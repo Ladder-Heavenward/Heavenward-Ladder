@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Limits and colimits</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r45d.html">← 45d pinned down by arrows</a><a href="r45f.html">next: 45f adjunctions →</a></p>
+  <div class="tags"><span class="tag proof">45e · proof</span></div>
+  <h1>Limits and colimits</h1>
+  <p data-pid="0eb81a">A product answers one question: what is the best thing with an arrow to each of two things? The question can be asked of any picture of things and arrows, not only of two dots. Ask it of two parallel arrows, and the answer in sets is the sift of the members where the two arrows agree. Turn the arrows round, and the answer in sets is the classes of rung five’s call back: the members, with each one taken as the same as whatever the two arrows force it to be. And ask it, arrows turned round, of two things glued along a third, and the answer in spaces is rung thirty four’s gluing. The integers as classes of pairs, the circle as an interval with its ends glued, the figure eight as two circles meeting at a point: each is the best thing for a picture, and what makes each one useful, that a map out of it is a map that respects the gluing, is the property that pins it down.</p>
+  <p class="gesture" data-pid="c9b420">A picture of things and arrows is a shape; a limit of it is the best thing with arrows to the whole picture, and a colimit the best thing with arrows from it. In sets, the limit of two parallel arrows is the sift where they agree, and the colimit is the classes they force. Gluing two spaces along a third is a colimit, and a map out of the glued space is a pair of maps that agree where they are glued.</p>
+</header>
+
+<section class="class step" data-step="45e1">
+  <h2 class="sthead"><span class="stno">45e1</span>Shapes and cones</h2>
+  <p data-pid="38e18c">A <i>shape</i> is a category J with few things, such as two dots with no arrows, or two dots with two parallel arrows u, v : 1 → 2. A <i>picture</i> of shape J in C is a map of categories D : J → C. A <i>cone</i> over D is a thing L with an arrow λ_j : L → D(j) for each thing j of J, such that D(w) ∘ λ_j = λ_k for every arrow w : j → k of J. A <i>limit</i> of D is a cone through which every cone runs by exactly one arrow that agrees with all of its arrows. By 45d2’s proof, word for word, any two limits of one picture are matched in exactly one way.</p>
+  <p data-pid="f62c53">Over two dots with no arrows, a cone is a thing with an arrow to each, and a limit is 45d’s product. Over two parallel arrows f, g : A → B, a cone is L with λ : L → A and λ′ : L → B, with f ∘ λ = λ′ and g ∘ λ = λ′: so f ∘ λ = g ∘ λ, and λ′ is fixed by λ. A limit of that picture is a <i>meeting place</i> of f and g.</p>
+  <p data-pid="584bb2">Sift-meets technique: <b>in Set, the sift of A where f and g agree, with its members sent to themselves, is a meeting place of f and g.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the sift-meets technique">
+E = \{x \in A : f(x) = g(x)\},\ \ e(x) = x @@ 2d’s sift, and its members sent into A
+f \circ e = g \circ e @@ each member of E is one where f and g agree
+h : X \to A,\ \ f \circ h = g \circ h \Rightarrow h(x) \in E \text{ for every } x @@ each h(x) is a member where they agree
+u(x) = h(x) \text{ is a function } X \to E \text{ with } e \circ u = h @@ the same outputs, read in E
+\htmlClass{new}{u \text{ is the only one}} \quad \blacksquare @@ e sends members to themselves: e ∘ u′ = h forces u′(x) = h(x)
+  </pre>
+  <p data-pid="855927">So the ladder’s oldest tool, the sift of 2d, is a limit. In <b>Vect</b> the meeting place of f and the 0 map is the kernel, 27c’s “what a map loses”.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · limits · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">45e1.1</span><span class="ph understand">understand</span>What are a shape, a picture, a cone and a limit? <br>What does the sift-meets technique say, and what is the meeting place of a linear map and 0?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45e2">
+  <h2 class="sthead"><span class="stno">45e2</span>Classes are a colimit</h2>
+  <p data-pid="e5ba21">A <i>colimit</i> is a limit in C^op: the best thing with arrows from the whole picture. Over two dots it is 45d3’s sum. Over two parallel arrows f, g : A → B it is a <i>forcing place</i>: a thing Q with q : B → Q and q ∘ f = q ∘ g, through which every such arrow runs in exactly one way.</p>
+  <p data-pid="f2f64a">In Set, let ∼ be the smallest sameness relation on B with f(x) ∼ g(x) for every x in A: the sift of B × B by membership in every sameness relation that contains those pairs (2g14). Its classes, B/∼, are 5·cb2’s quotient set, and q sends each member to its class.</p>
+  <p data-pid="01c7c2">Classes-force technique: <b>in Set, the classes of the smallest sameness relation that puts f(x) with g(x), with each member sent to its class, are a forcing place of f and g: a function out of the classes is a function on B that is constant on each class.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the classes-force technique">
+q(f(x)) = [f(x)] = [g(x)] = q(g(x)) @@ f(x) ∼ g(x), and same class exactly when related (5·cb2)
+h : B \to X,\ \ h \circ f = h \circ g @@ a rival arrow out of B
+\{(b, b') : h(b) = h(b')\} \text{ is a sameness relation holding every } (f(x), g(x)) @@ 2g14: h’s own sameness
+b \sim b' \Rightarrow h(b) = h(b') @@ ∼ is the smallest such: it sits inside h’s
+u([b]) = h(b) \text{ is well named} @@ the well-defined-rule technique (5·cb2)
+\htmlClass{new}{u \circ q = h,\ \text{and } u \text{ is the only one}} \quad \blacksquare @@ q is onto: every class is [b] for some b
+  </pre>
+  <p data-pid="5a13ce">The integers of 5b are a forcing place: take B = ℕ × ℕ and put (m, n) with (m + 1, n + 1), and the classes are the integers. A function out of ℤ is a function on pairs that gives (m, n) and (m + 1, n + 1) one value. That is how every function of 5d’s was checked, and the check was the property.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · colimits · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45e2.1</span><span class="ph understand">understand</span>What is a forcing place of two parallel arrows, and how is it a limit turned round? <br>What does the classes-force technique say, and which technique of 5·cb2 makes u well named?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45e3">
+  <h2 class="sthead"><span class="stno">45e3</span>Gluing is a colimit</h2>
+  <p data-pid="cb0580">The shape · ← · → ·: a thing C with arrows j : C → A and k : C → B. Its colimit is A and B <i>glued along C</i>: a thing G with arrows i₁ : A → G, i₂ : B → G and i₁ ∘ j = i₂ ∘ k, through which every such pair runs in exactly one way. In Set, G is A ⊔ B with each j(c) in the first copy put with k(c) in the second: 45d3’s sum, then 45e2’s classes. A colimit of any shape in Set is built the same way, a sum and then classes.</p>
+  <p data-pid="d145e6">Glued-is-colimit technique: <b>the space glued from A and B along C is the colimit of the shape A ← C → B in Top: a continuous map out of it is a pair of continuous maps that agree on C.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the glued-is-colimit technique">
+G = (A \sqcup B)/{\sim},\ \ j(c) \sim k(c) @@ as a set: 45d3’s sum, then 45e2’s classes
+\text{its open sets: those whose parts in } A \text{ and } B \text{ are open} @@ 34b5’s gluing of spaces
+s : A \to X,\ t : B \to X,\ \ s \circ j = t \circ k @@ a rival pair, agreeing on C
+\text{one function } u : G \to X \text{ with } u \circ i_1 = s,\ u \circ i_2 = t @@ the classes-force and cases-map techniques, in Set
+u \text{ is continuous} @@ the glued-map technique (34b5): continuous on each piece
+\htmlClass{new}{G \text{ is the colimit in } \mathbf{Top}} \quad \blacksquare @@ uniqueness came already in Set
+  </pre>
+  <p data-pid="fb9158">The circle is [0, 1] glued to a point along the two ends. The figure eight is two circles glued along a point. 34i3’s gluing rule, held in trust there, says the loop-group map of categories carries this colimit of spaces to the colimit of groups: the free group on two letters is the sum of ℤ and ℤ in <b>Grp</b> (45d3). Maps of categories that carry colimits to colimits are the subject of 45f.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · gluing · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45e3.1</span><span class="ph understand">understand</span>What is the colimit of A ← C → B, and how is it built in Set? <br>What does the glued-is-colimit technique say, and what does a continuous map out of the glued space amount to?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45e4">
+  <h2 class="sthead"><span class="stno">45e4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+B/{\sim} \text{ with } \sim = \{(f(x), g(x))\}\,? @@ that set of pairs need not be a sameness relation; the smallest sameness relation holding it is meant
+\text{a function out of } B/{\sim} \text{ is any function on } B\,? @@ only one constant on each class: (0, 1) and (1, 2) are one integer
+\text{a colimit in } \mathbf{Top} \text{ is the colimit in } \mathbf{Set} \text{ with any opens}\,? @@ the opens must make every rival pair’s u continuous: 34b5’s opens, and no others
+\text{every picture has a limit}\,? @@ some categories lack them: 45i finds two fields with no product
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45e4.1</span><span class="ph understand">understand</span>Why is the set of pairs (f(x), g(x)) not enough to give the classes of a forcing place? <br>Why is a function on ℕ × ℕ not always a function out of ℤ?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">45e.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="A \xrightarrow{\ f\ } C \xleftarrow{\ g\ } B"></span></span>Build the limit of this shape in Set from a product and a sift, and prove its property. <br>For f and g both the inclusion of parts A, B ⊆ C, what is it?</div>
+  <div class="chq"><span class="chid">45e.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f = g : A \to B"></span></span>Find the meeting place and the forcing place of an arrow with itself, in Set. <br>Find both when A is empty. Which of them is a matching with A or with B?</div>
+  <div class="chq"><span class="chid">45e.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="q : B \to Q \text{ onto},\ \ q(b) = q(c) \iff b \sim c"></span></span>Every forcing place in Set is matched with classes. Turn it round: is every onto function q out of B a forcing place of some pair of parallel arrows? <br>Find the pair, and prove it.</div>
+  <div class="chq"><span class="chid">45e.5.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">5·cb2.4.5: \text{is } -2 \text{ the set } \{(0, 2), (1, 3), \ldots\}?</span></span>5·cb2.4.5 asked whether negative two is the class [0, 2]. The integers are a forcing place, and any forcing place of the same two arrows is matched with them in exactly one way. <br>Which statements about −2 can the forcing place tell you, and which can it not? Is “−2 is a set of pairs” one of them? Is the question answered, or ruled out?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r45d.html">← 45d · pinned down by arrows</a><a href="r45f.html">45f · adjunctions →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A shape is an index category and a picture a diagram; a cone over it with the universal property is a limit, and the dual notion a colimit. A meeting place is an equalizer and a forcing place a coequalizer. The limit of A → C ← B is a pullback, or fibre product; the colimit of A ← C → B is a pushout. Products and equalizers together give every finite limit; in Set every small limit and colimit exists, and Set is complete and cocomplete. The gluing rule of 34i3 is the Seifert–van Kampen theorem, whose modern statement is that π₁ takes such pushouts of spaces to pushouts of groups.</p>
+  <h3>Who said it first</h3>
+  <p>Limits of chains of groups were in use from the 1930s (inverse and direct limits); Daniel Kan defined limits and colimits for any diagram with adjoint functors in 1958. Herbert Seifert proved the gluing rule in 1931 and Egbert van Kampen in 1933. The integers as classes of pairs are older than all of it.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“A colimit is a sum and then classes, in every category.” Not allowed: that is a build in Set. In Grp the sum of ℤ and ℤ is the free group on two letters, not two copies side by side, and in a category where sums do not exist the build cannot start, while a colimit may still exist or may not. The property is the definition; the build is a witness in one category.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'picture',t:R`D : J \to C`,n:`A shape, drawn in C.`},
+  {k:'ember',kl:'cone',t:R`D(w) \circ \lambda_j = \lambda_k`,n:`Arrows to the whole picture.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\{x : f(x) = g(x)\}}`,n:`The sift is a limit.`}
+],{title:'The slides · limits · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'force',t:R`q \circ f = q \circ g`,n:`Arrows from the picture.`},
+  {k:'ember',kl:'classes',t:R`B/{\sim}`,n:`The smallest sameness that forces it.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{u([b]) = h(b)}`,n:`A map out of classes.`}
+],{title:'The slides · colimits · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'shape',t:R`A \xleftarrow{\ j\ } C \xrightarrow{\ k\ } B`,n:`Two things along a third.`},
+  {k:'ember',kl:'build',t:R`(A \sqcup B)/(j(c) \sim k(c))`,n:`A sum, then classes.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{u \circ i_1 = s,\ u \circ i_2 = t}`,n:`A map out is a pair that agrees.`}
+],{title:'The slides · gluing · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

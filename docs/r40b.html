@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Trees</title>
+<title>Other machines, the same reach</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,93 +25,94 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r40a.html">← 40a dots and links</a><a href="r40c.html">next: 40c walking every link once →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40a.html">← 40a machines with a tape</a><a href="r40c.html">next: 40c one machine runs them all →</a></p>
   <div class="tags"><span class="tag proof">40b · proof</span></div>
-  <h1>Trees</h1>
-  <p data-pid="461018">A graph in one piece with no cycle is the thriftiest way to join a set of dots: take away any link and it falls in two, add any link and a cycle appears. These graphs are called trees, and they are everywhere the ladder has already been: the proofs of rung 37 were drawn as trees, the chances of rung 30 branched as trees, and a family is drawn as one. This step proves that a tree on n dots always has exactly one link fewer than it has dots, that any two of three plain conditions force the third, and that every graph in one piece holds a tree that reaches all its dots. Then it counts the trees on n named dots. The answer is n multiplied by itself n − 2 times, a count so clean that it was guessed from small cases long before it was proved. The proof here codes each tree as a list of n − 2 numbers, and decodes it back.</p>
-  <p class="gesture" data-pid="c4c8c1">A tree is in one piece with no cycle. It has at least two ends, and exactly one link fewer than dots. Any two of in one piece, no cycle, and one link fewer than dots give the third. Every graph in one piece holds a tree through all its dots. The trees on n named dots match the lists of n − 2 names, so there are n to the n − 2.</p>
+  <h1>Other machines, the same reach</h1>
+  <p data-pid="df08b5">In the same year that the tape machine was described, two other answers to the question of what a recipe is were already on the table. One started from rung four’s recursion. Take a few functions too simple to doubt, and allow three ways of making new functions from old: putting one inside another, recursion, and a search for the first number that works. The other threw numbers away altogether. It has one kind of thing, a function, and one move, feeding a function its input, and it builds the numbers themselves out of functions that repeat. The three look nothing alike. A tape has cells, a recursion has equations, a calculus of functions has only brackets. This step proves that they reach exactly the same functions. That is the second kind of evidence for the thesis. It also pays something held in trust since the rung before: every recipe that always stops can be written as a formula of arithmetic, so 38h’s formula for “this number codes a proof” is now built, not assumed.</p>
+  <p class="gesture" data-pid="22e694">Functions built from zero, next and picking, by putting inside, recursion and search, are exactly the functions tape machines compute, and one search is always enough. Their graphs are search formulas, which closes 38h’s flag. A calculus with one move, feeding a function its input, reaches the same functions.</p>
 </header>
 
 <section class="class step" data-step="40b1">
-  <h2 class="sthead"><span class="stno">40b1</span>Ends and links</h2>
-  <p data-pid="077eb7">A <i>tree</i> is a graph in one piece with no cycle. An <i>end</i> of a graph is a dot with exactly one link.</p>
-  <p data-pid="418baa">Tree-ends technique: <b>a tree with at least two dots has at least two ends.</b> Take a path of greatest length, v₀, …, vₖ. A neighbour of v₀ other than v₁ would lie on the path, closing a cycle, or off it, making a longer path. So v₀ is an end, and so is vₖ.</p>
-  <p data-pid="4061c6">Links-of-a-tree technique: <b>a tree with n dots has n − 1 links.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the links-of-a-tree technique">
-n = 1:\ 0 \text{ links} @@ one dot, and a link needs two
-T \text{ a tree with } n + 1 \ge 2 \text{ dots; } v \text{ an end of it} @@ the tree-ends technique
-T - v \text{ is in one piece and has no cycle} @@ a path through v would need two links at v; taking a dot away makes no cycle
-T - v \text{ has } n - 1 \text{ links} @@ induction on n (4c)
-\htmlClass{new}{T \text{ has } (n - 1) + 1 = n \text{ links}} \quad \blacksquare @@ v took one link with it
+  <h2 class="sthead"><span class="stno">40b1</span>Functions built from a few</h2>
+  <p data-pid="9c0d22">The <i>start functions</i> are zero, Z(x) = 0, next, S(x) = x + 1, and the picks, Pᵢ(x₁, …, xₖ) = xᵢ. Three ways make new functions from old. <i>Putting inside</i>: h(x) = f(g₁(x), …, gₘ(x)). <i>Recursion</i>, 4d’s technique with a parameter: h(x, 0) = f(x) and h(x, y + 1) = g(x, y, h(x, y)). <i>Search</i>: h(x) is the least y with f(x, y) = 0, when there is one and f(x, z) has a value for each z below it; otherwise h(x) has no value.</p>
+  <p data-pid="d8f00c">A function made from the start functions by these three ways is <i>built</i>. Made without search it is <i>built without search</i>, and it has a value at every input, by induction on the building. With search it may have none: the least y with y + x + 1 = 0 never comes. One example first: adding is built without search, add(x, 0) = P₁(x) and add(x, y + 1) = S(add(x, y)), which is 4f’s adding line by line.</p>
+  <p data-pid="0a9b4f">Built-runs technique: <b>every built function is computed by a tape machine.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the built-runs technique">
+Z,\ \allowbreak S,\ \allowbreak P_i \text{: }\allowbreak \text{a }\allowbreak \text{few }\allowbreak \text{rows }\allowbreak \text{each} @@ erase, add one (40a1’s example), keep one input
+f(g_1(x), \dots, g_m(x)) \text{: }\allowbreak \text{run }\allowbreak \text{each } g_j \text{ on }\allowbreak \text{its }\allowbreak \text{own }\allowbreak \text{tape, }\allowbreak \text{then } f @@ the tracks technique (40a3) makes the tapes one
+h(x, y)\text{: }\allowbreak \text{a }\allowbreak \text{counter } c \text{ from } 0 \text{ to } y\text{, with } h(x, c) \text{ kept }\allowbreak \text{on }\allowbreak \text{a }\allowbreak \text{tape} @@ each turn runs g once; the counter stops the loop at y
+\text{search: }\allowbreak \text{try } y = 0, 1, 2, \dots \text{ and }\allowbreak \text{stop }\allowbreak \text{at }\allowbreak \text{the }\allowbreak \text{first } f(x, y) = 0 @@ if none, the machine never stops, and h has no value there
+\htmlClass{new}{\text{every }}\allowbreak \htmlClass{new}{ \text{built }}\allowbreak \htmlClass{new}{ \text{function }}\allowbreak \htmlClass{new}{ \text{is }}\allowbreak \htmlClass{new}{ \text{computed}} \quad \blacksquare @@ induction on the building (4c)
   </pre>
-  <p data-pid="519173">A tree with n dots and links counts d(v) has Σ d(v) = 2n − 2, by the ends-count technique. So the average count is below 2, which is the tree-ends technique again, from the other side.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · trees · ← → keys work</div></section>
+  <p data-pid="322dfd">The search is where never stopping enters. A machine built from the first two ways only is a tower of loops whose counts are known before they start, the falling-measure shape of 4l. Search is the loop whose count is not known.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · built · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">40b1.1</span><span class="ph understand">understand</span>Why are the two ends of a longest path in a tree ends of the tree? <br>What does the links-of-a-tree technique say, and why does taking an end away keep a tree?</li>
+      <li><span class="qid">40b1.1</span><span class="ph understand">understand</span>What are the start functions, and what are the three ways of making new functions? <br>What does the built-runs technique say, and which of the three ways can make a machine that never stops?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="40b2">
-  <h2 class="sthead"><span class="stno">40b2</span>Any two of three</h2>
-  <p data-pid="bb3d19">Any-two-of-three technique: <b>for a graph with n dots, any two of these give the third: it is in one piece; it has no cycle; it has n − 1 links.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the any-two-of-three technique">
-\text{one piece and no cycle} \Rightarrow n - 1 \text{ links} @@ the links-of-a-tree technique
-\text{no cycle, } c \text{ pieces} \Rightarrow \text{each piece a tree, } n - c \text{ links in all} @@ links-of-a-tree in each piece; the dots add up to n
-\text{no cycle and } n - 1 \text{ links} \Rightarrow c = 1 @@ n − c = n − 1
-\text{one piece, } n - 1 \text{ links, a cycle} \Rightarrow \text{drop a link of the cycle; still one piece} @@ a walk that used the link goes round the rest of the cycle
-\text{drop links of cycles until none is left: a tree with fewer than } n - 1 \text{ links} @@ each drop keeps one piece
-\htmlClass{new}{\bot:\ \text{one piece and } n - 1 \text{ links} \Rightarrow \text{no cycle}} \quad \blacksquare @@ against the links-of-a-tree technique
+  <h2 class="sthead"><span class="stno">40b2</span>Every machine is built, with one search</h2>
+  <p data-pid="b7e016">Now the other way. Code a configuration u q v as one number: the tape as a numeral in base |Γ|, and the state and the head’s place beside it, packed by 38m’s pair code. Call the code of the start configuration on input x start(e, x), where e codes the table.</p>
+  <p data-pid="fe414e">One-search technique: <b>for every tape machine with code e there are functions next, start and out, built without search, such that the machine’s output on x is out(run(e, x, y)), where y is the least number of steps after which the state is a stop state.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-search technique">
+\text{next}(e, c)\text{: }\allowbreak \text{read }\allowbreak \text{the }\allowbreak \text{mark }\allowbreak \text{under }\allowbreak \text{the }\allowbreak \text{head }\allowbreak \text{and }\allowbreak \text{the }\allowbreak \text{state, }\allowbreak \text{look }\allowbreak \text{up }\allowbreak \text{the }\allowbreak \text{row} @@ remainders and quotients by powers of |Γ|: built without search, with cases (the one-next technique)
+\text{run}(e, x, 0) = \text{start}(e, x),\ \allowbreak \ \text{run}(e, x, y + 1) = \text{next}(e, \text{run}(e, x, y)) @@ recursion (40b1), 4l’s run
+\text{halted}(e, c) = 0 \text{ exactly }\allowbreak \text{when }\allowbreak \text{the }\allowbreak \text{state }\allowbreak \text{in } c \text{ is }\allowbreak \text{a }\allowbreak \text{stop }\allowbreak \text{state} @@ a finite check, built without search
+y_0 = \text{the }\allowbreak \text{least } y \text{ with }\allowbreak \text{halted}(e, \text{run}(e, x, y)) = 0 @@ the one search
+\htmlClass{new}{\text{output} = \text{out}(\text{run}(e, x, y_0))} \quad \blacksquare @@ out reads the tape off the code
   </pre>
-  <p data-pid="9d2f2f">One more way to say tree: <b>a graph is a tree exactly when each two of its dots are joined by exactly one path.</b> Two paths from u to w that part and meet again close a cycle; and a cycle gives two paths between any two of its dots. So a tree is the graph where the walk-to-path technique of 40a has only one answer.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · two of three · ← → keys work</div></section>
+  <p data-pid="8d1e6a">So the tape machine and the built functions reach the same functions, by the built-runs and one-search techniques together. And something more: however many searches a built function used, one search is enough, with everything else built without search. The searches of a big building are folded into the one search for the moment the machine stops.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · one search · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">40b2.1</span><span class="ph understand">understand</span>What does the any-two-of-three technique say? <br>Why does dropping a link that lies on a cycle keep the graph in one piece?</li>
+      <li><span class="qid">40b2.1</span><span class="ph understand">understand</span>What does the one-search technique say? <br>Why is next built without search, and where does the one search go?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="40b3">
-  <h2 class="sthead"><span class="stno">40b3</span>A tree inside every graph</h2>
-  <p data-pid="64d021">A <i>spanning tree</i> of a graph G is a tree whose dots are all the dots of G and whose links are links of G.</p>
-  <p data-pid="021c79">Spanning-tree technique: <b>every graph in one piece has a spanning tree.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the spanning-tree technique">
-H := G @@ the state of a recipe (4l): a graph in one piece on the dots of G
-\text{while } H \text{ has a cycle, drop one link of it} @@ the move; H stays in one piece (40b2)
-\text{the number of links falls at every move} @@ so every run stops (the falling-measure technique, 4l)
-\htmlClass{new}{\text{at the stop } H \text{ is in one piece with no cycle: a spanning tree}} \quad \blacksquare @@ the stop test
+  <h2 class="sthead"><span class="stno">40b3</span>38h’s flag, closed</h2>
+  <p data-pid="e942fc">38h1 held in trust that “y is the code of a proof of the statement with code x” is a formula of arithmetic of the right shape, and 38h2 the same for Sub. Both are recipes that always stop. The one-search technique turns every such recipe into arithmetic.</p>
+  <p data-pid="bd5370">Search-graph technique: <b>if a tape machine computes f, then “f(x) = z” is a search formula F(x, z); and when f(n) = m, PA reaches F(n̄, m̄) and ∀z (F(n̄, z) ⇒ z = m̄).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the search-graph technique">
+F(x, z):\ \exists u\,\exists v\,\exists y\ (\text{the }\allowbreak \text{list }\allowbreak \text{stored }\allowbreak \text{by } u, v \text{ is run}(e, x, 0), \dots, \text{run}(e, x, y)\ \land \cdots) @@ the list-in-one-number technique (38g3) stores the whole run
+\text{each }\allowbreak \text{place }\allowbreak \text{obeys }\allowbreak \text{next; }\allowbreak \text{the }\allowbreak \text{last }\allowbreak \text{is }\allowbreak \text{stopped, }\allowbreak \text{no }\allowbreak \text{earlier }\allowbreak \text{one }\allowbreak \text{is; }\allowbreak \text{out }\allowbreak \text{of }\allowbreak \text{the }\allowbreak \text{last }\allowbreak \text{is } z @@ every check is kept below u, v or y: a bounded formula
+f(n) = m \Rightarrow F(\bar n, \bar m) \text{ is }\allowbreak \text{a }\allowbreak \text{true }\allowbreak \text{search }\allowbreak \text{statement} @@ the run exists: one list, one y
+PA \vdash F(\bar n, \bar m) @@ the search-reached technique (38g4)
+\htmlClass{new}{PA \vdash \forall z\,(F(\bar n, z) \Rightarrow z = \bar m)} \quad \blacksquare @@ two stored runs agree place by place, by PA’s induction line on the place; so their outputs agree
   </pre>
-  <p data-pid="bdc456">Which links to drop is free, and the trees that come out differ. When links have costs, a cheapest spanning tree is a question with an answer, and a greedy recipe finds it. 40k asks why greed is safe there and not elsewhere.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · spanning · ← → keys work</div></section>
+  <p data-pid="465b7f">Proof(y, x) is decided by 38b3’s check, so by the both-sides technique it and its denial are both listed, and each is a search formula. Whichever of them is true at given numbers, PA reaches it. That is all 38h1, 38h2 and 38i used. The flag 38h left open is closed here.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · arithmetic · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">40b3.1</span><span class="ph understand">understand</span>What is a spanning tree? <br>Why does the recipe of the spanning-tree technique always stop, and why is the graph still in one piece when it does?</li>
+      <li><span class="qid">40b3.1</span><span class="ph understand">understand</span>What does the search-graph technique say? <br>Which flag of 38h does it close, and why is it enough that Proof and its denial are both search formulas?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="40b4">
-  <h2 class="sthead"><span class="stno">40b4</span>Counting the trees</h2>
-  <p data-pid="142899">On the dots {1, 2, …, n}, with n ≥ 2, the <i>leaf code</i> of a tree is a list of n − 2 numbers made this way: take away the end with the smallest name, write down the name of its one neighbour, and repeat until two dots are left.</p>
-  <pre class="lines" data-k="ember" data-label="this step: one tree coded">
-\text{links } \{1,4\}, \{2,4\}, \{3,4\}, \{4,5\}, \{5,6\} @@ a tree on six dots
-\text{ends } 1, 2, 3, 6;\ \text{take } 1,\ \text{write } 4 @@ the smallest end
-\text{take } 2,\ \text{write } 4;\ \ \text{take } 3,\ \text{write } 4 @@ again
-\text{now } 4 \text{ is an end; ends } 4, 6;\ \text{take } 4,\ \text{write } 5 @@ two dots, 5 and 6, are left
-\htmlClass{new}{\text{leaf code } (4, 4, 4, 5)} \quad \blacksquare @@ n − 2 = 4 numbers
+  <h2 class="sthead"><span class="stno">40b4</span>A calculus of functions</h2>
+  <p data-pid="fa528c">The third answer has only functions. Its <i>terms</i> are placeholders x, y, …; λx.M, the function that sends x to M; and (M N), M fed N. Its one move is <i>feeding</i>: (λx.M) N may be rewritten as M with N put in for x, renaming bound placeholders so that none is caught. A term no feeding move applies to is <i>finished</i>. Numbers are not given. They are built: the numeral of n is the term that does a function n times, n̄ = λf.λx. f(f(⋯ f(x))), with n copies of f.</p>
+  <p data-pid="705c99">Numeral-iterator technique: <b>the term λn.λf.λx. f(n f x) turns the numeral of n into the numeral of n + 1, by feeding alone.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the numeral-iterator technique, on 1">
+\bar 1 = \lambda g.\lambda y.\, g\,y @@ do g once
+(\lambda n.\lambda f.\lambda x.\, f(n\,f\,x))\ \bar 1 \to \lambda f.\lambda x.\, f(\bar 1\,f\,x) @@ feed: put 1̄ in for n
+\bar 1\,f\,x = (\lambda g.\lambda y.\, g\,y)\,f\,x \to (\lambda y.\, f\,y)\,x \to f\,x @@ feed twice
+\htmlClass{new}{\lambda f.\lambda x.\, f(f\,x) = \bar 2} \quad \blacksquare @@ do f twice
   </pre>
-  <p data-pid="650c90">Leaf-code technique: <b>the leaf code is a matching between the trees on n named dots and the lists of n − 2 names; so there are nⁿ⁻² such trees.</b> A dot appears in the code one time fewer than its count of links, since it is written once for each neighbour taken away before it, and ends never appear. So from the code alone the first end taken is known: the smallest name not in the code. Join it to the code’s first entry, strike both, and go on; the last two dots left are joined. That rebuilds the tree, and only that tree, from the code, and every list rebuilds some tree. A matching (9c) between the trees and the nⁿ⁻² lists of 4k’s counted-functions technique.</p>
-  <p data-pid="30355f">For n = 4 that gives 16 trees: 12 paths, the 4!/2 ways to put four names along a line, and 4 stars, one for each choice of the centre. n = 2, 3, 4, 5 give 1, 3, 16, 125.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · leaf code · ← → keys work</div></section>
+  <p data-pid="dd5d45">Adding is λm.λn.λf.λx. m f (n f x): do f n times, then m times more. Recursion and search are harder. They need a term that feeds itself to itself, as 38h’s diagonal fed a formula its own code; 40b.6.2 asks for one.</p>
+  <p data-pid="d7a0d9">Equal-reach technique: <b>a function on numbers is reached by feeding exactly when a tape machine computes it.</b> One way: each start function and each of the three ways of 40b1 has a term, so every built function does. The other way: a term is a string, a feeding move is a rewrite of a string, and a machine can apply the leftmost move again and again, stopping at a finished term. That the leftmost order finds the finished term whenever any order does is held in trust here; the basement names it.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · feeding · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">40b4.1</span><span class="ph understand">understand</span>How is the leaf code of a tree made? <br>Why does a dot appear in the code one time fewer than its count of links, and how does that let the code be read back?</li>
+      <li><span class="qid">40b4.1</span><span class="ph understand">understand</span>What are the terms of the calculus of functions, and what is its one move? <br>What does the numeral-iterator technique say, and what is held in trust in the equal-reach technique?</li>
     </ol>
   </section>
 </section>
@@ -119,15 +120,15 @@ H := G @@ the state of a recipe (4l): a graph in one piece on the dots of G
 <section class="class step" data-step="40b5">
   <h2 class="sthead"><span class="stno">40b5</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{a graph with } n \text{ dots and } n - 1 \text{ links is a tree}\,? @@ a triangle and a lone dot have 4 dots and 3 links; it needs one piece too
-\text{every tree has exactly two ends}\,? @@ a star with k links has k ends; two is the least
-n^{n-2} \text{ counts the shapes of tree}\,? @@ it counts trees on named dots; on four dots there are 16 trees and 2 shapes
-\text{the code } (4, 4, 4, 5) \text{ makes dot 4 an end}\,? @@ dot 4 appears three times, so it has four links
+\text{the }\allowbreak \text{least } y \text{ with } f(x, y) = 0 \text{ always }\allowbreak \text{has }\allowbreak \text{a }\allowbreak \text{value}\,? @@ there may be no such y; then the search runs for ever and h has no value at x
+\text{a }\allowbreak \text{function }\allowbreak \text{built }\allowbreak \text{with }\allowbreak \text{three }\allowbreak \text{searches }\allowbreak \text{needs }\allowbreak \text{a }\allowbreak \text{machine }\allowbreak \text{with }\allowbreak \text{three }\allowbreak \text{searches}\,? @@ the one-search technique: one search, everything else built without it
+\text{Proof }\allowbreak \text{is }\allowbreak \text{a }\allowbreak \text{search }\allowbreak \text{formula, }\allowbreak \text{so }\allowbreak \text{PA }\allowbreak \text{reaches }\allowbreak \text{its }\allowbreak \text{denial }\allowbreak \text{when }\allowbreak \text{it }\allowbreak \text{is }\allowbreak \text{false}\,? @@ that needs the denial to be a search formula too: the both-sides technique, since the check is decided
+(\lambda x.\lambda y.\, x)\,y \to \lambda y.\, y\,? @@ y is caught; rename first: λz. y
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">40b5.1</span><span class="ph understand">understand</span>Why is a graph with n dots and n − 1 links not always a tree? <br>Why does nⁿ⁻² not count the shapes of tree?</li>
+      <li><span class="qid">40b5.1</span><span class="ph understand">understand</span>Why may a search have no value? <br>Why must the bound y be renamed before y is fed to λx.λy. x?</li>
     </ol>
   </section>
 </section>
@@ -136,22 +137,22 @@ n^{n-2} \text{ counts the shapes of tree}\,? @@ it counts trees on named dots; o
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">40b.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="(3, 3, 1, 1)"></span></span>Build the tree on six named dots with this leaf code, and code it again to check. <br>Which list codes the path 1, 2, 3, 4, 5, 6, and which the star with centre 6?</div>
-  <div class="chq"><span class="chid">40b.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n = 2,\ \ n = 1"></span></span>The leaf code on two dots is the empty list. Does the leaf-code technique hold there, and what is n^(n − 2) at n = 1? <br>Count the trees on n named dots in which dot 1 is an end, from the code.</div>
-  <div class="chq"><span class="chid">40b.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\textstyle\sum_v d(v) = 2n - 2,\ \ d(v) \ge 1"></span></span>A tree has links counts at least 1 adding to 2n − 2. Turn it round: does every such list belong to a tree? Prove it, or find a list that fails. <br>Count, from the leaf code, the trees on named dots with a given list of counts.</div>
-  <div class="chq"><span class="chid">40b.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">1, 3, 16, 125, 1296</span></span>The count nⁿ⁻² was announced in 1889 from a pattern and an argument that covered only some cases. Rung 7 asked whether evidence is proof (7b.4.4). <br>How many cases would have made you sure? Which part of the leaf code’s proof does no number of cases supply?</div>
+  <div class="chq"><span class="chid">40b.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{mul}(x, 0) = ?,\ \allowbreak \ \text{mul}(x, y + 1) = ?"></span></span>Build multiplying as a function built without search, from adding. Build the term of the calculus of functions that multiplies two numerals, and run it on 2̄ and 2̄ by feeding.</div>
+  <div class="chq"><span class="chid">40b.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="Y = \lambda f.\,(\lambda x.\, f(x\,x))(\lambda x.\, f(x\,x))"></span></span>Feed Y a term g, and show that Y g can be rewritten to g(Y g). What has this to do with 38h’s diagonal? Find a term with no finished form at all.</div>
+  <div class="chq"><span class="chid">40b.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="h_0, h_1, h_2, \dots \text{ the }\allowbreak \text{functions }\allowbreak \text{built }\allowbreak \text{without }\allowbreak \text{search}"></span></span>The functions built without search can be listed, each from its building. Let d(n) = hₙ(n) + 1. Prove that d has a value everywhere, that a tape machine computes it, and that it is not built without search. Which step of the rung before does this repeat, and which technique of this step does it show cannot be improved?</div>
+  <div class="chq"><span class="chid">40b.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">9b.4.4: x ↦ x + 2 + 3 and x ↦ x + 5</span></span>9b.4.4 asked whether two rules giving the same pairs are one function, and whether they are one rule. In the calculus of functions a rule is a term. Are the terms for the two rules the same term? Can feeding take one to the other? Which of the two answers to 9b.4.4 does this calculus take, and what would it cost to take the other?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r40a.html">← 40a · dots and links</a><a href="r40c.html">40c · walking every link once →</a></nav>
+<nav class="nextrung"><a href="r40a.html">← 40a · machines with a tape</a><a href="r40c.html">40c · one machine runs them all →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>Ends are leaves. A graph with no cycle is a forest. The tree-ends technique and the any-two-of-three technique are the basic characterizations of trees; the count nⁿ⁻² is Cayley's formula, and the leaf code is the Prüfer code.</p>
+  <p>The start functions are the initial functions (zero, successor, projections); putting inside is composition; the search is minimization, the μ-operator. Functions built without search are the primitive recursive functions, and built functions are the partial recursive, or μ-recursive, functions. The one-search technique is Kleene’s normal form theorem, with Kleene’s T predicate. The search-graph technique is the representability of recursive functions in PA, through Σ₁ definitions. The calculus of functions is the λ-calculus; feeding is β-reduction, renaming is α-conversion, a finished term is in normal form, and the numerals are Church numerals. That the leftmost order reaches the normal form whenever one exists is the standardization theorem (Curry and Feys, 1958). Y is the fixed-point combinator. The function d of 40b.6.3, made concrete, is close to the Ackermann function, total and computable but not primitive recursive.</p>
   <h3>Who said it first</h3>
-  <p>Gustav Kirchhoff used spanning trees in 1847 to solve electrical networks. Arthur Cayley counted trees in 1857 for the calculus and in 1874 for chemistry, and stated nⁿ⁻² in 1889; Carl Wilhelm Borchardt had a determinant formula equivalent to it in 1860. Heinz Prüfer gave the code in 1918.</p>
+  <p>Thoralf Skolem (1923) built arithmetic from recursion; Kurt Gödel used the primitive recursive functions in 1931 and, after a suggestion of Jacques Herbrand, defined general recursive functions in 1934. Stephen Kleene added the μ-operator and proved the normal form theorem in 1936. Alonzo Church published the λ-calculus in 1936, and Kleene showed that the λ-definable functions are the recursive ones. Alan Turing showed in 1937 that λ-definable and machine-computable are the same. Wilhelm Ackermann gave his function in 1928.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“A tree has n − 1 links: start with one dot and add the others one at a time, each with one link to what is there.” Not allowed as it stands: it shows that the trees built that way have n − 1 links, but not that every tree can be built that way. The missing step is the tree-ends technique, which takes a tree apart in the reverse order.</p>
+  <p>“Every built function has a value at every input, since each of the three ways makes a function from functions.” Not allowed: it is true of putting inside and of recursion, by induction on the building, and false for search. The least y with y + x + 1 = 0 has no value anywhere.</p>
 </section>
 
 </div>
@@ -166,25 +167,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'ends',t:R`\text{a longest path ends at ends}`,n:`At least two.`},
-  {k:'ember',kl:'peel',t:R`T - v`,n:`Still a tree.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{|E| = n - 1}`,n:`One fewer than the dots.`}
-],{title:'The slides · trees · ← → keys work'});
+  {k:'ember',kl:'start',t:R`Z,\ S,\ P_i`,n:`Too simple to doubt.`},
+  {k:'ember',kl:'ways',t:R`\text{inside, recursion, search}`,n:`Three.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{built} \Rightarrow \text{computed}}`,n:`Search may not stop.`}
+],{title:'The slides · built · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'one piece',t:R`c = 1`,n:`Joined.`},
-  {k:'ember',kl:'no cycle',t:R`\text{forest}`,n:`Each piece a tree.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{|E| = n - c}`,n:`Two give the third.`}
-],{title:'The slides · two of three · ← → keys work'});
+  {k:'ember',kl:'step',t:R`\text{next}(e, c)`,n:`No search.`},
+  {k:'ember',kl:'run',t:R`\text{run}(e, x, y)`,n:`Recursion on y.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{out}(\text{run}(e, x, \mu y\,\text{halted}))}`,n:`Search once.`}
+],{title:'The slides · one search · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'start',t:R`H = G`,n:`In one piece.`},
-  {k:'ember',kl:'drop',t:R`\text{a link of a cycle}`,n:`Still one piece.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a spanning tree}}`,n:`The recipe stops.`}
-],{title:'The slides · spanning · ← → keys work'});
+  {k:'ember',kl:'run',t:R`\exists u\,\exists v\,\exists y\ (\cdots)`,n:`The run in two numbers.`},
+  {k:'ember',kl:'reached',t:R`PA \vdash F(\bar n, \bar m)`,n:`Search-reached.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{38h’s flag closed}}`,n:`Proof is built.`}
+],{title:'The slides · arithmetic · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'take',t:R`\text{the smallest end}`,n:`Write its neighbour.`},
-  {k:'ember',kl:'repeat',t:R`n - 2 \text{ times}`,n:`Two dots left.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{n^{n-2} \text{ trees}}`,n:`A matching with the lists.`}
-],{title:'The slides · leaf code · ← → keys work'});
+  {k:'ember',kl:'numeral',t:R`\bar n = \lambda f.\lambda x.\, f^n x`,n:`Do f n times.`},
+  {k:'ember',kl:'next',t:R`\lambda n.\lambda f.\lambda x.\, f(n\,f\,x)`,n:`Once more.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{next}\ \bar 1 \to \bar 2}`,n:`By feeding alone.`}
+],{title:'The slides · feeding · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

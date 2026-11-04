@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The liar box</title>
+<title>Formulas as numbers</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,93 +25,127 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r38f.html">← 38f every table from one gate</a><a href="r38h.html">next: 38h memory →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38f.html">← 38f numbers past every numeral</a><a href="r38h.html">next: 38h a sentence about itself →</a></p>
   <div class="tags"><span class="tag proof">38g · proof</span></div>
-  <h1>The liar box</h1>
-  <p data-pid="bf8096">Rung zero set one statement aside: this statement is false. If it is so, it is not, and if it is not, it is. Rung one refuted it as a statement and moved on. The computing annex of rung four built it in wire, a not gate whose output runs back to its own input, and found it was neither true nor false but a timer, true and false in turn. This step builds that box from the parts of this rung and counts it. As a sameness to be settled once, the liar asks for a mark equal to one take away itself, and the only number that meets it is one half: no mark at all, but exactly the voltage at the steep middle of the gate. As a wire that answers its own answer a moment late, it flips once a moment, for ever. A ring of three gates, or any odd number, behaves the same way more slowly, and its one resting place is the middle, which the steep slope pushes away from. The time round the ring can be counted exactly: twice the number of gates, times the delay of one. That count is how chips measure their own speed.</p>
-  <p class="gesture" data-pid="fa62f9">The liar asks for x equal to one take away x, and only one half meets it: no mark. With a delay, x at each moment is one take away x a moment before, so it flips every delay. A ring of an odd number of nots has one rest, in the middle, and it does not hold; the ring runs, with a period of twice the gates times the delay.</p>
+  <h1>Formulas as numbers</h1>
+  <p data-pid="9e9e53">A formula is a finite string of marks, and a proof is a finite list of formulas. Rung four proved that every number other than zero has exactly one list of primes. So give each mark a number, and turn a string into one number by raising the primes in order to the numbers of its marks. Different strings get different numbers, and factoring a number gives its string back. A statement about formulas becomes a statement about numbers, and the language of arithmetic, which only speaks of numbers, can now speak of formulas without knowing it. Two things are needed for that to be useful. First, the axioms of arithmetic must be written down as a list of statements, so that proofs from them are objects too. Second, arithmetic, with nothing but adding and multiplying, must be able to say things like “the number in the third place of this list”. A trick with remainders does that. Then one technique says that every true statement of a certain simple shape, a some in front of a search that stops, is reached by the axioms. The next step points this machinery at the axioms themselves.</p>
+  <p class="gesture" data-pid="44f870">Each string of marks gets a number by prime powers, and factoring reads it back. The axioms of arithmetic are a list of statements. One number can hold a whole list, by remainders, so arithmetic can speak of codes, and every true statement made of a some in front of a bounded condition is reached by the axioms.</p>
 </header>
 
 <section class="class step" data-step="38g1">
-  <h2 class="sthead"><span class="stno">38g1</span>A not fed back into itself</h2>
-  <p data-pid="1b1d2f"><a href="r01b.html">1b</a> took the statement that says of itself that it is not so, and refuted it: supposing it gives ⊥, and so does supposing its denial. In 38a’s arithmetic it is a mark x with x = 1 − x. Built in wire, it is one not gate with its output joined to its input. A real gate answers a change at its input only after a delay τ, a few trillionths of a second on a chip.</p>
-  <p data-pid="c29ffe">Delay-loop technique: <b>a not whose output feeds its own input has no mark that rests, and with a delay τ its output is 1 and 0 in turn, each for τ, with period 2τ.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the delay-loop technique">
-x = 1 - x \Rightarrow 2x = 1 \Rightarrow x = \tfrac12 @@ the same change to both sides (5g)
-\tfrac12 \notin \{0, 1\} @@ no mark meets it: 1b’s refutation, in arithmetic
-x(t) = 1 - x(t - \tau) @@ with the delay: the output now is the not of the output a delay ago
-x(t) = 1 - (1 - x(t - 2\tau)) = x(t - 2\tau) @@ the same line, a delay earlier
-\htmlClass{new}{x \text{ repeats every } 2\tau,\ \text{and is } 1 - x \text{ a delay on}} \quad \blacksquare @@ so it is 1, then 0, then 1: a clock
+  <h2 class="sthead"><span class="stno">38g1</span>A number for each string</h2>
+  <p data-pid="1b087f">Number the marks of the language of arithmetic: 0 is 1, S is 2, + is 3, · is 4, = is 5, ¬ is 6, ∧ is 7, ∨ is 8, ⇒ is 9, ∀ is 10, ∃ is 11, the left bracket is 12, the right bracket is 13, ⊥ is 14, and the placeholder xₖ is 15 + k. Write S t with no brackets, as S0, since S has one place, and write + and · between brackets: (t + s). The <i>code</i> of a string m₁ m₂ ⋯ mₖ is ⌜m₁ ⋯ mₖ⌝ = 2 to the number of m₁, times 3 to the number of m₂, and so on, with the kth prime to the number of mₖ.</p>
+  <p data-pid="611d64">Prime-code technique: <b>different strings get different codes, and a string can be read back from its code.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the prime-code technique">
+\ulcorner m_1 \cdots m_k \urcorner = \ulcorner n_1 \cdots n_j \urcorner @@ suppose two strings share a code
+\text{both are prime lists of one number} @@ a product of primes in order, each power at least 1
+k = j \text{ and each prime has the same power on both sides} @@ the one-prime-list technique (4j)
+\htmlClass{new}{m_i = n_i \text{ for every } i} \quad \blacksquare @@ each mark has its own number
   </pre>
-  <p data-pid="2f4d0c">The ½ is not idle. On a wire, ½ is the middle voltage m of 38e2, where the gate’s curve crosses the line v = v. The liar’s only answer as a sameness is the gate’s one balanced point, and 38e2 proved that point does not hold when the slope there is steep. Read once, the liar has no mark. Read over time, it has a steady pattern: so and not so in turn, a moment each.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · liar box · ← → keys work</div></section>
+  <pre class="lines" data-k="ember" data-label="this step: two codes, worked">
+\ulcorner 0 = 0 \urcorner = 2^1 \cdot 3^5 \cdot 5^1 = 2430 @@ marks 0, =, 0: numbers 1, 5, 1
+\htmlClass{new}{\ulcorner S0 = S0 \urcorner = 2^2 \cdot 3^1 \cdot 5^5 \cdot 7^2 \cdot 11^1 = 20\,212\,500} \quad \blacksquare @@ marks S, 0, =, S, 0
+  </pre>
+  <p data-pid="15b466">A list of strings gets a code the same way, one level up: the list σ₁, …, σₖ has code 2 to the ⌜σ₁⌝, times 3 to the ⌜σ₂⌝, and so on. A line (S, R) is the list of S’s formulas followed by R, and a proof is a list of lines. So every proof has a code. The proof-check technique (38b3) reads the code back and checks it: whether a number is the code of a proof can be settled by a recipe that always stops.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · codes · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">38g1.1</span><span class="ph understand">understand</span>What does the delay-loop technique say? <br>Why is the ½ that meets x = 1 − x the middle voltage of 38e2, and why does it not hold?</li>
+      <li><span class="qid">38g1.1</span><span class="ph understand">understand</span>How is the code of a string of marks made? <br>What does the prime-code technique say, and which technique of rung 4 does its proof rest on?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="38g2">
-  <h2 class="sthead"><span class="stno">38g2</span>An odd ring has no rest that holds</h2>
-  <p data-pid="969de6">Join n not gates in a ring, each feeding the next and the last feeding the first. The ring rests when every gate’s input and output agree with its neighbours’: when v = h(v), with h = g ∘ g ∘ ⋯ ∘ g, n times (9b).</p>
-  <p data-pid="503860">Odd-ring technique: <b>a ring of an odd number of not gates has exactly one rest, the middle voltage m, and when |g′(m)| > 1 it does not hold.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the odd-ring technique">
-g \text{ falls},\ \ n \text{ odd} \Rightarrow h \text{ falls} @@ a fall after a fall is a rise; an odd count of falls is a fall
-h(v) - v \text{ falls strictly, from above } 0 \text{ at } v = 0 \text{ to below } 0 \text{ at the supply} @@ a falling function less a rising one; h(0) &gt; 0 and h(supply) &lt; supply
-\text{exactly one } v \text{ with } h(v) = v @@ in-between values (12a) for one, and strict falling for no more
-g(m) = m \Rightarrow h(m) = m @@ so the one rest is m
-\htmlClass{new}{h'(m) = g'(m)^n,\ |h'(m)| > 1:\ \text{the rest pushes}} \quad \blacksquare @@ the chain rule n times (13e); the middle-gain technique’s argument (38e2)
+  <h2 class="sthead"><span class="stno">38g2</span>The axioms of arithmetic</h2>
+  <p data-pid="2f4193">Rung 4 proved its facts from sets. Here a few of them are written as the givens of a collection, PA, in the language of arithmetic:</p>
+  <ul>
+    <li data-pid="832603">∀x ¬(S(x) = 0): 0 is nobody’s next (4b).</li>
+    <li data-pid="02b187">∀x ∀y (S(x) = S(y) ⇒ x = y): different numbers have different nexts (4b).</li>
+    <li data-pid="3a8984">∀x (x + 0 = x) and ∀x ∀y (x + S(y) = S(x + y)): adding (4f).</li>
+    <li data-pid="7647e2">∀x (x · 0 = 0) and ∀x ∀y (x · S(y) = (x · y) + x): multiplying (4g).</li>
+    <li data-pid="e85b3c">For each formula φ(x), with perhaps other free placeholders: if φ(0), and ∀x (φ(x) ⇒ φ(S(x))), then ∀x φ(x). Induction (4c), one statement for each φ, each with an every in front for its other placeholders.</li>
+  </ul>
+  <p data-pid="4d0450">Each member is true in N, by rung 4, so N is a world of PA, and by the true-everywhere technique PA reaches only statements true in N. The list is endless, but whether a number codes a member of it is settled by a recipe: read the string back and compare it with the six lines and the pattern of the seventh.</p>
+  <p data-pid="f7bc52">Why is induction among the givens? Without it the collection stops short. Take the numbers with two extra members, ⋆ and ⋆′, each its own next, as 38c.5.4 asks. Let a number plus ⋆ be ⋆′, and fill in the rest to fit the six lines. That world makes the first six true and 0 + ⋆ = ⋆′, so ∀x (0 + x = x) is false there, and the first six alone never reach it. With induction, φ(x) = (0 + x = x) gives it in four lines.</p>
+  <pre class="lines" data-k="ember" data-label="this step: 0 + x = x from PA">
+0 + 0 = 0 @@ use an every, x + 0 = x with 0
+0 + S(x) = S(0 + x) @@ use an every, the second adding line
+\qquad \text{assume } 0 + x = x;\ \ 0 + S(x) = S(x) @@ swap, on the line above
+\htmlClass{new}{\forall x\,(0 + x = x)} \quad \blacksquare @@ prove an if; speak of everything; induction for φ(x) = (0 + x = x)
   </pre>
-  <p data-pid="7f87f6">So an odd ring cannot sit still. Any noise moves it off m, the steep slope carries it away, and it never finds another place to rest. The ring of one gate is the liar box; a ring of three or five is the same box, slower, and easier to build, because one gate feeding itself is too quick for the wire between.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · odd ring · ← → keys work</div></section>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · PA · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38g2.1</span><span class="ph understand">understand</span>What does the odd-ring technique say? <br>Why does an odd number of falling gates make a falling ring, and why does that leave exactly one rest?</li>
+      <li><span class="qid">38g2.1</span><span class="ph understand">understand</span>What are the axioms of arithmetic, PA, and why does PA reach only statements true in N? <br>What breaks without the induction line?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="38g3">
-  <h2 class="sthead"><span class="stno">38g3</span>The period of a ring</h2>
-  <p data-pid="ce111e">Name the outputs round the ring x₁, x₂, …, xₙ, each the not of the one before, a delay late, and x₁ the not of xₙ.</p>
-  <p data-pid="1154d3">Ring-period technique: <b>a ring of an odd number n of not gates, each with delay τ, runs with period 2nτ; a ring of an even number repeats any pattern every nτ, and may rest.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the ring-period technique">
-x_{k+1}(t) = 1 - x_k(t - \tau),\ \ x_1(t) = 1 - x_n(t - \tau) @@ the ring
-x_1(t) = \neg^{\,n}\, x_1(t - n\tau) @@ follow the wire round once: n nots, n delays
-n \text{ odd}:\ x_1(t) = 1 - x_1(t - n\tau) @@ an even count of nots cancels in pairs (38a2), one is left
-\htmlClass{new}{x_1 \text{ flips every } n\tau,\ \text{period } 2n\tau} \quad \blacksquare @@ the delay-loop technique with nτ for τ; n even gives x₁(t) = x₁(t − nτ) instead
+  <h2 class="sthead"><span class="stno">38g3</span>A list in one number</h2>
+  <p data-pid="725697">A code is a product of prime powers, and the language of arithmetic has no mark for powers. It has + and ·. With them, “r is the remainder of u on division by d” is a formula: ∃q (q ≤ u ∧ u = q · d + r ∧ r &lt; d), with every some kept below u. The trick is to store a whole list in two numbers through remainders.</p>
+  <p data-pid="35f699">List-in-one-number technique: <b>for every finite list of numbers there are two numbers u and v such that the entry in place i of the list is the remainder of u on division by 1 + (i + 1) · v.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the list-in-one-number technique">
+\text{list } t_0, \ldots, t_{n-1};\ \ m = 1 + \text{the largest of } n, t_0, \ldots, t_{n-1};\ \ v = m! @@ given; 4k’s factorial
+d_i = 1 + (i + 1)v \text{ for } i < n;\ \ t_i < m \le v < d_i @@ each entry is small enough to be a remainder
+p \text{ prime},\ p \mid d_i,\ p \mid d_j,\ i < j \Rightarrow p \mid (j - i)v @@ the divides-the-rest technique (4j), on dⱼ − dᵢ
+\Rightarrow p \mid v @@ prime-divides-a-factor (4j); j − i is at most m, so it divides m!
+\Rightarrow p \mid 1 @@ divides-the-rest, on dᵢ = 1 + (i + 1)v
+\text{so no two of the } d_i \text{ share a prime} @@ refute: no prime divides 1
+u, u' < D = d_0 \cdots d_{n-1} \text{ with the same remainders} \Rightarrow D \mid u - u' \Rightarrow u = u' @@ each dᵢ divides the difference; prime lists (4j); the difference is below D
+\htmlClass{new}{\text{some } u < D \text{ has the remainders } t_0, \ldots, t_{n-1}} \quad \blacksquare @@ D numbers, D lists of remainders, no two numbers alike: every list is met (4k)
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: two rings, counted">
-n = 3,\ \tau = 10 \text{ ps}:\ \ 2 \cdot 3 \cdot 10 = 60 \text{ ps} @@ a trillionth of a second is a picosecond, ps
-\tfrac{1}{60 \cdot 10^{-12}} \approx 1.67 \cdot 10^{10} \text{ Hz} @@ about 16.7 billion turns a second
-n = 101,\ \tau = 15 \text{ ps}:\ \ 2 \cdot 101 \cdot 15 = 3030 \text{ ps} @@ a ring kept on chips to measure their own gates
-\htmlClass{new}{\tfrac{1}{3.03 \cdot 10^{-9}} \approx 330 \text{ MHz}:\ \text{read the frequency, and } \tau = \tfrac{1}{2nf}} \quad \blacksquare @@ the count turned round
+  <pre class="lines" data-k="ember" data-label="this step: the list 2, 0, 3 in one number">
+n = 3,\ \ m = 4,\ \ v = 4! = 24,\ \ d_0, d_1, d_2 = 25,\ 49,\ 73 @@ the recipe of the technique
+u = 64\,827 @@ found by search below D = 89 425
+\htmlClass{new}{64\,827 = 25 \cdot 2593 + 2 = 49 \cdot 1323 + 0 = 73 \cdot 888 + 3} \quad \blacksquare @@ the remainders are the list
   </pre>
-  <p data-pid="cca871">The change runs round the ring twice per period: once to turn x₁ from 1 to 0, once to turn it back. A factory cannot see a delay of 15 ps directly, but it can count 330 million turns a second and divide. That is the liar box at work.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · period · ← → keys work</div></section>
+  <p data-pid="a53429">So “y is 2 to the power x” is a formula: some u and v store the list 1, 2, 4, …, y, each entry twice the one before, with x + 1 entries. Every some after the first two is kept below a term. The same trick writes “x is the code of a formula” and “y is the code of a proof of the formula with code x”.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · one number · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38g3.1</span><span class="ph understand">understand</span>What does the ring-period technique say? <br>Why does the change go round the ring twice in each period?</li>
+      <li><span class="qid">38g3.1</span><span class="ph understand">understand</span>What does the list-in-one-number technique say? <br>Why does arithmetic need it, and how does it make “y is 2 to the power x” a formula?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="38g4">
-  <h2 class="sthead"><span class="stno">38g4</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">38g4</span>True searches are reached</h2>
+  <p data-pid="a38e71">Call a formula <i>bounded</i> when each of its everys and somes is kept below a term: ∀x (x &lt; t ⇒ ⋯) or ∃x (x &lt; t ∧ ⋯). 4j’s bounded-some technique showed that such a statement is settled, by a search that stops. A <i>search statement</i> is a bounded formula with somes in front: ∃y θ(y), θ bounded. “Some number is the code of a proof of φ” has that shape.</p>
+  <p data-pid="cc91db">Search-reached technique: <b>every search statement true in N is reached by PA.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the search-reached technique">
+N \models \exists y\,\theta(y) \text{, so } N \models \theta(\bar k) \text{ for some number } k @@ the clause for some (38a3)
+\text{each term } t \text{ with no placeholder: } PA \vdash t = \bar n \text{, with } n \text{ its value} @@ induction on the term; the adding and multiplying lines, one step at a time
+PA \vdash \neg(\bar m = \bar n) \text{ for } m \ne n @@ the two next lines, run min(m, n) times, then 0 is nobody’s next
+PA \vdash \forall x\,(x < \bar n \Rightarrow x = \bar 0 \lor \cdots \lor x = \overline{n - 1}) @@ induction in PA, on n, from outside: one proof for each n
+\text{a true bounded statement is reached} @@ induction on its building: each bounded every is n cases, each true bounded some names its example
+\htmlClass{new}{PA \vdash \exists y\,\theta(y)} \quad \blacksquare @@ show an example, with k̄
+  </pre>
+  <p data-pid="8e06f8">The proof leans on N twice and on PA throughout: a true search has an example, and the example is a numeral that PA can work with. A false search statement is another matter. To reach its denial, PA would have to check every number, and the technique says nothing about that. 38i shows what goes wrong there.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · searches · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38g4.1</span><span class="ph understand">understand</span>What is a bounded formula, and what is a search statement? <br>What does the search-reached technique say, and why does it say nothing about false search statements?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38g5">
+  <h2 class="sthead"><span class="stno">38g5</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-x = 1 - x \text{ has no answer}\,? @@ it has one, ½; it has no mark, which is the liar’s point
-\text{the liar box is stuck at } \tfrac12\,? @@ ½ is its one rest and it does not hold; it runs
-\text{a ring of } n \text{ gates has period } n\tau\,? @@ 2nτ for n odd: the change goes round twice
-\text{an even ring runs like an odd one}\,? @@ an even count of nots cancels; it may rest, and 38h makes it hold a bit
+\ulcorner 0 = 0 \urcorner = 2430 \text{, so } 0 = 0 \text{ is a statement about } 2430\,? @@ the statement is about 0; its code is a number that stands for it, as a name stands for a thing (0b)
+\text{arithmetic has no power mark, so it cannot say } y = 2^x\,? @@ the list-in-one-number technique says it with + and · alone
+\text{every true statement of arithmetic is reached by PA, since true searches are}\,? @@ only search statements; an every in front is another matter (38i)
+\text{induction is among the givens, so it is no longer a technique}\,? @@ in PA it is a given line; on the ladder it was proved from sets (4c), and PA is a collection the ladder studies
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38g4.1</span><span class="ph understand">understand</span>Why is the liar box not stuck at ½? <br>Why is the period 2nτ and not nτ?</li>
+      <li><span class="qid">38g5.1</span><span class="ph understand">understand</span>Why is 0 = 0 not a statement about 2430? <br>Why does the search-reached technique not give every true statement of arithmetic?</li>
     </ol>
   </section>
 </section>
@@ -120,22 +154,22 @@ x = 1 - x \text{ has no answer}\,? @@ it has one, ½; it has no mark, which is t
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">38g.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\tau_1, \tau_2, \ldots, \tau_n \text{ all different}"></span></span>Build the period of an odd ring whose gates have different delays. <br>A ring of 5 gates runs at 2 GHz; one gate is replaced by a slower one and it runs at 1.8 GHz. Find the new gate’s delay, if the others are equal.</div>
-  <div class="chq"><span class="chid">38g.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="|g&#x27;(m)| &lt; 1"></span></span>Build an odd ring whose gates are too shallow at the middle. What does it do? <br>Is a liar box made of shallow gates a statement with a third value after all?</div>
-  <div class="chq"><span class="chid">38g.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="x_1(t) = x_1(t - 2n\tau)"></span></span>Every odd ring repeats every 2nτ. Turn it round: is every pattern that repeats every 2nτ a run of the ring? <br>Which patterns of 1s and 0s can a ring of 3 gates run, starting from any outputs at all?</div>
-  <div class="chq"><span class="chid">38g.5.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">1b.4.4 and 1f’s U-table: the liar, again</span></span>One answer to the liar gives it a third value, neither true nor false, and finds that value as the still point every honest attempt to fix the truths settles at. Another says the liar is not a statement, only a string of words that never finishes being read. <br>On this step the box has a still point, ½, which does not hold, and a reading over time, which never ends. Which answer does the wire favour, and does the wire get a vote?</div>
+  <div class="chq"><span class="chid">38g.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\ulcorner \neg 0 = S0 \urcorner"></span></span>Find this code from the table of marks, and factor it back. <br>Build u and v for the list 1, 2, 4 by the recipe of the list-in-one-number technique, and check the three remainders.</div>
+  <div class="chq"><span class="chid">38g.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{the empty string},\ \ \text{the number } 1"></span></span>Which string has the code 1? Which numbers are codes of no string at all, and why is 2 to the power 0 never a factor of a code? <br>What would go wrong if a mark were given the number 0?</div>
+  <div class="chq"><span class="chid">38g.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="PA \vdash \exists y\,\theta(y)"></span></span>The search-reached technique runs from true to reached. Turn it round: if PA reaches a search statement, is it true in N? <br>Prove it from 38c, and find which fact about N the proof needs.</div>
+  <div class="chq"><span class="chid">38g.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="m = 4,\ \ v = 24"></span></span>Reroute the list-in-one-number technique for the list 2, 0, 3 without searching below D: find u from the dividers 25, 49 and 73 by 4j’s oldest algorithm, building a number with remainder 1 on one divider and 0 on the others, three times.</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r38f.html">← 38f · every table from one gate</a><a href="r38h.html">38h · memory →</a></nav>
+<nav class="nextrung"><a href="r38f.html">← 38f · numbers past every numeral</a><a href="r38h.html">38h · a sentence about itself →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A ring of an odd number of inverters is a ring oscillator, and its period 2nτ uses the propagation delay τ of each stage. The liar statement is the liar paradox; x = 1 − x with x = ½ is its value in a three-valued or continuous logic. Rings of 101 or more stages on test chips measure process speed.</p>
+  <p>The codes are Gödel numbers, and coding is Gödel numbering; ⌜φ⌝ is the Gödel number of φ. PA is Peano arithmetic, here in its first-order form, with induction as an axiom schema; without the schema the first six lines are close to Robinson arithmetic, Q, which has one more line, every number is 0 or a next. The list-in-one-number technique is Gödel’s β-function lemma, and its middle lines are the Chinese remainder theorem. Bounded formulas are Δ₀ formulas, search statements are Σ₁ sentences, and the search-reached technique is Σ₁-completeness.</p>
   <h3>Who said it first</h3>
-  <p>The liar is from Eubulides of Miletus in the fourth century BCE; the Cretan who calls all Cretans liars is older, from Epimenides. Saul Kripke’s theory of truth (1975) found a fixed point of the process of fixing truths, at which the liar is neither true nor false. Anil Gupta and Hans Herzberger in 1982 read the liar by revision, flipping at each step of a sequence, which is the ring of 38g1 in logic’s words. Ring oscillators were used in valve circuits from the 1920s and are on almost every chip made since the 1970s.</p>
+  <p>Kurt Gödel numbered formulas by prime powers, and used the β-function to express sequences, in his paper of 1931, “On formally undecidable propositions of Principia Mathematica and related systems I”. Giuseppe Peano wrote the axioms of arithmetic in 1889, after Richard Dedekind’s analysis of 1888. Raphael Robinson isolated the weaker system Q in 1950. The remainder theorem is in the Chinese mathematical text of Sunzi, around the 4th century.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“The liar box oscillates, so the liar statement is true half the time and false half the time, and its truth value is ½.” Not allowed: the box is a wire, not a statement. The statement was refuted on 1b and has no mark. What the box shows is that the arithmetic sameness x = 1 − x, given a delay, becomes a rule fed its own answers, and that rule has a pattern in time. The ½ is the box’s one rest, which never holds.</p>
+  <p>“The code of 0 = 0 is 2430, and 2430 is even. So 0 = 0 says that something is even.” Not allowed: the code is a name for the formula, chosen by a table. A different table gives a different number. What 0 = 0 says is fixed by 38a’s truth, and it is about 0. What the code makes possible is the other direction: a formula about numbers that is true of 2430 exactly when it is true of the formula 0 = 0.</p>
 </section>
 
 </div>
@@ -150,20 +184,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'once',t:R`x = 1 - x \Rightarrow x = \tfrac12`,n:`No mark.`},
-  {k:'ember',kl:'with delay',t:R`x(t) = 1 - x(t - \tau)`,n:`Answers a moment late.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{period } 2\tau}`,n:`A clock.`}
-],{title:'The slides · liar box · ← → keys work'});
+  {k:'ember',kl:'marks',t:R`0 \mapsto 1,\ \ S \mapsto 2,\ \ = \ \mapsto 5`,n:`A number for each mark.`},
+  {k:'ember',kl:'string',t:R`\ulcorner 0 = 0 \urcorner = 2^1 3^5 5^1`,n:`Primes in order.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2430 \text{ is } 0 = 0}`,n:`Factor to read it back.`}
+],{title:'The slides · codes · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'compose',t:R`h = g \circ \cdots \circ g`,n:`n falls, n odd.`},
-  {k:'ember',kl:'one rest',t:R`h(m) = m`,n:`In-between values.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{|h'(m)| = |g'(m)|^n > 1}`,n:`It pushes.`}
-],{title:'The slides · odd ring · ← → keys work'});
+  {k:'ember',kl:'next',t:R`\neg(S(x) = 0),\ \ S(x) = S(y) \Rightarrow x = y`,n:`From 4b.`},
+  {k:'ember',kl:'adding, multiplying',t:R`x + S(y) = S(x + y),\ \ x \cdot S(y) = x \cdot y + x`,n:`From 4f and 4g.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\varphi(0) \land \forall x\,(\varphi(x) \Rightarrow \varphi(Sx)) \Rightarrow \forall x\,\varphi(x)}`,n:`Induction, one line per formula.`}
+],{title:'The slides · PA · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'round once',t:R`x_1(t) = \neg^n x_1(t - n\tau)`,n:`n nots.`},
-  {k:'ember',kl:'odd',t:R`1 - x_1(t - n\tau)`,n:`One not left.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{2n\tau}`,n:`Count the gates.`}
-],{title:'The slides · period · ← → keys work'});
+  {k:'ember',kl:'dividers',t:R`d_i = 1 + (i+1)\,v`,n:`No two share a prime.`},
+  {k:'ember',kl:'remainders',t:R`u = q_i d_i + t_i`,n:`Each entry a remainder.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(u, v) \text{ holds the list}}`,n:`Powers without a power mark.`}
+],{title:'The slides · one number · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'bounded',t:R`\forall x < t,\ \ \exists x < t`,n:`Settled by a search that stops.`},
+  {k:'ember',kl:'search',t:R`\exists y\,\theta(y)`,n:`A some in front.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{N \models \exists y\,\theta \Rightarrow PA \vdash \exists y\,\theta}`,n:`True searches are reached.`}
+],{title:'The slides · searches · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

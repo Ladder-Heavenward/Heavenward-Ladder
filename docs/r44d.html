@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pinned down by arrows</title>
+<title>Subgroups and middle fields</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,89 +25,117 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r44c.html">← 44c maps between maps</a><a href="r44e.html">next: 44e limits and colimits →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r44c.html">← 44c the symmetries of the roots</a><a href="r44e.html">next: 44e groups taken apart →</a></p>
   <div class="tags"><span class="tag proof">44d · proof</span></div>
-  <h1>Pinned down by arrows</h1>
-  <p data-pid="31c0c4">Rung two built a pair in order out of sets, and then proved the one fact anyone ever uses about it: two pairs are equal exactly when their first parts are equal and their second parts are equal. Its standing questions tried other ways of building a pair, and found that some work and some do not. The ones that work all have that one fact. This step turns the fact into a description that names no members at all. A product of two things is a thing with an arrow to each, such that any other thing with an arrow to each has exactly one arrow into it that agrees with both. For sets it is the set of pairs. For statements ordered by if, it is and. For groups it is pairs multiplied entry by entry. Turn every arrow round and the same words describe a sum: for sets two copies side by side, for statements or. Such a description does not say what the thing is made of. It pins the thing down anyway, up to exactly one matching, and that is the sameness the rung is about.</p>
-  <p class="gesture" data-pid="85d007">A product of two things is a thing with an arrow to each, through which every other such pair of arrows runs in exactly one way. A sum is the same with every arrow turned round. Sets give pairs and side-by-side copies, statements give and and or, groups give pairs. Any two products of the same two things are matched by exactly one arrow that agrees with the two arrows out.</p>
+  <h1>Subgroups and middle fields</h1>
+  <p data-pid="96f94c">Between the rationals and the field the roots make there are fields in the middle, and inside the group of the equation there are smaller groups. This step matches them exactly. Each smaller group leaves some members of the field alone, and those members make a middle field. Each middle field is left alone by some of the symmetries, and those make a smaller group. The two ways round undo each other, the bigger group goes with the smaller field, and the sizes match: how many symmetries a part-group has is how far the field climbs above its middle field. So a question about fields, which may be endless sets, becomes a question about a finite group, which can be listed. One more thing comes out. Some middle fields are themselves the fields of roots of an equation, and they are exactly the ones whose groups are normal, the kind of part-group rung 42 cut along.</p>
+  <p class="gesture" data-pid="3b8f86">A part-group H gives the field of what H leaves alone; a middle field E gives the group of symmetries that leave E alone. These undo each other, reverse containment, and the field climbs above its middle field by exactly as many steps as the part-group has members. A middle field is a splitting field exactly when its group is normal, and then its own group is the quotient.</p>
 </header>
 
 <section class="class step" data-step="44d1">
-  <h2 class="sthead"><span class="stno">44d1</span>A product, by its arrows</h2>
-  <p data-pid="1277a8">Let A and B be things of a category C. A <i>product</i> of A and B is a thing P with arrows p₁ : P → A and p₂ : P → B, such that for every thing X and arrows f : X → A and g : X → B there is exactly one arrow u : X → P with p₁ ∘ u = f and p₂ ∘ u = g. Write ⟨f, g⟩ for that u. A description of this kind, a thing with arrows such that every rival runs through it in exactly one way, is a <i>universal property</i>.</p>
-  <p data-pid="5212d6">Pair-map technique: <b>in Set, the set of pairs A × B, with the maps to the first and the second entry, is a product of A and B.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the pair-map technique">
-p_1(x, y) = x,\ \ p_2(x, y) = y @@ 2g4: reading a pair back
-f : X \to A,\ g : X \to B;\ \ u(z) = (f(z), g(z)) @@ a function into A × B (2g10: the pair exists)
-p_1(u(z)) = f(z),\ \ p_2(u(z)) = g(z) @@ u runs f and g through P
-u' \text{ with } p_1 \circ u' = f,\ p_2 \circ u' = g \Rightarrow u'(z) \text{ has parts } f(z), g(z) @@ suppose a second
-\htmlClass{new}{u' = u} \quad \blacksquare @@ the equal-pairs technique (2g5), at each z; equal functions (9a3)
+  <h2 class="sthead"><span class="stno">44d1</span>Fixed fields and fixing groups</h2>
+  <p data-pid="f99b85">Let K be the splitting field of a polynomial over F inside ℂ, and G = Aut(K/F). For a part-group H of G, the <i>fixed field</i> K^H is the set of a in K with σ(a) = a for every σ in H. It is a field between F and K: if σ fixes a and b, it fixes a + b, ab, −a and 1/a. For a field E with F ⊆ E ⊆ K, a <i>middle field</i>, Aut(K/E) is the part-group of G that fixes every member of E.</p>
+  <pre class="lines" data-k="ember" data-label="this step: two of each, for x³ − 2">
+\tau = \text{the flip of } \mathbb C \text{ on } K:\ \ \sqrt[3]2 \mapsto \sqrt[3]2,\ \ \omega \mapsto \omega^2 @@ 25a’s flip keeps sums and products, and K is closed under it
+K^{\{e, \tau\}} \supseteq \mathbb Q(\sqrt[3]2) @@ τ fixes ∛2
+\sigma:\ \sqrt[3]2 \mapsto \omega\sqrt[3]2,\ \ \omega \mapsto \omega,\ \ \text{the loop } (1\ 2\ 3) @@ a symmetry, by the count of 44c3
+\htmlClass{new}{K^{\{e, \sigma, \sigma^2\}} \supseteq \mathbb Q(\omega),\ \ \mathrm{Aut}(K/\mathbb Q(\omega)) \supseteq \{e, \sigma, \sigma^2\}} \quad \blacksquare @@ σ fixes ω
   </pre>
-  <p data-pid="3b6989">The product in <b>Grp</b> is G × H with (g, h)(g′, h′) = (g g′, h h′): the same u keeps products when f and g do. In <b>Top</b> it is 34b3’s box product. In the category of statements ordered by ⇒ (44a2), an arrow X → A is “X ⇒ A”, and the product of P and Q is P ∧ Q: P ∧ Q ⇒ P and P ∧ Q ⇒ Q by keep either part, and from X ⇒ P and X ⇒ Q, X ⇒ P ∧ Q by join (1c). In any order, the product of two things is their greatest lower bound, when there is one.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · a product · ← → keys work</div></section>
+  <p data-pid="58f2c0">The containments go both ways round: a bigger part-group fixes fewer members, and a bigger middle field is fixed by fewer symmetries. The next two footings turn the ⊇ above into =.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · fixing · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">44d1.1</span><span class="ph understand">understand</span>What is a product of A and B, by its arrows alone? <br>What does the pair-map technique say, and which technique of 2g gives the “exactly one”?</li>
+      <li><span class="qid">44d1.1</span><span class="ph understand">understand</span>What is the fixed field of a part-group H, and why is it a field? <br>Why does a bigger part-group have a smaller fixed field?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="44d2">
-  <h2 class="sthead"><span class="stno">44d2</span>Unique up to one matching</h2>
-  <p data-pid="f03970">The description names no members, so it cannot say which set P is. It says something stronger instead.</p>
-  <p data-pid="c93164">One-matching technique: <b>if P and P′ are both products of A and B, exactly one arrow from P′ to P agrees with the arrows out, and that arrow is a matching.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the one-matching technique">
-u = \langle p'_1, p'_2 \rangle : P' \to P,\ \ u' = \langle p_1, p_2 \rangle' : P \to P' @@ each is a product: run the other’s arrows through it; exactly one each
-p_1 \circ (u \circ u') = p'_1 \circ u' = p_1,\ \ p_2 \circ (u \circ u') = p_2 @@ brackets free; each runs p₁, p₂ through
-p_1 \circ \mathrm{id}_P = p_1,\ \ p_2 \circ \mathrm{id}_P = p_2 @@ so does the do-nothing arrow
-u \circ u' = \mathrm{id}_P @@ exactly one arrow P → P runs p₁ and p₂ through P
-u' \circ u = \mathrm{id}_{P'} @@ the same, at P′
-\htmlClass{new}{u \text{ is a matching, and the only arrow that agrees}} \quad \blacksquare @@ 44a3
+  <h2 class="sthead"><span class="stno">44d2</span>A part-group fixes a field of its own size</h2>
+  <p data-pid="752b41">Fixed-size technique: <b>for every part-group H of G, [K : K^H] = |H|.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the fixed-size technique">
+H = \{h_1, \ldots, h_m\},\ \ h_1 = e;\ \ x_1, \ldots, x_{m+1} \in K @@ to show: any m + 1 members of K are tied over K^H, so [K : K^H] ≤ m
+\textstyle\sum_j h_i(x_j)\,y_j = 0,\ \ i = 1, \ldots, m @@ m conditions on m + 1 unknowns in K
+\text{some answer } y \ne 0;\ \text{take one with fewest } y_j \ne 0, \text{ and } y_1 = 1 @@ lost plus reached (27c): the map from K^(m+1) to K^m loses more than 0; renumber and scale
+\textstyle\sum_j h_i(x_j)\,h(y_j) = 0 \text{ for } h \in H @@ apply h to the i-th condition: h hᵢ runs over H as hᵢ does (19b’s one-answer technique)
+y - h(y) \text{ is an answer with } y_1 - h(y_1) = 0 @@ subtract; it has fewer entries that are not 0, so it is 0
+h(y_j) = y_j \text{ for every } h, \text{ so every } y_j \in K^H @@ fewest
+\textstyle\sum_j x_j y_j = 0 \text{ with } y_j \in K^H \text{ not all } 0 @@ the condition for h₁ = e
+[K : K^H] \le m \le |\mathrm{Aut}(K/K^H)| = [K : K^H] @@ H ⊆ Aut(K/K^H), and K is the splitting field over K^H too, so 44c3 counts it
+\htmlClass{new}{[K : K^H] = |H|,\ \ \mathrm{Aut}(K/K^H) = H} \quad \blacksquare @@ the sizes force equality
   </pre>
-  <p data-pid="86350f">So any two products are matched, and in exactly one way that respects what makes them products. The pair of 2g, and any other build whose pairs have the equal-pairs property, give matched products; nothing about the product can tell them apart. That is what “pinned down by arrows” means: not one thing, but one thing up to exactly one matching. The trick of the proof, using “exactly one” on the thing itself to force an arrow to be id, is the whole engine of this rung.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · one matching · ← → keys work</div></section>
+  <p data-pid="531b6f">With H = G: K^G is a field E with F ⊆ E and [K : E] = |G| = [K : F]. Since degrees multiply up the tower F ⊆ E ⊆ K, [E : F] = 1 and E = F. So what every symmetry leaves alone is exactly F.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · fixed size · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">44d2.1</span><span class="ph understand">understand</span>What does the one-matching technique say about two products of A and B? <br>Which line of its proof uses “exactly one” on P itself, and what does it force?</li>
+      <li><span class="qid">44d2.1</span><span class="ph understand">understand</span>What does the fixed-size technique say? <br>Why is what every symmetry of K over F leaves alone exactly F?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="44d3">
-  <h2 class="sthead"><span class="stno">44d3</span>A sum, the arrows turned round</h2>
-  <p data-pid="900988">A <i>sum</i> of A and B is a product of A and B in C^op (44b3): a thing S with arrows i₁ : A → S and i₂ : B → S, such that for every X and arrows f : A → X and g : B → X there is exactly one u : S → X with u ∘ i₁ = f and u ∘ i₂ = g. Write [f, g] for it. The one-matching technique, turned round, says any two sums are matched in exactly one way.</p>
-  <p data-pid="9f7a5d">Cases-map technique: <b>in Set, two copies side by side, A ⊔ B, with each member sent to its copy, is a sum of A and B: a function out of it is a function on A and one on B, taken case by case.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the cases-map technique">
-i_1(x) = (x, 0),\ \ i_2(y) = (y, 1) @@ 35e1: A ⊔ B = (A × {0}) ∪ (B × {1})
-u(x, 0) = f(x),\ \ u(y, 1) = g(y) @@ each member of A ⊔ B is in one copy only: one output each (9a1)
-u \circ i_1 = f,\ \ u \circ i_2 = g @@ by the definition
-u' \circ i_1 = f,\ u' \circ i_2 = g \Rightarrow u'(x, 0) = f(x),\ u'(y, 1) = g(y) @@ suppose a second
-\htmlClass{new}{u' = u} \quad \blacksquare @@ they agree on each copy, and the copies are all of A ⊔ B
+  <h2 class="sthead"><span class="stno">44d3</span>The two ways round undo each other</h2>
+  <p data-pid="89aa3c">Middle-field technique: <b>H ↦ K^H and E ↦ Aut(K/E) are matchings between the part-groups of G and the middle fields, each undoing the other, with bigger part-groups going to smaller fields, and [E : F] = |G|/|Aut(K/E)|.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the middle-field technique">
+\mathrm{Aut}(K/K^H) = H @@ the fixed-size technique
+K \text{ is the splitting field of the same polynomial over } E @@ its coefficients are in F ⊆ E
+K^{\mathrm{Aut}(K/E)} = E @@ the fixed-size technique with E in place of F: what every symmetry over E leaves alone is E
+[E : F] = [K : F]/[K : E] = |G|/|\mathrm{Aut}(K/E)| @@ degrees up the tower, and 44c3 twice
+\htmlClass{new}{\text{each way round undoes the other}} \quad \blacksquare @@ the first and third lines
   </pre>
-  <p data-pid="a56e45">In statements ordered by ⇒, the sum of P and Q is P ∨ Q: add an option gives P ⇒ P ∨ Q, and from P ⇒ X and Q ⇒ X, cases worked inside the line (1c) give P ∨ Q ⇒ X. A thing with exactly one arrow to every thing is the sum of nothing at all: in Set it is ∅, with the empty function, and in statements it is ⊥, since ⊥ ⇒ X for every X (1b: when nothing is true, everything is permitted). In <b>Grp</b> the sum of ℤ and ℤ is not ℤ × ℤ. It is the free group on two letters, the loop group of 34i3’s figure eight, and 44i counts arrows to prove the two differ.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · a sum · ← → keys work</div></section>
+  <pre class="lines" data-k="ember" data-label="this step: x³ − 2, every middle field">
+\text{part-groups of } S_3:\ \{e\},\ \{e, (2\ 3)\},\ \{e, (1\ 3)\},\ \{e, (1\ 2)\},\ \{e, \sigma, \sigma^2\},\ S_3 @@ sizes dividing 6 (19d), listed
+\{e, (2\ 3)\} = \{e, \tau\} \leftrightarrow \mathbb Q(\sqrt[3]2) @@ τ fixes root 1; [ℚ(∛2) : ℚ] = 3 = 6/2
+\{e, (1\ 3)\} \leftrightarrow \mathbb Q(\omega\sqrt[3]2),\ \ \{e, (1\ 2)\} \leftrightarrow \mathbb Q(\omega^2\sqrt[3]2) @@ each swap fixes one root, and that root makes a field of degree 3
+\{e, \sigma, \sigma^2\} \leftrightarrow \mathbb Q(\omega) @@ degree 2 = 6/3
+\htmlClass{new}{\text{six part-groups, six middle fields, and no others}} \quad \blacksquare @@ {e} ↔ K, S₃ ↔ ℚ
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · correspondence · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">44d3.1</span><span class="ph understand">understand</span>What is a sum of A and B, and how is it a product turned round? <br>What does the cases-map technique say, and what are the sums of P and Q, and of nothing at all, among statements?</li>
+      <li><span class="qid">44d3.1</span><span class="ph understand">understand</span>What does the middle-field technique say? <br>Why is there no middle field of degree 4 over ℚ inside the splitting field of x³ − 2?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="44d4">
-  <h2 class="sthead"><span class="stno">44d4</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">44d4</span>Normal middles</h2>
+  <p data-pid="ad7287">A middle field E is <i>closed</i> when every σ in G sends E onto E. Then each σ, cut down to E, is a symmetry of E over F.</p>
+  <p data-pid="d1a35c">Normal-middle technique: <b>E = K^H is closed exactly when H is normal in G; then E is the splitting field of a polynomial over F, and Aut(E/F) matches the quotient G/H.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the normal-middle technique">
+\sigma(K^H) = K^{\sigma H \sigma^{-1}} @@ a is fixed by H exactly when σ(a) is fixed by σHσ⁻¹
+E \text{ closed} \iff \sigma H \sigma^{-1} = H \text{ for every } \sigma \iff H \text{ normal} @@ the middle-field technique: different part-groups, different fields
+a \in E \text{ closed}:\ \ g_a(x) = \textstyle\prod (x - b) \text{ over the different } \sigma(a) @@ its roots are in E, and G shuffles them
+g_a \text{ has coefficients in } K^G = F @@ symmetric in the σ(a), so fixed by every σ (44b), and 44d2
+E \text{ is the splitting field of the product of } g_a \text{ over finitely many } a \text{ that build it} @@ [E : F] is finite
+G \to \mathrm{Aut}(E/F),\ \ \sigma \mapsto \sigma \text{ on } E: \text{ keeps composing, loses exactly } H @@ σ fixes E exactly when σ is in Aut(K/E) = H
+\htmlClass{new}{\mathrm{Aut}(E/F) \text{ matches } G/H} \quad \blacksquare @@ onto, since both have |G|/|H| members (44c3); the first isomorphism technique (42·cb19)
+  </pre>
+  <p data-pid="08b11e">For x³ − 2: {e, σ, σ²} is normal in S₃, and ℚ(ω) is the splitting field of x² + x + 1, with group S₃/{e, σ, σ²} of size 2. {e, τ} is not normal, since σ τ σ⁻¹ = (1 3); and ℚ(∛2) is not closed, since σ sends ∛2 to ω∛2, outside it.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · normal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">44d4.1</span><span class="ph understand">understand</span>When is a middle field closed? <br>What does the normal-middle technique say, and why is ℚ(∛2) not closed?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="44d5">
+  <h2 class="sthead"><span class="stno">44d5</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-P \text{ and } P' \text{ are products of } A, B,\ \text{so } P = P'\,? @@ matched, in exactly one way that agrees; equal is rung 0’s sameness, and the property cannot give it
-A \cup B \text{ is a sum of } A \text{ and } B \text{ in } \mathbf{Set}\,? @@ when A and B share a member, f and g may disagree on it, and no u exists: 35e1 keeps copies apart for this reason
-u \text{ runs } f, g \text{ through } P,\ \text{so } P \text{ is a product}\,? @@ some u for every f, g is half; the property needs exactly one
-\text{the sum of } \mathbb Z \text{ and } \mathbb Z \text{ in } \mathbf{Grp} \text{ is } \mathbb Z \times \mathbb Z\,? @@ in ℤ × ℤ the two copies change places with each other, and a map to S₃ need not let them (44i)
+\text{a bigger part-group has a bigger fixed field}\,? @@ the other way: more symmetries leave fewer members alone; G fixes only F
+[\mathbb Q(\sqrt[3]2) : \mathbb Q] = |\{e, \tau\}| = 2\,? @@ the degree of the fixed field over F is the index |G|/|H| = 3; |H| = 2 is the climb from it to K
+\mathbb Q(\sqrt[3]2) \text{ has a symmetry group of size 3 over } \mathbb Q\,? @@ it is not closed; its only symmetry over ℚ is the identity (44c5), and the quotient needs H normal
+\text{every field between } \mathbb Q \text{ and } \mathbb C \text{ appears in the matching}\,? @@ only the middle fields of one splitting field K, between F and K
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">44d4.1</span><span class="ph understand">understand</span>Why is A ∪ B not a sum of A and B in Set when A and B share a member? <br>Why does the one-matching technique give matched products and not equal ones?</li>
+      <li><span class="qid">44d5.1</span><span class="ph understand">understand</span>Why is the degree of ℚ(∛2) over ℚ not the size of the part-group that fixes it? <br>Why does ℚ(∛2) not have a symmetry group S₃/{e, τ}?</li>
     </ol>
   </section>
 </section>
@@ -116,22 +144,22 @@ u \text{ runs } f, g \text{ through } P,\ \text{so } P \text{ is a product}\,? @
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">44d.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{the parts of a set } X,\ \ A \to B \text{ exactly when } A \subseteq B"></span></span>Build the product and the sum of two parts A and B in this order category, and prove the product property for your answer. <br>Which part has exactly one arrow to every part, and which has exactly one arrow from every part?</div>
-  <div class="chq"><span class="chid">44d.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{the empty product}"></span></span>A product of no things at all: a thing T such that every X has exactly one arrow to T. <br>Find it in Set, in Grp, and among statements ordered by ⇒. Is A × T matched with A? Prove it from the property, naming no members.</div>
-  <div class="chq"><span class="chid">44d.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="P \text{ with } p_1, p_2,\ \ Q \cong P \text{ by } h"></span></span>The one-matching technique says products are matched. Turn it round: if Q is matched with a product P by h, is Q a product, and with which arrows out? <br>Prove it. Then find a thing matched with A × B whose arrows out, chosen badly, make it no product.</div>
-  <div class="chq"><span class="chid">44d.5.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">2g.4.3: \{t, \{t, b\}\} \text{ as a shorter pair}</span></span>2g.4.3 tried {t, {t, b}} for the pair t then b, and asked what sets must do for the cases left open to happen. <br>Suppose a build of pairs has the equal-pairs property. Is it then a product in Set? If two builds both are, what can a statement about pairs tell apart between them, and what can it not? Is the question “which set is the pair” still open after this step, or answered?</div>
+  <div class="chq"><span class="chid">44d.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="K = \mathbb Q(\sqrt2, \sqrt3)"></span></span>Build the whole matching for the splitting field of x⁴ − 5x² + 6: every part-group of its group of 4, and the middle field each one fixes. <br>Which middle fields are closed, and why must all of them be here?</div>
+  <div class="chq"><span class="chid">44d.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="H = \{e\},\ \ H = G"></span></span>At the two ends of the matching, H = {e} and H = G. Which fields do they fix, and which lines of the fixed-size technique’s proof become empty or trivial? <br>Does the proof need H to be a part-group, or would any set of symmetries do?</div>
+  <div class="chq"><span class="chid">44d.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="E \text{ closed} \Rightarrow H \text{ normal}"></span></span>The normal-middle technique runs both ways. Prove directly, without the matching, that if E is the splitting field of some polynomial over F, then every σ in G sends E onto E. <br>Which technique of 44c does it use?</div>
+  <div class="chq"><span class="chid">44d.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\mathbb Q(\omega\sqrt[3]2)"></span></span>Reroute the line that ℚ(ω∛2) is fixed by {e, (1 3)}: find the symmetry that swaps roots 1 and 3 as a map of ∛2 and ω, and check by hand that it fixes ω∛2. <br>Is ℚ(ω∛2) the same field as ℚ(∛2)? How can two fields of degree 3 inside K differ?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r44c.html">← 44c · maps between maps</a><a href="r44e.html">44e · limits and colimits →</a></nav>
+<nav class="nextrung"><a href="r44c.html">← 44c · the symmetries of the roots</a><a href="r44e.html">44e · groups taken apart →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A universal property defines an object up to unique isomorphism; the one-matching technique is that uniqueness. A product is a categorical product, ⟨f, g⟩ the pairing; a sum is a coproduct, [f, g] the copairing, A ⊔ B the disjoint union. The empty product is a terminal object; the empty sum an initial object. In a partial order the product is the meet and the coproduct the join; in the category of statements and implications they are conjunction and disjunction, and the initial object is falsum. The coproduct of groups is the free product, ℤ ∗ ℤ for the figure eight.</p>
+  <p>The middle-field technique is the fundamental theorem of Galois theory, and the matching is the Galois correspondence. The fixed-size technique is Artin’s theorem, and its proof is Artin’s lemma on the independence of the symmetries, in the form of a fewest-terms argument. A closed middle field is a normal extension of F. The middle fields are intermediate fields.</p>
   <h3>Who said it first</h3>
-  <p>Products and coproducts by arrows were set out by Saunders Mac Lane in “Duality for groups” (1950), where he noticed that the direct product and the free product of groups are dual. Pierre Samuel described universal mappings in 1948, and Nicolas Bourbaki gave “universal problems” a chapter in the 1950s. Kazimierz Kuratowski’s pair {{x}, {x, y}} of 1921 is the build of 2g, and Norbert Wiener’s of 1914, {{{x}, ∅}, {{y}}}, is another that has the equal-pairs property.</p>
+  <p>Évariste Galois described, in his memoir of 1831, how adjoining a root of an auxiliary equation shrinks the group of an equation, and when the smaller group is what he called a proper decomposition, the normal case. The matching of part-groups with middle fields, stated as an exact correspondence, comes from Richard Dedekind and Heinrich Weber in the 1890s. Emil Artin gave the proof by linear algebra used here, in lectures at Notre Dame in 1938, printed in 1942.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“A × B and B × A are both products of A and B, so A × B = B × A.” Not allowed: with the arrows out swapped, B × A is a product of A and B, and the one-matching technique gives the matching (x, y) ↦ (y, x), which is not the sameness of rung 0. For A = {1} and B = {2} the two sets are {(1, 2)} and {(2, 1)}, which are different sets.</p>
+  <p>“The middle fields of x³ − 2 are ℚ(∛2), ℚ(ω) and nothing else, since ∛2 and ω make K.” Not allowed: a middle field is any field between, and ℚ(ω∛2) and ℚ(ω²∛2) are two more, each of degree 3. Listing the generators misses them; listing the part-groups does not.</p>
 </section>
 
 </div>
@@ -146,20 +174,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'arrows out',t:R`p_1 : P \to A,\ \ p_2 : P \to B`,n:`One to each.`},
-  {k:'ember',kl:'every rival',t:R`f, g \Rightarrow \text{one } u = \langle f, g\rangle`,n:`Exactly one.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{A \times B,\ \ P \wedge Q}`,n:`Pairs; and.`}
-],{title:'The slides · a product · ← → keys work'});
+  {k:'ember',kl:'group to field',t:R`H \mapsto K^H`,n:`What H leaves alone.`},
+  {k:'ember',kl:'field to group',t:R`E \mapsto \mathrm{Aut}(K/E)`,n:`What leaves E alone.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{H_1 \subseteq H_2 \Rightarrow K^{H_1} \supseteq K^{H_2}}`,n:`They reverse.`}
+],{title:'The slides · fixing · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'both ways',t:R`u : P' \to P,\ \ u' : P \to P'`,n:`Each runs the other through.`},
-  {k:'ember',kl:'itself',t:R`u \circ u^{\prime} = \mathrm{id}_P`,n:`Exactly one arrow P → P.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{P \cong P^{\prime} \text{ in one way}}`,n:`Pinned down.`}
-],{title:'The slides · one matching · ← → keys work'});
+  {k:'ember',kl:'tied',t:R`\textstyle\sum_j x_j y_j = 0,\ y_j \in K^H`,n:`m + 1 members.`},
+  {k:'ember',kl:'count',t:R`[K : K^H] \le |H| \le [K : K^H]`,n:`Both ways.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{[K : K^H] = |H|}`,n:`And K^G = F.`}
+],{title:'The slides · fixed size · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'arrows in',t:R`i_1 : A \to S,\ \ i_2 : B \to S`,n:`One from each.`},
-  {k:'ember',kl:'every rival',t:R`f, g \Rightarrow \text{one } [f, g]`,n:`Case by case.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{A \sqcup B,\ \ P \vee Q,\ \ \varnothing,\ \ \bot}`,n:`Copies; or; nothing.`}
-],{title:'The slides · a sum · ← → keys work'});
+  {k:'ember',kl:'part-groups',t:R`\{e\} \subset \{e, \tau\} \subset S_3`,n:`Up the group.`},
+  {k:'ember',kl:'fields',t:R`K \supset \mathbb Q(\sqrt[3]2) \supset \mathbb Q`,n:`Down the fields.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{[E : F] = |G|/|\mathrm{Aut}(K/E)|}`,n:`Sizes match.`}
+],{title:'The slides · correspondence · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'conjugate',t:R`\sigma(K^H) = K^{\sigma H\sigma^{-1}}`,n:`Fields move with groups.`},
+  {k:'ember',kl:'closed',t:R`\sigma H \sigma^{-1} = H`,n:`Normal.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\mathrm{Aut}(E/F) \cong G/H}`,n:`The quotient.`}
+],{title:'The slides · normal · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Adjunctions</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r45e.html">← 45e limits and colimits</a><a href="r45g.html">next: 45g a thing is its arrows →</a></p>
+  <div class="tags"><span class="tag proof">45f · proof</span></div>
+  <h1>Adjunctions</h1>
+  <p data-pid="f4435b">A product-keeping map out of a free group is fixed by where the letters go, and the letters may go anywhere. Rung thirty four proved it and used it to name groups by words. Read as a statement about two categories, it says more. Maps of groups out of the free group on a set match exactly with functions out of the set into the members of a group. Freeing on one side, forgetting on the other, and the two collections of arrows matched, naturally. That pairing of two maps of categories has a name, and it turns up everywhere. Functions of two inputs match with functions that return functions. In rung forty three, middle fields and the subgroups that fix them were matched by a correspondence that turns order round; it is the same pairing between two orders. And whatever is on the left of such a pairing carries sums to sums, which is why the free group on two letters had to be the sum of two copies of the whole numbers.</p>
+  <p class="gesture" data-pid="5fdf7d">One map of categories is left of another when the arrows out of the first map’s value match naturally with the arrows into the second map’s value. Freeing is left of forgetting; taking pairs is left of taking functions; and between two orders the pairing is a correspondence like rung 44’s fields and groups. A map of categories that is left of another carries sums to sums.</p>
+</header>
+
+<section class="class step" data-step="45f1">
+  <h2 class="sthead"><span class="stno">45f1</span>Freeing is left of forgetting</h2>
+  <p data-pid="3e00f4">Let F : C → D and U : D → C be maps of categories. F is <i>left of</i> U, written F ⊣ U, when for every A in C and B in D the arrows D(F(A), B) are matched with the arrows C(A, U(B)), by matchings that are natural in A and in B: running an arrow of C before, or of D after, commutes with the matching. Its accepted name is an adjunction, and this is the step’s one academy word, from the Latin <i>adiungere</i>, to join to.</p>
+  <p data-pid="7d76b3">Free-forgetful technique: <b>product-keeping maps from the free group on S to a group G match with functions from S to the members of G, by keeping only where the letters go, and the matching is natural.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the free-forgetful technique">
+\varphi : F(S) \to G \ \mapsto\ \varphi|_S : S \to U(G) @@ keep where each letter goes
+h : S \to U(G) \ \mapsto\ \text{the one product-keeping } \bar h : F(S) \to G \text{ with } \bar h(s) = h(s) @@ the presented-map technique, no relations (34i2)
+\bar h|_S = h,\ \ \overline{\varphi|_S} = \varphi @@ the second: two product-keeping maps that agree on the letters are one
+\psi \circ \varphi \mapsto U(\psi) \circ \varphi|_S,\ \ \varphi \circ F(k) \mapsto \varphi|_S \circ k @@ after a map of groups, before a function of letters: the same both ways
+\htmlClass{new}{F \dashv U} \quad \blacksquare @@ matched, naturally in S and G
+  </pre>
+  <p data-pid="50b9c4">Count both sides for S with two letters and G = S₃: functions from two letters to six members number 6² = 36, so 36 product-keeping maps run from the free group on two letters to S₃, one for each choice of where x and y go. In <b>Vect</b>, the free space on S is left of forgetting a space to its vectors, which is 27d1’s columns technique: a linear map is fixed by where a basis goes, and the basis may go anywhere.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · free and forget · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">45f1.1</span><span class="ph understand">understand</span>What does F ⊣ U say about the arrows out of F(A) and the arrows into U(B)? <br>What does the free-forgetful technique say, and how many product-keeping maps run from the free group on two letters to S₃?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45f2">
+  <h2 class="sthead"><span class="stno">45f2</span>Two inputs, or a function back</h2>
+  <p data-pid="aaecea">Write B^C for 35e1’s set of functions from C to B. In Set, fix B. Taking pairs with B, A ↦ A × B, and taking functions from B, D ↦ D^B, are maps of categories from Set to Set: f : A → A′ gives (x, y) ↦ (f(x), y), and g : D → D′ gives h ↦ g ∘ h.</p>
+  <p data-pid="02e6cf">Pair-to-function technique: <b>a function of a pair, from A × B to D, matches with a function from A to the functions from B to D, by fixing the first input; so taking pairs with B is left of taking functions from B.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the pair-to-function technique">
+h : A \times B \to D \ \mapsto\ \hat h : A \to D^B,\ \ \hat h(x)(y) = h(x, y) @@ fix x; what is left is a function of y
+k : A \to D^B \ \mapsto\ \check k(x, y) = k(x)(y) @@ the other way
+\check{\hat h} = h,\ \ \hat{\check k} = k @@ the same outputs at every input (9a3)
+(h \circ (f \times \mathrm{id}_B))\hat{\ } = \hat h \circ f,\ \ (g \circ h)\hat{\ } = g \circ \hat h \text{ entry by entry} @@ natural in A and in D
+\htmlClass{new}{(\ ) \times B \dashv (\ )^B} \quad \blacksquare @@ matched, naturally
+  </pre>
+  <p data-pid="fe5103">With sizes, |D|^(|A| · |B|) = (|D|^|B|)^|A|: for |A| = 2, |B| = 3, |D| = 2, both sides are 64. That is 4g’s power technique, (dᵇ)ᵃ = d^(ab), seen as a matching of sets of arrows. 45j turns it into the rule that a program of two inputs is a program that returns a program.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · two inputs · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45f2.1</span><span class="ph understand">understand</span>What is ĥ for a function h of a pair, and what is its value at x? <br>What does the pair-to-function technique say, and which power technique of rung 4 does it match, set for set?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45f3">
+  <h2 class="sthead"><span class="stno">45f3</span>Between two orders: fixing</h2>
+  <p data-pid="88e3de">Between two orders, seen as categories (45a2), a map of categories is a map that keeps order, and naturality is automatic, since there is at most one arrow between two things. So f ⊣ g says only: f(x) ≤ y exactly when x ≤ g(y).</p>
+  <p data-pid="cdda73">Take any relation R between members of X and members of Y. For a part A of X let A→ be the members of Y related to every member of A; for a part B of Y let B← be the members of X related to every member of B. Both turn ⊆ round: a bigger part has fewer common partners.</p>
+  <p data-pid="523470">Fixing technique: <b>for any relation between two sets, B ⊆ A→ exactly when A ⊆ B←, so the two maps are an adjunction between the parts of X and the parts of Y turned round; and A ⊆ A→←, with A→←→ = A→.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the fixing technique">
+B \subseteq A^{\to} \iff \forall y \in B\ \forall x \in A\ (x \mathrel R y) \iff A \subseteq B^{\leftarrow} @@ both say every member of A is related to every member of B (2b: the order of two everys)
+A^{\to} \subseteq A^{\to} \Rightarrow A \subseteq A^{\to\leftarrow} @@ the first line, with B = A→
+A^{\to} \subseteq (A^{\to\leftarrow})^{\to} @@ the same, read in Y: B ⊆ B←→ for B = A→
+A \subseteq A^{\to\leftarrow} \Rightarrow (A^{\to\leftarrow})^{\to} \subseteq A^{\to} @@ → turns ⊆ round
+\htmlClass{new}{A^{\to\leftarrow\to} = A^{\to}} \quad \blacksquare @@ the two lines before
+  </pre>
+  <p data-pid="b4d1ea">Now take 44d’s field L over K with its group G, and the relation “the matching g leaves the member x where it is”. For a subgroup H, H← is the field fixed by H; for a middle field M, M→ is the subgroup that fixes M. The fixing technique gives, for any relation, an adjunction and a matching between the parts with A = A→← and those with B = B←→. 44d’s correspondence is the further fact, proved there, that for the group of an equation every subgroup and every middle field is such a part, so the matching is between all of them.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · fixing · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45f3.1</span><span class="ph understand">understand</span>What does an adjunction between two orders say? <br>What does the fixing technique say, and what are H← and M→ for 44d’s field and group?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45f4">
+  <h2 class="sthead"><span class="stno">45f4</span>Left carries sums</h2>
+  <p data-pid="f31308">Left-keeps-sums technique: <b>if F is left of U, F carries a sum of A and A′ to a sum of F(A) and F(A′).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the left-keeps-sums technique">
+\psi : F(A) \to B,\ \psi' : F(A') \to B @@ a rival pair of arrows out of F(A) and F(A′)
+\psi \leftrightarrow h : A \to U(B),\ \ \psi' \leftrightarrow h' : A' \to U(B) @@ F ⊣ U
+\text{exactly one } [h, h'] : A + A' \to U(B) @@ A + A′ is a sum (45d3)
+[h, h'] \leftrightarrow \text{exactly one } \theta : F(A + A') \to B @@ F ⊣ U again
+\theta \circ F(i_1) = \psi,\ \ \theta \circ F(i_2) = \psi' @@ naturality in A: running i₁ before commutes with the matching
+\htmlClass{new}{F(A + A') \text{ is a sum of } F(A) \text{ and } F(A')} \quad \blacksquare @@ exactly one θ, by the two matchings
+  </pre>
+  <p data-pid="60d98a">Freeing is left of forgetting, so the free group on two letters, F({x} ⊔ {y}), is the sum of F({x}) = ℤ and F({y}) = ℤ in <b>Grp</b>. That is 34i3’s figure eight, found with no picture. Forgetting is on the right, and turned round, a right map carries products to products: the members of G × H are the pairs of members. It does not carry sums: the members of the sum of ℤ and ℤ are words, not two copies side by side.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · left keeps sums · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45f4.1</span><span class="ph understand">understand</span>What does the left-keeps-sums technique say? <br>Why is the free group on two letters the sum of two copies of ℤ in Grp, and why does forgetting not carry that sum to a sum of sets?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45f5">
+  <h2 class="sthead"><span class="stno">45f5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+F \dashv U \Rightarrow U \dashv F\,? @@ left and right differ: freeing keeps sums, forgetting keeps products, and neither keeps both
+\mathbf{Grp}(F(S), G) \cong \mathbf{Set}(S, U(G)) \text{ for one } S, G \Rightarrow F \dashv U\,? @@ the matching must hold for every S and G, and be natural
+U \text{ keeps sums, since it keeps products}\,? @@ the members of ℤ + ℤ in Grp are words, not ℤ ⊔ ℤ
+A^{\to\leftarrow} = A \text{ for every part } A\,? @@ only for the closed parts; for the relation ≤ on ℚ, the part {x : x &lt; 0} closes to {x : x ≤ 0}
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45f5.1</span><span class="ph understand">understand</span>Why does F ⊣ U not give U ⊣ F? <br>Why is A→← not always A? Give the example on the page in your own words.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">45f.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\mathbb Z \to \mathbb R,\ \ \lfloor\ \rfloor : \mathbb R \to \mathbb Z"></span></span>Build the adjunction between the orders ℤ and ℝ: the map sending n to n, and the round-down of 11f. <br>Which is left of which? Prove f(n) ≤ x exactly when n ≤ g(x). Is there a map on the other side of the inclusion, and what is it?</div>
+  <div class="chq"><span class="chid">45f.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="S = \varnothing"></span></span>What is the free group on no letters, and what does the free-forgetful technique say about it? <br>Turned round, what does the left-keeps-sums technique say F carries the sum of nothing to?</div>
+  <div class="chq"><span class="chid">45f.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="U : \mathbf{Grp} \to \mathbf{Set}"></span></span>Forgetting has freeing on its left. Turn it round: does forgetting have a map of categories on its right, G : Set → Grp with Set(U(H), S) matched with Grp(H, G(S))? <br>Test S = ∅: what would Grp(H, G(∅)) be for every group H, and what does that force?</div>
+  <div class="chq"><span class="chid">45f.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="|D|^{|A|\cdot|B|} = (|D|^{|B|})^{|A|}"></span></span>Reroute 4g’s power technique (dᵇ)ᵃ = d^(ab) through the pair-to-function technique and 35e1’s sizes. <br>Which of the two proofs needs induction, and which needs none? What does the reroute prove that 4g did not?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r45e.html">← 45e · limits and colimits</a><a href="r45g.html">45g · a thing is its arrows →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>F ⊣ U is an adjunction, F the left adjoint and U the right adjoint; the matching is the hom-set bijection. Free–forgetful is the first example in every book. The pair-to-function technique is currying, and says that Set is cartesian closed. An adjunction between partial orders is a Galois connection; one that turns order round, as the fixing technique does, is an antitone Galois connection, or polarity, and its closed parts are the Galois-closed sets. The left-keeps-sums technique is the case of “left adjoints preserve colimits, right adjoints preserve limits”.</p>
+  <h3>Who said it first</h3>
+  <p>Daniel Kan defined adjoint functors in “Adjoint functors” (1958). Galois connections were named by Øystein Ore in 1944, after Évariste Galois’s correspondence of 1830–32; Garrett Birkhoff described polarities from a relation in the 1940 edition of Lattice Theory. Currying is named for Haskell Curry, though Moses Schönfinkel used it in 1924 and Gottlob Frege before him.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Forgetting keeps products, so it has a map on its right.” Not allowed: a right adjoint keeps products, so keeping products is what a right map does, not what a left map does. And forgetting has none on its right: Grp(H, G(∅)) would have to be matched with Set(U(H), ∅), which is empty for every H, while every group H has a map to every group, the one sending every member to the member that does nothing.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'out of F(S)',t:R`\varphi : F(S) \to G`,n:`A map of groups.`},
+  {k:'ember',kl:'into U(G)',t:R`\varphi|_S : S \to U(G)`,n:`Where the letters go.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\mathbf{Grp}(F(S), G) \cong \mathbf{Set}(S, U(G))}`,n:`F ⊣ U.`}
+],{title:'The slides · free and forget · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'pair',t:R`h : A \times B \to D`,n:`A function of two inputs.`},
+  {k:'ember',kl:'fix one',t:R`\hat h(x)(y) = h(x, y)`,n:`A function back.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(\ ) \times B \dashv (\ )^B}`,n:`Pairs left of functions.`}
+],{title:'The slides · two inputs · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'partners',t:R`A^{\to} = \{y : x \mathrel R y \text{ for all } x \in A\}`,n:`Common partners.`},
+  {k:'ember',kl:'turned',t:R`B \subseteq A^{\to} \iff A \subseteq B^{\leftarrow}`,n:`Both say all pairs relate.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{A^{\to\leftarrow\to} = A^{\to}}`,n:`Closed parts match.`}
+],{title:'The slides · fixing · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'pair out',t:R`\psi, \psi' \leftrightarrow h, h'`,n:`Through the adjunction.`},
+  {k:'ember',kl:'cases',t:R`[h, h'] \leftrightarrow \theta`,n:`And back.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{F(A + A^{\prime}) = F(A) + F(A^{\prime})}`,n:`Sums to sums.`}
+],{title:'The slides · left keeps sums · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

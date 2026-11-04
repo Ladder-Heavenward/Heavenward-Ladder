@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sorting and searching</title>
+<title>Quantifying over sets</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,88 +25,105 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r38k.html">← 38k how long a program takes</a><a href="r38m.html">next: 38m divide and conquer →</a></p>
-  <div class="tags"><span class="tag proof">38l · proof</span></div>
-  <h1>Sorting and searching</h1>
-  <p data-pid="058e12">Two jobs take up a large share of every computer’s time: putting a list in order, and finding something in a list already in order. The rung on endless sums already counted the best-known ways. Looking up a name by checking the middle and keeping one half costs about the log of the length. Merge sort costs about the length times its log, for every length, and no sort that only compares can promise much less. This step goes further in three directions. First it proves the floor for searching, as the earlier rung proved it for sorting: no search that asks yes or no questions can do better than halving, by more than a single question. Then it counts a sort that chooses at random, the one most libraries actually use, and finds its average by the chance of the statistics floor: about one and four tenths times the floor, with almost no extra memory. And then it breaks the sorting floor, honestly, by not comparing at all. A list of ages can be sorted by counting how many people have each age, in time that grows only like the length, because the floor was about sorts that learn only by comparing, and this one learns more.</p>
-  <p class="gesture" data-pid="321259">Halving search finds an item among n in at most one more than the log of n looks, and no search by yes or no does better than the log of n plus one. Choosing the split at random sorts in about twice n times the natural log of n comparisons on average. Counting each key sorts without comparing, in time like n plus the number of keys.</p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38k.html">← 38k truth cannot be defined inside</a><a href="r38m.html">next: 38m numbering formulas by hand →</a></p>
+  <div class="tags"><span class="tag support">38l · support</span></div>
+  <h1>Quantifying over sets</h1>
+  <p data-pid="995586">Rung four did not say that induction holds for every formula. It said something stronger: the numbers are what is in every inductive set, so any set that holds zero and is closed under next holds every number. Rung eight did not say that every bounded formula has a least upper bound. It said every bounded set does. Both principles speak of every set, and the language of this rung speaks only of members. That is why its worlds can be strange, with numbers past every numeral and lines with holes. So let the language speak of sets too. Add placeholders for parts of the world, and let every and some run over all of them. Then induction is one statement, and its worlds are all copies of the numbers: the strange worlds are gone. The price is high. The new language has no calculus that reaches all its truths, the finite-parts technique fails for it, and what “every part” means is handed back to the theory of sets, with all its open questions.</p>
+  <p class="gesture" data-pid="6082ab">With placeholders for sets, induction and the least upper bound are single statements, and their worlds are all matched with the numbers and the line. The price is that no recipe can list what is true in every such world, and the meaning of “every set” comes from the theory of sets.</p>
 </header>
 
 <section class="class step" data-step="38l1">
-  <h2 class="sthead"><span class="stno">38l1</span>No search beats halving</h2>
-  <p data-pid="1838c5">22l2 counted halving search: compare the target with the middle of the sorted list, keep the half it must be in, and go on, about log₂ n looks. The difference here is the floor. A search that learns only by asking yes-or-no questions about the items must end with one of n + 1 answers: the target is in place 1, or 2, …, or n, or nowhere.</p>
-  <p data-pid="070b70">Search-floor technique: <b>a search that learns only by yes-or-no questions needs at least log₂(n + 1) of them on some input, and halving needs at most ⌊log₂ n⌋ + 1.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the search-floor technique">
-\text{at most } m \text{ questions on every input} @@ suppose it
-\text{at most } 2^m \text{ different runs} @@ each answer yes or no: the answer count of 22l4
-\text{each of the } n + 1 \text{ answers needs its own run} @@ two inputs with different answers cannot share every move
-2^m \ge n + 1 \Rightarrow m \ge \log_2(n + 1) @@ log₂ rises (17d)
-\htmlClass{new}{n = 10^6:\ \ \log_2(10^6 + 1) \approx 19.93,\ \text{so } 20;\ \ \text{halving: } \lfloor 19.93 \rfloor + 1 = 20} \quad \blacksquare @@ halving meets the floor exactly
+  <h2 class="sthead"><span class="stno">38l1</span>Placeholders for sets</h2>
+  <p data-pid="1be8d8">Add to a language a second kind of placeholder, X₀, X₁, …, and the formulas X(t): “t is in X”. Let every and some bind these too. In a world M, ∀X φ is true when φ is true for every part of |M|, every member of 2f’s set of all subsets. Its accepted name is second-order logic; the logic of 38a is first-order.</p>
+  <p data-pid="da93e5">Then 4b’s principle is one statement, and so is 8c’s:</p>
+  <pre class="lines" data-k="ember" data-label="this step: two principles, each one statement">
+\forall X\,\big((X(0) \land \forall x\,(X(x) \Rightarrow X(S(x)))) \Rightarrow \forall x\,X(x)\big) @@ induction: every part that holds 0 and is closed under next holds everything (4b)
+\htmlClass{new}{\forall X\,\big((\exists x\,X(x) \land \exists u\,\forall x\,(X(x) \Rightarrow x \le u)) \Rightarrow \exists v\,(v \text{ is a least upper bound of } X)\big)} \quad \blacksquare @@ the least upper bound: every bounded part that has a member (8c)
   </pre>
-  <p data-pid="5a75ac">So halving is not merely good; for a million names nothing that asks yes or no can do better. The floor counts every search at once, the ones not yet thought of, by counting what they could learn. It says nothing about searches that learn more per question: a dictionary opened near the right letter, or 38n’s hash tables, which do not compare at all.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · search floor · ← → keys work</div></section>
+  <p data-pid="73ad64">Call PA₂ the two next lines of PA with second-order induction in place of the endless list of first-order inductions.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · second order · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">38l1.1</span><span class="ph understand">understand</span>What does the search-floor technique say? <br>Why are there n + 1 answers and not n?</li>
+      <li><span class="qid">38l1.1</span><span class="ph understand">understand</span>What does a set placeholder add to a language, and over what does ∀X run in a world? <br>How are induction and the least upper bound written as single statements?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="38l2">
-  <h2 class="sthead"><span class="stno">38l2</span>A sort that chooses at random</h2>
-  <p data-pid="ac8bfd">Pick an item of the list at random, the <i>pivot</i>. Compare every other item with it, putting the smaller ones on its left and the larger on its right; then sort each side the same way. The two sides need no merging. It sorts in place, with no second list, which merge sort needs. Name the items by their places in sorted order, 1 to n.</p>
-  <p data-pid="b7f0e2">Pivot-chance technique: <b>for n different items, the random-pivot sort makes on average 2(n + 1)(1 + ½ + ⋯ + 1/n) − 4n comparisons, which grows alike with 2n ln n.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the pivot-chance technique">
-i < j \text{ are compared} \iff \text{the first pivot chosen among } i, i+1, \ldots, j \text{ is } i \text{ or } j @@ until then they sit on one side together; a pivot between them parts them for good; only a pivot is compared
-\text{chance } \tfrac{2}{j - i + 1} @@ each of the j − i + 1 is equally likely to be first (30l1)
-\text{average comparisons} = \textstyle\sum_{i \lt j} \tfrac{2}{j - i + 1} @@ the average of a count is the sum of the chances (30g1)
-= \textstyle\sum_{d=1}^{n-1} (n - d)\,\tfrac{2}{d + 1} = 2(n + 1)H_n - 4n @@ n − d pairs at gap d; H_n = 1 + ½ + ⋯ + 1/n
-\htmlClass{new}{n = 1000:\ \ 10\,986 \text{ on average}} \quad \blacksquare @@ worked by machine; a run of 200 sorts gave 10 986
+  <h2 class="sthead"><span class="stno">38l2</span>One world, up to matching</h2>
+  <p data-pid="219760">Only-the-numbers technique: <b>any two worlds of PA₂ are matched by a matching that carries 0 and next.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the only-the-numbers technique">
+M, M' \models PA_2 @@ given
+h = \text{the smallest set of pairs holding } (0^M, 0^{M'}) \text{ and closed under } (x, y) \mapsto (S(x), S'(y)) @@ the smallest-closed-set technique (4d), in |M| × |M′|
+\{x : \text{exactly one } y \text{ has } (x, y) \in h\} \text{ holds } 0^M \text{ and is closed under } S @@ 0 is nobody’s next and next is one-to-one, in M′ and in M; where-each-pair-comes-from (4d)
+h \text{ is a function on all of } |M| @@ second-order induction in M, on that part
+\text{the outputs of } h \text{ hold } 0^{M'} \text{ and are closed under } S' @@ h is closed
+h \text{ is onto } |M'| @@ second-order induction in M′, on the outputs
+\{x : h(x) = h(x') \Rightarrow x = x' \text{ for every } x'\} \text{ holds } 0^M \text{ and is closed under } S @@ next one-to-one, 0 nobody’s next, both worlds
+\htmlClass{new}{h \text{ is a matching that carries } 0 \text{ and next}} \quad \blacksquare @@ second-order induction in M, once more
   </pre>
-  <p data-pid="d31fe4">Hₙ grows like ln n (17), so the average is about 2n ln n ≈ 1.39 n log₂ n: about 39% above the floor of 22l4, which at n = 1000 is log₂ 1000! ≈ 8529. The worst case is far worse, n(n − 1)/2, when every pivot is the smallest; the randomness makes that rare and says how rare. In practice the random-pivot sort is usually the fastest, because it moves fewer items and keeps them close together in memory.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · random pivot · ← → keys work</div></section>
+  <p data-pid="76d502">Adding and multiplying are fixed by their lines, by induction, so h carries them too. So every world of PA₂ is a copy of N. The worlds of 38f, with members past every numeral, are not worlds of PA₂. The same can be done for the line: the field rules, the order, and the single statement of the least upper bound have only R as a world, up to matching. 38l.6.3 asks for the outline.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · one world · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38l2.1</span><span class="ph understand">understand</span>What does the pivot-chance technique say? <br>Why are items i and j compared exactly when one of them is the first pivot chosen between them?</li>
+      <li><span class="qid">38l2.1</span><span class="ph understand">understand</span>What does the only-the-numbers technique say? <br>At which three lines does its proof use second-order induction, and in which world each time?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="38l3">
-  <h2 class="sthead"><span class="stno">38l3</span>Sorting without comparing</h2>
-  <p data-pid="570d62">22l4’s floor was for sorts that learn about the items only by comparing two of them. Suppose instead each item is a whole number below k, an age below 120, a postcode. Then a sort can look at the number itself.</p>
-  <p data-pid="baae9c">Counting-sort technique: <b>n items, each a whole number below k, are sorted by counting how many there are of each value and then writing them out in order, in about 2n + k turns, with no comparisons.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the counting-sort technique">
-\text{for each item, add } 1 \text{ to cell } (\text{its value}) @@ n turns; k cells start at 0
-\text{running totals of the } k \text{ cells} @@ k turns: cell v now says how many items are below or at v
-\text{place each item at its total, and lower the total by } 1 @@ n turns; items of one value keep their order
-\text{no comparison of two items is made} @@ each turn reads one item’s value
-\htmlClass{new}{n = 10^6 \text{ ages below } 120:\ \ \text{about } 2\,000\,120 \text{ turns}} \quad \blacksquare @@ against about 1.85 · 10⁷ comparisons at the floor for comparing sorts
+  <h2 class="sthead"><span class="stno">38l3</span>Why the first-order list is not enough</h2>
+  <p data-pid="ba6c45">38f built a world M where every first-order induction is true and some member is past every numeral. Why is second-order induction false there? Because the part of |M| holding the values of the numerals holds 0, is closed under next, and is not all of |M|. 38f3 showed no formula picks out that part. First-order induction speaks only of the parts some formula picks out.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the parts a formula can reach">
+\text{the formulas of arithmetic can be listed} @@ the proof-listing technique’s listing of strings (38b3)
+\text{each formula, with members for its other placeholders, picks out one part} @@ in a listed world, countably many parts in all
+\text{the parts of an endless listed world cannot be listed} @@ more parts than members (35c)
+\htmlClass{new}{\text{first-order induction covers few parts; second-order covers all}} \quad \blacksquare @@ the numerals’ part in 38f’s world is one it misses
   </pre>
-  <p data-pid="45b537">This does not break 22l4’s technique; it steps outside its supposition. Each look at a value answers a question with k possible answers, not two, so the answer count gives log_k n! looks, not log₂ n!. The price is the k cells, and the need for keys that are small numbers. Sorting the names of a city by counting would need a cell for every possible name.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · counting sort · ← → keys work</div></section>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · few parts · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38l3.1</span><span class="ph understand">understand</span>What does the counting-sort technique say? <br>Why does it not contradict the floor of 22l4?</li>
+      <li><span class="qid">38l3.1</span><span class="ph understand">understand</span>Why is second-order induction false in 38f’s world, while every first-order induction is true there? <br>Why can first-order induction speak of only some of the parts of a world?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="38l4">
-  <h2 class="sthead"><span class="stno">38l4</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">38l4</span>The price</h2>
+  <p data-pid="e2672f">No-full-calculus technique: <b>no recipe lists exactly the second-order statements true in every world.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the no-full-calculus technique">
+\varphi \text{ a first-order statement of arithmetic} @@ given
+N \models \varphi \iff (PA_2 \Rightarrow \varphi) \text{ is true in every world} @@ every world of PA₂ is matched with N (38l2), and matched worlds share statements (38a4)
+\text{if a recipe listed the statements true in every world, it would list the truths of } N @@ list them, and keep those of the form PA₂ ⇒ φ
+\text{the truths of } N \text{ cannot be listed by a recipe} @@ 38i3
+\htmlClass{new}{\text{no such recipe}} \quad \blacksquare @@ refute
+  </pre>
+  <p data-pid="e026c4">So second-order logic has no calculus of 38b’s kind that reaches all its truths: the way back of 38d fails. The finite-parts technique fails too. Every finite part of PA₂ together with all the demands n̄ &lt; c has a world, N with c large; the whole has none, since every world of PA₂ is N.</p>
+  <p data-pid="74cadc">And “every part” must come from somewhere. It means every member of 𝒫(|M|), as the theory of sets supplies it. Whether 35f’s in-between size exists can be written as a question about which second-order statements are true in every world, and 35f reported that the axioms of sets cannot settle it. Categoricity was bought by handing the hard questions to the theory of sets.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the price · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38l4.1</span><span class="ph understand">understand</span>What does the no-full-calculus technique say, and which earlier technique does its proof turn against second-order logic? <br>Why does the finite-parts technique fail for second-order statements?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38l5">
+  <h2 class="sthead"><span class="stno">38l5</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{a search for one of } n \text{ needs } \log_2 n \text{ questions}\,? @@ log₂(n + 1): the answer “nowhere” counts too
-\text{the random-pivot sort takes } 2n\ln n \text{ on every list}\,? @@ on average; its worst is n(n − 1)/2
-\text{counting sort beats } \log_2 n! \text{, so the floor is wrong}\,? @@ the floor is for sorts that learn only by comparing
-\text{counting sort is always best}\,? @@ it needs k cells; for keys with many possible values k swamps n
+\text{PA}_2 \text{ has only } N \text{, so it reaches every truth of arithmetic}\,? @@ only one world, yet no calculus reaches all its truths (38l4)
+\text{first-order induction for every formula is the same as second-order induction}\,? @@ formulas pick out countably many parts; 38f’s world tells them apart
+\forall X \text{ runs over the parts a formula picks out}\,? @@ over every part in 2f’s set of all subsets
+\text{the finite-parts technique holds for every logic}\,? @@ it rests on 38d’s calculus; PA₂ with the demands n̄ &lt; c breaks it
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38l4.1</span><span class="ph understand">understand</span>Why does counting sort not show the floor of 22l4 is wrong? <br>Why is 2n ln n not the random-pivot sort’s count on every list?</li>
+      <li><span class="qid">38l5.1</span><span class="ph understand">understand</span>Why does having only one world not make PA₂ reach every truth of arithmetic? <br>Why is first-order induction for every formula weaker than second-order induction?</li>
     </ol>
   </section>
 </section>
@@ -115,22 +132,22 @@ i < j \text{ are compared} \iff \text{the first pivot chosen among } i, i+1, \ld
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">38l.5.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">sorted list of n; target is absent or present</span></span>Build halving search as a program for 38j’s machine, in outline, and count its turns at most, worst case. <br>For n = 1000, find a target that makes it take all ⌊log₂ 1000⌋ + 1 = 10 looks.</div>
-  <div class="chq"><span class="chid">38l.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n = 3"></span></span>Run the pivot-chance technique at n = 3 and check it by listing every run of the random-pivot sort. <br>What is the chance it makes the worst count, n(n − 1)/2?</div>
-  <div class="chq"><span class="chid">38l.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="2^m \ge n + 1"></span></span>The search floor says m questions are needed. Turn it round: given any m with 2ᵐ ≥ n + 1, is there always a search that uses only m questions on every input? <br>Which of 38l1’s lines would fail if the list were not sorted?</div>
-  <div class="chq"><span class="chid">38l.5.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">a sort that rolls dice</span></span>One camp held that a program which rolls dice is no proof of anything: its count is only an average, and a bad run is possible. Another that an average with a known spread (30h) is as solid as a worst case, and often more honest about what happens. <br>Which is the random-pivot sort’s count, a deduction or a guess under the large case? Would you fly in a plane whose software sorted this way?</div>
+  <div class="chq"><span class="chid">38l.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{“the world is finite”}"></span></span>Build a second-order statement true in exactly the worlds with finitely many members. Hint, not a recipe: a world is endless when some one-to-one function from it to itself is not onto (3c), and a function is a set of pairs. <br>Which first-order fact of 38d4 does the statement break?</div>
+  <div class="chq"><span class="chid">38l.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\forall X \text{ over only the parts a formula picks out}"></span></span>Read ∀X in a world as running only over the parts some formula picks out. Which technique of this step fails, and which of 38d’s come back?</div>
+  <div class="chq"><span class="chid">38l.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{the field rules},\ &lt;,\ \text{the least upper bound as one statement}"></span></span>Outline why any two worlds of these are matched: send fractions to fractions, then each member to the least upper bound of the fractions below it. <br>Turn it round: if two worlds of the field rules and the order are matched, must both satisfy the least upper bound?</div>
+  <div class="chq"><span class="chid">38l.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">4b.4.4: induction a proved result, an axiom, or needing no proof?</span></span>Rung 4 asked whether induction is a proved result, an axiom, or needs no proof, and proved it from sets. <br>In PA it is an endless list of given lines. In PA₂ it is one given line that only a world of sets can read. On the ladder it was a technique. Which of the three is the induction you trust, and what does each one hand the trust to?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r38k.html">← 38k · how long a program takes</a><a href="r38m.html">38m · divide and conquer →</a></nav>
+<nav class="nextrung"><a href="r38k.html">← 38k · truth cannot be defined inside</a><a href="r38m.html">38m · numbering formulas by hand →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>Halving search is binary search; its floor is the information-theoretic lower bound for search. The random-pivot sort is randomized quicksort, and Hₙ is the nth harmonic number; its average, 2(n + 1)Hₙ − 4n, is the standard result. Counting sort, repeated digit by digit, is radix sort. Sorts that learn only by comparing are comparison sorts. The crosswalk items here are AP Computer Science A 4.14 and 4.17 (linear and binary search, merge sort) and the sorting, searching and randomized-analysis items of MIT 6.006 and Stanford CS 161.</p>
+  <p>Set placeholders are second-order variables, and reading ∀X over all subsets is the full, or standard, semantics of second-order logic; reading it over a chosen family of parts is Henkin semantics, under which completeness and compactness return. A theory with only one model up to isomorphism is categorical, and the only-the-numbers technique is Dedekind’s categoricity theorem for second-order Peano arithmetic; the line’s is the categoricity of the complete ordered field. The no-full-calculus technique says second-order validity is not recursively enumerable.</p>
   <h3>Who said it first</h3>
-  <p>Binary search was described by John Mauchly in 1946; a version correct for every n was not published until 1960, and a famous overflow bug in common library code was found in 2006. Tony Hoare invented quicksort in 1959–60. Counting sort was used on punched-card sorting machines from Herman Hollerith’s, built for the 1890 census, and Harold Seward described it for electronic machines in 1954.</p>
+  <p>Richard Dedekind proved categoricity for the numbers in “What are numbers and what should they be?” (1888). Gottlob Frege’s logic of 1879 was already second-order. Thoralf Skolem argued from 1922 that first-order logic is the right frame for set theory, and Ernst Zermelo argued against him in 1929 and 1930; Leon Henkin gave second-order logic its general semantics in 1950. Stewart Shapiro’s Foundations without Foundationalism (1991) is the modern case for the full semantics.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“The random-pivot sort on 1000 items averaged 10 986 comparisons in a test, and the floor is 8529. So no sort can get below 10 986.” Not allowed: the floor is 8529, for every comparing sort; merge sort gets to about 8977 on its worst list. A measured average of one program says nothing about other programs, and the floor says nothing about how near any one program comes.</p>
+  <p>“PA₂ has one world. A collection with one world is complete. So the calculus of 38b, with second-order moves added, reaches every truth of PA₂.” Not allowed: completeness on this rung is the reached-if-true-everywhere technique, and it was proved for first-order languages only. For second-order statements, the no-full-calculus technique shows no recipe can do it.</p>
 </section>
 
 </div>
@@ -145,20 +162,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'answers',t:R`n + 1`,n:`n places, or nowhere.`},
-  {k:'ember',kl:'runs',t:R`2^m \ge n + 1`,n:`Yes or no each time.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{m \ge \log_2(n+1)}`,n:`Halving meets it.`}
-],{title:'The slides · search floor · ← → keys work'});
+  {k:'ember',kl:'new placeholders',t:R`X(t)`,n:`“t is in X”.`},
+  {k:'ember',kl:'every part',t:R`\forall X\,\varphi`,n:`Over all of 2f’s subsets.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{induction is one statement}}`,n:`As 4b said it.`}
+],{title:'The slides · second order · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'pair',t:R`P(i, j \text{ compared}) = \tfrac{2}{j - i + 1}`,n:`First pivot between.`},
-  {k:'ember',kl:'add',t:R`\textstyle\sum_{i \lt j}`,n:`Averages add.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{2(n + 1)H_n - 4n}`,n:`About 2n ln n.`}
-],{title:'The slides · random pivot · ← → keys work'});
+  {k:'ember',kl:'pairs',t:R`(0, 0'),\ (S x, S' y)`,n:`The smallest closed set.`},
+  {k:'ember',kl:'induction',t:R`\forall X \text{ in } M \text{ and in } M'`,n:`Function, onto, one-to-one.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{M,\ M' \text{ matched}}`,n:`Only the numbers.`}
+],{title:'The slides · one world · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'count',t:R`\text{cell } v \mathrel{+}= 1`,n:`n turns.`},
-  {k:'ember',kl:'totals',t:R`k \text{ turns}`,n:`Places found.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{2n + k,\ \text{no comparisons}}`,n:`Outside the floor.`}
-],{title:'The slides · counting sort · ← → keys work'});
+  {k:'ember',kl:'formulas',t:R`\varphi_0, \varphi_1, \ldots`,n:`They can be listed.`},
+  {k:'ember',kl:'parts',t:R`\mathcal P(|M|)`,n:`They cannot.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{the numerals’ part is missed}}`,n:`First order is blind to it.`}
+],{title:'The slides · few parts · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'categorical',t:R`PA_2 \text{ has only } N`,n:`Strange worlds gone.`},
+  {k:'ember',kl:'no calculus',t:R`\text{validity not listable}`,n:`Or the truths of N would be.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{sets decide what “every part” means}}`,n:`The hard questions move.`}
+],{title:'The slides · the price · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

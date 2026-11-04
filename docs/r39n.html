@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Structures that hold data</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r39m.html">← 39m divide and conquer</a><a href="r39o.html">next: 39o remembering answers →</a></p>
+  <div class="tags"><span class="tag proof">39n · proof</span></div>
+  <h1>Structures that hold data</h1>
+  <p data-pid="b01612">A program rarely wants a list for its own sake. It wants to do something to it again and again: take the newest item, or the oldest, or the largest; find whether a name is there; add a name and find it later. How the items are laid out in memory decides how many turns each of those jobs costs, and a good layout can turn a count like the size into a count like its log, or into a count that does not grow at all. This step builds five layouts. A pile, where only the top can be reached. A line, where items leave in the order they came. A heap, a tree folded into a list so that the largest item is always on top and each change costs only the height of the tree. A search tree, ordered left to right, whose cost is its depth, and whose depth, if items arrive in random order, the sort that chooses at random has already counted. And a table of slots chosen by a scrambling rule, where the chance of the statistics floor says how crowded a slot will be.</p>
+  <p class="gesture" data-pid="21b73f">A pile and a line take and give in a fixed number of turns, and a list that doubles when full costs at most three moves an item. A heap keeps the largest on top at a cost of its height, the log of its size. A search tree costs its depth, and random order gives depth about twice the natural log. A table of m slots holding n keys costs about one plus n over m a look.</p>
+</header>
+
+<section class="class step" data-step="39n1">
+  <h2 class="sthead"><span class="stno">39n1</span>Piles, lines, and a list that doubles</h2>
+  <p data-pid="39c1a8">A <i>pile</i> lets a program put an item on top and take the top item off. A <i>line</i> lets it put an item at the back and take one from the front. With a counter for the top, or one for each end, each is a fixed number of turns. The catch is room: a list in memory has a fixed number of cells. When it is full, take a new list twice as long and copy everything across.</p>
+  <p data-pid="402121">Doubling-array technique: <b>n items put one at a time into a list that starts with one cell and doubles whenever it is full cost fewer than 3n moves in all.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the doubling-array technique">
+\text{each item written once}: n \text{ moves} @@ the writes themselves
+\text{copies at sizes } 1, 2, 4, \ldots, 2^j \text{ with } 2^j < n @@ a copy happens each time the list fills
+1 + 2 + \cdots + 2^j = 2^{j+1} - 1 < 2n @@ a geometric sum (22e), and 2ʲ &lt; n
+\htmlClass{new}{\text{fewer than } n + 2n = 3n \text{ moves}} \quad \blacksquare @@ on average fewer than 3 an item
+  </pre>
+  <p data-pid="f2ef33">Any one put may be slow: the put that triggers a copy of a million items costs a million moves. The total is what is small. A count spread over a whole run like this is honest only when the run is long, and the technique says exactly how long: the bound holds after every put, not just at the end.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · doubling · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">39n1.1</span><span class="ph understand">understand</span>What does the doubling-array technique say? <br>Why can one put cost a million moves though the average is under three?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39n2">
+  <h2 class="sthead"><span class="stno">39n2</span>A heap</h2>
+  <p data-pid="3d7df9">Lay a tree in a list: cell 1 is the top, and the cells below cell i are 2i and 2i + 1. A <i>heap</i> keeps each cell at least as large as the cells below it, so the largest item is always in cell 1. To add an item, put it in the first empty cell and swap it upward while it is larger than the cell above. To take the largest, move the last item to the top and swap it downward with its larger child while a child is larger.</p>
+  <p data-pid="1a2627">Heap-height technique: <b>a heap of n items has height ⌊log₂ n⌋, so adding an item costs at most that many swaps, and taking the largest at most twice that many comparisons.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the heap-height technique">
+\text{level } j \text{ holds cells } 2^j \text{ to } 2^{j+1} - 1 @@ cell i’s children are 2i and 2i + 1: each level doubles
+\text{cell } n \text{ is on level } \lfloor \log_2 n \rfloor @@ 2ʲ ≤ n &lt; 2ʲ⁺¹
+\text{a swap moves one level} @@ up when adding, down when taking
+\text{taking: two comparisons a level} @@ which child is larger, then whether it beats the item
+\htmlClass{new}{n = 10^6:\ \ 19 \text{ levels; at most } 19 \text{ swaps to add, } 38 \text{ comparisons to take}} \quad \blacksquare @@ ⌊log₂ 10⁶⌋ = 19
+  </pre>
+  <p data-pid="6977c1">Put n items in and take them all out, largest first, and they come out sorted, in about 2n log₂ n comparisons and no second list: heap sort. A heap is also how a program keeps the next job to do when jobs keep arriving with different urgencies. 40 uses that to find shortest routes; this step leaves the routes there.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · heap · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39n2.1</span><span class="ph understand">understand</span>What does the heap-height technique say? <br>Why does each level of the tree hold twice as many cells as the one above?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39n3">
+  <h2 class="sthead"><span class="stno">39n3</span>A search tree</h2>
+  <p data-pid="e49d09">A <i>search tree</i> keeps at each place one item, with every smaller item somewhere to its left and every larger one somewhere to its right. To find an item, start at the top and go left or right by comparing; to add one, go down the same way and hang it where the path ends. The cost of a search is the depth reached.</p>
+  <p data-pid="b2dba2">Tree-depth technique: <b>if n different items are added to an empty search tree in random order, the average number of comparisons to add them all is 2(n + 1)Hₙ − 4n, the same as the random-pivot sort’s.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the tree-depth technique">
+i \text{ and } j \text{ are compared} \iff \text{the first added among } i, \ldots, j \text{ is } i \text{ or } j @@ before it, both go the same way at every place; it parts them
+\text{the order of adding is random: chance } \tfrac{2}{j - i + 1} @@ each of the j − i + 1 equally likely to be first (30l1)
+\text{the same pairs, the same chances, as in 39l2} @@ the first item added is the top: a pivot
+\text{average total} = 2(n + 1)H_n - 4n @@ the pivot-chance technique
+\htmlClass{new}{n = 10^6:\ \ \text{about } 24.8 \text{ comparisons an item on average, against } 19 \text{ levels at best}} \quad \blacksquare @@ worked by machine
+  </pre>
+  <p data-pid="05a675">A random order gives a tree only about a quarter deeper than the best. A sorted order gives the worst, a single path n deep. Trees that rebalance themselves after each add keep the depth below about 1.44 log₂ n for every order; 40 uses them to keep things findable.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · search tree · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39n3.1</span><span class="ph understand">understand</span>What does the tree-depth technique say? <br>Why is adding items in random order the same count as the random-pivot sort?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39n4">
+  <h2 class="sthead"><span class="stno">39n4</span>A table of slots</h2>
+  <p data-pid="12ecc0">A <i>hash table</i> has m slots. A scrambling rule turns each key, a name say, into a slot number, and the key goes on a short list in that slot. To find a key, scramble it and look only in its slot. Model the rule as 30’s chance: each key lands in each slot with chance 1/m, independently of the others.</p>
+  <p data-pid="cd5b09">Load-share technique: <b>with n keys in m slots, a look for a key that is there checks on average at most 1 + (n − 1)/m keys, and the chance that some two keys share a slot is 1 − (1 − 1/m)(1 − 2/m)⋯(1 − (n − 1)/m).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the load-share technique">
+\text{each other key shares the slot with chance } \tfrac1m @@ independence (30f2)
+\text{average others in the slot} = \tfrac{n - 1}{m} @@ averages add (30g1)
+\text{look} \le 1 + \tfrac{n - 1}{m} @@ the key itself, and at most all the others
+\text{no two share} = 1 \cdot \tfrac{m - 1}{m}\cdots\tfrac{m - n + 1}{m} @@ branch-product (30l2): each key misses the slots already used
+\htmlClass{new}{n = 23,\ m = 365:\ \ 1 - 0.493 = 0.507} \quad \blacksquare @@ worked by machine: more likely than not
+  </pre>
+  <p data-pid="1096a8">So with as many slots as keys, a look costs about 2 checks whatever the size: a count that does not grow. But two keys meet in some slot far sooner than the slots fill: 23 keys in 365 slots, the people in a room with a shared birthday. A table is fast on average and crowded somewhere almost at once; its rule must scramble well, and 39n.6.4 asks what “well” can mean.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · hash table · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39n4.1</span><span class="ph understand">understand</span>What does the load-share technique say? <br>Why do two keys share a slot long before the slots are full?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39n5">
+  <h2 class="sthead"><span class="stno">39n5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{every put into the doubling list is quick}\,? @@ a put that triggers a copy costs as many moves as the list holds; the average is under 3
+\text{a heap is sorted}\,? @@ only each cell against those below it; the bottom row is in no order
+\text{a search tree always has depth } \log_2 n\,? @@ sorted order gives depth n; random order about 2 ln n on average
+\text{a table with more slots than keys has no shared slot}\,? @@ 23 keys in 365 slots share one with chance 0.507
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39n5.1</span><span class="ph understand">understand</span>Why is a heap not sorted? <br>Why does a table with more slots than keys still share a slot?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">39n.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="5, 9, 2, 7, 1, 8"></span></span>Build the heap these make, added one at a time, and show every swap. <br>Take the largest twice and show the heap after each.</div>
+  <div class="chq"><span class="chid">39n.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a list that grows by } 10 \text{ cells when full}"></span></span>Count the moves for n puts if the list grows by a fixed 10 cells instead of doubling. Which family is it in? <br>What is the least share by which it may grow and still cost O(n)?</div>
+  <div class="chq"><span class="chid">39n.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="1 - \textstyle\prod (1 - k/m) \approx \tfrac12"></span></span>Turn the load-share technique round: for m slots, about how many keys give an even chance of a shared slot? Prove that it grows like √m, using 1 − x ≤ e^(−x) (17). <br>How many keys for m = 1 000 000?</div>
+  <div class="chq"><span class="chid">39n.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">a scrambling rule as chance</span></span>The load-share technique models a fixed scrambling rule as chance. One camp says that is a guess under the large case, true of the keys that actually come. Another that it is false of the worst keys, which a clever opponent can choose, so the rule must itself be chosen at random when the table is made. <br>Which camp does the technique side with as proved? What would each have to measure?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r39m.html">← 39m · divide and conquer</a><a href="r39o.html">39o · remembering answers →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A pile is a stack (last in, first out) and a line a queue (first in, first out). The doubling list is a dynamic array, and spreading the cost of the copies over the run is amortized analysis. A heap is a binary heap and its use for urgent jobs a priority queue; heap sort is heapsort. A search tree is a binary search tree, and those that rebalance are AVL and red–black trees. A table of slots is a hash table, its rule a hash function, two keys in one slot a collision, and n/m the load factor; the shared-slot chance is the birthday problem. Choosing the rule at random is universal hashing. The crosswalk items here are the data-structure and amortized-analysis items of MIT 6.006 and Stanford CS 161.</p>
+  <h3>Who said it first</h3>
+  <p>J. W. J. Williams gave the heap and heapsort in 1964, and Robert Floyd the way to build a heap in linear time the same year. Search trees were described by several people around 1960; Georgy Adelson-Velsky and Evgenii Landis gave the first self-balancing tree in 1962. Hans Peter Luhn proposed hashing at IBM in 1953. Larry Carter and Mark Wegman introduced universal hashing in 1977.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“A hash table finds a key in about 2 checks, and a search tree takes about log₂ n, so the table is always better.” Not allowed: the table’s count is an average over its scrambling, and it cannot list keys in order, find the next larger key, or promise a worst case without more work. The tree does all three. A count answers one question about a layout, not which layout to use.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'writes',t:R`n`,n:`Once each.`},
+  {k:'ember',kl:'copies',t:R`1 + 2 + \cdots < 2n`,n:`Geometric.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{< 3n}`,n:`Spread over the run.`}
+],{title:'The slides · doubling · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'layout',t:R`\text{children of } i:\ 2i,\ 2i + 1`,n:`A tree in a list.`},
+  {k:'ember',kl:'height',t:R`\lfloor\log_2 n\rfloor`,n:`Levels double.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{add or take in } O(\log n)}`,n:`Largest on top.`}
+],{title:'The slides · heap · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'order',t:R`\text{left smaller, right larger}`,n:`At every place.`},
+  {k:'ember',kl:'pivot',t:R`\text{first added among } i..j`,n:`Parts them.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2(n+1)H_n - 4n}`,n:`Depth about 2 ln n.`}
+],{title:'The slides · search tree · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'slot',t:R`\text{chance } 1/m`,n:`Independently.`},
+  {k:'ember',kl:'look',t:R`1 + (n - 1)/m`,n:`On average.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{23 \text{ in } 365:\ 0.507}`,n:`Shared soon.`}
+],{title:'The slides · hash table · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

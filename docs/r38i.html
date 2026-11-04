@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Adding with gates</title>
+<title>True and unprovable</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,99 +25,92 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r38h.html">← 38h memory</a><a href="r38j.html">next: 38j a machine that follows a list →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38h.html">← 38h a sentence about itself</a><a href="r38j.html">next: 38j consistency from within →</a></p>
   <div class="tags"><span class="tag proof">38i · proof</span></div>
-  <h1>Adding with gates</h1>
-  <p data-pid="d0b3b1">Rung four wrote numbers in twos and added them in columns, carrying from each place to the next. Its computing annex built that column sum out of gates and chained the gates place by place. This step lays the sum down as a lesson, from the arithmetic of the first step of this rung, and then asks the question the annex did not: how long does it take? A carry can travel the whole width of the number, place by place, and every place costs two gates’ worth of waiting, so a wide adder is slow, and the clock of the last step must wait for the slowest sum. The cure is to stop waiting for carries one at a time. Each place can say, before any carry arrives, whether it will make a carry of its own and whether it will pass one along. Those two facts combine in pairs, the pairs in pairs again, and a tree of combinations reaches the top place after about as many levels as the number of times the width can be halved. Then the same adder subtracts, once negative numbers are written the way a car’s odometer would write them running backwards, and the step ends with what happens when a sum is too big for its row of catches.</p>
-  <p class="gesture" data-pid="5a445c">Three bits add to a sum bit, their exactly-one, and a carry, at-least-two. Chained, the carry waits two gates a place. Each place says whether it makes a carry and whether it passes one; those pairs combine in a tree of about the log of the width levels. Negatives are the complement plus one, so the adder subtracts, and a sum too big wraps round.</p>
+  <h1>True and unprovable</h1>
+  <p data-pid="49eb68">The last step built a statement of arithmetic that is reached as equivalent to “I am not reached”. Call it the unreached statement. Suppose the axioms of arithmetic reached it. Then they would also reach that it is reached, since every proof is a number they can check, and they would reach that it is not, since that is what it says. That is a clash, and the axioms have a world, the numbers themselves, so they do not clash. So the statement is not reached. But that is exactly what it says, so it is true. Here is a statement about numbers, as ordinary in its form as any statement about adding and multiplying, that is true and that the axioms never reach, and its denial is not reached either. Adding it as a new axiom does not help: the longer list has its own unreached statement, by the same argument. No list that a recipe can check, and that is true of the numbers, reaches every truth about them.</p>
+  <p class="gesture" data-pid="e5d522">The unreached statement is not reached by the axioms of arithmetic, and so it is true, and its denial is not reached either. The same holds for every collection that holds those axioms, that a recipe can check, and that is true of the numbers.</p>
 </header>
 
 <section class="class step" data-step="38i1">
-  <h2 class="sthead"><span class="stno">38i1</span>Three bits in, two out</h2>
-  <p data-pid="4ba004">In a column of a sum in twos (4i12, 4i14) there are three bits to add: one from each number and the carry in, c. The total is 0, 1, 2 or 3, two bits: a sum bit, worth 1, and a carry out, worth 2. 38a3 found the two-bit case: x + y = 2xy + (x ⊕ y). 4·comp built the three-bit case from two two-bit adders as an annex; here it is laid down from the arithmetic.</p>
-  <p data-pid="8d8e44">Three-bit-sum technique: <b>x + y + c is twice “at least two of x, y, c”, plus x ⊕ y ⊕ c.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the three-bit-sum technique">
-x + y = 2xy + (x \oplus y) @@ the remainder-by-two technique (38a3)
-x + y + c = 2xy + (x \oplus y) + c = 2xy + 2(x \oplus y)c + (x \oplus y \oplus c) @@ the same technique on x ⊕ y and c
-xy \text{ and } (x \oplus y)c \text{ are never both } 1 @@ if xy = 1, then x ⊕ y = 0
-xy + (x \oplus y)c = xy \lor (x \oplus y)c @@ the or-as-greater technique with no overlap (38a2)
-\htmlClass{new}{x + y + c = 2\,\big(xy \lor (x \oplus y)c\big) + (x \oplus y \oplus c)} \quad \blacksquare @@ and xy ∨ (x ⊕ y)c is 1 exactly when at least two of the three are 1
+  <h2 class="sthead"><span class="stno">38i1</span>Not reached</h2>
+  <p data-pid="3350d3">Let U be the diagonal statement δ₃ of 38h3, the <i>unreached statement</i>: PA ⊢ U ⇔ ¬Prov(⌜U⌝).</p>
+  <pre class="lines" data-k="ember" data-label="this step: U is not reached">
+PA \vdash U @@ suppose, aiming to refute
+PA \vdash \text{Prov}(\ulcorner U \urcorner) @@ the provable-mark technique (38h1)
+PA \vdash \neg\text{Prov}(\ulcorner U \urcorner) @@ carry an if through, on the left-to-right half of U’s ⇔
+PA \vdash \bot @@ clash
+PA \text{ is clash-free} @@ N is a world of PA (38g2); the world-means-clash-free technique (38c2)
+\htmlClass{new}{PA \nvdash U} \quad \blacksquare @@ refute
   </pre>
-  <p data-pid="c7cee1">Two names keep the rest short. In each place k, gₖ = xₖyₖ says the place <i>makes</i> a carry by itself, and pₖ = xₖ ⊕ yₖ says it <i>passes</i> one along. The carry out is then cₖ₊₁ = gₖ ∨ (pₖ ∧ cₖ), and the sum bit is pₖ ⊕ cₖ.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · three bits · ← → keys work</div></section>
+  <p data-pid="45dea9">Nothing in the proof looked at what U is about. It used only that U and ¬Prov(⌜U⌝) are reached as equivalent, and that a proof can be checked inside arithmetic.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · not reached · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">38i1.1</span><span class="ph understand">understand</span>What does the three-bit-sum technique say? <br>Why are xy and (x ⊕ y)c never both 1?</li>
+      <li><span class="qid">38i1.1</span><span class="ph understand">understand</span>What is the unreached statement U? <br>Why does PA not reach it, and which fact about PA does the last line spend?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="38i2">
-  <h2 class="sthead"><span class="stno">38i2</span>The carry chain</h2>
-  <p data-pid="48b595">Chain n places, the carry out of each into the next, c₀ = 0. Every gate takes a delay τ to answer. The carry rule cₖ₊₁ = gₖ ∨ (pₖ ∧ cₖ) is a both then an either: two delays from cₖ to cₖ₊₁.</p>
-  <p data-pid="585a0b">Carry-delay technique: <b>in a chain of n places the last carry may wait 2nτ, and it does when every place passes and none makes.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the carry-delay technique">
-\text{all } g_k, p_k \text{ ready after a few delays} @@ each place sees only its own two bits
-c_{k+1} \text{ ready } 2\tau \text{ after } c_k @@ a both, then an either
-c_n \text{ ready } 2n\tau \text{ after } c_0 @@ induction on k (4c)
-x = 0111\ldots1,\ y = 0\ldots01:\ \ p_k = 1 \text{ above place } 0 @@ the carry made in place 0 must pass through every place
-\htmlClass{new}{n = 64,\ \tau = 15 \text{ ps}:\ 2 \cdot 64 \cdot 15 = 1920 \text{ ps}} \quad \blacksquare @@ about 1.9 ns
+  <h2 class="sthead"><span class="stno">38i2</span>True, and its denial not reached</h2>
+  <p data-pid="2ce462">Unreached-truth technique: <b>the unreached statement is true in N, and PA reaches neither it nor its denial.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the unreached-truth technique">
+\text{no number codes a proof of } U \text{ from } PA @@ PA ⊬ U (38i1)
+N \models \neg\text{Prov}(\ulcorner U \urcorner) @@ Prov says that some number codes such a proof
+N \models U \Leftrightarrow \neg\text{Prov}(\ulcorner U \urcorner) @@ PA reaches it, and N is a world of PA (38c2)
+N \models U @@ carry an if through, the right-to-left half, in N
+PA \vdash \neg U \Rightarrow N \models \neg U @@ PA reaches only statements true in N (38g2)
+\htmlClass{new}{N \models U,\ \ PA \nvdash U,\ \ PA \nvdash \neg U} \quad \blacksquare @@ ¬U is false in N, so it is not reached
   </pre>
-  <p data-pid="af22d3">38h3 says the clock may not rise before every path has settled. An adder that may need 1.9 ns caps the clock near 520 million rises a second, whatever else the machine could do. The carry is the slow part of the sum, and it is slow only because each place waits for the one below it.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · carry chain · ← → keys work</div></section>
+  <p data-pid="bcb81c">U is true, and the reason given is a proof. It is a proof from more than PA: it used the fact that N is a world of PA, which PA cannot state about itself. That is the subject of 38j.</p>
+  <p data-pid="57b3c3">Arrangement against series again. A proof answers a question about the arrangement: does this list of givens reach this statement? Truth in N answers a question about the series: does every number behave so? Here the two answers come apart, for a statement about adding and multiplying.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · true · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38i2.1</span><span class="ph understand">understand</span>What does the carry-delay technique say? <br>Which pair of numbers makes the carry wait longest, and why?</li>
+      <li><span class="qid">38i2.1</span><span class="ph understand">understand</span>What does the unreached-truth technique say? <br>Why is U true, and why is its denial not reached?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="38i3">
-  <h2 class="sthead"><span class="stno">38i3</span>A carry tree</h2>
-  <p data-pid="986779">A block of places, taken as one, also makes or passes a carry. Two blocks side by side, the higher with (g, p) and the lower with (g′, p′), make one block with (g, p) ∘ (g′, p′) = (g ∨ (p ∧ g′), p ∧ p′): the pair makes a carry if the higher makes one, or passes one the lower made; it passes if both pass.</p>
-  <p data-pid="0af6e9">Carry-tree technique: <b>the combining of (make, pass) pairs is grouping-free, so every carry of an n-place adder can be found in about log₂ n levels of combining, each two gates deep.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the carry-tree technique">
-\big((g_1, p_1) \circ (g_2, p_2)\big) \circ (g_3, p_3) = (g_1 \lor p_1 g_2 \lor p_1 p_2 g_3,\ p_1 p_2 p_3) @@ combine twice, spreading and over or (1f)
-(g_1, p_1) \circ \big((g_2, p_2) \circ (g_3, p_3)\big) = (g_1 \lor p_1 (g_2 \lor p_2 g_3),\ p_1 p_2 p_3) @@ the other grouping
-\text{the two are one pair} @@ spreading and over or, again
-\text{pair neighbours, then neighbouring pairs, and so on} @@ grouping does not matter, so any tree gives the same block pair
-\htmlClass{new}{\lceil \log_2 n \rceil \text{ levels};\ n = 64:\ 6 \text{ levels},\ \text{about } 2 \cdot 6 \cdot 15 = 180 \text{ ps}} \quad \blacksquare @@ 64 halves to 1 in six steps (17d)
+  <h2 class="sthead"><span class="stno">38i3</span>Every list falls short</h2>
+  <p data-pid="cf6505">Nothing in 38i1 and 38i2 was special to PA except three facts: PA holds the axioms of arithmetic, so the search-reached technique holds for it; whether a number codes a member of PA is settled by a recipe, so Proof can be written; and PA is true in N.</p>
+  <p data-pid="77090f">Every-list technique: <b>if a collection T holds PA, membership in T is settled by a recipe, and every member of T is true in N, then some statement true in N is not reached by T.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the every-list technique">
+\text{Proof}_T(y, x) \text{ and } \text{Prov}_T(x) \text{ written as in 38h1} @@ the recipe for T in place of the one for PA
+T \vdash U_T \Leftrightarrow \neg\text{Prov}_T(\ulcorner U_T \urcorner) @@ the self-statement technique; T holds PA
+T \nvdash U_T,\ \ N \models U_T @@ 38i1 and 38i2, word for word, with T in place of PA
+\htmlClass{new}{T + U_T \text{ is again such a collection, with its own } U_{T + U_T}} \quad \blacksquare @@ adding one true axiom keeps all three facts
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: 1011 + 0110, by makes and passes">
-\text{places } 3, 2, 1, 0:\ \ g = 0, 0, 1, 0,\ \ p = 1, 1, 0, 1 @@ g = xy, p = x ⊕ y, place by place
-c_1 = 0,\ c_2 = g_1 = 1,\ c_3 = p_2 c_2 = 1,\ c_4 = p_3 c_3 = 1 @@ the carry rule, each read from the blocks below
-\text{sum bits } p_k \oplus c_k = 0, 0, 0, 1 \text{ for places } 3, 2, 1, 0 @@ the three-bit-sum technique
-\htmlClass{new}{1011 + 0110 = 10001:\ \ 11 + 6 = 17} \quad \blacksquare @@ c₄ is the fifth bit
-  </pre>
-  <p data-pid="5b2b7f">The ripple chain does about n combinings in a row; the tree does more combinings in all, about n log₂ n in the plainest layout, but no path is longer than about log₂ n of them. Spending more gates to wait less is the trade every fast circuit makes.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · carry tree · ← → keys work</div></section>
+  <p data-pid="ae8b0c">So the true statements of arithmetic can never be listed by a recipe. If they could, take T to be all of them: whether φ is in T would be settled by listing until φ or ¬φ turns up, as one of them must. T would hold PA and be true in N, and it would reach every truth, against the technique.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · every list · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38i3.1</span><span class="ph understand">understand</span>What does the carry-tree technique say, and why does it need the grouping not to matter? <br>Why does the tree wait less though it uses more gates?</li>
+      <li><span class="qid">38i3.1</span><span class="ph understand">understand</span>What does the every-list technique say, and which three facts about PA does it need of T? <br>Why can the true statements of arithmetic not be listed by a recipe?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="38i4">
-  <h2 class="sthead"><span class="stno">38i4</span>Subtracting, and the wrap</h2>
-  <p data-pid="9aea46">A row of n catches holds 0 to 2ⁿ − 1. Let the row stand for x when x ≥ 0 and for 2ⁿ + x when x < 0, for x from −2ⁿ⁻¹ to 2ⁿ⁻¹ − 1. Then adding in the row, and dropping the carry out of the top place, is adding numbers, as long as the answer stays in range.</p>
-  <p data-pid="5c8ec8">Twos-complement technique: <b>in a row of n places, −x is written as 2ⁿ − x, which is every bit of x turned over, plus 1; so x − y is x plus that, with the top carry dropped.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the twos-complement technique">
-\text{turning every bit of } y \text{ over gives } (2^n - 1) - y @@ 1 − bit, place by place (38a2); the places of 2ⁿ − 1 are all 1
-2^n - y = \big((2^n - 1) - y\big) + 1 @@ add 1
-n = 8:\ \ 9 = 00001001 \to 11110110 + 1 = 11110111 = 247 = 256 - 9 @@ worked
-5 + 247 = 252 = 11111100 \to 252 - 256 = -4 @@ the top bit 1 marks a negative; 5 − 9 = −4
-\htmlClass{new}{n = 8:\ \ 127 + 1 = 10000000 \to -128} \quad \blacksquare @@ the answer 128 is out of range: it wraps round
+  <h2 class="sthead"><span class="stno">38i4</span>A world where U is false</h2>
+  <p data-pid="436a4f">PA ⊬ U, so PA together with ¬U is clash-free, and the full-growth and term-world techniques give it a world M (38d). In M, ¬U is true, so Prov(⌜U⌝) is true: some member of M is, in M’s eyes, the code of a proof of U. No number is. So that member is past every numeral, as in 38f.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the false side of U">
+PA \cup \{\neg U\} \text{ is clash-free} @@ PA ⊬ ¬¬U, since PA ⊬ U and not-not out would give it (7d)
+M \models PA,\ \ M \models \neg U @@ the full-growth and term-world techniques (38d)
+M \models \text{Proof}(e, \ulcorner U \urcorner) \text{ for some member } e @@ ¬U is reached as equivalent to Prov(⌜U⌝); Prov is a some
+e \text{ is not the value of any numeral } \bar k @@ else Proof(k̄, ⌜U⌝) would be true in N, a true bounded statement in both worlds
+\htmlClass{new}{e \text{ is past every numeral: a “proof” in } M \text{ that no list of lines is}} \quad \blacksquare @@ the numerals come first in M (38f2)
   </pre>
-  <p data-pid="d6b509">The wrap is the price of a fixed row. A count of 127 in an 8-place row, plus one, reads −128, and nothing in the gates objects. Programs have crashed rockets and frozen games on exactly this line. The catch is that it can be seen: the wrap happens exactly when two numbers of the same sign give a sum of the other sign.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · subtract · ← → keys work</div></section>
+  <p data-pid="2a8630">So U is not reached because it is true in N and false in M, and both are worlds of PA. When someone says U “is true”, they mean true in N. That meaning is clear, and PA cannot see which world it is in.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · false side · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38i4.1</span><span class="ph understand">understand</span>What does the twos-complement technique say? <br>Why does 127 + 1 read −128 in a row of 8 places, and how can a machine see that it happened?</li>
+      <li><span class="qid">38i4.1</span><span class="ph understand">understand</span>In a world of PA where U is false, what does the member e do? <br>Why must e be past every numeral?</li>
     </ol>
   </section>
 </section>
@@ -125,15 +118,15 @@ n = 8:\ \ 9 = 00001001 \to 11110110 + 1 = 11110111 = 247 = 256 - 9 @@ worked
 <section class="class step" data-step="38i5">
   <h2 class="sthead"><span class="stno">38i5</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{carry out} = x \lor y \lor c\,? @@ that is “at least one”; the carry is “at least two”
-\text{a wider adder is no slower}\,? @@ in a chain the last carry waits 2nτ
--9 = 11110110 \text{ in } 8 \text{ places}\,? @@ that is every bit turned over, 246; add 1: 247
-127 + 1 = 128 \text{ in } 8 \text{ places}\,? @@ 128 is out of the range −128 to 127; the row wraps to −128
+PA \nvdash U \text{, so } U \text{ is false}\,? @@ U is true in N; not reached is not false
+U \text{ cannot be proved}\,? @@ by PA; PA + U reaches it in one line, and 38i2 is a proof of it from more than PA
+PA + U \text{ reaches every truth of arithmetic}\,? @@ the every-list technique gives it its own unreached statement
+U \text{ says “I am false”}\,? @@ U says it is not reached; 38k is where “not true” is tried
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38i5.1</span><span class="ph understand">understand</span>Why is the carry not x ∨ y ∨ c? <br>Why is −9 not 11110110 in 8 places?</li>
+      <li><span class="qid">38i5.1</span><span class="ph understand">understand</span>Why does PA ⊬ U not make U false? <br>Why does adding U to PA not reach every truth of arithmetic?</li>
     </ol>
   </section>
 </section>
@@ -142,22 +135,26 @@ n = 8:\ \ 9 = 00001001 \to 11110110 + 1 = 11110111 = 247 = 256 - 9 @@ worked
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">38i.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="n = 16"></span></span>Build the carry tree for 16 places: which block pairs are combined at each level, and how many combinings in all? <br>Find the carries of 0111 1111 1111 1111 + 1 with it, level by level.</div>
-  <div class="chq"><span class="chid">38i.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x = y = -2^{n-1}"></span></span>Add the most negative number to itself in n places. What does the row read, and is the wrap seen by the sign test? <br>Is there a number x in range with −x out of range?</div>
-  <div class="chq"><span class="chid">38i.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{same sign in, other sign out} \Rightarrow \text{wrap}"></span></span>The sign test catches every wrap. Turn it round: if two numbers of the same sign give a sum of the other sign, must the true sum be out of range? Prove it. <br>Can two numbers of different signs ever wrap?</div>
-  <div class="chq"><span class="chid">38i.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">4i: numerals as names</span></span>In 4i a numeral was a name of a number, and every number had exactly one. Here 11111100 names 252 or −4, depending on a choice of reading made outside the row. <br>Is the row of catches a numeral, a number, or neither? Is −4 = 252 in 8 places a sameness in 0b’s sense?</div>
+  <div class="chq"><span class="chid">38i.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">the denial of U, reached from PA without using that PA is true in N</span></span>The proof that PA ⊬ ¬U spent the fact that PA reaches only truths. Build the other road: suppose PA ⊢ ¬U, so PA ⊢ Prov(⌜U⌝), and find what that says about the numbers 0, 1, 2, … that are not codes of a proof of U. <br>Which weaker fact than “PA is true in N” is enough?</div>
+  <div class="chq"><span class="chid">38i.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="T = \text{every statement true in } N"></span></span>This T holds PA and is true in N. Which of the every-list technique’s three facts fails for it? <br>Does T reach U_T, whatever that would be?</div>
+  <div class="chq"><span class="chid">38i.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="N \models \varphi,\ \ PA \nvdash \varphi"></span></span>U is true in N and not reached. Turn it round: is every statement true in N and not reached by PA a statement about proofs? <br>Look at 38·cb29’s row in the ladder and 29·cb3.5’s game: what kind of statement is that one?</div>
+  <div class="chq"><span class="chid">38i.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">15g.4.6: induction by cases against the demand for proof</span></span>Rung 15 asked whether checking a rule on many cases can stand in for a proof, and found a rule that held for the first cases checked and failed at the next. <br>U is a statement “for every number, this number is not the code of a proof of U”. Every case can be checked, and each check passes. Is that evidence that U is true? Is it a proof? Which guess is 38i2’s argument: over the arrangement, over the series, or under a case?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r38h.html">← 38h · memory</a><a href="r38j.html">38j · a machine that follows a list →</a></nav>
+<nav class="nextrung"><a href="r38h.html">← 38h · a sentence about itself</a><a href="r38j.html">38j · consistency from within →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The three-bit adder is a full adder, and the chain of them a ripple-carry adder. g and p are generate and propagate; the combining of pairs is the carry operator, and its tree is a carry-lookahead or parallel prefix adder, of which the Kogge–Stone and Brent–Kung layouts are the best known. −x as 2ⁿ − x is two’s complement, and the wrap is integer overflow. The sign test is the overflow flag.</p>
+  <p>The unreached-truth technique and the every-list technique are Gödel’s first incompleteness theorem: a consistent, recursively axiomatized theory that contains enough arithmetic is incomplete. The unreached statement is the Gödel sentence. A collection whose membership is settled by a recipe is recursive, or recursively axiomatizable. That the truths of arithmetic are not recursively enumerable follows. 38i.6.1’s weaker fact is ω-consistency; John Barkley Rosser’s trick of 1936 replaces it with plain consistency, by a sentence that says “for every proof of me there is a shorter proof of my denial”.</p>
   <h3>Who said it first</h3>
-  <p>Carry look-ahead was worked out for valve and relay machines in the 1950s, by Weinberger and Smith (1956) among others. Peter Kogge and Harold Stone gave the log-depth prefix tree in 1973, and Richard Brent and H. T. Kung a thriftier one in 1982. Two’s complement was used on the EDSAC (1949) and was proposed for machines by John von Neumann in 1945. The first flight of Ariane 5 (1996) was lost when a 64-bit number was squeezed into 16 places and overflowed.</p>
+  <p>Kurt Gödel announced the result at a meeting in Königsberg in September 1930, where David Hilbert gave his address ending “We must know. We will know.” the next day. The paper appeared in 1931. Gödel assumed ω-consistency; Rosser removed it in 1936. The proof by the diagonal lemma, as on this page, is a later tidying of Gödel’s own argument.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“The carry tree finds every carry in log₂ n levels, so adding n-place numbers takes log₂ n steps in all.” Not allowed: it takes about log₂ n levels of waiting, and many gates at each level. Time and gates are different counts, and 38k counts steps of a machine that does one thing at a time.</p>
+  <pre class="lines" data-k="ember" data-label="37i: a worked “proof”, not allowed">
+PA \nvdash U @@ fine: 38i1
+\text{so } PA \vdash \neg\text{Prov}(\ulcorner U \urcorner) @@ not allowed: that no proof exists is true in N, not reached by PA; it is a statement with an every in front, not a search
+\text{so } PA \vdash U @@ would follow, and would clash with the first line
+  </pre>
 </section>
 
 </div>
@@ -172,25 +169,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'make',t:R`g = xy`,n:`A carry by itself.`},
-  {k:'ember',kl:'pass',t:R`p = x \oplus y`,n:`A carry passed on.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{c_{k+1} = g_k \lor p_k c_k}`,n:`Sum bit p ⊕ c.`}
-],{title:'The slides · three bits · ← → keys work'});
+  {k:'ember',kl:'U',t:R`PA \vdash U \Leftrightarrow \neg\text{Prov}(\ulcorner U \urcorner)`,n:`From the diagonal.`},
+  {k:'ember',kl:'if reached',t:R`\text{Prov}(\ulcorner U\urcorner) \text{ and its denial}`,n:`A clash.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{PA \nvdash U}`,n:`PA is clash-free.`}
+],{title:'The slides · not reached · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'one place',t:R`2\tau`,n:`A both and an either.`},
-  {k:'ember',kl:'n places',t:R`2n\tau`,n:`Each waits for the last.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{64 \text{ bits}: 1.9 \text{ ns}}`,n:`The clock waits.`}
-],{title:'The slides · carry chain · ← → keys work'});
+  {k:'ember',kl:'no proof',t:R`N \models \neg\text{Prov}(\ulcorner U \urcorner)`,n:`Since PA ⊬ U.`},
+  {k:'ember',kl:'so',t:R`N \models U`,n:`That is what U says.`},
+  {k:'ember',kl:'and',t:R`\htmlClass{new}{PA \nvdash \neg U}`,n:`PA reaches only truths.`}
+],{title:'The slides · true · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'combine',t:R`(g, p) \circ (g', p') = (g \lor pg',\ pp')`,n:`Blocks as pairs.`},
-  {k:'ember',kl:'grouping-free',t:R`(a \circ b) \circ c = a \circ (b \circ c)`,n:`Any tree.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\lceil\log_2 n\rceil \text{ levels}}`,n:`64 bits: 6.`}
-],{title:'The slides · carry tree · ← → keys work'});
+  {k:'ember',kl:'T',t:R`T \supseteq PA,\ \text{settled},\ N \models T`,n:`The three facts.`},
+  {k:'ember',kl:'its own',t:R`U_T`,n:`A new unreached statement.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{no recipe lists all truths}}`,n:`Adding axioms never ends it.`}
+],{title:'The slides · every list · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'turn over',t:R`(2^n - 1) - y`,n:`Bit by bit.`},
-  {k:'ember',kl:'add 1',t:R`2^n - y`,n:`The negative.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{127 + 1 \to -128}`,n:`The wrap.`}
-],{title:'The slides · subtract · ← → keys work'});
+  {k:'ember',kl:'a world',t:R`M \models PA + \neg U`,n:`Clash-free, so a world.`},
+  {k:'ember',kl:'in M',t:R`M \models \text{Prov}(\ulcorner U\urcorner)`,n:`Some member “proves” U.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{e \text{ past every numeral}}`,n:`A proof of no length.`}
+],{title:'The slides · false side · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

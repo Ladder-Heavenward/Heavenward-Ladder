@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>What can’t be built, by hand</title>
+<title>Boolean algebra standing on its own</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,106 +25,127 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r43k.html">← 43k symmetry groups of equations, by hand</a><a href="r43cb27.html">next: 43·cb27 groups as matrices →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r43k.html">← 43k field extensions by hand</a><a href="r43cb27.html">next: 43·cb27 every matrix is nearly diagonal →</a></p>
   <div class="tags"><span class="tag tech">43l · technique</span></div>
-  <h1>What can’t be built, by hand</h1>
-  <p data-pid="211471">Deciding whether a length can be built with compass and straightedge comes down to one polynomial. Find a polynomial with rational coefficients that the length is a root of. Show it cannot be factored. Read its degree. If the degree is not a power of two, the length cannot be built, and that settles it. If it is a power of two, more is needed, and the group of the polynomial decides. This step runs the test on angles, on regular figures and on lengths, and finds the whole list of regular figures up to twenty sides that can be built. It ends with the pentagon, built line by line, as the smallest case where the test says yes for a reason that is not obvious.</p>
-  <p class="gesture" data-pid="039933">Find the polynomial, prove it irreducible, read the degree. A degree that is not a power of two forbids the construction. An angle can be cut in three exactly when the cubic for the cosine of its third factors over the field of its own cosine. A regular figure can be built exactly when the count of hours of the clock of its number of sides that share no factor with that number is a power of two.</p>
+  <h1>Boolean algebra standing on its own</h1>
+  <p data-pid="955ce6">Rung one wrote a rulebook for and, or and not, and proved each entry by a table. Rung four wired the tables into adders, and rung thirty eight built every table from one gate. Through all of it the tables came first and the rules were read off them. Turn that round. Lay down a short list of rules for two ways of combining and one way of flipping, and ask what follows from the list alone, with no tables at all. Most of the rulebook does. The list has a mirror in it: swap and with or and nothing with everything, and every rule becomes another rule, so every proof becomes another proof for free. Read with either-but-not-both as plus, the same things are a ring of step 43a in which every member is its own square, and in that ring each table is exactly one polynomial. That gives a way to simplify a circuit by arithmetic. Last, every such algebra with finitely many members is the parts of some set, so the list says no more and no less than the sets of rung two.</p>
+  <p class="gesture" data-pid="5bc755">A short list of rules for and, or and not gives the rest of the rulebook, and it is its own mirror, so every proved rule has a twin. With either-but-not-both as plus and and as times, the same algebra is a ring where every member is its own square; there one plus one is nothing, and every table is exactly one polynomial. Every finite such algebra is the parts of a set.</p>
 </header>
 
 <section class="class step" data-step="43l1">
-  <h2 class="sthead"><span class="stno">43l1</span>The test</h2>
-  <p data-pid="4dcaba">Unbuildable-test technique: <b>to show a number cannot be built, find a polynomial with rational coefficients it is a root of, show the polynomial irreducible, and check that its degree is not a power of 2.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the regular nine-sided figure">
-c = \cos 40^\circ:\ \ 4c^3 - 3c = \cos 120^\circ = -\tfrac12 @@ cos 3θ = 4cos³θ − 3cosθ (21d)
-y = 2c:\ \ y^3 - 3y + 1 = 0 @@ multiply by 2
-y = \pm 1:\ \ -1,\ 3 \ne 0 @@ the whole-answer technique: no rational root, so irreducible
-\htmlClass{new}{[\mathbb Q(\cos 40^\circ) : \mathbb Q] = 3:\ \ \text{the 9-gon cannot be built}} \quad \blacksquare @@ the degree-three technique
+  <h2 class="sthead"><span class="stno">43l1</span>A short list</h2>
+  <p data-pid="5ba3e3">A <i>Boolean algebra</i> is a set B with two combinings ∨ and ∧, a flip ¬, and two members 0 and 1, obeying for all x, y, z: turn-about for ∧ and for ∨; regroup for each; spread ∧ over ∨ and ∨ over ∧; units, x ∨ 0 = x and x ∧ 1 = x; and the two clash rules x ∨ ¬x = 1, x ∧ ¬x = 0. Ten lines, all from 1f’s rulebook. 1e’s {0, 1} is one, and so are the parts of any set, with ∪, ∩ and the rest.</p>
+  <p data-pid="03fff0">Short-list technique: <b>say-it-again, absorb and both not-through rules of 1f follow from the ten lines alone.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the short-list technique, say-it-again">
+x = x \lor 0 @@ units
+\phantom{x} = x \lor (x \land \neg x) @@ clash, x ∧ ¬x = 0
+\phantom{x} = (x \lor x) \land (x \lor \neg x) @@ spread ∨ over ∧
+\phantom{x} = (x \lor x) \land 1 = x \lor x @@ clash; units
+\htmlClass{new}{x \lor x = x} \quad \blacksquare @@ no table was drawn
   </pre>
-  <p data-pid="29ab23">So 120° cannot be cut in three either, and since 40° is a third of 120°, the angle a 9-gon needs is out of reach.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · the test · ← → keys work</div></section>
+  <p data-pid="a3b0af">Absorb, x ∨ (x ∧ y) = x, goes the same way: x ∨ (x ∧ y) = (x ∧ 1) ∨ (x ∧ y) = x ∧ (1 ∨ y), and 1 ∨ y = 1 by a line like the one above. Not-through needs one more idea: ¬x is the only z with x ∨ z = 1 and x ∧ z = 0 (43l.7.1 asks for it), so to show ¬(x ∨ y) = ¬x ∧ ¬y, check that ¬x ∧ ¬y passes both tests.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the list · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">43l1.1</span><span class="ph understand">understand</span>What does the unbuildable-test technique say, in its three moves? <br>Why does the 9-gon come down to y³ − 3y + 1?</li>
+      <li><span class="qid">43l1.1</span><span class="ph understand">understand</span>Which ten lines make a Boolean algebra? <br>What does the short-list technique say, and which two lines does the proof of x ∨ x = x lean on most?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43l2">
-  <h2 class="sthead"><span class="stno">43l2</span>Which angles cut in three</h2>
-  <p data-pid="9dfed6">Third-of-angle technique: <b>an angle θ whose cosine k is buildable can be cut in three exactly when 4x³ − 3x − k has a root in ℚ(k)’s tower of square roots; when k is rational, exactly when 4x³ − 3x − k has a rational root.</b> If it has none, it is irreducible over ℚ and the degree is 3.</p>
-  <pre class="lines" data-k="ember" data-label="this step: three angles">
-90^\circ:\ \ 4x^3 - 3x = 0,\ \ x = \cos 30^\circ = \tfrac{\sqrt3}{2} @@ k = 0: x(4x² − 3); 30° is built from the equilateral triangle (18j)
-180^\circ:\ \ 4x^3 - 3x + 1 = (x + 1)(2x - 1)^2,\ \ x = \tfrac12 @@ k = −1; 60° is built
-60^\circ:\ \ 8x^3 - 6x - 1,\ \ \text{no rational root} @@ 43i2
-\htmlClass{new}{\arccos\tfrac14:\ \ 16x^3 - 12x - 1,\ \text{roots } \tfrac{u}{v},\ u \mid 1,\ v \mid 16:\ \text{none}} \quad \blacksquare @@ ±1, ±1/2, ±1/4, ±1/8, ±1/16 checked: no third of this angle
+  <h2 class="sthead"><span class="stno">43l2</span>The mirror</h2>
+  <p data-pid="862656">The <i>mirror</i> of a statement about a Boolean algebra swaps ∨ with ∧ and 0 with 1, and leaves ¬ alone.</p>
+  <p data-pid="f5ad65">Mirror technique: <b>if a statement follows from the ten lines, so does its mirror.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the mirror technique">
+\text{the mirror of each of the ten lines is one of the ten} @@ turn-about to turn-about, spread to spread, x ∨ 0 = x to x ∧ 1 = x, x ∨ ¬x = 1 to x ∧ ¬x = 0
+\text{mirror every line of a proof} @@ each axiom used becomes an axiom; each move of 0b and 1 stays a move
+\htmlClass{new}{\text{the mirrored lines are a proof of the mirrored statement}} \quad \blacksquare @@ induction on the length of the proof (4c)
   </pre>
-  <p data-pid="d84257">For a cubic with top coefficient not 1, the whole-answer technique becomes: a rational root u/v in lowest terms has u dividing the last coefficient and v dividing the first. The proof is the same lines, read at both ends.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · thirds · ← → keys work</div></section>
+  <p data-pid="393f7a">So the proof of x ∨ x = x in 43l1, mirrored, proves x ∧ x = x with no more work, and absorb’s twin x ∧ (x ∨ y) = x comes free. In the parts of a set the mirror swaps ∪ with ∩ and ∅ with the whole set. A statement and its mirror need not say the same thing: x ∧ 0 = 0 and x ∨ 1 = 1 are twins and different.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · mirror · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43l2.1</span><span class="ph understand">understand</span>What does the third-of-angle technique say? <br>Why can 90° be cut in three though 60° cannot?</li>
+      <li><span class="qid">43l2.1</span><span class="ph understand">understand</span>What is the mirror of a statement? <br>What does the mirror technique say, and why does it need the mirror of each of the ten lines to be one of them?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43l3">
-  <h2 class="sthead"><span class="stno">43l3</span>Which regular figures</h2>
-  <p data-pid="3d11c7">Write φ(n) for the number of hours of the clock of n that share no factor with n, the units of 41d. The turn by an n-th has a field of degree φ(n), held in trust for n not prime: 43i proved it for 17, and the same test proves it for every prime.</p>
-  <p data-pid="0eaca1">Regular-figure technique: <b>the regular n-gon can be built exactly when φ(n) is a power of 2.</b> The field of the turn is a splitting field with a turn-about group of φ(n) members, so the two-group technique gives one way and the power-of-two technique the other.</p>
-  <pre class="lines" data-k="ember" data-label="this step: n from 3 to 20">
-\varphi(n) = 2, 2, 4, 2, 6, 4, 6, 4, 10, 4, 12, 6, 8, 8, 16, 6, 18, 8 @@ n = 3, 4, …, 20, counted
-\text{powers of 2}:\ 3, 4, 5, 6, 8, 10, 12, 15, 16, 17, 20 @@ build
-\text{not}:\ 7, 9, 11, 13, 14, 18, 19 @@ cannot
-\htmlClass{new}{n = 2^k p_1 \cdots p_j,\ \ p_i \text{ different primes } 2^{2^m} + 1} \quad \blacksquare @@ φ(pᵉ) = pᵉ⁻¹(p − 1) is a power of 2 only for e = 1 and p − 1 a power of 2, and then p = 2^(2^m) + 1
+  <h2 class="sthead"><span class="stno">43l3</span>As a ring</h2>
+  <p data-pid="96f4c0">In a Boolean algebra put x + y = (x ∧ ¬y) ∨ (¬x ∧ y), either-but-not-both, and xy = x ∧ y. Then B is a ring of 43a, with 0 and 1 as its 0 and 1, and the negative of x is x itself. In the parts of a set this is 43a2’s ring of parts. Every member is its own square: xx = x ∧ x = x.</p>
+  <p data-pid="f63d9a">Own-square technique: <b>in any ring in which every member is its own square, 1 + 1 = 0 and the ring turns about.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the own-square technique">
+x + y = (x + y)^2 = x^2 + xy + yx + y^2 = x + xy + yx + y @@ spread, both sides; squares are themselves
+xy + yx = 0 @@ take away x + y
+x = y:\ \ x + x = 0,\ \text{so } x = -x @@ the line above with y = x; and 1 + 1 = 0 is the case x = 1
+\htmlClass{new}{xy = -yx = yx} \quad \blacksquare @@ the second line, then the third on yx
   </pre>
-  <p data-pid="f1871c">The primes 2^(2^m) + 1 known are 3, 5, 17, 257 and 65 537. 2^32 + 1 = 641 × 6 700 417, and no other prime of the form has been found.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · figures · ← → keys work</div></section>
+  <p data-pid="4aa510">The way back: in such a ring put x ∨ y = x + y + xy, x ∧ y = xy and ¬x = 1 + x, and the ten lines hold. So a Boolean algebra and a ring of own squares are one thing written two ways. 39a read 1e’s either-but-not-both as the sum by 2 and and as the product: that was the two-member case.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · a ring · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43l3.1</span><span class="ph understand">understand</span>What does the regular-figure technique say? <br>Why can the 15-gon be built though the 9-gon cannot?</li>
+      <li><span class="qid">43l3.1</span><span class="ph understand">understand</span>How is a Boolean algebra read as a ring? <br>What does the own-square technique say, and why does (x + y)² = x + y give xy + yx = 0?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43l4">
-  <h2 class="sthead"><span class="stno">43l4</span>The pentagon, built</h2>
-  <pre class="lines" data-k="ember" data-label="this step: the cosine of a fifth of a turn">
-\zeta^5 = 1,\ \zeta \ne 1:\ \ \zeta^2 + \zeta + 1 + \zeta^{-1} + \zeta^{-2} = 0 @@ divide 1 + ζ + ⋯ + ζ⁴ = 0 by ζ²
-y = \zeta + \zeta^{-1} = 2\cos 72^\circ:\ \ y^2 + y - 1 = 0 @@ y² = ζ² + 2 + ζ⁻²
-y = \tfrac{-1 + \sqrt5}{2} @@ 8i; the positive root, since cos 72° &gt; 0
-\htmlClass{new}{\cos 72^\circ = \tfrac{\sqrt5 - 1}{4} \approx 0.30902} \quad \blacksquare @@ halve
+  <h2 class="sthead"><span class="stno">43l4</span>One polynomial for each table</h2>
+  <p data-pid="e2b7e1">Over ℤ/2 with x² = x, a polynomial in x₁, …, xₙ is a sum of products of distinct letters, each product used once or not at all. There are 2ⁿ such products, so 2^(2ⁿ) such sums, and there are 2^(2ⁿ) tables of n inputs, since a table picks 0 or 1 for each of its 2ⁿ rows (4k).</p>
+  <p data-pid="1c4d5e">One-polynomial technique: <b>every table of n inputs is exactly one sum of products of distinct inputs over ℤ/2.</b> Each table is some such sum, since each row with a 1 is a product of xᵢ and 1 + xⱼ, and rows that never both hold add as either-but-not-both. Different sums give different tables, since the counts match: 2^(2ⁿ) sums onto 2^(2ⁿ) tables.</p>
+  <pre class="lines" data-k="ember" data-label="this step: a circuit simplified by arithmetic">
+(x \land y) \lor (x \land \neg y) \lor (\neg x \land y) @@ the rows 11, 10, 01, as 4·comp wrote a table
+xy + x(1 + y) + (1 + x)y @@ the three rows never hold together, so each ∨ is a +
+= xy + x + xy + y + xy @@ spread
+= x + y + xy @@ xy + xy = 0
+\htmlClass{new}{= x \lor y} \quad \blacksquare @@ the way back of 43l3
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: with the tools">
-\text{centre } O,\ \text{radius } OA = 1,\ OB \perp OA @@ the perpendicular technique (18j)
-M \text{ the midpoint of } OB:\ \ MA = \sqrt{1 + \tfrac14} = \tfrac{\sqrt5}{2} @@ the midpoint technique; the plane’s distance
-\text{circle about } M \text{ through } A \text{ meets the line } OB \text{ at } P,\ \ OP = \tfrac{\sqrt5 - 1}{2} @@ on the far side of O from B: MP = √5/2, MO = 1/2
-\htmlClass{new}{OP = 2\cos 72^\circ:\ \text{the perpendicular to } OA \text{ at distance } OP/2 \text{ cuts the circle at two corners}} \quad \blacksquare @@ bisect OP; the corners at ±72°
-  </pre>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · pentagon · ← → keys work</div></section>
+  <p data-pid="bc40c3">4·comp found “at least two of three” as A · B ∨ B · C ∨ A · C by merging rows. Its polynomial is AB + BC + CA: at 1, 1, 1 it gives 1 + 1 + 1 = 1. The same three ands, with either-but-not-both gates in place of ors. Which form is cheaper depends on the gates on hand, as 39f counted.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · one polynomial · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43l4.1</span><span class="ph understand">understand</span>How does 2 cos 72° come out of the fifth roots of 1? <br>In the construction, why is OP equal to (√5 − 1)/2?</li>
+      <li><span class="qid">43l4.1</span><span class="ph understand">understand</span>What does the one-polynomial technique say, and why do the counts 2^(2ⁿ) settle that different sums give different tables? <br>How does (x ∧ y) ∨ (x ∧ ¬y) ∨ (¬x ∧ y) become x + y + xy?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43l5">
-  <h2 class="sthead"><span class="stno">43l5</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">43l5</span>Every finite one is the parts of a set</h2>
+  <p data-pid="0a68b6">In a Boolean algebra write x ≤ y when x ∧ y = x. An <i>atom</i> is a member a ≠ 0 with nothing strictly between 0 and a.</p>
+  <p data-pid="ea5030">Atoms technique: <b>a Boolean algebra with finitely many members is matched with the parts of its set of atoms, x going to the atoms below it, keeping ∨, ∧ and ¬; so it has 2ᵏ members, k the number of atoms.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the atoms technique">
+x \ne 0 \Rightarrow \text{some atom } a \le x @@ go down while something lies strictly between; finitely many members, so it stops
+a \text{ an atom},\ a \le x \lor y \Rightarrow a \le x \text{ or } a \le y @@ a = a ∧ (x ∨ y) = (a ∧ x) ∨ (a ∧ y), and each part is 0 or a
+a \le \neg x \iff a \not\le x @@ a ∧ x and a ∧ ¬x are each 0 or a, and they join to a and meet in 0
+x = \textstyle\bigvee\{a \text{ atom} : a \le x\} @@ the join w of those atoms has w ≤ x; if x ∧ ¬w ≠ 0, an atom below it is below x and not below w, ⊥
+\htmlClass{new}{x \mapsto \{a : a \le x\} \text{ is a matching with the parts of the atoms}} \quad \blacksquare @@ the lines above: one-to-one, onto, and keeping ∨, ∧, ¬
+  </pre>
+  <p data-pid="4299f6">So there is no Boolean algebra with 6 members, or 12, and the divisors of 30, with the greatest common divisor as ∧ and the least common multiple as ∨ and 30/x as ¬, are the parts of {2, 3, 5}. Endless ones need not be the parts of anything: the parts of ℕ that are finite or have a finite rest are a Boolean algebra that can be listed, and the parts of an endless set cannot (35c).</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · atoms · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">43l5.1</span><span class="ph understand">understand</span>What are ≤ and an atom in a Boolean algebra? <br>What does the atoms technique say, and why does it rule out a Boolean algebra with 6 members?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="43l6">
+  <h2 class="sthead"><span class="stno">43l6</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-x^4 - x - 1 \text{ has degree 4, so its roots can be built}\,? @@ its group is all 24 shuffles; 24 is not a power of 2, and the two-group technique fails
-\text{the 9-gon can be built because 3 can}\,? @@ φ(9) = 6: a 9-gon needs 40°, a third of 120°
-8x^3 - 6x - 1 \text{ has the root } \tfrac12\,? @@ 1 − 3 − 1 = −3; a rational root u/v needs u ∣ 1 and v ∣ 8, and none works
-2^{32} + 1 \text{ is prime, so the } (2^{32} + 1)\text{-gon can be built}\,? @@ 641 divides it
+x \lor y = x + y \text{ in the ring}\,? @@ at x = y = 1, x + y = 0 and x ∨ y = 1: x ∨ y = x + y + xy
+\text{the mirror of a true statement says the same thing}\,? @@ x ∧ 0 = 0 and x ∨ 1 = 1 are twins and different
+x + x = 2x \ne 0 \text{ in a Boolean ring}\,? @@ 1 + 1 = 0 by the own-square technique
+\text{every Boolean algebra has } 2^k \text{ members}\,? @@ for finite ones; the finite-or-cofinite parts of ℕ are endless and can be listed
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43l5.1</span><span class="ph understand">understand</span>Why does a degree of 4 not let the roots of x⁴ − x − 1 be built? <br>Why does the 3-gon being buildable not make the 9-gon buildable?</li>
+      <li><span class="qid">43l6.1</span><span class="ph understand">understand</span>Why is x ∨ y not x + y in the ring? <br>Why is the mirror of a statement a new statement, not the same one?</li>
     </ol>
   </section>
 </section>
@@ -133,22 +154,22 @@ x^4 - x - 1 \text{ has degree 4, so its roots can be built}\,? @@ its group is a
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">43l.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="n = 15"></span></span>Build the 15-gon from the 3-gon and the 5-gon: which angle do you get by combining 120° and 72°, and how does it give 24°? <br>Write cos 24° with square roots.</div>
-  <div class="chq"><span class="chid">43l.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\sqrt[4]{2},\ \ \sqrt[3]{3},\ \ \sqrt2 + \sqrt[3]2"></span></span>For each length, decide whether it can be built, and give the polynomial and its degree. <br>Which of the three needs the group, not only the degree?</div>
-  <div class="chq"><span class="chid">43l.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{a regular } n\text{-gon built} \Rightarrow \text{the angle } 360^\circ/n"></span></span>The regular-figure technique goes from n to φ(n). Turn it round: which whole-degree angles 1°, 2°, 3°, … can be built? <br>Find the smallest, and say why 1° cannot.</div>
-  <div class="chq"><span class="chid">43l.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{a marked straightedge}"></span></span>With two marks on the straightedge, a line can be slid through a point until the marks sit on two curves. Find how this cuts any angle in three, and why it escapes the power-of-two technique. <br>What does the tower of a marked straightedge’s numbers look like?</div>
+  <div class="chq"><span class="chid">43l.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x \lor z = 1,\ \ x \land z = 0"></span></span>Build a proof from the ten lines that only z = ¬x passes both tests. <br>Then prove ¬¬x = x and ¬(x ∨ y) = ¬x ∧ ¬y. Which of 1f’s rules needed rung 7, and why do they not need it here?</div>
+  <div class="chq"><span class="chid">43l.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="(x \lor y) \land (\neg x \lor z) \land (y \lor z)"></span></span>Simplify this by the one-polynomial technique, and by the rulebook. <br>Is y ∨ z needed? Find, among tables of three inputs, how many are symmetric in all three letters, and their polynomials.</div>
+  <div class="chq"><span class="chid">43l.7.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">a ring in which 1 + 1 = 0 and that turns about</span></span>The own-square technique said own squares force 1 + 1 = 0 and turning about. Turn it round: must a ring that turns about with 1 + 1 = 0 have every member its own square? <br>Test the field of four from 43g and ℤ/2[x]. Which members of the field of four are their own squares?</div>
+  <div class="chq"><span class="chid">43l.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">1e: the four rows as four regions</span></span>Rung 1 drew the rows of a table as regions of a picture. The atoms technique says a finite Boolean algebra is the parts of its atoms. <br>For the tables of two inputs, what are the atoms, and what are the regions? Is the algebra of tables of n inputs the parts of its rows, and how many atoms has it?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r43k.html">← 43k · symmetry groups of equations, by hand</a><a href="r43cb27.html">43·cb27 · groups as matrices →</a></nav>
+<nav class="nextrung"><a href="r43k.html">← 43k · field extensions by hand</a><a href="r43cb27.html">43·cb27 · every matrix is nearly diagonal →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>φ is Euler’s totient function. The regular-figure technique is the Gauss–Wantzel theorem, and the primes 2^(2^m) + 1 are the Fermat primes. That the field of the turn by an n-th has degree φ(n) is the irreducibility of the cyclotomic polynomials. The marked straightedge’s move is a neusis.</p>
+  <p>The ten lines are Huntington’s postulates for a Boolean algebra, in one of their forms; say-it-again is idempotence, and not-through is De Morgan’s laws. The mirror technique is the duality principle. A ring of own squares is a Boolean ring, and the own-square technique says every Boolean ring is commutative of characteristic 2. The polynomial of a table is its algebraic normal form, or Zhegalkin polynomial, and the sum of rows is the disjunctive normal form. The atoms technique is the finite case of Stone’s representation theorem.</p>
   <h3>Who said it first</h3>
-  <p>Pierre de Fermat conjectured in 1640 that every 2^(2^m) + 1 is prime; Leonhard Euler found the factor 641 of 2^32 + 1 in 1732. Carl Friedrich Gauss proved the sufficient condition for the n-gon in 1801 and stated the necessary one; Pierre Wantzel proved it in 1837. Archimedes is credited with the trisection by a marked straightedge. The construction of the pentagon on this step is close to the one in Euclid’s Elements, Book IV.</p>
+  <p>George Boole wrote an algebra of logic in 1847 and 1854, with x² = x as his law of duality. Ernst Schröder noticed the mirror in the 1890s. Edward Huntington gave lists of postulates in 1904 and 1933. Ivan Zhegalkin wrote the polynomial form in 1927, and Marshall Stone showed in 1936 that Boolean algebras and Boolean rings are one thing, and that every Boolean algebra is an algebra of sets.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“60° cannot be cut in three, so no angle can.” Not allowed: the test is about one angle at a time. 90°, 180° and every angle whose cubic factors can be cut in three. Impossibility in general means: no recipe works for every angle, which one counterexample, 60°, proves.</p>
+  <p>“x ∨ y = x + y + xy, and x ∧ y = xy, so by the mirror technique x ∧ y = x + y + xy too.” Not allowed: the mirror technique works on statements built from ∨, ∧, ¬, 0 and 1 alone. The + of the ring is not one of them, and its mirror is not defined.</p>
 </section>
 
 </div>
@@ -163,25 +184,30 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'polynomial',t:R`y^3 - 3y + 1`,n:`For 2 cos 40°.`},
-  {k:'ember',kl:'irreducible',t:R`\pm1 \text{ fail}`,n:`No rational root.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{degree } 3:\ \text{no 9-gon}}`,n:`Not a power of 2.`}
-],{title:'The slides · the test · ← → keys work'});
+  {k:'ember',kl:'ten lines',t:R`\lor,\ \land,\ \neg,\ 0,\ 1`,n:`From 1f.`},
+  {k:'ember',kl:'say it again',t:R`x \lor x = x`,n:`From the list.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{no tables needed}}`,n:`The rulebook follows.`}
+],{title:'The slides · the list · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'90°',t:R`x(4x^2 - 3)`,n:`Factors.`},
-  {k:'ember',kl:'60°',t:R`8x^3 - 6x - 1`,n:`Does not.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a rational root decides}}`,n:`When cos θ is rational.`}
-],{title:'The slides · thirds · ← → keys work'});
+  {k:'ember',kl:'swap',t:R`\lor \leftrightarrow \land,\ \ 0 \leftrightarrow 1`,n:`Leave ¬.`},
+  {k:'ember',kl:'the list',t:R`\text{mirrors to itself}`,n:`Line by line.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{x \land x = x \text{ for free}}`,n:`Every proof has a twin.`}
+],{title:'The slides · mirror · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'count',t:R`\varphi(15) = 8,\ \varphi(9) = 6`,n:`Units of the clock.`},
-  {k:'ember',kl:'test',t:R`\varphi(n) = 2^k`,n:`Power of 2.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{3, 4, 5, 6, 8, 10, 12, 15, 16, 17, 20}`,n:`Up to 20.`}
-],{title:'The slides · figures · ← → keys work'});
+  {k:'ember',kl:'plus',t:R`x + y = \text{either but not both}`,n:`Exclusive or.`},
+  {k:'ember',kl:'own squares',t:R`x^2 = x`,n:`Every member.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{1 + 1 = 0,\ \ xy = yx}`,n:`Forced.`}
+],{title:'The slides · a ring · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'quadratic',t:R`y^2 + y - 1 = 0`,n:`For 2 cos 72°.`},
-  {k:'ember',kl:'length',t:R`OP = \tfrac{\sqrt5 - 1}{2}`,n:`From MA = √5/2.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\cos 72^\circ = \tfrac{\sqrt5 - 1}{4}}`,n:`Built.`}
-],{title:'The slides · pentagon · ← → keys work'});
+  {k:'ember',kl:'rows',t:R`xy,\ x(1 + y),\ (1 + x)y`,n:`Never together.`},
+  {k:'ember',kl:'add',t:R`xy + xy = 0`,n:`Cancels.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{x + y + xy = x \lor y}`,n:`Simplified.`}
+],{title:'The slides · one polynomial · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'atoms',t:R`a \le x \lor y \Rightarrow a \le x \lor a \le y`,n:`Cannot split.`},
+  {k:'ember',kl:'every member',t:R`x = \bigvee a`,n:`Its atoms.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|B| = 2^k}`,n:`Parts of the atoms.`}
+],{title:'The slides · atoms · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

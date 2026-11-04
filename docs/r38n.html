@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Structures that hold data</title>
+<title>Natural deduction by hand</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,92 +25,87 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r38m.html">← 38m divide and conquer</a><a href="r38o.html">next: 38o remembering answers →</a></p>
-  <div class="tags"><span class="tag proof">38n · proof</span></div>
-  <h1>Structures that hold data</h1>
-  <p data-pid="b01612">A program rarely wants a list for its own sake. It wants to do something to it again and again: take the newest item, or the oldest, or the largest; find whether a name is there; add a name and find it later. How the items are laid out in memory decides how many turns each of those jobs costs, and a good layout can turn a count like the size into a count like its log, or into a count that does not grow at all. This step builds five layouts. A pile, where only the top can be reached. A line, where items leave in the order they came. A heap, a tree folded into a list so that the largest item is always on top and each change costs only the height of the tree. A search tree, ordered left to right, whose cost is its depth, and whose depth, if items arrive in random order, the sort that chooses at random has already counted. And a table of slots chosen by a scrambling rule, where the chance of the statistics floor says how crowded a slot will be.</p>
-  <p class="gesture" data-pid="21b73f">A pile and a line take and give in a fixed number of turns, and a list that doubles when full costs at most three moves an item. A heap keeps the largest on top at a cost of its height, the log of its size. A search tree costs its depth, and random order gives depth about twice the natural log. A table of m slots holding n keys costs about one plus n over m a look.</p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38m.html">← 38m numbering formulas by hand</a><a href="r38cb29.html">next: 38·cb29 a true sentence arithmetic cannot reach →</a></p>
+  <div class="tags"><span class="tag tech">38n · technique</span></div>
+  <h1>Natural deduction by hand</h1>
+  <p data-pid="53429a">A column is one way to write a proof. A tree is another. Put the foot at the bottom, and above each line put the lines it leans on, so the givens and suppositions are the leaves at the top and every move is a bar with its inputs above and its output below. A supposition that a move drops is marked with a number, and the move that drops it carries the same number. Trees show at a glance which lines lean on which, and they make one thing easy to see that columns hide: a detour, where a mark is made and used at once. Cutting detours out leaves a proof that never makes a mark only to take it apart again. Then the step looks hard at two moves that have always been allowed. Prove an if may drop a supposition the proof never used, and from the totally false anything may be written. Both make sense of the tables of rung one. Both have been argued against for as long as there have been tables, and the trees show exactly where each one enters.</p>
+  <p class="gesture" data-pid="dd4b10">A tree has the foot at the root, the givens and suppositions at the leaves, and one bar for each move. A mark made and used at once is a detour, and can be cut out. Dropping an unused supposition, and writing anything from the totally false, are where the if of the tables and its critics part.</p>
 </header>
 
 <section class="class step" data-step="38n1">
-  <h2 class="sthead"><span class="stno">38n1</span>Piles, lines, and a list that doubles</h2>
-  <p data-pid="39c1a8">A <i>pile</i> lets a program put an item on top and take the top item off. A <i>line</i> lets it put an item at the back and take one from the front. With a counter for the top, or one for each end, each is a fixed number of turns. The catch is room: a list in memory has a fixed number of cells. When it is full, take a new list twice as long and copy everything across.</p>
-  <p data-pid="402121">Doubling-array technique: <b>n items put one at a time into a list that starts with one cell and doubles whenever it is full cost fewer than 3n moves in all.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the doubling-array technique">
-\text{each item written once}: n \text{ moves} @@ the writes themselves
-\text{copies at sizes } 1, 2, 4, \ldots, 2^j \text{ with } 2^j < n @@ a copy happens each time the list fills
-1 + 2 + \cdots + 2^j = 2^{j+1} - 1 < 2n @@ a geometric sum (22e), and 2ʲ &lt; n
-\htmlClass{new}{\text{fewer than } n + 2n = 3n \text{ moves}} \quad \blacksquare @@ on average fewer than 3 an item
+  <h2 class="sthead"><span class="stno">38n1</span>Proofs as trees</h2>
+  <p data-pid="37109d">A <i>tree</i> writes a proof upside down from a column. Each move is a bar: the lines it leans on above, the line it writes below, the move named at its side. The foot is at the bottom. The leaves are givens and suppositions. A supposition dropped by a move is written in square brackets with a number, and the move carries the same number.</p>
+  <p data-pid="063f5d">Tree-column technique: <b>every column of 38b’s calculus can be drawn as a tree with the same foot and the same givens, and every tree can be written as a column.</b> Read the column from the foot up, putting above each line the lines it leans on; read the tree from the leaves down, writing each bar’s output after its inputs.</p>
+  <pre class="lines" data-k="ember" data-label="this step: a tree, and its column">
+\dfrac{\dfrac{\dfrac{[P \land Q]^1}{P} \quad P \Rightarrow (Q \Rightarrow R)}{Q \Rightarrow R} \qquad \dfrac{[P \land Q]^1}{Q}}{\dfrac{R}{(P \land Q) \Rightarrow R}\ 1} @@ keep left, carry through; keep right; carry through; prove an if, dropping 1
+P \Rightarrow (Q \Rightarrow R) @@ the column: given
+\qquad \text{assume } P \land Q;\ \ P;\ \ Q \Rightarrow R;\ \ Q;\ \ R @@ supposed; keep left; carry through; keep right; carry through
+\htmlClass{new}{(P \land Q) \Rightarrow R} \quad \blacksquare @@ prove an if: the supposition leaves
   </pre>
-  <p data-pid="f2ef33">Any one put may be slow: the put that triggers a copy of a million items costs a million moves. The total is what is small. A count spread over a whole run like this is honest only when the run is long, and the technique says exactly how long: the bound holds after every put, not just at the end.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · doubling · ← → keys work</div></section>
+  <p data-pid="ec4f16">The supposition P ∧ Q appears twice in the tree, once for each use. In the column it is written once and cited twice. The tree pays for its clarity in copies.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · trees · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">38n1.1</span><span class="ph understand">understand</span>What does the doubling-array technique say? <br>Why can one put cost a million moves though the average is under three?</li>
+      <li><span class="qid">38n1.1</span><span class="ph understand">understand</span>How is a proof drawn as a tree, and how is a dropped supposition marked? <br>What does the tree-column technique say?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="38n2">
-  <h2 class="sthead"><span class="stno">38n2</span>A heap</h2>
-  <p data-pid="3d7df9">Lay a tree in a list: cell 1 is the top, and the cells below cell i are 2i and 2i + 1. A <i>heap</i> keeps each cell at least as large as the cells below it, so the largest item is always in cell 1. To add an item, put it in the first empty cell and swap it upward while it is larger than the cell above. To take the largest, move the last item to the top and swap it downward with its larger child while a child is larger.</p>
-  <p data-pid="1a2627">Heap-height technique: <b>a heap of n items has height ⌊log₂ n⌋, so adding an item costs at most that many swaps, and taking the largest at most twice that many comparisons.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the heap-height technique">
-\text{level } j \text{ holds cells } 2^j \text{ to } 2^{j+1} - 1 @@ cell i’s children are 2i and 2i + 1: each level doubles
-\text{cell } n \text{ is on level } \lfloor \log_2 n \rfloor @@ 2ʲ ≤ n &lt; 2ʲ⁺¹
-\text{a swap moves one level} @@ up when adding, down when taking
-\text{taking: two comparisons a level} @@ which child is larger, then whether it beats the item
-\htmlClass{new}{n = 10^6:\ \ 19 \text{ levels; at most } 19 \text{ swaps to add, } 38 \text{ comparisons to take}} \quad \blacksquare @@ ⌊log₂ 10⁶⌋ = 19
+  <h2 class="sthead"><span class="stno">38n2</span>Every and some in a tree</h2>
+  <p data-pid="b9c981">The fresh-name conditions of 38b2 are checked at the bar: when speak of everything writes ∀x φ(x) from φ(y), look up every branch above it for a leaf still open in which y is free. When use a some drops φ(y), look for y anywhere outside the bracketed leaves.</p>
+  <p data-pid="145992">Swapped-order technique: <b>if something stands in R to everything, then everything has something standing in R to it.</b> In marks: ∃x ∀y R(x, y) ⊢ ∀y ∃x R(x, y). It is 2b’s licensed-swap technique, here a tree.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the swapped-order technique">
+\dfrac{\exists x\,\forall y\,R(x, y) \qquad \dfrac{\dfrac{\dfrac{[\forall y\,R(u, y)]^1}{R(u, v)}}{\exists x\,R(x, v)}}{\forall y\,\exists x\,R(x, y)}}{\forall y\,\exists x\,R(x, y)}\ 1 @@ use an every with v; show an example with u; speak of everything on v; use a some, dropping 1
+v \text{ is free in no open leaf above the speak-of-everything bar} @@ the only open leaf is [∀y R(u, y)], with no v
+\htmlClass{new}{u \text{ is free in neither the foot nor } \exists x\,\forall y\,R(x, y)} \quad \blacksquare @@ the use-a-some condition
   </pre>
-  <p data-pid="6977c1">Put n items in and take them all out, largest first, and they come out sorted, in about 2n log₂ n comparisons and no second list: heap sort. A heap is also how a program keeps the next job to do when jobs keep arriving with different urgencies. 40 uses that to find shortest routes; this step leaves the routes there.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · heap · ← → keys work</div></section>
+  <p data-pid="53f1ce">The other way, from ∀y ∃x R(x, y) to ∃x ∀y R(x, y), fails at the speak-of-everything bar: the example found for v depends on v, so the name it gets is free in an open leaf. 38c.5.1 built the world that shows no other tree can do it.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · every and some · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38n2.1</span><span class="ph understand">understand</span>What does the heap-height technique say? <br>Why does each level of the tree hold twice as many cells as the one above?</li>
+      <li><span class="qid">38n2.1</span><span class="ph understand">understand</span>Where in a tree are the fresh-name conditions checked? <br>What does the swapped-order technique say, and at which bar does the other direction fail?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="38n3">
-  <h2 class="sthead"><span class="stno">38n3</span>A search tree</h2>
-  <p data-pid="e49d09">A <i>search tree</i> keeps at each place one item, with every smaller item somewhere to its left and every larger one somewhere to its right. To find an item, start at the top and go left or right by comparing; to add one, go down the same way and hang it where the path ends. The cost of a search is the depth reached.</p>
-  <p data-pid="b2dba2">Tree-depth technique: <b>if n different items are added to an empty search tree in random order, the average number of comparisons to add them all is 2(n + 1)Hₙ − 4n, the same as the random-pivot sort’s.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the tree-depth technique">
-i \text{ and } j \text{ are compared} \iff \text{the first added among } i, \ldots, j \text{ is } i \text{ or } j @@ before it, both go the same way at every place; it parts them
-\text{the order of adding is random: chance } \tfrac{2}{j - i + 1} @@ each of the j − i + 1 equally likely to be first (30l1)
-\text{the same pairs, the same chances, as in 38l2} @@ the first item added is the top: a pivot
-\text{average total} = 2(n + 1)H_n - 4n @@ the pivot-chance technique
-\htmlClass{new}{n = 10^6:\ \ \text{about } 24.8 \text{ comparisons an item on average, against } 19 \text{ levels at best}} \quad \blacksquare @@ worked by machine
+  <h2 class="sthead"><span class="stno">38n3</span>Detours</h2>
+  <p data-pid="ebf666">A <i>detour</i> is a bar that makes a mark, followed at once by a bar that uses the same mark: join and then keep left; prove an if and then carry it through; show an example and then use a some.</p>
+  <p data-pid="394a80">Detour-cut technique: <b>a detour can be cut out of a tree, and the tree that is left reaches the same foot from the same givens.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the detour-cut technique, for the if">
+\dfrac{\dfrac{\dfrac{[P]^1\ \vdots}{Q}}{P \Rightarrow Q}\,1 \qquad \dfrac{\vdots}{P}}{Q} @@ prove an if, then at once carry it through on a tree for P
+\text{put the tree for } P \text{ in the place of every leaf } [P]^1 @@ each leaf was waiting for a P, and now has one
+\text{the fresh-name conditions still hold} @@ rename any placeholder of the inserted tree that would be caught (38b2)
+\htmlClass{new}{\dfrac{\vdots\ \dfrac{\vdots}{P}\ \vdots}{Q}\text{: the same foot, no if made or used}} \quad \blacksquare @@ the same for join, add an option, show an example
   </pre>
-  <p data-pid="05a675">A random order gives a tree only about a quarter deeper than the best. A sorted order gives the worst, a single path n deep. Trees that rebalance themselves after each add keep the depth below about 1.44 log₂ n for every order; 40 uses them to keep things findable.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · search tree · ← → keys work</div></section>
+  <p data-pid="fdcd72">Cutting one detour can make others, where the inserted tree meets the bars below it. Cutting them all does stop, and leaves a tree in which every formula is a part of the foot or of a given. That fact is proved much higher up the ladder. Its proof is a falling count of the kind 38·cb29 uses.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · detours · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38n3.1</span><span class="ph understand">understand</span>What does the tree-depth technique say? <br>Why is adding items in random order the same count as the random-pivot sort?</li>
+      <li><span class="qid">38n3.1</span><span class="ph understand">understand</span>What is a detour in a tree? <br>What does the detour-cut technique say, and how is the detour of an if cut out?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="38n4">
-  <h2 class="sthead"><span class="stno">38n4</span>A table of slots</h2>
-  <p data-pid="12ecc0">A <i>hash table</i> has m slots. A scrambling rule turns each key, a name say, into a slot number, and the key goes on a short list in that slot. To find a key, scramble it and look only in its slot. Model the rule as 30’s chance: each key lands in each slot with chance 1/m, independently of the others.</p>
-  <p data-pid="cd5b09">Load-share technique: <b>with n keys in m slots, a look for a key that is there checks on average at most 1 + (n − 1)/m keys, and the chance that some two keys share a slot is 1 − (1 − 1/m)(1 − 2/m)⋯(1 − (n − 1)/m).</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the load-share technique">
-\text{each other key shares the slot with chance } \tfrac1m @@ independence (30f2)
-\text{average others in the slot} = \tfrac{n - 1}{m} @@ averages add (30g1)
-\text{look} \le 1 + \tfrac{n - 1}{m} @@ the key itself, and at most all the others
-\text{no two share} = 1 \cdot \tfrac{m - 1}{m}\cdots\tfrac{m - n + 1}{m} @@ branch-product (30l2): each key misses the slots already used
-\htmlClass{new}{n = 23,\ m = 365:\ \ 1 - 0.493 = 0.507} \quad \blacksquare @@ worked by machine: more likely than not
+  <h2 class="sthead"><span class="stno">38n4</span>Where relevance and the if enter</h2>
+  <p data-pid="a97a2b">Two moves let a tree reach a foot that has nothing to do with its leaves. Prove an if may drop a supposition that no bar above it used. And everything permitted writes any formula at all from ⊥.</p>
+  <pre class="lines" data-k="ember" data-label="this step: two trees that ignore their leaves">
+\dfrac{Q}{P \Rightarrow Q}\ 1 \quad \text{(no leaf } [P]^1\text{)} @@ the free-if technique (3a): the supposition was never used
+\dfrac{\dfrac{P \quad \neg P}{\bot}}{R} @@ clash, then everything permitted: R may be anything
+\dfrac{\dfrac{P}{P \lor R} \qquad \neg P}{R} @@ add an option, then the remaining option (1c): R again, with no ⊥ written
+\htmlClass{new}{\text{the third tree reaches the second’s foot with no } \bot \text{ written}} \quad \blacksquare @@ the remaining option, laid down by 1c as a move of its own, writes no ⊥; this calculus derives it through cases and everything permitted
   </pre>
-  <p data-pid="1096a8">So with as many slots as keys, a look costs about 2 checks whatever the size: a count that does not grow. But two keys meet in some slot far sooner than the slots fill: 23 keys in 365 slots, the people in a room with a shared birthday. A table is fast on average and crowded somewhere almost at once; its rule must scramble well, and 38n.6.4 asks what “well” can mean.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · hash table · ← → keys work</div></section>
+  <p data-pid="1473ed">1e’s table for ⇒ is true in every row where P is false. The first tree is that row, as a move. A logic that refuses it, and refuses everything permitted, must also refuse one of add an option, the remaining option, or chaining two proofs together: the third tree uses only those. Such logics exist, and are worked on. Their accepted name is relevance logic. The calculus of this rung keeps both moves, and so keeps 1e’s tables and the true-everywhere technique of 38c.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · relevance · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38n4.1</span><span class="ph understand">understand</span>What does the load-share technique say? <br>Why do two keys share a slot long before the slots are full?</li>
+      <li><span class="qid">38n4.1</span><span class="ph understand">understand</span>Which two moves let a tree reach a foot unrelated to its leaves? <br>What must a logic refuse, if it refuses both and still wants to block the third tree?</li>
     </ol>
   </section>
 </section>
@@ -118,15 +113,15 @@ i \text{ and } j \text{ are compared} \iff \text{the first added among } i, \ldo
 <section class="class step" data-step="38n5">
   <h2 class="sthead"><span class="stno">38n5</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{every put into the doubling list is quick}\,? @@ a put that triggers a copy costs as many moves as the list holds; the average is under 3
-\text{a heap is sorted}\,? @@ only each cell against those below it; the bottom row is in no order
-\text{a search tree always has depth } \log_2 n\,? @@ sorted order gives depth n; random order about 2 ln n on average
-\text{a table with more slots than keys has no shared slot}\,? @@ 23 keys in 365 slots share one with chance 0.507
+\text{a leaf } [P]^1 \text{ may stay open after the bar marked } 1\,? @@ the bar drops every leaf with its number; the foot must stand on no open supposition
+\dfrac{\exists x\,R(x, v)}{\forall y\,\exists x\,R(x, y)} \text{ with } [R(v, v)] \text{ still open above}\,? @@ v is free in an open leaf: the fresh-name condition fails
+\text{cutting a detour may change the foot}\,? @@ the cut keeps the foot and the givens; only the inside changes
+\text{a tree with no } \bot \text{ cannot reach an unrelated foot}\,? @@ add an option and the remaining option do it (38n4)
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38n5.1</span><span class="ph understand">understand</span>Why is a heap not sorted? <br>Why does a table with more slots than keys still share a slot?</li>
+      <li><span class="qid">38n5.1</span><span class="ph understand">understand</span>Why may a leaf [P]¹ not stay open below the bar marked 1? <br>Why can a tree with no ⊥ in it still reach an unrelated foot?</li>
     </ol>
   </section>
 </section>
@@ -135,22 +130,22 @@ i \text{ and } j \text{ are compared} \iff \text{the first added among } i, \ldo
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">38n.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="5, 9, 2, 7, 1, 8"></span></span>Build the heap these make, added one at a time, and show every swap. <br>Take the largest twice and show the heap after each.</div>
-  <div class="chq"><span class="chid">38n.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a list that grows by } 10 \text{ cells when full}"></span></span>Count the moves for n puts if the list grows by a fixed 10 cells instead of doubling. Which family is it in? <br>What is the least share by which it may grow and still cost O(n)?</div>
-  <div class="chq"><span class="chid">38n.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="1 - \textstyle\prod (1 - k/m) \approx \tfrac12"></span></span>Turn the load-share technique round: for m slots, about how many keys give an even chance of a shared slot? Prove that it grows like √m, using 1 − x ≤ e^(−x) (17). <br>How many keys for m = 1 000 000?</div>
-  <div class="chq"><span class="chid">38n.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">a scrambling rule as chance</span></span>The load-share technique models a fixed scrambling rule as chance. One camp says that is a guess under the large case, true of the keys that actually come. Another that it is false of the worst keys, which a clever opponent can choose, so the rule must itself be chosen at random when the table is made. <br>Which camp does the technique side with as proved? What would each have to measure?</div>
+  <div class="chq"><span class="chid">38n.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\neg(P \lor Q) \vdash \neg P \land \neg Q"></span> <span data-tex-inline="(P \Rightarrow Q) \land (Q \Rightarrow R) \vdash P \Rightarrow R"></span></span>Build a tree for each. Mark every dropped supposition with its number. <br>Count the leaves of each tree and the lines of the matching column.</div>
+  <div class="chq"><span class="chid">38n.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\dfrac{\dfrac{\dfrac{[P]^1}{P \lor Q}}{P \Rightarrow P \lor Q}\,1 \qquad P}{P \lor Q}"></span></span>Find the detour in this tree and cut it. <br>Is the tree left over the shortest tree for P ⊢ P ∨ Q? Is there a tree with no bar at all?</div>
+  <div class="chq"><span class="chid">38n.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\forall y\,\exists x\,R(x, y) \vdash \exists x\,\forall y\,R(x, y)\ ?"></span></span>Try to build a tree for this. Find the bar where it breaks, and name the leaf that blocks it. <br>Why does the failure of this one try not prove that no tree exists, and what does?</div>
+  <div class="chq"><span class="chid">38n.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">1c.4.4 and 1f.4.2: when nothing is true, everything is permitted; 1g.4.4: the if of the tables</span></span>Rung 1 laid down that from the totally false anything may be written, and gave the if its table: true in every row where its hypothesis is false. <br>One side holds that “if the moon is cheese, then 2 + 2 = 4” is true, because the tables say so and the calculus reaches it. The other side holds that an if must connect what it joins, and that a proof should use what it supposes. <br>Which bars of 38n4 does each side keep? What does the second side lose of 38c and 38d? Is the if of the tables a discovery about reasoning, or a choice?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r38m.html">← 38m · divide and conquer</a><a href="r38o.html">38o · remembering answers →</a></nav>
+<nav class="nextrung"><a href="r38m.html">← 38m · numbering formulas by hand</a><a href="r38cb29.html">38·cb29 · a true sentence arithmetic cannot reach →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A pile is a stack (last in, first out) and a line a queue (first in, first out). The doubling list is a dynamic array, and spreading the cost of the copies over the run is amortized analysis. A heap is a binary heap and its use for urgent jobs a priority queue; heap sort is heapsort. A search tree is a binary search tree, and those that rebalance are AVL and red–black trees. A table of slots is a hash table, its rule a hash function, two keys in one slot a collision, and n/m the load factor; the shared-slot chance is the birthday problem. Choosing the rule at random is universal hashing. The crosswalk items here are the data-structure and amortized-analysis items of MIT 6.006 and Stanford CS 161.</p>
+  <p>Trees are Gentzen-style natural deduction, or Prawitz-style proof trees; brackets with a number mark a discharged assumption. The tree-column technique says that Fitch-style and Gentzen-style presentations prove the same things. A detour is a maximal formula, or a cut; the detour-cut technique is a reduction step, and the fact held for later is the normalization theorem, with its corollary, the subformula property. That making and using moves undo each other is harmony. Dropping an unused supposition is vacuous discharge; the free-if facts are the paradoxes of material implication; everything permitted is ex falso quodlibet. The third tree of 38n4 is C. I. Lewis’s proof. Relevance (or relevant) logic refuses such moves.</p>
   <h3>Who said it first</h3>
-  <p>J. W. J. Williams gave the heap and heapsort in 1964, and Robert Floyd the way to build a heap in linear time the same year. Search trees were described by several people around 1960; Georgy Adelson-Velsky and Evgenii Landis gave the first self-balancing tree in 1962. Hans Peter Luhn proposed hashing at IBM in 1953. Larry Carter and Mark Wegman introduced universal hashing in 1977.</p>
+  <p>Gerhard Gentzen drew proofs as trees in 1934 and proved the subformula property for his sequent calculus; Dag Prawitz proved normalization for natural deduction in 1965. Clarence Irving Lewis gave the argument of 38n4 in Symbolic Logic (1932), with C. H. Langford, against those who would refuse ex falso. Alan Ross Anderson and Nuel Belnap built relevance logic in Entailment (1975).</p>
   <h3>A proof that is not allowed</h3>
-  <p>“A hash table finds a key in about 2 checks, and a search tree takes about log₂ n, so the table is always better.” Not allowed: the table’s count is an average over its scrambling, and it cannot list keys in order, find the next larger key, or promise a worst case without more work. The tree does all three. A count answers one question about a layout, not which layout to use.</p>
+  <p>“From ∀y ∃x R(x, y): use an every with v, giving ∃x R(x, v). Use a some with u, supposing R(u, v). Speak of everything on v: ∀y R(u, y). Show an example: ∃x ∀y R(x, y).” Not allowed: at speak of everything, the leaf R(u, v) is still open and v is free in it. In the world of 38c.5.1 the foot is false and the given is true.</p>
 </section>
 
 </div>
@@ -165,25 +160,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'writes',t:R`n`,n:`Once each.`},
-  {k:'ember',kl:'copies',t:R`1 + 2 + \cdots < 2n`,n:`Geometric.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{< 3n}`,n:`Spread over the run.`}
-],{title:'The slides · doubling · ← → keys work'});
+  {k:'ember',kl:'a bar',t:R`\dfrac{P \quad P \Rightarrow Q}{Q}`,n:`Inputs above, output below.`},
+  {k:'ember',kl:'dropped',t:R`[P]^1 \ \cdots\ \dfrac{Q}{P \Rightarrow Q}\,1`,n:`One number, two places.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{foot at the root}}`,n:`Leaves at the top.`}
+],{title:'The slides · trees · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'layout',t:R`\text{children of } i:\ 2i,\ 2i + 1`,n:`A tree in a list.`},
-  {k:'ember',kl:'height',t:R`\lfloor\log_2 n\rfloor`,n:`Levels double.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{add or take in } O(\log n)}`,n:`Largest on top.`}
-],{title:'The slides · heap · ← → keys work'});
+  {k:'ember',kl:'use',t:R`\dfrac{\forall y\,R(u, y)}{R(u, v)}`,n:`Any v.`},
+  {k:'ember',kl:'speak',t:R`\dfrac{\exists x\,R(x, v)}{\forall y\,\exists x\,R(x, y)}`,n:`v free in no open leaf.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\exists x\,\forall y \vdash \forall y\,\exists x}`,n:`One way only.`}
+],{title:'The slides · every and some · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'order',t:R`\text{left smaller, right larger}`,n:`At every place.`},
-  {k:'ember',kl:'pivot',t:R`\text{first added among } i..j`,n:`Parts them.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{2(n+1)H_n - 4n}`,n:`Depth about 2 ln n.`}
-],{title:'The slides · search tree · ← → keys work'});
+  {k:'ember',kl:'make then use',t:R`\dfrac{\dfrac{P \quad Q}{P \land Q}}{P}`,n:`A mark for nothing.`},
+  {k:'ember',kl:'cut',t:R`P`,n:`Keep what was there.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{same foot, shorter tree}}`,n:`The making and using agree.`}
+],{title:'The slides · detours · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'slot',t:R`\text{chance } 1/m`,n:`Independently.`},
-  {k:'ember',kl:'look',t:R`1 + (n - 1)/m`,n:`On average.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{23 \text{ in } 365:\ 0.507}`,n:`Shared soon.`}
-],{title:'The slides · hash table · ← → keys work'});
+  {k:'ember',kl:'unused',t:R`\dfrac{Q}{P \Rightarrow Q}`,n:`P never used.`},
+  {k:'ember',kl:'from nothing',t:R`\dfrac{\bot}{R}`,n:`Anything at all.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\dfrac{P \lor R \quad \neg P}{R}}`,n:`The same, without ⊥.`}
+],{title:'The slides · relevance · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

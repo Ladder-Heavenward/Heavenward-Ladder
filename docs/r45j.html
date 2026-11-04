@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Proofs are programs</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r45i.html">← 45i universal properties by hand</a><a href="r45cb0.html">next: 45·cb0 the same as itself, again →</a></p>
+  <div class="tags"><span class="tag tech">45j · technique</span></div>
+  <h1>Proofs are programs</h1>
+  <p data-pid="0d146a">Rung thirty nine wrote programs with nothing but making functions and applying them, and found that this bare calculus computes everything a machine can. Give each program a type, saying what it takes and what it gives, and forbid the programs whose types do not fit. What is left is a small language in which every program stops. Now set it beside the proofs of rung thirty seven, written as trees. A program from one type to another is built by supposing a member of the first and producing a member of the second. A proof of an if is built by supposing its first part and reaching its second. Applying a program to an input is using an if on a line. A pair is a join, and taking the first part of a pair is keeping one side of an and. The rules match one for one, and the detour that rung thirty seven cut out of proofs, building an if only to use it at once, is exactly one step of running a program. A proof is a program, a statement is a type, and proving is computing.</p>
+  <p class="gesture" data-pid="f7428c">Types are built by arrows and pairs, and a program from one type to another is made by supposing a member of the first and building a member of the second. Read the arrow as if and the pair as and, and the typing rules are the moves of natural deduction: a proof is a program, and a statement with a proof is a type with a member. Cutting a detour from a proof is one step of running its program.</p>
+</header>
+
+<section class="class step" data-step="45j1">
+  <h2 class="sthead"><span class="stno">45j1</span>Terms with types</h2>
+  <p data-pid="e46352">Start from 40b’s λ-calculus: terms are placeholders, λx. t (the function that takes x to t) and t s (t applied to s), and running a program puts s in for x: (λx. t) s becomes t with s in place of x. Now lay down <i>types</i>. Some base types, written A, B, C. If A and B are types, so are A → B, the functions from A to B, and A × B, the pairs. A <i>typing</i> x₁ : A₁, …, x_n : A_n ⊢ t : B says that, with those placeholders of those types, t has type B. The arrow → here joins two types; it keeps its 4d meaning for functions, and these are functions in 45f2’s sense.</p>
+  <p data-pid="9910ed">The rules, one for each way of building. A placeholder has its own type. If, with x : A added, t : B, then λx. t : A → B. If t : A → B and s : A, then t s : B. If t : A and s : B, then ⟨t, s⟩ : A × B; and from p : A × B, fst p : A and snd p : B.</p>
+  <p data-pid="969675">Typed-term technique: <b>λf. λx. f (f x) has type (A → A) → (A → A) for every type A, and applied to a function and an input it runs that function twice.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the typed-term technique">
+f : A \to A,\ x : A \vdash f\,x : A @@ apply f to x
+f : A \to A,\ x : A \vdash f\,(f\,x) : A @@ apply f again
+f : A \to A \vdash \lambda x.\,f\,(f\,x) : A \to A @@ make a function of x
+\vdash \lambda f.\,\lambda x.\,f\,(f\,x) : (A \to A) \to (A \to A) @@ make a function of f
+(\lambda f.\,\lambda x.\,f(f\,x))\,S\,3 \to (\lambda x.\,S(S\,x))\,3 \to S(S\,3) = 5 @@ run it on next and 3: put S in for f, then 3 for x
+\htmlClass{new}{\text{a term with a type, and its run}} \quad \blacksquare @@ the typing, then the computation
+  </pre>
+  <p data-pid="9e40ca">λx. x x, which 40b used to build programs that never stop, has no type: x would need a type A with A equal to A → B, and no type built by the rules is shorter than itself. Typed terms all stop when run; the proof is held in trust, much higher up the ladder.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · types · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">45j1.1</span><span class="ph understand">understand</span>What are the typing rules for λx. t, for t s, and for pairs? <br>What does the typed-term technique say, and why has λx. x x no type?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45j2">
+  <h2 class="sthead"><span class="stno">45j2</span>A proof is a term</h2>
+  <p data-pid="439525">Read each type as a statement: A → B as A ⇒ B, A × B as A ∧ B. Then each typing rule is a move of 38b. Making λx. t from x : A ⊢ t : B is 38n’s box: suppose A, reach B, write A ⇒ B and drop the supposition. Applying t s is using an if: from A ⇒ B and A, B. A pair is a join, and fst and snd are keep either part.</p>
+  <p data-pid="2b495c">Proofs-as-terms technique: <b>a tree proof of B from suppositions A₁, …, A_n, using only if and and, is a term of type B with placeholders of types A₁, …, A_n, and every such term is such a proof; the term records the proof move by move.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the proofs-as-terms technique, on (P ∧ Q) ⇒ (Q ∧ P)">
+p : P \times Q \vdash \mathrm{snd}\,p : Q,\ \ \mathrm{fst}\,p : P @@ suppose P ∧ Q; keep either part, twice
+p : P \times Q \vdash \langle \mathrm{snd}\,p, \mathrm{fst}\,p \rangle : Q \times P @@ join
+\vdash \lambda p.\,\langle \mathrm{snd}\,p, \mathrm{fst}\,p \rangle : (P \times Q) \to (Q \times P) @@ drop the supposition: an if
+\text{the tree: } [P \wedge Q] \to Q,\ P \to Q \wedge P \to (P \wedge Q) \Rightarrow (Q \wedge P) @@ 38n1’s tree, the same moves in the same order
+\htmlClass{new}{\text{the proof is the program that swaps a pair}} \quad \blacksquare @@ induction on the building, rule by rule, for every proof
+  </pre>
+  <p data-pid="3c5699">The sum of 45d3 gives or. A + B has inl : A → A + B and inr : B → A + B, and a case term out of it: add an option, and cases worked inside the line. ⊥ is a type with no terms built by the rules, and ¬A is A → ⊥. So a statement is true in this calculus when its type has a member, and the member is the proof.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · proofs as terms · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45j2.1</span><span class="ph understand">understand</span>Which move of natural deduction does λx. t match, and which does t s match? <br>What does the proofs-as-terms technique say, and what is the program that proves (P ∧ Q) ⇒ (Q ∧ P)?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45j3">
+  <h2 class="sthead"><span class="stno">45j3</span>A detour is a step of the run</h2>
+  <p data-pid="d6cac8">38n3 called a detour a place in a tree where an if is built and at once used: suppose A, reach B, write A ⇒ B, then use it on a proof of A. Its detour-cut technique put the proof of A in place of the supposition, and the if disappeared. Read that as terms.</p>
+  <p data-pid="f9c2d0">Detour-is-step technique: <b>cutting a detour from a proof is one step of running its term: building an if and using it at once is (λx. t) s, and cutting it is putting s in for x.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the detour-is-step technique">
+\text{detour: } x : A \vdash t : B,\ \ \lambda x.\,t : A \to B,\ \ s : A,\ \ (\lambda x.\,t)\,s : B @@ build the if, then use it
+\text{cut: put the proof } s \text{ of } A \text{ where the supposition } x \text{ was used} @@ the detour-cut technique (38n3)
+(\lambda x.\,t)\,s \to t \text{ with } s \text{ in place of } x @@ one step of running the term (40b)
+\mathrm{fst}\,\langle t, s \rangle \to t @@ the detour join, then keep the left part, cut the same way
+\htmlClass{new}{\text{straightening a proof} = \text{running a program}} \quad \blacksquare @@ each kind of detour matches each kind of step
+  </pre>
+  <p data-pid="6fa950">Now read it in a category. Types are the things, and terms with one placeholder, x : A ⊢ t : B, taken up to running, are the arrows A → B. A × B is a product, by 45d1’s pair-map shape, and A → B is 45f2’s function type, with the pair-to-function matching. A category with these two is the accepted kind for typed programs. What has no term is as telling. P ∨ ¬P, rung 7’s either-way principle, has no term in this calculus: a program would have to decide, for an unknown P, which side it can produce. ¬¬(P ∨ ¬P) has one, λk. k (inr (λp. k (inl p))). The calculus is the logic that refuses rung 7’s principle and keeps everything before it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · detours · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45j3.1</span><span class="ph understand">understand</span>What is a detour in a tree proof, and what term does it become? <br>What does the detour-is-step technique say, and why does P ∨ ¬P have no term?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45j4">
+  <h2 class="sthead"><span class="stno">45j4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\lambda x.\,x\,x : A \to A\,? @@ x x needs x : A → B and x : A at once; no type is both
+\vdash t : P \vee \neg P \text{ for some closed } t\,? @@ none: rung 7’s either-way is not a program; ¬¬(P ∨ ¬P) is
+(\lambda x.\,t)\,s \to t\,? @@ s must be put in for x; dropping it keeps a supposition with no proof
+\text{every proof is a term, so every true statement has a term}\,? @@ true in every world (38c) is not having a term here: P ∨ ¬P is true in each table of 1e
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45j4.1</span><span class="ph understand">understand</span>Why has λx. x x no type? <br>Why is P ∨ ¬P true in every row of 1e’s table and still without a term?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">45j.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="(A \to B) \to (B \to C) \to (A \to C)"></span></span>Build a term of this type, and the tree proof it records. <br>Build a term of type (A × B → C) → (A → B → C). Which technique of 45f is it?</div>
+  <div class="chq"><span class="chid">45j.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\bot \to A"></span></span>Is there a term of type ⊥ → A in a calculus with no rule for ⊥? Add the rule that from t : ⊥ any type follows. <br>Which line of 1b does it match, and why does it never run?</div>
+  <div class="chq"><span class="chid">45j.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\vdash t : (P \to Q) \to P"></span></span>Turn the technique round: from a term, read off the proof. For each of (P → Q) → P and ((P → Q) → P) → P, find a term or argue that there is none. <br>Which of the two is a tautology of 1e, and what does that show about the calculus and rung 7?</div>
+  <div class="chq"><span class="chid">45j.5.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">7: P \vee \neg P,\ \text{whether or not anyone can show which}</span></span>Rung 7 fixed truth with the either-way principle, and said what it adds: an or with no side in hand. A term is a proof with its side in hand. <br>Is a calculus with no term for P ∨ ¬P weaker, or more honest? Is λk. k (inr (λp. k (inl p))) a proof of P ∨ ¬P with the side left in trust? Which programs would have to exist if every statement had one?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r45i.html">← 45i · universal properties by hand</a><a href="r45cb0.html">45·cb0 · the same as itself, again →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The calculus is the simply typed λ-calculus, with function, product and sum types; its terms all terminate (strong normalization). The proofs-as-terms technique is the Curry–Howard correspondence, or propositions-as-types; the detour-is-step technique matches cut elimination with β-reduction. A category of types and terms with products and function types is a cartesian closed category. The logic with no term for excluded middle is intuitionistic logic, and λk. k (inr (λp. k (inl p))) proves its double negation; adding control operators such as call/cc gives classical logic a reading as programs.</p>
+  <h3>Who said it first</h3>
+  <p>Alonzo Church gave the simply typed λ-calculus in 1940. Haskell Curry noticed in 1934, and again with Robert Feys in 1958, that the types of combinators are the axioms of implication. William Howard wrote the correspondence for natural deduction in a note circulated in 1969, published in 1980. Joachim Lambek tied it to cartesian closed categories in the early 1970s; Per Martin-Löf’s type theory (1972 onward) built mathematics on it. Timothy Griffin read call/cc as a classical proof in 1990. L. E. J. Brouwer refused excluded middle from 1908, and Arend Heyting wrote intuitionistic logic down in 1930.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“P ∨ ¬P has no term, so it is false.” Not allowed: having no term in this calculus says it has no proof by these moves. It is true in every world of 38a and every row of 1e’s tables; rung 7 adds it, and with it every proof of the ladder past rung 7. The calculus measures what can be proved with the side in hand, not what is true.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'make',t:R`x : A \vdash t : B \Rightarrow \lambda x.\,t : A \to B`,n:`A function of x.`},
+  {k:'ember',kl:'apply',t:R`t : A \to B,\ s : A \vdash t\,s : B`,n:`Use it.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\lambda f.\lambda x.\,f(f\,x) : (A \to A) \to A \to A}`,n:`Twice.`}
+],{title:'The slides · types · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'if',t:R`A \to B \ \leftrightarrow\ A \Rightarrow B`,n:`λ is the box.`},
+  {k:'ember',kl:'and',t:R`A \times B \ \leftrightarrow\ A \wedge B`,n:`Pairs are joins.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\lambda p.\langle \mathrm{snd}\,p, \mathrm{fst}\,p\rangle}`,n:`A proof that swaps.`}
+],{title:'The slides · proofs as terms · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'build and use',t:R`(\lambda x.\,t)\,s`,n:`An if made and used at once.`},
+  {k:'ember',kl:'cut',t:R`\to t \text{ with } s \text{ for } x`,n:`Put s in for x.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{proving} = \text{computing}}`,n:`Straightening is running.`}
+],{title:'The slides · detours · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

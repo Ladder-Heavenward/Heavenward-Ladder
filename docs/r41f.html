@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Squares on a clock</title>
+<title>Flows and cuts</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,131 +25,106 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r41e.html">← 41e a clock hand that reaches every hour</a><a href="r41g.html">next: 41g primes are endless and thin →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r41e.html">← 41e matchings</a><a href="r41g.html">next: 41g the best corner →</a></p>
   <div class="tags"><span class="tag proof">41f · proof</span></div>
-  <h1>Squares on a clock</h1>
-  <p data-pid="5c02a6">On the clock of eleven, the squares of the hours land on only five of the ten hours that are not twelve: one, three, four, five and nine. Seven is not a square there, however long you search. On a prime clock exactly half the units are squares, and the full hand of the last step says which: its even powers. A test follows that needs no search: raise to half the count of units, and see whether one comes out. Then the step proves the deepest fact of this rung, found by a young man of eighteen in 1796 after years of trying. Whether one odd prime is a square on the clock of another is tied, by a simple sign, to whether the second is a square on the clock of the first. Two questions about two different clocks turn out to be one. The proof counts points under a slanted line in a box, and nothing else, and it has the feel of a trick until you see why the count must split that way.</p>
-  <p class="gesture" data-pid="552db4">On an odd prime clock half the units are squares, the even powers of a full hand. Raising to half the count of units gives one exactly for squares. A square is told by counting how many multiples land in the upper half of the clock. And for two odd primes, each is a square on the other’s clock in the same way, unless both are three more than a multiple of four, when exactly one is.</p>
+  <h1>Flows and cuts</h1>
+  <p data-pid="f69762">Water from a reservoir runs through a city’s mains to a treatment plant. Each main carries at most so much an hour, and at every junction what flows in flows out. How much can reach the plant? An answer from above is easy to find: draw a line across the map that separates the reservoir from the plant, and add up what the mains crossing it can carry. Nothing can get past that line faster. The surprise is that the best such line is always exactly right: the most that can flow equals the least that any separating line lets through. The step proves it by a recipe. Push water along any route that still has room, counting a main already in use as room to send water back. When no route has room, the dots still reachable from the reservoir mark out a separating line that every route to the plant crosses full, and the flow equals that line’s total. On the way it finds that whole-number mains give a whole-number best flow, and that the matchings of the last step are flows in disguise.</p>
+  <p class="gesture" data-pid="ef1e77">A flow obeys each link’s capacity and keeps what goes in equal to what comes out at every inside dot. Every flow is at most every cut. When no path from source to sink has room left, the dots still reachable give a cut the flow fills exactly, so the largest flow equals the smallest cut. Whole capacities give a whole largest flow.</p>
 </header>
 
 <section class="class step" data-step="41f1">
-  <h2 class="sthead"><span class="stno">41f1</span>Half the units are squares</h2>
-  <p data-pid="fc614d">Let p be an odd prime. An hour [a] with p ∤ a is a <i>square</i> on the clock of p when [x]² = [a] for some [x]. On the clock of 11 the squares of 1 to 10 are 1, 4, 9, 5, 3, 3, 5, 9, 4, 1.</p>
-  <p data-pid="7e32d2">Half-squares technique: <b>on the clock of an odd prime p, exactly (p − 1)/2 of the units are squares, and they are the even powers of any full hand.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the half-squares technique">
-[x]^2 = [y]^2 \iff ([x] - [y])([x] + [y]) = [0] \iff [x] = \pm[y] @@ a prime clock is a field: no zero product (41b4)
-[x] \ne -[x] \text{ for } [x] \ne [0] @@ else [2][x] = [0], and p is odd
-\text{the } p - 1 \text{ units pair off as } \pm[x],\ \text{each pair one square} @@ the line above
-\htmlClass{new}{(p - 1)/2 \text{ squares}} @@ one for each pair
-[g] \text{ a full hand: } [g]^{2j} = ([g]^j)^2 @@ the full-hand technique (41e4): every unit is a power of [g]
-\htmlClass{new}{\text{the squares are } [g]^0, [g]^2, \ldots, [g]^{p-3}} \quad \blacksquare @@ (p − 1)/2 even powers, each a square, and no more squares exist
+  <h2 class="sthead"><span class="stno">41f1</span>Flows and cuts</h2>
+  <p data-pid="0260a7">A <i>network</i> is a finite set of dots with two named dots, the <i>source</i> s and the <i>sink</i> t, and one-way links: pairs (u, w) in order (2g), each with a <i>capacity</i> c(u, w) ≥ 0. A <i>flow</i> gives each one-way link a number f(u, w) with 0 ≤ f(u, w) ≤ c(u, w), so that at every dot other than s and t what flows in equals what flows out. Its <i>value</i> |f| is what flows out of s less what flows in.</p>
+  <p data-pid="b17312">A <i>cut</i> is a set S of dots holding s and not t. Its <i>capacity</i> c(S) is the total capacity of the one-way links from S to the rest.</p>
+  <p data-pid="55c173">Flow-under-cut technique: <b>the value of any flow is at most the capacity of any cut.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the flow-under-cut technique">
+|f| = \textstyle\sum_{v \in S} (\text{out of } v - \text{into } v) @@ only s gives a nonzero term; inside dots balance
+= (\text{flow from } S \text{ to the rest}) - (\text{flow from the rest into } S) @@ links inside S appear once out and once in, and cancel
+\le \text{flow from } S \text{ to the rest} @@ flows are at least 0
+\htmlClass{new}{|f| \le c(S)} \quad \blacksquare @@ each flow is at most its capacity
   </pre>
-  <p data-pid="319d82">From here on, for an odd prime p and an integer a, the mark (a ∕ p), written in display lines as a over p inside round brackets, is +1 when [a] is a square unit, −1 when [a] is a unit and not a square, and 0 when p ∣ a. It is not a fraction: the round brackets around it are part of the mark. Read it “a on p”. So (3 ∕ 11) = +1 and (7 ∕ 11) = −1.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · squares · ← → keys work</div></section>
+  <p data-pid="28fb20">The second line says more: the net flow across every cut is the same number, the value. The ledger kept at each dot is kept across every line drawn between s and t.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · cuts · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">41f1.1</span><span class="ph understand">understand</span>What does the half-squares technique say, and why do the units pair off? <br>What does the mark (a ∕ p) give, and why is it not a fraction?</li>
+      <li><span class="qid">41f1.1</span><span class="ph understand">understand</span>What is a flow, and what is a cut? <br>What does the flow-under-cut technique say, and why does every cut carry the same net flow?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="41f2">
-  <h2 class="sthead"><span class="stno">41f2</span>The test for a square</h2>
-  <p data-pid="572aaa">Square-test technique: <b>for an odd prime p and p ∤ a, a^((p − 1)/2) ≡ (a ∕ p) (mod p).</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the square-test technique">
-h = (p - 1)/2,\ \ ([a]^h)^2 = [a]^{p-1} = [1] @@ the little technique (41d1)
-[a]^h = \pm[1] @@ the roots of x² = 1 on a prime clock (41f1)
-[a] = [g]^k:\ \ [a]^h = [g]^{kh} @@ a full hand [g] (41e4)
-[g]^h \ne [1],\ \text{so } [g]^h = -[1] @@ [g] has order p − 1 = 2h, not h
-[a]^h = (-[1])^k @@ powers of a power
-\htmlClass{new}{[a]^h = [1] \iff k \text{ even} \iff [a] \text{ a square}} \quad \blacksquare @@ the half-squares technique
+  <h2 class="sthead"><span class="stno">41f2</span>Room left</h2>
+  <p data-pid="94964f">Given a flow f, a link (u, w) has <i>room forward</i> c(u, w) − f(u, w), and <i>room back</i> f(u, w): sending less along it is the same as sending some back from w to u. A <i>route with room</i> is a path from s to t, each step along some link with room forward or against some link with room back.</p>
+  <p data-pid="828f37">Push-along technique: <b>if a route with room has least room r, pushing r along it gives a flow of value |f| + r.</b> Forward steps gain r, backward steps lose r, and both stay between 0 and the capacity, by the choice of r. At each inside dot of the route one step comes in and one goes out; in each of the four cases, two forward, two back, or one of each, the balance is kept.</p>
+  <pre class="lines" data-k="ember" data-label="this step: pushing, worked">
+c(s,p) = 8,\ c(s,q) = 7,\ c(p,q) = 4,\ c(p,t) = 5,\ c(q,t) = 9 @@ a network
+s \to p \to t:\ \text{push } 5;\ \ s \to q \to t:\ \text{push } 7 @@ least rooms 5 and 7
+s \to p \to q \to t:\ \text{rooms } 3, 4, 2;\ \text{push } 2 @@ value 14
+\htmlClass{new}{\text{from } s \text{: room only to } p \text{, then to } q \text{; nothing reaches } t} \quad \blacksquare @@ s→q full, p→t full, q→t full
   </pre>
-  <p data-pid="712f83">Two things follow at once. The mark multiplies: (ab ∕ p) = (a ∕ p)(b ∕ p), since (ab)ʰ = aʰbʰ. And −1 is a square on the clock of p exactly when (p − 1)/2 is even, so exactly when p ≡ 1 (mod 4): 2² = 4 ≡ −1 on the clock of 5, 5² = 25 ≡ −1 on the clock of 13, and on the clock of 7 no square is 6.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · the test · ← → keys work</div></section>
+  <p data-pid="153a71">The cut {s, p, q} has capacity c(p, t) + c(q, t) = 14. So 14 is the largest flow, by the flow-under-cut technique: the cut proves it, and the flow proves the cut is smallest.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · push · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41f2.1</span><span class="ph understand">understand</span>What does the square-test technique say? <br>Why is −1 a square on the clock of 13 and not on the clock of 7?</li>
+      <li><span class="qid">41f2.1</span><span class="ph understand">understand</span>What are room forward and room back? <br>What does the push-along technique say, and why is the balance kept at a dot where the route steps back against a link?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="41f3">
-  <h2 class="sthead"><span class="stno">41f3</span>Counting the multiples that land high</h2>
-  <p data-pid="f0c9bb">Write h = (p − 1)/2. Each hour but [0] is ±r for exactly one r from 1 to h: call r its <i>fold</i>. An hour <i>lands high</i> when its least member between 0 and p is above p/2, so it is −r.</p>
-  <p data-pid="6b2a6e">High-count technique: <b>for an odd prime p and p ∤ a, (a ∕ p) = (−1)^μ, where μ is the number of a, 2a, …, ha that land high on the clock of p.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the high-count technique">
-[ka] = \varepsilon_k [r_k],\ \ \varepsilon_k = \pm1,\ \ 1 \le r_k \le h @@ each multiple, folded
-r_j = r_k \Rightarrow [ja] = \pm[ka] \Rightarrow j = \pm k \Rightarrow j = k @@ cancel [a] (41a4); j + k lies between 2 and p − 1
-\{r_1, \ldots, r_h\} = \{1, \ldots, h\} @@ h different folds, each from 1 to h
-[a]^h\,[h!] = \textstyle\prod_k [ka] = \prod_k \varepsilon_k\,[r_k] = (-1)^\mu\,[h!] @@ multiply the h lines
-\htmlClass{new}{[a]^h = (-1)^\mu \text{, and so } (a \,/\, p) = (-1)^\mu} \quad \blacksquare @@ [h!] is a unit; the square-test technique
+  <h2 class="sthead"><span class="stno">41f3</span>The largest flow is the smallest cut</h2>
+  <p data-pid="aac0a6">Bottleneck technique: <b>if no route has room, the dots reachable from s by steps with room form a cut whose capacity is the value of the flow; so the largest flow equals the smallest cut.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the bottleneck technique">
+S = \text{dots reachable from } s \text{ by steps with room} @@ t ∉ S: no route has room
+(u, w),\ u \in S,\ w \notin S \Rightarrow f(u, w) = c(u, w) @@ room forward would put w in S
+(w, u),\ w \notin S,\ u \in S \Rightarrow f(w, u) = 0 @@ room back would put w in S
+|f| = \text{flow out of } S - \text{flow into } S = c(S) - 0 @@ the second line of the flow-under-cut proof
+\htmlClass{new}{|f| = c(S) \ge \text{every flow},\ \ c(S) \le \text{every cut}} \quad \blacksquare @@ the flow-under-cut technique, both ways
   </pre>
-  <p data-pid="c0a27c">For a = 2 the multiples 2, 4, …, p − 1 land high when they pass p/2. On the clock of 7: 2, 4, 6, and 4 and 6 land high, so μ = 2 and 2 is a square: 3² = 9 ≡ 2. On the clock of 11: 2, 4, 6, 8, 10, and three land high, so 2 is not a square there. Counting in general gives the rule: 2 is a square on the clock of p exactly when p ≡ 1 or 7 (mod 8).</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · sign count · ← → keys work</div></section>
+  <p data-pid="ec247b">Whole-flow technique: <b>if every capacity is a whole number, pushing from the zero flow stops, and the largest flow can be taken with every f(u, w) whole.</b> Each push adds a whole number at least 1 to the value, and the value never passes c({s}). The distance to that ceiling is a falling measure (4l). Every room stays whole, so every push is whole.</p>
+  <p data-pid="a783f1">With capacities that are not fractions, pushing along badly chosen routes can go on for ever, and the values settle below the largest flow. Choosing a route with fewest links each time stops in at most |V| · |E| pushes, whatever the capacities; that was shown in 1972, and is stated here.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · bottleneck · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41f3.1</span><span class="ph understand">understand</span>What does the high-count technique say? <br>Why are the folds r₁, …, r_h all different, and how does the count show 2 is a square on the clock of 7?</li>
+      <li><span class="qid">41f3.1</span><span class="ph understand">understand</span>What does the bottleneck technique say? <br>Why is every link from S to the rest full, and every link from the rest into S empty?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="41f4">
-  <h2 class="sthead"><span class="stno">41f4</span>Each prime on the other’s clock</h2>
-  <p data-pid="cc8a63">Square-swap technique: <b>for different odd primes p and q, (p ∕ q)(q ∕ p) = (−1) to the power ((p − 1)/2)((q − 1)/2): each is a square on the other’s clock in the same way, unless both are 3 more than a multiple of 4, and then exactly one is.</b></p>
-  <p data-pid="ad377b">First, μ can be counted with whole parts. Write ⌊t⌋ for the greatest integer at most t, its <i>whole part</i>; so ⌊17/5⌋ = 3. For odd a with p ∤ a, put T = ⌊a/p⌋ + ⌊2a/p⌋ + ⋯ + ⌊ha/p⌋. Then μ and T are both even or both odd. Let s be the sum of the remainders of ka by p that land low, and l the sum of those that land high, and H = 1 + ⋯ + h. The folds are 1 to h, so s + (μp − l) = H. And by 4j7, aH = pT + s + l. Taking the first from the second, (a − 1)H = pT − μp + 2l. Here a − 1 is even, and p is odd, so T − μ is even.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the square-swap technique">
-\text{the box: } 1 \le x \le h_p,\ 1 \le y \le h_q,\ \ h_p = \tfrac{p-1}2,\ h_q = \tfrac{q-1}2 @@ h_p h_q whole-number points
-qx = py \text{ at no point of the box} @@ p ∣ qx would need p ∣ x, and x &lt; p
-\text{below the line } y = qx/p \text{ in column } x:\ \lfloor qx/p \rfloor \text{ points} @@ the whole part; all lie in the box, since qx/p &lt; q/2
-\textstyle\sum_x \lfloor qx/p\rfloor + \sum_y \lfloor py/q\rfloor = h_p h_q @@ the points above the line, counted by rows, the same way
-\left(\tfrac qp\right)\left(\tfrac pq\right) = (-1)^{T(q, p)}(-1)^{T(p, q)} @@ the high-count technique with μ and T alike in evenness, twice
-\htmlClass{new}{= (-1)^{h_p h_q}} \quad \blacksquare @@ the sum of the two counts
+  <h2 class="sthead"><span class="stno">41f4</span>Matchings as flows</h2>
+  <p data-pid="38c114">Take a two-sided graph with sides X and Y. Add a source joined to each dot of X, and a sink joined from each dot of Y. Turn each link into a one-way link from X to Y. Give every link capacity 1.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the largest matching as a flow">
+\text{a matching of } k \text{ links} \to \text{a flow of value } k @@ send 1 along s → x → y → t for each matched pair
+\text{a whole flow of value } k \to \text{a matching of } k \text{ links} @@ each x receives at most 1, so sends 1 to at most one y; each y likewise
+\text{largest matching} = \text{largest flow} @@ the whole-flow technique gives a whole largest flow
+\htmlClass{new}{= \text{smallest cut}} \quad \blacksquare @@ the bottleneck technique
   </pre>
-  <p data-pid="33ed35">With p = 5 and q = 19, h_p h_q = 2 · 9 is even, so 5 is a square on the clock of 19 exactly when 19 ≡ 4 is a square on the clock of 5, and 4 = 2². So 5 is a square on the clock of 19: 9² = 81 = 4 · 19 + 5.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · square swap · ← → keys work</div></section>
+  <p data-pid="59b180">A smallest cut here can be read as a cover. Give the X to Y links capacity |X| + 1 in place of 1, which changes no whole flow’s value; then a smallest cut S never lets one of them cross, and the dots of X outside S, with the dots of Y inside S, are a cover with c(S) dots. So 41e’s cover-equals-matching technique is the bottleneck technique on a special network.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · matching flow · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41f4.1</span><span class="ph understand">understand</span>What does the square-swap technique say? <br>What is counted in the box, and why does no point of the box lie on the line qx = py?</li>
+      <li><span class="qid">41f4.1</span><span class="ph understand">understand</span>How is a two-sided graph made into a network whose largest flow is its largest matching? <br>Why does that use the whole-flow technique?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="41f5">
-  <h2 class="sthead"><span class="stno">41f5</span>Deciding a square by swapping</h2>
-  <p data-pid="f4d492">With the mark multiplying, the rules for −1 and 2, and the square-swap technique, a question on a big clock shrinks to questions on small ones, much as the gcd algorithm shrinks a pair. Is 219 a square on the clock of 383? Both 383 and 3 are prime.</p>
-  <pre class="lines" data-k="ember" data-label="this step: 219 on the clock of 383">
-219 = 3 \cdot 73:\ \ \left(\tfrac{219}{383}\right) = \left(\tfrac{3}{383}\right)\left(\tfrac{73}{383}\right) @@ the mark multiplies (41f2)
-\left(\tfrac{3}{383}\right) = -\left(\tfrac{383}{3}\right) = -\left(\tfrac{2}{3}\right) = -(-1) = 1 @@ both are 3 more than a multiple of 4; 383 = 3 · 127 + 2; 3 ≡ 3 (mod 8)
-\left(\tfrac{73}{383}\right) = \left(\tfrac{383}{73}\right) = \left(\tfrac{18}{73}\right) @@ 73 ≡ 1 (mod 4); 383 = 5 · 73 + 18
-\left(\tfrac{18}{73}\right) = \left(\tfrac{2}{73}\right)\left(\tfrac{3}{73}\right)^2 = 1 @@ 73 ≡ 1 (mod 8); a square of ±1 is 1
-\htmlClass{new}{\left(\tfrac{219}{383}\right) = 1:\ 219 \text{ is a square on the clock of } 383} \quad \blacksquare @@ the two factors
-  </pre>
-  <p data-pid="1f0c1c">The proof says a square root exists and does not find it. Searching 191 candidates would. 41f.7.1 asks for a quicker road on clocks like 383, which are 3 more than a multiple of 4. And squares on the clock of 8 settle an old question of rung 7: the squares there are 0, 1 and 4, so three squares add to 0, 1, 2, 3, 4, 5 or 6 on the clock of 8, never 7. No number 8k + 7 is a sum of three squares. That every other number not of the form 4ʲ(8k + 7) is one is stated here, and its proof is much higher up the ladder.</p>
-  <section class="slides" id="sl5"><div class="eyebrow">The slides · deciding · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">41f5.1</span><span class="ph understand">understand</span>How is 219 on the clock of 383 decided, and which step spends the square-swap technique with a minus sign? <br>Why is no number 8k + 7 a sum of three squares?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="41f6">
-  <h2 class="sthead"><span class="stno">41f6</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">41f5</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\left(\tfrac{3}{7}\right) = \left(\tfrac{7}{3}\right)\,? @@ 3 and 7 are both 3 more than a multiple of 4: the signs differ, and 7 ≡ 1 is a square on the clock of 3 while 3 is not one on the clock of 7
-\left(\tfrac{a}{p}\right) = a/p\,? @@ the mark is ±1 or 0, never a fraction
-\left(\tfrac{15}{7}\right) = \left(\tfrac{7}{15}\right) \cdot (\pm1)\,? @@ the square-swap technique is for two odd primes; 15 = 3 · 5: split first
--1 \text{ is a square on every prime clock}\,? @@ only when p ≡ 1 (mod 4): on the clock of 7, the squares are 1, 2 and 4
+\text{no path from } s \text{ to } t \text{ has room forward, so the flow is largest}\,? @@ a route may need a step back against a used link; room back counts
+\text{the cut of capacity 14 is smallest, so it is the only smallest cut}\,? @@ two cuts may share the least capacity; the flow fills each
+\text{the largest flow is whole, so every largest flow is whole}\,? @@ some largest flow is whole; halves on two parallel routes can also be largest
+\text{a cut’s capacity counts links both ways across}\,? @@ only links from S to the rest; links back into S carry nothing in a largest flow
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41f6.1</span><span class="ph understand">understand</span>Why is (3 ∕ 7) not (7 ∕ 3)? <br>Why can the square-swap technique not be used on 15 and 7 as they stand?</li>
+      <li><span class="qid">41f5.1</span><span class="ph understand">understand</span>Why must a route with room be allowed to step back against a link? <br>Why does a cut’s capacity count only the links from S to the rest?</li>
     </ol>
   </section>
 </section>
@@ -158,22 +133,22 @@ qx = py \text{ at no point of the box} @@ p ∣ qx would need p ∣ x, and x &lt
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">41f.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="p \equiv 3 \pmod 4,\ \ \left(\tfrac ap\right) = 1"></span></span>Build a square root with no search: prove that x = a^((p + 1)/4) has x² ≡ a on the clock of p. <br>Find a square root of 219 on the clock of 383 this way, by the fast powers of 41h when you reach it, or by patience now.</div>
-  <div class="chq"><span class="chid">41f.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="p \equiv 1 \pmod 4"></span></span>Prove that such a prime is a sum of two squares. Hint held back: take x with x² ≡ −1, look at the numbers u + xv for 0 ≤ u, v ≤ ⌊√p⌋, and use pigeonhole. <br>Write 13, 29 and 97 that way. Why can no prime 3 more than a multiple of 4 be a sum of two squares?</div>
-  <div class="chq"><span class="chid">41f.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="a \text{ a square on the clock of every prime } p \nmid a"></span></span>Must a be a perfect square? Try a = 2 and a = −1 with the rules of the page, and then a = 3 with the square-swap technique: find a prime on whose clock 3 is not a square. <br>For a general a that is not a perfect square, what would you need to know about primes in a progression to finish?</div>
-  <div class="chq"><span class="chid">41f.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">a proof of 1785 that assumed a prime in each of certain progressions</span></span>A proof of the square-swap technique was published that assumed, without proof, that a progression like 4k + 1 or 8k + 3 holds a prime with a given behaviour on another clock. The young man who found the first full proof called it no proof. <br>Is a proof that rests on a true but unproved statement a proof? What should it be called while the statement waits, and does it become one when the statement is proved, as it was in 1837 (41g)?</div>
+  <div class="chq"><span class="chid">41f.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="c(s,p) = 3,\ c(s,q) = 2,\ c(p,q) = 1,\ c(p,r) = 3,\ c(q,r) = 1,\ c(q,t) = 2,\ c(r,t) = 4"></span></span>Find the largest flow by pushing, and a cut that proves it largest. <br>Which one link, raised by 1, raises the largest flow? Is there one whose raising does nothing?</div>
+  <div class="chq"><span class="chid">41f.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{capacities } 1,\ 1,\ r = \tfrac{\sqrt5 - 1}{2},\ \text{and large ones elsewhere}"></span></span>Capacities that are not fractions can trap the push-along recipe. With r² = 1 − r, check that rooms r, r², r³, … can be pushed in turn, each push leaving the next. <br>Where do the values settle? Why does the falling-measure technique not apply?</div>
+  <div class="chq"><span class="chid">41f.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{several sources, several sinks; capacities on dots}"></span></span>The bottleneck technique has one source, one sink and capacities on links. Reduce a network with many sources and sinks, and capacities on dots too, to one of that shape. <br>Then prove: in a graph, the fewest dots whose removal parts u from w equals the most paths from u to w sharing no dot but u and w.</div>
+  <div class="chq"><span class="chid">41f.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">28j: what leaves a region is what the region produces</span></span>Rung 28 traded an integral inside a region for one on its boundary: the flux out equals the total of the divergence. A flow on a network has divergence zero at every inside dot. <br>Write the flow-under-cut technique’s second line as that trade. What plays the region, the boundary and the divergence, and where do s and t come in?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r41e.html">← 41e · a clock hand that reaches every hour</a><a href="r41g.html">41g · primes are endless and thin →</a></nav>
+<nav class="nextrung"><a href="r41e.html">← 41e · matchings</a><a href="r41g.html">41g · the best corner →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A square unit modulo p is a quadratic residue, a non-square a quadratic non-residue. The mark (a ∕ p) is the Legendre symbol. The square-test technique is Euler’s criterion; the rules for −1 and 2 are the first and second supplementary laws. The high-count technique is Gauss’s lemma, and its counting form with T is Eisenstein’s. The square-swap technique is the law of quadratic reciprocity, and the box proof is Eisenstein’s (1844). The whole part ⌊t⌋ is the floor function. Fermat’s theorem on sums of two squares is 41f.7.2. Numbers 4ʲ(8k + 7) are exactly those that are not sums of three squares: Legendre’s three-square theorem.</p>
+  <p>A network is a flow network; room is residual capacity, and the network of rooms is the residual graph. A route with room is an augmenting path. The bottleneck technique is the max-flow min-cut theorem, and the push-along recipe is the Ford–Fulkerson method; choosing fewest links each time is the Edmonds–Karp algorithm (1972; Yefim Dinitz had a faster form in 1970). The whole-flow technique is the integrality theorem. The statement of 41f.6.3 is Menger's theorem (1927).</p>
   <h3>Who said it first</h3>
-  <p>Leonhard Euler guessed reciprocity from tables in the 1740s to 1783. Adrien-Marie Legendre stated it in 1785 and published a proof in 1798 that assumed what Dirichlet proved in 1837, primes in progressions; Gauss criticised it. Carl Friedrich Gauss found the first full proof on 8 April 1796, aged eighteen, published it in 1801, and gave eight proofs in all. Gotthold Eisenstein’s lattice proof is from 1844. The three-square theorem is Legendre’s (1798), completed by Gauss (1801). Fermat claimed the two-squares theorem in 1640; Euler proved it in 1749.</p>
+  <p>Theodore Harris and Frank Ross studied, in a report of 1955 for the United States Air Force, the smallest cut of the Soviet rail network into Eastern Europe. Lester Ford and Delbert Fulkerson proved the max-flow min-cut theorem in 1956, as did Peter Elias, Amiel Feinstein and Claude Shannon the same year. Karl Menger had the version for paths in 1927. Ford and Fulkerson's example of a recipe that never stops is from their book of 1962.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“3 is a square on the clock of 13, since 4² = 16 ≡ 3. So by the square-swap technique 13 is a square on the clock of 3, so 13 is a square on every clock.” Not allowed: the technique ties two clocks, 3 and 13, and says nothing about a third. 13 ≡ 1 is a square on the clock of 3, and 13 is not a square on the clock of 5, where the squares are 1 and 4 and 13 ≡ 3.</p>
+  <p>“The smallest cut is a bottleneck, so no flow can be larger. Push flow until it can go no further; then it is as large as the bottleneck.” Not allowed: “it can go no further” must mean no route with room, counting room back. With only forward steps, the recipe can stop below the largest flow: route the first push through a middle link that a better flow does not use.</p>
 </section>
 
 </div>
@@ -188,30 +163,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'pairs',t:R`[x]^2 = [y]^2 \iff [x] = \pm[y]`,n:`A field.`},
-  {k:'ember',kl:'half',t:R`(p - 1)/2 \text{ squares}`,n:`One per pair.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\left(\tfrac{3}{11}\right) = 1,\ \left(\tfrac{7}{11}\right) = -1}`,n:`The square mark.`}
-],{title:'The slides · squares · ← → keys work'});
+  {k:'ember',kl:'balance',t:R`\text{in} = \text{out}`,n:`At inside dots.`},
+  {k:'ember',kl:'across',t:R`|f| = \text{net flow out of } S`,n:`Every cut.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|f| \le c(S)}`,n:`A bound from above.`}
+],{title:'The slides · cuts · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'half power',t:R`a^{(p-1)/2} \equiv \pm 1`,n:`A root of x² = 1.`},
-  {k:'ember',kl:'full hand',t:R`[g]^{(p-1)/2} = -[1]`,n:`Order p − 1.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\left(\tfrac{-1}{p}\right) = (-1)^{(p-1)/2}}`,n:`p ≡ 1 (mod 4).`}
-],{title:'The slides · the test · ← → keys work'});
+  {k:'ember',kl:'room',t:R`c - f \text{ forward},\ f \text{ back}`,n:`On each link.`},
+  {k:'ember',kl:'route',t:R`s \to \cdots \to t`,n:`Least room r.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|f| + r}`,n:`A larger flow.`}
+],{title:'The slides · push · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'fold',t:R`[ka] = \pm[r_k]`,n:`r from 1 to h.`},
-  {k:'ember',kl:'product',t:R`[a]^h[h!] = (-1)^\mu[h!]`,n:`Folds are 1 to h.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\left(\tfrac{a}{p}\right) = (-1)^\mu}`,n:`Count the high ones.`}
-],{title:'The slides · sign count · ← → keys work'});
+  {k:'ember',kl:'reach',t:R`S = \text{reachable with room}`,n:`From s.`},
+  {k:'ember',kl:'full',t:R`f = c \text{ out},\ f = 0 \text{ in}`,n:`Across S.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\max |f| = \min c(S)}`,n:`Largest flow, smallest cut.`}
+],{title:'The slides · bottleneck · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'box',t:R`h_p \times h_q \text{ points}`,n:`Split by a line.`},
-  {k:'ember',kl:'counts',t:R`T(q, p) + T(p, q) = h_p h_q`,n:`Below and above.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\left(\tfrac pq\right)\left(\tfrac qp\right) = (-1)^{h_p h_q}}`,n:`Two clocks, one question.`}
-],{title:'The slides · square swap · ← → keys work'});
-stepper('#sl5',[
-  {k:'ember',kl:'multiply',t:R`\left(\tfrac{219}{383}\right) = \left(\tfrac{3}{383}\right)\left(\tfrac{73}{383}\right)`,n:`Split.`},
-  {k:'ember',kl:'swap',t:R`\left(\tfrac{73}{383}\right) = \left(\tfrac{18}{73}\right)`,n:`Smaller clock.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{219 \text{ is a square on } \mathbb Z/383}`,n:`Never searched.`}
-],{title:'The slides · deciding · ← → keys work'});
+  {k:'ember',kl:'build',t:R`s \to X \to Y \to t`,n:`Capacity 1.`},
+  {k:'ember',kl:'whole',t:R`f \in \{0, 1\}`,n:`A matching.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{matching} = \text{cut} = \text{cover}}`,n:`41e again.`}
+],{title:'The slides · matching flow · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

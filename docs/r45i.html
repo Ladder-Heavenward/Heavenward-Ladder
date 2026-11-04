@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Universal properties by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r45h.html">← 45h tensor products</a><a href="r45j.html">next: 45j proofs are programs →</a></p>
+  <div class="tags"><span class="tag tech">45i · technique</span></div>
+  <h1>Universal properties by hand</h1>
+  <p data-pid="4c0a2b">A universal property is quick to write and slow to check. This step checks some by hand, in three places where the answer is not the one a first guess gives. In the counting numbers ordered by dividing, the product of two numbers is not their product: it is their greatest common divisor, and their sum is the least number both divide. Among groups, the sum of two copies of the whole numbers is not the pairs of whole numbers, and the way to prove it is to count the maps into a small group and find the counts disagree. And among fields, some pairs have no product at all, because a map of fields cannot change whether one plus one is nothing. The recipe each time is the same: guess a thing, find the arrows out of it, prove that every rival runs through it in one way, and when the guess fails, count arrows to show that nothing could pass.</p>
+  <p class="gesture" data-pid="278571">Guess from sets, check that every rival runs through the guess, and check that it runs in only one way. In the dividing order the product is the greatest common divisor and the sum the least common multiple. Counting maps into the shuffles of three shows that the pairs of whole numbers are not the sum of two copies among groups. A map of fields keeps whether one plus one is nothing, so the clock of two and the fractions have no product among fields.</p>
+</header>
+
+<section class="class step" data-step="45i1">
+  <h2 class="sthead"><span class="stno">45i1</span>Products in the dividing order</h2>
+  <p data-pid="a5a1f8">Order the counting numbers by dividing: one arrow m → n exactly when m divides n. 45a2’s order-category technique makes this a category, since n | n and dividing is transitive (4j). A product of m and n is then a number p that divides both, such that every number dividing both divides p.</p>
+  <p data-pid="f2bdc6">Divides-order technique: <b>in the dividing order, the product of two counting numbers is their greatest common divisor and their sum is the least number both divide; 1 has an arrow to every number and 0 has an arrow from every number.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the divides-order technique, for 12 and 18">
+12 = 2^2 \cdot 3,\ \ 18 = 2 \cdot 3^2 @@ unique factorisation (4j)
+d \mid 12 \land d \mid 18 \iff d = 2^i 3^j,\ i \le 1,\ j \le 1 @@ a divisor’s prime list sits inside each; least power of each prime
+\text{the common divisors are } 1, 2, 3, 6,\ \text{and each divides } 6 @@ every one of them divides 2¹3¹
+\text{product of } 12 \text{ and } 18 = 6 @@ 6 divides both, and every rival divides 6; there is at most one arrow, so “exactly one” is free
+12 \mid m \land 18 \mid m \iff 2^2 3^2 \mid m @@ greatest power of each prime
+\htmlClass{new}{\text{sum of } 12 \text{ and } 18 = 36,\ \ 1 \mid n,\ \ n \mid 0} \quad \blacksquare @@ 36 is divided by both and divides every rival; 1 divides every n, and every n divides 0
+  </pre>
+  <p data-pid="2b73c5">In an order, “exactly one” never needs checking: there is at most one arrow. All the work is in finding a thing that every rival runs through. Here the greatest common divisor is greatest in the dividing order, not only in size, and that is what 4j’s prime lists show.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · dividing order · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">45i1.1</span><span class="ph understand">understand</span>What are the product and the sum of two numbers in the dividing order? <br>Why is the “exactly one” part of the product property free in any order?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45i2">
+  <h2 class="sthead"><span class="stno">45i2</span>Counting arrows to tell things apart</h2>
+  <p data-pid="f4156e">A guess fails when nothing passes the property. To show a thing is not a sum, it is often enough to count arrows. If S is a sum of A and B, the maps out of S into X match with pairs of maps, one out of A and one out of B. So the count of maps S → X is the count from A times the count from B, for every X.</p>
+  <p data-pid="4c4395">Count-the-arrows technique: <b>if S is a sum of A and B, the number of arrows from S to X is the number from A to X times the number from B to X, for every X; a thing whose counts disagree for one X is no sum of A and B.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the count-the-arrows technique, for ℤ × ℤ">
+|\mathbf{Grp}(\mathbb Z, S_3)| = 6 @@ the arrows-from-one technique (45g1): maps from ℤ are members
+\text{a sum } S \text{ of } \mathbb Z \text{ and } \mathbb Z:\ \ |\mathbf{Grp}(S, S_3)| = 6 \cdot 6 = 36 @@ the property: a map out of S is a pair of maps
+\mathbf{Grp}(\mathbb Z \times \mathbb Z, S_3) \leftrightarrow \text{pairs } (g, h) \text{ with } g h = h g @@ (1, 0) and (0, 1) change places in ℤ × ℤ, so their images must
+\text{pairs that change places in } S_3:\ \ 6 + 2 \cdot 3 + 3 \cdot 2 = 18 @@ e with all 6; each turn with the 3 powers of r; each flip with e and itself
+\htmlClass{new}{18 \ne 36,\ \text{so } \mathbb Z \times \mathbb Z \text{ is no sum of } \mathbb Z \text{ and } \mathbb Z \text{ in } \mathbf{Grp}} \quad \blacksquare @@ the sum is the free group on two letters (45f4), with 36
+  </pre>
+  <p data-pid="856e0a">In the category of turn-about groups the same count runs the other way. There every X changes places with itself, so every pair of maps from ℤ into a turn-about X gives one map from ℤ × ℤ, and ℤ × ℤ is the sum. The thing is the same; the category, and so the answer, is not.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · count arrows · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45i2.1</span><span class="ph understand">understand</span>What does the count-the-arrows technique say? <br>How many product-keeping maps run from ℤ × ℤ to S₃, and from the sum of ℤ and ℤ, and what does the difference prove?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45i3">
+  <h2 class="sthead"><span class="stno">45i3</span>When nothing passes</h2>
+  <p data-pid="e4c0e3">Fields, with the ring maps between them (43a): a ring map keeps sums, products and 1. A product of two fields would be a field P with a ring map to each.</p>
+  <p data-pid="bcafd2">No-common-field technique: <b>no field has a ring map both to the clock of two and to the fractions, so the two have no product among fields.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the no-common-field technique">
+\varphi : P \to \mathbb Z/2,\ \ \psi : P \to \mathbb Q \text{ ring maps} @@ suppose a product, or any field with both
+\varphi(1 + 1) = 1 + 1 = 0,\ \ \psi(1 + 1) = 2 @@ ring maps keep 1 and sums
+1 + 1 = 0 \text{ in } P \Rightarrow 2 = \psi(0) = 0 \text{ in } \mathbb Q @@ case one: against 5d
+1 + 1 \ne 0 \text{ in } P \Rightarrow \text{some } u \in P,\ u(1 + 1) = 1 @@ case two: P is a field, so 1 + 1 has a reciprocal
+\varphi(u) \cdot 0 = \varphi(u)\varphi(1 + 1) = \varphi(1) = 1 \text{ in } \mathbb Z/2 @@ ring maps keep products
+\htmlClass{new}{0 = 1 \text{ in } \mathbb Z/2,\ \text{totally false either way}} \quad \blacksquare @@ 5e: x · 0 = 0; both cases end at ⊥
+  </pre>
+  <p data-pid="b828a6">The recipe ends here: guess, check every rival runs through, check it runs in one way, and if no guess survives, find what every arrow must keep. Fields keep whether 1 + 1 is 0, and so all arrows stay inside fields that agree on it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · nothing passes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45i3.1</span><span class="ph understand">understand</span>What does the no-common-field technique say? <br>Which fact about ring maps does each of its two cases spend?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45i4">
+  <h2 class="sthead"><span class="stno">45i4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{the product of } 12 \text{ and } 18 \text{ in the dividing order is } 216\,? @@ 216 does not divide 12; the product divides both: 6
+\text{the counts agree for } X = S_3,\ \text{so } T \text{ is a sum}\,? @@ agreeing counts are not the property; a disagreement for one X rules a sum out
+\mathbb Z \times \mathbb Z \text{ is a sum of } \mathbb Z \text{ and } \mathbb Z,\ \text{so it is one in } \mathbf{Grp}\,? @@ in turn-about groups it is; Grp has more X to test, and S₃ fails it
+\text{a product of fields is the pairs, with entrywise sums and products}\,? @@ (1, 0)(0, 1) = (0, 0): the pairs are a ring, not a field
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45i4.1</span><span class="ph understand">understand</span>Why does agreeing on the count for one X not prove that a thing is a sum? <br>Why are pairs of members of two fields, with entrywise sums and products, not a field?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">45i.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\mathbb Z/2 \text{ and } \mathbb Z/3 \text{ in } \mathbf{Grp}"></span></span>Build the product of the clocks of two and three in Grp, and find whether it is matched with ℤ/6. <br>Count the maps from each to S₃, and from the free group on two letters with x² and y³ set to nothing (34i2). Is that group the sum of ℤ/2 and ℤ/3 in Grp, and is it matched with ℤ/6?</div>
+  <div class="chq"><span class="chid">45i.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{rings with ring maps}"></span></span>Find a ring with exactly one ring map to every ring, and a ring with exactly one from every ring (43a). <br>In fields, is there either? What does the no-common-field technique say about a field with a map to every field?</div>
+  <div class="chq"><span class="chid">45i.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="|C(T, X)| = |C(A, X)| \cdot |C(B, X)| \text{ for every } X"></span></span>The count-the-arrows technique turns a sum into counts. Turn it round: if T’s counts agree with the products of counts for every finite group X, must T be a sum of A and B in Grp? <br>Find what more the property asks than the count, and test it on A = B = ℤ/2 with T = ℤ/2 × ℤ/2.</div>
+  <div class="chq"><span class="chid">45i.5.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">8a.4.4 \text{ and } 43h: \text{one complete ordered field}</span></span>43h proved that any two complete ordered fields are matched. 8a.4.4 asked whether √2 is the cut or a new thing the cut produces. <br>Write the line as a thing pinned down by a property, as this step does by hand. Is the matching of two complete ordered fields exactly one, as 45d2’s is? Does that pay 8a.4.4, or move it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r45h.html">← 45h · tensor products</a><a href="r45j.html">45j · proofs are programs →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>In the divisibility poset, meet is gcd and join is lcm; 1 is the initial object (bottom) and 0 the terminal object (top). The count-the-arrows technique is the use of Hom-sets into a test object as invariants; the sum of groups is the free product, and in abelian groups the coproduct of finitely many is the direct sum, which is also the product. Fields have no initial object and no products in general, because ring maps preserve the characteristic. ℤ is the initial ring.</p>
+  <h3>Who said it first</h3>
+  <p>The free product of groups is from Otto Schreier (1927); Saunders Mac Lane read it as the dual of the direct product in 1950. Ernst Steinitz’s 1910 paper on fields defined the characteristic, the fact the no-common-field technique spends.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“ℤ × ℤ is the sum of ℤ and ℤ, since a map out of it is fixed by where (1, 0) and (0, 1) go.” Not allowed in Grp: it is fixed by them, but they cannot go anywhere: their images must change places. The sum’s property asks that every pair of maps out of the two copies runs through, and the pair sending 1 to two flips of S₃ that do not change places does not.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'arrows',t:R`m \to n \iff m \mid n`,n:`An order category.`},
+  {k:'ember',kl:'product',t:R`\gcd(12, 18) = 6`,n:`Least power of each prime.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{sum} = 36,\ \ 1 \text{ first},\ \ 0 \text{ last}}`,n:`Greatest power of each.`}
+],{title:'The slides · dividing order · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'a sum',t:R`|C(S, X)| = |C(A, X)| \cdot |C(B, X)|`,n:`For every X.`},
+  {k:'ember',kl:'S₃',t:R`18 \text{ against } 36`,n:`Pairs that change places.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\mathbb Z \times \mathbb Z \ne \mathbb Z + \mathbb Z \text{ in } \mathbf{Grp}}`,n:`No sum.`}
+],{title:'The slides · count arrows · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'two maps',t:R`\varphi : P \to \mathbb Z/2,\ \psi : P \to \mathbb Q`,n:`Suppose both.`},
+  {k:'ember',kl:'1 + 1',t:R`0 \text{ there},\ 2 \text{ here}`,n:`Kept by ring maps.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{no product}}`,n:`Both cases end at ⊥.`}
+],{title:'The slides · nothing passes · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>No machine decides stopping</title>
+<title>A one-way valve</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,88 +25,110 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r39c.html">← 39c one machine runs them all</a><a href="r39e.html">next: 39e undecidable everywhere →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r39c.html">← 39c a wave can carry power, or a message</a><a href="r39e.html">next: 39e a switch worked by a switch →</a></p>
   <div class="tags"><span class="tag proof">39d · proof</span></div>
-  <h1>No machine decides stopping</h1>
-  <p data-pid="a6e135">Rung three asked whether a program can run for ever, and found loops that stop, loops that come back, and loops that go on making something new, and it said nobody can always tell. Rung thirty seven ended with a search that finds every proof and never says when there is none, and it left the question of telling the two apart for here. Now the question can be asked exactly. Given the written table of a machine and an input, does the machine stop? The universal machine answers half of it: run the machine, and if it stops, say so. The other half is the trouble. This step proves that no machine answers the whole question for every machine and every input. The proof is the diagonal of the rung on sizes, run on machines instead of digits. A machine that could predict every machine is fed to a machine built to do the opposite of whatever it predicts, and that machine is fed its own table. The rung on switches built a box that says the opposite of itself and found it ticks like a clock. Here there is no clock to run. There is only the refusal: no such predictor exists.</p>
-  <p class="gesture" data-pid="c88524">The machines that stop on their inputs are listed by running them. No machine decides which ones stop: one that did would be fed a machine built to do the opposite of its prediction about itself. So the machines that never stop are not even listed.</p>
+  <h1>A one-way valve</h1>
+  <p data-pid="4e4b41">The newsflash on the complex rung met the diode, a sandwich of two kinds of silicon whose current grows by equal factors for equal steps of push, and found it shut below about half a volt and wide open just above. This step takes that valve and asks what logic it can do on its own. Two valves feeding one resistor make an either gate: the output follows whichever input is higher. Two valves hanging from a resistor to the supply make a both gate: the output follows whichever input is lower. So both and either come cheaply. Then the step proves what valves cannot do, and the proof is the interesting part. In any network of valves and resistors, raising an input never lowers anything, so no such network can turn a one into a zero. And no node moves further than the inputs moved, so a weak one never comes out stronger: each stage loses a little, and after a few stages the one is gone. Something with a supply of its own is needed, and the next step builds it.</p>
+  <p class="gesture" data-pid="b7e2f7">A diode passes current one way, exponentially, and backwards almost none. Two diodes and a resistor make either, or both. In a network of diodes and resistors, raising an input never lowers a node, so there is no not; and no node moves further than an input, so a weak level is never restored.</p>
 </header>
 
 <section class="class step" data-step="39d1">
-  <h2 class="sthead"><span class="stno">39d1</span>Stopping is listed</h2>
-  <p data-pid="f1e4b0">The <i>stopping set</i> H is the set of strings ⟨M⟩ # w such that M, started on w, stops. Its accepted name is the halting problem.</p>
-  <p data-pid="31f4a9">Stopping-listed technique: <b>a machine lists the stopping set.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the stopping-listed technique">
-\text{on input } x\text{: }\allowbreak \text{check }\allowbreak \text{that } x = \langle M\rangle \# w @@ the table-code technique (39c1); if not, stop in no
-\text{run U on } \langle M\rangle \# w @@ the universal technique (39c2)
-\text{if }\allowbreak \text{U }\allowbreak \text{stops, }\allowbreak \text{stop }\allowbreak \text{in }\allowbreak \text{yes} @@ U stops exactly when M stops on w
-\htmlClass{new}{\text{yes }}\allowbreak \htmlClass{new}{ \text{exactly }}\allowbreak \htmlClass{new}{ \text{on }}\allowbreak \htmlClass{new}{ \text{the }}\allowbreak \htmlClass{new}{ \text{members }}\allowbreak \htmlClass{new}{ \text{of } H} \quad \blacksquare @@ on the others it runs for ever, which a lister may
+  <h2 class="sthead"><span class="stno">39d1</span>Forward and back</h2>
+  <p data-pid="4fabba"><a href="r26then.html#26then1">26·then1</a> laid down the measured law of a silicon diode, I = Iₛ(e^(V/Vₜ) − 1), with Iₛ about 10⁻¹² A and Vₜ ≈ 0.0259 V at room warmth, and proved the sixty-millivolt technique for V above 0. The difference here is the other side: V below 0.</p>
+  <p data-pid="164f0c">Reverse-leak technique: <b>pushed backwards, a diode passes less than Iₛ, however hard it is pushed.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the reverse-leak technique">
+V < 0 \Rightarrow 0 < e^{V/V_T} < 1 @@ exp is above 0 everywhere and rises (17e), and exp 0 = 1
+-1 < e^{V/V_T} - 1 < 0 @@ take 1 from each part
+-I_s < I < 0 @@ multiply by Iₛ &gt; 0 (5g)
+V = -5 \text{ V}:\ \ I \approx -10^{-12} \text{ A};\ \ V = 0.6 \text{ V}:\ \ I \approx 0.012 \text{ A} @@ the law, worked by machine
+\htmlClass{new}{\text{forward at } 0.6 \text{ V passes about ten thousand million times more than backward at } 5 \text{ V}} \quad \blacksquare @@ 0.012 against 10⁻¹²
   </pre>
-  <p data-pid="82f36f">That is 37b’s proof-listing in a new coat, and it has the same flaw. While U runs, nothing tells whether it is nearly done or never will be. 3·comp caught loops that come back by remembering states; a machine whose tape keeps growing never comes back.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · listed · ← → keys work</div></section>
+  <p data-pid="cda012">So a diode is a switch read by the sign of the push: closed one way, open the other. It is a switch nobody works. Its state is set by the voltages around it, which is what makes it a valve and not yet a gate that can be steered. Its accepted plain name is a rectifier, from the Latin <i>rectus</i>, straight, for the way it turns a socket’s back and forth into one-way flow.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · valve · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">39d1.1</span><span class="ph understand">understand</span>What is the stopping set H? <br>What does the stopping-listed technique say, and what does its machine do on a string outside H?</li>
+      <li><span class="qid">39d1.1</span><span class="ph understand">understand</span>What does the reverse-leak technique say, and which fact about exp does its first line use? <br>Why is a diode a switch that nobody works?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="39d2">
-  <h2 class="sthead"><span class="stno">39d2</span>No machine decides stopping</h2>
-  <p data-pid="e53bc6">No-stop-decider technique: <b>no tape machine decides the stopping set.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the no-stop-decider technique">
-D \text{ decides } H @@ suppose it, to refute it
-E\text{: on } \langle M\rangle\text{, run } D \text{ on } \langle M\rangle \# \langle M\rangle @@ feed M its own code, as 35b looked at the nth digit of the nth real
-\text{if }\allowbreak \text{D }\allowbreak \text{says }\allowbreak \text{yes, }\allowbreak \text{E }\allowbreak \text{loops }\allowbreak \text{for }\allowbreak \text{ever; }\allowbreak \text{if }\allowbreak \text{D }\allowbreak \text{says }\allowbreak \text{no, }\allowbreak \text{E }\allowbreak \text{stops} @@ E does the opposite of what D predicts
-\text{run E on } \langle E\rangle @@ E has a code (39c1); feed E its own
-E \text{ stops }\allowbreak \text{on } \langle E\rangle \iff D \text{ says }\allowbreak \text{no }\allowbreak \text{on } \langle E\rangle \# \langle E\rangle \iff E \text{ does }\allowbreak \text{not }\allowbreak \text{stop }\allowbreak \text{on } \langle E\rangle @@ the two lines above, with D right about every input
-\htmlClass{new}{\bot;\ }\allowbreak \htmlClass{new}{ \text{no such } D} \quad \blacksquare @@ refute (1b)
+  <h2 class="sthead"><span class="stno">39d2</span>Either and both from valves</h2>
+  <p data-pid="1d3369">Read 5 V as 1 and 0 V as 0. For <i>either</i>: each input feeds a diode, the diodes join at the output, and a 1 kΩ resistor runs from the output to ground. For <i>both</i>: each input meets a diode pointing toward it, the diodes join at the output, and a resistor runs from the output up to the 5 V supply.</p>
+  <p data-pid="81171b">Diode-gate technique: <b>the either gate’s output sits one diode drop below the higher input, and the both gate’s output one drop above the lower input; read against a threshold, they are 39a’s greater and lesser.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the diode-gate technique, worked">
+\text{either, inputs } 5, 0:\ \ 5 - V_d = 1000\,I,\ \ I = I_s(e^{V_d/V_T} - 1) @@ the higher input’s diode is forward; the loop law (7·phys)
+V_d \approx 0.57 \text{ V},\ \ \text{output} \approx 4.43 \text{ V} @@ solved by machine; the other diode is pushed backwards and passes less than Iₛ
+\text{both, inputs } 5, 0:\ \ \text{the diode to the } 0 \text{ V input is forward} @@ the supply pushes current out through it
+\text{output} \approx 0 + 0.6 \text{ V} \text{, read as } 0 @@ the lower input wins
+\htmlClass{new}{\text{either} \approx \max(x, y) - V_d,\ \ \text{both} \approx \min(x, y) + V_d} \quad \blacksquare @@ the or-as-greater technique (39a2), and the and as the lesser
   </pre>
-  <p data-pid="8dceed">Lay the machines down the side of a table and their codes along the top, and write in each place whether machine i stops on code j. D would be a machine that reads the whole table. E runs down the diagonal and takes the opposite at each place, so E’s row differs from every row, its own included. That is 35b’s unlisted real, with “stops” for a digit.</p>
-  <p data-pid="9dedff">38g wired a not back into itself, and the box did not settle: so, then not so, a clock. E fed ⟨E⟩ is the same loop of predictions, “if it stops, it does not; if not, it does”, and a machine has no wire in which to oscillate. Its run is one run. What gives way is the supposition that D exists.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · diagonal · ← → keys work</div></section>
+  <p data-pid="780eb0">On {0, 1} the lesser of x and y is xy, so the both gate is 39a1’s product, read off a wire. The gates are cheap and they work. What they do to the level is the problem: 4.43 V is not 5 V.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · diode gates · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">39d2.1</span><span class="ph understand">understand</span>What does the no-stop-decider technique say? <br>What does E do, and why does running E on its own code refute D?</li>
+      <li><span class="qid">39d2.1</span><span class="ph understand">understand</span>What does the diode-gate technique say? <br>Why is the either gate’s output one diode drop below the higher input?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="39d3">
-  <h2 class="sthead"><span class="stno">39d3</span>Never stopping is not even listed</h2>
-  <p data-pid="4070c1">Not-stopping technique: <b>no machine lists the strings ⟨M⟩ # w such that M never stops on w.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the not-stopping technique">
-\text{a }\allowbreak \text{machine }\allowbreak \text{lists }\allowbreak \text{the }\allowbreak \text{never-stopping }\allowbreak \text{strings} @@ suppose it
-\text{strings }\allowbreak \text{that }\allowbreak \text{are }\allowbreak \text{not }\allowbreak \text{of }\allowbreak \text{the }\allowbreak \text{form } \langle M\rangle \# w \text{ are }\allowbreak \text{decided} @@ the table-code technique; add them to the list
-H \text{ and }\allowbreak \text{the }\allowbreak \text{strings }\allowbreak \text{outside } H \text{ are }\allowbreak \text{both }\allowbreak \text{listed} @@ the stopping-listed technique, and the line above
-H \text{ is }\allowbreak \text{decided} @@ the both-sides technique (39a2)
-\htmlClass{new}{\bot} \quad \blacksquare @@ the no-stop-decider technique
+  <h2 class="sthead"><span class="stno">39d3</span>No not from valves</h2>
+  <p data-pid="ee6592">A network of diodes and resistors, with fixed supplies and some inputs, settles where the current law holds at every inner node: what flows in flows out. Each part’s current is a rising function of the voltage across it, V/R for a resistor and the diode’s law for a diode, and every inner node is joined by some path to a supply or an input.</p>
+  <p data-pid="81aa40">Rising-network technique: <b>in a network of diodes and resistors, raising inputs and lowering none never lowers the voltage of any node.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the rising-network technique">
+\text{some node falls; let } m \text{ fall the most, by } \delta > 0 @@ suppose it, and take the largest fall (4h: the finitely many nodes have a largest)
+\text{each neighbour } j \text{ of } m \text{ falls by at most } \delta @@ inner nodes by the choice of m; inputs rose; supplies did not move
+V_m - V_j \text{ does not rise, so the current from } m \text{ to } j \text{ does not rise} @@ each current is a rising function of the voltage across it
+\text{the currents out of } m \text{ add to } 0 \text{ before and after} @@ the current law (7·phys)
+\text{so none changed, and each neighbour fell by exactly } \delta @@ a sum of parts that did not rise, unchanged: each part unchanged; strictly rising functions
+\bot @@ carry it along a path from m to a supply or an input, which fell by at most 0, not δ
+\htmlClass{new}{\text{no node falls}} \quad \blacksquare @@ the supposition is refuted (1b)
   </pre>
-  <p data-pid="196170">So the two halves are not alike. A machine that stops can always be shown to stop: run it, and the run is the evidence, a list of configurations anyone can check. A machine that never stops has, in general, no such evidence a machine could find. Some do: 3·comp’s loops that come back, and the falling-measure of 4l turned round. 39j collects a few kinds. No finite stock of kinds catches them all.</p>
-  <p data-pid="6ccb1b">And a limit in time changes everything. “M stops on w within t steps” is decided: run U for t steps. The question that cannot be decided is the one with no t attached. 39h asks what happens when t is attached and the answer must come quickly.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · two halves · ← → keys work</div></section>
+  <p data-pid="41dfb8">A not would have to send its output down when its input goes up. The rising-network technique forbids it. So valves make both and either and nothing that turns a 1 into a 0. 39f will show that both and either alone miss every table with a not in it, and 4·comp’s not gate needs a part this network does not have.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · no not · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">39d3.1</span><span class="ph understand">understand</span>What does the not-stopping technique say, and which two techniques does its proof join? <br>Why is “M stops on w within t steps” decided?</li>
+      <li><span class="qid">39d3.1</span><span class="ph understand">understand</span>What does the rising-network technique say? <br>Which line of its proof uses that each part’s current rises with the voltage across it, and why does that forbid a not?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="39d4">
-  <h2 class="sthead"><span class="stno">39d4</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">39d4</span>No restoring from valves</h2>
+  <p data-pid="e51fb9">The same argument, run on the largest rise in place of the largest fall, gives a second fact.</p>
+  <p data-pid="2c7d35">No-gain technique: <b>in a network of diodes and resistors, if no input rises by more than Δ, no node rises by more than Δ.</b> The node with the largest rise, if above Δ, has every neighbour rising by less or as much, so no current out of it falls, so none changes, and the walk to an input or supply ends in ⊥.</p>
+  <pre class="lines" data-k="ember" data-label="this step: four either gates in a row">
+5 \text{ V} \to 4.43 \to 3.86 \to 3.29 \to 2.73 \text{ V} @@ each stage with a 1 kΩ load, solved by machine: each drop near 0.57 V
+\text{reading threshold } 2.5 \text{ V} @@ halfway, as 39b4
+\text{after four stages the margin is } 0.23 \text{ V} @@ from 2.5 V at the start
+\htmlClass{new}{\text{a fifth stage reads the } 1 \text{ as } 0} \quad \blacksquare @@ about 2.2 V: below the threshold
+  </pre>
+  <p data-pid="eebd60">A gate that restored a weak level would have to move its output further than its input moved, near the threshold: a slope above 1. The no-gain technique says valves never do. So noise that slips in is never squeezed out again, and every stage spends margin. 39b4 priced margin in spreads of noise; a chain of valves spends it by the stage. The cure is a part with its own supply, steered by the signal, and 39e builds it.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · no restoring · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39d4.1</span><span class="ph understand">understand</span>What does the no-gain technique say? <br>Why would restoring a weak level need a slope above 1 near the threshold?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39d5">
+  <h2 class="sthead"><span class="stno">39d5</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{no }\allowbreak \text{machine }\allowbreak \text{decides } H\text{, }\allowbreak \text{so }\allowbreak \text{for }\allowbreak \text{some } M, w \text{ nobody }\allowbreak \text{can }\allowbreak \text{know }\allowbreak \text{if } M \text{ stops }\allowbreak \text{on } w\,? @@ the technique says no single machine is right on every pair; each pair alone may be settled by some argument
-\text{E on } \langle E\rangle \text{ oscillates }\allowbreak \text{between }\allowbreak \text{stopping }\allowbreak \text{and }\allowbreak \text{not}\,? @@ a run is one run; what fails is the supposition that D exists
-\text{a }\allowbreak \text{faster }\allowbreak \text{machine }\allowbreak \text{could }\allowbreak \text{decide } H\,? @@ speed is not the issue: D is refuted whatever its step count
-\text{every }\allowbreak \text{set }\allowbreak \text{that }\allowbreak \text{is }\allowbreak \text{not }\allowbreak \text{decided }\allowbreak \text{is }\allowbreak \text{not }\allowbreak \text{listed}\,? @@ H is listed and not decided
+\text{a diode is a resistor of about } 0.6/I\ \Omega\,? @@ its current is exponential in V, not in proportion (26·then1)
+\text{a diode backwards passes nothing}\,? @@ less than Iₛ, about 10⁻¹² A: almost nothing, never nothing
+\text{a cleverer network of diodes makes a not}\,? @@ the rising-network technique covers every network of diodes and resistors
+\text{a diode chain loses } 0.6 \text{ V a stage, so add } 0.6 \text{ V back with a resistor}\,? @@ a resistor alone moves no node further than an input (no-gain); adding back needs a supply steered by the signal
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">39d4.1</span><span class="ph understand">understand</span>Why does the no-stop-decider technique not say that some pair M, w can never be settled by anyone? <br>Why is H a set that is listed and not decided?</li>
+      <li><span class="qid">39d5.1</span><span class="ph understand">understand</span>Why is no cleverer network of diodes and resistors a not? <br>Why does a resistor not add the lost 0.6 V back?</li>
     </ol>
   </section>
 </section>
@@ -115,22 +137,22 @@ H \text{ is }\allowbreak \text{decided} @@ the both-sides technique (39a2)
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">39d.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="D_0\text{: }\allowbreak \text{say }\allowbreak \text{yes }\allowbreak \text{exactly }\allowbreak \text{when } \langle M\rangle \text{ has }\allowbreak \text{an }\allowbreak \text{even }\allowbreak \text{number }\allowbreak \text{of }\allowbreak \text{rows}"></span></span>Build the E of 39d2 against this would-be decider, and find the input on which D₀ is wrong. Is D₀ wrong on E’s code, on some other machine’s, or both?</div>
-  <div class="chq"><span class="chid">39d.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\{\langle M\rangle : M \text{ has }\allowbreak \text{two }\allowbreak \text{marks, }\allowbreak \text{five }\allowbreak \text{states }\allowbreak \text{besides }\allowbreak \text{the }\allowbreak \text{stop, }\allowbreak \text{and }\allowbreak \text{stops }\allowbreak \text{on }\allowbreak \text{the }\allowbreak \text{blank }\allowbreak \text{tape}\}"></span></span>Prove that this set is decided, without saying which machine decides it. Until 2024 no one had that machine in hand; 39·now says why. What does that show about the gap between “some machine decides it” and “we have the machine”?</div>
-  <div class="chq"><span class="chid">39d.5.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">H decided by a machine with an oracle for H</span></span>Give a machine one free move: it may ask whether any ⟨M⟩ # w is in H and be told at once. Run 39d2’s argument on machines with that move. What set do they fail to decide, and what does that say about adding answers to a machine?</div>
-  <div class="chq"><span class="chid">39d.5.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">E does the opposite of what D predicts about E</span></span>One view holds that a person sees that E defeats D, while D cannot, so minds are not machines; it adds that the same holds for the unreached truth of 37i. Another holds that the person sees this only by supposing D is right, and that any machine supposing the same sees it too. Which step of 39d2 does each view lean on? Is “seeing that E defeats D” a proof, and from which givens?</div>
+  <div class="chq"><span class="chid">39d.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x, y, z \in \{0, 5 \text{ V}\}"></span></span>Build a network of diodes and resistors for (x ∧ y) ∨ z, and find its output on the row x = y = z = 5 V with 1 kΩ loads. <br>How many rows of its table read wrong after the output passes through three more either gates?</div>
+  <div class="chq"><span class="chid">39d.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="V_T = kT/q"></span></span>Vₜ grows in proportion to the temperature. At 85 °C, how much less steep is the diode’s law than at 25 °C, and what happens to the drop at 12 mA? <br>Does the rising-network technique care?</div>
+  <div class="chq"><span class="chid">39d.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{raising inputs never lowers a node}"></span></span>Every network of valves only rises. Turn it round: is every rising table of {0, 1}² to {0, 1} made by valves? List the rising tables of two inputs and build each. <br>Which of the sixteen tables of 1e are rising?</div>
+  <div class="chq"><span class="chid">39d.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">valves before switches</span></span>Early electronic machines were built of glass valves that needed heaters and burned out by the hundred, and of crystal diodes that were cheap and cool. One camp built as much logic as it could from the diodes alone; another held that every stage needs a steered supply. <br>On this step’s two techniques, what does the first camp have to add, every few stages, and why? Is that an argument for the second camp, or a compromise?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r39c.html">← 39c · one machine runs them all</a><a href="r39e.html">39e · undecidable everywhere →</a></nav>
+<nav class="nextrung"><a href="r39c.html">← 39c · a wave can carry power, or a message</a><a href="r39e.html">39e · a switch worked by a switch →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The stopping set is the halting problem, written HALT or A_TM in many books; the no-stop-decider technique is the undecidability of the halting problem. The not-stopping technique says the complement of the halting problem is not Turing-recognizable. A machine with a free question about H is an oracle machine, and 39d.5.3 leads to the arithmetical hierarchy and Turing degrees.</p>
+  <p>The diode’s law is the Shockley diode equation; Iₛ is the saturation current and Vₜ = kT/q the thermal voltage. The either and both gates are diode–resistor logic (DRL), an OR gate and an AND gate. A network whose outputs rise with its inputs computes a monotone function; the rising-network technique is a maximum principle for resistive networks, like the one for still water on rung 33. That no passive network has a slope above 1 is the statement that a passive network has no power gain.</p>
   <h3>Who said it first</h3>
-  <p>Alan Turing proved in 1936 that no machine decides whether a machine ever prints a 0, the form his paper used; the form with stopping is from Martin Davis’s book of 1958, which gave it the name halting problem. Alonzo Church reached the same limit from the λ-calculus in 1936. John Lucas (1961) and Roger Penrose (1989, 1994) argued that minds outrun machines because a mind sees the truth of the diagonal statement; Hilary Putnam (1960) and many since replied that the argument assumes the mind knows its own system is clash-free.</p>
+  <p>Ferdinand Braun found that a metal point on a crystal passes current one way in 1874, and crystal detectors were the first radio receivers. John Ambrose Fleming’s valve of 1904, a heated wire and a plate in a vacuum, was the first diode tube. William Shockley derived the junction diode’s law in 1949. Diode logic was used beside valves in machines of the late 1940s and 1950s, including the SEAC (1950), with valves added to restore the levels.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“Let D run M on w. If M stops, D says yes. If M runs for a million steps without stopping, D says no.” Not allowed as a decider: some machine stops after a million and one steps, and D is wrong on it. Any fixed limit fails, and a limit that grows with M is a function, which 39·now shows no machine computes large enough.</p>
+  <p>“A diode backwards passes no current, so it is an open switch, and a diode forwards is a closed one. So a network of diodes is a network of switches, and 4·comp built a not from switches.” Not allowed: the switches of a relay are worked by another wire. A diode’s state is set by the voltages on its own two ends, which is why the rising-network technique covers it.</p>
 </section>
 
 </div>
@@ -145,20 +167,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'input',t:R`\langle M\rangle \# w`,n:`A code and a string.`},
-  {k:'ember',kl:'run',t:R`U(\langle M\rangle \# w)`,n:`Wait.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{H \text{ is listed}}`,n:`Yes when it stops.`}
-],{title:'The slides · listed · ← → keys work'});
+  {k:'ember',kl:'back',t:R`-I_s < I < 0`,n:`Almost none.`},
+  {k:'ember',kl:'forward',t:R`I(0.6\,\text{V}) \approx 0.012 \text{ A}`,n:`Wide open.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{one way only}}`,n:`A rectifier.`}
+],{title:'The slides · valve · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'suppose',t:R`D \text{ decides } H`,n:`To refute it.`},
-  {k:'ember',kl:'opposite',t:R`E(\langle M\rangle) \text{ stops} \iff \neg\, M(\langle M\rangle) \text{ stops}`,n:`Down the diagonal.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{E(\langle E\rangle)\colon \bot}`,n:`No decider.`}
-],{title:'The slides · diagonal · ← → keys work'});
+  {k:'ember',kl:'either',t:R`\max(x, y) - V_d`,n:`Higher input wins.`},
+  {k:'ember',kl:'both',t:R`\min(x, y) + V_d`,n:`Lower input wins.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{4.43 \text{ V, not } 5}`,n:`A drop each time.`}
+],{title:'The slides · diode gates · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'stops',t:R`H\ \text{listed}`,n:`The run is the evidence.`},
-  {k:'ember',kl:'never',t:R`\text{outside } H`,n:`Not listed.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{within } t\text{: decided}}`,n:`No t: not.`}
-],{title:'The slides · two halves · ← → keys work'});
+  {k:'ember',kl:'largest fall',t:R`\delta > 0 \text{ at } m`,n:`Suppose it.`},
+  {k:'ember',kl:'current law',t:R`\textstyle\sum I_{mj} = 0`,n:`Before and after.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\bot:\ \text{no node falls}}`,n:`Valves only rise.`}
+],{title:'The slides · no not · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'stages',t:R`5 \to 4.43 \to 3.86 \to 3.29`,n:`A drop each.`},
+  {k:'ember',kl:'no gain',t:R`\text{rise} \le \Delta`,n:`Never more than the input.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{the } 1 \text{ fades}}`,n:`Margin spent.`}
+],{title:'The slides · no restoring · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How does a computer hold a sound?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r37eng.html">← 37·eng why does a room change a song?</a><a href="r37bio.html">next: 37·bio how does the ear tell one pitch from another? →</a></p>
+  <div class="tags"><span class="tag comp">37·comp · computing</span></div>
+  <h1>How does a computer hold a sound?</h1>
+  <p data-pid="1f16cd">How does a computer hold a sound? A pressure is a smooth thing and a computer holds only lists of whole numbers. 32g said how often to look; this page says how finely, and finds that every bit buys six decibels. Then it shakes the rounding on purpose to make it fair, builds an echo out of a list and a delay, and ends with the trick that lets a phone in Albuquerque carry a song in a tenth of the bits a CD needs: drop what 37c4 says the ear would hide anyway.</p>
+  <p class="gesture" data-pid="3e09d7">Each bit of a sample adds about 6 dB between the loudest note it holds and its rounding hiss. Rounding after a random shake is right on average. A list fed back into itself after a delay is an echo, with peaks at whole multiples of one frequency. A coder keeps, in each band, only the bits needed to stay above what the ear would hide.</p>
+</header>
+
+<section class="class step" data-step="37comp1">
+  <h2 class="sthead"><span class="stno">37comp1</span>Six decibels a bit</h2>
+  <p data-pid="87df74">By <a href="r32g.html#32g1">32g1</a>, a sound with nothing above 20 000 Hz is fixed by 40 000 samples a second; a CD takes 44 100, leaving room for the filter that cuts what is above. Each sample is then rounded to one of 2ⁿ levels a step q apart, and by <a href="r32comp.html#32comp2">32comp2</a> each moves by at most q/2.</p>
+  <p data-pid="f2b019">A rounding move spread evenly over a step has average square q²/12, the mean of u² for u from −q/2 to q/2. The loudest turning the n bits hold swings 2ⁿ⁻¹q each way, with average square (2ⁿ⁻¹q)²/2.</p>
+  <p data-pid="88bdad">Bit-hiss technique: <b>n bits hold a full turning about 6.02n + 1.76 dB above their rounding hiss.</b> Proof: the ratio of the two average squares is (3/2)·2²ⁿ, and 10 log₁₀ of it is 10 log₁₀ 1.5 + 20n log₁₀ 2 (<a href="r37c.html#37c2">37c2</a>).</p>
+  <pre class="lines" data-k="ember" data-label="this page: a CD, and a cheap toy">
+n = 16:\ 6.02(16) + 1.76 \approx 98 \text{ dB} @@ the bit-hiss technique
+n = 8:\ 6.02(8) + 1.76 \approx 50 \text{ dB} @@ a talking toy: hiss you can hear
+\htmlClass{new}{\text{each bit: } 20\log_{10} 2 \approx 6.02 \text{ dB}} \quad \blacksquare @@ doubling the levels halves the step
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · bits · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">37·comp.1.1</span><span class="ph understand">understand</span>What does the bit-hiss technique say, and where does the q²/12 come from? <br>How many bits hold a turning 120 dB above the hiss, the span from the quietest to the painful?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37comp2">
+  <h2 class="sthead"><span class="stno">37comp2</span>Rounding made fair</h2>
+  <p data-pid="be36c2">A quiet note smaller than one step rounds to the same level every time, and the note is gone. Worse, a slow fade rounds into a staircase, and the stairs are a buzz at frequencies that were never in the sound. The cure is to shake each sample by a random amount before rounding.</p>
+  <p data-pid="85a4df">Shaken-rounding technique: <b>add to x a random amount spread evenly over one step and then round down, and the result is x on average.</b> Proof: write x = (k + u)q with k whole and 0 ≤ u < 1. The shaken sample reaches (k + 1)q exactly when the shake is at least (1 − u)q, which happens with chance u; otherwise it stays at kq. So the average is (k + u)q = x.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a note a third of a step high">
+x = 0.3q:\ \text{plain rounding gives } 0 \text{ every time} @@ the note is lost
+\text{shaken: } q \text{ with chance } 0.3,\ 0 \text{ with chance } 0.7 @@ the shaken-rounding technique
+\htmlClass{new}{\text{average } 0.3q} \quad \blacksquare @@ the note survives, under a little steady hiss
+  </pre>
+  <p data-pid="e5ab7d">The price is a hiss a little louder than plain rounding’s, but a steady one that does not follow the music, and the ear (37c4) minds a steady hiss far less than a buzz that comes and goes with the notes.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · a fair round · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37·comp.2.1</span><span class="ph understand">understand</span>What does the shaken-rounding technique say? <br>Why does plain rounding lose a note smaller than half a step?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37comp3">
+  <h2 class="sthead"><span class="stno">37comp3</span>An echo out of a list</h2>
+  <p data-pid="4ac2b2"><a href="r32i.html#32i3">32i3</a> fed a filter’s last output back with one step of delay. A delay of D steps makes an echo: y_k = x_k + a·y_(k−D), with 0 < a < 1. A clap comes out as the clap, then a times it after D steps, then a² after 2D, the terms of 15i’s geometric list.</p>
+  <p data-pid="a53a02">Repeat-echo technique: <b>fed back after D samples at the rate r with share a, a turning is lifted by 1/(1 − a) at the whole multiples of r/D and cut to 1/(1 + a) halfway between.</b> Proof: a turning at f comes back after D steps turned by 2πfD/r; at the multiples of r/D that is whole turns, so every echo adds in step and 15i’s sum gives 1/(1 − a); halfway between, each echo is half a turn off the last and the sum is 1/(1 + a).</p>
+  <pre class="lines" data-k="ember" data-label="this page: a tenth of a second">
+D = 4410,\ r = 44\,100:\ \text{an echo every } 0.1 \text{ s} @@ about 17 m of wall away, by 37e4
+a = 0.5:\ 1/(1 - a) = 2,\ 1/(1 + a) = 2/3 @@ the repeat-echo technique
+\htmlClass{new}{+6 \text{ dB at every } 10 \text{ Hz},\ -3.5 \text{ dB between}} \quad \blacksquare @@ a comb of peaks
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · an echo · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37·comp.3.1</span><span class="ph understand">understand</span>What does the repeat-echo technique say, and which list of 15i does its proof use? <br>Why must a stay below 1, by 37·eng.4?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37comp4">
+  <h2 class="sthead"><span class="stno">37comp4</span>Dropping what the ear would hide</h2>
+  <p data-pid="67f0df">A CD carries 44 100 × 16 × 2 = 1 411 200 bits a second. A phone streams a song in about 128 000. The coder splits the sound into bands, and in each band asks only one thing: how quiet may the rounding hiss be and still go unheard? By 37c4, a loud note hides quieter sound near it, so the hiss may sit just under that hiding level.</p>
+  <p data-pid="26f91b">Hidden-hiss technique: <b>a band whose sound stands m dB above the level its neighbours hide needs only about m/6 bits.</b> Proof: by the bit-hiss technique each bit sets the hiss 6 dB further below the sound; the hiss need only go below the hiding level, m dB down, not below silence.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one band of a song">
+\text{sound at } 70 \text{ dB, hiding level } 52 \text{ dB}:\ m = 18 @@ 37c4, a neighbour’s hiding
+18/6 = 3 \text{ bits, not } 16 @@ the hidden-hiss technique
+\htmlClass{new}{1\,411\,200 / 128\,000 \approx 11} \quad \blacksquare @@ over every band, an eleventh of the bits
+  </pre>
+  <p data-pid="6ad323">This answers the question 37c4 left open. What the recording loses is exactly what most ears would not have heard, and the loss cannot be undone (37h3): the bits are gone. A listener with keener ears than the rate allows, or a sound played back many times through other coders, may hear it.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · coding · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37·comp.4.1</span><span class="ph understand">understand</span>What does the hidden-hiss technique say, and which laid-down line of 37c does it rest on? <br>Why can a coded song not be turned back into the CD it came from?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37comp5">
+  <h2 class="sthead"><span class="stno">37comp5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{Twice the samples a second, twice the quality}\,? @@ 32g1: past twice the highest frequency, nothing more is told
+\text{Adding noise can only make a recording worse}\,? @@ the shaken-rounding technique: a small shake saves notes under a step
+\text{A coded song is a smaller copy of the CD}\,? @@ the hidden-hiss technique: it is another sound, heard the same by most ears
+\text{Each bit doubles the range in decibels}\,? @@ each bit adds 6 dB; it doubles the range in pressure
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37·comp.5.1</span><span class="ph understand">understand</span>A shop sells 32-bit recordings as “twice as good as 16-bit”. What does the bit-hiss technique say they hold, and can any microphone or room use it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">37·comp.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="6.02n + 1.76"></span> <span data-tex-inline="x = (k + u)q"></span></span>Build the hiss of plain rounding and of shaken rounding for a note a third of a step high, and compare. <br>Build a shake that leaves the hiss steady for every x.</div>
+  <div class="chq"><span class="chid">37·comp.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="a \to 1"></span></span>Find what the repeat-echo technique gives as a comes up to 1. <br>What does an echo with a = 1 do to a single clap?</div>
+  <div class="chq"><span class="chid">37·comp.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="m/6 \text{ bits}"></span></span>Turn the hidden-hiss technique round: given 3 bits in a band, how far above its hiding level may the sound stand before the hiss is heard? <br>Why does a coder that is fine for a song fail for a tuning fork alone?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r37eng.html">← 37·eng · why does a room change a song?</a><a href="r37bio.html">37·bio · how does the ear tell one pitch from another? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Rounding to levels is quantization, its hiss quantization noise, and 6.02n + 1.76 is the signal-to-noise ratio of n-bit audio. The random shake is dither. The repeat echo is a feedback comb filter. Coding by what the ear hides is perceptual coding, as in MP3 and AAC.</p>
+  <h3>Who said it first</h3>
+  <p>Alec Reeves patented pulse-code modulation in 1938. Lawrence Roberts studied dither for pictures in 1962. The compact disc set 44 100 samples of 16 bits in 1980. Karlheinz Brandenburg and others at Fraunhofer built MP3 around 1991.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Each sample is right to within half a step, so the recording is right to within half a step, so nothing is lost.” <span class="wrong">Not allowed:</span> the moves are within half a step, but their sum over many samples is a hiss with its own power, q²/12 a sample, and that power is what sets the 98 dB.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'hiss',t:R`q^2/12`,n:`Even over a step.`},
+  {k:'ember',kl:'loudest',t:R`(2^{n-1}q)^2/2`,n:`A full turning.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{6.02n + 1.76 \text{ dB}}`,n:`98 dB for 16.`}
+],{title:'The slides · bits · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'write',t:R`x = (k + u)q`,n:`Whole and part.`},
+  {k:'ember',kl:'chance',t:R`u`,n:`Of going up.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{average } x}`,n:`Right on average.`}
+],{title:'The slides · a fair round · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'feed',t:R`y_k = x_k + a\,y_{k-D}`,n:`Back after D.`},
+  {k:'ember',kl:'in step',t:R`1/(1 - a)`,n:`At multiples of r/D.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a comb}}`,n:`Peaks and dips.`}
+],{title:'The slides · an echo · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'CD',t:R`1\,411\,200 \text{ bits/s}`,n:`Every level kept.`},
+  {k:'ember',kl:'band',t:R`m/6 \text{ bits}`,n:`Above the hiding level.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{about an eleventh}}`,n:`What the ear drops.`}
+],{title:'The slides · coding · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

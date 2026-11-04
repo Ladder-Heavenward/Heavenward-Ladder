@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can a program’s type say what it does?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r45cb0.html">← 45·cb0 the same as itself, again</a><a href="r45now.html">next: 45·now when are two things truly the same? →</a></p>
+  <div class="tags"><span class="tag comp">45·comp · computing</span></div>
+  <h1>Can a program’s type say what it does?</h1>
+  <p data-pid="d3b8c6">Can a program’s type say what it does? A programmer writes, before any code, what kind of thing goes in and what kind comes out: a list of names in, a number out; a pair in, one of its parts out. A checker reads those labels and refuses programs whose pieces do not fit. Most of the time a label says little, since many programs take a list of names to a number. But some labels say a great deal. A program that must work for every kind of thing at once, and takes a thing to a thing of the same kind, can do only one thing: hand back what it was given. A program that takes two things of any one kind to one of them can only pick the first or the second. What makes this hard to believe is that nothing about the code is read, only its label. This page reads types as the things of a category and programs as its arrows, and finds that the rung’s arrows explain the labels: pairs and choices are products and sums, the rule that turns a program of two inputs into one of one input is 45f’s adjunction, a container that can be mapped over is a map of categories, and a program for every type is a natural map, fixed by its arrows in the way 45g fixed a thing. A database is read the same way, with a join as a limit.</p>
+  <p class="gesture" data-pid="2ce7b9">A type is a thing and a program that always stops is an arrow, and running programs one after another is running arrows in a row. Pairs of types are products and tagged choices are sums, so the counts of members multiply and add, and a program of two inputs is a program that hands back a program. Lists, with the rule that applies a program to each entry, form a map of categories. A program written for every type without looking at the type is a natural map, and the arrows it must be carried along by leave it almost no room: one program for a thing to a thing, two for a pair to a thing. A table of a database is a set of rows, a column that names a row of another table is an arrow, and the join of two tables over a third is the limit of their two arrows.</p>
+</header>
+
+<section class="class step" data-step="45·comp.1">
+  <h2 class="sthead"><span class="stno">45·comp.1</span>Types as things, programs as arrows</h2>
+  <p data-pid="6862de">A typed language has types: Bool, with the two members true and false; Int, the whole numbers; String, the rows of letters; One, with a single member ⋆; and the types built from them. A program from X to Y that has no other effect and always stops takes each member of X to one member of Y, so it is a function. Running one program on the output of another is running functions in a row, and the program that hands back its input does nothing.</p>
+  <p data-pid="79772b">Types-and-programs technique: <b>the types of a language, with its stopping programs read as functions, form a category, so every technique of this rung made with arrows alone holds of programs.</b> Proof: running in a row is 9b’s composing of functions, where brackets do not matter, and the do-nothing program is the identity function; those are 45a’s rules. Held in trust: that the programs all stop, as on 45j.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the types-and-programs technique, on two programs and a count">
+\mathrm{len} : \mathrm{String} \to \mathrm{Int},\ \ \mathrm{even} : \mathrm{Int} \to \mathrm{Bool} @@ two programs, two arrows
+(\mathrm{even} \circ \mathrm{len})(\text{“arrow”}) = \mathrm{even}(5) = \text{false} @@ run in a row: the types fit, so the checker allows it
+\mathrm{len} \circ \mathrm{even} \text{ is refused} @@ even ends at Bool, and len starts at String
+\htmlClass{new}{\mathrm{Bool} \to \mathrm{Bool} \text{ has } 2^2 = 4 \text{ programs: keep, flip, always true, always false}} \quad \blacksquare @@ two outputs for each of two inputs
+  </pre>
+  <p data-pid="ff82db">So a checker that refuses len ∘ even is refusing an arrow that starts where the last one did not end, 45a4’s refusal, and the count says that a type of four programs leaves the label a lot to say and the code a little.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · types as things · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">45·comp.1.1</span><span class="ph understand">understand</span>What are the things and the arrows of the category of a typed language, and why must the programs always stop for them to be functions? <br>What does the types-and-programs technique say, and why does the checker refuse len ∘ even?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45·comp.2">
+  <h2 class="sthead"><span class="stno">45·comp.2</span>Pairs, choices and programs that hand back programs</h2>
+  <p data-pid="0e0d52">The pair type X × Y holds pairs (x, y), and a program into it is a pair of programs, one for each part: 45d’s pair-map technique, so X × Y is the product. The choice type X + Y holds members tagged left x or right y, and a program out of it is a pair of programs, one for each tag: 45d’s cases-map technique, so X + Y is the sum. The function type Y → Z holds programs, and 45f’s pair-to-function technique matches programs X × Y → Z with programs X → (Y → Z), which take the first input and hand back a program waiting for the second.</p>
+  <p data-pid="0db274">Type-counts technique: <b>for types with finitely many members, X × Y has |X|·|Y| members, X + Y has |X| + |Y|, and Y → Z has |Z| to the power |Y|; and the matchings of the pair-map, cases-map and pair-to-function techniques give |Z|^{|X|·|Y|} = (|Z|^{|Y|})^{|X|} and |Z|^{|X| + |Y|} = |Z|^{|X|}·|Z|^{|Y|}.</b> Proof: rung 4’s counting of pairs, of a set split in two, and of choices made once for each input; matched sets have equal counts.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the type-counts technique, on a sum">
+|\mathrm{Bool} + \mathrm{Three}| = 2 + 3 = 5 @@ the type-counts technique, sums; Three has three members
+|(\mathrm{Bool} + \mathrm{Three}) \to \mathrm{Bool}| = 2^5 = 32 @@ the type-counts technique, functions
+|\mathrm{Bool} \to \mathrm{Bool}| \cdot |\mathrm{Three} \to \mathrm{Bool}| = 4 \cdot 8 = 32 @@ the type-counts technique, pairs of programs
+\htmlClass{new}{(X + Y) \to Z \ \cong\ (X \to Z) \times (Y \to Z)} \quad \blacksquare @@ the cases-map technique: a program out of a choice is a program for each tag
+  </pre>
+  <p data-pid="b75575">So the counts of types obey the rules of powers, and the rules of powers are the rung’s universal properties counted. A rule of programming, “a program out of a choice handles each case”, is a statement of arrows.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · pairs and choices · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45·comp.2.1</span><span class="ph understand">understand</span>Which universal property makes X × Y the product of two types, and which makes X + Y their sum? <br>What does the type-counts technique say, and which of its equalities is the pair-to-function technique counted?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45·comp.3">
+  <h2 class="sthead"><span class="stno">45·comp.3</span>Map over a container</h2>
+  <p data-pid="fda1ce">For each type X, List X holds the finite rows [x₁, …, xₙ] of members of X. For each program f : X → Y, map f : List X → List Y applies f to each entry and keeps the order: map f [x₁, …, xₙ] = [f(x₁), …, f(xₙ)]. Option X holds either nothing or one member of X, and map f leaves nothing alone and applies f to the member.</p>
+  <p data-pid="774a10">Map-over technique: <b>List, sending X to List X and f to map f, is a map of categories from types to types, and so is Option.</b> Proof: entry by entry, map of the do-nothing program leaves each entry as it is, and map (g ∘ f) puts g(f(xᵢ)) in place i, which is what map g does after map f; the length and the order are kept. Option is the case of rows of length at most one.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the map-over technique, one rule checked on a row">
+f(n) = n + 1,\ \ g(n) = 2n,\ \ \text{on } [1, 2, 3] @@ two programs Int → Int, and a row
+\mathrm{map}\, f\, [1, 2, 3] = [2, 3, 4],\ \ \mathrm{map}\, g\, [2, 3, 4] = [4, 6, 8] @@ map f, then map g
+\mathrm{map}\,(g \circ f)\, [1, 2, 3] = [g(2), g(3), g(4)] = [4, 6, 8] @@ map of the row run
+\htmlClass{new}{\mathrm{map}\,(g \circ f) = \mathrm{map}\, g \circ \mathrm{map}\, f} \quad \blacksquare @@ the map-over technique
+  </pre>
+  <p data-pid="2a3029">So 45b’s matched-to-matched technique applies: matched types have matched list types. Programmers rely on the second rule when they fuse two passes over a list into one, and the map-over technique is why the fused program gives the same answer.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · map over a container · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45·comp.3.1</span><span class="ph understand">understand</span>What do List X and map f hold and do, and what are the two rules a map of categories keeps? <br>What does the map-over technique say, and why may two passes over a list be fused into one?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45·comp.4">
+  <h2 class="sthead"><span class="stno">45·comp.4</span>A program for every type</h2>
+  <p data-pid="cfbced">Some programs are written once for every type: reverse, which turns a row round at each type X; the do-nothing program; the program that swaps a pair. Such a program is a family p_X, one at each type, written without looking at what X is. Held in trust: <b>a program written for every type without looking at the type is carried along by every program f : X → Y</b>, so it is a natural map in 45c’s sense. For reverse, the square reads reverse ∘ map f = map f ∘ reverse.</p>
+  <p data-pid="d9c19f">Only-identity technique: <b>a family p_X : X → X carried along by every program is the do-nothing program at every type.</b> Proof: take x in X and f : One → X with f(⋆) = x. One has one member, so p_One(⋆) = ⋆. The square for f gives p_X(x) = p_X(f(⋆)) = f(p_One(⋆)) = f(⋆) = x. This is 45g’s arrows-into technique in small: the family is fixed by what it does to one member of one type.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the square for reverse, on a row">
+f(n) = 2n,\ \ \text{on } [1, 2, 3] @@ a program and a row
+\mathrm{reverse}(\mathrm{map}\, f\, [1, 2, 3]) = \mathrm{reverse}\, [2, 4, 6] = [6, 4, 2] @@ map, then reverse
+\mathrm{map}\, f\, (\mathrm{reverse}\, [1, 2, 3]) = \mathrm{map}\, f\, [3, 2, 1] = [6, 4, 2] @@ reverse, then map
+\htmlClass{new}{\mathrm{reverse} \circ \mathrm{map}\, f = \mathrm{map}\, f \circ \mathrm{reverse}} \quad \blacksquare @@ the square closes on this row; in general, entry by entry
+  </pre>
+  <p data-pid="1d77d2">So the label “for every X, X to X” says what the program does, and the code need not be read. A program that broke the square, by looking at its type and adding 1 when X is Int, is exactly what the held-in-trust statement rules out, and it is not written for every type.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · for every type · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45·comp.4.1</span><span class="ph understand">understand</span>What is a program written for every type, and what does the held-in-trust statement say about it? <br>What does the only-identity technique say, and which arrow of One does its proof spend?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45·comp.5">
+  <h2 class="sthead"><span class="stno">45·comp.5</span>Two picks</h2>
+  <p data-pid="019464">The label “for every X, a pair of X to an X” leaves a little more room. Taking the first part and taking the second part both fit it. The square for f : X → Y reads p_Y(f(x), f(y)) = f(p_X(x, y)).</p>
+  <p data-pid="05ec52">Two-picks technique: <b>a family p_X : X × X → X carried along by every program is either the first part at every type or the second part at every type.</b> Proof: take (x, y) in X × X and f : Bool → X with f(false) = x and f(true) = y. The square for f gives p_X(x, y) = p_X(f(false), f(true)) = f(p_Bool(false, true)). If p_Bool(false, true) = false, then p_X(x, y) = x for every X, x and y; if it is true, p_X(x, y) = y.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the two-picks technique, on Int">
+p_{\mathrm{Bool}}(\text{false}, \text{true}) = \text{true} @@ suppose this family picks the second at Bool
+f : \mathrm{Bool} \to \mathrm{Int},\ \ f(\text{false}) = 7,\ \ f(\text{true}) = 9 @@ the program that names the pair (7, 9)
+p_{\mathrm{Int}}(7, 9) = f(p_{\mathrm{Bool}}(\text{false}, \text{true})) = f(\text{true}) = 9 @@ the square for f
+\htmlClass{new}{p_X(x, y) = y \text{ at every type}} \quad \blacksquare @@ the two-picks technique
+  </pre>
+  <p data-pid="11b736">So the count of such programs is the count of members of Bool, 2, one for each answer at the one test pair (false, true). A program that returned the larger of two numbers fits Int × Int → Int, and fails the label for every type: it looked at the type.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · two picks · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45·comp.5.1</span><span class="ph understand">understand</span>What does the square for f say about a family p_X : X × X → X? <br>What does the two-picks technique say, and why is the pair (false, true) of Bool enough to fix p at every type?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45·comp.6">
+  <h2 class="sthead"><span class="stno">45·comp.6</span>A schema is a category</h2>
+  <p data-pid="cb871b">A database keeps tables: Worker, Team and Task, each a set of rows. A column that names a row of another table is an arrow: team : Worker → Team gives each worker’s team, and owner : Task → Team gives each task’s team. The schema, the tables and columns with their paths run in a row, is a category, and the data at one moment is a map of categories from the schema to sets, sending each table to its set of rows and each column to the function it gives.</p>
+  <p data-pid="183658">The join of Worker and Task over Team keeps the pairs (w, k) with team(w) = owner(k). Join-is-limit technique: <b>the join is the limit of the picture Worker → Team ← Task: the part of Worker × Task where the two teams agree, with its two maps to Worker and Task.</b> Proof: a rival Z with maps u to Worker and v to Task, agreeing in Team, gives z ↦ (u(z), v(z)) in Worker × Task by the pair-map technique, and that pair lies in the sift where the teams agree by 45e’s sift-meets technique, in exactly one way.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the join-is-limit technique, counted">
+\text{workers } w_1, w_2, w_3 \text{ in teams } T_1, T_1, T_2 @@ the column team
+\text{tasks } k_1, k_2, k_3 \text{ owned by } T_1, T_2, T_2 @@ the column owner
+|\mathrm{Worker} \times \mathrm{Task}| = 3 \cdot 3 = 9 @@ the type-counts technique, pairs
+\text{join} = \{(w_1, k_1), (w_2, k_1), (w_3, k_2), (w_3, k_3)\} @@ the pairs whose teams agree
+\htmlClass{new}{|\text{join}| = 2 \cdot 1 + 1 \cdot 2 = 4} \quad \blacksquare @@ the join-is-limit technique, one team at a time
+  </pre>
+  <p data-pid="d653fc">So a join is fixed by its arrows and not by how the rows are stored: two databases with matched tables, matched so the columns agree, have matched joins, by 45d’s one-matching technique read for this picture.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · a schema is a category · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45·comp.6.1</span><span class="ph understand">understand</span>How is a schema a category, and what is the data of a database at one moment? <br>What does the join-is-limit technique say, and why does the join of the example have 4 rows and not 9?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">45·comp.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="X \to X \times X"></span> <span data-tex-inline="X \times X \times X \to X"></span></span>Build every family of each label carried along by every program, and count them. <br>Which test type and test member do you use for each, and how do the only-identity and two-picks techniques carry over?</div>
+  <div class="chq"><span class="chid">45·comp.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="p_X(x) = x + 1 \text{ if } X = \mathrm{Int},\ \ p_X(x) = x \text{ otherwise}"></span></span>A language that lets a program ask which type it was given allows this family for “X to X”. Find a program f whose square fails to close for it. <br>Which line of the only-identity technique’s proof fails, and what does the edge show about the held-in-trust statement?</div>
+  <div class="chq"><span class="chid">45·comp.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="r_X : \mathrm{List}\, X \to \mathrm{List}\, X"></span></span>The only-identity technique fixed a family by one member of one type. Turn it round for lists: if r is carried along by every program, prove r_X([x₁, …, xₙ]) = map f (r_Int([1, …, n])) for f(i) = xᵢ. <br>What does this make of reverse? What can r_Int([1, 2]) be, and why can it hold no entry other than 1 and 2?</div>
+  <div class="chq"><span class="chid">45·comp.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">45h.5.4: a foundation of arrows or of members</span></span>45h.5.4 set a foundation of arrows against one of members. A database read here is a map of categories into sets, and its rows may be stored in any order under any names. <br>Which facts about a database does every matching of its tables keep, and which does it lose? Is a database its rows or its arrows?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r45cb0.html">← 45·cb0 · the same as itself, again</a><a href="r45now.html">45·now · when are two things truly the same? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The category of types and stopping programs is the usual model of a typed functional language, written Hask or Set for short. Pair types are product types, choice types are sum types, tagged unions or Either, and One is the unit type. Turning a program of two inputs into one that hands back a program is currying. A container with map is a functor, written Functor with fmap in Haskell; the map-over technique is the functor laws, and fusing two passes is map fusion. A program for every type is parametrically polymorphic; the held-in-trust statement is relational parametricity, and the only-identity and two-picks techniques are free theorems. A schema read as a category, with data as a functor into Set, is the categorical, or functorial, view of databases, and a join over a common column is a pullback.</p>
+  <h3>Who said it first</h3>
+  <p>Christopher Strachey told parametric polymorphism from the ad hoc kind in 1967. John Reynolds proved the parametricity statement for his polymorphic calculus in 1983, and Philip Wadler drew free theorems from it in 1989. Currying is named after Haskell Curry, and was used by Moses Schönfinkel in 1924. Edgar Codd set out the relational model of databases in 1970, and David Spivak gave the functorial reading of schemas and data migration in 2012.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="44·comp: a worked “proof”, not allowed">
+q_X : \mathrm{List}\, X \to \mathrm{Int} \text{ carried along by every } f @@ fine: the square reads q_Y \circ \mathrm{map}\, f = q_X
+q(\mathrm{map}\, f\, xs) = q(xs) @@ fine: map keeps the length, and the square says q sees nothing else
+\text{so } q \text{ is the length} @@ not allowed: q is some function of the length, such as twice it, or always 0; the label fixes what q may look at, not what it does with it
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'arrow',t:R`\mathrm{len} : \mathrm{String} \to \mathrm{Int}`,n:`A program that stops is a function.`},
+  {k:'ember',kl:'row',t:R`\mathrm{even} \circ \mathrm{len} : \mathrm{String} \to \mathrm{Bool}`,n:`Run in a row when the types fit.`},
+  {k:'ember',kl:'count',t:R`\htmlClass{new}{|\mathrm{Bool} \to \mathrm{Bool}| = 4}`,n:`Keep, flip, always true, always false.`}
+],{title:'The slides · types as things · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'pair',t:R`Z \to X \times Y \ \cong\ (Z \to X) \times (Z \to Y)`,n:`The pair-map technique.`},
+  {k:'ember',kl:'choice',t:R`(X + Y) \to Z \ \cong\ (X \to Z) \times (Y \to Z)`,n:`The cases-map technique.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2^5 = 4 \cdot 8 = 32}`,n:`Bool + Three to Bool.`}
+],{title:'The slides · pairs and choices · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'entries',t:R`\mathrm{map}\, f\, [x_1, \dots, x_n] = [f(x_1), \dots, f(x_n)]`,n:`Each entry, order kept.`},
+  {k:'ember',kl:'nothing',t:R`\mathrm{map}\, \mathrm{id} = \mathrm{id}`,n:`The first rule.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\mathrm{map}\,(g \circ f) = \mathrm{map}\, g \circ \mathrm{map}\, f}`,n:`Two passes fuse into one.`}
+],{title:'The slides · map over a container · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'square',t:R`f(p_X(x)) = p_Y(f(x))`,n:`Carried along by every f.`},
+  {k:'ember',kl:'one',t:R`f : \mathrm{One} \to X,\ \ f(\star) = x`,n:`One member picks any x.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{p_X(x) = f(p_{\mathrm{One}}(\star)) = x}`,n:`The do-nothing program.`}
+],{title:'The slides · for every type · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'test',t:R`f : \mathrm{Bool} \to X,\ \ (\text{false}, \text{true}) \mapsto (x, y)`,n:`One pair names every pair.`},
+  {k:'ember',kl:'square',t:R`p_X(x, y) = f(p_{\mathrm{Bool}}(\text{false}, \text{true}))`,n:`Carried along by f.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{first or second: } 2 \text{ programs}}`,n:`One for each member of Bool.`}
+],{title:'The slides · two picks · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'arrows',t:R`\mathrm{team} : \mathrm{Worker} \to \mathrm{Team},\ \ \mathrm{owner} : \mathrm{Task} \to \mathrm{Team}`,n:`Columns that name rows.`},
+  {k:'ember',kl:'limit',t:R`\{(w, k) : \mathrm{team}(w) = \mathrm{owner}(k)\}`,n:`The sift inside the product.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|\text{join}| = 4 \text{ of } 9}`,n:`One team at a time.`}
+],{title:'The slides · a schema is a category · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

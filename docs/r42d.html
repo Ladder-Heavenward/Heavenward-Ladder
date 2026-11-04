@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Unique factoring</title>
+<title>Powers cycle</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,95 +25,93 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r42c.html">← 42c division with remainder for polynomials</a><a href="r42e.html">next: 42e where factoring fails →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r42c.html">← 42c several clocks at once</a><a href="r42e.html">next: 42e a clock hand that reaches every hour →</a></p>
   <div class="tags"><span class="tag proof">42d · proof</span></div>
-  <h1>Unique factoring</h1>
-  <p data-pid="a11b8c">Rung four proved that a whole number splits into primes in only one way. The proof leaned on a single fact: a prime that divides a product divides a factor, and that came from the oldest recipe for a greatest common divisor, which is repeated division with remainder. Step 42c gave polynomials over a field the same division. So the same chain of reasons should run there, and it does, once each link is named. Division gives every ideal one maker. One maker turns a member that cannot be split into a member that behaves like a prime. And behaving like a prime gives one factoring. With the chain laid out, polynomials with whole-number coefficients can be brought in too, though they have no division by two: the trick is to look at their coefficients on a prime clock. That gives a test that some polynomials cannot be split at all, and a reason why splitting over the fractions never needs fractions.</p>
-  <p class="gesture" data-pid="9f0e94">In a ring where every ideal has one maker, a member that cannot be split divides a factor of any product it divides, and every member splits into such pieces in one way only, up to order and undoable factors. For whole-number polynomials, the common divisor of the coefficients of a product is the product of theirs. A prime that divides every coefficient but the top, with its square missing the constant, shows a polynomial cannot be split.</p>
+  <h1>Powers cycle</h1>
+  <p data-pid="74713a">Rung five walked the powers of three round the clock of seven, and the walk came back to one after six steps. Rung nineteen proved, for any finite group, that a member done over and over comes back to doing nothing after a number of steps that divides the size of the group. The units of a clock are a finite group. So the walk always comes back, and the size of the group says when it must have. On a prime clock the size is one less than the prime, and every hour but zero, raised to that power, is one. On any clock the size is the count of units, and the rung has the tools to count them: count them on a clock whose size is a power of a prime, then put the clocks together. With that count, a power with an exponent too large to write can be cut down to one that fits on a page. The step ends with the old puzzle of why one seventh repeats in blocks of six digits.</p>
+  <p class="gesture" data-pid="b7676e">On a prime clock, any hour but zero to the power one less than the prime is one, by the dividing of rung nineteen. On any clock, a unit to the power of the count of units is one, and the count is found prime by prime. So exponents may be cut on the clock of the count, and the block length of a repeating decimal is a power’s return time.</p>
 </header>
 
 <section class="class step" data-step="42d1">
-  <h2 class="sthead"><span class="stno">42d1</span>Members that cannot be split</h2>
-  <p data-pid="7541cd">A cancelling ring in which every ideal is the multiples of one member is a <i>principal ring</i>. ℤ is one, by 4j’s division-with-remainder technique, and so is F[x] over any field, by 42c’s one-maker technique.</p>
-  <p data-pid="8d2313">A member q, not 0 and not undoable, is <i>unsplittable</i> when q = wb only if w or b is undoable. It is <i>prime</i> when q dividing wb means q divides w or q divides b. Two members that differ by an undoable factor, as 3 and −3, or x − 1 and 2x − 2 in ℚ[x], are <i>partners</i>.</p>
-  <p data-pid="0ebf2e">Unsplittable-is-prime technique: <b>in a principal ring, every unsplittable member is prime.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the unsplittable-is-prime technique">
-(q) \subseteq J = (g) \Rightarrow q = gh @@ any ideal above (q) has one maker g
-g \text{ undoable, so } J = R;\ \text{ or } h \text{ undoable, so } J = (q) @@ q is unsplittable
-(q) \text{ is largest, so } R/(q) \text{ is a field} @@ the largest-ideal technique (42b)
-q \mid wb \Rightarrow (w + (q))(b + (q)) = 0 @@ wb lands in (q)
-\htmlClass{new}{q \mid w \ \lor\ q \mid b} \quad \blacksquare @@ a field has no zero products
+  <h2 class="sthead"><span class="stno">42d1</span>The little technique</h2>
+  <p data-pid="e22e4c">5·cb2 walked [3] round the clock of 7: [3], [2], [6], [4], [5], [1]. Six steps, and the clock has six units. <a href="r19d.html#b520cd">19d5</a> said that a member of a finite group G comes back to e after a number of steps that divides |G|, so that a^|G| = e.</p>
+  <p data-pid="fdc6ce">Little technique: <b>if p is prime and p does not divide a, then a^(p − 1) ≡ 1 (mod p); and aᵖ ≡ a (mod p) for every integer a.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the little technique">
+p \nmid a \Rightarrow [a] \in (\mathbb Z/p)^\times @@ gcd(a, p) = 1 (42b4)
+|(\mathbb Z/p)^\times| = p - 1 @@ every hour but [0] is a unit (the prime-clock-field technique)
+\htmlClass{new}{[a]^{p - 1} = [1]} @@ order-divides (19d5) in the group of units (42b3)
+[a]^p = [a]^{p-1}[a] = [a] @@ times [a]
+p \mid a \Rightarrow a^p \equiv 0 \equiv a @@ both sides are multiples of p
+\htmlClass{new}{a^p \equiv a \pmod p \text{ for every } a} \quad \blacksquare @@ reason by cases
   </pre>
-  <p data-pid="390fb8">This is 4j’s prime-divides-a-factor technique, with the plus-only combination replaced by the one-maker technique. The two words come apart in rings that are not principal: in 42e, 2 is unsplittable and not prime.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · primes · ← → keys work</div></section>
+  <p data-pid="561ec3">So 2¹⁰⁰ on the clock of 101 is 1, though 2¹⁰⁰ has 31 digits. The technique is a fact about the size of a group, and it says nothing about which smaller power comes back first: [2]³ = [1] on the clock of 7, and 3 divides 6.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the little technique · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">42d1.1</span><span class="ph understand">understand</span>What are a principal ring, an unsplittable member, a prime member and partners? <br>What does the unsplittable-is-prime technique say, and which technique of 42b does its proof use?</li>
+      <li><span class="qid">42d1.1</span><span class="ph understand">understand</span>What does the little technique say? <br>Which technique of rung 19 does its proof spend, and in which group?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42d2">
-  <h2 class="sthead"><span class="stno">42d2</span>One factoring</h2>
-  <p data-pid="e353d8">One-factoring technique: <b>in a principal ring, every member other than 0 that is not undoable is a product of unsplittables, and any two such products have the same length and can be paired off into partners.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the one-factoring technique">
-\text{suppose } w_0 \text{ has no factoring; then } w_0 = w_1 b_1,\ w_1 \text{ with no factoring, } b_1 \text{ not undoable} @@ w₀ is not unsplittable, and one factor must lack a factoring
-(w_0) \subsetneq (w_1) \subsetneq (w_2) \subsetneq \cdots @@ the same move again and again (6c’s picking in turn)
-U = \textstyle\bigcup_k (w_k) = (g),\ \ g \in (w_k) \text{ for some } k @@ a union of a rising chain of ideals is an ideal; one maker
-(w_{k+1}) \subseteq (g) \subseteq (w_k) @@ so the chain stops: ⊥, and every member has a factoring
-q_1 \cdots q_s = q'_1 \cdots q'_t \Rightarrow q_1 \mid q'_j \text{ for some } j @@ the unsplittable-is-prime technique, on a list (4j’s prime-divides-a-list)
-\htmlClass{new}{q'_j = u\,q_1,\ u \text{ undoable; cancel and repeat}} \quad \blacksquare @@ q′ⱼ is unsplittable; cancelling (42a3); induction on s
+  <h2 class="sthead"><span class="stno">42d2</span>Counting the units</h2>
+  <p data-pid="04145e">The units of the clock of n are the hours [k] with 1 ≤ k ≤ n and gcd(k, n) = 1. On the clock of a prime power pᵏ, an hour fails exactly when p divides it, and the multiples of p among 1, …, pᵏ number pᵏ⁻¹.</p>
+  <p data-pid="470af8">Unit-count technique: <b>if n is the product of the prime powers p₁^(k₁), …, pᵣ^(kᵣ), then the clock of n has n(1 − 1/p₁)⋯(1 − 1/pᵣ) units.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the unit-count technique">
+\gcd(j, p^k) = 1 \iff p \nmid j @@ the common divisors of j and pᵏ are powers of p (4j17’s one prime list)
+|(\mathbb Z/p^k)^\times| = p^k - p^{k-1} = p^k(1 - 1/p) @@ take away the pᵏ⁻¹ multiples of p
+n = p_1^{k_1} \cdots p_r^{k_r},\ \text{the prime powers sharing nothing} @@ the prime list of n (4j17)
+|(\mathbb Z/n)^\times| = \prod_i |(\mathbb Z/p_i^{k_i})^\times| @@ the two-clock technique (42c3), one prime power at a time
+\htmlClass{new}{|(\mathbb Z/n)^\times| = n\,(1 - \tfrac{1}{p_1}) \cdots (1 - \tfrac{1}{p_r})} \quad \blacksquare @@ multiply the lines
   </pre>
-  <p data-pid="1372d7">So in ℚ[x], x⁴ − 4 = (x² − 2)(x² + 2), and no other factoring is possible except partners such as (2x² − 4)(½x² + 1). In ℝ[x] the same polynomial is (x − √2)(x + √2)(x² + 2): one factoring there too, but the unsplittables are different, because the field is.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · factoring · ← → keys work</div></section>
+  <p data-pid="605080">360 = 2³ · 3² · 5, so the clock of 360 has 4 · 6 · 4 = 96 units, and 360 · ½ · ⅔ · ⅘ = 96. The clock of 100 has 40. The clock of a product of two primes pq has pq − q − p + 1 = (p − 1)(q − 1): of the hours 0 to pq − 1, the q multiples of p and the p multiples of q fail, and 0 is counted in both. 42i builds a lock on that count.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · counting units · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42d2.1</span><span class="ph understand">understand</span>What does the one-factoring technique say? <br>Why does the chain (w₀) ⊊ (w₁) ⊊ ⋯ have to stop in a principal ring?</li>
+      <li><span class="qid">42d2.1</span><span class="ph understand">understand</span>What does the unit-count technique say? <br>Why does the clock of a prime power pᵏ have pᵏ − pᵏ⁻¹ units?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42d3">
-  <h2 class="sthead"><span class="stno">42d3</span>The divisor of the coefficients</h2>
-  <p data-pid="4748dd">ℤ[x] is not principal (42c4), but it is close. The <i>content</i> of a polynomial with whole coefficients, not 0, is the greatest common divisor of its coefficients. A polynomial with content 1 is <i>bare</i>. 6x² + 24x + 24 has content 6, and x² + 4x + 4 is bare.</p>
-  <p data-pid="ab19b6">Content-multiplies technique: <b>the content of a product of whole-number polynomials is the product of their contents.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the content-multiplies technique">
-p = c(p)\,\bar p,\ \ q = c(q)\,\bar q,\ \ \bar p, \bar q \text{ bare} @@ take out the contents
-\text{suppose a prime } \ell \text{ divides every coefficient of } \bar p \bar q @@ to show the product is bare
-\bar p \bmod \ell \ne 0,\ \ \bar q \bmod \ell \ne 0 \text{ in } (\mathbb Z/\ell)[x] @@ neither is bare-and-all-multiples-of-ℓ
-(\bar p \bmod \ell)(\bar q \bmod \ell) = 0 @@ the clock map ℤ → ℤ/ℓ keeps sums and products, coefficient by coefficient
-\bot @@ ℤ/ℓ is a field (42b4), so (ℤ/ℓ)[x] is cancelling (degree-adds)
-\htmlClass{new}{c(pq) = c(p)\,c(q)} \quad \blacksquare @@ p̄q̄ is bare
+  <h2 class="sthead"><span class="stno">42d3</span>Cutting the exponent</h2>
+  <p data-pid="ca2c7f">42a5 warned that an exponent is a count, and does not carry to the clock of n. It does carry to another clock: the clock of the count of units.</p>
+  <p data-pid="6b0c0e">Exponent-clock technique: <b>if gcd(a, n) = 1 and c is the count of units of the clock of n, then a^c ≡ 1 (mod n), and a^k ≡ a^j (mod n) whenever k ≡ j (mod c).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the exponent-clock technique">
+[a]^c = [1] @@ order-divides (19d5) in the units (42b3), of size c
+k = j + ct,\ \ k, j \ge 0 @@ ﹀ ≡ on the clock of c, taking k the larger
+[a]^k = [a]^j([a]^c)^t = [a]^j @@ powers add their counts and power-of-a-power (4g), carried to the clock
+7^{222} \text{ on the clock of } 10:\ \ c = 4,\ \ 222 = 4 \cdot 55 + 2 @@ the unit-count technique: 10 · ½ · ⅘ = 4
+\htmlClass{new}{7^{222} \equiv 7^2 = 49 \equiv 9 \pmod{10}} \quad \blacksquare @@ the last digit of 7²²² is 9
   </pre>
-  <p data-pid="35ac61">One check: (2x + 4)(3x + 6) = 6x² + 24x + 24, with content 2 · 3 = 6. The use: a whole-number polynomial that splits over ℚ splits over ℤ into factors of the same degrees. Clear the bottoms of each fraction factor, take out contents, and the content-multiplies technique says the leftover number divides out.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · content · ← → keys work</div></section>
+  <p data-pid="33ff8b">So the power is cut twice: the base on the clock of n, the exponent on the clock of c. 42·cb7 runs this down a tower of exponents, clock inside clock, and reads the last digits of a number too big to write.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · cutting exponents · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42d3.1</span><span class="ph understand">understand</span>What are the content of a polynomial and a bare polynomial? <br>What does the content-multiplies technique say, and on which ring does its proof find the totally false?</li>
+      <li><span class="qid">42d3.1</span><span class="ph understand">understand</span>What does the exponent-clock technique say? <br>Why may the exponent of 7²²² be cut on the clock of 4, though 42a5 forbade cutting it on the clock of 10?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42d4">
-  <h2 class="sthead"><span class="stno">42d4</span>A test that a polynomial cannot be split</h2>
-  <p data-pid="0d850f">Prime-wedge technique: <b>let f = aₙxⁿ + ⋯ + a₀ have whole coefficients and n ≥ 1. Let ℓ be a prime. Suppose ℓ divides a₀, …, aₙ₋₁, ℓ does not divide aₙ, and ℓ² does not divide a₀. Then f cannot be split over ℚ into two factors of smaller degree.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the prime-wedge technique">
-f = gh,\ \ g, h \in \mathbb Z[x],\ \ \deg g = k,\ \deg h = n - k,\ \ 0 < k < n @@ suppose it splits; over ℤ, by the content-multiplies technique
-f \bmod \ell = a_n x^n,\ \ a_n \not\equiv 0 @@ every lower coefficient is a multiple of ℓ
-(g \bmod \ell)(h \bmod \ell) = a_n x^n \Rightarrow g \bmod \ell = b\,x^k,\ h \bmod \ell = c\,x^{n-k} @@ one factoring in (ℤ/ℓ)[x] (one-factoring): the only unsplittable factor is x
-\ell \mid g_0 \text{ and } \ell \mid h_0 @@ the constant terms are 0 on the clock, since k &gt; 0 and n − k &gt; 0
-\ell^2 \mid g_0 h_0 = a_0 @@ the constant of a product
-\htmlClass{new}{\bot:\ f \text{ cannot be split}} \quad \blacksquare @@ ℓ² does not divide a₀
+  <h2 class="sthead"><span class="stno">42d4</span>Why one seventh repeats in sixes</h2>
+  <p data-pid="b29050">8·cb5 proved that a fraction’s decimal repeats, since there are only so many remainders. It did not say how long the block is. 1/7 = 0.142857 142857 …, a block of six; 1/41 = 0.02439 02439 …, a block of five.</p>
+  <p data-pid="7bfe72">Decimal-block technique: <b>if q shares nothing with 10, the decimal of 1/q repeats from the first place in a block whose length is the least k with 10ᵏ ≡ 1 (mod q), and that length divides the count of units of the clock of q.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the decimal-block technique">
+10^k \equiv 1 \pmod q \iff 10^k - 1 = qM @@ ﹀ ≡
+\iff \tfrac1q = \tfrac{M}{10^k - 1} = 0.\overline{M} \text{, } M \text{ written with } k \text{ digits} @@ 8·cb5’s repeating-decimal technique, run backwards
+\text{a block of length } k \text{ from the first place} \iff 10^k \equiv 1 @@ the same lines, read both ways
+\htmlClass{new}{\text{the least such } k \text{ is the order of } [10] \text{, which divides } |(\mathbb Z/q)^\times|} \quad \blacksquare @@ order-divides (19d5)
   </pre>
-  <p data-pid="991104">x³ − 2 with ℓ = 2: 2 divides 0, 0 and −2, not the top 1, and 4 does not divide −2. So x³ − 2 cannot be split over ℚ, and ∛2 is a zero of no polynomial over ℚ of degree 1 or 2. 42f needs that. The test only ever says no: x² + 1 passes no prime and still cannot be split over ℚ.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · the wedge · ← → keys work</div></section>
+  <p data-pid="817960">On the clock of 7 the order of [10] = [3] is 6, the most it could be. On the clock of 41, 10⁵ − 1 = 99 999 = 41 · 2439, so the block is 02439, of length 5, which divides 40. On the clock of 17 the order is 16, and 1/17 has a block of sixteen digits. A prime q for which the block is q − 1 long is one where [10] walks through every unit. Whether there are endlessly many such primes is open.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · decimal blocks · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42d4.1</span><span class="ph understand">understand</span>What does the prime-wedge technique say? <br>Why are both constant terms g₀ and h₀ multiples of ℓ, and how does that give ℓ² ∣ a₀?</li>
+      <li><span class="qid">42d4.1</span><span class="ph understand">understand</span>What does the decimal-block technique say? <br>Why is the block of 1/41 five digits long, and why must its length divide 40?</li>
     </ol>
   </section>
 </section>
@@ -121,15 +119,15 @@ f \bmod \ell = a_n x^n,\ \ a_n \not\equiv 0 @@ every lower coefficient is a mult
 <section class="class step" data-step="42d5">
   <h2 class="sthead"><span class="stno">42d5</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-x^2 + 1 \text{ cannot be split over } \mathbb Q \text{, so not over any field}\,? @@ over ℂ it is (x − i)(x + i); on ℤ/2 it is (x + 1)²
-x^4 + 1 \text{ fails the prime-wedge test, so it can be split over } \mathbb Q\,? @@ the test only says no; x⁴ + 1 cannot be split over ℚ
-2x + 2 \text{ is unsplittable in } \mathbb Z[x]\,? @@ 2x + 2 = 2(x + 1) and 2 is not undoable in ℤ[x]; in ℚ[x] it is unsplittable
-\text{an unsplittable member is prime in every cancelling ring}\,? @@ it needs one maker for each ideal; 42e finds 2 unsplittable and not prime
+a^{p-1} \equiv 1 \pmod p \text{ for every } a\,? @@ not when p ∣ a: 7⁶ ≡ 0 on the clock of 7
+2^{n-1} \equiv 1 \pmod n \Rightarrow n \text{ prime}\,? @@ 2³⁴⁰ ≡ 1 on the clock of 341 = 11 · 31: the little technique runs one way
+7^{222} \equiv 7^{222 - 10k} \pmod{10}\,? @@ the exponent goes on the clock of the count of units, 4, not of 10
+\text{the order of } [a] \text{ is the count of units}\,? @@ it divides the count: [2] has order 3 on the clock of 7, which has 6 units
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42d5.1</span><span class="ph understand">understand</span>Why is failing the prime-wedge test not a proof that a polynomial splits? <br>Why is 2x + 2 unsplittable in ℚ[x] and not in ℤ[x]?</li>
+      <li><span class="qid">42d5.1</span><span class="ph understand">understand</span>Why does 2³⁴⁰ ≡ 1 (mod 341) not make 341 prime? <br>Why may the exponent of 7²²² not be cut on the clock of 10?</li>
     </ol>
   </section>
 </section>
@@ -138,22 +136,22 @@ x^4 + 1 \text{ fails the prime-wedge test, so it can be split over } \mathbb Q\,
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">42d.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x^5 - 6x + 3,\ \ x^4 + 10x + 5,\ \ x^4 - 10x^2 + 1"></span></span>Build a proof, for each, that it cannot be split over ℚ, or show how it splits. <br>For the one the prime-wedge technique cannot reach, try every way it could split, using the content-multiplies technique to keep the coefficients whole.</div>
-  <div class="chq"><span class="chid">42d.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x^{p-1} + x^{p-2} + \cdots + x + 1"></span></span>The prime-wedge technique does not apply to this polynomial as it stands. Put x + 1 in place of x and expand by 4k’s binomial technique. <br>Which prime makes the test pass? For which p does the argument work, and what goes wrong when p is 4?</div>
-  <div class="chq"><span class="chid">42d.6.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">a cancelling ring in which every member has one factoring into unsplittables</span></span>The page proved principal ⇒ one factoring. Turn it round: must a ring with one factoring be principal? <br>Look at ℤ[x], which has one factoring by the content-multiplies technique and the one-factoring technique in ℚ[x]. Which ideal of ℤ[x] has no one maker?</div>
-  <div class="chq"><span class="chid">42d.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="q \text{ unsplittable} \Rightarrow q \text{ prime}"></span></span>Reroute the unsplittable-is-prime technique without quotients: in a principal ring, take the ideal made by q and w, (q, w) = (g), and follow 4j’s plus-only combination. <br>Which line plays the part of the largest-ideal technique?</div>
+  <div class="chq"><span class="chid">42d.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\binom{p}{k},\ \ 0 \lt k \lt p"></span></span>Build a second proof of the little technique that does not use rung 19. Prove that p divides these counts of choices (4k), so that (a + 1)ᵖ ≡ aᵖ + 1 (mod p). <br>Then prove aᵖ ≡ a for every counting number a by induction on a. Which of the two proofs says more?</div>
+  <div class="chq"><span class="chid">42d.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n = 2^k,\ \ a \text{ odd}"></span></span>The exponent-clock technique gives a^(2^(k−1)) ≡ 1 on the clock of 2ᵏ. Find the order of [3] and of [5] on the clocks of 8, 16 and 32. <br>Does any unit of the clock of 2ᵏ, with k ≥ 3, reach the count of units as its order? Prove what you find.</div>
+  <div class="chq"><span class="chid">42d.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="a^{n-1} \equiv 1 \pmod n \text{ for every } a \text{ with } \gcd(a, n) = 1"></span></span>The illegal moves showed that one base can be fooled. Turn the little technique round with every base: must n then be prime? <br>Test n = 561 = 3 · 11 · 17 by the two-clock technique, clock by clock, without computing a single big power. What makes it pass?</div>
+  <div class="chq"><span class="chid">42d.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">15g.4.6: 2^{2^5} + 1 = 4\,294\,967\,297, guessed prime</span></span>A great number theorist guessed, from five cases, that every 2^(2^k) + 1 is prime. Show that a prime p dividing 2^(32) + 1 has [2] of order 64 on its clock, and so p ≡ 1 (mod 64). <br>Use that to search for a factor, trying only primes of that shape. How many tries does it take? Was the guess evidence, and is the search a proof, a guess under the small case, or both?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r42c.html">← 42c · division with remainder for polynomials</a><a href="r42e.html">42e · where factoring fails →</a></nav>
+<nav class="nextrung"><a href="r42c.html">← 42c · several clocks at once</a><a href="r42e.html">42e · a clock hand that reaches every hour →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A principal ring is a principal ideal domain. Unsplittable members are irreducible elements; prime members are prime elements; partners are associates. A ring where every member has one factoring is a unique factorisation domain, and the one-factoring technique says every principal ideal domain is one; the chain that must stop is the ascending chain condition. The content-multiplies technique is Gauss’s lemma, and bare polynomials are primitive. The prime-wedge technique is Eisenstein’s criterion.</p>
+  <p>The little technique is Fermat’s little theorem. The count of units is Euler’s totient function, written φ(n), and the exponent-clock technique is Euler’s theorem, a^φ(n) ≡ 1 (mod n). The least k with aᵏ ≡ 1 is the multiplicative order of a modulo n. A composite n with 2ⁿ⁻¹ ≡ 1 (mod n) is a Fermat pseudoprime to base 2, and 341 is the least; 561 is the least Carmichael number (42j). Primes for which 10 has order q − 1 are full reptend primes, and that there are endlessly many is a case of Artin’s conjecture (1927). The numbers 2^(2^k) + 1 are the Fermat numbers.</p>
   <h3>Who said it first</h3>
-  <p>Carl Friedrich Gauss proved the lemma on contents in 1801. Theodor Schönemann published the test in 1846 and Gotthold Eisenstein in 1850; it carries Eisenstein’s name. The chain condition is from Emmy Noether’s paper on ideals of 1921, and rings with it are named for her.</p>
+  <p>Pierre de Fermat stated the little theorem in a letter to Frénicle de Bessy in 1640, without proof. Leonhard Euler proved it in 1736 by the binomial road of 42d.6.1, and defined φ and proved the exponent-clock technique in 1763. Fermat guessed that all Fermat numbers are prime; Euler found 641 · 6 700 417 = 2³² + 1 in 1732. Gauss connected the length of decimal blocks to orders in the Disquisitiones (1801).</p>
   <h3>A proof that is not allowed</h3>
-  <p>“x⁴ + 4 has no real zero, so it cannot be split over ℚ.” Not allowed: having no zero rules out straight factors only. x⁴ + 4 = (x² + 2x + 2)(x² − 2x + 2), two quadratics with whole coefficients and no real zeros.</p>
+  <p>“[a]^(p − 1) = [1] for every unit, so p − 1 is the order of every unit.” Not allowed: order-divides says the order divides p − 1. On the clock of 7, [2] has order 3 and [6] order 2. 42e asks which units have the largest order.</p>
 </section>
 
 </div>
@@ -168,25 +166,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'one maker',t:R`(q) \subseteq (g)`,n:`Every ideal.`},
-  {k:'ember',kl:'largest',t:R`R/(q) \text{ a field}`,n:`q unsplittable.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{q \mid wb \Rightarrow q \mid w \lor q \mid b}`,n:`Prime.`}
-],{title:'The slides · primes · ← → keys work'});
+  {k:'ember',kl:'units',t:R`|(\mathbb Z/p)^\times| = p - 1`,n:`A prime clock.`},
+  {k:'ember',kl:'order divides',t:R`[a]^{|G|} = [1]`,n:`19d5.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{a^{p-1} \equiv 1 \pmod p}`,n:`When p ∤ a.`}
+],{title:'The slides · the little technique · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'exists',t:R`(w_0) \subsetneq (w_1) \subsetneq \cdots`,n:`Cannot rise forever.`},
-  {k:'ember',kl:'one way',t:R`q_1 \mid q′_j`,n:`A prime divides a factor.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{x^4 - 4 = (x^2 - 2)(x^2 + 2)}`,n:`In ℚ[x].`}
-],{title:'The slides · factoring · ← → keys work'});
+  {k:'ember',kl:'prime power',t:R`p^k - p^{k-1}`,n:`Take away the multiples of p.`},
+  {k:'ember',kl:'put together',t:R`\prod_i |(\mathbb Z/p_i^{k_i})^\times|`,n:`42c3.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|(\mathbb Z/360)^\times| = 96}`,n:`Prime by prime.`}
+],{title:'The slides · counting units · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'bare',t:R`c(\bar p) = 1`,n:`Contents taken out.`},
-  {k:'ember',kl:'on a clock',t:R`(\mathbb Z/\ell)[x]`,n:`No zero products.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{c(pq) = c(p)c(q)}`,n:`Contents multiply.`}
-],{title:'The slides · content · ← → keys work'});
+  {k:'ember',kl:'base',t:R`\text{on the clock of } n`,n:`42a.`},
+  {k:'ember',kl:'exponent',t:R`\text{on the clock of } c`,n:`The count of units.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{7^{222} \equiv 9 \pmod{10}}`,n:`Last digit.`}
+],{title:'The slides · cutting exponents · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'on the clock',t:R`f \equiv a_n x^n`,n:`Everything but the top.`},
-  {k:'ember',kl:'both constants',t:R`\ell \mid g_0,\ \ell \mid h_0`,n:`So ℓ² ∣ a₀.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{x^3 - 2 \text{ cannot be split}}`,n:`With ℓ = 2.`}
-],{title:'The slides · the wedge · ← → keys work'});
+  {k:'ember',kl:'repeat',t:R`10^k \equiv 1 \pmod q`,n:`A block of k.`},
+  {k:'ember',kl:'least',t:R`\text{the order of } [10]`,n:`19d5.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\tfrac{1}{41} = 0.\overline{02439}}`,n:`Five divides 40.`}
+],{title:'The slides · decimal blocks · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

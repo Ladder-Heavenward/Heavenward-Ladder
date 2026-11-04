@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wiring a table by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r39o.html">← 39o remembering answers</a><a href="r39q.html">next: 39q counting steps by hand →</a></p>
+  <div class="tags"><span class="tag tech">39p · technique</span></div>
+  <h1>Wiring a table by hand</h1>
+  <p data-pid="4d6b5d">Someone hands over a job in words: water the beds when the soil is dry and it is not raining, or whenever the gardener presses the button. The job is a table of three inputs, and 39f proved that some circuit of not-and gates does it. This step finds a small one by hand, and goes the other way too. First write the table, row by row. Then write one both for each row that gives a one, and join them with either: that always works and is always too big. Then merge rows that differ in a single input, because the input that changes between them does not matter there, and a grid laid out so that neighbours differ by one input makes the merges visible at a glance. Then turn either-of-boths into not-ands of not-ands, which costs nothing but a few nots. And finally run a finished circuit back to its table, row by row, which is how any circuit is checked, and how two circuits are shown to do the same job.</p>
+  <p class="gesture" data-pid="9bb923">Write the table. One both per row with a one, joined by either, always works. Merge rows that differ in one input; a grid with neighbours one input apart shows the merges. Either of boths is a not-and of not-ands. Run a circuit back to its table, row by row, to check it.</p>
+</header>
+
+<section class="class step" data-step="39p1">
+  <h2 class="sthead"><span class="stno">39p1</span>One both for each row</h2>
+  <p data-pid="d53726">The job: d is 1 when the soil is dry, r when it rains, m when the button is pressed; water, f = 1, when m, or when d and not r. The table has 2³ = 8 rows (1e6), and f is 1 on the rows d r m = 001, 011, 100, 101, 111.</p>
+  <p data-pid="42cf22">One-row-each technique: <b>a table is the either of one both for each row where it gives 1, each both taking each input as it is when that row has a 1 there and its not when the row has a 0.</b> Each both is 1 on its own row and 0 on every other; the either is 1 exactly on the rows listed.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-row-each technique">
+001:\ \neg d\,\neg r\,m;\ \ 011:\ \neg d\,r\,m;\ \ 100:\ d\,\neg r\,\neg m @@ a both per row, product marks (39a1)
+101:\ d\,\neg r\,m;\ \ 111:\ d\,r\,m @@ the rest of the rows with a 1
+\htmlClass{new}{f = \neg d\neg r m \lor \neg d r m \lor d\neg r\neg m \lor d\neg r m \lor d r m} \quad \blacksquare @@ five boths of three, joined by either
+  </pre>
+  <p data-pid="b32d64">It is right and it is large: five boths of three inputs each and an either of five. The next footing shrinks it.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · row by row · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">39p1.1</span><span class="ph understand">understand</span>What does the one-row-each technique say? <br>Why is each both 1 on its own row and 0 on every other?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39p2">
+  <h2 class="sthead"><span class="stno">39p2</span>Neighbours merge</h2>
+  <p data-pid="e70442">Two boths that agree in every input but one merge: x ∧ Y ∨ ¬x ∧ Y = Y, since (x ∨ ¬x) ∧ Y = 1 ∧ Y by spreading (1f). Lay the rows in a grid with d and r across, in the order 00, 01, 11, 10, so that each step across changes one input, and m down. Then rows that merge sit side by side, the two ends of a row counting as side by side too.</p>
+  <p data-pid="ec34e9">Neighbour-merge technique: <b>two rows with a 1 that differ in exactly one input merge into one both without that input; a block of 2ᵏ rows that agree in all but k inputs merges into one both of the rest.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the neighbour-merge technique">
+\text{grid}: \ m = 0:\ 0\ 0\ 0\ 1;\ \ m = 1:\ 1\ 1\ 1\ 1 @@ columns dr = 00, 01, 11, 10
+\text{the whole row } m = 1:\ 4 \text{ rows, agreeing only in } m @@ a block of 2² rows
+\to m @@ d and r drop out
+\text{column } dr = 10:\ \text{rows } 100, 101 \to d\,\neg r @@ a block of 2, differing only in m
+\htmlClass{new}{f = m \lor d\,\neg r} \quad \blacksquare @@ every 1 is in a block; blocks may overlap at 101
+  </pre>
+  <p data-pid="07b727">Two small boths in place of five large ones. Blocks may share a row, since a 1 joined to a 1 by either is still 1 (39a2). Every block must cover only 1s, and the biggest blocks give the smallest result.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · merge · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39p2.1</span><span class="ph understand">understand</span>What does the neighbour-merge technique say, and which rewrite of 1f gives it? <br>Why are the columns of the grid in the order 00, 01, 11, 10?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39p3">
+  <h2 class="sthead"><span class="stno">39p3</span>Into not-ands</h2>
+  <p data-pid="97256c">39f2 found that the either of two boths is the not-and of their not-ands. A lone input in the either counts as a both of one, and the not-and of one input is its not.</p>
+  <p data-pid="4d8828">Two-level-nand technique: <b>an either of boths is the not-and of the not-ands of the boths, with a lone input entering the last gate as its not.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-level-nand technique">
+f = m \lor d\,\neg r @@ the merged table
+= \mathrm{nand}\big(\neg m,\ \mathrm{nand}(d, \neg r)\big) @@ either of two is the not-and of their nots (39f1); not of a both is its not-and
+\neg m = \mathrm{nand}(m, m),\ \ \neg r = \mathrm{nand}(r, r) @@ 39f1
+\htmlClass{new}{4 \text{ not-ands in all}} \quad \blacksquare @@ the two nots, the inner gate, the outer gate
+  </pre>
+  <p data-pid="c136d5">Four gates, sixteen switches. The split-on-one recipe of 39f2 would have spent up to sixteen gates. By hand, merging first and converting last, small tables come out small.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · nand-nand · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39p3.1</span><span class="ph understand">understand</span>What does the two-level-nand technique say? <br>Why does a lone input enter the last gate as its not?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39p4">
+  <h2 class="sthead"><span class="stno">39p4</span>Back to the table</h2>
+  <p data-pid="5f047d">A circuit with no loop gives each output as a table of its inputs. To read it, run each row through the gates from inputs to output, as 1e7 worked one row by hand.</p>
+  <p data-pid="584d86">Circuit-to-table technique: <b>a circuit with no loop is checked by running every row; two such circuits do the same job exactly when they give the same column.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the circuit-to-table technique">
+d r m = 100:\ \ \neg m = 1,\ \neg r = 1,\ \mathrm{nand}(1, 1) = 0,\ \mathrm{nand}(1, 0) = 1 @@ one row, gate by gate
+d r m = 110:\ \ \neg m = 1,\ \neg r = 0,\ \mathrm{nand}(1, 0) = 1,\ \mathrm{nand}(1, 1) = 0 @@ dry, but raining: no water
+\text{all } 8 \text{ rows}: 0, 1, 0, 1, 1, 1, 0, 1 @@ run by machine, rows 000 to 111
+\htmlClass{new}{\text{the column of the circuit is the column of } f} \quad \blacksquare @@ same column, same statement (1e14)
+  </pre>
+  <p data-pid="3534cb">A row check costs 2ⁿ runs, cheap for three inputs and impossible for sixty-four. For wide circuits, the rewrites of 1f prove sameness by lines instead of rows, and machines that search for a row where two circuits differ are how chips are checked before they are made.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · check · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39p4.1</span><span class="ph understand">understand</span>What does the circuit-to-table technique say? <br>Why does a row check fail for a circuit of sixty-four inputs, and what takes its place?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39p5">
+  <h2 class="sthead"><span class="stno">39p5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+d\,\neg r\,m \lor d\,r\,\neg m = d\,? @@ the two rows differ in two inputs; only rows differing in one merge
+\text{columns } 00, 01, 10, 11 \text{ show every merge}\,? @@ 01 and 10 sit side by side and differ in two inputs; use 00, 01, 11, 10
+\text{a block of } 3 \text{ rows merges}\,? @@ blocks have 2ᵏ rows; three rows are a block of 2 and one more
+\text{a circuit with a loop is checked row by row}\,? @@ a loop may keep a bit (39h): its output depends on its history
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39p5.1</span><span class="ph understand">understand</span>Why do two rows that differ in two inputs not merge? <br>Why can a circuit with a loop not be checked by its rows alone?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">39p.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a lamp on a stair, two switches; it changes whenever either switch is flipped</span></span>Build its table, merge what can be merged, and wire it in not-ands. Why does nothing merge? <br>Count the gates and compare with 39f.5.1.</div>
+  <div class="chq"><span class="chid">39p.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(x, y, z, w) \text{ is } 1 \text{ on } 0000, 0010, 1000, 1010"></span></span>Lay a grid for four inputs, 00, 01, 11, 10 across and down. Where do these four rows sit, and what single both covers them? <br>Why must the corners of the grid count as neighbours?</div>
+  <div class="chq"><span class="chid">39p.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f = m \lor d\neg r"></span></span>Merging gave this. Turn it round: is this the smallest either of boths for the table, counting inputs written? Prove that no either of fewer written inputs gives the column. <br>Is the smallest either of boths always the smallest circuit?</div>
+  <div class="chq"><span class="chid">39p.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="f = m \lor d\neg r"></span></span>Reroute the wiring through 39f2’s split on m: f = (m ∧ 1) ∨ (¬m ∧ d¬r). Wire that in not-ands and count. <br>Which route gives fewer gates here, and which would you trust for a table of six inputs?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r39o.html">← 39o · remembering answers</a><a href="r39q.html">39q · counting steps by hand →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>An either of one both per 1-row is the canonical sum of products (disjunctive normal form, a sum of minterms). The grid is a Karnaugh map, its blocks are implicants, and the largest blocks are prime implicants; the method that finds them in a table rather than a picture is Quine–McCluskey. The two-level not-and form is NAND–NAND logic. Checking that two circuits agree is equivalence checking, done on chips by satisfiability solvers.</p>
+  <h3>Who said it first</h3>
+  <p>Edward Veitch drew the grid in 1952 and Maurice Karnaugh gave it its order of neighbours in 1953. Willard Van Orman Quine (1952) and Edward McCluskey (1956) gave the method by tables. Finding the smallest either of boths for a table is, in general, as hard as the problems 39 asks about.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“m ∨ d¬r gives 1 on the row 100 and on the row 111, which are the rows I checked, so it is the table.” Not allowed: two rows are two rows. The table has eight, and the sameness of two columns (1e14) needs all eight, or lines of 1f’s rewrites that cover them all.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'rows',t:R`001, 011, 100, 101, 111`,n:`Where f is 1.`},
+  {k:'ember',kl:'a both each',t:R`\neg d\neg r m, \ldots`,n:`Nots on the 0s.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{five boths, one either}}`,n:`Right, and large.`}
+],{title:'The slides · row by row · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'neighbours',t:R`x Y \lor \neg x Y = Y`,n:`One input drops.`},
+  {k:'ember',kl:'blocks',t:R`2^k \text{ rows}`,n:`k inputs drop.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{f = m \lor d\neg r}`,n:`Two small boths.`}
+],{title:'The slides · merge · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'either of boths',t:R`m \lor d\neg r`,n:`Merged.`},
+  {k:'ember',kl:'convert',t:R`\mathrm{nand}(\neg m, \mathrm{nand}(d, \neg r))`,n:`Nots cancel.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{4 \text{ gates}}`,n:`Sixteen switches.`}
+],{title:'The slides · nand-nand · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'one row',t:R`100 \to 1`,n:`Gate by gate.`},
+  {k:'ember',kl:'every row',t:R`2^n \text{ runs}`,n:`The column.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{same column, same job}}`,n:`1e14.`}
+],{title:'The slides · check · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

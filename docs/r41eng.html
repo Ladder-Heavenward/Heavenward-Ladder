@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What holds cloth and rope together?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r41phys.html">← 41·phys how do tiny magnets agree?</a><a href="r41logi.html">next: 41·logi what is the cheapest way to ship? →</a></p>
+  <div class="tags"><span class="tag eng">41·eng · engineering</span></div>
+  <h1>What holds cloth and rope together?</h1>
+  <p data-pid="7b4920">What holds cloth and rope together? A shirt is threads that each could be pulled out on its own, and a rope is fibres no longer than a hand. Nothing is glued. What holds is the way the threads cross, and the friction where they press on each other. That makes cloth and rope a question about how things connect, the question of this rung, with friction as the price of each connection. This page treats a knot drawing as a flat graph and counts its faces. It writes a weave as a grid of 1s and 0s, over and under, and gives a test, by walking a one-way graph, for whether the cloth hangs together or falls apart in layers. It works out why a woven shirt stretches a few percent and a knitted one twice as far. It writes machine lace and a three-strand plait as braids, whose crossings compose as rung 19’s shuffles do. It finds why rope is laid with twists in opposite ways, and how a sailor with one hand on a few turns round a post holds a ship: the grip grows as an exponential of the angle. And it ends on a craft that no machine has ever done.</p>
+  <p class="gesture" data-pid="8b7f7c">A knot drawing is a flat graph with four links at each crossing, so it has two more faces than crossings. A weave is a grid of over and under; it hangs together exactly when its one-way graph of threads, over to under, can be walked from any thread to any other. Woven yarn stretches by its crimp, knitted loops by their shape. Braids compose like shuffles. A turn round a post multiplies the grip by e to the friction times the angle.</p>
+</header>
+
+<section class="class step" data-step="41·eng.1">
+  <h2 class="sthead"><span class="stno">41·eng.1</span>A knot drawing is a flat graph</h2>
+  <p data-pid="290ca5">34m drew a knot as a closed loop with crossings, and proved, by the three-colour technique, that the trefoil is not an untied loop. Read the drawing as a flat graph: each crossing is a dot, and each stretch of the loop from one crossing to the next is a link. Every dot then has exactly four links.</p>
+  <p data-pid="1bb55e">Crossing-faces technique: <b>a knot drawing in one piece with c ≥ 1 crossings has c + 2 faces.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the crossing-faces technique">
+\textstyle\sum d = 4c = 2E @@ four links at each crossing; the ends-count technique
+E = 2c @@ 
+c - 2c + F = 2 @@ the flat-count technique (41d1)
+\htmlClass{new}{F = c + 2} \quad \blacksquare @@ the trefoil, c = 3, has 5 faces
+  </pre>
+  <p data-pid="db501d">So the faces of a knot drawing can be coloured black and white like a chessboard, a fact 41·eng.7.2 asks for, and the black faces with the crossings make a flat graph of their own. Knot tables are built that way. To a rigger the count is a check: a knot drawn with 4 crossings that shows 5 faces has been drawn wrong.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · knot drawings · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">41·eng.1.1</span><span class="ph understand">understand</span>How is a knot drawing a flat graph? <br>What does the crossing-faces technique say, and why does it need four links at each crossing?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41·eng.2">
+  <h2 class="sthead"><span class="stno">41·eng.2</span>Over and under</h2>
+  <p data-pid="a8f61f">A weave has warp threads running one way and weft threads across them. At each crossing one is on top. Write the weave as a grid: entry (i, j) is 1 when warp i is over weft j, and 0 when it is under, the 1 and 0 of 39a. Plain weave is 1 0 / 0 1 repeated; a twill shifts a run of 1s one place each row.</p>
+  <p data-pid="ed8422">Make a one-way graph on the threads: an arrow from u to w when u lies over w where they cross. The cloth <i>falls apart</i> when its threads split into two sets, each nonempty, with every thread of one set over every thread of the other where they cross: then the top set lifts off as a layer.</p>
+  <p data-pid="07ce14">Hangs-together technique: <b>a weave hangs together exactly when, in its one-way graph, every thread can be reached from every other along arrows.</b> If the threads split into two layers, no arrow goes from the bottom layer up, so the top cannot be reached from below. If some thread w cannot be reached from u, the threads reachable from u form a top layer: no arrow leaves it, so every one of its threads lies over every thread outside it that it crosses.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two weaves tested">
+\begin{smallmatrix}1&1&0&0\\0&1&1&0\\0&0&1&1\\1&0&0&1\end{smallmatrix}:\ \text{a twill} @@ warp rows, weft columns
+\text{from warp 1: wefts 1, 2; from weft 1 to warps 2, 3; on round} @@ walk the arrows (41m)
+\text{every thread reached, and every thread reaches warp 1} @@ two walks, forward and back
+\htmlClass{new}{\text{hangs together; a grid with a row of all 1s falls apart: that warp lies on top of all}} \quad \blacksquare @@ no arrow into it
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · weaves · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·eng.2.1</span><span class="ph understand">understand</span>How is a weave written as a grid of 1s and 0s, and what is its one-way graph? <br>What does the hangs-together technique say, and why does a row of all 1s make the cloth fall apart?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41·eng.3">
+  <h2 class="sthead"><span class="stno">41·eng.3</span>Why knit stretches</h2>
+  <p data-pid="77013e">A woven thread goes over and under, so it is longer than the cloth it crosses; the extra share is its <i>crimp</i>. Pulled, the cloth can stretch along a thread only until the thread is straight.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the crimp of a plain weave">
+\text{threads } p = 0.5 \text{ mm apart; the crossing thread lifts it by } d = 0.2 \text{ mm} @@ a cotton shirting, roughly
+\text{one step: a slope of rise } d \text{ over run } p @@ the thread, as straight pieces
+\text{length } \sqrt{p^2 + d^2} = p\sqrt{1 + (d/p)^2} @@ the distance of 18a (8f’s square root)
+\htmlClass{new}{\text{crimp } \sqrt{1.16} - 1 \approx 7.7\%} \quad \blacksquare @@ the most the cloth stretches along it before the yarn itself must
+  </pre>
+  <p data-pid="f7d692">Crimp technique: <b>a woven cloth stretches along a thread by at most its crimp, √(1 + (d/p)²) − 1, before the yarn itself is pulled.</b> A knitted cloth is a lattice of loops, each pulled through the loop below it. Its yarn is all in loops, and a loop pulled sideways changes shape, tall and thin to short and wide, long before any yarn is straight: a loop of yarn length ℓ can go from about ℓ/4 wide to nearly ℓ/2. So knit stretches by up to about 100% with no pull on the yarn, and springs back as the yarn’s bending pulls the loops round again. That is why a sweater fits many people and a shirt fits one.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · stretch · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·eng.3.1</span><span class="ph understand">understand</span>What is crimp, and what does the crimp technique say? <br>Why can knitted cloth stretch much further than woven cloth without pulling on its yarn?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41·eng.4">
+  <h2 class="sthead"><span class="stno">41·eng.4</span>Braids and lace</h2>
+  <p data-pid="22e06d">A <i>braid</i> of n strands runs from n points in a row to n points in a row, each strand moving forward. Write σᵢ for strand i crossing over strand i + 1, and σᵢ⁻¹ for crossing under. One braid after another is a braid, and σᵢσᵢ⁻¹ can be pulled straight: the braids form a group, as rung 19’s moves did.</p>
+  <p data-pid="f1d398">Strand-shuffle technique: <b>reading which starting point each strand ends at gives a shuffle of {1, …, n}, and a braid after a braid gives the shuffle after the shuffle.</b> σᵢ gives the swap of i and i + 1 whether over or under; the ends follow the strands through both braids in turn.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a three-strand plait">
+\text{plait: right over middle, left over middle: } \sigma_2^{-1}\sigma_1 @@ the hair braid’s two crossings
+\text{shuffle: the swap of 2, 3, then of 1, 2: a ring of three} @@ the strand-shuffle technique
+\text{a ring of three, done 3 times, is doing nothing} @@ order 3 (19b)
+\htmlClass{new}{\text{after 6 crossings each strand is back in its place, and the braid is not undone}} \quad \blacksquare @@ the braid is not the shuffle
+  </pre>
+  <p data-pid="d813c7">So a shuffle counts where strands end, and forgets the over and under that hold the plait together. Machine lace of the bobbin kind is made of pairs of threads, each move a cross, σ, or a twist of a pair, and the pattern card is the list of moves; a braiding machine carries bobbins round two tracks that weave in and out, a list of σ’s set in steel.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · braids · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·eng.4.1</span><span class="ph understand">understand</span>What does the strand-shuffle technique say? <br>Why does a plait come back to its starting order after 6 crossings without coming undone?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41·eng.5">
+  <h2 class="sthead"><span class="stno">41·eng.5</span>Rope, and a turn round a post</h2>
+  <p data-pid="dc43d8">Fibres are twisted into yarn one way, yarns into strands the other way, and strands into rope the first way again. Each twist, pulled, tries to untwist; laying each level against the one inside it makes the turning pulls cancel, so a laid rope under load does not spin open. The friction where fibres press, which the twist creates, is what holds fibres a hand long in a rope a hundred metres long.</p>
+  <p data-pid="e4097f">Wrap a rope round a fixed post. On a short arc dθ the rope presses on the post with force T dθ, and friction can hold a difference of up to μ T dθ between its two ends, μ the friction between rope and post. So dT/dθ = μT.</p>
+  <p data-pid="ec38e7">Turn-grip technique: <b>a rope wrapped through an angle θ round a post holds a load up to T₀e^(μθ) against a pull T₀ at the other end.</b> T′ = μT with T(0) = T₀ has the one answer T₀e^(μθ), by 17f’s slope-equals-size technique.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a hand on a bollard">
+\mu \approx 0.3,\ \ \text{three turns: } \theta = 6\pi \approx 18.85 @@ a fibre rope on a steel bollard at a ferry dock
+e^{0.3 \cdot 18.85} = e^{5.65} \approx 286 @@ the turn-grip technique
+\text{a hand holding } 100 \text{ N} @@ about 10 kg of pull
+\htmlClass{new}{\text{holds about } 28\,600 \text{ N, near three tonnes}} \quad \blacksquare @@ one turn more multiplies by e^(0.6π) ≈ 6.6
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · grip · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·eng.5.1</span><span class="ph understand">understand</span>What does the turn-grip technique say, and which technique of rung 17 solves its rule? <br>Why does each extra turn multiply the grip, rather than add to it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41·eng.6">
+  <h2 class="sthead"><span class="stno">41·eng.6</span>A craft with no machine</h2>
+  <p data-pid="6db510">A knitting machine holds a whole row of live loops on a row of needles, and each new loop goes through the loop on its needle. So the loops of machine knit form a grid: each loop is linked to the one below and the ones beside, the same at every place, and the needles can all move at once. Read the fabric as a graph of loops, linked when one passes through the other, and machine knit is a grid graph.</p>
+  <p data-pid="3b9eaf">Crochet keeps one live loop, on a hook, and each new stitch can be pulled through any earlier stitch the worker chooses: the one below, two along, or one at the far side of a round. Its graph of loops can be any flat graph a hand can reach, built one stitch at a time, and it curls into three dimensions as it goes. A machine with fixed needles makes only grids. Machines sold as crochet machines make warp knit that looks like crochet; true crochet is still all made by hand. That is an engineering fact about what fixed tools can reach, not a technique: no proof says a machine could not be built.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · crochet · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·eng.6.1</span><span class="ph understand">understand</span>Why does the graph of loops of machine knit form a grid? <br>What does crochet do that a row of fixed needles cannot?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41·eng.7">
+  <h2 class="sthead"><span class="stno">41·eng.7</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{the strands are back in their places, so the plait has come undone}\,? @@ the shuffle forgets over and under; the braid is not the do-nothing braid
+\text{every thread crosses some other, so the cloth hangs together}\,? @@ a warp over every weft crosses all of them and lifts off
+\text{two turns hold twice what one turn holds}\,? @@ the grip multiplies by e^(2πμ) each turn: about 6.6 times
+\text{a cloth stretches as far as its yarn does}\,? @@ it stretches by its crimp, or its loops’ change of shape, before the yarn is pulled
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·eng.7.1</span><span class="ph understand">understand</span>Why does a plait whose strands are back in place not come undone? <br>Why do two turns round a post hold far more than twice what one turn holds?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">41·eng.8.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{the reef knot and the granny knot, as closed loops}"></span></span>Close each knot into a loop and count its three-colourings by 34m’s technique. Do they tell the two apart? <br>The reef knot holds and the granny slips: is that a fact about the knot, or about friction and the way it is loaded?</div>
+  <div class="chq"><span class="chid">41·eng.8.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="F = c + 2"></span></span>Prove that the faces of a knot drawing can be coloured black and white so that faces sharing a link differ. <br>Use the two-sides idea of 41a: what graph on the faces must be two-sided, and why are its cycles even?</div>
+  <div class="chq"><span class="chid">41·eng.8.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{a satin: a 1 every fifth place, moved on 2 each row}"></span></span>Write the 5 × 5 grid of a satin weave and test it by the hangs-together technique. <br>Turn the technique round: given that a grid hangs together, must every row and every column hold both a 1 and a 0? Must a grid with both in every row and column hang together? Find a grid that settles it.</div>
+  <div class="chq"><span class="chid">41·eng.8.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">34m: the twist, the poke and the slide</span></span>Rung 34 proved that three moves never change the count of colourings. A braid can be closed into a knot by joining each end to its start. <br>Close the plait σ₂⁻¹σ₁ done three times: which knot is it? Does the closed braid’s colouring count follow from the strand-shuffle technique, or does it need the over and under the shuffle forgot?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r41phys.html">← 41·phys · how do tiny magnets agree?</a><a href="r41logi.html">41·logi · what is the cheapest way to ship? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A knot drawing is a knot diagram, and as a flat graph a 4-regular plane graph; the black faces give its Tait graph, and the colouring of 41·eng.8.2 is the checkerboard colouring. The hangs-together technique is a test of strong connectivity of the over-under graph (the question was set as "when a fabric hangs together" by C. R. J. Clapham, 1980). Crimp is crimp. The braid group and its generators σᵢ are Emil Artin's (1925), and the strand-shuffle technique is the map from braids to permutations. The turn-grip technique is the capstan equation (Euler–Eytelwein formula). Laid rope's opposite twists are Z and S lay.</p>
+  <h3>Who said it first</h3>
+  <p>Peter Guthrie Tait drew knot tables from about 1876, as faces and crossings. Leonhard Euler studied rope round a post in 1762, and Johann Albert Eytelwein gave the formula its engineering form in 1808. Joseph Marie Jacquard's loom of 1804 read the grid of 1s and 0s from punched cards, and those cards fed the first designs for computing machines. John Heathcoat patented a bobbin net machine in 1809 and John Levers his lace machine in 1813. William Lee built the knitting frame in 1589. Branko Grünbaum and Geoffrey Shephard classified the weaves that hang together in a fixed pattern in the 1980s.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Each turn round the post adds friction μT₀ times 2π, so n turns hold T₀(1 + 2πμn).” Not allowed: the friction on each arc is μ times the tension there, and the tension grows along the rope. Adding a fixed amount per turn treats the tension as fixed. The rule is T′ = μT, whose answer multiplies.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'crossings',t:R`d = 4`,n:`Four links each.`},
+  {k:'ember',kl:'count',t:R`c - 2c + F = 2`,n:`Flat-count.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{F = c + 2}`,n:`Faces.`}
+],{title:'The slides · knot drawings · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'grid',t:R`(i, j) = 1 \text{ if warp over}`,n:`39a.`},
+  {k:'ember',kl:'graph',t:R`u \to w \text{ if } u \text{ over } w`,n:`One-way.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{reach both ways} \iff \text{hangs}}`,n:`A walk tests it.`}
+],{title:'The slides · weaves · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'crimp',t:R`\sqrt{1 + (d/p)^2} - 1`,n:`About 8%.`},
+  {k:'ember',kl:'loops',t:R`\ell/4 \to \ell/2`,n:`Shape changes.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{knit} \approx 100\%}`,n:`Woven a few percent.`}
+],{title:'The slides · stretch · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'cross',t:R`\sigma_i,\ \sigma_i^{-1}`,n:`Over or under.`},
+  {k:'ember',kl:'shuffle',t:R`\text{ends}`,n:`Forgets over and under.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{plait: order 3}}`,n:`Back in place, still braided.`}
+],{title:'The slides · braids · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'rule',t:R`dT/d\theta = \mu T`,n:`Friction on each arc.`},
+  {k:'ember',kl:'solve',t:R`T_0 e^{\mu\theta}`,n:`17f.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\times 286 \text{ for three turns}}`,n:`A hand holds a ship.`}
+],{title:'The slides · grip · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'knit',t:R`\text{a grid of loops}`,n:`All needles at once.`},
+  {k:'ember',kl:'crochet',t:R`\text{any earlier stitch}`,n:`One live loop.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{no machine yet}}`,n:`A hand reaches anywhere.`}
+],{title:'The slides · crochet · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

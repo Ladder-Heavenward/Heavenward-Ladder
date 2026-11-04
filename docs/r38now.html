@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>How little energy can a switch spend?</title>
+<title>Can a machine check a proof?</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,109 +25,123 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r38bio.html">← 38·bio is a neuron a gate?</a><a href="r38concl.html">next: 38·∎ a machine made of switches →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38phys.html">← 38·phys why can't two electrons share a place?</a><a href="r38now2.html">next: 38·now2 what if a machine writes the proof? →</a></p>
   <div class="tags"><span class="tag now">38·now · research front</span></div>
-  <h1>How little energy can a switch spend?</h1>
-  <p data-pid="c55cef">How little energy can a switch spend? 38·eng found that each flip of a switch turns C V² into warmth, half in filling its store and half in emptying it, and that this heat is what stopped the clock. But the half lost in filling came from filling fast: the supply jumped to its full voltage at once, and the whole push fell across the switch. Raise the supply slowly instead, a ramp in place of a step, and the store follows close behind, the push across the switch stays small, and the heat falls as the ramp gets longer. Then the charge can go back into the supply the same way, if the switches that filled the store are still set as they were, which asks for gates that forget nothing. Slowness has its own price, because every switch leaks while it waits, so there is a best speed. And a bit must be held against the jiggle of warmth, which asks for a barrier some tens of kT high. Whether there is a floor that no switch can go below, and what it is, is 39·comp’s question.</p>
-  <p class="gesture" data-pid="80a706">Ramp the supply over T in place of a step, and the heat of filling falls to (RC/T) C V². The charge can return to the supply only while the switches that filled it are still set, so the gates must forget nothing. Leak grows with the wait, so the ramp has a best length. A held bit needs a barrier of about 47 kT for ten years.</p>
+  <h1>Can a machine check a proof?</h1>
+  <p data-pid="1d8024">Can a machine check a proof? A greengrocer stacks oranges in a pyramid, each layer sitting in the hollows of the one below, and nobody can do better: no way of packing equal balls fills more of space. That was guessed in 1611 and proved in 1998, by a proof so long and so dependent on computer runs that the referees, after four years, said they were 99% sure of it and could not be surer. The author then spent eleven more years, with a team, writing the proof again in a form a small program could check line by line, and the check finished in 2014. In 2020 another mathematician wrote that he was not sure his own proof of a result he cared about was right, and asked for it to be checked the same way; it was, by 2022. What makes the question hard is not the checking. Step 38b showed that whether a list of lines is a proof is settled by a recipe that always stops. The hard parts are getting a real proof into lines at all, knowing that the statement checked says what was meant, and trusting the checker. This page computes the density of the grocer’s stack, shows how a checker is built so that very little of it needs trust, and says where the trust that is left rests, which is where rung 38 left it.</p>
+  <p class="gesture" data-pid="6aa26a">A proof written in a calculus is a finite object, and checking it is a recipe. A checker trusts only a small core that applies the moves; everything else that helps write a proof hands the core lines to check, so a mistake outside the core can fail to find a proof and cannot make a false one pass. What is left to trust is the core, the statement as written, and the calculus itself, and the last of these cannot certify itself.</p>
 </header>
 
-<section class="class step" data-step="38now1">
-  <h2 class="sthead"><span class="stno">38now1</span>A ramp in place of a step</h2>
-  <p data-pid="87528c">38·eng.1 filled a store C through a switch of resistance R from a supply that jumped to V, and lost ½ C V² in the switch. Let the supply rise instead in a straight ramp from 0 to V over a time T. The store’s voltage obeys RC v′ = u − v: it is pulled toward the supply u with time RC, the target technique of 24·then2, with a target that moves.</p>
-  <p data-pid="d7b9ce">Slow-ramp technique: <b>filling a store C through R by a supply that ramps from 0 to V over T, with T much longer than RC, warms the switch by about (RC/T) C V², which heads to 0 as T grows.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the slow-ramp technique">
-v = u - RC\,\tfrac{V}{T} \text{ once the start has died away} @@ the lag technique (24·then1): a steady ramp is followed RC behind
-I = C v' = \tfrac{CV}{T} @@ the store fills at the ramp’s pace
-\text{heat} = I^2 R\,T = \tfrac{C^2 V^2 R}{T} = \tfrac{RC}{T}\,C V^2 @@ power I²R for a time T (7·phys)
-RC = 10\text{ ps},\ T = 1\text{ ns}:\ \ 0.01\,C V^2 \text{ (exactly } 0.0099\text{)} @@ the exact heat (RC/T)CV²(1 − (RC/T)(1 − e^(−T/RC))), checked by machine
-\htmlClass{new}{50\times \text{ less than the step’s } \tfrac12 C V^2} \quad \blacksquare @@ at 100 times the time
+<section class="class step" data-step="37now1">
+  <h2 class="sthead"><span class="stno">37now1</span>Checking is a recipe</h2>
+  <p data-pid="300af7">38b’s proof-check technique says that whether a finite list of lines is a proof from a finite collection G is settled by a recipe that always stops: look at each line, and see that it is in G or follows from earlier lines by one of the moves. 38n did it by hand. A machine does it the same way, faster and without getting bored.</p>
+  <p data-pid="f412e0">The trouble is that proofs as mathematicians write them are not lists of lines. They skip steps, say “similarly”, and lean on ten thousand earlier results. 38b’s derived-move technique is the way in: a step that is a known pattern of moves can be used as one move, once the pattern is checked. A library of checked results is a stock of derived moves.</p>
+  <p data-pid="cf76c5">Small-kernel technique: <b>a checker can be split into a small core that applies the moves of the calculus and nothing else, and any number of helpers that search for proofs; if every helper hands the core a list of lines to check, a mistake in a helper can fail to find a proof but cannot make a false statement pass.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the small-kernel technique">
+\text{a helper outputs lines } \ell_1, \dots, \ell_n \text{ for the statement } \varphi @@ whatever the helper did to find them
+\text{the core checks each } \ell_j \text{ is in } G \text{ or follows by one move} @@ the proof-check technique (38b)
+\text{if the core accepts, } G \vdash \varphi @@ the lines are a proof, whoever wrote them
+\htmlClass{new}{\text{only the core and } G \text{ need trust}} \quad \blacksquare @@ a wrong helper gives lines the core rejects
   </pre>
-  <p data-pid="16d917">Heat and speed trade one for one: halve the heat by doubling the time. A step has no time, and the lag technique’s small case breaks down: the store is not following, and the full push falls across the switch.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · slow ramp · ← → keys work</div></section>
+  <p data-pid="8ea8d8">The cores of the checkers in wide use run to a few thousand lines of program. The helpers, which do the clever work, run to hundreds of thousands, and nobody needs to read them.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · kernel · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">38·now.1.1</span><span class="ph understand">understand</span>What does the slow-ramp technique say? <br>Why does a step lose ½ C V² however small R is, while a ramp loses less the longer it takes?</li>
+      <li><span class="qid">38·now.1.1</span><span class="ph understand">understand</span>What does the small-kernel technique say? <br>Why can a mistake in a helper not make a false statement pass?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="38now2">
-  <h2 class="sthead"><span class="stno">38now2</span>Giving the charge back</h2>
-  <p data-pid="369a98">The ½ C V² a filled store keeps is not yet heat. 38·eng.1 dumped it to the ground through the lower switch. A ramp of the supply back down, slowly, would pull it back into the supply instead, with heat (RC/T) C V² again. But the charge flows back only along the path it came: the upper switch must still be on while the supply ramps down.</p>
-  <p data-pid="918245">Undo-gate technique: <b>a store filled by a slow ramp through a gate can be emptied back into the supply by a slow ramp only while the gate’s inputs are still as they were; so a circuit that gives its charge back must keep each gate’s inputs until its output is emptied, which a gate that forgets nothing (22·comp5) allows and a not-and alone does not.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the undo-gate technique">
-\text{output filled through the path that its inputs set} @@ the pair inverter (38e): the upper switches are on exactly when the output is 1
-\text{inputs change first} \Rightarrow \text{that path may shut} @@ then the store can empty only to the ground: ½ C V² of heat
-\text{inputs kept} \Rightarrow \text{ramp the supply down along the same path} @@ the slow-ramp technique run backwards
-\text{a not-and's output does not fix its inputs} @@ three rows give 1 (22·comp5): the inputs cannot be found from the output to rebuild the path
-\htmlClass{new}{\text{empty in the reverse order of filling, inputs kept}} \quad \blacksquare @@ a gate whose rows run backwards
+<section class="class step" data-step="37now2">
+  <h2 class="sthead"><span class="stno">37now2</span>The grocer’s stack</h2>
+  <p data-pid="b10359">Stack balls of radius r in layers, each ball in a hollow of the layer below. The stack repeats in cubes: a ball at each corner of a cube and one at the centre of each face, the face-centred stacking of 32·chem. Balls touch along a face’s diagonal.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the density of the stack">
+\text{face diagonal } = s\sqrt2 = 4r @@ a corner ball, the face’s centre ball, the opposite corner ball, touching in a row
+\text{balls per cube: } 8 \cdot \tfrac18 + 6 \cdot \tfrac12 = 4 @@ each corner ball is shared by 8 cubes, each face ball by 2
+\text{density} = \frac{4 \cdot \tfrac43 \pi r^3}{s^3} = \frac{\tfrac{16}{3}\pi r^3}{(2\sqrt2\, r)^3} = \frac{16\pi}{3 \cdot 16\sqrt2} @@ s = 4r/√2 = 2√2 r
+\htmlClass{new}{\text{density} = \tfrac{\pi}{3\sqrt2} = \tfrac{\pi}{\sqrt{18}} \approx 0.7405} \quad \blacksquare @@ π ≈ 3.14159, √18 ≈ 4.24264
   </pre>
-  <p data-pid="ac41d3">So a circuit that recycles its charge runs in waves: each stage is filled while its inputs are held, then held while the next stage fills, then emptied in reverse order. Chips built this way have run, in laboratories since the 1990s, at a small share of the heat of the same circuit filled by steps, and many times slower.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · giving back · ← → keys work</div></section>
+  <p data-pid="aafef3">So the grocer’s stack fills just over 74% of space. The claim that no packing of equal balls does better, even one with no pattern at all, was proved in 1998. The proof reduced the question to some thousands of local arrangements and settled each with a computer: tens of thousands of inequalities, each checked by a program working with intervals of numbers so that rounding could not mislead it. No referee could check the runs. The formal check, finished in 2014, put both the reasoning and the computer runs through a small core.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · packing · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38·now.2.1</span><span class="ph understand">understand</span>What does the undo-gate technique say? <br>Why can a not-and’s output store not be emptied back into the supply once its inputs have changed?</li>
+      <li><span class="qid">38·now.2.1</span><span class="ph understand">understand</span>How is the density π/√18 found from the cube of the stack? <br>Why could the referees of the 1998 proof not be more than 99% sure of it?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="38now3">
-  <h2 class="sthead"><span class="stno">38now3</span>A best length of ramp</h2>
-  <p data-pid="0128df">A slow ramp spends less in the switch, but every switch of the chip leaks a small power P_ℓ all the time (38·eng.3’s leak floor), and a slower ramp means a longer wait. The two pull opposite ways.</p>
-  <p data-pid="d1b4b2">Best-ramp technique: <b>with ramp heat (RC/T) C V² and leak P_ℓ T, the energy of one filling is least at T* = √(RC · C V² / P_ℓ), where it is 2√(RC · C V² · P_ℓ).</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the best-ramp technique">
-E(T) = \tfrac{RC\cdot CV^2}{T} + P_\ell\,T @@ the two costs
-E'(T) = -\tfrac{RC\cdot CV^2}{T^2} + P_\ell = 0 \iff T^* = \sqrt{RC\cdot CV^2/P_\ell} @@ slope 0 at the least (13)
-E(T^*) = 2\sqrt{RC\cdot CV^2\cdot P_\ell} @@ the two costs are equal there
-RC = 10\text{ ps},\ CV^2 = 4.9\cdot10^{-17}\text{ J},\ P_\ell = 0.7\text{ nW}:\ \ T^* \approx 0.84\text{ ns} @@ a leak of 1 nA at 0.7 V
-\htmlClass{new}{E \approx 1.2\cdot10^{-18}\text{ J}, \text{ about } 42\times \text{ less than } CV^2} \quad \blacksquare @@ checked by machine
+<section class="class step" data-step="37now3">
+  <h2 class="sthead"><span class="stno">37now3</span>The statement as written</h2>
+  <p data-pid="8dbf98">A checker checks that the formal statement φ is reached from G. Whether φ says what the mathematician meant is not something the checker can see. Every definition that φ uses must be written out too, and a mistake in a definition can make a statement easy to prove and worthless.</p>
+  <p data-pid="4ae66d">Statement-read technique: <b>a checked proof certifies the formal statement and nothing else, so the statement and every definition it uses must be read by a person and matched with what was meant; the proof itself need not be read.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: a definition gone wrong">
+\text{meant: } p \text{ is prime when its only factors are } 1 \text{ and } p @@ as 4j defines it
+\text{written: } \forall d\,(d \mid p \Rightarrow d = 1 \lor d = p) @@ forgetting p ≥ 2
+d \mid 1 \Rightarrow d = 1:\ \ 1 \text{ is “prime”} @@ the written definition lets 1 in
+\htmlClass{new}{\text{“every number above 1 is a product of primes” is checked, and so is a false-looking list}} \quad \blacksquare @@ 1 · 1 · 1 is a “prime list” of 1, and one-prime-list (4j) fails as written
   </pre>
-  <p data-pid="1fb515">So recycling is a trade against leaking, and the better the switch holds back its leak, the slower and cooler the best ramp. That is why the hope for chips of this kind rests on switches that leak far less than silicon at room warmth: switches cooled near absolute zero, or made of moving parts.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · best ramp · ← → keys work</div></section>
+  <p data-pid="500ac0">This is why the statement of the packing result, as checked, is a few lines anyone with rung 38 can read, and why libraries of checked mathematics spend so much care on their definitions: a definition, once checked against many results that use it, is unlikely to be wrong in a way nobody notices.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · statement · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38·now.3.1</span><span class="ph understand">understand</span>What does the best-ramp technique say? <br>Why are the two costs equal at the best length?</li>
+      <li><span class="qid">38·now.3.1</span><span class="ph understand">understand</span>What does the statement-read technique say? <br>Why does a checked proof of a statement with a wrong definition prove nothing useful?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="38now4">
-  <h2 class="sthead"><span class="stno">38now4</span>Holding a bit against warmth</h2>
-  <p data-pid="5738d1">A bit is held when the two states are parted by a barrier of energy E. Warmth tries to lift the state over it about f₀ = 10¹² times a second, the jiggle of atoms, taken as measured, and each try succeeds with share e^(−E/kT), the two-shares technique in its rare form, as 38·phys3 used it.</p>
-  <p data-pid="dd8565">Holding-barrier technique: <b>a bit held by a barrier E against tries at rate f₀ keeps its state for a time t with chance of a flip about f₀ t e^(−E/kT); for that to be below ε, E must be at least kT ln(f₀ t/ε).</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the holding-barrier technique">
-f_0\,t\,e^{-E/kT} \le \varepsilon \iff E \ge kT\ln\tfrac{f_0 t}{\varepsilon} @@ take logs (17)
-t = 10 \text{ years} \approx 3.16\cdot10^8\text{ s},\ \varepsilon = 1:\ \ \ln(3.16\cdot10^{20}) \approx 47.2 @@ one flip expected in ten years
-E \ge 47.2\,kT \approx 1.22\text{ eV} \approx 2\cdot10^{-19}\text{ J} @@ kT = 0.0259 eV at 300 K
-\tfrac12 CV^2 = 2.45\cdot10^{-17}\text{ J} \approx 5900\,kT @@ today’s store, by the switch-heat technique
-\htmlClass{new}{\text{holding needs about } 47\,kT;\ \text{today’s switch spends about } 12\,000\,kT} \quad \blacksquare @@ CV² per flip, checked by machine
-  </pre>
-  <p data-pid="a3bc7b">The barrier is not spent: a bit can sit behind it for years for nothing. It sets how deep the store must be, and so how much charge is moved if it is moved fast. What is proved is that the slow-ramp heat goes to 0 as T grows, and that undoing needs the inputs kept. What is open is whether any switch can flip a bit, at a useful speed, near kT, and whether wiping a bit must cost something no ramp can save. That last question has an answer, and 39·comp gives it.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · holding · ← → keys work</div></section>
+<section class="class step" data-step="37now4">
+  <h2 class="sthead"><span class="stno">37now4</span>A result its author doubted</h2>
+  <p data-pid="57b773">In 2019 two mathematicians proved a result that their whole new theory of spaces rested on. The proof was hard, and one of them wrote in December 2020 that he had lost sleep over it and was not sure every step was right; he asked for it to be checked by machine. A group using a checker of the small-kernel kind did the central part by June 2021, and the whole result by July 2022.</p>
+  <ul>
+    <li data-pid="69d0f9">The proof was right. Writing it out found a simpler route through one part, which the authors then used.</li>
+    <li data-pid="ef1ad1">The library the group built on held tens of thousands of definitions and well over a hundred thousand checked results, written by hundreds of people over years. That stock of derived moves was what made the work possible.</li>
+    <li data-pid="d2c288">In 2023 another result, proved in November, was checked in about three weeks. A project begun in 2024 aims to check the proof of the statement that xⁿ + yⁿ = zⁿ has no solutions in positive whole numbers for n ≥ 3, down to results from the 1980s, over five years.</li>
+  </ul>
+  <p data-pid="b34f8d">Checking is now quick for results that sit near the library, and slow for results far from it. The cost of writing a proof out in lines is still several times the cost of writing it for a reader.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · 2022 · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38·now.4.1</span><span class="ph understand">understand</span>What does the holding-barrier technique say? <br>Why does holding a bit for ten years need only about 47 kT, when a flip today spends about 12 000 kT?</li>
+      <li><span class="qid">38·now.4.1</span><span class="ph understand">understand</span>Why did the author of the 2019 result ask for a machine check, and what did it find? <br>Why is checking fast for a result near the library and slow for one far from it?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="38now5">
-  <h2 class="sthead"><span class="stno">38now5</span>Illegal moves</h2>
-  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{a smaller resistance cuts the heat of a step}\,? @@ a step loses ½CV² whatever R; only the time of a ramp cuts it
-\text{a slow ramp can give back the charge of any gate}\,? @@ only while its inputs are still held: the gate must forget nothing
-\text{the slower, the better}\,? @@ leak grows with the wait; past T* the energy rises
-\text{a held bit spends its barrier energy}\,? @@ it sits behind it for nothing; the barrier sets the size of the store
+<section class="class step" data-step="37now5">
+  <h2 class="sthead"><span class="stno">37now5</span>Where the trust rests</h2>
+  <p data-pid="36e11c">After the small-kernel technique, a checked result rests on three things: the core does what it says, the machine runs the core faithfully, and the calculus with its axioms G is clash-free. The first two are engineering. Cores are small enough to read, and a proof can be checked again by a second core written by other people in another language. The third is mathematics.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the last trust">
+G \vdash \varphi \text{, checked} @@ the small-kernel technique
+G \text{ clash-free and all of } G \text{ true in some world} \Rightarrow \varphi \text{ true there} @@ the true-everywhere technique (38c)
+\text{if } G \text{ reaches } \mathrm{Con}_G \text{, then } G \text{ is not clash-free} @@ the no-self-certificate technique (38j), G strong enough for 38g
+\htmlClass{new}{\text{the checker cannot certify its own calculus}} \quad \blacksquare @@ any certificate rests on a stronger G′
+  </pre>
+  <p data-pid="ccc1c2">So the clash-freeness of the calculus a checker uses is shown, when it is shown, from a stronger collection of axioms, and that one’s from a stronger still. This is the same trust any mathematician extends to the axioms of sets. It is held in trust by everyone, and the machine has not changed it. What the machine has changed is the rest: for a checked result, the step that a referee might miss is no longer a place a mistake can hide.</p>
+  <p data-pid="191b60">Open: whether most of current research mathematics can be checked at reasonable cost; how far helpers can go in writing lines themselves, which is 38·now2’s question; and how to make formal statements readable enough that the statement-read technique is cheap.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · trust · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·now.5.1</span><span class="ph understand">understand</span>What three things does a checked result rest on? <br>Why can the checker not certify the third one itself?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37now6">
+  <h2 class="sthead"><span class="stno">37now6</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{the checker accepted it, so the result I meant is true}\,? @@ it certifies the formal statement; read the statement (38·now.3)
+\text{the helper is buggy, so its proofs are suspect}\,? @@ the core checks every line the helper gives; a bug cannot pass a false line
+\text{a checked proof is certain beyond any doubt}\,? @@ it rests on the core, the machine, and a calculus that cannot certify itself (38j)
+\text{the grocer’s stack is best because it has a pattern}\,? @@ the claim is about all packings; the density π/√18 alone proves nothing about the others
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38·now.5.1</span><span class="ph understand">understand</span>Why does a slower ramp stop saving energy past T*? <br>Why does holding a bit behind a barrier not spend the barrier’s energy?</li>
+      <li><span class="qid">38·now.6.1</span><span class="ph understand">understand</span>Why does a checked proof not show the result its author meant? <br>Why is a bug in a helper not a reason to doubt a checked proof?</li>
     </ol>
   </section>
 </section>
@@ -136,23 +150,22 @@ E \ge 47.2\,kT \approx 1.22\text{ eV} \approx 2\cdot10^{-19}\text{ J} @@ kT = 0.
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">38·now.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="RC = 10\text{ ps},\ T = 20\text{ ps},\ 100\text{ ps},\ 1\text{ ns}"></span></span>Build the heat of filling at each ramp from the exact form (RC/T)CV²(1 − (RC/T)(1 − e^(−T/RC))), as a share of the step’s ½CV². <br>At what T does the ramp first lose less than the step?</div>
-  <div class="chq"><span class="chid">38·now.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="T \to 0"></span></span>Find the limit of the exact ramp heat as T heads to 0. <br>Does it give the step’s ½ C V²? Why must it?</div>
-  <div class="chq"><span class="chid">38·now.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="E \ge kT\ln\tfrac{f_0 t}{\varepsilon}"></span></span>The holding-barrier technique gives the least barrier for a time. Turn it round: a store of barrier 40 kT at 300 K, with f₀ = 10¹², how long does it hold, on average? <br>And at 360 K, a hot chip?</div>
-  <div class="chq"><span class="chid">38·now.6.4</span><span class="tagq">reroute</span><span class="givens"><span class="gtx">a chain of k stages, filled and emptied in waves</span></span>Reroute the giving back: in place of keeping every input until the end, empty each stage as soon as the stage after it is filled, keeping only what the next needs. <br>How many stages are held at once, and what does a gate that forgets nothing at the last stage cost?</div>
-  <div class="chq"><span class="chid">38·now.6.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">what the floor is for</span></span>One side holds that the gap between today’s 12 000 kT and a floor near kT shows that computing can be made thousands of times cooler. The other holds that leak, noise and speed set floors of their own far above kT, so the thermal floor does not bear on real chips. <br>Which of the costs on this page are set by physics, and which by how we build?</div>
+  <div class="chq"><span class="chid">38·now.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{balls at the corners of cubes of side } 2r"></span></span>Build the density of the plain cubic stack, one ball at each corner of a cube, touching along the edges. <br>Compare it with π/√18 and say which stack the grocer should use.</div>
+  <div class="chq"><span class="chid">38·now.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a core that accepts every line}"></span></span>A core with a bug that accepts every line as following by one move. <br>Which statements can it be made to pass? Can the statement-read technique catch this bug, and what can?</div>
+  <div class="chq"><span class="chid">38·now.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="G \vdash \varphi \Rightarrow \text{some list of lines is accepted}"></span></span>The small-kernel technique says an accepted list is a proof. Turn it round: if G reaches φ, is there always a list of lines the core accepts? <br>Prove it, and say why the existence of the list does not mean a helper will find it.</div>
+  <div class="chq"><span class="chid">38·now.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">3c.4.4: the endless only as a process, never a finished whole</span></span>3c.4.4 asked whether a view that admits the endless only as a process must reject the inductive set. A checker holds that view in practice: it handles only finite lists of lines, one at a time. <br>Can such a checker check a proof from axioms that include the inductive set? If it accepts one, what has it certified, and what has it left exactly where 3c left it?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r38bio.html">← 38·bio · is a neuron a gate?</a><a href="r38concl.html">38·∎ · a machine made of switches →</a></nav>
+<nav class="nextrung"><a href="r38phys.html">← 38·phys · why can't two electrons share a place?</a><a href="r38now2.html">38·now2 · what if a machine writes the proof? →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>Filling by a ramp is adiabatic charging, and the circuits that give their charge back are adiabatic logic, or charge-recovery logic, run by a power clock; filling and emptying stages in waves is Bennett clocking, or a reversible pipeline. A gate whose rows run backwards is a reversible gate. The barrier against warmth is the Arrhenius, or Néel–Arrhenius, law for thermally activated hopping, with f₀ the attempt frequency; the least energy a held bit needs is the retention barrier of a memory cell. The thermal floor for wiping is Landauer’s principle (39·comp, 22·comp).</p>
+  <p>The packing claim is the Kepler conjecture, and the formal check of it was the Flyspeck project, done in the proof assistants HOL Light and Isabelle. Checkers of the small-kernel kind are proof assistants, and the small-kernel technique is the de Bruijn criterion; the core is the kernel and the helpers are tactics. The 2022 check was the Liquid Tensor Experiment, done in the proof assistant Lean with its library mathlib. The 2023 result was the polynomial Freiman–Ruzsa conjecture. The statement about xⁿ + yⁿ = zⁿ is Fermat’s Last Theorem.</p>
   <h3>Who said it first</h3>
-  <p>Charles Seitz and colleagues described charging by ramps in 1985; William Athas, Lars Svensson and others built adiabatic chips in the 1990s, and Michael Frank has argued for them since. Charles Bennett showed in 1973 that computing can be undone step by step, and Ralph Merkle gave reversible circuits of ramps in 1993. Svante Arrhenius gave the law of warmth and barriers for reactions in 1889.</p>
+  <p>Johannes Kepler stated the packing claim in 1611. Thomas Hales announced its proof in 1998, with Samuel Ferguson; it appeared in 2005 with the referees’ note, and Hales led Flyspeck to its end in August 2014. Nicolaas de Bruijn built the checker Automath from 1967 and stated the small-core rule. Georges Gonthier checked the four-colour result in 2005 and, with a team, the odd-order result of group theory in 2012. Peter Scholze and Dustin Clausen proved the 2019 result; Scholze posed the challenge in December 2020, and Johan Commelin led the group that met it. Timothy Gowers, Ben Green, Freddie Manners and Terence Tao proved the 2023 result, and Kevin Buzzard leads the project on Fermat’s statement. Mario Carneiro showed in 2019 that Lean’s calculus is clash-free if set theory with enough large sets is.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“A slow ramp loses (RC/T) C V², which heads to 0, so a chip can compute for no energy at all.” Not allowed: the ramp’s heat heads to 0 only if every switch along the way gives its charge back, which needs the gates to forget nothing, and only if no leak is paid while waiting, which the best-ramp technique forbids. Whether forgetting itself has a price is a different question, and 39·comp answers it.</p>
+  <p>“The checker’s core has been checked by the checker itself, so the core is right.” Not allowed: a core that is wrong may well accept a false proof that it is right. A second core written separately is evidence; a core vouching for itself is the shape 38j forbids.</p>
 </section>
 
 </div>
@@ -167,25 +180,30 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'lag',t:R`v = u - RC\,V/T`,n:`Followed RC behind.`},
-  {k:'ember',kl:'heat',t:R`I^2 R T = \tfrac{RC}{T}CV^2`,n:`Small current.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{0.01\,CV^2 \text{ at } T = 100\,RC}`,n:`Slow is cool.`}
-],{title:'The slides · slow ramp · ← → keys work'});
+  {k:'ember',kl:'helper',t:R`\ell_1, \dots, \ell_n`,n:`Found anyhow.`},
+  {k:'ember',kl:'core',t:R`\text{each line checked}`,n:`The proof-check technique.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{trust the core}}`,n:`Not the helpers.`}
+],{title:'The slides · kernel · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'path',t:R`\text{inputs set the path}`,n:`Pair inverter.`},
-  {k:'ember',kl:'keep',t:R`\text{inputs held}`,n:`Ramp back.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{undo in reverse order}}`,n:`Forget nothing.`}
-],{title:'The slides · giving back · ← → keys work'});
+  {k:'ember',kl:'diagonal',t:R`s\sqrt2 = 4r`,n:`Balls touch.`},
+  {k:'ember',kl:'count',t:R`4 \text{ balls per cube}`,n:`Corners and faces.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\pi/\sqrt{18} \approx 0.7405}`,n:`The best there is.`}
+],{title:'The slides · packing · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'costs',t:R`\tfrac{RC\,CV^2}{T} + P_\ell T`,n:`Opposite pulls.`},
-  {k:'ember',kl:'least',t:R`T^* = \sqrt{RC\,CV^2/P_\ell}`,n:`Slope 0.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{42\times \text{ less}}`,n:`At 0.84 ns.`}
-],{title:'The slides · best ramp · ← → keys work'});
+  {k:'ember',kl:'meant',t:R`p \text{ prime}`,n:`In words.`},
+  {k:'ember',kl:'written',t:R`\forall d\,(d \mid p \Rightarrow \dots)`,n:`Without p ≥ 2.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{read the statement}}`,n:`Not the proof.`}
+],{title:'The slides · statement · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'tries',t:R`f_0\,t\,e^{-E/kT}`,n:`Two shares.`},
-  {k:'ember',kl:'barrier',t:R`E \ge kT\ln\tfrac{f_0 t}{\varepsilon}`,n:`Logs.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{47\,kT \text{ for ten years}}`,n:`Against 12 000.`}
-],{title:'The slides · holding · ← → keys work'});
+  {k:'ember',kl:'doubt',t:R`\text{December 2020}`,n:`The author unsure.`},
+  {k:'ember',kl:'check',t:R`\text{July 2022}`,n:`All of it.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{right, and simpler}}`,n:`Doubt settled.`}
+],{title:'The slides · 2022 · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'core',t:R`\text{small, readable}`,n:`Engineering.`},
+  {k:'ember',kl:'calculus',t:R`G \text{ clash-free}`,n:`Mathematics.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{G \nvdash \mathrm{Con}_G}`,n:`Held in trust.`}
+],{title:'The slides · trust · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Programs that print themselves</title>
+<title>Every table from one gate</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,77 +25,76 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r39e.html">← 39e undecidable everywhere</a><a href="r39g.html">next: 39g smaller machines →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r39e.html">← 39e a switch worked by a switch</a><a href="r39g.html">next: 39g the liar box →</a></p>
   <div class="tags"><span class="tag proof">39f · proof</span></div>
-  <h1>Programs that print themselves</h1>
-  <p data-pid="ca51e5">Can a program print its own text? It seems it must hold a copy of itself, and the copy must hold a copy, and so on without end. Rung zero met the way out, in words: fill a phrase’s gap with the phrase’s own quotation, and the statement speaks of itself without containing itself. Rung thirty seven did it in arithmetic: a formula fed its own code. This step does it with machines. A machine is built in two halves. The first half writes out the text of the second. The second half reads what is on the tape, works out the text of a machine that would write that, and puts it in front. The result is the text of the whole. Once a machine can get its own code, it can do anything with it: run it, compare it, do the opposite of a prediction about it. So the diagonal of the step on stopping becomes three lines, and a new limit comes out at once: no machine can list endlessly many programs that are each the shortest of their kind.</p>
-  <p class="gesture" data-pid="c9f526">One half of a machine writes the other half’s code; the other half writes the code of a machine that would write what it reads. Together they print their own code. So every machine can be given access to its own code, which turns diagonal arguments into short programs.</p>
+  <h1>Every table from one gate</h1>
+  <p data-pid="c2abe8">A not-and gate gives zero only when both its inputs are one. Four switches make it: two of the kind that close on high, one after the other, down to the ground, and two of the other kind side by side up to the supply. This step proves that this one gate, and nothing else, builds every table there is: not, both, either, and every table of any number of inputs that rung one could write. The proof is a recipe that splits a table on its first input and builds each half the same way, so it also counts the gates the recipe spends, and the count doubles with each input added. Then the step turns the count around and asks the harder question: could a cleverer circuit always do far better? Counting answers it without building a single circuit. There are far more tables than there are small circuits, so most tables of ten inputs need many dozens of gates, and nobody can say which ones.</p>
+  <p class="gesture" data-pid="6cc81f">Not is a not-and with its inputs joined; both is a not-and then a not; either is a not-and of two nots. Splitting a table on its first input builds every table, at most five times two to the inputs less one, less four, gates. There are more tables than small circuits, so most tables need many gates.</p>
 </header>
 
 <section class="class step" data-step="39f1">
-  <h2 class="sthead"><span class="stno">39f1</span>A machine that prints its own code</h2>
-  <p data-pid="a2837f">For each string w there is a machine P_w that, on any input, erases it, writes w and stops: one row per letter of w. The function q(w) = ⟨P_w⟩ is computed: reading w, write the rows for each letter in turn. So a machine can turn any string into the code of a machine that prints that string.</p>
-  <p data-pid="11fa41">Self-print technique: <b>some machine, started on a blank tape, stops with its own code on the tape.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the self-print technique">
-B\text{: }\allowbreak \text{read }\allowbreak \text{the }\allowbreak \text{tape, } \langle X\rangle\text{; }\allowbreak \text{compute } q(\langle X\rangle) = \langle P_{\langle X\rangle}\rangle\text{; }\allowbreak \text{write }\allowbreak \text{it }\allowbreak \text{in }\allowbreak \text{front} @@ q is computed; B ends with ⟨P_⟨X⟩⟩⟨X⟩
-A = P_{\langle B\rangle} @@ A writes B’s code and stops; built after B, from B
-SELF = A \text{ then } B @@ the machine that runs A, then B
-\text{A leaves } \langle B\rangle\text{; }\allowbreak \text{B }\allowbreak \text{computes } q(\langle B\rangle) = \langle A\rangle\text{, }\allowbreak \text{and }\allowbreak \text{writes }\allowbreak \text{it }\allowbreak \text{in }\allowbreak \text{front} @@ A is P_⟨B⟩, by its building
-\htmlClass{new}{\text{the }}\allowbreak \htmlClass{new}{ \text{tape }}\allowbreak \htmlClass{new}{ \text{reads } \langle A\rangle\langle B\rangle = \langle SELF\rangle} \quad \blacksquare @@ the code of a machine run in two parts is the two codes joined
+  <h2 class="sthead"><span class="stno">39f1</span>Not, both and either from not-and</h2>
+  <p data-pid="a37aff">Two switches that close on high, in a row from the output to ground, join it to ground only when both gates are high; two of the other kind, side by side from the supply, join it to the supply when either gate is low. That is the <i>not-and</i>: its mark is 1 − xy. 4·comp saw the next lines as an annex; here they carry a lesson.</p>
+  <p data-pid="0dc1fc">Nand-alone technique: <b>not x is the not-and of x with itself, x and y is the not of their not-and, and x or y is the not-and of their nots.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the nand-alone technique">
+\mathrm{nand}(x, y) = 1 - xy @@ 39a1’s product, then 39a2’s not
+\mathrm{nand}(x, x) = 1 - x^2 = 1 - x = \neg x @@ x² = x on {0, 1} (39a1)
+\neg\,\mathrm{nand}(x, y) = 1 - (1 - xy) = xy = x \land y @@ two gates
+\mathrm{nand}(\neg x, \neg y) = 1 - (1 - x)(1 - y) = x + y - xy = x \lor y @@ the or-as-greater technique (39a2); swap-the-denial (1f), in arithmetic
+\htmlClass{new}{\text{not: } 1 \text{ gate},\ \ \text{both: } 2,\ \ \text{either: } 3} \quad \blacksquare @@ count the not-ands
   </pre>
-  <p data-pid="774c79">Rung 0’s quotation trick is the same. A, a quotation, names B. B fills its gap with the quotation of what it was given. In a programming language the shortest such programs are one line. This one, in Python, prints exactly its own text: <code>s='s=%r;print(s%%s)';print(s%s)</code>. The string s is A; print(s%s) is B, filling s’s gap with s’s quotation.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · self · ← → keys work</div></section>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · one gate · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">39f1.1</span><span class="ph understand">understand</span>What do the two halves A and B of SELF each do? <br>What does the self-print technique say, and why is A built after B and not before?</li>
+      <li><span class="qid">39f1.1</span><span class="ph understand">understand</span>What does the nand-alone technique say? <br>Which line uses x² = x, and why would it fail off {0, 1}?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="39f2">
-  <h2 class="sthead"><span class="stno">39f2</span>Its own code, for any use</h2>
-  <p data-pid="7896ab">Own-code technique: <b>for every machine T that reads a code and a string, there is a machine R such that R on any w does what T does on ⟨R⟩ # w.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the own-code technique">
-R = A\,B\,T @@ three parts, run in turn
-A = P_{\langle BT\rangle}\text{, run on } w\text{: write } \langle BT\rangle \text{ after } w @@ as in 39f1, now keeping w
-B\text{: from } \langle BT\rangle \text{ compute } \langle P_{\langle BT\rangle}\rangle = \langle A\rangle\text{, }\allowbreak \text{and }\allowbreak \text{form } \langle A\rangle\langle BT\rangle \# w @@ q, then a rearrangement
-\langle A\rangle\langle BT\rangle = \langle R\rangle @@ the code of three parts run in turn
-\htmlClass{new}{T \text{ runs on } \langle R\rangle \# w} \quad \blacksquare @@ the last part of R
+  <h2 class="sthead"><span class="stno">39f2</span>Splitting a table on its first input</h2>
+  <p data-pid="aaa00a">A table of n inputs gives a 0 or 1 for each of the 2ⁿ rows. Fix the first input at 1 and the rest is a table f₁ of n − 1 inputs; fix it at 0 and the rest is f₀. Count, as gates, only the not-ands: the inputs and the two constant wires, 0 and 1, come free.</p>
+  <p data-pid="06ace1">Split-on-one technique: <b>every table of n inputs is (x ∧ f₁) ∨ (¬x ∧ f₀), and a circuit of not-ands for it takes at most 5 · 2ⁿ⁻¹ − 4 gates.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the split-on-one technique">
+x = 1:\ \ (1 \cdot f_1) \lor (0 \cdot f_0) = f_1;\ \ x = 0:\ \ (0 \cdot f_1) \lor (1 \cdot f_0) = f_0 @@ cases on x (1c), in 39a’s arithmetic
+(x \land f_1) \lor (\neg x \land f_0) = \mathrm{nand}\big(\mathrm{nand}(x, f_1),\ \mathrm{nand}(\neg x, f_0)\big) @@ either of two boths is the not-and of their not-ands: the nand-alone lines, the nots cancelling
+\text{cost of the split}: 3 \text{ gates, and } 1 \text{ for } \neg x @@ count
+G(1) \le 1,\ \ G(n) \le 2\,G(n - 1) + 4 @@ one input: 0, 1, x free, ¬x one gate; then build f₁ and f₀ the same way
+\htmlClass{new}{G(n) \le 5 \cdot 2^{n-1} - 4} \quad \blacksquare @@ induction on n (4c): 2(5 · 2ⁿ⁻² − 4) + 4 = 5 · 2ⁿ⁻¹ − 4
   </pre>
-  <p data-pid="927982">37h2 put a formula’s code into the formula, by Sub, and got a statement δ with PA reaching δ ⇔ ψ(⌜δ⌝). Here the code is put into the machine, by q, and R does what T does with R’s code. The formula and the machine take the same two steps: describe, then feed the description to itself.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · own code · ← → keys work</div></section>
+  <p data-pid="866d47">So every table of 1e, of any number of letters, is a circuit of one kind of gate: 1 gate for one input, at most 6 for two, 16 for three, 76 for five. The count doubles with each input. Sharing helps: f₁ and f₀ often have parts in common, and 39p reads circuits off tables by hand with far fewer gates than the recipe spends. The recipe’s point is that it always works.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · split · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">39f2.1</span><span class="ph understand">understand</span>What does the own-code technique say? <br>How does its proof match the self-statement technique of 37h2?</li>
+      <li><span class="qid">39f2.1</span><span class="ph understand">understand</span>What does the split-on-one technique say? <br>Why does the count of gates double with each input?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="39f3">
-  <h2 class="sthead"><span class="stno">39f3</span>Diagonals in three lines</h2>
-  <p data-pid="086164">With the own-code technique a machine may begin “get your own code”. The stopping question falls in three lines.</p>
-  <pre class="lines" data-k="ember" data-label="this step: stopping again">
-D \text{ decides } H;\ \allowbreak \ R\text{: get } \langle R\rangle\text{, run } D \text{ on } \langle R\rangle \# w\text{, }\allowbreak \text{do }\allowbreak \text{the }\allowbreak \text{opposite} @@ suppose D; R by the own-code technique
-R \text{ stops }\allowbreak \text{on } w \iff D \text{ says } R \text{ does }\allowbreak \text{not }\allowbreak \text{stop }\allowbreak \text{on } w @@ R’s building
-\htmlClass{new}{\bot} \quad \blacksquare @@ D is right about R
+  <h2 class="sthead"><span class="stno">39f3</span>Most tables need many gates</h2>
+  <p data-pid="739b01">The recipe gives an upper count. Could some cleverer circuit build every table with only a few gates? Count both sides. A table of n inputs is a column of 2ⁿ marks, so there are 2^(2ⁿ) tables. A circuit with g not-ands is fixed by choosing, for each gate, its two inputs among the n inputs, the two constants and the g gates, and then choosing the output wire.</p>
+  <p data-pid="2227bf">Most-tables-hard technique: <b>if (n + 2 + g)^(2g + 1) is less than 2^(2ⁿ), some table of n inputs needs more than g not-ands.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the most-tables-hard technique">
+\text{circuits with } g \text{ gates} \le (n + 2 + g)^{2g} \cdot (n + 2 + g) @@ two choices of wire per gate, and the output: the product rule (4k), counting some circuits more than once
+\text{each circuit gives one table} @@ run it on every row
+(n + 2 + g)^{2g + 1} < 2^{2^n} @@ given
+\htmlClass{new}{\text{some table is given by no circuit of } g \text{ gates}} \quad \blacksquare @@ fewer circuits than tables: no room (6·logi)
   </pre>
-  <p data-pid="5468cd">A machine is <i>shortest</i> when no machine with a shorter code computes the same function.</p>
-  <p data-pid="075684">Shortest-unlisted technique: <b>no machine lists endlessly many shortest machines.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the shortest-unlisted technique">
-L \text{ lists }\allowbreak \text{endlessly }\allowbreak \text{many }\allowbreak \text{shortest }\allowbreak \text{machines} @@ suppose it
-R\text{: get } \langle R\rangle\text{; run } L \text{ until }\allowbreak \text{it }\allowbreak \text{lists }\allowbreak \text{some } C \text{ with }\allowbreak \text{a }\allowbreak \text{code }\allowbreak \text{longer }\allowbreak \text{than } \langle R\rangle\text{; }\allowbreak \text{then }\allowbreak \text{act }\allowbreak \text{as } C @@ the own-code technique; such a C comes, since only finitely many codes are as short as ⟨R⟩
-R \text{ computes }\allowbreak \text{what } C \text{ computes} @@ R acts as C on every input
-\langle R\rangle \text{ is }\allowbreak \text{shorter }\allowbreak \text{than } \langle C\rangle @@ the choice of C
-\htmlClass{new}{\bot:\ C \text{ is }}\allowbreak \htmlClass{new}{ \text{not }}\allowbreak \htmlClass{new}{ \text{shortest}} \quad \blacksquare @@ against L’s list
+  <pre class="lines" data-k="ember" data-label="this step: ten inputs">
+n = 10:\ \ 2^{2^{10}} = 2^{1024} \text{ tables} @@ count the columns
+g = 78:\ \ (90)^{157} = 2^{157 \log_2 90} \approx 2^{1019} @@ log₂ 90 ≈ 6.49 (17d)
+2^{1019} < 2^{1024} @@ log₂ rises
+\htmlClass{new}{\text{some table of } 10 \text{ inputs needs at least } 79 \text{ not-ands}} \quad \blacksquare @@ the technique
   </pre>
-  <p data-pid="3d47bf">So there are endlessly many shortest machines, one for each computed function at least, and no machine can find more than finitely many of them and know it. Proving that a program cannot be made shorter is, past a point, beyond every listed method.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · uses · ← → keys work</div></section>
+  <p data-pid="311f17">Carried further, the same count shows that most tables of n inputs need about 2ⁿ/n gates or more, not far below the recipe’s 2ⁿ. And it does all this without naming one hard table. Finding a particular table that provably needs many gates is far harder; no one has done better than a small multiple of n for any table anyone can write down. 39’s questions about what a machine cannot do quickly live in that gap.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · counting · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">39f3.1</span><span class="ph understand">understand</span>How does the own-code technique shorten the proof of 39d2? <br>What does the shortest-unlisted technique say, and why does a C longer than R always come?</li>
+      <li><span class="qid">39f3.1</span><span class="ph understand">understand</span>What does the most-tables-hard technique say? <br>Why does it prove that a hard table exists without naming one?</li>
     </ol>
   </section>
 </section>
@@ -103,15 +102,15 @@ R \text{ computes }\allowbreak \text{what } C \text{ computes} @@ R acts as C on
 <section class="class step" data-step="39f4">
   <h2 class="sthead"><span class="stno">39f4</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-SELF \text{ holds }\allowbreak \text{a }\allowbreak \text{copy }\allowbreak \text{of }\allowbreak \text{its }\allowbreak \text{own }\allowbreak \text{code }\allowbreak \text{inside }\allowbreak \text{it}\,? @@ A holds B’s code only; B makes A’s code from it
-\text{let } R \text{ be }\allowbreak \text{a }\allowbreak \text{machine }\allowbreak \text{whose }\allowbreak \text{table }\allowbreak \text{contains } \langle R\rangle\,? @@ ⟨R⟩ is longer than any table holding it; build R as A B T
-\text{the }\allowbreak \text{self-print }\allowbreak \text{technique }\allowbreak \text{needs }\allowbreak \text{a }\allowbreak \text{mark }\allowbreak \text{for }\allowbreak \text{“this }\allowbreak \text{machine”}\,? @@ it needs only q, which turns a string into a printer of it
-\text{no }\allowbreak \text{shortest }\allowbreak \text{machine }\allowbreak \text{exists, }\allowbreak \text{by }\allowbreak \text{the }\allowbreak \text{shortest-unlisted }\allowbreak \text{technique}\,? @@ endlessly many exist; none of them is listed endlessly
+\text{both and either alone build every table}\,? @@ they only rise (39d3): no table that falls, such as not, is reached
+\text{not alone builds every table}\,? @@ one input in, one out: no table of two inputs
+G(n) \le 5\cdot 2^{n-1} - 4 \text{ so some table needs that many}\,? @@ an upper count for one recipe; the lower count is the next footing’s
+\text{the most-tables-hard technique names a hard table}\,? @@ it shows one exists by counting; it points at none
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">39f4.1</span><span class="ph understand">understand</span>Why can SELF not hold a copy of its own code? <br>Why does the shortest-unlisted technique not say there are no shortest machines?</li>
+      <li><span class="qid">39f4.1</span><span class="ph understand">understand</span>Why do both and either alone not build every table? <br>Why is the split-on-one count not a lower count?</li>
     </ol>
   </section>
 </section>
@@ -120,22 +119,22 @@ SELF \text{ holds }\allowbreak \text{a }\allowbreak \text{copy }\allowbreak \tex
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">39f.5.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a program that prints its own text twice</span></span>Build, as two halves in the manner of 39f1, a machine that prints its own code twice. Then change the Python line of 39f1 so it prints its text twice, and check it.</div>
-  <div class="chq"><span class="chid">39f.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="R\text{: get } \langle R\rangle\text{, }\allowbreak \text{and }\allowbreak \text{write }\allowbreak \text{it }\allowbreak \text{on }\allowbreak \text{the }\allowbreak \text{next }\allowbreak \text{empty }\allowbreak \text{tape}"></span></span>A program that writes its own code somewhere new is a copier. What more does it need to spread? Is copying the code the same as copying the machine, and what does a living cell do in the place of each half?</div>
-  <div class="chq"><span class="chid">39f.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f \text{ computed, }\allowbreak \text{from }\allowbreak \text{codes }\allowbreak \text{to }\allowbreak \text{codes}"></span></span>Prove that for every computed f from codes to codes there is a machine M such that M and the machine with code f(⟨M⟩) compute the same function. Use the own-code technique with T: on ⟨M⟩ # w, compute f(⟨M⟩) and run it on w. What does this say when f adds one row that does nothing?</div>
-  <div class="chq"><span class="chid">39f.5.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">0b.4.4: the phrase “is not so of its own quotation”</span></span>0b.4.4 filled a phrase’s gap with the phrase’s own quotation, and asked about “is not so of its own quotation”. SELF fills B’s gap with B’s quotation. Write the statement 0b.4.4 asked for. What happens when the phrase is “does not stop when given its own quotation”? Which of the three, the phrase, the statement or the machine, has an answer, and which is refused?</div>
+  <div class="chq"><span class="chid">39f.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x \oplus y"></span></span>Build exactly-one from not-ands in four gates, and prove it by 39a’s arithmetic. <br>Prove that no circuit of three not-ands builds it: what does each three-gate circuit compute?</div>
+  <div class="chq"><span class="chid">39f.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n = 4"></span></span>Run the most-tables-hard count at four inputs. What is the largest g it rules out, and why is it so weak there? <br>At what n does it first prove that some table needs more gates than it has inputs?</div>
+  <div class="chq"><span class="chid">39f.5.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">a gate g from which every table can be built</span></span>Not-and is enough. Which other tables of two inputs are enough alone? Prove one other is, and that a rising one never is. <br>Is “if x then not y” enough alone?</div>
+  <div class="chq"><span class="chid">39f.5.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">a proof that something exists, with nothing exhibited</span></span>The most-tables-hard technique proves that hard tables exist and names none. One camp holds that such a proof tells you something real; another, met on the choice rung, that an existence claim with no example is a promise without a payer. <br>Here the tables are finitely many and could be checked one by one. Does that settle the quarrel for this case, or only move it?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r39e.html">← 39e · undecidable everywhere</a><a href="r39g.html">39g · smaller machines →</a></nav>
+<nav class="nextrung"><a href="r39e.html">← 39e · a switch worked by a switch</a><a href="r39g.html">39g · the liar box →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A program that prints its own text is a quine, after the logician W. V. O. Quine, whose phrase “yields falsehood when preceded by its quotation” is the 0b.4.4 trick written out. The own-code technique is Kleene’s second recursion theorem, or the recursion theorem; 39f.5.3 is its fixed-point form, Rogers’s fixed-point theorem. The shortest-unlisted technique is that MIN_TM is not Turing-recognizable, and it is close to the result that the shortest description of a string, its Kolmogorov complexity, is not computable.</p>
+  <p>The not-and is the NAND gate, and its being enough alone is the functional completeness of NAND (the Sheffer stroke). The split on one input is the Shannon expansion, and the gate made of its three NANDs is a multiplexer. The least number of gates a table needs is its circuit complexity, and the most-tables-hard technique is Shannon’s counting argument (1949); its sharp form, about 2ⁿ/n, is Lupanov’s (1958). The best lower bound for a table anyone has written down is about 5n gates.</p>
   <h3>Who said it first</h3>
-  <p>Stephen Kleene proved the recursion theorem in 1938. John von Neumann, in lectures of 1948 and 1949 published in 1966, built a machine that reproduces itself from a description of itself, with a copier and a builder, the A and B of this step, before the structure of DNA was known (1953). Douglas Hofstadter popularised the name quine in 1979. Andrey Kolmogorov (1965) and Gregory Chaitin (1966) defined the shortest description.</p>
+  <p>Charles Sanders Peirce noticed around 1880 that one joining word suffices, and Henry Sheffer published it in 1913. Claude Shannon gave the expansion in 1938 and the counting argument in 1949. Oleg Lupanov showed in 1958 that every table of n inputs can be built in about 2ⁿ/n gates. Kazuo Iwama and others proved bounds near 5n for explicit tables in the 2000s, and Magnus Find, Alexander Golovnev, Edward Hirsch and Alexander Kulikov raised the constant slightly in 2016.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“R gets its own code by reading its table.” Not allowed: a machine cannot read its own table, only its tape. The own-code technique puts ⟨R⟩ on the tape by computing it, which is the whole point of A and B.</p>
+  <p>“The split-on-one recipe uses 5 · 2ⁿ⁻¹ − 4 gates, and it is the obvious way to build a table, so no table needs fewer.” Not allowed: the parity of two inputs takes four not-ands, fewer than the recipe’s six, and the obviousness of a recipe proves nothing about all recipes. A lower count has to count every circuit, as the most-tables-hard technique does.</p>
 </section>
 
 </div>
@@ -150,20 +149,20 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'B',t:R`\langle X\rangle \mapsto \langle P_{\langle X\rangle}\rangle\langle X\rangle`,n:`Quote what you read.`},
-  {k:'ember',kl:'A',t:R`P_{\langle B\rangle}`,n:`Print B.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\langle A\rangle\langle B\rangle = \langle SELF\rangle}`,n:`Its own code.`}
-],{title:'The slides · self · ← → keys work'});
+  {k:'ember',kl:'mark',t:R`\mathrm{nand}(x, y) = 1 - xy`,n:`Four switches.`},
+  {k:'ember',kl:'not',t:R`\mathrm{nand}(x, x) = 1 - x`,n:`Inputs joined.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{not, both, either}}`,n:`From one kind.`}
+],{title:'The slides · one gate · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'parts',t:R`R = A\,B\,T`,n:`Print, quote, use.`},
-  {k:'ember',kl:'tape',t:R`\langle R\rangle \# w`,n:`Code and input.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{R(w) = T(\langle R\rangle \# w)}`,n:`For any T.`}
-],{title:'The slides · own code · ← → keys work'});
+  {k:'ember',kl:'cases',t:R`x = 1 \to f_1,\ x = 0 \to f_0`,n:`Two smaller tables.`},
+  {k:'ember',kl:'cost',t:R`G(n) \le 2G(n - 1) + 4`,n:`Three gates and a not.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{G(n) \le 5\cdot 2^{n-1} - 4}`,n:`Every table.`}
+],{title:'The slides · split · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'stopping',t:R`R\colon \text{opposite of } D(\langle R\rangle \# w)`,n:`Three lines.`},
-  {k:'ember',kl:'shortest',t:R`R \text{ acts as a longer } C`,n:`Shorter, same function.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{no list of shortest}}`,n:`Endlessly many, unlisted.`}
-],{title:'The slides · uses · ← → keys work'});
+  {k:'ember',kl:'tables',t:R`2^{2^n}`,n:`Columns of 2ⁿ marks.`},
+  {k:'ember',kl:'circuits',t:R`(n + 2 + g)^{2g + 1}`,n:`Choices of wire.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{n = 10:\ \ge 79 \text{ gates}}`,n:`For some table.`}
+],{title:'The slides · counting · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

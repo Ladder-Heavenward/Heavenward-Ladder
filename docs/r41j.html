@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Is it prime?</title>
+<title>Disorder is impossible</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,97 +25,100 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r41i.html">← 41i clock powers and secret keys</a><a href="r41k.html">next: 41k continued fractions →</a></p>
-  <div class="tags"><span class="tag tech">41j · technique</span></div>
-  <h1>Is it prime?</h1>
-  <p data-pid="c11018">The lock of the last step needs two primes of three hundred digits, and somebody has to find them. The prime-count technique says about one number in seven hundred near ten to the three hundred is prime, so a few hundred tries at random will meet one. Each try needs an answer to the question: is this number prime? Trying every divisor up to its square root would outlast the stars. The little technique gives a quicker road, run backwards: if a power fails to come back to one, the number is not prime, for certain, and the power is fast. But some numbers that are not prime pass for every base. A sharper test looks at how the power reaches one, and a number that is not prime is caught by most bases, three in four at least. So a test with fifty random bases is wrong with a chance below one in a million million million million million. In 2002 a test was found that is certain and still fast in the sense of rung thirty nine: its steps grow like a power of the number of digits.</p>
-  <p class="gesture" data-pid="9058d8">A number with no prime factor up to its root is prime, and that search is slow. A unit whose power one less than n is not one proves n composite; some composites fool every base. On a prime clock the only square roots of one are plus and minus one, so the chain of squarings toward one must pass minus one; a composite fails that for at least three bases in four. And a test of 2002 is certain and fast.</p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r41i.html">← 41i the unavoidable</a><a href="r41k.html">next: 41k shortest paths and greedy choices →</a></p>
+  <div class="tags"><span class="tag proof">41j · proof</span></div>
+  <h1>Disorder is impossible</h1>
+  <p data-pid="371da9">At any party of six, there are three people who all know each other or three who are all strangers. Nobody planned it, and nobody can prevent it; with five people it can be prevented. This step proves it, and then proves the same thing for any size: for every size of group, there is a party large enough that a group of that size, all friends or all strangers, cannot be avoided. Complete disorder is impossible once things are many enough. The counts that the proof gives are huge, and the true numbers are known only for the smallest cases. The step also finds how many links a graph can have with no three dots all joined, and the answer is a quarter of the square of the number of dots. Last, it turns the question round. To show that a large party can avoid a group of a given size, it does not build one. It colours the links at random, counts the average number of one-coloured groups, finds it below one, and concludes that some colouring has none. That argument shows a thing exists and names no example of it.</p>
+  <p class="gesture" data-pid="41e2f2">Colour the links of six dots all joined, red or blue: some three dots have their three links one colour, and five dots need not. For every s and t, enough dots force s dots with every link red or t with every link blue, and the count needed is at most a number from the triangle of choices. A graph with no three dots all joined has at most n²/4 links. A random colouring has fewer than one one-coloured group of k on average when there are fewer than about 2^(k/2) dots, so some colouring has none.</p>
 </header>
 
 <section class="class step" data-step="41j1">
-  <h2 class="sthead"><span class="stno">41j1</span>Divisors up to the root</h2>
-  <p data-pid="06e915">Root-bound technique: <b>a number n above 1 that is not prime has a prime factor at most √n.</b> If n = jk with 1 &lt; j ≤ k, then j² ≤ jk = n, and a prime divisor of j (4j10) is at most j.</p>
-  <pre class="lines" data-k="ember" data-label="this step: what the root bound costs">
-91:\ \ \sqrt{91} \lt 10,\ \text{try } 2, 3, 5, 7:\ \ 91 = 7 \cdot 13 @@ four tries
-97:\ \ 2, 3, 5, 7 \text{ all fail} @@ so 97 is prime
-n \approx 10^{300}:\ \ \text{primes up to } 10^{150} @@ the prime-count technique: about 10¹⁵⁰/345 of them
-\htmlClass{new}{\text{about } 3 \times 10^{147} \text{ divisions}} \quad \blacksquare @@ the growth family of √n, which is 10 to half the digits
+  <h2 class="sthead"><span class="stno">41j1</span>A party of six</h2>
+  <p data-pid="77847a">Colour each link of Kₙ red or blue, red for friends and blue for strangers. A <i>one-colour triangle</i> is three dots whose three links have one colour.</p>
+  <p data-pid="aa8f6a">Six-guests technique: <b>every red and blue colouring of the links of K₆ has a one-colour triangle; some colouring of K₅ has none.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the six-guests technique">
+v \text{ a dot of } K_6;\ 5 \text{ links at } v @@ any dot
+\text{three of them, to } u_1, u_2, u_3 \text{, have one colour, say red} @@ 5 &gt; 2 · 2: the crowded-box technique
+\text{a red link among } u_1, u_2, u_3 \text{ makes a red triangle with } v @@ case one
+\text{else } u_1 u_2,\ u_2 u_3,\ u_1 u_3 \text{ are all blue} @@ case two: a blue triangle
+\htmlClass{new}{K_5:\ \text{the ring of five red, the five crossing links blue}} \quad \blacksquare @@ the ring and the star of five each have no triangle
   </pre>
-  <p data-pid="4d73ed">The root bound is certain, and it is slow in the sense of 38k: its steps grow like a power of n itself, not of the number of digits of n. A test that is fast must grow like a power of the digits.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · the root bound · ← → keys work</div></section>
+  <p data-pid="a2b957">For each s and t, the <i>party number</i> R(s, t) is the least n such that every colouring of Kₙ has s dots with every link between them red, or t with every link blue, if such an n exists. The six-guests technique says R(3, 3) = 6. R(s, 2) = s: a colouring of Kₛ with no blue link at all is all red.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · six guests · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">41j1.1</span><span class="ph understand">understand</span>What does the root-bound technique say, and why is the smaller factor at most √n? <br>Why is it too slow for a number of three hundred digits?</li>
+      <li><span class="qid">41j1.1</span><span class="ph understand">understand</span>What does the six-guests technique say? <br>Why must three of the five links at a dot of K₆ share a colour, and how does K₅ escape?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="41j2">
-  <h2 class="sthead"><span class="stno">41j2</span>The little test, and its liars</h2>
-  <p data-pid="8a2b1f">Run the little technique backwards. If gcd(a, n) = 1 and a^(n − 1) ≢ 1 (mod n), then n is not prime. Such an a is a <i>witness</i>, and it proves n composite without finding a factor. 3³⁴⁰ ≡ 56 on the clock of 341, so 3 is a witness for 341 = 11 · 31, though 2 is not (41d5).</p>
-  <p data-pid="b01b86">Every-base-liar technique: <b>if n has no repeated prime factor, and p − 1 divides n − 1 for every prime p dividing n, then a^(n − 1) ≡ 1 (mod n) for every a with gcd(a, n) = 1.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: 561 lies for every base">
-561 = 3 \cdot 11 \cdot 17,\ \ 560 = 2 \cdot 280 = 10 \cdot 56 = 16 \cdot 35 @@ 2, 10 and 16 divide 560
-p \in \{3, 11, 17\}:\ \ a^{560} = (a^{p-1})^{560/(p-1)} \equiv 1 \pmod p @@ the little technique on each clock
-\text{three readings of } a^{560}, \text{ each } 1 @@ one prime at a time
-\htmlClass{new}{a^{560} \equiv 1 \pmod{561}} \quad \blacksquare @@ the remainder technique (41c1): 3, 11 and 17 share nothing
+  <h2 class="sthead"><span class="stno">41j2</span>Order in every large enough disorder</h2>
+  <p data-pid="106529">Party-number technique: <b>for all s, t ≥ 2, R(s, t) exists, and R(s, t) ≤ R(s − 1, t) + R(s, t − 1).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the party-number technique">
+n = R(s - 1, t) + R(s, t - 1);\ v \text{ a dot of } K_n @@ induction on s + t (4c); the two exist
+n - 1 \text{ links at } v:\ \text{at least } R(s-1, t) \text{ red, or at least } R(s, t-1) \text{ blue} @@ else n − 1 ≤ R(s − 1, t) − 1 + R(s, t − 1) − 1 (the crowded-box technique, in its sharp form)
+\text{red case: among the red neighbours, } s - 1 \text{ all red, or } t \text{ all blue} @@ the meaning of R(s − 1, t)
+s - 1 \text{ all red, with } v:\ s \text{ all red} @@ v is joined to them in red
+\text{blue case: the same with the colours traded} @@ R(s, t − 1)
+\htmlClass{new}{R(s, t) \le R(s - 1, t) + R(s, t - 1) \le \binom{s + t - 2}{s - 1}} \quad \blacksquare @@ the row-step technique of 4k, from R(s, 2) = s and R(2, t) = t
   </pre>
-  <p data-pid="0ee539">So the little test can never prove 561 composite, except with a base that shares a factor with it, and those are few: 240 of the 560 hours. Such numbers are endless; there are 43 below a million.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · liars · ← → keys work</div></section>
+  <p data-pid="6a9e71">So R(k, k) ≤ (2k − 2 choose k − 1) < 4^(k − 1). R(4, 4) ≤ 20, and in fact R(4, 4) = 18; R(3, 4) ≤ 10, and in fact 9 (41j.6.1). The bound is the same idea as the six-guests technique, repeated. 41·now2 asks how far from the truth it is.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · party number · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41j2.1</span><span class="ph understand">understand</span>What is a witness, and what does it prove? <br>What does the every-base-liar technique say, and why does 561 meet its condition?</li>
+      <li><span class="qid">41j2.1</span><span class="ph understand">understand</span>What is the party number R(s, t), and what does the party-number technique say? <br>Why do the n − 1 links at v give R(s − 1, t) red or R(s, t − 1) blue?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="41j3">
-  <h2 class="sthead"><span class="stno">41j3</span>Watching the power reach one</h2>
-  <p data-pid="fede5e">Write n − 1 = 2ˢ · d with d odd. The little technique’s power a^(n − 1) is a^d squared s times. On a prime clock the only square roots of [1] are ±[1] (41e2). So the last hour before [1] in the chain a^d, a^(2d), …, a^(n − 1) must be −[1], unless the chain starts at [1].</p>
-  <p data-pid="5c6825">Strong-test technique: <b>if n is an odd prime, n − 1 = 2ˢd with d odd, and n ∤ a, then either a^d ≡ 1, or a^(2ʳd) ≡ −1 for some r below s.</b> A base for which neither happens is a <i>strong witness</i>, and proves n composite.</p>
-  <pre class="lines" data-k="ember" data-label="this step: 561, caught">
-560 = 2^4 \cdot 35 @@ s = 4, d = 35
-2^{35} \equiv 263,\ \ 263^2 \equiv 166,\ \ 166^2 \equiv 67,\ \ 67^2 \equiv 1 \pmod{561} @@ square-and-multiply (41h), then three squarings
-67 \ne \pm 1 \text{ and } 67^2 \equiv 1 @@ a square root of 1 that is neither: impossible on a prime clock
-\htmlClass{new}{561 \text{ is composite, and } 2 \text{ is a strong witness}} @@ the strong-test technique
-561 \mid (67 - 1)(67 + 1),\ \ \gcd(66, 561) = 33 @@ neither factor is a multiple of 561
-\htmlClass{new}{561 = 33 \cdot 17} \quad \blacksquare @@ the odd square root hands over a factor
+  <h2 class="sthead"><span class="stno">41j3</span>No triangle, few links</h2>
+  <p data-pid="afd947">How many links can n dots have with no three all joined? The two-sided graph with sides of n/2 has n²/4 links and no triangle, since a triangle is an odd cycle (41a3).</p>
+  <p data-pid="327d5f">No-triangle technique: <b>a graph on n dots with no triangle has at most n²/4 links.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the no-triangle technique">
+\{u, w\} \text{ a link:\ } d(u) + d(w) \le n @@ u and w share no neighbour, so their neighbours are separate sets of dots
+\textstyle\sum_{\{u,w\} \in E} (d(u) + d(w)) = \sum_v d(v)^2 @@ each dot v is named once for each of its d(v) links
+\textstyle\sum_v d(v)^2 \le n|E| @@ the first line, over the |E| links
+\big(\textstyle\sum_v d(v)\big)^2 \le n \sum_v d(v)^2 @@ the product inequality of 31a, with the list of 1s
+(2|E|)^2 \le n \cdot n|E| @@ the ends-count technique, and the third line
+\htmlClass{new}{|E| \le n^2/4} \quad \blacksquare @@ 
   </pre>
-  <aside class="nature">
-    <div class="eyebrow">Anexact, yet rigorous · laws with a known exception rate</div>
-    <p data-pid="5943d4">For an odd composite n, at most a quarter of the bases from 1 to n − 1 fail to be strong witnesses. That is a technique, held in trust here, proved in 1980. Pick bases at random and independently (30f), k of them.</p>
-    <p data-pid="7310d7"><b>A test that says yes with a stated exception rate is rigorous: the rate is the proof’s output, and it is known before the first base is tried.</b></p>
-    <p data-pid="535433">A composite then passes every round with chance at most 1/4ᵏ. With k = 50 that is below 10⁻³⁰. The test never says “prime” for certain. It says “composite” for certain, or “prime, with an exception rate below 4 to the minus k”, a rate stated before the test is run.</p>
-    <p class="bait" data-pid="9bc5e1">A machine draws 600 random 300-digit odd numbers and runs 50 rounds on each. Bound the chance that some composite among them is called prime. Is the bound a fact about these numbers, or about the drawing?</p>
-  </aside>
-  <p data-pid="d3e635">For 91 = 7 · 13, 18 of the 90 bases lie, which is 20%. For 561 only 10 lie. The bound of a quarter is near the worst case, not the usual one.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · the strong test · ← → keys work</div></section>
+  <p data-pid="a0ba78">So a crowd of links forces a triangle: one link past n²/4 is enough. Rung 41’s questions are often of this kind, the most a thing can hold before a pattern is forced. Forbid four dots all joined in place of three, and the best is the three-sided graph with equal sides, n²/3 links; the general count was found in 1941.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · no triangle · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41j3.1</span><span class="ph understand">understand</span>What does the strong-test technique say, and why must the chain pass −1 on a prime clock? <br>How does the chain for 561 with base 2 prove 561 composite, and how does it hand over a factor?</li>
+      <li><span class="qid">41j3.1</span><span class="ph understand">understand</span>What does the no-triangle technique say? <br>Why is d(u) + d(w) at most n for a link {u, w} of a graph with no triangle?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="41j4">
-  <h2 class="sthead"><span class="stno">41j4</span>Certain, and still fast</h2>
-  <p data-pid="06a72b">Binomial-test technique: <b>if gcd(a, n) = 1 and n ≥ 2, then n is prime exactly when (x + a)ⁿ and xⁿ + a have the same coefficients on the clock of n.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the binomial-test technique">
-(x + a)^n = \textstyle\sum_k \binom nk a^{n-k} x^k @@ the binomial technique (4k)
-n \text{ prime}: \ n \mid \tbinom nk \text{ for } 0 \lt k \lt n,\ \ a^n \equiv a @@ 41d.6.1; the little technique
-n \text{ not prime}: \ q \text{ a prime},\ q^j \text{ the highest power of } q \text{ dividing } n @@ pick one prime factor
-\tbinom nq = \frac{n(n-1)\cdots(n-q+1)}{q!}:\ \ q^j \nmid \tbinom nq @@ the top has q to the power j only, from n; the bottom takes one q away
-\htmlClass{new}{\text{the coefficient of } x^q \text{ is } \tbinom nq a^{n-q} \not\equiv 0 \pmod n} \quad \blacksquare @@ gcd(a, n) = 1: q ∤ a
+  <h2 class="sthead"><span class="stno">41j4</span>A colouring nobody has seen</h2>
+  <p data-pid="6bd70e">To show R(k, k) > n, one colouring of Kₙ with no one-colour group of k is enough. Nobody knows how to write one down for large k. Colour each link red or blue by a fair coin, all the coins independent. A <i>one-colour k-group</i> is k dots whose links all share a colour.</p>
+  <p data-pid="60c636">Average-below-one technique: <b>if the average number of one-colour k-groups in a random colouring of Kₙ is below 1, some colouring of Kₙ has none, and R(k, k) > n.</b> A count that is always at least 1 has average at least 1, by 30g’s average-adds technique, since X ≥ 1 gives E X ≥ 1.</p>
+  <pre class="lines" data-k="ember" data-label="this step: a lower bound">
+\text{one group of } k \text{ dots: chance } 2 \cdot 2^{-\binom{k}{2}} \text{ that its links share a colour} @@ all red or all blue, coins independent (30f)
+\text{average number} = \binom{n}{k}\, 2^{1 - \binom{k}{2}} @@ the average-adds technique: a sum over the groups of their chances
+n \le 2^{k/2},\ k \ge 3:\ \binom{n}{k} 2^{1 - \binom{k}{2}} < \frac{n^k}{k!}\, 2^{1 - \frac{k(k-1)}{2}} \le \frac{2^{1 + k/2}}{k!} < 1 @@ n choose k is below nᵏ/k!; nᵏ ≤ 2^(k²/2)
+\htmlClass{new}{R(k, k) > 2^{k/2} \text{ for } k \ge 3} \quad \blacksquare @@ the average-below-one technique
   </pre>
-  <p data-pid="e3d952">With n = 15 and q = 3: (15 choose 3) = 455, which 3 does not divide, so the coefficient of x³ shows 15 is composite. As it stands the test is slow: (x + a)ⁿ has n + 1 coefficients. The test of 2002 checks the same sameness only on the clock of xʳ − 1 as well, for a small r and a few a, and proves that enough. Its steps grow like a power of the number of digits, so primality is in 39h’s class P. In practice the strong test is used, since it is faster still, and the certain test only where certainty is asked for.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · certain · ← → keys work</div></section>
+  <p data-pid="5f3f1c">At k = 10 the average is below one up to n = 100, so some colouring of K₁₀₀ has no one-colour group of ten. Not one such colouring has ever been written down. So order is forced somewhere between about 2^(k/2) and 4^k dots. The gap between the two was not narrowed at the top for 88 years; 41·now2 tells how it was.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · counting</div>
+    <p data-pid="e47609">4k found that random things in a crowd make a steady shape, and that the shape of the pile is part of the answer. Here the pile is of colourings, 2 to the power 4950 of them for K₁₀₀, far too many to look at. The average number of one-colour groups of ten is about 3.7 in a million for K₃₂, and it stays below 1 for every n up to 100.</p>
+    <p data-pid="09ae41"><b>A crowd’s average can prove that some member exists before anyone can name it.</b></p>
+    <p data-pid="e857ad">This average is not a guess about the pile. It is computed exactly, from the count of groups and the chance of each. And an average below one forces a member of the pile with none.</p>
+    <p class="bait" data-pid="b305b1">Rung 7 asked what an either-way principle adds that cannot be shown case by case. A random colouring adds the same kind of thing: a yes with no example.</p>
+  </aside>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · random · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41j4.1</span><span class="ph understand">understand</span>What does the binomial-test technique say? <br>Why does q to the power j not divide (n choose q) when n is not prime?</li>
+      <li><span class="qid">41j4.1</span><span class="ph understand">understand</span>What does the average-below-one technique say, and which fact about averages proves it? <br>Why is the chance that a given group of k dots is one colour 2 times 2 to the minus k choose 2?</li>
     </ol>
   </section>
 </section>
@@ -123,15 +126,15 @@ n \text{ not prime}: \ q \text{ a prime},\ q^j \text{ the highest power of } q \
 <section class="class step" data-step="41j5">
   <h2 class="sthead"><span class="stno">41j5</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-2^{n-1} \equiv 1 \pmod n \Rightarrow n \text{ prime}\,? @@ 341 and 561 pass: the little test proves only “composite”
-50 \text{ rounds passed} \Rightarrow n \text{ is prime}\,? @@ prime with an exception rate below 4⁻⁵⁰, which is not certainty
-\text{a strong witness gives a factor}\,? @@ only when an odd square root of 1 appears, as 67 did; a power that never reaches 1 gives none
-\text{trial division to } n/2 \text{ is needed}\,? @@ the root bound: √n is enough
+\text{the average is } 0.3 \text{, so most colourings have no one-colour group}\,? @@ an average below one gives some colouring with none; how many have none needs more than the average
+\text{the average is above } 1 \text{, so every colouring has a one-colour group}\,? @@ the average can be large because a few colourings have many
+R(s, t) \le R(s - 1, t) + R(s, t - 1) \text{, so it equals it}\,? @@ R(3, 4) = 9, and the sum is 10
+\text{a graph with } n^2/4 \text{ links has a triangle}\,? @@ the equal two-sided graph has exactly n²/4 and none; one more forces it
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41j5.1</span><span class="ph understand">understand</span>Why does passing 50 rounds of the strong test not make n prime for certain? <br>When does a strong witness hand over a factor, and when does it not?</li>
+      <li><span class="qid">41j5.1</span><span class="ph understand">understand</span>Why does an average below one not show that most colourings have no one-colour group? <br>Why does an average above one not show that every colouring has one?</li>
     </ol>
   </section>
 </section>
@@ -140,22 +143,22 @@ n \text{ not prime}: \ q \text{ a prime},\ q^j \text{ the highest power of } q \
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">41j.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="2047 = 23 \cdot 89"></span></span>Run the strong test on 2047 with base 2, and then with base 3. Which is a strong witness? <br>Build the smallest odd composite for which 2 lies in the strong test, by searching, and say how you would search faster.</div>
-  <div class="chq"><span class="chid">41j.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n = p^2"></span></span>For n the square of an odd prime, find how many bases lie in the little test. Prove that the count is p − 1. <br>Why is a square never a number that lies for every base?</div>
-  <div class="chq"><span class="chid">41j.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="a^{n-1} \equiv 1 \pmod n \text{ for every unit } a"></span></span>Prove the other half of the every-base-liar technique: if every unit lies, n has no repeated prime and p − 1 divides n − 1 for each prime p dividing n. <br>Hint held back: a full hand of the clock of p (41e) and the remainder technique.</div>
-  <div class="chq"><span class="chid">41j.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">30f: chance; 39i: chance in computing</span></span>A lock is built on a number that passed 64 rounds of the strong test. Nobody proves it prime. <br>Is the lock built on a prime? If it is not, is it broken? Some writers called such numbers prime enough for industry. Is a statement with a stated exception rate below 2⁻¹²⁸ a proof, a guess under the large case, or something the ladder has no word for?</div>
+  <div class="chq"><span class="chid">41j.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="R(3, 4) \le R(2, 4) + R(3, 3) = 10"></span></span>Sharpen the party-number technique: if R(s − 1, t) and R(s, t − 1) are both even, the sum minus 1 is enough. Use the ends-count technique on the red links. <br>So R(3, 4) ≤ 9. Find a colouring of K₈, by a ring of eight with some crossing links, that shows R(3, 4) = 9.</div>
+  <div class="chq"><span class="chid">41j.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{three colours: } R(3, 3, 3)"></span></span>Colour the links of Kₙ red, blue or green. Prove that n = 17 forces a one-colour triangle, by the six-guests technique’s first line and the crowded-box technique. <br>What would the average-below-one technique give for three colours?</div>
+  <div class="chq"><span class="chid">41j.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="|E| = \lfloor n^2/4 \rfloor + 1"></span></span>The no-triangle technique bounds the links. Turn it round: with ⌊n²/4⌋ + 1 links, prove that some link lies in a triangle with d(u) + d(w) > n, using Σ over links of d(u) + d(w) = Σ d(v)². Add one link inside the larger side of the equal two-sided graph: how many triangles appear? <br>Is the equal two-sided graph the only graph with ⌊n²/4⌋ links and no triangle?</div>
+  <div class="chq"><span class="chid">41j.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">7a: an or with no side in hand; 14g.4.4: is a plot a proof?</span></span>The average-below-one technique proves that a colouring of K₁₀₀ exists and gives none. In 1976 the four colour result was proved by checking cases no person could read. <br>Rung 7 let a proof say “one or the other” without saying which. Are these two proofs of the same kind as that? Which would you trust less, the one nobody can see the example of, or the one nobody can read through, and why?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r41i.html">← 41i · clock powers and secret keys</a><a href="r41k.html">41k · continued fractions →</a></nav>
+<nav class="nextrung"><a href="r41i.html">← 41i · the unavoidable</a><a href="r41k.html">41k · shortest paths and greedy choices →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The root-bound technique is trial division. The little test is the Fermat primality test, and a liar a Fermat liar; numbers that lie for every unit are Carmichael numbers, and the every-base-liar technique with 41j.6.3 is Korselt’s criterion. The strong test is the Miller–Rabin test, a strong witness a Miller–Rabin witness, and 2047 the least strong pseudoprime to base 2. The bound of a quarter is the Monier–Rabin bound. The binomial-test technique is the starting point of the AKS primality test, which puts PRIMES in P. Numbers passing a probabilistic test are probable primes; “industrial-grade primes” is Henri Cohen’s phrase.</p>
+  <p>Party numbers are Ramsey numbers, and the party-number technique is Ramsey's theorem with the Erdős–Szekeres bound. The six-guests technique is the theorem on friends and strangers. The no-triangle technique is Mantel's theorem; the general count for no r + 1 dots all joined is Turán's theorem (1941), and the subject is extremal graph theory. The average-below-one technique is the first moment method, and the subject that grew from it is the probabilistic method; a coloured Kₙ with independent fair coins is the random graph G(n, ½).</p>
   <h3>Who said it first</h3>
-  <p>Robert Carmichael found 561 in 1910; Alwin Korselt gave the criterion in 1899. That Carmichael numbers are endless was proved by William Alford, Andrew Granville and Carl Pomerance in 1994. Gary Miller gave the strong test in 1976, certain if a then unproved hypothesis holds; Michael Rabin made it a test with chance in 1980, and Louis Monier and Rabin proved the bound of a quarter that year. Manindra Agrawal, Neeraj Kayal and Nitin Saxena announced the certain fast test in August 2002; it was published in 2004.</p>
+  <p>Frank Ramsey proved the theorem in 1928, as a step in a question of logic; he died in 1930, aged 26. Paul Erdős and George Szekeres found it again in 1935 with the bound by the triangle of choices. Willem Mantel's count was a problem set in 1907. Robert Greenwood and Andrew Gleason found R(3, 4) = 9, R(4, 4) = 18 and R(3, 3, 3) = 17 in 1955. Erdős proved R(k, k) > 2^(k/2) in 1947, and with Alfréd Rényi founded the study of random graphs in 1959. Pál Turán proved his count in 1941, in a labour camp.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“The strong test with base 2 says 2047 might be prime, base 3 says 2047 might be prime, … so after many bases the chance that 2047 is prime is near 1.” Not allowed: 2047 is prime or not, and it is not; base 3 is a strong witness. The exception rate is a fact about the drawing of bases, not a chance that a fixed number is prime.</p>
+  <p>“A random colouring of K₃₂ has a one-colour group of ten with chance below 1 in 270 000. So if I toss the coins, I will get a colouring with none.” Not allowed as a proof, though nearly so as a recipe: the toss gives such a colouring with high chance, not for sure, and checking it means looking at all 64 512 240 groups of ten. The average-below-one technique proves existence; finding and checking are separate costs.</p>
 </section>
 
 </div>
@@ -170,25 +173,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'factor',t:R`n = jk,\ j \le k \Rightarrow j \le \sqrt n`,n:`The smaller one.`},
-  {k:'ember',kl:'97',t:R`2, 3, 5, 7 \nmid 97`,n:`Prime.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\approx 10^{147} \text{ tries at } 10^{300}}`,n:`Too slow.`}
-],{title:'The slides · the root bound · ← → keys work'});
+  {k:'ember',kl:'five links',t:R`5 > 2 \cdot 2`,n:`Three share a colour.`},
+  {k:'ember',kl:'among them',t:R`\text{red, or all blue}`,n:`A triangle either way.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{R(3, 3) = 6}`,n:`K₅ escapes.`}
+],{title:'The slides · six guests · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'witness',t:R`a^{n-1} \not\equiv 1`,n:`Composite, for certain.`},
-  {k:'ember',kl:'561',t:R`2, 10, 16 \mid 560`,n:`Every prime minus one.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{a^{560} \equiv 1 \pmod{561}}`,n:`Every unit lies.`}
-],{title:'The slides · liars · ← → keys work'});
+  {k:'ember',kl:'split',t:R`n - 1 = \text{red} + \text{blue}`,n:`At one dot.`},
+  {k:'ember',kl:'recurse',t:R`R(s-1,t),\ R(s,t-1)`,n:`Inside the neighbours.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{R(k,k) < 4^{k-1}}`,n:`Order is forced.`}
+],{title:'The slides · party number · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'chain',t:R`a^d, a^{2d}, \ldots, a^{n-1}`,n:`Squarings.`},
-  {k:'ember',kl:'prime clock',t:R`x^2 = 1 \Rightarrow x = \pm 1`,n:`41e2.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{67^2 \equiv 1,\ 67 \ne \pm1 \Rightarrow 561 \text{ composite}}`,n:`And 33 divides it.`}
-],{title:'The slides · the strong test · ← → keys work'});
+  {k:'ember',kl:'a link',t:R`d(u) + d(w) \le n`,n:`No shared neighbour.`},
+  {k:'ember',kl:'square',t:R`(2|E|)^2 \le n\textstyle\sum d^2`,n:`31a.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|E| \le n^2/4}`,n:`Equal two sides is best.`}
+],{title:'The slides · no triangle · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'prime',t:R`(x + a)^n \equiv x^n + a`,n:`Counts divisible by n.`},
-  {k:'ember',kl:'composite',t:R`q^j \nmid \tbinom nq`,n:`One coefficient survives.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{prime} \iff \text{the sameness}}`,n:`Fast by 2002.`}
-],{title:'The slides · certain · ← → keys work'});
+  {k:'ember',kl:'chance',t:R`2^{1 - \binom{k}{2}}`,n:`One group, one colour.`},
+  {k:'ember',kl:'average',t:R`\binom{n}{k}2^{1 - \binom{k}{2}} < 1`,n:`Over all groups.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{R(k, k) > 2^{k/2}}`,n:`A colouring nobody has seen.`}
+],{title:'The slides · random · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

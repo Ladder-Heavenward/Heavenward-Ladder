@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Flows and cuts</title>
+<title>Programs that print themselves</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,106 +25,93 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r40e.html">← 40e matchings</a><a href="r40g.html">next: 40g the best corner →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40e.html">← 40e undecidable everywhere</a><a href="r40g.html">next: 40g smaller machines →</a></p>
   <div class="tags"><span class="tag proof">40f · proof</span></div>
-  <h1>Flows and cuts</h1>
-  <p data-pid="f69762">Water from a reservoir runs through a city’s mains to a treatment plant. Each main carries at most so much an hour, and at every junction what flows in flows out. How much can reach the plant? An answer from above is easy to find: draw a line across the map that separates the reservoir from the plant, and add up what the mains crossing it can carry. Nothing can get past that line faster. The surprise is that the best such line is always exactly right: the most that can flow equals the least that any separating line lets through. The step proves it by a recipe. Push water along any route that still has room, counting a main already in use as room to send water back. When no route has room, the dots still reachable from the reservoir mark out a separating line that every route to the plant crosses full, and the flow equals that line’s total. On the way it finds that whole-number mains give a whole-number best flow, and that the matchings of the last step are flows in disguise.</p>
-  <p class="gesture" data-pid="ef1e77">A flow obeys each link’s capacity and keeps what goes in equal to what comes out at every inside dot. Every flow is at most every cut. When no path from source to sink has room left, the dots still reachable give a cut the flow fills exactly, so the largest flow equals the smallest cut. Whole capacities give a whole largest flow.</p>
+  <h1>Programs that print themselves</h1>
+  <p data-pid="ca51e5">Can a program print its own text? It seems it must hold a copy of itself, and the copy must hold a copy, and so on without end. Rung zero met the way out, in words: fill a phrase’s gap with the phrase’s own quotation, and the statement speaks of itself without containing itself. Rung thirty seven did it in arithmetic: a formula fed its own code. This step does it with machines. A machine is built in two halves. The first half writes out the text of the second. The second half reads what is on the tape, works out the text of a machine that would write that, and puts it in front. The result is the text of the whole. Once a machine can get its own code, it can do anything with it: run it, compare it, do the opposite of a prediction about it. So the diagonal of the step on stopping becomes three lines, and a new limit comes out at once: no machine can list endlessly many programs that are each the shortest of their kind.</p>
+  <p class="gesture" data-pid="c9f526">One half of a machine writes the other half’s code; the other half writes the code of a machine that would write what it reads. Together they print their own code. So every machine can be given access to its own code, which turns diagonal arguments into short programs.</p>
 </header>
 
 <section class="class step" data-step="40f1">
-  <h2 class="sthead"><span class="stno">40f1</span>Flows and cuts</h2>
-  <p data-pid="0260a7">A <i>network</i> is a finite set of dots with two named dots, the <i>source</i> s and the <i>sink</i> t, and one-way links: pairs (u, w) in order (2g), each with a <i>capacity</i> c(u, w) ≥ 0. A <i>flow</i> gives each one-way link a number f(u, w) with 0 ≤ f(u, w) ≤ c(u, w), so that at every dot other than s and t what flows in equals what flows out. Its <i>value</i> |f| is what flows out of s less what flows in.</p>
-  <p data-pid="b17312">A <i>cut</i> is a set S of dots holding s and not t. Its <i>capacity</i> c(S) is the total capacity of the one-way links from S to the rest.</p>
-  <p data-pid="55c173">Flow-under-cut technique: <b>the value of any flow is at most the capacity of any cut.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the flow-under-cut technique">
-|f| = \textstyle\sum_{v \in S} (\text{out of } v - \text{into } v) @@ only s gives a nonzero term; inside dots balance
-= (\text{flow from } S \text{ to the rest}) - (\text{flow from the rest into } S) @@ links inside S appear once out and once in, and cancel
-\le \text{flow from } S \text{ to the rest} @@ flows are at least 0
-\htmlClass{new}{|f| \le c(S)} \quad \blacksquare @@ each flow is at most its capacity
+  <h2 class="sthead"><span class="stno">40f1</span>A machine that prints its own code</h2>
+  <p data-pid="a2837f">For each string w there is a machine P_w that, on any input, erases it, writes w and stops: one row per letter of w. The function q(w) = ⟨P_w⟩ is computed: reading w, write the rows for each letter in turn. So a machine can turn any string into the code of a machine that prints that string.</p>
+  <p data-pid="11fa41">Self-print technique: <b>some machine, started on a blank tape, stops with its own code on the tape.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the self-print technique">
+B\text{: }\allowbreak \text{read }\allowbreak \text{the }\allowbreak \text{tape, } \langle X\rangle\text{; }\allowbreak \text{compute } q(\langle X\rangle) = \langle P_{\langle X\rangle}\rangle\text{; }\allowbreak \text{write }\allowbreak \text{it }\allowbreak \text{in }\allowbreak \text{front} @@ q is computed; B ends with ⟨P_⟨X⟩⟩⟨X⟩
+A = P_{\langle B\rangle} @@ A writes B’s code and stops; built after B, from B
+SELF = A \text{ then } B @@ the machine that runs A, then B
+\text{A leaves } \langle B\rangle\text{; }\allowbreak \text{B }\allowbreak \text{computes } q(\langle B\rangle) = \langle A\rangle\text{, }\allowbreak \text{and }\allowbreak \text{writes }\allowbreak \text{it }\allowbreak \text{in }\allowbreak \text{front} @@ A is P_⟨B⟩, by its building
+\htmlClass{new}{\text{the }}\allowbreak \htmlClass{new}{ \text{tape }}\allowbreak \htmlClass{new}{ \text{reads } \langle A\rangle\langle B\rangle = \langle SELF\rangle} \quad \blacksquare @@ the code of a machine run in two parts is the two codes joined
   </pre>
-  <p data-pid="28fb20">The second line says more: the net flow across every cut is the same number, the value. The ledger kept at each dot is kept across every line drawn between s and t.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · cuts · ← → keys work</div></section>
+  <p data-pid="774c79">Rung 0’s quotation trick is the same. A, a quotation, names B. B fills its gap with the quotation of what it was given. In a programming language the shortest such programs are one line. This one, in Python, prints exactly its own text: <code>s='s=%r;print(s%%s)';print(s%s)</code>. The string s is A; print(s%s) is B, filling s’s gap with s’s quotation.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · self · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">40f1.1</span><span class="ph understand">understand</span>What is a flow, and what is a cut? <br>What does the flow-under-cut technique say, and why does every cut carry the same net flow?</li>
+      <li><span class="qid">40f1.1</span><span class="ph understand">understand</span>What do the two halves A and B of SELF each do? <br>What does the self-print technique say, and why is A built after B and not before?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="40f2">
-  <h2 class="sthead"><span class="stno">40f2</span>Room left</h2>
-  <p data-pid="94964f">Given a flow f, a link (u, w) has <i>room forward</i> c(u, w) − f(u, w), and <i>room back</i> f(u, w): sending less along it is the same as sending some back from w to u. A <i>route with room</i> is a path from s to t, each step along some link with room forward or against some link with room back.</p>
-  <p data-pid="828f37">Push-along technique: <b>if a route with room has least room r, pushing r along it gives a flow of value |f| + r.</b> Forward steps gain r, backward steps lose r, and both stay between 0 and the capacity, by the choice of r. At each inside dot of the route one step comes in and one goes out; in each of the four cases, two forward, two back, or one of each, the balance is kept.</p>
-  <pre class="lines" data-k="ember" data-label="this step: pushing, worked">
-c(s,p) = 8,\ c(s,q) = 7,\ c(p,q) = 4,\ c(p,t) = 5,\ c(q,t) = 9 @@ a network
-s \to p \to t:\ \text{push } 5;\ \ s \to q \to t:\ \text{push } 7 @@ least rooms 5 and 7
-s \to p \to q \to t:\ \text{rooms } 3, 4, 2;\ \text{push } 2 @@ value 14
-\htmlClass{new}{\text{from } s \text{: room only to } p \text{, then to } q \text{; nothing reaches } t} \quad \blacksquare @@ s→q full, p→t full, q→t full
+  <h2 class="sthead"><span class="stno">40f2</span>Its own code, for any use</h2>
+  <p data-pid="7896ab">Own-code technique: <b>for every machine T that reads a code and a string, there is a machine R such that R on any w does what T does on ⟨R⟩ # w.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the own-code technique">
+R = A\,B\,T @@ three parts, run in turn
+A = P_{\langle BT\rangle}\text{, run on } w\text{: write } \langle BT\rangle \text{ after } w @@ as in 40f1, now keeping w
+B\text{: from } \langle BT\rangle \text{ compute } \langle P_{\langle BT\rangle}\rangle = \langle A\rangle\text{, }\allowbreak \text{and }\allowbreak \text{form } \langle A\rangle\langle BT\rangle \# w @@ q, then a rearrangement
+\langle A\rangle\langle BT\rangle = \langle R\rangle @@ the code of three parts run in turn
+\htmlClass{new}{T \text{ runs on } \langle R\rangle \# w} \quad \blacksquare @@ the last part of R
   </pre>
-  <p data-pid="153a71">The cut {s, p, q} has capacity c(p, t) + c(q, t) = 14. So 14 is the largest flow, by the flow-under-cut technique: the cut proves it, and the flow proves the cut is smallest.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · push · ← → keys work</div></section>
+  <p data-pid="927982">38h2 put a formula’s code into the formula, by Sub, and got a statement δ with PA reaching δ ⇔ ψ(⌜δ⌝). Here the code is put into the machine, by q, and R does what T does with R’s code. The formula and the machine take the same two steps: describe, then feed the description to itself.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · own code · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">40f2.1</span><span class="ph understand">understand</span>What are room forward and room back? <br>What does the push-along technique say, and why is the balance kept at a dot where the route steps back against a link?</li>
+      <li><span class="qid">40f2.1</span><span class="ph understand">understand</span>What does the own-code technique say? <br>How does its proof match the self-statement technique of 38h2?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="40f3">
-  <h2 class="sthead"><span class="stno">40f3</span>The largest flow is the smallest cut</h2>
-  <p data-pid="aac0a6">Bottleneck technique: <b>if no route has room, the dots reachable from s by steps with room form a cut whose capacity is the value of the flow; so the largest flow equals the smallest cut.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the bottleneck technique">
-S = \text{dots reachable from } s \text{ by steps with room} @@ t ∉ S: no route has room
-(u, w),\ u \in S,\ w \notin S \Rightarrow f(u, w) = c(u, w) @@ room forward would put w in S
-(w, u),\ w \notin S,\ u \in S \Rightarrow f(w, u) = 0 @@ room back would put w in S
-|f| = \text{flow out of } S - \text{flow into } S = c(S) - 0 @@ the second line of the flow-under-cut proof
-\htmlClass{new}{|f| = c(S) \ge \text{every flow},\ \ c(S) \le \text{every cut}} \quad \blacksquare @@ the flow-under-cut technique, both ways
+  <h2 class="sthead"><span class="stno">40f3</span>Diagonals in three lines</h2>
+  <p data-pid="086164">With the own-code technique a machine may begin “get your own code”. The stopping question falls in three lines.</p>
+  <pre class="lines" data-k="ember" data-label="this step: stopping again">
+D \text{ decides } H;\ \allowbreak \ R\text{: get } \langle R\rangle\text{, run } D \text{ on } \langle R\rangle \# w\text{, }\allowbreak \text{do }\allowbreak \text{the }\allowbreak \text{opposite} @@ suppose D; R by the own-code technique
+R \text{ stops }\allowbreak \text{on } w \iff D \text{ says } R \text{ does }\allowbreak \text{not }\allowbreak \text{stop }\allowbreak \text{on } w @@ R’s building
+\htmlClass{new}{\bot} \quad \blacksquare @@ D is right about R
   </pre>
-  <p data-pid="ec247b">Whole-flow technique: <b>if every capacity is a whole number, pushing from the zero flow stops, and the largest flow can be taken with every f(u, w) whole.</b> Each push adds a whole number at least 1 to the value, and the value never passes c({s}). The distance to that ceiling is a falling measure (4l). Every room stays whole, so every push is whole.</p>
-  <p data-pid="a783f1">With capacities that are not fractions, pushing along badly chosen routes can go on for ever, and the values settle below the largest flow. Choosing a route with fewest links each time stops in at most |V| · |E| pushes, whatever the capacities; that was shown in 1972, and is stated here.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · bottleneck · ← → keys work</div></section>
+  <p data-pid="5468cd">A machine is <i>shortest</i> when no machine with a shorter code computes the same function.</p>
+  <p data-pid="075684">Shortest-unlisted technique: <b>no machine lists endlessly many shortest machines.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the shortest-unlisted technique">
+L \text{ lists }\allowbreak \text{endlessly }\allowbreak \text{many }\allowbreak \text{shortest }\allowbreak \text{machines} @@ suppose it
+R\text{: get } \langle R\rangle\text{; run } L \text{ until }\allowbreak \text{it }\allowbreak \text{lists }\allowbreak \text{some } C \text{ with }\allowbreak \text{a }\allowbreak \text{code }\allowbreak \text{longer }\allowbreak \text{than } \langle R\rangle\text{; }\allowbreak \text{then }\allowbreak \text{act }\allowbreak \text{as } C @@ the own-code technique; such a C comes, since only finitely many codes are as short as ⟨R⟩
+R \text{ computes }\allowbreak \text{what } C \text{ computes} @@ R acts as C on every input
+\langle R\rangle \text{ is }\allowbreak \text{shorter }\allowbreak \text{than } \langle C\rangle @@ the choice of C
+\htmlClass{new}{\bot:\ C \text{ is }}\allowbreak \htmlClass{new}{ \text{not }}\allowbreak \htmlClass{new}{ \text{shortest}} \quad \blacksquare @@ against L’s list
+  </pre>
+  <p data-pid="3d47bf">So there are endlessly many shortest machines, one for each computed function at least, and no machine can find more than finitely many of them and know it. Proving that a program cannot be made shorter is, past a point, beyond every listed method.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · uses · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">40f3.1</span><span class="ph understand">understand</span>What does the bottleneck technique say? <br>Why is every link from S to the rest full, and every link from the rest into S empty?</li>
+      <li><span class="qid">40f3.1</span><span class="ph understand">understand</span>How does the own-code technique shorten the proof of 40d2? <br>What does the shortest-unlisted technique say, and why does a C longer than R always come?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="40f4">
-  <h2 class="sthead"><span class="stno">40f4</span>Matchings as flows</h2>
-  <p data-pid="38c114">Take a two-sided graph with sides X and Y. Add a source joined to each dot of X, and a sink joined from each dot of Y. Turn each link into a one-way link from X to Y. Give every link capacity 1.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the largest matching as a flow">
-\text{a matching of } k \text{ links} \to \text{a flow of value } k @@ send 1 along s → x → y → t for each matched pair
-\text{a whole flow of value } k \to \text{a matching of } k \text{ links} @@ each x receives at most 1, so sends 1 to at most one y; each y likewise
-\text{largest matching} = \text{largest flow} @@ the whole-flow technique gives a whole largest flow
-\htmlClass{new}{= \text{smallest cut}} \quad \blacksquare @@ the bottleneck technique
-  </pre>
-  <p data-pid="59b180">A smallest cut here can be read as a cover. Give the X to Y links capacity |X| + 1 in place of 1, which changes no whole flow’s value; then a smallest cut S never lets one of them cross, and the dots of X outside S, with the dots of Y inside S, are a cover with c(S) dots. So 40e’s cover-equals-matching technique is the bottleneck technique on a special network.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · matching flow · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">40f4.1</span><span class="ph understand">understand</span>How is a two-sided graph made into a network whose largest flow is its largest matching? <br>Why does that use the whole-flow technique?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="40f5">
-  <h2 class="sthead"><span class="stno">40f5</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">40f4</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{no path from } s \text{ to } t \text{ has room forward, so the flow is largest}\,? @@ a route may need a step back against a used link; room back counts
-\text{the cut of capacity 14 is smallest, so it is the only smallest cut}\,? @@ two cuts may share the least capacity; the flow fills each
-\text{the largest flow is whole, so every largest flow is whole}\,? @@ some largest flow is whole; halves on two parallel routes can also be largest
-\text{a cut’s capacity counts links both ways across}\,? @@ only links from S to the rest; links back into S carry nothing in a largest flow
+SELF \text{ holds }\allowbreak \text{a }\allowbreak \text{copy }\allowbreak \text{of }\allowbreak \text{its }\allowbreak \text{own }\allowbreak \text{code }\allowbreak \text{inside }\allowbreak \text{it}\,? @@ A holds B’s code only; B makes A’s code from it
+\text{let } R \text{ be }\allowbreak \text{a }\allowbreak \text{machine }\allowbreak \text{whose }\allowbreak \text{table }\allowbreak \text{contains } \langle R\rangle\,? @@ ⟨R⟩ is longer than any table holding it; build R as A B T
+\text{the }\allowbreak \text{self-print }\allowbreak \text{technique }\allowbreak \text{needs }\allowbreak \text{a }\allowbreak \text{mark }\allowbreak \text{for }\allowbreak \text{“this }\allowbreak \text{machine”}\,? @@ it needs only q, which turns a string into a printer of it
+\text{no }\allowbreak \text{shortest }\allowbreak \text{machine }\allowbreak \text{exists, }\allowbreak \text{by }\allowbreak \text{the }\allowbreak \text{shortest-unlisted }\allowbreak \text{technique}\,? @@ endlessly many exist; none of them is listed endlessly
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">40f5.1</span><span class="ph understand">understand</span>Why must a route with room be allowed to step back against a link? <br>Why does a cut’s capacity count only the links from S to the rest?</li>
+      <li><span class="qid">40f4.1</span><span class="ph understand">understand</span>Why can SELF not hold a copy of its own code? <br>Why does the shortest-unlisted technique not say there are no shortest machines?</li>
     </ol>
   </section>
 </section>
@@ -133,22 +120,22 @@ S = \text{dots reachable from } s \text{ by steps with room} @@ t ∉ S: no rout
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">40f.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="c(s,p) = 3,\ c(s,q) = 2,\ c(p,q) = 1,\ c(p,r) = 3,\ c(q,r) = 1,\ c(q,t) = 2,\ c(r,t) = 4"></span></span>Find the largest flow by pushing, and a cut that proves it largest. <br>Which one link, raised by 1, raises the largest flow? Is there one whose raising does nothing?</div>
-  <div class="chq"><span class="chid">40f.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{capacities } 1,\ 1,\ r = \tfrac{\sqrt5 - 1}{2},\ \text{and large ones elsewhere}"></span></span>Capacities that are not fractions can trap the push-along recipe. With r² = 1 − r, check that rooms r, r², r³, … can be pushed in turn, each push leaving the next. <br>Where do the values settle? Why does the falling-measure technique not apply?</div>
-  <div class="chq"><span class="chid">40f.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{several sources, several sinks; capacities on dots}"></span></span>The bottleneck technique has one source, one sink and capacities on links. Reduce a network with many sources and sinks, and capacities on dots too, to one of that shape. <br>Then prove: in a graph, the fewest dots whose removal parts u from w equals the most paths from u to w sharing no dot but u and w.</div>
-  <div class="chq"><span class="chid">40f.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">28j: what leaves a region is what the region produces</span></span>Rung 28 traded an integral inside a region for one on its boundary: the flux out equals the total of the divergence. A flow on a network has divergence zero at every inside dot. <br>Write the flow-under-cut technique’s second line as that trade. What plays the region, the boundary and the divergence, and where do s and t come in?</div>
+  <div class="chq"><span class="chid">40f.5.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a program that prints its own text twice</span></span>Build, as two halves in the manner of 40f1, a machine that prints its own code twice. Then change the Python line of 40f1 so it prints its text twice, and check it.</div>
+  <div class="chq"><span class="chid">40f.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="R\text{: get } \langle R\rangle\text{, }\allowbreak \text{and }\allowbreak \text{write }\allowbreak \text{it }\allowbreak \text{on }\allowbreak \text{the }\allowbreak \text{next }\allowbreak \text{empty }\allowbreak \text{tape}"></span></span>A program that writes its own code somewhere new is a copier. What more does it need to spread? Is copying the code the same as copying the machine, and what does a living cell do in the place of each half?</div>
+  <div class="chq"><span class="chid">40f.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f \text{ computed, }\allowbreak \text{from }\allowbreak \text{codes }\allowbreak \text{to }\allowbreak \text{codes}"></span></span>Prove that for every computed f from codes to codes there is a machine M such that M and the machine with code f(⟨M⟩) compute the same function. Use the own-code technique with T: on ⟨M⟩ # w, compute f(⟨M⟩) and run it on w. What does this say when f adds one row that does nothing?</div>
+  <div class="chq"><span class="chid">40f.5.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">0b.4.4: the phrase “is not so of its own quotation”</span></span>0b.4.4 filled a phrase’s gap with the phrase’s own quotation, and asked about “is not so of its own quotation”. SELF fills B’s gap with B’s quotation. Write the statement 0b.4.4 asked for. What happens when the phrase is “does not stop when given its own quotation”? Which of the three, the phrase, the statement or the machine, has an answer, and which is refused?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r40e.html">← 40e · matchings</a><a href="r40g.html">40g · the best corner →</a></nav>
+<nav class="nextrung"><a href="r40e.html">← 40e · undecidable everywhere</a><a href="r40g.html">40g · smaller machines →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A network is a flow network; room is residual capacity, and the network of rooms is the residual graph. A route with room is an augmenting path. The bottleneck technique is the max-flow min-cut theorem, and the push-along recipe is the Ford–Fulkerson method; choosing fewest links each time is the Edmonds–Karp algorithm (1972; Yefim Dinitz had a faster form in 1970). The whole-flow technique is the integrality theorem. The statement of 40f.6.3 is Menger's theorem (1927).</p>
+  <p>A program that prints its own text is a quine, after the logician W. V. O. Quine, whose phrase “yields falsehood when preceded by its quotation” is the 0b.4.4 trick written out. The own-code technique is Kleene’s second recursion theorem, or the recursion theorem; 40f.5.3 is its fixed-point form, Rogers’s fixed-point theorem. The shortest-unlisted technique is that MIN_TM is not Turing-recognizable, and it is close to the result that the shortest description of a string, its Kolmogorov complexity, is not computable.</p>
   <h3>Who said it first</h3>
-  <p>Theodore Harris and Frank Ross studied, in a report of 1955 for the United States Air Force, the smallest cut of the Soviet rail network into Eastern Europe. Lester Ford and Delbert Fulkerson proved the max-flow min-cut theorem in 1956, as did Peter Elias, Amiel Feinstein and Claude Shannon the same year. Karl Menger had the version for paths in 1927. Ford and Fulkerson's example of a recipe that never stops is from their book of 1962.</p>
+  <p>Stephen Kleene proved the recursion theorem in 1938. John von Neumann, in lectures of 1948 and 1949 published in 1966, built a machine that reproduces itself from a description of itself, with a copier and a builder, the A and B of this step, before the structure of DNA was known (1953). Douglas Hofstadter popularised the name quine in 1979. Andrey Kolmogorov (1965) and Gregory Chaitin (1966) defined the shortest description.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“The smallest cut is a bottleneck, so no flow can be larger. Push flow until it can go no further; then it is as large as the bottleneck.” Not allowed: “it can go no further” must mean no route with room, counting room back. With only forward steps, the recipe can stop below the largest flow: route the first push through a middle link that a better flow does not use.</p>
+  <p>“R gets its own code by reading its table.” Not allowed: a machine cannot read its own table, only its tape. The own-code technique puts ⟨R⟩ on the tape by computing it, which is the whole point of A and B.</p>
 </section>
 
 </div>
@@ -163,25 +150,20 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'balance',t:R`\text{in} = \text{out}`,n:`At inside dots.`},
-  {k:'ember',kl:'across',t:R`|f| = \text{net flow out of } S`,n:`Every cut.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{|f| \le c(S)}`,n:`A bound from above.`}
-],{title:'The slides · cuts · ← → keys work'});
+  {k:'ember',kl:'B',t:R`\langle X\rangle \mapsto \langle P_{\langle X\rangle}\rangle\langle X\rangle`,n:`Quote what you read.`},
+  {k:'ember',kl:'A',t:R`P_{\langle B\rangle}`,n:`Print B.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\langle A\rangle\langle B\rangle = \langle SELF\rangle}`,n:`Its own code.`}
+],{title:'The slides · self · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'room',t:R`c - f \text{ forward},\ f \text{ back}`,n:`On each link.`},
-  {k:'ember',kl:'route',t:R`s \to \cdots \to t`,n:`Least room r.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{|f| + r}`,n:`A larger flow.`}
-],{title:'The slides · push · ← → keys work'});
+  {k:'ember',kl:'parts',t:R`R = A\,B\,T`,n:`Print, quote, use.`},
+  {k:'ember',kl:'tape',t:R`\langle R\rangle \# w`,n:`Code and input.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{R(w) = T(\langle R\rangle \# w)}`,n:`For any T.`}
+],{title:'The slides · own code · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'reach',t:R`S = \text{reachable with room}`,n:`From s.`},
-  {k:'ember',kl:'full',t:R`f = c \text{ out},\ f = 0 \text{ in}`,n:`Across S.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\max |f| = \min c(S)}`,n:`Largest flow, smallest cut.`}
-],{title:'The slides · bottleneck · ← → keys work'});
-stepper('#sl4',[
-  {k:'ember',kl:'build',t:R`s \to X \to Y \to t`,n:`Capacity 1.`},
-  {k:'ember',kl:'whole',t:R`f \in \{0, 1\}`,n:`A matching.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{matching} = \text{cut} = \text{cover}}`,n:`40e again.`}
-],{title:'The slides · matching flow · ← → keys work'});
+  {k:'ember',kl:'stopping',t:R`R\colon \text{opposite of } D(\langle R\rangle \# w)`,n:`Three lines.`},
+  {k:'ember',kl:'shortest',t:R`R \text{ acts as a longer } C`,n:`Shorter, same function.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{no list of shortest}}`,n:`Endlessly many, unlisted.`}
+],{title:'The slides · uses · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

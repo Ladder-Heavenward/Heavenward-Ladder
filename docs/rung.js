@@ -1308,10 +1308,30 @@ const ss={ get(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null
 const last=()=>{ try{ return JSON.parse(LS.getItem(LK)||'null'); }catch(e){ return null; } };
 const href=(p,id)=>p+'.html'+(id?'#'+id:'');
 /* where the Ladder button and the app's start go */
+/* 0.3.2 (Andrew 21:27): the Ladder button and the app's start go to your furthest footing on the climb, not the last one opened.
+   A footing's place on the climb: its rung, then its page within the rung (theory page, steps in LADMAP's order, statistics and
+   newsflash, conclusion; floor pages around their rungs), then the footing. Subject annexes, the blue sky and the index have no place. */
+const FK='ladder:furthest';
+const furthest=()=>{ try{ return JSON.parse(LS.getItem(FK)||'null'); }catch(e){ return null; } };
+const OPTX=/(phys|chem|bio|comp|eng|econ|logi|crypt|nav)\d*$/;
+function placeOf(stem){ const M=window.LADMAP; let m=String(stem||'').match(/^floor(\d+)(concl)?$/);
+  if(m){ if(!M) return null; const F=M.find(x=>x[0]===+m[1]); if(!F||!F[1].length) return null; return m[2]?F[1][F[1].length-1][0]*1000+960:F[1][0][0]*1000; }
+  m=String(stem||'').match(/^r(\d+)(.*)$/); if(!m) return null; const r=+m[1], suf=m[2];
+  if(suf==='') return r*1000+10; if(suf==='concl') return r*1000+950; if(OPTX.test(suf)) return null;
+  if(!M) return null; for(const [,rungs] of M) for(const [rr,core,annex] of rungs) if(rr===r){ const all=core.concat(annex).map(x=>x[0]); const i=all.indexOf(stem); return i<0?null:r*1000+20+i; }
+  return null; }
+function climbed(P,id,n){ const pl=placeOf(P); if(pl==null) return; const ord=pl*1000+n, f=furthest();
+  if(!f||!(f.ord>=ord)) try{ LS.setItem(FK,JSON.stringify({page:P,id,ord,t:Date.now()})); }catch(e){} }
+/* no record yet (before 0.3.2): the furthest page the record knows, opened at its top */
+function guess(){ let P={}; try{ P=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
+  const stems=new Set(Object.keys(P).filter(k=>!/^open:/.test(k)));
+  for(let i=0;i<LS.length;i++){ const k=LS.key(i)||''; if(/^steps:/.test(k)) stems.add(k.slice(6)); }
+  Object.keys(P).forEach(k=>{ const m=k.match(/^open:(r\d+)$/); if(m&&P[k].v) stems.add(m[1]); });
+  let best=null, bo=-1; stems.forEach(s=>{ const o=placeOf(s); if(o!=null&&o>bo){ bo=o; best=s; } }); return best?{page:best,id:null}:null; }
 window.LadderFV={
-  last,
-  resumeHref(){ const l=last(); return l&&l.page?href(l.page,l.id):null; },
-  resume(){ const l=last(), h=this.resumeHref(); if(!h) return false;
+  last,furthest,placeOf,climbed,
+  resumeHref(){ const l=furthest()||guess(); return l&&l.page?href(l.page,l.id&&l.id!=='top'?l.id:null):null; },
+  resume(){ const l=furthest()||guess(), h=this.resumeHref(); if(!h) return false;
     if(l.page===page()&&this.goId){ this.goId(l.id); return true; }
     ss.set('fv:want','fv');
     if(window.LADDER_PAGE&&window.__deskGo){ window.__deskGo(h); return true; }
@@ -1335,11 +1355,20 @@ function footingView(){
   const kids=[...wrap.children], i0=kids.indexOf(steps[0]), iN=kids.indexOf(steps[steps.length-1]);
   const units=[kids.slice(0,i0)];
   steps.forEach(s=>units.push([s]));
+  /* 0.3.2 (Andrew 21:27): what follows the last footing (the standing questions, the measuring stick, the links) is not a footing:
+     it is reached from the toolbox, or by a link to it; "next" on the last footing goes to the first footing of the next page */
   const tail=kids.slice(iN+1); if(tail.length) units.push(tail);
   /* footings between the first and the last that are not steps ride with the footing before them */
   kids.slice(i0,iN+1).forEach(k=>{ if(!steps.includes(k)){ const prev=steps.filter(s=>kids.indexOf(s)<kids.indexOf(k)).pop(); units[steps.indexOf(prev)+1].push(k); } });
   units.forEach((u,n)=>u.forEach(el=>el.setAttribute('data-fvu',n)));
-  const N=units.length, P=page();
+  const N=units.length, P=page(), LASTU=tail.length?N-2:N-1;
+  /* the pages before and after on the climb: nav.nextrung as built, or the .pn rows pn() made of it (annex links relinked) */
+  const pageLink=dir=>{ const a=document.querySelector(dir>0?'.pn .pnb.next[href], nav.nextrung a.pnb.next[href]':'.pn .pnb.prev[href], nav.nextrung a.pnb.prev[href]')
+      ||[...document.querySelectorAll('nav.nextrung a')].find(x=>dir>0?/→/.test(x.textContent):(/←/.test(x.textContent)&&!/index\.html$/.test(x.getAttribute('href')||'')));
+    const h=a&&a.getAttribute('href'); return h&&!/^index\.html/.test(h)?h:null; };
+  const leave=(h,dir)=>{ ss.set('fv:want','fv'); location.href=h.replace(/#.*$/,'')+(dir<0?'#last':''); };
+  /* the blue sky waits until the top of the ladder is finished (Andrew 21:27) */
+  const skyOpen=()=>window.LadderSky&&LadderSky.open&&LadderSky.open();
   const unitOf=el=>{ const u=el&&el.closest&&el.closest('[data-fvu]'); return u?+u.getAttribute('data-fvu'):-1; };
   const idOf=n=>n===0?'top':(n===N-1&&tail.length?'end':steps[n-1].dataset.step);
   let cur=0, on=false, busy=false;
@@ -1349,19 +1378,23 @@ function footingView(){
   const sky=document.createElement('button'); sky.type='button'; sky.className='fvnav fvup fvsky'; sky.innerHTML='<span aria-hidden="true">☁</span> blue sky'; sky.hidden=true;
   sky.onclick=()=>{ if(window.LadderSky) LadderSky.supply(); };
   document.body.append(up,dn,sky);
-  const label=()=>{ up.hidden=!on||cur>=N-1; dn.hidden=!on||cur<=0; sky.hidden=!on||cur<N-1;
-    up.setAttribute('aria-label','next: '+(cur+1<N?idOf(cur+1):'')); dn.setAttribute('aria-label','previous: '+(cur>0?idOf(cur-1):''));
+  const label=()=>{ const atEnd=cur>=LASTU, nextPage=atEnd?pageLink(1):null, prevPage=cur<=0?pageLink(-1):null;
+    up.hidden=!on||(atEnd&&!nextPage); dn.hidden=!on||(cur<=0&&!prevPage); sky.hidden=!on||!atEnd||!!nextPage||!skyOpen();
+    up.setAttribute('aria-label','next: '+(atEnd?(nextPage||''):idOf(cur+1))); dn.setAttribute('aria-label','previous: '+(cur>0?idOf(cur-1):(prevPage||'')));
     pos.textContent=cur>0&&cur<=steps.length?' · '+cur+' of '+steps.length:''; };
   const paint=()=>{ units.forEach((u,n)=>u.forEach(el=>el.classList.toggle('fv-on',n===cur))); document.body.classList.toggle('fv-notend',cur<N-1); label(); };
-  const remember=()=>{ try{ LS.setItem(LK,JSON.stringify({page:P,id:idOf(cur),t:Date.now()})); }catch(e){} };
+  const remember=()=>{ try{ LS.setItem(LK,JSON.stringify({page:P,id:idOf(cur),t:Date.now()})); }catch(e){} if(cur<=LASTU) climbed(P,idOf(cur),cur); };
   const top=()=>{ window.scrollTo(0,0); };
   function setMode(v){ on=v; document.body.classList.toggle('fv',on); if(on) paint(); else units.forEach(u=>u.forEach(el=>el.classList.remove('fv-on'))); label();
     const b=document.querySelector('#desk .dfv'); if(b) b.textContent=on?'Page view':'Footing view';
     try{ const pr=JSON.parse(LS.getItem('ladder:view')||'{}')||{}; pr[P]=on?'fv':'page'; LS.setItem('ladder:view',JSON.stringify(pr)); }catch(e){} }
-  /* the cam: a smooth rise (1 − cos)/2 along y, a sideways swell sin along x, a slight lean, so the path is an oval arc */
-  const cam=(dir,H,W,outgoing)=>{ const f=[]; for(let i=0;i<=16;i++){ const t=i/16, e=(1-Math.cos(Math.PI*t))/2, s=Math.sin(Math.PI*t);
-      const y=outgoing?dir*e*H:-dir*(1-e)*H, x=(outgoing?1:-1)*0.07*W*s, r=(outgoing?1:-1)*dir*2.2*s;
-      f.push({transform:'translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px) rotate('+r.toFixed(2)+'deg)',opacity:outgoing?1-0.35*e*e:0.35+0.65*e}); }
+  /* the cam (0.3.2, Andrew 21:27): the footing travels straight up or down; only its speed follows the cam. An elliptical cam
+     (semi-axes 1 and 0.55) turning at an even rate lifts its follower by r(φ) = ab/√(b²cos²φ + a²sin²φ) as φ runs from π/2 to 0:
+     the lift starts and ends at rest, and the ellipse sets how it gathers and loses speed in between. */
+  const CA=1, CB=0.55, lift=t=>{ const ph=Math.PI/2*(1-t), r=CA*CB/Math.sqrt(CB*CB*Math.cos(ph)**2+CA*CA*Math.sin(ph)**2); return (r-CB)/(CA-CB); };
+  const cam=(dir,H,W,outgoing)=>{ const f=[]; for(let i=0;i<=32;i++){ const t=i/32, e=lift(t);
+      const y=outgoing?dir*e*H:-dir*(1-e)*H;
+      f.push({transform:'translateY('+y.toFixed(1)+'px)',opacity:outgoing?1-0.35*e*e:0.35+0.65*e}); }
     return f; };
   function go(n,opts){ opts=opts||{}; n=Math.max(0,Math.min(N-1,n)); if(n===cur&&!opts.force){ return; } if(busy) return;
     const from=cur, dir=n>from?1:-1; cur=n;
@@ -1379,25 +1412,30 @@ function footingView(){
     const a2=inc.map(el=>el.animate(cam(dir,H,W,false),{duration:560,easing:'linear'}));
     a1.onfinish=()=>{ old.forEach((el,i)=>{ el.classList.remove('fv-on'); marks[i].replaceWith(el); }); ghost.remove(); paint(); busy=false; remember(); if(opts.el) opts.el.scrollIntoView({block:'start'}); };
   }
-  up.onclick=()=>go(cur+1); dn.onclick=()=>go(cur-1);
+  const fwd=()=>{ if(cur>=LASTU){ const h=pageLink(1); if(h) leave(h,1); return; } go(cur+1); };
+  const back=()=>{ if(cur<=0){ const h=pageLink(-1); if(h) leave(h,-1); return; } go(Math.min(cur-1,LASTU)); };
+  up.onclick=fwd; dn.onclick=back;
   /* one finger: past the top edge of a footing, pulling down climbs to the next; past its bottom edge, pushing up goes back */
   let sy=null, sx=0, mode=0;
   const shut=t=>!!(t.closest&&t.closest('.slides,.pic,canvas,input,textarea,select,button,a,.mg,#desk,#lbar,.chq,.sayback .qid'));
   addEventListener('touchstart',e=>{ if(!on||busy||e.touches.length!==1||shut(e.target)) { sy=null; return; }
     sy=e.touches[0].clientY; sx=e.touches[0].clientX;
     const atTop=wrap.getBoundingClientRect().top>=-2, atFoot=innerHeight+scrollY>=document.documentElement.scrollHeight-4;
-    mode=(atTop&&cur<N-1?1:0)|(atFoot&&cur>0&&!(tail.length&&cur===N-1)?2:0); },{passive:true});
+    mode=(atTop&&(cur<LASTU||pageLink(1))&&cur<=LASTU?1:0)|(atFoot&&(cur>0||pageLink(-1))&&cur<=LASTU?2:0); },{passive:true});
+  /* not passive: a pull that climbs must not also be the browser's pull-to-refresh (Andrew 21:27: "it just reloads the page") */
   addEventListener('touchmove',e=>{ if(sy==null||!mode) return; const dy=e.touches[0].clientY-sy, dx=e.touches[0].clientX-sx;
     if(Math.abs(dx)>Math.abs(dy)) return; const pull=(mode&1&&dy>0)?dy:(mode&2&&dy<0)?dy:0;
-    units[cur].forEach(el=>el.style.transform=pull?'translateY('+(pull*0.35).toFixed(1)+'px)':''); },{passive:true});
+    if(pull&&e.cancelable) e.preventDefault();
+    units[cur].forEach(el=>el.style.transform=pull?'translateY('+(pull*0.35).toFixed(1)+'px)':''); },{passive:false});
   addEventListener('touchend',e=>{ if(sy==null) return; const t=e.changedTouches[0], dy=t.clientY-sy, dx=t.clientX-sx; sy=null;
     units[cur].forEach(el=>el.style.transform='');
     if(!mode||Math.abs(dx)>Math.abs(dy)) return;
-    if(mode&1&&dy>90) go(cur+1); else if(mode&2&&dy<-90) go(cur-1); },{passive:true});
+    if(mode&1&&dy>90) fwd(); else if(mode&2&&dy<-90) back(); },{passive:true});
   /* a link to a paragraph or a footing on this page opens the footing that holds it */
   const toHash=()=>{ const h=decodeURIComponent((location.hash||'').slice(1)); if(!h) return false;
     let el=null; try{ el=document.getElementById(h)||document.querySelector('[data-step="'+CSS.escape(h)+'"]')||document.querySelector('[data-pid="'+CSS.escape(h)+'"]'); }catch(e){}
     if(h==='top') { go(0,{instant:true,force:true}); return true; } if(h==='end'){ go(N-1,{instant:true,force:true}); return true; }
+    if(h==='last'){ go(LASTU,{instant:true,force:true}); return true; }
     const u=unitOf(el); if(u<0) return false; go(u,{instant:true,force:true,el:u>0?el:null}); return true; };
   addEventListener('hashchange',()=>{ if(on) toHash(); });
   document.addEventListener('click',e=>{ const a=e.target.closest('a[href^="#"]'); if(!a||!on) return; const id=a.getAttribute('href').slice(1); if(!id) return;
@@ -1411,7 +1449,9 @@ function footingView(){
   window.LadderFV.go=n=>go(n);
   window.LadderFV.goId=id=>{ if(!on) setMode(true); const n=id==='top'?0:id==='end'?N-1:1+steps.findIndex(s=>s.dataset.step===id); go(n<0?0:n,{force:true}); };
 }
-ready(()=>{ /* 0.2.1: rung and floor pages carry no tags */ if(/^(r\d+|floor\d+)$/.test(page())) document.querySelectorAll(".top .tags").forEach(t=>t.remove()); onIndex(); setTimeout(footingView,60); });
+const ladmap=()=>window.LADMAP?Promise.resolve():new Promise(res=>{ const s=document.createElement('script'); s.src='ladmap.js'; s.onload=s.onerror=()=>res(); document.head.appendChild(s); });
+window.LadderFV.ladmap=ladmap;
+ready(()=>{ /* 0.2.1: rung and floor pages carry no tags */ if(/^(r\d+|floor\d+)$/.test(page())) document.querySelectorAll(".top .tags").forEach(t=>t.remove()); ladmap().then(()=>{ onIndex(); setTimeout(footingView,60); }); });
 })();
 
 /* ---- 0.2.1 the blue sky (Andrew 2026-11-04 19:13, 19:53): the Endless floor's steps come one at a time. The button sits at the very top
@@ -1430,12 +1470,21 @@ function supply(){ load().then(L=>{ const st=got(); if(!L.length){ note('The blu
     const nx=L[st.n]; st.n++; st.at=(st.at||[]).concat([Date.now()]); try{ LS.setItem(KEY,JSON.stringify(st)); }catch(e){}
     try{ sessionStorage.setItem('fv:want','fv'); }catch(e){} location.href=nx.page+'.html'; }); }
 function index(){ const sec=document.getElementById('skysec'), top=document.getElementById('skytop'); if(!sec||!top) return;
-  top.querySelector('.skybtn').onclick=supply;
+  top.querySelector('.skybtn').onclick=supply; top.hidden=true; sec.hidden=true;
+  if(!window.LADMAP){ const s=document.createElement('script'); s.src='ladmap.js'; s.onload=()=>index(); document.head.appendChild(s); return; }
+  if(!open()) return; top.hidden=false;
   load().then(L=>{ const n=Math.min(got().n,L.length), ol=sec.querySelector('ol');
     const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
     ol.innerHTML=L.slice(0,n).map(x=>'<li class="k-sky built"><span class="n">∞'+x.n+'</span><span class="t"><a href="'+x.page+'.html">'+esc(x.title)+'</a><span class="kind">'+esc(x.kw)+'</span></span></li>').join('');
     sec.hidden=!n; const nt=top.querySelector('.skynote'); if(nt&&n>=L.length&&L.length) nt.textContent='caught up: all '+L.length+' steps from the front are below'; }); }
-window.LadderSky={supply,load,count:()=>got().n};
+/* 0.3.2 (Andrew 21:27): the blue sky does not appear until the top floor is finished: every core step of the ladder's
+   last floor passed, or that floor measured */
+function open(){ const M=window.LADMAP; if(!M||!M.length) return false; const F=M[M.length-1];
+  let P={}; try{ P=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
+  let c=null; try{ c=JSON.parse(LS.getItem('cert:floor'+F[0]+'concl')||'null'); }catch(e){}
+  if(c&&c.via!=='measure') return true;
+  return F[1].length>0&&F[1].every(([,core])=>core.every(([s])=>P[s]&&P[s].v)); }
+window.LadderSky={supply,load,open,count:()=>got().n};
 const go=()=>{ index(); };
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
 })();
@@ -1661,4 +1710,76 @@ function list(){ close(); const body=frame('','');
 window.LadderStanding={walk,list,lockFor,stemOf};
 const boot=()=>setTimeout(pageHooks,300);
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
+})();
+
+/* ---- 0.3.2 how annexes are reached (Andrew 2026-11-04 21:15): the climb runs through the steps, the statistics annex,
+   the newsflash and the research front (Andrew 21:31); previous and next skip the subject annexes. A subject annex is reached from the ladder itself
+   ("dizzying heights") or from the toolbox's "Annexes": a catalogue by subject, each annex opening once its rung is
+   opened, with the next one named ("next annex at 18", or "much higher up the ladder" past the furthest-forward limit).
+   On an annex page, previous goes back to the climb and next goes to the subject's next open annex.
+   The map is annexes.js, written by tools/annexmap.py from index.html and the pages' links. */
+(function(){
+'use strict';
+const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+const get=(k,d)=>{ try{ const v=JSON.parse(LS.getItem(k)||'null'); return v==null?d:v; }catch(e){ return d; } };
+let loading=null;
+const data=()=>window.LADDER_ANNEXES?Promise.resolve(window.LADDER_ANNEXES):(loading=loading||new Promise(res=>{ const s=document.createElement('script'); s.src='annexes.js'; s.onload=()=>res(window.LADDER_ANNEXES||null); s.onerror=()=>res(null); document.head.appendChild(s); }));
+const page=()=>window.ladderPage?ladderPage():(location.pathname.split('/').pop()||'index').replace(/\.html$/,'');
+/* progress: the highest rung opened (at the foot of its page, or measured into) */
+function high(){ const P=get('pages:done',{}); let h=-1; for(const k in P){ const m=k.match(/^open:r(\d+)$/); if(m&&P[k]&&P[k].v) h=Math.max(h,+m[1]); } return h; }
+/* how far ahead a page may number (Andrew 2026-10-29): r + floor(0.2·(12 + r/6)·6) */
+const limit=r=>{ r=Math.max(0,r); return r+Math.floor(0.2*(12+r/6)*6); };
+const isOpen=(a,h)=>a[3]<=h;
+function nextAt(list,h){ const n=list.find(a=>!isOpen(a,h)); if(!n) return null; return n[3]<=limit(h)?'next annex at '+n[3]:'next annex much higher up the ladder'; }
+function subjectOf(D,stem){ for(const k of D.order){ const i=(D.subj[k]||[]).findIndex(a=>a[0]===stem); if(i>=0) return {k,i,list:D.subj[k]}; } return null; }
+/* the climb's links: pn() has turned nav.nextrung into .pn rows (top and foot); before that, the nav itself */
+function relink(D){ const P=page(), sk=D.skip[P], S=subjectOf(D,P), opt=S&&S.k!=='stat'&&S.k!=='now';
+  if(!sk&&!opt) return;
+  let prev=null, next=null, lock=null;
+  if(sk){ prev=sk[0]; next=sk[1]; }
+  if(opt){ prev=D.back[P]||null; const h=high(), nx=S.list[S.i+1];
+    if(nx&&isOpen(nx,h)) next=[nx[0],nx[1]+' · '+nx[2].charAt(0).toLowerCase()+nx[2].slice(1)]; else { next=null; lock=nx?nextAt(S.list.slice(S.i+1),h).replace('next annex','next '+D.names[S.k]+' annex'):'the last '+D.names[S.k]+' annex built so far'; } }
+  const txt=s=>s==null?null:Array.isArray(s)?s[1]:(D.text[s]||s), href=s=>(Array.isArray(s)?s[0]:s)+'.html';
+  const prevT=opt&&prev?'back to the climb · '+txt(prev):txt(prev);
+  const rows=[...document.querySelectorAll('.pn')];
+  if(rows.length){ rows.forEach(n=>{
+      const set=(cls,s,t,k)=>{ const old=n.querySelector('.pnb.'+cls); if(!old) return;
+        if(s==null&&!t){ return; }
+        let el;
+        if(s!=null){ el=document.createElement('a'); el.href=href(s); el.innerHTML='<span class="pk">'+k+'</span><span class="pl">'+esc(t)+'</span>'; }
+        else { el=document.createElement('button'); el.type='button'; el.innerHTML='<span class="pk">'+k+'</span><span class="pl">'+esc(t)+'</span>'; el.onclick=()=>catalogue(S&&S.k); }
+        el.className='pnb '+cls+(s==null?' annexlock':''); old.replaceWith(el); };
+      if(prev||sk) set('prev',prev,txt(prev),opt?'← back to the climb':'← previous');
+      if(next||lock) set('next',next,next?txt(next):lock,next?(opt?'next '+D.names[S.k]+' →':'next →'):'annexes ☰'); });
+    return; }
+  const nav=document.querySelector('nav.nextrung'); if(!nav) return;
+  const as=[...nav.querySelectorAll('a')], pa=as.find(a=>/←/.test(a.textContent)&&!/index\.html$/.test(a.getAttribute('href')||'')), na=as.find(a=>/→/.test(a.textContent));
+  if(pa&&prev){ pa.href=href(prev); pa.textContent='← '+prevT; }
+  if(na){ if(next){ na.href=href(next); na.textContent=(opt?'next '+D.names[S.k]+': ':'')+txt(next)+' →'; } else if(lock){ const b=document.createElement('button'); b.type='button'; b.className='annexlock'; b.textContent=lock; b.onclick=()=>catalogue(S&&S.k); na.replaceWith(b); } }
+}
+/* the toolbox catalogue */
+function catalogue(want){ data().then(D=>{ if(!D) return;
+  const old=document.getElementById('stick'); if(old) old.remove();
+  const box=document.createElement('div'); box.id='stick'; box.setAttribute('role','dialog'); box.setAttribute('aria-label','the annexes'); document.body.appendChild(box); document.body.classList.add('stickopen');
+  const h=high(), P=get('pages:done',{}), here=page();
+  const sec=k=>{ const L=D.subj[k]||[]; if(!L.length) return ''; const open=L.filter(a=>isOpen(a,h)), nx=nextAt(L,h);
+    const sum=D.names[k]+' · '+(open.length?(open.length===L.length?'all '+L.length+' open':open.length+' open'):(nx?nx.replace('next annex','first annex'):''));
+    const show=want?k===want:(open.some(a=>a[0]===here));
+    return '<details class="sk-fl"'+(show?' open':'')+'><summary>'+esc(sum)+'</summary><ul class="sk-list">'
+      +open.map(a=>'<li><a href="'+a[0]+'.html">'+esc(a[1])+'</a> <span class="sk-st">'+esc(a[2])+(P[a[0]]&&P[a[0]].v?' ✓':'')+'</span></li>').join('')
+      +(nx?'<li class="sk-st">'+esc(open.length?nx:nx.replace('next annex','first annex'))+'</li>':'')+'</ul></details>'; };
+  box.innerHTML='<div class="sk-card"><div class="sk-top"><span>the annexes</span><button type="button" class="sk-x" aria-label="close">×</button></div>'
+    +'<p class="sk-n">The annexes by subject, in the order you meet them. The climb runs through the steps, statistics, the newsflash and the research front; every other annex is here, or on the ladder itself under dizzying heights. An annex opens when you open its rung.</p>'
+    +D.order.map(sec).join('')+'</div>';
+  box.querySelector('.sk-x').onclick=()=>{ box.remove(); document.body.classList.remove('stickopen'); };
+  box.addEventListener('click',e=>{ if(e.target===box){ box.remove(); document.body.classList.remove('stickopen'); } });
+}); }
+/* the toolbox button, beside "Dizzying heights" */
+function button(){ const dh=document.querySelector('#desk .dheights'); if(!dh) return false; if(document.querySelector('#desk .dannex')) return true;
+  const b=document.createElement('button'); b.type='button'; b.className='dannex'; b.textContent='Annexes';
+  b.onclick=()=>{ const x=document.querySelector('#desk .x'); if(x) x.click(); catalogue(); };
+  dh.parentNode.insertBefore(b,dh); return true; }
+window.LadderAnnexes={catalogue,data,high,relink};
+const boot=()=>{ data().then(D=>{ if(D) relink(D); }); let n=0; const t=setInterval(()=>{ if(button()||++n>40) clearInterval(t); },150); };
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(boot,0)); else boot();
 })();

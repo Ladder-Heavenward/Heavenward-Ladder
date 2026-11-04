@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>How do earbuds share a secret in public?</title>
+<title>Can a secret be split so any three of five can open it?</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,124 +25,108 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r42comp.html">← 42·comp how can a damaged message still be read?</a><a href="r42chem.html">next: 42·chem where do a molecule’s electrons sit? →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r42phys.html">← 42·phys why do metals conduct?</a><a href="r42now.html">next: 42·now do primes keep coming close together? →</a></p>
   <div class="tags"><span class="tag crypt">42·crypt · cryptography</span></div>
-  <h1>How do earbuds share a secret in public?</h1>
-  <p data-pid="08beb1">How do earbuds share a secret in public? A pair of earbuds taken out of a box on a bus in Portland and paired with a phone has never met it before, and everything the two say to each other goes out by radio, where anyone nearby can listen. Within a second they share a secret key that nobody listening can work out, and they check, by showing six digits on the phone, that no third device slipped in between them. Then they talk by hopping across 79 radio channels, sixteen hundred times a second, in an order only the two of them know. Rung forty one agreed on a secret in public with powers on a prime clock. The earbuds do the same with the points of a curve over a finite field, which can be added like numbers and give the same safety with much shorter keys. This page builds the adding of points, agrees on a secret with a small curve by hand, counts the chance that a device in the middle fools the six digits, and counts what the hopping buys.</p>
-  <p class="gesture" data-pid="21ceb7">The points of y² = x³ + ax + b over a prime clock, with one far point, can be added by drawing lines, and they form a group. Two devices each keep a secret count, send that many copies of a public point, and each multiplies what it receives by its own count: both reach the same point. A device in the middle is caught by six digits both screens show, with a chance of one in a million of slipping through. Hopping over 79 channels leaves a listener on one channel a seventy ninth of the talk.</p>
+  <h1>Can a secret be split so any three of five can open it?</h1>
+  <p data-pid="59a468">Can a secret be split so any three of five can open it? A bank vault has one combination and five managers, and the rule is that any three of them together may open it, while no two can, and no one alone. Cutting the combination into five pieces fails at once: each piece gives away part of the secret, and the pieces have to be the right ones. There is a way that gives each manager one number, so that any three numbers rebuild the secret exactly and any two give away nothing at all, not one hint. It uses only what this rung built: a curve through points, read on a prime clock. Three points fix a curve that bends once, two points fit every such curve through every possible secret, and on a clock there are no sizes to give a hint. The same trick guards the keys that sign the root notes of the web.</p>
+  <p class="gesture" data-pid="8d86c1">Write the secret as the value at 0 of a curve f(x) = s + a₁x + a₂x² on a prime clock, with a₁ and a₂ chosen at random, and give the five people f(1) to f(5). Any three values fix f and so s. Any two fit exactly one curve through each possible secret, so they say nothing about s.</p>
 </header>
 
-<section class="class step" data-step="42crypt1">
-  <h2 class="sthead"><span class="stno">42crypt1</span>A curve with finitely many points</h2>
-  <p data-pid="40914b">Over the prime clock ℤ/17, take the curve y² = x³ + 2x + 2. Its points are the pairs (x, y) of the clock that make it true, and one more, the <i>far point</i> O, which the next footing needs.</p>
-  <p data-pid="070ee8">Square-count technique: <b>for each x, the curve has two points if x³ + 2x + 2 is a square other than 0 on the clock, one if it is 0, and none if it is not a square.</b> On ℤ/17 the squares other than 0 are 1, 2, 4, 8, 9, 13, 15, 16, each the square of two hours (41f).</p>
-  <pre class="lines" data-k="ember" data-label="this page: counting the points">
-x = 0:\ 2 = 6^2 \Rightarrow (0, 6), (0, 11) @@ 36 = 2 on the clock of 17
-x = 5:\ 125 + 10 + 2 = 137 = 1 \Rightarrow (5, 1), (5, 16) @@ 137 = 8 · 17 + 1
-\text{nine values of } x \text{ give a square other than } 0,\ \text{none give } 0 @@ checking the 17 values of x³ + 2x + 2 against the squares
-\htmlClass{new}{9 \cdot 2 + 1 = 19 \text{ points, with } O} \quad \blacksquare @@ the far point
+<section class="class step" data-step="41crypt1">
+  <h2 class="sthead"><span class="stno">41crypt1</span>One point for each person</h2>
+  <p data-pid="aad15d">Work on the clock of a prime p larger than the secret and than the number of people. The secret s is an hour. Pick two hours a₁ and a₂ at random, each of the p equally likely, and make the curve f(x) ≡ s + a₁x + a₂x². Then f(0) ≡ s. Person i is given the pair (i, f(i)), for i = 1 to 5, and the curve is thrown away.</p>
+  <p data-pid="170479">On the clock of 101, with s = 57, a₁ = 13 and a₂ = 70, the five shares are f(1) = 39, f(2) = 60, f(3) = 19, f(4) = 17, f(5) = 54. For instance f(3) = 57 + 39 + 630 = 726 = 7 · 101 + 19.</p>
+  <p data-pid="d945a0">Point-share technique: <b>each share (i, f(i)) is a point of the one curve of degree at most 2 whose value at 0 is the secret, and the five points are at five different hours.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the point-share technique">
+f(x) \equiv s + a_1x + a_2x^2 \pmod p @@ the dealer’s curve
+f(0) \equiv s @@ the secret is where the curve meets x = 0
+1, 2, 3, 4, 5 \text{ are different hours, none } 0 @@ p &gt; 5
+\htmlClass{new}{\text{shares } (i, f(i)),\ i = 1, \ldots, 5,\ \text{ all on } f} \quad \blacksquare @@ the curve is then thrown away
   </pre>
-  <p data-pid="6e8bda">Each x gives a square about half the time, so a curve over ℤ/p has about p + 1 points: never further from p + 1 than 2√p, a technique proved much higher up the ladder.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · points · ← → keys work</div></section>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · dealing · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">42·crypt.1.1</span><span class="ph understand">understand</span>What are the points of y² = x³ + 2x + 2 over ℤ/17? <br>What does the square-count technique say, and why does x = 5 give two points?</li>
+      <li><span class="qid">42·crypt.1.1</span><span class="ph understand">understand</span>Why must the prime p be larger than both the secret and the number of people? <br>What does each person hold, and where on the curve is the secret?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="42crypt2">
-  <h2 class="sthead"><span class="stno">42crypt2</span>Adding points</h2>
-  <p data-pid="bea492">Draw the line through two points P and Q of the curve. Put it into the curve: a cubic in x, with zeros at P’s x and Q’s x, so a third zero R (42c3’s factor technique). The <i>sum</i> P + Q is R flipped, (x_R, −y_R). P + O = P; P plus its flip is O; and P + P uses the tangent line.</p>
-  <p data-pid="d7614b">Chord-add technique: <b>with slope λ = (y_Q − y_P)/(x_Q − x_P), or λ = (3x_P² + a)/(2y_P) when Q = P, the sum has x = λ² − x_P − x_Q and y = λ(x_P − x) − y_P.</b> The cubic’s three zeros add to λ², by the sum-of-zeros rule of 9g, which gives x.</p>
-  <pre class="lines" data-k="ember" data-label="this page: doubling P = (5, 1) on ℤ/17">
-\lambda = \frac{3 \cdot 25 + 2}{2 \cdot 1} = 77 \cdot 2^{-1} = 9 \cdot 9 = 81 = 13 @@ the tangent; 77 = 9 and 2⁻¹ = 9 on the clock of 17
-x = 13^2 - 5 - 5 = 159 = 6 @@ 169 − 10; 159 = 9 · 17 + 6
-y = 13(5 - 6) - 1 = -14 = 3 @@ on the clock
-\htmlClass{new}{2P = (6, 3)} \quad \blacksquare @@ check: 9 = 3², and 216 + 12 + 2 = 230 = 9 on the clock
+<section class="class step" data-step="41crypt2">
+  <h2 class="sthead"><span class="stno">41crypt2</span>Three points fix the curve</h2>
+  <p data-pid="ecb64e">42e’s few-roots technique says a curve of degree d on a prime clock, not zero, has at most d roots. That gives the first half of the rule.</p>
+  <p data-pid="6f0a0f">Three-points-fix technique: <b>on a prime clock, two curves of degree at most 2 that agree at three different hours are the same curve; and for any three points at different hours there is one, built as a sum of three pieces.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the three-points-fix technique">
+f, g \text{ of degree} \le 2,\ f(x_k) \equiv g(x_k),\ k = 1, 2, 3 @@ two curves through the same three points
+f - g \text{ has degree} \le 2 \text{ and three roots} @@ subtract
+f - g \equiv 0 @@ the few-roots technique (42e): a nonzero curve of degree 2 has at most 2 roots
+\ell_1(x) \equiv \tfrac{(x - x_2)(x - x_3)}{(x_1 - x_2)(x_1 - x_3)} \text{ is } 1 \text{ at } x_1,\ 0 \text{ at } x_2, x_3 @@ the bottom is a unit, since the hours differ (42b)
+\htmlClass{new}{f \equiv y_1\ell_1 + y_2\ell_2 + y_3\ell_3 \text{ passes through all three}} \quad \blacksquare @@ ℓ₂, ℓ₃ the same way; and it is the only one
   </pre>
-  <p data-pid="2bc04d">With this adding the points form a group that turns about, with O as its nothing. <i>Held in trust</i>: that the adding regroups, which takes a page of algebra. The group here has 19 members, a prime, so by 19d every point but O has order 19, and the multiples of P run through all 18 other points.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · adding · ← → keys work</div></section>
+  <p data-pid="77ba4c">The division in ℓ₁ is the step that needs the clock to be prime. On the clock of 12, 2 has no undoing, and three points can fit two curves or none.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · three points · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42·crypt.2.1</span><span class="ph understand">understand</span>How is P + Q found from the line through P and Q? <br>What does the chord-add technique give for 2P with P = (5, 1)?</li>
+      <li><span class="qid">42·crypt.2.1</span><span class="ph understand">understand</span>Why can two curves of degree at most 2 not agree at three hours unless they are equal? <br>Why does building ℓ₁ need the clock to be prime?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="42crypt3">
-  <h2 class="sthead"><span class="stno">42crypt3</span>A secret from public points</h2>
-  <p data-pid="3c84da">Shared-multiple technique: <b>if one device keeps a count a and sends aP, and the other keeps b and sends bP, then a(bP) = b(aP) = abP, which both can find and a listener who knows P, aP and bP is believed unable to find.</b> The first part is regrouping in the group: a copies of b copies of P are ab copies. The second is a belief, as on 41l: no fast way is known to find a from P and aP.</p>
-  <pre class="lines" data-k="ember" data-label="this page: the secret by hand">
-a = 3:\ \ A = 3P = (10, 6) @@ the phone’s secret count, and the point it sends
-b = 7:\ \ B = 7P = (0, 6) @@ the earbuds’ secret count, and the point they send
-3B = 21P,\ \ 7A = 21P @@ each multiplies what it received by its own count
-\htmlClass{new}{21P = 2P = (6, 3)} \quad \blacksquare @@ 19P = O, so 21P = 2P
+<section class="class step" data-step="41crypt3">
+  <h2 class="sthead"><span class="stno">41crypt3</span>Three people open it</h2>
+  <p data-pid="04b9b8">The three holders need not rebuild the whole curve, only its value at 0, so they put x = 0 into each piece.</p>
+  <p data-pid="835ee6">Rebuild-at-zero technique: <b>holders of three shares at the hours x₁, x₂, x₃ get the secret as s ≡ y₁w₁ + y₂w₂ + y₃w₃, with w₁ ≡ x₂x₃ / ((x₁ − x₂)(x₁ − x₃)) and w₂, w₃ alike, weights that depend only on which hours came.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the rebuild-at-zero technique, with the shares at 1, 3, 5">
+w_1 \equiv \tfrac{(0 - 3)(0 - 5)}{(1 - 3)(1 - 5)} = \tfrac{15}{8},\ \ w_3 \equiv \tfrac{(0 - 1)(0 - 5)}{(3 - 1)(3 - 5)} = -\tfrac54,\ \ w_5 \equiv \tfrac{(0 - 1)(0 - 3)}{(5 - 1)(5 - 3)} = \tfrac38 @@ ℓₖ(0), the three-points-fix technique
+s \equiv 39 \cdot \tfrac{15}{8} - 19 \cdot \tfrac{5}{4} + 54 \cdot \tfrac38 = \tfrac{585 - 190 + 162}{8} = \tfrac{557}{8} @@ the three shares
+557 \equiv 52,\ \ 8^{-1} \equiv 38 \pmod{101} @@ 8 · 38 = 304 = 3 · 101 + 1 (42b)
+\htmlClass{new}{s \equiv 52 \cdot 38 = 1976 \equiv 57} \quad \blacksquare @@ the secret
   </pre>
-  <p data-pid="73010c">Real devices use a curve over a prime clock of about 2²⁵⁶, and counts of 256 bits. Finding aP takes about 256 doublings and at most 256 additions, by 41h’s halving trick done with adding. The best known way to find a from aP takes about 2¹²⁸ steps. A key on 41l’s prime clock needs about 3000 bits for the same safety, and the curve’s shorter keys are why small devices use them.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · a secret · ← → keys work</div></section>
+  <p data-pid="efe4dc">Holders 2, 3 and 4 have the weights 6, 93 and 3 on the clock of 101, and 60 · 6 + 19 · 93 + 17 · 3 = 2178 ≡ 57 again. Any three of the five, ten groups in all, each have their weights, and each gets 57.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · opening · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42·crypt.3.1</span><span class="ph understand">understand</span>What does the shared-multiple technique say, and which part is a belief? <br>How do the phone and the earbuds both reach (6, 3) with a = 3 and b = 7?</li>
+      <li><span class="qid">42·crypt.3.1</span><span class="ph understand">understand</span>Why are the weights the values at 0 of the three pieces? <br>Why do the weights depend only on which hours came, and not on the shares?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="42crypt4">
-  <h2 class="sthead"><span class="stno">42crypt4</span>A device in the middle</h2>
-  <p data-pid="6244e6">A device in the middle M can catch the phone’s A and send its own M₁ to the earbuds, and catch their B and send M₂ to the phone. Each side then shares a secret with M, and M passes everything on, reading it. The counts do not help: they were never checked against who sent them.</p>
-  <p data-pid="078edb">Six-digit technique: <b>if both devices show six digits made from both public points and a fresh random number each committed to before seeing the other’s, then a device in the middle makes the two screens agree with chance one in a million.</b> M must commit to its numbers before it learns what the phone will send, so the two six-digit numbers it causes are, as far as it can steer them, unrelated draws from a million.</p>
-  <pre class="lines" data-k="ember" data-label="this page: the chance of slipping through">
-\text{phone shows } f(A, M_1, \ldots),\ \ \text{earbuds show } f(M_2, B, \ldots) @@ different inputs once M is in the middle
-\text{chance the six digits agree} = 10^{-6} @@ 30f: each of 10⁶ values equally likely, independently
-\text{the person presses yes only when they agree} @@ the check is a person reading two screens
-\htmlClass{new}{\text{M is caught except once in a million tries}} \quad \blacksquare @@ and each failed try is seen
+<section class="class step" data-step="41crypt4">
+  <h2 class="sthead"><span class="stno">41crypt4</span>Two people learn nothing</h2>
+  <p data-pid="73c8af">Two holders know two points. The question is what those tell them about s, and the answer is: not a thing. They are no better off than someone guessing an hour with no shares at all, one chance in p.</p>
+  <p data-pid="7c0692">Two-say-nothing technique: <b>for any two shares at different hours and any hour s′, exactly one curve of degree at most 2 passes through both shares and has the value s′ at 0; so every secret is equally likely given two shares.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the two-say-nothing technique">
+(0, s'),\ (x_1, y_1),\ (x_2, y_2):\ \text{three points at different hours} @@ the shares’ hours are not 0
+\text{exactly one curve of degree} \le 2 \text{ through them} @@ the three-points-fix technique
+\text{the dealer’s choice } (a_1, a_2) \text{ is one of } p^2,\ \text{all equally likely} @@ how the curve was made
+\text{for each } s', \text{ one } (a_1, a_2) \text{ gives these two shares} @@ the line above
+\htmlClass{new}{P(s = s' \mid \text{two shares}) = 1/p \text{ for every } s'} \quad \blacksquare @@ the same count of dealings for every secret
   </pre>
-  <p data-pid="f710bf">Earbuds with no screen cannot show digits. They pair with no check, trusting that nobody is in the middle during the few seconds of pairing, or use the opening of the case beside the phone as the check.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · the middle · ← → keys work</div></section>
+  <p data-pid="a1ec2b">Holders 1 and 2 have 39 and 60. If the secret were 0, the curve would be 48x + 92x²; if 57, the true 57 + 13x + 70x²; if 100, 100 + 100x + 41x². Each passes through (1, 39) and (2, 60). Cutting the secret into digits fails by comparison: holders of two of three digits have ruled out all but ten of a thousand combinations.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · nothing · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42·crypt.4.1</span><span class="ph understand">understand</span>How does a device in the middle read a conversation agreed by the shared-multiple technique? <br>What does the six-digit technique say, and why must each side commit to its random number first?</li>
+      <li><span class="qid">42·crypt.4.1</span><span class="ph understand">understand</span>What does the two-say-nothing technique say? <br>Why does the count of dealings that fit two shares come out the same for every possible secret?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="42crypt5">
-  <h2 class="sthead"><span class="stno">42crypt5</span>Hopping in an order only the pair knows</h2>
-  <p data-pid="26b972">The earbuds and phone talk on 79 channels, each 1 MHz wide, from 2402 to 2480 MHz. They hop to a new channel every 625 microseconds, 1600 times a second, in an order computed from the phone’s address and its clock, which both share.</p>
-  <p data-pid="1b1dec">Hop-share technique: <b>a receiver or a jammer fixed on one channel meets, on average, one slot in 79 of a pair hopping over 79 channels evenly.</b> Each slot’s channel is one of 79, equally often over a long run, so the share of slots on any one is 1/79 (30f).</p>
-  <pre class="lines" data-k="ember" data-label="this page: what a fixed jammer costs">
-1600 \text{ slots a second},\ \ \tfrac{1}{79} \text{ on the jammed channel} @@ the hop-share technique
-1600 / 79 \approx 20 \text{ slots a second lost} @@ about 1.3%
-\text{a lost slot is sent again} @@ the receiver did not confirm it
-\htmlClass{new}{\text{the music plays on}} \quad \blacksquare @@ a narrow jammer, or a microwave oven, spoils one channel, not the link
-  </pre>
-  <p data-pid="3fb390">The order hides nothing from a listener with a wideband radio that hears all 79 channels at once, so the hopping is not the secret. The key from the shared-multiple technique is. Hopping spreads the talk so that no one narrow source of noise can stop it.</p>
-  <section class="slides" id="sl5"><div class="eyebrow">The slides · hopping · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">42·crypt.5.1</span><span class="ph understand">understand</span>What does the hop-share technique say? <br>Why does a jammer on one channel cost only about 20 slots a second, and why is the hopping order not the secret?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="42crypt6">
-  <h2 class="sthead"><span class="stno">42crypt6</span>Illegal moves</h2>
+<section class="class step" data-step="41crypt5">
+  <h2 class="sthead"><span class="stno">41crypt5</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
-P + Q = (x_P + x_Q,\ y_P + y_Q)\,? @@ that point need not be on the curve: (5, 1) + (5, 1) would be (10, 2), and 4 ≠ 1000 + 20 + 2 on the clock
-\text{a listener who sees } A \text{ and } B \text{ adds them to get the secret}\,? @@ A + B = 10P, not 21P: the secret needs ab, not a + b
-\text{the shared-multiple technique is proved safe}\,? @@ it is believed safe; no fast way to find a from aP is known
-\text{hopping makes the talk secret}\,? @@ a wideband listener hears every channel; the key makes it secret
+\text{the curve may be worked in the ordinary numbers}\,? @@ sizes leak: on the clock every hour is as likely, and off it they are not
+\text{a share may be given at } x = 0\,? @@ that share is the secret
+\text{any clock will do}\,? @@ on the clock of 12 the weights need 2⁻¹, which does not exist
+a_2 \text{ may be } 0 \text{ always}\,? @@ then f is a straight line and two shares fix it
+\text{two holders know the secret is one of } p - 1\,? @@ every one of the p hours is still possible, 0 included
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42·crypt.6.1</span><span class="ph understand">understand</span>Why does adding A and B not give the secret? <br>Why is hopping not what keeps the talk secret?</li>
+      <li><span class="qid">42·crypt.5.1</span><span class="ph understand">understand</span>Why would the ordinary numbers leak hints about the secret? <br>Why must the dealer choose a₂ at random and never fix it at 0?</li>
     </ol>
   </section>
 </section>
@@ -151,22 +135,22 @@ P + Q = (x_P + x_Q,\ y_P + y_Q)\,? @@ that point need not be on the curve: (5, 1
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">42·crypt.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="y^2 = x^3 + 2x + 2 \text{ on } \mathbb Z/17,\ \ P = (5, 1)"></span></span>Build 3P from 2P = (6, 3) and P by the chord-add technique, and check that it is (10, 6). <br>Find 9P and 10P, and check that they are flips of each other. Why must they be?</div>
-  <div class="chq"><span class="chid">42·crypt.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="y^2 = x^3 \text{ on } \mathbb Z/17"></span></span>Why is the curve y² = x³ no good for the chord-add technique? Find the point where the tangent slope is not defined. <br>Which condition on a and b keeps y² = x³ + ax + b free of such points?</div>
-  <div class="chq"><span class="chid">42·crypt.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="aP = (10, 6)"></span></span>The listener knows P = (5, 1) and A = (10, 6). Find a by trying. <br>Turn it round: how many tries does trying take for a group of 19 points, and for one of about 2²⁵⁶? Is there a way to do better than trying every count, by meeting in the middle with a list?</div>
-  <div class="chq"><span class="chid">42·crypt.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">41l: agreeing on a secret with powers on a prime clock</span></span>41l agreed on a secret by powers gᵃ on a prime clock, and this page by multiples aP on a curve. <br>Which group does each use, and what plays the part of multiplying in each? If both rest on a belief, why would one need keys twelve times as long as the other for the same safety?</div>
+  <div class="chq"><span class="chid">42·crypt.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="p = 101,\ \ \text{shares } (2, 60),\ (4, 17),\ (5, 54)"></span></span>Build the weights for the hours 2, 4 and 5, and rebuild the secret from these three shares. <br>Find a₁ and a₂ as well, and check them against the dealer’s curve.</div>
+  <div class="chq"><span class="chid">42·crypt.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{any } k \text{ of } n"></span></span>Change the rule to any k of n. What degree must the curve have, and how large must p be? <br>What happens at k = 1 and at k = n, and which of the two is a pad of 9·crypt in disguise?</div>
+  <div class="chq"><span class="chid">42·crypt.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{three open it, two learn nothing}"></span></span>Turn the page round: must any split with these two rules give each person a share at least as long as the secret? <br>Prove that if each share took fewer than p values, two holders and one missing share could not leave all p secrets possible.</div>
+  <div class="chq"><span class="chid">42·crypt.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">7·crypt: proving you know a secret without telling it</span></span>A holder may lie and hand in a wrong share, and the three would rebuild a wrong secret without knowing it. <br>Could a holder prove the share is right without showing it, in the way of 7·crypt’s cave? What would the dealer have to publish first, and what would that publishing give away?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r42comp.html">← 42·comp · how can a damaged message still be read?</a><a href="r42chem.html">42·chem · where do a molecule’s electrons sit? →</a></nav>
+<nav class="nextrung"><a href="r42phys.html">← 42·phys · why do metals conduct?</a><a href="r42now.html">42·now · do primes keep coming close together? →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The curve is an elliptic curve over a finite field, and its points with the point at infinity O form the group E(F_p). The chord-add technique is the chord-and-tangent law. The shared-multiple technique is elliptic-curve Diffie–Hellman, ECDH; finding a from aP is the elliptic-curve discrete logarithm problem, and the 2¹²⁸ steps are Pollard’s rho method. The bound |#E − (p + 1)| ≤ 2√p is Hasse’s theorem. Pairing with six digits is numeric comparison in Bluetooth Secure Simple Pairing and LE Secure Connections, and the hopping is frequency-hopping spread spectrum. The curve over a prime of about 2²⁵⁶ is P-256.</p>
+  <p>This is Shamir’s secret sharing, a threshold scheme with threshold 3. The pieces ℓₖ are the Lagrange basis polynomials, and the rebuild at zero is Lagrange interpolation at 0. The two-say-nothing technique says the scheme is perfect, or information-theoretically secure. The converse standing question is the bound that shares of a perfect scheme are at least as large as the secret. A split whose shares can be checked is verifiable secret sharing. Root keys of the web’s chains of trust and of domain name signing are held in this way.</p>
   <h3>Who said it first</h3>
-  <p>Neal Koblitz and Victor Miller proposed curves for cryptography independently in 1985. Whitfield Diffie and Martin Hellman published agreeing in public in 1976. Helmut Hasse proved his bound in 1933. Hedy Lamarr and George Antheil patented frequency hopping, with a paper roll like a player piano’s, in 1942. Bluetooth took its name from Harald Bluetooth, a king of Denmark; its first standard is from 1999, and numeric comparison came with version 2.1 in 2007.</p>
+  <p>Adi Shamir published the scheme in 1979 in a page and a half, and George Blakley gave another, with planes in place of curves, the same year. Joseph-Louis Lagrange gave the pieces in 1795, and Edward Waring had them in 1779. Paul Feldman (1987) and Torben Pedersen (1991) made shares that can be checked.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“The group has 19 points, so a secret count can only be one of 19, and the scheme is broken.” Not allowed as a judgement of the scheme: it is broken for this curve, which is a toy for working by hand. The argument shows only that the group must be large. Real curves have about 2²⁵⁶ points, and trying them is hopeless.</p>
+  <p>“Two shares give two conditions on three unknowns s, a₁, a₂, so s is not fixed, so two holders learn nothing.” Not allowed: not being fixed is not the same as learning nothing. Over the ordinary numbers s is not fixed either, yet sizes and remainders leak. The claim needs the count of the two-say-nothing technique: the same number of dealings for every secret.</p>
 </section>
 
 </div>
@@ -181,30 +165,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'x = 0',t:R`y^2 = 2 = 6^2`,n:`Two points.`},
-  {k:'ember',kl:'x = 5',t:R`y^2 = 1`,n:`Two more.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{19 \text{ points}}`,n:`With the far point.`}
-],{title:'The slides · points · ← → keys work'});
+  {k:'ember',kl:'curve',t:R`f(x) \equiv s + a_1x + a_2x^2`,n:`a₁, a₂ at random.`},
+  {k:'ember',kl:'shares',t:R`(i, f(i))`,n:`One each.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{39, 60, 19, 17, 54}`,n:`On the clock of 101.`}
+],{title:'The slides · dealing · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'slope',t:R`\lambda = 13`,n:`The tangent at P.`},
-  {k:'ember',kl:'third point',t:R`x = \lambda^2 - 10 = 6`,n:`Flipped.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{2P = (6, 3)}`,n:`On the curve.`}
-],{title:'The slides · adding · ← → keys work'});
+  {k:'ember',kl:'subtract',t:R`f - g \text{ has 3 roots}`,n:`Degree ≤ 2.`},
+  {k:'ember',kl:'build',t:R`\ell_1(x_1) = 1,\ \ell_1(x_2) = \ell_1(x_3) = 0`,n:`Pieces.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{f = \textstyle\sum y_k\ell_k}`,n:`One curve.`}
+],{title:'The slides · three points · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'sent',t:R`A = 3P,\ B = 7P`,n:`In public.`},
-  {k:'ember',kl:'kept',t:R`3,\ 7`,n:`Never sent.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{21P = (6, 3)}`,n:`Shared.`}
-],{title:'The slides · a secret · ← → keys work'});
+  {k:'ember',kl:'weights',t:R`\tfrac{15}{8},\ -\tfrac54,\ \tfrac38`,n:`Hours 1, 3, 5.`},
+  {k:'ember',kl:'sum',t:R`\tfrac{557}{8} \equiv 52 \cdot 38`,n:`On the clock.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{s \equiv 57}`,n:`Any three.`}
+],{title:'The slides · opening · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'two secrets',t:R`aM_2,\ \ bM_1`,n:`Each with M.`},
-  {k:'ember',kl:'the check',t:R`10^6 \text{ values}`,n:`Six digits.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{10^{-6}}`,n:`Chance to slip through.`}
-],{title:'The slides · the middle · ← → keys work'});
-stepper('#sl5',[
-  {k:'ember',kl:'channels',t:R`79 \times 1\ \text{MHz}`,n:`2402 to 2480 MHz.`},
-  {k:'ember',kl:'slots',t:R`1600 / 79 \approx 20`,n:`Lost a second.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{one channel in } 79}`,n:`Spread, not hidden.`}
-],{title:'The slides · hopping · ← → keys work'});
+  {k:'ember',kl:'guess',t:R`(0, s')`,n:`Any secret.`},
+  {k:'ember',kl:'fit',t:R`\text{one curve through three points}`,n:`Always.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{1/p \text{ each}}`,n:`Two say nothing.`}
+],{title:'The slides · nothing · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

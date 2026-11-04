@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Games</title>
+<title>How long and how much room</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,107 +25,132 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r40g.html">← 40g the best corner</a><a href="r40i.html">next: 40i the unavoidable →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40g.html">← 40g smaller machines</a><a href="r40i.html">next: 40i chance in computing →</a></p>
   <div class="tags"><span class="tag proof">40h · proof</span></div>
-  <h1>Games</h1>
-  <p data-pid="a8a9cc">A penalty taker in soccer picks a side of the goal, and the keeper picks a side to dive, both in the same instant. A taker who always picks the same side is easy to stop. A keeper who always dives the same way is easy to beat. So each should be unpredictable, but how unpredictable, and in what proportion? This step treats a game where one player’s gain is the other’s loss as a grid of numbers, and lets each player choose a side by chance, with chances of their own choosing. Each can then guarantee a certain average whatever the other does. The taker’s best guarantee from below, and the keeper’s best guarantee from above, turn out to be the same number. That was proved in 1928 by a fixed-point argument; here it comes in a few lines from the last step, since each player’s question is a program, and the two programs are twins. The step ends with games where both can gain or both can lose, and states, without proof, what can then still be said.</p>
-  <p class="gesture" data-pid="324958">In a game of gain against loss, each player mixes choices by chance. The most the first can guarantee is at most the least the second can hold it to, and the two are equal, because the two players’ questions are twin programs. In a two-by-two game with no safe choice, each best mix makes the other player indifferent. In games that are not gain against loss, there is always a pair of mixes neither player would change alone, and it can be bad for both.</p>
+  <h1>How long and how much room</h1>
+  <p data-pid="0446bb">A question a machine can answer is not yet a question anyone can answer. Rung thirty eight counted the steps of programs and sorted the counts into families; a count that grows like a power of the input’s length is one thing, a count that doubles with each extra letter is another, and the gap between them is the gap between a second and the age of the universe. This step turns those counts into classes of questions. The questions decided in a number of steps that is a power of the length are the ones called fast, and the class does not care which kind of machine counts. Then comes a stranger class: questions whose yes answers come with a short certificate that can be checked fast, though nobody knows how to find one fast. A whole crowd of everyday questions is in it, and in 1971 it was shown that one of them, whether a statement built from letters with and, or and not can be made true, holds all the others inside it. Whether that one is fast is open. What is not open: more time answers more questions, and room is cheaper than time, since halving a search can save almost all of the room it needs.</p>
+  <p class="gesture" data-pid="59e201">Fast means a power of the length, on any machine. A certificate class holds the questions whose yes answers can be checked fast; making a statement true holds them all. More time decides more. Room can be halved over and over: reaching one state from another needs only the square of the room of one state.</p>
 </header>
 
 <section class="class step" data-step="40h1">
-  <h2 class="sthead"><span class="stno">40h1</span>A grid of gains</h2>
-  <p data-pid="d2ce2b">A <i>game of gain against loss</i> is an m × n grid M. The row player picks a row i, the column player a column j, at once, and the column player pays the row player Mᵢⱼ; a negative number is a payment the other way. A <i>mix</i> for the row player is a list x of chances xᵢ ≥ 0 adding to 1 (30f); a mix y for the column player likewise. Choosing independently, the average payment is xᵀMy, by 30g’s average-adds technique.</p>
-  <p data-pid="eb0474">In stone, paper, scissors, with a win paid 1, a loss −1 and a draw 0, every row loses to some column, so no fixed choice is safe. The mix (⅓, ⅓, ⅓) earns 0 on average against every column.</p>
-  <p data-pid="867d7c">Guarantee-order technique: <b>what the row player can guarantee is at most what the column player can hold it to: the largest over x of the least over y of xᵀMy is at most the least over y of the largest over x.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the guarantee-order technique">
-\text{for each } x \text{ and } y:\ \min_{y'} x^{\mathsf T}My' \le x^{\mathsf T}My \le \max_{x'} x'^{\mathsf T}My @@ a least is at most any value, a largest at least
-\min_{y'} x^{\mathsf T}My' \le \max_{x'} x'^{\mathsf T}My \text{ for every } x, y @@ the outer two
-\htmlClass{new}{\max_x \min_y x^{\mathsf T}My \le \min_y \max_x x^{\mathsf T}My} \quad \blacksquare @@ the left side does not depend on y, nor the right on x
+  <h2 class="sthead"><span class="stno">40h1</span>Fast, on any machine</h2>
+  <p data-pid="64e797">A machine <i>runs within</i> t(n) steps when on every input of length n it stops after at most t(n) steps. A set is <i>fast</i> when some machine decides it within some power of n, nᵏ steps for a fixed k. The fast sets form the class P. Balanced brackets are fast, by a walk with a counter; a list is sorted fast, by 39l, in about n log₂ n comparisons.</p>
+  <p data-pid="35c87e">Power-stays technique: <b>whether a set is fast does not depend on how many tapes the machine has, and a fast machine whose output is fed to a fast machine makes a fast machine.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the power-stays technique">
+k \text{ tapes, }\allowbreak \text{within } n^a \text{ steps} \Rightarrow \text{one }\allowbreak \text{tape, }\allowbreak \text{within }\allowbreak \text{about } n^a(n + n^a) @@ the tracks technique (40a3)
+n^a(n + n^a) \le 2n^{2a} \text{ for } a \ge 1 @@ a power of n still
+\text{first }\allowbreak \text{machine }\allowbreak \text{within } n^a\text{: }\allowbreak \text{its }\allowbreak \text{output }\allowbreak \text{has }\allowbreak \text{at }\allowbreak \text{most } n^a \text{ letters} @@ it writes at most one cell a step
+\text{second, }\allowbreak \text{within } m^b \text{ on }\allowbreak \text{that }\allowbreak \text{output: }\allowbreak \text{at }\allowbreak \text{most } (n^a)^b = n^{ab} @@ 4g’s powers of powers
+\htmlClass{new}{\text{a }}\allowbreak \htmlClass{new}{ \text{power }}\allowbreak \htmlClass{new}{ \text{of } n \text{, }}\allowbreak \htmlClass{new}{ \text{either }}\allowbreak \htmlClass{new}{ \text{way}} \quad \blacksquare @@ the class P is the same for every machine of 40a3
   </pre>
-  <p data-pid="20b9f9">Against a fixed mix x, the column player does best with a single column: xᵀMy is a mix of the column averages, so it is least at the least of them. So the row player’s guarantee is the largest over x of the least entry of xᵀM. The largest and least exist: the mixes form a closed and bounded set, and the averages are continuous (34d).</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · games · ← → keys work</div></section>
+  <p data-pid="8abbe9">So P is not about a machine. It is about a growth family, 39k’s powers, kept apart from 39k’s doublings. A count of n¹⁰⁰ is fast by this line and useless by any clock, and a count of 1.0001ⁿ is slow by it and fine for every n anyone meets. The line is drawn at powers because powers stay powers when machines are swapped and run in a row, and because the questions that are fast in practice turned out to have small powers.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · P · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">40h1.1</span><span class="ph understand">understand</span>What is a mix, and what is the average payment when both players mix? <br>What does the guarantee-order technique say, and why can the column player answer a fixed mix with a single column?</li>
+      <li><span class="qid">40h1.1</span><span class="ph understand">understand</span>When is a set fast, and what is the class P? <br>What does the power-stays technique say, and why does it make P the same for every machine?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="40h2">
-  <h2 class="sthead"><span class="stno">40h2</span>The minimax technique</h2>
-  <p data-pid="5f7f17">Minimax technique: <b>in every game of gain against loss, the largest over x of the least over y of xᵀMy equals the least over y of the largest over x; that common number is the value of the game.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the minimax technique">
-\text{add one number to every entry so that all are above } 0 @@ every average moves by that number; both sides move alike
-\text{row player: best } v \text{ with } x^{\mathsf T}M \ge v \text{ in every column};\ \ u = x / v @@ v &gt; 0, since entries are
-\Rightarrow \text{least } \textstyle\sum u_i \text{ with } M^{\mathsf T}u \ge 1,\ u \ge 0;\ \text{it equals } 1/v @@ the mixes x are the u scaled to add to 1
-\text{column player: least } w \text{ with } My \le w \text{ in every row};\ \ z = y / w @@ the same, the other way
-\Rightarrow \text{largest } \textstyle\sum z_j \text{ with } Mz \le 1,\ z \ge 0;\ \text{it equals } 1/w @@ a program as in 40g, with A = M, b = 1, c = 1
-\text{the two are twin programs; } z = 0 \text{ is allowed and large } u \text{ cover} @@ 40g2
-\htmlClass{new}{1/v = 1/w,\ \ \text{so } v = w} \quad \blacksquare @@ the equal-prices technique
+  <h2 class="sthead"><span class="stno">40h2</span>Checking a certificate</h2>
+  <p data-pid="f25292">A statement built from letters with ∧, ∨ and ¬, like (P ∨ Q) ∧ (¬P ∨ R) ∧ ¬Q, is <i>satisfiable</i> when some row of its 1e table makes it true. With n letters the table has 2ⁿ rows. But a row that works, P true, Q false, R true, is checked in one pass along the statement.</p>
+  <p data-pid="1c33fd">A set A is in NP when there are a fast checker C and a power p such that x is in A exactly when some string c no longer than p(|x|) makes C say yes on x # c. The string c is a <i>certificate</i>. Satisfiable statements are in NP, with a row as the certificate. So are maps whose regions can be given three colours with neighbours different, with the colouring as the certificate, and composite numbers, with a factor. Every fast set is in NP, with the empty certificate.</p>
+  <p data-pid="1a702a">Certificate-search technique: <b>every set in NP is decided within 2 to the power of a power of n steps.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the certificate-search technique">
+x \text{ of }\allowbreak \text{length } n @@ given
+\text{at most } 2^{p(n) + 1} \text{ strings } c \text{ no }\allowbreak \text{longer }\allowbreak \text{than } p(n) @@ 4k, strings of 0s and 1s of each length
+\text{run } C \text{ on } x \# c \text{ for }\allowbreak \text{each, }\allowbreak \text{within } (n + p(n) + 1)^a \text{ steps} @@ C is fast
+\htmlClass{new}{\text{at most } 2^{p(n)+1}(n + p(n) + 1)^a \text{ steps }}\allowbreak \htmlClass{new}{ \text{in }}\allowbreak \htmlClass{new}{ \text{all}} \quad \blacksquare @@ yes at the first c that works
   </pre>
-  <p data-pid="58e282">So in a game of gain against loss there is nothing to gain by reading the other player’s mind, once both play their best mixes. A player who announces a best mix in advance loses nothing by it. That is not true of fixed choices, and it is the reason to mix.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · minimax · ← → keys work</div></section>
+  <p data-pid="707981">That is 2ⁿ times something for satisfiability. It decides, and it is slow. Whether every set in NP is fast, whether P equals NP, is the question of 40·now2.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · NP · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">40h2.1</span><span class="ph understand">understand</span>What does the minimax technique say? <br>Which two programs does its proof write, and why are they twins?</li>
+      <li><span class="qid">40h2.1</span><span class="ph understand">understand</span>What is a certificate, and when is a set in NP? <br>What does the certificate-search technique say, and why is it slow?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="40h3">
-  <h2 class="sthead"><span class="stno">40h3</span>The penalty</h2>
-  <p data-pid="3393ea">A <i>safe choice</i> is a row whose least entry equals the value: a row player who has one need not mix. In a two-by-two game with no safe choice for either player, each best mix uses both choices; then the other player’s two choices must earn the same against it, or the other would use only the better one.</p>
-  <p data-pid="c25d60">Indifference technique: <b>in a two-by-two game with no safe choice, each player’s best mix makes the other player’s two choices earn the same.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the indifference technique, worked">
-\text{taker left, keeper left } 0.58;\ \text{left, right } 0.95;\ \text{right, left } 0.93;\ \text{right, right } 0.70 @@ chances of scoring, close to those measured on professional penalties
-0.58\,x + 0.93\,(1 - x) = 0.95\,x + 0.70\,(1 - x) @@ the taker kicks left with chance x; the keeper is indifferent
-0.23 = 0.60\,x,\ \ x \approx 0.383 @@ the taker kicks left about 38% of the time
-0.58\,q + 0.95\,(1 - q) = 0.93\,q + 0.70\,(1 - q),\ \ q \approx 0.417 @@ the keeper dives left with chance q
-\htmlClass{new}{\text{value} \approx 0.93 - 0.35 \cdot 0.383 \approx 0.796} \quad \blacksquare @@ the same from either side, by the minimax technique
+  <h2 class="sthead"><span class="stno">40h3</span>One question holds them all</h2>
+  <p data-pid="f8125e">A set A <i>fast-reduces</i> to B when 40e1’s f is computed fast. Then a fast decider for B gives a fast one for A, by the power-stays technique. A set in NP that every set in NP fast-reduces to is <i>NP-complete</i>.</p>
+  <p data-pid="e26eb1">Tableau technique: <b>every set in NP fast-reduces to the satisfiable statements.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the tableau technique">
+C \text{ checks } A \text{ within } t = n^a \text{ steps; }\allowbreak \text{write }\allowbreak \text{its }\allowbreak \text{run }\allowbreak \text{as }\allowbreak \text{a }\allowbreak \text{table }\allowbreak \text{of } t \text{ rows of } t \text{ cells} @@ row i is the configuration after i steps (40a1)
+\text{letters: } X_{i,j,s}\text{, “row } i\text{, cell } j \text{ holds } s\text{”, }\allowbreak \text{for }\allowbreak \text{marks }\allowbreak \text{and }\allowbreak \text{states} @@ about t² · |Γ ∪ Q| letters
+\text{each }\allowbreak \text{cell }\allowbreak \text{holds }\allowbreak \text{exactly }\allowbreak \text{one: }\allowbreak \text{an }\allowbreak \text{or }\allowbreak \text{of }\allowbreak \text{its }\allowbreak \text{letters, }\allowbreak \text{and } \neg(X \land X') \text{ for }\allowbreak \text{each }\allowbreak \text{pair} @@ a fixed number of short pieces per cell
+\text{row 0 is } x \# \text{ and }\allowbreak \text{then }\allowbreak \text{free }\allowbreak \text{cells }\allowbreak \text{for } c @@ the certificate is left to the row
+\text{each }\allowbreak \text{window }\allowbreak \text{of } 2 \times 3 \text{ cells }\allowbreak \text{obeys }\allowbreak \text{the }\allowbreak \text{table} @@ the one-next technique: a cell is fixed by the three above it; a finite list of allowed windows
+\text{some }\allowbreak \text{row }\allowbreak \text{holds }\allowbreak \text{the }\allowbreak \text{yes }\allowbreak \text{state} @@ one long or
+\htmlClass{new}{\text{the }}\allowbreak \htmlClass{new}{ \text{statement }}\allowbreak \htmlClass{new}{ \text{is }}\allowbreak \htmlClass{new}{ \text{satisfiable} \iff \text{some } c \text{ makes } C \text{ say yes} \iff x \in A} \quad \blacksquare @@ about t² pieces, written fast from x
   </pre>
-  <p data-pid="aab916">A guess under the small case can be checked against this. If takers play as the technique says, their scoring chance should be the same whichever side they choose. Studies of thousands of penalties have found it close to the same, within the spread their counts allow, which is a law in the ladder’s sense with a stated spread, and not a proof that the players reason this way.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · penalty · ← → keys work</div></section>
+  <p data-pid="bb11da">So satisfiability is NP-complete. If it is fast, every set in NP is fast. 40k carries it to colouring maps with three colours, and since then thousands of questions, from packing boxes to folding chains, have been proved NP-complete the same way. A fast method for any one of them would be a fast method for all.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · tableau · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">40h3.1</span><span class="ph understand">understand</span>What does the indifference technique say, and why does it need the game to have no safe choice? <br>How are the taker’s chance x and the value found in the penalty game?</li>
+      <li><span class="qid">40h3.1</span><span class="ph understand">understand</span>What does it mean for a set to be NP-complete? <br>What does the tableau technique say, and why is checking 2 × 3 windows enough to make the table a run?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="40h4">
-  <h2 class="sthead"><span class="stno">40h4</span>When both can gain</h2>
-  <p data-pid="9f625b">In most games one player’s gain is not the other’s loss: each has a grid of their own. A pair of mixes is an <i>equilibrium</i> when neither player can do better by changing their own mix alone.</p>
-  <pre class="lines" data-k="ember" data-label="this step: two accused, questioned apart">
-\text{both silent: 1 year each; both confess: 5 years each} @@ each may stay silent or confess
-\text{one confesses, one silent: the one who confesses goes free, the other 10 years} @@ a grid for each player
-\text{whatever the other does, confessing is shorter: } 0 < 1,\ \ 5 < 10 @@ each player’s own grid
-\htmlClass{new}{\text{the one equilibrium: both confess, 5 years each, against 1 year each if both kept silent}} \quad \blacksquare @@ no change alone helps
+  <h2 class="sthead"><span class="stno">40h4</span>More time answers more</h2>
+  <p data-pid="8fb9d9">More-time technique: <b>for each k, some set is decided within a power of n steps and by no machine within nᵏ steps.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the more-time technique">
+D\text{: on } \langle M\rangle \# 0^m \text{ of }\allowbreak \text{length } n\text{, }\allowbreak \text{run }\allowbreak \text{U }\allowbreak \text{on } \langle M\rangle \# \langle M\rangle \# 0^m \text{ for } n^{k+1} \text{ steps} @@ a counter stops U; D is within a power of n
+\text{if }\allowbreak \text{U }\allowbreak \text{shows }\allowbreak \text{that } M \text{ said }\allowbreak \text{yes, }\allowbreak \text{say }\allowbreak \text{no; }\allowbreak \text{otherwise }\allowbreak \text{say }\allowbreak \text{yes} @@ the opposite, as in 40d2
+M \text{ decides } D\text{’s }\allowbreak \text{set }\allowbreak \text{within } n^k @@ suppose it
+U \text{ needs }\allowbreak \text{at }\allowbreak \text{most } c_M n^k \text{ steps }\allowbreak \text{per }\allowbreak \text{run }\allowbreak \text{of } M\text{, and } c_M n^k \lt n^{k+1} \text{ once } n \gt c_M @@ the universal technique, with the padding 0ᵐ making n large
+\text{on }\allowbreak \text{that }\allowbreak \text{input } D \text{ sees } M\text{’s }\allowbreak \text{answer }\allowbreak \text{and }\allowbreak \text{says }\allowbreak \text{the }\allowbreak \text{opposite} @@ M and D disagree
+\htmlClass{new}{\bot} \quad \blacksquare @@ refute
   </pre>
-  <p data-pid="d927bc">Equilibrium stated: every game with finitely many choices for finitely many players has an equilibrium in mixes. The proof, of 1950, finds it as a kept point of a continuous map of the set of mixes to itself, by the kept-point technique of 34h on a set of that shape; it is not given here. The minimax technique is the case of two players and gain against loss, where an equilibrium is a pair of best mixes and every equilibrium pays the value. In other games equilibria can be many, pay differently, and, as the two accused show, leave everyone worse off than a choice no one would make alone.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · equilibrium · ← → keys work</div></section>
+  <p data-pid="e993aa">The padding is the trick. D cannot beat M on short inputs, where U is slow; it beats M on one long enough input, and one is all it needs. The same diagonal, with 2ⁿ in place of nᵏ⁺¹, gives a set decided within 2ⁿ steps and not fast: the doublings outreach the powers. And the diagonal cannot tell P from NP. It works equally for machines given any free question, as 40d.5.3 did, and 40·now2 says why that matters.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · hierarchy · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">40h4.1</span><span class="ph understand">understand</span>What is an equilibrium of a game that is not gain against loss? <br>Why is “both confess” an equilibrium, though both would rather both stay silent?</li>
+      <li><span class="qid">40h4.1</span><span class="ph understand">understand</span>What does the more-time technique say? <br>Why does D pad its input with 0s, and which earlier argument does it repeat?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="40h5">
-  <h2 class="sthead"><span class="stno">40h5</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">40h5</span>Room, saved by halving</h2>
+  <p data-pid="1b187e">A machine <i>runs in room</i> s(n) when it never uses more than s(n) cells. The sets decided in a power of n cells form the class PSPACE. Every set in NP is in it: try the certificates one at a time, reusing the same cells, so the room is p(n) for the certificate and the checker’s room, never 2 to the power p(n).</p>
+  <p data-pid="9360f8">Halving-room technique: <b>if a list of N states has a fast test of which state may follow which, then whether state u leads to state v is decided in room about (log₂ N)² cells times the room of one state.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the halving-room technique">
+\text{reach}(u, v, 1)\text{: } u = v \text{ or } v \text{ may }\allowbreak \text{follow } u @@ one test
+\text{reach}(u, v, 2^k) \iff \text{some } w \text{ has }\allowbreak \text{reach}(u, w, 2^{k-1}) \land \text{reach}(w, v, 2^{k-1}) @@ a path of 2ᵏ steps has a middle state
+\text{try each } w \text{ in }\allowbreak \text{turn; }\allowbreak \text{for }\allowbreak \text{each, }\allowbreak \text{check }\allowbreak \text{the }\allowbreak \text{halves }\allowbreak \text{one }\allowbreak \text{after }\allowbreak \text{the }\allowbreak \text{other, }\allowbreak \text{reusing }\allowbreak \text{their }\allowbreak \text{room} @@ 39m’s halving, with the halves done in a row, not side by side
+\text{each }\allowbreak \text{level }\allowbreak \text{keeps } u, v, w\text{: }\allowbreak \text{three }\allowbreak \text{states; } \log_2 N \text{ levels} @@ a path between states need not be longer than N
+\htmlClass{new}{\text{room: }}\allowbreak \htmlClass{new}{ \text{about } 3 \log_2 N \text{ states}} \quad \blacksquare @@ the time is enormous; the room is small
+  </pre>
+  <p data-pid="992c3f">For a machine in room s, a state is a configuration, and there are about mˢ of them, so log₂ N is about s log₂ m: reaching is decided in room about s². That gives the named result that a machine allowed to guess its moves in room s needs no more than room s² without guessing. Room can be reused; time cannot. P sits in NP, NP in PSPACE, PSPACE in the sets decided within 2 to a power of n, and of those four steps only the first and last are known to differ.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · halving · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40h5.1</span><span class="ph understand">understand</span>What is PSPACE, and why is every set in NP in it? <br>What does the halving-room technique say, and why does it save room but not time?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40h6">
+  <h2 class="sthead"><span class="stno">40h6</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{the taker scores } 0.796 \text{ by kicking left}\,? @@ against the keeper’s best mix, yes; against a keeper who always dives right, left scores 0.95
-\text{a best mix gives every choice the same chance}\,? @@ it gives the other player’s choices the same earnings; 0.383 is not one half
-\text{an equilibrium is best for both players}\,? @@ it is a pair no one changes alone; both confess is an equilibrium and worse for both
-\max_x \min_y = \min_y \max_x \text{ for fixed choices too}\,? @@ in stone, paper, scissors fixed rows guarantee −1 and fixed columns hold to 1
+\text{satisfiability }\allowbreak \text{takes } 2^n \text{ steps, }\allowbreak \text{so }\allowbreak \text{it }\allowbreak \text{is }\allowbreak \text{not }\allowbreak \text{fast}\,? @@ one method takes 2ⁿ; whether every method does is open (40·now2)
+\text{NP }\allowbreak \text{means }\allowbreak \text{not }\allowbreak \text{fast}\,? @@ NP means a yes has a short certificate checked fast; every fast set is in NP
+\text{a }\allowbreak \text{set }\allowbreak \text{in }\allowbreak \text{NP }\allowbreak \text{is }\allowbreak \text{listed }\allowbreak \text{but }\allowbreak \text{not }\allowbreak \text{decided}\,? @@ the certificate-search technique decides it, slowly
+\text{the }\allowbreak \text{halving-room }\allowbreak \text{technique }\allowbreak \text{makes }\allowbreak \text{reaching }\allowbreak \text{fast}\,? @@ it saves room; its time grows like N to the power log₂ N
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">40h5.1</span><span class="ph understand">understand</span>Why does a best mix not make every choice equally likely? <br>Why does the minimax technique fail for fixed choices?</li>
+      <li><span class="qid">40h6.1</span><span class="ph understand">understand</span>Why does a 2ⁿ method for satisfiability not show it is not fast? <br>Why is every fast set in NP?</li>
     </ol>
   </section>
 </section>
@@ -134,22 +159,22 @@ table.tt td.l{text-align:left}
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">40h.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{stone, paper, scissors; paper over stone pays 2}"></span></span>In stone, paper, scissors, let a win by paper over stone pay 2 and every other win 1. Find both players’ best mixes and the value. <br>Who should play paper more often, and does the answer surprise you?</div>
-  <div class="chq"><span class="chid">40h.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="M = \begin{pmatrix} 3 &amp; 1 \\ 4 &amp; 2 \end{pmatrix}"></span></span>Find a safe choice for each player and the value. Why does the indifference technique fail here? <br>Prove that a game has a pair of safe choices exactly when some entry is the least in its row and the largest in its column.</div>
-  <div class="chq"><span class="chid">40h.6.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{the minimax technique} \Rightarrow \text{the equal-prices technique}\ ?"></span></span>The minimax technique came from the equal-prices technique. Reroute the other way: given a program and its twin, build a game, with the plan, the prices and one extra row and column, whose value is 0, and read the equal-prices technique off its best mixes. <br>Where does the proof need the extra row and column?</div>
-  <div class="chq"><span class="chid">40h.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">1921, 1924, 1927: best mixes for 3 and 5 choices; for 7, a doubt</span></span>In the early 1920s it was proved that games of gain against loss with 3 and 5 choices have a value, and it was doubted that games with many choices did. It was settled in 1928, and the settling proof used no programs. <br>The doubt was reasonable: which part of this step’s proof would have been hardest to see in 1921? What does the twin program give that a case-by-case search for 7 choices does not?</div>
+  <div class="chq"><span class="chid">40h.7.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">two colours, and three</span></span>Build a fast method that decides whether a map’s regions can be given two colours with neighbours different, and count its steps. Write the certificate and checker that put three colours in NP. Why does your two-colour method not carry over?</div>
+  <div class="chq"><span class="chid">40h.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{composite }\allowbreak \text{numbers, }\allowbreak \text{written }\allowbreak \text{in }\allowbreak \text{twos}"></span></span>Composites are in NP, with a factor as certificate. Find a short certificate that a number is prime, or say why one is hard to find. Trying every factor up to the root of N: is that fast in the length of N’s numeral?</div>
+  <div class="chq"><span class="chid">40h.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{co-NP: }\allowbreak \text{sets }\allowbreak \text{whose }\allowbreak \text{outside }\allowbreak \text{is }\allowbreak \text{in }\allowbreak \text{NP}"></span></span>Prove that if P equals NP then NP equals co-NP. Turn it round: if NP equals co-NP, must P equal NP? What would a short certificate that a statement is satisfied by no row look like?</div>
+  <div class="chq"><span class="chid">40h.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">7·then.4.4: is a number too big to write down still a number?</span></span>7·then.4.4 set a view that the numbers end somewhere against the view that every number is there. The certificate-search technique decides satisfiability for 300 letters in about 2³⁰⁰ steps, more than the atoms in the visible universe. Is that question decided, in the sense that matters? Does the line at powers of n side with either view of 7·then.4.4, or draw a third line between them?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r40g.html">← 40g · the best corner</a><a href="r40i.html">40i · the unavoidable →</a></nav>
+<nav class="nextrung"><a href="r40g.html">← 40g · smaller machines</a><a href="r40i.html">40i · chance in computing →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A game of gain against loss is a two-person zero-sum game, a mix a mixed strategy, and a fixed choice a pure strategy. The minimax technique is von Neumann's minimax theorem, and a pair of safe choices is a saddle point. The indifference technique is the indifference principle. The two accused are the prisoner's dilemma (Merrill Flood and Melvin Dresher's game of 1950, named by Albert Tucker). An equilibrium is a Nash equilibrium, and its existence is Nash's theorem.</p>
+  <p>Running within t(n) steps is time complexity, and the classes are TIME(t(n)), with P the union over k of TIME(nᵏ). The certificate classes are NP (nondeterministic polynomial time); a certificate is a witness. Satisfiability is SAT, fast reductions are polynomial-time (Karp) reductions, and the tableau technique is the Cook–Levin theorem. The more-time technique is the time hierarchy theorem, and the set decided within 2ⁿ and not fast shows P ≠ EXPTIME. The room classes are SPACE(s(n)) and PSPACE, and the halving-room technique gives Savitch’s theorem, NSPACE(s) ⊆ SPACE(s²).</p>
   <h3>Who said it first</h3>
-  <p>Émile Borel wrote about mixed strategies from 1921 and solved games with 3 and 5 choices, and doubted for a time that the minimax held in general. John von Neumann proved the minimax theorem in 1928, and with Oskar Morgenstern wrote Theory of Games and Economic Behavior (1944). David Gale, Harold Kuhn and Albert Tucker proved the link with linear programming in 1951. John Nash proved that equilibria exist in 1950, by Brouwer's and then Kakutani's fixed point theorems. Ignacio Palacios-Huerta studied 1417 penalty kicks from professional matches in 2003; the four chances on this page are close to his.</p>
+  <p>Juris Hartmanis and Richard Stearns (1965) defined time classes and proved the hierarchy. Alan Cobham (1965) and Jack Edmonds (1965) proposed polynomial time as the mark of a feasible algorithm. Stephen Cook (1971) proved SAT NP-complete, and Leonid Levin found it independently in the Soviet Union (published 1973). Richard Karp (1972) gave 21 NP-complete problems, three-colouring among them. Walter Savitch proved his theorem in 1970. Manindra Agrawal, Neeraj Kayal and Nitin Saxena (2002) showed primes are in P; Vaughan Pratt (1975) had shown that primes have short certificates.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“The row player's best mix earns v against every column. The column player's best mix holds every row to w. Play them against each other: the payment is at least v and at most w, so v ≤ w; and since both are best, v = w.” Not allowed: v ≤ w is the guarantee-order technique, and “both are best” does not give equality. That is the whole content of the minimax technique.</p>
+  <p>“Satisfiability needs 2ⁿ steps, since a statement with n letters has 2ⁿ rows and each row might be the one.” Not allowed: it proves that one method, trying rows, needs them. A cleverer method might never look at most rows. Every known method still takes about cⁿ steps for some c &gt; 1 on its worst inputs, and that is evidence, not proof.</p>
 </section>
 
 </div>
@@ -164,25 +189,30 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'grid',t:R`M_{ij}`,n:`Column pays row.`},
-  {k:'ember',kl:'mix',t:R`x^{\mathsf T}My`,n:`The average.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\max\min \le \min\max}`,n:`Easy half.`}
-],{title:'The slides · games · ← → keys work'});
+  {k:'ember',kl:'tapes',t:R`n^a \to 2n^{2a}`,n:`Tracks.`},
+  {k:'ember',kl:'in a row',t:R`(n^a)^b = n^{ab}`,n:`Powers of powers.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P \text{ for any machine}}`,n:`A growth family.`}
+],{title:'The slides · P · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'row',t:R`\min \textstyle\sum u,\ M^{\mathsf T}u \ge 1`,n:`Guarantee from below.`},
-  {k:'ember',kl:'column',t:R`\max \textstyle\sum z,\ Mz \le 1`,n:`Hold from above.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{v = w}`,n:`Twins, equal prices.`}
-],{title:'The slides · minimax · ← → keys work'});
+  {k:'ember',kl:'certificate',t:R`c,\ \ |c| \le p(|x|)`,n:`Short.`},
+  {k:'ember',kl:'check',t:R`C(x \# c) \text{ fast}`,n:`One pass.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2^{p(n)} \text{ tries}}`,n:`Decided, slowly.`}
+],{title:'The slides · NP · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'indifferent',t:R`0.58x + 0.93(1-x) = 0.95x + 0.70(1-x)`,n:`Keeper’s view.`},
-  {k:'ember',kl:'mix',t:R`x \approx 0.383,\ q \approx 0.417`,n:`Both sides.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{value} \approx 0.796}`,n:`Scoring chance.`}
-],{title:'The slides · penalty · ← → keys work'});
+  {k:'ember',kl:'table',t:R`t \times t \text{ cells}`,n:`The run, row by row.`},
+  {k:'ember',kl:'windows',t:R`2 \times 3`,n:`The table, locally.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{A \text{ fast-reduces to satisfiable}}`,n:`NP-complete.`}
+],{title:'The slides · tableau · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'own grids',t:R`A \ne -B`,n:`Both can gain.`},
-  {k:'ember',kl:'alone',t:R`\text{no change helps}`,n:`Equilibrium.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{both confess}}`,n:`Worse for both.`}
-],{title:'The slides · equilibrium · ← → keys work'});
+  {k:'ember',kl:'run',t:R`n^{k+1} \text{ steps of U}`,n:`With a counter.`},
+  {k:'ember',kl:'opposite',t:R`\text{say what } M \text{ did not}`,n:`Diagonal.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{n^k \subsetneq \text{more}}`,n:`More time, more sets.`}
+],{title:'The slides · hierarchy · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'middle',t:R`\text{reach}(u, w) \land \text{reach}(w, v)`,n:`Half each.`},
+  {k:'ember',kl:'levels',t:R`\log_2 N`,n:`Room reused.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(\log_2 N)^2}`,n:`Room, squared at worst.`}
+],{title:'The slides · halving · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Reductions by hand</title>
+<title>How long a program takes</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,97 +25,96 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r39j.html">← 39j machines that read a tape, by hand</a><a href="r39l.html">next: 39l convincing without telling →</a></p>
-  <div class="tags"><span class="tag tech">39k · technique</span></div>
-  <h1>Reductions by hand</h1>
-  <p data-pid="b8d1fa">The tableau technique said that every question with short certificates turns into one question: can this statement built from letters be made true? It said so for every question at once, which makes it hard to see. This step does one turning by hand, from statements to maps. A map here is only dots and links between them, and the question is whether the dots can be given three colours so that no link joins two dots of one colour. It looks like a question about drawing. It holds every statement inside it. The step builds the pieces: a triangle of three dots that names the colours true, false and spare; a pair of linked dots for each letter, which must take true and false between them; and a small piece of six dots for each or, which can be coloured only if one of its inputs is true. Then it joins them, counts the dots, and runs the reduction backwards, reading a true row off a colouring. Every piece is checked by trying all its cases, and every count is a power of the statement’s length.</p>
-  <p class="gesture" data-pid="a7095c">A statement in clauses of three becomes a map: a triangle for the colours, a linked pair for each letter, and a six-dot piece for each clause, coloured only if one of its letters is true. The map has three colours exactly when the statement has a true row, and the map is built fast.</p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r39j.html">← 39j a machine that follows a list</a><a href="r39l.html">next: 39l sorting and searching →</a></p>
+  <div class="tags"><span class="tag proof">39k · proof</span></div>
+  <h1>How long a program takes</h1>
+  <p data-pid="7ca5e8">The machine of the last step multiplied three by four in thirty-nine turns, and the count grew by nine for each one added to the second number. That kind of count is the subject here. A program’s time is the number of turns its machine takes, and the count can be read off the program before it is run: a loop run so many times, with so many instructions inside, costs their product. The exact count depends on the machine, and a different machine changes it by a fixed factor at most, so what is worth saying about a program is the family its count belongs to: steady, growing like the log, like the size, like the size times its log, like the square, or like two raised to the size. The rung on endless sums ranked those families already. This step reads them as what a machine can do. A thousand times faster machine solves a problem a thousand times bigger in the same time if the count grows like the size, about thirty times bigger if it grows like the square, and only ten more items bigger if it grows like two to the size. Then the step counts the other thing a program spends, the memory it needs, and what digital storage costs and buys.</p>
+  <p class="gesture" data-pid="3cd7d5">Read a program’s turns off the page: a loop costs its instructions times its rounds. A different machine changes the count by a fixed factor, so the family is what matters. A faster machine buys a much bigger problem for slow-growing counts and almost nothing for two to the size. Memory is counted in bits, and a stored bit is copied exactly.</p>
 </header>
 
 <section class="class step" data-step="39k1">
-  <h2 class="sthead"><span class="stno">39k1</span>Clauses of three</h2>
-  <p data-pid="bf6828">A <i>clause</i> is an or of letters and nots of letters, like ¬x ∨ y ∨ z. The tableau technique wrote its statement as an and of clauses. Clauses of any length can be cut to clauses of exactly three, with new letters.</p>
-  <p data-pid="cc621d">Clause-split technique: <b>a ∨ b ∨ c ∨ d has a true row exactly when (a ∨ b ∨ z) ∧ (¬z ∨ c ∨ d) does, for a new letter z.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the clause-split technique">
-\text{case } a \lor b \text{ true: }\allowbreak \text{put } z = \text{false} @@ the first clause holds by a or b, the second by ¬z
-\text{case } c \lor d\text{: put } z = \text{true; }\allowbreak \text{the }\allowbreak \text{first }\allowbreak \text{clause }\allowbreak \text{holds }\allowbreak \text{by } z\text{, }\allowbreak \text{the }\allowbreak \text{second }\allowbreak \text{by } c \text{ or } d @@ 1e’s or
-\text{the }\allowbreak \text{other }\allowbreak \text{way: }\allowbreak \text{if }\allowbreak \text{both }\allowbreak \text{new }\allowbreak \text{clauses }\allowbreak \text{are }\allowbreak \text{true }\allowbreak \text{and } a, b, c, d \text{ all }\allowbreak \text{false, }\allowbreak \text{then } z \text{ and } \neg z @@ the first needs z, the second ¬z
-\htmlClass{new}{\text{a }}\allowbreak \htmlClass{new}{ \text{true }}\allowbreak \htmlClass{new}{ \text{row }}\allowbreak \htmlClass{new}{ \text{for }}\allowbreak \htmlClass{new}{ \text{one }}\allowbreak \htmlClass{new}{ \text{gives }}\allowbreak \htmlClass{new}{ \text{a }}\allowbreak \htmlClass{new}{ \text{true }}\allowbreak \htmlClass{new}{ \text{row }}\allowbreak \htmlClass{new}{ \text{for }}\allowbreak \htmlClass{new}{ \text{the }}\allowbreak \htmlClass{new}{ \text{other}} \quad \blacksquare @@ the new letter is chosen, the old ones kept
+  <h2 class="sthead"><span class="stno">39k1</span>Counting turns</h2>
+  <p data-pid="b09c2b">The time a program takes on an input is the number of turns of 39j2’s loop before it stops. A run of instructions with no jump back costs one turn each. A loop whose body has b instructions and goes round r times costs br, plus its test. Loops inside loops multiply, and sums of rounds add by 4k.</p>
+  <p data-pid="f3b8f9">Loop-count technique: <b>a loop whose body takes b turns and runs r times, with s turns outside it, takes br + s turns; a loop inside a loop whose inner rounds are r₁, r₂, …, takes b(r₁ + r₂ + ⋯) plus the outer loop’s own turns.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the loop-count technique, on two programs">
+\text{39j3: body } 9 \text{ turns},\ k \text{ rounds},\ 3 \text{ outside} @@ read off the program
+9k + 3 @@ the technique
+\text{look at each of } n \text{ cells for a match: body } 5,\ n \text{ rounds},\ 2 \text{ outside} @@ a search through a list, in this machine’s instructions
+\text{compare every pair: inner rounds } n - 1, n - 2, \ldots, 0 @@ for each cell, every cell after it
+\htmlClass{new}{5n + 2\ \text{ and }\ b\,\tfrac{n(n - 1)}{2} + \ldots} \quad \blacksquare @@ the sum of the first n − 1 numbers (4k)
   </pre>
-  <p data-pid="2624d0">A clause with k letters becomes k − 2 clauses of three, with k − 3 new letters. A clause of one or two letters is padded by repeating one: x ∨ y becomes x ∨ y ∨ y. So the statements in clauses of three are NP-complete too, and they are the starting point below.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · clauses · ← → keys work</div></section>
+  <p data-pid="58af0b">“Takes” means at most, over the inputs of a given size: the worst case. A search that finds its match in the first cell is quick; the count that matters is the one that holds for every input of size n. The average over inputs is a second count, and 39l uses 30’s chance to find it.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · counting · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">39k1.1</span><span class="ph understand">understand</span>What is a clause, and what does the clause-split technique say? <br>In its proof, how is the new letter z chosen in each case?</li>
+      <li><span class="qid">39k1.1</span><span class="ph understand">understand</span>What does the loop-count technique say? <br>Why is the count taken over the worst input of each size?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="39k2">
-  <h2 class="sthead"><span class="stno">39k2</span>A palette, and a pair for each letter</h2>
-  <p data-pid="4834da">A <i>map</i> here is a finite set of dots and a set of links, each joining two dots. A <i>three-colouring</i> gives each dot one of three colours so that no link joins two dots of one colour. 34m coloured a knot’s strands with three colours under a different rule; here the rule is only that linked dots differ.</p>
-  <p data-pid="4e2520">Palette technique: <b>in a three-colouring of a triangle T, F, B, with a dot x and a dot x̄ linked to each other and both linked to B, the dots x and x̄ take the colours of T and F, one each.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the palette technique">
-T, F, B \text{ pairwise }\allowbreak \text{linked: }\allowbreak \text{three }\allowbreak \text{different }\allowbreak \text{colours} @@ name the colours after them: true, false, spare
-x, \bar x \text{ both }\allowbreak \text{linked }\allowbreak \text{to } B\text{: }\allowbreak \text{neither }\allowbreak \text{is }\allowbreak \text{spare} @@ a link joins different colours
-x \text{ linked }\allowbreak \text{to } \bar x\text{: }\allowbreak \text{they }\allowbreak \text{differ} @@ the same rule
-\htmlClass{new}{\{x, \bar x\} \text{ coloured }}\allowbreak \htmlClass{new}{ \text{true }}\allowbreak \htmlClass{new}{ \text{and }}\allowbreak \htmlClass{new}{ \text{false}} \quad \blacksquare @@ the only two colours left
+  <h2 class="sthead"><span class="stno">39k2</span>The family is what survives</h2>
+  <p data-pid="8918ba">Change the machine and the counts change. A machine with only adding by one would need many turns where 39j’s needs one add; a machine with a multiply instruction would need one where 39j’s needs a loop. If each instruction of one machine can be done by at most c instructions of another, the second’s count is at most c times the first’s.</p>
+  <p data-pid="c48766">Machine-change technique: <b>if each turn of one machine is done in at most c turns of another, a count that is O(f(n)) on the first is O(f(n)) on the second.</b> That every reasonable machine can mimic every other in this way is held in trust until 39 makes the machines exact.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the machine-change technique">
+T_1(n) \le C f(n) \text{ for } n \ge N @@ O as 22k1 defines it
+T_2(n) \le c\,T_1(n) @@ each turn done in at most c turns
+T_2(n) \le cC f(n) \text{ for } n \ge N @@ chain the two
+\htmlClass{new}{T_2(n) = O(f(n))} \quad \blacksquare @@ the constant cC, the same N
   </pre>
-  <p data-pid="6db40d">So each colouring reads off a row of 1e’s table: x is true when its dot is coloured like T. And every row is read off some colouring of this much of the map. What is left is to make a clause cost something.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · palette · ← → keys work</div></section>
+  <pre class="lines" data-k="ember" data-label="this step: n² against n log n, at a billion turns a second">
+n = 10^6:\ \ \tfrac12 n^2 = 5\cdot10^{11} \text{ turns} @@ comparing every pair
+5\cdot 10^{11} / 10^9 = 500 \text{ s} @@ over eight minutes
+n\log_2 n \approx 2\cdot10^7 \text{ turns} @@ log₂ 10⁶ ≈ 19.9 (17d)
+\htmlClass{new}{2\cdot10^7 / 10^9 = 0.02 \text{ s}} \quad \blacksquare @@ the ranks of 22k2, in seconds
+  </pre>
+  <p data-pid="3d7499">So what is worth saying about a program is its family, read with 22k’s big O: constant, log n, n, n log n, n², n³, 2ⁿ, ranked by 22k2. The constants matter in practice, and a program in a lower family with a huge constant can lose for every n anyone meets. But no constant survives a change of family for long.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · family · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">39k2.1</span><span class="ph understand">understand</span>What is a three-colouring of a map? <br>What does the palette technique say, and how does a colouring give a row of a table?</li>
+      <li><span class="qid">39k2.1</span><span class="ph understand">understand</span>What does the machine-change technique say, and what does it hold in trust? <br>Why does n log n beat n² by a factor that grows without end?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="39k3">
-  <h2 class="sthead"><span class="stno">39k3</span>A piece for each or</h2>
-  <p data-pid="ab5b19">Take two input dots a and b. Add three dots u, v, o, with links a–u, b–v, u–v, u–o, v–o. Call it an <i>or-piece</i> with output o.</p>
-  <p data-pid="0f5398">Or-piece technique: <b>if a and b are both coloured false, o is coloured false; if either is coloured true, the colouring can be finished with o coloured true.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the or-piece technique">
-a, b \text{ false} \Rightarrow u, v \ne \text{false},\ \allowbreak u \ne v\text{: } \{u, v\} = \{\text{true}, \text{spare}\} @@ u is linked to a, v to b, and u to v
-o \text{ linked }\allowbreak \text{to } u \text{ and } v \Rightarrow o = \text{false} @@ the one colour left
-a \text{ true} \Rightarrow u = \text{false},\ \allowbreak v = \text{spare},\ \allowbreak o = \text{true} @@ u ≠ a; v ≠ b, since b is true or false; u ≠ v; o ≠ u, v
-a \text{ false},\ \allowbreak b \text{ true} \Rightarrow u = \text{spare},\ \allowbreak v = \text{false},\ \allowbreak o = \text{true} @@ u ≠ a, v ≠ b, u ≠ v, o ≠ u, v
-\htmlClass{new}{\text{both }}\allowbreak \htmlClass{new}{ \text{false: } o \text{ false; }}\allowbreak \htmlClass{new}{ \text{either }}\allowbreak \htmlClass{new}{ \text{true: } o \text{ true }}\allowbreak \htmlClass{new}{ \text{is }}\allowbreak \htmlClass{new}{ \text{possible}} \quad \blacksquare @@ every case of the two inputs
+  <h2 class="sthead"><span class="stno">39k3</span>What a faster machine buys</h2>
+  <p data-pid="9c6a9b">Fix a time, a second say, and ask how big a problem fits in it. Then make the machine s times faster.</p>
+  <p data-pid="7b9288">Faster-machine technique: <b>on a machine s times faster, in the same time, a count of n fits s times as large a problem, a count of n² fits √s times as large, and a count of 2ⁿ fits a problem only log₂ s items larger.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the faster-machine technique">
+n_1 = M,\ \ n_2 = sM @@ count n: s times as many turns, s times the size
+n_1^2 = M,\ \ n_2^2 = sM \Rightarrow n_2 = \sqrt{s}\,n_1 @@ count n²
+2^{n_1} = M,\ \ 2^{n_2} = sM \Rightarrow n_2 = n_1 + \log_2 s @@ count 2ⁿ; take logs (17d)
+\htmlClass{new}{s = 1000:\ \ 1000 \text{ times},\ \ 31.6 \text{ times},\ \ \text{about } 10 \text{ more items}} \quad \blacksquare @@ √1000 ≈ 31.6, log₂ 1000 ≈ 9.97
   </pre>
-  <p data-pid="5f4096">The finishings must be chosen with care, and that is the point of doing it by hand: with a true, the choice u spare and v true is allowed when b is false, and it forces o false. Some finishing gives o true, and that is all the piece needs. So in every case with a true input, some finishing gives o = true, and with both inputs false, o is forced false.</p>
-  <p data-pid="d4ee8c">A clause a ∨ b ∨ c gets two or-pieces in a row: o₁ from a and b, then o₂ from o₁ and c, and o₂ is linked to F and to B, so it must be true. If a, b and c are all false, o₁ is false, then o₂ is false, against its links. If any is true, the pieces can be finished. A script that tries all 3⁶ colourings of the six new dots for each of the eight rows agrees.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · or-piece · ← → keys work</div></section>
+  <p data-pid="9c3209">Machines have grown about a thousand times faster every twenty years or so for decades, and 39·eng asks why that slowed. For a program whose count grows like 2ⁿ, those decades bought ten more items each. A problem is practical or not by its family, much more than by its machine, and 39 asks which problems have no program in a low family at all.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · speed · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">39k3.1</span><span class="ph understand">understand</span>What does the or-piece technique say? <br>Why is o forced false when both inputs are false, and how does a clause of three use two or-pieces?</li>
+      <li><span class="qid">39k3.1</span><span class="ph understand">understand</span>What does the faster-machine technique say for each of the three counts? <br>Why does a thousand times the speed buy only about ten more items for a count of 2ⁿ?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="39k4">
-  <h2 class="sthead"><span class="stno">39k4</span>The whole map, and back</h2>
-  <p data-pid="10a381">Map-from-clauses technique: <b>a statement with n letters and m clauses of three has a true row exactly when its map, with 3 + 2n + 6m dots and 3 + 3n + 12m links, has a three-colouring.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the map-from-clauses technique">
-\text{dots: } T, F, B\text{; } x_i, \bar x_i \text{ for }\allowbreak \text{each }\allowbreak \text{letter; }\allowbreak \text{six }\allowbreak \text{for }\allowbreak \text{each }\allowbreak \text{clause} @@ 3 + 2n + 6m
-\text{links: } 3 \text{ in }\allowbreak \text{the }\allowbreak \text{triangle, } 3 \text{ for }\allowbreak \text{each }\allowbreak \text{letter, } 12 \text{ for }\allowbreak \text{each }\allowbreak \text{clause} @@ 5 per or-piece, two pieces, and o₂ to F and B
-\text{a }\allowbreak \text{true }\allowbreak \text{row} \Rightarrow \text{colour }\allowbreak \text{each } x_i \text{ by }\allowbreak \text{the }\allowbreak \text{row, }\allowbreak \text{then }\allowbreak \text{finish }\allowbreak \text{each }\allowbreak \text{clause }\allowbreak \text{piece} @@ the or-piece technique, each clause has a true letter
-\text{a }\allowbreak \text{three-colouring} \Rightarrow \text{the }\allowbreak \text{row }\allowbreak \text{read }\allowbreak \text{off }\allowbreak \text{the }\allowbreak \text{pairs }\allowbreak \text{makes }\allowbreak \text{every }\allowbreak \text{clause }\allowbreak \text{true} @@ an all-false clause forces o₂ false (the or-piece technique), against its links
-\htmlClass{new}{\text{the }}\allowbreak \htmlClass{new}{ \text{statement }}\allowbreak \htmlClass{new}{ \text{has }}\allowbreak \htmlClass{new}{ \text{a }}\allowbreak \htmlClass{new}{ \text{true }}\allowbreak \htmlClass{new}{ \text{row} \iff \text{the }}\allowbreak \htmlClass{new}{ \text{map }}\allowbreak \htmlClass{new}{ \text{has }}\allowbreak \htmlClass{new}{ \text{three }}\allowbreak \htmlClass{new}{ \text{colours}} \quad \blacksquare @@ the map is written in one pass along the statement: fast
+  <h2 class="sthead"><span class="stno">39k4</span>Memory counts too</h2>
+  <p data-pid="698c9b">A program also spends memory: cells, and in the end bits. A number below 2ᵇ needs b catches (39h4), so a list of n such numbers needs nb bits, and reading all of it takes at least about n turns.</p>
+  <p data-pid="be7e32">Storage-count technique: <b>n items each one of 2ᵇ patterns take nb bits, and fewer bits cannot hold every list of n items.</b> A row of fewer than nb catches has fewer than 2^(nb) patterns, so two lists would share one.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the storage-count technique, on two files">
+\text{a photo}: 12\cdot10^6 \text{ dots},\ 3 \text{ colours of } 8 \text{ bits} @@ 2²⁴ patterns a dot (36’s three numbers, each a byte)
+12\cdot10^6 \cdot 24 = 2.88\cdot10^8 \text{ bits} = 36\,000\,000 \text{ bytes} @@ a byte is 8 bits
+\text{a song}: 44\,100 \text{ samples a second},\ 16 \text{ bits},\ 2 \text{ ears},\ 180 \text{ s} @@ 32k’s rate
+\htmlClass{new}{44\,100 \cdot 16 \cdot 2 \cdot 180 / 8 \approx 31.8 \text{ million bytes}} \quad \blacksquare @@ the technique
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: one statement, worked">
-(x \lor y \lor z) \land (\bar x \lor \bar y \lor z) \land (\bar z \lor \bar z \lor x) @@ three letters, three clauses
-3 + 6 + 18 = 27 \text{ dots},\ \allowbreak \ 3 + 9 + 36 = 48 \text{ links} @@ the counts
-\text{the row } x, \neg y, z \text{ is }\allowbreak \text{true: }\allowbreak \text{colour } x, \bar y, z \text{ like } T @@ each clause has a true letter: x; ȳ; x
-\htmlClass{new}{\text{a }}\allowbreak \htmlClass{new}{ \text{colouring }}\allowbreak \htmlClass{new}{ \text{of }}\allowbreak \htmlClass{new}{ \text{all }}\allowbreak \htmlClass{new}{ \text{27 }}\allowbreak \htmlClass{new}{ \text{dots, }}\allowbreak \htmlClass{new}{ \text{read }}\allowbreak \htmlClass{new}{ \text{back: } x \text{ true, } y \text{ false, } z \text{ true}} \quad \blacksquare @@ backwards and forwards agree
-  </pre>
-  <p data-pid="aaf5cc">So three-colouring is NP-complete: satisfiability fast-reduces to it, and its certificate is a colouring. With two colours the question is fast, by walking the map; the reduction needs the spare colour in every piece.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · the map · ← → keys work</div></section>
+  <p data-pid="824e61">What digital storage buys is exactness. Each bit is read against a threshold (39b4), so a copy of a copy of a copy has the same bits, misread only at the known rate, which codes push lower still. A tape of sound loses a little at every copy and never gets it back. What it costs is the count: every bit must be stored, and moved, and 39c3 limits how many a wire moves a second. That is why the file sizes above are usually cut, by 32·comp’s and 30·comp’s ways of dropping what the eye and ear will not miss, or what is predictable.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · memory · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">39k4.1</span><span class="ph understand">understand</span>What does the map-from-clauses technique say, and how many dots does the map of a statement with n letters and m clauses have? <br>How is a true row read off a three-colouring?</li>
+      <li><span class="qid">39k4.1</span><span class="ph understand">understand</span>What does the storage-count technique say, and why can fewer bits not hold every list? <br>What does digital storage buy over a copied tape, and what does it cost?</li>
     </ol>
   </section>
 </section>
@@ -123,15 +122,15 @@ a \text{ false},\ \allowbreak b \text{ true} \Rightarrow u = \text{spare},\ \all
 <section class="class step" data-step="39k5">
   <h2 class="sthead"><span class="stno">39k5</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{a }\allowbreak \text{clause }\allowbreak \text{piece }\allowbreak \text{with }\allowbreak \text{an }\allowbreak \text{input }\allowbreak \text{true }\allowbreak \text{forces } o \text{ true}\,? @@ it allows o true; other finishings may colour o otherwise, and o₂’s links pick the true one
-\text{the }\allowbreak \text{reduction }\allowbreak \text{shows }\allowbreak \text{colouring }\allowbreak \text{is }\allowbreak \text{harder }\allowbreak \text{than }\allowbreak \text{satisfiability}\,? @@ it shows colouring is at least as hard; the tableau technique puts colouring back into satisfiability too
-\text{split } a \lor b \lor c \lor d \text{ as } (a \lor b \lor z) \land (z \lor c \lor d)\,? @@ the second needs ¬z; with z true both hold whatever a, b, c, d are
-\text{a }\allowbreak \text{map }\allowbreak \text{with } 27 \text{ dots }\allowbreak \text{has } 3^{27} \text{ colourings, }\allowbreak \text{so }\allowbreak \text{the }\allowbreak \text{reduction }\allowbreak \text{is }\allowbreak \text{slow}\,? @@ the reduction writes the map; it never tries the colourings
+\text{the search takes } 1 \text{ turn when the match is first, so it is } O(1)\,? @@ the count is over the worst input of size n: 5n + 2
+100n \text{ is always slower than } n^2\,? @@ only below n = 100; past it n² loses for ever
+\text{a thousand times faster solves } 2^n \text{ problems a thousand times bigger}\,? @@ about log₂ 1000 ≈ 10 items bigger
+\text{a copied file loses a little each time, like a tape}\,? @@ each bit is read against a threshold: the copy is exact but for a known misread rate
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">39k5.1</span><span class="ph understand">understand</span>Why must the second clause of a split hold ¬z and not z? <br>Why is the reduction fast although the map has 3²⁷ ways to colour?</li>
+      <li><span class="qid">39k5.1</span><span class="ph understand">understand</span>Why is the search not O(1), though it sometimes takes one turn? <br>Why is a copied file exact, though a copied tape is not?</li>
     </ol>
   </section>
 </section>
@@ -140,22 +139,22 @@ a \text{ false},\ \allowbreak b \text{ true} \Rightarrow u = \text{spare},\ \all
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">39k.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="(x \lor y) \land \neg x \land \neg y"></span></span>Pad the clauses to three letters, build the map, count its dots and links, and show it has no three-colouring by following the or-pieces.</div>
-  <div class="chq"><span class="chid">39k.6.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">two colours</span></span>Build a fast method for two-colouring a map, and find where the palette technique and the or-piece technique fail with two colours. What does that say about satisfiability with clauses of two letters?</div>
-  <div class="chq"><span class="chid">39k.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="X_{v,c}\text{: “dot } v \text{ has }\allowbreak \text{colour } c\text{”}"></span></span>Reduce three-colouring to satisfiability by hand: with these letters, write the clauses that say each dot has a colour, no dot has two, and no link joins two of one colour. Count the clauses for a map with d dots and l links.</div>
-  <div class="chq"><span class="chid">39k.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">34m: the number of three-colourings of a knot drawing</span></span>34m counted the ways to colour a knot’s strands with three colours, and found the count does not change under the three moves. This step only asked whether a map has one colouring. Is counting colourings at least as hard as finding one? The knot count is quick to find for any drawing. What is different about the rule at a crossing that makes it quick?</div>
+  <div class="chq"><span class="chid">39k.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">39j’s machine; find the largest of n cells</span></span>Build a program for 39j’s machine that finds the largest number in cells 50 to 50 + n − 1, using only its seven kinds. (It has no “is less than”: what can stand in?) <br>Count its turns exactly, worst case, as a function of n.</div>
+  <div class="chq"><span class="chid">39k.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="T(n) = n^{100},\ \ U(n) = 1.01^n"></span></span>U is in a higher family. Find roughly where U passes T, and say what that does to the advice “prefer the lower family”. <br>Which would you run for n = 1000?</div>
+  <div class="chq"><span class="chid">39k.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="T_2 \le c\,T_1"></span></span>A fixed factor keeps the family. Turn it round: if two machines always give counts in the same family for every program, must each mimic the other with a fixed factor? Look for a pair of machines where one turn of the first costs about log n turns of the second. <br>Does the family survive that?</div>
+  <div class="chq"><span class="chid">39k.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">practical means a low family</span></span>One camp holds that a problem is practical exactly when some program solves it in a count that is a power of n. Another points to programs in a power of n with a power of 100 that no one could run, and programs in 2ⁿ that run every day on real inputs. <br>Is “a power of n” a law with a known exception rate, a definition, or a guess? What would it take to test it?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r39j.html">← 39j · machines that read a tape, by hand</a><a href="r39l.html">39l · convincing without telling →</a></nav>
+<nav class="nextrung"><a href="r39j.html">← 39j · a machine that follows a list</a><a href="r39l.html">39l · sorting and searching →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A statement in clauses is in conjunctive normal form, CNF; with clauses of three it is 3-SAT, or 3-CNF-SAT. A map of dots and links is a graph, with vertices and edges; three-colouring is graph 3-colourability, written 3-COL. The palette is the base triangle, and the or-piece is the OR gadget of the standard reduction. The question of 39k.6.4 is about counting complexity, the class #P; counting the three-colourings of a graph is #P-complete, while the knot count of 34m is a determinant in disguise.</p>
+  <p>A program’s count of turns is its running time or time complexity, and the worst case over inputs of size n is the worst-case time; the families are constant, logarithmic, linear, linearithmic (n log n), quadratic, cubic, and exponential time. The machine-change technique is the invariance behind the cost model, and the claim held in trust, that every reasonable machine mimics every other within a fixed factor or a power, is the extended (or strong) Church–Turing thesis. A program’s memory is its space complexity. The practical-means-polynomial camp of 39k.6.4 is Cobham’s thesis (also credited to Edmonds). The crosswalk items here are AP Computer Science A 2.12 (informal run-time analysis), AP Computer Science Principles 3.17 (algorithmic efficiency) and NGSS HS-PS4-2 (digital information storage).</p>
   <h3>Who said it first</h3>
-  <p>Richard Karp (1972) listed chromatic number among his 21 NP-complete problems; Michael Garey, David Johnson and Larry Stockmeyer (1976) proved three-colouring NP-complete even for maps that can be drawn on a plane without crossing links. The four colour theorem of 1976 says four colours always suffice for such maps, so for them only three is a question. Leslie Valiant (1979) defined #P.</p>
+  <p>Juris Hartmanis and Richard Stearns founded the counting of running times as functions of the input size in 1965. Alan Cobham (1965) and Jack Edmonds (1965) proposed polynomial time as the mark of a practical problem. Donald Knuth made big O the language of program counts in The Art of Computer Programming, from 1968, and argued in 1976 for its letters Ω and Θ.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“In the or-piece, a is true, so u is spare, so v is true, so o is false: the piece fails.” Not allowed: the piece asks only that some finishing colours o true. Choosing v badly shows one finishing fails, not every one. With a true, take u false and v spare, and o is true.</p>
+  <p>“Program A took 2 seconds on my laptop and program B took 3, so A is in a lower family.” Not allowed: one run on one input of one size, on one machine, measures one count. The family is a claim about every size, and two programs can trade places as n grows. Counts are read off the program, or measured at many sizes and fitted, and the fit is a guess under the small case with its range said.</p>
 </section>
 
 </div>
@@ -170,25 +169,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'long',t:R`a \lor b \lor c \lor d`,n:`Four letters.`},
-  {k:'ember',kl:'split',t:R`(a \lor b \lor z) \land (\neg z \lor c \lor d)`,n:`A new letter.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{same: a true row or not}}`,n:`Clauses of three.`}
-],{title:'The slides · clauses · ← → keys work'});
+  {k:'ember',kl:'loop',t:R`br + s`,n:`Body times rounds.`},
+  {k:'ember',kl:'nested',t:R`b\textstyle\sum r_i`,n:`Rounds add.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{9k + 3,\ \ 5n + 2,\ \ \tfrac{b}{2}n(n-1)}`,n:`Off the page.`}
+],{title:'The slides · counting · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'triangle',t:R`T, F, B`,n:`Three colours named.`},
-  {k:'ember',kl:'pair',t:R`x - \bar x,\ \text{both} - B`,n:`True and false.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a colouring is a row}}`,n:`One letter each pair.`}
-],{title:'The slides · palette · ← → keys work'});
+  {k:'ember',kl:'machines',t:R`T_2 \le c\,T_1`,n:`A fixed factor.`},
+  {k:'ember',kl:'O',t:R`O(f) \to O(f)`,n:`The family survives.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{500 \text{ s against } 0.02 \text{ s}}`,n:`At a million items.`}
+],{title:'The slides · family · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'both false',t:R`\{u, v\} = \{\text{true}, \text{spare}\}`,n:`So o is false.`},
-  {k:'ember',kl:'one true',t:R`o = \text{true possible}`,n:`Finish it.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{o_2 \text{ forced true}}`,n:`Linked to F and B.`}
-],{title:'The slides · or-piece · ← → keys work'});
+  {k:'ember',kl:'n',t:R`\times s`,n:`In proportion.`},
+  {k:'ember',kl:'n²',t:R`\times\sqrt s`,n:`Square root.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2^n:\ + \log_2 s}`,n:`Almost nothing.`}
+],{title:'The slides · speed · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'dots',t:R`3 + 2n + 6m`,n:`Palette, pairs, pieces.`},
-  {k:'ember',kl:'links',t:R`3 + 3n + 12m`,n:`All counted.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{true row} \iff \text{three colours}}`,n:`Fast, both ways.`}
-],{title:'The slides · the map · ← → keys work'});
+  {k:'ember',kl:'items',t:R`n \text{ of } 2^b \text{ patterns}`,n:`b bits each.`},
+  {k:'ember',kl:'no room',t:R`< nb \text{ bits}: \text{ two share}`,n:`Counting.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a song} \approx 31.8 \text{ MB}}`,n:`Copied exactly.`}
+],{title:'The slides · memory · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

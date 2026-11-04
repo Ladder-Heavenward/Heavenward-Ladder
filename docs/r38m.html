@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Divide and conquer</title>
+<title>Numbering formulas by hand</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,88 +25,107 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r38l.html">← 38l sorting and searching</a><a href="r38n.html">next: 38n structures that hold data →</a></p>
-  <div class="tags"><span class="tag proof">38m · proof</span></div>
-  <h1>Divide and conquer</h1>
-  <p data-pid="109d7d">A program that cuts its job into smaller copies of itself has a count given by its own smaller counts. The rung on endless sums solved the commonest shape, where a job of size n becomes several jobs of size n over some fixed number, plus a cost like a power of n for the cutting and joining: the top level wins, every level ties, or the bottom wins. Real programs do not always cut so neatly. Some shrink the job by one item, not by a share, and pay for it with a square. Some cut into pieces of different sizes. One famous program finds the middle item of a list without sorting it, by cutting into a fifth and seven tenths, and the shares add to less than one, which turns out to be all that matters. And some pay a log for each cut as well as a power. This step solves each of those shapes, then gives the one method that handles any shape at all, at the cost of having to guess the answer first: guess, and check by induction that the rule keeps the guess.</p>
-  <p class="gesture" data-pid="5718aa">Shrinking by one item adds up the costs, often to a square. Cutting into shares that add to less than one costs only in proportion to the size. A log on each cut adds a log to the answer. Any shape can be solved by guessing and checking the guess by induction.</p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38l.html">← 38l quantifying over sets</a><a href="r38n.html">next: 38n natural deduction by hand →</a></p>
+  <div class="tags"><span class="tag tech">38m · technique</span></div>
+  <h1>Numbering formulas by hand</h1>
+  <p data-pid="3d96f0">Formulas as numbers is easy to say and slow to do. This step does it by hand, with the table of marks from the step on codes. A short formula gets a number with nine digits, and a short proof a number with more digits than there are atoms in the sky. Reading a code back is factoring, and it goes the same way every time: divide by two as often as it goes, then by three, and so on, and the counts are the marks. Not every number is the code of a formula, and checking which ones are is a small recipe of its own. Then a second way of numbering, older and thriftier: the diagonal listing of pairs from the rung on sizes turns two numbers into one with nothing but adding and multiplying, and it can be undone by hand too. The step ends where the numbers stop being practical, which is almost at once, and that is the point: the codes are there to be reasoned about, not written out.</p>
+  <p class="gesture" data-pid="28b0af">Code a string by prime powers from the table of marks, and read it back by dividing out each prime in turn. A number codes a formula when its primes run in order with no gap and the string read back is a formula. Pairs go into one number by the diagonal listing, and come back out by a square root.</p>
 </header>
 
 <section class="class step" data-step="38m1">
-  <h2 class="sthead"><span class="stno">38m1</span>Shrinking by one</h2>
-  <p data-pid="a9e153">22l1 unrolled a rule that halves the job. Some programs take one item off and do the rest the same way: find the smallest, set it first, sort the rest. Their rule is T(n) = T(n − 1) + f(n).</p>
-  <p data-pid="006e08">Shrink-by-one technique: <b>if T(1) = c and T(n) = T(n − 1) + f(n) for n ≥ 2, then T(n) = c + f(2) + f(3) + ⋯ + f(n).</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the shrink-by-one technique">
-T(n) = T(n - 1) + f(n) = T(n - 2) + f(n - 1) + f(n) @@ the rule, used twice
-T(n) = T(1) + f(2) + \cdots + f(n) @@ induction on n (4c)
-f(n) = n - 1:\ \ T(n) = 0 + 1 + 2 + \cdots + (n - 1) = \tfrac{n(n-1)}{2} @@ selection sort, 17·comp’s count, with c = 0
-f(n) = 1:\ \ T(n) = c + n - 1 @@ a step per item
-\htmlClass{new}{\text{shrinking by one turns a cost of } n \text{ per call into } n^2/2} \quad \blacksquare @@ 4k’s sum of the first n − 1 numbers
+  <h2 class="sthead"><span class="stno">38m1</span>Coding a formula</h2>
+  <p data-pid="2f0cfe">The table of 38g1: 0 is 1, S is 2, + is 3, · is 4, = is 5, ¬ is 6, ∧ is 7, ∨ is 8, ⇒ is 9, ∀ is 10, ∃ is 11, the brackets are 12 and 13, ⊥ is 14, and xₖ is 15 + k. The kth mark of the string becomes the power of the kth prime.</p>
+  <p data-pid="c4c97c">Code-by-primes technique: <b>to code a string, write the number of each mark as the power of the next prime, and multiply.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: two codes">
+0 = S0:\ \ \text{marks } 0, =, S, 0 \to 1, 5, 2, 1 @@ the table
+\ulcorner 0 = S0 \urcorner = 2^1 \cdot 3^5 \cdot 5^2 \cdot 7^1 = 2 \cdot 243 \cdot 25 \cdot 7 = 85\,050 @@ the code-by-primes technique
+\neg S0 = 0:\ \ \text{marks } \neg, S, 0, =, 0 \to 6, 2, 1, 5, 1 @@ the table
+\htmlClass{new}{\ulcorner \neg S0 = 0 \urcorner = 2^6 \cdot 3^2 \cdot 5 \cdot 7^5 \cdot 11 = 532\,445\,760} \quad \blacksquare @@ 64 · 9 · 5 · 16 807 · 11
   </pre>
-  <p data-pid="e60811">Set that beside merge sort, T(n) = 2T(n/2) + n, which is n log₂ n. The work at each call is the same, about n. What changes is how fast the job shrinks: by a share, there are log₂ n levels; by one item, there are n. The depth of the cutting is the whole difference between n log n and n².</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · by one · ← → keys work</div></section>
+  <p data-pid="16857d">Five marks gave nine digits. A placeholder is numbered 15 or more, and ⌜∀x₀ x₀ = x₀⌝ = 2¹⁰ · 3¹⁵ · 5¹⁵ · 7⁵ · 11¹⁵ has 41 digits. A proof codes a list of lines, each line a list of codes, so its code has one of these numbers as a power: far too many digits to write, though the number exists and is fixed.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · coding · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">38m1.1</span><span class="ph understand">understand</span>What does the shrink-by-one technique say? <br>Why does the same work per call give n² here and n log n for merge sort?</li>
+      <li><span class="qid">38m1.1</span><span class="ph understand">understand</span>How is a string coded by the code-by-primes technique? <br>Why do the codes of proofs grow far too large to write out?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="38m2">
-  <h2 class="sthead"><span class="stno">38m2</span>Uneven pieces</h2>
-  <p data-pid="220fdc">To find the middle item of a list without sorting it: cut the list into groups of five, find the middle of each group, find the middle of those middles by the same program, and use it as 38l2’s pivot. At least three tenths of the items lie on each side of it, so the side that holds the middle item has at most seven tenths of the list. The program then works on that side alone. Its count obeys T(n) ≤ T(n/5) + T(7n/10) + cn, with pieces of two different sizes.</p>
-  <p data-pid="f7d782">Shares-below-one technique: <b>if T(n) ≤ T(αn) + T(βn) + cn with α + β < 1, then T(n) ≤ cn/(1 − α − β): the count grows only in proportion to n.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the shares-below-one technique">
-K = \tfrac{c}{1 - \alpha - \beta} @@ the guess’s constant
-T(m) \le Km \text{ for every } m < n @@ strong induction (4h): the claim at every smaller size, and at the small sizes by choosing K large enough
-T(n) \le K\alpha n + K\beta n + cn @@ the rule, with the claim at αn and βn
-= n\big(K(\alpha + \beta) + c\big) = n\big(K - K(1 - \alpha - \beta) + c\big) = Kn @@ K(1 − α − β) = c
-\htmlClass{new}{\alpha = \tfrac15,\ \beta = \tfrac{7}{10}:\ \ T(n) \le 10cn} \quad \blacksquare @@ 1 − 9/10 = 1/10
+  <h2 class="sthead"><span class="stno">38m2</span>Reading a code back</h2>
+  <p data-pid="137e8a">Code-reading technique: <b>to read a code, divide by 2 as often as it goes, then by 3, then by 5, and on through the primes in order; the counts are the numbers of the marks, in order, and the string ends at the first prime that does not divide.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: 532 445 760 read back">
+532\,445\,760 = 2^6 \cdot 8\,319\,465 @@ halve six times; 8 319 465 is odd
+8\,319\,465 = 3^2 \cdot 924\,385 @@ divide by 3 twice; 9 + 2 + 4 + 3 + 8 + 5 = 31 is not a multiple of 3
+924\,385 = 5 \cdot 184\,877 @@ once by 5
+184\,877 = 7^5 \cdot 11 @@ five times by 7, then 11 once, then nothing is left
+6, 2, 1, 5, 1 @@ the counts, prime by prime
+\htmlClass{new}{\neg\ S\ 0\ =\ 0} \quad \blacksquare @@ the table, read backwards
   </pre>
-  <p data-pid="af7691">So the middle of a million items can be found in a count in proportion to a million, without the log a sort would cost. Run with c = 1 by machine, the rule gives about 8.6n at a million, under the bound of 10n. The shares tell the story: if the pieces add to less than the whole, each level does less work than the one above, and the top level wins, as in 22l2’s first case.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · uneven · ← → keys work</div></section>
+  <p data-pid="73fd40">The proof that this always works is the one-prime-list technique of 4j: the number has exactly one prime list, and the counts are its powers.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · reading · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38m2.1</span><span class="ph understand">understand</span>What does the shares-below-one technique say? <br>Why must α + β be below 1, and what happens to the proof if it is exactly 1?</li>
+      <li><span class="qid">38m2.1</span><span class="ph understand">understand</span>What does the code-reading technique say? <br>Why does it give back the one string with that code?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="38m3">
-  <h2 class="sthead"><span class="stno">38m3</span>Guess, then check</h2>
-  <p data-pid="80e042">The master technique of 22l2 needs the cost of cutting to be a power nᵈ. 22l5 marked T(n) = 2T(n/2) + n log₂ n as outside it. Any rule can be solved by guessing the answer and then proving by induction that the rule keeps the guess: the method of the last footing, made general.</p>
-  <p data-pid="bbacb1">Guess-and-check technique: <b>if g meets the rule at the smallest sizes, and the rule applied to g at the smaller sizes gives at most g at n, then T ≤ g at every size.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the guess-and-check technique, on a cut that costs n log n">
-T(1) = c,\ \ T(n) = 2T(n/2) + n\log_2 n,\ \ n = 2^k @@ the rule
-\text{guess } g(2^k) = 2^k\big(c + \tfrac{k(k + 1)}{2}\big) @@ divide by 2ᵏ, as 22l1 did: the cost per item rises by k at size 2ᵏ
-2g(2^{k-1}) + 2^k k = 2^k\big(c + \tfrac{(k - 1)k}{2} + k\big) = 2^k\big(c + \tfrac{k(k + 1)}{2}\big) @@ the rule applied to the guess
-g(1) = c @@ the smallest size
-\htmlClass{new}{T(n) = n\big(c + \tfrac12\log_2 n\,(\log_2 n + 1)\big) \sim \tfrac12 n\log_2^2 n} \quad \blacksquare @@ induction on k (4c); checked by machine at n = 1024: 57 344 with c = 1
+  <h2 class="sthead"><span class="stno">38m3</span>Which numbers are codes</h2>
+  <p data-pid="0f3ae8">Not every number is the code of a formula. A recipe sorts them.</p>
+  <p data-pid="f553ea">Code-test technique: <b>a number is the code of a formula exactly when it is at least 2, its primes are the first k primes with none skipped, each power is the number of a mark, and the string read back is built as 38a1 builds formulas.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: four numbers tested">
+12 = 2^2 \cdot 3 \to S\ 0 @@ a code of a string, a term, not a formula
+10 = 2 \cdot 5 @@ 3 is skipped: no string has this code
+2^{12} \cdot 3^1 \cdot 5^{13} \to (\ 0\ ) @@ a string, and no formula: brackets go only around a joining word, a sum or a product
+\htmlClass{new}{2430 = 2 \cdot 3^5 \cdot 5 \to 0 = 0,\ \text{a formula and a statement}} \quad \blacksquare @@ 38g1’s first code
   </pre>
-  <p data-pid="c4f6cc">Guessing is not cheating. The guess can come from anywhere, a picture of the levels, a run by machine, a hunch; only the check is a proof. A split of a product of two square grids into seven half-size products, 7T(n/2) + n², falls to 22l2 directly: r = 7/4, the bottom wins, n^(log₂ 7) ≈ n^2.807. At n = 1024 that is 7¹⁰ ≈ 2.8 · 10⁸ products against 1024³ ≈ 1.07 · 10⁹.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · guess and check · ← → keys work</div></section>
+  <p data-pid="4bac25">Each test stops: factoring a number stops, the marks are checked one by one, and 38a’s one-reading technique gives a recipe that parses the string. So “x is the code of a formula” is settled, the shape of fact 38h needed.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · codes or not · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38m3.1</span><span class="ph understand">understand</span>What does the guess-and-check technique say? <br>Why is the guess not part of the proof, and the check all of it?</li>
+      <li><span class="qid">38m3.1</span><span class="ph understand">understand</span>What does the code-test technique say? <br>Why is 12 the code of a string and not of a formula, and why is 10 the code of no string?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="38m4">
-  <h2 class="sthead"><span class="stno">38m4</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">38m4</span>Pairs in one number</h2>
+  <p data-pid="8e09b1">35a listed the pairs of numbers by diagonals: (0, 0); (0, 1), (1, 0) in some order; then the pairs that add to 2; and so on. Count along that listing and each pair gets one number with adding and multiplying alone.</p>
+  <p data-pid="2a4cd7">Pair-code technique: <b>the pair (x, y) gets the number ⟨x, y⟩ = (x + y)(x + y + 1)/2 + y, and each number is the code of exactly one pair.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the pair-code technique, run both ways">
+\text{the pairs with } x + y < w \text{ number } 1 + 2 + \cdots + w = w(w + 1)/2 @@ 4k’s sum of the first w numbers
+\text{on the diagonal } x + y = w \text{, the pair } (w - y, y) \text{ is the } y\text{th} @@ count from y = 0
+\langle 3, 5 \rangle = 8 \cdot 9 / 2 + 5 = 41 @@ w = 8
+41:\ \ 36 \le 41 < 45 \text{, so } w = 8,\ y = 41 - 36 = 5,\ x = 8 - 5 = 3 @@ the largest w with w(w + 1)/2 at most 41, by a square root (8f)
+\htmlClass{new}{\langle x, y \rangle \text{ is a matching of the pairs with the numbers}} \quad \blacksquare @@ every number lands on one diagonal, at one place
+  </pre>
+  <p data-pid="6c19a9">The pair code grows like the square of the larger entry, not like a power. Lists go in by pairing again: ⟨t₀, ⟨t₁, ⟨t₂, 0⟩⟩⟩. A code made this way stays small enough to write for a while longer than a prime code does.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · pairs · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38m4.1</span><span class="ph understand">understand</span>What does the pair-code technique say? <br>How is a pair read back from its number, and why does that need a square root?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38m5">
+  <h2 class="sthead"><span class="stno">38m5</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-T(n) = T(n - 1) + n \text{ is } n\log n \text{, like merge sort}\,? @@ it shrinks by one: n levels, n(n + 1)/2 − 1 + c
-T(n) \le T(n/2) + T(n/2) + cn \text{ is linear by shares-below-one}\,? @@ ½ + ½ = 1: the shares must add to less than 1; it is n log n
-\text{guess } T \le Kn \text{, and the step gives } Kn + cn \text{, so } T = O(n)\,? @@ the check must give at most Kn itself; Kn + cn is not
-T(n) = 2T(n/2) + n\log_2 n \text{ is } n\log_2 n\,? @@ the extra log at each level adds up: ½ n log₂² n
+\ulcorner 0 = 0 \urcorner = 1 \cdot 5 \cdot 1 = 5\,? @@ the marks’ numbers are powers of the primes, not factors: 2¹ · 3⁵ · 5¹ = 2430
+10 \text{ codes the string } 0\ 0\,? @@ 3 is skipped; 0 0 would be 2¹ · 3¹ = 6
+\text{every number above 1 is the code of some formula}\,? @@ 12 codes the term S0; 10 codes nothing
+\langle 3, 5 \rangle = \langle 5, 3 \rangle\,? @@ 41 against 8 · 9/2 + 3 = 39: order matters
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38m4.1</span><span class="ph understand">understand</span>Why does a check that gives Kn + cn not prove T ≤ Kn? <br>Why is T(n) ≤ 2T(n/2) + cn not linear?</li>
+      <li><span class="qid">38m5.1</span><span class="ph understand">understand</span>Why is the code of 0 = 0 not 1 · 5 · 1? <br>Why is ⟨3, 5⟩ not ⟨5, 3⟩?</li>
     </ol>
   </section>
 </section>
@@ -115,22 +134,22 @@ T(n) = 2T(n/2) + n\log_2 n \text{ is } n\log_2 n\,? @@ the extra log at each lev
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">38m.5.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">groups of three, not five</span></span>Build the rule for the middle-finding program with groups of three. What shares do you get, and does the shares-below-one technique still apply? <br>Try groups of seven.</div>
-  <div class="chq"><span class="chid">38m.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="T(n) = T(n/3) + T(2n/3) + n"></span></span>The shares add to exactly 1. Guess the answer from the levels and check it. <br>Why is the deepest branch the one that sets the number of levels?</div>
-  <div class="chq"><span class="chid">38m.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="T(n) \le Kn"></span></span>The shares-below-one technique gives a count in proportion to n. Turn it round: if a program cuts into shares adding to less than 1 and its count is in proportion to n, must the cost of cutting be in proportion to n? Build a counterexample or a proof. <br>What if the cutting cost is n²?</div>
-  <div class="chq"><span class="chid">38m.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="T(n) = 2T(n/2) + n\log_2 n"></span></span>Reroute the count by levels, as 22l2 does: what does level j cost, and how many levels are there? <br>Add them and compare with the guess-and-check answer.</div>
+  <div class="chq"><span class="chid">38m.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="2^{10} \cdot 3^{15} \cdot 5^{15} \cdot 7^{5} \cdot 11^{15}"></span></span>Read this code back into its string, and find whether it is a statement and whether it is true in N. <br>Build the code of the statement ¬ ⊥, and of ⊥ ⇒ ⊥ with whatever brackets 38a1 requires.</div>
+  <div class="chq"><span class="chid">38m.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="1,\ \ 2,\ \ 2^{16}"></span></span>Which strings, if any, have these codes? Which of them are formulas? <br>Find the smallest code of a statement under 38g1’s table.</div>
+  <div class="chq"><span class="chid">38m.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="z = \tfrac{w(w+1)}{2} + y,\ \ 0 \le y \le w"></span></span>The pair-code technique turns pairs into numbers. Turn it round as a recipe: prove that every number z has exactly one w and y of this shape, and read back z = 100. <br>Is the result the same as the pair the diagonal listing of 35a puts in place 100?</div>
+  <div class="chq"><span class="chid">38m.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\ulcorner 0 = S0 \urcorner"></span></span>Reroute the coding of 0 = S0 by pairs alone: code the list of mark numbers 1, 5, 2, 1 as ⟨1, ⟨5, ⟨2, ⟨1, 0⟩⟩⟩⟩. <br>Compare its size with 85 050. Which code would you rather read back by hand, and why?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r38l.html">← 38l · sorting and searching</a><a href="r38n.html">38n · structures that hold data →</a></nav>
+<nav class="nextrung"><a href="r38l.html">← 38l · quantifying over sets</a><a href="r38n.html">38n · natural deduction by hand →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>Cutting a job into smaller copies is divide and conquer, and its rules are recurrences. Guess-and-check is the substitution method; laying out the levels is the recursion-tree method; the master technique is the master theorem, and its extension to uneven pieces is the Akra–Bazzi method. The middle-finding program is median-of-medians selection, or BFPRT. The split of a grid product into seven is Strassen’s algorithm. The crosswalk items here are the recurrences, divide and conquer and selection of MIT 6.006 and Stanford CS 161.</p>
+  <p>Prime-power coding is Gödel numbering; the pair code is Cantor’s pairing function, and nested pairs code finite sequences. The code-test technique says the set of Gödel numbers of formulas is primitive recursive.</p>
   <h3>Who said it first</h3>
-  <p>Manuel Blum, Robert Floyd, Vaughan Pratt, Ronald Rivest and Robert Tarjan found linear-time selection in 1973. Volker Strassen gave his seven-product split in 1969; the best known exponent for grid products has since fallen below 2.372. Mohamad Akra and Louay Bazzi solved uneven recurrences in general in 1998. Jon Bentley, Dorothea Haken and James Saxe set out the master technique’s general form in 1980.</p>
+  <p>Georg Cantor’s listing of pairs by diagonals is from his work on countable sets in the 1870s, and the formula for the pair code is often credited to him. Kurt Gödel used prime powers in 1931. Many textbooks now code by pairs or by strings in base 2 instead, since only the existence of a recipe matters for the argument.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“The middle-finding program cuts into a fifth and seven tenths, and those are fixed shares, so by the master technique it is n log n.” Not allowed: the master technique needs equal pieces, a of size n/b. With pieces of different sizes, the shares’ total decides, and here it is 9/10, below 1, so the count is linear.</p>
+  <p>“532 445 760 is divisible by 2 six times, so its first mark is ¬, and its code tells us ¬ comes first in every formula.” Not allowed: the code tells the first mark of this one string. The rest of the number tells the rest of the string, and another number another string.</p>
 </section>
 
 </div>
@@ -145,20 +164,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'rule',t:R`T(n) = T(n-1) + f(n)`,n:`One item off.`},
-  {k:'ember',kl:'unroll',t:R`T(1) + f(2) + \cdots + f(n)`,n:`Add the costs.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{f = n - 1 \Rightarrow n(n-1)/2}`,n:`The square.`}
-],{title:'The slides · by one · ← → keys work'});
+  {k:'ember',kl:'marks',t:R`0 = S0 \to 1, 5, 2, 1`,n:`The table.`},
+  {k:'ember',kl:'primes',t:R`2^1 \cdot 3^5 \cdot 5^2 \cdot 7^1`,n:`In order.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\ulcorner 0 = S0 \urcorner = 85\,050}`,n:`One number.`}
+],{title:'The slides · coding · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'rule',t:R`T(n) \le T(\alpha n) + T(\beta n) + cn`,n:`Two sizes.`},
-  {k:'ember',kl:'guess',t:R`K = c/(1 - \alpha - \beta)`,n:`The constant.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{T(n) \le 10cn}`,n:`The middle, in linear time.`}
-],{title:'The slides · uneven · ← → keys work'});
+  {k:'ember',kl:'divide',t:R`532\,445\,760 = 2^6 \cdot 3^2 \cdot 5 \cdot 7^5 \cdot 11`,n:`Prime by prime.`},
+  {k:'ember',kl:'counts',t:R`6, 2, 1, 5, 1`,n:`The marks’ numbers.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\neg S0 = 0}`,n:`The string, back.`}
+],{title:'The slides · reading · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'rule',t:R`2T(n/2) + n\log_2 n`,n:`Not a power.`},
-  {k:'ember',kl:'guess',t:R`n(c + \tfrac{k(k+1)}{2})`,n:`From the levels.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\sim \tfrac12 n\log_2^2 n}`,n:`The rule keeps it.`}
-],{title:'The slides · guess and check · ← → keys work'});
+  {k:'ember',kl:'a term',t:R`12 \to S0`,n:`A string, not a formula.`},
+  {k:'ember',kl:'a gap',t:R`10 = 2 \cdot 5`,n:`No string at all.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2430 \to 0 = 0}`,n:`A formula.`}
+],{title:'The slides · codes or not · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'diagonals',t:R`x + y = w`,n:`Listed by 35a.`},
+  {k:'ember',kl:'count',t:R`\langle x, y\rangle = \tfrac{w(w+1)}{2} + y`,n:`Adding and multiplying.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\langle 3, 5\rangle = 41}`,n:`And back.`}
+],{title:'The slides · pairs · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

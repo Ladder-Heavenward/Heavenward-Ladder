@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>A₅ is simple</title>
+<title>Field extensions</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,93 +25,94 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r43e.html">← 43e groups taken apart</a><a href="r43g.html">next: 43g no formula →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r43e.html">← 43e where factoring fails</a><a href="r43g.html">next: 43g finite fields →</a></p>
   <div class="tags"><span class="tag proof">43f · proof</span></div>
-  <h1>A₅ is simple</h1>
-  <p data-pid="43d835">The even shuffles of five things make a group of sixty. This step proves that it cannot be cut: its only normal part-groups are the one that does nothing and the whole. The proof is a count. A normal part-group is made of whole families of shuffles that are the same up to relabelling, so it is a sum of family sizes, one of them the family of the identity. The families of the even shuffles of five have sizes one, fifteen, twenty, twelve and twelve, and no sum of them that includes the one divides sixty except one and sixty. So the group is simple, and it is not turn-about. That is the first piece on the ladder that is not a clock, and it sits inside the group of every equation of degree five whose group is all the shuffles.</p>
-  <p class="gesture" data-pid="f8e736">Conjugating a shuffle relabels its loops, so conjugates have the same loop shape. A normal part-group is a union of conjugate families. In the even shuffles of five the families have sizes one, fifteen, twenty, twelve and twelve, and the only sums with the one that divide sixty are one and sixty. So that group is simple and not turn-about, and the shuffles of five or more things are not solvable.</p>
+  <h1>Field extensions</h1>
+  <p data-pid="cd1714">The complex numbers hold the reals, and every complex number is a real plus a real times i: two real numbers fix it. The fractions with the square root of two put in hold the fractions, and two fractions fix each member. That is the dimension of rung twenty seven, spent on a new kind of space: a big field, read as arrows that the small field stretches. The count of arrows in a basis is how far the big field reaches past the small one. When the big field is made by putting in one root of an unsplittable polynomial, the count is the degree of that polynomial, and the field is the polynomials divided by it, as step 43b found the complex numbers to be the real polynomials divided by x squared plus one. And when one field sits inside a second, inside a third, the counts multiply. That one rule settles questions that look hard: the cube root of two is not made from square roots of square roots alone, and the square root of two is not made from the cube root of two.</p>
+  <p class="gesture" data-pid="322eb3">A field inside a bigger one makes the bigger one a space of arrows, and its dimension is the degree. Putting in one root of an unsplittable polynomial of degree d gives a field of degree d, a copy of the polynomials divided by it. Along a tower of fields the degrees multiply, so the degree of any member divides the degree of the field it lies in.</p>
 </header>
 
 <section class="class step" data-step="43f1">
-  <h2 class="sthead"><span class="stno">43f1</span>Conjugating relabels</h2>
-  <p data-pid="3b511e">Two members x and y of G are <i>conjugate</i> in G when y = gxg⁻¹ for some g in G. Being conjugate is an equivalence relation (5·cb2’s kind), so G is cut into conjugate families. A normal part-group holds, with each member, its whole family.</p>
-  <p data-pid="f54f46">Relabel technique: <b>in Sₙ, g (a₁ a₂ ⋯ aₖ) g⁻¹ = (g(a₁) g(a₂) ⋯ g(aₖ)); so conjugate shuffles have the same loop shape, and any two of the same shape are conjugate in Sₙ.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the relabel technique">
-g(a_1) \xrightarrow{g^{-1}} a_1 \xrightarrow{(a_1 \cdots a_k)} a_2 \xrightarrow{g} g(a_2) @@ follow g(a₁) through g⁻¹, the loop, then g
-b \text{ not any } g(a_i):\ \ g^{-1}(b) \text{ is not any } a_i, \text{ so } b \mapsto b @@ the loop leaves g⁻¹(b) alone
-\text{a shuffle is a product of loops on separate members; conjugate each} @@ g x y g⁻¹ = (g x g⁻¹)(g y g⁻¹)
-\htmlClass{new}{\text{same shape} \Rightarrow \text{conjugate: send each } a_i \text{ to the matching } b_i} \quad \blacksquare @@ that g is a shuffle, and gxg⁻¹ = y by the first lines
+  <h2 class="sthead"><span class="stno">43f1</span>A big field over a small one</h2>
+  <p data-pid="b66086">Let K be a field inside a field L, with the same plus and times. Read members of L as arrows, added in L, and stretched by members of K, multiplied in L. 27a’s eight rules hold, because they are rules of the field L.</p>
+  <p data-pid="508646">Field-as-space technique: <b>a field L holding a field K is a space of arrows over K, and its dimension is the degree [L : K].</b> The degree may be endless.</p>
+  <pre class="lines" data-k="ember" data-label="this step: three degrees">
+a + bi = a \cdot 1 + b \cdot i,\ \ a, b \in \mathbb R @@ 1 and i build ℂ, and are free: a + bi = 0 only when a = b = 0
+[\mathbb C : \mathbb R] = 2 @@ the same-size technique (27b)
+[\mathbb Q(\sqrt2) : \mathbb Q] = 2 @@ 1 and √2 free over ℚ, since √2 is no fraction (5f)
+\htmlClass{new}{[\mathbb R : \mathbb Q] \text{ is endless}} \quad \blacksquare @@ a space of n arrows over ℚ is listed like ℚⁿ (35a); ℝ cannot be listed (35b)
   </pre>
-  <p data-pid="e76a30">So (1 2 3) and (2 4 5) are conjugate in S₅, by any g with 1 ↦ 2, 2 ↦ 4, 3 ↦ 5. In A₅ the g must be even, and a family of S₅ may split in two.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · relabel · ← → keys work</div></section>
+  <p data-pid="06aa34">Here ℚ(√2) is the smallest field inside ℝ holding ℚ and √2. Its members are a + b√2 with a, b fractions, and 43k divides them by hand.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · degree · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">43f1.1</span><span class="ph understand">understand</span>When are two members of a group conjugate? <br>What does the relabel technique say, and what does it tell you about a normal part-group of Sₙ?</li>
+      <li><span class="qid">43f1.1</span><span class="ph understand">understand</span>How is a field L that holds a field K a space of arrows over K? <br>What is the degree [L : K], and why is [ℝ : ℚ] endless?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43f2">
-  <h2 class="sthead"><span class="stno">43f2</span>The families of A₅</h2>
-  <p data-pid="55a23a">A₅ holds the even shuffles of five: e; the double swaps like (1 2)(3 4); the 3-loops; the 5-loops. Count them: 1, then 5 · 3 = 15 double swaps, 10 · 2 = 20 three-loops, 4! = 24 five-loops: 60 in all. By 40·cb19 the family of x in a group H has |H|/|C(x)| members, where C(x) is the part-group of members that commute with x.</p>
-  <p data-pid="eee274">Families-of-A₅ technique: <b>the conjugate families of A₅ have sizes 1, 15, 20, 12 and 12.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the families-of-A₅ technique">
-x = (1\ 2\ 3):\ \ C_{S_5}(x) = \{e, x, x^2\} \times \{e, (4\ 5)\},\ \ 6 \text{ members} @@ family in S₅ of 20, so 120/20 = 6; these six commute with x
-C_{A_5}(x) = \{e, x, x^2\},\ \ \text{family in } A_5:\ 60/3 = 20 @@ (4 5) and x(4 5) are odd; all 20 three-loops, one family
-x = (1\ 2)(3\ 4):\ \ |C_{S_5}(x)| = 120/15 = 8,\ \ |C_{A_5}(x)| = 4,\ \ \text{family } 15 @@ the odd (1 2) commutes with x, so half of C is odd
-x = (1\ 2\ 3\ 4\ 5):\ \ |C_{S_5}(x)| = 120/24 = 5 = |\{e, x, \ldots, x^4\}|,\ \ \text{all even} @@ no odd member commutes with x
-\htmlClass{new}{\text{family of } x \text{ in } A_5:\ 60/5 = 12,\ \text{so the 24 five-loops make two families of } 12} \quad \blacksquare @@ the rest of the 24
+  <h2 class="sthead"><span class="stno">43f2</span>Putting in one root</h2>
+  <p data-pid="67dc6a">Let α in L be a zero of some polynomial over K other than 0. Putting α in, p ↦ p(α), is a ring map from K[x] to L. What it loses is an ideal other than {0}, so by the one-maker technique it is (m) for one polynomial m, chosen with top coefficient 1. This m is α’s <i>least polynomial</i>, as 27g’s least-obeyed technique found one for a grid. It cannot be split: if m = gh, then g(α)h(α) = 0, so g(α) or h(α) is 0, and that one is a multiple of m.</p>
+  <p data-pid="b32836">Root-field technique: <b>if α has least polynomial m of degree d over K, then K(α) is a copy of K[x]/(m), with basis 1, α, …, α^(d − 1), and [K(α) : K] = d.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the root-field technique">
+K[x]/(m) \text{ is a copy of what } p \mapsto p(\alpha) \text{ reaches} @@ the lost-ideal technique (43b)
+(m) \text{ is largest, so that copy is a field} @@ m cannot be split; 43d1’s proof of the unsplittable-is-prime technique; the largest-ideal technique
+\text{so what is reached is } K(\alpha) @@ a field holding K and α, made of polynomials in α
+p = mq + r,\ \ \deg r < d \Rightarrow p(\alpha) = r(\alpha) @@ division (43c); m(α) = 0
+\htmlClass{new}{1, \alpha, \ldots, \alpha^{d-1} \text{ build } K(\alpha) \text{ and are free}} \quad \blacksquare @@ a mix equal to 0 is r(α) = 0 with deg r &lt; d, so r is a multiple of m, so r = 0
   </pre>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · families · ← → keys work</div></section>
+  <p data-pid="cd6e70">∛2 has least polynomial x³ − 2 over ℚ, since 43d’s prime-wedge technique showed it cannot be split, and a polynomial that cannot be split with top 1 and zero ∛2 is the least. So [ℚ(∛2) : ℚ] = 3, with basis 1, ∛2, ∛4. And ℝ[x]/(x² + 1) gave ℂ in 43b by exactly this.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · one root · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43f2.1</span><span class="ph understand">understand</span>What does the families-of-A₅ technique say? <br>Why do the 24 five-loops split into two families in A₅, when the 20 three-loops do not?</li>
+      <li><span class="qid">43f2.1</span><span class="ph understand">understand</span>What is the least polynomial of α over K, and why can it not be split? <br>What does the root-field technique say about [ℚ(∛2) : ℚ]?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43f3">
-  <h2 class="sthead"><span class="stno">43f3</span>Nothing cuts A₅</h2>
-  <p data-pid="0c1a27">Simple-sixty technique: <b>A₅ is simple.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the simple-sixty technique">
-N \lhd A_5 \Rightarrow N \text{ is a union of families, with } e @@ normal: each member’s whole family is in N
-|N| = 1 + \text{a sum of some of } 15, 20, 12, 12 @@ the families-of-A₅ technique
-|N| \text{ divides } 60 @@ the part-divides-whole technique (19d)
-\text{sums: } 1, 13, 16, 21, 25, 28, 33, 36, 40, 45, 48, 60 @@ every choice of the four, listed
-\htmlClass{new}{|N| = 1 \text{ or } 60:\ \ N = \{e\} \text{ or } A_5} \quad \blacksquare @@ the only two that divide 60
+  <h2 class="sthead"><span class="stno">43f3</span>Towers</h2>
+  <p data-pid="5c390b">Tower technique: <b>if K ⊆ L ⊆ M are fields with [M : L] = m and [L : K] = n, then [M : K] = mn.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the tower technique">
+u_1, \ldots, u_n \text{ a basis of } L \text{ over } K;\ \ v_1, \ldots, v_m \text{ of } M \text{ over } L @@ given
+z = \textstyle\sum_j b_j v_j,\ \ b_j = \sum_i c_{ij} u_i,\ c_{ij} \in K @@ write z over L, then each bⱼ over K
+z = \textstyle\sum_{i,j} c_{ij}\, u_i v_j @@ so the mn products build M over K
+\textstyle\sum_{i,j} c_{ij} u_i v_j = 0 \Rightarrow \sum_i c_{ij} u_i = 0 \text{ for each } j @@ the vⱼ are free over L
+\htmlClass{new}{c_{ij} = 0 \text{ for all } i, j:\ [M : K] = mn} \quad \blacksquare @@ the uᵢ are free over K
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: A₅ is not turn-about">
-(1\ 2\ 3)(3\ 4\ 5):\ \ 1 \mapsto 2,\ 2 \mapsto 3,\ 3 \mapsto 4,\ 4 \mapsto 5,\ 5 \mapsto 1 @@ (3 4 5) first, then (1 2 3)
-(3\ 4\ 5)(1\ 2\ 3):\ \ 1 \mapsto 2,\ 2 \mapsto 4,\ 3 \mapsto 1 @@ (1 2 3) first
-\htmlClass{new}{(1\ 2\ 3)(3\ 4\ 5) \ne (3\ 4\ 5)(1\ 2\ 3)} \quad \blacksquare @@ 2 goes to 3 in one, to 4 in the other
-  </pre>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · simple · ← → keys work</div></section>
+  <p data-pid="5d604a">ℚ(√2, √3), the fractions with both roots put in, sits over ℚ(√2), which sits over ℚ. √3 is not in ℚ(√2), since (a + b√2)² = 3 forces 2ab = 0, and neither a² = 3 nor 2b² = 3 has a fraction answer. So the top step has degree 2, the bottom 2, and the whole tower 4, with basis 1, √2, √3, √6.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · towers · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43f3.1</span><span class="ph understand">understand</span>What does the simple-sixty technique say, and which two facts does its count use? <br>Why is A₅ not turn-about?</li>
+      <li><span class="qid">43f3.1</span><span class="ph understand">understand</span>What does the tower technique say? <br>Why is [ℚ(√2, √3) : ℚ] equal to 4, and what basis does the proof give?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43f4">
-  <h2 class="sthead"><span class="stno">43f4</span>S₅ does not come apart</h2>
-  <p data-pid="0e7124">Not-solvable technique: <b>A₅ is not solvable, and Sₙ is not solvable for any n ≥ 5.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the not-solvable technique">
-\text{A}_5 \text{ has one chain of pieces: } \{e\} \lhd A_5 @@ simple-sixty: nothing between
-\text{its piece } A_5 \text{ is not a clock of prime size} @@ it is not turn-about
-A_5 \text{ is not solvable} @@ the pieces technique (43e3) with the same-pieces technique
-S_n,\ n \ge 5,\ \text{holds the even shuffles of } 1, \ldots, 5 \text{ as a part-group matching } A_5 @@ shuffles that leave 6, …, n alone
-\htmlClass{new}{S_n \text{ is not solvable for } n \ge 5} \quad \blacksquare @@ the solvable-parts technique (43e2): a part of a solvable group is solvable
+  <h2 class="sthead"><span class="stno">43f4</span>Degrees divide</h2>
+  <p data-pid="0ce652">Degree-divides technique: <b>if α lies in a field L of finite degree over K, the degree of α’s least polynomial divides [L : K].</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the degree-divides technique">
+K \subseteq K(\alpha) \subseteq L @@ K(α) is the smallest field holding K and α
+[L : K] = [L : K(\alpha)]\,[K(\alpha) : K] @@ the tower technique
+\htmlClass{new}{\deg m_\alpha = [K(\alpha) : K] \text{ divides } [L : K]} \quad \blacksquare @@ the root-field technique
   </pre>
-  <p data-pid="3055b3">So S₂, S₃, S₄ come apart into clocks of prime size, and S₅ does not. The line between four and five, which 43a met as the end of the formulas, has turned up in the groups.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · not solvable · ← → keys work</div></section>
+  <pre class="lines" data-k="ember" data-label="this step: two consequences">
+\sqrt2 \in \mathbb Q(\sqrt[3]2) \Rightarrow 2 \mid 3 @@ √2 has degree 2; the field has degree 3
+\sqrt2 \notin \mathbb Q(\sqrt[3]2) @@ 2 does not divide 3
+L \text{ reached by square roots, one at a time} \Rightarrow [L : \mathbb Q] = 2^k @@ each step has degree 1 or 2 (the tower technique)
+\htmlClass{new}{\sqrt[3]2 \notin L:\ 3 \nmid 2^k} \quad \blacksquare @@ the degree-divides technique
+  </pre>
+  <p data-pid="71febc">The second consequence is the heart of 44i, where square roots stand for what a straightedge and compass can reach: doubling a cube means building ∛2, and the degrees say no.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · divides · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43f4.1</span><span class="ph understand">understand</span>What does the not-solvable technique say? <br>Why does A₅ being simple and not turn-about stop it being solvable?</li>
+      <li><span class="qid">43f4.1</span><span class="ph understand">understand</span>What does the degree-divides technique say? <br>Why is ∛2 in no field reached from ℚ by putting in square roots one at a time?</li>
     </ol>
   </section>
 </section>
@@ -119,15 +120,15 @@ S_n,\ n \ge 5,\ \text{holds the even shuffles of } 1, \ldots, 5 \text{ as a part
 <section class="class step" data-step="43f5">
   <h2 class="sthead"><span class="stno">43f5</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{the 24 five-loops make one family in } A_5\,? @@ in S₅ yes; in A₅ the commuting part is all even, so the family is 60/5 = 12
-\text{a normal part-group of } A_5 \text{ of size 12, the five-loops}\,? @@ it has no identity, and 12 + 1 = 13 does not divide 60
-A_5 \text{ simple, so } S_5 \text{ simple}\,? @@ A₅ ◁ S₅, with half the members
-\text{every simple group is } A_n \text{ or a clock}\,? @@ there are others; 43·now counts them
+[\mathbb Q(\sqrt2, \sqrt3) : \mathbb Q] = 2 + 2\,? @@ degrees multiply along a tower: 2 · 2 = 4
+x^4 - 4 \text{ has } \sqrt2 \text{ as a zero, so } [\mathbb Q(\sqrt2) : \mathbb Q] = 4\,? @@ the least polynomial is x² − 2; x⁴ − 4 can be split
+[\mathbb Q(\sqrt[3]2) : \mathbb Q] = 3 \text{ because } \sqrt[3]2 \text{ is no fraction}\,? @@ being no fraction gives degree above 1; degree 3 needs x³ − 2 unsplittable
+\mathbb Q(\sqrt2) \text{ and } \mathbb Q(\sqrt3) \text{ both have degree 2, so they are the same field}\,? @@ √3 is not in ℚ(√2)
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43f5.1</span><span class="ph understand">understand</span>Why do the five-loops make two families in A₅? <br>Why is S₅ not simple?</li>
+      <li><span class="qid">43f5.1</span><span class="ph understand">understand</span>Why is [ℚ(√2, √3) : ℚ] not 2 + 2? <br>Why does √2 being a zero of x⁴ − 4 not make [ℚ(√2) : ℚ] equal to 4?</li>
     </ol>
   </section>
 </section>
@@ -136,22 +137,22 @@ A_5 \text{ simple, so } S_5 \text{ simple}\,? @@ A₅ ◁ S₅, with half the me
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">43f.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="A_4"></span></span>Build the conjugate families of A₄ and their sizes. <br>Find a normal part-group of A₄ from them, and check that A₄ has no part-group of size 6.</div>
-  <div class="chq"><span class="chid">43f.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="A_6,\ \ |A_6| = 360"></span></span>Find the loop shapes in A₆ and the sizes of their families in S₆. Which families split in A₆? <br>Is the count of the simple-sixty technique enough to show A₆ simple, or does it leave a sum that divides 360?</div>
-  <div class="chq"><span class="chid">43f.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="N \lhd A_5,\ \ N \ni (1\ 2\ 3)"></span></span>Reroute the proof without counting: show that a normal part-group holding one 3-loop holds all of them, and that the 3-loops build every even shuffle of five. <br>Then show that any normal N ≠ {e} holds a 3-loop.</div>
-  <div class="chq"><span class="chid">43f.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">19e’s puzzle: half of the shuffles cannot be reached</span></span>Rung 19 found a puzzle of sliding tiles that reaches only the even arrangements. The even shuffles of five things are a simple group. <br>Is there a puzzle of moves whose reachable arrangements make a group with A₅ as a piece? What would a solver of such a puzzle be unable to do, that a solver of a puzzle with a solvable group can?</div>
+  <div class="chq"><span class="chid">43f.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\mathbb Q(\sqrt2, \sqrt[3]2)"></span></span>Find the degree of this field over ℚ, with a basis. <br>Build the least polynomial of √2 + ∛2 over ℚ, and check that its degree is what the degree-divides technique allows.</div>
+  <div class="chq"><span class="chid">43f.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\zeta = e^{2\pi i/5}"></span></span>Find [ℚ(ζ) : ℚ] from the least polynomial of ζ (43d.6.2 has the tool). <br>Is cos(2π/5) in ℚ(ζ)? Find its degree over ℚ, and what that says about building a regular pentagon from square roots.</div>
+  <div class="chq"><span class="chid">43f.6.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">[L : K] = 2</span></span>The degree-divides technique says the degree of a member divides the degree of the field. Turn it round for a field L of degree 2 over ℚ: must L be ℚ(√d) for some whole d? <br>Take any member β of L not in ℚ and complete the square on its least polynomial.</div>
+  <div class="chq"><span class="chid">43f.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">9·cb8: pairs of reals, multiplied by a rule of their own, are a field</span></span>9·cb8 made pairs of reals into a field with a multiplying rule of its own. Do the same for pairs of fractions. <br>Write the rule that makes (a, b) behave as a + b√2. Is the field of pairs the same as ℚ(√2), or only a copy, and does the question even have an answer? Which rule for (a, b) gives a field for d = 3 and fails for d = 4?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r43e.html">← 43e · groups taken apart</a><a href="r43g.html">43g · no formula →</a></nav>
+<nav class="nextrung"><a href="r43e.html">← 43e · where factoring fails</a><a href="r43g.html">43g · finite fields →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>Conjugate families are conjugacy classes; C(x) is the centralizer of x, and the count |H|/|C(x)| is the orbit–stabilizer theorem for the action by conjugation. A union of classes adding to the order of the group is the class equation. The simple-sixty technique is the simplicity of A₅, and its extension to every n ≥ 5 is the simplicity of the alternating groups.</p>
+  <p>A field L holding K is an extension L/K, and [L : K] is its degree; extensions of finite degree are finite extensions. A member with a least polynomial is algebraic over K, and the least polynomial is the minimal polynomial. The root-field technique says K(α) ≅ K[x]/(m_α); the tower technique is the tower law, and the degree-divides technique is often stated as: the degree of an algebraic element divides the degree of any finite extension containing it.</p>
   <h3>Who said it first</h3>
-  <p>Évariste Galois stated in 1832, in his last letter, that the smallest group that cannot be cut has 60 members. Camille Jordan, in his Traité des substitutions (1870), proved that Aₙ is simple for n ≥ 5. Paolo Ruffini (1799) and Niels Henrik Abel (1824) had already argued, without the word group, that shuffles of five letters do not come apart as those of four do.</p>
+  <p>Richard Dedekind read fields as spaces over smaller fields in his supplements to Dirichlet’s lectures (1871 to 1894), and the word degree for [L : K] is his. Leopold Kronecker built K(α) as the polynomials divided by m in 1882. Pierre Wantzel proved in 1837 that doubling the cube and trisecting an angle cannot be done with straightedge and compass, by an argument close to the degree-divides technique. Ernst Steinitz wrote the theory of fields as a whole in 1910.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“A normal part-group of A₅ has size dividing 60, so it has size 1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30 or 60. A₅ has part-groups of size 12, the turns of a tetrahedron, so one of them is normal.” Not allowed: a part-group need not be normal. Normal means a union of whole families, and the count of the simple-sixty technique shows that no union of size 12 includes e.</p>
+  <p>“√2 + √3 is a sum of two members of degree 2, so it has degree 2 or 4, and since it is no fraction, it has degree 2.” Not allowed: being no fraction rules out degree 1 only. The least polynomial of √2 + √3 is x⁴ − 10x² + 1, of degree 4.</p>
 </section>
 
 </div>
@@ -166,25 +167,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'conjugate',t:R`y = gxg^{-1}`,n:`Seen through g.`},
-  {k:'ember',kl:'loops',t:R`g(1\ 2\ 3)g^{-1} = (g1\ g2\ g3)`,n:`Relabelled.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{same shape} \iff \text{conjugate in } S_n}`,n:`Shapes are families.`}
-],{title:'The slides · relabel · ← → keys work'});
+  {k:'ember',kl:'arrows',t:R`a \cdot 1 + b \cdot i`,n:`ℂ over ℝ.`},
+  {k:'ember',kl:'count',t:R`[\mathbb C : \mathbb R] = 2`,n:`A basis of two.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{[\mathbb R : \mathbb Q] \text{ endless}}`,n:`ℝ cannot be listed.`}
+],{title:'The slides · degree · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'3-loops',t:R`60/3 = 20`,n:`One family.`},
-  {k:'ember',kl:'5-loops',t:R`60/5 = 12,\ \text{twice}`,n:`The family splits.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{1,\ 15,\ 20,\ 12,\ 12}`,n:`Sixty in all.`}
-],{title:'The slides · families · ← → keys work'});
+  {k:'ember',kl:'lost',t:R`(m) = \{p : p(\alpha) = 0\}`,n:`One maker.`},
+  {k:'ember',kl:'a field',t:R`K[x]/(m)`,n:`m unsplittable.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{[K(\alpha) : K] = \deg m}`,n:`Basis 1, α, …`}
+],{title:'The slides · one root · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'union',t:R`|N| = 1 + \text{families}`,n:`Whole families.`},
-  {k:'ember',kl:'divides',t:R`|N| \text{ divides } 60`,n:`19d.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{N = \{e\} \text{ or } A_5}`,n:`Nothing cuts it.`}
-],{title:'The slides · simple · ← → keys work'});
+  {k:'ember',kl:'two bases',t:R`u_i,\ \ v_j`,n:`Over K and over L.`},
+  {k:'ember',kl:'products',t:R`u_i v_j`,n:`A basis over K.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{[M : K] = [M : L][L : K]}`,n:`Degrees multiply.`}
+],{title:'The slides · towers · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'A₅',t:R`\{e\} \lhd A_5`,n:`Its only chain.`},
-  {k:'ember',kl:'piece',t:R`A_5 \ne \text{a prime clock}`,n:`Not turn-about.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{S_n,\ n \ge 5,\ \text{not solvable}}`,n:`A part of it is not.`}
-],{title:'The slides · not solvable · ← → keys work'});
+  {k:'ember',kl:'the tower',t:R`K \subseteq K(\alpha) \subseteq L`,n:`Two steps.`},
+  {k:'ember',kl:'the count',t:R`[K(\alpha) : K] \mid [L : K]`,n:`Degrees divide.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\sqrt[3]2 \text{ needs a } 3}`,n:`Not square roots alone.`}
+],{title:'The slides · divides · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

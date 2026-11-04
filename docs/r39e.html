@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Undecidable everywhere</title>
+<title>A switch worked by a switch</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,90 +25,96 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r39d.html">← 39d no machine decides stopping</a><a href="r39f.html">next: 39f programs that print themselves →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r39d.html">← 39d a one-way valve</a><a href="r39f.html">next: 39f every table from one gate →</a></p>
   <div class="tags"><span class="tag proof">39e · proof</span></div>
-  <h1>Undecidable everywhere</h1>
-  <p data-pid="994285">One question no machine answers would be a curiosity. This step shows it is a seed. The tool is a way of turning one question into another: a recipe that sends each case of the first question to a case of the second, with the same answer. If the second could be decided, so could the first. Run backwards, the stopping question’s refusal spreads to every question it can be turned into. Does this machine stop on a blank tape? Does it stop on every input? Do these two programs do the same thing? Each is undecidable, and the reason is one argument: any question about what a program does, as opposed to how it is written, is undecidable unless its answer is always the same. Then the spread reaches mathematics. No machine decides which statements the axioms of arithmetic reach, so the hope of a recipe that settles every question by calculating is closed. And it reaches the oldest kind of question there is, whether an equation in whole numbers has a solution. Solutions can be searched for. In 1970 it was shown that no recipe can always say there are none.</p>
-  <p class="gesture" data-pid="6ce2f9">If a recipe turns one question into another with the same answers, a decider for the second gives one for the first. From stopping, the refusal spreads: every question about what programs do is undecidable unless trivial, no machine decides what arithmetic reaches, and no machine decides whether a whole-number equation has a solution.</p>
+  <h1>A switch worked by a switch</h1>
+  <p data-pid="a47d35">Valves cannot turn a one into a zero, and cannot give back a level they have lost. The part that can is a switch worked by a switch. A plate sits over a strip of silicon, with a layer of glass between them so thin that a few hundred atoms would span it. Put a voltage on the plate and the strip beneath it fills with carriers and conducts; take the voltage away and it stops. The plate draws almost no current, because the glass lets none through, yet it opens and shuts a path that can carry a great deal. One such switch of each kind, stacked between the supply and the ground, is a not gate, and the newsflash on the complex rung already drew its curve: flat at the two ends, steep in the middle. This step proves why steep is enough. Two not gates in a row have three resting places, and the one in the middle holds exactly when the slope there is less than one. Make it more than one and the middle pushes every voltage out to an end, and each end pulls its neighbours in so hard that noise added at every stage never piles up. And the switch does one more thing a valve never could: a signal of a few microwatts on the plate steers watts through the strip. That ratio is where the power of the last step and its message finally meet.</p>
+  <p class="gesture" data-pid="005eab">A plate over thin glass opens and shuts a strip of silicon: a switch worked by a voltage, drawing almost no current. Two kinds in a stack make a not. Two nots in a row rest at the ends and in the middle; the middle holds only if its slope is below one, so a slope above one restores every level, and noise stays bounded. A tiny signal steers a large power.</p>
 </header>
 
 <section class="class step" data-step="39e1">
-  <h2 class="sthead"><span class="stno">39e1</span>Turning one question into another</h2>
-  <p data-pid="dc511a">A set A <i>reduces</i> to a set B when some machine computes a function f with: x is in A exactly when f(x) is in B. f turns every case of A into a case of B with the same answer.</p>
-  <p data-pid="d293bf">Reduction-carries technique: <b>if A reduces to B and B is decided, then A is decided; so if A reduces to B and A is not decided, B is not decided.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the reduction-carries technique">
-f \text{ computed},\ \allowbreak \ x \in A \iff f(x) \in B,\ \allowbreak \ D \text{ decides } B @@ given
-\text{on } x\text{, }\allowbreak \text{compute } f(x)\text{, }\allowbreak \text{then }\allowbreak \text{run } D \text{ on it} @@ two machines in a row (39b1, putting inside)
-\text{the }\allowbreak \text{run }\allowbreak \text{stops, }\allowbreak \text{and }\allowbreak \text{says }\allowbreak \text{yes }\allowbreak \text{exactly }\allowbreak \text{when } f(x) \in B @@ f stops on every input; D decides
-\htmlClass{new}{\text{it }}\allowbreak \htmlClass{new}{ \text{decides } A} \quad \blacksquare @@ x ∈ A exactly when f(x) ∈ B; the second half is the first turned round (1b)
+  <h2 class="sthead"><span class="stno">39e1</span>A switch worked by a voltage</h2>
+  <p data-pid="18bfe8">Over a strip of silicon lies a plate, the <i>gate</i>, with glass a few nanometres thick between. A voltage on the gate above a threshold, about 0.4 V on a modern chip, draws carriers into the strip and joins its two ends; below the threshold the ends are apart. One kind closes when its gate is high, the other when its gate is low. The glass passes no current, so holding a switch closed costs the gate nothing: only changing it costs, the charge that fills the plate.</p>
+  <p data-pid="b9e734">Pair-inverter technique: <b>a switch that closes on high from the output to ground, and one that closes on low from the supply to the output, with their gates joined, make a not: on {0, 1} the output is 1 − x.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the pair-inverter technique">
+x = 1:\ \text{the lower switch closes, the upper opens} @@ the two kinds
+\text{output joined to ground only}:\ 0 = 1 - 1 @@ no path to the supply
+x = 0:\ \text{the upper switch closes, the lower opens} @@ the two kinds
+\text{output joined to the supply only}:\ 1 = 1 - 0 @@ no path to ground
+\htmlClass{new}{\text{output} = 1 - x = \neg x} \quad \blacksquare @@ the or-as-greater technique’s not (39a2)
   </pre>
-  <p data-pid="22aa55">One example first. Does M stop when started on a blank tape? From ⟨M⟩ # w build M_w: write w on the tape, walk back to the first cell, then act as M. M_w on a blank tape does what M does on w. So H reduces to the blank-tape question, and the blank-tape question is not decided.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · reduce · ← → keys work</div></section>
+  <p data-pid="388425">This escapes 39d3. The rising-network technique was about parts whose state is set by the voltages on their own ends. Here the upper switch’s state is set by a third wire, the gate, and the supply behind it is fixed. Raising the gate cuts the path to the supply. A not is a fall, and only a steered part can fall.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · inverter · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">39e1.1</span><span class="ph understand">understand</span>When does a set A reduce to a set B? <br>What does the reduction-carries technique say, and how does M_w turn the stopping question into the blank-tape question?</li>
+      <li><span class="qid">39e1.1</span><span class="ph understand">understand</span>What does the pair-inverter technique say? <br>Why does it escape the rising-network technique of 39d3?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="39e2">
-  <h2 class="sthead"><span class="stno">39e2</span>What programs do</h2>
-  <p data-pid="404c8e">Each machine computes a function, with no value where the machine never stops. A property P of such functions is <i>about what machines do</i>: two machines computing the same function both have it or neither does. It is <i>trivial</i> when every machine’s function has it, or none does.</p>
-  <p data-pid="03bba8">Behaviour technique: <b>for every property about what machines do that is not trivial, no machine decides which codes ⟨M⟩ have it.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the behaviour technique">
-\text{the }\allowbreak \text{function }\allowbreak \text{with }\allowbreak \text{no }\allowbreak \text{values }\allowbreak \text{lacks } P;\ \allowbreak \ M_1\text{’s }\allowbreak \text{function }\allowbreak \text{has } P @@ not trivial; if the empty function has P, run the proof on not-P
-N_{M,w}\text{: }\allowbreak \text{on }\allowbreak \text{input } x\text{, }\allowbreak \text{first }\allowbreak \text{run } M \text{ on } w\text{, }\allowbreak \text{then }\allowbreak \text{run } M_1 \text{ on } x @@ built from ⟨M⟩ # w by a recipe
-M \text{ stops }\allowbreak \text{on } w \Rightarrow N_{M,w} \text{ computes }\allowbreak \text{what } M_1 \text{ computes: }\allowbreak \text{it }\allowbreak \text{has } P @@ the first part ends, the second is M₁
-M \text{ never }\allowbreak \text{stops }\allowbreak \text{on } w \Rightarrow N_{M,w} \text{ has }\allowbreak \text{no }\allowbreak \text{values: }\allowbreak \text{it }\allowbreak \text{lacks } P @@ the first part never ends
-\htmlClass{new}{H \text{ reduces }}\allowbreak \htmlClass{new}{ \text{to } P\text{; } P \text{ is }}\allowbreak \htmlClass{new}{ \text{not }}\allowbreak \htmlClass{new}{ \text{decided}} \quad \blacksquare @@ the reduction-carries technique
+  <h2 class="sthead"><span class="stno">39e2</span>A slope above 1 restores a level</h2>
+  <p data-pid="c6a0b7"><a href="r26then.html#26then4">26·then4</a> drew the not gate’s curve g, from input to output, falling from near the supply to near 0, steepest in the middle, and named the bands and margin. Take two gates in a row, G = g ∘ g. A voltage that goes through pairs of gates is fed its own answers: vₙ₊₁ = G(vₙ). It settles, if at all, at a rest, where G(v) = v (22a’s fixed-point technique). G rests near 0, near the supply, and at the middle point m where g(m) = m.</p>
+  <p data-pid="298b5a">Middle-gain technique: <b>the middle rest of two not gates in a row holds when the slope of g there is less than 1 in size, and pushes every nearby voltage away when it is more than 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the middle-gain technique">
+G'(m) = g'(g(m))\,g'(m) = g'(m)^2 @@ the chain rule (13e), with g(m) = m
+|g'(m)| < 1 \Rightarrow |G(v) - m| \le k\,|v - m| \text{ near } m,\ k < 1 @@ the mean value technique (14c): the slope is continuous, so below some k &lt; 1 on a window
+\text{then } v_n \to m \text{ from every start in the window} @@ the pull-together technique (22h3)
+|g'(m)| > 1 \Rightarrow |G(v) - m| \ge k\,|v - m| \text{ near } m,\ k > 1 @@ the same, above 1
+\htmlClass{new}{\text{then } |v_n - m| \text{ grows by } k \text{ each pair until } v_n \text{ leaves the window}} \quad \blacksquare @@ kⁿ heads past every ceiling (22h2)
   </pre>
-  <p data-pid="2ba531">So none of these is decided: whether a machine stops on every input; whether it ever outputs 0; whether its function is that of adding one; whether two machines compute the same function. Questions about how a program is written are another matter. Whether a table has five rows is decided by counting. The line runs between the text of a program, which can be read, and its behaviour, which can only be run.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · behaviour · ← → keys work</div></section>
+  <pre class="lines" data-k="ember" data-label="this step: worked on the model curve">
+g(v) = \tfrac{3.3}{1 + e^{4(v - 1.65)}},\ \ m = 1.65,\ \ g'(m) = -3.3 @@ 26·then4’s model; its slope at m is −3.3 · 4/4
+G'(m) = 10.9,\ \ G' \approx 0.0003 \text{ at both end rests} @@ worked by machine
+1.2 \to 2.832 \to 0.029 \to 3.295 \to 0.005 @@ a weak 0 at 1.2 V, through four gates
+\htmlClass{new}{\text{after two pairs the level is within } 0.005 \text{ V of the rail}} \quad \blacksquare @@ restored
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · restoring · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">39e2.1</span><span class="ph understand">understand</span>What makes a property about what machines do, and when is it trivial? <br>What does the behaviour technique say, and why is “the table has five rows” not covered by it?</li>
+      <li><span class="qid">39e2.1</span><span class="ph understand">understand</span>What does the middle-gain technique say, and why is G′(m) the square of g′(m)? <br>Why does a slope of −3.3 at the middle make the end rests hold so hard?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="39e3">
-  <h2 class="sthead"><span class="stno">39e3</span>What arithmetic reaches is not decided</h2>
-  <p data-pid="a40fe0">Reach-undecided technique: <b>no machine decides which statements PA reaches.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the reach-undecided technique">
-\sigma_{M,w}\text{: } \exists y\ \text{“the }\allowbreak \text{run }\allowbreak \text{of } M \text{ on } w \text{ has }\allowbreak \text{stopped }\allowbreak \text{by }\allowbreak \text{step } y\text{”} @@ a search statement, written by 39b3 from ⟨M⟩ # w, by a recipe
-M \text{ stops }\allowbreak \text{on } w \Rightarrow \sigma_{M,w} \text{ true} \Rightarrow PA \vdash \sigma_{M,w} @@ the search-reached technique (37g4)
-M \text{ never }\allowbreak \text{stops }\allowbreak \text{on } w \Rightarrow \sigma_{M,w} \text{ false }\allowbreak \text{in } N \Rightarrow PA \nvdash \sigma_{M,w} @@ PA reaches only statements true in N (37g2)
-\htmlClass{new}{H \text{ reduces }}\allowbreak \htmlClass{new}{ \text{to }}\allowbreak \htmlClass{new}{ \text{what }}\allowbreak \htmlClass{new}{ \text{PA }}\allowbreak \htmlClass{new}{ \text{reaches}} \quad \blacksquare @@ the reduction-carries technique
+  <h2 class="sthead"><span class="stno">39e3</span>Why noise dies out</h2>
+  <p data-pid="373c28">Every stage of a real chain adds a little noise. Near a rail the pair of gates pulls hard: 39e2 found a slope of 0.0003 there. Call the size of that pull k, and let each pair of stages add noise at most η.</p>
+  <p data-pid="2379d0">Noise-floor technique: <b>if each pair of stages adds noise at most η, and near a rail the pair’s slope is at most k with k < 1, then the distance from the rail never passes η/(1 − k), however long the chain.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the noise-floor technique">
+e_{n+1} \le k\,e_n + \eta,\ \ e_0 = 0 @@ the pull shrinks the old error; the new noise adds
+e_n \le \eta\,(1 + k + k^2 + \cdots + k^{n-1}) @@ induction on n (4c)
+1 + k + \cdots + k^{n-1} < \tfrac{1}{1 - k} @@ the geometric sum (22e), k &lt; 1
+\htmlClass{new}{e_n < \tfrac{\eta}{1 - k} \text{ for every } n} \quad \blacksquare @@ a ceiling that does not depend on n
   </pre>
-  <p data-pid="1fbd99">37b listed what PA reaches; now it is clear the list cannot be made into a decider. Run the same reduction with a finite collection in place of PA, the six lines of 37g2 without induction, which still reach every true search statement (held in trust here; the proof of 37g4 uses no induction). A finite collection G reaches σ exactly when “the lines of G, joined, imply σ” is true in every world (37d). So no machine decides which statements are true in every world. The question was asked in 1928 as a challenge, and this is its answer.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · arithmetic · ← → keys work</div></section>
+  <p data-pid="bbfc9b">With k = 0.0003 the ceiling is barely more than η itself: the error at any stage is about the noise of the last stage alone. Set that beside 39d4. Valves have a slope of at most 1, so k = 1 and the sum is ηn: after a billion stages, a billion stages of noise. A gate with a steep middle has a flat end, and the flat end forgets. That is why a chip can chain gates a billion deep and still read every 1 as a 1.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · noise floor · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">39e3.1</span><span class="ph understand">understand</span>What does the reach-undecided technique say? <br>Which two facts about PA make σ reached exactly when M stops on w?</li>
+      <li><span class="qid">39e3.1</span><span class="ph understand">understand</span>What does the noise-floor technique say? <br>Why does the same argument give a ceiling that grows with n for a chain of valves?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="39e4">
-  <h2 class="sthead"><span class="stno">39e4</span>Equations in whole numbers</h2>
-  <p data-pid="2b7a7a">Take a polynomial equation p(x₁, …, xₖ) = 0 with integer coefficients, and ask whether it has a solution in whole numbers. x² − 2y² = 1 has x = 3, y = 2. x² + y² = 3 has none: a square leaves remainder 0 or 1 by 4, so a sum of two squares leaves 0, 1 or 2, and 3 leaves 3 (4j).</p>
-  <p data-pid="7d2384">Equation-search technique: <b>the equations with a whole-number solution are listed.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the equation-search technique">
-\text{list }\allowbreak \text{the }\allowbreak \text{lists } (x_1, \dots, x_k) \text{ of }\allowbreak \text{whole }\allowbreak \text{numbers} @@ by largest entry, then in order, as 35a listed pairs
-\text{at }\allowbreak \text{each, }\allowbreak \text{compute } p(x_1, \dots, x_k) @@ adding and multiplying, built without search
-\text{stop }\allowbreak \text{in }\allowbreak \text{yes }\allowbreak \text{at }\allowbreak \text{the }\allowbreak \text{first }\allowbreak \text{zero} @@ one search (39b1)
-\htmlClass{new}{\text{yes }}\allowbreak \htmlClass{new}{ \text{exactly }}\allowbreak \htmlClass{new}{ \text{on }}\allowbreak \htmlClass{new}{ \text{the }}\allowbreak \htmlClass{new}{ \text{solvable }}\allowbreak \htmlClass{new}{ \text{equations}} \quad \blacksquare @@ if none, the search never ends
+  <h2 class="sthead"><span class="stno">39e4</span>A small signal steers a large power</h2>
+  <p data-pid="29083f">A switch on a board in a greenhouse near Salinas turns a 12 V, 2 A pump on and off, a thousand times a second to set its speed. Its gate is worked by a 3.3 V pin. Each change fills or empties the gate with about 10 nC of charge. The pin pays for the charge; the pump’s supply pays for the pump.</p>
+  <p data-pid="2d17b4">Steering technique: <b>a switch worked by a voltage spends, on its gate, about the gate charge times the gate voltage at each change, while the power it steers is set by its supply and load; their ratio is its power gain.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the steering technique, worked">
+\text{gate}: \ Q V f = 10^{-8} \cdot 3.3 \cdot 1000 = 3.3 \cdot 10^{-5} \text{ W} @@ charge per change, times voltage, times changes a second (7·phys: a volt is a joule per coulomb)
+\text{load}: \ 12 \cdot 2 = 24 \text{ W while on} @@ power is voltage times current (7·phys)
+\tfrac{24}{3.3 \cdot 10^{-5}} \approx 7 \cdot 10^5 @@ the ratio
+\htmlClass{new}{\text{thirty-three microwatts of pattern steer twenty-four watts of power}} \quad \blacksquare @@ a power gain near seven hundred thousand
   </pre>
-  <p data-pid="a38027">That is one half, and it is easy. The other half was proved in 1970, after twenty years of work by four people: every listed set A of numbers has a polynomial p with integer coefficients such that a is in A exactly when p(a, x₁, …, xₖ) = 0 has a whole-number solution. Take A to be the codes of stopping pairs, and the stopping question reduces to solvability. So no machine decides whether an equation in whole numbers has a solution. The ladder names this result and does not prove it: its proof turns the run of a machine into an equation, using the solutions of x² − dy² = 1 to make powers out of adding and multiplying.</p>
-  <p data-pid="b4510e">The remainder argument for x² + y² = 3 is a certificate that no solution exists. Some equations have such certificates and some do not, and no machine finds the certificate whenever there is one.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · equations · ← → keys work</div></section>
+  <p data-pid="d03569">This is where 39c’s two questions meet. The gate carries the message: when to switch. The strip carries the power. The transistor copies the pattern of the first onto the second, and its gain is their ratio. Valves had a power gain of at most 1. Every gate of 39f on stands on a gain far above it.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · steering · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">39e4.1</span><span class="ph understand">understand</span>What does the equation-search technique say? <br>What did the result of 1970 add to it, and how does that give an equation question no machine decides?</li>
+      <li><span class="qid">39e4.1</span><span class="ph understand">understand</span>What does the steering technique say? <br>Which of 39c’s two questions does the gate answer, and which does the strip?</li>
     </ol>
   </section>
 </section>
@@ -116,15 +122,15 @@ M \text{ never }\allowbreak \text{stops }\allowbreak \text{on } w \Rightarrow \s
 <section class="class step" data-step="39e5">
   <h2 class="sthead"><span class="stno">39e5</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-A \text{ reduces }\allowbreak \text{to } B \text{ and } A \text{ is }\allowbreak \text{decided, }\allowbreak \text{so } B \text{ is }\allowbreak \text{decided}\,? @@ backwards: f carries a decider of B to one of A, never the other way
-\text{whether }\allowbreak \text{a }\allowbreak \text{table }\allowbreak \text{has }\allowbreak \text{five }\allowbreak \text{rows }\allowbreak \text{is }\allowbreak \text{not }\allowbreak \text{decided, }\allowbreak \text{by }\allowbreak \text{the }\allowbreak \text{behaviour }\allowbreak \text{technique}\,? @@ that is about the text, not what the machine does; count the rows
-x^2 + y^2 = 3 \text{ has }\allowbreak \text{no }\allowbreak \text{solution, }\allowbreak \text{so }\allowbreak \text{no }\allowbreak \text{equation’s }\allowbreak \text{question }\allowbreak \text{is }\allowbreak \text{decided}\,? @@ many are; no single machine decides them all
-\text{PA }\allowbreak \text{reaches } \sigma \text{ whenever } \sigma \text{ is true}\,? @@ only true search statements; 37i’s unreached truth is true and not reached
+\text{the gate draws the load’s current}\,? @@ the glass passes none; the gate draws only the charge that fills it, at each change
+|g'(m)| > 1 \text{ so every rest of } G \text{ pushes}\,? @@ the end rests have slope near 0.0003 and hold; only the middle pushes
+\text{the noise-floor ceiling grows with the chain}\,? @@ η/(1 − k) does not depend on n, for k below 1
+\text{a gain of } 7\cdot10^5 \text{ makes energy}\,? @@ the 24 W come from the pump’s supply; the gate only steers it
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">39e5.1</span><span class="ph understand">understand</span>Why does a decided A that reduces to B say nothing about B? <br>Why does the behaviour technique say nothing about the number of rows of a table?</li>
+      <li><span class="qid">39e5.1</span><span class="ph understand">understand</span>Why do the end rests hold though the middle pushes? <br>Where do the 24 W come from, if not the gate?</li>
     </ol>
   </section>
 </section>
@@ -133,22 +139,22 @@ x^2 + y^2 = 3 \text{ has }\allowbreak \text{no }\allowbreak \text{solution, }\al
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">39e.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\{\langle M_1\rangle \# \langle M_2\rangle : M_1, M_2 \text{ compute }\allowbreak \text{the }\allowbreak \text{same }\allowbreak \text{function}\}"></span></span>Build a reduction from the blank-tape question to this set, writing the machine that f outputs. Is the set listed? Is the set outside it listed?</div>
-  <div class="chq"><span class="chid">39e.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\{\langle M\rangle : M \text{ stops }\allowbreak \text{on }\allowbreak \text{some }\allowbreak \text{input }\allowbreak \text{within } 100 \text{ steps}\}"></span></span>Is this set decided? It looks like a question about what M does. Find what keeps the behaviour technique from applying, and decide it.</div>
-  <div class="chq"><span class="chid">39e.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="A \text{ reduces }\allowbreak \text{to } B,\ \allowbreak \ B \text{ listed}"></span></span>Prove that A is listed. Then turn it round: if B reduces to A and B is decided, what follows about A? Find two sets that show nothing does.</div>
-  <div class="chq"><span class="chid">39e.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">a calculus in which every dispute is settled by calculating</span></span>One old hope held that every dispute could be settled by sitting down and calculating. A later one asked for a recipe that decides every statement of mathematics. The reach-undecided technique closes the second. Does it close the first? Which disputes could still be settled by calculating, and what kind of answer is left for the rest?</div>
+  <div class="chq"><span class="chid">39e.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="g(v) = \tfrac{3.3}{1 + e^{s(v - 1.65)}}"></span></span>Build the least s for which the middle rest of g ∘ g pushes. <br>For s just above it, find how many pairs of gates bring 1.6 V to within 0.1 V of a rail.</div>
+  <div class="chq"><span class="chid">39e.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="|g&#x27;(m)| = 1"></span></span>At exactly slope 1 in size, does the middle hold or push? Build a curve with slope −1 at m for which it holds, and one for which it pushes. <br>What does this say about a design that is only just steep enough?</div>
+  <div class="chq"><span class="chid">39e.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="e_n &lt; \eta/(1 - k)"></span></span>A bounded error for every n follows from k < 1. Turn it round: if the error stays bounded in a chain where every pair adds exactly η in the worst direction, must k be below 1? <br>What happens at k = 1?</div>
+  <div class="chq"><span class="chid">39e.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="G = g \circ g"></span></span>Reroute the middle-gain technique through one gate in place of two: g has the rest m too. Does the sign of g′(m) matter for whether vₙ₊₁ = g(vₙ) settles at m? <br>Why does the chain of 26·then4 use pairs?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r39d.html">← 39d · no machine decides stopping</a><a href="r39f.html">39f · programs that print themselves →</a></nav>
+<nav class="nextrung"><a href="r39d.html">← 39d · a one-way valve</a><a href="r39f.html">39f · every table from one gate →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The reduction of 39e1 is a mapping reduction, or many-one reduction, written A ≤ₘ B. The blank-tape question is the blank-tape halting problem. The behaviour technique is Rice’s theorem. The reach-undecided technique is Church’s theorem on the undecidability of arithmetic, and the question of truth in every world is the Entscheidungsproblem, posed by David Hilbert and Wilhelm Ackermann in 1928. The question of whole-number equations is Hilbert’s tenth problem (1900), and its negative answer is the Matiyasevich, or MRDP, theorem; x² − dy² = 1 is Pell’s equation.</p>
+  <p>The switch worked by a plate over glass is the metal-oxide-semiconductor field-effect transistor (MOSFET); the plate is the gate, the strip’s ends the source and the drain, and the glass the gate oxide. The two kinds are n-channel and p-channel, and the stacked pair is a CMOS inverter (complementary MOS). Its curve is the voltage transfer characteristic; the middle point m is the switching threshold, and |g′(m)| > 1 is the condition for regeneration. The ratio of steered to steering power is the power gain.</p>
   <h3>Who said it first</h3>
-  <p>Alonzo Church (1936) and Alan Turing (1936) answered the Entscheidungsproblem, each by his own calculus. Henry Gordon Rice proved his theorem in 1951, published 1953. Martin Davis, Hilary Putnam and Julia Robinson reduced Hilbert’s tenth problem to one fact about growth by 1961, and Yuri Matiyasevich supplied it in 1970, using the Fibonacci numbers. The old hope of settling disputes by calculating is Gottfried Leibniz’s “calculemus”.</p>
+  <p>Julius Lilienfeld patented a field-effect switch in 1925, which could not then be built. John Bardeen and Walter Brattain made the point-contact transistor in 1947 at Bell Labs, and William Shockley the junction transistor. Mohamed Atalla and Dawon Kahng made the first working MOSFET at Bell Labs in 1959. Frank Wanlass and Chih-Tang Sah described CMOS in 1963. Gate oxides on modern chips are a little over a nanometre thick in silicon-oxide terms.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“Whether M stops on every input is a property about what M does. So by the behaviour technique it is not listed.” Not allowed: the behaviour technique says not decided, and says nothing about listing. In fact neither this set nor its outside is listed, but that needs its own argument.</p>
+  <p>“A pair of gates has slope 10.9 at the middle, so it amplifies every signal ten times, and a chain of a hundred pairs amplifies by 10.9¹⁰⁰.” Not allowed: the slope is 10.9 only at m. A voltage pushed away from m reaches the flat ends, where the slope is 0.0003, and stays there. The gain is what restores the level, and the flat ends are what keep it.</p>
 </section>
 
 </div>
@@ -163,25 +169,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'turn',t:R`x \in A \iff f(x) \in B`,n:`Same answers.`},
-  {k:'ember',kl:'carry',t:R`B \text{ decided} \Rightarrow A \text{ decided}`,n:`Compute, then decide.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{H \text{ reduces to the blank tape}}`,n:`Neither decided.`}
-],{title:'The slides · reduce · ← → keys work'});
+  {k:'ember',kl:'high in',t:R`\text{lower closes}`,n:`Output to ground.`},
+  {k:'ember',kl:'low in',t:R`\text{upper closes}`,n:`Output to supply.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{1 - x}`,n:`A not, from a steered pair.`}
+],{title:'The slides · inverter · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'build',t:R`N_{M,w}\text{: run } M \text{ on } w\text{, then } M_1`,n:`One machine per case.`},
-  {k:'ember',kl:'cases',t:R`P \text{ exactly when } M \text{ stops}`,n:`Same answers.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{P \text{ not decided}}`,n:`Unless trivial.`}
-],{title:'The slides · behaviour · ← → keys work'});
+  {k:'ember',kl:'pair',t:R`G = g \circ g`,n:`Two gates.`},
+  {k:'ember',kl:'middle',t:R`G'(m) = g'(m)^2`,n:`Chain rule.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|g'(m)| > 1 \Rightarrow \text{pushed to a rail}}`,n:`Every level restored.`}
+],{title:'The slides · restoring · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'case',t:R`\sigma_{M,w} = \exists y\,(\cdots)`,n:`A search statement.`},
-  {k:'ember',kl:'reach',t:R`PA \vdash \sigma \iff M \text{ stops}`,n:`Search-reached, and truth.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{PA’s reach: not decided}}`,n:`Nor truth everywhere.`}
-],{title:'The slides · arithmetic · ← → keys work'});
+  {k:'ember',kl:'step',t:R`e_{n+1} \le k e_n + \eta`,n:`Pull, then noise.`},
+  {k:'ember',kl:'sum',t:R`\eta(1 + k + \cdots)`,n:`Geometric.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{e_n < \eta/(1 - k)}`,n:`Bounded for ever.`}
+],{title:'The slides · noise floor · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'search',t:R`p(x_1, \dots, x_k) = 0\,?`,n:`Try every list.`},
-  {k:'ember',kl:'1970',t:R`a \in A \iff \exists x\ p(a, x) = 0`,n:`Named, not proved.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{solvable? not decided}}`,n:`Listed only.`}
-],{title:'The slides · equations · ← → keys work'});
+  {k:'ember',kl:'gate',t:R`QVf \approx 33\ \mu\text{W}`,n:`The pattern.`},
+  {k:'ember',kl:'load',t:R`24 \text{ W}`,n:`The power.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{gain} \approx 7\cdot 10^5}`,n:`Pattern steers power.`}
+],{title:'The slides · steering · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

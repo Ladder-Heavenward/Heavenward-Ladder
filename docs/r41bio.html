@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How are all living things related?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r41chem.html">← 41·chem how many ways can atoms join?</a><a href="r41phys.html">next: 41·phys how do tiny magnets agree? →</a></p>
+  <div class="tags"><span class="tag bio">41·bio · biology</span></div>
+  <h1>How are all living things related?</h1>
+  <p data-pid="d8ddac">How are all living things related? Every cell of a person, a horse, a chicken and a tuna makes a small protein, cytochrome c, of about a hundred links in a chain, that passes electrons along inside the cell. The chains are not quite the same. A person’s and a horse’s differ at 12 places, a person’s and a tuna’s at 21. If kinds of living thing split from shared ancestors, and the chains changed a little at a time after each split, then the counts should fit a tree: the further back two kinds split, the more their chains differ. Whether they fit is a question the counts can answer, and this page asks it. It counts how many trees there could be, and finds that for twenty kinds there are more than there are grains of sand on the Earth, so no one finds the tree by trying them all. It finds an exact test for whether a table of distances comes from a tree, and the table for the four animals passes. It builds the tree, places its root, and tries to date its splits with a clock that runs at a steady rate. The clock runs, roughly, and its errors are part of what it says.</p>
+  <p class="gesture" data-pid="9cfbe2">Trees with n named ends and three links at every inside dot number 1 · 3 · 5 ⋯ (2n − 5). Distances along a tree pass a four-point test: of the three ways to pair four ends, the two largest sums are equal. The cytochrome c differences of four animals pass it, and give a tree with link lengths. Rooted by the midpoint and timed by a clock, the tree dates the splits roughly; the clock’s errors are measured. Seen differences undercount the changes, and a rare-events count corrects them.</p>
+</header>
+
+<section class="class step" data-step="41·bio.1">
+  <h2 class="sthead"><span class="stno">41·bio.1</span>How many trees</h2>
+  <p data-pid="3fb86e">A <i>tree of descent</i> here is a tree whose ends are the kinds being compared, named, and whose other dots, the shared ancestors, each have exactly three links. It has no root yet: the root is placed later.</p>
+  <p data-pid="203bfe">Graft technique: <b>there are 1 · 3 · 5 ⋯ (2n − 5) trees of descent with n named ends, for n ≥ 3.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the graft technique">
+\text{a tree of descent with } k \text{ ends has } 2k - 2 \text{ dots and } 2k - 3 \text{ links} @@ ends-count: k + 3(k − 2) = 2(dots − 1) gives k − 2 inside dots
+\text{a new end } k + 1 \text{ grafts onto the middle of any one of the } 2k - 3 \text{ links} @@ each graft gives a different tree
+\text{every tree with } k + 1 \text{ ends comes from one graft: take end } k + 1 \text{ off and close the gap} @@ undoing the graft
+T(k + 1) = (2k - 3)\,T(k),\ \ T(3) = 1 @@ induction (4c)
+\htmlClass{new}{T(n) = 1 \cdot 3 \cdot 5 \cdots (2n - 5):\ \ T(4) = 3,\ T(10) = 2\,027\,025,\ T(20) \approx 2.2 \times 10^{20}} \quad \blacksquare @@ 
+  </pre>
+  <p data-pid="964d38">For 50 kinds the count has 75 digits. So a tree is not found by trying them all and keeping the best. It is built from the data by a recipe, and then tested.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · graft · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">41·bio.1.1</span><span class="ph understand">understand</span>What does the graft technique say? <br>Why does a tree of descent with k ends have 2k − 3 links?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41·bio.2">
+  <h2 class="sthead"><span class="stno">41·bio.2</span>A test for tree distances</h2>
+  <p data-pid="ca7e8a">Give each link of a tree a length at least 0. The <i>tree distance</i> between two ends is the total length of the one path between them (41b2). A table of distances <i>fits a tree</i> when some tree with lengths has exactly those tree distances.</p>
+  <p data-pid="aaec4b">Four-point technique: <b>if a table fits a tree, then for every four ends p, q, r, s, of the three sums d(p, q) + d(r, s), d(p, r) + d(q, s), d(p, s) + d(q, r), the two largest are equal.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the four-point technique">
+\text{the paths among } p, q, r, s \text{ form a tree with four ends; say } p, q \text{ on one side of a middle stretch of length } m \ge 0 @@ the shape of four ends: pairs split by a middle stretch, possibly of length 0
+d(p, q) + d(r, s) = \text{the four end links} @@ the two paths miss the middle
+d(p, r) + d(q, s) = d(p, s) + d(q, r) = \text{the four end links} + 2m @@ each path crosses the middle once
+\htmlClass{new}{\text{the two largest sums are equal, and the smallest is less by } 2m} \quad \blacksquare @@ 
+  </pre>
+  <p data-pid="96e2e0">The other way also holds, and is proved by building the tree four ends at a time; it is stated here. The pairing with the smallest sum shows which ends sit together, and half the gap gives the middle stretch.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · four points · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·bio.2.1</span><span class="ph understand">understand</span>What does the four-point technique say? <br>Why do two of the three sums cross the middle stretch and one does not?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41·bio.3">
+  <h2 class="sthead"><span class="stno">41·bio.3</span>Four animals</h2>
+  <p data-pid="cc9ba9">Line up the chains of cytochrome c by 41l’s alignment-route technique: for these four the chains have the same length, 104 links, and the best route needs no gaps. Count the places where two chains differ.</p>
+  <pre class="lines" data-k="ember" data-label="this page: cytochrome c">
+\text{human–horse } 12,\ \text{human–chicken } 13,\ \text{human–tuna } 21,\ \text{horse–chicken } 11,\ \text{horse–tuna } 19,\ \text{chicken–tuna } 17 @@ places differing, as tabulated in 1967
+\text{pairings: } 12 + 17 = 29,\ \ 13 + 19 = 32,\ \ 21 + 11 = 32 @@ the three sums
+\text{the two largest are equal: the table fits a tree, with human and horse together, } m = (32 - 29)/2 = 1.5 @@ the four-point technique, and its converse
+\text{human } \tfrac12(12 + 13 - 11) = 7,\ \ \text{horse } 5,\ \ \text{chicken } 4.5,\ \ \text{tuna } 12.5 @@ each end link from three distances
+\htmlClass{new}{\text{check: human–tuna } 7 + 1.5 + 12.5 = 21} \quad \blacksquare @@ and the other five
+  </pre>
+  <p data-pid="20f989">A table of real counts need not fit exactly, and this one does, which is luck in the rounding as much as biology. For many kinds the recipes build a tree that fits the table as nearly as can be, and then ask, by resampling the places of the chain, how often each split comes back.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · four animals · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·bio.3.1</span><span class="ph understand">understand</span>How does the four-point technique show that human and horse sit together? <br>How is the length of the human end link found from three distances?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41·bio.4">
+  <h2 class="sthead"><span class="stno">41·bio.4</span>A root and a clock</h2>
+  <p data-pid="186f85">If chains change at a steady rate on every line of descent, every end is the same distance from the root. Then the root is the midpoint of the longest path between two ends. Here that path is human to tuna, 21; its midpoint is 10.5 from each end, which lies on the tuna’s link, 2 from the middle stretch.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the tree, rooted and timed">
+\text{root: tuna on one side; chicken, then horse and human on the other} @@ the midpoint
+\text{root to human } 10.5,\ \text{to horse } 8.5,\ \text{to chicken } 6.5,\ \text{to tuna } 10.5 @@ a steady clock would make these equal
+\text{mammals and birds split about } 320 \text{ million years ago} @@ from fossils
+\tfrac{13}{2} \text{ changes per line in } 320 \text{ million years: one per about } 49 @@ human–chicken
+\htmlClass{new}{\text{human–tuna: } \tfrac{21}{2} \cdot 49 \approx 520;\ \ \text{human–horse: } 6 \cdot 49 \approx 290 \text{ million years}} \quad \blacksquare @@ fossils say about 430 and about 90
+  </pre>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · laws with a known exception rate</div>
+    <p data-pid="a8d532">The steady clock is a law under the small case, guessed in 1962 from proteins like this one. It holds in one sense: across many proteins and many kinds, differences grow with the time since the split. It fails in another. One protein over a few kinds can be off by a factor of three, as horse and human are here.</p>
+    <p data-pid="63612c"><b>A law is stated with its range and its rate of exceptions, and the exceptions are part of the measurement.</b></p>
+    <p data-pid="efe7e1">Today’s clocks are calibrated on many fossils, let the rate drift from line to line within a stated spread, and give each date a range. A date without its range is a law with its exceptions hidden.</p>
+    <p class="bait" data-pid="124fe5">The clock puts the horse and human split at 290 million years, and fossils at about 90. Is that a reason to doubt the tree, the clock, or neither?</p>
+  </aside>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · clock · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·bio.4.1</span><span class="ph understand">understand</span>Why does a steady clock put the root at the midpoint of the longest path? <br>How is the rate of one change per 49 million years found, and what does it predict for the human and tuna split?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41·bio.5">
+  <h2 class="sthead"><span class="stno">41·bio.5</span>Changes nobody saw</h2>
+  <p data-pid="7c1f46">Two chains that differ at a place may have changed there twice, and two that agree may have changed and changed back. So the count of differences undercounts the changes, more so the further apart two kinds are. A guess that corrects it: changes strike each place as rare events (22j), at an average of d per place, and a place shows a difference whenever it was struck at least once.</p>
+  <pre class="lines" data-k="ember" data-label="this page: correcting the count">
+\text{chance a place was never struck: } e^{-d} @@ the rare-events technique, k = 0
+\text{share of places that differ: } p = 1 - e^{-d},\ \ d = -\ln(1 - p) @@ undo exp by ln (17)
+\text{human–tuna: } p = 21/104 \approx 0.202,\ \ d \approx 0.226,\ \ 104\,d \approx 23.5 @@ about 2.5 changes nobody saw
+\htmlClass{new}{\text{human–chicken: } 13 \to 13.9;\ \ \text{the correction grows with the distance}} \quad \blacksquare @@ 
+  </pre>
+  <p data-pid="b3d130">The guess ignores that a change at a place can land back on what was there, and that some places hardly ever change, and better corrections count both. The direction of the correction is sure: the far distances are stretched more than the near ones, which pushes the human and tuna split back, away from the fossil date. A model fixes one error and shows the next.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · correction · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·bio.5.1</span><span class="ph understand">understand</span>Why do seen differences undercount the changes? <br>How does the rare-events technique give d = −ln(1 − p)?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41·bio.6">
+  <h2 class="sthead"><span class="stno">41·bio.6</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{tuna is the ancestor of the others}\,? @@ every end is a living kind; ancestors are inside dots, and none is alive
+\text{the table fits a tree, so the steady clock holds}\,? @@ any tree with lengths fits; the clock asks more, that the ends be equally far from a root
+\text{human and horse are 12 apart, so 12 changes happened}\,? @@ at least 12; changes that were undone or repeated are hidden
+\text{the best tree is found by trying them all}\,? @@ for 20 kinds there are about 2.2 × 10²⁰
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·bio.6.1</span><span class="ph understand">understand</span>Why is the tuna not an ancestor of the other three? <br>Why does fitting a tree not show that the clock is steady?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">41·bio.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{a fifth end, grafted}"></span></span>Graft a fifth end onto the middle of one link of the four animals’ tree, with lengths of your choosing, and write out the table of ten tree distances. Test all five fours with the four-point technique. <br>Hand the table, without the tree, to someone else: can they rebuild exactly your tree from it, and how?</div>
+  <div class="chq"><span class="chid">41·bio.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="m = 0"></span></span>If the three sums of the four-point technique are all equal, what does the tree look like? <br>Can such a table come from a tree whose inside dots all have three links? What would a biologist conclude?</div>
+  <div class="chq"><span class="chid">41·bio.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{equal root distances}"></span></span>A table is from a clock when it fits a rooted tree with every end the same distance from the root. Prove that then, for every three ends, the two largest of their three distances are equal. <br>Test the cytochrome c table. Which three fail, and by how much?</div>
+  <div class="chq"><span class="chid">41·bio.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">30·bio: drift in a finite population</span></span>30·bio found that in a finite population a gene with no effect drifts, by chance, to everyone or to no one. Most changes in cytochrome c are of that kind, and a new one sweeps to every member of a kind with chance one over the population. <br>Why does that make the rate of change per year nearly independent of the population’s size? Is that reason enough to trust the clock?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r41chem.html">← 41·chem · how many ways can atoms join?</a><a href="r41phys.html">41·phys · how do tiny magnets agree? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A tree of descent is a phylogenetic tree, here unrooted and binary; its inside dots are hypothetical common ancestors. The graft count is the number of unrooted binary trees, (2n − 5)!!. The four-point technique is the four-point condition (Peter Buneman, 1971), and a table that fits a tree is a tree metric, or additive. A table from a clock is ultrametric, and the steady clock is the molecular clock. The correction is the Poisson correction; for DNA its relative is the Jukes–Cantor distance (1969). Building a tree from distances is done by neighbour joining (Naruya Saitou and Masatoshi Nei, 1987); the resampling of places is the bootstrap (Joseph Felsenstein, 1985).</p>
+  <h3>Who said it first</h3>
+  <p>Charles Darwin drew a tree of descent in a notebook in 1837, with the words "I think" above it. Emanuel Margoliash and others sequenced cytochrome c from many species in the early 1960s, and Walter Fitch and Margoliash built a tree from the differences in 1967. Emile Zuckerkandl and Linus Pauling proposed the molecular clock in 1962, and Motoo Kimura's neutral theory of 1968 gave a reason for it, the one in 41·bio.7.4.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Human and tuna differ at 21 places and human and horse at 12, so the tuna split from us 21/12 times as long ago as the horse did.” Not allowed: it assumes the steady clock, the very law the page tests, and ignores the changes nobody saw. On these numbers it would put the horse split at about 245 million years, if the tuna split is 430.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'links',t:R`2k - 3`,n:`Places to graft.`},
+  {k:'ember',kl:'grow',t:R`T(k+1) = (2k-3)T(k)`,n:`One graft each.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{T(20) \approx 2.2 \times 10^{20}}`,n:`Too many to try.`}
+],{title:'The slides · graft · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'pair',t:R`d(p,q) + d(r,s)`,n:`Misses the middle.`},
+  {k:'ember',kl:'cross',t:R`+\,2m`,n:`The other two.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{two largest equal}}`,n:`A test for trees.`}
+],{title:'The slides · four points · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'sums',t:R`29,\ 32,\ 32`,n:`Two largest equal.`},
+  {k:'ember',kl:'middle',t:R`m = 1.5`,n:`Half the gap.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{7,\ 5,\ 4.5,\ 12.5}`,n:`End links.`}
+],{title:'The slides · four animals · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'root',t:R`\text{midpoint of } 21`,n:`On the tuna’s link.`},
+  {k:'ember',kl:'rate',t:R`6.5 \text{ in } 320 \text{ My}`,n:`Human–chicken.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\approx 520 \text{ against } 430}`,n:`Roughly.`}
+],{title:'The slides · clock · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'never struck',t:R`e^{-d}`,n:`Rare events.`},
+  {k:'ember',kl:'undo',t:R`d = -\ln(1 - p)`,n:`Log.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{21 \to 23.5}`,n:`Changes nobody saw.`}
+],{title:'The slides · correction · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

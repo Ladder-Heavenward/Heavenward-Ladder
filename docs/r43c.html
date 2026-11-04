@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The symmetries of the roots</title>
+<title>Division with remainder for polynomials</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,99 +25,96 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r43b.html">← 43b symmetric in the roots</a><a href="r43d.html">next: 43d subgroups and middle fields →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r43b.html">← 43b ideals and quotients</a><a href="r43d.html">next: 43d unique factoring →</a></p>
   <div class="tags"><span class="tag proof">43c · proof</span></div>
-  <h1>The symmetries of the roots</h1>
-  <p data-pid="9f6a43">The roots of a polynomial with rational coefficients live in a field: the smallest field inside the plane that holds the rationals and every root. Rung 19 found groups wherever something could be moved and put back, and here is something that can be moved. A symmetry of the field is a matching of it with itself that keeps adding and multiplying and leaves every rational number alone. Such a symmetry cannot send a root anywhere but to another root, and once you know where the roots go, you know the whole symmetry. So the symmetries are shuffles of the roots, and they form a group, the group of the equation. This step builds that group and counts it: it has exactly as many members as the degree of the field. Not every shuffle of the roots is a symmetry, and which ones are is the information the rest of the rung lives on.</p>
-  <p class="gesture" data-pid="6799f2">The field of the roots is the rationals with every root adjoined. A symmetry of it keeps sums and products and fixes every rational number; it sends roots to roots and is fixed by where they go, so the symmetries are a part-group of the shuffles of the roots. There are exactly as many as the degree of the field, and when f cannot be factored they carry any root to any other.</p>
+  <h1>Division with remainder for polynomials</h1>
+  <p data-pid="f8710d">Rung nine divided one polynomial by another, with real coefficients, and found that a number is a zero exactly when a straight factor splits off. Nothing in that work used the real numbers as numbers. It used adding, multiplying, and one reciprocal at each step: the reciprocal of the top coefficient of the divisor. So the same division runs with coefficients on a prime clock, in the fractions, in any field. What it needs is now easy to say exactly, and so is where it breaks. With whole-number coefficients, dividing by two x gets stuck at once. On a clock with zero products, the top coefficients of a product can cancel to nothing, a degree can fall, and a polynomial of degree two can have four zeros. This step sorts the rules that carry from rung nine to every field from the rules that need more.</p>
+  <p class="gesture" data-pid="210173">In a ring with no zero products the degree of a product is the sum of the degrees. Division with a remainder of smaller degree works over every field, and over any ring when the divisor’s top coefficient has a reciprocal. The remainder on dividing by x − r is the value at r, so a zero is a straight factor, and a polynomial of degree n has at most n zeros, in any ring with no zero products.</p>
 </header>
 
 <section class="class step" data-step="43c1">
-  <h2 class="sthead"><span class="stno">43c1</span>The field the roots make</h2>
-  <p data-pid="9ea11b">Let F be a field inside ℂ and f a polynomial with coefficients in F, of degree n ≥ 1. By 25’s splitting, f has roots r₁, …, rₙ in ℂ. The <i>splitting field</i> of f over F is K = F(r₁, …, rₙ), the smallest field inside ℂ holding F and every root, built by adjoining one root at a time as on 42f. Each root adjoined is a root of f over the field before, so each step has degree at most n, and [K : F] is finite, since degrees multiply up a tower (42f).</p>
-  <pre class="lines" data-k="ember" data-label="this step: the splitting field of x³ − 2">
-\text{roots } \sqrt[3]2,\ \omega\sqrt[3]2,\ \omega^2\sqrt[3]2 @@ the even-spacing technique (21·cb20), ω = (−1 + i√3)/2
-K = \mathbb Q(\sqrt[3]2, \omega\sqrt[3]2, \omega^2\sqrt[3]2) = \mathbb Q(\sqrt[3]2, \omega) @@ ω = (ω∛2)/∛2, and the other way
-[\mathbb Q(\sqrt[3]2) : \mathbb Q] = 3 @@ x³ − 2 cannot be factored over ℚ (42k)
-\omega \notin \mathbb Q(\sqrt[3]2) \subset \mathbb R,\ \ \omega^2 + \omega + 1 = 0 @@ ω is not real
-\htmlClass{new}{[K : \mathbb Q] = 3 \cdot 2 = 6} \quad \blacksquare @@ degrees multiply up the tower ℚ ⊂ ℚ(∛2) ⊂ K
+  <h2 class="sthead"><span class="stno">43c1</span>Degrees add, when nothing multiplies to 0</h2>
+  <p data-pid="60ea87">The <i>degree</i> of a polynomial other than 0 is the largest k with a coefficient of xᵏ other than 0, and that coefficient is its <i>top coefficient</i>. The zero polynomial has no degree.</p>
+  <p data-pid="fa7f6c">Degree-adds technique: <b>in R[x], with R a cancelling ring, the degree of pq is the degree of p plus the degree of q, and R[x] is a cancelling ring.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the degree-adds technique">
+p = a_m x^m + \cdots,\ \ q = b_n x^n + \cdots,\ \ a_m \ne 0,\ b_n \ne 0 @@ the top coefficients
+(pq)_k = 0 \text{ for } k > m + n @@ every product pᵢqⱼ with i + j = k has i &gt; m or j &gt; n
+(pq)_{m+n} = a_m b_n @@ the only pair is i = m, j = n
+\htmlClass{new}{a_m b_n \ne 0,\ \ \deg pq = m + n} \quad \blacksquare @@ R has no zero products; so pq ≠ 0 too
   </pre>
-  <p data-pid="9e98cf">So the field the roots of x³ − 2 make has degree 6, not 3: one root brings in a field of degree 3, and the others need one step more.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · splitting field · ← → keys work</div></section>
+  <p data-pid="da871a">On ℤ/4, (2x + 1)(2x + 1) = 4x² + 4x + 1 = 1. Two polynomials of degree 1 multiply to one of degree 0, and 2x + 1 is undoable in ℤ/4[x]. In a cancelling ring that cannot happen, and the undoable polynomials are just the undoable constants.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · degrees · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">43c1.1</span><span class="ph understand">understand</span>What is the splitting field of f over F? <br>Why is the splitting field of x³ − 2 of degree 6 and not 3?</li>
+      <li><span class="qid">43c1.1</span><span class="ph understand">understand</span>What are the degree and the top coefficient of a polynomial? <br>What does the degree-adds technique say, and where does (2x + 1)² = 1 on ℤ/4 break it?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43c2">
-  <h2 class="sthead"><span class="stno">43c2</span>Symmetries send roots to roots</h2>
-  <p data-pid="d707c7">A <i>symmetry of K over F</i> is a matching σ of K with itself (9c) with σ(a + b) = σ(a) + σ(b) and σ(ab) = σ(a)σ(b) for all a, b in K, and σ(c) = c for every c in F. Its accepted name is an automorphism. The symmetries of K over F, composed, form a group (19a): composing and undoing keep the three conditions. Write it Aut(K/F).</p>
-  <p data-pid="7e3939">From here on, a shuffle that moves a few things round a loop is written as the loop: (1 2 3) sends 1 to 2, 2 to 3 and 3 to 1, and leaves the rest alone; (1 2)(3 4) does two swaps. 19a kept the list [2 3 1]; the loop is shorter when a shuffle moves few things.</p>
-  <p data-pid="a5dae4">Roots-to-roots technique: <b>a symmetry of the splitting field of f over F sends each root of f to a root of f, and is fixed by what it does to the roots; so Aut(K/F) is a part-group of the shuffles of the roots.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the roots-to-roots technique">
-f(x) = c_n x^n + \cdots + c_0,\ \ c_k \in F,\ \ f(r) = 0 @@ r a root
-0 = \sigma(f(r)) = \sigma(c_n)\sigma(r)^n + \cdots + \sigma(c_0) = f(\sigma(r)) @@ σ keeps sums and products, and fixes each cₖ
-\sigma(r_i) \text{ is a root, and } \sigma \text{ is one-to-one, so it shuffles the roots} @@ a matching
-\text{every member of } K \text{ is a sum of products of roots and members of } F, \text{ with quotients} @@ K is built from F by adjoining them
-\htmlClass{new}{\sigma \text{ and } \tau \text{ agree on every root} \Rightarrow \sigma = \tau} \quad \blacksquare @@ both keep sums, products and quotients
+  <h2 class="sthead"><span class="stno">43c2</span>Dividing over any field</h2>
+  <p data-pid="51ed78">9g’s polynomial-division technique took real coefficients. Its proof was an induction on the degree of p: take away (aₘ/dₖ) x^(m − k) d(x) to kill the top term of p, and divide what is left. The one move that is more than adding and multiplying is the reciprocal of dₖ, the top coefficient of d.</p>
+  <p data-pid="454700">Top-undoable technique: <b>in R[x], if the top coefficient of d has a reciprocal in R, then every p is dq + r with r = 0 or of degree less than d’s; over a field this holds for every d ≠ 0, and q and r are the only ones.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the top-undoable technique">
+p = a_m x^m + \cdots,\ \ d = d_k x^k + \cdots,\ \ m \ge k,\ \ d_k u = 1 @@ given: dₖ is undoable
+p_1 = p - a_m u\, x^{m-k} d @@ its xᵐ coefficient is aₘ − aₘ u dₖ = 0
+p_1 = dq_1 + r \text{ with } \deg r < k \text{ or } r = 0 @@ strong induction on m (4h); for m &lt; k take q = 0, r = p
+p = d\,(q_1 + a_m u\,x^{m-k}) + r @@ put it back
+dq + r = dq' + r' \Rightarrow d(q - q') = r' - r @@ two answers, over a field
+\htmlClass{new}{q = q',\ \ r = r'} \quad \blacksquare @@ the left side has degree at least k unless q = q′ (degree-adds); the right side has degree less than k
   </pre>
-  <p data-pid="94d01a">For x² − 2 over ℚ, a symmetry sends √2 to √2 or to −√2. Both are symmetries: a + b√2 goes to a + b√2 or to a − b√2. The group has two members, the identity and the swap (1 2) of the two roots.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · symmetries · ← → keys work</div></section>
+  <pre class="lines" data-k="ember" data-label="this step: one division on the clock of 5">
+p = x^3 + 2x + 4,\ \ d = 3x + 1,\ \ 3 \cdot 2 = 1 @@ on ℤ/5 the reciprocal of 3 is 2
+p - 2x^2 d = -2x^2 + 2x + 4 = 3x^2 + 2x + 4 @@ kill x³: 2x² · 3x = 6x³ = x³
+3x^2 + 2x + 4 - x\,d = x + 4,\ \ \ x + 4 - 2d = 2 @@ kill x², then x
+\htmlClass{new}{x^3 + 2x + 4 = (3x + 1)(2x^2 + x + 2) + 2} \quad \blacksquare @@ on ℤ/5, checked by multiplying out
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · dividing · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43c2.1</span><span class="ph understand">understand</span>What is a symmetry of K over F? <br>What does the roots-to-roots technique say, and why can a symmetry not send √2 to √3?</li>
+      <li><span class="qid">43c2.1</span><span class="ph understand">understand</span>Which single move of 9g’s division is more than adding and multiplying? <br>What does the top-undoable technique say, and why does it make q and r the only ones over a field?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43c3">
-  <h2 class="sthead"><span class="stno">43c3</span>Counting the symmetries</h2>
-  <p data-pid="1a4543">Two facts first. An irreducible g over F inside ℂ has no repeated root: a repeated root would be a root of the slope g′ too, and g′ is not 0 and has lower degree, so the greatest common divisor of g and g′, found by 42c’s division, would be a factor of g strictly between 1 and g. And adjoining one root α of g gives F(α), each member written once as a polynomial in α of degree below deg g (42f), so a symmetry on F(α) is fixed by where α goes.</p>
-  <p data-pid="9592ac">Count-the-symmetries technique: <b>if K is the splitting field of a polynomial over F, then Aut(K/F) has exactly [K : F] members.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the count-the-symmetries technique">
-\text{claim: a matching } \tau: F \to F' \text{ keeping sums and products extends to exactly } [K : F] \text{ such matchings } K \to K' @@ K, K′ the splitting fields of f and of f′, f with τ put on its coefficients; induction on [K : F]
-[K : F] = 1:\ \ K = F, \text{ one extension, } \tau \text{ itself} @@ the start
-g \text{ an irreducible factor of } f,\ \deg g = d > 1,\ \alpha \text{ a root of } g \text{ in } K @@ some factor has degree above 1, or every root is in F
-g' = \tau(g) \text{ has } d \text{ different roots } \beta \text{ in } K' @@ irreducible, so no repeated root
-\text{each } \beta \text{ gives one extension } F(\alpha) \to F'(\beta),\ \ \alpha \mapsto \beta @@ both are F[x]/(g) by 42b and 42f, and α must go to a root of g′
-[K : F(\alpha)] = [K : F]/d @@ degrees multiply up the tower F ⊂ F(α) ⊂ K
-\text{each of the } d \text{ extends in } [K : F]/d \text{ ways} @@ K is the splitting field of f over F(α); the claim, by induction
-\htmlClass{new}{d \cdot [K : F]/d = [K : F] \text{ extensions; with } F' = F,\ \tau = \text{identity},\ |\mathrm{Aut}(K/F)| = [K : F]} \quad \blacksquare @@ the count
+  <h2 class="sthead"><span class="stno">43c3</span>The value is the remainder</h2>
+  <p data-pid="b2af20">Divide by x − r. Its top coefficient is 1, so the top-undoable technique works over any ring that turns about.</p>
+  <p data-pid="c4fed5">Remainder-is-value technique: <b>the remainder of p on division by x − r is the constant p(r).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the remainder-is-value technique">
+p = (x - r)\,q + c @@ the top-undoable technique: the remainder has degree 0, or is 0
+p(r) = (r - r)\,q(r) + c @@ putting r in keeps sums and products (43b3)
+\htmlClass{new}{p(r) = c} \quad \blacksquare @@ r − r = 0
   </pre>
-  <p data-pid="4f7e47">For x³ − 2, Aut(K/ℚ) has 6 members, so every one of the 6 shuffles of the three roots is a symmetry: the group is all of S₃. For x² − 2 the count is 2.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · count · ← → keys work</div></section>
+  <p data-pid="72dbef">So 9g’s factor technique holds over every ring that turns about: r is a zero of p exactly when x − r is a factor. And 9g’s at-most-n-zeros technique holds over every cancelling ring: n zeros r₁, …, rₙ split off one at a time, and a zero s of (x − r₁)q other than r₁ is a zero of q, because (s − r₁)q(s) = 0 with s − r₁ ≠ 0. That step needs no zero products, and only that step. On ℤ/8, x² − 1 has the four zeros 1, 3, 5 and 7.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · values · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43c3.1</span><span class="ph understand">understand</span>What does the count-the-symmetries technique say? <br>Why does the proof need an irreducible polynomial to have no repeated root?</li>
+      <li><span class="qid">43c3.1</span><span class="ph understand">understand</span>What does the remainder-is-value technique say? <br>Which line of the at-most-n-zeros proof needs a cancelling ring, and how does x² − 1 on ℤ/8 show it?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43c4">
-  <h2 class="sthead"><span class="stno">43c4</span>The group of an equation</h2>
-  <p data-pid="01d17d">The <i>group</i> of f over F is Aut(K/F), with K the splitting field, read as shuffles of the roots by the roots-to-roots technique. Write it G_f. It has [K : F] members, a divisor of n! (19d).</p>
-  <p data-pid="ad5353">Every-root technique: <b>if f is irreducible over F, then for any two roots α and β of f, some member of G_f sends α to β.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the every-root technique">
-\tau = \text{identity of } F,\ \ g = f @@ the claim of the count-the-symmetries proof
-F(\alpha) \to F(\beta),\ \ \alpha \mapsto \beta @@ one extension for each root of f
-\htmlClass{new}{\text{it extends to a symmetry of } K \text{ sending } \alpha \text{ to } \beta} \quad \blacksquare @@ the claim again, from F(α) to K
+  <h2 class="sthead"><span class="stno">43c4</span>Division makes one maker</h2>
+  <p data-pid="6f75a3">Over a field F, the top-undoable technique says the ideals of F[x] are as simple as those of ℤ.</p>
+  <p data-pid="bd18da">One-maker technique: <b>every ideal of F[x] other than {0} is the multiples of one polynomial: any member of least degree.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-maker technique">
+I \ne \{0\},\ \ g \in I,\ g \ne 0,\ \text{of least degree in } I @@ least member of a set of numbers (4h)
+p \in I,\ \ p = gq + r,\ \ \deg r < \deg g \text{ or } r = 0 @@ the top-undoable technique
+r = p - gq \in I @@ I holds multiples and sums
+r = 0 @@ a member of I other than 0 has degree at least deg g
+\htmlClass{new}{I = (g)} \quad \blacksquare @@ every p in I is gq
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: a group that does not reach every root">
-x^4 - 5x^2 + 6 = (x^2 - 2)(x^2 - 3),\ \ \text{roots } \sqrt2, -\sqrt2, \sqrt3, -\sqrt3 @@ it factors
-K = \mathbb Q(\sqrt2, \sqrt3),\ \ [K : \mathbb Q] = 4 @@ √3 is not in ℚ(√2): (a + b√2)² = 3 forces ab = 0, and neither a² = 3 nor 2b² = 3 has a rational answer
-\htmlClass{new}{G_f = \{\text{e},\ (1\ 2),\ (3\ 4),\ (1\ 2)(3\ 4)\}} \quad \blacksquare @@ √2 goes to ±√2 and √3 to ±√3: four choices, and the count is 4
-  </pre>
-  <p data-pid="51807c">So G_f is never just “all shuffles”. For x⁴ − 5x² + 6 it keeps the pair {√2, −√2} together, which is how the group remembers that f factors.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · the group · ← → keys work</div></section>
+  <p data-pid="182ccd">The same lines, with 4j’s division-with-remainder technique, give every ideal of ℤ as nℤ. In ℤ[x], where 2 has no reciprocal, (2, x) is not the multiples of one member: such a member would divide 2, so be ±1 or ±2, and ±1 is not in (2, x), while x is not a multiple of 2. 43d builds on rings where the one-maker technique holds.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · one maker · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43c4.1</span><span class="ph understand">understand</span>What is the group of an equation? <br>What does the every-root technique say, and why does the group of x⁴ − 5x² + 6 not send √2 to √3?</li>
+      <li><span class="qid">43c4.1</span><span class="ph understand">understand</span>What does the one-maker technique say? <br>Why is the ideal (2, x) of ℤ[x] not the multiples of one member?</li>
     </ol>
   </section>
 </section>
@@ -125,15 +122,15 @@ K = \mathbb Q(\sqrt2, \sqrt3),\ \ [K : \mathbb Q] = 4 @@ √3 is not in ℚ(√2
 <section class="class step" data-step="43c5">
   <h2 class="sthead"><span class="stno">43c5</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{a symmetry of } \mathbb Q(\sqrt2) \text{ with } \sigma(\sqrt2) = 2\,? @@ then σ(2) = σ(√2)² = 4, but σ fixes 2
-\mathrm{Aut}(\mathbb Q(\sqrt[3]2)/\mathbb Q) \text{ has 3 members}\,? @@ ∛2 can only go to a root inside ℚ(∛2), which is real; the other roots are not, so only the identity
-\text{the group of a polynomial of degree } n \text{ is always } S_n\,? @@ x⁴ − 5x² + 6 has a group of 4
-\text{the swap of } \sqrt2 \text{ and } \sqrt3 \text{ is a symmetry of } \mathbb Q(\sqrt2, \sqrt3)\,? @@ it would send 2 = (√2)² to (√3)² = 3
+x^2 = 2x \cdot q + r \text{ with } q, r \in \mathbb Z[x],\ \deg r < 1\,? @@ the top of 2x · q is even; x² has top 1; it needs ½
+\deg pq = \deg p + \deg q \text{ on } \mathbb Z/6\,? @@ (2x)(3x) = 6x² = 0
+x^2 - 1 \text{ has at most two zeros on } \mathbb Z/8\,? @@ 1, 3, 5, 7: ℤ/8 has zero products
+p(r) = 0 \text{ for every } r \text{ in } F \Rightarrow p = 0\,? @@ on ℤ/2, x² + x is 0 at 0 and at 1 and is not the zero polynomial
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43c5.1</span><span class="ph understand">understand</span>Why is there no symmetry of ℚ(√2) sending √2 to 2? <br>Why does ℚ(∛2) have only one symmetry over ℚ?</li>
+      <li><span class="qid">43c5.1</span><span class="ph understand">understand</span>Why can x² not be divided by 2x in ℤ[x]? <br>Why is x² + x not the zero polynomial on ℤ/2, though both its values are 0?</li>
     </ol>
   </section>
 </section>
@@ -142,22 +139,22 @@ K = \mathbb Q(\sqrt2, \sqrt3),\ \ [K : \mathbb Q] = 4 @@ √3 is not in ℚ(√2
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">43c.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x^3 - 2,\ \ \sigma(\sqrt[3]2) = \omega\sqrt[3]2,\ \sigma(\omega) = \omega,\ \ \tau(\sqrt[3]2) = \sqrt[3]2,\ \tau(\omega) = \omega^2"></span></span>Build σ and τ as shuffles of the three roots, numbered 1, 2, 3 for ∛2, ω∛2, ω²∛2, in loop notation. <br>Find στ and τσ, and check that the group they make is all of S₃.</div>
-  <div class="chq"><span class="chid">43c.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x^4 + 1"></span></span>Its four roots are the turns by an eighth, three eighths, five and seven. Find its splitting field and its degree. <br>Why is the group smaller than the 24 shuffles, though x⁴ + 1 cannot be factored over ℚ? Which shuffles are in it?</div>
-  <div class="chq"><span class="chid">43c.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f \text{ irreducible} \Rightarrow G_f \text{ reaches every root}"></span></span>The every-root technique turns “cannot be factored” into “the group carries any root to any other”. Turn it round: if f has no repeated root and G_f carries any root to any other, must f be irreducible? Prove it or find a polynomial where it fails.</div>
-  <div class="chq"><span class="chid">43c.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="[\mathbb Q(\sqrt2, \sqrt3) : \mathbb Q] = 4"></span></span>Reroute the count for x⁴ − 5x² + 6: show that √2 + √3 alone already gives K, by finding a polynomial of degree 4 with rational coefficients that it is a root of. <br>Where do the four symmetries send √2 + √3?</div>
+  <div class="chq"><span class="chid">43c.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x^4 + 1,\ \ x^2 + 1 \text{ on } \mathbb Z/3"></span></span>Divide x⁴ + 1 by x² + 1 on ℤ/3, and find the remainder. <br>Then find every zero of x⁴ + 1 on ℤ/3, ℤ/5 and ℤ/17, and check each against the factor technique.</div>
+  <div class="chq"><span class="chid">43c.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x^p - x \text{ on } \mathbb Z/p"></span></span>How many zeros has xᵖ − x on ℤ/p? <br>What does that say about its straight factors, and about how far the values of a polynomial on a finite field fix its coefficients? Compare 9g’s same-coefficients technique.</div>
+  <div class="chq"><span class="chid">43c.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="R \text{ a ring that turns about, } R[x] \text{ has division by every } d \ne 0"></span></span>The top-undoable technique gives division over a field. Turn it round: if R[x] has division with remainder by every d other than 0, must R be a field? <br>Divide the constant 1 by a constant d, and read off what the remainder must be.</div>
+  <div class="chq"><span class="chid">43c.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">5h: on the clock of 8, how many numbers square to 1?</span></span>Rung 5 counted the numbers that square to 1 on the clock of 8 and found more than two. <br>How many are there on the clock of 15, and of 16? Which clocks n have exactly two? Is the count a fact about polynomials, or about the clock?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r43b.html">← 43b · symmetric in the roots</a><a href="r43d.html">43d · subgroups and middle fields →</a></nav>
+<nav class="nextrung"><a href="r43b.html">← 43b · ideals and quotients</a><a href="r43d.html">43d · unique factoring →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A symmetry of K over F is an F-automorphism, and Aut(K/F) is written Gal(K/F) when K is a splitting field: the Galois group. G_f is the Galois group of the polynomial. A splitting field is a normal extension; that an irreducible polynomial has no repeated root is separability, automatic in fields inside ℂ. The claim in the count-the-symmetries proof is the isomorphism extension theorem. Loop notation is cycle notation. The every-root technique says the Galois group of an irreducible polynomial is transitive on its roots.</p>
+  <p>The degree-adds technique says that a polynomial ring over an integral domain is an integral domain, with units the units of R. The top-undoable technique is the division algorithm for monic divisors, and over a field F the statement that F[x] is a Euclidean domain. The remainder-is-value technique is the remainder theorem, and the factor technique is the factor theorem. The one-maker technique says F[x] is a principal ideal domain; ℤ[x] is not one.</p>
   <h3>Who said it first</h3>
-  <p>Joseph-Louis Lagrange (1770–71) studied how expressions in the roots change when the roots are shuffled, and Paolo Ruffini and Augustin-Louis Cauchy developed shuffles as objects. Évariste Galois, in a memoir of 1831 printed in 1846, attached a group to an equation: the shuffles of its roots that keep every rational relation among them. The version by symmetries of a field is Richard Dedekind’s, from his lectures of the 1850s, and Emil Artin’s, from lectures of 1938 printed in 1942.</p>
+  <p>Simon Stevin divided polynomials and took their greatest common divisor by repeated division in 1585. Carl Friedrich Gauss worked with polynomials on prime clocks in an unpublished eighth section of his book of 1801. Évariste Galois wrote with them in 1830, and Richard Dedekind made the comparison of polynomials with whole numbers a theme in 1857.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“x³ − 2 has three roots, so its group has three members, the turns of the three roots.” Not allowed: the count is [K : ℚ], the degree of the splitting field, which is 6. The turns are three of the six; the flip of ℂ, restricted to K, is a swap of ω∛2 and ω²∛2 that fixes ∛2.</p>
+  <p>“p has degree 2, so it has at most two zeros, by 9g.” Not allowed as it stands: 9g’s technique was proved for real coefficients, and its proof spends a step that needs no zero products. Over a cancelling ring the citation is good. Over ℤ/8 the claim is false.</p>
 </section>
 
 </div>
@@ -172,25 +169,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'roots',t:R`\sqrt[3]2,\ \omega\sqrt[3]2,\ \omega^2\sqrt[3]2`,n:`Three, in ℂ.`},
-  {k:'ember',kl:'field',t:R`K = \mathbb Q(\sqrt[3]2, \omega)`,n:`Smallest holding them.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{[K : \mathbb Q] = 6}`,n:`A tower 3 then 2.`}
-],{title:'The slides · splitting field · ← → keys work'});
+  {k:'ember',kl:'tops',t:R`a_m b_n`,n:`The top of the product.`},
+  {k:'ember',kl:'no zero products',t:R`a_m b_n \ne 0`,n:`Cancelling R.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\deg pq = \deg p + \deg q}`,n:`Degrees add.`}
+],{title:'The slides · degrees · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'keeps',t:R`\sigma(a + b) = \sigma a + \sigma b,\ \sigma(ab) = \sigma a\,\sigma b`,n:`And fixes F.`},
-  {k:'ember',kl:'roots',t:R`f(\sigma r) = \sigma(f(r)) = 0`,n:`Roots to roots.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\mathrm{Aut}(K/F) \subseteq S_n}`,n:`Shuffles of the roots.`}
-],{title:'The slides · symmetries · ← → keys work'});
+  {k:'ember',kl:'kill the top',t:R`p - a_m u\, x^{m-k} d`,n:`One reciprocal.`},
+  {k:'ember',kl:'repeat',t:R`\deg r < \deg d`,n:`Strong induction.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{p = dq + r}`,n:`Over any field.`}
+],{title:'The slides · dividing · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'extend',t:R`\tau: F \to F'`,n:`A matching to extend.`},
-  {k:'ember',kl:'one root',t:R`\alpha \mapsto \beta,\ d \text{ choices}`,n:`Then induct.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{|\mathrm{Aut}(K/F)| = [K : F]}`,n:`As many as the degree.`}
-],{title:'The slides · count · ← → keys work'});
+  {k:'ember',kl:'divide',t:R`p = (x - r)q + c`,n:`Top coefficient 1.`},
+  {k:'ember',kl:'put r in',t:R`p(r) = c`,n:`The remainder.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{x - r \mid p \iff p(r) = 0}`,n:`Any ring that turns about.`}
+],{title:'The slides · values · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'field',t:R`K = \mathbb Q(\sqrt2, \sqrt3)`,n:`Degree 4.`},
-  {k:'ember',kl:'members',t:R`\sqrt2 \mapsto \pm\sqrt2,\ \sqrt3 \mapsto \pm\sqrt3`,n:`Four symmetries.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{G_f \ne S_4}`,n:`Only 4 of 24 shuffles.`}
-],{title:'The slides · the group · ← → keys work'});
+  {k:'ember',kl:'least degree',t:R`g \in I`,n:`Exists.`},
+  {k:'ember',kl:'remainder',t:R`r = p - gq \in I`,n:`Too small to be anything but 0.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{I = (g)}`,n:`One maker.`}
+],{title:'The slides · one maker · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

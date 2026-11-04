@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Finite fields</title>
+<title>Primes are endless and thin</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,91 +25,101 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r42f.html">← 42f field extensions</a><a href="r42h.html">next: 42h only one complete ordered field →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r42f.html">← 42f squares on a clock</a><a href="r42h.html">next: 42h clock arithmetic by hand →</a></p>
   <div class="tags"><span class="tag proof">42g · proof</span></div>
-  <h1>Finite fields</h1>
-  <p data-pid="b36942">The prime clocks are fields with finitely many members. Are there others? A field with four members cannot be the clock of four, which has two times two equal to nothing. Yet there is one, and it is easy to build: put into the clock of two a root of a polynomial that cannot be split there, as step 42f put the cube root of two into the fractions. Every finite field is built that way, and the counting is strict. A finite field holds a prime clock, it is a space of arrows over that clock, and so its count of members is a power of a prime. Six members, or ten, or twelve, can never make a field. And for each power of a prime there is a field of that size: the zeros of one polynomial, gathered in a big enough field, are closed under adding and multiplying, because on a prime clock raising to the prime keeps sums. Last, as on the prime clocks, one member’s powers run through every member but zero.</p>
-  <p class="gesture" data-pid="365218">A finite field holds a prime clock and is a space over it, so its size is a power of that prime. Dividing the polynomials of a prime clock by one that cannot be split, of degree n, gives a field of pⁿ members. For every power of a prime there is one: the zeros of x to that power minus x. Raising to the prime keeps sums there. The members other than 0 are the powers of one of them.</p>
+  <h1>Primes are endless and thin</h1>
+  <p data-pid="d281cc">Rung four proved that the primes never run out: hand the proof a list, and it finds a prime not on it. It said nothing about how many there are below a thousand, or a million, or how far apart they sit. Among the first ten numbers four are prime; among the first thousand, one hundred and sixty eight; among the first million, about one in thirteen. They thin out. This step asks how fast. First, not too fast: the sum of one over each prime grows without bound, slowly, as the log of a log, so the primes are far more plentiful than the squares. Second, the primes are packed into one endless product, and that product is the sum of one over every power of every number, the start of a road that runs to the open question at the end of this rung. Third, a single count of choices fences the number of primes below a bound from above and below. The exact rate, one over the log, was guessed by a boy of fifteen from tables and proved a century later; this step states it and holds it in trust. And the primes are shared out fairly among the hours of every clock, which the step proves in two cases.</p>
+  <p class="gesture" data-pid="cd1e99">The sum of one over each prime passes every bound, at the rate of the log of a log. The sum of one over each power of every number is a product over the primes. The middle count of choices fences how many primes lie below a bound. Near x, about one number in ln x is prime, and each unit hour of a clock gets its fair share of primes.</p>
 </header>
 
 <section class="class step" data-step="42g1">
-  <h2 class="sthead"><span class="stno">42g1</span>The size of a finite field</h2>
-  <p data-pid="48d82e">In a finite field F, add 1 to itself: 1, 1 + 1, 1 + 1 + 1, …. Two of these must agree, so some count of 1s is 0. Let p be the least count with p · 1 = 0. If p = ab with a, b < p, then (a · 1)(b · 1) = 0, and a field has no zero products, so p is prime. The p sums of 1 are a copy of ℤ/p inside F. This p is the field’s <i>bottom prime</i>.</p>
-  <p data-pid="09e4bb">Prime-power-size technique: <b>a finite field with bottom prime p has pⁿ members, where n = [F : ℤ/p].</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the prime-power-size technique">
-\mathbb Z/p \subseteq F @@ the sums of 1
-F \text{ is a space over } \mathbb Z/p \text{ with a basis } u_1, \ldots, u_n @@ the field-as-space technique; finite, so the degree is finite
-z = c_1 u_1 + \cdots + c_n u_n,\ \ c_i \in \mathbb Z/p,\ \text{one way} @@ a basis builds and is free (27b)
-\htmlClass{new}{|F| = p^n} \quad \blacksquare @@ p choices for each of n coefficients (4k’s product rule)
+  <h2 class="sthead"><span class="stno">42g1</span>Thin, but not too thin</h2>
+  <p data-pid="ffbdc3">22f proved that 1 + ¼ + ⅑ + ⋯ settles, and 22d that 1 + ½ + ⅓ + ⋯ passes every bound. The squares are thin enough that their reciprocals settle. Are the primes?</p>
+  <p data-pid="812bc9">Thin-but-endless technique: <b>for every x ≥ 3, the sum of 1/p over the primes p ≤ x is at least ln ln x − 1, so it passes every bound.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the thin-but-endless technique">
+\textstyle\prod_{p \le x} \frac{1}{1 - 1/p} = \prod_{p \le x}\big(1 + \tfrac1p + \tfrac1{p^2} + \cdots\big) @@ the geometric sum (22e), one for each prime
+\phantom{\textstyle\prod} \ge \textstyle\sum_{n \le x} \tfrac1n \ge \ln x @@ multiply out: each n ≤ x has one prime list (4j18), all its primes ≤ x; the sum beats the area under 1/t (17a)
+\textstyle\sum_{p \le x} -\ln(1 - \tfrac1p) \ge \ln\ln x @@ ln of both sides (17c)
+-\ln(1 - t) \le t + t^2 \text{ for } 0 \le t \le \tfrac12 @@ the two sides agree at 0, and the slopes are 1/(1 − t) ≤ 1 + 2t (14’s slopes control heights)
+\textstyle\sum_p \tfrac1{p^2} \le \sum_{n \ge 2} \tfrac{1}{n(n - 1)} = 1 @@ the sum folds: 1/(n − 1) − 1/n
+\htmlClass{new}{\textstyle\sum_{p \le x} \tfrac1p \ge \ln\ln x - 1} \quad \blacksquare @@ the last three lines
   </pre>
-  <p data-pid="5083d5">So there is no field with 6 members, or 10, or 12. ℤ/6, ℤ/10 and ℤ/12 have zero products, and no other plus and times on 6 members fix that.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · size · ← → keys work</div></section>
+  <p data-pid="8e7851">Below a million the sum is about 2.89 and ln ln 10⁶ is about 2.63. The bound is weak and the growth is slow: to pass 4 the sum needs primes into the hundreds of millions. But it does pass every bound, and the squares’ sum never passes 2. So the primes are endless again, in a stronger form, and they are not as thin as the squares.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · thin, not too thin · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">42g1.1</span><span class="ph understand">understand</span>What is the bottom prime of a finite field, and why is it prime? <br>What does the prime-power-size technique say, and why can no field have 6 members?</li>
+      <li><span class="qid">42g1.1</span><span class="ph understand">understand</span>What does the thin-but-endless technique say? <br>Which line spends 4j18’s one prime list, and why does the sum over n ≤ x beat ln x?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42g2">
-  <h2 class="sthead"><span class="stno">42g2</span>Building small ones</h2>
-  <p data-pid="a769fc">Unsplittable-builds technique: <b>if m of degree n cannot be split over ℤ/p, then (ℤ/p)[x]/(m) is a field with pⁿ members.</b> It is a field by 42b’s largest-ideal technique, as in 42f2, and its members are the remainders of degree less than n, pⁿ of them, by 42c’s division.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the field of four">
-m = x^2 + x + 1 \text{ on } \mathbb Z/2:\ m(0) = 1,\ m(1) = 1 @@ no zero, so no straight factor; degree 2, so it cannot be split
-\text{members } 0,\ 1,\ x,\ x + 1;\ \ x^2 = x + 1 @@ the remainders, and x² ∼ −x − 1 = x + 1 on ℤ/2
-x(x + 1) = x^2 + x = 1 @@ so x and x + 1 are each other’s reciprocals
-\htmlClass{new}{F_4 = \{0, 1, x, x + 1\},\ \ 1 + 1 = 0} \quad \blacksquare @@ a field of four, not the clock of four
+  <h2 class="sthead"><span class="stno">42g2</span>One product over the primes</h2>
+  <p data-pid="0d3ede">From here on, ζ (the Greek letter zeta, in its small form) names the function on s &gt; 1 with ζ(s) = 1 + 1/2ˢ + 1/3ˢ + ⋯, which settles by 22f’s p-sums. Its capital form is not used. 32b found ζ(2) = π²/6.</p>
+  <p data-pid="9db382">Prime-product technique: <b>for every s &gt; 1, ζ(s) is the endless product over the primes of 1/(1 − p^(−s)).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the prime-product technique">
+P(x) = \textstyle\prod_{p \le x} \frac{1}{1 - p^{-s}} = \sum_{n \text{ with every prime} \le x} n^{-s} @@ multiply the geometric sums: terms never negative, so the order is free (22g); one prime list each (4j18)
+0 \le \zeta(s) - P(x) \le \textstyle\sum_{n \gt x} n^{-s} @@ every n ≤ x is in P(x)’s sum, and only the larger ones can be missing
+\textstyle\sum_{n \gt x} n^{-s} \to 0 \text{ as } x \to \infty @@ the tail of a settling sum (22d)
+\htmlClass{new}{\zeta(s) = \textstyle\prod_p \frac{1}{1 - p^{-s}}} \quad \blacksquare @@ the partial products settle on ζ(s)
   </pre>
-  <p data-pid="af80cb">On ℤ/2, x³ + x + 1 has no zero, so it cannot be split, and it gives a field of 8. Its powers of x run x, x², x + 1, x² + x, x² + x + 1, x² + 1, 1: all seven members other than 0. On ℤ/3, x² + 1 has no zero (0, 1, 1 are the squares), and it gives a field of 9, written ℤ/3 with i put in. In it 1 + i has powers 1 + i, 2i, 1 + 2i, 2, 2 + 2i, i, 2 + i, 1.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · four · ← → keys work</div></section>
+  <p data-pid="92c0dc">Take s = 2. The product of (1 − 1/p²) over all primes is 6/π², about 0.6079. Read through rung 30’s chance, it is the share of pairs of numbers that share no prime: a pair misses sharing 2 with chance 1 − ¼, sharing 3 with chance 1 − 1/9, and so on, independently, as the remainder technique (42c) makes exact on each finite clock. So about 61% of pairs of large numbers have gcd 1. The open question of 42·now2 is about where ζ, carried into the complex plane, is 0.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the product · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42g2.1</span><span class="ph understand">understand</span>What does the unsplittable-builds technique say? <br>Why is x² + x + 1 unsplittable on ℤ/2, and why is the field of four not the clock of four?</li>
+      <li><span class="qid">42g2.1</span><span class="ph understand">understand</span>What does ζ(s) name, and what does the prime-product technique say? <br>Why may the product of geometric sums be multiplied out in any order?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42g3">
-  <h2 class="sthead"><span class="stno">42g3</span>One for each prime power</h2>
-  <p data-pid="af7d20">Power-keeps-plus technique: <b>in a ring that turns about with p · 1 = 0 for a prime p, (w + b)ᵖ = wᵖ + bᵖ.</b> By 4k’s binomial technique (w + b)ᵖ is the sum of C(p, k) wᵏ bᵖ⁻ᵏ, and for 0 < k < p, C(p, k) = p!/(k!(p − k)!) is a multiple of p: p divides the top and no factor of the bottom (4j’s prime-divides-a-list). Those terms are 0.</p>
-  <p data-pid="18c6e8">Every-prime-power technique: <b>for every prime p and every n ≥ 1 there is a field with q = pⁿ members.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the every-prime-power technique">
-f = x^q - x \text{ over } \mathbb Z/p @@ the polynomial whose zeros will be the field
-E \supseteq \mathbb Z/p \text{ in which } f \text{ splits into straight factors} @@ put in a root of an unsplittable factor (the root-field technique), and repeat, at most q times
-f' = q\,x^{q-1} - 1 = -1 @@ the slope of a power read on coefficients (13d’s rule, which uses only adding and multiplying); q · 1 = 0
-\text{no factor } (x - r)^2 @@ f = (x − r)²g would give f′ = (x − r)(2g + (x − r)g′), zero at r
-F = \{r \in E : r^q = r\} \text{ has exactly } q \text{ members} @@ q different straight factors
-r^q = r,\ s^q = s \Rightarrow (r + s)^q = r + s,\ (rs)^q = rs,\ (r^{-1})^q = r^{-1} @@ the power-keeps-plus technique, n times; powers of a product
-\htmlClass{new}{F \text{ is a field with } q \text{ members}} \quad \blacksquare @@ it holds 0, 1, sums, products, negatives and reciprocals
+  <h2 class="sthead"><span class="stno">42g3</span>A fence from the middle count</h2>
+  <p data-pid="9981ef">Write π(x) for the number of primes at most x. Here π names a count, not the round number of rung 21: the letter has a further job, with a counting number or a real inside the brackets, and its old meaning stands wherever it stands alone. So π(10) = 4 and π(100) = 25.</p>
+  <p data-pid="1f308f">Middle-count technique: <b>for every n ≥ 1, π(2n) · ln(2n) ≥ n ln 4 − ln(2n + 1).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the middle-count technique">
+\tbinom{2n}{n} \ge \tfrac{4^n}{2n + 1} @@ the largest of the 2n + 1 counts of choices, which add to 2²ⁿ (4k’s binomial technique)
+\text{the power of } p \text{ in } m! \text{ is } \textstyle\sum_{j \ge 1} \lfloor m/p^j \rfloor @@ count the multiples of p, of p², … up to m (the whole part, 42f4)
+\text{in } \tbinom{2n}{n}:\ \textstyle\sum_j \big(\lfloor 2n/p^j\rfloor - 2\lfloor n/p^j\rfloor\big),\ \text{each term } 0 \text{ or } 1 @@ ⌊2t⌋ − 2⌊t⌋ is 0 or 1; terms with pʲ &gt; 2n are 0
+p^k \mid \tbinom{2n}{n} \Rightarrow p^k \le 2n @@ k is at most the number of j with pʲ ≤ 2n
+\tbinom{2n}{n} \le (2n)^{\pi(2n)} @@ only primes up to 2n divide it, each to a power at most 2n
+\htmlClass{new}{\pi(2n)\ln(2n) \ge n\ln 4 - \ln(2n + 1)} \quad \blacksquare @@ ln of the first and fifth lines
   </pre>
-  <p data-pid="71974b">And every field F with q members is of this kind: its q − 1 members other than 0 form a group under times, so each has rᵠ⁻¹ = 1 by 19d’s order-divides technique, so every member is a zero of x^q − x. That makes any two fields with q members copies of each other. <i>Held in trust:</i> that two fields in which one polynomial splits, each made by its zeros, are copies. 43c proves it.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · every size · ← → keys work</div></section>
+  <p data-pid="0d5ab3">So π(x) is at least about (ln 2 / 2) · x/ln x for large x. The other side of the fence uses the same count: every prime between n and 2n divides (2n)!/(n! n!) once, so their product is at most 4ⁿ, and the product of all primes up to x is below 4ˣ, a standing question. That caps π(x) at a fixed multiple of x/ln x. For n = 50 the fence gives π(100) ≥ 14; the truth is 25.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the fence · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42g3.1</span><span class="ph understand">understand</span>What does the power-keeps-plus technique say, and why is C(p, k) a multiple of p for 0 < k < p? <br>Why are the zeros of x^q − x different from each other, and why do they form a field?</li>
+      <li><span class="qid">42g3.1</span><span class="ph understand">understand</span>What does the middle-count technique say? <br>Why does every prime power dividing the middle count of choices stay at most 2n?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42g4">
-  <h2 class="sthead"><span class="stno">42g4</span>One member reaches every other</h2>
-  <p data-pid="fbdb69">41e proved that on a prime clock some hour’s powers reach every hour but 0. The proof counted members of each order, and spent one fact about the clock: a polynomial of degree d has at most d zeros there. 42c3 showed that fact holds in every cancelling ring, so in every field.</p>
-  <p data-pid="967f84">Whole-hand technique: <b>in every finite field, the members other than 0 are the powers of one of them.</b> The proof is 41e’s, word for word, with F in place of ℤ/p and 42c3’s at-most-n-zeros in place of the clock’s.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the whole-hand technique, checked in the field of 9">
-(1 + i)^2 = 1 + 2i + i^2 = 2i @@ i² = −1 = 2 on ℤ/3
-(1 + i)^4 = (2i)^2 = 4i^2 = -4 = 2 @@ on ℤ/3, −4 = 2
-(1 + i)^8 = 2^2 = 1 @@ and no smaller power is 1: 2i, 2, and the fourth power is 2, not 1
-\htmlClass{new}{1 + i \text{ has order } 8:\ \text{its powers are all eight members other than } 0} \quad \blacksquare @@ the order divides 8 (19d); it is not 1, 2 or 4
+  <h2 class="sthead"><span class="stno">42g4</span>About one in ln x</h2>
+  <p data-pid="dc55ce">Prime-count technique, held in trust: <b>the share of primes among the numbers up to x settles toward 1/ln x, so that π(x) divided by x/ln x settles on 1.</b> Its proof, through ζ in the complex plane, is much higher up the ladder.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the prime-count technique against the counts">
+\pi(10^3) = 168,\ \ 10^3/\ln 10^3 \approx 144.8,\ \ \text{ratio } 1.161 @@ counted
+\pi(10^6) = 78\,498,\ \ 10^6/\ln 10^6 \approx 72\,382,\ \ \text{ratio } 1.084 @@ counted
+\pi(10^9) = 50\,847\,534,\ \ 10^9/\ln 10^9 \approx 48\,254\,942,\ \ \text{ratio } 1.054 @@ counted
+\htmlClass{new}{\text{the ratios fall toward } 1 \text{, slowly}} @@ the technique says they settle there
   </pre>
-  <p data-pid="4d06f5">Not every member reaches every other. i has order 4 in the field of 9: i, −1, −i, 1. In the field of 8, every member other than 0 and 1 has order 7, since 7 is prime.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · a hand · ← → keys work</div></section>
+  <p data-pid="9887f0">Fair-shares, held in trust: if gcd(a, n) = 1, the clock of n has endlessly many primes in the hour [a], and each of the c(n) unit hours gets, in the long run, the same share of them. The hours that are not units hold at most one prime each, since every member shares a divisor with n. The step proves two cases whole.</p>
+  <p data-pid="5543e4">Four-clock technique: <b>the hours [1] and [3] of the clock of 4 each hold endlessly many primes.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the four-clock technique">
+p_1, \ldots, p_k \equiv 3 \pmod 4;\ \ N = 4p_1\cdots p_k - 1 \equiv 3 @@ a list of primes in the hour [3]
+\text{a product of numbers in } [1] \text{ is in } [1] @@ carry-to-the-clock (42a2)
+\text{some prime } q \mid N \text{ is in } [3],\ q \ne p_i @@ N is odd and in [3]; q = pᵢ would divide 1 (4j16)
+q_1, \ldots, q_k \equiv 1;\ \ M = (2q_1\cdots q_k)^2 + 1 @@ a list in the hour [1]
+r \mid M \Rightarrow -1 \equiv (2q_1\cdots q_k)^2 \pmod r @@ r is odd and none of the qᵢ
+\htmlClass{new}{-1 \text{ is a square on the clock of } r \text{, so } r \equiv 1 \pmod 4} \quad \blacksquare @@ the square-test technique (42f2): a new prime in [1]
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · one in ln x · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42g4.1</span><span class="ph understand">understand</span>What does the whole-hand technique say, and which fact of 42c3 does its proof spend? <br>Why is the order of 1 + i in the field of 9 exactly 8?</li>
+      <li><span class="qid">42g4.1</span><span class="ph understand">understand</span>What do the prime-count technique and fair shares claim, and which of them does the step prove? <br>In the four-clock technique, why must a prime factor of (2q₁⋯q_k)² + 1 be 1 more than a multiple of 4?</li>
     </ol>
   </section>
 </section>
@@ -117,15 +127,15 @@ r^q = r,\ s^q = s \Rightarrow (r + s)^q = r + s,\ (rs)^q = rs,\ (r^{-1})^q = r^{
 <section class="class step" data-step="42g5">
   <h2 class="sthead"><span class="stno">42g5</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-F_4 = \mathbb Z/4\,? @@ on ℤ/4, 2 · 2 = 0; in F₄, 1 + 1 = 0 and there are no zero products
-(w + b)^2 = w^2 + b^2 \text{ in every field}\,? @@ only when 1 + 1 = 0; on ℚ, (1 + 1)² = 4 ≠ 2
-x^4 + x^2 + 1 \text{ has no zero on } \mathbb Z/2 \text{, so it gives a field of } 16\,? @@ no zero rules out straight factors only: it is (x² + x + 1)² there
-\text{a field of 9 holds the clock of 9}\,? @@ it holds ℤ/3; its bottom prime is 3
+\text{the primes are endless, so } \textstyle\sum 1/p \text{ passes every bound}\,? @@ the squares are endless too, and their sum settles; the technique needed the product
+\pi(x) \approx x/\ln x \text{ means } \pi(x) - x/\ln x \to 0\,? @@ the ratio settles on 1; the gap grows without bound: at 10⁹ it is over 2.5 million
+n^2 + n + 41 \text{ is prime for } n = 0, \ldots, 39 \text{, so always}\,? @@ at n = 40 it is 41²; cases are not every case
+\text{every hour of a clock holds endlessly many primes}\,? @@ only the units: the hour [2] of the clock of 4 holds the one prime 2
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42g5.1</span><span class="ph understand">understand</span>Why is the field of four not ℤ/4? <br>Why does x⁴ + x² + 1 having no zero on ℤ/2 not make it unsplittable there?</li>
+      <li><span class="qid">42g5.1</span><span class="ph understand">understand</span>Why does the endless-primes technique of 4j16 alone not give that Σ 1/p passes every bound? <br>Why does π(x) ≈ x/ln x not mean that their difference shrinks?</li>
     </ol>
   </section>
 </section>
@@ -134,22 +144,22 @@ x^4 + x^2 + 1 \text{ has no zero on } \mathbb Z/2 \text{, so it gives a field of
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">42g.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\mathbb Z/2,\ \ \deg 4"></span></span>Build a field of 16. Find every polynomial of degree 4 on ℤ/2 that cannot be split, and pick one whose x has order 15. <br>For the others, find the order of x, and whether it is 3, 5 or 15.</div>
-  <div class="chq"><span class="chid">42g.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="F_4 \subseteq F_{16},\ \ F_4 \not\subseteq F_8"></span></span>Does a field of pⁿ members hold a field of pᵏ members exactly when k divides n? <br>Use the tower technique for one direction, and the zeros of x^(pᵏ) − x for the other.</div>
-  <div class="chq"><span class="chid">42g.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="r \mapsto r^p"></span></span>In a finite field with bottom prime p, raising to p keeps sums and products. Is it one-to-one, and so onto? <br>Turn it round: in which fields of bottom prime p is every member a pᵗʰ power? Find a field with bottom prime p, endless, where x is not a pᵗʰ power.</div>
-  <div class="chq"><span class="chid">42g.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">25b: a field with no order</span></span>25b showed that a field with a square root of −1 has no order. <br>Has a finite field an order? Prove it from the bottom prime, without square roots. Which finite fields have a square root of −1? Find one on ℤ/5 and show none exists on ℤ/7.</div>
+  <div class="chq"><span class="chid">42g.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\textstyle\prod_{p \le x} p \lt 4^x"></span></span>Build the other side of the fence. Prove the product of the primes up to x is below 4ˣ, by induction on x: for odd x = 2m + 1, the primes between m + 2 and 2m + 1 divide the count (2m + 1 choose m), which is at most 4ᵐ. <br>Turn it into an upper bound for π(x) of the shape C · x/ln x, and find a C that works.</div>
+  <div class="chq"><span class="chid">42g.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="(n + 1)! + 2,\ \ldots,\ (n + 1)! + n + 1"></span></span>Prove these are n numbers in a row with no prime among them, so gaps between primes grow without bound. <br>Find a run of at least 7 numbers with no prime below 100, and compare its length with ln 100. Is a long gap against the prime-count technique?</div>
+  <div class="chq"><span class="chid">42g.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\textstyle\sum_{n \in S} 1/n \text{ passes every bound}"></span></span>The thin-but-endless technique says the primes’ reciprocals pass every bound. Turn it round: if a set S of numbers has reciprocals passing every bound, must S hold endlessly many primes? Must it hold arithmetic progressions of every length? <br>Settle what you can. What is still open?</div>
+  <div class="chq"><span class="chid">42g.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">a book of 1940: the theory of numbers, gloriously useless</span></span>A mathematician wrote in 1940 that the theory of numbers had no use in war or commerce, and was the cleaner for it. In 1977 a lock was published whose key is two primes of a hundred digits each. The prime-count technique says how many such primes there are: about one number in 230 near 10¹⁰⁰. <br>Was the 1940 claim wrong, or is use the wrong way to judge it? Is the prime-count technique pure or applied, and does the answer change when 42i uses it?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r42f.html">← 42f · field extensions</a><a href="r42h.html">42h · only one complete ordered field →</a></nav>
+<nav class="nextrung"><a href="r42f.html">← 42f · squares on a clock</a><a href="r42h.html">42h · clock arithmetic by hand →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>Finite fields are Galois fields, written F_q or GF(q). The bottom prime is the characteristic, and ℤ/p inside F is the prime field. The power-keeps-plus technique is the Frobenius map’s additivity, sometimes called the freshman’s dream. The every-prime-power technique and the uniqueness held in trust give the existence and uniqueness of finite fields, and F_q is the splitting field of x^q − x. The whole-hand technique says the multiplicative group of a finite field is cyclic; a member that reaches every other is a primitive element.</p>
+  <p>The thin-but-endless technique is Euler’s proof that Σ 1/p diverges; the sharper Σ_{p ≤ x} 1/p = ln ln x + M + o(1) is Mertens’s second theorem. ζ is the Riemann zeta function, and the prime-product technique the Euler product. π(x) is the prime-counting function. The middle-count technique and the upper bound of 42g.6.1 are Chebyshev’s bounds, and the power of p in m! is Legendre’s formula. The prime-count technique is the prime number theorem. Fair shares is Dirichlet’s theorem on primes in arithmetic progressions, in its strong form (de la Vallée Poussin, 1896). The four-clock technique is its first two cases. Progressions of every length in the primes is the Green–Tao theorem (2004); that a set with reciprocals passing every bound has them is the Erdős conjecture on arithmetic progressions, open.</p>
   <h3>Who said it first</h3>
-  <p>Évariste Galois built fields of pⁿ members in 1830, with imaginary roots on a prime clock. Carl Friedrich Gauss had worked out much the same in unpublished notes from about 1797. E. H. Moore proved in 1893 that every finite field is one of Galois’s. Georg Frobenius studied raising to p in 1896.</p>
+  <p>Leonhard Euler found the product and the divergence in 1737. Carl Friedrich Gauss, around 1792, aged fifteen, guessed from tables that the primes thin like 1/ln x; Adrien-Marie Legendre guessed a like formula in 1798. Pafnuty Chebyshev proved the fence in 1850. Peter Gustav Lejeune Dirichlet proved primes in progressions in 1837. Bernhard Riemann carried ζ into the complex plane in 1859, and Jacques Hadamard and Charles de la Vallée Poussin proved the prime number theorem separately in 1896. Atle Selberg and Paul Erdős found proofs without complex numbers in 1948. G. H. Hardy’s A Mathematician’s Apology (1940) is the book of 42g.6.4.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“A field of 8 has 7 members other than 0, and 7 is prime, so it is ℤ/7 with 0 put back in.” Not allowed: the members other than 0 form a group of size 7 under times, and that group is a copy of ℤ/7 under adding. The field itself has bottom prime 2, since 1 + 1 = 0 in it, and no copy of ℤ/7 sits inside it.</p>
+  <p>“The chance that a large n is prime is 1/ln n, and the chance that n + 2 is prime is 1/ln(n + 2), so the chance both are is about 1/(ln n)², and summing over n, there are endlessly many twin primes.” Not allowed: primes are not chances, and the two events are not independent: if n is odd, n + 2 is odd too. The count it gives is a guess, the kind 42·now2 weighs. Twin primes are still open.</p>
 </section>
 
 </div>
@@ -164,25 +174,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'the prime',t:R`p \cdot 1 = 0`,n:`Least such count.`},
-  {k:'ember',kl:'the space',t:R`F \text{ over } \mathbb Z/p`,n:`Dimension n.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{|F| = p^n}`,n:`A prime power.`}
-],{title:'The slides · size · ← → keys work'});
+  {k:'ember',kl:'product',t:R`\textstyle\prod_{p \le x} (1 - 1/p)^{-1} \ge \ln x`,n:`Prime lists.`},
+  {k:'ember',kl:'ln',t:R`\textstyle\sum -\ln(1 - 1/p) \ge \ln\ln x`,n:`Log of a product.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\textstyle\sum_{p \le x} 1/p \ge \ln\ln x - 1}`,n:`Passes every bound.`}
+],{title:'The slides · thin, not too thin · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'m',t:R`x^2 + x + 1 \text{ on } \mathbb Z/2`,n:`No zero.`},
-  {k:'ember',kl:'rule',t:R`x^2 = x + 1`,n:`The remainder.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{F_4 = \{0, 1, x, x + 1\}}`,n:`A field.`}
-],{title:'The slides · four · ← → keys work'});
+  {k:'ember',kl:'ζ',t:R`\zeta(s) = \textstyle\sum n^{-s}`,n:`s > 1.`},
+  {k:'ember',kl:'product',t:R`\textstyle\prod_p (1 - p^{-s})^{-1}`,n:`One prime list each.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\textstyle\prod_p (1 - 1/p^2) = 6/\pi^2}`,n:`Pairs sharing nothing.`}
+],{title:'The slides · the product · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'zeros',t:R`x^q = x`,n:`In a big enough field.`},
-  {k:'ember',kl:'sums',t:R`(r + s)^p = r^p + s^p`,n:`Raising to p keeps plus.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a field of } p^n}`,n:`Every prime power.`}
-],{title:'The slides · every size · ← → keys work'});
+  {k:'ember',kl:'middle count',t:R`\tbinom{2n}{n} \ge 4^n/(2n + 1)`,n:`The largest term.`},
+  {k:'ember',kl:'small powers',t:R`p^k \le 2n`,n:`Each term 0 or 1.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\pi(2n) \ge \frac{n \ln 4 - \ln(2n + 1)}{\ln 2n}}`,n:`From below.`}
+],{title:'The slides · the fence · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'square',t:R`(1 + i)^2 = 2i`,n:`On ℤ/3.`},
-  {k:'ember',kl:'fourth',t:R`(1 + i)^4 = 2`,n:`Not 1.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{1 + i \text{ has order } 8}`,n:`Reaches all eight.`}
-],{title:'The slides · a hand · ← → keys work'});
+  {k:'ember',kl:'rate',t:R`\pi(x) \big/ (x/\ln x) \to 1`,n:`Held in trust.`},
+  {k:'ember',kl:'fair shares',t:R`\text{each unit hour, } 1/c(n)`,n:`Held in trust.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{endless primes in } [1] \text{ and } [3] \bmod 4}`,n:`Proved.`}
+],{title:'The slides · one in ln x · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

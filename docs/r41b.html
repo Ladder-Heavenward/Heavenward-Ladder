@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Undoing on a clock</title>
+<title>Trees</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -25,96 +25,93 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r41a.html">← 41a clock arithmetic</a><a href="r41c.html">next: 41c several clocks at once →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r41a.html">← 41a dots and links</a><a href="r41c.html">next: 41c walking every link once →</a></p>
   <div class="tags"><span class="tag proof">41b · proof</span></div>
-  <h1>Undoing on a clock</h1>
-  <p data-pid="4c6593">On a clock, adding can always be undone: go back the same number of hours. Multiplying is another matter. On the clock of twelve, five times five is one, so five undoes itself. Two has no undo at all, since every multiple of two is an even hour and one is odd. The last step found that the hours that cannot be cancelled are the ones that share a divisor with the clock. This step finds that the others can be undone, and finds the undo by a road the ladder built on rung four: the oldest algorithm, run backwards. The undoable hours multiply among themselves and form a group. And on a clock whose size is prime, every hour but twelve o’clock is undoable, so dividing works there as it does in the fractions, with a finite set of hours.</p>
-  <p class="gesture" data-pid="517a11">An hour can be undone exactly when it shares nothing with the clock, and the gcd algorithm run backwards finds the undo. The undoable hours form a group under times. A clock whose size is a prime is a field: every hour but zero has an undo.</p>
+  <h1>Trees</h1>
+  <p data-pid="461018">A graph in one piece with no cycle is the thriftiest way to join a set of dots: take away any link and it falls in two, add any link and a cycle appears. These graphs are called trees, and they are everywhere the ladder has already been: the proofs of rung 38 were drawn as trees, the chances of rung 30 branched as trees, and a family is drawn as one. This step proves that a tree on n dots always has exactly one link fewer than it has dots, that any two of three plain conditions force the third, and that every graph in one piece holds a tree that reaches all its dots. Then it counts the trees on n named dots. The answer is n multiplied by itself n − 2 times, a count so clean that it was guessed from small cases long before it was proved. The proof here codes each tree as a list of n − 2 numbers, and decodes it back.</p>
+  <p class="gesture" data-pid="c4c8c1">A tree is in one piece with no cycle. It has at least two ends, and exactly one link fewer than dots. Any two of in one piece, no cycle, and one link fewer than dots give the third. Every graph in one piece holds a tree through all its dots. The trees on n named dots match the lists of n − 2 names, so there are n to the n − 2.</p>
 </header>
 
 <section class="class step" data-step="41b1">
-  <h2 class="sthead"><span class="stno">41b1</span>Which hours have an undo</h2>
-  <p data-pid="fadbbd"><a href="r04j.html#ffbe16">4j13</a> found, with plus only, numbers x and y with u · x = b · y + gcd(u, b) or the other way round. It had to allow either side, since it had no taking away. In ℤ the two sides fold into one.</p>
-  <p data-pid="5807d7">Gcd-as-a-sum technique: <b>for any integers a and n, not both 0, there are integers x and y with ax + ny = gcd(a, n).</b> For counting numbers it is 4j13 with the multiple taken across: u · x − b · y = g, or u · (−x) + b · y = g. A negative a or n changes only signs, since gcd(−a, n) = gcd(a, n).</p>
-  <p data-pid="87f508">From here on, an <i>undo</i> of the hour [a] on the clock of n is an hour [x] with [a][x] = [1]. Undo-exactly-when technique: <b>the hour [a] has an undo on the clock of n exactly when gcd(a, n) = 1, and then it has only one.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the undo-exactly-when technique">
-\gcd(a, n) = 1:\ \ ax + ny = 1 @@ the gcd-as-a-sum technique
-ax \equiv 1 \pmod n @@ n ∣ ny, and ax − 1 = −ny
-\htmlClass{new}{[a][x] = [1]} @@ ︿ undo
-[a][x] = [1] \Rightarrow ax - 1 = nk \Rightarrow ax + n(-k) = 1 @@ the other way: ﹀ ≡
-d \mid a,\ d \mid n \Rightarrow d \mid 1 @@ divides-a-multiple and divides-a-sum (4j2): every common divisor divides 1
-[a][x] = [a][x'] = [1] \Rightarrow \htmlClass{new}{[x] = [x']} \quad \blacksquare @@ the clock-cancel technique (41a4)
+  <h2 class="sthead"><span class="stno">41b1</span>Ends and links</h2>
+  <p data-pid="077eb7">A <i>tree</i> is a graph in one piece with no cycle. An <i>end</i> of a graph is a dot with exactly one link.</p>
+  <p data-pid="418baa">Tree-ends technique: <b>a tree with at least two dots has at least two ends.</b> Take a path of greatest length, v₀, …, vₖ. A neighbour of v₀ other than v₁ would lie on the path, closing a cycle, or off it, making a longer path. So v₀ is an end, and so is vₖ.</p>
+  <p data-pid="4061c6">Links-of-a-tree technique: <b>a tree with n dots has n − 1 links.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the links-of-a-tree technique">
+n = 1:\ 0 \text{ links} @@ one dot, and a link needs two
+T \text{ a tree with } n + 1 \ge 2 \text{ dots; } v \text{ an end of it} @@ the tree-ends technique
+T - v \text{ is in one piece and has no cycle} @@ a path through v would need two links at v; taking a dot away makes no cycle
+T - v \text{ has } n - 1 \text{ links} @@ induction on n (4c)
+\htmlClass{new}{T \text{ has } (n - 1) + 1 = n \text{ links}} \quad \blacksquare @@ v took one link with it
   </pre>
-  <p data-pid="903087">So the hours that cannot be cancelled cannot be undone, and the ones that can be cancelled can be undone. The same line, ax + ny = 1, says both.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · undoing · ← → keys work</div></section>
+  <p data-pid="519173">A tree with n dots and links counts d(v) has Σ d(v) = 2n − 2, by the ends-count technique. So the average count is below 2, which is the tree-ends technique again, from the other side.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · trees · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">41b1.1</span><span class="ph understand">understand</span>What does the gcd-as-a-sum technique say, and how does it come from 4j13? <br>What does the undo-exactly-when technique say, and why is the undo only one?</li>
+      <li><span class="qid">41b1.1</span><span class="ph understand">understand</span>Why are the two ends of a longest path in a tree ends of the tree? <br>What does the links-of-a-tree technique say, and why does taking an end away keep a tree?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="41b2">
-  <h2 class="sthead"><span class="stno">41b2</span>Finding the undo</h2>
-  <p data-pid="82041e">The undo is found by 4j12’s algorithm, then 4j13’s reading from the foot up, now with taking away. On the clock of 43, find the undo of [17].</p>
-  <pre class="lines" data-k="ember" data-label="this step: the undo of 17 on the clock of 43">
-43 = 17 \cdot 2 + 9,\ \ 17 = 9 \cdot 1 + 8,\ \ 9 = 8 \cdot 1 + 1 @@ the gcd algorithm (4j12): gcd(43, 17) = 1
-1 = 9 - 8 @@ the last line, taken across
-\phantom{1} = 9 - (17 - 9) = 2 \cdot 9 - 17 @@ the middle line, 8 = 17 − 9
-\phantom{1} = 2(43 - 2 \cdot 17) - 17 = 2 \cdot 43 - 5 \cdot 17 @@ the first line, 9 = 43 − 2 · 17
-17 \cdot (-5) \equiv 1 \pmod{43} @@ 43 ∣ 2 · 43
-\htmlClass{new}{[17]^{-1} = [-5] = [38]} \quad \blacksquare @@ check: 17 · 38 = 646 = 15 · 43 + 1
+  <h2 class="sthead"><span class="stno">41b2</span>Any two of three</h2>
+  <p data-pid="bb3d19">Any-two-of-three technique: <b>for a graph with n dots, any two of these give the third: it is in one piece; it has no cycle; it has n − 1 links.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the any-two-of-three technique">
+\text{one piece and no cycle} \Rightarrow n - 1 \text{ links} @@ the links-of-a-tree technique
+\text{no cycle, } c \text{ pieces} \Rightarrow \text{each piece a tree, } n - c \text{ links in all} @@ links-of-a-tree in each piece; the dots add up to n
+\text{no cycle and } n - 1 \text{ links} \Rightarrow c = 1 @@ n − c = n − 1
+\text{one piece, } n - 1 \text{ links, a cycle} \Rightarrow \text{drop a link of the cycle; still one piece} @@ a walk that used the link goes round the rest of the cycle
+\text{drop links of cycles until none is left: a tree with fewer than } n - 1 \text{ links} @@ each drop keeps one piece
+\htmlClass{new}{\bot:\ \text{one piece and } n - 1 \text{ links} \Rightarrow \text{no cycle}} \quad \blacksquare @@ against the links-of-a-tree technique
   </pre>
-  <p data-pid="cca13b">From here on, [a]⁻¹ names the undo of [a], when it has one: 19a’s mark for an undo in a group, and 41b3 shows the undoable hours are a group. It is not 5b’s reciprocal: 1/17 is no integer, and [17]⁻¹ is the hour [38].</p>
-  <p data-pid="990b49">Each round of the algorithm shrinks the pair, and 4j12 ended within a few rounds. How few is a question for 41h, where the count of rounds decides whether a machine can do this for numbers with hundreds of digits.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · the undo found · ← → keys work</div></section>
+  <p data-pid="9d2f2f">One more way to say tree: <b>a graph is a tree exactly when each two of its dots are joined by exactly one path.</b> Two paths from u to w that part and meet again close a cycle; and a cycle gives two paths between any two of its dots. So a tree is the graph where the walk-to-path technique of 41a has only one answer.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · two of three · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41b2.1</span><span class="ph understand">understand</span>How is the undo of [17] on the clock of 43 found from the gcd algorithm? <br>Why is [17]⁻¹ not 5b’s reciprocal of 17?</li>
+      <li><span class="qid">41b2.1</span><span class="ph understand">understand</span>What does the any-two-of-three technique say? <br>Why does dropping a link that lies on a cycle keep the graph in one piece?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="41b3">
-  <h2 class="sthead"><span class="stno">41b3</span>The undoable hours form a group</h2>
-  <p data-pid="44b1d2">From here on, (ℤ/n)ˣ names the set of hours of the clock of n that have an undo: the raised cross is part of the mark, and it marks “under times”. An hour with an undo is a <i>unit</i>, from the Latin <i>unitas</i>, oneness: a unit times its undo is one.</p>
-  <p data-pid="ea59eb">Units-group technique: <b>the units of the clock of n form a group under times.</b> A product of units is a unit: by 19c, [b]⁻¹[a]⁻¹ undoes [a][b]. [1] is a unit and does nothing. Regroup comes from ℤ by 41a3. Each unit has its undo in the set, since [a] undoes [a]⁻¹. That is 19a’s three demands, met.</p>
-  <pre class="lines" data-k="ember" data-label="this step: two groups of units">
-(\mathbb Z/12)^\times = \{[1], [5], [7], [11]\} @@ gcd with 12 is 1 for these four only (undo-exactly-when)
-[5]^2 = [25] = [1],\ \ [7]^2 = [49] = [1],\ \ [11]^2 = [121] = [1] @@ each is its own undo
-(\mathbb Z/10)^\times = \{[1], [3], [7], [9]\} @@ the same test
-[3][7] = [21] = [1],\ \ [9]^2 = [81] = [1] @@ 3 and 7 undo each other
-\htmlClass{new}{[3]^2 = [9],\ [3]^3 = [7],\ [3]^4 = [1]} \quad \blacksquare @@ the powers of [3] walk through all four units of the clock of 10
+  <h2 class="sthead"><span class="stno">41b3</span>A tree inside every graph</h2>
+  <p data-pid="64d021">A <i>spanning tree</i> of a graph G is a tree whose dots are all the dots of G and whose links are links of G.</p>
+  <p data-pid="021c79">Spanning-tree technique: <b>every graph in one piece has a spanning tree.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the spanning-tree technique">
+H := G @@ the state of a recipe (4l): a graph in one piece on the dots of G
+\text{while } H \text{ has a cycle, drop one link of it} @@ the move; H stays in one piece (41b2)
+\text{the number of links falls at every move} @@ so every run stops (the falling-measure technique, 4l)
+\htmlClass{new}{\text{at the stop } H \text{ is in one piece with no cycle: a spanning tree}} \quad \blacksquare @@ the stop test
   </pre>
-  <p data-pid="3f74ee">Both groups have four members, and they are not alike. In the clock of 12 every unit done twice does nothing. In the clock of 10 one unit, [3], has all four as its powers. Which clocks have such a unit is 41e’s question.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · units · ← → keys work</div></section>
+  <p data-pid="bdc456">Which links to drop is free, and the trees that come out differ. When links have costs, a cheapest spanning tree is a question with an answer, and a greedy recipe finds it. 41k asks why greed is safe there and not elsewhere.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · spanning · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41b3.1</span><span class="ph understand">understand</span>What is a unit, and what does (ℤ/n)ˣ name? <br>What does the units-group technique say, and where does 19c enter its proof?</li>
+      <li><span class="qid">41b3.1</span><span class="ph understand">understand</span>What is a spanning tree? <br>Why does the recipe of the spanning-tree technique always stop, and why is the graph still in one piece when it does?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="41b4">
-  <h2 class="sthead"><span class="stno">41b4</span>A prime clock is a field</h2>
-  <p data-pid="28bbae">Prime-clock-field technique: <b>the clock of n is a field exactly when n is prime.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the prime-clock-field technique">
-p \text{ prime},\ \ 0 \lt a \lt p \Rightarrow \gcd(a, p) = 1 @@ the gcd divides p, so it is 1 or p (4j9); p ∤ a
-\text{every hour but } [0] \text{ has an undo} @@ the undo-exactly-when technique
-[0] \ne [1] @@ p ∤ 1, since p &gt; 1
-\htmlClass{new}{\mathbb Z/p \text{ is a field}} @@ the rules of plus and times come along (41a3); undoes for times; 0 ≠ 1
-n = jk,\ \ 1 \lt j, k \lt n \Rightarrow [j][k] = [0] @@ not prime: 41a4’s two hours that multiply to [0]
-\htmlClass{new}{[j] \text{ has no undo, so } \mathbb Z/n \text{ is no field}} \quad \blacksquare @@ [k] = [j]⁻¹[j][k] = [0] would follow, against 0 &lt; k &lt; n
+  <h2 class="sthead"><span class="stno">41b4</span>Counting the trees</h2>
+  <p data-pid="142899">On the dots {1, 2, …, n}, with n ≥ 2, the <i>leaf code</i> of a tree is a list of n − 2 numbers made this way: take away the end with the smallest name, write down the name of its one neighbour, and repeat until two dots are left.</p>
+  <pre class="lines" data-k="ember" data-label="this step: one tree coded">
+\text{links } \{1,4\}, \{2,4\}, \{3,4\}, \{4,5\}, \{5,6\} @@ a tree on six dots
+\text{ends } 1, 2, 3, 6;\ \text{take } 1,\ \text{write } 4 @@ the smallest end
+\text{take } 2,\ \text{write } 4;\ \ \text{take } 3,\ \text{write } 4 @@ again
+\text{now } 4 \text{ is an end; ends } 4, 6;\ \text{take } 4,\ \text{write } 5 @@ two dots, 5 and 6, are left
+\htmlClass{new}{\text{leaf code } (4, 4, 4, 5)} \quad \blacksquare @@ n − 2 = 4 numbers
   </pre>
-  <p data-pid="d61639">In a field, ax = b has exactly one answer when a is not 0: x = a⁻¹b. On the clock of 43, 17x ≡ 5 has x ≡ 38 · 5 = 190 ≡ 18, and 17 · 18 = 306 = 7 · 43 + 5. The field with two members of 5c.4.3 is the clock of 2. So for each prime p there is a field with p members, and the fractions, the reals and 25’s ℂ are no longer the only fields the ladder can compute in.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · prime clocks · ← → keys work</div></section>
+  <p data-pid="650c90">Leaf-code technique: <b>the leaf code is a matching between the trees on n named dots and the lists of n − 2 names; so there are nⁿ⁻² such trees.</b> A dot appears in the code one time fewer than its count of links, since it is written once for each neighbour taken away before it, and ends never appear. So from the code alone the first end taken is known: the smallest name not in the code. Join it to the code’s first entry, strike both, and go on; the last two dots left are joined. That rebuilds the tree, and only that tree, from the code, and every list rebuilds some tree. A matching (9c) between the trees and the nⁿ⁻² lists of 4k’s counted-functions technique.</p>
+  <p data-pid="30355f">For n = 4 that gives 16 trees: 12 paths, the 4!/2 ways to put four names along a line, and 4 stars, one for each choice of the centre. n = 2, 3, 4, 5 give 1, 3, 16, 125.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · leaf code · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41b4.1</span><span class="ph understand">understand</span>What does the prime-clock-field technique say? <br>Why is the clock of 15 not a field, and how is 17x ≡ 5 (mod 43) solved?</li>
+      <li><span class="qid">41b4.1</span><span class="ph understand">understand</span>How is the leaf code of a tree made? <br>Why does a dot appear in the code one time fewer than its count of links, and how does that let the code be read back?</li>
     </ol>
   </section>
 </section>
@@ -122,15 +119,15 @@ n = jk,\ \ 1 \lt j, k \lt n \Rightarrow [j][k] = [0] @@ not prime: 41a4’s two 
 <section class="class step" data-step="41b5">
   <h2 class="sthead"><span class="stno">41b5</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-[6]^{-1} \text{ on the clock of } 9\,? @@ gcd(6, 9) = 3: [6] has no undo, and [6][3] = [0]
-[17]^{-1} = [1/17]\,? @@ 1/17 is no integer and names no hour; [17]⁻¹ = [38] on the clock of 43
-(\mathbb Z/12)^\times = \text{the hours but } [0]\,? @@ that is so only on a prime clock; the clock of 12 has four units, not eleven
-2x \equiv 1 \pmod 6 \text{ has one answer}\,? @@ it has none: 2x is even, 6k + 1 odd. An answer for each b needs gcd(a, n) = 1
+\text{a graph with } n \text{ dots and } n - 1 \text{ links is a tree}\,? @@ a triangle and a lone dot have 4 dots and 3 links; it needs one piece too
+\text{every tree has exactly two ends}\,? @@ a star with k links has k ends; two is the least
+n^{n-2} \text{ counts the shapes of tree}\,? @@ it counts trees on named dots; on four dots there are 16 trees and 2 shapes
+\text{the code } (4, 4, 4, 5) \text{ makes dot 4 an end}\,? @@ dot 4 appears three times, so it has four links
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41b5.1</span><span class="ph understand">understand</span>Why does [6] have no undo on the clock of 9? <br>Why are the units of the clock of 12 not all the hours but [0]?</li>
+      <li><span class="qid">41b5.1</span><span class="ph understand">understand</span>Why is a graph with n dots and n − 1 links not always a tree? <br>Why does nⁿ⁻² not count the shapes of tree?</li>
     </ol>
   </section>
 </section>
@@ -139,22 +136,22 @@ n = jk,\ \ 1 \lt j, k \lt n \Rightarrow [j][k] = [0] @@ not prime: 41a4’s two 
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">41b.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\mathbb Z/13"></span></span>Build the table of undos on the clock of 13, pairing each unit with its undo. Which units are their own undo, and why only those? <br>Use the pairing to find 12! on the clock of 13, and then prove what (p − 1)! is on the clock of any prime p.</div>
-  <div class="chq"><span class="chid">41b.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="6x \equiv 9 \pmod{15}"></span></span>When gcd(a, n) = d is above 1, ax ≡ b can still have answers. Find every answer of this one among the hours of the clock of 15. <br>Prove that ax ≡ b (mod n) has answers exactly when d ∣ b, and then exactly d of them on the clock of n.</div>
-  <div class="chq"><span class="chid">41b.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{every } [a] \ne [0] \text{ can be cancelled}"></span></span>If every hour but [0] can be cancelled on a clock, must every hour but [0] have an undo? Prove it for any clock, using only that the clock has finitely many hours (8·cb5’s pigeonhole). <br>In ℤ every integer but 0 can be cancelled. Which integers have an undo for times, and why does the clock’s proof not reach ℤ?</div>
-  <div class="chq"><span class="chid">41b.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">7·cb4.4.1: 3a + 5b with counting numbers a and b misses 1, 2, 4 and 7, and nothing past 7</span></span>Rung 7 found the greatest number 3a + 5b cannot reach. With integers in place of counting numbers, the gcd-as-a-sum technique reaches every integer. <br>Why does allowing negatives close every gap? Prove, by the clock of 3, that with counting numbers the greatest gap for coins of 3 and 5 is 3 · 5 − 3 − 5. Is there a formula of the same kind for three sizes of coin, and what would you try first to find one?</div>
+  <div class="chq"><span class="chid">41b.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="(3, 3, 1, 1)"></span></span>Build the tree on six named dots with this leaf code, and code it again to check. <br>Which list codes the path 1, 2, 3, 4, 5, 6, and which the star with centre 6?</div>
+  <div class="chq"><span class="chid">41b.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n = 2,\ \ n = 1"></span></span>The leaf code on two dots is the empty list. Does the leaf-code technique hold there, and what is n^(n − 2) at n = 1? <br>Count the trees on n named dots in which dot 1 is an end, from the code.</div>
+  <div class="chq"><span class="chid">41b.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\textstyle\sum_v d(v) = 2n - 2,\ \ d(v) \ge 1"></span></span>A tree has links counts at least 1 adding to 2n − 2. Turn it round: does every such list belong to a tree? Prove it, or find a list that fails. <br>Count, from the leaf code, the trees on named dots with a given list of counts.</div>
+  <div class="chq"><span class="chid">41b.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">1, 3, 16, 125, 1296</span></span>The count nⁿ⁻² was announced in 1889 from a pattern and an argument that covered only some cases. Rung 7 asked whether evidence is proof (7b.4.4). <br>How many cases would have made you sure? Which part of the leaf code’s proof does no number of cases supply?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r41a.html">← 41a · clock arithmetic</a><a href="r41c.html">41c · several clocks at once →</a></nav>
+<nav class="nextrung"><a href="r41a.html">← 41a · dots and links</a><a href="r41c.html">41c · walking every link once →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The gcd-as-a-sum technique is Bézout’s identity (Bézout’s lemma), and running the algorithm backwards is the extended Euclidean algorithm. The undo [a]⁻¹ is the inverse of a modulo n, or modular inverse. (ℤ/n)ˣ is the group of units, or multiplicative group, of ℤ/nℤ. The prime-clock-field technique says ℤ/pℤ is a field, written 𝔽_p or GF(p). The value of (p − 1)! in 41b.6.1 is Wilson’s theorem. The greatest gap of 41b.6.4 is the Frobenius number, and its formula for two coins is Sylvester’s.</p>
+  <p>Ends are leaves. A graph with no cycle is a forest. The tree-ends technique and the any-two-of-three technique are the basic characterizations of trees; the count nⁿ⁻² is Cayley's formula, and the leaf code is the Prüfer code.</p>
   <h3>Who said it first</h3>
-  <p>Claude Gaspard Bachet de Méziriac solved ax − by = 1 by the algorithm in 1624; Étienne Bézout proved the like statement for polynomials in 1779. The value of (p − 1)! was known to Ibn al-Haytham around 1000, announced by Edward Waring for his student John Wilson in 1770, and first proved by Joseph-Louis Lagrange in 1771. James Joseph Sylvester found the two-coin formula in 1884. Évariste Galois built fields with a prime power of members in 1830, the subject of 42g.</p>
+  <p>Gustav Kirchhoff used spanning trees in 1847 to solve electrical networks. Arthur Cayley counted trees in 1857 for the calculus and in 1874 for chemistry, and stated nⁿ⁻² in 1889; Carl Wilhelm Borchardt had a determinant formula equivalent to it in 1860. Heinz Prüfer gave the code in 1918.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“On the clock of 12, [5][5] = [1] and [7][7] = [1], so every unit is its own undo, on every clock.” Not allowed: two cases are not every case. On the clock of 10, [3][3] = [9], and the undo of [3] is [7].</p>
+  <p>“A tree has n − 1 links: start with one dot and add the others one at a time, each with one link to what is there.” Not allowed as it stands: it shows that the trees built that way have n − 1 links, but not that every tree can be built that way. The missing step is the tree-ends technique, which takes a tree apart in the reverse order.</p>
 </section>
 
 </div>
@@ -169,25 +166,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'a sum',t:R`ax + ny = \gcd(a, n)`,n:`4j13 in ℤ.`},
-  {k:'ember',kl:'gcd 1',t:R`ax \equiv 1 \pmod n`,n:`The undo.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{[a]^{-1} \text{ exists} \iff \gcd(a, n) = 1}`,n:`And only one.`}
-],{title:'The slides · undoing · ← → keys work'});
+  {k:'ember',kl:'ends',t:R`\text{a longest path ends at ends}`,n:`At least two.`},
+  {k:'ember',kl:'peel',t:R`T - v`,n:`Still a tree.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|E| = n - 1}`,n:`One fewer than the dots.`}
+],{title:'The slides · trees · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'down',t:R`43 = 17 \cdot 2 + 9,\ \ldots`,n:`The algorithm.`},
-  {k:'ember',kl:'up',t:R`1 = 2 \cdot 43 - 5 \cdot 17`,n:`Read back.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{[17]^{-1} = [38]}`,n:`On the clock of 43.`}
-],{title:'The slides · the undo found · ← → keys work'});
+  {k:'ember',kl:'one piece',t:R`c = 1`,n:`Joined.`},
+  {k:'ember',kl:'no cycle',t:R`\text{forest}`,n:`Each piece a tree.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|E| = n - c}`,n:`Two give the third.`}
+],{title:'The slides · two of three · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'mark',t:R`(\mathbb Z/n)^\times`,n:`Hours with an undo.`},
-  {k:'ember',kl:'products',t:R`([a][b])^{-1} = [b]^{-1}[a]^{-1}`,n:`19c.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{(\mathbb Z/n)^\times \text{ is a group}}`,n:`Under times.`}
-],{title:'The slides · units · ← → keys work'});
+  {k:'ember',kl:'start',t:R`H = G`,n:`In one piece.`},
+  {k:'ember',kl:'drop',t:R`\text{a link of a cycle}`,n:`Still one piece.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a spanning tree}}`,n:`The recipe stops.`}
+],{title:'The slides · spanning · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'prime',t:R`0 \lt a \lt p \Rightarrow \gcd(a, p) = 1`,n:`Every hour but [0].`},
-  {k:'ember',kl:'not prime',t:R`[3][5] = [0] \text{ on } \mathbb Z/15`,n:`No undo.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\mathbb Z/p \text{ is a field}}`,n:`Exactly then.`}
-],{title:'The slides · prime clocks · ← → keys work'});
+  {k:'ember',kl:'take',t:R`\text{the smallest end}`,n:`Write its neighbour.`},
+  {k:'ember',kl:'repeat',t:R`n - 2 \text{ times}`,n:`Two dots left.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{n^{n-2} \text{ trees}}`,n:`A matching with the lists.`}
+],{title:'The slides · leaf code · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>
