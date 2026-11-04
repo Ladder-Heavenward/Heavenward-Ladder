@@ -1516,11 +1516,25 @@ function rungOf(r){ const M=window.LADMAP||[]; for(const [fl,rungs] of M) for(le
 function floorOf(fl){ const F=(window.LADMAP||[]).find(x=>x[0]===fl); return F?{fl,rungs:F[1].map(x=>x[0])}:null; }
 /* pools */
 const CM=s=>(window.LADDER_CARDMAP||{})[s]||[null,null,0];
-async function stepPool(stem){ const [tag,deck]=CM(stem); const out=[];
-  if(deck){ await script('cards/'+deck+'.js',()=>window.LADDER_CARDS&&window.LADDER_CARDS[tag]);
-    (window.LADDER_CARDS&&window.LADDER_CARDS[tag]||[]).forEach((c,i)=>out.push({id:tag+'#'+i,q:c.q,a:c.a,w:c.w||[],why:c.why||'',tag})); }
-  if(tag){ await rand(); const R=window.LadderRandomizer; (R&&R.QP||[]).filter(P=>P.step===tag).forEach(P=>{ for(let k=0;k<4;k++){ let x=null; for(let t=0;t<20&&!x;t++) x=P.make(); if(x) out.push({id:x.index,q:x.lines.map(l=>l[0]).join('\n')+'\n'+x.ask,a:x.right,w:x.opts.filter(o=>o!==x.right),why:x.why,html:x.html,tag}); } }); }
+/* 0.3.3 (Andrew 21:07): the stick populates itself from the techniques the step offers (tech/rNN.js, from the techs read),
+   with the laundry's question pools for the step; the crosswalk cards fill in only where a step offers fewer than six. */
+const techFile=stem=>{ const m=String(stem).match(/^r(\d\d)/); return m?'tech/r'+m[1]+'.js':null; };
+async function techOf(stem){ const f=techFile(stem); if(!f) return []; await script(f,()=>window.LADDER_TECH&&window.LADDER_TECH[stem]); return (window.LADDER_TECH||{})[stem]||[]; }
+function techQs(stem,own,rungAll){ const out=[]; const others=rungAll.filter(x=>x[0]!==own[0]);
+  own.forEach((t,i)=>{ if(t[2]==='axiom') return; const dn=shuffle(rungAll.filter(x=>x[0]!==t[0]&&x[1]!==t[1])).slice(0,3); if(dn.length<3) return;
+    out.push({id:'t:'+stem+'#'+i+'n', q:'Which technique says this?\n“'+t[1]+'”', a:t[0], w:dn.map(x=>x[0]), why:'It is '+t[0]+', built at '+stem.replace(/^r0?/,'')+'.', tag:stem});
+    out.push({id:'t:'+stem+'#'+i+'w', q:'What does '+t[0]+' say?', a:t[1], w:dn.map(x=>x[1]), why:t[0]+': '+t[1], tag:stem}); });
   return out; }
+async function stepTech(stem){ const own=(await techOf(stem)).map(x=>[x[0],x[1],x[2]]); if(!own.length) return [];
+  const T=window.LADDER_TECH||{}, rp=String(stem).slice(0,3), all=[]; Object.keys(T).forEach(k=>{ if(k.slice(0,3)===rp) T[k].forEach(x=>all.push(x)); });
+  return techQs(stem,own,all); }
+async function cardsOf(stem){ const [tag,deck]=CM(stem); const out=[]; if(!deck) return out;
+  await script('cards/'+deck+'.js',()=>window.LADDER_CARDS&&window.LADDER_CARDS[tag]);
+  (window.LADDER_CARDS&&window.LADDER_CARDS[tag]||[]).forEach((c,i)=>out.push({id:tag+'#'+i,q:c.q,a:c.a,w:c.w||[],why:c.why||'',tag})); return out; }
+async function qpOf(stem){ const [tag]=CM(stem); const out=[]; if(!tag) return out; await rand(); const R=window.LadderRandomizer;
+  (R&&R.QP||[]).filter(P=>P.step===tag).forEach(P=>{ for(let k=0;k<4;k++){ let x=null; for(let t=0;t<20&&!x;t++) x=P.make(); if(x) out.push({id:x.index,q:x.lines.map(l=>l[0]).join('\n')+'\n'+x.ask,a:x.right,w:x.opts.filter(o=>o!==x.right),why:x.why,html:x.html,tag}); } }); return out; }
+async function stepPool(stem){ let out=(await stepTech(stem)).concat(await qpOf(stem));
+  if(out.length<6) out=out.concat(await cardsOf(stem)); return out; }
 const pick=(arr,n)=>shuffle(arr.slice()).slice(0,n);
 async function draw(scope,key){
   if(scope==='step') return pick(await stepPool(key),6);
@@ -1562,7 +1576,7 @@ async function sit(scope,key,opts){ opts=opts||{}; close();
     box.querySelector('.sk-again').onclick=()=>{ if(pass) close(); else sit(scope,key,opts); };
     if(window.__barStats) window.__barStats(); if(opts.done) opts.done(pass); };
   show(); }
-window.LadderStick={sit,read,certKey,where,rungOf,floorOf,stepPool,draw,maps};
+window.LadderStick={sit,read,certKey,where,rungOf,floorOf,stepPool,draw,maps,stepTech,techOf,techQs};
 })();
 
 /* ---- 0.3.1 measure into (Andrew 20:25): a small ruler on the index rows you have not reached or finished,

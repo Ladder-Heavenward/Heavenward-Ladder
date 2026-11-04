@@ -336,18 +336,18 @@ function strayDue(){ const day=new Date().toISOString().slice(0,10); let s=get('
   if(!s||s.day!==day){ s={day,due:poisson(0.25),served:0}; put('rand:strays',s); } return s; }
 
 function build(){
-  const off=get('rand:off',{});
-  if(!LINKS.some(l=>l.open())&&!CARDP.some(P=>P.open())) return {closed:'The laundry opens with 0b, the step that earns the first techniques for sameness, and fills as you pass measuring sticks.'};
+  const off=get('rand:off',{}), isOff=P=>!!(off['step:'+P.step]||off[P.id]);
+  if(!LINKS.some(l=>l.open())&&!QP.some(P=>P.open())&&!CARDP.some(P=>P.open())) return {closed:'The laundry opens with the crosswalk of the first step you reach, and its technique pools open as you pass measuring sticks.'};
   const openS=SEEDS.filter(s=>s.open()), openL=LINKS.filter(l=>l.open());
-  let seeds=openS.filter(s=>!off[s.id]), links=openL.filter(l=>!off[l.id]);
-  const qps=QP.filter(P=>P.open()&&!off[P.id]), cps=CARDP.filter(P=>P.open()&&!off[P.id]&&(window.LADDER_CARDS||{})[P.step]), linkOK=seeds.length&&links.length;
-  if(!linkOK&&!qps.length&&!cps.length) return {closed:seeds.length||openS.length||qps.length?'Pick at least one claim pool and one technique pool, or one question pool, below.':'The laundry’s claim and question pools open as you pass measuring sticks: finish a step, then sit its stick from the toolbox.'};
+  let seeds=openS.filter(s=>!isOff(s)), links=openL.filter(l=>!isOff(l));
+  const qps=QP.filter(P=>P.open()&&!isOff(P)), cps=CARDP.filter(P=>P.open()&&!isOff(P)&&P.ready()), linkOK=seeds.length&&links.length;
+  if(!linkOK&&!qps.length&&!cps.length) return {closed:seeds.length||openS.length||qps.length?'Pick at least one claim pool and one technique pool, or one question pool, below.':'Every step is switched off below. Switch one on.'};
   const used=get('rand:seen',{});
-  const st=strayDue(), offL=openL.filter(l=>off[l.id]), offS=openS.filter(s=>off[s.id]);
+  const st=strayDue(), offL=openL.filter(l=>isOff(l)), offS=openS.filter(s=>isOff(s));
   let stray=false;
   if(st.due>st.served&&(offL.length||offS.length)){ stray=true; if(offL.length) links=offL; if(offS.length&&!offL.length) seeds=offS; }
   const last=get('rand:last',[]);
-  if(cps.length&&(!stray&&!(linkOK||qps.length)||Math.random()<0.4)) for(let tries=0;tries<40;tries++){ const x=cardQ(pick(cps)); if(!x||used[x.index]) continue; return x; }
+  if(cps.length&&(!stray&&!(linkOK||qps.length)||Math.random()<0.4)) for(let tries=0;tries<40;tries++){ const x=pick(cps).make(); if(!x||used[x.index]) continue; return x; }
   if(qps.length&&!stray&&(!linkOK||Math.random()<0.5)) for(let tries=0;tries<60;tries++){ const P=pick(qps), x=P.make(); if(!x||used[x.index]) continue;
     if(x.opts.length>2&&last.length>=2&&last[0]===x.right&&last[1]===x.right) continue;
     if(x.opts.filter(o=>o===x.right).length!==1) continue;
@@ -380,24 +380,21 @@ function build(){
 
 function picker(q){
   const off=get('rand:off',{}), by={};
-  SEEDS.filter(x=>x.open()).forEach(P=>(by[P.step]=by[P.step]||[]).push([P,'claims: '+P.label]));
-  LINKS.filter(x=>x.open()).forEach(P=>(by[P.step]=by[P.step]||[]).push([P,P.name.replace(/^the /,'')]));
-  QP.filter(x=>x.open()).forEach(P=>(by[P.step]=by[P.step]||[]).push([P,P.label]));
-  CARDP.filter(x=>x.open()).forEach(P=>(by[P.step]=by[P.step]||[]).push([P,P.label]));
-  const order=[...new Set(Object.keys(STEPS).concat(Object.keys(by)))];
-  const rows=order.filter(s=>by[s]).map(s=>'<p class="rzph">'+s+(STEPS[s]?' · '+esc(STEPS[s][1]):'')+'</p>'
-    +by[s].map(([P,t])=>'<label class="rzp"><input type="checkbox" data-id="'+P.id+'"'+(off[P.id]?'':' checked')+'> '+esc(t)+'</label>').join('')).join('');
-  return '<details class="rzpick"'+(q.closed?' open':'')+'><summary>pools</summary>'+rows+'</details>';
+  [...SEEDS,...LINKS,...QP,...CARDP].filter(x=>x.open()).forEach(P=>{ const b=by[P.step]=by[P.step]||new Set(); b.add(P.kind==='cards'?'crosswalk':P.kind==='sq'?'standing questions':'techniques'); });
+  const M=window.LADDER_CARDMAP||{}, stemOf=t=>{ for(const s in M) if(M[s][0]===t) return s; return STEPS[t]?STEPS[t][0]:t; };
+  const order=Object.keys(by).sort((x,y)=>stemOf(x)<stemOf(y)?-1:1);
+  const rows=order.map(t=>'<label class="rzp"><input type="checkbox" data-id="step:'+esc(t)+'"'+(off['step:'+t]?'':' checked')+'> '+esc(t)+' <span class="rzsrc">'+[...by[t]].join(', ')+'</span></label>').join('');
+  return '<details class="rzpick"'+(q.closed?' open':'')+'><summary>pools, one to a step</summary>'+(rows||'<p class="dnote">None open yet.</p>')+'</details>';
 }
 
 function render(box){
   const S=window.LadderStick;
-  if(!window.LADDER_CARDMAP&&S&&!render.maps){ render.maps=1; box.innerHTML='<p class="dnote">Gathering the pools…</p>'; S.maps().then(()=>render(box)); return; }
-  cardPools(); const wantD=CARDP.filter(P=>P.open()&&!(window.LADDER_CARDS||{})[P.step]&&!deckOnce[P.deck]);
+  if((!window.LADDER_CARDMAP||!window.LADDER_SQHAS)&&S&&!render.maps){ render.maps=1; box.innerHTML='<p class="dnote">Gathering the pools…</p>'; Promise.all([S.maps(),load('sq/has.js')]).then(()=>Promise.all((window.LADDER_SQHAS||[]).map(st=>load('sq/'+st+'.js')))).then(()=>render(box)); return; }
+  cardPools(); const wantD=CARDP.filter(P=>P.open()&&!P.ready()&&!deckOnce[P.file]);
   if(wantD.length){ box.innerHTML='<p class="dnote">Gathering the pools…</p>'; needDecks().then(()=>render(box)); return; }
   const q=build(), right=get('rand:right',0);
   if(window.MathKeys){ const off=get('rand:off',{}), K=new Set(); [...SEEDS,...LINKS,...QP].filter(P=>P.open()&&!off[P.id]).forEach(P=>(P.keys||[]).forEach(k=>K.add(k))); MathKeys.limit(K,'the laundry’s chosen pools'); }
-  if(q.closed&&!LINKS.some(l=>l.open())){ box.innerHTML='<p class="dnote">'+esc(q.closed)+'</p>'; return; }
+  if(q.closed&&!LINKS.some(l=>l.open())&&!CARDP.some(P=>P.open())){ box.innerHTML='<p class="dnote">'+esc(q.closed)+'</p>'; return; }
   const wire=()=>box.querySelectorAll('.rzpick input').forEach(i=>i.onchange=()=>{ const o=get('rand:off',{}); if(i.checked) delete o[i.dataset.id]; else o[i.dataset.id]=1; put('rand:off',o); render(box); });
   if(q.closed){ box.innerHTML='<p class="dnote">'+esc(q.closed)+'</p>'+picker(q); wire(); return; }
   box.innerHTML='<p class="dnote">Practice drawn from the pools your steps have opened. A question never comes twice. Right answers so far: <b>'+right+'</b>.</p>'
@@ -422,17 +419,36 @@ function render(box){
   box.querySelector('.rznext').onclick=()=>render(box);
 }
 
+/* 0.3.3 (Andrew 21:07): the laundry draws from three sets only, each folded into the step it came from:
+   the crosswalk (its cards, opening when you reach the step), the techniques the measuring stick draws on (the claim,
+   technique and question pools and the step's techniques, opening when you pass its stick), and the standing questions'
+   trees (their considerations, as links, opening when you finish a tree; debates add nothing). */
 SEEDS.forEach(S=>{ S.open=()=>measured(S.step); });
+LINKS.forEach(L=>{ L.open=()=>measured(L.step); });
 QP.forEach(P=>{ P.open=()=>measured(P.step); });
-/* card pools: every measured step's crosswalk cards are a seed pool of the laundry (0.3.1) */
 const CARDP=[];
-function cardPools(){ const M=window.LADDER_CARDMAP||{}; CARDP.length=0;
-  for(const st in M){ const [tag,deck,n]=M[st]; if(!deck||!n) continue; CARDP.push({id:'cards.'+tag, step:tag, deck, label:'crosswalk cards', open:()=>measured(tag)}); } return CARDP; }
+const T=()=>window.LADDER_TECH||{}, sqDone=id=>{ const r=get('sq:'+id,null); return !!(r&&r.done); };
+function cardPools(){ const M=window.LADDER_CARDMAP||{}, H=window.LADDER_SQHAS||[]; CARDP.length=0;
+  for(const st in M){ const [tag,deck,n]=M[st];
+    if(deck&&n) CARDP.push({id:'cards.'+tag, step:tag, stem:st, kind:'cards', file:'cards/'+deck+'.js', label:'crosswalk', open:()=>has(tag),
+      ready:()=>!!(window.LADDER_CARDS||{})[tag], make(){ return cardQ(this); }});
+    CARDP.push({id:'tech.'+tag, step:tag, stem:st, kind:'tech', file:'tech/'+st.slice(0,3)+'.js', label:'techniques', open:()=>measured(tag),
+      ready:()=>!!(T()[st]&&T()[st].length), make(){ return techQ(this); }});
+    if(H.includes(st)) CARDP.push({id:'sq.'+tag, step:tag, stem:st, kind:'sq', file:'sq/'+st+'.js', label:'standing questions', open(){ const S=(window.LADDER_SQ||{}); return Object.keys(S).some(id=>id.split('.')[0]===tag&&S[id].kind!=='debate'&&sqDone(id)); },
+      ready:()=>!!window.LADDER_SQ, make(){ return sqQ(this); }}); }
+  return CARDP; }
 const deckOnce={};
-function needDecks(){ const want=CARDP.filter(P=>P.open()&&!(window.LADDER_CARDS&&window.LADDER_CARDS[P.step])); const decks=[...new Set(want.map(P=>P.deck))].filter(d=>!deckOnce[d]);
-  return Promise.all(decks.map(d=>deckOnce[d]=new Promise(res=>{ const sc=document.createElement('script'); sc.src='cards/'+d+'.js'; sc.onload=sc.onerror=()=>res(); document.head.appendChild(sc); }))); }
+const load=f=>deckOnce[f]||(deckOnce[f]=new Promise(res=>{ const sc=document.createElement('script'); sc.src=f; sc.onload=sc.onerror=()=>res(); document.head.appendChild(sc); }));
+function needDecks(){ const fs=[...new Set(CARDP.filter(P=>P.open()&&!P.ready()).map(P=>P.file))].filter(f=>!deckOnce[f]); return Promise.all(fs.map(load)); }
 function cardQ(P){ const C=(window.LADDER_CARDS||{})[P.step]||[]; if(!C.length) return null; const k=rnd(C.length), c=C[k]; if(!c.w||!c.w.length) return null;
   return {index:'c:'+P.step+'#'+k, addr:P.step+'#'+k, stray:false, step:P.step, lines:[], ask:c.q, right:c.a, opts:shuffle([c.a].concat(c.w.slice(0,3))), why:c.why||'', lead:'It is '+c.a+'. '}; }
-window.LadderRandomizer={render, build, parseNames, licensers, LINKS, SEEDS, QP, measured, cardPools};
+function techQ(P){ const S=window.LadderStick; if(!S||!S.techQs) return null; const own=T()[P.stem]||[], all=[]; Object.keys(T()).forEach(k=>{ if(k.slice(0,3)===P.stem.slice(0,3)) T()[k].forEach(x=>all.push(x)); });
+  const qs=S.techQs(P.stem,own,all); if(!qs.length) return null; const c=pick(qs); const lines=String(c.q).split('\n');
+  return {index:c.id, addr:c.id.slice(2), stray:false, step:P.step, lines:lines.length>1?[[lines.slice(1).join(' '),null]]:[], ask:lines[0], right:c.a, opts:shuffle([c.a].concat(c.w.slice(0,3))), why:c.why||'', lead:''}; }
+function sqQ(P){ const S=window.LADDER_SQ||{}, ids=Object.keys(S).filter(id=>id.split('.')[0]===P.step&&S[id].kind!=='debate'&&sqDone(id)); if(!ids.length) return null;
+  const id=pick(ids), tr=S[id], ns=Object.keys(tr.n).filter(k=>(tr.n[k].c||[]).length>1); if(!ns.length) return null; const k=pick(ns), N=tr.n[k];
+  const r=N.c.find(c=>c.go||c.win); if(!r) return null;
+  return {index:'s:'+id+'#'+k, addr:id+'#'+k, stray:false, step:P.step, lines:[], ask:N.t, right:r.t, opts:shuffle(N.c.map(c=>c.t)).slice(0,4), why:r.why||'', lead:'The path goes by: '+r.t+'. '}; }
+window.LadderRandomizer={render, build, parseNames, licensers, LINKS, SEEDS, QP, measured, cardPools, CARDP};
 const pane=document.getElementById('dp-rand'); if(pane){ let box=pane.querySelector('.rzbox'); if(!box){ box=document.createElement('div'); box.className='rzbox'; pane.innerHTML=''; pane.appendChild(box); } render(box); }
 })();
