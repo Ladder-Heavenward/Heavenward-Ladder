@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The unavoidable</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40h.html">← 40h games</a><a href="r40j.html">next: 40j disorder is impossible →</a></p>
+  <div class="tags"><span class="tag proof">40i · proof</span></div>
+  <h1>The unavoidable</h1>
+  <p data-pid="205740">Seattle has more than seven hundred thousand people, and nobody has more than about a hundred and fifty thousand hairs on their head. So at least five people in Seattle have exactly the same number of hairs, and no one needs to count a single head to know it. Some facts are forced by counting alone, before anything is measured. Rung 8 used the simplest of them to prove that every fraction’s digits repeat: more letters than boxes puts two letters in one box. This step sharpens it and puts it to work on a row of numbers, where it forces a long run that only rises or only falls. Then it turns to counting what is left when some things are struck out, by adding back what was struck out twice, taking away what was added back too often, and so on. That gives the chance that when every guest at a dinner takes a coat at random, nobody gets their own: about 37 in 100, nearly the same for ten guests as for ten thousand, and the number behind it is e.</p>
+  <p class="gesture" data-pid="d43657">If more than n times k things go into n boxes, some box gets more than k. So a row of n² + 1 different numbers holds a rising run or a falling run of n + 1. To count what lies in none of several sets, take away the sizes, add back the overlaps of two, take away those of three, and on. The arrangements that move everything are n! times the sum of (−1)ᵏ/k!, the nearest whole number to n!/e.</p>
+</header>
+
+<section class="class step" data-step="40i1">
+  <h2 class="sthead"><span class="stno">40i1</span>A crowded box</h2>
+  <p data-pid="b26993">8·cb5’s pigeonhole technique put S(q) things into q boxes and found two in one. The count can be pushed.</p>
+  <p data-pid="99f407">Crowded-box technique: <b>if more than n · k things go into n boxes, some box gets more than k.</b> If every box got at most k, the boxes would hold at most n · k in all, by 4k’s separate-piles technique. With k = 1 it is the pigeonhole technique.</p>
+  <pre class="lines" data-k="ember" data-label="this step: heads of hair">
+\text{boxes: } 0, 1, \dots, 150\,000 \text{ hairs; } n = 150\,001 @@ an upper bound, generous, on hairs on one head
+\text{people: } 737\,015 \text{ in Seattle in 2020} @@ the census count
+737\,015 > 4 \cdot 150\,001 = 600\,004 @@ k = 4
+\htmlClass{new}{\text{some five people have exactly the same number of hairs}} \quad \blacksquare @@ the crowded-box technique
+  </pre>
+  <p data-pid="e705f3">Rise-or-fall technique: <b>any row of n² + 1 different numbers holds n + 1 of them, in their order in the row, that rise, or n + 1 that fall.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the rise-or-fall technique">
+L(i) = \text{the length of the longest rising run starting at place } i @@ a label for each of the n² + 1 places
+\text{if some } L(i) \ge n + 1 \text{, done; else every } L(i) \in \{1, \dots, n\} @@ suppose not
+n^2 + 1 > n \cdot n:\ \text{some } n + 1 \text{ places share a label} @@ the crowded-box technique, k = n
+i < j \text{ with } L(i) = L(j):\ \text{if } r_i < r_j \text{ then } L(i) \ge L(j) + 1 @@ put rᵢ in front of the longest rising run from j
+\htmlClass{new}{\text{so } r_i > r_j:\ \text{the } n + 1 \text{ places with one label fall}} \quad \blacksquare @@ the numbers differ
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · crowded · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">40i1.1</span><span class="ph understand">understand</span>What does the crowded-box technique say, and how is the pigeonhole technique a case of it? <br>In the rise-or-fall technique, why must two places with the same label hold falling numbers?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40i2">
+  <h2 class="sthead"><span class="stno">40i2</span>Adding back what was struck twice</h2>
+  <p data-pid="03da49">How many of the numbers 1 to 100 are divisible by none of 2, 3 and 5? Strike out the 50 even ones, the 33 multiples of 3, the 20 multiples of 5. The multiples of 6, 10 and 15 were struck twice, and the multiples of 30 three times.</p>
+  <p data-pid="d104a8">Over-and-under technique: <b>the number of members of U lying in none of A₁, …, Aₘ is |U| minus the sizes of the Aᵢ, plus the sizes of the overlaps of two, minus those of three, and so on to the overlap of all m.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the over-and-under technique">
+\text{a member of } U \text{ in none of the } A_i:\ \text{counted once, by } |U|, \text{ and nowhere else} @@ it lies in no overlap
+\text{a member in exactly } r \ge 1 \text{ of them: counted } 1 - \binom{r}{1} + \binom{r}{2} - \cdots \pm \binom{r}{r} \text{ times} @@ it lies in the overlaps of every j of its r sets, and of no others (choosing-counts-parts, 4k)
+= (1 - 1)^r = 0 @@ the two-term-power technique (4k)
+\htmlClass{new}{\text{the total counts exactly the members in none of them}} \quad \blacksquare @@ 
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: 1 to 100, worked">
+100 - (50 + 33 + 20) + (16 + 10 + 6) - 3 @@ multiples of 2, 3, 5; of 6, 10, 15; of 30, counted by dividing and rounding down
+\htmlClass{new}{= 26} \quad \blacksquare @@ 
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · over and under · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40i2.1</span><span class="ph understand">understand</span>What does the over-and-under technique say? <br>Why is a member lying in exactly r of the sets counted 0 times in all, and which technique of rung 4 shows it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40i3">
+  <h2 class="sthead"><span class="stno">40i3</span>Nobody gets their own coat</h2>
+  <p data-pid="267158">An arrangement of {1, …, n}, a shuffle in 19’s word, <i>moves everything</i> when no i is sent to i. Let Dₙ count them. With Aᵢ the arrangements keeping i where it is, an overlap of j of the Aᵢ keeps j places and arranges the other n − j freely.</p>
+  <p data-pid="056884">Wrong-coats technique: <b>Dₙ = n!(1 − 1/1! + 1/2! − ⋯ + (−1)ⁿ/n!), and for n ≥ 1 it is the whole number nearest n!/e.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the wrong-coats technique">
+D_n = \textstyle\sum_{j=0}^{n} (-1)^j \binom{n}{j} (n - j)! @@ the over-and-under technique; an overlap of j has (n − j)! members (4k)
+= n! \textstyle\sum_{j=0}^{n} \frac{(-1)^j}{j!} @@ n choose j times (n − j)! is n!/j!
+e^{-1} = \textstyle\sum_{j \ge 0} \frac{(-1)^j}{j!} @@ the exp-as-a-sum technique (22j) at −1
+\big|\tfrac{n!}{e} - D_n\big| < \tfrac{n!}{(n + 1)!} = \tfrac{1}{n + 1} \le \tfrac12 @@ the alternating bracket (22g): the error is below the first term left out
+\htmlClass{new}{D_4 = 9,\ \ D_5 = 44,\ \ D_{10} = 1\,334\,961} \quad \blacksquare @@ the nearest whole numbers to 8.83, 44.15, 1 334 960.9
+  </pre>
+  <p data-pid="5fbb53">So the chance that n guests taking coats at random all get the wrong one is Dₙ/n!, which heads to 1/e ≈ 0.3679, and is within 1/(n + 1)! of it. For ten guests it is 0.367879, already the same to six places.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · coats · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40i3.1</span><span class="ph understand">understand</span>What does the wrong-coats technique say? <br>Why is Dₙ within 1/(n + 1) of n!/e?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40i4">
+  <h2 class="sthead"><span class="stno">40i4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{737 015 people, 150 001 boxes, so some box has 5 people exactly}\,? @@ at least 5; the technique gives a floor, not a count
+\text{the rise-or-fall technique holds for } n^2 \text{ numbers}\,? @@ 3, 2, 1, 6, 5, 4, 9, 8, 7 is 9 numbers with no rise or fall of 4
+100 - (50 + 33 + 20) = -3 \text{ counts the numbers with no factor 2, 3 or 5}\,? @@ the multiples of 6, 10, 15 were struck twice; add them back, and so on
+D_n / n! \text{ falls toward 0 as the guests multiply}\,? @@ more guests, more chances for each to be wrong, and more to be right: it settles near 1/e
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40i4.1</span><span class="ph understand">understand</span>Why does the crowded-box technique give at least five people, and not exactly five? <br>Why is 100 − (50 + 33 + 20) not the count?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">40i.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{functions from } \{1, \dots, 4\} \text{ onto } \{1, 2, 3\}"></span></span>Count the functions from a set of 4 onto a set of 3 by the over-and-under technique, and check by listing how the 4 are split. <br>Give the count for n onto k as a sum.</div>
+  <div class="chq"><span class="chid">40i.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="D_0,\ \ D_1,\ \ D_2"></span></span>Find D₀, D₁ and D₂ from the formula and from the definition. Is the nearest-whole-number claim true at n = 0? <br>Prove Dₙ = (n − 1)(Dₙ₋₁ + Dₙ₋₂) by asking where n goes.</div>
+  <div class="chq"><span class="chid">40i.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="n^2 \text{ numbers}"></span></span>The rise-or-fall technique needs n² + 1 numbers. Prove n² is not enough for every n, by a row like the one in the illegal moves. <br>Which rows of 4 numbers have no rise or fall of 3?</div>
+  <div class="chq"><span class="chid">40i.5.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">4j.4.4: S(n) members into n</span></span>Rung 4 asked about S(n) things in n boxes before it had functions, and rung 8 proved the pigeonhole technique by induction on q. <br>Prove the crowded-box technique by induction instead. Which proof would you rather check? Is the pigeonhole technique a fact about counting, or about the numbers, or both?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r40h.html">← 40h · games</a><a href="r40j.html">40j · disorder is impossible →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The crowded-box technique is the generalized pigeonhole principle. The rise-or-fall technique is the Erdős–Szekeres theorem. The over-and-under technique is the inclusion–exclusion principle. Arrangements that move everything are derangements, and Dₙ is the subfactorial, written !n; the coats are the hat-check problem, or the problème des rencontres.</p>
+  <h3>Who said it first</h3>
+  <p>Pierre Rémond de Montmort counted derangements in 1708, for a card game, and Nicolaus Bernoulli and Leonhard Euler found the formula and its link with e. Abraham de Moivre wrote inclusion–exclusion in 1718; James Joseph Sylvester gave it its general form in 1883. Paul Erdős and George Szekeres proved the rise-or-fall technique in 1935, in the paper that also began 40j. The hair count goes back at least to a book of 1622 by Jean Leurechon, who made the argument for Paris.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The chance that guest i gets their own coat is 1/n, so the chance that nobody does is (1 − 1/n)ⁿ, which heads to 1/e.” Not allowed: the n events are not independent (if every guest but one has their own coat, so does the last). The answer, 1/e, is right in the limit and wrong for every n: for n = 4 the product is 0.316 and the true chance 9/24 = 0.375.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'boxes',t:R`> nk \text{ into } n`,n:`Some box has more than k.`},
+  {k:'ember',kl:'labels',t:R`L(i) \le n`,n:`Longest rise from i.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{n + 1 \text{ rise or fall}}`,n:`From n² + 1.`}
+],{title:'The slides · crowded · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'strike',t:R`- \textstyle\sum |A_i|`,n:`Once each.`},
+  {k:'ember',kl:'add back',t:R`+ \textstyle\sum |A_i \cap A_j|`,n:`Struck twice.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(1 - 1)^r = 0}`,n:`Every overlap undone.`}
+],{title:'The slides · over and under · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'overlaps',t:R`\binom{n}{j}(n-j)!`,n:`j kept in place.`},
+  {k:'ember',kl:'sum',t:R`n! \textstyle\sum (-1)^j / j!`,n:`Over and under.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{D_n \approx n!/e}`,n:`Chance 1/e.`}
+],{title:'The slides · coats · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

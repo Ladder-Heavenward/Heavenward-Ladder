@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sorting and searching</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38k.html">← 38k how long a program takes</a><a href="r38m.html">next: 38m divide and conquer →</a></p>
+  <div class="tags"><span class="tag proof">38l · proof</span></div>
+  <h1>Sorting and searching</h1>
+  <p data-pid="058e12">Two jobs take up a large share of every computer’s time: putting a list in order, and finding something in a list already in order. The rung on endless sums already counted the best-known ways. Looking up a name by checking the middle and keeping one half costs about the log of the length. Merge sort costs about the length times its log, for every length, and no sort that only compares can promise much less. This step goes further in three directions. First it proves the floor for searching, as the earlier rung proved it for sorting: no search that asks yes or no questions can do better than halving, by more than a single question. Then it counts a sort that chooses at random, the one most libraries actually use, and finds its average by the chance of the statistics floor: about one and four tenths times the floor, with almost no extra memory. And then it breaks the sorting floor, honestly, by not comparing at all. A list of ages can be sorted by counting how many people have each age, in time that grows only like the length, because the floor was about sorts that learn only by comparing, and this one learns more.</p>
+  <p class="gesture" data-pid="321259">Halving search finds an item among n in at most one more than the log of n looks, and no search by yes or no does better than the log of n plus one. Choosing the split at random sorts in about twice n times the natural log of n comparisons on average. Counting each key sorts without comparing, in time like n plus the number of keys.</p>
+</header>
+
+<section class="class step" data-step="38l1">
+  <h2 class="sthead"><span class="stno">38l1</span>No search beats halving</h2>
+  <p data-pid="1838c5">22l2 counted halving search: compare the target with the middle of the sorted list, keep the half it must be in, and go on, about log₂ n looks. The difference here is the floor. A search that learns only by asking yes-or-no questions about the items must end with one of n + 1 answers: the target is in place 1, or 2, …, or n, or nowhere.</p>
+  <p data-pid="070b70">Search-floor technique: <b>a search that learns only by yes-or-no questions needs at least log₂(n + 1) of them on some input, and halving needs at most ⌊log₂ n⌋ + 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the search-floor technique">
+\text{at most } m \text{ questions on every input} @@ suppose it
+\text{at most } 2^m \text{ different runs} @@ each answer yes or no: the answer count of 22l4
+\text{each of the } n + 1 \text{ answers needs its own run} @@ two inputs with different answers cannot share every move
+2^m \ge n + 1 \Rightarrow m \ge \log_2(n + 1) @@ log₂ rises (17d)
+\htmlClass{new}{n = 10^6:\ \ \log_2(10^6 + 1) \approx 19.93,\ \text{so } 20;\ \ \text{halving: } \lfloor 19.93 \rfloor + 1 = 20} \quad \blacksquare @@ halving meets the floor exactly
+  </pre>
+  <p data-pid="5a75ac">So halving is not merely good; for a million names nothing that asks yes or no can do better. The floor counts every search at once, the ones not yet thought of, by counting what they could learn. It says nothing about searches that learn more per question: a dictionary opened near the right letter, or 38n’s hash tables, which do not compare at all.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · search floor · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">38l1.1</span><span class="ph understand">understand</span>What does the search-floor technique say? <br>Why are there n + 1 answers and not n?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38l2">
+  <h2 class="sthead"><span class="stno">38l2</span>A sort that chooses at random</h2>
+  <p data-pid="ac8bfd">Pick an item of the list at random, the <i>pivot</i>. Compare every other item with it, putting the smaller ones on its left and the larger on its right; then sort each side the same way. The two sides need no merging. It sorts in place, with no second list, which merge sort needs. Name the items by their places in sorted order, 1 to n.</p>
+  <p data-pid="b7f0e2">Pivot-chance technique: <b>for n different items, the random-pivot sort makes on average 2(n + 1)(1 + ½ + ⋯ + 1/n) − 4n comparisons, which grows alike with 2n ln n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the pivot-chance technique">
+i < j \text{ are compared} \iff \text{the first pivot chosen among } i, i+1, \ldots, j \text{ is } i \text{ or } j @@ until then they sit on one side together; a pivot between them parts them for good; only a pivot is compared
+\text{chance } \tfrac{2}{j - i + 1} @@ each of the j − i + 1 is equally likely to be first (30l1)
+\text{average comparisons} = \textstyle\sum_{i \lt j} \tfrac{2}{j - i + 1} @@ the average of a count is the sum of the chances (30g1)
+= \textstyle\sum_{d=1}^{n-1} (n - d)\,\tfrac{2}{d + 1} = 2(n + 1)H_n - 4n @@ n − d pairs at gap d; H_n = 1 + ½ + ⋯ + 1/n
+\htmlClass{new}{n = 1000:\ \ 10\,986 \text{ on average}} \quad \blacksquare @@ worked by machine; a run of 200 sorts gave 10 986
+  </pre>
+  <p data-pid="d31fe4">Hₙ grows like ln n (17), so the average is about 2n ln n ≈ 1.39 n log₂ n: about 39% above the floor of 22l4, which at n = 1000 is log₂ 1000! ≈ 8529. The worst case is far worse, n(n − 1)/2, when every pivot is the smallest; the randomness makes that rare and says how rare. In practice the random-pivot sort is usually the fastest, because it moves fewer items and keeps them close together in memory.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · random pivot · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38l2.1</span><span class="ph understand">understand</span>What does the pivot-chance technique say? <br>Why are items i and j compared exactly when one of them is the first pivot chosen between them?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38l3">
+  <h2 class="sthead"><span class="stno">38l3</span>Sorting without comparing</h2>
+  <p data-pid="570d62">22l4’s floor was for sorts that learn about the items only by comparing two of them. Suppose instead each item is a whole number below k, an age below 120, a postcode. Then a sort can look at the number itself.</p>
+  <p data-pid="baae9c">Counting-sort technique: <b>n items, each a whole number below k, are sorted by counting how many there are of each value and then writing them out in order, in about 2n + k turns, with no comparisons.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the counting-sort technique">
+\text{for each item, add } 1 \text{ to cell } (\text{its value}) @@ n turns; k cells start at 0
+\text{running totals of the } k \text{ cells} @@ k turns: cell v now says how many items are below or at v
+\text{place each item at its total, and lower the total by } 1 @@ n turns; items of one value keep their order
+\text{no comparison of two items is made} @@ each turn reads one item’s value
+\htmlClass{new}{n = 10^6 \text{ ages below } 120:\ \ \text{about } 2\,000\,120 \text{ turns}} \quad \blacksquare @@ against about 1.85 · 10⁷ comparisons at the floor for comparing sorts
+  </pre>
+  <p data-pid="45b537">This does not break 22l4’s technique; it steps outside its supposition. Each look at a value answers a question with k possible answers, not two, so the answer count gives log_k n! looks, not log₂ n!. The price is the k cells, and the need for keys that are small numbers. Sorting the names of a city by counting would need a cell for every possible name.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · counting sort · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38l3.1</span><span class="ph understand">understand</span>What does the counting-sort technique say? <br>Why does it not contradict the floor of 22l4?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38l4">
+  <h2 class="sthead"><span class="stno">38l4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{a search for one of } n \text{ needs } \log_2 n \text{ questions}\,? @@ log₂(n + 1): the answer “nowhere” counts too
+\text{the random-pivot sort takes } 2n\ln n \text{ on every list}\,? @@ on average; its worst is n(n − 1)/2
+\text{counting sort beats } \log_2 n! \text{, so the floor is wrong}\,? @@ the floor is for sorts that learn only by comparing
+\text{counting sort is always best}\,? @@ it needs k cells; for keys with many possible values k swamps n
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38l4.1</span><span class="ph understand">understand</span>Why does counting sort not show the floor of 22l4 is wrong? <br>Why is 2n ln n not the random-pivot sort’s count on every list?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">38l.5.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">sorted list of n; target is absent or present</span></span>Build halving search as a program for 38j’s machine, in outline, and count its turns at most, worst case. <br>For n = 1000, find a target that makes it take all ⌊log₂ 1000⌋ + 1 = 10 looks.</div>
+  <div class="chq"><span class="chid">38l.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n = 3"></span></span>Run the pivot-chance technique at n = 3 and check it by listing every run of the random-pivot sort. <br>What is the chance it makes the worst count, n(n − 1)/2?</div>
+  <div class="chq"><span class="chid">38l.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="2^m \ge n + 1"></span></span>The search floor says m questions are needed. Turn it round: given any m with 2ᵐ ≥ n + 1, is there always a search that uses only m questions on every input? <br>Which of 38l1’s lines would fail if the list were not sorted?</div>
+  <div class="chq"><span class="chid">38l.5.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">a sort that rolls dice</span></span>One camp held that a program which rolls dice is no proof of anything: its count is only an average, and a bad run is possible. Another that an average with a known spread (30h) is as solid as a worst case, and often more honest about what happens. <br>Which is the random-pivot sort’s count, a deduction or a guess under the large case? Would you fly in a plane whose software sorted this way?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r38k.html">← 38k · how long a program takes</a><a href="r38m.html">38m · divide and conquer →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Halving search is binary search; its floor is the information-theoretic lower bound for search. The random-pivot sort is randomized quicksort, and Hₙ is the nth harmonic number; its average, 2(n + 1)Hₙ − 4n, is the standard result. Counting sort, repeated digit by digit, is radix sort. Sorts that learn only by comparing are comparison sorts. The crosswalk items here are AP Computer Science A 4.14 and 4.17 (linear and binary search, merge sort) and the sorting, searching and randomized-analysis items of MIT 6.006 and Stanford CS 161.</p>
+  <h3>Who said it first</h3>
+  <p>Binary search was described by John Mauchly in 1946; a version correct for every n was not published until 1960, and a famous overflow bug in common library code was found in 2006. Tony Hoare invented quicksort in 1959–60. Counting sort was used on punched-card sorting machines from Herman Hollerith’s, built for the 1890 census, and Harold Seward described it for electronic machines in 1954.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The random-pivot sort on 1000 items averaged 10 986 comparisons in a test, and the floor is 8529. So no sort can get below 10 986.” Not allowed: the floor is 8529, for every comparing sort; merge sort gets to about 8977 on its worst list. A measured average of one program says nothing about other programs, and the floor says nothing about how near any one program comes.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'answers',t:R`n + 1`,n:`n places, or nowhere.`},
+  {k:'ember',kl:'runs',t:R`2^m \ge n + 1`,n:`Yes or no each time.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{m \ge \log_2(n+1)}`,n:`Halving meets it.`}
+],{title:'The slides · search floor · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'pair',t:R`P(i, j \text{ compared}) = \tfrac{2}{j - i + 1}`,n:`First pivot between.`},
+  {k:'ember',kl:'add',t:R`\textstyle\sum_{i \lt j}`,n:`Averages add.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2(n + 1)H_n - 4n}`,n:`About 2n ln n.`}
+],{title:'The slides · random pivot · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'count',t:R`\text{cell } v \mathrel{+}= 1`,n:`n turns.`},
+  {k:'ember',kl:'totals',t:R`k \text{ turns}`,n:`Places found.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2n + k,\ \text{no comparisons}}`,n:`Outside the floor.`}
+],{title:'The slides · counting sort · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

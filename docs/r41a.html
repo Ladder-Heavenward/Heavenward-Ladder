@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Clock arithmetic</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r41.html">← 41 arithmetic works on a clock</a><a href="r41b.html">next: 41b undoing on a clock →</a></p>
+  <div class="tags"><span class="tag proof">41a · proof</span></div>
+  <h1>Clock arithmetic</h1>
+  <p data-pid="02e347">Rung five sorted the counting numbers by what is left over when you divide, and found that the leftovers can be added and multiplied as if they were numbers themselves, round a clock face. That page worked only with counting numbers, so every check went through the remainders by hand, six lines at a time. The integers are built now, and taking away always has an answer. So the same sorting can be said in one short line: two integers are alike on a clock when their difference is a whole number of turns. With that line the old checks shrink to one line each, the negatives join in, and every rule of adding and multiplying comes along to the clock at once. One rule does not come along. On some clocks two hours that are not twelve multiply to give twelve, and then cancelling fails. Which clocks those are is the first question the rung has to answer, and the answer is a matter of what the clock size shares with the hour.</p>
+  <p class="gesture" data-pid="286d67">Two integers are alike on a clock of n hours when n divides their difference. The classes of that likeness are the hours, and adding and multiplying hours is honest because a difference of products is a sum of multiples of differences. Every rule of plus and times comes along; order does not, and cancelling works only by an hour that shares nothing with the clock.</p>
+</header>
+
+<section class="class step" data-step="41a1">
+  <h2 class="sthead"><span class="stno">41a1</span>Alike on a clock</h2>
+  <p data-pid="21e284"><a href="r05cb2.html#76a375">5·cb2</a> wrote m ∼ₙ b for counting numbers that leave the same remainder on dividing by n. It could not use a difference, since in ℕ the difference m − b names a number only when b ≤ m. Rung 5 made taking away total. So the remainder can be traded for a difference.</p>
+  <p data-pid="5511a0">From here on, for integers d and m, d ∣ m means that m = dk for some integer k: <a href="r04j.html#960406">4j1</a>’s line with k an integer. And for a number n ≥ 1 and integers m and b, m ≡ b (mod n) means that n divides m − b. Read it “m is b on the clock of n”. Its accepted name is “m is congruent to b modulo n”, and n is the <i>modulus</i>, from the Latin <i>modulus</i>, a small measure: the length of one turn of the clock.</p>
+  <p data-pid="9f9996">The mark ≡ has stood until now only in basements, for two statements whose tables match (1f). From here on, on the page, it is this relation between integers, and it always has (mod n) after it. In a basement it may still mean what it meant there; there is no clash, since one side is statements and the other integers.</p>
+  <p data-pid="c5672a">Difference-test technique: <b>two counting numbers leave the same remainder on dividing by n exactly when n divides their difference.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the difference-test technique">
+m = nq + r,\ \ b = ns + t,\ \ 0 \le r, t \lt n @@ division with remainder, twice (4j7)
+m - b = n(q - s) + (r - t),\ \ -n \lt r - t \lt n @@ take away (5a); spread for times over taking away
+n \mid m - b \iff n \mid r - t @@ divides-a-multiple and divides-the-rest (4j2, 4j3), read in ℤ
+\text{the only multiple of } n \text{ strictly between } -n \text{ and } n \text{ is } 0 @@ nk with k ≠ 0 has size at least n
+\htmlClass{new}{n \mid m - b \iff r = t \iff m \sim_n b} \quad \blacksquare @@ ﹀ ∼ₙ
+  </pre>
+  <p data-pid="cf7a76">So ≡ (mod n), on counting numbers, is 5·cb2’s ∼ₙ. 38 ≡ 14 (mod 12), since 38 − 14 = 24 = 12 · 2: thirty-eight hours from midnight the clock shows what it shows fourteen hours from midnight. And now the negatives come too: −1 ≡ 11 (mod 12), since −1 − 11 = −12. An hour before midnight the clock shows eleven.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · alike on a clock · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">41a1.1</span><span class="ph understand">understand</span>What does m ≡ b (mod n) mean, and what is the modulus? <br>What does the difference-test technique say, and why is the multiple of n in its last line 0?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41a2">
+  <h2 class="sthead"><span class="stno">41a2</span>The clock of n</h2>
+  <p data-pid="d58684">≡ (mod n) is a sameness relation on ℤ. Reflexive: m − m = n · 0. Symmetric: b − m = n(−k) when m − b = nk. Transitive: (m − b) + (b − c) = m − c, and a number dividing both parts divides the sum (4j2, read in ℤ).</p>
+  <p data-pid="e1dac7">From here on, ℤ/n names the quotient set ℤ/≡ (mod n) of <a href="r05cb2.html#d533b4">5·cb2</a>, and [m] the class of m in it. 5·cb2 said the slash always has a relation after it. Here the number n stands for its relation, ≡ (mod n), so ℤ/n is short for that quotient, and nothing is divided. Its members are the <i>hours</i> of the clock of n.</p>
+  <p data-pid="3592da">Clock-hours technique: <b>ℤ/n has exactly n members, [0], [1], …, [n − 1], and every integer lies in one of them.</b> For m ≥ 0, 4j7 gives m = nq + r with r < n. For m &lt; 0, divide −m: −m = nq + r, so m = n(−q) − r, and m ≡ n − r when r &gt; 0, m ≡ 0 when r = 0. Two of [0], …, [n − 1] are never one, by the difference-test technique. So [−5] = [7] on the clock of 12, and [−12] = [0].</p>
+  <p data-pid="0a68e6">Carry-to-the-clock technique: <b>if m ≡ m′ and b ≡ b′ (mod n), then m + b ≡ m′ + b′ and mb ≡ m′b′ (mod n).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the carry-to-the-clock technique">
+m - m' = nj,\ \ b - b' = nk @@ ﹀ ≡ twice; use the somes
+(m + b) - (m' + b') = n(j + k) @@ regroup and turn-about for plus; spread for times
+mb - m'b' = m(b - b') + b'(m - m') @@ add and take away mb′ (5a)
+\phantom{mb - m'b'} = n(mk + b'j) @@ the two givens; spread for times
+\htmlClass{new}{m + b \equiv m' + b',\ \ mb \equiv m'b' \pmod n} \quad \blacksquare @@ ︿ ≡
+  </pre>
+  <p data-pid="dcba94">That is the whole of what <a href="r05cb2.html#7c41e2">5·cb2’s remainders-multiply</a> did in six lines, and the difference is the one line mb − m′b′ = m(b − b′) + b′(m − m′), which needed taking away. With 5·cb2’s well-defined-rule technique, [m] + [b] = [m + b] and [m][b] = [mb] are honest on ℤ/n, and so are powers [m]ᵏ = [mᵏ], by induction on k as there.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the clock · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41a2.1</span><span class="ph understand">understand</span>What is ℤ/n, and why does it have exactly n members? <br>What does the carry-to-the-clock technique say, and which line of its proof needed taking away?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41a3">
+  <h2 class="sthead"><span class="stno">41a3</span>Every rule comes along, but one</h2>
+  <p data-pid="cffbfe">Rules-come-along technique: <b>every rule of plus and times that is an equation between integers is true of the hours of every clock.</b> Turn-about and regroup for plus and for times, spread for times over plus, 0 changes nothing in a sum, 1 changes nothing in a product, and −[m] = [−m] = [n − m] undoes [m] in a sum. Each is a sameness between integers, and the class map keeps both operations: [m] + [b] = [m + b] and [m][b] = [mb]. So the class of one side is the class of the other.</p>
+  <pre class="lines" data-k="ember" data-label="this step: one rule carried, then put to work">
+[m]([b] + [c]) = [m][b + c] = [m(b + c)] @@ carry-to-the-clock, twice
+\phantom{[m]([b] + [c])} = [mb + mc] = [m][b] + [m][c] @@ spread for times over plus (5a); carry-to-the-clock, twice
+10 \equiv 1 \pmod 9,\ \ \text{so } 10^k \equiv 1^k = 1 @@ 9 ∣ 10 − 1; powers carry over
+d_k 10^k + \cdots + d_1 10 + d_0 \equiv d_k + \cdots + d_1 + d_0 \pmod 9 @@ carry-to-the-clock, term by term
+\htmlClass{new}{38 \cdot 47 = 1786:\ \ 2 \cdot 2 \equiv 4,\ \ 1 + 7 + 8 + 6 = 22 \equiv 4 \pmod 9} \quad \blacksquare @@ 3 + 8 = 11 ≡ 2, 4 + 7 = 11 ≡ 2: the product passes the check
+  </pre>
+  <p data-pid="0bf737">That is casting out nines, the check bookkeepers ran on long multiplications for centuries. 5·cb2.1.1 asked for it in many lines, and here it is one line about 10 and 1. A product that fails the check is wrong. A product that passes may still be wrong: 1768 passes too, since the check sees only the hour.</p>
+  <p data-pid="4fa791">The rule that does not come along is order. 4h and 5d’s “less than” is not a statement about hours. On the clock of 12, [11] + [1] = [0], so a sum of two hours can be “below” both. There is no way to order the hours that keeps adding honest, since adding [1] twelve times comes back to the start.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · rules carried · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41a3.1</span><span class="ph understand">understand</span>What does the rules-come-along technique say, and why does every rule that is an equation between integers come along? <br>Why does order not come along?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41a4">
+  <h2 class="sthead"><span class="stno">41a4</span>Where cancelling stops</h2>
+  <p data-pid="bb9b87">5d.3.1 found on the clock of four that [2][2] = [0]. On the clock of 6, [2][3] = [0], and neither is [0]. Then [2][1] = [2] = [2][4], while [1] ≠ [4]: cancelling [2] fails. In ℤ, rung 5’s cancel technique for times needed only a factor other than 0. On a clock it needs more.</p>
+  <p data-pid="50add4">Clock-cancel technique: <b>on the clock of n, [a][x] = [a][y] always gives [x] = [y] exactly when gcd(a, n) = 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the clock-cancel technique">
+\gcd(a, n) = 1,\ \ [a][x] = [a][y] @@ the first way: given
+n \mid a(x - y) @@ ﹀ ≡; spread for times over taking away
+\htmlClass{new}{n \mid x - y,\ \ [x] = [y]} @@ factor-that-shares-nothing (5h), read in ℤ
+\gcd(a, n) = d \gt 1:\ \ a = dj,\ \ n = dk,\ \ 0 \lt k \lt n @@ the other way: ﹀ gcd
+a \cdot k = djk = j \cdot n \equiv 0 = a \cdot 0 \pmod n @@ regroup and turn-about for times
+\htmlClass{new}{[a][k] = [a][0] \text{ while } [k] \ne [0]} \quad \blacksquare @@ 0 &lt; k &lt; n, so n ∤ k: cancelling [a] fails
+  </pre>
+  <p data-pid="5ed58c">So the hours that share a divisor above 1 with the clock are the ones that multiply some other hour to [0]. On the clock of 12 they are [2], [3], [4], [6], [8], [9], [10]: [4][3] = [0], [9][4] = [0]. The others, [1], [5], [7], [11], can be cancelled. 41b shows they can do more: each can be undone.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · cancelling · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41a4.1</span><span class="ph understand">understand</span>What does the clock-cancel technique say? <br>Which hours of the clock of 10 can be cancelled, and why can [4] not be?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41a5">
+  <h2 class="sthead"><span class="stno">41a5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+1 \equiv 6 \pmod 5,\ \text{so } 2^1 \equiv 2^6 \pmod 5\,? @@ 2 against 64 ≡ 4: the class of the base carries over, the exponent is a count and does not
+2x \equiv 2y \pmod 6 \Rightarrow x \equiv y \pmod 6\,? @@ x = 1, y = 4: gcd(2, 6) = 2, and clock-cancel needs 1
+14 \equiv 2 \pmod{12},\ \text{halve: } 7 \equiv 1 \pmod{12}\,? @@ 12 ∤ 6; halving both sides halves the clock too: 7 ≡ 1 (mod 6)
+[11] \lt [12] \text{ on the clock of } 12\,? @@ [12] = [0], and no order on the hours keeps adding honest
+\mathbb Z/n \text{ is } \mathbb Z \text{ divided by } n\,? @@ it is the set of classes of ≡ (mod n): nothing is divided
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41a5.1</span><span class="ph understand">understand</span>Why does 1 ≡ 6 (mod 5) not give 2¹ ≡ 2⁶ (mod 5)? <br>Why does halving 14 ≡ 2 (mod 12) not give 7 ≡ 1 (mod 12)?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">41a.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="918\,082"></span></span>Build casting out elevens: prove that a number is, on the clock of 11, the sum of its digits taken with signs + and − in turn from the right. <br>Test this number, and find the remainder of 123 456 789 by 11 without dividing.</div>
+  <div class="chq"><span class="chid">41a.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n = 1;\ \ \text{and } m \equiv b \text{ when } 0 \mid m - b"></span></span>Find ℤ/1 and its sum and product, and which rules of plus and times are true there. Is [0] = [1] a clash? <br>Find what ≡ becomes with 0 in place of n, and what ℤ/0 would be.</div>
+  <div class="chq"><span class="chid">41a.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\sim \text{ a sameness relation on } \mathbb Z \text{ with } + \text{ and } \cdot \text{ well defined}"></span></span>The carry-to-the-clock technique says ≡ (mod n) keeps plus and times honest. Turn it round: prove that every sameness relation on ℤ that keeps both honest is ≡ (mod n) for one n ≥ 0. <br>Hint held back: look at the class of 0, and at its least positive member.</div>
+  <div class="chq"><span class="chid">41a.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">5·cb2.4.5: is −2 the set {(0, 2), (1, 3), …}?</span></span>Rung 5 asked whether an integer is the set of pairs it was built as. Ask the same of an hour. <br>Is three o’clock the integer 3, the set {…, −9, 3, 15, …}, or neither? When a clock in Bozeman and a clock in Seattle both show three, is it the same hour? What would settle it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r41.html">← 41 · arithmetic works on a clock</a><a href="r41b.html">41b · undoing on a clock →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>m ≡ b (mod n) is congruence modulo n, and n is the modulus. The classes are residue classes, and ℤ/n is written ℤ/nℤ, the integers modulo n. The difference-test technique says congruence modulo n is the same as having the same remainder. The rules-come-along technique says the class map is a ring homomorphism, and ℤ/nℤ a commutative ring; rung 42 names rings. Hours [a] with [a][k] = [0] and [k] ≠ [0] are zero divisors. Casting out nines and elevens are the divisibility rules for 9 and 11.</p>
+  <h3>Who said it first</h3>
+  <p>Carl Friedrich Gauss introduced the mark ≡ and the word modulus in the Disquisitiones Arithmeticae (1801), the great book whose opening definition 5·cb2 quotes. Casting out nines came to Europe from Indian and Arabic arithmetic; Leonardo of Pisa (Fibonacci) taught it in the Liber Abaci (1202).</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“[2][3] = [0] on the clock of 6, so 6 divides 2 · 3, so 6 divides 2 or 3, by prime-divides-a-factor.” Not allowed: 4j14’s technique needs a prime, and 6 is not one. Its failure here is exactly the clock-cancel technique’s second half.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'difference',t:R`m \equiv b \pmod n \iff n \mid m - b`,n:`One line.`},
+  {k:'ember',kl:'counting numbers',t:R`\iff m \sim_n b`,n:`5·cb2’s remainders.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{-1 \equiv 11 \pmod{12}}`,n:`Negatives join.`}
+],{title:'The slides · alike on a clock · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'hours',t:R`\mathbb Z/n = \{[0], \ldots, [n-1]\}`,n:`Every integer in one.`},
+  {k:'ember',kl:'carry',t:R`mb - m'b' = m(b - b') + b'(m - m')`,n:`One line.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{[m][b] = [mb] \text{ is honest}}`,n:`Well defined.`}
+],{title:'The slides · the clock · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'a rule',t:R`[m]([b] + [c]) = [m][b] + [m][c]`,n:`From ℤ.`},
+  {k:'ember',kl:'nines',t:R`10 \equiv 1 \pmod 9`,n:`Digits add.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{38 \cdot 47 \equiv 2 \cdot 2 \pmod 9}`,n:`The check.`}
+],{title:'The slides · rules carried · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'fails',t:R`[2][3] = [0] \text{ on } \mathbb Z/6`,n:`Neither is [0].`},
+  {k:'ember',kl:'works',t:R`\gcd(a, n) = 1`,n:`Factor that shares nothing.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{[a][x] = [a][y] \Rightarrow [x] = [y]}`,n:`Exactly then.`}
+],{title:'The slides · cancelling · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

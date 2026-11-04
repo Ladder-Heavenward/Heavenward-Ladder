@@ -61,11 +61,11 @@ const PK='pages:done';
 function localPages(){ try{ return JSON.parse(LS.getItem(PK)||'{}')||{}; }catch(e){ return {}; } }
 function saveLocalPages(m){ try{ LS.setItem(PK,JSON.stringify(m)); }catch(e){} }
 let pchain=Promise.resolve();
-MarksSync.reportPage=function(stem,done,any,opt,has){
-  const o=(opt===undefined)?true:!!opt, h=!!has;
+MarksSync.reportPage=function(stem,done,any,opt,has,ch){
+  const o=(opt===undefined)?true:!!opt, h=!!has, cn=ch?+ch.n||0:0, cd=ch?+ch.d||0:0;
   const m=localPages(); const cur=m[stem];
-  if(cur&&!!cur.v===!!done&&!!cur.a===!!any&&(cur.o!==false)===o&&!!cur.h===h) return;
-  m[stem]={v:!!done,a:!!any,o:o,h:h,t:Date.now()}; saveLocalPages(m);
+  if(cur&&!!cur.v===!!done&&!!cur.a===!!any&&(cur.o!==false)===o&&!!cur.h===h&&(+cur.cn||0)===cn&&(+cur.cd||0)===cd) return;
+  m[stem]={v:!!done,a:!!any,o:o,h:h,cn:cn,cd:cd,t:Date.now()}; saveLocalPages(m);
   pchain=pchain.then(async()=>{ const db=await waitDb(); if(!db) return; let ref; try{ ref=db.doc('marks/_pages'); }catch(e){ return; }
     let body={}; try{ const sn=await ref.get(); body=sn.exists?(sn.data()||{}):{}; }catch(e){ return; }
     const pages=(body.pages&&typeof body.pages==='object')?body.pages:{};
@@ -76,7 +76,7 @@ MarksSync.reportPage=function(stem,done,any,opt,has){
 MarksSync.pages=async function(){
   const m=localPages(); const db=await waitDb(); if(!db) return m;
   try{ const sn=await db.doc('marks/_pages').get(); const body=sn.exists?(sn.data()||{}):{}; const pages=(body.pages&&typeof body.pages==='object')?body.pages:{};
-    Object.keys(pages).forEach(k=>{ const r=pages[k]; if(!m[k]||(+r.t||0)>(+m[k].t||0)) m[k]={v:!!r.v,a:!!r.a,o:r.o!==false,h:!!r.h,t:+r.t||0}; }); saveLocalPages(m); }catch(e){}
+    Object.keys(pages).forEach(k=>{ const r=pages[k]; if(!m[k]||(+r.t||0)>(+m[k].t||0)) m[k]={v:!!r.v,a:!!r.a,o:r.o!==false,h:!!r.h,cn:+r.cn||0,cd:+r.cd||0,t:+r.t||0}; }); saveLocalPages(m); }catch(e){}
   return m;
 };
 })();

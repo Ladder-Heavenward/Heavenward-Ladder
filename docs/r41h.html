@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Clock arithmetic by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r41g.html">← 41g primes are endless and thin</a><a href="r41i.html">next: 41i clock powers and secret keys →</a></p>
+  <div class="tags"><span class="tag tech">41h · technique</span></div>
+  <h1>Clock arithmetic by hand</h1>
+  <p data-pid="f81f5e">The proof steps of this rung said what is true on a clock. This step is about how long it takes to find out. A power with an exponent of three hundred digits cannot be reached by multiplying one more time, and one more, since the count of products would be a number of three hundred digits too, and no machine there will ever be could finish. Yet a pocket calculator can do it in a blink. The trick is to square: square once and the exponent doubles, square ten times and it has gone up a thousandfold. Write the exponent in twos, square for each place, and multiply in the places that hold a one. The count of products is about twice the number of places, so a power with a three hundred digit exponent takes about two thousand products. The gcd algorithm is fast for the same kind of reason: its remainders halve at least every two rounds. And a power on a big clock can be split onto small clocks, cut down there, and put back.</p>
+  <p class="gesture" data-pid="2c1bb7">Write the exponent in twos; square once per place and multiply where a place holds one. That takes at most about twice the log base two of the exponent in products. The gcd algorithm halves its remainder every two rounds. Splitting a clock into prime power clocks lets each exponent be cut before the work starts.</p>
+</header>
+
+<section class="class step" data-step="41h1">
+  <h2 class="sthead"><span class="stno">41h1</span>Square, then multiply</h2>
+  <p data-pid="345911">4i wrote every number in twos: 218 = 128 + 64 + 16 + 8 + 2, written 11011010. 4g’s powers-add-their-counts technique turns that sum into a product of powers whose exponents are powers of 2, and each of those is the square of the one before.</p>
+  <p data-pid="a287c6">Square-and-multiply technique: <b>to find aᵏ on the clock of n, square a again and again to get a, a², a⁴, a⁸, …, each on the clock, and multiply together those whose places in k written in twos hold a 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: 3²¹⁸ on the clock of 1000">
+3,\ 9,\ 81,\ 6561 \equiv 561,\ 561^2 \equiv 721,\ 721^2 \equiv 841,\ 841^2 \equiv 281,\ 281^2 \equiv 961 @@ 3 to the powers 1, 2, 4, …, 128, each the square of the last, kept below 1000
+218 = 2 + 8 + 16 + 64 + 128 @@ the places of 11011010 that hold a 1
+9 \cdot 561 = 5049 \equiv 49,\ \ 49 \cdot 721 \equiv 329 @@ the places 2, 8, 16
+329 \cdot 281 \equiv 449,\ \ 449 \cdot 961 \equiv 489 @@ the places 64 and 128
+\htmlClass{new}{3^{218} \equiv 489 \pmod{1000}} \quad \blacksquare @@ seven squarings and four products
+  </pre>
+  <p data-pid="fb1792">No number above 961 · 961, under a million, was ever needed. The power 3²¹⁸ has 105 digits; its last three are 489.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · square and multiply · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">41h1.1</span><span class="ph understand">understand</span>What does the square-and-multiply technique say? <br>Which powers of 3 are multiplied to give 3²¹⁸, and why those?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41h2">
+  <h2 class="sthead"><span class="stno">41h2</span>How many products</h2>
+  <p data-pid="9df6f8">Power-cost technique: <b>the square-and-multiply technique finds aᵏ on a clock with at most 2⌊log₂ k⌋ products of hours.</b> k written in twos has ⌊log₂ k⌋ + 1 places. There is one squaring for each place after the first, and at most one product for each place after the first that holds a 1.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the cost, counted">
+k \lt 10^{300} \Rightarrow \log_2 k \lt 300 \log_2 10 \approx 997 @@ log of a power (17c); log₂ 10 ≈ 3.32
+\text{square-and-multiply: at most about } 1994 \text{ products} @@ the power-cost technique
+\text{one product at a time: } k - 1 \text{ products, about } 10^{300} @@ the plain road
+\htmlClass{new}{\text{a growth family of } \log k \text{ against one of } k} \quad \blacksquare @@ 38k’s families: the log is far below the power
+  </pre>
+  <p data-pid="62ffd8">Each product is of two hours below n, which for n with 600 digits takes some thousands of digit products by 4i’s rule. So the whole power is millions of digit steps, a small fraction of a second for a chip. That is what makes the next three steps possible.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the cost · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41h2.1</span><span class="ph understand">understand</span>What does the power-cost technique say, and where do the squarings and the products come from? <br>About how many products does an exponent of 300 digits need, and how many on the plain road?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41h3">
+  <h2 class="sthead"><span class="stno">41h3</span>The gcd is fast too</h2>
+  <p data-pid="400eb8">41b found undoes by the gcd algorithm. That would be useless on clocks of hundreds of digits if the algorithm took as many rounds as the numbers are large.</p>
+  <p data-pid="0ba1f2">Halving-remainders technique: <b>in the gcd algorithm, each remainder is less than half of the one two rounds before, so the algorithm on a and b, with b ≤ a, ends within about 2 log₂ b rounds.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the halving-remainders technique">
+r_{i-1} = r_i q + r_{i+1},\ \ r_{i+1} \lt r_i @@ one round (4j7)
+\text{if } r_i \le r_{i-1}/2:\ \ r_{i+1} \lt r_i \le r_{i-1}/2 @@ the remainder falls below
+\text{if } r_i \gt r_{i-1}/2:\ \ q = 1,\ \ r_{i+1} = r_{i-1} - r_i \lt r_{i-1}/2 @@ r_i fits only once
+\htmlClass{new}{r_{i+1} \lt r_{i-1}/2} @@ reason by cases
+\text{after } 2j \text{ rounds the remainder is below } b/2^j @@ induction on j
+\htmlClass{new}{\text{at most } 2\log_2 b + 1 \text{ rounds}} \quad \blacksquare @@ a remainder below 1 is 0
+  </pre>
+  <p data-pid="304291">For 1071 and 462 it took three rounds; the bound is about 18. The worst pairs are neighbours in the list 1, 1, 2, 3, 5, 8, 13, …, where every quotient is 1, and even there the count of rounds grows only like the log.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the gcd, fast · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41h3.1</span><span class="ph understand">understand</span>What does the halving-remainders technique say? <br>In which case of its proof is the quotient 1, and why does the remainder still fall below half?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41h4">
+  <h2 class="sthead"><span class="stno">41h4</span>Split the clock first</h2>
+  <p data-pid="b850bf">On the clock of 1000 = 8 · 125 the exponent-clock technique cuts the exponent on the clock of 400, and 218 is already below 400. On the two small clocks it cuts further, each on the clock of its own count of units.</p>
+  <pre class="lines" data-k="ember" data-label="this step: 3²¹⁸ again, clock by clock">
+c(8) = 4,\ 218 \equiv 2:\ \ 3^{218} \equiv 3^2 = 9 \equiv 1 \pmod 8 @@ the exponent-clock technique (41d3)
+c(125) = 100,\ 218 \equiv 18:\ \ 3^{218} \equiv 3^{18} \equiv 114 \pmod{125} @@ the same; 3¹⁸ by square-and-multiply
+x \equiv 1 \pmod 8,\ \ x \equiv 114 \pmod{125} @@ put back (41c2)
+114 + 125t \equiv 1 \pmod 8:\ \ 2 + 5t \equiv 1,\ \ t \equiv 3 @@ 114 ≡ 2 and 125 ≡ 5 on the clock of 8; [5]⁻¹ = [5]
+\htmlClass{new}{x = 114 + 375 = 489} \quad \blacksquare @@ the same last three digits as 41h1
+  </pre>
+  <p data-pid="f53098">Two roads, one answer, and the answer is checked. Splitting pays when the clock is a product of clocks whose sizes are known and the exponent is far larger than their counts of units. On a clock whose factors nobody knows, the split is not available, and 41i builds a lock on exactly that.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · split first · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41h4.1</span><span class="ph understand">understand</span>How is 3²¹⁸ found on the clocks of 8 and 125, and why may the exponent be cut there? <br>How are the two readings put back together into 489?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41h5">
+  <h2 class="sthead"><span class="stno">41h5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+3^{218} = (3^{200})(3^{18}) \text{, and } 3^{200} \text{ by } 199 \text{ products}\,? @@ allowed, and far slower: squaring reaches 3²⁵⁶ in eight products
+2^{402} \equiv 2^{2} \pmod{1000} \text{ since } c(1000) = 400\,? @@ 2 is no unit of the clock of 1000, so the exponent-clock technique does not apply: 2⁴⁰² ≡ 504, not 4
+\text{square first, and reduce at the end}\,? @@ 3¹²⁸ has 62 digits; reduce after every product, so no number passes n²
+\text{the gcd algorithm takes about } b \text{ rounds}\,? @@ at most about 2 log₂ b: the remainder halves every two rounds
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41h5.1</span><span class="ph understand">understand</span>Why may 402 not be cut to 2 in 2⁴⁰² on the clock of 1000? <br>Why reduce on the clock after every product, and not once at the end?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">41h.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="219^{96} \pmod{383}"></span></span>Build the square root that 41f.7.1 asked for: find 219⁹⁶ on the clock of 383 by the square-and-multiply technique, writing every squaring. <br>Check that its square is 219, and find the other square root.</div>
+  <div class="chq"><span class="chid">41h.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\gcd(89, 55)"></span></span>Run the gcd algorithm on these and count the rounds. Prove that neighbours in the list 1, 1, 2, 3, 5, 8, … always give quotients of 1 until the end. <br>Is 2 log₂ b near the truth for them, or is the true count nearer a smaller multiple of log₂ b? Find the multiple.</div>
+  <div class="chq"><span class="chid">41h.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="a^{15}"></span></span>Square-and-multiply takes 6 products for a¹⁵. Find a road with 5: a, a², a³, a⁶, … <br>Is square-and-multiply ever the fewest? Find a k below 100 where it is beaten by two products or more, or prove none exists.</div>
+  <div class="chq"><span class="chid">41h.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">7·then: 3↑↑4 = 3^{7\,625\,597\,484\,987}</span></span>Rung 7 found the last digit of a tower of threes by hand. Find the last three digits of 3↑↑4 two ways: square-and-multiply on the clock of 1000 with the full exponent, counting the products, and by cutting the exponent on the clock of 400 first. <br>Which road would still work for 3↑↑5? 41·cb7 takes this further.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r41g.html">← 41g · primes are endless and thin</a><a href="r41i.html">41i · clock powers and secret keys →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Square-and-multiply is binary exponentiation, or exponentiation by squaring; the power-cost technique says modular exponentiation takes O(log k) multiplications. The halving-remainders technique is a form of Lamé’s theorem (1844): the number of steps of Euclid’s algorithm is at most five times the number of decimal digits of the smaller number, the worst case being consecutive Fibonacci numbers. A shortest road to aᵏ is a shortest addition chain; finding one in general is believed to be hard.</p>
+  <h3>Who said it first</h3>
+  <p>Squaring to reach a high power is in the Chandaḥśāstra of Piṅgala (before 200 BCE), in a rule for counting metres. Gabriel Lamé proved the step bound in 1844, one of the first results counting the steps of an algorithm. Splitting the clock to cut exponents is how RSA is computed in practice (41i).</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“3²¹⁸ on the clock of 1000: 218 = 2 · 109, so 3²¹⁸ = 9¹⁰⁹, and 109 is prime, so the little technique gives 9¹⁰⁸ ≡ 1, and 3²¹⁸ ≡ 9.” Not allowed: the little technique is about a prime clock, and here the prime is the exponent, not the clock. The answer is 489.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'twos',t:R`218 = 11011010_{\text{twos}}`,n:`4i.`},
+  {k:'ember',kl:'squares',t:R`3^{2^i} \bmod 1000`,n:`Each the square of the last.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{3^{218} \equiv 489 \pmod{1000}}`,n:`Eleven products.`}
+],{title:'The slides · square and multiply · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'places',t:R`\lfloor \log_2 k \rfloor + 1`,n:`k in twos.`},
+  {k:'ember',kl:'products',t:R`\le 2\lfloor \log_2 k \rfloor`,n:`Squares and ones.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\approx 2000 \text{ against } 10^{300}}`,n:`Logs, not powers.`}
+],{title:'The slides · the cost · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'two cases',t:R`r_i \le r_{i-1}/2 \text{ or } q = 1`,n:`Either way.`},
+  {k:'ember',kl:'halving',t:R`r_{i+1} \lt r_{i-1}/2`,n:`Two rounds.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\le 2\log_2 b + 1 \text{ rounds}}`,n:`Logs again.`}
+],{title:'The slides · the gcd, fast · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'small clocks',t:R`3^{218} \equiv 1 \pmod 8,\ \equiv 114 \pmod{125}`,n:`Exponents cut.`},
+  {k:'ember',kl:'put back',t:R`114 + 125t,\ t \equiv 3`,n:`41c.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{489 \text{ again}}`,n:`Checked.`}
+],{title:'The slides · split first · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

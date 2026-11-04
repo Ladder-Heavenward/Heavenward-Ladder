@@ -21,7 +21,7 @@
 table.tt td.l{text-align:left}
 
 </style>
-<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
 <div class="wrap">
 
 <header class="top">
@@ -29,7 +29,7 @@ table.tt td.l{text-align:left}
   <div class="tags"><span class="tag bio">30·bio · biology</span></div>
   <h1>How does a gene spread through a population?</h1>
   <p data-pid="cfeeb5">How does a gene spread through a population? The threespine stickleback is a small fish of the coast, from the Salish Sea down into California. In the sea it wears a row of bony plates along each side. In the lakes of British Columbia, cut off from the sea when the glaciers melted, the same fish wears only a few. The form of the gene for few plates is rare in the sea, perhaps one copy in a hundred, and in lake after lake it has become nearly the only form. How does a form of a gene go from rare to everywhere? And when a form is lost, as nearly every variant has been lost from the island foxes off the coast of southern California, what took it away? What makes the question hard is that two forces work at once. Selection favours the form that leaves more young, and pushes steadily. Chance decides which parents happen to leave young at all, and it pushes every which way, hardest in small populations. Rung five counted one cross of peas. This page follows a whole population, generation after generation, with rung thirty’s chance as size, averages and fair games, and asks which force did the work.</p>
-  <p class="gesture" data-pid="1d00bc">Mix the eggs and pollen of a whole population at random, and the three kinds of plant come out in shares fixed by the share of each form of the gene, and those shares then stay put. Give one form an edge in leaving young, and its odds against the other grow by a fixed factor each generation, so it spreads along a rising curve that is slow at both ends. In general the share of a form moves uphill on the population’s average fitness, and rests at the tops: when the mixed kind does best, both forms are kept, in a share fixed by how much worse each pure kind does. And in a population of fixed size, chance alone makes the share of a form a fair game. Its average stays put, its spread grows, and the mixing of forms drains away by a fixed share each generation, until one form is everywhere. The chance that a form ends up everywhere is exactly its share at the start.</p>
+  <p class="gesture" data-pid="1d00bc">Mix the eggs and pollen of a whole population at random, and the three kinds of plant come out in shares fixed by the share of each form of the gene, and those shares then stay put. Give one form an edge in leaving young, and its odds against the other grow by a fixed factor each generation, so it spreads along a rising curve that is slow at both ends. In general the share of a form moves uphill on the population’s average fitness, and rests at the tops: when the mixed kind does best, both forms are kept, in a share fixed by how much worse each pure kind does. And in a population of fixed size, chance alone makes the share of a form a fair game. Its average stays put, its spread grows, and the mixing of forms drains away by a fixed share each generation, until one form is everywhere. The chance that a form ends up everywhere is exactly its share at the start. Genes on one strand travel together and are sent out mixed at a share that never reaches a half, and a gene on the X shows in men at its share and in women at its square.</p>
 </header>
 
 <section class="class step" data-step="30bio1">
@@ -161,15 +161,59 @@ p' = p + s\,? @@ the edge multiplies the odds by 1 + s; it does not add s to the
   </section>
 </section>
 
+<section class="class step" data-step="30bio6">
+  <h2 class="sthead"><span class="stno">30bio6</span>Genes on one strand travel together</h2>
+  <p data-pid="52f9be">5·bio’s peas sorted two genes apart from each other. That holds for genes on different strands of DNA. Two genes on one strand are passed on together, unless, while eggs and pollen are made, the strand is cut and swapped with its partner somewhere between them. Take a plant with A and B on one strand and a and b on the other. One swap between the genes sends out Ab or aB; no swap, or two, sends out AB or ab. Write r for the share of copies sent out mixed.</p>
+  <p data-pid="a25aeb">A law, measured along the strands of many living things, with exceptions near some places that block swaps: along a stretch of strand the swaps are many small independent chances, so their count in the stretch is 22j’s rare count, with some average m. Lay down m as the stretch’s length on the map, counted in swaps per copy.</p>
+  <p data-pid="178188">Odd-crossing technique: <b>if the swaps between two genes are a rare count with average m, the share sent out mixed is r = (1 − e^(−2m))/2, which never reaches ½; and m = −½ ln(1 − 2r).</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the odd-crossing technique">
+r = P(\text{an }\allowbreak \text{odd }\allowbreak \text{number }\allowbreak \text{of }\allowbreak \text{swaps}) @@ an even number puts each gene back with its old partner
+= e^{-m}\big(m + \tfrac{m^3}{3!} + \tfrac{m^5}{5!} + \cdots\big) @@ the rare-events technique (22j2): chance e^(−m) mᵏ/k! of k swaps
+= e^{-m}\cdot\tfrac{e^{m} - e^{-m}}{2} @@ the exp-as-a-sum technique (22j3) for e^m and e^(−m): the odd terms are half the difference
+\htmlClass{new}{r = \tfrac{1 - e^{-2m}}{2} \lt \tfrac12,\ }\allowbreak \htmlClass{new}{ \ m = -\tfrac12\ln(1 - 2r)} \quad \blacksquare @@ e^(−2m) is above 0; undo the exponential (17)
+  </pre>
+  <p data-pid="8c27ab">Count: AB/ab crossed with ab/ab gives 410 AB, 400 ab, 95 Ab and 95 aB young, so r = 190/1000 = 0.19 and m = −½ ln 0.62 ≈ 0.24, 24 units on the map, where genes on different strands would give r = ½. Map lengths add along a strand, since the counts in two stretches that do not overlap are independent and add (30g). Genes A, B, C with r = 0.1 between each neighbouring pair are 11.2 and 11.2 units apart, 22.3 from A to C, and r from A to C is 0.18, not 0.2. Shares sent out mixed do not add; map lengths do; and over short stretches, where r ≈ m, the two agree.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · genes on one strand travel together · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·bio.6.1</span><span class="ph understand">understand</span>Why are two genes on one strand sent out mixed only by an odd number of swaps? <br>What does the odd-crossing technique say, and why do map lengths add when the shares sent out mixed do not?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30bio7">
+  <h2 class="sthead"><span class="stno">30bio7</span>A gene on the X</h2>
+  <p data-pid="b58b04">A woman carries two X strands, one from each parent; a man carries one X, from his mother, and a Y from his father. A gene on the X with no partner on the Y comes in two copies in women and one in men. Let q be the share of its copies, in the whole pool, that are the form a, and let a show only in a double dose in women.</p>
+  <p data-pid="6486c6">X-share technique: <b>if copies join at random, a form a of a gene on the X shows in men at its share q and in women at q², so men show it 1/q times as often; a mother with one copy passes it to half her sons, who show it, and to half her daughters, who carry it.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the X-share technique">
+P(\text{a }\allowbreak \text{man }\allowbreak \text{shows } a) = q @@ his one X is one draw from the pool (30f)
+P(\text{a }\allowbreak \text{woman }\allowbreak \text{shows } a) = q \cdot q = q^2 @@ two independent draws, as in the one-round-rest technique (30·bio.1)
+X^AX^a \times X^AY:\ \ \text{sons } \tfrac12\,X^aY,\ \allowbreak \ \text{daughters } \tfrac12\,X^AX^a @@ 5·bio’s square; a son’s X is his mother’s
+\text{red-green }\allowbreak \text{colour }\allowbreak \text{blindness}:\ \ q \approx 0.08,\ \allowbreak \ q^2 \approx 0.0064 @@ about 8 men in 100 of northern European descent
+\htmlClass{new}{\tfrac{q}{q^2} = \tfrac1q = 12.5} \quad \blacksquare @@ the X-share technique: twelve men for each woman
+  </pre>
+  <p data-pid="6f87b2">Measured, about 0.5 women in 100 have red-green colour blindness, near the technique’s 0.64; the gap is in part that the form is several forms at two genes side by side, and a woman with one of each sees normally. A father never passes such a form to his son, whose X came from the mother, and he passes it to every daughter, who carry it unseen to half their sons. So a form that hides in women shows a generation later in their sons, as haemophilia did in the royal families of Europe. Rung 36 finds what a missing cone does to the colours such a man sees.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · a gene on the X · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·bio.7.1</span><span class="ph understand">understand</span>Why does a form on the X show in men at its share q but in women at q²? <br>What does the X-share technique say about the sons and daughters of a mother who carries one copy?</li>
+    </ol>
+  </section>
+</section>
+
 <section class="challenge themeend">
   <div class="eyebrow">Special challenges · there if you want them</div>
   <h2>Special challenges</h2>
-  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
-  <div class="chq"><span class="chid">30·bio.6.1</span><span class="tagq">build</span>Build a population in which an allele with no edge spreads to every copy faster than drift alone would carry it. <br>Which condition of the one-round-rest technique does it break?</div>
-  <div class="chq"><span class="chid">30·bio.6.2</span><span class="tagq">edge</span>Find what the fix-chance and shrinking-mix techniques give as N grows without bound. <br>Find what the odds-growth technique gives as s heads to 0, and which force wins when s is about 1/(2N).</div>
-  <div class="chq"><span class="chid">30·bio.6.3</span><span class="tagq">converse</span>If a sample shows shares close to p², 2pq, q², must the mixing have been random?</div>
-  <div class="chq"><span class="chid">30·bio.6.4</span><span class="tagq">reroute</span>Find the fix-chance technique a second way for N = 1: write the chance of ending at all A from each count 0, 1, 2, and solve the three equations, as 30k’s ruin-chance technique did.</div>
-  <div class="chq"><span class="chid">30·bio.6.5</span><span class="tagq">seam</span>One side holds that most of the differences between the genes of two species were spread by drift: changes that made no difference to fitness, carried to every copy by chance, at a steady pace like a clock. The other holds that selection did most of the work, and that a change which looks like it makes no difference has simply not been understood yet. Both sides read the same sequences. <br>What count would tell them apart?</div>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">30·bio.8.1</span><span class="tagq">build</span>Build a population in which an allele with no edge spreads to every copy faster than drift alone would carry it. <br>Which condition of the one-round-rest technique does it break?</div>
+  <div class="chq"><span class="chid">30·bio.8.2</span><span class="tagq">edge</span>Find what the fix-chance and shrinking-mix techniques give as N grows without bound. <br>Find what the odds-growth technique gives as s heads to 0, and which force wins when s is about 1/(2N).</div>
+  <div class="chq"><span class="chid">30·bio.8.3</span><span class="tagq">converse</span>If a sample shows shares close to p², 2pq, q², must the mixing have been random?</div>
+  <div class="chq"><span class="chid">30·bio.8.4</span><span class="tagq">reroute</span>Find the fix-chance technique a second way for N = 1: write the chance of ending at all A from each count 0, 1, 2, and solve the three equations, as 30k’s ruin-chance technique did.</div>
+  <div class="chq"><span class="chid">30·bio.8.5</span><span class="tagq">seam</span>One side holds that most of the differences between the genes of two species were spread by drift: changes that made no difference to fitness, carried to every copy by chance, at a steady pace like a clock. The other holds that selection did most of the work, and that a change which looks like it makes no difference has simply not been understood yet. Both sides read the same sequences. <br>What count would tell them apart?</div>
+  <div class="chq"><span class="chid">30·bio.8.6</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{shares sent out mixed: A–B } 0.15,\ \ \text{B–C } 0.20,\ \ \text{A–C } 0.29"></span></span>Build the map lengths of the three stretches by the odd-crossing technique. <br>Find which gene lies in the middle, and whether the map lengths add.</div>
+  <div class="chq"><span class="chid">30·bio.8.7</span><span class="tagq">edge</span>Find what the odd-crossing technique gives as m grows without bound, and what a measured r of 0.5 says about two genes. <br>Can counts of young show that two genes far apart on one strand are on one strand?</div>
 </section>
 <div class="themecert themeend"></div>
 
@@ -177,10 +221,10 @@ p' = p + s\,? @@ the edge multiplies the odds by 1 + s; it does not add s to the
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The one-round-rest technique is the Hardy–Weinberg principle, and a population with shares p², 2pq, q² is in Hardy–Weinberg equilibrium. w₁₁, w₁₂, w₂₂ are relative fitnesses, s and t selection coefficients, and the mixed kind’s edge is heterozygote advantage (overdominance); its shortfall is underdominance. The uphill-share technique is Wright’s formula for the change in allele frequency, and w̄ against p his adaptive landscape. The drawing of 2N copies is the Wright–Fisher model; 2pq is the heterozygosity, and N the effective population size. The fix-chance technique gives the probability of fixation of a neutral allele. The view in the seam’s first side is the neutral theory of molecular evolution, and its steady pace the molecular clock.</p>
+  <p>The one-round-rest technique is the Hardy–Weinberg principle, and a population with shares p², 2pq, q² is in Hardy–Weinberg equilibrium. w₁₁, w₁₂, w₂₂ are relative fitnesses, s and t selection coefficients, and the mixed kind’s edge is heterozygote advantage (overdominance); its shortfall is underdominance. The uphill-share technique is Wright’s formula for the change in allele frequency, and w̄ against p his adaptive landscape. The drawing of 2N copies is the Wright–Fisher model; 2pq is the heterozygosity, and N the effective population size. The fix-chance technique gives the probability of fixation of a neutral allele. The view in the seam’s first side is the neutral theory of molecular evolution, and its steady pace the molecular clock. Genes on one strand are linked, the strand is a chromosome, and the swap is crossing over; the young sent out mixed are recombinants, and r the recombination frequency. The map length is the genetic map distance, in morgans or centimorgans, and m = −½ ln(1 − 2r) is Haldane’s map function. A gene on the X is X-linked, or sex-linked, and a woman with one hidden copy is a carrier.</p>
   <h3>Who said it first</h3>
-  <p>G. H. Hardy and Wilhelm Weinberg found the resting shares independently in 1908; Udny Yule’s question about why dominant traits do not take over prompted Hardy’s letter. The MN survey is from the textbook literature of the twentieth century and should be checked against its source. Ronald Fisher, J. B. S. Haldane and Sewall Wright built the mathematics of selection and drift between 1918 and 1932; Haldane estimated the edge of the dark peppered moth near Manchester in 1924. Anthony Allison tied the sickle allele to malaria in 1954. Motoo Kimura gave the fixation chances in 1962 and proposed the neutral theory in 1968, with Jack King and Thomas Jukes (1969); Tomoko Ohta extended it to nearly neutral changes in 1973. David Kingsley’s group (Colosimo and colleagues, 2005) found the few-plates allele of the stickleback gene Eda at low shares in the sea and nearly fixed in fresh water. Robert Wayne and colleagues (1991) found almost no genetic variation among the foxes of San Nicolas Island.</p>
-  <p>In 30·bio.6.5, the neutral side is Kimura’s; the selectionist side runs from the critics of the 1970s to John Gillespie and later work finding selection in genome-wide data. The quarrel between Fisher (selection in large populations) and Wright (drift in small, divided ones, his shifting balance) is its older form.</p>
+  <p>G. H. Hardy and Wilhelm Weinberg found the resting shares independently in 1908; Udny Yule’s question about why dominant traits do not take over prompted Hardy’s letter. The MN survey is from the textbook literature of the twentieth century and should be checked against its source. Ronald Fisher, J. B. S. Haldane and Sewall Wright built the mathematics of selection and drift between 1918 and 1932; Haldane estimated the edge of the dark peppered moth near Manchester in 1924. Anthony Allison tied the sickle allele to malaria in 1954. Motoo Kimura gave the fixation chances in 1962 and proposed the neutral theory in 1968, with Jack King and Thomas Jukes (1969); Tomoko Ohta extended it to nearly neutral changes in 1973. David Kingsley’s group (Colosimo and colleagues, 2005) found the few-plates allele of the stickleback gene Eda at low shares in the sea and nearly fixed in fresh water. Robert Wayne and colleagues (1991) found almost no genetic variation among the foxes of San Nicolas Island. William Bateson, Edith Saunders and Reginald Punnett saw two genes of the sweet pea travel together in 1905. Thomas Hunt Morgan found a gene on the X of the fruit fly in 1910, and his student Alfred Sturtevant drew the first map of a strand from shares sent out mixed in 1913. J. B. S. Haldane gave the map function in 1919. Queen Victoria carried haemophilia into several royal houses of Europe.</p>
+  <p>In 30·bio.8.5, the neutral side is Kimura’s; the selectionist side runs from the critics of the 1970s to John Gillespie and later work finding selection in genome-wide data. The quarrel between Fisher (selection in large populations) and Wright (drift in small, divided ones, his shifting balance) is its older form.</p>
   <h3>Wrong moves, worked</h3>
   <pre class="lines" data-k="ember" data-label="30·bio: a worked “proof”, not allowed">
 \operatorname{E}[p' \mid p] = p @@ fine: drift is a fair game
@@ -255,6 +299,16 @@ stepper('#sl4',[
 stepper('#sl5',[
   {k:'ember',kl:'illegal',t:R`p^{\prime} = p + s\,?`,n:`The odds multiply.`}
 ],{title:'The slides · illegal · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'odd',t:R`r = P(\text{odd count of swaps})`,n:`Even counts put genes back.`},
+  {k:'ember',kl:'rare',t:R`e^{-m}\sinh m = \tfrac{1 - e^{-2m}}{2}`,n:`Rare-events (22j2).`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{r \lt \tfrac12,\ \ m = -\tfrac12\ln(1 - 2r)}`,n:`The odd-crossing technique.`}
+],{title:'The slides · genes on one strand travel together · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'men',t:R`P = q`,n:`One X, one draw.`},
+  {k:'ember',kl:'women',t:R`P = q^2`,n:`Two draws.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{men } 1/q \text{ times as often}}`,n:`The X-share technique.`}
+],{title:'The slides · a gene on the X · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

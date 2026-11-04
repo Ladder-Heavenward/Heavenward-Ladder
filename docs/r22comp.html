@@ -21,7 +21,7 @@
 table.tt td.l{text-align:left}
 
 </style>
-<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
 <div class="wrap">
 
 <header class="top">
@@ -29,7 +29,7 @@ table.tt td.l{text-align:left}
   <div class="tags"><span class="tag comp">22·comp · computing</span></div>
   <h1>Does forgetting cost energy?</h1>
   <p data-pid="975865">Does forgetting cost energy? A computer gets warm. Some of that heat comes from wires that are not perfect, and better wires could cut it. But is there a part that no engineering can remove? A memory that is wiped clean has lost something. Before, it could have held either of two things; after, it holds one. Physicists had long tied heat to the number of ways the molecules of a body can sit. What makes it hard is that a bit is information and heat is energy, and for a long time nobody could see why one should cost the other. This page shows, with counting from rung 4, logs from rung 17 and 22k’s size of the factorials, how to count the ways a thing can sit in bits, why a gas that fills its room is a matter of counting, and why wiping a bit sends a least amount of heat into the room. Then it looks back at the gates of 4·comp, and finds which of them forget.</p>
-  <p class="gesture" data-pid="47615b">The log of the number of ways a thing can sit adds when two things sit side by side, so it can be counted in bits, and a measured law ties heat to the same count. Choosing a share of many things can be done in a number of ways whose log is the count of things times a fixed fraction, by the size of the factorials. Squeezing a gas into half its room at a steady temperature turns a fixed amount of work into heat, and that heat is exactly what the lost ways are worth. A memory wiped clean loses ways in the same manner, so it must send heat into the room. A gate that sends two different inputs to the same output forgets, and pays.</p>
+  <p class="gesture" data-pid="47615b">The log of the number of ways a thing can sit adds when two things sit side by side, so it can be counted in bits, and a measured law ties heat to the same count. Choosing a share of many things can be done in a number of ways whose log is the count of things times a fixed fraction, by the size of the factorials. Squeezing a gas into half its room at a steady temperature turns a fixed amount of work into heat, and that heat is exactly what the lost ways are worth. A memory wiped clean loses ways in the same manner, so it must send heat into the room. A gate that sends two different inputs to the same output forgets, and pays. A program’s steps are counted by what it repeats, and halving a sorted list finds a name in about log₂ n of them.</p>
 </header>
 
 <section class="class step" data-step="22comp1">
@@ -161,15 +161,38 @@ W = W_1 W_2 @@ stages-multiply (4k): each way of the first with each way of the 
   </section>
 </section>
 
+<section class="class step" data-step="22comp7">
+  <h2 class="sthead"><span class="stno">22comp7</span>Counting a program’s steps</h2>
+  <p data-pid="0aa5e6">Every gate use above can cost heat, so how many uses does a job take? Count a program’s steps by what it repeats. Two sign-up sheets hold n names each: which names are on both? Program one takes each name of the first sheet and compares it with every name of the second: n comparisons for each of n names, n² in all. Program two first sorts the second sheet by merge sort, in fewer than n log₂ n + n comparisons by the halvings technique (<a href="r22l.html#22l3">22l3</a>). Then it finds each name of the first sheet by halving, as <a href="r12e.html">12e</a> halved for a root: compare with the middle name of what is left, and keep the half that could hold it.</p>
+  <p data-pid="5cdc7b">Halve-to-nothing technique: <b>a halving search of a sorted list of n items makes at most ⌊log₂ n⌋ + 1 comparisons; so program two makes fewer than 2n log₂ n + 2n, against program one’s n².</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the halve-to-nothing technique">
+H(m) \le 1 + H(\lfloor m/2 \rfloor),\ \allowbreak \ H(0) = 0 @@ one comparison with the middle leaves at most ⌊m/2⌋ items
+2^k \le m \lt 2^{k+1} \Rightarrow 2^{k-1} \le \lfloor m/2 \rfloor \lt 2^k \text{ for } k \ge 1 @@ halving lowers k by 1
+H(m) \le k + 1 = \lfloor \log_2 m \rfloor + 1 @@ induction on k (4c), from H(1) ≤ 1 + H(0) = 1
+\text{program }\allowbreak \text{two} \lt (n\log_2 n + n) + n(\log_2 n + 1) = 2n\log_2 n + 2n @@ one sort, then n searches
+\htmlClass{new}{n = 10^6:\ \ 10^{12} \text{ against }}\allowbreak \htmlClass{new}{ \text{fewer }}\allowbreak \htmlClass{new}{ \text{than } 4.2 \times 10^7} \quad \blacksquare @@ the ranking technique (22k2): n log n over n² heads to 0
+  </pre>
+  <p data-pid="4c5299">At a billion comparisons a second, program one takes 1000 s, about 17 minutes, and program two 0.04 s. Both counts grow like a power of n, or less, and such jobs are counted as reasonable. A program that tried every way of picking some of the names would take 2ⁿ steps, and at n = 60, at the same pace, that is 36 years; 22·logi meets the same wall in routes. The count, not the machine, decides which jobs can be done. And if each step wipes even one bit, the count times kT ln 2 is a floor on the heat (<a href="r22comp.html#22comp4">22·comp.4</a>). Rung 38 counts steps in full, for every program a machine of switches can follow.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · counting a program’s steps · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22·comp.7.1</span><span class="ph understand">understand</span>How are the comparisons of each program counted? <br>What does the halve-to-nothing technique say, and why does program two win for large n?</li>
+    </ol>
+  </section>
+</section>
+
 <section class="challenge themeend">
   <div class="eyebrow">Special challenges · there if you want them</div>
   <h2>Special challenges</h2>
-  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
-  <div class="chq"><span class="chid">22·comp.7.1</span><span class="tagq">build</span>Build a gate with three inputs and three outputs whose 8 rows go to 8 different outputs and which, with its third input held at 0, gives the half adder’s sum and carry.</div>
-  <div class="chq"><span class="chid">22·comp.7.2</span><span class="tagq">edge</span>Find the halved-room technique’s heat for a gas of one molecule. <br>Find what can go wrong with a pressure made of one molecule’s knocks.</div>
-  <div class="chq"><span class="chid">22·comp.7.3</span><span class="tagq">converse</span>A process sends kT ln 2 of heat into the room. Must it have wiped a bit?</div>
-  <div class="chq"><span class="chid">22·comp.7.4</span><span class="tagq">reroute</span>Find the share of the ways to place N molecules in two halves that put every molecule on the left. <br>Find the gas’s loss of entropy from that count alone, and check it against the halved-room technique’s heat over T.</div>
-  <div class="chq"><span class="chid">22·comp.7.5</span><span class="tagq">seam</span>A small being guards a door in a wall across a box of gas. It lets fast molecules through one way and slow ones the other, and the gas sorts itself into hot and cold with no work done. <br>Where is the cost paid: in looking, in remembering, or nowhere?</div>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">22·comp.8.1</span><span class="tagq">build</span>Build a gate with three inputs and three outputs whose 8 rows go to 8 different outputs and which, with its third input held at 0, gives the half adder’s sum and carry.</div>
+  <div class="chq"><span class="chid">22·comp.8.2</span><span class="tagq">edge</span>Find the halved-room technique’s heat for a gas of one molecule. <br>Find what can go wrong with a pressure made of one molecule’s knocks.</div>
+  <div class="chq"><span class="chid">22·comp.8.3</span><span class="tagq">converse</span>A process sends kT ln 2 of heat into the room. Must it have wiped a bit?</div>
+  <div class="chq"><span class="chid">22·comp.8.4</span><span class="tagq">reroute</span>Find the share of the ways to place N molecules in two halves that put every molecule on the left. <br>Find the gas’s loss of entropy from that count alone, and check it against the halved-room technique’s heat over T.</div>
+  <div class="chq"><span class="chid">22·comp.8.5</span><span class="tagq">seam</span>A small being guards a door in a wall across a box of gas. It lets fast molecules through one way and slow ones the other, and the gas sorts itself into hot and cold with no work done. <br>Where is the cost paid: in looking, in remembering, or nowhere?</div>
+  <div class="chq"><span class="chid">22·comp.8.6</span><span class="tagq">build</span>Build a program that finds whether one sheet of n names holds some name twice, in fewer comparisons than the n(n − 1)/2 of comparing every pair. <br>Count its comparisons for n = 1000.</div>
+  <div class="chq"><span class="chid">22·comp.8.7</span><span class="tagq">converse</span>A program finds whether a name is in any list of n names, comparing two names for sameness at each step, in at most ⌊log₂ n⌋ + 1 steps. Must the list have been sorted, or ordered some other way, first?</div>
 </section>
 <div class="themecert themeend"></div>
 
@@ -177,10 +200,10 @@ W = W_1 W_2 @@ stages-multiply (4k): each way of the first with each way of the 
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>S = k ln W is Boltzmann’s entropy formula, and W the number of microstates. The second law of heat is the second law of thermodynamics, and Q/T the Clausius entropy. h(p) is the binary entropy function, and the bits of a choice are its information entropy, or Shannon entropy; the share-count technique bounds lossless compression. The slow squeeze at fixed temperature is an isothermal compression. The erasure technique is Landauer’s principle, the one-molecule memory is the Szilard engine, and a gate whose rows can be run backwards is a reversible gate; the one on this page is the Toffoli gate, or controlled-controlled-not.</p>
+  <p>S = k ln W is Boltzmann’s entropy formula, and W the number of microstates. The second law of heat is the second law of thermodynamics, and Q/T the Clausius entropy. h(p) is the binary entropy function, and the bits of a choice are its information entropy, or Shannon entropy; the share-count technique bounds lossless compression. The slow squeeze at fixed temperature is an isothermal compression. The erasure technique is Landauer’s principle, the one-molecule memory is the Szilard engine, and a gate whose rows can be run backwards is a reversible gate; the one on this page is the Toffoli gate, or controlled-controlled-not. Counting a program’s steps as n grows is finding its running time, or time complexity, and n² and n log n are orders of growth; program one is a nested loop, and halving search is binary search. Counts that grow like a power of n are polynomial time, called reasonable, and 2ⁿ is exponential time.</p>
   <h3>Who said it first</h3>
-  <p>Rudolf Clausius named entropy in 1865, from heat over temperature. Ludwig Boltzmann tied it to counting the ways in the 1870s; Max Planck wrote it as S = k log W in 1900, and the formula is carved on Boltzmann’s grave in Vienna. Claude Shannon (1948) counted information in bits with the same h. Leo Szilard (1929) built the one-molecule engine on paper. Rolf Landauer, at IBM, argued in 1961 that wiping, not computing, is what must cost heat, and Charles Bennett (1973) showed that any computation can be done by gates that forget nothing. Tommaso Toffoli gave his gate in 1980. In 2012 a team in Lyon wiped a one-bit memory made of a glass bead held by laser light, and measured heat approaching kT ln 2.</p>
-  <p>In 22·comp.7.5, the small being is Maxwell’s demon (James Clerk Maxwell, 1867 in a letter, 1871 in print). Szilard (1929) and Léon Brillouin (1951) placed its cost in looking at the molecules. Bennett (1982) placed it in wiping the demon’s memory, after Landauer. John Earman and John Norton (1998 and 1999) argued that the wiping answer assumes the second law it is meant to save.</p>
+  <p>Rudolf Clausius named entropy in 1865, from heat over temperature. Ludwig Boltzmann tied it to counting the ways in the 1870s; Max Planck wrote it as S = k log W in 1900, and the formula is carved on Boltzmann’s grave in Vienna. Claude Shannon (1948) counted information in bits with the same h. Leo Szilard (1929) built the one-molecule engine on paper. Rolf Landauer, at IBM, argued in 1961 that wiping, not computing, is what must cost heat, and Charles Bennett (1973) showed that any computation can be done by gates that forget nothing. Tommaso Toffoli gave his gate in 1980. In 2012 a team in Lyon wiped a one-bit memory made of a glass bead held by laser light, and measured heat approaching kT ln 2. John Mauchly described binary search in 1946, and Derrick Lehmer gave a form for lists of every length in 1960. Donald Knuth set out the counting of a program’s steps in The Art of Computer Programming, from 1968.</p>
+  <p>In 22·comp.8.5, the small being is Maxwell’s demon (James Clerk Maxwell, 1867 in a letter, 1871 in print). Szilard (1929) and Léon Brillouin (1951) placed its cost in looking at the molecules. Bennett (1982) placed it in wiping the demon’s memory, after Landauer. John Earman and John Norton (1998 and 1999) argued that the wiping answer assumes the second law it is meant to save.</p>
   <h3>Wrong moves, worked</h3>
   <pre class="lines" data-k="ember" data-label="22·comp: a worked “proof”, not allowed">
 \text{AND forgets } \tfrac34\log_2 3 + \tfrac14\log_2 1 \approx 1.19 \text{ bits} @@ fine
@@ -247,6 +270,11 @@ stepper('#sl5',[
 stepper('#sl6',[
   {k:'ember',kl:'illegal',t:R`W_1 + W_2\,?`,n:`Ways multiply.`}
 ],{title:'The slides · illegal · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'one',t:R`n \cdot n = n^2`,n:`Every name against every name.`},
+  {k:'ember',kl:'halve',t:R`H(n) \le \lfloor\log_2 n\rfloor + 1`,n:`Half is out at each comparison.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2n\log_2 n + 2n \text{ against } n^2}`,n:`The halve-to-nothing technique.`}
+],{title:'The slides · counting a program’s steps · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

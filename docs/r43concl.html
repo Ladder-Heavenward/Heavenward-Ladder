@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Past degree four, no formula</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.cl-lock{display:none;border-left:3px solid var(--gold);background:var(--sand);padding:10px 14px;border-radius:0 4px 4px 0;max-width:66ch}
+body.cl-locked .cl-lock{display:block} body.cl-locked .cl-body{display:none}
+.cl-lock button{margin-top:6px;font-size:.8rem}
+.claim{border:1px solid var(--grid);border-left:4px solid var(--teal);background:var(--card);border-radius:0 6px 6px 0;padding:10px 16px;max-width:66ch}
+.claim p{margin:.4em 0}
+ul.cl-adds{max-width:66ch;padding-left:1.1em} ul.cl-adds li{margin:.5em 0}
+ul.cl-adds .cl-w{display:none;color:var(--muted);font-style:italic}
+ul.cl-adds li.cl-wait .cl-t{display:none} ul.cl-adds li.cl-wait .cl-w{display:inline}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r43now2.html">← 43·now2 can every symmetry group come from an equation?</a><a href="r44.html">next: 44 arrows matter more than things →</a></p>
+  <div class="tags"><span class="tag concl">43·∎ · conclusion</span></div>
+  <h1>Past degree four, no formula</h1>
+  <p class="gesture" data-pid="89fcca">The roots of an equation make a field, and its symmetries a group as large as the field’s degree. Middle fields match part-groups. A formula by roots exists exactly when the group comes apart into prime clocks, and the shuffles of five do not. Towers of square roots are what compass and straightedge reach.</p>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The conclusion · the rung's claim, in full, and its proof</div>
+  <div class="cl-lock"><p>This page opens once every question on <a href="r43i.html">43i what compass and straightedge can build</a> is ticked. The claim below is proved from the steps of this rung, so it waits for them.</p><button type="button" class="cl-peek">reviewing the ladder? open it anyway</button></div>
+  <div class="cl-body">
+  <h3>What the rung set out to show</h3>
+  <p data-pid="0fcdbb">The survey of rung 43 asked why the formulas stop at degree four. <b>An equation has a formula by roots exactly when the group of symmetries of its roots comes apart, step by step, into clocks of prime size; the shuffles of five or more roots do not, so past degree four there is no formula.</b> On the way, the same tools settle what compass and straightedge can build.</p>
+  <p data-pid="cd2e66"><a href="r43a.html">43a</a> solved the cubic and quartic. <a href="r43b.html">43b</a> showed symmetric quantities are read off the coefficients. <a href="r43c.html">43c</a> built the group of an equation and counted it; <a href="r43d.html">43d</a> matched its part-groups with middle fields. <a href="r43e.html">43e</a> took groups apart into fixed pieces, and <a href="r43f.html">43f</a> found a piece that is not a clock. <a href="r43g.html">43g</a> joined fields and groups into the test for a formula, and found a quintic with none. <a href="r43h.html">43h</a> found part-groups of every prime-power size, and <a href="r43i.html">43i</a> used them on the old constructions. This page puts the claim together.</p>
+  <h3>The claim, in full</h3>
+  <div class="claim">
+  <p data-pid="39abb1"><b>Let F be a field inside ℂ, f a polynomial over F, K its splitting field and G = Aut(K/F). Then |G| = [K : F]; H ↦ K^H is a matching of the part-groups of G with the fields between F and K, reversing containment, with [K : K^H] = |H|, and K^H is a splitting field over F exactly when H is normal, with group G/H. Every finite group has a chain of simple pieces, the same for every chain; f has a formula by roots exactly when every piece of G is a clock of prime size.</b></p>
+  <p data-pid="2336b0"><b>A₅ is simple and not turn-about, so Sₙ is not solvable for n ≥ 5, and x⁵ − 4x + 2 has group S₅ and no formula by roots, while every equation of degree at most four has one. An irreducible cubic over ℚ with three real roots has no formula by real roots. A real number is constructible exactly when it lies in a tower of square roots over ℚ, so its degree is a power of 2: ∛2, cos 20° and cos(2π/7) are not constructible, and cos(2π/17) is.</b></p>
+  </div>
+  <h3>The proof</h3>
+  <p data-pid="b073d3">Each part below is a technique already proved on a step of this rung. The proof cites them by name and joins them.</p>
+  <pre class="lines" data-k="ember" data-label="the low degrees">
+\text{a cubic shifts to } y^3 + py + q \text{ and is solved by } u + v @@ the shift-out and cube-formula techniques (43a)
+D < 0 \iff \text{three different real roots} @@ the three-real-roots technique (43a)
+\htmlClass{new}{\text{a quartic comes down to one cubic and two quadratics}} \quad \blacksquare @@ the quartic-to-cubic technique (43a)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="fields and groups">
+\text{symmetric in the roots} \Rightarrow \text{a polynomial in the coefficients} @@ the symmetric-is-coefficients and symmetric-is-rational techniques (43b)
+\mathrm{Aut}(K/F) \subseteq \text{the shuffles of the roots},\ |\mathrm{Aut}(K/F)| = [K : F] @@ the roots-to-roots and count-the-symmetries techniques (43c)
+[K : K^H] = |H|,\ \ H \leftrightarrow K^H @@ the fixed-size and middle-field techniques (43d)
+\htmlClass{new}{K^H \text{ closed} \iff H \lhd G,\ \ \mathrm{Aut}(K^H/F) \cong G/H} \quad \blacksquare @@ the normal-middle technique (43d)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="groups taken apart">
+\text{solvable passes to parts, quotients, and back} @@ the solvable-parts technique (43e)
+\text{chains of pieces exist, and their pieces are fixed} @@ the pieces and same-pieces techniques (43e)
+A_5 \text{ is simple and not turn-about} @@ the relabel, families-of-A₅ and simple-sixty techniques (43f)
+\htmlClass{new}{S_n \text{ is not solvable for } n \ge 5} \quad \blacksquare @@ the not-solvable technique (43f)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="no formula">
+\text{each root step has a turn-about group} @@ the root-step technique (43g)
+\text{a formula} \Rightarrow G \text{ solvable};\ \ G \text{ solvable} \Rightarrow \text{a formula} @@ the formula-means-solvable, turning-sum and solvable-means-formula techniques (43g)
+x^5 - 4x + 2:\ G = S_5 @@ the prime-member technique and 43g4’s count of real roots
+\text{the cubic of rung 21 needs } \mathbb C @@ the no-real-route technique (43g)
+\htmlClass{new}{\text{past degree four, no formula}} \quad \blacksquare @@ the not-solvable technique
+  </pre>
+  <pre class="lines" data-k="ember" data-label="what can be built">
+\text{prime-power groups have chains of every size; largest } p\text{-parts exist, are conjugate, and number } 1 \text{ on the clock of } p @@ the centre, prime-power-chain, largest-part and count-of-parts techniques (43h)
+\text{constructible} \Rightarrow \text{degree a power of } 2 @@ the power-of-two technique (43i)
+\sqrt[3]2,\ \cos 20^\circ,\ \cos\tfrac{2\pi}{7} \text{ have degree } 3 @@ the degree-three technique (43i)
+\htmlClass{new}{\cos\tfrac{2\pi}{17} \text{ is constructible}} \quad \blacksquare @@ the two-group and seventeen-arcs techniques (43i)
+  </pre>
+  <p data-pid="7274e5">So the rung’s claim holds: the group of an equation decides whether it has a formula by roots, and five roots are where the groups stop coming apart. Nothing in the proof is held in trust; the steps after it hold two facts, on 43l and 43·cb27.</p>
+  <h3>What the rest of the rung adds</h3>
+  <p data-pid="594efe">Each step and annex after the proof steps adds a line to the claim. A line appears here once you have finished its page.</p>
+  <ul class="cl-adds">
+    <li data-after="r43j" data-pid="8c3b68"><b><a href="r43j.html">43j solving cubics and quartics by hand</a></b>: <span class="cl-t">cubics by the sign of D, quartics by one cubic; whole answers first.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r43k" data-pid="6138b0"><b><a href="r43k.html">43k symmetry groups of equations, by hand</a></b>: <span class="cl-t">the groups of x² − 2, x³ − 2 and x⁴ − 2, and every middle field; the cubic’s group from its discriminant.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r43l" data-pid="14f503"><b><a href="r43l.html">43l what can’t be built, by hand</a></b>: <span class="cl-t">which angles cut in three, which regular figures can be built, and the pentagon built.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r43cb27" data-pid="6e68bb"><b><a href="r43cb27.html">43·cb27 groups as matrices</a></b>: <span class="cl-t">groups as grids: every representation splits, the one-stretch technique, characters, and the shakes of water.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r43phys" data-pid="2986d8"><b><a href="r43phys.html">43·phys what are particles built from?</a></b>: <span class="cl-t">kept amounts from symmetries, isospin, the families of eight and ten, quarks, binding and decay.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r43now" data-pid="e2ff51"><b><a href="r43now.html">43·now what are the building blocks of symmetry?</a></b>: <span class="cl-t">the finite simple groups listed, the largest of them, and moonshine.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r43now2" data-pid="13c43e"><b><a href="r43now2.html">43·now2 can every symmetry group come from an equation?</a></b>: <span class="cl-t">which groups come from equations over ℚ: all shuffles, the turn-about groups, the solvable groups, and what is open.</span><span class="cl-w">its line appears when you finish it.</span></li>
+  </ul>
+  <p data-pid="58cb94">That is how far a group can see into an equation. It says whether a formula exists, and it says what a compass can reach. Rung 44 asks what is left of a group, or a field, or anything, when only the maps between them are kept.</p>
+  </div>
+</section>
+
+<nav class="nextrung"><a href="r43now2.html">← 43·now2 · can every symmetry group come from an equation?</a><a href="r44.html">44 · arrows matter more than things →</a></nav>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+  const need="r43i";
+  let p={}; try{ p=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
+  let peek=false; try{ peek=sessionStorage.getItem('cl:peek')==='1'; }catch(e){}
+  const done=k=>!!(p[k]&&p[k].v);
+  function apply(){
+    const open=peek||done(need);
+    document.body.classList.toggle('cl-locked',!open);
+    document.querySelectorAll('ul.cl-adds li[data-after]').forEach(li=>li.classList.toggle('cl-wait',!(peek||done(li.dataset.after))));
+    if(open&&done(need)){ const me=(window.ladderPage?ladderPage():(location.pathname.split('/').pop()||'').replace(/\.html?$/,''));
+      if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(me,true,true,true,false);
+      else { try{ p[me]={v:true,a:true,o:true,h:false,t:Date.now()}; LS.setItem('pages:done',JSON.stringify(p)); }catch(e){} } }
+  }
+  const b=document.querySelector('.cl-peek'); if(b) b.addEventListener('click',()=>{ peek=true; try{ sessionStorage.setItem('cl:peek','1'); }catch(e){} apply(); });
+  apply();
+  try{ if(window.MarksSync&&MarksSync.pages) MarksSync.pages().then(q=>{ if(q){ p=Object.assign({},p,q); apply(); } },()=>{}); }catch(e){}
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

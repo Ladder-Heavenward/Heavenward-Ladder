@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How long a program takes</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38j.html">← 38j a machine that follows a list</a><a href="r38l.html">next: 38l sorting and searching →</a></p>
+  <div class="tags"><span class="tag proof">38k · proof</span></div>
+  <h1>How long a program takes</h1>
+  <p data-pid="7ca5e8">The machine of the last step multiplied three by four in thirty-nine turns, and the count grew by nine for each one added to the second number. That kind of count is the subject here. A program’s time is the number of turns its machine takes, and the count can be read off the program before it is run: a loop run so many times, with so many instructions inside, costs their product. The exact count depends on the machine, and a different machine changes it by a fixed factor at most, so what is worth saying about a program is the family its count belongs to: steady, growing like the log, like the size, like the size times its log, like the square, or like two raised to the size. The rung on endless sums ranked those families already. This step reads them as what a machine can do. A thousand times faster machine solves a problem a thousand times bigger in the same time if the count grows like the size, about thirty times bigger if it grows like the square, and only ten more items bigger if it grows like two to the size. Then the step counts the other thing a program spends, the memory it needs, and what digital storage costs and buys.</p>
+  <p class="gesture" data-pid="3cd7d5">Read a program’s turns off the page: a loop costs its instructions times its rounds. A different machine changes the count by a fixed factor, so the family is what matters. A faster machine buys a much bigger problem for slow-growing counts and almost nothing for two to the size. Memory is counted in bits, and a stored bit is copied exactly.</p>
+</header>
+
+<section class="class step" data-step="38k1">
+  <h2 class="sthead"><span class="stno">38k1</span>Counting turns</h2>
+  <p data-pid="b09c2b">The time a program takes on an input is the number of turns of 38j2’s loop before it stops. A run of instructions with no jump back costs one turn each. A loop whose body has b instructions and goes round r times costs br, plus its test. Loops inside loops multiply, and sums of rounds add by 4k.</p>
+  <p data-pid="f3b8f9">Loop-count technique: <b>a loop whose body takes b turns and runs r times, with s turns outside it, takes br + s turns; a loop inside a loop whose inner rounds are r₁, r₂, …, takes b(r₁ + r₂ + ⋯) plus the outer loop’s own turns.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the loop-count technique, on two programs">
+\text{38j3: body } 9 \text{ turns},\ k \text{ rounds},\ 3 \text{ outside} @@ read off the program
+9k + 3 @@ the technique
+\text{look at each of } n \text{ cells for a match: body } 5,\ n \text{ rounds},\ 2 \text{ outside} @@ a search through a list, in this machine’s instructions
+\text{compare every pair: inner rounds } n - 1, n - 2, \ldots, 0 @@ for each cell, every cell after it
+\htmlClass{new}{5n + 2\ \text{ and }\ b\,\tfrac{n(n - 1)}{2} + \ldots} \quad \blacksquare @@ the sum of the first n − 1 numbers (4k)
+  </pre>
+  <p data-pid="58af0b">“Takes” means at most, over the inputs of a given size: the worst case. A search that finds its match in the first cell is quick; the count that matters is the one that holds for every input of size n. The average over inputs is a second count, and 38l uses 30’s chance to find it.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · counting · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">38k1.1</span><span class="ph understand">understand</span>What does the loop-count technique say? <br>Why is the count taken over the worst input of each size?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38k2">
+  <h2 class="sthead"><span class="stno">38k2</span>The family is what survives</h2>
+  <p data-pid="8918ba">Change the machine and the counts change. A machine with only adding by one would need many turns where 38j’s needs one add; a machine with a multiply instruction would need one where 38j’s needs a loop. If each instruction of one machine can be done by at most c instructions of another, the second’s count is at most c times the first’s.</p>
+  <p data-pid="c48766">Machine-change technique: <b>if each turn of one machine is done in at most c turns of another, a count that is O(f(n)) on the first is O(f(n)) on the second.</b> That every reasonable machine can mimic every other in this way is held in trust until 39 makes the machines exact.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the machine-change technique">
+T_1(n) \le C f(n) \text{ for } n \ge N @@ O as 22k1 defines it
+T_2(n) \le c\,T_1(n) @@ each turn done in at most c turns
+T_2(n) \le cC f(n) \text{ for } n \ge N @@ chain the two
+\htmlClass{new}{T_2(n) = O(f(n))} \quad \blacksquare @@ the constant cC, the same N
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: n² against n log n, at a billion turns a second">
+n = 10^6:\ \ \tfrac12 n^2 = 5\cdot10^{11} \text{ turns} @@ comparing every pair
+5\cdot 10^{11} / 10^9 = 500 \text{ s} @@ over eight minutes
+n\log_2 n \approx 2\cdot10^7 \text{ turns} @@ log₂ 10⁶ ≈ 19.9 (17d)
+\htmlClass{new}{2\cdot10^7 / 10^9 = 0.02 \text{ s}} \quad \blacksquare @@ the ranks of 22k2, in seconds
+  </pre>
+  <p data-pid="3d7499">So what is worth saying about a program is its family, read with 22k’s big O: constant, log n, n, n log n, n², n³, 2ⁿ, ranked by 22k2. The constants matter in practice, and a program in a lower family with a huge constant can lose for every n anyone meets. But no constant survives a change of family for long.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · family · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38k2.1</span><span class="ph understand">understand</span>What does the machine-change technique say, and what does it hold in trust? <br>Why does n log n beat n² by a factor that grows without end?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38k3">
+  <h2 class="sthead"><span class="stno">38k3</span>What a faster machine buys</h2>
+  <p data-pid="9c6a9b">Fix a time, a second say, and ask how big a problem fits in it. Then make the machine s times faster.</p>
+  <p data-pid="7b9288">Faster-machine technique: <b>on a machine s times faster, in the same time, a count of n fits s times as large a problem, a count of n² fits √s times as large, and a count of 2ⁿ fits a problem only log₂ s items larger.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the faster-machine technique">
+n_1 = M,\ \ n_2 = sM @@ count n: s times as many turns, s times the size
+n_1^2 = M,\ \ n_2^2 = sM \Rightarrow n_2 = \sqrt{s}\,n_1 @@ count n²
+2^{n_1} = M,\ \ 2^{n_2} = sM \Rightarrow n_2 = n_1 + \log_2 s @@ count 2ⁿ; take logs (17d)
+\htmlClass{new}{s = 1000:\ \ 1000 \text{ times},\ \ 31.6 \text{ times},\ \ \text{about } 10 \text{ more items}} \quad \blacksquare @@ √1000 ≈ 31.6, log₂ 1000 ≈ 9.97
+  </pre>
+  <p data-pid="9c3209">Machines have grown about a thousand times faster every twenty years or so for decades, and 38·eng asks why that slowed. For a program whose count grows like 2ⁿ, those decades bought ten more items each. A problem is practical or not by its family, much more than by its machine, and 39 asks which problems have no program in a low family at all.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · speed · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38k3.1</span><span class="ph understand">understand</span>What does the faster-machine technique say for each of the three counts? <br>Why does a thousand times the speed buy only about ten more items for a count of 2ⁿ?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38k4">
+  <h2 class="sthead"><span class="stno">38k4</span>Memory counts too</h2>
+  <p data-pid="698c9b">A program also spends memory: cells, and in the end bits. A number below 2ᵇ needs b catches (38h4), so a list of n such numbers needs nb bits, and reading all of it takes at least about n turns.</p>
+  <p data-pid="be7e32">Storage-count technique: <b>n items each one of 2ᵇ patterns take nb bits, and fewer bits cannot hold every list of n items.</b> A row of fewer than nb catches has fewer than 2^(nb) patterns, so two lists would share one.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the storage-count technique, on two files">
+\text{a photo}: 12\cdot10^6 \text{ dots},\ 3 \text{ colours of } 8 \text{ bits} @@ 2²⁴ patterns a dot (36’s three numbers, each a byte)
+12\cdot10^6 \cdot 24 = 2.88\cdot10^8 \text{ bits} = 36\,000\,000 \text{ bytes} @@ a byte is 8 bits
+\text{a song}: 44\,100 \text{ samples a second},\ 16 \text{ bits},\ 2 \text{ ears},\ 180 \text{ s} @@ 32k’s rate
+\htmlClass{new}{44\,100 \cdot 16 \cdot 2 \cdot 180 / 8 \approx 31.8 \text{ million bytes}} \quad \blacksquare @@ the technique
+  </pre>
+  <p data-pid="824e61">What digital storage buys is exactness. Each bit is read against a threshold (38b4), so a copy of a copy of a copy has the same bits, misread only at the known rate, which codes push lower still. A tape of sound loses a little at every copy and never gets it back. What it costs is the count: every bit must be stored, and moved, and 38c3 limits how many a wire moves a second. That is why the file sizes above are usually cut, by 32·comp’s and 30·comp’s ways of dropping what the eye and ear will not miss, or what is predictable.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · memory · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38k4.1</span><span class="ph understand">understand</span>What does the storage-count technique say, and why can fewer bits not hold every list? <br>What does digital storage buy over a copied tape, and what does it cost?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38k5">
+  <h2 class="sthead"><span class="stno">38k5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{the search takes } 1 \text{ turn when the match is first, so it is } O(1)\,? @@ the count is over the worst input of size n: 5n + 2
+100n \text{ is always slower than } n^2\,? @@ only below n = 100; past it n² loses for ever
+\text{a thousand times faster solves } 2^n \text{ problems a thousand times bigger}\,? @@ about log₂ 1000 ≈ 10 items bigger
+\text{a copied file loses a little each time, like a tape}\,? @@ each bit is read against a threshold: the copy is exact but for a known misread rate
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38k5.1</span><span class="ph understand">understand</span>Why is the search not O(1), though it sometimes takes one turn? <br>Why is a copied file exact, though a copied tape is not?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">38k.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">38j’s machine; find the largest of n cells</span></span>Build a program for 38j’s machine that finds the largest number in cells 50 to 50 + n − 1, using only its seven kinds. (It has no “is less than”: what can stand in?) <br>Count its turns exactly, worst case, as a function of n.</div>
+  <div class="chq"><span class="chid">38k.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="T(n) = n^{100},\ \ U(n) = 1.01^n"></span></span>U is in a higher family. Find roughly where U passes T, and say what that does to the advice “prefer the lower family”. <br>Which would you run for n = 1000?</div>
+  <div class="chq"><span class="chid">38k.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="T_2 \le c\,T_1"></span></span>A fixed factor keeps the family. Turn it round: if two machines always give counts in the same family for every program, must each mimic the other with a fixed factor? Look for a pair of machines where one turn of the first costs about log n turns of the second. <br>Does the family survive that?</div>
+  <div class="chq"><span class="chid">38k.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">practical means a low family</span></span>One camp holds that a problem is practical exactly when some program solves it in a count that is a power of n. Another points to programs in a power of n with a power of 100 that no one could run, and programs in 2ⁿ that run every day on real inputs. <br>Is “a power of n” a law with a known exception rate, a definition, or a guess? What would it take to test it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r38j.html">← 38j · a machine that follows a list</a><a href="r38l.html">38l · sorting and searching →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A program’s count of turns is its running time or time complexity, and the worst case over inputs of size n is the worst-case time; the families are constant, logarithmic, linear, linearithmic (n log n), quadratic, cubic, and exponential time. The machine-change technique is the invariance behind the cost model, and the claim held in trust, that every reasonable machine mimics every other within a fixed factor or a power, is the extended (or strong) Church–Turing thesis. A program’s memory is its space complexity. The practical-means-polynomial camp of 38k.6.4 is Cobham’s thesis (also credited to Edmonds). The crosswalk items here are AP Computer Science A 2.12 (informal run-time analysis), AP Computer Science Principles 3.17 (algorithmic efficiency) and NGSS HS-PS4-2 (digital information storage).</p>
+  <h3>Who said it first</h3>
+  <p>Juris Hartmanis and Richard Stearns founded the counting of running times as functions of the input size in 1965. Alan Cobham (1965) and Jack Edmonds (1965) proposed polynomial time as the mark of a practical problem. Donald Knuth made big O the language of program counts in The Art of Computer Programming, from 1968, and argued in 1976 for its letters Ω and Θ.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Program A took 2 seconds on my laptop and program B took 3, so A is in a lower family.” Not allowed: one run on one input of one size, on one machine, measures one count. The family is a claim about every size, and two programs can trade places as n grows. Counts are read off the program, or measured at many sizes and fitted, and the fit is a guess under the small case with its range said.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'loop',t:R`br + s`,n:`Body times rounds.`},
+  {k:'ember',kl:'nested',t:R`b\textstyle\sum r_i`,n:`Rounds add.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{9k + 3,\ \ 5n + 2,\ \ \tfrac{b}{2}n(n-1)}`,n:`Off the page.`}
+],{title:'The slides · counting · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'machines',t:R`T_2 \le c\,T_1`,n:`A fixed factor.`},
+  {k:'ember',kl:'O',t:R`O(f) \to O(f)`,n:`The family survives.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{500 \text{ s against } 0.02 \text{ s}}`,n:`At a million items.`}
+],{title:'The slides · family · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'n',t:R`\times s`,n:`In proportion.`},
+  {k:'ember',kl:'n²',t:R`\times\sqrt s`,n:`Square root.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2^n:\ + \log_2 s}`,n:`Almost nothing.`}
+],{title:'The slides · speed · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'items',t:R`n \text{ of } 2^b \text{ patterns}`,n:`b bits each.`},
+  {k:'ember',kl:'no room',t:R`< nb \text{ bits}: \text{ two share}`,n:`Counting.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a song} \approx 31.8 \text{ MB}}`,n:`Copied exactly.`}
+],{title:'The slides · memory · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

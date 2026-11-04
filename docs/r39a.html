@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Machines with a tape</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r39.html">← 39 some questions no machine can answer</a><a href="r39b.html">next: 39b other machines, the same reach →</a></p>
+  <div class="tags"><span class="tag proof">39a · proof</span></div>
+  <h1>Machines with a tape</h1>
+  <p data-pid="329cd8">Rung four said what a recipe for answers is made of: a state, a start, a stop test, a move and an output. It never said what a move is allowed to do, and so it never said which recipes there are. Rung thirty eight built a machine that follows a list, from switches, and counted its steps. That machine is real, and it is messy: it has a memory of a fixed size, an adder, a counter, and a list of instructions that are themselves numbers. This step strips it down until nothing is left but what a recipe needs. A long strip of cells, each holding one mark. A head that sees one cell. A short table that says, for what the head sees and the state the machine is in, what to write, which way to step, and which state to go to. That is all. It looks too weak to do anything. The step shows it computes, decides and lists, that more strips add no reach, and then it names the guess the whole rung stands on: that whatever a person could compute by following rules, such a machine computes too. That guess is not proved. It is a thesis, and this step says why it cannot be anything more, and why it is believed.</p>
+  <p class="gesture" data-pid="d50784">A tape machine reads one cell, writes one mark, steps one cell, and changes state by a finite table. Each configuration has one next. Such machines compute functions, decide sets and list sets, and a set is decided exactly when it and its outside are both listed. Many tapes do no more than one. The thesis says these machines compute whatever a recipe computes.</p>
+</header>
+
+<section class="class step" data-step="39a1">
+  <h2 class="sthead"><span class="stno">39a1</span>A tape and a table</h2>
+  <p data-pid="032579">7·then met a rulebook machine on a strip of 0s and 1s. Here it gets any marks, an input and an output. A <i>tape machine</i> has a finite set Γ of marks, among them the blank ⊔, and a finite set of states, among them a start state and the stop states. Its <i>table</i> δ gives, for each state that is not a stop state and each mark, three things: a mark to write, a step L or R, and a next state. The <i>tape</i> is a row of cells endless to the right, each holding one mark, all blank but finitely many.</p>
+  <p data-pid="bb9101">A <i>configuration</i> is the whole situation at one moment: the state, the tape, and the cell the head is on. Write it u q v: the tape reads uv, the machine is in state q, and the head is on the first mark of v. The input w is written at the left, the rest blank, the head on the first cell, the state the start. This is 4l’s recipe made exact. The state of 4l is the configuration. The stop test asks whether the state is a stop state, which is settled by looking. The move is one row of the table. The output is what the tape holds at the stop.</p>
+  <p data-pid="f02b79">One-next technique: <b>a configuration whose state is not a stop state has exactly one next configuration, and finding it means looking at one cell.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-next technique">
+u\,q\,s\,v,\ \allowbreak \ q \text{ not }\allowbreak \text{a }\allowbreak \text{stop }\allowbreak \text{state} @@ the head reads the mark s
+\delta(q, s) = (s', \text{R}, q') \text{ is }\allowbreak \text{one }\allowbreak \text{entry} @@ δ is a function (4d2): one value for each pair
+u\,q\,s\,v \to u\,s'\,q'\,v @@ write s′, step right, take state q′; v blank means one more blank cell
+u\,r\,q\,s\,v \to u\,q'\,r\,s'\,v \text{ for }\allowbreak \text{a }\allowbreak \text{step }\allowbreak \text{L} @@ on the first cell a step L stays put
+\htmlClass{new}{\text{one }}\allowbreak \htmlClass{new}{ \text{next }}\allowbreak \htmlClass{new}{ \text{configuration, }}\allowbreak \htmlClass{new}{ \text{from }}\allowbreak \htmlClass{new}{ \text{the }}\allowbreak \htmlClass{new}{ \text{pair } (q, s) \text{ alone}} \quad \blacksquare @@ nothing else of the tape is read
+  </pre>
+  <p data-pid="52b4ae">So a run is 4l’s run: run(0) is the start configuration, and run(n + 1) is the next of run(n) until a stop state comes. One example first, adding 1 to a number written in twos (4i). State r walks right to the first blank, then turns into c. In state c a 1 becomes 0 with a step left, and a 0 or a blank becomes 1, and the machine stops.</p>
+  <pre class="lines" data-k="ember" data-label="this step: 1011 plus one">
+r\,1011 \to 1\,r\,011 \to 10\,r\,11 \to 101\,r\,1 \to 1011\,r\,\sqcup @@ state r on 0 or 1: write it back, step R
+1011\,r\,\sqcup \to 101\,c\,1\sqcup @@ on the blank: step L, take c
+101\,c\,1 \to 10\,c\,10 \to 1\,c\,000 @@ c on 1: write 0, step L; the carry moves left
+\htmlClass{new}{1\,c\,000 \to 1100,\ }\allowbreak \htmlClass{new}{ \text{stopped}} \quad \blacksquare @@ c on 0: write 1, stop; eleven plus one is twelve
+  </pre>
+  <p data-pid="0fad10">Eight steps for four digits. The count grows with the length of the input, as 38k’s counts did. What the table cannot do is look at two far cells at once: everything it learns, it learns by walking.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a tape · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">39a1.1</span><span class="ph understand">understand</span>What are the parts of a tape machine, and what is a configuration? <br>What does the one-next technique say, and why is a run of a tape machine one of 4l’s runs?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39a2">
+  <h2 class="sthead"><span class="stno">39a2</span>Computing, deciding, listing</h2>
+  <p data-pid="57e638">A machine <i>computes</i> a function f on strings when, started on any input w, it stops with f(w) on the tape. Give a machine two stop states, yes and no. It <i>decides</i> a set A of strings when it stops on every input, in yes exactly on the members of A. It <i>lists</i> A when it stops in yes exactly on the members of A; on other strings it may stop in no, or never stop at all.</p>
+  <p data-pid="217787">Reuse, said out loud. 7b called a statement decidable when a constructive column proves it or its denial. From here on a set of strings is decidable when some tape machine decides it. The new meaning fits the old: for each input the run of the machine is a column, step by step, that reaches one answer. Where the two might part, the page says which it means.</p>
+  <p data-pid="bcfef1">Both-sides technique: <b>a set is decided by a machine exactly when the set and the strings outside it are both listed.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the both-sides technique">
+M \text{ decides } A @@ suppose it
+M \text{ lists } A;\ \allowbreak \ M \text{ with }\allowbreak \text{yes }\allowbreak \text{and }\allowbreak \text{no }\allowbreak \text{swapped }\allowbreak \text{lists }\allowbreak \text{the }\allowbreak \text{outside} @@ M stops on every input
+M_1 \text{ lists } A,\ \allowbreak \ M_2 \text{ lists }\allowbreak \text{the }\allowbreak \text{outside} @@ now suppose the other way
+\text{run } M_1, M_2 \text{ on } w \text{ in }\allowbreak \text{turns, }\allowbreak \text{one }\allowbreak \text{step }\allowbreak \text{each} @@ two tapes, one each; 39a3 makes them one
+w \in A \text{ or } w \notin A,\ \allowbreak \text{so }\allowbreak \text{one }\allowbreak \text{of }\allowbreak \text{them }\allowbreak \text{stops} @@ either-way, on a string and a set (7d)
+\htmlClass{new}{\text{answer }}\allowbreak \htmlClass{new}{ \text{yes }}\allowbreak \htmlClass{new}{ \text{if } M_1 \text{ stopped }}\allowbreak \htmlClass{new}{ \text{in }}\allowbreak \htmlClass{new}{ \text{yes, }}\allowbreak \htmlClass{new}{ \text{else }}\allowbreak \htmlClass{new}{ \text{no}} \quad \blacksquare @@ the run stops on every w, and is right
+  </pre>
+  <p data-pid="bd6c09">The proof does not say how long to wait. It says only that the wait ends. That is the gap between listing and deciding: a lister that has not stopped tells you nothing yet. 37b’s proof-listing technique gave a lister of what a collection reaches. Whether a decider can be built from it is 39e’s question.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · three jobs · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39a2.1</span><span class="ph understand">understand</span>What does it mean for a machine to compute a function, to decide a set, and to list a set? <br>What does the both-sides technique say, and why does running two machines in turns stop?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39a3">
+  <h2 class="sthead"><span class="stno">39a3</span>More tapes, no more reach</h2>
+  <p data-pid="d4c924">A machine with k tapes has k heads and a table that reads k marks at once. It is easier to program: the turn-taking of 39a2 wants one tape for each machine. It computes nothing new.</p>
+  <p data-pid="45c42b">Tracks technique: <b>for every machine with k tapes there is a machine with one tape that computes the same function, and if the first takes t steps on an input of length n, the second takes at most about t(n + t) steps.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the tracks technique">
+\text{one }\allowbreak \text{cell }\allowbreak \text{of }\allowbreak \text{the }\allowbreak \text{new }\allowbreak \text{tape }\allowbreak \text{holds }\allowbreak \text{a }\allowbreak \text{column }\allowbreak \text{of } k \text{ marks, }\allowbreak \text{each }\allowbreak \text{with }\allowbreak \text{a }\allowbreak \text{head }\allowbreak \text{flag }\allowbreak \text{or }\allowbreak \text{not} @@ the marks are the lists of k old marks and flags: still a finite set
+\text{a }\allowbreak \text{sweep }\allowbreak \text{right }\allowbreak \text{reads }\allowbreak \text{the } k \text{ flagged }\allowbreak \text{marks }\allowbreak \text{into }\allowbreak \text{the }\allowbreak \text{state} @@ finitely many lists of k marks: finitely many states
+\text{a }\allowbreak \text{sweep }\allowbreak \text{left }\allowbreak \text{writes }\allowbreak \text{and }\allowbreak \text{moves }\allowbreak \text{each }\allowbreak \text{flag} @@ one row of the old table
+\text{after } t \text{ old }\allowbreak \text{steps }\allowbreak \text{no }\allowbreak \text{head }\allowbreak \text{is }\allowbreak \text{past }\allowbreak \text{cell } n + t @@ each step moves a head one cell
+\htmlClass{new}{\text{each }}\allowbreak \htmlClass{new}{ \text{old }}\allowbreak \htmlClass{new}{ \text{step }}\allowbreak \htmlClass{new}{ \text{costs }}\allowbreak \htmlClass{new}{ \text{at }}\allowbreak \htmlClass{new}{ \text{most }}\allowbreak \htmlClass{new}{ \text{about } 2(n + t) \text{ new }}\allowbreak \htmlClass{new}{ \text{steps}} \quad \blacksquare @@ two sweeps over the used stretch
+  </pre>
+  <p data-pid="6dab01">So a machine that takes n² steps on k tapes takes about n⁴ on one. 38k’s growth families matter here: the slowdown squares the count, and a count that was a power of n stays a power of n. The same kind of argument gives a tape endless both ways, more marks, or a head that may stay put, and none of them reaches further. 39h leans on this when it says that fast does not depend on which machine.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · tracks · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39a3.1</span><span class="ph understand">understand</span>What does the tracks technique say? <br>Why does one old step cost at most about 2(n + t) new steps, and why does a power of n stay a power of n?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39a4">
+  <h2 class="sthead"><span class="stno">39a4</span>A thesis, not a technique</h2>
+  <p data-pid="8eff94">Here is the claim the rung needs. <b>Whatever a person can compute by following a finite list of rules, with pencil and paper and no insight, some tape machine computes.</b> It is called a thesis. It cannot be a technique, because one side of it, following a list of rules, was never made exact: 4l named the five parts of a recipe and never said which moves are allowed. If it were made exact, the exact version would be a new definition, and the thesis would be the claim that the definition caught the loose word.</p>
+  <p data-pid="2f4064">Two kinds of evidence hold it up. The first is an analysis of a person computing. They are in one of finitely many states of mind. They look at a bounded patch of paper and change a bounded patch. They shift their attention a bounded distance. Each such step is a few rows of a table, and the tracks technique packs the paper into a tape. The second is what 39b finds: every other exact try at the word, made by people working apart, reaches exactly the same functions.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · loose, then locked</div>
+    <p data-pid="844a0d">The word recipe was gathered loose: gcd, counting on, writing in twos, the proof-check of 37b, all called recipes because they felt alike. The tape machine locks it. From here on “a recipe computes f” is said to mean “a tape machine computes f”, and it is the lock, not the loose word, that the proofs of this rung use.</p>
+    <p data-pid="5e1ab2"><b>Lock the word before you prove anything about it, and say which side of the lock each claim is on.</b></p>
+    <p data-pid="099409">Unlocking runs the steps backward, and here it cannot be done. The lock does not prove it caught every loose recipe. No one has found a recipe it missed in ninety years, and no count of such years would prove it.</p>
+    <p class="bait" data-pid="a48c0f">A spreadsheet in Sacramento recalculates a budget whenever a cell changes. Is that a recipe in 4l’s sense? Which of its parts would you need to lock before a tape machine could be said to do the same?</p>
+  </aside>
+  <p data-pid="c612ae">Without the thesis nothing on this rung breaks as mathematics. What breaks is what it means. 39d proves that no tape machine decides which tape machines stop. Only with the thesis does that become: no recipe at all does.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39a4.1</span><span class="ph understand">understand</span>What does the thesis claim, and why can it not be proved as a technique? <br>What two kinds of evidence hold it up, and what is lost from 39d without it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39a5">
+  <h2 class="sthead"><span class="stno">39a5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{the }\allowbreak \text{machine }\allowbreak \text{lists } A \text{ and }\allowbreak \text{has }\allowbreak \text{run }\allowbreak \text{a }\allowbreak \text{long }\allowbreak \text{time }\allowbreak \text{on } w\text{, so } w \notin A\,? @@ a lister that has not stopped has said nothing; it may stop at the next step
+\text{a }\allowbreak \text{machine }\allowbreak \text{with }\allowbreak \text{two }\allowbreak \text{tapes }\allowbreak \text{computes }\allowbreak \text{more }\allowbreak \text{than }\allowbreak \text{one }\allowbreak \text{with }\allowbreak \text{one}\,? @@ the tracks technique: the same functions, at most about t(n + t) steps
+\text{the }\allowbreak \text{thesis }\allowbreak \text{is }\allowbreak \text{proved }\allowbreak \text{by } 39b\,? @@ 39b proves machines equal to each other; the thesis is about the loose word, which no proof touches
+\text{the }\allowbreak \text{head }\allowbreak \text{reads }\allowbreak \text{the }\allowbreak \text{cell }\allowbreak \text{it }\allowbreak \text{last }\allowbreak \text{wrote }\allowbreak \text{and }\allowbreak \text{the }\allowbreak \text{one }\allowbreak \text{it }\allowbreak \text{will }\allowbreak \text{step }\allowbreak \text{to}\,? @@ one cell, the one under the head (the one-next technique)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39a5.1</span><span class="ph understand">understand</span>Why does a long run of a lister on w not show that w is outside the set? <br>Why does 39b not prove the thesis?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">39a.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">strings of a’s and b’s</span></span>Build a tape machine with one tape that decides whether a string has as many a’s as b’s. Write its table, and count, roughly, its steps on a string of length n.</div>
+  <div class="chq"><span class="chid">39a.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a }\allowbreak \text{machine }\allowbreak \text{with }\allowbreak \text{no }\allowbreak \text{stop }\allowbreak \text{state}"></span></span>A machine has no stop state at all. Which function does it compute, and which set does it list? Is the empty set decided?</div>
+  <div class="chq"><span class="chid">39a.6.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">4l: an algorithm is sure to stop</span></span>Every recipe of 4l is a tape machine, by the thesis. Turn it round. Is every tape machine a recipe in 4l’s sense? Which tape machines are, and which part of 4l rules the others out?</div>
+  <div class="chq"><span class="chid">39a.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">a thesis, a definition, or a law of nature?</span></span>One view holds that the tape machine is simply what “computable” now means: a definition, nothing to prove. Another holds that it is a claim about people that could be false, and that a mind may see truths no machine reaches. A third holds that it is a claim about the physical world, and that some device might one day compute more. Which of the three is the thesis of 39a4? What would count against each?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r39.html">← 39 · some questions no machine can answer</a><a href="r39b.html">39b · other machines, the same reach →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A tape machine is a Turing machine; its table is the transition function, a configuration is an instantaneous description, and the stop states are halting states, accepting and rejecting. A function a machine computes is computable, or recursive, and a set a machine decides is decidable or recursive. A set a machine lists is recognizable, or recursively enumerable, or computably enumerable, the name 37·now2 used. The both-sides technique is often stated as: a set is decidable exactly when it and its complement are recognizable. A machine with k tapes is a multitape Turing machine, and the tracks technique says it is simulated with quadratic slowdown. The thesis is the Church–Turing thesis.</p>
+  <h3>Who said it first</h3>
+  <p>Alan Turing described the machine in “On computable numbers, with an application to the Entscheidungsproblem”, written in 1936 and published in 1936 and 1937. His machine stood for a person computing, then called a computer, and his analysis of that person’s states of mind is the first kind of evidence in 39a4. Emil Post described a nearly identical scheme in 1936, independently. Alonzo Church proposed in 1936 that the functions of his λ-calculus (39b) are exactly the effectively calculable ones; Stephen Kleene named the claim Church’s thesis in 1952. Kurt Gödel doubted the earlier proposals and was persuaded by Turing’s analysis. Robin Gandy (1980) asked which physical machines the thesis covers. The view that minds outrun machines was argued by John Lucas (1961) and Roger Penrose (1989).</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Every recipe anyone has written has been turned into a tape machine. So every recipe is a tape machine.” Not allowed as a proof: it is induction under the small case, a list of cases, and a list of cases is evidence for a law, not a proof of a technique. That is why it is called a thesis, and why 39a4 keeps it apart from the techniques.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'table',t:R`\delta(q, s) = (s', \text{R}, q')`,n:`One row.`},
+  {k:'ember',kl:'step',t:R`u\,q\,s\,v \to u\,s'\,q'\,v`,n:`One cell looked at.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{1011 + 1 = 1100}`,n:`Eight steps.`}
+],{title:'The slides · a tape · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'decide',t:R`\text{stops on every } w`,n:`Yes or no.`},
+  {k:'ember',kl:'list',t:R`\text{stops in yes on members}`,n:`May run for ever.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{decided} \iff \text{both sides listed}}`,n:`Run in turns.`}
+],{title:'The slides · three jobs · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'column',t:R`(s_1, \dots, s_k) \text{ in one cell}`,n:`Flags mark heads.`},
+  {k:'ember',kl:'sweep',t:R`2(n + t) \text{ moves}`,n:`Read, then write.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{t \text{ steps} \to t(n + t)}`,n:`Same reach.`}
+],{title:'The slides · tracks · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

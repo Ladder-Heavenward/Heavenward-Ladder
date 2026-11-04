@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Undecidable everywhere</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r39d.html">← 39d no machine decides stopping</a><a href="r39f.html">next: 39f programs that print themselves →</a></p>
+  <div class="tags"><span class="tag proof">39e · proof</span></div>
+  <h1>Undecidable everywhere</h1>
+  <p data-pid="994285">One question no machine answers would be a curiosity. This step shows it is a seed. The tool is a way of turning one question into another: a recipe that sends each case of the first question to a case of the second, with the same answer. If the second could be decided, so could the first. Run backwards, the stopping question’s refusal spreads to every question it can be turned into. Does this machine stop on a blank tape? Does it stop on every input? Do these two programs do the same thing? Each is undecidable, and the reason is one argument: any question about what a program does, as opposed to how it is written, is undecidable unless its answer is always the same. Then the spread reaches mathematics. No machine decides which statements the axioms of arithmetic reach, so the hope of a recipe that settles every question by calculating is closed. And it reaches the oldest kind of question there is, whether an equation in whole numbers has a solution. Solutions can be searched for. In 1970 it was shown that no recipe can always say there are none.</p>
+  <p class="gesture" data-pid="6ce2f9">If a recipe turns one question into another with the same answers, a decider for the second gives one for the first. From stopping, the refusal spreads: every question about what programs do is undecidable unless trivial, no machine decides what arithmetic reaches, and no machine decides whether a whole-number equation has a solution.</p>
+</header>
+
+<section class="class step" data-step="39e1">
+  <h2 class="sthead"><span class="stno">39e1</span>Turning one question into another</h2>
+  <p data-pid="dc511a">A set A <i>reduces</i> to a set B when some machine computes a function f with: x is in A exactly when f(x) is in B. f turns every case of A into a case of B with the same answer.</p>
+  <p data-pid="d293bf">Reduction-carries technique: <b>if A reduces to B and B is decided, then A is decided; so if A reduces to B and A is not decided, B is not decided.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the reduction-carries technique">
+f \text{ computed},\ \allowbreak \ x \in A \iff f(x) \in B,\ \allowbreak \ D \text{ decides } B @@ given
+\text{on } x\text{, }\allowbreak \text{compute } f(x)\text{, }\allowbreak \text{then }\allowbreak \text{run } D \text{ on it} @@ two machines in a row (39b1, putting inside)
+\text{the }\allowbreak \text{run }\allowbreak \text{stops, }\allowbreak \text{and }\allowbreak \text{says }\allowbreak \text{yes }\allowbreak \text{exactly }\allowbreak \text{when } f(x) \in B @@ f stops on every input; D decides
+\htmlClass{new}{\text{it }}\allowbreak \htmlClass{new}{ \text{decides } A} \quad \blacksquare @@ x ∈ A exactly when f(x) ∈ B; the second half is the first turned round (1b)
+  </pre>
+  <p data-pid="22aa55">One example first. Does M stop when started on a blank tape? From ⟨M⟩ # w build M_w: write w on the tape, walk back to the first cell, then act as M. M_w on a blank tape does what M does on w. So H reduces to the blank-tape question, and the blank-tape question is not decided.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · reduce · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">39e1.1</span><span class="ph understand">understand</span>When does a set A reduce to a set B? <br>What does the reduction-carries technique say, and how does M_w turn the stopping question into the blank-tape question?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39e2">
+  <h2 class="sthead"><span class="stno">39e2</span>What programs do</h2>
+  <p data-pid="404c8e">Each machine computes a function, with no value where the machine never stops. A property P of such functions is <i>about what machines do</i>: two machines computing the same function both have it or neither does. It is <i>trivial</i> when every machine’s function has it, or none does.</p>
+  <p data-pid="03bba8">Behaviour technique: <b>for every property about what machines do that is not trivial, no machine decides which codes ⟨M⟩ have it.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the behaviour technique">
+\text{the }\allowbreak \text{function }\allowbreak \text{with }\allowbreak \text{no }\allowbreak \text{values }\allowbreak \text{lacks } P;\ \allowbreak \ M_1\text{’s }\allowbreak \text{function }\allowbreak \text{has } P @@ not trivial; if the empty function has P, run the proof on not-P
+N_{M,w}\text{: }\allowbreak \text{on }\allowbreak \text{input } x\text{, }\allowbreak \text{first }\allowbreak \text{run } M \text{ on } w\text{, }\allowbreak \text{then }\allowbreak \text{run } M_1 \text{ on } x @@ built from ⟨M⟩ # w by a recipe
+M \text{ stops }\allowbreak \text{on } w \Rightarrow N_{M,w} \text{ computes }\allowbreak \text{what } M_1 \text{ computes: }\allowbreak \text{it }\allowbreak \text{has } P @@ the first part ends, the second is M₁
+M \text{ never }\allowbreak \text{stops }\allowbreak \text{on } w \Rightarrow N_{M,w} \text{ has }\allowbreak \text{no }\allowbreak \text{values: }\allowbreak \text{it }\allowbreak \text{lacks } P @@ the first part never ends
+\htmlClass{new}{H \text{ reduces }}\allowbreak \htmlClass{new}{ \text{to } P\text{; } P \text{ is }}\allowbreak \htmlClass{new}{ \text{not }}\allowbreak \htmlClass{new}{ \text{decided}} \quad \blacksquare @@ the reduction-carries technique
+  </pre>
+  <p data-pid="2ba531">So none of these is decided: whether a machine stops on every input; whether it ever outputs 0; whether its function is that of adding one; whether two machines compute the same function. Questions about how a program is written are another matter. Whether a table has five rows is decided by counting. The line runs between the text of a program, which can be read, and its behaviour, which can only be run.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · behaviour · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39e2.1</span><span class="ph understand">understand</span>What makes a property about what machines do, and when is it trivial? <br>What does the behaviour technique say, and why is “the table has five rows” not covered by it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39e3">
+  <h2 class="sthead"><span class="stno">39e3</span>What arithmetic reaches is not decided</h2>
+  <p data-pid="a40fe0">Reach-undecided technique: <b>no machine decides which statements PA reaches.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the reach-undecided technique">
+\sigma_{M,w}\text{: } \exists y\ \text{“the }\allowbreak \text{run }\allowbreak \text{of } M \text{ on } w \text{ has }\allowbreak \text{stopped }\allowbreak \text{by }\allowbreak \text{step } y\text{”} @@ a search statement, written by 39b3 from ⟨M⟩ # w, by a recipe
+M \text{ stops }\allowbreak \text{on } w \Rightarrow \sigma_{M,w} \text{ true} \Rightarrow PA \vdash \sigma_{M,w} @@ the search-reached technique (37g4)
+M \text{ never }\allowbreak \text{stops }\allowbreak \text{on } w \Rightarrow \sigma_{M,w} \text{ false }\allowbreak \text{in } N \Rightarrow PA \nvdash \sigma_{M,w} @@ PA reaches only statements true in N (37g2)
+\htmlClass{new}{H \text{ reduces }}\allowbreak \htmlClass{new}{ \text{to }}\allowbreak \htmlClass{new}{ \text{what }}\allowbreak \htmlClass{new}{ \text{PA }}\allowbreak \htmlClass{new}{ \text{reaches}} \quad \blacksquare @@ the reduction-carries technique
+  </pre>
+  <p data-pid="1fbd99">37b listed what PA reaches; now it is clear the list cannot be made into a decider. Run the same reduction with a finite collection in place of PA, the six lines of 37g2 without induction, which still reach every true search statement (held in trust here; the proof of 37g4 uses no induction). A finite collection G reaches σ exactly when “the lines of G, joined, imply σ” is true in every world (37d). So no machine decides which statements are true in every world. The question was asked in 1928 as a challenge, and this is its answer.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · arithmetic · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39e3.1</span><span class="ph understand">understand</span>What does the reach-undecided technique say? <br>Which two facts about PA make σ reached exactly when M stops on w?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39e4">
+  <h2 class="sthead"><span class="stno">39e4</span>Equations in whole numbers</h2>
+  <p data-pid="2b7a7a">Take a polynomial equation p(x₁, …, xₖ) = 0 with integer coefficients, and ask whether it has a solution in whole numbers. x² − 2y² = 1 has x = 3, y = 2. x² + y² = 3 has none: a square leaves remainder 0 or 1 by 4, so a sum of two squares leaves 0, 1 or 2, and 3 leaves 3 (4j).</p>
+  <p data-pid="7d2384">Equation-search technique: <b>the equations with a whole-number solution are listed.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the equation-search technique">
+\text{list }\allowbreak \text{the }\allowbreak \text{lists } (x_1, \dots, x_k) \text{ of }\allowbreak \text{whole }\allowbreak \text{numbers} @@ by largest entry, then in order, as 35a listed pairs
+\text{at }\allowbreak \text{each, }\allowbreak \text{compute } p(x_1, \dots, x_k) @@ adding and multiplying, built without search
+\text{stop }\allowbreak \text{in }\allowbreak \text{yes }\allowbreak \text{at }\allowbreak \text{the }\allowbreak \text{first }\allowbreak \text{zero} @@ one search (39b1)
+\htmlClass{new}{\text{yes }}\allowbreak \htmlClass{new}{ \text{exactly }}\allowbreak \htmlClass{new}{ \text{on }}\allowbreak \htmlClass{new}{ \text{the }}\allowbreak \htmlClass{new}{ \text{solvable }}\allowbreak \htmlClass{new}{ \text{equations}} \quad \blacksquare @@ if none, the search never ends
+  </pre>
+  <p data-pid="a38027">That is one half, and it is easy. The other half was proved in 1970, after twenty years of work by four people: every listed set A of numbers has a polynomial p with integer coefficients such that a is in A exactly when p(a, x₁, …, xₖ) = 0 has a whole-number solution. Take A to be the codes of stopping pairs, and the stopping question reduces to solvability. So no machine decides whether an equation in whole numbers has a solution. The ladder names this result and does not prove it: its proof turns the run of a machine into an equation, using the solutions of x² − dy² = 1 to make powers out of adding and multiplying.</p>
+  <p data-pid="b4510e">The remainder argument for x² + y² = 3 is a certificate that no solution exists. Some equations have such certificates and some do not, and no machine finds the certificate whenever there is one.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · equations · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39e4.1</span><span class="ph understand">understand</span>What does the equation-search technique say? <br>What did the result of 1970 add to it, and how does that give an equation question no machine decides?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39e5">
+  <h2 class="sthead"><span class="stno">39e5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+A \text{ reduces }\allowbreak \text{to } B \text{ and } A \text{ is }\allowbreak \text{decided, }\allowbreak \text{so } B \text{ is }\allowbreak \text{decided}\,? @@ backwards: f carries a decider of B to one of A, never the other way
+\text{whether }\allowbreak \text{a }\allowbreak \text{table }\allowbreak \text{has }\allowbreak \text{five }\allowbreak \text{rows }\allowbreak \text{is }\allowbreak \text{not }\allowbreak \text{decided, }\allowbreak \text{by }\allowbreak \text{the }\allowbreak \text{behaviour }\allowbreak \text{technique}\,? @@ that is about the text, not what the machine does; count the rows
+x^2 + y^2 = 3 \text{ has }\allowbreak \text{no }\allowbreak \text{solution, }\allowbreak \text{so }\allowbreak \text{no }\allowbreak \text{equation’s }\allowbreak \text{question }\allowbreak \text{is }\allowbreak \text{decided}\,? @@ many are; no single machine decides them all
+\text{PA }\allowbreak \text{reaches } \sigma \text{ whenever } \sigma \text{ is true}\,? @@ only true search statements; 37i’s unreached truth is true and not reached
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39e5.1</span><span class="ph understand">understand</span>Why does a decided A that reduces to B say nothing about B? <br>Why does the behaviour technique say nothing about the number of rows of a table?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">39e.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\{\langle M_1\rangle \# \langle M_2\rangle : M_1, M_2 \text{ compute }\allowbreak \text{the }\allowbreak \text{same }\allowbreak \text{function}\}"></span></span>Build a reduction from the blank-tape question to this set, writing the machine that f outputs. Is the set listed? Is the set outside it listed?</div>
+  <div class="chq"><span class="chid">39e.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\{\langle M\rangle : M \text{ stops }\allowbreak \text{on }\allowbreak \text{some }\allowbreak \text{input }\allowbreak \text{within } 100 \text{ steps}\}"></span></span>Is this set decided? It looks like a question about what M does. Find what keeps the behaviour technique from applying, and decide it.</div>
+  <div class="chq"><span class="chid">39e.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="A \text{ reduces }\allowbreak \text{to } B,\ \allowbreak \ B \text{ listed}"></span></span>Prove that A is listed. Then turn it round: if B reduces to A and B is decided, what follows about A? Find two sets that show nothing does.</div>
+  <div class="chq"><span class="chid">39e.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">a calculus in which every dispute is settled by calculating</span></span>One old hope held that every dispute could be settled by sitting down and calculating. A later one asked for a recipe that decides every statement of mathematics. The reach-undecided technique closes the second. Does it close the first? Which disputes could still be settled by calculating, and what kind of answer is left for the rest?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r39d.html">← 39d · no machine decides stopping</a><a href="r39f.html">39f · programs that print themselves →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The reduction of 39e1 is a mapping reduction, or many-one reduction, written A ≤ₘ B. The blank-tape question is the blank-tape halting problem. The behaviour technique is Rice’s theorem. The reach-undecided technique is Church’s theorem on the undecidability of arithmetic, and the question of truth in every world is the Entscheidungsproblem, posed by David Hilbert and Wilhelm Ackermann in 1928. The question of whole-number equations is Hilbert’s tenth problem (1900), and its negative answer is the Matiyasevich, or MRDP, theorem; x² − dy² = 1 is Pell’s equation.</p>
+  <h3>Who said it first</h3>
+  <p>Alonzo Church (1936) and Alan Turing (1936) answered the Entscheidungsproblem, each by his own calculus. Henry Gordon Rice proved his theorem in 1951, published 1953. Martin Davis, Hilary Putnam and Julia Robinson reduced Hilbert’s tenth problem to one fact about growth by 1961, and Yuri Matiyasevich supplied it in 1970, using the Fibonacci numbers. The old hope of settling disputes by calculating is Gottfried Leibniz’s “calculemus”.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Whether M stops on every input is a property about what M does. So by the behaviour technique it is not listed.” Not allowed: the behaviour technique says not decided, and says nothing about listing. In fact neither this set nor its outside is listed, but that needs its own argument.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'turn',t:R`x \in A \iff f(x) \in B`,n:`Same answers.`},
+  {k:'ember',kl:'carry',t:R`B \text{ decided} \Rightarrow A \text{ decided}`,n:`Compute, then decide.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{H \text{ reduces to the blank tape}}`,n:`Neither decided.`}
+],{title:'The slides · reduce · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'build',t:R`N_{M,w}\text{: run } M \text{ on } w\text{, then } M_1`,n:`One machine per case.`},
+  {k:'ember',kl:'cases',t:R`P \text{ exactly when } M \text{ stops}`,n:`Same answers.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P \text{ not decided}}`,n:`Unless trivial.`}
+],{title:'The slides · behaviour · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'case',t:R`\sigma_{M,w} = \exists y\,(\cdots)`,n:`A search statement.`},
+  {k:'ember',kl:'reach',t:R`PA \vdash \sigma \iff M \text{ stops}`,n:`Search-reached, and truth.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{PA’s reach: not decided}}`,n:`Nor truth everywhere.`}
+],{title:'The slides · arithmetic · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'search',t:R`p(x_1, \dots, x_k) = 0\,?`,n:`Try every list.`},
+  {k:'ember',kl:'1970',t:R`a \in A \iff \exists x\ p(a, x) = 0`,n:`Named, not proved.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{solvable? not decided}}`,n:`Listed only.`}
+],{title:'The slides · equations · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

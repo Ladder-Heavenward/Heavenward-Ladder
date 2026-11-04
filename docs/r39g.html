@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Smaller machines</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r39f.html">← 39f programs that print themselves</a><a href="r39h.html">next: 39h how long and how much room →</a></p>
+  <div class="tags"><span class="tag proof">39g · proof</span></div>
+  <h1>Smaller machines</h1>
+  <p data-pid="549ca1">The tape machine can do everything a recipe can, and so it inherits every refusal: no machine decides what tape machines do. Take some of its power away, and the refusals go away too. A machine that may not write, and may only read from left to right, is a ticket reader or a lock on a door: it can check a pattern, and every question about it can be answered. Give it a pile of marks it can add to and take from the top, and it can check brackets nested without end. Give it a tape no longer than its input, and it can check more again. Each kind of machine answers to a kind of grammar, and the kinds sit one inside the next, a ladder of machines. This step proves the walls between the first rungs of that ladder with one shape of argument, used twice: a long enough string must pass through some state, or some placeholder, twice, and the loop between can be run again as often as you like. Then it shows that every machine below the tape machine stops, so the refusals of this rung begin exactly at the top.</p>
+  <p class="gesture" data-pid="94d404">A machine that only reads checks a pattern, and patterns join by and, or and not. In a long string it repeats a state, so the loop can be pumped. A stack machine’s grammar repeats a placeholder, so two loops can be pumped together. Every machine with bounded room stops or is caught looping, so all the families below the tape machine are decided.</p>
+</header>
+
+<section class="class step" data-step="39g1">
+  <h2 class="sthead"><span class="stno">39g1</span>A machine that only reads</h2>
+  <p data-pid="808dde">12·comp built a machine with no memory: finitely many states, a start, some accepting states, and a table that moves from state to state on each letter. It is a tape machine that never writes and always steps right, and stops at the first blank. A set of strings it checks is called a <i>pattern</i>; its accepted name is a regular language. The tables of 1e work on patterns.</p>
+  <p data-pid="6cfc62">Joined-machines technique: <b>if machines with no memory check A and B, then machines with no memory check A and B, A or B, and the strings not in A.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the joined-machines technique">
+M_A \text{ with }\allowbreak \text{states } p\text{, } M_B \text{ with }\allowbreak \text{states } q @@ given
+\text{new }\allowbreak \text{states: }\allowbreak \text{pairs } (p, q)\text{; }\allowbreak \text{on }\allowbreak \text{a }\allowbreak \text{letter, }\allowbreak \text{move }\allowbreak \text{each }\allowbreak \text{half }\allowbreak \text{by }\allowbreak \text{its }\allowbreak \text{own }\allowbreak \text{table} @@ the two run side by side, as 39a’s turn-taking did, in one step
+\text{accept } (p, q) \text{ when }\allowbreak \text{both }\allowbreak \text{accept, }\allowbreak \text{or }\allowbreak \text{when }\allowbreak \text{either }\allowbreak \text{does} @@ 1e’s and, 1e’s or
+\text{for not } A\text{: }\allowbreak \text{swap }\allowbreak \text{the }\allowbreak \text{accepting }\allowbreak \text{and }\allowbreak \text{the }\allowbreak \text{other }\allowbreak \text{states }\allowbreak \text{of } M_A @@ every string ends in exactly one state (the one-next technique)
+\htmlClass{new}{\text{and, }}\allowbreak \htmlClass{new}{ \text{or }}\allowbreak \htmlClass{new}{ \text{and }}\allowbreak \htmlClass{new}{ \text{not }}\allowbreak \htmlClass{new}{ \text{of }}\allowbreak \htmlClass{new}{ \text{patterns }}\allowbreak \htmlClass{new}{ \text{are }}\allowbreak \htmlClass{new}{ \text{patterns}} \quad \blacksquare @@ the pair machine has p times q states
+  </pre>
+  <p data-pid="76c47a">So whether a pattern machine accepts any string at all is decided: look for an accepting state the start can reach, a search through finitely many states. Whether two pattern machines check the same set is decided too: the set where they differ is a pattern, by the technique, and it is empty or not. Every question 39e found undecidable for tape machines is decided for these.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · patterns · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">39g1.1</span><span class="ph understand">understand</span>What is a pattern, and which tape machines are machines with no memory? <br>What does the joined-machines technique say, and why is “do these two machines check the same set?” decided for them?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39g2">
+  <h2 class="sthead"><span class="stno">39g2</span>Pumping a loop</h2>
+  <p data-pid="b45425">Pumping technique: <b>if a machine with no memory with q states checks L, then every member w of L with at least q letters can be cut as w = xyz, with y not empty and xy at most q letters long, so that xyⁱz is in L for every i ≥ 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the pumping technique">
+w = w_1 w_2 \cdots w_m \in L,\ \allowbreak \ m \ge q @@ given
+\text{states } s_0, s_1, \dots, s_q \text{ after } 0, 1, \dots, q \text{ letters} @@ q + 1 states named, q states in all
+s_j = s_k \text{ for }\allowbreak \text{some } j \lt k \le q @@ pigeonhole (8·cb5)
+x = w_1 \cdots w_j,\ \allowbreak \ y = w_{j+1} \cdots w_k,\ \allowbreak \ z = \text{the rest} @@ y takes the machine from s_j back to s_j
+\htmlClass{new}{\text{reading } xy^iz \text{ ends }}\allowbreak \htmlClass{new}{ \text{where } xyz \text{ ends: }}\allowbreak \htmlClass{new}{ \text{in } L} \quad \blacksquare @@ the loop is run i times, then z as before
+  </pre>
+  <p data-pid="e4e728">The pumping technique says what every pattern does. To show a set is no pattern, suppose a machine with q states and find a member it cannot pump. The squares: L = strings aⁿ with n a square. Take w to be q² a’s. Any allowed cut has y made of k a’s, with 1 ≤ k ≤ q. Then xy²z has q² + k letters, and q² &lt; q² + k &lt; (q + 1)², so it is not in L.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · pumping · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39g2.1</span><span class="ph understand">understand</span>What does the pumping technique say, and where does its proof use pigeonhole? <br>Why does the string of q² a’s show that the strings of square length are no pattern?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39g3">
+  <h2 class="sthead"><span class="stno">39g3</span>A stack, and two loops at once</h2>
+  <p data-pid="edd82b">A <i>stack machine</i> is a machine with no memory that also keeps a stack: a pile of marks it may add to, or take from, at the top only. It checks the balanced brackets of 12·comp: push at each opening bracket, pop at each closing one, fail if the stack is empty when a pop is needed, and accept when it is empty at the end. Its sets are exactly the sets of strings made by 12·comp’s second family, the grammars with one placeholder on the left of each rule; that is named here and its proof is in the basement.</p>
+  <p data-pid="63c631">Two-loop technique: <b>if a grammar of the second family has p placeholders, and no right side is longer than b ≥ 2, then every string w that the grammar makes and that is longer than bᵖ can be cut as w = uvxyz, with v and y not both empty, so that uvⁱxyⁱz is made by it for every i ≥ 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-loop technique">
+\text{the }\allowbreak \text{building }\allowbreak \text{of } w \text{ is }\allowbreak \text{a }\allowbreak \text{tree: }\allowbreak \text{each }\allowbreak \text{placeholder }\allowbreak \text{above }\allowbreak \text{the }\allowbreak \text{string }\allowbreak \text{its }\allowbreak \text{rule }\allowbreak \text{wrote} @@ 4d’s recursion, read as a tree, as 37n read proofs
+\text{a }\allowbreak \text{tree }\allowbreak \text{of }\allowbreak \text{height } h \text{ has }\allowbreak \text{at }\allowbreak \text{most } b^h \text{ letters }\allowbreak \text{at }\allowbreak \text{its }\allowbreak \text{foot} @@ each placeholder writes at most b
+|w| \gt b^p \Rightarrow \text{some }\allowbreak \text{path }\allowbreak \text{from }\allowbreak \text{the }\allowbreak \text{top }\allowbreak \text{has }\allowbreak \text{more }\allowbreak \text{than } p \text{ placeholders} @@ the line above, turned round
+\text{some }\allowbreak \text{placeholder } A \text{ appears }\allowbreak \text{twice }\allowbreak \text{on }\allowbreak \text{that }\allowbreak \text{path} @@ pigeonhole (8·cb5)
+\text{the }\allowbreak \text{upper } A \text{ writes } vAy\text{, }\allowbreak \text{the }\allowbreak \text{lower }\allowbreak \text{writes } x @@ cut the tree at the two A’s
+\htmlClass{new}{\text{replace }}\allowbreak \htmlClass{new}{ \text{the }}\allowbreak \htmlClass{new}{ \text{lower }}\allowbreak \htmlClass{new}{ \text{by }}\allowbreak \htmlClass{new}{ \text{the }}\allowbreak \htmlClass{new}{ \text{upper, } i \text{ times: } uv^ixy^iz} \quad \blacksquare @@ the same rules, used again; i = 0 puts x in the upper A’s place
+  </pre>
+  <p data-pid="d08477">So aⁿbⁿcⁿ is in no grammar of the second family. For a long enough w = aⁿbⁿcⁿ, v and y together lie within two of the three blocks or hold a mix of letters; pumped, either the counts of a, b and c stop being equal, or the letters come out of order. 12·comp wrote a grammar of the third family for it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · two loops · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39g3.1</span><span class="ph understand">understand</span>What is a stack machine, and how does it check balanced brackets? <br>What does the two-loop technique say, and why must some placeholder appear twice on a path?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39g4">
+  <h2 class="sthead"><span class="stno">39g4</span>The ladder of machines</h2>
+  <p data-pid="7bf72d">Each family of 12·comp has its machine: no memory for the first, a stack for the second, a tape no longer than the input for the third, a tape machine for the fourth. The fourth family’s sets are exactly the listed sets. The third’s are below the decided sets.</p>
+  <p data-pid="4dfaa4">Bounded-room technique: <b>if a tape machine never uses more than r cells, then whether it stops is decided: it stops within q · r · mʳ steps, or never, where q is its count of states and m its count of marks.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the bounded-room technique">
+\text{a }\allowbreak \text{configuration }\allowbreak \text{is }\allowbreak \text{a }\allowbreak \text{state, }\allowbreak \text{a }\allowbreak \text{head }\allowbreak \text{place, }\allowbreak \text{and }\allowbreak \text{the } r \text{ cells} @@ 39a1
+\text{at most } q \cdot r \cdot m^r \text{ configurations} @@ stages-multiply (4k)
+\text{a }\allowbreak \text{run }\allowbreak \text{longer }\allowbreak \text{than }\allowbreak \text{that }\allowbreak \text{repeats }\allowbreak \text{a }\allowbreak \text{configuration} @@ pigeonhole
+\text{from }\allowbreak \text{a }\allowbreak \text{repeated }\allowbreak \text{configuration }\allowbreak \text{the }\allowbreak \text{run }\allowbreak \text{repeats }\allowbreak \text{for }\allowbreak \text{ever} @@ the back-again technique (3·comp), with the one-next technique
+\htmlClass{new}{\text{run } q \cdot r \cdot m^r \text{ steps: }}\allowbreak \htmlClass{new}{ \text{stopped, }}\allowbreak \htmlClass{new}{ \text{or }}\allowbreak \htmlClass{new}{ \text{never }}\allowbreak \htmlClass{new}{ \text{will}} \quad \blacksquare @@ a decider
+  </pre>
+  <p data-pid="be634f">A stack machine is not bounded in room, but its stack can be shown never to need to grow past a bound fixed by the grammar for a given input, so it too is decided. So every family below the fourth is decided, and the walls are proper: aⁿbⁿ is in the second family and no pattern (12·comp’s wall, or the pumping technique), aⁿbⁿcⁿ in the third and not the second, and the stopping set in the fourth and not decided. The refusals of 39d live only at the top rung of this ladder.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · bounded · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39g4.1</span><span class="ph understand">understand</span>What does the bounded-room technique say, and why does a run longer than q · r · mʳ steps never stop? <br>Which example separates each family from the one below it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39g5">
+  <h2 class="sthead"><span class="stno">39g5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+L \text{ can }\allowbreak \text{be }\allowbreak \text{pumped, }\allowbreak \text{so } L \text{ is }\allowbreak \text{a }\allowbreak \text{pattern}\,? @@ the technique runs one way; some sets that are no pattern pump too (39g.6.3)
+\text{in } w = xyz\text{, choose } y \text{ to }\allowbreak \text{suit }\allowbreak \text{the }\allowbreak \text{proof}\,? @@ the machine chooses the cut; the proof must defeat every cut with xy at most q long
+\text{a }\allowbreak \text{laptop }\allowbreak \text{has }\allowbreak \text{bounded }\allowbreak \text{room, }\allowbreak \text{so }\allowbreak \text{whether }\allowbreak \text{its }\allowbreak \text{programs }\allowbreak \text{stop }\allowbreak \text{is }\allowbreak \text{decided }\allowbreak \text{in }\allowbreak \text{practice}\,? @@ decided by a run of q · r · mʳ steps, with r in the billions: no practice reaches it
+\text{a }\allowbreak \text{stack }\allowbreak \text{machine }\allowbreak \text{with }\allowbreak \text{two }\allowbreak \text{stacks }\allowbreak \text{is }\allowbreak \text{still }\allowbreak \text{below }\allowbreak \text{the }\allowbreak \text{tape }\allowbreak \text{machine}\,? @@ two stacks are a tape, one on each side of the head
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39g5.1</span><span class="ph understand">understand</span>Why may the proof that a set is no pattern not choose the cut xyz? <br>Why is a machine with two stacks as strong as a tape machine?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">39g.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">numbers written in twos</span></span>Build a machine with no memory that checks the numerals in twos of the multiples of 5, as a table with its states as remainders. Then build the pair machine for “a multiple of 5 and of 3”, and count its states.</div>
+  <div class="chq"><span class="chid">39g.6.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">any finite set of strings</span></span>Prove that every finite set of strings is a pattern. The squares of 39g2 are endless: find the first place in its proof that needed an endless set.</div>
+  <div class="chq"><span class="chid">39g.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="L = \{a^ib^jc^k : i = 0 \text{ or } j = k\}"></span></span>Show that every member of L with at least one letter can be pumped, with q = 1. Then prove that L is no pattern, by joining it with a pattern and using the joined-machines technique. What does this say about the pumping technique run backwards?</div>
+  <div class="chq"><span class="chid">39g.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">the rat the cat the dog chased bit ran</span></span>One view holds that a language like English needs at least a stack, since its statements nest without end: the rat the cat bit ran; the rat the cat the dog chased bit ran. Another holds that no speaker follows more than two or three nestings, so a machine with no memory, and a large one, describes what people actually say. Which family is English in? Can the question be settled by counting what people say, and if not, by what?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r39f.html">← 39f · programs that print themselves</a><a href="r39h.html">39h · how long and how much room →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A machine with no memory is a deterministic finite automaton, and a pattern is a regular language. The joined-machines technique is the product construction, and the closure of regular languages under intersection, union and complement. The pumping technique is the pumping lemma for regular languages, and the two-loop technique the pumping lemma for context-free languages. A stack machine is a pushdown automaton; its languages are the context-free languages. A tape machine bounded by its input is a linear bounded automaton, for the context-sensitive languages. The ladder of families is the Chomsky hierarchy.</p>
+  <h3>Who said it first</h3>
+  <p>Michael Rabin and Dana Scott (1959) proved the pumping lemma for regular languages in its first form. Yehoshua Bar-Hillel, Micha Perles and Eli Shamir (1961) proved the lemma for context-free languages. Noam Chomsky (1956, 1959) set out the hierarchy, and Marcel-Paul Schützenberger (1963) and Chomsky showed that pushdown automata check exactly the context-free languages. Sige-Yuki Kuroda (1964) matched linear bounded automata with the third family. The centre-embedding of 39g.6.4 was discussed by George Miller and Chomsky (1963).</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“aⁿbⁿ is no pattern: take w to be q a’s and then q b’s, and cut it as x and z empty, y all of w. Then y twice over is not in the set.” Not allowed: the cut must have xy at most q long, and here it is 2q. The machine chooses the cut, and the proof must work for every cut it could choose; for that w every allowed y is made of a’s, and that is what the proof uses.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'pair',t:R`(p, q)`,n:`Both halves at once.`},
+  {k:'ember',kl:'accept',t:R`\text{both, or either}`,n:`1e’s tables.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{A \cap B,\ A \cup B,\ \text{not } A}`,n:`Still patterns.`}
+],{title:'The slides · patterns · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'states',t:R`s_0, \dots, s_q`,n:`q + 1 names.`},
+  {k:'ember',kl:'loop',t:R`s_j = s_k`,n:`Pigeonhole.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{xy^iz \in L}`,n:`Run the loop again.`}
+],{title:'The slides · pumping · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'tree',t:R`|w| \gt b^p`,n:`Tall tree.`},
+  {k:'ember',kl:'repeat',t:R`A \Rightarrow vAy,\ \ A \Rightarrow x`,n:`Same placeholder twice.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{uv^ixy^iz}`,n:`Pump both.`}
+],{title:'The slides · two loops · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'count',t:R`q \cdot r \cdot m^r`,n:`Configurations.`},
+  {k:'ember',kl:'repeat',t:R`\text{back again}`,n:`Then for ever.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{bounded room: decided}}`,n:`Refusals only at the top.`}
+],{title:'The slides · bounded · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

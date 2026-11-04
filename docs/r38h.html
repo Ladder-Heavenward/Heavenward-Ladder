@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Memory</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38g.html">← 38g the liar box</a><a href="r38i.html">next: 38i adding with gates →</a></p>
+  <div class="tags"><span class="tag proof">38h · proof</span></div>
+  <h1>Memory</h1>
+  <p data-pid="6a8c9e">The liar had a twin: this statement is true. If it is so, it is so, and if not, not. As a sameness it asks for a mark equal to itself, and both marks meet that, so the logic picks neither. Built as a ring of two not gates, the twin is a ring that cannot run, because the nots cancel in pairs. It rests, and the steep middle that kept the odd ring moving now drives the even ring to one end or the other and holds it there. Which end is whatever it was last made to be. That is a memory of one bit. This step proves it holds, then gives it two doors so that it can be written on purpose: two not-and gates in a ring, each with a spare input, so that a zero on one door sets the bit and a zero on the other clears it. Then a clock is added, so that the bit is taken in only at the instant the clock rises, and a row of such catches, all on one clock, holds a whole number at once. The odd ring keeps time, the even ring keeps a value, and the next steps need both.</p>
+  <p class="gesture" data-pid="5166c1">Two nots in a ring rise as a whole and rest at either end, and each end holds: one bit. Two not-ands in a ring, with spare inputs, are a latch: a zero on one input sets it, a zero on the other clears it, and ones hold. Two latches, open in turn, catch a bit at the clock’s rise. A row of them is a register.</p>
+</header>
+
+<section class="class step" data-step="38h1">
+  <h2 class="sthead"><span class="stno">38h1</span>An even ring holds a bit</h2>
+  <p data-pid="ff4ac0">The truth-teller in 38a’s arithmetic is x = x, which both marks meet. In wire it is a ring of two not gates, h = g ∘ g. <a href="r26then.html#26then5">26·then5</a> found its three rests and named the ring technique: an even ring holds one of two states. The difference here is the proof, by the techniques of this rung, and what it says about any even ring.</p>
+  <p data-pid="82e5ea">Even-ring technique: <b>a ring of an even number of not gates with |g′(m)| > 1 rests at the middle and at two patterns of 1s and 0s; the middle pushes and the two patterns hold.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the even-ring technique">
+n \text{ even}:\ h = g \circ \cdots \circ g \text{ rises} @@ an even count of falls (38g2)
+h(m) = m,\ \ h'(m) = g'(m)^n > 1 @@ the chain rule; |g′(m)| &gt; 1
+\text{near } 0:\ h(v) - v > 0;\ \text{at } m^-:\ h(v) - v < 0 @@ h is flat near the ends (38e2: slope near 0.0003) and steep at m
+\text{a rest } r_0 \text{ below } m \text{ and } r_1 \text{ above, each with } |h'| < 1 @@ in-between values (12a) on each side
+\htmlClass{new}{r_0 \text{ and } r_1 \text{ hold},\ m \text{ pushes}:\ \text{two states that keep}} \quad \blacksquare @@ the pull-together technique (22h3) at the ends; the middle-gain technique at m
+  </pre>
+  <p data-pid="618e14">Which state the ring is in is set by its history, not by its logic: x = x is true of both. When the power comes on the ring sits near m, noise tips it, and it falls to an end and stays. To use it, it must be told which end.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · even ring · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">38h1.1</span><span class="ph understand">understand</span>What does the even-ring technique say? <br>Why does the ring’s state depend on its history and not on its logic?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38h2">
+  <h2 class="sthead"><span class="stno">38h2</span>A latch, with two doors</h2>
+  <p data-pid="50139d">Replace each not of the ring with a not-and, and give each a spare input: the doors s and r. The outputs are Q and its partner P, with Q = nand(s, P) and P = nand(r, Q). A not-and with one input at 1 is a not, since nand(1, y) = 1 − y.</p>
+  <p data-pid="c270d5">Hold-row technique: <b>with both doors at 1 the latch is an even ring and keeps its bit; s = 0 sets Q to 1, r = 0 clears Q to 0; both at 0 is not used.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the hold-row technique">
+s = r = 1:\ \ Q = 1 - P,\ \ P = 1 - Q @@ nand(1, y) = 1 − y: a ring of two nots, the even-ring technique
+s = 0:\ \ Q = \mathrm{nand}(0, P) = 1 @@ 1 − 0 · P = 1, whatever P was
+\text{then } P = \mathrm{nand}(r, 1) = 1 - r = 0 \text{ when } r = 1 @@ the partner follows
+r = 0:\ \ P = 1,\ \ Q = \mathrm{nand}(s, 1) = 0 \text{ when } s = 1 @@ the same, the other way
+\htmlClass{new}{s = r = 0:\ Q = P = 1:\ \text{not a bit; and on release both race}} \quad \blacksquare @@ so that row is kept out by design
+  </pre>
+  <p data-pid="75cf04">Set, then hold: a 0 on s for a moment, then s back to 1, and Q stays 1. The moment of the 0 has been remembered. The row both-at-0 is the latch’s illegal move: it gives Q and P the same value, and when both doors open together the ring tips whichever way noise says.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · latch · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38h2.1</span><span class="ph understand">understand</span>What does the hold-row technique say? <br>Why is the row s = r = 0 kept out?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38h3">
+  <h2 class="sthead"><span class="stno">38h3</span>Catching a bit at an edge</h2>
+  <p data-pid="632528">Feed the doors from a data wire d and an enable wire e: s = nand(d, e) and r = nand(¬d, e). When e = 1, s = 1 − d and r = d, so Q follows d. When e = 0, both doors are 1, and Q holds. That is a gated latch: open while e is 1, shut while it is 0. It is still open for a whole stretch. To take a bit at one instant, put two in a row, the first open while the clock c is 0 and the second open while c is 1.</p>
+  <p data-pid="a82363">Edge-catch technique: <b>two gated latches in a row, the first enabled by not c and the second by c, take the value of d at the moment c rises from 0 to 1, and hold it until the next rise.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the edge-catch technique">
+c = 0:\ \text{first latch open, follows } d;\ \text{second shut, holds} @@ e₁ = 1 − c = 1, e₂ = c = 0
+c \text{ rises}:\ \text{first shuts on the last } d,\ \text{second opens} @@ the first holds what d was at the rise
+c = 1:\ \text{second follows the first, which no longer moves} @@ changes of d now reach only the shut first latch
+c \text{ falls}:\ \text{second shuts on that value, first opens} @@ the output still holds
+\htmlClass{new}{\text{the output changes only at a rise, to } d \text{ as it was then}} \quad \blacksquare @@ every stretch of the clock checked
+  </pre>
+  <p data-pid="2008da">The clock is the odd ring of 38g, or a crystal steadied by one. Between rises the gates may wobble as they settle. At the rise, everything that has settled is caught at once. A design works if every path from one catch to the next settles in less than one period: 38i counts how long an adder takes for exactly this reason.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · flip-flop · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38h3.1</span><span class="ph understand">understand</span>What does the edge-catch technique say? <br>Why can changes of d while the clock is 1 not reach the output?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38h4">
+  <h2 class="sthead"><span class="stno">38h4</span>A row of catches</h2>
+  <p data-pid="00ba9a">Put n edge-catches side by side on one clock. Each holds one bit; together they hold a numeral in twos of n places (4i14).</p>
+  <p data-pid="6483e8">Register-count technique: <b>a row of n edge-catches on one clock holds any one of 2ⁿ patterns, and takes a new one only at a rise.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the register-count technique">
+\text{each catch: } 2 \text{ states, held independently} @@ the edge-catch technique, one per place
+2 \cdot 2 \cdots 2 = 2^n \text{ patterns} @@ the product rule (4k)
+n = 64:\ \ 2^{64} \approx 1.8 \cdot 10^{19} @@ every number from 0 to 2⁶⁴ − 1 in twos
+\htmlClass{new}{\text{a register of } 64 \text{ catches holds any number below } 2^{64}} \quad \blacksquare @@ the place-value technique in twos
+  </pre>
+  <p data-pid="962a48">A row of catches whose input is its own output plus 1 counts: at each rise it takes the next number. That needs an adder, which 38i builds. A memory of many rows, each with a number of its own to pick it out, is what 38j’s machine reads its list from.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · register · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38h4.1</span><span class="ph understand">understand</span>What does the register-count technique say? <br>What would a row of catches fed its own value plus 1 do at each rise?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38h5">
+  <h2 class="sthead"><span class="stno">38h5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{an even ring rests only at the ends}\,? @@ it rests at m too; m does not hold
+x = x \text{ picks the bit}\,? @@ both marks meet it; the history picks
+s = r = 0 \text{ clears and sets at once}\,? @@ it gives Q = P = 1, no bit; on release the ring races
+\text{a gated latch catches } d \text{ at one instant}\,? @@ it follows d for the whole time e is 1; two in a row catch an instant
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38h5.1</span><span class="ph understand">understand</span>Why does x = x not pick the bit? <br>Why does one gated latch not catch d at an instant?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">38h.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a ring of four not gates</span></span>Build the rests of a ring of four not gates. Which patterns of four 1s and 0s hold, and how many are there? <br>Could a ring of four hold two bits?</div>
+  <div class="chq"><span class="chid">38h.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="s = r = 0 \to s = r = 1 \text{ together}"></span></span>Both doors open at once from the forbidden row. Using the middle-gain technique, what does the latch do, and how long might it take to decide? <br>Why does every chip that reads an unclocked wire use two catches in a row?</div>
+  <div class="chq"><span class="chid">38h.6.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">a circuit that keeps a bit</span></span>Every even ring keeps a bit. Turn it round: must every circuit that keeps a bit contain a loop of gates? <br>Prove that a circuit with no loop has its outputs fixed by its present inputs alone.</div>
+  <div class="chq"><span class="chid">38h.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">4·comp’s truth-teller, and 1e’s settled statements</span></span>The truth-teller has two marks and the wire chooses by history. One camp says a statement whose truth depends on its history is no statement at all; another that memory is exactly a statement made true by an earlier move, as a supposition is held open until a box closes. <br>Which camp does a latch side with, and is a latch nearer a supposition held open or a given?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r38g.html">← 38g · the liar box</a><a href="r38i.html">38i · adding with gates →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A ring of two inverters is a bistable element; with two doors it is an SR latch (set–reset), here built of NANDs with doors active at 0. With data and enable it is a gated D latch, and two in a row, opened in turn by the clock, are a master–slave D flip-flop, which is edge-triggered. A row of flip-flops on one clock is a register. The undecided state of 38h.6.2 is metastability, and two flip-flops in a row are a synchronizer.</p>
+  <h3>Who said it first</h3>
+  <p>William Eccles and Frank Jordan built the trigger circuit, two valves in a ring holding one of two states, in 1918. Registers of such circuits held numbers in the ENIAC (1945). Static memory cells of six transistors, the even ring with two doors, have been the fast memory of chips since the 1960s. The latch’s undecided state was studied by Thomas Chaney and Charles Molnar in 1973, who showed that no catch can bound its deciding time.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“A latch stores a bit, so its output is a function of its inputs: Q = f(s, r).” Not allowed: on the row s = r = 1 both Q = 0 and Q = 1 are possible. Q is a function of the inputs and the latch’s past, which is what memory is. Rung 9’s functions give single values; a latch needs its history as one more input.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'rises',t:R`h = g \circ g`,n:`Two falls.`},
+  {k:'ember',kl:'rests',t:R`r_0,\ m,\ r_1`,n:`Middle pushes.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{two states that keep}}`,n:`One bit.`}
+],{title:'The slides · even ring · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'hold',t:R`s = r = 1`,n:`An even ring.`},
+  {k:'ember',kl:'set',t:R`s = 0 \Rightarrow Q = 1`,n:`One door.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a bit written on purpose}}`,n:`Set, clear, hold.`}
+],{title:'The slides · latch · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'gated',t:R`s = \mathrm{nand}(d, e)`,n:`Open while e is 1.`},
+  {k:'ember',kl:'two in a row',t:R`\neg c \text{ then } c`,n:`Open in turn.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{caught at the rise}}`,n:`One instant.`}
+],{title:'The slides · flip-flop · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'one place',t:R`2 \text{ states}`,n:`An edge-catch.`},
+  {k:'ember',kl:'n places',t:R`2^n`,n:`Product rule.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{64 \text{ catches: below } 2^{64}}`,n:`A number held.`}
+],{title:'The slides · register · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Counting steps by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38p.html">← 38p wiring a table by hand</a><a href="r38phys.html">next: 38·phys why does silicon have a gap? →</a></p>
+  <div class="tags"><span class="tag tech">38q · technique</span></div>
+  <h1>Counting steps by hand</h1>
+  <p data-pid="4641a8">A program on a page is a set of loops and calls, and its count can be read off before it is ever run. This step does that by hand, four ways. Loops inside loops whose inner count depends on the outer one are a sum, and the sums of the counting rung finish them. A loop that halves its counter, or doubles it, runs about as many times as the log of its bound, and the floor of that log can be pinned exactly. A program that calls itself gives a rule for its own count, one term for each call, and the last steps of this rung solve the rule. And at the end the family is read off by keeping the term that grows fastest, which is honest only past the size where that term takes over, so the step finds that size too.</p>
+  <p class="gesture" data-pid="975d01">Loops in loops are sums over the outer counter. A halving or doubling loop runs about the log of its bound. A program that calls itself writes its own rule. Keep the fastest-growing term for the family, and say from which size on it rules.</p>
+</header>
+
+<section class="class step" data-step="38q1">
+  <h2 class="sthead"><span class="stno">38q1</span>Loops inside loops</h2>
+  <p data-pid="43d054">A loop over i from 1 to n, with a loop over j from 1 to i inside, runs its inner body once for each pair j ≤ i. Count the inner rounds as a sum over the outer counter.</p>
+  <p data-pid="fae6d6">Nested-loop technique: <b>the inner body of loops nested as i from 1 to n, j from 1 to i, runs n(n + 1)/2 times; with a third loop, l from 1 to j, it runs n(n + 1)(n + 2)/6 times.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the nested-loop technique">
+\textstyle\sum_{i=1}^{n} i = \tfrac{n(n + 1)}{2} @@ 4k’s sum
+\textstyle\sum_{i=1}^{n}\sum_{j=1}^{i} j = \sum_{i=1}^{n} \tfrac{i(i + 1)}{2} @@ the inner two loops, for each i
+= \tbinom{n + 2}{3} = \tfrac{n(n + 1)(n + 2)}{6} @@ the triangle of choices (4k): each run is a choice of l ≤ j ≤ i from n values, repeats allowed
+\htmlClass{new}{n = 10:\ \ 55 \text{ and } 220} \quad \blacksquare @@ checked by running the loops
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · nested · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">38q1.1</span><span class="ph understand">understand</span>What does the nested-loop technique say? <br>Why is the count of three nested loops a count of choices with repeats allowed?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38q2">
+  <h2 class="sthead"><span class="stno">38q2</span>Loops that halve or double</h2>
+  <p data-pid="b3f3f1">A loop that sets k to the whole part of k/2 each round, while k > 1, or one that doubles i from 1 while i ≤ n, does not run n times. It runs about as many times as n can be halved.</p>
+  <p data-pid="8e25b1">Halving-loop technique: <b>halving k to its whole part while k > 1 runs ⌊log₂ k⌋ rounds; doubling i from 1 while i ≤ n runs ⌊log₂ n⌋ + 1 rounds.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the halving-loop technique">
+2^j \le n < 2^{j+1},\ \ j = \lfloor \log_2 n \rfloor @@ name the place of n among the powers of 2
+i = 1, 2, 4, \ldots, 2^j \le n,\ \ 2^{j+1} > n @@ the doubling loop’s values
+\text{rounds} = j + 1 @@ count 2⁰ to 2ʲ
+n = 1000:\ \ 2^9 = 512 \le 1000 < 1024 @@ j = 9
+\htmlClass{new}{10 \text{ doubling rounds},\ 9 \text{ halving rounds}} \quad \blacksquare @@ 1000 → 500 → 250 → 125 → 62 → 31 → 15 → 7 → 3 → 1
+  </pre>
+  <p data-pid="a6c3c5">A halving loop inside a loop over n items costs n(⌊log₂ n⌋ + 1), the family n log n. A loop that goes up by adding 1 to i and stops at i² > n runs about √n times: what changes the counter decides the family.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · halving · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38q2.1</span><span class="ph understand">understand</span>What does the halving-loop technique say? <br>Why does halving to the whole part run one round fewer than doubling, for the same n?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38q3">
+  <h2 class="sthead"><span class="stno">38q3</span>Programs that call themselves</h2>
+  <p data-pid="a8d3a8">A program that calls itself writes the rule for its own count: one term for each call it makes, at the size it calls with, plus the turns of its own loops.</p>
+  <p data-pid="2a0737">Call-tree technique: <b>if a program on size n calls itself on sizes n₁, …, n_a and spends f(n) turns of its own, its count obeys T(n) = T(n₁) + ⋯ + T(n_a) + f(n), and 38m and 22l2 solve the common shapes.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the call-tree technique, on three programs">
+\text{halves, two calls, a loop over } n:\ T(n) = 2T(n/2) + n @@ merge sort’s shape: n log₂ n (22l1)
+\text{one call on } n - 1, \text{ a loop over } n:\ T(n) = T(n - 1) + n @@ the shrink-by-one technique: about n²/2
+\text{three calls on halves, a loop over } n:\ T(n) = 3T(n/2) + n @@ the master technique, r = 3/2: the bottom wins
+\htmlClass{new}{n\log_2 n,\ \ \tfrac12 n^2,\ \ n^{\log_2 3} \approx n^{1.585}} \quad \blacksquare @@ 22l2’s third case
+  </pre>
+  <p data-pid="44f4dc">The calls draw a tree: the first call at the top, its calls below it, theirs below them. The count is the sum of the work at every place of the tree, which is why 22l2 adds the levels and 38m3 guesses and checks.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · calls · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38q3.1</span><span class="ph understand">understand</span>What does the call-tree technique say? <br>Why does a program that calls itself three times on halves land in a higher family than one that calls itself twice?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38q4">
+  <h2 class="sthead"><span class="stno">38q4</span>Keep the largest term</h2>
+  <p data-pid="0034c3">A count read by hand is often a sum of terms of different families. The family is that of the fastest-growing term, ranked by 22k2. What that hides is where the fast term takes over.</p>
+  <p data-pid="117c7c">Largest-term technique: <b>a sum of finitely many terms is in the family of the term of highest rank; and the hand count should say the size past which that term is the largest.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the largest-term technique">
+T(n) = 3n^2 + 100\,n\log_2 n + 10^6 @@ a count read off a program
+\tfrac{100\,n\log_2 n}{3n^2} \to 0,\ \ \tfrac{10^6}{3n^2} \to 0 @@ the ranking technique (22k2)
+T(n) = O(n^2) @@ each lower term is at most 3n² past some size
+3n^2 > 100\,n\log_2 n \text{ from } n = 270;\ \ 3n^2 > 10^6 \text{ from } n = 578 @@ found by machine
+\htmlClass{new}{\text{below about } 600 \text{ items, the } 10^6 \text{ start-up rules}} \quad \blacksquare @@ the family speaks only for large n
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · largest term · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38q4.1</span><span class="ph understand">understand</span>What does the largest-term technique say? <br>Why should a hand count say from which size on the largest term rules?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38q5">
+  <h2 class="sthead"><span class="stno">38q5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{two nested loops are always } n^2\,? @@ i from 1 to n, j doubling up to i: about n log₂ n
+\text{doubling } i \text{ from } 1 \text{ to } n \text{ runs } \log_2 n \text{ times}\,? @@ ⌊log₂ n⌋ + 1: ten rounds for 1000, not 9.97
+T(n) = 3T(n/2) + n \text{ is } n\log n \text{ like merge sort}\,? @@ three calls: r = 3/2, n^1.585
+3n^2 + 10^6 \text{ is quicker than } n^3 \text{ for every } n\,? @@ only from n = 102 on; at n = 10, n³ = 1000 against 1 000 300
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38q5.1</span><span class="ph understand">understand</span>Why are two nested loops not always n²? <br>Why does doubling from 1 to 1000 run 10 rounds and not log₂ 1000?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">38q.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">i from 1 to n; j from i to n; l doubling from 1 to j</span></span>Build the count of the innermost body exactly as a sum, and find its family. <br>Check your sum at n = 8 by running the loops by hand.</div>
+  <div class="chq"><span class="chid">38q.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{while } k &gt; 1:\ k \leftarrow \lfloor \sqrt{k} \rfloor"></span></span>How many rounds does this loop run from k = 2⁶⁴? Find the family as a function of n = k. <br>Is it in any family of 22k2’s list?</div>
+  <div class="chq"><span class="chid">38q.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="T(n) = O(n^2)"></span></span>The largest-term technique reads the family off a sum. Turn it round: if a count is O(n²), must it be a sum with an n² term? Build a count in O(n²) that has no n² term and is not O(n^1.9). <br>What does that say about reading families off a page?</div>
+  <div class="chq"><span class="chid">38q.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\textstyle\sum_{i=1}^n \sum_{j=1}^i j"></span></span>Reroute the three-loop count without choices: sum i(i + 1)/2 by 4k’s sums of squares and of numbers. <br>Which route would you trust at the board, and why?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r38p.html">← 38p · wiring a table by hand</a><a href="r38phys.html">38·phys · why does silicon have a gap? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Reading counts off loops is the analysis of algorithms by summation; halving and doubling loops are logarithmic loops. A program that calls itself is recursive, its count a recurrence, and its calls a recursion tree. Keeping the largest term is asymptotic analysis, and the size past which it rules is where the asymptotic regime begins; below it, constant factors and lower-order terms decide. The crosswalk items here are AP Computer Science A 2.11 and 2.12 (nested iteration, informal run-time analysis) and AP Computer Science Principles 3.17.</p>
+  <h3>Who said it first</h3>
+  <p>Donald Knuth made the counting of a program’s steps by sums and recurrences a discipline in The Art of Computer Programming (from 1968) and Concrete Mathematics (1989, with Ronald Graham and Oren Patashnik).</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The program has two loops, one inside the other, each up to n, so its count is n², and it is in the same family as a program with one loop up to n².” Not allowed as a reading of programs, though right in its last part: the inner loop may stop early, halve, or double, and only the sum of its rounds counts. Two nested loops are a sum to work out, not a family to guess.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'two',t:R`\tfrac{n(n+1)}{2}`,n:`A sum.`},
+  {k:'ember',kl:'three',t:R`\tbinom{n+2}{3}`,n:`Choices.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{55,\ 220 \text{ at } n = 10}`,n:`Off the page.`}
+],{title:'The slides · nested · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'place',t:R`2^j \le n < 2^{j+1}`,n:`Between powers.`},
+  {k:'ember',kl:'rounds',t:R`\lfloor\log_2 n\rfloor + 1`,n:`Doubling.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{n = 1000:\ 10 \text{ and } 9}`,n:`The log.`}
+],{title:'The slides · halving · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'rule',t:R`T(n) = \textstyle\sum T(n_i) + f(n)`,n:`One term a call.`},
+  {k:'ember',kl:'solve',t:R`\text{38m, 22l2}`,n:`Common shapes.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{n\log n,\ n^2/2,\ n^{1.585}}`,n:`Three programs.`}
+],{title:'The slides · calls · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'rank',t:R`n\log n \ll n^2`,n:`22k2.`},
+  {k:'ember',kl:'family',t:R`O(n^2)`,n:`Keep the largest.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{rules from } n \approx 578}`,n:`Say where.`}
+],{title:'The slides · largest term · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

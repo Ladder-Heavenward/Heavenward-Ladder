@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Division with remainder for polynomials</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r42b.html">← 42b ideals and quotients</a><a href="r42d.html">next: 42d unique factoring →</a></p>
+  <div class="tags"><span class="tag proof">42c · proof</span></div>
+  <h1>Division with remainder for polynomials</h1>
+  <p data-pid="f8710d">Rung nine divided one polynomial by another, with real coefficients, and found that a number is a zero exactly when a straight factor splits off. Nothing in that work used the real numbers as numbers. It used adding, multiplying, and one reciprocal at each step: the reciprocal of the top coefficient of the divisor. So the same division runs with coefficients on a prime clock, in the fractions, in any field. What it needs is now easy to say exactly, and so is where it breaks. With whole-number coefficients, dividing by two x gets stuck at once. On a clock with zero products, the top coefficients of a product can cancel to nothing, a degree can fall, and a polynomial of degree two can have four zeros. This step sorts the rules that carry from rung nine to every field from the rules that need more.</p>
+  <p class="gesture" data-pid="210173">In a ring with no zero products the degree of a product is the sum of the degrees. Division with a remainder of smaller degree works over every field, and over any ring when the divisor’s top coefficient has a reciprocal. The remainder on dividing by x − r is the value at r, so a zero is a straight factor, and a polynomial of degree n has at most n zeros, in any ring with no zero products.</p>
+</header>
+
+<section class="class step" data-step="42c1">
+  <h2 class="sthead"><span class="stno">42c1</span>Degrees add, when nothing multiplies to 0</h2>
+  <p data-pid="60ea87">The <i>degree</i> of a polynomial other than 0 is the largest k with a coefficient of xᵏ other than 0, and that coefficient is its <i>top coefficient</i>. The zero polynomial has no degree.</p>
+  <p data-pid="fa7f6c">Degree-adds technique: <b>in R[x], with R a cancelling ring, the degree of pq is the degree of p plus the degree of q, and R[x] is a cancelling ring.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the degree-adds technique">
+p = a_m x^m + \cdots,\ \ q = b_n x^n + \cdots,\ \ a_m \ne 0,\ b_n \ne 0 @@ the top coefficients
+(pq)_k = 0 \text{ for } k > m + n @@ every product pᵢqⱼ with i + j = k has i &gt; m or j &gt; n
+(pq)_{m+n} = a_m b_n @@ the only pair is i = m, j = n
+\htmlClass{new}{a_m b_n \ne 0,\ \ \deg pq = m + n} \quad \blacksquare @@ R has no zero products; so pq ≠ 0 too
+  </pre>
+  <p data-pid="da871a">On ℤ/4, (2x + 1)(2x + 1) = 4x² + 4x + 1 = 1. Two polynomials of degree 1 multiply to one of degree 0, and 2x + 1 is undoable in ℤ/4[x]. In a cancelling ring that cannot happen, and the undoable polynomials are just the undoable constants.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · degrees · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">42c1.1</span><span class="ph understand">understand</span>What are the degree and the top coefficient of a polynomial? <br>What does the degree-adds technique say, and where does (2x + 1)² = 1 on ℤ/4 break it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42c2">
+  <h2 class="sthead"><span class="stno">42c2</span>Dividing over any field</h2>
+  <p data-pid="51ed78">9g’s polynomial-division technique took real coefficients. Its proof was an induction on the degree of p: take away (aₘ/dₖ) x^(m − k) d(x) to kill the top term of p, and divide what is left. The one move that is more than adding and multiplying is the reciprocal of dₖ, the top coefficient of d.</p>
+  <p data-pid="454700">Top-undoable technique: <b>in R[x], if the top coefficient of d has a reciprocal in R, then every p is dq + r with r = 0 or of degree less than d’s; over a field this holds for every d ≠ 0, and q and r are the only ones.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the top-undoable technique">
+p = a_m x^m + \cdots,\ \ d = d_k x^k + \cdots,\ \ m \ge k,\ \ d_k u = 1 @@ given: dₖ is undoable
+p_1 = p - a_m u\, x^{m-k} d @@ its xᵐ coefficient is aₘ − aₘ u dₖ = 0
+p_1 = dq_1 + r \text{ with } \deg r < k \text{ or } r = 0 @@ strong induction on m (4h); for m &lt; k take q = 0, r = p
+p = d\,(q_1 + a_m u\,x^{m-k}) + r @@ put it back
+dq + r = dq' + r' \Rightarrow d(q - q') = r' - r @@ two answers, over a field
+\htmlClass{new}{q = q',\ \ r = r'} \quad \blacksquare @@ the left side has degree at least k unless q = q′ (degree-adds); the right side has degree less than k
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: one division on the clock of 5">
+p = x^3 + 2x + 4,\ \ d = 3x + 1,\ \ 3 \cdot 2 = 1 @@ on ℤ/5 the reciprocal of 3 is 2
+p - 2x^2 d = -2x^2 + 2x + 4 = 3x^2 + 2x + 4 @@ kill x³: 2x² · 3x = 6x³ = x³
+3x^2 + 2x + 4 - x\,d = x + 4,\ \ \ x + 4 - 2d = 2 @@ kill x², then x
+\htmlClass{new}{x^3 + 2x + 4 = (3x + 1)(2x^2 + x + 2) + 2} \quad \blacksquare @@ on ℤ/5, checked by multiplying out
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · dividing · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42c2.1</span><span class="ph understand">understand</span>Which single move of 9g’s division is more than adding and multiplying? <br>What does the top-undoable technique say, and why does it make q and r the only ones over a field?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42c3">
+  <h2 class="sthead"><span class="stno">42c3</span>The value is the remainder</h2>
+  <p data-pid="b2af20">Divide by x − r. Its top coefficient is 1, so the top-undoable technique works over any ring that turns about.</p>
+  <p data-pid="c4fed5">Remainder-is-value technique: <b>the remainder of p on division by x − r is the constant p(r).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the remainder-is-value technique">
+p = (x - r)\,q + c @@ the top-undoable technique: the remainder has degree 0, or is 0
+p(r) = (r - r)\,q(r) + c @@ putting r in keeps sums and products (42b3)
+\htmlClass{new}{p(r) = c} \quad \blacksquare @@ r − r = 0
+  </pre>
+  <p data-pid="72dbef">So 9g’s factor technique holds over every ring that turns about: r is a zero of p exactly when x − r is a factor. And 9g’s at-most-n-zeros technique holds over every cancelling ring: n zeros r₁, …, rₙ split off one at a time, and a zero s of (x − r₁)q other than r₁ is a zero of q, because (s − r₁)q(s) = 0 with s − r₁ ≠ 0. That step needs no zero products, and only that step. On ℤ/8, x² − 1 has the four zeros 1, 3, 5 and 7.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · values · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42c3.1</span><span class="ph understand">understand</span>What does the remainder-is-value technique say? <br>Which line of the at-most-n-zeros proof needs a cancelling ring, and how does x² − 1 on ℤ/8 show it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42c4">
+  <h2 class="sthead"><span class="stno">42c4</span>Division makes one maker</h2>
+  <p data-pid="6f75a3">Over a field F, the top-undoable technique says the ideals of F[x] are as simple as those of ℤ.</p>
+  <p data-pid="bd18da">One-maker technique: <b>every ideal of F[x] other than {0} is the multiples of one polynomial: any member of least degree.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-maker technique">
+I \ne \{0\},\ \ g \in I,\ g \ne 0,\ \text{of least degree in } I @@ least member of a set of numbers (4h)
+p \in I,\ \ p = gq + r,\ \ \deg r < \deg g \text{ or } r = 0 @@ the top-undoable technique
+r = p - gq \in I @@ I holds multiples and sums
+r = 0 @@ a member of I other than 0 has degree at least deg g
+\htmlClass{new}{I = (g)} \quad \blacksquare @@ every p in I is gq
+  </pre>
+  <p data-pid="182ccd">The same lines, with 4j’s division-with-remainder technique, give every ideal of ℤ as nℤ. In ℤ[x], where 2 has no reciprocal, (2, x) is not the multiples of one member: such a member would divide 2, so be ±1 or ±2, and ±1 is not in (2, x), while x is not a multiple of 2. 42d builds on rings where the one-maker technique holds.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · one maker · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42c4.1</span><span class="ph understand">understand</span>What does the one-maker technique say? <br>Why is the ideal (2, x) of ℤ[x] not the multiples of one member?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42c5">
+  <h2 class="sthead"><span class="stno">42c5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+x^2 = 2x \cdot q + r \text{ with } q, r \in \mathbb Z[x],\ \deg r < 1\,? @@ the top of 2x · q is even; x² has top 1; it needs ½
+\deg pq = \deg p + \deg q \text{ on } \mathbb Z/6\,? @@ (2x)(3x) = 6x² = 0
+x^2 - 1 \text{ has at most two zeros on } \mathbb Z/8\,? @@ 1, 3, 5, 7: ℤ/8 has zero products
+p(r) = 0 \text{ for every } r \text{ in } F \Rightarrow p = 0\,? @@ on ℤ/2, x² + x is 0 at 0 and at 1 and is not the zero polynomial
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42c5.1</span><span class="ph understand">understand</span>Why can x² not be divided by 2x in ℤ[x]? <br>Why is x² + x not the zero polynomial on ℤ/2, though both its values are 0?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">42c.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x^4 + 1,\ \ x^2 + 1 \text{ on } \mathbb Z/3"></span></span>Divide x⁴ + 1 by x² + 1 on ℤ/3, and find the remainder. <br>Then find every zero of x⁴ + 1 on ℤ/3, ℤ/5 and ℤ/17, and check each against the factor technique.</div>
+  <div class="chq"><span class="chid">42c.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x^p - x \text{ on } \mathbb Z/p"></span></span>How many zeros has xᵖ − x on ℤ/p? <br>What does that say about its straight factors, and about how far the values of a polynomial on a finite field fix its coefficients? Compare 9g’s same-coefficients technique.</div>
+  <div class="chq"><span class="chid">42c.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="R \text{ a ring that turns about, } R[x] \text{ has division by every } d \ne 0"></span></span>The top-undoable technique gives division over a field. Turn it round: if R[x] has division with remainder by every d other than 0, must R be a field? <br>Divide the constant 1 by a constant d, and read off what the remainder must be.</div>
+  <div class="chq"><span class="chid">42c.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">5h: on the clock of 8, how many numbers square to 1?</span></span>Rung 5 counted the numbers that square to 1 on the clock of 8 and found more than two. <br>How many are there on the clock of 15, and of 16? Which clocks n have exactly two? Is the count a fact about polynomials, or about the clock?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r42b.html">← 42b · ideals and quotients</a><a href="r42d.html">42d · unique factoring →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The degree-adds technique says that a polynomial ring over an integral domain is an integral domain, with units the units of R. The top-undoable technique is the division algorithm for monic divisors, and over a field F the statement that F[x] is a Euclidean domain. The remainder-is-value technique is the remainder theorem, and the factor technique is the factor theorem. The one-maker technique says F[x] is a principal ideal domain; ℤ[x] is not one.</p>
+  <h3>Who said it first</h3>
+  <p>Simon Stevin divided polynomials and took their greatest common divisor by repeated division in 1585. Carl Friedrich Gauss worked with polynomials on prime clocks in an unpublished eighth section of his book of 1801. Évariste Galois wrote with them in 1830, and Richard Dedekind made the comparison of polynomials with whole numbers a theme in 1857.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“p has degree 2, so it has at most two zeros, by 9g.” Not allowed as it stands: 9g’s technique was proved for real coefficients, and its proof spends a step that needs no zero products. Over a cancelling ring the citation is good. Over ℤ/8 the claim is false.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'tops',t:R`a_m b_n`,n:`The top of the product.`},
+  {k:'ember',kl:'no zero products',t:R`a_m b_n \ne 0`,n:`Cancelling R.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\deg pq = \deg p + \deg q}`,n:`Degrees add.`}
+],{title:'The slides · degrees · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'kill the top',t:R`p - a_m u\, x^{m-k} d`,n:`One reciprocal.`},
+  {k:'ember',kl:'repeat',t:R`\deg r < \deg d`,n:`Strong induction.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{p = dq + r}`,n:`Over any field.`}
+],{title:'The slides · dividing · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'divide',t:R`p = (x - r)q + c`,n:`Top coefficient 1.`},
+  {k:'ember',kl:'put r in',t:R`p(r) = c`,n:`The remainder.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{x - r \mid p \iff p(r) = 0}`,n:`Any ring that turns about.`}
+],{title:'The slides · values · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'least degree',t:R`g \in I`,n:`Exists.`},
+  {k:'ember',kl:'remainder',t:R`r = p - gq \in I`,n:`Too small to be anything but 0.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{I = (g)}`,n:`One maker.`}
+],{title:'The slides · one maker · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How can a damaged message still be read?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r42cb27.html">← 42·cb27 every matrix is nearly diagonal</a><a href="r42crypt.html">next: 42·crypt how do earbuds share a secret in public? →</a></p>
+  <div class="tags"><span class="tag comp">42·comp · computing</span></div>
+  <h1>How can a damaged message still be read?</h1>
+  <p data-pid="cb0c15">How can a damaged message still be read? A QR code on a parking meter in Seattle can have a third of its squares scratched off, or covered by a sticker, and a phone still reads it. A probe past Neptune sends back pictures with a radio a few watts strong, so faint by the time it reaches a dish in California that some of the bits arrive flipped, and the pictures still come out clean. Neither works by sending the message twice. Each adds a few check symbols, chosen so that every message that could be sent is far from every other, and then a damaged copy is still nearest the one that was sent. The checks are linear algebra over the field of two, and for the QR code over a field of 256. The damaged copy is read by putting it through a grid, and the answer points at the damage. The field of rung forty two is what lets the grid be built, and the count of zeros of a polynomial is what keeps the messages far apart.</p>
+  <p class="gesture" data-pid="6b42ed">A code is a set of words kept far apart. Least distance d finds d − 1 flips and fixes about half that. A code that is a space over the field of two has least distance equal to its lightest word other than 0. A check grid turns a word with one flip into the place of the flip. Over a larger finite field, the values of a polynomial of low degree at many points make a code whose words agree in few places, and that is the QR code’s.</p>
+</header>
+
+<section class="class step" data-step="42comp1">
+  <h2 class="sthead"><span class="stno">42comp1</span>Words kept far apart</h2>
+  <p data-pid="8e7b7c">A <i>word</i> of length n is a list of n bits. The <i>distance</i> between two words is the count of places where they differ: 1011 and 1101 are at distance 2. A <i>code</i> is a set of words that may be sent. Its <i>least distance</i> d is the least distance between two different words of the code. The distance obeys 8h’s triangle inequality: one place at a time, a word can be no farther from a third than the two steps through a second.</p>
+  <p data-pid="bec134">Fix-radius technique: <b>a code with least distance d can find any d − 1 flips, and can fix any t flips when 2t + 1 ≤ d, by reading each received word as the nearest code word.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the fix-radius technique">
+\text{sent } c,\ \text{received } r,\ \text{dist}(c, r) \le t @@ at most t flips
+c' \ne c \text{ in the code} \Rightarrow \text{dist}(c', r) \ge \text{dist}(c', c) - \text{dist}(c, r) \ge d - t @@ the triangle inequality
+d - t \ge t + 1 > t @@ 2t + 1 ≤ d
+\htmlClass{new}{c \text{ is the only code word within } t \text{ of } r} \quad \blacksquare @@ so the nearest word is the one sent
+  </pre>
+  <p data-pid="e4a118">Sending each bit three times, 000 or 111, has d = 3: it fixes one flip in three, at the price of three bits for one. Adding a single check bit that makes the count of 1s even has d = 2: it finds one flip and cannot say where. The rest of the page does better than both.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · distance · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">42·comp.1.1</span><span class="ph understand">understand</span>What are the distance between two words and the least distance of a code? <br>What does the fix-radius technique say, and how many flips can a code with d = 3 fix?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42comp2">
+  <h2 class="sthead"><span class="stno">42comp2</span>A code that is a space</h2>
+  <p data-pid="22092f">Read words as arrows over ℤ/2, the field of two: added place by place with 1 + 1 = 0. A <i>straight code</i> is a space of words, the words that a check grid H sends to 0: what H loses (27c). The <i>weight</i> of a word is its count of 1s, so dist(u, v) is the weight of u + v.</p>
+  <p data-pid="2d8736">Lightest-word technique: <b>the least distance of a straight code is the least weight of its words other than 0.</b> dist(u, v) = weight(u + v), and u + v is in the code when u and v are.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the check grid of a code of 16 words">
+H = \begin{pmatrix} 0&0&0&1&1&1&1 \\ 0&1&1&0&0&1&1 \\ 1&0&1&0&1&0&1 \end{pmatrix} @@ column j is j written in twos (4i), for j = 1 to 7
+\text{the code is what } H \text{ loses: dimension } 7 - 3 = 4,\ 2^4 = 16 \text{ words} @@ lost-plus-reached (27c); H reaches all of (ℤ/2)³
+\text{no word of weight 1 or 2: no column is 0, and no two columns are equal} @@ Hv = 0 says the columns at v’s 1s add to 0
+\htmlClass{new}{d = 3:\ \text{columns 1, 2, 3 add to } 0} \quad \blacksquare @@ 001 + 010 + 011 = 000, so 1110000 is a word of weight 3
+  </pre>
+  <p data-pid="b7badb">So 7 bits carry 4 bits of message and fix any one flip. Three bits for one did worse: here it is 7 for 4.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · a space · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42·comp.2.1</span><span class="ph understand">understand</span>What are a straight code and the weight of a word? <br>What does the lightest-word technique say, and why does the code of H have least distance 3?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42comp3">
+  <h2 class="sthead"><span class="stno">42comp3</span>The check points at the flip</h2>
+  <p data-pid="99b88a">Flip-finder technique: <b>if a code word c of H’s code arrives with one flip, at place j, then H applied to the received word is column j of H, which is j written in twos.</b> H(c + eⱼ) = Hc + Heⱼ = 0 + column j.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one message, sent, damaged and read">
+\text{message } 1, 0, 1, 1 \text{ at places } 3, 5, 6, 7 @@ the places that are not powers of 2
+\text{check bits at } 1, 2, 4 \text{ make each row of } H \text{ even} @@ place 1: 1 + 0 + 1 = 0; place 2: 1 + 1 + 1 = 1; place 4: 0 + 1 + 1 = 0
+c = 0110011 @@ the word sent; Hc = 0
+r = 0110001 @@ place 6 flipped on the way
+Hr = 110 = 6 @@ the 1s of r are at 2, 3 and 7: 010 + 011 + 111 = 110
+\htmlClass{new}{\text{flip place 6 back: } 0110011,\ \text{message } 1011} \quad \blacksquare @@ the flip-finder technique
+  </pre>
+  <p data-pid="c31fb8">No search, no table of 16 words: three sums of bits. That is why the code is cheap in a memory chip, where a stray particle can flip one bit of a stored word.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the check · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42·comp.3.1</span><span class="ph understand">understand</span>What does the flip-finder technique say? <br>How does Hr = 110 point to place 6 for the received word 0110001?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42comp4">
+  <h2 class="sthead"><span class="stno">42comp4</span>How many words fit</h2>
+  <p data-pid="19cdf8">Ball-packing technique: <b>a code of words of length n that fixes t flips has at most 2ⁿ divided by C(n, 0) + C(n, 1) + ⋯ + C(n, t) words.</b> Around each code word lie the words within t of it, C(n, 0) + ⋯ + C(n, t) of them (4k’s choosing), and by the fix-radius technique no two such balls share a word.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the code of H fills its space">
+n = 7,\ t = 1:\ \ C(7, 0) + C(7, 1) = 8 @@ each ball: the word and its 7 one-flip neighbours
+16 \cdot 8 = 128 = 2^7 @@ 16 balls of 8
+\htmlClass{new}{\text{every word of length 7 is within 1 of exactly one code word}} \quad \blacksquare @@ the bound is met: the balls fill the space
+  </pre>
+  <p data-pid="db72ab">Such a code is called perfect, and perfect codes are rare. Most codes in use leave gaps, which lets them find more flips than they fix. 30·comp’s noisy channel technique says that as the length grows, codes exist that fix almost every damaged word at any rate below the line’s capacity; it does not say how to build them. Building them took fifty years.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · counting · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42·comp.4.1</span><span class="ph understand">understand</span>What does the ball-packing technique say, and why can no two balls share a word? <br>Why does every word of length 7 lie within 1 of exactly one word of H’s code?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42comp5">
+  <h2 class="sthead"><span class="stno">42comp5</span>Codes from the values of a polynomial</h2>
+  <p data-pid="ea1224">Take a finite field F with at least n members, and n different points x₁, …, xₙ in it. A message is k symbols of F, read as the coefficients of a polynomial m of degree below k. Its code word is the list of values m(x₁), …, m(xₙ).</p>
+  <p data-pid="80d2d5">Value-code technique: <b>two different code words agree in at most k − 1 places, so the code has least distance n − k + 1 and fixes any t damaged symbols with 2t ≤ n − k.</b> If m and m′ agree at k places, m − m′ has degree below k and k zeros, so it is 0 (42c3, in a field).</p>
+  <pre class="lines" data-k="ember" data-label="this page: a code on the clock of 7">
+m = 3 + 2x \text{ on } \mathbb Z/7,\ \ k = 2,\ \ x = 0, 1, \ldots, 5 @@ a message of two symbols, six points
+c = (3, 5, 0, 2, 4, 6) @@ the values of m; n − k + 1 = 5, so it fixes 2 damaged symbols
+r = (3, 5, 0, 2, 1, 6) @@ the value at x = 4 damaged
+\text{the line through } (0, 3), (1, 5) \text{ meets 5 of the 6 points} @@ any other line agrees with m at most once, so with r at most twice
+\htmlClass{new}{m = 3 + 2x,\ \text{the symbol at } x = 4 \text{ was } 4} \quad \blacksquare @@ the value-code technique
+  </pre>
+  <p data-pid="eaec01">The QR code works this way over the field of 256 members, one byte to a symbol, built as 42g built fields from a polynomial of degree 8 on ℤ/2. Its highest level gives about 30% of the bytes to checks: the smallest QR code at that level has 26 bytes, 9 of message and 17 of checks, and fixes up to 8 damaged bytes. A scratched or covered patch damages bytes, not scattered bits, and a byte is one symbol however many of its 8 bits are wrong. That is why a field of 256 does better here than the field of two.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · values · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42·comp.5.1</span><span class="ph understand">understand</span>What does the value-code technique say, and which fact of 42c gives it? <br>Why does a field of 256 suit a scratched QR code better than the field of two?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42comp6">
+  <h2 class="sthead"><span class="stno">42comp6</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{a code with } d = 3 \text{ fixes 3 flips}\,? @@ it finds 2 and fixes 1: 2t + 1 ≤ 3
+Hr = 0 \text{, so no bit was flipped}\,? @@ three flips can land on another code word: 1110000 has H of it 0
+\text{the value code over } \mathbb Z/7 \text{ can have length 10}\,? @@ it needs n different points of the field; ℤ/7 has 7
+\text{a straight code over } \mathbb Z/2 \text{ fixes bursts as well as scattered flips}\,? @@ a burst of 8 flipped bits is 8 flips there, and one damaged byte over the field of 256
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42·comp.6.1</span><span class="ph understand">understand</span>Why does Hr = 0 not prove that nothing was flipped? <br>Why can the value code over ℤ/7 not have length 10?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">42·comp.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="H \text{ with 4 rows: columns } 1, \ldots, 15 \text{ in twos}"></span></span>Build the code H loses. How many message bits does it carry in 15, and is it perfect? <br>Encode a message of your choice, flip one bit, and find it with the flip-finder technique.</div>
+  <div class="chq"><span class="chid">42·comp.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{add an 8th bit: the sum of all 7}"></span></span>Add to each word of H’s code an eighth bit that makes its count of 1s even. <br>What is the new least distance? What can the longer code do with two flips that the first could not?</div>
+  <div class="chq"><span class="chid">42·comp.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="r = (3, 5, 2, 2, 1, 6)"></span></span>The value code on ℤ/7 above fixes 2 damaged symbols. Read this received word back to its message. <br>Turn it round: with 3 symbols damaged, can a wrong message lie nearer to r than the true one? Build an example.</div>
+  <div class="chq"><span class="chid">42·comp.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">30·comp: a rate below capacity, and almost no errors</span></span>30·comp proved that good codes exist without building any. <br>The code of H carries 4 bits in 7. On a line that flips each bit with chance 1 in 100, independently, what is the chance that a word of 7 has 2 or more flips? Is that the kind of number the noisy channel technique promises, and what would make it smaller?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r42cb27.html">← 42·cb27 · every matrix is nearly diagonal</a><a href="r42crypt.html">42·crypt · how do earbuds share a secret in public? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The distance is the Hamming distance and the weight the Hamming weight. A straight code is a linear code, written [n, k, d]; the check grid is the parity-check matrix, and H applied to a received word is its syndrome. The code of this page is the [7, 4, 3] Hamming code, and the ball-packing technique is the Hamming bound, met by perfect codes. The value code is a Reed–Solomon code, and its least distance n − k + 1 meets the Singleton bound.</p>
+  <h3>Who said it first</h3>
+  <p>Richard Hamming built his code at Bell Labs and published it in 1950, tired of a relay computer that stopped at every error over the weekend. Marcel Golay found perfect codes of length 23 over ℤ/2 and 11 over ℤ/3 in 1949. Irving Reed and Gustave Solomon published the value code in 1960. The two Voyager probes, launched in 1977, used such codes to send pictures from beyond Neptune. Masahiro Hara’s team at Denso Wave designed the QR code in 1994. Claude Shannon proved in 1948 that good codes exist.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The code of H has 16 words of length 7, and 16 is less than 128, so most damaged words are far from every code word, and the code can fix many flips.” Not allowed: the ball-packing technique shows every word of length 7 is within 1 of a code word. A word with two flips lies within 1 of a wrong code word, and is read wrong.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'places',t:R`\mathrm{dist}(1011, 1101) = 2`,n:`Where they differ.`},
+  {k:'ember',kl:'room',t:R`2t + 1 \le d`,n:`Balls do not overlap.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{nearest word} = \text{sent word}}`,n:`Up to t flips.`}
+],{title:'The slides · distance · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'checks',t:R`Hv = 0`,n:`What H loses.`},
+  {k:'ember',kl:'weight',t:R`\mathrm{dist}(u, v) = \mathrm{wt}(u + v)`,n:`Over ℤ/2.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{d = 3,\ 16 \text{ words}}`,n:`7 bits for 4.`}
+],{title:'The slides · a space · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'received',t:R`r = 0110001`,n:`One flip.`},
+  {k:'ember',kl:'check',t:R`Hr = 110`,n:`Column 6.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{place 6}}`,n:`Flipped back.`}
+],{title:'The slides · the check · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'ball',t:R`1 + 7 = 8`,n:`Words within 1.`},
+  {k:'ember',kl:'words',t:R`16 \cdot 8 = 2^7`,n:`All of them.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a perfect code}}`,n:`No gaps.`}
+],{title:'The slides · counting · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'message',t:R`m = 3 + 2x`,n:`Degree below k.`},
+  {k:'ember',kl:'word',t:R`(3, 5, 0, 2, 4, 6)`,n:`Its values.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{d = n - k + 1}`,n:`Two lines agree once.`}
+],{title:'The slides · values · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

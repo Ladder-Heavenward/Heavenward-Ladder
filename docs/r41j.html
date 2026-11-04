@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Is it prime?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r41i.html">← 41i clock powers and secret keys</a><a href="r41k.html">next: 41k continued fractions →</a></p>
+  <div class="tags"><span class="tag tech">41j · technique</span></div>
+  <h1>Is it prime?</h1>
+  <p data-pid="c11018">The lock of the last step needs two primes of three hundred digits, and somebody has to find them. The prime-count technique says about one number in seven hundred near ten to the three hundred is prime, so a few hundred tries at random will meet one. Each try needs an answer to the question: is this number prime? Trying every divisor up to its square root would outlast the stars. The little technique gives a quicker road, run backwards: if a power fails to come back to one, the number is not prime, for certain, and the power is fast. But some numbers that are not prime pass for every base. A sharper test looks at how the power reaches one, and a number that is not prime is caught by most bases, three in four at least. So a test with fifty random bases is wrong with a chance below one in a million million million million million. In 2002 a test was found that is certain and still fast in the sense of rung thirty nine: its steps grow like a power of the number of digits.</p>
+  <p class="gesture" data-pid="9058d8">A number with no prime factor up to its root is prime, and that search is slow. A unit whose power one less than n is not one proves n composite; some composites fool every base. On a prime clock the only square roots of one are plus and minus one, so the chain of squarings toward one must pass minus one; a composite fails that for at least three bases in four. And a test of 2002 is certain and fast.</p>
+</header>
+
+<section class="class step" data-step="41j1">
+  <h2 class="sthead"><span class="stno">41j1</span>Divisors up to the root</h2>
+  <p data-pid="06e915">Root-bound technique: <b>a number n above 1 that is not prime has a prime factor at most √n.</b> If n = jk with 1 &lt; j ≤ k, then j² ≤ jk = n, and a prime divisor of j (4j10) is at most j.</p>
+  <pre class="lines" data-k="ember" data-label="this step: what the root bound costs">
+91:\ \ \sqrt{91} \lt 10,\ \text{try } 2, 3, 5, 7:\ \ 91 = 7 \cdot 13 @@ four tries
+97:\ \ 2, 3, 5, 7 \text{ all fail} @@ so 97 is prime
+n \approx 10^{300}:\ \ \text{primes up to } 10^{150} @@ the prime-count technique: about 10¹⁵⁰/345 of them
+\htmlClass{new}{\text{about } 3 \times 10^{147} \text{ divisions}} \quad \blacksquare @@ the growth family of √n, which is 10 to half the digits
+  </pre>
+  <p data-pid="4d73ed">The root bound is certain, and it is slow in the sense of 38k: its steps grow like a power of n itself, not of the number of digits of n. A test that is fast must grow like a power of the digits.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the root bound · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">41j1.1</span><span class="ph understand">understand</span>What does the root-bound technique say, and why is the smaller factor at most √n? <br>Why is it too slow for a number of three hundred digits?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41j2">
+  <h2 class="sthead"><span class="stno">41j2</span>The little test, and its liars</h2>
+  <p data-pid="8a2b1f">Run the little technique backwards. If gcd(a, n) = 1 and a^(n − 1) ≢ 1 (mod n), then n is not prime. Such an a is a <i>witness</i>, and it proves n composite without finding a factor. 3³⁴⁰ ≡ 56 on the clock of 341, so 3 is a witness for 341 = 11 · 31, though 2 is not (41d5).</p>
+  <p data-pid="b01b86">Every-base-liar technique: <b>if n has no repeated prime factor, and p − 1 divides n − 1 for every prime p dividing n, then a^(n − 1) ≡ 1 (mod n) for every a with gcd(a, n) = 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: 561 lies for every base">
+561 = 3 \cdot 11 \cdot 17,\ \ 560 = 2 \cdot 280 = 10 \cdot 56 = 16 \cdot 35 @@ 2, 10 and 16 divide 560
+p \in \{3, 11, 17\}:\ \ a^{560} = (a^{p-1})^{560/(p-1)} \equiv 1 \pmod p @@ the little technique on each clock
+\text{three readings of } a^{560}, \text{ each } 1 @@ one prime at a time
+\htmlClass{new}{a^{560} \equiv 1 \pmod{561}} \quad \blacksquare @@ the remainder technique (41c1): 3, 11 and 17 share nothing
+  </pre>
+  <p data-pid="0ee539">So the little test can never prove 561 composite, except with a base that shares a factor with it, and those are few: 240 of the 560 hours. Such numbers are endless; there are 43 below a million.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · liars · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41j2.1</span><span class="ph understand">understand</span>What is a witness, and what does it prove? <br>What does the every-base-liar technique say, and why does 561 meet its condition?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41j3">
+  <h2 class="sthead"><span class="stno">41j3</span>Watching the power reach one</h2>
+  <p data-pid="fede5e">Write n − 1 = 2ˢ · d with d odd. The little technique’s power a^(n − 1) is a^d squared s times. On a prime clock the only square roots of [1] are ±[1] (41e2). So the last hour before [1] in the chain a^d, a^(2d), …, a^(n − 1) must be −[1], unless the chain starts at [1].</p>
+  <p data-pid="5c6825">Strong-test technique: <b>if n is an odd prime, n − 1 = 2ˢd with d odd, and n ∤ a, then either a^d ≡ 1, or a^(2ʳd) ≡ −1 for some r below s.</b> A base for which neither happens is a <i>strong witness</i>, and proves n composite.</p>
+  <pre class="lines" data-k="ember" data-label="this step: 561, caught">
+560 = 2^4 \cdot 35 @@ s = 4, d = 35
+2^{35} \equiv 263,\ \ 263^2 \equiv 166,\ \ 166^2 \equiv 67,\ \ 67^2 \equiv 1 \pmod{561} @@ square-and-multiply (41h), then three squarings
+67 \ne \pm 1 \text{ and } 67^2 \equiv 1 @@ a square root of 1 that is neither: impossible on a prime clock
+\htmlClass{new}{561 \text{ is composite, and } 2 \text{ is a strong witness}} @@ the strong-test technique
+561 \mid (67 - 1)(67 + 1),\ \ \gcd(66, 561) = 33 @@ neither factor is a multiple of 561
+\htmlClass{new}{561 = 33 \cdot 17} \quad \blacksquare @@ the odd square root hands over a factor
+  </pre>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · laws with a known exception rate</div>
+    <p data-pid="5943d4">For an odd composite n, at most a quarter of the bases from 1 to n − 1 fail to be strong witnesses. That is a technique, held in trust here, proved in 1980. Pick bases at random and independently (30f), k of them.</p>
+    <p data-pid="7310d7"><b>A test that says yes with a stated exception rate is rigorous: the rate is the proof’s output, and it is known before the first base is tried.</b></p>
+    <p data-pid="535433">A composite then passes every round with chance at most 1/4ᵏ. With k = 50 that is below 10⁻³⁰. The test never says “prime” for certain. It says “composite” for certain, or “prime, with an exception rate below 4 to the minus k”, a rate stated before the test is run.</p>
+    <p class="bait" data-pid="9bc5e1">A machine draws 600 random 300-digit odd numbers and runs 50 rounds on each. Bound the chance that some composite among them is called prime. Is the bound a fact about these numbers, or about the drawing?</p>
+  </aside>
+  <p data-pid="d3e635">For 91 = 7 · 13, 18 of the 90 bases lie, which is 20%. For 561 only 10 lie. The bound of a quarter is near the worst case, not the usual one.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the strong test · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41j3.1</span><span class="ph understand">understand</span>What does the strong-test technique say, and why must the chain pass −1 on a prime clock? <br>How does the chain for 561 with base 2 prove 561 composite, and how does it hand over a factor?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41j4">
+  <h2 class="sthead"><span class="stno">41j4</span>Certain, and still fast</h2>
+  <p data-pid="06a72b">Binomial-test technique: <b>if gcd(a, n) = 1 and n ≥ 2, then n is prime exactly when (x + a)ⁿ and xⁿ + a have the same coefficients on the clock of n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the binomial-test technique">
+(x + a)^n = \textstyle\sum_k \binom nk a^{n-k} x^k @@ the binomial technique (4k)
+n \text{ prime}: \ n \mid \tbinom nk \text{ for } 0 \lt k \lt n,\ \ a^n \equiv a @@ 41d.6.1; the little technique
+n \text{ not prime}: \ q \text{ a prime},\ q^j \text{ the highest power of } q \text{ dividing } n @@ pick one prime factor
+\tbinom nq = \frac{n(n-1)\cdots(n-q+1)}{q!}:\ \ q^j \nmid \tbinom nq @@ the top has q to the power j only, from n; the bottom takes one q away
+\htmlClass{new}{\text{the coefficient of } x^q \text{ is } \tbinom nq a^{n-q} \not\equiv 0 \pmod n} \quad \blacksquare @@ gcd(a, n) = 1: q ∤ a
+  </pre>
+  <p data-pid="e3d952">With n = 15 and q = 3: (15 choose 3) = 455, which 3 does not divide, so the coefficient of x³ shows 15 is composite. As it stands the test is slow: (x + a)ⁿ has n + 1 coefficients. The test of 2002 checks the same sameness only on the clock of xʳ − 1 as well, for a small r and a few a, and proves that enough. Its steps grow like a power of the number of digits, so primality is in 39h’s class P. In practice the strong test is used, since it is faster still, and the certain test only where certainty is asked for.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · certain · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41j4.1</span><span class="ph understand">understand</span>What does the binomial-test technique say? <br>Why does q to the power j not divide (n choose q) when n is not prime?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41j5">
+  <h2 class="sthead"><span class="stno">41j5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+2^{n-1} \equiv 1 \pmod n \Rightarrow n \text{ prime}\,? @@ 341 and 561 pass: the little test proves only “composite”
+50 \text{ rounds passed} \Rightarrow n \text{ is prime}\,? @@ prime with an exception rate below 4⁻⁵⁰, which is not certainty
+\text{a strong witness gives a factor}\,? @@ only when an odd square root of 1 appears, as 67 did; a power that never reaches 1 gives none
+\text{trial division to } n/2 \text{ is needed}\,? @@ the root bound: √n is enough
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41j5.1</span><span class="ph understand">understand</span>Why does passing 50 rounds of the strong test not make n prime for certain? <br>When does a strong witness hand over a factor, and when does it not?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">41j.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="2047 = 23 \cdot 89"></span></span>Run the strong test on 2047 with base 2, and then with base 3. Which is a strong witness? <br>Build the smallest odd composite for which 2 lies in the strong test, by searching, and say how you would search faster.</div>
+  <div class="chq"><span class="chid">41j.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n = p^2"></span></span>For n the square of an odd prime, find how many bases lie in the little test. Prove that the count is p − 1. <br>Why is a square never a number that lies for every base?</div>
+  <div class="chq"><span class="chid">41j.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="a^{n-1} \equiv 1 \pmod n \text{ for every unit } a"></span></span>Prove the other half of the every-base-liar technique: if every unit lies, n has no repeated prime and p − 1 divides n − 1 for each prime p dividing n. <br>Hint held back: a full hand of the clock of p (41e) and the remainder technique.</div>
+  <div class="chq"><span class="chid">41j.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">30f: chance; 39i: chance in computing</span></span>A lock is built on a number that passed 64 rounds of the strong test. Nobody proves it prime. <br>Is the lock built on a prime? If it is not, is it broken? Some writers called such numbers prime enough for industry. Is a statement with a stated exception rate below 2⁻¹²⁸ a proof, a guess under the large case, or something the ladder has no word for?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r41i.html">← 41i · clock powers and secret keys</a><a href="r41k.html">41k · continued fractions →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The root-bound technique is trial division. The little test is the Fermat primality test, and a liar a Fermat liar; numbers that lie for every unit are Carmichael numbers, and the every-base-liar technique with 41j.6.3 is Korselt’s criterion. The strong test is the Miller–Rabin test, a strong witness a Miller–Rabin witness, and 2047 the least strong pseudoprime to base 2. The bound of a quarter is the Monier–Rabin bound. The binomial-test technique is the starting point of the AKS primality test, which puts PRIMES in P. Numbers passing a probabilistic test are probable primes; “industrial-grade primes” is Henri Cohen’s phrase.</p>
+  <h3>Who said it first</h3>
+  <p>Robert Carmichael found 561 in 1910; Alwin Korselt gave the criterion in 1899. That Carmichael numbers are endless was proved by William Alford, Andrew Granville and Carl Pomerance in 1994. Gary Miller gave the strong test in 1976, certain if a then unproved hypothesis holds; Michael Rabin made it a test with chance in 1980, and Louis Monier and Rabin proved the bound of a quarter that year. Manindra Agrawal, Neeraj Kayal and Nitin Saxena announced the certain fast test in August 2002; it was published in 2004.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The strong test with base 2 says 2047 might be prime, base 3 says 2047 might be prime, … so after many bases the chance that 2047 is prime is near 1.” Not allowed: 2047 is prime or not, and it is not; base 3 is a strong witness. The exception rate is a fact about the drawing of bases, not a chance that a fixed number is prime.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'factor',t:R`n = jk,\ j \le k \Rightarrow j \le \sqrt n`,n:`The smaller one.`},
+  {k:'ember',kl:'97',t:R`2, 3, 5, 7 \nmid 97`,n:`Prime.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\approx 10^{147} \text{ tries at } 10^{300}}`,n:`Too slow.`}
+],{title:'The slides · the root bound · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'witness',t:R`a^{n-1} \not\equiv 1`,n:`Composite, for certain.`},
+  {k:'ember',kl:'561',t:R`2, 10, 16 \mid 560`,n:`Every prime minus one.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{a^{560} \equiv 1 \pmod{561}}`,n:`Every unit lies.`}
+],{title:'The slides · liars · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'chain',t:R`a^d, a^{2d}, \ldots, a^{n-1}`,n:`Squarings.`},
+  {k:'ember',kl:'prime clock',t:R`x^2 = 1 \Rightarrow x = \pm 1`,n:`41e2.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{67^2 \equiv 1,\ 67 \ne \pm1 \Rightarrow 561 \text{ composite}}`,n:`And 33 divides it.`}
+],{title:'The slides · the strong test · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'prime',t:R`(x + a)^n \equiv x^n + a`,n:`Counts divisible by n.`},
+  {k:'ember',kl:'composite',t:R`q^j \nmid \tbinom nq`,n:`One coefficient survives.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{prime} \iff \text{the sameness}}`,n:`Fast by 2002.`}
+],{title:'The slides · certain · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

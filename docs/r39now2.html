@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Is checking easier than finding?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r39now.html">← 39·now how long can a tiny machine run?</a><a href="r39now3.html">next: 39·now3 can a computer tell if a knot is untied? →</a></p>
+  <div class="tags"><span class="tag now">39·now2 · research front</span></div>
+  <h1>Is checking easier than finding?</h1>
+  <p data-pid="3d4115">Is checking easier than finding? A sudoku takes minutes to solve and seconds to check. A proof takes years to find and a day to check. It feels obvious that finding is harder, and nobody can prove it. 39h put the question exactly: is every question whose yes answers can be checked fast also a question that can be answered fast? In 2000 it was named one of seven problems with a prize of a million dollars for a solution, and it is still open. This page says what it would take to answer, how slow the best methods for the hardest questions are now, with the numbers, what would break if checking and finding were the same, and why almost everyone who works on it bets they differ. It also says why the tools of this rung, the diagonals that settled stopping and more time, cannot settle it alone: they work the same for machines given any free question, and there are free questions that make the two classes equal and others that make them differ.</p>
+  <p class="gesture" data-pid="bb7c24">Checking equals finding exactly when making a statement true is fast. The best methods for clauses of three still take a fixed power above one to the number of letters. If finding were as fast as checking, short proofs could be found as fast as checked and every lock could be picked fast. The diagonal cannot settle it, since free questions can tilt it either way.</p>
+</header>
+
+<section class="class step" data-step="39now21">
+  <h2 class="sthead"><span class="stno">39now21</span>The question, exactly</h2>
+  <p data-pid="2818aa">One-test technique: <b>P equals NP exactly when the satisfiable statements are fast.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the one-test technique">
+P = NP \Rightarrow \text{satisfiable }\allowbreak \text{is }\allowbreak \text{fast} @@ it is in NP, with a row as certificate (39h2)
+\text{satisfiable }\allowbreak \text{fast},\ \allowbreak \ A \in NP @@ the other way
+A \text{ fast-reduces }\allowbreak \text{to }\allowbreak \text{satisfiable} @@ the tableau technique (39h3)
+\htmlClass{new}{A \text{ is fast}} \quad \blacksquare @@ the power-stays technique (39h1): a fast reduction, then a fast decider
+  </pre>
+  <p data-pid="152b96">So the whole question is one question about one set, or about any of the thousands of NP-complete ones: three-colouring, by 39k, or the best route through a list of cities, or packing boxes. A proof that any one of them is fast, or that it is not, settles all of them. The prize is for either.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · one test · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">39·now2.1.1</span><span class="ph understand">understand</span>What does the one-test technique say? <br>Why would a fast method for three-colouring settle the question?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39now22">
+  <h2 class="sthead"><span class="stno">39now22</span>How slow the best methods are</h2>
+  <p data-pid="e1b090">Trying every row takes 2ⁿ for n letters. For clauses of three, a better way is to branch on a clause, as 38m’s divide and conquer did, and count with a recurrence.</p>
+  <p data-pid="516906">Clause-branch technique: <b>a statement in clauses of three with n letters is decided in about 1.84ⁿ steps.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the clause-branch technique">
+\text{pick }\allowbreak \text{a }\allowbreak \text{clause } a \lor b \lor c \text{ not }\allowbreak \text{yet }\allowbreak \text{true} @@ if none is left, the row so far works
+\text{branch: } a \text{ true; }\allowbreak \text{or } a \text{ false }\allowbreak \text{and } b \text{ true; }\allowbreak \text{or } a, b \text{ false }\allowbreak \text{and } c \text{ true} @@ every true row is in exactly one branch
+\text{the }\allowbreak \text{branches }\allowbreak \text{fix } 1, 2, 3 \text{ letters: } T(n) \le T(n - 1) + T(n - 2) + T(n - 3) @@ a recurrence, 38m
+T(n) \le x^n \text{ when } x^3 = x^2 + x + 1 @@ induction: x^(n−1) + x^(n−2) + x^(n−3) = x^(n−3)(x² + x + 1) = xⁿ
+\htmlClass{new}{x \approx 1.839} \quad \blacksquare @@ the one real root, by halving (12e)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: what the powers mean">
+2^{100} \approx 1.27 \times 10^{30}\text{: at } 10^{18} \text{ rows }\allowbreak \text{a }\allowbreak \text{second, }\allowbreak \text{about } 40\,000 \text{ years} @@ every row
+1.84^{100} \approx 3.0 \times 10^{26} @@ branching on clauses
+1.307^{100} \approx 4.2 \times 10^{11}\text{, but } 1.307^{1000} \approx 1.9 \times 10^{116} @@ the best known for clauses of three, from 2019
+\htmlClass{new}{1000^3 = 10^9} \quad \blacksquare @@ a power of n, for comparison
+  </pre>
+  <p data-pid="7b4aae">Programs that solve satisfiability in practice handle statements with millions of letters from chip design and planning, because those statements have structure. The worst cases are another matter. Every known method takes cⁿ steps on some statements, for some c above 1. Whether c can be pushed down to 1, with a power of n in front, is the question.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · slow · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39·now2.2.1</span><span class="ph understand">understand</span>What does the clause-branch technique say, and where does the recurrence T(n) ≤ T(n − 1) + T(n − 2) + T(n − 3) come from? <br>Why is 1.307ⁿ fast for 100 letters and hopeless for 1000?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39now23">
+  <h2 class="sthead"><span class="stno">39now23</span>What would break</h2>
+  <p data-pid="a3bb57">Suppose P equals NP, with a method that is fast in practice, not only in principle.</p>
+  <p data-pid="dd30ba">Prefix-undo technique: <b>if P equals NP, then for every fast function f there is a fast machine that, given y = f(x) with x of known length, finds some x′ with f(x′) = y.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the prefix-undo technique">
+B = \{(y, p) : \text{some } x \text{ beginning }\allowbreak \text{with } p \text{ has } f(x) = y\} @@ the certificate is x; checking f(x) = y is fast
+B \in NP\text{, so } B \text{ is fast} @@ P = NP
+\text{ask } (y, 0)\text{: }\allowbreak \text{if }\allowbreak \text{yes, }\allowbreak \text{the }\allowbreak \text{first }\allowbreak \text{letter }\allowbreak \text{is } 0\text{, else } 1 @@ one letter found
+\text{ask }\allowbreak \text{again }\allowbreak \text{with }\allowbreak \text{the }\allowbreak \text{longer }\allowbreak \text{prefix, }\allowbreak \text{letter }\allowbreak \text{by }\allowbreak \text{letter} @@ n questions in all
+\htmlClass{new}{x\prime \text{ found }}\allowbreak \htmlClass{new}{ \text{in } n \text{ fast }}\allowbreak \htmlClass{new}{ \text{questions}} \quad \blacksquare @@ the power-stays technique
+  </pre>
+  <p data-pid="33b044">So every locked box of 39l could be opened, and every secret shared over a wire, the subject of 41·comp, read. And proofs: “PA reaches φ by a proof of at most n marks” is in NP, with the proof as certificate, checked by 37b3’s recipe. The same letter-by-letter questions would find the proof. 37·now2’s search through proofs would become as fast, up to a power, as checking one, for every statement with a proof short enough to write. Mathematicians would still choose what to ask. They would not spend years finding what a machine checks in a day.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · break · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39·now2.3.1</span><span class="ph understand">understand</span>What does the prefix-undo technique say, and why is B in NP? <br>Why would P equal to NP make short proofs as easy to find as to check?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39now24">
+  <h2 class="sthead"><span class="stno">39now24</span>Why the bet, and why it is hard</h2>
+  <p data-pid="206498">The bet that P differs from NP rests on evidence of the kind 30w weighs: thousands of NP-complete questions from every field, studied by people who wanted fast methods, and none found. In a poll of researchers in 2019, close to nine in ten said they believed P differs from NP. Evidence is not a proof, and some well-known researchers keep the other bet open.</p>
+  <p data-pid="0d3843">The proof is hard for a reason that can itself be proved. 39d.5.3 gave machines a free question about a set A. Every argument of this rung that works by running machines and doing the opposite works just as well for machines with any free question: it never looks inside them. In 1975 it was shown that there is a set A for which P and NP with free questions about A are equal, and a set B for which they differ. So a proof that settles the question must fail for one of A or B, and the diagonal alone cannot do it.</p>
+  <ul>
+    <li data-pid="c92b78">In 1994 a second wall was found: a wide family of arguments that lower-bound circuits, if they worked here, would also break the locked boxes 39l relies on.</li>
+    <li data-pid="1a2fcc">In 2008 a third: arguments that survive the first wall by using polynomials, as 39i2 and 39l4 did, meet a version of the same obstacle.</li>
+    <li data-pid="81cb5e">Since 2001 a programme has tried to separate the two classes with the symmetry of polynomials. It has found smaller results and no end yet.</li>
+  </ul>
+  <p data-pid="8a6a41">Open: P against NP; whether NP equals the sets whose outsides are in NP; whether BPP equals P; and whether any NP-complete question needs more than a fixed power above one to the number of letters, the guess called the exponential time hypothesis. Each would settle part of the others.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the walls · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39·now2.4.1</span><span class="ph understand">understand</span>What is the evidence for the bet that P differs from NP, and what kind of induction is it? <br>Why can a diagonal argument like 39h4’s not settle the question alone?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39now25">
+  <h2 class="sthead"><span class="stno">39now25</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{satisfiability }\allowbreak \text{programs }\allowbreak \text{solve }\allowbreak \text{millions }\allowbreak \text{of }\allowbreak \text{letters, }\allowbreak \text{so }\allowbreak \text{P }\allowbreak \text{equals }\allowbreak \text{NP}\,? @@ on statements with structure; the question is about every statement
+P \ne NP \text{ would }\allowbreak \text{mean }\allowbreak \text{no }\allowbreak \text{NP-complete }\allowbreak \text{statement }\allowbreak \text{can }\allowbreak \text{ever }\allowbreak \text{be }\allowbreak \text{solved}\,? @@ it would mean no method is fast on every input; many inputs stay easy
+\text{the }\allowbreak \text{more-time }\allowbreak \text{technique }\allowbreak \text{shows }\allowbreak \text{NP }\allowbreak \text{is }\allowbreak \text{bigger }\allowbreak \text{than }\allowbreak \text{P}\,? @@ it separates time bounds within one kind of machine; it works with any free question, and those can make P and NP equal
+\text{if }\allowbreak \text{P }\allowbreak \text{equals }\allowbreak \text{NP, }\allowbreak \text{every }\allowbreak \text{lock }\allowbreak \text{is }\allowbreak \text{picked }\allowbreak \text{tomorrow}\,? @@ only if the power is small; n¹⁰⁰ is fast by the definition and useless
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39·now2.5.1</span><span class="ph understand">understand</span>Why do fast programs on real statements not show P equals NP? <br>Why would P equal to NP not pick every lock if the power were large?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">39·now2.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{clauses }\allowbreak \text{of }\allowbreak \text{two }\allowbreak \text{letters}"></span></span>Build a fast method for statements in clauses of two letters, using the fact that each clause a ∨ b is the pair of ifs ¬a ⇒ b and ¬b ⇒ a. Where does the same idea fail for clauses of three?</div>
+  <div class="chq"><span class="chid">39·now2.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x^4 = x^3 + x^2 + x + 1"></span></span>Branch on clauses of four letters as the clause-branch technique branched on three. Find the recurrence, its root, and whether the method beats 2ⁿ. What happens to the root as the clauses grow longer?</div>
+  <div class="chq"><span class="chid">39·now2.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="P = NP \Rightarrow \text{every }\allowbreak \text{fast }\allowbreak \text{function }\allowbreak \text{undone}"></span></span>The prefix-undo technique runs from P = NP to undoing. Turn it round: if every fast function can be undone fast, must P equal NP? Find the gap. What kind of question would close it?</div>
+  <div class="chq"><span class="chid">39·now2.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">find a proof as fast as you check one</span></span>One view holds that if P equals NP, mathematics as a search for proofs is over, and what is left is choosing what to ask. Another holds that the creative part was always the asking, and that 37·now2’s machines already show it. A third holds that a power of n may still be far too slow to matter. Which view does the prefix-undo technique support, and what would it take to tell them apart?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r39now.html">← 39·now · how long can a tiny machine run?</a><a href="r39now3.html">39·now3 · can a computer tell if a knot is untied? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The question is P versus NP, one of the Clay Mathematics Institute’s Millennium Prize Problems, announced in Paris in May 2000. The one-test technique is that SAT is NP-complete, read both ways. The clause-branch technique is the Monien–Speckenmeyer bound, and 1.307ⁿ is the bound of the PPSZ algorithm as sharpened by Hansen, Kaplan, Zamir and Zwick (2019). The prefix-undo technique says that P = NP implies no one-way functions exist. The free-question result is relativization, by Theodore Baker, John Gill and Robert Solovay (1975); the second wall is natural proofs, by Alexander Razborov and Steven Rudich (1994); the third is algebrization, by Scott Aaronson and Avi Wigderson (2008). The programme of 2001 is geometric complexity theory, by Ketan Mulmuley and Milind Sohoni. The exponential time hypothesis is from Russell Impagliazzo and Ramamohan Paturi (2001).</p>
+  <h3>Who said it first</h3>
+  <p>Kurt Gödel asked John von Neumann in a letter of 1956 whether proofs of length n could be found in about n or n² steps, which is the question of this page before it had a name. Stephen Cook (1971) and Leonid Levin (1973) gave it its form. William Gasarch’s polls of researchers in 2002, 2012 and 2019 found growing majorities for P ≠ NP, about 88% in the last.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Every method for satisfiability must at some point consider every row, since a row not considered might be the only true one.” Not allowed: a method can rule out many rows at once, as the clause-branch technique rules out every row that leaves a chosen clause false. Whether rows can be ruled out fast enough is the question, and the line assumes the answer.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'in NP',t:R`\text{SAT} \in NP`,n:`A row is a certificate.`},
+  {k:'ember',kl:'complete',t:R`A \le \text{SAT}`,n:`Tableau.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P = NP \iff \text{SAT fast}}`,n:`One set decides it.`}
+],{title:'The slides · one test · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'branch',t:R`T(n - 1) + T(n - 2) + T(n - 3)`,n:`Three ways.`},
+  {k:'ember',kl:'root',t:R`x^3 = x^2 + x + 1`,n:`x ≈ 1.839.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{1.84^n \text{, still } c^n}`,n:`Not a power.`}
+],{title:'The slides · slow · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'B',t:R`(y, p)\colon \exists x \text{ from } p`,n:`In NP.`},
+  {k:'ember',kl:'ask',t:R`n \text{ questions}`,n:`Letter by letter.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{every lock picked}}`,n:`And short proofs found.`}
+],{title:'The slides · break · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'evidence',t:R`\text{thousands, none fast}`,n:`A large case.`},
+  {k:'ember',kl:'1975',t:R`P^A = NP^A,\ \ P^B \ne NP^B`,n:`Free questions.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{the diagonal cannot settle it}}`,n:`Nor two other walls.`}
+],{title:'The slides · the walls · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A one-way valve</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38c.html">← 38c a wave can carry power, or a message</a><a href="r38e.html">next: 38e a switch worked by a switch →</a></p>
+  <div class="tags"><span class="tag proof">38d · proof</span></div>
+  <h1>A one-way valve</h1>
+  <p data-pid="4e4b41">The newsflash on the complex rung met the diode, a sandwich of two kinds of silicon whose current grows by equal factors for equal steps of push, and found it shut below about half a volt and wide open just above. This step takes that valve and asks what logic it can do on its own. Two valves feeding one resistor make an either gate: the output follows whichever input is higher. Two valves hanging from a resistor to the supply make a both gate: the output follows whichever input is lower. So both and either come cheaply. Then the step proves what valves cannot do, and the proof is the interesting part. In any network of valves and resistors, raising an input never lowers anything, so no such network can turn a one into a zero. And no node moves further than the inputs moved, so a weak one never comes out stronger: each stage loses a little, and after a few stages the one is gone. Something with a supply of its own is needed, and the next step builds it.</p>
+  <p class="gesture" data-pid="b7e2f7">A diode passes current one way, exponentially, and backwards almost none. Two diodes and a resistor make either, or both. In a network of diodes and resistors, raising an input never lowers a node, so there is no not; and no node moves further than an input, so a weak level is never restored.</p>
+</header>
+
+<section class="class step" data-step="38d1">
+  <h2 class="sthead"><span class="stno">38d1</span>Forward and back</h2>
+  <p data-pid="4fabba"><a href="r26then.html#26then1">26·then1</a> laid down the measured law of a silicon diode, I = Iₛ(e^(V/Vₜ) − 1), with Iₛ about 10⁻¹² A and Vₜ ≈ 0.0259 V at room warmth, and proved the sixty-millivolt technique for V above 0. The difference here is the other side: V below 0.</p>
+  <p data-pid="164f0c">Reverse-leak technique: <b>pushed backwards, a diode passes less than Iₛ, however hard it is pushed.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the reverse-leak technique">
+V < 0 \Rightarrow 0 < e^{V/V_T} < 1 @@ exp is above 0 everywhere and rises (17e), and exp 0 = 1
+-1 < e^{V/V_T} - 1 < 0 @@ take 1 from each part
+-I_s < I < 0 @@ multiply by Iₛ &gt; 0 (5g)
+V = -5 \text{ V}:\ \ I \approx -10^{-12} \text{ A};\ \ V = 0.6 \text{ V}:\ \ I \approx 0.012 \text{ A} @@ the law, worked by machine
+\htmlClass{new}{\text{forward at } 0.6 \text{ V passes about ten thousand million times more than backward at } 5 \text{ V}} \quad \blacksquare @@ 0.012 against 10⁻¹²
+  </pre>
+  <p data-pid="cda012">So a diode is a switch read by the sign of the push: closed one way, open the other. It is a switch nobody works. Its state is set by the voltages around it, which is what makes it a valve and not yet a gate that can be steered. Its accepted plain name is a rectifier, from the Latin <i>rectus</i>, straight, for the way it turns a socket’s back and forth into one-way flow.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · valve · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">38d1.1</span><span class="ph understand">understand</span>What does the reverse-leak technique say, and which fact about exp does its first line use? <br>Why is a diode a switch that nobody works?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38d2">
+  <h2 class="sthead"><span class="stno">38d2</span>Either and both from valves</h2>
+  <p data-pid="1d3369">Read 5 V as 1 and 0 V as 0. For <i>either</i>: each input feeds a diode, the diodes join at the output, and a 1 kΩ resistor runs from the output to ground. For <i>both</i>: each input meets a diode pointing toward it, the diodes join at the output, and a resistor runs from the output up to the 5 V supply.</p>
+  <p data-pid="81171b">Diode-gate technique: <b>the either gate’s output sits one diode drop below the higher input, and the both gate’s output one drop above the lower input; read against a threshold, they are 38a’s greater and lesser.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the diode-gate technique, worked">
+\text{either, inputs } 5, 0:\ \ 5 - V_d = 1000\,I,\ \ I = I_s(e^{V_d/V_T} - 1) @@ the higher input’s diode is forward; the loop law (7·phys)
+V_d \approx 0.57 \text{ V},\ \ \text{output} \approx 4.43 \text{ V} @@ solved by machine; the other diode is pushed backwards and passes less than Iₛ
+\text{both, inputs } 5, 0:\ \ \text{the diode to the } 0 \text{ V input is forward} @@ the supply pushes current out through it
+\text{output} \approx 0 + 0.6 \text{ V} \text{, read as } 0 @@ the lower input wins
+\htmlClass{new}{\text{either} \approx \max(x, y) - V_d,\ \ \text{both} \approx \min(x, y) + V_d} \quad \blacksquare @@ the or-as-greater technique (38a2), and the and as the lesser
+  </pre>
+  <p data-pid="780eb0">On {0, 1} the lesser of x and y is xy, so the both gate is 38a1’s product, read off a wire. The gates are cheap and they work. What they do to the level is the problem: 4.43 V is not 5 V.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · diode gates · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38d2.1</span><span class="ph understand">understand</span>What does the diode-gate technique say? <br>Why is the either gate’s output one diode drop below the higher input?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38d3">
+  <h2 class="sthead"><span class="stno">38d3</span>No not from valves</h2>
+  <p data-pid="ee6592">A network of diodes and resistors, with fixed supplies and some inputs, settles where the current law holds at every inner node: what flows in flows out. Each part’s current is a rising function of the voltage across it, V/R for a resistor and the diode’s law for a diode, and every inner node is joined by some path to a supply or an input.</p>
+  <p data-pid="81aa40">Rising-network technique: <b>in a network of diodes and resistors, raising inputs and lowering none never lowers the voltage of any node.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the rising-network technique">
+\text{some node falls; let } m \text{ fall the most, by } \delta > 0 @@ suppose it, and take the largest fall (4h: the finitely many nodes have a largest)
+\text{each neighbour } j \text{ of } m \text{ falls by at most } \delta @@ inner nodes by the choice of m; inputs rose; supplies did not move
+V_m - V_j \text{ does not rise, so the current from } m \text{ to } j \text{ does not rise} @@ each current is a rising function of the voltage across it
+\text{the currents out of } m \text{ add to } 0 \text{ before and after} @@ the current law (7·phys)
+\text{so none changed, and each neighbour fell by exactly } \delta @@ a sum of parts that did not rise, unchanged: each part unchanged; strictly rising functions
+\bot @@ carry it along a path from m to a supply or an input, which fell by at most 0, not δ
+\htmlClass{new}{\text{no node falls}} \quad \blacksquare @@ the supposition is refuted (1b)
+  </pre>
+  <p data-pid="41dfb8">A not would have to send its output down when its input goes up. The rising-network technique forbids it. So valves make both and either and nothing that turns a 1 into a 0. 38f will show that both and either alone miss every table with a not in it, and 4·comp’s not gate needs a part this network does not have.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · no not · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38d3.1</span><span class="ph understand">understand</span>What does the rising-network technique say? <br>Which line of its proof uses that each part’s current rises with the voltage across it, and why does that forbid a not?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38d4">
+  <h2 class="sthead"><span class="stno">38d4</span>No restoring from valves</h2>
+  <p data-pid="e51fb9">The same argument, run on the largest rise in place of the largest fall, gives a second fact.</p>
+  <p data-pid="2c7d35">No-gain technique: <b>in a network of diodes and resistors, if no input rises by more than Δ, no node rises by more than Δ.</b> The node with the largest rise, if above Δ, has every neighbour rising by less or as much, so no current out of it falls, so none changes, and the walk to an input or supply ends in ⊥.</p>
+  <pre class="lines" data-k="ember" data-label="this step: four either gates in a row">
+5 \text{ V} \to 4.43 \to 3.86 \to 3.29 \to 2.73 \text{ V} @@ each stage with a 1 kΩ load, solved by machine: each drop near 0.57 V
+\text{reading threshold } 2.5 \text{ V} @@ halfway, as 38b4
+\text{after four stages the margin is } 0.23 \text{ V} @@ from 2.5 V at the start
+\htmlClass{new}{\text{a fifth stage reads the } 1 \text{ as } 0} \quad \blacksquare @@ about 2.2 V: below the threshold
+  </pre>
+  <p data-pid="eebd60">A gate that restored a weak level would have to move its output further than its input moved, near the threshold: a slope above 1. The no-gain technique says valves never do. So noise that slips in is never squeezed out again, and every stage spends margin. 38b4 priced margin in spreads of noise; a chain of valves spends it by the stage. The cure is a part with its own supply, steered by the signal, and 38e builds it.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · no restoring · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38d4.1</span><span class="ph understand">understand</span>What does the no-gain technique say? <br>Why would restoring a weak level need a slope above 1 near the threshold?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38d5">
+  <h2 class="sthead"><span class="stno">38d5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{a diode is a resistor of about } 0.6/I\ \Omega\,? @@ its current is exponential in V, not in proportion (26·then1)
+\text{a diode backwards passes nothing}\,? @@ less than Iₛ, about 10⁻¹² A: almost nothing, never nothing
+\text{a cleverer network of diodes makes a not}\,? @@ the rising-network technique covers every network of diodes and resistors
+\text{a diode chain loses } 0.6 \text{ V a stage, so add } 0.6 \text{ V back with a resistor}\,? @@ a resistor alone moves no node further than an input (no-gain); adding back needs a supply steered by the signal
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38d5.1</span><span class="ph understand">understand</span>Why is no cleverer network of diodes and resistors a not? <br>Why does a resistor not add the lost 0.6 V back?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">38d.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x, y, z \in \{0, 5 \text{ V}\}"></span></span>Build a network of diodes and resistors for (x ∧ y) ∨ z, and find its output on the row x = y = z = 5 V with 1 kΩ loads. <br>How many rows of its table read wrong after the output passes through three more either gates?</div>
+  <div class="chq"><span class="chid">38d.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="V_T = kT/q"></span></span>Vₜ grows in proportion to the temperature. At 85 °C, how much less steep is the diode’s law than at 25 °C, and what happens to the drop at 12 mA? <br>Does the rising-network technique care?</div>
+  <div class="chq"><span class="chid">38d.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{raising inputs never lowers a node}"></span></span>Every network of valves only rises. Turn it round: is every rising table of {0, 1}² to {0, 1} made by valves? List the rising tables of two inputs and build each. <br>Which of the sixteen tables of 1e are rising?</div>
+  <div class="chq"><span class="chid">38d.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">valves before switches</span></span>Early electronic machines were built of glass valves that needed heaters and burned out by the hundred, and of crystal diodes that were cheap and cool. One camp built as much logic as it could from the diodes alone; another held that every stage needs a steered supply. <br>On this step’s two techniques, what does the first camp have to add, every few stages, and why? Is that an argument for the second camp, or a compromise?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r38c.html">← 38c · a wave can carry power, or a message</a><a href="r38e.html">38e · a switch worked by a switch →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The diode’s law is the Shockley diode equation; Iₛ is the saturation current and Vₜ = kT/q the thermal voltage. The either and both gates are diode–resistor logic (DRL), an OR gate and an AND gate. A network whose outputs rise with its inputs computes a monotone function; the rising-network technique is a maximum principle for resistive networks, like the one for still water on rung 33. That no passive network has a slope above 1 is the statement that a passive network has no power gain.</p>
+  <h3>Who said it first</h3>
+  <p>Ferdinand Braun found that a metal point on a crystal passes current one way in 1874, and crystal detectors were the first radio receivers. John Ambrose Fleming’s valve of 1904, a heated wire and a plate in a vacuum, was the first diode tube. William Shockley derived the junction diode’s law in 1949. Diode logic was used beside valves in machines of the late 1940s and 1950s, including the SEAC (1950), with valves added to restore the levels.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“A diode backwards passes no current, so it is an open switch, and a diode forwards is a closed one. So a network of diodes is a network of switches, and 4·comp built a not from switches.” Not allowed: the switches of a relay are worked by another wire. A diode’s state is set by the voltages on its own two ends, which is why the rising-network technique covers it.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'back',t:R`-I_s < I < 0`,n:`Almost none.`},
+  {k:'ember',kl:'forward',t:R`I(0.6\,\text{V}) \approx 0.012 \text{ A}`,n:`Wide open.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{one way only}}`,n:`A rectifier.`}
+],{title:'The slides · valve · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'either',t:R`\max(x, y) - V_d`,n:`Higher input wins.`},
+  {k:'ember',kl:'both',t:R`\min(x, y) + V_d`,n:`Lower input wins.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{4.43 \text{ V, not } 5}`,n:`A drop each time.`}
+],{title:'The slides · diode gates · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'largest fall',t:R`\delta > 0 \text{ at } m`,n:`Suppose it.`},
+  {k:'ember',kl:'current law',t:R`\textstyle\sum I_{mj} = 0`,n:`Before and after.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\bot:\ \text{no node falls}}`,n:`Valves only rise.`}
+],{title:'The slides · no not · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'stages',t:R`5 \to 4.43 \to 3.86 \to 3.29`,n:`A drop each.`},
+  {k:'ember',kl:'no gain',t:R`\text{rise} \le \Delta`,n:`Never more than the input.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{the } 1 \text{ fades}}`,n:`Margin spent.`}
+],{title:'The slides · no restoring · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

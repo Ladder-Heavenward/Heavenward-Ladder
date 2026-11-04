@@ -215,6 +215,9 @@ function plane(cv,o){
 const PAGE=ladderPage();
 function progress(){
   const boxes=[...document.querySelectorAll('.sayback')], box=document.querySelector('.themecert')||boxes[0];
+  /* special challenges tick like questions; they are never needed for the step, only for the angel wings (Andrew, 2026-11-04) */
+  const chs=[...document.querySelectorAll('section.challenge .chid')].filter(el=>!el.closest('#desk'));
+  const CH={n:chs.length,d:chs.filter(el=>el.classList.contains('done')).length};
   if(box){
     const vars=boxes.flatMap(b=>[...b.querySelectorAll('.qid')]).filter(el=>/^(?:[^.\s]+\.\d+\.\d+|\d+[a-z]+\d+\.\d+)$/.test(el.textContent.trim()));
     boxes.flatMap(b=>[...b.querySelectorAll('.qid.auto')]).forEach(g=>{
@@ -229,14 +232,15 @@ function progress(){
     const optAll=opt.every(v=>v.classList.contains('done'));
     const hasOpt=opt.length>0;
     certify(box,all);
-    if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(PAGE,all,any,optAll,hasOpt);
-    else { try{ const m=JSON.parse(LS.getItem('pages:done')||'{}'); m[PAGE]={v:all,a:any,o:optAll,h:hasOpt,t:Date.now()}; LS.setItem('pages:done',JSON.stringify(m)); }catch(e){} }
+    if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(PAGE,all,any,optAll,hasOpt,CH);
+    else { try{ const m=JSON.parse(LS.getItem('pages:done')||'{}'); m[PAGE]={v:all,a:any,o:optAll,h:hasOpt,cn:CH.n,cd:CH.d,t:Date.now()}; LS.setItem('pages:done',JSON.stringify(m)); }catch(e){} }
   } else if(/^r\d\d[a-z]+$/.test(PAGE)&&!/concl$/.test(PAGE)&&document.querySelector('header.top .tags .tag')&&!document.querySelector('.qid')){
     /* a step with no questions (1a, from 2026-10-29) ticks itself once it has been read */
     if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(PAGE,true,true,true,false);
     else { try{ const m=JSON.parse(LS.getItem('pages:done')||'{}'); m[PAGE]={v:true,a:true,o:true,h:false,t:Date.now()}; LS.setItem('pages:done',JSON.stringify(m)); }catch(e){} }
   }
   placeHere();
+  if(window.__barStats) window.__barStats();
 }
 /* certification (Andrew, 2026-10-29): one kind, replacing quiz, test and exam. A gold button shows once the
    required questions (x.1 to x.3) are ticked; sat under a proctor it becomes a green check, sat on your own a gold star.
@@ -442,6 +446,7 @@ function marks(){
   const items=[];
   const VAR=/^(?:[^.\s]+\.\d+\.\d+|\d+[a-z]+\d+\.\d+)$/;
   document.querySelectorAll('.qid').forEach(el=>{ if(el.closest('#desk')) return; if(!VAR.test(el.textContent.trim())){ el.classList.add('auto'); el.title='ticks itself when every question in this group is ticked; tap for prompt or report'; return; } items.push({el,id:'q:'+el.textContent.trim(),on:()=>el.classList.contains('done'),set:v=>el.classList.toggle('done',v)}); });
+  document.querySelectorAll('section.challenge .chid').forEach(el=>{ if(el.closest('#desk')) return; el.title='tap when you have cleared this challenge'; items.push({el,id:'c:'+el.textContent.trim(),on:()=>el.classList.contains('done'),set:v=>el.classList.toggle('done',v)}); });
   document.querySelectorAll('li>.n').forEach(el=>{ const li=el.parentElement;
     if(li.classList.contains('built')&&!li.classList.contains('k-theory')&&!li.classList.contains('k-gate')){ li.classList.add('autorow'); el.title='ticks itself when every question on this page is ticked'; el.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation(); lockedHint(li); }); return; }
     items.push({el,id:'L:'+el.textContent.trim(),on:()=>li.classList.contains('passed'),set:v=>li.classList.toggle('passed',v)}); });
@@ -538,19 +543,45 @@ function ladderStats(){
   if(window.__barStats) window.__barStats();
 }
 
+/* The bar's three counts (Andrew, 2026-11-04 18:38):
+   blue stars = steps with every footing question cleared + rungs with every step starred + floors with every rung starred;
+   gold stars = steps certified + rungs certified + floors certified;
+   angel wings = rungs and floors with their blue star, their gold star and every challenge cleared.
+   The shape of the ladder comes from ladmap.js (made from ladder.tsv). A rung's certification is its last core step's;
+   the last rung of a floor is certified by the floor's certification. */
+function starCounts(){
+  const M=window.LADMAP; if(!M) return null;
+  let pages={}; try{ pages=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
+  const cert=k=>!!certRead(k), P=s=>pages[s]||{};
+  const blueStep=s=>!!P(s).v, starStep=s=>!!(P(s).v&&P(s).o!==false), cleared=([s,n])=>!n||(+P(s).cd||0)>=n;
+  let blue=0,gold=0,wings=0;
+  M.forEach(([fl,rungs])=>{ let fB=rungs.length>0,fC=true; const fG=cert('floor'+fl+'concl');
+    rungs.forEach(([r,core,annex],i)=>{
+      core.concat(annex).forEach(([s])=>{ if(blueStep(s)) blue++; if(cert(s)) gold++; });
+      const rB=core.every(([s])=>starStep(s)), rG=i===rungs.length-1?fG:cert(core[core.length-1][0]), rC=core.every(cleared);
+      if(rB) blue++; if(rG) gold++; if(rB&&rG&&rC) wings++;
+      fB=fB&&rB; fC=fC&&rC; });
+    if(fB) blue++; if(fG) gold++; if(fB&&fG&&fC) wings++; });
+  return {blue,gold,wings};
+}
+const ICON_L='<svg class="lb-L" viewBox="104 92 308 328" aria-hidden="true"><path d="M222,132 L384,358" stroke="#5fd13a" stroke-width="16" stroke-linecap="round"/><path fill="currentColor" d="M112,100 L262,100 L262,108 C238,108 225,112 223,136 L222,360 L360,360 C384,359 397,342 398,294 L405,294 L400,412 L112,412 L112,404 C134,404 149,399 150,378 L150,136 C149,112 136,108 112,108 Z"/><path d="M222,318 L264,318 L264,360" fill="none" stroke="#e8703a" stroke-width="16"/></svg>';
+const WINGS='<svg viewBox="0 0 28 14" width="22" height="11" aria-hidden="true"><path fill="currentColor" d="M13.4 9.2C11 3.6 6.4.9.8.8c1 3 2.4 5 4.4 6.2-1 .5-1.7 1.1-2.2 1.9 1.9.9 3.8 1 5.2.7-.6 1-.8 2-.5 3.2 1.4.4 3.4-.2 5.7-3.6z"/><path fill="currentColor" transform="matrix(-1 0 0 1 28 0)" d="M13.4 9.2C11 3.6 6.4.9.8.8c1 3 2.4 5 4.4 6.2-1 .5-1.7 1.1-2.2 1.9 1.9.9 3.8 1 5.2.7-.6 1-.8 2-.5 3.2 1.4.4 3.4-.2 5.7-3.6z"/></svg>';
+
 /* The ladder bar: sticky along the foot of every page. The ladder (home, with how far you have climbed),
    the keys, and the tray (the page's questions, a grapher, the quick moves, the randomizer). */
 function ladderBar(){
   if(document.getElementById('lbar')) return;
   const home=!!document.querySelector('.rungs');
   const bar=document.createElement('nav'); bar.id='lbar'; bar.setAttribute('aria-label','the ladder bar');
-  bar.innerHTML=(home?'<button type="button" class="lb lb-ladder"':'<a class="lb lb-ladder" href="index.html"')+' title="the ladder: how far you have climbed"><svg viewBox="0 0 20 28" width="15" height="21" aria-hidden="true"><path d="M5 1v26M15 1v26M5 6h10M5 12h10M5 18h10M5 24h10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span class="lb-l">the ladder</span><b class="lb-far"></b><span class="lb-star"></span>'+(home?'</button>':'</a>')
-    +'<span class="lb-gap"></span>'+'<button type="button" class="lb lb-keys" aria-label="the keys" hidden>⌨ <span class="lb-l">keys</span></button>'+'<button type="button" class="lb lb-tray" aria-label="the tray">☰ <span class="lb-l">tray</span></button>';
+  bar.innerHTML=(home?'<button type="button" class="lb lb-ladder"':'<a class="lb lb-ladder" href="index.html"')+' title="the ladder"><span class="lb-l" aria-label="Ladder">'+ICON_L+'<span class="lb-w">adder</span></span>'+(home?'</button>':'</a>')
+    +'<span class="lb-counts" role="status"><span class="lc lc-blue" title="blue stars: steps with every footing question cleared, rungs with every step starred, floors with every rung starred"><span aria-hidden="true">★</span><b>0</b><span class="vh"> blue stars</span></span><span class="lc lc-gold" title="gold stars: steps, rungs and floors certified"><span aria-hidden="true">★</span><b>0</b><span class="vh"> gold stars</span></span><span class="lc lc-wing" title="angel wings: rungs and floors with their blue star, their gold star and every challenge cleared">'+WINGS+'<b>0</b><span class="vh"> angel wings</span></span></span>'
+    +'<span class="lb-gap"></span>'+'<button type="button" class="lb lb-keys" aria-label="the keys" hidden>⌨ <span class="lb-l">keys</span></button>'+'<button type="button" class="lb lb-tray" aria-label="the toolbox">☰ <span class="lb-l">toolbox</span></button>';
   document.body.appendChild(bar); document.body.classList.add('hasbar');
-  const stats=()=>{ let v={far:-1,stars:0}; try{ v=Object.assign(v,JSON.parse(LS.getItem('ladder:stats')||'{}')); }catch(e){}
-    bar.querySelector('.lb-far').textContent=v.far<0?'':String(v.far);
-    bar.querySelector('.lb-star').textContent=v.stars?'★ '+v.stars:''; };
-  window.__barStats=stats; stats();
+  const stats=()=>{ const v=starCounts(); if(!v) return;
+    bar.querySelector('.lc-blue b').textContent=v.blue; bar.querySelector('.lc-gold b').textContent=v.gold; bar.querySelector('.lc-wing b').textContent=v.wings; };
+  window.__barStats=stats;
+  if(window.LADMAP) stats(); else { const sc=document.createElement('script'); sc.src='ladmap.js'; sc.onload=stats; document.head.appendChild(sc); }
+  addEventListener('storage',e=>{ if(!e.key||e.key==='ladder:record') setTimeout(stats,0); });
   if(home) bar.querySelector('.lb-ladder').onclick=()=>climbTo(true);
   const kb=bar.querySelector('.lb-keys'); if(kb) kb.onclick=()=>{ const b=document.querySelector('#mk-tray .mk-btn'); if(b) b.click(); };
   bar.querySelector('.lb-tray').onclick=()=>{ const b=document.getElementById('deskbtn'); if(b) b.click(); };
@@ -1146,7 +1177,8 @@ function basement(){
   const flip=()=>{ const inb=open&&b.getBoundingClientRect().top<innerHeight*0.45;
     if(document.body.classList.contains('inbase')===inb) return;
     document.body.classList.toggle('inbase',inb);
-    const l=document.querySelector('#lbar .lb-ladder .lb-l'); if(l) l.textContent=inb?'the basement':'the ladder'; };
+    const w=document.querySelector('#lbar .lb-ladder .lb-w'), L=document.querySelector('#lbar .lb-ladder .lb-L'); if(w) w.textContent=inb?'Basement':'adder'; if(L) L.style.display=inb?'none':'';
+    const l=document.querySelector('#lbar .lb-ladder .lb-l'); if(l) l.setAttribute('aria-label',inb?'Basement':'Ladder'); };
   addEventListener('scroll',flip,{passive:true}); flip();
 }
 ready(()=>setTimeout(basement,0));

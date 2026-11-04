@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How do tiny magnets agree?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40bio.html">← 40·bio how are all living things related?</a><a href="r40eng.html">next: 40·eng what holds cloth and rope together? →</a></p>
+  <div class="tags"><span class="tag phys">40·phys · physics</span></div>
+  <h1>How do tiny magnets agree?</h1>
+  <p data-pid="55f83a">How do tiny magnets agree? Each atom of iron is a small magnet, and each pulls on only its nearest neighbours. Yet below 1043 kelvin, about 770 °C, a bar of iron can be a magnet as a whole, with nearly every atom pointing one way, and above that temperature it cannot, however strong the neighbours’ pull. Nothing tells the atoms far apart to agree. The agreement appears all at once, at one temperature, out of nothing but each atom’s wish to match the ones beside it and the heat that shakes them. This page builds the simplest model of that: arrows that point up or down, one at each dot of a grid, with a little energy saved for every link whose two ends agree. On a line of dots it solves the model exactly with a two-by-two grid, and finds no agreement at any temperature above zero. On a flat grid an exact answer exists, found in 1944, and is hard; the page instead finds an approximate one, in which each arrow feels only the average of its neighbours, and that one has a temperature where agreement begins. It reads the strength of iron’s pull between neighbours off its measured temperature. And it ends with the same model turned into a memory, where stored patterns are the low points of the energy.</p>
+  <p class="gesture" data-pid="7d38e5">Arrows up or down on a grid save energy J for each agreeing link. A pair agrees on average by tanh(J/kT). On a ring, the shares come from a two-by-two grid’s stretches, and the agreement dies out along the ring at every temperature above zero. If each arrow feels its neighbours’ average, agreement appears below kT = qJ, growing as the square root of the distance below. Iron’s 1043 K gives J of about 0.01 eV. Stored patterns are low points of the energy, and arrows that follow their local field never climb.</p>
+</header>
+
+<section class="class step" data-step="40·phys.1">
+  <h2 class="sthead"><span class="stno">40·phys.1</span>Arrows on a grid</h2>
+  <p data-pid="982e80">Put an arrow sᵢ = +1 (up) or −1 (down) at each dot i of a graph: the dots of a square grid, or of a ring. In a field h, the energy of a whole arrangement s is E(s) = −J Σ sᵢsⱼ − h Σ sᵢ, the first sum over the links, the second over the dots. J > 0 is the energy saved by a link whose two arrows agree. By 30·phys, at temperature T the share of the arrangement s is e^(−E(s)/kT) divided by Z, the total of e^(−E/kT) over every arrangement.</p>
+  <p data-pid="7553b2">Pair-agreement technique: <b>two linked arrows with no field agree on average by tanh(J/kT) = (e^(J/kT) − e^(−J/kT))/(e^(J/kT) + e^(−J/kT)).</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the pair-agreement technique">
+K = J/kT;\ \ \text{arrangements } {+}{+}, {-}{-} \text{ weigh } e^{K};\ \ {+}{-}, {-}{+} \text{ weigh } e^{-K} @@ E = −J for agreeing, +J for not
+Z = 2e^{K} + 2e^{-K} @@ the four arrangements
+\text{average of } s_1 s_2 = \frac{2e^{K} - 2e^{-K}}{2e^{K} + 2e^{-K}} @@ +1 for agreeing, −1 for not, each with its share
+\htmlClass{new}{= \tanh K} \quad \blacksquare @@ near 1 when cold, near K when hot
+  </pre>
+  <p data-pid="a52e2a">At room temperature kT ≈ 0.0257 eV. A pull of J = 0.01 eV gives tanh(0.39) ≈ 0.37: linked neighbours agree a little more than half the time, (1 + 0.37)/2 ≈ 69%. The question is whether that local lean adds up to agreement across a whole bar.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · arrows · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">40·phys.1.1</span><span class="ph understand">understand</span>What is the energy of an arrangement of arrows, and what is its share at temperature T? <br>What does the pair-agreement technique say, and why does it head to 1 as the temperature falls?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40·phys.2">
+  <h2 class="sthead"><span class="stno">40·phys.2</span>A ring, exactly</h2>
+  <p data-pid="8c9634">Put N arrows on a ring, each linked to the next, with field h; write K = J/kT and b = h/kT. The weight of an arrangement is a product of one factor for each link: T(sᵢ, sᵢ₊₁) = e^(K sᵢsᵢ₊₁ + b(sᵢ + sᵢ₊₁)/2), so that each arrow gets half its field from each side. Read T as a 2 × 2 grid, rows and columns marked +1 and −1.</p>
+  <p data-pid="022148">Ring-grid technique: <b>Z for the ring is λ₊ᴺ + λ₋ᴺ, where λ± = e^K cosh b ± √(e^(2K) sinh² b + e^(−2K)) are the stretches of T.</b> The total of the weights over all arrangements is the sum down the middle of Tᴺ, since the ring closes; by the straighten-out technique of 27f, Tᴺ = P Dᴺ P⁻¹, whose sum down the middle is that of Dᴺ. The stretches come from det(T − λI) = 0.</p>
+  <pre class="lines" data-k="ember" data-label="this page: no agreement on a ring">
+N \text{ large: } Z \approx \lambda_+^N @@ λ₊ &gt; |λ₋|
+\text{average arrow } m = \frac{1}{N}\frac{\partial \ln Z}{\partial b} = \frac{\sinh b}{\sqrt{\sinh^2 b + e^{-4K}}} @@ the slope of ln Z in b gives the average of Σ sᵢ (30·phys)
+h \to 0 \text{ at any } T > 0:\ \ m \to 0 @@ e^(−4K) &gt; 0 keeps the bottom away from 0
+\htmlClass{new}{\text{on a ring, no agreement across the whole at any temperature above zero}} \quad \blacksquare @@ 
+  </pre>
+  <p data-pid="09e300">The reason is cheap walls. Break the ring into a long run of ups and a long run of downs: it costs 2J at each of the two walls and gains, in the count of where to put them, about k ln(N²) of entropy. For large N the gain wins at any T above zero. On a flat grid a wall between two regions is a whole line of disagreeing links, and its cost grows with its length. That is why two dimensions differ.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · ring · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·phys.2.1</span><span class="ph understand">understand</span>What does the ring-grid technique say? <br>Why does the average arrow on a long ring head to 0 as the field is taken away, at any temperature above zero?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40·phys.3">
+  <h2 class="sthead"><span class="stno">40·phys.3</span>Each arrow feels the average</h2>
+  <p data-pid="c39994">On a flat grid, each dot has q neighbours: 4 on a square grid. Guess that each arrow feels its neighbours only through their average m, and the field. Then one arrow sits in the field h + qJm, and its two states weigh e^(±(h + qJm)/kT).</p>
+  <p data-pid="300551">Average-field technique: <b>if each arrow feels only the average of its q neighbours, then m = tanh((qJm + h)/kT); with no field, a solution m ≠ 0 exists exactly when kT &lt; qJ, and just below that temperature m ≈ √3 (1 − T/T_c)^(1/2), with kT_c = qJ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the average-field technique">
+m = \tanh(x),\ \ x = \tau m,\ \ \tau = qJ/kT = T_c/T @@ one arrow’s average, h = 0
+\tanh \text{ has slope 1 at 0 and bends down for } x > 0 @@ so m = tanh(τm) meets m only at 0 when τ ≤ 1, and also at ±m₀ when τ &gt; 1
+\tanh x \approx x - x^3/3 \text{ near } 0 @@ its series (23h)
+m = \tau m - \tau^3 m^3/3 \Rightarrow m^2 = 3(\tau - 1)/\tau^3 @@ divide by m ≠ 0
+\htmlClass{new}{m \approx \sqrt{3}\,(1 - T/T_c)^{1/2} \text{ just below } T_c} \quad \blacksquare @@ τ − 1 ≈ 1 − T/T_c, τ³ ≈ 1
+  </pre>
+  <p data-pid="868d63">So the guess has a temperature where agreement begins. For the square grid it says kT_c = 4J. The exact answer, of 1944, is kT_c = 2J/ln(1 + √2) ≈ 2.269J: the guess is 76% too high, since it ignores that neighbours lean together, not each alone. Near T_c the exact m grows as (1 − T/T_c)^(1/8), not the square root. Measured magnets near their temperature grow with a power near 1/3, which the three-dimensional grid gives, and which no average-field guess can.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · average field · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·phys.3.1</span><span class="ph understand">understand</span>What does the average-field technique say? <br>Why does m = tanh(τm) have a solution other than 0 only when τ > 1?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40·phys.4">
+  <h2 class="sthead"><span class="stno">40·phys.4</span>Iron</h2>
+  <p data-pid="a3f967">Iron’s atoms sit on a cubic grid with one atom at each corner and one at the centre of each cube; each atom has q = 8 nearest neighbours. Its measured temperature of agreement is T_c = 1043 K.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the pull between neighbours">
+J \approx kT_c/q = 1.381 \times 10^{-23} \cdot 1043 / 8 \text{ J} @@ the average-field technique, read backwards
+\approx 1.80 \times 10^{-21} \text{ J} \approx 0.011 \text{ eV} @@ 1 eV = 1.602 × 10⁻¹⁹ J
+\text{one atom’s magnet in a field of 1 T: } \mu B \approx 9.27 \times 10^{-24} \text{ J} @@ one electron’s magnet; iron has about two to an atom
+\htmlClass{new}{J / \mu B \approx 190:\ \text{the neighbours’ pull far outweighs a strong magnet’s}} \quad \blacksquare @@ 
+  </pre>
+  <p data-pid="042b94">Above T_c the bar has no agreement, and a field leans it a little. With m small, the average-field technique gives m ≈ (qJm + h)/kT, so m ≈ h/(k(T − T_c)): the lean grows without bound as T falls to T_c. Above-the-point technique: <b>above its temperature of agreement, in the average-field guess, a magnet’s lean in a small field is h/(k(T − T_c)).</b> Measured on nickel and iron, the lean does grow as one over T minus a fixed temperature, close above it, with a fitted temperature a little above the true one.</p>
+  <p data-pid="06b6bc">The pull J does not come from the atoms’ magnets at all: two such magnets an atom apart pull with about a hundred-thousandth of an eV. It comes from 37·phys’s swap sign, through the energy of two electrons whose spins agree or disagree. Agreement in iron is magnetic in its effects and electric, through exclusion, in its cause.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · iron · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·phys.4.1</span><span class="ph understand">understand</span>How is J for iron read from its measured temperature of agreement? <br>What does the above-the-point technique say, and why does the lean grow without bound as T falls to T_c?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40·phys.5">
+  <h2 class="sthead"><span class="stno">40·phys.5</span>A memory made of arrows</h2>
+  <p data-pid="b417bb">Let the links have their own strengths wᵢⱼ = wⱼᵢ, and the energy E(s) = −½ Σᵢ Σⱼ wᵢⱼ sᵢ sⱼ, with wᵢᵢ = 0. To store a pattern ξ of ups and downs, set wᵢⱼ = ξᵢξⱼ/N. Then E(ξ) = −(N − 1)/2, the least the energy can be, and −ξ is equally low.</p>
+  <p data-pid="507e58">Downhill-update technique: <b>setting one arrow sᵢ to the sign of its field Σⱼ wᵢⱼ sⱼ never raises the energy.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the downhill-update technique">
+\text{the terms of } E \text{ holding } s_i:\ -s_i\,f_i,\ \ f_i = \textstyle\sum_{j} w_{ij} s_j @@ the halves of the two terms wᵢⱼ and wⱼᵢ add
+s_i \to \text{sign}(f_i):\ \ -s_i f_i \to -|f_i| @@ the least of −f_i and +f_i
+\htmlClass{new}{E \text{ falls or stays}} \quad \blacksquare @@ the other terms do not hold sᵢ
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: four arrows remember">
+\xi = (+1, -1, +1, -1),\ \ w_{ij} = \xi_i\xi_j/4 @@ one pattern stored
+\text{start } (+1, +1, +1, -1) @@ one arrow wrong
+f_2 = \tfrac{\xi_2}{4}(\xi_1 s_1 + \xi_3 s_3 + \xi_4 s_4) = -\tfrac14(1 + 1 + 1) = -\tfrac34 @@ arrow 2’s field
+\htmlClass{new}{s_2 \to -1:\ \text{the pattern is back}} \quad \blacksquare @@ the energy fell from 0 to −3/2
+  </pre>
+  <p data-pid="e36dc5">Each update is 38·bio’s threshold unit; the whole is a ring of them with links both ways, which settles where a one-way ring of 38g ticks for ever. Many patterns can be stored by adding their w’s. They interfere, and past about 0.14N patterns for N arrows the stored ones stop being low points; the count was made with the methods of this page’s first footings, for random patterns, in 1985.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · memory · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·phys.5.1</span><span class="ph understand">understand</span>What does the downhill-update technique say? <br>Why is the stored pattern ξ a lowest point of the energy when wᵢⱼ = ξᵢξⱼ/N?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40·phys.6">
+  <h2 class="sthead"><span class="stno">40·phys.6</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{neighbours agree, so a long ring agrees across its length}\,? @@ agreement between arrows k apart falls as (tanh K)ᵏ; the ring has none in the whole
+kT_c = 4J \text{ for the square grid}\,? @@ that is the average-field guess; the exact value is 2.269J
+\text{iron agrees because its atoms are magnets pulling on each other}\,? @@ their magnets’ pull is about 10⁻⁵ eV; J comes from the swap sign
+\text{a memory recalls every stored pattern}\,? @@ past about 0.14N patterns, stored ones stop being low points
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·phys.6.1</span><span class="ph understand">understand</span>Why does agreement between neighbours not give agreement across a long ring? <br>Why is kT_c = 4J not the true value for the square grid?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">40·phys.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{a line of 3 arrows, no field}"></span></span>Find Z for three arrows in a line, s₁ to s₂ to s₃, by listing the 8 arrangements, and the average agreement of s₁ and s₃. <br>Show it is (tanh K)². Why does the middle arrow pass on the agreement as a product?</div>
+  <div class="chq"><span class="chid">40·phys.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="T \to 0,\ \ T \to \infty"></span></span>Find what the ring-grid technique gives for λ₊ and λ₋ as T heads to 0 and as T heads to ∞, with no field, and what Z counts in each case. <br>At T = 0 is the ring in agreement? Does that contradict the footing’s conclusion?</div>
+  <div class="chq"><span class="chid">40·phys.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="m = \tanh(\tau m + b)"></span></span>With a small field b > 0 below T_c, the average-field equation has three solutions. Which one does a magnet take, and which is the energy’s worst? <br>Turn the field from +b to −b slowly. What happens to m, and why does that give a magnet a memory of its last field?</div>
+  <div class="chq"><span class="chid">40·phys.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">24k: stability by the sign of a slope</span></span>Rung 24 judged a kept point of a rule stable when the slope there is below 1 in size. The average-field equation asks for a kept point of m ↦ tanh(τm). <br>At τ &lt; 1 and at τ &gt; 1, which kept points are stable by 24k’s test? What happens to m = 0 as τ passes 1, and what did rung 24 call that?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r40bio.html">← 40·bio · how are all living things related?</a><a href="r40eng.html">40·eng · what holds cloth and rope together? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The model is the Ising model, with J the exchange coupling. The temperature of agreement is the Curie temperature, and agreement across the whole is spontaneous magnetization, a phase transition. The ring-grid technique is the transfer matrix method. The average-field technique is mean-field theory (Weiss's molecular field, 1907), and the exponent of m near T_c is the critical exponent β: ½ in mean field, ⅛ exactly in two dimensions, about 0.326 in three. The above-the-point technique is the Curie–Weiss law. The memory is the Hopfield network, its w's are Hebbian weights, and its limit of 0.138N is from Amit, Gutfreund and Sompolinsky (1985). The swap-sign pull is the exchange interaction (Heisenberg, 1928).</p>
+  <h3>Who said it first</h3>
+  <p>Wilhelm Lenz proposed the model in 1920 and his student Ernst Ising solved the line in 1925, finding no transition, and wrongly guessed none in any dimension. Pierre Weiss gave the average field in 1907; Pierre Curie had measured the temperatures in 1895. Rudolf Peierls argued in 1936, by the cost of walls, that two dimensions do have a transition. Lars Onsager solved the square grid exactly in 1944. John Hopfield proposed the memory in 1982, and shared the physics prize of 2024 for it with Geoffrey Hinton.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The average-field equation has a solution m ≠ 0 below T_c on every grid, including the line, where q = 2. So a line of arrows agrees below kT = 2J.” Not allowed: the average-field guess was not proved; it was guessed, and the line is where its guess can be checked exactly, by the ring-grid technique, which finds no agreement at any T above zero. The guess is wrong there, and the exact answer is the judge.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'energy',t:R`E = -J\textstyle\sum s_i s_j - h\sum s_i`,n:`Agreeing links save J.`},
+  {k:'ember',kl:'share',t:R`e^{-E/kT}/Z`,n:`30·phys.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\langle s_1 s_2 \rangle = \tanh K}`,n:`A pair.`}
+],{title:'The slides · arrows · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'grid',t:R`T(s, s') = e^{Kss' + b(s+s')/2}`,n:`One factor per link.`},
+  {k:'ember',kl:'stretches',t:R`Z = \lambda_+^N + \lambda_-^N`,n:`27f.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{m \to 0 \text{ as } h \to 0}`,n:`No agreement.`}
+],{title:'The slides · ring · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'feel',t:R`h + qJm`,n:`Neighbours’ average.`},
+  {k:'ember',kl:'solve',t:R`m = \tanh(\tau m)`,n:`A kept point.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{kT_c = qJ,\ m \approx \sqrt3(1 - T/T_c)^{1/2}}`,n:`Agreement begins.`}
+],{title:'The slides · average field · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'neighbours',t:R`q = 8`,n:`Corners and centre.`},
+  {k:'ember',kl:'read back',t:R`J \approx kT_c/q`,n:`1043 K.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{J \approx 0.011 \text{ eV}}`,n:`Far above μB.`}
+],{title:'The slides · iron · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'store',t:R`w_{ij} = \xi_i\xi_j/N`,n:`One pattern.`},
+  {k:'ember',kl:'update',t:R`s_i \to \text{sign}(f_i)`,n:`Downhill.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{the pattern returns}}`,n:`A low point.`}
+],{title:'The slides · memory · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

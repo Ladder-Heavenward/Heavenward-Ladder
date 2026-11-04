@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Why does silicon have a gap?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38q.html">← 38q counting steps by hand</a><a href="r38eng.html">next: 38·eng why did chips stop getting faster? →</a></p>
+  <div class="tags"><span class="tag phys">38·phys · physics</span></div>
+  <h1>Why does silicon have a gap?</h1>
+  <p data-pid="e5d0d7">Why does silicon have a gap? Every switch of this rung is a strip of silicon that conducts when told to and not otherwise, and that is a strange thing for a solid to do. Copper always conducts. Glass never does. Silicon sits between, and the reason is a gap in the energies its electrons may have. The physics annex on electrons found that a single atom allows only certain energies, and that an electron can leak through a thin wall. Put two atoms side by side and each allowed energy splits in two. Put a whole crystal of them side by side, more atoms than there are stars in the sky, and each energy spreads into a band of energies packed too close to tell apart, with gaps between the bands where no electron may be. The exclusion rule then fills the bands from the bottom, two to a level. In silicon the filling stops exactly at the top of a band, so a full band sits under an empty one, with a gap of a little over one electron volt. Warmth lifts very few electrons across. A trace of phosphorus adds electrons that need almost nothing to lift; a trace of boron takes some away. Put the two kinds side by side and the one-way valve of this rung appears, with the law the newsflash on the complex rung laid down from measurement, now with a reason behind it.</p>
+  <p class="gesture" data-pid="b71331">Two atoms split a level in two; a row of N spreads it into a band of N levels, four times the leak wide. Exclusion fills silicon’s lower band exactly, so a gap of 1.12 eV separates full from empty. Warmth lifts about one electron in five trillion atoms across. Phosphorus gives electrons that warmth frees at once. Where the two kinds meet, a barrier of about 0.7 V forms, and a push lowers it by equal factors.</p>
+</header>
+
+<section class="class step" data-step="38phys1">
+  <h2 class="sthead"><span class="stno">38phys1</span>Two atoms, then a row</h2>
+  <p data-pid="77b4ca">One atom allows an energy E₀ for an outer electron. Bring a second atom close: 35·phys4’s thin-wall technique lets the electron leak from one to the other, and the energy of that leak is a number t > 0. The energy is a symmetric map on the two places (31d), with E₀ on the diagonal and −t off it. Its axes are the sum and the difference of the two places, with energies E₀ − t and E₀ + t: one level becomes two.</p>
+  <p data-pid="6a9210">Level-spread technique: <b>N atoms in a row, each leaking to its neighbours with energy t, turn one level E₀ into N levels E₀ − 2t cos(kπ/(N + 1)), k = 1, …, N: a band of width just under 4t.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the level-spread technique">
+(H u)_j = E_0 u_j - t\,(u_{j-1} + u_{j+1}),\ \ u_0 = u_{N+1} = 0 @@ each place leaks to its two neighbours; none past the ends
+u_j = \sin\tfrac{jk\pi}{N + 1} @@ try a turning along the row
+\sin\tfrac{(j-1)k\pi}{N+1} + \sin\tfrac{(j+1)k\pi}{N+1} = 2\cos\tfrac{k\pi}{N+1}\,\sin\tfrac{jk\pi}{N+1} @@ the sum formulas (21d)
+H u = \big(E_0 - 2t\cos\tfrac{k\pi}{N+1}\big)u,\ \ u_0 = u_{N+1} = 0 \text{ at } j = 0, N + 1 @@ an axis of the symmetric map (31d)
+\htmlClass{new}{N \text{ levels between } E_0 - 2t \text{ and } E_0 + 2t} \quad \blacksquare @@ k = 1, …, N give N different cosines, all axes found
+  </pre>
+  <p data-pid="e45ecf">N = 6 gives levels E₀ ± 1.80t, ± 1.25t, ± 0.45t, checked by machine. For a crystal of 10²² atoms in each cubic centimetre, the levels are packed so close that the band is, for every purpose, a continuous stretch. Each atomic level gives its own band, and between bands lie gaps.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · bands · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">38·phys.1.1</span><span class="ph understand">understand</span>What does the level-spread technique say? <br>Why does a row of N atoms give exactly N levels, and why is the band never wider than 4t?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38phys2">
+  <h2 class="sthead"><span class="stno">38phys2</span>A full band under an empty one</h2>
+  <p data-pid="c72684">Each level holds two electrons, of opposite spin, by 37·phys’s swap-sign technique. A silicon atom brings four outer electrons. In the crystal each atom joins four neighbours, and the four outer orbitals of each atom mix into a lower band that holds exactly four electrons an atom and an upper band that holds four more. The measured gap between them, at room warmth, is 1.12 eV.</p>
+  <p data-pid="17e077">Full-band technique: <b>a band whose every level is filled carries no current, since a push cannot move any electron to a level that is free.</b> A metal’s top band is part filled, and a push shifts electrons into the empty levels just above. Silicon’s lower band is full and its upper band empty: with no warmth, silicon does not conduct.</p>
+  <pre class="lines" data-k="ember" data-label="this step: silicon’s gap as light">
+E_g = 1.12 \text{ eV} @@ measured
+\lambda = \tfrac{hc}{E_g} = \tfrac{1240 \text{ eV nm}}{1.12 \text{ eV}} @@ the gap-to-wavelength technique (36·phys3)
+\approx 1107 \text{ nm} @@ in the near infrared
+\htmlClass{new}{\text{light shorter than } 1.1\ \mu\text{m lifts electrons across: all visible light}} \quad \blacksquare @@ so silicon looks dark grey, and longer infrared passes through it
+  </pre>
+  <p data-pid="4f9197">That is why the camera in a phone and the solar panels on the roofs of Davis are silicon: every visible photon has enough energy to lift an electron across the gap and be counted, or be turned into current.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the gap · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·phys.2.1</span><span class="ph understand">understand</span>What does the full-band technique say? <br>Why does silicon take in visible light and let longer infrared through?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38phys3">
+  <h2 class="sthead"><span class="stno">38phys3</span>How many cross</h2>
+  <p data-pid="5fc5be">Warmth lifts a few electrons across. The middle of the gap is where 37·phys’s share for sign −1 is ½, so a level at the bottom of the upper band, E_g/2 above it, is filled with share 1/(e^(E_g/2kT) + 1). At 300 K, kT = 0.0259 eV.</p>
+  <p data-pid="371186">Gap-crossing technique: <b>the share of the upper band’s lowest levels that warmth fills is about e^(−E_g/2kT), so a larger gap gives exponentially fewer carriers.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the gap-crossing technique">
+\tfrac{E_g}{2kT} = \tfrac{1.12}{2 \cdot 0.0259} \approx 21.7 @@ silicon at 300 K
+e^{-21.7} \approx 3.9 \cdot 10^{-10} @@ the two-shares technique, with the 1 beside e^21.7 dropped
+\text{about } 2.5 \cdot 10^{19} \text{ levels per cm}^3 \text{ near the band edge} \Rightarrow \approx 10^{10} \text{ electrons per cm}^3 @@ the count of levels within a few kT of the edge, taken as measured
+\htmlClass{new}{10^{10} \text{ against } 5 \cdot 10^{22} \text{ atoms: one in five trillion}} \quad \blacksquare @@ the measured value is about 1.0 · 10¹⁰ cm⁻³
+  </pre>
+  <p data-pid="8ab7d5">Germanium’s gap is 0.66 eV, and the exponent alone gives it about seven thousand times more carriers per level: germanium switches leak when warm, which is one reason silicon replaced it in the 1960s. A diamond’s gap of 5.5 eV gives essentially none, so diamond is clear and does not conduct.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · crossing · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·phys.3.1</span><span class="ph understand">understand</span>What does the gap-crossing technique say? <br>Why do germanium switches leak more when warm than silicon ones?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38phys4">
+  <h2 class="sthead"><span class="stno">38phys4</span>A trace of phosphorus</h2>
+  <p data-pid="168c4f">Phosphorus has five outer electrons. Put one phosphorus atom in place of a silicon atom: four electrons join the bonds, and the fifth is held only by one extra charge of the nucleus, inside silicon, which weakens the pull by a factor of 11.7 (its measured shielding), and with an electron that moves through the crystal as if lighter, 0.26 times its mass.</p>
+  <p data-pid="112998">Donor technique: <b>an extra electron bound by one charge inside a material that shields by ε and makes it move with mass share m* is held like hydrogen’s electron, with energy −13.6 eV × m*/ε².</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the donor technique">
+E = -\tfrac{m\,k^2 e^4}{2\hbar^2} \cdot \tfrac{m^*}{\varepsilon^2} @@ the ground-orbital technique (35·phys6), with the pull k e² cut by ε and the mass m by m*
+= -13.6 \text{ eV} \cdot \tfrac{0.26}{11.7^2} @@ hydrogen’s energy, scaled
+\approx -0.026 \text{ eV} @@ about kT at room warmth; measured, 0.045 eV
+\htmlClass{new}{\text{warmth frees almost every donor’s electron}} \quad \blacksquare @@ the binding is a few kT, against 21.7 for the gap
+  </pre>
+  <p data-pid="7ea67b">One phosphorus atom in every five million silicon atoms gives 10¹⁶ free electrons per cm³: a million times the 10¹⁰ warmth gives. The silicon now conducts by electrons, n-type. Boron, with three outer electrons, leaves a bond short; a neighbour’s electron hops in and the gap moves, a hole that carries current as a positive charge: p-type. Doping is chosen by the atom, and set by the count.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · doping · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·phys.4.1</span><span class="ph understand">understand</span>What does the donor technique say? <br>Why does one phosphorus atom in five million matter more than all the warmth of the room?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38phys5">
+  <h2 class="sthead"><span class="stno">38phys5</span>The one-way layer</h2>
+  <p data-pid="29f9f1">Join n-type silicon to p-type. Electrons spill from the n side into the p side, holes the other way, and the charges they leave behind build a voltage that stops the spill. In the balance, electrons on each side are spread by the same share rule, so their counts differ by the factor e^(V/kT·q) across the step.</p>
+  <p data-pid="49e8e2">Junction-voltage technique: <b>where n-type with Nd donors meets p-type with Na acceptors, a barrier of (kT/q) ln(Na Nd / nᵢ²) forms; a push V forward lowers it, and the current over it grows as e^(V/Vₜ).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the junction-voltage technique">
+n_n = N_d,\ \ n_p = n_i^2/N_a @@ electrons on each side: the donors, and the warmth share, which holes push down (counts times counts is nᵢ², measured)
+\tfrac{n_n}{n_p} = e^{qV_{bi}/kT} @@ the two-shares technique in its rare form: equal factors for equal steps of energy
+V_{bi} = \tfrac{kT}{q}\ln\tfrac{N_a N_d}{n_i^2} = 0.0259 \ln\tfrac{10^{16}\cdot10^{16}}{10^{20}} \approx 0.71 \text{ V} @@ Na = Nd = 10¹⁶, nᵢ = 10¹⁰ per cm³
+\text{push } V \text{ forward: barrier } V_{bi} - V,\ \text{electrons over it} \propto e^{-q(V_{bi} - V)/kT} @@ the same share
+\htmlClass{new}{I = I_s\big(e^{V/V_T} - 1\big)} \quad \blacksquare @@ the flow back over the barrier does not depend on V: it is the −Iₛ of 38d1
+  </pre>
+  <p data-pid="08928e">So the diode’s law, laid down from measurement on 26·then1, is the two-shares technique at a step of energy, and the 0.6 V at which a diode opens is a barrier of about 0.7 V nearly flattened. A transistor of 38e is the same layer with a plate above it, whose voltage builds or removes the barrier along a strip.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · junction · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·phys.5.1</span><span class="ph understand">understand</span>What does the junction-voltage technique say? <br>Why is the backward current Iₛ independent of the push?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38phys6">
+  <h2 class="sthead"><span class="stno">38phys6</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{silicon does not conduct because it has no free electrons}\,? @@ it has four outer electrons an atom; its band is full, so a push moves none
+\text{a band is one level}\,? @@ N atoms give N levels, packed into a band of width under 4t
+\text{doping adds a band}\,? @@ it adds levels just inside the gap, near the band edge, freed by warmth
+V_{bi} \text{ can drive a current through a wire}\,? @@ the barrier is balanced by the spill; joining the ends sets up equal and opposite steps at the contacts
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·phys.6.1</span><span class="ph understand">understand</span>Why does a full band carry no current? <br>Why can the barrier not drive a current round a wire?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">38·phys.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="N_a = 10^{18},\ \ N_d = 10^{15} \text{ per cm}^3"></span></span>Build the barrier for this junction at 300 K. <br>At what warmth would the warmth carriers nᵢ reach 10¹⁵, taking nᵢ to scale as e^(−E_g/2kT) alone?</div>
+  <div class="chq"><span class="chid">38·phys.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="N = 2,\ 3"></span></span>Check the level-spread technique at N = 2 against the two-atom levels, and at N = 3 by the symmetric map itself. <br>What happens to the band as the leak t heads to 0, and what does that say about atoms far apart?</div>
+  <div class="chq"><span class="chid">38·phys.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{a full band carries no current}"></span></span>A full band carries none. Turn it round: does an empty band carry none? Does a band with one electron missing carry the current of one positive charge? <br>Prove the last from the full-band technique.</div>
+  <div class="chq"><span class="chid">38·phys.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">measured laws and their reasons</span></span>The diode’s law was laid down on 26·then1 from measurement and used on 38d. This page derives it from bands, exclusion and the shares. <br>Has the law changed standing, from a law to a technique? What did the derivation itself lay down from measurement, and is a law explained by other laws more certain, or only better connected?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r38q.html">← 38q · counting steps by hand</a><a href="r38eng.html">38·eng · why did chips stop getting faster? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The levels of a row of atoms are the tight-binding model, and t is the hopping integral; the full lower band is the valence band, the upper the conduction band, and E_g the band gap. Silicon’s crystal is the diamond lattice, and its bonds sp³ hybrids. nᵢ is the intrinsic carrier concentration, and the count of levels near the edge the effective density of states. Doped silicon is an extrinsic semiconductor; phosphorus is a donor and boron an acceptor; the donor technique is the hydrogenic model of a shallow donor, with ε the relative permittivity and m* the effective mass. The layer is a p–n junction with its depletion region, V_bi its built-in potential. The crosswalk item here is condensed matter, lattices and band structure (Cambridge IB, Oxford B6), and semiconductors as a first course meets them.</p>
+  <h3>Who said it first</h3>
+  <p>Felix Bloch found the waves of electrons in a crystal in 1928, and Alan Wilson explained insulators, metals and semiconductors by full and part-filled bands in 1931. Russell Ohl found the p–n junction in a cracked silicon rod at Bell Labs in 1940. William Shockley’s theory of the junction (1949) gave the diode law. Morgan Sparks and Gordon Teal made junction transistors from grown crystals in 1950–51, and Texas Instruments sold the first silicon transistors in 1954.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The donor’s binding works out at 0.026 eV and the measured value is 0.045 eV. So the hydrogen picture is wrong and should be dropped.” Not allowed as a conclusion: the picture is a guess under the small case with a range. It gets the size right, a few hundredths of an eV against the gap’s 1.12, which is what explains doping. Its error, a factor under 2, comes from the electron sitting close to the phosphorus core, where the crystal’s shielding is not yet in force.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'two',t:R`E_0 \pm t`,n:`Sum and difference.`},
+  {k:'ember',kl:'row of N',t:R`E_0 - 2t\cos\tfrac{k\pi}{N+1}`,n:`Turnings along the row.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a band of width} < 4t}`,n:`One per level.`}
+],{title:'The slides · bands · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'full',t:R`\text{4 electrons an atom}`,n:`Lower band filled.`},
+  {k:'ember',kl:'gap',t:R`E_g = 1.12 \text{ eV}`,n:`Measured.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\lambda \approx 1107 \text{ nm}}`,n:`Dark to light, clear to infrared.`}
+],{title:'The slides · the gap · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'share',t:R`e^{-E_g/2kT}`,n:`Two-shares.`},
+  {k:'ember',kl:'silicon',t:R`e^{-21.7} \approx 3.9\cdot10^{-10}`,n:`At 300 K.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{10^{10} \text{ per cm}^3}`,n:`One in five trillion.`}
+],{title:'The slides · crossing · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'hydrogen',t:R`-13.6 \text{ eV}`,n:`One charge, one electron.`},
+  {k:'ember',kl:'in silicon',t:R`\times 0.26/11.7^2`,n:`Shielded and light.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\approx 0.026 \text{ eV}:\ \text{freed}}`,n:`n-type.`}
+],{title:'The slides · doping · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'spill',t:R`n_n/n_p = e^{qV_{bi}/kT}`,n:`Balance.`},
+  {k:'ember',kl:'barrier',t:R`V_{bi} \approx 0.71 \text{ V}`,n:`At 10¹⁶.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{I = I_s(e^{V/V_T} - 1)}`,n:`The diode law, explained.`}
+],{title:'The slides · junction · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

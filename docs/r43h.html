@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Subgroups of every prime-power size</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r43g.html">← 43g no formula</a><a href="r43i.html">next: 43i what compass and straightedge can build →</a></p>
+  <div class="tags"><span class="tag proof">43h · proof</span></div>
+  <h1>Subgroups of every prime-power size</h1>
+  <p data-pid="6404fa">Rung 19 proved that the size of a part-group divides the size of the group. The converse is false: the even shuffles of four have twelve members and no part-group of six. This step proves the converse for prime powers. If a prime power divides the size of a finite group, the group has a part-group of exactly that size. For the largest such power, the part-groups of that size are all relabellings of one another, and how many there are leaves one on the clock of the prime and divides what is left of the size. These facts make a group’s size say a great deal about its shape: a group of fifteen must be a clock, and every group whose size is a power of a prime comes apart, which 43e left open and 43i will need.</p>
+  <p class="gesture" data-pid="1773b2">The size of a group is the size of its centre plus the sizes of its other conjugate families. In a group of prime-power size the centre is not trivial, so such a group has normal part-groups of every smaller prime-power size, and is solvable. Every finite group has a part-group of the largest power of each prime dividing its size; all such are conjugate, and their number leaves one on the clock of the prime and divides the rest of the size.</p>
+</header>
+
+<section class="class step" data-step="43h1">
+  <h2 class="sthead"><span class="stno">43h1</span>The count by families</h2>
+  <p data-pid="294569">The <i>centre</i> Z(G) is the set of members that commute with every member. Each z in Z(G) is a family of one by itself. Every other family has |G|/|C(x)| members, a divisor of |G| above 1.</p>
+  <p data-pid="23e49d">Centre technique: <b>if |G| = pᵏ with p prime and k ≥ 1, then Z(G) has more than one member.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the centre technique">
+|G| = |Z(G)| + \textstyle\sum |G|/|C(x_i)| @@ one xᵢ from each family of more than one member; the families cut G
+|G|/|C(x_i)| \text{ divides } p^k \text{ and is above } 1 @@ so it is a power of p above 1
+p \text{ divides } |G| \text{ and every term of the sum} @@ k ≥ 1
+\htmlClass{new}{p \text{ divides } |Z(G)| \ge 1,\ \text{so } |Z(G)| \ge p} \quad \blacksquare @@ e is in Z(G)
+  </pre>
+  <p data-pid="8813bd">The square’s group of 8 (19f) has centre {e, half turn}: two members, a power of 2 above 1, as the technique says.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · centre · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">43h1.1</span><span class="ph understand">understand</span>What is the centre of a group? <br>What does the centre technique say, and why must p divide |Z(G)|?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="43h2">
+  <h2 class="sthead"><span class="stno">43h2</span>Groups of prime-power size come apart</h2>
+  <p data-pid="3529c2">Prime-power-chain technique: <b>a group of size pᵏ has a chain {e} = G₀ ◁ G₁ ◁ ⋯ ◁ Gₖ = G with |Gᵢ| = pⁱ and each Gᵢ normal in G; so it is solvable, and it has part-groups of every size pⁱ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the prime-power-chain technique">
+z \in Z(G) \text{ of order } p @@ the centre technique, then the prime-member technique (43g4) on Z(G)
+N = \{e, z, \ldots, z^{p-1}\} \lhd G @@ z commutes with everything, so gNg⁻¹ = N
+|G/N| = p^{k-1}:\ \text{a chain with normal } \bar G_i,\ |\bar G_i| = p^i @@ induction on k
+G_{i+1} = \text{the members whose class lies in } \bar G_i,\ \ |G_{i+1}| = p^{i+1} @@ 41·cb19: part-groups of G/N are M/N, normal when M is
+\htmlClass{new}{\{e\} \lhd N \lhd G_2 \lhd \cdots \lhd G,\ \text{each step of size } p} \quad \blacksquare @@ groups of prime size are clocks, so solvable (43e1)
+  </pre>
+  <p data-pid="92596b">That closes 43e.6.2.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · prime powers · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">43h2.1</span><span class="ph understand">understand</span>What does the prime-power-chain technique say? <br>Why is the first step N of the chain normal in G?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="43h3">
+  <h2 class="sthead"><span class="stno">43h3</span>Part-groups of the largest prime power</h2>
+  <p data-pid="a021c9">Write |G| = pᵃm with p not dividing m. A part-group of size pᵃ is a <i>largest p-part</i> of G.</p>
+  <p data-pid="c59c68">Largest-part technique: <b>every finite group has a largest p-part for every prime p; so it has a part-group of every prime-power size that divides its size.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the largest-part technique">
+\text{induction on } |G|;\ a \ge 1 @@ if a = 0, {e} is one
+p \mid |Z(G)|:\ z \in Z(G) \text{ of order } p,\ N = \{e, z, \ldots\} \lhd G @@ the prime-member technique
+G/N \text{ has a largest } p\text{-part } \bar P,\ |\bar P| = p^{a-1} @@ |G/N| = p^(a−1)m &lt; |G|
+P = \text{its members' preimage},\ |P| = p^{a-1}\cdot p = p^a @@ 41·cb19
+p \nmid |Z(G)|:\ \text{some family size } |G|/|C(x)| \text{ is not divisible by } p @@ the count by families: p divides |G|
+p^a \text{ divides } |C(x)| < |G| @@ |G| = |C(x)| · (a number not divisible by p)
+\htmlClass{new}{C(x) \text{ has a part-group of size } p^a,\ \text{a part-group of } G} \quad \blacksquare @@ induction; then the prime-power-chain technique gives every pⁱ, i ≤ a
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · largest part · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">43h3.1</span><span class="ph understand">understand</span>What is a largest p-part of G? <br>What does the largest-part technique say, and what does the proof do when p does not divide |Z(G)|?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="43h4">
+  <h2 class="sthead"><span class="stno">43h4</span>How many, and how alike</h2>
+  <p data-pid="4fb4a8">Count-of-parts technique: <b>any two largest p-parts are conjugate; and their number n_p leaves 1 on the clock of p and divides m.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the count-of-parts technique">
+P \text{ acts on the set } \mathcal S \text{ of largest } p\text{-parts by } Q \mapsto xQx^{-1} @@ 40·cb19: families of sizes dividing |P| = pᵃ
+Q \text{ fixed by all of } P \Rightarrow PQ \text{ is a part-group of size } |P||Q|/|P \cap Q| @@ xQx⁻¹ = Q for x in P
+|PQ| = p^{2a}/|P \cap Q| \text{ is a power of } p,\ \text{so } P = Q @@ a part-group of G of prime-power size has at most pᵃ members, so |P ∩ Q| = pᵃ
+\text{one family of size 1, the rest divisible by } p:\ \ n_p \equiv 1 @@ on the clock of p (41a)
+\text{the conjugates of } P \text{ form a set } \mathcal T \subseteq \mathcal S,\ |\mathcal T| \equiv 1 @@ the same count, with P acting on 𝒯
+Q \notin \mathcal T:\ Q \text{ acts on } \mathcal T \text{ with no fixed member, so } |\mathcal T| \equiv 0 @@ a fixed member would be Q itself, by the lines above with Q for P
+\htmlClass{new}{\mathcal S = \mathcal T,\ \ n_p = |G|/|N(P)| \text{ divides } m} \quad \blacksquare @@ ⊥ from 1 ≡ 0; N(P), the members x with xPx⁻¹ = P, holds P, so |G|/|N(P)| divides |G|/|P| = m (40·cb19)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: every group of 15 is a clock">
+|G| = 15 = 3 \cdot 5:\ \ n_3 \mid 5,\ n_3 \equiv 1 \text{ (on 3)} \Rightarrow n_3 = 1 @@ 5 leaves 2 on the clock of 3
+n_5 \mid 3,\ n_5 \equiv 1 \text{ (on 5)} \Rightarrow n_5 = 1 @@ 3 leaves 3
+P_3, P_5 \lhd G,\ P_3 \cap P_5 = \{e\},\ \ xy = yx \text{ for } x \in P_3,\ y \in P_5 @@ alone of their size, so normal; xyx⁻¹y⁻¹ lies in both
+\htmlClass{new}{xy \text{ has order } 15:\ \ G \text{ is a clock}} \quad \blacksquare @@ orders 3 and 5, commuting
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · how many · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">43h4.1</span><span class="ph understand">understand</span>What does the count-of-parts technique say? <br>Why does every group of 15 members have one part-group of size 3 and one of size 5?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="43h5">
+  <h2 class="sthead"><span class="stno">43h5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+6 \mid 12, \text{ so } A_4 \text{ has a part-group of size } 6\,? @@ 6 is not a prime power; 43f.6.1 shows A₄ has none
+n_p \equiv 1, \text{ so } n_p = 1\,? @@ in A₅, n₅ = 24/4 = 6, and 6 leaves 1 on the clock of 5
+\text{the largest } 2\text{-part of } S_3 \text{ is normal}\,? @@ n₂ = 3: {e, (1 2)}, {e, (1 3)}, {e, (2 3)}, conjugate and not normal
+\text{a group of prime-power size is turn-about}\,? @@ the square’s group of 8 is not: a quarter turn and a flip do not commute
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">43h5.1</span><span class="ph understand">understand</span>Why does 6 dividing 12 not give A₄ a part-group of size 6? <br>Why does n_p leaving 1 on the clock of p not mean n_p = 1?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">43h.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="|G| = 35,\ \ |G| = 21"></span></span>Build the count-of-parts argument for a group of 35, and decide whether every such group is a clock. <br>Run it for 21: what changes, and can you build a group of 21 that is not turn-about from the clock of 7?</div>
+  <div class="chq"><span class="chid">43h.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="A_5:\ \ n_2,\ n_3,\ n_5"></span></span>Find n₂, n₃ and n₅ for A₅ from the families of 43f, and check each against the count-of-parts technique. <br>Which of the three numbers would have to be 1 if A₅ were not simple?</div>
+  <div class="chq"><span class="chid">43h.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="|G| = 12"></span></span>The count-of-parts technique forces some largest parts to be normal. In a group of 12, show that n₃ = 1 or n₂ = 1. <br>Which of the groups of 12 you know (the clock, A₄, the hexagon’s group) has which?</div>
+  <div class="chq"><span class="chid">43h.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="X = \{\text{subsets of } G \text{ of size } p^a\},\ \ |X| = \binom{p^a m}{p^a}"></span></span>Reroute the largest-part technique: G acts on X by moving each subset by g. The number of subsets is not divisible by p. <br>Prove that some family of subsets has a size not divisible by p, and that what keeps one of its subsets is a part-group of size pᵃ.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r43g.html">← 43g · no formula</a><a href="r43i.html">43i · what compass and straightedge can build →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A largest p-part is a Sylow p-subgroup, and the largest-part and count-of-parts techniques are the Sylow theorems. The count by families is the class equation; Z(G) is the centre, and N(P) the normalizer of P. A group of prime-power size is a p-group, and the prime-power-chain technique shows that p-groups are nilpotent, hence solvable. The proof of 43h.6.4 is Helmut Wielandt’s (1959).</p>
+  <h3>Who said it first</h3>
+  <p>Ludwig Sylow proved the existence and the count of largest p-parts in 1872, in a paper of ten pages, as shuffle groups. Augustin-Louis Cauchy had proved the case of a single prime in 1845. Georg Frobenius gave the proof by induction on the centre in 1887, and proved in 1895 that the part-groups of each prime-power size number 1 on the clock of p as well.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“A group of 15 has n₃ = 1 and n₅ = 1, so it is the product of a clock of 3 and a clock of 5, and that product has a member of order 15 because 15 = 3 · 5.” Not allowed as it stands: the product of two clocks needs their members to commute. They do here because both parts are normal and meet only in e, so xyx⁻¹y⁻¹ lies in both; that is the line that makes it a clock.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'count',t:R`|G| = |Z| + \textstyle\sum |G|/|C(x)|`,n:`Families cut G.`},
+  {k:'ember',kl:'powers',t:R`p \mid |G|/|C(x)|`,n:`Each above 1.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|Z(G)| \ge p}`,n:`Not trivial.`}
+],{title:'The slides · centre · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'centre',t:R`z \in Z(G),\ z^p = e`,n:`A central member.`},
+  {k:'ember',kl:'quotient',t:R`|G/N| = p^{k-1}`,n:`Induct.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|G_i| = p^i,\ \text{all normal}}`,n:`Solvable.`}
+],{title:'The slides · prime powers · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'centre',t:R`p \mid |Z|:\ \text{cut by } N`,n:`Then lift.`},
+  {k:'ember',kl:'else',t:R`p^a \mid |C(x)|`,n:`A smaller group.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|P| = p^a}`,n:`It exists.`}
+],{title:'The slides · largest part · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'conjugate',t:R`Q = xPx^{-1}`,n:`All alike.`},
+  {k:'ember',kl:'count',t:R`n_p \equiv 1,\ n_p \mid m`,n:`On the clock of p.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|G| = 15 \Rightarrow \text{a clock}}`,n:`Size decides.`}
+],{title:'The slides · how many · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

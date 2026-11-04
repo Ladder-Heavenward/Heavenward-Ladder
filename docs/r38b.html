@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The wave that is only 1 or 0</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38a.html">← 38a true and false as 1 and 0</a><a href="r38c.html">next: 38c a wave can carry power, or a message →</a></p>
+  <div class="tags"><span class="tag proof">38b · proof</span></div>
+  <h1>The wave that is only 1 or 0</h1>
+  <p data-pid="648254">Clip two probes to a wire and an oscilloscope draws what the wire is doing: a line that rises and falls as time goes by. That line is a function, one height for each moment. The plainest such line is a turning, the shadow of a point going round the circle, and the last step read its two extreme shares as true and false. This step asks for less. Keep only whether the shadow is on the near side or the far side, and write one for the near side and zero for the far. The result is a wave that is only ever one or zero: a square wave, the beat of every clock in every chip. The rung on sums of turnings already knows its recipe, so the recipe is borrowed, not worked again. Then comes the surprise: the very first turning of that recipe, alone, read against the halfway mark, gives back every one and every zero. And then the honest part. No wire is ever exactly at one level. A wire is read against a threshold, and noise sometimes carries it across. How often can be said in numbers, and that is what makes reading by threshold both inexact and rigorous.</p>
+  <p class="gesture" data-pid="ab4c89">A trace is a function of time. The sign of a turning, read as one or zero, is the square wave, and its recipe is the square recipe slid a quarter turn. Read against the halfway mark, the first turning alone gives back every bit. Noise misreads a level with a chance the bell curve gives.</p>
+</header>
+
+<section class="class step" data-step="38b1">
+  <h2 class="sthead"><span class="stno">38b1</span>A trace</h2>
+  <p data-pid="a0683c">A wire’s voltage at each moment t is one number v(t): a function of time in <a href="r09a.html">9a</a>’s sense, which the oscilloscope draws with time across and voltage up. The turning v(t) = V cos(2πft) is the across share of a point that goes round the circle f times a second (21c1, with θ = 2πft); V is its size and f its frequency, in turns a second, named the hertz, Hz. The socket in a Seattle kitchen gives 60 Hz; a chip’s clock gives billions.</p>
+  <p data-pid="7634e9">A trace is a function, so everything rung 32 built for functions applies to it. Sliding it later by s multiplies its turnings’ coefficients by a turning of their own (32h2), and stretching time keeps the coefficients. So a recipe found for one size, one frequency and one start serves every other.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">38b1.1</span><span class="ph understand">understand</span>What is a trace, and what do V and f mean in V cos(2πft)? <br>Why does one recipe serve a wave at every frequency and every start?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38b2">
+  <h2 class="sthead"><span class="stno">38b2</span>The sign of a turning, read as 1 or 0</h2>
+  <p data-pid="ad2d84">Let s(θ) be 1 when cos θ > 0 and 0 when cos θ < 0, and ½ at the two quarter turns where cos θ = 0, as <a href="r32h.html#32h1">32h1</a>’s halfway technique sets a jump. s is 1 on the near half of the circle and 0 on the far half: a square wave of 1s and 0s, one 1 and one 0 a turn.</p>
+  <p data-pid="a3c27e">Sign-wave technique: <b>the sign of cos θ, read as 1 or 0, is ½ + (2/π)(cos θ − cos 3θ/3 + cos 5θ/5 − ⋯): one half, and the odd speeds alone, each over its speed, with signs taking turns.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the sign-wave technique">
+q(x) = 1 \text{ on } (0, \pi),\ -1 \text{ on } (-\pi, 0):\ \ s(\theta) = \tfrac12\big(1 + q(\theta + \tfrac\pi2)\big) @@ θ + π/2 is in (0, π) exactly when cos θ &gt; 0 (21c); 38a’s marks from ±1
+q(x) = \tfrac4\pi\textstyle\sum_{n\ \mathrm{odd}} \tfrac{\sin nx}{n} @@ the square-recipe technique (32h1)
+\sin\big(n(\theta + \tfrac\pi2)\big) = \sin\tfrac{n\pi}{2}\,\cos n\theta \text{ for odd } n @@ the sum formula (21d); cos(nπ/2) = 0 for odd n
+\sin\tfrac{n\pi}{2} = 1, -1, 1, \ldots \text{ for } n = 1, 3, 5, \ldots @@ a quarter, three quarters, five quarters of a turn
+\htmlClass{new}{s(\theta) = \tfrac12 + \tfrac2\pi\big(\cos\theta - \tfrac{\cos 3\theta}{3} + \tfrac{\cos 5\theta}{5} - \cdots\big)} \quad \blacksquare @@ halve, and add ½
+  </pre>
+  <p data-pid="d5d0d8">Nothing in this proof is new except the reading. The ½ is the wave’s average, its 0th turning: on for half the time. The rest is rung 32’s square, slid a quarter turn so that it lines up with the cosine, and squeezed from ±1 into {0, 1}.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · sign wave · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38b2.1</span><span class="ph understand">understand</span>What does the sign-wave technique say? <br>Where do the ½ and the alternating signs come from?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38b3">
+  <h2 class="sthead"><span class="stno">38b3</span>The first turning knows every bit</h2>
+  <p data-pid="a6c315">Keep only the first two terms: u(θ) = ½ + (2/π) cos θ. It is a smooth turning, swinging from ½ − 2/π ≈ −0.137 to ½ + 2/π ≈ 1.137. It is nothing like a square. Read it against the halfway mark ½ all the same.</p>
+  <p data-pid="906cf0">First-turning technique: <b>read against the threshold ½, the first turning of the sign wave alone gives back every 1 and every 0 of the wave.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the first-turning technique">
+u(\theta) > \tfrac12 \iff \tfrac2\pi\cos\theta > 0 @@ take ½ from both sides
+\iff \cos\theta > 0 @@ 2/π is above 0: multiplying keeps the order (5g)
+\iff s(\theta) = 1 @@ the reading of 38b2
+\htmlClass{new}{u > \tfrac12 \iff s = 1,\ \ u < \tfrac12 \iff s = 0} \quad \blacksquare @@ the same lines with &lt;
+  </pre>
+  <p data-pid="e1359d">So a wire that passes only the lowest frequency of a square wave still carries all its bits, provided the reader looks only at which side of the threshold the trace is on. The higher turnings make the edges sharp. They tell the reader when a change happened more exactly, and nothing about which bit it was. That is the first sign of the split 38c makes: the shape of a wave and the message on it are different things.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · first turning · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38b3.1</span><span class="ph understand">understand</span>What does the first-turning technique say, and which line of its proof needs 2/π to be above 0? <br>What do the higher turnings add, if not the bits?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38b4">
+  <h2 class="sthead"><span class="stno">38b4</span>A level read against a threshold</h2>
+  <p data-pid="1e14e0">A real wire does not sit at 0 V or 3.3 V. It sits near one of them, plus noise: the warmth of the wire, the motor in the next room, the wire beside it. Model the noise as 30j’s bell, centred at 0 with spread σ. A level is read as 1 when it is above the threshold and as 0 when below, and the gap from the level to the threshold is the margin d.</p>
+  <p data-pid="e3cb33">Threshold-reading technique: <b>a level with margin d, under bell noise of spread σ, is misread with the chance that the bell lies more than d/σ spreads to one side.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the threshold-reading technique, worked">
+v = 0.6 + Z \cdot 0.1 \text{ V},\ \ Z \text{ a standard bell},\ \ \text{threshold } 1.2 \text{ V} @@ a 0 sent at 0.6 V, spread σ = 0.1 V; the margin is d = 0.6 V
+\text{misread} \iff v > 1.2 \iff Z > 6 @@ subtract 0.6, divide by 0.1
+P(Z > 6) \approx 9.9 \cdot 10^{-10} @@ the bell’s tail (30j), worked by machine
+\htmlClass{new}{\text{a billion bits a second: about one misread a second}} \quad \blacksquare @@ the average count adds (30g1): 10⁹ × 9.9 · 10⁻¹⁰
+P(Z > 7) \approx 1.3 \cdot 10^{-12}:\ \ \text{one misread in about 13 minutes} @@ one more spread of margin: a factor of nearly 800
+  </pre>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · laws with a known exception rate</div>
+    <p data-pid="7e2854">Every reading of a wire is a guess under the large case. The voltage is a crowd of causes no one tracks, and the reader keeps only one fact about it: which side of the threshold it fell on.</p>
+    <p data-pid="9afd74"><b>The reading is wrong at a rate, and the rate is known.</b></p>
+    <p data-pid="d52856">The bell does not make the wire exact. It makes the error exact: one in a billion at six spreads, one in a trillion near seven. Engineers buy margin with power, and buy it by the spread.</p>
+    <p class="bait" data-pid="f984fc">A rule of thumb on an Oregon coast radio link says a dry day gives twice the margin of a stormy one. What would you measure to turn that rule into a misread rate?</p>
+  </aside>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · threshold · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38b4.1</span><span class="ph understand">understand</span>What does the threshold-reading technique say? <br>Why does one more spread of margin cut the misreads by far more than one more spread’s worth?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38b5">
+  <h2 class="sthead"><span class="stno">38b5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+s(\theta) = \tfrac4\pi\big(\sin\theta + \tfrac{\sin 3\theta}{3} + \cdots\big)\,? @@ that is 32h1’s q, at ±1 and lined up with the sine; s is ½(1 + q slid a quarter turn)
+u = \tfrac12 + \tfrac2\pi\cos\theta \text{ is a square wave}\,? @@ it is a smooth turning; only its reading against ½ is the square wave’s
+\text{the threshold makes the reading exact}\,? @@ it makes the error rate known, not zero
+P(Z > 12) = 2\,P(Z > 6)\,? @@ the tail falls far faster than in proportion: about 10⁻³³ against 10⁻⁹
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38b5.1</span><span class="ph understand">understand</span>Why is u = ½ + (2/π) cos θ not a square wave, though its reading is? <br>Why is twice the margin not half the misreads?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">38b.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a wave that is 1 for a quarter of each turn and 0 for the rest</span></span>Build its recipe in cosines from the slide-and-stretch technique and 32a’s coefficients. What is its 0th turning? <br>Read its first turning alone against a threshold. Is there a threshold that gives back every bit?</div>
+  <div class="chq"><span class="chid">38b.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{threshold at the level itself}"></span></span>Put the threshold exactly at the level sent, with bell noise. What is the misread chance? <br>What does that say about where a threshold belongs between two levels, and why halfway?</div>
+  <div class="chq"><span class="chid">38b.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="u(\theta) &gt; \tfrac12 \iff s(\theta) = 1"></span></span>The first turning reads back the sign wave. Turn it round: does every turning with the same zero crossings read back s against some threshold? <br>Does a wave with the same 1s and 0s as s need to have the same recipe?</div>
+  <div class="chq"><span class="chid">38b.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">a voltage that may stand anywhere, read as one of two</span></span>A wire carries a level that may be any number, and the reader keeps one of two. One camp held that machines should compute with the levels themselves, as smooth quantities, since nature is smooth; another that only the two-valued reading is reliable enough to chain a billion times. <br>On this step’s evidence, what does each camp gain and lose? Is the smooth level a guess under the small case, and the reading a guess under the large case, or the other way?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r38a.html">← 38a · true and false as 1 and 0</a><a href="r38c.html">38c · a wave can carry power, or a message →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A trace on an oscilloscope is a waveform; the square wave of 1s and 0s with equal time on and off has a duty cycle of 50%. Its recipe is its Fourier series. Reading a level against a threshold is slicing, or decision, and the chance of a misread is the bit error rate; d/σ is tied to the Q-factor of a link. The tail of the bell beyond z is Q(z), the complementary error function halved: Q(z) = ½ erfc(z/√2).</p>
+  <h3>Who said it first</h3>
+  <p>Ferdinand Braun built the first cathode-ray oscilloscope in 1897. The two-valued reading of a relay’s contacts as logic is Claude Shannon’s, in his master’s thesis of 1937. The contest between computing with smooth levels and with two values ran from Vannevar Bush’s differential analyser (1931) to the digital machines of the late 1940s; analog computers stayed in use for control and simulation into the 1970s, and a revival for low-power learning machines is under way.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The first turning reads back every bit. So a wire that passes only the first turning carries everything the square wave carries.” Not allowed as stated: it carries every bit of this one wave, whose changes come at a fixed beat. A wave whose changes come at other times needs other frequencies to place them, and 38c counts how many changes a wire can carry.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'read',t:R`s = 1 \iff \cos\theta > 0`,n:`Near half, far half.`},
+  {k:'ember',kl:'borrow',t:R`s = \tfrac12(1 + q(\theta + \tfrac\pi2))`,n:`32h1, slid.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{s = \tfrac12 + \tfrac2\pi(\cos\theta - \tfrac{\cos3\theta}3 + \cdots)}`,n:`Odd speeds alone.`}
+],{title:'The slides · sign wave · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'keep two terms',t:R`u = \tfrac12 + \tfrac2\pi\cos\theta`,n:`A smooth swing.`},
+  {k:'ember',kl:'read',t:R`u > \tfrac12`,n:`Against the halfway mark.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{u > \tfrac12 \iff s = 1}`,n:`Every bit back.`}
+],{title:'The slides · first turning · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'noise',t:R`v = 0.6 + 0.1Z`,n:`A bell around the level.`},
+  {k:'ember',kl:'margin',t:R`d/\sigma = 6`,n:`Six spreads.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P \approx 9.9\cdot 10^{-10}}`,n:`A known rate.`}
+],{title:'The slides · threshold · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

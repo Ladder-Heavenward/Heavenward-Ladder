@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Polynomial division by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r42i.html">← 42i modules over a principal ring</a><a href="r42k.html">next: 42k field extensions by hand →</a></p>
+  <div class="tags"><span class="tag tech">42j · technique</span></div>
+  <h1>Polynomial division by hand</h1>
+  <p data-pid="56e25a">Division with remainder, done again and again, finds the greatest common factor of two polynomials, as rung four’s oldest recipe found it for two numbers. That is slow by hand and quick to check. There is a faster test, which never divides at all: write the coefficients of the two polynomials into one square grid, shifted along row by row, and take its determinant. It is zero exactly when the two share a factor. The same grid, built with a second letter riding along in the coefficients, throws that letter away and leaves a polynomial in the first letter alone, whose zeros are where two curves meet. Counting the degree of that polynomial gives a bound on how many times two curves can cross: a line meets a parabola at most twice, two conics at most four times, and two curves of degrees m and n at most m times n, unless they share a piece.</p>
+  <p class="gesture" data-pid="0b09f5">Repeated division finds the greatest common factor. A grid of shifted coefficients has determinant zero exactly when two polynomials share a factor. Built with a second letter in the coefficients, it eliminates that letter, and its degree bounds the meetings of two curves by the product of their degrees.</p>
+</header>
+
+<section class="class step" data-step="42j1">
+  <h2 class="sthead"><span class="stno">42j1</span>The remainder chain</h2>
+  <p data-pid="bec62b">Remainder-chain technique: <b>to find the greatest common factor of f and g over a field, divide f by g, then g by the remainder, then that remainder by the next, until a remainder is 0; the last remainder other than 0 is the greatest common factor, up to a constant.</b> 4j’s split-keeps-divisors technique, with polynomials: f = gq + r and g share exactly the common factors of g and r.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the remainder chain, by hand">
+f = x^4 - 1,\ \ g = x^3 - 2x^2 + 2x - 1 @@ over ℚ
+x^4 - 1 = (x + 2)\,g + (2x^2 - 3x + 1) @@ divide (42c)
+g = (\tfrac12 x - \tfrac14)(2x^2 - 3x + 1) + \tfrac34 (x - 1) @@ divide again
+2x^2 - 3x + 1 = (x - 1)(2x - 1) + 0 @@ the chain stops
+\htmlClass{new}{\text{the greatest common factor is } x - 1} \quad \blacksquare @@ the last remainder other than 0, top coefficient made 1
+  </pre>
+  <p data-pid="0698f8">Run backwards, the chain writes x − 1 as uf + vg for polynomials u and v, as 4j’s plus-only combination did for numbers. That is the one-maker technique made a recipe: (f, g) = (x − 1). The fractions grow fast, which is why the chain is slow by hand.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · chain · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">42j1.1</span><span class="ph understand">understand</span>What does the remainder-chain technique say, and which technique of 4j does it carry to polynomials? <br>Why is the greatest common factor of x⁴ − 1 and x³ − 2x² + 2x − 1 equal to x − 1?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42j2">
+  <h2 class="sthead"><span class="stno">42j2</span>A grid that tests for a shared factor</h2>
+  <p data-pid="3083ae">Let f have degree m and g degree n, over a field. Their <i>resultant</i> Res(f, g) is the determinant of the grid with m + n rows: n rows of f’s coefficients, each shifted one place right of the last, then m rows of g’s.</p>
+  <p data-pid="c76d34">Shared-factor-test technique: <b>Res(f, g) = 0 exactly when f and g share a factor of degree at least 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the shared-factor-test technique">
+\text{share } h \iff uf = vg \text{ for some } u \ne 0,\ \deg u < n,\ \deg v < m @@ if f = hf₁, g = hg₁, take u = g₁, v = f₁; the other way, one factoring (42d) puts all of f’s unsplittables in vg, so one of them divides g
+uf - vg = 0 \text{ is a straight equation in the } m + n \text{ coefficients of } u, v @@ each coefficient of uf − vg is a mix of them
+\text{the grid of that straight map is the resultant’s grid, turned on its side} @@ row by row, the shifted coefficients
+\htmlClass{new}{\text{a nonzero answer} \iff \det = 0} \quad \blacksquare @@ the straight map loses more than 0 exactly when its determinant is 0 (27c, 27e)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: two tests by hand">
+\mathrm{Res}(x^2 - 3x + 2,\ x^2 - 1) = \det\begin{pmatrix} 1 & -3 & 2 & 0 \\ 0 & 1 & -3 & 2 \\ 1 & 0 & -1 & 0 \\ 0 & 1 & 0 & -1 \end{pmatrix} = 0 @@ they share x − 1
+\htmlClass{new}{\mathrm{Res}(x^2 + 1,\ x - 2) = \det\begin{pmatrix} 1 & 0 & 1 \\ 1 & -2 & 0 \\ 0 & 1 & -2 \end{pmatrix} = 5} \quad \blacksquare @@ no shared factor; 5 = 2² + 1, the value of x² + 1 at the zero of x − 2
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · resultant · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42j2.1</span><span class="ph understand">understand</span>How is the resultant’s grid built from the coefficients of f and g? <br>What does the shared-factor-test technique say, and which technique of rung 27 finishes its proof?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42j3">
+  <h2 class="sthead"><span class="stno">42j3</span>Throwing a letter away</h2>
+  <p data-pid="02479d">Two curves f(x, y) = 0 and g(x, y) = 0. Read each as a polynomial in y, with coefficients that are polynomials in x. Then Res_y(f, g) is a polynomial in x alone.</p>
+  <p data-pid="d05941">Eliminate-a-letter technique: <b>if (x₀, y₀) is on both curves, then Res_y(f, g) is 0 at x₀; and if the top coefficients in y do not both vanish at x₀, every zero x₀ of Res_y comes from a shared point, perhaps with a complex y₀.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the circle and the hyperbola">
+f = x^2 + y^2 - 5,\ \ g = xy - 2 @@ in y: f = y² + 0·y + (x² − 5), g = x·y − 2
+\mathrm{Res}_y = \det\begin{pmatrix} 1 & 0 & x^2 - 5 \\ x & -2 & 0 \\ 0 & x & -2 \end{pmatrix} = x^4 - 5x^2 + 4 @@ the grid: one row of f, two of g
+x^4 - 5x^2 + 4 = (x - 1)(x + 1)(x - 2)(x + 2) @@ a quadratic in x²
+\htmlClass{new}{(1, 2),\ (2, 1),\ (-1, -2),\ (-2, -1)} \quad \blacksquare @@ y = 2/x at each; each is on the circle
+  </pre>
+  <p data-pid="d12f09">The parabola y = x² and the line y = x + 2: Res_y(y − x², y − x − 2) = x² − x − 2 = (x − 2)(x + 1), and the meetings are (2, 4) and (−1, 1). Elimination did what substitution does, and it works when nothing can be solved for a letter.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · elimination · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42j3.1</span><span class="ph understand">understand</span>What does the eliminate-a-letter technique say? <br>Where do x² + y² = 5 and xy = 2 meet, and how does the resultant find the x of each meeting?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42j4">
+  <h2 class="sthead"><span class="stno">42j4</span>How many times two curves meet</h2>
+  <p data-pid="a3f18e">Meeting-count technique: <b>two curves of degrees m and n with no shared piece meet in at most mn points.</b> A piece here is a factor of degree at least 1 common to f and g.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the meeting-count technique">
+\text{turn the plane so that no two meetings share an } x @@ finitely many directions are bad (20’s turns)
+\text{in each grid entry, the coefficient of } y^{k} \text{ in } f \text{ has degree at most } m - k \text{ in } x @@ f has degree m
+\text{each term of the determinant has degree at most } mn \text{ in } x @@ count: the entry in row i, column j has degree at most its place’s weight, and the weights add to mn
+\mathrm{Res}_y \ne 0 @@ no shared piece (the shared-factor-test technique, over the fractions of polynomials in x)
+\htmlClass{new}{\text{at most } mn \text{ zeros, so at most } mn \text{ meetings}} \quad \blacksquare @@ at-most-n-zeros (9g); each meeting gives its own x
+  </pre>
+  <p data-pid="4b415b">So a line meets a cubic at most 3 times, and two conics at most 4: the circle and the hyperbola above reach 4. Two circles x² + y² = 1 and x² + y² = 4 never meet: Res_y is the constant 9. The count is exactly mn only after counting complex meetings, meetings twice where curves touch, and meetings at the far points of 29m. <i>Held in trust</i>: that exact count is much higher up the ladder.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · meetings · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42j4.1</span><span class="ph understand">understand</span>What does the meeting-count technique say, and what is a shared piece? <br>Why can two conics meet at most 4 times, and why do x² + y² = 1 and x² + y² = 4 meet none?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42j5">
+  <h2 class="sthead"><span class="stno">42j5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\mathrm{Res}(f, g) \ne 0 \text{, so } f \text{ and } g \text{ have no common zero anywhere}\,? @@ true over a field where both split; but the test is about factors over the field the coefficients come from
+x^2 + y^2 = 1 \text{ and } x^2 + y^2 = 4 \text{ meet 4 times, by the meeting-count}\,? @@ the technique says at most 4; here 0
+\text{the last remainder in the chain is the greatest common factor exactly}\,? @@ up to a constant: (3/4)(x − 1) and x − 1 are partners
+(x - y)(x + y) = 0 \text{ and } x - y = 0 \text{ meet at most } 2 \cdot 1 \text{ times}\,? @@ they share the piece x − y and meet along a whole line
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42j5.1</span><span class="ph understand">understand</span>Why does the meeting-count technique not say that two conics always meet 4 times? <br>Why do (x − y)(x + y) = 0 and x − y = 0 meet endlessly often?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">42j.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="y^2 = x^3 - x,\ \ y = x"></span></span>Build the resultant in y and find every meeting of the cubic and the line. <br>Then do the same for y² = x³ − x and the circle x² + y² = 2. How many meetings does the meeting-count technique allow, and how many are real?</div>
+  <div class="chq"><span class="chid">42j.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f = x^2 - 2x + 1,\ \ 2x - 2"></span></span>Find Res(f, 2x − 2), where 2x − 2 is f’s slope. <br>Build a proof that a polynomial over ℚ has a repeated zero in ℂ exactly when Res(f, f′) = 0. What is Res(x² + bx + c, 2x + b)?</div>
+  <div class="chq"><span class="chid">42j.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\mathrm{Res}_y(f, g)(x_0) = 0"></span></span>The eliminate-a-letter technique needs the top coefficients in y not both to vanish at x₀. Turn it round and find curves whose resultant is 0 at some x₀ where they do not meet, even with complex y. <br>Try f = xy − 1 and g = xy − 2. What does the far point of 29m have to do with it?</div>
+  <div class="chq"><span class="chid">42j.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\gcd(x^4 - 1,\ x^3 - 2x^2 + 2x - 1)"></span></span>Reroute the first footing’s answer by the shared-factor-test technique: compute Res(x⁴ − 1, x³ − 2x² + 2x − 1). <br>It is 0. Which test tells you more, and which is quicker by hand?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r42i.html">← 42i · modules over a principal ring</a><a href="r42k.html">42k · field extensions by hand →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The remainder chain is the Euclidean algorithm for polynomials. The resultant’s grid is the Sylvester matrix, and the shared-factor-test technique is the resultant criterion. Res(f, f′) is, up to a factor, the discriminant. The meeting-count technique is the easy half of Bézout’s theorem; the exact count, with complex points, multiplicities and points at infinity, is Bézout’s theorem in the projective plane.</p>
+  <h3>Who said it first</h3>
+  <p>Étienne Bézout wrote on elimination and the count of meetings in 1779; Isaac Newton had guessed the count earlier. James Joseph Sylvester wrote the resultant’s grid in 1840. Leonhard Euler eliminated a letter from two equations in 1748.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“x² + 1 and x² + 4 have no real zeros, so Res(x² + 1, x² + 4) = 0.” Not allowed: the test is about shared factors, not about zeros on the line. The two share no factor, and their resultant is 9.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'divide',t:R`f = gq + r`,n:`Common factors kept.`},
+  {k:'ember',kl:'again',t:R`g = rq′ + r′`,n:`Until 0.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\gcd = x - 1}`,n:`The last remainder.`}
+],{title:'The slides · chain · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the grid',t:R`m + n \text{ rows}`,n:`Shifted coefficients.`},
+  {k:'ember',kl:'its meaning',t:R`uf = vg`,n:`A straight map.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\mathrm{Res} = 0 \iff \text{a shared factor}}`,n:`No dividing.`}
+],{title:'The slides · resultant · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'in y',t:R`\mathrm{Res}_y(f, g)`,n:`A polynomial in x.`},
+  {k:'ember',kl:'zeros',t:R`x = \pm 1, \pm 2`,n:`Four.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{four meetings}}`,n:`Circle and hyperbola.`}
+],{title:'The slides · elimination · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'degrees',t:R`m,\ n`,n:`Two curves.`},
+  {k:'ember',kl:'resultant',t:R`\deg \mathrm{Res}_y \le mn`,n:`Count the weights.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\le mn \text{ meetings}}`,n:`Unless they share a piece.`}
+],{title:'The slides · meetings · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arithmetic works on a clock</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.cl-lock{display:none;border-left:3px solid var(--gold);background:var(--sand);padding:10px 14px;border-radius:0 4px 4px 0;max-width:66ch}
+body.cl-locked .cl-lock{display:block} body.cl-locked .cl-body{display:none}
+.cl-lock button{margin-top:6px;font-size:.8rem}
+.claim{border:1px solid var(--grid);border-left:4px solid var(--teal);background:var(--card);border-radius:0 6px 6px 0;padding:10px 16px;max-width:66ch}
+.claim p{margin:.4em 0}
+ul.cl-adds{max-width:66ch;padding-left:1.1em} ul.cl-adds li{margin:.5em 0}
+ul.cl-adds .cl-w{display:none;color:var(--muted);font-style:italic}
+ul.cl-adds li.cl-wait .cl-t{display:none} ul.cl-adds li.cl-wait .cl-w{display:inline}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r41now2.html">← 41·now2 how regularly are the primes spread?</a><a href="r42.html">next: 42 the rules of plus and times stand on their own →</a></p>
+  <div class="tags"><span class="tag concl">41·∎ · conclusion</span></div>
+  <h1>Arithmetic works on a clock</h1>
+  <p class="gesture" data-pid="74fc49">Whole numbers taken by their remainders keep every rule of plus and times. An hour undoes exactly when it shares nothing with the clock, so prime clocks are fields. Clocks that share nothing read together as one. Powers cycle within the count of units, a prime clock has a full hand, squares obey a swap law, and the primes are endless and thin.</p>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The conclusion · the rung's claim, in full, and its proof</div>
+  <div class="cl-lock"><p>This page opens once every question on <a href="r41g.html">r41g</a> is ticked. The claim below is proved from the steps of this rung, so it waits for them.</p><button type="button" class="cl-peek">reviewing the ladder? open it anyway</button></div>
+  <div class="cl-body">
+  <h3>What the rung set out to show</h3>
+  <p data-pid="c3db96">The survey of <a href="r41.html">rung 41</a> asked what is left of arithmetic when only remainders count. <b>On the clock of n, sums and products carry over and obey every rule of plus and times; an hour can be undone exactly when it shares nothing with n, so a prime clock is a field; clocks of sizes that share nothing read together are one clock; every unit to the power of the count of units is 1, and a prime clock has a hand that reaches every unit; squares on prime clocks obey the square-swap technique; and the primes are endless, with Σ 1/p passing every bound and ζ a product over them.</b></p>
+  <p data-pid="c208ab"><a href="r41a.html">41a</a> built the clock and carried the rules over. <a href="r41b.html">41b</a> found the undo and the field. <a href="r41c.html">41c</a> read several clocks at once. <a href="r41d.html">41d</a> made powers cycle, and <a href="r41e.html">41e</a> found the full hand. <a href="r41f.html">41f</a> sorted the squares and proved the swap. <a href="r41g.html">41g</a> counted the primes. This page puts the claim together.</p>
+  <h3>The claim, in full</h3>
+  <div class="claim">
+  <p data-pid="28539e"><b>Let n ≥ 1. For integers m, b, m ≡ b (mod n) means n ∣ m − b; it is an equivalence, ℤ/n has exactly the n classes [0], …, [n − 1], and [m] + [b] = [m + b], [m][b] = [mb] are well defined and obey every rule of plus and times that holds in ℤ. The class [a] has an inverse exactly when gcd(a, n) = 1, the inverse is unique, the units form a group, and ℤ/n is a field exactly when n is prime. If gcd(m, n) = 1, sending the hour of x on the clock of mn to its hours on the clocks of m and n is a matching of ℤ/mn with ℤ/m × ℤ/n that keeps sums and products.</b></p>
+  <p data-pid="d22083"><b>If gcd(a, n) = 1 and c(n) = n ∏(1 − 1/p) over the primes p ∣ n, then a^c(n) ≡ 1 (mod n); for p prime, (ℤ/p)ˣ has an element of order p − 1, and exactly c(p − 1) of them. For an odd prime p and p ∤ a, a^((p − 1)/2) ≡ (a ∕ p), and for different odd primes p and q, (p ∕ q)(q ∕ p) = (−1)^(((p − 1)/2)((q − 1)/2)). For x ≥ 3, Σ_(p ≤ x) 1/p ≥ ln ln x − 1, and for s > 1, ζ(s) = ∏_p 1/(1 − p^(−s)).</b></p>
+  </div>
+  <h3>The proof</h3>
+  <p data-pid="414595">Each part below is a technique already proved on a step of this rung. The proof cites them by name and joins them.</p>
+  <pre class="lines" data-k="ember" data-label="the clock and its rules">
+m \equiv b \pmod n \iff m, b \text{ leave one remainder} @@ the difference-test technique (41a)
+\mathbb Z/n = \{[0], \ldots, [n - 1]\} @@ the clock-hours technique (41a)
+m \equiv m',\ b \equiv b' \Rightarrow m + b \equiv m' + b',\ mb \equiv m'b' @@ the carry-to-the-clock technique (41a)
+\htmlClass{new}{\text{every rule of plus and times in } \mathbb Z \text{ holds in } \mathbb Z/n} \quad \blacksquare @@ the rules-come-along technique (41a)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="undoing">
+ax + ny = \gcd(a, n) \text{ for some integers } x, y @@ the gcd-as-a-sum technique (41b)
+[a] \text{ has an undo} \iff \gcd(a, n) = 1,\ \text{and it is unique} @@ the undo-exactly-when technique (41b); the clock-cancel technique (41a)
+\text{the units form a group under times} @@ the units-group technique (41b)
+\htmlClass{new}{\mathbb Z/n \text{ is a field} \iff n \text{ prime}} \quad \blacksquare @@ the prime-clock-field technique (41b)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="several clocks">
+\gcd(m, n) = 1 \Rightarrow \mathbb Z/mn \to \mathbb Z/m \times \mathbb Z/n \text{ is a matching} @@ the remainder technique (41c)
+\text{the matching keeps sums and products; units read clock by clock} @@ the two-clock technique (41c)
+\htmlClass{new}{c(mn) = c(m)c(n),\ \ c(n) = n\textstyle\prod_{p \mid n}(1 - 1/p)} \quad \blacksquare @@ the unit-count technique (41d)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="powers">
+p \nmid a \Rightarrow a^{p - 1} \equiv 1 \pmod p @@ the little technique (41d), by the size of a part-group (19d)
+\gcd(a, n) = 1 \Rightarrow a^{c(n)} \equiv 1,\ \ a^k \equiv a^j \text{ when } k \equiv j \pmod{c(n)} @@ the exponent-clock technique (41d)
+\text{a polynomial of degree } d \text{ has at most } d \text{ roots on a prime clock} @@ the few-roots technique (41e)
+\textstyle\sum_{d \mid n} c(d) = n @@ the divisor-sum technique (41e)
+\htmlClass{new}{(\mathbb Z/p)^{\times} \text{ has exactly } c(p - 1) \text{ full hands}} \quad \blacksquare @@ the full-hand technique (41e), with the power-order technique
+  </pre>
+  <pre class="lines" data-k="ember" data-label="squares">
+\text{half the units are squares: the even powers of a full hand} @@ the half-squares technique (41f)
+a^{(p - 1)/2} \equiv (a \,∕\, p) @@ the square-test technique (41f)
+(a \,∕\, p) = (-1)^{\mu} @@ the high-count technique (41f)
+\htmlClass{new}{(p \,∕\, q)(q \,∕\, p) = (-1)^{\frac{p - 1}{2}\cdot\frac{q - 1}{2}}} \quad \blacksquare @@ the square-swap technique (41f)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the primes">
+\textstyle\sum_{p \le x} 1/p \ge \ln\ln x - 1 @@ the thin-but-endless technique (41g)
+\zeta(s) = \textstyle\prod_p 1/(1 - p^{-s}),\ \ s > 1 @@ the prime-product technique (41g)
+\pi(2n)\ln(2n) \ge n\ln 4 - \ln(2n + 1) @@ the middle-count technique (41g)
+\htmlClass{new}{\text{endlessly many primes in } [1] \text{ and in } [3] \text{ of the clock of } 4} \quad \blacksquare @@ the four-clock technique (41g), with the square test
+  </pre>
+  <p data-pid="555a77">So the rung’s claim holds: arithmetic works on a clock, with every rule of plus and times and with laws of its own about undoing, powers, squares and primes. Held in trust, and not part of the claim: that π(x) divided by x/ln x settles on 1, and that each unit hour gets its fair share of primes (41g).</p>
+  <h3>What the rest of the rung adds</h3>
+  <p data-pid="5db145">Each step and annex after the proof steps adds a line to the claim. A line appears here once you have finished its page.</p>
+  <ul class="cl-adds">
+    <li data-after="r41h" data-pid="e5dcba"><b><a href="r41h.html">41h clock arithmetic by hand</a></b>: <span class="cl-t">any power on a clock in about 2 log₂ k products, by squaring; the gcd in about 2 log₂ b rounds.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r41i" data-pid="d0856a"><b><a href="r41i.html">41i clock powers and secret keys</a></b>: <span class="cl-t">a lock whose locking key may be printed, (m^e)^d ≡ m on the clock of pq, and the signature it turns into.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r41j" data-pid="6a3f0b"><b><a href="r41j.html">41j is it prime?</a></b>: <span class="cl-t">liars for every base, a strong test fooled at most a quarter of the time, and a test that is never fooled.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r41k" data-pid="b7a558"><b><a href="r41k.html">41k continued fractions</a></b>: <span class="cl-t">the best fractions near a number, and every answer of x² − ny² = 1 from the first.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r41l" data-pid="5a90b1"><b><a href="r41l.html">41l discrete logarithms</a></b>: <span class="cl-t">the clock log, a secret agreed in public, and two ways to take the log far faster than trying every power.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r41cb19" data-pid="bd7ed1"><b><a href="r41cb19.html">41·cb19 the clock as a quotient</a></b>: <span class="cl-t">normal part-groups, quotient groups, and the clock of n as ℤ over nℤ.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r41cb7" data-pid="5d17a4"><b><a href="r41cb7.html">41·cb7 last time on the number too big to write down</a></b>: <span class="cl-t">the last ten digits of rung 7’s tower, 2464195387, frozen by a chain of clocks.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r41comp" data-pid="a6e2e7"><b><a href="r41comp.html">41·comp how can strangers share a secret?</a></b>: <span class="cl-t">streams, one-way functions, fingerprints, tags and signatures, each from a clock.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r41phys" data-pid="ad2ab4"><b><a href="r41phys.html">41·phys why do metals conduct?</a></b>: <span class="cl-t">bands from the clock of a lattice, two electrons to each hour, and copper’s drift, alloys and heat in numbers.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r41crypt" data-pid="16bebd"><b><a href="r41crypt.html">41·crypt can a secret be split so any three of five can open it?</a></b>: <span class="cl-t">a curve on a prime clock: three points fix it, two say nothing.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r41now" data-pid="6b2744"><b><a href="r41now.html">41·now do primes keep coming close together?</a></b>: <span class="cl-t">patterns a clock forbids, and gaps of at most 246 for ever.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r41now2" data-pid="e72dda"><b><a href="r41now2.html">41·now2 how regularly are the primes spread?</a></b>: <span class="cl-t">the smooth count, the cloud of a coin model, waves from the zeros of ζ, and twins.</span><span class="cl-w">its line appears when you finish it.</span></li>
+  </ul>
+  <p data-pid="5cdfc0">That is how much of arithmetic survives on a clock: all of its rules, and a set of laws the whole numbers alone do not show. The rules themselves have now been met on the whole numbers, the fractions, the reals, the complex numbers, matrices and clocks. Rung 42 takes the rules on their own, without any numbers under them.</p>
+  </div>
+</section>
+
+<nav class="nextrung"><a href="r41now2.html">← 41·now2 · how regularly are the primes spread?</a><a href="r42.html">42 · the rules of plus and times stand on their own →</a></nav>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+  const need="r41g";
+  let p={}; try{ p=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
+  let peek=false; try{ peek=sessionStorage.getItem('cl:peek')==='1'; }catch(e){}
+  const done=k=>!!(p[k]&&p[k].v);
+  function apply(){
+    const open=peek||done(need);
+    document.body.classList.toggle('cl-locked',!open);
+    document.querySelectorAll('ul.cl-adds li[data-after]').forEach(li=>li.classList.toggle('cl-wait',!(peek||done(li.dataset.after))));
+    if(open&&done(need)){ const me=(window.ladderPage?ladderPage():(location.pathname.split('/').pop()||'').replace(/\.html?$/,''));
+      if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(me,true,true,true,false);
+      else { try{ p[me]={v:true,a:true,o:true,h:false,t:Date.now()}; LS.setItem('pages:done',JSON.stringify(p)); }catch(e){} } }
+  }
+  const b=document.querySelector('.cl-peek'); if(b) b.addEventListener('click',()=>{ peek=true; try{ sessionStorage.setItem('cl:peek','1'); }catch(e){} apply(); });
+  apply();
+  try{ if(window.MarksSync&&MarksSync.pages) MarksSync.pages().then(q=>{ if(q){ p=Object.assign({},p,q); apply(); } },()=>{}); }catch(e){}
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

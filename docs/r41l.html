@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Discrete logarithms</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r41k.html">← 41k continued fractions</a><a href="r41cb19.html">next: 41·cb19 the clock as a quotient →</a></p>
+  <div class="tags"><span class="tag tech">41l · technique</span></div>
+  <h1>Discrete logarithms</h1>
+  <p data-pid="1d6702">Rung seventeen built a function that turns multiplying into adding, the log. A prime clock has one too. Every unit is a power of a full hand, and the count of steps to reach it turns products into sums, on the clock of one less than the prime. On the line the log is easy to compute, by tables or by a few terms of a sum. On a clock nobody knows a fast way. Raising to a power is quick, by squaring; going back, from the hour to the power, seems to need a search, and the best searches known grow far faster than the number of digits. In 1976 two people saw that this one-way street lets strangers agree on a secret while everyone listens. Each picks a power in private, sends the full hand raised to it, and raises what arrives to their own power. Both land on the same hour, and a listener who saw both messages would have to take a log to follow. The step finds logs by hand, shows the best simple search, and shows when the clock gives its logs away.</p>
+  <p class="gesture" data-pid="159ada">With a full hand g, every unit is g to one power on the clock of p − 1, its clock log, and logs turn products into sums. Two people send g to secret powers and each raises what arrives to their own: the same hour. Finding a log by a table of small steps and a stride takes about the root of p products, and when p − 1 has only small primes the log splits clock by clock.</p>
+</header>
+
+<section class="class step" data-step="41l1">
+  <h2 class="sthead"><span class="stno">41l1</span>The log on a clock</h2>
+  <p data-pid="8eca3b">Let [g] be a full hand of the clock of a prime p. By 41e every unit [a] is [g]ᵏ for exactly one k from 0 to p − 2. From here on, that k is the <i>clock log</i> of a to the base g, written log_g a. It is the same mark as 17’s log, given a further job: on a clock, with a full hand named as its base, it names a number from 0 to p − 2. On the line it keeps its old meaning.</p>
+  <p data-pid="ca590f">Clock-log technique: <b>log_g(ab) ≡ log_g a + log_g b (mod p − 1), and log_g(aᵐ) ≡ m log_g a (mod p − 1).</b> For [g]^(j + k) = [g]ʲ[g]ᵏ, and exponents live on the clock of p − 1 (the exponent-clock technique, 41d3).</p>
+  <pre class="lines" data-k="ember" data-label="this step: clock logs on the clock of 13, base 2">
+2^0, \ldots, 2^{11} \equiv 1, 2, 4, 8, 3, 6, 12, 11, 9, 5, 10, 7 \pmod{13} @@ [2] is a full hand (41e4)
+\log_2 3 = 4,\ \ \log_2 5 = 9 @@ read off the list
+\log_2 15 \equiv 4 + 9 = 13 \equiv 1 \pmod{12} @@ the clock-log technique
+\htmlClass{new}{15 \equiv 2 = 2^1 \pmod{13}} \quad \blacksquare @@ the check
+  </pre>
+  <p data-pid="90d358">The list was built by multiplying by 2 eleven times. To read a log from it, the whole list was needed. For a clock of six hundred digits the list would have about 10⁶⁰⁰ entries.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · clock logs · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">41l1.1</span><span class="ph understand">understand</span>What is the clock log of a to the base g, and why is there exactly one from 0 to p − 2? <br>What does the clock-log technique say, and why is the sum taken on the clock of p − 1?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41l2">
+  <h2 class="sthead"><span class="stno">41l2</span>A secret agreed in public</h2>
+  <p data-pid="e0297d">Two people choose a prime p and a full hand g in public. Each picks a power in private, a and b. The first sends A = gᵃ, the second B = gᵇ, both on the clock of p.</p>
+  <p data-pid="6bc504">Shared-secret technique: <b>Bᵃ ≡ Aᵇ (mod p), so both reach the hour g^(ab) without either sending it.</b> Both are g^(ab), by power-of-a-power (4g) carried to the clock.</p>
+  <pre class="lines" data-k="ember" data-label="this step: p = 23, g = 5">
+a = 6:\ \ A = 5^6 \equiv 8 \pmod{23} @@ the first sends 8
+b = 15:\ \ B = 5^{15} \equiv 19 \pmod{23} @@ the second sends 19
+19^6 \equiv 2 \pmod{23} @@ the first raises B to a
+8^{15} \equiv 2 \pmod{23} @@ the second raises A to b
+\htmlClass{new}{\text{the shared hour is } 2} \quad \blacksquare @@ the shared-secret technique
+  </pre>
+  <p data-pid="016e23">A listener sees 23, 5, 8 and 19. To reach 2 the obvious road is a clock log: log₅ 8 = 6. Whether some road avoids the log is not known. Nobody has found one.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · in public · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41l2.1</span><span class="ph understand">understand</span>What does the shared-secret technique say, and why do both sides reach the same hour? <br>What does a listener see, and which clock log would let her follow?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41l3">
+  <h2 class="sthead"><span class="stno">41l3</span>A table of steps and strides</h2>
+  <p data-pid="8de947">Trying k = 0, 1, 2, … finds a log in up to p − 1 products. A table does better. Write m for the least whole number with m² ≥ p − 1. Every k from 0 to p − 2 is mi + j with j below m and i below m, by division with remainder (4j7).</p>
+  <p data-pid="c19887">Step-and-stride technique: <b>to find log_g a, list g⁰, …, g^(m − 1), then compute a, a·g^(−m), a·g^(−2m), …; the first of these found in the list, a·g^(−mi) = gʲ, gives log_g a = mi + j, after at most about 2m products.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: log₅ 8 on the clock of 23">
+m = 5:\ \ 5^0, \ldots, 5^4 \equiv 1, 5, 2, 10, 4 @@ 5² = 25 ≥ 22: the small steps
+5^5 \equiv 20,\ \ [20]^{-1} = [15] @@ 20 · 15 = 300 = 13 · 23 + 1 (41b2): one stride back
+i = 0:\ 8 \text{ not in the list};\ \ i = 1:\ 8 \cdot 15 = 120 \equiv 5 @@ 5 = 5¹ is in the list
+8 \cdot 5^{-5} \equiv 5^1 \Rightarrow 8 \equiv 5^{5 + 1} @@ multiply back by 5⁵
+\htmlClass{new}{\log_5 8 = 6} \quad \blacksquare @@ the first’s private power, found
+  </pre>
+  <p data-pid="e1f2e0">About 2√p products, against p. For a clock of six hundred digits, √p has three hundred: still far past any machine. The best methods known for prime clocks are much faster than that, and still slower than any power of the number of digits.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · steps and strides · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41l3.1</span><span class="ph understand">understand</span>What does the step-and-stride technique say, and why is every k some mi + j? <br>How is log₅ 8 found on the clock of 23?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41l4">
+  <h2 class="sthead"><span class="stno">41l4</span>When the clock gives its logs away</h2>
+  <p data-pid="37383e">Logs live on the clock of p − 1. If p − 1 is a product of small prime powers, the remainder technique splits a log into small logs.</p>
+  <p data-pid="cc5204">Split-log technique: <b>if p − 1 = uv with u and v sharing nothing, then log_g a on the clock of u is the log of a^v to the base g^v, which has order u, and likewise for v; the two readings are put back by the remainder technique.</b> For (g^v)^(x) = (gˣ)^v = a^v exactly when x is the log of a, read on the clock of u, by the power-order technique (41e1).</p>
+  <pre class="lines" data-k="ember" data-label="this step: log₂ 10 on the clock of 37">
+36 = 4 \cdot 9 @@ p − 1 split into clocks that share nothing
+2^9 \equiv 31,\ \ 10^9 \equiv 1:\ \ 31^{x} \equiv 1 \Rightarrow x \equiv 0 \pmod 4 @@ [31] has order 4
+2^4 = 16,\ \ 10^4 \equiv 10:\ \ 16^x \equiv 10 @@ [16] has order 9
+16^1, \ldots, 16^6 \equiv 16, 34, 26, 9, 33, 10:\ \ x \equiv 6 \pmod 9 @@ at most nine tries
+\htmlClass{new}{x \equiv 0 \pmod 4,\ x \equiv 6 \pmod 9 \Rightarrow \log_2 10 = 24} \quad \blacksquare @@ the remainder technique (41c2); 2²⁴ ≡ 10 on the clock of 37
+  </pre>
+  <p data-pid="ceedca">So a clock for secrets must have p − 1 with a large prime factor; the usual choice is p = 2q + 1 with q prime too. Even then the exchange has a weak point that is not arithmetic. A listener who can change messages can stand in the middle, agree one secret with each side, and pass everything on. Each side must sign what it sends, by 41i’s turned keys, so the other knows who sent it.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · split logs · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41l4.1</span><span class="ph understand">understand</span>What does the split-log technique say? <br>How is log₂ 10 on the clock of 37 split onto the clocks of 4 and 9?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41l5">
+  <h2 class="sthead"><span class="stno">41l5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\log_2 15 = 4 + 9 = 13 \text{ on the clock of } 13\,? @@ logs add on the clock of p − 1 = 12: 13 ≡ 1
+A \cdot B = g^{a + b} \text{ is the shared secret}\,? @@ anyone can multiply A and B; the secret is g^(ab), which needs a or b
+\text{any unit will do for } g\,? @@ a unit of small order leaves few hours to search: g must be a full hand, or of large prime order
+\text{the exchange alone stops a listener who changes messages}\,? @@ she stands in the middle; each side must sign
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41l5.1</span><span class="ph understand">understand</span>Why is g^(a + b) not the shared secret? <br>Why does the exchange alone not stop a listener who can change the messages?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">41l.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="p = 23,\ \ g = 5,\ \ A = 8"></span></span>Build a lock from the shared-secret technique: to send m to the holder of a, pick k, send (gᵏ, m · Aᵏ). Show how she unlocks it with a alone. <br>Lock m = 10 with k = 3, and unlock it.</div>
+  <div class="chq"><span class="chid">41l.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="p = 2q + 1,\ \ q \text{ prime}"></span></span>For p = 23 = 2 · 11 + 1, list the orders of the units, and say which units are full hands. Why is the split-log technique no help here? <br>What does the step-and-stride technique cost for such p, and how does it compare with the split-log on a p with p − 1 = 2⁵ · 3?</div>
+  <div class="chq"><span class="chid">41l.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="g^a,\ g^b \mapsto g^{ab}"></span></span>A fast clock log would break the exchange. Turn it round: if someone could compute g^(ab) from gᵃ and gᵇ fast, could they compute clock logs fast? <br>Settle what you can for small p by hand, and say what is open.</div>
+  <div class="chq"><span class="chid">41l.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">39·phys: a quantum machine would take clock logs fast (1994)</span></span>A listener records today’s exchanges and waits. If a large enough quantum machine is built in twenty years, she reads them then. <br>Is a secret that will be read in twenty years a secret now? What would you need to know to decide whether to trust the exchange today, and which of those things is a technique and which a guess?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r41k.html">← 41k · continued fractions</a><a href="r41cb19.html">41·cb19 · the clock as a quotient →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The clock log is the discrete logarithm, or index, of a to the base g. The shared-secret technique is the Diffie–Hellman key exchange, and the lock of 41l.6.1 is ElGamal encryption (1985). The step-and-stride technique is Shanks’s baby-step giant-step algorithm (1971); the split-log technique is the Pohlig–Hellman algorithm (1978). Primes p = 2q + 1 with q prime are safe primes, and q a Sophie Germain prime. The listener in the middle is a man-in-the-middle attack. Computing g^(ab) from gᵃ and gᵇ is the computational Diffie–Hellman problem. Recording now to read later is “harvest now, decrypt later”.</p>
+  <h3>Who said it first</h3>
+  <p>Gauss tabulated indices in the Disquisitiones (1801). Whitfield Diffie and Martin Hellman published the exchange in “New Directions in Cryptography” (1976), building on Ralph Merkle’s puzzles; Malcolm Williamson had found it at GCHQ in 1974, unpublished until 1997. Taher ElGamal gave the lock and a signature in 1985. Peter Shor’s quantum algorithm for discrete logs and factoring is from 1994.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“log₅ 8 on the clock of 23 is the real log ln 8 / ln 5 ≈ 1.29, rounded to 1.” Not allowed: the clock log is a count of steps round the clock, and it has nothing to do with the size of 8. 5¹ = 5, not 8; the clock log is 6.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'powers',t:R`[a] = [g]^k`,n:`One k.`},
+  {k:'ember',kl:'products',t:R`\log_g ab \equiv \log_g a + \log_g b`,n:`On the clock of p − 1.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\log_2 15 \equiv 1 \pmod{12}}`,n:`On the clock of 13.`}
+],{title:'The slides · clock logs · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'send',t:R`A = g^a,\ B = g^b`,n:`Fast powers.`},
+  {k:'ember',kl:'raise',t:R`B^a = A^b = g^{ab}`,n:`Both sides.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2 \text{ on the clock of } 23}`,n:`Never sent.`}
+],{title:'The slides · in public · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'steps',t:R`g^0, \ldots, g^{m-1}`,n:`A table.`},
+  {k:'ember',kl:'strides',t:R`a\,g^{-mi}`,n:`Until a hit.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\log_5 8 = 6}`,n:`About 2√p products.`}
+],{title:'The slides · steps and strides · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'split',t:R`p - 1 = uv`,n:`Sharing nothing.`},
+  {k:'ember',kl:'small logs',t:R`(g^v)^x = a^v`,n:`Order u.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\log_2 10 = 24 \text{ on } \mathbb Z/37}`,n:`Put back.`}
+],{title:'The slides · split logs · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

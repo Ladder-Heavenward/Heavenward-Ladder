@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shortest paths and greedy choices</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40j.html">← 40j disorder is impossible</a><a href="r40l.html">next: 40l best from best pieces →</a></p>
+  <div class="tags"><span class="tag tech">40k · technique</span></div>
+  <h1>Shortest paths and greedy choices</h1>
+  <p data-pid="18c983">Rung 38 found that taking the best-looking step at every moment, the greedy choice, sometimes gives the best answer and sometimes a poor one, and that a proof is the only way to tell which. On graphs there are two famous places where greed is safe. One is finding the shortest routes from a starting town to every other: settle the nearest town not yet settled, again and again, and every distance settled is final. The other is joining every town by the cheapest network of roads: take the cheapest road that does not close a loop, again and again, and the result is cheapest. Both proofs are exchanges: if the greedy choice were wrong, a better answer could be swapped into a cheaper one. And both fail in a clear place, the first when a road can have negative length, the second when the network must be a single tour. Along the way the step counts the cost of a recipe in a new way, by charging each step to a link or a dot and adding up the charges, so that a dot with many links costs no more in total than the links it has.</p>
+  <p class="gesture" data-pid="21dace">Walk out from a dot in layers to find every distance in links, at a cost of each link looked at twice. With lengths at least 0, settle the nearest unsettled dot; its distance is final. Taking the cheapest link that closes no cycle builds a cheapest spanning tree, because the cheapest link across any split belongs to some cheapest tree. Merging pieces by relabelling the smaller one costs at most n log₂ n in all.</p>
+</header>
+
+<section class="class step" data-step="40k1">
+  <h2 class="sthead"><span class="stno">40k1</span>Layer by layer</h2>
+  <p data-pid="62e846">38n’s queue holds things in the order they came, first in, first out. Put a start dot r in it, at distance 0. Then, while the queue is not empty, take out its first dot u, and put in every neighbour of u not yet seen, each at u’s distance plus 1.</p>
+  <p data-pid="3e84e3">Layer-by-layer technique: <b>walking out from r in this way gives every dot its distance from r in links, and looks at each link at most twice.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the layer-by-layer technique">
+\text{the queue holds the dots at distance } k \text{, then some at } k + 1 \text{, never others} @@ induction on the moves: each dot taken out at k adds only k + 1
+\text{a dot at distance } k + 1 \text{ has a neighbour at distance } k @@ the last link of a least walk (40a2)
+\text{it is seen when that neighbour, or an earlier one at } k \text{, is taken out} @@ so it gets k + 1, and no less
+\text{each dot enters the queue once; its links are looked at when it leaves} @@ seen dots are not put in again
+\htmlClass{new}{\text{cost: } |V| \text{ dots and } \textstyle\sum_u d(u) = 2|E| \text{ link looks}} \quad \blacksquare @@ the ends-count technique
+  </pre>
+  <p data-pid="310123">The cost was counted by charging each look to a link, not to a move of the recipe. One move may look at a thousand links, but no link is looked at more than twice over the whole run. Counting by charges is the accepted name’s <i>amortized cost</i>, from the Old French <i>amortir</i>, to deaden: the large moves are paid for by the many small ones. The same walk settles 40a’s odd-cycle question in one pass.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · layers · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">40k1.1</span><span class="ph understand">understand</span>What does the layer-by-layer technique say? <br>Why is its cost |V| plus 2|E|, even when one dot has very many links?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40k2">
+  <h2 class="sthead"><span class="stno">40k2</span>The nearest first</h2>
+  <p data-pid="72f95f">Now each link {u, w} has a length ℓ(u, w) ≥ 0, and the distance is the least total length of a path. Keep a <i>settled</i> set, at first {r} with distance 0; write dist(u) for the distance of a settled dot u. Each unsettled dot w has a <i>tentative distance</i> t(w): the least dist(u) + ℓ(u, w) over settled u, or no value. At each move, settle the unsettled dot with the least tentative distance.</p>
+  <p data-pid="7736bc">Nearest-first technique: <b>if every length is at least 0, the tentative distance of a dot, when it is settled, is its distance from r.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the nearest-first technique">
+w \text{ is settled at } t(w) \text{; suppose a path from } r \text{ to } w \text{ is shorter} @@ settled distances so far are right (induction on the moves)
+\text{the path leaves the settled set first along a link } \{u, x\},\ u \text{ settled} @@ r is settled and w is not
+\text{length of the path} \ge \mathrm{dist}(u) + \ell(u, x) \ge t(x) @@ the rest of the path has length at least 0
+t(x) \ge t(w) @@ w had the least tentative distance
+\htmlClass{new}{\bot:\ \text{no path is shorter than } t(w)} \quad \blacksquare @@ 
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: the nearest first, from Seattle">
+\text{about: Seattle–Tacoma 55, Tacoma–Olympia 50, Olympia–Portland 185, Seattle–Ellensburg 175,} @@ road kilometres, rounded
+\text{Ellensburg–Yakima 55, Yakima–Portland 300} @@ the last by the Columbia gorge
+\text{settled in order: Seattle 0, Tacoma 55, Olympia 105, Ellensburg 175, Yakima 230} @@ the least tentative distance each time
+\htmlClass{new}{\text{Portland: } \min(105 + 185,\ 230 + 300) = 290} \quad \blacksquare @@ settled last
+  </pre>
+  <p data-pid="8416c9">The proof used ℓ ≥ 0 in its third line. With one-way links r to x of length 2, r to y of length 3 and y to x of length −2, x is settled at 2 and the path through y has length 1. 40l finds distances when some lengths are negative, at a higher cost.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · nearest first · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40k2.1</span><span class="ph understand">understand</span>What does the nearest-first technique say? <br>Which line of its proof needs every length to be at least 0, and what goes wrong without it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40k3">
+  <h2 class="sthead"><span class="stno">40k3</span>The cheapest tree, greedily</h2>
+  <p data-pid="8b140a">Each link now has a cost, and a cheapest spanning tree is one whose costs add to the least. A <i>split</i> of the dots is a set S with something in it and something outside; a link <i>crosses</i> it when one end is in S and one out.</p>
+  <p data-pid="03ca66">Cheapest-across technique: <b>for every split, a cheapest link crossing it belongs to some cheapest spanning tree.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the cheapest-across technique">
+T \text{ a cheapest spanning tree},\ e \text{ a cheapest crossing link},\ e \notin T @@ else done
+T + e \text{ has exactly one cycle, through } e @@ the one path in T between e’s ends, and e (40b2)
+\text{the cycle crosses the split again, along a link } f \text{ of } T @@ a closed walk crosses a split an even number of times
+T + e - f \text{ is in one piece with } n - 1 \text{ links: a spanning tree} @@ the any-two-of-three technique
+\htmlClass{new}{\text{cost}(T + e - f) \le \text{cost}(T):\ \text{a cheapest tree holding } e} \quad \blacksquare @@ cost(e) ≤ cost(f)
+  </pre>
+  <p data-pid="c863d1">Sort the links by cost, and take each in turn unless it closes a cycle with those already taken. Each link taken is a cheapest link crossing the split between the piece holding one of its ends and the rest: any cheaper crossing link came earlier and was refused, so it closed a cycle inside the taken links, and could not have crossed. By the cheapest-across technique, at each moment the links taken lie in some cheapest tree; at the end they are one.</p>
+  <p data-pid="3303fd">This is where greed is safe, and the exchange is the reason. The tour of a delivery van (22·logi) has no such exchange: taking the nearest stop next can give a tour far longer than the best, as 38o found for greed in general.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · greedy tree · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40k3.1</span><span class="ph understand">understand</span>What does the cheapest-across technique say? <br>Why does the cycle in T + e cross the split a second time, and why is T + e − f a spanning tree?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40k4">
+  <h2 class="sthead"><span class="stno">40k4</span>Who is in which piece</h2>
+  <p data-pid="e20e43">The greedy tree needs, for each link, whether its ends are already in one piece. Keep for each dot the name of its piece, and a list of each piece’s dots. Two ends are in one piece exactly when their names match. Taking a link merges two pieces: relabel every dot of the smaller.</p>
+  <p data-pid="117c61">Doubling-piece technique: <b>relabelling the smaller piece at each merge relabels each dot at most log₂ n times, so all the merges together cost at most n log₂ n relabellings.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the doubling-piece technique">
+\text{a dot is relabelled only when its piece joins one at least as large} @@ the smaller is relabelled
+\text{after } j \text{ relabellings its piece has at least } 2^j \text{ dots} @@ each one at least doubles it
+2^j \le n \Rightarrow j \le \log_2 n @@ a piece has at most n dots
+\htmlClass{new}{\text{all relabellings} \le n \log_2 n} \quad \blacksquare @@ charged to the dots, not to the merges
+  </pre>
+  <p data-pid="f4a161">One merge may relabel n/2 dots, so the worst single move is costly. Charged to the dots, the total is small, which is the amortized count of the first footing at work again. Sorting the links costs about |E| log₂ |E| comparisons, more than the merges; 40m asks whether anything faster is possible, and finds where the floor is.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · pieces · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40k4.1</span><span class="ph understand">understand</span>What does the doubling-piece technique say? <br>Why does a dot’s piece at least double each time the dot is relabelled?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40k5">
+  <h2 class="sthead"><span class="stno">40k5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{the nearest-first technique works with any lengths}\,? @@ with a length −2, x is settled at 2 and a path of length 1 reaches it
+\text{the cheapest link at each dot is in every cheapest tree}\,? @@ in some cheapest tree; with ties there may be others without it
+\text{one merge can relabel } n/2 \text{ dots, so } n \text{ merges cost } n^2/2\,? @@ a dot is relabelled at most log₂ n times; the costly merges are rare
+\text{greed builds the cheapest tree, so it builds the cheapest tour}\,? @@ a tour has no exchange step; the nearest-stop rule can be far from best
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40k5.1</span><span class="ph understand">understand</span>Why does a negative length break the nearest-first technique? <br>Why is n²/2 not the cost of n merges by the doubling-piece technique?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">40k.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{lengths: } AB = 4,\ AC = 1,\ CB = 2,\ BD = 5,\ CD = 8,\ DE = 3,\ CE = 10"></span></span>Run the nearest first from A, writing the tentative distances at each move. <br>Build a cheapest spanning tree greedily on the same links, as costs. Are the shortest-path links from A a cheapest tree here? Must they be?</div>
+  <div class="chq"><span class="chid">40k.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{all costs different}"></span></span>Prove that when all link costs are different, the cheapest spanning tree is unique. <br>With all costs equal, how many cheapest spanning trees has K₄?</div>
+  <div class="chq"><span class="chid">40k.6.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{grow one tree from } r"></span></span>Reroute the greedy tree: start from one dot, and at each move take the cheapest link from the tree to a dot outside it. Prove by the cheapest-across technique that this also gives a cheapest tree. <br>How is it like the nearest first, and where does it differ?</div>
+  <div class="chq"><span class="chid">40k.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">22·logi: the nearest-stop rule and its floor</span></span>22·logi found that taking the nearest stop next can be far from the best tour, and bounded every tour from below. A cheapest spanning tree is at most a best tour, since a tour less one link is a spanning path. <br>Walk round a cheapest spanning tree, along each link twice, and skip dots already seen. When lengths obey the triangle inequality, how long is that tour, at worst, compared with the best?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r40j.html">← 40j · disorder is impossible</a><a href="r40l.html">40l · best from best pieces →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Walking out in layers is breadth-first search. The nearest first is Dijkstra's algorithm (1956, published 1959). The greedy tree is Kruskal's algorithm (1956), and the tree grown from one dot (40k.6.3) is Prim's algorithm (1957, found first by Vojtěch Jarník in 1930). The cheapest-across technique is the cut property. The doubling-piece technique is the union-by-size bound for disjoint sets, and charging is amortized analysis. The tour of 40k.6.4 is the tree-doubling 2-approximation for the metric travelling salesman problem.</p>
+  <h3>Who said it first</h3>
+  <p>Otakar Borůvka found a greedy cheapest tree in 1926, for the electrical network of Moravia. Edsger Dijkstra found the nearest first in 1956, he said in about twenty minutes, sitting at a café in Amsterdam, and published it in 1959. Joseph Kruskal published his recipe in 1956 and Robert Prim his in 1957. Robert Tarjan set out amortized analysis as a method in 1985.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The nearest first settles the closest dot each time, so it settles the dots in order of distance, so every settled distance is right.” Not allowed: settling in order of tentative distance is what the recipe does; that the tentative distance is the true one is what must be proved. The exchange step, that a shorter path would leave the settled set at a dot with smaller tentative distance, is the proof, and it needs lengths at least 0.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'queue',t:R`k,\ \dots,\ k,\ k+1,\ \dots`,n:`Two layers at most.`},
+  {k:'ember',kl:'charge',t:R`\textstyle\sum_u d(u) = 2|E|`,n:`Each link twice.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|V| + 2|E|}`,n:`Every distance.`}
+],{title:'The slides · layers · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'settle',t:R`\min t(w)`,n:`Among the unsettled.`},
+  {k:'ember',kl:'exchange',t:R`\text{a shorter path leaves at } x`,n:`And t(x) ≥ t(w).`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{t(w) = \mathrm{dist}(w)}`,n:`Final when settled.`}
+],{title:'The slides · nearest first · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'across',t:R`e = \text{cheapest crossing}`,n:`Any split.`},
+  {k:'ember',kl:'swap',t:R`T + e - f`,n:`No dearer.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{greed builds a cheapest tree}}`,n:`An exchange.`}
+],{title:'The slides · greedy tree · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'names',t:R`\text{same name} \iff \text{same piece}`,n:`A check is one look.`},
+  {k:'ember',kl:'merge',t:R`\text{relabel the smaller}`,n:`At least doubles.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\le n \log_2 n}`,n:`All merges together.`}
+],{title:'The slides · pieces · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

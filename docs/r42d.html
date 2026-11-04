@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Unique factoring</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r42c.html">← 42c division with remainder for polynomials</a><a href="r42e.html">next: 42e where factoring fails →</a></p>
+  <div class="tags"><span class="tag proof">42d · proof</span></div>
+  <h1>Unique factoring</h1>
+  <p data-pid="a11b8c">Rung four proved that a whole number splits into primes in only one way. The proof leaned on a single fact: a prime that divides a product divides a factor, and that came from the oldest recipe for a greatest common divisor, which is repeated division with remainder. Step 42c gave polynomials over a field the same division. So the same chain of reasons should run there, and it does, once each link is named. Division gives every ideal one maker. One maker turns a member that cannot be split into a member that behaves like a prime. And behaving like a prime gives one factoring. With the chain laid out, polynomials with whole-number coefficients can be brought in too, though they have no division by two: the trick is to look at their coefficients on a prime clock. That gives a test that some polynomials cannot be split at all, and a reason why splitting over the fractions never needs fractions.</p>
+  <p class="gesture" data-pid="9f0e94">In a ring where every ideal has one maker, a member that cannot be split divides a factor of any product it divides, and every member splits into such pieces in one way only, up to order and undoable factors. For whole-number polynomials, the common divisor of the coefficients of a product is the product of theirs. A prime that divides every coefficient but the top, with its square missing the constant, shows a polynomial cannot be split.</p>
+</header>
+
+<section class="class step" data-step="42d1">
+  <h2 class="sthead"><span class="stno">42d1</span>Members that cannot be split</h2>
+  <p data-pid="7541cd">A cancelling ring in which every ideal is the multiples of one member is a <i>principal ring</i>. ℤ is one, by 4j’s division-with-remainder technique, and so is F[x] over any field, by 42c’s one-maker technique.</p>
+  <p data-pid="8d2313">A member q, not 0 and not undoable, is <i>unsplittable</i> when q = wb only if w or b is undoable. It is <i>prime</i> when q dividing wb means q divides w or q divides b. Two members that differ by an undoable factor, as 3 and −3, or x − 1 and 2x − 2 in ℚ[x], are <i>partners</i>.</p>
+  <p data-pid="0ebf2e">Unsplittable-is-prime technique: <b>in a principal ring, every unsplittable member is prime.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the unsplittable-is-prime technique">
+(q) \subseteq J = (g) \Rightarrow q = gh @@ any ideal above (q) has one maker g
+g \text{ undoable, so } J = R;\ \text{ or } h \text{ undoable, so } J = (q) @@ q is unsplittable
+(q) \text{ is largest, so } R/(q) \text{ is a field} @@ the largest-ideal technique (42b)
+q \mid wb \Rightarrow (w + (q))(b + (q)) = 0 @@ wb lands in (q)
+\htmlClass{new}{q \mid w \ \lor\ q \mid b} \quad \blacksquare @@ a field has no zero products
+  </pre>
+  <p data-pid="390fb8">This is 4j’s prime-divides-a-factor technique, with the plus-only combination replaced by the one-maker technique. The two words come apart in rings that are not principal: in 42e, 2 is unsplittable and not prime.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · primes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">42d1.1</span><span class="ph understand">understand</span>What are a principal ring, an unsplittable member, a prime member and partners? <br>What does the unsplittable-is-prime technique say, and which technique of 42b does its proof use?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42d2">
+  <h2 class="sthead"><span class="stno">42d2</span>One factoring</h2>
+  <p data-pid="e353d8">One-factoring technique: <b>in a principal ring, every member other than 0 that is not undoable is a product of unsplittables, and any two such products have the same length and can be paired off into partners.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-factoring technique">
+\text{suppose } w_0 \text{ has no factoring; then } w_0 = w_1 b_1,\ w_1 \text{ with no factoring, } b_1 \text{ not undoable} @@ w₀ is not unsplittable, and one factor must lack a factoring
+(w_0) \subsetneq (w_1) \subsetneq (w_2) \subsetneq \cdots @@ the same move again and again (6c’s picking in turn)
+U = \textstyle\bigcup_k (w_k) = (g),\ \ g \in (w_k) \text{ for some } k @@ a union of a rising chain of ideals is an ideal; one maker
+(w_{k+1}) \subseteq (g) \subseteq (w_k) @@ so the chain stops: ⊥, and every member has a factoring
+q_1 \cdots q_s = q'_1 \cdots q'_t \Rightarrow q_1 \mid q'_j \text{ for some } j @@ the unsplittable-is-prime technique, on a list (4j’s prime-divides-a-list)
+\htmlClass{new}{q'_j = u\,q_1,\ u \text{ undoable; cancel and repeat}} \quad \blacksquare @@ q′ⱼ is unsplittable; cancelling (42a3); induction on s
+  </pre>
+  <p data-pid="1372d7">So in ℚ[x], x⁴ − 4 = (x² − 2)(x² + 2), and no other factoring is possible except partners such as (2x² − 4)(½x² + 1). In ℝ[x] the same polynomial is (x − √2)(x + √2)(x² + 2): one factoring there too, but the unsplittables are different, because the field is.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · factoring · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42d2.1</span><span class="ph understand">understand</span>What does the one-factoring technique say? <br>Why does the chain (w₀) ⊊ (w₁) ⊊ ⋯ have to stop in a principal ring?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42d3">
+  <h2 class="sthead"><span class="stno">42d3</span>The divisor of the coefficients</h2>
+  <p data-pid="4748dd">ℤ[x] is not principal (42c4), but it is close. The <i>content</i> of a polynomial with whole coefficients, not 0, is the greatest common divisor of its coefficients. A polynomial with content 1 is <i>bare</i>. 6x² + 24x + 24 has content 6, and x² + 4x + 4 is bare.</p>
+  <p data-pid="ab19b6">Content-multiplies technique: <b>the content of a product of whole-number polynomials is the product of their contents.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the content-multiplies technique">
+p = c(p)\,\bar p,\ \ q = c(q)\,\bar q,\ \ \bar p, \bar q \text{ bare} @@ take out the contents
+\text{suppose a prime } \ell \text{ divides every coefficient of } \bar p \bar q @@ to show the product is bare
+\bar p \bmod \ell \ne 0,\ \ \bar q \bmod \ell \ne 0 \text{ in } (\mathbb Z/\ell)[x] @@ neither is bare-and-all-multiples-of-ℓ
+(\bar p \bmod \ell)(\bar q \bmod \ell) = 0 @@ the clock map ℤ → ℤ/ℓ keeps sums and products, coefficient by coefficient
+\bot @@ ℤ/ℓ is a field (42b4), so (ℤ/ℓ)[x] is cancelling (degree-adds)
+\htmlClass{new}{c(pq) = c(p)\,c(q)} \quad \blacksquare @@ p̄q̄ is bare
+  </pre>
+  <p data-pid="35ac61">One check: (2x + 4)(3x + 6) = 6x² + 24x + 24, with content 2 · 3 = 6. The use: a whole-number polynomial that splits over ℚ splits over ℤ into factors of the same degrees. Clear the bottoms of each fraction factor, take out contents, and the content-multiplies technique says the leftover number divides out.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · content · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42d3.1</span><span class="ph understand">understand</span>What are the content of a polynomial and a bare polynomial? <br>What does the content-multiplies technique say, and on which ring does its proof find the totally false?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42d4">
+  <h2 class="sthead"><span class="stno">42d4</span>A test that a polynomial cannot be split</h2>
+  <p data-pid="0d850f">Prime-wedge technique: <b>let f = aₙxⁿ + ⋯ + a₀ have whole coefficients and n ≥ 1. Let ℓ be a prime. Suppose ℓ divides a₀, …, aₙ₋₁, ℓ does not divide aₙ, and ℓ² does not divide a₀. Then f cannot be split over ℚ into two factors of smaller degree.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the prime-wedge technique">
+f = gh,\ \ g, h \in \mathbb Z[x],\ \ \deg g = k,\ \deg h = n - k,\ \ 0 < k < n @@ suppose it splits; over ℤ, by the content-multiplies technique
+f \bmod \ell = a_n x^n,\ \ a_n \not\equiv 0 @@ every lower coefficient is a multiple of ℓ
+(g \bmod \ell)(h \bmod \ell) = a_n x^n \Rightarrow g \bmod \ell = b\,x^k,\ h \bmod \ell = c\,x^{n-k} @@ one factoring in (ℤ/ℓ)[x] (one-factoring): the only unsplittable factor is x
+\ell \mid g_0 \text{ and } \ell \mid h_0 @@ the constant terms are 0 on the clock, since k &gt; 0 and n − k &gt; 0
+\ell^2 \mid g_0 h_0 = a_0 @@ the constant of a product
+\htmlClass{new}{\bot:\ f \text{ cannot be split}} \quad \blacksquare @@ ℓ² does not divide a₀
+  </pre>
+  <p data-pid="991104">x³ − 2 with ℓ = 2: 2 divides 0, 0 and −2, not the top 1, and 4 does not divide −2. So x³ − 2 cannot be split over ℚ, and ∛2 is a zero of no polynomial over ℚ of degree 1 or 2. 42f needs that. The test only ever says no: x² + 1 passes no prime and still cannot be split over ℚ.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the wedge · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42d4.1</span><span class="ph understand">understand</span>What does the prime-wedge technique say? <br>Why are both constant terms g₀ and h₀ multiples of ℓ, and how does that give ℓ² ∣ a₀?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42d5">
+  <h2 class="sthead"><span class="stno">42d5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+x^2 + 1 \text{ cannot be split over } \mathbb Q \text{, so not over any field}\,? @@ over ℂ it is (x − i)(x + i); on ℤ/2 it is (x + 1)²
+x^4 + 1 \text{ fails the prime-wedge test, so it can be split over } \mathbb Q\,? @@ the test only says no; x⁴ + 1 cannot be split over ℚ
+2x + 2 \text{ is unsplittable in } \mathbb Z[x]\,? @@ 2x + 2 = 2(x + 1) and 2 is not undoable in ℤ[x]; in ℚ[x] it is unsplittable
+\text{an unsplittable member is prime in every cancelling ring}\,? @@ it needs one maker for each ideal; 42e finds 2 unsplittable and not prime
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42d5.1</span><span class="ph understand">understand</span>Why is failing the prime-wedge test not a proof that a polynomial splits? <br>Why is 2x + 2 unsplittable in ℚ[x] and not in ℤ[x]?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">42d.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x^5 - 6x + 3,\ \ x^4 + 10x + 5,\ \ x^4 - 10x^2 + 1"></span></span>Build a proof, for each, that it cannot be split over ℚ, or show how it splits. <br>For the one the prime-wedge technique cannot reach, try every way it could split, using the content-multiplies technique to keep the coefficients whole.</div>
+  <div class="chq"><span class="chid">42d.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x^{p-1} + x^{p-2} + \cdots + x + 1"></span></span>The prime-wedge technique does not apply to this polynomial as it stands. Put x + 1 in place of x and expand by 4k’s binomial technique. <br>Which prime makes the test pass? For which p does the argument work, and what goes wrong when p is 4?</div>
+  <div class="chq"><span class="chid">42d.6.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">a cancelling ring in which every member has one factoring into unsplittables</span></span>The page proved principal ⇒ one factoring. Turn it round: must a ring with one factoring be principal? <br>Look at ℤ[x], which has one factoring by the content-multiplies technique and the one-factoring technique in ℚ[x]. Which ideal of ℤ[x] has no one maker?</div>
+  <div class="chq"><span class="chid">42d.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="q \text{ unsplittable} \Rightarrow q \text{ prime}"></span></span>Reroute the unsplittable-is-prime technique without quotients: in a principal ring, take the ideal made by q and w, (q, w) = (g), and follow 4j’s plus-only combination. <br>Which line plays the part of the largest-ideal technique?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r42c.html">← 42c · division with remainder for polynomials</a><a href="r42e.html">42e · where factoring fails →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A principal ring is a principal ideal domain. Unsplittable members are irreducible elements; prime members are prime elements; partners are associates. A ring where every member has one factoring is a unique factorisation domain, and the one-factoring technique says every principal ideal domain is one; the chain that must stop is the ascending chain condition. The content-multiplies technique is Gauss’s lemma, and bare polynomials are primitive. The prime-wedge technique is Eisenstein’s criterion.</p>
+  <h3>Who said it first</h3>
+  <p>Carl Friedrich Gauss proved the lemma on contents in 1801. Theodor Schönemann published the test in 1846 and Gotthold Eisenstein in 1850; it carries Eisenstein’s name. The chain condition is from Emmy Noether’s paper on ideals of 1921, and rings with it are named for her.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“x⁴ + 4 has no real zero, so it cannot be split over ℚ.” Not allowed: having no zero rules out straight factors only. x⁴ + 4 = (x² + 2x + 2)(x² − 2x + 2), two quadratics with whole coefficients and no real zeros.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'one maker',t:R`(q) \subseteq (g)`,n:`Every ideal.`},
+  {k:'ember',kl:'largest',t:R`R/(q) \text{ a field}`,n:`q unsplittable.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{q \mid wb \Rightarrow q \mid w \lor q \mid b}`,n:`Prime.`}
+],{title:'The slides · primes · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'exists',t:R`(w_0) \subsetneq (w_1) \subsetneq \cdots`,n:`Cannot rise forever.`},
+  {k:'ember',kl:'one way',t:R`q_1 \mid q′_j`,n:`A prime divides a factor.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{x^4 - 4 = (x^2 - 2)(x^2 + 2)}`,n:`In ℚ[x].`}
+],{title:'The slides · factoring · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'bare',t:R`c(\bar p) = 1`,n:`Contents taken out.`},
+  {k:'ember',kl:'on a clock',t:R`(\mathbb Z/\ell)[x]`,n:`No zero products.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{c(pq) = c(p)c(q)}`,n:`Contents multiply.`}
+],{title:'The slides · content · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'on the clock',t:R`f \equiv a_n x^n`,n:`Everything but the top.`},
+  {k:'ember',kl:'both constants',t:R`\ell \mid g_0,\ \ell \mid h_0`,n:`So ℓ² ∣ a₀.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{x^3 - 2 \text{ cannot be split}}`,n:`With ℓ = 2.`}
+],{title:'The slides · the wedge · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

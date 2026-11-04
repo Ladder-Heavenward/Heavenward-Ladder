@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The best corner</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40f.html">← 40f flows and cuts</a><a href="r40h.html">next: 40h games →</a></p>
+  <div class="tags"><span class="tag proof">40g · proof</span></div>
+  <h1>The best corner</h1>
+  <p data-pid="98b466">A small glass works has three shops. One frames doors, one frames windows, and the third cuts and fits the glass for both. Each shop has so many hours a week. A batch of doors earns so much, a batch of windows so much more, and each uses hours in two of the shops. How many of each should it make? Rung 18 answered a question of this shape with two unknowns on a sheet of paper: the best plan sits at a corner of the region the limits cut out. A real plan has hundreds of unknowns, and the sheet becomes a space of that many directions; the corners are still where to look, and this step proves it. Then it finds that every such question has a twin. Ask what each shop’s hour is worth, the least prices that would make the shops’ hours at least as valuable as anything they can make. Every set of such prices bounds every plan from above. And the best plan and the best prices meet at exactly the same number. The proof of that runs through a recipe for taking one unknown out of a list of limits, and it ends with a single fact: a list of limits has no answer exactly when a combination of them says that zero is less than a negative number.</p>
+  <p class="gesture" data-pid="979791">Maximise a sum of the unknowns, each times a price, under limits that are sums at most a bound, with every unknown at least 0. If the region has a corner and the sum is bounded, a corner is best. Prices for the limits that cover every unknown’s worth bound every plan. A list of limits has no answer exactly when a combination with weights at least 0 reads 0 at most a negative number. So the best plan and the best prices are equal.</p>
+</header>
+
+<section class="class step" data-step="40g1">
+  <h2 class="sthead"><span class="stno">40g1</span>Plans and corners</h2>
+  <p data-pid="b5b6e2">A <i>plan</i> is a list x = (x₁, …, xₙ) of numbers. A <i>limit</i> reads a₁x₁ + ⋯ + aₙxₙ ≤ b. A <i>program</i> asks for the largest value of c · x (27i) over the plans with Ax ≤ b and x ≥ 0, where A is an m × n grid (27d), b a list of m bounds, and ≤ between lists means each entry. The plans that obey every limit are the <i>allowed plans</i>. The accepted name of the whole question is a linear program.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the glass works">
+\text{doors } x,\ \text{windows } y;\ \text{earn } 3x + 5y @@ in thousands of dollars per batch
+x \le 4,\ \ 2y \le 12,\ \ 3x + 2y \le 18,\ \ x, y \ge 0 @@ hours of the door shop, the window shop, the glass shop
+\text{corners } (0,0), (4,0), (4,3), (2,6), (0,6) \text{ give } 0, 12, 27, 36, 30 @@ 18g’s best-corner technique, in the plane
+\htmlClass{new}{(2, 6):\ 36} \quad \blacksquare @@ the best corner
+  </pre>
+  <p data-pid="cce622">In n unknowns, a <i>corner</i> is an allowed plan at which some n of the m + n limits, counting each xⱼ ≥ 0, hold with equality and have rows that make a free list (27b). Those n equations have exactly one answer, so there are at most as many corners as ways to choose n of the m + n limits.</p>
+  <p data-pid="145815">Tight-corner technique: <b>if the allowed plans have a corner and c · x is bounded above on them, some corner gives the largest value.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the tight-corner technique">
+x \text{ allowed, not a corner; its tight rows build less than all } n \text{ directions} @@ the rows of the limits holding with equality there
+d \ne 0 \text{ at right angles to every tight row, with } c \cdot d \ge 0 @@ the kernel is not 0 (27c); take −d if needed
+x + t\,d \text{ stays allowed for small } t \ge 0 \text{; follow it until a new limit is tight} @@ tight limits stay tight; loose ones stay loose a while
+\text{if none ever tightens: } c \cdot d > 0 \text{ is unbounded, and } c \cdot d = 0 \text{ go along } -d @@ the whole line cannot fit: x ≥ 0 stops one side unless d = 0
+x' \text{ allowed, } c \cdot x' \ge c \cdot x \text{, with one more tight row, free from the old ones} @@ d is at right angles to the old rows and not to the new one
+\htmlClass{new}{\text{after at most } n \text{ moves a corner at least as good; the best of the finitely many corners is best}} \quad \blacksquare @@ each move adds a free row
+  </pre>
+  <p data-pid="63a51f">18g’s best-corner technique is the case n = 2, on a bounded region. The difference here is that the region need not be bounded, only the value, and the number of directions is anything.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · corners · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">40g1.1</span><span class="ph understand">understand</span>What is a corner of the allowed plans in n unknowns? <br>What does the tight-corner technique say, and why does each move of its proof add a row that is free from the old ones?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40g2">
+  <h2 class="sthead"><span class="stno">40g2</span>Prices</h2>
+  <p data-pid="791640">Put a price yᵢ ≥ 0 on each limit: what an hour of shop i is worth. A plan’s product uses up hours, and column j of A says how many of each shop’s hours unit j uses. The prices <i>cover</i> unit j when the hours it uses are worth at least what it earns. With Aᵀ for the grid read with rows as columns, the <i>twin program</i> asks for the least value of b · y over the y with Aᵀy ≥ c and y ≥ 0.</p>
+  <p data-pid="a1b323">Price-bound technique: <b>if x is an allowed plan and y covering prices, then c · x ≤ b · y.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the price-bound technique">
+c \cdot x \le (A^{\mathsf T} y) \cdot x @@ c ≤ Aᵀy entry by entry, and x ≥ 0
+= y \cdot (A x) @@ the same sum of aᵢⱼ yᵢ xⱼ, taken by rows instead of columns
+\htmlClass{new}{\le y \cdot b} \quad \blacksquare @@ Ax ≤ b entry by entry, and y ≥ 0
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: prices for the glass works">
+p + 3r \ge 3,\ \ 2q + 2r \ge 5,\ \ p, q, r \ge 0 @@ doors use 1 hour of the door shop and 3 of glass; windows 2 of the window shop and 2 of glass
+y = (0, \tfrac32, 1):\ \ 4 \cdot 0 + 12 \cdot \tfrac32 + 18 \cdot 1 = 36 @@ covering: 0 + 3 = 3, 3 + 2 = 5
+\htmlClass{new}{\text{every plan earns at most } 36\text{, and } (2, 6) \text{ earns } 36} \quad \blacksquare @@ the price-bound technique: both are best
+  </pre>
+  <p data-pid="aebaaf">The door shop’s price is 0: at the best plan its 4 hours are not all used, and an hour more of it would earn nothing. Shops with slack have price 0, and units with a positive amount are covered exactly. That pattern holds at every pair of best answers; 40g.6.3 asks for its proof.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · prices · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40g2.1</span><span class="ph understand">understand</span>What are covering prices, and what is the twin program? <br>What does the price-bound technique say, and which two facts about signs does its proof need?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40g3">
+  <h2 class="sthead"><span class="stno">40g3</span>Taking one unknown out</h2>
+  <p data-pid="80b546">A list of limits Σⱼ aᵢⱼxⱼ ≤ bᵢ, i = 1 to m, may have no answer at all. To settle it, sort the limits by the sign of xₙ’s coefficient. A positive one bounds xₙ above, a negative one below, and a zero one leaves it free.</p>
+  <p data-pid="bb3a69">One-out technique: <b>the limits have an answer exactly when the list made of the zero ones, together with one limit for each pair of an upper and a lower one, has an answer in x₁, …, xₙ₋₁; each new limit is a sum of two old ones with weights at least 0, made so that xₙ drops out.</b> Given an answer of the new list, every lower bound on xₙ is then at most every upper bound, so an xₙ between the largest lower and the smallest upper obeys them all.</p>
+  <p data-pid="797359">No-answer technique: <b>Ax ≤ b has no answer exactly when some y ≥ 0 has yᵀA = 0 and y · b &lt; 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the no-answer technique">
+y \ge 0,\ y^{\mathsf T}A = 0,\ y \cdot b < 0,\ \text{and } Ax \le b @@ suppose both
+0 = y^{\mathsf T}A x \le y \cdot b < 0 @@ weights at least 0 keep ≤
+\bot @@ so no answer
+\text{other way: take out } x_n, x_{n-1}, \dots, x_1 \text{ by the one-out technique} @@ induction on n (4c)
+\text{each limit at the end reads } 0 \le b' \text{ and is } y^{\mathsf T}(Ax \le b) \text{ for some } y \ge 0 @@ weights at least 0, multiplied and added
+\htmlClass{new}{\text{no answer} \Rightarrow \text{some final limit has } b' < 0:\ \text{its } y \text{ is the certificate}} \quad \blacksquare @@ the one-out technique, run back up
+  </pre>
+  <p data-pid="53fd80">So a “no” always comes with a short reason anyone can check, as the marriage technique’s did. Taking unknowns out by the one-out technique is honest and slow: the number of limits can square at every step.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · no answer · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40g3.1</span><span class="ph understand">understand</span>What does the one-out technique do to a list of limits? <br>What does the no-answer technique say, and why is its certificate easy to check?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40g4">
+  <h2 class="sthead"><span class="stno">40g4</span>Equal prices</h2>
+  <p data-pid="456448">Equal-prices technique: <b>if the program has an allowed plan and its twin has covering prices, both have best answers, and the best plan earns exactly the least price total.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the equal-prices technique">
+\text{seek } x, y:\ Ax \le b,\ -x \le 0,\ -A^{\mathsf T}y \le -c,\ -y \le 0,\ -c \cdot x + b \cdot y \le 0 @@ an answer is a plan and prices with c · x ≥ b · y
+\text{an answer gives } c \cdot x = b \cdot y \text{, both best} @@ the price-bound technique gives ≤ too
+\text{no answer} \Rightarrow u, p, w, q, \lambda \ge 0:\ A^{\mathsf T}u \ge \lambda c,\ A w \le \lambda b,\ b \cdot u < c \cdot w @@ the no-answer technique, the weights read off by unknown
+\lambda > 0:\ u/\lambda \text{ covers},\ w/\lambda \text{ allowed},\ c \cdot w \le b \cdot u @@ the price-bound technique; against the last line
+\lambda = 0:\ b \cdot u \ge (A x_0) \cdot u \ge 0 \ge (A^{\mathsf T} y_0) \cdot w \ge c \cdot w @@ x₀ allowed and y₀ covering, given; against b · u &lt; c · w
+\htmlClass{new}{\text{an answer exists: } \max c \cdot x = \min b \cdot y} \quad \blacksquare @@ both cases end in ⊥
+  </pre>
+  <p data-pid="3752ed">Two questions, one about making and one about pricing, have one answer. Rung 28’s lines-up technique priced a single smooth limit by the stretch λ of its gradient; here every limit gets a price, and the limits may have corners. 40n finds both answers at once by hand.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · equal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40g4.1</span><span class="ph understand">understand</span>What does the equal-prices technique say? <br>Which list of limits does its proof show has an answer, and why does that answer give equal values?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40g5">
+  <h2 class="sthead"><span class="stno">40g5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{the best plan is always a corner}\,? @@ some corner is best; a whole edge between two best corners may be best too
+\text{the allowed plans are bounded, since the value is}\,? @@ the region can run off for ever along a direction where c · d ≤ 0
+\text{covering prices total } 40 \text{, so some plan earns } 40\,? @@ prices bound plans from above; the least total equals the best plan, not every total
+\text{a plan obeying } Ax \le b \text{ is allowed}\,? @@ it must also have x ≥ 0
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40g5.1</span><span class="ph understand">understand</span>Why is the best plan not always only a corner? <br>Why does a total of covering prices not give a plan that earns it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">40g.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\max\ 2x + 3y:\ \ x + y \le 4,\ \ x + 3y \le 6,\ \ x, y \ge 0"></span></span>Solve the program at its corners, write its twin, and find covering prices with the same total. <br>Both limits are tight at the best corner: what would a price of 0 on one of them have meant?</div>
+  <div class="chq"><span class="chid">40g.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\max\ x:\ \ x - y \le 1,\ \ -x + y \le -2,\ \ x, y \ge 0"></span></span>Show that this program has no allowed plan, by a certificate from the no-answer technique. <br>What does its twin do? Can a program and its twin both fail to have answers?</div>
+  <div class="chq"><span class="chid">40g.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="c \cdot x = b \cdot y"></span></span>If x is allowed, y covering and c · x = b · y, prove that every limit with yᵢ > 0 holds with equality at x, and every unit with xⱼ > 0 is covered exactly. <br>Turn it round: do those two patterns make an allowed x and covering y both best?</div>
+  <div class="chq"><span class="chid">40g.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">28g: the gradients line up, ∇f = λ∇g</span></span>Rung 28 found the best point on a smooth limit, where the gradient of the value is a stretch λ of the limit’s gradient. <br>At the glass works’ best corner, which two limits are tight, and how is c a sum of their rows with weights at least 0? Read the weights as λ’s. What happens to the 28g recipe at a corner, where the limit has no gradient?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r40f.html">← 40f · flows and cuts</a><a href="r40h.html">40h · games →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A program is a linear program, its allowed plans the feasible region (a convex polyhedron), and a corner a vertex or basic feasible solution. The twin is the dual program, and covering prices are dual feasible solutions, or shadow prices. The price-bound technique is weak duality; the equal-prices technique is strong duality. The one-out technique is Fourier–Motzkin elimination, and the no-answer technique is a form of Farkas's lemma. The pattern of 40g.6.3 is complementary slackness. The glass works is the Wyndor Glass example from an operations research textbook of 1967.</p>
+  <h3>Who said it first</h3>
+  <p>Joseph Fourier described elimination for inequalities in 1826; Theodore Motzkin rediscovered it in 1936. Gyula Farkas proved his lemma in 1902. Leonid Kantorovich wrote on planning production by programs in 1939, in Leningrad. George Dantzig set out the general question and his recipe in 1947, and John von Neumann, told of it, guessed the twin program at once, from his work on games. Kantorovich and Tjalling Koopmans shared the economics prize of 1975.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The value rises as we move from (0, 0) toward (2, 6), and falls beyond it, so (2, 6) is best.” Not allowed: rising along one route and falling beyond is a fact about that route. The proof is either the list of every corner, by the tight-corner technique, or a set of covering prices with total 36, by the price-bound technique. The second is shorter and is the one that scales.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'limits',t:R`Ax \le b,\ x \ge 0`,n:`The allowed plans.`},
+  {k:'ember',kl:'move',t:R`x + t\,d,\ c \cdot d \ge 0`,n:`Until a limit tightens.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a corner is best}}`,n:`Finitely many to check.`}
+],{title:'The slides · corners · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'cover',t:R`A^{\mathsf T} y \ge c,\ y \ge 0`,n:`Worth at least what it earns.`},
+  {k:'ember',kl:'bound',t:R`c \cdot x \le y \cdot Ax \le y \cdot b`,n:`Two signs.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{36 \le 36}`,n:`Both best.`}
+],{title:'The slides · prices · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'sort',t:R`\text{upper, lower, free in } x_n`,n:`Pair them.`},
+  {k:'ember',kl:'drop',t:R`x_n \text{ out, weights} \ge 0`,n:`Same answers.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{y^{\mathsf T}A = 0,\ y \cdot b < 0}`,n:`A certificate.`}
+],{title:'The slides · no answer · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'seek',t:R`c \cdot x \ge b \cdot y`,n:`Plus both lists of limits.`},
+  {k:'ember',kl:'else',t:R`\lambda > 0 \text{ or } \lambda = 0`,n:`Both clash.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\max c \cdot x = \min b \cdot y}`,n:`Make and price agree.`}
+],{title:'The slides · equal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

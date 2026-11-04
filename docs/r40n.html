@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The simplex method by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40m.html">← 40m keeping things findable</a><a href="r40cb19.html">next: 40·cb19 counting up to symmetry →</a></p>
+  <div class="tags"><span class="tag tech">40n · technique</span></div>
+  <h1>The simplex method by hand</h1>
+  <p data-pid="9011b1">The best corner proved that a corner of the allowed plans is best, and that there are finitely many corners. Checking them all is hopeless for a real plan: a hundred limits on fifty unknowns can have more corners than there are stars in the visible universe. The recipe that is used instead walks from corner to corner along the edges of the region, each step to a neighbouring corner that earns more, and stops when no neighbour does. This step does it by hand on the glass works of the best corner. Each limit gets a slack, the amount by which it is not yet tight, and the whole program is rewritten so that some unknowns are written in terms of the others. A step of the walk swaps one unknown for another, and a ratio test says which. At the end, the earnings are written as the best value less some amounts at least zero, and those amounts are the prices of the twin program, read off with no extra work. So the walk proves its own answer best. The step ends with what can go wrong: a region where the walk can circle without moving, and a start that is not allowed at all.</p>
+  <p class="gesture" data-pid="66d2c3">Add a slack to each limit, so limits become equations and every unknown is at least 0. A corner sets some unknowns to 0 and solves for the rest. A step lets one unknown with a positive coefficient rise until the first slack hits 0, and swaps the two. When no coefficient is positive, the corner is best, and the coefficients of the slacks are the twin’s prices. A rule of smallest names stops the walk from circling, and a first phase finds a start.</p>
+</header>
+
+<section class="class step" data-step="40n1">
+  <h2 class="sthead"><span class="stno">40n1</span>Slacks and a first corner</h2>
+  <p data-pid="0566a1">For each limit aᵢ · x ≤ bᵢ, the <i>slack</i> sᵢ = bᵢ − aᵢ · x. A plan is allowed exactly when every xⱼ and every sᵢ is at least 0. Write the slacks and the value z = c · x in terms of the x’s: that list of equations is a <i>dictionary</i>. The unknowns on the left are its <i>kept</i> unknowns; those on the right, set to 0, give its corner.</p>
+  <p data-pid="c0a52e">Slack-form technique: <b>a dictionary whose constants are all at least 0 names a corner, by setting every unknown on the right to 0; and it holds for every plan, allowed or not, since it is the same equations rearranged.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the glass works’ first dictionary">
+s_1 = 4 - x @@ the door shop
+s_2 = 12 - 2y @@ the window shop
+s_3 = 18 - 3x - 2y @@ the glass shop
+\htmlClass{new}{z = 0 + 3x + 5y;\ \ \text{corner } (0, 0),\ z = 0} \quad \blacksquare @@ x = y = 0 on the right; the constants 4, 12, 18 are at least 0
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · slacks · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">40n1.1</span><span class="ph understand">understand</span>What is a slack, and what is a dictionary? <br>What does the slack-form technique say, and why does a dictionary hold for every plan?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40n2">
+  <h2 class="sthead"><span class="stno">40n2</span>A step to a better corner</h2>
+  <p data-pid="c1cbc6">Pivot technique: <b>if an unknown on the right of z has a positive coefficient, let it rise from 0 until the first kept unknown reaches 0; swap those two, rewriting the dictionary; the new constants are all at least 0, and z has not fallen.</b> The first kept unknown to reach 0 is found by the <i>ratio test</i>: the least constant divided by the rate at which it falls.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two steps">
+y \text{ rises: } s_2 = 0 \text{ at } y = 6,\ s_3 = 0 \text{ at } y = 9 @@ ratios 12/2 and 18/2; s₁ does not fall
+y = 6 - \tfrac12 s_2,\ \ s_3 = 6 - 3x + s_2,\ \ z = 30 + 3x - \tfrac52 s_2 @@ swap y and s₂; put y’s line into the others (27j’s row moves)
+x \text{ rises: } s_1 = 0 \text{ at } x = 4,\ s_3 = 0 \text{ at } x = 2 @@ ratios 4/1 and 6/3; x enters, s₃ leaves
+x = 2 - \tfrac13 s_3 + \tfrac13 s_2,\ \ s_1 = 2 + \tfrac13 s_3 - \tfrac13 s_2 @@ from s₃’s line
+\htmlClass{new}{z = 36 - \tfrac32 s_2 - s_3;\ \ \text{corner } (2, 6)} \quad \blacksquare @@ no coefficient is positive: stop
+  </pre>
+  <p data-pid="4522d7">Each dictionary is a corner, and each step goes along an edge of the region to a neighbouring corner: one tight limit is let go and another becomes tight. The walk visited three of the five corners. On a hundred limits it typically visits a few hundred out of more corners than can be counted.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · pivot · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40n2.1</span><span class="ph understand">understand</span>What does the pivot technique say, and what is the ratio test for? <br>In the glass works, why did s₃ leave in the second step and not s₁?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40n3">
+  <h2 class="sthead"><span class="stno">40n3</span>The prices, read off</h2>
+  <p data-pid="fb87c7">Last-row technique: <b>when the walk stops, with z = z* − Σ rⱼxⱼ − Σ yᵢsᵢ and every r and y at least 0, the y’s are covering prices with b · y = z*; so the corner is best, by the price-bound technique.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the last-row technique">
+c \cdot x = z^* - r \cdot x - y \cdot (b - A x) \text{ for every plan } x @@ the last dictionary holds for every plan (the slack-form technique), with s = b − Ax
+c \cdot x = (A^{\mathsf T} y - r) \cdot x + (z^* - y \cdot b) @@ gather the terms
+c = A^{\mathsf T} y - r \text{ and } z^* = y \cdot b @@ equal for every x, so the coefficients and the constants agree
+A^{\mathsf T} y = c + r \ge c,\ \ y \ge 0 @@ every r at least 0
+\htmlClass{new}{y \text{ covers and } b \cdot y = z^*} \quad \blacksquare @@ the price-bound technique: no plan earns more
+  </pre>
+  <p data-pid="e7f35a">The glass works stopped at z = 36 − 0 · s₁ − (3/2) s₂ − 1 · s₃: the prices (0, 3/2, 1) of 40g2, found by the walk with no extra work. So the walk, when it stops, proves the equal-prices technique for that program again, by a second road.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · last row · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40n3.1</span><span class="ph understand">understand</span>What does the last-row technique say? <br>Why may the coefficients of x in the two sides of its second line be set equal?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40n4">
+  <h2 class="sthead"><span class="stno">40n4</span>When the walk stalls, and where it starts</h2>
+  <p data-pid="b22450">A step can leave z where it was, when the leaving unknown’s constant is already 0: a corner where more than n limits are tight. Then the walk can circle through dictionaries of one corner for ever. <i>Held in trust</i>, as stated: choosing, among the unknowns that may enter, the one with the smallest name, and among those that may leave, again the smallest, never circles; that was proved in 1977. With that rule the dictionaries never repeat, and there are finitely many, so the walk stops, by 4l’s falling-measure technique read on the dictionaries not yet visited.</p>
+  <p data-pid="9957fe">First-phase technique: <b>if the dictionary at x = 0 has a negative constant, add one unknown x₀ ≥ 0 to every limit as aᵢ · x − x₀ ≤ bᵢ and maximise −x₀; the program has an allowed plan exactly when the best value is 0, and the last dictionary of that walk starts the real one.</b> Large x₀ makes every limit loose, so a first corner of the new program is found with one step, and a plan with x₀ = 0 is an allowed plan of the old.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a start that is not allowed">
+x + y \ge 2 \text{, written } -x - y \le -2:\ \ s = -2 + x + y @@ the constant −2: x = y = 0 is not allowed
+-x - y - x_0 \le -2:\ \ s = -2 + x + y + x_0 @@ the first phase
+x_0 \text{ enters until } s = 0:\ \ x_0 = 2 - x - y + s @@ one step to an allowed start
+\htmlClass{new}{\text{then } x \text{ or } y \text{ enters, } x_0 \text{ leaves, and } -x_0 = 0 \text{ is best}} \quad \blacksquare @@ an allowed plan, such as (2, 0)
+  </pre>
+  <p data-pid="b36dd6">How many steps? On a shape found in 1972, of n unknowns and 2n limits, the walk with the steepest coefficient visits all 2ⁿ corners. On real programs it takes a small multiple of the number of limits. Recipes with a guaranteed polynomial cost were found in 1979 and 1984, and a reason for the walk’s speed in practice was proved in 2001.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · stalls and starts · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40n4.1</span><span class="ph understand">understand</span>What does the first-phase technique say? <br>Why can a step leave z where it was, and what does the rule of smallest names do about it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40n5">
+  <h2 class="sthead"><span class="stno">40n5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{enter } x \text{, and let the slack with the largest ratio leave}\,? @@ the least ratio; a larger one would drive another slack below 0
+\text{a coefficient of } z \text{ is negative, so stop}\,? @@ stop only when none is positive
+\text{no ratio exists for the entering unknown, so the program has no allowed plan}\,? @@ no slack falls as it rises: the value is unbounded
+\text{the prices are the coefficients of } x \text{ and } y \text{ in the last row}\,? @@ of the slacks; those of x and y are the r’s, how far each unit is from being covered exactly
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40n5.1</span><span class="ph understand">understand</span>Why must the slack with the least ratio leave? <br>What does it mean when no slack falls as the entering unknown rises?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">40n.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\max\ 2x + 3y:\ \ x + y \le 4,\ \ x + 3y \le 6,\ \ x, y \ge 0"></span></span>Run the walk on 40g.6.1’s program by hand, from (0, 0). <br>Read the prices from the last row and check that they match the ones you found there.</div>
+  <div class="chq"><span class="chid">40n.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\max\ x + y:\ \ x - y \le 1,\ \ x, y \ge 0"></span></span>Run the walk. Where does the ratio test fail, and what does the dictionary then say about the value? <br>Find the twin and show that it has no covering prices.</div>
+  <div class="chq"><span class="chid">40n.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="z = z^* - r \cdot x - y \cdot s,\ \text{some } r_j = 0 \text{ off the corner}"></span></span>The last-row technique says a stopped walk is best. If some unknown on the right has coefficient 0 in z, what happens when it enters? <br>Prove that the best plan is then not the only one, unless the ratio for it is 0.</div>
+  <div class="chq"><span class="chid">40n.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">27j: row moves; the cost of elimination, about n³</span></span>Rung 27 solved systems by row moves and counted about n³ steps. A pivot is one round of row moves on the dictionary. <br>How many steps does one pivot cost with m limits and n unknowns? Why is the walk’s whole cost not settled by that count, as elimination’s was?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r40m.html">← 40m · keeping things findable</a><a href="r40cb19.html">40·cb19 · counting up to symmetry →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The walk is the simplex method, a dictionary is a simplex dictionary (or tableau), kept unknowns are basic variables, and a corner named by one is a basic feasible solution. The ratio test keeps its name. A corner with more than n tight limits is degenerate, and circling is cycling; the rule of smallest names is Bland's rule (1977). The first phase is phase one of the two-phase method. The last-row technique reads the dual solution from the reduced costs.</p>
+  <h3>Who said it first</h3>
+  <p>George Dantzig devised the simplex method in 1947. Alan Hoffman found a program on which it cycles in 1951, and Robert Bland the rule that prevents it in 1977. Victor Klee and George Minty built the cube on which it visits every corner in 1972. Leonid Khachiyan gave the first polynomial recipe, the ellipsoid method, in 1979, and Narendra Karmarkar a practical one, an interior point method, in 1984. Daniel Spielman and Shang-Hua Teng explained the walk's speed in practice by smoothed analysis in 2001.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Each step goes to a corner that earns more, and there are finitely many corners, so the walk stops at the best.” Not allowed twice over. A step may earn the same, not more, and then the walk can circle; that is what the smallest-name rule is for. And stopping is not the same as best: the walk stops when no neighbour earns more, and that the corner is then best is the last-row technique, not a fact about stopping.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'slack',t:R`s_i = b_i - a_i \cdot x`,n:`How far from tight.`},
+  {k:'ember',kl:'dictionary',t:R`\text{kept} = \text{constants} + \text{the rest}`,n:`Same equations.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(0, 0),\ z = 0}`,n:`A first corner.`}
+],{title:'The slides · slacks · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'enter',t:R`\text{a positive coefficient in } z`,n:`It rises.`},
+  {k:'ember',kl:'ratio',t:R`\min \tfrac{\text{constant}}{\text{rate}}`,n:`Who leaves.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{z = 36 - \tfrac32 s_2 - s_3}`,n:`Two steps.`}
+],{title:'The slides · pivot · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'stop',t:R`z = z^* - r \cdot x - y \cdot s`,n:`All r, y at least 0.`},
+  {k:'ember',kl:'compare',t:R`c = A^{\mathsf T}y - r`,n:`For every plan.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(0, \tfrac32, 1)}`,n:`The prices, free.`}
+],{title:'The slides · last row · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'stall',t:R`\text{constant } 0 \Rightarrow z \text{ unchanged}`,n:`Circling possible.`},
+  {k:'ember',kl:'rule',t:R`\text{smallest names}`,n:`Held in trust.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\max -x_0 = 0 \iff \text{allowed}}`,n:`A first phase.`}
+],{title:'The slides · stalls and starts · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

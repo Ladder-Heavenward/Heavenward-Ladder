@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dots and links</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40.html">← 40 counting alone says how things connect</a><a href="r40b.html">next: 40b trees →</a></p>
+  <div class="tags"><span class="tag proof">40a · proof</span></div>
+  <h1>Dots and links</h1>
+  <p data-pid="8ce0ba">Three ferry docks on Puget Sound, at Fauntleroy, on Vashon Island and at Southworth, are joined by one run of boats, and each dock can reach each other dock without stopping at the third. Draw the docks as dots and the runs as links, and the drawing has thrown away almost everything: the water, the distances, the timetable, the size of the boats. What is left is only which dock is joined to which. This rung asks how much can be known from that alone, and the answer is a great deal. This first step lays the object down. A graph is a set of dots and a set of links, each link joining two different dots. Counting the links at each dot gives a total that is always even, for a reason that takes one line. A walk goes from dot to dot along links, a path never comes back to a dot, and a cycle comes back only to where it began. And one plain question, whether the dots can be split into two sides with every link crossing, has an answer that a count settles: exactly when no cycle has an odd number of links.</p>
+  <p class="gesture" data-pid="9c1b2f">A graph is dots and links, each link a set of two dots. Counting the ends of the links counts each link twice. A walk can be shortened to a path. The dots split into two sides with every link crossing exactly when no cycle is odd.</p>
+</header>
+
+<section class="class step" data-step="40a1">
+  <h2 class="sthead"><span class="stno">40a1</span>A graph is its links</h2>
+  <p data-pid="94f1e1">A <i>graph</i> G is a set V of <i>dots</i> and a set E of <i>links</i>. Each link is a set {u, w} of two different dots of V, built as 2e builds a set of two. The link {u, w} <i>joins</i> u and w, and u and w are then <i>neighbours</i>. V is finite on this rung unless a page says otherwise.</p>
+  <p data-pid="06e619">The word graph is reused. In 9e a graph was the pairs of a function, drawn in the plane, and that meaning stays for functions. Here a graph is a set of dots with a set of links, and nothing is drawn: a drawing is only a way to look at it. The accepted name comes from the Greek <i>graphein</i>, to write, through the chemists of the 1870s, who wrote a molecule as atoms and bonds.</p>
+  <p data-pid="e8a49e">Write d(v), the <i>links at v</i>, for the number of links that hold v. The three docks have d = 2 each. Kₙ is the graph on n dots with every one of the n(n − 1)/2 possible links, by 4k’s choosing-counts-parts technique with k = 2.</p>
+  <p data-pid="f1cbfb">Ends-count technique: <b>adding the links at every dot counts every link exactly twice.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the ends-count technique">
+P = \{(v, e) : v \in V,\ e \in E,\ v \in e\} @@ the set of ends: a dot together with a link that holds it
+|P| = \textstyle\sum_{v \in V} d(v) @@ sort the ends by their dot; each dot v gives d(v) of them (4k, separate piles)
+|P| = \textstyle\sum_{e \in E} 2 = 2|E| @@ sort the same ends by their link; each link has exactly two dots
+\htmlClass{new}{\textstyle\sum_{v} d(v) = 2|E|} \quad \blacksquare @@ one set, counted two ways
+  </pre>
+  <p data-pid="f9a623">So the number of dots with an odd count of links is even: the even counts add to an even number, and the total is even. At a party where some people shake hands, the people who shook an odd number of hands are an even number of people. No graph has links counts 3, 3, 3, 1, 1.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · connections, not families</div>
+    <p data-pid="ecc1fc">The Washington ferry map draws Vashon Island to scale, with the water blue and the docks where they are. The timetable leaflet draws the same three docks as three circles on a line. One looks like the Sound and one does not. As graphs they are the same object, since the same docks are joined.</p>
+    <p data-pid="aa7257"><b>A graph is known by which dots are joined, not by where the dots are drawn or what they are.</b></p>
+    <p data-pid="311318">Two graphs are the <i>same shape</i> when a matching of their dots (9c) carries links to links and non-links to non-links. Everything this rung proves about a graph is about its links, so it holds for every graph of the same shape. The count of links at each dot is kept by such a matching; so is the number of pieces, and the length of the shortest cycle.</p>
+    <p class="bait" data-pid="5882d1">The three docks of the Fauntleroy run and the three corners of a triangle drawn in chalk: one graph, or two?</p>
+  </aside>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · ends · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">40a1.1</span><span class="ph understand">understand</span>What is a graph, and how does it differ from the graph of 9e? <br>What does the ends-count technique say, and why must the dots with an odd count of links be an even number?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40a2">
+  <h2 class="sthead"><span class="stno">40a2</span>Walks, paths and cycles</h2>
+  <p data-pid="685571">A <i>walk</i> from u to w is a list of dots v₀ = u, v₁, …, vₖ = w, each joined to the next; its <i>length</i> is k, the number of links used. A <i>path</i> is a walk that meets no dot twice. A <i>cycle</i> is a walk of length at least 3 that ends where it starts and meets no other dot twice.</p>
+  <p data-pid="7982bc">Walk-to-path technique: <b>if a walk joins u to w, a path joins u to w.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the walk-to-path technique">
+\text{among the walks from } u \text{ to } w \text{, take one of least length } k @@ a least member of a set of numbers that has one (4h)
+\text{suppose } v_i = v_j \text{ with } i < j @@ the walk meets a dot twice
+v_0, \dots, v_i, v_{j+1}, \dots, v_k \text{ is a walk of length } k - (j - i) < k @@ cut out the loop between the two meetings
+\htmlClass{new}{\bot:\ \text{the least walk meets no dot twice, so it is a path}} \quad \blacksquare @@ against the choice of the least
+  </pre>
+  <p data-pid="a86694">Being joined by a walk is a sameness relation on V (2g): every dot is joined to itself by the walk of length 0, a walk can be read backwards, and two walks can be put end to end. Its classes are the <i>pieces</i> of G. G is <i>in one piece</i> when it has one class, the word of 34c carried over: a graph drawn with its links as curves is in one piece in 34c’s sense exactly when it is in one piece here.</p>
+  <p data-pid="46faf6">The <i>distance</i> from u to w is the least length of a walk between them. It obeys 34a’s three demands, so a graph in one piece is a space with a distance.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · walks · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40a2.1</span><span class="ph understand">understand</span>What is the difference between a walk, a path and a cycle? <br>What does the walk-to-path technique say, and which line of its proof uses the least walk?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40a3">
+  <h2 class="sthead"><span class="stno">40a3</span>Two sides</h2>
+  <p data-pid="4a9b66">A graph is <i>two-sided</i> when V splits into two sets X and Y, with no dot in both, so that every link has one dot in X and one in Y. Six houses on a street and three shops, with a link from each house to each shop it buys from, make a two-sided graph. Kₘ,ₙ is the two-sided graph with m dots on one side, n on the other, and every crossing link.</p>
+  <p data-pid="5ab7d5">Odd-cycle technique: <b>a graph is two-sided exactly when it has no cycle of odd length.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the odd-cycle technique, one way">
+\text{a cycle } v_0, v_1, \dots, v_k = v_0 \text{ in a two-sided graph} @@ suppose
+v_0, v_2, v_4, \dots \in X \text{ and } v_1, v_3, \dots \in Y \text{, if } v_0 \in X @@ every link crosses, so the sides alternate
+v_k = v_0 \in X \text{, so } k \text{ is even} @@ the dot at place k is on v₀’s side exactly when k is even (4j, even or odd)
+\htmlClass{new}{\text{no cycle of a two-sided graph is odd}} \quad \blacksquare @@ 
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the odd-cycle technique, the other way">
+\text{no odd cycle; take one piece and a dot } r \text{ in it} @@ the pieces can be done one at a time
+X = \{v : \text{distance}(r, v) \text{ even}\},\ \ Y = \{v : \text{distance}(r, v) \text{ odd}\} @@ the sides, by distance from r
+\text{a link } \{u, w\} \text{ inside } X \text{ or inside } Y @@ suppose one does not cross
+\text{least paths } r \to u,\ r \to w \text{ and the link make a closed walk of odd length} @@ two lengths of one parity, plus 1
+\text{a closed walk of odd length holds an odd cycle} @@ induction on the length: cut at a repeated dot; one of the two closed walks is odd and shorter
+\htmlClass{new}{\bot:\ \text{every link crosses, and the graph is two-sided}} \quad \blacksquare @@ against no odd cycle
+  </pre>
+  <p data-pid="6e1794">So a question about every way to split the dots, of which there are 2ⁿ, is settled by looking at the cycles, and by the second proof, at the distances from one dot. A recipe that walks out from r in layers settles it in one pass; 40k builds that recipe.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · two sides · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40a3.1</span><span class="ph understand">understand</span>What is a two-sided graph? <br>What does the odd-cycle technique say, and how does its second proof choose the two sides?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40a4">
+  <h2 class="sthead"><span class="stno">40a4</span>How many graphs</h2>
+  <p data-pid="fda1b1">On the dots {1, …, n}, a graph is a choice of which of the n(n − 1)/2 possible links to keep. 4k’s settled-parts technique counts the choices.</p>
+  <pre class="lines" data-k="ember" data-label="this step: graphs on n named dots">
+\text{possible links: } \binom{n}{2} = \tfrac{n(n-1)}{2} @@ choosing-counts-parts (4k)
+\text{a graph is a part of the possible links} @@ the definition, with V fixed
+\text{graphs on } n \text{ named dots: } 2^{n(n-1)/2} @@ settled-parts (4k)
+\htmlClass{new}{n = 4:\ 2^6 = 64;\ \ n = 10:\ 2^{45} \approx 3.5 \times 10^{13}} \quad \blacksquare @@ counted
+  </pre>
+  <p data-pid="2558b6">Many of the 64 graphs on four named dots are the same shape: the six graphs with one link are one shape, only the names moved. How many shapes there are is a different count, harder, since it asks what stays when the names are shuffled. There are 11. 40·cb19 counts them with rung 19’s moves.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · how many · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40a4.1</span><span class="ph understand">understand</span>Why are there 2^(n(n − 1)/2) graphs on n named dots? <br>Why is the number of shapes of graph on four dots smaller than 64?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40a5">
+  <h2 class="sthead"><span class="stno">40a5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{links counts } 3, 3, 2, 1 \text{ belong to some graph}\,? @@ they add to 9, which is odd; the ends-count technique needs an even total
+\text{a walk from } u \text{ to } w \text{ is a path}\,? @@ it may meet a dot twice; only a least walk is sure to be a path
+\text{two drawings that look different are different graphs}\,? @@ a graph is its links; the drawing is not part of it
+\text{no cycle of length 3, so the graph is two-sided}\,? @@ a cycle of 5 links is odd, and has no triangle
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40a5.1</span><span class="ph understand">understand</span>Why can no graph have links counts 3, 3, 2, 1? <br>Why does having no triangle not make a graph two-sided?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">40a.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="d = 3, 3, 3, 3, 3, 3"></span></span>Build two graphs on six dots, each with three links at every dot, that are not the same shape. <br>What single count, kept by every matching that carries links, tells them apart?</div>
+  <div class="chq"><span class="chid">40a.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n \ge 2"></span></span>Prove that in every graph with at least two dots, two dots have the same count of links. <br>Does the proof still go through if the graph may have endlessly many dots?</div>
+  <div class="chq"><span class="chid">40a.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="4, 4, 3, 2, 2, 1"></span></span>Every list of link counts with an even total adds up as the ends-count technique demands. Turn it round: must every such list belong to a graph? Settle this list, and 3, 3, 3, 1. <br>Find a test that settles a list by removing its largest count.</div>
+  <div class="chq"><span class="chid">40a.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">9e: the graph of a function, its pairs (x, f(x))</span></span>Rung 9 drew a function’s pairs in the plane and called them its graph. Make a function from a finite set X to a finite set Y into a two-sided graph of this step. <br>Which graphs arise this way? Is the reuse of the word a pun, or does one meaning hold the other?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r40.html">← 40 · counting alone says how things connect</a><a href="r40b.html">40b · trees →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Dots are vertices (or nodes) and links are edges; the links at v are its degree. The ends-count technique is the handshake lemma. Neighbours are adjacent vertices. Walks, paths and cycles keep their names, and the pieces are the connected components. A two-sided graph is bipartite, and the odd-cycle technique is the characterization of bipartite graphs. Kₙ is the complete graph and Kₘ,ₙ the complete bipartite graph. Graphs of the same shape are isomorphic. The test asked for in 40a.6.3 is the Havel–Hakimi test.</p>
+  <h3>Who said it first</h3>
+  <p>Leonhard Euler counted the ends of bridges in 1736 (see 40c). James Joseph Sylvester used the word graph in 1878, borrowing it from the chemists' graphic notation, and Arthur Cayley counted trees for chemistry in the 1870s. Dénes Kőnig wrote the first book on the subject in 1936 and proved the odd-cycle technique there in the form used here. Václav Havel (1955) and S. Louis Hakimi (1962) found the test for lists of degrees.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Each person at a party shakes an even number of hands or an odd number. Pair the odd ones up as they shake hands with each other; so there is an even number of them.” Not allowed: the odd ones need not shake hands with each other at all. The count is even because the total of all the counts is twice the number of handshakes, not because the odd ones pair off.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'a link',t:R`e = \{u, w\},\ u \ne w`,n:`A set of two dots.`},
+  {k:'ember',kl:'count twice',t:R`(v, e) \text{ with } v \in e`,n:`Sorted by dot, then by link.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\textstyle\sum_v d(v) = 2|E|}`,n:`Always even.`}
+],{title:'The slides · ends · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'walk',t:R`v_0, v_1, \dots, v_k`,n:`Each joined to the next.`},
+  {k:'ember',kl:'cut',t:R`v_i = v_j \Rightarrow \text{shorter}`,n:`A loop cut out.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{walk} \Rightarrow \text{path}}`,n:`The least walk is a path.`}
+],{title:'The slides · walks · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'alternate',t:R`v_0 \in X,\ v_1 \in Y,\ \dots`,n:`Each link crosses.`},
+  {k:'ember',kl:'by distance',t:R`X = \text{even},\ Y = \text{odd}`,n:`From one dot r.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{two-sided} \iff \text{no odd cycle}}`,n:`A count settles a split.`}
+],{title:'The slides · two sides · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'links',t:R`\binom{n}{2}`,n:`Possible links.`},
+  {k:'ember',kl:'choose',t:R`2^{\binom{n}{2}}`,n:`Keep or drop each.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{64 \text{ on four named dots}}`,n:`Shapes are fewer.`}
+],{title:'The slides · how many · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

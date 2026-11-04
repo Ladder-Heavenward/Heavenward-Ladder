@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can we trust a proof no one can read?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40econ.html">← 40·econ can everyone be paired so no two would rather swap?</a><a href="r40now2.html">next: 40·now2 how big must order be? →</a></p>
+  <div class="tags"><span class="tag now">40·now · research front</span></div>
+  <h1>Can we trust a proof no one can read?</h1>
+  <p data-pid="697008">Can we trust a proof no one can read? 40d proved that five colours are enough for any map, and said that four are enough too, by a proof of 1976 that it did not give. That proof is the first famous one that no person has read from end to end: part of it is a computer checking well over a thousand cases. This page shows how such a proof is built. It counts a charge on each dot of a flat graph and finds that the charges always add to 12, which forces small pieces to appear. It shows what it means for a piece to be unable to sit in a smallest map needing five colours, and why the pieces that turn up are too many to check by hand. Then it asks the question the proof raised in 1979 and that has not gone away: is a check that no one can read a proof, and what do we trust when we accept it?</p>
+  <p class="gesture" data-pid="57a653">Give each dot of a flat graph of triangles the charge 6 less its links; the charges add to 12. Moving charge by rules shows that some piece from a fixed list must appear. If no piece on the list can sit in a smallest map needing five colours, four colours suffice. The 1976 list had near two thousand pieces, checked by computer; the 1997 list has 633; in 2005 a proof checker checked the whole proof.</p>
+</header>
+
+<section class="class step" data-step="40·now.1">
+  <h2 class="sthead"><span class="stno">40·now.1</span>Four colours, guessed and wrongly proved</h2>
+  <p data-pid="0c058a">The guess came in 1852, from colouring a map of counties: four colours are enough for any map, so that countries sharing a border differ. As 40d did, put a dot in each country and a link across each border; the map becomes a flat graph and the guess is that every flat graph has four colours.</p>
+  <p data-pid="4ff97a">A proof was published in 1879 and believed for eleven years. It followed the five-colour technique of 40d: take a dot with at most five links, colour the rest, and free a colour for the dot by swaps. With at most four neighbours one swap works, as in 40d. With five neighbours the proof made two swaps, one after the other.</p>
+  <pre class="lines" data-k="ember" data-label="this step: where the 1879 proof failed">
+\text{neighbours coloured } 1, 2, 3, 4, 2 \text{ round the dot} @@ four colours used, two of them 2
+\text{swap } 1 \leftrightarrow 3 \text{ from one neighbour 2, and } 1 \leftrightarrow 4 \text{ from the other} @@ each alone frees nothing for a 2
+\text{each swap is safe alone: its chain is cut off by the other chain} @@ 40d’s swap
+\text{after the first swap, the chains the second relied on can change} @@ the first swap recolours dots on them
+\htmlClass{new}{\text{both swaps together can join what was apart, and leave five colours needed}} @@ found in 1890
+  </pre>
+  <p data-pid="d525d1">The flaw was found in 1890, and the proof kept what it could: five colours, the five-colour technique of 40d. The guess for four stayed open for 86 more years.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · 1879 · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">40·now.1.1</span><span class="ph understand">understand</span>Why does one swap free a colour when the dot has four neighbours? <br>Why can two swaps done one after the other fail when each alone would work?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40·now.2">
+  <h2 class="sthead"><span class="stno">40·now.2</span>Charges that add to 12</h2>
+  <p data-pid="f013ad">Adding links never makes colouring easier, so it is enough to colour flat graphs whose faces are all triangles. Give each dot with d links the charge 6 − d.</p>
+  <p data-pid="a27769">Charge-count technique: <b>in a flat graph with V ≥ 3 dots whose faces are all triangles, the charges 6 − d add to exactly 12.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the charge-count technique">
+3F = 2E @@ each face has 3 links, each link 2 faces
+V - E + \tfrac23 E = 2,\ \ E = 3V - 6 @@ the flat-count technique (40d)
+\textstyle\sum d = 2E = 6V - 12 @@ the ends-count technique (40a)
+\htmlClass{new}{\textstyle\sum (6 - d) = 6V - (6V - 12) = 12} \quad \blacksquare @@ 
+  </pre>
+  <p data-pid="eb19c0">So some dot has charge above 0, that is at most five links, the five-or-fewer technique of 40d again. The new use is to move the charge. Moving it between dots keeps the total 12, so if a rule for moving can be shown to leave every dot at 0 or below, something the rule assumed absent must be present.</p>
+  <p data-pid="9c1594">Unavoidable-pair technique: <b>a flat graph of triangles in which every dot has at least five links has a dot of five links next to a dot of five or six.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the unavoidable-pair technique">
+\text{suppose every neighbour of a five-dot has 7 or more links} @@ for contradiction
+\text{each five-dot gives } \tfrac15 \text{ to each of its 5 neighbours} @@ the rule; its charge 1 goes to 0
+\text{round a dot, neighbours next to each other are linked} @@ the faces are triangles
+\text{so no two five-dots are next to each other round a dot of } d \ge 7 @@ else a five-dot would have a five-neighbour
+d \ge 7:\ \ 6 - d + \tfrac15 \lfloor \tfrac d2 \rfloor \le 6 - \tfrac{9d}{10} < 0 @@ at most ⌊d/2⌋ five-neighbours
+\text{six-dots keep } 0 @@ they give and get nothing
+\htmlClass{new}{\text{every charge is at most } 0, \text{ but they add to } 12} \quad \blacksquare @@ a contradiction
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · charges · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·now.2.1</span><span class="ph understand">understand</span>Why do the charges 6 − d add to 12? <br>Why does moving charge prove that some piece must appear?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40·now.3">
+  <h2 class="sthead"><span class="stno">40·now.3</span>Pieces that cannot appear</h2>
+  <p data-pid="cca85f">Suppose some flat graph needs five colours, and take one with the fewest dots. A piece of graph is <i>reducible</i> if it cannot appear in such a smallest graph: whenever the rest is coloured in four, the colouring can be changed by swaps and finished on the piece.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the plan of the proof">
+\text{a dot of 3 links is reducible; a dot of 4 links is reducible} @@ a colour is free, or one swap frees one (40d)
+\text{so a smallest graph has every dot of 5 or more links} @@ and its faces may be taken as triangles
+\text{it has a five next to a five or six} @@ the unavoidable-pair technique
+\text{a list of pieces is unavoidable if every such graph has one} @@ found by rules for moving charge
+\htmlClass{new}{\text{an unavoidable list of reducible pieces proves four colours}} @@ no smallest graph needing five can exist
+  </pre>
+  <p data-pid="338c47">The pair of the unavoidable-pair technique is not reducible by itself, and the swaps that would free a colour fail as in 1879. So the list must hold larger pieces, each with a ring of dots round it, and to show a piece reducible means checking every four-colouring of its ring.</p>
+  <pre class="lines" data-k="ember" data-label="this step: how many ring colourings to check">
+\text{colourings of a ring of } m \text{ dots in 4 colours: } 3^m + 3(-1)^m @@ a ring is a cycle
+\text{renaming the colours: } 24 \text{ moves; a swap of two colours keeps the } 2 \text{ two-colourings in the others} @@ m even; the rest keep none but doing nothing
+m = 14:\ \ \tfrac{1}{24}\,(3^{14} + 3 + 6 \cdot 2) = \tfrac{4\,782\,984}{24} @@ the average-kept technique (40·cb19)
+\htmlClass{new}{= 199\,291 \text{ colourings of one ring of 14, each to be finished on the piece}} @@ for one piece of the list
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · reducible · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·now.3.1</span><span class="ph understand">understand</span>What does it mean for a piece to be reducible? <br>Why does an unavoidable list of reducible pieces prove that four colours suffice?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40·now.4">
+  <h2 class="sthead"><span class="stno">40·now.4</span>The proof by computer</h2>
+  <p data-pid="bc5e03">The 1976 proof had an unavoidable list of near two thousand pieces, found partly by hand with rules for moving charge, and a computer checked each piece reducible, ring colouring by ring colouring, in some 1200 hours. The 1997 proof used a list of 633 pieces and 32 rules for moving charge, and both halves, unavoidable and reducible, were checked by computer in a few hours. In 2005 the whole proof, with the flat drawings and the curves of 40d, was written for a proof checker and checked, line by line, by its small core.</p>
+  <p data-pid="3c0e48">The four-colour result is now this: <b>every flat graph can be coloured with four colours, so that linked dots differ.</b> It is believed by everyone who works on it. No one has found a proof short enough to read, and no one has shown there is none.</p>
+  <pre class="lines" data-k="ember" data-label="this step: what each proof asks us to trust">
+1976:\ \text{the hand work, the programs, the machine} @@ an error in the hand part was found and repaired later
+1997:\ \text{the charge rules by hand; programs anyone can run again} @@ two independent checks
+2005:\ \text{the small core of the checker and the written statement} @@ the small-kernel technique (37·now)
+\htmlClass{new}{\text{the trust moves from a reader to a check anyone can repeat}} @@ 
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · by computer · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·now.4.1</span><span class="ph understand">understand</span>What did the computer check in 1976, and what was found by hand? <br>Where does the trust rest in the 2005 proof?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40·now.5">
+  <h2 class="sthead"><span class="stno">40·now.5</span>Is a check no one reads a proof?</h2>
+  <p data-pid="2928e6">In 1979 a philosopher argued that the 1976 proof was not a proof in the old sense. A proof, he said, is something a person can survey: read, follow and be convinced by. A computer run cannot be surveyed, so accepting it is trusting an experiment, like a measurement in a laboratory; mathematics with such proofs has a part that is known by experience, not by reason. 14g asked whether a plot drawn by a machine is a proof; this is the same question with the plot made exact.</p>
+  <p data-pid="1d7b89">The reply has three parts. Long arithmetic done by hand is not surveyed either: no one checks the multiplication of two hundred-digit numbers by holding it in mind, only that each step is a step. Every proof that people accept rests on checks they did not make, and errors in long proofs read by people have stood for years, as the 1879 proof did. And the 2005 check narrows what must be trusted to a small core that people can read, and to a statement that says what was proved. What the reply does not give is understanding: a list of 633 pieces says that four colours suffice, and does not say why.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the two positions">
+\text{a proof must be surveyable by a person} @@ so the 1976 proof is an experiment
+\text{a proof is a list of steps each of which can be checked} @@ by a person or a core a person can read
+\text{both agree: the result is true beyond reasonable doubt} @@ no error has been found since 1997
+\htmlClass{new}{\text{they disagree on whether the knowing is the same kind}} @@ the question stays open
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · trust · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·now.5.1</span><span class="ph understand">understand</span>Why did the 1979 argument call the computer proof an experiment? <br>What does the small core of a proof checker change, and what does it not change?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40·now.6">
+  <h2 class="sthead"><span class="stno">40·now.6</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{one swap at a dot of five neighbours always frees a colour}\,? @@ the 1879 mistake; two chains can cross
+\text{every flat graph has a dot of five links next to one of five or six}\,? @@ only when every dot has five or more; else a dot of four or fewer
+\text{if a computer checked it, it is a proof without trust}\,? @@ the trust moves to the program and the core; it does not vanish
+\text{a result no one can read through is no more certain than a guess}\,? @@ it is a check that anyone can repeat; a guess is not
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·now.6.1</span><span class="ph understand">understand</span>Why is the unavoidable-pair technique false for flat graphs with a dot of four links? <br>Why does a computer check not remove trust?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">40·now.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{a ring of 6 dots, 4 colours}"></span></span>Count the colourings of a ring of 6 dots in 4 colours, and the colourings up to renaming the colours, by the average-kept technique. <br>Check by listing them by the number of colours used.</div>
+  <div class="chq"><span class="chid">40·now.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{every dot has 5 or 6 links}"></span></span>Find a flat graph of triangles in which every dot has five or six links and no two five-dots are next to each other. <br>How many five-dots must it have, by the charge-count technique? Which ball of 40d.6.4 is it the drawing of?</div>
+  <div class="chq"><span class="chid">40·now.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{an unavoidable list of reducible pieces}"></span></span>The plan says an unavoidable list of reducible pieces proves four colours. Turn it round: if four colours suffice, must there be such a list? <br>Is a dot of five links reducible once the four-colour result is known, and does that make the list trivial?</div>
+  <div class="chq"><span class="chid">40·now.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">40j.6.4: a proof that shows no example, and one that no one reads; 14g.4.4: is a plot a proof?</span></span>40j.6.4 asked which you would trust less: a proof that something exists that shows none, or a proof no one can read. <br>Now that you have seen how the computer proof is built, place it: is it more like a long hand calculation, a measurement, or a plot? Give the strongest form of the 1979 argument and the strongest reply. Which do you hold?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r40econ.html">← 40·econ · can everyone be paired so no two would rather swap?</a><a href="r40now2.html">40·now2 · how big must order be? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The four-colour result is the four colour theorem. The swap is a Kempe chain interchange. The charges and their moving are the discharging method; the charge-count technique is Euler's formula for triangulations, and the unavoidable-pair technique is Wernicke's theorem (1904). A smallest graph needing five colours is a minimal counterexample; a reducible piece is a reducible configuration, and its ring is the ring of the configuration. The 1979 question is the surveyability debate.</p>
+  <h3>Who said it first</h3>
+  <p>Francis Guthrie guessed four colours in 1852 and his brother passed the question to Augustus De Morgan. Alfred Kempe published his proof in 1879; Percy Heawood found the flaw in 1890 and proved five colours. Paul Wernicke found the unavoidable pair in 1904, and Heinrich Heesch, from the 1930s, the method of charges and reducible pieces. Kenneth Appel and Wolfgang Haken, with John Koch, gave the computer proof in 1976. Neil Robertson, Daniel Sanders, Paul Seymour and Robin Thomas gave the 1997 proof, and Georges Gonthier, with Benjamin Werner, checked it in the Coq proof assistant in 2005. Thomas Tymoczko made the surveyability argument in 1979.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“A map that needs five colours would need five countries each bordering all the others. Five such countries cannot be drawn flat, since K₅ is not flat (40d). So four colours suffice.” Not allowed: a graph can need more colours than its largest group of dots all linked to each other. A ring of five dots has no three all linked and still needs three colours. Needing five colours does not mean holding K₅, and that is why the problem took 124 years.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'guess',t:R`\text{four colours}`,n:`1852.`},
+  {k:'ember',kl:'proof',t:R`\text{two swaps}`,n:`Each alone is safe.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{together they can fail}}`,n:`Found in 1890.`}
+],{title:'The slides · 1879 · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'charge',t:R`6 - d`,n:`On each dot.`},
+  {k:'ember',kl:'total',t:R`\textstyle\sum = 12`,n:`Flat-count.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a five next to a five or six}}`,n:`Move and compare.`}
+],{title:'The slides · charges · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'reducible',t:R`\text{every ring colouring finishes}`,n:`Cannot be in a smallest graph.`},
+  {k:'ember',kl:'unavoidable',t:R`\text{one must appear}`,n:`Moving charge.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{four colours}}`,n:`No smallest graph needs five.`}
+],{title:'The slides · reducible · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'1976',t:R`\approx 2000 \text{ pieces}`,n:`About 1200 hours.`},
+  {k:'ember',kl:'1997',t:R`633 \text{ pieces, } 32 \text{ rules}`,n:`Hours.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2005: \text{ the small core}}`,n:`A check anyone can repeat.`}
+],{title:'The slides · by computer · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'surveyable',t:R`\text{a person reads it}`,n:`The 1979 view.`},
+  {k:'ember',kl:'checkable',t:R`\text{each step can be checked}`,n:`The reply.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{true; but known how?}}`,n:`Still argued.`}
+],{title:'The slides · trust · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

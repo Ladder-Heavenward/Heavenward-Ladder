@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Every table from one gate</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38e.html">← 38e a switch worked by a switch</a><a href="r38g.html">next: 38g the liar box →</a></p>
+  <div class="tags"><span class="tag proof">38f · proof</span></div>
+  <h1>Every table from one gate</h1>
+  <p data-pid="c2abe8">A not-and gate gives zero only when both its inputs are one. Four switches make it: two of the kind that close on high, one after the other, down to the ground, and two of the other kind side by side up to the supply. This step proves that this one gate, and nothing else, builds every table there is: not, both, either, and every table of any number of inputs that rung one could write. The proof is a recipe that splits a table on its first input and builds each half the same way, so it also counts the gates the recipe spends, and the count doubles with each input added. Then the step turns the count around and asks the harder question: could a cleverer circuit always do far better? Counting answers it without building a single circuit. There are far more tables than there are small circuits, so most tables of ten inputs need many dozens of gates, and nobody can say which ones.</p>
+  <p class="gesture" data-pid="6cc81f">Not is a not-and with its inputs joined; both is a not-and then a not; either is a not-and of two nots. Splitting a table on its first input builds every table, at most five times two to the inputs less one, less four, gates. There are more tables than small circuits, so most tables need many gates.</p>
+</header>
+
+<section class="class step" data-step="38f1">
+  <h2 class="sthead"><span class="stno">38f1</span>Not, both and either from not-and</h2>
+  <p data-pid="a37aff">Two switches that close on high, in a row from the output to ground, join it to ground only when both gates are high; two of the other kind, side by side from the supply, join it to the supply when either gate is low. That is the <i>not-and</i>: its mark is 1 − xy. 4·comp saw the next lines as an annex; here they carry a lesson.</p>
+  <p data-pid="0dc1fc">Nand-alone technique: <b>not x is the not-and of x with itself, x and y is the not of their not-and, and x or y is the not-and of their nots.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the nand-alone technique">
+\mathrm{nand}(x, y) = 1 - xy @@ 38a1’s product, then 38a2’s not
+\mathrm{nand}(x, x) = 1 - x^2 = 1 - x = \neg x @@ x² = x on {0, 1} (38a1)
+\neg\,\mathrm{nand}(x, y) = 1 - (1 - xy) = xy = x \land y @@ two gates
+\mathrm{nand}(\neg x, \neg y) = 1 - (1 - x)(1 - y) = x + y - xy = x \lor y @@ the or-as-greater technique (38a2); swap-the-denial (1f), in arithmetic
+\htmlClass{new}{\text{not: } 1 \text{ gate},\ \ \text{both: } 2,\ \ \text{either: } 3} \quad \blacksquare @@ count the not-ands
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · one gate · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">38f1.1</span><span class="ph understand">understand</span>What does the nand-alone technique say? <br>Which line uses x² = x, and why would it fail off {0, 1}?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38f2">
+  <h2 class="sthead"><span class="stno">38f2</span>Splitting a table on its first input</h2>
+  <p data-pid="aaa00a">A table of n inputs gives a 0 or 1 for each of the 2ⁿ rows. Fix the first input at 1 and the rest is a table f₁ of n − 1 inputs; fix it at 0 and the rest is f₀. Count, as gates, only the not-ands: the inputs and the two constant wires, 0 and 1, come free.</p>
+  <p data-pid="06ace1">Split-on-one technique: <b>every table of n inputs is (x ∧ f₁) ∨ (¬x ∧ f₀), and a circuit of not-ands for it takes at most 5 · 2ⁿ⁻¹ − 4 gates.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the split-on-one technique">
+x = 1:\ \ (1 \cdot f_1) \lor (0 \cdot f_0) = f_1;\ \ x = 0:\ \ (0 \cdot f_1) \lor (1 \cdot f_0) = f_0 @@ cases on x (1c), in 38a’s arithmetic
+(x \land f_1) \lor (\neg x \land f_0) = \mathrm{nand}\big(\mathrm{nand}(x, f_1),\ \mathrm{nand}(\neg x, f_0)\big) @@ either of two boths is the not-and of their not-ands: the nand-alone lines, the nots cancelling
+\text{cost of the split}: 3 \text{ gates, and } 1 \text{ for } \neg x @@ count
+G(1) \le 1,\ \ G(n) \le 2\,G(n - 1) + 4 @@ one input: 0, 1, x free, ¬x one gate; then build f₁ and f₀ the same way
+\htmlClass{new}{G(n) \le 5 \cdot 2^{n-1} - 4} \quad \blacksquare @@ induction on n (4c): 2(5 · 2ⁿ⁻² − 4) + 4 = 5 · 2ⁿ⁻¹ − 4
+  </pre>
+  <p data-pid="866d47">So every table of 1e, of any number of letters, is a circuit of one kind of gate: 1 gate for one input, at most 6 for two, 16 for three, 76 for five. The count doubles with each input. Sharing helps: f₁ and f₀ often have parts in common, and 38p reads circuits off tables by hand with far fewer gates than the recipe spends. The recipe’s point is that it always works.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · split · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38f2.1</span><span class="ph understand">understand</span>What does the split-on-one technique say? <br>Why does the count of gates double with each input?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38f3">
+  <h2 class="sthead"><span class="stno">38f3</span>Most tables need many gates</h2>
+  <p data-pid="739b01">The recipe gives an upper count. Could some cleverer circuit build every table with only a few gates? Count both sides. A table of n inputs is a column of 2ⁿ marks, so there are 2^(2ⁿ) tables. A circuit with g not-ands is fixed by choosing, for each gate, its two inputs among the n inputs, the two constants and the g gates, and then choosing the output wire.</p>
+  <p data-pid="2227bf">Most-tables-hard technique: <b>if (n + 2 + g)^(2g + 1) is less than 2^(2ⁿ), some table of n inputs needs more than g not-ands.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the most-tables-hard technique">
+\text{circuits with } g \text{ gates} \le (n + 2 + g)^{2g} \cdot (n + 2 + g) @@ two choices of wire per gate, and the output: the product rule (4k), counting some circuits more than once
+\text{each circuit gives one table} @@ run it on every row
+(n + 2 + g)^{2g + 1} < 2^{2^n} @@ given
+\htmlClass{new}{\text{some table is given by no circuit of } g \text{ gates}} \quad \blacksquare @@ fewer circuits than tables: no room (6·logi)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: ten inputs">
+n = 10:\ \ 2^{2^{10}} = 2^{1024} \text{ tables} @@ count the columns
+g = 78:\ \ (90)^{157} = 2^{157 \log_2 90} \approx 2^{1019} @@ log₂ 90 ≈ 6.49 (17d)
+2^{1019} < 2^{1024} @@ log₂ rises
+\htmlClass{new}{\text{some table of } 10 \text{ inputs needs at least } 79 \text{ not-ands}} \quad \blacksquare @@ the technique
+  </pre>
+  <p data-pid="311f17">Carried further, the same count shows that most tables of n inputs need about 2ⁿ/n gates or more, not far below the recipe’s 2ⁿ. And it does all this without naming one hard table. Finding a particular table that provably needs many gates is far harder; no one has done better than a small multiple of n for any table anyone can write down. 39’s questions about what a machine cannot do quickly live in that gap.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · counting · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38f3.1</span><span class="ph understand">understand</span>What does the most-tables-hard technique say? <br>Why does it prove that a hard table exists without naming one?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38f4">
+  <h2 class="sthead"><span class="stno">38f4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{both and either alone build every table}\,? @@ they only rise (38d3): no table that falls, such as not, is reached
+\text{not alone builds every table}\,? @@ one input in, one out: no table of two inputs
+G(n) \le 5\cdot 2^{n-1} - 4 \text{ so some table needs that many}\,? @@ an upper count for one recipe; the lower count is the next footing’s
+\text{the most-tables-hard technique names a hard table}\,? @@ it shows one exists by counting; it points at none
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38f4.1</span><span class="ph understand">understand</span>Why do both and either alone not build every table? <br>Why is the split-on-one count not a lower count?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">38f.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x \oplus y"></span></span>Build exactly-one from not-ands in four gates, and prove it by 38a’s arithmetic. <br>Prove that no circuit of three not-ands builds it: what does each three-gate circuit compute?</div>
+  <div class="chq"><span class="chid">38f.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n = 4"></span></span>Run the most-tables-hard count at four inputs. What is the largest g it rules out, and why is it so weak there? <br>At what n does it first prove that some table needs more gates than it has inputs?</div>
+  <div class="chq"><span class="chid">38f.5.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">a gate g from which every table can be built</span></span>Not-and is enough. Which other tables of two inputs are enough alone? Prove one other is, and that a rising one never is. <br>Is “if x then not y” enough alone?</div>
+  <div class="chq"><span class="chid">38f.5.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">a proof that something exists, with nothing exhibited</span></span>The most-tables-hard technique proves that hard tables exist and names none. One camp holds that such a proof tells you something real; another, met on the choice rung, that an existence claim with no example is a promise without a payer. <br>Here the tables are finitely many and could be checked one by one. Does that settle the quarrel for this case, or only move it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r38e.html">← 38e · a switch worked by a switch</a><a href="r38g.html">38g · the liar box →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The not-and is the NAND gate, and its being enough alone is the functional completeness of NAND (the Sheffer stroke). The split on one input is the Shannon expansion, and the gate made of its three NANDs is a multiplexer. The least number of gates a table needs is its circuit complexity, and the most-tables-hard technique is Shannon’s counting argument (1949); its sharp form, about 2ⁿ/n, is Lupanov’s (1958). The best lower bound for a table anyone has written down is about 5n gates.</p>
+  <h3>Who said it first</h3>
+  <p>Charles Sanders Peirce noticed around 1880 that one joining word suffices, and Henry Sheffer published it in 1913. Claude Shannon gave the expansion in 1938 and the counting argument in 1949. Oleg Lupanov showed in 1958 that every table of n inputs can be built in about 2ⁿ/n gates. Kazuo Iwama and others proved bounds near 5n for explicit tables in the 2000s, and Magnus Find, Alexander Golovnev, Edward Hirsch and Alexander Kulikov raised the constant slightly in 2016.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The split-on-one recipe uses 5 · 2ⁿ⁻¹ − 4 gates, and it is the obvious way to build a table, so no table needs fewer.” Not allowed: the parity of two inputs takes four not-ands, fewer than the recipe’s six, and the obviousness of a recipe proves nothing about all recipes. A lower count has to count every circuit, as the most-tables-hard technique does.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'mark',t:R`\mathrm{nand}(x, y) = 1 - xy`,n:`Four switches.`},
+  {k:'ember',kl:'not',t:R`\mathrm{nand}(x, x) = 1 - x`,n:`Inputs joined.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{not, both, either}}`,n:`From one kind.`}
+],{title:'The slides · one gate · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'cases',t:R`x = 1 \to f_1,\ x = 0 \to f_0`,n:`Two smaller tables.`},
+  {k:'ember',kl:'cost',t:R`G(n) \le 2G(n - 1) + 4`,n:`Three gates and a not.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{G(n) \le 5\cdot 2^{n-1} - 4}`,n:`Every table.`}
+],{title:'The slides · split · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'tables',t:R`2^{2^n}`,n:`Columns of 2ⁿ marks.`},
+  {k:'ember',kl:'circuits',t:R`(n + 2 + g)^{2g + 1}`,n:`Choices of wire.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{n = 10:\ \ge 79 \text{ gates}}`,n:`For some table.`}
+],{title:'The slides · counting · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

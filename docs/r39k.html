@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reductions by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r39j.html">← 39j machines that read a tape, by hand</a><a href="r39l.html">next: 39l convincing without telling →</a></p>
+  <div class="tags"><span class="tag tech">39k · technique</span></div>
+  <h1>Reductions by hand</h1>
+  <p data-pid="b8d1fa">The tableau technique said that every question with short certificates turns into one question: can this statement built from letters be made true? It said so for every question at once, which makes it hard to see. This step does one turning by hand, from statements to maps. A map here is only dots and links between them, and the question is whether the dots can be given three colours so that no link joins two dots of one colour. It looks like a question about drawing. It holds every statement inside it. The step builds the pieces: a triangle of three dots that names the colours true, false and spare; a pair of linked dots for each letter, which must take true and false between them; and a small piece of six dots for each or, which can be coloured only if one of its inputs is true. Then it joins them, counts the dots, and runs the reduction backwards, reading a true row off a colouring. Every piece is checked by trying all its cases, and every count is a power of the statement’s length.</p>
+  <p class="gesture" data-pid="a7095c">A statement in clauses of three becomes a map: a triangle for the colours, a linked pair for each letter, and a six-dot piece for each clause, coloured only if one of its letters is true. The map has three colours exactly when the statement has a true row, and the map is built fast.</p>
+</header>
+
+<section class="class step" data-step="39k1">
+  <h2 class="sthead"><span class="stno">39k1</span>Clauses of three</h2>
+  <p data-pid="bf6828">A <i>clause</i> is an or of letters and nots of letters, like ¬x ∨ y ∨ z. The tableau technique wrote its statement as an and of clauses. Clauses of any length can be cut to clauses of exactly three, with new letters.</p>
+  <p data-pid="cc621d">Clause-split technique: <b>a ∨ b ∨ c ∨ d has a true row exactly when (a ∨ b ∨ z) ∧ (¬z ∨ c ∨ d) does, for a new letter z.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the clause-split technique">
+\text{case } a \lor b \text{ true: }\allowbreak \text{put } z = \text{false} @@ the first clause holds by a or b, the second by ¬z
+\text{case } c \lor d\text{: put } z = \text{true; }\allowbreak \text{the }\allowbreak \text{first }\allowbreak \text{clause }\allowbreak \text{holds }\allowbreak \text{by } z\text{, }\allowbreak \text{the }\allowbreak \text{second }\allowbreak \text{by } c \text{ or } d @@ 1e’s or
+\text{the }\allowbreak \text{other }\allowbreak \text{way: }\allowbreak \text{if }\allowbreak \text{both }\allowbreak \text{new }\allowbreak \text{clauses }\allowbreak \text{are }\allowbreak \text{true }\allowbreak \text{and } a, b, c, d \text{ all }\allowbreak \text{false, }\allowbreak \text{then } z \text{ and } \neg z @@ the first needs z, the second ¬z
+\htmlClass{new}{\text{a }}\allowbreak \htmlClass{new}{ \text{true }}\allowbreak \htmlClass{new}{ \text{row }}\allowbreak \htmlClass{new}{ \text{for }}\allowbreak \htmlClass{new}{ \text{one }}\allowbreak \htmlClass{new}{ \text{gives }}\allowbreak \htmlClass{new}{ \text{a }}\allowbreak \htmlClass{new}{ \text{true }}\allowbreak \htmlClass{new}{ \text{row }}\allowbreak \htmlClass{new}{ \text{for }}\allowbreak \htmlClass{new}{ \text{the }}\allowbreak \htmlClass{new}{ \text{other}} \quad \blacksquare @@ the new letter is chosen, the old ones kept
+  </pre>
+  <p data-pid="2624d0">A clause with k letters becomes k − 2 clauses of three, with k − 3 new letters. A clause of one or two letters is padded by repeating one: x ∨ y becomes x ∨ y ∨ y. So the statements in clauses of three are NP-complete too, and they are the starting point below.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · clauses · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">39k1.1</span><span class="ph understand">understand</span>What is a clause, and what does the clause-split technique say? <br>In its proof, how is the new letter z chosen in each case?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39k2">
+  <h2 class="sthead"><span class="stno">39k2</span>A palette, and a pair for each letter</h2>
+  <p data-pid="4834da">A <i>map</i> here is a finite set of dots and a set of links, each joining two dots. A <i>three-colouring</i> gives each dot one of three colours so that no link joins two dots of one colour. 34m coloured a knot’s strands with three colours under a different rule; here the rule is only that linked dots differ.</p>
+  <p data-pid="4e2520">Palette technique: <b>in a three-colouring of a triangle T, F, B, with a dot x and a dot x̄ linked to each other and both linked to B, the dots x and x̄ take the colours of T and F, one each.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the palette technique">
+T, F, B \text{ pairwise }\allowbreak \text{linked: }\allowbreak \text{three }\allowbreak \text{different }\allowbreak \text{colours} @@ name the colours after them: true, false, spare
+x, \bar x \text{ both }\allowbreak \text{linked }\allowbreak \text{to } B\text{: }\allowbreak \text{neither }\allowbreak \text{is }\allowbreak \text{spare} @@ a link joins different colours
+x \text{ linked }\allowbreak \text{to } \bar x\text{: }\allowbreak \text{they }\allowbreak \text{differ} @@ the same rule
+\htmlClass{new}{\{x, \bar x\} \text{ coloured }}\allowbreak \htmlClass{new}{ \text{true }}\allowbreak \htmlClass{new}{ \text{and }}\allowbreak \htmlClass{new}{ \text{false}} \quad \blacksquare @@ the only two colours left
+  </pre>
+  <p data-pid="6db40d">So each colouring reads off a row of 1e’s table: x is true when its dot is coloured like T. And every row is read off some colouring of this much of the map. What is left is to make a clause cost something.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · palette · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39k2.1</span><span class="ph understand">understand</span>What is a three-colouring of a map? <br>What does the palette technique say, and how does a colouring give a row of a table?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39k3">
+  <h2 class="sthead"><span class="stno">39k3</span>A piece for each or</h2>
+  <p data-pid="ab5b19">Take two input dots a and b. Add three dots u, v, o, with links a–u, b–v, u–v, u–o, v–o. Call it an <i>or-piece</i> with output o.</p>
+  <p data-pid="0f5398">Or-piece technique: <b>if a and b are both coloured false, o is coloured false; if either is coloured true, the colouring can be finished with o coloured true.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the or-piece technique">
+a, b \text{ false} \Rightarrow u, v \ne \text{false},\ \allowbreak u \ne v\text{: } \{u, v\} = \{\text{true}, \text{spare}\} @@ u is linked to a, v to b, and u to v
+o \text{ linked }\allowbreak \text{to } u \text{ and } v \Rightarrow o = \text{false} @@ the one colour left
+a \text{ true} \Rightarrow u = \text{false},\ \allowbreak v = \text{spare},\ \allowbreak o = \text{true} @@ u ≠ a; v ≠ b, since b is true or false; u ≠ v; o ≠ u, v
+a \text{ false},\ \allowbreak b \text{ true} \Rightarrow u = \text{spare},\ \allowbreak v = \text{false},\ \allowbreak o = \text{true} @@ u ≠ a, v ≠ b, u ≠ v, o ≠ u, v
+\htmlClass{new}{\text{both }}\allowbreak \htmlClass{new}{ \text{false: } o \text{ false; }}\allowbreak \htmlClass{new}{ \text{either }}\allowbreak \htmlClass{new}{ \text{true: } o \text{ true }}\allowbreak \htmlClass{new}{ \text{is }}\allowbreak \htmlClass{new}{ \text{possible}} \quad \blacksquare @@ every case of the two inputs
+  </pre>
+  <p data-pid="5f4096">The finishings must be chosen with care, and that is the point of doing it by hand: with a true, the choice u spare and v true is allowed when b is false, and it forces o false. Some finishing gives o true, and that is all the piece needs. So in every case with a true input, some finishing gives o = true, and with both inputs false, o is forced false.</p>
+  <p data-pid="d4ee8c">A clause a ∨ b ∨ c gets two or-pieces in a row: o₁ from a and b, then o₂ from o₁ and c, and o₂ is linked to F and to B, so it must be true. If a, b and c are all false, o₁ is false, then o₂ is false, against its links. If any is true, the pieces can be finished. A script that tries all 3⁶ colourings of the six new dots for each of the eight rows agrees.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · or-piece · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39k3.1</span><span class="ph understand">understand</span>What does the or-piece technique say? <br>Why is o forced false when both inputs are false, and how does a clause of three use two or-pieces?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39k4">
+  <h2 class="sthead"><span class="stno">39k4</span>The whole map, and back</h2>
+  <p data-pid="10a381">Map-from-clauses technique: <b>a statement with n letters and m clauses of three has a true row exactly when its map, with 3 + 2n + 6m dots and 3 + 3n + 12m links, has a three-colouring.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the map-from-clauses technique">
+\text{dots: } T, F, B\text{; } x_i, \bar x_i \text{ for }\allowbreak \text{each }\allowbreak \text{letter; }\allowbreak \text{six }\allowbreak \text{for }\allowbreak \text{each }\allowbreak \text{clause} @@ 3 + 2n + 6m
+\text{links: } 3 \text{ in }\allowbreak \text{the }\allowbreak \text{triangle, } 3 \text{ for }\allowbreak \text{each }\allowbreak \text{letter, } 12 \text{ for }\allowbreak \text{each }\allowbreak \text{clause} @@ 5 per or-piece, two pieces, and o₂ to F and B
+\text{a }\allowbreak \text{true }\allowbreak \text{row} \Rightarrow \text{colour }\allowbreak \text{each } x_i \text{ by }\allowbreak \text{the }\allowbreak \text{row, }\allowbreak \text{then }\allowbreak \text{finish }\allowbreak \text{each }\allowbreak \text{clause }\allowbreak \text{piece} @@ the or-piece technique, each clause has a true letter
+\text{a }\allowbreak \text{three-colouring} \Rightarrow \text{the }\allowbreak \text{row }\allowbreak \text{read }\allowbreak \text{off }\allowbreak \text{the }\allowbreak \text{pairs }\allowbreak \text{makes }\allowbreak \text{every }\allowbreak \text{clause }\allowbreak \text{true} @@ an all-false clause forces o₂ false (the or-piece technique), against its links
+\htmlClass{new}{\text{the }}\allowbreak \htmlClass{new}{ \text{statement }}\allowbreak \htmlClass{new}{ \text{has }}\allowbreak \htmlClass{new}{ \text{a }}\allowbreak \htmlClass{new}{ \text{true }}\allowbreak \htmlClass{new}{ \text{row} \iff \text{the }}\allowbreak \htmlClass{new}{ \text{map }}\allowbreak \htmlClass{new}{ \text{has }}\allowbreak \htmlClass{new}{ \text{three }}\allowbreak \htmlClass{new}{ \text{colours}} \quad \blacksquare @@ the map is written in one pass along the statement: fast
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: one statement, worked">
+(x \lor y \lor z) \land (\bar x \lor \bar y \lor z) \land (\bar z \lor \bar z \lor x) @@ three letters, three clauses
+3 + 6 + 18 = 27 \text{ dots},\ \allowbreak \ 3 + 9 + 36 = 48 \text{ links} @@ the counts
+\text{the row } x, \neg y, z \text{ is }\allowbreak \text{true: }\allowbreak \text{colour } x, \bar y, z \text{ like } T @@ each clause has a true letter: x; ȳ; x
+\htmlClass{new}{\text{a }}\allowbreak \htmlClass{new}{ \text{colouring }}\allowbreak \htmlClass{new}{ \text{of }}\allowbreak \htmlClass{new}{ \text{all }}\allowbreak \htmlClass{new}{ \text{27 }}\allowbreak \htmlClass{new}{ \text{dots, }}\allowbreak \htmlClass{new}{ \text{read }}\allowbreak \htmlClass{new}{ \text{back: } x \text{ true, } y \text{ false, } z \text{ true}} \quad \blacksquare @@ backwards and forwards agree
+  </pre>
+  <p data-pid="aaf5cc">So three-colouring is NP-complete: satisfiability fast-reduces to it, and its certificate is a colouring. With two colours the question is fast, by walking the map; the reduction needs the spare colour in every piece.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the map · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39k4.1</span><span class="ph understand">understand</span>What does the map-from-clauses technique say, and how many dots does the map of a statement with n letters and m clauses have? <br>How is a true row read off a three-colouring?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39k5">
+  <h2 class="sthead"><span class="stno">39k5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{a }\allowbreak \text{clause }\allowbreak \text{piece }\allowbreak \text{with }\allowbreak \text{an }\allowbreak \text{input }\allowbreak \text{true }\allowbreak \text{forces } o \text{ true}\,? @@ it allows o true; other finishings may colour o otherwise, and o₂’s links pick the true one
+\text{the }\allowbreak \text{reduction }\allowbreak \text{shows }\allowbreak \text{colouring }\allowbreak \text{is }\allowbreak \text{harder }\allowbreak \text{than }\allowbreak \text{satisfiability}\,? @@ it shows colouring is at least as hard; the tableau technique puts colouring back into satisfiability too
+\text{split } a \lor b \lor c \lor d \text{ as } (a \lor b \lor z) \land (z \lor c \lor d)\,? @@ the second needs ¬z; with z true both hold whatever a, b, c, d are
+\text{a }\allowbreak \text{map }\allowbreak \text{with } 27 \text{ dots }\allowbreak \text{has } 3^{27} \text{ colourings, }\allowbreak \text{so }\allowbreak \text{the }\allowbreak \text{reduction }\allowbreak \text{is }\allowbreak \text{slow}\,? @@ the reduction writes the map; it never tries the colourings
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39k5.1</span><span class="ph understand">understand</span>Why must the second clause of a split hold ¬z and not z? <br>Why is the reduction fast although the map has 3²⁷ ways to colour?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">39k.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="(x \lor y) \land \neg x \land \neg y"></span></span>Pad the clauses to three letters, build the map, count its dots and links, and show it has no three-colouring by following the or-pieces.</div>
+  <div class="chq"><span class="chid">39k.6.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">two colours</span></span>Build a fast method for two-colouring a map, and find where the palette technique and the or-piece technique fail with two colours. What does that say about satisfiability with clauses of two letters?</div>
+  <div class="chq"><span class="chid">39k.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="X_{v,c}\text{: “dot } v \text{ has }\allowbreak \text{colour } c\text{”}"></span></span>Reduce three-colouring to satisfiability by hand: with these letters, write the clauses that say each dot has a colour, no dot has two, and no link joins two of one colour. Count the clauses for a map with d dots and l links.</div>
+  <div class="chq"><span class="chid">39k.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">34m: the number of three-colourings of a knot drawing</span></span>34m counted the ways to colour a knot’s strands with three colours, and found the count does not change under the three moves. This step only asked whether a map has one colouring. Is counting colourings at least as hard as finding one? The knot count is quick to find for any drawing. What is different about the rule at a crossing that makes it quick?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r39j.html">← 39j · machines that read a tape, by hand</a><a href="r39l.html">39l · convincing without telling →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A statement in clauses is in conjunctive normal form, CNF; with clauses of three it is 3-SAT, or 3-CNF-SAT. A map of dots and links is a graph, with vertices and edges; three-colouring is graph 3-colourability, written 3-COL. The palette is the base triangle, and the or-piece is the OR gadget of the standard reduction. The question of 39k.6.4 is about counting complexity, the class #P; counting the three-colourings of a graph is #P-complete, while the knot count of 34m is a determinant in disguise.</p>
+  <h3>Who said it first</h3>
+  <p>Richard Karp (1972) listed chromatic number among his 21 NP-complete problems; Michael Garey, David Johnson and Larry Stockmeyer (1976) proved three-colouring NP-complete even for maps that can be drawn on a plane without crossing links. The four colour theorem of 1976 says four colours always suffice for such maps, so for them only three is a question. Leslie Valiant (1979) defined #P.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“In the or-piece, a is true, so u is spare, so v is true, so o is false: the piece fails.” Not allowed: the piece asks only that some finishing colours o true. Choosing v badly shows one finishing fails, not every one. With a true, take u false and v spare, and o is true.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'long',t:R`a \lor b \lor c \lor d`,n:`Four letters.`},
+  {k:'ember',kl:'split',t:R`(a \lor b \lor z) \land (\neg z \lor c \lor d)`,n:`A new letter.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{same: a true row or not}}`,n:`Clauses of three.`}
+],{title:'The slides · clauses · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'triangle',t:R`T, F, B`,n:`Three colours named.`},
+  {k:'ember',kl:'pair',t:R`x - \bar x,\ \text{both} - B`,n:`True and false.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a colouring is a row}}`,n:`One letter each pair.`}
+],{title:'The slides · palette · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'both false',t:R`\{u, v\} = \{\text{true}, \text{spare}\}`,n:`So o is false.`},
+  {k:'ember',kl:'one true',t:R`o = \text{true possible}`,n:`Finish it.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{o_2 \text{ forced true}}`,n:`Linked to F and B.`}
+],{title:'The slides · or-piece · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'dots',t:R`3 + 2n + 6m`,n:`Palette, pairs, pieces.`},
+  {k:'ember',kl:'links',t:R`3 + 3n + 12m`,n:`All counted.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{true row} \iff \text{three colours}}`,n:`Fast, both ways.`}
+],{title:'The slides · the map · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

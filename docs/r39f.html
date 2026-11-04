@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Programs that print themselves</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r39e.html">← 39e undecidable everywhere</a><a href="r39g.html">next: 39g smaller machines →</a></p>
+  <div class="tags"><span class="tag proof">39f · proof</span></div>
+  <h1>Programs that print themselves</h1>
+  <p data-pid="ca51e5">Can a program print its own text? It seems it must hold a copy of itself, and the copy must hold a copy, and so on without end. Rung zero met the way out, in words: fill a phrase’s gap with the phrase’s own quotation, and the statement speaks of itself without containing itself. Rung thirty seven did it in arithmetic: a formula fed its own code. This step does it with machines. A machine is built in two halves. The first half writes out the text of the second. The second half reads what is on the tape, works out the text of a machine that would write that, and puts it in front. The result is the text of the whole. Once a machine can get its own code, it can do anything with it: run it, compare it, do the opposite of a prediction about it. So the diagonal of the step on stopping becomes three lines, and a new limit comes out at once: no machine can list endlessly many programs that are each the shortest of their kind.</p>
+  <p class="gesture" data-pid="c9f526">One half of a machine writes the other half’s code; the other half writes the code of a machine that would write what it reads. Together they print their own code. So every machine can be given access to its own code, which turns diagonal arguments into short programs.</p>
+</header>
+
+<section class="class step" data-step="39f1">
+  <h2 class="sthead"><span class="stno">39f1</span>A machine that prints its own code</h2>
+  <p data-pid="a2837f">For each string w there is a machine P_w that, on any input, erases it, writes w and stops: one row per letter of w. The function q(w) = ⟨P_w⟩ is computed: reading w, write the rows for each letter in turn. So a machine can turn any string into the code of a machine that prints that string.</p>
+  <p data-pid="11fa41">Self-print technique: <b>some machine, started on a blank tape, stops with its own code on the tape.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the self-print technique">
+B\text{: }\allowbreak \text{read }\allowbreak \text{the }\allowbreak \text{tape, } \langle X\rangle\text{; }\allowbreak \text{compute } q(\langle X\rangle) = \langle P_{\langle X\rangle}\rangle\text{; }\allowbreak \text{write }\allowbreak \text{it }\allowbreak \text{in }\allowbreak \text{front} @@ q is computed; B ends with ⟨P_⟨X⟩⟩⟨X⟩
+A = P_{\langle B\rangle} @@ A writes B’s code and stops; built after B, from B
+SELF = A \text{ then } B @@ the machine that runs A, then B
+\text{A leaves } \langle B\rangle\text{; }\allowbreak \text{B }\allowbreak \text{computes } q(\langle B\rangle) = \langle A\rangle\text{, }\allowbreak \text{and }\allowbreak \text{writes }\allowbreak \text{it }\allowbreak \text{in }\allowbreak \text{front} @@ A is P_⟨B⟩, by its building
+\htmlClass{new}{\text{the }}\allowbreak \htmlClass{new}{ \text{tape }}\allowbreak \htmlClass{new}{ \text{reads } \langle A\rangle\langle B\rangle = \langle SELF\rangle} \quad \blacksquare @@ the code of a machine run in two parts is the two codes joined
+  </pre>
+  <p data-pid="774c79">Rung 0’s quotation trick is the same. A, a quotation, names B. B fills its gap with the quotation of what it was given. In a programming language the shortest such programs are one line. This one, in Python, prints exactly its own text: <code>s='s=%r;print(s%%s)';print(s%s)</code>. The string s is A; print(s%s) is B, filling s’s gap with s’s quotation.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · self · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">39f1.1</span><span class="ph understand">understand</span>What do the two halves A and B of SELF each do? <br>What does the self-print technique say, and why is A built after B and not before?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39f2">
+  <h2 class="sthead"><span class="stno">39f2</span>Its own code, for any use</h2>
+  <p data-pid="7896ab">Own-code technique: <b>for every machine T that reads a code and a string, there is a machine R such that R on any w does what T does on ⟨R⟩ # w.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the own-code technique">
+R = A\,B\,T @@ three parts, run in turn
+A = P_{\langle BT\rangle}\text{, run on } w\text{: write } \langle BT\rangle \text{ after } w @@ as in 39f1, now keeping w
+B\text{: from } \langle BT\rangle \text{ compute } \langle P_{\langle BT\rangle}\rangle = \langle A\rangle\text{, }\allowbreak \text{and }\allowbreak \text{form } \langle A\rangle\langle BT\rangle \# w @@ q, then a rearrangement
+\langle A\rangle\langle BT\rangle = \langle R\rangle @@ the code of three parts run in turn
+\htmlClass{new}{T \text{ runs on } \langle R\rangle \# w} \quad \blacksquare @@ the last part of R
+  </pre>
+  <p data-pid="927982">37h2 put a formula’s code into the formula, by Sub, and got a statement δ with PA reaching δ ⇔ ψ(⌜δ⌝). Here the code is put into the machine, by q, and R does what T does with R’s code. The formula and the machine take the same two steps: describe, then feed the description to itself.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · own code · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39f2.1</span><span class="ph understand">understand</span>What does the own-code technique say? <br>How does its proof match the self-statement technique of 37h2?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39f3">
+  <h2 class="sthead"><span class="stno">39f3</span>Diagonals in three lines</h2>
+  <p data-pid="086164">With the own-code technique a machine may begin “get your own code”. The stopping question falls in three lines.</p>
+  <pre class="lines" data-k="ember" data-label="this step: stopping again">
+D \text{ decides } H;\ \allowbreak \ R\text{: get } \langle R\rangle\text{, run } D \text{ on } \langle R\rangle \# w\text{, }\allowbreak \text{do }\allowbreak \text{the }\allowbreak \text{opposite} @@ suppose D; R by the own-code technique
+R \text{ stops }\allowbreak \text{on } w \iff D \text{ says } R \text{ does }\allowbreak \text{not }\allowbreak \text{stop }\allowbreak \text{on } w @@ R’s building
+\htmlClass{new}{\bot} \quad \blacksquare @@ D is right about R
+  </pre>
+  <p data-pid="5468cd">A machine is <i>shortest</i> when no machine with a shorter code computes the same function.</p>
+  <p data-pid="075684">Shortest-unlisted technique: <b>no machine lists endlessly many shortest machines.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the shortest-unlisted technique">
+L \text{ lists }\allowbreak \text{endlessly }\allowbreak \text{many }\allowbreak \text{shortest }\allowbreak \text{machines} @@ suppose it
+R\text{: get } \langle R\rangle\text{; run } L \text{ until }\allowbreak \text{it }\allowbreak \text{lists }\allowbreak \text{some } C \text{ with }\allowbreak \text{a }\allowbreak \text{code }\allowbreak \text{longer }\allowbreak \text{than } \langle R\rangle\text{; }\allowbreak \text{then }\allowbreak \text{act }\allowbreak \text{as } C @@ the own-code technique; such a C comes, since only finitely many codes are as short as ⟨R⟩
+R \text{ computes }\allowbreak \text{what } C \text{ computes} @@ R acts as C on every input
+\langle R\rangle \text{ is }\allowbreak \text{shorter }\allowbreak \text{than } \langle C\rangle @@ the choice of C
+\htmlClass{new}{\bot:\ C \text{ is }}\allowbreak \htmlClass{new}{ \text{not }}\allowbreak \htmlClass{new}{ \text{shortest}} \quad \blacksquare @@ against L’s list
+  </pre>
+  <p data-pid="3d47bf">So there are endlessly many shortest machines, one for each computed function at least, and no machine can find more than finitely many of them and know it. Proving that a program cannot be made shorter is, past a point, beyond every listed method.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · uses · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39f3.1</span><span class="ph understand">understand</span>How does the own-code technique shorten the proof of 39d2? <br>What does the shortest-unlisted technique say, and why does a C longer than R always come?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39f4">
+  <h2 class="sthead"><span class="stno">39f4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+SELF \text{ holds }\allowbreak \text{a }\allowbreak \text{copy }\allowbreak \text{of }\allowbreak \text{its }\allowbreak \text{own }\allowbreak \text{code }\allowbreak \text{inside }\allowbreak \text{it}\,? @@ A holds B’s code only; B makes A’s code from it
+\text{let } R \text{ be }\allowbreak \text{a }\allowbreak \text{machine }\allowbreak \text{whose }\allowbreak \text{table }\allowbreak \text{contains } \langle R\rangle\,? @@ ⟨R⟩ is longer than any table holding it; build R as A B T
+\text{the }\allowbreak \text{self-print }\allowbreak \text{technique }\allowbreak \text{needs }\allowbreak \text{a }\allowbreak \text{mark }\allowbreak \text{for }\allowbreak \text{“this }\allowbreak \text{machine”}\,? @@ it needs only q, which turns a string into a printer of it
+\text{no }\allowbreak \text{shortest }\allowbreak \text{machine }\allowbreak \text{exists, }\allowbreak \text{by }\allowbreak \text{the }\allowbreak \text{shortest-unlisted }\allowbreak \text{technique}\,? @@ endlessly many exist; none of them is listed endlessly
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39f4.1</span><span class="ph understand">understand</span>Why can SELF not hold a copy of its own code? <br>Why does the shortest-unlisted technique not say there are no shortest machines?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">39f.5.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a program that prints its own text twice</span></span>Build, as two halves in the manner of 39f1, a machine that prints its own code twice. Then change the Python line of 39f1 so it prints its text twice, and check it.</div>
+  <div class="chq"><span class="chid">39f.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="R\text{: get } \langle R\rangle\text{, }\allowbreak \text{and }\allowbreak \text{write }\allowbreak \text{it }\allowbreak \text{on }\allowbreak \text{the }\allowbreak \text{next }\allowbreak \text{empty }\allowbreak \text{tape}"></span></span>A program that writes its own code somewhere new is a copier. What more does it need to spread? Is copying the code the same as copying the machine, and what does a living cell do in the place of each half?</div>
+  <div class="chq"><span class="chid">39f.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f \text{ computed, }\allowbreak \text{from }\allowbreak \text{codes }\allowbreak \text{to }\allowbreak \text{codes}"></span></span>Prove that for every computed f from codes to codes there is a machine M such that M and the machine with code f(⟨M⟩) compute the same function. Use the own-code technique with T: on ⟨M⟩ # w, compute f(⟨M⟩) and run it on w. What does this say when f adds one row that does nothing?</div>
+  <div class="chq"><span class="chid">39f.5.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">0b.4.4: the phrase “is not so of its own quotation”</span></span>0b.4.4 filled a phrase’s gap with the phrase’s own quotation, and asked about “is not so of its own quotation”. SELF fills B’s gap with B’s quotation. Write the statement 0b.4.4 asked for. What happens when the phrase is “does not stop when given its own quotation”? Which of the three, the phrase, the statement or the machine, has an answer, and which is refused?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r39e.html">← 39e · undecidable everywhere</a><a href="r39g.html">39g · smaller machines →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A program that prints its own text is a quine, after the logician W. V. O. Quine, whose phrase “yields falsehood when preceded by its quotation” is the 0b.4.4 trick written out. The own-code technique is Kleene’s second recursion theorem, or the recursion theorem; 39f.5.3 is its fixed-point form, Rogers’s fixed-point theorem. The shortest-unlisted technique is that MIN_TM is not Turing-recognizable, and it is close to the result that the shortest description of a string, its Kolmogorov complexity, is not computable.</p>
+  <h3>Who said it first</h3>
+  <p>Stephen Kleene proved the recursion theorem in 1938. John von Neumann, in lectures of 1948 and 1949 published in 1966, built a machine that reproduces itself from a description of itself, with a copier and a builder, the A and B of this step, before the structure of DNA was known (1953). Douglas Hofstadter popularised the name quine in 1979. Andrey Kolmogorov (1965) and Gregory Chaitin (1966) defined the shortest description.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“R gets its own code by reading its table.” Not allowed: a machine cannot read its own table, only its tape. The own-code technique puts ⟨R⟩ on the tape by computing it, which is the whole point of A and B.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'B',t:R`\langle X\rangle \mapsto \langle P_{\langle X\rangle}\rangle\langle X\rangle`,n:`Quote what you read.`},
+  {k:'ember',kl:'A',t:R`P_{\langle B\rangle}`,n:`Print B.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\langle A\rangle\langle B\rangle = \langle SELF\rangle}`,n:`Its own code.`}
+],{title:'The slides · self · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'parts',t:R`R = A\,B\,T`,n:`Print, quote, use.`},
+  {k:'ember',kl:'tape',t:R`\langle R\rangle \# w`,n:`Code and input.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{R(w) = T(\langle R\rangle \# w)}`,n:`For any T.`}
+],{title:'The slides · own code · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'stopping',t:R`R\colon \text{opposite of } D(\langle R\rangle \# w)`,n:`Three lines.`},
+  {k:'ember',kl:'shortest',t:R`R \text{ acts as a longer } C`,n:`Shorter, same function.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{no list of shortest}}`,n:`Endlessly many, unlisted.`}
+],{title:'The slides · uses · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Powers cycle</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r41c.html">← 41c several clocks at once</a><a href="r41e.html">next: 41e a clock hand that reaches every hour →</a></p>
+  <div class="tags"><span class="tag proof">41d · proof</span></div>
+  <h1>Powers cycle</h1>
+  <p data-pid="74713a">Rung five walked the powers of three round the clock of seven, and the walk came back to one after six steps. Rung nineteen proved, for any finite group, that a member done over and over comes back to doing nothing after a number of steps that divides the size of the group. The units of a clock are a finite group. So the walk always comes back, and the size of the group says when it must have. On a prime clock the size is one less than the prime, and every hour but zero, raised to that power, is one. On any clock the size is the count of units, and the rung has the tools to count them: count them on a clock whose size is a power of a prime, then put the clocks together. With that count, a power with an exponent too large to write can be cut down to one that fits on a page. The step ends with the old puzzle of why one seventh repeats in blocks of six digits.</p>
+  <p class="gesture" data-pid="b7676e">On a prime clock, any hour but zero to the power one less than the prime is one, by the dividing of rung nineteen. On any clock, a unit to the power of the count of units is one, and the count is found prime by prime. So exponents may be cut on the clock of the count, and the block length of a repeating decimal is a power’s return time.</p>
+</header>
+
+<section class="class step" data-step="41d1">
+  <h2 class="sthead"><span class="stno">41d1</span>The little technique</h2>
+  <p data-pid="e22e4c">5·cb2 walked [3] round the clock of 7: [3], [2], [6], [4], [5], [1]. Six steps, and the clock has six units. <a href="r19d.html#b520cd">19d5</a> said that a member of a finite group G comes back to e after a number of steps that divides |G|, so that a^|G| = e.</p>
+  <p data-pid="fdc6ce">Little technique: <b>if p is prime and p does not divide a, then a^(p − 1) ≡ 1 (mod p); and aᵖ ≡ a (mod p) for every integer a.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the little technique">
+p \nmid a \Rightarrow [a] \in (\mathbb Z/p)^\times @@ gcd(a, p) = 1 (41b4)
+|(\mathbb Z/p)^\times| = p - 1 @@ every hour but [0] is a unit (the prime-clock-field technique)
+\htmlClass{new}{[a]^{p - 1} = [1]} @@ order-divides (19d5) in the group of units (41b3)
+[a]^p = [a]^{p-1}[a] = [a] @@ times [a]
+p \mid a \Rightarrow a^p \equiv 0 \equiv a @@ both sides are multiples of p
+\htmlClass{new}{a^p \equiv a \pmod p \text{ for every } a} \quad \blacksquare @@ reason by cases
+  </pre>
+  <p data-pid="561ec3">So 2¹⁰⁰ on the clock of 101 is 1, though 2¹⁰⁰ has 31 digits. The technique is a fact about the size of a group, and it says nothing about which smaller power comes back first: [2]³ = [1] on the clock of 7, and 3 divides 6.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the little technique · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">41d1.1</span><span class="ph understand">understand</span>What does the little technique say? <br>Which technique of rung 19 does its proof spend, and in which group?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41d2">
+  <h2 class="sthead"><span class="stno">41d2</span>Counting the units</h2>
+  <p data-pid="04145e">The units of the clock of n are the hours [k] with 1 ≤ k ≤ n and gcd(k, n) = 1. On the clock of a prime power pᵏ, an hour fails exactly when p divides it, and the multiples of p among 1, …, pᵏ number pᵏ⁻¹.</p>
+  <p data-pid="470af8">Unit-count technique: <b>if n is the product of the prime powers p₁^(k₁), …, pᵣ^(kᵣ), then the clock of n has n(1 − 1/p₁)⋯(1 − 1/pᵣ) units.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the unit-count technique">
+\gcd(j, p^k) = 1 \iff p \nmid j @@ the common divisors of j and pᵏ are powers of p (4j17’s one prime list)
+|(\mathbb Z/p^k)^\times| = p^k - p^{k-1} = p^k(1 - 1/p) @@ take away the pᵏ⁻¹ multiples of p
+n = p_1^{k_1} \cdots p_r^{k_r},\ \text{the prime powers sharing nothing} @@ the prime list of n (4j17)
+|(\mathbb Z/n)^\times| = \prod_i |(\mathbb Z/p_i^{k_i})^\times| @@ the two-clock technique (41c3), one prime power at a time
+\htmlClass{new}{|(\mathbb Z/n)^\times| = n\,(1 - \tfrac{1}{p_1}) \cdots (1 - \tfrac{1}{p_r})} \quad \blacksquare @@ multiply the lines
+  </pre>
+  <p data-pid="605080">360 = 2³ · 3² · 5, so the clock of 360 has 4 · 6 · 4 = 96 units, and 360 · ½ · ⅔ · ⅘ = 96. The clock of 100 has 40. The clock of a product of two primes pq has pq − q − p + 1 = (p − 1)(q − 1): of the hours 0 to pq − 1, the q multiples of p and the p multiples of q fail, and 0 is counted in both. 41i builds a lock on that count.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · counting units · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41d2.1</span><span class="ph understand">understand</span>What does the unit-count technique say? <br>Why does the clock of a prime power pᵏ have pᵏ − pᵏ⁻¹ units?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41d3">
+  <h2 class="sthead"><span class="stno">41d3</span>Cutting the exponent</h2>
+  <p data-pid="ca2c7f">41a5 warned that an exponent is a count, and does not carry to the clock of n. It does carry to another clock: the clock of the count of units.</p>
+  <p data-pid="6b0c0e">Exponent-clock technique: <b>if gcd(a, n) = 1 and c is the count of units of the clock of n, then a^c ≡ 1 (mod n), and a^k ≡ a^j (mod n) whenever k ≡ j (mod c).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the exponent-clock technique">
+[a]^c = [1] @@ order-divides (19d5) in the units (41b3), of size c
+k = j + ct,\ \ k, j \ge 0 @@ ﹀ ≡ on the clock of c, taking k the larger
+[a]^k = [a]^j([a]^c)^t = [a]^j @@ powers add their counts and power-of-a-power (4g), carried to the clock
+7^{222} \text{ on the clock of } 10:\ \ c = 4,\ \ 222 = 4 \cdot 55 + 2 @@ the unit-count technique: 10 · ½ · ⅘ = 4
+\htmlClass{new}{7^{222} \equiv 7^2 = 49 \equiv 9 \pmod{10}} \quad \blacksquare @@ the last digit of 7²²² is 9
+  </pre>
+  <p data-pid="33ff8b">So the power is cut twice: the base on the clock of n, the exponent on the clock of c. 41·cb7 runs this down a tower of exponents, clock inside clock, and reads the last digits of a number too big to write.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · cutting exponents · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41d3.1</span><span class="ph understand">understand</span>What does the exponent-clock technique say? <br>Why may the exponent of 7²²² be cut on the clock of 4, though 41a5 forbade cutting it on the clock of 10?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41d4">
+  <h2 class="sthead"><span class="stno">41d4</span>Why one seventh repeats in sixes</h2>
+  <p data-pid="b29050">8·cb5 proved that a fraction’s decimal repeats, since there are only so many remainders. It did not say how long the block is. 1/7 = 0.142857 142857 …, a block of six; 1/41 = 0.02439 02439 …, a block of five.</p>
+  <p data-pid="7bfe72">Decimal-block technique: <b>if q shares nothing with 10, the decimal of 1/q repeats from the first place in a block whose length is the least k with 10ᵏ ≡ 1 (mod q), and that length divides the count of units of the clock of q.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the decimal-block technique">
+10^k \equiv 1 \pmod q \iff 10^k - 1 = qM @@ ﹀ ≡
+\iff \tfrac1q = \tfrac{M}{10^k - 1} = 0.\overline{M} \text{, } M \text{ written with } k \text{ digits} @@ 8·cb5’s repeating-decimal technique, run backwards
+\text{a block of length } k \text{ from the first place} \iff 10^k \equiv 1 @@ the same lines, read both ways
+\htmlClass{new}{\text{the least such } k \text{ is the order of } [10] \text{, which divides } |(\mathbb Z/q)^\times|} \quad \blacksquare @@ order-divides (19d5)
+  </pre>
+  <p data-pid="817960">On the clock of 7 the order of [10] = [3] is 6, the most it could be. On the clock of 41, 10⁵ − 1 = 99 999 = 41 · 2439, so the block is 02439, of length 5, which divides 40. On the clock of 17 the order is 16, and 1/17 has a block of sixteen digits. A prime q for which the block is q − 1 long is one where [10] walks through every unit. Whether there are endlessly many such primes is open.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · decimal blocks · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41d4.1</span><span class="ph understand">understand</span>What does the decimal-block technique say? <br>Why is the block of 1/41 five digits long, and why must its length divide 40?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41d5">
+  <h2 class="sthead"><span class="stno">41d5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+a^{p-1} \equiv 1 \pmod p \text{ for every } a\,? @@ not when p ∣ a: 7⁶ ≡ 0 on the clock of 7
+2^{n-1} \equiv 1 \pmod n \Rightarrow n \text{ prime}\,? @@ 2³⁴⁰ ≡ 1 on the clock of 341 = 11 · 31: the little technique runs one way
+7^{222} \equiv 7^{222 - 10k} \pmod{10}\,? @@ the exponent goes on the clock of the count of units, 4, not of 10
+\text{the order of } [a] \text{ is the count of units}\,? @@ it divides the count: [2] has order 3 on the clock of 7, which has 6 units
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41d5.1</span><span class="ph understand">understand</span>Why does 2³⁴⁰ ≡ 1 (mod 341) not make 341 prime? <br>Why may the exponent of 7²²² not be cut on the clock of 10?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">41d.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\binom{p}{k},\ \ 0 \lt k \lt p"></span></span>Build a second proof of the little technique that does not use rung 19. Prove that p divides these counts of choices (4k), so that (a + 1)ᵖ ≡ aᵖ + 1 (mod p). <br>Then prove aᵖ ≡ a for every counting number a by induction on a. Which of the two proofs says more?</div>
+  <div class="chq"><span class="chid">41d.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n = 2^k,\ \ a \text{ odd}"></span></span>The exponent-clock technique gives a^(2^(k−1)) ≡ 1 on the clock of 2ᵏ. Find the order of [3] and of [5] on the clocks of 8, 16 and 32. <br>Does any unit of the clock of 2ᵏ, with k ≥ 3, reach the count of units as its order? Prove what you find.</div>
+  <div class="chq"><span class="chid">41d.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="a^{n-1} \equiv 1 \pmod n \text{ for every } a \text{ with } \gcd(a, n) = 1"></span></span>The illegal moves showed that one base can be fooled. Turn the little technique round with every base: must n then be prime? <br>Test n = 561 = 3 · 11 · 17 by the two-clock technique, clock by clock, without computing a single big power. What makes it pass?</div>
+  <div class="chq"><span class="chid">41d.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">15g.4.6: 2^{2^5} + 1 = 4\,294\,967\,297, guessed prime</span></span>A great number theorist guessed, from five cases, that every 2^(2^k) + 1 is prime. Show that a prime p dividing 2^(32) + 1 has [2] of order 64 on its clock, and so p ≡ 1 (mod 64). <br>Use that to search for a factor, trying only primes of that shape. How many tries does it take? Was the guess evidence, and is the search a proof, a guess under the small case, or both?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r41c.html">← 41c · several clocks at once</a><a href="r41e.html">41e · a clock hand that reaches every hour →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The little technique is Fermat’s little theorem. The count of units is Euler’s totient function, written φ(n), and the exponent-clock technique is Euler’s theorem, a^φ(n) ≡ 1 (mod n). The least k with aᵏ ≡ 1 is the multiplicative order of a modulo n. A composite n with 2ⁿ⁻¹ ≡ 1 (mod n) is a Fermat pseudoprime to base 2, and 341 is the least; 561 is the least Carmichael number (41j). Primes for which 10 has order q − 1 are full reptend primes, and that there are endlessly many is a case of Artin’s conjecture (1927). The numbers 2^(2^k) + 1 are the Fermat numbers.</p>
+  <h3>Who said it first</h3>
+  <p>Pierre de Fermat stated the little theorem in a letter to Frénicle de Bessy in 1640, without proof. Leonhard Euler proved it in 1736 by the binomial road of 41d.6.1, and defined φ and proved the exponent-clock technique in 1763. Fermat guessed that all Fermat numbers are prime; Euler found 641 · 6 700 417 = 2³² + 1 in 1732. Gauss connected the length of decimal blocks to orders in the Disquisitiones (1801).</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“[a]^(p − 1) = [1] for every unit, so p − 1 is the order of every unit.” Not allowed: order-divides says the order divides p − 1. On the clock of 7, [2] has order 3 and [6] order 2. 41e asks which units have the largest order.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'units',t:R`|(\mathbb Z/p)^\times| = p - 1`,n:`A prime clock.`},
+  {k:'ember',kl:'order divides',t:R`[a]^{|G|} = [1]`,n:`19d5.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{a^{p-1} \equiv 1 \pmod p}`,n:`When p ∤ a.`}
+],{title:'The slides · the little technique · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'prime power',t:R`p^k - p^{k-1}`,n:`Take away the multiples of p.`},
+  {k:'ember',kl:'put together',t:R`\prod_i |(\mathbb Z/p_i^{k_i})^\times|`,n:`41c3.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|(\mathbb Z/360)^\times| = 96}`,n:`Prime by prime.`}
+],{title:'The slides · counting units · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'base',t:R`\text{on the clock of } n`,n:`41a.`},
+  {k:'ember',kl:'exponent',t:R`\text{on the clock of } c`,n:`The count of units.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{7^{222} \equiv 9 \pmod{10}}`,n:`Last digit.`}
+],{title:'The slides · cutting exponents · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'repeat',t:R`10^k \equiv 1 \pmod q`,n:`A block of k.`},
+  {k:'ember',kl:'least',t:R`\text{the order of } [10]`,n:`19d5.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\tfrac{1}{41} = 0.\overline{02439}}`,n:`Five divides 40.`}
+],{title:'The slides · decimal blocks · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

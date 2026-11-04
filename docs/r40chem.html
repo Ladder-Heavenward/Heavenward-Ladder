@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How many ways can atoms join?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40cb19.html">← 40·cb19 counting up to symmetry</a><a href="r40bio.html">next: 40·bio how are all living things related? →</a></p>
+  <div class="tags"><span class="tag chem">40·chem · chemistry</span></div>
+  <h1>How many ways can atoms join?</h1>
+  <p data-pid="0d6f42">How many ways can atoms join? Two gases sold in camp stove canisters are each made of four carbon atoms and ten hydrogen atoms, and they are not the same gas: one boils just below the freezing point of water and the other eleven degrees colder. The atoms are the same; the way they are joined is not. Chemists of the 1870s drew molecules as atoms joined by bonds, and the word graph came from those drawings. Read as a graph, a molecule of this family is a tree, and counting the molecules is counting trees in which no dot has more than four links. The counts grow fast: 3 with five carbons, 75 with ten, more than thirty six million with twenty five. Then the graph says more than how many. A number read off the graph, the total of its distances, sorts the boiling points. And the energies of the electrons that roam over a ring or a chain of carbons, in the simplest model that works, are the stretches of the grid of the graph’s links, the eigenvalues of rung 27. That model says why benzene is so much harder to break than it should be, and it says by how much.</p>
+  <p class="gesture" data-pid="580885">Atoms are dots and bonds are links; a carbon has four links and a hydrogen one. A molecule with n carbons and 2n + 2 hydrogens is a tree, so its kinds are the trees whose dots have at most four links. The total of the distances in the carbon tree sorts the boiling points of molecules with one formula. In the simplest model of the electrons spread over a chain or ring, their energies are the stretches of the graph’s grid of links; the ring of six gains two units over three separate pairs, as measured.</p>
+</header>
+
+<section class="class step" data-step="40·chem.1">
+  <h2 class="sthead"><span class="stno">40·chem.1</span>A molecule is a graph</h2>
+  <p data-pid="172d07">Draw each atom as a dot and each bond as a link; a double bond is two links. The number of links at an atom is its <i>valence</i>: 4 for carbon, 1 for hydrogen, 2 for oxygen. A molecule of carbon and hydrogen whose links are all single is an <i>alkane</i>.</p>
+  <p data-pid="58867e">Alkane-tree technique: <b>a molecule in one piece with n carbons and 2n + 2 hydrogens, all bonds single, is a tree; its carbons alone form a tree with at most four links at each dot, and every such carbon tree gives exactly one alkane.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the alkane-tree technique">
+\text{dots: } n + 2n + 2 = 3n + 2 @@ carbons and hydrogens
+\text{links: } \tfrac12 \big(4n + 1 \cdot (2n + 2)\big) = 3n + 1 @@ the ends-count technique, by valence
+3n + 1 = (3n + 2) - 1 \text{ and in one piece} @@ one fewer link than dots
+\text{a tree} @@ the any-two-of-three technique (40b2)
+\htmlClass{new}{\text{the hydrogens are ends; take them off: a carbon tree, at most four links each}} \quad \blacksquare @@ fill each carbon up to four with hydrogens to go back
+  </pre>
+  <p data-pid="0ef082">So C₄H₁₀ is a carbon tree on four dots: a path, butane, or a star, isobutane. There are no others: 40b counted 16 trees on four named dots, in two shapes.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · alkanes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">40·chem.1.1</span><span class="ph understand">understand</span>What does the alkane-tree technique say? <br>Why does the ends-count technique give 3n + 1 bonds, and why does that make the molecule a tree?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40·chem.2">
+  <h2 class="sthead"><span class="stno">40·chem.2</span>Counting the kinds</h2>
+  <p data-pid="53336f">Molecules with one formula and different graphs are <i>isomers</i>. Up to shape (40·cb19), the carbon trees on n dots with at most four links each are counted by the length of the longest chain, then where the branches go.</p>
+  <pre class="lines" data-k="ember" data-label="this page: six carbons">
+\text{longest chain 6: hexane} @@ a path
+\text{longest chain 5: one branch at carbon 2 or carbon 3} @@ 2-methylpentane, 3-methylpentane; carbon 4 is carbon 2 read backwards
+\text{longest chain 4: two branches on the middle carbons, both on one or one each} @@ 2,2- and 2,3-dimethylbutane
+\text{longest chain 3: impossible} @@ three more carbons on the middle one would make a chain of 4 or more
+\htmlClass{new}{5 \text{ isomers of } C_6H_{14}} \quad \blacksquare @@ 
+  </pre>
+  <p data-pid="22fb23">The counts for 1 to 10 carbons run 1, 1, 1, 2, 3, 5, 9, 18, 35, 75; for 20 carbons, 366 319; for 25, 36 797 588. They were found by hand to about 13 carbons in the 1870s, with mistakes, and fully by counting with series in 1931.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · connections, not families</div>
+    <p data-pid="5651d0">Pentane, C₅H₁₂, comes in three kinds, and the formula, the family name, is the same for all three. A chain of five boils at 36.1 °C, a chain of four with a branch at 27.7 °C, and a carbon with four carbons round it at 9.5 °C. The family says what the molecule is made of. The connections say how it behaves.</p>
+    <p data-pid="71d4e0"><b>A molecule is known by how its atoms are joined, not only by which atoms it has.</b></p>
+    <p data-pid="673ef5">The more a molecule is branched, the more nearly round it is, the less of it touches its neighbours, and the weaker the pull between molecules. So the most branched boils lowest. That is a law under the small case, with exceptions, not a technique.</p>
+    <p class="bait" data-pid="5343ef">Butane and isobutane are both C₄H₁₀. In a camp stove on a cold morning in the Cascades, at −5 °C, which of the two still boils?</p>
+  </aside>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · isomers · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·chem.2.1</span><span class="ph understand">understand</span>What are isomers? <br>Why can no isomer of C₆H₁₄ have a longest chain of three carbons?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40·chem.3">
+  <h2 class="sthead"><span class="stno">40·chem.3</span>A number from the graph</h2>
+  <p data-pid="044d3c">The <i>distance total</i> of a carbon tree is the sum, over every pair of carbons, of the number of links between them (40a2).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the three pentanes">
+\text{chain of five: } 4 \cdot 1 + 3 \cdot 2 + 2 \cdot 3 + 1 \cdot 4 = 20 @@ pairs at distance 1, 2, 3, 4
+\text{chain of four with a branch: } 4 \cdot 1 + 4 \cdot 2 + 2 \cdot 3 = 18 @@ counted pair by pair
+\text{one carbon with four round it: } 4 \cdot 1 + 6 \cdot 2 = 16 @@ the centre to each, and each pair of the four
+\htmlClass{new}{20,\ 18,\ 16 \text{ against } 36.1,\ 27.7,\ 9.5\ ^{\circ}\mathrm{C}} \quad \blacksquare @@ the same order
+  </pre>
+  <p data-pid="b87960">A more branched tree has shorter distances, so a smaller total, as the green box’s law says the boiling point is lower. In 1947 a fit of boiling points against the distance total and one other count of the graph predicted the boiling points of alkanes to within about a degree. A number made from the graph alone carries a measurable property: the first of what chemists now call descriptors, of which thousands are used to guess which molecules will make good medicines.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · distance total · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·chem.3.1</span><span class="ph understand">understand</span>What is the distance total of a carbon tree? <br>Why does branching make it smaller?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40·chem.4">
+  <h2 class="sthead"><span class="stno">40·chem.4</span>Electrons on a chain</h2>
+  <p data-pid="b8fb9d">In a chain of carbons joined by alternating single and double bonds, one electron from each carbon is not held in a bond but spread over the whole chain. In the simplest model that works, the state of such an electron is a list of numbers, one for each carbon, and its energy grid H has α down the middle and β wherever two carbons are joined: H = α I + β G, where G is the graph’s grid of links of 40m1. α and β are energies, β is negative, and both are measured.</p>
+  <p data-pid="148b32">Graph-energy technique: <b>in this model the energies of a spread electron are α + λβ, one for each stretch λ of the grid of links G, and each state holds two electrons, the lowest first.</b> G is symmetric, so its stretches are real and its stretched arrows at right angles (31d); H stretches the same arrows by α + λβ. Two electrons fill each state, with opposite spins.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two carbons, and four">
+G = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}:\ \lambda = 1, -1 @@ two carbons, ethylene: det(G − λI) = λ² − 1 (27f)
+\text{two electrons in } \lambda = 1:\ \ 2\alpha + 2\beta @@ the lower energy, since β &lt; 0
+\text{four in a chain: } \det(G - \lambda I) = \lambda^4 - 3\lambda^2 + 1,\ \ \lambda = \pm 1.618,\ \pm 0.618 @@ butadiene; λ² = (3 ± √5)/2
+\text{four electrons: } 4\alpha + 2(1.618 + 0.618)\beta = 4\alpha + 4.472\beta @@ the two lowest states
+\htmlClass{new}{\text{against two separate pairs, } 4\alpha + 4\beta:\ 0.472\beta \text{ lower}} \quad \blacksquare @@ spreading over four lowers the energy
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · graph energy · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·chem.4.1</span><span class="ph understand">understand</span>What does the graph-energy technique say? <br>Why are the stretches of the grid of links real numbers?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40·chem.5">
+  <h2 class="sthead"><span class="stno">40·chem.5</span>The ring of six</h2>
+  <p data-pid="dd9df3">Benzene is a ring of six carbons. Its grid of links is a ring too, and the turnings of 26a are its stretched arrows: with ω = e^(2πik/6), the list (1, ω, ω², …, ω⁵) is stretched by ω + ω⁻¹ = 2 cos(2πk/6).</p>
+  <pre class="lines" data-k="ember" data-label="this page: benzene">
+\lambda = 2\cos(2\pi k/6),\ k = 0, \dots, 5:\ \ 2,\ 1,\ 1,\ -1,\ -1,\ -2 @@ each carbon’s two neighbours add ω and ω⁻¹ times its own entry
+\text{six electrons in the three lowest: } 6\alpha + 2(2 + 1 + 1)\beta = 6\alpha + 8\beta @@ the graph-energy technique
+\text{three separate double bonds: } 6\alpha + 6\beta @@ three copies of ethylene
+\htmlClass{new}{\text{the ring is lower by } 2\beta} \quad \blacksquare @@ about 2|β| more energy needed to break it
+  </pre>
+  <p data-pid="e2e7fa">Measured: adding hydrogen to one double bond in a ring of six, cyclohexene, gives out 120 kJ/mol. Three such bonds would give 360. Benzene gives out 208. The ring is 152 kJ/mol harder to break than three double bonds, so 2|β| ≈ 152 and |β| ≈ 76 kJ/mol, a value of the same size as the ones got from spectra. That extra hold is why benzene rings survive in so much of chemistry. The model, from 1931, is crude: it ignores the push between electrons and the shapes of the orbitals. It gets the sign, the order of size, and the ring sizes that are specially stable, those with 4m + 2 spread electrons, right.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · benzene · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·chem.5.1</span><span class="ph understand">understand</span>Why are the stretches of the ring of six 2cos(2πk/6)? <br>How does the measured heat of adding hydrogen give an estimate of |β|?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40·chem.6">
+  <h2 class="sthead"><span class="stno">40·chem.6</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{isomers have the same graph drawn differently}\,? @@ they have different graphs; one graph drawn two ways is one molecule
+\text{there are } 6^{4} \text{ hexanes, by the leaf-code technique}\,? @@ that counts trees on six named dots with any links; isomers are shapes, with at most four links each
+\text{the distance total predicts the boiling point exactly}\,? @@ it sorts the pentanes; the fit is a law with a spread of about a degree
+\text{the energies are the stretches } \lambda\,? @@ they are α + λβ; λ = 2 is the lowest energy because β is negative
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·chem.6.1</span><span class="ph understand">understand</span>Why does the leaf-code count not count the hexanes? <br>Why is the stretch λ = 2 the lowest energy and not the highest?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">40·chem.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="C_7H_{16}"></span></span>Find the 9 isomers of C₇H₁₆ by the longest chain, and give each its distance total. <br>Which would you guess boils lowest?</div>
+  <div class="chq"><span class="chid">40·chem.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a ring of four: cyclobutadiene}"></span></span>Find the stretches of the ring of four and fill four electrons. Two states share one energy, and two electrons must go into them. <br>Is the ring lower or higher than two separate double bonds? The molecule is very unstable; does the model agree?</div>
+  <div class="chq"><span class="chid">40·chem.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{a tree on } n \text{ dots, at most four links each}"></span></span>The alkane-tree technique turned alkanes into trees. Turn it round for oxygen too: with valence 2, which formulas CₙH_mO_k give a tree, and what is the count of links? <br>Find the two isomers of C₂H₆O. Which is the one in beer?</div>
+  <div class="chq"><span class="chid">40·chem.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">31d: a symmetric grid has real stretches and right-angled arrows</span></span>The graph-energy technique needed G symmetric. Rung 31 proved that a symmetric grid has real stretches. <br>For a two-sided graph, prove that the stretches come in pairs λ and −λ. What does that say about the chain of four, and about every chain? What is the chemistry of a molecule whose carbons do not split into two sides?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r40cb19.html">← 40·cb19 · counting up to symmetry</a><a href="r40bio.html">40·bio · how are all living things related? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Valence and isomer are the chemists' names. The carbon tree is the hydrogen-depleted graph. The distance total is the Wiener index (Harry Wiener, 1947), the first topological index, and such numbers are molecular descriptors. The model of the spread electrons is Hückel molecular orbital theory (Erich Hückel, 1931), α is the Coulomb integral and β the resonance integral; 2|β| for benzene is its delocalization or resonance energy, and the 4m + 2 rule is Hückel's rule for aromaticity. In graph theory, the energies are the spectrum of the graph.</p>
+  <h3>Who said it first</h3>
+  <p>Alexander Crum Brown drew molecules as atoms joined by lines in 1864. Arthur Cayley counted alkanes as trees in 1875, with errors past 11 carbons. Henry Henze and Charles Blair counted them correctly with generating functions in 1931, and George Pólya's counting method of 1937 grew from such problems. George Kistiakowsky and others measured the heats of adding hydrogen in the 1930s.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Benzene is a ring of six carbons with three double bonds, so its energy is three times ethylene's.” Not allowed: that assumes the electrons stay in three separate pairs. The graph-energy technique lets each electron spread over all six carbons, and the measured heat says that the spread state is lower. The argument assumed the answer to the question it was asking.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'dots',t:R`3n + 2`,n:`Atoms.`},
+  {k:'ember',kl:'links',t:R`\tfrac12(4n + 2n + 2) = 3n + 1`,n:`By valence.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a tree}}`,n:`Carbons at most four links.`}
+],{title:'The slides · alkanes · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'chain',t:R`\text{longest chain first}`,n:`Then the branches.`},
+  {k:'ember',kl:'six',t:R`1 + 2 + 2`,n:`Chains of 6, 5, 4.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{5 \text{ hexanes}}`,n:`One formula.`}
+],{title:'The slides · isomers · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'chain',t:R`20`,n:`Pentane.`},
+  {k:'ember',kl:'branched',t:R`18,\ 16`,n:`Shorter distances.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{same order as boiling}}`,n:`A law, fitted.`}
+],{title:'The slides · distance total · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'grid',t:R`H = \alpha I + \beta G`,n:`G the links.`},
+  {k:'ember',kl:'stretches',t:R`\alpha + \lambda\beta`,n:`Energies.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{0.472\beta \text{ lower}}`,n:`Butadiene.`}
+],{title:'The slides · graph energy · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'ring',t:R`2, 1, 1, -1, -1, -2`,n:`Stretches.`},
+  {k:'ember',kl:'fill',t:R`6\alpha + 8\beta`,n:`Six electrons.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2|\beta| \approx 152 \text{ kJ/mol}}`,n:`Measured.`}
+],{title:'The slides · benzene · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A machine made of switches</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.cl-lock{display:none;border-left:3px solid var(--gold);background:var(--sand);padding:10px 14px;border-radius:0 4px 4px 0;max-width:66ch}
+body.cl-locked .cl-lock{display:block} body.cl-locked .cl-body{display:none}
+.cl-lock button{margin-top:6px;font-size:.8rem}
+.claim{border:1px solid var(--grid);border-left:4px solid var(--teal);background:var(--card);border-radius:0 6px 6px 0;padding:10px 16px;max-width:66ch}
+.claim p{margin:.4em 0}
+ul.cl-adds{max-width:66ch;padding-left:1.1em} ul.cl-adds li{margin:.5em 0}
+ul.cl-adds .cl-w{display:none;color:var(--muted);font-style:italic}
+ul.cl-adds li.cl-wait .cl-t{display:none} ul.cl-adds li.cl-wait .cl-w{display:inline}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38now.html">← 38·now how little energy can a switch spend?</a><a href="r39.html">next: 39 some questions no machine can answer →</a></p>
+  <div class="tags"><span class="tag concl">38·∎ · conclusion</span></div>
+  <h1>A machine made of switches</h1>
+  <p class="gesture" data-pid="142659">True is 1 and false is 0. Switches with gain build every table from not-and, an odd ring of nots is a clock and an even ring a memory. Gates add, and a machine follows a list of numbers in its own memory. Its turns are counted, and their family survives a change of machine.</p>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The conclusion · the rung's claim, in full, and its proof</div>
+  <div class="cl-lock"><p>This page opens once every question on <a href="r38o.html">r38o</a> is ticked. The claim below is proved from the steps of this rung, so it waits for them.</p><button type="button" class="cl-peek">reviewing the ladder? open it anyway</button></div>
+  <div class="cl-body">
+  <h3>What the rung set out to show</h3>
+  <p data-pid="3fbb5b">The survey of rung 38 asked how the tables of true and false can be built in matter, and what a machine built of them can do in how many turns. <b>Every table of n inputs is built from not-and gates alone, made of switches worked by switches whose slope above 1 keeps every level clean; an odd ring of nots is a clock and an even ring a memory; with them a machine runs any list of instructions stored as numbers, and the turns it takes grow in a family that a change of machine does not change.</b></p>
+  <p data-pid="b89ee1"><a href="r38a.html">38a</a> wrote true as 1 and false as 0. <a href="r38b.html">38b</a> read a wire as the sign of a turning, against a threshold, wrong at a known rate, and <a href="r38c.html">38c</a> told power from message. <a href="r38d.html">38d</a> found what valves cannot do, and <a href="r38e.html">38e</a> the switch that can. <a href="r38f.html">38f</a> built every table from not-and. <a href="r38g.html">38g</a> built the clock and <a href="r38h.html">38h</a> the memory; <a href="r38i.html">38i</a> added; <a href="r38j.html">38j</a> built the machine that follows a list. <a href="r38k.html">38k</a> counted its turns, <a href="r38l.html">38l</a> searched and sorted, <a href="r38m.html">38m</a> solved counts in pieces, <a href="r38n.html">38n</a> kept data findable, and <a href="r38o.html">38o</a> kept answers. This page puts the claim together.</p>
+  <h3>The claim, in full</h3>
+  <div class="claim">
+  <p data-pid="03c6bf"><b>On {0, 1}, both is xy, either is the greater of x and y, not is 1 − x, and exactly one is the remainder of x + y by 2. A level with margin d under bell noise of spread σ is misread with the chance that the bell lies past d/σ spreads; a wire passing frequencies up to B carries at most 2B log₂ M bits a second with M levels, and a known wave carries none. Networks of diodes and resistors never give a not and never shrink a rise; a pair inverter with |g′(m)| > 1 restores its levels, and noise along a chain stays below η/(1 − k). Every table of n inputs is built from at most 5 · 2ⁿ⁻¹ − 4 not-ands, and some table needs more than g of them when (n + 2 + g)^(2g + 1) < 2^(2ⁿ).</b></p>
+  <p data-pid="d84862"><b>A ring of an odd number n of nots, each with delay τ, has no rest that holds and runs with period 2nτ; an even ring holds one of two patterns, and two latches catch a bit at the rise of a clock. A row of n places adds with a carry found in about log₂ n levels, and subtracts by adding 2ⁿ − y. A machine whose state is a list of numbers, with instructions stored as numbers among its data, follows any list placed in its memory. A count O(f(n)) on one machine is O(f(n)) on a machine that does each turn in c turns; search by yes-or-no questions needs log₂(n + 1) questions; the random-pivot sort and the random search tree make 2(n + 1)Hₙ − 4n comparisons on average; T(n) = T(αn) + T(βn) + cn with α + β < 1 grows in proportion to n; a heap has height ⌊log₂ n⌋; a recursion on sizes below n, with answers kept, costs the number of sizes times one step.</b></p>
+  </div>
+  <h3>The proof</h3>
+  <p data-pid="df757c">Each part below is a technique already proved on a step of this rung. The proof cites them by name and joins them.</p>
+  <pre class="lines" data-k="ember" data-label="marks and waves">
+xy,\ \max(x, y) = x + y - xy,\ 1 - x @@ the and-as-product and or-as-greater techniques (38a)
+x \oplus y = (x + y) \bmod 2 @@ the remainder-by-two technique (38a)
+\text{the sign of } \cos\theta \text{ and its first turning} @@ the sign-wave and first-turning techniques (38b)
+\text{misread} = P(Z > d/\sigma) @@ the threshold-reading technique (38b), laws with a known exception rate
+\text{power by frequency};\ \text{a known wave: 0 bits} @@ the power-by-frequency and known-wave techniques (38c)
+\htmlClass{new}{\le 2B\log_2 M \text{ bits a second}} \quad \blacksquare @@ the changes-per-second technique (38c); the noisy capacity held in trust from 30·comp
+  </pre>
+  <pre class="lines" data-k="ember" data-label="switches and tables">
+\text{valves: less than } I_s \text{ backwards; either and both, one drop off} @@ the reverse-leak and diode-gate techniques (38d)
+\text{valves give no not and no gain} @@ the rising-network and no-gain techniques (38d)
+\text{pair inverter: } 1 - x;\ |g'(m)| > 1 \text{ restores} @@ the pair-inverter and middle-gain techniques (38e)
+\text{noise} \le \eta/(1 - k);\ \text{power gain} @@ the noise-floor and steering techniques (38e)
+\text{not, both, either from not-and} @@ the nand-alone technique (38f)
+\le 5\cdot2^{n-1} - 4 \text{ gates} @@ the split-on-one technique (38f)
+\htmlClass{new}{\text{some table needs more than } g} \quad \blacksquare @@ the most-tables-hard technique (38f)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="clocks, memory, adding">
+\text{a not on itself: period } 2\tau @@ the delay-loop technique (38g)
+\text{odd ring: one rest, which does not hold; period } 2n\tau @@ the odd-ring and ring-period techniques (38g)
+\text{even ring: two patterns hold} @@ the even-ring technique (38h)
+\text{latch, edge, register of } 2^n \text{ patterns} @@ the hold-row, edge-catch and register-count techniques (38h)
+x + y + c = 2\,\mathrm{maj} + x \oplus y \oplus c @@ the three-bit-sum technique (38i)
+\text{ripple } 2n\tau;\ \text{tree about } \log_2 n \text{ levels} @@ the carry-delay and carry-tree techniques (38i)
+\htmlClass{new}{x - y = x + (2^n - y) \text{, top carry dropped}} \quad \blacksquare @@ the twos-complement technique (38i)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the machine and its turns">
+\text{an instruction is a number; a run is fixed by its first state} @@ the instruction-number and fetch-run techniques (38j)
+\text{one machine runs any stored list} @@ the stored-list technique (38j)
+br + s \text{ turns};\ \text{the family survives a change of machine} @@ the loop-count and machine-change techniques (38k), every reasonable machine held in trust until 39
+\text{a faster machine; } nb \text{ bits} @@ the faster-machine and storage-count techniques (38k)
+\log_2(n + 1) \le \text{questions};\ 2(n + 1)H_n - 4n;\ 2n + k @@ the search-floor, pivot-chance and counting-sort techniques (38l)
+\text{counts in pieces solved} @@ the shrink-by-one, shares-below-one and guess-and-check techniques (38m)
+\lt 3n;\ \lfloor\log_2 n\rfloor;\ 2(n + 1)H_n - 4n;\ 1 + \tfrac{n - 1}{m} @@ the doubling-array, heap-height, tree-depth and load-share techniques (38n)
+\htmlClass{new}{\text{answers kept; tables; greedy where it is best}} \quad \blacksquare @@ the remembered-answers, alignment-table, earliest-finish and coin-table techniques (38o)
+  </pre>
+  <p data-pid="a1eb4a">So the rung’s claim holds: the tables of true and false are built of switches, kept clean by gain, made into clocks, memories, adders and a machine that follows a list, whose turns are counted and ranked. Held in trust: that every reasonable machine mimics every other within a fixed factor or a power, until rung 39, and the capacity of a noisy wire, from 30·comp.</p>
+  <h3>What the rest of the rung adds</h3>
+  <p data-pid="2fc540">Each step and annex after the proof steps adds a line to the claim. A line appears here once you have finished its page.</p>
+  <ul class="cl-adds">
+    <li data-after="r38p" data-pid="d01ecb"><b><a href="r38p.html">38p wiring a table by hand</a></b>: <span class="cl-t">a table in words becomes a small circuit of not-ands by merging neighbours, and is checked row by row.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r38q" data-pid="8d3e56"><b><a href="r38q.html">38q counting steps by hand</a></b>: <span class="cl-t">loops in loops are sums, halving loops are logs, calls write rules, and the largest term rules past a size the count names.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r38phys" data-pid="fb076c"><b><a href="r38phys.html">38·phys why does silicon have a gap?</a></b>: <span class="cl-t">bands from atoms in a row, a full band under an empty one, doping, and the one-way layer explained.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r38eng" data-pid="d0d4eb"><b><a href="r38eng.html">38·eng why did chips stop getting faster?</a></b>: <span class="cl-t">the heat of a flip, shrinking everything at once, the leak floor, and many slow cores.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r38bio" data-pid="3ff849"><b><a href="r38bio.html">38·bio is a neuron a gate?</a></b>: <span class="cl-t">a unit with a threshold builds every table, a cell has a top speed and a window, and a ring of cells is a clock.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r38now" data-pid="b65ab0"><b><a href="r38now.html">38·now how little energy can a switch spend?</a></b>: <span class="cl-t">slow ramps, charge given back by gates that forget nothing, a best ramp against leak, and a barrier against warmth.</span><span class="cl-w">its line appears when you finish it.</span></li>
+  </ul>
+  <p data-pid="f4a8f1">That is a machine made of switches. It follows any list it is given, as fast as its switches flip, in a count of turns that can be ranked. Rung 39 asks what no list can do.</p>
+  </div>
+</section>
+
+<nav class="nextrung"><a href="r38now.html">← 38·now · how little energy can a switch spend?</a><a href="r39.html">39 · some questions no machine can answer →</a></nav>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+  const need="r38o";
+  let p={}; try{ p=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
+  let peek=false; try{ peek=sessionStorage.getItem('cl:peek')==='1'; }catch(e){}
+  const done=k=>!!(p[k]&&p[k].v);
+  function apply(){
+    const open=peek||done(need);
+    document.body.classList.toggle('cl-locked',!open);
+    document.querySelectorAll('ul.cl-adds li[data-after]').forEach(li=>li.classList.toggle('cl-wait',!(peek||done(li.dataset.after))));
+    if(open&&done(need)){ const me=(window.ladderPage?ladderPage():(location.pathname.split('/').pop()||'').replace(/\.html?$/,''));
+      if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(me,true,true,true,false);
+      else { try{ p[me]={v:true,a:true,o:true,h:false,t:Date.now()}; LS.setItem('pages:done',JSON.stringify(p)); }catch(e){} } }
+  }
+  const b=document.querySelector('.cl-peek'); if(b) b.addEventListener('click',()=>{ peek=true; try{ sessionStorage.setItem('cl:peek','1'); }catch(e){} apply(); });
+  apply();
+  try{ if(window.MarksSync&&MarksSync.pages) MarksSync.pages().then(q=>{ if(q){ p=Object.assign({},p,q); apply(); } },()=>{}); }catch(e){}
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

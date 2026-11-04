@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Clock powers and secret keys</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r41h.html">← 41h clock arithmetic by hand</a><a href="r41j.html">next: 41j is it prime? →</a></p>
+  <div class="tags"><span class="tag tech">41i · technique</span></div>
+  <h1>Clock powers and secret keys</h1>
+  <p data-pid="812968">Every cipher on the ladder so far had one key, and whoever could lock a message could unlock it. To send a secret, the two sides first had to share the key in secret, which is the problem again. In 1977 a lock was published with two keys. One locks and can be printed in a newspaper. The other unlocks and is kept at home. The lock is a power on a clock whose size is a product of two large primes. The unlocking key is another power, the undo of the first on the clock of the count of units. Anyone can compute the count from the two primes, and nobody is known to be able to compute it from their product alone, because nobody knows a fast way to find the two primes again. The same pair of keys, turned round, signs a message: only the holder of the home key could have made the signature, and anyone can check it with the printed one.</p>
+  <p class="gesture" data-pid="dd3eeb">Take two primes and multiply. Pick a locking power that shares nothing with the count of units, and take its undo on the clock of that count as the unlocking power. Then locking and unlocking undo each other on the big clock. The count gives the primes, so finding it is as hard as factoring. Turned round, the pair signs.</p>
+</header>
+
+<section class="class step" data-step="41i1">
+  <h2 class="sthead"><span class="stno">41i1</span>A lock with two keys</h2>
+  <p data-pid="9cb6c6">Take different primes p and q, and n = pq. By 41d2 the clock of n has c = (p − 1)(q − 1) units. Pick e with gcd(e, c) = 1, and let d be its undo on the clock of c, so ed = 1 + tc for some t ≥ 0. The printed key is (n, e); the home key is d.</p>
+  <p data-pid="188ce6">Two-key technique: <b>with n, e and d as above, (m^e)^d ≡ m (mod n) for every integer m.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-key technique">
+p \nmid m:\ \ m^{ed} = m \cdot (m^{p-1})^{t(q-1)} @@ ed = 1 + t(p − 1)(q − 1); powers add their counts (4g)
+\phantom{p \nmid m:\ \ m^{ed}} \equiv m \cdot 1 = m \pmod p @@ the little technique (41d1)
+p \mid m:\ \ m^{ed} \equiv 0 \equiv m \pmod p @@ both sides are multiples of p
+m^{ed} \equiv m \pmod q @@ the same lines on the clock of q
+\htmlClass{new}{m^{ed} \equiv m \pmod{pq}} \quad \blacksquare @@ the remainder technique’s one-to-one line (41c1): p and q share nothing
+  </pre>
+  <p data-pid="a94a8c">So a message, written as an hour m of the clock of n, is locked as mᵉ and unlocked by raising to d. The technique holds for every m, even one that shares a prime with n; the second line is why both cases were split.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · two keys · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">41i1.1</span><span class="ph understand">understand</span>What does the two-key technique say, and how are n, e and d chosen? <br>Which line spends the little technique, and why is the case p ∣ m split off?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41i2">
+  <h2 class="sthead"><span class="stno">41i2</span>A lock built by hand</h2>
+  <pre class="lines" data-k="ember" data-label="this step: the primes 61 and 53">
+n = 61 \cdot 53 = 3233,\ \ c = 60 \cdot 52 = 3120 @@ the clock, and its count of units
+e = 17:\ \ 3120 = 17 \cdot 183 + 9,\ \ 17 = 9 + 8,\ \ 9 = 8 + 1 @@ gcd(17, 3120) = 1 (4j12)
+1 = 2 \cdot 9 - 17 = 2 \cdot 3120 - 367 \cdot 17 @@ read back (41b2)
+d \equiv -367 \equiv 2753 \pmod{3120} @@ the home key
+m = 65:\ \ 65^{17} \equiv 2790 \pmod{3233} @@ locked, by square-and-multiply (41h1): 17 = 10001 in twos
+\htmlClass{new}{2790^{2753} \equiv 65 \pmod{3233}} \quad \blacksquare @@ unlocked: the two-key technique
+  </pre>
+  <p data-pid="5a7ebe">Locking took five products: four squarings and one more. Unlocking takes fifteen: 2753 is 101011000001 in twos, so eleven squarings and four products. Real locks use primes of about three hundred digits each, and the printed power is very often 65 537 = 2¹⁶ + 1, which locks in seventeen products.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · by hand · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41i2.1</span><span class="ph understand">understand</span>How is the home key 2753 found from e = 17 and c = 3120? <br>Why does locking with e = 17 take only five products?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41i3">
+  <h2 class="sthead"><span class="stno">41i3</span>What the lock rests on</h2>
+  <p data-pid="6faa65">Anyone with (n, e) can lock. To unlock, the obvious road is d, which needs c. And c needs p and q: or does it? It does, in this sense: c and n together give p and q.</p>
+  <p data-pid="428c13">Count-gives-factors technique: <b>if n = pq for different primes p and q and c = (p − 1)(q − 1), then p and q are the two roots of x² − (n − c + 1)x + n = 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the count-gives-factors technique">
+c = pq - p - q + 1 = n - (p + q) + 1 @@ spread for times
+p + q = n - c + 1,\ \ pq = n @@ the sum and the product of the roots
+(x - p)(x - q) = x^2 - (n - c + 1)x + n @@ spread for times (5i)
+3233,\ 3120:\ \ x^2 - 114x + 3233 = 0 @@ the lock of 41i2
+\htmlClass{new}{x = 57 \pm \sqrt{57^2 - 3233} = 57 \pm 4 = 61,\ 53} \quad \blacksquare @@ the quadratic formula (8i)
+  </pre>
+  <p data-pid="95383d">So finding c from n is as hard as factoring n. Trying every divisor up to √n takes about 10³⁰⁰ tries for a number of six hundred digits. Cleverer methods exist and are much faster than that, and still far slower than any power of the number of digits. In 2020 a number of 250 digits built this way was factored, with about 2700 years of computer time spread over many machines. Nobody has a proof that factoring is slow. 39h’s classes ask that kind of question, and this one is open. The lock rests on a guess from cases: every attempt since 1977 to factor fast has failed.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · what it rests on · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41i3.1</span><span class="ph understand">understand</span>What does the count-gives-factors technique say? <br>Why does it make finding c from n as hard as factoring n?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41i4">
+  <h2 class="sthead"><span class="stno">41i4</span>Turning the keys round</h2>
+  <p data-pid="f1ba2d">The two-key technique did not care which power came first: (m^d)^e = m^(de) = m^(ed). So the home key can lock and the printed key unlock.</p>
+  <p data-pid="aa4637">Turned-key technique: <b>a signature on m is s = m^d on the clock of n, and anyone holding (n, e) accepts it exactly when s^e ≡ m.</b> Only the holder of d is known to be able to make an s that passes, since making one is unlocking a lock that was never locked.</p>
+  <pre class="lines" data-k="ember" data-label="this step: a signature by hand">
+m = 123:\ \ s = 123^{2753} \equiv 2746 \pmod{3233} @@ signed with the home key
+2746^{17} \equiv 123 \pmod{3233} @@ checked with the printed key: the two-key technique, keys turned
+\text{a forger with } m' = 124 \text{ needs } 124^{d} @@ d is unknown to her
+\htmlClass{new}{\text{the check passes for 123 and the signature 2746}} \quad \blacksquare @@ and for no other m with this s
+  </pre>
+  <p data-pid="713d88">A message is not an hour of a small clock, and signing a long file this way would take one power per hour. 41·comp signs a short fingerprint of the file in its place, and shows why the fingerprint must be one nobody can match on purpose.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · signing · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41i4.1</span><span class="ph understand">understand</span>What does the turned-key technique say? <br>Why does the check s^e ≡ m pass for a true signature, and why can a forger not make one?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41i5">
+  <h2 class="sthead"><span class="stno">41i5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+d \text{ is the undo of } e \text{ on the clock of } n\,? @@ on the clock of c, the count of units; on the clock of n the powers would not cancel
+\text{the same message locks to a fresh hour each time}\,? @@ mᵉ is one hour: a spy who guesses “yes” or “no” locks both and compares; real systems pad m with chance first
+e = 3,\ m^3 \lt n \Rightarrow m^3 \text{ is safe}\,? @@ then the lock never went round the clock, and an ordinary cube root unlocks it
+p, q \text{ close together is fine}\,? @@ then √n is near both, and trying near √n finds them at once
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41i5.1</span><span class="ph understand">understand</span>Why must d be the undo of e on the clock of c, not of n? <br>Why does a small message locked with e = 3 give itself away?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">41i.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="p = 11,\ \ q = 17,\ \ e = 7"></span></span>Build the lock: find n, c and d. Lock the message 42 and unlock it, writing every squaring. <br>Then sign 10 and check the signature.</div>
+  <div class="chq"><span class="chid">41i.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="m = 122,\ \ n = 3233"></span></span>The two-key technique works for m sharing a prime with n. Find gcd(122, 3233). <br>What does a message that shares a prime with n give away to anyone who sees it, and how likely is it that a message chosen at random does so, when p and q have three hundred digits?</div>
+  <div class="chq"><span class="chid">41i.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="m^{ed} \equiv m \pmod n \text{ for every } m"></span></span>Must ed ≡ 1 (mod c) for that? Prove that ed ≡ 1 on the clock of the least common multiple of p − 1 and q − 1 is enough. <br>For 61 and 53, find the smallest home key that works for e = 17, and compare it with 2753.</div>
+  <div class="chq"><span class="chid">41i.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">1973, a lock with two keys, kept secret; 1977, the same lock, published</span></span>A mathematician working for a government found this lock in 1973, and it was kept secret for twenty four years. Others found it in 1977 and published it, and it went round the world. <br>Who found it? Is a discovery that nobody may read a discovery, and does the answer change for a technique, which is true whether or not it is read, against an invention, which is only of use when it is?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r41h.html">← 41h · clock arithmetic by hand</a><a href="r41j.html">41j · is it prime? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The two-key lock is RSA public-key encryption; (n, e) is the public key, d the private key, e the public exponent and d the private exponent. The count c is φ(n), and the least common multiple of 41i.6.3 is Carmichael’s λ(n). The turned-key technique is the RSA signature. Padding with chance is OAEP (for locking) and PSS (for signing). The cube-root attack is the small public exponent attack, and the attack on close primes is Fermat’s factorisation method. The cleverer factoring methods are the quadratic sieve and the general number field sieve.</p>
+  <h3>Who said it first</h3>
+  <p>Ron Rivest, Adi Shamir and Leonard Adleman published the lock in 1977 (in Scientific American’s column by Martin Gardner) and in a paper of 1978. Clifford Cocks, at the British government’s GCHQ, found the same lock in 1973, after James Ellis’s idea of a cipher with no shared key (1970); it was declassified in 1997. RSA-250 was factored in February 2020 by Fabrice Boudot, Pierrick Gaudry, Aurore Guillevic, Nadia Heninger, Emmanuel Thomé and Paul Zimmermann. Peter Shor’s method of 1994 (39·phys) would factor fast on a large quantum computer.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“m^(ed) = m^(1 + tc) = m · (m^c)^t, and m^c ≡ 1 by the exponent-clock technique, so m^(ed) ≡ m.” Not allowed for every m: the exponent-clock technique needs gcd(m, n) = 1. The page’s proof splits the clocks of p and q to cover the m that share a prime with n.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'clock',t:R`n = pq,\ \ c = (p-1)(q-1)`,n:`The count of units.`},
+  {k:'ember',kl:'keys',t:R`ed \equiv 1 \pmod c`,n:`Undo on the clock of c.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(m^e)^d \equiv m \pmod n}`,n:`Every m.`}
+],{title:'The slides · two keys · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'clock',t:R`n = 3233,\ c = 3120`,n:`61 and 53.`},
+  {k:'ember',kl:'keys',t:R`e = 17,\ d = 2753`,n:`An undo.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{65 \to 2790 \to 65}`,n:`Locked, unlocked.`}
+],{title:'The slides · by hand · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'sum',t:R`p + q = n - c + 1`,n:`From c.`},
+  {k:'ember',kl:'roots',t:R`x^2 - 114x + 3233`,n:`Factors back.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{61,\ 53}`,n:`c is as hard as p and q.`}
+],{title:'The slides · what it rests on · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'sign',t:R`s = m^d`,n:`Home key.`},
+  {k:'ember',kl:'check',t:R`s^e \equiv m`,n:`Printed key.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2746^{17} \equiv 123 \pmod{3233}}`,n:`Accepted.`}
+],{title:'The slides · signing · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

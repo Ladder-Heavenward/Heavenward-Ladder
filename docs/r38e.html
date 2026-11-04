@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A switch worked by a switch</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38d.html">← 38d a one-way valve</a><a href="r38f.html">next: 38f every table from one gate →</a></p>
+  <div class="tags"><span class="tag proof">38e · proof</span></div>
+  <h1>A switch worked by a switch</h1>
+  <p data-pid="a47d35">Valves cannot turn a one into a zero, and cannot give back a level they have lost. The part that can is a switch worked by a switch. A plate sits over a strip of silicon, with a layer of glass between them so thin that a few hundred atoms would span it. Put a voltage on the plate and the strip beneath it fills with carriers and conducts; take the voltage away and it stops. The plate draws almost no current, because the glass lets none through, yet it opens and shuts a path that can carry a great deal. One such switch of each kind, stacked between the supply and the ground, is a not gate, and the newsflash on the complex rung already drew its curve: flat at the two ends, steep in the middle. This step proves why steep is enough. Two not gates in a row have three resting places, and the one in the middle holds exactly when the slope there is less than one. Make it more than one and the middle pushes every voltage out to an end, and each end pulls its neighbours in so hard that noise added at every stage never piles up. And the switch does one more thing a valve never could: a signal of a few microwatts on the plate steers watts through the strip. That ratio is where the power of the last step and its message finally meet.</p>
+  <p class="gesture" data-pid="005eab">A plate over thin glass opens and shuts a strip of silicon: a switch worked by a voltage, drawing almost no current. Two kinds in a stack make a not. Two nots in a row rest at the ends and in the middle; the middle holds only if its slope is below one, so a slope above one restores every level, and noise stays bounded. A tiny signal steers a large power.</p>
+</header>
+
+<section class="class step" data-step="38e1">
+  <h2 class="sthead"><span class="stno">38e1</span>A switch worked by a voltage</h2>
+  <p data-pid="18bfe8">Over a strip of silicon lies a plate, the <i>gate</i>, with glass a few nanometres thick between. A voltage on the gate above a threshold, about 0.4 V on a modern chip, draws carriers into the strip and joins its two ends; below the threshold the ends are apart. One kind closes when its gate is high, the other when its gate is low. The glass passes no current, so holding a switch closed costs the gate nothing: only changing it costs, the charge that fills the plate.</p>
+  <p data-pid="b9e734">Pair-inverter technique: <b>a switch that closes on high from the output to ground, and one that closes on low from the supply to the output, with their gates joined, make a not: on {0, 1} the output is 1 − x.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the pair-inverter technique">
+x = 1:\ \text{the lower switch closes, the upper opens} @@ the two kinds
+\text{output joined to ground only}:\ 0 = 1 - 1 @@ no path to the supply
+x = 0:\ \text{the upper switch closes, the lower opens} @@ the two kinds
+\text{output joined to the supply only}:\ 1 = 1 - 0 @@ no path to ground
+\htmlClass{new}{\text{output} = 1 - x = \neg x} \quad \blacksquare @@ the or-as-greater technique’s not (38a2)
+  </pre>
+  <p data-pid="388425">This escapes 38d3. The rising-network technique was about parts whose state is set by the voltages on their own ends. Here the upper switch’s state is set by a third wire, the gate, and the supply behind it is fixed. Raising the gate cuts the path to the supply. A not is a fall, and only a steered part can fall.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · inverter · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">38e1.1</span><span class="ph understand">understand</span>What does the pair-inverter technique say? <br>Why does it escape the rising-network technique of 38d3?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38e2">
+  <h2 class="sthead"><span class="stno">38e2</span>A slope above 1 restores a level</h2>
+  <p data-pid="c6a0b7"><a href="r26then.html#26then4">26·then4</a> drew the not gate’s curve g, from input to output, falling from near the supply to near 0, steepest in the middle, and named the bands and margin. Take two gates in a row, G = g ∘ g. A voltage that goes through pairs of gates is fed its own answers: vₙ₊₁ = G(vₙ). It settles, if at all, at a rest, where G(v) = v (22a’s fixed-point technique). G rests near 0, near the supply, and at the middle point m where g(m) = m.</p>
+  <p data-pid="298b5a">Middle-gain technique: <b>the middle rest of two not gates in a row holds when the slope of g there is less than 1 in size, and pushes every nearby voltage away when it is more than 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the middle-gain technique">
+G'(m) = g'(g(m))\,g'(m) = g'(m)^2 @@ the chain rule (13e), with g(m) = m
+|g'(m)| < 1 \Rightarrow |G(v) - m| \le k\,|v - m| \text{ near } m,\ k < 1 @@ the mean value technique (14c): the slope is continuous, so below some k &lt; 1 on a window
+\text{then } v_n \to m \text{ from every start in the window} @@ the pull-together technique (22h3)
+|g'(m)| > 1 \Rightarrow |G(v) - m| \ge k\,|v - m| \text{ near } m,\ k > 1 @@ the same, above 1
+\htmlClass{new}{\text{then } |v_n - m| \text{ grows by } k \text{ each pair until } v_n \text{ leaves the window}} \quad \blacksquare @@ kⁿ heads past every ceiling (22h2)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: worked on the model curve">
+g(v) = \tfrac{3.3}{1 + e^{4(v - 1.65)}},\ \ m = 1.65,\ \ g'(m) = -3.3 @@ 26·then4’s model; its slope at m is −3.3 · 4/4
+G'(m) = 10.9,\ \ G' \approx 0.0003 \text{ at both end rests} @@ worked by machine
+1.2 \to 2.832 \to 0.029 \to 3.295 \to 0.005 @@ a weak 0 at 1.2 V, through four gates
+\htmlClass{new}{\text{after two pairs the level is within } 0.005 \text{ V of the rail}} \quad \blacksquare @@ restored
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · restoring · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38e2.1</span><span class="ph understand">understand</span>What does the middle-gain technique say, and why is G′(m) the square of g′(m)? <br>Why does a slope of −3.3 at the middle make the end rests hold so hard?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38e3">
+  <h2 class="sthead"><span class="stno">38e3</span>Why noise dies out</h2>
+  <p data-pid="373c28">Every stage of a real chain adds a little noise. Near a rail the pair of gates pulls hard: 38e2 found a slope of 0.0003 there. Call the size of that pull k, and let each pair of stages add noise at most η.</p>
+  <p data-pid="2379d0">Noise-floor technique: <b>if each pair of stages adds noise at most η, and near a rail the pair’s slope is at most k with k < 1, then the distance from the rail never passes η/(1 − k), however long the chain.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the noise-floor technique">
+e_{n+1} \le k\,e_n + \eta,\ \ e_0 = 0 @@ the pull shrinks the old error; the new noise adds
+e_n \le \eta\,(1 + k + k^2 + \cdots + k^{n-1}) @@ induction on n (4c)
+1 + k + \cdots + k^{n-1} < \tfrac{1}{1 - k} @@ the geometric sum (22e), k &lt; 1
+\htmlClass{new}{e_n < \tfrac{\eta}{1 - k} \text{ for every } n} \quad \blacksquare @@ a ceiling that does not depend on n
+  </pre>
+  <p data-pid="bbfc9b">With k = 0.0003 the ceiling is barely more than η itself: the error at any stage is about the noise of the last stage alone. Set that beside 38d4. Valves have a slope of at most 1, so k = 1 and the sum is ηn: after a billion stages, a billion stages of noise. A gate with a steep middle has a flat end, and the flat end forgets. That is why a chip can chain gates a billion deep and still read every 1 as a 1.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · noise floor · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38e3.1</span><span class="ph understand">understand</span>What does the noise-floor technique say? <br>Why does the same argument give a ceiling that grows with n for a chain of valves?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38e4">
+  <h2 class="sthead"><span class="stno">38e4</span>A small signal steers a large power</h2>
+  <p data-pid="29083f">A switch on a board in a greenhouse near Salinas turns a 12 V, 2 A pump on and off, a thousand times a second to set its speed. Its gate is worked by a 3.3 V pin. Each change fills or empties the gate with about 10 nC of charge. The pin pays for the charge; the pump’s supply pays for the pump.</p>
+  <p data-pid="2d17b4">Steering technique: <b>a switch worked by a voltage spends, on its gate, about the gate charge times the gate voltage at each change, while the power it steers is set by its supply and load; their ratio is its power gain.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the steering technique, worked">
+\text{gate}: \ Q V f = 10^{-8} \cdot 3.3 \cdot 1000 = 3.3 \cdot 10^{-5} \text{ W} @@ charge per change, times voltage, times changes a second (7·phys: a volt is a joule per coulomb)
+\text{load}: \ 12 \cdot 2 = 24 \text{ W while on} @@ power is voltage times current (7·phys)
+\tfrac{24}{3.3 \cdot 10^{-5}} \approx 7 \cdot 10^5 @@ the ratio
+\htmlClass{new}{\text{thirty-three microwatts of pattern steer twenty-four watts of power}} \quad \blacksquare @@ a power gain near seven hundred thousand
+  </pre>
+  <p data-pid="d03569">This is where 38c’s two questions meet. The gate carries the message: when to switch. The strip carries the power. The transistor copies the pattern of the first onto the second, and its gain is their ratio. Valves had a power gain of at most 1. Every gate of 38f on stands on a gain far above it.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · steering · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38e4.1</span><span class="ph understand">understand</span>What does the steering technique say? <br>Which of 38c’s two questions does the gate answer, and which does the strip?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38e5">
+  <h2 class="sthead"><span class="stno">38e5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{the gate draws the load’s current}\,? @@ the glass passes none; the gate draws only the charge that fills it, at each change
+|g'(m)| > 1 \text{ so every rest of } G \text{ pushes}\,? @@ the end rests have slope near 0.0003 and hold; only the middle pushes
+\text{the noise-floor ceiling grows with the chain}\,? @@ η/(1 − k) does not depend on n, for k below 1
+\text{a gain of } 7\cdot10^5 \text{ makes energy}\,? @@ the 24 W come from the pump’s supply; the gate only steers it
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38e5.1</span><span class="ph understand">understand</span>Why do the end rests hold though the middle pushes? <br>Where do the 24 W come from, if not the gate?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">38e.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="g(v) = \tfrac{3.3}{1 + e^{s(v - 1.65)}}"></span></span>Build the least s for which the middle rest of g ∘ g pushes. <br>For s just above it, find how many pairs of gates bring 1.6 V to within 0.1 V of a rail.</div>
+  <div class="chq"><span class="chid">38e.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="|g&#x27;(m)| = 1"></span></span>At exactly slope 1 in size, does the middle hold or push? Build a curve with slope −1 at m for which it holds, and one for which it pushes. <br>What does this say about a design that is only just steep enough?</div>
+  <div class="chq"><span class="chid">38e.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="e_n &lt; \eta/(1 - k)"></span></span>A bounded error for every n follows from k < 1. Turn it round: if the error stays bounded in a chain where every pair adds exactly η in the worst direction, must k be below 1? <br>What happens at k = 1?</div>
+  <div class="chq"><span class="chid">38e.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="G = g \circ g"></span></span>Reroute the middle-gain technique through one gate in place of two: g has the rest m too. Does the sign of g′(m) matter for whether vₙ₊₁ = g(vₙ) settles at m? <br>Why does the chain of 26·then4 use pairs?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r38d.html">← 38d · a one-way valve</a><a href="r38f.html">38f · every table from one gate →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The switch worked by a plate over glass is the metal-oxide-semiconductor field-effect transistor (MOSFET); the plate is the gate, the strip’s ends the source and the drain, and the glass the gate oxide. The two kinds are n-channel and p-channel, and the stacked pair is a CMOS inverter (complementary MOS). Its curve is the voltage transfer characteristic; the middle point m is the switching threshold, and |g′(m)| > 1 is the condition for regeneration. The ratio of steered to steering power is the power gain.</p>
+  <h3>Who said it first</h3>
+  <p>Julius Lilienfeld patented a field-effect switch in 1925, which could not then be built. John Bardeen and Walter Brattain made the point-contact transistor in 1947 at Bell Labs, and William Shockley the junction transistor. Mohamed Atalla and Dawon Kahng made the first working MOSFET at Bell Labs in 1959. Frank Wanlass and Chih-Tang Sah described CMOS in 1963. Gate oxides on modern chips are a little over a nanometre thick in silicon-oxide terms.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“A pair of gates has slope 10.9 at the middle, so it amplifies every signal ten times, and a chain of a hundred pairs amplifies by 10.9¹⁰⁰.” Not allowed: the slope is 10.9 only at m. A voltage pushed away from m reaches the flat ends, where the slope is 0.0003, and stays there. The gain is what restores the level, and the flat ends are what keep it.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'high in',t:R`\text{lower closes}`,n:`Output to ground.`},
+  {k:'ember',kl:'low in',t:R`\text{upper closes}`,n:`Output to supply.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{1 - x}`,n:`A not, from a steered pair.`}
+],{title:'The slides · inverter · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'pair',t:R`G = g \circ g`,n:`Two gates.`},
+  {k:'ember',kl:'middle',t:R`G'(m) = g'(m)^2`,n:`Chain rule.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|g'(m)| > 1 \Rightarrow \text{pushed to a rail}}`,n:`Every level restored.`}
+],{title:'The slides · restoring · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'step',t:R`e_{n+1} \le k e_n + \eta`,n:`Pull, then noise.`},
+  {k:'ember',kl:'sum',t:R`\eta(1 + k + \cdots)`,n:`Geometric.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{e_n < \eta/(1 - k)}`,n:`Bounded for ever.`}
+],{title:'The slides · noise floor · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'gate',t:R`QVf \approx 33\ \mu\text{W}`,n:`The pattern.`},
+  {k:'ember',kl:'load',t:R`24 \text{ W}`,n:`The power.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{gain} \approx 7\cdot 10^5}`,n:`Pattern steers power.`}
+],{title:'The slides · steering · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

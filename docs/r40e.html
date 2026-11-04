@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Matchings</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40d.html">← 40d flat drawings</a><a href="r40f.html">next: 40f flows and cuts →</a></p>
+  <div class="tags"><span class="tag proof">40e · proof</span></div>
+  <h1>Matchings</h1>
+  <p data-pid="d8f5b2">A hospital has night shifts to fill, and each nurse can work some of them and not others. Can every shift get its own nurse? Rung 6 asked a cousin of this question when it picked one member from each of many boxes, and noticed that asking for the picks to be all different is a harder thing. Here the boxes are finite, and the question has a clean answer. An obvious obstacle is a group of shifts that, between them, only a smaller group of nurses can work. The answer is that this is the only obstacle: if every group of shifts can be worked by at least as many nurses as there are shifts in it, then every shift can have its own nurse. The step proves it, and then finds a way to grow any matching that is not yet as large as it can be, along a path that alternates between used and unused links. Last, it turns the question round. The fewest people who can watch every link, a cover, is at least the most links in a matching, and on a two-sided graph the two numbers are the same.</p>
+  <p class="gesture" data-pid="6555fe">A matching is a set of links with no dot in two of them. On a two-sided graph a matching covers one side exactly when every group of dots on that side has at least as many neighbours. A matching is as large as can be exactly when no path alternates from a free dot to a free dot. And the largest matching is the smallest cover.</p>
+</header>
+
+<section class="class step" data-step="40e1">
+  <h2 class="sthead"><span class="stno">40e1</span>Matchings in a graph</h2>
+  <p data-pid="fcdae7">A <i>matching</i> in a graph is a set M of links, no two of which share a dot. A dot in a link of M is <i>matched</i>; the other end of its link is its <i>partner</i>.</p>
+  <p data-pid="4facc0">The word matching is reused. In 9c a matching was a function that is one-to-one and onto. A matching in a graph gives one: on a two-sided graph with sides X and Y, a matching is exactly a one-to-one function from the matched dots of X onto the matched dots of Y that sends each dot along a link. So the old meaning stays, and the new one is a 9c matching that must travel along links. A matching <i>covers X</i> when every dot of X is matched.</p>
+  <p data-pid="b4aa8e">For a set S of dots, N(S) is the set of dots joined to some dot of S. If a matching covers X, the partners of S are |S| different dots of N(S). So |N(S)| ≥ |S| for every part S of X. In rung 6’s words: each x ∈ X gives a box N({x}), and a matching covering X is a pick from every box with no two picks the same.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · matching · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">40e1.1</span><span class="ph understand">understand</span>What is a matching in a graph, and how is a matching on a two-sided graph a matching in the sense of 9c? <br>Why does a matching covering X force |N(S)| ≥ |S| for every part S of X?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40e2">
+  <h2 class="sthead"><span class="stno">40e2</span>The marriage technique</h2>
+  <p data-pid="d25221">Marriage technique: <b>on a two-sided graph with sides X and Y, X finite, some matching covers X exactly when every part S of X has |N(S)| ≥ |S|.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the marriage technique, the hard half">
+\text{every } S \subseteq X \text{ has } |N(S)| \ge |S|;\ \text{strong induction on } |X| \text{ (4h)} @@ |X| = 1: the one dot has a neighbour
+\text{case one: every } S \text{ with } \varnothing \ne S \ne X \text{ has } |N(S)| \ge |S| + 1 @@ a spare neighbour everywhere
+\quad \text{match any } x \text{ to any neighbour } y;\ \text{in } G - x - y \text{ each } S \subseteq X - x \text{ lost at most } y @@ |N(S)| − 1 ≥ |S|
+\quad \text{match } X - x \text{ by induction} @@ smaller X
+\text{case two: some } S_0 \text{ with } \varnothing \ne S_0 \ne X \text{ and } |N(S_0)| = |S_0| @@ a tight group
+\quad \text{match } S_0 \text{ into } N(S_0) \text{ by induction} @@ the condition holds inside: N(S) ⊆ N(S₀) for S ⊆ S₀
+\quad T \subseteq X - S_0:\ |N(T) - N(S_0)| = |N(T \cup S_0)| - |N(S_0)| \ge |T| + |S_0| - |S_0| @@ the condition on T ∪ S₀
+\quad \text{match } X - S_0 \text{ into } Y - N(S_0) \text{ by induction} @@ smaller X, and no dot used twice
+\htmlClass{new}{\text{a matching covers } X} \quad \blacksquare @@ the two matchings together
+  </pre>
+  <p data-pid="b3e142">Every part S is a lot of checking: 2^|X| parts. The technique is a yes that comes with a certificate for no: if no matching covers X, a single group S with too few neighbours shows it, and anyone can check that group.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · marriage · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40e2.1</span><span class="ph understand">understand</span>What does the marriage technique say? <br>In case two, why does every T outside S₀ still have enough neighbours outside N(S₀)?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40e3">
+  <h2 class="sthead"><span class="stno">40e3</span>Growing a matching</h2>
+  <p data-pid="4e2613">Given a matching M, a path is <i>alternating</i> when its links are by turns out of M and in M. A <i>growing path</i> is an alternating path whose two ends are both unmatched.</p>
+  <p data-pid="3c19d8">Growing-path technique: <b>a matching is as large as any matching in the graph exactly when there is no growing path for it.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the growing-path technique">
+P \text{ a growing path, with } k \text{ links in } M \text{ and } k + 1 \text{ out} @@ it starts and ends with links out of M
+M' = M \text{ with the links of } P \text{ swapped: in for out} @@ the inside dots of P keep one partner each; the two ends gain one
+|M'| = |M| + 1 @@ so M was not largest
+\text{other way: } |M'| > |M| \text{ for some matching } M' @@ suppose
+\text{the links in exactly one of } M, M' \text{: every dot has at most two, one of each} @@ so the pieces are paths and even cycles that alternate
+\text{some piece has more links of } M' \text{ than of } M @@ the totals differ; cycles share equally
+\htmlClass{new}{\text{that piece is a growing path for } M} \quad \blacksquare @@ a path that starts and ends in M′
+  </pre>
+  <p data-pid="c1a806">So a recipe: start with no links, and while a growing path exists, swap along it. Each swap adds one link, so there are at most |V|/2 swaps. Finding a growing path on a two-sided graph is a walk out from the free dots of X in layers, 40k’s recipe. On a graph with odd cycles the search can be fooled, and it took until 1965 to repair it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · grow · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40e3.1</span><span class="ph understand">understand</span>What is a growing path, and how does swapping along one make the matching larger? <br>Why does a larger matching M′ give a growing path for M?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40e4">
+  <h2 class="sthead"><span class="stno">40e4</span>Matchings and covers</h2>
+  <p data-pid="b6432b">A <i>cover</i> is a set K of dots that holds at least one dot of every link: guards at dots, watching every link. Each link of a matching needs its own guard, since no dot holds two of them. So every cover has at least as many dots as every matching has links.</p>
+  <p data-pid="52b7b3">Cover-equals-matching technique: <b>on a two-sided graph, the most links in a matching equals the fewest dots in a cover.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the cover-equals-matching technique">
+M \text{ largest};\ U = \text{unmatched dots of } X;\ Z = \text{dots reached from } U \text{ by alternating paths} @@ a path starts in U along a link out of M
+K = (X - Z) \cup (Y \cap Z) @@ the guards
+y \in Y \cap Z \Rightarrow y \text{ matched, and its partner is in } Z @@ else a growing path (40e3); step on along y’s link in M
+\text{each link of } M \text{ has exactly one end in } K @@ its ends are both in Z or both out of Z, by the last line and U being unmatched
+\text{every dot of } K \text{ is matched} @@ X − Z misses U; Y ∩ Z by the third line
+\{x, y\} \text{ a link},\ x \in Z \Rightarrow y \in Z @@ step along it, out of M or in M
+\htmlClass{new}{K \text{ covers every link, and } |K| = |M|} \quad \blacksquare @@ x ∉ Z puts x in K; x ∈ Z puts y in K
+  </pre>
+  <p data-pid="465858">On a triangle the largest matching has one link and the smallest cover two dots. The two-sided shape is what made the numbers meet. 40f will find the same equality as a special case of one about flows, and 40g as a special case of one about prices.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · covers · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40e4.1</span><span class="ph understand">understand</span>What is a cover, and why is every cover at least as large as every matching? <br>What does the cover-equals-matching technique say, and why does it fail on a triangle?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40e5">
+  <h2 class="sthead"><span class="stno">40e5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{every dot of } X \text{ has a neighbour, so } X \text{ is covered}\,? @@ two nurses who can both work only the same one shift have one neighbour each and one between them
+\text{no link can be added to } M \text{, so } M \text{ is largest}\,? @@ on the path of three links, the middle link alone blocks both others; the two end links are larger
+\text{largest matching equals smallest cover in every graph}\,? @@ only on two-sided graphs; the triangle has 1 against 2
+|N(S)| \ge |S| \text{ for each single dot } S \text{ suffices}\,? @@ the condition is on every part S, not only single dots
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40e5.1</span><span class="ph understand">understand</span>Why is a matching that cannot be added to not always largest? <br>Why is checking |N(S)| ≥ |S| for single dots not enough?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">40e.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{every dot has exactly } k \ge 1 \text{ links}"></span></span>On a two-sided graph where every dot has exactly k links, prove that the sides have the same size and that some matching covers both. <br>A deck of 52 cards dealt into 13 piles of 4: prove that one card can be picked from each pile so that the 13 picks hold each of ace to king once.</div>
+  <div class="chq"><span class="chid">40e.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x_0 \sim y_1, y_2, y_3, \ldots;\ \ x_i \sim y_i \ (i \ge 1)"></span></span>Here X and Y are endless. Check that every finite part S of X has |N(S)| ≥ |S|. <br>Show that no matching covers X. Which line of the marriage technique’s proof needed X finite?</div>
+  <div class="chq"><span class="chid">40e.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="K_{1,3},\ \ C_5"></span></span>On a two-sided graph a smallest cover is as small as a largest matching. On the five-cycle C₅, find both numbers. <br>Turn the technique round: if a graph has largest matching equal to smallest cover, must it be two-sided?</div>
+  <div class="chq"><span class="chid">40e.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">6d.4.1: maximal, but not whole</span></span>Rung 6 found a set that could not be made larger and still was not everything. A matching that cannot be added to is maximal; a largest one is maximum. <br>Prove that a maximal matching has at least half as many links as a maximum one. Is the greedy recipe, adding any link that fits, then a fair recipe or a poor one?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r40d.html">← 40d · flat drawings</a><a href="r40f.html">40f · flows and cuts →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The marriage technique is Hall's marriage theorem, and the condition is Hall's condition; a matching covering X is a system of distinct representatives. A growing path is an augmenting path, and the growing-path technique is Berge's lemma. The cover-equals-matching technique is Kőnig's theorem, or the Kőnig–Egerváry theorem. A cover is a vertex cover. The repair for graphs with odd cycles is Edmonds's blossom algorithm (1965).</p>
+  <h3>Who said it first</h3>
+  <p>Dénes Kőnig proved the cover-equals-matching technique in 1931, and Jenő Egerváry a weighted form the same year. Philip Hall proved the marriage technique in 1935; the two-case proof here is Paul Halmos and Herbert Vaughan's of 1950. Claude Berge proved the growing-path technique in 1957. Jack Edmonds's 1965 paper, "Paths, trees, and flowers", is also where a recipe of polynomial cost was first argued to be the right meaning of a good recipe.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Match the dots of X one at a time, each to a free neighbour. If the condition holds, a free neighbour is always there.” Not allowed: early choices can use up the only neighbour a later dot has, even when the condition holds. With X = {p, q}, p joined to y₁ and y₂, q joined to y₁ only, matching p to y₁ first leaves q stranded. The growing path through p is what puts it right.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'links',t:R`\text{no shared dot}`,n:`A set of links.`},
+  {k:'ember',kl:'9c',t:R`X \to Y \text{ one-to-one, along links}`,n:`The old meaning, kept.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|N(S)| \ge |S|}`,n:`If X is covered.`}
+],{title:'The slides · matching · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'spare',t:R`|N(S)| \ge |S| + 1`,n:`Match any link.`},
+  {k:'ember',kl:'tight',t:R`|N(S_0)| = |S_0|`,n:`Split there.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{X \text{ covered} \iff |N(S)| \ge |S|}`,n:`For every S.`}
+],{title:'The slides · marriage · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'alternate',t:R`\notin M,\ \in M,\ \notin M, \dots`,n:`Free at both ends.`},
+  {k:'ember',kl:'swap',t:R`|M| + 1`,n:`One more link.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{largest} \iff \text{no growing path}}`,n:`A recipe.`}
+],{title:'The slides · grow · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'guards',t:R`K \ni \text{an end of each link}`,n:`A cover.`},
+  {k:'ember',kl:'reach',t:R`K = (X - Z) \cup (Y \cap Z)`,n:`From the free dots.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\max |M| = \min |K|}`,n:`On two sides.`}
+],{title:'The slides · covers · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

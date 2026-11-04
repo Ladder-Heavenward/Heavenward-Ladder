@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Machines that read a tape, by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r39i.html">← 39i chance in computing</a><a href="r39k.html">next: 39k reductions by hand →</a></p>
+  <div class="tags"><span class="tag tech">39j · technique</span></div>
+  <h1>Machines that read a tape, by hand</h1>
+  <p data-pid="13d11c">The step on stopping proved that no machine sorts every machine into stops and never stops. It did not say that a person, or a machine, cannot sort a particular one. This step does the sorting by hand, on small machines, the way the volunteers who settled the five-state question did it by the million. First, run a machine and write down each configuration on its own line, until it stops. Then the ways a machine shows it will never stop: it comes back to a configuration it has been in, or it marches off into blank tape doing the same thing at each new cell. A machine that never steps left can always be sorted, and the step proves why. Last, the diagonal argument itself, run on a table of four machines and four codes, with a would-be decider to defeat. Every catch here is a pattern that some machines show. No finite stock of patterns catches them all, and that is what the step on stopping proved.</p>
+  <p class="gesture" data-pid="ede844">Run a machine one configuration to a line. A configuration seen twice means never stopping; so does a march into blank tape that comes back to the same state. A machine that only steps right is sorted by running it a fixed number of steps. And the diagonal, run on a small table, finds the row every decider misses.</p>
+</header>
+
+<section class="class step" data-step="39j1">
+  <h2 class="sthead"><span class="stno">39j1</span>A run, one line at a time</h2>
+  <p data-pid="8f8b11">For this step the tape is endless both ways, which 39a3’s tracks argument showed adds no reach, and the marks are 0 and 1 with 0 the blank, as in 7·then. Write a configuration as the stretch of tape that is not blank, with the state written just before the cell the head is on.</p>
+  <p data-pid="209929">Trace-line technique: <b>to run a machine by hand, write one configuration a line, find the row of the table for the state and the mark after it, and write the next line by changing that one cell, moving the state one place, and renaming it.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-state machine of 7·then">
+A0 \to 1\text{R}B,\ \allowbreak \ A1 \to 1\text{L}B,\ \allowbreak \ B0 \to 1\text{L}A,\ \allowbreak \ B1 \to 1\text{R stop} @@ the table: state and mark, then write, step, next
+A\,0 \to 1\,B\,0 @@ step 1: A reads 0
+1\,B\,0 \to A\,1\,1 \to B\,0\,1\,1 @@ steps 2 and 3: B reads 0, then A reads 1, both step left
+B\,0\,1\,1 \to A\,0\,1\,1\,1 \to 1\,B\,1\,1\,1 @@ steps 4 and 5
+\htmlClass{new}{1\,B\,1\,1\,1 \to 1\,1\,1\,1,\ }\allowbreak \htmlClass{new}{ \text{stopped }}\allowbreak \htmlClass{new}{ \text{after } 6 \text{ steps, }}\allowbreak \htmlClass{new}{ \text{four }}\allowbreak \htmlClass{new}{ \text{1s}} \quad \blacksquare @@ step 6: B reads 1
+  </pre>
+  <p data-pid="223d8e">Six steps: 7·then’s BB(2) = 6, and this machine is the one that reaches it. No machine with two states that stops takes more, and the proof of that is a sorting of every two-state table, which the next footings make possible.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a trace · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">39j1.1</span><span class="ph understand">understand</span>What does the trace-line technique say? <br>In the run of the two-state machine, which row is used at step 3, and what does it change?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39j2">
+  <h2 class="sthead"><span class="stno">39j2</span>Two ways to see it never stops</h2>
+  <p data-pid="ccd6f6">The first way is 3·comp’s back-again technique, with the one-next technique: a configuration seen twice comes round again for ever. The bounded-room technique of 39g4 said a machine that stays in r cells must show this within q · r · mʳ steps.</p>
+  <pre class="lines" data-k="ember" data-label="this step: caught coming back">
+A0 \to 1\text{R}B,\ \allowbreak \ B0 \to 0\text{L}A,\ \allowbreak \ A1 \to 1\text{R}B @@ a three-row table; B1 is never reached
+A\,0 \to 1\,B\,0 \to A\,1\,0 \to 1\,B\,0 @@ three steps
+\htmlClass{new}{1\,B\,0 \text{ seen }}\allowbreak \htmlClass{new}{ \text{twice: }}\allowbreak \htmlClass{new}{ \text{it }}\allowbreak \htmlClass{new}{ \text{never }}\allowbreak \htmlClass{new}{ \text{stops}} \quad \blacksquare @@ back-again, with the one-next technique
+  </pre>
+  <p data-pid="d6a3d1">The second way catches a machine whose tape keeps growing, which never repeats a configuration.</p>
+  <p data-pid="2d1edb">Blank-march technique: <b>if the machine is in state q on a blank cell with only blanks to its right, and later is again in state q on a blank cell with only blanks to its right, further right, having never stepped left of the first of those cells, then it never stops.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the blank-march technique">
+\text{between }\allowbreak \text{the }\allowbreak \text{two }\allowbreak \text{moments }\allowbreak \text{the }\allowbreak \text{machine }\allowbreak \text{read }\allowbreak \text{only }\allowbreak \text{cells }\allowbreak \text{to }\allowbreak \text{the }\allowbreak \text{right }\allowbreak \text{of }\allowbreak \text{the }\allowbreak \text{first} @@ it never stepped left of it
+\text{those }\allowbreak \text{cells }\allowbreak \text{were }\allowbreak \text{blank }\allowbreak \text{at }\allowbreak \text{the }\allowbreak \text{first }\allowbreak \text{moment, }\allowbreak \text{as }\allowbreak \text{they }\allowbreak \text{are }\allowbreak \text{now }\allowbreak \text{to }\allowbreak \text{the }\allowbreak \text{right }\allowbreak \text{of }\allowbreak \text{the }\allowbreak \text{second} @@ given
+\text{so }\allowbreak \text{from }\allowbreak \text{the }\allowbreak \text{second }\allowbreak \text{moment }\allowbreak \text{it }\allowbreak \text{does }\allowbreak \text{what }\allowbreak \text{it }\allowbreak \text{did }\allowbreak \text{from }\allowbreak \text{the }\allowbreak \text{first, }\allowbreak \text{shifted }\allowbreak \text{right} @@ the one-next technique, cell by cell
+\htmlClass{new}{\text{it }}\allowbreak \htmlClass{new}{ \text{reaches }}\allowbreak \htmlClass{new}{ \text{state } q \text{ on }}\allowbreak \htmlClass{new}{ \text{fresh }}\allowbreak \htmlClass{new}{ \text{blank }}\allowbreak \htmlClass{new}{ \text{tape }}\allowbreak \htmlClass{new}{ \text{again, }}\allowbreak \htmlClass{new}{ \text{and }}\allowbreak \htmlClass{new}{ \text{again, }}\allowbreak \htmlClass{new}{ \text{and }}\allowbreak \htmlClass{new}{ \text{never }}\allowbreak \htmlClass{new}{ \text{stops}} \quad \blacksquare @@ induction on the number of marches (4c)
+  </pre>
+  <p data-pid="50a017">A0 → 1RB, B0 → 0RA marches: A on a blank at cell 0, then at cell 2, then 4. Its tape reads 1010… and grows for ever.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · never · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39j2.1</span><span class="ph understand">understand</span>What are the two ways of this footing to see that a machine never stops? <br>Why does the blank-march technique need the machine never to step left of the first cell?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39j3">
+  <h2 class="sthead"><span class="stno">39j3</span>A machine that only steps right</h2>
+  <p data-pid="514bc0">One-way technique: <b>if a machine with q states never steps left, then on an input of length n it stops within n + q steps or never stops.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-way technique">
+\text{every }\allowbreak \text{step }\allowbreak \text{is }\allowbreak \text{R, }\allowbreak \text{so }\allowbreak \text{after } n \text{ steps }\allowbreak \text{the }\allowbreak \text{head }\allowbreak \text{is }\allowbreak \text{past }\allowbreak \text{the }\allowbreak \text{input} @@ it moves one cell a step
+\text{from }\allowbreak \text{then }\allowbreak \text{on }\allowbreak \text{it }\allowbreak \text{reads }\allowbreak \text{only }\allowbreak \text{blanks, }\allowbreak \text{so }\allowbreak \text{its }\allowbreak \text{next }\allowbreak \text{state }\allowbreak \text{depends }\allowbreak \text{on }\allowbreak \text{its }\allowbreak \text{state }\allowbreak \text{alone} @@ the one-next technique, with the mark always blank
+\text{among }\allowbreak \text{the }\allowbreak \text{states }\allowbreak \text{at }\allowbreak \text{steps } n, n + 1, \dots, n + q\text{, }\allowbreak \text{two }\allowbreak \text{are }\allowbreak \text{the }\allowbreak \text{same} @@ q + 1 moments, q states: pigeonhole
+\text{from }\allowbreak \text{the }\allowbreak \text{first }\allowbreak \text{of }\allowbreak \text{them }\allowbreak \text{the }\allowbreak \text{states }\allowbreak \text{cycle, }\allowbreak \text{and }\allowbreak \text{each }\allowbreak \text{is }\allowbreak \text{a }\allowbreak \text{state }\allowbreak \text{it }\allowbreak \text{did }\allowbreak \text{not }\allowbreak \text{stop }\allowbreak \text{in} @@ if it had stopped, it stopped by step n + q
+\htmlClass{new}{\text{not }}\allowbreak \htmlClass{new}{ \text{stopped }}\allowbreak \htmlClass{new}{ \text{by }}\allowbreak \htmlClass{new}{ \text{step } n + q \Rightarrow \text{never}} \quad \blacksquare @@ run n + q steps, and look
+  </pre>
+  <p data-pid="7e785e">So stopping is decided for machines that only step right, by a run of fixed length. This is the shape of every catch: a family of machines with a bound on how long a stopper can take. The stopping set is not decided because no such bound works for every machine, and 39·now finds how fast the bound must grow.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · one way · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39j3.1</span><span class="ph understand">understand</span>What does the one-way technique say? <br>Why does the machine’s next state depend on its state alone once it is past the input?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39j4">
+  <h2 class="sthead"><span class="stno">39j4</span>The diagonal, on a small table</h2>
+  <p data-pid="928421">Four machines: M₀ stops at once; M₁ never stops; M₂ stops exactly when its input has an even number of letters; M₃ stops exactly when its input begins with 0. Their codes have 23, 30, 41 and 56 letters, and every code begins with 0 (39c1).</p>
+  <p data-pid="dc59af">Flip-diagonal technique: <b>a machine that, on the code of machine i, stops exactly when machine i does not stop on its own code differs from every machine of the table at that machine’s own column.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the table, and its diagonal">
+M_0\text{: }\allowbreak \text{stops, }\allowbreak \text{stops, }\allowbreak \text{stops, }\allowbreak \text{stops} @@ on ⟨M₀⟩, ⟨M₁⟩, ⟨M₂⟩, ⟨M₃⟩
+M_1\text{: }\allowbreak \text{never }\allowbreak \text{on }\allowbreak \text{all }\allowbreak \text{four} @@ it never stops
+M_2\text{: }\allowbreak \text{never, }\allowbreak \text{stops, }\allowbreak \text{never, }\allowbreak \text{stops} @@ code lengths 23, 30, 41, 56: odd, even, odd, even
+M_3\text{: }\allowbreak \text{stops }\allowbreak \text{on }\allowbreak \text{all }\allowbreak \text{four} @@ every code begins with 0
+\text{the }\allowbreak \text{diagonal: }\allowbreak \text{stops, }\allowbreak \text{never, }\allowbreak \text{never, }\allowbreak \text{stops} @@ M₀ on ⟨M₀⟩, M₁ on ⟨M₁⟩, M₂ on ⟨M₂⟩, M₃ on ⟨M₃⟩
+\htmlClass{new}{E\text{: }}\allowbreak \htmlClass{new}{ \text{never, }}\allowbreak \htmlClass{new}{ \text{stops, }}\allowbreak \htmlClass{new}{ \text{stops, }}\allowbreak \htmlClass{new}{ \text{never: }}\allowbreak \htmlClass{new}{ \text{unlike }}\allowbreak \htmlClass{new}{ \text{each }}\allowbreak \htmlClass{new}{ \text{row }}\allowbreak \htmlClass{new}{ \text{at }}\allowbreak \htmlClass{new}{ \text{its }}\allowbreak \htmlClass{new}{ \text{own }}\allowbreak \htmlClass{new}{ \text{place}} \quad \blacksquare @@ flip each entry
+  </pre>
+  <p data-pid="fdebb1">A would-be decider D₀ answers “stops” exactly when a code has an even number of letters. Build E from D₀ as in 39d2, and suppose ⟨E⟩ has an odd number of letters. D₀ says E does not stop on ⟨E⟩, so E stops on ⟨E⟩: D₀ is wrong there. Had ⟨E⟩ been even, D₀ would say it stops, and E would loop. Either way the input ⟨E⟩ # ⟨E⟩ is the one it gets wrong.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · diagonal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39j4.1</span><span class="ph understand">understand</span>What does the flip-diagonal technique say? <br>On which input is the would-be decider D₀ wrong, and why does the answer not depend on the length of ⟨E⟩?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39j5">
+  <h2 class="sthead"><span class="stno">39j5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{the }\allowbreak \text{run }\allowbreak \text{passed } 1000 \text{ steps }\allowbreak \text{without }\allowbreak \text{a }\allowbreak \text{repeated }\allowbreak \text{configuration, }\allowbreak \text{so }\allowbreak \text{it }\allowbreak \text{never }\allowbreak \text{stops}\,? @@ it may stop at step 1001; a catch needs a repeat, a march, or a proof
+A\,0 \to 0\text{L}A \text{ marches }\allowbreak \text{left }\allowbreak \text{for }\allowbreak \text{ever, }\allowbreak \text{so }\allowbreak \text{the }\allowbreak \text{blank-march }\allowbreak \text{technique }\allowbreak \text{catches }\allowbreak \text{it}\,? @@ blank-march is for marching right on blanks; the mirror form needs its own proof, with blanks to the left
+\text{the }\allowbreak \text{table }\allowbreak \text{of }\allowbreak \text{four }\allowbreak \text{machines }\allowbreak \text{shows }\allowbreak \text{E }\allowbreak \text{is }\allowbreak \text{no }\allowbreak \text{machine}\,? @@ it shows E is none of these four; E is a machine, its row is new
+\text{a }\allowbreak \text{machine }\allowbreak \text{with }\allowbreak \text{three }\allowbreak \text{states }\allowbreak \text{never }\allowbreak \text{steps }\allowbreak \text{left }\allowbreak \text{on }\allowbreak \text{input } 01\text{, }\allowbreak \text{and }\allowbreak \text{it }\allowbreak \text{has }\allowbreak \text{not }\allowbreak \text{stopped }\allowbreak \text{by }\allowbreak \text{step }\allowbreak \text{4, }\allowbreak \text{so }\allowbreak \text{it }\allowbreak \text{never }\allowbreak \text{will}\,? @@ the bound is n + q = 2 + 3 = 5 steps; look at step 5
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39j5.1</span><span class="ph understand">understand</span>Why do 1000 steps with no repeat not show that a machine never stops? <br>Why does the table of four machines not show that E is no machine?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">39j.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="A0 \to 1\text{R}B,\ \allowbreak A1 \to 1\text{R stop},\ \allowbreak B0 \to 0\text{R}C,\ \allowbreak B1 \to 1\text{R}B,\ \allowbreak C0 \to 1\text{L}C,\ \allowbreak C1 \to 1\text{L}A"></span></span>Run this three-state machine from a blank tape with the trace-line technique, and count its steps and its 1s. Compare with BB(3) = 21 from 7·then.</div>
+  <div class="chq"><span class="chid">39j.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="A0 \to 1\text{R}A"></span></span>Sort this one-row machine on a blank tape with each of the techniques of this step. Which of them catch it, and with what numbers? Is there a machine with one state that stops after more than one step?</div>
+  <div class="chq"><span class="chid">39j.6.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">never stops ⇒ caught by some catch?</span></span>Every machine caught by a repeat or a march never stops. Turn it round: build a machine that never stops, never repeats a configuration, and is not caught by the blank-march technique. What does its tape look like after many steps, and what kind of argument would catch it?</div>
+  <div class="chq"><span class="chid">39j.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">3·comp: why nobody can always tell</span></span>Rung 3 said, of loops, that nobody can always tell whether they stop. This step told, for every machine it met. Which is right? Write the claim of 3·comp exactly, in the words of 39d. Which of this step’s catches does it leave standing, and which does it rule out as a method for every machine?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r39i.html">← 39i · chance in computing</a><a href="r39k.html">39k · reductions by hand →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A configuration seen twice marks a cycler; a march into blank tape marks a translated cycler, the names the busy beaver project used for its first deciders. The two-state machine of 39j1 is the two-state busy beaver champion. A machine that only moves right is a one-way, or right-moving, Turing machine, and the one-way technique says its halting problem is decidable. Catches of this kind, each correct for every machine it accepts and silent on the rest, are deciders, partial ones.</p>
+  <h3>Who said it first</h3>
+  <p>Tibor Radó (1962) posed the busy beaver question; Shen Lin and Radó (1965) settled the three-state case by sorting every machine by hand and by computer, with catches like these. The cycler and translated-cycler deciders were named in the bbchallenge project, begun in 2022, which settled the five-state case in 2024.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The machine’s tape has grown for 500 steps and its head keeps moving right, so it is marching and never stops.” Not allowed: the blank-march technique needs the same state on fresh blanks twice, with no step left of the first. A machine can move right for 500 steps and then turn back and stop.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'row',t:R`B0 \to 1\text{L}A`,n:`Look it up.`},
+  {k:'ember',kl:'line',t:R`B\,0\,1\,1 \to A\,0\,1\,1\,1`,n:`One cell changes.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{6 \text{ steps, four 1s}}`,n:`BB(2).`}
+],{title:'The slides · a trace · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'back',t:R`1\,B\,0 \text{ twice}`,n:`Comes round.`},
+  {k:'ember',kl:'march',t:R`q \text{ on fresh blanks, again}`,n:`Moves off.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{two catches}}`,n:`Not all catches.`}
+],{title:'The slides · never · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'past',t:R`n \text{ steps}`,n:`Off the input.`},
+  {k:'ember',kl:'cycle',t:R`q + 1 \text{ moments}`,n:`A state repeats.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{n + q \text{ steps, or never}}`,n:`Decided.`}
+],{title:'The slides · one way · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'table',t:R`M_i \text{ on } \langle M_j\rangle`,n:`Four by four.`},
+  {k:'ember',kl:'diagonal',t:R`\text{stops, never, never, stops}`,n:`i on i.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{E\text{: never, stops, stops, never}}`,n:`Unlike every row.`}
+],{title:'The slides · diagonal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

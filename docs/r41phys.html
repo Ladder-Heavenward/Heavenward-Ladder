@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Why do metals conduct?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r41comp.html">← 41·comp how can strangers share a secret?</a><a href="r41crypt.html">next: 41·crypt can a secret be split so any three of five can open it? →</a></p>
+  <div class="tags"><span class="tag phys">41·phys · physics</span></div>
+  <h1>Why do metals conduct?</h1>
+  <p data-pid="a26ae6">Why do metals conduct? A copper wire in a wall carries the current of a kettle and barely warms, a strip of glass the same size carries nothing at all, and a sliver of silicon sits in between. All three are made of atoms with electrons, packed close. The answer is in how the atoms are packed: in a crystal the same arrangement repeats, over and over, so the electron sees the same thing one step along as here. That repeat is a clock. Count the sites of a ring of atoms on the clock of their number, and the waves an electron can make are labelled by the hours of the same clock. Each hour gives one level, the levels crowd into a band, and each band holds exactly two electrons for each atom. Whether a band is full or half full decides the rest. A full band carries nothing, however hard it is pushed; a half full one carries current at the slightest push. This page builds the bands from the clock, counts the electrons of copper, finds how long an electron runs between knocks and why that run is so long, shows why a pinch of nickel spoils copper and why an alloy is used for a resistor, and ends with the reason metals carry heat as well as charge, in a fixed ratio.</p>
+  <p class="gesture" data-pid="e07c2d">A repeating lattice wrapped round is a clock of N sites, and the shift by one site has the N roots of 1 as its stretches. So an electron’s waves are labelled by hours, each band has N of them, and with two spins a band holds 2N electrons. A full band carries no current; a part full one does. The run between knocks, the drift, the spoiling by stray atoms and the heat carried alongside follow with worked numbers for copper.</p>
+</header>
+
+<section class="class step" data-step="41phys1">
+  <h2 class="sthead"><span class="stno">41phys1</span>A ring of atoms is a clock</h2>
+  <p data-pid="47d6b9"><a href="r32chem.html#ecb325">32·chem</a> saw a crystal as one cell repeated in space. Take first a row of N atoms a distance a apart, with the last joined back to the first. Site j and site j + N are the same site: the sites are the hours of the clock of N (41a). A row a billion atoms long has the same inside whether its ends are free or joined; joining them only spares the ends, and the count of states comes out the same. An electron spread over the row has an amount cⱼ at each site, <a href="r35phys.html#947537">35·phys</a>’s wave read at the atoms.</p>
+  <p data-pid="65d466">The move S that slides every amount one site along, (Sc)ⱼ = cⱼ₊₁, looks the same at every site, exactly as the row does. Write ω for the turning e^(2πi/N), so ω^N = 1.</p>
+  <p data-pid="abf9fd">Wrap-round technique: <b>on the clock of N, the slide by one site has exactly N stretches, the numbers ω^m for the N hours m, and the arrow it stretches by ω^m is cⱼ = ω^(mj).</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the wrap-round technique">
+(Sc)_j = c_{j+1},\ \ j \in \mathbb{Z}/N @@ j + 1 is read on the clock of N
+S^N c = c @@ N slides bring every site back to itself
+Sc = \lambda c,\ c \ne 0 \Rightarrow c = S^N c = \lambda^N c,\ \ \lambda^N = 1 @@ each stretch of S is an N-th root of 1
+c_j = \omega^{mj}:\ (Sc)_j = \omega^{m(j+1)} = \omega^m c_j @@ ω^(mj) depends on mj only on the clock of N, since ω^N = 1
+\textstyle\sum_j \omega^{(m - m')j} = 0 \text{ for } m \ne m' \text{ on the clock of } N @@ a geometric sum (15i) of a root of 1 that is not 1
+\htmlClass{new}{N \text{ stretches } \omega^m,\ m \in \mathbb{Z}/N,\ \text{ with right-angled arrows}} \quad \blacksquare @@ N right-angled arrows fill all N directions; nothing is left over
+  </pre>
+  <p data-pid="77991f">So the waves of a ring are labelled by hours m, read on the clock of N: m and m + N give the same amounts at every site. In length units the wave is cⱼ = e^(ikja) with k = 2πm/(Na), and k and k + 2π/a are one wave. The sites live on one clock and the waves on another of the same size.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the ring · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">41·phys.1.1</span><span class="ph understand">understand</span>Why may a long row of atoms be joined into a ring without changing its inside? <br>What does the wrap-round technique say, and why are m and m + N the same wave?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41phys2">
+  <h2 class="sthead"><span class="stno">41phys2</span>Hopping makes a band</h2>
+  <p data-pid="4c1dcc"><a href="r38phys.html#6a9210">38·phys</a> found that N atoms in a row with free ends spread one level into a band, E₀ − 2t cos(kπ/(N + 1)). On a ring the clock gives the levels exactly, and labels each by an hour. An electron at a site has energy E₀ there, and it can hop to either neighbour; the rule for its energy adds −t times the amounts next door, with t > 0 a measured number for each solid. Its rule H is the same at every site, so H and the slide S can be done in either order: HS = SH.</p>
+  <p data-pid="b864eb">Hopping-band technique: <b>an electron hopping by t on a ring of N sites has the N levels E₀ − 2t cos(2πm/N), one for each hour m, and they all lie in a band from E₀ − 2t to E₀ + 2t.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the hopping-band technique">
+(Hc)_j = E_0c_j - t(c_{j+1} + c_{j-1}) @@ the rule; j ± 1 on the clock of N
+HSc = SHc @@ H is the same at every site
+Sc = \omega^m c \Rightarrow S(Hc) = \omega^m (Hc) @@ H keeps each line of arrows S stretches by ω^m, and that line is one arrow wide
+(Hc)_j = E_0\omega^{mj} - t(\omega^{m} + \omega^{-m})\omega^{mj} @@ put cⱼ = ω^(mj)
+\omega^m + \omega^{-m} = 2\cos(2\pi m/N) @@ a turning plus its mirror (26a)
+\htmlClass{new}{E_m = E_0 - 2t\cos(2\pi m/N),\ \ m \in \mathbb{Z}/N} \quad \blacksquare @@ the cosine runs from −1 to 1
+  </pre>
+  <p data-pid="1efc35">So the levels of separate atoms, all at E₀, spread when the atoms come close into a band of width 4t, and a ring of a billion atoms has a billion levels in it, as close as sand. Near the bottom, cos x ≈ 1 − x²/2 gives E ≈ E₀ − 2t + ta²k², a parabola: there the electron moves as a free one, with a mass set by ħ²/(2ta²) in place of its own.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · a band · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·phys.2.1</span><span class="ph understand">understand</span>Why does the rule H keep each wave of the slide? <br>What does the hopping-band technique say, and how wide is the band?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41phys3">
+  <h2 class="sthead"><span class="stno">41phys3</span>Two electrons to each hour</h2>
+  <p data-pid="d3adfd"><a href="r37phys.html#1ea43c">37·phys</a> put at most two electrons in each one-electron state, one of each spin. Each hour of the band is one state of the wave.</p>
+  <p data-pid="26af3a">Two-per-hour technique: <b>a band of a ring of N sites holds exactly 2N electrons, two for each atom.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the two-per-hour technique">
+\text{levels of the band} = \text{hours } m \in \mathbb{Z}/N @@ the hopping-band technique
+\text{one wave per hour, two spins per wave} @@ the swap-sign technique
+\htmlClass{new}{2N \text{ electrons fill the band}} \quad \blacksquare @@ two for each site
+  </pre>
+  <p data-pid="f42724">A ring of six carbons, benzene, tests it. Each carbon gives one electron to the ring. The levels are E₀ − 2t, E₀ − t twice, E₀ + t twice, and E₀ + 2t. The six electrons fill the lowest three hours, two each, for a total of 6E₀ − 8t. Three separate double bonds, each a ring of two, hold 6E₀ − 6t. The ring is lower by 2t, and that is why benzene is so hard to break open. The band holds 12; the six electrons fill it half.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · counting · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·phys.3.1</span><span class="ph understand">understand</span>Why does each hour of a band take two electrons and no more? <br>How does the two-per-hour technique give benzene’s six electrons a total of 6E₀ − 8t?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41phys4">
+  <h2 class="sthead"><span class="stno">41phys4</span>The sea of electrons in copper</h2>
+  <p data-pid="8abcab">A block of copper is a clock in each of three directions: a cube of side L, wrapped round in each, so a wave is labelled by three hours and k = (2π/L)(m₁, m₂, m₃). Near the bottom of its band an electron of copper moves as a free one, E = ħ²|k|²/2m. Copper gives one electron per atom to the band, n = 8.49 × 10²⁸ of them per cubic metre: its density 8.96 g/cm³ over 63.55 g per mole, times 6.022 × 10²³.</p>
+  <p data-pid="b2e062">Ball-of-states technique: <b>n free electrons per unit volume, filled from the lowest level, fill a ball of k of radius k_F with k_F³ = 3π²n, and the top level is ħ²k_F²/2m.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the ball-of-states technique">
+k = \tfrac{2\pi}{L}(m_1, m_2, m_3),\ \ m_i \in \mathbb{Z}/N @@ the wrap-round technique on each edge
+\text{one } k \text{ per box of volume } (2\pi/L)^3 @@ the hours make a grid of k
+\text{levels rise with } |k| \text{, so the filled } k \text{ form a ball} @@ E = ħ²|k|²/2m
+2 \cdot \tfrac{4}{3}\pi k_F^3 \big/ (2\pi/L)^3 = nL^3 @@ two spins per box; every electron placed
+\htmlClass{new}{k_F^3 = 3\pi^2 n,\ \ E_F = \hbar^2k_F^2/2m} \quad \blacksquare @@ the L³ cancels
+  </pre>
+  <p data-pid="dc43a1">For copper: k_F = 1.36 × 10¹⁰ per metre, the top level E_F = 7.0 eV above the bottom, and the electrons there move at v_F = ħk_F/m = 1.57 × 10⁶ m/s, half a percent of the speed of light, even at the coldest. kT at room temperature is 0.025 eV, so by the <a href="r37phys.html#fe5627">two-shares technique</a> the filling is a sharp step at E_F, blurred over a few hundredths of an eV. Only the electrons near the top can change state, since every state below is taken.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the sea · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·phys.4.1</span><span class="ph understand">understand</span>Why do the filled waves of a block of copper make a ball of k? <br>What does the ball-of-states technique give for copper’s top level, and why can only electrons near it change state?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41phys5">
+  <h2 class="sthead"><span class="stno">41phys5</span>Two kinds of site open a gap</h2>
+  <p data-pid="e5a956">Salt is sodium and chlorine in turn, along every row. Take a ring of N sites, N even, whose sites have energies E₀ + Δ and E₀ − Δ in turn, hopping t as before. The pattern now repeats every two sites, so the cells, not the sites, are the hours, of the clock of N/2.</p>
+  <p data-pid="319d77">Two-site-gap technique: <b>a ring whose sites alternate between E₀ + Δ and E₀ − Δ has two bands, E₀ ± √(Δ² + 4t² cos² ka), each of N/2 levels, with a gap of 2Δ between them.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the two-site-gap technique">
+\alpha_n = \alpha e^{2ikan},\ \ \beta_n = \beta e^{2ikan} @@ the wrap-round technique on the clock of N/2 cells, cell length 2a
+(E - E_0 - \Delta)\alpha = -t(1 + e^{-2ika})\beta @@ the rule at a high site, its two low neighbours
+(E - E_0 + \Delta)\beta = -t(1 + e^{2ika})\alpha @@ the rule at a low site
+(E - E_0)^2 - \Delta^2 = t^2|1 + e^{2ika}|^2 = 4t^2\cos^2 ka @@ multiply, for α, β not both 0
+\htmlClass{new}{E = E_0 \pm \sqrt{\Delta^2 + 4t^2\cos^2 ka}:\ \text{ the gap from } E_0 - \Delta \text{ to } E_0 + \Delta} \quad \blacksquare @@ at ka = π/2 the cosine is 0; elsewhere the root is larger
+  </pre>
+  <p data-pid="7f8eaa">Each band has N/2 hours, so it holds N electrons, one per site. With Δ = 0 the gap closes and the two bands join into the one band of the hopping-band technique, cut at its middle. On a ring of 8 with t = 1 and Δ = 0.5 the levels are ±2.06, ±1.5 twice and ±0.5: nothing between −0.5 and 0.5. In salt the chlorine sites are far lower, the lower band holds every electron sodium handed over, and the gap is about 9 eV. Salt is clear and does not conduct.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · a gap · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·phys.5.1</span><span class="ph understand">understand</span>Why do the cells, and not the sites, become the hours when the sites alternate? <br>What does the two-site-gap technique say, and where in the band does the gap open?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41phys6">
+  <h2 class="sthead"><span class="stno">41phys6</span>A full band carries nothing</h2>
+  <p data-pid="b919d3"><a href="r38phys.html#17e077">38·phys</a>’s full-band technique said a full band carries no current, since a push finds no free level to move an electron to. The clock shows what the current of each filling is. An electron in wave k moves at the group speed of <a href="r32phys.html#9742d9">32·phys</a>, the slope of its frequency E/ħ: v(k) = (1/ħ) dE/dk = (2ta/ħ) sin ka. A push of the field E on the electron changes its ħk at the rate −eE, as a force changes a momentum (14·phys); for a wave in a lattice that rule is held in trust. In a step of time each filled k moves on by one hour of the clock.</p>
+  <p data-pid="863416">Full-clock technique: <b>the current of a band is the sum of sin(2πm/N) over its filled hours; it is 0 for a full band before and after any push, and a band filled in part carries current once pushed.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the full-clock technique">
+\text{current} \propto \textstyle\sum_{\text{filled } m} \sin(2\pi m/N) @@ the group speeds, two spins alike
+\textstyle\sum_{m \in \mathbb{Z}/N} \sin(2\pi m/N) = \operatorname{Im}\sum_m \omega^m = 0 @@ the roots of 1 add to 0 (41·phys.1)
+\text{a push: } m \mapsto m + 1 \text{ on the clock of } N @@ every filled hour moves on together
+m \mapsto m + 1 \text{ is one-to-one on } \mathbb{Z}/N @@ 41a: a full clock stays full
+\htmlClass{new}{\text{full: the sum stays } 0;\ \ \text{part full: the block of filled hours slides off centre}} \quad \blacksquare @@ the speeds no longer cancel in pairs
+  </pre>
+  <p data-pid="db61a3">On the ring of six, half full: the hours −1, 0, 1 are filled, and sin(−60°) + sin 0° + sin 60° = 0. After one push the filled hours are 0, 1, 2, and the sum is 0 + 0.866 + 0.866 = 1.73: a current. Full, all six hours, the sum is 0 and stays 0. Copper has one electron per atom in a band that holds two: half full, a metal. Silicon fills its lower band exactly, and its gap of 1.12 eV is 44 times kT at room temperature, so by 38·phys’s gap-crossing technique the share lifted across is about e^(−22), 2 in 10¹⁰: a few carriers, and 38·phys made them many by doping. Diamond, with a gap of 5.5 eV, lifts none.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · metal or not · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·phys.6.1</span><span class="ph understand">understand</span>Why does a push not change the current of a full band? <br>What does the full-clock technique give for the half full ring of six after one push?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41phys7">
+  <h2 class="sthead"><span class="stno">41phys7</span>The run between knocks</h2>
+  <p data-pid="d08164">A wave of a perfect lattice is a shape of the rule, so by the standing-wave technique its size never changes: a perfect lattice does not knock its electrons at all. What knocks them is whatever spoils the repeat: atoms shaking with heat, and stray atoms. Say each electron is knocked at random, with τ the average time since its last knock, and after a knock it moves off in no favoured direction.</p>
+  <p data-pid="07ea2c">Drift-current technique: <b>with n electrons per unit volume and average time τ since the last knock, a field E drives a current density ne²τE/m, so the conductivity is σ = ne²τ/m and the resistivity is ρ = 1/σ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the drift-current technique">
+m\,\dot v = -eE @@ the push between knocks (13·phys: force sets the slope of velocity)
+\bar v = -eE\tau/m @@ the velocity gained since the last knock, averaged; the speeds after a knock average to 0
+j = -ne\bar v = \tfrac{ne^2\tau}{m}E @@ charge per second through a unit area
+\htmlClass{new}{\sigma = ne^2\tau/m,\ \ \rho = 1/\sigma} \quad \blacksquare @@ current density in proportion to the field: 7·phys’s proportion law, made local
+  </pre>
+  <p data-pid="9eb08f">Copper’s conductivity is measured at 5.96 × 10⁷ per ohm metre, so ρ = 1.68 × 10⁻⁸ ohm metres, and τ = σm/(ne²) = 2.5 × 10⁻¹⁴ s. A metre of wire 1 mm² across has R = ρL/A = 0.0168 ohm. One ampere through it moves the electrons on at 7.4 × 10⁻⁵ m/s, a quarter of a metre an hour; the electrons near the top move at v_F all the while, and between knocks they run v_Fτ = 39 nm, about 170 atoms. The run is long because the lattice itself never knocks.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · drift · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·phys.7.1</span><span class="ph understand">understand</span>Why does a perfect lattice not knock its electrons? <br>What does the drift-current technique give for copper’s τ and its run between knocks?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41phys8">
+  <h2 class="sthead"><span class="stno">41phys8</span>Stray atoms and alloys</h2>
+  <p data-pid="ccc9fd">An alloy puts other atoms into a metal’s lattice: in place of its own, as nickel or zinc in copper (cupronickel, brass), or in the gaps between them, as carbon in iron (steel). Either way the repeat is spoiled and the electrons are knocked more.</p>
+  <p data-pid="187f4b">Rates-add technique: <b>if two kinds of knock come independently at rates 1/τ₁ and 1/τ₂, they come together at the rate 1/τ₁ + 1/τ₂, so the resistivities they cause add.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the rates-add technique">
+P(\text{no knock in } dt) = (1 - dt/\tau_1)(1 - dt/\tau_2) @@ independent: the chances multiply, each at its rate
+= 1 - dt\,(1/\tau_1 + 1/\tau_2) + dt^2/(\tau_1\tau_2) @@ multiply out
+1/\tau = 1/\tau_1 + 1/\tau_2 @@ the dt² term is lost as dt shrinks
+\htmlClass{new}{\rho = \tfrac{m}{ne^2\tau_1} + \tfrac{m}{ne^2\tau_2} = \rho_1 + \rho_2} \quad \blacksquare @@ the drift-current technique, n and m the same for both
+  </pre>
+  <p data-pid="d4156d">So a metal’s resistivity is a shaking part, which falls as it cools, plus a stray part, which does not. Pure copper: 1.68 × 10⁻⁸ ohm metres at 293 K, about 0.21 × 10⁻⁸ at 77 K, in liquid nitrogen. One nickel atom in a hundred adds about 1.1 × 10⁻⁸ at every temperature: 2.8 × 10⁻⁸ warm and 1.3 × 10⁻⁸ cold. Cooling cuts pure copper’s resistance 8 times, the alloy’s only 2.1 times, and that ratio is how makers test copper for purity. Constantan, copper with 45 parts in a hundred of nickel, has 4.9 × 10⁻⁷, almost all of it the stray part, so it barely changes with temperature: resistors and strain gauges are wound from it.</p>
+  <p data-pid="698668">The same stray atoms make an alloy harder. A metal bends because its planes of atoms slide over each other and the sea of electrons, shared by all, follows; nothing ties one atom to one neighbour. A stray atom of another size snags the planes. Pure iron bends easily, and iron with less than one part in a hundred of carbon is steel. Glass and salt hold their electrons in full bands and in bonds between neighbours, so they break instead.</p>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · alloys · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·phys.8.1</span><span class="ph understand">understand</span>Why do the rates of independent knocks add? <br>Why does cooling cut pure copper’s resistance 8 times and the nickel alloy’s only about twice?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41phys9">
+  <h2 class="sthead"><span class="stno">41phys9</span>Heat rides on the same electrons</h2>
+  <p data-pid="6d5b88">Heat flows down a bar at the rate κ times the slope of the temperature, κ its thermal conductivity. In a metal the electrons near the top carry heat as well as charge. A gas whose carriers have heat c per unit volume per kelvin, speed v and run ℓ between knocks carries heat with κ = cvℓ/3, from the share of carriers crossing a face from each side, held in trust here. Of the electrons, only those within kT of the top can take heat, so their c is n k times about kT/E_F; the exact number, π²/2 times nk·kT/E_F, comes from the two-shares technique and is held in trust.</p>
+  <p data-pid="2066ff">Heat-and-charge technique: <b>for electrons in a metal, the thermal conductivity over the conductivity times the temperature is (π²/3)(k/e)², about 2.44 × 10⁻⁸ watt ohms per kelvin squared, whatever the metal and whatever τ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the heat-and-charge technique">
+\kappa = \tfrac13 c\,v_F\,\ell,\ \ \ell = v_F\tau @@ the carriers’ heat, speed and run
+c = \tfrac{\pi^2}{2}\,nk\,\tfrac{kT}{E_F},\ \ E_F = \tfrac12 mv_F^2 @@ the two-shares technique (held in trust); the ball-of-states technique
+\kappa = \tfrac{\pi^2}{3}\,\tfrac{nk^2T\tau}{m} @@ the v_F² cancels
+\sigma T = \tfrac{ne^2\tau}{m}T @@ the drift-current technique
+\htmlClass{new}{\kappa/(\sigma T) = \tfrac{\pi^2}{3}(k/e)^2 \approx 2.44 \times 10^{-8}} \quad \blacksquare @@ n, m and τ all cancel
+  </pre>
+  <p data-pid="ac2c1b">Copper at 293 K: 2.44 × 10⁻⁸ × 5.96 × 10⁷ × 293 = 427 watts per metre per kelvin, against 401 measured. Aluminium, σ = 3.77 × 10⁷: 270 against 237. The good conductors of charge are the good conductors of heat, which is why a metal spoon in tea grows hot and a glass rod does not. Glass carries heat at about 1, by the shaking of its atoms alone. Diamond, which has no free electrons at all, carries about 2000 by shaking, the best of any solid: the rule is a rule for electrons, not for heat.</p>
+  <section class="slides" id="sl9"><div class="eyebrow">The slides · heat · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·phys.9.1</span><span class="ph understand">understand</span>Why does τ cancel in the heat-and-charge technique? <br>How close does the technique come for copper, and why does diamond not obey it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41phys10">
+  <h2 class="sthead"><span class="stno">41phys10</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{a ring of } N \text{ atoms has } N \text{ states, so its band holds } N \text{ electrons}\,? @@ two spins to each hour: 2N
+k \text{ and } k + 2\pi/a \text{ are different waves}\,? @@ at the sites they agree; the hour is read on the clock of N
+\text{an electron is knocked by every atom it passes}\,? @@ the perfect lattice never knocks; copper’s run is about 170 atoms
+\text{the electrons of a full band cannot move}\,? @@ each moves, at (2ta/ħ) sin ka; the speeds cancel in pairs
+\text{two electrons per atom fill a band, so magnesium insulates}\,? @@ in three directions two bands overlap, and magnesium is a metal
+\text{the drift speed is the electrons’ speed}\,? @@ 7.4 × 10⁻⁵ m/s is the average; each moves at about 1.6 × 10⁶ m/s
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·phys.10.1</span><span class="ph understand">understand</span>Why is it wrong to say a ring of N atoms gives a band of N electrons? <br>Why does a count of two electrons per atom not prove that a solid insulates?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">41·phys.11.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="N = 4,\ \text{four electrons};\ \ N = 6,\ \text{six}"></span></span>Build the levels of a ring of four carbons by the hopping-band technique, and fill them with four electrons. <br>Compare the total with two separate double bonds, and say why a ring of four is unstable while benzene is not.</div>
+  <div class="chq"><span class="chid">41·phys.11.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="t \to 0;\ \ \Delta \to 0"></span></span>Let the hopping t shrink to 0, the atoms drawn far apart. What happens to the band and to the two-per-hour count? <br>Now let Δ shrink to 0 in the two-site-gap technique: show the two bands join into the hopping band, and find where the old gap sat.</div>
+  <div class="chq"><span class="chid">41·phys.11.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{full} \Rightarrow \text{no current after any push}"></span></span>The full-clock technique: a full band carries nothing after any push. Turn it round: if a filling of the ring of six carries nothing after every number of pushes, must it be full or empty? <br>Test the filling of the hours 0 and 3 alone, and the hours 0, 2 and 4, and prove which fillings of the ring of six carry nothing for ever.</div>
+  <div class="chq"><span class="chid">41·phys.11.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">7·phys: what flows in a wire, and what pushes it</span></span>The first picture of the drift took electrons as a gas of tiny balls at the speed heat gives them, about 10⁵ m/s, every one of them taking heat. Its speed squared was about 190 times too small and its heat per electron about 85 times too large, and the two errors nearly cancelled in the heat ratio, which came out half the right size. <br>Does a near right answer from a wrong picture count for the picture? Which numbers on this page tell the two pictures apart?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r41comp.html">← 41·comp · how can strangers share a secret?</a><a href="r41crypt.html">41·crypt · can a secret be split so any three of five can open it? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The wrap-round is the periodic, or Born–von Kármán, boundary condition. The waves labelled by hours are Bloch waves, and the hopping-band technique is Bloch’s theorem for the tight-binding model, with t the hopping integral; the hours of k, taken from −N/2 to N/2, fill the first Brillouin zone. The ring of six is Hückel’s model of benzene, and the extra 2t its aromatic stabilisation (in Hückel’s notation the hopping is −β). The ball of states is the Fermi sphere, k_F the Fermi wave number, E_F the Fermi energy and v_F the Fermi velocity. The two-site-gap technique gives the band gap of a diatomic chain; a part-filled band makes a metal, a full one with a wide gap an insulator, with a narrow gap a semiconductor. The drift-current technique is the Drude model and τ the relaxation time; the rates-add technique is Matthiessen’s rule, the ratio of warm to cold resistance is the residual resistivity ratio, and the stray part is residual resistivity. Alloys of the first kind are substitutional and of the second interstitial. The heat-and-charge technique is the Wiedemann–Franz law, and (π²/3)(k/e)² is the Lorenz number. The rule ħ dk/dt = −eE held in trust is the semiclassical equation of motion.</p>
+  <h3>Who said it first</h3>
+  <p>Gustav Wiedemann and Rudolph Franz measured the fixed ratio of heat to charge in 1853, and Ludvig Lorenz saw in 1872 that it grows with temperature. Paul Drude gave the gas of electrons in 1900, two years after the electron was found, and got the ratio near right by a slip of a factor 2 that hid a much larger error in the heat. Augustus Matthiessen found that stray atoms add a fixed amount to resistance in the 1860s. Arnold Sommerfeld put the two-shares technique into the gas in 1927 and the heat ratio came out right. Felix Bloch found the waves in a lattice in 1928, in his thesis under Werner Heisenberg, and explained the long run; Alan Wilson saw in 1931 that full bands make insulators. Erich Hückel gave the ring of benzene in 1931. The figures for copper here are handbook values at room temperature.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Sodium has one electron per atom and chlorine seven, eight in all, an even number, so salt fills its bands and insulates.” Not allowed as it stands: an even count fills bands only if the bands do not overlap, and magnesium, with two per atom, is a metal. The two-site-gap technique shows a gap opens between the bands of salt; it is the gap, not the count, that makes the insulator.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'slide',t:R`(Sc)_j = c_{j+1},\ S^N = 1`,n:`On the clock of N.`},
+  {k:'ember',kl:'stretch',t:R`\lambda^N = 1`,n:`A root of 1.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{c_j = \omega^{mj},\ m \in \mathbb{Z}/N}`,n:`One wave per hour.`}
+],{title:'The slides · the ring · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'rule',t:R`E_0c_j - t(c_{j+1} + c_{j-1})`,n:`Hopping.`},
+  {k:'ember',kl:'wave',t:R`c_j = \omega^{mj}`,n:`Kept by H.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{E_0 - 2t\cos(2\pi m/N)}`,n:`Width 4t.`}
+],{title:'The slides · a band · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'hours',t:R`m \in \mathbb{Z}/N`,n:`N levels.`},
+  {k:'ember',kl:'spins',t:R`\uparrow,\ \downarrow`,n:`Two to each.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2N}`,n:`A full band.`}
+],{title:'The slides · counting · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'grid',t:R`(2\pi/L)^3 \text{ per state}`,n:`Three clocks.`},
+  {k:'ember',kl:'fill',t:R`2\cdot\tfrac43\pi k_F^3`,n:`Two spins.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{k_F^3 = 3\pi^2 n,\ E_F \approx 7.0 \text{ eV}}`,n:`Copper.`}
+],{title:'The slides · the sea · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'two sites',t:R`E_0 \pm \Delta`,n:`Every other site.`},
+  {k:'ember',kl:'levels',t:R`E_0 \pm \sqrt{\Delta^2 + 4t^2\cos^2 ka}`,n:`Two bands.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{gap } 2\Delta}`,n:`At ka = π/2.`}
+],{title:'The slides · a gap · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'speed',t:R`v \propto \sin ka`,n:`Group speed.`},
+  {k:'ember',kl:'full',t:R`\sum_m \omega^m = 0`,n:`Cancels.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{part full} \Rightarrow \text{current}}`,n:`A metal.`}
+],{title:'The slides · metal or not · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'push',t:R`\bar v = -eE\tau/m`,n:`Between knocks.`},
+  {k:'ember',kl:'current',t:R`j = ne^2\tau E/m`,n:`Proportion.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\tau_{\text{Cu}} \approx 2.5 \times 10^{-14}\ \text{s}}`,n:`A run of 39 nm.`}
+],{title:'The slides · drift · ← → keys work'});
+stepper('#sl8',[
+  {k:'ember',kl:'rates',t:R`1/\tau = 1/\tau_1 + 1/\tau_2`,n:`Independent knocks.`},
+  {k:'ember',kl:'add',t:R`\rho = \rho_{\text{shake}} + \rho_{\text{stray}}`,n:`Two parts.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{1.68 \to 2.8 \times 10^{-8}}`,n:`With 1% nickel.`}
+],{title:'The slides · alloys · ← → keys work'});
+stepper('#sl9',[
+  {k:'ember',kl:'heat',t:R`\kappa = \tfrac{\pi^2}{3} nk^2T\tau/m`,n:`Near the top.`},
+  {k:'ember',kl:'charge',t:R`\sigma = ne^2\tau/m`,n:`The same τ.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\kappa/\sigma T = \tfrac{\pi^2}{3}(k/e)^2}`,n:`427 for copper, 401 measured.`}
+],{title:'The slides · heat · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

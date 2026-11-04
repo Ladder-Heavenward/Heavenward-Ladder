@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Disorder is impossible</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40i.html">← 40i the unavoidable</a><a href="r40k.html">next: 40k shortest paths and greedy choices →</a></p>
+  <div class="tags"><span class="tag proof">40j · proof</span></div>
+  <h1>Disorder is impossible</h1>
+  <p data-pid="371da9">At any party of six, there are three people who all know each other or three who are all strangers. Nobody planned it, and nobody can prevent it; with five people it can be prevented. This step proves it, and then proves the same thing for any size: for every size of group, there is a party large enough that a group of that size, all friends or all strangers, cannot be avoided. Complete disorder is impossible once things are many enough. The counts that the proof gives are huge, and the true numbers are known only for the smallest cases. The step also finds how many links a graph can have with no three dots all joined, and the answer is a quarter of the square of the number of dots. Last, it turns the question round. To show that a large party can avoid a group of a given size, it does not build one. It colours the links at random, counts the average number of one-coloured groups, finds it below one, and concludes that some colouring has none. That argument shows a thing exists and names no example of it.</p>
+  <p class="gesture" data-pid="41e2f2">Colour the links of six dots all joined, red or blue: some three dots have their three links one colour, and five dots need not. For every s and t, enough dots force s dots with every link red or t with every link blue, and the count needed is at most a number from the triangle of choices. A graph with no three dots all joined has at most n²/4 links. A random colouring has fewer than one one-coloured group of k on average when there are fewer than about 2^(k/2) dots, so some colouring has none.</p>
+</header>
+
+<section class="class step" data-step="40j1">
+  <h2 class="sthead"><span class="stno">40j1</span>A party of six</h2>
+  <p data-pid="77847a">Colour each link of Kₙ red or blue, red for friends and blue for strangers. A <i>one-colour triangle</i> is three dots whose three links have one colour.</p>
+  <p data-pid="aa8f6a">Six-guests technique: <b>every red and blue colouring of the links of K₆ has a one-colour triangle; some colouring of K₅ has none.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the six-guests technique">
+v \text{ a dot of } K_6;\ 5 \text{ links at } v @@ any dot
+\text{three of them, to } u_1, u_2, u_3 \text{, have one colour, say red} @@ 5 &gt; 2 · 2: the crowded-box technique
+\text{a red link among } u_1, u_2, u_3 \text{ makes a red triangle with } v @@ case one
+\text{else } u_1 u_2,\ u_2 u_3,\ u_1 u_3 \text{ are all blue} @@ case two: a blue triangle
+\htmlClass{new}{K_5:\ \text{the ring of five red, the five crossing links blue}} \quad \blacksquare @@ the ring and the star of five each have no triangle
+  </pre>
+  <p data-pid="a2b957">For each s and t, the <i>party number</i> R(s, t) is the least n such that every colouring of Kₙ has s dots with every link between them red, or t with every link blue, if such an n exists. The six-guests technique says R(3, 3) = 6. R(s, 2) = s: a colouring of Kₛ with no blue link at all is all red.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · six guests · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">40j1.1</span><span class="ph understand">understand</span>What does the six-guests technique say? <br>Why must three of the five links at a dot of K₆ share a colour, and how does K₅ escape?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40j2">
+  <h2 class="sthead"><span class="stno">40j2</span>Order in every large enough disorder</h2>
+  <p data-pid="106529">Party-number technique: <b>for all s, t ≥ 2, R(s, t) exists, and R(s, t) ≤ R(s − 1, t) + R(s, t − 1).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the party-number technique">
+n = R(s - 1, t) + R(s, t - 1);\ v \text{ a dot of } K_n @@ induction on s + t (4c); the two exist
+n - 1 \text{ links at } v:\ \text{at least } R(s-1, t) \text{ red, or at least } R(s, t-1) \text{ blue} @@ else n − 1 ≤ R(s − 1, t) − 1 + R(s, t − 1) − 1 (the crowded-box technique, in its sharp form)
+\text{red case: among the red neighbours, } s - 1 \text{ all red, or } t \text{ all blue} @@ the meaning of R(s − 1, t)
+s - 1 \text{ all red, with } v:\ s \text{ all red} @@ v is joined to them in red
+\text{blue case: the same with the colours traded} @@ R(s, t − 1)
+\htmlClass{new}{R(s, t) \le R(s - 1, t) + R(s, t - 1) \le \binom{s + t - 2}{s - 1}} \quad \blacksquare @@ the row-step technique of 4k, from R(s, 2) = s and R(2, t) = t
+  </pre>
+  <p data-pid="6a9e71">So R(k, k) ≤ (2k − 2 choose k − 1) < 4^(k − 1). R(4, 4) ≤ 20, and in fact R(4, 4) = 18; R(3, 4) ≤ 10, and in fact 9 (40j.6.1). The bound is the same idea as the six-guests technique, repeated. 40·now2 asks how far from the truth it is.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · party number · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40j2.1</span><span class="ph understand">understand</span>What is the party number R(s, t), and what does the party-number technique say? <br>Why do the n − 1 links at v give R(s − 1, t) red or R(s, t − 1) blue?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40j3">
+  <h2 class="sthead"><span class="stno">40j3</span>No triangle, few links</h2>
+  <p data-pid="afd947">How many links can n dots have with no three all joined? The two-sided graph with sides of n/2 has n²/4 links and no triangle, since a triangle is an odd cycle (40a3).</p>
+  <p data-pid="327d5f">No-triangle technique: <b>a graph on n dots with no triangle has at most n²/4 links.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the no-triangle technique">
+\{u, w\} \text{ a link:\ } d(u) + d(w) \le n @@ u and w share no neighbour, so their neighbours are separate sets of dots
+\textstyle\sum_{\{u,w\} \in E} (d(u) + d(w)) = \sum_v d(v)^2 @@ each dot v is named once for each of its d(v) links
+\textstyle\sum_v d(v)^2 \le n|E| @@ the first line, over the |E| links
+\big(\textstyle\sum_v d(v)\big)^2 \le n \sum_v d(v)^2 @@ the product inequality of 31a, with the list of 1s
+(2|E|)^2 \le n \cdot n|E| @@ the ends-count technique, and the third line
+\htmlClass{new}{|E| \le n^2/4} \quad \blacksquare @@ 
+  </pre>
+  <p data-pid="a0ba78">So a crowd of links forces a triangle: one link past n²/4 is enough. Rung 40’s questions are often of this kind, the most a thing can hold before a pattern is forced. Forbid four dots all joined in place of three, and the best is the three-sided graph with equal sides, n²/3 links; the general count was found in 1941.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · no triangle · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40j3.1</span><span class="ph understand">understand</span>What does the no-triangle technique say? <br>Why is d(u) + d(w) at most n for a link {u, w} of a graph with no triangle?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40j4">
+  <h2 class="sthead"><span class="stno">40j4</span>A colouring nobody has seen</h2>
+  <p data-pid="6bd70e">To show R(k, k) > n, one colouring of Kₙ with no one-colour group of k is enough. Nobody knows how to write one down for large k. Colour each link red or blue by a fair coin, all the coins independent. A <i>one-colour k-group</i> is k dots whose links all share a colour.</p>
+  <p data-pid="60c636">Average-below-one technique: <b>if the average number of one-colour k-groups in a random colouring of Kₙ is below 1, some colouring of Kₙ has none, and R(k, k) > n.</b> A count that is always at least 1 has average at least 1, by 30g’s average-adds technique, since X ≥ 1 gives E X ≥ 1.</p>
+  <pre class="lines" data-k="ember" data-label="this step: a lower bound">
+\text{one group of } k \text{ dots: chance } 2 \cdot 2^{-\binom{k}{2}} \text{ that its links share a colour} @@ all red or all blue, coins independent (30f)
+\text{average number} = \binom{n}{k}\, 2^{1 - \binom{k}{2}} @@ the average-adds technique: a sum over the groups of their chances
+n \le 2^{k/2},\ k \ge 3:\ \binom{n}{k} 2^{1 - \binom{k}{2}} < \frac{n^k}{k!}\, 2^{1 - \frac{k(k-1)}{2}} \le \frac{2^{1 + k/2}}{k!} < 1 @@ n choose k is below nᵏ/k!; nᵏ ≤ 2^(k²/2)
+\htmlClass{new}{R(k, k) > 2^{k/2} \text{ for } k \ge 3} \quad \blacksquare @@ the average-below-one technique
+  </pre>
+  <p data-pid="5f3f1c">At k = 10 the average is below one up to n = 100, so some colouring of K₁₀₀ has no one-colour group of ten. Not one such colouring has ever been written down. So order is forced somewhere between about 2^(k/2) and 4^k dots. The gap between the two was not narrowed at the top for 88 years; 40·now2 tells how it was.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · counting</div>
+    <p data-pid="e47609">4k found that random things in a crowd make a steady shape, and that the shape of the pile is part of the answer. Here the pile is of colourings, 2 to the power 4950 of them for K₁₀₀, far too many to look at. The average number of one-colour groups of ten is about 3.7 in a million for K₃₂, and it stays below 1 for every n up to 100.</p>
+    <p data-pid="09ae41"><b>A crowd’s average can prove that some member exists before anyone can name it.</b></p>
+    <p data-pid="e857ad">This average is not a guess about the pile. It is computed exactly, from the count of groups and the chance of each. And an average below one forces a member of the pile with none.</p>
+    <p class="bait" data-pid="b305b1">Rung 7 asked what an either-way principle adds that cannot be shown case by case. A random colouring adds the same kind of thing: a yes with no example.</p>
+  </aside>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · random · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40j4.1</span><span class="ph understand">understand</span>What does the average-below-one technique say, and which fact about averages proves it? <br>Why is the chance that a given group of k dots is one colour 2 times 2 to the minus k choose 2?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40j5">
+  <h2 class="sthead"><span class="stno">40j5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{the average is } 0.3 \text{, so most colourings have no one-colour group}\,? @@ an average below one gives some colouring with none; how many have none needs more than the average
+\text{the average is above } 1 \text{, so every colouring has a one-colour group}\,? @@ the average can be large because a few colourings have many
+R(s, t) \le R(s - 1, t) + R(s, t - 1) \text{, so it equals it}\,? @@ R(3, 4) = 9, and the sum is 10
+\text{a graph with } n^2/4 \text{ links has a triangle}\,? @@ the equal two-sided graph has exactly n²/4 and none; one more forces it
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40j5.1</span><span class="ph understand">understand</span>Why does an average below one not show that most colourings have no one-colour group? <br>Why does an average above one not show that every colouring has one?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">40j.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="R(3, 4) \le R(2, 4) + R(3, 3) = 10"></span></span>Sharpen the party-number technique: if R(s − 1, t) and R(s, t − 1) are both even, the sum minus 1 is enough. Use the ends-count technique on the red links. <br>So R(3, 4) ≤ 9. Find a colouring of K₈, by a ring of eight with some crossing links, that shows R(3, 4) = 9.</div>
+  <div class="chq"><span class="chid">40j.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{three colours: } R(3, 3, 3)"></span></span>Colour the links of Kₙ red, blue or green. Prove that n = 17 forces a one-colour triangle, by the six-guests technique’s first line and the crowded-box technique. <br>What would the average-below-one technique give for three colours?</div>
+  <div class="chq"><span class="chid">40j.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="|E| = \lfloor n^2/4 \rfloor + 1"></span></span>The no-triangle technique bounds the links. Turn it round: with ⌊n²/4⌋ + 1 links, prove that some link lies in a triangle with d(u) + d(w) > n, using Σ over links of d(u) + d(w) = Σ d(v)². Add one link inside the larger side of the equal two-sided graph: how many triangles appear? <br>Is the equal two-sided graph the only graph with ⌊n²/4⌋ links and no triangle?</div>
+  <div class="chq"><span class="chid">40j.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">7a: an or with no side in hand; 14g.4.4: is a plot a proof?</span></span>The average-below-one technique proves that a colouring of K₁₀₀ exists and gives none. In 1976 the four colour result was proved by checking cases no person could read. <br>Rung 7 let a proof say “one or the other” without saying which. Are these two proofs of the same kind as that? Which would you trust less, the one nobody can see the example of, or the one nobody can read through, and why?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r40i.html">← 40i · the unavoidable</a><a href="r40k.html">40k · shortest paths and greedy choices →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Party numbers are Ramsey numbers, and the party-number technique is Ramsey's theorem with the Erdős–Szekeres bound. The six-guests technique is the theorem on friends and strangers. The no-triangle technique is Mantel's theorem; the general count for no r + 1 dots all joined is Turán's theorem (1941), and the subject is extremal graph theory. The average-below-one technique is the first moment method, and the subject that grew from it is the probabilistic method; a coloured Kₙ with independent fair coins is the random graph G(n, ½).</p>
+  <h3>Who said it first</h3>
+  <p>Frank Ramsey proved the theorem in 1928, as a step in a question of logic; he died in 1930, aged 26. Paul Erdős and George Szekeres found it again in 1935 with the bound by the triangle of choices. Willem Mantel's count was a problem set in 1907. Robert Greenwood and Andrew Gleason found R(3, 4) = 9, R(4, 4) = 18 and R(3, 3, 3) = 17 in 1955. Erdős proved R(k, k) > 2^(k/2) in 1947, and with Alfréd Rényi founded the study of random graphs in 1959. Pál Turán proved his count in 1941, in a labour camp.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“A random colouring of K₃₂ has a one-colour group of ten with chance below 1 in 270 000. So if I toss the coins, I will get a colouring with none.” Not allowed as a proof, though nearly so as a recipe: the toss gives such a colouring with high chance, not for sure, and checking it means looking at all 64 512 240 groups of ten. The average-below-one technique proves existence; finding and checking are separate costs.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'five links',t:R`5 > 2 \cdot 2`,n:`Three share a colour.`},
+  {k:'ember',kl:'among them',t:R`\text{red, or all blue}`,n:`A triangle either way.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{R(3, 3) = 6}`,n:`K₅ escapes.`}
+],{title:'The slides · six guests · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'split',t:R`n - 1 = \text{red} + \text{blue}`,n:`At one dot.`},
+  {k:'ember',kl:'recurse',t:R`R(s-1,t),\ R(s,t-1)`,n:`Inside the neighbours.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{R(k,k) < 4^{k-1}}`,n:`Order is forced.`}
+],{title:'The slides · party number · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'a link',t:R`d(u) + d(w) \le n`,n:`No shared neighbour.`},
+  {k:'ember',kl:'square',t:R`(2|E|)^2 \le n\textstyle\sum d^2`,n:`31a.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|E| \le n^2/4}`,n:`Equal two sides is best.`}
+],{title:'The slides · no triangle · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'chance',t:R`2^{1 - \binom{k}{2}}`,n:`One group, one colour.`},
+  {k:'ember',kl:'average',t:R`\binom{n}{k}2^{1 - \binom{k}{2}} < 1`,n:`Over all groups.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{R(k, k) > 2^{k/2}}`,n:`A colouring nobody has seen.`}
+],{title:'The slides · random · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

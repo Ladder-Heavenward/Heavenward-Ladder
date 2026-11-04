@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Field extensions by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r42j.html">← 42j polynomial division by hand</a><a href="r42l.html">next: 42l Boolean algebra standing on its own →</a></p>
+  <div class="tags"><span class="tag tech">42k · technique</span></div>
+  <h1>Field extensions by hand</h1>
+  <p data-pid="52e769">Step 42f proved that the fractions with the square root of two put in are a field, and the fractions with the cube root of two put in are another. Proving that a reciprocal exists is not the same as writing it down. This step writes them down. For the square root of two the trick is the one rung twenty five used for complex numbers: multiply top and bottom by the flipped member. For the cube root of two there is no single flip, and the reciprocal comes from a grid, because multiplying by a member is a straight map on the basis, and its determinant is how much that member scales the field. The same grids find least polynomials: write the powers of a member in the basis and look for the first mix that gives nothing. Last, towers by hand: degrees that share no factor multiply, which settles at once how big a field two roots make.</p>
+  <p class="gesture" data-pid="c48cfc">In the fractions with √2 put in, divide by multiplying top and bottom by the flipped member. With ∛2 put in, multiplying by a member is a grid on the basis 1, ∛2, ∛4; its determinant is the member’s size, and solving the grid gives the reciprocal. The powers of a member, written in a basis, give its least polynomial, and degrees with no common factor multiply.</p>
+</header>
+
+<section class="class step" data-step="42k1">
+  <h2 class="sthead"><span class="stno">42k1</span>Dividing with √2</h2>
+  <p data-pid="81fc05">Flip-undo technique: <b>in ℚ(√2), the reciprocal of a + b√2, not 0, is (a − b√2)/(a² − 2b²), and a² − 2b² is never 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the flip-undo technique">
+(a + b\sqrt2)(a - b\sqrt2) = a^2 - 2b^2 @@ the difference of squares (5i)
+a^2 - 2b^2 = 0,\ b \ne 0 \Rightarrow (a/b)^2 = 2 @@ divide by b²
+\bot @@ no fraction squares to 2 (5f); and b = 0 gives a = 0
+\htmlClass{new}{\frac{1}{a + b\sqrt2} = \frac{a - b\sqrt2}{a^2 - 2b^2}} \quad \blacksquare @@ divide by the size a² − 2b², a fraction other than 0
+  </pre>
+  <p data-pid="a6de25">So 1/(1 + √2) = (1 − √2)/(1 − 2) = −1 + √2, and 1/(3 + 2√2) = 3 − 2√2. The size a² − 2b² multiplies, as 25c’s sizes did: it is the product of a member and its flip, and the flip keeps products. Members of size 1 or −1 are undoable in ℤ[√2], and 1 + √2 is one whose powers never end.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · √2 · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">42k1.1</span><span class="ph understand">understand</span>What does the flip-undo technique say? <br>Why is a² − 2b² never 0 for a + b√2 other than 0, and what is 1/(3 + 2√2)?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42k2">
+  <h2 class="sthead"><span class="stno">42k2</span>Dividing with ∛2</h2>
+  <p data-pid="bce3dc">Write α = ∛2, with basis 1, α, α² over ℚ and α³ = 2. Multiplying by β = a + bα + cα² is a straight map of ℚ(α) to itself.</p>
+  <p data-pid="13c76f">Times-grid technique: <b>the grid of multiplying by β = a + bα + cα² on the basis 1, α, α² has determinant a³ + 2b³ + 4c³ − 6abc, which is 0 only for β = 0, and solving the grid for 1 gives β’s reciprocal.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the times-grid technique">
+\beta \cdot 1 = a + b\alpha + c\alpha^2,\ \ \beta\alpha = 2c + a\alpha + b\alpha^2,\ \ \beta\alpha^2 = 2b + 2c\alpha + a\alpha^2 @@ α³ = 2, α⁴ = 2α
+M_\beta = \begin{pmatrix} a & 2c & 2b \\ b & a & 2c \\ c & b & a \end{pmatrix} @@ the images as columns (27d)
+\det M_\beta = a^3 + 2b^3 + 4c^3 - 6abc @@ 27k’s cofactors
+\htmlClass{new}{\beta \ne 0 \Rightarrow \det M_\beta \ne 0} \quad \blacksquare @@ ℚ(α) is a field, so multiplying by β ≠ 0 loses nothing (27c, 27e)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the reciprocal of 1 + ∛2">
+(1 + \alpha)(x + y\alpha + z\alpha^2) = (x + 2z) + (x + y)\alpha + (y + z)\alpha^2 @@ the grid with a = b = 1, c = 0
+x + 2z = 1,\ \ x + y = 0,\ \ y + z = 0 @@ ask for 1
+z = \tfrac13,\ y = -\tfrac13,\ x = \tfrac13 @@ elimination (27j): x = −y = z, so 3z = 1
+\htmlClass{new}{\frac{1}{1 + \sqrt[3]2} = \frac{1 - \sqrt[3]2 + \sqrt[3]4}{3}} \quad \blacksquare @@ check: (1 + α)(1 − α + α²) = 1 + α³ = 3
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · ∛2 · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42k2.1</span><span class="ph understand">understand</span>What does the times-grid technique say, and where do the 2s in the grid come from? <br>How is 1/(1 + ∛2) found by solving the grid?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42k3">
+  <h2 class="sthead"><span class="stno">42k3</span>Least polynomials from powers</h2>
+  <p data-pid="b88e1f">First-mix technique: <b>to find the least polynomial of β over K, write 1, β, β², … in a basis of the field until one is a mix of those before it; that first mix, moved to one side, is the least polynomial.</b> It is the least by 27b’s spare-arrow technique: no shorter mix gives 0.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the least polynomial of √2 + √3">
+\beta = \sqrt2 + \sqrt3;\ \ \text{basis } 1, \sqrt2, \sqrt3, \sqrt6 @@ the tower ℚ ⊆ ℚ(√2) ⊆ ℚ(√2, √3) (42f3)
+\beta^2 = 5 + 2\sqrt6 @@ 2 + 2√6 + 3
+\beta^3 = 11\sqrt2 + 9\sqrt3 @@ (5 + 2√6)(√2 + √3) = 5√2 + 5√3 + 4√3 + 6√2
+\beta^4 = 49 + 20\sqrt6 = 10\beta^2 - 1 @@ (5 + 2√6)²; 1, β, β², β³ are free, since β³ needs √2 and √3 in the ratio 11 : 9 and β in 1 : 1
+\htmlClass{new}{x^4 - 10x^2 + 1} \quad \blacksquare @@ the first mix; so [ℚ(β) : ℚ] = 4 and ℚ(β) is all of ℚ(√2, √3)
+  </pre>
+  <p data-pid="91086d">So √2 + √3 alone makes the field that √2 and √3 make together. That one member can make a field of two roots is common, and 43 builds on it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · first mix · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42k3.1</span><span class="ph understand">understand</span>What does the first-mix technique say? <br>Why are 1, β, β², β³ free for β = √2 + √3, and what does that make [ℚ(β) : ℚ]?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42k4">
+  <h2 class="sthead"><span class="stno">42k4</span>Degrees that share nothing</h2>
+  <p data-pid="f4f884">Coprime-degrees technique: <b>if α has degree m and β has degree n over K, and m and n share no factor, then [K(α, β) : K] = mn.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the coprime-degrees technique">
+m \mid [K(\alpha, \beta) : K],\ \ n \mid [K(\alpha, \beta) : K] @@ the degree-divides technique, twice
+mn \mid [K(\alpha, \beta) : K] @@ m and n share no factor (4j)
+[K(\alpha, \beta) : K(\alpha)] \le n @@ β’s least polynomial over K still has β as a zero over K(α)
+\htmlClass{new}{[K(\alpha, \beta) : K] \le mn,\ \text{so} = mn} \quad \blacksquare @@ the tower technique
+  </pre>
+  <p data-pid="4a3b05">So [ℚ(√2, ∛2) : ℚ] = 6. When the degrees share a factor, the count can fall short: ℚ(√2, √8) is just ℚ(√2), degree 2, not 4.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · coprime · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42k4.1</span><span class="ph understand">understand</span>What does the coprime-degrees technique say? <br>Why is [ℚ(√2, ∛2) : ℚ] equal to 6, and why is [ℚ(√2, √8) : ℚ] not 4?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42k5">
+  <h2 class="sthead"><span class="stno">42k5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\frac{1}{1 + \sqrt[3]2} = \frac{1 - \sqrt[3]2}{1 - \sqrt[3]4}\,? @@ that only moves ∛2 to the bottom; there is no single flip; solve the grid
+\frac{1}{\sqrt2 + \sqrt3} = \frac{1}{\sqrt2} + \frac{1}{\sqrt3}\,? @@ reciprocals do not spread over sums; the answer is √3 − √2
+\sqrt2 + \sqrt3 \text{ has degree } 2 + 2\,? @@ it has degree 4 because of the first mix, not because 2 + 2 = 4: √2 + √8 has degree 2
+[\mathbb Q(\sqrt2, \sqrt3) : \mathbb Q] = 4 \text{ by the coprime-degrees technique}\,? @@ 2 and 2 share a factor; 42f3’s check that √3 ∉ ℚ(√2) is needed
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42k5.1</span><span class="ph understand">understand</span>Why is there no single flip that clears ∛2 from a bottom? <br>Why can the coprime-degrees technique not give [ℚ(√2, √3) : ℚ]?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">42k.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\beta = 1 + \sqrt[3]2 + \sqrt[3]4"></span></span>Find the size of β by the times-grid technique, and its reciprocal. <br>Build β’s least polynomial by the first-mix technique, and check its constant term against the size.</div>
+  <div class="chq"><span class="chid">42k.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="1 + \sqrt2 \in \mathbb Z[\sqrt2]"></span></span>Find every undoable member of ℤ[√2] with a, b ≥ 0 and a below 100. <br>Are they all powers of 1 + √2? What does that say about whole answers of a² − 2b² = ±1?</div>
+  <div class="chq"><span class="chid">42k.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\det M_\beta = N(\beta)"></span></span>The times-grid technique makes the size of β a determinant. Turn it round: if N(β) = 1 for β in ℤ[∛2], must β be undoable in ℤ[∛2]? <br>Check with β = α − 1, multiplying it by 1 + α + α², and with 1 + α, whose size is 3.</div>
+  <div class="chq"><span class="chid">42k.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\frac{1}{1 + \sqrt[3]2}"></span></span>Reroute the reciprocal by 42j’s remainder chain: run it on x³ − 2 and x + 1 over ℚ, and run it backwards to write 1 as u(x)(x + 1) + v(x)(x³ − 2). <br>Which road is shorter here, and which is shorter for a member like 2 + 3α − α²?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r42j.html">← 42j · polynomial division by hand</a><a href="r42l.html">42l · Boolean algebra standing on its own →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The flip of a + b√2 is its conjugate, and a² − 2b² and a³ + 2b³ + 4c³ − 6abc are norms, N(β) = det M_β. The grid M_β is the regular representation. A member that makes a whole field is a primitive element; that √2 + √3 makes ℚ(√2, √3) is a case of the primitive element theorem. The undoable members of ℤ[√2] are ±(1 + √2)ⁿ, and a² − 2b² = ±1 is Pell’s equation, 41k’s x² − ny² = 1 with n = 2.</p>
+  <h3>Who said it first</h3>
+  <p>Writing the reciprocal of a sum of roots by clearing the bottom is old school algebra. Richard Dedekind defined the norm as a determinant in 1871. Joseph-Louis Lagrange proved in 1768 that x² − ny² = 1 always has whole answers past the obvious one.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“√2 + √3 is a zero of x² − 5 − 2√6, which has degree 2, so √2 + √3 has degree 2.” Not allowed over ℚ: that polynomial has √6 in its coefficients, so it is a polynomial over ℚ(√6), and there β has degree 2. Over ℚ the degree is 4.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'flip',t:R`a - b\sqrt2`,n:`Top and bottom.`},
+  {k:'ember',kl:'size',t:R`a^2 - 2b^2 \ne 0`,n:`√2 is no fraction.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\tfrac{1}{1 + \sqrt2} = -1 + \sqrt2}`,n:`Written down.`}
+],{title:'The slides · √2 · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the grid',t:R`M_\beta`,n:`Multiply by β.`},
+  {k:'ember',kl:'size',t:R`a^3 + 2b^3 + 4c^3 - 6abc`,n:`Its determinant.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\tfrac{1 - \alpha + \alpha^2}{3}}`,n:`The reciprocal of 1 + α.`}
+],{title:'The slides · ∛2 · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'powers',t:R`1, \beta, \beta^2, \beta^3`,n:`Free.`},
+  {k:'ember',kl:'the fourth',t:R`\beta^4 = 10\beta^2 - 1`,n:`A mix.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{x^4 - 10x^2 + 1}`,n:`The least polynomial.`}
+],{title:'The slides · first mix · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'both divide',t:R`m,\ n \mid [L : K]`,n:`Degree-divides.`},
+  {k:'ember',kl:'at most',t:R`[L : K] \le mn`,n:`The tower.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{[\mathbb Q(\sqrt2, \sqrt[3]2) : \mathbb Q] = 6}`,n:`Exactly.`}
+],{title:'The slides · coprime · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

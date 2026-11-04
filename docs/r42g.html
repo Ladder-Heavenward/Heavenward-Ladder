@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Finite fields</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r42f.html">← 42f field extensions</a><a href="r42h.html">next: 42h only one complete ordered field →</a></p>
+  <div class="tags"><span class="tag proof">42g · proof</span></div>
+  <h1>Finite fields</h1>
+  <p data-pid="b36942">The prime clocks are fields with finitely many members. Are there others? A field with four members cannot be the clock of four, which has two times two equal to nothing. Yet there is one, and it is easy to build: put into the clock of two a root of a polynomial that cannot be split there, as step 42f put the cube root of two into the fractions. Every finite field is built that way, and the counting is strict. A finite field holds a prime clock, it is a space of arrows over that clock, and so its count of members is a power of a prime. Six members, or ten, or twelve, can never make a field. And for each power of a prime there is a field of that size: the zeros of one polynomial, gathered in a big enough field, are closed under adding and multiplying, because on a prime clock raising to the prime keeps sums. Last, as on the prime clocks, one member’s powers run through every member but zero.</p>
+  <p class="gesture" data-pid="365218">A finite field holds a prime clock and is a space over it, so its size is a power of that prime. Dividing the polynomials of a prime clock by one that cannot be split, of degree n, gives a field of pⁿ members. For every power of a prime there is one: the zeros of x to that power minus x. Raising to the prime keeps sums there. The members other than 0 are the powers of one of them.</p>
+</header>
+
+<section class="class step" data-step="42g1">
+  <h2 class="sthead"><span class="stno">42g1</span>The size of a finite field</h2>
+  <p data-pid="48d82e">In a finite field F, add 1 to itself: 1, 1 + 1, 1 + 1 + 1, …. Two of these must agree, so some count of 1s is 0. Let p be the least count with p · 1 = 0. If p = ab with a, b < p, then (a · 1)(b · 1) = 0, and a field has no zero products, so p is prime. The p sums of 1 are a copy of ℤ/p inside F. This p is the field’s <i>bottom prime</i>.</p>
+  <p data-pid="09e4bb">Prime-power-size technique: <b>a finite field with bottom prime p has pⁿ members, where n = [F : ℤ/p].</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the prime-power-size technique">
+\mathbb Z/p \subseteq F @@ the sums of 1
+F \text{ is a space over } \mathbb Z/p \text{ with a basis } u_1, \ldots, u_n @@ the field-as-space technique; finite, so the degree is finite
+z = c_1 u_1 + \cdots + c_n u_n,\ \ c_i \in \mathbb Z/p,\ \text{one way} @@ a basis builds and is free (27b)
+\htmlClass{new}{|F| = p^n} \quad \blacksquare @@ p choices for each of n coefficients (4k’s product rule)
+  </pre>
+  <p data-pid="5083d5">So there is no field with 6 members, or 10, or 12. ℤ/6, ℤ/10 and ℤ/12 have zero products, and no other plus and times on 6 members fix that.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · size · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">42g1.1</span><span class="ph understand">understand</span>What is the bottom prime of a finite field, and why is it prime? <br>What does the prime-power-size technique say, and why can no field have 6 members?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42g2">
+  <h2 class="sthead"><span class="stno">42g2</span>Building small ones</h2>
+  <p data-pid="a769fc">Unsplittable-builds technique: <b>if m of degree n cannot be split over ℤ/p, then (ℤ/p)[x]/(m) is a field with pⁿ members.</b> It is a field by 42b’s largest-ideal technique, as in 42f2, and its members are the remainders of degree less than n, pⁿ of them, by 42c’s division.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the field of four">
+m = x^2 + x + 1 \text{ on } \mathbb Z/2:\ m(0) = 1,\ m(1) = 1 @@ no zero, so no straight factor; degree 2, so it cannot be split
+\text{members } 0,\ 1,\ x,\ x + 1;\ \ x^2 = x + 1 @@ the remainders, and x² ∼ −x − 1 = x + 1 on ℤ/2
+x(x + 1) = x^2 + x = 1 @@ so x and x + 1 are each other’s reciprocals
+\htmlClass{new}{F_4 = \{0, 1, x, x + 1\},\ \ 1 + 1 = 0} \quad \blacksquare @@ a field of four, not the clock of four
+  </pre>
+  <p data-pid="af80cb">On ℤ/2, x³ + x + 1 has no zero, so it cannot be split, and it gives a field of 8. Its powers of x run x, x², x + 1, x² + x, x² + x + 1, x² + 1, 1: all seven members other than 0. On ℤ/3, x² + 1 has no zero (0, 1, 1 are the squares), and it gives a field of 9, written ℤ/3 with i put in. In it 1 + i has powers 1 + i, 2i, 1 + 2i, 2, 2 + 2i, i, 2 + i, 1.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · four · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42g2.1</span><span class="ph understand">understand</span>What does the unsplittable-builds technique say? <br>Why is x² + x + 1 unsplittable on ℤ/2, and why is the field of four not the clock of four?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42g3">
+  <h2 class="sthead"><span class="stno">42g3</span>One for each prime power</h2>
+  <p data-pid="af7d20">Power-keeps-plus technique: <b>in a ring that turns about with p · 1 = 0 for a prime p, (w + b)ᵖ = wᵖ + bᵖ.</b> By 4k’s binomial technique (w + b)ᵖ is the sum of C(p, k) wᵏ bᵖ⁻ᵏ, and for 0 < k < p, C(p, k) = p!/(k!(p − k)!) is a multiple of p: p divides the top and no factor of the bottom (4j’s prime-divides-a-list). Those terms are 0.</p>
+  <p data-pid="18c6e8">Every-prime-power technique: <b>for every prime p and every n ≥ 1 there is a field with q = pⁿ members.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the every-prime-power technique">
+f = x^q - x \text{ over } \mathbb Z/p @@ the polynomial whose zeros will be the field
+E \supseteq \mathbb Z/p \text{ in which } f \text{ splits into straight factors} @@ put in a root of an unsplittable factor (the root-field technique), and repeat, at most q times
+f' = q\,x^{q-1} - 1 = -1 @@ the slope of a power read on coefficients (13d’s rule, which uses only adding and multiplying); q · 1 = 0
+\text{no factor } (x - r)^2 @@ f = (x − r)²g would give f′ = (x − r)(2g + (x − r)g′), zero at r
+F = \{r \in E : r^q = r\} \text{ has exactly } q \text{ members} @@ q different straight factors
+r^q = r,\ s^q = s \Rightarrow (r + s)^q = r + s,\ (rs)^q = rs,\ (r^{-1})^q = r^{-1} @@ the power-keeps-plus technique, n times; powers of a product
+\htmlClass{new}{F \text{ is a field with } q \text{ members}} \quad \blacksquare @@ it holds 0, 1, sums, products, negatives and reciprocals
+  </pre>
+  <p data-pid="71974b">And every field F with q members is of this kind: its q − 1 members other than 0 form a group under times, so each has rᵠ⁻¹ = 1 by 19d’s order-divides technique, so every member is a zero of x^q − x. That makes any two fields with q members copies of each other. <i>Held in trust:</i> that two fields in which one polynomial splits, each made by its zeros, are copies. 43c proves it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · every size · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42g3.1</span><span class="ph understand">understand</span>What does the power-keeps-plus technique say, and why is C(p, k) a multiple of p for 0 < k < p? <br>Why are the zeros of x^q − x different from each other, and why do they form a field?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42g4">
+  <h2 class="sthead"><span class="stno">42g4</span>One member reaches every other</h2>
+  <p data-pid="fbdb69">41e proved that on a prime clock some hour’s powers reach every hour but 0. The proof counted members of each order, and spent one fact about the clock: a polynomial of degree d has at most d zeros there. 42c3 showed that fact holds in every cancelling ring, so in every field.</p>
+  <p data-pid="967f84">Whole-hand technique: <b>in every finite field, the members other than 0 are the powers of one of them.</b> The proof is 41e’s, word for word, with F in place of ℤ/p and 42c3’s at-most-n-zeros in place of the clock’s.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the whole-hand technique, checked in the field of 9">
+(1 + i)^2 = 1 + 2i + i^2 = 2i @@ i² = −1 = 2 on ℤ/3
+(1 + i)^4 = (2i)^2 = 4i^2 = -4 = 2 @@ on ℤ/3, −4 = 2
+(1 + i)^8 = 2^2 = 1 @@ and no smaller power is 1: 2i, 2, and the fourth power is 2, not 1
+\htmlClass{new}{1 + i \text{ has order } 8:\ \text{its powers are all eight members other than } 0} \quad \blacksquare @@ the order divides 8 (19d); it is not 1, 2 or 4
+  </pre>
+  <p data-pid="4d06f5">Not every member reaches every other. i has order 4 in the field of 9: i, −1, −i, 1. In the field of 8, every member other than 0 and 1 has order 7, since 7 is prime.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · a hand · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42g4.1</span><span class="ph understand">understand</span>What does the whole-hand technique say, and which fact of 42c3 does its proof spend? <br>Why is the order of 1 + i in the field of 9 exactly 8?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42g5">
+  <h2 class="sthead"><span class="stno">42g5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+F_4 = \mathbb Z/4\,? @@ on ℤ/4, 2 · 2 = 0; in F₄, 1 + 1 = 0 and there are no zero products
+(w + b)^2 = w^2 + b^2 \text{ in every field}\,? @@ only when 1 + 1 = 0; on ℚ, (1 + 1)² = 4 ≠ 2
+x^4 + x^2 + 1 \text{ has no zero on } \mathbb Z/2 \text{, so it gives a field of } 16\,? @@ no zero rules out straight factors only: it is (x² + x + 1)² there
+\text{a field of 9 holds the clock of 9}\,? @@ it holds ℤ/3; its bottom prime is 3
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42g5.1</span><span class="ph understand">understand</span>Why is the field of four not ℤ/4? <br>Why does x⁴ + x² + 1 having no zero on ℤ/2 not make it unsplittable there?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">42g.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\mathbb Z/2,\ \ \deg 4"></span></span>Build a field of 16. Find every polynomial of degree 4 on ℤ/2 that cannot be split, and pick one whose x has order 15. <br>For the others, find the order of x, and whether it is 3, 5 or 15.</div>
+  <div class="chq"><span class="chid">42g.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="F_4 \subseteq F_{16},\ \ F_4 \not\subseteq F_8"></span></span>Does a field of pⁿ members hold a field of pᵏ members exactly when k divides n? <br>Use the tower technique for one direction, and the zeros of x^(pᵏ) − x for the other.</div>
+  <div class="chq"><span class="chid">42g.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="r \mapsto r^p"></span></span>In a finite field with bottom prime p, raising to p keeps sums and products. Is it one-to-one, and so onto? <br>Turn it round: in which fields of bottom prime p is every member a pᵗʰ power? Find a field with bottom prime p, endless, where x is not a pᵗʰ power.</div>
+  <div class="chq"><span class="chid">42g.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">25b: a field with no order</span></span>25b showed that a field with a square root of −1 has no order. <br>Has a finite field an order? Prove it from the bottom prime, without square roots. Which finite fields have a square root of −1? Find one on ℤ/5 and show none exists on ℤ/7.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r42f.html">← 42f · field extensions</a><a href="r42h.html">42h · only one complete ordered field →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Finite fields are Galois fields, written F_q or GF(q). The bottom prime is the characteristic, and ℤ/p inside F is the prime field. The power-keeps-plus technique is the Frobenius map’s additivity, sometimes called the freshman’s dream. The every-prime-power technique and the uniqueness held in trust give the existence and uniqueness of finite fields, and F_q is the splitting field of x^q − x. The whole-hand technique says the multiplicative group of a finite field is cyclic; a member that reaches every other is a primitive element.</p>
+  <h3>Who said it first</h3>
+  <p>Évariste Galois built fields of pⁿ members in 1830, with imaginary roots on a prime clock. Carl Friedrich Gauss had worked out much the same in unpublished notes from about 1797. E. H. Moore proved in 1893 that every finite field is one of Galois’s. Georg Frobenius studied raising to p in 1896.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“A field of 8 has 7 members other than 0, and 7 is prime, so it is ℤ/7 with 0 put back in.” Not allowed: the members other than 0 form a group of size 7 under times, and that group is a copy of ℤ/7 under adding. The field itself has bottom prime 2, since 1 + 1 = 0 in it, and no copy of ℤ/7 sits inside it.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'the prime',t:R`p \cdot 1 = 0`,n:`Least such count.`},
+  {k:'ember',kl:'the space',t:R`F \text{ over } \mathbb Z/p`,n:`Dimension n.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|F| = p^n}`,n:`A prime power.`}
+],{title:'The slides · size · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'m',t:R`x^2 + x + 1 \text{ on } \mathbb Z/2`,n:`No zero.`},
+  {k:'ember',kl:'rule',t:R`x^2 = x + 1`,n:`The remainder.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{F_4 = \{0, 1, x, x + 1\}}`,n:`A field.`}
+],{title:'The slides · four · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'zeros',t:R`x^q = x`,n:`In a big enough field.`},
+  {k:'ember',kl:'sums',t:R`(r + s)^p = r^p + s^p`,n:`Raising to p keeps plus.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a field of } p^n}`,n:`Every prime power.`}
+],{title:'The slides · every size · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'square',t:R`(1 + i)^2 = 2i`,n:`On ℤ/3.`},
+  {k:'ember',kl:'fourth',t:R`(1 + i)^4 = 2`,n:`Not 1.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{1 + i \text{ has order } 8}`,n:`Reaches all eight.`}
+],{title:'The slides · a hand · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

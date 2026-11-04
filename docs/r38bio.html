@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Is a neuron a gate?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38eng.html">← 38·eng why did chips stop getting faster?</a><a href="r38now.html">next: 38·now how little energy can a switch spend? →</a></p>
+  <div class="tags"><span class="tag bio">38·bio · biology</span></div>
+  <h1>Is a neuron a gate?</h1>
+  <p data-pid="a5f5b2">Is a neuron a gate? A nerve cell either fires or does not, and each spike is all or none, so it is tempting to read a brain as a circuit of the gates of this rung. The first picture of a neuron as a gate did exactly that: a unit adds its inputs, each with a weight, and fires when the sum reaches a threshold. Such units build both, either and not, and so every table. The complex rung’s newsflash then gave a nerve cell as a circuit of its own: a store of charge that leaks, filled by its inputs, firing when it climbs a set height. That cell does more than a gate. It has a rest after each spike, so it has a top speed. It adds only inputs that come close together in time, so it is a both-gate with a window. And cells that silence one another, in a ring of an odd number, are this rung’s liar box: a clock, whose period the drive sets. So a neuron is a gate, and also a timer, and the brain’s rhythms are its clocks.</p>
+  <p class="gesture" data-pid="aeac07">A unit that fires when its weighted sum reaches a threshold builds both, either and not, so every table. A leaking cell with a rest after each spike has a top rate of one over the rest. It adds two kicks only if they come within a window, so it is a both-gate in time. An odd ring of cells that silence each other runs as a clock.</p>
+</header>
+
+<section class="class step" data-step="38bio1">
+  <h2 class="sthead"><span class="stno">38bio1</span>A unit with a threshold</h2>
+  <p data-pid="695bee">Give a unit inputs x₁, x₂, … that are 0 or 1, a weight wᵢ for each, and a threshold θ. It gives 1 when w₁x₁ + w₂x₂ + ⋯ ≥ θ, and 0 otherwise. A weight above 0 is an input that urges it on; a weight below 0 one that holds it back.</p>
+  <p data-pid="c0ade9">Weighted-threshold technique: <b>with weights 1, 1 and threshold 2 a unit is both; with threshold 1, either; with weight −1 and threshold 0, not; with weights −1, −1 and threshold −1, not-and. So networks of such units build every table (38f1).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the weighted-threshold technique">
+x_1 + x_2 \ge 2 \iff x_1 = x_2 = 1 @@ both
+x_1 + x_2 \ge 1 \iff x_1 = 1 \text{ or } x_2 = 1 @@ either
+-x \ge 0 \iff x = 0 @@ not
+-x_1 - x_2 \ge -1 \iff \text{not both} @@ not-and: the sum is −2 only on row 11
+\htmlClass{new}{\text{every table, from units with thresholds}} \quad \blacksquare @@ the nand-alone technique (38f1)
+  </pre>
+  <p data-pid="db899f">One unit draws one straight cut through the rows, so 28·now2’s either-not-both technique says no single unit gives either-but-not-both. Two layers do: either, and not-and, joined by both. With three inputs of weight 1 and threshold 2, one unit gives the majority of three, which takes several gates of 38f: a threshold is a stronger gate than a not-and.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · threshold unit · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">38·bio.1.1</span><span class="ph understand">understand</span>What does the weighted-threshold technique say? <br>Why does either-but-not-both need two layers of units?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38bio2">
+  <h2 class="sthead"><span class="stno">38bio2</span>A top speed</h2>
+  <p data-pid="1b0162">26·then6’s fire technique gave the time from rest to a spike, T = τ ln(RI/(RI − d)), for a leaking cell of time τ driven at RI toward a threshold d above rest. A real cell, once it fires, cannot fire again for a rest t_r of a millisecond or two: its sodium gates are shut and must reopen.</p>
+  <p data-pid="712158">Rate-ceiling technique: <b>a leaking cell with a rest t_r after each spike fires at rate 1/(t_r + τ ln(RI/(RI − d))) when RI > d; the rate starts from 0 at RI = d, rises with the drive, and never reaches 1/t_r.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the rate-ceiling technique">
+\text{period} = t_r + \tau\ln\tfrac{RI}{RI - d} @@ the rest, then the climb from rest (26·then6)
+\tau = 10\text{ ms},\ d = 15\text{ mV},\ t_r = 2\text{ ms} @@ a typical cell
+RI = 20:\ 13.9 + 2 \Rightarrow 63\text{ a second};\ \ RI = 60:\ 2.88 + 2 \Rightarrow 205\text{ a second} @@ checked by machine
+RI \to d:\ \ \ln\tfrac{RI}{RI - d} \to \infty @@ the climb never ends
+\htmlClass{new}{\text{rate from } 0 \text{ up toward } 500 \text{ a second}} \quad \blacksquare @@ the log heads to 0 as the drive grows, leaving t_r
+  </pre>
+  <p data-pid="280bc4">So the cell turns a drive into a count of spikes a second, a number and not only a 1 or 0: a gate reads a level, and a cell also reads how much. The ceiling is why no nerve sends more than a few hundred spikes a second, and why loud sounds and bright lights are coded by more cells firing, not by any one firing faster.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · top speed · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·bio.2.1</span><span class="ph understand">understand</span>What does the rate-ceiling technique say? <br>Why does the rate never reach 1/t_r however strong the drive?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38bio3">
+  <h2 class="sthead"><span class="stno">38bio3</span>A both-gate in time</h2>
+  <p data-pid="e0475e">A kick from one input lifts the cell by k at once, and then the lift leaks away as k e^(−t/τ), by 24·then2’s target technique with the drive gone. Take a threshold d with k &lt; d ≤ 2k: one kick alone never fires the cell.</p>
+  <p data-pid="170eff">Coincidence-window technique: <b>a cell with threshold d, kicked by k at time 0 and again by k at time Δ, with k &lt; d ≤ 2k, fires exactly when Δ ≤ τ ln(k/(d − k)).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the coincidence-window technique">
+V(\Delta) - E = k\,e^{-\Delta/\tau} + k @@ the first kick, leaked for Δ, and the second
+k\,e^{-\Delta/\tau} + k \ge d \iff e^{-\Delta/\tau} \ge \tfrac{d - k}{k} @@ fire when the lift reaches d
+\iff \Delta \le \tau \ln\tfrac{k}{d - k} @@ take logs (17)
+\tau = 10\text{ ms},\ k = 10\text{ mV},\ d = 15\text{ mV}:\ \ \Delta \le 10 \ln 2 \approx 6.9\text{ ms} @@ a window of about 7 ms
+\htmlClass{new}{\text{both inputs, within } 6.9 \text{ ms}} \quad \blacksquare @@ a both-gate whose rows include time
+  </pre>
+  <p data-pid="d724e2">Owls find a mouse in the dark this way: cells in the brainstem get a spike from each ear and fire only when the two arrive together, and the lengths of the fibres from the two ears set which cell gets them together for which direction. The windows there are tens of millionths of a second, set by cells with a very short τ.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · coincidence · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·bio.3.1</span><span class="ph understand">understand</span>What does the coincidence-window technique say? <br>Why does the window shrink to nothing as d heads to 2k?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38bio4">
+  <h2 class="sthead"><span class="stno">38bio4</span>A ring of cells as a clock</h2>
+  <p data-pid="d23346">Some cells silence the next cell they reach: while a cell fires, its target is held at rest. Each such cell, driven steadily, is a not: it fires when its holder is quiet. 38g3’s ring-period technique counted a ring of an odd number of nots, each with one delay. A cell has two delays: the climb from rest, τ ln(RI/(RI − d)), when it is let go, and a short δ for its silencing to reach the next when it fires.</p>
+  <p data-pid="59c566">Inhibitory-ring technique: <b>a ring of an odd number n of steadily driven cells, each silenced by the one before, runs as a clock of period n(δ + τ ln(RI/(RI − d))); a stronger drive runs it faster.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the inhibitory-ring technique">
+\text{one change goes round the ring twice in a period} @@ an odd ring: after one round the change comes back turned over (38g2)
+\text{each cell passes it once as let go, once as silenced} @@ two passes, two kinds of change
+\text{period} = n\,(t_\text{let go} + t_\text{silence}) = n\big(\tau\ln\tfrac{RI}{RI - d} + \delta\big) @@ the ring-period count, with unequal delays
+n = 3,\ \tau = 10\text{ ms},\ RI = 20,\ d = 15,\ \delta = 1\text{ ms}:\ \ 3 \times 14.9 \approx 44.6\text{ ms} @@ checked by machine
+\htmlClass{new}{\text{about } 22 \text{ cycles a second}} \quad \blacksquare @@ with equal delays this is 38g3’s 2nτ
+  </pre>
+  <p data-pid="665960">Rings like this, of cells that hold one another back, set the beat of walking in the spinal cord of a lamprey and of a cat, the rhythm of breathing in the brainstem, and the fast waves of 30 to 80 a second seen on a scalp, where the delays are a few milliseconds. Two cells that silence each other are an even ring: they hold one state, a memory of which one fired first (38h), unless each tires and lets the other go.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · ring of cells · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·bio.4.1</span><span class="ph understand">understand</span>What does the inhibitory-ring technique say? <br>Why does a ring of two cells that silence each other hold a state rather than run?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38bio5">
+  <h2 class="sthead"><span class="stno">38bio5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{one threshold unit can give either-but-not-both}\,? @@ one straight cut; it needs two layers (28·now2)
+\text{a stronger drive makes a cell fire as fast as we like}\,? @@ the rest t_r caps the rate below 1/t_r
+\text{two kicks always add to fire a cell}\,? @@ only within the window τ ln(k/(d − k)); later, the first has leaked
+\text{a ring of cells that silence each other is always a clock}\,? @@ an even ring holds a state; only an odd ring runs
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·bio.5.1</span><span class="ph understand">understand</span>Why do two kicks a long way apart not fire the cell? <br>Why is an even ring of silencing cells a memory, not a clock?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">38·bio.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x_1, x_2, x_3 \in \{0, 1\}"></span></span>Build a single threshold unit that gives 1 when at least two of three inputs are 1, and a two-layer network of units that gives 1 when exactly one is. <br>Can a single unit give “exactly one”?</div>
+  <div class="chq"><span class="chid">38·bio.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="RI = 15.5,\ 16,\ 20\text{ mV};\ d = 15,\ \tau = 10,\ t_r = 2"></span></span>Find the rate at each drive. How steep is the rate near the threshold drive? <br>Why is a cell near its threshold a poor reader of small changes in drive, and a good detector that a drive has begun?</div>
+  <div class="chq"><span class="chid">38·bio.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\Delta \le \tau\ln\tfrac{k}{d - k}"></span></span>The coincidence window says when two kicks fire a cell. Turn it round: given a window of 1 ms wanted from kicks of 10 mV and a threshold of 15 mV, what τ must the cell have? <br>What must a cell that hears time to a millionth of a second be built like?</div>
+  <div class="chq"><span class="chid">38·bio.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="n = 2,\ \text{with tiring}"></span></span>Two cells that silence each other hold a state. Reroute them into a clock: let a firing cell tire, so that its drive falls by a share each second it fires, until the other is let go. <br>Build the period for a cell that stops after a time t_f of firing, and compare it with an odd ring.</div>
+  <div class="chq"><span class="chid">38·bio.6.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">the brain as a circuit</span></span>One side holds that a brain is a circuit of gates and timers, so its working can in principle be copied by a machine of this rung. The other holds that a cell’s gates, its chemistry and its growth are not a table of inputs and outputs, and that the copy leaves out what matters. <br>What about a real cell does the picture of this page leave out, and would any of it change what a brain can compute?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r38eng.html">← 38·eng · why did chips stop getting faster?</a><a href="r38now.html">38·now · how little energy can a switch spend? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The unit with a threshold is the McCulloch–Pitts neuron, or a linear threshold unit; a network of them with weights learned is a perceptron (28·now). The leaking cell is the leaky integrate-and-fire model, its rest the absolute refractory period, and the rate against drive its f–I curve. The both-gate in time is coincidence detection, and its use in the owl the Jeffress model of sound localisation. A ring of cells that silence each other is a central pattern generator built from reciprocal inhibition; the pair that tires is a half-centre oscillator. The crosswalk items here are the integrate-and-fire and rate models of a first course in computational neuroscience, and neural networks as threshold units.</p>
+  <h3>Who said it first</h3>
+  <p>Warren McCulloch and Walter Pitts gave the threshold unit in 1943, in which a single holding-back input vetoed firing outright. Louis Lapicque modelled the cell as a leaking store of charge in 1907. Lloyd Jeffress proposed the owl’s, and the ear’s, coincidence scheme in 1948, and Masakazu Konishi and Catherine Carr found it in the barn owl in the 1980s. Thomas Graham Brown proposed the half-centre for walking in 1911.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Each spike is all or none, so a nerve cell is a gate with a 1 or 0 out, and the brain is a circuit of 38f.” Not allowed as it stands: the cell’s output is a train of spikes whose rate and timing carry the message, and its inputs add only within a window. A gate is the small case of the cell, with the times left out; the cell is a gate and a timer at once.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'both',t:R`x_1 + x_2 \ge 2`,n:`Threshold 2.`},
+  {k:'ember',kl:'not-and',t:R`-x_1 - x_2 \ge -1`,n:`Weights below 0.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{every table}}`,n:`38f1.`}
+],{title:'The slides · threshold unit · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'climb',t:R`\tau\ln\tfrac{RI}{RI - d}`,n:`26·then6.`},
+  {k:'ember',kl:'rest',t:R`+\,t_r`,n:`Sodium gates shut.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{rate} \lt 1/t_r}`,n:`500 a second.`}
+],{title:'The slides · top speed · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'leak',t:R`k\,e^{-\Delta/\tau} + k`,n:`Two kicks.`},
+  {k:'ember',kl:'fire',t:R`\Delta \le \tau\ln\tfrac{k}{d-k}`,n:`The window.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{6.9 \text{ ms}}`,n:`Both, in time.`}
+],{title:'The slides · coincidence · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'delays',t:R`\tau\ln\tfrac{RI}{RI-d} + \delta`,n:`Let go, silenced.`},
+  {k:'ember',kl:'period',t:R`n(\ldots)`,n:`Odd n.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{44.6 \text{ ms}}`,n:`A clock.`}
+],{title:'The slides · ring of cells · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

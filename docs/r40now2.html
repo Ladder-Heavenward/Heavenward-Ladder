@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How big must order be?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40now.html">← 40·now can we trust a proof no one can read?</a><a href="r40concl.html">next: 40·∎ counting alone says how things connect →</a></p>
+  <div class="tags"><span class="tag now">40·now2 · research front</span></div>
+  <h1>How big must order be?</h1>
+  <p data-pid="dc6f3a">How big must order be? 40j proved that at any party of six, three people all know each other or three are all strangers, and that six is the least number that works. For four people, the number is 18, known since 1955. For five people, nobody knows. The answer lies between 43 and 46, and the upper end moved last in 2024. This page builds the party of 17 with no four all acquainted and no four all strangers, from the remainders of squares. It counts why 43 is out of reach of any search, even counted up to symmetry. And it tells the story of the gap 40j left between the lower bound, near 2 to the power k/2, and the upper bound, near 4 to the power k: for 88 years no one could lower the 4, and in 2023 someone did.</p>
+  <p class="gesture" data-pid="2afbc5">Link two of 17 dots when their difference leaves the remainder of a square on dividing by 17: no four are all linked and no four all unlinked, so R(4, 4) = 18. R(5, 5) is between 43 and 46; the colourings of K₄₃ number 2⁹⁰³. 40j gave 2^(k/2) < R(k, k) < 4^k; in 2023 the 4 became 4 − 2⁻⁷, and later 3.8.</p>
+</header>
+
+<section class="class step" data-step="40·now2.1">
+  <h2 class="sthead"><span class="stno">40·now2.1</span>A party of 17 with no order of four</h2>
+  <p data-pid="bcddbb">Number 17 dots 0 to 16. The squares 1², 2², …, 16² leave the remainders 1, 2, 4, 8, 9, 13, 15, 16 on dividing by 17 (4j); call these eight the <i>square remainders</i>. Link two dots when their difference leaves a square remainder. Since 16 = −1 leaves a square remainder, x − y and y − x leave square remainders together, so the links do not depend on order.</p>
+  <p data-pid="dd5b7e">Square-party technique: <b>in the 17-dot graph of square remainders, no four dots are all linked and no four are all unlinked.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: no four all linked">
+\text{adding the same number to every dot keeps every link} @@ differences do not change
+\text{so a group of four all linked can be moved to contain } 0 \text{ and some } s,\ s \text{ a square remainder} @@ move one of its links to start at 0
+x \mapsto -x \text{ keeps links too; so } s \in \{1, 2, 4, 8\} @@ 16 − s for the rest
+\text{the other two dots are linked to } 0 \text{ and to } s @@ square remainders both x and x − s
+s = 1: \{2, 9, 16\};\ \ s = 2: \{1, 4, 15\};\ \ s = 4: \{2, 8, 13\};\ \ s = 8: \{4, 9, 16\} @@ the dots linked to both
+\text{differences in each: } 7, 14, 7;\ \ 3, 14, 11;\ \ 6, 11, 5;\ \ 5, 12, 7 @@ none a square remainder
+\htmlClass{new}{\text{no two of them are linked, so no four are all linked}} @@ 
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: no four all unlinked">
+3 \cdot \{1, 2, 4, 8, 9, 13, 15, 16\} \to \{3, 6, 12, 7, 10, 5, 11, 14\} @@ remainders on dividing by 17
+\text{these are exactly the 8 differences that are not square remainders} @@ and 3 times those gives the squares back
+x \mapsto 3x \text{ shuffles the 17 dots} @@ 6 · 3 = 18 leaves 1, so x ↦ 6x undoes it
+\text{it carries links to non-links and non-links to links} @@ 
+\htmlClass{new}{\text{four all unlinked would go to four all linked}} \quad \blacksquare @@ the step before
+  </pre>
+  <p data-pid="30ed41">So R(4, 4) > 17. The party-number technique of 40j with R(3, 4) = 9, sharpened by a challenge of 40j, gives R(4, 4) ≤ 18. So R(4, 4) = 18 exactly, and a computer could check the 17-dot party too: it has 2380 groups of four, and none is all linked or all unlinked.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · seventeen · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">40·now2.1.1</span><span class="ph understand">understand</span>Why can any group of four all linked be moved to one containing 0 and 1, 2, 4 or 8? <br>Why does multiplying by 3 turn a group of four all unlinked into one all linked?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40·now2.2">
+  <h2 class="sthead"><span class="stno">40·now2.2</span>Why five is out of reach</h2>
+  <p data-pid="8d1fc0">For five, R(5, 5) ≥ 43: a colouring of the links of K₄₂ with no one-colour K₅ was found by computer in 1989. And R(5, 5) ≤ 46, by a computer proof of 2024, which lowered the 48 of 2017. The party-number technique alone gives R(5, 5) ≤ R(4, 5) + R(5, 4) = 25 + 25 = 50, using R(4, 5) = 25, found by computer in 1995.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the size of the search">
+K_{43} \text{ has } \tbinom{43}{2} = 903 \text{ links} @@ each red or blue
+2^{903} \approx 10^{271.8} \text{ colourings} @@ 903 · log₁₀ 2
+43! \approx 10^{52.8} \text{ ways to rename the dots} @@ the moves of 40·cb19
+\text{each class holds at most } 43! \text{ colourings} @@ the class-times-keepers technique
+\htmlClass{new}{\text{at least } 10^{271.8 - 52.8} = 10^{219} \text{ classes to check}} @@ far beyond any computer
+  </pre>
+  <p data-pid="0ce5b7">So the search for R(5, 5) cannot be a search through colourings. The upper bound of 2024 came from proving that a colouring of K₄₆ with no one-colour K₅ would have to be built from smaller parties of known kinds, and then checking those by computer, a proof of the kind 40·now asked about. The lower bound would rise only if someone found a colouring of K₄₃ with no one-colour K₅; many believe the answer is 43.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · five · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·now2.2.1</span><span class="ph understand">understand</span>Why does counting up to renaming the dots still leave about 10²¹⁹ classes? <br>What would it take to prove R(5, 5) ≥ 44?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40·now2.3">
+  <h2 class="sthead"><span class="stno">40·now2.3</span>The gap between 2 and 4</h2>
+  <p data-pid="dd3f60">40j proved both bounds of the gap: the party-number technique gives R(k, k) < 4^(k − 1), and the average-below-one technique of 1947 gives R(k, k) > 2^(k/2). Written as k-th roots, the answer lies between √2 ≈ 1.41 and 4.</p>
+  <pre class="lines" data-k="ember" data-label="this step: what was known, root by root">
+1935:\ R(k, k)^{1/k} < 4 @@ the party-number technique
+1947:\ R(k, k)^{1/k} > \sqrt 2 @@ the average-below-one technique
+1975\text{ to }2020: \text{ only factors smaller than any } c^k @@ both bounds; the bases did not move
+2023:\ R(k, k) \le (4 - \varepsilon)^k,\ \ \varepsilon = 2^{-7} @@ the base below 4 for the first time
+\htmlClass{new}{\text{later: } R(k, k) \le 3.8^k \text{ for large } k} @@ by a sharper run of the same method
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: how much a base saves">
+\left(\tfrac{3.9921875}{4}\right)^{100} \approx 0.82 @@ 4 − 2⁻⁷, at k = 100
+\left(\tfrac{3.8}{4}\right)^{100} \approx 0.0059 @@ 0.95¹⁰⁰
+\htmlClass{new}{\text{a base below 4 beats every bound of the form } c \cdot 4^k / k^m} @@ exponentials outgrow powers
+  </pre>
+  <p data-pid="8e0936">The method of 2023 builds the one-colour group greedily, as 40j’s proof does, but keeps a second pile of dots, a “book”, from which many choices can be made at once, and proves that the pile stays large enough. The lower bound has not moved its base since 1947, and no one knows a colouring better than a random one. Whether the answer is near √2 to the k, near 4 to the k, or somewhere between, is open.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the gap · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·now2.3.1</span><span class="ph understand">understand</span>What are the two bases of 40j’s bounds, and which moved in 2023? <br>Why does a base of 3.8 matter more than any power of k in front of 4^k?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40·now2.4">
+  <h2 class="sthead"><span class="stno">40·now2.4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+R(5, 5) \text{ is unknown because no one has tried hard enough to search}\,? @@ at least 10²¹⁹ classes; no search finishes
+\text{a random colouring of } K_{17} \text{ has no one-colour } K_4\,? @@ on average 2380 · 2⁻⁵ ≈ 74 of them; the square party is special
+\text{the 2023 bound settles } R(k, k) \text{ for large } k\,? @@ it lowers the upper base; the gap from √2 to 3.8 is open
+\text{R(4, 4) > 17 needs every colouring of } K_{17} \text{ checked}\,? @@ one colouring with none is enough; R(4, 4) ≤ 18 is the hard half
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·now2.4.1</span><span class="ph understand">understand</span>Why does one colouring of K₁₇ prove R(4, 4) > 17? <br>Why does the 2023 bound not settle the size of R(k, k)?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">40·now2.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{5 dots; link differences of remainder 1 or 4}"></span></span>Build the 5-dot party with links where the difference leaves 1 or 4 on dividing by 5. <br>Show it has no one-colour triangle. Which colouring of K₅ from 40j is it?</div>
+  <div class="chq"><span class="chid">40·now2.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{13 dots; differences } 1, 5, 8, 12"></span></span>Link two of 13 dots when their difference leaves 1, 5, 8 or 12 on dividing by 13. Show it has no triangle all linked and no five all unlinked. <br>What lower bound on R(3, 5) does it give? The answer is 14: what would the upper half need?</div>
+  <div class="chq"><span class="chid">40·now2.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="R(k, k) &gt; 2^{k/2}"></span></span>The average-below-one technique shows good colourings exist without building one. Turn it round: does the square party of 17 do better or worse than the random bound for k = 4? <br>Compute 2^(k/2) for k = 4 and compare with 17.</div>
+  <div class="chq"><span class="chid">40·now2.5.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">40·now: a proof no one can read</span></span>40·now asked whether a check no one reads is a proof. The bound R(5, 5) ≤ 46 is a computer proof too. <br>Is a computer search that finds nothing (no colouring of K₄₆ without a one-colour K₅) the same kind of evidence as a search that finds something (a colouring of K₄₂)? Which can be checked by a person, and how?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r40now.html">← 40·now · can we trust a proof no one can read?</a><a href="r40concl.html">40·∎ · counting alone says how things connect →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>R(s, t) are the Ramsey numbers. The 17-dot graph is the Paley graph of order 17, and the square remainders are the quadratic residues of 17, which rung 41 names properly. The square-party technique is the statement that the Paley graph on 17 vertices has clique and independence number 3. The 2023 upper bound is the exponential improvement for diagonal Ramsey numbers, by the book algorithm.</p>
+  <h3>Who said it first</h3>
+  <p>Robert Greenwood and Andrew Gleason found R(3, 4) = 9, R(4, 4) = 18 and the 17-dot party in 1955. Paul Erdős and George Szekeres gave the upper bound in 1935, and Erdős the random lower bound in 1947. Geoffrey Exoo found the colouring of K₄₂ in 1989; Brendan McKay and Stanisław Radziszowski proved R(4, 5) = 25 in 1995; Vigleik Angeltveit and McKay proved R(5, 5) ≤ 48 in 2017 and ≤ 46 in 2024. Marcelo Campos, Simon Griffiths, Robert Morris and Julian Sahasrabudhe proved the bound (4 − ε)ᵏ in 2023, and P. Gupta, N. Ndiaye, S. Norin and L. Wei sharpened it to 3.8ᵏ. Erdős said that if an alien force demanded R(5, 5) on pain of war, we should set every computer to work on it; if it demanded R(6, 6), we should try to destroy the aliens.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“R(4, 4) is the next after R(3, 3) = 6, and the numbers go 2, 6, so they grow about three times each time: R(4, 4) ≈ 18, R(5, 5) ≈ 54.” Not allowed: two values fix no rule, and the guess for five is already above the proved bound 46. The value 18 came from a party of 17 and a count, not from a pattern.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'link',t:R`x - y \text{ a square remainder}`,n:`On dividing by 17.`},
+  {k:'ember',kl:'check',t:R`\{2, 9, 16\}, \ldots`,n:`No two linked.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{R(4, 4) = 18}`,n:`With 40j’s bound.`}
+],{title:'The slides · seventeen · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'known',t:R`43 \le R(5, 5) \le 46`,n:`1989 and 2024.`},
+  {k:'ember',kl:'search',t:R`2^{903}`,n:`Colourings of K₄₃.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\ge 10^{219} \text{ classes}}`,n:`No search can do it.`}
+],{title:'The slides · five · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'lower',t:R`\sqrt 2^{\,k}`,n:`1947, unmoved.`},
+  {k:'ember',kl:'upper',t:R`4^k \to 3.8^k`,n:`2023 on.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{the base moved}}`,n:`After 88 years.`}
+],{title:'The slides · the gap · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Convincing without telling</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r39k.html">← 39k reductions by hand</a><a href="r39comp.html">next: 39·comp must computing cost energy? →</a></p>
+  <div class="tags"><span class="tag tech">39l · technique</span></div>
+  <h1>Convincing without telling</h1>
+  <p data-pid="397c7f">Can you convince someone that a map can be coloured with three colours without showing them a colouring, or anything at all they could not have made up themselves? It sounds like a trick. Rung thirty seven made a proof a list of lines that anyone can check, and a list of lines tells everything. This step changes the game. There are two players. One knows the answer and has unlimited time. The other has a few coins and little time, and asks questions. The first has to answer so that a liar would be caught, almost surely, and an honest answer gives nothing away. With locked boxes, which the rung on clock arithmetic will build, it can be done for three-colouring, and by the last step’s reduction, for every question with short certificates. The checker ends up sure, with a stated chance of being fooled, and with nothing to show anyone else. This step does it by hand, with numbers: how often a cheat is caught, how many rounds bring the chance down, and why the record of a round is something the checker could have written alone.</p>
+  <p class="gesture" data-pid="c4b58d">A checker with coins questions a prover; a liar is caught at a known rate each round, and rounds multiply. With locked boxes and shuffled colours, a three-colouring is proved by opening one link at a time, and the checker learns nothing it could not have made up. By reduction, every question with short certificates has such a proof.</p>
+</header>
+
+<section class="class step" data-step="39l1">
+  <h2 class="sthead"><span class="stno">39l1</span>Two players, and a liar caught</h2>
+  <p data-pid="a7e740">Two maps are <i>the same shape</i> when a matching of their dots (9c) carries links to links and non-links to non-links. Nobody knows a fast way to decide this, and no short certificate is known that two maps are <i>not</i> the same shape. Yet a prover can convince a checker of it.</p>
+  <p data-pid="d97937">Which-one technique: <b>if two maps are not the same shape, a prover names which of them the checker shuffled every time; if they are the same shape, any prover names it with chance exactly one half; so k rounds fool the checker with chance at most 2⁻ᵏ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the which-one technique">
+\text{the }\allowbreak \text{checker }\allowbreak \text{picks } i \in \{1, 2\} \text{ with }\allowbreak \text{a }\allowbreak \text{coin, }\allowbreak \text{shuffles }\allowbreak \text{the }\allowbreak \text{dots }\allowbreak \text{of }\allowbreak \text{map } i \text{ at }\allowbreak \text{random, }\allowbreak \text{and }\allowbreak \text{sends }\allowbreak \text{it} @@ the prover sees the shuffled map, not i
+\text{not }\allowbreak \text{the }\allowbreak \text{same }\allowbreak \text{shape: }\allowbreak \text{the }\allowbreak \text{shuffled }\allowbreak \text{map }\allowbreak \text{is }\allowbreak \text{the }\allowbreak \text{same }\allowbreak \text{shape }\allowbreak \text{as }\allowbreak \text{map } i \text{ only} @@ shuffling keeps shape; the prover, with unlimited time, finds i
+\text{the }\allowbreak \text{same }\allowbreak \text{shape: }\allowbreak \text{the }\allowbreak \text{shuffled }\allowbreak \text{map }\allowbreak \text{has }\allowbreak \text{the }\allowbreak \text{same }\allowbreak \text{chance }\allowbreak \text{from } i = 1 \text{ and } i = 2 @@ a random shuffle of either gives every map of that shape alike
+\text{so }\allowbreak \text{the }\allowbreak \text{prover’s }\allowbreak \text{answer }\allowbreak \text{matches } i \text{ with }\allowbreak \text{chance } \tfrac12 @@ i is independent of what the prover sees (30f)
+\htmlClass{new}{k \text{ rounds, }}\allowbreak \htmlClass{new}{ \text{all }}\allowbreak \htmlClass{new}{ \text{right: }}\allowbreak \htmlClass{new}{ \text{chance } 2^{-k}} \quad \blacksquare @@ independent coins each round
+  </pre>
+  <p data-pid="9802e7">Twenty rounds bring the chance of being fooled below one in a million. The checker’s work is fast: shuffling and comparing an answer. The prover’s work may be enormous, and the checker does not care how it was done. This is a proof with a stated chance of error, of the kind 39i set beside proofs with none.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · which one · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">39l1.1</span><span class="ph understand">understand</span>When are two maps the same shape? <br>What does the which-one technique say, and why does a prover facing two maps of the same shape guess right only half the time?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39l2">
+  <h2 class="sthead"><span class="stno">39l2</span>Locked colours</h2>
+  <p data-pid="f037e7">A <i>locked box</i> holds a colour. Once sent, its content cannot be changed, and the checker cannot see it until the prover sends the key. Boxes like this are built from functions that are fast to compute and believed slow to undo; the ladder holds them in trust until rung 41 builds them. With them the prover proves a three-colouring of a map with l links.</p>
+  <p data-pid="509a38">Locked-colours technique: <b>if the map has no three-colouring, each round catches the prover with chance at least 1/l; so k · l rounds fool the checker with chance at most e⁻ᵏ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the locked-colours technique">
+\text{each }\allowbreak \text{round: }\allowbreak \text{the }\allowbreak \text{prover }\allowbreak \text{renames }\allowbreak \text{the }\allowbreak \text{three }\allowbreak \text{colours }\allowbreak \text{at }\allowbreak \text{random, }\allowbreak \text{one }\allowbreak \text{of } 6 \text{ ways, }\allowbreak \text{and }\allowbreak \text{locks }\allowbreak \text{each }\allowbreak \text{dot’s }\allowbreak \text{colour} @@ a fresh renaming every round
+\text{the }\allowbreak \text{checker }\allowbreak \text{picks }\allowbreak \text{one }\allowbreak \text{link }\allowbreak \text{at }\allowbreak \text{random; }\allowbreak \text{the }\allowbreak \text{prover }\allowbreak \text{opens }\allowbreak \text{its }\allowbreak \text{two }\allowbreak \text{boxes} @@ chance 1/l for each link
+\text{the }\allowbreak \text{checker }\allowbreak \text{accepts }\allowbreak \text{when }\allowbreak \text{the }\allowbreak \text{two }\allowbreak \text{colours }\allowbreak \text{differ} @@ a true colouring always passes
+\text{no }\allowbreak \text{three-colouring: }\allowbreak \text{whatever }\allowbreak \text{was }\allowbreak \text{locked, }\allowbreak \text{some }\allowbreak \text{link }\allowbreak \text{has }\allowbreak \text{its }\allowbreak \text{ends }\allowbreak \text{alike} @@ the locked colours are fixed before the pick
+\text{caught }\allowbreak \text{with }\allowbreak \text{chance }\allowbreak \text{at }\allowbreak \text{least } \tfrac1l\text{; }\allowbreak \text{not }\allowbreak \text{caught }\allowbreak \text{in } kl \text{ rounds: }\allowbreak \text{at }\allowbreak \text{most } (1 - \tfrac1l)^{kl} @@ independent rounds (30f)
+\htmlClass{new}{(1 - \tfrac1l)^{kl} \le e^{-k}} \quad \blacksquare @@ ln(1 − 1/l) ≤ −1/l (17)
+  </pre>
+  <p data-pid="ed8ddc">For the 27-dot map of 39k4, with 48 links, 48 × 14 = 672 rounds bring the chance of being fooled below e⁻¹⁴, about 8 in ten million. Each round costs the checker one random pick and two opened boxes.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · locked · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39l2.1</span><span class="ph understand">understand</span>What does a locked box do, and what is held in trust about it? <br>What does the locked-colours technique say, and why must the boxes be locked before the checker picks a link?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39l3">
+  <h2 class="sthead"><span class="stno">39l3</span>Nothing learned</h2>
+  <p data-pid="dea446">What does the checker see in a round of the locked-colours technique? A link it chose, and two different colours at its ends. Because the colours were renamed at random, the pair it sees is any of the 6 ordered pairs of different colours, each with chance 1/6, whatever the colouring was.</p>
+  <p data-pid="8d3ae5">Self-made-record technique: <b>the record of each round, the link and the two colours shown, has the same chances as a record the checker could make alone, with its own coins and no colouring.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the self-made-record technique">
+\text{the }\allowbreak \text{true }\allowbreak \text{colouring }\allowbreak \text{gives }\allowbreak \text{the }\allowbreak \text{link’s }\allowbreak \text{ends }\allowbreak \text{two }\allowbreak \text{different }\allowbreak \text{colours } c_1 \ne c_2 @@ given
+\text{a }\allowbreak \text{random }\allowbreak \text{renaming }\allowbreak \text{sends } (c_1, c_2) \text{ to }\allowbreak \text{each }\allowbreak \text{of }\allowbreak \text{the } 6 \text{ ordered }\allowbreak \text{pairs }\allowbreak \text{with }\allowbreak \text{chance } \tfrac16 @@ 3 · 2 renamings send c₁ to a given colour and c₂ to another
+\text{alone: }\allowbreak \text{pick }\allowbreak \text{the }\allowbreak \text{link, }\allowbreak \text{then }\allowbreak \text{pick }\allowbreak \text{an }\allowbreak \text{ordered }\allowbreak \text{pair }\allowbreak \text{of }\allowbreak \text{different }\allowbreak \text{colours }\allowbreak \text{at }\allowbreak \text{random} @@ the checker’s own coins
+\htmlClass{new}{\text{the }}\allowbreak \htmlClass{new}{ \text{two }}\allowbreak \htmlClass{new}{ \text{records }}\allowbreak \htmlClass{new}{ \text{have }}\allowbreak \htmlClass{new}{ \text{the }}\allowbreak \htmlClass{new}{ \text{same }}\allowbreak \htmlClass{new}{ \text{chances}} \quad \blacksquare @@ each link with chance 1/l, each pair 1/6
+  </pre>
+  <p data-pid="58be7a">So the checker gains certainty and no information. It cannot show the record to anyone else as evidence, since it could have made it up. Its accepted name is a zero-knowledge proof. The lock is what makes it work: without it, the prover could choose the colours after seeing the link, and with it, the boxes not opened stay unopened.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · zero · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39l3.1</span><span class="ph understand">understand</span>What does the self-made-record technique say? <br>Why is each of the 6 ordered pairs equally likely, and why can the checker not use the record to convince anyone else?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39l4">
+  <h2 class="sthead"><span class="stno">39l4</span>Every short certificate, kept secret</h2>
+  <p data-pid="6cdeb8">Through-colouring technique: <b>with locked boxes, every set in NP has a proof of this kind: a liar is caught at a known rate, and the checker learns nothing it could not make alone.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the through-colouring technique">
+x \in A,\ \allowbreak A \in NP @@ given, with a certificate the prover knows
+\text{the }\allowbreak \text{tableau }\allowbreak \text{and }\allowbreak \text{map-from-clauses }\allowbreak \text{techniques }\allowbreak \text{turn } x \text{ into }\allowbreak \text{a }\allowbreak \text{map } G_x @@ fast, and both sides can compute it
+\text{the }\allowbreak \text{certificate }\allowbreak \text{gives }\allowbreak \text{a }\allowbreak \text{true }\allowbreak \text{row, }\allowbreak \text{and }\allowbreak \text{so }\allowbreak \text{a }\allowbreak \text{three-colouring }\allowbreak \text{of } G_x @@ 39k4, forwards
+\htmlClass{new}{\text{run }}\allowbreak \htmlClass{new}{ \text{the }}\allowbreak \htmlClass{new}{ \text{locked-colours }}\allowbreak \htmlClass{new}{ \text{rounds }}\allowbreak \htmlClass{new}{ \text{on } G_x} \quad \blacksquare @@ 39l2 and 39l3
+  </pre>
+  <p data-pid="5a54c1">So a person can prove they know a password, a factor of a number, or the solution of a puzzle, without giving it away. And interaction reaches further than certificates: in 1990 it was proved that every set in PSPACE has an interactive proof with a fast checker. That result is named here; its proof turns a question about every row into a polynomial and checks it at random points, as 39i2 did.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · every NP · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39l4.1</span><span class="ph understand">understand</span>What does the through-colouring technique say? <br>Which techniques of 39h and 39k does it pass through, and what does the prover need to know?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39l5">
+  <h2 class="sthead"><span class="stno">39l5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{the }\allowbreak \text{prover }\allowbreak \text{passed }\allowbreak \text{one }\allowbreak \text{round, }\allowbreak \text{so }\allowbreak \text{the }\allowbreak \text{map }\allowbreak \text{has }\allowbreak \text{a }\allowbreak \text{three-colouring}\,? @@ a cheat passes one round with chance up to 1 − 1/l
+\text{the }\allowbreak \text{prover }\allowbreak \text{may }\allowbreak \text{pick }\allowbreak \text{the }\allowbreak \text{colours }\allowbreak \text{after }\allowbreak \text{seeing }\allowbreak \text{the }\allowbreak \text{link}\,? @@ then every link passes; the boxes are locked first
+\text{keep }\allowbreak \text{the }\allowbreak \text{same }\allowbreak \text{renaming }\allowbreak \text{every }\allowbreak \text{round}\,? @@ then the rounds together show the whole colouring, link by link
+\text{the }\allowbreak \text{checker }\allowbreak \text{saw }\allowbreak \text{only }\allowbreak \text{true }\allowbreak \text{answers, }\allowbreak \text{so }\allowbreak \text{it }\allowbreak \text{can }\allowbreak \text{convince }\allowbreak \text{a }\allowbreak \text{judge}\,? @@ it could have made the record alone; it is no evidence to anyone else
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39l5.1</span><span class="ph understand">understand</span>Why must the colours be renamed afresh each round? <br>Why is the checker’s record no evidence for a judge?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">39l.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">three dots in a triangle; three dots in a row</span></span>Run three rounds of the which-one technique by hand for these two maps, with coins of your own, playing both sides. Then run it for the triangle against a triangle with its dots renamed, and find what the prover can do.</div>
+  <div class="chq"><span class="chid">39l.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a }\allowbreak \text{map }\allowbreak \text{with }\allowbreak \text{one }\allowbreak \text{bad }\allowbreak \text{link }\allowbreak \text{out }\allowbreak \text{of } l"></span></span>A cheat has a locking with exactly one link whose ends are alike. Find the number of rounds that brings the chance of not being caught below one in a thousand, for l = 48. What if the checker picks links not at random but in order, one each round?</div>
+  <div class="chq"><span class="chid">39l.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{a }\allowbreak \text{checker }\allowbreak \text{that }\allowbreak \text{keeps }\allowbreak \text{its }\allowbreak \text{coins }\allowbreak \text{hidden}"></span></span>In the which-one technique the checker’s coin i is hidden. Turn it round: if the prover could see i, what would the rounds prove? In the locked-colours technique, what would the checker learn if it could open every box?</div>
+  <div class="chq"><span class="chid">39l.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">37b: a proof is a list of lines anyone can check</span></span>37b made a proof a list of lines that anyone can check, and 37·now2 trusted a proof once its statement was read and its lines passed a core. The checker of this step is convinced and holds no lines. Is it holding a proof? One view says yes: a proof is whatever rightly makes a reader sure. Another says no: a proof must convince the next reader too. Which view does each page of rung 37 take?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r39k.html">← 39k · reductions by hand</a><a href="r39comp.html">39·comp · must computing cost energy? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The two players are the prover and the verifier of an interactive proof system, and IP is the class of sets with such proofs; IP = PSPACE is Shamir’s theorem (1990), after Lund, Fortnow, Karloff and Nisan. The which-one technique is the protocol for graph non-isomorphism, and two maps of the same shape are isomorphic graphs. A locked box is a commitment scheme. The locked-colours technique and the self-made-record technique are the zero-knowledge protocol for graph 3-colouring; the checker’s lone method of making a record is a simulator.</p>
+  <h3>Who said it first</h3>
+  <p>Shafi Goldwasser, Silvio Micali and Charles Rackoff defined interactive and zero-knowledge proofs in a paper circulated in 1985; László Babai gave a version with public coins the same year. Oded Goldreich, Silvio Micali and Avi Wigderson (1986) gave the protocols for non-isomorphism and three-colouring, and so for all of NP. Adi Shamir proved IP = PSPACE in 1990. Goldwasser and Micali received the Turing Award in 2012.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The checker saw the same link coloured red and blue in round 3 and blue and green in round 7, so it has learned that the link’s ends differ in every colouring.” Not allowed as learning: that the ends differ is what a three-colouring promises, and the checker was told the map has one. The colours themselves were renamed, so the two rounds say nothing about which colours the true colouring uses.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'shuffle',t:R`i \in \{1, 2\} \text{ hidden}`,n:`The checker’s coin.`},
+  {k:'ember',kl:'answer',t:R`\text{the prover names } i`,n:`Always, if they differ.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{fooled} \le 2^{-k}}`,n:`Rounds multiply.`}
+],{title:'The slides · which one · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'rename',t:R`6 \text{ ways}`,n:`Fresh each round.`},
+  {k:'ember',kl:'open',t:R`\text{one link’s two boxes}`,n:`Chance 1/l.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(1 - \tfrac1l)^{kl} \le e^{-k}}`,n:`Cheats caught.`}
+],{title:'The slides · locked · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'see',t:R`(c_1, c_2),\ c_1 \ne c_2`,n:`One link.`},
+  {k:'ember',kl:'chance',t:R`\tfrac16 \text{ each}`,n:`Renamed at random.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{could have made it alone}}`,n:`Nothing learned.`}
+],{title:'The slides · zero · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'turn',t:R`x \mapsto G_x`,n:`Tableau, then map.`},
+  {k:'ember',kl:'prove',t:R`\text{locked colours}`,n:`Rounds.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{every NP: zero knowledge}}`,n:`Given locks.`}
+],{title:'The slides · every NP · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

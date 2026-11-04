@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Several clocks at once</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r41b.html">← 41b undoing on a clock</a><a href="r41d.html">next: 41d powers cycle →</a></p>
+  <div class="tags"><span class="tag proof">41c · proof</span></div>
+  <h1>Several clocks at once</h1>
+  <p data-pid="812dfc">A number of soldiers is lined up in threes, and two are left over. In fives, three are left over. In sevens, two. How many soldiers? An old book of puzzles asked this, and answered twenty three. The answer is one of many, since adding one hundred and five changes none of the leftovers, but between one and one hundred and five it is the only one. That is the claim of this step. Reading a number on several clocks at once loses nothing, as long as no two of the clocks share a divisor, and it keeps adding and multiplying. So a question on a big clock can be split into questions on small clocks, answered there, and put back together. The undoes of the last step do the putting back. When two clocks do share a divisor, the readings must agree on the shared part, and that condition is all that goes wrong.</p>
+  <p class="gesture" data-pid="bb9511">If m and n share nothing, an hour of the clock of mn is the same as a pair of hours, one on each, and the pairing keeps plus and times. The pair is put back together with undoes. Clocks that share a divisor can be read together exactly when the readings agree on it.</p>
+</header>
+
+<section class="class step" data-step="41c1">
+  <h2 class="sthead"><span class="stno">41c1</span>Two clocks that share nothing</h2>
+  <p data-pid="8f36bc">Fix m and n with gcd(m, n) = 1. Read each hour of the clock of mn on both small clocks: [x] goes to the pair ([x] on the clock of m, [x] on the clock of n). That is well defined, since mn ∣ x − y gives m ∣ x − y and n ∣ x − y.</p>
+  <p data-pid="f11a68">Remainder technique: <b>if m and n share no divisor above 1, reading an hour of the clock of mn on the clocks of m and n is a matching of ℤ/mn with the pairs ℤ/m × ℤ/n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the remainder technique">
+x \equiv y \pmod m,\ \ x \equiv y \pmod n @@ suppose two hours give one pair
+m \mid x - y,\ \ n \mid x - y = nk @@ ﹀ ≡ twice
+m \mid nk \Rightarrow m \mid k @@ factor-that-shares-nothing (5h), since gcd(m, n) = 1
+\htmlClass{new}{mn \mid x - y} @@ x − y = n(mj): one-to-one
+|\mathbb Z/mn| = mn = |\mathbb Z/m \times \mathbb Z/n| @@ clock-hours (41a2); pairs counted by the product rule (4k)
+\htmlClass{new}{\text{the reading is onto}} \quad \blacksquare @@ a one-to-one map between finite sets of one size misses nothing: else pigeonhole (8·cb5) on the map back
+  </pre>
+  <p data-pid="72eeb2">So the soldiers have one count between 0 and 104 for each list of leftovers. The proof says the answer exists. It does not say how to find it, short of trying all 105. The next footing finds it.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · several clocks · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">41c1.1</span><span class="ph understand">understand</span>What does the remainder technique say? <br>Which line of its proof needs m and n to share nothing, and why does onto come free?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41c2">
+  <h2 class="sthead"><span class="stno">41c2</span>Putting the pair back</h2>
+  <p data-pid="88c394">Each small clock gets a number that is 1 on it and 0 on all the others. On the clock of m, N/m times its undo there is 1; on every other clock it is a multiple of that clock, so 0. Add them, each times its leftover.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the soldiers">
+N = 3 \cdot 5 \cdot 7 = 105 @@ the clocks share nothing
+35 \equiv 2 \pmod 3,\ [2]^{-1} = [2];\ \ 21 \equiv 1 \pmod 5;\ \ 15 \equiv 1 \pmod 7 @@ N/3, N/5, N/7 on their own clocks; undoes by 41b
+e_3 = 35 \cdot 2 = 70,\ \ e_5 = 21,\ \ e_7 = 15 @@ each is 1 on its clock and 0 on the other two
+x = 2 \cdot 70 + 3 \cdot 21 + 2 \cdot 15 = 233 @@ the leftovers 2, 3 and 2
+\htmlClass{new}{x \equiv 233 - 210 = 23 \pmod{105}} \quad \blacksquare @@ 23 = 3 · 7 + 2 = 5 · 4 + 3 = 7 · 3 + 2
+  </pre>
+  <p data-pid="7d4e22">The three numbers 70, 21 and 15 serve every list of leftovers on these clocks. Any count of soldiers is 70a + 21b + 15c on the clock of 105, where a, b and c are the leftovers in threes, fives and sevens. The old book gave exactly these three numbers as a rhyme.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · putting back · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41c2.1</span><span class="ph understand">understand</span>How is the number 70 found, and what is it on each of the clocks of 3, 5 and 7? <br>How does the footing put the leftovers 2, 3, 2 back together into 23?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41c3">
+  <h2 class="sthead"><span class="stno">41c3</span>The pairing keeps plus and times</h2>
+  <p data-pid="3326cb">Two-clock technique: <b>if m and n share nothing, the reading of the remainder technique sends sums to sums and products to products, so an hour of the clock of mn is a unit exactly when both its readings are units.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-clock technique">
+[x + y] \mapsto ([x + y]_m, [x + y]_n) = ([x]_m + [y]_m, [x]_n + [y]_n) @@ carry-to-the-clock (41a2) on each clock
+[xy] \mapsto ([x]_m[y]_m, [x]_n[y]_n) @@ the same, for times
+[x][y] = [1] \Rightarrow [x]_m[y]_m = [1]_m,\ [x]_n[y]_n = [1]_n @@ a unit reads as two units
+[x]_m[a]_m = [1]_m,\ [x]_n[b]_n = [1]_n \Rightarrow [x][y] = [1] @@ y the hour reading as (a, b): onto (41c1), then one-to-one
+\htmlClass{new}{|(\mathbb Z/mn)^\times| = |(\mathbb Z/m)^\times| \cdot |(\mathbb Z/n)^\times|} \quad \blacksquare @@ the units match the pairs of units; the product rule (4k)
+  </pre>
+  <p data-pid="273f3c">So the clock of 12 has 2 · 2 = 4 units, two from the clock of 3 and two from the clock of 4. And an equation can be solved clock by clock. x² ≡ 1 on the clock of 15 reads as x ≡ ±1 on the clock of 3 and x ≡ ±1 on the clock of 5: four pairs, so four answers, 1, 4, 11 and 14. On a prime clock x² ≡ 1 has two. 41j turns the extra answers into a test for primes.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · pairs keep the rules · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41c3.1</span><span class="ph understand">understand</span>What does the two-clock technique say about sums, products and units? <br>Why does x² ≡ 1 have four answers on the clock of 15?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41c4">
+  <h2 class="sthead"><span class="stno">41c4</span>Clocks that share a divisor</h2>
+  <p data-pid="1d3acf">Two clocks of 4 and 6 hours share 2. A reading of 3 on the clock of 4 and 1 on the clock of 6 is odd on both, and 7 gives it. A reading of 1 and 2 is odd on one and even on the other, and no integer gives it.</p>
+  <p data-pid="f83b5f">Shared-divisor technique: <b>x ≡ a (mod m) and x ≡ b (mod n) together have an answer exactly when a ≡ b (mod gcd(m, n)), and then all the answers are one hour on the clock of the least common multiple of m and n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the shared-divisor technique">
+g = \gcd(m, n),\ \ x = a + mj = b + nk @@ suppose an answer
+g \mid m,\ g \mid n \Rightarrow g \mid a - b @@ a − b = nk − mj (divides-a-sum)
+a - b = gt,\ \ mu + nv = g @@ the other way: given; gcd-as-a-sum (41b1)
+x = a - mut @@ try it
+x - b = (a - b) - mut = gt - mut = nvt @@ mu = g − nv
+\htmlClass{new}{x \equiv a \pmod m,\ \ x \equiv b \pmod n} \quad \blacksquare @@ the uniqueness on the clock of the common multiple is the remainder technique’s one-to-one line, with gcd in place of 1, a special challenge
+  </pre>
+  <p data-pid="5ac921">Calendars are clocks that share divisors, and the condition is what makes some dates impossible. A rhythm of 260 days and a year of 365 share 5, so a pair of readings that disagree on the clock of 5 never comes; the pairs that can come repeat every 18 980 days, the least common multiple, about 52 years.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · shared divisors · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41c4.1</span><span class="ph understand">understand</span>What does the shared-divisor technique say? <br>Why do x ≡ 1 (mod 4) and x ≡ 2 (mod 6) have no answer together?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41c5">
+  <h2 class="sthead"><span class="stno">41c5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\mathbb Z/4 \text{ matches } \mathbb Z/2 \times \mathbb Z/2 \text{ keeping plus}\,? @@ 4 and 2 share 2; [1] + [1] ≠ [0] on the clock of 4, while every pair added to itself gives (0, 0)
+x = 2 + 3 + 2 \text{ for the soldiers}\,? @@ the leftovers are weights on 70, 21 and 15, the numbers that are 1 on one clock and 0 on the others
+x \equiv 1 \pmod 4,\ x \equiv 1 \pmod 6 \Rightarrow x \equiv 1 \pmod{24}\,? @@ the clocks share 2; the answers are one hour on the clock of 12: 1 and 13 both work
+\text{one answer, so the only answer}\,? @@ one answer on the clock of the product; every integer in that hour also answers
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41c5.1</span><span class="ph understand">understand</span>Why does the clock of 4 not match the pairs from the clocks of 2 and 2? <br>Why do x ≡ 1 (mod 4) and x ≡ 1 (mod 6) not give x ≡ 1 (mod 24)?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">41c.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x \equiv 1 \pmod 7,\ \ x \equiv 2 \pmod{11},\ \ x \equiv 3 \pmod{13}"></span></span>Build the three numbers that are 1 on one of these clocks and 0 on the other two, and find x between 0 and 1000. <br>7 · 11 · 13 = 1001. Use it to find the remainder of 123 456 by 1001 by reading 123 456 on the three clocks.</div>
+  <div class="chq"><span class="chid">41c.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x \equiv a \pmod m,\ \ x \equiv b \pmod n,\ \ \gcd(m, n) = g"></span></span>Finish the shared-divisor technique: prove that two answers differ by a multiple of the least common multiple of m and n, and that mn/g is that multiple. <br>What does the technique say when m = n?</div>
+  <div class="chq"><span class="chid">41c.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\mathbb Z/mn \leftrightarrow \mathbb Z/m \times \mathbb Z/n"></span></span>Suppose a matching of ℤ/mn with the pairs keeps plus. Prove that m and n share nothing. <br>Hint held back: which hour of the clock of mn needs the most additions of itself to reach [0], and how many does a pair ever need?</div>
+  <div class="chq"><span class="chid">41c.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">5·nav: dates carried like digits, on clocks of 7, 12, 365</span></span>A date was read on 5·nav as several clocks carried like digits: weekday, month, year. A rhythm of 260 days and one of 365 run side by side in one calendar of Central America. <br>Is a date in that calendar a number, a pair of hours, or a name for an hour on the clock of 18 980? How many different pairs can occur, and why not 260 · 365? If a third rhythm of 9 days is added, how long until all three repeat together?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r41b.html">← 41b · undoing on a clock</a><a href="r41d.html">41d · powers cycle →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The remainder technique is the Chinese remainder theorem, and the two-clock technique the ring isomorphism ℤ/mnℤ ≅ ℤ/mℤ × ℤ/nℤ for coprime m and n, with its consequence φ(mn) = φ(m)φ(n) for Euler’s φ (41d). The shared-divisor technique is the general Chinese remainder theorem. The 260-day count and the 365-day year together are the Calendar Round of the Maya, 52 years long.</p>
+  <h3>Who said it first</h3>
+  <p>The soldiers’ puzzle is in the Sunzi Suanjing, a Chinese book of the third to fifth century. Qin Jiushao gave a general method in 1247. Leonhard Euler and Carl Friedrich Gauss proved it in modern form, Gauss in the Disquisitiones (1801). The rhyme with 70, 21 and 15 is from the Ming dynasty.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The clock of 4 has 4 hours and the pairs on the clocks of 2 and 2 are 4 in number. A set of 4 matches a set of 4, so the remainder technique applies.” Not allowed: any two sets of 4 match, but the technique is about the reading, which must also keep plus and times. The reading [x] ↦ ([x], [x]) on the clocks of 2 is not one-to-one: [0] and [2] both read as ([0], [0]).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'read',t:R`[x] \mapsto ([x]_m, [x]_n)`,n:`Both small clocks.`},
+  {k:'ember',kl:'one-to-one',t:R`m, n \mid x - y \Rightarrow mn \mid x - y`,n:`Sharing nothing.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\mathbb Z/mn \leftrightarrow \mathbb Z/m \times \mathbb Z/n}`,n:`A matching.`}
+],{title:'The slides · several clocks · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'one on its clock',t:R`e_3 = 70,\ e_5 = 21,\ e_7 = 15`,n:`Undoes of N/m.`},
+  {k:'ember',kl:'combine',t:R`2 \cdot 70 + 3 \cdot 21 + 2 \cdot 15`,n:`Leftovers as weights.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{x \equiv 23 \pmod{105}}`,n:`The soldiers.`}
+],{title:'The slides · putting back · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'sums',t:R`[x + y] \mapsto (\ldots + \ldots,\ \ldots + \ldots)`,n:`Clock by clock.`},
+  {k:'ember',kl:'units',t:R`\text{unit} \iff \text{both readings units}`,n:`Undoes put back.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|(\mathbb Z/12)^\times| = 2 \cdot 2}`,n:`Counts multiply.`}
+],{title:'The slides · pairs keep the rules · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'agree',t:R`a \equiv b \pmod{\gcd(m, n)}`,n:`Needed and enough.`},
+  {k:'ember',kl:'build',t:R`x = a - mut`,n:`From mu + nv = g.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{x \equiv 7 \pmod{12}}`,n:`From 3 mod 4 and 1 mod 6.`}
+],{title:'The slides · shared divisors · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

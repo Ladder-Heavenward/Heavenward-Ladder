@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>When are two things truly the same?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r44comp.html">← 44·comp can a program’s type say what it does?</a><a href="r44now2.html">next: 44·now2 is all of mathematics one theory? →</a></p>
+  <div class="tags"><span class="tag now">44·now · research front</span></div>
+  <h1>When are two things truly the same?</h1>
+  <p data-pid="c7b128">When are two things truly the same? The call back before this page kept two answers side by side: one thing with two names, and two things matched in exactly one way that keeps what matters. Mathematicians work with the second all day and write the first, and the gap between them is filled by a habit: whatever is true of one is true of the other, as long as it was said properly. Between 2006 and 2013 a group of mathematicians took the habit at its word. Start from the typed programs of the last step, where a statement is a type and a proof is a term. Make sameness a type too: for two members of a type, a type whose members are the ways the two are the same. Read those ways as the paths of rung thirty four, from one point to another, and the ways of being the same can be run in a row and run backwards, exactly as loops were. Then lay down one more axiom, that the ways two types are the same are exactly the matchings between them. Matched becomes equal, and the habit becomes a rule of the calculus. This page builds the sameness type, counts its members for small types, and computes the loops of the circle inside it, a result of 2012.</p>
+  <p class="gesture" data-pid="accec4">In a type theory, the sameness of two members is a type whose members are the ways they are the same, read as paths; they run in a row and backwards, and any one carries every statement about the first to one about the second. The univalence axiom says the ways two types are the same are exactly their matchings, so a two-member type is the same as itself in two ways, and a type with more members in as many ways as it has shuffles. The circle, built from a point and a loop, has the whole numbers as its loops, computed inside the calculus.</p>
+</header>
+
+<section class="class step" data-step="44·now.1">
+  <h2 class="sthead"><span class="stno">44·now.1</span>Sameness as a type</h2>
+  <p data-pid="a2d2ff">Add to 44j’s calculus a type x = y for any two members x, y of a type A, and one term refl_x : x = x. A member p : x = y is a <i>way</i> x and y are the same. The one rule for using a way says: to build something from every way p : x = y, for every x and y, it is enough to build it for refl. 0b’s self-sameness is refl, and the rule is how 0b’s swap becomes a term.</p>
+  <p data-pid="3fdf07">Carry-along technique: <b>from a way p : x = y and a member of P(x), the rule builds a member of P(y), for every type family P.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the carry-along technique">
+P : A \to \text{types},\ \ p : x = y,\ \ t : P(x) @@ a family of statements, a way, and a proof about a
+\text{to build } P(x) \to P(y) \text{ for every } p @@ the goal
+\text{for } p = \mathrm{refl}_x:\ \ \lambda t.\,t : P(x) \to P(x) @@ enough, by the one rule
+\htmlClass{new}{\text{carry}_P(p) : P(x) \to P(y)} \quad \blacksquare @@ the swap axiom of 0b, as a program
+  </pre>
+  <p data-pid="c53dd1">The same rule builds p · q : x = z from p : x = y and q : y = z, and p⁻¹ : y = x, each by building it for refl. The ways at a point, x = x, then make a group up to sameness of ways, as 34g2’s loops did. Picture each type as a space, each member as a point and each way as a path, and every rule of the calculus is true of paths. That reading is the field’s name for itself.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · sameness as a type · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">44·now.1.1</span><span class="ph understand">understand</span>What is a member of the type x = y, and what is the one rule for using such members? <br>What does the carry-along technique say, and which axiom of rung 0 does it make a program?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="44·now.2">
+  <h2 class="sthead"><span class="stno">44·now.2</span>Matched means equal</h2>
+  <p data-pid="12f37f">Types are themselves members of a type of types. So for types A and B there is a type A = B. There is also the type A ≃ B of matchings, pairs of terms f : A → B and g : B → A undoing each other up to ways. By the one rule, every way A = B gives a matching: carry along it in the family X ↦ X. The <i>univalence axiom</i> lays down that this map from A = B to A ≃ B is itself a matching. It is earned from above: without it, the calculus cannot prove that two matched types are the same, and every statement must be carried across a matching by hand, the habit the axiom turns into a rule.</p>
+  <p data-pid="3171db">Way-count technique: <b>with the univalence axiom, a type with n members is the same as itself in exactly n! ways.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the way-count technique">
+(A = A) \cong (A \simeq A) @@ the univalence axiom
+A \simeq A \text{ for } A \text{ with } n \text{ members} = \text{the matchings of } A \text{ with itself} @@ the shuffles of n things (19a)
+\text{their number is } n! @@ 4k’s product rule: n places for the first, n − 1 for the next, …
+\text{two members: } 2! = 2,\ \ \text{three: } 3! = 6 @@ the do-nothing way and the swap; S₃
+\htmlClass{new}{\text{refl is not the only way } A = A \text{ once } n \ge 2} \quad \blacksquare @@ the swap is a second
+  </pre>
+  <p data-pid="c00e4a">That breaks a rule sets keep. In rung 2’s sets, two sets are equal or not, and there is nothing more to say: one way at most. The calculus without the axiom has a world where every x = y has at most one member. In 1994 a second world was found, built from categories in which every arrow can be undone (44a2), where x = x can have many; so “at most one way” cannot be proved in the calculus, and the axiom chooses the second kind. The two-member type has two ways to be itself, and a proof that uses the swap way carries a statement about true and false to the statement with true and false exchanged.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · univalence · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">44·now.2.1</span><span class="ph understand">understand</span>What does the univalence axiom lay down, and what breaks without it? <br>What does the way-count technique say, and how many ways is a three-member type the same as itself?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="44·now.3">
+  <h2 class="sthead"><span class="stno">44·now.3</span>The circle, computed</h2>
+  <p data-pid="4d17cf">Build a type S by two terms: a point base : S and a way loop : base = base, with the rule that to build something over S it is enough to say where base goes and where loop goes. That is the circle of 34g, made of one point and one path, with nothing about the line or about cos and sin.</p>
+  <p data-pid="595a01">Circle-ways technique: <b>in the calculus with univalence, the ways base = base are matched with the whole numbers, loop going to 1 and running ways in a row going to adding.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the circle-ways technique, in outline">
+\text{over } S:\ \ \text{base} \mapsto \mathbb Z,\ \ \text{loop} \mapsto (n \mapsto n + 1) @@ the rule for S; n ↦ n + 1 is a matching of ℤ, so by univalence a way ℤ = ℤ
+\text{code}(p) = \text{carry}(p)(0) \in \mathbb Z \text{ for } p : \text{base} = \text{base} @@ carry 0 along p: 34g3’s lift of a loop from 0, read at its end
+\text{code}(\text{loop} \cdot \text{loop} \cdot \text{loop}^{-1}) = 0 + 1 + 1 - 1 = 1 @@ carrying along a row is carrying each in turn
+\text{decode}(n) = \text{loop}^n @@ run loop n times, backwards for n below 0
+\text{code} \circ \text{decode} = \mathrm{id},\ \ \text{decode} \circ \text{code} = \mathrm{id} \text{ up to ways} @@ by the rule for S, and the one rule; held in trust here, done in full in 2013
+\htmlClass{new}{(\text{base} = \text{base}) \cong \mathbb Z} @@ 34g4, now a program
+  </pre>
+  <p data-pid="886958">The proof is 34g’s, with the unrolling of the circle onto the line replaced by a family of types over the circle. The line’s endless copies of each arc became the one type ℤ, carried round by adding 1. Univalence is where it runs: without it, n ↦ n + 1 could not be a way ℤ = ℤ, and nothing would turn as the loop goes round. Since 2013 the loops of spheres in more dimensions have been computed the same way, some of them by machine checkers of the kind 37·now described.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the circle · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">44·now.3.1</span><span class="ph understand">understand</span>How is the circle built as a type, and what does the rule for building over it say? <br>What does the circle-ways technique say, and where in its proof is univalence spent?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="44·now.4">
+  <h2 class="sthead"><span class="stno">44·now.4</span>What is settled, and what is not</h2>
+  <p data-pid="659d5b">Settled: the calculus with univalence has a world built from sets, found in 2006–2009, so it is clash-free if set theory with enough large sets is (37c). Settled since 2015–2018: a variant, cubical, in which univalence is no longer only laid down but computes, so a term built with it still runs to an answer, as 44j’s terms do. A book written by the group in 2013 laid the field out, and machine checkers of 37·now carry large libraries in it.</p>
+  <p data-pid="c09402">Not settled: whether mathematics should be written this way. A theory in which matched things are equal fits the practice of this rung; it does not fit rung 2’s sets, where {1, 2} and {3, 4} are matched and unequal. Each world of the calculus is one witness, and 37j’s no-self-certificate technique says neither side can certify itself from inside. Whether the calculus can hold every higher kind of sameness, ways between ways between ways without end, in a form a machine can check is a question being worked on now.</p>
+  <pre class="lines" data-k="ember" data-label="this page: what each side keeps">
+\text{rung 2’s sets: } \{1, 2\} \ne \{3, 4\},\ \text{at most one way } x = y @@ sameness is membership
+\text{univalence: } \mathrm{Bool} = \mathrm{Bool} \text{ in } 2 \text{ ways} @@ sameness is matching
+\htmlClass{new}{\text{both clash-free if set theory with large sets is}} \quad \blacksquare @@ a world of the calculus is built from sets
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · settled and not · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">44·now.4.1</span><span class="ph understand">understand</span>What is settled about the calculus with univalence, and how was its freedom from clash shown? <br>What is not settled, and why can neither side certify itself?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="44·now.5">
+  <h2 class="sthead"><span class="stno">44·now.5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+p : x = y \text{ and } q : x = y,\ \text{so } p = q\,? @@ ways need not be the same way: Bool = Bool has refl and the swap
+\text{univalence proves } \{1, 2\} = \{3, 4\} \text{ as sets}\,? @@ it speaks of types in the calculus, not of rung 2’s membership
+\text{the circle type has a point for each angle}\,? @@ it has one point, base, and one way loop; the angles are not members
+\text{univalence is a technique of the calculus}\,? @@ it is laid down: the calculus without it cannot prove it, and has a world where it fails
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">44·now.5.1</span><span class="ph understand">understand</span>Why are two ways p, q : x = y not always the same way? <br>Why does univalence not make {1, 2} and {3, 4} equal as rung 2’s sets?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">44·now.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Bool} = \{\text{yes}, \text{no}\}"></span></span>Build the two matchings of Bool with itself and the two ways they give. <br>Carry the statement “yes is the first member listed” along each. What does each give, and why is only one of the two results the same statement?</div>
+  <div class="chq"><span class="chid">44·now.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="A \text{ with no members};\ \ A \text{ with one member}"></span></span>How many ways is the type with no members the same as itself, and the type with one? <br>Does the way-count technique agree with 4k’s 0! and 1!?</div>
+  <div class="chq"><span class="chid">44·now.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{carry}_P(p) \text{ for every } P"></span></span>The carry-along technique sends a way to a function for each family. Turn it round: if two members x, y have, for every family P, a function P(x) → P(y), is there a way x = y? <br>Find the family that gives it, and compare with 44g’s known-by-arrows technique.</div>
+  <div class="chq"><span class="chid">44·now.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">44·cb0.5.4: \text{does sameness need a thing underneath?}</span></span>44·cb0.5.4 asked whether rung 0’s “a thing is the same as itself” needs a thing underneath, if numbers are places in a structure. <br>In the calculus with univalence, a type is the same as itself in many ways. Is a thing then known by its ways of being itself, as 44g knew a thing by its arrows? Is that the end of the question, or a new form of it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r44comp.html">← 44·comp · can a program’s type say what it does?</a><a href="r44now2.html">44·now2 · is all of mathematics one theory? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The calculus is homotopy type theory; x = y is the identity type, refl reflexivity, and the one rule is path induction, the J eliminator. The carry-along technique is transport. A ≃ B is the type of equivalences, and the univalence axiom says idtoeqv : (A = B) → (A ≃ B) is an equivalence. The circle type is a higher inductive type, and the circle-ways technique is π₁(S¹) = ℤ, by the encode–decode method. The rule that every two proofs of x = y are equal is uniqueness of identity proofs, or axiom K. The world built from sets is the simplicial set model; cubical type theory gives univalence computational content.</p>
+  <h3>Who said it first</h3>
+  <p>Per Martin-Löf introduced identity types in the 1970s. Martin Hofmann and Thomas Streicher showed in 1994 that uniqueness of identity proofs is not provable, with a model in groupoids. Steve Awodey and Michael Warren, and Vladimir Voevodsky independently, read identity types as paths in 2005–2006; Voevodsky formulated univalence around 2009 and built the simplicial set model, published with Chris Kapulkin and Peter LeFanu Lumsdaine. The special year at the Institute for Advanced Study in 2012–13 produced the book Homotopy Type Theory: Univalent Foundations of Mathematics (2013). Michael Shulman and Daniel Licata computed the loops of the circle in 2012–13. Cyril Cohen, Thierry Coquand, Simon Huber and Anders Mörtberg gave cubical type theory in 2015, published 2018.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“A matching of A with B gives a way A = B, so every statement about A is true of B, including that A is the set {1, 2}.” Not allowed: inside the calculus, “A is the set {1, 2}” is not a statement about types; there are no members of members to speak of. Carrying is only along families the calculus can write, and that is why univalence is clash-free with it, and clashes with rung 2’s sets.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'ways',t:R`p : x = y`,n:`A path from x to y.`},
+  {k:'ember',kl:'one rule',t:R`\text{build it for } \mathrm{refl}`,n:`Enough for every way.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{carry}_P(p) : P(x) \to P(y)}`,n:`The swap, as a term.`}
+],{title:'The slides · sameness as a type · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'ways or matchings',t:R`(A = B) \cong (A \simeq B)`,n:`The axiom.`},
+  {k:'ember',kl:'count',t:R`|A| = n \Rightarrow n!`,n:`Shuffles.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2! = 2,\ \ 3! = 6}`,n:`More than refl.`}
+],{title:'The slides · univalence · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'build',t:R`\text{base},\ \ \text{loop} : \text{base} = \text{base}`,n:`A point and a path.`},
+  {k:'ember',kl:'over it',t:R`\text{loop} \mapsto (n \mapsto n + 1)`,n:`Univalence.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(\text{base} = \text{base}) \cong \mathbb Z}`,n:`34g4, computed.`}
+],{title:'The slides · the circle · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'a world',t:R`\text{built from sets}`,n:`Clash-free relative to sets.`},
+  {k:'ember',kl:'computes',t:R`\text{cubical}`,n:`Univalence runs.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{which foundation: open}}`,n:`Neither certifies itself.`}
+],{title:'The slides · settled and not · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

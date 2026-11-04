@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Best from best pieces</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40k.html">← 40k shortest paths and greedy choices</a><a href="r40m.html">next: 40m keeping things findable →</a></p>
+  <div class="tags"><span class="tag tech">40l · technique</span></div>
+  <h1>Best from best pieces</h1>
+  <p data-pid="79b62c">Rung 38 solved hard questions by remembering the answers to smaller ones and building up, and aligned two strings of letters that way. On a graph that idea has a plain form: every piece of a shortest route is itself a shortest route between its ends. So the distances can be built from the distances of fewer links, or of fewer stops, one layer at a time. This step does it three ways. On one-way links with no cycle, put the dots in an order where every link goes forward, and one pass along the order gives every best route, shortest or longest. When some lengths are negative, the nearest first of the last step fails, but rounds of improvement, each allowing one more link, still work, and one extra round tells whether a cycle of negative total exists, which in money is a way to get rich by trading in a circle. And allowing the stops one at a time gives the distance between every two dots at once. Last, rung 38’s alignment of two strings turns out to be a best route through a grid, and its table is the forward pass.</p>
+  <p class="gesture" data-pid="1cbfa5">A piece of a best route is a best route between its ends. With one-way links and no cycle, an order with every link forward exists, and one pass along it finds every best route. With negative lengths, n − 1 rounds of improvement find every distance, and one more round finds a cycle of negative total if there is one. Allowing the stops one at a time finds every distance at once. An alignment is a best route through a grid.</p>
+</header>
+
+<section class="class step" data-step="40l1">
+  <h2 class="sthead"><span class="stno">40l1</span>Pieces of a best route</h2>
+  <p data-pid="e1733c">Links are one-way here, each (u, w) with a length ℓ(u, w), which may be negative. A path’s length is the sum along it.</p>
+  <p data-pid="9ef2bd">Best-pieces technique: <b>if a path from r to w is shortest, each of its pieces, from a dot u on it to a later dot x on it, is a shortest path from u to x.</b> A shorter path from u to x, put in place of the piece, would give a shorter walk from r to w; if it met the rest of the path, cutting out the loop would shorten it again, as long as no cycle has negative total.</p>
+  <p data-pid="730af5">A one-way graph with no cycle can be put in <i>forward order</i>: a list of its dots in which every link goes from an earlier dot to a later one. Forward-order technique: <b>every finite one-way graph with no cycle has a forward order.</b> Some dot has no link coming in, since walking backwards along links from any dot must stop, or it would repeat a dot and close a cycle. Put that dot first, take it away, and go on by induction.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one pass in forward order">
+\text{dist}(r) = 0;\ \text{for each later } w \text{ in order: } \text{dist}(w) = \min_{(u, w)} \big(\text{dist}(u) + \ell(u, w)\big) @@ every u with a link into w comes earlier
+\text{each } \text{dist}(u) \text{ used is already final} @@ induction along the order
+\text{a shortest path to } w \text{ ends with a link } (u, w) \text{ after a shortest path to } u @@ the best-pieces technique
+\htmlClass{new}{\text{every distance from } r \text{, each link looked at once}} \quad \blacksquare @@ and longest paths the same way, with max for min
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · pieces · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">40l1.1</span><span class="ph understand">understand</span>What does the best-pieces technique say? <br>Why does a one-way graph with no cycle always have a dot with no link coming in?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40l2">
+  <h2 class="sthead"><span class="stno">40l2</span>Rounds of improvement</h2>
+  <p data-pid="90268a">With cycles and negative lengths, let dₖ(w) be the least length of a walk from r to w with at most k links. Then d₀(r) = 0, and d₀ has no value elsewhere.</p>
+  <p data-pid="820d09">Rounds technique: <b>dₖ(w) is the least of dₖ₋₁(w) and dₖ₋₁(u) + ℓ(u, w) over the links (u, w); if no cycle has negative total, dₙ₋₁ is the distance; and some cycle has negative total exactly when a further round still lowers some value.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the rounds technique">
+\text{a best walk of at most } k \text{ links has at most } k - 1 \text{, or ends with a link } (u, w) @@ the best-pieces technique on its last link
+\text{no negative cycle: a shortest walk is a path, of at most } n - 1 \text{ links} @@ cutting a loop does not lengthen it
+d_{n-1} = d_n = d_{n+1} = \cdots @@ no more links help
+\text{a negative cycle: walking round it again and again lowers some } d_k \text{ for ever} @@ so round n lowers something
+\htmlClass{new}{n - 1 \text{ rounds of } |E| \text{ looks, and one more to test}} \quad \blacksquare @@ cost about n|E|
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: trading in a circle">
+1\ \text{US dollar} \to 1.36\ \text{Canadian};\ 1\ \text{Canadian} \to 0.68\ \text{euro};\ 1\ \text{euro} \to 1.09\ \text{US} @@ rates of the kind quoted in a day’s trading
+\ell = -\ln(\text{rate}):\ \text{a cycle’s total is } -\ln(1.36 \cdot 0.68 \cdot 1.09) @@ logs turn the product into a sum (17c)
+1.36 \cdot 0.68 \cdot 1.09 \approx 1.008 > 1 @@ so the total is below 0
+\htmlClass{new}{\text{a negative cycle: } 0.8\% \text{ for one trip round, before fees}} \quad \blacksquare @@ the rounds technique finds it
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · rounds · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40l2.1</span><span class="ph understand">understand</span>What does the rounds technique say? <br>Why do n − 1 rounds suffice when no cycle has negative total, and how does trading in a circle become a cycle of negative total?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40l3">
+  <h2 class="sthead"><span class="stno">40l3</span>Every pair at once</h2>
+  <p data-pid="1019b8">Name the dots 1 to n. Let Dₖ(i, j) be the least length of a path from i to j whose stops, the dots strictly between its ends, are all among 1 to k. D₀(i, j) is ℓ(i, j) if there is a link, 0 if i = j, and no value otherwise.</p>
+  <p data-pid="8aaaaf">Stops-allowed technique: <b>Dₖ(i, j) is the least of Dₖ₋₁(i, j) and Dₖ₋₁(i, k) + Dₖ₋₁(k, j); so with no negative cycle, Dₙ gives every distance after n³ steps.</b> A best path with stops among 1 to k either avoids k, or passes it once, and its two pieces, before and after k, have stops among 1 to k − 1 (the best-pieces technique).</p>
+  <pre class="lines" data-k="ember" data-label="this page: three dots, worked">
+\ell(1,2) = 4,\ \ell(2,3) = -2,\ \ell(1,3) = 5,\ \ell(3,1) = 1 @@ one-way links
+D_2(1, 3) = \min(D_1(1, 3),\ D_1(1, 2) + D_1(2, 3)) = \min(5,\ 4 - 2) = 2 @@ stop 2 allowed
+D_3(2, 1) = \min(D_2(2, 1),\ D_2(2, 3) + D_2(3, 1)) = \min(\text{none},\ -2 + 1) = -1 @@ stop 3 allowed
+\htmlClass{new}{\text{cycles: } 1 \to 2 \to 3 \to 1 \text{ has total } 3 \ge 0,\ \text{so these are distances}} \quad \blacksquare @@ D₃(i, i) = 0 for each i
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · all pairs · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40l3.1</span><span class="ph understand">understand</span>What does the stops-allowed technique say? <br>Why does a best path with stops among 1 to k pass dot k at most once?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40l4">
+  <h2 class="sthead"><span class="stno">40l4</span>An alignment is a route</h2>
+  <p data-pid="b788ea">38o aligned two strings by a table: an entry for each pair of starting pieces, built from three neighbours. Read the table as a graph. Its dots are the places (i, j), i letters of the first string used and j of the second. A one-way link goes right (a letter of the second against a gap), down (a letter of the first against a gap), or down and right (two letters against each other), with the score of that step as its length. Every link goes forward in the order row by row, and an alignment is a path from (0, 0) to the far corner.</p>
+  <p data-pid="c5da55">Alignment-route technique: <b>the best alignment of two strings is a longest route through their grid, and 38o’s table is the forward pass of the forward-order technique.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: ACGT against AGT">
+\text{score: } +1 \text{ a match},\ -1 \text{ a mismatch},\ -1 \text{ a gap} @@ the scores of 38o
+\text{grid } 5 \times 4 \text{ places; three kinds of link} @@ (i, j) with i ≤ 4, j ≤ 3
+\text{route: } \mathrm{A/A},\ \mathrm{C}/{-},\ \mathrm{G/G},\ \mathrm{T/T} @@ down-right, down, down-right, down-right
+\htmlClass{new}{1 - 1 + 1 + 1 = 2,\ \text{the longest route}} \quad \blacksquare @@ the forward pass gives 2 at the corner
+  </pre>
+  <p data-pid="7ed84a">So alignment is not a new idea but a graph in disguise, and every trick for routes applies: the layers of 40k to bound how far off the diagonal a good route strays, the cost of n times m for the pass. 40·bio aligns proteins this way before it builds a tree.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · alignment · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40l4.1</span><span class="ph understand">understand</span>What does the alignment-route technique say? <br>What do the three kinds of link in the grid stand for, and why do they all go forward?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40l5">
+  <h2 class="sthead"><span class="stno">40l5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{the pieces of a longest path are longest paths, in any graph}\,? @@ in a graph with cycles a longest path must avoid repeats, and its pieces need not be longest; with no cycle it holds
+\text{after } n - 1 \text{ rounds every distance is right}\,? @@ only with no negative cycle; with one, there is no shortest walk
+\text{the nearest first works if every length is raised by the same amount}\,? @@ a path with more links gains more; the best path can change
+D_k(i, j) \text{ uses at most } k \text{ links}\,? @@ it uses stops among 1 to k, and a path with k stops has k + 1 links
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40l5.1</span><span class="ph understand">understand</span>Why does adding the same amount to every length not let the nearest first handle negative lengths? <br>Why do the pieces of a longest path in a graph with cycles not have to be longest?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">40l.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{tasks: } A\,3,\ B\,2,\ C\,4,\ D\,1,\ E\,2;\ \ A, B \text{ before } C;\ \ B \text{ before } D;\ \ C, D \text{ before } E"></span></span>Each task takes the days given, and some must wait for others. Put the tasks in forward order and find the least number of days for all of them, as a longest route. <br>Which tasks can be late by a day without delaying the end?</div>
+  <div class="chq"><span class="chid">40l.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\ell(1,2) = 1,\ \ell(2,3) = -3,\ \ell(3,1) = 1"></span></span>Run the rounds technique from dot 1 for four rounds. What happens in round 3, and what does it mean? <br>Is there a shortest path from 1 to 3 that meets no dot twice? Is that question easy?</div>
+  <div class="chq"><span class="chid">40l.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{longest paths that meet no dot twice}"></span></span>The best-pieces technique fails for longest paths in graphs with cycles. Show that a recipe for longest paths with no repeated dot would decide whether a graph has a round of the dots (40c). <br>What does 39h then suggest about such a recipe?</div>
+  <div class="chq"><span class="chid">40l.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">29g: the equation of the best path</span></span>Rung 29 found the best path on a curved surface from an equation, and called a best path between two of its points a geodesic. <br>Is every piece of a geodesic a geodesic? Is a geodesic always a shortest path? Find the rung 29 example where it is not, and match it with the failure of the best-pieces technique you have seen here.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r40k.html">← 40k · shortest paths and greedy choices</a><a href="r40m.html">40m · keeping things findable →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Building best answers from best pieces is dynamic programming, and the best-pieces technique is Bellman's principle of optimality, or optimal substructure. A one-way graph with no cycle is a directed acyclic graph, and a forward order is a topological sort. The rounds technique is the Bellman–Ford algorithm; the stops-allowed technique is the Floyd–Warshall algorithm. The best alignment is the Needleman–Wunsch alignment (1970), and the longest chain of tasks in 40l.6.1 is the critical path.</p>
+  <h3>Who said it first</h3>
+  <p>Richard Bellman named dynamic programming in the early 1950s, choosing a name, he wrote, that a congressman could not object to. Alfonso Shimbel (1955), Lester Ford (1956), Edward Moore (1957) and Bellman (1958) found the rounds. Bernard Roy (1959), Robert Floyd (1962) and Stephen Warshall (1962) found the stops-allowed recipe. Saul Needleman and Christian Wunsch aligned proteins this way in 1970. The critical path method was developed at DuPont in 1957.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“A shortest path to w ends with a link (u, w). The path to u is shortest, by the best-pieces technique. So take the nearest u, and the distance to w is that u’s distance plus ℓ(u, w).” Not allowed: the best u is the one with the least dist(u) + ℓ(u, w), not the least dist(u). A far u with a short link can beat a near u with a long one.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'cut and paste',t:R`\text{a shorter piece} \Rightarrow \text{a shorter whole}`,n:`Best pieces.`},
+  {k:'ember',kl:'order',t:R`\text{every link forward}`,n:`No cycle.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{one pass}}`,n:`Every distance.`}
+],{title:'The slides · pieces · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'one more link',t:R`d_k = \min(d_{k-1}, d_{k-1}(u) + \ell)`,n:`Each round.`},
+  {k:'ember',kl:'settle',t:R`d_{n-1}`,n:`Paths have at most n − 1 links.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{round } n \text{ tests}}`,n:`A negative cycle.`}
+],{title:'The slides · rounds · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'allow',t:R`D_k(i,j)`,n:`Stops among 1 to k.`},
+  {k:'ember',kl:'split at k',t:R`D_{k-1}(i,k) + D_{k-1}(k,j)`,n:`Two pieces.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{n^3 \text{ steps}}`,n:`Every distance.`}
+],{title:'The slides · all pairs · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'grid',t:R`(i, j)`,n:`Letters used.`},
+  {k:'ember',kl:'links',t:R`\rightarrow,\ \downarrow,\ \searrow`,n:`Gap, gap, pair.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{best alignment} = \text{longest route}}`,n:`The forward pass.`}
+],{title:'The slides · alignment · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
