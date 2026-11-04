@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wave recipes by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r32concl.html">← 32·∎ a periodic function is the sum of its shadows</a><a href="r32i.html">next: 32i convolution and filters by hand →</a></p>
+  <div class="tags"><span class="tag tech">32h · technique</span></div>
+  <h1>Wave recipes by hand</h1>
+  <p data-pid="f95161">Three waves come up again and again wherever anything is switched, swept or bounced. The square wave flips between two levels: a clock in a chip, a light blinking on a buoy. The sawtooth climbs steadily and drops: the sweep of an old television, the tide of charge in a flash. The triangle climbs and falls at the same steady pace: a ball bounced between two walls. Each one is a sum of turnings, and the recipe for each, the list of how much of each speed goes in, can be worked out by hand in a few lines. This step does that, and then finds the rule behind the three recipes. How fast the amounts fall off with speed is set by how rough the wave is. A wave that jumps needs a lot of every speed. A wave with only corners needs much less. Each smoother kind needs less again. And a few old endless sums drop out along the way, read off the recipes at one point.</p>
+  <p class="gesture" data-pid="2a38ad">The square wave is four over π times the odd sines, each over its speed. The sawtooth is twice the sines with alternating signs, each over its speed, and any wave can be slid, stretched or lifted without working its recipe again. The triangle is the square’s recipe divided by the speed once more, as cosines. A jump makes the amounts fall like one over the speed, a corner like one over its square.</p>
+</header>
+
+<section class="class step" data-step="32h1">
+  <h2 class="sthead"><span class="stno">32h1</span>The square wave</h2>
+  <p data-pid="5b5678">The square wave q is 1 on (0, π), −1 on (−π, 0), repeated. It is odd, so it has sines alone (32a3).</p>
+  <p data-pid="7c9fcf">Square-recipe technique: <b>the square wave is (4/π)(sin x + sin 3x / 3 + sin 5x / 5 + ⋯), the odd speeds alone, each over its speed.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the square-recipe technique">
+b_n = \tfrac1\pi\int_{-\pi}^{\pi} q(x)\sin nx\,dx = \tfrac2\pi\int_0^{\pi}\sin nx\,dx @@ q sin nx is even (9e)
+= \tfrac{2}{\pi n}\,(1 - \cos n\pi) = \tfrac{2}{\pi n}\,(1 - (-1)^n) @@ area as a change (16)
+b_n = \tfrac{4}{\pi n} \text{ for odd } n,\ \ 0 \text{ for even } n @@ even speeds cancel over a half turn
+\htmlClass{new}{q(x) = \tfrac4\pi\big(\sin x + \tfrac{\sin 3x}{3} + \tfrac{\sin 5x}{5} + \cdots\big)} \quad \blacksquare @@ at every x off the jumps, by the slope-returns technique (32c2); 0 at the jumps, by the halfway technique
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: two sums read off the recipe">
+x = \tfrac{\pi}{2}:\ \ 1 = \tfrac4\pi\big(1 - \tfrac13 + \tfrac15 - \tfrac17 + \cdots\big) @@ sin(nπ/2) is 1, 0, −1, 0, … for n = 1, 2, 3, 4, …
+1 - \tfrac13 + \tfrac15 - \cdots = \tfrac\pi4 @@ an alternating sum, settling by 22g
+1 = \|q\|^2 = \tfrac12\textstyle\sum_{n\ \text{odd}} b_n^2 = \tfrac{8}{\pi^2}\big(1 + \tfrac19 + \tfrac1{25} + \cdots\big) @@ the energy-kept technique (32b3) in cosines and sines: |cₙ|² = bₙ²/4 for n and −n
+\htmlClass{new}{1 + \tfrac19 + \tfrac1{25} + \cdots = \tfrac{\pi^2}{8}} \quad \blacksquare @@ divide
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · square · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">32h1.1</span><span class="ph know">know</span>What does the square-recipe technique say? <br>Which two endless sums are read off it, and which technique gives each?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32h2">
+  <h2 class="sthead"><span class="stno">32h2</span>The sawtooth, slid and stretched</h2>
+  <p data-pid="e3fd90">32b4 found the sawtooth that is x on (−π, π): cₙ = i(−1)ⁿ/n, which in sines reads x = 2(sin x − sin 2x / 2 + sin 3x / 3 − ⋯). Real sawtooths start at other places, climb to other heights and repeat over other times. None of that needs a new total.</p>
+  <p data-pid="d60234">Slide-and-stretch technique: <b>sliding a wave by s multiplies its nth coefficient by e^(−ins); running it over a repeat of length T instead of 2π keeps every coefficient, with the turning e^(2πint/T) in place of e^(inx); and adding a constant changes c₀ alone.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the slide-and-stretch technique">
+c_n(f(\cdot - s)) = \tfrac{1}{2\pi}\int f(x - s)\,e^{-inx}\,dx = e^{-ins}\,c_n(f) @@ slide the variable; f repeats, so the window does not matter
+g(t) = f(2\pi t/T):\ \ \tfrac1T\int_0^T g(t)\,e^{-2\pi int/T}\,dt = c_n(f) @@ slide the variable, x = 2πt/T
+\htmlClass{new}{c_0(f + k) = c_0(f) + k,\ \ c_n(f + k) = c_n(f) \text{ for } n \ne 0} \quad \blacksquare @@ the constant is the 0th turning (32a1)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a sawtooth from 0 to 1, repeating every T">
+\tfrac tT = \tfrac12 + \tfrac{x}{2\pi},\ \ x = \tfrac{2\pi t}{T} - \pi @@ on [0, T), x runs over [−π, π)
+\tfrac{x}{2\pi} = \tfrac1\pi\textstyle\sum_n (-1)^{n+1}\tfrac{\sin nx}{n} @@ 32b4’s recipe, scaled by 1/(2π)
+\sin\big(n(\tfrac{2\pi t}{T} - \pi)\big) = (-1)^n\sin\tfrac{2\pi nt}{T} @@ a slide by π flips odd speeds
+\htmlClass{new}{\tfrac tT = \tfrac12 - \tfrac1\pi\textstyle\sum_{n=1}^{\infty}\tfrac{\sin(2\pi nt/T)}{n}} \quad \blacksquare @@ (−1)ⁿ⁺¹(−1)ⁿ = −1
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · slide · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32h2.1</span><span class="ph know">know</span>What does the slide-and-stretch technique say a slide, a stretch and a constant each do to the coefficients?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32h3">
+  <h2 class="sthead"><span class="stno">32h3</span>The triangle, and how fast recipes fall</h2>
+  <p data-pid="f8ff7c">The triangle w is |x| on [−π, π], repeated. Its slope is the square wave, w′ = q, off the corners. A slope is a multiplication for coefficients too.</p>
+  <p data-pid="489314">Corner-and-jump technique: <b>if f repeats every 2π, is continuous, and its slope f′ is sized and bounded, then cₙ(f′) = in cₙ(f); so a wave with a jump has coefficients falling like 1/n, one with corners and no jump like 1/n², and each further continuous slope buys one more power of n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the corner-and-jump technique">
+c_n(f') = \tfrac{1}{2\pi}\Big[f(x)\,e^{-inx}\Big]_{-\pi}^{\pi} + \tfrac{in}{2\pi}\int f(x)\,e^{-inx}\,dx @@ parts (16), piece by piece between the corners
+\Big[f(x)\,e^{-inx}\Big]_{-\pi}^{\pi} = 0 @@ f is continuous and repeats, and so does e^(−inx)
+c_n(f') = in\,c_n(f) @@ what is left
+c_n(w) = \tfrac{c_n(q)}{in},\ \ c_n(q) = \tfrac{2}{\pi in} \text{ for odd } n @@ w′ = q; the square recipe in turnings (32h1)
+\htmlClass{new}{w(x) = \tfrac\pi2 - \tfrac4\pi\big(\cos x + \tfrac{\cos 3x}{9} + \tfrac{\cos 5x}{25} + \cdots\big)} \quad \blacksquare @@ cₙ(w) = −2/(πn²) for odd n; c₀ = π/2, the average of |x|
+  </pre>
+  <p data-pid="3feba8">At x = 0 the triangle is 0, and the recipe gives π/2 − (4/π)(1 + 1/9 + 1/25 + ⋯), which is 0 again by 32h1: two waves, one sum. The square jumps, and its amounts fall like 1/n; the triangle has corners and no jumps, and its fall like 1/n². The sound of each tells the same story: a square wave from a synthesiser is buzzy, a triangle is mellow, and a pure turning is a flute-like hum.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · corners · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32h3.1</span><span class="ph know">know</span>What does the corner-and-jump technique say? <br>How does it give the triangle’s recipe from the square’s?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32h4">
+  <h2 class="sthead"><span class="stno">32h4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+q(x) = \tfrac4\pi\textstyle\sum \tfrac{\sin nx}{n} \text{ over every } n\,? @@ the even speeds cancel; that sum is a sawtooth
+\text{sliding a wave changes the sizes } |c_n|\,? @@ a slide multiplies each by a turn, of size 1
+c_n(w') = c_n(w)/(in)\,? @@ a slope multiplies by in; it is the triangle that divides the square’s
+q(0) = 1\,? @@ at the jump the recipe gives the halfway point, 0
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32h4.1</span><span class="ph know">know</span>Why is “sliding a wave changes the sizes of its coefficients” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">32h.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="f(x) = \max(\sin x,\ 0)"></span></span>Build the recipe for this wave, a sine with its lower halves cut off, as a sum of cosines and one sine. Check the corner-and-jump rate.</div>
+  <div class="chq"><span class="chid">32h.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(x) = \textstyle\sum_{n \ge 1} \tfrac{\cos(2^n x)}{2^n}"></span></span>This recipe’s amounts fall like 1/n at the speeds it uses, yet the sum has no jump. Find whether the sum settles everywhere at once, and whether it is continuous. Which part of the corner-and-jump technique does it test?</div>
+  <div class="chq"><span class="chid">32h.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="c_n = O(1/n^2)"></span></span>If the coefficients fall like 1/n², must the wave be continuous? Must it have a slope everywhere? Test the triangle.</div>
+  <div class="chq"><span class="chid">32h.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="x^2 = \tfrac{\pi^2}{3} + 4\textstyle\sum (-1)^n\tfrac{\cos nx}{n^2}"></span></span>Find this recipe a second way, from the sawtooth’s, by the corner-and-jump technique run backwards. Then read it at x = π.</div>
+  <div class="chq"><span class="chid">32h.5.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="1 - \tfrac13 + \tfrac15 - \cdots = \tfrac\pi4"></span></span>This sum was found in Kerala around 1400 from the slopes of arcs, and in Europe in the 1670s, as a series for the arc whose tangent is x. It settles so slowly that a thousand terms give three places. One side holds that a sum that is useless for computing is still a fine answer. The other holds that an answer is only as good as its use. <br>Is π/4 = 1 − 1/3 + 1/5 − ⋯ a good formula for π?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r32concl.html">← 32·∎ · a periodic function is the sum of its shadows</a><a href="r32i.html">32i · convolution and filters by hand →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The three waves are the square, sawtooth and triangle waves of electronics and synthesis. The slide-and-stretch technique gathers the shift and scaling properties of Fourier coefficients, and the corner-and-jump technique the differentiation property with its consequence for decay: the smoother the function, the faster its coefficients decay. 1 − 1/3 + 1/5 − ⋯ = π/4 is the Leibniz series (the Madhava–Leibniz series); 1 + 1/9 + 1/25 + ⋯ = π²/8 is a companion of the Basel sum. The recipe of 32h.5.2 is a Weierstrass-type function, continuous with no slope anywhere when the speeds grow fast enough against the amounts.</p>
+  <h3>Who said it first</h3>
+  <p>Madhava of Sangamagrama found the series for π/4 around 1400, as recorded by later scholars of the Kerala school. James Gregory found the arc series in 1671, and Gottfried Leibniz the series for π/4 in 1673. Fourier worked the square wave’s recipe in his memoir of 1807. Robert Moog’s synthesisers of the 1960s made square, sawtooth and triangle waves the raw material of electronic sound, shaped afterwards by filters (32i).</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The triangle’s slope is the square wave, so take the square’s recipe and find the slope of every term.” Not allowed: the slope of each term of the square’s recipe gives (4/π) Σ cos nx, which settles nowhere. Going from a wave to its slope multiplies by in and can break a sum; going from a slope to its wave divides, and the corner-and-jump technique proves that direction from parts.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'total',t:R`b_n = \tfrac{2}{\pi n}(1 - (-1)^n)`,n:`Odd speeds only.`},
+  {k:'ember',kl:'recipe',t:R`\htmlClass{new}{q = \tfrac4\pi\textstyle\sum_{\text{odd}} \tfrac{\sin nx}{n}}`,n:`Over the speed.`},
+  {k:'ember',kl:'read',t:R`1 - \tfrac13 + \tfrac15 - \cdots = \tfrac\pi4`,n:`At π/2.`}
+],{title:'The slides · square · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'slide',t:R`c_n(f(\cdot - s)) = e^{-ins}c_n(f)`,n:`A turn per speed.`},
+  {k:'ember',kl:'stretch',t:R`e^{inx} \to e^{2\pi int/T}`,n:`Same coefficients.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\tfrac tT = \tfrac12 - \tfrac1\pi\textstyle\sum\tfrac{\sin(2\pi nt/T)}{n}}`,n:`No new total.`}
+],{title:'The slides · slide · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'parts',t:R`c_n(f^{\prime}) = in\,c_n(f)`,n:`A slope multiplies by in.`},
+  {k:'ember',kl:'triangle',t:R`c_n(w) = c_n(q)/(in)`,n:`w′ = q.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{jump: } 1/n;\ \text{corner: } 1/n^2}`,n:`Rougher, richer.`}
+],{title:'The slides · corners · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'illegal',t:R`|c_n| \text{ changed by a slide}\,?`,n:`A turn has size 1.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

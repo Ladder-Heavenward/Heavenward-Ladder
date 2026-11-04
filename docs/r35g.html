@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Countable or not, by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r35concl.html">← 35·∎ infinities come in sizes</a><a href="r35h.html">next: 35h dust with no length, and dimensions between whole numbers →</a></p>
+  <div class="tags"><span class="tag tech">35g · technique</span></div>
+  <h1>Countable or not, by hand</h1>
+  <p data-pid="62e21c">The proof steps of this rung settled a handful of sets: the fractions and the algebraic reals can be listed, the line and the parts of the counting numbers cannot. Most sets that turn up in practice are settled by one of two moves, done by hand. To list a set, give each member a height, a counting number, with only finitely many members at each height, and list height by height. To show a set cannot be listed, find inside it a copy of the endless strings of zeros and ones: a way of sending each such string to a different member. When a set has both a way into the line and such a copy inside it, it has the size of the line exactly. This step gives the three moves and runs them on a row of sets: the finite strings of a keyboard, the finite parts of the counting numbers, the ways to shuffle the counting numbers, the circles in the plane, and the reals that use only two digits. The hard part is never the proof. It is seeing which move fits.</p>
+  <p class="gesture" data-pid="73bc8a">Countable: find a height with finitely many members at each height. Not countable: send the endless strings of zeros and ones one-to-one into the set. The size of the line: both a way into the line and a copy of the strings.</p>
+</header>
+
+<section class="class step" data-step="35g1">
+  <h2 class="sthead"><span class="stno">35g1</span>Listing by height</h2>
+  <p data-pid="f83c3d"><a href="r35a.html">35a4</a> listed the algebraic reals by giving each polynomial a height. The move works on any set.</p>
+  <p data-pid="5493a0">Height-listing technique: <b>if each member of A is given a height in ℕ, and only finitely many members share each height, then A is countable.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the height-listing technique">
+H_k = \{x \in A : x \text{ has height } k\} \text{ is finite} @@ given; with a list of its own, its entries in a fixed order
+\text{list } H_0, \text{ then } H_1, \text{ then } H_2, \ldots @@ one finite run after another, the empty ones skipped
+\text{every } x \in A \text{ has some height } k,\ \text{so it is reached in } H_k @@ it comes after the finitely many members of lower height
+\htmlClass{new}{A \text{ is countable}} \quad \blacksquare @@ a list, or A is empty
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: two worked runs">
+\text{a string of length } n \text{ from a keyboard of } 100 \text{ keys: height } n @@ 100ⁿ strings of each length (counted-functions, 4k9)
+\text{every program, every recipe, every book ever printed is such a string} @@ so the programs are countable
+\text{a finite part } s \subseteq \mathbb N \mapsto \textstyle\sum_{j \in s} 2^j @@ the part read as the 1s of a numeral in base 2 (4i)
+\{0, 2, 3\} \mapsto 1 + 4 + 8 = 13,\ \ \varnothing \mapsto 0 @@ different parts, different numerals
+\htmlClass{new}{\text{the finite parts of } \mathbb N \text{ are matched with } \mathbb N} \quad \blacksquare @@ every number has one numeral in base 2: a matching, no height needed
+  </pre>
+  <p data-pid="d8c785">The second run beats a height. When a set can be read off as the numerals of the counting numbers, the matching is written in one line. When it cannot, a height is the fallback, and the thinning technique turns the list into a matching.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · height · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">35g1.1</span><span class="ph know">know</span>What does the height-listing technique say? <br>What height lists the strings of a keyboard, and what matches the finite parts of ℕ with ℕ?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35g2">
+  <h2 class="sthead"><span class="stno">35g2</span>A copy of the bits</h2>
+  <p data-pid="6eb270">An endless string of 0s and 1s is a function from ℕ to 2. Write 2^ℕ for the set of them; <a href="r04k.html">4k10</a> matched it with 𝒫(ℕ), and 35c2 showed that no list holds it.</p>
+  <p data-pid="bef105">Copy-of-the-bits technique: <b>if 2^ℕ goes one-to-one into A, then A cannot be listed.</b> A list of A would give a list of the strings sent into it: keep the entries that are images, and read each back through the one-to-one map.</p>
+  <pre class="lines" data-k="ember" data-label="this step: three copies of the bits">
+b \mapsto \{\,n : b(n) = 1\,\} \cup \{\,\text{every odd number}\} @@ into the endless parts of ℕ: each image holds every odd number, so it is endless
+b \mapsto 0.e_0e_1\cdots,\ e_n = 3 \text{ if } b(n) = 0,\ 7 \text{ if } b(n) = 1 @@ into the reals written with 3s and 7s only; no 9s, so different strings give different reals (8·cb5)
+b \mapsto \sigma_b,\ \ \sigma_b \text{ swaps } 2n \text{ and } 2n + 1 \text{ when } b(n) = 1 @@ into the shuffles of ℕ: each σ_b is a matching of ℕ with itself, and different b give different σ_b
+\htmlClass{new}{\text{none of the three sets can be listed}} \quad \blacksquare @@ the copy-of-the-bits technique, three times
+  </pre>
+  <p data-pid="e8888a">The endless parts of ℕ cannot be listed, though the finite parts can. Removing the finite ones from 𝒫(ℕ) removes a countable set, as 35b3 said it would, and leaves a set that still cannot be listed.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the bits · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35g2.1</span><span class="ph know">know</span>What does the copy-of-the-bits technique say? <br>How do the strings of 0s and 1s go one-to-one into the shuffles of ℕ?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35g3">
+  <h2 class="sthead"><span class="stno">35g3</span>The size of the line, by hand</h2>
+  <p data-pid="1df9b6">Line-sized-by-hand technique: <b>if A goes one-to-one into ℝ, and 2^ℕ goes one-to-one into A, then A has the size of the line.</b> The first map gives |A| ≤ |ℝ|. The second gives |𝒫(ℕ)| ≤ |A|. The line-size technique (35e2) and the two-one-way technique (35d1) finish it.</p>
+  <pre class="lines" data-k="ember" data-label="this step: four sets sorted">
+\text{circles with fraction centre and fraction radius: height } h = \text{the height of the three fractions} @@ countable: three fractions name the circle; each fraction’s height is |z| + q; finitely many below each h
+\text{all circles in the plane} \to \mathbb R^3 \to \mathbb R @@ centre and radius, one-to-one; the plane-as-line technique twice (35e2)
+\text{radius } 0.e_0e_1\cdots \text{ in 3s and 7s, centre } (0, 0) @@ a copy of the bits among the circles
+\htmlClass{new}{\text{the circles have the size of the line}} @@ the line-sized-by-hand technique
+\text{the functions from } \mathbb N \text{ to } \mathbb N \to \mathcal P(\mathbb N \times \mathbb N) \to \mathcal P(\mathbb N) @@ a function is its pairs (9a); carry parts through the pair-listing matching
+\htmlClass{new}{|\{f : \mathbb N \to \mathbb N\}| = 2^{\aleph_0}} \quad \blacksquare @@ the functions to 2 sit among them
+  </pre>
+  <p data-pid="b810e1">So ℵ₀^ℵ₀ = 2^ℵ₀: more choices at each place give no larger size than two. The shuffles of ℕ, the circles of the plane, the endless walks on a grid of streets, the reals with two digits: each lands on the line’s size once both maps are written.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · line sized · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35g3.1</span><span class="ph know">know</span>What does the line-sized-by-hand technique say, and which two maps does it need? <br>Why are the circles with fraction centre and radius countable, while all circles have the size of the line?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35g4">
+  <h2 class="sthead"><span class="stno">35g4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{height } = \text{ the first digit, for the reals in } [0, 1)\,? @@ each height holds endlessly many reals; a height must leave finitely many
+\text{a copy of the bits must reach every member of } A\,? @@ it must be one-to-one, not onto: endless parts missing an odd number are never reached, and need not be
+\text{each finite part is countable, so } \mathcal P(\mathbb N) \text{ is}\,? @@ the members being countable says nothing of how many there are
+\text{a set that is not listed has the size of the line}\,? @@ that needs a way into the line and a copy of the bits; ω₁ has the first and perhaps not the second (35f)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35g4.1</span><span class="ph know">know</span>Why is “each finite part of ℕ is countable, so 𝒫(ℕ) is countable” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">35g.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{the finite parts of } \mathbb N,\ \ s \mapsto \textstyle\sum_{j \in s} 2^j"></span></span>Find the part matched with 100, and with 2⁶ − 1. <br>Build a height for the finite parts of ℤ, and find how many parts have height 2.</div>
+  <div class="chq"><span class="chid">35g.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{the endless strings of 0s and 1s with only finitely many 1s}"></span> <span data-tex-inline="\text{those that repeat from some place on}"></span></span>Find whether each set can be listed. <br>Find which of the two moves of this step settles each one, and why the other move cannot.</div>
+  <div class="chq"><span class="chid">35g.4.3</span><span class="tagq">converse</span>Copy-of-the-bits: a copy of 2^ℕ inside A means A cannot be listed. Turn it round: if A cannot be listed, must 2^ℕ go one-to-one into A? <br>Find what the converse says about ω₁, and which result of 35f stands in the way of proving or refuting it.</div>
+  <div class="chq"><span class="chid">35g.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{the shuffles of } \mathbb N"></span></span>Prove that the shuffles of ℕ cannot be listed with no copy of the bits, by a diagonal: given a list σ₀, σ₁, …, build a shuffle that differs from σₙ at some input, for every n. <br>Find where your shuffle must be careful to stay a matching.</div>
+  <div class="chq"><span class="chid">35g.4.5</span><span class="tagq">seam</span>8·cb5.4.4 asked whether every real has a rule for its digits. A rule a machine can follow is a program, and the programs are countable, so most reals have no such rule. <br>One side holds that a real with no rule for its digits is no real at all: a number is what can be computed. The other holds that the line is all the cuts of the fractions, whatever can be computed. <br>The diagonal of a list of every program’s real is described by a rule. Why is it not on the list? Find what would have to be decidable, and whether a machine could decide it.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r35concl.html">← 35·∎ · infinities come in sizes</a><a href="r35h.html">35h · dust with no length, and dimensions between whole numbers →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The height-listing technique is the usual proof that a set is countable by an enumeration by rank. 2^ℕ is Cantor space. The line-sized-by-hand technique is the standard way of showing a set has the cardinality of the continuum, through Cantor–Schröder–Bernstein. A shuffle of ℕ is a permutation, and the shuffles form the infinite symmetric group. ℵ₀^ℵ₀ = 2^ℵ₀ is the usual identity of cardinal arithmetic. Reals whose digits a program prints are computable reals; the reason the diagonal of 35g.5.5 is not one is the undecidability of the halting problem.</p>
+  <h3>Who said it first</h3>
+  <p>Georg Cantor listed rationals and algebraic numbers by height, and introduced the dust of the next step in 1883. The countability of the computable reals, and the diagonal against them, are in Alan Turing’s paper of 1936, which began from the question of which reals a machine can write out. Émile Borel had raised the same doubt about reals with no description in 1927.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Give each real in [0, 1) the height n, where n is the place of its first 7. Each height then holds the reals with their first 7 there, and the list runs height by height.” Not allowed: each height holds endlessly many reals, so “list Hₙ” is not one finite run, and reals with no 7 get no height at all.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'heights',t:R`H_k \text{ finite}`,n:`Finitely many each.`},
+  {k:'ember',kl:'list',t:R`H_0, H_1, H_2, \ldots`,n:`Run after run.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{A \text{ is countable}}`,n:`Strings, programs, finite parts.`}
+],{title:'The slides · height · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'strings',t:R`2^{\mathbb N}`,n:`Endless 0s and 1s.`},
+  {k:'ember',kl:'copy',t:R`b \mapsto \sigma_b`,n:`One-to-one into A.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{A \text{ cannot be listed}}`,n:`Shuffles, endless parts, 3s and 7s.`}
+],{title:'The slides · the bits · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'into',t:R`A \to \mathbb R`,n:`One-to-one.`},
+  {k:'ember',kl:'copy',t:R`2^{\mathbb N} \to A`,n:`One-to-one.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|A| = 2^{\aleph_0}}`,n:`Circles, functions, shuffles.`}
+],{title:'The slides · line sized · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

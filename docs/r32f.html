@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Short in time, wide in frequency</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r32e.html">← 32e breaking a signal into frequencies</a><a href="r32g.html">next: 32g samples suffice →</a></p>
+  <div class="tags"><span class="tag proof">32f · proof</span></div>
+  <h1>Short in time, wide in frequency</h1>
+  <p data-pid="ca941d">Tap a key on a piano and hold it, and a tuner can name the note to a fraction of a hertz. Tap a drum once, a sharp crack, and no one can say what note it was. That is not a fault of the ear or of the tuner. The step before showed that stretching a bell squeezes its transform. This step proves that the squeeze is forced for every signal. Measure how spread out a signal is in time, and how spread out its transform is in frequency, each as the width of a cloud. The two widths, multiplied, can never fall below one fixed number, one over four π. A signal can be short, or it can have a sharp pitch, but not both. The proof is three lines long: a slope of the signal becomes a multiple of its transform, and rung 31’s bound on a product does the rest. And the only signals that reach the limit exactly are the bells.</p>
+  <p class="gesture" data-pid="c9fc13">A slope in time becomes a multiplication by the frequency, times two π i. Treat the square of a signal of energy one as a spread of chance in time, and the square of its transform as a spread in frequency. Then the width in time times the width in frequency is at least one over four π, by the product bound. Equality holds exactly for the bells.</p>
+</header>
+
+<section class="class step" data-step="32f1">
+  <h2 class="sthead"><span class="stno">32f1</span>A slope becomes a multiple</h2>
+  <p data-pid="753f1d">Slope-to-frequency technique: <b>if f and its slope f′ have finite total sizes, then the transform of f′ is 2πiξ times the transform of f.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the slope-to-frequency technique">
+\int_{-L}^{L} f'(x)\,e^{-2\pi i x\xi}\,dx = \Big[f(x)\,e^{-2\pi i x\xi}\Big]_{-L}^{L} + 2\pi i\xi\int_{-L}^{L} f(x)\,e^{-2\pi i x\xi}\,dx @@ parts (16)
+f(L) = f(0) + \int_0^L f' \text{ settles as } L \to \infty, \text{ and its limit is } 0 @@ ∫|f′| is finite; a nonzero limit would make ∫|f| endless
+\htmlClass{new}{\widehat{f'}(\xi) = 2\pi i\xi\,\hat f(\xi)} \quad \blacksquare @@ let L grow; the ends vanish
+  </pre>
+  <p data-pid="fcdc0d">In frequency, a slope is a multiplication. Sharp corners and steep sides, a large slope, mean large transform far out in ξ. That is the reading of 32h’s corners and jumps, and it is what 32j uses to turn rate rules into algebra.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · slope · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">32f1.1</span><span class="ph know">know</span>What does the slope-to-frequency technique say? <br>Why do the end terms of the parts line vanish?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32f2">
+  <h2 class="sthead"><span class="stno">32f2</span>The two widths</h2>
+  <p data-pid="5d93e9">Let f have energy 1, ∫|f|² = 1. Then |f(x)|² is a density in x (30m), and by the transform-energy technique (<a href="r32e.html#32e4">32e4</a>) |f̂(ξ)|² is a density in ξ. Slide f so that the first is centred at 0, and multiply f by a turning so that the second is. Their widths are Δx = √(∫x²|f|² dx) and Δξ = √(∫ξ²|f̂|² dξ).</p>
+  <p data-pid="177fe9">Spread-product technique: <b>for every signal with energy 1 for which xf and f′ have finite energy, the width in time times the width in frequency is at least 1/(4π).</b> Its accepted name is the uncertainty principle.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the spread-product technique">
+1 = \int|f|^2\,dx = \Big[x|f|^2\Big]_{-\infty}^{\infty} - \int x\,\big(\overline{f}f' + f\overline{f'}\big)\,dx @@ parts (16), with |f|² = f f̄; the ends vanish
+= -2\,\text{floor part of} \int x\overline{f(x)}\,f'(x)\,dx @@ the two terms are flips of each other (25)
+\le 2\,\Big(\int x^2|f|^2\Big)^{1/2}\Big(\int|f'|^2\Big)^{1/2} @@ the product-bound technique (31a3), for xf and f′
+\int|f'|^2 = \int|2\pi i\xi\hat f|^2 = 4\pi^2\int\xi^2|\hat f|^2 @@ the transform-energy technique (32e4) for f′; the slope-to-frequency technique (32f1)
+1 \le 2\,\Delta x\cdot 2\pi\,\Delta\xi @@ the last two lines
+\htmlClass{new}{\Delta x\,\Delta\xi \ge \tfrac{1}{4\pi}} \quad \blacksquare @@ divide by 4π
+  </pre>
+  <p data-pid="aea8f1">A tone that sounds with a width of 0.01 s in time has a width of at least 1/(4π × 0.01) ≈ 7.96 Hz in frequency. To name a note to within a hertz, a tuner must listen to a width of about 0.08 s or more.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the cloud</div>
+    <p data-pid="3f0958">A radar on the coast near Westport sends out pulses and reads back the frequency of the echo to find how fast a boat is moving. A short pulse fixes where the boat is; a long one fixes its speed.</p>
+    <p data-pid="4c2fbc"><b>A signal is a cloud in time and a cloud in frequency at once, and the two widths, multiplied, are at least 1/(4π).</b></p>
+    <p data-pid="fc98e5">The spread-product technique is an exact bound on the width of two clouds, one in time and one in frequency. Neither width is an error of the instrument. A pulse simply is a cloud in both, and the radar engineer chooses where to spend the 1/(4π).</p>
+    <p class="bait" data-pid="6e32d0">If a radar needed to fix a boat’s place to within a few metres and its speed to within a few centimetres a second, could one pulse do both, or would it take a train of pulses?</p>
+  </aside>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · widths · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32f2.1</span><span class="ph know">know</span>What are the width in time and the width in frequency of a signal of energy 1? <br>What does the spread-product technique say, and which earlier bound does the proof spend?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32f3">
+  <h2 class="sthead"><span class="stno">32f3</span>Only the bells are tightest</h2>
+  <p data-pid="b07c19">Tightest-bell technique: <b>the width in time times the width in frequency is exactly 1/(4π) only for bells, the multiples of e^(−cx²) with c &gt; 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the tightest-bell technique">
+\text{equality in the product bound} \iff f' = -\lambda\,x f \text{ for some number } \lambda @@ the product-bound technique (31a3): one is a multiple of the other
+\text{the floor part is the whole product} \Rightarrow \lambda \text{ is real} @@ the second line of 32f2 must be an equality too
+f = A\,e^{-\lambda x^2/2},\ \ \lambda \gt 0 @@ the rate rule y′ = −λxy has these solutions alone (24a, by separation); λ ≤ 0 has endless energy
+f = 2^{1/4}e^{-\pi x^2}:\ \ \Delta x^2 = \int x^2\sqrt2\,e^{-2\pi x^2}dx = \tfrac{1}{4\pi} @@ the bell with spread 1/(4π) (30m); energy 1 by the bell-total technique (30j1)
+\htmlClass{new}{\Delta x = \Delta\xi = \tfrac{1}{2\sqrt\pi},\ \ \Delta x\,\Delta\xi = \tfrac{1}{4\pi}} \quad \blacksquare @@ f̂ = f by the own-transform technique (32e2)
+  </pre>
+  <p data-pid="596aee">So the bell, which the statistics floor met as the shape a sum of many small chances settles into, is also the signal that is as short and as sharp as anything can be at once. Every other shape pays more.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · tightest · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32f3.1</span><span class="ph know">know</span>What does the tightest-bell technique say? <br>Which rate rule does equality force, and what are its solutions?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32f4">
+  <h2 class="sthead"><span class="stno">32f4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{a better instrument beats } \tfrac{1}{4\pi}\,? @@ the bound is about the signal, not the instrument
+\Delta x\,\Delta\xi \ge 1\,? @@ the floor is 1/(4π), with ξ in turns per unit
+\text{a box is the tightest signal}\,? @@ its transform fades like 1/ξ, and its width in frequency is endless
+\widehat{f'} = \hat f\,'\,? @@ a slope in time is a multiplication in frequency
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32f4.1</span><span class="ph know">know</span>Why is “a better instrument can beat the width product of 1/(4π)” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">32f.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="f(x) = e^{-|x|}"></span></span>Check that f has energy 1. Find Δx, and Δξ from ∫|f′|² by the slope-to-frequency technique. Find how far above 1/(4π) the product lies.</div>
+  <div class="chq"><span class="chid">32f.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{the box } 1 \text{ on } [-\tfrac12, \tfrac12]"></span></span>Find Δx for the box. Find whether Δξ is finite, using ∫|f̂|²ξ² and the transform 32e1 found. Which line of 32f2 fails for the box?</div>
+  <div class="chq"><span class="chid">32f.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\Delta x\,\Delta\xi \text{ large}"></span></span>Must a signal with a large width product be long in time or wide in frequency? Build one that is short in time and narrow in frequency except for a second, far-off bump.</div>
+  <div class="chq"><span class="chid">32f.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="e^{-\pi x^2/s^2}"></span></span>Find Δx and Δξ for this stretched bell directly, from the stretch rule of 32e2, and check that the product does not depend on s.</div>
+  <div class="chq"><span class="chid">32f.5.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">30·then: a jiggle measured by chance</span></span>In mechanics at the smallest scales, a particle’s place and its push are two such widths, tied by the same product. One side holds that the particle has an exact place and push, and the bound only says how little we can know of them. The other holds that there is nothing more to the particle than the cloud. <br>Does the spread-product technique, as proved on this page, speak to either side?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r32e.html">← 32e · breaking a signal into frequencies</a><a href="r32g.html">32g · samples suffice →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The spread-product technique is the Heisenberg uncertainty principle in its Fourier form, or the Heisenberg–Pauli–Weyl inequality; in signal processing, the Gabor limit, or the time–bandwidth product. The tightest bells are the Gaussian wave packets, or coherent states. The slope-to-frequency technique is the differentiation property of the Fourier transform.</p>
+  <h3>Who said it first</h3>
+  <p>Werner Heisenberg argued for the principle in 1927 from thought experiments. Earle Kennard proved the exact bound in 1927, and Hermann Weyl gave the proof on this page in 1928, crediting Wolfgang Pauli. Dennis Gabor made it the base of a theory of communication in 1946. In 32f.5.5, Albert Einstein held that the cloud is incomplete, and Niels Bohr that it is all there is; they argued it from 1927 to Einstein’s death.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Measuring a place disturbs the push, so the widths cannot both be small.” Not allowed as a proof of this page’s claim: the page measures nothing. The bound is a fact about a function and its transform, proved from the product bound, and it would hold if no one ever looked.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'parts',t:R`\int f^{\prime}e^{-2\pi i x\xi} = [\ldots] + 2\pi i\xi\int fe^{-2\pi i x\xi}`,n:`16.`},
+  {k:'ember',kl:'ends',t:R`f(\pm L) \to 0`,n:`Finite totals.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\widehat{f^{\prime}} = 2\pi i\xi\hat f}`,n:`A slope is a multiple.`}
+],{title:'The slides · slope · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'energy',t:R`1 = -2\,\text{floor}\int x\bar f f^{\prime}`,n:`By parts.`},
+  {k:'ember',kl:'bound',t:R`\le 2\|xf\|\,\|f^{\prime}\|`,n:`Product-bound.`},
+  {k:'ember',kl:'slope',t:R`\|f^{\prime}\| = 2\pi\|\xi\hat f\|`,n:`Energy kept.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\Delta x\,\Delta\xi \ge \tfrac{1}{4\pi}}`,n:`Short or sharp, not both.`}
+],{title:'The slides · widths · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'equal',t:R`f^{\prime} = -\lambda x f`,n:`A multiple.`},
+  {k:'ember',kl:'solve',t:R`f = Ae^{-\lambda x^2/2}`,n:`A bell.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\Delta x\,\Delta\xi = \tfrac{1}{4\pi}}`,n:`Only bells.`}
+],{title:'The slides · tightest · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'illegal',t:R`\text{better instrument}\,?`,n:`The signal is the cloud.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

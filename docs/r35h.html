@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dust with no length, and dimensions between whole numbers</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r35g.html">← 35g countable or not, by hand</a><a href="r35i.html">next: 35i a line onto a square →</a></p>
+  <div class="tags"><span class="tag tech">35h · technique</span></div>
+  <h1>Dust with no length, and dimensions between whole numbers</h1>
+  <p data-pid="4d0742">Take a stretch of the line and throw away its open middle third. Throw away the middle third of each of the two pieces left, then of each of the four, and keep going for ever. What is left is a dust. Its total length shrinks by a third at every stage, so in the end it has no length at all. It holds no stretch of the line, however short. And yet it has exactly as many points as the whole line, because each point of the dust is an endless string of choices, left or right, one at each stage. So length and size come apart completely. Then the step asks a sharper question: how much room does the dust take up, if not length? Cover it with little pieces of one width, and count how many it takes. Halve the width and a line needs twice as many, a square four times as many. The dust needs a number of pieces that grows like a power between the two, and that power is its dimension. It is not a whole number. A triangle with its middles thrown out has a dimension between one and two, and so does a curve made of ever smaller bumps.</p>
+  <p class="gesture" data-pid="ec0d1d">The dust left after every middle third is thrown out has length zero and the size of the line: lengths and sizes measure different things. Count the pieces of width w that cover a set; if the count grows like one over w to a power, that power is the set’s dimension, and for the dust it is log 2 over log 3.</p>
+</header>
+
+<section class="class step" data-step="35h1">
+  <h2 class="sthead"><span class="stno">35h1</span>The middle-thirds dust</h2>
+  <p data-pid="0556fd">Let K₀ = [0, 1]. Make Kₙ₊₁ from Kₙ by throwing out the open middle third of each of its intervals. So K₁ = [0, 1/3] ∪ [2/3, 1], and Kₙ is 2ⁿ closed intervals, each of length 3⁻ⁿ. The <i>dust</i> K is what is in every Kₙ. Each Kₙ is closed, and the part of a space outside an overlap of closed sets is a union of open ones (<a href="r34a.html">34a</a>), so K is closed.</p>
+  <p data-pid="a27594">Dust technique: <b>the middle-thirds dust has length 0 and the size of the line.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the dust technique">
+m^*(K) \le m^*(K_n) \le 2^n \cdot 3^{-n} = (\tfrac23)^n \text{ for every } n @@ K ⊆ Kₙ; cover-total and outer-adds-at-most (30a)
+m^*(K) = 0 @@ (2/3)ⁿ heads to 0: the terms of the settling geometric sum Σ(2/3)ⁿ (22e) must shrink to 0 (22d)
+c(b) = \textstyle\sum_{n \ge 0} 2\,b(n)\,3^{-(n+1)} \text{ for } b \in 2^{\mathbb N} @@ a real with base-3 digits 0 and 2 only; the sum settles (geometric yardstick, 22e)
+c(b) \in K @@ the first n digits keep it in one interval of Kₙ: digit 0 the left third, digit 2 the right
+b \ne b' \text{ first at } n \Rightarrow |c(b) - c(b')| \ge 2\cdot3^{-(n+1)} - \textstyle\sum_{k > n} 2\cdot 3^{-(k+1)} = 3^{-(n+1)} @@ the first difference outweighs all the rest: a geometric sum (22e)
+c \text{ is one-to-one, and } K \subseteq \mathbb R @@ a copy of the bits inside K, and a way into the line
+\htmlClass{new}{m^*(K) = 0,\ \ |K| = 2^{\aleph_0}} \quad \blacksquare @@ the line-sized-by-hand technique (35g3)
+  </pre>
+  <p data-pid="dfccd9">So K holds no interval: an interval of length ℓ would give K length at least ℓ. It holds 1/4 = 0.0202…₃, which is no end of any piece. It is closed, it has length 0, and it is not countable. A countable set always has length 0 (30a2). The dust shows the way back fails.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · two sizes of truth</div>
+    <p data-pid="bad779">30c set a claim about the whole beside a claim about each point. Here are two claims about one set. Its length is a crowd claim: it adds up how much of the line is taken, and it cannot see any one point. Its size is a count by matching: it sees every point, and it cannot see how they are spread.</p>
+    <p data-pid="f272a8"><b>Length and size are two claims about one set, each exact, and neither gives the other.</b></p>
+    <p data-pid="559fd4">The dust is all point and no length. The fractions are fewer points and no length. A stretch is as many points as the dust, with length. Each claim is exact. Neither one can be read off the other.</p>
+    <p class="bait" data-pid="34c079">One rain gauge in Missoula records a storm’s total depth of rain. Another counts the drops. Which of the two claims does each make? Could two storms agree on one and differ on the other?</p>
+  </aside>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · dust · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">35h1.1</span><span class="ph know">know</span>How is the dust built, and what does the dust technique say? <br>Why is the map c from the strings of 0s and 1s into the dust one-to-one?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35h2">
+  <h2 class="sthead"><span class="stno">35h2</span>Counting covers</h2>
+  <p data-pid="f3259a">How much room does a set take, if not length? Cover it with closed intervals of one width w and let N(w) be the least number that covers it. For [0, 1], N(w) is about 1/w; for a square covered by little squares of side w, about 1/w². From here on, the <i>dimension</i> of a set is the number D at which log N(w) / log(1/w) settles as w heads to 0, when it settles. Its accepted name is the box-counting dimension.</p>
+  <p data-pid="f940b5">Box-count technique: <b>the middle-thirds dust has dimension log 2 / log 3, about 0.631.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the box-count technique">
+w = 3^{-n}:\ \ N(w) \le 2^n @@ the 2ⁿ pieces of Kₙ cover K
+\text{pieces of } K_n \text{ are at least } 3^{-n} \text{ apart} @@ each gap is a thrown-out third, of length 3⁻ᵏ with k ≤ n
+\text{an interval of width } 3^{-n} \text{ meets at most two pieces of } K_n @@ it cannot reach across a gap and a piece and a gap
+\text{each piece holds a point of } K,\ \text{so } N(w) \ge 2^n / 2 @@ its left end, which stays in every later stage
+\tfrac{(n - 1)\log 2}{n \log 3} \le \tfrac{\log N(w)}{\log(1/w)} \le \tfrac{n\log 2}{n\log 3} @@ logs keep order (17g)
+\htmlClass{new}{D = \tfrac{\log 2}{\log 3} \approx 0.6309} \quad \blacksquare @@ squeezed as n grows; between the widths 3⁻ⁿ, N changes by at most a factor of 2, which the squeeze absorbs
+  </pre>
+  <p data-pid="61000a">The count says what the dust is. Shrink the width by 3 and a line needs 3 times as many pieces, a square 9 times, and the dust 2 times. 3¹ = 3, 3² = 9, and 3^D = 2. The dust is more than a point and less than a line.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · dimension · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35h2.1</span><span class="ph know">know</span>What is N(w), and what is the dimension of a set? <br>What does the box-count technique say, and why does a cover of width 3⁻ⁿ need at least 2ⁿ / 2 intervals?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35h3">
+  <h2 class="sthead"><span class="stno">35h3</span>Dimensions between whole numbers</h2>
+  <p data-pid="0ec8c0">Scaled-copies technique: <b>a set made of N copies of itself, each scaled by 1/s and kept apart or meeting in only finitely many points, has dimension log N / log s.</b> At stage n it is covered by Nⁿ copies of width s⁻ⁿ, and, as for the dust, by not many fewer. The count is the dust’s proof, with 2 copies at 1/3 replaced by N copies at 1/s.</p>
+  <pre class="lines" data-k="ember" data-label="this step: three shapes">
+\text{the triangle of 9a, its middles thrown out: } N = 3,\ s = 2 @@ three corner triangles, each half as wide
+D = \tfrac{\log 3}{\log 2} \approx 1.585,\ \ \text{area} \le (\tfrac34)^n \to 0 @@ more than a line, less than a plane, and no area
+\text{a bump curve: each segment becomes four, each a third as long} @@ N = 4, s = 3
+D = \tfrac{\log 4}{\log 3} \approx 1.262,\ \ \text{length } (\tfrac43)^n \to \text{passes every bound} @@ endlessly long, between a line and a plane
+\text{a square cut into } 3 \times 3 \text{ and the middle thrown out, for ever} @@ N = 8, s = 3
+\htmlClass{new}{D = \tfrac{\log 8}{\log 3} \approx 1.893} \quad \blacksquare @@ the scaled-copies technique
+  </pre>
+  <p data-pid="421af7">9a’s green box asked of the triangle: at every stage it has finitely many pieces, so where do the extra points come from? Each point is an endless string of choices among three corners, and those strings cannot be listed (35g2). The dimension answers a different question: how the pieces crowd in as they shrink. Between them, size and dimension tell the triangle from a line, which length and area cannot.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · between · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35h3.1</span><span class="ph know">know</span>What does the scaled-copies technique say? <br>What are the dimension and the area of 9a’s triangle with its middles thrown out?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35h4">
+  <h2 class="sthead"><span class="stno">35h4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{the dust has length } 0, \text{ so it is countable}\,? @@ countable gives length 0; length 0 does not give countable: the dust has the line’s size
+\text{only the ends of the pieces are left}\,? @@ the ends are countable; the dust is not, and 1/4 is no end
+\text{the dust has dimension } 0, \text{ since it holds no interval}\,? @@ holding no interval says D &lt; 1 for a part of the line; its count gives log 2/log 3
+\text{the bump curve has length, so its dimension is } 1\,? @@ its length passes every bound; its count gives log 4/log 3
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35h4.1</span><span class="ph know">know</span>Why is “the dust has length 0, so it is countable” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">35h.4.1</span><span class="tagq">build</span>Build the dust that throws out the open middle fifth of each piece at every stage, keeping two pieces of 2/5. <br>Find its length and its dimension, and prove it has the size of the line.</div>
+  <div class="chq"><span class="chid">35h.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\tfrac14,\ \ \tfrac{3}{10},\ \ \tfrac{1}{3},\ \ \tfrac{3}{4}"></span></span>Find which of these are in the middle-thirds dust, from their base-3 digits. <br>One real has two base-3 decimals, one using a 1 and one not. Find it here, and which decimal the dust technique’s c uses.</div>
+  <div class="chq"><span class="chid">35h.4.3</span><span class="tagq">converse</span>Countable sets have length 0, and the dust shows the way back fails. Is there a set of length 0 with dimension 1? Build one from dusts that throw out less and less. <br>What does that say about reading dimension from length?</div>
+  <div class="chq"><span class="chid">35h.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="K + K = \{x + y : x, y \in K\}"></span></span>Show that K + K is all of [0, 2], though K has length 0. Use the base-3 digits: a digit of x + y from digits 0 and 2 of x and y. <br>Find what this says about adding sets of length 0.</div>
+  <div class="chq"><span class="chid">35h.4.5</span><span class="tagq">seam</span>Rung 8 asked whether the line is made of points, and rung 30 gave it length 1 while each of its points has length 0. The dust has as many points as the line and no length at all. <br>One side holds that a stretch is made of its points, and length is something the points add up to. The other holds that a stretch comes first, that points are only ends and cuts, and that a heap of points has no length to add. <br>Which side does the dust help? Which side does a set of length 1 made of points of length 0 help?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r35g.html">← 35g · countable or not, by hand</a><a href="r35i.html">35i · a line onto a square →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The middle-thirds dust is the Cantor set, or Cantor ternary set. The box-counting dimension is also called the Minkowski dimension; the dimension that the scaled-copies technique gives for such shapes also equals the Hausdorff dimension, defined by covers of varying widths. The triangle of 9a is the Sierpiński triangle, the bump curve the Koch curve, and the square with its middles thrown out the Sierpiński carpet. The dusts of 35h.4.3 are fat Cantor sets, or Smith–Volterra–Cantor sets when they have positive length. A shape made of scaled copies of itself is self-similar, and sets of dimension not a whole number are fractals.</p>
+  <h3>Who said it first</h3>
+  <p>Henry Smith described such a set in 1875, and Georg Cantor in 1883. Felix Hausdorff defined his dimension in 1918. Helge von Koch drew his curve in 1904, Wacław Sierpiński his triangle in 1915 and his carpet in 1916. Lewis Fry Richardson measured coasts with shorter and shorter rulers and found their lengths growing; Benoit Mandelbrot read his measurements as a dimension in “How long is the coast of Britain?” (1967) and coined “fractal” in 1975.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“At stage n the dust is 2ⁿ intervals. Their ends are 2ⁿ⁺¹ points. Every point of the dust is an end at some stage, and the ends of all stages can be listed. So the dust is countable.” Not allowed: “every point is an end at some stage” is false. 1/4 is in every stage and is never an end.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'stages',t:R`K_n:\ 2^n \text{ pieces of length } 3^{-n}`,n:`Middles thrown out.`},
+  {k:'ember',kl:'length',t:R`m^*(K) \le (\tfrac23)^n`,n:`So 0.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{m^*(K) = 0,\ |K| = 2^{\aleph_0}}`,n:`No length, every size.`}
+],{title:'The slides · dust · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'cover',t:R`N(w)`,n:`Least count of width w.`},
+  {k:'ember',kl:'rate',t:R`\tfrac{\log N(w)}{\log(1/w)}`,n:`Where it settles.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{D = \tfrac{\log 2}{\log 3}}`,n:`Between a point and a line.`}
+],{title:'The slides · dimension · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'copies',t:R`N \text{ at } 1/s`,n:`Self-made.`},
+  {k:'ember',kl:'triangle',t:R`\tfrac{\log 3}{\log 2} \approx 1.585`,n:`No area.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{D = \tfrac{\log N}{\log s}}`,n:`Not a whole number.`}
+],{title:'The slides · between · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

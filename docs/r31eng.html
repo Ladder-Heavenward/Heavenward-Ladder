@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Why does a tall building sway?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r31then.html">← 31·then how do you fit a curve to noisy data?</a><a href="r31econ.html">next: 31·econ why buy both insurance and lottery tickets? →</a></p>
+  <div class="tags"><span class="tag eng">31·eng · engineering</span></div>
+  <h1>Why does a tall building sway?</h1>
+  <p data-pid="444889">Why does a tall building sway? Stand at the top of a forty-storey tower in Seattle on a windy day and the floor moves under you, slowly, a few centimetres one way and back, about once every four seconds. Nothing is wrong. Every tall building sways, because steel and concrete bend a little, and a building that could not bend would crack. What makes the question hard is that a tower is not one swinging thing but thousands of floors, columns and beams, each pulling on its neighbours, and a gust pushes on all of them at once in a pattern that changes every second. 27·then found that such a motion breaks into steady swings, one along each arrow the grid only stretches. This page asks why those arrows exist at all for a building, why they are at right angles, how a push shares itself among them, and why the worst danger is a push that keeps time with one. The cure that hangs near the top of the tallest towers, a heavy weight on a spring of its own, is a grid that has been made to split one way of shaking into two.</p>
+  <p class="gesture" data-pid="2df8e2">The pulls between floors make a symmetric grid with positive energy, so a building has right-angled ways of shaking, each at its own pace. A push shares itself among the ways by its shadow on each, and a push that keeps time with one way builds it up. A tuned weight near the top splits the first way into two, one just above and one just below the old pace.</p>
+</header>
+
+<section class="class step" data-step="31eng1">
+  <h2 class="sthead"><span class="stno">31eng1</span>Ways of shaking</h2>
+  <p data-pid="0d7221">Model a building as floors of mass m joined by storeys that bend like springs. Let xᵢ be how far floor i has moved sideways. The pull on floor i is a sum of terms kᵢⱼ times the moves, so m x″ = −Kx for a grid K. Spring j pulls floor i exactly as hard as it pulls floor j the other way (14·phys), so kᵢⱼ = kⱼᵢ: K is symmetric. The energy stored in the bent storeys, ½xᵀKx, is above 0 for every move that is not 0.</p>
+  <p data-pid="335491">Symmetric-sway technique: <b>if m x″ = −Kx with K symmetric and ½xᵀKx above 0 for every x that is not 0, then K has a right-angled basis e₁, …, eₙ of axes, with stretches λₖ above 0; each x = eₖ cos(ωₖt) with ωₖ = √(λₖ/m) is a motion, and every motion is a sum of these, each going on its own.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the symmetric-sway technique">
+K = Q\Lambda Q^{\mathsf T},\ \ Q \text{ right-angled} @@ the spectral technique (31d3)
+\lambda_k = e_k^{\mathsf T}Ke_k > 0 @@ the energy along eₖ is above 0 (the form test, 31e3)
+y = Q^{\mathsf T}x:\ \ m\,y'' = -\Lambda y @@ the readings along the axes; QᵀQ = I
+m\,y_k'' = -\lambda_k\,y_k \text{ for each } k @@ the grid is diagonal: no axis pulls on another
+\htmlClass{new}{x = \textstyle\sum_k y_k(t)\,e_k,\ \ \omega_k = \sqrt{\lambda_k/m}} \quad \blacksquare @@ 27·then’s normal-mode technique, now with right angles and real paces guaranteed
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: two storeys">
+K = k\begin{pmatrix} 2 & -1 \\ -1 & 1\end{pmatrix} @@ floor 1 is held by the ground and by floor 2
+\lambda^2 - 3\lambda + 1 = 0:\ \ \lambda = \tfrac{3 \mp \sqrt5}{2}k \approx 0.382k,\ 2.618k @@ the stretch test
+e_1 \propto (1,\ 1.618),\ \ e_2 \propto (1,\ -0.618) @@ both floors one way; the floors against each other
+e_1\cdot e_2 = 1 - 1.000 = 0 @@ at right angles, as promised
+\htmlClass{new}{f_1 \approx 1.97,\ \ f_2 \approx 5.15 \text{ Hz}} \quad \blacksquare @@ f = ω/2π, with m = 5 × 10⁴ kg and k = 2 × 10⁷ N/m
+  </pre>
+  <p data-pid="db0366">The first way of shaking has every floor moving the same way, more at the top. A real tower has as many ways as it has floors in each of two directions, plus twisting ones, but its first one or two carry most of what happens. A rough rule for steel towers puts the first period near one tenth of a second for each storey, so four seconds for forty.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · ways · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">31·eng.1.1</span><span class="ph know">know</span>Why is the grid of pulls between floors symmetric, and why are its stretches above 0?  <br>What does the symmetric-sway technique say about the ways of shaking?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31eng2">
+  <h2 class="sthead"><span class="stno">31eng2</span>A push shared among the ways</h2>
+  <p data-pid="3147e1">Now push: m x″ = −Kx + F(t), where F lists the push on each floor. Read the push along the axes, as the motion was.</p>
+  <p data-pid="df89a9">Shared-push technique: <b>a push F drives the kth way of shaking only through its reading F · eₖ along that way, so m yₖ″ = −λₖyₖ + F · eₖ; a push at right angles to a way never starts it, and the squares (F · eₖ)² add to |F|².</b> The first part is Qᵀ applied to the pushed equation, as in 31·eng.1. The second is the shadow-sum technique (31b2) for the right-angled basis eₖ.</p>
+  <pre class="lines" data-k="ember" data-label="this page: wind on both floors">
+F = f(1, 1) @@ the same push on each floor
+e_1 = (0.526,\ 0.851),\ \ e_2 = (0.851,\ -0.526) @@ the axes, of size 1
+F\cdot e_1 = 1.376f,\ \ F\cdot e_2 = 0.325f @@ the readings
+\tfrac{(F\cdot e_1)^2}{|F|^2} = \tfrac{1.894}{2} \approx 95\% @@ the shadow-sum technique
+\text{steady lean along } e_k: \tfrac{F\cdot e_k}{\lambda_k} = \tfrac{3.60f}{k},\ \tfrac{0.124f}{k} @@ y″ = 0 in each way
+\htmlClass{new}{\text{the first way leans } 29 \text{ times as far}} \quad \blacksquare @@ a small stretch is a soft way, and the push is mostly along it
+  </pre>
+  <p data-pid="4c07e9">If the push swings as F cos Ωt, each way is a forced swing of 26·phys, with its own pace ωₖ. Its size grows as Ω nears ωₖ, and with light damping it becomes very large. A building is safe in a push of any one pace that keeps away from all of its own, and in danger from a push that keeps time with one. In 2000 a new footbridge over the Thames in London swayed sideways when crowds crossed it. People walking push sideways once each two steps, near one push a second, which was close to the pace of one of its sideways ways, and the walkers fell into step with the sway, making the push larger.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · shared push · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·eng.2.1</span><span class="ph know">know</span>What does the shared-push technique say, and why does a push at right angles to a way never start it?  <br>Why is a push that keeps time with one way more dangerous than a larger steady push?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31eng3">
+  <h2 class="sthead"><span class="stno">31eng3</span>A weight that splits the pace</h2>
+  <p data-pid="2a635c">Wind past a tower sheds swirls, first off one side and then the other, at a pace near 0.2U/D for wind speed U and width D. For a tower 40 m wide with a first way at 0.2 Hz, that pace matches when U = 0.2 × 40/0.2 = 40 m/s, a strong gale. Making the tower stiffer moves its pace; making it heavier moves it back. The cure on many tall towers is to hang a weight of about a hundredth of the tower’s moving mass near the top, on a spring tuned to the tower’s own pace.</p>
+  <pre class="lines" data-k="ember" data-label="this page: tower and weight">
+Mx'' = -kx - \kappa(x - z),\ \ \mu M z'' = -\kappa(z - x) @@ tower x, weight z of mass μM; k = Mω², κ = μMω²
+u = \sqrt M\,x,\ \ v = \sqrt{\mu M}\,z @@ weigh each move by the root of its mass
+\begin{pmatrix} u \\ v\end{pmatrix}'' = -\omega^2\begin{pmatrix} 1 + \mu & -\sqrt\mu \\ -\sqrt\mu & 1\end{pmatrix}\begin{pmatrix} u \\ v\end{pmatrix} @@ symmetric again: the spectral technique applies
+\lambda = \omega^2\big(1 + \tfrac\mu2 \pm \sqrt{\mu + \mu^2/4}\big) @@ middle sum 2 + μ, determinant 1
+\htmlClass{new}{\mu = 0.01:\ \ 0.951\,\omega,\ \ 1.051\,\omega} \quad \blacksquare @@ the tower’s one way at ω becomes two, 5% each side
+  </pre>
+  <p data-pid="662985">Weighted-grid technique: <b>if M x″ = −Kx with M diagonal with entries above 0 and K symmetric, then the moves u = M^(1/2)x obey u″ = −M^(−1/2)KM^(−1/2)u, and that grid is symmetric; so unequal masses still give right-angled ways, at right angles in the weighted product Σmᵢxᵢyᵢ.</b></p>
+  <p data-pid="a957d1">With the weight tuned, no way of shaking sits at ω any more, so a gust at ω no longer finds a pace to keep time with. A damper between the weight and the tower soaks up the swing that remains. In the tower called 101 in Taipei a steel ball of about 660 tonnes hangs near the top. Its splitting is the weight-and-spring arithmetic above; how much damping to give it is a matter for the forced swing, and is left open here.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · tuned weight · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·eng.3.1</span><span class="ph know">know</span>Why are the moves weighted by the root of their masses, and what does the weighted-grid technique say?  <br>What happens to the tower’s first pace when a tuned weight is hung near the top?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31eng4">
+  <h2 class="sthead"><span class="stno">31eng4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+M^{-1}K \text{ is symmetric, so its axes are at right angles}\,? @@ it is not when the masses differ; weigh by the roots of the masses first
+\text{a stiffer tower sways less in every wind}\,? @@ it moves its paces, and may move one onto the wind’s
+\text{a push on every floor starts every way}\,? @@ only those it is not at right angles to; F · eₖ = 0 starts nothing
+\text{the weight soaks up the sway at } \omega\,? @@ first it moves the paces off ω; the damper soaks the rest
+\text{a building that does not sway is safest}\,? @@ it cannot bend, so it cannot store a gust’s energy, and it cracks
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·eng.4.1</span><span class="ph know">know</span>Why are the axes of M⁻¹K not at right angles when the masses differ?  <br>Why can a stiffer tower sway more in some wind?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">31·eng.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{three storeys, each of stiffness } k,\ \text{floors of mass } m"></span></span>Build K, its three stretches and its three ways of shaking.  <br>Check that the ways are at right angles, and find the share of a push on the top floor alone that goes into the first way.</div>
+  <div class="chq"><span class="chid">31·eng.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\mu \to 0"></span></span>Find the two paces of tower and weight as the weight shrinks to nothing.  <br>Why does a very small weight still split the pace, and what must be true of its tuning for that?</div>
+  <div class="chq"><span class="chid">31·eng.5.3</span><span class="tagq">converse</span>A symmetric grid with positive energy gives right-angled ways at real paces. Turn it round: if a set of floors has right-angled ways at real paces above 0, must the grid of pulls be symmetric, with equal masses?</div>
+  <div class="chq"><span class="chid">31·eng.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="K = k\begin{pmatrix} 2 &amp; -1 \\ -1 &amp; 1\end{pmatrix}"></span></span>Find the first pace of the two storeys a second way, by the two-sided reading of 31n: try x = (1, 2) and (1, 1.6).  <br>Which gives the lower pace, and why is the true first pace below both?</div>
+  <div class="chq"><span class="chid">31·eng.5.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">26·phys: was it resonance?</span></span>26·phys asked whether a bridge that tore itself apart in a steady wind was pushed at its own pace, or fed itself. One side says every sway is resonance with some way of shaking, because the shared-push technique splits every push among the ways. The other says a steady wind has no pace at all, so the sway must come from the bridge’s motion changing the push, which no fixed F can do.  <br>Which claim of this page does a push that depends on x break? Can the ways of shaking still be read along the axes then?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r31then.html">← 31·then · how do you fit a curve to noisy data?</a><a href="r31econ.html">31·econ · why buy both insurance and lottery tickets? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The ways of shaking are the mode shapes, or normal modes, and their paces the natural frequencies; reading the motion along them is modal analysis. K is the stiffness matrix and M the mass matrix, and M x″ = −Kx is the generalised eigenvalue problem Kx = ω²Mx, made symmetric by mass-normalising. The swirls shed by wind are vortex shedding, with 0.2 the Strouhal number. A tuned weight with a damper is a tuned mass damper. A push that is changed by the motion it causes is self-excited, as in flutter and galloping.</p>
+  <h3>Who said it first</h3>
+  <p>John William Strutt, Lord Rayleigh, set out the ways of shaking of elastic bodies in <i>The Theory of Sound</i> (1877). Vincenc Strouhal measured the singing of wires in wind in 1878, and Theodore von Kármán explained the street of swirls in 1911. Hermann Frahm patented the tuned weight in 1909 for ships, and Jacob Pieter Den Hartog worked out its best tuning in 1934 and 1940. The London footbridge opened in June 2000 and was closed two days later; it reopened in 2002 with dampers.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'pulls',t:R`m x^{\prime\prime} = -Kx,\ K = K^{\mathsf T}`,n:`Pull for pull.`},
+  {k:'ember',kl:'energy',t:R`\tfrac12 x^{\mathsf T}Kx > 0`,n:`Stretches above 0.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\omega_k = \sqrt{\lambda_k/m}}`,n:`Right-angled ways.`}
+],{title:'The slides · ways · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'readings',t:R`F = \textstyle\sum (F\cdot e_k)e_k`,n:`The right-angled basis.`},
+  {k:'ember',kl:'each way',t:R`m y_k^{\prime\prime} = -\lambda_ky_k + F\cdot e_k`,n:`Alone.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\textstyle\sum (F\cdot e_k)^2 = |F|^2}`,n:`Shadow-sum.`}
+],{title:'The slides · shared push · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'weigh',t:R`u = M^{1/2}x`,n:`Symmetric again.`},
+  {k:'ember',kl:'grid',t:R`\omega^2\begin{pmatrix} 1 + \mu & -\sqrt\mu \\ -\sqrt\mu & 1\end{pmatrix}`,n:`Tower and weight.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\omega(1 \pm \tfrac12\sqrt\mu)}`,n:`One pace split in two.`}
+],{title:'The slides · tuned weight · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

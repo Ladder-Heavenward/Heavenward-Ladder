@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Projections and least squares by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r31concl.html">← 31·∎ one product gives functions lengths, angles and closest points</a><a href="r31l.html">next: 31l correlation and regression →</a></p>
+  <div class="tags"><span class="tag tech">31k · technique</span></div>
+  <h1>Projections and least squares by hand</h1>
+  <p data-pid="f0c19f">A surveyor in Bellingham has a point and a sloping plane of ground, and needs the foot of the drop. A student rolls a ball down a ramp and times it, and needs the curve the timings lie near. A laboratory in Corvallis reads the colour of four known solutions, and needs the line that turns a colour into a strength. Each is a shadow, and the rung has already proved how to find one. This step does them by hand, with the shortcuts that make the hand work short. A plane is best handled through the one arrow at right angles to it. A curve with powers in it is a fit whose columns are the powers. A line forced through zero needs only one ratio. And readings that are not all equally good get a product that trusts each one as much as it deserves.</p>
+  <p class="gesture" data-pid="e436b8">To drop an arrow onto a plane, take away its shadow on the arrow at right angles to the plane. To fit a polynomial, use the powers as the columns. A line through zero has slope the sum of products over the sum of squares. Readings of different widths are fitted under a product that weights each by one over its spread.</p>
+</header>
+
+<section class="class step" data-step="31k1">
+  <h2 class="sthead"><span class="stno">31k1</span>A shadow on a plane</h2>
+  <p data-pid="2b3e2d">A plane through 0 in space is the set of arrows at right angles to one arrow n, its <i>normal</i>. Its shadow is easiest found from n alone, with no basis of the plane at all.</p>
+  <p data-pid="fdd3d1">Through-the-normal technique: <b>the shadow of f on the plane at right angles to n is f − ((f · n)/|n|²) n, and the distance from f to the plane is |f · n|/|n|.</b> The plane is W, its W⊥ is the line through n (27i2), and f splits into its shadow on that line and the rest (31b1). The rest is the shadow on W.</p>
+  <pre class="lines" data-k="ember" data-label="this step: one drop onto a plane">
+f = (1, 2, 3),\ \ n = (1, 1, 1),\ \ \text{plane } x + y + z = 0 @@ the plane at right angles to n
+f\cdot n = 6,\ \ |n|^2 = 3 @@ the dot
+Pf = (1, 2, 3) - 2(1, 1, 1) = (-1, 0, 1) @@ the through-the-normal technique
+Pf\cdot n = -1 + 0 + 1 = 0 @@ check: Pf lies in the plane
+\htmlClass{new}{\text{distance } = \tfrac{|f\cdot n|}{|n|} = \tfrac{6}{\sqrt3} = 2\sqrt3 \approx 3.46} \quad \blacksquare @@ the length of 2(1, 1, 1)
+  </pre>
+  <p data-pid="9be455">As a grid, the shadow on the plane is P = I − nnᵀ/|n|². For a plane not through 0, such as x + y + z = 3, slide it to pass through 0 first: subtract any point on it, (1, 1, 1), drop, and slide back.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · plane · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">31k1.1</span><span class="ph know">know</span>What is the normal of a plane through 0?  <br>What does the through-the-normal technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31k2">
+  <h2 class="sthead"><span class="stno">31k2</span>A curve through timings</h2>
+  <p data-pid="4781a7">Power-columns technique: <b>to fit y ≈ c₀ + c₁x + ⋯ + c_d x^d to n points, use the columns 1, x, …, x^d; then XᵀX has Σᵢ xᵢ^(j+k) in row j and column k, and the best c solves XᵀXc = Xᵀy.</b> It is the miss-at-right-angles technique of 31b3 with powers for columns, and its grid needs only the sums of powers.</p>
+  <pre class="lines" data-k="ember" data-label="this step: a ball rolling down a ramp">
+t: 0, 1, 2, 3 \text{ s};\ \ s: 0.0,\ 1.1,\ 3.9,\ 9.1 \text{ m} @@ distances rolled, read off a tape; the numbers are a model
+\textstyle\sum t^0, \ldots, \sum t^4 = 4,\ 6,\ 14,\ 36,\ 98 @@ the sums of powers
+\begin{pmatrix} 4 & 6 & 14 \\ 6 & 14 & 36 \\ 14 & 36 & 98\end{pmatrix}c = \begin{pmatrix} 14.1 \\ 36.2 \\ 98.6\end{pmatrix} @@ Σs, Σts, Σt²s
+c = (0.035,\ -0.065,\ 1.025) @@ elimination (27j)
+\text{misses: } -0.035,\ 0.105,\ -0.105,\ 0.035 @@ they add to 0, and to 0 against t and t²: right angles (31b4)
+\htmlClass{new}{s \approx 1.025\,t^2,\ \ \text{an acceleration of about } 2.05 \text{ m/s}^2} \quad \blacksquare @@ s = ½ g′ t² with g′ = 2c₂
+  </pre>
+  <p data-pid="2c2044">The fit put tiny numbers in front of 1 and t. That is a finding, not a demand: the ball started at rest at the zero of the tape. Had the timings been fitted with columns 1 and t only, the shadow would have been the best line, and its misses would have shown a curve, low at the ends and high in the middle.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · powers · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31k2.1</span><span class="ph know">know</span>What does the power-columns technique say, and what fills XᵀX?  <br>What do the misses of the ramp fit add to, and against which columns?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31k3">
+  <h2 class="sthead"><span class="stno">31k3</span>Lines through zero, and readings that are not all as good</h2>
+  <p data-pid="816eca">Through-zero technique: <b>the best line y ≈ bx through 0 has b = Σxᵢyᵢ / Σxᵢ².</b> It is the closest-point technique of 31b1 on the line through x, with g = x.</p>
+  <pre class="lines" data-k="ember" data-label="this step: a colour calibration line">
+x: 0.5,\ 1,\ 2,\ 4 \text{ mg/L};\ \ y: 0.11,\ 0.20,\ 0.41,\ 0.79 @@ four known strengths and the colour each reads; the numbers are a model
+\textstyle\sum x_iy_i = 4.235,\ \ \sum x_i^2 = 21.25 @@ products and squares
+b = 4.235/21.25 \approx 0.1993 @@ the through-zero technique
+\htmlClass{new}{\text{a reading of } 0.30 \text{ means about } 0.30/0.1993 \approx 1.51 \text{ mg/L}} \quad \blacksquare @@ the line, run backwards
+  </pre>
+  <p data-pid="404e6b">Readings that are not all as good should not count alike. If reading i has spread σᵢ², use the weighted product ⟨u, v⟩ = Σᵢ uᵢvᵢ/σᵢ² of 31a1, which trusts each reading in proportion to one over its spread.</p>
+  <p data-pid="30887c">Weighted-shadow technique: <b>with weights wᵢ = 1/σᵢ², the best fit is the shadow under the weighted product, and solves XᵀWXc = XᵀWy, with W the grid of the wᵢ down its middle. Fitting one number to the readings gives Σwᵢyᵢ / Σwᵢ, with spread 1/Σwᵢ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: one length, read three times">
+y: 10.2,\ 9.8,\ 10.9 \text{ cm};\ \ \sigma: 0.1,\ 0.2,\ 0.5 @@ three tools of different quality
+w: 100,\ 25,\ 4 @@ one over each spread
+\textstyle\sum w_iy_i = 1308.6,\ \ \sum w_i = 129 @@ X is the column of 1s
+\htmlClass{new}{\hat y = 1308.6/129 \approx 10.14 \text{ cm},\ \ \text{width } 1/\sqrt{129} \approx 0.088} \quad \blacksquare @@ the independent-spreads-add technique (30g3), on Σwᵢyᵢ/Σwᵢ
+  </pre>
+  <p data-pid="fa2e03">The plain average, 10.30, leans towards the worst tool. The weighted one stays near the best, and its width is smaller than the best tool’s alone.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · weights · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31k3.1</span><span class="ph know">know</span>What do the through-zero and weighted-shadow techniques say?  <br>Why should a reading with a larger spread count for less?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31k4">
+  <h2 class="sthead"><span class="stno">31k4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{the shadow of } f \text{ on the plane at right angles to } n \text{ is } (f\cdot n)n\,? @@ that is the shadow on the line through n, and only for |n| = 1
+\text{fit } y \approx c_0 + c_1x + c_2x^2 \text{ by three fits of one column each}\,? @@ the columns are not at right angles; fit them together, or straighten them first
+\text{a line through 0 fits better than a line with a start}\,? @@ it is the shadow on a smaller piece: its misses can only be larger
+\text{weight a reading by } 1/\sigma\,? @@ the weight is one over the spread, 1/σ²
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31k4.1</span><span class="ph know">know</span>Why can a quadratic fit not be done one column at a time?  <br>Why does forcing the line through 0 never make the misses smaller?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">31k.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{plane } 2x - y + 2z = 6,\ \ f = (4, 1, 5)"></span></span>Build the point of the plane closest to f, by sliding the plane through 0, dropping, and sliding back.  <br>Find the distance from f to the plane, and check it with the through-the-normal technique.</div>
+  <div class="chq"><span class="chid">31k.5.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx"> 0, 1, 2;\ \ s: 0.0,\ 1.1,\ 3.9</span></span>Fit c₀ + c₁t + c₂t² to only three timings. Find the misses.  <br>What does a fit with as many columns as points tell you about the ball, and what can it not tell you?</div>
+  <div class="chq"><span class="chid">31k.5.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="x: 1, 2, 3, 4;\ \ y: 2, 1, 4, 3"></span></span>Fit y ≈ k + bx by straightening the columns 1 and x first (31c), so that each number is one reading.  <br>Check that k = 1 and b = 0.6, and find which reading gave b.</div>
+  <div class="chq"><span class="chid">31k.5.4</span><span class="tagq">converse</span>The weighted average with weights 1/σᵢ² has spread 1/Σ(1/σᵢ²). Turn it round: among all averages Σcᵢyᵢ with Σcᵢ = 1, is this one the one with least spread?  <br>Prove it with the product bound (31a3).</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r31concl.html">← 31·∎ · one product gives functions lengths, angles and closest points</a><a href="r31l.html">31l · correlation and regression →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The normal of a plane is its normal vector, and I − nnᵀ/|n|² is the orthogonal projector onto the plane. Fitting with the powers as columns is polynomial regression, and X with columns 1, x, …, x^d is a Vandermonde matrix. A line through 0 is regression through the origin. The weighted-shadow technique is weighted least squares, and Σwᵢyᵢ/Σwᵢ with wᵢ = 1/σᵢ² is the inverse-variance weighted mean. A colour reading against strength is a calibration curve, and in a spectrometer its straightness is the Beer–Lambert law.</p>
+  <h3>Who said it first</h3>
+  <p>Galileo Galilei timed balls rolling down ramps about 1604 and found distances in proportion to the squares of the times. Carl Friedrich Gauss weighted readings by their precision in 1809 and 1823. August Beer stated the law of colour and strength in 1852.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'normal',t:R`W = n^{\perp}`,n:`One arrow fixes the plane.`},
+  {k:'ember',kl:'drop',t:R`Pf = f - \tfrac{f\cdot n}{|n|^2}\,n`,n:`Take away the normal part.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{distance} = \tfrac{|f\cdot n|}{|n|}}`,n:`No basis needed.`}
+],{title:'The slides · plane · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'columns',t:R`1,\ x,\ \ldots,\ x^d`,n:`One per power.`},
+  {k:'ember',kl:'grid',t:R`(X^{\mathsf T}X)_{jk} = \textstyle\sum x_i^{j+k}`,n:`Sums of powers.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{s \approx 1.025\,t^2}`,n:`A curve through timings.`}
+],{title:'The slides · powers · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'through 0',t:R`b = \textstyle\sum x_iy_i/\sum x_i^2`,n:`A shadow on a line.`},
+  {k:'ember',kl:'weights',t:R`w_i = 1/\sigma_i^2`,n:`Trust by spread.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{X^{\mathsf T}WXc = X^{\mathsf T}Wy}`,n:`The weighted shadow.`}
+],{title:'The slides · weights · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

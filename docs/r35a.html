@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Countable</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r35.html">← 35 infinities come in sizes</a><a href="r35b.html">next: 35b the line cannot be listed →</a></p>
+  <div class="tags"><span class="tag proof">35a · proof</span></div>
+  <h1>Countable</h1>
+  <p data-pid="766584">Rung 4 counted a finite set by matching it with a number, and rung 3 noticed that the endless run can be matched with a part of itself that leaves something out. This step asks what matching says about endless sets. Two sets are the same size when they can be matched, and nothing else about them matters. A set is countable when it can be listed, one member at a time, with every member reached at some place. The even numbers can be listed, and so can the squares, though most numbers are neither. Then come sets that look far larger. The pairs of counting numbers fill a whole quarter of a grid, and a walk along its diagonals gives every pair a place. The fractions sit in every gap of the line, and they can be listed. The roots of all the polynomials with whole coefficients can be listed too, by giving each polynomial a height with only finitely many polynomials at each height. Every one of these lists is a matching with the counting numbers. The next step finds a set that no list can hold.</p>
+  <p class="gesture" data-pid="010e1b">Listing a set is matching it with the counting numbers, once the repeats are struck out. Walk the grid of pairs along its diagonals and every pair gets one place. Give the fractions and the roots of polynomials a height, with finitely many at each height, and list them height by height.</p>
+</header>
+
+<section class="class step" data-step="35a1">
+  <h2 class="sthead"><span class="stno">35a1</span>The same size, and countable</h2>
+  <p data-pid="a3da30"><a href="r04k.html">4k1</a> made matching exact, and <a href="r09c.html">9c1</a> showed that a matching is a bijection. From here on, two sets A and B have <i>the same size</i> when they are matched, and |A| = |B| says so. The bars already name how far a number is from 0, and that meaning stays for numbers. With a set inside, the line |A| = |B| is a statement about matching and nothing more. For finite sets it is <a href="r04k.html">4k</a>’s count: |A| = |n| says A has n members. Rung 30’s sizes were lengths and chances, written m. This rung’s size is a count by matching, and the two can disagree: <a href="r30a.html">30a2</a> gave the fractions length 0.</p>
+  <p data-pid="0ef245">A <i>list</i> of a set A is a function L from ℕ onto A. Its entries L(0), L(1), L(2), … reach every member of A, and repeats are allowed. From here on, A is <i>countable</i> when it is empty or has a list. <a href="r30a.html">30a</a> used “countably many” for what a list can hold; this is that word made exact.</p>
+  <p data-pid="6b34cc">Thinning technique: <b>a set with a list is finite or matched with ℕ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the thinning technique">
+L : \mathbb N \to A \text{ onto} @@ the list
+K = \{n \in \mathbb N : L(n) \ne L(j) \text{ for every } j < n\} @@ keep the places where a member first appears (a sift, 2d)
+L \text{ restricted to } K \text{ is a matching between } K \text{ and } A @@ each member’s places form a set of numbers with a member; its least place (7·cb4) is its one place in K
+K \text{ finite} \Rightarrow A \text{ finite} @@ chain for matchings (4k1)
+K \text{ not finite:}\ \ k_0 = \min K,\ \ k_{i+1} = \min\{k \in K : k > k_i\} @@ there is always a member above kᵢ, or K would be finite; each min by least-member-for-any-set (7·cb4)
+i \mapsto k_i \text{ is a matching between } \mathbb N \text{ and } K @@ it climbs, so it is one-to-one; a member of K missed would sit below some kᵢ₊₁ and above kᵢ
+\htmlClass{new}{A \text{ finite, or } |A| = |\mathbb N|} \quad \blacksquare @@ chain for matchings, twice
+  </pre>
+  <p data-pid="888ea2">So the even numbers, the squares and the primes all have the size of ℕ. Each is a part of ℕ that is not finite, and listing itself in order is its list. <a href="r03c.html">3c9</a> called a collection endless when it is matched with a part of itself that leaves something out, and <a href="r09c.html">9c</a>.4.4 asked whether there are as many squares as numbers. By matching there are, though the squares leave out almost every number. For endless sets, leaving members out need not make a set smaller.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · same size · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">35a1.1</span><span class="ph know">know</span>What does |A| = |B| say, and what is a list of A? <br>What does the thinning technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35a2">
+  <h2 class="sthead"><span class="stno">35a2</span>Pairs of numbers</h2>
+  <p data-pid="35c551">Lay the pairs (m, n) of ℕ × ℕ out as a grid, m across and n up. A list that runs along the first row never reaches the second. Walk the short diagonals instead. Diagonal d holds the pairs with m + n = d, and there are d + 1 of them. Before it come diagonals 0 to d − 1, with 1 + 2 + ⋯ + d pairs in all. Write T(d) = 0 + 1 + ⋯ + d.</p>
+  <p data-pid="441dee">Pair-listing technique: <b>the pairs of counting numbers are matched with ℕ by p(m, n) = (m + n)(m + n + 1)/2 + n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the pair-listing technique">
+d = m + n,\ \ T(d) = \tfrac{d(d+1)}{2} @@ the doubled-sum technique (4k8)
+\text{diagonal } d \text{ holds the } d + 1 \text{ pairs } (d - n, n),\ n = 0, \ldots, d @@ m is fixed once d and n are
+p \text{ sends diagonal } d \text{ onto } T(d), T(d) + 1, \ldots, T(d) + d,\ \text{one each} @@ p(d − n, n) = T(d) + n
+T(d) + d + 1 = T(d + 1) @@ sum-one-more (4k7)
+\text{the blocks } T(d), \ldots, T(d + 1) - 1 \text{ are separate and fill } \mathbb N @@ T(0) = 0 and T climbs by d + 1 at each step, so each number lies in exactly one block
+\htmlClass{new}{p : \mathbb N \times \mathbb N \to \mathbb N \text{ is a matching}} \quad \blacksquare @@ one-to-one and onto on each block, and the blocks part ℕ
+  </pre>
+  <p data-pid="5403bd">So (0, 0) is at place 0, (1, 0) at 1, (0, 1) at 2, (2, 0) at 3, and (2, 1) at T(3) + 1 = 7. A quarter of a grid, endless both ways, has the size of one of its rows.</p>
+  <p data-pid="096b73">Countable-union technique: <b>if A₀, A₁, A₂, … are countably many sets, each with a member and each given a list Lₘ, their union has a list.</b> Send the place k to Lₘ(n), where p(m, n) = k. Every member of the union is some Lₘ(n), so it is reached. The lists must be given. If each Aₘ is only known to have a list, picking one list for each m is choice, countably often (<a href="r06b.html">6b</a>), as <a href="r30a.html">30a2</a> spent it to pick covers.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · pairs · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35a2.1</span><span class="ph know">know</span>What does the pair-listing technique say, and why is each number reached exactly once? <br>What does the countable-union technique need given, and what is spent if it is not given?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35a3">
+  <h2 class="sthead"><span class="stno">35a3</span>Integers and fractions</h2>
+  <p data-pid="3b9cb7"><a href="r30a.html">30a2</a> listed the fractions by levels. The difference here is that the list becomes a matching. The integers come first: send 0 to 0, then 1 to 1, −1 to 2, 2 to 3, −2 to 4, and on. In marks, z ↦ 2z − 1 for z &gt; 0 and z ↦ −2z for z ≤ 0. It is one-to-one, and onto ℕ: the odd numbers come from the positive integers, the even ones from the rest.</p>
+  <p data-pid="d78bdb">Into-ℕ technique: <b>a set that goes one-to-one into ℕ is countable.</b> Its image is a part of ℕ. That part lists itself in order, and the thinning technique makes it finite or matched with ℕ. Run the one-to-one map backwards on its image (<a href="r09d.html">9d</a>), and chain the matchings.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the fractions are matched with ℕ">
+r = \tfrac{z}{q} \text{ in lowest terms},\ z \in \mathbb Z,\ q \ge 1 @@ each fraction has one such form (5b, 4j)
+r \mapsto (\zeta(z), q) \in \mathbb N \times \mathbb N @@ ζ is the matching of ℤ with ℕ above
+r \mapsto p(\zeta(z), q) \text{ is one-to-one into } \mathbb N @@ a chain of one-to-ones (9c3): the lowest form, ζ, then the pair-listing technique
+\mathbb Q \text{ is not finite} @@ it holds every integer
+\htmlClass{new}{|\mathbb Q| = |\mathbb Z| = |\mathbb N|} \quad \blacksquare @@ into-ℕ and thinning
+  </pre>
+  <p data-pid="2e3efe">The same chain lists the points of the plane with two fraction coordinates: pairs of fractions go one-to-one into pairs of numbers, and the pairs of numbers into ℕ. The fractions are dense, and in order they have no next member at all. Matching does not care about order.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · fractions · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35a3.1</span><span class="ph know">know</span>How is ℤ matched with ℕ? <br>What does the into-ℕ technique say, and how does it list the fractions?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35a4">
+  <h2 class="sthead"><span class="stno">35a4</span>The algebraic reals</h2>
+  <p data-pid="a41cfc"><a href="r23g.html">23g3</a> called a real algebraic when it is a root of a polynomial with whole coefficients, not all 0. Give the polynomial uₖxᵏ + ⋯ + u₁x + u₀, with uₖ ≠ 0, the <i>height</i> k + |uₖ| + ⋯ + |u₀|. A polynomial of height h has degree at most h, and each coefficient lies between −h and h. So only finitely many polynomials have height h.</p>
+  <p data-pid="31eab3">Algebraic-list technique: <b>the algebraic reals can be listed, so they are matched with ℕ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the algebraic-list technique">
+\text{height } h:\ \text{at most } (2h + 1)^{h + 1} \text{ polynomials} @@ at most h + 1 coefficients, each one of 2h + 1 integers (stages-multiply, 4k6)
+\text{each has at most } k \le h \text{ zeros} @@ the at-most-n-zeros technique (9g)
+Z_h = \text{the zeros of the polynomials of height } h \text{ is finite} @@ finitely many finite sets, merged (separate piles, 4k5, as an at most)
+\text{list } Z_1, \text{ then } Z_2, \text{ then } Z_3, \ldots,\ \text{each in increasing order} @@ any two reals compare (8b), so a finite set of reals has an increasing order with no picking
+\text{every algebraic real is in some } Z_h @@ its polynomial has a height
+\htmlClass{new}{\text{the algebraic reals have a list}} \quad \blacksquare @@ not finite: every integer is algebraic; so matched with ℕ, by thinning
+  </pre>
+  <p data-pid="5c4312">Height 2 gives only 0, from x and −x. Height 3 adds −1 and 1. Height 4 adds −2, −1/2, 1/2 and 2. At height 5 come x² − 2 and x² − x − 1, and with them ±√2 and the two roots (1 ± √5)/2. Every root of every polynomial with whole coefficients turns up at some finite height. Most of these numbers have no name, and they still get a place.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · algebraic · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35a4.1</span><span class="ph know">know</span>What is the height of a polynomial with whole coefficients, and why do only finitely many polynomials share a height? <br>What does the algebraic-list technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35a5">
+  <h2 class="sthead"><span class="stno">35a5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\mathbb N \subseteq \mathbb Z \text{ leaves out } -1, \text{ so } \mathbb Z \text{ is bigger}\,? @@ for endless sets a part can have the size of the whole: ℤ is matched with ℕ
+\text{the fractions are dense, so no list holds them}\,? @@ density is about order; the matching of 35a3 ignores order
+(0, 0), (0, 1), (0, 2), \ldots \text{ lists } \mathbb N \times \mathbb N\,? @@ the first row never ends, so (1, 0) gets no place
+\text{every endless set is countable}\,? @@ not shown; 35b finds a set no list holds
+\text{each } A_m \text{ is countable, so the union is, with no picking}\,? @@ a list for each Aₘ must be given, or picked: choice, countably often (6b)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35a5.1</span><span class="ph know">know</span>Why does “(0, 0), (0, 1), (0, 2), … lists ℕ × ℕ” fail as a list?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">35a.4.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">the finite strings of the letters A, C, G, T, the letters of a strand of DNA</span></span>Build a list of every such string, the empty string included, shorter strings first, and strings of one length in alphabetical order. <br>Find the place of GAT, counting from 0.</div>
+  <div class="chq"><span class="chid">35a.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="A_m = \{x_m,\ y_m\} \text{ for every } m \in \mathbb N"></span></span>Each Aₘ is a pair of socks, as on 6b, with no rule to tell its two apart. Each Aₘ has a list. <br>Is the union of all the Aₘ countable? Find the list you would write, and what it would have to pick.</div>
+  <div class="chq"><span class="chid">35a.4.3</span><span class="tagq">converse</span>Thinning: a set with a list is finite or matched with ℕ. Turn it round. If a set is matched with a part of itself that leaves something out, as in 3c9, must it have a list? <br>What would you need to know to settle it?</div>
+  <div class="chq"><span class="chid">35a.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\tfrac{z}{q} \mapsto 2^{\zeta(z)}\,3^{q}"></span></span>Prove that the fractions go one-to-one into ℕ another way, with this map, z/q in lowest terms with q ≥ 1. <br>Which technique of 4j does the proof need, and which technique of this step does it skip?</div>
+  <div class="chq"><span class="chid">35a.4.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="n \mapsto n \cdot n"></span></span>This map pairs every number with a square, and the squares leave out most numbers. <br>One side holds that size is matching, and that the old rule “the whole is greater than its part” fails for endless sets. The other holds that the old rule is right, so endless sets cannot be compared at all. A third keeps both, with one word for matching and another for parts. <br>Which rule should the word “more” follow? Can both be kept on one page?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r35.html">← 35 · infinities come in sizes</a><a href="r35b.html">35b · the line cannot be listed →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Sets of the same size are equinumerous, or have the same cardinality; |A| is the cardinality of A. A set matched with ℕ is countably infinite, or denumerable; “countable” sometimes means only that. The pair-listing technique is the Cantor pairing function. The height of a polynomial is Cantor’s height. The result of 35a4 is that the algebraic numbers are countable, and the countable-union technique is the theorem that a countable union of countable sets is countable, which uses countable choice.</p>
+  <h3>Who said it first</h3>
+  <p>Galileo noticed in Two New Sciences (1638) that the squares can be paired with the numbers, and concluded that “equal”, “greater” and “less” do not apply to endless quantities. Bolzano’s Paradoxes of the Infinite (1851) took the pairing seriously. Dedekind made the matching with a part of itself the definition of an endless set (1888). Georg Cantor proved in 1874 that the algebraic numbers can be listed, in the same short paper that showed the line cannot be, and wrote the diagonal pairing of ℕ × ℕ in 1878. Without choice, a union of countably many pairs need not be countable; the sock world of 6d is the model.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“List ℚ in order of size, from the least fraction up.” Not allowed: there is no least fraction, and between any two there is another (8e), so “the next one” names nothing. The list of 35a3 is not in order of size, and does not need to be.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'size',t:R`|A| = |B|`,n:`A and B are matched.`},
+  {k:'ember',kl:'list',t:R`L : \mathbb N \to A \text{ onto}`,n:`Repeats allowed.`},
+  {k:'ember',kl:'thin',t:R`\htmlClass{new}{A \text{ finite, or } |A| = |\mathbb N|}`,n:`Strike the repeats.`}
+],{title:'The slides · same size · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'grid',t:R`(m, n) \in \mathbb N \times \mathbb N`,n:`Rows never end.`},
+  {k:'ember',kl:'diagonals',t:R`m + n = d`,n:`Each one is finite.`},
+  {k:'ember',kl:'place',t:R`\htmlClass{new}{p(m,n) = \tfrac{(m+n)(m+n+1)}{2} + n}`,n:`A matching.`}
+],{title:'The slides · pairs · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'integers',t:R`0, 1, -1, 2, -2, \ldots`,n:`Odd places, even places.`},
+  {k:'ember',kl:'chain',t:R`\tfrac{z}{q} \mapsto p(\zeta(z), q)`,n:`One-to-one into ℕ.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|\mathbb Q| = |\mathbb N|}`,n:`Order does not count.`}
+],{title:'The slides · fractions · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'height',t:R`k + |u_k| + \cdots + |u_0|`,n:`Finitely many each.`},
+  {k:'ember',kl:'zeros',t:R`\le k \text{ each}`,n:`9g.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{the algebraic reals are listed}}`,n:`Height by height.`}
+],{title:'The slides · algebraic · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

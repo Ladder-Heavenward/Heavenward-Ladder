@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Principal components</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r31n.html">← 31n eigenvalues by machine</a><a href="r31stat.html">next: 31·stat can a model fit too well? →</a></p>
+  <div class="tags"><span class="tag tech">31o · technique</span></div>
+  <h1>Principal components</h1>
+  <p data-pid="7b6ebd">A naturalist measures a hundred Dungeness crabs on the beach at Long Beach, Washington: the width of the shell, its length, the size of the claw, the weight. Four numbers for each crab, and a cloud of a hundred points in a space with four directions. Most of the cloud runs along one direction, big crabs against small ones, with a little spread around it. Which direction is that, and how much of the spread does it carry? The spread of the cloud along any direction is a quadratic form, read off one symmetric grid made of the co-spreads. Its axes are the answer. The first axis carries the most spread, the next carries the most of what is left, at right angles, and so on. Keep the first few, and the flat piece they build is the one the whole cloud lies closest to. The axes are found by the techniques of the rung, and nothing about them says what they mean.</p>
+  <p class="gesture" data-pid="9d9d01">The spread of a cloud of data along a direction d of size 1 is dᵀCd, with C the grid of co-spreads. Its axes carry the most spread, in falling order, each at right angles to the ones before, and the stretches are the spreads they carry. The flat piece built by the first r axes is the one the cloud lies closest to.</p>
+</header>
+
+<section class="class step" data-step="31o1">
+  <h2 class="sthead"><span class="stno">31o1</span>Spread along a direction</h2>
+  <p data-pid="cf0c36">Take n points x₁, …, xₙ in lists of p numbers, with their average already taken away, so that the points add to 0. Stack them as the rows of a grid X. From here on, the <i>spread grid</i> is C = XᵀX/n: its place (j, k) is the average of the jth number times the kth, the co-spread of 30g, and its middle line holds the spreads. It is symmetric.</p>
+  <p data-pid="a68620">Spread-along technique: <b>the spread of the points along a direction d of size 1, the average of (xᵢ · d)², is dᵀCd.</b> The shadow of xᵢ on the line through d is (xᵢ · d)d (31b1), the readings xᵢ · d average to 0, and Σᵢ(xᵢ · d)² = |Xd|² = dᵀXᵀXd.</p>
+  <pre class="lines" data-k="ember" data-label="this step: four points in the plane">
+(3, 1),\ (-3, -1),\ (1, 1),\ (-1, -1) @@ they add to 0
+C = \tfrac14\begin{pmatrix} 20 & 8 \\ 8 & 4\end{pmatrix} = \begin{pmatrix} 5 & 2 \\ 2 & 1\end{pmatrix} @@ Σx² = 20, Σxy = 8, Σy² = 4
+d = (1, 0):\ \ d^{\mathsf T}Cd = 5;\ \ d = (0, 1):\ \ 1 @@ the spreads along the axes of the page
+\htmlClass{new}{d^{\mathsf T}Cd = \tfrac12(5 + 4 + 1) = 5} \quad \blacksquare @@ d = (1, 1)/√2: the spread-along technique
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · spread grid · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">31o1.1</span><span class="ph know">know</span>What is the spread grid C of a cloud of points?  <br>What does the spread-along technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31o2">
+  <h2 class="sthead"><span class="stno">31o2</span>The directions of most spread</h2>
+  <p data-pid="df6189">Most-spread technique: <b>the direction of most spread is the axis e₁ of C’s largest stretch λ₁, and the spread along it is λ₁; among directions at right angles to e₁, the most spread is λ₂, along e₂; and so on. The spreads along all the axes add to the middle sum of C, the total spread.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the most-spread technique">
+d^{\mathsf T}Cd = \lambda_1y_1^2 + \cdots + \lambda_py_p^2,\ \ y_1^2 + \cdots + y_p^2 = 1 @@ the axes-form technique (31e1); |d| = 1
+\le \lambda_1,\ \text{with equality at } d = e_1 @@ λ₁ is the largest
+d \perp e_1 \Rightarrow y_1 = 0,\ \ d^{\mathsf T}Cd \le \lambda_2 @@ the same, one axis fewer
+\htmlClass{new}{\lambda_1 + \cdots + \lambda_p = C_{11} + \cdots + C_{pp}} \quad \blacksquare @@ the middle-sum technique (27l1)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the four points, along their axes">
+\det(C - \lambda I) = \lambda^2 - 6\lambda + 1 @@ the stretch-test technique
+\lambda_1 = 3 + 2\sqrt2 \approx 5.83,\ \ \lambda_2 = 3 - 2\sqrt2 \approx 0.17 @@ the roots
+e_1 \propto (2,\ \lambda_1 - 5) = (2,\ 2\sqrt2 - 2) \propto (1,\ \sqrt2 - 1) @@ (C − λ₁I)e₁ = 0, top row
+\htmlClass{new}{e_1 \text{ at } 22.5^\circ,\ \ \text{carrying } \tfrac{5.83}{6} \approx 97\% \text{ of the spread}} \quad \blacksquare @@ tan 22.5° = √2 − 1 (21k)
+  </pre>
+  <p data-pid="670a61">From here on, the readings xᵢ · eₖ are the kth <i>components</i> of the points. Different components never co-spread: the average of (xᵢ · e₁)(xᵢ · e₂) is e₁ᵀCe₂ = λ₂ e₁ · e₂ = 0.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · most spread · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31o2.1</span><span class="ph know">know</span>What does the most-spread technique say?  <br>What are the components of the points, and why do two different components never co-spread?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31o3">
+  <h2 class="sthead"><span class="stno">31o3</span>The flat piece the cloud lies nearest</h2>
+  <p data-pid="9d296c">Closest-piece technique: <b>among all flat pieces of dimension r through the average, the one built by e₁, …, eᵣ makes the total squared distance from the points least, and that least total is n(λᵣ₊₁ + ⋯ + λₚ).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the closest-piece technique">
+W \text{ built by a right-angled list } d_1, \ldots, d_r @@ any flat piece of dimension r through 0
+\textstyle\sum_i |x_i - Px_i|^2 = \sum_i |x_i|^2 - \sum_i |Px_i|^2 = n\,\text{tr}\,C - n\sum_{k \le r} d_k^{\mathsf T}Cd_k @@ the square-sum technique; |Px|² = Σ(x · dₖ)² (31b2); tr C, the middle sum
+\textstyle\sum_{k \le r} d_k^{\mathsf T}Cd_k = \sum_j \lambda_j\,w_j,\ \ w_j = \sum_{k \le r}(d_k\cdot e_j)^2 @@ the axes-form technique, for each dₖ
+0 \le w_j \le 1,\ \ \textstyle\sum_j w_j = r @@ the energy-bound technique (31h2): eⱼ read along the list dₖ; each dₖ has size 1
+\textstyle\sum_j \lambda_jw_j \le \lambda_1 + \cdots + \lambda_r @@ weights of at most 1 each, r in all, do best on the r largest
+\htmlClass{new}{\textstyle\sum_i |x_i - Px_i|^2 \ge n(\lambda_{r+1} + \cdots + \lambda_p)} \quad \blacksquare @@ with equality when dₖ = eₖ
+  </pre>
+  <p data-pid="011c0a">For the four points, the line along e₁ leaves a total squared distance of 4 × 0.17 = 0.69, against 4 × 1 = 4 for the line along the first axis of the page. In practice, points with many numbers each are kept as a few components, and the rest of the spread is reported as lost.</p>
+  <p data-pid="354950">Which units the numbers are in decides C, so it decides the axes. Measure claw size in millimetres and weight in kilograms, and the first axis is almost all claw. That is why each number is often first divided by its own spread width, which uses the grid of correlations instead. Neither choice is the true one; the report must say which was made.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · closest piece · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31o3.1</span><span class="ph know">know</span>What does the closest-piece technique say?  <br>In its proof, which technique gives 0 ≤ wⱼ ≤ 1, and why do the units of the numbers change the answer?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31o4">
+  <h2 class="sthead"><span class="stno">31o4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{the first axis is the cause of the spread}\,? @@ it is a direction of most spread; what it means is a guess about the world
+\text{the axes do not depend on the units}\,? @@ changing one number’s units stretches one place of every point, and C changes
+\text{the first axis is the best line of } y \text{ on } x\,? @@ that line makes misses up and down least; the axis makes misses at right angles least
+\text{components left out carry nothing}\,? @@ they carry n(λᵣ₊₁ + ⋯ + λₚ), stated, and sometimes the small spread is the interesting one
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31o4.1</span><span class="ph know">know</span>Why is the first axis not the best line of y on x?  <br>Why is the first axis not shown to be a cause of the spread?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">31o.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="(2, 0, 1),\ (-2, 0, -1),\ (0, 1, 0),\ (0, -1, 0)"></span></span>Build C, its stretches and axes, and the share of the spread the first axis carries.  <br>Find the flat piece of dimension 2 the points lie nearest, and the total squared distance left.</div>
+  <div class="chq"><span class="chid">31o.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="C = \begin{pmatrix} 4 &amp; 0 \\ 0 &amp; 4\end{pmatrix}"></span></span>Find the direction of most spread.  <br>Which line of the most-spread technique has no single answer, and what does the cloud look like?</div>
+  <div class="chq"><span class="chid">31o.5.3</span><span class="tagq">converse</span>Different components never co-spread. Turn it round: if the readings along two directions d and d′ of size 1 never co-spread, must d and d′ be axes of C?</div>
+  <div class="chq"><span class="chid">31o.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="X \text{ with rows } (3, 1), (-3, -1), (1, 1), (-1, -1)"></span></span>Find the axes of C a second way, from the turn-stretch-turn of X (31f2).  <br>Check that σₖ²/n = λₖ.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r31n.html">← 31n · eigenvalues by machine</a><a href="r31stat.html">31·stat · can a model fit too well? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The spread grid is the sample covariance matrix (often with n − 1 in place of n), and with each number divided by its spread width it is the correlation matrix. Its axes are the principal axes, the readings along them the principal component scores, and the method is principal component analysis (PCA). The share λ₁/(λ₁ + ⋯ + λₚ) is the proportion of variance explained. The bound with the weights wⱼ is Ky Fan’s maximum principle. Finding the axes from the SVD of X is how machines do it.</p>
+  <h3>Who said it first</h3>
+  <p>Karl Pearson in 1901 found the lines and planes of closest fit to systems of points in space. Harold Hotelling in 1933 found the components of a set of test scores, and gave them their name. Ky Fan proved the bound on sums of the largest stretches in 1949.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'grid',t:R`C = X^{\mathsf T}X/n`,n:`Co-spreads.`},
+  {k:'ember',kl:'along d',t:R`\tfrac1n\textstyle\sum(x_i\cdot d)^2`,n:`Shadows on a line.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{d^{\mathsf T}Cd}`,n:`A quadratic form.`}
+],{title:'The slides · spread grid · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'axes',t:R`d^{\mathsf T}Cd = \textstyle\sum\lambda_ky_k^2`,n:`Axes form.`},
+  {k:'ember',kl:'first',t:R`\le \lambda_1 = e_1^{\mathsf T}Ce_1`,n:`The most.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\textstyle\sum\lambda_k = \text{total spread}}`,n:`The middle sum.`}
+],{title:'The slides · most spread · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'miss',t:R`\textstyle\sum|x_i - Px_i|^2 = n\,\text{tr}C - n\sum d_k^{\mathsf T}Cd_k`,n:`Square-sum.`},
+  {k:'ember',kl:'weights',t:R`0 \le w_j \le 1,\ \textstyle\sum w_j = r`,n:`Energy bound.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\ge n(\lambda_{r+1} + \cdots + \lambda_p)}`,n:`The first r axes win.`}
+],{title:'The slides · closest piece · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

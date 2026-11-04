@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>When the series returns the function</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r32b.html">← 32b energy is kept</a><a href="r32d.html">next: 32d convolution →</a></p>
+  <div class="tags"><span class="tag proof">32c · proof</span></div>
+  <h1>When the series returns the function</h1>
+  <p data-pid="a9abf2">The step before proved that sums of turnings come close to a repeating function on average: the energy they miss shrinks to nothing. An average can hide a lot. A sum can be close on average and still be wrong at a point, or at many points, by as much as you like. So this step asks a sharper question. Pick one input. Do the partial sums, read at that input, settle at the value of the function there? The answer turns on the shape of the function near that input. Where it has a slope, they do. Where it jumps, they settle, but at the halfway point of the jump, which may not be the function’s value at all. And next to a jump, the sums always overshoot. Add a thousand turnings or a million, the overshoot gets narrower and moves closer to the jump, but it never gets lower. It stays at about a tenth of the jump, for ever.</p>
+  <p class="gesture" data-pid="1354aa">The partial sum at a point is a weighted average of the function near that point, with a weight built from the turnings. Where the function has a slope, the average settles at its value, because the leftover is a coefficient of a function of finite energy, and those fade. At a jump the average settles halfway. Beside a jump the sums rise past the top by about nine per cent of the jump, at every number of turnings, so the sums never come near the function everywhere at once.</p>
+</header>
+
+<section class="class step" data-step="32c1">
+  <h2 class="sthead"><span class="stno">32c1</span>The partial sum is a weighted average</h2>
+  <p data-pid="63724d">Put the coefficient totals inside the partial sum, and swap the finite sum with the total. What comes out is a total of f near x against one fixed weight.</p>
+  <p data-pid="2f2dca">Turning-kernel technique: <b>the Nth partial sum at x is the average of f(x − s) over one repeat, weighted by D_N(s) = sin((N + ½)s) / sin(s/2), a weight whose own average is 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the turning-kernel technique">
+S_Nf(x) = \textstyle\sum_{|n| \le N}\tfrac{1}{2\pi}\int_{-\pi}^{\pi} f(t)\,e^{in(x - t)}\,dt = \tfrac{1}{2\pi}\int_{-\pi}^{\pi} f(x - s)\,D_N(s)\,ds @@ a finite sum passes through a total; s = x − t, and f repeats every 2π
+D_N(s) = \textstyle\sum_{|n| \le N} e^{ins} = e^{-iNs}\,\tfrac{e^{i(2N+1)s} - 1}{e^{is} - 1} @@ the geometric sum (15i), for s ≠ 0
+= \tfrac{e^{i(N + \frac12)s} - e^{-i(N + \frac12)s}}{e^{is/2} - e^{-is/2}} = \tfrac{\sin((N + \frac12)s)}{\sin(s/2)} @@ top and bottom times e^(−is/2); the power-to-sum technique (26i)
+\tfrac{1}{2\pi}\int_{-\pi}^{\pi} D_N(s)\,ds = 1 @@ only the turning n = 0 has a total (32a1)
+\htmlClass{new}{S_Nf(x) - f(x) = \tfrac{1}{2\pi}\int_{-\pi}^{\pi} \big(f(x - s) - f(x)\big)D_N(s)\,ds} \quad \blacksquare @@ f(x) is the average of the constant f(x)
+  </pre>
+  <p data-pid="283aa9">D_N is 2N + 1 at s = 0 and swings ever faster away from it. The question of a point is the question of whether that swinging cancels everything but the value at s = 0.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · kernel · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">32c1.1</span><span class="ph know">know</span>What does the turning-kernel technique say the partial sum at x is? <br>Why does D_N have average 1?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32c2">
+  <h2 class="sthead"><span class="stno">32c2</span>Where there is a slope, the sum returns</h2>
+  <p data-pid="b0ddbc">Slope-returns technique: <b>if f repeats every 2π, is sized and bounded, and has a slope at x, then S_N f(x) settles at f(x).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the slope-returns technique">
+g(s) = \tfrac{f(x - s) - f(x)}{\sin(s/2)} \text{ for } 0 \lt |s| \le \pi @@ the leftover’s weight, with sin((N + ½)s) taken out
+|f(x - s) - f(x)| \le C|s| \text{ for } |s| \lt r @@ the slope-bounds-change technique (13b)
+|\sin(s/2)| \ge |s|/\pi \text{ on } [-\pi, \pi] @@ sin bends down on [0, π/2], so it lies above its chord (14)
+|g(s)| \le C\pi \text{ near } 0,\ \text{ and } g \text{ is bounded beyond } r @@ f is bounded, and sin(s/2) is away from 0 there
+\sin((N + \tfrac12)s) = \sin Ns\,\cos\tfrac s2 + \cos Ns\,\sin\tfrac s2 @@ the sum formula (21d)
+S_Nf(x) - f(x) = \tfrac{1}{2\pi}\int g(s)\cos\tfrac s2\,\sin Ns\,ds + \tfrac{1}{2\pi}\int g(s)\sin\tfrac s2\,\cos Ns\,ds @@ the turning-kernel technique (32c1)
+\htmlClass{new}{S_Nf(x) - f(x) \to 0} \quad \blacksquare @@ both are coefficients of functions of finite energy, which fade (32b1)
+  </pre>
+  <p data-pid="27f235">The proof needs less than a slope: a bound |f(x − s) − f(x)| ≤ C|s| near x is enough. Continuity alone is not. It is proved much higher up the ladder that some continuous function has partial sums that wander at a point without settling.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · slope · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32c2.1</span><span class="ph know">know</span>What does the slope-returns technique say? <br>Where does the proof use the slope, and where does it use fading?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32c3">
+  <h2 class="sthead"><span class="stno">32c3</span>At a jump, halfway</h2>
+  <p data-pid="291a13">Let f have a limit from each side at x, f(x⁻) from the left and f(x⁺) from the right (<a href="r10e.html">10e</a>), and a slope from each side: (f(x + h) − f(x⁺))/h and (f(x − h) − f(x⁻))/(−h) settle as h heads to 0 from above.</p>
+  <p data-pid="6e6f4a">Halfway technique: <b>at a jump with a slope on each side, the partial sums settle at the halfway point of the jump, whatever value f has at the jump itself.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the halfway technique">
+D_N(-s) = D_N(s) @@ sin is odd, so the quotient is even (9e)
+S_Nf(x) = \tfrac{1}{2\pi}\int_0^{\pi}\big(f(x - s) + f(x + s)\big)D_N(s)\,ds @@ fold the total onto [0, π]
+\tfrac{1}{2\pi}\int_0^{\pi} D_N(s)\,ds = \tfrac12 @@ half of an even function’s total (32c1)
+S_Nf(x) - \tfrac{f(x^-) + f(x^+)}{2} = \tfrac{1}{2\pi}\int_0^{\pi}\big(f(x - s) - f(x^-) + f(x + s) - f(x^+)\big)D_N(s)\,ds @@ the halfway value is the average of its constant
+\htmlClass{new}{S_Nf(x) \to \tfrac{f(x^-) + f(x^+)}{2}} \quad \blacksquare @@ the slope-returns proof, with one-sided slopes bounding the bracket
+  </pre>
+  <p data-pid="f578c2">The sawtooth of 32b4 is x on (−π, π). At π it jumps from π down to −π. Its sum there is Σ i(−1)ⁿe^(inπ)/n = Σ i/n over n ≠ 0, which is 0, since the terms for n and −n cancel: the halfway point, whatever value the sawtooth is given at π.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · halfway · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32c3.1</span><span class="ph know">know</span>What does the halfway technique say? <br>Why does the value f takes at the jump itself not matter to the sum?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32c4">
+  <h2 class="sthead"><span class="stno">32c4</span>The overshoot that never goes away</h2>
+  <p data-pid="b77e09">The <i>square wave</i> q is 1 on (0, π) and −1 on (−π, 0), repeated. It is odd, so it has sines alone (32a3), and its coefficients are bₙ = 4/(πn) for odd n and 0 for even n. Take N = 2M − 1.</p>
+  <p data-pid="44b8ff">Lasting-overshoot technique: <b>beside each jump of the square wave, the partial sums rise past 1 to a peak that heads to (2/π) times the total of sin t / t from 0 to π, about 1.179, however many turnings are used.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the lasting-overshoot technique">
+S_Nq(x) = \tfrac4\pi\textstyle\sum_{j=1}^{M}\tfrac{\sin((2j - 1)x)}{2j - 1} @@ the cosine-and-sine technique (32a3)
+\tfrac{d}{dx}S_Nq(x) = \tfrac4\pi\textstyle\sum_{j=1}^{M}\cos((2j - 1)x) = \tfrac{2}{\pi}\,\tfrac{\sin 2Mx}{\sin x} @@ a geometric sum of turnings, as in 32c1
+\text{first peak at } x = \tfrac{\pi}{2M} @@ the slope is first 0 there (14)
+S_Nq\big(\tfrac{\pi}{2M}\big) = \tfrac2\pi\textstyle\sum_{j=1}^{M}\tfrac{\pi}{M}\cdot\tfrac{\sin t_j}{t_j},\ \ t_j = \tfrac{(2j - 1)\pi}{2M} @@ rewrite each term
+\htmlClass{new}{S_Nq\big(\tfrac{\pi}{2M}\big) \to \tfrac2\pi\int_0^{\pi}\tfrac{\sin t}{t}\,dt \approx 1.1790} \quad \blacksquare @@ a sum of strips of width π/M at their middles closes on the area (15)
+  </pre>
+  <p data-pid="accd15">The jump is 2, from −1 to 1, and the peak passes 1 by 0.179: about nine per cent of the jump. As M grows the peak moves toward the jump and gets narrower, so at every fixed x it does go away, as the slope-returns technique says. But it is always there somewhere. So the sums never come within 0.17 of q everywhere at once, and they could not: a limit everywhere at once of continuous sums would be continuous (the kept-continuity technique, <a href="r23d.html">23d</a>), and q jumps.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · overshoot · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · the square wave and its partial sums</div>
+    <div class="kn"><span class="m">turnings, M</span><input type="range" id="kM" min="1" max="60" step="1" value="5"><output id="oM"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Ink: the square wave q on [−π, π]. Ember: its partial sum with the odd speeds 1, 3, …, 2M − 1. Dot: the first peak, at x = π/(2M). The peak moves in and narrows as M grows, and stays near 1.179.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32c4.1</span><span class="ph know">know</span>What does the lasting-overshoot technique say? <br>How can the overshoot never go away while the sums still settle at every fixed x?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32c5">
+  <h2 class="sthead"><span class="stno">32c5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+f \text{ is continuous at } x, \text{ so } S_Nf(x) \to f(x)\,? @@ the proof needs a slope, or a bound C|s|; continuity is not enough
+\text{at a jump the sum returns } f(x)\,? @@ it returns the halfway point, whatever f(x) is
+\text{more turnings make the overshoot smaller}\,? @@ narrower and closer, never lower: about 1.179 at every M
+S_Nf(x) \to f(x) \text{ at every } x, \text{ so } S_Nf \text{ comes near } f \text{ everywhere at once}\,? @@ settling at each point is not settling everywhere at once (23d)
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32c5.1</span><span class="ph know">know</span>Why is “more turnings make the overshoot beside a jump smaller” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">32c.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="f(x) = x(\pi - |x|) \text{ on } [-\pi, \pi]"></span></span>Find the coefficients of this wave, which is odd and has a slope everywhere. Read its sum at x = π/2, and find 1 − 1/27 + 1/125 − 1/343 + ⋯.</div>
+  <div class="chq"><span class="chid">32c.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(x) = \sqrt{|x|} \text{ on } [-\pi, \pi]"></span></span>Is there a C with |f(0 − s) − f(0)| ≤ C|s| near 0? Find which line of the slope-returns proof fails, and whether the proof still works with g(s) of finite energy instead of bounded.</div>
+  <div class="chq"><span class="chid">32c.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="S_Nf(x) \to f(x) \text{ at every } x"></span></span>If the partial sums return f at every point, must f have a slope everywhere? Test the wave that is |x| on [−π, π], repeated, at x = 0.</div>
+  <div class="chq"><span class="chid">32c.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="D_N(s) = \textstyle\sum_{|n|\le N} e^{ins}"></span></span>Find D_N(s) a second way, by the many-angle technique and cosines alone: D_N(s) = 1 + 2(cos s + cos 2s + ⋯ + cos Ns). Multiply by sin(s/2), and use the product of a sine and a cosine as a difference of sines.</div>
+  <div class="chq"><span class="chid">32c.6.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">10e.4.4: one side’s objection, that a sum of smooth waves cannot jump</span></span>One side said that a sum of smooth waves is smooth, so it can never make a jump, and a claim that it does is a mistake. The other replied that the sums settle at every point, at the middle of each jump, and that an endless sum need not keep the smoothness of its terms. <br>Both sides used the word sum. Which notion of a sum settling does each need? Which side does the lasting overshoot help?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r32b.html">← 32b · energy is kept</a><a href="r32d.html">32d · convolution →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>D_N is the Dirichlet kernel. The slope-returns technique is Dirichlet’s test, or the Dini criterion in its stronger form with the bound C|s|. The halfway technique is the Dirichlet–Jordan result for functions with jumps. The lasting overshoot is the Gibbs phenomenon, and (2/π)∫₀^π sin t / t dt the Wilbraham–Gibbs constant, about 1.17898; the total of sin t / t is the sine integral Si(π) ≈ 1.8519. The bound C|s| is a Lipschitz condition.</p>
+  <h3>Who said it first</h3>
+  <p>Peter Gustav Lejeune Dirichlet proved in 1829 that the series returns the function at points of continuity and settles at the middle of each jump, for functions with finitely many jumps and turns. Ulisse Dini sharpened the test in 1880. Paul du Bois-Reymond built a continuous function in 1873 whose series fails to settle at a point. Henry Wilbraham found the overshoot in 1848. Albert Michelson’s machine of 1898, which added eighty turnings with springs, drew it; J. Willard Gibbs explained it in letters to Nature in 1898 and 1899. Lennart Carleson proved in 1966 that the series of every function of finite energy returns it at all points but a set of size zero.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“D_N heads to a spike of total 1 at 0, so S_N f(x) heads to f(x) for every f.” Not allowed: D_N does not head to a spike. Its total size, (1/2π)∫|D_N|, grows like (4/π²) ln N without bound, and that growth is what lets a continuous function’s series fail at a point. 32d finds a weight that stays at or above 0 and does what this proof wanted.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+// plot(series, xr, yr, opts): series = [{pts:[[x,y],...], c:'--ember', w:1.6, dash:''}]; returns svg string
+function plot(series, xr, yr, o){ o=o||{}; const W=360,H=o.H||210,L=34,B=22,T=8,Rr=8;
+  const sx=x=>L+(x-xr[0])/(xr[1]-xr[0])*(W-L-Rr), sy=y=>H-B-(y-yr[0])/(yr[1]-yr[0])*(H-B-T);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:440px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  (o.yt||[]).forEach(y=>{ s+='<line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+sy(y)+'" y2="'+sy(y)+'" style="stroke:'+V('--grid')+';stroke-width:0.6"/><text x="'+(L-3)+'" y="'+(sy(y)+3)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+y+'</text>'; });
+  (o.xt||[]).forEach(x=>{ s+='<text x="'+sx(x)+'" y="'+(H-8)+'" text-anchor="middle" style="font:9px var(--mono);fill:'+V('--muted')+'">'+x+'</text>'; });
+  s+='<line x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/><line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+(H-B)+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/>';
+  series.forEach(se=>{ const cl=v=>Math.max(yr[0]-0.05*(yr[1]-yr[0]),Math.min(yr[1]+0.05*(yr[1]-yr[0]),v));
+    const d=se.pts.filter(p=>isFinite(p[1])).map((p,i)=>(i?'L':'M')+sx(p[0]).toFixed(1)+','+sy(cl(p[1])).toFixed(1)).join('');
+    s+='<path d="'+d+'" style="fill:none;stroke:'+V(se.c||'--ember')+';stroke-width:'+(se.w||1.6)+(se.dash?';stroke-dasharray:'+se.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(p=>{ s+='<circle cx="'+sx(p[0])+'" cy="'+sy(p[1])+'" r="2.6" style="fill:'+V(p[2]||'--ember')+'"/>'; });
+  if(o.xl) s+='<text x="'+(W-Rr)+'" y="'+(H-B-4)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.xl+'</text>';
+  if(o.yl) s+='<text x="'+(L+4)+'" y="'+(T+9)+'" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.yl+'</text>';
+  return s+'</svg>'; }
+
+const sq=x=>x>0?1:(x<0?-1:0);
+const S=(M,x)=>{ let s=0; for(let j=1;j<=M;j++){ const k=2*j-1; s+=Math.sin(k*x)/k; } return 4/Math.PI*s; };
+function draw(){ const M=+$('kM').value; $('oM').textContent=M;
+  const A=[],Q=[]; for(let i=0;i<=800;i++){ const x=-Math.PI+2*Math.PI*i/800; A.push([x,S(M,x)]); }
+  Q.push([-Math.PI,-1],[0,-1],[0,1],[Math.PI,1]);
+  const xp=Math.PI/(2*M), yp=S(M,xp);
+  $('pl').innerHTML=plot([{pts:Q,c:'--ink',w:1},{pts:A,c:'--ember'}],[-Math.PI,Math.PI],[-1.4,1.4],{xt:[-3,-2,-1,0,1,2,3],yt:[-1,0,1],xl:'x',yl:'S',dots:[[xp,yp,'--ink']],H:220});
+  $('vd').className='verdict'; $('vd').textContent='Speeds up to '+(2*M-1)+': the first peak is at x = '+fm(xp,4)+', with height '+fm(yp,4)+', past 1 by '+fm(yp-1,4)+'.'; }
+$('kM').oninput=draw; draw();
+window.__pic={set:(M)=>{ $('kM').value=M; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'swap',t:R`S_Nf(x) = \tfrac{1}{2\pi}\int f(x - s)D_N(s)ds`,n:`A finite sum passes through.`},
+  {k:'ember',kl:'weight',t:R`D_N(s) = \tfrac{\sin((N+\frac12)s)}{\sin(s/2)}`,n:`Geometric sum.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{S_Nf(x) - f(x) = \tfrac{1}{2\pi}\int (f(x-s) - f(x))D_N}`,n:`Average 1.`}
+],{title:'The slides · kernel · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'leftover',t:R`g(s) = \tfrac{f(x-s) - f(x)}{\sin(s/2)}`,n:`Bounded, by the slope.`},
+  {k:'ember',kl:'split',t:R`\sin((N+\tfrac12)s)`,n:`Two coefficients.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{S_Nf(x) \to f(x)}`,n:`They fade.`}
+],{title:'The slides · slope · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'fold',t:R`\tfrac{1}{2\pi}\int_0^\pi (f(x-s) + f(x+s))D_N`,n:`D_N is even.`},
+  {k:'ember',kl:'half',t:R`\tfrac{1}{2\pi}\int_0^\pi D_N = \tfrac12`,n:`Half the total.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{S_Nf(x) \to \tfrac{f(x^-) + f(x^+)}{2}}`,n:`The middle of the jump.`}
+],{title:'The slides · halfway · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'square',t:R`S_Nq = \tfrac4\pi\textstyle\sum \tfrac{\sin((2j-1)x)}{2j-1}`,n:`Odd: sines.`},
+  {k:'ember',kl:'peak',t:R`x = \tfrac{\pi}{2M}`,n:`First level point.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\to \tfrac2\pi\int_0^\pi \tfrac{\sin t}{t}dt \approx 1.179}`,n:`Nine per cent, for ever.`}
+],{title:'The slides · overshoot · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\text{overshoot} \to 0\,?`,n:`Narrower, never lower.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

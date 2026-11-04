@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>More parts than members</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r35b.html">← 35b the line cannot be listed</a><a href="r35d.html">next: 35d two one-way matchings make a matching →</a></p>
+  <div class="tags"><span class="tag proof">35c · proof</span></div>
+  <h1>More parts than members</h1>
+  <p data-pid="06b590">Rung 2 gathered all the parts of a set into one set, and asked a question it could not yet answer: can the parts of a set be matched, one each, with its members? Rung 4 counted them for a finite set, two to the power of the count, always more. This step answers for every set, finite or not. Take any way of handing each member a part. Collect the members that are not in the part they were handed. That collection is a part too, and no member was handed it, because each member disagrees with it about itself. So the parts always outrun the members. Each member goes to the part that holds only it, so the members never outrun the parts. Every set is smaller than its set of parts. Then the parts of the parts are larger still, and so on without end: there is no largest size. And if there were a set of everything, its parts would be things too, and would fit inside it. They cannot, so there is no such set, which rung 2 found another way.</p>
+  <p class="gesture" data-pid="44111b">Hand each member of a set a part. The members that are not in their own part make a part no member was handed. So no function from a set onto its parts exists, the set is smaller than its parts, and sizes climb for ever.</p>
+</header>
+
+<section class="class step" data-step="35c1">
+  <h2 class="sthead"><span class="stno">35c1</span>No map reaches every part</h2>
+  <p data-pid="9b610a"><a href="r02f.html">2f6</a> asked whether the parts of a set can all be matched, one each, with its members, and left the question to later. <a href="r09a.html">9a4</a> answered it for ℕ with parts read as functions to 2 (<a href="r04k.html">4k10</a> matched a part with its keep-or-drop function). The difference here is that the set is any set at all, and the parts are used directly.</p>
+  <p data-pid="c291e4">Parts-outrun technique: <b>for every set A and every function f from A to 𝒫(A), some part of A is f(x) for no x in A.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the parts-outrun technique">
+f : A \to \mathcal P(A) @@ any function handing each member a part
+D = \{x \in A : x \notin f(x)\} @@ a sift of A (2d): the members not in their own part
+D \in \mathcal P(A) @@ a sift of A is a part of A (2f)
+x \in A;\ \ \text{assume } \htmlClass{new}{D = f(x)} @@ to refute: D is handed to x
+x \in D \iff x \notin f(x) \iff x \notin D @@ the sift’s condition, then the swap axiom with D = f(x)
+\bot @@ a statement exactly when its own denial: either case clashes (7d)
+\htmlClass{keep}{D \ne f(x) \text{ for every } x \in A} \quad \blacksquare @@ refute; x was anything
+  </pre>
+  <p data-pid="b06081">Each member x goes to {x}, and different members go to different parts. So A goes one-to-one into 𝒫(A), and no function from A onto 𝒫(A) exists. The parts never fit the members, and the members always fit the parts. For A = ∅, the only function from ∅ is the empty one, and it misses 𝒫(∅)’s one member, ∅. For A = {cat, dog}, four parts and two members. For A = ℕ, this is 9a4 again.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · parts outrun · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">35c1.1</span><span class="ph know">know</span>What does the parts-outrun technique say? <br>How is D built, and why can no member be handed it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35c2">
+  <h2 class="sthead"><span class="stno">35c2</span>Smaller, and smaller than</h2>
+  <p data-pid="bb0982">From here on, |A| ≤ |B| says that A goes one-to-one into B, and |A| &lt; |B| says that |A| ≤ |B| and A and B are not matched. Read them “A is no bigger than B” and “A is smaller than B”. Like |A| = |B|, these are statements about maps, and the bars name no new object. For finite sets they agree with counting: n goes one-to-one into m exactly when n ≤ m: one way by <a href="r04h.html">4h</a>’s at-most-is-a-part, the other by <a href="r08cb5.html">8·cb5</a>’s pigeonhole technique.</p>
+  <p data-pid="a4c2e1">Smaller-than-its-parts technique: <b>every set is smaller than its set of parts: |A| &lt; |𝒫(A)|.</b> The map x ↦ {x} gives |A| ≤ |𝒫(A)|. A matching would be a function from A onto 𝒫(A), and the parts-outrun technique says there is none.</p>
+  <pre class="lines" data-k="ember" data-label="this step: |ℕ| &lt; |𝒫(ℕ)|, by 35b’s line instead">
+s \in \mathcal P(\mathbb N) \mapsto 0.e_0e_1e_2\cdots,\ \ e_n = 5 \text{ if } n \in s,\ 4 \text{ if not} @@ a decimal with no 9s (8·cb5), one for each part
+\text{different parts give different reals} @@ they differ at some n, so at one digit, and a decimal with no endless 9s is one real’s only one
+|\mathcal P(\mathbb N)| \le |\mathbb R| @@ a one-to-one map
+\mathcal P(\mathbb N) \text{ countable} \Rightarrow \text{its image in } [0, 1) \text{ countable} @@ a list of parts gives a list of their reals
+\htmlClass{new}{\text{the image would hold its own diagonal}} \quad \blacksquare @@ the unlisted-real technique (35b1) builds a real of 4s and 5s, which is the real of a part
+  </pre>
+  <p data-pid="ec4f55">The two proofs are one move. 35b’s diagonal changed the nth digit of the nth entry; the parts-outrun technique asks the nth member whether it is in the nth part, and answers the other way.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · smaller · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35c2.1</span><span class="ph know">know</span>What do |A| ≤ |B| and |A| &lt; |B| say? <br>What does the smaller-than-its-parts technique say, and which two maps does its proof use?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35c3">
+  <h2 class="sthead"><span class="stno">35c3</span>No largest size</h2>
+  <p data-pid="955bda">No-largest-size technique: <b>for every set there is a larger one.</b> 𝒫(A) is larger than A, 𝒫(𝒫(A)) is larger than 𝒫(A), and the climb never stops. From ℕ: |ℕ| &lt; |𝒫(ℕ)| &lt; |𝒫(𝒫(ℕ))| &lt; ⋯. Each storey is a size, and none is the last.</p>
+  <pre class="lines" data-k="ember" data-label="this step: no set of everything, again">
+\text{assume } U \text{ holds every thing} @@ to refute
+x \in U \text{ a set} \Rightarrow x \subseteq U @@ each member of x is a thing, so it is in U
+f(x) = x \text{ if } x \text{ is a set},\ \ f(x) = \varnothing \text{ if not} @@ a function from U to 𝒫(U), by cases (7d)
+s \in \mathcal P(U) \Rightarrow s \in U,\ \ f(s) = s @@ a part of U is a set, and a thing, so it is in U
+f \text{ is onto } \mathcal P(U) @@ every part is a value of f
+\htmlClass{new}{\text{no set holds every thing}} \quad \blacksquare @@ a clash with the parts-outrun technique; refute
+  </pre>
+  <p data-pid="68be21">The D of this f, for the sets in U, is {x : x ∉ x}: the sift of the sets not members of themselves, <a href="r02d.html">2d</a>’s sift, which showed there is no set of everything. The size argument and the old sift are one argument. The climb of sizes has no top, and the reason is the reason there is no set of all sets.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · no top · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35c3.1</span><span class="ph know">know</span>What does the no-largest-size technique say? <br>What is D when the parts-outrun proof is run on a set of every set?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35c4">
+  <h2 class="sthead"><span class="stno">35c4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\mathbb N \text{ is endless, so } |\mathcal P(\mathbb N)| = |\mathbb N|\,? @@ the parts outrun the members for every set, endless or not
+\text{add } D \text{ to the values of } f, \text{ and } f \text{ is onto}\,? @@ the new function has its own D
+|A| < |B| \text{ means } A \text{ is a part of } B \text{ that leaves something out}\,? @@ ℕ ⊆ ℤ leaves things out and they are matched (35a3); smaller is about maps
+\text{the parts of } \varnothing \text{ are none, so they fit}\,? @@ 𝒫(∅) = {∅} has one member, and ∅ has none
+\text{the size of the largest set is the size of everything}\,? @@ there is no largest size, and no set of everything
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35c4.1</span><span class="ph know">know</span>Why does adding D to the values of f not make f onto 𝒫(A)?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">35c.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="A = \{1, 2, 3\}"></span> <span data-tex-inline="f(1) = \{1, 2\},\ f(2) = \varnothing,\ f(3) = \{1, 3\}"></span></span>Find D for this f, and check it is no value of f. <br>Build an f from A to 𝒫(A) whose D is ∅. Build one whose D is A.</div>
+  <div class="chq"><span class="chid">35c.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="D = \{x \in A : x \notin f(x)\}"></span></span>Suppose the sift could be taken with no set A to sift from: D = {x : x ∉ x}. Find which line of the parts-outrun proof would then give a clash with no f at all. <br>Which rule of 2d stops it, and what does that rule cost?</div>
+  <div class="chq"><span class="chid">35c.4.3</span><span class="tagq">converse</span>No function from A onto 𝒫(A). Turn it round: is there always a function from 𝒫(A) onto A, when A has a member? <br>Is there always a one-to-one function from 𝒫(A) into A? Find what the answer to the second would give with x ↦ {x}, once 35d is in hand.</div>
+  <div class="chq"><span class="chid">35c.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\mathcal F = \text{the functions from } \mathbb N \text{ to } \mathbb N"></span></span>Prove that ℱ cannot be listed, by a diagonal that adds 1 to the nth value of the nth function. <br>Prove it again from the smaller-than-its-parts technique, by a one-to-one map from 𝒫(ℕ) into ℱ.</div>
+  <div class="chq"><span class="chid">35c.4.5</span><span class="tagq">seam</span>The climb ℕ, 𝒫(ℕ), 𝒫(𝒫(ℕ)), … has no top, and each storey is larger than all below it. <br>One side calls this a paradise: a mathematics of the endless as finished objects, which no one shall be driven out of. The other calls it an illness the subject will recover from: an endless that is only ever possible, never finished, and sizes of it that are words with nothing behind them. <br>What does each side make of the line D ≠ f(x)? Can a proof that uses no endless list in any line still be about the finished endless?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r35b.html">← 35b · the line cannot be listed</a><a href="r35d.html">35d · two one-way matchings make a matching →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The parts-outrun technique and the smaller-than-its-parts technique are Cantor’s theorem: |A| &lt; |𝒫(A)|. The set D is the diagonal set. |A| ≤ |B| is the order on cardinalities, and |A| &lt; |B| strict inequality of cardinalities. The run on a set of every set is Cantor’s paradox; its D is Russell’s set.</p>
+  <h3>Who said it first</h3>
+  <p>Georg Cantor proved in 1891 that a set of functions to two values is larger than the set they are defined on, which is the result for every set, and drew from it that there is no largest size. He had met the paradox of a set of all sets by 1899, in letters to Dedekind. Bertrand Russell found his set in 1901 by running Cantor’s argument on the set of all sets. David Hilbert said in 1925 that no one shall drive us out of the paradise Cantor created. Henri Poincaré, among the critics, held that the actual infinite does not exist, and is quoted, from a report of uncertain source, as calling the theory a disease from which mathematics would recover.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“A has n members and 𝒫(A) has 2ⁿ, and 2ⁿ &gt; n for every n (4k). So |A| &lt; |𝒫(A)| for every set.” Not allowed for every set: the count needs A to have n members for some number n, and for an endless set no n fits. The parts-outrun proof counts nothing.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'hand out',t:R`f : A \to \mathcal P(A)`,n:`Any way at all.`},
+  {k:'ember',kl:'collect',t:R`D = \{x \in A : x \notin f(x)\}`,n:`Not in their own part.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{D \ne f(x) \text{ for every } x}`,n:`A part no one holds.`}
+],{title:'The slides · parts outrun · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'no bigger',t:R`|A| \le |B|`,n:`One-to-one into.`},
+  {k:'ember',kl:'into',t:R`x \mapsto \{x\}`,n:`Members fit the parts.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|A| < |\mathcal P(A)|}`,n:`Parts never fit the members.`}
+],{title:'The slides · smaller · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'climb',t:R`|A| < |\mathcal P(A)| < |\mathcal P(\mathcal P(A))|`,n:`Storey after storey.`},
+  {k:'ember',kl:'everything',t:R`\mathcal P(U) \subseteq U`,n:`Would fit inside.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{no largest size}}`,n:`And no set of everything.`}
+],{title:'The slides · no top · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

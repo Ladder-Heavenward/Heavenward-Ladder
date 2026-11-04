@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Breaking a signal into frequencies</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r32d.html">← 32d convolution</a><a href="r32f.html">next: 32f short in time, wide in frequency →</a></p>
+  <div class="tags"><span class="tag proof">32e · proof</span></div>
+  <h1>Breaking a signal into frequencies</h1>
+  <p data-pid="502fb7">Most signals do not repeat. A clap in a hall, one word spoken into a phone, the flash of a lighthouse seen once: each starts, does its business and fades. The turnings of this rung were built for things that go round again. What happens when the repeat is made longer and longer, a minute, an hour, a year, until it never comes? The speeds of the turnings that fit a repeat crowd closer together as it grows, and in the end every speed is allowed, not just the whole ones. The list of coefficients becomes a function of the speed, found by one total over the whole line. That function says how much of each frequency the signal holds. This step builds it, shows that it can be undone to get the signal back, and proves that it keeps energy just as the coefficients did. Along the way the bell curve of the statistics floor turns up in a new part: of all signals, it is the one whose frequencies have the same shape as itself.</p>
+  <p class="gesture" data-pid="7aac45">For a signal with a finite total size, the transform at a frequency is the total of the signal times a turning of that frequency, run backwards. It is bounded and continuous. The bell e to the minus π x squared is its own transform, because both obey the same rate rule with the same start. A transform can be undone by the forward total with the turning run forwards, and the total of the square of a signal equals the total of the square of its transform.</p>
+</header>
+
+<section class="class step" data-step="32e1">
+  <h2 class="sthead"><span class="stno">32e1</span>From a repeat to no repeat</h2>
+  <p data-pid="15b5cf">Let f be a sized function on the whole line with a finite total size, ∫|f(x)| dx &lt; ∞ over the line. On this step a frequency ξ is counted in whole turns per unit of x, so e^(2πixξ) turns ξ times round in each unit. The <i>transform</i> of f is</p>
+  <p class="eqline" data-pid="581a10"><span data-tex="\hat f(\xi) = \int_{-\infty}^{\infty} f(x)\,e^{-2\pi i x\xi}\,dx."></span></p>
+  <p data-pid="cb7ccc">It is what 32a’s coefficients become as the repeat grows. Cut f off outside [−L, L] and repeat it every 2L: the turnings that fit have frequencies n/(2L), and its coefficients are f̂(n/(2L))/(2L), up to the part of f beyond L. As L grows, the frequencies fill the line. The accepted name of the transform is the Fourier transform.</p>
+  <p data-pid="69667a">Transform-bound technique: <b>if f has a finite total size, its transform is bounded by that total and continuous at every frequency.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the transform-bound technique">
+|f(x)\,e^{-2\pi i x\xi}| = |f(x)| @@ a turning has size 1 (26b)
+|\hat f(\xi)| \le \int|f(x)|\,dx @@ the size of a total is at most the total of the size (30c)
+\xi_k \to \xi:\ f(x)\,e^{-2\pi i x\xi_k} \to f(x)\,e^{-2\pi i x\xi} \text{ at every } x @@ the turning is continuous in ξ (26a)
+\htmlClass{new}{\hat f(\xi_k) \to \hat f(\xi)} \quad \blacksquare @@ the fenced-limit technique (30d), with fence |f|
+  </pre>
+  <p data-pid="6c5885">One example first. The box that is 1 on [−½, ½] and 0 elsewhere has transform ∫ from −½ to ½ of e^(−2πixξ) dx = sin(πξ)/(πξ), with value 1 at ξ = 0. It is 0 at every whole ξ other than 0, and it fades slowly, like 1/ξ: a box’s sharp edges hold every frequency.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · transform · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">32e1.1</span><span class="ph know">know</span>What is the transform of f, and how do 32a’s coefficients turn into it as the repeat grows? <br>What does the transform-bound technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32e2">
+  <h2 class="sthead"><span class="stno">32e2</span>The bell is its own transform</h2>
+  <p data-pid="31aa75">Own-transform technique: <b>the bell g(x) = e^(−πx²) has transform e^(−πξ²): itself.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the own-transform technique">
+\hat g(0) = \int e^{-\pi x^2}\,dx = \tfrac{1}{\sqrt\pi}\int e^{-u^2}\,du = 1 @@ u = √π x; the bell-total technique (30j1)
+\hat g\,'(\xi) = \int(-2\pi i x)\,e^{-\pi x^2}\,e^{-2\pi i x\xi}\,dx @@ the fenced-limit technique (30d) on the quotients, with fence 2π|x|e^(−πx²)
+-2\pi i x\,e^{-\pi x^2} = i\,\tfrac{d}{dx}e^{-\pi x^2} @@ the chain rule (13)
+\hat g\,'(\xi) = -i\int e^{-\pi x^2}\,(-2\pi i\xi)\,e^{-2\pi i x\xi}\,dx = -2\pi\xi\,\hat g(\xi) @@ parts (16); the ends vanish, since e^(−πx²) does
+y' = -2\pi\xi\,y,\ \ y(0) = 1 \text{ has exactly one solution, } e^{-\pi\xi^2} @@ a tame rule fixes the future (24d), floor and upright parts each
+\htmlClass{new}{\hat g(\xi) = e^{-\pi\xi^2}} \quad \blacksquare @@ ĝ is one solution, so it is that one
+  </pre>
+  <p data-pid="d9e6c4">A rule and a start fixed the transform without a single total being worked out by hand beyond ĝ(0). The bell and its transform obey the same rule with the same start, so they are the same function. Stretch the bell and its transform squeezes: e^(−πx²/s²) has transform s e^(−πs²ξ²), by sliding x = sy in the total. 32f proves that the squeeze is forced.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · own · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32e2.1</span><span class="ph know">know</span>What does the own-transform technique say? <br>Which rate rule and start do the bell’s transform obey, and why does that settle it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32e3">
+  <h2 class="sthead"><span class="stno">32e3</span>Undoing the transform</h2>
+  <p data-pid="8afff3">Undo-transform technique: <b>if f and f̂ both have finite total sizes, then f(x) = ∫ f̂(ξ) e^(2πixξ) dξ at every x where f is continuous.</b> The turning runs forwards to undo what it did backwards.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the undo-transform technique">
+\int \hat f(\xi)\,e^{2\pi i x\xi}\,e^{-\pi\varepsilon^2\xi^2}\,d\xi = \int f(y)\Big(\int e^{2\pi i(x - y)\xi}\,e^{-\pi\varepsilon^2\xi^2}\,d\xi\Big)dy @@ a bell put in to tame the total; either order (30e): |f(y)|e^(−πε²ξ²) has a finite total on the plane
+\int e^{2\pi i u\xi}\,e^{-\pi\varepsilon^2\xi^2}\,d\xi = w_\varepsilon(u) = \tfrac1\varepsilon\,e^{-\pi u^2/\varepsilon^2} @@ slide ξ = η/ε; the own-transform technique (32e2); the bell is even, so the turn’s direction does not matter
+w_\varepsilon \ge 0,\ \ \int w_\varepsilon = 1,\ \ w_\varepsilon(u) \le \tfrac1\varepsilon e^{-\pi\delta^2/\varepsilon^2} \text{ for } |u| \ge \delta @@ a stretched bell
+\int f(x - u)\,w_\varepsilon(u)\,du \to f(x) \text{ as } \varepsilon \to 0 @@ as in 32d3: near 0 by continuity at x, far off by the bound times ∫|f|
+\htmlClass{new}{\int \hat f(\xi)\,e^{2\pi i x\xi}\,d\xi = f(x)} \quad \blacksquare @@ the left side heads there too: the fenced-limit technique, fence |f̂|
+  </pre>
+  <p data-pid="9a926c">So a signal and its transform carry the same information: from either one the other is found, by the same kind of total. The bell was used as a smoothing weight, the job 32d3 gave its never-negative weight, and was then let go.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · undo · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32e3.1</span><span class="ph know">know</span>What does the undo-transform technique say? <br>Why does the proof put a bell inside the total, and what happens to it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32e4">
+  <h2 class="sthead"><span class="stno">32e4</span>The transform keeps energy</h2>
+  <p data-pid="e20c7d">On the line the blend is (f * g)(x) = ∫ f(x − t) g(t) dt, with no weight in front, and the blend-coefficients proof (<a href="r32d.html#32d1">32d1</a>) runs unchanged: the transform of a blend is the product of the transforms.</p>
+  <p data-pid="168bcf">Transform-energy technique: <b>if f has a finite total size and a finite energy, then the total of |f̂|² over the line equals the total of |f|².</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the transform-energy technique">
+\tilde f(x) = \overline{f(-x)},\ \ \hat{\tilde f} = \overline{\hat f} @@ the flip passes through the total; slide x to −x
+h = f * \tilde f,\ \ \hat h = \hat f\,\overline{\hat f} = |\hat f|^2 \ge 0 @@ the transform of a blend is the product (32d1, on the line)
+h(0) = \int f(-t)\,\overline{f(-t)}\,dt = \int|f|^2 @@ the blend at 0
+\int |\hat f(\xi)|^2\,e^{-\pi\varepsilon^2\xi^2}\,d\xi = \int h(u)\,w_\varepsilon(u)\,du \to h(0) @@ the undo-transform proof (32e3), at x = 0; h is continuous, a blend of two functions of finite energy
+\int |\hat f(\xi)|^2\,e^{-\pi\varepsilon^2\xi^2}\,d\xi \to \int|\hat f|^2 @@ the rising-limit technique (30d): the bell rises to 1 as ε falls
+\htmlClass{new}{\int_{-\infty}^{\infty}|\hat f(\xi)|^2\,d\xi = \int_{-\infty}^{\infty}|f(x)|^2\,dx} \quad \blacksquare @@ the same limit
+  </pre>
+  <p data-pid="a19d61">It is 32b3’s energy-kept technique with every frequency allowed. The energy of a signal can be counted in time or in frequency, and the two counts agree.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · energy · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32e4.1</span><span class="ph know">know</span>What does the transform-energy technique say? <br>Which function h does the proof build, and what is its transform?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32e5">
+  <h2 class="sthead"><span class="stno">32e5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\hat f \text{ has a finite total, since } f \text{ does}\,? @@ the box has finite total, and sin(πξ)/(πξ) does not
+\hat f(\xi) = \textstyle\sum_n c_n \text{ for a signal that does not repeat}\,? @@ there are no whole speeds to sum; every frequency carries a share
+\widehat{fg} = \hat f\,\hat g\,? @@ it is the transform of the blend that is the product
+\text{a narrower bell has a narrower transform}\,? @@ stretching one squeezes the other
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32e5.1</span><span class="ph know">know</span>Why is “f has a finite total size, so its transform does too” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">32e.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="f(x) = e^{-|x|}"></span></span>Find f̂ by splitting the total at 0. Check that f̂ has a finite total size, and use the undo-transform technique at x = 0 to find the total of 2/(1 + 4π²ξ²).</div>
+  <div class="chq"><span class="chid">32e.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{the box } 1 \text{ on } [-\tfrac12, \tfrac12]"></span></span>The undo-transform technique asks f̂ to have a finite total size, and the box’s does not. Use the transform-energy technique instead to find the total of (sin πξ / πξ)² over the line.</div>
+  <div class="chq"><span class="chid">32e.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\hat f = \hat g"></span></span>If two signals of finite total size have the same transform, must they agree? At which points does the undo-transform technique prove it, and what is left?</div>
+  <div class="chq"><span class="chid">32e.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="g(x) = e^{-\pi x^2}"></span></span>Find ĝ a second way, by completing the square in the power, −π(x + iξ)² − πξ², and sliding the line of the total. Find which technique of rung 26 lets the line slide from the floor to the line of upright part ξ.</div>
+  <div class="chq"><span class="chid">32e.6.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">32e1: every frequency allowed</span></span>One side holds that a frequency is something a signal does for ever, so a clap that lasts a moment has no frequencies at all, and the transform merely invents them. The other holds that the transform is what the clap is made of, since the clap is rebuilt exactly from it. <br>Does a sound that lasts a moment have frequencies?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r32d.html">← 32d · convolution</a><a href="r32f.html">32f · short in time, wide in frequency →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The transform is the Fourier transform, here in the convention f̂(ξ) = ∫ f(x)e^(−2πixξ) dx, with ξ in cycles per unit, which makes e^(−πx²) exactly its own transform. The transform-bound technique is the L¹ bound with continuity; the undo-transform technique is the Fourier inversion theorem; the transform-energy technique is Plancherel’s theorem (Parseval’s on the line). The box’s transform sin(πξ)/(πξ) is the sinc function. The bell as a tamer that is let go is a Gaussian summability method.</p>
+  <h3>Who said it first</h3>
+  <p>Joseph Fourier wrote the transform and its undoing in his book on heat (1822), with the repeat grown without bound, as on this page. Augustin-Louis Cauchy and Siméon Denis Poisson used it in the 1810s for waves on water. Michel Plancherel proved the energy equality in 1910. Norbert Wiener built the theory on the line in the 1930s, and Laurent Schwartz extended the transform to the Dirac delta and its kin in the 1940s.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“f(x) = ∫ f̂(ξ)e^(2πixξ)dξ = ∫∫ f(y)e^(2πi(x − y)ξ) dy dξ; swap the order; ∫ e^(2πiuξ)dξ is a spike at u = 0; so the total is f(x).” Not allowed: |f(y)| over the plane has an endless total, so the order cannot be swapped, and ∫ e^(2πiuξ)dξ is no function at all. The bell inside the total is what makes each line true.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'repeat',t:R`c_n = \tfrac{1}{2L}\hat f\big(\tfrac{n}{2L}\big)`,n:`Speeds n/2L.`},
+  {k:'ember',kl:'no repeat',t:R`\hat f(\xi) = \int f(x)e^{-2\pi i x\xi}dx`,n:`Every speed.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|\hat f| \le \int|f|,\ \text{continuous}}`,n:`Fenced.`}
+],{title:'The slides · transform · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'start',t:R`\hat g(0) = 1`,n:`Bell-total.`},
+  {k:'ember',kl:'rule',t:R`\hat g\,^{\prime} = -2\pi\xi\,\hat g`,n:`By parts.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\widehat{e^{-\pi x^2}} = e^{-\pi\xi^2}}`,n:`One rule, one start, one function.`}
+],{title:'The slides · own · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'tame',t:R`\hat f(\xi)e^{2\pi i x\xi}e^{-\pi\varepsilon^2\xi^2}`,n:`A bell inside.`},
+  {k:'ember',kl:'swap',t:R`\int f(x-u)w_\varepsilon(u)du`,n:`A gathering weight.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{f(x) = \int\hat f(\xi)e^{2\pi i x\xi}d\xi}`,n:`Forwards undoes backwards.`}
+],{title:'The slides · undo · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'blend',t:R`h = f * \tilde f,\ \hat h = |\hat f|^2`,n:`Never negative.`},
+  {k:'ember',kl:'at 0',t:R`h(0) = \int|f|^2`,n:`Energy in time.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\int|\hat f|^2 = \int|f|^2}`,n:`Energy in frequency.`}
+],{title:'The slides · energy · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\int|\hat f| \lt \infty\,?`,n:`The box says no.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

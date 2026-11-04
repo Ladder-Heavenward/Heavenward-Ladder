@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can a model fit too well?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r31o.html">← 31o principal components</a><a href="r31then.html">next: 31·then how do you fit a curve to noisy data? →</a></p>
+  <div class="tags"><span class="tag stat">31·stat · statistics</span></div>
+  <h1>Can a model fit too well?</h1>
+  <p data-pid="3ba476">Can a model fit too well? A county health office in Oregon wants to know which things predict the weight of a newborn: the mother’s age, her height, whether she smokes, how many weeks the pregnancy ran. Each thing measured is a column, and the best fit is a shadow on the flat piece the columns build. Add a column and the shadow can only come closer, so the fit always looks better. Add enough columns, even columns of pure noise, and the fit becomes perfect, passing through every point. That perfect fit is worthless for the next baby. What makes the question hard is that the fit on the data in hand is the only thing anyone can see, and it always flatters. This page counts exactly how much it flatters, shows how to get an honest measure from data held back, and carries the shadow to yes or no answers, where the thing predicted is a chance.</p>
+  <p class="gesture" data-pid="cd2683">With more columns the shadow on the data can only come closer, so the fit on the data in hand always flatters. With p columns and noise of spread σ², the misses on the data average (n − p)σ² in total, and the misses on fresh data (n + p)σ². Data held back measure the honest miss. For yes or no answers the log of the odds is fitted, and the best fit again has its misses at right angles to every column.</p>
+</header>
+
+<section class="class step" data-step="31stat1">
+  <h2 class="sthead"><span class="stno">31stat1</span>Many columns, one shadow</h2>
+  <p data-pid="889ced">Put the n babies’ weights in a list y, and each thing measured in a column of X, with a column of 1s first: p columns in all. 31b3 found the best c as the shadow ŷ = Xc of y on the flat piece the columns build. The share of the spread taken, R² = |ŷ − ȳ1|²/|y − ȳ1|², is 13·stat’s r² for one column, now for many.</p>
+  <p data-pid="d03ec1">Never-worse technique: <b>adding a column never makes the total squared miss larger, so it never lowers R².</b> The new flat piece holds the old one, and a closest point in a bigger piece is at least as close (31b2).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the never-worse technique, pushed to the end">
+\text{piece } W \subseteq W' \Rightarrow \min_{W'}|y - w| \le \min_W|y - w| @@ every point of W is in W′
+p = n \text{ free columns} \Rightarrow W' = \text{every list of } n \text{ numbers} @@ n free arrows build the whole space (27b3)
+\text{the miss is } 0,\ \ R^2 = 1 @@ y lies in the piece
+\htmlClass{new}{1, x, \ldots, x^{n-1}\ \text{fit exactly}} \quad \blacksquare @@ columns of powers: the curve through every point, by the through-the-points technique (31m1)
+  </pre>
+  <p data-pid="51ad86">So R² near 1 is no proof that a model is good. A model with as many columns as babies fits every weight exactly, including the noise in each one.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · many columns · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">31·stat.1.1</span><span class="ph know">know</span>What does the never-worse technique say, and why?  <br>Why does R² = 1 not show that a model is good?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31stat2">
+  <h2 class="sthead"><span class="stno">31stat2</span>How much the fit flatters</h2>
+  <p data-pid="ce3338">Suppose the truth is y = Xβ + ε, where the noise ε has independent places, each with average 0 and spread σ². Let P be the shadow map onto the piece, so ŷ = Py, and the miss is e = (I − P)y = (I − P)ε, since (I − P)Xβ = 0.</p>
+  <p data-pid="f7c13b">Lost-directions technique: <b>the total squared miss on the data in hand averages (n − p)σ²: each column spends one direction of the noise.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the lost-directions technique">
+P = QQ^{\mathsf T},\ \ Q \text{ with } p \text{ right-angled columns} @@ the column-straightening technique (31c3); shadow-sum (31b2)
+|e|^2 = |\varepsilon|^2 - |Q^{\mathsf T}\varepsilon|^2 @@ the square-sum technique: ε = Pε + e
+\operatorname{E}|Q^{\mathsf T}\varepsilon|^2 = \textstyle\sum_{k \le p}\operatorname{E}(q_k\cdot\varepsilon)^2 = \sum_k \sigma^2|q_k|^2 = p\sigma^2 @@ the co-spreads of ε are σ² down the middle, 0 elsewhere (30g)
+\htmlClass{new}{\operatorname{E}|e|^2 = n\sigma^2 - p\sigma^2 = (n - p)\sigma^2} \quad \blacksquare @@ the average-adds technique
+  </pre>
+  <p data-pid="5af457">Fresh-data technique: <b>new readings y′ at the same inputs, with fresh noise, miss the old fit by a total that averages (n + p)σ².</b> y′ − ŷ = ε′ − Pε, with ε′ and ε independent, so its squared size averages nσ² + pσ². The gap between the two is 2pσ²: each column flatters the fit by 2σ².</p>
+  <pre class="lines" data-k="ember" data-label="this page: twenty babies, five columns">
+n = 20,\ \ p = 5,\ \ \sigma = 0.4 \text{ kg} @@ a model of the county’s data
+\text{in hand: } \tfrac{(20 - 5)(0.16)}{20} = 0.12 \text{ kg}^2 \text{ per baby} @@ the lost-directions technique
+\text{fresh: } \tfrac{(20 + 5)(0.16)}{20} = 0.20 \text{ kg}^2 \text{ per baby} @@ the fresh-data technique
+\htmlClass{new}{\text{the fit looks } \tfrac{0.20}{0.12} \approx 1.7 \text{ times better than it is}} \quad \blacksquare @@ and 15 more noise columns would make it look perfect
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · flatters · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat.2.1</span><span class="ph know">know</span>What do the lost-directions and fresh-data techniques say?  <br>How much does each column flatter the total squared miss, on average?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31stat3">
+  <h2 class="sthead"><span class="stno">31stat3</span>Holding data back</h2>
+  <p data-pid="1c68ba">The fresh-data technique needs σ², and the truth to be one of the shadows. Neither is known in practice. The plain cure is to keep some data out of sight. Fit on one part, the training part, and measure the miss on the rest, the held-back part. The held-back readings are fresh for that fit.</p>
+  <p data-pid="42345f">Held-out technique: <b>if the held-back readings are independent of the training readings and of the choice of model, their average squared miss is an honest estimate of the miss on fresh data, with a width that shrinks like one over the root of their number.</b> Each held-back squared miss is an independent try at the same average, so the sample-average technique of 30q gives the estimate and its width.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the cloud</div>
+    <p data-pid="64220f">A held-back miss is an average of tries, and it wobbles like any average. With 50 held-back babies and squared misses of spread width 0.3 kg², the honest miss is reported give or take 0.3/√50 ≈ 0.04 kg².</p>
+    <p data-pid="c940d4"><b>A model’s miss on held-back data is the middle of a cloud and is reported with its width; once used to choose, it flatters.</b></p>
+    <p data-pid="45e287">Choosing among many models by their held-back misses uses the held-back data a little, and the winner’s miss flatters a little, as the winner of many tries always does. A third part, never looked at until the end, keeps the last report honest.</p>
+    <p class="bait" data-pid="fa9e42">Ten models are tried on 40 held-back readings, and the best scores 0.18 against 0.20 for the next. Is that a real difference? What would you need before reporting the winner’s miss?</p>
+  </aside>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · held back · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat.3.1</span><span class="ph know">know</span>What does the held-out technique say, and what must the held-back readings be independent of?  <br>Why does the held-back miss of the chosen model flatter a little?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31stat4">
+  <h2 class="sthead"><span class="stno">31stat4</span>Yes or no answers</h2>
+  <p data-pid="d1e02a">Some answers are yes or no: was the baby born early? A shadow can give numbers below 0 or above 1, which no chance can be. The cure is to fit a straight model not to the chance p but to its log odds, ln(p/(1 − p)), which runs over every number. From here on, the <i>logistic model</i> says ln(pᵢ/(1 − pᵢ)) = (Xc)ᵢ, so pᵢ = 1/(1 + e^(−(Xc)ᵢ)), the logistic curve of 17·bio.</p>
+  <p data-pid="ccd207">Log-odds technique: <b>in the logistic model, one more unit of a column’s input multiplies the odds of yes by e to the power of that column’s number.</b> The log odds rise by cⱼ, and odds are e to the log odds (30l3).</p>
+  <p data-pid="0d653b">Right-angled-score technique: <b>the most likely c for yes-or-no answers yᵢ = 1 or 0 makes the misses y − p at right angles to every column: Xᵀ(y − p) = 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the right-angled-score technique">
+\ell(c) = \textstyle\sum_i y_i\ln p_i + (1 - y_i)\ln(1 - p_i) @@ the log-likelihood (30r1)
+\tfrac{dp_i}{dc_j} = p_i(1 - p_i)X_{ij} @@ the slope of the logistic curve (17·bio), by the chain rule (28c)
+\tfrac{\partial\ell}{\partial c_j} = \textstyle\sum_i\big(\tfrac{y_i}{p_i} - \tfrac{1 - y_i}{1 - p_i}\big)p_i(1 - p_i)X_{ij} = \sum_i (y_i - p_i)X_{ij} @@ multiply out
+\htmlClass{new}{X^{\mathsf T}(y - p) = 0} \quad \blacksquare @@ at the most likely c every partial slope is 0 (28)
+  </pre>
+  <p data-pid="2c956c">So least squares and the logistic fit are kin. Both leave the misses at right angles to the columns. In least squares the samenesses are straight in c and solved at once; here p depends on c through the curve, and a machine walks to the answer step by step. Models with a straight part inside a curve, fitted this way, are a family, and the shadow is the member with no curve at all.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · yes or no · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat.4.1</span><span class="ph know">know</span>What does the logistic model fit, and what does the log-odds technique say?  <br>What does the right-angled-score technique say about the misses?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31stat5">
+  <h2 class="sthead"><span class="stno">31stat5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+R^2 \text{ rose when the column went in, so the column matters}\,? @@ R² never falls when a column is added, even a column of noise
+\text{the miss on the data in hand is the miss to expect}\,? @@ it averages (n − p)σ²; fresh data average (n + p)σ²
+\text{choose the model on the held-back data and report its miss there}\,? @@ choosing spent those data; report on a part never looked at
+p_i = (Xc)_i \text{ for yes-or-no answers}\,? @@ a straight fit gives chances below 0 and above 1; fit the log odds
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat.5.1</span><span class="ph know">know</span>Why does a rise in R² not show that a new column matters?  <br>Why should the miss of a model chosen on held-back data not be reported on those same data?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">31·stat.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="n = 30,\ \ \sigma^2 = 1"></span></span>Build a table of the average miss per reading in hand and on fresh data for p = 1, 5, 10, 20, 30.  <br>At which p does the fit look perfect, and how bad is it on fresh data then?</div>
+  <div class="chq"><span class="chid">31·stat.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="y_i = 1 \text{ exactly when } x_i &gt; 5;\ \ x: 1, 2, \ldots, 10"></span></span>Try to fit the logistic model with columns 1 and x.  <br>What happens to the most likely c as the fit improves, and which demand of a best point fails?</div>
+  <div class="chq"><span class="chid">31·stat.6.3</span><span class="tagq">converse</span>The best least-squares c makes the misses at right angles to the columns. Turn it round for the logistic model: if Xᵀ(y − p) = 0, must c be the most likely? Use that ℓ bends down in every direction (28o3).</div>
+  <div class="chq"><span class="chid">31·stat.6.4</span><span class="tagq">reroute</span>Find the lost-directions technique a second way, for p = 1 with the column of 1s: the miss is yᵢ − ȳ, and 30q’s sample-spread technique gives its average total. Check that it is (n − 1)σ².</div>
+  <div class="chq"><span class="chid">31·stat.6.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">8·stat.4.4: which middle is right?</span></span>8·stat asked whether the best middle makes the total distance least or the total squared distance least. One side, in the 1750s, fitted lines that made the total size of the misses least. The other made the squares least, and later argued that squares are right because errors follow the bell. Squares give a shadow, with right angles and a formula; sizes give no product (31g1) and no formula.  <br>Is least squares right because of the bell, because of the geometry, or only because it is easy? Which misses would you fit for babies’ weights with a few wrong entries?</div>
+  <div class="chq"><span class="chid">31·stat.6.6</span><span class="tagq">seam</span><span class="givens"><span class="gtx">13·stat.4.4: a law of families, or of arithmetic?</span></span>13·stat asked whether the sons of tall fathers coming back towards the middle is a law of families. In standard units, the line of sons on fathers predicts r times the father’s height, and the line of fathers on sons predicts r times the son’s (31l2).  <br>Show that any two lists with the same spread and r between 0 and 1 pull to the middle both ways, whatever made them. What would a law of families have to predict that the arithmetic does not, and could a model with many columns tell the two apart?</div>
+  <div class="chq"><span class="chid">31·stat.6.7</span><span class="tagq">seam</span><span class="givens"><span class="gtx">5·stat.4.5: does evidence raise a chance?</span></span>5·stat asked whether the turned-chance technique answers the claim that no number of sunrises proves the next one. Held-back data are this page’s answer in practice: a model that has predicted readings it never saw is trusted to predict the next. One side says that is the whole of learning from data. The other says it only moves the question: the held-out technique needs the held-back readings to be independent tries at the same average, which is the claim that tomorrow is like today, and no data can test it.  <br>Which assumption does the held-out technique need that no held-back data can check? What chance does the turned-chance technique need before it starts, and where does the held-out technique hide it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r31o.html">← 31o · principal components</a><a href="r31then.html">31·then · how do you fit a curve to noisy data? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Fitting y by the shadow on many columns is multiple linear regression, and R² is the coefficient of determination. The lost-directions technique says the residual sum of squares has expectation (n − p)σ², so s² = RSS/(n − p) is unbiased; n − p is the residual degrees of freedom. The gap 2pσ² is the optimism of the training error, and it underlies Mallows’s C_p and the Akaike information criterion. Holding data back is validation, with training, validation and test sets; doing it in turn over every part is cross-validation. Fitting the noise is overfitting. The logistic model is logistic regression, the log odds the logit, and models with a straight part inside a curve are generalised linear models; Xᵀ(y − p) = 0 are the score equations, solved by iteratively reweighted least squares.</p>
+  <h3>Who said it first</h3>
+  <p>In 8·stat.4.4, Roger Boscovich fitted by least total size in 1757, Adrien-Marie Legendre published least squares in 1805, and Carl Friedrich Gauss tied it to the bell in 1809. Francis Galton’s regression of 1886 grew into multiple regression with Karl Pearson and George Udny Yule by 1897. Joseph Berkson named the logit in 1944, and John Nelder and Robert Wedderburn set out generalised linear models in 1972. Colin Mallows (1973) and Hirotugu Akaike (1974) counted the optimism; Mervyn Stone (1974) and Seymour Geisser (1975) set out cross-validation.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="31·stat: a worked “proof”, not allowed">
+R^2 = 0.97 \text{ with } 18 \text{ columns and } 20 \text{ babies} @@ fine, as a number
+\text{so the model explains } 97\% \text{ of birth weight} @@ not allowed: with p near n the shadow fits the noise; the fresh-data miss averages (20 + 18)σ²/20, nearly twice the noise itself
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'shadow',t:R`\hat y = Xc`,n:`p columns.`},
+  {k:'ember',kl:'bigger piece',t:R`W \subseteq W^{\prime}`,n:`Never further.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{p = n \Rightarrow R^2 = 1}`,n:`Fits the noise.`}
+],{title:'The slides · many columns · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'in hand',t:R`\operatorname{E}|e|^2 = (n - p)\sigma^2`,n:`Columns spend noise.`},
+  {k:'ember',kl:'fresh',t:R`(n + p)\sigma^2`,n:`New noise, old fit.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{gap } 2p\sigma^2}`,n:`The flattery.`}
+],{title:'The slides · flatters · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'split',t:R`\text{train} \mid \text{held back}`,n:`Fit on one, test on the other.`},
+  {k:'ember',kl:'average',t:R`\tfrac1m\textstyle\sum e_i^2`,n:`Fresh for the fit.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\pm\ \text{width}/\sqrt m}`,n:`An honest cloud.`}
+],{title:'The slides · held back · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'log odds',t:R`\ln\tfrac{p}{1 - p} = Xc`,n:`Runs over every number.`},
+  {k:'ember',kl:'one unit',t:R`\times e^{c_j}`,n:`Odds multiply.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{X^{\mathsf T}(y - p) = 0}`,n:`Misses at right angles.`}
+],{title:'The slides · yes or no · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

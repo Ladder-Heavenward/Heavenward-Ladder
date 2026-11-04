@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A language for mathematics</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r37.html">← 37 arithmetic describes its own proofs</a><a href="r37b.html">next: 37b proofs as objects →</a></p>
+  <div class="tags"><span class="tag proof">37a · proof</span></div>
+  <h1>A language for mathematics</h1>
+  <p data-pid="627690">Since the first rung you have written statements in marks, and the ladder never once said exactly which strings of marks count as statements. Rung four made a proof an object, a list of lines, but the statements on those lines were taken as they came. That was enough while the only question was whether a proof was right. It is not enough for the questions of this rung, which ask about every proof at once, and about every world a statement could be true in. So the statements themselves become objects. A language is a short list of marks. Its terms and its formulas are built from the marks by repeating a few steps, the way rung four built the numbers. A world for the language gives each mark a meaning, and then truth in that world is defined, one way of building at a time. The same statement can be true in one world and false in another, and that difference is the tool the whole rung works with.</p>
+  <p class="gesture" data-pid="49846e">A language is a list of marks. Its formulas are built by recursion and read in exactly one way. A world gives each mark a meaning, and truth in the world is defined by the same recursion, so two matched worlds make the same statements true.</p>
+</header>
+
+<section class="class step" data-step="37a1">
+  <h2 class="sthead"><span class="stno">37a1</span>Marks, terms and formulas</h2>
+  <p data-pid="3c866c">A <i>language</i> is a list of marks of three kinds. <i>Names</i>, each standing for one thing. <i>Function marks</i>, each with a number of places, each making a thing from that many things. <i>Relation marks</i>, each with a number of places, each saying something of that many things. Every language also shares the placeholders x₀, x₁, x₂, … of 2b, the mark =, the joining words ¬, ∧, ∨, ⇒, the totally false ⊥, the turned A and E, and brackets.</p>
+  <p data-pid="027466">The language of arithmetic has one name, 0, one function mark with one place, S, and two with two places, + and ·. The language of sets has one relation mark with two places, ∈, and nothing else.</p>
+  <p data-pid="cfa4cd"><i>Terms</i> are built by 4d’s recursion. Every placeholder and every name is a term. If f has n places and t₁, …, tₙ are terms, then f(t₁, …, tₙ) is a term; t + s is shorthand for +(t, s). <i>Formulas</i> are built the same way. t = s, R(t₁, …, tₙ) and ⊥ are formulas. If φ and ψ are formulas and x is a placeholder, then ¬φ, (φ ∧ ψ), (φ ∨ ψ), (φ ⇒ ψ), ∀x φ and ∃x φ are formulas. Nothing else is.</p>
+  <p data-pid="5e8a44">One-reading technique: <b>every formula is built in exactly one way.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-reading technique">
+\text{every term and formula has as many left brackets as right} @@ induction on the building (4c): each step adds one of each, or none
+\text{a starting piece of a formula never has more right brackets than left} @@ the same induction, one building step at a time
+\text{a starting piece of } (\varphi \land \psi) \text{, shorter than it, has more left than right} @@ the outer bracket is still open
+(\varphi \land \psi) = (\varphi' \lor \psi') \text{ with } \varphi \text{ shorter than } \varphi' @@ suppose two readings part at the first inner formula
+\varphi \text{ is a starting piece of } \varphi' \text{ with equal brackets, and not all of it} @@ the first line, on φ
+\bot @@ against the second and third lines, on φ′: a shorter starting piece of φ′ that is itself a formula either begins with a bracket and so has more left than right, or is an atom, a ¬, a turned A or a turned E, read the same way one mark further in
+\htmlClass{new}{\varphi = \varphi',\ \text{the joining word is the same},\ \psi = \psi'} \quad \blacksquare @@ the same lines for every other way of building
+  </pre>
+  <p data-pid="8cb299">So a formula is not just a string. It is a string with one history, and anything defined “one way of building at a time” is defined once. 4d’s recursion technique needs exactly that: each thing made in one way only. The rest of the rung defines truth, codes and proofs by such recursions.</p>
+  <p data-pid="b6620b">An every or a some <i>binds</i> its placeholder, as in 2b. A placeholder that is not bound where it stands is <i>free</i> there. A formula with no free placeholder is a <i>statement</i>. x₀ + 0 = x₀ is a formula; ∀x₀ (x₀ + 0 = x₀) is a statement.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · formulas · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">37a1.1</span><span class="ph know">know</span>What are the terms and the formulas of a language? <br>What does the one-reading technique say, and why does a definition by recursion on formulas need it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37a2">
+  <h2 class="sthead"><span class="stno">37a2</span>A world for the language</h2>
+  <p data-pid="c58bdd">3d’s layers, 6d’s sock world and 29c’s disc plane were worlds described in words. Here a world is an object. A <i>world</i> M for a language is a set |M| with at least one member, and a meaning for each mark: a member of |M| for each name, a function from lists of n members to members for each function mark with n places, and a relation, a set of lists of n members (2g), for each relation mark with n places. Its accepted name is a structure, from the Latin <i>structura</i>, a building.</p>
+  <p data-pid="6abd9f">The world N has the numbers of rung 4 as its members, 0 for 0, the next one for S, and rung 4’s adding and multiplying for + and ·. The integers of rung 5, with S(x) = x + 1, are another world for the same language. So is the set {0, 1} with S swapping 0 and 1, and x + y and x · y both read as 0 always.</p>
+  <p data-pid="4ebe6d">An <i>assignment</i> s gives each placeholder a member of |M|. The <i>value</i> of a term is found by recursion: a placeholder x takes s(x); a name takes its member; f(t₁, …, tₙ) takes the meaning of f at the values of t₁, …, tₙ.</p>
+  <pre class="lines" data-k="ember" data-label="this step: one value, worked">
+M = N,\ \ s(x_0) = 3 @@ the world of rung 4, and an assignment
+\text{value of } 0 = 0,\ \ \text{value of } S(0) = 1,\ \ \text{value of } S(S(0)) = 2 @@ a name, then S twice: the next one
+\text{value of } x_0 = 3 @@ the assignment
+\htmlClass{new}{\text{value of } S(S(0)) + x_0 = 2 + 3 = 5} \quad \blacksquare @@ the meaning of + at the two values (4f)
+  </pre>
+  <p data-pid="c7a3c8">In the world {0, 1} the same term, with s(x₀) = 1, has the value 0: S(S(0)) is 0 there, and + gives 0 whatever it is fed. The term is the same string. Its value belongs to the world.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · a world · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37a2.1</span><span class="ph know">know</span>What does a world for a language give each kind of mark? <br>What is an assignment, and how is the value of a term found?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37a3">
+  <h2 class="sthead"><span class="stno">37a3</span>True in a world</h2>
+  <p data-pid="28b43b">Truth in M is defined by recursion on formulas, under an assignment s. t = t′ is true when the two values are the same member. R(t₁, …, tₙ) is true when the list of values is in R’s relation. ⊥ is never true. ¬, ∧, ∨ and ⇒ follow 1e’s tables. ∀x φ is true when φ is true under every assignment that agrees with s except perhaps at x. ∃x φ is true when φ is true under some such assignment.</p>
+  <p data-pid="9d35e2">This is 1e’s tables with one row for each assignment, and 2b’s every and some read over the members of M. The every clause speaks of every member, and there may be endlessly many. So truth in N is defined, and it is not computed: no recipe checks every number. 4j’s bounded-some technique settles only the somes and everys kept below a bound.</p>
+  <p data-pid="65085b">Free-places technique: <b>whether a formula is true in a world under an assignment depends only on what the assignment gives its free placeholders.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the free-places technique">
+s,\ s' \text{ agree on the free placeholders of } \varphi @@ given
+\text{a term's value uses only the placeholders written in it} @@ induction on the term (37a1)
+\varphi \text{ an atom: both values the same, so the same truth} @@ the clause for = and for R
+\varphi = \neg\psi,\ (\psi \land \chi), \ldots: \text{ the parts have no other free placeholders} @@ induction on the building; 1e’s tables
+\varphi = \forall x\,\psi:\ s,\ s' \text{ changed at } x \text{ still agree on the free placeholders of } \psi @@ ψ’s free placeholders are φ’s, and perhaps x
+\htmlClass{new}{s \text{ and } s' \text{ make } \varphi \text{ true together, or neither does}} \quad \blacksquare @@ the some case is the same
+  </pre>
+  <p data-pid="105b7b">A statement has no free placeholders, so every assignment gives it the same truth. From here on, M ⊨ φ, read “φ is true in M”, means φ is true there under any assignment. On the ladder each statement is true in M or not, by rung 7’s either-way principle: its every clauses run over a set that may be endless.</p>
+  <pre class="lines" data-k="ember" data-label="this step: one statement, two worlds">
+N \models \forall x_0\,(x_0 = 0 \lor \exists x_1\,(x_0 = S(x_1))) @@ every number is 0 or a next (the zero-or-a-next technique, 4c)
+\text{in the integers: } {-5} = S(-6) @@ every integer is a next there
+\htmlClass{new}{N \models \neg\exists x_0\,(S(x_0) = 0),\ \ \text{and in the integers } \exists x_0\,(S(x_0) = 0) \text{ is true}} \quad \blacksquare @@ 0 is nobody’s next in N (4b); 0 = S(−1) in the integers
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · truth · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37a3.1</span><span class="ph know">know</span>How is the truth of ∀x φ in a world defined? <br>What does the free-places technique say, and why does it let a statement be true or false in a world outright?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37a4">
+  <h2 class="sthead"><span class="stno">37a4</span>Same statements, different worlds</h2>
+  <p data-pid="427dd5">A collection G of statements is true in M when each of its members is. Then M is a <i>world of G</i>. And G ⊨ φ, read “G makes φ true everywhere”, means: φ is true in every world of G.</p>
+  <p data-pid="61021b">A matching h from |M| onto |M′| (9c) <i>carries the marks</i> when h sends each name’s member to its member in M′, h(f(u₁, …)) = f′(h(u₁), …) for each function mark, and a list is in R exactly when its image is in R′.</p>
+  <p data-pid="c4d4de">Matching-worlds technique: <b>if a matching carries every mark of M to M′, then every statement true in M is true in M′, and every statement false in M is false in M′.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the matching-worlds technique">
+\text{value}^{M'}_{h\circ s}(t) = h(\text{value}^M_s(t)) @@ induction on the term: h carries names and function marks
+\varphi \text{ an atom: } M \models \varphi[s] \iff M' \models \varphi[h \circ s] @@ h is one-to-one for =, and carries R
+\varphi = \forall x\,\psi:\ \text{each member of } M' \text{ is } h(u) \text{ for one } u @@ h is onto, so changing h∘s at x runs over every member of M′
+\text{the joining words and some go through by the same induction} @@ 37a3’s clauses
+\htmlClass{new}{M \models \varphi \iff M' \models \varphi \text{ for every statement } \varphi} \quad \blacksquare @@ a statement needs no assignment (the free-places technique)
+  </pre>
+  <p data-pid="dd0d2b">So statements cannot tell matched worlds apart. They can often tell unmatched ones apart: N and the integers differ on ∃x₀ (S(x₀) = 0). Whether they always can is a question 37e answers, and the answer is no.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · matched · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37a4.1</span><span class="ph know">know</span>What does G ⊨ φ mean? <br>What does the matching-worlds technique say, and which line of its proof needs h to be onto?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37a5">
+  <h2 class="sthead"><span class="stno">37a5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\exists x_0\,\varphi \text{ is true in } M \text{ when } \varphi \text{ holds for some name}\,? @@ for some member: a world may have members no name reaches, as the line has (35b)
+\forall x_0\,(x_0 = 0) \text{ is false, so it is false in every world}\,? @@ true in a world with one member; truth belongs to a world
+x_0 + 0 = x_0 \text{ is a statement true in } N\,? @@ a formula with a free placeholder; ∀x₀ (x₀ + 0 = x₀) is the statement
+(\varphi \land \psi \lor \chi) \text{ is a formula}\,? @@ no brackets inside: two readings, and the one-reading technique needs one
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37a5.1</span><span class="ph know">know</span>Why is ∃x₀ φ not true in M merely when φ holds for some name? <br>Why is ∀x₀ (x₀ = 0) not false in every world?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">37a.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\forall x_0\,\neg(S(x_0) = 0),\ \ \forall x_0\,\forall x_1\,(S(x_0) = S(x_1) \Rightarrow x_0 = x_1)"></span></span>Build a world for the language of arithmetic in which both statements are true and some member is not the value of any term with no placeholder. <br>Prove that no world with finitely many members makes both true.</div>
+  <div class="chq"><span class="chid">37a.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="|M| = \{0\}"></span></span>Find which statements of the language of arithmetic are true in the world with one member. <br>Is ⊥ the only formula false there?</div>
+  <div class="chq"><span class="chid">37a.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="(\mathbb{Q}, &lt;)\ \ \text{and}\ \ (\mathbb{R}, &lt;)"></span></span>In the language with one relation mark &lt;, two worlds that make the same statements true: must they be matched? Look for a statement true in one of these and false in the other. <br>Does 8c’s least upper bound give one? What does it speak of that a formula of this language cannot?</div>
+  <div class="chq"><span class="chid">37a.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">0a.4.3: “This statement is in English” against “This statement is false”</span></span>Rung 0 asked which of the two can be judged. Truth is now defined, one way of building at a time, for the formulas of a language. <br>Can either of the two be written as a formula of the language of arithmetic? If a formula could speak of formulas, what would its world need to hold? Is a definition of truth that calls on the truth of the parts going round in a circle, or not?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r37.html">← 37 · arithmetic describes its own proofs</a><a href="r37b.html">37b · proofs as objects →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The language is a signature or vocabulary; its marks are constant, function and relation symbols, each with an arity. The terms and formulas are the well-formed terms and formulas of first-order logic; first-order because every and some range over members only, never over sets of them. The one-reading technique is unique readability. Free and bound placeholders are free and bound variables; a formula with no free variable is a sentence. A world is a structure or interpretation; its set is the domain or universe. The definition of truth is the Tarskian satisfaction relation, M ⊨ φ[s]. The free-places technique is the coincidence lemma; the matching-worlds technique is the isomorphism lemma, and a matching that carries the marks is an isomorphism. G ⊨ φ is logical consequence, and a world of G is a model of G.</p>
+  <h3>Who said it first</h3>
+  <p>Gottlob Frege wrote the first full language of every and some in his Begriffsschrift (1879). Charles Sanders Peirce and Ernst Schröder wrote quantifiers in algebra in the 1880s. Leopold Löwenheim worked with first-order formulas in 1915, and David Hilbert and Wilhelm Ackermann set first-order logic apart as a system in their book of 1928. Alfred Tarski defined truth in a formal language in a Polish monograph of 1933, translated into German in 1935; his definition by recursion, with one clause for each way of building, is the one on this page.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“0 is nobody’s next, by 4b. So ∃x₀ (S(x₀) = 0) is false.” Not allowed as it stands: 4b’s technique is about the numbers, so it shows that the statement is false in N. In the integers it is true. A statement is false in a world, never false with no world named.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'marks',t:R`0,\ \ S,\ \ +,\ \ \cdot`,n:`The language of arithmetic.`},
+  {k:'ember',kl:'terms',t:R`S(S(0)) + x_0`,n:`Built by recursion, one way only.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\forall x_0\,(x_0 = 0 \lor \exists x_1\,(x_0 = S(x_1)))}`,n:`A statement: no free placeholder.`}
+],{title:'The slides · formulas · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'members',t:R`|M| \ne \varnothing`,n:`At least one.`},
+  {k:'ember',kl:'meanings',t:R`0^M,\ S^M,\ +^M,\ \cdot^M`,n:`One for each mark.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{value of } S(S(0)) + x_0 = 5}`,n:`In N, with x₀ at 3.`}
+],{title:'The slides · a world · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'atoms',t:R`t = t\text{: same value}`,n:`Read off the world.`},
+  {k:'ember',kl:'every',t:R`\forall x\,\varphi\text{: under every change at } x`,n:`Every member, not every name.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{M \models \varphi}`,n:`A statement is true in M or not.`}
+],{title:'The slides · truth · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'matching',t:R`h : |M| \to |M'|`,n:`One-to-one and onto.`},
+  {k:'ember',kl:'carries',t:R`h(f(u)) = f'(h(u))`,n:`Every mark.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{M \models \varphi \iff M' \models \varphi}`,n:`Same statements.`}
+],{title:'The slides · matched · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arithmetic of sizes</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r35d.html">← 35d two one-way matchings make a matching</a><a href="r35f.html">next: 35f is there a size in between? →</a></p>
+  <div class="tags"><span class="tag proof">35e · proof</span></div>
+  <h1>Arithmetic of sizes</h1>
+  <p data-pid="28cd86">Rung 4 added counts by putting separate piles together, multiplied them by choosing in stages, and raised them to powers by counting functions. None of that needed the piles to be finite, only the sets themselves. So sizes add, multiply and raise to powers in exactly the same way, with matching doing the work. The size of the counting numbers gets a mark of its own. Then the arithmetic turns strange. That size plus itself is itself, and so is that size times itself. Two raised to it is the size of all the parts of the counting numbers, and that is the size of the line: the line, the parts of the fractions and the endless strings of zeros and ones are all matched. The plane, two whole lines, has the size of one. Last, the step sets sizes beside the run past the endless from rung 29. The points of that run are orders, and many different orders have one size. Past the finite, size forgets the order, and the order knows more.</p>
+  <p class="gesture" data-pid="56a06d">Sizes add as separate copies put side by side, multiply as pairs, and raise to powers as functions. The counting numbers’ size plus itself, and times itself, is itself. Two to that size is the size of the line, and of the plane. Different points of the run can have one size.</p>
+</header>
+
+<section class="class step" data-step="35e1">
+  <h2 class="sthead"><span class="stno">35e1</span>Adding and multiplying sizes</h2>
+  <p data-pid="9db79c">Write A ⊔ B for (A × {0}) ∪ (B × {1}): a copy of A and a copy of B, kept separate even when A and B share members. From here on, for sets A, B and C, the statement |C| = |A| + |B| says that C is matched with A ⊔ B. The statement |C| = |A| · |B| says that C is matched with A × B. And |C| = |B|^|A| says that C is matched with the set of functions from A to B. For finite sets these are <a href="r04k.html">4k5</a>’s separate piles, <a href="r04k.html">4k6</a>’s stages and <a href="r04k.html">4k9</a>’s counted functions. Matched sets give matched copies, pairs and functions, so each statement says the same whichever matched sets are used.</p>
+  <p data-pid="1286eb">From here on, ℵ₀ marks the size of ℕ: |A| = ℵ₀ says that A is matched with ℕ. Read it “aleph-null”. ℵ, aleph, is the first letter of the Hebrew alphabet, and the low 0 marks it as the first of a family that 35f continues.</p>
+  <p data-pid="bd232d">Aleph-sums technique: <b>ℵ₀ + ℵ₀ = ℵ₀, ℵ₀ · ℵ₀ = ℵ₀, and n + ℵ₀ = ℵ₀ for every number n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the aleph-sums technique">
+(k, 0) \mapsto 2k,\ \ (k, 1) \mapsto 2k + 1 @@ ℕ ⊔ ℕ onto ℕ: even places for the first copy, odd for the second (4j’s even-or-odd: one way only)
+\htmlClass{new}{\aleph_0 + \aleph_0 = \aleph_0} @@ a matching
+(m, k) \mapsto p(m, k) @@ the pair-listing technique (35a2)
+\htmlClass{new}{\aleph_0 \cdot \aleph_0 = \aleph_0} @@ a matching of ℕ × ℕ with ℕ
+(j, 0) \mapsto j \text{ for } j < n,\ \ (k, 1) \mapsto n + k @@ n ⊔ ℕ onto ℕ: the n first, then the copy of ℕ moved up by n
+\htmlClass{new}{n + \aleph_0 = \aleph_0} \quad \blacksquare @@ a matching
+  </pre>
+  <p data-pid="9ccc63">So ℵ₀ cannot be undone. There is no number x with x + ℵ₀ = ℵ₀ that makes subtraction work: every number x does it. Sizes past the finite add and multiply, and they do not take away.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · adding · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">35e1.1</span><span class="ph know">know</span>What do |A| + |B|, |A| · |B| and |B|^|A| each say, and what does ℵ₀ mark? <br>What does the aleph-sums technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35e2">
+  <h2 class="sthead"><span class="stno">35e2</span>Two to the aleph-null is the line</h2>
+  <p data-pid="a8c409">2^ℵ₀ is the size of the functions from ℕ to 2. <a href="r04k.html">4k10</a> matched those functions with the parts of a set by keep or drop, and since rung 7 every part is settled. So 2^ℵ₀ = |𝒫(ℕ)|, and 35c2 showed it is more than ℵ₀.</p>
+  <p data-pid="6511fd">Line-size technique: <b>the line has the size of the parts of ℕ: |ℝ| = 2^ℵ₀.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the line-size technique">
+x \mapsto x,\ \ \mathbb R \to \mathcal P(\mathbb Q) @@ a real is a cut, a set of fractions (8a); different reals are different sets
+\mathcal P(\mathbb Q) \text{ matched with } \mathcal P(\mathbb N) @@ carry each part through the matching of ℚ with ℕ (35a3)
+s \mapsto 0.e_0e_1e_2\cdots,\ \ e_n = 5 \text{ if } n \in s,\ 4 \text{ if not} @@ 𝒫(ℕ) one-to-one into ℝ (35c2)
+|\mathbb R| \le |\mathcal P(\mathbb N)| \text{ and } |\mathcal P(\mathbb N)| \le |\mathbb R| @@ the first two lines chained, and the third
+\htmlClass{new}{|\mathbb R| = |\mathcal P(\mathbb N)| = 2^{\aleph_0}} \quad \blacksquare @@ the two-one-way technique (35d1)
+  </pre>
+  <p data-pid="381515">Plane-as-line technique: <b>the plane has the size of the line: |ℝ × ℝ| = |ℝ|.</b> The parts of ℕ in pairs are matched with single parts: (s, t) ↦ {2n : n ∈ s} ∪ {2n + 1 : n ∈ t}, the first part on the evens and the second on the odds. So 2^ℵ₀ · 2^ℵ₀ = 2^ℵ₀. Match each coordinate of a point with a part of ℕ, and the plane is matched with the line. A line and a square, and a cube too, have one size. Whether such a matching can be continuous is the question of 35i.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the line · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35e2.1</span><span class="ph know">know</span>What does the line-size technique say, and which two one-way matchings give it? <br>What does the plane-as-line technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35e3">
+  <h2 class="sthead"><span class="stno">35e3</span>Sizes against orders</h2>
+  <p data-pid="dfb5bd"><a href="r29cb3.html">29·cb3</a> ran past the end of the counting numbers: ω, then ω + 1, ω + 2, and on, then with Replace ω + ω and ω·ω. As points of the run they are all different. ω + 1 has a last member and ω has none, so no matching that keeps the order joins them (29·cb3.1). As sizes, a matching need not keep the order.</p>
+  <p data-pid="5a7696">Countable-points technique: <b>ω + n, ω + ω and ω·ω are all of size ℵ₀, though no two of them are the same point.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the countable-points technique">
+\omega + n = \omega \cup \{\omega, \omega + 1, \ldots, \omega + (n - 1)\} @@ the one-past technique, n times (29·cb3.1)
+|\omega + n| = \aleph_0 + n = \aleph_0 @@ the aleph-sums technique
+\omega + \omega = \omega \cup \{\omega + k : k \in \omega\} @@ the doubled-run technique (29·cb3.3)
+|\omega + \omega| = \aleph_0 + \aleph_0 = \aleph_0 @@ k ↦ ω + k matches ℕ with the second run
+\omega\cdot\omega \text{ has the members } \omega\cdot k + n,\ \text{one for each pair } (k, n) @@ Replace on k ↦ ω·k, then merge (29·cb3.3)
+\htmlClass{new}{|\omega\cdot\omega| = \aleph_0\cdot\aleph_0 = \aleph_0} \quad \blacksquare @@ the pair-listing technique
+  </pre>
+  <p data-pid="f1ebcd">For the numbers, order and size agree: different numbers are different sizes, by <a href="r04k.html">4k4</a>’s one-count technique. Past ω they come apart. A point of the run is an order, and size is what is left when the order is forgotten. Many points share the size ℵ₀. Is every point of the run countable? 35f answers.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · orders · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35e3.1</span><span class="ph know">know</span>What does the countable-points technique say? <br>Why are ω and ω + 1 different points, and why the same size?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35e4">
+  <h2 class="sthead"><span class="stno">35e4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\aleph_0 - \aleph_0 = 0\,? @@ ℵ₀ + x = ℵ₀ for every number x, and for x = ℵ₀: there is no one answer to take away
+\aleph_0 + 1 > \aleph_0\,? @@ n + ℵ₀ = ℵ₀: one more member makes no bigger size
+\omega + 1 \ne \omega, \text{ so } |\omega + 1| \ne |\omega|\,? @@ different points, one size: size forgets order
+2^{\aleph_0} = 2\cdot\aleph_0\,? @@ 2 · ℵ₀ = ℵ₀ + ℵ₀ = ℵ₀, and 2^ℵ₀ is the line, which is larger (35b)
+\aleph_0^{\aleph_0} = \aleph_0, \text{ since } \aleph_0\cdot\aleph_0 = \aleph_0\,? @@ the functions from ℕ to ℕ cannot be listed (35c.4.4); powers are not repeated products past the finite
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35e4.1</span><span class="ph know">know</span>Why is “ℵ₀ − ℵ₀ = 0” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">35e.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\mathbb N \sqcup \mathbb N \sqcup \mathbb N"></span> <span data-tex-inline="\mathbb N \times \mathbb N \times \mathbb N"></span></span>Build a matching of each with ℕ, in one line each. <br>Find the place of (2, 1, 1) in your matching of the second.</div>
+  <div class="chq"><span class="chid">35e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\mathbb N \setminus B \text{ for parts } B \subseteq \mathbb N \text{ with } |B| = \aleph_0"></span></span>Find parts B of size ℵ₀ for which ℕ ∖ B is empty, has 7 members, and has size ℵ₀. <br>What does that do to any rule for ℵ₀ − ℵ₀?</div>
+  <div class="chq"><span class="chid">35e.4.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="(0.d_1d_2d_3\cdots,\ 0.c_1c_2c_3\cdots) \mapsto 0.d_1c_1d_2c_2d_3c_3\cdots"></span></span>Interleave the decimals of two reals in [0, 1), each with no endless 9s. Prove the result has no endless 9s. <br>Is the map one-to-one? Onto [0, 1)? Find a real it misses, then find which one-way matching it still gives, and finish |[0, 1)²| = |[0, 1)| with the two-one-way technique.</div>
+  <div class="chq"><span class="chid">35e.4.4</span><span class="tagq">converse</span>For ℕ and ℝ, a set plus itself has its own size. Turn it round: if |A| + |A| = |A|, must A be endless? Must every endless A have |A| + |A| = |A|? <br>Find a proof for the line, and find where your proof for every endless set would need choice.</div>
+  <div class="chq"><span class="chid">35e.4.5</span><span class="tagq">seam</span>6e.4.5 asked whether the parts of the numbers can be put in a line in which every collection of them with a member has a first. The line is matched with those parts (35e2). With choice, the line can be lined up so that every part with a member has a least member (7·cb6), and then it is shaped like some point of the run. Its size is the size of that point. <br>In 1904 a lecture claimed a proof that the line cannot be lined up this way; within a day the proof was found to rest on a false result and was withdrawn. Weeks later choice was used to prove the opposite. <br>Which point of the run would the line be shaped like? Can a lining-up that nobody can describe give the line a place in the run? What would have followed had the lecture been right?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r35d.html">← 35d · two one-way matchings make a matching</a><a href="r35f.html">35f · is there a size in between? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>|A| + |B|, |A| · |B| and |B|^|A| are cardinal addition, multiplication and exponentiation; A ⊔ B is the disjoint union. ℵ₀ is aleph-null (or aleph-zero), the least infinite cardinal. 2^ℵ₀ is the cardinality of the continuum, often written 𝔠. Points of the run are ordinals, and their sizes cardinals; ω + 1 and ω are different ordinals of the same cardinality. The interleaving of 35e.4.3 is Cantor’s.</p>
+  <h3>Who said it first</h3>
+  <p>Georg Cantor defined the arithmetic of sizes and introduced the alephs in 1895, in the first part of his Contributions to the Founding of the Theory of Transfinite Numbers. He proved in 1877 that the square and the line have one size, and wrote to Dedekind: “I see it, but I do not believe it.” Julius König gave the 1904 Heidelberg lecture claiming the continuum cannot be well-ordered; Ernst Zermelo published the well-ordering theorem from choice later that year. The joke that choice is obviously true, well-ordering obviously false, and Zorn’s lemma no one knows, is Jerry Bona’s.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“ℵ₀ · ℵ₀ = ℵ₀, so by induction ℵ₀ · ℵ₀ · ⋯ = ℵ₀ for endlessly many factors, and ℵ₀^ℵ₀ = ℵ₀.” Not allowed: induction gives ℵ₀ⁿ = ℵ₀ for every number n, one n at a time, and says nothing about endlessly many factors at once. The functions from ℕ to ℕ cannot be listed.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'copies',t:R`A \sqcup B = (A \times \{0\}) \cup (B \times \{1\})`,n:`Kept separate.`},
+  {k:'ember',kl:'aleph',t:R`|A| = \aleph_0`,n:`Matched with ℕ.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\aleph_0 + \aleph_0 = \aleph_0 \cdot \aleph_0 = \aleph_0}`,n:`Evens, odds, diagonals.`}
+],{title:'The slides · adding · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'cuts',t:R`\mathbb R \to \mathcal P(\mathbb Q)`,n:`A real is a set of fractions.`},
+  {k:'ember',kl:'digits',t:R`\mathcal P(\mathbb N) \to \mathbb R`,n:`4s and 5s.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|\mathbb R| = 2^{\aleph_0}}`,n:`And the plane too.`}
+],{title:'The slides · the line · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'points',t:R`\omega,\ \omega + 1,\ \omega + \omega,\ \omega\cdot\omega`,n:`All different orders.`},
+  {k:'ember',kl:'sizes',t:R`\aleph_0 + n,\ \aleph_0 + \aleph_0,\ \aleph_0 \cdot \aleph_0`,n:`All ℵ₀.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{size forgets order}}`,n:`Past the finite.`}
+],{title:'The slides · orders · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

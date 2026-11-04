@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coefficients as projections</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r32.html">← 32 every periodic function is a sum of turnings</a><a href="r32b.html">next: 32b energy is kept →</a></p>
+  <div class="tags"><span class="tag proof">32a · proof</span></div>
+  <h1>Coefficients as projections</h1>
+  <p data-pid="47c13f">A tide gauge at the foot of a pier, a heartbeat on a monitor, the hum of a fridge: each one repeats. After some fixed stretch of time it is back where it started, and it goes round again. Rung 26 found the simplest thing that repeats. Feed the growth function a turn instead of a number, and it runs round the circle of size one, once for each length of the circle, for ever. Run it twice as fast and it goes round twice in the same stretch. Three times as fast, three times. These are the turnings, one for every whole number, forwards and backwards. Rung 31 gave functions lengths and angles, so that two functions can be at right angles just as two arrows can, and it found the closest point to a function inside a space built from a list of functions at right angles. This step puts the two together. The turnings turn out to be at right angles to each other, every one to every other, and each has length one. So the share of a repeating function that lies along a turning is its shadow on that turning, found by one total, and the shadows do not move when more turnings join the list.</p>
+  <p class="gesture" data-pid="6e047d">Any two different turnings are at right angles, and each has size one. So the closest sum of turnings to a repeating function is the sum of its shadows on them, each shadow found by one total and fixed once found. For a real function the turnings pair into a cosine and a sine of each speed, and an even function needs cosines alone.</p>
+</header>
+
+<section class="class step" data-step="32a1">
+  <h2 class="sthead"><span class="stno">32a1</span>The turnings are at right angles</h2>
+  <p data-pid="1b4362">A function f on the line <i>repeats every 2π</i> when f(x + 2π) = f(x) for every x. Its accepted name is periodic, with period 2π. Such a function is known from its values on [−π, π], so the product of <a href="r31a.html#31a1">31a1</a> can be taken there. On this rung it carries the weight 1/2π, so that the constant function 1 has size 1:</p>
+  <p class="eqline" data-pid="63a26f"><span data-tex="\langle f, g\rangle = \tfrac{1}{2\pi}\int_{-\pi}^{\pi} f(x)\,\overline{g(x)}\,dx,\qquad \|f\| = \sqrt{\langle f, f\rangle}"></span></p>
+  <p data-pid="5c8c23">For each whole number n, positive, zero or negative, the <i>nth turning</i> is eₙ(x) = e^(inx). By the turn-growth technique (<a href="r26a.html#26a3">26a3</a>) it is cos nx + i sin nx: as x runs once along [−π, π], it runs n times round the circle of size 1, backwards when n is negative. By the whole-turn technique (<a href="r26b.html">26b</a>) it repeats every 2π.</p>
+  <p data-pid="c5e476">Right-angled-turnings technique: <b>any two different turnings are at right angles, and every turning has size 1; so the turnings make a right-angled list.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the right-angled-turnings technique">
+e_m(x)\,\overline{e_n(x)} = e^{imx}e^{-inx} = e^{i(m - n)x} @@ the flip of e^(iθ) is e^(−iθ) (26a); the plane-adding technique (26b)
+k = m - n \ne 0:\ \ \tfrac{d}{dx}\,\tfrac{e^{ikx}}{ik} = e^{ikx} @@ the complex-rate technique (26·cb24), with rate ik
+\int_{-\pi}^{\pi} e^{ikx}\,dx = \tfrac{e^{ik\pi} - e^{-ik\pi}}{ik} = 0 @@ area as a change (16), floor and upright parts each; e^(ikπ) = e^(−ikπ), since they differ by a whole number of 2πi (26b)
+m = n:\ \ \tfrac{1}{2\pi}\int_{-\pi}^{\pi} 1\,dx = 1 @@ e^(i0x) = 1
+\htmlClass{new}{\langle e_m, e_n\rangle = 1 \text{ if } m = n,\ \ 0 \text{ if } m \ne n} \quad \blacksquare @@ the product, with its weight
+  </pre>
+  <p data-pid="6662a7">Being at right angles here is a claim about totals, not about where graphs cross. cos x and sin x meet at π/4, and still ⟨cos, sin⟩ = 0: over a whole turn their product is above the floor exactly as much as below it.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · right angles · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">32a1.1</span><span class="ph know">know</span>What is the nth turning, and what does the right-angled-turnings technique say? <br>Why is the total of e^(ikx) over [−π, π] zero for k ≠ 0?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32a2">
+  <h2 class="sthead"><span class="stno">32a2</span>A coefficient is a shadow</h2>
+  <p data-pid="954f88">Let f repeat every 2π, be sized, and have finite size ‖f‖ (<a href="r31g.html">31g</a>). Its <i>nth coefficient</i> is its shadow on the nth turning, cₙ = ⟨f, eₙ⟩. Its <i>Nth partial sum</i> is S_N f = Σ cₙeₙ, over n from −N to N. The accepted names are the Fourier coefficient and the Fourier partial sum.</p>
+  <p data-pid="ef1d36">Turning-shadow technique: <b>among all sums of the turnings from −N to N, the one closest to f is the sum of f’s shadows on them; and a shadow, once found, does not change when more turnings are added.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the turning-shadow technique">
+c_n = \langle f, e_n\rangle = \tfrac{1}{2\pi}\int_{-\pi}^{\pi} f(x)\,e^{-inx}\,dx @@ the product, with the flip of e^(inx)
+e_{-N}, \ldots, e_N \text{ is a right-angled list} @@ the right-angled-turnings technique (32a1)
+\|f - \textstyle\sum b_ne_n\| \text{ is least exactly when } b_n = c_n @@ the shadow-sum technique (31b2): the closest point is the sum of the shadows
+\langle f - S_Nf,\ e_k\rangle = c_k - c_k = 0 \text{ for } |k| \le N @@ the miss is at right angles to every turning used
+\|f\|^2 = \textstyle\sum_{|n| \le N}|c_n|^2 + \|f - S_Nf\|^2 @@ sizes at right angles add as squares (31a)
+\htmlClass{new}{c_n \text{ depends on } f \text{ and } n \text{ alone, not on } N} \quad \blacksquare @@ the first line names no N
+  </pre>
+  <p data-pid="2de5d9">That last line is what right angles buy. Fit a sum of the powers 1, x, x² to a curve, and adding x³ changes every number found so far. Fit a sum of turnings, and each coefficient is found once, by its own total, and stays.</p>
+  <p data-pid="31aed3">One example first. cos²x = ½ + ¼e^(2ix) + ¼e^(−2ix), by the power-to-sum technique (<a href="r26i.html">26i</a>). The shadow on e₂ is ⟨cos², e₂⟩ = ½⟨e₀, e₂⟩ + ¼⟨e₂, e₂⟩ + ¼⟨e₋₂, e₂⟩ = ¼. A function that is already a finite sum of turnings is its own partial sum, from N = 2 on.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · shadows · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32a2.1</span><span class="ph know">know</span>What are the nth coefficient and the Nth partial sum of f? <br>What does the turning-shadow technique say, and what changes, and what does not, when N grows?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32a3">
+  <h2 class="sthead"><span class="stno">32a3</span>Cosines and sines</h2>
+  <p data-pid="80d980">A real function has real values, so its coefficients come in flipped pairs, and each pair adds to a real wave.</p>
+  <p data-pid="bbe436">Cosine-and-sine technique: <b>for a real f, the turnings n and −n pair into a cosine and a sine of speed n; an even function needs cosines alone, and an odd function sines alone.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the cosine-and-sine technique">
+c_{-n} = \tfrac{1}{2\pi}\int f(x)\,e^{inx}\,dx = \overline{c_n} @@ f is real, so the flip passes onto e^(−inx) (25)
+c_ne^{inx} + c_{-n}e^{-inx} = 2\,\text{floor part of } c_ne^{inx} @@ z + z̄ is twice the floor part (25)
+= a_n\cos nx + b_n\sin nx,\ \ a_n = \tfrac{1}{\pi}\int_{-\pi}^{\pi} f(x)\cos nx\,dx,\ \ b_n = \tfrac{1}{\pi}\int_{-\pi}^{\pi} f(x)\sin nx\,dx @@ the turn-growth technique (26a), multiplied out
+f \text{ even: } f(x)\sin nx \text{ is odd, so } b_n = 0 @@ an odd function totals 0 over [−π, π] (9e: the halves cancel)
+\htmlClass{new}{S_Nf = \tfrac{a_0}{2} + \textstyle\sum_{n=1}^{N}(a_n\cos nx + b_n\sin nx)} \quad \blacksquare @@ for f odd, a_n = 0 the same way
+  </pre>
+  <p data-pid="542677">Every function on [−π, π] is an even part plus an odd part, ½(f(x) + f(−x)) plus ½(f(x) − f(−x)). The cosines carry the first and the sines the second. The cosine-and-sine form is the one the sciences write; the turnings are the one that proves things, since multiplying turnings adds their speeds.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · cos and sin · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32a3.1</span><span class="ph know">know</span>Why do a real function’s coefficients come in flipped pairs? <br>What does the cosine-and-sine technique say about even and odd functions?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32a4">
+  <h2 class="sthead"><span class="stno">32a4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\cos x \text{ and } \sin x \text{ cross at } \tfrac{\pi}{4}, \text{ so they are not at right angles}\,? @@ right angles are a total of the product, and ⟨cos, sin⟩ = 0
+e^{inx} \text{ and } e^{-inx} \text{ are the same turning}\,? @@ they turn opposite ways, and their product totals 0 for n ≠ 0
+\text{adding } e_{N+1} \text{ changes } c_0, \ldots, c_N\,? @@ the turnings are at right angles, so each shadow is fixed
+f = \textstyle\sum c_ne_n \text{ at every } x, \text{ for every } f\,? @@ only the closest sums are proved here; 32b and 32c ask when they return f
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32a4.1</span><span class="ph know">know</span>Why is “adding the turning e_(N+1) changes the coefficients already found” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">32a.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="f(x) = \sin^3 x"></span></span>Write f as a sum of turnings by the power-to-sum technique. Find every coefficient by a total, and check that the two ways agree. <br>Find a₁ and b₁, b₃.</div>
+  <div class="chq"><span class="chid">32a.5.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">a function that repeats every 2L</span></span>Find the turnings that repeat every 2L, the weight that gives them size 1, and the coefficient formula. <br>What happens to the spacing of their speeds as L grows without bound?</div>
+  <div class="chq"><span class="chid">32a.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="c_n = 0 \text{ for every } n"></span></span>The shadows of f on every turning are 0. Must f be 0? Find what 32a proves about S_N f and ‖f − S_N f‖, and what it leaves open.</div>
+  <div class="chq"><span class="chid">32a.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="z = e^{ix}"></span></span>Prove the right-angled-turnings technique a second way, from the circle-powers technique (26e): write the total over [−π, π] as a total once round the circle |z| = 1.</div>
+  <div class="chq"><span class="chid">32a.5.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">9e: every function is an even part plus an odd part</span></span>One side holds that a function is a rule written as one formula, and that a wave drawn by hand, with a corner, is not a function at all, let alone a sum of smooth waves. The other holds that the coefficients ask only for totals, and totals exist for any shape that can be drawn. <br>The coefficients of 32a2 ask for nothing but a total. Which side do they take, and what do they still leave unproved?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r32.html">← 32 · every periodic function is a sum of turnings</a><a href="r32b.html">32b · energy is kept →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A function that repeats every 2π is 2π-periodic. The turnings are the complex exponentials e^(inx), the characters of the circle group. That they are at right angles is the orthogonality of the exponentials, or of the trigonometric system. The coefficients cₙ are the Fourier coefficients, the partial sums S_N f the Fourier partial sums, and the endless sum Σ cₙe^(inx) the Fourier series of f; aₙ and bₙ are the cosine and sine coefficients. A finite sum of turnings is a trigonometric polynomial. The fixed shadows are the reason the coefficient formula is often called the Euler–Fourier formula.</p>
+  <h3>Who said it first</h3>
+  <p>Daniel Bernoulli proposed in 1753 that a vibrating string is a sum of sine waves. Leonhard Euler used the coefficient totals for particular sums in 1777. Joseph Fourier put the coefficients at the centre of his memoir on heat, read to the Paris Academy in 1807 and printed as The Analytical Theory of Heat in 1822, and claimed that every function has such a sum. The right-angle reading came much later, with the spaces of rung 31.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Write f = Σ cₙeₙ, take the product of both sides with e_k, and swap the total with the endless sum: c_k = ⟨f, e_k⟩.” Not allowed yet: it supposes f is the sum, and that the total of an endless sum is the sum of the totals. The turning-shadow technique needs neither: it finds the closest finite sum, and 32b proves that those sums come as near as you like.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'turning',t:R`e_n(x) = e^{inx}`,n:`n times round, as x goes once.`},
+  {k:'ember',kl:'product',t:R`e^{imx}\overline{e^{inx}} = e^{i(m-n)x}`,n:`Flip and add.`},
+  {k:'ember',kl:'total',t:R`\int_{-\pi}^{\pi} e^{ikx}dx = 0,\ k \ne 0`,n:`Whole turns cancel.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\langle e_m, e_n\rangle = 0 \text{ or } 1}`,n:`A right-angled list.`}
+],{title:'The slides · right angles · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'coefficient',t:R`c_n = \tfrac{1}{2\pi}\int f(x)e^{-inx}dx`,n:`One total each.`},
+  {k:'ember',kl:'closest',t:R`S_Nf = \textstyle\sum_{|n|\le N} c_ne_n`,n:`The shadow-sum technique.`},
+  {k:'ember',kl:'miss',t:R`f - S_Nf \perp e_k`,n:`At right angles.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{c_n \text{ fixed as } N \text{ grows}}`,n:`Found once, kept.`}
+],{title:'The slides · shadows · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'pairs',t:R`c_{-n} = \overline{c_n}`,n:`Real f.`},
+  {k:'ember',kl:'waves',t:R`a_n\cos nx + b_n\sin nx`,n:`Twice the floor part.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{even: cosines; odd: sines}}`,n:`The halves cancel.`}
+],{title:'The slides · cos and sin · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'illegal',t:R`c_n \text{ changes with } N\,?`,n:`Right angles fix it.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

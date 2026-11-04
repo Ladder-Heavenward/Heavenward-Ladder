@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Open sets and continuity by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r34concl.html">← 34·∎ stretching keeps what open sets decide</a><a href="r34k.html">next: 34k surfaces from a square →</a></p>
+  <div class="tags"><span class="tag tech">34j · technique</span></div>
+  <h1>Open sets and continuity by hand</h1>
+  <p data-pid="ab82f2">Checking that a set is open one ball at a time is slow, and checking that a map is continuous one point at a time is slower. This step gives the quick ways. A set cut out of the plane by strict inequalities between continuous functions is open, and one cut out by inequalities that allow equality is closed, so most sets met on a map or a graph can be sorted at a glance. Then three sets that every set carries with it: its inside, its closure and its edge, found by asking what every small open set about a point meets. Last, continuity checked on a base, and the quickest way to find a break: pull back one small open set and see whether a point of the edge sneaks into the pull-back.</p>
+  <p class="gesture" data-pid="8e1b05">If a function to the line is continuous, the points where it is above or below a number make an open set, and the points where it is at least, at most or equal to a number make a closed set. A point is on the edge of a set exactly when every open set about it meets both the set and its leftover. A map is continuous when the pull-back of each member of a base is open, so one bad pull-back of a small stretch shows a break.</p>
+</header>
+
+<section class="class step" data-step="34j1">
+  <h2 class="sthead"><span class="stno">34j1</span>Open by a strict inequality</h2>
+  <p data-pid="b1d577">Strict-test technique: <b>if g is a continuous map from a space X to the line, then the points with g &gt; c, and those with g &lt; c, are open; the points with g ≥ c, g ≤ c, and g = c are closed.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the strict-test technique">
+\{g > c\} = g^{-1}((c, \infty)) @@ a pull-back of an open stretch: open (34b2)
+\{g < c\} = g^{-1}((-\infty, c)) @@ likewise
+\{g \le c\} = X \setminus \{g > c\},\ \ \{g \ge c\} = X \setminus \{g < c\} @@ leftovers of open sets: closed
+\htmlClass{new}{\{g = c\} = \{g \le c\} \cap \{g \ge c\} \text{ is closed}} \quad \blacksquare @@ the overlap of two closed sets is closed: its leftover is a union of two open sets
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: four sets sorted at a glance">
+\{(x, y) : x^2 + y^2 < 1\} \text{ open} @@ g = x² + y² is continuous (11b); g &lt; 1
+\{(x, y) : 0 < x < 1,\ y > x^2\} \text{ open} @@ three strict tests: x &gt; 0, x &lt; 1, y − x² &gt; 0; finitely many overlaps (34a2)
+\{(x, y) : xy = 1\} \text{ closed} @@ g = xy, and g = 1
+\htmlClass{new}{\{(x, y) : y \ge 0,\ x^2 + y^2 < 1\} \text{ neither}} @@ (0, 0) is in it with no ball inside it; (0, 1 − 1/n) settles at (0, 1), outside it
+  </pre>
+  <p data-pid="f927be">A hiker’s map of Mount Hood draws the line where the height is 1800 m. By the technique, that line is closed, the land above it is open, and the land at or above it is closed, as long as the height is continuous. A cliff is where it is not.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · strict tests · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">34j1.1</span><span class="ph know">know</span>What does the strict-test technique say?  <br>Why is the set where x² + y² &lt; 1 open?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34j2">
+  <h2 class="sthead"><span class="stno">34j2</span>Inside, closure, edge</h2>
+  <p data-pid="1bbfec">Every part A of a space carries three sets. Its <i>inside</i> is the union of all open sets that lie in A: the largest open set in A. Its <i>closure</i>, from 34c4, is the set of points every open set about which meets A: the smallest closed set holding A. Its <i>edge</i> is the closure with the inside taken away.</p>
+  <p data-pid="967d47">Edge technique: <b>a point is on the edge of A exactly when every open set about it meets both A and the leftover of A.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the edge technique">
+x \in \overline A \iff \text{every open } U \ni x \text{ meets } A @@ the closure, 34c4
+x \notin \text{inside}(A) \iff \text{no open } U \ni x \text{ lies in } A @@ the inside is the union of open sets in A
+\text{no open } U \ni x \text{ lies in } A \iff \text{every open } U \ni x \text{ meets } X \setminus A @@ not lying in A is meeting its leftover
+\htmlClass{new}{x \in \text{edge}(A) \iff \text{every open } U \ni x \text{ meets } A \text{ and } X \setminus A} \quad \blacksquare @@ the edge is the closure minus the inside
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: three parts, by hand">
+A = [0, 1) \subseteq \mathbb R:\ \ \text{inside } (0, 1),\ \text{closure } [0, 1],\ \text{edge } \{0, 1\} @@ every stretch about 0 or 1 meets A and its leftover
+A = \mathbb Q \cap [0, 1]:\ \ \text{inside } \emptyset,\ \text{closure } [0, 1],\ \text{edge } [0, 1] @@ every stretch holds fractions and non-fractions (8e)
+A = \{y \ge 0,\ x^2 + y^2 < 1\}:\ \ \text{inside } \{y > 0,\ x^2 + y^2 < 1\} @@ the strict tests
+\htmlClass{new}{\text{closure } \{y \ge 0,\ x^2 + y^2 \le 1\},\ \text{edge: the segment and the upper half of the circle}} @@ the closed tests; closure minus inside
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · three sets · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34j2.1</span><span class="ph know">know</span>What are the inside, the closure and the edge of a part A?  <br>What does the edge technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34j3">
+  <h2 class="sthead"><span class="stno">34j3</span>Continuity, checked on a base</h2>
+  <p data-pid="e91954">Base-check technique: <b>if ℬ is a base for the open sets of Y, a map f from X to Y is continuous exactly when the pull-back of every member of ℬ is open.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the base-check technique">
+V \subseteq Y \text{ open} \Rightarrow V = \textstyle\bigcup_i B_i,\ B_i \in \mathcal B @@ a base (34b3)
+f^{-1}(V) = \textstyle\bigcup_i f^{-1}(B_i) @@ x lands in V exactly when it lands in some Bᵢ
+\htmlClass{new}{f^{-1}(V) \text{ is open}} \quad \blacksquare @@ a union of open sets is open; the other way, members of ℬ are open
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: breaks found by pull-backs">
+f(x) = x^2:\ \ f^{-1}((1, 4)) = (-2, -1) \cup (1, 2) @@ open: no break shows; every stretch pulls back so, by the strict tests
+f(x) = \text{the round-down of } x:\ \ f^{-1}((\tfrac12, \tfrac32)) = [1, 2) @@ not open at 1: a break at 1
+f(x) = 1 \text{ for } x > 0,\ \ 0 \text{ for } x \le 0:\ \ f^{-1}((\tfrac12, \tfrac32)) = (0, \infty) @@ open; but f⁻¹((−½, ½)) = (−∞, 0], not open: a break at 0
+\htmlClass{new}{X = \{1, 2, 3\},\ \mathcal T = \{\emptyset, \{1\}, \{1, 2\}, X\},\ \ f = 1 \leftrightarrow 3:\ \ f^{-1}(\{1\}) = \{3\}} @@ not open: f is not continuous from X to itself
+  </pre>
+  <p data-pid="d12add">A pull-back that is not open has a point with no room around it inside the pull-back. That point is where the break is. The step function above shows that one good pull-back is not enough: each small stretch has to be tried.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · checking · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34j3.1</span><span class="ph know">know</span>What does the base-check technique say?  <br>How does the pull-back of (½, 3/2) show where the round-down breaks?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34j4">
+  <h2 class="sthead"><span class="stno">34j4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\{g \le c\} \text{ is open, since } g \text{ is continuous}\,? @@ it is closed: {x² ≤ 1} = [−1, 1] is not open
+\text{the edge of } A \text{ lies in } A\,? @@ the edge of (0, 1) is {0, 1}, outside it
+\text{one open pull-back shows that } f \text{ is continuous}\,? @@ the step function pulls (½, 3/2) back to an open set, and still breaks at 0
+\text{the inside of the fractions is the fractions}\,? @@ no open stretch lies in the fractions; their inside is ∅
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34j4.1</span><span class="ph know">know</span>Why is “one open pull-back shows that f is continuous” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">34j.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="g(x, y) = x^3 - 3xy^2"></span></span>Sort the plane into the open set g &gt; 0, the open set g &lt; 0, and the closed set g = 0. Find how many pieces each of the open sets has, by testing along the circle of radius 1.</div>
+  <div class="chq"><span class="chid">34j.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="A = \{1/n : n = 1, 2, 3, \ldots\} \subseteq \mathbb R"></span></span>Find the inside, the closure and the edge of A. Is A closed? Is A with 0 added closed? <br>Find a continuous g with A ∪ {0} = {g = 0}.</div>
+  <div class="chq"><span class="chid">34j.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\{g &gt; c\} \text{ open for every } c"></span></span>If {g &gt; c} is open for every c, must g be continuous? Test g = 1 for x &gt; 0 and 0 for x ≤ 0, and check {g &lt; c} as well. <br>Prove that if both {g &gt; c} and {g &lt; c} are open for every c, then g is continuous.</div>
+  <div class="chq"><span class="chid">34j.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="f(x, y) = (x + y,\ xy)"></span></span>Prove f is continuous from the plane to the plane twice: once by the two-parts technique of 34b3, and once by the base-check technique with the boxes of fraction stretches as the base.</div>
+  <div class="chq"><span class="chid">34j.5.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">the edge of the coast of British Columbia</span></span>A map of the coast at one scale shows the shore as a line. At a finer scale the line becomes coves and points, and at a finer one rocks and pools. Where is the edge of the land? One side holds that the coast has an edge, a closed set, whatever the scale. The other holds that the edge depends on what counts as an open set of land, so the question has no answer until the measuring is fixed. <br>Which side does the edge technique take?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r34concl.html">← 34·∎ · stretching keeps what open sets decide</a><a href="r34k.html">34k · surfaces from a square →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The inside is the interior, int A; the closure is cl A or A with a bar; the edge is the boundary, ∂A, or frontier. The strict-test technique says that the sets {g &gt; c} are open for continuous g: superlevel sets are open, level sets closed. A map with all {g &gt; c} open is lower semicontinuous.</p>
+  <h3>Who said it first</h3>
+  <p>Interior, closure and boundary were in use for sets of the line by Georg Cantor in the 1880s, and for sets in general spaces by Felix Hausdorff in 1914. Kazimierz Kuratowski built spaces from the closure alone in 1922.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“{x² ≤ 1} is the pull-back of (−∞, 1] under a continuous map, so it is open.” Not allowed: (−∞, 1] is not open. Pull-backs of closed sets are closed, and of open sets open; continuity says nothing about a set that is neither.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'pull back',t:R`\{g > c\} = g^{-1}((c, \infty))`,n:`Open.`},
+  {k:'ember',kl:'leftovers',t:R`\{g \le c\} = X \setminus \{g > c\}`,n:`Closed.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\{g = c\} \text{ closed}}`,n:`Sort sets at a glance.`}
+],{title:'The slides · strict tests · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'inside',t:R`\textstyle\bigcup\{U \text{ open} : U \subseteq A\}`,n:`Largest open set in A.`},
+  {k:'ember',kl:'closure',t:R`\overline A`,n:`Smallest closed set holding A.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{edge} = \overline A \setminus \text{inside}(A)}`,n:`Every open set meets both sides.`}
+],{title:'The slides · three sets · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'base',t:R`V = \textstyle\bigcup B_i`,n:`Small open sets suffice.`},
+  {k:'ember',kl:'pull back',t:R`f^{-1}(\bigcup B_i) = \bigcup f^{-1}(B_i)`,n:`Unions pass through.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{[1, 2) \text{ not open: a break at } 1}`,n:`One bad pull-back.`}
+],{title:'The slides · checking · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

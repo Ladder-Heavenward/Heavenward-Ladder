@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How can a picture be stored small?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r31phys.html">← 31·phys how do polarized sunglasses cut glare?</a><a href="r32.html">next: 32 every periodic function is a sum of turnings →</a></p>
+  <div class="tags"><span class="tag now">31·now · research front</span></div>
+  <h1>How can a picture be stored small?</h1>
+  <p data-pid="68b6df">How can a picture be stored small? A phone photo of the Palouse hills in June has twelve million dots, each with three numbers for its colour. Stored plainly that is thirty-six million numbers, yet the phone keeps it in a few million bytes, and looking closely you cannot tell what was thrown away. Most of the picture is smooth: sky, a field, the slow side of a hill. Smooth stretches are nearly the same from one dot to the next, so most of the numbers say almost nothing new. What makes the question hard is the edges. A field ends at a fence line, a roof against the sky, and an edge is exactly where neighbouring dots differ most. A way of storing that is good on smooth stretches spreads an edge over everything, and a way that is good at edges wastes room on the smooth parts. This page builds a right-angled basis of brief waves, each a small up-and-down at one place and one size. Reading a picture along it, a smooth stretch gives readings near 0 and an edge touches only a few. Then keeping the largest readings, by the shadow-sum technique, is the best way to keep a few numbers. Bases like this, but smooth, were built in 1988; what is still argued comes at the end.</p>
+  <p class="gesture" data-pid="6aa9a1">The brief waves at every place and every size, with the constant, form a right-angled basis. A picture read along them has small readings where it is smooth and only a few large ones at its edges. Keeping the m largest readings is the best picture from m pieces of the basis, and the miss is the total square of what was dropped.</p>
+</header>
+
+<section class="class step" data-step="31now1">
+  <h2 class="sthead"><span class="stno">31now1</span>Brief waves at right angles</h2>
+  <p data-pid="c66f49">Take one row of a picture with 8 dots, as a list of 8 numbers, with the plain dot product. Build 8 lists. h₀ is 1/√8 at every dot. h₁ is +1/√8 on the first four dots and −1/√8 on the last four. h₂ and h₃ are ±½ on the first four and on the last four dots, + then −, and 0 elsewhere. h₄ to h₇ are ±1/√2 on each pair of dots in turn, and 0 elsewhere. Each list after the first is a <i>brief wave</i>: up, then down by the same amount, at one place and one size.</p>
+  <p data-pid="6ceea5">Brief-wave technique: <b>the lists h₀, …, h₇ are a right-angled basis of lists of 8 numbers; and in general, for 2ᴶ dots, the constant and the brief waves at every size 2ʲ and place form a right-angled basis.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the brief-wave technique">
+|h_k|^2 = 1 \text{ for every } k @@ for example h₂: 4 dots of ¼ each
+h_0\cdot h_k = 0\ (k \ge 1) @@ each brief wave goes up as much as down
+\text{two waves of one size touch disjoint dots} @@ so their product is 0
+\text{a smaller wave sits on a flat of a larger} @@ where the larger is constant; so the product is that constant times an up-and-down: 0
+\htmlClass{new}{\text{a right-angled basis}} \quad \blacksquare @@ 2ᴶ lists of size 1 at right angles are free (31c), and there are as many as dots
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: a row with an edge">
+x = (10, 12, 14, 16, 40, 40, 40, 40) @@ a slow rise, then a roof edge, then flat
+x\cdot h_0 = 212/\sqrt8 \approx 74.95,\ \ x\cdot h_1 = -108/\sqrt8 \approx -38.18 @@ the average, and the halves against each other
+x\cdot h_2 = -4,\ \ x\cdot h_3 = 0 @@ quarters
+x\cdot h_4 = x\cdot h_5 = -\sqrt2 \approx -1.41,\ \ x\cdot h_6 = x\cdot h_7 = 0 @@ pairs
+\htmlClass{new}{3 \text{ readings of } 8 \text{ are } 0} \quad \blacksquare @@ the flat stretch gives 0 at every size
+  </pre>
+  <p data-pid="7c2ad5">On a whole picture the same is done along rows and down columns. For a function on 0 to 1, the brief waves are 2^(j/2)ψ(2ʲt − k), with ψ equal to 1 on the first half of 0 to 1 and −1 on the second. They and the constant are a right-angled list of sized functions (31h), and it is complete: their shadows are the step averages over pieces of size 2^(−J), and these come as close as you like to any continuous function in the sup-size, so in the square size too (31g).</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · brief waves · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">31·now.1.1</span><span class="ph know">know</span>What is a brief wave, and why are two brief waves of different sizes at right angles?  <br>Why did the flat stretch of the row give readings of 0?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31now2">
+  <h2 class="sthead"><span class="stno">31now2</span>Keeping a few readings</h2>
+  <p data-pid="01d426">Read a picture x along a right-angled basis: x = Σ cₖhₖ with cₖ = x · hₖ. To store it small, keep a few of the cₖ and drop the rest.</p>
+  <p data-pid="8c2d2f">Largest-readings technique: <b>in a right-angled basis, of all pictures built from m of the basis lists, the closest to x keeps the m readings of largest size, and its squared miss is the total of the squares of the readings dropped.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the largest-readings technique">
+\big|x - \textstyle\sum_{k \in S} b_kh_k\big|^2 = \sum_{k \in S}(c_k - b_k)^2 + \sum_{k \notin S}c_k^2 @@ the shadow-sum technique (31b2), list by list
+\text{least over } b_k: b_k = c_k @@ for each kept list, the reading itself
+\text{miss}^2 = \textstyle\sum_{k \notin S} c_k^2 @@ what is dropped
+\htmlClass{new}{\text{least when } S \text{ holds the } m \text{ largest } |c_k|} \quad \blacksquare @@ drop the smallest squares
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: the row, kept small">
+|x|^2 = 7096 = 74.95^2 + 38.18^2 + 4^2 + 1.41^2 + 1.41^2 @@ the energy-sum technique (31h3), finite
+\text{keep } c_0, c_1:\ \ (13, 13, 13, 13, 40, 40, 40, 40) @@ the two halves’ averages
+\text{miss}^2 = 16 + 2 + 2 = 20 @@ 9 + 1 + 1 + 9, dot by dot
+\htmlClass{new}{2 \text{ numbers of } 8 \text{ keep } 99.7\% \text{ of } |x|^2} \quad \blacksquare @@ and the edge sits exactly where it was
+  </pre>
+  <p data-pid="9c3098">31f’s keep-the-largest technique did the same for a grid, with the axes of the turn-stretch-turn. There the basis was fitted to the one picture, and had to be stored with it. Here the basis is fixed in advance and costs nothing to store; only the kept readings and their places are kept. The price is that a fixed basis suits some pictures better than others.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · keep a few · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·now.2.1</span><span class="ph know">know</span>What does the largest-readings technique say, and what is the squared miss?  <br>How is it different from keeping the largest stretches of the turn-stretch-turn?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31now3">
+  <h2 class="sthead"><span class="stno">31now3</span>Why edges are cheap</h2>
+  <p data-pid="1cbd46">Two facts make brief waves suit pictures. A brief wave sees only the dots it touches, so an edge changes only the waves that straddle it. And a brief wave reads a smooth stretch as nearly 0, because it takes away its left half from its right.</p>
+  <p data-pid="9f7d4f">Edge-count technique: <b>for 2ᴶ dots, a row that is constant except for one jump has at most J + 1 readings that are not 0, one at each size and the constant; and where a function has slope f′ across a small wave of width w, the wave’s reading is about −f′w^(3/2)/4.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the edge-count technique">
+\text{waves of one size touch disjoint stretches} @@ the brief-wave technique
+\text{a wave on a flat stretch reads } 0 @@ up as much as down
+\text{at most one wave of each size straddles the jump} @@ J sizes, plus the constant
+\textstyle\int_0^w \tfrac{\pm 1}{\sqrt w}\big(f(s) + f'(s)(t - s)\big)\,dt = \tfrac{1}{\sqrt w}\Big(\int_0^{w/2} - \int_{w/2}^w\Big)f'(s)(t - s)\,dt @@ the tangent line (13k), on a wave of width w from s
+\htmlClass{new}{\approx -\tfrac{f'(s)\,w^{3/2}}{4}} \quad \blacksquare @@ the flat part cancels; each halving of w cuts the reading by 2√2
+  </pre>
+  <p data-pid="215725">So a picture with smooth stretches and a few edges has a few large readings, at the edges and at the largest sizes, and a great many tiny ones. Turnings, the sums of waves of rung 32, run across the whole picture, and every one of them feels each edge; their readings of a jump shrink only like one over their pace, and many must be kept. That is why a file built on brief waves can keep a sharp roof line with few numbers, where one built on turnings smears it into ripples.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · edges · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·now.3.1</span><span class="ph know">know</span>What does the edge-count technique say about a row with one jump?  <br>Why does a brief wave read a smooth stretch as nearly 0, and how fast does its reading shrink as it narrows?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31now4">
+  <h2 class="sthead"><span class="stno">31now4</span>What is shown, and what is open</h2>
+  <p data-pid="5d4693">Shown: the up-and-down brief waves of this page are a complete right-angled list, and keeping the largest readings is the best way to keep m of them. Their weakness is that they jump: a picture kept with few of them looks blocky. In 1988 a family of brief waves was built that are smooth, touch only a short stretch each, and are still at right angles at every size and place, all copies of one shape squeezed and slid. It had been doubted that all three could hold at once.</p>
+  <p data-pid="6e0129">Shown too: the picture standard of the year 2000 reads pictures along brief waves, close kin to these, and so do standards for storing fingerprints. Most phone photos still use the older standard, which reads small square tiles along turnings.</p>
+  <p data-pid="adf699">Open, or argued: which basis is best for which kind of picture, and whether a fixed basis should be used at all. Methods that learn a way of storing from many pictures now keep photos smaller than any fixed basis at the same look, but they are not right-angled, their misses are not a sum of dropped squares, and nobody can yet say what they keep. Whether the squared miss is even the right measure of what an eye notices is argued too.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · open · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·now.4.1</span><span class="ph know">know</span>What three things were shown to hold at once for the brief waves of 1988?  <br>What does a learned way of storing give up that a right-angled basis has?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31now5">
+  <h2 class="sthead"><span class="stno">31now5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{keep the first } m \text{ readings}\,? @@ keep the m largest; the order of the list is not their size
+\text{the miss is the largest reading dropped}\,? @@ it is the total of the squares of all dropped
+\text{in any basis, dropping small readings costs their squares}\,? @@ only in a right-angled one; otherwise the misses mix
+\text{brief waves are best for every picture}\,? @@ a picture of fine stripes is cheaper in turnings
+\text{a small squared miss means the picture looks the same}\,? @@ the eye weighs edges and textures in its own way
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·now.5.1</span><span class="ph know">know</span>Why does dropping small readings cost exactly their squares in a right-angled basis, and not in others?  <br>Why are brief waves not best for a picture of fine stripes?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">31·now.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x = (3, 5, 9, 11, 11, 9, 5, 3)"></span></span>Build the 8 readings of x along h₀, …, h₇.  <br>Keep the 3 largest, build the picture they give, and check the squared miss against the dropped squares.</div>
+  <div class="chq"><span class="chid">31·now.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="J \to \infty"></span></span>For the function equal to t on 0 to 1, find the total of the squared readings at size 2^(−j), and add over every j.  <br>Check the total against ‖t‖² less the constant’s share. Which technique of 31h does this check?</div>
+  <div class="chq"><span class="chid">31·now.6.3</span><span class="tagq">converse</span>In a right-angled basis, dropping readings costs their squares. Turn it round: if, for every x, dropping any set of readings costs exactly their squares, must the basis be right-angled? Start with two lists.</div>
+  <div class="chq"><span class="chid">31·now.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="x = (10, 12, 14, 16, 40, 40, 40, 40)"></span></span>Find the readings a second way: replace each pair of dots by their sum and difference over √2, and repeat on the sums.  <br>Check you get the same 8 numbers, and count the multiplications for 2ᴶ dots.</div>
+  <div class="chq"><span class="chid">31·now.6.5</span><span class="tagq">seam</span>One side holds that a picture should be stored in a right-angled basis, because then every loss is a known sum of squares and can be bounded before anyone looks. The other holds that what matters is how the picture looks, which no sum of squares measures, so the best store is whatever looks best to people, proved or not.  <br>Which of this page’s techniques survive if the right angles are given up? What would count as evidence that one store is better than another?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r31phys.html">← 31·phys · how do polarized sunglasses cut glare?</a><a href="r32.html">32 · every periodic function is a sum of turnings →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The brief waves are wavelets, and the up-and-down ones of this page the Haar wavelets; reading a list along them is the discrete wavelet transform, done with the pairwise sums and differences of 31·now.6.4 in about 2·2ᴶ steps. A family made of one shape squeezed and slid is a wavelet basis, and the smooth ones of 1988 are the Daubechies wavelets, with compact support. Keeping the largest readings is thresholding, or best m-term approximation. The picture standard of 2000 is JPEG 2000, whose wavelets are biorthogonal, not right-angled; the fingerprint standard is WSQ. The older standard is JPEG, built on the discrete cosine transform over 8 × 8 tiles. Learned stores are neural image compression.</p>
+  <h3>Who said it first</h3>
+  <p>Alfréd Haar built the up-and-down basis in 1910. Jean Morlet and Alex Grossmann named wavelets in 1984, working on echoes from rock. Yves Meyer found smooth right-angled wavelets in 1985, and Stéphane Mallat and Meyer gave the frame for building them by sizes in 1986 to 1989. Ingrid Daubechies built smooth wavelets that touch only a short stretch in 1988. David Donoho and Iain Johnstone studied keeping the largest readings in noise from 1994.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'sizes',t:R`h_1,\ h_2, h_3,\ h_4, \ldots, h_7`,n:`Halves, quarters, pairs.`},
+  {k:'ember',kl:'right angles',t:R`h_j\cdot h_k = 0`,n:`Disjoint, or constant under.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a right-angled basis}}`,n:`As many as dots.`}
+],{title:'The slides · brief waves · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'miss',t:R`\textstyle\sum_{k\in S}(c_k - b_k)^2 + \sum_{k\notin S}c_k^2`,n:`Shadow-sum.`},
+  {k:'ember',kl:'best',t:R`b_k = c_k`,n:`Keep the readings.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{keep the } m \text{ largest}}`,n:`Drop the smallest squares.`}
+],{title:'The slides · keep a few · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'one jump',t:R`\le J + 1 \text{ readings}`,n:`One per size.`},
+  {k:'ember',kl:'smooth',t:R`\approx -f^{\prime}w^{3/2}/4`,n:`The tangent line.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{few large, many tiny}}`,n:`Cheap edges.`}
+],{title:'The slides · edges · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'shown',t:R`\text{smooth, short, at right angles}`,n:`All three at once.`},
+  {k:'ember',kl:'used',t:R`\text{the standard of } 2000`,n:`Pictures, fingerprints.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{which basis? which miss?}}`,n:`Still argued.`}
+],{title:'The slides · open · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

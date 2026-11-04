@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The heat equation</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r33.html">← 33 rates in space and time govern heat and waves</a><a href="r33b.html">next: 33b heat smooths and forgets →</a></p>
+  <div class="tags"><span class="tag proof">33a · proof</span></div>
+  <h1>The heat equation</h1>
+  <p data-pid="ccd296">Hold one end of a copper rod in a flame and the other end warms, slowly at first, then less slowly, and never all at once. Rung 24 wrote rules on how fast a single quantity changes in time. A rod is not a single quantity. It has a temperature at every point, so its temperature is a function of where and of when, and the rule that moves it has to tie the two together. Two plain facts give the rule. Heat runs from hot to cold, faster where the temperature falls more steeply. And heat is kept: what a short piece of rod gains is what flows in at one end less what flows out at the other. Put the two together and shrink the piece, and the rate in time is tied to the second rate in space. Then the step solves the rule on a rod whose ends are held cold. It looks for answers that keep their shape and only fade, finds exactly one family of them, and builds every other answer as a sum of those, with the series of the rung before.</p>
+  <p class="gesture" data-pid="8c5e5b">Heat flows down the temperature slope, and heat is kept, so the rate of temperature in time is a fixed multiple of its second rate along the rod. Shapes that only fade are sine curves, each fading at its own pace, and every start held cold at the ends is a sum of them.</p>
+</header>
+
+<section class="class step" data-step="33a1">
+  <h2 class="sthead"><span class="stno">33a1</span>Heat runs downhill, and is kept</h2>
+  <p data-pid="27705d">Take a thin rod along the x-axis, with cross-section 1 square metre to keep the books simple. Let u(x, t) be its temperature at the point x at the time t. Then u has two partial slopes (28a): u_t, the rate in time with x held still, and u_x, the rate along the rod with t held still. Write u_xx for the partial slope of u_x along x.</p>
+  <p data-pid="a7438d">Two measured laws, held in trust. First, the heat a piece of rod holds rises by ρc for each degree, per metre of rod: ρ is the density and c the heat each kilogram takes per degree. Second, the heat that crosses the point x each second, going right, is −K u_x(x, t): heat runs down the slope, and faster where the slope is steeper. K is the rod’s conductivity.</p>
+  <p data-pid="4ba751">Heat-rule technique: <b>if heat runs down the temperature slope at a rate in proportion to it, and no heat is made or lost inside the rod, then u_t = κ u_xx, with κ = K/(ρc).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the heat-rule technique">
+Q(t) = \textstyle\int_x^{x+h} \rho c\,u(s, t)\,ds @@ the heat held by the piece from x to x + h (the first law)
+Q^{\prime}(t) = \textstyle\int_x^{x+h} \rho c\,u_t(s, t)\,ds @@ either order (28h) on ∫∫ uₜ, then the area function’s slope (16b); uₜ is continuous
+Q^{\prime}(t) = -K u_x(x, t) + K u_x(x + h, t) @@ the books: in at the left end, less out at the right end (the second law); nothing is made inside
+\rho c\,u_t(x^*, t) = K\,\tfrac{u_x(x + h, t) - u_x(x, t)}{h} \text{ for some } x^* \in [x, x + h] @@ divide by h; the mean value technique (14c) on the area function of uₜ
+\htmlClass{new}{u_t = \kappa\,u_{xx},\ \ \kappa = K/(\rho c)} \quad \blacksquare @@ let h head to 0: x* heads to x, and the right side heads to K uₓₓ
+  </pre>
+  <p data-pid="0bcf00">A rule that ties several partial slopes of one unknown function is a rate rule in several inputs. Its accepted name is a <i>partial differential equation</i>. This one is the heat rule, and κ is the rod’s diffusivity: for copper, κ = 401 / (8960 × 385) ≈ 1.16 × 10⁻⁴ m²/s.</p>
+  <p data-pid="071f69">In a solid block the same books are kept on a small box instead of a short piece. The flow is the arrow −K∇u, and the spread technique (28j) turns the flow out through the six faces into the total of its spread inside. So u_t = κ(u_xx + u_yy + u_zz). The sum of the three second slopes is written Δu.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the ledger, at every point</div>
+    <p data-pid="3fd993">16·then kept a lake’s books every second: the change is what comes in less what goes out. The heat rule keeps the same books at every point at once. A short piece of rod is a lake for heat, and the slope of the flow is what it gains.</p>
+    <p data-pid="165571"><b>Where the heat rule fails, heat is being made or lost, and the size of the failure is the size of the source.</b></p>
+    <p data-pid="7b3f31">Once the books are kept everywhere, a place where they do not close is a place where something makes or takes heat. Add a heater that gives q joules per cubic metre per second, and the rule becomes ρc u_t = K u_xx + q. The term q is what the books found missing.</p>
+    <p class="bait" data-pid="f0eb8a">A compost heap near Chilliwack is warmer in the middle than at its edges in January, though the air around it is near freezing. If the heat rule with no source were true there, could the middle stay warmest for weeks? What would the books say is inside?</p>
+  </aside>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · heat rule · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">33a1.1</span><span class="ph know">know</span>What two measured laws does the heat-rule technique stand on, and what does it say? <br>What is Δu, and what rule does a solid block obey?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33a2">
+  <h2 class="sthead"><span class="stno">33a2</span>Shapes that only fade</h2>
+  <p data-pid="ee4585">Hold the ends of a rod of length L at temperature 0: u(0, t) = u(L, t) = 0 for every t. Which answers keep one shape and only change in size? Try u(x, t) = X(x) T(t), with neither X nor T always 0.</p>
+  <p data-pid="35238e">Cooling-shape technique: <b>the answers of u_t = κu_xx of the form X(x)T(t), with u = 0 at both ends, are exactly the multiples of e^(−κ(nπ/L)²t) sin(nπx/L), for n = 1, 2, 3, ….</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the cooling-shape technique">
+X(x)\,T^{\prime}(t) = \kappa\,X^{\prime\prime}(x)\,T(t) @@ put u = XT into the heat rule (one-knob technique, 28a)
+\tfrac{T^{\prime}(t)}{\kappa T(t)} = \tfrac{X^{\prime\prime}(x)}{X(x)} = -\lambda @@ where XT ≠ 0: the left side does not move with x, the right side does not move with t, so both are one number
+X(0) = X(L) = 0 @@ u = 0 at the ends for every t, and T is not always 0
+\lambda \le 0 \Rightarrow X = 0 @@ λ = 0: X = A + Bx; λ &lt; 0: two growths (the tried-growth technique, 24h); either way both ends 0 force A = B = 0
+\lambda > 0:\ X = A\cos(\sqrt\lambda\,x) + B\sin(\sqrt\lambda\,x),\ A = 0 @@ the steady-swing technique (24h); X(0) = 0
+\sin(\sqrt\lambda\,L) = 0,\ \ \sqrt\lambda = \tfrac{n\pi}{L} @@ X(L) = 0 with B ≠ 0; sin is 0 exactly at the whole multiples of π (21b)
+\htmlClass{new}{u = C\,e^{-\kappa(n\pi/L)^2 t}\,\sin\tfrac{n\pi x}{L}} \quad \blacksquare @@ T′ = −κλT gives T (the own-rate technique, 24a)
+  </pre>
+  <p data-pid="95f272">Each shape is a sine arch, or n arches side by side, and each fades by a fixed factor every second. The shape with n arches fades n² times as fast as the shape with one. For a copper rod half a metre long, the one-arch shape loses a factor of e every L²/(κπ²) ≈ 218 seconds. The shape with ten arches loses it in about 2 seconds.</p>
+  <p data-pid="0e80d4">Looking for answers of the form X(x)T(t) has an accepted name: <i>separation of variables</i>. It found every answer of that form. It did not find every answer.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · fading shapes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33a2.1</span><span class="ph know">know</span>What does the cooling-shape technique say? <br>Why must T′/(κT) and X″/X be one number?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33a3">
+  <h2 class="sthead"><span class="stno">33a3</span>Every start is a sum of fading shapes</h2>
+  <p data-pid="eba0d1">The heat rule is straight in u: if u and v are answers, so are u + v and cu. So the answers with ends at 0 form a space of arrows (27a), and every finite sum of cooling shapes is an answer. Now start the rod at u(x, 0) = f(x), with f(0) = f(L) = 0. Stretch f to [−L, L] as an odd function, f(−x) = −f(x). Its projections onto the turnings (32a) leave only sines, with coefficients</p>
+  <p class="eqline" data-pid="b3cbc4">\(b_n = \tfrac{2}{L}\int_0^L f(x)\,\sin\tfrac{n\pi x}{L}\,dx.\)</p>
+  <p data-pid="2e6882">Fading-series technique: <b>if Σ|b_n| settles, then u(x, t) = Σ b_n e^(−κ(nπ/L)²t) sin(nπx/L) solves the heat rule for t &gt; 0, is 0 at both ends, and at t = 0 is the sine series of f.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the fading-series technique">
+|b_n e^{-\kappa(n\pi/L)^2t}\sin\tfrac{n\pi x}{L}| \le |b_n| @@ each term is at most its coefficient, for every x and every t ≥ 0
+\textstyle\sum b_n e^{-\kappa(n\pi/L)^2t}\sin\tfrac{n\pi x}{L} \text{ settles at once on } [0, L] \times [0, \infty) @@ the at-once comparison technique (23d), with Mₙ = |bₙ|
+\big|\tfrac{\partial}{\partial t}\text{term}\big|,\ \big|\tfrac{\partial^2}{\partial x^2}\text{term}\big| \le \kappa\big(\tfrac{n\pi}{L}\big)^2|b_n|\,e^{-\kappa(n\pi/L)^2t_0} \text{ for } t \ge t_0 > 0 @@ and n²e^(−cn²) shrinks fast enough that these settle too (22e)
+u_t = \textstyle\sum \tfrac{\partial}{\partial t}\text{term},\ \ u_{xx} = \sum \tfrac{\partial^2}{\partial x^2}\text{term} \text{ for } t > 0 @@ slopes settling at once give the slope of the sum: the area-at-once technique (23e) and the area function’s slope (16b)
+\htmlClass{new}{u_t - \kappa u_{xx} = \textstyle\sum (\text{each term’s } \tfrac{\partial}{\partial t} - \kappa\tfrac{\partial^2}{\partial x^2}) = 0} \quad \blacksquare @@ the cooling-shape technique, term by term; at t = 0 the sum is the sine series
+  </pre>
+  <p data-pid="9d6736">Where the sine series of f returns f, as it does when f has a slope (32c), the sum starts at f itself. One example first. A rod of length L starts at u = x(L − x), warm in the middle and cold at the ends. Its sine coefficients come out by parts twice: b_n = 8L²/(n³π³) for odd n, and 0 for even n. So</p>
+  <p class="eqline" data-pid="0aa970">\(u(x, t) = \tfrac{8L^2}{\pi^3}\Big(e^{-\kappa\pi^2t/L^2}\sin\tfrac{\pi x}{L} + \tfrac{1}{27}e^{-9\kappa\pi^2t/L^2}\sin\tfrac{3\pi x}{L} + \cdots\Big).\)</p>
+  <p data-pid="4057d3">The second term starts at one twenty-seventh of the first and fades nine times as fast. After a short while the rod is one sine arch, sinking.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · every start · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33a3.1</span><span class="ph know">know</span>Why do sums of cooling shapes solve the heat rule? <br>What does the fading-series technique say, and where do the coefficients bₙ come from?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33a4">
+  <h2 class="sthead"><span class="stno">33a4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+u_t = \kappa u_x\,? @@ the books take the difference of two flows, so the rule needs the slope of uₓ, the second rate
+\tfrac{T^{\prime}}{\kappa T} = \tfrac{X^{\prime\prime}}{X} \text{, so both are } 0\,? @@ both are one number, not 0; with λ = 0 only X = 0 meets the ends
+\text{separation found every answer of the form } X(x)T(t), \text{ so every answer is of that form}\,? @@ most answers are sums of many such shapes, and are of no such form
+u(x, t) = \sin\tfrac{\pi x}{L} + 3 \text{ solves the rule with ends at } 0\,? @@ it solves the rule, but at x = 0 it is 3: adding a constant spoils the ends
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33a4.1</span><span class="ph know">know</span>Why is “separation found every answer of the form X(x)T(t), so every answer is of that form” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">33a.4.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a rod of length L, ends held at 0</span> <span data-tex-inline="u(x, 0) = 5\sin\tfrac{\pi x}{L} - 2\sin\tfrac{3\pi x}{L}"></span></span>Build the answer, and check it in the rule by taking slopes. <br>Find the time at which the second shape is one hundredth of the first, for copper with L = 0.5 m.</div>
+  <div class="chq"><span class="chid">33a.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="u(x, 0) = 1 \text{ on } (0, L),\ \ u = 0 \text{ at the ends}"></span></span>Find bₙ. Does Σ|bₙ| settle?  <br>Find which line of the fading-series proof still holds for t ≥ t₀ &gt; 0, and which fails at t = 0. What does the sum give at x = L/2 when t = 0, and at x = 0?</div>
+  <div class="chq"><span class="chid">33a.4.3</span><span class="tagq">converse</span>The heat-rule technique went from the two laws to the rule. Turn it round: suppose u has continuous slopes and u_t = κu_xx on a rod. Prove that the books close on every piece [α, β]: the slope of the heat held equals the flow in at α less the flow out at β. <br>Find whether this proves the second law, that the flow is −K uₓ.</div>
+  <div class="chq"><span class="chid">33a.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="u(x, 0) = x(L - x)"></span></span>Find bₙ = 8L²/(n³π³) for odd n by parts, twice. <br>The answer at x = L/2 and t = 0 must be L²/4, by 32c. Use it to find the total of 1 − 1/27 + 1/125 − 1/343 + ⋯, a sum 22g can only show settles.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r33.html">← 33 · rates in space and time govern heat and waves</a><a href="r33b.html">33b · heat smooths and forgets →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A rate rule in several inputs is a partial differential equation (PDE). The heat rule u_t = κu_xx is the heat equation, also called the diffusion equation; κ is the thermal diffusivity, K the thermal conductivity, ρc the volumetric heat capacity. The second law of this step, flow = −K∇u, is Fourier’s law of conduction. The sum Δu = u_xx + u_yy + u_zz is the Laplacian. Holding the ends at 0 is a Dirichlet condition. Trying u = X(x)T(t) is separation of variables, and −λ is the separation constant.</p>
+  <h3>Who said it first</h3>
+  <p>Joseph Fourier wrote the heat equation and solved it by sine series in a memoir to the Paris Academy in 1807. The referees, among them Joseph-Louis Lagrange and Pierre-Simon Laplace, were not satisfied, above all that an arbitrary function could be such a sum. He won the Academy’s prize on heat in 1811, and published <i>Théorie analytique de la chaleur</i> in 1822. Jean-Baptiste Biot had written the conduction law for a bar in 1804, without the equation.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Heat flows from hot to cold, so the hottest point of the rod cools fastest. The rule is u_t = −κu.” Not allowed: a point loses heat only to its neighbours, and only as fast as the flow on its two sides differs. A rod at one uniform 90 °C, with no flow at its ends, does not cool at all.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'held',t:R`Q = \textstyle\int \rho c\,u`,n:`Heat stored.`},
+  {k:'ember',kl:'books',t:R`Q^{\prime} = K u_x(x + h) - K u_x(x)`,n:`In less out.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{u_t = \kappa u_{xx}}`,n:`Shrink the piece.`}
+],{title:'The slides · heat rule · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'try',t:R`u = X(x)\,T(t)`,n:`One shape, changing size.`},
+  {k:'ember',kl:'split',t:R`\tfrac{T^{\prime}}{\kappa T} = \tfrac{X^{\prime\prime}}{X} = -\lambda`,n:`Each side on its own knob.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{e^{-\kappa(n\pi/L)^2t}\sin\tfrac{n\pi x}{L}}`,n:`More arches fade faster.`}
+],{title:'The slides · fading shapes · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'project',t:R`b_n = \tfrac{2}{L}\textstyle\int_0^L f\sin\tfrac{n\pi x}{L}`,n:`Onto the sines.`},
+  {k:'ember',kl:'fade',t:R`b_n \to b_n e^{-\kappa(n\pi/L)^2t}`,n:`Each at its pace.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{u = \textstyle\sum b_n e^{-\kappa(n\pi/L)^2t}\sin\tfrac{n\pi x}{L}}`,n:`The sum solves it.`}
+],{title:'The slides · every start · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

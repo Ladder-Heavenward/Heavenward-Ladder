@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Truth cannot be defined inside</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r37j.html">← 37j consistency from within</a><a href="r37concl.html">next: 37·∎ arithmetic describes its own proofs →</a></p>
+  <div class="tags"><span class="tag proof">37k · proof</span></div>
+  <h1>Truth cannot be defined inside</h1>
+  <p data-pid="1c41e7">Provability from the axioms of arithmetic turned out to be a formula of arithmetic. What about truth? A truth formula would be a formula that is true of the code of a statement exactly when the statement is true of the numbers. The definition of truth on this rung, one clause for each way of building, looks as if it could be written in arithmetic, the way the checks of a proof were. It cannot. Feed the diagonal the denial of a truth formula, and it returns a statement reached as equivalent to “I am not true”: the statement of the first rung, which says of itself that it is not so, now in marks of arithmetic. In the numbers, that statement would be true exactly when it is false. So no formula of arithmetic defines truth in arithmetic. Truth can be defined one level up, in the language of sets, and the same argument then shows that truth for sets needs a level above that. As a gift, the step gives a second road to the last two steps: provability is defined inside, truth is not, so they are not the same.</p>
+  <p class="gesture" data-pid="92413d">No formula of arithmetic is true of exactly the codes of the true statements of arithmetic, because the diagonal would turn it into a statement true exactly when it is false. Provability is a formula, truth is not, so some truth is not reached.</p>
+</header>
+
+<section class="class step" data-step="37k1">
+  <h2 class="sthead"><span class="stno">37k1</span>What a truth formula would be</h2>
+  <p data-pid="4500c6">A <i>truth formula</i> for arithmetic would be a formula True(x), with one free placeholder, such that for every statement φ of arithmetic, N ⊨ True(⌜φ⌝) ⇔ φ.</p>
+  <p data-pid="12aa66">For some statements there is no difficulty. For the statements t = t′ with no placeholders, “the two terms have the same value” is a search formula, by the list-in-one-number technique: some list records the computation of both values. The same works for every bounded statement, since each is settled by a search that stops (4j). The trouble starts with everys and somes that are not kept below anything. 37a3’s clause for ∀x φ asks about every number at once, and the recursion needs the truth of every part of φ under every assignment: a table with endlessly many rows, not a number a formula could hold.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · truth formula · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">37k1.1</span><span class="ph know">know</span>What would a truth formula for arithmetic be? <br>For which statements is there no difficulty, and where does the difficulty start?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37k2">
+  <h2 class="sthead"><span class="stno">37k2</span>The liar, in marks</h2>
+  <p data-pid="446661">Undefinable-truth technique: <b>no formula of arithmetic is a truth formula for arithmetic.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the undefinable-truth technique">
+\text{True}(x) \text{ is a truth formula} @@ suppose, aiming to refute
+PA \vdash \lambda \Leftrightarrow \neg\text{True}(\ulcorner\lambda\urcorner) @@ the self-statement technique (37h2), with ψ(x) = ¬True(x)
+N \models \lambda \Leftrightarrow \neg\text{True}(\ulcorner\lambda\urcorner) @@ N is a world of PA (37g2, 37c2)
+N \models \text{True}(\ulcorner\lambda\urcorner) \Leftrightarrow \lambda @@ True is a truth formula, at φ = λ
+N \models \lambda \Leftrightarrow \neg\lambda @@ swap, on the two lines above
+\htmlClass{new}{\bot} \quad \blacksquare @@ 1d’s exactly-when turned into a clash, as 1b.4.4 did: λ and ¬λ cannot share a truth value
+  </pre>
+  <p data-pid="b751a1">1b.4.4 met a statement in words that says of itself that it is not so, and refuted it: there is no such statement. The refutation here is the same, and now it says which part must go. The diagonal is a technique, proved. So the part that goes is the supposed truth formula.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the liar · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37k2.1</span><span class="ph know">know</span>What does the undefinable-truth technique say? <br>Which statement does its proof feed to the diagonal, and which supposition does the clash refute?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37k3">
+  <h2 class="sthead"><span class="stno">37k3</span>A second road to the unreached</h2>
+  <p data-pid="53825a">Prov(x) is a formula of arithmetic true of exactly the codes of the statements PA reaches. No formula is true of exactly the codes of the true statements. So the two collections are different. Every statement PA reaches is true (37g2). So some true statement is not reached.</p>
+  <pre class="lines" data-k="ember" data-label="this step: truth outruns proof">
+\{\varphi : PA \vdash \varphi\} \text{ is picked out by } \text{Prov}(x) @@ 37h1, and its way back for PA
+\{\varphi : N \models \varphi\} \text{ is picked out by no formula} @@ the undefinable-truth technique
+\{\varphi : PA \vdash \varphi\} \ne \{\varphi : N \models \varphi\} @@ same members would make Prov a truth formula
+\{\varphi : PA \vdash \varphi\} \subseteq \{\varphi : N \models \varphi\} @@ PA reaches only truths
+\htmlClass{new}{\text{some true statement is not reached by } PA} \quad \blacksquare @@ a part that is not the whole has an outsider
+  </pre>
+  <p data-pid="57c3e0">This road gives no particular statement. 37i built one, U, and showed its denial is not reached either. This road needs no diagonal for ¬Prov. It needs the one for ¬True, and the fact that truth is not a formula. One road ends at a statement, the other at a size: what can be defined is a smaller collection than what is true.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · second road · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37k3.1</span><span class="ph know">know</span>How does the undefinable-truth technique give a true statement that PA does not reach? <br>What does this road give that 37i does not, and what does it not give?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37k4">
+  <h2 class="sthead"><span class="stno">37k4</span>Truth one level up</h2>
+  <p data-pid="730110">37a3 defined truth in N, and the definition was not circular. It was written in the ladder’s own language, the language of sets. There N is a set, formulas are sets of pairs, and 4d’s recursion builds the truth function, from pairs (φ, s) to T or F, as one set. That set is a member of the world of sets, and the numbers are a small part of it.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the levels">
+\text{in sets: truth for arithmetic is a set, by 4d} @@ the recursion over formulas, with N as a member
+\text{in arithmetic: no truth formula for arithmetic} @@ the undefinable-truth technique
+\text{in sets: no truth formula for sets} @@ the same diagonal, with codes for formulas of ∈ (37g’s trick, in sets)
+\htmlClass{new}{\text{truth for each language is defined in a richer one}} \quad \blacksquare @@ and never in itself
+  </pre>
+  <p data-pid="3779e5">So each language can say what is true in a smaller one and not what is true in itself. The ladder has been doing this all along: every page defined truth for a collection of marks in words, a richer language than any of the marks it described.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · levels · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37k4.1</span><span class="ph know">know</span>Where is truth for arithmetic defined, and how? <br>Why does the same argument stop truth for sets being defined in the language of sets?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37k5">
+  <h2 class="sthead"><span class="stno">37k5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{truth cannot be defined, so “true in } N \text{” means nothing}\,? @@ it is defined in sets (37a3); it is not defined in arithmetic
+\text{Prov}(x) \text{ is a truth formula}\,? @@ it misses U, which is true and not reached (37i)
+\lambda \text{ says “I am not reached”}\,? @@ that is U; λ would say “I am not true”, and so there is no truth formula to build it from
+\text{no formula defines truth even for bounded statements}\,? @@ bounded statements are settled by a search, and a search formula defines their truth
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37k5.1</span><span class="ph know">know</span>Why does the undefinable-truth technique not make “true in N” meaningless? <br>Why is Prov(x) not a truth formula?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">37k.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{True}_0(x)"></span></span>Build, in outline, a formula True₀(x) true of exactly the codes of the true statements t = t′ with no placeholders: some list records the computation of both values, and the two last entries agree. <br>Which technique of 37g does it use, and what shape does the formula have?</div>
+  <div class="chq"><span class="chid">37k.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{True}(x) \text{ defined only for statements with at most } n \text{ everys and somes}"></span></span>Does the proof of the undefinable-truth technique still run against such a partial truth formula? <br>Find where it breaks: how many everys and somes does λ have, compared with True?</div>
+  <div class="chq"><span class="chid">37k.6.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\{\varphi : PA \vdash \varphi\} \subsetneq \{\varphi : N \models \varphi\}"></span></span>Reroute 37i3’s claim that the true statements cannot be listed by a recipe, using the undefinable-truth technique: if a recipe listed them, what formula would pick them out?</div>
+  <div class="chq"><span class="chid">37k.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">1b.4.4: a statement that says of itself that it is not so</span></span>Rung 1 refuted such a statement and saw what followed outside. One answer to the liar sorts statements into levels, each speaking of the truth of the levels below and never of its own. Another lets truth be built in rounds, each round deciding more, with the liar never settled. A third lets some statements be both true and false, and keeps the clash from spreading. <br>Which of the three does the undefinable-truth technique support? Does it refute the others, or only show what arithmetic cannot do?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r37j.html">← 37j · consistency from within</a><a href="r37concl.html">37·∎ · arithmetic describes its own proofs →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The undefinable-truth technique is Tarski’s undefinability theorem. λ is the liar sentence. Truth for statements with at most n alternations of quantifiers is definable, by a partial truth predicate of the same complexity; the full truth set is arithmetical at no level. Truth defined one level up is a metalanguage’s truth predicate for an object language. 37k3’s road is the proof of the first incompleteness theorem from undefinability.</p>
+  <h3>Who said it first</h3>
+  <p>Alfred Tarski proved undefinability in the monograph of 1933 on truth in formalized languages; Kurt Gödel had seen it in 1931 and noted it in a letter of that year. The levels answer to the liar is Bertrand Russell’s theory of types (1908) and Tarski’s hierarchy of languages; the rounds answer is Saul Kripke’s theory of truth (1975), with Anil Gupta, Hans Herzberger and Nuel Belnap’s revision theory (1980s); the both-true-and-false answer is dialetheism, argued by Graham Priest from 1979.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The liar statement λ is true exactly when it is false. So arithmetic clashes.” Not allowed: λ was built from a supposed formula True, and the clash refutes the supposition. Without a truth formula there is no λ. Arithmetic, and PA, are untouched.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'wanted',t:R`N \models \text{True}(\ulcorner\varphi\urcorner) \Leftrightarrow \varphi`,n:`For every statement φ.`},
+  {k:'ember',kl:'easy',t:R`\text{bounded statements}`,n:`A search that stops.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{the unbounded every is the trouble}}`,n:`A table with endless rows.`}
+],{title:'The slides · truth formula · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'suppose',t:R`\text{True}(x)`,n:`A truth formula.`},
+  {k:'ember',kl:'diagonal',t:R`\lambda \Leftrightarrow \neg\text{True}(\ulcorner\lambda\urcorner)`,n:`“I am not true.”`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\lambda \Leftrightarrow \neg\lambda\text{: a clash}}`,n:`No truth formula.`}
+],{title:'The slides · the liar · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'proof',t:R`\text{Prov}(x)`,n:`A formula.`},
+  {k:'ember',kl:'truth',t:R`\text{no True}(x)`,n:`Not a formula.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{reached} \subsetneq \text{true}}`,n:`Truth outruns proof.`}
+],{title:'The slides · second road · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'one up',t:R`\text{truth for } N \text{ is a set}`,n:`Defined in sets.`},
+  {k:'ember',kl:'inside',t:R`\text{no True}(x) \text{ in arithmetic}`,n:`The diagonal stops it.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{each truth one level up}}`,n:`Never in its own language.`}
+],{title:'The slides · levels · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

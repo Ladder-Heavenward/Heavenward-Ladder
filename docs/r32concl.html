@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A periodic function is the sum of its shadows</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.cl-lock{display:none;border-left:3px solid var(--gold);background:var(--sand);padding:10px 14px;border-radius:0 4px 4px 0;max-width:66ch}
+body.cl-locked .cl-lock{display:block} body.cl-locked .cl-body{display:none}
+.cl-lock button{margin-top:6px;font-size:.8rem}
+.claim{border:1px solid var(--grid);border-left:4px solid var(--teal);background:var(--card);border-radius:0 6px 6px 0;padding:10px 16px;max-width:66ch}
+.claim p{margin:.4em 0}
+ul.cl-adds{max-width:66ch;padding-left:1.1em} ul.cl-adds li{margin:.5em 0}
+ul.cl-adds .cl-w{display:none;color:var(--muted);font-style:italic}
+ul.cl-adds li.cl-wait .cl-t{display:none} ul.cl-adds li.cl-wait .cl-w{display:inline}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r32g.html">← 32g samples suffice</a><a href="r32h.html">next: 32h wave recipes by hand →</a></p>
+  <div class="tags"><span class="tag concl">32·∎ · conclusion</span></div>
+  <h1>A periodic function is the sum of its shadows</h1>
+  <p class="gesture" data-pid="08a2e3">The turnings are at right angles and leave no direction out, so a repeating function is the sum of its shadows on them and keeps its energy. The sum returns f where f has a slope, the halfway value at a jump, and averaged sums settle everywhere. The transform breaks any signal into frequencies, keeps energy, costs a width, and needs only samples at twice the top frequency.</p>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The conclusion · the rung's claim, in full, and its proof</div>
+  <div class="cl-lock"><p>This page opens once every question on <a href="r32g.html">32g samples suffice</a> is ticked. The claim below is proved from the steps of this rung, so it waits for them.</p><button type="button" class="cl-peek">reviewing the ladder? open it anyway</button></div>
+  <div class="cl-body">
+  <h3>What the rung set out to show</h3>
+  <p data-pid="48c299">The survey of rung 32 asked whether every repeating function is a sum of turnings. <b>The turnings are a right-angled list that leaves no direction out, so every periodic function with finite energy is the sum of its shadows on them, and its energy is the sum of the squares of their sizes.</b> At a single point the sum is subtler: it returns f where f has a slope, the halfway value at a jump, and an overshoot near the jump that never dies.</p>
+  <p data-pid="96a35d"><a href="r32a.html">32a</a> showed the turnings are at right angles and each coefficient is a shadow. <a href="r32b.html">32b</a> showed the turnings leave no direction out, so energy is kept. <a href="r32c.html">32c</a> found where the series returns the function, and <a href="r32d.html">32d</a> repaired the rest by blending and averaging. <a href="r32e.html">32e</a> let the repeat grow without end and built the transform, <a href="r32f.html">32f</a> proved short in time means wide in frequency, and <a href="r32g.html">32g</a> showed samples suffice. This page puts the claim together.</p>
+  <h3>The claim, in full</h3>
+  <div class="claim">
+  <p data-pid="4d84df"><b>On [−π, π], with ⟨f, g⟩ = (1/2π)∫ f ḡ, the turnings e<sub>n</sub>(x) = e<sup>inx</sup> are a right-angled list, and c<sub>n</sub> = ⟨f, e<sub>n</sub>⟩ is the shadow of f on e<sub>n</sub>. For every periodic f with finite energy, c<sub>n</sub> → 0, the partial sums S<sub>N</sub>f come as close as wanted to f in energy, and ‖f‖² = Σ|c<sub>n</sub>|².</b></p>
+  <p data-pid="95e78b">Where f has a slope at x, S<sub>N</sub>f(x) → f(x); at a jump, S<sub>N</sub>f(x) → (f(x⁻) + f(x⁺))/2; and near a jump of size 2 the sums rise to about 1.179, for every N. The blend f * g has coefficients c<sub>n</sub>(f)c<sub>n</sub>(g) and the smoothness of the smoother part, and the averages σ<sub>N</sub>f of the partial sums settle at every continuous f everywhere at once.</p>
+  <p data-pid="154e80">For f with a finite total on the line, f̂(ξ) = ∫ f(x)e<sup>−2πixξ</sup> dx is bounded and continuous, the bell e<sup>−πx²</sup> is its own transform, f is rebuilt as ∫ f̂(ξ)e<sup>2πixξ</sup> dξ, and ∫|f̂|² = ∫|f|². A slope becomes the multiple 2πiξ, so Δx Δξ ≥ 1/(4π), with equality only for bells. A signal with no frequency above B is fixed by its samples f(k/(2B)) and is Σ f(k/(2B)) sinc(2Bx − k); frequencies ξ and ξ + r give the same samples at rate r.</p>
+  </div>
+  <h3>The proof</h3>
+  <p data-pid="aceb40">Each part below is a technique already proved on a step of this rung. The proof cites them by name and joins them.</p>
+  <pre class="lines" data-k="ember" data-label="turnings and energy">
+\langle e_m, e_n\rangle = 1 \text{ if } m = n,\ 0 \text{ if not} @@ the right-angled-turnings technique (32a)
+c_n = \langle f, e_n\rangle,\ \ S_Nf = \textstyle\sum_{|n| \le N} c_ne_n \text{ is the closest sum} @@ the turning-shadow and cosine-and-sine techniques (32a), with the closest-point technique (31b)
+c_n \to 0;\ \ |f - P| \lt \varepsilon \text{ for some sum of turnings } P @@ the fading-coefficients and turnings-near-everything techniques (32b)
+\htmlClass{new}{\|f\|^2 = \textstyle\sum|c_n|^2,\ \ \|f - S_Nf\| \to 0} \quad \blacksquare @@ the energy-kept technique (32b)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the series at a point">
+S_Nf(x) - f(x) = \tfrac{1}{2\pi}\textstyle\int (f(x - s) - f(x))D_N(s)\,ds @@ the turning-kernel technique (32c)
+\text{slope at } x \Rightarrow S_Nf(x) \to f(x);\ \ \text{jump} \Rightarrow \text{halfway} @@ the slope-returns and halfway techniques (32c)
+S_Nq(\tfrac{\pi}{2M}) \to 1.179\ldots @@ the lasting-overshoot technique (32c)
+c_n(f * g) = c_n(f)c_n(g),\ \ (f * g)^{\prime} = f * g^{\prime} @@ the blend-coefficients and blend-smooths techniques (32d)
+\htmlClass{new}{\sigma_Nf \to f \text{ everywhere at once, for continuous } f} \quad \blacksquare @@ the averaged-sums technique (32d)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="transform and samples">
+|\hat f| \le \textstyle\int|f|,\ \hat f \text{ continuous};\ \ \widehat{e^{-\pi x^2}} = e^{-\pi\xi^2} @@ the transform-bound and own-transform techniques (32e)
+f = \textstyle\int\hat f(\xi)e^{2\pi ix\xi}d\xi,\ \ \int|\hat f|^2 = \int|f|^2 @@ the undo-transform and transform-energy techniques (32e)
+\widehat{f^{\prime}} = 2\pi i\xi\hat f,\ \ \Delta x\,\Delta\xi \ge \tfrac{1}{4\pi},\ \text{equal for bells} @@ the slope-to-frequency, spread-product and tightest-bell techniques (32f)
+\htmlClass{new}{f = \textstyle\sum f(\tfrac{k}{2B})\,\text{sinc}(2Bx - k);\ \ \xi,\ \xi + r \text{ alike}} \quad \blacksquare @@ the samples-are-coefficients, sample-rebuild and same-samples techniques (32g)
+  </pre>
+  <p data-pid="e5b93a">So the rung’s claim holds: every periodic function with finite energy is the sum of its shadows on the turnings, its energy is kept, and letting the repeat grow without end gives the transform with its two prices. This also pays what 31h held in trust: the turnings, and so the sines on [0, 1], leave no direction out.</p>
+  <h3>What the rest of the rung adds</h3>
+  <p data-pid="024892">Each step and annex after the proof steps adds a line to the claim. A line appears here once you have finished its page.</p>
+  <ul class="cl-adds">
+    <li data-after="r32h" data-pid="33bf81"><b><a href="r32h.html">32h wave recipes by hand</a></b>: <span class="cl-t">square, sawtooth and triangle waves written out as turnings.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r32i" data-pid="abd4c1"><b><a href="r32i.html">32i convolution and filters by hand</a></b>: <span class="cl-t">a filter as a multiplication of coefficients, one turning at a time.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r32j" data-pid="de2a48"><b><a href="r32j.html">32j turning rate rules into algebra</a></b>: <span class="cl-t">rate rules with constant coefficients solved one frequency at a time.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r32k" data-pid="8adaa5"><b><a href="r32k.html">32k breaking a signal into frequencies, fast</a></b>: <span class="cl-t">N samples turned into frequencies in about N log N steps, and the CD rate.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r32l" data-pid="22f770"><b><a href="r32l.html">32l where oscillating integrals live</a></b>: <span class="cl-t">oscillating totals found near the points where the phase stops turning.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r32stat" data-pid="f90faa"><b><a href="r32stat.html">32·stat why does the bell curve keep turning up?</a></b>: <span class="cl-t">the bell as the shape a sum’s turnings fade into.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r32then" data-pid="66a846"><b><a href="r32then.html">32·then what can a spectrum tell us?</a></b>: <span class="cl-t">line widths, places as frequencies, and spots as coefficients.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r32phys" data-pid="2e3720"><b><a href="r32phys.html">32·phys what makes a violin sound like a violin?</a></b>: <span class="cl-t">a plucked or bowed string as a list of harmonics, filtered by the body.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r32chem" data-pid="e8eead"><b><a href="r32chem.html">32·chem how do X-rays see inside a crystal?</a></b>: <span class="cl-t">the spots of a crystal as the coefficients of a repeating density.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r32comp" data-pid="e76fb3"><b><a href="r32comp.html">32·comp how does a photo shrink to a small file?</a></b>: <span class="cl-t">a block of a picture kept in a few mirrored turnings.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r32eng" data-pid="e89b11"><b><a href="r32eng.html">32·eng how can headphones cancel noise?</a></b>: <span class="cl-t">an anti-wave, and the delay that limits it to low frequencies.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r32nav" data-pid="7f7781"><b><a href="r32nav.html">32·nav how can tides be predicted years ahead?</a></b>: <span class="cl-t">a tide as a few turnings at the speeds of the sky.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r32time" data-pid="1d8c3f"><b><a href="r32time.html">32·G sometimes time has holes, and apparently that’s ok (II)</a></b>: <span class="cl-t">stepped mechanics read through its turnings, keeping area in its plane.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r32now" data-pid="dd6fcb"><b><a href="r32now.html">32·now can a signal be rebuilt from fewer samples?</a></b>: <span class="cl-t">few non-zero coefficients found from too few samples by least plain size.</span><span class="cl-w">its line appears when you finish it.</span></li>
+  </ul>
+  <p data-pid="86a9d7">That is the arithmetic of waves laid down. The next rung spends it at once: rates in space and time, heat and waves, solved one turning at a time.</p>
+  </div>
+</section>
+
+<nav class="nextrung"><a href="r32g.html">← 32g · samples suffice</a><a href="r32h.html">32h · wave recipes by hand →</a></nav>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+  const need="r32g";
+  let p={}; try{ p=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
+  let peek=false; try{ peek=sessionStorage.getItem('cl:peek')==='1'; }catch(e){}
+  const done=k=>!!(p[k]&&p[k].v);
+  function apply(){
+    const open=peek||done(need);
+    document.body.classList.toggle('cl-locked',!open);
+    document.querySelectorAll('ul.cl-adds li[data-after]').forEach(li=>li.classList.toggle('cl-wait',!(peek||done(li.dataset.after))));
+    if(open&&done(need)){ const me=(window.ladderPage?ladderPage():(location.pathname.split('/').pop()||'').replace(/\.html?$/,''));
+      if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(me,true,true,true,false);
+      else { try{ p[me]={v:true,a:true,o:true,h:false,t:Date.now()}; LS.setItem('pages:done',JSON.stringify(p)); }catch(e){} } }
+  }
+  const b=document.querySelector('.cl-peek'); if(b) b.addEventListener('click',()=>{ peek=true; try{ sessionStorage.setItem('cl:peek','1'); }catch(e){} apply(); });
+  apply();
+  try{ if(window.MarksSync&&MarksSync.pages) MarksSync.pages().then(q=>{ if(q){ p=Object.assign({},p,q); apply(); } },()=>{}); }catch(e){}
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

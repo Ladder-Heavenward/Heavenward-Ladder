@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stretching keeps what open sets decide</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.cl-lock{display:none;border-left:3px solid var(--gold);background:var(--sand);padding:10px 14px;border-radius:0 4px 4px 0;max-width:66ch}
+body.cl-locked .cl-lock{display:block} body.cl-locked .cl-body{display:none}
+.cl-lock button{margin-top:6px;font-size:.8rem}
+.claim{border:1px solid var(--grid);border-left:4px solid var(--teal);background:var(--card);border-radius:0 6px 6px 0;padding:10px 16px;max-width:66ch}
+.claim p{margin:.4em 0}
+ul.cl-adds{max-width:66ch;padding-left:1.1em} ul.cl-adds li{margin:.5em 0}
+ul.cl-adds .cl-w{display:none;color:var(--muted);font-style:italic}
+ul.cl-adds li.cl-wait .cl-t{display:none} ul.cl-adds li.cl-wait .cl-w{display:inline}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r34i.html">← 34i gluing loops</a><a href="r34j.html">next: 34j open sets and continuity by hand →</a></p>
+  <div class="tags"><span class="tag concl">34·∎ · conclusion</span></div>
+  <h1>Stretching keeps what open sets decide</h1>
+  <p class="gesture" data-pid="e166b9">Continuity is a statement about open sets, and so are being in one piece, being finitely covered and keeping points apart. A stretching that matches open sets keeps them all. Surfaces fall into one list, told apart by a count. Loops, slid without breaking, form a group that counts holes, and so a map of the disc to itself keeps a point.</p>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The conclusion · the rung's claim, in full, and its proof</div>
+  <div class="cl-lock"><p>This page opens once every question on <a href="r34i.html">34i gluing loops</a> is ticked. The claim below is proved from the steps of this rung, so it waits for them.</p><button type="button" class="cl-peek">reviewing the ladder? open it anyway</button></div>
+  <div class="cl-body">
+  <h3>What the rung set out to show</h3>
+  <p data-pid="a7777d">The survey of rung 34 asked what is left of nearness when distance is taken away. <b>Continuity needs only which sets are open; being in one piece, being finitely covered and keeping points apart are decided by the open sets too, so a stretching that matches open sets with open sets keeps them all; and the loops of a space, slid without breaking, count its holes.</b> The price is a choice spent on products of finitely covered spaces, and several steps held in trust.</p>
+  <p data-pid="9b526a"><a href="r34a.html">34a</a> built spaces with a distance and their open sets. <a href="r34b.html">34b</a> kept the open sets and threw the distance away. <a href="r34c.html">34c</a> found what being in one piece means, and <a href="r34d.html">34d</a> what finitely many suffice means. <a href="r34e.html">34e</a> matched spaces of the same shape, and <a href="r34f.html">34f</a> listed every closed surface. <a href="r34g.html">34g</a> counted holes by loops, <a href="r34h.html">34h</a> found a point that stays put, and <a href="r34i.html">34i</a> named the loops of glued spaces. This page puts the claim together.</p>
+  <h3>The claim, in full</h3>
+  <div class="claim">
+  <p data-pid="cb9c1b"><b>A map between spaces with a distance is continuous exactly when it pulls open sets back to open sets, so continuity, and every notion built from it, is a statement about families of open sets. Being in one piece, being joined by paths, being finitely covered and keeping points apart are statements of that kind, and a same-shape map keeps each of them.</b></p>
+  <p data-pid="08cd41">A part of the line is in one piece exactly when it is a stretch, and finitely covered exactly when it is closed and bounded; continuous maps carry pieces to pieces and finitely covered spaces to finitely covered spaces, and so a continuous function on a closed stretch takes every value between and has a highest value. Products of two finitely covered spaces are finitely covered; that every product is, is as strong as choice.</p>
+  <p data-pid="f6b36a">Every closed surface in one piece, cut into triangles, is the same shape as exactly one of the sphere, a sum of g tori and a sum of k cross-caps, told apart by its characteristic and its sides. The loops of a space at a point, up to sliding, form a group, kept by same-shape maps; the circle’s is the whole numbers, counted by winding; and so no continuous map of the disc into itself moves every point. The loops of a glued space are named by the letters and relations of its pieces.</p>
+  </div>
+  <h3>The proof</h3>
+  <p data-pid="39bd19">Each part below is a technique already proved on a step of this rung, or a claim held in trust and said so there. The proof cites them by name and joins them.</p>
+  <pre class="lines" data-k="ember" data-label="open sets">
+|d(x, z) - d(y, z)| \le d(x, y);\ \text{every ball is open} @@ the back-triangle and ball-open techniques (34a)
+\emptyset, X \text{ open; unions and overlaps of two open} @@ the open-family technique (34a)
+\text{closed} \Leftrightarrow \text{keeps limits};\ \text{closed in complete} \Rightarrow \text{complete} @@ the keeps-limits and closed-part techniques (34a)
+\htmlClass{new}{f \text{ continuous} \Leftrightarrow f^{-1}(\text{open}) \text{ open}} \quad \blacksquare @@ the pull-back technique (34a); chains, products and glued maps by the pull-back-chain, two-parts and glued-map techniques (34b)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="pieces and covers">
+\text{stretches are in one piece, and only stretches} @@ the stretch-one-piece and one-piece-is-a-stretch techniques (34c)
+f \text{ continuous},\ X \text{ in one piece} \Rightarrow f(X) \text{ in one piece} @@ the image-one-piece, path-one-piece and closure-one-piece techniques; the sine-curve technique shows the converse of path-one-piece fails (34c)
+[v, w] \text{ finitely covered};\ \text{on the line: covered} \Leftrightarrow \text{closed and bounded} @@ the closed-stretch-covered, closed-part-covered, covered-is-closed and closed-and-bounded techniques (34d)
+f(X) \text{ covered};\ X \times Y \text{ covered} @@ the image-covered, covered-thread, cover-reach and box-covered techniques (34d)
+\htmlClass{new}{\text{every product covered} \Rightarrow \text{choice}} \quad \blacksquare @@ the products-choose technique (34d)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the same shape, and surfaces">
+\text{same shape is a sameness relation} @@ the same-shape technique (34e)
+\text{one piece, paths, covered, points apart: kept} @@ the kept-by-shape, point-out and covered-matching techniques (34e)
+\text{sphere drawings: } V - E + F = 2;\ \text{kept by finer cuts} @@ the sphere-drawing and finer-cut techniques (34f)
+\chi = V - n + 1 \text{ for a word};\ \chi(S \# T) = \chi(S) + \chi(T) - 2 @@ the word-count and sum-count techniques (34f)
+\htmlClass{new}{\text{sphere, } g \text{ tori, or } k \text{ cross-caps, exactly one}} \quad \blacksquare @@ the surface-list technique (34f), with triangulation and common cuttings held in trust
+  </pre>
+  <pre class="lines" data-k="ember" data-label="loops">
+\text{loops slid at } x_0 \text{ form a group} @@ the straight-slide and loop-group techniques (34g)
+\text{paths and slides lift, uniquely} @@ the path-lift and covering-lift techniques (34g)
+\pi_1(\text{circle}) = \mathbb{Z},\ [\gamma] \mapsto w(\gamma) @@ the circle-loops technique (34g)
+\text{no press onto the rim};\ f(x) = x \text{ somewhere} @@ the no-press and kept-point techniques (34h); the field-slide technique, and the hairy ball stated
+\htmlClass{new}{\text{glued spaces: letters and relations of the pieces}} \quad \blacksquare @@ the free-group, presented-map and turn-about-count techniques (34i), with the gluing rule held in trust
+  </pre>
+  <p data-pid="9374e6">So the rung’s claim holds: nearness survives without distance, and what the open sets decide, stretching keeps. Held in trust along the way: the closed curve’s inside and outside, cutting surfaces into triangles and their common cuttings, the details of lifting slides, the gluing rule, and that the far-point map of the sphere does not slide to the do-nothing map.</p>
+  <h3>What the rest of the rung adds</h3>
+  <p data-pid="d24e15">Each step and annex after the proof steps adds a line to the claim. A line appears here once you have finished its page.</p>
+  <ul class="cl-adds">
+    <li data-after="r34j" data-pid="876b98"><b><a href="r34j.html">34j open sets and continuity by hand</a></b>: <span class="cl-t">open sets and continuity tested by hand, on strange families and at the edges.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r34k" data-pid="7e9b83"><b><a href="r34k.html">34k surfaces from a square</a></b>: <span class="cl-t">the torus, the one-sided bottle and the cross-cap sewn from a square, and their words reduced.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r34l" data-pid="719dcc"><b><a href="r34l.html">34l winding numbers by hand</a></b>: <span class="cl-t">roots of a polynomial counted inside a loop by its winding.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r34m" data-pid="001040"><b><a href="r34m.html">34m knots by hand</a></b>: <span class="cl-t">knots told apart by counts no move changes, and the overhand knot not its mirror.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r34cb18" data-pid="733600"><b><a href="r34cb18.html">34·cb18 lines of equal height</a></b>: <span class="cl-t">contour maps kept up to stretching, and peaks less passes plus pits counted by the characteristic.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r34phys" data-pid="0ce5b3"><b><a href="r34phys.html">34·phys how do charges make light?</a></b>: <span class="cl-t">flux as a count, no trap for charges, and light as a wave of the fields.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r34bio" data-pid="becb1e"><b><a href="r34bio.html">34·bio can a cell untie its own DNA?</a></b>: <span class="cl-t">the linking count of the strands of DNA, and the enzymes that change it by 1 or by 2.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r34now" data-pid="0b7f3c"><b><a href="r34now.html">34·now can loops tell you the shape of space?</a></b>: <span class="cl-t">loops that decide the sphere, and the flow of a ruler that settled the question one dimension up.</span><span class="cl-w">its line appears when you finish it.</span></li>
+  </ul>
+  <p data-pid="df2d0b">That is the end of nearness tied to distance. From here on, a space is its open sets, and a count that stretching cannot change is a fact about the shape. You are only just getting started with what can be counted without measuring.</p>
+  </div>
+</section>
+
+<nav class="nextrung"><a href="r34i.html">← 34i · gluing loops</a><a href="r34j.html">34j · open sets and continuity by hand →</a></nav>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+  const need="r34i";
+  let p={}; try{ p=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
+  let peek=false; try{ peek=sessionStorage.getItem('cl:peek')==='1'; }catch(e){}
+  const done=k=>!!(p[k]&&p[k].v);
+  function apply(){
+    const open=peek||done(need);
+    document.body.classList.toggle('cl-locked',!open);
+    document.querySelectorAll('ul.cl-adds li[data-after]').forEach(li=>li.classList.toggle('cl-wait',!(peek||done(li.dataset.after))));
+    if(open&&done(need)){ const me=(window.ladderPage?ladderPage():(location.pathname.split('/').pop()||'').replace(/\.html?$/,''));
+      if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(me,true,true,true,false);
+      else { try{ p[me]={v:true,a:true,o:true,h:false,t:Date.now()}; LS.setItem('pages:done',JSON.stringify(p)); }catch(e){} } }
+  }
+  const b=document.querySelector('.cl-peek'); if(b) b.addEventListener('click',()=>{ peek=true; try{ sessionStorage.setItem('cl:peek','1'); }catch(e){} apply(); });
+  apply();
+  try{ if(window.MarksSync&&MarksSync.pages) MarksSync.pages().then(q=>{ if(q){ p=Object.assign({},p,q); apply(); } },()=>{}); }catch(e){}
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

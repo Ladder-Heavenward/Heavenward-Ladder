@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Symmetric maps have square axes</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r31c.html">← 31c straightening a basis</a><a href="r31e.html">next: 31e quadratic forms →</a></p>
+  <div class="tags"><span class="tag proof">31d · proof</span></div>
+  <h1>Symmetric maps have square axes</h1>
+  <p data-pid="2db1a5">Rung twenty seven looked for the arrows a map only stretches, and found that some maps have too few of them, and some have stretches that are turning numbers rather than real ones. A product picks out a family of maps that never has either trouble. These are the maps that can be moved from one slot of the product to the other without changing it. Their grids read the same across and down, so they are called symmetric. Every stretch of such a map is real. Arrows it stretches by different amounts stand at right angles. And there are always enough of them: a whole basis of axes, each at right angles to the others, along which the map does nothing but stretch. A symmetric map is a turn, a plain stretch along the axes, and the turn back. The maps that keep the product itself are the turns of this picture, and over the turning numbers they keep every length as well.</p>
+  <p class="gesture" data-pid="5bc50b">A map that can move across the product unchanged has real stretches, has its differently stretched arrows at right angles, and has a whole basis of right-angled axes it only stretches. So a symmetric grid is a turn, then a stretch along the axes, then the turn back.</p>
+</header>
+
+<section class="class step" data-step="31d1">
+  <h2 class="sthead"><span class="stno">31d1</span>A map that moves across the product</h2>
+  <p data-pid="e32455">Fix a product on a space V of dimension n. From here on, a straight map A from V to V is <i>symmetric</i> when ⟨Af, g⟩ = ⟨f, Ag⟩ for all f and g. For lists of real numbers with the dot, ⟨Ax, y⟩ = (Ax)ᵀy = xᵀAᵀy, so A is symmetric exactly when Aᵀ = A: the grid reads the same across as down, as 27h2’s two-slot reading did when it did not care about order. For lists of turning numbers, A is symmetric exactly when A equals its own transpose with every number turned to its conjugate.</p>
+  <p data-pid="78dd6b">Real-stretches technique: <b>every stretch of a symmetric map is a real number.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the real-stretches technique">
+Av = \lambda v,\ \ v \ne 0 @@ a stretch of A, possibly a turning number, with its arrow (27f1)
+\lambda\langle v, v\rangle = \langle Av, v\rangle @@ straight in the first slot
+= \langle v, Av\rangle = \langle v, \lambda v\rangle = \bar\lambda\langle v, v\rangle @@ symmetric; the turned-product technique (31a2)
+\htmlClass{new}{\lambda = \bar\lambda,\ \text{so } \lambda \text{ is real}} \quad \blacksquare @@ ⟨v, v⟩ &gt; 0: divide
+  </pre>
+  <p data-pid="b3a717">For a real symmetric grid, the stretch-test polynomial det(A − λI) has a root in ℂ by 25d, that root is real by this technique, and A − λI is then a real grid that loses some arrow, so a real arrow is stretched by λ.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · symmetric · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">31d1.1</span><span class="ph know">know</span>When is a straight map symmetric, and what does that mean for a real grid under the dot?  <br>What does the real-stretches technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31d2">
+  <h2 class="sthead"><span class="stno">31d2</span>Different stretches, right angles</h2>
+  <p data-pid="06f49a">27f2 showed that arrows stretched by different amounts are free. For a symmetric map they are more than free.</p>
+  <p data-pid="4bfb57">Right-angled-stretches technique: <b>if a symmetric map stretches u by λ and v by μ, with λ ≠ μ, then u and v are at right angles.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the right-angled-stretches technique">
+\lambda\langle u, v\rangle = \langle Au, v\rangle @@ Au = λu
+= \langle u, Av\rangle = \bar\mu\langle u, v\rangle = \mu\langle u, v\rangle @@ symmetric; μ is real (31d1)
+(\lambda - \mu)\langle u, v\rangle = 0 @@ take the two apart
+\htmlClass{new}{\langle u, v\rangle = 0} \quad \blacksquare @@ λ − μ ≠ 0
+  </pre>
+  <p data-pid="f88e1e">The grid with rows (2, 1) and (1, 2) stretches (1, 1) by 3 and (1, −1) by 1, and (1, 1) · (1, −1) = 0. The grid with rows (1, 1) and (0, 2), which is not symmetric, stretches (1, 0) by 1 and (1, 1) by 2, at 45°.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · right angles · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31d2.1</span><span class="ph know">know</span>What does the right-angled-stretches technique say?  <br>Which line of its proof needs the stretches to be real?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31d3">
+  <h2 class="sthead"><span class="stno">31d3</span>Enough axes, always</h2>
+  <p data-pid="74ef60">27f3 straightened a grid out when it had n free arrows it only stretched, and some grids have too few. A symmetric map never does. The spectral technique, from the Latin spectrum, an appearance, since the stretches of a map are what it looks like along its axes: <b>a symmetric map on a space of dimension n has a right-angled basis e₁, …, eₙ that it only stretches, by real λ₁, …, λₙ. For a real symmetric grid this reads A = QDQᵀ, with Q a length-keeper and D the grid of the λs down its middle.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the spectral technique">
+n = 1:\ \ \text{any } e_1 \text{ of size } 1 @@ every map on a line is a stretch
+Ae_1 = \lambda_1e_1,\ \ \|e_1\| = 1 @@ some stretch exists, and it is real (31d1); cut its arrow to size 1
+W = e_1^{\perp} \text{ has dimension } n - 1 @@ the shadow on e₁ splits every arrow (31b2), and lost plus reached (27c2)
+w \perp e_1 \Rightarrow \langle Aw, e_1\rangle = \langle w, Ae_1\rangle = \lambda_1\langle w, e_1\rangle = 0 @@ A keeps W: it sends W into W
+A \text{ on } W \text{ is symmetric, so } W \text{ has a right-angled basis } e_2, \ldots, e_n \text{ that } A \text{ only stretches} @@ induction (4b) on the dimension
+\htmlClass{new}{e_1, \ldots, e_n \text{ right-angled, } Ae_k = \lambda_ke_k} \quad \blacksquare @@ e₁ is at right angles to W; columns eₖ give Q with QᵀQ = I, and AQ = QD
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: one symmetric grid">
+A = \begin{pmatrix} 2 & 1 \\ 1 & 2\end{pmatrix},\ \ \det(A - \lambda I) = (2 - \lambda)^2 - 1 @@ the stretch-test technique (27f1)
+\lambda_1 = 3,\ e_1 = \tfrac{1}{\sqrt2}(1, 1);\ \ \lambda_2 = 1,\ e_2 = \tfrac{1}{\sqrt2}(1, -1) @@ right angles, as 31d2 promised
+\htmlClass{new}{A = Q\begin{pmatrix} 3 & 0 \\ 0 & 1\end{pmatrix}Q^{\mathsf T},\ \ Q = \tfrac{1}{\sqrt2}\begin{pmatrix} 1 & 1 \\ 1 & -1\end{pmatrix}} \quad \blacksquare @@ Qᵀ undoes Q, so no undoing has to be computed
+  </pre>
+  <p data-pid="ffc3c2">So a symmetric grid acting on x does three things. Qᵀx reads x along the axes. D stretches each reading by its λ. Q puts the stretched readings back. The circle of arrows of size 1 goes to an ellipse with its axes along e₁ and e₂, of half-lengths |λ₁| and |λ₂|.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · axes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31d3.1</span><span class="ph know">know</span>What does the spectral technique say, and what are Q and D?  <br>Why does A keep the space of arrows at right angles to e₁?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31d4">
+  <h2 class="sthead"><span class="stno">31d4</span>Maps that keep the product</h2>
+  <p data-pid="6fa954">27m1 found that a real grid keeps every length exactly when it keeps every dot, exactly when QᵀQ = I. With turning numbers, write U* for the transpose of U with every number turned to its conjugate, so that ⟨Ux, y⟩ = ⟨x, U*y⟩ for the product of 31a2.</p>
+  <p data-pid="cc3679">Product-keeper technique: <b>a square grid U of turning numbers keeps every product, ⟨Ux, Uy⟩ = ⟨x, y⟩, exactly when U*U = I; then it keeps every size, and every stretch of U has size 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the product-keeper technique">
+\langle Ux, Uy\rangle = \langle x, U^*Uy\rangle @@ move U across as U*
+= \langle x, y\rangle \ \forall x, y \iff U^*Uy = y\ \forall y @@ two arrows with the same product against every x are the same: take x as their difference
+U^*U = I \Rightarrow \|Ux\| = \|x\| @@ put y = x
+\htmlClass{new}{Uv = \lambda v,\ v \ne 0 \Rightarrow |\lambda|\,\|v\| = \|v\|,\ |\lambda| = 1} \quad \blacksquare @@ sizes are kept
+  </pre>
+  <p data-pid="7cc2a1">The quarter turn with rows (0, −1) and (1, 0) keeps the dot and has no real stretch: its stretches are i and −i, both of size 1, the turning numbers of 20·cb8. It is not symmetric, and the spectral technique does not apply to it. It has its own axes, over ℂ, at right angles under the turned product: (1, −i) and (1, i).</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · keepers · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31d4.1</span><span class="ph know">know</span>What does the product-keeper technique say, and what is U*?  <br>Why does every stretch of a product-keeper have size 1?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31d5">
+  <h2 class="sthead"><span class="stno">31d5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+A = PDP^{-1} \Rightarrow \text{the columns of } P \text{ are at right angles}\,? @@ only when A is symmetric; (1, 1), (0, 2) has stretched arrows at 45°
+\text{every real grid has a real stretch}\,? @@ the quarter turn has stretches i and −i
+\text{equal stretches give arrows at right angles}\,? @@ the technique needs λ ≠ μ; with a repeated stretch, choose right angles inside its space
+Q^{\mathsf T}AQ = D \text{ for any length-keeper } Q\,? @@ only for the Q whose columns are A’s axes
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31d5.1</span><span class="ph know">know</span>Why does A = PDP⁻¹ not give columns of P at right angles?  <br>Why does the quarter turn have no real stretch, though it keeps lengths?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">31d.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 2 &amp; 1 &amp; 0 \\ 1 &amp; 2 &amp; 1 \\ 0 &amp; 1 &amp; 2\end{pmatrix}"></span></span>Build A = QDQᵀ. Find the three stretches and the three axes, and check that the axes are at right angles.</div>
+  <div class="chq"><span class="chid">31d.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\begin{pmatrix} 1 &amp; 1 \\ 0 &amp; 1\end{pmatrix},\ \ \begin{pmatrix} 3 &amp; 0 \\ 0 &amp; 3\end{pmatrix}"></span></span>The first grid has one stretch, and the second has one stretch too. How many free stretched arrows does each have?  <br>Which has a right-angled basis of axes, and how many such bases?</div>
+  <div class="chq"><span class="chid">31d.6.3</span><span class="tagq">converse</span>A symmetric real grid is QDQᵀ with Q a length-keeper and D a middle line of real numbers. Turn it round: if A = QDQᵀ for such Q and D, must A be symmetric?</div>
+  <div class="chq"><span class="chid">31d.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} p &amp; q \\ q &amp; r\end{pmatrix}"></span></span>Prove the real-stretches technique for this grid without a product: find the discriminant of det(A − λI) and show it is never below 0.  <br>When is it 0, and what is A then?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r31c.html">← 31c · straightening a basis</a><a href="r31e.html">31e · quadratic forms →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A symmetric map under a product is self-adjoint (or Hermitian, for turning numbers); a real grid with Aᵀ = A is a symmetric matrix. The spectral technique is the spectral theorem for self-adjoint maps (the principal axis theorem), and A = QDQᵀ is the orthogonal diagonalization. U* is the conjugate transpose (or adjoint), and a grid with U*U = I is unitary; a real one is orthogonal. The set of stretches of a map is its spectrum.</p>
+  <h3>Who said it first</h3>
+  <p>Joseph-Louis Lagrange found principal axes for the spinning of a solid in the 1770s, and Augustin-Louis Cauchy proved in 1829 that a symmetric grid has real stretches, in a memoir on the axes of surfaces of degree two. Charles Hermite worked with the conjugate form in 1855. David Hilbert used the word spectrum for the stretches of maps on functions about 1904; it later fitted, by luck, the spectra of light from atoms, which the stretches of quantum mechanics turned out to give.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“A has n real stretches, so it has n free stretched arrows.” Not allowed: (1, 1), (0, 1) has the real stretch 1 twice and only one free stretched arrow. The spectral proof never counts stretches; it finds one axis, then keeps the rest of the space.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'moves across',t:R`\langle Af, g\rangle = \langle f, Ag\rangle`,n:`For every f, g.`},
+  {k:'ember',kl:'grids',t:R`A^{\mathsf T} = A`,n:`Under the dot.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\lambda = \bar\lambda}`,n:`Every stretch is real.`}
+],{title:'The slides · symmetric · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'both ways',t:R`\lambda\langle u, v\rangle = \mu\langle u, v\rangle`,n:`Move A across.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\lambda \ne \mu \Rightarrow u \perp v}`,n:`Different stretches, right angles.`}
+],{title:'The slides · right angles · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'one axis',t:R`Ae_1 = \lambda_1e_1`,n:`Real, cut to size 1.`},
+  {k:'ember',kl:'the rest',t:R`A(e_1^{\perp}) \subseteq e_1^{\perp}`,n:`Move A across.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{A = QDQ^{\mathsf T}}`,n:`Turn, stretch, turn back.`}
+],{title:'The slides · axes · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'across',t:R`\langle Ux, Uy\rangle = \langle x, U^*Uy\rangle`,n:`U moves as U*.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{U^*U = I}`,n:`Keeps every product.`},
+  {k:'ember',kl:'stretches',t:R`|\lambda| = 1`,n:`Sizes kept.`}
+],{title:'The slides · keepers · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

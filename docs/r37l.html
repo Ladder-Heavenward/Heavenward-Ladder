@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quantifying over sets</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r37concl.html">← 37·∎ arithmetic describes its own proofs</a><a href="r37m.html">next: 37m numbering formulas by hand →</a></p>
+  <div class="tags"><span class="tag support">37l · support</span></div>
+  <h1>Quantifying over sets</h1>
+  <p data-pid="995586">Rung four did not say that induction holds for every formula. It said something stronger: the numbers are what is in every inductive set, so any set that holds zero and is closed under next holds every number. Rung eight did not say that every bounded formula has a least upper bound. It said every bounded set does. Both principles speak of every set, and the language of this rung speaks only of members. That is why its worlds can be strange, with numbers past every numeral and lines with holes. So let the language speak of sets too. Add placeholders for parts of the world, and let every and some run over all of them. Then induction is one statement, and its worlds are all copies of the numbers: the strange worlds are gone. The price is high. The new language has no calculus that reaches all its truths, the finite-parts technique fails for it, and what “every part” means is handed back to the theory of sets, with all its open questions.</p>
+  <p class="gesture" data-pid="6082ab">With placeholders for sets, induction and the least upper bound are single statements, and their worlds are all matched with the numbers and the line. The price is that no recipe can list what is true in every such world, and the meaning of “every set” comes from the theory of sets.</p>
+</header>
+
+<section class="class step" data-step="37l1">
+  <h2 class="sthead"><span class="stno">37l1</span>Placeholders for sets</h2>
+  <p data-pid="1be8d8">Add to a language a second kind of placeholder, X₀, X₁, …, and the formulas X(t): “t is in X”. Let every and some bind these too. In a world M, ∀X φ is true when φ is true for every part of |M|, every member of 2f’s set of all subsets. Its accepted name is second-order logic; the logic of 37a is first-order.</p>
+  <p data-pid="da93e5">Then 4b’s principle is one statement, and so is 8c’s:</p>
+  <pre class="lines" data-k="ember" data-label="this step: two principles, each one statement">
+\forall X\,\big((X(0) \land \forall x\,(X(x) \Rightarrow X(S(x)))) \Rightarrow \forall x\,X(x)\big) @@ induction: every part that holds 0 and is closed under next holds everything (4b)
+\htmlClass{new}{\forall X\,\big((\exists x\,X(x) \land \exists u\,\forall x\,(X(x) \Rightarrow x \le u)) \Rightarrow \exists v\,(v \text{ is a least upper bound of } X)\big)} \quad \blacksquare @@ the least upper bound: every bounded part that has a member (8c)
+  </pre>
+  <p data-pid="73ad64">Call PA₂ the two next lines of PA with second-order induction in place of the endless list of first-order inductions.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · second order · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">37l1.1</span><span class="ph know">know</span>What does a set placeholder add to a language, and over what does ∀X run in a world? <br>How are induction and the least upper bound written as single statements?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37l2">
+  <h2 class="sthead"><span class="stno">37l2</span>One world, up to matching</h2>
+  <p data-pid="219760">Only-the-numbers technique: <b>any two worlds of PA₂ are matched by a matching that carries 0 and next.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the only-the-numbers technique">
+M, M' \models PA_2 @@ given
+h = \text{the smallest set of pairs holding } (0^M, 0^{M'}) \text{ and closed under } (x, y) \mapsto (S(x), S'(y)) @@ the smallest-closed-set technique (4d), in |M| × |M′|
+\{x : \text{exactly one } y \text{ has } (x, y) \in h\} \text{ holds } 0^M \text{ and is closed under } S @@ 0 is nobody’s next and next is one-to-one, in M′ and in M; where-each-pair-comes-from (4d)
+h \text{ is a function on all of } |M| @@ second-order induction in M, on that part
+\text{the outputs of } h \text{ hold } 0^{M'} \text{ and are closed under } S' @@ h is closed
+h \text{ is onto } |M'| @@ second-order induction in M′, on the outputs
+\{x : h(x) = h(x') \Rightarrow x = x' \text{ for every } x'\} \text{ holds } 0^M \text{ and is closed under } S @@ next one-to-one, 0 nobody’s next, both worlds
+\htmlClass{new}{h \text{ is a matching that carries } 0 \text{ and next}} \quad \blacksquare @@ second-order induction in M, once more
+  </pre>
+  <p data-pid="76d502">Adding and multiplying are fixed by their lines, by induction, so h carries them too. So every world of PA₂ is a copy of N. The worlds of 37f, with members past every numeral, are not worlds of PA₂. The same can be done for the line: the field rules, the order, and the single statement of the least upper bound have only R as a world, up to matching. 37l.6.3 asks for the outline.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · one world · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37l2.1</span><span class="ph know">know</span>What does the only-the-numbers technique say? <br>At which three lines does its proof use second-order induction, and in which world each time?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37l3">
+  <h2 class="sthead"><span class="stno">37l3</span>Why the first-order list is not enough</h2>
+  <p data-pid="ba6c45">37f built a world M where every first-order induction is true and some member is past every numeral. Why is second-order induction false there? Because the part of |M| holding the values of the numerals holds 0, is closed under next, and is not all of |M|. 37f3 showed no formula picks out that part. First-order induction speaks only of the parts some formula picks out.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the parts a formula can reach">
+\text{the formulas of arithmetic can be listed} @@ the proof-listing technique’s listing of strings (37b3)
+\text{each formula, with members for its other placeholders, picks out one part} @@ in a listed world, countably many parts in all
+\text{the parts of an endless listed world cannot be listed} @@ more parts than members (35c)
+\htmlClass{new}{\text{first-order induction covers few parts; second-order covers all}} \quad \blacksquare @@ the numerals’ part in 37f’s world is one it misses
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · few parts · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37l3.1</span><span class="ph know">know</span>Why is second-order induction false in 37f’s world, while every first-order induction is true there? <br>Why can first-order induction speak of only some of the parts of a world?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37l4">
+  <h2 class="sthead"><span class="stno">37l4</span>The price</h2>
+  <p data-pid="e2672f">No-full-calculus technique: <b>no recipe lists exactly the second-order statements true in every world.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the no-full-calculus technique">
+\varphi \text{ a first-order statement of arithmetic} @@ given
+N \models \varphi \iff (PA_2 \Rightarrow \varphi) \text{ is true in every world} @@ every world of PA₂ is matched with N (37l2), and matched worlds share statements (37a4)
+\text{if a recipe listed the statements true in every world, it would list the truths of } N @@ list them, and keep those of the form PA₂ ⇒ φ
+\text{the truths of } N \text{ cannot be listed by a recipe} @@ 37i3
+\htmlClass{new}{\text{no such recipe}} \quad \blacksquare @@ refute
+  </pre>
+  <p data-pid="e026c4">So second-order logic has no calculus of 37b’s kind that reaches all its truths: the way back of 37d fails. The finite-parts technique fails too. Every finite part of PA₂ together with all the demands n̄ &lt; c has a world, N with c large; the whole has none, since every world of PA₂ is N.</p>
+  <p data-pid="74cadc">And “every part” must come from somewhere. It means every member of 𝒫(|M|), as the theory of sets supplies it. Whether 35f’s in-between size exists can be written as a question about which second-order statements are true in every world, and 35f reported that the axioms of sets cannot settle it. Categoricity was bought by handing the hard questions to the theory of sets.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the price · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37l4.1</span><span class="ph know">know</span>What does the no-full-calculus technique say, and which earlier technique does its proof turn against second-order logic? <br>Why does the finite-parts technique fail for second-order statements?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37l5">
+  <h2 class="sthead"><span class="stno">37l5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{PA}_2 \text{ has only } N \text{, so it reaches every truth of arithmetic}\,? @@ only one world, yet no calculus reaches all its truths (37l4)
+\text{first-order induction for every formula is the same as second-order induction}\,? @@ formulas pick out countably many parts; 37f’s world tells them apart
+\forall X \text{ runs over the parts a formula picks out}\,? @@ over every part in 2f’s set of all subsets
+\text{the finite-parts technique holds for every logic}\,? @@ it rests on 37d’s calculus; PA₂ with the demands n̄ &lt; c breaks it
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37l5.1</span><span class="ph know">know</span>Why does having only one world not make PA₂ reach every truth of arithmetic? <br>Why is first-order induction for every formula weaker than second-order induction?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">37l.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{“the world is finite”}"></span></span>Build a second-order statement true in exactly the worlds with finitely many members. Hint, not a recipe: a world is endless when some one-to-one function from it to itself is not onto (3c), and a function is a set of pairs. <br>Which first-order fact of 37d4 does the statement break?</div>
+  <div class="chq"><span class="chid">37l.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\forall X \text{ over only the parts a formula picks out}"></span></span>Read ∀X in a world as running only over the parts some formula picks out. Which technique of this step fails, and which of 37d’s come back?</div>
+  <div class="chq"><span class="chid">37l.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{the field rules},\ &lt;,\ \text{the least upper bound as one statement}"></span></span>Outline why any two worlds of these are matched: send fractions to fractions, then each member to the least upper bound of the fractions below it. <br>Turn it round: if two worlds of the field rules and the order are matched, must both satisfy the least upper bound?</div>
+  <div class="chq"><span class="chid">37l.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">4b.4.4: induction a proved result, an axiom, or needing no proof?</span></span>Rung 4 asked whether induction is a proved result, an axiom, or needs no proof, and proved it from sets. <br>In PA it is an endless list of given lines. In PA₂ it is one given line that only a world of sets can read. On the ladder it was a technique. Which of the three is the induction you trust, and what does each one hand the trust to?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r37concl.html">← 37·∎ · arithmetic describes its own proofs</a><a href="r37m.html">37m · numbering formulas by hand →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Set placeholders are second-order variables, and reading ∀X over all subsets is the full, or standard, semantics of second-order logic; reading it over a chosen family of parts is Henkin semantics, under which completeness and compactness return. A theory with only one model up to isomorphism is categorical, and the only-the-numbers technique is Dedekind’s categoricity theorem for second-order Peano arithmetic; the line’s is the categoricity of the complete ordered field. The no-full-calculus technique says second-order validity is not recursively enumerable.</p>
+  <h3>Who said it first</h3>
+  <p>Richard Dedekind proved categoricity for the numbers in “What are numbers and what should they be?” (1888). Gottlob Frege’s logic of 1879 was already second-order. Thoralf Skolem argued from 1922 that first-order logic is the right frame for set theory, and Ernst Zermelo argued against him in 1929 and 1930; Leon Henkin gave second-order logic its general semantics in 1950. Stewart Shapiro’s Foundations without Foundationalism (1991) is the modern case for the full semantics.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“PA₂ has one world. A collection with one world is complete. So the calculus of 37b, with second-order moves added, reaches every truth of PA₂.” Not allowed: completeness on this rung is the reached-if-true-everywhere technique, and it was proved for first-order languages only. For second-order statements, the no-full-calculus technique shows no recipe can do it.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'new placeholders',t:R`X(t)`,n:`“t is in X”.`},
+  {k:'ember',kl:'every part',t:R`\forall X\,\varphi`,n:`Over all of 2f’s subsets.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{induction is one statement}}`,n:`As 4b said it.`}
+],{title:'The slides · second order · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'pairs',t:R`(0, 0'),\ (S x, S' y)`,n:`The smallest closed set.`},
+  {k:'ember',kl:'induction',t:R`\forall X \text{ in } M \text{ and in } M'`,n:`Function, onto, one-to-one.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{M,\ M' \text{ matched}}`,n:`Only the numbers.`}
+],{title:'The slides · one world · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'formulas',t:R`\varphi_0, \varphi_1, \ldots`,n:`They can be listed.`},
+  {k:'ember',kl:'parts',t:R`\mathcal P(|M|)`,n:`They cannot.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{the numerals’ part is missed}}`,n:`First order is blind to it.`}
+],{title:'The slides · few parts · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'categorical',t:R`PA_2 \text{ has only } N`,n:`Strange worlds gone.`},
+  {k:'ember',kl:'no calculus',t:R`\text{validity not listable}`,n:`Or the truths of N would be.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{sets decide what “every part” means}}`,n:`The hard questions move.`}
+],{title:'The slides · the price · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What makes a violin sound like a violin?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r32then.html">← 32·then what can a spectrum tell us?</a><a href="r32chem.html">next: 32·chem how do X-rays see inside a crystal? →</a></p>
+  <div class="tags"><span class="tag phys">32·phys · physics</span></div>
+  <h1>What makes a violin sound like a violin?</h1>
+  <p data-pid="cb0972">What makes a violin sound like a violin? Play the A above middle C on a violin, a flute and a guitar in a hall in San Francisco. All three are the same note: the air at your ear repeats 440 times a second. A tuner cannot tell them apart. Your ear can, at once, with its eyes shut. 6·phys found why no scale is perfectly in tune, by treating each note as one frequency. A real note is not one frequency. It repeats, so it is a sum of turnings at 440, 880, 1320 and every whole multiple, and the instrument decides how much of each goes in. What makes the question hard is that the same violin, played twice, makes waves that look different on a screen, and still sounds the same. This page takes the recipe apart: what the string makes, what the body of the instrument does to it, why two strings slightly out of tune throb, and why a ripple of many frequencies does not travel at the speed of any of its crests.</p>
+  <p class="gesture" data-pid="7d633f">A string fixed at both ends repeats at one speed and its whole multiples. Plucked at a point, its recipe falls like one over the square of the speed and skips the speeds that are still at the pluck; bowed, it falls like one over the speed. The body of the violin filters that recipe, speed by speed, and the shares it leaves are what the ear hears as the violin. Two turnings close in speed add to a swell and fade at their difference, which is how a string is tuned. And a bunch of turnings travels at the slope of speed against wave number, which for waves on deep water is half the speed of the crests.</p>
+</header>
+
+<section class="class step" data-step="32phys1">
+  <h2 class="sthead"><span class="stno">32phys1</span>A string makes whole multiples</h2>
+  <p data-pid="aea281">A string of length L, held at both ends, with waves on it travelling at speed v, can hold the shapes sin(nπx/L) for n = 1, 2, 3, …, each swinging at n f₁, with f₁ = v/(2L). Any shape it is given is a sum of these (32a3, for the odd wave on [−L, L] that the shape makes). A violin’s A string is 32.5 cm long and sounds 440 Hz, so v = 2 × 0.325 × 440 = 286 m/s.</p>
+  <p data-pid="016bae">Pluck-point technique: <b>a string plucked to height h at a point d along it has, in its nth shape, the amount 2hL² sin(nπd/L) / (π²n²d(L − d)); so the amounts fall like 1/n², and every shape that is still at the pluck point is missing.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the pluck-point technique">
+y(x) = \tfrac{h}{d}x \text{ on } [0, d],\ \ \tfrac{h}{L - d}(L - x) \text{ on } [d, L] @@ the pulled string: two straight pieces, a corner at d
+b_n = \tfrac2L\int_0^L y(x)\sin\tfrac{n\pi x}{L}\,dx @@ the sine coefficient for a repeat of length 2L (32a3, 32a.5.2)
+y'' = 0 \text{ off } d,\ \ y' \text{ jumps by } -\tfrac{hL}{d(L - d)} \text{ at } d @@ the corner
+b_n = \tfrac2L\cdot\tfrac{L^2}{n^2\pi^2}\cdot\tfrac{hL}{d(L - d)}\sin\tfrac{n\pi d}{L} @@ parts twice (16), as in the corner-and-jump technique (32h3)
+\htmlClass{new}{b_n = \tfrac{2hL^2}{\pi^2n^2\,d(L - d)}\sin\tfrac{n\pi d}{L}} \quad \blacksquare @@ 0 whenever nd/L is a whole number
+  </pre>
+  <p data-pid="2da516">Pluck a guitar a fifth of the way along, and the 5th, 10th, 15th shapes are missing; pluck it near the bridge and the high shapes are strong, and the note is bright. A bow does something else. It drags the string along, lets it slip back, drags it again, and the string’s push on the bridge is close to a sawtooth (32h2), with amounts falling like 1/n, not 1/n². A bowed note is richer in high shapes than a plucked one.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · string · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a plucked string and its recipe</div>
+    <div class="kn"><span class="m">pluck point d/L</span><input type="range" id="kd" min="0.05" max="0.5" step="0.01" value="0.2"><output id="od"></output>
+    <span class="m">shapes used</span><input type="range" id="kn" min="1" max="30" step="1" value="6"><output id="on"></output></div>
+    <div id="pl"></div>
+    <div class="cap">Ink: the string pulled to height 1 at d. Ember: the sum of its first shapes, by the pluck-point technique. The verdict lists the first eight amounts, as shares of the first.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">32·phys.1.1</span><span class="ph know">know</span>Which frequencies can a string held at both ends make? <br>What does the pluck-point technique say, and how does a bowed string differ?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32phys2">
+  <h2 class="sthead"><span class="stno">32phys2</span>The body filters the string</h2>
+  <p data-pid="5e9283">A string alone is nearly silent: it is too thin to push much air. It pushes the bridge, the bridge shakes the wooden body, and the body pushes the air. The body is a blend, in the sense of 32i: what goes in at the bridge comes out at the ear with each speed scaled by the body’s own gain at that speed.</p>
+  <p data-pid="a2877f">Body-filter technique: <b>the recipe of a played note at the ear is the string’s recipe multiplied, speed by speed, by the gain of the body.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the body-filter technique">
+\text{push on the bridge} = \textstyle\sum_n F_n\,e^{2\pi i n f_1 t} @@ a repeating push: the string’s recipe
+\text{each turning in, a multiple of it out} @@ the gain-per-turning technique (32i2)
+\htmlClass{new}{\text{sound at the ear} = \textstyle\sum_n H(nf_1)\,F_n\,e^{2\pi i n f_1 t}} \quad \blacksquare @@ add up the turnings
+  </pre>
+  <p data-pid="fce0ea">A violin’s body has gains with peaks: one near 280 Hz from the air in its box, several between about 400 and 600 Hz from its plates, and a broad hill near 2500 Hz from the bridge. The same body shapes every note, so its peaks stay at the same frequencies while the notes move: that fixed shaping is much of what the ear calls the violin. It also explains the screen. The turns of the H(nf₁) shift each turning, so two bowings look different, while their shares |H(nf₁)F_n|², which the ear mostly hears, stay put.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · body · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·phys.2.1</span><span class="ph know">know</span>What does the body-filter technique say? <br>Why do the body’s peaks stay at the same frequencies for every note?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32phys3">
+  <h2 class="sthead"><span class="stno">32phys3</span>Two strings that throb</h2>
+  <p data-pid="1b1b07">6·phys tuned a bass by the slow wah, wah of two notes that should agree. Here is the wah, in turnings.</p>
+  <p data-pid="453ed5">Beat technique: <b>two equal turnings of frequencies f₁ and f₂ add to a turning of the middle frequency (f₁ + f₂)/2 whose size swells and fades |f₁ − f₂| times a second.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the beat technique">
+e^{2\pi if_1t} + e^{2\pi if_2t} = e^{\pi i(f_1 + f_2)t}\big(e^{\pi i(f_1 - f_2)t} + e^{-\pi i(f_1 - f_2)t}\big) @@ the plane-adding technique (26b)
+= 2\cos\big(\pi(f_1 - f_2)t\big)\,e^{\pi i(f_1 + f_2)t} @@ the power-to-sum technique (26i)
+\text{size } 2|\cos(\pi(f_1 - f_2)t)| \text{ peaks every } \tfrac{1}{|f_1 - f_2|} @@ |cos| repeats every π
+\htmlClass{new}{\text{beats at } |f_1 - f_2| \text{ a second}} \quad \blacksquare @@ the loudness swells and fades
+  </pre>
+  <p data-pid="868f5a">A violin’s A at 442 Hz against a tuning fork at 440 Hz beats twice a second; tuned to within a beat every ten seconds, it is within 0.1 Hz. The beats are the same throb that 6·phys heard between a pure fifth and a tempered one: their higher shapes, the 3rd of the lower note and the 2nd of the upper, nearly meet.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · beats · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·phys.3.1</span><span class="ph know">know</span>What does the beat technique say? <br>How does a violinist use beats to tune a string?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32phys4">
+  <h2 class="sthead"><span class="stno">32phys4</span>A bunch of waves, and its own speed</h2>
+  <p data-pid="9fedfe">A wave along a line with wave number k (turns of 2π per unit length) and frequency ω(k) (turns of 2π per unit time) is e^(i(kx − ω(k)t)). Its crests move at ω/k, the <i>crest speed</i>. A short burst is a bunch of such waves, ∫ A(k)e^(i(kx − ω(k)t)) dk, with A gathered near k₀.</p>
+  <p data-pid="9742d9">Group-speed technique: <b>a bunch of waves gathered near wave number k₀ travels at the slope ω′(k₀), which differs from the crest speed ω(k₀)/k₀ unless ω is in proportion to k.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the group-speed technique">
+\omega(k) \approx \omega(k_0) + \omega'(k_0)(k - k_0) @@ the line that matches at k₀ (23a), since A is gathered there
+kx - \omega(k)t \approx k_0x - \omega(k_0)t + (k - k_0)\big(x - \omega'(k_0)t\big) @@ multiply out
+\textstyle\int A(k)e^{i(kx - \omega t)}dk \approx e^{i(k_0x - \omega(k_0)t)}\int A(k)e^{i(k - k_0)(x - \omega'(k_0)t)}dk @@ the crests times an envelope
+\htmlClass{new}{\text{the envelope depends on } x - \omega'(k_0)t:\ \text{it moves at } \omega'(k_0)} \quad \blacksquare @@ the level-point technique (32l3) reads the same: the bulk sits where the phase is level in k
+  </pre>
+  <p data-pid="90ff5d">On a violin string ω = vk, so crests and bunches move together and a note keeps its shape. Waves on deep water have ω = √(gk). Their crest speed is √(g/k) and their bunches move at half that. A swell with a period of 12 s has crests moving at gT/(2π) ≈ 18.7 m/s, and its energy arrives at 9.4 m/s: a storm 3000 km off the coast reaches the surf at Santa Cruz about 3.7 days later. A piano’s stiff strings have ω² = v²k² + βk⁴, and their high shapes are a little sharp of whole multiples, part of what makes a piano a piano.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · group · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·phys.4.1</span><span class="ph know">know</span>What are the crest speed and the group speed of a wave? <br>What does the group-speed technique say, and what does it give for waves on deep water?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32phys5">
+  <h2 class="sthead"><span class="stno">32phys5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{two instruments playing 440 Hz make the same wave}\,? @@ the same repeat, different recipes
+\text{a plucked string holds every whole multiple}\,? @@ the shapes still at the pluck point are missing
+\text{beats come at the middle frequency}\,? @@ the swell comes |f₁ − f₂| times a second
+\text{the energy of a swell arrives at the crests’ speed}\,? @@ it arrives at the group speed, half that on deep water
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·phys.5.1</span><span class="ph know">know</span>Why is “two instruments playing the same 440 Hz note make the same wave” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">32·phys.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="d = L/2"></span></span>Build the recipe of a string plucked at its middle. Find which shapes are missing, and the share of the energy in the first shape.</div>
+  <div class="chq"><span class="chid">32·phys.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\omega(k) = \sqrt{gk + \sigma k^3/\rho}"></span></span>Very short ripples are pulled flat by the water’s skin as well as by gravity. Find where the group speed and the crest speed are equal, using σ/ρ = 7.3 × 10⁻⁵ m³/s² for water.</div>
+  <div class="chq"><span class="chid">32·phys.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{a recipe } |F_n|"></span></span>Given the shares of a note’s shapes, can the wave on a screen be rebuilt? Find what is missing, and why two bowings with the same shares can look different.</div>
+  <div class="chq"><span class="chid">32·phys.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="b_n \text{ of the plucked string}"></span></span>Find bₙ a second way, by sliding and stretching the triangle recipe of 32h3 for the case d = L/2, and check against the pluck-point technique.</div>
+  <div class="chq"><span class="chid">32·phys.6.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">32·phys.2: the shares, not the turns</span></span>One side, in the 1860s, held that the ear hears only the shares of a note’s shapes, and is deaf to their turns. Others found that some changes in the turns can be heard, in sharp clicks and in the low throb of a mistuned chord. <br>If the ear is deaf to turns for steady notes and not for clicks, is it deaf to turns? What would settle it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r32then.html">← 32·then · what can a spectrum tell us?</a><a href="r32chem.html">32·chem · how do X-rays see inside a crystal? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The whole multiples are the harmonics (or partials, or overtones), and f₁ the fundamental. A note’s recipe of shares is its spectrum, and what the ear makes of it timbre. The bowed string’s slip and drag is Helmholtz motion. The body’s peaks are its resonances, or formants; the air peak is the A0 mode and the hill near 2.5 kHz the bridge hill. The beat technique gives the beat frequency. The crest speed is the phase velocity, the bunch’s speed the group velocity, ω(k) the dispersion relation, and waves whose speed depends on k are dispersive; the piano’s sharp partials are inharmonicity. The claim that the ear ignores turns is Ohm’s acoustic law.</p>
+  <h3>Who said it first</h3>
+  <p>Marin Mersenne measured the frequencies of strings in 1636, and Joseph Sauveur named the harmonics around 1701. Thomas Young found in 1800 that a string plucked at a point lacks the harmonics that have a node there. Hermann von Helmholtz described the bowed string’s motion and set out the theory of timbre in On the Sensations of Tone (1863), building on Georg Ohm’s acoustic law of 1843; August Seebeck had argued against Ohm, and later experiments found the ear does hear some phase. William Rowan Hamilton described group velocity in 1839, and Lord Rayleigh gave the theory in The Theory of Sound (1877). Walter Munk tracked swells from storms near Antarctica to Alaska in 1963.</p>
+  <h3>Wrong moves, worked</h3>
+  <pre class="lines" data-k="ember" data-label="32·phys: a worked “proof”, not allowed">
+\text{a violin and a flute play 440 Hz} @@ fine: the same repeat
+\text{so their waves have the same coefficients} @@ not allowed: the repeat fixes the speeds, nf₁, not the amounts
+\text{so they sound the same} @@ not allowed: the shares |Fₙ|² differ, and the ear hears the shares
+  </pre>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+const V=c=>'var('+c+')';
+// plot(series, xr, yr, opts): series = [{pts:[[x,y],...], c:'--ember', w:1.6, dash:''}]; returns svg string
+function plot(series, xr, yr, o){ o=o||{}; const W=360,H=o.H||210,L=34,B=22,T=8,Rr=8;
+  const sx=x=>L+(x-xr[0])/(xr[1]-xr[0])*(W-L-Rr), sy=y=>H-B-(y-yr[0])/(yr[1]-yr[0])*(H-B-T);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:440px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  (o.yt||[]).forEach(y=>{ s+='<line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+sy(y)+'" y2="'+sy(y)+'" style="stroke:'+V('--grid')+';stroke-width:0.6"/><text x="'+(L-3)+'" y="'+(sy(y)+3)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+y+'</text>'; });
+  (o.xt||[]).forEach(x=>{ s+='<text x="'+sx(x)+'" y="'+(H-8)+'" text-anchor="middle" style="font:9px var(--mono);fill:'+V('--muted')+'">'+x+'</text>'; });
+  s+='<line x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/><line x1="'+L+'" x2="'+(W-Rr)+'" y1="'+(H-B)+'" y2="'+(H-B)+'" style="stroke:'+V('--ink')+';stroke-width:0.8"/>';
+  series.forEach(se=>{ const cl=v=>Math.max(yr[0]-0.05*(yr[1]-yr[0]),Math.min(yr[1]+0.05*(yr[1]-yr[0]),v));
+    const d=se.pts.filter(p=>isFinite(p[1])).map((p,i)=>(i?'L':'M')+sx(p[0]).toFixed(1)+','+sy(cl(p[1])).toFixed(1)).join('');
+    s+='<path d="'+d+'" style="fill:none;stroke:'+V(se.c||'--ember')+';stroke-width:'+(se.w||1.6)+(se.dash?';stroke-dasharray:'+se.dash:'')+'"/>'; });
+  (o.dots||[]).forEach(p=>{ s+='<circle cx="'+sx(p[0])+'" cy="'+sy(p[1])+'" r="2.6" style="fill:'+V(p[2]||'--ember')+'"/>'; });
+  if(o.xl) s+='<text x="'+(W-Rr)+'" y="'+(H-B-4)+'" text-anchor="end" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.xl+'</text>';
+  if(o.yl) s+='<text x="'+(L+4)+'" y="'+(T+9)+'" style="font:9px var(--mono);fill:'+V('--muted')+'">'+o.yl+'</text>';
+  return s+'</svg>'; }
+
+function draw(){ const d=+$('kd').value, N=+$('kn').value; $('od').textContent=fm(d,2); $('on').textContent=N;
+  const b=n=>2*Math.sin(n*Math.PI*d)/(Math.PI*Math.PI*n*n*d*(1-d));
+  const A=[],Y=[[0,0],[d,1],[1,0]]; for(let i=0;i<=400;i++){ const x=i/400; let s=0; for(let n=1;n<=N;n++) s+=b(n)*Math.sin(n*Math.PI*x); A.push([x,s]); }
+  $('pl').innerHTML=plot([{pts:Y,c:'--ink',w:1},{pts:A,c:'--ember'}],[0,1],[-0.2,1.2],{xt:[0,0.25,0.5,0.75,1],yt:[0,0.5,1],xl:'x/L',yl:'y',H:200});
+  const r=[]; for(let n=1;n<=8;n++) r.push(n+': '+fm(b(n)/b(1),3));
+  $('vd').className='verdict'; $('vd').textContent='Amounts as shares of the first, pluck at '+fm(d,2)+': '+r.join(', ')+'.'; }
+$('kd').oninput=draw; $('kn').oninput=draw; draw();
+window.__pic={set:(d,N)=>{ $('kd').value=d; $('kn').value=N; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'shapes',t:R`\sin\tfrac{n\pi x}{L},\ \ nf_1`,n:`Whole multiples.`},
+  {k:'ember',kl:'pluck',t:R`b_n \propto \tfrac{\sin(n\pi d/L)}{n^2}`,n:`A corner.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{missing when } nd/L \text{ is whole}}`,n:`Still at the pluck.`}
+],{title:'The slides · string · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'string',t:R`\textstyle\sum F_ne^{2\pi inf_1t}`,n:`The push.`},
+  {k:'ember',kl:'filter',t:R`H(nf_1)F_n`,n:`Speed by speed.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{fixed peaks, moving notes}}`,n:`The violin’s voice.`}
+],{title:'The slides · body · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'add',t:R`e^{2\pi if_1t} + e^{2\pi if_2t}`,n:`Two turnings.`},
+  {k:'ember',kl:'factor',t:R`2\cos(\pi(f_1 - f_2)t)\,e^{\pi i(f_1+f_2)t}`,n:`Middle, swelling.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|f_1 - f_2| \text{ beats a second}}`,n:`Tune them out.`}
+],{title:'The slides · beats · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'match',t:R`\omega \approx \omega(k_0) + \omega^{\prime}(k_0)(k-k_0)`,n:`23a.`},
+  {k:'ember',kl:'envelope',t:R`x - \omega^{\prime}(k_0)t`,n:`Moves at the slope.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{deep water: half the crest speed}}`,n:`ω = √(gk).`}
+],{title:'The slides · group · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\text{same note, same wave}\,?`,n:`Different recipes.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

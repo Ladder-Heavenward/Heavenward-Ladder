@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Convolution and filters by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r32h.html">← 32h wave recipes by hand</a><a href="r32j.html">next: 32j turning rate rules into algebra →</a></p>
+  <div class="tags"><span class="tag tech">32i · technique</span></div>
+  <h1>Convolution and filters by hand</h1>
+  <p data-pid="7f33ce">Roll two dice at a game night in Bellingham and add them. Seven is the likeliest total, and two and twelve the rarest, and the shape of the chances is a tent. Multiply out two polynomials and the coefficients of the answer come from the same kind of sum: every way of pairing a term of one with a term of the other that lands on a given power. Both are blends, done on lists instead of on functions. This step does blends by hand. Then it reads a blend the way 32d taught, one turning at a time. A smoothing, a tone control, the treble knob on an amplifier: each is a blend, and each simply multiplies every turning by a number of its own. Write down that number for every speed and you know everything the filter does. The last footing builds a filter that runs one reading at a time, the kind a thermometer or a phone uses, and finds its number for each speed by feeding it a single turning.</p>
+  <p class="gesture" data-pid="8941bf">The coefficients of a product of polynomials are the blend of the coefficient lists, and the chances of a sum of independent counts are the blend of their chances. A filter that blends multiplies each turning by its own number, the weight’s coefficient at that speed: the size is the gain and the turn is the shift. A filter that runs one reading at a time, mixing each new reading with its last output, has, for each speed, the share it takes from each new reading, divided by one minus the share it keeps times a backward turning.</p>
+</header>
+
+<section class="class step" data-step="32i1">
+  <h2 class="sthead"><span class="stno">32i1</span>Blending lists</h2>
+  <p data-pid="28869d">For two lists a₀, a₁, a₂, … and b₀, b₁, b₂, …, the blend a * b is the list whose kth entry is a₀b_k + a₁b_(k−1) + ⋯ + a_kb₀: every pairing whose places add to k.</p>
+  <p data-pid="cb52a0">List-blend technique: <b>the coefficients of a product of polynomials are the blend of their coefficient lists; so the chances of a sum of two independent whole-number counts are the blend of their chance lists.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the list-blend technique">
+\big(\textstyle\sum_j a_jz^j\big)\big(\sum_m b_mz^m\big) = \sum_{j, m} a_jb_mz^{j + m} @@ multiply out term by term (5)
+\text{the coefficient of } z^k = \textstyle\sum_{j=0}^{k} a_jb_{k-j} @@ gather the pairings with j + m = k
+G_{X+Y} = G_XG_Y @@ the sums-multiply technique (30i)
+\htmlClass{new}{P(X + Y = k) = \textstyle\sum_j P(X = j)\,P(Y = k - j)} \quad \blacksquare @@ read off the coefficients, by the chances-from-G technique (30i)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: two dice">
+\text{one die: } \tfrac16(z + z^2 + \cdots + z^6) @@ its chance function
+\text{two dice: } \tfrac{1}{36}(z + \cdots + z^6)^2 @@ the list-blend technique
+\tfrac{1}{36}(1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1) \text{ for totals } 2, \ldots, 12 @@ each total counts the pairings that make it
+\htmlClass{new}{P(\text{total } 7) = \tfrac{6}{36} = \tfrac16,\ \ P(\text{total } 2) = \tfrac1{36}} \quad \blacksquare @@ the tent
+  </pre>
+  <p data-pid="bb07a9">Blend the tent with a third die and the shape rounds off. Blend again and again and it heads to the bell: 32·stat asks why, with turnings.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · lists · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">32i1.1</span><span class="ph know">know</span>What is the blend of two lists? <br>What does the list-blend technique say about polynomials, and about chances of sums?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32i2">
+  <h2 class="sthead"><span class="stno">32i2</span>A filter is a number for every speed</h2>
+  <p data-pid="6a2b1a">A filter that blends a signal with a fixed weight g sends each turning eₙ to cₙ(g)eₙ (32d1). Write H(n) = cₙ(g).</p>
+  <p data-pid="f16f79">Gain-per-turning technique: <b>a blend multiplies each turning by its own number H(n); the size |H(n)| is the gain at that speed, and the turn of H(n) is the shift the turning suffers.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the gain-per-turning technique">
+(e_n * g)(x) = \tfrac{1}{2\pi}\int e^{in(x - t)}g(t)\,dt = e^{inx}\,c_n(g) @@ the blend of one turning
+H(n) = |H(n)|\,e^{-i\phi_n} @@ out-and-round form (21·cb20, 26a)
+\htmlClass{new}{e_n * g = |H(n)|\,e^{in(x - \phi_n/n)}} \quad \blacksquare @@ the turning comes out scaled by |H(n)| and slid by φₙ/n
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: smoothing the square wave">
+H(n) = \tfrac{\sin nh}{nh} \text{ for the average over } [x - h, x + h] @@ 32d1’s example
+h = \tfrac\pi3:\ \ H(1) = \tfrac{\sin(\pi/3)}{\pi/3} \approx 0.827,\ \ H(3) = \tfrac{\sin\pi}{\pi} = 0 @@ the window holds a whole wave of speed 3
+\htmlClass{new}{q * g = \tfrac4\pi\big(0.827\sin x + 0\cdot\tfrac{\sin 3x}{3} + H(5)\tfrac{\sin 5x}{5} + \cdots\big)} \quad \blacksquare @@ the square recipe (32h1), each term multiplied
+  </pre>
+  <p data-pid="544349">The average’s numbers are all real, so it shifts nothing; it only scales, and it wipes out the speeds whose waves fit the window exactly. The treble knob on an amplifier is a filter whose gain falls for high speeds; a hum filter has a gain of 0 at the mains hum of 60 turns a second.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · gain · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32i2.1</span><span class="ph know">know</span>What does the gain-per-turning technique say? <br>What do the size and the turn of H(n) each do to a turning?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32i3">
+  <h2 class="sthead"><span class="stno">32i3</span>A filter that runs one reading at a time</h2>
+  <p data-pid="fc30d7">A thermometer on a buoy off Newport reads every minute, xₖ at minute k. Its display shows yₖ = (1 − β)y_(k−1) + β xₖ, for a fixed β in (0, 1): each new display is mostly the old one, with a share β of the new reading.</p>
+  <p data-pid="f762e4">Stepped-filter technique: <b>the running filter yₖ = (1 − β)y_(k−1) + β xₖ sends the stepped turning e^(iωk) to H(ω)e^(iωk), with H(ω) = β / (1 − (1 − β)e^(−iω)).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the stepped-filter technique">
+y_k = \beta\textstyle\sum_{j \ge 0}(1 - \beta)^j\,x_{k - j} @@ unroll the rule (9·cb4); a blend of the readings with the list β(1 − β)ʲ
+x_k = e^{i\omega k}:\ \ y_k = \beta\,e^{i\omega k}\textstyle\sum_{j \ge 0}\big((1 - \beta)e^{-i\omega}\big)^j @@ the plane-adding technique (26b)
+\textstyle\sum_{j \ge 0}\big((1 - \beta)e^{-i\omega}\big)^j = \tfrac{1}{1 - (1 - \beta)e^{-i\omega}} @@ the geometric sum (15i), of size 1 − β &lt; 1
+\htmlClass{new}{y_k = H(\omega)\,e^{i\omega k},\ \ H(\omega) = \tfrac{\beta}{1 - (1 - \beta)e^{-i\omega}}} \quad \blacksquare @@ the turning comes out a turning
+  </pre>
+  <p data-pid="43abc0">With β = 0.1: H(0) = 1, so a steady temperature shows unchanged. At ω = π/10, a wiggle of period 20 minutes, |H| ≈ 0.32 and the display lags by about 63°. At ω = π, a reading that flips every minute, |H| = 0.1/1.9 ≈ 0.053: the jitter is cut to a twentieth.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · running · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32i3.1</span><span class="ph know">know</span>What does the stepped-filter technique say? <br>Why is the running filter a blend, and with which list?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32i4">
+  <h2 class="sthead"><span class="stno">32i4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+P(X + Y = k) = P(X = k)\,P(Y = k)\,? @@ every pairing j and k − j counts, added
+\text{a filter changes a turning into another speed}\,? @@ a blend sends each turning to a multiple of itself
+\text{the average over a window keeps every speed, a little smaller}\,? @@ it wipes out speeds whose waves fit the window exactly
+\text{the running filter forgets old readings after a while}\,? @@ every old reading keeps a share β(1 − β)ʲ, never 0
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32i4.1</span><span class="ph know">know</span>Why is “a filter can turn one speed into another” an illegal move, for a blend?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">32i.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{three dice}"></span></span>Build the chance list of the total of three dice by blending the tent with one die. Find the chance of a total of 10.</div>
+  <div class="chq"><span class="chid">32i.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\beta = 1,\ \ \beta \to 0"></span></span>Find H(ω) for the running filter at β = 1, and what the filter does. Find what happens to H(ω) as β heads to 0, at ω = 0 and at ω ≠ 0.</div>
+  <div class="chq"><span class="chid">32i.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="H(n) \text{ for every } n"></span></span>Given any list of numbers H(n) whose squares have a settling sum, is there a filter of finite energy with exactly those numbers? Use 32b.6.3, and find what such a filter does to the square wave.</div>
+  <div class="chq"><span class="chid">32i.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="y_k = (1 - \beta)y_{k-1} + \beta x_k"></span></span>Find H(ω) a second way, without unrolling: put yₖ = H e^(iωk) and xₖ = e^(iωk) into the rule, and solve for H.</div>
+  <div class="chq"><span class="chid">32i.5.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="\text{a filter that reads the future}"></span></span>The average over [x − h, x + h] uses readings after x. One side holds that a filter that needs the future is no filter, since no machine can run it as the signal comes in. The other holds that a recording is all there at once, so any blend is fair, and that the shift-free average is better for it. <br>Is a filter that looks ahead a filter?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r32h.html">← 32h · wave recipes by hand</a><a href="r32j.html">32j · turning rate rules into algebra →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The blend of lists is discrete convolution, the list-blend technique the convolution of coefficient sequences (and, for chances, of probability mass functions). H(n), as a function of the speed, is the filter’s frequency response; |H| is the gain, or magnitude response, and the turn its phase response. The running filter is a first-order infinite impulse response filter, or exponential moving average; the window average is a moving average, or boxcar filter. A filter that needs only the past is causal, one that needs the future non-causal, and the shift-free average is zero-phase.</p>
+  <h3>Who said it first</h3>
+  <p>Abraham de Moivre counted the totals of several dice by multiplying polynomials in 1730. The running average was used by Robert Brown for stock control in the 1950s and is called exponential smoothing. Stephen Butterworth designed the flattest filters in 1930, and the hum filter of the 1930s telephone exchanges is the ancestor of every notch filter.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The running filter has gain β at every speed, since each reading enters with weight β.” Not allowed: each reading enters again and again, with weights β(1 − β)ʲ, and the shares add as a geometric sum whose total depends on the speed. At ω = 0 they add to 1, not β.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'multiply',t:R`\textstyle\sum_j a_jb_{k-j}`,n:`Pairings that add to k.`},
+  {k:'ember',kl:'chances',t:R`G_{X+Y} = G_XG_Y`,n:`30i.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{two dice: a tent}}`,n:`Blend of two flats.`}
+],{title:'The slides · lists · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'one turning',t:R`e_n * g = c_n(g)\,e_n`,n:`Only scaled.`},
+  {k:'ember',kl:'polar',t:R`H(n) = |H(n)|e^{-i\phi_n}`,n:`Gain and shift.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{H(3) = 0 \text{ for } h = \pi/3}`,n:`A whole wave wiped.`}
+],{title:'The slides · gain · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'unroll',t:R`y_k = \beta\textstyle\sum (1-\beta)^jx_{k-j}`,n:`A blend.`},
+  {k:'ember',kl:'feed',t:R`x_k = e^{i\omega k}`,n:`One stepped turning.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{H(\omega) = \tfrac{\beta}{1 - (1-\beta)e^{-i\omega}}}`,n:`Geometric sum.`}
+],{title:'The slides · running · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'illegal',t:R`e_n \to e_m\,?`,n:`Only a multiple.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

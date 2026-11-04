@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>When every point is the average of its neighbours</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r33c.html">← 33c the wave equation</a><a href="r33e.html">next: 33e characteristics and shocks →</a></p>
+  <div class="tags"><span class="tag proof">33d · proof</span></div>
+  <h1>When every point is the average of its neighbours</h1>
+  <p data-pid="2cf0c2">Leave a metal plate long enough with its rim held at fixed temperatures, some parts warm and some cold, and it stops changing. Heat still flows through it, from the warm stretch of rim to the cold one, but every point takes in exactly what it gives out. The heat rule with nothing changing in time says that the second slopes in the two directions cancel. This step finds a great many such still states at once, in a place the ladder has already been: the real part of any function with a complex slope is one. Then it proves the property in the title. The temperature at any point of a still plate is the plain average of the temperatures round any circle about it. From that, the hottest point of a still plate is on its rim, the rim fixes everything inside, and on a round plate the inside can be written down from the rim by a series.</p>
+  <p class="gesture" data-pid="1b434d">A still state of heat has its two second slopes cancelling, and the real part of every function with a complex slope is one. Its value at any point is the average round any circle about the point, so it is greatest and least on the rim, the rim fixes the inside, and on a disc a series builds the inside from the rim.</p>
+</header>
+
+<section class="class step" data-step="33d1">
+  <h2 class="sthead"><span class="stno">33d1</span>Still states, and where to find them</h2>
+  <p data-pid="80e988">A plate that has stopped changing has u_t = 0, so by the heat rule in a block (33a1), u_xx + u_yy = 0. A function with continuous second slopes and Δu = 0 on an open set is <i>balanced</i> there. Its accepted name is <i>harmonic</i>. x² − y² is balanced: its second slopes are 2 and −2. x² + y² is not.</p>
+  <p data-pid="37d02e">Real-part technique: <b>if f = u + iv has a complex slope at every point of an open set, then u and v are both balanced there, and u_x = v_y, u_y = −v_x.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the real-part technique">
+f^{\prime} = u_x + i\,v_x @@ the slope along the floor, h = t real (26d)
+f^{\prime} = \tfrac{1}{i}(u_y + i\,v_y) = v_y - i\,u_y @@ the two-ways technique (26d): along the upright the slope is i times f′
+u_x = v_y,\ \ u_y = -v_x @@ the same number two ways: match the real and imaginary parts
+u, v \text{ have continuous slopes of every order} @@ f is a power series near each point (26g), and so is f′
+u_{xx} = v_{yx},\ \ u_{yy} = -v_{xy} @@ take the slope of the first pair along x, the second along y
+\htmlClass{new}{u_{xx} + u_{yy} = v_{yx} - v_{xy} = 0} \quad \blacksquare @@ the swap-knobs technique (28d); the same lines run for v
+  </pre>
+  <p data-pid="1dc867">So every function of rung 26 hands over two balanced functions. From z² come x² − y² and 2xy. From e^z come eˣ cos y and eˣ sin y. From the logarithm, away from 0, comes ln √(x² + y²): the log of the distance from 0, balanced everywhere but at 0.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · balanced · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">33d1.1</span><span class="ph know">know</span>What is a balanced function? <br>What does the real-part technique say, and which technique of rung 26 gives its first pair of lines?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33d2">
+  <h2 class="sthead"><span class="stno">33d2</span>The average round a circle</h2>
+  <p data-pid="f4b97e">Let u be balanced on an open set holding the closed disc of radius r about the point w = (w₁, w₂). For 0 &lt; ρ ≤ r, let φ(ρ) be the average of u round the circle of radius ρ about w:</p>
+  <p class="eqline" data-pid="694bcd">\(\varphi(\rho) = \tfrac{1}{2\pi}\int_0^{2\pi} u(w_1 + \rho\cos\theta,\ w_2 + \rho\sin\theta)\,d\theta.\)</p>
+  <p data-pid="19a38f">Circle-average technique: <b>the value of a balanced function at a point is the average of its values round every circle about that point that lies, with its inside, where the function is balanced.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the circle-average technique">
+\varphi^{\prime}(\rho) = \tfrac{1}{2\pi}\textstyle\int_0^{2\pi} (u_x\cos\theta + u_y\sin\theta)\,d\theta @@ the slope under the total, as on 33a1; roads add (28c) for the slope along ρ
+\varphi^{\prime}(\rho) = \tfrac{1}{2\pi\rho}\times\big(\text{flux of } \nabla u \text{ out of the circle of radius } \rho\big) @@ the flux across the circle traced as (w₁ + ρ cos θ, w₂ + ρ sin θ): x′ = −ρ sin θ, y′ = ρ cos θ (28j1)
+\varphi^{\prime}(\rho) = \tfrac{1}{2\pi\rho}\textstyle\iint_{\text{disc}} (u_{xx} + u_{yy}) = 0 @@ the spread technique (28j) on the disc, which is slanted both ways
+\varphi(\rho) = \varphi(r) \text{ for every } 0 < \rho \le r @@ zero slope means flat (14d)
+\varphi(\rho) \to u(w) \text{ as } \rho \to 0 @@ u is continuous at w, so close to u(w) all round a small circle
+\htmlClass{new}{u(w) = \tfrac{1}{2\pi}\textstyle\int_0^{2\pi} u(w_1 + r\cos\theta,\ w_2 + r\sin\theta)\,d\theta} \quad \blacksquare @@ a constant that heads to u(w) is u(w)
+  </pre>
+  <p data-pid="f4f193">This is the title of the step. Every point of a still plate is the plain average of its neighbours, on every circle at once. The heat rule says why in words: a point warmer than the average round it would be losing heat, and a still plate loses none.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · circle average · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33d2.1</span><span class="ph know">know</span>What does the circle-average technique say? <br>Which technique of rung 28 makes the slope of the average 0?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33d3">
+  <h2 class="sthead"><span class="stno">33d3</span>The rim fixes the inside</h2>
+  <p data-pid="5eb004">Let D be a bounded open set in the plane, and let u be continuous on D with its edge, and balanced in D.</p>
+  <p data-pid="fc443b">Edge-rules-inside technique: <b>the greatest and the least values of u are taken on the edge of D.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the edge-rules-inside technique">
+v = u + \varepsilon(x^2 + y^2),\ \ \Delta v = 4\varepsilon > 0 @@ the tilt of 33b1, now bending up both ways
+v \text{ has a greatest value at some } p \text{ in } D \text{ or on its edge} @@ closed and bounded (25d)
+p \in D \Rightarrow v_{xx}(p) \le 0,\ v_{yy}(p) \le 0,\ \Delta v(p) \le 0 @@ a top along each knob (14a, 14f): a clash with 4ε &gt; 0
+\max u \le \max v = \max_{\text{edge}} v \le \max_{\text{edge}} u + \varepsilon\rho^2 @@ D lies within distance ρ of 0
+\htmlClass{new}{\max_{D} u = \max_{\text{edge}} u} \quad \blacksquare @@ ε was any positive number; for the least value use −u
+  </pre>
+  <p data-pid="f9e348">One-still-state technique: <b>two functions continuous on D with its edge, balanced in D, and equal on the edge, are equal in D. If they differ by at most δ on the edge, they differ by at most δ in D.</b> The proof is the lines of 33b2 with the edge in place of the floor and walls.</p>
+  <p data-pid="c63034">So the rim of a still plate fixes every temperature inside. Nothing about the past is needed. That is a different kind of question from the heat and the string, which needed a start: here there is no start, only a boundary all round.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · rim rules · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33d3.1</span><span class="ph know">know</span>What do the edge-rules-inside and one-still-state techniques say? <br>Why does the tilt ε(x² + y²) make the clash?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33d4">
+  <h2 class="sthead"><span class="stno">33d4</span>A round plate from its rim</h2>
+  <p data-pid="cf23de">Let the plate be the disc of radius 1 about 0, and write points by reach r and turn θ (21r). Let the rim’s temperature be g(θ) = a₀/2 + Σ (a_n cos nθ + b_n sin nθ), its series (32a), with Σ(|a_n| + |b_n|) settling.</p>
+  <p data-pid="4770a0">Disc-series technique: <b>the one balanced function on the disc that matches g on the rim is u = a₀/2 + Σ rⁿ(a_n cos nθ + b_n sin nθ).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the disc-series technique">
+r^n\cos n\theta = \operatorname{Re} z^n,\ \ r^n\sin n\theta = \operatorname{Im} z^n @@ z = re^(iθ), so zⁿ = rⁿe^(inθ) (26a)
+\text{each term is balanced} @@ the real-part technique, on zⁿ and on −izⁿ
+\text{the sum settles at once on } r \le 1 \text{ and is continuous there} @@ the at-once comparison technique, Mₙ = |aₙ| + |bₙ|, and kept continuity (23d)
+\text{for } r \le r_0 < 1, \text{ the first and second slopes of the terms settle at once} @@ they are at most n²r₀ⁿ⁻²(|aₙ| + |bₙ|), and n²r₀ⁿ shrinks fast (22e)
+u \text{ is balanced inside, and } u = g \text{ on the rim} @@ slopes of the sum are sums of slopes, as on 33a3; at r = 1 the sum is g’s series
+\htmlClass{new}{u \text{ is the only such function}} \quad \blacksquare @@ the one-still-state technique
+  </pre>
+  <p data-pid="e63671">Each wiggle of the rim is passed inward and shrinks by rⁿ: the finer the wiggle, the faster it is lost. At the centre only a₀/2 is left, the rim’s average, as the circle-average technique said it must be. One example first. A steel disc of radius R has its rim held at 40 + 10 cos θ − 6 sin 2θ degrees. Inside, with r/R for r, the temperature is 40 + 10(r/R) cos θ − 6(r/R)² sin 2θ, which in x and y is 40 + 10x/R − 12xy/R².</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · round plate · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33d4.1</span><span class="ph know">know</span>What does the disc-series technique say? <br>What happens to each wiggle of the rim as it is passed inward?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33d5">
+  <h2 class="sthead"><span class="stno">33d5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\ln\sqrt{x^2 + y^2} \text{ is balanced, so its value at } 0 \text{ is the average round the unit circle, } 0\,? @@ it is not balanced at 0, so the disc about 0 is not inside where it is balanced
+x^2 + y^2 \text{ has } u_{xx} = u_{yy}, \text{ so it is balanced}\,? @@ balanced asks for the sum to be 0; here it is 4
+\text{a still plate’s hottest point can be in the middle, if the middle was heated first}\,? @@ the edge-rules-inside technique: a still plate keeps no memory of what was heated first
+\text{the real part of } \bar z = x - iy \text{ is } x, \text{ which is balanced, so } \bar z \text{ has a complex slope}\,? @@ the technique runs one way: z̄ has no complex slope (26d), though x is balanced
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33d5.1</span><span class="ph know">know</span>Why is “ln √(x² + y²) is balanced, so its value at 0 is the average round the unit circle” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">33d.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="g(\theta) = \cos^2\theta"></span></span>Build the balanced function on the unit disc with these rim values, in x and y. <br>Find its value at the centre two ways, and its greatest value inside.</div>
+  <div class="chq"><span class="chid">33d.4.2</span><span class="tagq">converse</span>Turn the circle-average technique round. Suppose u has continuous second slopes, and u(w) is the average round every small circle about every point w. Prove Δu = 0. <br>Use the line for φ′(ρ): what would Δu(w) &gt; 0 do to φ near ρ = 0?</div>
+  <div class="chq"><span class="chid">33d.4.3</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="u = \ln\sqrt{x^2 + y^2} \text{ on } 1 &lt; x^2 + y^2 &lt; 4"></span></span>Find the average of u round the circle of radius ρ about 0, for 1 &lt; ρ &lt; 2, and why it is not constant. Which line of the circle-average proof fails? <br>Find a balanced function on this ring that is 0 on the inner rim and 1 on the outer rim.</div>
+  <div class="chq"><span class="chid">33d.4.4</span><span class="tagq">reroute</span>Prove a stronger edge-rules-inside technique from the circle-average technique: if u is balanced on a disc and its greatest value is taken at the centre, then u is constant on the disc. <br>Find why this proof needs no tilt.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r33c.html">← 33c · the wave equation</a><a href="r33e.html">33e · characteristics and shocks →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A balanced function is a harmonic function, and Δu = 0 is Laplace’s equation. The pair u_x = v_y, u_y = −v_x is the Cauchy–Riemann equations, and v is a harmonic conjugate of u. The circle-average technique is the mean value property. The edge-rules-inside technique is the weak maximum principle, and the stronger form of the reroute is the strong maximum principle. Finding the balanced function with given edge values is the Dirichlet problem, and the one-still-state technique is its uniqueness. The disc series, summed in one total, is Poisson’s integral formula.</p>
+  <h3>Who said it first</h3>
+  <p>Pierre-Simon Laplace wrote Δu = 0 for the pull of gravity in 1782. Jean le Rond d’Alembert found the pair of equations for the flow of a fluid in 1752, and Leonhard Euler and later Augustin-Louis Cauchy and Bernhard Riemann used them for complex functions. Carl Friedrich Gauss proved the mean value property for the potential of gravity in 1840. Siméon Denis Poisson gave the formula for the disc in 1820, and Peter Gustav Lejeune Dirichlet and Riemann argued over whether every edge always has a balanced inside; Karl Weierstrass found the flaw in the argument of 1857 that it always has, and David Hilbert repaired it in 1900.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“A balanced function has u_xx = −u_yy. Where it bends down along x it bends up along y, so every point inside is a saddle, and a saddle is never a top. So the greatest value is on the edge.” Not allowed: at a top both second slopes can be 0, as for a constant, and a point with both 0 need not be a saddle. The tilt is there to close that gap.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'two ways',t:R`u_x + iv_x = v_y - iu_y`,n:`Floor and upright.`},
+  {k:'ember',kl:'pair',t:R`u_x = v_y,\ u_y = -v_x`,n:`Match parts.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\Delta u = 0}`,n:`Every real part.`}
+],{title:'The slides · balanced · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'average',t:R`\varphi(\rho) = \tfrac{1}{2\pi}\textstyle\oint u`,n:`Round a circle.`},
+  {k:'ember',kl:'slope',t:R`\varphi^{\prime} = \tfrac{1}{2\pi\rho}\textstyle\iint\Delta u = 0`,n:`The spread technique.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{u(w) = \varphi(r)}`,n:`The centre is the average.`}
+],{title:'The slides · circle average · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'tilt',t:R`v = u + \varepsilon(x^2 + y^2)`,n:`Δv &gt; 0.`},
+  {k:'ember',kl:'top inside',t:R`\Delta v(p) \le 0`,n:`A clash.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\max_D u = \max_{\text{edge}} u}`,n:`The rim fixes the inside.`}
+],{title:'The slides · rim rules · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'rim',t:R`g = \tfrac{a_0}{2} + \textstyle\sum(a_n\cos n\theta + b_n\sin n\theta)`,n:`Its series.`},
+  {k:'ember',kl:'inside',t:R`\htmlClass{new}{u = \tfrac{a_0}{2} + \textstyle\sum r^n(\ldots)}`,n:`Each wiggle shrinks by rⁿ.`},
+  {k:'ember',kl:'centre',t:R`u(0) = \tfrac{a_0}{2}`,n:`The rim’s average.`}
+],{title:'The slides · round plate · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

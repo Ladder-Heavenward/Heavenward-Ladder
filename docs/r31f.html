@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Turn, stretch, turn</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r31e.html">← 31e quadratic forms</a><a href="r31g.html">next: 31g sizes of functions →</a></p>
+  <div class="tags"><span class="tag proof">31f · proof</span></div>
+  <h1>Turn, stretch, turn</h1>
+  <p data-pid="1f2def">Symmetric maps have axes. Most maps are not symmetric: a shear has too few stretched arrows, a quarter turn has none that are real, and a map from one space to another of a different dimension has no stretches at all, since an arrow and its image do not live in the same place. Yet every map, of any shape, has a pair of right-angled bases that it carries one to the other, stretching as it goes. Find them by feeding the map to its own transpose, which makes a symmetric map whose stretches are never below zero. Their roots are the stretches of the original map. So every grid is a turn, a plain stretch, and another turn. The largest stretch is the most the map can lengthen any arrow, and keeping only the few largest stretches gives the closest simple map there is. That is how a large table of numbers is stored small.</p>
+  <p class="gesture" data-pid="943bbf">Every grid A carries a right-angled basis of its input space to a right-angled basis of its output space, stretching the kth arrow by σₖ ≥ 0. The σs are the roots of the stretches of AᵀA. The largest is the most A lengthens any arrow, and keeping the r largest gives the closest grid built from r pieces.</p>
+</header>
+
+<section class="class step" data-step="31f1">
+  <h2 class="sthead"><span class="stno">31f1</span>Feed a map its own transpose</h2>
+  <p data-pid="02c145">Let A be a real grid with m rows and n columns: a straight map from lists of n numbers to lists of m. It has no stretches of its own unless m = n. But AᵀA is n by n and symmetric, since (AᵀA)ᵀ = AᵀA.</p>
+  <p data-pid="4a1b39">Never-negative technique: <b>the stretches of AᵀA are never below 0, and Av = 0 exactly when AᵀAv = 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the never-negative technique">
+A^{\mathsf T}Av = \lambda v,\ \ |v| = 1 @@ an axis of AᵀA (31d3)
+\lambda = \lambda\,v\cdot v = v^{\mathsf T}A^{\mathsf T}Av = (Av)\cdot(Av) = |Av|^2 @@ the dot as a row times a column
+\lambda \ge 0 @@ a squared length
+A^{\mathsf T}Av = 0 \Rightarrow |Av|^2 = v^{\mathsf T}A^{\mathsf T}Av = 0 @@ the same line, for any v
+\htmlClass{new}{A^{\mathsf T}A \text{ loses exactly what } A \text{ loses}} \quad \blacksquare @@ and Av = 0 gives AᵀAv = 0 at once
+  </pre>
+  <p data-pid="b502b8">From here on, the <i>stretch sizes</i> of A are σₖ = √λₖ, for the stretches λ₁ ≥ λ₂ ≥ ⋯ ≥ λₙ ≥ 0 of AᵀA, written in falling order. The number of σₖ above 0 is the dimension of what A reaches, by lost plus reached (27c2).</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · AᵀA · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">31f1.1</span><span class="ph know">know</span>What does the never-negative technique say?  <br>What are the stretch sizes of a grid A?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31f2">
+  <h2 class="sthead"><span class="stno">31f2</span>Every grid is a turn, a stretch and a turn</h2>
+  <p data-pid="1cc04b">Turn-stretch-turn technique: <b>for every real grid A with m rows and n columns there are right-angled bases v₁, …, vₙ of the inputs and u₁, …, uₘ of the outputs with Avₖ = σₖuₖ; as grids, A = UΣVᵀ, with U and V length-keepers and Σ zero except for σ₁, σ₂, … down its middle.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the turn-stretch-turn technique">
+v_1, \ldots, v_n \text{ right-angled axes of } A^{\mathsf T}A @@ the spectral technique (31d3), stretches λ₁ ≥ ⋯ ≥ λₙ
+\sigma_k > 0:\ \ u_k = Av_k/\sigma_k @@ |Avₖ|² = λₖ = σₖ² (31f1), so |uₖ| = 1
+u_j\cdot u_k = \tfrac{(Av_j)\cdot(Av_k)}{\sigma_j\sigma_k} = \tfrac{v_j^{\mathsf T}A^{\mathsf T}Av_k}{\sigma_j\sigma_k} = \tfrac{\lambda_k\,v_j\cdot v_k}{\sigma_j\sigma_k} = 0 @@ for j ≠ k: the vs are at right angles
+\sigma_k = 0:\ \ Av_k = 0 = \sigma_ku_k \text{ for any } u_k @@ grow the uₖ found so far to a right-angled basis (27b3, then 31c1)
+\htmlClass{new}{AV = U\Sigma,\ \ A = U\Sigma V^{\mathsf T}} \quad \blacksquare @@ column k of each side is Avₖ = σₖuₖ; Vᵀ undoes V (27m1)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: one grid that is not symmetric">
+A = \begin{pmatrix} 3 & 0 \\ 4 & 5\end{pmatrix},\ \ A^{\mathsf T}A = \begin{pmatrix} 25 & 20 \\ 20 & 25\end{pmatrix} @@ symmetric, though A is not
+\lambda = 45 \text{ along } \tfrac{1}{\sqrt2}(1, 1),\ \ \lambda = 5 \text{ along } \tfrac{1}{\sqrt2}(1, -1) @@ the stretch-test technique (27f1)
+\sigma_1 = 3\sqrt5 \approx 6.708,\ \ \sigma_2 = \sqrt5 \approx 2.236 @@ the roots
+u_1 = \tfrac{Av_1}{\sigma_1} = \tfrac{1}{\sqrt{10}}(1, 3),\ \ u_2 = \tfrac{Av_2}{\sigma_2} = \tfrac{1}{\sqrt{10}}(3, -1) @@ Av₁ = (3, 9)/√2, Av₂ = (3, −1)/√2
+\htmlClass{new}{u_1\cdot u_2 = \tfrac{3 - 3}{10} = 0} \quad \blacksquare @@ the right angles survive the map
+  </pre>
+  <p data-pid="a44759">So the circle of arrows of size 1 goes to an ellipse for every grid, not only the symmetric ones. Vᵀ turns the circle without changing it, Σ stretches it along the axes into an ellipse, and U turns the ellipse into place. σ₁σ₂ = 15 = |det A|, the area scale of 27e.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · turn, stretch, turn · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31f2.1</span><span class="ph know">know</span>What does the turn-stretch-turn technique say, and where do the vₖ, uₖ and σₖ come from?  <br>Why are the uₖ at right angles?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31f3">
+  <h2 class="sthead"><span class="stno">31f3</span>The most a map can stretch</h2>
+  <p data-pid="650864">Greatest-stretch technique: <b>the most A lengthens any arrow is σ₁: |Ax| ≤ σ₁|x| for every x, with equality at x = v₁.</b> From here on, σ₁ is the <i>stretch size</i> of A, written ‖A‖.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the greatest-stretch technique">
+x = y_1v_1 + \cdots + y_nv_n @@ the vₖ are a basis; |x|² = y₁² + ⋯ + yₙ² (27i2)
+|Ax|^2 = |\textstyle\sum_k y_k\sigma_ku_k|^2 = \sum_k \sigma_k^2y_k^2 @@ the uₖ are right-angled: the square-sum technique (31a1)
+\le \sigma_1^2(y_1^2 + \cdots + y_n^2) = \sigma_1^2|x|^2 @@ σ₁ is the largest
+\htmlClass{new}{|Ax| \le \sigma_1|x|,\ \ |Av_1| = \sigma_1} \quad \blacksquare @@ take roots
+  </pre>
+  <p data-pid="7ab28e">For the grid of 31f2, no arrow of size 1 comes out longer than 6.708, and none shorter than 2.236. Their ratio, 3, measures how much A squashes one direction against another. A grid whose ratio is huge loses digits when it is undone by a machine: 31n meets it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · greatest · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31f3.1</span><span class="ph know">know</span>What does the greatest-stretch technique say, and what is ‖A‖?  <br>Why does the proof need the uₖ at right angles?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31f4">
+  <h2 class="sthead"><span class="stno">31f4</span>Keep the largest pieces</h2>
+  <p data-pid="f7e4c4">Turn-stretch-turn writes A as a sum of simple pieces: A = σ₁u₁v₁ᵀ + σ₂u₂v₂ᵀ + ⋯, each piece a column times a row, a grid that reaches only one line. Keep the first r and call the sum Aᵣ. It reaches r dimensions.</p>
+  <p data-pid="1d53ee">Keep-the-largest technique: <b>‖A − Aᵣ‖ = σᵣ₊₁, and every grid B that reaches at most r dimensions has ‖A − B‖ ≥ σᵣ₊₁: no simpler grid is closer.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the keep-the-largest technique">
+A - A_r = \textstyle\sum_{k > r}\sigma_ku_kv_k^{\mathsf T},\ \ \|A - A_r\| = \sigma_{r+1} @@ itself turned, stretched and turned, with σᵣ₊₁ its largest (31f3)
+B \text{ reaches at most } r \Rightarrow B \text{ loses at least } n - r \text{ dimensions} @@ lost plus reached (27c2)
+\text{some } x \ne 0 \text{ in what } B \text{ loses and in what } v_1, \ldots, v_{r+1} \text{ build} @@ (n − r) + (r + 1) &gt; n (27b2)
+|(A - B)x|^2 = |Ax|^2 = \textstyle\sum_{k \le r+1}\sigma_k^2y_k^2 \ge \sigma_{r+1}^2|x|^2 @@ Bx = 0; x uses only v₁, …, vᵣ₊₁
+\htmlClass{new}{\|A - B\| \ge \sigma_{r+1}} \quad \blacksquare @@ divide by |x|
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: one piece of 31f2’s grid">
+A_1 = \sigma_1u_1v_1^{\mathsf T} = 3\sqrt5\cdot\tfrac{1}{\sqrt{10}}\tfrac{1}{\sqrt2}\begin{pmatrix} 1 \\ 3\end{pmatrix}(1\ \ 1) = \tfrac32\begin{pmatrix} 1 & 1 \\ 3 & 3\end{pmatrix} @@ the largest piece
+A - A_1 = \begin{pmatrix} 1.5 & -1.5 \\ -0.5 & 0.5\end{pmatrix} @@ what is left
+\htmlClass{new}{\|A - A_1\| = \sqrt5 = \sigma_2} \quad \blacksquare @@ its AᵀA has rows (2.5, −2.5), (−2.5, 2.5), stretches 5 and 0
+  </pre>
+  <p data-pid="371cba">A table of numbers 1000 by 1000 needs a million numbers. Kept to its 20 largest pieces it needs 20 × (1000 + 1000 + 1) = 40 020, and the keep-the-largest technique says exactly how much is lost: σ₂₁. Whether σ₂₁ is small is a fact about the table, not about the technique.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · keep the largest · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31f4.1</span><span class="ph know">know</span>What is Aᵣ, and what does the keep-the-largest technique say?  <br>In its proof, why must some x ≠ 0 be lost by B and built by v₁, …, vᵣ₊₁?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31f5">
+  <h2 class="sthead"><span class="stno">31f5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{the stretch sizes of } A \text{ are its stretches}\,? @@ the grid of 31f2 has stretches 3 and 5, and stretch sizes 6.708 and 2.236
+\|A\| = \text{the largest number in } A\,? @@ rows (1, 1), (1, 1) have largest number 1 and ‖A‖ = 2
+U = V \text{ in every turn-stretch-turn}\,? @@ only for symmetric A with stretches ≥ 0; in 31f2 u₁ ≠ v₁
+A_r \text{ is } A \text{ with all but } r \text{ rows set to } 0\,? @@ Aᵣ keeps the r largest pieces σₖuₖvₖᵀ, which spread over every row
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31f5.1</span><span class="ph know">know</span>Why are the stretch sizes of A not its stretches?  <br>Why is ‖A‖ not the largest number in A?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">31f.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 1 &amp; 1 \\ 1 &amp; 1 \\ 0 &amp; 2\end{pmatrix}"></span></span>Build A = UΣVᵀ: find AᵀA, its stretches and axes, the two stretch sizes, and u₁, u₂.  <br>Grow u₁, u₂ to a right-angled basis of lists of three numbers.</div>
+  <div class="chq"><span class="chid">31f.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="Q \text{ a length-keeper},\ \ D = \begin{pmatrix} 2 &amp; 0 \\ 0 &amp; -3\end{pmatrix}"></span></span>Find the stretch sizes of a length-keeper, and of D.  <br>Where does the minus sign of D go in its turn-stretch-turn?</div>
+  <div class="chq"><span class="chid">31f.6.3</span><span class="tagq">converse</span>A symmetric grid with stretches ≥ 0 has U = V. Turn it round: if A = UΣVᵀ with U = V, must A be symmetric, and must its stretches be at least 0?</div>
+  <div class="chq"><span class="chid">31f.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 3 &amp; 0 \\ 4 &amp; 5\end{pmatrix}"></span></span>Find ‖A‖ a second way: write |A(cos t, sin t)|² as a function of t and find its greatest value by slopes (14).  <br>Check that it is 45.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r31e.html">← 31e · quadratic forms</a><a href="r31g.html">31g · sizes of functions →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Turn-stretch-turn is the singular value decomposition (SVD), the σₖ are the singular values, and the vₖ and uₖ are the right and left singular vectors. The stretch size ‖A‖ = σ₁ is the operator norm (or spectral norm) of A. The ratio σ₁/σₙ is the condition number. The keep-the-largest technique is the Eckart–Young theorem, and Aᵣ is the truncated SVD, the best rank-r approximation. The number of σₖ above 0 is the rank.</p>
+  <h3>Who said it first</h3>
+  <p>Eugenio Beltrami in 1873 and Camille Jordan in 1874 found the decomposition for square grids, independently. James Joseph Sylvester followed in 1889, and Erhard Schmidt carried it to maps on functions in 1907. Carl Eckart and Gale Young proved the keep-the-largest technique in 1936, writing about psychological tests. Gene Golub and William Kahan gave the machine method in 1965, and it is now one of the most used computations there is.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“A sends v₁ to σ₁u₁ and v₂ to σ₂u₂, so it sends v₁ + v₂ to (σ₁ + σ₂)(u₁ + u₂).” Not allowed: a straight map sends v₁ + v₂ to σ₁u₁ + σ₂u₂. The stretches go with their own arrows and do not add.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'symmetric',t:R`(A^{\mathsf T}A)^{\mathsf T} = A^{\mathsf T}A`,n:`Axes exist.`},
+  {k:'ember',kl:'each stretch',t:R`\lambda = |Av|^2`,n:`Never below 0.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\sigma_k = \sqrt{\lambda_k}}`,n:`Stretch sizes.`}
+],{title:'The slides · AᵀA · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'inputs',t:R`v_k \text{ axes of } A^{\mathsf T}A`,n:`Right-angled.`},
+  {k:'ember',kl:'outputs',t:R`u_k = Av_k/\sigma_k`,n:`Right-angled too.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{A = U\Sigma V^{\mathsf T}}`,n:`Every grid.`}
+],{title:'The slides · turn, stretch, turn · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'along axes',t:R`|Ax|^2 = \textstyle\sum\sigma_k^2y_k^2`,n:`Square-sum.`},
+  {k:'ember',kl:'bound',t:R`\le \sigma_1^2|x|^2`,n:`σ₁ largest.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\|A\| = \sigma_1}`,n:`The stretch size.`}
+],{title:'The slides · greatest · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'pieces',t:R`A = \textstyle\sum\sigma_ku_kv_k^{\mathsf T}`,n:`Columns times rows.`},
+  {k:'ember',kl:'keep r',t:R`\|A - A_r\| = \sigma_{r+1}`,n:`The first dropped.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\|A - B\| \ge \sigma_{r+1}}`,n:`No simpler grid is closer.`}
+],{title:'The slides · keep the largest · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

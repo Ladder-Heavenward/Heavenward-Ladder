@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Turning rate rules into algebra</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r32i.html">← 32i convolution and filters by hand</a><a href="r32k.html">next: 32k breaking a signal into frequencies, fast →</a></p>
+  <div class="tags"><span class="tag tech">32j · technique</span></div>
+  <h1>Turning rate rules into algebra</h1>
+  <p data-pid="b2b1c2">Rung 24 solved rules that tie a function to its slopes, and rung 26 finished the swinging spring with a brake. Those rules were solved by guessing a shape and checking it. When the push on the spring repeats, or when the push is any signal at all, there is a better way. A slope of a turning is the same turning times a number. So a rule made of slopes, fed a turning, gives back the same turning times a number, and solving the rule is one division. Split the push into turnings, divide each one by its own number, and add them up again: that is the answer. This step does it for a spring pushed by a repeating force, where one speed of the push can ring the spring far harder than the others, and then for a circuit fed any signal at all, where the number to divide by, for each frequency, describes the circuit completely.</p>
+  <p class="gesture" data-pid="128bfa">For a repeating solution, each slope multiplies the nth coefficient by i n, so a rule with constant coefficients becomes one division for each speed. A spring pushed by a repeating force answers each speed of the push separately, and the speed nearest its own is amplified most. On the whole line, a slope multiplies the transform by two π i times the frequency, and the rule divides the transform of the input by one function of the frequency.</p>
+</header>
+
+<section class="class step" data-step="32j1">
+  <h2 class="sthead"><span class="stno">32j1</span>A rate rule becomes one division per speed</h2>
+  <p data-pid="6f366a">Let f repeat every 2π, and look for a y that repeats every 2π, with two continuous slopes, and obeys y″ + by′ + cy = f, for fixed real b and c.</p>
+  <p data-pid="3d7803">Rate-to-algebra technique: <b>a repeating solution of y″ + by′ + cy = f has coefficients cₙ(y) = cₙ(f) / (c − n² + ibn); so when no c − n² + ibn is 0, there is exactly one repeating solution.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the rate-to-algebra technique">
+c_n(y') = in\,c_n(y),\ \ c_n(y'') = (in)^2c_n(y) = -n^2c_n(y) @@ the corner-and-jump technique (32h3), twice
+(-n^2 + ibn + c)\,c_n(y) = c_n(f) @@ coefficients add (32a2), so the rule holds speed by speed
+c_n(y) = \tfrac{c_n(f)}{c - n^2 + ibn} @@ when the bottom is not 0
+\text{two repeating solutions have the same coefficients} @@ the last line names no choice
+\htmlClass{new}{\text{exactly one repeating solution}} \quad \blacksquare @@ a function is fixed by its coefficients (32b3); the divided list has a settling sum of squares, and gives a solution
+  </pre>
+  <p data-pid="c18125">The bottom is 0 only when b = 0 and c = n² for some whole n: a spring with no brake whose own speed matches a speed of the push. Then that speed of the push must be absent, or no repeating solution exists. The rule of 24h, y″ = −n²y, is the case f = 0 at that speed.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · algebra · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">32j1.1</span><span class="ph know">know</span>What does the rate-to-algebra technique say? <br>When can the division fail, and what does that mean for the spring?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32j2">
+  <h2 class="sthead"><span class="stno">32j2</span>A spring pushed by a repeating force</h2>
+  <p data-pid="ff11e7">A spring with own speed ω₀ and a light brake β obeys y″ + 2βy′ + ω₀²y = f. Every solution is the repeating one plus a decaying turn (the decaying-turn technique, <a href="r26cb24.html">26·cb24</a>), so after a while only the repeating one is left.</p>
+  <p data-pid="c17e5e">Driven-response technique: <b>a braked spring answers each speed n of a repeating push separately, with its push scaled by 1/√((ω₀² − n²)² + 4β²n²); the speed nearest ω₀ is scaled the most.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the driven-response technique">
+c_n(y) = \tfrac{c_n(f)}{\omega_0^2 - n^2 + 2i\beta n} @@ the rate-to-algebra technique (32j1)
+|\omega_0^2 - n^2 + 2i\beta n| = \sqrt{(\omega_0^2 - n^2)^2 + 4\beta^2n^2} @@ the size of a complex number (25c)
+\htmlClass{new}{|c_n(y)| = \tfrac{|c_n(f)|}{\sqrt{(\omega_0^2 - n^2)^2 + 4\beta^2n^2}}} \quad \blacksquare @@ the size of a quotient (25c)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a square push">
+f = q,\ \ \omega_0 = 3.02,\ \ \beta = 0.05 @@ the square wave of 32h1: amounts 4/(πn) at odd n
+n = 1:\ \ \tfrac{1.273}{\sqrt{(9.12 - 1)^2 + 0.01}} \approx 0.157 @@ the push’s largest speed, far from ω₀
+n = 3:\ \ \tfrac{0.424}{\sqrt{(9.12 - 9)^2 + 0.09}} \approx 1.31 @@ the push’s third speed, next to ω₀
+n = 5:\ \ \approx 0.016,\ \ n = 7:\ \ \approx 0.005 @@ far again
+\htmlClass{new}{\text{the spring swings mostly at speed } 3} \quad \blacksquare @@ eight times the first speed’s swing
+  </pre>
+  <p data-pid="7079ad">So a push that flips once a turn rings a spring tuned to three times that speed, as a child on a swing can be pushed every third swing. The push’s third speed holds a third of the amount of its first, and the spring makes it the loudest by far.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · driven · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32j2.1</span><span class="ph know">know</span>What does the driven-response technique say? <br>Why does a square push ring a spring tuned near speed 3 mostly at speed 3?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32j3">
+  <h2 class="sthead"><span class="stno">32j3</span>Any signal, and the transfer function</h2>
+  <p data-pid="393d51">A signal on the whole line need not repeat. The same move works with transforms in place of coefficients.</p>
+  <p data-pid="74f5cd">Transfer technique: <b>if y and f have finite total sizes, with y′ too, and y′ + ky = f with k &gt; 0, then ŷ(ξ) = f̂(ξ) / (k + 2πiξ); the rule divides every frequency of the input by its own number.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the transfer technique">
+\widehat{y'} = 2\pi i\xi\,\hat y @@ the slope-to-frequency technique (32f1)
+(2\pi i\xi + k)\,\hat y(\xi) = \hat f(\xi) @@ transforms add
+\htmlClass{new}{\hat y(\xi) = H(\xi)\,\hat f(\xi),\ \ H(\xi) = \tfrac{1}{k + 2\pi i\xi}} \quad \blacksquare @@ k + 2πiξ is never 0 for k &gt; 0
+  </pre>
+  <p data-pid="dab7b2">H is the transfer function: the gain-per-turning number of 32i2, for every frequency at once. A circuit of a resistor R and a capacitor C, fed a voltage f, has a charge voltage y with y′ + ky = kf, where k = 1/(RC), so its gain is |kH(ξ)|. With R = 1 kΩ and C = 1 μF, k = 1000 per second. At 50 Hz the gain is 1/√(1 + (2π × 50/1000)²) ≈ 0.954; at 1000 Hz it is 1/√(1 + 4π²) ≈ 0.157. The circuit passes low tones and cuts high ones.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · transfer · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32j3.1</span><span class="ph know">know</span>What does the transfer technique say, and what is the transfer function? <br>Which frequencies does the circuit of the example pass, and which does it cut?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32j4">
+  <h2 class="sthead"><span class="stno">32j4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+c_n(y'') = n^2c_n(y)\,? @@ (in)² = −n²
+\text{the spring swings most at the push’s largest speed}\,? @@ each speed is divided by its own number; near ω₀ it is small
+\text{every solution of } y'' + 2\beta y' + \omega_0^2 y = f \text{ repeats}\,? @@ only one does; the others add a decaying turn
+\text{the transfer function works for } y' = y + f\,? @@ k = −1 &lt; 0, and y with finite total need not exist
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32j4.1</span><span class="ph know">know</span>Why is “the spring swings most at the push’s largest speed” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">32j.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="y^{\prime\prime} + y^{\prime} + y = q"></span></span>Build the repeating solution’s first three nonzero coefficients for the square push, and its sum of cosines and sines up to speed 5.</div>
+  <div class="chq"><span class="chid">32j.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="y^{\prime\prime} + 9y = q"></span></span>No brake, own speed 3. Find which speed of the push makes the division fail, and whether the square push holds that speed. Find what a solution does instead, by 24h.</div>
+  <div class="chq"><span class="chid">32j.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="H(\xi) = \tfrac{1}{k + 2\pi i\xi}"></span></span>Given only how a circuit answers each frequency, H(ξ), can its rate rule be found? Find the rule for H(ξ) = 1/((1 + 2πiξ)(2 + 2πiξ)).</div>
+  <div class="chq"><span class="chid">32j.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="y^{\prime} + ky = e^{2\pi i x\xi_0}"></span></span>Find a solution of the form A e^(2πixξ₀) by putting it into the rule, as 24h tried e^(rx). Check that A = H(ξ₀).</div>
+  <div class="chq"><span class="chid">32j.5.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">24: a tame rule and a start fix the future</span></span>Rung 24 fixed a solution by its start. This step fixed one by asking it to repeat, or to have a finite total, and gave no start at all. One side holds that the start is what makes a physical answer, since a spring is set going at some moment. The other holds that the repeating answer is the only one anyone measures, since the rest decays. <br>Which answer is the spring’s?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r32i.html">← 32i · convolution and filters by hand</a><a href="r32k.html">32k · breaking a signal into frequencies, fast →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The rate-to-algebra technique is the Fourier method for linear ordinary differential equations with constant coefficients, and the repeating solution the steady-state (or periodic) solution; the decaying part is the transient. The driven-response technique gives the amplitude response of a forced, damped harmonic oscillator, and the peak near ω₀ is resonance. H(ξ) is the transfer function, or frequency response, of a linear time-invariant system; the RC circuit is a first-order low-pass filter, with cut-off frequency 1/(2πRC), about 159 Hz in the example.</p>
+  <h3>Who said it first</h3>
+  <p>Fourier invented the method in 1807 for heat in a ring. Oliver Heaviside turned rate rules into algebra in the 1880s with his operational calculus, writing p for the slope and dividing by it, to the scandal of mathematicians, and was vindicated by the transforms of the next decades. Hendrik Bode and Harry Nyquist made the transfer function the language of feedback design at Bell Labs in the 1930s.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Write y′ + ky = f as (D + k)y = f, where D is the slope; divide: y = f/(D + k).” Not allowed: D is not a number, and there is nothing to divide by. The transfer technique does the same division honestly, at each frequency, where D has become the number 2πiξ.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'slopes',t:R`c_n(y^{\prime\prime}) = -n^2c_n(y)`,n:`Twice by in.`},
+  {k:'ember',kl:'divide',t:R`c_n(y) = \tfrac{c_n(f)}{c - n^2 + ibn}`,n:`Speed by speed.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{one repeating solution}}`,n:`Unless the bottom is 0.`}
+],{title:'The slides · algebra · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'divide',t:R`c_n(y) = \tfrac{c_n(f)}{\omega_0^2 - n^2 + 2i\beta n}`,n:`32j1.`},
+  {k:'ember',kl:'size',t:R`\sqrt{(\omega_0^2 - n^2)^2 + 4\beta^2n^2}`,n:`Small near ω₀.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{loudest near } \omega_0}`,n:`Speed by speed.`}
+],{title:'The slides · driven · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'slope',t:R`\widehat{y^{\prime}} = 2\pi i\xi\,\hat y`,n:`32f1.`},
+  {k:'ember',kl:'divide',t:R`\hat y = \tfrac{\hat f}{k + 2\pi i\xi}`,n:`Never 0.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{H(\xi) = \tfrac{1}{k + 2\pi i\xi}}`,n:`The circuit, entire.`}
+],{title:'The slides · transfer · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'illegal',t:R`\text{largest push wins}\,?`,n:`The divider decides.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

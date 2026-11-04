@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Open sets alone</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r34a.html">← 34a spaces with a distance</a><a href="r34c.html">next: 34c in one piece →</a></p>
+  <div class="tags"><span class="tag proof">34b · proof</span></div>
+  <h1>Open sets alone</h1>
+  <p data-pid="d3bf6c">The last step ended with a suspicion. Continuity can be said with open sets alone, and two different distances that make the same open sets make the same continuous maps. So this step throws the distance away and keeps only a family of sets called open, obeying the three rules the open sets of a distance always obeyed. Some such families come from a distance and some do not, and the difference shows up in a plain place: whether two different points can be held apart by open sets. With a family of open sets, continuity is pulling back, and the proof that a chain of continuous maps is continuous shrinks to one line. Then come the ways to make new spaces from old: by taking a part, by taking pairs, and by gluing points together. Gluing the two ends of a stretch makes a loop, and gluing the sides of a square makes the surface of a doughnut. None of this needs a distance, and none of it could be said without open sets.</p>
+  <p class="gesture" data-pid="e55f4e">A family of open sets on a set holds the empty set and the whole, every union of its members, and the overlap of any two. A map is continuous when it pulls open sets back to open sets, and continuous maps chain. A base is a family whose unions make every open set, and boxes are a base for pairs. A space keeps points apart when any two points sit in separate open sets, and then a list settles at one point at most. A part takes the open sets that meet it, and a glued space takes the sets whose pull-back is open, so a map out of a glued space is continuous exactly when it is continuous before the gluing.</p>
+</header>
+
+<section class="class step" data-step="34b1">
+  <h2 class="sthead"><span class="stno">34b1</span>A family of open sets</h2>
+  <p data-pid="bcb5ca">A <i>family of open sets</i> on a set X is a family 𝒯 of parts of X with three properties: ∅ and X are in 𝒯; every union of members of 𝒯 is in 𝒯; the overlap of any two members of 𝒯 is in 𝒯. Its members are the <i>open sets</i>, and X with 𝒯 is a <i>space</i>. <a href="r34a.html#6d7218">34a2</a>’s open-family technique says every distance makes one. Its accepted name is a <i>topology</i>, from the Greek topos, place: the study of place without measure. It is this step’s one new academy word.</p>
+  <p data-pid="9142a6">Families that come from no distance in sight. On any set, every part: the scattered family. On any set, only ∅ and X: the lumped family. On the line, ∅ together with every set whose leftover is finite: the finite-leftover family. Its three properties hold because a union only shrinks a leftover, and two finite leftovers have a finite union.</p>
+  <p data-pid="58da56">Same-opens technique: <b>on the plane, the straight distance and the street distance make the same family of open sets.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the same-opens technique">
+d(x, y) = \sqrt{p^2 + q^2},\ \ t(x, y) = |p| + |q| @@ p and q the two gaps between x and y along the axes
+d^2 = p^2 + q^2 \le (|p| + |q|)^2 = t^2 \le 2(p^2 + q^2) = 2d^2 @@ (|p| − |q|)² ≥ 0 gives 2|p||q| ≤ p² + q²
+d \le t \le \sqrt2\,d @@ square roots keep order (8f)
+B_t(x, r) \subseteq B_d(x, r),\ \ B_d(x, r/\sqrt2) \subseteq B_t(x, r) @@ a point nearer by t is nearer by d; a point nearer than r/√2 by d is nearer than r by t
+\htmlClass{new}{U \text{ open for } d \iff U \text{ open for } t} \quad \blacksquare @@ every ball of either kind holds a ball of the other kind about the same point
+  </pre>
+  <p data-pid="ac90cc">So street and straight distance give the same continuous maps of the plane (34a4), though they never agree on how far it is from the Pearl District to the Rose Garden.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · open sets alone · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">34b1.1</span><span class="ph know">know</span>What three properties make a family of parts of X a family of open sets?  <br>What does the same-opens technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34b2">
+  <h2 class="sthead"><span class="stno">34b2</span>Continuity is pulling back</h2>
+  <p data-pid="38b445">From here on, a map f from a space X to a space Y is <i>continuous</i> when the pull-back of every open set of Y is open in X. For spaces with distances, the pull-back technique (<a href="r34a.html#94f6cd">34a4</a>) says this is the old continuity. For every other space, it is the definition.</p>
+  <p data-pid="247793">Pull-back-chain technique: <b>a continuous map after a continuous map is continuous.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the pull-back-chain technique">
+f : X \to Y,\ \ g : Y \to Z \text{ continuous},\ \ W \subseteq Z \text{ open} @@ the setting
+(g \circ f)^{-1}(W) = \{x : g(f(x)) \in W\} = f^{-1}(g^{-1}(W)) @@ the pull-back, read twice
+\htmlClass{new}{(g \circ f)^{-1}(W) \text{ is open}} \quad \blacksquare @@ g⁻¹(W) is open, and f pulls it back to an open set
+  </pre>
+  <p data-pid="50290f"><a href="r11c.html#224a79">11c</a> needed a chain of three gaps and a new Greek letter in the middle. Here the whole proof is one line, because the gaps were never the point. Two more facts are as quick. Every map out of a scattered space is continuous, since every pull-back is open there. Every map into a lumped space is continuous, since the only pull-backs to check are of ∅ and Y.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · pulling back · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34b2.1</span><span class="ph know">know</span>When is a map between two spaces continuous?  <br>What does the pull-back-chain technique say, and why is its proof one line?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34b3">
+  <h2 class="sthead"><span class="stno">34b3</span>Bases, and boxes for pairs</h2>
+  <p data-pid="45d6a8">A family ℬ of open sets is a <i>base</i> when every open set is a union of members of ℬ. The balls of a distance are a base: each point of an open set has a ball inside it, and the open set is the union of those balls. On the line, the stretches with fraction ends are a base, and they can be listed.</p>
+  <p data-pid="1de10d">For spaces X and Y, a <i>box</i> is a set U × V of pairs, with U open in X and V open in Y. Two boxes overlap in a box, (U × V) ∩ (U′ × V′) = (U ∩ U′) × (V ∩ V′), so the unions of boxes are a family of open sets on X × Y (2g’s pairs). These are the open sets of X × Y. The straight distance on the plane makes the same open sets as boxes of the line, since a ball holds a box about its centre and a box holds a ball.</p>
+  <p data-pid="d2fc3e">Two-parts technique: <b>a map g into X × Y is continuous exactly when both of its parts, the left entry and the right entry of g, are continuous.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-parts technique">
+\ell(x, y) = x,\ \ \ell^{-1}(U) = U \times Y,\ \text{a box} @@ the left entry is continuous; so is the right entry, likewise
+g \text{ continuous} \Rightarrow \ell \circ g,\ r \circ g \text{ continuous} @@ the pull-back-chain technique (34b2)
+g^{-1}(U \times V) = (\ell \circ g)^{-1}(U) \cap (r \circ g)^{-1}(V) @@ g(z) is in the box exactly when its left entry is in U and its right entry in V
+g^{-1}(\textstyle\bigcup_i B_i) = \bigcup_i g^{-1}(B_i) @@ a pull-back of a union is the union of the pull-backs
+\htmlClass{new}{\text{both parts continuous} \Rightarrow g \text{ continuous}} \quad \blacksquare @@ overlaps of two open sets, and unions of open sets, are open
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · boxes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34b3.1</span><span class="ph know">know</span>What is a base, and what is a box in X × Y?  <br>What does the two-parts technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34b4">
+  <h2 class="sthead"><span class="stno">34b4</span>Points kept apart</h2>
+  <p data-pid="ac9ca4">In a space, a list x₁, x₂, … <i>settles</i> at x when every open set holding x holds every xₙ from some N on. With a distance, this is 34a3’s settling, since every open set about x holds a ball about x. Without one, strange things happen. In the lumped family every list settles at every point at once, since the only open set holding a point is the whole space.</p>
+  <p data-pid="5d4848">A space <i>keeps points apart</i> when any two different points x and y sit in open sets U and V that share no point. Every space with a distance does: the balls of reach d(x, y)/2 about each, by <a href="r10b.html#bcd823">10b</a>’s half-the-distance line.</p>
+  <p data-pid="2d5365">One-limit-apart technique: <b>in a space that keeps points apart, a list settles at one point at most.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-limit-apart technique">
+x_n \to x,\ \ x_n \to y,\ \ x \ne y @@ suppose two limits
+x \in U,\ y \in V,\ U \cap V = \emptyset,\ U, V \text{ open} @@ the space keeps points apart
+x_n \in U \text{ for } n \ge N_1,\ \ x_n \in V \text{ for } n \ge N_2 @@ the list settles at both
+x_{\max(N_1, N_2)} \in U \cap V = \emptyset @@ a false line
+\htmlClass{new}{x = y} \quad \blacksquare @@ the supposition falls
+  </pre>
+  <p data-pid="9c6971">The finite-leftover family on the line does not keep points apart. Two open sets that are not empty have finite leftovers, and the line is endless, so they always share a point. So no distance makes it. A family of open sets is more than a distance with its numbers rubbed out.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · kept apart · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34b4.1</span><span class="ph know">know</span>When does a list settle in a space, and when does a space keep points apart?  <br>What does the one-limit-apart technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34b5">
+  <h2 class="sthead"><span class="stno">34b5</span>Parts, and gluing</h2>
+  <p data-pid="d81483">A part A of a space X is a space of its own: its open sets are the overlaps U ∩ A with U open in X. So [0, 1/2) is open in [0, 1], as (−1, 1/2) ∩ [0, 1], though it is not open in the line.</p>
+  <p data-pid="b219b1">Gluing. Let ∼ be a sameness relation on X, sorting it into <a href="r02g.html#741344">2g</a>’s classes, and let X/∼ be the set of classes. The map q sends x to its class. A set of classes is open when its pull-back by q is open in X. That is the largest family that keeps q continuous. Glue 0 to 1 in [0, 1], and nothing else: the result is a loop. Glue the left side of a square to the right, and the top to the bottom: the surface of a doughnut, 34k’s torus.</p>
+  <p data-pid="dbe027">Glued-map technique: <b>a map g out of a glued space X/∼ is continuous exactly when g ∘ q is continuous.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the glued-map technique">
+(g \circ q)^{-1}(W) = q^{-1}(g^{-1}(W)) @@ the pull-back, read twice
+g \text{ continuous} \Rightarrow g \circ q \text{ continuous} @@ the pull-back-chain technique
+g \circ q \text{ continuous} \Rightarrow q^{-1}(g^{-1}(W)) \text{ open for open } W @@ the line above
+\htmlClass{new}{g^{-1}(W) \text{ is open in } X/\!\sim} \quad \blacksquare @@ that is what open means in a glued space
+  </pre>
+  <p data-pid="6fe67f">So to make a continuous map out of a glued space, make one out of X that sends glued points to one place. The loop made from [0, 1] maps onto the circle by t ↦ (cos 2πt, sin 2πt), since 0 and 1 land on the same point. Is that map a matching of the two spaces, open set for open set? 34e answers.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · gluing · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34b5.1</span><span class="ph know">know</span>What are the open sets of a part of a space, and of a glued space X/∼?  <br>What does the glued-map technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34b6">
+  <h2 class="sthead"><span class="stno">34b6</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{every family of open sets comes from some distance}\,? @@ the finite-leftover family keeps no points apart, and every distance does
+\text{a list settles at one point at most, in any space}\,? @@ in the lumped family every list settles everywhere
+[0, \tfrac12) \text{ is not open, so it is not open in } [0, 1]\,? @@ open in a part means an overlap with an open set: (−1, ½) ∩ [0, 1]
+f \text{ continuous, so } f \text{ sends closed sets to closed sets}\,? @@ the left entry sends the closed set xy = 1 to the line with 0 taken out
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34b6.1</span><span class="ph know">know</span>Why is “every family of open sets comes from some distance” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">34b.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="X = \{0, 1\},\ \ \mathcal T = \{\emptyset, \{1\}, \{0, 1\}\}"></span></span>Prove that 𝒯 is a family of open sets, and that it keeps no points apart. <br>For any space Y, match the continuous maps from Y to X with the open sets of Y. Which open set goes with which map?</div>
+  <div class="chq"><span class="chid">34b.7.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">the line with the finite-leftover family</span></span>Find which lists settle, and where. Does 1, 2, 3, … settle? Does 0, 1, 0, 1, …? <br>Find every continuous map from this space to the line with its usual open sets.</div>
+  <div class="chq"><span class="chid">34b.7.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">the line, with ∅ and every set whose leftover can be listed</span></span>Prove that these sets are a family of open sets, and that a list settles in it only when it is constant from some point on. <br>Then every list settles at one point at most. Does the space keep points apart?</div>
+  <div class="chq"><span class="chid">34b.7.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="d(x, y),\ \ t(x, y) \text{ on the plane}"></span></span>Prove that the straight distance makes the same open sets as the boxes of the line, without passing through the street distance. <br>Find the largest square about a point inside a ball of reach r, and the smallest ball holding a square of side s.</div>
+  <div class="chq"><span class="chid">34b.7.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">distance first, or nearness first?</span></span>One side built spaces from a distance: numbers first, then balls, then open sets, as 34a did. A second laid down a family of open sets and nothing else, as this step did. A third laid down only which points are near which sets: a rule that hands each set its edge, the points it keeps and the points it barely misses. <br>Each can be built from the others for the spaces of the line and the plane, and they part company elsewhere. Which is closest to what nearness is?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r34a.html">← 34a · spaces with a distance</a><a href="r34c.html">34c · in one piece →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A family of open sets is a topology, and a space is a topological space. The scattered family is the discrete topology; the lumped family is the indiscrete or trivial topology; the finite-leftover family is the cofinite topology; the family of the converse challenge is the cocountable topology. A space that keeps points apart is a Hausdorff space, or T₂. The boxes make the product topology, the open sets of a part make the subspace topology, and the open sets of a glued space make the quotient topology. The space of the build challenge is the Sierpiński space.</p>
+  <h3>Who said it first</h3>
+  <p>Felix Hausdorff laid down spaces by neighbourhoods in 1914, with the rule that keeps points apart among them. Kazimierz Kuratowski built them in 1922 from a rule that hands each set its closure, and Pavel Alexandrov and others moved to open sets in the 1920s. The family of open sets became the standard start in the 1930s and 1940s, with the books of the group writing as Nicolas Bourbaki. Frigyes Riesz had already proposed nearness of points to sets in 1909.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“A list settles at x and at y. Take ε = d(x, y)/2. Then the terms are near both, which is impossible. So limits are unique in every space.” Not allowed: the proof used a distance. In the lumped family there is no distance and no pair of separate open sets, and every list settles at every point.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'the family',t:R`\emptyset, X \in \mathcal T;\ \ \textstyle\bigcup U_i \in \mathcal T;\ \ U \cap V \in \mathcal T`,n:`The rules of 34a2, kept.`},
+  {k:'ember',kl:'two distances',t:R`d \le t \le \sqrt2\,d`,n:`Each ball holds the other kind.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\mathcal T_d = \mathcal T_t}`,n:`The distance can change.`}
+],{title:'The slides · open sets alone · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'continuous',t:R`V \text{ open} \Rightarrow f^{-1}(V) \text{ open}`,n:`The definition now.`},
+  {k:'ember',kl:'chain',t:R`(g \circ f)^{-1}(W) = f^{-1}(g^{-1}(W))`,n:`Pull back twice.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{g \circ f \text{ continuous}}`,n:`One line.`}
+],{title:'The slides · pulling back · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'base',t:R`\text{open} = \textstyle\bigcup \text{members of } \mathcal B`,n:`Balls, or fraction stretches.`},
+  {k:'ember',kl:'box',t:R`U \times V`,n:`Open sets of pairs are unions of boxes.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{g = (g_1, g_2) \text{ continuous} \iff g_1, g_2 \text{ are}}`,n:`Check each part.`}
+],{title:'The slides · boxes · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'settles',t:R`x \in U \text{ open} \Rightarrow x_n \in U \text{ for } n \ge N`,n:`Open sets do the measuring.`},
+  {k:'ember',kl:'apart',t:R`x \in U,\ y \in V,\ U \cap V = \emptyset`,n:`Separate open sets.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{at most one limit}}`,n:`10b, without the distance.`}
+],{title:'The slides · kept apart · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'part',t:R`U \cap A`,n:`Open in A.`},
+  {k:'ember',kl:'glued',t:R`W \text{ open} \iff q^{-1}(W) \text{ open}`,n:`The largest family keeping q continuous.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{g \text{ continuous} \iff g \circ q \text{ is}}`,n:`Build maps before gluing.`}
+],{title:'The slides · gluing · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

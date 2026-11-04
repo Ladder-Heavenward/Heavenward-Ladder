@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Round drums</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r33f.html">← 33f boundary value problems</a><a href="r33concl.html">next: 33·∎ heat forgets, waves keep, still water averages →</a></p>
+  <div class="tags"><span class="tag proof">33g · proof</span></div>
+  <h1>Round drums</h1>
+  <p data-pid="a6d858">Rung 24 met the rule of a beaten drum without saying where it came from, and found that the drum’s pitches are not whole multiples of each other. This step derives the rule, from the string’s rule spread over a round sheet. First the sum of the two second slopes has to be rewritten for a round shape, in reach and turn instead of east and north. Then the drum separates into a turn, a reach and a time, and the reach obeys the rule of rung 24, now with a whole family of members, one for each number of times the shape winds round. Then the claim that a drum’s tones are not harmonics, which rung 24 read off a computer’s numbers, is proved, with bounds that the alternating sums of rung 22 give exactly. Last, the same work is done for a ball, where the round rule turns out to be the rod’s rule in disguise. A ball the size of the earth, cooling as a whole, would need far longer than the earth has existed.</p>
+  <p class="gesture" data-pid="0a30c9">In reach and turn, the sum of second slopes picks up a term from the reach. A round drum separates into whole windings, the drum functions of rung 24, and a swing, and its pitches are the zeros of those functions, which are provably not whole multiples. A ball that depends only on distance from its centre obeys the rod’s rule for r times u.</p>
+</header>
+
+<section class="class step" data-step="33g1">
+  <h2 class="sthead"><span class="stno">33g1</span>The round sum of slopes</h2>
+  <p data-pid="88aa63">A drumhead is a sheet, and its rule is the string’s rule spread over the plane: u_tt = c²Δu, with Δu = u_xx + u_yy, by the books of 33c1 kept on a small square instead of a short piece. A round drum asks for reach r and turn θ, with x = r cos θ and y = r sin θ (21r).</p>
+  <p data-pid="f76355">Round-rate technique: <b>for r &gt; 0, Δu = u_rr + u_r/r + u_θθ/r².</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the round-rate technique">
+u_r = u_x\cos\theta + u_y\sin\theta @@ roads add (28c): x_r = cos θ, y_r = sin θ
+u_{rr} = u_{xx}\cos^2\theta + 2u_{xy}\sin\theta\cos\theta + u_{yy}\sin^2\theta @@ roads add again on u_x and u_y; swap knobs (28d)
+u_\theta = -u_x\,r\sin\theta + u_y\,r\cos\theta @@ x_θ = −r sin θ, y_θ = r cos θ
+u_{\theta\theta} = r^2\big(u_{xx}\sin^2\theta - 2u_{xy}\sin\theta\cos\theta + u_{yy}\cos^2\theta\big) - r\,u_r @@ the product rule; the last term is −r(u_x cos θ + u_y sin θ)
+u_{rr} + \tfrac{1}{r^2}u_{\theta\theta} = u_{xx} + u_{yy} - \tfrac{1}{r}u_r @@ add, with sin² + cos² = 1 (21c)
+\htmlClass{new}{\Delta u = u_{rr} + \tfrac1r u_r + \tfrac{1}{r^2}u_{\theta\theta}} \quad \blacksquare @@ move the last term across
+  </pre>
+  <p data-pid="5f054a">The middle term is new. Along a reach, the circles grow as r grows, so a slope along the reach is spread over more and more room. That term is why a drum is not a string.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · round rate · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">33g1.1</span><span class="ph know">know</span>What does the round-rate technique say? <br>Where does the middle term u_r/r come from, in words?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33g2">
+  <h2 class="sthead"><span class="stno">33g2</span>The drum’s shapes</h2>
+  <p data-pid="84a13c">Tie a drumhead of radius R round its rim: u = 0 at r = R. Look for shapes that keep their form: u = P(r) Θ(θ) T(t).</p>
+  <p data-pid="678dfc">Drum-shape technique: <b>the drum’s answers of this form are J_m(kr) cos(mθ − θ₀) times a swing cos(ckt − t₀), for a whole number m ≥ 0 and a k with J_m(kR) = 0, where J_m(x) = Σ (−1)ʲ (x/2)^(2j + m) / (j! (j + m)!).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the drum-shape technique">
+\tfrac{T^{\prime\prime}}{c^2T} = \tfrac{P^{\prime\prime} + P^{\prime}/r}{P} + \tfrac{1}{r^2}\tfrac{\Theta^{\prime\prime}}{\Theta} = -k^2 @@ put PΘT into u_tt = c²Δu with the round-rate technique; the left side moves only with t
+\tfrac{\Theta^{\prime\prime}}{\Theta} = -m^2,\ \ \Theta = \cos(m\theta - \theta_0) @@ multiply by r²: the turn part moves only with θ; the steady swing (24h)
+m \text{ is a whole number} @@ θ and θ + 2π are the same point of the drum, and a swing with m repeats every 2π/m
+r^2P^{\prime\prime} + rP^{\prime} + (k^2r^2 - m^2)P = 0 @@ what is left, multiplied by r²P
+x^2y^{\prime\prime} + xy^{\prime} + (x^2 - m^2)y = 0,\ \ x = kr @@ the drum’s rule of 24l3, with a term for the winding
+s^2 = m^2,\ \ u_j = -\tfrac{u_{j-2}}{j(j + 2m)} @@ the starting-power technique (24l); only s = m stays finite at the centre
+\htmlClass{new}{P = J_m(kr),\ \ J_m(kR) = 0} \quad \blacksquare @@ the recipe, from u₀ = 1/(2ᵐm!); the rim is tied
+  </pre>
+  <p data-pid="9a94e6">So each shape is fixed by m, the number of times it winds, and by which zero of J_m sits at the rim. A shape with m = 1 has a line across the drum that never moves. Its frequency is c k/(2π) = c j/(2πR), where j is the zero. Rung 24’s drum was the shape with m = 0.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · drum shapes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33g2.1</span><span class="ph know">know</span>What does the drum-shape technique say? <br>Why must m be a whole number, and what does the rim decide?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33g3">
+  <h2 class="sthead"><span class="stno">33g3</span>Tones that are not harmonics</h2>
+  <p data-pid="b88233">24l3 read the first zeros of J₀ off its sum, as 2.405 and 5.520, and took their ratio. A drum’s tones are not whole multiples. Is that a fact, or a rounding?</p>
+  <p data-pid="420da3">Unharmonic-drum technique: <b>the first two round tones of a drum, with m = 0, have a ratio between 2.28 and 2.31, so the second is not a whole multiple of the first.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the unharmonic-drum technique">
+J_0(x) = 1 - \tfrac{x^2}{4} + \tfrac{x^4}{64} - \tfrac{x^6}{2304} + \cdots @@ the recipe with m = 0
+\text{for } x \le 6, \text{ the terms shrink in size from } j = 3 \text{ on} @@ the jth term is the one before times −(x/2)²/j², and 9/j² &lt; 1 once j ≥ 4
+J_0(2.40) \in [0.00249,\ 0.00293],\ \ J_0(2.41) \in [-0.00998,\ -0.00225] @@ two running totals in a row bracket the total (22g), worked in exact fractions
+J_0(5.51) \in [-0.00962,\ -0.00284],\ \ J_0(5.53) \in [0.00332,\ 0.00401] @@ the same, with more terms
+\text{a zero in } (2.40, 2.41) \text{ and one in } (5.51, 5.53) @@ no gaps (12e): J₀ is continuous and changes sign
+\htmlClass{new}{2.28 < \tfrac{5.51}{2.41} < \tfrac{j_2}{j_1} < \tfrac{5.53}{2.40} < 2.31} \quad \blacksquare @@ and no whole number lies between 2.28 and 2.31
+  </pre>
+  <p data-pid="62d25d">That the two zeros found are the first two takes one more look: J₀ is positive from 0 to 2.40 and has one sign between them. The step leaves that check to its challenges. The same bounds for J₁ put its first zero between 3.83 and 3.84. So a drum of radius R sounds, against its lowest tone, at about 1.59, 2.14, 2.30, 2.65 and 2.92 times it. A string sounds at 2, 3, 4. A snare drum 36 cm across, with c = 100 m/s in its head, has its lowest tone at 100 × 2.405 / (2π × 0.178) ≈ 215 swings a second, and the rest sit at no whole multiple of it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · not harmonics · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33g3.1</span><span class="ph know">know</span>What does the unharmonic-drum technique say? <br>Which technique of rung 22 turns the drum’s sum into exact bounds?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33g4">
+  <h2 class="sthead"><span class="stno">33g4</span>A ball, by the rod’s rule</h2>
+  <p data-pid="7338ba">In space, Δu = u_xx + u_yy + u_zz. Let u depend only on the distance r from the centre: u = U(r), with r = √(x² + y² + z²).</p>
+  <p data-pid="b6496a">Round-ball technique: <b>if u depends only on the distance r from the centre, then Δu = (1/r)(rU)″ for r &gt; 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the round-ball technique">
+u_x = U^{\prime}(r)\,\tfrac{x}{r} @@ the chain rule: r_x = x/r
+u_{xx} = U^{\prime\prime}\tfrac{x^2}{r^2} + U^{\prime}\big(\tfrac1r - \tfrac{x^2}{r^3}\big) @@ the product rule
+\Delta u = U^{\prime\prime} + U^{\prime}\big(\tfrac3r - \tfrac1r\big) = U^{\prime\prime} + \tfrac2r U^{\prime} @@ add the three, with x² + y² + z² = r²
+\htmlClass{new}{\Delta u = \tfrac1r\,(rU)^{\prime\prime}} \quad \blacksquare @@ (rU)″ = rU″ + 2U′
+  </pre>
+  <p data-pid="f458bc">So for a ball, w = rU obeys the rod’s rule. A ball of radius R, started evenly warm and held at 0 on its skin, cools in the shapes sin(nπr/R)/r, each fading like e^(−κn²π²t/R²) by 33a2’s lines for w, with w = 0 at the centre and at the skin. The slowest loses a factor of e every R²/(κπ²). A steel ball 2 cm across, with κ = 1.2 × 10⁻⁵ m²/s, takes under a second. A ball of rock the size of the earth, with κ about 10⁻⁶ m²/s, would take some 130 billion years, about ten times the age of everything. A body that large has cooled only in its outer skin.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · ball · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33g4.1</span><span class="ph know">know</span>What does the round-ball technique say? <br>What rule does w = rU obey, and what are the cooling shapes of a ball?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33g5">
+  <h2 class="sthead"><span class="stno">33g5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\Delta u = u_{rr} + u_{\theta\theta} \text{ in reach and turn}\,? @@ the turn is an angle, not a length: it needs 1/r², and the reach leaves the term u_r/r
+m = \tfrac12 \text{ gives a shape that winds half a time}\,? @@ a swing with m = ½ does not come back to itself after one turn of θ, so the drum would tear along a line
+\text{24l3 printed } 5.520/2.405 = 2.295, \text{ so the ratio is proved not whole}\,? @@ a printed number is a rounding; bounds from the alternating bracket make it a proof
+\text{a ball cools like a rod of length } R\,? @@ rU does, and only with rU = 0 at the centre as well as at the skin
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33g5.1</span><span class="ph know">know</span>Why is “24l3 printed 5.520/2.405 = 2.295, so the ratio is proved not whole” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">33g.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="J_1(x) = \tfrac{x}{2} - \tfrac{x^3}{16} + \tfrac{x^5}{384} - \cdots"></span></span>Build bounds that put the first zero of J₁ between 3.83 and 3.84, as the unharmonic-drum technique did for J₀. <br>Find the line across the drum that never moves in the shape J₁(kr) cos θ, and the ratio of its tone to the lowest.</div>
+  <div class="chq"><span class="chid">33g.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a square drum, side } 1,\ \ u = \sin(m\pi x)\sin(n\pi y)"></span></span>Find the tones of a square drum tied round its edge, against the lowest. <br>Is a square drum harmonic? Find two different shapes with the same tone, and whether the perpendicular-shapes technique says anything about them.</div>
+  <div class="chq"><span class="chid">33g.4.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="P = 1 - (r/R)^2"></span></span>The perpendicular-shapes technique wrote a shape’s number as a total over the shape itself. For the round drum with m = 0, that number is k² = ∫ P′² r dr / ∫ P² r dr over [0, R]. <br>Find the ratio for this P, which is 0 at the rim but is not a shape. Compare √(ratio) × R with 2.405. Which is larger, and can you prove it must be?</div>
+  <div class="chq"><span class="chid">33g.4.4</span><span class="tagq">converse</span>The unharmonic-drum technique found sign changes. Turn it round: prove that J₀ has no zero in [0, 2.40], so that the zero in (2.40, 2.41) is the first. <br>Use the alternating bracket: the running total through x²/4 covers [0, 2). Find how many more terms it takes to cover [2, 2.40].</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r33f.html">← 33f · boundary value problems</a><a href="r33concl.html">33·∎ · heat forgets, waves keep, still water averages →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>u_tt = c²Δu on a disc is the wave equation for a circular membrane; Δu in reach and turn is the Laplacian in polar coordinates. J_m is the Bessel function of the first kind of order m, x²y″ + xy′ + (x² − m²)y = 0 is Bessel’s equation, and its zeros are written j_{m,n}. The shapes are the normal modes of the membrane, and the lines that never move are nodal lines. The number of the reroute is the Rayleigh quotient, and the fact that it is never below the lowest number is the Rayleigh principle.</p>
+  <h3>Who said it first</h3>
+  <p>Leonhard Euler studied a round drum in 1764 and found the drum’s rule. Daniel Bernoulli had met J₀ in a hanging chain in 1732. Friedrich Bessel studied the functions in 1824 for the motion of planets. Siméon Denis Poisson cooled a ball by the rod’s rule for rU in the 1820s. William Thomson (Lord Kelvin) estimated the earth’s age from its cooling skin in 1862, and Lord Rayleigh’s Theory of Sound (1877) set out the drum’s tones and his quotient. Mark Kac asked in 1966 whether the tones of a drum fix its shape; Carolyn Gordon, David Webb and Scott Wolpert found two different drums with the same tones in 1992.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The drum’s rule has two solutions, so each shape is a mix of J₀ and the second one, and the rim fixes the mix.” Not allowed: the second solution passes every bound at the centre (24l3), and a drumhead is finite at its centre, so the mix has none of it. The rim then fixes k, not the mix.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'reach',t:R`u_{rr} = u_{xx}\cos^2 + \cdots`,n:`Roads add, twice.`},
+  {k:'ember',kl:'turn',t:R`u_{\theta\theta} = r^2(\cdots) - r\,u_r`,n:`A leftover.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\Delta u = u_{rr} + \tfrac1r u_r + \tfrac{1}{r^2}u_{\theta\theta}}`,n:`Room grows with r.`}
+],{title:'The slides · round rate · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'turn',t:R`\Theta = \cos(m\theta - \theta_0)`,n:`Winds m times.`},
+  {k:'ember',kl:'reach',t:R`x^2y^{\prime\prime} + xy^{\prime} + (x^2 - m^2)y = 0`,n:`The drum’s rule.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{J_m(kR) = 0}`,n:`Tied at the rim.`}
+],{title:'The slides · drum shapes · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'bracket',t:R`J_0(2.40) > 0 > J_0(2.41)`,n:`Running totals, exactly.`},
+  {k:'ember',kl:'again',t:R`J_0(5.51) < 0 < J_0(5.53)`,n:`More terms.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2.28 < j_2/j_1 < 2.31}`,n:`No whole number.`}
+],{title:'The slides · not harmonics · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'chain',t:R`u_x = U^{\prime}\,x/r`,n:`r_x = x/r.`},
+  {k:'ember',kl:'add',t:R`U^{\prime\prime} + \tfrac2r U^{\prime}`,n:`Three directions.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\Delta u = \tfrac1r(rU)^{\prime\prime}}`,n:`The rod’s rule for rU.`}
+],{title:'The slides · ball · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

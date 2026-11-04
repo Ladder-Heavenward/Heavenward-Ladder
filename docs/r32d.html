@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Convolution</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r32c.html">← 32c when the series returns the function</a><a href="r32e.html">next: 32e breaking a signal into frequencies →</a></p>
+  <div class="tags"><span class="tag proof">32d · proof</span></div>
+  <h1>Convolution</h1>
+  <p data-pid="5ee77b">A weather station on the coast at Newport logs the temperature every minute, and the log is jumpy: a gust, a passing cloud, a door left open beside the sensor. To see the day’s shape, people average each reading with its neighbours. That average is a new function made from the old one by sliding a small weight along it and taking a weighted total at each place. This step studies that move. It does three things, and all three are surprising. First, the turnings pass through it untouched in shape: each one comes out as itself, only scaled. So the coefficients of the averaged function are products, the old coefficients times the coefficients of the weight. Second, the result is at least as smooth as the weight, however rough the function was. Third, the step before found that the plain partial sums can overshoot and even fail. Average the partial sums themselves, and the failures go away: for every continuous repeating function, those averages come near it everywhere at once.</p>
+  <p class="gesture" data-pid="323719">Blend a function with a weight by sliding the weight along it and taking a total at each place. The coefficients of the blend are the products of the two lists of coefficients. The blend takes on the smoothness of the weight. And the average of the first N partial sums is a blend with a weight that is never negative and gathers at zero, so for a continuous function it comes near everywhere at once.</p>
+</header>
+
+<section class="class step" data-step="32d1">
+  <h2 class="sthead"><span class="stno">32d1</span>Blending one function with another</h2>
+  <p data-pid="65e4ce">Let f and g repeat every 2π and be sized and bounded. The <i>blend</i> of f by g is</p>
+  <p class="eqline" data-pid="d5e9a1"><span data-tex="(f * g)(x) = \tfrac{1}{2\pi}\int_{-\pi}^{\pi} f(x - t)\,g(t)\,dt."></span></p>
+  <p data-pid="139020">At each x it is an average of f near x, weighted by g. With g equal to π/h on [−h, h] and 0 elsewhere, it is the plain average of f over [x − h, x + h]: the weather station’s smoothing. The blend’s accepted name is the word in this step’s title, convolution, from the Latin convolvere, to roll together.</p>
+  <p data-pid="672a3f">Blend-coefficients technique: <b>the coefficients of a blend are the products of the two functions’ coefficients: cₙ(f * g) = cₙ(f) cₙ(g).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the blend-coefficients technique">
+c_n(f * g) = \tfrac{1}{2\pi}\int_{-\pi}^{\pi}\tfrac{1}{2\pi}\int_{-\pi}^{\pi} f(x - t)\,g(t)\,dt\;e^{-inx}\,dx @@ the coefficient total (32a2)
+e^{-inx} = e^{-in(x - t)}\,e^{-int} @@ the plane-adding technique (26b)
+= \tfrac{1}{2\pi}\int_{-\pi}^{\pi} g(t)\,e^{-int}\Big(\tfrac{1}{2\pi}\int_{-\pi}^{\pi} f(x - t)\,e^{-in(x - t)}\,dx\Big)dt @@ either order (30e): |f||g| is bounded, so its total over the square is finite
+\tfrac{1}{2\pi}\int_{-\pi}^{\pi} f(x - t)\,e^{-in(x - t)}\,dx = c_n(f) @@ f repeats, so sliding the window by t changes no total
+\htmlClass{new}{c_n(f * g) = c_n(f)\,c_n(g)} \quad \blacksquare @@ what is left is the coefficient of g
+  </pre>
+  <p data-pid="b4c9de">So the turning eₙ goes into a blend and comes out as cₙ(g)eₙ: the same turning, scaled. In 27f’s words, every turning is an arrow the blend only stretches. And blending gives the same either way round, f * g = g * f, since the products of coefficients agree and 32b3 fixes a function by its coefficients.</p>
+  <p data-pid="06ee07">One example first. The average over [x − h, x + h] has the weight g above, with cₙ(g) = (1/2π)∫ from −h to h of (π/h)e^(−int) dt = sin(nh)/(nh) for n ≠ 0. A turning of speed n with nh = π, a whole wave inside the window, is wiped out.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · blend · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">32d1.1</span><span class="ph know">know</span>What is the blend f * g, and what does the blend-coefficients technique say? <br>What does a blend do to a single turning?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32d2">
+  <h2 class="sthead"><span class="stno">32d2</span>Blending smooths</h2>
+  <p data-pid="a9cb5d">Blend-smooths technique: <b>if g has a continuous slope, then f * g has a slope for every sized bounded f, and (f * g)′ = f * g′.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the blend-smooths technique">
+(f * g)(x) = \tfrac{1}{2\pi}\int_{-\pi}^{\pi} f(t)\,g(x - t)\,dt @@ slide the variable, t to x − t; f and g repeat
+\tfrac{(f * g)(x + h) - (f * g)(x)}{h} = \tfrac{1}{2\pi}\int f(t)\,\tfrac{g(x + h - t) - g(x - t)}{h}\,dt @@ totals subtract
+\Big|\tfrac{g(x + h - t) - g(x - t)}{h}\Big| \le \max|g'| @@ the mean value technique (14c)
+\tfrac{g(x + h - t) - g(x - t)}{h} \to g'(x - t) \text{ as } h \to 0 @@ g has a slope
+\htmlClass{new}{(f * g)'(x) = \tfrac{1}{2\pi}\int f(t)\,g'(x - t)\,dt = (f * g')(x)} \quad \blacksquare @@ the fenced-limit technique (30d), with fence |f| max|g′|
+  </pre>
+  <p data-pid="7fda93">Run it again: if g has k continuous slopes, so does the blend, whatever f was. In coefficients, the blend’s cₙ(f)cₙ(g) fall at least as fast as g’s. A square wave averaged over a window has no jumps left, only ramps: the step’s rough input came out continuous.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · smooths · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32d2.1</span><span class="ph know">know</span>What does the blend-smooths technique say? <br>Which function’s smoothness does the blend take on, and why?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32d3">
+  <h2 class="sthead"><span class="stno">32d3</span>Averaging the partial sums</h2>
+  <p data-pid="4b1ff9">32c found that the weight D_N of the partial sums swings below 0, and that is where its trouble comes from. Average the first N partial sums: σ_N f = (S₀f + S₁f + ⋯ + S_(N−1)f)/N.</p>
+  <p data-pid="967adb">Averaged-sums technique: <b>for every continuous f that repeats every 2π, the averages σ_N f of its partial sums come near f everywhere at once.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the averaged-sums technique">
+\sigma_Nf = f * F_N,\ \ F_N(s) = \tfrac1N\textstyle\sum_{k=0}^{N-1}D_k(s) = \tfrac{1}{N}\Big(\tfrac{\sin(Ns/2)}{\sin(s/2)}\Big)^2 @@ the turning-kernel technique (32c1); Σ sin((k + ½)s) = sin²(Ns/2)/sin(s/2), by the many-angle technique (26i)
+F_N \ge 0,\ \ \tfrac{1}{2\pi}\int_{-\pi}^{\pi}F_N = 1,\ \ F_N(s) \le \tfrac{1}{N\sin^2(\delta/2)} \text{ for } \delta \le |s| \le \pi @@ a square; each D_k has average 1; sin(s/2) ≥ sin(δ/2) there
+|\sigma_Nf(x) - f(x)| \le \tfrac{1}{2\pi}\int_{-\pi}^{\pi}|f(x - s) - f(x)|\,F_N(s)\,ds @@ F_N ≥ 0 with average 1
+|f(x - s) - f(x)| \lt \varepsilon \text{ for } |s| \lt \delta, \text{ every } x @@ the evenly-continuous technique (15f): one δ serves every x
+\le \varepsilon + 2\max|f|\cdot\tfrac{1}{N\sin^2(\delta/2)} @@ split the total at |s| = δ
+\htmlClass{new}{|\sigma_Nf(x) - f(x)| \lt 2\varepsilon \text{ for every } x, \text{ once } N \text{ is large}} \quad \blacksquare @@ the second term heads to 0
+  </pre>
+  <p data-pid="d5893b">This is a second road to 32b2’s nearness, with no polynomials: the averages of the partial sums are the finite sums of turnings that come near. And at a jump, the averages settle at the halfway point without any overshoot past the top, since F_N is never negative.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · averaged · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32d3.1</span><span class="ph know">know</span>What are the averages σ_N f, and what does the averaged-sums technique say? <br>Which property of F_N does D_N lack, and why does it matter?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32d4">
+  <h2 class="sthead"><span class="stno">32d4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+c_n(f * g) = c_n(f) + c_n(g)\,? @@ blending multiplies the coefficients
+c_n(fg) = c_n(f)\,c_n(g)\,? @@ the product of two functions is not their blend
+\text{the blend is as rough as the rougher of the two}\,? @@ it takes on the smoothness of the smoother
+\sigma_Nf \to f \text{ at once, so } S_Nf \to f \text{ at once}\,? @@ the averages can settle where the sums do not
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32d4.1</span><span class="ph know">know</span>Why is “the coefficients of fg are the products of the coefficients of f and g” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">32d.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="g = \tfrac{\pi}{h} \text{ on } [-h, h],\ 0 \text{ elsewhere},\ \ q = \text{the square wave}"></span></span>Find q * g for h = 0.5, as a function on [−π, π]. Check one coefficient by the blend-coefficients technique.</div>
+  <div class="chq"><span class="chid">32d.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="g = 1 \text{ (the constant)}"></span></span>Find f * g for every f, and its coefficients. Find a weight g with f * g = f for every f, or prove that none exists among bounded sized functions.</div>
+  <div class="chq"><span class="chid">32d.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="c_n(h) = c_n(f)\,c_n(g) \text{ for every } n"></span></span>If a function h of finite energy has these coefficients, must h be the blend f * g? Use 32b3.</div>
+  <div class="chq"><span class="chid">32d.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="1 + 2\textstyle\sum_{k=1}^{N}(1 - \tfrac{k}{N+1})\cos ks"></span></span>Show that this is F_(N+1), using the blend-coefficients technique to read off the coefficients of σ_(N+1) f.</div>
+  <div class="chq"><span class="chid">32d.5.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="\sigma_Nf \to f"></span></span>One side holds that a sum that does not settle has no total, and that averaging its running totals invents an answer the sum never gave. The other holds that the averages settle on the function itself, for every continuous wave, and that a method that gives the right answer every time is a fair way to read a sum. <br>Is the averaged total of 1 − 1 + 1 − 1 + ⋯ (rung 22’s endless sum) its total? Which side does the averaged-sums technique take?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r32c.html">← 32c · when the series returns the function</a><a href="r32e.html">32e · breaking a signal into frequencies →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The blend is the convolution f ∗ g. The blend-coefficients technique is the convolution theorem for Fourier series. A weight g with a single bump, used to smooth, is a mollifier; a family that gathers at 0 with total 1 and stays at or above 0 is an approximate identity, or good kernel. F_N is the Fejér kernel, σ_N f the Cesàro means of the series, and the averaged-sums technique Fejér’s theorem. No bounded weight g has f ∗ g = f for every f: the identity of convolution is the Dirac delta, which is not a function.</p>
+  <h3>Who said it first</h3>
+  <p>Lipót Fejér proved the averaged-sums technique in 1900, at nineteen, while still a student. Ernesto Cesàro had proposed averaging running totals to read sums that do not settle in 1890. Pierre-Simon Laplace and Augustin-Louis Cauchy used blends in their work on chance and on heat, and Vito Volterra developed them as a calculus in his own right around 1912.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The blend of f by g is f multiplied by the average of g.” Not allowed: that is the blend’s 0th coefficient only. Every other turning is scaled by its own cₙ(g), and smoothing is exactly the fading of those factors for large n.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'blend',t:R`(f*g)(x) = \tfrac{1}{2\pi}\int f(x-t)g(t)dt`,n:`A sliding weighted average.`},
+  {k:'ember',kl:'split',t:R`e^{-inx} = e^{-in(x-t)}e^{-int}`,n:`Plane-adding.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{c_n(f*g) = c_n(f)c_n(g)}`,n:`Coefficients multiply.`}
+],{title:'The slides · blend · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'quotient',t:R`\tfrac{g(x+h-t) - g(x-t)}{h}`,n:`Fenced by max |g′|.`},
+  {k:'ember',kl:'limit',t:R`\to g^{\prime}(x-t)`,n:`Fenced-limit.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(f*g)^{\prime} = f*g^{\prime}}`,n:`The weight’s smoothness.`}
+],{title:'The slides · smooths · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'weight',t:R`F_N = \tfrac1N\big(\tfrac{\sin(Ns/2)}{\sin(s/2)}\big)^2`,n:`Never below 0.`},
+  {k:'ember',kl:'split',t:R`\varepsilon + \tfrac{2\max|f|}{N\sin^2(\delta/2)}`,n:`Near and far.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\sigma_Nf \to f \text{ at once}}`,n:`Every continuous f.`}
+],{title:'The slides · averaged · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'illegal',t:R`c_n(fg) = c_n(f)c_n(g)\,?`,n:`That is the blend.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Should every counter have its own line?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r31econ.html">← 31·econ why buy both insurance and lottery tickets?</a><a href="r31phys.html">next: 31·phys how do polarized sunglasses cut glare? →</a></p>
+  <div class="tags"><span class="tag logi">31·logi · logistics</span></div>
+  <h1>Should every counter have its own line?</h1>
+  <p data-pid="3f620f">Should every counter have its own line? A post office in Spokane has two clerks. At noon people come in at random, about 54 an hour, and each clerk serves about 30 an hour, so the clerks are busy nine tenths of the time. The office can paint two lines on the floor, one to each counter, or rope off a single line that feeds whichever clerk is free. The clerks are the same either way, and so are the people. What makes the question hard is that the averages are the same in both plans: 27 people an hour to each clerk, on average, either way. Yet one plan makes people wait twice as long as the other. 30o found the steady line at one counter, with chance arrivals and chance service. This page reads from it how fast the wait grows as a counter nears full use, then finds the steady line at two counters sharing one line, and shows why the shared line wins, by exactly how much, and why the gain is largest when the office is busiest.</p>
+  <p class="gesture" data-pid="306b2c">At one counter busy a share ρ of the time, a person waits on average ρ/(1 − ρ) service times before being served, which grows without bound as ρ nears 1. Two counters sharing one line, each busy a share ρ, cut that wait by the factor ρ/(1 + ρ), nearly half when the office is busy, because a clerk is never idle while someone waits.</p>
+</header>
+
+<section class="class step" data-step="31logi1">
+  <h2 class="sthead"><span class="stno">31logi1</span>One counter, nearly full</h2>
+  <p data-pid="34721c">At one counter, people arrive as a rare-arrival stream of rate λ, and each takes a chance time to serve, exponential with rate μ, apart from everything else. 30o’s steady-line technique, with ρ = λ/μ below 1, gives the steady chance (1 − ρ)ρⁿ of n people at the counter, being served or waiting. This page holds in trust one more fact, true for rare-arrival streams: a person arriving finds n there with the steady chance.</p>
+  <p data-pid="3afbd3">Near-full technique: <b>at one counter with ρ = λ/μ below 1, a person waits on average ρ/(1 − ρ) service times, ρ/(μ − λ), before being served; so the wait grows like 1/(1 − ρ) as the counter nears full use.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the near-full technique">
+\text{finds } n \text{ there: waits for } n \text{ services} @@ the one being served has 1/μ left, by the forgets-the-wait technique (30m)
+\operatorname{E}(\text{wait}\mid n) = n/\mu @@ averages add (30g)
+\operatorname{E}(\text{wait}) = \textstyle\sum_{n \ge 0}(1 - \rho)\rho^n\,\tfrac n\mu @@ the steady chances, held in trust for arrivals
+\textstyle\sum_{n \ge 0} n\rho^n = \tfrac{\rho}{(1 - \rho)^2} @@ the slope of the geometric sum (22e)
+\htmlClass{new}{\operatorname{E}(\text{wait}) = \tfrac{\rho}{\mu(1 - \rho)} = \tfrac{\rho}{\mu - \lambda}} \quad \blacksquare @@ ρ/(1 − ρ) service times
+  </pre>
+  <table class="tt"><tr><th>ρ</th><th>0.5</th><th>0.8</th><th>0.9</th><th>0.95</th><th>0.99</th></tr><tr><td class="l">service times waited</td><td>1</td><td>4</td><td>9</td><td>19</td><td>99</td></tr><tr><td class="l">minutes, at μ = 30 an hour</td><td>2</td><td>8</td><td>18</td><td>38</td><td>198</td></tr></table>
+  <p data-pid="0218d1">From 0.9 to 0.99 the clerk does ten percent more work, and the wait grows elevenfold. A counter run near full is not efficient; it is a line that has stopped being steady in any useful sense. Each step closer to full costs more than the one before, because 1/(1 − ρ) has slope 1/(1 − ρ)².</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · near full · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">31·logi.1.1</span><span class="ph know">know</span>What does the near-full technique say, and which fact does it hold in trust?  <br>Why does the wait grow elevenfold when ρ goes from 0.9 to 0.99?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31logi2">
+  <h2 class="sthead"><span class="stno">31logi2</span>Two counters, one line</h2>
+  <p data-pid="ddfa51">Now two clerks, each serving at rate μ, share one line, and people arrive at rate λ, with ρ = λ/(2μ) below 1. With n people there, service ends at rate μ if n = 1 and at rate 2μ if n is 2 or more, by 30o’s first-of-two technique: two independent exponential times end first at the sum of their rates. In the steady line, the flow up from n to n + 1 balances the flow down, as in 30o.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the steady line at two counters">
+\lambda p_0 = \mu p_1,\ \ \lambda p_n = 2\mu p_{n+1}\ (n \ge 1) @@ balance across each step
+p_1 = 2\rho\,p_0,\ \ p_n = 2\rho^n p_0\ (n \ge 1) @@ λ/μ = 2ρ, λ/2μ = ρ
+p_0\big(1 + \tfrac{2\rho}{1 - \rho}\big) = 1 \Rightarrow p_0 = \tfrac{1 - \rho}{1 + \rho} @@ the geometric sum (22e)
+\text{finds } n \ge 2: \text{waits for } n - 1 \text{ ends, each at rate } 2\mu @@ the first-of-two technique
+\operatorname{E}(\text{wait}) = \textstyle\sum_{n \ge 2} 2\rho^n p_0\,\tfrac{n - 1}{2\mu} = \tfrac{p_0}{\mu}\cdot\tfrac{\rho^2}{(1 - \rho)^2} @@ Σ (n − 1)ρⁿ from n = 2 is ρ²/(1 − ρ)²
+\htmlClass{new}{\operatorname{E}(\text{wait}) = \tfrac{\rho^2}{\mu(1 - \rho^2)}} \quad \blacksquare @@ p₀ = (1 − ρ)/(1 + ρ)
+  </pre>
+  <p data-pid="f559a9">Shared-line technique: <b>two counters each busy a share ρ, sharing one line, give an average wait of ρ²/(μ(1 − ρ²)); two separate lines with the arrivals split evenly give ρ/(μ(1 − ρ)); the shared wait is the separate one times ρ/(1 + ρ), below a half for every ρ below 1.</b> Each separate line is a single counter with arrivals at λ/2, so the near-full technique gives its wait, and the ratio is ρ²(1 − ρ)/(ρ(1 − ρ²)) = ρ/(1 + ρ).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the post office at noon">
+\lambda = 54,\ \mu = 30 \text{ an hour},\ \ \rho = 0.9 @@ each clerk busy nine tenths of the time
+\text{two lines: } \tfrac{0.9}{30 \times 0.1} = 0.3 \text{ h} = 18 \text{ min} @@ the near-full technique, at each counter
+\text{one line: } \tfrac{0.81}{30 \times 0.19} \approx 0.142 \text{ h} \approx 8.5 \text{ min} @@ the shared-line technique
+\htmlClass{new}{\text{ratio } 0.9/1.9 \approx 0.47} \quad \blacksquare @@ the same clerks and the same people, half the wait
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · one line · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·logi.2.1</span><span class="ph know">know</span>What does the shared-line technique say, and what is the ratio of the two waits?  <br>Why does service end at rate 2μ when two or more people are there?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31logi3">
+  <h2 class="sthead"><span class="stno">31logi3</span>Where the time goes</h2>
+  <p data-pid="d2652e">With two lines, a clerk can stand idle while the other has people waiting. The lines are independent, each a single counter with ρ = 0.9. Clerk A is idle with chance 1 − ρ, and clerk B has someone waiting, two or more there, with chance ρ². So one clerk idles while someone waits at the other with chance 2(1 − ρ)ρ² = 2 × 0.1 × 0.81 ≈ 0.16. For about a sixth of the noon hour, a clerk is free and a person is waiting for no reason but which line they chose.</p>
+  <p data-pid="3f3967">Idle-waste technique: <b>with separate lines, the chance that a clerk idles while someone waits is 2(1 − ρ)ρ²; with one shared line it is 0, since a free clerk takes the next person.</b> The first part is the steady-line technique at each counter, with the two counters independent; the second is how the line is built.</p>
+  <p data-pid="16c73d">The shared line is better for the average wait and worse for nothing but the length it looks. It is also fairer: people are served in the order they came, while with two lines a person can be stuck behind one slow service and watch later arrivals go first. Its cost is floor space for one long line, and a short walk to the free counter. Supermarkets often keep a line per till anyway, because people who see one long line leave, and banks and airports mostly rope off one.</p>
+  <p data-pid="73464d">A third plan is one clerk twice as fast. Its total time in the office, waiting and served, is 1/(2μ − λ), 10 minutes at noon, less than the shared line’s 10.5, but its wait before service is 9 minutes, more than 8.5. Which plan is best depends on which time is counted, and that is not a question the arithmetic answers.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · idle · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·logi.3.1</span><span class="ph know">know</span>What does the idle-waste technique say, and how often does a clerk idle while someone waits at noon?  <br>Why does the shared line also serve people in the order they came?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31logi4">
+  <h2 class="sthead"><span class="stno">31logi4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{same clerks, same arrivals, so the same wait}\,? @@ the averages match; the waste of idle clerks does not
+\rho = 0.99 \text{ is only a little worse than } 0.9\,? @@ the wait is 99 services against 9
+\text{a counter at full use, } \rho = 1, \text{ has a long but steady line}\,? @@ the steady-line technique needs ρ below 1; at 1 the line has no steady chances
+\text{two lines are as good if people switch to the shorter}\,? @@ switching helps, but a free clerk can still idle beside a line one service long
+\text{the fast single clerk is always best}\,? @@ for time in the office; for time before service, the shared line wins
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·logi.4.1</span><span class="ph know">know</span>Why do two lines make people wait longer than one, when the clerks and the arrivals are the same?  <br>Why has a counter at ρ = 1 no steady line?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">31·logi.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\lambda = 54 \text{ an hour},\ \ \mu = 30 \text{ an hour}"></span></span>Build the average wait with one shared line for 2, 3 and 4 clerks; for 3 and 4, find the steady chances by the same balance across each step.  <br>How much does the third clerk save each person, on average, and the fourth?</div>
+  <div class="chq"><span class="chid">31·logi.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\rho \to 0"></span></span>Find the ratio of the shared and separate waits as the office empties.  <br>Why does sharing help least when the clerks are idle most, and what is the wait itself then?</div>
+  <div class="chq"><span class="chid">31·logi.5.3</span><span class="tagq">converse</span>The shared-line technique says one line never idles a clerk while someone waits. Turn it round: if no clerk is ever idle while someone waits, must the office have one shared line?</div>
+  <div class="chq"><span class="chid">31·logi.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{time in the office} = \text{wait} + 1/\mu"></span></span>Find the average number in the office with one shared line, from the steady chances directly.  <br>Check that it is λ times the average time in the office, and say why that should hold for any steady line.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r31econ.html">← 31·econ · why buy both insurance and lottery tickets?</a><a href="r31phys.html">31·phys · how do polarized sunglasses cut glare? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A single counter with rare arrivals and exponential service is the M/M/1 queue, and two counters sharing one line the M/M/2 queue; c counters give the M/M/c queue, whose chance of waiting is the Erlang C formula. ρ is the utilisation or traffic intensity. That arrivals in a rare-arrival stream see the steady chances is PASTA, Poisson arrivals see time averages. That the average number equals λ times the average time is Little’s law. Pooling the lines is resource pooling; one line feeding many counters is a single-queue multi-server or serpentine line, and switching between lines is jockeying.</p>
+  <h3>Who said it first</h3>
+  <p>Agner Krarup Erlang worked out the waits at telephone exchanges in Copenhagen from 1909 to 1917, including many lines sharing one wait. David Kendall gave the M/M/c names in 1953. John Little proved his law in 1961. Ronald Wolff proved in 1982 that rare-arrival streams see the steady chances.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'finds n',t:R`(1 - \rho)\rho^n`,n:`Steady chances.`},
+  {k:'ember',kl:'waits',t:R`\textstyle\sum (1 - \rho)\rho^n\,n/\mu`,n:`n services.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\tfrac{\rho}{\mu(1 - \rho)}}`,n:`Without bound as ρ → 1.`}
+],{title:'The slides · near full · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'balance',t:R`p_n = 2\rho^np_0,\ p_0 = \tfrac{1 - \rho}{1 + \rho}`,n:`Flows across each step.`},
+  {k:'ember',kl:'wait',t:R`\tfrac{\rho^2}{\mu(1 - \rho^2)}`,n:`n − 1 ends at 2μ.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\times\,\tfrac{\rho}{1 + \rho}}`,n:`Below a half.`}
+],{title:'The slides · one line · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'A free',t:R`1 - \rho`,n:`One counter idle.`},
+  {k:'ember',kl:'B busy',t:R`\rho^2`,n:`Someone waiting.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2(1 - \rho)\rho^2 \approx 0.16}`,n:`Waste with two lines.`}
+],{title:'The slides · idle · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

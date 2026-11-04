@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Loops count holes</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r34f.html">← 34f surfaces classified</a><a href="r34h.html">next: 34h something stays put →</a></p>
+  <div class="tags"><span class="tag proof">34g · proof</span></div>
+  <h1>Loops count holes</h1>
+  <p data-pid="862ebe">Rung 26 walked once round a hole in the plane and found a total that never came out zero, however the walk was bent, as long as it stayed off the hole. Rung 29 read holes in a region by the same kind of total. Both needed slopes. This step counts holes with loops alone. Fix a point, and take every loop that starts and ends there. Two loops are the same when one can be slid into the other without leaving the space. Loops can be run one after another, and run backwards, and their sliding classes make a group. In the plane every loop slides down to its starting point, so the group has one member. On the circle a loop that goes round three times cannot be slid into one that goes round once, and the group is the whole numbers. The proof unrolls the circle onto the line, the way a tape measure unrolls from its case, and follows each loop up into the line, where it can be measured. Spaces that unroll like that onto others are called coverings, and they count loops on the torus and the cross-cap too.</p>
+  <p class="gesture" data-pid="e026f5">A loop at a point is a path that starts and ends there, and two loops are the same when a continuous family of loops slides one into the other. Run one loop after another and the sliding classes form a group, the loop group, and a continuous map carries it along. In a space of arrows every loop slides to a point. Wrapping the line round the circle unrolls every path on the circle into exactly one path on the line from a chosen start, and the distance a loop climbs on the line is a whole number that slides cannot change. So the loop group of the circle is the whole numbers, and a covering, which unrolls the same way over every small open set, makes its loop group a part of the loop group below.</p>
+</header>
+
+<section class="class step" data-step="34g1">
+  <h2 class="sthead"><span class="stno">34g1</span>Loops, and sliding them</h2>
+  <p data-pid="774335">Fix a point x₀ of a space X. A <i>loop</i> at x₀ is a path γ with γ(0) = γ(1) = x₀. Two loops γ and δ at x₀ <i>slide</i> into each other when some continuous map H from the square [0, 1] × [0, 1] to X has H(t, 0) = γ(t), H(t, 1) = δ(t), and H(0, s) = H(1, s) = x₀ for every s. Each s gives a loop, and as s runs from 0 to 1 the loops slide from γ to δ, with the ends held at x₀.</p>
+  <p data-pid="96ac08">Sliding is a sameness relation (2g). H(t, s) = γ(t) slides γ to itself. H(t, 1 − s) slides back. To chain two slides, run the first for s from 0 to ½ and the second for s from ½ to 1; the two pieces agree where they meet, so the glued map is continuous, by <a href="r11e.html#583ea2">11e</a>’s glued pieces carried to closed parts of the square.</p>
+  <p data-pid="4e52a3">Straight-slide technique: <b>in a space of arrows, every loop at x₀ slides to the loop that stays at x₀; and so in any part of one that holds the straight segment from each of its points to x₀.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the straight-slide technique">
+H(t, s) = (1 - s)\,\gamma(t) + s\,x_0 @@ the point part of the way from γ(t) to x₀
+H(t, 0) = \gamma(t),\ \ H(t, 1) = x_0,\ \ H(0, s) = H(1, s) = x_0 @@ γ(0) = γ(1) = x₀
+H \text{ is continuous} @@ sums and products of continuous maps, in each entry (11b, 34b3)
+\htmlClass{new}{\gamma \text{ slides to the loop that stays at } x_0} \quad \blacksquare @@ H stays in the part, which holds each segment
+  </pre>
+  <p data-pid="72915e">So in the plane, in a disc, in a ball, every loop slides to a point. The plane with a hole is not covered: a segment from a point of a loop round the hole to x₀ may run through the hole.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · loops · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">34g1.1</span><span class="ph know">know</span>What is a loop at x₀, and when do two loops slide into each other?  <br>What does the straight-slide technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34g2">
+  <h2 class="sthead"><span class="stno">34g2</span>Loops form a group</h2>
+  <p data-pid="a9f625">For loops γ and δ at x₀, γ · δ runs γ at double speed for t in [0, ½], then δ at double speed for t in [½, 1]. γ⁻¹ runs γ backwards: γ⁻¹(t) = γ(1 − t). Write [γ] for the sliding class of γ. A path γ ∘ φ, with φ a continuous map of [0, 1] to itself with φ(0) = 0 and φ(1) = 1, is γ run on a new timetable. It slides to γ by H(t, s) = γ((1 − s)φ(t) + st).</p>
+  <p data-pid="488a76">Loop-group technique: <b>the sliding classes of loops at x₀, with [γ][δ] = [γ · δ], form a group, whose member that does nothing is the class of the loop that stays at x₀, and in which [γ] is undone by [γ⁻¹].</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the loop-group technique">
+\gamma \text{ slides to } \gamma' \text{ by } H,\ \ \delta \text{ to } \delta' \text{ by } K \Rightarrow \gamma\cdot\delta \text{ slides to } \gamma'\cdot\delta' @@ run H on the left half of the square, K on the right; they agree at t = ½: so the product is well named
+(\gamma\cdot\delta)\cdot\varepsilon \text{ is } \gamma\cdot(\delta\cdot\varepsilon) \text{ on a new timetable} @@ the same three loops, run at speeds 4, 4, 2 and 2, 4, 4: brackets do not matter
+c\cdot\gamma \text{ and } \gamma\cdot c \text{ are } \gamma \text{ on new timetables} @@ c stays at x₀; a pause, then γ at double speed
+H(t, s) = \gamma(2t(1 - s)) \text{ for } t \le \tfrac12,\ \ \gamma((2 - 2t)(1 - s)) \text{ for } t \ge \tfrac12 @@ slides γ · γ⁻¹ to c: go out less far each time, and come back
+\htmlClass{new}{[\gamma][\gamma^{-1}] = [c]} \quad \blacksquare @@ and likewise [γ⁻¹][γ] = [c]: the rules of a group (19a)
+  </pre>
+  <p data-pid="9b188e">This group is the <i>loop group</i> of X at x₀, written π₁(X, x₀). The mark π here is a name, with a small 1 beside it, and it has nothing to do with the π of 21a, which keeps its meaning everywhere else. Its accepted name is the fundamental group. A continuous map f from X to Y with f(x₀) = y₀ sends loops to loops, and slides to slides, so it gives a map f∗[γ] = [f ∘ γ] from π₁(X, x₀) to π₁(Y, y₀) that keeps products: f∗([γ][δ]) = f∗[γ] f∗[δ]. A same-shape map gives a matching of the two groups that keeps products both ways. So the loop group is a shape-property.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the loop group · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34g2.1</span><span class="ph know">know</span>How are two loops multiplied, and what is γ⁻¹?  <br>What does the loop-group technique say, and what map does a continuous f give?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34g3">
+  <h2 class="sthead"><span class="stno">34g3</span>Unrolling the circle</h2>
+  <p data-pid="d33d5e">Let C be the circle, and p(t) = (cos 2πt, sin 2πt) for t on the line: <a href="r21b.html#a323ad">21b</a>’s point at t whole turns. p wraps the line round C endlessly, and p(t) = p(t′) exactly when t − t′ is a whole number. Over an open arc of C shorter than the whole circle, p⁻¹ of the arc is endlessly many separate open stretches, one in each whole turn, and p matches each of them with the arc by a same-shape map. Its backwards map reads off an angle on that stretch, as one of 26c’s logarithm values does.</p>
+  <p data-pid="dc8a2d">A path γ̃ on the line with p ∘ γ̃ = γ is a <i>lift</i> of γ: γ unrolled.</p>
+  <p data-pid="8be50e">Path-lift technique: <b>for every path γ on C and every t₀ with p(t₀) = γ(0), exactly one path γ̃ on the line has p ∘ γ̃ = γ and γ̃(0) = t₀.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the path-lift technique">
+A_1 = C \setminus \{(1, 0)\},\ \ A_2 = C \setminus \{(-1, 0)\} @@ two open arcs, each shorter than the circle, that cover it
+\gamma^{-1}(A_1),\ \gamma^{-1}(A_2) \text{ cover } [0, 1] @@ open sets, by continuity
+0 < \tfrac1N < \tfrac2N < \cdots < 1,\ \ \gamma([\tfrac kN, \tfrac{k+1}N]) \text{ in one arc} @@ the cover-reach technique (34d4), with 1/N below the reach
+\text{on each piece: the stretch over that arc holding the lift so far, and its backwards map} @@ start at t₀; each piece starts where the last one ended
+\tilde\gamma \text{ is continuous} @@ finitely many pieces, agreeing at their joins (11e)
+\tilde\gamma - \tilde\gamma' \text{ is a whole number at each } t,\ \text{and continuous} @@ two lifts of the same path; p(t) = p(t′) only for whole gaps
+\htmlClass{new}{\tilde\gamma - \tilde\gamma' = 0} \quad \blacksquare @@ the whole numbers are scattered, so its image is one point (34c2); it is 0 at t = 0
+  </pre>
+  <p data-pid="c1c2b8">The same lines, run on the square [0, 1] × [0, 1], which is finitely covered (34d5), lift a slide of loops to a slide of paths on the line. Slide-lift: <b>if two loops on C slide into each other, their lifts from the same start end at the same point.</b> The end of the lifted slide moves continuously through numbers that all sit over the same point of C, so it does not move.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · unrolling · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34g3.1</span><span class="ph know">know</span>What is p, and what is a lift of a path on the circle?  <br>What does the path-lift technique say, and where does its proof use the cover-reach technique?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34g4">
+  <h2 class="sthead"><span class="stno">34g4</span>The circle’s loops are the whole numbers</h2>
+  <p data-pid="366d08">Take x₀ = (1, 0) = p(0). For a loop γ at x₀, lift it from 0. Its end γ̃(1) sits over x₀, so it is a whole number: the <i>winding number</i> w(γ), the number of times γ goes round, anticlockwise counted as positive.</p>
+  <p data-pid="5161ee">Circle-loops technique: <b>γ ↦ w(γ) matches the loop group of the circle with the whole numbers, and turns the product of loops into the sum of their winding numbers.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the circle-loops technique">
+\gamma \text{ slides to } \delta \Rightarrow w(\gamma) = w(\delta) @@ slide-lift (34g3): w is a function of the class
+\widetilde{\gamma\cdot\delta} = \tilde\gamma \text{ then } (\tilde\delta + w(\gamma)) @@ the lift of δ from w(γ) is the lift from 0, slid up by w(γ); one lift (34g3)
+w(\gamma\cdot\delta) = w(\gamma) + w(\delta) @@ read off the end
+\gamma_n(t) = p(nt):\ \ \tilde\gamma_n(t) = nt,\ \ w(\gamma_n) = n @@ every whole number is reached
+w(\gamma) = 0 \Rightarrow \tilde\gamma \text{ is a loop at } 0 \text{ on the line} @@ it starts and ends at 0
+\tilde\gamma \text{ slides to } 0 \text{ by } H,\ \ \text{so } \gamma \text{ slides to } x_0 \text{ by } p \circ H @@ the straight-slide technique on the line (34g1)
+\htmlClass{new}{\pi_1(C, x_0) \text{ matches } \mathbb Z} \quad \blacksquare @@ one-to-one: w(γ) = w(δ) gives w(γ · δ⁻¹) = 0
+  </pre>
+  <p data-pid="0fde5f">So the circle is not the same shape as a disc: their loop groups differ. The plane with its centre taken out slides onto the circle by x ↦ x/|x|, keeping the circle in place, and its loop group is the whole numbers too. That is the shape of <a href="r26f.html#2affd9">26f</a>’s hole technique: 1/z totals 2πi round the circle because the circle goes once round a hole, and the total is 2πi times the winding number. The plane with a point out and space with a point out, which 34e could not tell apart, now part company: every loop in space with a point taken out slides to a point, which is proved much higher up the ladder.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the circle · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34g4.1</span><span class="ph know">know</span>What is the winding number w(γ) of a loop on the circle?  <br>What does the circle-loops technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34g5">
+  <h2 class="sthead"><span class="stno">34g5</span>Coverings</h2>
+  <p data-pid="f53ce3">A continuous map p from Y onto X is a <i>covering</i> when every point of X has an open set U about it whose pull-back is a union of separate open sets, each matched with U by p, as a same-shape map. Each of those open sets is a <i>sheet</i> over U. The line over the circle is one, with a sheet for each whole number. The circle over itself by z ↦ z³ (26a’s powers) is one with three sheets. The plane over the torus, by (t₁, t₂) ↦ (p(t₁), p(t₂)), is one. The sphere over the cross-cap, sending x and −x to the same point, is one with two sheets.</p>
+  <p data-pid="9afca5">Covering-lift technique: <b>for every covering, every path below has exactly one lift from each start above it, and slides lift to slides; so p∗ is one-to-one on loop groups.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the covering-lift technique">
+\text{open sets } U \text{ with sheets cover } X @@ the definition
+\text{the lines of 34g3 with } U \text{ for the arcs} @@ the cover-reach technique cuts a path, and then a slide, into pieces each in one U
+p\circ\tilde\gamma = \gamma,\ \ \tilde\gamma(0) = y_0,\ \text{one lift} @@ the pieces glue; two lifts agree where they start and stay together sheet by sheet
+p_*[\tilde\delta] = [c] \Rightarrow p\circ\tilde\delta \text{ slides to } c \text{ by } H @@ suppose a loop above goes to the class of the loop that stays put
+\htmlClass{new}{\tilde H \text{ slides } \tilde\delta \text{ to the loop that stays at } y_0} \quad \blacksquare @@ lift H from y₀; its sides stay over x₀ and are lifted to the constant path
+  </pre>
+  <p data-pid="5914da">Lift each loop on the torus to the plane, from 0, and it ends at a pair (m, n) of whole numbers: how often it goes round each way. The same lines as 34g4 match the loop group of the torus with pairs of whole numbers, added entry by entry. A loop on the cross-cap lifts to a path on the sphere from x to x or from x to −x. Every loop on the sphere slides to a point, which is proved much higher up the ladder, and with it the loop group of the cross-cap has exactly two members.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · coverings · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34g5.1</span><span class="ph know">know</span>When is a map a covering, and what is a sheet?  <br>What does the covering-lift technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34g6">
+  <h2 class="sthead"><span class="stno">34g6</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{the loop } p(2t) \text{ slides to } p(t)\,? @@ their winding numbers are 2 and 1, and slides keep winding numbers
+\text{every loop in the plane with a point out slides to } x_0\,? @@ the straight slide runs through the hole; a loop round it has winding number 1
+\text{the circle of radius 2 has a bigger loop group}\,? @@ it is the same shape as the circle of radius 1; loop groups see shape only
+\text{two lifts of a path differ by different whole numbers at different times}\,? @@ their difference is continuous with scattered values on [0, 1], which is in one piece
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34g6.1</span><span class="ph know">know</span>Why is “every loop in the plane with a point taken out slides to its starting point” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">34g.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="f(z) = z^3 \text{ on the circle}"></span></span>Find what f∗ does to the loop group of the circle, as a map of the whole numbers. <br>Build a continuous map of the circle to itself whose f∗ is n ↦ −2n.</div>
+  <div class="chq"><span class="chid">34g.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x_0,\ x_1 \text{ joined by a path } \beta \text{ in } X"></span></span>Prove that [γ] ↦ [β⁻¹ · γ · β] matches π₁(X, x₀) with π₁(X, x₁) and keeps products. <br>What goes wrong if X is not joined by paths?</div>
+  <div class="chq"><span class="chid">34g.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\pi_1(X, x_0) \text{ has one member}"></span></span>If every loop of X slides to a point, must X be the same shape as a disc? Test the sphere, using what this step holds in trust, and the closed stretch [0, 1].</div>
+  <div class="chq"><span class="chid">34g.7.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\gamma(t) = (\cos 2\pi t, \sin 2\pi t) \text{ in } \mathbb C"></span></span>Find w(γ) for the loop that runs round the circle twice anticlockwise, then once clockwise, by lifting. <br>Find it a second way, by 26e’s total of 1/z round the loop, divided by 2πi. Prove that the two ways agree for every loop with a continuous slope.</div>
+  <div class="chq"><span class="chid">34g.7.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">is a hole a thing?</span></span>Loops count holes without ever touching one. A hole is where the space is not. One side holds that a hole is nothing at all, and a statement about it is a statement about the material around it. The other holds that holes are real parts of the world: a hole can be counted, moved, widened, and filled. <br>Is a hole a thing? What does the circle-loops technique count?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r34f.html">← 34f · surfaces classified</a><a href="r34h.html">34h · something stays put →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Sliding is homotopy relative to the ends; a slide is a homotopy. The loop group is the fundamental group, π₁(X, x₀), and f∗ is the induced homomorphism, a product-keeping map, or homomorphism, of groups. A space whose loops all slide to a point is simply connected. A lift is a lift, and the path-lift technique and slide-lift are the path lifting and homotopy lifting properties. A covering is a covering map, and the line over the circle is the universal cover of the circle. The winding number is the degree.</p>
+  <h3>Who said it first</h3>
+  <p>Henri Poincaré introduced the fundamental group in Analysis Situs in 1895, with coverings, and used it to tell three-dimensional shapes apart. Bernhard Riemann had used cuts and coverings of the plane in the 1850s to study the many values of functions like the complex logarithm. The question of whether holes are things was argued by David and Stephanie Lewis in 1970, and by Roberto Casati and Achille Varzi in 1994.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The loop round the circle slides to a point: shrink it toward the centre.” Not allowed: the shrinking loops leave the circle. A slide must stay in the space. In the disc this slide is allowed, and the loop does slide to a point there; on the circle it is not, and the winding number shows no other slide can do it.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'loop',t:R`\gamma(0) = \gamma(1) = x_0`,n:`A path home.`},
+  {k:'ember',kl:'slide',t:R`H(t, s),\ \ H(0, s) = H(1, s) = x_0`,n:`Ends held.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(1 - s)\gamma(t) + s x_0}`,n:`In the plane, all slide home.`}
+],{title:'The slides · loops · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'product',t:R`\gamma\cdot\delta`,n:`One loop, then the other.`},
+  {k:'ember',kl:'timetables',t:R`\gamma \circ \varphi \text{ slides to } \gamma`,n:`Speed does not matter.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\pi_1(X, x_0)}`,n:`A group, carried by maps.`}
+],{title:'The slides · the loop group · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'wrap',t:R`p(t) = (\cos 2\pi t, \sin 2\pi t)`,n:`The line round the circle.`},
+  {k:'ember',kl:'pieces',t:R`\gamma([\tfrac kN, \tfrac{k+1}N]) \subseteq A_i`,n:`Short enough to unroll.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{p \circ \tilde\gamma = \gamma,\ \text{one lift}}`,n:`Each start, one lift.`}
+],{title:'The slides · unrolling · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'winding',t:R`w(\gamma) = \tilde\gamma(1) \in \mathbb Z`,n:`Where the lift ends.`},
+  {k:'ember',kl:'product',t:R`w(\gamma\cdot\delta) = w(\gamma) + w(\delta)`,n:`Lift, then lift again.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\pi_1(C) = \mathbb Z}`,n:`Round three times is not round once.`}
+],{title:'The slides · the circle · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'sheets',t:R`p^{-1}(U) = \textstyle\bigsqcup \text{sheets}`,n:`Each matched with U.`},
+  {k:'ember',kl:'lift',t:R`p \circ \tilde\gamma = \gamma`,n:`One from each start.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\pi_1(\text{torus}) = \mathbb Z \times \mathbb Z}`,n:`Count the turns each way.`}
+],{title:'The slides · coverings · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

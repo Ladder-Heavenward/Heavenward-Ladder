@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Straightening a basis</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r31b.html">← 31b the closest point</a><a href="r31d.html">next: 31d symmetric maps have square axes →</a></p>
+  <div class="tags"><span class="tag proof">31c · proof</span></div>
+  <h1>Straightening a basis</h1>
+  <p data-pid="e6eb62">The closest point was easy to find with measuring directions at right angles and slow without them. Most bases do not come at right angles. The powers of x do not, and neither do the columns of a table of data. So this step straightens a basis, one arrow at a time. Keep the first arrow, cut to size one. From the second, take away its shadow on the first, and cut what is left to size one. From the third, take away its shadows on the first two, and so on. Each new arrow stands at right angles to all the ones before it, and the first few always build the same space as the first few of the old basis. Written with grids, straightening says that every grid with free columns is a grid with columns at right angles times a grid shaped like a staircase. That is how a machine finds a best fit without ever forming the slow samenesses of the last step.</p>
+  <p class="gesture" data-pid="8af0b6">From any free list, take away from each arrow its shadows on the straightened arrows before it, and cut what is left to size one. The result is a right-angled list that builds the same spaces, one at a time. As grids: every grid with free columns is a grid with right-angled columns times a staircase.</p>
+</header>
+
+<section class="class step" data-step="31c1">
+  <h2 class="sthead"><span class="stno">31c1</span>One arrow at a time</h2>
+  <p data-pid="703c58">Let v₁, v₂, …, vₙ be free, under some product. Build e₁, e₂, … in turn. Put e₁ = v₁/‖v₁‖. When e₁, …, eₖ₋₁ are built, take wₖ = vₖ − ⟨vₖ, e₁⟩e₁ − ⋯ − ⟨vₖ, eₖ₋₁⟩eₖ₋₁, the miss of vₖ from its shadow on the arrows already built (31b2), and put eₖ = wₖ/‖wₖ‖.</p>
+  <p data-pid="44459b">Straightening technique: <b>from free arrows v₁, …, vₙ, the arrows e₁, …, eₙ built this way are a right-angled list, and for every k the first k of them build the same space as v₁, …, vₖ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the straightening technique">
+k = 1:\ \ e_1 = v_1/\|v_1\|,\ \ \|e_1\| = 1 @@ v₁ ≠ 0, since the list is free; e₁ builds the line v₁ builds
+e_1, \ldots, e_{k-1} \text{ right-angled, building } W_{k-1} @@ suppose it, for induction (4b): W₍ₖ₋₁₎ is what v₁, …, vₖ₋₁ build
+w_k = v_k - P_{k-1}v_k \perp W_{k-1} @@ the shadow-sum technique (31b2)
+w_k \ne 0 @@ else vₖ lies in W₍ₖ₋₁₎, a mix of v₁, …, vₖ₋₁, and the list is not free
+e_k = w_k/\|w_k\| \text{ has size } 1,\ \perp e_1, \ldots, e_{k-1} @@ stretching keeps right angles
+\htmlClass{new}{e_1, \ldots, e_k \text{ build what } v_1, \ldots, v_k \text{ build}} \quad \blacksquare @@ eₖ is a mix of vₖ and W₍ₖ₋₁₎, and vₖ = wₖ + P₍ₖ₋₁₎vₖ is a mix of the e’s
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: three lists of three numbers">
+v_1 = (1, 1, 1),\ v_2 = (1, 1, 0),\ v_3 = (1, 0, 0) @@ free, under the dot
+e_1 = \tfrac{1}{\sqrt3}(1, 1, 1) @@ |v₁| = √3
+w_2 = (1, 1, 0) - \tfrac23(1, 1, 1) = \tfrac13(1, 1, -2),\ \ e_2 = \tfrac{1}{\sqrt6}(1, 1, -2) @@ ⟨v₂, e₁⟩e₁ = (2/3)(1, 1, 1)
+w_3 = (1, 0, 0) - \tfrac13(1, 1, 1) - \tfrac16(1, 1, -2) = \tfrac12(1, -1, 0) @@ two shadows taken away
+\htmlClass{new}{e_3 = \tfrac{1}{\sqrt2}(1, -1, 0)} \quad \blacksquare @@ 27i2’s three directions, found from a staircase of 1s
+  </pre>
+  <p data-pid="0883f3">The order matters. Straighten v₃, v₂, v₁ instead and the first arrow is (1, 0, 0): another right-angled list, building the same whole space, with different first pieces.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · straighten · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">31c1.1</span><span class="ph know">know</span>How is eₖ built from vₖ and e₁, …, eₖ₋₁?  <br>What does the straightening technique say, and why is wₖ never 0?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31c2">
+  <h2 class="sthead"><span class="stno">31c2</span>Straightening the powers of x</h2>
+  <p data-pid="aa2879">Under the area product on [−1, 1], the powers 1, x, x², … are free (a polynomial that is 0 everywhere has every number in front of xᵏ equal to 0) and far from right-angled: ⟨1, x²⟩ = 2/3. Straighten the first three.</p>
+  <pre class="lines" data-k="ember" data-label="this step: 1, x and x² straightened">
+e_1 = \tfrac{1}{\sqrt2} @@ ‖1‖² = 2
+w_2 = x - \langle x, e_1\rangle e_1 = x,\ \ e_2 = \sqrt{\tfrac32}\,x @@ ⟨x, 1⟩ = 0; ‖x‖² = 2/3
+w_3 = x^2 - \langle x^2, e_1\rangle e_1 - \langle x^2, e_2\rangle e_2 = x^2 - \tfrac13 @@ ⟨x², 1⟩ = 2/3, ⟨x², x⟩ = 0
+\|x^2 - \tfrac13\|^2 = \tfrac25 - \tfrac49 + \tfrac29 = \tfrac{8}{45} @@ ∫ (x⁴ − (2/3)x² + 1/9) from −1 to 1
+\htmlClass{new}{e_3 = \sqrt{\tfrac{45}{8}}\,\big(x^2 - \tfrac13\big)} \quad \blacksquare @@ cut to size 1
+  </pre>
+  <p data-pid="fd5861">So the closest parabola to any f on [−1, 1] is three readings, ⟨f, e₁⟩e₁ + ⟨f, e₂⟩e₂ + ⟨f, e₃⟩e₃, and the closest cubic adds one more reading without changing the first three. That is what right angles buy. The polynomials straightened this way have their own family, and 31m works with them.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · powers · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31c2.1</span><span class="ph know">know</span>What are the first three straightened powers of x on [−1, 1], up to their sizes?  <br>Why does the closest cubic keep the first three readings of the closest parabola?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31c3">
+  <h2 class="sthead"><span class="stno">31c3</span>Right angles times a staircase</h2>
+  <p data-pid="9772b7">Take lists of m numbers with the dot, and a grid X with m rows and n free columns v₁, …, vₙ. Straightening gives e₁, …, eₙ. From here on, Q is the grid with columns e₁, …, eₙ, so QᵀQ = I as in 27m1, and a <i>staircase</i> is a square grid with only 0s below its middle line.</p>
+  <p data-pid="ad3c60">Column-straightening technique: <b>every grid X with free columns is X = QR, where Q has right-angled columns and R is a staircase with numbers above 0 down its middle.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the column-straightening technique">
+v_k = w_k + \textstyle\sum_{j \lt k}\langle v_k, e_j\rangle e_j = \|w_k\|e_k + \sum_{j \lt k}\langle v_k, e_j\rangle e_j @@ 31c1, turned round
+R_{jk} = \langle v_k, e_j\rangle \text{ for } j \lt k,\ \ R_{kk} = \|w_k\| > 0,\ \ R_{jk} = 0 \text{ for } j > k @@ column k uses only e₁, …, eₖ
+\text{column } k \text{ of } QR = \textstyle\sum_j R_{jk}e_j = v_k @@ the product-is-doing technique (27d2)
+\htmlClass{new}{X = QR} \quad \blacksquare @@ every column agrees
+  </pre>
+  <p data-pid="634370">Now the best fit of 31b3 needs no XᵀX. Put X = QR into XᵀXc = Xᵀy: RᵀQᵀQRc = RᵀQᵀy, so RᵀRc = RᵀQᵀy. Rᵀ is undoable, its middle numbers being above 0, so Rc = Qᵀy, solved from the bottom row up.</p>
+  <pre class="lines" data-k="ember" data-label="this step: 8·stat’s line again">
+X = [\,1\ \ x\,],\ \ x = (1, 2, 3, 4) @@ the grid of 31b4
+e_1 = \tfrac12(1, 1, 1, 1),\ \ w_2 = x - 5e_1 = (-1.5, -0.5, 0.5, 1.5),\ \ \|w_2\| = \sqrt5 @@ ⟨x, e₁⟩ = 5
+R = \begin{pmatrix} 2 & 5 \\ 0 & \sqrt5\end{pmatrix},\ \ Q^{\mathsf T}y = \big(5,\ \tfrac{3}{\sqrt5}\big) @@ y = (2, 1, 4, 3)
+\htmlClass{new}{b = \tfrac{3/\sqrt5}{\sqrt5} = 0.6,\ \ k = \tfrac{5 - 5(0.6)}{2} = 1} \quad \blacksquare @@ bottom row first, then the top
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · QR · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31c3.1</span><span class="ph know">know</span>What does the column-straightening technique say, and what are the numbers of R?  <br>How does X = QR turn the samenesses XᵀXc = Xᵀy into a staircase?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31c4">
+  <h2 class="sthead"><span class="stno">31c4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+w_2 = v_2 - \langle v_2, v_1\rangle v_1\,? @@ the shadow on v₁ needs v₁ cut to size 1: ⟨v₂, v₁⟩v₁/‖v₁‖²
+w_3 = v_3 - \langle v_3, e_2\rangle e_2\,? @@ the shadows on every earlier e are taken away, not only the last
+QQ^{\mathsf T} = I \text{ for every } Q \text{ with right-angled columns}\,? @@ only when Q is square; with fewer columns QQᵀ is the shadow map onto what they build
+\text{straightening in another order gives the same list}\,? @@ the first arrow decides the first direction; other orders give other lists
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31c4.1</span><span class="ph know">know</span>Why is w₂ = v₂ − ⟨v₂, v₁⟩v₁ wrong when ‖v₁‖ ≠ 1?  <br>Why is QQᵀ not I when Q has fewer columns than rows?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">31c.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="v_1 = (3, 4, 0),\ v_2 = (2, 1, 2)"></span></span>Straighten v₁ and v₂ under the dot, and build X = QR.  <br>Find the point of the plane they build closest to (0, 0, 5).</div>
+  <div class="chq"><span class="chid">31c.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="v_1 = (1, 2),\ v_2 = (2, 4),\ v_3 = (0, 1)"></span></span>Run the straightening on this list as it stands. Where does it break, and what does the break tell you about the list?  <br>How would a machine that drops every wₖ of size 0 carry on?</div>
+  <div class="chq"><span class="chid">31c.5.3</span><span class="tagq">converse</span>Straightening gives X = QR with R’s middle numbers above 0. Turn it round: if X = Q′R′ with Q′ right-angled and R′ a staircase with middle numbers above 0, must Q′ = Q and R′ = R?  <br>Use that (Q′)ᵀQ = R′R⁻¹ is a staircase whose transpose is its undoing.</div>
+  <div class="chq"><span class="chid">31c.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="1,\ x,\ x^2 \text{ on } [0, 1]"></span></span>Straighten 1, x, x² under the area product on [0, 1] instead of [−1, 1].  <br>Check your third arrow by its right angles to 1 and to x, and find the closest parabola’s reading along it for f = x³.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r31b.html">← 31b · the closest point</a><a href="r31d.html">31d · symmetric maps have square axes →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Straightening is the Gram–Schmidt process (or Gram–Schmidt orthogonalization), and the list it gives is an orthonormal basis. X = QR is the QR decomposition (or QR factorization), with Q having orthonormal columns and R upper triangular; a staircase is an upper triangular matrix. The straightened powers of x on [−1, 1] are, up to size, the Legendre polynomials.</p>
+  <h3>Who said it first</h3>
+  <p>Pierre-Simon Laplace used the steps in 1812, without the name. Jørgen Pedersen Gram set them out in 1883 for fitting series by least squares, and Erhard Schmidt gave the clean form for functions in 1907. Adrien-Marie Legendre met his polynomials in 1782, in the pull of a planet of any shape, long before anyone straightened anything. The machine methods for QR came in the 1950s: Wallace Givens by turns in the plane, and Alston Householder by mirrors, in 1958.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“e₃ is at right angles to e₂, and e₂ is at right angles to e₁, so e₃ is at right angles to e₁.” Not allowed: right angles do not chain. (1, 0), (0, 1) and (1, 0) chain right angles and the first and last are the same arrow. Each eₖ is at right angles to every earlier e because every shadow was taken away.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'take away',t:R`w_k = v_k - \textstyle\sum_{j \lt k}\langle v_k, e_j\rangle e_j`,n:`Its shadows on the arrows before.`},
+  {k:'ember',kl:'cut',t:R`e_k = w_k/\|w_k\|`,n:`Size 1.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{e_1..e_k \text{ build what } v_1..v_k \text{ build}}`,n:`At every k.`}
+],{title:'The slides · straighten · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'1, x',t:R`\langle 1, x\rangle = 0`,n:`Already at right angles.`},
+  {k:'ember',kl:'x²',t:R`x^2 - \tfrac13`,n:`Its shadow on 1 taken away.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\|x^2 - \tfrac13\|^2 = \tfrac{8}{45}}`,n:`Cut to size 1.`}
+],{title:'The slides · powers · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'columns',t:R`v_k = \|w_k\|e_k + \textstyle\sum_{j \lt k}\langle v_k, e_j\rangle e_j`,n:`Straightening, turned round.`},
+  {k:'ember',kl:'grids',t:R`\htmlClass{new}{X = QR}`,n:`Right angles times a staircase.`},
+  {k:'ember',kl:'fit',t:R`Rc = Q^{\mathsf T}y`,n:`Bottom row up.`}
+],{title:'The slides · QR · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Polynomials are everywhere near</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r31i.html">← 31i complete spaces with a size</a><a href="r31concl.html">next: 31·∎ one product gives functions lengths, angles and closest points →</a></p>
+  <div class="tags"><span class="tag proof">31j · proof</span></div>
+  <h1>Polynomials are everywhere near</h1>
+  <p data-pid="e258a2">A continuous function can be wild. Its graph can turn sharply, wiggle more and more finely, and have no slope anywhere at all. A polynomial is tame: it has slopes of every order, and it is fixed by finitely many numbers. Yet every continuous function on a closed interval has polynomials as close to it as you like, at every input at once. The proof on this step does not hunt for the polynomial. It tosses coins. Toss a coin that lands heads with chance x, many times, and look up the function at the share of heads. The average of what you find is a polynomial in x, and rung thirty’s averages that settle push it onto the function. So chance builds the polynomial, and the even continuity of rung fifteen locks the closeness at every input together. The step ends on the other side of the same coin: a function with no slope anywhere is still continuous, and polynomials still come as near to it as you like.</p>
+  <p class="gesture" data-pid="8a0e2b">Toss n coins, each heads with chance x, and average the value of f at the share of heads. The result is a polynomial of degree n in x. Because shares of heads settle, and f is evenly continuous on [0, 1], these polynomials come within any ε of f at every input at once, however wild f is.</p>
+</header>
+
+<section class="class step" data-step="31j1">
+  <h2 class="sthead"><span class="stno">31j1</span>A polynomial made of coin tosses</h2>
+  <p data-pid="617a4b">Fix x in [0, 1]. Toss n coins, independently, each heads with chance x, and let S be the number of heads. By 4k’s counting of choices and 30f’s rules, P(S = k) = C(n, k) xᵏ(1 − x)ⁿ⁻ᵏ. For a function f on [0, 1], from here on Bₙf is the polynomial</p>
+  <p class="eqline" data-pid="7d3fb3">B_nf(x) = \sum_{k=0}^{n} f\big(\tfrac kn\big)\binom nk x^k(1 - x)^{n-k} = \operatorname{E} f\big(\tfrac Sn\big)</p>
+  <p data-pid="bdfc78">the average of f at the share of heads. It has degree at most n, and its numbers are values of f.</p>
+  <p data-pid="c8de9d">Coin-average technique: <b>the share of heads S/n has average x and spread x(1 − x)/n, which is at most 1/(4n); so Bₙ1 = 1, Bₙx = x and Bₙx² = x² + x(1 − x)/n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the coin-average technique">
+S = X_1 + \cdots + X_n,\ \ X_i = 1 \text{ for heads, } 0 \text{ for tails} @@ one chance variable per coin
+\operatorname{E}X_i = x,\ \ \operatorname{Var}X_i = x - x^2 @@ X² = X; the spread-of-a-sum technique (30g2)
+\operatorname{E}\tfrac Sn = x,\ \ \operatorname{Var}\tfrac Sn = \tfrac{x(1 - x)}{n} @@ the average-adds and independent-spreads-add techniques (30g)
+x(1 - x) = \tfrac14 - (x - \tfrac12)^2 \le \tfrac14 @@ completing the square (8i)
+\htmlClass{new}{B_nx^2 = \operatorname{E}\big(\tfrac Sn\big)^2 = x^2 + \tfrac{x(1 - x)}{n}} \quad \blacksquare @@ E Y² = (E Y)² + Var Y (30g2)
+  </pre>
+  <p data-pid="671a6e">So Bₙ keeps lines exactly and misses x² by x(1 − x)/n, at most 1/(4n). It never overshoots: if f ≥ 0, then Bₙf ≥ 0, since every term is a value of f times a chance.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · coins · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">31j1.1</span><span class="ph know">know</span>What is Bₙf(x), and why is it a polynomial?  <br>What does the coin-average technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31j2">
+  <h2 class="sthead"><span class="stno">31j2</span>Near at every input at once</h2>
+  <p data-pid="d212a3">Average-polynomial technique: <b>if f is continuous on [0, 1], then ‖Bₙf − f‖∞ heads to 0: for every ε &gt; 0 some polynomial is within ε of f at every input at once. On any [u, v] the same holds, by the slide and stretch x = u + (v − u)t.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the average-polynomial technique">
+|f| \le M \text{ on } [0, 1] @@ bounded on a closed interval (12b)
+|s - t| < \delta \Rightarrow |f(s) - f(t)| < \varepsilon,\ \text{one } \delta \text{ for all } s, t @@ the evenly-continuous technique (15f)
+|B_nf(x) - f(x)| = \big|\operatorname{E}\big(f(\tfrac Sn) - f(x)\big)\big| \le \operatorname{E}\big|f(\tfrac Sn) - f(x)\big| @@ Bₙ1 = 1 (31j1); the size of an average is at most the average size
+\le \varepsilon + 2M\,P\big(|\tfrac Sn - x| \ge \delta\big) @@ split: near x the miss is below ε; elsewhere it is at most 2M
+\le \varepsilon + \tfrac{2M}{4n\delta^2} @@ the spread-bound technique (30h1), with Var(S/n) ≤ 1/(4n)
+\htmlClass{new}{\|B_nf - f\|_\infty \le 2\varepsilon \text{ once } n \ge M/(2\varepsilon\delta^2)} \quad \blacksquare @@ the bound is the same at every x
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the corner of |x − ½|">
+f(x) = |x - \tfrac12|,\ \ f(\tfrac12) = 0 @@ continuous, with no slope at ½
+B_{10}f(\tfrac12) = \operatorname{E}\big|\tfrac{S}{10} - \tfrac12\big| = \tfrac{126}{1024} \approx 0.123 @@ ten fair coins: the eleven terms C(10, k) |k/10 − ½|, added, over 2¹⁰
+B_{100}f(\tfrac12) \approx 0.0398,\ \ B_{1000}f(\tfrac12) \approx 0.0126 @@ a machine’s sums
+\htmlClass{new}{\text{the miss at the corner shrinks like } 1/\sqrt n} \quad \blacksquare @@ about √(1/(2πn)): the width of the share, as 30h foretold
+  </pre>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · loose, then locked</div>
+    <p data-pid="1d7b81">30d’s box set loose limits, each point settling at its own pace, against a fence that locks them. Here the loose part is chance: at each x, the share of heads settles at x by 30h. The lock is 15f’s even continuity: one δ serves every input, and the spread bound 1/(4n) is the same for every x.</p>
+    <p data-pid="a7bfd8"><b>Settling at each point is loose; one bound that serves every point at once locks it, and only the locked claim gives one polynomial for the whole interval.</b></p>
+    <p data-pid="572252">Without the lock, the averages would still settle at each x, and nothing would be said about all of them at once. With it, one n serves the whole interval.</p>
+    <p class="bait" data-pid="e9bf5c">A survey of salmon counts on every creek between Coos Bay and Tillamook gets more precise as it samples more. What would it take to say one sample size is enough for every creek at once?</p>
+  </aside>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · near · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31j2.1</span><span class="ph know">know</span>What does the average-polynomial technique say?  <br>In its proof, what does the spread bound do, and what does even continuity do?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31j3">
+  <h2 class="sthead"><span class="stno">31j3</span>Near in height, not in slope</h2>
+  <p data-pid="56efd8">Near in the highest height means near in every size below it, so by the size-order technique (31g2) every continuous function on [0, 1] is near a polynomial in total size and in energy size too. It does not mean near in slope. 31i2 showed that the slope is not bounded: a tiny wiggle can have a large slope. So the polynomials of 31j2 can come near a function that has no slope at all.</p>
+  <p data-pid="d3061b">Build one. Let z(x) be the distance from x to the nearest whole number: a zigzag of height ½ and slopes ±1. Let</p>
+  <p class="eqline" data-pid="73e4c7">W(x) = \sum_{k \ge 0} \frac{z(4^kx)}{2^k}</p>
+  <p data-pid="0f96c1">a sum of zigzags, each four times as fine as the last and half as tall. The kth zigzag has slopes ±2ᵏ wherever it has a slope.</p>
+  <p data-pid="772da3">Zigzag-sum technique: <b>W is continuous on the whole line, and the polynomials Bₙ come within any ε of it on [0, 1].</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the zigzag-sum technique">
+\big\|\tfrac{z(4^kx)}{2^k}\big\|_\infty = \tfrac{1}{2^{k+1}},\ \ \textstyle\sum_k \tfrac{1}{2^{k+1}} = 1 @@ the sizes add to something finite (22e)
+\text{each term is continuous} @@ a zigzag, squeezed: continuous functions composed (11)
+W \text{ is continuous} @@ the size-sum technique (31i1), in the complete space of the sup-complete technique
+\htmlClass{new}{\|B_nW - W\|_\infty \to 0} \quad \blacksquare @@ the average-polynomial technique: it needs only continuity
+  </pre>
+  <p data-pid="874730">Does W have a slope anywhere? Over the inputs where the kth zigzag runs straight, its chord slopes are ±2ᵏ, and finer zigzags add slopes that do not cancel. The proof that W has a slope at no input at all is the seam challenge of this step. Each Bₙ W is a polynomial, smooth everywhere, and the list of them comes as near as you like to a curve that has no slope anywhere.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · zigzags · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31j3.1</span><span class="ph know">know</span>Why does near in the highest height not give near in slope?  <br>What does the zigzag-sum technique say, and which techniques make W continuous?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31j4">
+  <h2 class="sthead"><span class="stno">31j4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\|p - f\|_\infty < \varepsilon \Rightarrow |p' - f'| \text{ is small}\,? @@ the slope is not bounded (31i2); f may have no slope at all
+B_nf = f \text{ for every polynomial } f \text{ of degree} \le n\,? @@ Bₙ keeps lines only: Bₙx² misses by x(1 − x)/n
+\text{the coins make the polynomial random}\,? @@ Bₙf(x) is an average, one fixed number for each x; the chance is in the proof, not the result
+\text{every function on } [0, 1] \text{ is near a polynomial in } \|\cdot\|_\infty\,? @@ only continuous ones: a step stays ½ away from every continuous function at its jump
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31j4.1</span><span class="ph know">know</span>Why is Bₙf not random, though coins built it?  <br>Why can a step on [0, 1] not be within ¼ of a polynomial at every input?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">31j.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="f(x) = x^3"></span></span>Build Bₙx³ as a polynomial, using the average of (S/n)³, and find the largest miss on [0, 1] as n grows.  <br>Check it against n = 2 by the definition.</div>
+  <div class="chq"><span class="chid">31j.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f = 0 \text{ on } [0, \tfrac12),\ \ f = 1 \text{ on } [\tfrac12, 1]"></span></span>Find Bₙf(½) for even n by the symmetry of fair coins, and where it heads.  <br>Which line of the average-polynomial proof fails, and where on [0, 1] does Bₙf still head to f?</div>
+  <div class="chq"><span class="chid">31j.5.3</span><span class="tagq">converse</span>Every continuous f on [0, 1] has polynomials within any ε at every input at once. Turn it round: if f has polynomials within any ε at every input at once, must f be continuous? Which technique of 31i answers it?</div>
+  <div class="chq"><span class="chid">31j.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="1,\ x,\ x^2,\ \ldots \text{ straightened on } [-1, 1]"></span></span>Use the average-polynomial technique to prove that the only continuous function at right angles to every polynomial on [−1, 1] is 0.  <br>What would be needed to say the same for every function of L², and which step of this rung does not yet give it?</div>
+  <div class="chq"><span class="chid">31j.5.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="W(x) = \textstyle\sum_k z(4^kx)/2^k"></span></span>Prove that W has a slope at no input. At a given x, take hₘ = ±½ · 4⁻ᵐ, with the sign that keeps x and x + hₘ on one straight run of the mth zigzag. Show that the zigzags past the mth add nothing across it, that the chord slope of W is then ±1 ± 2 ± 4 ± ⋯ ± 2ᵐ, and that the chord slopes for m and for m + 1 differ by 2ᵐ⁺¹.  <br>One side, when the first such curve was printed, turned away from it in horror and called it a monster, a disease of continuity. The same author had proved polynomials are everywhere near. Later it was proved that, in a precise sense, almost every continuous function has a slope nowhere.  <br>Is the monster the exception, as the polynomials suggest, or the rule? Which answer does this step’s last footing support?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r31i.html">← 31i · complete spaces with a size</a><a href="r31concl.html">31·∎ · one product gives functions lengths, angles and closest points →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Bₙf is the Bernstein polynomial of f, and the average-polynomial technique is the Weierstrass approximation theorem, proved here by Bernstein’s probabilistic method. Near at every input at once is uniform approximation, and a set near to every member of a space is dense. A continuous function with no slope anywhere is a nowhere-differentiable function; W is one of the family of Takagi–van der Waerden functions, and the first such curve is the Weierstrass function. That most continuous functions are of this kind, in the sense of Baire category, is the Banach–Mazurkiewicz theorem.</p>
+  <h3>Who said it first</h3>
+  <p>Karl Weierstrass presented a continuous function with no slope anywhere to the Berlin Academy in 1872, and proved in 1885 that every continuous function on a closed interval is a uniform limit of polynomials. Charles Hermite wrote to Thomas Stieltjes in 1893 that he turned away “with fright and horror from this lamentable plague of continuous functions which have no derivatives”, and Henri Poincaré called such functions monsters, made to show the arguments of the fathers wrong. Sergei Bernstein gave the coin proof in 1912. Teiji Takagi built a zigzag sum in 1903, and Bartel van der Waerden the one with factor 4 in 1930. Stefan Banach and Stefan Mazurkiewicz proved in 1931 that the functions with a slope somewhere are, in Baire’s sense, a thin set among the continuous ones.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Each Bₙ W has a slope everywhere and Bₙ W heads to W, so W has a slope everywhere.” Not allowed: a list that settles in highest height says nothing about slopes, as 31i2 showed for the wiggles (1/n) sin(nx).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'the polynomial',t:R`B_nf(x) = \operatorname{E}f(S/n)`,n:`f at the share of heads.`},
+  {k:'ember',kl:'share',t:R`\operatorname{E}\tfrac Sn = x,\ \operatorname{Var}\tfrac Sn \le \tfrac{1}{4n}`,n:`Settles at x.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{B_nx^2 = x^2 + \tfrac{x(1-x)}{n}}`,n:`Lines kept exactly.`}
+],{title:'The slides · coins · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'split',t:R`\le \varepsilon + 2M\,P(|S/n - x| \ge \delta)`,n:`Near and far.`},
+  {k:'ember',kl:'bound',t:R`\le \varepsilon + \tfrac{2M}{4n\delta^2}`,n:`Spread bound.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\|B_nf - f\|_\infty \to 0}`,n:`At every input at once.`}
+],{title:'The slides · near · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'each',t:R`z(4^kx)/2^k`,n:`Finer, lower.`},
+  {k:'ember',kl:'sizes',t:R`\textstyle\sum 2^{-(k+1)} = 1`,n:`Size-sum.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{W \text{ continuous},\ \|B_nW - W\|_\infty \to 0}`,n:`Near, with no slope.`}
+],{title:'The slides · zigzags · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

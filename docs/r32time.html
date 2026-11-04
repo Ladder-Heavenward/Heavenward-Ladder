@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sometimes time has holes, and apparently that's ok (II)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r32nav.html">← 32·nav how can tides be predicted years ahead?</a><a href="r32now.html">next: 32·now can a signal be rebuilt from fewer samples? →</a></p>
+  <div class="tags"><span class="tag now">32·G · research front</span></div>
+  <h1>Sometimes time has holes, and apparently that's ok (II)</h1>
+  <p data-pid="344d5d">Sometimes time has holes, and apparently that’s ok. 29·G rebuilt mechanics with time in steps, a body at one place each tick and nowhere between, and found that the stepped law keeps a momentum exactly and keeps the area of every patch of states, at any size of step. It found something odd too: the energy was not kept, and yet it never wandered far. Two years later a dissertation carried the stepped mechanics further, and asked what keeping area buys and what it costs. This rung gives a new way to look. A stepped spring, like a flowing one, has solutions that are turnings, but stepped ones: each tick turns them by a fixed angle. Keeping area turns out to be exactly what makes the stepped turnings stay on the circle instead of spiralling out, as the plain way of stepping does. The cost is a small error in the pace: the stepped spring turns a little faster than the real one, by an amount the turnings let us compute exactly. This page builds those three facts, and then says what the dissertation proved beyond them and what is still open.</p>
+  <p class="gesture" data-pid="d892a9">Try a stepped turning, the kth power of a number z, in the stepped spring: z must solve z squared minus c z plus one equals zero, so the two roots multiply to one. When the step is small enough they are a turning and its flip, and the solutions go round without growing. Any straight step that keeps area has eigenvalues that multiply to one, so if they are not real they sit on the circle; the plain step has eigenvalues of size more than one and spirals out. The stepped turning goes round a little faster than the flowing one, by about one part in twenty-four times the square of the step times the speed.</p>
+</header>
+
+<section class="class step" data-step="32time1">
+  <h2 class="sthead"><span class="stno">32time1</span>The stepped spring turns</h2>
+  <p data-pid="154d5d">29·G’s stepped law for a spring, V = ½mω²x², with ticks of length h, is x_(k+1) = c x_k − x_(k−1), with c = 2 − ω²h². Try a stepped turning: xₖ = zᵏ for a fixed complex number z.</p>
+  <p data-pid="5c1238">Stepped-turning technique: <b>if ωh &lt; 2, every solution of the stepped spring is a sum of the stepped turnings e^(iθk) and e^(−iθk), with cos θ = 1 − ω²h²/2; they neither grow nor shrink.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the stepped-turning technique">
+z^{k+1} = c\,z^k - z^{k-1} \iff z^2 - cz + 1 = 0 @@ divide by z^(k−1); z ≠ 0
+z_1z_2 = 1,\ \ z_1 + z_2 = c @@ the roots of a quadratic (8i)
+|c| \lt 2 \iff \omega h \lt 2 @@ c = 2 − ω²h² lies in (−2, 2)
+z = \tfrac{c}{2} \pm i\sqrt{1 - \tfrac{c^2}{4}} = e^{\pm i\theta},\ \ \cos\theta = \tfrac c2 @@ the quadratic formula; a point of the circle of size 1 (21·cb20)
+\htmlClass{new}{x_k = A\,e^{i\theta k} + B\,e^{-i\theta k},\ \ \cos\theta = 1 - \tfrac{\omega^2h^2}{2}} \quad \blacksquare @@ two starts fix A and B, and two solutions of the step make every one (27a)
+  </pre>
+  <p data-pid="5d2801">With ωh &gt; 2 the roots are real, one of them below −1, and the stepped places flip sign and grow every tick: the step is too long for the spring, as 29·G’s illegal moves warned.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · stepped turning · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">32·G.1.1</span><span class="ph know">know</span>What does the stepped-turning technique say? <br>Why do the two roots of z² − cz + 1 = 0 lie on the circle when ωh &lt; 2?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32time2">
+  <h2 class="sthead"><span class="stno">32time2</span>Keeping area keeps the circle</h2>
+  <p data-pid="6c4d74">29·G.3 wrote the stepped law as a map of pairs of places, (x_(k−1), x_k) ↦ (x_k, x_(k+1)), with determinant 1. For the spring the map is straight, with grid (0, 1; −1, c).</p>
+  <p data-pid="dc2ca7">Unit-product technique: <b>a straight step map of the plane that keeps area has two eigenvalues whose product is 1; so if they are not real, both have size 1, and every solution turns without growing.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the unit-product technique">
+\lambda_1\lambda_2 = \det = 1 @@ the eigenvalues multiply to the determinant (27f, 27e); keeping area means |det| = 1 (28i)
+\lambda_2 = \overline{\lambda_1} \text{ if they are not real} @@ the grid is real, so its roots come in flipped pairs (25e)
+|\lambda_1|^2 = \lambda_1\overline{\lambda_1} = 1 @@ z z̄ = |z|²
+\text{plain step: grid } \begin{pmatrix} 1 & h\\ -\omega^2h & 1\end{pmatrix},\ \ \lambda = 1 \pm i\omega h @@ 29·G.3’s plain step, its own characteristic polynomial (27f)
+\htmlClass{new}{|1 \pm i\omega h| = \sqrt{1 + \omega^2h^2} \gt 1:\ \text{the plain step spirals out}} \quad \blacksquare @@ its determinant is 1 + ω²h², not 1
+  </pre>
+  <p data-pid="bbcd11">Follow 29·G’s Moon as a spring about the Earth with one-day ticks: ω = 2π/27.32 per day, so ωh = 0.230. The plain step grows the swing by √(1 + 0.230²) = 1.026 a day, which doubles it in a month. The stepped law keeps it, for ever. The difference is the determinant, and nothing else.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · circle · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·G.2.1</span><span class="ph know">know</span>What does the unit-product technique say? <br>Why does the plain step spiral out while the stepped law does not?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32time3">
+  <h2 class="sthead"><span class="stno">32time3</span>The stepped spring is a little fast</h2>
+  <p data-pid="cd9077">The flowing spring turns by ωh in a tick. The stepped one turns by θ.</p>
+  <p data-pid="a1f57f">Stepped-pace technique: <b>the stepped spring turns by θ = 2 arcsin(ωh/2) each tick, a little more than ωh: about ωh(1 + ω²h²/24).</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the stepped-pace technique">
+\cos\theta = 1 - \tfrac{\omega^2h^2}{2} @@ the stepped-turning technique (32·G.1)
+1 - \cos\theta = 2\sin^2\tfrac\theta2 @@ the half-turn formula (21e)
+\sin\tfrac\theta2 = \tfrac{\omega h}{2},\ \ \theta = 2\arcsin\tfrac{\omega h}{2} @@ θ in (0, π)
+\arcsin u = u + \tfrac{u^3}{6} + \cdots @@ its series (23h)
+\htmlClass{new}{\theta = \omega h\big(1 + \tfrac{\omega^2h^2}{24} + \cdots\big)} \quad \blacksquare @@ u = ωh/2
+  </pre>
+  <p data-pid="a67d6c">The stepped Moon, with ωh = 0.230, goes round in 2π/θ = 27.26 ticks against 27.32 days: two tenths of a per cent fast. The error does not grow with time as a size; it grows as a lag, a fixed amount each turn. A stepped orbit stays an orbit, and its clock runs a little fast. Halve the tick, and the clock error falls to a quarter.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · pace · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·G.3.1</span><span class="ph know">know</span>What does the stepped-pace technique say? <br>What kind of error does a stepped law that keeps area make, and how does it shrink with the tick?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32time4">
+  <h2 class="sthead"><span class="stno">32time4</span>What the dissertation adds, and what is open</h2>
+  <p data-pid="12e179">Proved, 1996. A dissertation set the stepped mechanics of 29·G on a general footing: any stepped action, for any number of bodies and any stored energy, gives a stepped law; every symmetry of the stepped action keeps a stepped quantity; and the stepped law always keeps the area form of the states, the general kind of area that 29·G kept for one body. It also built stepped laws from the transforms that join one set of states to another.</p>
+  <p data-pid="e9f9f9">Proved, in the years after. A stepped law that keeps area keeps a nearby energy for a number of ticks that grows like e to a constant over h, and its errors are errors of pace, as in 32·G.3, not of size. Stepped laws are now the way the solar system is followed for billions of years, and the way molecules are followed in a computer.</p>
+  <p data-pid="df5f34">Open. Whether a stepped law can keep area, momentum and energy all at once, exactly, for a general body: it is proved that with a fixed tick it cannot, unless it is the exact flow, and a tick that changes from step to step is one way out, still being worked on. Open, as on 29·G: whether time in nature comes in steps.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · open · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·G.4.1</span><span class="ph know">know</span>What did the dissertation prove about stepped laws? <br>What is still open about keeping area, momentum and energy at once?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32time5">
+  <h2 class="sthead"><span class="stno">32time5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{the stepped spring turns by } \omega h \text{ each tick}\,? @@ by θ = 2 arcsin(ωh/2), a little more
+\text{keeping area keeps the solutions on the circle for any } h\,? @@ only while the eigenvalues are not real: ωh &lt; 2
+\text{the plain step is fine with a small enough tick}\,? @@ it spirals out by √(1 + ω²h²) every tick, at every h
+\text{a stepped law that keeps area has no error}\,? @@ its error is in the pace, and grows as a lag
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·G.5.1</span><span class="ph know">know</span>Why is “the stepped spring turns by ωh each tick, as the flowing spring does” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">32·G.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x_0 = 1,\ x_1 = \cos\theta,\ \ \omega h = 1"></span></span>Build the first six stepped places by the law, and check them against cos(θk), with cos θ = ½. Find θ and the stepped period in ticks.</div>
+  <div class="chq"><span class="chid">32·G.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\omega h = 2"></span></span>Find the roots of z² − cz + 1 = 0, and what the stepped places do. Is the area still kept? Which line of the unit-product technique fails?</div>
+  <div class="chq"><span class="chid">32·G.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="|\lambda_1| = |\lambda_2| = 1"></span></span>If a straight step map has both eigenvalues of size 1, must it keep area? Must it be a stepped law of 29·G? Test the grid (0, −1; 1, 0).</div>
+  <div class="chq"><span class="chid">32·G.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="x_k = e^{i\theta k}"></span></span>Find the stepped period a second way, with 32k’s turnings on N points: for which h does the stepped spring repeat after exactly N ticks? Find h for N = 6.</div>
+  <div class="chq"><span class="chid">32·G.6.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">32·G.3: an orbit kept, a clock a little fast</span></span>One side holds that a stepped simulation that keeps every orbit closed but runs its clock a little fast is more faithful than one that is more accurate over a week but lets orbits spiral. The other holds that the right simulation is the one with the smaller error at the time you care about. <br>Which is the better simulation of the solar system: the one that keeps its shape, or the one that is closer today?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r32nav.html">← 32·nav · how can tides be predicted years ahead?</a><a href="r32now.html">32·now · can a signal be rebuilt from fewer samples? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The stepped turnings are the discrete normal modes of the leapfrog (Störmer–Verlet) method, and θ its numerical frequency; the stepped-pace technique gives its phase error, of order h². The unit-product technique is the eigenvalue property of symplectic matrices (for the plane, determinant 1), which keeps linear symplectic methods on the unit circle; ωh &lt; 2 is the leapfrog stability limit. The plain step is explicit Euler. The general area kept is the symplectic form, and stepped laws built from generating functions are symplectic integrators by generating functions. The open problem is the Ge–Marsden theorem: a fixed-step symplectic integrator that also conserves energy exactly is, for a general system, the exact flow up to a reparametrisation of time.</p>
+  <h3>Who said it first</h3>
+  <p>The dissertation this page is named for is James W. Gilliam, Lagrangian and Symplectic Techniques in Discrete Mechanics, University of California, Riverside (1996), written under John Baez, after their paper of 1994 (29·G). Zhong Ge and Jerrold Marsden proved in 1988 that a fixed-step method cannot keep area and energy at once for a general system. Ernst Hairer, Christian Lubich and Gerhard Wanner gathered the theory in Geometric Numerical Integration (2002). Jack Wisdom and Matthew Holman’s stepped map of 1991 followed the planets for billions of years and found the inner solar system chaotic.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The stepped law keeps area, so it keeps energy, since for a spring energy is area.” Not allowed: a patch of states keeps its area while it is turned and sheared, and energy is the size of one state, not a patch. The stepped spring keeps patches and moves each state at a slightly wrong pace, so the energy wobbles, as 29·G found.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'try',t:R`x_k = z^k`,n:`A stepped turning.`},
+  {k:'ember',kl:'roots',t:R`z^2 - cz + 1 = 0,\ z_1z_2 = 1`,n:`Product 1.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{z = e^{\pm i\theta}}`,n:`On the circle.`}
+],{title:'The slides · stepped turning · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'product',t:R`\lambda_1\lambda_2 = \det = 1`,n:`Area kept.`},
+  {k:'ember',kl:'flipped',t:R`|\lambda|^2 = \lambda\bar\lambda = 1`,n:`On the circle.`},
+  {k:'ember',kl:'plain',t:R`\htmlClass{new}{|1 \pm i\omega h| \gt 1}`,n:`Spirals out.`}
+],{title:'The slides · circle · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'angle',t:R`\cos\theta = 1 - \tfrac{\omega^2h^2}{2}`,n:`Each tick.`},
+  {k:'ember',kl:'half',t:R`\sin\tfrac\theta2 = \tfrac{\omega h}{2}`,n:`21e.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\theta \approx \omega h(1 + \tfrac{\omega^2h^2}{24})}`,n:`A little fast.`}
+],{title:'The slides · pace · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'proved',t:R`\text{symmetry} \Rightarrow \text{kept}`,n:`Any stepped action.`},
+  {k:'ember',kl:'proved',t:R`e^{c/h} \text{ ticks}`,n:`Nearby energy.`},
+  {k:'ember',kl:'open',t:R`\text{all three at once}`,n:`Not with a fixed tick.`}
+],{title:'The slides · open · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\theta = \omega h\,?`,n:`A little more.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

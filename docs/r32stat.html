@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Why does the bell curve keep turning up?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r32l.html">← 32l where oscillating integrals live</a><a href="r32then.html">next: 32·then what can a spectrum tell us? →</a></p>
+  <div class="tags"><span class="tag stat">32·stat · statistics</span></div>
+  <h1>Why does the bell curve keep turning up?</h1>
+  <p data-pid="79e16b">Why does the bell curve keep turning up? Heights of adults in Oregon, errors in a surveyor’s chain across the Willamette Valley, the weight of a bag of rice off a packing line in Sacramento, the average of a poll: plot any of them and the same shape appears, high in the middle and thinning at the edges in the same way. The things measured have nothing to do with each other. Rung 30 proved that a rescaled sum of many independent parts heads to the bell, but its proof asked each part to have an average-function, and many measured things have none. What makes the question hard is that the bell seems to come from nowhere: no single part is a bell. This page answers with turnings. Every chance variable has a turning average, which always exists. Turning averages of independent parts multiply. Near zero every one of them looks the same, up to its spread. Multiply many, and the bell’s own turning average is what comes out. And the page ends with a case where the bell does not turn up at all, and why.</p>
+  <p class="gesture" data-pid="5eb5ba">Average a turning of a chance variable: the result exists for every variable, starts at one and has size at most one. For independent parts, the turning average of the sum is the product of theirs. Near zero, every turning average with a finite spread is one, plus i times the average times t, minus half the second power average times t squared. Rescale a sum, multiply its parts’ turning averages, and the product heads to e to the minus t squared over two, which is the bell’s own. Where the spread is endless, as for the spots of a lighthouse beam on a beach, the average of many is no narrower than one.</p>
+</header>
+
+<section class="class step" data-step="32stat1">
+  <h2 class="sthead"><span class="stno">32stat1</span>The turning average</h2>
+  <p data-pid="53630b">For a chance variable X and a real t, the <i>turning average</i> of X is ψ(t) = E e^(itX), the average of a turning of speed t read at X. When X has a density f, it is ∫ f(x)e^(itx) dx, the transform of 32e read at the frequency −t/(2π).</p>
+  <p data-pid="bde17a">Turning-average technique: <b>every chance variable has a turning average; it has ψ(0) = 1, size at most 1, and is continuous in t.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the turning-average technique">
+|e^{itX}| = 1 @@ a turning has size 1 (26b)
+\psi(t) = \operatorname{E}\cos tX + i\operatorname{E}\sin tX \text{ exists} @@ bounded sized functions have averages (30g)
+|\psi(t)| \le \operatorname{E}|e^{itX}| = 1,\ \ \psi(0) = \operatorname{E}1 = 1 @@ the size of an average is at most the average of the size
+\htmlClass{new}{t_k \to t \Rightarrow \psi(t_k) \to \psi(t)} \quad \blacksquare @@ the fenced-limit technique (30d), with fence 1
+  </pre>
+  <p data-pid="3d498c">30j’s average-function E e^(tX) can be endless at every t ≠ 0, as it is for the spots of 32·stat.5. The turning average never is: that is what the i buys.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · turning average · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">32·stat.1.1</span><span class="ph know">know</span>What is the turning average of a chance variable? <br>What does the turning-average technique say, and why does it always exist?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32stat2">
+  <h2 class="sthead"><span class="stno">32stat2</span>Sums multiply, and every start looks alike</h2>
+  <p data-pid="6e69c3">Sum-turnings technique: <b>for independent X and Y, the turning average of X + Y is the product of theirs; and if X has average μ and finite E X², then near 0, ψ(t) = 1 + iμt − ½E X² t² + r(t), with r(t)/t² heading to 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the sum-turnings technique">
+e^{it(X + Y)} = e^{itX}e^{itY} @@ the plane-adding technique (26b)
+\operatorname{E}(e^{itX}e^{itY}) = \operatorname{E}e^{itX}\cdot\operatorname{E}e^{itY} @@ the independent-averages-multiply technique (30g), for the floor and upright parts, multiplied out
+e^{iu} = 1 + iu - \tfrac12u^2 + \rho(u),\ \ |\rho(u)| \le \min(u^2,\ |u|^3/6) @@ the remainder (23b), for the floor and upright parts
+\operatorname{E}|\rho(tX)|/t^2 \le \operatorname{E}\min(X^2,\ |t||X|^3/6) \to 0 @@ the fenced-limit technique (30d), with fence X²
+\htmlClass{new}{\psi_{X+Y} = \psi_X\psi_Y,\ \ \psi(t) = 1 + i\mu t - \tfrac12\operatorname{E}X^2\,t^2 + o(t^2)} \quad \blacksquare @@ average the expansion at u = tX
+  </pre>
+  <p data-pid="ef0234">So near 0 a turning average sees only the average and the spread. Every other feature of the chance law, its lumps and its lean, is pushed out to larger t.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · multiply · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·stat.2.1</span><span class="ph know">know</span>What does the sum-turnings technique say about sums, and about ψ near 0? <br>What does the fence X² need from X?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32stat3">
+  <h2 class="sthead"><span class="stno">32stat3</span>The bell’s own turning average</h2>
+  <p data-pid="b1322b">The bell of 30j has density φ(x) = e^(−x²/2)/√(2π).</p>
+  <p data-pid="9a598d">Bell-turning technique: <b>the bell’s turning average is e^(−t²/2): a bell again.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the bell-turning technique">
+\psi(t) = \int\tfrac{1}{\sqrt{2\pi}}e^{-x^2/2}\,e^{itx}\,dx @@ the turning average of a density
+x = \sqrt{2\pi}\,y:\ \ \psi(t) = \int e^{-\pi y^2}\,e^{-2\pi iy(-t/\sqrt{2\pi})}\,dy @@ slide the variable
+= e^{-\pi(t/\sqrt{2\pi})^2} @@ the own-transform technique (32e2)
+\htmlClass{new}{\psi(t) = e^{-t^2/2}} \quad \blacksquare @@ π t²/(2π) = t²/2
+  </pre>
+  <p data-pid="cfa487">A bell with spread σ² has e^(−σ²t²/2). Multiply two, for independent bells: e^(−(σ₁² + σ₂²)t²/2), a bell whose spread is the sum of theirs. A sum of independent bells is a bell, with no limit needed.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · bell · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·stat.3.1</span><span class="ph know">know</span>What does the bell-turning technique say? <br>What does it give for the sum of two independent bells?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32stat4">
+  <h2 class="sthead"><span class="stno">32stat4</span>Every rescaled sum heads to the bell</h2>
+  <p data-pid="113e31">Let X₁, X₂, … be independent copies of X, with average μ and finite spread σ² &gt; 0. Nothing more is asked: no average-function. Let Zₙ = (X₁ + ⋯ + Xₙ − nμ)/(σ√n).</p>
+  <p data-pid="defac4">Turning-limit technique: <b>the turning average of Zₙ heads to e^(−t²/2), the bell’s, at every t.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the turning-limit technique">
+Y = \tfrac{X - \mu}{\sigma}:\ \ \operatorname{E}Y = 0,\ \ \operatorname{E}Y^2 = 1 @@ 30g
+\psi_{Z_n}(t) = \psi_Y\big(\tfrac{t}{\sqrt n}\big)^n @@ the sum-turnings technique, n times
+\psi_Y\big(\tfrac{t}{\sqrt n}\big) = 1 - \tfrac{t^2}{2n} + o\big(\tfrac1n\big) @@ the start, at t/√n
+\big(1 - \tfrac{t^2/2 + o(1)}{n}\big)^n \to e^{-t^2/2} @@ (1 − λ/N)ᴺ heads to e^(−λ) (22j), with λ heading to t²/2
+\htmlClass{new}{\psi_{Z_n}(t) \to e^{-t^2/2}} \quad \blacksquare @@ the bell-turning technique
+  </pre>
+  <p data-pid="c4aef2">Rung 30 held one step in trust on 30j: that matching limits of average-functions give matching limits of chances. The same trust carries over to turning averages, and it is still held: by the undo-transform technique of 32e a chance law with a density is fixed by its turning average, but that matching limits give matching chances is proved much higher up the ladder. What this page adds is that the trust no longer needs the average-function at all, only a finite spread.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the middle of a change</div>
+    <p data-pid="054f48">A packing line in Sacramento fills bags of rice. Each bag’s weight is the sum of thousands of small pours, each a little more or less than planned, for reasons no one tracks: a grain that bounces, a gust from a door, the wear of a valve.</p>
+    <p data-pid="326be9"><b>The bell is the shape a sum passes through once its parts have faded into their averages and spreads.</b></p>
+    <p data-pid="213a89">Near 0 the turning average of each pour sees only its average and spread. Multiply thousands of them, and every other feature fades from view; what is left is the bell. The weights are anexact, and no one knows any pour’s story. The bell is rigorous, because the step from many parts to one shape is a technique.</p>
+    <p class="bait" data-pid="91cde3">If one valve on the line stuck now and then and dumped a whole extra cup, would the weights still form a bell? What would you check first?</p>
+  </aside>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · limit · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·stat.4.1</span><span class="ph know">know</span>What does the turning-limit technique say, and what does it ask of the parts? <br>What part of 30j’s trust does it remove, and what is still held?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32stat5">
+  <h2 class="sthead"><span class="stno">32stat5</span>When the bell does not turn up</h2>
+  <p data-pid="eaad18">A lighthouse stands 1 km off the straight beach at Long Beach, Washington. Its beam points at a random angle, all angles facing the shore equally likely, and lights a spot on the sand at a distance X from the point nearest the light. Then X = tan Θ with Θ spread evenly on (−π/2, π/2), and X has density 1/(π(1 + x²)).</p>
+  <p data-pid="d9a049">Heavy-tail technique: <b>for the lighthouse spots, ψ(t) = e^(−|t|), so the average of n independent spots has the same chances as a single spot: averaging does not narrow it.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the heavy-tail technique">
+\int e^{-|x|}e^{-2\pi i x\xi}\,dx = \tfrac{2}{1 + 4\pi^2\xi^2} @@ the build challenge of 32e: split at 0
+\int\tfrac{1}{\pi(1 + x^2)}\,e^{itx}\,dx = e^{-|t|} @@ the undo-transform technique (32e3), slid to the variable t
+\psi_{\bar X_n}(t) = \psi\big(\tfrac tn\big)^n = \big(e^{-|t|/n}\big)^n = e^{-|t|} @@ the sum-turnings technique, then divide by n
+\htmlClass{new}{\bar X_n \text{ has the same turning average as one spot}} \quad \blacksquare @@ and so the same chances (32e3)
+  </pre>
+  <p data-pid="539d90">The spots have no average: ∫|x|/(π(1 + x²)) is endless (16i). 30h’s averages-settle technique needs an average, and the turning-limit technique a spread. Without them, an average of a thousand spots is no better than one. Some measured things are built from rare huge events, floods and market crashes among them, and for those the bell turns up less than people expect.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · heavy tail · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·stat.5.1</span><span class="ph know">know</span>What does the heavy-tail technique say about the lighthouse spots? <br>Which demand of the turning-limit technique do the spots fail?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32stat6">
+  <h2 class="sthead"><span class="stno">32stat6</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{every average of many independent tries is near a bell}\,? @@ only with a finite spread; the lighthouse spots never narrow
+\psi_{X+Y} = \psi_X + \psi_Y\,? @@ turning averages of independent parts multiply
+\text{the turning average needs } \operatorname{E}e^{tX} \text{ finite}\,? @@ it always exists, with size at most 1
+\text{a sum of independent bells is a bell only in the limit}\,? @@ it is a bell exactly, for every number of parts
+  </pre>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·stat.6.1</span><span class="ph know">know</span>Why is “every average of many independent tries is near a bell” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">32·stat.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="X = \pm 1 \text{ with chance } \tfrac12 \text{ each}"></span></span>Find ψ for X, and for the sum of n copies divided by √n. Find the limit at t = 1, and compare (cos(1/√n))ⁿ with e^(−1/2) for n = 10 and n = 100.</div>
+  <div class="chq"><span class="chid">32·stat.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\psi(t) = e^{-|t|^{\alpha}},\ 0 \lt \alpha \le 2"></span></span>For which α does the sum of n copies, divided by n^(1/α), have the same turning average again? Find which α gives the bell and which the lighthouse.</div>
+  <div class="chq"><span class="chid">32·stat.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\psi_{Z_n}(t) \to e^{-t^2/2}"></span></span>Must the parts have a finite spread for the rescaled sums to head to the bell? Find what the start of ψ near 0 must look like, and whether a part with an endless spread could still do it.</div>
+  <div class="chq"><span class="chid">32·stat.7.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{30j’s central limit technique}"></span></span>Redo 30j3’s proof with the turning average in place of the average-function, line by line. Find each line that used the average-function being finite, and what replaces it.</div>
+  <div class="chq"><span class="chid">32·stat.7.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">30j: the bell, and errors of measurement</span></span>One side, in the nineteenth century, held that the bell is a law of nature: errors are bells, heights are bells, crimes counted by year are bells. The other held that the bell is a mathematical fact about sums, and appears only where a sum of many small independent parts is truly at work. <br>Which is the bell: a law, or a technique? What would decide it in a given case?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r32l.html">← 32l · where oscillating integrals live</a><a href="r32then.html">32·then · what can a spectrum tell us? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The turning average is the characteristic function φ_X(t) = E e^(itX). The sum-turnings technique gives the multiplicativity of characteristic functions for independent sums and their second-order Taylor expansion. The turning-limit technique is the central limit theorem (Lindeberg–Lévy) proved by characteristic functions; the step still held in trust is Lévy’s continuity theorem. The lighthouse spots follow the Cauchy distribution, and the laws with e^(−|t|^α) are the stable laws, α the stability index; α = 2 is the normal law. Laws whose tails thin like a power are heavy-tailed.</p>
+  <h3>Who said it first</h3>
+  <p>Pierre-Simon Laplace used turning averages for sums of errors in 1810. Augustin-Louis Cauchy found in 1853 the law that bears his name and that averaging does not narrow it, against Irénée-Jules Bienaymé. Aleksandr Lyapunov proved the central limit theorem by these averages in 1901, and Jarl Lindeberg in 1922 and Paul Lévy in the 1920s and 1930s gave its classic forms; Lévy also found the stable laws. In 32·stat.7.5, Adolphe Quetelet held the bell to be nature’s law of the average man (1835), and Francis Galton called it a law of frequency of error that reigns with serenity; Henri Poincaré reported the quip that everyone believes in it, the experimenters because they think it a theorem of mathematics, the mathematicians because they think it a fact of observation.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Each spot is a tangent of an even angle, so the average of many is the tangent of an average angle, and the average angle heads to 0.” Not allowed: the average of tangents is not the tangent of the average. The angles average to a bell around 0, but the spots do not.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'turn',t:R`\psi(t) = \operatorname{E}e^{itX}`,n:`A turning, averaged.`},
+  {k:'ember',kl:'size',t:R`|\psi(t)| \le 1`,n:`Size 1 each.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\psi \text{ always exists}}`,n:`Unlike E e^(tX).`}
+],{title:'The slides · turning average · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'sum',t:R`\psi_{X+Y} = \psi_X\psi_Y`,n:`Independent.`},
+  {k:'ember',kl:'start',t:R`1 + i\mu t - \tfrac12\operatorname{E}X^2t^2`,n:`Average and spread.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{near 0, all alike}}`,n:`Up to spread.`}
+],{title:'The slides · multiply · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'density',t:R`\tfrac{1}{\sqrt{2\pi}}e^{-x^2/2}`,n:`30j.`},
+  {k:'ember',kl:'slide',t:R`x = \sqrt{2\pi}y`,n:`To 32e2’s bell.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\psi(t) = e^{-t^2/2}}`,n:`Its own.`}
+],{title:'The slides · bell · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'rescale',t:R`Z_n = \tfrac{\sum X_i - n\mu}{\sigma\sqrt n}`,n:`Average 0, spread 1.`},
+  {k:'ember',kl:'multiply',t:R`\psi_Y(t/\sqrt n)^n`,n:`n parts.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\to e^{-t^2/2}}`,n:`The bell, from any start.`}
+],{title:'The slides · limit · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'spot',t:R`\tfrac{1}{\pi(1+x^2)}`,n:`A tangent of an even angle.`},
+  {k:'ember',kl:'turning',t:R`\psi(t) = e^{-|t|}`,n:`Undo 32e.6.1.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\psi_{\bar X_n} = \psi}`,n:`No narrowing.`}
+],{title:'The slides · heavy tail · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'illegal',t:R`\text{always a bell}\,?`,n:`Not without a spread.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

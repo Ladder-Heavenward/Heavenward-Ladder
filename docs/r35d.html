@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Two one-way matchings make a matching</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r35c.html">← 35c more parts than members</a><a href="r35e.html">next: 35e arithmetic of sizes →</a></p>
+  <div class="tags"><span class="tag proof">35d · proof</span></div>
+  <h1>Two one-way matchings make a matching</h1>
+  <p data-pid="e91a0e">A one-to-one map from one set into another is half a matching. It pairs every member of the first set with a different member of the second, and may leave some of the second unpaired. Call it a one-way matching. Suppose there is a one-way matching each way, from the first set into the second and from the second into the first. Must the two sets be matched? For finite sets, counting says yes at once. For endless sets nothing can be counted, and the two maps can tangle. This step untangles them. Start from the members of the first set that the second map misses, and follow where the two maps send them, back and forth, for ever. The members caught on that endless chase are sent across by the first map. Everyone else is sent back along the second. The result is a matching, and the proof picks nothing. So the order on sizes behaves: no bigger each way means the same size. The step ends with a harder question. Must any two sets compare at all? With choice, they must.</p>
+  <p class="gesture" data-pid="3ac614">Follow the members the second map misses, back and forth through both maps. Send the ones caught on that chase across by the first map, and the rest back by the second. That is a matching, and nothing was picked. With choice, any two sets compare.</p>
+</header>
+
+<section class="class step" data-step="35d1">
+  <h2 class="sthead"><span class="stno">35d1</span>Back and forth</h2>
+  <p data-pid="cc31e7">35c2 wrote |A| ≤ |B| for “A goes one-to-one into B”. It chains: one-to-ones compose (<a href="r09c.html">9c3</a>), so |A| ≤ |B| and |B| ≤ |C| give |A| ≤ |C|. What it lacked was the step back: from no bigger each way to the same size.</p>
+  <p data-pid="16e9f6">Two-one-way technique: <b>if A goes one-to-one into B and B goes one-to-one into A, then A and B are matched.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-one-way technique">
+f : A \to B,\ \ g : B \to A,\ \text{both one-to-one} @@ the two one-way matchings
+C_0 = A \setminus g[B],\ \ C_{n+1} = g[f[C_n]] @@ start where g misses; then across by f and back by g; a definition by repeating (4d); g[B] is the image of B
+C = C_0 \cup C_1 \cup C_2 \cup \cdots @@ every member caught on the chase
+h(x) = f(x) \text{ if } x \in C,\ \ h(x) = g^{-1}(x) \text{ if } x \notin C @@ x ∉ C means x ∉ C₀, so x = g(y) for exactly one y (9d)
+h \text{ one-to-one: } f(x) = g^{-1}(x') \text{ with } x \in C_n,\ x' \notin C \Rightarrow x' = g(f(x)) \in C_{n+1} @@ the only case to check; f and g⁻¹ are one-to-one on their own; it clashes with x′ ∉ C
+h \text{ onto: } y \in B,\ \ g(y) \notin C \Rightarrow h(g(y)) = y @@ if g(y) ∉ C, y is reached through g⁻¹
+g(y) \in C \Rightarrow g(y) \in C_{n+1},\ \text{so } g(y) = g(f(x)),\ x \in C_n,\ y = f(x) = h(x) @@ g(y) ∉ C₀, since C₀ misses g[B]; g is one-to-one
+\htmlClass{new}{h : A \to B \text{ is a matching}} \quad \blacksquare @@ one-to-one and onto
+  </pre>
+  <p data-pid="68204f">No line picks anything. C is built by repeating, h by cases on x ∈ C (<a href="r07d.html">7d</a>). So |A| ≤ |B| and |B| ≤ |A| give |A| = |B|, in every world of the axioms, with or without choice.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · back and forth · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">35d1.1</span><span class="ph know">know</span>What does the two-one-way technique say? <br>Where does the chase C start, and which map does h use on C and which off it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35d2">
+  <h2 class="sthead"><span class="stno">35d2</span>Closed against open</h2>
+  <p data-pid="908ddd">Are [0, 1] and (0, 1) the same size? One goes into the other by doing nothing. The other way, x ↦ (1 + x)/3 sends [0, 1] one-to-one into [1/3, 2/3], inside (0, 1). The two-one-way technique says they are matched. Run the chase and it builds the matching.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the chase, run">
+f(x) = x \text{ from } (0, 1) \text{ into } [0, 1],\ \ g(x) = \tfrac{1 + x}{3} \text{ from } [0, 1] \text{ into } (0, 1) @@ here A = (0, 1) and B = [0, 1]
+C_0 = (0, 1) \setminus [\tfrac13, \tfrac23] = (0, \tfrac13) \cup (\tfrac23, 1) @@ where g misses
+C_1 = g[C_0] = (\tfrac13, \tfrac49) \cup (\tfrac59, \tfrac23) @@ f does nothing, then g
+\text{every } x \in C \text{ stays; every } x \notin C \text{ goes to } 3x - 1 @@ h is f on C, and g⁻¹ off it
+\htmlClass{new}{h(\tfrac13) = 0,\ \ h(\tfrac23) = 1} \quad \blacksquare @@ 1/3 and 2/3 are in no Cₙ: the two ends of [0, 1] are reached
+  </pre>
+  <p data-pid="0841bd">Sizes do not see ends. A closed interval and an open one, a line and a stretch of it, the line and half of it: wherever two one-way matchings can be written, the sets are matched, whether or not anyone can write the matching down.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · closed, open · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35d2.1</span><span class="ph know">know</span>Which two one-way matchings show |[0, 1]| = |(0, 1)|? <br>Where does the matching built by the chase send 1/3 and 2/3?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35d3">
+  <h2 class="sthead"><span class="stno">35d3</span>Must any two sizes compare?</h2>
+  <p data-pid="8290fd">For numbers, of two one is at most the other (<a href="r04h.html">4h</a>). Is that so for sizes? Given any A and B, must A go one-to-one into B or B into A? Nothing in the last footing says so. The two maps had to be given.</p>
+  <p data-pid="5ff24a">Any-two-sizes technique: <b>with choice, for any sets A and B, A goes one-to-one into B or B goes one-to-one into A.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the any-two-sizes technique">
+\text{order pairs } (X, m): X \subseteq A,\ m : X \to B \text{ one-to-one} @@ the partial one-way matchings; (X, m) below (X′, m′) when m ⊆ m′
+\text{a chain has an upper bound: the union of its } m @@ any two in a chain agree where both are defined, so the union is a function, and one-to-one
+(X, m) \text{ maximal} @@ the maximal-member principle, from choice (7·cb6)
+X \ne A \text{ and } m[X] \ne B \Rightarrow \text{a larger pair} @@ add one more pair, (u, v), with u ∉ X and v ∉ m[X]
+X = A:\ \ m : A \to B \text{ one-to-one} @@ one case
+m[X] = B:\ \ m^{-1} : B \to A \text{ one-to-one} @@ the other: m⁻¹ runs backwards (9d), onto X ⊆ A
+\htmlClass{new}{|A| \le |B| \text{ or } |B| \le |A|} \quad \blacksquare @@ by not-not-out, the two cases are the only ones
+  </pre>
+  <p data-pid="d150cb">So with choice, sizes line up: any two compare, and by the two-one-way technique, no bigger each way is the same. The cost is real. The way back holds too, and 35d.4.4 asks for it: if any two sets compare, every set can be lined up, and so choice is true. <a href="r06e.html">6e</a> found three faces of one principle, and comparing sizes is a fourth.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · compare · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35d3.1</span><span class="ph know">know</span>What does the any-two-sizes technique say, and which line spends choice? <br>What would a maximal pair have to be, if neither case held?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35d4">
+  <h2 class="sthead"><span class="stno">35d4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+f : A \to B \text{ one-to-one and } g : B \to A \text{ one-to-one, so } f \text{ is onto}\,? @@ f may miss much of B: the matching is h, built from both
+h = f \text{ everywhere}\,? @@ off the chase, h runs g backwards
+\text{onto maps each way give a matching, with no picking}\,? @@ to run an onto map back one-to-one, pick one input for each output: choice
+\text{any two sets compare, in every world}\,? @@ the any-two-sizes technique spends choice
+|A| \le |B| \text{ and } |A| \ne |B| \text{ so } B \text{ has a member outside } A\,? @@ smaller is about maps, not parts: A need not be a part of B
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35d4.1</span><span class="ph know">know</span>Why does running an onto map backwards, one-to-one, spend choice?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">35d.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="[0, 1] \text{ and } [0, 1)"></span></span>Build a matching between these two sets that you can write in one line for each x. Send 1 to 1/2, 1/2 to 1/3, 1/3 to 1/4, and every other x to itself. Prove it is a matching. <br>Run the chase of 35d1 with f(x) = x/2 and g(x) = x, and compare.</div>
+  <div class="chq"><span class="chid">35d.4.2</span><span class="tagq">edge</span>Find which lines of the two-one-way proof use that f and g are one-to-one, and what breaks in each when one of them is not. <br>Could the proof run with f one-to-one and g only onto?</div>
+  <div class="chq"><span class="chid">35d.4.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\Phi(S) = A \setminus g[B \setminus f[S]]"></span></span>Prove the two-one-way technique with no chase. Show that Φ keeps inclusion, S ⊆ S′ ⇒ Φ(S) ⊆ Φ(S′). Let C be the union of every S with S ⊆ Φ(S), and show Φ(C) = C. <br>Build the matching from this C, and find which line uses the parts of A as a set (2f).</div>
+  <div class="chq"><span class="chid">35d.4.4</span><span class="tagq">converse</span>With choice, any two sizes compare. Turn it round: suppose any two sets compare. Show that every set A goes one-to-one into some point of the run (29·cb3), when that point is too large to go into A. <br>What would that give for lining up A, and so for choice?</div>
+  <div class="chq"><span class="chid">35d.4.5</span><span class="tagq">seam</span>The two-one-way proof spends no choice. The any-two-sizes proof spends it in one line. <br>One side holds that comparison of sizes is so plainly true that it is evidence for choice: an axiom earns its place by the clean results it gives. The other holds that a principle that names no matching, and gives sets that cannot be described, cannot be made true by being convenient. <br>Is a clean consequence evidence for an axiom? Which consequence of choice on the ladder so far would you least want to lose, and which would you most like to be rid of?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r35c.html">← 35c · more parts than members</a><a href="r35e.html">35e · arithmetic of sizes →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The two-one-way technique is the Cantor–Schröder–Bernstein theorem. The chase C is the set of points whose backward orbit starts outside g[B]. The reroute of 35d.4.3 is the proof by a fixed point of a map that keeps inclusion, the Knaster–Tarski fixed point theorem. The any-two-sizes technique is the comparability of cardinals, or the trichotomy of cardinals; that it implies choice is Hartogs’s theorem.</p>
+  <h3>Who said it first</h3>
+  <p>Georg Cantor stated the two-one-way technique in 1887 and could not prove it without the well-ordering of every set. Richard Dedekind proved it in 1887 and did not publish; Ernst Schröder published a proof with a gap in 1896, and Felix Bernstein, a student of Cantor, gave a full proof in 1897. Julius König gave the chase of 35d1, in pictures of chains, in 1906. Friedrich Hartogs proved in 1915 that the comparability of all sizes gives choice.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“f is one-to-one into B, so |A| ≤ |B|. g is one-to-one into A, so |B| ≤ |A|. Two numbers each at most the other are equal (4h), so |A| = |B|.” Not allowed: |A| and |B| are not numbers, and |A| ≤ |B| is a statement about maps. 4h’s technique speaks of numbers only. The whole of 35d1 is the work that line skips.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'two maps',t:R`f : A \to B,\ \ g : B \to A`,n:`Both one-to-one.`},
+  {k:'ember',kl:'chase',t:R`C_{n+1} = g[f[C_n]]`,n:`From where g misses.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{h = f \text{ on } C,\ g^{-1} \text{ off it}}`,n:`A matching.`}
+],{title:'The slides · back and forth · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'into',t:R`(0,1) \to [0,1],\ \ [0,1] \to [\tfrac13, \tfrac23]`,n:`Each way.`},
+  {k:'ember',kl:'chase',t:R`C_0 = (0, \tfrac13) \cup (\tfrac23, 1)`,n:`Where g misses.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|[0,1]| = |(0,1)|}`,n:`Ends do not count.`}
+],{title:'The slides · closed, open · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'partial',t:R`(X, m),\ m : X \to B`,n:`One-to-one, on a part.`},
+  {k:'ember',kl:'maximal',t:R`\text{7·cb6}`,n:`Choice spent here.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|A| \le |B| \lor |B| \le |A|}`,n:`Sizes line up.`}
+],{title:'The slides · compare · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

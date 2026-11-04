@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Breaking a signal into frequencies, fast</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r32j.html">← 32j turning rate rules into algebra</a><a href="r32l.html">next: 32l where oscillating integrals live →</a></p>
+  <div class="tags"><span class="tag tech">32k · technique</span></div>
+  <h1>Breaking a signal into frequencies, fast</h1>
+  <p data-pid="f4ca05">A machine never sees a whole wave. It sees a list of samples, and the transform it can compute is a list too: one number for each of as many frequencies as there are samples. Done the plain way, each of those numbers is a sum over every sample, so a list of a thousand samples costs a million multiplications, and a second of music costs nearly two billion. For most of the twentieth century that put the frequencies of a sound beyond everyday reach. The way out is the one rung 22 found for sorting: split the work in half. The transform of a list is the transform of its even places and the transform of its odd places, stitched together with one turn each. Split those again, and again, and the cost falls from the square of the length to the length times the number of halvings. The step ends with a number every phone carries: why music is sampled forty-four thousand one hundred times a second, and not forty thousand.</p>
+  <p class="gesture" data-pid="dfd199">On N equally spaced points, the N stepped turnings are at right angles, so a list of N samples has N coefficients and is rebuilt from them. The transform of a list of even length is the transform of its even places plus a turn times the transform of its odd places, and the second half of the answer uses the same two with a minus sign. Halving again and again makes the cost about N times the number of halvings.</p>
+</header>
+
+<section class="class step" data-step="32k1">
+  <h2 class="sthead"><span class="stno">32k1</span>Turnings on N points</h2>
+  <p data-pid="6d47e9">Let N be a whole number, and ω = e^(2πi/N), so that ω, ω², …, ω^N = 1 are N equal parts of a turn (21·cb20). For a list x₀, …, x_(N−1), its <i>stepped transform</i> is the list X₀, …, X_(N−1) with</p>
+  <p class="eqline" data-pid="e59ca7"><span data-tex="X_k = \textstyle\sum_{j=0}^{N-1} x_j\,\omega^{-jk}."></span></p>
+  <p data-pid="2b70a7">Sampled-turnings technique: <b>on N equally spaced points the N stepped turnings are at right angles, so a list is rebuilt from its stepped transform by x_j = (1/N) Σ X_k ω^(jk).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the sampled-turnings technique">
+\textstyle\sum_{j=0}^{N-1}\omega^{j(k - m)} = \tfrac{\omega^{N(k - m)} - 1}{\omega^{k - m} - 1} = 0 @@ the geometric sum (15i), when k − m is not a whole multiple of N; ω^N = 1
+\textstyle\sum_{j=0}^{N-1}\omega^{j(k - m)} = N @@ when k − m is a whole multiple of N: every term is 1
+\tfrac1N\textstyle\sum_k X_k\,\omega^{jk} = \tfrac1N\sum_m x_m\sum_k \omega^{k(j - m)} @@ put in X_k; finite sums swap
+\htmlClass{new}{\tfrac1N\textstyle\sum_{k=0}^{N-1} X_k\,\omega^{jk} = x_j} \quad \blacksquare @@ only m = j survives, with N
+  </pre>
+  <p data-pid="bfbd61">If the list is N samples of a wave at the spacing 1/r over one repeat, the stepped transform holds its coefficients for the speeds 0 to N − 1, read with 32g’s disguise: the speed k and the speed k − N give the same samples. One example: the list (1, 2, 3, 4) has X = (10, −2 + 2i, −2, −2 − 2i), with ω = i.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · N points · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">32k1.1</span><span class="ph know">know</span>What is the stepped transform of a list of N samples? <br>What does the sampled-turnings technique say, and which sum makes the turnings at right angles?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32k2">
+  <h2 class="sthead"><span class="stno">32k2</span>Splitting in half</h2>
+  <p data-pid="01f93b">Let N = 2M. Write E for the stepped transform of the even places x₀, x₂, …, and O for that of the odd places x₁, x₃, …, each on M points, with ω² as their equal part of a turn.</p>
+  <p data-pid="348aa2">Halving-transform technique: <b>for k from 0 to M − 1, X_k = E_k + ω^(−k)O_k and X_(k+M) = E_k − ω^(−k)O_k; so on N = 2ᵖ points the stepped transform costs about N log₂ N steps instead of N².</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the halving-transform technique">
+X_k = \textstyle\sum_{m} x_{2m}\,\omega^{-2mk} + \omega^{-k}\sum_m x_{2m+1}\,\omega^{-2mk} @@ split the sum into even and odd places
+= E_k + \omega^{-k}O_k @@ ω² is the part of a turn for M points
+E_{k+M} = E_k,\ \ O_{k+M} = O_k,\ \ \omega^{-(k + M)} = -\omega^{-k} @@ (ω²)^M = 1 and ω^M = −1
+X_{k+M} = E_k - \omega^{-k}O_k @@ the same two transforms, one sign changed
+T(N) = 2T(N/2) + N @@ two half transforms, then M multiplications and N additions, counted as N steps
+\htmlClass{new}{T(N) = N\log_2 N + N\,T(1)} \quad \blacksquare @@ the unrolling technique (22l1)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the list (1, 2, 3, 4) by halves">
+E = \text{transform of } (1, 3) = (4, -2),\ \ O = \text{transform of } (2, 4) = (6, -2) @@ on two points, ω = −1
+X_0 = 4 + 6 = 10,\ \ X_2 = 4 - 6 = -2 @@ k = 0
+\htmlClass{new}{X_1 = -2 + (-i)(-2) = -2 + 2i,\ \ X_3 = -2 - (-i)(-2) = -2 - 2i} \quad \blacksquare @@ k = 1, with ω⁻¹ = −i
+  </pre>
+  <p data-pid="2a0248">For N = 1024 the plain way takes about a million steps and the halving way about ten thousand. For one second of music, N = 44 100, about two billion against about seven hundred thousand.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · halves · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32k2.1</span><span class="ph know">know</span>What does the halving-transform technique say? <br>Why does the second half of the answer reuse E and O, and what does that do to the cost?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32k3">
+  <h2 class="sthead"><span class="stno">32k3</span>Why forty-four thousand one hundred</h2>
+  <p data-pid="46e974">Hearing reaches up to about 20 000 Hz in the young, and less with age. The samples-are-coefficients technique (<a href="r32g.html#32g1">32g1</a>) asks for more than 40 000 samples a second. Before sampling, a filter must cut everything above half the rate, or it comes back in disguise (32g3). No filter of finite cost has gain 1 up to one frequency and 0 just above it: its gain must fall over a band. So the rate is set a little above 40 000, to leave that band.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the rate">
+\text{top of hearing} \approx 20\,000 \text{ Hz} @@ measured, and falling with age
+\text{rate} \gt 2 \times 20\,000 = 40\,000 @@ the samples-are-coefficients technique (32g1)
+\tfrac{44\,100}{2} = 22\,050 \text{ Hz} @@ half the rate: the filter falls from full gain at 20 000 Hz to none by 22 050 Hz
+44\,100 = 3 \times 245 \times 60 = 3 \times 294 \times 50 @@ three samples on each usable line of a video picture, in both of the world’s two video systems
+\htmlClass{new}{44\,100 \text{ samples a second}} \quad \blacksquare @@ the first digital recorders stored sound on video tape
+  </pre>
+  <p data-pid="c9f090">So the number is part technique and part history. The technique gives the floor, 40 000, and the need for a falling band gives the margin. The video tape of the late 1970s chose the exact number, and every compact disc and most music files kept it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · 44 100 · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32k3.1</span><span class="ph know">know</span>Why must music be sampled at more than 40 000 times a second? <br>Why is the rate set above 40 000, and what set the exact number?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32k4">
+  <h2 class="sthead"><span class="stno">32k4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+X_{k+M} = E_{k+M} + \omega^{-(k + M)}O_{k+M} \text{ needs new transforms}\,? @@ E and O repeat every M, so they are reused
+\text{the halving way gives a different answer from the plain way}\,? @@ the same sums, grouped; only the cost changes
+\text{a rate of exactly } 40\,000 \text{ is enough}\,? @@ the filter needs room to fall, and a turning at the top frequency is not caught
+x_j = \textstyle\sum X_k\omega^{jk}\,? @@ the rebuilding has a factor 1/N
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32k4.1</span><span class="ph know">know</span>Why is “the halving way gives a different answer from the plain way” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">32k.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="(1, 1, 1, 1, 0, 0, 0, 0)"></span></span>Build the stepped transform of this list by halves, down to lists of length 1, and check X₁ = 1 − (1 + √2)i.</div>
+  <div class="chq"><span class="chid">32k.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="N = 6"></span></span>Find how to split a list of length 6, and what the cost recurrence becomes. Find the cost for N a power of 3, split into thirds.</div>
+  <div class="chq"><span class="chid">32k.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{a fast way to multiply long numbers}"></span></span>Multiplying two numbers of n digits is a blend of their digit lists (32i1). Find how the stepped transform turns a blend into N products, and what the cost of multiplying two million-digit numbers becomes.</div>
+  <div class="chq"><span class="chid">32k.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="x_j = \tfrac1N\textstyle\sum X_k\omega^{jk}"></span></span>Show that the rebuilding is itself a stepped transform, of the list X with its places reversed, divided by N, so the same halving machine runs it.</div>
+  <div class="chq"><span class="chid">32k.5.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">22l: splitting the work, counted</span></span>The halving trick was found in a notebook in 1805 for fitting the orbits of asteroids, and was lost. It was found again many times, and became famous only in 1965, when machines could use it. One side holds that a method belongs to whoever first wrote it down. The other holds that it belongs to whoever made the world use it. <br>Who discovered the fast transform?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r32j.html">← 32j · turning rate rules into algebra</a><a href="r32l.html">32l · where oscillating integrals live →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The stepped transform is the discrete Fourier transform (DFT), and the sampled-turnings technique its inversion formula; ω is a primitive Nth root of unity. The halving-transform technique is the radix-2 Cooley–Tukey fast Fourier transform (FFT); its join of E and O is the butterfly. 44.1 kHz is the Red Book audio standard of the compact disc (1980); the band between 20 and 22.05 kHz is the transition band of the anti-aliasing filter. Multiplying long numbers by transforms is the Schönhage–Strassen method.</p>
+  <h3>Who said it first</h3>
+  <p>Carl Friedrich Gauss used the halving trick around 1805, in work on the orbits of Pallas and Juno published only after his death. James Cooley and John Tukey published it in 1965, and it spread at once. The 44 100 rate came from Sony’s PCM adaptors of the late 1970s, which stored digital audio on video recorders; Sony and Philips fixed it for the compact disc. Arnold Schönhage and Volker Strassen multiplied long numbers by transforms in 1971, and David Harvey and Joris van der Hoeven reached n log n in 2019.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Halving the list halves the cost, so halving it p times divides the cost by 2ᵖ.” Not allowed: each halving gives two half-size transforms, not one, plus a join that costs N. The count is the recurrence T(N) = 2T(N/2) + N, and it gives N log₂ N, not N²/2ᵖ.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'turn',t:R`\omega = e^{2\pi i/N}`,n:`N equal parts.`},
+  {k:'ember',kl:'transform',t:R`X_k = \textstyle\sum x_j\omega^{-jk}`,n:`N sums of N.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{x_j = \tfrac1N\textstyle\sum X_k\omega^{jk}}`,n:`Geometric sums vanish.`}
+],{title:'The slides · N points · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'split',t:R`X_k = E_k + \omega^{-k}O_k`,n:`Even and odd places.`},
+  {k:'ember',kl:'second half',t:R`X_{k+M} = E_k - \omega^{-k}O_k`,n:`One sign.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{T(N) \approx N\log_2N}`,n:`Unrolled.`}
+],{title:'The slides · halves · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'hearing',t:R`20\,000 \text{ Hz}`,n:`Measured.`},
+  {k:'ember',kl:'floor',t:R`2 \times 20\,000`,n:`Samples suffice.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{44\,100 = 3 \times 245 \times 60}`,n:`A falling band, and tape.`}
+],{title:'The slides · 44 100 · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'illegal',t:R`\text{different answers}\,?`,n:`Same sums, grouped.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

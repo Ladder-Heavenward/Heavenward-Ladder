@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Where oscillating integrals live</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r32k.html">← 32k breaking a signal into frequencies, fast</a><a href="r32stat.html">next: 32·stat why does the bell curve keep turning up? →</a></p>
+  <div class="tags"><span class="tag tech">32l · technique</span></div>
+  <h1>Where oscillating integrals live</h1>
+  <p data-pid="5769a8">Total a turning that spins fast, and almost everything cancels: each swing up is matched by a swing down a moment later. That is why the coefficients of 32b fade, and why the transform of a smooth signal is small at high frequencies. But the cancelling is not even. Where the spin slows down, for a moment the turning lingers in one direction, and there the swings fail to cancel. So the total of a fast-spinning turning lives almost entirely near the places where its spin pauses. This step makes that precise. Where the spin never pauses, the total shrinks at least as fast as one over the speed. Where it pauses at one point, the total is read off from that one point, with a size that shrinks only like one over the root of the speed. To get there it needs one total done exactly: the bell with a turn inside, found with a loop from rung 26. And it ends with the ringing of a drum, read off from two pauses.</p>
+  <p class="gesture" data-pid="55b546">If the phase has no level point, a by-parts step puts one over the speed in front, so the total shrinks like one over the speed. The total of e to the i times the speed times x squared, over the whole line, is the root of π over the speed, turned by an eighth of a turn, found by sliding the bell’s total round a wedge. Near a single level point the phase is a square, so the total is that turned bell, scaled by the function there. The drum’s function at a large speed is the sum of two such pieces.</p>
+</header>
+
+<section class="class step" data-step="32l1">
+  <h2 class="sthead"><span class="stno">32l1</span>Where the phase never pauses</h2>
+  <p data-pid="bc3758">Let g and φ be real functions on [u, v] with two continuous slopes, and λ &gt; 0 a speed. The <i>oscillating total</i> is I(λ) = ∫ᵤᵛ g(x)e^(iλφ(x)) dx, and φ is its phase. A <i>level point</i> of the phase is an x with φ′(x) = 0.</p>
+  <p data-pid="0d5433">No-level-point technique: <b>if the phase has no level point on [u, v], then |I(λ)| ≤ C/λ for a number C fixed by g and φ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the no-level-point technique">
+e^{i\lambda\varphi(x)} = \tfrac{1}{i\lambda\varphi'(x)}\,\tfrac{d}{dx}e^{i\lambda\varphi(x)} @@ the complex-rate technique (26·cb24) with the chain rule; φ′ is never 0
+I(\lambda) = \Big[\tfrac{g\,e^{i\lambda\varphi}}{i\lambda\varphi'}\Big]_u^v - \tfrac{1}{i\lambda}\int_u^v\Big(\tfrac{g}{\varphi'}\Big)'e^{i\lambda\varphi}\,dx @@ parts (16)
+|I(\lambda)| \le \tfrac1\lambda\Big(\Big|\tfrac{g(v)}{\varphi'(v)}\Big| + \Big|\tfrac{g(u)}{\varphi'(u)}\Big| + \int_u^v\Big|\Big(\tfrac{g}{\varphi'}\Big)'\Big|\,dx\Big) @@ a turning has size 1
+\htmlClass{new}{|I(\lambda)| \le \tfrac{C}{\lambda}} \quad \blacksquare @@ the bracket is fixed by g and φ
+  </pre>
+  <p data-pid="41f418">If g and φ also vanish smoothly at the ends, or repeat, the end terms go, and each further round of parts gives another 1/λ. That is 32h3’s corner-and-jump technique seen from the frequency side.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · no pause · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">32l1.1</span><span class="ph know">know</span>What is a level point of the phase? <br>What does the no-level-point technique say, and which move gives the 1/λ?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32l2">
+  <h2 class="sthead"><span class="stno">32l2</span>The bell with a turn inside</h2>
+  <p data-pid="52e8dd">Turning-bell technique: <b>for every λ &gt; 0, the total of e^(iλx²) over the whole line settles at √(π/λ) e^(iπ/4).</b> The size of each term is 1, so the total settles only because of cancelling, never absolutely.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the turning-bell technique">
+\oint e^{iz^2}\,dz = 0 \text{ round the wedge } 0 \to R \to Re^{i\pi/4} \to 0 @@ no hole, no total (26f): z ↦ e^(iz²) has a complex slope everywhere
+\Big|\int_{\text{arc}} e^{iz^2}\,dz\Big| \le R\int_0^{\pi/4}e^{-R^2\sin 2\theta}\,d\theta \le R\int_0^{\pi/4}e^{-4R^2\theta/\pi}\,d\theta \lt \tfrac{\pi}{4R} @@ |e^(iz²)| = e^(−R² sin 2θ) on z = Re^(iθ); sin 2θ ≥ 4θ/π there; the path-fence idea (26e)
+z = e^{i\pi/4}t:\ \ iz^2 = -t^2,\ \ \int_0^R e^{iz^2}\,dz = e^{i\pi/4}\int_0^R e^{-t^2}\,dt @@ along the slanted side
+\int_0^{\infty} e^{ix^2}\,dx = e^{i\pi/4}\,\tfrac{\sqrt\pi}{2} @@ let R grow: the arc fades, and the bell-total technique (30j1) halved
+\htmlClass{new}{\int_{-\infty}^{\infty} e^{i\lambda x^2}\,dx = \sqrt{\tfrac{\pi}{\lambda}}\;e^{i\pi/4}} \quad \blacksquare @@ the even halves add; slide x = y/√λ
+  </pre>
+  <p data-pid="33b439">With −λ in place of λ the turn is the other way: √(π/λ) e^(−iπ/4). The floor and upright parts give ∫ cos(x²) and ∫ sin(x²), each √(π/2), totals that light passing an edge spends.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · turning bell · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32l2.1</span><span class="ph know">know</span>What does the turning-bell technique say? <br>Which loop does the proof use, and why does its curved side fade?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32l3">
+  <h2 class="sthead"><span class="stno">32l3</span>One level point decides</h2>
+  <p data-pid="f7e77e">Level-point technique: <b>if the phase has one level point x₀ inside [u, v], with φ″(x₀) ≠ 0, then for large λ, I(λ) is about g(x₀) e^(iλφ(x₀)) √(2π/(λ|φ″(x₀)|)) e^(±iπ/4), with + when φ″(x₀) &gt; 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the level-point technique">
+\varphi(x) = \varphi(x_0) + \tfrac12\varphi''(x_0)(x - x_0)^2 + \text{a remainder of size } O(|x - x_0|^3) @@ the remainder (23b); φ′(x₀) = 0
+\text{away from } x_0:\ \ O(1/\lambda) @@ the no-level-point technique (32l1) on the pieces with no level point
+\text{near } x_0:\ \ \approx g(x_0)\,e^{i\lambda\varphi(x_0)}\int e^{i\lambda\varphi''(x_0)(x - x_0)^2/2}\,dx @@ g is about g(x₀), φ about its square
+\int e^{i\mu y^2}\,dy = \sqrt{\pi/|\mu|}\;e^{\pm i\pi/4},\ \ \mu = \tfrac{\lambda\varphi''(x_0)}{2} @@ the turning-bell technique (32l2)
+\htmlClass{new}{I(\lambda) \approx g(x_0)\,e^{i\lambda\varphi(x_0)}\sqrt{\tfrac{2\pi}{\lambda|\varphi''(x_0)|}}\;e^{\pm i\pi/4}} \quad \blacksquare @@ the size 1/√λ beats the rest, 1/λ
+  </pre>
+  <p data-pid="77852f">That the leftover is smaller than 1/√λ is the part held in trust here: the edge challenge below asks where the pieces of the third line go. The reading is sound and every page of optics uses it.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the drum at a large speed">
+J(\lambda) = \tfrac{1}{2\pi}\int_{-\pi}^{\pi} e^{i\lambda\cos t}\,dt @@ the drum’s function of 24l, as a total (the build challenge below)
+\text{level points } t = 0,\ \ t = \pm\pi \text{ (one point of the repeat)} @@ sin t = 0; φ″ = −cos t is −1 at 0 and 1 at π
+J(\lambda) \approx \tfrac{1}{2\pi}\sqrt{\tfrac{2\pi}{\lambda}}\big(e^{i\lambda}e^{-i\pi/4} + e^{-i\lambda}e^{i\pi/4}\big) @@ the level-point technique, once at each
+\htmlClass{new}{J(\lambda) \approx \sqrt{\tfrac{2}{\pi\lambda}}\cos\big(\lambda - \tfrac{\pi}{4}\big)} \quad \blacksquare @@ z + z̄ is twice the floor part
+  </pre>
+  <p data-pid="6b3f11">At λ = 10 the reading gives −0.2468, and the drum’s function is −0.2459. At λ = 50 they agree to three places. A drum’s ring fades like one over the root of the distance from the centre, and its rings are spaced by π.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · level point · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32l3.1</span><span class="ph know">know</span>What does the level-point technique say? <br>Why does the total near a level point shrink only like 1/√λ while the rest shrinks like 1/λ?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32l4">
+  <h2 class="sthead"><span class="stno">32l4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\int_0^{\infty}e^{ix^2}dx \text{ settles absolutely}\,? @@ every term has size 1; it settles by cancelling alone
+\text{the whole interval contributes equally}\,? @@ away from level points the total is O(1/λ)
+\text{a level point gives } O(1/\lambda)\,? @@ it gives 1/√λ, larger
+\text{the turn } e^{\pm i\pi/4} \text{ can be dropped}\,? @@ it shifts the drum’s ring by an eighth of a turn, as measured
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32l4.1</span><span class="ph know">know</span>Why is “the total of e^(ix²) out to forever settles absolutely” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">32l.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="J(\lambda) = \tfrac{1}{2\pi}\int_{-\pi}^{\pi}e^{i\lambda\cos t}\,dt"></span></span>Build the power series of J by expanding e^(iλ cos t) and totalling term by term (23e). Check that J(0) = 1, and that J obeys λ²J″ + λJ′ + λ²J = 0, the drum’s rule of 24l.</div>
+  <div class="chq"><span class="chid">32l.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\varphi(x) = x^3"></span></span>Here φ″(0) = 0 too. Find how ∫ e^(iλx³) dx over a small interval about 0 shrinks with λ, by sliding x = y/λ^(1/3). Which line of 32l3 fails?</div>
+  <div class="chq"><span class="chid">32l.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="|I(\lambda)| \le C/\lambda"></span></span>If the total shrinks like 1/λ for every smooth g, must the phase have no level point? Test φ(x) = x² on [0, 1], with g = 1.</div>
+  <div class="chq"><span class="chid">32l.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\int_{-\infty}^{\infty}e^{-(s - i\lambda)x^2}dx,\ \ s \gt 0"></span></span>Find this total for s &gt; 0 by sliding the bell’s total, as in 32e.6.4, and let s head to 0. Check that it gives the turning-bell technique.</div>
+  <div class="chq"><span class="chid">32l.5.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">32l3: the bulk of a total lives at its level points</span></span>Light from a far star passes the edge of a building and spreads a little into the shadow. One side, in 1818, held that light is a stream of tiny bodies that travel straight, and that the spreading is a pull of the edge. The other worked out, with these totals, that a wave would put a bright spot at the very centre of the shadow of a round disc. The first side thought that absurd. The spot was looked for and found. <br>Can a prediction that sounds absurd be good evidence for the theory that makes it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r32k.html">← 32k · breaking a signal into frequencies, fast</a><a href="r32stat.html">32·stat · why does the bell curve keep turning up? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The no-level-point technique is the non-stationary phase estimate; the level-point technique is the method of stationary phase, and a level point of the phase a stationary point. The turning bell is the Fresnel integral, ∫cos(x²) and ∫sin(x²) the Fresnel integrals, and the drum’s function the Bessel function J₀, whose large-λ reading √(2/(πλ)) cos(λ − π/4) is its asymptotic form. The wedge is a Jordan-type contour. The method extends to the saddle-point method, or method of steepest descent, for totals with a complex phase; 23k’s totals dominated by their peak are its real cousin, Laplace’s method.</p>
+  <h3>Who said it first</h3>
+  <p>George Stokes used stationary phase in 1856 for the rainbow, and William Thomson, Lord Kelvin, set it out in 1887 for ship waves. Augustin-Louis Cauchy and Siméon Denis Poisson had used such totals for water waves in 1815–16. Augustin Fresnel computed his totals for light at an edge in 1818. In 32l.5.5, Poisson, on the judging panel for Fresnel’s entry to the Paris Academy’s prize of 1818, argued that Fresnel’s theory forced a bright spot behind a disc, as a reductio; François Arago looked and found it, and the spot carries both their names.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Near x₀ replace φ by its square and g by g(x₀), and away from x₀ drop everything.” As a reading, fine; as a proof, not allowed. Each replacement leaves an error, and each must be shown smaller than 1/√λ: the dropped pieces by 32l1, the replaced phase by a by-parts step on the remainder, which needs two more slopes than this page asks for.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'rewrite',t:R`e^{i\lambda\varphi} = \tfrac{(e^{i\lambda\varphi})^{\prime}}{i\lambda\varphi^{\prime}}`,n:`φ′ ≠ 0.`},
+  {k:'ember',kl:'parts',t:R`I = [\ldots] - \tfrac{1}{i\lambda}\int(\ldots)`,n:`16.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|I| \le C/\lambda}`,n:`Cancelling.`}
+],{title:'The slides · no pause · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'loop',t:R`\oint_{\text{wedge}} e^{iz^2}dz = 0`,n:`26f.`},
+  {k:'ember',kl:'slant',t:R`iz^2 = -t^2`,n:`A plain bell.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\int e^{i\lambda x^2} = \sqrt{\pi/\lambda}\,e^{i\pi/4}}`,n:`An eighth of a turn.`}
+],{title:'The slides · turning bell · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'square',t:R`\varphi \approx \varphi(x_0) + \tfrac12\varphi^{\prime\prime}(x_0)(x-x_0)^2`,n:`23b.`},
+  {k:'ember',kl:'bell',t:R`\sqrt{\pi/|\mu|}\,e^{\pm i\pi/4}`,n:`32l2.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{J(\lambda) \approx \sqrt{\tfrac{2}{\pi\lambda}}\cos(\lambda - \tfrac\pi4)}`,n:`Two pauses.`}
+],{title:'The slides · level point · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'illegal',t:R`\text{absolute}\,?`,n:`By cancelling only.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

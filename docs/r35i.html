@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A line onto a square</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r35h.html">← 35h dust with no length, and dimensions between whole numbers</a><a href="r35phys.html">next: 35·phys is an electron a dot or a flow? →</a></p>
+  <div class="tags"><span class="tag tech">35i · technique</span></div>
+  <h1>A line onto a square</h1>
+  <p data-pid="c55425">This rung showed that a line and a square have one size: there is a matching between them. That matching tears everything apart. Points next to each other on the line land far apart in the square. Can the tearing be avoided? Can a pen, moving steadily along a stretch of time without ever lifting, pass through every point of a square? It can. Cut the square into four, the time into four, and send each quarter of time through one quarter of the square, in an order where each quarter ends where the next begins. Then cut each quarter into four again, keeping the order inside each, and so on for ever. The pen’s position at each time is pinned down by the squares it is sent through, and the pen never jumps. So continuity does not keep dimension: a curve can fill a square. What continuity cannot do is fill it without passing some point twice. Rung 34 showed that a continuous matching from a stretch of the line would keep its shape, and a stretch falls in two when a point is taken out, while a square does not. Size can be kept, and nearness can be kept, but never both at once.</p>
+  <p class="gesture" data-pid="0c2a4f">Send each quarter of a stretch of time through one quarter of the square, then each sixteenth through one sixteenth, keeping the order. The limit is a continuous curve onto the square. No such curve is one-to-one, because a continuous matching would keep the shape, and a point taken out splits a stretch but not a square.</p>
+</header>
+
+<section class="class step" data-step="35i1">
+  <h2 class="sthead"><span class="stno">35i1</span>A curve through every point</h2>
+  <p data-pid="ae3f2d">Cut [0, 1] into four pieces of length 1/4, and the square S = [0, 1] × [0, 1] into four squares of side 1/2. Send the pieces in order to the lower left, upper left, upper right and lower right squares. At the next stage, cut every piece and every square into four again, and run through the four small squares of each square by a turned or flipped copy of the first shape (rung 20), placed so that it starts at the corner where the copy before it ended. By induction on the stage (4c), this can be done at every stage n: [0, 1] is cut into 4ⁿ pieces and S into 4ⁿ squares of side 2⁻ⁿ, each piece has its square, each stage keeps the order of the one before, and squares of neighbouring pieces share an edge.</p>
+  <p data-pid="932a8f">Square-filling technique: <b>there is a continuous function from [0, 1] onto the square.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the square-filling technique">
+t \in [0, 1]:\ \ P_0 \supseteq P_1 \supseteq \cdots \text{ pieces holding } t,\ \ Q_0 \supseteq Q_1 \supseteq \cdots \text{ their squares} @@ each stage keeps the order of the one before, so the squares are nested
+H(t) = \text{the one point in every } Q_n @@ nested closed squares of side 2⁻ⁿ: across and up, each a nest of closed intervals, which meet in one real (8c)
+t \text{ in two pieces at a stage} \Rightarrow \text{both nests meet in the corner they share} @@ the copy before ends where the next one starts
+|s - t| < 4^{-n} \Rightarrow s, t \text{ in one piece or two neighbours} \Rightarrow |H(s) - H(t)| \le \sqrt5\cdot 2^{-n} @@ one square, or two that share an edge: a 1 × 2 box of side 2⁻ⁿ, whose diagonal is √5 · 2⁻ⁿ (18)
+H \text{ is continuous} @@ for ε &gt; 0, choose n with √5 · 2⁻ⁿ &lt; ε, and δ = 4⁻ⁿ (11a)
+p \in S:\ \ Q'_n \ni p \text{ nested},\ \ \text{their pieces } P'_n \text{ nested},\ \ t \in \textstyle\bigcap P'_n @@ take at each stage the first square, in the order, that holds p, inside the last; nested closed intervals meet (8c)
+\htmlClass{new}{H(t) \in Q'_n \text{ for every } n,\ \text{so } H(t) = p} \quad \blacksquare @@ two points in squares of side 2⁻ⁿ for every n are 0 apart
+  </pre>
+  <p data-pid="0ca636">So H(0) = (0, 0) and H(1) = (1, 0), and H(1/2) = (1/2, 1/2), the corner shared by the second and third squares of stage 1. In time 1/4 the curve fills a quarter of the square, in time 1/16 a sixteenth. The line has dimension 1 and the square 2 (35h2), and a continuous function raised one to the other.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · fill · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">35i1.1</span><span class="ph know">know</span>How is H(t) found from the stages, and why is H continuous? <br>What does the square-filling technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35i2">
+  <h2 class="sthead"><span class="stno">35i2</span>Some point is passed twice</h2>
+  <p data-pid="2dc422">35e2 matched the line with the plane. 35i1 sent the line continuously onto the square. Can one map do both?</p>
+  <p data-pid="80db11">Filling-twice technique: <b>every continuous function from [0, 1] onto the square sends two different inputs to one point.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the filling-twice technique">
+\text{assume } F : [0, 1] \to S \text{ continuous, onto and one-to-one} @@ to refute
+[0, 1] \text{ finitely covered};\ \ S \text{ keeps points apart} @@ closed-and-bounded (34d2); a space with a distance keeps points apart (34b4)
+F \text{ is a same-shape map} @@ the covered-matching technique (34e4)
+[0, 1] \setminus \{\tfrac12\} \simeq S \setminus \{F(\tfrac12)\} @@ the point-out technique (34e3)
+[0, 1] \setminus \{\tfrac12\} \text{ is split};\ \ S \setminus \{F(\tfrac12)\} \text{ is joined by paths} @@ it is no stretch (34c); go round the missing point (34c3)
+\htmlClass{new}{F \text{ is not one-to-one}} \quad \blacksquare @@ the same shape keeps the number of pieces (34e2): a clash; refute
+  </pre>
+  <p data-pid="36808f">So the curve H passes some point at least twice, and every square-filling curve does. A size can be kept by a matching. Nearness can be kept by a continuous map. The line and the square cannot have both at once, and that is what dimension is about: not how many points, but how they sit near one another.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · twice · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35i2.1</span><span class="ph know">know</span>What does the filling-twice technique say? <br>Which two techniques of 34e does its proof use, and on which point?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35i3">
+  <h2 class="sthead"><span class="stno">35i3</span>How fast a curve can fill</h2>
+  <p data-pid="050d54">35i1’s last bound says more than continuity. Inputs 4⁻ⁿ apart land at most √5 · 2⁻ⁿ apart: a quarter of the time moves the pen at most half as far.</p>
+  <p data-pid="6e7579">Half-power technique: <b>for all s and t in [0, 1], |H(s) − H(t)| ≤ 2√5 · |s − t|^(1/2).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the half-power technique">
+4^{-(n+1)} \le |s - t| < 4^{-n} @@ every s ≠ t has one such n
+|H(s) - H(t)| \le \sqrt5\cdot 2^{-n} = 2\sqrt5\cdot 2^{-(n+1)} @@ 35i1’s bound
+2^{-(n+1)} = (4^{-(n+1)})^{1/2} \le |s - t|^{1/2} @@ the square root keeps order (9d)
+\htmlClass{new}{|H(s) - H(t)| \le 2\sqrt5\,|s - t|^{1/2}} \quad \blacksquare @@ and s = t gives 0
+  </pre>
+  <p data-pid="d23422">Fill-rate technique: <b>no curve with |F(s) − F(t)| ≤ C|s − t|^α for some α &gt; 1/2 fills the square.</b> Cut [0, 1] into k pieces of length 1/k. Each piece lands inside a disc of radius C k^(−α), of area πC²k^(−2α) (rung 15 and 21). The k discs hold the whole square, so 1 ≤ k · πC²k^(−2α) = πC² k^(1 − 2α). With α &gt; 1/2 the right side heads to 0 as k grows: a clash. So H fills as smoothly as any curve can. The power 1/2 is 1 over the dimension of the square.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · how fast · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35i3.1</span><span class="ph know">know</span>What does the half-power technique say? <br>What does the fill-rate technique say, and how do the k discs give it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35i4">
+  <h2 class="sthead"><span class="stno">35i4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{a path through the centres of the } 4^n \text{ squares is about } 2^n \text{ long, so } H \text{ has a length}\,? @@ those lengths pass every bound; H has no length at all
+\text{the matching of 35e2 is continuous}\,? @@ the filling-twice technique: no continuous matching joins [0, 1] and the square
+H \text{ passes every point exactly once}\,? @@ every filling curve passes some point twice
+\text{a continuous map cannot raise dimension}\,? @@ H raises it from 1 to 2; a continuous matching from a finitely covered space keeps shape, and that is all
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35i4.1</span><span class="ph know">know</span>Why is “the matching of 35e2 is continuous” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">35i.4.1</span><span class="tagq">build</span>Build stage 2 of the curve: number the sixteen squares of side 1/4 in the order the pen passes them, starting at the lower left corner and ending at the lower right. <br>Check that squares with neighbouring numbers share an edge, and find the square of the piece [5/16, 6/16].</div>
+  <div class="chq"><span class="chid">35i.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="H([0, \tfrac14])"></span></span>Find the image of the first quarter of time, and prove your answer from 35i1’s lines. <br>Find H(1/4) and H(3/4).</div>
+  <div class="chq"><span class="chid">35i.4.3</span><span class="tagq">converse</span>A continuous function can send a stretch onto a square. Turn it round: can a continuous function send the square onto [0, 1]? One-to-one into [0, 1]? <br>Find which technique of 34e or of this step answers the second.</div>
+  <div class="chq"><span class="chid">35i.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="K \text{ the dust of 35h},\ \ c(b) \in K"></span></span>Fill the square another way. Send the point c(b) of the dust to the pair of reals whose base-2 digits are the even-place bits of b and the odd-place bits of b. Show this is onto the square. <br>Fill each thrown-out third by a straight segment between the images of its ends, and find what must be checked for continuity.</div>
+  <div class="chq"><span class="chid">35i.4.5</span><span class="tagq">seam</span>When the line and the square were first matched, the one who found it wrote that he saw it and did not believe it. A colleague replied that dimension was safe: it is not kept by every matching, only by the continuous ones, and no continuous matching would join them. Then a curve was drawn that fills the square. <br>One side holds that dimension is a count, of how many numbers fix a point, and the matching shows the count means nothing. The other holds that dimension is about nearness, and that the curve, which passes points twice, confirms it. <br>Which side does the filling-twice technique support? Is dimension a fact about size, about nearness, or about something else?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r35h.html">← 35h · dust with no length, and dimensions between whole numbers</a><a href="r35phys.html">35·phys · is an electron a dot or a flow? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A continuous function from [0, 1] onto the square is a space-filling curve, or Peano curve; the one built here is the Hilbert curve. The half-power technique says the Hilbert curve is Hölder continuous with exponent 1/2. The filling-twice technique is a case of the invariance of domain and of dimension, here reached by the point-out argument. The reroute of 35i.4.4 is Lebesgue’s curve, built on the Cantor set.</p>
+  <h3>Who said it first</h3>
+  <p>Georg Cantor matched the line with the plane in 1877 and wrote to Richard Dedekind: “Je le vois, mais je ne le crois pas” (I see it, but I do not believe it). Dedekind answered that dimension should be kept by continuous matchings. Giuseppe Peano published the first square-filling curve in 1890, by base-3 digits and with no picture; David Hilbert drew his in 1891. Henri Lebesgue gave the curve on the Cantor set in 1904. Luitzen Brouwer proved in 1911 that no continuous matching joins spaces of different whole dimensions.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Each Hₙ passes each of its squares once. So the limit H passes each point once, and H is a continuous matching.” Not allowed: a point on an edge shared by two squares sits in both, at every stage, and the nests that reach it come from different pieces. Passing each square once at every stage does not mean passing each point once in the limit.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'stage 1',t:R`\text{four pieces, four squares}`,n:`Lower left, upper left, upper right, lower right.`},
+  {k:'ember',kl:'stage n',t:R`4^n \text{ pieces},\ 4^n \text{ squares of side } 2^{-n}`,n:`Order kept.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{H : [0,1] \to S \text{ onto, continuous}}`,n:`A pen through every point.`}
+],{title:'The slides · fill · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'assume',t:R`F \text{ one-to-one, onto, continuous}`,n:`A continuous matching.`},
+  {k:'ember',kl:'shape',t:R`[0,1] \setminus \{\tfrac12\} \simeq S \setminus \{F(\tfrac12)\}`,n:`Point out.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{F \text{ is not one-to-one}}`,n:`Size or nearness, not both.`}
+],{title:'The slides · twice · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'quarter',t:R`|s - t| < 4^{-n} \Rightarrow |H(s) - H(t)| \le \sqrt5\,2^{-n}`,n:`A quarter of time, half the distance.`},
+  {k:'ember',kl:'half',t:R`\htmlClass{new}{|H(s) - H(t)| \le 2\sqrt5|s - t|^{1/2}}`,n:`Power 1/2.`},
+  {k:'ember',kl:'no faster',t:R`1 \le \pi C^2 k^{1 - 2\alpha}`,n:`α > 1/2 fails.`}
+],{title:'The slides · how fast · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

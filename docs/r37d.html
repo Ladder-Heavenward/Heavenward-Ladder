@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What is true everywhere is provable</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r37c.html">← 37c what is provable is true</a><a href="r37e.html">next: 37e a countable line →</a></p>
+  <div class="tags"><span class="tag proof">37d · proof</span></div>
+  <h1>What is true everywhere is provable</h1>
+  <p data-pid="fab2e2">The last step showed that a proof reaches only what is true in every world of its givens. This step goes the other way, and it is the harder road. Suppose a statement is true in every world where the givens are true. Is there a proof? Rung seven answered for statements built from letters with the joining words: a statement whose column is all true can be proved. With every and some there is no column to check, since a world can have endlessly many members. The answer is still yes, and the proof builds a world out of nothing but names. Start with givens that do not clash. Grow them, one statement at a time, until every statement or its denial is in, and every some has a named example. Then let the names themselves be the members. That world makes exactly the grown statements true. So every collection that does not clash has a world, and from that the way back follows. A gift comes with it. If every finite part of a collection has a world, the whole collection has one, because a proof only ever uses finitely many givens.</p>
+  <p class="gesture" data-pid="67b54c">A clash-free collection of statements grows into a full one, and its names make a world for it. So whatever is true in every world of the givens is reached from them, and a collection whose finite parts all have worlds has a world.</p>
+</header>
+
+<section class="class step" data-step="37d1">
+  <h2 class="sthead"><span class="stno">37d1</span>Two questions, one answer</h2>
+  <p data-pid="5c76a4">7d’s always-true-lines technique proved the way back for statements built from letters: a column of all T can be proved. The new question is the same one with every and some. It turns into a question about worlds.</p>
+  <p data-pid="087acb">Two-questions technique: <b>if every clash-free collection of statements has a world, then whatever is true in every world of G is reached from G.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-questions technique">
+G \nvdash \varphi @@ suppose, aiming at G ⊭ φ
+G \cup \{\neg\varphi\} \vdash \bot \Rightarrow G \vdash \neg\neg\varphi \Rightarrow G \vdash \varphi @@ refute drops ¬φ; not-not out (7d)
+G \cup \{\neg\varphi\} \text{ is clash-free} @@ the line above, turned and denied, against the first line
+M \models G \cup \{\neg\varphi\} \text{ for some world } M @@ the hypothesis: every clash-free collection has a world
+M \text{ is a world of } G \text{ in which } \varphi \text{ is false} @@ so G ⊭ φ
+\htmlClass{new}{G \models \varphi \Rightarrow G \vdash \varphi} \quad \blacksquare @@ the turn-and-deny turned back technique (7d)
+  </pre>
+  <p data-pid="5fdb97">So the whole weight falls on one claim: a collection that does not clash has a world. The next two footings build one, from the collection itself.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · two questions · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">37d1.1</span><span class="ph know">know</span>What does the two-questions technique say? <br>Which line of its proof spends not-not out, and what claim does the way back now rest on?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37d2">
+  <h2 class="sthead"><span class="stno">37d2</span>Growing a collection</h2>
+  <p data-pid="e2839f">Let G be clash-free in a language whose marks can be listed. Add new names c₀, c₁, c₂, …, used nowhere in G. List every statement of the larger language: φ₀, φ₁, φ₂, …, as the proof-listing technique lists strings (37b3).</p>
+  <p data-pid="790f26">Grow G in rounds. G₀ = G. At round n, put φₙ in if that keeps the collection clash-free, and ¬φₙ in if not. If the statement put in is ∃x ψ(x), put in ψ(c) as well, for the first new name c not yet used. G* is everything put in at some round.</p>
+  <p data-pid="310911">Full-growth technique: <b>a clash-free collection in a listed language grows into a clash-free collection that holds each statement or its denial, and holds a named example of each some it holds.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the full-growth technique">
+G_n \cup \{\varphi\} \vdash \bot \text{ and } G_n \cup \{\neg\varphi\} \vdash \bot \Rightarrow G_n \vdash \neg\varphi,\ G_n \vdash \neg\neg\varphi \Rightarrow G_n \vdash \bot @@ refute twice, then clash
+\text{so one of } \varphi_n,\ \neg\varphi_n \text{ keeps the collection clash-free} @@ if Gₙ is clash-free
+G_n \cup \{\exists x\,\psi(x),\ \psi(c)\} \vdash \bot \Rightarrow G_n \cup \{\exists x\,\psi(x)\} \vdash \bot @@ use a some: c is used nowhere in Gₙ or ⊥, so it is fresh (37b2)
+\text{every } G_n \text{ is clash-free} @@ induction on n (4c)
+\text{a proof from } G^* \text{ uses finitely many givens, all in some } G_n @@ a proof is finite (37b3)
+\htmlClass{new}{G^* \text{ is clash-free, full, and named}} \quad \blacksquare @@ each φₙ or ¬φₙ was put in at round n
+  </pre>
+  <p data-pid="5d5610">Nothing was chosen without a rule. The listing fixed the order, and at each round exactly one of the two was put in by a settled test of the rule: φₙ when that keeps the collection clash-free, ¬φₙ otherwise. The test itself is no recipe, but it is a condition, and 4d’s recursion builds the rounds. No axiom of choice is spent. A language too large to list would need its statements lined up some other way, and 37e meets that.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · growing · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37d2.1</span><span class="ph know">know</span>How is G grown, round by round? <br>What does the full-growth technique say, and why does the growth spend no axiom of choice?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37d3">
+  <h2 class="sthead"><span class="stno">37d3</span>A world made of names</h2>
+  <p data-pid="023396">A full clash-free collection holds everything it reaches: if G* ⊢ χ and ¬χ were in G*, G* would reach ⊥. Call two terms with no placeholders <i>kin</i> when the statement t = t′ is in G*. Self-sameness, turn-about and chain are reached, so kin is a sameness relation, and it splits the terms into classes (2g, 5·cb2).</p>
+  <p data-pid="2ed75d">The world of names M* has the classes as its members. A name means its own class. f([t₁], …, [tₙ]) = [f(t₁, …, tₙ)], and R holds of [t₁], …, [tₙ] when R(t₁, …, tₙ) is in G*. Swap makes both well defined: kin terms put in give kin results.</p>
+  <p data-pid="0ba787">Term-world technique: <b>a statement is true in the world of names exactly when it is in G*.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the term-world technique">
+\text{atoms: } M^* \models t = t' \iff [t] = [t'] \iff (t = t') \in G^* @@ the definition of the world
+\neg\varphi:\ M^* \models \neg\varphi \iff \varphi \notin G^* \iff \neg\varphi \in G^* @@ induction on the statement; G* is full and clash-free
+\varphi \land \psi,\ \varphi \lor \psi,\ \varphi \Rightarrow \psi @@ the same: G* holds what it reaches, and is full
+\exists x\,\psi:\ \exists x\,\psi \in G^* \Rightarrow \psi(c) \in G^* \Rightarrow M^* \models \psi(c) @@ G* is named; induction
+\exists x\,\psi:\ M^* \models \psi[\,[t]\,] \Rightarrow \psi(t) \in G^* \Rightarrow \exists x\,\psi \in G^* @@ every member is a class [t]; show an example
+\forall x\,\psi \text{ is } \neg\exists x\,\neg\psi \text{ in force} @@ each gives the other in the calculus, with not-not out (7d)
+\htmlClass{new}{M^* \models \varphi \iff \varphi \in G^*} \quad \blacksquare @@ every way of building is covered (37a1)
+  </pre>
+  <p data-pid="1d4436">So G, inside G*, has a world: forget the meanings of the new names, and M* is a world for G’s own language. Every clash-free collection in a listed language has a world. With the two-questions technique, that is the way back.</p>
+  <p data-pid="d336f1">Reached-if-true-everywhere technique: <b>in a listed language, whatever is true in every world of G is reached from G.</b> In marks: G ⊨ φ gives G ⊢ φ. With 37c, the two marks ⊢ and ⊨ say the same thing.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · names · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37d3.1</span><span class="ph know">know</span>What are the members of the world of names, and what does each mark mean there? <br>What does the term-world technique say, and what does the reached-if-true-everywhere technique then give?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37d4">
+  <h2 class="sthead"><span class="stno">37d4</span>Finitely many suffice</h2>
+  <p data-pid="c7054d">Finite-parts technique: <b>if every finite part of a collection of statements has a world, the whole collection has a world.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the finite-parts technique">
+G \text{ has no world} @@ suppose, aiming to refute
+G \models \bot @@ nothing to check: there is no world of G
+G \vdash \bot @@ the reached-if-true-everywhere technique
+F \vdash \bot \text{ for the finite part } F \text{ of givens the proof uses} @@ a proof is finite (37b3)
+F \text{ has no world} @@ the world-means-clash-free technique (37c2)
+\htmlClass{new}{\bot} \quad \blacksquare @@ clash, with the hypothesis on F; so G has a world
+  </pre>
+  <p data-pid="3879bc">34d called a space compact when finitely many of any open cover suffice. The accepted name of this technique is compactness, for the same reason: a demand that every finite part can meet, the whole can meet.</p>
+  <pre class="lines" data-k="ember" data-label="this step: no statement says “finite”">
+\lambda_n:\ \exists x_1 \cdots \exists x_n\,(x_1 \ne x_2 \land x_1 \ne x_3 \land \cdots \land x_{n-1} \ne x_n) @@ “at least n members”, one statement for each n
+G \text{ has a world with at least } n \text{ members, for every } n @@ suppose
+\text{each finite part of } G \cup \{\lambda_1, \lambda_2, \ldots\} \text{ has a world} @@ a world of G with enough members makes its λₙ true
+G \cup \{\lambda_1, \lambda_2, \ldots\} \text{ has a world, and it is not finite} @@ the finite-parts technique
+\htmlClass{new}{\text{no collection of statements has exactly the finite worlds as its worlds}} \quad \blacksquare @@ a collection with worlds of every finite size has an endless one
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · compact · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37d4.1</span><span class="ph know">know</span>What does the finite-parts technique say, and which fact about proofs does it rest on? <br>Why can no collection of statements have exactly the finite worlds as its worlds?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37d5">
+  <h2 class="sthead"><span class="stno">37d5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+G \nvdash \varphi \text{, so } G \vdash \neg\varphi\,? @@ G may reach neither; only the grown G* holds one of them
+\text{every finite part of } G \text{ is true in } N \text{, so } G \text{ is true in } N\,? @@ the finite-parts technique gives some world, not that one (37f)
+\text{the growth picks at every round, so it spends choice}\,? @@ the listing and a settled condition fix each round: 4d’s recursion, no axiom
+\text{the world of names is made of strings, so its members are the numbers}\,? @@ its members are classes of terms; which classes depends on G*
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37d5.1</span><span class="ph know">know</span>Why does G ⊬ φ not give G ⊢ ¬φ? <br>Why does “every finite part of G is true in N” not make G true in N?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">37d.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="G = \{\,P(c_0) \lor P(c_1),\ \ \neg P(c_0)\,\}"></span> <span data-tex-inline="\varphi_0 = P(c_1),\ \ \varphi_1 = \exists x\,\neg P(x),\ \ \varphi_2 = P(c_0)"></span></span>Run three rounds of the growth on G with this start of the listing. Write what is put in at each round. <br>In the world of names, which classes are P?</div>
+  <div class="chq"><span class="chid">37d.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="G = \{\lambda_1, \lambda_2, \lambda_3, \ldots\} \cup \{\neg\lambda_{n} : n \ge 1\}"></span></span>Find a finite part of this collection with no world. <br>Then find a collection in which every finite part has a world with exactly 2 members and the whole has no world with exactly 2 members, or prove that there is none.</div>
+  <div class="chq"><span class="chid">37d.6.3</span><span class="tagq">reroute</span><span class="givens"><span class="gtx">7d’s always-true-lines technique</span></span>Reroute 7d: prove that a statement built from letters with the joining words, whose column is all T, can be proved, by reading each letter as a relation mark with no places and using the reached-if-true-everywhere technique. <br>Which worlds of the empty collection are the rows of the column?</div>
+  <div class="chq"><span class="chid">37d.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">7c.4.4: the quarrel over whether a statement no one can show either way is still true or false</span></span>Rung 7 left one side holding that a statement is so or not so whether or not anyone can show which, and the other holding that truth is what can be shown. <br>Find the lines of this step that spend the either-way principle or not-not out: in the growth, in the term-world technique, in the two-questions technique. <br>Without them, does every clash-free collection still have a world of this kind? Which side does the way back from ⊨ to ⊢ take?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r37c.html">← 37c · what is provable is true</a><a href="r37e.html">37e · a countable line →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The reached-if-true-everywhere technique is the completeness theorem for first-order logic: if Γ ⊨ φ then Γ ⊢ φ. The full-growth technique combines Lindenbaum’s lemma (every consistent set extends to a maximal consistent one) with Henkin’s witnesses; the new names are Henkin constants and the world of names is the term model, or Henkin model. The term-world technique is the truth lemma. The finite-parts technique is the compactness theorem. The two-questions technique says that completeness is the same as the model existence theorem: every consistent set has a model.</p>
+  <h3>Who said it first</h3>
+  <p>Kurt Gödel proved completeness in his doctoral thesis (Vienna, 1929), published in 1930, by another road; compactness for countable languages was a corollary there. Anatolii Maltsev proved compactness for languages of any size in 1936 and used it in algebra in 1941. Leon Henkin found the proof on this page, with witnesses and a world of names, in his thesis of 1947, published in 1949. The question had been posed by David Hilbert and Wilhelm Ackermann in their book of 1928.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“G does not reach φ. So by the reached-if-true-everywhere technique, φ is false in every world of G.” Not allowed: the technique, turned round, gives only that φ is false in some world of G. In the others φ may well be true.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'not reached',t:R`G \nvdash \varphi`,n:`Then ¬φ adds no clash.`},
+  {k:'ember',kl:'a world',t:R`M \models G \cup \{\neg\varphi\}`,n:`If clash-free means a world.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{G \models \varphi \Rightarrow G \vdash \varphi}`,n:`True everywhere is reached.`}
+],{title:'The slides · two questions · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'round',t:R`G_{n+1} = G_n \cup \{\varphi_n\} \text{ or } G_n \cup \{\neg\varphi_n\}`,n:`Whichever keeps clash-free.`},
+  {k:'ember',kl:'witness',t:R`\exists x\,\psi(x) \to \psi(c)`,n:`A new name for each some.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{G^* \text{ full, named, clash-free}}`,n:`Every statement decided.`}
+],{title:'The slides · growing · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'members',t:R`[t] = \{t' : (t = t') \in G^*\}`,n:`Classes of terms.`},
+  {k:'ember',kl:'truth',t:R`M^* \models \varphi \iff \varphi \in G^*`,n:`By induction.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{G \models \varphi \iff G \vdash \varphi}`,n:`True everywhere is provable.`}
+],{title:'The slides · names · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'finite parts',t:R`F \subseteq G \text{ finite} \Rightarrow F \text{ has a world}`,n:`Each part can be met.`},
+  {k:'ember',kl:'proofs',t:R`G \vdash \bot \Rightarrow F \vdash \bot`,n:`A proof uses finitely many.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{G \text{ has a world}}`,n:`The whole can be met.`}
+],{title:'The slides · compact · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

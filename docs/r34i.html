@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gluing loops</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r34h.html">← 34h something stays put</a><a href="r34concl.html">next: 34·∎ stretching keeps what open sets decide →</a></p>
+  <div class="tags"><span class="tag proof">34i · proof</span></div>
+  <h1>Gluing loops</h1>
+  <p data-pid="5f6c5b">Rung 19 built groups from shuffles and from the moves of a square. The loop groups of the circle and the torus turned out to be old friends, the whole numbers and their pairs. Glue two circles at a point, into a figure eight, and something new appears. A loop that goes round the left circle and then the right is not the same as one that goes round the right and then the left, so the order of loops matters. The group that records this is built from words: strings of letters and their undoings, with nothing allowed except cancelling a letter against its undoing. Then a group can be named by its letters and by the words it sets to nothing, the way a surface was named by a word round a polygon. The rule for gluing spaces turns the word round a polygon into exactly such a description of its loop group. And the loop groups of the surfaces of the list are all different, so loops alone tell every closed surface from every other.</p>
+  <p class="gesture" data-pid="5c030a">The reduced words in some letters and their undoings, multiplied by writing one after another and cancelling, form a group, because each word acts on the reduced words as a shuffle. A group named by letters and by words set to nothing has exactly one product-keeping map to any group in which those words come out as nothing. Gluing spaces glues their loop groups, with the loops of the overlap named twice and set equal: a figure eight has the free group on two letters, and a surface sewn from a word has the group of its letters with that one word set to nothing. Counting what is left when the letters are allowed to change places tells every surface of the list apart.</p>
+</header>
+
+<section class="class step" data-step="34i1">
+  <h2 class="sthead"><span class="stno">34i1</span>Words in letters</h2>
+  <p data-pid="02dd14">Take letters x and y, and their undoings x⁻¹ and y⁻¹. A <i>word</i> is a finite string of them, such as x y x⁻¹ y⁻¹ or y y y. A word is <i>reduced</i> when no letter stands next to its own undoing. Every word reduces, by cancelling such neighbours until none is left, and it reduces to the same word whatever order the cancelling takes. The empty word is written e.</p>
+  <p data-pid="226c76">To multiply two reduced words, write one after the other and reduce. The <i>free group</i> on x and y is the reduced words with this product. Free, because no rule ties the letters together except cancelling. It is this step’s one new academy word.</p>
+  <p data-pid="2c0062">Free-group technique: <b>the reduced words in any set of letters, multiplied by writing one after the other and cancelling, form a group.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the free-group technique">
+e\,w = w\,e = w;\ \ (s_1\cdots s_n)(s_n^{-1}\cdots s_1^{-1}) = e @@ the empty word does nothing; the reversed word with every letter undone undoes w (19c)
+L_s(w) = s\,w \text{ reduced},\ \text{for each letter or undoing } s @@ put s in front, and cancel if w starts with s⁻¹
+L_{s^{-1}}(L_s(w)) = w \Rightarrow L_s \text{ is a shuffle of the reduced words} @@ it has a backwards map (9d)
+w = s_1\cdots s_n \mapsto L_w = L_{s_1}\circ\cdots\circ L_{s_n},\ \ L_w(e) = w @@ so different words give different shuffles
+L_{w\,v} = L_w \circ L_v @@ the product of w and v reduces to what L_w does to v
+\htmlClass{new}{(u\,v)\,w = u\,(v\,w)} \quad \blacksquare @@ composing shuffles does not care about brackets (9b), and w ↦ L_w is one-to-one
+  </pre>
+  <p data-pid="285c0b">Brackets were the hard part. Reducing by hand in different orders seems to give the same answer, but checking every case is a long road. Each word acting as a shuffle makes it one line, through <a href="r19a.html#c93c14">19a</a>’s shuffles. The free group is not turn-about: x y and y x are different reduced words.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · free groups · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">34i1.1</span><span class="ph know">know</span>What is a reduced word, and how are two reduced words multiplied?  <br>What does the free-group technique say, and what does each word do to the reduced words?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34i2">
+  <h2 class="sthead"><span class="stno">34i2</span>Naming a group by letters and words</h2>
+  <p data-pid="4eb76e">⟨x, y | r₁, r₂⟩ names the group of words in x and y in which the words r₁ and r₂, the <i>relations</i>, count as nothing. Two words name the same member when one can be turned into the other by putting in or taking out a relation, its undoing, or a letter beside its undoing, anywhere in the word. Its accepted name is a presentation.</p>
+  <p data-pid="ae2e39">Presented-map technique: <b>if g and h are members of a group G in which r₁(g, h) and r₂(g, h) do nothing, then exactly one product-keeping map from ⟨x, y | r₁, r₂⟩ to G sends x to g and y to h.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the presented-map technique">
+w = s_1\cdots s_n \mapsto \bar s_1\cdots\bar s_n \in G @@ x to g, x⁻¹ to g⁻¹, and the same for y
+\text{putting in a letter beside its undoing: } \bar s\,\bar s^{-1} = e @@ the product in G does not change
+\text{putting in } r_i \text{ or its undoing: } r_i(g, h) = e @@ the product in G does not change
+\text{so the map is well named, and keeps products} @@ a product of words is written one after the other
+\htmlClass{new}{\text{and it is the only one}} \quad \blacksquare @@ a product-keeping map is fixed by what it does to x and y
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: three named groups">
+\langle x \mid x^2 \rangle = \{e, x\} @@ every word is a power of x, and x² is nothing; a flip of 20c, done twice, does nothing, so the map to {do nothing, flip} shows e ≠ x
+\langle x, y \mid x\,y\,x^{-1}\,y^{-1} \rangle:\ \ x\,y = y\,x @@ put in the relation and cancel: every word becomes xᵐyⁿ
+x \mapsto (1, 0),\ \ y \mapsto (0, 1) \text{ onto } \mathbb Z \times \mathbb Z @@ the presented-map technique: (1, 0) + (0, 1) − (1, 0) − (0, 1) = (0, 0)
+\htmlClass{new}{\langle x, y \mid x\,y\,x^{-1}\,y^{-1} \rangle = \mathbb Z \times \mathbb Z} \quad \blacksquare @@ xᵐyⁿ goes to (m, n): different m, n, different members
+  </pre>
+  <p data-pid="6726f9">The square’s eight symmetries of <a href="r19f.html#3db537">19f</a> are ⟨r, f | r⁴, f², f r f r⟩, with r the quarter turn and f a flip. The presented-map technique gives a map onto them. That the group named has no more than eight members takes a count of words, one of the special challenges.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · presentations · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34i2.1</span><span class="ph know">know</span>What does ⟨x, y | r₁, r₂⟩ name, and when do two words name the same member?  <br>What does the presented-map technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34i3">
+  <h2 class="sthead"><span class="stno">34i3</span>Gluing spaces glues their loops</h2>
+  <p data-pid="96fc31">The gluing rule, stated here and proved much higher up the ladder: <b>if X is the union of two open sets U and V, each joined by paths, whose overlap is joined by paths and holds x₀, then the loop group of X is named by the letters and relations of the loop groups of U and V together, with one more relation for each loop in the overlap: its name as a loop of U equals its name as a loop of V.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the figure eight">
+U = \text{left circle with a short piece of the right},\ \ V = \text{the mirror of that} @@ open, joined by paths
+\pi_1(U) = \langle x \rangle,\ \ \pi_1(V) = \langle y \rangle @@ each slides onto its circle: whole numbers (34g4)
+U \cap V = \text{a small cross about the meeting point} @@ its loops all slide to x₀: no new relation
+\htmlClass{new}{\pi_1(\text{figure eight}) = \langle x, y \mid \ \rangle,\ \text{the free group}} \quad \blacksquare @@ the gluing rule
+  </pre>
+  <p data-pid="b72e2b">Sewn surfaces next. Sew a polygon by a word whose corners all fall into one class, as 34f4 can always arrange. The rim becomes a bunch of circles joined at one point, one circle for each letter, and by the gluing rule its loop group is free on those letters. Gluing the inside of the polygon onto that bunch adds one relation, because the only new loop that slides away is the rim, read as the word. So the loop group of the surface is the letters, with the surface’s word set to nothing.</p>
+  <pre class="lines" data-k="ember" data-label="this step: loop groups of sewn surfaces">
+\text{torus}:\ \ \langle x, y \mid x\,y\,x^{-1}\,y^{-1} \rangle = \mathbb Z \times \mathbb Z @@ 34i2; it agrees with the plane over the torus (34g5)
+\text{cross-cap}:\ \ \langle x \mid x\,x \rangle = \{e, x\} @@ 34i2; it agrees with the sphere over the cross-cap (34g5)
+\text{bottle}:\ \ \langle x, y \mid x\,y\,x\,y^{-1} \rangle,\ \ y^{-1}\,x\,y = x^{-1} @@ the relation, read again; x to a quarter turn and y to a flip (19f) keep it, and do not change places: so x y ≠ y x
+\htmlClass{new}{g \text{ tori}:\ \ \langle x_1, y_1, \ldots, x_g, y_g \mid x_1y_1x_1^{-1}y_1^{-1}\cdots x_gy_gx_g^{-1}y_g^{-1} \rangle} @@ the word of 34f4, one corner class
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · gluing · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34i3.1</span><span class="ph know">know</span>What does the gluing rule say?  <br>What is the loop group of the figure eight, and of a surface sewn from a word with one corner class?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34i4">
+  <h2 class="sthead"><span class="stno">34i4</span>Loops tell the surfaces apart</h2>
+  <p data-pid="f62b64">Two named groups can look different and be the same, so the step compares something simpler: what is left when every two letters are allowed to change places. Let every letter count as a whole number, and every word as the sum of its letters, each counted with its sign. A relation then becomes a sum set to nothing.</p>
+  <p data-pid="bd50e4">Turn-about-count technique: <b>with the letters allowed to change places, the loop group of g tori summed becomes lists of 2g whole numbers, and that of k cross-caps becomes lists of k − 1 whole numbers together with one member that done twice does nothing.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the turn-about-count technique">
+x_1y_1x_1^{-1}y_1^{-1}\cdots \to x_1 + y_1 - x_1 - y_1 + \cdots = 0 @@ the relation becomes nothing at all
+g \text{ tori}:\ \ 2g \text{ free counts} @@ no relation is left among the 2g letters
+x_1x_1\cdots x_kx_k \to 2(x_1 + \cdots + x_k) = 0 @@ the cross-caps’ relation
+u = x_1 + \cdots + x_k:\ \ \text{letters } x_1, \ldots, x_{k-1}, u,\ \ 2u = 0 @@ change one letter for the sum; the k − 1 others stay free
+\htmlClass{new}{k \text{ cross-caps}:\ \ k - 1 \text{ free counts and } u,\ 2u = 0,\ u \ne 0} \quad \blacksquare @@ the map u ↦ 1 onto {0, 1} with 1 + 1 = 0 shows u is not nothing
+  </pre>
+  <p data-pid="417261">So the sphere has nothing, the g tori have 2g free counts and nothing else, and the k cross-caps have k − 1 free counts and one member of order two. No two surfaces of the list match. Loops alone tell every closed surface from every other, as the count of 34f and the sides did. Does that go one step up? Is every closed three-dimensional shape whose loops all slide to a point the same shape as the round one? That question waited a hundred years. 34·now tells how it ended.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · telling apart · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34i4.1</span><span class="ph know">know</span>What happens to a named group when its letters are allowed to change places?  <br>What does the turn-about-count technique say about the surfaces of the list?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34i5">
+  <h2 class="sthead"><span class="stno">34i5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{the loops of the figure eight change places: } x\,y = y\,x\,? @@ x y and y x are different reduced words; the free group is not turn-about
+\langle x \mid x^2 \rangle \text{ has endlessly many members, one for each power}\,? @@ x² is nothing, so every power is e or x
+\text{a relation may be taken out only where it stands in the word}\,? @@ it may be put in anywhere first: x y x⁻¹ y⁻¹ put in after y x makes y x into x y
+\text{named groups that look different are different}\,? @@ ⟨x, y | y⟩ is ⟨x⟩, the whole numbers
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34i5.1</span><span class="ph know">know</span>Why is “the loops of the figure eight change places” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">34i.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\langle r, f \mid r^4,\ f^2,\ f\,r\,f\,r \rangle"></span></span>Prove that every word in r and f names one of e, r, r², r³, f, f r, f r², f r³. <br>Then use the presented-map technique and 19f’s symmetries of the square to prove the eight are different.</div>
+  <div class="chq"><span class="chid">34i.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\langle x, y \mid x\,y\,x^{-1}\,y^{-1} \rangle,\ \ \langle x, y \mid x\,y\,x\,y^{-1} \rangle"></span></span>Find each group with its letters allowed to change places. <br>The torus and the bottle have the same characteristic. Find which of them has a member, other than e, that done twice does nothing, once the letters change places.</div>
+  <div class="chq"><span class="chid">34i.6.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">a closed surface whose loop group has one member</span></span>Prove from the list and the turn-about-count technique that such a surface is the sphere. <br>Then drop the word closed: find a surface in one piece, not the same shape as the sphere, whose every loop slides to a point.</div>
+  <div class="chq"><span class="chid">34i.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\pi_1(\text{torus})"></span></span>Find the loop group of the torus a second way: the torus is the circle times the circle. Prove that a loop in a product is a pair of loops, and a slide a pair of slides, so the loop group of X × Y is the pairs. <br>Check it against 34g5.</div>
+  <div class="chq"><span class="chid">34i.6.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">a group named by letters and words</span></span>A named group is fixed by its letters and relations. In 1911 a question was asked: given the letters and relations, is there a procedure that decides, for every word, whether it names nothing? For the surfaces of this step there is. In general the answer came in the 1950s, and it is no. <br>If no procedure can decide which words name nothing, does the presentation tell you what the group is? Rung 38 has the bill.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r34h.html">← 34h · something stays put</a><a href="r34concl.html">34·∎ · stretching keeps what open sets decide →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The free group on x and y is F₂. A group named by letters and words is a group presentation, with generators and relators. A product-keeping map is a homomorphism. The gluing rule is the Seifert–van Kampen theorem. Allowing the letters to change places is abelianisation, and the abelianised fundamental group is the first homology group, H₁. The group ⟨r, f | r⁴, f², frfr⟩ is the dihedral group of the square. The question of 1911 is the word problem.</p>
+  <h3>Who said it first</h3>
+  <p>Walther von Dyck named groups by generators and relations in 1882. Max Dehn studied the loop groups of surfaces by their words and asked the word problem in 1911. Herbert Seifert in 1931 and Egbert van Kampen in 1933 proved the gluing rule. The proof of brackets by shuffles is due to B. L. van der Waerden (1945). Pyotr Novikov in 1955 and William Boone in 1958 built named groups whose word problem no procedure can decide.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“To multiply three reduced words, join them and cancel. Joining is bracket-free, so the product is bracket-free.” Not allowed: the product is not plain joining. Cancelling between the first two words can expose new letters to cancel against the third, and a direct check must follow every such chain. The shuffle proof avoids the chains.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'words',t:R`x\,y\,x^{-1}\,y^{-1},\ \ y\,y\,y`,n:`Letters and undoings.`},
+  {k:'ember',kl:'shuffles',t:R`L_s(w) = s\,w \text{ reduced}`,n:`Each letter shuffles the words.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(uv)w = u(vw)}`,n:`Brackets, by shuffles.`}
+],{title:'The slides · free groups · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'relations',t:R`\langle x, y \mid r_1, r_2 \rangle`,n:`Words set to nothing.`},
+  {k:'ember',kl:'maps out',t:R`r_i(g, h) = e \Rightarrow x \mapsto g,\ y \mapsto h`,n:`Exactly one.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\langle x, y \mid xyx^{-1}y^{-1} \rangle = \mathbb Z^2}`,n:`The torus’s loops, again.`}
+],{title:'The slides · presentations · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'two pieces',t:R`X = U \cup V`,n:`Overlap joined by paths.`},
+  {k:'ember',kl:'names',t:R`\pi_1(U),\ \pi_1(V),\ \text{overlap set equal}`,n:`One relation per overlap loop.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\pi_1 = \langle \text{letters} \mid \text{the word} \rangle}`,n:`The polygon’s word.`}
+],{title:'The slides · gluing · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'turn-about',t:R`x + y - x - y = 0`,n:`The torus relation vanishes.`},
+  {k:'ember',kl:'cross-caps',t:R`2(x_1 + \cdots + x_k) = 0`,n:`One member of order two.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\mathbb Z^{2g}\ \text{vs}\ \mathbb Z^{k-1} \times \{0, 1\}}`,n:`Every surface, its own group.`}
+],{title:'The slides · telling apart · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

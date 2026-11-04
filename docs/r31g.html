@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sizes of functions</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r31f.html">← 31f turn, stretch, turn</a><a href="r31h.html">next: 31h a plane with endlessly many directions →</a></p>
+  <div class="tags"><span class="tag proof">31g · proof</span></div>
+  <h1>Sizes of functions</h1>
+  <p data-pid="646747">How big is a function? The answer depends on what you need it for. If the question is how far a curve ever strays, the size is its highest height, taken without sign. If it is how much stuff lies under the curve, the size is its total. If it is how much energy a signal carries, the size is the root of the total of its square, and that one comes from a product. Each of the three obeys the same rules a size must obey, and they are tied to each other by inequalities. But the totals of rung thirty bring a snag. A function that is zero everywhere but one point has total zero, so its size is zero, and yet it is not the zero function. Something has to give. The ladder gives on a point it laid down on rung two: when two functions agree everywhere except on a set of size zero, they are taken to be the same. With that bent, the sizes built on totals are true sizes, and they have no holes: every list of functions that crowds settles at a function.</p>
+  <p class="gesture" data-pid="c29bdc">The highest height, the total, and the root of the total of the square are three sizes of a function, each obeying the rules of a size, tied by inequalities. Built on rung thirty’s totals, they are true sizes only when functions that agree except on a set of size zero are taken as the same. Then every crowding list settles.</p>
+</header>
+
+<section class="class step" data-step="31g1">
+  <h2 class="sthead"><span class="stno">31g1</span>Three sizes</h2>
+  <p data-pid="f3f353">From here on, a <i>size</i> on a space of arrows is a number ‖f‖ for each f with three demands: ‖f‖ ≥ 0, and ‖f‖ = 0 only for f = 0; ‖tf‖ = |t| ‖f‖; and ‖f + g‖ ≤ ‖f‖ + ‖g‖. 31a4 proved that every product’s size is one. Three sizes of a function f on an interval [u, v] are wanted:</p>
+  <p class="eqline" data-pid="63f5d3">\|f\|_\infty = \sup_{[u, v]} |f|,\qquad \|f\|_1 = \int_u^v |f|,\qquad \|f\|_2 = \Big(\int_u^v |f|^2\Big)^{1/2}</p>
+  <p data-pid="9ad988">the highest height, the total size and the energy size. ‖f‖₂ is 31a1’s size, from the area product. For f = x on [0, 1] they are 1, 1/2 and 1/√3 ≈ 0.577.</p>
+  <p data-pid="992288">Sup-size technique: <b>on the continuous functions on [u, v], the highest height and the total size are sizes, and the highest height comes from no product.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the sup-size technique">
+|f(x) + g(x)| \le |f(x)| + |g(x)| \le \|f\|_\infty + \|g\|_\infty @@ the triangle for numbers, at each x
+\|f + g\|_\infty \le \|f\|_\infty + \|g\|_\infty @@ the least upper bound is at most any upper bound (8c)
+\textstyle\int |f + g| \le \int |f| + \int |g| @@ totals keep order and add (30c1)
+f = x,\ g = 1 - x \text{ on } [0, 1]:\ \ \|f \pm g\|_\infty = 1,\ \ \|f\|_\infty = \|g\|_\infty = 1 @@ f + g = 1; f − g = 2x − 1
+\htmlClass{new}{1^2 + 1^2 \ne 2\cdot 1^2 + 2\cdot 1^2} \quad \blacksquare @@ the parallelogram line of 31a4 fails, so no product gives this size
+  </pre>
+  <p data-pid="c86d1e">Each demand ‖f‖ = 0 ⇒ f = 0 needs continuity: a continuous f ≠ 0 is far from 0 on a whole piece of [u, v], as in 31a1.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · sizes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">31g1.1</span><span class="ph know">know</span>What are the three demands on a size, and what are ‖f‖∞, ‖f‖₁ and ‖f‖₂?  <br>What does the sup-size technique say, and which line shows that no product gives ‖f‖∞?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31g2">
+  <h2 class="sthead"><span class="stno">31g2</span>Sizes in order, and in powers</h2>
+  <p data-pid="241df2">Size-order technique: <b>on an interval of length L, ‖f‖₁ ≤ √L ‖f‖₂ ≤ L ‖f‖∞; so on [0, 1], ‖f‖₁ ≤ ‖f‖₂ ≤ ‖f‖∞.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the size-order technique">
+\|f\|_1 = \textstyle\int |f|\cdot 1 = \langle |f|, 1\rangle @@ the area product
+\le \|f\|_2\,\|1\|_2 = \sqrt L\,\|f\|_2 @@ the product bound (31a3)
+\|f\|_2^2 = \textstyle\int |f|^2 \le \int \|f\|_\infty^2 = L\,\|f\|_\infty^2 @@ |f| ≤ ‖f‖∞ at every x; totals keep order
+\htmlClass{new}{\|f\|_1 \le \sqrt L\,\|f\|_2 \le L\,\|f\|_\infty} \quad \blacksquare @@ take roots, multiply by √L
+  </pre>
+  <p data-pid="5981af">The inequalities run one way only. On [0, 1], the tall thin tent of height n over [0, 2/n] has total size 1, energy size √(2n/3) and highest height n. A list of such tents shrinks to nothing under one size and grows without bound under another.</p>
+  <p data-pid="68da22">Between the total and the energy size sit others. For p ≥ 1, the <i>p-size</i> is ‖f‖ₚ = (∫|f|ᵖ)^(1/p), and p and q are <i>matched</i> when 1/p + 1/q = 1, as 2 is with 2. For matched p and q, every s, t ≥ 0 have st ≤ sᵖ/p + t^q/q: ln bends down (17b), so ln of the mix sᵖ/p + t^q/q is at least the same mix of ln sᵖ and ln t^q, which is ln st (14g).</p>
+  <p data-pid="1662b4">Matched-powers technique: <b>if p and q are matched, ∫|fg| ≤ ‖f‖ₚ ‖g‖_q.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the matched-powers technique">
+\|f\|_p = \|g\|_q = 1 \text{ first} @@ stretch f and g; both sides scale alike
+|f(x)g(x)| \le \tfrac{|f(x)|^p}{p} + \tfrac{|g(x)|^q}{q} @@ the bending line above, at each x
+\textstyle\int |fg| \le \tfrac1p\int|f|^p + \tfrac1q\int|g|^q = \tfrac1p + \tfrac1q = 1 @@ totals keep order and add
+\htmlClass{new}{\textstyle\int |fg| \le \|f\|_p\,\|g\|_q} \quad \blacksquare @@ undo the stretching; p = q = 2 is the product bound
+  </pre>
+  <p data-pid="7fa9e8">That ‖f + g‖ₚ ≤ ‖f‖ₚ + ‖g‖ₚ, so that the p-size is a size, follows from the matched-powers technique in four lines. They are left to the challenges.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · in order · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31g2.1</span><span class="ph know">know</span>What does the size-order technique say?  <br>What are matched powers, and what does the matched-powers technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31g3">
+  <h2 class="sthead"><span class="stno">31g3</span>The same, but for a set of size zero</h2>
+  <p data-pid="e965a1">Rung 30’s totals reach far beyond continuous functions: every sized f with ∫|f| finite has a total size. But take h = 1 at x = ½ and 0 elsewhere on [0, 1]. Its total is 0, so ‖h‖₁ = 0, and h is not the zero function. The first demand of a size fails. And it is not a small failure. Without that demand a list can settle at two different functions at once, since ‖fₙ − f‖₁ → 0 gives ‖fₙ − (f + h)‖₁ → 0 as well. Limits stop being one thing, and nothing built on them works.</p>
+  <p data-pid="db75e0">By 9a a function is a set of pairs, and by 2c’s same-members axiom f and f + h are different sets. The ladder does not drop the axiom. It bends it one level up, as 5a did for pairs of counting numbers. From here on, sized functions f and g <i>agree but for size zero</i> when the set where f(x) ≠ g(x) has size 0. In a space of sized functions, f = g now means that they agree but for size zero; everywhere else = keeps its meaning. The objects of the space are the boxes of functions that agree but for size zero, and two boxes are the same exactly when they have the same members: the same-members axiom, kept, one level up. Its accepted name, extensionality, from the Latin extensio, a stretching out, says that a set is fixed by what it stretches over.</p>
+  <p data-pid="ddc5e1">Size-zero-sameness technique: <b>agreeing but for size zero is a sameness that adding, stretching and totals respect; on its boxes, ‖f‖₁ = 0 only when f = 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the size-zero-sameness technique">
+\{f \ne h\} \subseteq \{f \ne g\} \cup \{g \ne h\} @@ where f and h differ, one of the two pairs differs
+\text{sizes } 0 + 0 = 0 \text{ bound it} @@ outer-adds-at-most (30a); so the sameness chains; it is plainly its own reverse and true of f with f
+\{f + g \ne f' + g'\} \subseteq \{f \ne f'\} \cup \{g \ne g'\} @@ adding respects it; stretching likewise
+\textstyle\int |f| = 0 \Rightarrow m\{|f| > 1/k\} \le k\int|f| = 0 \text{ for every } k @@ a step function below |f| on that set (30c1)
+\htmlClass{new}{\{f \ne 0\} = \textstyle\bigcup_k \{|f| > 1/k\} \text{ has size } 0} \quad \blacksquare @@ countable adding (30b3): ‖f‖₁ = 0 makes f = 0 in the new sense
+  </pre>
+  <p data-pid="606ed6">From here on, L¹ and L² are the spaces of boxes of sized functions with ‖f‖₁ finite, and with ‖f‖₂ finite. On L², ∫ f ḡ is a product: 2|fg| ≤ |f|² + |g|² makes it finite, and the size-zero-sameness technique gives the third demand.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · two sizes of truth</div>
+    <p data-pid="da9112">30c’s box found that a total is a claim about the whole function and cannot see one point. Here that blindness is made part of what a function is. In L², asking for the value of f at ½ has no answer, because the box holds functions with every value there. Only claims that totals can see survive: sizes, products, the total over a piece.</p>
+    <p data-pid="cf5869"><b>In a space built on totals, a function is known by what its totals say, and its value at one point is not a fact about it.</b></p>
+    <p data-pid="5e1c9f">A measured signal is like this. A reading at one instant is never what a meter reports; it reports an average over a short window, a total. Two signals that differ only at instants no window can catch are the same signal for every reading that can be made.</p>
+    <p class="bait" data-pid="1ddcd3">A rain gauge at Hoquiam reports the total each hour. Could two storms that differ only at single instants give different reports? What would it take for two storms to be told apart?</p>
+  </aside>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · size zero · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31g3.1</span><span class="ph know">know</span>Why does the first demand of a size fail for ‖·‖₁ on all sized functions, and what breaks without it?  <br>How is the same-members axiom bent, and what does the size-zero-sameness technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31g4">
+  <h2 class="sthead"><span class="stno">31g4</span>No holes in L¹</h2>
+  <p data-pid="71df51">22c called a list <i>crowding</i> when its terms come as close to each other as you like, and found that on the line every crowding list settles. With a size, a list fₙ crowds when ‖fₙ − fₘ‖ heads to 0 as n and m grow, and settles at f when ‖fₙ − f‖ heads to 0. The continuous functions under ‖·‖₁ have holes: on [0, 1], the ramps that climb from 0 to 1 over [½, ½ + 1/n] crowd, and they settle at the step that jumps at ½, which is not continuous and agrees but for size zero with no continuous function. With rung 30’s totals the holes are filled.</p>
+  <p data-pid="d23538">Size-complete technique: <b>in L¹, every crowding list settles; and some sub-list of it settles at every point but a set of size zero. The same is true in L².</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the size-complete technique, in L¹">
+n_1 < n_2 < \cdots \text{ with } \|f_{n_{k+1}} - f_{n_k}\|_1 < 2^{-k} @@ the list crowds: pick each nₖ far enough out
+g = |f_{n_1}| + \textstyle\sum_k |f_{n_{k+1}} - f_{n_k}| @@ a sum of sized functions ≥ 0, its running totals rising
+\textstyle\int g \le \|f_{n_1}\|_1 + \sum_k 2^{-k} = \|f_{n_1}\|_1 + 1 @@ the rising-limit technique (30d1), term by term
+g(x) \text{ finite but for size zero} @@ else ∫g would be endless on a set of positive size
+f_{n_k}(x) = f_{n_1}(x) + \textstyle\sum_{j < k}(f_{n_{j+1}} - f_{n_j})(x) \to f(x) @@ a sum settling in size settles (22g), where g(x) is finite
+|f_{n_k} - f| \le 2g,\ \ \|f_{n_k} - f\|_1 \to 0 @@ the fenced-limit technique (30d3), with the fence 2g
+\htmlClass{new}{\|f_n - f\|_1 \le \|f_n - f_{n_k}\|_1 + \|f_{n_k} - f\|_1 \to 0} \quad \blacksquare @@ the list crowds, and a sub-list settles at f
+  </pre>
+  <p data-pid="e77d6e">The proof for L² is the same, with squares and the energy size, and is a challenge. The sub-list cannot be dropped. In L¹ a list of narrow blocks that sweeps across [0, 1] again and again, each sweep with narrower blocks, settles at 0 in total size and at no single point.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · no holes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31g4.1</span><span class="ph know">know</span>When does a list of functions crowd under a size, and when does it settle?  <br>What does the size-complete technique say, and why do continuous functions under ‖·‖₁ not have it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31g5">
+  <h2 class="sthead"><span class="stno">31g5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\|f\|_1 = 0 \Rightarrow f(x) = 0 \text{ for every } x\,? @@ only but for size zero: h = 1 at ½ has ‖h‖₁ = 0
+\text{in } L^2,\ f(\tfrac12) \text{ is a number}\,? @@ the box of f holds functions with every value at ½
+\|f\|_\infty \le \|f\|_1\,? @@ the tents of 31g2: height n, total size 1
+\|f_n - f\|_1 \to 0 \Rightarrow f_n(x) \to f(x) \text{ at every } x\,? @@ the sweeping blocks settle at 0 in total size and at no point
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31g5.1</span><span class="ph know">know</span>Why is f(½) not a number for f in L²?  <br>Why does settling in total size not give settling at each point?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">31g.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="r_n:\ 0 \text{ on } [0, \tfrac12],\ 1 \text{ on } [\tfrac12 + \tfrac1n, 1],\ \text{straight between}"></span></span>Build ‖rₙ − rₘ‖₁ for n &lt; m and show the ramps crowd.  <br>Find the function of L¹ they settle at, and prove that no continuous function agrees with it but for size zero.</div>
+  <div class="chq"><span class="chid">31g.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="h = 1 \text{ on the fractions in } [0, 1],\ 0 \text{ elsewhere}"></span></span>Find ‖h‖₁, ‖h‖₂ and ‖h‖∞.  <br>The highest height sees what the totals cannot. Build a highest height for L¹ that ignores sets of size zero, and find its value for h.</div>
+  <div class="chq"><span class="chid">31g.6.3</span><span class="tagq">converse</span>A list that settles at every point and is fenced by one g with a finite total settles in total size, by the fenced-limit technique. Turn it round: if a list settles in total size, must it be fenced by one g with a finite total?  <br>Test the sweeping blocks.</div>
+  <div class="chq"><span class="chid">31g.6.4</span><span class="tagq">reroute</span>Close the open proof of 31g2. Write |f + g|ᵖ ≤ |f| |f + g|ᵖ⁻¹ + |g| |f + g|ᵖ⁻¹, apply the matched-powers technique to each part with q = p/(p − 1), and divide.  <br>Then prove the size-complete technique in L² by the same route as in L¹.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r31f.html">← 31f · turn, stretch, turn</a><a href="r31h.html">31h · a plane with endlessly many directions →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A size with the three demands is a norm. ‖f‖∞ is the sup norm (or uniform norm, or infinity norm), ‖f‖₁ the L¹ norm, ‖f‖₂ the L² norm, and ‖f‖ₚ the Lᵖ norm; matched p and q are conjugate exponents. The bending line is Young’s inequality, the matched-powers technique Hölder’s inequality, and the triangle for p-sizes Minkowski’s inequality. Agreeing but for size zero is equality almost everywhere (a.e.), and the boxes are equivalence classes. A crowding list under a size is a Cauchy sequence, and the size-complete technique is the Riesz–Fischer theorem: Lᵖ is complete, a Banach space. The axiom of 2c is the axiom of extensionality.</p>
+  <h3>Who said it first</h3>
+  <p>Otto Hölder proved his inequality in 1889, after Leonard James Rogers in 1888, and Hermann Minkowski the triangle for p-sizes in 1896. William Henry Young gave the bending line in 1912. Frigyes Riesz and Ernst Fischer proved, independently, in 1907, that L² is complete, in the year after Henri Lebesgue’s integral had made it possible; Riesz built the Lᵖ spaces in 1910.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Every crowding list of continuous functions under ‖·‖₁ settles, because the line has no holes (22c).” Not allowed: 22c fills holes among numbers. At each x the values may crowd, and the limit function may still not be continuous, as the ramps show. Filling the holes among functions needs rung 30’s totals.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'highest',t:R`\|f\|_\infty = \sup|f|`,n:`How far it strays.`},
+  {k:'ember',kl:'total',t:R`\|f\|_1 = \textstyle\int|f|`,n:`How much is under it.`},
+  {k:'ember',kl:'energy',t:R`\htmlClass{new}{\|f\|_2 = (\textstyle\int|f|^2)^{1/2}}`,n:`From the product.`}
+],{title:'The slides · sizes · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'total',t:R`\|f\|_1 \le \sqrt L\,\|f\|_2`,n:`The product bound with 1.`},
+  {k:'ember',kl:'energy',t:R`\|f\|_2 \le \sqrt L\,\|f\|_\infty`,n:`Under the highest height.`},
+  {k:'ember',kl:'powers',t:R`\htmlClass{new}{\textstyle\int|fg| \le \|f\|_p\|g\|_q}`,n:`Matched p, q.`}
+],{title:'The slides · in order · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'snag',t:R`h = 1 \text{ at } \tfrac12,\ \ \|h\|_1 = 0`,n:`Not the zero function.`},
+  {k:'ember',kl:'bend',t:R`f = g \iff m\{f \ne g\} = 0`,n:`Boxes of functions.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\|f\|_1 = 0 \Rightarrow f = 0}`,n:`A true size.`}
+],{title:'The slides · size zero · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'pick',t:R`\|f_{n_{k+1}} - f_{n_k}\|_1 < 2^{-k}`,n:`A fast sub-list.`},
+  {k:'ember',kl:'fence',t:R`g = |f_{n_1}| + \textstyle\sum|f_{n_{k+1}} - f_{n_k}|`,n:`Finite total.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\|f_n - f\|_1 \to 0}`,n:`Every crowding list settles.`}
+],{title:'The slides · no holes · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

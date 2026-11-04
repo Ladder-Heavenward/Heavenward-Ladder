@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Functions of colour’s own</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r36g.html">← 36g a colour can be a name</a><a href="r36i.html">next: 36i side by side is not mixed →</a></p>
+  <div class="tags"><span class="tag proof">36h · proof</span></div>
+  <h1>Functions of colour’s own</h1>
+  <p data-pid="ff5244">Colours make functions that nothing earlier on the ladder made for them: two ways of mixing that disagree, a dodge and a burn that hit the walls, a screen that is multiply turned inside out, and a darken and lighten that are 1e’s tables at the corners. Each is a function in 9a’s sense, from pairs of colours to colours, and each is one line of arithmetic in the coordinates of 36b3 scaled into [0, 1]. This step defines them and proves what they do; it does not say where programs put them, which is 36·comp.</p>
+  <p class="gesture" data-pid="bcbc94">Mixing light adds; mixing pigment multiplies. Dodge adds and clamps; burn subtracts and clamps. Screen is multiply inside invert. Darken is the least in each place, lighten the greatest, difference the gap. At the corners 0 and 1 the functions are 1e’s tables.</p>
+</header>
+
+<section class="class step" data-step="36h1">
+  <h2 class="sthead"><span class="stno">36h1</span>Two mixings</h2>
+  <p data-pid="a79e35">From here on, colours on this step are triples with each coordinate scaled into [0, 1], and every function is applied in each coordinate. The <i>light mix</i> of c and d is c + d, clamped at 1 (36c2 with a wall). The <i>pigment mix</i> of c and d is c·d, each coordinate the product: 18·chem’s transmission, one material through the other. Light mix is never darker than either input; pigment mix is never lighter. Light mix has (0, 0, 0) as its do-nothing and pigment mix has (1, 1, 1): 6a4’s zero and one, for free, in colour.</p>
+  <p data-pid="c6bc9f">Two-mixings technique: <b>for all c, d in [0, 1]³, c·d ≤ min(c, d) ≤ max(c, d) ≤ c + d clamped, coordinate by coordinate.</b> Proof: for x, y in [0, 1], xy ≤ x since y ≤ 1 (4h10 and 5d8, multiplying keeps order), and x ≤ x + y since y ≥ 0; the rest is the definition of min and max.</p>
+  <p data-pid="300fd4">So the same two colours have two mixes, and which one the world uses is a fact by cases with its rate (36g3): lights add, pigments multiply, and a student who adds pigments has used the wrong function.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · two mixings · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">36h1.1</span><span class="ph do">do</span>c = (1, 1, 0) and d = (0, 1, 1). Find the light mix and the pigment mix, and name the two colours in words.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="36h2">
+  <h2 class="sthead"><span class="stno">36h2</span>Dodge and burn</h2>
+  <p data-pid="60b3c3">From here on, <i>dodge</i>(c, d) = clamp(c + d), each coordinate; and <i>burn</i>(c, d) = clamp(c + d − 1). Dodge is the light mix with its wall made explicit; burn is the same addition shifted down by one, so that it only leaves 0 when the two together pass 1. Their accepted names are linear dodge and linear burn.</p>
+  <p data-pid="401412">Dodge–burn technique: <b>burn(c, d) = inv(dodge(inv c, inv d)), where inv(x) = 1 − x in each coordinate.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the dodge–burn technique">
+\mathrm{inv}(\mathrm{dodge}(\mathrm{inv}\,c, \mathrm{inv}\,d)) = 1 - \mathrm{clamp}((1-c) + (1-d)) @@ the definitions
+= 1 - \mathrm{clamp}(2 - c - d) @@ 5d3, the adding rules
+= \mathrm{clamp}(c + d - 1) @@ 1 − clamp(2 − t) = clamp(t − 1) for every real t: check t &lt; 1, 1 ≤ t ≤ 2, t &gt; 2
+\htmlClass{new}{= \mathrm{burn}(c, d)} \quad \blacksquare @@ the definition
+  </pre>
+  <p data-pid="46c6fb">Neither is associative at the walls: dodge(dodge(0.8, 0.4), −0.4) is not dodge(0.8, dodge(0.4, −0.4)) once a wall is hit: a clamped sum is not a sum, and 36e6’s warning about walls applies.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · dodge and burn · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">36h2.1</span><span class="ph do">do</span>dodge((0.6, 0.2, 0), (0.6, 0.2, 0)) and burn((0.6, 0.2, 0), (0.6, 0.2, 0)). Say which coordinates hit a wall.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="36h3">
+  <h2 class="sthead"><span class="stno">36h3</span>Screen</h2>
+  <p data-pid="8fb6b8">From here on, <i>screen</i>(c, d) = 1 − (1 − c)(1 − d), each coordinate.</p>
+  <p data-pid="38ef08">Screen technique: <b>screen(c, d) = inv(c·d conjugated), that is, screen is the pigment mix done on the inverts and inverted back: screen(c, d) = inv(inv(c)·inv(d)).</b> Proof: the definition, read as 1 − (inv c)(inv d).</p>
+  <p data-pid="822586">So screen is to pigment mix as burn is to dodge: the same function seen through inv. Screen is never darker than either input (since (1 − c)(1 − d) ≤ 1 − c), and (0, 0, 0) is its do-nothing. It is the mix of two lights where each light’s amount is read as a fraction of what is left, rather than added outright, which is why it never hits a wall.</p>
+  <p data-pid="f6faea">Inv is 1b’s not at the level of coordinates, and “screen is pigment-mix through inv” is 1f7’s pushing a not inward: the not of an and is the or of the nots. 36h5 makes that exact.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · screen · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">36h3.1</span><span class="ph make">make</span>Prove screen(c, d) ≥ max(c, d) in each coordinate, and say where in the proof c, d ≤ 1 was used.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="36h4">
+  <h2 class="sthead"><span class="stno">36h4</span>Darken, lighten, difference</h2>
+  <p data-pid="0b67cc">From here on, <i>darken</i>(c, d) = min(c, d), <i>lighten</i>(c, d) = max(c, d), and <i>difference</i>(c, d) = |c − d|, each coordinate (8h’s absolute value). Darken and lighten keep whichever input is less or more in each place; difference is 0 exactly where the two agree, which is why it finds what changed between two pictures.</p>
+  <p data-pid="59ff02">Lattice technique: <b>darken and lighten are each commutative, associative and idempotent, and each distributes over the other.</b> Proof: these are the laws of least and greatest on a line where any two compare (8b2), coordinate by coordinate.</p>
+  <p data-pid="a5a75f">Difference technique: <b>difference(c, d) = (0, 0, 0) exactly when c = d; difference(c, d) = difference(d, c).</b> Proof: 8h’s |x| is 0 only at 0, and |x − y| = |y − x|.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · darken, lighten, difference · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">36h4.1</span><span class="ph do">do</span>For c = (0.9, 0.2, 0.5) and d = (0.4, 0.6, 0.5), find darken, lighten and difference, and say in which coordinate the two agree.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="36h5">
+  <h2 class="sthead"><span class="stno">36h5</span>The corners</h2>
+  <p data-pid="15330e">Take the corners only: colours whose coordinates are each 0 or 1. On the corners, 0 is F and 1 is T, 1e1’s marks for the ways a statement can come out and 4·comp’s switches, and each function of this step is one of 1e8’s tables, coordinate by coordinate. Pigment mix is and (1 · 1 = 1, anything · 0 = 0). Screen is or. Darken is and and lighten is or again. Difference is or-but-not-both (1c11). Inv is not. Dodge is or with the wall (1 + 1 clamped is 1), and burn is and with the floor.</p>
+  <p data-pid="885428">Corners technique: <b>on the corners, pigment mix = darken = and, screen = lighten = or, difference = xor, inv = not.</b> Proof: 1e8’s tables, checked at the four pairs (0, 0), (0, 1), (1, 0), (1, 1) in each coordinate.</p>
+  <p data-pid="2bada7">Between the corners the functions differ: pigment mix and darken agree at the corners and not at (½, ½), where one is ¼ and the other ½. So the corners are a world in which every entry of 1f’s rulebook holds, and the whole interval is a world of 7a6’s kind, where some hold and some fail. Pushing a not inward (1f7) holds for pigment mix and screen everywhere (36h3: screen is inv around multiply). The either-way principle fails between the corners for lighten: lighten(x, inv x) = max(x, 1 − x) is 1 only at the corners and ½ at ½. That is 7a1’s principle, true in the two-marks world and false in the one on [0, 1], by calculation; 7a7 built a two-stage world to show the same, and the strip of greys is such a world made of paint.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · the corners · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">36h5.1</span><span class="ph do">do</span>Write the table of difference at the four corner pairs and say which of 1c’s words it is.</li><li><span class="qid">36h5.2</span><span class="ph bend">bend</span>Find an entry of 1f’s rulebook that holds for darken and lighten on all of [0, 1], and one that fails off the corners. Check each by calculation at (½, ½).</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="36h6">
+  <h2 class="sthead"><span class="stno">36h6</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{Expecting }\allowbreak \text{dodge }\allowbreak \text{to }\allowbreak \text{undo }\allowbreak \text{burn}\,? @@ both hit walls; dodge–burn technique relates them through inv, not as inverses
+\text{Adding }\allowbreak \text{pigments}\,? @@ 36h1
+\text{Using }\allowbreak \text{difference }\allowbreak \text{as }\allowbreak \text{a }\allowbreak \text{distance}\,? @@ it is a colour; 18a’s distance is a number
+\text{Reading }\allowbreak \text{pigment }\allowbreak \text{mix }\allowbreak \text{as }\allowbreak \text{“mix }\allowbreak \text{the }\allowbreak \text{paints }\allowbreak \text{in }\allowbreak \text{a }\allowbreak \text{pot”}\,? @@ it is 18·chem’s transmission, one through the other; a pot adds scattering, 36·phys
+\text{Taking }\allowbreak \text{the }\allowbreak \text{laws }\allowbreak \text{that }\allowbreak \text{hold }\allowbreak \text{at }\allowbreak \text{the }\allowbreak \text{corners }\allowbreak \text{to }\allowbreak \text{hold }\allowbreak \text{everywhere}\,? @@ 36h5
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">36h6.1</span><span class="ph bend">bend</span>Which of this step’s functions are associative on all of [0, 1], and which only away from the walls? Say why the walls matter for some and not others.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">36h.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x \in [0, 1]"></span></span>Build a function of one colour coordinate from this step’s functions and inv alone that is 0 at both corners 0 and 1 and greatest at ½. <br>Find its value at ½, and which entry of 1f’s rulebook it measures the failure of.</div>
+  <div class="chq"><span class="chid">36h.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{difference}(c, \text{difference}(d, e))"></span></span>Test whether difference is associative on [0, 1], with c = 0.5, d = 0.2, e = 0.1, and then on the corners only. <br>Find what the corners technique says it must be there, and why the two answers differ.</div>
+  <div class="chq"><span class="chid">36h.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{on }\allowbreak \text{the }\allowbreak \text{corners, }\allowbreak \text{pigment }\allowbreak \text{mix} = \text{darken}"></span></span>Turn it round: if two of this step’s functions agree at all four corner pairs, must they agree on all of [0, 1]? <br>Answer with two pairs from this step, one that agrees everywhere and one that does not.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r36g.html">← 36g · a colour can be a name</a><a href="r36i.html">36i · side by side is not mixed →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Light mix is additive mixing, and in picture programs the add or linear dodge blend; pigment mix is multiply, and its accepted name in colour science is subtractive mixing. Screen, darken, lighten and difference keep their names as blend modes. inv is the invert, or the complement. The corners are the Boolean values, and the corners technique says these blends extend Boolean algebra to [0, 1]; min and max with 1 − x are the operations of fuzzy logic. The lattice technique says min and max make a distributive lattice.</p>
+  <h3>Who said it first</h3>
+  <p>George Boole wrote the algebra of the two values 0 and 1 in 1847 and 1854, with multiplication for and; the corners of this step are his tables. Lotfi Zadeh took min, max and 1 − x onto all of [0, 1] in 1965, the world of 7a6’s kind this step finds in the strip of greys. Thomas Porter and Tom Duff set out the arithmetic of combining pictures in 1984.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Pigment mix and darken agree at all four corner pairs. A function on [0, 1] is fixed by its values at 0 and 1. So they agree everywhere.” Not allowed: the second line is false; a function is its pairs (9a), all of them. At (½, ½) one gives ¼ and the other ½.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'light',t:R`\min(c + d,\ 1)`,n:`Adds, with a wall.`},
+  {k:'ember',kl:'pigment',t:R`c\cdot d`,n:`Multiplies: one through the other.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{c\cdot d \le \min(c, d) \le \max(c, d) \le \min(c + d, 1)}`,n:`In each coordinate.`}
+],{title:'The slides · two mixings · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'dodge',t:R`\mathrm{clamp}(c + d)`,n:`Adds, to a wall at 1.`},
+  {k:'ember',kl:'burn',t:R`\mathrm{clamp}(c + d - 1)`,n:`Adds, shifted down by one.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\mathrm{burn}(c, d) = \mathrm{inv}(\mathrm{dodge}(\mathrm{inv}\,c, \mathrm{inv}\,d))}`,n:`One function seen through inv.`}
+],{title:'The slides · dodge and burn · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'screen',t:R`1 - (1 - c)(1 - d)`,n:`Each light a fraction of what is left.`},
+  {k:'ember',kl:'inverts',t:R`\mathrm{inv}(\mathrm{inv}(c)\cdot\mathrm{inv}(d))`,n:`Pigment mix, through inv.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\mathrm{screen}(c, d) \ge \max(c, d)}`,n:`Never darker; never at a wall.`}
+],{title:'The slides · screen · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'darken',t:R`\min(c, d)`,n:`The lesser, in each place.`},
+  {k:'ember',kl:'lighten',t:R`\max(c, d)`,n:`The greater, in each place.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|c - d| = (0, 0, 0) \iff c = d}`,n:`Difference finds what changed.`}
+],{title:'The slides · darken, lighten, difference · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'corners',t:R`\text{coordinates } 0 \text{ or } 1:\ 0 \text{ is F},\ 1 \text{ is T}`,n:`1e1’s marks.`},
+  {k:'ember',kl:'tables',t:R`c\cdot d = \min(c, d) = \text{and},\ \ \max(c, d) = \text{or}`,n:`1e8’s tables, coordinate by coordinate.`},
+  {k:'ember',kl:'off',t:R`\max(x, 1 - x) = \tfrac12 \text{ at } x = \tfrac12`,n:`Either-way fails between the corners.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{the strip of greys is a world of 7a6’s kind}}`,n:`A world made of paint.`}
+],{title:'The slides · the corners · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

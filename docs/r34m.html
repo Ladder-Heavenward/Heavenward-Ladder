@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Knots by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r34l.html">← 34l winding numbers by hand</a><a href="r34cb18.html">next: 34·cb18 lines of equal height →</a></p>
+  <div class="tags"><span class="tag tech">34m · technique</span></div>
+  <h1>Knots by hand</h1>
+  <p data-pid="06ede2">Tie an overhand knot in a length of rope, then splice the two ends together so the knot can never slide off. Can the loop be untangled into a plain ring without cutting it? Sailors in Port Angeles will say no, and they are right, but saying so takes a proof. A knot is a closed loop in space, and two knots are the same when one can be moved into the other without passing the rope through itself. On paper a knot is a drawing with crossings, over and under. Three small changes to a drawing, the twist, the poke and the slide, never change the knot, and two drawings of one knot are always joined by a string of them. So a count that none of the three changes is a count of the knot itself. Colouring the strands with three colours gives one such count, and it shows the overhand knot cannot be untied. A finer count, a sum over every way of opening the crossings, shows more: the overhand knot and its mirror image are different knots, although each is the other seen in a looking glass.</p>
+  <p class="gesture" data-pid="a483c8">A knot is a loop in space up to moving without cutting, drawn with crossings. The twist, the poke and the slide change the drawing and never the knot. The number of ways to colour the strands with three colours, so that at every crossing the three strands meeting there are all alike or all different, is the same for every drawing of a knot: three for a plain ring, nine for the overhand knot. A sum over every way of opening the crossings, corrected by the count of signed crossings, is the same for every drawing too, and it changes when the knot is mirrored, so the overhand knot is not its mirror image.</p>
+</header>
+
+<section class="class step" data-step="34m1">
+  <h2 class="sthead"><span class="stno">34m1</span>Drawings of knots, and three moves</h2>
+  <p data-pid="13b832">A <i>knot</i> is a loop in space that does not cross itself, made of finitely many straight pieces. Two knots are the same when one can be moved into the other through knots, never passing through itself. A <i>drawing</i> of a knot is its shadow on a table, with a small gap in the lower strand at each crossing to show which passes under. The plain ring, with no crossings, is the unknot.</p>
+  <p data-pid="6630fb">Three changes to a drawing never change the knot. The <i>twist</i> puts in or takes out a kink: a single crossing of a strand with itself. The <i>poke</i> pushes one strand over another, making or removing two crossings. The <i>slide</i> moves a strand across a crossing of two others, passing over both or under both. Held in trust, and proved much higher up the ladder: <b>two drawings show the same knot exactly when a string of twists, pokes and slides turns one into the other.</b></p>
+  <p data-pid="598a99">So a number computed from a drawing that none of the three moves changes is a number of the knot. That is how every claim on this page is proved: one move at a time.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · three moves · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">34m1.1</span><span class="ph know">know</span>What is a knot, and when are two knots the same?  <br>What are the twist, the poke and the slide, and what is held in trust about them?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34m2">
+  <h2 class="sthead"><span class="stno">34m2</span>Three colours</h2>
+  <p data-pid="84f90f">A <i>strand</i> of a drawing is a piece of it from one gap to the next: it passes over crossings and stops where it passes under. Colour each strand red, green or blue, so that at every crossing the over strand and the two pieces of the under strand are all one colour or all different. Let c(D) be the number of such colourings of the drawing D.</p>
+  <p data-pid="2cf1ec">Three-colour technique: <b>the twist, the poke and the slide never change the number of three-colourings, so it is a number of the knot.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the three-colour technique">
+\text{twist}:\ \text{the kink’s three ends are one strand and its pieces} @@ at the kink’s crossing two of the three are the same strand: all three must match; one colour in, one out
+\text{poke}:\ \text{the under strand is cut in three; its outer pieces must match} @@ if the over strand has colour r and the outer pieces q: the middle piece is forced, alike if q = r, the third colour if not
+\text{poke, removed}:\ \text{the outer pieces join into one strand of colour } q @@ every colouring before matches exactly one after, and back
+\text{slide}:\ \text{the colours of the three ends on each side fix the inside} @@ check the 3 × 3 × 3 colourings of the three incoming strands: the outgoing colours agree before and after
+\htmlClass{new}{c(D) \text{ is the same for every drawing of the knot}} \quad \blacksquare @@ any two drawings are joined by moves, held in trust
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the overhand knot cannot be untied">
+\text{the unknot, no crossings, one strand}:\ \ c = 3 @@ any one colour
+\text{the overhand knot, three crossings, three strands} @@ each strand passes over one crossing and under two
+\text{all three alike}:\ 3;\ \ \text{all three different}:\ 3! = 6 @@ at each crossing the three strands are the three strands of the knot; two alike would force the third
+\htmlClass{new}{c = 9 \ne 3} \quad \blacksquare @@ so no string of moves turns the overhand knot into the ring
+  </pre>
+  <p data-pid="a9949d">A colouring that is all one colour always exists, so every knot has c ≥ 3. The figure-eight knot, with four crossings, has c = 3, the same as the ring. Three colours cannot tell it from the unknot, though it is knotted. The count says only what it says.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · colours · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34m2.1</span><span class="ph know">know</span>What is a strand of a drawing, and what makes a three-colouring?  <br>What does the three-colour technique say, and how does it show the overhand knot is knotted?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34m3">
+  <h2 class="sthead"><span class="stno">34m3</span>A knot and its mirror image</h2>
+  <p data-pid="a437cd">The <i>mirror image</i> of a drawing switches every crossing, over for under. Rung 20g’s flips reverse handedness, and so does this. Three colours cannot see it: the crossing rule does not care which strand is on top. A finer count can.</p>
+  <p data-pid="a3f898">Each crossing can be opened two ways. Stand on the over strand, looking at the crossing. Turn it anticlockwise toward the under strand: it sweeps two of the four corners. The <i>s-opening</i> joins those two corners into one channel; the <i>s⁻¹-opening</i> joins the other two. Opening every crossing leaves some loops. The <i>bracket</i> ⟨D⟩ is the sum, over every way of opening every crossing, of s raised to the number of s-openings minus the number of s⁻¹-openings, times d raised to the number of loops less one, with d = −s² − s⁻². Each crossing also has a <i>sign</i>, +1 or −1, by which way round the under strand passes when both strands are walked along the knot, and the <i>writhe</i> w(D) is their sum.</p>
+  <p data-pid="274a85">Mirror-count technique: <b>X(D) = (−s³)^(−w(D)) ⟨D⟩ is the same for every drawing of a knot, and the mirror image of a knot has X with s and s⁻¹ swapped.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the mirror-count technique">
+\langle \text{kink} \rangle = s\,d\,\langle \text{strand} \rangle + s^{-1}\langle \text{strand} \rangle = -s^3\langle \text{strand} \rangle @@ one opening leaves an extra small loop; s(−s² − s⁻²) + s⁻¹ = −s³
+\langle \text{poke} \rangle = (s^2 + s^{-2} + d)\,\langle \text{turned back} \rangle + \langle \text{apart} \rangle @@ four openings: two turn both strands back, one turns them back with a small loop, one leaves them apart
+= \langle \text{apart} \rangle @@ d = −s² − s⁻², so the first term is 0
+\langle \text{slide} \rangle \text{ unchanged} @@ open the crossing of the two other strands both ways: each side is then a poke, unchanged
+w(D) \text{ changes by } \pm1 \text{ under a twist, and not under a poke or a slide} @@ a poke adds one crossing of each sign
+\htmlClass{new}{X(D) = (-s^3)^{-w(D)}\langle D \rangle \text{ unchanged by all three moves}} @@ the twist’s −s^{±3} is undone by the writhe’s change
+\text{mirror: every opening’s } s \text{ becomes } s^{-1},\ \ w \mapsto -w \quad \blacksquare @@ switching a crossing swaps which corners the over strand sweeps
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the overhand knot is not its mirror image">
+\text{left-handed overhand knot}:\ \ \langle D \rangle = s^7 - s^3 - s^{-5},\ \ w = -3 @@ eight ways to open three crossings, counted by hand
+X = (-s^3)^{3}(s^7 - s^3 - s^{-5}) = -s^{16} + s^{12} + s^4 @@ the mirror-count technique
+\text{right-handed}:\ \ X = -s^{-16} + s^{-12} + s^{-4} @@ the mirror: s and s⁻¹ swapped
+\htmlClass{new}{-s^{16} + s^{12} + s^4 \ne -s^{-16} + s^{-12} + s^{-4}} \quad \blacksquare @@ so no string of moves turns one into the other
+  </pre>
+  <p data-pid="4a9ac2">The figure-eight knot has X = s⁸ − s⁴ + 1 − s⁻⁴ + s⁻⁸, which is unchanged when s and s⁻¹ are swapped. It is in fact the same as its mirror image: a rope tied in a figure eight can be moved into its own reflection. The bracket allowed that; it did not prove it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · mirrors · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34m3.1</span><span class="ph know">know</span>What is the mirror image of a drawing, and what are the two openings of a crossing?  <br>What does the mirror-count technique say, and what does it show about the overhand knot?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34m4">
+  <h2 class="sthead"><span class="stno">34m4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+c(D) = 3, \text{ so the knot is the unknot}\,? @@ the figure-eight knot has c = 3 and is knotted; the count can only tell knots apart
+\text{the bracket } \langle D \rangle \text{ alone is a number of the knot}\,? @@ a twist multiplies it by −s^{±3}; only X, corrected by the writhe, is unchanged
+\text{every knot differs from its mirror image}\,? @@ the figure-eight knot can be moved into its own mirror image
+\text{switching one crossing never changes the knot}\,? @@ switch one crossing of the overhand knot and it falls open into the ring
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34m4.1</span><span class="ph know">know</span>Why is “c(D) = 3, so the knot is the unknot” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">34m.5.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">two rings, linked once</span></span>Find the number of three-colourings of the drawing of two rings linked once, with two crossings, and of two rings lying apart. <br>Find X for both, and whether the two rings can be pulled apart.</div>
+  <div class="chq"><span class="chid">34m.5.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">the knot with five crossings that runs round like a five-pointed star</span></span>Draw the knot that winds twice round a centre and crosses itself five times. Find its strands and its three-colourings. <br>What does the count say about it, and what does it not say?</div>
+  <div class="chq"><span class="chid">34m.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="X(D) = 1"></span></span>The unknot has X = 1. If a drawing has X = 1, must it be the unknot? Find what is known, and why no proof on this page could settle it.</div>
+  <div class="chq"><span class="chid">34m.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="c(\text{overhand}) = 9"></span></span>Find the three-colourings of the overhand knot a second way: label each strand by 0, 1 or 2, and write the crossing rule as a sum of the three labels at a crossing being a multiple of 3. Solve the three conditions. <br>Check that the all-alike and all-different colourings are exactly the answers.</div>
+  <div class="chq"><span class="chid">34m.5.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">atoms as knots, and a table of knots</span></span>In the 1860s a physicist proposed that atoms were knotted rings in a fluid filling all space, each element a different knot. A friend began a table of every knot with up to ten crossings, by hand, to list the elements. The fluid was abandoned within a few decades. The tables were kept, and almost a century later a lawyer working at home found that two knots listed as different in them were the same. <br>Was the table of knots a work of physics or of mathematics? Can a table built by hand be trusted?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r34l.html">← 34l · winding numbers by hand</a><a href="r34cb18.html">34·cb18 · lines of equal height →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The twist, the poke and the slide are the Reidemeister moves I, II and III, and the claim held in trust is Reidemeister’s theorem. A three-colouring is a Fox 3-colouring, and c(D) counts them; a knot with c &gt; 3 is tricolourable. The bracket is the Kauffman bracket, and X with s = t^(−1/4) is the Jones polynomial; the overhand knot is the trefoil, whose two hands are the left-handed and right-handed trefoils, and a knot equal to its mirror image is amphichiral. The five-crossing star is the cinquefoil, 5₁. The question of the converse challenge, whether the Jones polynomial detects the unknot, is open.</p>
+  <h3>Who said it first</h3>
+  <p>Carl Friedrich Gauss counted linking by an integral in 1833. William Thomson, later Lord Kelvin, proposed vortex atoms in 1867, and Peter Guthrie Tait began the knot tables, continued by Thomas Kirkman and Charles Little. Kurt Reidemeister proved that the three moves suffice in 1927, as did J. W. Alexander and G. B. Briggs. Ralph Fox introduced colourings in the 1950s. Max Dehn proved in 1914 that the trefoil is not its mirror image. Vaughan Jones found his polynomial in 1984, and Louis Kauffman gave the bracket in 1987. Kenneth Perko found in 1974 that two knots of Little’s table were the same.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“I tried for an hour to untie the overhand knot spliced into a ring and could not. So it cannot be untied.” Not allowed: failing to find a string of moves does not show there is none. The three-colour count shows it, since every string of moves keeps c, and c is 9 for the knot and 3 for the ring.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'twist',t:R`\text{one crossing in or out}`,n:`A kink.`},
+  {k:'ember',kl:'poke',t:R`\text{two crossings in or out}`,n:`Strand over strand.`},
+  {k:'ember',kl:'slide',t:R`\text{a strand across a crossing}`,n:`Over both or under both.`}
+],{title:'The slides · three moves · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'crossing rule',t:R`\text{all alike, or all different}`,n:`Three strands at each crossing.`},
+  {k:'ember',kl:'moves',t:R`c(D) \text{ unchanged}`,n:`Twist, poke, slide.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{c(\text{overhand}) = 9 \ne 3}`,n:`It cannot be untied.`}
+],{title:'The slides · colours · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'openings',t:R`\langle \times \rangle = s\langle \asymp \rangle + s^{-1}\langle )( \rangle`,n:`Two ways at each crossing.`},
+  {k:'ember',kl:'twist',t:R`\langle \text{kink} \rangle = -s^3\langle \text{strand} \rangle`,n:`Corrected by the writhe.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{X(\text{left}) \ne X(\text{right})}`,n:`The overhand knot has a hand.`}
+],{title:'The slides · mirrors · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

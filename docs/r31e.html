@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quadratic forms</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r31d.html">← 31d symmetric maps have square axes</a><a href="r31f.html">next: 31f turn, stretch, turn →</a></p>
+  <div class="tags"><span class="tag proof">31e · proof</span></div>
+  <h1>Quadratic forms</h1>
+  <p data-pid="25546e">A two-slot reading fed the same arrow twice gives a number that grows like a square: two times one place squared, plus the two places multiplied, plus another square. Such readings measure the energy of a stretched frame, the bend of a surface at a flat point, and the spread of a cloud of data in each direction. Read along the axes of the last step, every one of them is a plain sum of squares, each with its own stretch in front. Some of those stretches are above zero, some below and some exactly zero. A change of measuring directions can change the numbers, but it can never change how many are positive, how many negative and how many zero. That count decides everything: whether the reading is above zero for every arrow but zero, whether a surface has a bottom, a top or a saddle. Rung twenty eight’s test for flat points used a determinant without saying why. Here is why.</p>
+  <p class="gesture" data-pid="e27584">A quadratic form is xᵀAx with A symmetric. Along A’s axes it is a sum of the stretches times squares. No change of measuring directions changes how many of those numbers are positive, negative or zero. A form is positive for every arrow but zero exactly when every stretch is above zero, and 28l’s test for flat points is this count for the grid of second slopes.</p>
+</header>
+
+<section class="class step" data-step="31e1">
+  <h2 class="sthead"><span class="stno">31e1</span>A sum of squares, along the axes</h2>
+  <p data-pid="0fb838">From here on, a <i>quadratic form</i> on lists of n real numbers is q(x) = xᵀAx, with A a symmetric grid: 27h2’s two-slot reading B(x, y) = xᵀAy, fed x in both slots. Any grid G gives the same q as the symmetric ½(G + Gᵀ), so nothing is lost by asking for A symmetric. Its academy name, quadratic, from the Latin quadratus, squared, is the one this lesson picks up.</p>
+  <p data-pid="bc18e6">Axes-form technique: <b>if A = QDQᵀ as in 31d3 and y = Qᵀx, then q(x) = λ₁y₁² + ⋯ + λₙyₙ²: read along A’s axes, a quadratic form is a sum of squares with the stretches in front.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the axes-form technique">
+q(x) = x^{\mathsf T}QDQ^{\mathsf T}x @@ the spectral technique (31d3)
+= (Q^{\mathsf T}x)^{\mathsf T}D(Q^{\mathsf T}x) = y^{\mathsf T}Dy @@ (Mx)ᵀ = xᵀMᵀ, grid by grid (27d)
+\htmlClass{new}{q(x) = \lambda_1y_1^2 + \cdots + \lambda_ny_n^2} \quad \blacksquare @@ D has only its middle line
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: one form, two ways">
+q(x) = 2x_1^2 + 2x_1x_2 + 2x_2^2 = x^{\mathsf T}\begin{pmatrix} 2 & 1 \\ 1 & 2\end{pmatrix}x @@ the cross term split evenly between the two corners
+y_1 = \tfrac{x_1 + x_2}{\sqrt2},\ \ y_2 = \tfrac{x_1 - x_2}{\sqrt2} @@ the axes of 31d3
+\htmlClass{new}{q = 3y_1^2 + y_2^2} \quad \blacksquare @@ check: 3(x₁ + x₂)²/2 + (x₁ − x₂)²/2 = 2x₁² + 2x₁x₂ + 2x₂²
+  </pre>
+  <p data-pid="368a82">So q(x) = 1 is an ellipse with its axes along (1, 1) and (1, −1), of half-lengths 1/√3 and 1. The cross term only tilted it.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · form · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">31e1.1</span><span class="ph know">know</span>What is a quadratic form, and why may A be taken symmetric?  <br>What does the axes-form technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31e2">
+  <h2 class="sthead"><span class="stno">31e2</span>The signs cannot be changed</h2>
+  <p data-pid="009135">There are other ways to write q as a sum of squares. Completing the square (8i) gives 2x₁² + 2x₁x₂ + 2x₂² = 2(x₁ + ½x₂)² + (3/2)x₂²: the numbers in front are 2 and 3/2, not 3 and 1. Any undoable change of directions x = Sz turns A into SᵀAS, and the numbers in front change with it. What cannot change is their signs.</p>
+  <p data-pid="5b998d">Sign-count technique: <b>however q is written as c₁z₁² + ⋯ + cₙzₙ² with z = Tx and T undoable, the number of cₖ above 0, the number below 0, and the number equal to 0 are always the same.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the sign-count technique">
+q = \textstyle\sum c_kz_k^2 = \sum d_kw_k^2,\ \ z = Tx,\ w = T'x @@ two such ways, T and T′ undoable
+p = \#\{c_k > 0\},\ \ p' = \#\{d_k > 0\},\ \text{suppose } p > p' @@ to be refuted
+U = \{x : z_k = 0 \text{ unless } c_k > 0\},\ \ \dim U = p @@ the arrows where q uses only its positive part; T is undoable
+U' = \{x : w_k = 0 \text{ when } d_k > 0\},\ \ \dim U' = n - p' @@ lost plus reached (27c2): p′ samenesses, free
+\dim U + \dim U' > n \Rightarrow \text{some } x \ne 0 \text{ in both} @@ a free list from each would be too long for the space (27b2)
+q(x) > 0 \text{ and } q(x) \le 0 @@ in U, q is a sum of positive multiples of squares, not all 0; in U′ every term is at most 0
+\htmlClass{new}{p = p'} \quad \blacksquare @@ ⊥; and p′ &gt; p is refuted the same way. The zero count is n minus the rank of A, which T does not change
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · signs · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31e2.1</span><span class="ph know">know</span>What does the sign-count technique say?  <br>In its proof, what are U and U′, and why must they share an arrow other than 0?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31e3">
+  <h2 class="sthead"><span class="stno">31e3</span>Positive for every arrow</h2>
+  <p data-pid="67d0e5">From here on, q is <i>positive definite</i> when q(x) &gt; 0 for every x ≠ 0. The dot’s form x₁² + ⋯ + xₙ² is one, and so is every product’s ⟨x, x⟩ on lists: a product is a positive definite form with its two-slot reading kept.</p>
+  <p data-pid="d5a3e6">Form-test technique: <b>q is positive definite exactly when every stretch of A is above 0. For n = 2, with A having rows (p, s) and (s, r), that is exactly when p &gt; 0 and pr − s² &gt; 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the form-test technique">
+q(x) = \textstyle\sum \lambda_ky_k^2,\ \ x \ne 0 \iff y \ne 0 @@ the axes-form technique; Q is undoable
+\text{all } \lambda_k > 0 \Rightarrow q(x) > 0;\ \ \lambda_j \le 0 \Rightarrow q(Qe_j) = \lambda_j \le 0 @@ both ways
+p x_1^2 + 2s\,x_1x_2 + r x_2^2 = p\big(x_1 + \tfrac{s}{p}x_2\big)^2 + \tfrac{pr - s^2}{p}\,x_2^2 @@ completing the square (8i), for p ≠ 0
+\htmlClass{new}{q \text{ positive definite} \iff p > 0,\ pr - s^2 > 0} \quad \blacksquare @@ the sign-count technique: two positive numbers in front, in this way as in every way; p = 0 gives q(e₁) = 0
+  </pre>
+  <p data-pid="c8e5f4">pr − s² is det A, the product of the two stretches (27l1). Both above 0 makes it positive, but so does both below 0. That is why the test asks for p too.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · definite · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31e3.1</span><span class="ph know">know</span>What is a positive definite form, and what does the form-test technique say?  <br>Why is det A &gt; 0 alone not enough for n = 2?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31e4">
+  <h2 class="sthead"><span class="stno">31e4</span>The test for flat points, explained</h2>
+  <p data-pid="683c0c">28l2’s grid test classed a flat point p of f by A = fxx(p) and D = AC − B², and did not say where the test came from. 28l1 gives f(p + h) = f(p) + ½hᵀHh + E(h) at a flat point, with H the symmetric grid of second slopes and E(h)/|h|² heading to 0. The test is the sign count of H.</p>
+  <p data-pid="48053a">Hug-axes technique: <b>at a flat point with continuous second slopes, if every stretch of H is above 0 the point is a bottom, if every one is below 0 a top, and if H has stretches of both signs a saddle; in two variables this is 28l2’s grid test.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the hug-axes technique">
+\tfrac12 h^{\mathsf T}Hh \ge \tfrac12\lambda_{\min}|h|^2 @@ the axes-form technique: Σλₖyₖ² ≥ λmin Σyₖ², and |y| = |h| since Q keeps lengths (27m1)
+f(p + h) - f(p) \ge |h|^2\big(\tfrac12\lambda_{\min} - |E(h)|/|h|^2\big) > 0 @@ all λ &gt; 0, for |h| small enough (28l1)
+H e_j = \lambda_je_j,\ \lambda_j < 0 \Rightarrow f(p + te_j) - f(p) = \tfrac12\lambda_jt^2 + E(te_j) < 0 @@ for t small: down along that axis
+\htmlClass{new}{\text{both signs} \Rightarrow \text{up along one axis, down along another}} \quad \blacksquare @@ a saddle; in two variables, D = λ₁λ₂ and A &gt; 0 picks both positive (31e3)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: one saddle, read along its axes">
+f(x, y) = x^2 + 3xy + y^2,\ \ H = \begin{pmatrix} 2 & 3 \\ 3 & 2\end{pmatrix} @@ flat at (0, 0)
+\lambda = 5 \text{ along } (1, 1),\ \ \lambda = -1 \text{ along } (1, -1) @@ the stretch-test technique (27f1)
+\htmlClass{new}{f(t, t) = 5t^2,\ \ f(t, -t) = -t^2} \quad \blacksquare @@ up along one axis, down along the other: D = −5 &lt; 0
+  </pre>
+  <p data-pid="297368">When some stretch is 0, the hug is flat along that axis and E decides, which is why 28l2 could not tell. And with three or more variables the grid test of two variables has nothing to say, while the stretches still do.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · flat points · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31e4.1</span><span class="ph know">know</span>What does the hug-axes technique say?  <br>Why does the test say nothing when one stretch of H is 0?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31e5">
+  <h2 class="sthead"><span class="stno">31e5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\det A > 0 \Rightarrow q \text{ positive definite}\,? @@ −x₁² − x₂² has det 1 and is below 0 everywhere but 0
+\text{every number of } A \text{ above } 0 \Rightarrow q \text{ positive definite}\,? @@ rows (1, 2), (2, 1): q(1, −1) = −2
+\text{the numbers in front are fixed, as well as their signs}\,? @@ 3 and 1 along the axes; 2 and 3/2 by completing the square
+\lambda = 0 \text{ somewhere} \Rightarrow \text{a saddle}\,? @@ x² + y⁴ has H with a stretch 0 and a bottom
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31e5.1</span><span class="ph know">know</span>Why does det A &gt; 0 not make q positive definite?  <br>Why can the numbers in front change when their signs cannot?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">31e.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="f(x, y, z) = x^2 + y^2 + z^2 + xy + yz"></span></span>Build the grid of second slopes at the flat point (0, 0, 0), find its stretches, and class the point.  <br>Which of 28l2’s letters could not have done this?</div>
+  <div class="chq"><span class="chid">31e.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x^2 + y^4,\ \ x^2 - y^4,\ \ x^2 + y^3"></span></span>All three have the same H at (0, 0). Find it and its stretches.  <br>Class each point by hand, and find what the hug could not see.</div>
+  <div class="chq"><span class="chid">31e.6.3</span><span class="tagq">converse</span>A positive definite form gives a product on lists (31a1). Turn it round: is every product on lists of n real numbers xᵀAy for one positive definite A?  <br>Which technique of 27h gives the grid?</div>
+  <div class="chq"><span class="chid">31e.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="q = x_1^2 + 4x_1x_2 + x_2^2"></span></span>Count the signs of q three ways: by its stretches, by completing the square, and by the change z₁ = x₁ + x₂, z₂ = x₁ − x₂.  <br>Check that all three give one positive and one negative.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r31d.html">← 31d · symmetric maps have square axes</a><a href="r31f.html">31f · turn, stretch, turn →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A quadratic form is xᵀAx; the axes-form technique is its diagonalization by the principal axis theorem. The sign-count technique is Sylvester’s law of inertia, here an accepted name for a proved result, not a measured one, and the three counts are its inertia; the positive count minus the negative count is the signature. Positive definite, negative definite, indefinite and semidefinite name the sign patterns. The test with p &gt; 0 and pr − s² &gt; 0, carried to n variables with the corner determinants, is Sylvester’s criterion. H is the Hessian matrix, and the hug-axes technique is the second-derivative test in n variables.</p>
+  <h3>Who said it first</h3>
+  <p>Carl Friedrich Gauss studied forms in two variables with whole-number coefficients in 1801. James Joseph Sylvester stated the law of inertia in 1852, and Carl Jacobi had proved it earlier without publishing; Sylvester also coined the word “matrix” in 1850. Joseph-Louis Lagrange gave the test for a bottom of a function of two variables in the 1760s, and Otto Hesse’s name went on the grid of second slopes in the 1840s.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Along the x-axis f = x² rises and along the y-axis f = y² rises, so f = x² + 3xy + y² has a bottom at 0.” Not allowed: rising along two directions says nothing about the others. Along (1, −1) it falls, as its stretch −1 shows.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'form',t:R`q(x) = x^{\mathsf T}Ax`,n:`A symmetric.`},
+  {k:'ember',kl:'axes',t:R`y = Q^{\mathsf T}x`,n:`Read along the axes.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{q = \textstyle\sum \lambda_ky_k^2}`,n:`A sum of squares.`}
+],{title:'The slides · form · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'two ways',t:R`\textstyle\sum c_kz_k^2 = \sum d_kw_k^2`,n:`Different numbers in front.`},
+  {k:'ember',kl:'meet',t:R`\dim U + \dim U^{\prime} > n`,n:`A shared arrow.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{p = p^{\prime}}`,n:`The signs are kept.`}
+],{title:'The slides · signs · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'all positive',t:R`\lambda_1, \ldots, \lambda_n > 0`,n:`Along the axes.`},
+  {k:'ember',kl:'two by two',t:R`p > 0,\ \ pr - s^2 > 0`,n:`Completing the square.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{q(x) > 0 \ \forall x \ne 0}`,n:`Positive definite.`}
+],{title:'The slides · definite · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'hug',t:R`f(p + h) \approx f(p) + \tfrac12 h^{\mathsf T}Hh`,n:`28l1.`},
+  {k:'ember',kl:'axes',t:R`\tfrac12\textstyle\sum\lambda_ky_k^2`,n:`Signs decide.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{both signs} \Rightarrow \text{saddle}}`,n:`The test, explained.`}
+],{title:'The slides · flat points · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Winding numbers by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r34k.html">← 34k surfaces from a square</a><a href="r34m.html">next: 34m knots by hand →</a></p>
+  <div class="tags"><span class="tag tech">34l · technique</span></div>
+  <h1>Winding numbers by hand</h1>
+  <p data-pid="efa9b9">A dog on a leash runs circles round a lamp post while its owner walks once round the block. How many times did the dog go round the post? 34g gave the answer a name, the winding number, and proved it is a whole number that bending the path cannot change. This step computes it by hand, three ways. Draw a ray from the point and count the crossings, with signs. Total a fraction round the loop, as rung 26 did. Or send the loop through a polynomial and count how often the image goes round 0, which counts the roots inside without finding any of them. The last way comes with a rule for leashes: if the dog never gets as far from its owner as the owner is from the post, both go round the post the same number of times. With it, every polynomial has as many roots as its degree, in one more line.</p>
+  <p class="gesture" data-pid="64f061">The winding number of a loop round a point is the signed count of its crossings of any ray from the point, when the crossings are clean. It is also the total of one over z minus the point, round the loop, divided by two pi i. A polynomial’s roots inside a circle are counted by how many times the circle’s image winds round zero. And if a second loop stays nearer to the first than the first is to the point, the two wind the same number of times.</p>
+</header>
+
+<section class="class step" data-step="34l1">
+  <h2 class="sthead"><span class="stno">34l1</span>Counting crossings of a ray</h2>
+  <p data-pid="a7193f">For a loop γ in the plane that misses the point w, its <i>winding number round w</i>, w(γ, w), is 34g4’s winding number of the loop (γ − w)/|γ − w| on the circle. It counts how many times γ goes round w, anticlockwise positive.</p>
+  <p data-pid="c071f9">Ray-count technique: <b>if γ crosses a ray from w finitely often, each time cleanly from one side to the other, then w(γ, w) is the number of anticlockwise crossings minus the number of clockwise ones.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the ray-count technique">
+\theta(t) = \text{a lift of the direction from } w \text{ to } \gamma(t) @@ the path-lift technique (34g3), in whole turns
+\text{the ray is at directions } \theta_0 + k,\ k \text{ whole} @@ one direction, every whole turn
+\theta \text{ passes from below } \theta_0 + k \text{ to above it at an anticlockwise crossing} @@ and from above to below at a clockwise one
+\theta(1) - \theta(0) = (\text{anticlockwise}) - (\text{clockwise}) @@ between crossings θ stays between two neighbours θ₀ + k and θ₀ + k + 1
+\htmlClass{new}{w(\gamma, w) = (\text{anticlockwise}) - (\text{clockwise})} \quad \blacksquare @@ the winding number is θ(1) − θ(0)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: a loop that loops twice">
+\gamma(t) = (1 + 2\cos 2\pi t)\,e^{2\pi i t} @@ a curve with a small loop inside a big one
+\text{the ray from } \tfrac12 \text{ to the right meets } \gamma \text{ at } 3 \text{ and at } 1 @@ at t = 0, and at t = ½, where 1 + 2 cos π = −1
+\text{both crossings anticlockwise} @@ the height of γ rises through 0 there
+\htmlClass{new}{w(\gamma, \tfrac12) = 2,\ \ w(\gamma, 2) = 1,\ \ w(\gamma, -\tfrac12) = 0} @@ from 2 the ray meets only 3; from −½ the ray to the left meets nothing
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · crossings · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">34l1.1</span><span class="ph know">know</span>What is the winding number of a loop round a point w?  <br>What does the ray-count technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34l2">
+  <h2 class="sthead"><span class="stno">34l2</span>Winding as a total</h2>
+  <p data-pid="c2f2b8">Winding-total technique: <b>if γ has a continuous slope and misses w, then w(γ, w) = (1/2πi) ∮ dz/(z − w) round γ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the winding-total technique">
+\gamma(t) - w = r(t)\,e^{2\pi i\theta(t)},\ \ r > 0 @@ the distance and the lifted direction, both with continuous slopes
+\tfrac{\gamma'(t)}{\gamma(t) - w} = \tfrac{r'(t)}{r(t)} + 2\pi i\,\theta'(t) @@ the slope of a product, and of e to a power (26d)
+\oint \tfrac{dz}{z - w} = \textstyle\int_0^1 \tfrac{\gamma'(t)}{\gamma(t) - w}\,dt = \big[\ln r\big]_0^1 + 2\pi i\big[\theta\big]_0^1 @@ 26e’s integral along a path, undone term by term (16)
+\htmlClass{new}{\tfrac{1}{2\pi i}\oint \tfrac{dz}{z - w} = \theta(1) - \theta(0) = w(\gamma, w)} \quad \blacksquare @@ r(1) = r(0), since the loop closes
+  </pre>
+  <p data-pid="8ff8ec"><a href="r26e.html#f9301a">26e</a>’s circle-powers technique is the case of the circle once round: 2πi. The total of <a href="r26f.html#2affd9">26f</a>’s hole technique was always a winding number times 2πi.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · a total · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34l2.1</span><span class="ph know">know</span>What does the winding-total technique say?  <br>Which part of the total vanishes because the loop closes?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34l3">
+  <h2 class="sthead"><span class="stno">34l3</span>Counting roots inside a circle</h2>
+  <p data-pid="fb93cd">Image-winding technique: <b>if a polynomial p has no root on the circle C, then the number of its roots inside C, counted with repeats, is the winding number of the loop p(C) round 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the image-winding technique">
+\#\text{roots inside } C = \tfrac{1}{2\pi i}\oint_C \tfrac{p'(z)}{p(z)}\,dz @@ the root-count technique (26h)
+= \tfrac{1}{2\pi i}\textstyle\int_0^1 \tfrac{p'(\gamma(t))\,\gamma'(t)}{p(\gamma(t))}\,dt @@ γ runs once round C
+= \tfrac{1}{2\pi i}\textstyle\int_0^1 \tfrac{(p\circ\gamma)'(t)}{(p\circ\gamma)(t)}\,dt @@ the chain rule
+\htmlClass{new}{= w(p \circ \gamma, 0)} \quad \blacksquare @@ the winding-total technique, for the loop p ∘ γ round 0
+  </pre>
+  <p data-pid="ca136c">Leash technique: <b>if two loops γ and δ miss w, and |δ(t) − γ(t)| &lt; |γ(t) − w| for every t, then w(δ, w) = w(γ, w).</b> The straight slide (1 − s)γ + sδ moves each point less than its distance from w, so it never passes through w, and 34g3’s slide-lift keeps the winding number. The dog is δ, the owner γ, the post w.</p>
+  <pre class="lines" data-k="ember" data-label="this step: roots of z⁵ + 3z + 1, without finding them">
+|z| = 1:\ \ |z^5 + 1| \le 2 < 3 = |3z| @@ the owner is 3z, the dog z⁵ + 3z + 1, the post 0
+w(p \circ \gamma, 0) = w(3\gamma, 0) = 1 @@ the leash technique; 3z goes once round 0
+|z| = 2:\ \ |3z + 1| \le 7 < 32 = |z^5| @@ now the owner is z⁵
+\htmlClass{new}{1 \text{ root inside } |z| = 1,\ \ 5 \text{ inside } |z| = 2} \quad \blacksquare @@ the image-winding technique; z⁵ goes 5 times round
+  </pre>
+  <p data-pid="e3c514">The second line is the general case. Any polynomial zⁿ + cₙ₋₁zⁿ⁻¹ + ⋯ + c₀ is held on a leash by zⁿ on a circle large enough, so it has n roots inside. That is 25d’s every-polynomial-has-a-root, with the count included.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · roots · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34l3.1</span><span class="ph know">know</span>What does the image-winding technique say?  <br>What does the leash technique say, and who are the dog, the owner and the post?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34l4">
+  <h2 class="sthead"><span class="stno">34l4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{count every crossing of the ray as } +1\,? @@ a clockwise crossing counts −1; a loop round and back crosses twice and winds 0
+\text{the ray-count works when the loop only touches the ray}\,? @@ a touch is not a crossing; turn the ray a little to make every meeting clean
+|z^5 + 1| \le 3|z| \text{ on } |z| = 1, \text{ so the leash holds}\,? @@ the leash needs strictly less: equality could let the slide reach 0
+\text{a loop through } w \text{ has a winding number round } w\,? @@ the direction from w is not defined where the loop meets w
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34l4.1</span><span class="ph know">know</span>Why is “count every crossing of the ray as +1” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">34l.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="p(z) = z^3 - 3z + 1"></span></span>Find how many roots p has inside |z| = 1 and inside |z| = 2, by the leash technique. Find a ring between two circles that holds exactly two of the roots. <br>Check with the in-between-value technique that all three roots are real.</div>
+  <div class="chq"><span class="chid">34l.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\gamma(t) = (1 + 2\cos 2\pi t)\,e^{2\pi i t}"></span></span>Find the winding number round every point the loop misses. Shade the plane by it. <br>Find the points where the winding number changes, and by how much it changes as you cross the loop.</div>
+  <div class="chq"><span class="chid">34l.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="w(\gamma, w) = 0 \text{ for every } w \text{ off } \gamma"></span></span>If a loop winds round no point, must it slide to a point in the plane with the points it misses taken out? Prove it when one point p is taken out. <br>Then take out two points p and q, and test the loop that runs round p anticlockwise, round q anticlockwise, round p clockwise and round q clockwise.</div>
+  <div class="chq"><span class="chid">34l.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="w(\gamma, w) \text{ as } w \text{ moves}"></span></span>Prove that w(γ, w) is the same for all w in one piece of the plane with the loop taken out, twice: once by the leash technique, and once by the winding-total technique and continuity.</div>
+  <div class="chq"><span class="chid">34l.5.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">a count found without a single root</span></span>The image-winding technique says z⁵ + 3z + 1 has exactly one root in the unit disc, and gives no way to write it down. One side holds that a root is known when a number can be computed to any accuracy. The other holds that a root is known when its existence and count are proved. <br>Which of the two does a ship’s engineer need, checking that a control system has no roots in the right half of the plane?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r34k.html">← 34k · surfaces from a square</a><a href="r34m.html">34m · knots by hand →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The winding number is the index, Ind_γ(w) or n(γ, w). The image-winding technique is the argument principle, and the leash technique is Rouché’s theorem, often taught as the dog on a leash. The check of the seam challenge is the Nyquist stability criterion.</p>
+  <h3>Who said it first</h3>
+  <p>Augustin-Louis Cauchy counted roots by integrals in the 1830s, and Eugène Rouché stated the leash in 1862. Harry Nyquist used the winding of a loop to test whether a feedback amplifier would sing, at Bell Labs in 1932. The dog on a leash appears in many textbooks of the twentieth century.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“z⁵ + 3z + 1 has five roots, so five lie in the unit disc.” Not allowed: the count of roots inside a circle depends on the circle. On |z| = 1 the term 3z is the owner, and only one root lies inside.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'direction',t:R`\theta(t)`,n:`Lifted, in whole turns.`},
+  {k:'ember',kl:'the ray',t:R`\theta_0 + k`,n:`Passed at each crossing.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{w = \text{anticlockwise} - \text{clockwise}}`,n:`Count with signs.`}
+],{title:'The slides · crossings · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'polar',t:R`\gamma - w = r\,e^{2\pi i\theta}`,n:`Distance and direction.`},
+  {k:'ember',kl:'slopes',t:R`\tfrac{\gamma^{\prime}}{\gamma - w} = \tfrac{r^{\prime}}{r} + 2\pi i\theta^{\prime}`,n:`Two parts.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\tfrac{1}{2\pi i}\oint \tfrac{dz}{z - w} = w(\gamma, w)}`,n:`Distance returns; direction counts.`}
+],{title:'The slides · a total · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'count',t:R`\tfrac{1}{2\pi i}\oint \tfrac{p^{\prime}}{p}`,n:`26h.`},
+  {k:'ember',kl:'leash',t:R`|\delta - \gamma| < |\gamma - w|`,n:`Same winding.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{z^5 + 3z + 1:\ 1,\ 5}`,n:`Count without finding.`}
+],{title:'The slides · roots · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

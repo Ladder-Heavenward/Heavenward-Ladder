@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can a signal be rebuilt from fewer samples?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r32time.html">← 32·G sometimes time has holes, and apparently that’s ok (II)</a><a href="r33.html">next: 33 rates in space and time govern heat and waves →</a></p>
+  <div class="tags"><span class="tag now">32·now · research front</span></div>
+  <h1>Can a signal be rebuilt from fewer samples?</h1>
+  <p data-pid="482061">Can a signal be rebuilt from fewer samples? 32g proved that a signal with no frequency above a top one is fixed by samples at twice that frequency, and no fewer will do for every such signal. A scanner in a children’s hospital in Oakland must listen to enough of the transform of the body to fill a picture, line after line, and a child must lie still the whole time. Fewer samples would mean a shorter scan. But fewer samples than unknowns means fewer equations than unknowns, and then endlessly many signals fit. What makes the question hard is that the count of samples cannot be cheated for every signal. In 2006 two papers showed that it can be cheated for most signals people care about. A picture is not any list of numbers: written in the right turnings, almost all its coefficients are nearly zero. Among all the signals that fit the samples, pick the one whose coefficients have the least total size, the size of 31g that adds up the plain sizes. That choice lands, again and again, on the one with few coefficients, and it is the true one. This page shows why with three unknowns and two equations, proves the condition under which it always works, and says what is known about how few samples suffice.</p>
+  <p class="gesture" data-pid="aaa2f6">With fewer equations than unknowns, the solutions form a slid copy of the map’s kernel, endlessly many. The solution of least energy spreads itself over every unknown. The solution of least total plain size lands on a corner of its diamond, where most entries are zero. It finds every signal with at most k nonzero entries exactly when every arrow of the kernel holds less than half its plain size on any k places. Random measurements meet that condition with a number of samples near k times the log of the length over k.</p>
+</header>
+
+<section class="class step" data-step="32now1">
+  <h2 class="sthead"><span class="stno">32now1</span>Too few equations</h2>
+  <p data-pid="acda01">Let x be a list of N unknowns, the coefficients of a signal, and let the scanner measure m numbers y = Ax, with A an m × N grid and m &lt; N. By 27c, A’s kernel has dimension at least N − m, so if x fits, so does x + v for every v in the kernel.</p>
+  <pre class="lines" data-k="ember" data-label="this page: three unknowns, two samples">
+A = \begin{pmatrix}1 & 0 & 1\\ 0 & 1 & 1\end{pmatrix},\ \ x^{\ast} = (0, 0, 1),\ \ y = Ax^{\ast} = (1, 1) @@ the true signal has one nonzero entry
+\text{kernel: } v = s(1, 1, -1) @@ Av = (1 − 1 + 0, …): rank 2, so the kernel has dimension 1 (27c)
+\htmlClass{new}{\text{every } x = (1 - t,\ 1 - t,\ t) \text{ fits}} \quad \blacksquare @@ x* + (t − 1)(−1, −1, 1)
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · too few · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">32·now.1.1</span><span class="ph know">know</span>Why do fewer measurements than unknowns give endlessly many fits? <br>What are the fits in the three-unknown example?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32now2">
+  <h2 class="sthead"><span class="stno">32now2</span>Least energy spreads, least plain size picks a corner</h2>
+  <p data-pid="f72727">Two ways to choose one fit: least energy, ‖x‖₂² = Σ xⱼ², or least plain size, ‖x‖₁ = Σ |xⱼ| (31g).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the two choices on the line of fits">
+\|x\|_2^2 = 2(1 - t)^2 + t^2,\ \ \text{least at } t = \tfrac23 @@ the slope −4(1 − t) + 2t is 0: the closest point to 0 on the line (31b)
+\text{least energy: } \big(\tfrac13,\ \tfrac13,\ \tfrac23\big) @@ spread over every entry; not the true signal
+\|x\|_1 = 2|1 - t| + |t| @@ on [0, 1] it is 2 − t, falling; beyond 1 it is 3t − 2, rising
+\htmlClass{new}{\text{least plain size: } t = 1,\ \ x = (0, 0, 1) = x^{\ast}} \quad \blacksquare @@ the true signal
+  </pre>
+  <p data-pid="e4ab9b">Why the difference? The fits of least energy are where the line first touches a ball, and a ball is round, so it touches at a point with nothing special about it. The fits of least plain size are where the line first touches a diamond, |x₁| + |x₂| + |x₃| ≤ r, and a diamond is all corners and edges. A line in a general direction touches it first at a corner, and a corner of the diamond is a list with one entry nonzero.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · corners · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·now.2.1</span><span class="ph know">know</span>What fit does least energy pick in the example, and what fit does least plain size pick? <br>Why does the diamond’s shape favour lists with few nonzero entries?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32now3">
+  <h2 class="sthead"><span class="stno">32now3</span>When least plain size always works</h2>
+  <p data-pid="726768">A list is <i>k-few</i> when it has at most k nonzero entries. For a list v and a set S of places, v_S keeps the entries in S and sets the rest to 0.</p>
+  <p data-pid="bd38f4">Kernel-share technique: <b>least plain size finds every k-few signal from y = Ax exactly when every nonzero v in A’s kernel has ‖v_S‖₁ &lt; ‖v‖₁/2 for every set S of k places.</b> (The proof below gives the direction that matters, that the condition is enough.)</p>
+  <pre class="lines" data-k="ember" data-label="this page: the kernel-share technique">
+x \text{ is } k\text{-few, with its nonzero entries in } S;\ \ v \ne 0 \text{ in the kernel} @@ every other fit is x + v
+\|x + v\|_1 = \|x + v_S\|_1 + \|v_{S'}\|_1 @@ the plain size adds over separate places; S′ is the rest
+\ge \|x\|_1 - \|v_S\|_1 + \|v_{S'}\|_1 @@ the product-triangle technique (31a4), for the plain size
+\|v_{S'}\|_1 - \|v_S\|_1 = \|v\|_1 - 2\|v_S\|_1 \gt 0 @@ the condition
+\htmlClass{new}{\|x + v\|_1 \gt \|x\|_1:\ x \text{ is the only fit of least plain size}} \quad \blacksquare @@ every other fit is larger
+  </pre>
+  <p data-pid="927247">In the example, the kernel is s(1, 1, −1), with plain size 3|s|, and the largest share on one place is |s|, less than half of 3|s|. So every 1-few signal is found from these two samples, not only (0, 0, 1). No 2-few signal is: two places of the kernel arrow hold 2|s|, more than half.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · always · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·now.3.1</span><span class="ph know">know</span>What does the kernel-share technique say? <br>Why does the example find every signal with one nonzero entry, but not every one with two?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32now4">
+  <h2 class="sthead"><span class="stno">32now4</span>How few, and the faster scan</h2>
+  <p data-pid="a5b44d">Proved, 2006. For a grid A of m rows filled with independent random bells, the kernel-share condition holds with high chance once m is at least about C k log(N/k), for a fixed number C. The same holds for m rows of turnings picked at random from 32k’s N, up to a few more logs. So a signal of length N = 1 000 000 with k = 10 000 nonzero coefficients can be rebuilt from some tens of thousands of random samples, not a million.</p>
+  <p data-pid="bebc00">Proved, 2006 and after. The rebuilding is steady: a signal that is only nearly k-few, and samples with some noise, give a rebuilt signal whose error is fenced by the noise and by the part of the signal outside its k largest entries.</p>
+  <p data-pid="a41e20">In use. A scanner’s samples are values of the transform of the body (32·then.2). Pictures of the body are nearly few in brief waves (31·now). So the scanner samples a random scatter of the transform, fewer than 32g asks for, and rebuilds by least plain size. Scanners cleared for clinical use in 2017 shortened some scans several times over, which matters most for children and for a beating heart.</p>
+  <p data-pid="d10c89">Open. The best constant C, and grids that are built by a rule rather than at random and provably meet the condition at the same small m: the known rules need m near k², not k log N. Checking whether a given grid meets the condition is itself believed to be very hard.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · few · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·now.4.1</span><span class="ph know">know</span>How many random samples suffice to rebuild a signal with k nonzero entries out of N? <br>What is still open about grids built by a rule?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32now5">
+  <h2 class="sthead"><span class="stno">32now5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{fewer samples than 32g asks for can fix every signal}\,? @@ only signals that are few in some known turnings
+\text{least energy finds the fewest nonzero entries}\,? @@ it spreads: (1/3, 1/3, 2/3) in the example
+\text{least plain size works for every grid } A\,? @@ only when the kernel spreads its size thin on every k places
+\text{any } k \text{ samples fix a } k\text{-few signal}\,? @@ the places of the nonzero entries are unknown too: m must be larger than k
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · illegal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·now.5.1</span><span class="ph know">know</span>Why is “the fit of least energy is the one with the fewest nonzero entries” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">32·now.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix}1 &amp; 0 &amp; 1\\ 0 &amp; 1 &amp; 1\end{pmatrix},\ \ x^{\ast} = (1, 0, 0)"></span></span>Find y and the line of fits. Build the plain size along the line, and check that its least is at x*.</div>
+  <div class="chq"><span class="chid">32·now.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix}1 &amp; 1 &amp; 0\\ 0 &amp; 1 &amp; 1\end{pmatrix}"></span></span>Find the kernel. Does least plain size find every 1-few signal from this grid? Find a 1-few signal it misses, or show there is none, by the kernel-share technique.</div>
+  <div class="chq"><span class="chid">32·now.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\|v_S\|_1 = \tfrac12\|v\|_1 \text{ for some } v,\ S"></span></span>Prove the other direction of the kernel-share technique: if some kernel arrow has at least half its plain size on k places, find a k-few signal that least plain size does not pick out alone.</div>
+  <div class="chq"><span class="chid">32·now.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{fewest nonzero entries}"></span></span>Instead of least plain size, pick the fit with fewest nonzero entries directly. Show that in the example it gives x*, and find how many trials a search over every set of k places would take for N = 1000 and k = 10.</div>
+  <div class="chq"><span class="chid">32·now.6.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">32g: samples suffice</span></span>One side holds that a picture rebuilt by least plain size shows what the scanner measured. The other holds that it shows a guess that the body is few in brief waves, and that a small tumour that is not few in them could be smoothed away. <br>When a rebuilt picture rests on a guess about what pictures are like, how should a doctor read it?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r32time.html">← 32·G · sometimes time has holes, and apparently that’s ok (II)</a><a href="r33.html">33 · rates in space and time govern heat and waves →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Rebuilding from fewer samples by least plain size is compressed sensing (or compressive sampling), and least plain size is basis pursuit, or L¹ minimisation; least energy is the minimum-norm least-squares solution. A k-few list is k-sparse. The kernel-share condition is the null space property; the stronger condition that random grids meet is the restricted isometry property. The search over every set of places is L⁰ minimisation, which is NP-hard.</p>
+  <h3>Who said it first</h3>
+  <p>Emmanuel Candès, Justin Romberg and Terence Tao, and independently David Donoho, published the founding papers in 2006 (Candès, Romberg and Tao, IEEE Transactions on Information Theory 52, 489–509; Donoho, the same journal, 1289–1306). Geophysicists had used L¹ to find sparse layers of rock from reflection records since the 1970s, Jon Claerbout and Francis Muir among them; Scott Chen, Donoho and Michael Saunders named basis pursuit in 1998. Michael Lustig, Donoho and John Pauly applied it to MRI in 2007, and the US Food and Drug Administration cleared compressed-sensing MRI scanners in 2017. Albert Cohen, Wolfgang Dahmen and Ronald DeVore studied the null space property in 2009.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The true signal has the fewest nonzero entries, and least plain size is near fewest nonzero entries, so least plain size finds it.” Not allowed: the two choices agree only under a condition on the kernel. Without it they part, and the second grid of 32·now.6.2 shows how.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'measure',t:R`y = Ax,\ m \lt N`,n:`Fewer rows.`},
+  {k:'ember',kl:'kernel',t:R`v = s(1, 1, -1)`,n:`Dimension N − m.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{x = (1-t, 1-t, t)}`,n:`A line of fits.`}
+],{title:'The slides · too few · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'energy',t:R`(\tfrac13, \tfrac13, \tfrac23)`,n:`Round ball: spread.`},
+  {k:'ember',kl:'plain',t:R`\|x\|_1 = 2|1-t| + |t|`,n:`Least at t = 1.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{x = (0, 0, 1)}`,n:`A corner of the diamond.`}
+],{title:'The slides · corners · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'fit',t:R`\|x+v\|_1 \ge \|x\|_1 - \|v_S\|_1 + \|v_{S\prime}\|_1`,n:`The triangle.`},
+  {k:'ember',kl:'condition',t:R`\|v_S\|_1 \lt \tfrac12\|v\|_1`,n:`Kernel spread thin.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{the true one is least}}`,n:`Exactly.`}
+],{title:'The slides · always · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'random',t:R`m \approx Ck\log(N/k)`,n:`Proved, 2006.`},
+  {k:'ember',kl:'steady',t:R`\text{error fenced by noise}`,n:`Nearly few is enough.`},
+  {k:'ember',kl:'open',t:R`\text{rule-built grids: } m \sim k^2`,n:`Open.`}
+],{title:'The slides · few · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'illegal',t:R`\text{least energy is fewest}\,?`,n:`It spreads.`}
+],{title:'The slides · illegal · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

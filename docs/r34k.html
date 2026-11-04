@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Surfaces from a square</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r34j.html">← 34j open sets and continuity by hand</a><a href="r34l.html">next: 34l winding numbers by hand →</a></p>
+  <div class="tags"><span class="tag tech">34k · technique</span></div>
+  <h1>Surfaces from a square</h1>
+  <p data-pid="6a82ef">In an old arcade game, a ship that flies off the right edge of the screen comes back on the left, and one that flies off the top comes back at the bottom. The ship is flying on a torus. A square with its sides sewn in pairs makes three of the surfaces of the list, depending only on which way round each pair is sewn. Sew both pairs straight and the result is the torus. Sew one pair with a twist and it is the one-sided bottle. Sew both with a twist and it is the cross-cap. This step builds each by hand, reads its count and its sides, finds it in the list, and follows straight lines across it. It then gives the move that brings a pair sewn the same way round side by side, and uses it to carry out the one move the list left to this step: a handle beside a twisted cap is three twisted caps.</p>
+  <p class="gesture" data-pid="c58624">A straight line of fraction slope through a corner of the torus closes up after as many crossings each way as the slope’s bottom and top, and a line of slope that is not a fraction never closes. The bottle sewn from a square is two cross-caps summed, and the square sewn with both pairs twisted is one cross-cap, with count one. A same-way pair x, with strings A and B between, can be cut and resewn so that a new pair sits side by side, and three such moves turn a handle beside a twisted cap into three twisted caps.</p>
+</header>
+
+<section class="class step" data-step="34k1">
+  <h2 class="sthead"><span class="stno">34k1</span>The torus, and straight lines on it</h2>
+  <p data-pid="0d423f">Sew the left side of the unit square to the right and the bottom to the top, straight across: the word is x y x⁻¹ y⁻¹, all four corners sew to one, and the count is 1 − 2 + 1 = 0, with two sides. That is the torus of the list, g = 1. A straight line on it is a straight line in the square, carried on from the opposite side each time it leaves. In the plane over the torus of 34g5, it is a straight line through the plane.</p>
+  <p data-pid="efead2">Slope-loop technique: <b>on the square torus, the straight line from a corner with slope n/m, in lowest terms with m &gt; 0, closes for the first time after crossing the left and right sides m times and the top and bottom |n| times; a line whose slope is not a fraction never closes.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the slope-loop technique">
+(t,\ \tfrac nm t),\ \ t \ge 0 @@ the line in the plane over the torus, from the corner (0, 0)
+\text{back at the corner} \iff t \text{ and } \tfrac{nt}{m} \text{ both whole} @@ the plane over the torus sends exactly the whole pairs to the corner (34g5)
+m \mid nt \text{ and } n, m \text{ share no factor} \Rightarrow m \mid t @@ lowest terms (5b): every factor of m divides t
+\text{first at } t = m:\ \ m \text{ crossings across},\ |n| \text{ up or down} @@ x passes 1, 2, …, m; y passes n whole values
+\htmlClass{new}{\text{its loop is } (m, n)} @@ the pair it ends at, in 34g5’s count
+s \text{ not a fraction},\ \ t,\ st \text{ whole},\ t > 0 \Rightarrow s = \tfrac{st}{t} \text{ a fraction} \quad \blacksquare @@ a false line: the line never closes
+  </pre>
+  <p data-pid="03e0c8">A line whose slope is not a fraction never closes, and it comes as near as you like to every point of the square, which is proved much higher up the ladder. A loop of slope 2/3 on the torus is the loop (3, 2): it winds three times round one way and twice round the other.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the torus · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">34k1.1</span><span class="ph know">know</span>Which word sews the square into the torus, and what is its count?  <br>What does the slope-loop technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34k2">
+  <h2 class="sthead"><span class="stno">34k2</span>The bottle</h2>
+  <p data-pid="8a074d">Sew the bottom to the top straight, and the left to the right with a twist, so the left side’s bottom meets the right side’s top. The word is x y x y⁻¹. The x pair is sewn the same way round, so the surface holds a twisted band and has one side. All four corners sew to one: the count is 1 − 2 + 1 = 0.</p>
+  <p data-pid="e434ba">Same-way move: <b>a word x A x B, read round, with strings A and B, can be cut and resewn into z z A B⁻¹, the same surface.</b> Cut along the diagonal z from the end of the first x to the end of the second. Two polygons result, one with A, x and z on its rim, one with B, x and z. Flip the second over and sew the two along x. The rim now reads z z A B⁻¹, up to where it starts, with z renamed. B⁻¹ is B read backwards, with every letter undone.</p>
+  <p data-pid="ffa005">Bottle-sum technique: <b>the bottle sewn from a square is two cross-caps summed.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the bottle-sum technique">
+x\,y\,x\,y^{-1} = x\,A\,x\,B,\ \ A = y,\ B = y^{-1} @@ read the word in the move’s form
+\to z\,z\,y\,y @@ the same-way move: B⁻¹ = y
+\htmlClass{new}{z\,z \text{ and } y\,y:\ \text{two cross-caps summed}} \quad \blacksquare @@ two same-way pairs, side by side (34f4); count 2 − 2 = 0, as before
+  </pre>
+  <p data-pid="042b2f">The bottle cannot be built in space without passing through itself. Glass-blowers make it with its neck pushed through its own side, and the crossing is a picture, not part of the surface.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the bottle · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34k2.1</span><span class="ph know">know</span>Which word sews the square into the bottle, and how many sides does it have?  <br>What do the same-way move and the bottle-sum technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34k3">
+  <h2 class="sthead"><span class="stno">34k3</span>The cross-cap from a square</h2>
+  <p data-pid="e6858a">Sew both pairs with a twist. The word is x y x y. Corners: the bottom-left sews to the top-right, and the bottom-right to the top-left, so two classes. The count is 2 − 2 + 1 = 1, and there is one side.</p>
+  <p data-pid="67a3e6">Square-cap technique: <b>the square sewn by x y x y is the cross-cap, the one-sided surface with count 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the square-cap technique">
+x\,y\,x\,y:\ \ V = 2,\ n = 2,\ \chi = 1 @@ the word-count technique (34f3)
+\text{one side} @@ the x pair is sewn the same way round
+\htmlClass{new}{\chi = 2 - k \Rightarrow k = 1:\ \text{the cross-cap}} \quad \blacksquare @@ the surface-list technique (34f4)
+  </pre>
+  <p data-pid="e1df51">Another picture of the same surface: the lines through the centre of space. Each line meets the sphere in two points straight across, and the sphere over the cross-cap of 34g5 sends both to that line. The upper half of the sphere already meets every line once, except the flat ones, which meet its rim twice. So the cross-cap is a disc with each rim point sewn to the point straight across: x x. Painters met these lines as the points at infinity of 29m’s perspective.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the cross-cap · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34k3.1</span><span class="ph know">know</span>Which word sews the square into the cross-cap, and how many corner classes does it have?  <br>What does the square-cap technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34k4">
+  <h2 class="sthead"><span class="stno">34k4</span>A handle beside a twisted cap</h2>
+  <p data-pid="9f8cc1">34f4’s list needed one move carried out here: a torus summed with a cross-cap is three cross-caps. The word of the sum is x y x⁻¹ y⁻¹ z z.</p>
+  <p data-pid="60f2d1">Handle-cap technique: <b>a torus summed with a cross-cap is three cross-caps summed.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the handle-cap technique">
+z\,z\,(x\,y)(x^{-1}\,y^{-1}) \to u\,(x\,y)\,u\,(y\,x) @@ the same-way move run backwards, with A = x y and B⁻¹ = x⁻¹ y⁻¹, so B = y x
+x\,u\,x\,(y\,u\,y) \to w\,w\,u\,y^{-1}\,u^{-1}\,y^{-1} @@ read from the last x: A = u, B = y u y, and B⁻¹ = y⁻¹ u⁻¹ y⁻¹
+v = y^{-1}:\ \ v\,u^{-1}\,v\,(w\,w\,u) \to t\,t\,u^{-1}\,u^{-1}\,w^{-1}\,w^{-1} @@ read from the first v: A = u⁻¹, B = w w u
+\htmlClass{new}{t\,t,\ \ u^{-1}u^{-1},\ \ w^{-1}w^{-1}:\ \text{three cross-caps}} \quad \blacksquare @@ count 1 − 3 + 1 = −1 = 2 − 3 at every stage, one corner class, one side
+  </pre>
+  <p data-pid="321375">So once a surface has one twisted cap, every handle on it can be traded for two more caps. That is why the list has no mixed kind. A doughnut-shaped surface with a twist sewn in somewhere is a surface with three twisted caps, and nothing else.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · handle and cap · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34k4.1</span><span class="ph know">know</span>What does the handle-cap technique say?  <br>Which move does each of its first three lines use?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34k5">
+  <h2 class="sthead"><span class="stno">34k5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{sewing the square by } x\,y\,x\,y \text{ gives the torus, since every pair is sewn}\,? @@ the pairs are twisted: one side, count 1, the cross-cap
+\text{the line of slope } \tfrac46 \text{ closes after 6 crossings}\,? @@ in lowest terms it is 2/3: it closes after 3
+\text{the bottle has count } 0, \text{ so it is the torus}\,? @@ the count and the sides together pick the surface; the bottle has one side
+\text{a line of slope } \sqrt2 \text{ closes after many crossings}\,? @@ closing would make √2 a fraction
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34k5.1</span><span class="ph know">know</span>Why is “the bottle has count 0, so it is the torus” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">34k.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x\,y\,z\,x\,y\,z"></span></span>Sew a hexagon by this word. Find its corner classes, its count and its sides, and find it in the list. <br>Then sew a hexagon by x x y z y⁻¹ z⁻¹, find its count, and find which sum of cross-caps the handle-cap technique turns it into.</div>
+  <div class="chq"><span class="chid">34k.6.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">the square with only its left and right sides sewn</span></span>Sew the left to the right straight: find the surface with a rim, and its count. Then sew them with a twist: find the surface, and how many pieces its rim has. <br>Cut each along the line midway between top and bottom, and find what falls apart.</div>
+  <div class="chq"><span class="chid">34k.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{a loop } (m, n) \text{ on the torus}"></span></span>For whole m and n, does some straight line from a corner close as the loop (m, n)? Find which pairs come from straight lines, and why (4, 6) does not. <br>Find a loop on the torus, not straight, that is (4, 6).</div>
+  <div class="chq"><span class="chid">34k.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="x\,y\,x\,y"></span></span>Prove the square-cap technique a second way, without the list: cut the square along the diagonal from bottom-left to top-right, and sew the two triangles along x. Find the word you get.</div>
+  <div class="chq"><span class="chid">34k.6.5</span><span class="tagq">seam</span><span class="givens"><span class="gtx">a surface that cannot be built in space</span></span>The bottle exists as a sewn square, as a glued space, and as a set of points in four dimensions. In space it can only be drawn passing through itself. <br>One side holds that a surface is real only if it can be built in the space we live in. The other holds that the sewn square is the surface, and space is just one place to put it. <br>Is the bottle a surface that exists?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r34j.html">← 34j · open sets and continuity by hand</a><a href="r34l.html">34l · winding numbers by hand →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The bottle is the Klein bottle, and the cross-cap is the real projective plane, ℝP². The lines through the centre of space are the points of ℝP²; the sphere over it is its universal double cover. The same-way move is the standard lemma of the classification by cutting and pasting, and the handle-cap technique is the relation T # ℝP² ≅ ℝP² # ℝP² # ℝP². Straight lines on the torus of slope that is not a fraction are irrational windings, and the claim that they come near every point is Kronecker’s theorem.</p>
+  <h3>Who said it first</h3>
+  <p>Felix Klein described the bottle in 1882. Walther von Dyck proved the handle-cap relation in 1888. The arcade game is Asteroids, released by Atari in 1979.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“x y x y has two letters, each twice, like x y x⁻¹ y⁻¹. Both have four edges and one face, so they are the same surface.” Not allowed: the count needs the corner classes, 1 for the torus and 2 here, and the sides need the directions of the pairs. The two words make different surfaces.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'word',t:R`x\,y\,x^{-1}\,y^{-1}`,n:`Straight across, both ways.`},
+  {k:'ember',kl:'closing',t:R`t,\ \tfrac nm t \text{ whole} \Rightarrow t = m`,n:`Lowest terms.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{the loop } (m, n)}`,n:`Not a fraction: never closes.`}
+],{title:'The slides · the torus · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'word',t:R`x\,y\,x\,y^{-1}`,n:`One pair twisted.`},
+  {k:'ember',kl:'the move',t:R`x\,A\,x\,B \to z\,z\,A\,B^{-1}`,n:`Cut and resew.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{two cross-caps}}`,n:`Count 0, one side.`}
+],{title:'The slides · the bottle · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'word',t:R`x\,y\,x\,y`,n:`Both pairs twisted.`},
+  {k:'ember',kl:'count',t:R`V = 2,\ \chi = 1`,n:`Two corner classes.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{the cross-cap}}`,n:`Lines through the centre.`}
+],{title:'The slides · the cross-cap · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'backwards',t:R`z\,z\,A\,B^{-1} \to u\,A\,u\,B`,n:`The move, run back.`},
+  {k:'ember',kl:'twice more',t:R`x\,A\,x\,B \to w\,w\,A\,B^{-1}`,n:`On x, then on v.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{t\,t\,u^{-1}u^{-1}w^{-1}w^{-1}}`,n:`Three caps.`}
+],{title:'The slides · handle and cap · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How do you fit a curve to noisy data?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r31stat.html">← 31·stat can a model fit too well?</a><a href="r31eng.html">next: 31·eng why does a tall building sway? →</a></p>
+  <div class="tags"><span class="tag then">31·then · newsflash</span></div>
+  <h1>How do you fit a curve to noisy data?</h1>
+  <p data-pid="032fe7">How do you fit a curve to noisy data? A water lab in Yakima tests well water for nitrate. It cannot see nitrate. It shines light through the sample and reads how much is soaked up, and it turns that reading into milligrams a litre with a line drawn through samples of known strength. Every such line, in every lab, is drawn through readings that wobble. So is the curve that says how fast an animal burns energy for its size, from a mouse to an elephant, and the curve that says how often the hundredth commonest word of a language turns up against the first. What makes the question hard is that there are endlessly many curves near any set of noisy points, and the eye picks badly. Rung thirty-one has one answer: choose a set of columns, and take the shadow. This page is the news it brings. A calibration line is a shadow read backwards. A power law is a shadow on log–log axes, where it misses by shares and not by amounts. And a fit to word counts must be weighted, or the rarest words outvote the common ones ten thousand to one.</p>
+  <p class="gesture" data-pid="5d78a8">A calibration line is fitted with the misses in the readings, then read backwards, and the unknown is reported with its width. A power law is fitted as a straight line in the logs, which misses each reading by a share. Word counts on log–log axes crowd at the rare end, and weights of one over the rank give each tenfold stretch of ranks the same say.</p>
+</header>
+
+<section class="class step" data-step="31then1">
+  <h2 class="sthead"><span class="stno">31then1</span>A line read backwards</h2>
+  <p data-pid="c1c07c">The lab makes five standards of nitrate, 0, 2, 4, 6 and 8 mg/L, weighed out with care, and reads how much light each soaks up: 0.01, 0.22, 0.40, 0.61 and 0.79. The strengths are known. The readings wobble. So the misses belong to the readings, and the line to fit is the line of reading on strength, the shadow of the readings on the columns 1 and x (13·stat, 31b4).</p>
+  <pre class="lines" data-k="ember" data-label="this page: five standards">
+\bar x = 4,\ \ \bar y = 0.406,\ \ S_{xx} = \textstyle\sum(x_i - \bar x)^2 = 40 @@ the averages
+S_{xy} = \textstyle\sum(x_i - \bar x)(y_i - \bar y) = 3.9 @@ the cross sum
+b = 3.9/40 = 0.0975,\ \ c = \bar y - b\bar x = 0.016 @@ the best-line technique (13·stat)
+\text{misses } -0.006,\ 0.009,\ -0.006,\ 0.009,\ -0.006 @@ they add to 0, and to 0 against x
+s^2 = \textstyle\sum e_i^2/(5 - 2) = 0.00009,\ \ s \approx 0.0095 @@ two columns, so two directions lost (31·stat)
+\htmlClass{new}{x_0 = \tfrac{0.50 - 0.016}{0.0975} \approx 4.96} \quad \blacksquare @@ the unknown well reads y₀ = 0.50; read back along the line
+  </pre>
+  <p data-pid="eb6220">Read-back technique: <b>if the standards are set exactly and the readings miss by independent amounts with spread σ², fit the readings on the strengths and read an unknown y₀ back as x₀ = (y₀ − c)/b; its spread width is about (σ/b)√(1 + 1/n + (y₀ − ȳ)²/(b²Sₓₓ)).</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the read-back technique">
+b = \textstyle\sum(x_i - \bar x)y_i/S_{xx},\ \ \operatorname{Var} b = \sigma^2/S_{xx} @@ a sum of independent parts (30g)
+\operatorname{Var}\big(c + bx\big) = \sigma^2\big(\tfrac1n + \tfrac{(x - \bar x)^2}{S_{xx}}\big) @@ c + bx = ȳ + b(x − x̄); ȳ and b do not co-spread
+y_0 - (c + bx_0) \text{ has spread } \sigma^2\big(1 + \tfrac1n + \tfrac{(x_0 - \bar x)^2}{S_{xx}}\big) @@ the new reading wobbles on its own
+\htmlClass{new}{x_0 \pm \tfrac{\sigma}{b}\sqrt{1 + \tfrac1n + \tfrac{(y_0 - \bar y)^2}{b^2S_{xx}}}} \quad \blacksquare @@ a miss of size m in y is a miss of m/b in x, near the line
+  </pre>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the cloud</div>
+    <p data-pid="5d647a">With s ≈ 0.0095 in place of σ, the unknown well reads 4.96 mg/L give or take (0.0095/0.0975) × √(1 + 0.2 + 0.0009) ≈ 0.11 mg/L.</p>
+    <p data-pid="11345f"><b>A strength read off a calibration line is the middle of a cloud and is reported with its width; the wobble of the unknown’s own reading sets most of it.</b></p>
+    <p data-pid="667162">The 1 under the root is the new reading’s own wobble, and it does not shrink with more standards. Five more standards cut the width only from 0.107 to about 0.102. Reading the unknown three times and averaging cuts it to about 0.073.</p>
+    <p class="bait" data-pid="dd3be1">A second well reads 0.79, at the top standard. Is its width larger or smaller than the first well’s, and by how much? What would a reading of 0.95 force you to say?</p>
+  </aside>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · read back · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">31·then.1.1</span><span class="ph know">know</span>Why is the line fitted with the reading on the strength, and not the strength on the reading?  <br>What does the read-back technique say, and which term of its width does not shrink with more standards?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31then2">
+  <h2 class="sthead"><span class="stno">31then2</span>Mouse to elephant</h2>
+  <p data-pid="f3fcc6">17·then drew the three-quarter line: the energy an animal burns at rest grows as its mass to the power ¾. Here are seven resting rates, rounded, of the kind in the tables, made up for this page to show the method: a mouse of 0.025 kg at 0.22 W, a rat of 0.3 kg at 1.3 W, a cat of 3 kg at 8.5 W, a dog of 15 kg at 24 W, a person of 70 kg at 85 W, a horse of 500 kg at 380 W and an elephant of 4000 kg at 1600 W.</p>
+  <p data-pid="81c6dd">A straight line through the raw numbers is ruled by the elephant. Its fit is about 42 + 0.39M watts, which gives the mouse 42 W, two hundred times its rate. The log-log technique of 17·then says that R = AMᵖ exactly when ln R is a straight function of ln M. So fit the shadow of the ln R on the columns 1 and ln M.</p>
+  <pre class="lines" data-k="ember" data-label="this page: seven animals, in logs">
+\ln M:\ -3.69,\ -1.20,\ 1.10,\ 2.71,\ 4.25,\ 6.21,\ 8.29 @@ natural logs
+\ln R:\ -1.51,\ 0.26,\ 2.14,\ 3.18,\ 4.44,\ 5.94,\ 7.38 @@ the same
+p = \tfrac{\sum(\ln M_i - \overline{\ln M})(\ln R_i - \overline{\ln R})}{\sum(\ln M_i - \overline{\ln M})^2} \approx 0.748 @@ the best-line technique, in logs
+\ln A \approx 1.23,\ \ A \approx 3.42 \text{ W} @@ the line passes through the average point
+\htmlClass{new}{R \approx 3.42\,M^{0.748}} \quad \blacksquare @@ misses in ln R of size at most 0.09: each rate within about 9%
+  </pre>
+  <p data-pid="883407">Log-fit technique: <b>the straight fit in the logs makes the total of the squared log shares ln(Rᵢ/R̂ᵢ) least, so it misses each reading by a share and not by an amount; the readings and the curve have the same geometric average, and the plain average of the shares Rᵢ/R̂ᵢ is at least 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the log-fit technique">
+e_i = \ln R_i - \ln \hat R_i = \ln(R_i/\hat R_i) @@ the miss, in logs, is the log of a share
+\textstyle\sum e_i = 0 \Rightarrow \prod R_i = \prod \hat R_i @@ the residuals technique (13·stat); the log of a product is the sum of logs
+e^t \ge 1 + t \text{ for every } t @@ e^t bends up, so it lies above its tangent at 0 (17)
+\htmlClass{new}{\tfrac1n\textstyle\sum R_i/\hat R_i \ge 1 + \tfrac1n\sum e_i = 1} \quad \blacksquare @@ for the seven animals, 1.002
+  </pre>
+  <p data-pid="c9ec13">So the curve runs through the middle of the shares, which is a little under the plain average of the rates at each mass. For seven animals it is 0.2% under. With noisier data, where a log miss of 0.5 is common, the gap is about one eighth, and a forecast of total energy needs it put back.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · in logs · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·then.2.1</span><span class="ph know">know</span>Why does a straight line through the raw rates fit the mouse so badly?  <br>What does the log-fit technique say about the misses, and why is the plain average of the shares at least 1?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31then3">
+  <h2 class="sthead"><span class="stno">31then3</span>Words by rank</h2>
+  <p data-pid="25b4cc">Count every word in a long run of English, and sort the words from commonest to rarest. Put the rank k on one axis and the count fₖ on the other, both in logs. The points lie close to a line of slope near −1. In one count, rank 1 is seen 6000 times, rank 10 640 times, rank 100 59 times and rank 1000 about 6 times: the count falls by about ten for each tenfold step in rank.</p>
+  <p data-pid="760a44">Fitting that line takes care. Of the ranks 1 to 10 000, nine thousand lie between 1000 and 10 000, the last tenth of the axis in logs. A plain shadow gives each point the same say, so the rare words outvote the first thousand by nine to one, and they are the ones whose counts are 1, 2 or 3 and wobble most. The weighted-shadow technique of 31k3 lets each point count for less.</p>
+  <p data-pid="bd30b7">Equal-decades technique: <b>with weight 1/k on the point of rank k, every tenfold stretch of ranks, from m to 10m, carries total weight close to ln 10, whatever m is.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the equal-decades technique">
+\tfrac1{k + 1} \le \textstyle\int_k^{k + 1}\tfrac{dx}{x} \le \tfrac1k @@ 1/x falls along each step
+\textstyle\int_m^{10m}\tfrac{dx}{x} \le \sum_{k = m}^{10m - 1}\tfrac1k \le \int_{m - 1}^{10m - 1}\tfrac{dx}{x} @@ add the steps
+\ln 10 \le \textstyle\sum_{k = m}^{10m - 1}\tfrac1k \le \ln\tfrac{10m - 1}{m - 1} @@ the integral of 1/x is ln (16)
+\htmlClass{new}{\textstyle\sum_{k = m}^{10m - 1}\tfrac1k \to \ln 10 \approx 2.30} \quad \blacksquare @@ as m grows; for m = 1000, 2.3030
+  </pre>
+  <p data-pid="d5ea5d">If the counts follow fₖ = C/k exactly over N words, the commonest word’s share of all words is 1/(1 + ½ + ⋯ + 1/N), close to 1/(ln N + 0.58) (22f). With 50 000 different words it is 1/11.4 ≈ 8.8%. A straight line on log–log axes is no proof that a power law holds; it is a claim about a few tenfold stretches, and other curves bend too slowly to tell apart over so few.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · by rank · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·then.3.1</span><span class="ph know">know</span>Why does a plain fit to word counts let the rare words rule?  <br>What does the equal-decades technique say, and how does weight 1/k fix the fit?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31then4">
+  <h2 class="sthead"><span class="stno">31then4</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{read the unknown off the line of } x \text{ on } y\,? @@ the strengths are exact; that line spreads the misses on the wrong side (31l2)
+\text{more standards make the read-back exact}\,? @@ the unknown’s own wobble, the 1 under the root, stays
+3.42\,M^{0.748} \text{ is the average rate at mass } M\,? @@ it is the middle of the shares, a little under the average
+\text{straight on log–log, so a power law}\,? @@ only over the stretches seen; a few tenfold steps cannot pin a curve
+\text{every point of a rank plot counts the same}\,? @@ then the last tenth of the axis outvotes the rest nine to one
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·then.4.1</span><span class="ph know">know</span>Why is the unknown read back along the line of reading on strength?  <br>Why is a straight line on log–log axes no proof of a power law?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">31·then.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x: 0, 2, 4, 6, 8;\ \ y: 0.01, 0.22, 0.40, 0.61, 0.79"></span></span>Build the widths of the read-back for y₀ = 0.10, 0.40 and 0.79.  <br>Where is the width least, and why there?</div>
+  <div class="chq"><span class="chid">31·then.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="y_0 = 0.95"></span></span>The reading of a well is above the top standard. Read it back.  <br>What does the read-back technique’s width say, and which claim of the technique no longer holds?</div>
+  <div class="chq"><span class="chid">31·then.5.3</span><span class="tagq">converse</span>The straight fit in logs has readings and curve with the same geometric average. Turn it round: if a curve AMᵖ has the same geometric average as the readings, must it be the best fit in logs?</div>
+  <div class="chq"><span class="chid">31·then.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{rank } 1, 10, 100, 1000;\ \ \text{counts } 6000, 640, 59, 6.2"></span></span>Find the slope of the word-count line a second way: with one point per tenfold step, weight them equally, and fit the line in base-10 logs.  <br>Check that it is near −1, and say why base 10 and base e give the same slope.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r31stat.html">← 31·stat · can a model fit too well?</a><a href="r31eng.html">31·eng · why does a tall building sway? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A line through standards read backwards is a calibration curve, and reading it backwards is inverse prediction or inverse regression; the width is a prediction interval for x₀. Fitting the line with the misses in x is the reverse regression, and it is biased for calibration. The three-quarter line is Kleiber’s law, and the straight fit in logs is a log-log regression; the shortfall of the back-turned curve is the retransformation bias. The rank law of words is Zipf’s law. The equal-decades weights are one way to fit a power law; maximum likelihood is now preferred.</p>
+  <h3>Who said it first</h3>
+  <p>Max Kleiber set the three-quarter line on the resting rates of animals from rats to steers in 1932. George Kingsley Zipf set out the rank law of words in 1935 and 1949; Jean-Baptiste Estoup had seen it in French shorthand in 1916. Aaron Clauset, Cosma Shalizi and Mark Newman showed in 2009 how often straight lines on log–log axes had been read as power laws without a test.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'fit',t:R`y \approx c + bx`,n:`Misses in the readings.`},
+  {k:'ember',kl:'back',t:R`x_0 = (y_0 - c)/b`,n:`Along the same line.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\pm\tfrac{\sigma}{b}\sqrt{1 + \tfrac1n + \cdots}}`,n:`Its own wobble stays.`}
+],{title:'The slides · read back · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'straighten',t:R`\ln R = \ln A + p\ln M`,n:`17·then.`},
+  {k:'ember',kl:'fit',t:R`p \approx 0.748`,n:`A shadow in logs.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\tfrac1n\textstyle\sum R_i/\hat R_i \ge 1}`,n:`Misses by shares.`}
+],{title:'The slides · in logs · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'crowd',t:R`9000 \text{ of } 10\,000 \text{ ranks above } 1000`,n:`The rare end.`},
+  {k:'ember',kl:'weight',t:R`w_k = 1/k`,n:`The weighted shadow.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\textstyle\sum_{m}^{10m - 1}\tfrac1k \approx \ln 10}`,n:`Equal decades.`}
+],{title:'The slides · by rank · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

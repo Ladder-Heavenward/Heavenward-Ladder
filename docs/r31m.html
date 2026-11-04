@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Interpolation and orthogonal polynomials</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1f3a5f"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r31l.html">← 31l correlation and regression</a><a href="r31n.html">next: 31n eigenvalues by machine →</a></p>
+  <div class="tags"><span class="tag tech">31m · technique</span></div>
+  <h1>Interpolation and orthogonal polynomials</h1>
+  <p data-pid="f52903">A tide table gives the height at each hour, and someone wants it at twenty past. A table of a function gives a few values, and a machine needs all of them. The oldest answer is to draw the one polynomial that passes through the given points exactly, and it works well in the middle of the table. At the ends it can go badly wrong: with many points spaced evenly, the curve through them swings wildly between the last few, even for a smooth bell-shaped function. The swing has a cause that can be written down, a product of the distances to the chosen points, and that product can be made as small as possible by choosing the points well. The best points crowd towards the ends, where the trouble was, and they come from the cosine. The same polynomials, straightened under the right product, stand at right angles to each other, and any family of straightened polynomials is built by a short recipe with three terms.</p>
+  <p class="gesture" data-pid="d1239f">Through n + 1 points there is one polynomial of degree at most n. Its miss from a smooth f is a high slope of f times the product of the distances to the points. Evenly spaced points make that product large near the ends; points from the cosine make it as small as it can be. Straightened polynomials obey a three-term recipe.</p>
+</header>
+
+<section class="class step" data-step="31m1">
+  <h2 class="sthead"><span class="stno">31m1</span>Through the given points</h2>
+  <p data-pid="f6b4fe">Given n + 1 inputs x₀, …, xₙ, all different, and values y₀, …, yₙ, a polynomial p of degree at most n <i>passes through</i> them when p(xⱼ) = yⱼ for every j.</p>
+  <p data-pid="ccdd6b">Through-the-points technique: <b>exactly one polynomial of degree at most n passes through n + 1 points with different inputs, and it is p = Σⱼ yⱼLⱼ, where Lⱼ(x) is the product over k ≠ j of (x − xₖ)/(xⱼ − xₖ).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the through-the-points technique">
+L_j(x_j) = 1,\ \ L_j(x_k) = 0 \text{ for } k \ne j @@ each factor is 1 at xⱼ; one factor is 0 at xₖ
+p(x_k) = \textstyle\sum_j y_jL_j(x_k) = y_k @@ only the kth term survives
+p, q \text{ both pass} \Rightarrow p - q \text{ has } n + 1 \text{ roots} @@ p − q is 0 at every xₖ
+\htmlClass{new}{p - q = 0} \quad \blacksquare @@ a polynomial of degree at most n that is not 0 has at most n zeros (the at-most-n-zeros technique, 9g)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: three points">
+(0, 1),\ (1, 3),\ (2, 7) @@ the table
+L_0 = \tfrac{(x - 1)(x - 2)}{2},\ \ L_1 = -x(x - 2),\ \ L_2 = \tfrac{x(x - 1)}{2} @@ the products
+\htmlClass{new}{p = L_0 + 3L_1 + 7L_2 = 1 + x + x^2} \quad \blacksquare @@ multiply out; check p(1) = 3
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · through points · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">31m1.1</span><span class="ph know">know</span>What does the through-the-points technique say, and what is Lⱼ?  <br>Why can two such polynomials not differ?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31m2">
+  <h2 class="sthead"><span class="stno">31m2</span>The miss, and the wiggle at the ends</h2>
+  <p data-pid="50197c">Interpolation-miss technique: <b>if f has n + 1 slopes on an interval holding x and every xₖ, and p passes through the points (xₖ, f(xₖ)), then f(x) − p(x) = f⁽ⁿ⁺¹⁾(ξ)/(n + 1)! times (x − x₀)(x − x₁)⋯(x − xₙ), for some ξ in the interval.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the interpolation-miss technique">
+\omega(t) = (t - x_0)\cdots(t - x_n),\ \ x \ne \text{every } x_k @@ the product of distances
+g(t) = f(t) - p(t) - K\omega(t),\ \ K \text{ chosen so that } g(x) = 0 @@ ω(x) ≠ 0
+g \text{ is } 0 \text{ at } n + 2 \text{ inputs} @@ at x and at every xₖ
+g^{(n+1)}(\xi) = 0 \text{ for some } \xi @@ the level-ends technique (14b) between neighbours, n + 1 times, each time one root fewer
+g^{(n+1)} = f^{(n+1)} - 0 - K(n + 1)! @@ p has degree at most n; ω starts with tⁿ⁺¹
+\htmlClass{new}{f(x) - p(x) = K\omega(x) = \tfrac{f^{(n+1)}(\xi)}{(n + 1)!}\,\omega(x)} \quad \blacksquare @@ g(x) = 0
+  </pre>
+  <p data-pid="048231">The slope part depends on f. The product ω depends only on the points chosen, and it is the part that can be changed. With 11 evenly spaced points on [−1, 1], |ω| is below 0.00007 at x = 0.05 and reaches 0.0085 near the ends, over a hundred times more.</p>
+  <pre class="lines" data-k="ember" data-label="this step: a smooth bell, through even points">
+f(x) = \tfrac{1}{1 + 25x^2} \text{ on } [-1, 1] @@ smooth, and at most 1
+4 \text{ even gaps: largest miss } \approx 0.44 @@ a machine’s check over 20 001 inputs
+10 \text{ even gaps: largest miss } \approx 1.92,\ \text{near } x = \pm 0.94 @@ worse
+\htmlClass{new}{16 \text{ even gaps: largest miss } \approx 14.4} \quad \blacksquare @@ more points, a worse fit at the ends
+  </pre>
+  <p data-pid="cf7fbd">31j promised polynomials near every continuous function. It never promised that the polynomials through evenly spaced points are the near ones, and they are not. The slopes of this bell grow like (n + 1)! times 5ⁿ⁺¹, faster than the product shrinks.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the miss · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31m2.1</span><span class="ph know">know</span>What does the interpolation-miss technique say?  <br>Which part of the miss depends only on the points chosen, and what does it do near the ends for even points?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31m3">
+  <h2 class="sthead"><span class="stno">31m3</span>Families at right angles</h2>
+  <p data-pid="09958c">31c2 straightened 1, x, x² under the area product on [−1, 1], and got multiples of 1, x and x² − 1/3. A <i>weight</i> w(x) &gt; 0 gives another product, ⟨f, g⟩ = ∫ f g w, and another family. Straighten 1, x, x², … under it and keep each pₙ of degree n with leading number 1: the family of the weight.</p>
+  <p data-pid="b4b36b">Three-term technique: <b>in the family of any weight, x pₙ = pₙ₊₁ + βₙpₙ + γₙpₙ₋₁ for numbers βₙ and γₙ: each new member needs only the last two.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the three-term technique">
+xp_n - p_{n+1} \text{ has degree at most } n @@ both start with xⁿ⁺¹
+xp_n - p_{n+1} = \textstyle\sum_{k \le n} c_kp_k @@ p₀, …, pₙ build the polynomials of degree at most n (31c1)
+c_k\|p_k\|^2 = \langle xp_n, p_k\rangle = \langle p_n, xp_k\rangle @@ pₙ₊₁ ⊥ pₖ; the weight moves x across the product
+xp_k \text{ has degree } k + 1 < n \text{ for } k \le n - 2 @@ and pₙ is at right angles to every polynomial of lower degree
+\htmlClass{new}{c_k = 0 \text{ for } k \le n - 2} \quad \blacksquare @@ only cₙ and cₙ₋₁ survive
+  </pre>
+  <p data-pid="dea6a7">With the weight 1/√(1 − x²) on (−1, 1), put x = cos θ. Then ⟨f, g⟩ = ∫₀^π f(cos θ) g(cos θ) dθ. On this step Tₙ names a new thing, the cosine polynomial; 23a’s Tₙ, the polynomial that matches slopes, keeps its meaning everywhere else. The cosine polynomials Tₙ, with Tₙ(cos θ) = cos nθ, are polynomials in x by 21k: cos(n + 1)θ + cos(n − 1)θ = 2 cos θ cos nθ, so Tₙ₊₁ = 2xTₙ − Tₙ₋₁, a three-term recipe, from T₀ = 1 and T₁ = x. And ∫₀^π cos nθ cos mθ dθ = 0 for n ≠ m by 21k again. So they are this weight’s family, up to their leading numbers 2ⁿ⁻¹: T₂ = 2x² − 1, T₃ = 4x³ − 3x.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · families · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31m3.1</span><span class="ph know">know</span>What is the family of a weight?  <br>What does the three-term technique say, and why do only two lower members appear?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31m4">
+  <h2 class="sthead"><span class="stno">31m4</span>The best points to choose</h2>
+  <p data-pid="4f3b5c">Cosine-points technique: <b>among all choices of n + 1 points in [−1, 1], the roots of Tₙ₊₁, xₖ = cos((2k + 1)π/(2n + 2)), make the largest size of ω on [−1, 1] as small as it can be, 2⁻ⁿ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the cosine-points technique">
+\omega = T_{n+1}/2^n @@ both start with xⁿ⁺¹ and have the same roots
+|\omega(x)| = |\cos((n + 1)\theta)|/2^n \le 2^{-n} @@ x = cos θ
+\omega = \pm 2^{-n} \text{ at } x = \cos\tfrac{j\pi}{n + 1},\ j = 0, \ldots, n + 1,\ \text{signs turning} @@ n + 2 inputs where cos((n + 1)θ) = ±1
+q \text{ starts with } x^{n+1},\ |q| < 2^{-n} \text{ on } [-1, 1] \Rightarrow \omega - q \text{ changes sign } n + 1 \text{ times} @@ q is smaller than ω at each of those n + 2 inputs
+\htmlClass{new}{\omega - q \text{ has degree} \le n \text{ and } n + 1 \text{ roots, so } \omega = q} \quad \blacksquare @@ the intermediate value technique (12a), then 9g; refuted, so no choice beats 2⁻ⁿ
+  </pre>
+  <p data-pid="2cdedb">For the bell of 31m2, the cosine points give a largest miss of about 0.40 with 5 points, 0.11 with 11 and 0.033 with 17. The points crowd towards ±1, the shadows of points evenly spaced round a half circle, and the wiggle at the ends is gone.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · best points · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31m4.1</span><span class="ph know">know</span>What does the cosine-points technique say?  <br>Why can no other choice of points beat 2⁻ⁿ?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31m5">
+  <h2 class="sthead"><span class="stno">31m5</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{more evenly spaced points always give a better fit}\,? @@ the bell: 0.44, 1.92, 14.4 as the points grow
+\text{the polynomials through the points are 31j’s near polynomials}\,? @@ 31j used coin averages, which need not pass through any point
+\text{every family of straightened polynomials is the cosine family}\,? @@ each weight has its own family; weight 1 gives 1, x, x² − 1/3
+\text{interpolate a table far past its last entry}\,? @@ ω grows like a power of the distance outside the points
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31m5.1</span><span class="ph know">know</span>Why do more evenly spaced points not always give a better fit?  <br>Why is reading a table far past its last entry dangerous?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Special challenges · there if you want them</div>
+  <h2>Special challenges</h2>
+  <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
+  <div class="chq"><span class="chid">31m.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{heights at Neah Bay: } 0 \text{ h}: 1.2 \text{ m},\ 2 \text{ h}: 2.1 \text{ m},\ 4 \text{ h}: 2.4 \text{ m}"></span></span>Build the parabola through the three readings, and find the height at 3 h and at 6 h.  <br>Which of the two would you trust, and why, by the interpolation-miss technique? The numbers are a model.</div>
+  <div class="chq"><span class="chid">31m.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x_0 = 0,\ x_1 = h"></span></span>Two points: find the polynomial through (0, f(0)) and (h, f(h)), and the interpolation-miss technique’s bound in the middle.  <br>What does the miss do as h heads to 0, and which rung 13 object is the line?</div>
+  <div class="chq"><span class="chid">31m.6.3</span><span class="tagq">converse</span>The cosine points make |ω| as small as can be. Turn it round: if a choice of n + 1 points gives max |ω| = 2⁻ⁿ, must they be the cosine points?</div>
+  <div class="chq"><span class="chid">31m.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="P_0 = 1,\ P_1 = x,\ P_2 = x^2 - \tfrac13"></span></span>Find P₃ for the weight 1 on [−1, 1] by the three-term technique, finding β₂ and γ₂ from products.  <br>Check it by straightening x³ directly.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r31l.html">← 31l · correlation and regression</a><a href="r31n.html">31n · eigenvalues by machine →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The polynomial through the points is the interpolating polynomial, and the Lⱼ form is Lagrange interpolation. The interpolation-miss technique is the interpolation error formula. The wiggle at the ends is Runge’s phenomenon, and 1/(1 + 25x²) is Runge’s function. A family of straightened polynomials under a weight is a family of orthogonal polynomials, and the three-term technique is the three-term recurrence. The Tₙ are the Chebyshev polynomials, their roots the Chebyshev nodes, and the cosine-points technique the minimax property of Chebyshev polynomials. Weight 1 gives the Legendre polynomials.</p>
+  <h3>Who said it first</h3>
+  <p>Edward Waring published the Lⱼ form in 1779, and Joseph-Louis Lagrange again in 1795; Isaac Newton had a form of interpolation by differences in 1676. Pafnuty Chebyshev found his polynomials in 1854 while designing linkages for steam engines. Carl Runge showed the wiggle at the ends in 1901.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'Lⱼ',t:R`L_j(x_k) = 1 \text{ or } 0`,n:`One where k = j.`},
+  {k:'ember',kl:'sum',t:R`p = \textstyle\sum y_jL_j`,n:`Passes through all.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{one } p \text{ of degree} \le n}`,n:`Roots count.`}
+],{title:'The slides · through points · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'helper',t:R`g = f - p - K\omega`,n:`0 at n + 2 inputs.`},
+  {k:'ember',kl:'level ends',t:R`g^{(n+1)}(\xi) = 0`,n:`n + 1 times.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{f - p = \tfrac{f^{(n+1)}(\xi)}{(n+1)!}\,\omega}`,n:`The product decides.`}
+],{title:'The slides · the miss · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'weight',t:R`\langle f, g\rangle = \textstyle\int fgw`,n:`w &gt; 0.`},
+  {k:'ember',kl:'across',t:R`\langle xp_n, p_k\rangle = \langle p_n, xp_k\rangle`,n:`x moves across.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{xp_n = p_{n+1} + \beta_np_n + \gamma_np_{n-1}}`,n:`Three terms.`}
+],{title:'The slides · families · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'points',t:R`x_k = \cos\tfrac{(2k+1)\pi}{2n+2}`,n:`Roots of Tₙ₊₁.`},
+  {k:'ember',kl:'product',t:R`\omega = T_{n+1}/2^n`,n:`At most 2⁻ⁿ.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\max|\omega| = 2^{-n}}`,n:`The least possible.`}
+],{title:'The slides · best points · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
