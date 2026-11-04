@@ -875,7 +875,7 @@ window.__deskInit=function(){
   const rx=desk.querySelector('.recx'), ri=desk.querySelector('.reci'), rn=desk.querySelector('#recnote');
   if(rx) rx.onclick=()=>LadderRecord.export();
   const rd=desk.querySelector('.recdel'); if(rd) rd.onclick=()=>{ if(!confirm('Delete your progress? You will lose all your progress: every footing, star, measure, standing question and note on this device. Save your record as a file first if you may want it back.')) return;
-    LadderRecord.erase(); rn.textContent='Progress deleted. Reloading…'; setTimeout(()=>location.href='index.html',400); };
+    LadderRecord.erase(); try{ sessionStorage.clear(); }catch(x){} rn.textContent='Progress deleted. Reloading…'; setTimeout(()=>location.href='index.html',400); };
   if(ri) ri.onchange=()=>{ const f=ri.files[0]; if(!f) return; f.text().then(t=>{ const o=JSON.parse(t);
     if(!confirm('Replace the record on this device with the one in this file?')) return;
     LadderRecord.import(o); rn.textContent='Record opened. Reloading…'; setTimeout(()=>location.reload(),400); }).catch(()=>{ rn.textContent='That file is not a ladder record.'; }); };
@@ -1422,8 +1422,11 @@ function footingView(){
   /* the pages before and after on the climb: nav.nextrung as built, or the .pn rows pn() made of it (annex links relinked) */
   const pageLink=dir=>{ const a=document.querySelector(dir>0?'.pn .pnb.next[href], nav.nextrung a.pnb.next[href]':'.pn .pnb.prev[href], nav.nextrung a.pnb.prev[href]')
       ||[...document.querySelectorAll('nav.nextrung a')].find(x=>dir>0?/→/.test(x.textContent):(/←/.test(x.textContent)&&!/index\.html$/.test(x.getAttribute('href')||'')));
-    const h=a&&a.getAttribute('href'); return h&&!/^index\.html/.test(h)?h:null; };
-  const leave=(h,dir)=>{ ss.set('fv:want','fv'); location.href=h.replace(/#.*$/,'')+(dir<0?'#last':''); };
+    const h=a&&a.getAttribute('href'); return h&&(dir>0||!/^index\.html/.test(h))?h:null; };
+  /* 0.3.7: forward, press the page's own next link, so a link a page has rewritten (the first run's floor 1 -> the dizzying
+     heights) keeps its own handler; back, open the previous page at its last footing */
+  const leave=(h,dir)=>{ ss.set('fv:want','fv'); if(dir>0){ const a=document.querySelector('.pn .pnb.next[href], nav.nextrung a.pnb.next[href]')||[...document.querySelectorAll('nav.nextrung a')].find(x=>/→/.test(x.textContent)); if(a&&a.getAttribute('href')===h){ a.click(); return; } }
+    location.href=h.replace(/#.*$/,'')+(dir<0?'#last':''); };
   /* the blue sky waits until the top of the ladder is finished (Andrew 21:27) */
   const skyOpen=()=>window.LadderSky&&LadderSky.open&&LadderSky.open();
   const unitOf=el=>{ const u=el&&el.closest&&el.closest('[data-fvu]'); return u?+u.getAttribute('data-fvu'):-1; };
