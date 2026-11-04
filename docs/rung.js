@@ -477,9 +477,10 @@ function deskHTML(){
   const b=document.createElement('button'); b.id='deskbtn'; b.setAttribute('aria-label','open the desk: questions and a grapher'); b.textContent='☰ desk';
   const d=document.createElement('div'); d.id='desk'; d.setAttribute('role','dialog'); d.setAttribute('aria-label','desk');
   const qs=!!document.querySelector('.sayback');
-  d.innerHTML='<div class="dtabs">'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph view</button><button data-p="moves">Techs read</button><button data-p="rand">Laundry</button>'+(document.querySelector('.qid')?'<button type="button" class="dcross">Crosswalk</button>':'')+'<button type="button" class="dstick">Measuring stick</button><button type="button" class="dstand">Standing questions</button><button data-p="rec">Record</button><button type="button" class="dkeys" aria-label="the math keys">⌨ Keys</button>'+(document.querySelector('.wrap>section.class.step')?'<button type="button" class="dfv">Page view</button>':'')+'<button type="button" class="dheights">Dizzying heights</button><a class="dshare" href="install.html">Share the ladder</a><button class="x" aria-label="close">✕</button></div>'
+  d.innerHTML='<div class="dtop"><button type="button" class="dback">← back</button><b class="dttl"></b></div><div class="dtabs"><button data-p="keys">Quick keys</button>'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph view</button><button data-p="moves">Techs read</button><button data-p="rand">Laundry</button>'+(document.querySelector('.qid')?'<button type="button" class="dcross">Crosswalk</button>':'')+'<button type="button" class="dstick">Measuring stick</button><button type="button" class="dstand">Standing questions</button><button data-p="rec">Record</button>'+(document.querySelector('.wrap>section.class.step')&&window.LADDER_DESK?'<button type="button" class="dfv">Page view</button>':'')+'<button type="button" class="dheights">Dizzying heights</button><a class="dshare" href="install.html">Share the ladder</a><button class="x" aria-label="close">✕</button></div>'
+    +'<div class="dpane" id="dp-keys"><p class="dnote">The marks this footing writes that a keyboard can’t type. Tap a text box first, and the key writes there; or use your own line and paste it.</p><div id="dkeyshost"></div></div>'
     +(qs?'<div class="dpane" id="dp-qs"><p class="dnote">The page’s questions, here so you can read them beside the class.</p><div class="dq" id="dq"></div></div>':'')
-    +'<div class="dpane" id="dp-graph"><div id="dmg"></div><p class="dnote" style="margin-top:10px">Type it as on paper: x^2, 2sin(x), e^x, ln x, √x, |x|, x!. a, b, c and k get sliders.</p></div>'
+    +'<div class="dpane" id="dp-graph"><div id="dgfig"></div><div id="dmg"></div><p class="dnote" style="margin-top:10px">Type it as on paper: x^2, 2sin(x), e^x, ln x, √x, |x|, x!. a, b, c and k get sliders.</p></div>'
     +'<div class="dpane" id="dp-moves"><p class="dnote" id="dmnote">The techs this step uses and builds: what each is called, what it does in words, and the line in symbols.</p><div id="dmoves"></div><p><a class="dlink" href="moves.html">every tech you have earned →</a></p></div>'
     +'<div class="dpane" id="dp-rand"><p class="dnote">Practice drawn from the pools your steps have opened, with no repeats.</p></div>'
     +'<div class="dpane" id="dp-rec"><p class="dnote">Everything the ladder remembers about your climb is one record, kept on this device. Save it as a file to keep a copy or to carry it to another device, and open that file there.</p><p><button type="button" class="dlink recx">save my record as a file</button></p><p><label class="dlink">open a record file <input type="file" accept=".json,application/json" class="reci" hidden></label></p><p><button type="button" class="dlink recdel">delete my progress</button></p><p class="dnote" id="recnote"></p></div>';
@@ -579,7 +580,7 @@ function ladderBar(){
   const bar=document.createElement('nav'); bar.id='lbar'; bar.setAttribute('aria-label','the ladder bar');
   bar.innerHTML=(home?'<button type="button" class="lb lb-ladder"':'<a class="lb lb-ladder" href="index.html"')+' title="the ladder"><span class="lb-l" aria-label="Ladder">'+ICON_L+'<span class="lb-w">adder</span></span>'+(home?'</button>':'</a>')
     +'<span class="lb-counts" role="status"><span class="lc lc-blue" title="blue stars: steps with every footing question cleared, rungs with every step starred, floors with every rung starred"><span aria-hidden="true">★</span><b>0</b><span class="vh"> blue stars</span></span><span class="lc lc-gold" title="gold stars: steps, rungs and floors measured"><span aria-hidden="true">★</span><b>0</b><span class="vh"> gold stars</span></span><span class="lc lc-wing" title="angel wings: rungs and floors with their blue star, their gold star and every standing question cleared">'+WINGS+'<b>0</b><span class="vh"> angel wings</span></span></span>'
-    +'<span class="lb-gap"></span>'+'<button type="button" class="lb lb-keys" aria-label="the keys" hidden>⌨ <span class="lb-l">keys</span></button>'+'<button type="button" class="lb lb-tray" aria-label="the toolbox">☰ <span class="lb-l">toolbox</span></button>';
+    +'<span class="lb-gap"></span>'+'<button type="button" class="lb lb-keys" aria-label="quick keys" hidden>⌨ <span class="lb-l">quick keys</span></button>'+'<button type="button" class="lb lb-tray" aria-label="the toolbox">☰ <span class="lb-l">toolbox</span></button>';
   document.body.appendChild(bar); document.body.classList.add('hasbar');
   const stats=()=>{ const v=starCounts(); if(!v) return;
     bar.querySelector('.lc-blue b').textContent=v.blue; bar.querySelector('.lc-gold b').textContent=v.gold; bar.querySelector('.lc-wing b').textContent=v.wings; };
@@ -593,15 +594,27 @@ function ladderBar(){
   bar.querySelector('.lb-tray').onclick=()=>{ const b=document.getElementById('deskbtn'); if(b) b.click(); };
   const sync=()=>{ const t=document.getElementById('mk-tray'), d=document.getElementById('desk');
     if(kb){ kb.hidden=!!d||!t; kb.classList.toggle('on',!!(t&&t.classList.contains('open'))); }
-    const dk=document.querySelector('#desk .dkeys'); if(dk) dk.classList.toggle('on',!!(t&&t.classList.contains('open')));
     bar.querySelector('.lb-tray').classList.toggle('on',!!(d&&d.classList.contains('open'))); };
   new MutationObserver(sync).observe(document.body,{subtree:true,attributes:true,attributeFilter:['class']}); sync();
 }
 /* On the ladder, rung 0 is at the foot and the page opens where you are standing. */
 function climbTo(smooth){
-  const h=document.querySelector('.rungs .here')||document.querySelector('.rungs section.rung');
+  if(window.LADDER_DESK) return deskScroll();
+  try{ if(sessionStorage.getItem('sky:new')||window.__skyFresh) return; }catch(e){}
+  /* 0.3.5 (Andrew 22:09): the index opens on your furthest footing; its step's footing list opens to show it */
+  let h=null; const f=window.LadderFV&&LadderFV.furthest&&LadderFV.furthest();
+  if(f&&f.page){ const pg=f.page.replace(/\.html$/,''); const fa=f.id&&f.id!=='top'&&f.id!=='end'?document.querySelector('.ladder a[href="'+pg+'.html#'+f.id+'"]'):null;
+    if(fa){ const d=fa.closest('details'); if(d) d.open=true; h=fa.closest('li')||fa; }
+    else { const ra=document.querySelector('.ladder a[href="'+pg+'.html"]'); if(ra) h=ra.closest('li')||ra; }
+    if(h){ document.querySelectorAll('.fvhere').forEach(x=>x.classList.remove('fvhere')); h.classList.add('fvhere'); } }
+  if(!h) h=document.querySelector('.rungs .here')||document.querySelector('.rungs section.rung');
   if(h) h.scrollIntoView({block:'center',behavior:smooth?'smooth':'auto'});
 }
+/* the desk: never jumps; it keeps where you were on the index between visits */
+function deskScroll(){ if(deskScroll.done) return; deskScroll.done=1;
+  let y=null; try{ y=JSON.parse(localStorage.getItem('desk:iscroll')||'null'); }catch(e){}
+  if(typeof y==='number') [60,400,1200].forEach(t=>setTimeout(()=>window.scrollTo(0,y),t));
+  let tk=0; window.addEventListener('scroll',()=>{ clearTimeout(tk); tk=setTimeout(()=>{ try{ localStorage.setItem('desk:iscroll',JSON.stringify(window.scrollY)); }catch(e){} },300); },{passive:true}); }
 
 function ready(f){ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',f); else f(); }
 window.Rung={tex,col,stepper,plane,ready,renderAll,_desk:deskHTML};
@@ -621,7 +634,7 @@ ready(()=>{ renderAll(document);
      the frame's ancestors, so the top of the new page comes into view. Deep links (#…) keep their jump. */
   if(!location.hash){ try{ if('scrollRestoration' in history) history.scrollRestoration='manual'; }catch(e){}
     const top=()=>{ try{ window.scrollTo(0,0); const h=document.querySelector('header.top')||document.body; h.scrollIntoView({block:'start'}); }catch(e){} };
-    if(document.querySelector('.rungs')){ [60,400,1200].forEach(t=>setTimeout(()=>climbTo(false),t)); }
+    if(document.querySelector('.rungs')){ if(window.LADDER_DESK) deskScroll(); else [60,400,1200].forEach(t=>setTimeout(()=>climbTo(false),t)); }
     else { top(); setTimeout(top,60); } }
   ladderBar();
 });
@@ -810,9 +823,20 @@ window.__deskInit=function(){
   function fillQs(){ const q=document.getElementById('dq'); if(q.dataset.done){ syncQs(); return; } const stq=[...document.querySelectorAll('section.step:not([hidden]) .sayback ol')]; const src=stq.length?null:document.querySelector('.sayback ol, #qs ol, section.sayback'); if(stq.length){ stq.forEach(o=>{ const c=o.cloneNode(true); c.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id')); q.appendChild(c); }); } if(src){ const c=src.cloneNode(true); c.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id')); q.appendChild(c);
     q.querySelectorAll('.qid,.id').forEach(el=>{ el.style.cursor='pointer'; el.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation(); const o=origQ(el.textContent.trim()); if(o&&o.__tick){ o.__tick(); el.classList.toggle('done',o.classList.contains('done')); } }); }); }
     q.dataset.done=1; syncQs(); }
-  function show(p){ desk.querySelectorAll('.dtabs [data-p]').forEach(b=>b.classList.toggle('on',b.dataset.p===p)); desk.querySelectorAll('.dpane').forEach(d=>d.classList.toggle('on',d.id==='dp-'+p)); if(p==='book') renderBook(); if(p==='qs') fillQs(); if(p==='moves') fillMoves(); if(p==='graph') initGraph(); if(p==='rand') loadRand(); else if(window.MathKeys) MathKeys.limit(null); st.tab=p; save(); }
+  const TOOLS={qs:'Questions',graph:'Graph view',moves:'Techs read',rand:'Laundry',rec:'Record'};
+  const hereOf=()=>{ const h=window.LadderFV&&LadderFV.here?LadderFV.here():null; const tag=(document.querySelector('header .tag, .stag')||{}).textContent||'';
+    if(h&&h.id&&h.id!=='top'&&h.id!=='end') return {id:h.id,els:h.els,say:'footing '+h.id}; return {id:h&&h.id||'page',els:h&&h.els||null,say:(tag.trim()||'the page')}; };
+  function dock(v){ const t=document.getElementById('mk-tray'), host=document.getElementById('dkeyshost'); if(!t||!host) return;
+    if(v){ if(t.parentNode!==host) host.appendChild(t); t.classList.add('mk-docked'); if(window.MathKeys&&MathKeys.open) MathKeys.open(true); }
+    else if(t.parentNode===host){ if(window.MathKeys&&MathKeys.open) MathKeys.open(false); t.classList.remove('mk-docked'); document.body.appendChild(t); } }
+  function toolPage(p){ const on=!!TOOLS[p]; desk.classList.toggle('toolpage',on); document.body.classList.toggle('toolpage',on);
+    if(on){ const h=hereOf(); desk.querySelector('.dttl').textContent=TOOLS[p]; desk.querySelector('.dback').textContent='← back to '+h.say;
+      if(!(history.state&&history.state.tool)) try{ history.pushState({tool:p},''); }catch(e){} else try{ history.replaceState({tool:p},''); }catch(e){}
+      desk.querySelector('.dpane.on')&&(desk.querySelector('.dpane.on').scrollTop=0); } }
+  function show(p){ desk.querySelectorAll('.dtabs [data-p]').forEach(b=>b.classList.toggle('on',b.dataset.p===p)); desk.querySelectorAll('.dpane').forEach(d=>d.classList.toggle('on',d.id==='dp-'+p)); dock(p==='keys'); toolPage(p); if(p==='book') renderBook(); if(p==='qs') fillQs(); if(p==='moves') fillMoves(); if(p==='graph') initGraph(); if(p==='rand') loadRand(); else if(window.MathKeys) MathKeys.limit(null); st.tab=p; save(); }
+  window.addEventListener('popstate',()=>{ if(desk.classList.contains('toolpage')) open(false); });
   function loadRand(){ if(window.LadderRandomizer){ const bx=desk.querySelector('#dp-rand .rzbox'); if(bx) LadderRandomizer.render(bx); return; } const s=document.createElement('script'); s.src='randomizer.js'; document.head.appendChild(s); }
-  function open(v){ if(!v&&window.MathKeys) MathKeys.limit(null); desk.classList.toggle('open',v); document.body.classList.toggle('deskopen',v); btn.textContent=v?'✕ desk':'☰ desk'; st.open=v; save(); if(v) show(st.tab&&desk.querySelector('.dtabs [data-p="'+st.tab+'"]')?st.tab:desk.querySelector('.dtabs [data-p]').dataset.p); }
+  function open(v){ if(!v&&window.MathKeys) MathKeys.limit(null); desk.classList.toggle('open',v); document.body.classList.toggle('deskopen',v); btn.textContent=v?'✕ desk':'☰ desk'; st.open=v; save(); if(v) show('keys'); else { dock(false); const was=desk.classList.contains('toolpage'); toolPage(null); if(was&&history.state&&history.state.tool) try{ history.back(); }catch(e){} } }
   let movesDone=false;
   function fillMoves(){ if(movesDone) return; movesDone=true; const box=document.getElementById('dmoves'), note=document.getElementById('dmnote');
     const page=ladderPage();
@@ -840,7 +864,7 @@ window.__deskInit=function(){
     setTimeout(go,50); });
   document.addEventListener('click',e=>{ const a=e.target.closest&&e.target.closest('#dmoves a.mwhere'); if(a&&a.getAttribute('href').startsWith('#')) open(false); });
   desk.querySelector('.x').onclick=()=>open(false);
-  const dkb=desk.querySelector('.dkeys'); if(dkb) dkb.onclick=()=>{ const b=document.querySelector('#mk-tray .mk-btn'); if(b) b.click(); };
+  desk.querySelector('.dback').onclick=()=>open(false);
   desk.querySelectorAll('.dtabs [data-p]').forEach(b=>b.onclick=()=>show(b.dataset.p));
   const dfv=desk.querySelector('.dfv'); if(dfv) dfv.onclick=()=>{ open(false); if(window.LadderFV&&LadderFV.toggle) LadderFV.toggle(); };
   const dx=desk.querySelector('.dcross'); if(dx) dx.onclick=()=>{ open(false); if(window.LadderCards) LadderCards.open(); else if(typeof toast==='function') toast('the crosswalk is loading'); };
@@ -854,7 +878,33 @@ window.__deskInit=function(){
   if(ri) ri.onchange=()=>{ const f=ri.files[0]; if(!f) return; f.text().then(t=>{ const o=JSON.parse(t);
     if(!confirm('Replace the record on this device with the one in this file?')) return;
     LadderRecord.import(o); rn.textContent='Record opened. Reloading…'; setTimeout(()=>location.reload(),400); }).catch(()=>{ rn.textContent='That file is not a ladder record.'; }); };
-  let G=null; function initGraph(){ if(G){ G.redraw(); return; } if(window.MathGraph) G=MathGraph(document.getElementById('dmg'),{key:'desk',height:280}); }
+  let G=null, GK=''; function initGraph(){ if(!window.MathGraph) return; const h=hereOf(), k='fg:'+(window.LADDER_PAGE||location.pathname.split('/').pop().replace(/\.html$/,''))+':'+h.id;
+    const fig=document.getElementById('dgfig'); fig.innerHTML='';
+    const big=x=>x.tagName!=='svg'||x.getBoundingClientRect().width>60||+x.getAttribute('width')>60||!!x.getAttribute('viewBox');
+    const pics=h.els?[].concat(...h.els.map(el=>[...el.querySelectorAll('svg,img,figure')])).filter(x=>!x.parentElement.closest('figure')).filter(x=>!x.closest('.katex,button,.qid,nav')&&big(x)):[];
+    if(pics.length){ const n=document.createElement('p'); n.className='dnote'; n.textContent='The figure'+(pics.length>1?'s':'')+' on '+h.say+':'; fig.appendChild(n); pics.slice(0,4).forEach(x=>{ const c=x.cloneNode(true); c.removeAttribute('id'); c.classList.add('dgpic'); fig.appendChild(c); }); }
+    if(G&&GK===k){ G.redraw(); return; }
+    const seed=footCurves(h.els); document.getElementById('dmg').innerHTML='';
+    G=MathGraph(document.getElementById('dmg'),{key:k,height:280,seed:seed.length?seed.concat(['','']).slice(0,3):['x^2','','']}); GK=k;
+    const n=document.createElement('p'); n.className='dnote'; n.textContent=seed.length?'Seeded with the curve'+(seed.length>1?'s':'')+' '+h.say+' names. Change them, or add your own; this footing keeps what you build.':'Build up to three curves here; this footing keeps what you build.'; document.getElementById('dmg').prepend(n); }
+  /* curves a footing names (y = …, f(x) = …) in its TeX or its words, turned into the grapher's typing and kept only if the grapher can draw them */
+  function footCurves(els){ if(!els||!window.MathGraph) return []; const src=[];
+    els.forEach(el=>{ [el,...el.querySelectorAll('[data-tex],[data-tex-inline],[data-t]')].forEach(n=>{ const v=n.getAttribute&&(n.getAttribute('data-tex')||n.getAttribute('data-tex-inline')||n.getAttribute('data-t')); if(v) src.push(v); });
+      el.querySelectorAll('annotation').forEach(a=>src.push(a.textContent));
+      const c=el.cloneNode(true); c.querySelectorAll('.katex,script,style,.qid,nav,button').forEach(n=>n.remove()); src.push(c.textContent); });
+    const SUPS={'²':'^2','³':'^3','⁴':'^4','½':'(1/2)'}, FN=/^(sin|cos|tan|ln|log|exp|sqrt|abs|pi)$/;
+    const plain=s=>{ let o=s.replace(/\\(left|right|displaystyle|,|;|!|quad|qquad)/g,' ').replace(/\\cdot|\\times/g,'*').replace(/\\operatorname\{(\w+)\}/g,'$1');
+      for(let i=0;i<6;i++) o=o.replace(/\\[dt]?frac\{([^{}]*)\}\{([^{}]*)\}/g,'(($1)/($2))').replace(/\\sqrt\{([^{}]*)\}/g,'√($1)').replace(/\^\{([^{}]*)\}/g,'^($1)');
+      o=o.replace(/\\(sin|cos|tan|ln|log|exp|pi)\b/g,'$1').replace(/[{}]/g,'').replace(/[²³⁴½]/g,m=>SUPS[m]).replace(/−/g,'-').replace(/\s+/g,' ').trim();
+      const w=o.split(' '); let k=w.length; for(let i=0;i<w.length;i++){ const m=w[i].replace(/[^A-Za-z]/g,''); if(m.length>=2&&!FN.test(m)){ k=i; break; } if(/[.?!]$/.test(w[i])&&!/\d\.$/.test(w[i])){ w[i]=w[i].replace(/[.?!]+$/,''); k=i+1; break; } }
+      o=w.slice(0,k).join(' ').replace(/[\s(.?!]+$/,'');
+      let d=0; for(const ch of o){ if(ch==='(') d++; else if(ch===')') d--; } while(d<0&&/\)$/.test(o)){ o=o.slice(0,-1); d++; }
+      return d===0?o:''; };
+    const out=[], RX=/(?:^|[^A-Za-z\\])(?:y|[a-z]\s*\(\s*x\s*\))\s*=\s*([^=\n,;:@]+?)(?=\\quad|\\qquad|\\text|\\\\|,|;|:|@|\n|=|$)/g;
+    src.join('\n').replace(RX,(m,r)=>{
+      const e=plain(r); if(!e||!/x/.test(e)||/[\\_∘→]/.test(e)||e.length>40||out.includes(e)||out.length>=3) return m;
+      try{ const q=MathGraph.parse(e); if(q&&q.f&&(q.params||[]).every(p=>'abck'.includes(p))){ const v=q.f({x:0.7,a:1,b:1,c:0,k:1}); if(typeof v==='number'&&isFinite(v)) out.push(e); } }catch(x){} return m; });
+    return out; }
   if(st.open) open(true);
 };
 /* inject the desk now (before tray.js looks for it) */
@@ -1347,10 +1397,10 @@ function onIndex(){
   if(!document.querySelector('.rungs')) return;
   const came=ss.get('fv:heights'); ss.del('fv:heights');
   const first=!ss.get('fv:session'); ss.set('fv:session','1');
-  if(first&&!came&&!location.hash){ const h=LadderFV.resumeHref(); if(h){ ss.set('fv:want','fv'); location.replace(h); return; } }
+  if(first&&!came&&!location.hash&&!window.LADDER_DESK){ const h=LadderFV.resumeHref(); if(h){ ss.set('fv:want','fv'); location.replace(h); return; } }
   /* a row's link opens the page view; a footing in a row's footing list opens that footing */
   document.addEventListener('click',e=>{ const a=e.target.closest('a'); if(!a) return;
-    if(a.closest('.flist')) ss.set('fv:want','fv'); else if(a.closest('.ladder')) ss.set('fv:want','page'); },true);
+    if(a.closest('.flist')) ss.set('fv:want','fv'); else if(a.closest('.ladder')) ss.set('fv:want',window.LADDER_DESK?'page':'fv'); },true);
 }
 const REDUCE=()=>window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 function footingView(){
@@ -1447,10 +1497,11 @@ function footingView(){
   /* the mode: a link from the ladder's rows opens the page view; everything else opens the footing view */
   const want=ss.get('fv:want'); ss.del('fv:want');
   let pref=null; try{ pref=(JSON.parse(LS.getItem('ladder:view')||'{}')||{})[P]; }catch(e){}
-  setMode(ss.get('fv:off')==='1'?false:want?want==='fv':(pref?pref==='fv':true)); /* fv:off = page view for checks */
+  setMode(ss.get('fv:off')==='1'?false:want?want==='fv':(pref&&window.LADDER_DESK?pref==='fv':true)); /* fv:off = page view for checks */
   if(on){ if(!toHash()) go(0,{instant:true,force:true}); }
   window.LadderFV.toggle=()=>{ const el=units[cur]&&units[cur][0]; setMode(!on); if(!on&&el&&cur>0) el.scrollIntoView({block:'start'}); else if(on) go(cur,{instant:true,force:true}); };
   window.LadderFV.go=n=>go(n);
+  window.LadderFV.here=()=>({id:idOf(cur),els:on?units[cur]:[...document.querySelectorAll('.wrap>section.class.step')].filter(s=>{ const r=s.getBoundingClientRect(); return r.top<innerHeight*.5&&r.bottom>0; }).slice(0,1)});
   window.LadderFV.goId=id=>{ if(!on) setMode(true); const n=id==='top'?0:id==='end'?N-1:1+steps.findIndex(s=>s.dataset.step===id); go(n<0?0:n,{force:true}); };
 }
 const ladmap=()=>window.LADMAP?Promise.resolve():new Promise(res=>{ const s=document.createElement('script'); s.src='ladmap.js'; s.onload=s.onerror=()=>res(); document.head.appendChild(s); });
@@ -1472,15 +1523,25 @@ function note(m){ let t=document.getElementById('patoast'); if(!t){ t=document.c
 function supply(){ load().then(L=>{ const st=got(); if(!L.length){ note('The blue sky could not load.'); return; }
     if(st.n>=L.length){ note('The blue sky is caught up: every step from the front is under the button. New ones come with new versions of the ladder.'); return; }
     const nx=L[st.n]; st.n++; st.at=(st.at||[]).concat([Date.now()]); try{ LS.setItem(KEY,JSON.stringify(st)); }catch(e){}
-    try{ sessionStorage.setItem('fv:want','fv'); }catch(e){} location.href=nx.page+'.html'; }); }
+    try{ sessionStorage.setItem('sky:new',nx.page); }catch(e){} if(window.LadderFV&&LadderFV.heights) LadderFV.heights(); else location.href='index.html'; }); }
 function index(){ const sec=document.getElementById('skysec'), top=document.getElementById('skytop'); if(!sec||!top) return;
   top.querySelector('.skybtn').onclick=supply; top.hidden=true; sec.hidden=true;
   if(!window.LADMAP){ const s=document.createElement('script'); s.src='ladmap.js'; s.onload=()=>index(); document.head.appendChild(s); return; }
-  if(!open()) return; top.hidden=false;
+  if(!endless()&&!window.LADDER_DESK) return;
   load().then(L=>{ const n=Math.min(got().n,L.length), ol=sec.querySelector('ol');
     const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
-    ol.innerHTML=L.slice(0,n).map(x=>'<li class="k-sky built"><span class="n">∞'+x.n+'</span><span class="t"><a href="'+x.page+'.html">'+esc(x.title)+'</a><span class="kind">'+esc(x.kw)+'</span></span></li>').join('');
-    sec.hidden=!n; const nt=top.querySelector('.skynote'); if(nt&&n>=L.length&&L.length) nt.textContent='caught up: all '+L.length+' steps from the front are below'; }); }
+    let fresh=null; try{ fresh=sessionStorage.getItem('sky:new'); sessionStorage.removeItem('sky:new'); }catch(e){} window.__skyFresh=fresh;
+    if(!n){ ol.innerHTML='<li class="k-floor built"><span class="n">∞</span><span class="t">Endless floor<span class="kind">floor</span></span><span class="b">past the ladder: at the top of the climb, the blue sky button brings one new step from the front, and it lands here</span></li>'; sec.hidden=false; return; }
+    ol.innerHTML=L.slice(0,n).reverse().map(x=>'<li class="k-sky built"><span class="n">∞'+x.n+'</span><span class="t"><a href="'+x.page+'.html">'+esc(x.title)+'</a><span class="kind">'+esc(x.kw)+'</span></span></li>').join('');
+    sec.hidden=false;
+    if(fresh){ const fa=ol.querySelector('a[href="'+fresh+'.html"]'); if(fa){ const li=fa.closest('li'); li.classList.add('fvhere'); setTimeout(()=>li.scrollIntoView({block:'center'}),80); setTimeout(()=>li.scrollIntoView({block:'center'}),700); } } }); }
+/* 0.3.5 (Andrew 21:57): the Endless floor shows once rung 30 is finished: its core steps passed, its floor certified, or a footing above it climbed */
+function endless(){ const M=window.LADMAP||[]; let P={}; try{ P=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
+  let r30=null; M.forEach(F=>F[1].forEach(R=>{ if(R[0]===30) r30=R; }));
+  if(r30&&r30[1].length&&r30[1].every(([s])=>P[s]&&P[s].v)) return true;
+  try{ const f=JSON.parse(LS.getItem('ladder:furthest')||'null'); const m=f&&f.page&&f.page.match(/^r(\d\d)/); if(m&&+m[1]>30) return true; }catch(e){}
+  for(const k of ['cert:floor5concl','cert:r30concl']){ try{ const c=JSON.parse(LS.getItem(k)||'null'); if(c) return true; }catch(e){} }
+  return false; }
 /* 0.3.2 (Andrew 21:27): the blue sky does not appear until the top floor is finished: every core step of the ladder's
    last floor passed, or that floor measured */
 function open(){ const M=window.LADMAP; if(!M||!M.length) return false; const F=M[M.length-1];
@@ -1488,7 +1549,7 @@ function open(){ const M=window.LADMAP; if(!M||!M.length) return false; const F=
   let c=null; try{ c=JSON.parse(LS.getItem('cert:floor'+F[0]+'concl')||'null'); }catch(e){}
   if(c&&c.via!=='measure') return true;
   return F[1].length>0&&F[1].every(([,core])=>core.every(([s])=>P[s]&&P[s].v)); }
-window.LadderSky={supply,load,open,count:()=>got().n};
+window.LadderSky={supply,load,open,endless,count:()=>got().n};
 const go=()=>{ index(); };
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
 })();
@@ -1800,4 +1861,74 @@ function button(){ const dh=document.querySelector('#desk .dheights'); if(!dh) r
 window.LadderAnnexes={catalogue,data,high,relink};
 const boot=()=>{ data().then(D=>{ if(D) relink(D); }); let n=0; const t=setInterval(()=>{ if(button()||++n>40) clearInterval(t); },150); };
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(boot,0)); else boot();
+})();
+
+/* 0.3.5 (Andrew 21:57, 22:11): the app's index shows the ladder only as far as you have climbed.
+   - A row (step, rung, conclusion, annex) shows once you have reached it: your furthest footing is at or past it, its page is passed,
+     or you measured into it, its rung or its floor.
+   - The step you stand on lists its footings only up to your furthest one.
+   - A rung above you shows only its own row, collapsed, with its measuring stick to test in; a floor above you shows only its floor row.
+   - The Endless floor waits for rung 30 (LadderSky). The desk (window.LADDER_DESK) always shows everything.
+   - Page view (the old compound page) opens only from a row's number; a row's title opens the footing view. */
+(function(){
+'use strict';
+if(window.LADDER_DESK) return;
+const J=(k,d)=>{ try{ const v=JSON.parse(LS.getItem(k)||'null'); return v==null?d:v; }catch(e){ return d; } };
+const stemOfLi=li=>{ const a=li.querySelector(':scope>.t>a'); const m=a&&(a.getAttribute('href')||'').match(/^([^#.]+)\.html/); return m?m[1]:null; };
+function lock(){
+  const wrap=document.querySelector('.rungs'); if(!wrap) return;
+  const P=J('pages:done',{}), fur=J('ladder:furthest',null), cert=k=>!!J('cert:'+k,null);
+  const secs=[...document.querySelectorAll('section.floor, section.rung:not(.sky)')];
+  /* climb order: every row in the index, top floor last as built */
+  const rows=[]; secs.forEach(s=>s.querySelectorAll(':scope>ol.ladder>li').forEach(li=>rows.push({li,sec:s,stem:stemOfLi(li)})));
+  const idx={}; rows.forEach((r,i)=>{ if(r.stem&&!(r.stem in idx)) idx[r.stem]=i; });
+  let reach=-1; let furStem=fur&&fur.page?String(fur.page).replace(/\.html$/,''):null;
+  if(furStem&&furStem in idx) reach=Math.max(reach,idx[furStem]);
+  for(const s in P){ if(P[s]&&P[s].v&&s in idx) reach=Math.max(reach,idx[s]); }
+  let fu=fur; if(reach<0){ reach=rows.findIndex(r=>r.stem&&/^r\d\d[a-z]/.test(r.stem)); /* a new learner stands on the first step, on its first footing */
+    const r0=rows[reach], a0=r0&&r0.li.querySelector(':scope>details.flist ol>li a'), h0=a0&&(a0.getAttribute('href')||'').split('#')[1]; if(r0&&h0) fu={page:r0.stem,id:h0}; }
+  if(fu!==fur){ furStem=fu.page; }
+  const F2=fu;
+  /* tested in: floors and rungs measured into, by LADMAP */
+  const M=window.LADMAP||[], openRung=new Set(), openFloor=new Set(), rungFloor={};
+  M.forEach(([fl,rungs])=>{ if(cert('floor'+fl+'concl')) openFloor.add(fl);
+    rungs.forEach(([r,core])=>{ rungFloor[r]=fl; if(core.length&&cert(core[core.length-1])) openRung.add(r); }); });
+  const rungNo=s=>{ const m=s&&s.match(/^r(\d\d)/); return m?+m[1]:null; };
+  const floorNo=sec=>{ const f=sec.getAttribute('data-floor'); return f?+f:null; };
+  /* the floor each section sits on: floor sections set it, rung sections inherit */
+  let curFl=null; const secFl=new Map(); secs.forEach(s=>{ if(s.classList.contains('floor')) curFl=floorNo(s); secFl.set(s,curFl); });
+  const reachedFl=new Set(); rows.forEach((r,i)=>{ if(i<=reach) reachedFl.add(secFl.get(r.sec)); });
+  const flOpen=fl=>reachedFl.has(fl)||openFloor.has(fl);
+  const rOpen=n=>openRung.has(n)||openFloor.has(rungFloor[n]);
+  rows.forEach((r,i)=>{ const li=r.li, fl=secFl.get(r.sec), isFloor=r.sec.classList.contains('floor'), n=rungNo(r.stem);
+    const isRungRow=li.classList.contains('k-theory')&&r.sec.querySelector(':scope>ol.ladder>li')===li;
+    let show, collapsed=false;
+    if(isFloor){ show=true; collapsed=!flOpen(fl); }
+    else if(!flOpen(fl)) show=false;
+    else if(i<=reach||(n!=null&&rOpen(n))||(r.stem&&(cert(r.stem)||(P[r.stem]&&P[r.stem].v)))) show=true;
+    else if(isRungRow){ show=true; collapsed=true; }
+    else show=false;
+    li.classList.toggle('lk-hide',!show); li.classList.toggle('lk-shut',show&&collapsed);
+    /* footings: the step you stand on lists only those you have reached */
+    const fl2=li.querySelector(':scope>details.flist'); if(fl2){ const items=[...fl2.querySelectorAll('ol>li')];
+      if(show&&r.stem===furStem&&F2&&F2.id&&F2.id!=='top'&&!(n!=null&&rOpen(n))&&!(P[r.stem]&&P[r.stem].v)){ const k=items.findIndex(x=>{ const a=x.querySelector('a'); return a&&(a.getAttribute('href')||'').endsWith('#'+F2.id); });
+        items.forEach((x,j)=>x.classList.toggle('lk-hide',F2.id==='end'?false:(k>=0&&j>k)));
+        const sm=fl2.querySelector('summary'); if(sm&&k>=0&&F2.id!=='end'){ sm.dataset.full=sm.dataset.full||sm.textContent; sm.textContent=(k+1)+' of '+items.length+' footings'; } }
+      else items.forEach(x=>x.classList.remove('lk-hide')); }
+  });
+  /* a section with nothing showing goes; a locked row tells you how to open it */
+  secs.forEach(s=>{ const any=s.querySelector(':scope>ol.ladder>li:not(.lk-hide)'); s.classList.toggle('lk-hide',!any); });
+  document.body.classList.add('lk-on');
+}
+/* rows: the title opens the footing view; the number opens the page view (the compound page, all its footings open) */
+document.addEventListener('click',e=>{ if(window.LADDER_DESK) return; const n=e.target.closest&&e.target.closest('.rungs .ladder li>.n'); if(!n) return;
+  const li=n.parentElement; if(li.classList.contains('lk-shut')) return; const a=li.querySelector(':scope>.t>a'); if(!a) return;
+  e.preventDefault(); try{ sessionStorage.setItem('fv:want','page'); }catch(x){} location.href=a.getAttribute('href').replace(/#.*$/,''); },true);
+document.addEventListener('click',e=>{ if(window.LADDER_DESK) return; const a=e.target.closest&&e.target.closest('.rungs .ladder li.lk-shut>.t>a'); if(!a) return;
+  e.preventDefault(); const b=a.parentElement.querySelector('.msr'); const li=a.closest('li');
+  let h=li.querySelector('.lockhint'); if(!h){ h=document.createElement('span'); h.className='lockhint'; h.textContent='above you: climb up to it, or measure into it with the ruler'; a.parentElement.appendChild(h); setTimeout(()=>h.remove(),2800); }
+  if(b) b.classList.add('pulse'), setTimeout(()=>b.classList.remove('pulse'),1600); },true);
+window.LadderLock={lock};
+const go=()=>{ if(!document.querySelector('.rungs')) return; lock(); if(!window.LADMAP){ const s=document.createElement('script'); s.src='ladmap.js'; s.onload=()=>{ lock(); }; document.head.appendChild(s); } };
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
 })();

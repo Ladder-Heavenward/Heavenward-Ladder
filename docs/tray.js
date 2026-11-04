@@ -29,6 +29,8 @@ const css=`
 #mk-tray .mk-panel{position:fixed;left:0;right:0;bottom:0;z-index:9001;background:var(--mk-paper);border-top:1px solid var(--mk-grid);box-shadow:0 -4px 18px rgba(0,0,0,.18);max-height:60vh;overflow:auto;padding:10px max(14px,env(safe-area-inset-right,0px)) max(14px,env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));transform:translateY(105%);transition:transform .22s ease;display:grid;gap:8px}
 #mk-tray.open .mk-panel{transform:none}
 #mk-tray .mk-panel[hidden]{display:none}
+#mk-tray.mk-docked .mk-btn,#mk-tray.mk-docked .mk-close{display:none}
+#mk-tray.mk-docked .mk-panel{position:static;transform:none;box-shadow:none;border:0;max-height:none;padding:0;background:transparent;transition:none}
 #mk-tray .mk-top{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 #mk-tray .mk-target{font-family:var(--mk-mono);font-size:.72rem;color:var(--mk-teal);flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #mk-tray .mk-top button,#mk-tray .mk-line button{font-family:var(--mk-mono);font-size:.8rem;background:var(--mk-sand);color:var(--mk-ink);border:1px solid var(--mk-grid);border-radius:6px;padding:5px 9px;cursor:pointer}
@@ -52,8 +54,8 @@ const css=`
 `;
 const root=document.createElement('div'); root.id='mk-tray';
 root.innerHTML=`<style>${css}</style>
-<button class="mk-btn" type="button" aria-expanded="false" aria-controls="mk-panel">⌨ keys</button>
-<div class="mk-panel" id="mk-panel" role="region" aria-label="math keys" hidden>
+<button class="mk-btn" type="button" aria-expanded="false" aria-controls="mk-panel">⌨ quick keys</button>
+<div class="mk-panel" id="mk-panel" role="region" aria-label="quick keys" hidden>
   <div class="mk-top"><span class="mk-target"></span><button type="button" class="mk-own">use my line</button><button type="button" class="mk-close">close</button></div>
   <div class="mk-line"><textarea aria-label="composing line" placeholder="dy/dx = ½·x⁻½"></textarea><button type="button" class="mk-copy">copy again</button><button type="button" class="mk-clear">clear</button></div>
   <div class="mk-keys"></div>
@@ -163,7 +165,7 @@ function drawKeys(){
   n.textContent=items.length?('keys for '+(limitTo?limitLabel:'this page')):(limitTo?limitLabel.replace(/^./,c=>c.toUpperCase())+' ask':'This page asks')+' for no marks beyond your own keyboard.';
   keys.appendChild(n);
 }
-window.MathKeys={ limit(set,label){ limitTo=set?new Set(set):null; limitLabel=label||''; drawKeys(); }, marksIn };
+window.MathKeys={ limit(set,label){ limitTo=set?new Set(set):null; limitLabel=label||''; drawKeys(); }, marksIn, open:v=>open(v) };
 drawKeys();
 document.addEventListener('pointerdown',e=>{ if(pops.length && !e.target.closest('.mk-pop') && !e.target.closest('.mk-k.node')) closePops(0); },true);
 
