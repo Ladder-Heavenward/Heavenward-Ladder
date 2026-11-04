@@ -484,7 +484,7 @@ function deskHTML(){
 
 /* An integer rung is opened at the foot of its own page: an orange button that turns teal. */
 function openRungButton(){
-  const m=PAGE.match(/^r(\d+)$/); if(!m||!document.querySelector('header.top .tag.theory')) return;
+  const m=PAGE.match(/^r(\d+)$/); if(!m) return; /* 0.2.2: rung pages carry no tags now, so the page name decides */
   const stem=PAGE, lab=String(+m[1]), id='open:'+stem;
   const box=document.createElement('div'); box.className='openrung';
   const b=document.createElement('button'); b.type='button'; b.className='openbtn';
@@ -1158,7 +1158,8 @@ const ready=f=>{ if(document.readyState==='loading') document.addEventListener('
 function basement(){
   const b=document.querySelector('section.basement'); if(!b) return;
   const t=document.querySelector('header.top .tags .tag'), txt=t?t.textContent.trim():'', i=txt.indexOf(' · ');
-  const lab=(i<0?txt:txt.slice(0,i)).replace(/^Rung\s+/,'');
+  let lab=(i<0?txt:txt.slice(0,i)).replace(/^Rung\s+/,'');
+  if(!lab){ const pm=(window.ladderPage?ladderPage():'').match(/^(?:r(\d+)|floor(\d+))$/); if(pm) lab=pm[1]?String(+pm[1]):'F'+pm[2]; }
   const head=document.createElement('div'); head.className='bhead'; head.innerHTML='<span class="bn">−'+lab+'</span> basement';
   const eb=b.querySelector('.eyebrow'); if(eb) eb.replaceWith(head); else b.prepend(head);
   b.id=b.id||'basement';
