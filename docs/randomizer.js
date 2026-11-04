@@ -248,6 +248,78 @@ LINKS.push(
 
 LINKS.forEach(L=>{ if(!L.kinds) L.kinds=['names','add','times']; });
 
+/* 0.2.1 question pools (Andrew 2026-11-04 19:13): five more kinds of laundry question, each opened by its step.
+   true or false · what is x, or [x, y], or [x, y, z] · which function is it · which graph is it · what set is it.
+   Each pool checks its own question: exactly one offered answer is right, and no decoy equals it. */
+Object.assign(STEPS,{'1e':['r01e','Tables'],'2h':['r02h','Sets by hand'],'9a':['r09a','A function is its pairs'],
+  '9e':['r09e','Reading and drawing graphs'],'27j':['r27j','Solving systems by elimination']});
+const S=n=>n<0?'−'+(-n):String(n);
+const lin=(a,b)=>(a===1?'':a===-1?'−':S(a))+'x'+(b===0?'':b>0?' + '+b:' − '+(-b));
+const ANIMALS=[['cat',{fur:1,legs:4}],['dog',{fur:1,legs:4}],['owl',{flies:1,legs:2}],['bee',{flies:1,legs:6}],['ant',{legs:6}],['eel',{water:1,legs:0}],['spider',{legs:8}]];
+const CONDS=[['flies',a=>!!a[1].flies],['has fur',a=>!!a[1].fur],['has six legs',a=>a[1].legs===6],['has four legs',a=>a[1].legs===4],['lives in water',a=>!!a[1].water],['has no legs',a=>a[1].legs===0]];
+const setTxt=a=>a.length?'{'+a.join(', ')+'}':'∅';
+const FUNS=[['x + 1',x=>x+1],['x + 2',x=>x+2],['2x',x=>2*x],['3x',x=>3*x],['x²',x=>x*x],['x³',x=>x*x*x],['2x + 1',x=>2*x+1],['x − 1',x=>x-1],['10 − x',x=>10-x],['x² + 1',x=>x*x+1]];
+const GRAPHS=[['y = x',x=>x],['y = x²',x=>x*x],['y = x³',x=>x*x*x],['y = 1/x',x=>Math.abs(x)<0.05?NaN:1/x],['y = √x',x=>x<0?NaN:Math.sqrt(x)],['y = |x|',x=>Math.abs(x)],['y = −x',x=>-x],['y = x + 2',x=>x+2],['y = −x²',x=>-x*x]];
+function svg(f){ let d='', pen=false; for(let i=0;i<=160;i++){ const x=-3+6*i/160, y=f(x); if(!isFinite(y)||Math.abs(y)>3.4){ pen=false; continue; }
+    const X=(x+3)/6*120, Y=60-y/3*60*0.92; d+=(pen?'L':'M')+X.toFixed(1)+' '+Y.toFixed(1); pen=true; }
+  return '<svg viewBox="0 0 120 120" width="96" height="96" aria-hidden="true" style="display:block"><path d="M0 60H120M60 0V120" stroke="currentColor" stroke-opacity=".3" fill="none"/><path d="'+d+'" stroke="currentColor" stroke-width="2.4" fill="none"/></svg>'; }
+const QP=[
+  {id:'1e.tf', step:'1e', label:'true or false: joined statements', open:()=>has('1e'), make(){
+     const a=rnd(10), b=rnd(10), c=rnd(10), P=[a+' < '+b, a<b], Q=[b+' = '+c, b===c], R=[c+' ≠ '+a, c!==a];
+     const forms=[[ '('+P[0]+') ∧ ('+Q[0]+')', P[1]&&Q[1]],[ '('+P[0]+') ∨ ('+R[0]+')', P[1]||R[1]],[ '¬('+Q[0]+') ∧ ('+R[0]+')', !Q[1]&&R[1]],[ '('+Q[0]+') → ('+P[0]+')', !Q[1]||P[1]],[ '('+P[0]+') ⊕ ('+R[0]+')', P[1]!==R[1]]];
+     const k=rnd(forms.length), [t,v]=forms[k];
+     return {index:'q:1e.tf['+a+','+b+','+c+','+k+']', lines:[[t,'statement']], ask:'Is the statement true or false?', right:v?'true':'false', opts:['true','false'],
+       why:'Each part is read from its numbers, then the joining word works on the marks, as 1e’s tables do.'}; }},
+  {id:'4j.tf', step:'4j', label:'true or false: divides', open:()=>has('4j'), make(){
+     const k=2+rnd(8), n=1+rnd(60), v=n%k===0;
+     return {index:'q:4j.tf['+k+','+n+']', lines:[[k+' | '+n,'statement']], ask:'Is the statement true or false?', right:v?'true':'false', opts:['true','false'],
+       why:k+' divides '+n+' exactly when '+n+' is '+k+' times some counting number; here the remainder is '+(n%k)+'.'}; }},
+  {id:'5g.x', step:'5g', label:'what is x', open:()=>has('5g'), make(){
+     let a=rnd(9)-4; if(a===0) a=3; const x=rnd(21)-10, b=rnd(21)-10, c=a*x+b;
+     const pool=[x+1,x-1,-x,c-b,(c+b)/a,x+2].filter(v=>Number.isInteger(v)&&v!==x);
+     const wrong=[...new Set(pool)].slice(0,3).map(S);
+     return {index:'q:5g.x['+a+','+x+','+b+']', lines:[[lin(a,b)+' = '+S(c),'given']], ask:'What is x?', right:S(x), opts:shuffle([S(x),...wrong]),
+       why:'Take '+S(b)+' from both sides, then divide both by '+S(a)+': x = '+S(x)+'. Put it back to check: '+S(a)+' · '+S(x)+' + '+S(b)+' = '+S(c)+'.'}; }},
+  {id:'5g.xy', step:'5g', label:'what is [x, y]', open:()=>has('5g'), make(){
+     const x=rnd(21)-10, y=rnd(21)-10, s=x+y, d=x-y, P=v=>'['+v.map(S).join(', ')+']';
+     const right=P([x,y]), wrong=[P([y,x]),P([x,-y]),P([-x,y]),P([x+1,y-1])].filter(w=>w!==right);
+     return {index:'q:5g.xy['+x+','+y+']', lines:[['x + y = '+S(s),'given'],['x − y = '+S(d),'given']], ask:'What is [x, y]?', right, opts:shuffle([right,...[...new Set(wrong)].slice(0,3)]),
+       why:'Add the two lines: 2x = '+S(s+d)+', so x = '+S(x)+'; then y = '+S(s)+' − '+S(x)+' = '+S(y)+'.'}; }},
+  {id:'27j.xyz', step:'27j', label:'what is [x, y, z]', open:()=>has('27j'), make(){
+     const x=rnd(13)-6, y=rnd(13)-6, z=rnd(13)-6, P=v=>'['+v.map(S).join(', ')+']';
+     const right=P([x,y,z]), wrong=[P([z,y,x]),P([x,z,y]),P([y,x,z]),P([x,y,-z]),P([-x,y,z])].filter(w=>w!==right);
+     const opts=[...new Set(wrong)].slice(0,3); if(opts.length<3) return null;
+     return {index:'q:27j.xyz['+x+','+y+','+z+']', lines:[['x + y + z = '+S(x+y+z),'given'],['y + z = '+S(y+z),'given'],['z = '+S(z),'given']], ask:'What is [x, y, z]?', right, opts:shuffle([right,...opts]),
+       why:'The rows are already reduced: z = '+S(z)+', then y = '+S(y+z)+' − '+S(z)+' = '+S(y)+', then x = '+S(x+y+z)+' − '+S(y+z)+' = '+S(x)+'.'}; }},
+  {id:'9a.which', step:'9a', label:'which function is it', open:()=>has('9a'), make(){
+     const k=rnd(FUNS.length), xs=shuffle([0,1,2,3,4]).slice(0,3).sort((p,q)=>p-q), f=FUNS[k];
+     const fits=g=>xs.every(x=>g[1](x)===f[1](x));
+     const wrong=shuffle(FUNS.filter((g,i)=>i!==k&&!fits(g))).slice(0,3).map(g=>'f(x) = '+g[0]);
+     return {index:'q:9a.which['+k+','+xs+']', lines:xs.map(x=>['f('+x+') = '+S(f[1](x)),'pair']), ask:'Which function is it?', right:'f(x) = '+f[0], opts:shuffle(['f(x) = '+f[0],...wrong]),
+       why:'Only f(x) = '+f[0]+' gives every listed pair; each other choice misses at least one.'}; }},
+  {id:'9e.graph', step:'9e', label:'which graph is it', open:()=>has('9e'), make(){
+     const k=rnd(GRAPHS.length), g=GRAPHS[k], others=shuffle(GRAPHS.filter((h,i)=>i!==k)).slice(0,3), all=shuffle([g,...others]);
+     const html={}; all.forEach(h=>html[h[0]]=svg(h[1]));
+     return {index:'q:9e.graph['+k+','+others.map(h=>GRAPHS.indexOf(h))+']', lines:[[g[0],'function']], ask:'Which graph is it?', right:g[0], opts:all.map(h=>h[0]), html,
+       why:'Read a few pairs off '+g[0]+' (at x = −1, 0, 1, 2) and find the drawing that holds them all.'}; }},
+  {id:'2h.set', step:'2h', label:'what set is it', open:()=>has('2h'), make(){
+     const base=shuffle(ANIMALS.slice()).slice(0,5), i=rnd(CONDS.length); let j=rnd(CONDS.length-1); if(j>=i) j++;
+     const A=CONDS[i], B=CONDS[j], f=rnd(3);
+     const test=[a=>A[1](a), a=>A[1](a)||B[1](a), a=>A[1](a)&&!B[1](a)][f];
+     const say=['{x ∈ U : x '+A[0]+'}','{x ∈ U : x '+A[0]+'} ∪ {x ∈ U : x '+B[0]+'}','{x ∈ U : x '+A[0]+'} ∖ {x ∈ U : x '+B[0]+'}'][f];
+     const nm=a=>a[0], right=setTxt(base.filter(test).map(nm));
+     const alt=[base.filter(a=>!test(a)).map(nm), base.filter(a=>A[1](a)&&B[1](a)).map(nm), base.filter(a=>B[1](a)).map(nm), base.filter(a=>A[1](a)!==B[1](a)).map(nm), base.map(nm)].map(setTxt);
+     const wrong=[...new Set(alt)].filter(w=>w!==right).slice(0,3); if(wrong.length<3) return null;
+     return {index:'q:2h.set['+base.map(nm)+';'+i+','+j+','+f+']', lines:[['U = '+setTxt(base.map(nm)),'given'],[say,'set']], ask:'What set is it?', right, opts:shuffle([right,...wrong]),
+       why:'Chase each member of U through the condition, as 2h chases a member through a sift: '+right+' is what is left.'}; }},
+  {id:'4j.set', step:'4j', label:'what set is it: by dividing', open:()=>has('4j'), make(){
+     const N=12+rnd(9), k=2+rnd(4), U=Array.from({length:N},(_,i)=>i+1);
+     const right=setTxt(U.filter(n=>n%k===0)), wrong=[k+1,k===2?4:2,k+2].filter(m=>m!==k).map(m=>setTxt(U.filter(n=>n%m===0)));
+     const w=[...new Set(wrong)].filter(x=>x!==right).slice(0,3); if(w.length<3) w.push(setTxt(U.filter(n=>n%k===1)));
+     return {index:'q:4j.set['+N+','+k+']', lines:[['{n ∈ {1, …, '+N+'} : '+k+' | n}','set']], ask:'What set is it?', right, opts:shuffle([right,...w.slice(0,3)]),
+       why:'Keep each n from 1 to '+N+' that '+k+' divides: '+right+'.'}; }}
+];
+
 /* The check: which techniques license the marked line, from the lines above it. */
 function licensers(lines){ const g=lines.filter(x=>x[1]).map(x=>x[0]), t=lines.find(x=>!x[1])[0]; return LINKS.filter(L=>L.lic(g,t)).map(L=>L.name); }
 
@@ -261,13 +333,18 @@ function build(){
   if(!LINKS.some(l=>l.open())) return {closed:'The laundry opens with 0b, the step that earns the first techniques for sameness.'};
   const openS=SEEDS.filter(s=>s.open()), openL=LINKS.filter(l=>l.open());
   let seeds=openS.filter(s=>!off[s.id]), links=openL.filter(l=>!off[l.id]);
-  if(!seeds.length||!links.length) return {closed:'Pick at least one claim pool and one technique pool below.'};
+  const qps=QP.filter(P=>P.open()&&!off[P.id]), linkOK=seeds.length&&links.length;
+  if(!linkOK&&!qps.length) return {closed:'Pick at least one claim pool and one technique pool, or one question pool, below.'};
   const st=strayDue(), offL=openL.filter(l=>off[l.id]), offS=openS.filter(s=>off[s.id]);
   let stray=false;
   if(st.due>st.served&&(offL.length||offS.length)){ stray=true; if(offL.length) links=offL; if(offS.length&&!offL.length) seeds=offS; }
   const used=get('rand:seen',{}), last=get('rand:last',[]);
+  if(qps.length&&!stray&&(!linkOK||Math.random()<0.5)) for(let tries=0;tries<60;tries++){ const P=pick(qps), x=P.make(); if(!x||used[x.index]) continue;
+    if(x.opts.length>2&&last.length>=2&&last[0]===x.right&&last[1]===x.right) continue;
+    if(x.opts.filter(o=>o===x.right).length!==1) continue;
+    return Object.assign({addr:x.index.slice(2), stray:false, step:P.step, lead:'The answer is '+x.right+'. '}, x); }
   const rights=new Set(links.map(l=>l.name));
-  for(let tries=0;tries<120;tries++){
+  if(linkOK) for(let tries=0;tries<120;tries++){
     const s=pick(seeds), c=s.make();
     const fit=links.filter(L=>L.kinds.includes(c.kind)); if(!fit.length) continue;
     const L=pick(fit);
@@ -296,6 +373,7 @@ function picker(q){
   const off=get('rand:off',{}), by={};
   SEEDS.filter(x=>x.open()).forEach(P=>(by[P.step]=by[P.step]||[]).push([P,'claims: '+P.label]));
   LINKS.filter(x=>x.open()).forEach(P=>(by[P.step]=by[P.step]||[]).push([P,P.name.replace(/^the /,'')]));
+  QP.filter(x=>x.open()).forEach(P=>(by[P.step]=by[P.step]||[]).push([P,P.label]));
   const rows=Object.keys(STEPS).filter(s=>by[s]).map(s=>'<p class="rzph">'+s+' · '+esc(STEPS[s][1])+'</p>'
     +by[s].map(([P,t])=>'<label class="rzp"><input type="checkbox" data-id="'+P.id+'"'+(off[P.id]?'':' checked')+'> '+esc(t)+'</label>').join('')).join('');
   return '<details class="rzpick"'+(q.closed?' open':'')+'><summary>pools</summary>'+rows+'</details>';
@@ -303,31 +381,31 @@ function picker(q){
 
 function render(box){
   const q=build(), right=get('rand:right',0);
-  if(window.MathKeys){ const off=get('rand:off',{}), K=new Set(); [...SEEDS,...LINKS].filter(P=>P.open()&&!off[P.id]).forEach(P=>(P.keys||[]).forEach(k=>K.add(k))); MathKeys.limit(K,'the laundry’s chosen pools'); }
+  if(window.MathKeys){ const off=get('rand:off',{}), K=new Set(); [...SEEDS,...LINKS,...QP].filter(P=>P.open()&&!off[P.id]).forEach(P=>(P.keys||[]).forEach(k=>K.add(k))); MathKeys.limit(K,'the laundry’s chosen pools'); }
   if(q.closed&&!LINKS.some(l=>l.open())){ box.innerHTML='<p class="dnote">'+esc(q.closed)+'</p>'; return; }
   const wire=()=>box.querySelectorAll('.rzpick input').forEach(i=>i.onchange=()=>{ const o=get('rand:off',{}); if(i.checked) delete o[i.dataset.id]; else o[i.dataset.id]=1; put('rand:off',o); render(box); });
   if(q.closed){ box.innerHTML='<p class="dnote">'+esc(q.closed)+'</p>'+picker(q); wire(); return; }
   box.innerHTML='<p class="dnote">Practice drawn from the pools your steps have opened. A question never comes twice. Right answers so far: <b>'+right+'</b>.</p>'
     +'<div class="rzlines">'+q.lines.map(([t,w],i)=>'<div class="rzl"><span class="rzn">'+(i+1)+'</span><span class="rzt">'+esc(t)+'</span><span class="rzw">'+(w?esc(w):'?')+'</span></div>').join('')+'</div>'
-    +'<p class="rzask">'+esc(q.ask)+'</p><div class="rzopts">'+q.opts.map(o=>'<button type="button" class="rzo">'+esc(o)+'</button>').join('')+'</div>'
+    +'<p class="rzask">'+esc(q.ask)+'</p><div class="rzopts">'+q.opts.map(o=>'<button type="button" class="rzo'+(q.html?' rzg':'')+'" data-v="'+esc(o).replace(/"/g,'&quot;')+'"'+(q.html?' aria-label="'+esc(o)+'">'+q.html[o]:'>'+esc(o))+'</button>').join('')+'</div>'
     +'<p class="rzwhy" hidden></p><p><button type="button" class="dlink rznext">another question</button></p>'
     +'<p class="dnote">If this question does not make sense, report it: <button type="button" class="rzseed" title="report this question">seed.link</button></p>'+picker(q);
   wire();
   box.querySelector('.rzseed').onclick=()=>{ if(window.__report) window.__report({kind:'laundry',where:'seed.link '+btoa(unescape(encodeURIComponent(q.addr))).replace(/=+$/,''),text:q.lines.map(l=>l[0]).join(' / ')+' | '+q.ask}); };
   const why=box.querySelector('.rzwhy'); let done=false;
   box.querySelectorAll('.rzo').forEach(b=>b.onclick=()=>{ if(done) return; done=true;
-    const ok=b.textContent===q.right;
-    box.querySelectorAll('.rzo').forEach(x=>{ x.disabled=true; if(x.textContent===q.right) x.classList.add('ok'); });
+    const ok=b.dataset.v===q.right;
+    box.querySelectorAll('.rzo').forEach(x=>{ x.disabled=true; if(x.dataset.v===q.right) x.classList.add('ok'); });
     if(!ok) b.classList.add('no');
     const u=get('rand:seen',{}); u[q.index]=Date.now(); put('rand:seen',u);
-    if(q.index.startsWith('link:')) put('rand:last',[q.right].concat(get('rand:last',[])).slice(0,2));
+    if(q.index.startsWith('link:')||q.index.startsWith('q:')) put('rand:last',[q.right].concat(get('rand:last',[])).slice(0,2));
     if(q.stray){ const s=strayDue(); s.served++; put('rand:strays',s); const lg=get('rand:straylog',[]); lg.push({day:s.day,index:q.index}); put('rand:straylog',lg); }
     if(ok) put('rand:right',get('rand:right',0)+1);
-    const ax=!ok&&AX.includes(b.textContent)?' An axiom stands under every technique above it; the question asks for the technique built over it.':'';
+    const ax=!ok&&AX.includes(b.dataset.v)?' An axiom stands under every technique above it; the question asks for the technique built over it.':'';
     why.hidden=false; why.innerHTML=esc((ok?'Right. ':(q.lead||'The line holds by '+q.right+'. '))+q.why+ax)+' Built at '+stepLink(q.step)+'.'; });
   box.querySelector('.rznext').onclick=()=>render(box);
 }
 
-window.LadderRandomizer={render, build, parseNames, licensers, LINKS, SEEDS};
+window.LadderRandomizer={render, build, parseNames, licensers, LINKS, SEEDS, QP};
 const pane=document.getElementById('dp-rand'); if(pane){ let box=pane.querySelector('.rzbox'); if(!box){ box=document.createElement('div'); box.className='rzbox'; pane.innerHTML=''; pane.appendChild(box); } render(box); }
 })();

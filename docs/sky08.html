@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can you prove you know a secret without telling it?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="sky07.html">← ∞7 what happens when a material is one atom thick?</a><a href="index.html">next: the ladder →</a></p>
+  <div class="tags"><span class="tag then">∞8 · newsflash</span></div>
+  <h1>Can you prove you know a secret without telling it?</h1>
+  <p data-pid="7c4335">Step 39l convinced a checker that a map has a three-colouring, and the checker went away sure and holding nothing it could not have made up. Rung 41 built a secret agreed in public: on the clock of 23, the first person picked the power 6 in private and sent the hour 8. Put the two together. Can the person who picked 6 prove, to anyone who asks, that she is the one who knows it, without ever sending 6? A password does the opposite: it is sent, and whoever hears it can use it. The game on this page is played in rounds. The prover sends an hour, the checker tosses a coin, the prover answers, and the checker tests the answer against the public hour 8. A prover who knows the secret always passes. A cheat passes half the time and no more, so twenty rounds leave her one chance in a million. And the record of the rounds is something the checker could have written alone, backwards. In 1986 the coin was replaced by a fingerprint, and the game became a signature. This is the shape of signatures now used for secure logins and by the largest digital currency.</p>
+  <p class="gesture" data-pid="e11631">The prover sends t = gʳ, the checker tosses c, the prover answers s ≡ r + cx, and the checker tests gˢ ≡ tyᶜ. Two answers to one t give x, so a cheat passes each round with chance at most one half, and k rounds fool the checker with chance 2⁻ᵏ. Picking c and s first and then t gives records with the same chances, so nothing is learned. A fingerprint in place of the coin makes a signature, and a real round beside a backward one proves one of two secrets without saying which.</p>
+</header>
+
+<section class="class step" data-step="sky8.1">
+  <h2 class="sthead"><span class="stno">sky8.1</span>A commitment, a coin, an answer</h2>
+  <p data-pid="041618">On the clock of 23 the hour 5 is a full hand, and the shared-secret step of <a href="r41l.html#41l2">41l2</a> sent y = 5⁶ ≡ 8. Call the private power x = 6. The which-one technique of <a href="r39l.html#39l1">39l1</a> convinced a checker of a fact about two maps. The claim here is of a different kind: not that something is true, but that the prover <i>knows</i> something. A round has three moves.</p>
+  <p data-pid="f97967">Commit-challenge technique: <b>if the prover sends t ≡ gʳ for a fresh random r, the checker answers with a coin c, 0 or 1, and the prover sends s ≡ r + cx (mod p − 1), then gˢ ≡ t · yᶜ (mod p); so a prover who knows x passes every round.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: one honest round on the clock of 23">
+g^{r + cx} \equiv g^r (g^x)^c = t \cdot y^c @@ exponents live on the clock of p − 1 (41d3)
+r = 10:\ \ t \equiv 5^{10} \equiv 9 @@ the prover sends 9 and keeps 10
+c = 0:\ \ s = 10,\ \ 5^{10} \equiv 9 = 9 \cdot 8^0 @@ she shows r
+c = 1:\ \ s \equiv 10 + 6 = 16,\ \ 5^{16} \equiv 3,\ \ 9 \cdot 8 = 72 \equiv 3 @@ 72 = 3 · 23 + 3
+\htmlClass{new}{\text{both coins pass}} \quad \blacksquare @@ the commit-challenge technique
+  </pre>
+  <p data-pid="754596">On the coin 0 the prover shows r, a random power that has nothing to do with x. On the coin 1 she shows r + 6 on the clock of 22, and since r was picked at random, r + 6 is any of the 22 exponents alike. Neither answer alone shows 6. Both answers to the same t would, which is why r is never used twice. What stops a cheat is the next footing.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a round · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">∞8.1.1</span><span class="ph understand">understand</span>What are the three moves of a round, and what does the checker test? <br>Why does a prover who knows x pass on either coin, and why must r be fresh each round?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky8.2">
+  <h2 class="sthead"><span class="stno">sky8.2</span>A cheat ready for one coin</h2>
+  <p data-pid="6f1a2c">A cheat who does not know x can still pass a round if she guesses the coin. Ready for the coin 0, she sends t ≡ gʳ as an honest prover does. Ready for the coin 1, she picks the answer s first and sends t ≡ gˢ · y⁻¹. What she cannot do is be ready for both with one t.</p>
+  <p data-pid="d14983">Two-answers technique: <b>anyone who answers both coins for one t can compute x ≡ s₁ − s₀ (mod p − 1); so a prover who cannot find x passes each round with chance at most one half.</b> The coin is tossed after t is sent, and is independent of it (30f).</p>
+  <pre class="lines" data-k="ember" data-label="this page: a cheat on the clock of 23">
+\text{ready for } c = 1:\ \ s = 3,\ \ t \equiv 5^3 \cdot 8^{-1} \equiv 10 \cdot 3 \equiv 7 @@ [8]⁻¹ = [3], since 24 = 23 + 1 (41b2)
+c = 1:\ \ 5^3 \equiv 10 \equiv 7 \cdot 8 @@ 56 = 2 · 23 + 10: she passes
+c = 0:\ \ \text{she needs } s_0 \text{ with } 5^{s_0} \equiv 7\text{, that is } \log_5 7 = 19 @@ a clock log (41l)
+5^{s_0} \equiv t,\ \ 5^{s_1} \equiv t \cdot y \Rightarrow 5^{s_1 - s_0} \equiv y @@ divide by t, on a prime clock
+\htmlClass{new}{x \equiv s_1 - s_0 \equiv 16 - 10 = 6 \pmod{22}} \quad \blacksquare @@ the two answers of sky8.1 give the secret
+  </pre>
+  <p data-pid="e5266e">On this small clock the cheat could list all 22 powers and read off 19. The game means something only on a clock where clock logs are out of reach, where 41l3’s step-and-stride needs about the root of p products. The technique says exactly what passing proves: a prover who can pass on both coins could be made to hand over x. That is what “knows” means here.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · a cheat · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞8.2.1</span><span class="ph understand">understand</span>How does a cheat prepare for the coin 1, and why can she not be ready for both coins with one t? <br>What does the two-answers technique say, and what does it make “knowing x” mean?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky8.3">
+  <h2 class="sthead"><span class="stno">sky8.3</span>Rounds multiply</h2>
+  <p data-pid="eda164">Each round has a fresh r and a fresh coin, so the rounds are independent, and a cheat must survive all of them. A bigger coin does in one round what many small ones do, if the exponents live on a prime clock.</p>
+  <p data-pid="5e8353">Rounds-multiply technique: <b>k rounds with fresh coins fool the checker with chance at most 2⁻ᵏ; one round with a coin of q outcomes, when g has exactly q powers and q is prime, fools it with chance at most 1/q.</b> Two answers c ≠ c′ to one t give x ≡ (s − s′)(c − c′)⁻¹ on the clock of q, and c − c′ can be undone because q is prime (41b).</p>
+  <pre class="lines" data-k="ember" data-label="this page: how many rounds">
+\text{fooled in } k \text{ rounds} \le (\tfrac12)^k @@ independent coins (30f)
+k = 20:\ \ 2^{-20} \approx 9.5 \times 10^{-7} @@ below one in a million
+2 = 5^2 \text{ on the clock of } 23\text{, and } 2^{11} = 2048 = 89 \cdot 23 + 1 @@ the hour 2 has exactly 11 powers
+g = 2,\ x = 6:\ \ y = 2^6 = 64 \equiv 18 @@ exponents now on the clock of 11, a prime
+\htmlClass{new}{\text{one coin from } 0 \text{ to } 10\text{: fooled with chance at most } \tfrac1{11}} \quad \blacksquare @@ the rounds-multiply technique
+  </pre>
+  <p data-pid="456f2d">In use, q is a prime of about 77 digits, 256 binary digits, and one round suffices. There is a price, and the next footing finds it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · rounds · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞8.3.1</span><span class="ph understand">understand</span>What does the rounds-multiply technique say, and how many rounds with a coin 0 or 1 bring the chance of being fooled below one in a million? <br>Why must q be prime for two answers to a big coin to give x?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky8.4">
+  <h2 class="sthead"><span class="stno">sky8.4</span>A round written backwards</h2>
+  <p data-pid="e4cc31">The self-made-record technique of <a href="r39l.html#39l3">39l3</a> showed that the checker could make a record of the colouring game alone. Here the difference is the order. An honest round goes commitment, coin, answer. The checker alone can go coin, answer, commitment, and never needs x.</p>
+  <p data-pid="2350da">Backward-round technique: <b>picking c and s at random and then putting t ≡ gˢ y⁻ᶜ gives records (t, c, s) with exactly the chances of honest rounds.</b> In an honest round r is any of the p − 1 exponents alike, so s ≡ r + cx is too, and t ≡ gˢ y⁻ᶜ is fixed by s and c in both lists.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the honest record of sky8.1, written with no x">
+c = 1,\ \ s = 16 @@ picked first
+t \equiv 5^{16} \cdot 8^{-1} \equiv 3 \cdot 3 = 9 @@ [8]⁻¹ = [3]
+(9, 1, 16) @@ the record of the honest round with r = 10
+22 \text{ values of } s \times 2 \text{ coins} = 44 \text{ records, each with chance } \tfrac1{44} @@ both ways
+\htmlClass{new}{\text{the two lists have the same chances}} \quad \blacksquare @@ the backward-round technique
+  </pre>
+  <p data-pid="d8baad">So the record proves nothing to a judge. A checker that cheats, picking its coin after it sees t, is met too: the writer guesses the coin, writes the round backwards, and throws the record away if the guess was wrong, keeping it half the time. With a coin of q outcomes the guess is right once in q, and the trick fails. Big coins are known to give nothing away only to a checker that tosses its coin fairly. That is the price.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞8.4.1</span><span class="ph understand">understand</span>What does the backward-round technique say, and why is s ≡ r + cx any exponent alike? <br>Why does the trick of guessing the coin work for coins 0 or 1 and fail for big coins?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky8.5">
+  <h2 class="sthead"><span class="stno">sky8.5</span>A fingerprint for a coin</h2>
+  <p data-pid="7d4a77">A conversation convinces one checker, once. A signature has to convince anyone, later, with no one tossing a coin. The 1986 idea: let the coin be a fingerprint, 41·comp’s H, of the message m and the commitment t. The signer cannot fit t to the coin, since any change in t changes H(m, t) beyond prediction.</p>
+  <p data-pid="e5b15a">Fingerprint-challenge technique: <b>a signature on m is a pair (t, s) with gˢ ≡ t · y^H(m, t); the signer makes it from a fresh r and x, and anyone checks it from y alone.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: g = 2, y = 18, a toy fingerprint H(m, t) = m + t on the clock of 11">
+m = 7,\ r = 4:\ \ t = 2^4 = 16,\ \ c \equiv 7 + 16 = 23 \equiv 1 \pmod{11} @@ a stand-in for 41·comp’s H, far too small to be safe
+s \equiv 4 + 1 \cdot 6 = 10 \pmod{11} @@ the commit-challenge answer
+2^{10} = 1024 \equiv 12,\ \ 16 \cdot 18 = 288 \equiv 12 @@ 1024 = 44 · 23 + 12 and 288 = 12 · 23 + 12
+\htmlClass{new}{(16, 10) \text{ signs } m = 7} \quad \blacksquare @@ checked from y alone
+  </pre>
+  <p data-pid="9cddec">Now sign m = 9 with the same r = 4. Then t = 16 again, c ≡ 25 ≡ 3 and s ≡ 4 + 18 ≡ 0. Two answers to one t: by the two-answers technique on the clock of 11, x ≡ (10 − 0)(1 − 3)⁻¹ ≡ 10 · 5 ≡ 6, since 9 · 5 = 45 ≡ 1. In 2010 a games console maker’s signing key was recovered in just this way, from signatures of a related kind that all used one fixed r.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · a signature · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞8.5.1</span><span class="ph understand">understand</span>What does the fingerprint-challenge technique say, and why can the signer not choose t after seeing the coin? <br>How do two signatures made with one r give away x on the clock of 11?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky8.6">
+  <h2 class="sthead"><span class="stno">sky8.6</span>One of two, and not which</h2>
+  <p data-pid="3c5253">A voter sends a locked vote and must show it is 0 or 1 without showing which. At its core is a smaller task: prove that you know the clock log of y₁ or of y₂, without saying which. The answer runs a real round beside a backward one.</p>
+  <p data-pid="00acce">One-of-two technique: <b>a prover who knows x₁ with y₁ ≡ g^x₁ writes the round for y₂ backwards with her own c₂ and s₂, runs a real round for y₁, and answers the checker’s coin c with c₁ ≡ c − c₂; the checker tests c₁ + c₂ ≡ c and both rounds, and the records have the same chances whichever log the prover knew.</b> A cheat who knows neither log cannot answer two coins for one pair of commitments, since two coins differ in c₁ or in c₂.</p>
+  <pre class="lines" data-k="ember" data-label="this page: g = 2 on the clock of 23, y₁ = 18 with x₁ = 6, y₂ = 13 with no log known to the prover">
+c_2 = 3,\ s_2 = 4:\ \ t_2 \equiv 2^4 \cdot 13^{-3} \equiv 16 \cdot 2 \equiv 9 @@ 13³ ≡ 12 and [12]⁻¹ = [2]: the backward round
+r = 3:\ \ t_1 = 2^3 = 8 @@ the real round; she sends t₁ = 8 and t₂ = 9
+c = 9:\ \ c_1 \equiv 9 - 3 = 6,\ \ s_1 \equiv 3 + 6 \cdot 6 = 39 \equiv 6 \pmod{11} @@ the checker’s coin, split
+2^6 = 64 \equiv 18 \equiv 8 \cdot 18^6,\ \ 2^4 = 16 \equiv 9 \cdot 13^3 @@ 18⁶ ≡ 8 and 9 · 12 = 108 ≡ 16
+\htmlClass{new}{\text{both rounds pass, and } c_1 + c_2 \equiv 9} \quad \blacksquare @@ the one-of-two technique
+  </pre>
+  <p data-pid="89635b">The checker sees two rounds, each with the chances of an honest one, and a split of its coin that could have been either way round. Online voting systems for universities and learned societies have used proofs of this shape since about 2009, to show each locked ballot holds a 0 or a 1.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · one of two · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞8.6.1</span><span class="ph understand">understand</span>What does the one-of-two technique say, and which round is written backwards? <br>Why can the checker not tell which log the prover knew?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky8.7">
+  <h2 class="sthead"><span class="stno">sky8.7</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{the coin may be tossed before } t \text{ is sent}\,? @@ then a cheat writes every round backwards and passes them all
+\text{she passed 10 rounds, so she knows } x\,? @@ a cheat passes 10 rounds with chance 2⁻¹⁰, about one in a thousand
+\text{the record convinces a judge}\,? @@ the checker could have written it alone, backwards
+\text{one } r \text{ may serve two signatures}\,? @@ two answers to one t give x
+\text{a big coin gives nothing away to any checker}\,? @@ known only for a checker that tosses fairly
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞8.7.1</span><span class="ph understand">understand</span>Why must t be sent before the coin is tossed? <br>Why does one r used for two signatures give the secret away?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="openq themeend">
+  <div class="eyebrow">Open questions · nobody has the answer yet</div>
+  <h2>Open questions</h2>
+  <p class="chnote">These are open: the field is still asking them. There is no key; a good attempt is a reason, a guess, or a better question.</p>
+  <div class="oq"><span class="oqid">∞8.oq.1</span>Is the clock log really hard? Everything on this page rests on the belief that finding x from gˣ on a large prime clock is slow. Nobody has proved it, and a quantum computer of enough size would find it fast (∞1). Is there any function at all that is fast to compute and provably slow to undo? A proof would prove more than 39·now2 asks, since a one-way function of this kind cannot exist if checking and finding are equally fast.</div>
+  <div class="oq"><span class="oqid">∞8.oq.2</span>Is the fingerprint trick safe with a real fingerprint? The fingerprint-challenge technique is proved safe only if H behaves like a fresh fair coin for every new input, which no real fingerprint does. Protocols have been built, on purpose, that are safe as conversations and unsafe with every real fingerprint, and in 2025 a protocol of a kind used in practice was shown to fail this way. Which protocols stay safe, with which fingerprints, is open.</div>
+  <div class="oq"><span class="oqid">∞8.oq.3</span>Is “the same shape” fast? The which-one technique of 39l1 proves two maps are not the same shape. Deciding whether they are has a method, announced in 2015 and repaired in 2017, whose steps grow faster than every power of n and slower than every doubling. Whether some method runs within a power of n is open.</div>
+  <div class="oq"><span class="oqid">∞8.oq.4</span>Should proving your age online work like this? Laws in several countries now require websites to check ages. A proof of the one-of-two kind can show “over 18” from a signed record of a birth date without showing the date. Critics argue that whoever signs the records still learns who asks for them and when, and that a privacy-friendly check makes checking everywhere easier to demand. Who should sign, and whether it should be done at all, is argued now.</div>
+</section>
+<section class="history themeend">
+  <div class="eyebrow">A short history · told from more than one side</div>
+  <h2>How we got here</h2>
+  <p data-pid="f22baa">The definitions came in 1985, from researchers at MIT and Toronto, in a paper that had been turned down by conferences more than once before it appeared. Some readers saw a curiosity: a proof that teaches nothing seemed to have no use. Others saw at once that a proof which shows nothing is exactly what a password ought to be.</p>
+  <p data-pid="dac271">The use came fast. In 1986 a group at the Weizmann Institute in Israel turned the game into identification for smart cards, with square roots on the clock of a product of two primes in place of logs, and added the fingerprint that turns it into a signature. When they applied for a patent in the United States, a secrecy order was placed on it at the army’s request, which would have barred them from publishing their own work. After protests it was soon withdrawn.</p>
+  <p data-pid="0c3d23">The version on this page, with a big coin on a prime clock, was published in 1989 by a mathematician in Frankfurt and patented. When the US government set its signature standard in 1991 it chose a different design. Critics argued the choice was made partly to avoid the patent and partly on the advice of the intelligence agency, and the patent holder argued that the standard used his idea anyway. The patent ran out in 2008. Signatures of this shape on a curve were published in 2011 and spread through secure logins over the next decade, and in 2021 the largest digital currency added them.</p>
+  <p data-pid="4c87bd">The 1985 authors received the field’s highest prize in 2012. By then the hope was short proofs of whole computations, a few hundred bytes checked in milliseconds. A digital currency launched in 2016 used them to hide who paid whom. Its proofs needed secret numbers made once and then destroyed in a public ceremony, and doubters asked how anyone could know they were destroyed. In 2019 its makers disclosed that a flaw, found within the company in 2018 and quietly fixed, would have let anyone create coins without detection. They argued that silence protected users while the fix was rolled out. Critics argued that a flaw undetectable by design means nobody can know it was never used.</p>
+  <p data-pid="897999">The ethics cut both ways. In 2022 the US Treasury put sanctions on a service that used such proofs to break the link between money paid in and money taken out, saying it laundered stolen funds. A US appeals court ruled in 2024 that its code, which no one could change, was not property that could be sanctioned, and the sanctions were lifted in 2025. At the same time governments in Europe began testing such proofs as the privacy-friendly way to check ages online.</p>
+  <p data-pid="fc05ee">What is argued now: whether the fingerprint trick, as used in practice, is safe (a 2025 attack revived the question); which proofs will survive quantum computers, since clock logs and curves will not; and whether proofs that show nothing protect privacy or only make checking easier to demand.</p>
+</section>
+
+<nav class="nextrung"><a href="sky07.html">← ∞7 · what happens when a material is one atom thick?</a><a href="index.html">the ladder →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The prover and checker are the prover and verifier. The round of the commit-challenge technique, with a big coin, is the Schnorr identification protocol, a Σ-protocol; the two-answers technique is special soundness, and it makes the protocol a proof of knowledge. The backward-round technique is the simulator, and the protocol with a big coin is honest-verifier zero-knowledge. The fingerprint-challenge technique is the Fiat–Shamir transform, proved safe in the random oracle model, and the signature is a Schnorr signature; Ed25519 (EdDSA) and Bitcoin’s BIP 340 signatures are of this shape. The one-of-two technique is the OR-proof of Cramer, Damgård and Schoenmakers, used as a disjunctive Chaum–Pedersen proof in voting. The 2010 key was recovered from ECDSA signatures with a repeated nonce.</p>
+  <h3>Who said it first</h3>
+  <p>Shafi Goldwasser, Silvio Micali and Charles Rackoff defined zero-knowledge proofs (circulated 1985). Amos Fiat and Adi Shamir gave identification and the fingerprint trick in 1986, and Uriel Feige, Fiat and Shamir the proof-of-knowledge form in 1988. Claus-Peter Schnorr published the prime-clock protocol in 1989 (journal version 1991). Ronald Cramer, Ivan Damgård and Berry Schoenmakers gave the OR-proof in 1994. Ran Canetti, Oded Goldreich and Shai Halevi (1998) and Shafi Goldwasser and Yael Tauman Kalai (2003) built protocols that fail under every real fingerprint; Dmitry Khovratovich, Ron Rothblum and Lev Soukhanov gave the 2025 attack. Goldwasser and Micali received the Turing Award in 2012.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The record shows the prover passed 30 rounds, each tested against y, so the record is a proof that she knows x.” Not allowed: by the backward-round technique the checker could have written the same 30 rounds alone, with the same chances, knowing nothing. Passing proves something only to the checker who tossed the coins, after the commitments were sent.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'commit',t:R`t \equiv g^r`,n:`Sent first.`},
+  {k:'ember',kl:'coin',t:R`c \in \{0, 1\}`,n:`The checker’s.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{g^s \equiv t\,y^c}`,n:`Always, with x.`}
+],{title:'The slides · a round · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'ready',t:R`t \equiv g^s y^{-1}`,n:`For c = 1 only.`},
+  {k:'ember',kl:'both',t:R`g^{s_1 - s_0} \equiv y`,n:`Two answers.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{x \equiv s_1 - s_0}`,n:`Or caught half the time.`}
+],{title:'The slides · a cheat · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'one',t:R`\tfrac12`,n:`Each round.`},
+  {k:'ember',kl:'k',t:R`2^{-k}`,n:`Fresh coins.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2^{-20} \lt 10^{-6}}`,n:`Twenty rounds.`}
+],{title:'The slides · rounds · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'first',t:R`c,\ s \text{ at random}`,n:`No x.`},
+  {k:'ember',kl:'last',t:R`t \equiv g^s y^{-c}`,n:`The commitment.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(9, 1, 16)}`,n:`Same chances.`}
+],{title:'The slides · backwards · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'coin',t:R`c = H(m, t)`,n:`A fingerprint.`},
+  {k:'ember',kl:'answer',t:R`s \equiv r + cx`,n:`Fresh r.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2^{10} \equiv 16 \cdot 18}`,n:`Anyone checks.`}
+],{title:'The slides · a signature · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'backward',t:R`t_2 \equiv g^{s_2} y_2^{-c_2}`,n:`Her own coin.`},
+  {k:'ember',kl:'real',t:R`c_1 \equiv c - c_2`,n:`The rest of the coin.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{one log, not which}}`,n:`Both pass.`}
+],{title:'The slides · one of two · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

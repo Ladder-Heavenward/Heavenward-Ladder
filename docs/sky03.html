@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How does CRISPR find one place in a genome?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="sky02.html">← ∞2 how do qubits keep from falling apart?</a><a href="index.html">next: the ladder →</a></p>
+  <div class="tags"><span class="tag then">∞3 · newsflash</span></div>
+  <h1>How does CRISPR find one place in a genome?</h1>
+  <p data-pid="2aece6">How does CRISPR find one place in a genome? The DNA of a person is a string of about three billion letters, each one of four, held on two strands that pair letter by letter. The tool that made the news from 2012 on carries a guide of twenty letters and cuts where the string matches it. One match among three billion places sounds like luck. It is counting. This page counts how many places a random string of that length would match by chance, which is far fewer than one; how many would match with a few letters wrong, which is not few at all; and how far the count of near matches can stray above its average, with a bound sharper than any this ladder has used. Then it turns to where the tool came from: a memory that bacteria keep of the viruses that attacked them, found by people puzzling over odd repeats in bacterial DNA, long before anyone thought of editing a genome. The lab work stays in the lab. This page is the arithmetic, and the argument over it.</p>
+  <p class="gesture" data-pid="931850">A fixed word of 20 letters is expected to appear by chance about 6 × 10⁹ / 4²⁰ ≈ 0.0055 times in a random string of 3 × 10⁹ letters read on both strands. A short signal beside the target cuts the places checked to one in sixteen. About 11 places beside a signal are expected within three wrong letters, and 145 within four: the exact match is nearly unique, and its neighbourhood is crowded. The count of near places strays above its average with a chance that falls faster than any power, by the exponential-tail technique, built from the stray-bound and average-function techniques. A stored stretch of 30 letters that matches a virus cannot be chance, which is how the bacterial memory was recognised in 2005.</p>
+</header>
+
+<section class="class step" data-step="sky3.1">
+  <h2 class="sthead"><span class="stno">sky3.1</span>Three billion letters, read both ways</h2>
+  <p data-pid="04fd14">Read a genome as a string of the letters A, C, G and T. One set of a person’s DNA has about 3 × 10⁹ of them. The two strands pair letter by letter, A with T and C with G, and run in opposite directions (<a href="r34bio.html#34bio1">34·bio.1</a>), so a word can sit on either strand. There are about 2 × 3 × 10⁹ = 6 × 10⁹ places where a word of 20 letters could start.</p>
+  <p data-pid="5fd701">Treat the string, for a moment, as random: each letter one of the four with chance 1/4, independently (<a href="r30f.html#30f2">30f2</a>). There are 4²⁰ words of 20 letters (<a href="r04k.html#4k6">4k6</a>), and a given place spells the guide with chance 4⁻²⁰.</p>
+  <p data-pid="16c009">Chance-match technique: <b>in a random string with W places to start, a fixed word of k letters is expected to appear W/4ᵏ times, and appears at least once with chance 1 − (1 − 4⁻ᵏ)^W, which is close to 1 − e^(−W/4ᵏ) when 4ᵏ is large.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the chance-match technique, for a person">
+4^{20} = 1\,099\,511\,627\,776 \approx 1.1 \times 10^{12} @@ stages-multiply (4k6), twenty times
+W\,4^{-20} = 6 \times 10^9 / (1.1 \times 10^{12}) \approx 0.0055 @@ averages add over the places (30g1)
+1 - (1 - 4^{-20})^{W} \approx 1 - e^{-0.0055} \approx 0.0054 @@ at-least-one (30l2); many-small-chances (22j1)
+\htmlClass{new}{k = 17:\ W\,4^{-17} \approx 0.35;\ \ k = 16:\ W\,4^{-16} \approx 1.4} \quad \blacksquare @@ the shortest word expected less than once is 17 letters
+  </pre>
+  <p data-pid="98c103">So a word of 17 letters would already be expected less than once by chance, and 20 leaves room: about one random genome in 180 would hold a second copy of the guide. But the real genome is no random string. Nearly half of it is made of a few families of stretches copied many times over, and a word drawn from inside one of them may appear thousands of times. The count is the floor that a random string gives, not a promise about a real one.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · chance match · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">∞3.1.1</span><span class="ph understand">understand</span>Why are there about 6 × 10⁹ places for a word to start, and not 3 × 10⁹? <br>What does the chance-match technique give for a guide of 20 letters, and why does a real genome not have to follow it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky3.2">
+  <h2 class="sthead"><span class="stno">sky3.2</span>A short signal first</h2>
+  <p data-pid="5fdc1c">The cutter does not test every place. The protein in widest use, taken from a bacterium that causes sore throats, holds on only where a short signal sits just beside the target: three letters, any letter and then two fixed ones. Only there does it open the two strands and test the guide against the 20 letters. Where the signal is missing it lets go and moves on.</p>
+  <p data-pid="2fc208">The signal is what keeps the bacterium from cutting itself. In the bacterium the guide is copied from a stretch of a virus that the bacterium has stored in its own DNA, and the stored copy sits there without the signal beside it. The virus carries the signal; the store does not. So the cutter attacks the virus and spares the memory that names it.</p>
+  <p data-pid="668bf3">Signal-sieve technique: <b>if a full test is made only where a signal appears, and the signal appears at each place with chance q, independently of the word beside it, then the expected number of full tests and the expected number of chance matches are both multiplied by q.</b> The averages of 30g1, with each count multiplied by the signal’s count, which is independent of it.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the sieve, for a person">
+q = \tfrac14 \cdot \tfrac14 = \tfrac{1}{16} @@ any letter, then two fixed ones (30f2)
+W q = 6 \times 10^9 / 16 = 3.75 \times 10^8 @@ places with the signal: full tests
+W q\,4^{-20} \approx 3.4 \times 10^{-4} @@ the chance-match technique, sieved
+\htmlClass{new}{\text{about } \allowbreak \text{one } \allowbreak \text{random } \allowbreak \text{genome } \allowbreak \text{in } \allowbreak \text{2900 } \allowbreak \text{holds } \allowbreak \text{a } \allowbreak \text{chance } \allowbreak \text{copy } \allowbreak \text{beside } \allowbreak \text{a } \allowbreak \text{signal}} \quad \blacksquare @@ 1/0.00034 ≈ 2900
+  </pre>
+  <p data-pid="98d604">The sieve also saves time. A test of two fixed letters fails at fifteen places in sixteen, and fails fast, so most of the search is short looks, and the long test is spent where it can matter. How the protein moves from one place to the next, sliding along the strands or hopping through the water around them, has been watched one molecule at a time since 2014, and is still described in more than one way.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · signal first · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞3.2.1</span><span class="ph understand">understand</span>What does the signal-sieve technique say, and why does it multiply both counts by 1/16 here? <br>Why does the signal keep the bacterium from cutting its own store?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky3.3">
+  <h2 class="sthead"><span class="stno">sky3.3</span>Near matches</h2>
+  <p data-pid="ff3bb1">The test against the guide is not all or nothing. Studies from 2013 on found cuts at places that differ from the guide in several letters, more often when the wrong letters sit far from the signal. So count the words near a given word.</p>
+  <p data-pid="b7fd4f">Near-word technique: <b>of the 4ᵏ words of k letters, exactly C(k, j) · 3ʲ differ from a given word in exactly j places.</b> Choose the j places (4k’s choosing counts), then one of the 3 other letters at each (4k6).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the neighbourhood of a guide of 20 letters">
+j = 1, 2, 3:\ \ 60,\ \ 1710,\ \ 30\,780 @@ 20 · 3, 190 · 9, 1140 · 27
+\textstyle\sum_{j \le 3} C(20, j)\,3^j = 32\,551 @@ with the word itself
+3.75 \times 10^8 \cdot 32\,551 / 4^{20} \approx 11.1 @@ the signal-sieve technique, with 32 551 words in place of one
+\htmlClass{new}{\le 2:\ 0.60;\ \ \le 3:\ 11.1;\ \ \le 4:\ 145} \quad \blacksquare @@ expected near places beside a signal, in a random genome
+  </pre>
+  <p data-pid="5e8e20">So a random genome is expected to hold about 11 places beside a signal that differ from the guide in at most three letters, and about 145 within four. The exact match is nearly unique; its neighbourhood is crowded. Counting wrong letters is the distance of <a href="r38o.html#38o2">38o2</a> with no gaps allowed. The cutter also tolerates a missing or an extra letter now and then, and the distance with gaps counts more places still.</p>
+  <p data-pid="6d5e31">Which near places are actually cut, and how often, counting does not settle. It depends on where the wrong letters fall, on how tightly that stretch of DNA is packed in the cell, and on how long the cutter stays. The count gives the size of the haystack. It cannot tell which straws are sharp.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · near words · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞3.3.1</span><span class="ph understand">understand</span>What does the near-word technique say, and where do C(k, j) and 3ʲ come from? <br>Why is the exact match nearly unique while the places within four letters number in the hundreds?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky3.4">
+  <h2 class="sthead"><span class="stno">sky3.4</span>How far the count can stray</h2>
+  <p data-pid="e15007">Let X be the number of near places, within three letters, in a random genome. It is a sum of 3.75 × 10⁸ counts, each 1 with a tiny chance and 0 otherwise, with average μ ≈ 11.1. Treat the counts as independent. Neighbouring places share letters, so this is a model, and a fair one only while near places are far apart. How likely is X ≥ 30?</p>
+  <p data-pid="2587eb">The spread-bound technique (<a href="r30h.html#30h1">30h1</a>) answers with the spread alone. The spread of X is at most μ, since independent spreads add (30g3) and each is at most its chance. So P(X ≥ 30) ≤ P(|X − μ| ≥ 18.9) ≤ 11.1/18.9² ≈ 0.031. Use the stray-bound technique on e^(sX) instead of on X, and the average-function of <a href="r30j.html#30j2">30j2</a> carries every power of X at once.</p>
+  <p data-pid="7fca19">Exponential-tail technique: <b>if X is a sum of independent counts, each 1 with its own chance and 0 otherwise, and E X = μ, then P(X ≥ t) ≤ e^(−μ) (eμ/t)ᵗ for every t &gt; μ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the exponential-tail technique">
+P(X \ge t) = P(e^{sX} \ge e^{st}) \le e^{-st}\,E\,e^{sX} @@ s &gt; 0, so e^(sx) rises; the stray-bound technique (30h1) on e^(sX)
+E\,e^{sX} = \textstyle\prod_i (1 - p_i + p_i e^s) @@ sums of independent counts multiply their average-functions (30j2)
+1 + x \le e^x \Rightarrow E\,e^{sX} \le e^{\mu(e^s - 1)} @@ x = pᵢ(eˢ − 1), and the pᵢ add to μ; eˣ lies above its tangent at 0 (17)
+e^s = t/\mu:\ \ P(X \ge t) \le e^{t - \mu}(\mu/t)^t @@ s = ln(t/μ) &gt; 0 since t &gt; μ; the s that makes the bound least
+\htmlClass{new}{P(X \ge t) \le e^{-\mu}(e\mu/t)^t} \quad \blacksquare @@ the exponential-tail technique
+  </pre>
+  <p data-pid="24eedb">With μ = 11.1 and t = 30 the bound is about 1.8 × 10⁻⁵, against 0.031 from the spread. The true chance, from the rare-events technique (<a href="r22j.html#22j2">22j2</a>), is about 2.0 × 10⁻⁶: the new bound is off by a factor of 9, the old by a factor of 15 000. At t = 40 the two bounds are 0.013 and 1.9 × 10⁻¹⁰. The spread bound falls like 1/t²; the exponential tail falls faster than any power of t. It is the sharper bound that <a href="r39i.html#39i1">39i1</a> named in its basement and left unbuilt, and the same lines, with a turned sign, bound the chance that a majority of runs goes wrong.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · exponential tail · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞3.4.1</span><span class="ph understand">understand</span>What does the exponential-tail technique say? <br>Which line uses the stray-bound technique, on what, and why does that do so much better than the spread-bound technique?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky3.5">
+  <h2 class="sthead"><span class="stno">sky3.5</span>A memory of past viruses</h2>
+  <p data-pid="4a0016">The tool was found in bacteria, where it is a defence. A bacterium that survives a virus can store a short stretch of the virus’s DNA, about 30 letters, in a row of stored stretches with a repeated stretch between each two. The row is copied into guides, and a guide that matches an incoming virus leads the cutter to it. New stretches are added at one end, so the row is a record, in order, of infections the line of bacteria has survived.</p>
+  <p data-pid="afdc8c">Is a match between a stored stretch and a virus a coincidence? By the chance-match technique, a fixed word of 30 letters appears by chance in a virus of 40 000 letters, read on both strands, with chance about 8 × 10⁴ / 4³⁰ ≈ 7 × 10⁻¹⁴. When stored stretches were found to match known viruses, the match could not be chance. The bacterium, or an ancestor, had met that virus.</p>
+  <p data-pid="565642">Many-memories technique: <b>if a virus escapes each of m stored stretches that match it with chance q, independently, it escapes all of them with chance qᵐ, and among V copies of the virus about V qᵐ escape.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: one memory, and two">
+q = 10^{-6},\ \ V = 10^{8} @@ suppose: one copy in a million changed at a letter that matters, and a burst of a hundred million copies
+m = 1:\ \ V q = 100 @@ averages add (30g1)
+m = 2:\ \ V q^2 = 10^{-4} @@ independent chances multiply (30f2)
+\htmlClass{new}{\text{one } \allowbreak \text{memory } \allowbreak \text{leaks; } \allowbreak \text{two } \allowbreak \text{nearly } \allowbreak \text{seal}} \quad \blacksquare @@ the many-memories technique
+  </pre>
+  <p data-pid="f3aacf">Viruses answer. Some change the signal or the letters beside it. Some carry proteins that block the cutter, first reported at the end of 2012. And independence is the weak line: one loss of a long stretch of the virus can remove two targets at once. The dairy experiments of 2007, with the bacteria that turn milk into yoghurt, showed that the stored stretches are what give the defence: add one that matches a virus and the bacterium resists it; take it away and the defence is gone.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · memory · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞3.5.1</span><span class="ph understand">understand</span>What does the many-memories technique say, and which line uses independence? <br>Why can a match of 30 letters between a stored stretch and a known virus not be chance?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky3.6">
+  <h2 class="sthead"><span class="stno">sky3.6</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{the } \allowbreak \text{guide } \allowbreak \text{has } \allowbreak \text{20 } \allowbreak \text{letters, } \allowbreak \text{so } \allowbreak \text{it } \allowbreak \text{matches } \allowbreak \text{exactly } \allowbreak \text{one } \allowbreak \text{place}\,? @@ a random genome would; a real one has repeats, and near places count too
+W\,4^{-20} \approx 0.0055 \Rightarrow \text{no } \allowbreak \text{chance } \allowbreak \text{copy } \allowbreak \text{exists}\,? @@ an average below 1 bounds a chance, it forbids nothing; and the genome is not random
+P(X \ge 30) \le 11.1/30 \Rightarrow \text{nothing } \allowbreak \text{sharper } \allowbreak \text{holds}\,? @@ that is stray-bound on X; on e^(sX) it gives 1.8 × 10⁻⁵
+\text{the } \allowbreak \text{places } \allowbreak \text{overlap, } \allowbreak \text{and } \allowbreak \text{the } \allowbreak \text{exponential-tail } \allowbreak \text{technique } \allowbreak \text{applies } \allowbreak \text{as } \allowbreak \text{stated}\,? @@ it needs independent counts; for overlapping places it is a model
+\text{the } \allowbreak \text{cutter } \allowbreak \text{runs } \allowbreak \text{the } \allowbreak \text{full } \allowbreak \text{test } \allowbreak \text{at } \allowbreak \text{all } \allowbreak \text{6 } \allowbreak \text{× } \allowbreak \text{10⁹ } \allowbreak \text{places}\,? @@ it tests the signal first, and the guide at one place in sixteen
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞3.6.1</span><span class="ph understand">understand</span>Why does an expected count of 0.0055 not show that no chance copy of the guide exists? <br>Why does the exponential-tail technique need a word of caution for overlapping places?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="openq themeend">
+  <div class="eyebrow">Open questions · nobody has the answer yet</div>
+  <h2>Open questions</h2>
+  <p class="chnote">These are open: the field is still asking them. There is no key; a good attempt is a reason, a guess, or a better question.</p>
+  <div class="oq"><span class="oqid">∞3.oq.1</span>Which near places does the cutter really cut? The rules in use for guessing it from the letters are fitted to measured cuts, not derived from how the protein holds the DNA. Is there a rule, built from the physics of the guide pairing with the strand letter by letter, that predicts the measured cuts as well as the fitted rules do, and shows why a wrong letter near the signal matters more than one far from it?</div>
+  <div class="oq"><span class="oqid">∞3.oq.2</span>How many unwanted cuts are missed? The methods for finding them in cells give different lists for the same guide, and each sees only cuts made in more than some small share of cells. Counting near places gives hundreds of candidates; the methods confirm a handful. Is the gap the cutter’s choosiness or the methods’ blindness, and how can a count of what was not seen be bounded?</div>
+  <div class="oq"><span class="oqid">∞3.oq.3</span>People differ from one another in millions of letters. A near place in one person may be absent in another, and one letter of difference can turn a near place into an exact one. The review of the first approved treatment in 2023 asked whether the search for unwanted cuts had covered the genomes of the people to be treated, most of them of African descent, when the reference genomes mostly had not. How should the chance of an unwanted cut be counted across a population, rather than against one reference string?</div>
+  <div class="oq"><span class="oqid">∞3.oq.4</span>Why do so many bacteria lack the defence? It is found in most archaea but in well under half of bacteria. If two memories nearly seal against a virus, what does the defence cost that leads so many lines to lose it: the risk of cutting their own DNA, the price of making the protein, or the blocking of useful DNA that arrives from other bacteria?</div>
+</section>
+<section class="history themeend">
+  <div class="eyebrow">A short history · told from more than one side</div>
+  <h2>How we got here</h2>
+  <p data-pid="6549e9">In 1987 a group at Osaka University, reading a gene of the gut bacterium E. coli, noticed beside it a short stretch repeated five times with different stretches between, and wrote that its meaning was unknown. In 1993 a researcher at the University of Alicante found similar rows in a salt-loving microbe from the salt ponds of Santa Pola, and by 2000 had shown that rows of this kind are common across bacteria and archaea. The name, an acronym in English for the repeating pattern, was agreed in 2002 between Alicante and a group at Utrecht. For fifteen years it was a pattern without a purpose.</p>
+  <p data-pid="2d3c35">In 2005 three groups, at Alicante, at the University of Paris-Sud and at the French national institute for agricultural research, reported that the stretches between the repeats match the DNA of viruses, and proposed that the rows are an immune memory. The Alicante paper was turned down by several journals before it appeared. At that point the idea was an inference from counting, the argument of the fifth footing: matches of that length could not be chance. It was not yet a finding.</p>
+  <p data-pid="8b7198">The finding came from industry. In 2007 the Danish food company Danisco, whose yoghurt and cheese cultures are ruined by viruses, showed that adding a stored stretch gave a bacterium resistance and removing it took resistance away. In 2008 a group at Northwestern University showed the target is DNA, and wrote that a cutter guided to DNA could be a tool. In 2011 a second small RNA needed to form the guide was found, in work from Umeå and Vienna. In 2012 two papers showed in test tubes that the cutter, with a guide of 20 letters, cuts any matching DNA beside the signal: one from Berkeley and Umeå, published in June, and one from Vilnius, sent to a journal earlier and published in September. In January 2013 groups at the Broad Institute and at Harvard reported it working in human cells, and within a year it was in laboratories everywhere.</p>
+  <p data-pid="8e6bac">From 2013 the near places became the argument. Studies that year found cuts at places differing from the guide in up to five letters, and the counting of this page was built into software that ranks guides by how crowded their neighbourhoods are. Altered cutters that cut near places far less often were reported in 2015 and 2016. In 2017 a short report claimed that editing in mice had made hundreds of unexpected changes across the genome; other groups answered that the mice compared were not closely enough related to tell an edit from an inherited difference, and the report was retracted in 2018. The episode made the point of this page from the other side: a count of differences means nothing without the count expected by chance. From 2018 on, studies also reported that a cut through both strands can be repaired wrongly, losing long stretches near the cut or shuffling them, and that worry is where the next step of this sky begins.</p>
+  <p data-pid="9e9af4">The money followed the priority. The University of California, with the University of Vienna, and the Broad Institute filed patents in 2012 and 2013, and from 2016 the United States patent office heard a contest over who first invented the use in cells with nuclei. It found for the Broad in 2017 and again in 2022. In May 2025 an appeals court sent part of the 2022 decision back, holding that the office had used too strict a test of when an invention is first conceived; the contest is not over. In Europe a Broad patent was revoked in 2018 because an earlier filing it relied on did not list the same inventors. The 2020 prize in chemistry from Stockholm went to two of the authors of the June 2012 paper. The Vilnius group, the Broad and the Alicante pioneer were left out, and the choice is still argued.</p>
+  <p data-pid="7b60d3">What is argued now: whether counting near places against one reference string is enough, or whether a guide meant for people must be checked against the genomes of the people it will treat; whether the fitted rules for which near places are cut can be trusted outside the cells they were fitted in; and whether a cut through both strands is itself the risk, whatever the guide. Each side has data. None has settled it.</p>
+</section>
+
+<nav class="nextrung"><a href="sky02.html">← ∞2 · how do qubits keep from falling apart?</a><a href="index.html">the ladder →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The rows are CRISPR, clustered regularly interspaced short palindromic repeats; the stored stretches are spacers, the matching stretch in the virus is a protospacer, and the signal is the protospacer adjacent motif, PAM, three letters with the last two fixed for the cutter Cas9 of Streptococcus pyogenes. The guide is a guide RNA, in the tool a single guide RNA joining the crRNA and the tracrRNA of the bacterium. The count of wrong letters is the Hamming distance, and with gaps the edit or Levenshtein distance; wrong letters the cutter tolerates are mismatches, and gaps are bulges. Unwanted cuts are off-target cuts. The proteins that block the cutter are anti-CRISPR proteins. The repeated families that make up nearly half the human genome are transposable elements. The exponential-tail technique is the Chernoff bound, in its multiplicative form for sums of independent counts; applying the stray-bound technique to e^(sX) is the Chernoff method, or the exponential moment method. The stray-bound technique is Markov’s inequality, and the spread-bound technique is Chebyshev’s.</p>
+  <h3>Who said it first</h3>
+  <p>Yoshizumi Ishino and colleagues at Osaka reported the repeats in 1987. Francisco Mojica at Alicante found them in Haloferax mediterranei in 1993, showed how widespread they are in 2000, and named them with Ruud Jansen of Utrecht in 2002; Jansen’s group also named the first cas genes. Mojica, Christine Pourcel and Alexander Bolotin proposed the immune memory in 2005. Rodolphe Barrangou and Philippe Horvath, at Danisco, gave the experiment of 2007. Luciano Marraffini and Erik Sontheimer showed the DNA target in 2008. Emmanuelle Charpentier’s group found the tracrRNA in 2011. Martin Jinek, Krzysztof Chylinski, Charpentier and Jennifer Doudna published the test-tube cutter in June 2012, and Giedrius Gasiunas and Virginijus Šikšnys theirs in September 2012. Feng Zhang at the Broad and George Church at Harvard reported human cells in January 2013. Charpentier and Doudna shared the 2020 Nobel Prize in Chemistry. Herman Chernoff published the method in 1952 and has said that the bound in this form came from Herman Rubin.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The guide matches only one place in the reference genome, so it cuts only there.” Not allowed: it treats an exact match as the only thing the cutter acts on, when about 11 places beside a signal within three letters are expected even in a random string, and the reference genome is not the genome of the person treated. A search of the reference shows where to look. It does not show where the cutter went.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'places',t:R`W \approx 6 \times 10^9`,n:`Both strands.`},
+  {k:'ember',kl:'words',t:R`4^{20} \approx 1.1 \times 10^{12}`,n:`Stages multiply.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{W\,4^{-20} \approx 0.0055}`,n:`Expected chance copies.`}
+],{title:'The slides · chance match · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'signal',t:R`q = 1/16`,n:`Two fixed letters.`},
+  {k:'ember',kl:'tests',t:R`Wq = 3.75 \times 10^8`,n:`Full tests only there.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{Wq\,4^{-20} \approx 3.4 \times 10^{-4}}`,n:`Sieved chance copies.`}
+],{title:'The slides · signal first · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'exactly j',t:R`C(20, j)\,3^j`,n:`Places, then letters.`},
+  {k:'ember',kl:'within 3',t:R`32\,551`,n:`Words near the guide.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\approx 11 \text{ near places}}`,n:`Beside a signal.`}
+],{title:'The slides · near words · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'stray',t:R`P(X \ge t) \le e^{-st}E\,e^{sX}`,n:`Stray-bound, on eˢˣ.`},
+  {k:'ember',kl:'product',t:R`E\,e^{sX} \le e^{\mu(e^s - 1)}`,n:`Average-functions multiply.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{e^{-\mu}(e\mu/t)^t}`,n:`At eˢ = t/μ.`}
+],{title:'The slides · exponential tail · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'chance',t:R`8 \times 10^4 / 4^{30} \approx 7 \times 10^{-14}`,n:`No coincidence.`},
+  {k:'ember',kl:'one',t:R`Vq = 100`,n:`Escapes.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{Vq^2 = 10^{-4}}`,n:`Two nearly seal.`}
+],{title:'The slides · memory · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

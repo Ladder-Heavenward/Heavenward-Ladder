@@ -473,7 +473,7 @@ function deskHTML(){
   const b=document.createElement('button'); b.id='deskbtn'; b.setAttribute('aria-label','open the desk: questions and a grapher'); b.textContent='☰ desk';
   const d=document.createElement('div'); d.id='desk'; d.setAttribute('role','dialog'); d.setAttribute('aria-label','desk');
   const qs=!!document.querySelector('.sayback');
-  d.innerHTML='<div class="dtabs">'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph</button><button data-p="moves">Reference</button><button data-p="rand">Laundry</button><button data-p="rec">Record</button><button type="button" class="dkeys" aria-label="the math keys">⌨ Keys</button><a class="dshare" href="install.html">Share the ladder</a><button class="x" aria-label="close">✕</button></div>'
+  d.innerHTML='<div class="dtabs">'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph view</button><button data-p="moves">Techs read</button><button data-p="rand">Laundry</button>'+(document.querySelector('.qid')?'<button type="button" class="dcross">Crosswalk</button>':'')+'<button data-p="rec">Record</button><button type="button" class="dkeys" aria-label="the math keys">⌨ Keys</button>'+(document.querySelector('.wrap>section.class.step')?'<button type="button" class="dfv">Page view</button>':'')+'<button type="button" class="dheights">Dizzying heights</button><a class="dshare" href="install.html">Share the ladder</a><button class="x" aria-label="close">✕</button></div>'
     +(qs?'<div class="dpane" id="dp-qs"><p class="dnote">The page’s questions, here so you can read them beside the class.</p><div class="dq" id="dq"></div></div>':'')
     +'<div class="dpane" id="dp-graph"><div id="dmg"></div><p class="dnote" style="margin-top:10px">Type it as on paper: x^2, 2sin(x), e^x, ln x, √x, |x|, x!. a, b, c and k get sliders.</p></div>'
     +'<div class="dpane" id="dp-moves"><p class="dnote" id="dmnote">The techs this step uses and builds: what each is called, what it does in words, and the line in symbols.</p><div id="dmoves"></div><p><a class="dlink" href="moves.html">every tech you have earned →</a></p></div>'
@@ -582,7 +582,9 @@ function ladderBar(){
   window.__barStats=stats;
   if(window.LADMAP) stats(); else { const sc=document.createElement('script'); sc.src='ladmap.js'; sc.onload=stats; document.head.appendChild(sc); }
   addEventListener('storage',e=>{ if(!e.key||e.key==='ladder:record') setTimeout(stats,0); });
-  if(home) bar.querySelector('.lb-ladder').onclick=()=>climbTo(true);
+  /* the Ladder button takes you to the footing you were last reading (0.2.1); the ladder itself is "dizzying heights" in the toolbox */
+  const lb=bar.querySelector('.lb-ladder');
+  lb.addEventListener('click',e=>{ if(window.LadderFV&&LadderFV.resume()){ e.preventDefault(); return; } if(home) climbTo(true); });
   const kb=bar.querySelector('.lb-keys'); if(kb) kb.onclick=()=>{ const b=document.querySelector('#mk-tray .mk-btn'); if(b) b.click(); };
   bar.querySelector('.lb-tray').onclick=()=>{ const b=document.getElementById('deskbtn'); if(b) b.click(); };
   const sync=()=>{ const t=document.getElementById('mk-tray'), d=document.getElementById('desk');
@@ -836,6 +838,9 @@ window.__deskInit=function(){
   desk.querySelector('.x').onclick=()=>open(false);
   const dkb=desk.querySelector('.dkeys'); if(dkb) dkb.onclick=()=>{ const b=document.querySelector('#mk-tray .mk-btn'); if(b) b.click(); };
   desk.querySelectorAll('.dtabs [data-p]').forEach(b=>b.onclick=()=>show(b.dataset.p));
+  const dfv=desk.querySelector('.dfv'); if(dfv) dfv.onclick=()=>{ open(false); if(window.LadderFV&&LadderFV.toggle) LadderFV.toggle(); };
+  const dx=desk.querySelector('.dcross'); if(dx) dx.onclick=()=>{ open(false); if(window.LadderCards) LadderCards.open(); else if(typeof toast==='function') toast('the crosswalk is loading'); };
+  const dh=desk.querySelector('.dheights'); if(dh) dh.onclick=()=>{ open(false); if(window.LadderFV) LadderFV.heights(); else location.href='index.html'; };
   const rx=desk.querySelector('.recx'), ri=desk.querySelector('.reci'), rn=desk.querySelector('#recnote');
   if(rx) rx.onclick=()=>LadderRecord.export();
   if(ri) ri.onchange=()=>{ const f=ri.files[0]; if(!f) return; f.text().then(t=>{ const o=JSON.parse(t);
@@ -875,7 +880,7 @@ function pn(){
     const b=(a,cls,k)=>a?'<a class="pnb '+cls+'" href="'+a.getAttribute('href')+'"><span class="pk">'+k+'</span><span class="pl">'+clean(a.textContent)+'</span></a>':'<span class="pnb '+cls+' none"></span>';
     const home='<a class="pnb home" href="index.html"><span class="pk">return to</span><span class="pl">the ladder</span></a>';
     /* the step's flash cards: at the foot only, between previous and next, below the questions and above the basement */
-    const mid=foot&&cards?'<div class="pnmid">'+home+'<button type="button" class="pnb cards"><span class="pk">study</span><span class="pl">flash cards</span></button></div>':home;
+    const mid=home; /* 0.2.1: the cards are the crosswalk, opened from the toolbox */
     n.innerHTML=b(prev,'prev','← previous')+mid+b(next,'next','next →');
     const c=n.querySelector('.cards'); if(c) c.addEventListener('click',()=>{ if(window.LadderCards) LadderCards.open(); else toast('flash cards are loading'); });
     return n; };
@@ -1224,12 +1229,12 @@ function open(){
   load().then(ok=>{
     const d=deck();
     if(!ok||!d.cards.length){ note('this deck’s cards are still being made'); return; }
-    close(); box=document.createElement('div'); box.id='cards'; box.setAttribute('role','dialog'); box.setAttribute('aria-label','flash cards');
+    close(); box=document.createElement('div'); box.id='cards'; box.setAttribute('role','dialog'); box.setAttribute('aria-label','crosswalk');
     document.body.appendChild(box); document.body.classList.add('cardsopen');
     const rec=get(CR,{}); let queue=shuffle(d.cards.slice()), n=0, right=0;
     const label=me.annex?('every '+me.annex+' page you have opened'):('rung '+me.rung+', steps opened: '+d.tags.sort().join(', '));
     const show=()=>{
-      if(!queue.length){ box.innerHTML='<div class="cd-card"><div class="cd-top"><span>flash cards</span><button class="cd-x" aria-label="close">×</button></div><p class="cd-q">'+right+' of '+n+' at first sight. Every card missed came back until it was known.</p><div class="cd-foot"><button class="cd-next cd-again">shuffle again</button></div></div>';
+      if(!queue.length){ box.innerHTML='<div class="cd-card"><div class="cd-top"><span>crosswalk</span><button class="cd-x" aria-label="close">×</button></div><p class="cd-q">'+right+' of '+n+' at first sight. Every card missed came back until it was known.</p><div class="cd-foot"><button class="cd-next cd-again">shuffle again</button></div></div>';
         box.querySelector('.cd-x').onclick=close; box.querySelector('.cd-again').onclick=()=>{ close(); open(); }; return; }
       const c=queue.shift(); const opts=shuffle([c.a].concat(shuffle((c.w||[]).slice()).slice(0,3)));
       box.innerHTML='<div class="cd-card"><div class="cd-top"><span>'+esc(c.tag)+' · '+esc(label)+'</span><button class="cd-x" aria-label="close">×</button></div><div class="cd-q"></div><div class="cd-opts"></div><div class="cd-why" hidden></div><div class="cd-foot"><span class="cd-n">'+queue.length+' left</span><button class="cd-next" hidden>next →</button></div></div>';
@@ -1282,4 +1287,150 @@ window.LadderCards={open,close,info:me};
     box.querySelector('.agyes').onclick=()=>{ try{ LS.setItem('ladder:agreed',JSON.stringify({terms:TERMS,at:new Date().toISOString()})); }catch(e){}
       box.remove(); document.body.classList.remove('agreeing'); }; };
   if(document.body) show(); else document.addEventListener('DOMContentLoaded',show);
+})();
+
+/* ---- the footing view (0.2.1, Andrew 2026-11-04 19:13): one footing at a time is the default way to read a step.
+   "next" is an up arrow at the top of the screen and "previous" a down arrow at the bottom; a one-finger drag past the
+   edge of a footing does the same. The old footing leaves along a cam's curve and the new one comes in on the same curve.
+   The page view (every footing at once) and the ladder itself ("dizzying heights") are in the toolbox.
+   The Ladder button and the app's start take you back to the footing you were last reading. */
+(function(){
+'use strict';
+const ready=f=>{ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',f); else f(); };
+const LK='ladder:lastFooting';
+const page=()=>window.ladderPage?ladderPage():'index';
+const ss={ get(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } }, set(k,v){ try{ sessionStorage.setItem(k,v); }catch(e){} }, del(k){ try{ sessionStorage.removeItem(k); }catch(e){} } };
+const last=()=>{ try{ return JSON.parse(LS.getItem(LK)||'null'); }catch(e){ return null; } };
+const href=(p,id)=>p+'.html'+(id?'#'+id:'');
+/* where the Ladder button and the app's start go */
+window.LadderFV={
+  last,
+  resumeHref(){ const l=last(); return l&&l.page?href(l.page,l.id):null; },
+  resume(){ const l=last(), h=this.resumeHref(); if(!h) return false;
+    if(l.page===page()&&this.goId){ this.goId(l.id); return true; }
+    ss.set('fv:want','fv');
+    if(window.LADDER_PAGE&&window.__deskGo){ window.__deskGo(h); return true; }
+    location.href=h; return true; },
+  heights(){ ss.set('fv:heights','1'); location.href='index.html'; }
+};
+/* the ladder itself: the app opens on the last footing, unless you came here by "dizzying heights" */
+function onIndex(){
+  if(!document.querySelector('.rungs')) return;
+  const came=ss.get('fv:heights'); ss.del('fv:heights');
+  const first=!ss.get('fv:session'); ss.set('fv:session','1');
+  if(first&&!came&&!location.hash){ const h=LadderFV.resumeHref(); if(h){ ss.set('fv:want','fv'); location.replace(h); return; } }
+  /* a row's link opens the page view; a footing in a row's footing list opens that footing */
+  document.addEventListener('click',e=>{ const a=e.target.closest('a'); if(!a) return;
+    if(a.closest('.flist')) ss.set('fv:want','fv'); else if(a.closest('.ladder')) ss.set('fv:want','page'); },true);
+}
+const REDUCE=()=>window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+function footingView(){
+  const wrap=document.querySelector('.wrap'); if(!wrap||document.querySelector('.rungs')) return;
+  const steps=[...wrap.querySelectorAll(':scope>section.class.step')]; if(!steps.length) return;
+  const kids=[...wrap.children], i0=kids.indexOf(steps[0]), iN=kids.indexOf(steps[steps.length-1]);
+  const units=[kids.slice(0,i0)];
+  steps.forEach(s=>units.push([s]));
+  const tail=kids.slice(iN+1); if(tail.length) units.push(tail);
+  /* footings between the first and the last that are not steps ride with the footing before them */
+  kids.slice(i0,iN+1).forEach(k=>{ if(!steps.includes(k)){ const prev=steps.filter(s=>kids.indexOf(s)<kids.indexOf(k)).pop(); units[steps.indexOf(prev)+1].push(k); } });
+  units.forEach((u,n)=>u.forEach(el=>el.setAttribute('data-fvu',n)));
+  const N=units.length, P=page();
+  const unitOf=el=>{ const u=el&&el.closest&&el.closest('[data-fvu]'); return u?+u.getAttribute('data-fvu'):-1; };
+  const idOf=n=>n===0?'top':(n===N-1&&tail.length?'end':steps[n-1].dataset.step);
+  let cur=0, on=false, busy=false;
+  const up=document.createElement('button'); up.type='button'; up.className='fvnav fvup'; up.innerHTML='<span aria-hidden="true">▲</span> next';
+  const dn=document.createElement('button'); dn.type='button'; dn.className='fvnav fvdn'; dn.innerHTML='<span aria-hidden="true">▼</span> previous';
+  const pos=document.createElement('span'); pos.className='fvpos'; up.appendChild(pos);
+  const sky=document.createElement('button'); sky.type='button'; sky.className='fvnav fvup fvsky'; sky.innerHTML='<span aria-hidden="true">☁</span> blue sky'; sky.hidden=true;
+  sky.onclick=()=>{ if(window.LadderSky) LadderSky.supply(); };
+  document.body.append(up,dn,sky);
+  const label=()=>{ up.hidden=!on||cur>=N-1; dn.hidden=!on||cur<=0; sky.hidden=!on||cur<N-1;
+    up.setAttribute('aria-label','next: '+(cur+1<N?idOf(cur+1):'')); dn.setAttribute('aria-label','previous: '+(cur>0?idOf(cur-1):''));
+    pos.textContent=cur>0&&cur<=steps.length?' · '+cur+' of '+steps.length:''; };
+  const paint=()=>{ units.forEach((u,n)=>u.forEach(el=>el.classList.toggle('fv-on',n===cur))); document.body.classList.toggle('fv-notend',cur<N-1); label(); };
+  const remember=()=>{ try{ LS.setItem(LK,JSON.stringify({page:P,id:idOf(cur),t:Date.now()})); }catch(e){} };
+  const top=()=>{ window.scrollTo(0,0); };
+  function setMode(v){ on=v; document.body.classList.toggle('fv',on); if(on) paint(); else units.forEach(u=>u.forEach(el=>el.classList.remove('fv-on'))); label();
+    const b=document.querySelector('#desk .dfv'); if(b) b.textContent=on?'Page view':'Footing view';
+    try{ const pr=JSON.parse(LS.getItem('ladder:view')||'{}')||{}; pr[P]=on?'fv':'page'; LS.setItem('ladder:view',JSON.stringify(pr)); }catch(e){} }
+  /* the cam: a smooth rise (1 − cos)/2 along y, a sideways swell sin along x, a slight lean, so the path is an oval arc */
+  const cam=(dir,H,W,outgoing)=>{ const f=[]; for(let i=0;i<=16;i++){ const t=i/16, e=(1-Math.cos(Math.PI*t))/2, s=Math.sin(Math.PI*t);
+      const y=outgoing?dir*e*H:-dir*(1-e)*H, x=(outgoing?1:-1)*0.07*W*s, r=(outgoing?1:-1)*dir*2.2*s;
+      f.push({transform:'translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px) rotate('+r.toFixed(2)+'deg)',opacity:outgoing?1-0.35*e*e:0.35+0.65*e}); }
+    return f; };
+  function go(n,opts){ opts=opts||{}; n=Math.max(0,Math.min(N-1,n)); if(n===cur&&!opts.force){ return; } if(busy) return;
+    const from=cur, dir=n>from?1:-1; cur=n;
+    if(!on||REDUCE()||opts.instant||from===n){ paint(); top(); remember(); if(opts.el) opts.el.scrollIntoView({block:'start'}); return; }
+    busy=true;
+    const H=innerHeight, W=Math.min(innerWidth,wrap.clientWidth||innerWidth);
+    /* lift the old footing out of the flow, in place, so the new one can take its spot */
+    const r=wrap.getBoundingClientRect(); const ghost=document.createElement('div'); ghost.className='wrap fvghost';
+    ghost.style.cssText='margin:0;max-width:none;position:fixed;left:'+r.left+'px;width:'+r.width+'px;top:'+r.top+'px;z-index:40;pointer-events:none;background:'+getComputedStyle(document.body).backgroundColor+';box-shadow:0 10px 40px rgba(0,0,0,.18);border-radius:14px;padding-bottom:40px';
+    const old=units[from], marks=old.map(el=>{ const c=document.createComment('fv'); el.replaceWith(c); return c; });
+    old.forEach(el=>{ el.classList.add('fv-on'); ghost.appendChild(el); }); document.body.appendChild(ghost);
+    units[n].forEach(el=>el.classList.add('fv-on')); label(); top();
+    const inc=units[n];
+    const a1=ghost.animate(cam(dir,H,W,true),{duration:560,easing:'linear',fill:'forwards'});
+    const a2=inc.map(el=>el.animate(cam(dir,H,W,false),{duration:560,easing:'linear'}));
+    a1.onfinish=()=>{ old.forEach((el,i)=>{ el.classList.remove('fv-on'); marks[i].replaceWith(el); }); ghost.remove(); paint(); busy=false; remember(); if(opts.el) opts.el.scrollIntoView({block:'start'}); };
+  }
+  up.onclick=()=>go(cur+1); dn.onclick=()=>go(cur-1);
+  /* one finger: past the top edge of a footing, pulling down climbs to the next; past its bottom edge, pushing up goes back */
+  let sy=null, sx=0, mode=0;
+  const shut=t=>!!(t.closest&&t.closest('.slides,.pic,canvas,input,textarea,select,button,a,.mg,#desk,#lbar,.chq,.sayback .qid'));
+  addEventListener('touchstart',e=>{ if(!on||busy||e.touches.length!==1||shut(e.target)) { sy=null; return; }
+    sy=e.touches[0].clientY; sx=e.touches[0].clientX;
+    const atTop=wrap.getBoundingClientRect().top>=-2, atFoot=innerHeight+scrollY>=document.documentElement.scrollHeight-4;
+    mode=(atTop&&cur<N-1?1:0)|(atFoot&&cur>0&&!(tail.length&&cur===N-1)?2:0); },{passive:true});
+  addEventListener('touchmove',e=>{ if(sy==null||!mode) return; const dy=e.touches[0].clientY-sy, dx=e.touches[0].clientX-sx;
+    if(Math.abs(dx)>Math.abs(dy)) return; const pull=(mode&1&&dy>0)?dy:(mode&2&&dy<0)?dy:0;
+    units[cur].forEach(el=>el.style.transform=pull?'translateY('+(pull*0.35).toFixed(1)+'px)':''); },{passive:true});
+  addEventListener('touchend',e=>{ if(sy==null) return; const t=e.changedTouches[0], dy=t.clientY-sy, dx=t.clientX-sx; sy=null;
+    units[cur].forEach(el=>el.style.transform='');
+    if(!mode||Math.abs(dx)>Math.abs(dy)) return;
+    if(mode&1&&dy>90) go(cur+1); else if(mode&2&&dy<-90) go(cur-1); },{passive:true});
+  /* a link to a paragraph or a footing on this page opens the footing that holds it */
+  const toHash=()=>{ const h=decodeURIComponent((location.hash||'').slice(1)); if(!h) return false;
+    let el=null; try{ el=document.getElementById(h)||document.querySelector('[data-step="'+CSS.escape(h)+'"]')||document.querySelector('[data-pid="'+CSS.escape(h)+'"]'); }catch(e){}
+    if(h==='top') { go(0,{instant:true,force:true}); return true; } if(h==='end'){ go(N-1,{instant:true,force:true}); return true; }
+    const u=unitOf(el); if(u<0) return false; go(u,{instant:true,force:true,el:u>0?el:null}); return true; };
+  addEventListener('hashchange',()=>{ if(on) toHash(); });
+  document.addEventListener('click',e=>{ const a=e.target.closest('a[href^="#"]'); if(!a||!on) return; const id=a.getAttribute('href').slice(1); if(!id) return;
+    let el=null; try{ el=document.getElementById(id)||document.querySelector('[data-pid="'+CSS.escape(id)+'"]'); }catch(x){} const u=unitOf(el); if(u>=0&&u!==cur){ e.preventDefault(); go(u,{el}); } });
+  /* the mode: a link from the ladder's rows opens the page view; everything else opens the footing view */
+  const want=ss.get('fv:want'); ss.del('fv:want');
+  let pref=null; try{ pref=(JSON.parse(LS.getItem('ladder:view')||'{}')||{})[P]; }catch(e){}
+  setMode(ss.get('fv:off')==='1'?false:want?want==='fv':(pref?pref==='fv':true)); /* fv:off = page view for checks */
+  if(on){ if(!toHash()) go(0,{instant:true,force:true}); }
+  window.LadderFV.toggle=()=>{ const el=units[cur]&&units[cur][0]; setMode(!on); if(!on&&el&&cur>0) el.scrollIntoView({block:'start'}); else if(on) go(cur,{instant:true,force:true}); };
+  window.LadderFV.go=n=>go(n);
+  window.LadderFV.goId=id=>{ if(!on) setMode(true); const n=id==='top'?0:id==='end'?N-1:1+steps.findIndex(s=>s.dataset.step===id); go(n<0?0:n,{force:true}); };
+}
+ready(()=>{ /* 0.2.1: rung and floor pages carry no tags */ if(/^(r\d+|floor\d+)$/.test(page())) document.querySelectorAll(".top .tags").forEach(t=>t.remove()); onIndex(); setTimeout(footingView,60); });
+})();
+
+/* ---- 0.2.1 the blue sky (Andrew 2026-11-04 19:13, 19:53): the Endless floor's steps come one at a time. The button sits at the very top
+   of the index, each step it supplies goes directly under it, newest on top; in the footing view it takes the place of "next" on the
+   last footing of a step, and a drag never presses it. The list is sky.js; what has been supplied is LS 'ladder:sky' {n}. */
+(function(){
+'use strict';
+const KEY='ladder:sky';
+const got=()=>{ try{ return (JSON.parse(LS.getItem(KEY)||'null')||{n:0}); }catch(e){ return {n:0}; } };
+let list=null;
+function load(){ if(window.LADDER_SKY) return Promise.resolve(window.LADDER_SKY); if(list) return list;
+  list=new Promise(res=>{ const s=document.createElement('script'); s.src='sky.js'; s.onload=()=>res(window.LADDER_SKY||[]); s.onerror=()=>res([]); document.head.appendChild(s); }); return list; }
+function note(m){ let t=document.getElementById('patoast'); if(!t){ t=document.createElement('div'); t.id='patoast'; t.setAttribute('role','status'); document.body.appendChild(t); } t.textContent=m; t.classList.add('on'); clearTimeout(note.h); note.h=setTimeout(()=>t.classList.remove('on'),3200); }
+function supply(){ load().then(L=>{ const st=got(); if(!L.length){ note('The blue sky could not load.'); return; }
+    if(st.n>=L.length){ note('The blue sky is caught up: every step from the front is under the button. New ones come with new versions of the ladder.'); return; }
+    const nx=L[st.n]; st.n++; st.at=(st.at||[]).concat([Date.now()]); try{ LS.setItem(KEY,JSON.stringify(st)); }catch(e){}
+    try{ sessionStorage.setItem('fv:want','fv'); }catch(e){} location.href=nx.page+'.html'; }); }
+function index(){ const sec=document.getElementById('skysec'), top=document.getElementById('skytop'); if(!sec||!top) return;
+  top.querySelector('.skybtn').onclick=supply;
+  load().then(L=>{ const n=Math.min(got().n,L.length), ol=sec.querySelector('ol');
+    const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    ol.innerHTML=L.slice(0,n).map(x=>'<li class="k-sky built"><span class="n">∞'+x.n+'</span><span class="t"><a href="'+x.page+'.html">'+esc(x.title)+'</a><span class="kind">'+esc(x.kw)+'</span></span></li>').join('');
+    sec.hidden=!n; const nt=top.querySelector('.skynote'); if(nt&&n>=L.length&&L.length) nt.textContent='caught up: all '+L.length+' steps from the front are below'; }); }
+window.LadderSky={supply,load,count:()=>got().n};
+const go=()=>{ index(); };
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
 })();

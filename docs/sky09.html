@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How does a network of simple units learn?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="sky08.html">← ∞8 can you prove you know a secret without telling it?</a><a href="index.html">next: the ladder →</a></p>
+  <div class="tags"><span class="tag now">∞9 · research front</span></div>
+  <h1>How does a network of simple units learn?</h1>
+  <p data-pid="2ca727">How does a network of simple units learn? The biology page of rung thirty eight wired a unit that fires when its weighted inputs pass a threshold. The physics page of rung forty wired many of them into a loop, with every link running both ways, and found that a unit which follows its inputs can only lower an energy. A pattern written into the links became a low point, and a damaged copy of it rolled back down. That is a memory found by what it holds, not by where it is kept. This page asks how far the picture reaches. It proves that such a loop always comes to rest, writes many patterns into one set of links, and counts how many random ones fit before they blur into each other: about fourteen for every hundred units. Then it lets the links be learned instead of written, which is where the walk downhill of rung twenty eight takes over. And it finds the same memory inside the machines that write text today, where the lookup has gone soft. What those machines have learned, and whether it deserves the word understanding, is where the field is loudest now.</p>
+  <p class="gesture" data-pid="eb3a96">With links wᵢⱼ = wⱼᵢ and one unit changed at a time, every change lowers the energy, so the loop comes to rest. Patterns written as wᵢⱼ = (1/N) Σ ξᵢξⱼ all rest when they are at right angles; random ones crowd each other, each bit’s field carries a crosstalk of spread width about √(p/N), and recall breaks near p = 0.138N. Rows learned by mistakes store more, and give up the energy. A soft lookup, weighing each pattern by e^(β · overlap), recovers the nearest one in a step, and is the attention step of today’s text machines, which are trained to make the next token less surprising.</p>
+</header>
+
+<section class="class step" data-step="sky9.1">
+  <h2 class="sthead"><span class="stno">sky9.1</span>A loop that comes to rest</h2>
+  <p data-pid="4ed908">40·phys.5 gave the energy E(s) = −½ Σᵢ Σⱼ wᵢⱼ sᵢ sⱼ, with wᵢⱼ = wⱼᵢ and wᵢᵢ = 0, and its downhill-update technique: setting one unit to the sign of its field fᵢ = Σⱼ wᵢⱼ sⱼ never raises E. Never rising is not yet resting. A walk that never climbs can still go round on a level. Fix the rule: one unit at a time, and a unit whose field is 0 stays as it is.</p>
+  <p data-pid="a6ff6b">Settle-down technique: <b>with links the same both ways, no link from a unit to itself, and one unit changed at a time, a net of N units makes at most 2ᴺ − 1 changes in all, and then rests: every unit agrees with the sign of its field.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the settle-down technique">
+s_i \text{ changes only when } f_i \ne 0 \text{ and } s_i = -\,\text{sign}(f_i) @@ the rule; a field of 0 leaves the unit alone
+\Delta E = -2\,|f_i| \lt 0 @@ the terms of E holding sᵢ are −sᵢfᵢ (40·phys.5), and go from +|fᵢ| to −|fᵢ|
+E_0 \gt E_1 \gt E_2 \gt \cdots @@ strictly lower after every change, so no arrangement comes back
+\htmlClass{new}{\text{at most } 2^N - 1 \text{ changes}} \quad \blacksquare @@ there are 2ᴺ arrangements of N units
+  </pre>
+  <p data-pid="227e6d">Both conditions are spent. Change both units of a pair at once, with w₁₂ = w₂₁ = −1, from (+1, +1): both fields are −1, so both turn, to (−1, −1); now both fields are +1, and both turn back. The pair swings for ever with period 2, a liar box of 38g. One at a time, the first turns, the second’s field is then +1, and it agrees: the pair rests at (−1, +1), its energy fallen from 1 to −1. Links that differ the two ways break the second line, and 38g’s ring of nots, linked one way only, ticks for ever.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · comes to rest · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">∞9.1.1</span><span class="ph understand">understand</span>What does the settle-down technique say, and which line of its proof spends links that are the same both ways? <br>Why does the pair with w₁₂ = −1 swing when both units turn at once, and rest when they turn one at a time?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky9.2">
+  <h2 class="sthead"><span class="stno">sky9.2</span>Many patterns in one set of links</h2>
+  <p data-pid="978394">Write p patterns ξ¹, …, ξᵖ, each a list of N signs, into one set of links by adding 40·phys.5’s links for each: wᵢⱼ = (1/N) Σ_μ ξᵢ^μ ξⱼ^μ for i ≠ j. The overlap of two patterns is Σⱼ ξⱼ^μ ξⱼ^ν: N for a pattern with itself, and 0 when the two agree in exactly half the places, at right angles as arrows (27i).</p>
+  <p data-pid="0f4543">Crosstalk technique: <b>at a stored pattern ξ^ν, the field on unit i is fᵢ = ξᵢ^ν (N − 1)/N + cᵢ, with crosstalk cᵢ = (1/N) Σ_{μ ≠ ν} ξᵢ^μ Σ_{j ≠ i} ξⱼ^μ ξⱼ^ν; when the patterns are at right angles in pairs, fᵢ = ξᵢ^ν (N − p)/N, so every pattern rests while p &lt; N.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the crosstalk technique">
+f_i = \textstyle\sum_{j \ne i} w_{ij}\,\xi_j^\nu = \tfrac1N \sum_\mu \xi_i^\mu \sum_{j \ne i} \xi_j^\mu \xi_j^\nu @@ the written links, at ξ^ν
+\mu = \nu:\ \ \tfrac1N\,\xi_i^\nu\,(N - 1) @@ the pattern’s own term: ξⱼ^ν ξⱼ^ν = 1 in each of N − 1 places
+\text{right angles: } \textstyle\sum_{j \ne i} \xi_j^\mu \xi_j^\nu = 0 - \xi_i^\mu \xi_i^\nu @@ the whole overlap is 0; take away place i
+c_i = \tfrac1N \textstyle\sum_{\mu \ne \nu} \xi_i^\mu\,(-\xi_i^\mu \xi_i^\nu) = -\tfrac{p - 1}{N}\,\xi_i^\nu @@ ξᵢ^μ ξᵢ^μ = 1, p − 1 times
+\htmlClass{new}{f_i = \xi_i^\nu\,\tfrac{N - p}{N}} \quad \blacksquare @@ the sign of ξᵢ^ν while p &lt; N
+  </pre>
+  <p data-pid="c86ee2">For N = 4, the patterns (1, 1, 1, 1), (1, −1, 1, −1) and (1, 1, −1, −1) are at right angles in pairs, and every field at each of them is ±¼, with the pattern’s own sign, as (4 − 3)/4 says. Patterns the world supplies are not at right angles. The overlap of two random lists of N signs is a sum of N independent fair signs, of spread width √N (30j), and that is where the trouble starts.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · many patterns · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞9.2.1</span><span class="ph understand">understand</span>What does the crosstalk technique say, and where does the pattern’s own term (N − 1)/N come from? <br>Why do patterns at right angles in pairs all rest while p &lt; N?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky9.3">
+  <h2 class="sthead"><span class="stno">sky9.3</span>How many random patterns fit</h2>
+  <p data-pid="3c679c">Let every sign of every pattern be a fair coin, all independent. A bit of ξ^ν is wrong at the first update when its field has the other sign, that is when ξᵢ^ν cᵢ &lt; −(N − 1)/N, close to −1. Write Φ(z) for the bell curve’s running total, the chance that a bell-shaped Z of spread 1 is below z.</p>
+  <p data-pid="dde82d">Crosstalk-tail technique: <b>for p random patterns of N signs, ξᵢ^ν cᵢ is a sum of (p − 1)(N − 1) independent terms, each +1/N or −1/N with chance ½; its spread is (p − 1)(N − 1)/N², about p/N; so for large N the chance that a given bit of a stored pattern is wrong at the first update is close to Φ(−√(N/p)).</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the crosstalk-tail technique">
+\xi_i^\nu c_i = \tfrac1N \textstyle\sum_{\mu \ne \nu} \sum_{j \ne i} (\xi_i^\nu \xi_i^\mu)(\xi_j^\mu \xi_j^\nu) @@ each ξⱼ^μ, j ≠ i, μ ≠ ν, sits in one term only
+\text{each term is } \pm\tfrac1N \text{ with chance } \tfrac12,\ \text{independent} @@ a fresh fair coin times signs it does not touch (30f)
+\text{spread } (p - 1)(N - 1) \cdot \tfrac{1}{N^2} \approx \tfrac pN @@ the independent-spreads-add technique (30g)
+P(\text{wrong}) \approx P\big(Z \lt -1/\sqrt{p/N}\big) = \Phi(-\sqrt{N/p}) @@ the central limit technique (30j)
+\htmlClass{new}{p = 100,\ N = 1000:\ \Phi(-3.16) \approx 0.00078} \quad \blacksquare @@ about 78 of the 100 000 stored bits
+  </pre>
+  <p data-pid="9dbc88">A machine draw of five such memories found 71, 78, 74, 66 and 65 wrong bits. At p/N = 0.138 the chance is 0.0036, one bit in 280. Yet that is where the memory breaks. Each wrong bit turns, nudges every other field, and the next turns follow. Below about 0.138N a stored pattern slides to a rest a few bits away; above it the slide runs on, to rests far from every pattern. That count was made in 1985 with the methods of 40·phys, and is held in trust. Every bit of one pattern right needs N Φ(−√(N/p)) well below 1, about p &lt; N/(2 ln N), 72 for a thousand units.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · random patterns · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞9.3.1</span><span class="ph understand">understand</span>What does the crosstalk-tail technique say, and why is the spread of the crosstalk about p/N? <br>Why does the memory break near 0.138N, when only one bit in 280 is wrong at the first update?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky9.4">
+  <h2 class="sthead"><span class="stno">sky9.4</span>Links learned, not written</h2>
+  <p data-pid="a6a5c3">Written links are one rule applied once, and they never check whether it worked. But each unit faces a question of 28·now.1: inputs the other units’ signs, right answer its own sign in each pattern, weights its row of links. So the mistake rule can learn the row. Take N = 6, the patterns ξ¹ = (1, 1, 1, 1, 1, 1), ξ² = (1, 1, 1, 1, −1, −1), ξ³ = (1, 1, 1, −1, 1, −1), and unit 6.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one row, written and learned">
+\text{written row of unit 6: } \tfrac16(-1, -1, -1, 1, 1) @@ Σ_μ ξ₆^μ ξⱼ^μ over 6, for j = 1, …, 5
+\text{at } \xi^1:\ f_6 = \tfrac16(-3 + 2) = -\tfrac16 @@ but ξ₆¹ = +1: wrong
+(1,1,1,1,1),\ (0,0,0,0,2),\ (-1,-1,-1,1,1),\ (0,0,0,2,2) @@ the mistake rule from 0: mistakes at ξ¹, ξ², ξ³, ξ¹
+\htmlClass{new}{(-1,-1,-1,1,3):\ \text{fields } 1,\ -5,\ -1} \quad \blacksquare @@ the fifth mistake, at ξ²; every sign right
+  </pre>
+  <p data-pid="72b1f7">Five mistakes, and every pattern is right at unit 6, where the written links failed. Done for every unit, learned rows make every pattern a rest whenever some rows can. For random patterns some rows can, with chance near 1, up to about 2N patterns, against 0.138N written: a count of 1965 for one unit, held in trust. The price is the settle-down technique. Learned rows need not be the same both ways, the energy is gone, and a start far from the patterns need not settle.</p>
+  <p data-pid="6d20ef">Hidden units go further. 28·now.2 found what one layer cannot answer, and 28·now.3 found every slope of a layered machine in one run backwards. Put the smooth switch in place of the sign and layers in place of the loop, and learning the links is 28o’s walk downhill on the error. That is the road from this memory to the machines of today.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · learned links · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞9.4.1</span><span class="ph understand">understand</span>How is each unit’s row of links a machine of 28·now.1, and why do the written links get unit 6 wrong at ξ¹? <br>What does learning the rows gain, and which technique of this page does it give up?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky9.5">
+  <h2 class="sthead"><span class="stno">sky9.5</span>A soft lookup</h2>
+  <p data-pid="5af149">Keep the p patterns as a list, not as links. Given a cue x, weigh each pattern by e^(β ξ^μ · x), where ξ^μ · x is its overlap with the cue and β &gt; 0 sets how sharp the weighing is. Divide the weights by their total, and return the weighted average of the patterns.</p>
+  <p data-pid="c64c5b">Soft-recall technique: <b>if the cue’s overlap with ξ^ν beats its overlap with every other pattern by at least g, the weight on ξ^ν is at least 1/(1 + (p − 1)e^(−βg)).</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the soft-recall technique">
+q_\mu = e^{\beta\,\xi^\mu \cdot x} \big/ \textstyle\sum_\kappa e^{\beta\,\xi^\kappa \cdot x} @@ the weights; they add to 1
+q_\nu = 1 \big/ \big(1 + \textstyle\sum_{\mu \ne \nu} e^{-\beta(\xi^\nu \cdot x - \xi^\mu \cdot x)}\big) @@ divide top and bottom by the top
+e^{-\beta(\xi^\nu \cdot x - \xi^\mu \cdot x)} \le e^{-\beta g} @@ each gap is at least g, and e^(−t) falls (17)
+\htmlClass{new}{q_\nu \ge 1/(1 + (p - 1)e^{-\beta g})} \quad \blacksquare @@ p − 1 such terms
+  </pre>
+  <p data-pid="e40a82">Take N = 8, the patterns all-ones, (1, −1, 1, −1, 1, −1, 1, −1) and (1, 1, −1, −1, 1, 1, −1, −1), and the cue all-ones with its last sign turned. The overlaps are 6, 2 and 2, so g = 4. With β = 1 the weights are 0.965, 0.018 and 0.018, the bound 1/(1 + 2e⁻⁴) exactly, and no place of the average is below 0.92: one step, and the turned sign is back. A lookup of this kind can keep apart a count of patterns that grows exponentially in N (shown 2016 to 2020, held in trust), far past 0.138N.</p>
+  <p data-pid="9927db">This is the attention step of the machines that write text, laid out in 2017. Each token of a passage gives a cue, its query, and a pattern to be found by, its key, and the weighted average is taken of a third list, its values. In 2020 the step was read as exactly this lookup: one update of a memory net with an energy of its own.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · soft lookup · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞9.5.1</span><span class="ph understand">understand</span>What does the soft-recall technique say, and why do the weights add to 1? <br>For the cue of the footing, how large must β be for the weight on all-ones to reach 0.99?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky9.6">
+  <h2 class="sthead"><span class="stno">sky9.6</span>What a text machine is trained to do</h2>
+  <p data-pid="d442cb">A text machine reads a passage cut into tokens, pieces of words from a list of tens of thousands, and at each place gives a chance to every token that might come next. It is trained by 28·now’s slopes on one error only: the surprise, in bits, of the token that did come next (30·comp), averaged over trillions of places. Chances ½, ¼ and ⅛ on the three tokens that came give surprises 1, 2 and 3 bits, an average of 2. An even guess over 50 257 tokens costs log₂ 50 257 ≈ 15.6 bits a token. No machine can average below the surprise of the text itself, by the source coding technique.</p>
+  <p data-pid="0b5945">Training-count technique: <b>a machine with n knobs trained on D tokens spends about 6nD multiplications and additions: about 2n a token forward, a multiply and an add for each knob, and about twice that backward.</b> 28·now.3’s backward pass costs about one forward run for each of its two jobs, the slopes of the lists and the slopes of the knobs.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two training runs">
+\text{2020: } n = 1.75 \times 10^{11},\ D = 3 \times 10^{11} @@ a machine of that year
+6nD = 3.15 \times 10^{23} @@ the training-count technique
+\text{2022: } n = 7 \times 10^{10},\ D = 1.4 \times 10^{12}:\ \ 6nD = 5.88 \times 10^{23} @@ fewer knobs, far more text
+\htmlClass{new}{D/n:\ 1.7 \text{ against } 20} \quad \blacksquare @@ tokens for each knob
+  </pre>
+  <p data-pid="976adb">The 2022 study fitted a law to hundreds of training runs: for a fixed budget of work, the least surprise comes with about 20 tokens for each knob, and the surprise falls as a power of the budget. It is a law, read from cases, and it says nothing about what a lower surprise buys. Whether falling surprise brings new abilities suddenly or smoothly, and whether a machine that predicts text well holds a model of what the text is about, is the dispute of the history below.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · next token · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞9.6.1</span><span class="ph understand">understand</span>What is a text machine trained to make small, and why can its average surprise never fall below that of the text? <br>What does the training-count technique say, and where does the 6 come from?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky9.7">
+  <h2 class="sthead"><span class="stno">sky9.7</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{the energy never rises, so the net rests}\,? @@ never rising is not resting; strict falls among finitely many arrangements do it
+\text{every unit changed at once still settles}\,? @@ w₁₂ = −1 from (+1, +1) swings with period 2
+\text{a net of } N \text{ units holds } N \text{ random patterns}\,? @@ written links hold about 0.138N; at right angles, up to N − 1
+\text{learned rows keep the energy}\,? @@ learned rows need not be the same both ways
+\text{low surprise shows a model of the world}\,? @@ that is the open dispute, not a line that follows
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞9.7.1</span><span class="ph understand">understand</span>Why is “the energy never rises, so the net rests” an illegal move? <br>Why does a low surprise on text not settle what a machine has learned?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="openq themeend">
+  <div class="eyebrow">Open questions · nobody has the answer yet</div>
+  <h2>Open questions</h2>
+  <p class="chnote">These are open: the field is still asking them. There is no key; a good attempt is a reason, a guess, or a better question.</p>
+  <div class="oq"><span class="oqid">∞9.oq.1</span>Do large text machines build a model of what the text is about? In 2023 a machine trained only on lists of moves in a board game was found to hold, in its lists of numbers, a picture of the board that could be read off, and changing the picture changed its next move. One side reads this as a model of a world. The other replies that a readable picture is not understanding, that games are small, and that exam scores can come from test items seen in training. What experiment would tell a model of the world from a very good model of the text, and is there a difference at all?</div>
+  <div class="oq"><span class="oqid">∞9.oq.2</span>Is anything like a memory net how a brain stores memories? One region of the brain’s memory system has cells linked back to one another in a loop, and has been read as such a net since the 1980s. A rest of a loop and a pattern of firing that merely recurs look alike from outside. What measurement would show that a remembered place is a rest, and would it matter whether the links are the same both ways?</div>
+  <div class="oq"><span class="oqid">∞9.oq.3</span>Will surprise keep falling as a power of the work spent, and does a lower surprise always buy more ability? Some abilities seemed to appear suddenly past a certain size (2022); a reply (2023) found that many such jumps vanish when ability is scored on a smooth scale instead of right or wrong. Which abilities, if any, truly jump, and what happens to the law when the text written by people runs short?</div>
+  <div class="oq"><span class="oqid">∞9.oq.4</span>Can what a trained machine knows be read off its knobs? A machine with n units seems to hold many more than n separate features, each spread across many units and overlapping like footing 3’s random patterns. Is there a way to list a machine’s features and to check that the list is complete, so that its answers can be checked from inside rather than only by testing?</div>
+</section>
+<section class="history themeend">
+  <div class="eyebrow">A short history · told from more than one side</div>
+  <h2>How we got here</h2>
+  <p data-pid="435beb"><b>1943 to 1969.</b> A unit that fires past a threshold was offered in 1943 as a model of a nerve cell and of logic at once. In 1949 a psychologist proposed that a link used by two cells firing together grows stronger: the rule behind this page’s written links. A learning machine of such units was built at Cornell in 1958 with money from the US Navy, and newspapers that year reported it as the first of machines that would walk, talk and know they exist. In 1969 a book proved how little one layer can learn, and money for the field fell away for more than a decade. Whether the book caused the fall, or only gave a reason for one already coming, is still argued.</p>
+  <p data-pid="067282"><b>1974 to 1986.</b> Loops with links both ways were proposed as memories in the 1970s, and a physicist’s paper of 1982 gave them the energy of 40·phys and the picture of memories as valleys. That brought in the physics of disordered magnets, and in 1985 the count of 0.138N. Critics pointed out that the valleys include mixtures of stored patterns that were never stored, and that the capacity is small next to any brain. In 1986 a paper showed layered machines learning hidden units by the backward pass. The backward pass itself had been written down in 1970 and proposed for networks in 1974, and how the credit should be shared is argued to this day.</p>
+  <p data-pid="f5e579"><b>1990s to 2020.</b> Through the 1990s other methods, with cleaner guarantees, beat layered machines on most tasks, and many journals lost interest in them. In 2012 a deep machine trained on graphics chips cut the error in a large contest of naming objects in photographs from about 26% to about 15%, counting an answer right if it was among five guesses; within a few years nearly every entry was such a machine. In 2017 researchers at Google laid out the machine of footing 5, built on attention alone, for translation. By 2020 a machine of that kind with 175 billion knobs wrote passages that readers found hard to tell from a person’s.</p>
+  <p data-pid="974c91"><b>2021 to 2023: what is it doing?</b> A paper of 2021 argued that such machines join forms of words with no grasp of meaning, like parrots driven by chance, and that their size brings costs in energy and in the biases of their text; two of its authors lost their posts at Google in the dispute around it. A chat program released in November 2022 drew about a hundred million users in two months, by one estimate. The other side pointed to exams passed and to probes that find pictures of the world inside the machines. Each side has checks to answer: test items found in the training text weaken the exam results, and a readable board in one game does not show that larger machines hold one for the world.</p>
+  <p data-pid="f07e72"><b>Money and ethics.</b> Training runs came to cost tens and then hundreds of millions of dollars, and the buildings that run them to draw electricity and water on the scale of towns. Authors and newspapers sued over the use of their text in training, one New York newspaper in December 2023, and the first rulings, in 2025, went different ways on different facts. An open letter in March 2023 asked for a six-month pause in training larger machines; none came. One pioneer of the backward pass left Google in 2023 to speak about the risks. In 2024 the prize in physics, in Stockholm, went to the memory net of this page and to a learning machine built on the physics of 40·phys, and some physicists asked whether that was physics; the prize in chemistry that year went in part to a machine that predicts the shapes of proteins.</p>
+  <p data-pid="4155fe"><b>Now.</b> Since 2024, machines have been trained to write out long chains of steps before they answer, and in July 2025 two companies reported that such machines reached the level of a gold medal on the problems of the International Mathematical Olympiad. What is argued now: whether that is reasoning or a search over patterns seen in training; whether the law of footing 6 holds as new text runs short; how claims can be checked when the training text and the knobs are kept secret; and whether a machine that writes as a person writes has, in any sense, understood. This page cannot settle any of it. It can state exactly what such a machine is trained to make small.</p>
+</section>
+
+<nav class="nextrung"><a href="sky08.html">← ∞8 · can you prove you know a secret without telling it?</a><a href="index.html">the ladder →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The loop with links the same both ways is the Hopfield network, and its energy a Lyapunov function for one-at-a-time (asynchronous) updates; changing every unit at once is synchronous updating, which ends in a rest or a cycle of length 2 (held in trust). The written links are Hebbian, or the outer-product rule, and the overlap is the dot product. The crosstalk is crosstalk noise, and the count 0.138N is the storage capacity α_c ≈ 0.138, found by the replica method. Every bit of one pattern right needs about N/(2 ln N) patterns, and every bit of every pattern about N/(4 ln N). The rows learned by mistakes are perceptron learning, and the 2N is the capacity of a perceptron for random patterns. The soft lookup is the modern Hopfield network or dense associative memory, the weights are a softmax, and β the inverse temperature; in a transformer the step is attention, with queries, keys and values. The surprise of the next token is the cross-entropy loss, and the fitted law a neural scaling law; the 2022 machine is Chinchilla, and the 2020 one GPT-3. The training-count technique is the 6ND rule for training FLOPs.</p>
+  <h3>Who said it first</h3>
+  <p>Warren McCulloch and Walter Pitts gave the threshold unit in 1943, and Donald Hebb the rule for links in The Organization of Behavior, 1949. Frank Rosenblatt built the perceptron in 1958; Marvin Minsky and Seymour Papert published Perceptrons in 1969. William Little proposed a loop memory in 1974, and John Hopfield gave the energy in 1982; Daniel Amit, Hanoch Gutfreund and Haim Sompolinsky counted 0.138 in 1985. Thomas Cover counted the 2N for one unit in 1965, and Elizabeth Gardner the capacity of learned links in 1988. Seppo Linnainmaa wrote the backward pass in 1970, Paul Werbos proposed it for networks in 1974, and David Rumelhart, Geoffrey Hinton and Ronald Williams showed it learning hidden units in 1986. Alex Krizhevsky, Ilya Sutskever and Hinton won the photograph contest in 2012. Ashish Vaswani and colleagues at Google gave the transformer in 2017. Dmitry Krotov and Hopfield gave dense memories in 2016, Mete Demircigil and colleagues their exponential capacity in 2017, and Hubert Ramsauer and colleagues read attention as a memory update in 2020. Jared Kaplan and colleagues fitted the first scaling laws in 2020, and Jordan Hoffmann and colleagues the 20 tokens a knob in 2022. Emily Bender, Timnit Gebru, Angelina McMillan-Major and Margaret Mitchell wrote the parrots paper in 2021. Jason Wei and colleagues reported sudden abilities in 2022, and Rylan Schaeffer, Brando Miranda and Sanmi Koyejo the reply in 2023. Kenneth Li and colleagues found the board inside a game machine in 2023. Hopfield and Hinton shared the physics prize of 2024; David Baker, Demis Hassabis and John Jumper the chemistry prize.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The written links make every stored pattern a lowest point of the energy, since each pattern alone does (40·phys.5), and adding links adds energies.” Not allowed: adding links adds energies, but the lowest point of a sum is not where each term is lowest. Each pattern’s own term is lowest at it; the crosstalk of the others is not, and past about 0.138N random patterns it wins.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'one change',t:R`\Delta E = -2|f_i|`,n:`Strictly down.`},
+  {k:'ember',kl:'no return',t:R`E_0 \gt E_1 \gt \cdots`,n:`No arrangement twice.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\le 2^N - 1 \text{ changes}}`,n:`Then it rests.`}
+],{title:'The slides · comes to rest · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'links',t:R`w_{ij} = \tfrac1N \sum_\mu \xi_i^\mu \xi_j^\mu`,n:`Added up.`},
+  {k:'ember',kl:'own term',t:R`\tfrac{N - 1}{N}\,\xi_i^\nu`,n:`The signal.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{f_i = \xi_i^\nu (N - p)/N}`,n:`At right angles.`}
+],{title:'The slides · many patterns · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'terms',t:R`(p - 1)(N - 1) \text{ coins of } \pm 1/N`,n:`Independent.`},
+  {k:'ember',kl:'spread',t:R`p/N`,n:`Spreads add.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\Phi(-\sqrt{N/p})}`,n:`Chance a bit is wrong.`}
+],{title:'The slides · random patterns · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'written',t:R`f_6(\xi^1) = -\tfrac16`,n:`Wrong.`},
+  {k:'ember',kl:'mistakes',t:R`5 \text{ from } 0`,n:`The mistake rule.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(-1,-1,-1,1,3)}`,n:`Right, room 1.`}
+],{title:'The slides · learned links · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'weights',t:R`e^{\beta\,\xi^\mu \cdot x}`,n:`Over their total.`},
+  {k:'ember',kl:'gap',t:R`g = 6 - 2 = 4`,n:`The cue’s lead.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{q \ge 1/(1 + 2e^{-4})}`,n:`0.965 at β = 1.`}
+],{title:'The slides · soft lookup · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'surprise',t:R`-\log_2 q`,n:`Bits a token.`},
+  {k:'ember',kl:'work',t:R`6nD`,n:`Forward and back.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{5.88 \times 10^{23}}`,n:`The 2022 run.`}
+],{title:'The slides · next token · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
