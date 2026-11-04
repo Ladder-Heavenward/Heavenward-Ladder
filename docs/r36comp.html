@@ -25,11 +25,11 @@ table.tt td.l{text-align:left}
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r36phys.html">← 36·phys light as energy, colour as perception</a><a href="r36bio.html">next: 36·bio true blue is rare in nature →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r36phys.html">← 36·phys light as energy, colour as perception</a><a href="r36chem.html">next: 36·chem what a molecule does with light →</a></p>
   <div class="tags"><span class="tag comp">36·comp · computing</span></div>
   <h1>The circle and the cylinder in a machine</h1>
   <p data-pid="2de748">The circle and the cylinder in a machine: what does a computer keep when it keeps a colour? A photo of the Oregon coast on a phone holds millions of places, and each place holds a colour in a handful of whole numbers. A colour picker shows a ring of hues and a slider for brightness. A picture program offers multiply, screen, dodge, burn and difference as buttons. Every one of these is the rung’s arithmetic, written down for a machine that can only hold whole numbers in a fixed range. What makes it hard is that the machine’s numbers are not the eye’s numbers. They are amounts of three chosen lights, so they live inside a gamut triangle; they come in steps, so every blend is rounded; and the machine draws its circle of hue with its own choice of where 0 sits. This page reads the machine’s choices with the rung’s tools.</p>
-  <p class="gesture" data-pid="cfa646">A screen keeps each place as three whole numbers from 0 to 255, the amounts of its three primaries, and divides by 255 to get the rung’s coordinates in the cube from 0 to 1. Hue, saturation and brightness are read from the largest and smallest of the three, with red at 0 by the machine’s own bend, and a grey gets no hue, so the program writes 0. The blends are the rung’s functions done in whole numbers and rounded. And a fourth number, which machines also call alpha, says how much of a layer covers what is beneath: a point on the segment from the lower colour to the upper.</p>
+  <p class="gesture" data-pid="cfa646">A screen keeps each place as three whole numbers from 0 to 255, the amounts of its three primaries, and divides by 255 to get the rung’s coordinates in the cube from 0 to 1. Hue, saturation and brightness are read from the largest and smallest of the three, with red at 0 by the machine’s own bend, and a grey gets no hue, so the program writes 0. The blends are the rung’s functions done in whole numbers and rounded. And a fourth number, which machines also call alpha, says how much of a layer covers what is beneath: a point on the segment from the lower colour to the upper. Bytes are written in sixteens, two digits each. A picture is a function from places to colours; sampled, fine stripes disguise themselves as broad ones, and averaging over each place is the cure that works well and not exactly.</p>
 </header>
 
 <section class="class step" data-step="36comp1">
@@ -99,23 +99,88 @@ c = (255, 0, 0),\ \allowbreak \ d = (0, 0, 255),\ \allowbreak \ \alpha = 0.25 @@
   </section>
 </section>
 
+<section class="class step" data-step="36comp5">
+  <h2 class="sthead"><span class="stno">36comp5</span>Sixteen marks for a byte</h2>
+  <p data-pid="01c13a">4i wrote every number in tens, and showed in 4i14 that any base above 1 works as well, twos among them. A byte is eight places in twos, and eight is a long row to read. Machines and the people who program them write bytes in sixteens instead, because 16 = 2⁴: four places in twos make exactly one place in sixteens.</p>
+  <p data-pid="95a19d">Sixteens need sixteen digits, and the ten of 4i run out at 9. From here on, inside a numeral written in sixteens, the marks A, B, C, D, E and F are digits, worth ten, eleven, twelve, thirteen, fourteen and fifteen. Outside such a numeral the letters keep every job they had. A colour written for a machine puts the mark # first, and here # says only that three bytes in sixteens follow, red’s, then green’s, then blue’s.</p>
+  <p data-pid="3a7b19">Two-digit technique: <b>every byte, from 0 to 255, is written in sixteens with exactly two digits, and each digit is four places of the byte in twos.</b> Proof: by the split-by-a-base technique (4i6) a byte is 16q + d with d below 16, and q is below 16 because the byte is below 256 = 16²; the one-split technique (4i7) makes the two digits the only ones. And 16q + d, with q and d each below 2⁴, is q’s four places in twos followed by d’s.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the colour of 36·comp2, written for a machine">
+255 = 15 \cdot 16 + 15 \to \text{FF} @@ split by sixteen (4i6): digits fifteen and fifteen
+128 = 8 \cdot 16 + 0 \to 80 @@ in twos 1000 0000: four places, then four places
+0 \to 00 @@ two digits always, so the three bytes can be read off without a gap
+\htmlClass{new}{(255, 128, 0) = \#\text{FF}8000} \quad \blacksquare @@ the two-digit technique, three times
+  </pre>
+  <p data-pid="af4eca">So six digits name each of the 16 777 216 colours of the three-bytes technique, and a grey is any colour whose three pairs are the same, as #808080 is: 36e3’s axis, in a name.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · sixteen marks for a byte · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">36·comp.5.1</span><span class="ph understand">understand</span>Why do machines write bytes in sixteens rather than tens or twos? <br>What does the two-digit technique say, and how do you read #FF8000 as three amounts?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="36comp6">
+  <h2 class="sthead"><span class="stno">36comp6</span>A picture is a function</h2>
+  <p data-pid="146a04">A screen’s places stand in rows and columns. Number the columns 0 to w − 1 and the rows 0 to h − 1; each place is a pair (i, j). Here w and h count columns and rows; they are not 36f’s amount w or 36d’s h. From here on, a <i>picture</i> is a function P from the pairs to the colours a screen keeps: P(i, j) is the three bytes of the place in column i and row j. It is 9a’s function, nothing more, and every fact about functions is a fact about pictures.</p>
+  <p data-pid="40034c">Picture-count technique: <b>a picture of w columns and h rows is kept in 3wh bytes, and there are exactly 256^(3wh) pictures of that size.</b> Proof: three bytes for each of the wh places; one choice of 256³ for each place, and 4’s products. A picture of 1920 columns and 1080 rows has 2 073 600 places and takes 6 220 800 bytes, before any squeezing.</p>
+  <p data-pid="7c62d5">Seen as functions, the picture program’s work sorts itself. A blend of two pictures is done place by place, P and Q to the picture whose value at (i, j) is the blend of P(i, j) and Q(i, j): 36i3’s seen mix was taken the same way. Flipping a picture left to right is composing it with the map (i, j) to (w − 1 − i, j), which is one-to-one and onto, so nothing is lost; doing it twice is the identity. Shrinking a picture to half its width maps two columns to one, so it is not one-to-one, and what it forgets cannot come back. And the scene in front of a camera is a function too, from points of a rectangle of the plane to the colours of 36e. A picture keeps that function at finitely many points.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · a picture is a function · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">36·comp.6.1</span><span class="ph understand">understand</span>What does it mean to say a picture is a function, and what are its inputs and outputs? <br>What does the picture-count technique say, and why can a flip be undone and a shrink not?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="36comp7">
+  <h2 class="sthead"><span class="stno">36comp7</span>Stripes in disguise</h2>
+  <p data-pid="4012e2">A camera takes the scene at one point per place, the place’s centre. That is sampling, and 32g counted what samples can and cannot keep: sampled at the rate r, a turning of frequency ξ and one of ξ + r give the same samples (the same-samples technique). A picture samples at one place per place, so its rate is 1 per place in each direction.</p>
+  <p data-pid="fd21dd">Stripe technique: <b>a scene of even stripes repeating every p places, with p below 2, is sampled as stripes repeating every 1/|1/p − k| places, for the whole number k that brings 1/p − k between −½ and ½.</b> Proof: the stripes have frequency 1/p per place; by the same-samples technique with r = 1, the samples are those of 1/p − k for every whole k, and the one between −½ and ½ is the frequency the picture shows. One example: stripes every 0.9 places have frequency 1.111…, read as 0.111…, so the picture shows broad stripes every 9 places that are not in the scene at all.</p>
+  <p data-pid="005797">That is why a striped shirt on a screen can crawl with broad bands, and a brick wall can grow curves. A sharp edge has the same trouble in another form. A step from one colour to another has frequencies without end, so no rate is enough for 32g’s samples-are-coefficients technique, and the edge comes out as a staircase, sharp where the scene was sharp and stepped where the scene was straight.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · stripes in disguise · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">36·comp.7.1</span><span class="ph understand">understand</span>Why can a picture of fine stripes show broad stripes that are not in the scene? <br>What does the stripe technique give for stripes every 0.9 places, and why is a sharp edge always a staircase?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="36comp8">
+  <h2 class="sthead"><span class="stno">36comp8</span>Averaging over the place</h2>
+  <p data-pid="3993d8">The cure is to stop reading the scene at one point. From here on, the <i>averaged picture</i> gives each place the average of the scene over the whole square of the place, coordinate by coordinate, as the mix of 36c2 at the strengths of the shares of the square. An edge that crosses a place then gives it a colour between the two sides, in proportion to what each side covers.</p>
+  <p data-pid="b20523">Coverage technique: <b>if a straight edge splits a place so that a share s of its square is colour c and the rest is colour d, the averaged picture gives the place s·c + (1 − s)·d, the over-blend of 36·comp4 with alpha s.</b> Proof: the average over the square is the sum over its two parts of each part’s colour times its share (5d spreading), and the shares add to 1.</p>
+  <p data-pid="d17c41">A machine cannot average over a square exactly, so it guesses. It takes k columns and k rows of samples inside each place and averages them. The counted share can then take only k² + 1 values, 0, 1/k², …, 1, so an edge shows at most k² + 1 shades between c and d; four by four gives 17. And averaging over the square is a filter before sampling: it weakens the frequencies above ½, the ones that disguise themselves, but it does not take them to 0. So averaged pictures still alias, much less. It is a method that works well and is not exact, and the machines say so by offering more samples for more time.</p>
+  <section class="slides" id="sl8"><div class="eyebrow">The slides · averaging over the place · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">36·comp.8.1</span><span class="ph understand">understand</span>What does the averaged picture give a place that an edge crosses? <br>What does the coverage technique say, and why does a k by k average still let some stripes through?</li>
+    </ol>
+  </section>
+</section>
+
 <section class="challenge themeend">
   <div class="eyebrow">Special challenges · there if you want them</div>
   <h2>Special challenges</h2>
   <p class="chnote">Harder challenges that rely on your own making. The step is complete without them; the rung's star needs them.</p>
-  <div class="chq"><span class="chid">36·comp.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="(R, G, B) = (51, 153, 255)"></span></span>Build the machine’s brightness, saturation and hue for this colour, using the formula of the hue-sector technique for the sector where blue is largest and red smallest: hue = 240° − 60° × (g − r)/(M − m). <br>Find the hue the rung’s own bend would put it near, and why the two numbers differ.</div>
-  <div class="chq"><span class="chid">36·comp.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="(128, 128, 128) \to (128, 128, 129)"></span></span>Find the machine’s hue and saturation before and after this one-step nudge. <br>Find how far the colour moved in the cube, and how far its hue moved on the circle. Which footing of 36e explains the gap?</div>
-  <div class="chq"><span class="chid">36·comp.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\alpha\,c + (1 - \alpha)\,d"></span></span>Turn the over-blend round: given the result and the ground d, and knowing α, can the layer c be found? Find c from the result (64, 0, 191), d = (0, 0, 255) and α = 0.25. <br>Find what goes wrong when α = 0, and what rounding does to the answer.</div>
+  <div class="chq"><span class="chid">36·comp.9.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="(R, G, B) = (51, 153, 255)"></span></span>Build the machine’s brightness, saturation and hue for this colour, using the formula of the hue-sector technique for the sector where blue is largest and red smallest: hue = 240° − 60° × (g − r)/(M − m). <br>Find the hue the rung’s own bend would put it near, and why the two numbers differ.</div>
+  <div class="chq"><span class="chid">36·comp.9.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="(128, 128, 128) \to (128, 128, 129)"></span></span>Find the machine’s hue and saturation before and after this one-step nudge. <br>Find how far the colour moved in the cube, and how far its hue moved on the circle. Which footing of 36e explains the gap?</div>
+  <div class="chq"><span class="chid">36·comp.9.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\alpha\,c + (1 - \alpha)\,d"></span></span>Turn the over-blend round: given the result and the ground d, and knowing α, can the layer c be found? Find c from the result (64, 0, 191), d = (0, 0, 255) and α = 0.25. <br>Find what goes wrong when α = 0, and what rounding does to the answer.</div>
+  <div class="chq"><span class="chid">36·comp.9.4</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\#1E90FF"></span></span>Build the three bytes of this colour in tens, and its brightness and saturation by 36·comp2. <br>Find the numeral in sixteens of the grey with the same brightness, and of the colour with each byte halved, rounding down.</div>
+  <div class="chq"><span class="chid">36·comp.9.5</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{stripes every } p \text{ places},\ \ p = 1,\ 1.5,\ 2,\ 3"></span></span>Find what the stripe technique and 32g say a picture shows for each of these stripes, and which of them come through as they are. <br>Find the widest stripes that can disguise themselves, and what the averaged picture of 36·comp8 does to stripes every 1 place.</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r36phys.html">← 36·phys · light as energy, colour as perception</a><a href="r36bio.html">36·bio · true blue is rare in nature →</a></nav>
+<nav class="nextrung"><a href="r36phys.html">← 36·phys · light as energy, colour as perception</a><a href="r36chem.html">36·chem · what a molecule does with light →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>Three bytes a place is 24-bit colour, or true colour, in RGB. The machine’s cylinder is HSV, hue, saturation and value, and its cousin HSL; the hue-sector formula is the hexcone model. The blend buttons are blend modes: multiply, screen, darken, lighten, difference, linear dodge and linear burn. The machine’s alpha is the alpha channel, and the over-blend is the over operator of compositing. Keeping more than a byte a primary while working is high bit depth.</p>
+  <p>Three bytes a place is 24-bit colour, or true colour, in RGB. The machine’s cylinder is HSV, hue, saturation and value, and its cousin HSL; the hue-sector formula is the hexcone model. The blend buttons are blend modes: multiply, screen, darken, lighten, difference, linear dodge and linear burn. The machine’s alpha is the alpha channel, and the over-blend is the over operator of compositing. Keeping more than a byte a primary while working is high bit depth. Writing in sixteens is hexadecimal, and #FF8000 is a hex colour code. A picture as a function is a raster image, and its places are pixels. The disguise of the stripe technique is aliasing, and the broad false bands are moiré; the staircase of an edge is called jaggies. Averaging over the place is anti-aliasing, the k by k average is supersampling, and the average over the square is a box filter.</p>
   <h3>Who said it first</h3>
-  <p>Alvy Ray Smith gave the hexcone formulas for hue, saturation and value in 1978. Alvy Ray Smith and Ed Catmull added the alpha channel in the 1970s, and Thomas Porter and Tom Duff set out the over operator and its companions in 1984. The sRGB primaries used by most screens were fixed in 1996.</p>
+  <p>Alvy Ray Smith gave the hexcone formulas for hue, saturation and value in 1978. Alvy Ray Smith and Ed Catmull added the alpha channel in the 1970s, and Thomas Porter and Tom Duff set out the over operator and its companions in 1984. The sRGB primaries used by most screens were fixed in 1996. Edwin Catmull drew anti-aliased pictures by coverage in 1978, and Franklin Crow set out the causes of aliasing in pictures in 1977.</p>
   <h3>Wrong moves, worked</h3>
   <pre class="lines" data-k="ember" data-label="36·comp: a worked “proof”, not allowed">
 \text{hue of } (255, 0, 0) = 0^\circ,\ \ \text{hue of } (255, 0, 51) = 348^\circ @@ fine: the hue-sector technique in its sectors
@@ -154,6 +219,26 @@ stepper('#sl4',[
   {k:'ember',kl:'over',t:R`\alpha\,c + (1 - \alpha)\,d`,n:`A share α of the way from d to c (18a5).`},
   {k:'ember',kl:'so',t:R`\htmlClass{new}{(64, 0, 191)}`,n:`Red at a quarter over blue.`}
 ],{title:'The slides · the other alpha · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'base',t:R`16 = 2^4`,n:`Four places in twos make one in sixteens.`},
+  {k:'ember',kl:'digits',t:R`0,\dots,9,\ \text{A},\dots,\text{F}`,n:`Letters as digits, inside such a numeral.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(255, 128, 0) = \#\text{FF}8000}`,n:`The two-digit technique.`}
+],{title:'The slides · sixteen marks for a byte · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'places',t:R`(i, j),\ 0 \le i < w,\ 0 \le j < h`,n:`Columns and rows.`},
+  {k:'ember',kl:'function',t:R`P(i, j) \in \{0, \dots, 255\}^3`,n:`9a’s function.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{3wh \text{ bytes};\ 256^{3wh} \text{ pictures}}`,n:`The picture-count technique.`}
+],{title:'The slides · a picture is a function · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'rate',t:R`r = 1 \text{ per place}`,n:`One sample a place.`},
+  {k:'ember',kl:'disguise',t:R`\xi \text{ and } \xi - k \text{ give the same samples}`,n:`Same-samples (32g).`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{p = 0.9 \to \text{stripes every } 9 \text{ places}}`,n:`The stripe technique.`}
+],{title:'The slides · stripes in disguise · ← → keys work'});
+stepper('#sl8',[
+  {k:'ember',kl:'average',t:R`\text{mean of the scene over the square}`,n:`Instead of one point.`},
+  {k:'ember',kl:'edge',t:R`s\,c + (1 - s)\,d`,n:`The over-blend with alpha s.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{k \times k \text{ samples: at most } k^2 + 1 \text{ shades}}`,n:`A guess that works well.`}
+],{title:'The slides · averaging over the place · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>
