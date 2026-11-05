@@ -1335,11 +1335,11 @@ function basement(){
   const t=document.querySelector('header.top .tags .tag'), txt=t?t.textContent.trim():'', i=txt.indexOf(' · ');
   let lab=(i<0?txt:txt.slice(0,i)).replace(/^Rung\s+/,'');
   if(!lab){ const pm=(window.ladderPage?ladderPage():'').match(/^(?:r(\d+)|floor(\d+))$/); if(pm) lab=pm[1]?String(+pm[1]):'F'+pm[2]; }
-  const head=document.createElement('div'); head.className='bhead'; head.innerHTML='<span class="bn">−'+lab+'</span> basement';
+  const head=document.createElement('div'); head.className='bhead'; head.innerHTML='<span class="bn">−'+lab+'</span> cellar';
   const eb=b.querySelector('.eyebrow'); if(eb) eb.replaceWith(head); else b.prepend(head);
   b.id=b.id||'basement';
   const lip=document.createElement('button'); lip.type='button'; lip.className='blip';
-  lip.innerHTML='<span class="bar"></span><span class="bl">keep going down: the basement</span>';
+  lip.innerHTML='<span class="bar"></span><span class="bl">keep going down: the cellar</span>';
   b.before(lip);
   let pull=0, open=false; const NEED=160;
   const atFoot=()=>window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-4;
@@ -1358,8 +1358,8 @@ function basement(){
   const flip=()=>{ const inb=open&&b.getBoundingClientRect().top<innerHeight*0.45;
     if(document.body.classList.contains('inbase')===inb) return;
     document.body.classList.toggle('inbase',inb);
-    const w=document.querySelector('#lbar .lb-ladder .lb-w'), L=document.querySelector('#lbar .lb-ladder .lb-L'); if(w) w.textContent=inb?'Basement':'adder'; if(L) L.style.display=inb?'none':'';
-    const l=document.querySelector('#lbar .lb-ladder .lb-l'); if(l) l.setAttribute('aria-label',inb?'Basement':'Ladder'); };
+    const w=document.querySelector('#lbar .lb-ladder .lb-w'), L=document.querySelector('#lbar .lb-ladder .lb-L'); if(w) w.textContent=inb?'Cellar':'adder'; if(L) L.style.display=inb?'none':'';
+    const l=document.querySelector('#lbar .lb-ladder .lb-l'); if(l) l.setAttribute('aria-label',inb?'Cellar':'Ladder'); };
   addEventListener('scroll',flip,{passive:true}); flip();
 }
 ready(()=>setTimeout(basement,0));
@@ -2221,11 +2221,12 @@ function paint(p){ if(p.dataset.kinds) return; p.dataset.kinds='1';
     while((m=RX.exec(s))){ const st=m.index+m[1].length, w=m[2]; if(st>last) f.appendChild(document.createTextNode(s.slice(last,st)));
       const sp=document.createElement('span'); sp.className=KIND.get(w.toLowerCase())==='s'?'kw-s':'kw-o'; sp.textContent=w; f.appendChild(sp); last=st+w.length; }
     if(last<s.length) f.appendChild(document.createTextNode(s.slice(last))); t.replaceWith(f); }); }
-const off=()=>{ try{ return LS.getItem('ladder:kinds')==='off'; }catch(e){ return false; } };
+const off=()=>false; /* 0.3.33 (Andrew 11:45): kinds in colour always on, no toggle */
 function apply(){ document.body.classList.toggle('kinds-off',off()); const ps=document.querySelectorAll('p.fp, p.pedited'); if(!ps.length||off()) return;
   const go=()=>{ if(!RX) build(); ps.forEach(paint); };
   if(window.LADDER_KINDNAMES) go(); else { const s=document.createElement('script'); s.src='kinds.js'; s.onload=s.onerror=go; document.head.appendChild(s); } }
-function button(){ const dh=document.querySelector('#desk .dheights'); if(!dh) return false; let b=document.querySelector('#desk .dkinds'); if(b) return true;
+function button(){ return true; }
+function buttonOld(){ const dh=document.querySelector('#desk .dheights'); if(!dh) return false; let b=document.querySelector('#desk .dkinds'); if(b) return true;
   b=document.createElement('button'); b.type='button'; b.className='dkinds';
   const lab=()=>{ b.textContent='Kinds in Colour: '+(off()?'Off':'On'); }; lab();
   b.onclick=()=>{ try{ LS.setItem('ladder:kinds',off()?'on':'off'); }catch(e){} lab(); apply(); };
