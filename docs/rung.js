@@ -2032,3 +2032,40 @@ const go=()=>{
 };
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(go,0)); else setTimeout(go,0);
 })();
+
+/* ---- final pass in colour (Andrew 2026-11-05 00:16): in a final-pass paragraph (p.fp: one he has re-edited, so the colouring
+   follows his edits up the ladder) the ink stays the page's own, but objects (names, sets, collections) read a shade cooler and
+   statements (functions, techniques, axioms) a shade warmer. Named moves come from kinds.js (tools/kindnames.py); the rest is
+   a short word list. The toolbox's "Kinds in colour" turns it off and on (LS ladder:kinds = 'off'). */
+(function(){
+'use strict';
+const OBJ=['name','names','letter','letters','set','sets','subset','subsets','collection','collections','member','members','object','objects','thing','things','number','numbers','pair','pairs','list','lists','element','elements','symbol','symbols','mark','marks','series','arrangement','arrangements','value','values','point','points','variable','variables'];
+const ST=['statement','statements','claim','claims','axiom','axioms','technique','techniques','tech','techs','function','functions','rule','rules','operator','operators','principle','principles','law','laws','line','lines','proof','proofs','equation','equations','sentence','sentences','theorem','theorems','definition','definitions','predicate','predicates','move','moves','argument','arguments'];
+const esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+let RX=null, KIND=null;
+function build(){ const N=window.LADDER_KINDNAMES||{s:[],o:[]}; KIND=new Map();
+  N.s.forEach(n=>KIND.set(n.toLowerCase(),'s')); N.o.forEach(n=>{ if(!KIND.has(n.toLowerCase())) KIND.set(n.toLowerCase(),'o'); });
+  OBJ.forEach(w=>{ if(!KIND.has(w)) KIND.set(w,'o'); }); ST.forEach(w=>{ if(!KIND.has(w)) KIND.set(w,'s'); });
+  const all=[...KIND.keys()].sort((a,b)=>b.length-a.length).map(esc);
+  RX=new RegExp('(^|[^\\p{L}\\p{N}-])('+all.join('|')+')(?![\\p{L}\\p{N}-])','giu'); }
+function paint(p){ if(p.dataset.kinds) return; p.dataset.kinds='1';
+  const walk=[]; const tw=document.createTreeWalker(p,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentElement&&n.parentElement.closest('button,.pa,.katex,code,.kw-o,.kw-s')?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
+  while(tw.nextNode()) walk.push(tw.currentNode);
+  walk.forEach(t=>{ const s=t.textContent; RX.lastIndex=0; if(!RX.test(s)) return; RX.lastIndex=0;
+    const f=document.createDocumentFragment(); let last=0, m;
+    while((m=RX.exec(s))){ const st=m.index+m[1].length, w=m[2]; if(st>last) f.appendChild(document.createTextNode(s.slice(last,st)));
+      const sp=document.createElement('span'); sp.className=KIND.get(w.toLowerCase())==='s'?'kw-s':'kw-o'; sp.textContent=w; f.appendChild(sp); last=st+w.length; }
+    if(last<s.length) f.appendChild(document.createTextNode(s.slice(last))); t.replaceWith(f); }); }
+const off=()=>{ try{ return LS.getItem('ladder:kinds')==='off'; }catch(e){ return false; } };
+function apply(){ document.body.classList.toggle('kinds-off',off()); const ps=document.querySelectorAll('p.fp, p.pedited'); if(!ps.length||off()) return;
+  const go=()=>{ if(!RX) build(); ps.forEach(paint); };
+  if(window.LADDER_KINDNAMES) go(); else { const s=document.createElement('script'); s.src='kinds.js'; s.onload=s.onerror=go; document.head.appendChild(s); } }
+function button(){ const dh=document.querySelector('#desk .dheights'); if(!dh) return false; let b=document.querySelector('#desk .dkinds'); if(b) return true;
+  b=document.createElement('button'); b.type='button'; b.className='dkinds';
+  const lab=()=>{ b.textContent='Kinds in colour: '+(off()?'off':'on'); }; lab();
+  b.onclick=()=>{ try{ LS.setItem('ladder:kinds',off()?'on':'off'); }catch(e){} lab(); apply(); };
+  dh.parentNode.insertBefore(b,dh.nextSibling); return true; }
+window.LadderKinds={apply};
+const boot=()=>{ setTimeout(apply,200); let n=0; const t=setInterval(()=>{ if(button()||++n>40) clearInterval(t); },150); };
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
+})();
