@@ -612,6 +612,7 @@ function climbTo(smooth){
     else { const ra=document.querySelector('.ladder a[href="'+pg+'.html"]'); if(ra) h=ra.closest('li')||ra; }
     if(h){ document.querySelectorAll('.fvhere').forEach(x=>x.classList.remove('fvhere')); h.classList.add('fvhere'); } }
   if(!h) h=document.querySelector('.rungs .here')||document.querySelector('.rungs section.rung');
+  while(h&&!h.offsetParent&&h.parentElement&&h.parentElement!==document.body) h=h.parentElement; /* 0.3.23: a hidden footing climbs to the row that shows it */
   if(h) h.scrollIntoView({block:'center',behavior:smooth?'smooth':'auto'});
 }
 /* the desk: never jumps; it keeps where you were on the index between visits */
@@ -638,7 +639,7 @@ ready(()=>{ renderAll(document);
      the frame's ancestors, so the top of the new page comes into view. Deep links (#…) keep their jump. */
   if(!location.hash){ try{ if('scrollRestoration' in history) history.scrollRestoration='manual'; }catch(e){}
     const top=()=>{ try{ window.scrollTo(0,0); const h=document.querySelector('header.top')||document.body; h.scrollIntoView({block:'start'}); }catch(e){} };
-    if(document.querySelector('.rungs')){ if(window.LADDER_DESK) deskScroll(); else [60,400,1200].forEach(t=>setTimeout(()=>climbTo(false),t)); }
+    if(document.querySelector('.rungs')){ if(window.LADDER_DESK) deskScroll(); else { window.__climbTo=climbTo; if(document.documentElement.classList.contains('lk-ready')) climbTo(false); } } /* 0.3.23: the lock reveals the list, then climbs once */
     else { top(); setTimeout(top,60); } }
   ladderBar();
 });
@@ -1739,7 +1740,7 @@ let box=null;
 function close(){ if(box){ box.remove(); box=null; document.body.classList.remove('stickopen'); } }
 async function sit(scope,key,opts){ opts=opts||{}; close();
   box=document.createElement('div'); box.id='stick'; box.setAttribute('role','dialog'); box.setAttribute('aria-label','the measuring stick'); document.body.appendChild(box); document.body.classList.add('stickopen');
-  const head=t=>'<div class="sk-top"><span>the measuring stick · '+esc(label(scope,key))+'</span><button type="button" class="sk-x" aria-label="close">×</button></div>';
+  const head=t=>'<div class="sk-top"><span>the measuring stick · '+esc(label(scope,key))+(opts.into?' · testing in to '+esc(label(opts.into[0],opts.into[1])):'')+'</span><button type="button" class="sk-x" aria-label="close">×</button></div>';
   const wire=()=>{ const x=box.querySelector('.sk-x'); if(x) x.onclick=close; };
   box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-q">Gathering the questions…</p></div>'; wire();
   await maps(); const qs=await draw(scope,key);
@@ -1756,8 +1757,8 @@ async function sit(scope,key,opts){ opts=opts||{}; close();
       oe.appendChild(b); });
     box.querySelector('.sk-next').onclick=()=>{ i++; if(i<qs.length) show(); else end(); }; };
   const end=()=>{ const pass=right>=need, k=certKey(scope,key);
-    if(pass&&k){ const old=read(k); const via=opts.via||'stick'; if(!old||(old.via==='measure'&&via==='stick')) put('cert:'+k,{by:'self',via,scope,t:Date.now(),score:right+'/'+qs.length}); if(via==='measure') unlock(scope,key); }
-    box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-q">'+right+' of '+qs.length+' right. '+(pass?(opts.via==='measure'?'It measures up: '+esc(label(scope,key))+' is unlocked. Its gold star waits until every floor below it is done.':'It measures up: a gold star.'):'Not yet: '+need+' were needed. Sit it again whenever you like; the questions are drawn fresh.')+'</p><p><button type="button" class="sk-again">'+(pass?'close':'sit it again')+'</button></p></div>'; wire();
+    if(pass&&k){ const old=read(k); const via=opts.via||'stick'; if(!old||(old.via==='measure'&&via==='stick')) put('cert:'+k,{by:'self',via,scope,t:Date.now(),score:right+'/'+qs.length}); if(via==='measure') unlock.apply(null,opts.into||[scope,key]); }
+    box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-q">'+right+' of '+qs.length+' right. '+(pass?(opts.via==='measure'?'It measures up: '+esc(opts.into?label(opts.into[0],opts.into[1]):label(scope,key))+' is unlocked. Its gold star waits until every floor below it is done.':'It measures up: a gold star.'):'Not yet: '+need+' were needed. Sit it again whenever you like; the questions are drawn fresh.')+'</p><p><button type="button" class="sk-again">'+(pass?'close':'sit it again')+'</button></p></div>'; wire();
     box.querySelector('.sk-again').onclick=()=>{ if(pass) close(); else sit(scope,key,opts); };
     if(window.__barStats) window.__barStats(); if(opts.done) opts.done(pass); };
   show(); }
@@ -1777,17 +1778,22 @@ function icon(li,scope,key,title){ if(li.querySelector(':scope>.msr')) return;
   const b=document.createElement('button'); b.type='button'; b.className='msr'; b.title=title; b.setAttribute('aria-label',title); b.innerHTML=RULER;
   b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); if(!S()) return; S().sit(scope,key,{via:'measure',done:ok=>{ if(ok) setTimeout(()=>location.reload(),1600); }}); };
   (li.querySelector(':scope>.t')||li).appendChild(b); }
-function indexIcons(){ if(!document.querySelector('.rungs')||!S()) return;
-  S().maps().then(()=>{ const P=pages(), done=s=>!!(P[s]&&P[s].v);
-    document.querySelectorAll('section.floor li.k-floor.built').forEach(li=>{ const m=(stemOf(li)||'').match(/^floor(\d+)$/); if(!m) return; const F=S().floorOf(+m[1]); if(!F) return;
-      const open=F.rungs.some(r=>P['open:r'+String(r).padStart(2,'0')]&&P['open:r'+String(r).padStart(2,'0')].v); /* a floor you have set foot on is reached */
-      if(!open&&!cert('floor'+m[1]+'concl')) icon(li,'floor',+m[1],'measure into floor '+m[1]); });
-    document.querySelectorAll('section.rung li.k-theory.built').forEach(li=>{ const n=((li.querySelector(':scope>.n')||{}).textContent||'').trim(); if(!/^\d+$/.test(n)) return;
-      const R=S().rungOf(+n); if(!R) return; const open=li.classList.contains('passed');
-      if(!open&&!cert(R.core[R.core.length-1])) icon(li,'rung',+n,'measure into rung '+n); });
-    document.querySelectorAll('section.rung li.built:not(.k-theory):not(.k-floor)').forEach(li=>{ const s=stemOf(li); if(!s||!S().where(s)) return;
-      if(!done(s)&&!cert(s)) icon(li,'step',s,'measure into this step'); });
+function indexIcons(){ if(!document.querySelector('.rungs')||!S()) return Promise.resolve();
+  /* 0.3.23 (Andrew 11:04): the ruler sits beside a step, rung or floor already unlocked, and measures it.
+     A locked row has no icon: tapping it tests in, with the last test before it. */
+  return S().maps().then(()=>{ const vis=li=>!li.classList.contains('lk-hide')&&!li.classList.contains('lk-shut')&&!li.closest('section.lk-hide');
+    document.querySelectorAll('.rungs .msr').forEach(b=>b.remove());
+    document.querySelectorAll('section.floor li.k-floor.built').forEach(li=>{ const m=(stemOf(li)||'').match(/^floor(\d+)$/); if(!m||!vis(li)||!S().floorOf(+m[1])) return; icon(li,'floor',+m[1],'measure floor '+m[1]); });
+    document.querySelectorAll('section.rung li.k-theory.built').forEach(li=>{ const n=((li.querySelector(':scope>.n')||{}).textContent||'').trim(); if(!/^\d+$/.test(n)||!vis(li)||!S().rungOf(+n)) return; icon(li,'rung',+n,'measure rung '+n); });
+    document.querySelectorAll('section.rung li.built:not(.k-theory):not(.k-floor)').forEach(li=>{ const s=stemOf(li); if(!s||!vis(li)||!S().where(s)) return; icon(li,'step',s,'measure this step'); });
   }); }
+/* testing in: a locked rung or floor gives the last test before it */
+function testIn(li){ const s=S(); if(!s) return; const M=window.LADMAP||[];
+  if(li.classList.contains('k-floor')){ const m=(stemOf(li)||'').match(/^floor(\d+)$/); if(!m) return; const F=+m[1], k=M.findIndex(x=>x[0]===F); if(k<1) return;
+    s.sit('floor',M[k-1][0],{via:'measure',into:['floor',F],done:ok=>{ if(ok) setTimeout(()=>location.reload(),1600); }}); return; }
+  const n=+((li.querySelector(':scope>.n')||{}).textContent||'').trim(); if(isNaN(n)) return;
+  const order=[]; M.forEach(([fl,rungs])=>rungs.forEach(r=>order.push(r[0]))); const k=order.indexOf(n); if(k<1) return;
+  s.sit('rung',order[k-1],{via:'measure',into:['rung',n],done:ok=>{ if(ok) setTimeout(()=>location.reload(),1600); }}); }
 /* the toolbox list: every finished section, with its measure */
 function finished(){ const M=window.LADMAP||[], P=pages(), v=s=>!!(P[s]&&P[s].v), out=[];
   M.forEach(([fl,rungs])=>{ const F={fl,rows:[]}; let all=rungs.length>0;
@@ -1807,9 +1813,7 @@ function list(){ const s=S(); if(!s) return;
     box.querySelector('.sk-x').onclick=()=>{ box.remove(); document.body.classList.remove('stickopen'); };
     box.querySelectorAll('.sk-sit').forEach(b=>b.onclick=()=>{ const sc=b.dataset.s, k=sc==='step'?b.dataset.k:+b.dataset.k; box.remove(); s.sit(sc,k,{via:'stick'}); });
   }); }
-window.LadderMeasure={list,finished,indexIcons};
-const go=()=>setTimeout(indexIcons,400);
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
+window.LadderMeasure={list,finished,indexIcons,testIn}; /* 0.3.23: LadderLock draws the icons once the rows are settled */
 })();
 
 /* ---- 0.3.1 standing questions (Andrew 2026-11-04 20:25): each standing question walks a branching tree.
@@ -1992,7 +1996,7 @@ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded'
    - Page view (the old compound page) opens only from a row's number; a row's title opens the footing view. */
 (function(){
 'use strict';
-if(window.LADDER_DESK) return;
+if(window.LADDER_DESK){ document.documentElement.classList.add('lk-ready'); return; }
 const J=(k,d)=>{ try{ const v=JSON.parse(LS.getItem(k)||'null'); return v==null?d:v; }catch(e){ return d; } };
 const stemOfLi=li=>{ const a=li.querySelector(':scope>.t>a'); const m=a&&(a.getAttribute('href')||'').match(/^([^#.]+)\.html/); return m?m[1]:null; };
 function lock(){
@@ -2012,7 +2016,9 @@ function lock(){
   /* tested in: floors and rungs measured into, by LADMAP */
   const M=window.LADMAP||[], openRung=new Set(), openFloor=new Set(), rungFloor={};
   M.forEach(([fl,rungs])=>{ if(cert('floor'+fl+'concl')) openFloor.add(fl);
-    rungs.forEach(([r,core])=>{ rungFloor[r]=fl; if(core.length&&cert(core[core.length-1])) openRung.add(r); }); });
+    rungs.forEach(([r,core])=>{ rungFloor[r]=fl; if(core.length&&cert(core[core.length-1])) openRung.add(r); const o=P['open:r'+String(r).padStart(2,'0')]; if(o&&o.v) openRung.add(r); }); });
+  /* 0.3.23: a rung tested into (open:rNN) is open, and so is its floor */
+  M.forEach(([fl,rungs])=>{ if(rungs.some(([r])=>openRung.has(r))) openFloor.add(fl); });
   const rungNo=s=>{ const m=s&&s.match(/^r(\d\d)/); return m?+m[1]:null; };
   const floorNo=sec=>{ const f=sec.getAttribute('data-floor'); return f?+f:null; };
   /* the floor each section sits on: floor sections set it, rung sections inherit */
@@ -2045,12 +2051,15 @@ function lock(){
 document.addEventListener('click',e=>{ if(window.LADDER_DESK) return; const n=e.target.closest&&e.target.closest('.rungs .ladder li>.n'); if(!n) return;
   const li=n.parentElement; if(li.classList.contains('lk-shut')) return; const a=li.querySelector(':scope>.t>a'); if(!a) return;
   e.preventDefault(); try{ sessionStorage.setItem('fv:want','page'); }catch(x){} location.href=a.getAttribute('href').replace(/#.*$/,''); },true);
-document.addEventListener('click',e=>{ if(window.LADDER_DESK) return; const a=e.target.closest&&e.target.closest('.rungs .ladder li.lk-shut>.t>a'); if(!a) return;
-  e.preventDefault(); const b=a.parentElement.querySelector('.msr'); const li=a.closest('li');
-  let h=li.querySelector('.lockhint'); if(!h){ h=document.createElement('span'); h.className='lockhint'; h.textContent='above you: climb up to it, or measure into it with the ruler'; a.parentElement.appendChild(h); setTimeout(()=>h.remove(),2800); }
-  if(b) b.classList.add('pulse'), setTimeout(()=>b.classList.remove('pulse'),1600); },true);
+document.addEventListener('click',e=>{ if(window.LADDER_DESK) return; const li=e.target.closest&&e.target.closest('.rungs .ladder li.lk-shut'); if(!li) return;
+  e.preventDefault(); e.stopPropagation(); if(window.LadderMeasure) LadderMeasure.testIn(li); },true); /* 0.3.23 (Andrew 11:04): tapping a locked rung or floor tests in */
 window.LadderLock={lock};
-const go=()=>{ if(!document.querySelector('.rungs')) return; lock(); if(!window.LADMAP){ const s=document.createElement('script'); s.src='ladmap.js'; s.onload=()=>{ lock(); }; document.head.appendChild(s); } };
+/* 0.3.23 (Andrew 11:04, "the list populates and then compacts"): the list stays hidden until the map is in,
+   the rows are locked and the rulers are drawn; then it shows once, already on your furthest footing. */
+let shown=false; const reveal=()=>{ if(shown) return; shown=true; document.documentElement.classList.add('lk-ready'); if(window.__climbTo) window.__climbTo(false); };
+const settle=()=>{ lock(); const p=window.LadderMeasure?LadderMeasure.indexIcons():null; Promise.resolve(p).catch(()=>{}).then(reveal); };
+const go=()=>{ if(!document.querySelector('.rungs')) return; setTimeout(reveal,2500);
+  if(window.LADMAP) settle(); else { const s=document.createElement('script'); s.src='ladmap.js'; s.onload=settle; s.onerror=settle; document.head.appendChild(s); } };
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
 })();
 
