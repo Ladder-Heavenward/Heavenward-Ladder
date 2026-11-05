@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Square root by hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r12e.html">← 12e bisection by hand</a><a href="r12phys.html">next: 12·phys how does a small push lift a heavy weight? →</a></p>
+  <div class="tags"><span class="tag tech">12f · technique</span></div>
+  <h1>Square root by hand</h1>
+  <p data-pid="0d29e2">12d found the averaging step: from a fraction u above √2, the average of u and 2/u is a smaller fraction still above it. Here the step works for any n. Each guess comes with a second number on the far side of the root, so every step is a trap like 12e’s, and the trap closes far faster than halving: the error of the square is squared at every step. With whole numbers and fractions alone, three steps give √7 to eight places.</p>
+  <p class="gesture" data-pid="9c6ecd">Average a guess and n over the guess. The root sits between the two, and the next guess overshoots the square by the square of the old overshoot, over four times the guess squared.</p>
+</header>
+
+<section class="class step" data-step="12f1">
+  <h2 class="sthead"><span class="stno">12f1</span>Two sides of the root</h2>
+  <p data-pid="459045">For n &gt; 0, x² − n is continuous on [0, n + 1], is below 0 at 0 and above 0 at n + 1, so by 12a it has a zero there: √n is a number. A guess u &gt; 0 for it is too big when u² &gt; n. Then n/u is too small, and the root is trapped between the two.</p>
+  <p data-pid="9e70e5">Root-trap technique: <b>if u &gt; 0 and u² &gt; n &gt; 0, then n/u &lt; √n &lt; u, and the trap [n/u, u] has width (u² − n)/u.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the root-trap technique">
+u^2 \gt n \Rightarrow u \gt \sqrt n @@ squares keep order on numbers above 0
+\big(\tfrac nu\big)^2 = \tfrac{n^2}{u^2} \lt \tfrac{n^2}{n} = n @@ u² &gt; n puts a bigger number under n²
+\tfrac nu \lt \sqrt n @@ the same order, read the other way
+u - \tfrac nu = \tfrac{u^2 - n}{u} @@ one fraction (5h)
+\htmlClass{new}{\tfrac nu \lt \sqrt n \lt u,\ \text{width } \tfrac{u^2 - n}{u}} \quad \blacksquare @@ the lines above
+  </pre>
+  <p data-pid="18d8bd">Call u² − n the overshoot of u. A guess with overshoot 0 is the root. A small overshoot makes a narrow trap.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">12f1.1</span><span class="ph understand">understand</span>What does the root-trap technique say? <br>Why is n/u too small whenever u is too big?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12f2">
+  <h2 class="sthead"><span class="stno">12f2</span>The averaging step, for any n</h2>
+  <p data-pid="c9acb6">12d averaged u and 2/u. Average u and n/u instead: u′ = (u + n/u)/2, one fraction (u² + n)/(2u). Its overshoot is a square.</p>
+  <p data-pid="2bb3ad">Square-overshoot technique: <b>if u &gt; 0 and u′ = (u + n/u)/2, then u′² − n = (u² − n)²/(4u²).</b> So u′ is never below √n, whatever u was, and its overshoot is the old one squared, over 4u².</p>
+  <pre class="lines" data-k="ember" data-label="this step: the square-overshoot technique">
+u' = \tfrac{u^2 + n}{2u} @@ the average, as one fraction
+u'^2 - n = \tfrac{(u^2 + n)^2 - 4nu^2}{4u^2} @@ square it, and write n over 4u²
+(u^2 + n)^2 - 4nu^2 = (u^2 - n)^2 @@ the square of a sum less 4ab is the square of a difference (4j)
+\htmlClass{new}{u'^2 - n = \tfrac{(u^2 - n)^2}{4u^2} \ge 0} \quad \blacksquare @@ a square over a square
+  </pre>
+  <p data-pid="066916">After the first step every guess is above the root or on it, so the root-trap technique applies at every step after that. A guess below the root is no trouble: the first step lifts it over.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12f2.1</span><span class="ph understand">understand</span>What does the square-overshoot technique say? <br>Why can the averaging step never land below √n?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12f3">
+  <h2 class="sthead"><span class="stno">12f3</span>√7 with fractions</h2>
+  <p data-pid="626eeb">Start at 3, since 3² = 9 is near 7. Each line is one averaging step, kept as a fraction, with its overshoot and its trap.</p>
+  <pre class="lines" data-k="ember" data-label="this step: √7 by hand">
+u_0 = 3,\ \ u_0^2 - 7 = 2 @@ start: the trap [7/3, 3] is a third wide
+u_1 = \tfrac{3 + 7/3}{2} = \tfrac83,\ \ \tfrac{64}{9} - 7 = \tfrac19 @@ the square-overshoot technique: 2²/(4 · 9) = 1/9
+u_2 = \tfrac{8/3 + 21/8}{2} = \tfrac{127}{48},\ \ \tfrac{16129}{2304} - 7 = \tfrac1{2304} @@ 127² = 16129 and 7 · 48² = 16128: one apart
+\tfrac{336}{127} \lt \sqrt7 \lt \tfrac{127}{48} @@ the root-trap technique: width (1/2304)/(127/48) = 1/6096
+u_3 = \tfrac{32257}{12192},\ \ u_3^2 - 7 = \tfrac{1}{148\,644\,864} @@ the overshoot squares again: 12192² = 148 644 864
+\htmlClass{new}{\sqrt7 = 2.6457513 \ldots} \quad \blacksquare @@ the trap is now narrower than 3 in a billion
+  </pre>
+  <p data-pid="6e3731">From 8/3 on, the fractions come out one apart: 8² and 7 · 3² differ by 1, and so do 127² and 7 · 48². That is no accident of 7. Whenever an overshoot is 1 over a square, the next fraction’s top squared and n times its bottom squared differ by 1 again.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12f3.1</span><span class="ph understand">understand</span>Starting at 3, why do three averaging steps give √7 to eight places? <br>What does the trap [336/127, 127/48] promise that the fraction 127/48 alone does not?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12f4">
+  <h2 class="sthead"><span class="stno">12f4</span>How fast the trap closes</h2>
+  <p data-pid="d5b816">12e’s trap halves at every step: ten halvings buy three places. Here the overshoot squares. Once u is above √n, 4u² is at least 4n, so the new overshoot is at most the old one squared, over 4n.</p>
+  <p data-pid="0d224a">Doubling-places technique: <b>once u ≥ √n, each averaging step takes an overshoot g to at most g²/(4n); so when g is below 1, the number of places the overshoot is good to at least doubles at each step.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the doubling-places technique">
+u \ge \sqrt n \Rightarrow 4u^2 \ge 4n @@ squares keep order
+g' = \tfrac{g^2}{4u^2} \le \tfrac{g^2}{4n} @@ the square-overshoot technique, with a bigger bottom
+g \lt 10^{-k} \Rightarrow g^2 \lt 10^{-2k} @@ squaring doubles the count of zeros after the point
+\htmlClass{new}{g \lt 10^{-k} \Rightarrow g' \lt 10^{-2k}} \quad \blacksquare @@ 4n ≥ 1 for n ≥ 1/4
+  </pre>
+  <p data-pid="a3e057">For √7 the overshoots ran 2, 1/9, 1/2304, 1/148 644 864: about 0.1, then 0.0004, then 0.000000007. Bisection on [2, 3] needs 29 halvings to reach the width the third averaging step gave.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12f4.1</span><span class="ph understand">understand</span>What does the doubling-places technique say? <br>Why does squaring the overshoot double its places, while halving a trap adds a place only every three or four steps?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12f5">
+  <h2 class="sthead"><span class="stno">12f5</span>Choosing the start</h2>
+  <p data-pid="b5f3b8">Any start above 0 works, since the first step lifts it over the root. A good start saves steps. Take the whole number whose square is nearest n. For a large n, split its digits in pairs from the point: each pair is one digit of the root, so 5300, read 53 | 00, has a root of two digits, and 7² = 49 is the nearest square below 53, so the root is about 70.</p>
+  <pre class="lines" data-k="ember" data-label="this step: √5300 from the nearest square">
+73^2 = 5329,\ \ g = 29 @@ 72² = 5184 is further off
+u' = \tfrac{73 + 5300/73}{2} = \tfrac{10629}{146} @@ one averaging step
+g' = \tfrac{29^2}{4 \cdot 5329} = \tfrac{841}{21316} \lt 0.04 @@ the square-overshoot technique
+\text{width } \tfrac{g'}{u'} \lt \tfrac{0.04}{72} \lt 0.0006 @@ the root-trap technique
+\htmlClass{new}{\sqrt{5300} = 72.80 \ldots} \quad \blacksquare @@ 10629/146 = 72.8013…, and the trap is narrower than 0.0006
+  </pre>
+  <p data-pid="4bac82">Long division does the rest by hand: n/u to as many places as you want, then the average. Carry two more places than the overshoot promises, and no more.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12f5.1</span><span class="ph understand">understand</span>How do the pairs of digits of 5300 tell you where to start? <br>Why does a start below the root cost only one step?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12f6">
+  <h2 class="sthead"><span class="stno">12f6</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{average } u \text{ and } n\,? @@ the step averages u and n/u: the two sides of the root, not u and n
+u = 0 \text{ to start}\,? @@ n/0 is no number; any start above 0 will do
+\text{an average of a low and a high number, so } u' \text{ may be low}\,? @@ the overshoot of u′ is a square: u′ is never below √n
+\text{two guesses agree to 5 places, so 5 places are right}\,? @@ say the trap [n/u, u]; agreement of guesses is not a width
+\sqrt{a + b} = \sqrt a + \sqrt b \text{ for a start}\,? @@ √(9 + 16) is 5, not 7
+\text{the step for } n = -4 @@ no number squares to −4: the guesses never settle, and there is no trap
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12f6.1</span><span class="ph understand">understand</span>Why is “two guesses agree to five places, so five places are right” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12f7">
+  <h2 class="sthead"><span class="stno">12f7</span>Running it backwards</h2>
+  <p data-pid="b74d6c">Handed a guess, square it and subtract n: that is its overshoot, and the overshoot over the guess is the width of its trap. Handed a width you need, square the overshoot until it passes: each step about doubles the places. Handed a fraction p/q with p² − nq² = 1, say at once that p/q is above √n by less than 1/(pq), and that the next step keeps the pattern. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12f7.1</span><span class="ph understand">understand</span>Handed the fraction 127/48 and n = 7, how do you find the width of its trap without a single division?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">12f.8.1</span><span class="tagq">build</span>Build √10 to six places by hand, starting at 3. <br>Write each guess as a fraction, with its overshoot, and stop when the root-trap technique gives a trap narrower than 0.000001.</div>
+  <div class="chq"><span class="chid">12f.8.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="u = \sqrt n"></span></span>What does the averaging step do to it? <br>What do the square-overshoot technique and the root-trap technique say there?</div>
+  <div class="chq"><span class="chid">12f.8.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="u&#x27; = \tfrac{u + n/u}{2} \text{ lands on } \sqrt n"></span></span>Must u have been √n already? <br>Settle it with the square-overshoot technique.</div>
+  <div class="chq"><span class="chid">12f.8.4</span><span class="tagq">seam</span>A clay tablet about 3700 years old gives √2 right to six places. It gives no reason and no rule. <br>Is a number that is right, with no proof, part of mathematics?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r12e.html">← 12e · bisection by hand</a><a href="r12phys.html">12·phys · how does a small push lift a heavy weight? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The averaging step is often called Heron’s method, after Heron of Alexandria, who in his Metrica (first century) finds √720 this way: 27 squared is 729, 720/27 is 26 2/3, and their average 26 5/6 is his answer, with a remark that the step can be run again. It is older than Heron. A Babylonian clay tablet, YBC 7289 at Yale, gives √2 as 1;24,51,10 in base sixty, which is 1.41421296, right to six places. How it was found is not written on it; the averaging step is one suggested way. The tablet of question 12f.8.4 is that one.</p>
+  <p>Accepted names: the averaging step is Heron’s method or the Babylonian method; it is Newton’s method run on x² − n (13m). The doubling-places technique says it converges quadratically. Fractions p/q with p² − nq² = 1 are solutions of Pell’s equation (42k).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
