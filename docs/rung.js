@@ -1050,17 +1050,21 @@ function reportQuestions(){}
    into the page's source at the next publish. Paragraphs with typeset maths are left alone. */
 const ED={db:null,owner:false,page:ladderPage()};
 function edWait(){ return Promise.resolve(false); return new Promise(res=>{ let n=0; (function t(){ if(window.claude&&typeof window.claude.use==='function') return res(true); if(++n>40) return res(false); setTimeout(t,250); })(); }); }
-function editable(p){ return !p.querySelector('[data-tex],[data-tex-inline],.katex,code'); }
+/* 0.3.42 (Andrew 18:28): a paragraph with inline maths is editable too. Each inline formula is one locked piece in the editor
+   (it can be moved past or deleted, not changed), and is saved back as its TeX source. Display maths and code stay out. */
+function editable(p){ if(p.querySelector('[data-tex],code')) return false; return [...p.querySelectorAll('.katex')].every(k=>k.closest('[data-tex-inline]')); }
+function edTex(p){ p.querySelectorAll('[data-tex-inline]').forEach(el=>{ if(el.querySelector('.katex')) return; const t=el.getAttribute('data-tex-inline'); try{ if(window.katex){ katex.render(t,el,{throwOnError:false,strict:false,trust:true,displayMode:false}); return; } }catch(_){} el.textContent=t; }); }
 const ED_OK={B:1,STRONG:1,I:1,EM:1,A:1,SUP:1,SUB:1,BR:1};
 function edClean(node){ const out=document.createElement('div');
   (function walk(src,dst){ src.childNodes.forEach(n=>{
     if(n.nodeType===3){ dst.appendChild(document.createTextNode(n.textContent)); return; }
     if(n.nodeType!==1||(n.classList&&n.classList.contains('pa'))||/^(SCRIPT|STYLE|TEMPLATE)$/.test(n.tagName)) return;
+    if(n.hasAttribute&&n.hasAttribute('data-tex-inline')){ const t=n.getAttribute('data-tex-inline'), e=document.createElement('span'); e.setAttribute('data-tex-inline',t); e.textContent=t; dst.appendChild(e); return; }
     if(ED_OK[n.tagName]){ const e=document.createElement(n.tagName.toLowerCase()); if(n.tagName==='A'){ const h=n.getAttribute('href')||''; if(/^(https?:|[\w.-]+\.html)/.test(h)) e.setAttribute('href',h); } dst.appendChild(e); walk(n,e); }
     else walk(n,dst); }); })(node,out);
   return out.innerHTML.replace(/\s+/g,' ').trim(); }
 function edApply(p,html){ const b=p.querySelector('button.pa'); const tmp=document.createElement('div'); tmp.innerHTML=html;
-  p.innerHTML=edClean(tmp); if(b){ p.appendChild(document.createTextNode(' ')); p.appendChild(b); } p.classList.add('pedited'); }
+  p.innerHTML=edClean(tmp); edTex(p); if(b){ p.appendChild(document.createTextNode(' ')); p.appendChild(b); } p.classList.add('pedited'); }
 function edClearPending(pid){ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); delete m[pid]; localStorage.setItem(k,JSON.stringify(m)); }catch(_){} }
 async function edFolded(){ const f={}; try{ const s=await ED.db.collection('folded').get(); s.docs.forEach(d=>{ const v=d.data()||{}; f[v.pid||d.id]=v.at||''; }); }catch(_){ return null; } return f; }
 /* The owner check runs once at load; if the host was slow to answer then, check again when a menu opens. */
@@ -1091,13 +1095,14 @@ async function edInit(){
 }
 function startEdit(p){ if(!ED.db||!ED.owner||!editable(p)||p.isContentEditable) return;
   const b=p.querySelector('button.pa'); if(b) b.remove(); const before=p.innerHTML;
+  p.querySelectorAll('[data-tex-inline]').forEach(el=>el.contentEditable='false');
   p.contentEditable='true'; p.classList.add('pediting'); p.focus();
   const bar=document.createElement('div'); bar.className='pebar';
   bar.innerHTML='<button type="button" data-e="save">save</button><button type="button" data-e="cancel">cancel</button><span class="pehint">prose only · bold with '+(/Mac|iPhone|iPad/.test(navigator.platform||navigator.userAgent)?'⌘B':'Ctrl+B')+'</span>';
   p.after(bar);
   const DK='ladder:edit-drafts', dset=v=>{ try{ const m=JSON.parse(localStorage.getItem(DK)||'{}'); if(v==null) delete m[p.dataset.pid]; else m[p.dataset.pid]={page:ED.page,html:v,at:Date.now()}; localStorage.setItem(DK,JSON.stringify(m)); }catch(_){} };
   let dt=0; p.addEventListener('input',()=>{ clearTimeout(dt); dt=setTimeout(()=>dset(p.innerHTML),400); });
-  const done0=()=>{ p.contentEditable='false'; p.classList.remove('pediting'); bar.remove(); if(b){ p.appendChild(document.createTextNode(' ')); p.appendChild(b); } };
+  const done0=()=>{ p.querySelectorAll('[data-tex-inline]').forEach(el=>el.removeAttribute('contenteditable')); p.contentEditable='false'; p.classList.remove('pediting'); bar.remove(); if(b){ p.appendChild(document.createTextNode(' ')); p.appendChild(b); } };
   const done=()=>{ clearTimeout(dt); dset(null); done0(); };
   bar.addEventListener('click',async e=>{ const k=e.target.dataset.e; if(!k) return;
     if(k==='cancel'){ p.innerHTML=before; done(); return; }
@@ -1106,7 +1111,7 @@ function startEdit(p){ if(!ED.db||!ED.owner||!editable(p)||p.isContentEditable) 
     for(const wait of [0,1500,4000,9000]){ if(wait){ toast('the database is busy; trying again…'); await new Promise(r=>setTimeout(r,wait)); }
       try{ const w=ED.db.doc('edits/'+p.dataset.pid).set(rec); w.then(()=>edClearPending(rec.pid),()=>{}); await Promise.race([w, new Promise((_,rj)=>setTimeout(()=>rj({code:'no answer in 10 seconds'}),10000))]); err=null; break; }catch(x){ err=x; } }
     if(!err){ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); delete m[p.dataset.pid]; localStorage.setItem(k,JSON.stringify(m)); }catch(_){}
-      p.innerHTML=html; p.classList.add('pedited'); done(); toast('saved: every reader sees it now, and it goes into the page at the next publish'); }
+      p.innerHTML=html; edTex(p); p.classList.add('pedited'); done(); toast('saved: every reader sees it now, and it goes into the page at the next publish'); }
     else{ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); m[p.dataset.pid]=rec; localStorage.setItem(k,JSON.stringify(m)); }catch(_){}
       e.target.disabled=false; toast('not saved yet ('+((err&&err.code)||'the database refused it')+'). Your words are kept on this device and will be sent when the database answers.'); } });
 }
