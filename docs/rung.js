@@ -2249,3 +2249,21 @@ window.LadderKinds={apply};
 const boot=()=>{ setTimeout(apply,200); let n=0; const t=setInterval(()=>{ if(button()||++n>40) clearInterval(t); },150); };
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
 })();
+
+/* 0.3.47 (Andrew 22:27 "the wrap for step tags falls into the step address"): on the index, a row's tags keep to the room
+   right of its number; when they need more than one line they wrap downward there, and when even one tag will not fit
+   beside the number, the tags drop under it. */
+(function(){
+  if(!document.querySelector('.rungs')) return;
+  function fit(){ document.querySelectorAll('.rungs .ladder>li>.tb:not([hidden])').forEach(tb=>{ const li=tb.parentElement, n=li.querySelector(':scope>.n'); if(!n||!li.offsetParent) return;
+    tb.classList.remove('tbdown'); tb.style.maxWidth='';
+    const side=parseFloat(getComputedStyle(li).gridTemplateColumns)||0; if(!side) return;
+    const room=Math.floor(side-n.getBoundingClientRect().width-4);
+    const widest=Math.max(0,...[...tb.children].map(k=>k.getBoundingClientRect().width));
+    if(widest>room){ tb.classList.add('tbdown'); tb.style.maxWidth=Math.floor(side)+'px'; } else tb.style.maxWidth=room+'px'; }); }
+  let q=0; const soon=()=>{ cancelAnimationFrame(q); q=requestAnimationFrame(fit); };
+  addEventListener('resize',soon); document.addEventListener('toggle',soon,true); document.addEventListener('click',()=>setTimeout(soon,30),true);
+  const go=()=>{ fit(); setTimeout(fit,400); setTimeout(fit,1500); setTimeout(fit,3000); };
+  if(document.readyState==='complete') go(); else addEventListener('load',go);
+  window.LadderFitTags=fit;
+})();
