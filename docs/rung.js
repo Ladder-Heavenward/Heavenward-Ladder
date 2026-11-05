@@ -1797,8 +1797,8 @@ function indexIcons(){ if(!document.querySelector('.rungs')||!S()) return Promis
   return S().maps().then(()=>{ const vis=li=>!li.classList.contains('lk-hide')&&!li.classList.contains('lk-shut')&&!li.closest('section.lk-hide');
     document.querySelectorAll('.rungs .msr').forEach(b=>b.remove()); if(window.__footCount) __footCount();
     document.querySelectorAll('section.floor li.k-floor.built').forEach(li=>{ const m=(stemOf(li)||'').match(/^floor(\d+)$/); if(!m||!vis(li)||!S().floorOf(+m[1])) return; icon(li,'floor',+m[1],'measure floor '+m[1]); });
-    document.querySelectorAll('section.rung li.k-theory.built').forEach(li=>{ const n=((li.querySelector(':scope>.n')||{}).textContent||'').trim(); if(!/^\d+$/.test(n)||!vis(li)||!S().rungOf(+n)) return; icon(li,'rung',+n,'measure rung '+n); });
-    document.querySelectorAll('section.rung li.built:not(.k-theory):not(.k-floor)').forEach(li=>{ const s=stemOf(li); if(!s||!vis(li)||!S().where(s)) return; icon(li,'step',s,'measure this step'); });
+    document.querySelectorAll('section.rung li.k-theory.built').forEach(li=>{ const n=((li.querySelector(':scope>.n')||{}).textContent||'').trim(); if(!/^\d+$/.test(n)||!vis(li)) return; const R=S().rungOf(+n); if(!R||R.lastRung) return; /* 0.3.38: the floor's test replaces its last rung's */ icon(li,'rung',+n,'measure rung '+n); });
+    document.querySelectorAll('section.rung li.built:not(.k-theory):not(.k-floor)').forEach(li=>{ const s=stemOf(li); if(!s||!vis(li)) return; const w=S().where(s); if(!w) return; if(w.core[w.core.length-1]===s) return; /* the rung's test replaces its last step's */ icon(li,'step',s,'measure this step'); });
   }); }
 /* testing in: a locked rung or floor gives the last test before it */
 function testIn(li){ const s=S(); if(!s) return; const M=window.LADMAP||[];
@@ -1806,7 +1806,9 @@ function testIn(li){ const s=S(); if(!s) return; const M=window.LADMAP||[];
     s.sit('floor',M[k-1][0],{via:'measure',into:['floor',F],done:ok=>{ if(ok) setTimeout(()=>location.reload(),1600); }}); return; }
   const n=+((li.querySelector(':scope>.n')||{}).textContent||'').trim(); if(isNaN(n)) return;
   const order=[]; M.forEach(([fl,rungs])=>rungs.forEach(r=>order.push(r[0]))); const k=order.indexOf(n); if(k<1) return;
-  s.sit('rung',order[k-1],{via:'measure',into:['rung',n],done:ok=>{ if(ok) setTimeout(()=>location.reload(),1600); }}); }
+  const P=s.rungOf(order[k-1]); const done=ok=>{ if(ok) setTimeout(()=>location.reload(),1600); };
+  if(P&&P.lastRung) s.sit('floor',P.fl,{via:'measure',into:['rung',n],done}); /* the floor's test stands in for its last rung's */
+  else s.sit('rung',order[k-1],{via:'measure',into:['rung',n],done}); }
 /* the toolbox list: every finished section, with its measure */
 function finished(){ const M=window.LADMAP||[], P=pages(), v=s=>!!(P[s]&&P[s].v), out=[];
   M.forEach(([fl,rungs])=>{ const F={fl,rows:[]}; let all=rungs.length>0;
