@@ -11,12 +11,13 @@ const LS=window.LS||window.localStorage;
 const get=(k,d)=>{ try{ return JSON.parse(LS.getItem(k)||'')||d; }catch(e){ return d; } };
 const put=(k,v)=>{ try{ LS.setItem(k,JSON.stringify(v)); }catch(e){} };
 const seen=()=>get('cards:seen',{});
-const has=tag=>!!seen()[tag];
+const DESK=!!window.LADDER_DESK; /* 0.3.15: the desk opens every pool, so its words can be read and edited */
+const has=tag=>DESK||!!seen()[tag];
 /* 0.3.1 (Andrew 20:25): seed pools open by the measuring stick; link pools by regular progress (has).
    A step counts as measured when its own stick is passed, or its rung's, or its floor's. */
 const cert=k=>{ try{ return JSON.parse(LS.getItem('cert:'+k)||'null'); }catch(e){ return null; } };
 function tagStem(t){ const M=window.LADDER_CARDMAP||{}; for(const s in M) if(M[s][0]===t) return s; return (typeof STEPS!=='undefined'&&STEPS[t])?STEPS[t][0]:null; }
-function measured(tag){ const s=tagStem(tag); if(!s) return false; if(cert(s)) return true;
+function measured(tag){ if(DESK) return true; const s=tagStem(tag); if(!s) return false; if(cert(s)) return true;
   const W=window.LadderStick&&LadderStick.where(s); if(!W) return false; if(cert('floor'+W.fl+'concl')) return true;
   const c=cert(W.core[W.core.length-1]); return !!(c&&c.scope==='rung'&&W.core.includes(s)); }
 const rnd=n=>Math.floor(Math.random()*n);

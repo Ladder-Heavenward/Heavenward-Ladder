@@ -336,6 +336,8 @@ function packLadder(){
     if(!subs.length) return;
     let cue=th.querySelector('.unpackcue');
     if(!cue){ cue=document.createElement('span'); cue.className='unpackcue'; (th.querySelector(':scope>.t')||th).appendChild(cue); }
+    /* 0.3.15 (Andrew 21:57): the desk opens on the whole ladder, every rung unpacked */
+    if(window.LADDER_DESK){ sec.classList.remove('packed'); cue.textContent=''; return; }
     const open=th.classList.contains('passed');
     const lab=((th.querySelector(':scope>.n')||{}).textContent||'').trim();
     if(open&&!openSeen.has(lab)){ openSeen.add(lab); saveOpenSeen(); if(openSeeded){ sec.classList.add('packed'); unpack(sec,true); } }
@@ -1099,6 +1101,93 @@ async function markFinal(p){ if(!ED.db||!ED.owner||!editable(p)) return;
   const rec={pid:p.dataset.pid,page:ED.page,html:edClean(p),at:new Date().toISOString(),final:true};
   try{ await Promise.race([ED.db.doc('edits/'+rec.pid).set(rec),new Promise((_,rj)=>setTimeout(()=>rj(0),10000))]); p.classList.add('pedited'); toast('marked final pass: it goes into the page at the next publish'); }
   catch(e){ toast('not marked yet: the database did not answer. Try again in a moment.'); } }
+/* 0.3.15 the desk's text editor (Andrew 21:57, 02:40 "i need the desk immediately"): on the desk the owner can edit the words of any
+   title or paragraph without typeset maths, graphs or slides, anywhere they show: page and index titles, footing names, step blurbs,
+   and the words that come from the data files (seeds, links, answers, questions, crosswalk cards). "✎ edit text" turns it on; a tap
+   opens the words in place. A save goes to edits/tx-<id> {kind:'text', page, old/new text and html}; the desk shows it at once,
+   and the next publish folds it into whichever source file holds those words (work/foldtext.py). Nothing is ever deleted here. */
+const TX={on:false,list:[],busy:null};
+const txNorm=s=>String(s||'').replace(/\s+/g,' ').trim();
+const TX_TAGS='a,button,summary,h1,h2,h3,h4,h5,h6,p,li,dd,dt,td,th,figcaption,blockquote,label';
+const TX_NO='.katex,[data-tex],[data-tex-inline],svg,canvas,img,code,pre,input,textarea,select,video,iframe';
+const TX_OFF='.txbar,.pebar,.pamenu,.qmenu,#txbtn,#patoast,.slide,.slides,.deck,figure,.graph,.gt,.grapher,#splash,.agree,.modal';
+const TX_BLOCK='p,li,ol,ul,div,section,table,details,h1,h2,h3,h4,h5,h6,blockquote,dl,figure,form';
+function txOwnText(e){ for(const n of e.childNodes) if(n.nodeType===3&&n.textContent.trim()) return true; return false; }
+function txOk(e){ if(!e||e.closest(TX_OFF)) return false; if(e.querySelector(TX_NO)||e.closest('svg')) return false;
+  if(e.matches('a,button,summary')) return !!txNorm(e.textContent);
+  if(e.querySelector(TX_BLOCK)) return false; return !!txNorm(e.textContent); }
+function txCand(t){ for(let e=t&&t.nodeType===1?t:t&&t.parentElement; e&&e!==document.body; e=e.parentElement){
+    if(e.closest(TX_OFF)) return null;
+    if(e.matches(TX_TAGS)||(txOwnText(e)&&getComputedStyle(e).display!=='inline')) return txOk(e)?e:null; }
+  return null; }
+function txKind(e){ return e.matches('h1,h2,h3,h4')||!!e.closest('.ladder .t, .stidx, .pn, nav, header.top h1, .fvhead')?'title':'text'; }
+function txId(s){ let h=2166136261; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return (h>>>0).toString(36); }
+/* map normalized text positions to (text node, offset), so an edit lands inside the element without flattening its markup */
+function txMap(el){ const map=[]; let out='', sp=true; const w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
+  for(let n=w.nextNode(); n; n=w.nextNode()){ if(n.parentElement&&n.parentElement.closest('button.pa,.txbar')) continue; const t=n.textContent;
+    for(let i=0;i<t.length;i++){ const ws=/\s/.test(t[i]); if(ws){ if(sp) continue; out+=' '; sp=true; } else { out+=t[i]; sp=false; } map.push([n,i]); } }
+  while(out.endsWith(' ')){ out=out.slice(0,-1); map.pop(); } return {text:out,map}; }
+function txDiff(a,b){ let p=0; while(p<a.length&&p<b.length&&a[p]===b[p]) p++; let s=0; while(s<a.length-p&&s<b.length-p&&a[a.length-1-s]===b[b.length-1-s]) s++;
+  return {p, oldMid:a.slice(p,a.length-s), newMid:b.slice(p,b.length-s)}; }
+function txApplyTo(el,r){ const done=(el.dataset.txdone||'').split(' '); if(done.includes(r.id)) return false; const {text,map}=txMap(el); let off=0;
+  if(text!==r.old_text){ if(r.role!=='title') return false; off=text.indexOf(r.old_text); if(off<0||text.length-r.old_text.length>24) return false;
+    const post=text[off+r.old_text.length]; if(post&&/\w/.test(post)&&/\w/.test(r.old_text.slice(-1))) return false; }
+  const d=txDiff(r.old_text,r.new_text); d.p+=off;
+  try{ const rg=document.createRange(); const a=map[d.p], z=map[d.p+d.oldMid.length-1];
+    if(a) rg.setStart(a[0],a[1]); else { const l=map[map.length-1]; rg.setStart(l[0],l[1]+1); }
+    if(z) rg.setEnd(z[0],z[1]+1); else rg.collapse(true);
+    rg.deleteContents(); if(d.newMid) rg.insertNode(document.createTextNode(d.newMid)); el.normalize(); el.classList.add('txedited'); el.dataset.txdone=(el.dataset.txdone?el.dataset.txdone+' ':'')+r.id; return true; }catch(e){ return false; } }
+function txOverlay(){ if(!TX.list.length) return; const pend=TX.list.filter(r=>!r.folded);
+  for(const r of pend){ const key=r.old_text.slice(0,24);
+    let els=[...document.querySelectorAll(r.role==='title'?TX_TAGS:(r.tag||TX_TAGS))].filter(el=>!el.isContentEditable&&txNorm(el.textContent).indexOf(key)>=0&&txOk(el));
+    els=els.filter(e=>!els.some(o=>o!==e&&e.contains(o))); /* the innermost holder of the words, not its row too */
+    els.forEach(el=>txApplyTo(el,r)); } }
+function txPend(rec,keep){ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); if(keep) m[rec.id]=rec; else delete m[rec.id]; localStorage.setItem(k,JSON.stringify(m)); }catch(_){} }
+async function txSave(rec){ let err=null; txPend(rec,true);
+  for(const wait of [0,1500,4000,9000]){ if(wait){ toast('the database is busy; trying again…'); await new Promise(r=>setTimeout(r,wait)); }
+    try{ await Promise.race([ED.db.doc('edits/'+rec.id).set(rec), new Promise((_,rj)=>setTimeout(()=>rj({code:'no answer in 10 seconds'}),10000))]); err=null; break; }catch(x){ err=x; } }
+  if(!err) txPend(rec,false); return err; }
+function txStart(el){ if(TX.busy) return; const pa=el.matches('p[data-pid]')&&!el.closest('.ladder');
+  if(pa&&editable(el)){ startEdit(el); return; }
+  const before=txMap(el).text, beforeHtml=el.innerHTML, tag=el.tagName.toLowerCase(); TX.busy=el;
+  const href=el.getAttribute('href'); if(href!=null){ el.dataset.txhref=href; el.removeAttribute('href'); }
+  el.contentEditable='true'; el.classList.add('txediting'); el.tabIndex=-1; el.focus(); try{ const sel=getSelection(), rg=document.createRange(); rg.selectNodeContents(el); rg.collapse(false); sel.removeAllRanges(); sel.addRange(rg); }catch(_){}
+  const bar=document.createElement('div'); bar.className='txbar';
+  bar.innerHTML='<button type="button" data-e="save">save</button><button type="button" data-e="cancel">cancel</button><span class="pehint">words only · '+(txKind(el)==='title'?'a title: the next publish changes it everywhere it shows':'the next publish puts it into its source')+'</span>';
+  (el.matches('a,button,summary,li,td,th,dt,dd')?document.body:el.parentNode).appendChild(bar);
+  if(bar.parentNode===document.body){ const r=el.getBoundingClientRect(); bar.style.cssText='position:absolute;z-index:9999;left:'+Math.max(8,r.left+window.scrollX)+'px;top:'+(r.bottom+window.scrollY+6)+'px'; }
+  else el.after(bar);
+  const done=()=>{ el.removeAttribute('tabindex'); el.removeAttribute('contenteditable'); el.classList.remove('txediting'); bar.remove(); if(el.dataset.txhref!=null){ el.setAttribute('href',el.dataset.txhref); delete el.dataset.txhref; } TX.busy=null; };
+  const key=e=>{ if(e.key==='Escape'){ e.preventDefault(); bar.querySelector('[data-e=cancel]').click(); } if(e.key==='Enter'&&(tag!=='p'||e.metaKey||e.ctrlKey)){ e.preventDefault(); bar.querySelector('[data-e=save]').click(); } };
+  el.addEventListener('keydown',key);
+  bar.addEventListener('click',async e=>{ const k=e.target.dataset&&e.target.dataset.e; if(!k) return; e.preventDefault(); e.stopPropagation();
+    if(k==='cancel'){ el.innerHTML=beforeHtml; el.removeEventListener('keydown',key); done(); return; }
+    const after=txMap(el).text; el.removeEventListener('keydown',key);
+    if(after===before){ done(); return; } if(!after){ toast('a title or paragraph cannot be left empty; cancel instead'); return; }
+    const tmpA=document.createElement('div'); tmpA.innerHTML=beforeHtml;
+    const rec={kind:'text',id:'tx-'+txId(ED.page+'|'+before),page:ED.page,tag,role:txKind(el),old_text:before,new_text:after,old_html:edClean(tmpA),new_html:edClean(el),at:new Date().toISOString()};
+    const prev=TX.list.find(r=>r.new_text===before&&!r.folded); if(prev){ rec.id=prev.id; rec.old_text=prev.old_text; rec.old_html=prev.old_html; rec.page=prev.page; }
+    e.target.disabled=true; const err=await txSave(rec);
+    TX.list=TX.list.filter(r=>r.id!==rec.id).concat([rec]); el.classList.add('txedited'); el.dataset.txdone=(el.dataset.txdone?el.dataset.txdone+' ':'')+rec.id; done();
+    toast(err?'not saved yet ('+((err&&err.code)||'the database refused it')+'). Your words are kept on this device and go out when the database answers.':'saved: it goes into its page or data file at the next publish'); });
+}
+function txToggle(v){ TX.on=v; document.body.classList.toggle('tx-on',v); const b=document.getElementById('txbtn'); if(b){ b.textContent=v?'✓ done editing':'✎ edit text'; b.setAttribute('aria-pressed',v); }
+  try{ sessionStorage.setItem('tx:on',v?'1':''); }catch(_){} }
+async function txInit(){ if(!window.LADDER_DESK) return;
+  const ok=await edWait(); if(!ok) return; await edRecheck(); if(!ED.db||!ED.owner) return;
+  const FOLD=await edFolded()||{};
+  try{ const s=await ED.db.collection('edits').where('kind','==','text').get(); TX.list=s.docs.map(d=>d.data()||{}).filter(r=>r.old_text&&r.new_text).map(r=>Object.assign(r,{folded:!!FOLD[r.id]&&String(FOLD[r.id])>=String(r.at||'')})); }catch(e){}
+  try{ const m=JSON.parse(localStorage.getItem('ladder:pending-edits')||'{}'); let n=0; for(const id in m){ const r=m[id]; if(!r||r.kind!=='text') continue; if(!(await txSave(r))) n++; TX.list=TX.list.filter(x=>x.id!==id).concat([r]); }
+    if(n) toast(n+' edit'+(n>1?'s':'')+' saved that had been waiting on this device'); }catch(_){}
+  const b=document.createElement('button'); b.type='button'; b.id='txbtn'; b.className='txbtn'; document.body.appendChild(b);
+  b.addEventListener('click',e=>{ e.stopPropagation(); if(TX.busy) return; txToggle(!TX.on); });
+  let st=''; try{ st=sessionStorage.getItem('tx:on')||''; }catch(_){} txToggle(!!st);
+  window.addEventListener('click',e=>{ if(!TX.on||TX.busy&&TX.busy.contains(e.target)) return; if(e.target.closest&&e.target.closest('#txbtn,.txbar,.pebar,#desk,.dtop,.lnav,#ladderbtn')) return;
+    const el=txCand(e.target); e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); if(TX.busy) return; if(el) txStart(el); else toast('that one has maths, a graph or a slide in it, so it stays as it is'); },true);
+  document.addEventListener('mouseover',e=>{ if(!TX.on||TX.busy) return; document.querySelectorAll('.txcand').forEach(x=>x.classList.remove('txcand')); const el=txCand(e.target); if(el) el.classList.add('txcand'); });
+  txOverlay(); let t=0; new MutationObserver(()=>{ if(TX.busy) return; clearTimeout(t); t=setTimeout(txOverlay,250); }).observe(document.body,{childList:true,subtree:true});
+}
+window.LadderText={on:()=>txToggle(true),off:()=>txToggle(false),list:()=>TX.list};
 function openMenu(p,b){ cur=p; const r=b.getBoundingClientRect(); const fb=menu.querySelector('[data-a=final]'); if(fb){ const done=p.classList.contains('fp')||p.classList.contains('pedited'); fb.hidden=!(ED.owner&&editable(p)&&!done); } const eb=menu.querySelector('[data-a=edit]'); if(eb){ eb.hidden=!(ED.owner&&editable(p)); if(!ED.owner&&editable(p)) edRecheck().then(ok=>{ if(ok&&cur===p) eb.hidden=false; }); } menu.hidden=false;
   const w=menu.offsetWidth||220; menu.style.left=Math.max(8,Math.min(window.innerWidth-w-8,r.left+r.width/2-w/2))+'px';
   menu.style.top=(r.bottom+window.scrollY+6)+'px'; }
@@ -1107,7 +1196,7 @@ const ANNEX=['stat','phys','chem','bio','comp','econ','logi','eng','crypt','nav'
 function nonskid(){
   const key=document.querySelector('.ladderkey'), rungs=document.querySelector('.rungs'); if(!key||!rungs) return;
   /* by default every annex but statistics is hidden: the learner finds the rest by being curious (Andrew, 2026-10-31) */
-  let hide=ANNEX.filter(k=>k!=='stat'); try{ const v=LS.getItem('ladder:hide'); if(v) hide=JSON.parse(v); }catch(e){}
+  let hide=ANNEX.filter(k=>k!=='stat'); try{ const v=LS.getItem('ladder:hide'); if(v) hide=JSON.parse(v); }catch(e){} if(window.LADDER_DESK) hide=[];
   const apply=()=>{ ANNEX.concat(['gt']).forEach(k=>rungs.classList.toggle('hide-'+k,hide.includes(k)));
     key.querySelectorAll('[data-k]').forEach(b=>{ const off=hide.includes(b.dataset.k); b.classList.toggle('off',off); b.setAttribute('aria-pressed',String(!off)); });
     try{ LS.setItem('ladder:hide',JSON.stringify(hide)); }catch(e){} };
@@ -1215,7 +1304,7 @@ function pids(){ document.querySelectorAll('[data-pid]').forEach(p=>{ const id=p
   const per={}; const ps=[...document.querySelectorAll('header.top > p[data-pid], section.class p[data-pid]')];
   for(const p of ps){ const top=!!p.closest('header.top'), st=p.closest('section.step'), k=top?info.label+'.top':(st?st.dataset.step:info.label); per[k]=(per[k]||0)+1; const ad=top?k+'.'+per[k]:k+'.0.'+per[k]; if(ad===h){ history.replaceState(null,'','#'+p.dataset.pid); break; } } }
 function toPid(){ const h=location.hash.slice(1); const t=h&&document.getElementById(h); if(t&&t.dataset&&t.dataset.pid) setTimeout(()=>t.scrollIntoView({block:'center'}),60); }
-ready(()=>{ pids(); steps(); const info=tagInfo(); if(info){ titles(info); addresses(info); edInit(); } toPid(); reportQuestions(); pn(); nonskid(); greek(); curly();
+ready(()=>{ pids(); steps(); const info=tagInfo(); if(info){ titles(info); addresses(info); edInit(); } txInit(); if(window.LADDER_DESK) setTimeout(()=>document.querySelectorAll('.rungs details.stidx').forEach(d=>d.open=true),0); toPid(); reportQuestions(); pn(); nonskid(); greek(); curly();
   const fit=()=>{ stackTables(); liftLong(); }; window.__fit=fit;
   setTimeout(fit,400); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>setTimeout(fit,100)); });
 })();
