@@ -572,7 +572,7 @@ function starCounts(){
   return {blue,gold,wings};
 }
 const ICON_L='<svg class="lb-L" viewBox="104 92 308 328" aria-hidden="true"><path d="M222,132 L384,358" stroke="#5fd13a" stroke-width="16" stroke-linecap="round"/><path fill="currentColor" d="M112,100 L262,100 L262,108 C238,108 225,112 223,136 L222,360 L360,360 C384,359 397,342 398,294 L405,294 L400,412 L112,412 L112,404 C134,404 149,399 150,378 L150,136 C149,112 136,108 112,108 Z"/><path d="M222,318 L264,318 L264,360" fill="none" stroke="#e8703a" stroke-width="16"/></svg>';
-const ICON_X='<svg class="lb-X" viewBox="20 20 280 300" aria-hidden="true"><path d="M262,64 C220,118 130,226 66,292" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round"/><path fill="currentColor" d="M38,92 C52,52 98,44 124,86 L216,262 C228,284 246,290 270,276 L276,286 C246,318 196,316 176,280 L88,112 C76,90 58,88 46,100 Z"/></svg>'; /* 0.3.23 (Andrew 10:54): Toolbox in the ladder's lettering, its x a large teal chi */
+const ICON_X='<svg class="lb-X" viewBox="20 20 280 300" aria-hidden="true"><path d="M262,64 C220,118 130,226 66,292" fill="none" stroke="#5fd13a" stroke-width="18" stroke-linecap="round"/><path fill="currentColor" d="M38,92 C52,52 98,44 124,86 L216,262 C228,284 246,290 270,276 L276,286 C246,318 196,316 176,280 L88,112 C76,90 58,88 46,100 Z"/></svg>'; /* 0.3.23 (Andrew 10:54): Toolbox in the ladder's lettering, its x a large teal chi */
 window.ICON_L_HTML='<span class="lb-l">'+ICON_L+'<span class="lb-w">adder</span></span>';
 const WINGS='<svg viewBox="0 0 28 14" width="22" height="11" aria-hidden="true"><path fill="currentColor" d="M13.4 9.2C11 3.6 6.4.9.8.8c1 3 2.4 5 4.4 6.2-1 .5-1.7 1.1-2.2 1.9 1.9.9 3.8 1 5.2.7-.6 1-.8 2-.5 3.2 1.4.4 3.4-.2 5.7-3.6z"/><path fill="currentColor" transform="matrix(-1 0 0 1 28 0)" d="M13.4 9.2C11 3.6 6.4.9.8.8c1 3 2.4 5 4.4 6.2-1 .5-1.7 1.1-2.2 1.9 1.9.9 3.8 1 5.2.7-.6 1-.8 2-.5 3.2 1.4.4 3.4-.2 5.7-3.6z"/></svg>';
 
@@ -1834,12 +1834,16 @@ function tidy(t){ if(!t||!t.querySelector(':scope>a')) return; const li=t.parent
 const STAR='<svg class="fstar" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M12 2.6l2.8 6.1 6.6.7-4.9 4.5 1.4 6.6L12 17.2l-5.9 3.3 1.4-6.6L2.6 9.4l6.6-.7z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
 const J=k=>{ try{ return JSON.parse(LS.getItem(k)||'null'); }catch(e){ return null; } };
 function footCount(){ const U=window.LADDER_UND||{};
+  /* 0.3.26 (Andrew 11:23): a footing whose understand question is ticked turns teal in the list; the star stays hidden
+     until every footing is, then shows as a teal star. A step with no understand questions just says "n footings". */
   document.querySelectorAll('.rungs .ladder li>details.flist').forEach(d=>{ const sm=d.querySelector('summary'); if(!sm) return;
-    const n=d.querySelectorAll(':scope ol>li').length; const a=d.parentElement.querySelector(':scope>.t>a'); const m=a&&(a.getAttribute('href')||'').match(/^(?:view\.html#p=)?([^#.&]+)/);
-    const u=m&&U[m[1]]; let x=0; if(u){ const st=J('marks:'+u[0])||{}; x=u[1].filter(q=>st['q:'+q]).length; } x=Math.min(x,n);
-    const ol=sm.querySelector('ol'); /* some summaries hold the list itself */
-    let lab=sm.querySelector(':scope>.fslab'); if(!lab){ [...sm.childNodes].forEach(c=>{ if(c!==ol) c.remove(); }); sm.insertAdjacentHTML('afterbegin',STAR+'<span class="fslab"></span>'); lab=sm.querySelector(':scope>.fslab'); }
-    lab.innerHTML=x+'/'+n+' <span class="fsw">footings</span>'; sm.classList.toggle('fsfull',n>0&&x>=n); sm.setAttribute('aria-label',x+' of '+n+' footings understood; show or hide the footings'); }); }
+    const items=[...d.querySelectorAll(':scope ol>li')], n=items.length; const a=d.parentElement.querySelector(':scope>.t>a'); const m=a&&(a.getAttribute('href')||'').match(/^(?:view\.html#p=)?([^#.&]+)/);
+    const u=m&&U[m[1]]; const st=u?(J('marks:'+u[0])||{}):{}; const done=new Set(); if(u) u[1].forEach(([f,q])=>{ if(st['q:'+q]) done.add(f); });
+    items.forEach(li=>{ const h=((li.querySelector('a')||{}).getAttribute?li.querySelector('a').getAttribute('href'):'')||''; const f=decodeURIComponent((h.split('#')[1]||'').replace(/^.*[&;]h=/,'')); li.classList.toggle('fdone',!!f&&done.has(f)); });
+    const x=Math.min(items.filter(li=>li.classList.contains('fdone')).length,n), full=!!u&&n>0&&x>=n;
+    let lab=sm.querySelector(':scope>.fslab'); if(!lab){ [...sm.childNodes].forEach(c=>c.remove()); sm.insertAdjacentHTML('afterbegin',STAR+'<span class="fslab"></span>'); lab=sm.querySelector(':scope>.fslab'); }
+    lab.innerHTML=(u?x+'/'+n:n)+' <span class="fsw">footings</span>'; sm.classList.toggle('fsfull',full);
+    sm.setAttribute('aria-label',(u?x+' of '+n+' footings understood':n+' footings')+'; show or hide the footings'); }); }
 window.__footCount=footCount;
 function start(){ const R=document.querySelector('.rungs'); if(!R) return;
   R.querySelectorAll('.ladder>li>.t').forEach(tidy);
