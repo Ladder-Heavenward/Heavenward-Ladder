@@ -615,7 +615,7 @@ function climbTo(smooth){
   if(f&&f.page){ const pg=f.page.replace(/\.html$/,''); const fa=f.id&&f.id!=='top'&&f.id!=='end'?document.querySelector('.ladder a[href="'+pg+'.html#'+f.id+'"]'):null;
     if(fa){ const d=fa.closest('details'); if(d) d.open=true; h=fa.closest('li')||fa; }
     else { const ra=document.querySelector('.ladder a[href="'+pg+'.html"]'); if(ra) h=ra.closest('li')||ra; }
-    if(h){ document.querySelectorAll('.fvhere').forEach(x=>x.classList.remove('fvhere')); h.classList.add('fvhere'); } }
+    if(h){ document.querySelectorAll('.fvhere,.fvrow').forEach(x=>x.classList.remove('fvhere','fvrow')); h.classList.add('fvhere'); const row=h.parentElement&&h.parentElement.closest('.ladder>li'); (row||h).classList.add('fvrow'); } } /* 0.3.36: the row carries the orange dot */
   if(!h) h=document.querySelector('.rungs .here')||document.querySelector('.rungs section.rung');
   while(h&&!h.offsetParent&&h.parentElement&&h.parentElement!==document.body) h=h.parentElement; /* 0.3.23: a hidden footing climbs to the row that shows it */
   if(h) h.scrollIntoView({block:'center',behavior:smooth?'smooth':'auto'});
@@ -1852,7 +1852,7 @@ function footCount(){ const U=window.LADDER_UND||{};
     items.forEach(li=>{ const h=((li.querySelector('a')||{}).getAttribute?li.querySelector('a').getAttribute('href'):'')||''; const f=decodeURIComponent((h.split('#')[1]||'').replace(/^.*[&;]h=/,'')); li.classList.toggle('fdone',!!f&&done.has(f)); });
     const x=Math.min(items.filter(li=>li.classList.contains('fdone')).length,n), full=!!u&&n>0&&x>=n;
     let lab=sm.querySelector(':scope>.fslab'); if(!lab){ [...sm.childNodes].forEach(c=>c.remove()); sm.insertAdjacentHTML('afterbegin',STAR+'<span class="fslab"></span>'); lab=sm.querySelector(':scope>.fslab'); }
-    lab.innerHTML=(u?x+'/'+n:n)+' <span class="fsw">footings</span>'; sm.classList.toggle('fsfull',full);
+    lab.innerHTML=(u?x+'/'+n:n)+' <span class="fsw">footings</span>'; sm.classList.toggle('fsnoq',!u); sm.classList.toggle('fsfull',full);
     sm.setAttribute('aria-label',(u?x+' of '+n+' footings understood':n+' footings')+'; show or hide the footings'); }); }
 window.__footCount=footCount;
 function start(){ const R=document.querySelector('.rungs'); if(!R) return;
