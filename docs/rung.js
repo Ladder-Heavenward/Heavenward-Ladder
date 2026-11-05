@@ -1489,7 +1489,7 @@ window.LadderFV={
     ss.set('fv:want','fv');
     if(window.LADDER_PAGE&&window.__deskGo){ window.__deskGo(h); return true; }
     location.href=h; return true; },
-  heights(){ ss.set('fv:heights','1'); location.href='index.html'; }
+  heights(){ ss.set('fv:heights','1'); try{ sessionStorage.setItem('desk:page','index'); sessionStorage.removeItem('desk:scroll'); }catch(e){} location.href='index.html'; } /* 0.3.20: the desk's index would otherwise reopen the last page */
 };
 /* the ladder itself: the app opens on the last footing, unless you came here by "dizzying heights" */
 function onIndex(){
