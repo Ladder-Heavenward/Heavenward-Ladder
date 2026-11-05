@@ -1757,7 +1757,8 @@ async function sit(scope,key,opts){ opts=opts||{}; close();
       oe.appendChild(b); });
     box.querySelector('.sk-next').onclick=()=>{ i++; if(i<qs.length) show(); else end(); }; };
   const end=()=>{ const pass=right>=need, k=certKey(scope,key);
-    if(pass&&k){ const old=read(k); const via=opts.via||'stick'; if(!old||(old.via==='measure'&&via==='stick')) put('cert:'+k,{by:'self',via,scope,t:Date.now(),score:right+'/'+qs.length}); if(via==='measure') unlock.apply(null,opts.into||[scope,key]); }
+    if(pass&&k){ const old=read(k); const via=opts.via||'stick'; if(!old||(old.via==='measure'&&via==='stick')) put('cert:'+k,{by:'self',via,scope,t:Date.now(),score:right+'/'+qs.length}); if(via==='measure') unlock.apply(null,opts.into||[scope,key]);
+      if(opts.into){ const [isc,ik]=opts.into, rs=isc==='rung'?[ik]:((floorOf(ik)||{}).rungs||[]); rs.forEach(r=>put('cert:in:r'+String(r).padStart(2,'0'),{by:'self',via:'testin',t:Date.now(),from:scope+' '+key})); } }
     box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-q">'+right+' of '+qs.length+' right. '+(pass?(opts.via==='measure'?'It measures up: '+esc(opts.into?label(opts.into[0],opts.into[1]):label(scope,key))+' is unlocked. Its gold star waits until every floor below it is done.':'It measures up: a gold star.'):'Not yet: '+need+' were needed. Sit it again whenever you like; the questions are drawn fresh.')+'</p><p><button type="button" class="sk-again">'+(pass?'close':'sit it again')+'</button></p></div>'; wire();
     box.querySelector('.sk-again').onclick=()=>{ if(pass) close(); else sit(scope,key,opts); };
     if(window.__barStats) window.__barStats(); if(opts.done) opts.done(pass); };
@@ -1774,15 +1775,18 @@ const pages=()=>{ try{ return JSON.parse(LS.getItem('pages:done')||'{}')||{}; }c
 const cert=k=>{ try{ return JSON.parse(LS.getItem('cert:'+k)||'null'); }catch(e){ return null; } };
 const S=()=>window.LadderStick;
 const stemOf=li=>{ const a=li.querySelector(':scope>.t>a'); const m=a&&(a.getAttribute('href')||'').match(/^([^#.]+)\.html/); return m?m[1]:null; };
-function icon(li,scope,key,title){ if(li.querySelector(':scope>.msr')) return;
-  const b=document.createElement('button'); b.type='button'; b.className='msr'; b.title=title; b.setAttribute('aria-label',title); b.innerHTML=RULER;
+const GOLD='<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 2.6l2.8 6.1 6.6.7-4.9 4.5 1.4 6.6L12 17.2l-5.9 3.3 1.4-6.6L2.6 9.4l6.6-.7z" fill="currentColor"/></svg>';
+function icon(li,scope,key,title){ if(li.querySelector('.msr')) return;
+  /* 0.3.25 (Andrew 11:08): once its test is passed, the ruler turns into a gold star (still tap to sit it again) */
+  const got=S().certKey&&cert(S().certKey(scope,key)); if(got) title=title.replace(/^measure/,'measured ★ · sit again:');
+  const b=document.createElement('button'); b.type='button'; b.className='msr'+(got?' msr-gold':''); b.title=title; b.setAttribute('aria-label',title); b.innerHTML=got?GOLD:RULER;
   b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); if(!S()) return; S().sit(scope,key,{via:'measure',done:ok=>{ if(ok) setTimeout(()=>location.reload(),1600); }}); };
   (li.querySelector(':scope>.t')||li).appendChild(b); }
 function indexIcons(){ if(!document.querySelector('.rungs')||!S()) return Promise.resolve();
   /* 0.3.23 (Andrew 11:04): the ruler sits beside a step, rung or floor already unlocked, and measures it.
      A locked row has no icon: tapping it tests in, with the last test before it. */
   return S().maps().then(()=>{ const vis=li=>!li.classList.contains('lk-hide')&&!li.classList.contains('lk-shut')&&!li.closest('section.lk-hide');
-    document.querySelectorAll('.rungs .msr').forEach(b=>b.remove());
+    document.querySelectorAll('.rungs .msr').forEach(b=>b.remove()); if(window.__footCount) __footCount();
     document.querySelectorAll('section.floor li.k-floor.built').forEach(li=>{ const m=(stemOf(li)||'').match(/^floor(\d+)$/); if(!m||!vis(li)||!S().floorOf(+m[1])) return; icon(li,'floor',+m[1],'measure floor '+m[1]); });
     document.querySelectorAll('section.rung li.k-theory.built').forEach(li=>{ const n=((li.querySelector(':scope>.n')||{}).textContent||'').trim(); if(!/^\d+$/.test(n)||!vis(li)||!S().rungOf(+n)) return; icon(li,'rung',+n,'measure rung '+n); });
     document.querySelectorAll('section.rung li.built:not(.k-theory):not(.k-floor)').forEach(li=>{ const s=stemOf(li); if(!s||!vis(li)||!S().where(s)) return; icon(li,'step',s,'measure this step'); });
@@ -1814,6 +1818,36 @@ function list(){ const s=S(); if(!s) return;
     box.querySelectorAll('.sk-sit').forEach(b=>b.onclick=()=>{ const sc=b.dataset.s, k=sc==='step'?b.dataset.k:+b.dataset.k; box.remove(); s.sit(sc,k,{via:'stick'}); });
   }); }
 window.LadderMeasure={list,finished,indexIcons,testIn}; /* 0.3.23: LadderLock draws the icons once the rows are settled */
+})();
+
+/* ---- 0.3.25 (Andrew 11:08) index rows: the title sits on the row's centre whatever comes with it. The ruler or gold star
+   sit in the row's right column, as wide as the number's column on the left, with the closed footing list; the tag,
+   "you are here" and cues go on a line below the title. An open footing list spans the row, centred (Andrew 11:14).
+   The footing list's button is a blue star outline with x/n: n footings, x understand questions ticked (und.js). */
+(function(){
+'use strict';
+const SIDE=n=>n.nodeType===1&&(n.matches('.msr,.certrow,svg,img')||n.tagName==='BUTTON'); /* these go to the row's right column */
+function tidy(t){ if(!t||!t.querySelector(':scope>a')) return; const li=t.parentElement; let tr=li.querySelector(':scope>.tr'), tb=t.querySelector(':scope>.tb');
+  if(!tr){ tr=document.createElement('span'); tr.className='tr'; li.insertBefore(tr,t.nextSibling); } if(!tb){ tb=document.createElement('span'); tb.className='tb'; t.appendChild(tb); }
+  [...t.childNodes].forEach(n=>{ if(n===tr||n===tb||(n.nodeType===1&&n.tagName==='A')) return; if(n.nodeType===3){ if(!n.textContent.trim()) return; tb.appendChild(n); return; } (SIDE(n)?tr:tb).appendChild(n); });
+  tr.hidden=!tr.childNodes.length; tb.hidden=!tb.childNodes.length; }
+const STAR='<svg class="fstar" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M12 2.6l2.8 6.1 6.6.7-4.9 4.5 1.4 6.6L12 17.2l-5.9 3.3 1.4-6.6L2.6 9.4l6.6-.7z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
+const J=k=>{ try{ return JSON.parse(LS.getItem(k)||'null'); }catch(e){ return null; } };
+function footCount(){ const U=window.LADDER_UND||{};
+  document.querySelectorAll('.rungs .ladder li>details.flist').forEach(d=>{ const sm=d.querySelector('summary'); if(!sm) return;
+    const n=d.querySelectorAll(':scope ol>li').length; const a=d.parentElement.querySelector(':scope>.t>a'); const m=a&&(a.getAttribute('href')||'').match(/^(?:view\.html#p=)?([^#.&]+)/);
+    const u=m&&U[m[1]]; let x=0; if(u){ const st=J('marks:'+u[0])||{}; x=u[1].filter(q=>st['q:'+q]).length; } x=Math.min(x,n);
+    const ol=sm.querySelector('ol'); /* some summaries hold the list itself */
+    let lab=sm.querySelector(':scope>.fslab'); if(!lab){ [...sm.childNodes].forEach(c=>{ if(c!==ol) c.remove(); }); sm.insertAdjacentHTML('afterbegin',STAR+'<span class="fslab"></span>'); lab=sm.querySelector(':scope>.fslab'); }
+    lab.innerHTML=x+'/'+n+' <span class="fsw">footings</span>'; sm.classList.toggle('fsfull',n>0&&x>=n); sm.setAttribute('aria-label',x+' of '+n+' footings understood; show or hide the footings'); }); }
+window.__footCount=footCount;
+function start(){ const R=document.querySelector('.rungs'); if(!R) return;
+  R.querySelectorAll('.ladder>li>.t').forEach(tidy);
+  new MutationObserver(ms=>{ const ts=new Set(); ms.forEach(m=>{ if(m.target.classList&&m.target.classList.contains('t')&&m.addedNodes.length) ts.add(m.target);
+      if(m.target.classList&&(m.target.classList.contains('tr')||m.target.classList.contains('tb'))){ m.target.hidden=!m.target.childNodes.length; } });
+    ts.forEach(tidy); }).observe(R,{childList:true,subtree:true});
+  const go=()=>footCount(); if(window.LADDER_UND) go(); else { const s=document.createElement('script'); s.src='und.js'; s.onload=go; document.head.appendChild(s); } }
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
 })();
 
 /* ---- 0.3.1 standing questions (Andrew 2026-11-04 20:25): each standing question walks a branching tree.
@@ -2016,15 +2050,15 @@ function lock(){
   /* tested in: floors and rungs measured into, by LADMAP */
   const M=window.LADMAP||[], openRung=new Set(), openFloor=new Set(), rungFloor={};
   M.forEach(([fl,rungs])=>{ if(cert('floor'+fl+'concl')) openFloor.add(fl);
-    rungs.forEach(([r,core])=>{ rungFloor[r]=fl; if(core.length&&cert(core[core.length-1])) openRung.add(r); const o=P['open:r'+String(r).padStart(2,'0')]; if(o&&o.v) openRung.add(r); }); });
+    rungs.forEach(([r,core])=>{ rungFloor[r]=fl; if(core.length&&cert(core[core.length-1])) openRung.add(r); if(cert('in:r'+String(r).padStart(2,'0'))) openRung.add(r); /* 0.3.25: tested in */ }); });
   /* 0.3.23: a rung tested into (open:rNN) is open, and so is its floor */
-  M.forEach(([fl,rungs])=>{ if(rungs.some(([r])=>openRung.has(r))) openFloor.add(fl); });
+  const flTouched=new Set(); M.forEach(([fl,rungs])=>{ if(rungs.some(([r])=>openRung.has(r))) flTouched.add(fl); });
   const rungNo=s=>{ const m=s&&s.match(/^r(\d\d)/); return m?+m[1]:null; };
   const floorNo=sec=>{ const f=sec.getAttribute('data-floor'); return f?+f:null; };
   /* the floor each section sits on: floor sections set it, rung sections inherit */
   let curFl=null; const secFl=new Map(); secs.forEach(s=>{ if(s.classList.contains('floor')) curFl=floorNo(s); secFl.set(s,curFl); });
   const reachedFl=new Set(); rows.forEach((r,i)=>{ if(i<=reach) reachedFl.add(secFl.get(r.sec)); });
-  const flOpen=fl=>reachedFl.has(fl)||openFloor.has(fl);
+  const flOpen=fl=>reachedFl.has(fl)||openFloor.has(fl)||flTouched.has(fl);
   const rOpen=n=>openRung.has(n)||openFloor.has(rungFloor[n]);
   rows.forEach((r,i)=>{ const li=r.li, fl=secFl.get(r.sec), isFloor=r.sec.classList.contains('floor'), n=rungNo(r.stem);
     const isRungRow=li.classList.contains('k-theory')&&r.sec.querySelector(':scope>ol.ladder>li')===li;
@@ -2040,7 +2074,7 @@ function lock(){
     const fl2=li.querySelector(':scope>details.flist'); if(fl2){ const items=[...fl2.querySelectorAll('ol>li')];
       if(show&&r.stem===furStem&&F2&&F2.id&&F2.id!=='top'&&!(n!=null&&rOpen(n))&&!(P[r.stem]&&P[r.stem].v)){ const k=items.findIndex(x=>{ const a=x.querySelector('a'); return a&&(a.getAttribute('href')||'').endsWith('#'+F2.id); });
         items.forEach((x,j)=>x.classList.toggle('lk-hide',F2.id==='end'?false:(k>=0&&j>k)));
-        const sm=fl2.querySelector('summary'); if(sm&&k>=0&&F2.id!=='end'){ sm.dataset.full=sm.dataset.full||sm.textContent; sm.textContent=(k+1)+' of '+items.length+' footings'; } }
+        }
       else items.forEach(x=>x.classList.remove('lk-hide')); }
   });
   /* a section with nothing showing goes; a locked row tells you how to open it */
