@@ -1064,7 +1064,13 @@ function edApply(p,html){ const b=p.querySelector('button.pa'); const tmp=docume
 function edClearPending(pid){ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); delete m[pid]; localStorage.setItem(k,JSON.stringify(m)); }catch(_){} }
 async function edFolded(){ const f={}; try{ const s=await ED.db.collection('folded').get(); s.docs.forEach(d=>{ const v=d.data()||{}; f[v.pid||d.id]=v.at||''; }); }catch(_){ return null; } return f; }
 /* The owner check runs once at load; if the host was slow to answer then, check again when a menu opens. */
-async function edRecheck(){ try{ if(!window.claude||typeof window.claude.use!=='function') return false; if(!ED.db) ED.db=await window.claude.use('db'); if(!ED.db) return false; const u=await window.claude.use('user'); ED.owner=u?!!(await u.isOwner()):false; if(ED.owner) document.body.classList.add('ed-owner'); }catch(e){} return ED.owner; }
+async function edRecheck(){ try{ if(!window.claude||typeof window.claude.use!=='function'){ ED.why='claude'; return false; } if(!ED.db) ED.db=await window.claude.use('db'); if(!ED.db){ ED.why='db'; return false; } const u=await window.claude.use('user'); ED.owner=u?!!(await u.isOwner()):false; ED.why=ED.owner?'':(u?'owner':'user'); if(ED.owner) document.body.classList.add('ed-owner'); }catch(e){ ED.why='err'; } return ED.owner; }
+/* 0.3.41 (Andrew 18:24 "the edit button is not on the menu"): on the desk, when editing is off, the menu says why and offers the Permissions panel */
+const ED_WHY={claude:'Editing is off: this view is not inside claude.ai. Open the desk link in claude.ai, signed in.',db:'Editing is off: the desk cannot reach its database. Allow database access under Permissions, then reload.',user:'Editing is off: the desk cannot tell who is viewing. Open the desk link in claude.ai, signed in.',owner:'Editing is off: claude.ai does not see you as the owner of this desk. Check that you are signed in to the account that owns it.',err:'Editing is off: the desk could not check its database. Reload the page and try again.'};
+async function edWhyShow(m){ let w=m.querySelector('.edwhy'); if(!window.LADDER_DESK||ED.owner){ if(w) w.hidden=true; return; }
+  if(!w){ w=document.createElement('div'); w.className='edwhy'; w.style.cssText='font-size:.78rem;line-height:1.35;max-width:16rem;padding:6px 8px;color:var(--muted,#666);border-top:1px solid rgba(0,0,0,.1);white-space:normal'; m.appendChild(w); }
+  w.hidden=false; w.textContent=ED_WHY[ED.why]||ED_WHY.err;
+  try{ const pm=window.claude&&await window.claude.use('permissions'); if(pm&&pm.manage){ const b=document.createElement('button'); b.type='button'; b.textContent='Open Permissions'; b.style.cssText='display:block;margin-top:4px'; b.onclick=e=>{ e.stopPropagation(); pm.manage().catch(()=>toast('Open the Permissions menu at the top of the desk')); }; w.appendChild(b); } }catch(_){} }
 async function edInit(){
   if(!document.querySelector('header.top > p[data-pid], section.class p[data-pid]')) return;
   if(!(await edWait())) return;
@@ -1199,7 +1205,7 @@ async function txInit(){ if(!window.LADDER_DESK) return;
   txOverlay(); let t=0; new MutationObserver(()=>{ if(TX.busy) return; clearTimeout(t); t=setTimeout(txOverlay,250); }).observe(document.body,{childList:true,subtree:true});
 }
 window.LadderText={on:()=>txToggle(true),off:()=>txToggle(false),list:()=>TX.list};
-function openMenu(p,b){ cur=p; const r=b.getBoundingClientRect(); const fb=menu.querySelector('[data-a=final]'); if(fb){ const done=p.classList.contains('fp')||p.classList.contains('pedited'); fb.hidden=!(ED.owner&&editable(p)&&!done); } const eb=menu.querySelector('[data-a=edit]'); if(eb){ eb.hidden=!(ED.owner&&editable(p)); if(!ED.owner&&editable(p)) edRecheck().then(ok=>{ if(ok&&cur===p) eb.hidden=false; }); } menu.hidden=false;
+function openMenu(p,b){ cur=p; const r=b.getBoundingClientRect(); const fb=menu.querySelector('[data-a=final]'); if(fb){ const done=p.classList.contains('fp')||p.classList.contains('pedited'); fb.hidden=!(ED.owner&&editable(p)&&!done); } const eb=menu.querySelector('[data-a=edit]'); if(eb){ eb.hidden=!(ED.owner&&editable(p)); if(!ED.owner&&editable(p)) edRecheck().then(ok=>{ if(ok&&cur===p) eb.hidden=false; edWhyShow(menu); }); else edWhyShow(menu); } menu.hidden=false;
   const w=menu.offsetWidth||220; menu.style.left=Math.max(8,Math.min(window.innerWidth-w-8,r.left+r.width/2-w/2))+'px';
   menu.style.top=(r.bottom+window.scrollY+6)+'px'; }
 /* the non-skid key: the annex tags show or hide their annexes; the geometry-transform mark waits for the geometry floor */
