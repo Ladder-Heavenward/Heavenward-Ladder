@@ -1599,6 +1599,12 @@ function footingView(){
   const fwd=()=>{ if(cur>=LASTU){ const h=pageLink(1); if(h) leave(h,1); return; } go(cur+1); };
   const back=()=>{ if(cur<=0){ const h=pageLink(-1); if(h) leave(h,-1); return; } go(Math.min(cur-1,LASTU)); };
   up.onclick=fwd; dn.onclick=back;
+  /* 0.3.40 (Andrew 12:08): on a keyboard, ↑ climbs to the next footing and ↓ goes back, as the ▲ and ▼ buttons do */
+  document.addEventListener('keydown',e=>{ if(!on||busy||e.defaultPrevented||e.altKey||e.ctrlKey||e.metaKey||e.shiftKey) return;
+    if(e.key!=='ArrowUp'&&e.key!=='ArrowDown') return;
+    const t=e.target; if(t&&(t.isContentEditable||/INPUT|TEXTAREA|SELECT/.test(t.tagName))) return;
+    if(document.querySelector('#desk.open,#stick,#agreebox:not([hidden])')||document.body.classList.contains('stickopen')||document.body.classList.contains('toolpage')) return;
+    const b=e.key==='ArrowUp'?up:dn; if(b.hidden) return; e.preventDefault(); b.click(); });
   /* one finger: past the top edge of a footing, pulling down climbs to the next; past its bottom edge, pushing up goes back */
   let sy=null, sx=0, mode=0;
   const shut=t=>!!(t.closest&&t.closest('.slides,.pic,canvas,input,textarea,select,button,a,.mg,#desk,#lbar,.chq,.sayback .qid'));
