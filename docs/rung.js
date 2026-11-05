@@ -479,7 +479,7 @@ function deskHTML(){
   const b=document.createElement('button'); b.id='deskbtn'; b.setAttribute('aria-label','open the desk: questions and a grapher'); b.textContent='☰ desk';
   const d=document.createElement('div'); d.id='desk'; d.setAttribute('role','dialog'); d.setAttribute('aria-label','desk');
   const qs=!!document.querySelector('.sayback');
-  d.innerHTML='<div class="dtop"><button type="button" class="dback">← back</button><b class="dttl"></b></div><div class="dtabs"><button data-p="keys">Quick keys</button>'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph view</button><button data-p="moves">Techs read</button><button data-p="rand">Laundry</button>'+(document.querySelector('.qid')?'<button type="button" class="dcross">Crosswalk</button>':'')+'<button type="button" class="dstick">Measuring stick</button><button type="button" class="dstand">Standing questions</button><button data-p="rec">Record</button>'+(document.querySelector('.wrap>section.class.step')&&window.LADDER_DESK?'<button type="button" class="dfv">Page view</button>':'')+'<button type="button" class="dheights">Dizzying heights</button><a class="dshare" href="install.html">Share the ladder</a><button class="x" aria-label="close">✕</button></div>'
+  d.innerHTML='<div class="dtop"><button type="button" class="dback">← back</button><b class="dttl"></b></div><div class="dtabs"><button data-p="keys">Quick keys</button>'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph view</button><button data-p="moves">Techs read</button><button data-p="rand">Laundry</button>'+(document.querySelector('.qid')?'<button type="button" class="dcross">Crosswalk</button>':'')+'<button type="button" class="dstick">Measuring stick</button><button type="button" class="dstand">Standing questions</button><button data-p="rec">Record</button>'+(document.querySelector('.wrap>section.class.step')&&false?'<button type="button" class="dfv">Page view</button>':'')+'<button type="button" class="dheights">Dizzying heights</button><a class="dshare" href="install.html">Share the ladder</a><button class="x" aria-label="close">✕</button></div>'
     +'<div class="dpane" id="dp-keys"><p class="dnote">The marks this footing writes that a keyboard can’t type. Tap a text box first, and the key writes there; or use your own line and paste it.</p><div id="dkeyshost"></div></div>'
     +(qs?'<div class="dpane" id="dp-qs"><p class="dnote">The page’s questions, here so you can read them beside the class.</p><div class="dq" id="dq"></div></div>':'')
     +'<div class="dpane" id="dp-graph"><div id="dgfig"></div><div id="dmg"></div><p class="dnote" style="margin-top:10px">Type it as on paper: x^2, 2sin(x), e^x, ln x, √x, |x|, x!. a, b, c and k get sliders.</p></div>'
@@ -1505,6 +1505,7 @@ function onIndex(){
 }
 const REDUCE=()=>window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 function footingView(){
+  if(window.LADDER_DESK) return; /* 0.3.19 (Andrew 2026-11-05 10:14): the desk has only page view; the app has footing view */
   const wrap=document.querySelector('.wrap'); if(!wrap||document.querySelector('.rungs')) return;
   let steps=[...wrap.querySelectorAll(':scope>section.class.step')];
   /* 0.3.9 (Andrew 23:43): a page built as one class section with no footings (a rung's theory page, a rung's or a floor's
