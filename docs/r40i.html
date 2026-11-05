@@ -71,7 +71,7 @@ P(|X - E X| \ge \tfrac k6) \le \frac{2k/9}{(k/6)^2} @@ the spread-bound techniqu
     <div class="eyebrow">Anexact, yet rigorous · laws with a known exception rate</div>
     <p data-pid="688908">A coin machine never makes its answer certain. It makes the chance of error a number fixed before it runs, the same on every input, and it lowers the number by repetition, at a cost in steps that is also fixed in advance.</p>
     <p data-pid="6b97ae"><b>A coin machine is judged by its chance of error, and that chance is stated before the coins are thrown, for every input alike.</b></p>
-    <p data-pid="b7dcfd">This bound is crude: for an error of one in a million it asks for eight million runs. A sharper bound, named in the basement, shows the chance falls by a fixed factor with each run, so a few hundred runs bring it below the chance that a cosmic ray flips a bit in the machine’s memory during the run.</p>
+    <p data-pid="b7dcfd">This bound is crude: for an error of one in a million it asks for eight million runs. A sharper bound, the fast-fall technique of 40i5, shows the chance falls by a fixed factor with each run, so a few hundred runs bring it below the chance that a cosmic ray flips a bit in the machine’s memory during the run.</p>
     <p class="bait" data-pid="add293">A test for whether a number is prime, run at a bank in Seattle, is wrong with chance at most 1/4 each run. How many runs would you ask for before signing a key with it, and against what other risk would you set the chance you accept?</p>
   </aside>
   <section class="slides" id="sl1"><div class="eyebrow">The slides · coins · ← → keys work</div></section>
@@ -149,7 +149,26 @@ r = \begin{pmatrix}0\\1\end{pmatrix}:\ Br = \begin{pmatrix}1\\1\end{pmatrix},\ \
 </section>
 
 <section class="class step" data-step="40i5">
-  <h2 class="sthead"><span class="stno">40i5</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">40i5</span>Errors that fall fast</h2>
+  <p data-pid="b13ad0">The majority-vote technique asked for eight million runs to bring the error below one in a million. That is the spread-bound technique’s fault, not the machine’s: the spread bound uses only the spread of X, and X has far more to give. Count the wrong runs instead, and bound a growing function of them with the stray-bound technique of <a href="r30h.html#30h1">30h1</a>.</p>
+  <p data-pid="54063a">Fast-fall technique: <b>if each of k independent runs is wrong with chance at most 1/3, the majority is wrong with chance at most (2√2/3)ᵏ, which is below e^(−k/18).</b> Proof: let W be the number of wrong runs; the majority is wrong only if W ≥ k/2, that is, only if 2^W ≥ 2^(k/2). The stray-bound technique applied to 2^W, which is never negative, gives the chance at most E 2^W / 2^(k/2). The runs are independent, so by the independent-averages-multiply technique (<a href="r30g.html#30g3">30g3</a>) E 2^W is the product of k averages, each (1 − q) · 1 + q · 2 = 1 + q for a run wrong with chance q ≤ 1/3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the fast-fall technique">
+P(\text{majority wrong}) \le P(2^W \ge 2^{k/2}) \le \frac{E\,2^W}{2^{k/2}} @@ the stray-bound technique (30h1)
+E\,2^W = (1 + q)^k \le (\tfrac43)^k @@ independent-averages-multiply (30g3), q ≤ 1/3
+\frac{(4/3)^k}{2^{k/2}} = \big(\tfrac{2\sqrt2}{3}\big)^k \approx 0.943^k @@ 4/(3√2) = 2√2/3
+\htmlClass{new}{0.943^k = e^{-0.0589k} < e^{-k/18}} \quad \blacksquare @@ ln 0.943 ≈ −0.0589, and 1/18 ≈ 0.0556
+  </pre>
+  <p data-pid="f2de00">One in a million now needs k with 0.943ᵏ below 10⁻⁶: k = 235 runs, against eight million. The base 2 was chosen, not found: for a run wrong with chance 1/3 it is the base that makes (1 − q + qx)/√x smallest, x = (1 − q)/q = 2. A run wrong with chance only a little under one half gains little from each run, and the same count shows how little.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40i5.1</span><span class="ph understand">understand</span>Why does the fast-fall technique bound 2^W and not W itself, and which two techniques of rung 30 does its proof use? <br>How many runs does it ask for to bring the error below one in a billion?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40i6">
+  <h2 class="sthead"><span class="stno">40i6</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
 p \text{ was } 0 \text{ at }\allowbreak \text{ten }\allowbreak \text{random }\allowbreak \text{points, }\allowbreak \text{so } p \text{ is }\allowbreak \text{the }\allowbreak \text{zero }\allowbreak \text{polynomial}\,? @@ that is a stated chance of error, at most (d/s)¹⁰, not a proof
 \text{a }\allowbreak \text{coin }\allowbreak \text{machine }\allowbreak \text{is }\allowbreak \text{wrong }\allowbreak \text{with }\allowbreak \text{chance } 1/3 \text{ on }\allowbreak \text{most }\allowbreak \text{inputs}\,? @@ BPP asks for 1/3 on every input; a chance over inputs is a different claim
@@ -159,7 +178,7 @@ p \text{ was } 0 \text{ at }\allowbreak \text{ten }\allowbreak \text{random }\al
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">40i5.1</span><span class="ph understand">understand</span>Why do ten zero values at random points not prove that p is the zero polynomial? <br>Why must BPP’s chance of error hold on every input?</li>
+      <li><span class="qid">40i6.1</span><span class="ph understand">understand</span>Why do ten zero values at random points not prove that p is the zero polynomial? <br>Why must BPP’s chance of error hold on every input?</li>
     </ol>
   </section>
 </section>
@@ -168,10 +187,10 @@ p \text{ was } 0 \text{ at }\allowbreak \text{ten }\allowbreak \text{random }\al
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">40i.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix}2&amp;0&amp;1\\1&amp;1&amp;0\\0&amp;3&amp;1\end{pmatrix},\ \allowbreak B = \begin{pmatrix}1&amp;2&amp;0\\0&amp;1&amp;1\\1&amp;0&amp;2\end{pmatrix}"></span> <span data-tex-inline="C = \begin{pmatrix}3&amp;4&amp;2\\1&amp;3&amp;1\\1&amp;3&amp;4\end{pmatrix}"></span></span>Run the random-column check by hand with each of the eight columns of 0s and 1s, and find how many catch C if it is wrong. Compute AB, and compare the count with the bound 1/2.</div>
-  <div class="chq"><span class="chid">40i.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{right }\allowbreak \text{with }\allowbreak \text{chance } \tfrac12 + \tfrac1n"></span></span>A coin machine is right with chance only one half plus 1/n on inputs of length n. Find how many runs the proof of the majority-vote technique needs to bring the error below 1/3, and whether that is still a power of n.</div>
-  <div class="chq"><span class="chid">40i.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="p(x) = x(x - 1),\ \allowbreak \ S = \{0, 1\}"></span></span>This p is not the zero polynomial, yet it is 0 at every point of S. Does it break the random-point technique? Build a polynomial in two letters of degree 2 that is 0 at every point of {0, 1} × {0, 1} and not zero, and find what the bound says for it.</div>
-  <div class="chq"><span class="chid">40i.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">wrong with chance 2⁻¹⁰⁰</span></span>One view holds that a claim checked by a coin machine with chance of error 2⁻¹⁰⁰ is as good as proved, since a long written proof is more likely than that to hide a slip. Another holds that a proof is a list of lines anyone can check, and a chance, however small, is not a line. Rung 30 called statistics induction with a stated chance of being wrong. Is the coin machine’s answer a proof, a statistic, or something else? What would change your mind?</div>
+  <div class="chq"><span class="chid">40i.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix}2&amp;0&amp;1\\1&amp;1&amp;0\\0&amp;3&amp;1\end{pmatrix},\ \allowbreak B = \begin{pmatrix}1&amp;2&amp;0\\0&amp;1&amp;1\\1&amp;0&amp;2\end{pmatrix}"></span> <span data-tex-inline="C = \begin{pmatrix}3&amp;4&amp;2\\1&amp;3&amp;1\\1&amp;3&amp;4\end{pmatrix}"></span></span>Run the random-column check by hand with each of the eight columns of 0s and 1s, and find how many catch C if it is wrong. Compute AB, and compare the count with the bound 1/2.</div>
+  <div class="chq"><span class="chid">40i.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{right }\allowbreak \text{with }\allowbreak \text{chance } \tfrac12 + \tfrac1n"></span></span>A coin machine is right with chance only one half plus 1/n on inputs of length n. Find how many runs the proof of the majority-vote technique needs to bring the error below 1/3, and whether that is still a power of n.</div>
+  <div class="chq"><span class="chid">40i.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="p(x) = x(x - 1),\ \allowbreak \ S = \{0, 1\}"></span></span>This p is not the zero polynomial, yet it is 0 at every point of S. Does it break the random-point technique? Build a polynomial in two letters of degree 2 that is 0 at every point of {0, 1} × {0, 1} and not zero, and find what the bound says for it.</div>
+  <div class="chq"><span class="chid">40i.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">wrong with chance 2⁻¹⁰⁰</span></span>One view holds that a claim checked by a coin machine with chance of error 2⁻¹⁰⁰ is as good as proved, since a long written proof is more likely than that to hide a slip. Another holds that a proof is a list of lines anyone can check, and a chance, however small, is not a line. Rung 30 called statistics induction with a stated chance of being wrong. Is the coin machine’s answer a proof, a statistic, or something else? What would change your mind?</div>
 </section>
 <div class="themecert themeend"></div>
 
@@ -179,9 +198,9 @@ p \text{ was } 0 \text{ at }\allowbreak \text{ten }\allowbreak \text{random }\al
 <section class="extra basement">
   <div class="eyebrow">The basement · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A coin machine is a probabilistic Turing machine, and BPP is bounded-error probabilistic polynomial time. The majority-vote technique is amplification; the sharper bound is the Chernoff bound, which gives an error below e^(−k/18) for k runs. The random-point technique is the Schwartz–Zippel lemma, and testing whether a formula is the zero polynomial is polynomial identity testing. The random-column technique is Freivalds’ algorithm. The all-coins technique is BPP ⊆ PSPACE; it is also known that BPP lies in the second level of the polynomial hierarchy.</p>
+  <p>A coin machine is a probabilistic Turing machine, and BPP is bounded-error probabilistic polynomial time. The majority-vote technique is amplification; the fast-fall technique is a Chernoff bound, and bounding E e^(tW) through the stray bound is the exponential-moment method. The random-point technique is the Schwartz–Zippel lemma, and testing whether a formula is the zero polynomial is polynomial identity testing. The random-column technique is Freivalds’ algorithm. The all-coins technique is BPP ⊆ PSPACE; it is also known that BPP lies in the second level of the polynomial hierarchy.</p>
   <h3>Who said it first</h3>
-  <p>Rūsiņš Freivalds gave his check in 1977. Jacob Schwartz (1980) and Richard Zippel (1979) proved the random-point bound, with an earlier form by Richard DeMillo and Richard Lipton (1978). Robert Solovay and Volker Strassen (1977) and Michael Rabin (1980, after Gary Miller, 1976) gave coin tests for primes; Manindra Agrawal, Neeraj Kayal and Nitin Saxena (2002) gave a fast test without coins. John Gill defined BPP in 1977. Russell Impagliazzo and Avi Wigderson (1997) showed that BPP equals P if some problems are hard enough in a precise sense.</p>
+  <p>Herman Chernoff published bounds of this kind in 1952, and credited the exponential trick to Herman Rubin. Rūsiņš Freivalds gave his check in 1977. Jacob Schwartz (1980) and Richard Zippel (1979) proved the random-point bound, with an earlier form by Richard DeMillo and Richard Lipton (1978). Robert Solovay and Volker Strassen (1977) and Michael Rabin (1980, after Gary Miller, 1976) gave coin tests for primes; Manindra Agrawal, Neeraj Kayal and Nitin Saxena (2002) gave a fast test without coins. John Gill defined BPP in 1977. Russell Impagliazzo and Avi Wigderson (1997) showed that BPP equals P if some problems are hard enough in a precise sense.</p>
   <h3>A proof that is not allowed</h3>
   <p>“Each run is wrong with chance 1/3, so two runs are both wrong with chance 1/9, and the answer of two runs is wrong with chance 1/9.” Not allowed: with two runs that disagree there is no majority, and the chance both are wrong is not the chance the answer is wrong. Take an odd number of runs, and bound the majority, as the technique does.</p>
 </section>
