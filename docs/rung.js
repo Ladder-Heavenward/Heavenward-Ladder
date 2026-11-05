@@ -413,7 +413,7 @@ function placeHere(){
   document.querySelectorAll('.here').forEach(h=>h.remove());
   document.querySelectorAll('.pagedone').forEach(h=>h.remove());
   const tag=(text,cls)=>{ const h=document.createElement('span'); h.className='here'+(cls?' '+cls:''); h.textContent=text; return h; };
-  const rows=[...document.querySelectorAll('li.built')].filter(li=>li.querySelector(':scope>.n'));
+  const rows=[...document.querySelectorAll('li.built')].filter(li=>li.querySelector(':scope>.n')&&!li.closest('.firstrun')) /* 0.3.23: the first-run rows below floor 1 are never ticked */;
   if(rows.length){
     const done=li=>li.classList.contains('passed');
     const first=rows.findIndex(li=>!done(li));
@@ -479,7 +479,7 @@ function deskHTML(){
   const b=document.createElement('button'); b.id='deskbtn'; b.setAttribute('aria-label','open the desk: questions and a grapher'); b.textContent='☰ desk';
   const d=document.createElement('div'); d.id='desk'; d.setAttribute('role','dialog'); d.setAttribute('aria-label','desk');
   const qs=!!document.querySelector('.sayback');
-  d.innerHTML='<div class="dtop"><button type="button" class="dback">← back</button><b class="dttl"></b></div><div class="dtabs"><button data-p="keys">Quick keys</button>'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph view</button><button data-p="moves">Techs read</button><button data-p="rand">Laundry</button>'+(document.querySelector('.qid')?'<button type="button" class="dcross">Crosswalk</button>':'')+'<button type="button" class="dstick">Measuring stick</button><button type="button" class="dstand">Standing questions</button><button data-p="rec">Record</button>'+(document.querySelector('.wrap>section.class.step')&&false?'<button type="button" class="dfv">Page view</button>':'')+'<button type="button" class="dheights">Dizzying heights</button><a class="dshare" href="install.html">Share the ladder</a><button class="x" aria-label="close">✕</button></div>'
+  d.innerHTML='<div class="dtop"><button type="button" class="dback">← back</button><b class="dttl"></b></div><div class="dtabs"><button data-p="keys">Quick Keys</button>'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph View</button><button data-p="moves">Techs Read</button><button data-p="rand">Laundry</button>'+(document.querySelector('.qid')?'<button type="button" class="dcross">Crosswalk</button>':'')+'<button type="button" class="dstick">Measuring Stick</button><button type="button" class="dstand">Standing Questions</button><button data-p="rec">Record</button>'+(document.querySelector('.wrap>section.class.step')&&false?'<button type="button" class="dfv">Page View</button>':'')+'<button type="button" class="dheights">Dizzying Heights</button><a class="dshare" href="install.html">Share the Ladder</a><button class="x" aria-label="close">✕</button></div>'
     +'<div class="dpane" id="dp-keys"><p class="dnote">The marks this footing writes that a keyboard can’t type. Tap a text box first, and the key writes there; or use your own line and paste it.</p><div id="dkeyshost"></div></div>'
     +(qs?'<div class="dpane" id="dp-qs"><p class="dnote">The page’s questions, here so you can read them beside the class.</p><div class="dq" id="dq"></div></div>':'')
     +'<div class="dpane" id="dp-graph"><div id="dgfig"></div><div id="dmg"></div><p class="dnote" style="margin-top:10px">Type it as on paper: x^2, 2sin(x), e^x, ln x, √x, |x|, x!. a, b, c and k get sliders.</p></div>'
@@ -572,6 +572,7 @@ function starCounts(){
   return {blue,gold,wings};
 }
 const ICON_L='<svg class="lb-L" viewBox="104 92 308 328" aria-hidden="true"><path d="M222,132 L384,358" stroke="#5fd13a" stroke-width="16" stroke-linecap="round"/><path fill="currentColor" d="M112,100 L262,100 L262,108 C238,108 225,112 223,136 L222,360 L360,360 C384,359 397,342 398,294 L405,294 L400,412 L112,412 L112,404 C134,404 149,399 150,378 L150,136 C149,112 136,108 112,108 Z"/><path d="M222,318 L264,318 L264,360" fill="none" stroke="#e8703a" stroke-width="16"/></svg>';
+const ICON_X='<svg class="lb-X" viewBox="20 20 280 300" aria-hidden="true"><path d="M262,64 C220,118 130,226 66,292" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round"/><path fill="currentColor" d="M38,92 C52,52 98,44 124,86 L216,262 C228,284 246,290 270,276 L276,286 C246,318 196,316 176,280 L88,112 C76,90 58,88 46,100 Z"/></svg>'; /* 0.3.23 (Andrew 10:54): Toolbox in the ladder's lettering, its x a large teal chi */
 window.ICON_L_HTML='<span class="lb-l">'+ICON_L+'<span class="lb-w">adder</span></span>';
 const WINGS='<svg viewBox="0 0 28 14" width="22" height="11" aria-hidden="true"><path fill="currentColor" d="M13.4 9.2C11 3.6 6.4.9.8.8c1 3 2.4 5 4.4 6.2-1 .5-1.7 1.1-2.2 1.9 1.9.9 3.8 1 5.2.7-.6 1-.8 2-.5 3.2 1.4.4 3.4-.2 5.7-3.6z"/><path fill="currentColor" transform="matrix(-1 0 0 1 28 0)" d="M13.4 9.2C11 3.6 6.4.9.8.8c1 3 2.4 5 4.4 6.2-1 .5-1.7 1.1-2.2 1.9 1.9.9 3.8 1 5.2.7-.6 1-.8 2-.5 3.2 1.4.4 3.4-.2 5.7-3.6z"/></svg>';
 
@@ -583,7 +584,7 @@ function ladderBar(){
   const bar=document.createElement('nav'); bar.id='lbar'; bar.setAttribute('aria-label','the ladder bar');
   bar.innerHTML=(home?'<button type="button" class="lb lb-ladder"':'<a class="lb lb-ladder" href="index.html"')+' title="the ladder"><span class="lb-l" aria-label="Ladder">'+ICON_L+'<span class="lb-w">adder</span></span>'+(home?'</button>':'</a>')
     +'<span class="lb-counts" role="status"><span class="lc lc-blue" title="blue stars: steps with every footing question cleared, rungs with every step starred, floors with every rung starred"><span aria-hidden="true">★</span><b>0</b><span class="vh"> blue stars</span></span><span class="lc lc-gold" title="gold stars: steps, rungs and floors measured"><span aria-hidden="true">★</span><b>0</b><span class="vh"> gold stars</span></span><span class="lc lc-wing" title="angel wings: rungs and floors with their blue star, their gold star and every standing question cleared">'+WINGS+'<b>0</b><span class="vh"> angel wings</span></span></span>'
-    +'<span class="lb-gap"></span>'+'<button type="button" class="lb lb-keys" aria-label="quick keys" hidden>⌨ <span class="lb-l">quick keys</span></button>'+'<button type="button" class="lb lb-tray" aria-label="the toolbox">☰ <span class="lb-l">toolbox</span></button>';
+    +'<span class="lb-gap"></span>'+'<button type="button" class="lb lb-keys" aria-label="quick keys" hidden>⌨ <span class="lb-l">quick keys</span></button>'+'<button type="button" class="lb lb-tray" title="the toolbox"><span class="lb-t" aria-label="Toolbox"><span class="lb-w">Toolbo</span>'+ICON_X+'</span></button>';
   document.body.appendChild(bar); document.body.classList.add('hasbar');
   const stats=()=>{ const v=starCounts(); if(!v) return;
     bar.querySelector('.lc-blue b').textContent=v.blue; bar.querySelector('.lc-gold b').textContent=v.gold; bar.querySelector('.lc-wing b').textContent=v.wings; };
@@ -826,7 +827,7 @@ window.__deskInit=function(){
   function fillQs(){ const q=document.getElementById('dq'); if(q.dataset.done){ syncQs(); return; } const stq=[...document.querySelectorAll('section.step:not([hidden]) .sayback ol')]; const src=stq.length?null:document.querySelector('.sayback ol, #qs ol, section.sayback'); if(stq.length){ stq.forEach(o=>{ const c=o.cloneNode(true); c.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id')); q.appendChild(c); }); } if(src){ const c=src.cloneNode(true); c.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id')); q.appendChild(c);
     q.querySelectorAll('.qid,.id').forEach(el=>{ el.style.cursor='pointer'; el.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation(); const o=origQ(el.textContent.trim()); if(o&&o.__tick){ o.__tick(); el.classList.toggle('done',o.classList.contains('done')); } }); }); }
     q.dataset.done=1; syncQs(); }
-  const TOOLS={qs:'Questions',graph:'Graph view',moves:'Techs read',rand:'Laundry',rec:'Record'};
+  const TOOLS={qs:'Questions',graph:'Graph View',moves:'Techs Read',rand:'Laundry',rec:'Record'};
   const hereOf=()=>{ const h=window.LadderFV&&LadderFV.here?LadderFV.here():null; const tag=(document.querySelector('header .tag, .stag')||{}).textContent||'';
     if(h&&h.id&&h.id!=='top'&&h.id!=='end') return {id:h.id,els:h.els,say:'footing '+h.id}; return {id:h&&h.id||'page',els:h&&h.els||null,say:(tag.trim()||'the page')}; };
   function dock(v){ const t=document.getElementById('mk-tray'), host=document.getElementById('dkeyshost'); if(!t||!host) return;
@@ -1171,7 +1172,7 @@ function txStart(el){ if(TX.busy) return; const pa=el.matches('p[data-pid]')&&!e
     TX.list=TX.list.filter(r=>r.id!==rec.id).concat([rec]); el.classList.add('txedited'); el.dataset.txdone=(el.dataset.txdone?el.dataset.txdone+' ':'')+rec.id; done();
     toast(err?'not saved yet ('+((err&&err.code)||'the database refused it')+'). Your words are kept on this device and go out when the database answers.':'saved: it goes into its page or data file at the next publish'); });
 }
-function txToggle(v){ TX.on=v; document.body.classList.toggle('tx-on',v); const b=document.getElementById('txbtn'); if(b){ b.textContent=v?'✓ done editing':'✎ edit text'; b.setAttribute('aria-pressed',v); }
+function txToggle(v){ TX.on=v; document.body.classList.toggle('tx-on',v); const b=document.getElementById('txbtn'); if(b){ b.textContent=v?'✓ Done Editing':'✎ Edit Text'; b.setAttribute('aria-pressed',v); }
   try{ sessionStorage.setItem('tx:on',v?'1':''); }catch(_){} }
 async function txInit(){ if(!window.LADDER_DESK) return;
   const ok=await edWait(); if(!ok) return; await edRecheck(); if(!ED.db||!ED.owner) return;
@@ -2164,7 +2165,7 @@ function apply(){ document.body.classList.toggle('kinds-off',off()); const ps=do
   if(window.LADDER_KINDNAMES) go(); else { const s=document.createElement('script'); s.src='kinds.js'; s.onload=s.onerror=go; document.head.appendChild(s); } }
 function button(){ const dh=document.querySelector('#desk .dheights'); if(!dh) return false; let b=document.querySelector('#desk .dkinds'); if(b) return true;
   b=document.createElement('button'); b.type='button'; b.className='dkinds';
-  const lab=()=>{ b.textContent='Kinds in colour: '+(off()?'off':'on'); }; lab();
+  const lab=()=>{ b.textContent='Kinds in Colour: '+(off()?'Off':'On'); }; lab();
   b.onclick=()=>{ try{ LS.setItem('ladder:kinds',off()?'on':'off'); }catch(e){} lab(); apply(); };
   dh.parentNode.insertBefore(b,dh.nextSibling); return true; }
 window.LadderKinds={apply};

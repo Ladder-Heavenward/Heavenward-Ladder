@@ -6,19 +6,18 @@
 'use strict';
 if(document.getElementById('mk-tray')) return;
 const L=s=>s.split(' ');
-const TREE=[
-  {k:'∂'},{k:'Δ'},{k:'δ'},{k:'∇'},
-  {t:'∫ ∬ ∮',n:'integrals',c:L('∫ ∬ ∭ ∮ ∯')},
-  {k:'Σ'},{k:'Π'},{k:'∞'},
+const TREE=[ /* 0.3.23 (Andrew 2026-11-05 10:54): no stray keys; each mark sits in its group */
+  {t:'︿ ﹀',n:'pack and unpack',c:L('︿ ﹀'),always:1},
+  {t:'∂ ∇ ∫',n:'rates and integrals',c:L('∂ ∇ ∫ ∬ ∭ ∮ ∯')},
   {t:'√ ∛',n:'roots',c:L('√ ∛ ∜')},
   {t:'xⁿ',n:'superscript',c:[...L('⁻ ⁺ ⁽ ⁾'),{t:'ⁿ',n:'n',c:L('⁰ ¹ ² ³ ⁴ ⁵ ⁶ ⁷ ⁸ ⁹ ⁿ ˣ')}]},
   {t:'xₙ',n:'subscript',c:[...L('₋ ₊ ₍ ₎'),{t:'ₙ',n:'n',c:L('₀ ₁ ₂ ₃ ₄ ₅ ₆ ₇ ₈ ₉ ₙ ₓ ₐ ᵢ')}]},
   {t:'½ ⅓',n:'fractions',c:L('½ ⅓ ¼ ⅔ ¾ ⁄')},
   {t:'→ ≈ ∝',n:'between two expressions',c:L('→ ← ↔ ↦ ⇒ ⇔ ≈ ≠ ≡ ≅ ≤ ≥ ≪ ≫ ∝ ± ∓ · × ÷ ∘ ⋯ ∴ ∵ lim ∈ ∉ ∅ ∀ ∃ ¬ ∧ ∨ ⊥ ⊂ ⊃ ⊆ ⊇ ∪ ∩ ∖')},
-  {t:'︿ ﹀',n:'pack and unpack',c:L('︿ ﹀')},{t:'ℕ ℤ ℚ ℝ',n:'number sets',c:L('ℕ ℤ ℚ ℝ ℂ')},{k:'′'},{k:'″'},
+  {t:'ℕ ℤ ∞',n:'number sets',c:L('ℕ ℤ ℚ ℝ ℂ ∞ ℵ')},
   {t:'α β γ',n:'greek',c:L('α β γ δ ε ζ η θ ι κ λ μ ν ξ π ρ σ τ υ φ χ ψ ω')},
-  {t:'Γ Δ Θ',n:'GREEK',c:L('Γ Δ Θ Λ Ξ Π Σ Φ Ψ Ω')},
-  {k:'°'},{k:'⟨'},{k:'⟩'}
+  {t:'Γ Δ Σ',n:'GREEK',c:L('Γ Δ Θ Λ Ξ Π Σ Φ Ψ Ω')},
+  {t:'′ ″ °',n:'primes, degree, angle brackets',c:L('′ ″ ° ⟨ ⟩')}
 ];
 const css=`
 #mk-tray{--mk-paper:var(--paper,#fbf9f4);--mk-ink:var(--ink,#26262b);--mk-muted:var(--muted,#8a8a93);--mk-grid:var(--grid,#e3dfd5);--mk-sand:var(--sand,#ece7dd);--mk-card:var(--card,#fff);--mk-teal:var(--teal,#1f6f8b);--mk-ember:var(--ember,#c8501e);
@@ -117,7 +116,7 @@ function openPop(item,e,depth){
    writes in its lesson and questions (not its basement); in the randomizer, the marks its chosen pools write. */
 const TEX={forall:'∀',exists:'∃',neg:'¬',lnot:'¬',land:'∧',wedge:'∧',lor:'∨',vee:'∨',Rightarrow:'⇒',implies:'⇒',Leftrightarrow:'⇔',iff:'⇔',to:'→',rightarrow:'→',leftarrow:'←',leftrightarrow:'↔',mapsto:'↦',
   le:'≤',leq:'≤',ge:'≥',geq:'≥',ne:'≠',neq:'≠',approx:'≈',equiv:'≡',cong:'≅',in:'∈',notin:'∉',emptyset:'∅',varnothing:'∅',subset:'⊂',subseteq:'⊆',supset:'⊃',supseteq:'⊇',cup:'∪',cap:'∩',setminus:'∖',
-  cdot:'·',times:'×',div:'÷',circ:'∘',pm:'±',mp:'∓',infty:'∞',int:'∫',iint:'∬',iiint:'∭',oint:'∮',sum:'Σ',prod:'Π',sqrt:'√',partial:'∂',nabla:'∇',lim:'lim',langle:'⟨',rangle:'⟩',
+  cdot:'·',times:'×',div:'÷',circ:'∘',pm:'±',mp:'∓',infty:'∞',aleph:'ℵ',int:'∫',iint:'∬',iiint:'∭',oint:'∮',sum:'Σ',prod:'Π',sqrt:'√',partial:'∂',nabla:'∇',lim:'lim',langle:'⟨',rangle:'⟩',
   cdots:'⋯',ldots:'⋯',dots:'⋯',therefore:'∴',because:'∵',propto:'∝',bot:'⊥',perp:'⊥',ll:'≪',gg:'≫',prime:'′',degree:'°',
   alpha:'α',beta:'β',gamma:'γ',delta:'δ',epsilon:'ε',varepsilon:'ε',zeta:'ζ',eta:'η',theta:'θ',iota:'ι',kappa:'κ',lambda:'λ',mu:'μ',nu:'ν',xi:'ξ',pi:'π',rho:'ρ',sigma:'σ',tau:'τ',upsilon:'υ',phi:'φ',varphi:'φ',chi:'χ',psi:'ψ',omega:'ω',
   Gamma:'Γ',Delta:'Δ',Theta:'Θ',Lambda:'Λ',Xi:'Ξ',Pi:'Π',Sigma:'Σ',Phi:'Φ',Psi:'Ψ',Omega:'Ω'};
@@ -144,10 +143,11 @@ function pageMarks(){
 function filt(item,S,depth){
   if(typeof item==='string') return S.has(item)?item:null;
   if(item.k) return S.has(item.k)?item:null;
+  if(item.always&&depth===0) return item;
   if(item.n==='n'){ return item.c.some(x=>S.has(x))?item:null; }
   const c=item.c.map(x=>filt(x,S,depth+1)).filter(Boolean);
   if(!c.length) return null;
-  if(c.length===1&&typeof c[0]==='string') return {k:c[0]};
+  if(c.length===1&&typeof c[0]==='string'&&depth>0) return {k:c[0]};
   const t=c.length<item.c.length?c.slice(0,3).map(x=>typeof x==='string'?x:(x.k||x.t)).join(' '):item.t;
   return Object.assign({},item,{c,t});
 }
@@ -159,7 +159,7 @@ function drawKeys(){
   const items=TREE.map(x=>filt(x,S,0)).filter(Boolean).map(x=>{
     if(x.k){ if(shown.has(x.k)) return null; shown.add(x.k); return x; }
     const c=x.c.filter(y=>typeof y!=='string'||!shown.has(y)); c.forEach(y=>{ if(typeof y==='string') shown.add(y); });
-    if(!c.length) return null; if(c.length===1&&typeof c[0]==='string') return {k:c[0]}; return Object.assign({},x,{c}); }).filter(Boolean);
+    if(!c.length) return null; return Object.assign({},x,{c}); }).filter(Boolean);
   items.forEach(item=>keys.appendChild(makeKey(item,0)));
   const n=document.createElement('p'); n.className='mk-scope';
   n.textContent=items.length?('keys for '+(limitTo?limitLabel:'this page')):(limitTo?limitLabel.replace(/^./,c=>c.toUpperCase())+' ask':'This page asks')+' for no marks beyond your own keyboard.';
