@@ -439,8 +439,12 @@ function placeHere(){
 }
 
 /* marks: click a question number or a ladder row number to toggle ✓; mirrored to the artifact's record by sync.js */
+/* 0.3.28: titles went to title case, so a record kept under the old title (same words, other case) carries over once */
+function titledKey(prefix,title){ const k=prefix+title; try{ if(LS.getItem(k)!=null) return k; const lk=k.toLowerCase();
+    for(let i=0;i<LS.length;i++){ const o=LS.key(i); if(o&&o!==k&&o.toLowerCase()===lk){ const v=LS.getItem(o); if(v!=null){ LS.setItem(k,v); } break; } } }catch(e){} return k; }
+window.__titledKey=titledKey;
 function marks(){
-  const KEY='marks:'+(document.title||location.pathname);
+  const KEY=titledKey('marks:',document.title||location.pathname);
   let st={}; try{ st=JSON.parse(LS.getItem(KEY)||'{}'); }catch(e){ st={}; }
   /* rung 1's steps moved one letter on (2026-10-25: the boxes page became 1a): carry old marks across */
   const RL=(PAGE.match(/^r01([a-h])$/)||[])[1]; const OLD=RL?'1'+RL:null, NEW=RL?'1'+String.fromCharCode(RL.charCodeAt(0)+1):null;
@@ -584,7 +588,7 @@ function ladderBar(){
   const bar=document.createElement('nav'); bar.id='lbar'; bar.setAttribute('aria-label','the ladder bar');
   bar.innerHTML=(home?'<button type="button" class="lb lb-ladder"':'<a class="lb lb-ladder" href="index.html"')+' title="the ladder"><span class="lb-l" aria-label="Ladder">'+ICON_L+'<span class="lb-w">adder</span></span>'+(home?'</button>':'</a>')
     +'<span class="lb-counts" role="status"><span class="lc lc-blue" title="blue stars: steps with every footing question cleared, rungs with every step starred, floors with every rung starred"><span aria-hidden="true">★</span><b>0</b><span class="vh"> blue stars</span></span><span class="lc lc-gold" title="gold stars: steps, rungs and floors measured"><span aria-hidden="true">★</span><b>0</b><span class="vh"> gold stars</span></span><span class="lc lc-wing" title="angel wings: rungs and floors with their blue star, their gold star and every standing question cleared">'+WINGS+'<b>0</b><span class="vh"> angel wings</span></span></span>'
-    +'<span class="lb-gap"></span>'+'<button type="button" class="lb lb-keys" aria-label="quick keys" hidden>⌨ <span class="lb-l">quick keys</span></button>'+'<button type="button" class="lb lb-tray" title="the toolbox"><span class="lb-t" aria-label="Toolbox"><span class="lb-w">Toolbo</span>'+ICON_X+'</span></button>';
+    +'<span class="lb-gap"></span>'+'<button type="button" class="lb lb-tray" title="the toolbox"><span class="lb-t" aria-label="Toolbox"><span class="lb-w">Toolbo</span>'+ICON_X+'</span></button>';
   document.body.appendChild(bar); document.body.classList.add('hasbar');
   const stats=()=>{ const v=starCounts(); if(!v) return;
     bar.querySelector('.lc-blue b').textContent=v.blue; bar.querySelector('.lc-gold b').textContent=v.gold; bar.querySelector('.lc-wing b').textContent=v.wings; };
@@ -594,7 +598,7 @@ function ladderBar(){
   /* the Ladder button takes you to the footing you were last reading (0.2.1); the ladder itself is "dizzying heights" in the toolbox */
   const lb=bar.querySelector('.lb-ladder');
   lb.addEventListener('click',e=>{ if(window.LadderFV&&LadderFV.resume()){ e.preventDefault(); return; } if(home) climbTo(true); });
-  const kb=bar.querySelector('.lb-keys'); if(kb) kb.onclick=()=>{ const b=document.querySelector('#mk-tray .mk-btn'); if(b) b.click(); };
+  const kb=null; /* 0.3.28 (Andrew 11:30): Quick Keys live only in the Toolbox */
   bar.querySelector('.lb-tray').onclick=()=>{ const b=document.getElementById('deskbtn'); if(b) b.click(); };
   const sync=()=>{ const t=document.getElementById('mk-tray'), d=document.getElementById('desk');
     if(kb){ kb.hidden=!!d||!t; kb.classList.toggle('on',!!(t&&t.classList.contains('open'))); }
@@ -815,7 +819,7 @@ window.MathGraph=MathGraph; window.MathGraph.parse=parse;
 /* ---- desk controller ---- */
 window.__deskInit=function(){
   const btn=document.getElementById('deskbtn'), desk=document.getElementById('desk');
-  const K='desk:'+(document.title||'');
+  const K=(window.__titledKey?__titledKey('desk:',document.title||''):'desk:'+(document.title||''));
   let st={}; try{ st=JSON.parse(LS.getItem(K)||'{}'); }catch(e){}
   const save=()=>{ try{ LS.setItem(K,JSON.stringify(st)); }catch(e){} };
   let bookDone=false;
@@ -1838,7 +1842,7 @@ function footCount(){ const U=window.LADDER_UND||{};
      until every footing is, then shows as a teal star. A step with no understand questions just says "n footings". */
   document.querySelectorAll('.rungs .ladder li>details.flist').forEach(d=>{ const sm=d.querySelector('summary'); if(!sm) return;
     const items=[...d.querySelectorAll(':scope ol>li')], n=items.length; const a=d.parentElement.querySelector(':scope>.t>a'); const m=a&&(a.getAttribute('href')||'').match(/^(?:view\.html#p=)?([^#.&]+)/);
-    const u=m&&U[m[1]]; const st=u?(J('marks:'+u[0])||{}):{}; const done=new Set(); if(u) u[1].forEach(([f,q])=>{ if(st['q:'+q]) done.add(f); });
+    const u=m&&U[m[1]]; const st=u?(J(window.__titledKey?__titledKey('marks:',u[0]):'marks:'+u[0])||{}):{}; const done=new Set(); if(u) u[1].forEach(([f,q])=>{ if(st['q:'+q]) done.add(f); });
     items.forEach(li=>{ const h=((li.querySelector('a')||{}).getAttribute?li.querySelector('a').getAttribute('href'):'')||''; const f=decodeURIComponent((h.split('#')[1]||'').replace(/^.*[&;]h=/,'')); li.classList.toggle('fdone',!!f&&done.has(f)); });
     const x=Math.min(items.filter(li=>li.classList.contains('fdone')).length,n), full=!!u&&n>0&&x>=n;
     let lab=sm.querySelector(':scope>.fslab'); if(!lab){ [...sm.childNodes].forEach(c=>c.remove()); sm.insertAdjacentHTML('afterbegin',STAR+'<span class="fslab"></span>'); lab=sm.querySelector(':scope>.fslab'); }

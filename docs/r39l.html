@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sorting and searching</title>
+<title>Sorting and Searching</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -50,13 +50,13 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <header class="top">
   <p class="home"><a href="index.html">← the ladder</a><a href="r39k.html">← 39k how long a program takes</a><a href="r39m.html">next: 39m divide and conquer →</a></p>
   <div class="tags"><span class="tag proof">39l · proof</span></div>
-  <h1>Sorting and searching</h1>
+  <h1>Sorting and Searching</h1>
   <p data-pid="058e12">Two jobs take up a large share of every computer’s time: putting a list in order, and finding something in a list already in order. The rung on endless sums already counted the best-known ways. Looking up a name by checking the middle and keeping one half costs about the log of the length. Merge sort costs about the length times its log, for every length, and no sort that only compares can promise much less. This step goes further in three directions. First it proves the floor for searching, as the earlier rung proved it for sorting: no search that asks yes or no questions can do better than halving, by more than a single question. Then it counts a sort that chooses at random, the one most libraries actually use, and finds its average by the chance of the statistics floor: about one and four tenths times the floor, with almost no extra memory. And then it breaks the sorting floor, honestly, by not comparing at all. A list of ages can be sorted by counting how many people have each age, in time that grows only like the length, because the floor was about sorts that learn only by comparing, and this one learns more.</p>
   <p class="gesture" data-pid="321259">Halving search finds an item among n in at most one more than the log of n looks, and no search by yes or no does better than the log of n plus one. Choosing the split at random sorts in about twice n times the natural log of n comparisons on average. Counting each key sorts without comparing, in time like n plus the number of keys.</p>
 </header>
 
 <section class="class step" data-step="39l1">
-  <h2 class="sthead"><span class="stno">39l1</span>No search beats halving</h2>
+  <h2 class="sthead"><span class="stno">39l1</span>No Search Beats Halving</h2>
   <p data-pid="1838c5">22l2 counted halving search: compare the target with the middle of the sorted list, keep the half it must be in, and go on, about log₂ n looks. The difference here is the floor. A search that learns only by asking yes-or-no questions about the items must end with one of n + 1 answers: the target is in place 1, or 2, …, or n, or nowhere.</p>
   <p data-pid="070b70">Search-floor technique: <b>a search that learns only by yes-or-no questions needs at least log₂(n + 1) of them on some input, and halving needs at most ⌊log₂ n⌋ + 1.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the search-floor technique">
@@ -77,7 +77,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 </section>
 
 <section class="class step" data-step="39l2">
-  <h2 class="sthead"><span class="stno">39l2</span>A sort that chooses at random</h2>
+  <h2 class="sthead"><span class="stno">39l2</span>A Sort That Chooses at Random</h2>
   <p data-pid="ac8bfd">Pick an item of the list at random, the <i>pivot</i>. Compare every other item with it, putting the smaller ones on its left and the larger on its right; then sort each side the same way. The two sides need no merging. It sorts in place, with no second list, which merge sort needs. Name the items by their places in sorted order, 1 to n.</p>
   <p data-pid="b7f0e2">Pivot-chance technique: <b>for n different items, the random-pivot sort makes on average 2(n + 1)(1 + ½ + ⋯ + 1/n) − 4n comparisons, which grows alike with 2n ln n.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the pivot-chance technique">
@@ -98,7 +98,7 @@ i < j \text{ are compared} \iff \text{the first pivot chosen among } i, i+1, \ld
 </section>
 
 <section class="class step" data-step="39l3">
-  <h2 class="sthead"><span class="stno">39l3</span>Sorting without comparing</h2>
+  <h2 class="sthead"><span class="stno">39l3</span>Sorting Without Comparing</h2>
   <p data-pid="570d62">22l4’s floor was for sorts that learn about the items only by comparing two of them. Suppose instead each item is a whole number below k, an age below 120, a postcode. Then a sort can look at the number itself.</p>
   <p data-pid="baae9c">Counting-sort technique: <b>n items, each a whole number below k, are sorted by counting how many there are of each value and then writing them out in order, in about 2n + k turns, with no comparisons.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the counting-sort technique">
@@ -119,7 +119,7 @@ i < j \text{ are compared} \iff \text{the first pivot chosen among } i, i+1, \ld
 </section>
 
 <section class="class step" data-step="39l4">
-  <h2 class="sthead"><span class="stno">39l4</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">39l4</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
 \text{a search for one of } n \text{ needs } \log_2 n \text{ questions}\,? @@ log₂(n + 1): the answer “nowhere” counts too
 \text{the random-pivot sort takes } 2n\ln n \text{ on every list}\,? @@ on average; its worst is n(n − 1)/2

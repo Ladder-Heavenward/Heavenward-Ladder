@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Adding with gates</title>
+<title>Adding With Gates</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -50,13 +50,13 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <header class="top">
   <p class="home"><a href="index.html">← the ladder</a><a href="r39h.html">← 39h memory</a><a href="r39j.html">next: 39j a machine that follows a list →</a></p>
   <div class="tags"><span class="tag proof">39i · proof</span></div>
-  <h1>Adding with gates</h1>
+  <h1>Adding With Gates</h1>
   <p data-pid="d0b3b1">Rung four wrote numbers in twos and added them in columns, carrying from each place to the next. Its computing annex built that column sum out of gates and chained the gates place by place. This step lays the sum down as a lesson, from the arithmetic of the first step of this rung, and then asks the question the annex did not: how long does it take? A carry can travel the whole width of the number, place by place, and every place costs two gates’ worth of waiting, so a wide adder is slow, and the clock of the last step must wait for the slowest sum. The cure is to stop waiting for carries one at a time. Each place can say, before any carry arrives, whether it will make a carry of its own and whether it will pass one along. Those two facts combine in pairs, the pairs in pairs again, and a tree of combinations reaches the top place after about as many levels as the number of times the width can be halved. Then the same adder subtracts, once negative numbers are written the way a car’s odometer would write them running backwards, and the step ends with what happens when a sum is too big for its row of catches.</p>
   <p class="gesture" data-pid="5a445c">Three bits add to a sum bit, their exactly-one, and a carry, at-least-two. Chained, the carry waits two gates a place. Each place says whether it makes a carry and whether it passes one; those pairs combine in a tree of about the log of the width levels. Negatives are the complement plus one, so the adder subtracts, and a sum too big wraps round.</p>
 </header>
 
 <section class="class step" data-step="39i1">
-  <h2 class="sthead"><span class="stno">39i1</span>Three bits in, two out</h2>
+  <h2 class="sthead"><span class="stno">39i1</span>Three Bits in, Two Out</h2>
   <p data-pid="4ba004">In a column of a sum in twos (4i12, 4i14) there are three bits to add: one from each number and the carry in, c. The total is 0, 1, 2 or 3, two bits: a sum bit, worth 1, and a carry out, worth 2. 39a3 found the two-bit case: x + y = 2xy + (x ⊕ y). 4·comp built the three-bit case from two two-bit adders as an annex; here it is laid down from the arithmetic.</p>
   <p data-pid="8d8e44">Three-bit-sum technique: <b>x + y + c is twice “at least two of x, y, c”, plus x ⊕ y ⊕ c.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the three-bit-sum technique">
@@ -77,7 +77,7 @@ xy + (x \oplus y)c = xy \lor (x \oplus y)c @@ the or-as-greater technique with n
 </section>
 
 <section class="class step" data-step="39i2">
-  <h2 class="sthead"><span class="stno">39i2</span>The carry chain</h2>
+  <h2 class="sthead"><span class="stno">39i2</span>The Carry Chain</h2>
   <p data-pid="48b595">Chain n places, the carry out of each into the next, c₀ = 0. Every gate takes a delay τ to answer. The carry rule cₖ₊₁ = gₖ ∨ (pₖ ∧ cₖ) is a both then an either: two delays from cₖ to cₖ₊₁.</p>
   <p data-pid="585a0b">Carry-delay technique: <b>in a chain of n places the last carry may wait 2nτ, and it does when every place passes and none makes.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the carry-delay technique">
@@ -98,7 +98,7 @@ x = 0111\ldots1,\ y = 0\ldots01:\ \ p_k = 1 \text{ above place } 0 @@ the carry 
 </section>
 
 <section class="class step" data-step="39i3">
-  <h2 class="sthead"><span class="stno">39i3</span>A carry tree</h2>
+  <h2 class="sthead"><span class="stno">39i3</span>A Carry Tree</h2>
   <p data-pid="986779">A block of places, taken as one, also makes or passes a carry. Two blocks side by side, the higher with (g, p) and the lower with (g′, p′), make one block with (g, p) ∘ (g′, p′) = (g ∨ (p ∧ g′), p ∧ p′): the pair makes a carry if the higher makes one, or passes one the lower made; it passes if both pass.</p>
   <p data-pid="0af6e9">Carry-tree technique: <b>the combining of (make, pass) pairs is grouping-free, so every carry of an n-place adder can be found in about log₂ n levels of combining, each two gates deep.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the carry-tree technique">
@@ -125,7 +125,7 @@ c_1 = 0,\ c_2 = g_1 = 1,\ c_3 = p_2 c_2 = 1,\ c_4 = p_3 c_3 = 1 @@ the carry rul
 </section>
 
 <section class="class step" data-step="39i4">
-  <h2 class="sthead"><span class="stno">39i4</span>Subtracting, and the wrap</h2>
+  <h2 class="sthead"><span class="stno">39i4</span>Subtracting, and the Wrap</h2>
   <p data-pid="9aea46">A row of n catches holds 0 to 2ⁿ − 1. Let the row stand for x when x ≥ 0 and for 2ⁿ + x when x < 0, for x from −2ⁿ⁻¹ to 2ⁿ⁻¹ − 1. Then adding in the row, and dropping the carry out of the top place, is adding numbers, as long as the answer stays in range.</p>
   <p data-pid="5c8ec8">Twos-complement technique: <b>in a row of n places, −x is written as 2ⁿ − x, which is every bit of x turned over, plus 1; so x − y is x plus that, with the top carry dropped.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the twos-complement technique">
@@ -146,7 +146,7 @@ n = 8:\ \ 9 = 00001001 \to 11110110 + 1 = 11110111 = 247 = 256 - 9 @@ worked
 </section>
 
 <section class="class step" data-step="39i5">
-  <h2 class="sthead"><span class="stno">39i5</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">39i5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
 \text{carry out} = x \lor y \lor c\,? @@ that is “at least one”; the carry is “at least two”
 \text{a wider adder is no slower}\,? @@ in a chain the last carry waits 2nτ

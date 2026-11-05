@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Keeping things findable</title>
+<title>Keeping Things Findable</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -50,13 +50,13 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <header class="top">
   <p class="home"><a href="index.html">← the ladder</a><a href="r41l.html">← 41l best from best pieces</a><a href="r41n.html">next: 41n the simplex method by hand →</a></p>
   <div class="tags"><span class="tag tech">41m · technique</span></div>
-  <h1>Keeping things findable</h1>
+  <h1>Keeping Things Findable</h1>
   <p data-pid="2af512">The road map of the United States, as a graph, has about twenty four million dots and fifty eight million links. A recipe that runs on it must be able to find, quickly and over and over, the links at a dot, the unsettled dot that is nearest, and whether a dot has been seen before. Rung 39 built the stores that do such finding: the heap, the search tree, the table found by a scrambling rule. This step puts them under the recipes of the last two steps and counts what each costs. A grid of every pair of dots is the wrong store for a road map: it would have hundreds of millions of millions of entries, nearly all of them empty. A list of neighbours at each dot is right. A heap makes the nearest first cost a little more than the number of links. And then a floor: no recipe that learns about lengths only by comparing them can list the dots in order of distance faster than it could sort them, so the heap is nearly the best there is. Last, a graph too big to write down, the positions of a sliding puzzle, is walked by making the dots as they are reached, with a table to say which have been seen.</p>
   <p class="gesture" data-pid="c15f2c">Store a thin graph as a list of neighbours at each dot, not as a grid of every pair. A heap of tentative distances makes the nearest first cost about the number of links times log₂ n; pushing a fresh entry in place of lowering an old one changes that by a factor of two at most. Listing dots in order of distance by comparing sums costs at least as much as sorting. A graph made as it is walked needs a table of the dots already seen.</p>
 </header>
 
 <section class="class step" data-step="41m1">
-  <h2 class="sthead"><span class="stno">41m1</span>Two ways to store links</h2>
+  <h2 class="sthead"><span class="stno">41m1</span>Two Ways to Store Links</h2>
   <p data-pid="7e7b2b">A graph on dots named 1 to n can be stored as a <i>grid</i>, n × n, with a 1 at (u, w) when u and w are joined and 0 otherwise; or as <i>neighbour lists</i>, one list at each dot of the dots joined to it.</p>
   <p data-pid="9a6c9e">Two-stores technique: <b>the grid takes n² entries and answers “are u and w joined?” in one look; the neighbour lists take n + 2|E| entries, answer it in at most d(u) looks, and give the links at u in d(u) looks where the grid needs n.</b> The count n + 2|E| is the ends-count technique: each link is in two lists.</p>
   <pre class="lines" data-k="ember" data-label="this page: the road map">
@@ -76,7 +76,7 @@ n \approx 2.4 \times 10^7,\ \ |E| \approx 5.8 \times 10^7 @@ the road map of the
 </section>
 
 <section class="class step" data-step="41m2">
-  <h2 class="sthead"><span class="stno">41m2</span>A heap under the nearest first</h2>
+  <h2 class="sthead"><span class="stno">41m2</span>A Heap Under the Nearest First</h2>
   <p data-pid="1ce331">The nearest first needs, again and again, the unsettled dot with least tentative distance, and lowers tentative distances as dots are settled. 39n’s heap gives the least of its entries in one look, and takes it out or puts a new one in with about log₂ of its size moves.</p>
   <p data-pid="4d61a3">Heap-run technique: <b>with neighbour lists and a heap, the nearest first costs about (n + |E|) log₂ n moves; pushing a fresh entry whenever a tentative distance is lowered, and skipping stale entries when they come out, keeps that within a factor of two.</b></p>
   <pre class="lines" data-k="ember" data-label="this page: the heap-run technique">
@@ -97,7 +97,7 @@ n \approx 2.4 \times 10^7,\ \ |E| \approx 5.8 \times 10^7 @@ the road map of the
 </section>
 
 <section class="class step" data-step="41m3">
-  <h2 class="sthead"><span class="stno">41m3</span>The floor</h2>
+  <h2 class="sthead"><span class="stno">41m3</span>The Floor</h2>
   <p data-pid="19db1c">Can a cleverer store make the nearest first cost about n + |E|, with no log at all? Not if the recipe learns about lengths only by comparing them.</p>
   <p data-pid="4816f1">Sorting-inside technique: <b>a recipe that lists the dots in order of distance from r, and learns about lengths only by comparing sums of them, makes at least log₂((n − 1)!) comparisons on some graph with n dots.</b></p>
   <pre class="lines" data-k="ember" data-label="this page: the sorting-inside technique">
@@ -117,7 +117,7 @@ n \approx 2.4 \times 10^7,\ \ |E| \approx 5.8 \times 10^7 @@ the road map of the
 </section>
 
 <section class="class step" data-step="41m4">
-  <h2 class="sthead"><span class="stno">41m4</span>A graph made as it is walked</h2>
+  <h2 class="sthead"><span class="stno">41m4</span>A Graph Made as It Is Walked</h2>
   <p data-pid="b1db0f">Some graphs are too large to store, and are given by a rule: the positions of a puzzle are the dots, and two positions are joined when one move turns one into the other. The sliding puzzle of eight numbered tiles in a 3 × 3 frame, with one gap, has 9! = 362 880 arrangements. Half of them can be reached from any one, by a count of 19e’s shuffles.</p>
   <p data-pid="845d69">Seen-set technique: <b>walking out in layers over a graph made by a rule, with the seen dots kept in a scrambled table, costs on average a fixed number of looks for each link followed, and room for every dot seen.</b> At each dot, the rule makes its neighbours; each is looked up in the table, and put in the queue and the table if it is new. The queue of 41k1 stays as it was.</p>
   <pre class="lines" data-k="ember" data-label="this page: the sliding puzzle, walked">
@@ -137,7 +137,7 @@ n \approx 2.4 \times 10^7,\ \ |E| \approx 5.8 \times 10^7 @@ the road map of the
 </section>
 
 <section class="class step" data-step="41m5">
-  <h2 class="sthead"><span class="stno">41m5</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">41m5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
 \text{the heap is always the best store for the nearest first}\,? @@ on a crowded graph a plain list costs n², below the heap’s n² log₂ n
 \text{no recipe finds shortest paths faster than sorting}\,? @@ no recipe that learns only by comparing; arithmetic on whole-number lengths can do better

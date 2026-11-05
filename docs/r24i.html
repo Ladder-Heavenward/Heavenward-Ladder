@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Slope fields and stepping forward</title>
+<title>Slope Fields and Stepping Forward</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -50,13 +50,13 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <header class="top">
   <p class="home"><a href="index.html">← the ladder</a><a href="r24h.html">← 24h the two model equations</a><a href="r24j.html">next: 24j the logistic equation solved →</a></p>
   <div class="tags"><span class="tag tech">24i · technique</span></div>
-  <h1>Slope fields and stepping forward</h1>
+  <h1>Slope Fields and Stepping Forward</h1>
   <p data-pid="4cf779">Most rules on rates have no formula for their solution. The rule still says, at every place, which way the solution must head. Draw that as a short stroke at each point of a grid and you have a field of slopes, and every solution is a curve that runs along the strokes. To follow one, start at the start, step a short way along the stroke you are standing on, and look again. This step makes that walk exact enough to trust. It counts how far one step can slip, and how the slips of many steps add up, using the matching polynomials of the last rung and the drift of nearby starts from this one. It finds a better step that looks ahead before it moves. And it meets rules that punish the plain walk however carefully it is taken, because the step must be tiny to keep the walk steady long after the solution itself has gone quiet.</p>
   <p class="gesture" data-pid="ffa274">A rule on rates draws a field of slopes, and a solution runs along it. Step along the stroke you stand on, and look again. Each step slips by about the square of its length, and the slips of a whole walk add to about one step length. Looking ahead before you step makes the slips much smaller. Some rules make the plain walk swing wildly unless the steps are tiny, and a step backward cures it.</p>
 </header>
 
 <section class="class step" data-step="24i1">
-  <h2 class="sthead"><span class="stno">24i1</span>Walking the field</h2>
+  <h2 class="sthead"><span class="stno">24i1</span>Walking the Field</h2>
   <p class="eqline" data-pid="c7de19">From here on, the <i>slope field</i> of y′ = F(x, y) is the picture with, at each point (x, y), a short stroke of slope F(x, y). The <i>forward walk</i> with step h from (x₀, y₀) is xₙ₊₁ = xₙ + h, yₙ₊₁ = yₙ + h·F(xₙ, yₙ). Accepted name: a direction field, and the forward step method.</p>
   <p data-pid="b5d8d5">A solution through a point leaves it along the stroke there, since its slope is F at that point. The walk does the same, but keeps that slope for a whole step, while the solution bends away. So each step lands a little off the solution it set out on.</p>
   <p data-pid="6e7022">Small-step technique: <b>for y′ = ky from (0, A), n forward steps of length x/n land at A(1 + kx/n)ⁿ, which heads to Ae^(kx) as n grows.</b> The walk closes in on the one solution of 24a3.</p>
@@ -84,7 +84,7 @@ y_n = A(1 + hk)^n = A\big(1 + \tfrac{kx}{n}\big)^n @@ n steps, with h = x/n
 </section>
 
 <section class="class step" data-step="24i2">
-  <h2 class="sthead"><span class="stno">24i2</span>The slip of one step, and of the walk</h2>
+  <h2 class="sthead"><span class="stno">24i2</span>The Slip of One Step, and of the Walk</h2>
   <p data-pid="81d886">Walk-error technique: <b>let F be tame with constant L on a region holding the walk and the solutions through its points, and let every such solution have second slope at most K in size. Then the forward walk with step h lands, at x, within (Kh/2L)(e^(L(x − x₀)) − 1) of the solution through the start.</b> Each step slips by at most Kh²/2; each slip moves the walk onto a nearby solution; and nearby solutions drift apart no faster than the drift technique allows.</p>
   <pre class="lines" data-k="ember" data-label="this step: the walk-error technique, for x = x_N">
 z_j = \text{the solution through } (x_j, y_j);\ \ z_0 = y \text{, the solution through the start} @@ the walk's own points, each a start (24d2)
@@ -107,7 +107,7 @@ z_j(x_{j+1}) = y_j + h\,F(x_j, y_j) + \tfrac12 z_j''(c)\,h^2 = y_{j+1} + \tfrac1
 </section>
 
 <section class="class step" data-step="24i3">
-  <h2 class="sthead"><span class="stno">24i3</span>Looking ahead</h2>
+  <h2 class="sthead"><span class="stno">24i3</span>Looking Ahead</h2>
   <p class="eqline" data-pid="f59b0b">From here on, a <i>look-ahead step</i> from (xₙ, yₙ) takes the slope s₁ = F(xₙ, yₙ), takes a trial step to ỹ = yₙ + h·s₁, reads the slope s₂ = F(xₙ₊₁, ỹ) there, and then steps with the average: yₙ₊₁ = yₙ + h(s₁ + s₂)/2. Accepted name: the improved (trapezoidal) step, a second-order step method.</p>
   <p data-pid="d74e87">Look-ahead technique: <b>for y′ = ky, one look-ahead step multiplies by 1 + hk + (hk)²/2, the matching polynomial of e^(hk) of degree 2; for k &gt; 0 the walk lands within Axk³h²e^(kx)/6 of Ae^(kx). And for y′ = f(x) the look-ahead walk is the trapezoid sum of 23l1.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the look-ahead technique">
@@ -130,7 +130,7 @@ F = f(x):\ \ y_{n+1} = y_n + \tfrac{h}{2}\big(f(x_n) + f(x_{n+1})\big) @@ the tr
 </section>
 
 <section class="class step" data-step="24i4">
-  <h2 class="sthead"><span class="stno">24i4</span>Rules that punish the plain walk</h2>
+  <h2 class="sthead"><span class="stno">24i4</span>Rules That Punish the Plain Walk</h2>
   <p data-pid="88e5b8">Stiff-step technique: <b>for y′ = −ky with k &gt; 0, forward steps shrink toward 0, as the solution does, exactly when hk &lt; 2; backward steps, yₙ₊₁ = yₙ + h·F(xₙ₊₁, yₙ₊₁), shrink toward 0 for every h &gt; 0.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the stiff-step technique">
 y_{n+1} = y_n - hk\,y_n = (1 - hk)\,y_n,\ \ y_n = (1 - hk)^n y_0 @@ forward steps
@@ -150,7 +150,7 @@ y_{n+1} = y_n - hk\,y_{n+1} \Rightarrow y_{n+1} = \tfrac{1}{1 + hk}\,y_n @@ back
 </section>
 
 <section class="class step" data-step="24i5">
-  <h2 class="sthead"><span class="stno">24i5</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">24i5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
 \text{halve the step, and each step's slip halves}\,? @@ a slip is about h², so it falls to a quarter; the walk's error halves, since there are twice as many slips
 y_{n+1} = y_n + h\,F(x_{n+1}, \tilde y) \text{ is the look-ahead step}\,? @@ the slope at the trial point alone is as crude as the forward step; the average of the two slopes is what matches degree 2

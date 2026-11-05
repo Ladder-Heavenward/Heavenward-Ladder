@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Eigenvalues by machine</title>
+<title>Eigenvalues by Machine</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -50,13 +50,13 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <header class="top">
   <p class="home"><a href="index.html">← the ladder</a><a href="r31m.html">← 31m interpolation and orthogonal polynomials</a><a href="r31o.html">next: 31o principal components →</a></p>
   <div class="tags"><span class="tag tech">31n · technique</span></div>
-  <h1>Eigenvalues by machine</h1>
+  <h1>Eigenvalues by Machine</h1>
   <p data-pid="da765b">Rung twenty seven found stretches as the roots of a polynomial. For a grid of three rows that is work; for a grid of a thousand rows, the polynomial is hopeless, since its numbers are huge and a tiny error in them moves the roots far. Machines do not use it. They use two ideas this rung has already proved. The first is to apply the grid again and again to one arrow: the largest stretch takes over, and the arrow swings onto its axis. Reading the arrow with the grid on both sides then gives the stretch, with an error that is the square of the arrow’s error. Undoing the grid after a shift aims the same trick at any stretch you like. The second idea straightens the columns, multiplies the pieces back in the other order, and does it again. It is the first idea run on every column at once, it never changes the stretches, and a symmetric grid slides towards its own axes form.</p>
   <p class="gesture" data-pid="03ca12">Applying a grid again and again swings an arrow onto the axis of the largest stretch, and the arrow read with the grid on both sides gives the stretch with a squared error. A shift and an undoing aim it at any stretch. Straightening, then multiplying back the other way, keeps the stretches and runs the same idea on every column at once.</p>
 </header>
 
 <section class="class step" data-step="31n1">
-  <h2 class="sthead"><span class="stno">31n1</span>Again and again</h2>
+  <h2 class="sthead"><span class="stno">31n1</span>Again and Again</h2>
   <p data-pid="0a26e2">27l2 proved that Aᵏx/λ₁ᵏ heads to c₁v₁ when |λ₁| is the largest stretch. A machine cannot divide by λ₁ before it knows it, so it cuts to size 1 at each step: xₖ₊₁ = Axₖ/|Axₖ|. The arrows swing onto the axis of λ₁, and the error shrinks by |λ₂/λ₁| each step. For a symmetric A, read the stretch off with R(x) = xᵀAx/xᵀx.</p>
   <p data-pid="f81a74">Two-sided-reading technique: <b>for symmetric A, if x makes an angle ε with an axis e of stretch λ, then |R(x) − λ| ≤ (λmax − λmin) sin²ε: the reading’s error is the square of the arrow’s.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the two-sided-reading technique">
@@ -81,7 +81,7 @@ R(2, 1) = \tfrac{14}{5} = 2.8,\ \ R(5, 4) = \tfrac{122}{41} \approx 2.9756,\ \ R
 </section>
 
 <section class="class step" data-step="31n2">
-  <h2 class="sthead"><span class="stno">31n2</span>Aiming at any stretch</h2>
+  <h2 class="sthead"><span class="stno">31n2</span>Aiming at Any Stretch</h2>
   <p data-pid="ee602f">Again-and-again finds only the largest stretch. To find the one nearest a guess s, change the grid. A − sI stretches the same axes by λ − s, and its undoing stretches them by 1/(λ − s), which is largest for the λ nearest s.</p>
   <p data-pid="a46270">Near-shift technique: <b>if s is nearer to the stretch λ than to any other, then applying (A − sI)⁻¹ again and again swings an arrow onto λ’s axis, its error shrinking each step by |λ − s| over the next nearest |λ′ − s|.</b> It is 27l2 run on (A − sI)⁻¹, whose stretches are the 1/(λ − s) of A’s axes.</p>
   <pre class="lines" data-k="ember" data-label="this step: the middle stretch of a three-row grid">
@@ -101,7 +101,7 @@ R(x_1) \approx 3.229,\ \ R(x_2) \approx 2.791,\ \ R(x_3) \approx 2.762 @@ a mach
 </section>
 
 <section class="class step" data-step="31n3">
-  <h2 class="sthead"><span class="stno">31n3</span>Straighten, then multiply back</h2>
+  <h2 class="sthead"><span class="stno">31n3</span>Straighten, Then Multiply Back</h2>
   <p data-pid="57c04e">Start with A₀ = A. At each step straighten the columns, Aₖ = QₖRₖ (31c3), and multiply back in the other order: Aₖ₊₁ = RₖQₖ.</p>
   <p data-pid="863bc8">Same-stretches technique: <b>every Aₖ has the same stretches as A, and if A is symmetric so is every Aₖ.</b> Rₖ = QₖᵀAₖ, so Aₖ₊₁ = QₖᵀAₖQₖ: a turn of the measuring directions, which keeps the stretch-test polynomial, since det(QᵀAQ − λI) = det(Qᵀ(A − λI)Q) = det(A − λI), and keeps symmetry, since (QᵀAQ)ᵀ = QᵀAᵀQ.</p>
   <p data-pid="89c147">Powers-in-QR technique: <b>(Q₀Q₁⋯Qₖ₋₁)(Rₖ₋₁⋯R₁R₀) = Aᵏ: the straightened columns of Aᵏ are Q₀⋯Qₖ₋₁, so the method applies A again and again to every column at once, keeping them at right angles.</b></p>
@@ -127,7 +127,7 @@ A_2 \approx \begin{pmatrix} 2.9756 & 0.2195 \\ 0.2195 & 1.0244\end{pmatrix} @@ t
 </section>
 
 <section class="class step" data-step="31n4">
-  <h2 class="sthead"><span class="stno">31n4</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">31n4</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
 \text{find the stretches of a large grid from the roots of } \det(A - \lambda I)\,? @@ the polynomial’s numbers are huge, and small errors in them move roots far
 \text{again and again always finds the largest stretch}\,? @@ a start with c₁ = 0 never swings onto it; two stretches of the same size never settle

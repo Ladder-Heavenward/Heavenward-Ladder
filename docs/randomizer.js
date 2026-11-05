@@ -25,8 +25,8 @@ const pick=a=>a[rnd(a.length)];
 const shuffle=a=>{ for(let i=a.length-1;i>0;i--){ const j=rnd(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; };
 const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 
-const STEPS={'0a':['r00a','Names and statements'],'0b':['r00b','The same as itself'],'1b':['r01b','Not, and the totally false'],
-  '1c':['r01c','And, and the ors'],'4f':['r04f','Adding'],'4g':['r04g','Multiplying and powers']};
+const STEPS={'0a':['r00a','Names and Statements'],'0b':['r00b','The Same as Itself'],'1b':['r01b','Not, and the Totally False'],
+  '1c':['r01c','And, and the Ors'],'4f':['r04f','Adding'],'4g':['r04g','Multiplying and Powers']};
 const stepLink=s=>{ const S=STEPS[s]; if(S) return '<a href="'+S[0]+'.html">'+s+' '+esc(S[1])+'</a>'; const st=tagStem(s); return st?'<a href="'+st+'.html">'+esc(s)+'</a>':esc(s); };
 
 /* Seed pools: each makes one sameness claim {l, r}, a claim that differs {n}, and the index of the values it drew. */
@@ -109,10 +109,10 @@ const fact=n=>n<2?1:n*fact(n-1);
 const re=s=>new RegExp('^'+s+'$');
 const kk=c=>c.k||(2+(c.a%8));
 const mem=n=>n+(n===1?' member':' members');
-Object.assign(STEPS,{'4h':['r04h','Order'],'4j':['r04j','Divides, remainders and primes'],'4k':['r04k','Counting choices'],
-  '5b':['r05b','Integers as pairs'],'5c':['r05c','Fractions as ratios'],'5e':['r05e','Zero, negatives, and the forbidden division'],
-  '5f':['r05f','Between any two, another; yet holes'],'5g':['r05g','The same change to both sides'],'5i':['r05i','Expanding and factoring'],
-  '5j':['r05j','Ratio, proportion and units']});
+Object.assign(STEPS,{'4h':['r04h','Order'],'4j':['r04j','Divides, Remainders and Primes'],'4k':['r04k','Counting Choices'],
+  '5b':['r05b','Integers as Pairs'],'5c':['r05c','Fractions as Ratios'],'5e':['r05e','Zero, Negatives, and the Forbidden Division'],
+  '5f':['r05f','Between Any Two, Another; Yet Holes'],'5g':['r05g','The Same Change to Both Sides'],'5i':['r05i','Expanding and Factoring'],
+  '5j':['r05j','Ratio, Proportion and Units']});
 SEEDS.push(
   {id:'4h.numbers', step:'4h', label:'numbers to compare', open:()=>has('4h'),
    make(){ const T=has('4j')?30:20, a=rnd(T+1), b=1+rnd(T), k=2+rnd(8); return {a,b,k,c:a+b,ix:'['+a+','+b+','+k+']',kind:'num'}; }},
@@ -259,8 +259,8 @@ LINKS.forEach(L=>{ if(!L.kinds) L.kinds=['names','add','times']; });
 /* 0.2.1 question pools (Andrew 2026-11-04 19:13): five more kinds of laundry question, each opened by its step.
    true or false · what is x, or [x, y], or [x, y, z] · which function is it · which graph is it · what set is it.
    Each pool checks its own question: exactly one offered answer is right, and no decoy equals it. */
-Object.assign(STEPS,{'1e':['r01e','Tables'],'2h':['r02h','Sets by hand'],'9a':['r09a','A function is its pairs'],
-  '9e':['r09e','Reading and drawing graphs'],'27j':['r27j','Solving systems by elimination']});
+Object.assign(STEPS,{'1e':['r01e','Tables'],'2h':['r02h','Sets by Hand'],'9a':['r09a','A Function Is Its Pairs'],
+  '9e':['r09e','Reading and Drawing Graphs'],'27j':['r27j','Solving Systems by Elimination']});
 const S=n=>n<0?'−'+(-n):String(n);
 const lin=(a,b)=>(a===1?'':a===-1?'−':S(a))+'x'+(b===0?'':b>0?' + '+b:' − '+(-b));
 const ANIMALS=[['cat',{fur:1,legs:4}],['dog',{fur:1,legs:4}],['owl',{flies:1,legs:2}],['bee',{flies:1,legs:6}],['ant',{legs:6}],['eel',{water:1,legs:0}],['spider',{legs:8}]];

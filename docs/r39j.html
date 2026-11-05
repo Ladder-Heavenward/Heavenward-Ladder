@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>A machine that follows a list</title>
+<title>A Machine That Follows a List</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -50,13 +50,13 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <header class="top">
   <p class="home"><a href="index.html">← the ladder</a><a href="r39i.html">← 39i adding with gates</a><a href="r39k.html">next: 39k how long a program takes →</a></p>
   <div class="tags"><span class="tag proof">39j · proof</span></div>
-  <h1>A machine that follows a list</h1>
+  <h1>A Machine That Follows a List</h1>
   <p data-pid="f3e8ad">Rows of catches hold numbers, gates add them, and a clock tells everything when to move. Put many rows side by side, each with a number of its own to pick it out, and that is a memory. Add one more row that holds a place in the memory and goes up by one at each turn, a counter. Now let the numbers in the memory do two jobs. Some are data, numbers to add. Others are instructions: a number whose first digit says what to do, load, add, store, take away, jump, stop, and whose other digits say where. The machine’s whole life is one loop. Read the cell the counter points at. Move the counter on. Do what the number read says. Go round again. That is all a processor does, billions of times a second, and this step builds one with seven kinds of instruction, writes a program that multiplies by adding, and follows it turn by turn. Because the program is numbers in the same memory as the data, a program can be handed to the machine as data, and can even rewrite itself. The rung on what machines can compute makes this machine exact, as a tape and a head, and asks what no such machine can do.</p>
   <p class="gesture" data-pid="b362dc">A memory is many registers, each picked out by its number. An instruction is a number: what to do, and where. The machine fetches the number the counter points at, moves the counter on, and runs it, again and again. Its whole state is a number, and each turn is a function of it. A program is data too.</p>
 </header>
 
 <section class="class step" data-step="39j1">
-  <h2 class="sthead"><span class="stno">39j1</span>An instruction is a number</h2>
+  <h2 class="sthead"><span class="stno">39j1</span>An Instruction Is a Number</h2>
   <p data-pid="c6c039">A <i>memory</i> is a list of registers, cell 0, cell 1, cell 2 and so on, each holding a number. Its <i>address</i> is its place in the list. Which cell to read is a table from the address bits to a choice of row, and 39f2 builds any table, so reading a cell by its number is a circuit. On this page cells hold numbers below 1000, written in tens for reading; inside they are in twos.</p>
   <p data-pid="a06b7d">Instruction-number technique: <b>a number of three digits, first digit d and last two digits n, is read as an instruction: d says what to do and n says which cell.</b> The seven kinds on this machine, with A a register named the accumulator:</p>
   <ul>
@@ -84,7 +84,7 @@ d = 2:\ \text{add} @@ the list above
 </section>
 
 <section class="class step" data-step="39j2">
-  <h2 class="sthead"><span class="stno">39j2</span>Fetch, move on, run</h2>
+  <h2 class="sthead"><span class="stno">39j2</span>Fetch, Move on, Run</h2>
   <p data-pid="d4a1b0">Besides the memory, the machine has two registers: the counter C and the accumulator A. At each turn: fetch the number in cell C; set C to C + 1; then run the number fetched. Every register is a row of edge-catches (39h3), so each turn happens between two rises of the clock.</p>
   <p data-pid="45eac1">Fetch-run technique: <b>the machine’s whole state, its counter, accumulator and memory, is one list of numbers, and each turn is a function from states to states; so a run is fixed by its first state.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the fetch-run technique">
@@ -105,7 +105,7 @@ s_0, \ F(s_0),\ F(F(s_0)), \ldots @@ the recursion technique (4d): a start and a
 </section>
 
 <section class="class step" data-step="39j3">
-  <h2 class="sthead"><span class="stno">39j3</span>A program that multiplies</h2>
+  <h2 class="sthead"><span class="stno">39j3</span>A Program That Multiplies</h2>
   <p data-pid="671b12">Multiplying is repeated adding (4g). The program sits in cells 0 to 9; cell 90 holds x = 3, cell 91 holds the count k = 4, cell 92 the product, starting at 0, and cell 93 holds 1.</p>
   <ul>
     <li data-pid="aa4bf6">0: 191, load the count.</li>
@@ -136,7 +136,7 @@ s_0, \ F(s_0),\ F(F(s_0)), \ldots @@ the recursion technique (4d): a start and a
 </section>
 
 <section class="class step" data-step="39j4">
-  <h2 class="sthead"><span class="stno">39j4</span>A program is data</h2>
+  <h2 class="sthead"><span class="stno">39j4</span>A Program Is Data</h2>
   <p data-pid="9dc9cf">Instructions and data sit in one memory and are both numbers. So a store can write a number where an instruction will be fetched.</p>
   <p data-pid="9f63b9">Stored-list technique: <b>since instructions are numbers in the cells data is stored in, one machine runs any program placed in its memory, and a program can change the instructions it will run next.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the stored-list technique">
@@ -156,7 +156,7 @@ s_0, \ F(s_0),\ F(F(s_0)), \ldots @@ the recursion technique (4d): a start and a
 </section>
 
 <section class="class step" data-step="39j5">
-  <h2 class="sthead"><span class="stno">39j5</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">39j5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
 290 \text{ is an instruction wherever it sits}\,? @@ only where the counter points; in cell 90 it would be data
 \text{the counter moves on after running}\,? @@ it moves on before; a jump then overwrites it

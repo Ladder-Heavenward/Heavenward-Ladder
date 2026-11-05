@@ -93,7 +93,7 @@
  {"q": "The people on roster r in neither group: which set?", "a": "r ∖ (h ∪ k)", "w": ["(r ∖ h) ∪ (r ∖ k)", "{x : x ∉ h ∪ k}", "r ∖ (h ∩ k)"], "why": "Neither needs the roster: not in the union, sifted from r."},
  {"q": "(r ∖ h) ∩ (r ∖ k) is the same set as which?", "a": "r ∖ (h ∪ k)", "w": ["r ∖ (h ∩ k)", "h ∩ k", "(h ∪ k) ∖ r"], "why": "The neither technique: not in h ∨ k is not in h and not in k."},
  {"q": "On the region picture of h and k, which row is the region inside h only?", "a": "TF", "w": ["TT", "FT", "FF"], "why": "In h, not in k."},
- {"q": "“Did you climb Baker or paddle to the San Juans?” Someone who did both answers no. Which or did they read?", "a": "The exclusive or", "w": ["The inclusive or", "Neither", "Not both"], "why": "The exclusive or: one or the other, but not both."},
+ {"q": "“Did you climb Baker or paddle to the San Juans?” Someone who did both answers no. Which or did they read?", "a": "The exclusive or", "w": ["The inclusive or", "Neither", "Not Both"], "why": "The exclusive or: one or the other, but not both."},
  {"q": "Everyone reads an or question as exclusive. What is the yes group?", "a": "(h ∖ k) ∪ (k ∖ h)", "w": ["h ∪ k", "h ∩ k", "r ∖ (h ∩ k)"], "why": "Yes from those in exactly one of the groups."},
  {"q": "From the yes group of an inclusive or question alone, which region cannot be found?", "a": "The both region, h ∩ k", "w": ["The neither region", "The union h ∪ k", "The roster r"], "why": "Two clubs with the same yes group can differ in who did both."},
  {"q": "A person left the second question blank. Which region of the picture is theirs?", "a": "None: their row is not settled", "w": ["FF", "TF", "TT"], "why": "The settled-only step needs each membership settled by an answer."}];

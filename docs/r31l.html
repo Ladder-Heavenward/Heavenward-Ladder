@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Correlation and regression</title>
+<title>Correlation and Regression</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -50,13 +50,13 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <header class="top">
   <p class="home"><a href="index.html">← the ladder</a><a href="r31k.html">← 31k projections and least squares by hand</a><a href="r31m.html">next: 31m interpolation and orthogonal polynomials →</a></p>
   <div class="tags"><span class="tag tech">31l · technique</span></div>
-  <h1>Correlation and regression</h1>
+  <h1>Correlation and Regression</h1>
   <p data-pid="fb1a4a">Two lists of numbers that rise together, like the July temperature in Sacramento and the sales of ice cream there, give a correlation and a fitted line. Both are easy to compute and easy to misread. Seen with the rung’s geometry they are one angle. Take each list away from its own average, and treat what is left as an arrow with one place for each day. The correlation is the cosine of the angle between the two arrows. The fitted line is a shadow of one on the other, and there are two shadows, one each way, which is why the line that predicts sales from heat is not the line that predicts heat from sales. A third list that both arrows lean towards, such as the number of people at the beach, can make the angle small with no link between the first two at all. Take its shadow out of both, and the angle that is left is the honest one.</p>
   <p class="gesture" data-pid="c908bb">The correlation is the cosine of the angle between the two lists of deviations. Each fitted line is a shadow of one list on the other, and the two slopes multiply to the correlation squared. A third list’s shadow, taken out of both, leaves the angle between what it does not explain.</p>
 </header>
 
 <section class="class step" data-step="31l1">
-  <h2 class="sthead"><span class="stno">31l1</span>A correlation is a cosine</h2>
+  <h2 class="sthead"><span class="stno">31l1</span>A Correlation Is a Cosine</h2>
   <p data-pid="bca406">Take paired data and the deviation lists u = (x₁ − x̄, …, xₙ − x̄) and v = (y₁ − ȳ, …, yₙ − ȳ), arrows of lists of n numbers. 8·stat’s correlation was r = u · v/(|u| |v|), and 8·stat bounded it by the dot bound. 31a4 gives the bound its meaning.</p>
   <p data-pid="3b750a">Correlation-angle technique: <b>r is the cosine of the angle between the deviation arrows u and v, and r² is the share of the spread of y that the best line accounts for.</b> The first part is 31a4’s angle with the dot. The second is 13·stat’s residuals technique read as 31b4’s square-sum: the shadow of v on u has squared size r²|v|², and the miss carries the rest.</p>
   <pre class="lines" data-k="ember" data-label="this step: 8·stat’s lists, as an angle">
@@ -76,7 +76,7 @@ r = \tfrac{3}{5} = 0.6,\ \ \theta = \arccos 0.6 \approx 53.1^\circ @@ the correl
 </section>
 
 <section class="class step" data-step="31l2">
-  <h2 class="sthead"><span class="stno">31l2</span>Two shadows, two lines</h2>
+  <h2 class="sthead"><span class="stno">31l2</span>Two Shadows, Two Lines</h2>
   <p data-pid="27d7f3">The line of y on x is the shadow of v on u: its slope is b = (u · v)/|u|² = r σ_y/σₓ. The line of x on y is the shadow of u on v, with slope b′ = r σₓ/σ_y, read as how much x changes for one unit of y.</p>
   <p data-pid="335bae">Two-lines technique: <b>the two slopes multiply to r², so the two lines are the same line exactly when r = ±1; in standard units, where each list is measured in its own spread widths from its own average, the line of y on x predicts r times the units of x.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the two-lines technique">
@@ -101,7 +101,7 @@ r = 0.5 \text{ between a first and a second test score} @@ a model class
 </section>
 
 <section class="class step" data-step="31l3">
-  <h2 class="sthead"><span class="stno">31l3</span>What the line does not say</h2>
+  <h2 class="sthead"><span class="stno">31l3</span>What the Line Does Not Say</h2>
   <p data-pid="4e1cb3">A small angle between u and v can come from a third list w that both lean towards: heat drives ice cream sales and beach crowds, and the crowds drive drownings. To see what is left, take the shadow of w out of both, and measure the angle between the misses.</p>
   <p data-pid="305b20">Take-out technique: <b>the correlation of x and y with w taken out is the cosine of the angle between the misses of u and v from their shadows on the deviation arrow of w, and it equals (r_xy − r_xw r_yw)/√((1 − r_xw²)(1 − r_yw²)).</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the take-out technique">
@@ -129,7 +129,7 @@ r = 0.5 \text{ between a first and a second test score} @@ a model class
 </section>
 
 <section class="class step" data-step="31l4">
-  <h2 class="sthead"><span class="stno">31l4</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">31l4</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
 \text{the line of } x \text{ on } y \text{ is the line of } y \text{ on } x \text{ turned round}\,? @@ their slopes multiply to r², not 1
 r = 0.6 \Rightarrow 60\% \text{ of the spread of } y \text{ is explained}\,? @@ the share is r² = 36%

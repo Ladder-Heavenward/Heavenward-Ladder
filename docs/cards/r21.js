@@ -122,7 +122,7 @@
  {"q": "iᵗ. What is it?", "a": "the turn of t quarter turns: cos(πt/2) + i sin(πt/2)", "w": ["i times t", "t to the power i", "1 for every t"], "why": "The quarter-power technique."},
  {"q": "i². What angle is it?", "a": "π, the half turn", "w": ["π/2", "2π", "0"], "why": "Two quarter turns."},
  {"q": "The square roots of i. Where do they sit?", "a": "at arcs π/4 and 5π/4", "w": ["at 1 and −1", "at π/2 only", "nowhere"], "why": "Halve the angle, then add half a turn."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["21·then"]=[{"q": "Why is summer warmer than winter?", "a": "the sun’s slant spreads its light less", "w": ["the Earth is nearer the sun", "the days are hotter", "the sun burns brighter"], "why": "The slant doubles the light; distance changes it by 7%, the wrong way."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["21·then"]=[{"q": "Why Is Summer Warmer Than Winter?", "a": "the sun’s slant spreads its light less", "w": ["the Earth is nearer the sun", "the days are hotter", "the sun burns brighter"], "why": "The slant doubles the light; distance changes it by 7%, the wrong way."},
  {"q": "A beam lands at angle θ from straight overhead. What share of light does each patch get?", "a": "cos θ", "w": ["sin θ", "1", "tan θ"], "why": "The beam spreads over 1/cos θ times the ground."},
  {"q": "Light through a filter turned θ from the last. What share of strength is kept?", "a": "cos² θ", "w": ["cos θ", "sin² θ", "1/2"], "why": "The two-filter technique."},
  {"q": "Two filters at right angles. How much light passes?", "a": "none", "w": ["half", "all", "a quarter"], "why": "cos²(π/2) = 0."},

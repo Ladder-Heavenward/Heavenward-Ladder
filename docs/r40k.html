@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Reductions by hand</title>
+<title>Reductions by Hand</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -50,13 +50,13 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <header class="top">
   <p class="home"><a href="index.html">← the ladder</a><a href="r40j.html">← 40j machines that read a tape, by hand</a><a href="r40l.html">next: 40l convincing without telling →</a></p>
   <div class="tags"><span class="tag tech">40k · technique</span></div>
-  <h1>Reductions by hand</h1>
+  <h1>Reductions by Hand</h1>
   <p data-pid="b8d1fa">The tableau technique said that every question with short certificates turns into one question: can this statement built from letters be made true? It said so for every question at once, which makes it hard to see. This step does one turning by hand, from statements to maps. A map here is only dots and links between them, and the question is whether the dots can be given three colours so that no link joins two dots of one colour. It looks like a question about drawing. It holds every statement inside it. The step builds the pieces: a triangle of three dots that names the colours true, false and spare; a pair of linked dots for each letter, which must take true and false between them; and a small piece of six dots for each or, which can be coloured only if one of its inputs is true. Then it joins them, counts the dots, and runs the reduction backwards, reading a true row off a colouring. Every piece is checked by trying all its cases, and every count is a power of the statement’s length.</p>
   <p class="gesture" data-pid="a7095c">A statement in clauses of three becomes a map: a triangle for the colours, a linked pair for each letter, and a six-dot piece for each clause, coloured only if one of its letters is true. The map has three colours exactly when the statement has a true row, and the map is built fast.</p>
 </header>
 
 <section class="class step" data-step="40k1">
-  <h2 class="sthead"><span class="stno">40k1</span>Clauses of three</h2>
+  <h2 class="sthead"><span class="stno">40k1</span>Clauses of Three</h2>
   <p data-pid="bf6828">A <i>clause</i> is an or of letters and nots of letters, like ¬x ∨ y ∨ z. The tableau technique wrote its statement as an and of clauses. Clauses of any length can be cut to clauses of exactly three, with new letters.</p>
   <p data-pid="cc621d">Clause-split technique: <b>a ∨ b ∨ c ∨ d has a true row exactly when (a ∨ b ∨ z) ∧ (¬z ∨ c ∨ d) does, for a new letter z.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the clause-split technique">
@@ -76,7 +76,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 </section>
 
 <section class="class step" data-step="40k2">
-  <h2 class="sthead"><span class="stno">40k2</span>A palette, and a pair for each letter</h2>
+  <h2 class="sthead"><span class="stno">40k2</span>A Palette, and a Pair for Each Letter</h2>
   <p data-pid="4834da">A <i>map</i> here is a finite set of dots and a set of links, each joining two dots. A <i>three-colouring</i> gives each dot one of three colours so that no link joins two dots of one colour. 34m coloured a knot’s strands with three colours under a different rule; here the rule is only that linked dots differ.</p>
   <p data-pid="4e2520">Palette technique: <b>in a three-colouring of a triangle T, F, B, with a dot x and a dot x̄ linked to each other and both linked to B, the dots x and x̄ take the colours of T and F, one each.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the palette technique">
@@ -96,7 +96,7 @@ x \text{ linked }\allowbreak \text{to } \bar x\text{: }\allowbreak \text{they }\
 </section>
 
 <section class="class step" data-step="40k3">
-  <h2 class="sthead"><span class="stno">40k3</span>A piece for each or</h2>
+  <h2 class="sthead"><span class="stno">40k3</span>A Piece for Each Or</h2>
   <p data-pid="ab5b19">Take two input dots a and b. Add three dots u, v, o, with links a–u, b–v, u–v, u–o, v–o. Call it an <i>or-piece</i> with output o.</p>
   <p data-pid="0f5398">Or-piece technique: <b>if a and b are both coloured false, o is coloured false; if either is coloured true, the colouring can be finished with o coloured true.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the or-piece technique">
@@ -118,7 +118,7 @@ a \text{ false},\ \allowbreak b \text{ true} \Rightarrow u = \text{spare},\ \all
 </section>
 
 <section class="class step" data-step="40k4">
-  <h2 class="sthead"><span class="stno">40k4</span>The whole map, and back</h2>
+  <h2 class="sthead"><span class="stno">40k4</span>The Whole Map, and Back</h2>
   <p data-pid="10a381">Map-from-clauses technique: <b>a statement with n letters and m clauses of three has a true row exactly when its map, with 3 + 2n + 6m dots and 3 + 3n + 12m links, has a three-colouring.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the map-from-clauses technique">
 \text{dots: } T, F, B\text{; } x_i, \bar x_i \text{ for }\allowbreak \text{each }\allowbreak \text{letter; }\allowbreak \text{six }\allowbreak \text{for }\allowbreak \text{each }\allowbreak \text{clause} @@ 3 + 2n + 6m
@@ -144,7 +144,7 @@ a \text{ false},\ \allowbreak b \text{ true} \Rightarrow u = \text{spare},\ \all
 </section>
 
 <section class="class step" data-step="40k5">
-  <h2 class="sthead"><span class="stno">40k5</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">40k5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
 \text{a }\allowbreak \text{clause }\allowbreak \text{piece }\allowbreak \text{with }\allowbreak \text{an }\allowbreak \text{input }\allowbreak \text{true }\allowbreak \text{forces } o \text{ true}\,? @@ it allows o true; other finishings may colour o otherwise, and o₂’s links pick the true one
 \text{the }\allowbreak \text{reduction }\allowbreak \text{shows }\allowbreak \text{colouring }\allowbreak \text{is }\allowbreak \text{harder }\allowbreak \text{than }\allowbreak \text{satisfiability}\,? @@ it shows colouring is at least as hard; the tableau technique puts colouring back into satisfiability too

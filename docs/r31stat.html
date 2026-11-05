@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Can a model fit too well?</title>
+<title>Can a Model Fit Too Well?</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -50,13 +50,13 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <header class="top">
   <p class="home"><a href="index.html">← the ladder</a><a href="r31o.html">← 31o principal components</a><a href="r31then.html">next: 31·then how do you fit a curve to noisy data? →</a></p>
   <div class="tags"><span class="tag stat">31·stat · statistics</span></div>
-  <h1>Can a model fit too well?</h1>
+  <h1>Can a Model Fit Too Well?</h1>
   <p data-pid="3ba476">Can a model fit too well? A county health office in Oregon wants to know which things predict the weight of a newborn: the mother’s age, her height, whether she smokes, how many weeks the pregnancy ran. Each thing measured is a column, and the best fit is a shadow on the flat piece the columns build. Add a column and the shadow can only come closer, so the fit always looks better. Add enough columns, even columns of pure noise, and the fit becomes perfect, passing through every point. That perfect fit is worthless for the next baby. What makes the question hard is that the fit on the data in hand is the only thing anyone can see, and it always flatters. This page counts exactly how much it flatters, shows how to get an honest measure from data held back, and carries the shadow to yes or no answers, where the thing predicted is a chance.</p>
   <p class="gesture" data-pid="cd2683">With more columns the shadow on the data can only come closer, so the fit on the data in hand always flatters. With p columns and noise of spread σ², the misses on the data average (n − p)σ² in total, and the misses on fresh data (n + p)σ². Data held back measure the honest miss. For yes or no answers the log of the odds is fitted, and the best fit again has its misses at right angles to every column.</p>
 </header>
 
 <section class="class step" data-step="31stat1">
-  <h2 class="sthead"><span class="stno">31stat1</span>Many columns, one shadow</h2>
+  <h2 class="sthead"><span class="stno">31stat1</span>Many Columns, One Shadow</h2>
   <p data-pid="889ced">Put the n babies’ weights in a list y, and each thing measured in a column of X, with a column of 1s first: p columns in all. 31b3 found the best c as the shadow ŷ = Xc of y on the flat piece the columns build. The share of the spread taken, R² = |ŷ − ȳ1|²/|y − ȳ1|², is 13·stat’s r² for one column, now for many.</p>
   <p data-pid="d03ec1">Never-worse technique: <b>adding a column never makes the total squared miss larger, so it never lowers R².</b> The new flat piece holds the old one, and a closest point in a bigger piece is at least as close (31b2).</p>
   <pre class="lines" data-k="ember" data-label="this page: the never-worse technique, pushed to the end">
@@ -76,7 +76,7 @@ p = n \text{ free columns} \Rightarrow W' = \text{every list of } n \text{ numbe
 </section>
 
 <section class="class step" data-step="31stat2">
-  <h2 class="sthead"><span class="stno">31stat2</span>How much the fit flatters</h2>
+  <h2 class="sthead"><span class="stno">31stat2</span>How Much the Fit Flatters</h2>
   <p data-pid="ce3338">Suppose the truth is y = Xβ + ε, where the noise ε has independent places, each with average 0 and spread σ². Let P be the shadow map onto the piece, so ŷ = Py, and the miss is e = (I − P)y = (I − P)ε, since (I − P)Xβ = 0.</p>
   <p data-pid="f7c13b">Lost-directions technique: <b>the total squared miss on the data in hand averages (n − p)σ²: each column spends one direction of the noise.</b></p>
   <pre class="lines" data-k="ember" data-label="this page: the lost-directions technique">
@@ -102,7 +102,7 @@ n = 20,\ \ p = 5,\ \ \sigma = 0.4 \text{ kg} @@ a model of the county’s data
 </section>
 
 <section class="class step" data-step="31stat3">
-  <h2 class="sthead"><span class="stno">31stat3</span>Holding data back</h2>
+  <h2 class="sthead"><span class="stno">31stat3</span>Holding Data Back</h2>
   <p data-pid="1c68ba">The fresh-data technique needs σ², and the truth to be one of the shadows. Neither is known in practice. The plain cure is to keep some data out of sight. Fit on one part, the training part, and measure the miss on the rest, the held-back part. The held-back readings are fresh for that fit.</p>
   <p data-pid="42345f">Held-out technique: <b>if the held-back readings are independent of the training readings and of the choice of model, their average squared miss is an honest estimate of the miss on fresh data, with a width that shrinks like one over the root of their number.</b> Each held-back squared miss is an independent try at the same average, so the sample-average technique of 30q gives the estimate and its width.</p>
   <aside class="nature">
@@ -122,7 +122,7 @@ n = 20,\ \ p = 5,\ \ \sigma = 0.4 \text{ kg} @@ a model of the county’s data
 </section>
 
 <section class="class step" data-step="31stat4">
-  <h2 class="sthead"><span class="stno">31stat4</span>Yes or no answers</h2>
+  <h2 class="sthead"><span class="stno">31stat4</span>Yes or No Answers</h2>
   <p data-pid="d1e02a">Some answers are yes or no: was the baby born early? A shadow can give numbers below 0 or above 1, which no chance can be. The cure is to fit a straight model not to the chance p but to its log odds, ln(p/(1 − p)), which runs over every number. From here on, the <i>logistic model</i> says ln(pᵢ/(1 − pᵢ)) = (Xc)ᵢ, so pᵢ = 1/(1 + e^(−(Xc)ᵢ)), the logistic curve of 17·bio.</p>
   <p data-pid="ccd207">Log-odds technique: <b>in the logistic model, one more unit of a column’s input multiplies the odds of yes by e to the power of that column’s number.</b> The log odds rise by cⱼ, and odds are e to the log odds (30l3).</p>
   <p data-pid="0d653b">Right-angled-score technique: <b>the most likely c for yes-or-no answers yᵢ = 1 or 0 makes the misses y − p at right angles to every column: Xᵀ(y − p) = 0.</b></p>
@@ -143,7 +143,7 @@ n = 20,\ \ p = 5,\ \ \sigma = 0.4 \text{ kg} @@ a model of the county’s data
 </section>
 
 <section class="class step" data-step="31stat5">
-  <h2 class="sthead"><span class="stno">31stat5</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">31stat5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
 R^2 \text{ rose when the column went in, so the column matters}\,? @@ R² never falls when a column is added, even a column of noise
 \text{the miss on the data in hand is the miss to expect}\,? @@ it averages (n − p)σ²; fresh data average (n + p)σ²

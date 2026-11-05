@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Best from best pieces</title>
+<title>Best From Best Pieces</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -50,13 +50,13 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <header class="top">
   <p class="home"><a href="index.html">← the ladder</a><a href="r41k.html">← 41k shortest paths and greedy choices</a><a href="r41m.html">next: 41m keeping things findable →</a></p>
   <div class="tags"><span class="tag tech">41l · technique</span></div>
-  <h1>Best from best pieces</h1>
+  <h1>Best From Best Pieces</h1>
   <p data-pid="79b62c">Rung 39 solved hard questions by remembering the answers to smaller ones and building up, and aligned two strings of letters that way. On a graph that idea has a plain form: every piece of a shortest route is itself a shortest route between its ends. So the distances can be built from the distances of fewer links, or of fewer stops, one layer at a time. This step does it three ways. On one-way links with no cycle, put the dots in an order where every link goes forward, and one pass along the order gives every best route, shortest or longest. When some lengths are negative, the nearest first of the last step fails, but rounds of improvement, each allowing one more link, still work, and one extra round tells whether a cycle of negative total exists, which in money is a way to get rich by trading in a circle. And allowing the stops one at a time gives the distance between every two dots at once. Last, rung 39’s alignment of two strings turns out to be a best route through a grid, and its table is the forward pass.</p>
   <p class="gesture" data-pid="1cbfa5">A piece of a best route is a best route between its ends. With one-way links and no cycle, an order with every link forward exists, and one pass along it finds every best route. With negative lengths, n − 1 rounds of improvement find every distance, and one more round finds a cycle of negative total if there is one. Allowing the stops one at a time finds every distance at once. An alignment is a best route through a grid.</p>
 </header>
 
 <section class="class step" data-step="41l1">
-  <h2 class="sthead"><span class="stno">41l1</span>Pieces of a best route</h2>
+  <h2 class="sthead"><span class="stno">41l1</span>Pieces of a Best Route</h2>
   <p data-pid="e1733c">Links are one-way here, each (u, w) with a length ℓ(u, w), which may be negative. A path’s length is the sum along it.</p>
   <p data-pid="9ef2bd">Best-pieces technique: <b>if a path from r to w is shortest, each of its pieces, from a dot u on it to a later dot x on it, is a shortest path from u to x.</b> A shorter path from u to x, put in place of the piece, would give a shorter walk from r to w; if it met the rest of the path, cutting out the loop would shorten it again, as long as no cycle has negative total.</p>
   <p data-pid="730af5">A one-way graph with no cycle can be put in <i>forward order</i>: a list of its dots in which every link goes from an earlier dot to a later one. Forward-order technique: <b>every finite one-way graph with no cycle has a forward order.</b> Some dot has no link coming in, since walking backwards along links from any dot must stop, or it would repeat a dot and close a cycle. Put that dot first, take it away, and go on by induction.</p>
@@ -76,7 +76,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 </section>
 
 <section class="class step" data-step="41l2">
-  <h2 class="sthead"><span class="stno">41l2</span>Rounds of improvement</h2>
+  <h2 class="sthead"><span class="stno">41l2</span>Rounds of Improvement</h2>
   <p data-pid="90268a">With cycles and negative lengths, let dₖ(w) be the least length of a walk from r to w with at most k links. Then d₀(r) = 0, and d₀ has no value elsewhere.</p>
   <p data-pid="820d09">Rounds technique: <b>dₖ(w) is the least of dₖ₋₁(w) and dₖ₋₁(u) + ℓ(u, w) over the links (u, w); if no cycle has negative total, dₙ₋₁ is the distance; and some cycle has negative total exactly when a further round still lowers some value.</b></p>
   <pre class="lines" data-k="ember" data-label="this page: the rounds technique">
@@ -102,7 +102,7 @@ d_{n-1} = d_n = d_{n+1} = \cdots @@ no more links help
 </section>
 
 <section class="class step" data-step="41l3">
-  <h2 class="sthead"><span class="stno">41l3</span>Every pair at once</h2>
+  <h2 class="sthead"><span class="stno">41l3</span>Every Pair at Once</h2>
   <p data-pid="1019b8">Name the dots 1 to n. Let Dₖ(i, j) be the least length of a path from i to j whose stops, the dots strictly between its ends, are all among 1 to k. D₀(i, j) is ℓ(i, j) if there is a link, 0 if i = j, and no value otherwise.</p>
   <p data-pid="8aaaaf">Stops-allowed technique: <b>Dₖ(i, j) is the least of Dₖ₋₁(i, j) and Dₖ₋₁(i, k) + Dₖ₋₁(k, j); so with no negative cycle, Dₙ gives every distance after n³ steps.</b> A best path with stops among 1 to k either avoids k, or passes it once, and its two pieces, before and after k, have stops among 1 to k − 1 (the best-pieces technique).</p>
   <pre class="lines" data-k="ember" data-label="this page: three dots, worked">
@@ -121,7 +121,7 @@ D_3(2, 1) = \min(D_2(2, 1),\ D_2(2, 3) + D_2(3, 1)) = \min(\text{none},\ -2 + 1)
 </section>
 
 <section class="class step" data-step="41l4">
-  <h2 class="sthead"><span class="stno">41l4</span>An alignment is a route</h2>
+  <h2 class="sthead"><span class="stno">41l4</span>An Alignment Is a Route</h2>
   <p data-pid="b788ea">39o aligned two strings by a table: an entry for each pair of starting pieces, built from three neighbours. Read the table as a graph. Its dots are the places (i, j), i letters of the first string used and j of the second. A one-way link goes right (a letter of the second against a gap), down (a letter of the first against a gap), or down and right (two letters against each other), with the score of that step as its length. Every link goes forward in the order row by row, and an alignment is a path from (0, 0) to the far corner.</p>
   <p data-pid="c5da55">Alignment-route technique: <b>the best alignment of two strings is a longest route through their grid, and 39o’s table is the forward pass of the forward-order technique.</b></p>
   <pre class="lines" data-k="ember" data-label="this page: ACGT against AGT">
@@ -141,7 +141,7 @@ D_3(2, 1) = \min(D_2(2, 1),\ D_2(2, 3) + D_2(3, 1)) = \min(\text{none},\ -2 + 1)
 </section>
 
 <section class="class step" data-step="41l5">
-  <h2 class="sthead"><span class="stno">41l5</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">41l5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
 \text{the pieces of a longest path are longest paths, in any graph}\,? @@ in a graph with cycles a longest path must avoid repeats, and its pieces need not be longest; with no cycle it holds
 \text{after } n - 1 \text{ rounds every distance is right}\,? @@ only with no negative cycle; with one, there is no shortest walk

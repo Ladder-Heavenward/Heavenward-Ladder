@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Remembering answers</title>
+<title>Remembering Answers</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -50,13 +50,13 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <header class="top">
   <p class="home"><a href="index.html">← the ladder</a><a href="r39n.html">← 39n structures that hold data</a><a href="r39p.html">next: 39p wiring a table by hand →</a></p>
   <div class="tags"><span class="tag proof">39o · proof</span></div>
-  <h1>Remembering answers</h1>
+  <h1>Remembering Answers</h1>
   <p data-pid="44e809">Some programs that cut a job into smaller copies meet the same small copy again and again. The plainest example is the rule that each number of a famous sequence is the sum of the two before it. Followed blindly, the rule asks for the earlier numbers so many times that the fortieth number takes two hundred million calls. Write each answer down the first time it is found, and look it up after that, and the same number takes thirty-nine additions. That one idea, keep a table of the answers to the smaller copies, solves a whole class of problems that look hopeless at first. The step uses it to line up two strings of genetic letters with the fewest changes, the daily work of every laboratory that reads DNA. Then it turns to the opposite habit, taking the best-looking piece at each moment and never looking back. Sometimes that is exactly right, and the step proves when for one case: fitting the most meetings into one room. Sometimes it fails badly, and a table of answers rescues it. The rung on counting and connection carries both ideas onto maps and routes.</p>
   <p class="gesture" data-pid="edda5b">A recursion whose calls repeat costs only as many steps as it has different calls, once their answers are kept. Aligning two strings with the fewest changes fills a table one cell for each pair of starting pieces. Taking the meeting that ends first is always best for one room. Taking the biggest coin first can fail, and a table of amounts fixes it.</p>
 </header>
 
 <section class="class step" data-step="39o1">
-  <h2 class="sthead"><span class="stno">39o1</span>Calls that repeat</h2>
+  <h2 class="sthead"><span class="stno">39o1</span>Calls That Repeat</h2>
   <p data-pid="4ebaef">The sequence 1, 1, 2, 3, 5, 8, … has each number the sum of the two before: F(1) = F(2) = 1 and F(n) = F(n − 1) + F(n − 2), a recursion by 4d. A program that follows the rule as written calls itself for n − 1 and for n − 2, and each of those calls itself twice again.</p>
   <p data-pid="475d51">Remembered-answers technique: <b>a recursion whose answer at n needs only answers at smaller sizes can be run with each answer computed once and kept, at a cost of the number of different sizes times the cost of one step.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the remembered-answers technique on the sequence">
@@ -77,7 +77,7 @@ n = 40:\ \ F(40) = 102\,334\,155,\ \ C(40) = 204\,668\,309 \text{ calls} @@ work
 </section>
 
 <section class="class step" data-step="39o2">
-  <h2 class="sthead"><span class="stno">39o2</span>Lining up two strings</h2>
+  <h2 class="sthead"><span class="stno">39o2</span>Lining up Two Strings</h2>
   <p data-pid="22e1ef">Two strings of DNA letters, A, C, G and T, read from two animals, differ by changes: a letter swapped, a letter dropped, a letter added. The <i>distance</i> between them is the least number of such changes that turns one into the other. Let D(i, j) be the distance between the first i letters of the first string and the first j of the second.</p>
   <p data-pid="732da8">Alignment-table technique: <b>D(i, j) is the least of D(i − 1, j) + 1, D(i, j − 1) + 1, and D(i − 1, j − 1) plus 0 or 1 as the last letters agree or differ; so the whole distance is found by filling a table of (n + 1)(m + 1) cells.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the alignment-table technique">
@@ -98,7 +98,7 @@ D(i, 0) = i,\ \ D(0, j) = j @@ against nothing, every letter is a change
 </section>
 
 <section class="class step" data-step="39o3">
-  <h2 class="sthead"><span class="stno">39o3</span>Take what ends first</h2>
+  <h2 class="sthead"><span class="stno">39o3</span>Take What Ends First</h2>
   <p data-pid="da716f">A <i>greedy</i> program builds its answer one piece at a time, always taking the piece that looks best now and never undoing a choice. For meetings that each want one room from a start to an end, a greedy program can take, again and again, the meeting that ends earliest among those that do not clash with what it has taken.</p>
   <p data-pid="f1cdab">Earliest-finish technique: <b>taking, again and again, the meeting that ends first among those that fit fits as many meetings into one room as any schedule can.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the earliest-finish technique">
@@ -119,7 +119,7 @@ g_1 \text{ ends no later than } b_1 @@ g₁ ends first of all
 </section>
 
 <section class="class step" data-step="39o4">
-  <h2 class="sthead"><span class="stno">39o4</span>When greedy fails, and the table that fixes it</h2>
+  <h2 class="sthead"><span class="stno">39o4</span>When Greedy Fails, and the Table That Fixes It</h2>
   <p data-pid="1c6ef1">Pay an amount with the fewest coins. Greedy takes the largest coin that fits, again and again. With the coins of a till in Santa Cruz, 25, 10, 5 and 1 cents, it is always best: a machine checked every amount up to 500. With coins of 1, 3 and 4, it pays 6 as 4 + 1 + 1, three coins, when 3 + 3 is two.</p>
   <p data-pid="1dd0dd">Coin-table technique: <b>the fewest coins for an amount v is 1 plus the least, over the coins c no larger than v, of the fewest for v − c; so a table of the amounts 0 to v gives the best answer for any coins, in about v times the number of coins turns.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the coin-table technique, coins 1, 3, 4">
@@ -140,7 +140,7 @@ N(6) = 1 + \min(N(5), N(3), N(2)) = 1 + 1 = 2 @@ coin 3, then N(3)
 </section>
 
 <section class="class step" data-step="39o5">
-  <h2 class="sthead"><span class="stno">39o5</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">39o5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
 \text{keeping answers makes every recursion fast}\,? @@ only as fast as its number of different calls; some have very many
 \text{the distance of two strings is the count of places where they differ}\,? @@ ACGT and AGT differ in three places lined up from the left, and their distance is 1

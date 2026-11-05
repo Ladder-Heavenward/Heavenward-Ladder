@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Breaking a signal into frequencies</title>
+<title>Breaking a Signal Into Frequencies</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -50,13 +50,13 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <header class="top">
   <p class="home"><a href="index.html">← the ladder</a><a href="r32d.html">← 32d convolution</a><a href="r32f.html">next: 32f short in time, wide in frequency →</a></p>
   <div class="tags"><span class="tag proof">32e · proof</span></div>
-  <h1>Breaking a signal into frequencies</h1>
+  <h1>Breaking a Signal Into Frequencies</h1>
   <p data-pid="502fb7">Most signals do not repeat. A clap in a hall, one word spoken into a phone, the flash of a lighthouse seen once: each starts, does its business and fades. The turnings of this rung were built for things that go round again. What happens when the repeat is made longer and longer, a minute, an hour, a year, until it never comes? The speeds of the turnings that fit a repeat crowd closer together as it grows, and in the end every speed is allowed, not just the whole ones. The list of coefficients becomes a function of the speed, found by one total over the whole line. That function says how much of each frequency the signal holds. This step builds it, shows that it can be undone to get the signal back, and proves that it keeps energy just as the coefficients did. Along the way the bell curve of the statistics floor turns up in a new part: of all signals, it is the one whose frequencies have the same shape as itself.</p>
   <p class="gesture" data-pid="7aac45">For a signal with a finite total size, the transform at a frequency is the total of the signal times a turning of that frequency, run backwards. It is bounded and continuous. The bell e to the minus π x squared is its own transform, because both obey the same rate rule with the same start. A transform can be undone by the forward total with the turning run forwards, and the total of the square of a signal equals the total of the square of its transform.</p>
 </header>
 
 <section class="class step" data-step="32e1">
-  <h2 class="sthead"><span class="stno">32e1</span>From a repeat to no repeat</h2>
+  <h2 class="sthead"><span class="stno">32e1</span>From a Repeat to No Repeat</h2>
   <p data-pid="15b5cf">Let f be a sized function on the whole line with a finite total size, ∫|f(x)| dx &lt; ∞ over the line. On this step a frequency ξ is counted in whole turns per unit of x, so e^(2πixξ) turns ξ times round in each unit. The <i>transform</i> of f is</p>
   <p class="eqline" data-pid="581a10"><span data-tex="\hat f(\xi) = \int_{-\infty}^{\infty} f(x)\,e^{-2\pi i x\xi}\,dx."></span></p>
   <p data-pid="cb7ccc">It is what 32a’s coefficients become as the repeat grows. Cut f off outside [−L, L] and repeat it every 2L: the turnings that fit have frequencies n/(2L), and its coefficients are f̂(n/(2L))/(2L), up to the part of f beyond L. As L grows, the frequencies fill the line. The accepted name of the transform is the Fourier transform.</p>
@@ -78,7 +78,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 </section>
 
 <section class="class step" data-step="32e2">
-  <h2 class="sthead"><span class="stno">32e2</span>The bell is its own transform</h2>
+  <h2 class="sthead"><span class="stno">32e2</span>The Bell Is Its Own Transform</h2>
   <p data-pid="31aa75">Own-transform technique: <b>the bell g(x) = e^(−πx²) has transform e^(−πξ²): itself.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the own-transform technique">
 \hat g(0) = \int e^{-\pi x^2}\,dx = \tfrac{1}{\sqrt\pi}\int e^{-u^2}\,du = 1 @@ u = √π x; the bell-total technique (30j1)
@@ -99,7 +99,7 @@ y' = -2\pi\xi\,y,\ \ y(0) = 1 \text{ has exactly one solution, } e^{-\pi\xi^2} @
 </section>
 
 <section class="class step" data-step="32e3">
-  <h2 class="sthead"><span class="stno">32e3</span>Undoing the transform</h2>
+  <h2 class="sthead"><span class="stno">32e3</span>Undoing the Transform</h2>
   <p data-pid="8afff3">Undo-transform technique: <b>if f and f̂ both have finite total sizes, then f(x) = ∫ f̂(ξ) e^(2πixξ) dξ at every x where f is continuous.</b> The turning runs forwards to undo what it did backwards.</p>
   <pre class="lines" data-k="ember" data-label="this step: the undo-transform technique">
 \int \hat f(\xi)\,e^{2\pi i x\xi}\,e^{-\pi\varepsilon^2\xi^2}\,d\xi = \int f(y)\Big(\int e^{2\pi i(x - y)\xi}\,e^{-\pi\varepsilon^2\xi^2}\,d\xi\Big)dy @@ a bell put in to tame the total; either order (30e): |f(y)|e^(−πε²ξ²) has a finite total on the plane
@@ -119,7 +119,7 @@ w_\varepsilon \ge 0,\ \ \int w_\varepsilon = 1,\ \ w_\varepsilon(u) \le \tfrac1\
 </section>
 
 <section class="class step" data-step="32e4">
-  <h2 class="sthead"><span class="stno">32e4</span>The transform keeps energy</h2>
+  <h2 class="sthead"><span class="stno">32e4</span>The Transform Keeps Energy</h2>
   <p data-pid="e20c7d">On the line the blend is (f * g)(x) = ∫ f(x − t) g(t) dt, with no weight in front, and the blend-coefficients proof (<a href="r32d.html#32d1">32d1</a>) runs unchanged: the transform of a blend is the product of the transforms.</p>
   <p data-pid="168bcf">Transform-energy technique: <b>if f has a finite total size and a finite energy, then the total of |f̂|² over the line equals the total of |f|².</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the transform-energy technique">
@@ -141,7 +141,7 @@ h(0) = \int f(-t)\,\overline{f(-t)}\,dt = \int|f|^2 @@ the blend at 0
 </section>
 
 <section class="class step" data-step="32e5">
-  <h2 class="sthead"><span class="stno">32e5</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">32e5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
 \hat f \text{ has a finite total, since } f \text{ does}\,? @@ the box has finite total, and sin(πξ)/(πξ) does not
 \hat f(\xi) = \textstyle\sum_n c_n \text{ for a signal that does not repeat}\,? @@ there are no whole speeds to sum; every frequency carries a share

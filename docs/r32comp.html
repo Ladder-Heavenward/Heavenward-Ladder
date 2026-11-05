@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>How does a photo shrink to a small file?</title>
+<title>How Does a Photo Shrink to a Small File?</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -50,13 +50,13 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <header class="top">
   <p class="home"><a href="index.html">← the ladder</a><a href="r32chem.html">← 32·chem how do X-rays see inside a crystal?</a><a href="r32eng.html">next: 32·eng how can headphones cancel noise? →</a></p>
   <div class="tags"><span class="tag comp">32·comp · computing</span></div>
-  <h1>How does a photo shrink to a small file?</h1>
+  <h1>How Does a Photo Shrink to a Small File?</h1>
   <p data-pid="63edf1">How does a photo shrink to a small file? A phone photo of the Golden Gate in fog has about twelve million pixels, and each has three brightnesses, one each for red, green and blue, each a whole number from 0 to 255. Stored as it is, that is thirty-six million bytes. The file the phone actually keeps is about three million, and nobody looking at it can see what is gone. Something has been thrown away, nine parts in ten, and yet the picture survives. What makes the question hard is that no single pixel can be dropped: a missing pixel is a hole anyone can see. The answer this page gives is to stop storing pixels at all. A short row of pixels is a sum of turnings, and in a photo of the world almost all of a row’s variation sits in its first few turnings. Store those carefully, store the rest roughly or not at all, and the rebuilt row is close to the original in energy. Then the page asks what is lost, and why the eye forgives it.</p>
   <p class="gesture" data-pid="e0c21d">Reflect a row of eight pixels end to end and it repeats without a jump, so it is a sum of eight cosines, at right angles, and the books balance exactly in energy. For rows of real photos, nearly all the variation sits in the first few cosines: that is a law, measured, not proved. Round each cosine’s amount to a step, coarse for the fast cosines and fine for the slow ones, and most fast ones become zero, which costs almost nothing to store. The error in the row has exactly the energy of the rounding. The eye sees fine stripes poorly, so the coarse steps go where it looks least.</p>
 </header>
 
 <section class="class step" data-step="32comp1">
-  <h2 class="sthead"><span class="stno">32comp1</span>A row of pixels as cosines</h2>
+  <h2 class="sthead"><span class="stno">32comp1</span>A Row of Pixels as Cosines</h2>
   <p data-pid="b1b7ad">Take a row of N = 8 brightnesses x₀, …, x₇. 32k’s stepped transform would treat the row as repeating, and the last pixel would jump back to the first: a jump, with amounts falling like 1/n (32h3). Reflect the row end to end first, x₀ … x₇ x₇ … x₀, and it repeats with no jump. The reflected row is even about its middle, so it needs cosines alone (32a3).</p>
   <p data-pid="c12ed4">Mirrored-row technique: <b>a row of N pixels, reflected end to end, is a sum of the N cosines cos(π(2j + 1)k/(2N)), k = 0 to N − 1, which are at right angles; with sizes set to 1, the energy of the row is the sum of the energies of its amounts.</b></p>
   <pre class="lines" data-k="ember" data-label="this page: the mirrored-row technique">
@@ -76,7 +76,7 @@ X_k = s_k\textstyle\sum_{j=0}^{N-1} x_j\cos\tfrac{\pi(2j + 1)k}{2N},\ \ s_0 = \s
 </section>
 
 <section class="class step" data-step="32comp2">
-  <h2 class="sthead"><span class="stno">32comp2</span>Most of a row in a few terms</h2>
+  <h2 class="sthead"><span class="stno">32comp2</span>Most of a Row in a Few Terms</h2>
   <p data-pid="887189">A row of eight grey levels from a photo, a stretch of sky shading into a cable: 52, 55, 61, 66, 70, 61, 64, 73.</p>
   <pre class="lines" data-k="ember" data-label="this page: one row, split">
 X = (177.5,\ -14.4,\ -5.7,\ -6.7,\ 7.1,\ -3.1,\ -0.7,\ 2.4) @@ the mirrored-row technique, by machine
@@ -96,7 +96,7 @@ X_0^2 = 31\,500.5 @@ X₀ is the average brightness, 62.75, times √8
 </section>
 
 <section class="class step" data-step="32comp3">
-  <h2 class="sthead"><span class="stno">32comp3</span>Rounding the amounts</h2>
+  <h2 class="sthead"><span class="stno">32comp3</span>Rounding the Amounts</h2>
   <p data-pid="e77bda">Each amount X_k is rounded to the nearest whole multiple of a step q_k: stored is the whole number round(X_k/q_k), and the rebuilt amount is that times q_k. The steps are small for slow cosines and large for fast ones.</p>
   <p data-pid="5c334c">Rounding-error technique: <b>rounding each amount to a whole multiple of its step q_k moves it by at most q_k/2, and the energy of the error in the row is exactly the sum of the squared moves.</b></p>
   <pre class="lines" data-k="ember" data-label="this page: the rounding-error technique">
@@ -121,7 +121,7 @@ q = (16,\ 11,\ 10,\ 16,\ 24,\ 40,\ 51,\ 61) @@ a step table of the kind cameras 
 </section>
 
 <section class="class step" data-step="32comp4">
-  <h2 class="sthead"><span class="stno">32comp4</span>Why the eye forgives</h2>
+  <h2 class="sthead"><span class="stno">32comp4</span>Why the Eye Forgives</h2>
   <p data-pid="2e3353">The eye sees coarse stripes well and fine ones poorly. Measured on many people, the faintest stripes anyone can see are at about 3 to 5 stripes per degree of view; by about 50 stripes per degree, even full black-on-white stripes blur to grey. A photo on a phone at arm’s length puts about 40 to 60 pixels in a degree, so the fastest cosine of an 8-pixel block, nearly 4 stripes in 8 pixels, sits at 20 or more stripes per degree, where the eye needs strong contrast to see anything.</p>
   <p data-pid="7043ac">So the steps q_k are set by a measured law of the eye, not by a technique: coarse where the eye is weak. The errors of 32·comp.3 are real, and measurable on the stored numbers, but they sit where the eye does not look well. Two losses are not forgiven. Edges ring a little, as 32c’s overshoot said a cut-off sum must, and at strong compression the 8-by-8 blocks show their seams, since each block is rounded on its own.</p>
   <section class="slides" id="sl4"><div class="eyebrow">The slides · the eye · ← → keys work</div></section>
@@ -134,7 +134,7 @@ q = (16,\ 11,\ 10,\ 16,\ 24,\ 40,\ 51,\ 61) @@ a step table of the kind cameras 
 </section>
 
 <section class="class step" data-step="32comp5">
-  <h2 class="sthead"><span class="stno">32comp5</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">32comp5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
 \text{splitting into cosines shrinks the file}\,? @@ eight pixels become eight amounts; the rounding shrinks it
 \text{every picture keeps its energy in the first few cosines}\,? @@ a law of photos, false for noise

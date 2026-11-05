@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>How does a network of simple units learn?</title>
+<title>How Does a Network of Simple Units Learn?</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -50,13 +50,13 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <header class="top">
   <p class="home"><a href="index.html">← the ladder</a><a href="sky08.html">← ∞8 can you prove you know a secret without telling it?</a><a href="index.html">next: the ladder →</a></p>
   <div class="tags"><span class="tag now">∞9 · research front</span></div>
-  <h1>How does a network of simple units learn?</h1>
+  <h1>How Does a Network of Simple Units Learn?</h1>
   <p data-pid="2ca727">How does a network of simple units learn? The biology page of rung thirty eight wired a unit that fires when its weighted inputs pass a threshold. The physics page of rung forty wired many of them into a loop, with every link running both ways, and found that a unit which follows its inputs can only lower an energy. A pattern written into the links became a low point, and a damaged copy of it rolled back down. That is a memory found by what it holds, not by where it is kept. This page asks how far the picture reaches. It proves that such a loop always comes to rest, writes many patterns into one set of links, and counts how many random ones fit before they blur into each other: about fourteen for every hundred units. Then it lets the links be learned instead of written, which is where the walk downhill of rung twenty eight takes over. And it finds the same memory inside the machines that write text today, where the lookup has gone soft. What those machines have learned, and whether it deserves the word understanding, is where the field is loudest now.</p>
   <p class="gesture" data-pid="eb3a96">With links wᵢⱼ = wⱼᵢ and one unit changed at a time, every change lowers the energy, so the loop comes to rest. Patterns written as wᵢⱼ = (1/N) Σ ξᵢξⱼ all rest when they are at right angles; random ones crowd each other, each bit’s field carries a crosstalk of spread width about √(p/N), and recall breaks near p = 0.138N. Rows learned by mistakes store more, and give up the energy. A soft lookup, weighing each pattern by e^(β · overlap), recovers the nearest one in a step, and is the attention step of today’s text machines, which are trained to make the next token less surprising.</p>
 </header>
 
 <section class="class step" data-step="sky9.1">
-  <h2 class="sthead"><span class="stno">sky9.1</span>A loop that comes to rest</h2>
+  <h2 class="sthead"><span class="stno">sky9.1</span>A Loop That Comes to Rest</h2>
   <p data-pid="4ed908">41·phys.5 gave the energy E(s) = −½ Σᵢ Σⱼ wᵢⱼ sᵢ sⱼ, with wᵢⱼ = wⱼᵢ and wᵢᵢ = 0, and its downhill-update technique: setting one unit to the sign of its field fᵢ = Σⱼ wᵢⱼ sⱼ never raises E. Never rising is not yet resting. A walk that never climbs can still go round on a level. Fix the rule: one unit at a time, and a unit whose field is 0 stays as it is.</p>
   <p data-pid="a6ff6b">Settle-down technique: <b>with links the same both ways, no link from a unit to itself, and one unit changed at a time, a net of N units makes at most 2ᴺ − 1 changes in all, and then rests: every unit agrees with the sign of its field.</b></p>
   <pre class="lines" data-k="ember" data-label="this page: the settle-down technique">
@@ -76,7 +76,7 @@ E_0 \gt E_1 \gt E_2 \gt \cdots @@ strictly lower after every change, so no arran
 </section>
 
 <section class="class step" data-step="sky9.2">
-  <h2 class="sthead"><span class="stno">sky9.2</span>Many patterns in one set of links</h2>
+  <h2 class="sthead"><span class="stno">sky9.2</span>Many Patterns in One Set of Links</h2>
   <p data-pid="978394">Write p patterns ξ¹, …, ξᵖ, each a list of N signs, into one set of links by adding 41·phys.5’s links for each: wᵢⱼ = (1/N) Σ_μ ξᵢ^μ ξⱼ^μ for i ≠ j. The overlap of two patterns is Σⱼ ξⱼ^μ ξⱼ^ν: N for a pattern with itself, and 0 when the two agree in exactly half the places, at right angles as arrows (27i).</p>
   <p data-pid="0f4543">Crosstalk technique: <b>at a stored pattern ξ^ν, the field on unit i is fᵢ = ξᵢ^ν (N − 1)/N + cᵢ, with crosstalk cᵢ = (1/N) Σ_{μ ≠ ν} ξᵢ^μ Σ_{j ≠ i} ξⱼ^μ ξⱼ^ν; when the patterns are at right angles in pairs, fᵢ = ξᵢ^ν (N − p)/N, so every pattern rests while p &lt; N.</b></p>
   <pre class="lines" data-k="ember" data-label="this page: the crosstalk technique">
@@ -97,7 +97,7 @@ c_i = \tfrac1N \textstyle\sum_{\mu \ne \nu} \xi_i^\mu\,(-\xi_i^\mu \xi_i^\nu) = 
 </section>
 
 <section class="class step" data-step="sky9.3">
-  <h2 class="sthead"><span class="stno">sky9.3</span>How many random patterns fit</h2>
+  <h2 class="sthead"><span class="stno">sky9.3</span>How Many Random Patterns Fit</h2>
   <p data-pid="3c679c">Let every sign of every pattern be a fair coin, all independent. A bit of ξ^ν is wrong at the first update when its field has the other sign, that is when ξᵢ^ν cᵢ &lt; −(N − 1)/N, close to −1. Write Φ(z) for the bell curve’s running total, the chance that a bell-shaped Z of spread 1 is below z.</p>
   <p data-pid="dde82d">Crosstalk-tail technique: <b>for p random patterns of N signs, ξᵢ^ν cᵢ is a sum of (p − 1)(N − 1) independent terms, each +1/N or −1/N with chance ½; its spread is (p − 1)(N − 1)/N², about p/N; so for large N the chance that a given bit of a stored pattern is wrong at the first update is close to Φ(−√(N/p)).</b></p>
   <pre class="lines" data-k="ember" data-label="this page: the crosstalk-tail technique">
@@ -118,7 +118,7 @@ P(\text{wrong}) \approx P\big(Z \lt -1/\sqrt{p/N}\big) = \Phi(-\sqrt{N/p}) @@ th
 </section>
 
 <section class="class step" data-step="sky9.4">
-  <h2 class="sthead"><span class="stno">sky9.4</span>Links learned, not written</h2>
+  <h2 class="sthead"><span class="stno">sky9.4</span>Links Learned, Not Written</h2>
   <p data-pid="a6a5c3">Written links are one rule applied once, and they never check whether it worked. But each unit faces a question of 28·now.1: inputs the other units’ signs, right answer its own sign in each pattern, weights its row of links. So the mistake rule can learn the row. Take N = 6, the patterns ξ¹ = (1, 1, 1, 1, 1, 1), ξ² = (1, 1, 1, 1, −1, −1), ξ³ = (1, 1, 1, −1, 1, −1), and unit 6.</p>
   <pre class="lines" data-k="ember" data-label="this page: one row, written and learned">
 \text{written row of unit 6: } \tfrac16(-1, -1, -1, 1, 1) @@ Σ_μ ξ₆^μ ξⱼ^μ over 6, for j = 1, …, 5
@@ -138,7 +138,7 @@ P(\text{wrong}) \approx P\big(Z \lt -1/\sqrt{p/N}\big) = \Phi(-\sqrt{N/p}) @@ th
 </section>
 
 <section class="class step" data-step="sky9.5">
-  <h2 class="sthead"><span class="stno">sky9.5</span>A soft lookup</h2>
+  <h2 class="sthead"><span class="stno">sky9.5</span>A Soft Lookup</h2>
   <p data-pid="5af149">Keep the p patterns as a list, not as links. Given a cue x, weigh each pattern by e^(β ξ^μ · x), where ξ^μ · x is its overlap with the cue and β &gt; 0 sets how sharp the weighing is. Divide the weights by their total, and return the weighted average of the patterns.</p>
   <p data-pid="c64c5b">Soft-recall technique: <b>if the cue’s overlap with ξ^ν beats its overlap with every other pattern by at least g, the weight on ξ^ν is at least 1/(1 + (p − 1)e^(−βg)).</b></p>
   <pre class="lines" data-k="ember" data-label="this page: the soft-recall technique">
@@ -159,7 +159,7 @@ e^{-\beta(\xi^\nu \cdot x - \xi^\mu \cdot x)} \le e^{-\beta g} @@ each gap is at
 </section>
 
 <section class="class step" data-step="sky9.6">
-  <h2 class="sthead"><span class="stno">sky9.6</span>What a text machine is trained to do</h2>
+  <h2 class="sthead"><span class="stno">sky9.6</span>What a Text Machine Is Trained to Do</h2>
   <p data-pid="d442cb">A text machine reads a passage cut into tokens, pieces of words from a list of tens of thousands, and at each place gives a chance to every token that might come next. It is trained by 28·now’s slopes on one error only: the surprise, in bits, of the token that did come next (30·comp), averaged over trillions of places. Chances ½, ¼ and ⅛ on the three tokens that came give surprises 1, 2 and 3 bits, an average of 2. An even guess over 50 257 tokens costs log₂ 50 257 ≈ 15.6 bits a token. No machine can average below the surprise of the text itself, by the source coding technique.</p>
   <p data-pid="0b5945">Training-count technique: <b>a machine with n knobs trained on D tokens spends about 6nD multiplications and additions: about 2n a token forward, a multiply and an add for each knob, and about twice that backward.</b> 28·now.3’s backward pass costs about one forward run for each of its two jobs, the slopes of the lists and the slopes of the knobs.</p>
   <pre class="lines" data-k="ember" data-label="this page: two training runs">
@@ -179,7 +179,7 @@ e^{-\beta(\xi^\nu \cdot x - \xi^\mu \cdot x)} \le e^{-\beta g} @@ each gap is at
 </section>
 
 <section class="class step" data-step="sky9.7">
-  <h2 class="sthead"><span class="stno">sky9.7</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">sky9.7</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
 \text{the energy never rises, so the net rests}\,? @@ never rising is not resting; strict falls among finitely many arrangements do it
 \text{every unit changed at once still settles}\,? @@ w₁₂ = −1 from (+1, +1) swings with period 2

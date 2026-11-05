@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Shortest paths and greedy choices</title>
+<title>Shortest Paths and Greedy Choices</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -50,13 +50,13 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <header class="top">
   <p class="home"><a href="index.html">← the ladder</a><a href="r41j.html">← 41j disorder is impossible</a><a href="r41l.html">next: 41l best from best pieces →</a></p>
   <div class="tags"><span class="tag tech">41k · technique</span></div>
-  <h1>Shortest paths and greedy choices</h1>
+  <h1>Shortest Paths and Greedy Choices</h1>
   <p data-pid="18c983">Rung 39 found that taking the best-looking step at every moment, the greedy choice, sometimes gives the best answer and sometimes a poor one, and that a proof is the only way to tell which. On graphs there are two famous places where greed is safe. One is finding the shortest routes from a starting town to every other: settle the nearest town not yet settled, again and again, and every distance settled is final. The other is joining every town by the cheapest network of roads: take the cheapest road that does not close a loop, again and again, and the result is cheapest. Both proofs are exchanges: if the greedy choice were wrong, a better answer could be swapped into a cheaper one. And both fail in a clear place, the first when a road can have negative length, the second when the network must be a single tour. Along the way the step counts the cost of a recipe in a new way, by charging each step to a link or a dot and adding up the charges, so that a dot with many links costs no more in total than the links it has.</p>
   <p class="gesture" data-pid="21dace">Walk out from a dot in layers to find every distance in links, at a cost of each link looked at twice. With lengths at least 0, settle the nearest unsettled dot; its distance is final. Taking the cheapest link that closes no cycle builds a cheapest spanning tree, because the cheapest link across any split belongs to some cheapest tree. Merging pieces by relabelling the smaller one costs at most n log₂ n in all.</p>
 </header>
 
 <section class="class step" data-step="41k1">
-  <h2 class="sthead"><span class="stno">41k1</span>Layer by layer</h2>
+  <h2 class="sthead"><span class="stno">41k1</span>Layer by Layer</h2>
   <p data-pid="62e846">39n’s queue holds things in the order they came, first in, first out. Put a start dot r in it, at distance 0. Then, while the queue is not empty, take out its first dot u, and put in every neighbour of u not yet seen, each at u’s distance plus 1.</p>
   <p data-pid="3e84e3">Layer-by-layer technique: <b>walking out from r in this way gives every dot its distance from r in links, and looks at each link at most twice.</b></p>
   <pre class="lines" data-k="ember" data-label="this page: the layer-by-layer technique">
@@ -77,7 +77,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 </section>
 
 <section class="class step" data-step="41k2">
-  <h2 class="sthead"><span class="stno">41k2</span>The nearest first</h2>
+  <h2 class="sthead"><span class="stno">41k2</span>The Nearest First</h2>
   <p data-pid="72f95f">Now each link {u, w} has a length ℓ(u, w) ≥ 0, and the distance is the least total length of a path. Keep a <i>settled</i> set, at first {r} with distance 0; write dist(u) for the distance of a settled dot u. Each unsettled dot w has a <i>tentative distance</i> t(w): the least dist(u) + ℓ(u, w) over settled u, or no value. At each move, settle the unsettled dot with the least tentative distance.</p>
   <p data-pid="7736bc">Nearest-first technique: <b>if every length is at least 0, the tentative distance of a dot, when it is settled, is its distance from r.</b></p>
   <pre class="lines" data-k="ember" data-label="this page: the nearest-first technique">
@@ -104,7 +104,7 @@ t(x) \ge t(w) @@ w had the least tentative distance
 </section>
 
 <section class="class step" data-step="41k3">
-  <h2 class="sthead"><span class="stno">41k3</span>The cheapest tree, greedily</h2>
+  <h2 class="sthead"><span class="stno">41k3</span>The Cheapest Tree, Greedily</h2>
   <p data-pid="8b140a">Each link now has a cost, and a cheapest spanning tree is one whose costs add to the least. A <i>split</i> of the dots is a set S with something in it and something outside; a link <i>crosses</i> it when one end is in S and one out.</p>
   <p data-pid="03ca66">Cheapest-across technique: <b>for every split, a cheapest link crossing it belongs to some cheapest spanning tree.</b></p>
   <pre class="lines" data-k="ember" data-label="this page: the cheapest-across technique">
@@ -126,7 +126,7 @@ T + e - f \text{ is in one piece with } n - 1 \text{ links: a spanning tree} @@ 
 </section>
 
 <section class="class step" data-step="41k4">
-  <h2 class="sthead"><span class="stno">41k4</span>Who is in which piece</h2>
+  <h2 class="sthead"><span class="stno">41k4</span>Who Is in Which Piece</h2>
   <p data-pid="e20e43">The greedy tree needs, for each link, whether its ends are already in one piece. Keep for each dot the name of its piece, and a list of each piece’s dots. Two ends are in one piece exactly when their names match. Taking a link merges two pieces: relabel every dot of the smaller.</p>
   <p data-pid="117c61">Doubling-piece technique: <b>relabelling the smaller piece at each merge relabels each dot at most log₂ n times, so all the merges together cost at most n log₂ n relabellings.</b></p>
   <pre class="lines" data-k="ember" data-label="this page: the doubling-piece technique">
@@ -146,7 +146,7 @@ T + e - f \text{ is in one piece with } n - 1 \text{ links: a spanning tree} @@ 
 </section>
 
 <section class="class step" data-step="41k5">
-  <h2 class="sthead"><span class="stno">41k5</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">41k5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
 \text{the nearest-first technique works with any lengths}\,? @@ with a length −2, x is settled at 2 and a path of length 1 reaches it
 \text{the cheapest link at each dot is in every cheapest tree}\,? @@ in some cheapest tree; with ties there may be others without it

@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Eigenvectors by hand</title>
+<title>Eigenvectors by Hand</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -50,13 +50,13 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <header class="top">
   <p class="home"><a href="index.html">← the ladder</a><a href="r27k.html">← 27k determinants by hand</a><a href="r27m.html">next: 27m turns of space →</a></p>
   <div class="tags"><span class="tag tech">27l · technique</span></div>
-  <h1>Eigenvectors by hand</h1>
+  <h1>Eigenvectors by Hand</h1>
   <p data-pid="3638ef">The stretch test turns the hunt for the arrows a grid only stretches into two smaller jobs. First find the stretches, as the roots of one polynomial. Then, for each stretch, find the arrows it loses when that stretch is taken off its middle, by elimination. For a grid of two rows the polynomial needs only two numbers: the sum down the middle and the determinant. Once the arrows are found, a grid done a hundred times is no harder than a grid done once, because in their directions it only stretches. The largest stretch wins in the long run, and that decides where a population settles. And the rabbit counts of an earlier rung, each the sum of the two before, are the powers of one small grid. Its two stretches are the two numbers in their closed form.</p>
   <p class="gesture" data-pid="2c5025">The stretches of a grid are the roots of its stretch polynomial, and for a grid of two rows that polynomial is read off the sum down the middle and the determinant. The arrows come from elimination. Written in those arrows, a high power of a grid is a power of each stretch, and the largest stretch wins. The rabbit counts are powers of one grid.</p>
 </header>
 
 <section class="class step" data-step="27l1">
-  <h2 class="sthead"><span class="stno">27l1</span>Stretches from the middle and the determinant</h2>
+  <h2 class="sthead"><span class="stno">27l1</span>Stretches From the Middle and the Determinant</h2>
   <p data-pid="90bc74">The <i>middle sum</i> of a square grid is a₁₁ + a₂₂ + ⋯ + aₙₙ, the sum down its middle.</p>
   <p data-pid="0742b8">Middle-sum technique: <b>det(A − λI) = (−λ)ⁿ + (a₁₁ + ⋯ + aₙₙ)(−λ)ⁿ⁻¹ + ⋯ + det A. So the n stretches of A in ℂ, each counted as often as its factor appears, add to the middle sum and multiply to det A. For a 2 × 2 grid the stretches are the roots of λ² − (a₁₁ + a₂₂)λ + det A. And P⁻¹AP has the same stretch polynomial as A, for every undoable P.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the middle-sum technique">
@@ -83,7 +83,7 @@ A = \begin{pmatrix}4&1\\2&3\end{pmatrix}:\ \ \lambda^2 - 7\lambda + 10 = (\lambd
 </section>
 
 <section class="class step" data-step="27l2">
-  <h2 class="sthead"><span class="stno">27l2</span>High powers, and the largest stretch</h2>
+  <h2 class="sthead"><span class="stno">27l2</span>High Powers, and the Largest Stretch</h2>
   <p data-pid="98cbf7">Leading-stretch technique: <b>if A, n × n, only stretches the free arrows v₁, …, vₙ, by λ₁, …, λₙ, and x = c₁v₁ + ⋯ + cₙvₙ, then Aᵏx = c₁λ₁ᵏv₁ + ⋯ + cₙλₙᵏvₙ. If |λ₁| is larger than every other |λᵢ|, and c₁ ≠ 0, then Aᵏx/λ₁ᵏ heads to c₁v₁ as k grows.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the leading-stretch technique">
 A^k v_i = \lambda_i^k v_i @@ induction on k (4c): A(λᵢᵏvᵢ) = λᵢᵏAvᵢ = λᵢᵏ⁺¹vᵢ
@@ -109,7 +109,7 @@ A^k = PD^kP^{-1} = \tfrac{5^k}{3}\begin{pmatrix}2&1\\2&1\end{pmatrix} + \tfrac{2
 </section>
 
 <section class="class step" data-step="27l3">
-  <h2 class="sthead"><span class="stno">27l3</span>The rabbit counts again</h2>
+  <h2 class="sthead"><span class="stno">27l3</span>The Rabbit Counts Again</h2>
   <p data-pid="c45424">Step-grid technique: <b>if uₙ₊₁ = p uₙ + q uₙ₋₁ for every n ≥ 1, then (uₙ₊₁, uₙ) = Mⁿ(u₁, u₀), where M has rows (p, q), (1, 0). The stretches of M are the roots of λ² = pλ + q, and when they are two different numbers λ and μ, uₙ = cλⁿ + dμⁿ for two numbers c, d fixed by u₀ and u₁.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the step-grid technique">
 (u_{n+1}, u_n) = M(u_n, u_{n-1}) = \cdots = M^n(u_1, u_0) @@ row 1 is the rule; row 2 copies uₙ; induction (4c)
@@ -136,7 +136,7 @@ F_{n+1} = F_n + F_{n-1},\ \ R = \begin{pmatrix}1&1\\1&0\end{pmatrix} @@ p = q = 
 </section>
 
 <section class="class step" data-step="27l4">
-  <h2 class="sthead"><span class="stno">27l4</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">27l4</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
 \text{the stretches of } A + B \text{ are sums of stretches of } A \text{ and of } B\,? @@ rows (0, 1), (0, 0) and rows (0, 0), (1, 0) each have only 0; their sum has 1 and −1
 A^k = P^kD^kP^{-k}\,? @@ the P⁻¹P in the middle cancel: Aᵏ = PDᵏP⁻¹

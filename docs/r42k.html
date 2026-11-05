@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Continued fractions</title>
+<title>Continued Fractions</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -50,13 +50,13 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <header class="top">
   <p class="home"><a href="index.html">← the ladder</a><a href="r42j.html">← 42j is it prime?</a><a href="r42l.html">next: 42l discrete logarithms →</a></p>
   <div class="tags"><span class="tag tech">42k · technique</span></div>
-  <h1>Continued fractions</h1>
+  <h1>Continued Fractions</h1>
   <p data-pid="2b4c3a">Run the oldest algorithm on a fraction and write down only the quotients. The fraction comes back as a whole number plus one over a whole number plus one over another, a staircase of fractions inside fractions. Do the same to a number that is no fraction, the root of two, and the staircase never ends, and its steps repeat: one, then two, two, two, for ever. Cut the staircase short and you get fractions, and they are rung five’s near misses for the root of two: three halves, seven fifths, seventeen twelfths. They come closer than any fraction with a smaller bottom can. Cut the staircase for pi and you get twenty two sevenths, rung five’s first guess, and then three hundred and fifty five over one hundred and thirteen, good to seven places. Cut it for how many octaves make a twelfth on a string and you get the reason a piano has twelve keys to the octave. And the same staircase for the root of a whole number finds the whole numbers whose squares differ by one times that number, which a great mathematician once set as a challenge to the English.</p>
   <p class="gesture" data-pid="d4e8d7">The quotients of the gcd algorithm write a number as a staircase of fractions. Cut it short and the fractions, the convergents, obey a two-term recursion, and neighbours cross-multiply to differ by one. Each convergent is within one over its bottom squared. A repeating staircase is a root of a quadratic, and the convergents of the root of n find x and y with x squared minus n y squared equal to one.</p>
 </header>
 
 <section class="class step" data-step="42k1">
-  <h2 class="sthead"><span class="stno">42k1</span>The gcd algorithm, written as a fraction</h2>
+  <h2 class="sthead"><span class="stno">42k1</span>The gcd Algorithm, Written as a Fraction</h2>
   <p data-pid="32a469">4j12 ran on 1071 and 462: 1071 = 462 · 2 + 147, 462 = 147 · 3 + 21, 147 = 21 · 7. Divide each line by its divisor and fold: 1071/462 = 2 + 147/462 = 2 + 1/(462/147) = 2 + 1/(3 + 1/7). From here on, [a₀; a₁, …, a_k] names a₀ + 1/(a₁ + 1/(⋯ + 1/a_k)), the <i>staircase</i> with steps a₀, a₁, …, a_k. Cut after a_j, it gives the <i>convergent</i> p_j/q_j. So 1071/462 = [2; 3, 7], with convergents 2, 7/3 and 51/22.</p>
   <p data-pid="de84b1">Neighbour technique: <b>with p₋₁ = 1, q₋₁ = 0, p₀ = a₀ and q₀ = 1, the convergents obey p_j = a_j p_(j−1) + p_(j−2) and q_j = a_j q_(j−1) + q_(j−2), and neighbours cross-multiply to differ by one: p_j q_(j−1) − p_(j−1) q_j = (−1)^(j−1).</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the neighbour technique">
@@ -77,7 +77,7 @@ p_{j+1}q_j - p_j q_{j+1} = (a_{j+1}p_j + p_{j-1})q_j - p_j(a_{j+1}q_j + q_{j-1})
 </section>
 
 <section class="class step" data-step="42k2">
-  <h2 class="sthead"><span class="stno">42k2</span>Staircases that never end</h2>
+  <h2 class="sthead"><span class="stno">42k2</span>Staircases That Never End</h2>
   <p data-pid="b1b53e">For a real x, take a₀ = ⌊x⌋; if x is not a₀, take x₁ = 1/(x − a₀), which is above 1, and go on with x₁. For a fraction this is the gcd algorithm, and it stops. For a number that is no fraction it never stops, since a stop would write x as a fraction.</p>
   <pre class="lines" data-k="ember" data-label="this step: three endless staircases">
 \sqrt2 = 1 + (\sqrt2 - 1),\ \ \tfrac{1}{\sqrt2 - 1} = \sqrt2 + 1 = 2 + (\sqrt2 - 1) @@ difference of squares: (√2 − 1)(√2 + 1) = 1
@@ -97,7 +97,7 @@ p_{j+1}q_j - p_j q_{j+1} = (a_{j+1}p_j + p_{j-1})q_j - p_j(a_{j+1}q_j + q_{j-1})
 </section>
 
 <section class="class step" data-step="42k3">
-  <h2 class="sthead"><span class="stno">42k3</span>How close a convergent comes</h2>
+  <h2 class="sthead"><span class="stno">42k3</span>How Close a Convergent Comes</h2>
   <p data-pid="bee124">Convergent-bound technique: <b>if x is no fraction, its convergents alternate below and above x, and |x − p_j/q_j| &lt; 1/(q_j q_(j+1)) ≤ 1/q_j².</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the convergent-bound technique">
 x = [a_0; \ldots, a_j, x_{j+1}] = \tfrac{x_{j+1}p_j + p_{j-1}}{x_{j+1}q_j + q_{j-1}} @@ the recursion with the real last step x_{j+1} (42k1)
@@ -116,7 +116,7 @@ x_{j+1} \gt a_{j+1} \Rightarrow x_{j+1}q_j + q_{j-1} \gt q_{j+1} @@ x_{j+1} is a
 </section>
 
 <section class="class step" data-step="42k4">
-  <h2 class="sthead"><span class="stno">42k4</span>Twelve notes to the octave</h2>
+  <h2 class="sthead"><span class="stno">42k4</span>Twelve Notes to the Octave</h2>
   <p data-pid="538831">6·phys stacked fifths, each the ratio 3/2, and found that no stack lands on a stack of octaves. In equal steps, k fifths come near j octaves when k log₂(3/2) is near j, so when log₂ 3 = 1 + log₂(3/2) is near (j + k)/k. The convergents of log₂ 3 say which numbers of equal steps to the octave fit a fifth well.</p>
   <pre class="lines" data-k="ember" data-label="this step: the staircase of log₂ 3">
 \log_2 3 \approx 1.5849625 = [1; 1, 1, 2, 2, 3, 1, 5, \ldots] @@ the steps of 42k2, from the decimal
@@ -136,7 +136,7 @@ x_{j+1} \gt a_{j+1} \Rightarrow x_{j+1}q_j + q_{j-1} \gt q_{j+1} @@ x_{j+1} is a
 </section>
 
 <section class="class step" data-step="42k5">
-  <h2 class="sthead"><span class="stno">42k5</span>Squares that differ by one times n</h2>
+  <h2 class="sthead"><span class="stno">42k5</span>Squares That Differ by One Times n</h2>
   <p data-pid="8c52b2">For a whole number n that is not a square, look for whole numbers x and y with x² − ny² = 1. 8·cb5.4.1 climbed for n = 3. The staircase of √n always repeats, and the convergent just before the end of a block gives x² − ny² = ±1. That is held in trust here, proved in 1770 and the years after.</p>
   <p data-pid="a61582">Unit-climb technique: <b>if x₁² − ny₁² = 1 with x₁, y₁ &gt; 0, then the pairs given by x_k + y_k√n = (x₁ + y₁√n)ᵏ all have x_k² − ny_k² = 1.</b> For (x + y√n)(x − y√n) = x² − ny², and a product of two such numbers is one of the same kind, with the sizes multiplying.</p>
   <pre class="lines" data-k="ember" data-label="this step: n = 7, then n = 61">
@@ -157,7 +157,7 @@ x_{j+1} \gt a_{j+1} \Rightarrow x_{j+1}q_j + q_{j-1} \gt q_{j+1} @@ x_{j+1} is a
 </section>
 
 <section class="class step" data-step="42k6">
-  <h2 class="sthead"><span class="stno">42k6</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">42k6</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
 [1; 2, 2] = 1 + \tfrac12 + \tfrac12\,? @@ the steps nest: 1 + 1/(2 + 1/2) = 7/5
 \tfrac{22}{7} = \pi\,? @@ a convergent, about 0.00126 too large; the next one is below π

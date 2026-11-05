@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Structures that hold data</title>
+<title>Structures That Hold Data</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -50,13 +50,13 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <header class="top">
   <p class="home"><a href="index.html">← the ladder</a><a href="r39m.html">← 39m divide and conquer</a><a href="r39o.html">next: 39o remembering answers →</a></p>
   <div class="tags"><span class="tag proof">39n · proof</span></div>
-  <h1>Structures that hold data</h1>
+  <h1>Structures That Hold Data</h1>
   <p data-pid="b01612">A program rarely wants a list for its own sake. It wants to do something to it again and again: take the newest item, or the oldest, or the largest; find whether a name is there; add a name and find it later. How the items are laid out in memory decides how many turns each of those jobs costs, and a good layout can turn a count like the size into a count like its log, or into a count that does not grow at all. This step builds five layouts. A pile, where only the top can be reached. A line, where items leave in the order they came. A heap, a tree folded into a list so that the largest item is always on top and each change costs only the height of the tree. A search tree, ordered left to right, whose cost is its depth, and whose depth, if items arrive in random order, the sort that chooses at random has already counted. And a table of slots chosen by a scrambling rule, where the chance of the statistics floor says how crowded a slot will be.</p>
   <p class="gesture" data-pid="21b73f">A pile and a line take and give in a fixed number of turns, and a list that doubles when full costs at most three moves an item. A heap keeps the largest on top at a cost of its height, the log of its size. A search tree costs its depth, and random order gives depth about twice the natural log. A table of m slots holding n keys costs about one plus n over m a look.</p>
 </header>
 
 <section class="class step" data-step="39n1">
-  <h2 class="sthead"><span class="stno">39n1</span>Piles, lines, and a list that doubles</h2>
+  <h2 class="sthead"><span class="stno">39n1</span>Piles, Lines, and a List That Doubles</h2>
   <p data-pid="39c1a8">A <i>pile</i> lets a program put an item on top and take the top item off. A <i>line</i> lets it put an item at the back and take one from the front. With a counter for the top, or one for each end, each is a fixed number of turns. The catch is room: a list in memory has a fixed number of cells. When it is full, take a new list twice as long and copy everything across.</p>
   <p data-pid="402121">Doubling-array technique: <b>n items put one at a time into a list that starts with one cell and doubles whenever it is full cost fewer than 3n moves in all.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the doubling-array technique">
@@ -76,7 +76,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 </section>
 
 <section class="class step" data-step="39n2">
-  <h2 class="sthead"><span class="stno">39n2</span>A heap</h2>
+  <h2 class="sthead"><span class="stno">39n2</span>A Heap</h2>
   <p data-pid="3d7df9">Lay a tree in a list: cell 1 is the top, and the cells below cell i are 2i and 2i + 1. A <i>heap</i> keeps each cell at least as large as the cells below it, so the largest item is always in cell 1. To add an item, put it in the first empty cell and swap it upward while it is larger than the cell above. To take the largest, move the last item to the top and swap it downward with its larger child while a child is larger.</p>
   <p data-pid="1a2627">Heap-height technique: <b>a heap of n items has height ⌊log₂ n⌋, so adding an item costs at most that many swaps, and taking the largest at most twice that many comparisons.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the heap-height technique">
@@ -97,7 +97,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 </section>
 
 <section class="class step" data-step="39n3">
-  <h2 class="sthead"><span class="stno">39n3</span>A search tree</h2>
+  <h2 class="sthead"><span class="stno">39n3</span>A Search Tree</h2>
   <p data-pid="e49d09">A <i>search tree</i> keeps at each place one item, with every smaller item somewhere to its left and every larger one somewhere to its right. To find an item, start at the top and go left or right by comparing; to add one, go down the same way and hang it where the path ends. The cost of a search is the depth reached.</p>
   <p data-pid="b2dba2">Tree-depth technique: <b>if n different items are added to an empty search tree in random order, the average number of comparisons to add them all is 2(n + 1)Hₙ − 4n, the same as the random-pivot sort’s.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the tree-depth technique">
@@ -118,7 +118,7 @@ i \text{ and } j \text{ are compared} \iff \text{the first added among } i, \ldo
 </section>
 
 <section class="class step" data-step="39n4">
-  <h2 class="sthead"><span class="stno">39n4</span>A table of slots</h2>
+  <h2 class="sthead"><span class="stno">39n4</span>A Table of Slots</h2>
   <p data-pid="12ecc0">A <i>hash table</i> has m slots. A scrambling rule turns each key, a name say, into a slot number, and the key goes on a short list in that slot. To find a key, scramble it and look only in its slot. Model the rule as 30’s chance: each key lands in each slot with chance 1/m, independently of the others.</p>
   <p data-pid="cd5b09">Load-share technique: <b>with n keys in m slots, a look for a key that is there checks on average at most 1 + (n − 1)/m keys, and the chance that some two keys share a slot is 1 − (1 − 1/m)(1 − 2/m)⋯(1 − (n − 1)/m).</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the load-share technique">
@@ -139,7 +139,7 @@ i \text{ and } j \text{ are compared} \iff \text{the first added among } i, \ldo
 </section>
 
 <section class="class step" data-step="39n5">
-  <h2 class="sthead"><span class="stno">39n5</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">39n5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
 \text{every put into the doubling list is quick}\,? @@ a put that triggers a copy costs as many moves as the list holds; the average is under 3
 \text{a heap is sorted}\,? @@ only each cell against those below it; the bottom row is in no order

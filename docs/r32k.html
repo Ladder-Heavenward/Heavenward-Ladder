@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Breaking a signal into frequencies, fast</title>
+<title>Breaking a Signal Into Frequencies, Fast</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -50,13 +50,13 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <header class="top">
   <p class="home"><a href="index.html">← the ladder</a><a href="r32j.html">← 32j turning rate rules into algebra</a><a href="r32l.html">next: 32l where oscillating integrals live →</a></p>
   <div class="tags"><span class="tag tech">32k · technique</span></div>
-  <h1>Breaking a signal into frequencies, fast</h1>
+  <h1>Breaking a Signal Into Frequencies, Fast</h1>
   <p data-pid="f4ca05">A machine never sees a whole wave. It sees a list of samples, and the transform it can compute is a list too: one number for each of as many frequencies as there are samples. Done the plain way, each of those numbers is a sum over every sample, so a list of a thousand samples costs a million multiplications, and a second of music costs nearly two billion. For most of the twentieth century that put the frequencies of a sound beyond everyday reach. The way out is the one rung 22 found for sorting: split the work in half. The transform of a list is the transform of its even places and the transform of its odd places, stitched together with one turn each. Split those again, and again, and the cost falls from the square of the length to the length times the number of halvings. The step ends with a number every phone carries: why music is sampled forty-four thousand one hundred times a second, and not forty thousand.</p>
   <p class="gesture" data-pid="dfd199">On N equally spaced points, the N stepped turnings are at right angles, so a list of N samples has N coefficients and is rebuilt from them. The transform of a list of even length is the transform of its even places plus a turn times the transform of its odd places, and the second half of the answer uses the same two with a minus sign. Halving again and again makes the cost about N times the number of halvings.</p>
 </header>
 
 <section class="class step" data-step="32k1">
-  <h2 class="sthead"><span class="stno">32k1</span>Turnings on N points</h2>
+  <h2 class="sthead"><span class="stno">32k1</span>Turnings on N Points</h2>
   <p data-pid="6d47e9">Let N be a whole number, and ω = e^(2πi/N), so that ω, ω², …, ω^N = 1 are N equal parts of a turn (21·cb20). For a list x₀, …, x_(N−1), its <i>stepped transform</i> is the list X₀, …, X_(N−1) with</p>
   <p class="eqline" data-pid="e59ca7"><span data-tex="X_k = \textstyle\sum_{j=0}^{N-1} x_j\,\omega^{-jk}."></span></p>
   <p data-pid="2b70a7">Sampled-turnings technique: <b>on N equally spaced points the N stepped turnings are at right angles, so a list is rebuilt from its stepped transform by x_j = (1/N) Σ X_k ω^(jk).</b></p>
@@ -77,7 +77,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 </section>
 
 <section class="class step" data-step="32k2">
-  <h2 class="sthead"><span class="stno">32k2</span>Splitting in half</h2>
+  <h2 class="sthead"><span class="stno">32k2</span>Splitting in Half</h2>
   <p data-pid="01f93b">Let N = 2M. Write E for the stepped transform of the even places x₀, x₂, …, and O for that of the odd places x₁, x₃, …, each on M points, with ω² as their equal part of a turn.</p>
   <p data-pid="348aa2">Halving-transform technique: <b>for k from 0 to M − 1, X_k = E_k + ω^(−k)O_k and X_(k+M) = E_k − ω^(−k)O_k; so on N = 2ᵖ points the stepped transform costs about N log₂ N steps instead of N².</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the halving-transform technique">
@@ -104,7 +104,7 @@ X_0 = 4 + 6 = 10,\ \ X_2 = 4 - 6 = -2 @@ k = 0
 </section>
 
 <section class="class step" data-step="32k3">
-  <h2 class="sthead"><span class="stno">32k3</span>Why forty-four thousand one hundred</h2>
+  <h2 class="sthead"><span class="stno">32k3</span>Why Forty-Four Thousand One Hundred</h2>
   <p data-pid="46e974">Hearing reaches up to about 20 000 Hz in the young, and less with age. The samples-are-coefficients technique (<a href="r32g.html#32g1">32g1</a>) asks for more than 40 000 samples a second. Before sampling, a filter must cut everything above half the rate, or it comes back in disguise (32g3). No filter of finite cost has gain 1 up to one frequency and 0 just above it: its gain must fall over a band. So the rate is set a little above 40 000, to leave that band.</p>
   <pre class="lines" data-k="ember" data-label="this step: the rate">
 \text{top of hearing} \approx 20\,000 \text{ Hz} @@ measured, and falling with age
@@ -124,7 +124,7 @@ X_0 = 4 + 6 = 10,\ \ X_2 = 4 - 6 = -2 @@ k = 0
 </section>
 
 <section class="class step" data-step="32k4">
-  <h2 class="sthead"><span class="stno">32k4</span>Illegal moves</h2>
+  <h2 class="sthead"><span class="stno">32k4</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
 X_{k+M} = E_{k+M} + \omega^{-(k + M)}O_{k+M} \text{ needs new transforms}\,? @@ E and O repeat every M, so they are reused
 \text{the halving way gives a different answer from the plain way}\,? @@ the same sums, grouped; only the cost changes
