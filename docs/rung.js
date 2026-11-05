@@ -1274,10 +1274,11 @@ function steps(){
   let open=1; try{ open=Math.max(1,parseInt(LS.getItem(K)||'1',10)||1); }catch(e){}
   const h=decodeURIComponent(location.hash.slice(1)); if(h){ const t=document.getElementById(h);
     const hi=ss.findIndex(s=>s.dataset.step===h||(t&&s.contains(t))); if(hi>=0) open=Math.max(open,hi+1); }
+  if(window.LADDER_DESK) open=ss.length; /* 0.3.20: the desk shows every footing at once, no next-footing buttons */
   open=Math.min(open,ss.length);
   const ends=[...document.querySelectorAll('.themeend')], btns=[];
   ss.forEach((s,i)=>{ if(!s.id) s.id=s.dataset.step;
-    if(i===ss.length-1) return;
+    if(i===ss.length-1||window.LADDER_DESK) return;
     const w=document.createElement('div'); w.className='stnext';
     w.innerHTML='<button type="button" class="stnextb"><span class="pk">next footing</span><span class="pl">'+ss[i+1].dataset.step+'</span></button>';
     w.querySelector('button').addEventListener('click',()=>{ set(i+2); setTimeout(()=>ss[i+1].scrollIntoView({behavior:'smooth',block:'start'}),30); });
