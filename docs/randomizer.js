@@ -31,7 +31,7 @@ const stepLink=s=>{ const S=STEPS[s]; if(S) return '<a href="'+S[0]+'.html">'+s+
 
 /* Seed pools: each makes one sameness claim {l, r}, a claim that differs {n}, and the index of the values it drew. */
 const NAME_SEEDS=`Tahoma = Mount Rainier = the tallest peak in Washington
-Big Sky Country = Montana = the Treasure State
+the Beaver State = Oregon = the Pacific Wonderland
 the Evergreen State = Washington = the state whose capital is Olympia
 the Golden State = California = the state whose capital is Sacramento
 the Beaver State = Oregon = the state whose capital is Salem

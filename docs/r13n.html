@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Units and standards</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r13m.html">← 13m homing in on a root with tangent lines, and how errors spread</a><a href="r13phys.html">next: 13·phys how fast is a falling stone going right now? →</a></p>
+  <div class="tags"><span class="tag tech">13n · technique</span></div>
+  <h1>Units and standards</h1>
+  <p data-pid="5a46eb">Rung 13 made the slope at a point. When the input and the output are measured, the slope is a rate, and it carries units: metres per second, grams per mole, joules per kelvin. This step works the units of a rate, checks lines by their units, and changes units by multiplying by one. Then it asks what fixes a unit at all. Since 2019 every base unit is fixed by giving an exact number to a constant of nature, and the mole, the kelvin and the kilogram each have a history of how they got there.</p>
+  <p class="gesture" data-pid="1ea182">Carry the units through every line. A rate has the units of the output over the units of the input; only like adds to like; a change of units is a multiplication by one.</p>
+</header>
+
+<section class="class step" data-step="13n1">
+  <h2 class="sthead"><span class="stno">13n1</span>The units of a rate</h2>
+  <p data-pid="9dd646">Let s(t) be the distance a cart has gone, in metres, at time t, in seconds. The chord slope (s(t + h) − s(t))/h is a distance over a time: metres over seconds. The limit as h goes to 0 keeps the units, since every chord slope on the way carries them.</p>
+  <p data-pid="a426e1">Rate-units technique: <b>if f gives outputs in one unit at inputs in another, f′ has the units of the output over the units of the input, and f″ has the units of the output over the input’s unit squared.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the rate-units technique">
+s \text{ in m},\ t \text{ in s} @@ the measured function
+\tfrac{s(t + h) - s(t)}{h} \text{ in } \tfrac{\text{m}}{\text{s}} @@ a change in metres over a change in seconds
+s'(t) \text{ in m/s} @@ the limit keeps the units of every chord slope (13a)
+\htmlClass{new}{s''(t) \text{ in m/s}^2} \quad \blacksquare @@ the rate-units technique, applied to s′
+  </pre>
+  <p data-pid="737c7f">So a speed is in metres per second, and the slope of the speed, the acceleration, is in metres per second per second.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">13n1.1</span><span class="ph understand">understand</span>What does the rate-units technique say? <br>Why does the limit keep the units of the chord slopes?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13n2">
+  <h2 class="sthead"><span class="stno">13n2</span>Only like adds to like</h2>
+  <p data-pid="65ae46">A unit rides along with its number as a factor. Products multiply units, and quotients divide them. A sum needs one unit for every term: 3 m + 2 s is not a length or a time. Both sides of an equality name one quantity, so they carry one unit.</p>
+  <p data-pid="8ecfb5">Unit-check technique: <b>in a correct line every term of a sum has the same units, and both sides of = have the same units. A line that fails the check is wrong; a line that passes may still be wrong.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: checking s = ut + ½at²">
+u \text{ in m/s},\ a \text{ in m/s}^2,\ t \text{ in s} @@ starting speed, acceleration, time
+ut \text{ in } \tfrac{\text{m}}{\text{s}} \cdot \text{s} = \text{m} @@ the seconds cancel
+\tfrac12 a t^2 \text{ in } \tfrac{\text{m}}{\text{s}^2} \cdot \text{s}^2 = \text{m} @@ ½ is a bare number and carries no unit
+\htmlClass{new}{s = ut + \tfrac12 at^2 \text{ passes: m} = \text{m} + \text{m}} \quad \blacksquare @@ the unit-check technique
+  </pre>
+  <p data-pid="0b63a9">The check cannot see the ½. s = ut + at² passes it too, and is wrong. The check catches a missing t, not a wrong number.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13n2.1</span><span class="ph understand">understand</span>What does the unit-check technique say? <br>Why can a line pass it and still be wrong?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13n3">
+  <h2 class="sthead"><span class="stno">13n3</span>Changing units is multiplying by one</h2>
+  <p data-pid="7db055">1 km = 1000 m, so (1000 m)/(1 km) is 1. Multiplying by 1 changes no quantity, and it changes the units in which the quantity is written.</p>
+  <p data-pid="cce6b9">Conversion technique: <b>to change units, multiply by a fraction equal to 1 whose bottom cancels the old unit; for a rate, convert the top and the bottom.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: 90 km/h in m/s">
+90\,\tfrac{\text{km}}{\text{h}} \cdot \tfrac{1000\ \text{m}}{1\ \text{km}} \cdot \tfrac{1\ \text{h}}{3600\ \text{s}} @@ two fractions, each equal to 1
+= \tfrac{90 \cdot 1000}{3600}\,\tfrac{\text{m}}{\text{s}} @@ km and h cancel
+\htmlClass{new}{90\ \text{km/h} = 25\ \text{m/s}} \quad \blacksquare @@ the conversion technique
+  </pre>
+  <p data-pid="26a776">The chain rule says the same of a rate. With t in seconds and τ = t/60 in minutes, t = 60τ, so ds/dτ = (ds/dt)(dt/dτ) = 60 ds/dt (13e). A speed per minute is 60 times the same speed per second, and so it should be: in a minute the cart goes 60 times as far.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13n3.1</span><span class="ph understand">understand</span>What does the conversion technique say? <br>How does the chain rule give the same answer for a rate?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13n4">
+  <h2 class="sthead"><span class="stno">13n4</span>What fixes a unit</h2>
+  <p data-pid="60c078">A conversion moves between units. Something must fix a unit in the first place: a standard. A standard can be a thing or a number.</p>
+  <p data-pid="5219d6">From 1889 to 2019 the kilogram was a thing: a cylinder of platinum and iridium kept near Paris. A thing can change. Its official copies drifted from it by some tens of micrograms over a century, and nothing could say which had moved, since the cylinder was the kilogram by definition.</p>
+  <p data-pid="d44279">Since 20 May 2019 every base unit is fixed by a number instead. Seven constants of nature were given exact values, and the units are whatever makes those values true. The second is fixed by a frequency of the caesium atom, 9 192 631 770 per second. The metre is fixed by the speed of light, 299 792 458 m/s. The kilogram is fixed by the Planck constant, h = 6.626 070 15 × 10⁻³⁴ kg m²/s.</p>
+  <p data-pid="962c7e">A number cannot drift. Anyone with the right apparatus can realise the unit from it, anywhere.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13n4.1</span><span class="ph understand">understand</span>Why was a metal cylinder a weak standard for the kilogram? <br>What fixes the kilogram since 2019?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13n5">
+  <h2 class="sthead"><span class="stno">13n5</span>The kelvin</h2>
+  <p data-pid="f5d63d">Temperature has an absolute zero, and the kelvin counts up from it. From 1954 to 2019 the kelvin was fixed by the triple point of water, where ice, water and vapour stand together: that temperature was 273.16 K exactly.</p>
+  <p data-pid="07a3b1">Since 2019 the kelvin is fixed by the Boltzmann constant, k = 1.380 649 × 10⁻²³ J/K, which links a temperature to an energy. The triple point of water is now a measured value, 273.16 K to within a few parts in ten million.</p>
+  <p data-pid="55661e">A Celsius temperature is the kelvin temperature less 273.15: T in K and T − 273.15 in °C. That is a lift, and lifting changes no slope (13d). So a rate per kelvin and the same rate per degree Celsius have the same number: a steel bar that grows 12 millionths of its length per kelvin grows that much per °C too.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13n5.1</span><span class="ph understand">understand</span>What fixed the kelvin before 2019, and what fixes it now? <br>Why is a rate per kelvin the same number as the rate per °C?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13n6">
+  <h2 class="sthead"><span class="stno">13n6</span>The mole: counting by weighing</h2>
+  <p data-pid="3bc6d6">Atoms are too small to count one by one. The mole counts them by weighing: a mole of anything is a fixed number of its pieces, so the mass of a mole tells you how many pieces a mass holds.</p>
+  <p data-pid="2c0411">Since 2019 that number is fixed: the Avogadro constant is N_A = 6.022 140 76 × 10²³ per mole, exactly. A mole is exactly that many atoms, molecules or ions.</p>
+  <p data-pid="ec900e">From 1971 to 2019 the mole was fixed the other way round: as many pieces as there are atoms in 12 g of carbon-12. Then 12 g per mole for carbon-12 was exact, and N_A was measured. Now N_A is exact, and the mass of a mole of carbon-12 is measured: still 12 g, to about a part in a billion.</p>
+  <pre class="lines" data-k="ember" data-label="this step: atoms in a gram of carbon-12">
+12\ \text{g of } {}^{12}\text{C} \approx 1\ \text{mol} @@ to about a part in a billion
+1\ \text{g} \cdot \tfrac{1\ \text{mol}}{12\ \text{g}} \cdot \tfrac{6.022 \times 10^{23}}{1\ \text{mol}} @@ two conversions, each equal to 1
+\htmlClass{new}{1\ \text{g of } {}^{12}\text{C} \approx 5.02 \times 10^{22} \text{ atoms}} \quad \blacksquare @@ the conversion technique
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13n6.1</span><span class="ph understand">understand</span>What is fixed in the mole since 2019, and what was fixed before? <br>How many atoms are in 6 g of carbon-12?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13n7">
+  <h2 class="sthead"><span class="stno">13n7</span>Why carbon, and why 12</h2>
+  <p data-pid="887b60">Atomic masses are written on a scale against one chosen atom. For a long time there were two scales. Chemists set natural oxygen at 16. But natural oxygen is a mix: mostly oxygen-16, with a little oxygen-17 and oxygen-18, found in 1929. Physicists, weighing single isotopes, set oxygen-16 at 16. The two scales differed by about 3 parts in 10 000, enough to matter.</p>
+  <p data-pid="072a2c">In 1959 to 1961 both sides agreed on a third choice: carbon-12 at exactly 12. It moved the chemists’ numbers by only about 4 parts in 100 000, small enough to leave their tables nearly as they were. And carbon suited the physicists, whose instruments already used carbon compounds as markers of mass.</p>
+  <p data-pid="911159">On that scale natural hydrogen is 1.008. The lone hydrogen-1 atom is 1.007 83; natural hydrogen carries a little heavy hydrogen, and its mix varies with where it was taken, from about 1.007 84 to 1.008 11. That is why tables print 1.008 and not more places.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13n7.1</span><span class="ph understand">understand</span>What were the two scales before 1961, and why did they differ? <br>Why does a table give hydrogen as 1.008 and stop there?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13n8">
+  <h2 class="sthead"><span class="stno">13n8</span>Illegal moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+3\ \text{m} + 2\ \text{s}\,? @@ only like adds to like: a length and a time make no sum
+s'(t) \text{ in m}\,? @@ a rate has the output’s units over the input’s: m/s
+90\ \text{km/h} = 90 \cdot 1000 \cdot 3600\ \text{m/s}\,? @@ multiply by fractions equal to 1 whose bottoms cancel; the hour goes underneath
+\text{passes the unit check, so it is right}\,? @@ the check catches a wrong unit, never a wrong number
+\text{a rate per °C differs from the rate per K}\,? @@ a lift changes no slope: same number, per K or per °C
+12\ \text{g of } {}^{12}\text{C is one mole by definition}\,? @@ it was, until 2019; now N_A is exact and that mass is measured
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13n8.1</span><span class="ph understand">understand</span>Why is “passes the unit check, so it is right” an illegal move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="13n9">
+  <h2 class="sthead"><span class="stno">13n9</span>Running it backwards</h2>
+  <p data-pid="ceca20">Handed a rate, read its units off: output over input. Handed a line, check its units before its numbers. Handed a quantity in one unit and wanting another, multiply by ones until the old units cancel. Handed a unit, ask what fixes it: since 2019, an exact constant. Found upward; written downward.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">13n9.1</span><span class="ph understand">understand</span>Handed f(x) in joules at x in kelvin, what are the units of f′ and of f″?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">13n.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="V(t) \text{ in litres},\ t \text{ in minutes}"></span></span>A tank fills, and V′(t) = 3 at t = 10. <br>Say what that means with its units, then give the same rate in cubic metres per second.</div>
+  <div class="chq"><span class="chid">13n.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f(x) = 5 \text{ for every } x"></span></span>What are the units of f′, and what is its value? <br>Does a rate of 0 still carry units?</div>
+  <div class="chq"><span class="chid">13n.4.3</span><span class="tagq">converse</span>A line passes the unit check. <br>Find a wrong line about a falling stone that passes, and say what else would catch it.</div>
+  <div class="chq"><span class="chid">13n.4.4</span><span class="tagq">seam</span>A standard that is an object can drift; a standard that is a number cannot. <br>But a number has to be realised by an apparatus that can be wrong. Has the 2019 change made the units more certain, or moved the uncertainty somewhere else?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r13m.html">← 13m · homing in on a root with tangent lines, and how errors spread</a><a href="r13stat.html">13·stat · which line fits the points best? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The basement · there if you want it</div>
+  <h3>Who said it first</h3>
+  <p>The kilogram cylinder, the International Prototype of the Kilogram, was adopted by the first General Conference on Weights and Measures in 1889. The isotopes oxygen-17 and oxygen-18 were found by William Giauque and Herrick Johnston in 1929. The carbon-12 scale was proposed by Josef Mattauch and by Alfred Nier and Alfred Olander in the late 1950s, and adopted by the physicists’ union (IUPAP) in 1960 and the chemists’ union (IUPAC) in 1961. The 26th General Conference voted the redefinition in November 2018, in force from 20 May 2019.</p>
+  <p>Accepted names: the rate-units and unit-check techniques are dimensional analysis; the conversion technique is the factor-label method, or unit conversion by unit fractions. The seven base units are the second, metre, kilogram, ampere, kelvin, mole and candela, of the International System of Units (SI). A mass on the carbon-12 scale is in daltons, or unified atomic mass units (u); a standard atomic weight is the average for the natural mix.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

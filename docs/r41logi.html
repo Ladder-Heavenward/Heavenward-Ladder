@@ -51,34 +51,34 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <p class="home"><a href="index.html">← the ladder</a><a href="r41eng.html">← 41·eng what holds cloth and rope together?</a><a href="r41econ.html">next: 41·econ can everyone be paired so no two would rather swap? →</a></p>
   <div class="tags"><span class="tag logi">41·logi · logistics</span></div>
   <h1>What is the cheapest way to ship?</h1>
-  <p data-pid="aadf55">What is the cheapest way to ship? A freight company has two ports, three cities that want containers, a map of roads, two bridges over a river and a warehouse to build by a deadline. Each of these is a question about a network, and this rung has already answered each one in the abstract. This page puts numbers on them. It finds the shortest road from Seattle to Boise, and the nearest warehouse to every town in one run. It finds the most traffic that can cross the Columbia River north out of Portland, and why widening the wrong road adds nothing. It finds the cheapest plan for moving 700 containers from Seattle and Oakland to three cities, proves that no plan is cheaper, and reads off what a container is worth at each port. And it finds the chain of tasks that sets how long a project must take, and how long every other task may slip.</p>
+  <p data-pid="aadf55">What is the cheapest way to ship? A freight company has two ports, three cities that want containers, a map of roads, two bridges over a river and a warehouse to build by a deadline. Each of these is a question about a network, and this rung has already answered each one in the abstract. This page puts numbers on them. It finds the shortest road from Seattle to Bend, and the nearest warehouse to every town in one run. It finds the most traffic that can cross the Columbia River north out of Portland, and why widening the wrong road adds nothing. It finds the cheapest plan for moving 700 containers from Seattle and Oakland to three cities, proves that no plan is cheaper, and reads off what a container is worth at each port. And it finds the chain of tasks that sets how long a project must take, and how long every other task may slip.</p>
   <p class="gesture" data-pid="3d5477">Shortest routes come from the nearest-first technique; one extra start serves every warehouse at once. The most a network carries is its smallest cut, so only widening a link of every smallest cut helps. The cheapest shipping plan is a best corner, its used routes form a tree, and prices at the ports prove it cheapest. A project takes as long as its longest chain of tasks.</p>
 </header>
 
 <section class="class step" data-step="41·logi.1">
   <h2 class="sthead"><span class="stno">41·logi.1</span>The shortest road, and the nearest warehouse</h2>
-  <p data-pid="3b0b96">Roads between six towns, in rounded road km: Seattle to Ellensburg 175, Ellensburg to Yakima 55, Yakima to Pendleton 215, Seattle to Portland 280, Portland to Pendleton 340, Pendleton to Boise 340. Every length is at least 0, so the nearest-first technique of 41k applies: settle the nearest unsettled town, then lower the tentative distances of its neighbours.</p>
-  <pre class="lines" data-k="ember" data-label="this step: Seattle to Boise, nearest first">
+  <p data-pid="3b0b96">Roads between six towns, in rounded road km: Seattle to Ellensburg 175, Ellensburg to Yakima 55, Yakima to The Dalles 160, Seattle to Portland 280, Portland to The Dalles 135, The Dalles to Bend 210, and Portland to Bend 260 over Mount Hood. Every length is at least 0, so the nearest-first technique of 41k applies: settle the nearest unsettled town, then lower the tentative distances of its neighbours.</p>
+  <pre class="lines" data-k="ember" data-label="this step: Seattle to Bend, nearest first">
 \text{settle Seattle } 0;\ \ \text{Ellensburg } 175,\ \text{Portland } 280 @@ tentative
 \text{settle Ellensburg } 175;\ \ \text{Yakima } 175 + 55 = 230 @@ 
-\text{settle Yakima } 230;\ \ \text{Pendleton } 230 + 215 = 445 @@ 
-\text{settle Portland } 280;\ \ \text{Pendleton stays } 445 < 280 + 340 @@ 620 is longer
-\text{settle Pendleton } 445;\ \ \text{Boise } 445 + 340 = 785 @@ 
-\htmlClass{new}{\text{Seattle to Boise: } 785 \text{ km, by Ellensburg, Yakima and Pendleton}} \quad \blacksquare @@ the nearest-first technique (41k)
+\text{settle Yakima } 230;\ \ \text{The Dalles } 230 + 160 = 390 @@ 
+\text{settle Portland } 280;\ \ \text{The Dalles stays } 390 < 280 + 135,\ \text{Bend } 280 + 260 = 540 @@ 415 is longer
+\text{settle The Dalles } 390;\ \ \text{Bend stays } 540 < 390 + 210 @@ 600 is longer
+\htmlClass{new}{\text{Seattle to Bend: } 540 \text{ km, by Portland and Mount Hood}} \quad \blacksquare @@ the nearest-first technique (41k)
   </pre>
-  <p data-pid="2094f1">When snow shuts the pass between Seattle and Ellensburg, the link goes and the run gives 280 + 340 + 340 = 960 km by Portland. A freight planner keeps the same map and changes the lengths: km for fuel, hours for drivers, dollars for tolls. The technique does not care which, so long as no length is below 0.</p>
+  <p data-pid="2094f1">When snow shuts the pass over Mount Hood, the link from Portland to Bend goes and the run gives 175 + 55 + 160 + 210 = 600 km by Yakima and The Dalles. A freight planner keeps the same map and changes the lengths: km for fuel, hours for drivers, dollars for tolls. The technique does not care which, so long as no length is below 0.</p>
   <p data-pid="fe02de">Shared-start technique: <b>add one new dot with a link of length 0 to every warehouse; one nearest-first run from it gives every town its distance to the nearest warehouse.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the shared-start technique">
 \text{a path from the new dot starts with one link of length } 0 \text{ to a warehouse } h @@ the new dot links only to warehouses
 \text{its length is the length of the rest, a path from } h @@ adding 0
 \htmlClass{new}{\text{shortest from the new dot} = \min_h \text{shortest from } h} \quad \blacksquare @@ 
   </pre>
-  <p data-pid="ca57c6">With warehouses in Seattle and Boise, one run gives Portland 280 and Yakima 230 from Seattle, and Pendleton 340 from Boise. Running once per warehouse would cost one run each; the shared start costs one run.</p>
+  <p data-pid="ca57c6">With warehouses in Seattle and Bend, one run gives Ellensburg 175 and Yakima 230 from Seattle, and The Dalles 210 and Portland 260 from Bend. Running once per warehouse would cost one run each; the shared start costs one run.</p>
   <section class="slides" id="sl1"><div class="eyebrow">The slides · shortest road · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">41·logi.1.1</span><span class="ph understand">understand</span>Why is Pendleton’s distance not lowered when Portland is settled? <br>Why does one run from the new dot give every town its nearest warehouse?</li>
+      <li><span class="qid">41·logi.1.1</span><span class="ph understand">understand</span>Why is The Dalles’ distance not lowered when Portland is settled? <br>Why does one run from the new dot give every town its nearest warehouse?</li>
     </ol>
   </section>
 </section>
@@ -110,14 +110,14 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 
 <section class="class step" data-step="41·logi.3">
   <h2 class="sthead"><span class="stno">41·logi.3</span>The cheapest shipping plan</h2>
-  <p data-pid="f3173c">Seattle has 300 containers and Oakland 400. Portland wants 250, Sacramento 300 and Boise 150. The cost of a route is its road km, one container at a time: Seattle to Portland 280, to Sacramento 1210, to Boise 810; Oakland to Portland 1020, to Sacramento 130, to Boise 1050. Let x be the containers on each route. Each port ships what it has, each city gets what it wants, every x is at least 0, and the total km is to be least. That is a linear program, as in 41g, with six unknowns.</p>
+  <p data-pid="f3173c">Seattle has 300 containers and Oakland 400. Portland wants 250, Sacramento 300 and Bend 150. The cost of a route is its road km, one container at a time: Seattle to Portland 280, to Sacramento 1210, to Bend 540; Oakland to Portland 1020, to Sacramento 130, to Bend 760. Let x be the containers on each route. Each port ships what it has, each city gets what it wants, every x is at least 0, and the total km is to be least. That is a linear program, as in 41g, with six unknowns.</p>
   <pre class="lines" data-k="ember" data-label="this step: one plan, and its cost">
-\text{Seattle: } 250 \to \text{Portland},\ 50 \to \text{Boise} @@ 300 containers
-\text{Oakland: } 300 \to \text{Sacramento},\ 100 \to \text{Boise} @@ 400 containers
-250 \cdot 280 + 50 \cdot 810 + 300 \cdot 130 + 100 \cdot 1050 @@ the total km
-\htmlClass{new}{= 70\,000 + 40\,500 + 39\,000 + 105\,000 = 254\,500 \text{ container-km}} @@ the next footing proves no plan is cheaper
+\text{Seattle: } 250 \to \text{Portland},\ 50 \to \text{Bend} @@ 300 containers
+\text{Oakland: } 300 \to \text{Sacramento},\ 100 \to \text{Bend} @@ 400 containers
+250 \cdot 280 + 50 \cdot 540 + 300 \cdot 130 + 100 \cdot 760 @@ the total km
+\htmlClass{new}{= 70\,000 + 27\,000 + 39\,000 + 76\,000 = 212\,000 \text{ container-km}} @@ the next footing proves no plan is cheaper
   </pre>
-  <p data-pid="9ff408">It uses 4 routes, which is the 2 ports plus the 3 cities less 1, and those routes join the five places into a tree: Portland, Seattle, Boise, Oakland, Sacramento in a path. That is no accident.</p>
+  <p data-pid="9ff408">It uses 4 routes, which is the 2 ports plus the 3 cities less 1, and those routes join the five places into a tree: Portland, Seattle, Bend, Oakland, Sacramento in a path. That is no accident.</p>
   <p data-pid="f9543c">Tree-corner technique: <b>at a corner of the shipping plans, the routes in use contain no cycle; so when supplies and wants are whole numbers, every corner ships whole numbers.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the tree-corner technique">
 \text{a cycle of used routes alternates port, city, port, city} @@ links join ports to cities only: two-sided (41a)
@@ -128,7 +128,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 \text{a forest has a leaf: one route, which must carry that place’s whole amount} @@ 41b
 \htmlClass{new}{\text{peel leaves: each amount is a whole number less whole numbers}} \quad \blacksquare @@ 
   </pre>
-  <p data-pid="95341a">By the tight-corner technique of 41g a corner is best, so a best plan in whole containers exists, and no rounding is needed. Peeling the tree above gives the plan back: Portland is a leaf, so Seattle to Portland carries 250; Sacramento is a leaf, so Oakland to Sacramento carries 300; Boise takes the rest from each port.</p>
+  <p data-pid="95341a">By the tight-corner technique of 41g a corner is best, so a best plan in whole containers exists, and no rounding is needed. Peeling the tree above gives the plan back: Portland is a leaf, so Seattle to Portland carries 250; Sacramento is a leaf, so Oakland to Sacramento carries 300; Bend takes the rest from each port.</p>
   <section class="slides" id="sl3"><div class="eyebrow">The slides · shipping plan · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
@@ -148,18 +148,18 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 \text{equality for the given plan} @@ c = p − q wherever x &gt; 0
 \htmlClass{new}{\text{no plan costs less than the given one}} \quad \blacksquare @@ the price-bound technique, for shipping
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: the prices for the plan of 254 500">
-q_{\text{Oak}} = 0,\ \ p_{\text{Sac}} = 130,\ \ p_{\text{Boi}} = 1050 @@ equal on Oakland’s two used routes
-q_{\text{Sea}} = 1050 - 810 = 240,\ \ p_{\text{Por}} = 240 + 280 = 520 @@ equal on Seattle’s two used routes
-\text{unused: } p_{\text{Sac}} - q_{\text{Sea}} = -110 \le 1210,\ \ p_{\text{Por}} - q_{\text{Oak}} = 520 \le 1020 @@ the two unused routes pass
-\htmlClass{new}{520 \cdot 250 + 130 \cdot 300 + 1050 \cdot 150 - 240 \cdot 300 = 254\,500} \quad \blacksquare @@ the equal-prices technique (41g): the two totals meet
+  <pre class="lines" data-k="ember" data-label="this step: the prices for the plan of 212 000">
+q_{\text{Oak}} = 0,\ \ p_{\text{Sac}} = 130,\ \ p_{\text{Ben}} = 760 @@ equal on Oakland’s two used routes
+q_{\text{Sea}} = 760 - 540 = 220,\ \ p_{\text{Por}} = 220 + 280 = 500 @@ equal on Seattle’s two used routes
+\text{unused: } p_{\text{Sac}} - q_{\text{Sea}} = -90 \le 1210,\ \ p_{\text{Por}} - q_{\text{Oak}} = 500 \le 1020 @@ the two unused routes pass
+\htmlClass{new}{500 \cdot 250 + 130 \cdot 300 + 760 \cdot 150 - 220 \cdot 300 = 212\,000} \quad \blacksquare @@ the equal-prices technique (41g): the two totals meet
   </pre>
-  <p data-pid="850775">The prices say more than that the plan is best. A container that starts in Seattle instead of Oakland is worth q_Sea − q_Oak = 240 km less to ship: run the program with 301 and 399 and the total drops to 254 260. A port with a higher price is a port to grow. Oakland to Portland passes with 500 km to spare, so a road there would have to cut its cost by more than 500 before any container used it.</p>
+  <p data-pid="850775">The prices say more than that the plan is best. A container that starts in Seattle instead of Oakland is worth q_Sea − q_Oak = 220 km less to ship: run the program with 301 and 399 and the total drops to 211 780. A port with a higher price is a port to grow. Oakland to Portland passes with 520 km to spare, so a road there would have to cut its cost by more than 520 before any container used it.</p>
   <section class="slides" id="sl4"><div class="eyebrow">The slides · port prices · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41·logi.4.1</span><span class="ph understand">understand</span>Why do prices equal on the used routes and no more than the cost on the rest prove the plan cheapest? <br>What does q_Sea − q_Oak = 240 tell the company?</li>
+      <li><span class="qid">41·logi.4.1</span><span class="ph understand">understand</span>Why do prices equal on the used routes and no more than the cost on the rest prove the plan cheapest? <br>What does q_Sea − q_Oak = 220 tell the company?</li>
     </ol>
   </section>
 </section>
@@ -195,9 +195,9 @@ G: \max(10 + 2,\ 10 + 3) = 13 @@ F finishes later
 <section class="class step" data-step="41·logi.6">
   <h2 class="sthead"><span class="stno">41·logi.6</span>Illegal moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{the shortest road from Seattle to Boise starts on the shortest link out of Seattle}\,? @@ it often does; the technique settles whole paths, not first links
+\text{the shortest road from Seattle to Bend starts on the shortest link out of Seattle}\,? @@ it often does; the technique settles whole paths, not first links
 \text{widening any road raises what the network carries}\,? @@ only links of every smallest cut; the untouched-cut technique
-\text{the cheapest plan sends each city its cheapest port’s containers}\,? @@ Boise’s cheapest port is Seattle, which has only 300; supplies bind
+\text{the cheapest plan sends each city its cheapest port’s containers}\,? @@ Bend’s cheapest port is Seattle, which has only 300; supplies bind
 \text{the project takes as long as the sum of its tasks}\,? @@ 21 days of tasks finish in 15; it is the longest chain
   </pre>
   <section class="sayback">
@@ -227,7 +227,7 @@ G: \max(10 + 2,\ 10 + 3) = 13 @@ F finishes later
   <h3>Who said it first</h3>
   <p>Frank Lauren Hitchcock set the transportation problem in 1941 and Tjalling Koopmans studied it for wartime shipping; Leonid Kantorovich had priced resources in 1939, and the two shared the 1975 economics prize. The critical path method was built by Morgan Walker and James Kelley in 1957 for plant maintenance, and its cousin PERT the next year for the Polaris missile programme. Edsger Dijkstra's method is of 1959; Lester Ford and Delbert Fulkerson's flows of 1956 began from a question about the rail network of eastern Europe.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“Boise gets its containers from Seattle, the cheaper port for it, Sacramento from Oakland, and Portland from Seattle. Each city is served as cheaply as it can be, so the plan is cheapest.” Not allowed: Seattle has 300 containers and that plan asks it for 400. A plan cheapest city by city may not be a plan at all. The proof that a plan is cheapest is a set of prices, checked on every route.</p>
+  <p>“Bend gets its containers from Seattle, the cheaper port for it, Sacramento from Oakland, and Portland from Seattle. Each city is served as cheaply as it can be, so the plan is cheapest.” Not allowed: Seattle has 300 containers and that plan asks it for 400. A plan cheapest city by city may not be a plan at all. The proof that a plan is cheapest is a set of prices, checked on every route.</p>
 </section>
 
 </div>
@@ -242,8 +242,8 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'nearest first',t:R`785 \text{ km}`,n:`Seattle to Boise.`},
-  {k:'ember',kl:'pass shut',t:R`960 \text{ km}`,n:`Remove a link and rerun.`},
+  {k:'ember',kl:'nearest first',t:R`540 \text{ km}`,n:`Seattle to Bend.`},
+  {k:'ember',kl:'pass shut',t:R`600 \text{ km}`,n:`Remove a link and rerun.`},
   {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{one start, many warehouses}}`,n:`Links of length 0.`}
 ],{title:'The slides · shortest road · ← → keys work'});
 stepper('#sl2',[
@@ -252,14 +252,14 @@ stepper('#sl2',[
   {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{widen the smallest cut}}`,n:`Nothing else helps.`}
 ],{title:'The slides · bottleneck · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'plan',t:R`254\,500`,n:`Container-km.`},
+  {k:'ember',kl:'plan',t:R`212\,000`,n:`Container-km.`},
   {k:'ember',kl:'used routes',t:R`2 + 3 - 1 = 4`,n:`A tree.`},
   {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{whole corners}}`,n:`Peel the leaves.`}
 ],{title:'The slides · shipping plan · ← → keys work'});
 stepper('#sl4',[
   {k:'ember',kl:'rule',t:R`p_j - q_i \le c_{ij}`,n:`Equal where used.`},
-  {k:'ember',kl:'totals',t:R`254\,500 = 254\,500`,n:`Plan and prices.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{Seattle is worth } 240}`,n:`Per container.`}
+  {k:'ember',kl:'totals',t:R`212\,000 = 212\,000`,n:`Plan and prices.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{Seattle is worth } 220}`,n:`Per container.`}
 ],{title:'The slides · port prices · ← → keys work'});
 stepper('#sl5',[
   {k:'ember',kl:'forward',t:R`\text{earliest start} = \max \text{finish before}`,n:`Forward order.`},

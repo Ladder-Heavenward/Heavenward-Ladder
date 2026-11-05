@@ -138,3 +138,11 @@
  {"q":"x² − 2 from 1: 1 − (1 − 2)/2 = 3/2. What is that move?","a":"one tangent step","w":["one halving","the linearization’s error","the relative error"],"why":"N(x) = x − f(x)/f′(x)."},
  {"q":"x_{n+1} = x_n − f(x_n)/f′(x_n). What is it called?","a":"the tangent step","w":["the d-mark","the nowhere-continuous technique","the three-quarters law"],"why":"The page names it the tangent step, and gives the accepted name in brackets: Newton's."},
  {"q":"To find √a, average x and a/x, and repeat. What is it called?","a":"the averaging step","w":["the tangent step","the d-mark","the nowhere-continuous technique"],"why":"The page names it the averaging step, and gives the accepted name in brackets: Heron's."}];
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["13n"]=[{"q":"s(t) in metres, t in seconds. Units of s′?","a":"m/s","w":["m","m/s²","s/m"],"why":"A rate has the output's units over the input's."},
+ {"q":"s(t) in metres, t in seconds. Units of s″?","a":"m/s²","w":["m/s","m²/s","m"],"why":"The rate-units technique applied to s′."},
+ {"q":"Which line fails the unit check? u in m/s, a in m/s², t in s.","a":"s = u + at²","w":["s = ut + ½at²","s = ut","v = u + at"],"why":"u is a speed and at² is a length: unlike terms."},
+ {"q":"s = ut + at² passes the unit check. Is it right?","a":"no: the check cannot see the ½","w":["yes: it passes","yes, if t is small","no: it fails the check"],"why":"The check catches a wrong unit, never a wrong number."},
+ {"q":"90 km/h in m/s?","a":"25","w":["324","1.5","90 000"],"why":"90 · 1000 / 3600 = 25."},
+ {"q":"Since 2019, what fixes the kilogram?","a":"an exact value of the Planck constant","w":["a platinum-iridium cylinder","a litre of water","the mass of a carbon-12 atom"],"why":"Every base unit is now fixed by an exact constant."},
+ {"q":"A bar grows 12 millionths per kelvin. Per °C?","a":"12 millionths","w":["12 millionths less 273.15","about 285 millionths","it depends on the temperature"],"why":"°C is K lifted by 273.15, and lifting changes no slope."},
+ {"q":"Since 2019, which is exact?","a":"the Avogadro constant","w":["the mass of a mole of carbon-12","the triple point of water","the atomic weight of hydrogen"],"why":"N_A = 6.022 140 76 × 10²³ per mole, exactly; the rest are measured."}];

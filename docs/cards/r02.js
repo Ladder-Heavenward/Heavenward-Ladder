@@ -9,7 +9,7 @@
  {"q":"u ⊆ u, for any set u. Which technique?","a":"the self-part technique","w":["the same-members axiom","the self-sameness axiom","the double-inclusion technique"],"why":"Every member of u is in u."},
  {"q":"cat ∈ {{cat}}. Is it so?","a":"no: its only member is {cat}","w":["yes: cat is inside it","yes: {{cat}} = {cat}","no: {{cat}} is empty"],"why":"A box holding a box holding a cat is not a box holding a cat."},
  {"q":"Ann ∈ r. What is Ann called, to r?","a":"a member, or element","w":["a subset","a part","a listing"],"why":"The accepted name for a member is element."},
- {"q":"u = {Missoula, Helena}; v = {Helena, Missoula, Butte}. Which holds?","a":"u ⊆ v, and u ≠ v","w":["u = v","v ⊆ u","u ∈ v"],"why":"Butte is in v and not in u."}];
+ {"q":"u = {Truckee, Merced}; v = {Merced, Truckee, Salinas}. Which holds?","a":"u ⊆ v, and u ≠ v","w":["u = v","v ⊆ u","u ∈ v"],"why":"Salinas is in v and not in u."}];
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["2d"]=[{"q":"{x ∈ {cat, dog, owl} : x can fly}. Which set?","a":"{owl}","w":["{cat, dog}","{cat, dog, owl}","∅"],"why":"Only the owl passes."},
  {"q":"{x ∈ {cat, dog} : x can fly}. Which set?","a":"∅","w":["{owl}","{cat, dog}","not a set: nothing flies"],"why":"Sifting never adds: no flier was there to keep."},
  {"q":"{x ∈ u : φ(x)} ⊆ u, whatever φ. Which technique?","a":"the sift-is-part technique","w":["the self-part technique","the one-empty-set technique","the same-members axiom"],"why":"A sift keeps or drops; it never adds."},
@@ -47,7 +47,7 @@
  {"q":"“For any set u there is the set of all its subsets.” Which axiom?","a":"the power axiom","w":["the merge axiom","the sift axiom","the gather axiom"],"why":"The last tool of the rung."}];
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["2g"]=[{"q":"{{t}, {t, b}}. What is it called?","a":"the ordered pair of t and b","w":["the set {t, b}","the product of t and b","a relation on t"],"why":"Built from gather alone, with t marked as the left entry."},
  {"q":"From (t, b) = (c, d), lines read t = c and b = d. Which technique?","a":"the equal-pairs technique","w":["the double-inclusion technique","the same-members axiom","the products-exist technique"],"why":"Same pairs, same left entries, same right entries."},
- {"q":"{Missoula, Helena} × {cat}. Which set?","a":"{(Missoula, cat), (Helena, cat)}","w":["{Missoula, Helena, cat}","{(cat, Missoula), (cat, Helena)}","{{Missoula, cat}, {Helena, cat}}"],"why":"All the pairs, left entry from the first set, right from the second."},
+ {"q":"{Truckee, Merced} × {cat}. Which set?","a":"{(Truckee, cat), (Merced, cat)}","w":["{Truckee, Merced, cat}","{(cat, Truckee), (cat, Merced)}","{{Truckee, cat}, {Merced, cat}}"],"why":"All the pairs, left entry from the first set, right from the second."},
  {"q":"“Has met” on people. Which property does the page give it?","a":"symmetric","w":["transitive","neither of these","reflexive only"],"why":"If x has met y, y has met x."},
  {"q":"“Is an ancestor of.” Which properties?","a":"transitive, and neither of the others","w":["reflexive and transitive","symmetric only","all three"],"why":"An ancestor’s ancestor is an ancestor."},
  {"q":"“Has met, or is.” Which property fails?","a":"transitive","w":["reflexive","symmetric","none of them"],"why":"Someone you met may have met a stranger to you."},
