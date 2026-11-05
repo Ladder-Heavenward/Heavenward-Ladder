@@ -1836,8 +1836,9 @@ window.LadderMeasure={list,finished,indexIcons,testIn}; /* 0.3.23: LadderLock dr
 (function(){
 'use strict';
 const SIDE=n=>n.nodeType===1&&(n.matches('.msr,.certrow,svg,img')||n.tagName==='BUTTON'); /* these go to the row's right column */
-function tidy(t){ if(!t||!t.querySelector(':scope>a')) return; const li=t.parentElement; let tr=li.querySelector(':scope>.tr'), tb=t.querySelector(':scope>.tb');
-  if(!tr){ tr=document.createElement('span'); tr.className='tr'; li.insertBefore(tr,t.nextSibling); } if(!tb){ tb=document.createElement('span'); tb.className='tb'; t.appendChild(tb); }
+function tidy(t){ if(!t||!t.querySelector(':scope>a')) return; const li=t.parentElement; let tr=li.querySelector(':scope>.tr'), tb=li.querySelector(':scope>.tb');
+  /* 0.3.35 (Andrew 11:50): tags and "you are here" sit under the address (the number), left-aligned; ruler and closed footings on the right */
+  if(!tr){ tr=document.createElement('span'); tr.className='tr'; li.insertBefore(tr,t.nextSibling); } if(!tb){ tb=document.createElement('span'); tb.className='tb'; li.insertBefore(tb,t); }
   [...t.childNodes].forEach(n=>{ if(n===tr||n===tb||(n.nodeType===1&&n.tagName==='A')) return; if(n.nodeType===3){ if(!n.textContent.trim()) return; tb.appendChild(n); return; } (SIDE(n)?tr:tb).appendChild(n); });
   tr.hidden=!tr.childNodes.length; tb.hidden=!tb.childNodes.length; }
 const STAR='<svg class="fstar" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M12 2.6l2.8 6.1 6.6.7-4.9 4.5 1.4 6.6L12 17.2l-5.9 3.3 1.4-6.6L2.6 9.4l6.6-.7z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
