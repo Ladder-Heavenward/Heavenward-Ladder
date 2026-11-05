@@ -2026,6 +2026,9 @@ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded'
 if(window.LADDER_DESK) return;
 const pg=(window.ladderPage&&ladderPage())||'';
 let st=null; try{ st=LS.getItem('ladder:started'); }catch(e){}
+/* 0.3.14: the walk counts as on while nothing past floor 1 has been climbed, even if the 'start' mark was lost */
+if(st!=='done'){ try{ const f=JSON.parse(LS.getItem('ladder:furthest')||'null'); const P=JSON.parse(LS.getItem('pages:done')||'{}')||{};
+  const early=!f||!f.page||/^(start|intro|floor1)$/.test(String(f.page).replace(/\.html$/,'')); if(early&&!Object.keys(P).some(k=>P[k]&&P[k].v)) st='start'; }catch(e){} }
 const go=()=>{
   if(pg==='start'){ try{ if(st!=='done') LS.setItem('ladder:started','start'); }catch(e){}
     const m=document.querySelector('.startmark'); if(m&&window.ICON_L_HTML) m.innerHTML=window.ICON_L_HTML;
@@ -2034,7 +2037,11 @@ const go=()=>{
       a.setAttribute('href','index.html'); if(a.classList.contains('pnb')){ const l=a.querySelector('.pl,.pt,span:last-child'); if(l&&l!==a) l.textContent='the dizzying heights'; else a.textContent='next → the dizzying heights'; } else a.textContent='next: the dizzying heights →';
       a.addEventListener('click',e=>{ e.preventDefault(); try{ LS.setItem('ladder:started','done'); }catch(x){} if(window.LadderFV&&LadderFV.heights) LadderFV.heights(); else location.href='index.html'; }); } }); }
 };
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(go,0)); else setTimeout(go,0);
+/* 0.3.14: the floor's next rows can be rebuilt after us (annex relinking), so the first-run turn is also caught at the click */
+if(pg==='floor1'&&st==='start') document.addEventListener('click',e=>{ const a=e.target.closest&&e.target.closest('a[href]'); if(!a||!/^r00\.html(#|$)/.test(a.getAttribute('href')||'')||!/→/.test(a.textContent)) return;
+  e.preventDefault(); e.stopPropagation(); try{ LS.setItem('ladder:started','done'); }catch(x){} if(window.LadderFV&&LadderFV.heights) LadderFV.heights(); else location.href='index.html'; },true);
+const run=()=>{ go(); setTimeout(go,600); setTimeout(go,1600); };
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(run,0)); else setTimeout(run,0);
 })();
 
 /* ---- final pass in colour (Andrew 2026-11-05 00:16): in a final-pass paragraph (p.fp: one he has re-edited, so the colouring
