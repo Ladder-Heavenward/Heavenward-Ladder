@@ -443,6 +443,11 @@ function placeHere(){
 function titledKey(prefix,title){ const k=prefix+title; try{ if(LS.getItem(k)!=null) return k; const lk=k.toLowerCase();
     for(let i=0;i<LS.length;i++){ const o=LS.key(i); if(o&&o!==k&&o.toLowerCase()===lk){ const v=LS.getItem(o); if(v!=null){ LS.setItem(k,v); } break; } } }catch(e){} return k; }
 window.__titledKey=titledKey;
+function holdMenu(el,open){ let t=null, x0=0, y0=0; const clear=()=>{ if(t){ clearTimeout(t); t=null; } };
+  el.addEventListener('pointerdown',e=>{ if(e.button>0) return; x0=e.clientX; y0=e.clientY; el.__held=false; clear(); t=setTimeout(()=>{ t=null; el.__held=true; try{ navigator.vibrate&&navigator.vibrate(12); }catch(x){} open(); },480); });
+  el.addEventListener('pointermove',e=>{ if(t&&Math.hypot(e.clientX-x0,e.clientY-y0)>10) clear(); });
+  ['pointerup','pointercancel','pointerleave'].forEach(k=>el.addEventListener(k,clear));
+  el.addEventListener('contextmenu',e=>{ e.preventDefault(); e.stopPropagation(); if(el.__held) return; el.__held=true; open(); setTimeout(()=>{ el.__held=false; },400); }); }
 function marks(){
   const KEY=titledKey('marks:',document.title||location.pathname);
   let st={}; try{ st=JSON.parse(LS.getItem(KEY)||'{}'); }catch(e){ st={}; }
@@ -466,8 +471,9 @@ function marks(){
       const v=!it.on(); it.set(v); st[it.id]=v; save(it.id); progress();
       if(it.id.startsWith('L:')&&li.classList.contains('k-theory')&&v) unpack(li.closest('section.rung'),true); };
     it.el.__tick=tick;
-    it.el.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation();
-      if(it.id.startsWith('q:')&&window.__qMenu) window.__qMenu(it.el,()=>tick(),it.on()); else tick(); }); });
+    it.el.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation(); if(it.el.__held){ it.el.__held=false; return; } tick(); });
+    /* 0.3.29 (Andrew 11:36): tap ticks; hold (or right-click) brings up the menu */
+    if(it.id.startsWith('q:')) holdMenu(it.el,()=>{ if(window.__qMenu) window.__qMenu(it.el,()=>tick(),it.on()); }); });
   document.querySelectorAll('.qid.auto').forEach(el=>el.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation(); if(window.__qMenu) window.__qMenu(el,null,false); }));
   progress(); gateLadder(true);
   const go=()=>{ if(window.MarksSync){ const r=MarksSync.init(KEY,st,items); const after=()=>{ if(relabel()){ try{ LS.setItem(KEY,JSON.stringify(st)); }catch(e){} items.forEach(it=>{ if(it.id in st){ it.set(!!st[it.id]); if(it.id.startsWith('q:'+NEW+'.')) MarksSync.push(KEY,st,it.id); } }); } progress(); gateLadder(); }; if(r&&r.then) r.then(after,after); else after(); } };
@@ -475,7 +481,7 @@ function marks(){
   /* pull again whenever the page comes back into view, so a ✓ made on another device shows up without a reload */
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden) go(); });
   window.addEventListener('pageshow',e=>{ if(e.persisted) go(); });
-  if(items.length&&document.querySelector('.qid')){ const p=document.createElement('p'); p.className='marknote'; p.textContent='Tap a question’s label to tick it ✓, prompt from it, or report it. Marks save in this browser and sync to the ladder’s record; I say in chat when one is earned.'; document.body.appendChild(p); }
+  if(items.length&&document.querySelector('.qid')){ const p=document.createElement('p'); p.className='marknote'; p.textContent='Tap a question’s label to tick it ✓; hold it to prompt from it or report it. Marks save in this browser and sync to the ladder’s record; I say in chat when one is earned.'; document.body.appendChild(p); }
 }
 
 /* desk */
