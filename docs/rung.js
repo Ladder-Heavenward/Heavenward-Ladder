@@ -1460,7 +1460,11 @@ function footingView(){
     up.hidden=!on||(atEnd&&!nextPage); dn.hidden=!on||(cur<=0&&!prevPage); sky.hidden=!on||!atEnd||!!nextPage||!skyOpen();
     up.setAttribute('aria-label','next: '+(atEnd?(nextPage||''):idOf(cur+1))); dn.setAttribute('aria-label','previous: '+(cur>0?idOf(cur-1):(prevPage||'')));
     pos.textContent=!ONE&&cur>0&&cur<=steps.length?' · '+cur+' of '+steps.length:''; };
-  const paint=()=>{ units.forEach((u,n)=>u.forEach(el=>el.classList.toggle('fv-on',n===cur))); document.body.classList.toggle('fv-notend',cur<N-1); label(); };
+  /* 0.3.13 (Andrew 00:51): the page view's reveal ("next footing") hides the footings past the furthest opened; in the footing
+     view, reaching a footing opens it, and the page view's record (steps:<page>) keeps up */
+  const reveal=()=>{ units[cur].forEach(el=>{ if(el.hidden&&el.matches('section.step')) el.hidden=false; });
+    const i=steps.indexOf(units[cur].find(el=>steps.includes(el))); if(i>=0) try{ const K='steps:'+P, o=parseInt(LS.getItem(K)||'1',10)||1; if(i+1>o) LS.setItem(K,String(i+1)); }catch(e){} };
+  const paint=()=>{ reveal(); units.forEach((u,n)=>u.forEach(el=>el.classList.toggle('fv-on',n===cur))); document.body.classList.toggle('fv-notend',cur<N-1); label(); };
   const remember=()=>{ try{ LS.setItem(LK,JSON.stringify({page:P,id:idOf(cur),t:Date.now()})); }catch(e){} if(cur<=LASTU) climbed(P,idOf(cur),cur); };
   const top=()=>{ window.scrollTo(0,0); };
   function setMode(v){ on=v; document.body.classList.toggle('fv',on); if(on) paint(); else units.forEach(u=>u.forEach(el=>el.classList.remove('fv-on'))); label();
@@ -1484,7 +1488,7 @@ function footingView(){
     ghost.style.cssText='margin:0;max-width:none;position:fixed;left:'+r.left+'px;width:'+r.width+'px;top:'+r.top+'px;z-index:40;pointer-events:none;background:'+getComputedStyle(document.body).backgroundColor+';box-shadow:0 10px 40px rgba(0,0,0,.18);border-radius:14px;padding-bottom:40px';
     const old=units[from], marks=old.map(el=>{ const c=document.createComment('fv'); el.replaceWith(c); return c; });
     old.forEach(el=>{ el.classList.add('fv-on'); ghost.appendChild(el); }); document.body.appendChild(ghost);
-    units[n].forEach(el=>el.classList.add('fv-on')); label(); top();
+    reveal(); units[n].forEach(el=>el.classList.add('fv-on')); label(); top();
     const inc=units[n];
     const a1=ghost.animate(cam(dir,H,W,true),{duration:560,easing:'linear',fill:'forwards'});
     const a2=inc.map(el=>el.animate(cam(dir,H,W,false),{duration:560,easing:'linear'}));
