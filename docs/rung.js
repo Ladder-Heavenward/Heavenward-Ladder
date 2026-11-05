@@ -958,12 +958,13 @@ function addresses(info){
     const b=document.createElement('button'); b.type='button'; b.className='pa'; b.textContent=ad; b.setAttribute('aria-label','paragraph '+ad+': prompt, report or leave a note');
     b.addEventListener('click',e=>{ e.stopPropagation(); openMenu(p,b); }); p.appendChild(document.createTextNode(' ')); p.appendChild(b); });
   menu=document.createElement('div'); menu.className='pamenu'; menu.hidden=true;
-  menu.innerHTML='<button type="button" data-a="prompt">prompt from</button><button type="button" data-a="report">report</button><button type="button" data-a="note">leave a note</button>';
+  menu.innerHTML='<button type="button" data-a="prompt">prompt from</button><button type="button" data-a="report">report</button><button type="button" data-a="note">leave a note</button><button type="button" data-a="final" hidden>final pass</button>';
   document.body.appendChild(menu);
   menu.addEventListener('click',e=>{ const a=e.target.dataset.a; if(!a||!cur) return; const ad=cur.dataset.addr;
     const text=[...cur.childNodes].filter(n=>!(n.classList&&n.classList.contains('pa'))).map(n=>n.textContent).join('').trim();
     if(a==='prompt'){ copy('About paragraph '+ad+' of the ladder, which reads: “'+text+'”\n\n'); toast('paragraph '+ad+' and its words are copied: paste them to your assistant and ask'); }
     if(a==='edit'){ menu.hidden=true; startEdit(cur); return; }
+    if(a==='final'){ menu.hidden=true; markFinal(cur); return; }
     if(a==='note'){ menu.hidden=true; noteEdit(cur); return; }
     if(a==='report'){ menu.hidden=true; report({kind:'paragraph',where:ad,pid:cur.dataset.pid,text}); return; }
     menu.hidden=true; });
@@ -1090,7 +1091,15 @@ function startEdit(p){ if(!ED.db||!ED.owner||!editable(p)||p.isContentEditable) 
     else{ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); m[p.dataset.pid]=rec; localStorage.setItem(k,JSON.stringify(m)); }catch(_){}
       e.target.disabled=false; toast('not saved yet ('+((err&&err.code)||'the database refused it')+'). Your words are kept on this device and will be sent when the database answers.'); } });
 }
-function openMenu(p,b){ cur=p; const r=b.getBoundingClientRect(); const eb=menu.querySelector('[data-a=edit]'); if(eb){ eb.hidden=!(ED.owner&&editable(p)); if(!ED.owner&&editable(p)) edRecheck().then(ok=>{ if(ok&&cur===p) eb.hidden=false; }); } menu.hidden=false;
+/* 0.3.10 final pass (Andrew 23:57): a paragraph he has re-edited down to plain, concise sentences, the promise that "the ladder
+   trusts your English completely" kept, reads in a slightly different ink. Every paragraph he saves through the editor is final
+   pass; one already right can be marked as it stands. The mark is an edit of the paragraph's own words, so it rides the edit
+   pipeline: shown live as .pedited, and the fold writes class="fp" into the page. */
+async function markFinal(p){ if(!ED.db||!ED.owner||!editable(p)) return;
+  const rec={pid:p.dataset.pid,page:ED.page,html:edClean(p),at:new Date().toISOString(),final:true};
+  try{ await Promise.race([ED.db.doc('edits/'+rec.pid).set(rec),new Promise((_,rj)=>setTimeout(()=>rj(0),10000))]); p.classList.add('pedited'); toast('marked final pass: it goes into the page at the next publish'); }
+  catch(e){ toast('not marked yet: the database did not answer. Try again in a moment.'); } }
+function openMenu(p,b){ cur=p; const r=b.getBoundingClientRect(); const fb=menu.querySelector('[data-a=final]'); if(fb){ const done=p.classList.contains('fp')||p.classList.contains('pedited'); fb.hidden=!(ED.owner&&editable(p)&&!done); } const eb=menu.querySelector('[data-a=edit]'); if(eb){ eb.hidden=!(ED.owner&&editable(p)); if(!ED.owner&&editable(p)) edRecheck().then(ok=>{ if(ok&&cur===p) eb.hidden=false; }); } menu.hidden=false;
   const w=menu.offsetWidth||220; menu.style.left=Math.max(8,Math.min(window.innerWidth-w-8,r.left+r.width/2-w/2))+'px';
   menu.style.top=(r.bottom+window.scrollY+6)+'px'; }
 /* the non-skid key: the annex tags show or hide their annexes; the geometry-transform mark waits for the geometry floor */
