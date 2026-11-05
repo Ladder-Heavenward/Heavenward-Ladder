@@ -341,7 +341,7 @@ function packLadder(){
     const open=th.classList.contains('passed');
     const lab=((th.querySelector(':scope>.n')||{}).textContent||'').trim();
     if(open&&!openSeen.has(lab)){ openSeen.add(lab); saveOpenSeen(); if(openSeeded){ sec.classList.add('packed'); unpack(sec,true); } }
-    if(!open){ sec.classList.add('packed'); cue.textContent=parseFloat(lab)===lowest?'open it at the foot of its page to unpack its '+(subs.length>1?'steps':'step'):''; }
+    if(!open){ sec.classList.add('packed'); cue.textContent=''; /* 0.3.34: no open button any more; a rung unpacks once its page is passed */ }
     else if(sec.classList.contains('packed')&&!sec.dataset.unpacking){ sec.classList.remove('packed'); cue.textContent=''; }
     else cue.textContent='';
     const built=subs.filter(li=>li.classList.contains('built'));
@@ -502,25 +502,19 @@ function deskHTML(){
 
 /* An integer rung is opened at the foot of its own page: an orange button that turns teal. */
 function openRungButton(){
-  const m=PAGE.match(/^r(\d+)$/); if(!m) return; /* 0.2.2: rung pages carry no tags now, so the page name decides */
-  const stem=PAGE, lab=String(+m[1]), id='open:'+stem;
-  const box=document.createElement('div'); box.className='openrung';
-  const b=document.createElement('button'); b.type='button'; b.className='openbtn';
-  const note=document.createElement('span'); note.className='opennote';
-  box.append(b,note);
-  const nav=document.querySelector('nav.nextrung'); if(nav) nav.parentNode.insertBefore(box,nav); else (document.querySelector('.wrap')||document.body).appendChild(box);
-  const legacy=()=>{ try{ const st=JSON.parse(LS.getItem('marks:The Ladder')||'{}'); return !!st['L:'+lab]; }catch(e){ return false; } };
-  const local=()=>{ try{ return JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){ return {}; } };
-  let on=false;
-  const show=()=>{ b.classList.toggle('on',on); b.textContent=on?'the rung is open':'open the rung'; b.setAttribute('aria-pressed',String(on));
-    note.textContent=on?'its steps are unpacked on the ladder; click again to close it':'opens its steps on the ladder'; };
-  const fromPages=p=>{ const r=p[id]; on=r?!!r.v:legacy(); show(); };
-  fromPages(local());
-  const withSync=f=>{ if(window.MarksSync) return f(); let n=0; const t=setInterval(()=>{ if(window.MarksSync||++n>40){ clearInterval(t); if(window.MarksSync) f(); } },150); };
-  withSync(()=>{ if(MarksSync.pages) MarksSync.pages().then(fromPages,()=>{}); });
-  b.addEventListener('click',()=>{ on=!on; show();
-    if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(id,on,on,true,false);
-    else { try{ const p=local(); p[id]={v:on,a:on,o:true,h:false,t:Date.now()}; LS.setItem('pages:done',JSON.stringify(p)); }catch(e){} } });
+  /* 0.3.34 (Andrew 11:47): no "open the rung" button. A rung opens (open:rNN) once you pass its page: you move on from it,
+     or your furthest footing is past it. */
+  const pages=()=>{ try{ return JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){ return {}; } };
+  const mark=stem=>{ const id='open:'+stem, p=pages(); if(p[id]&&p[id].v) return;
+    if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(id,true,true,true,false);
+    else { try{ p[id]={v:true,a:true,o:true,h:false,t:Date.now()}; LS.setItem('pages:done',JSON.stringify(p)); }catch(e){} } };
+  let fur=null; try{ fur=JSON.parse(LS.getItem('ladder:furthest')||'null'); }catch(e){}
+  const fm=fur&&fur.page&&String(fur.page).match(/^r(\d\d)(.*)$/);
+  if(fm){ const top=+fm[1], beyond=fm[2]!==''; for(let r=0;r<top+(beyond?1:0);r++) mark('r'+String(r).padStart(2,'0')); }
+  const m=PAGE.match(/^r(\d+)$/); if(!m) return;
+  const stem=PAGE;
+  document.addEventListener('click',e=>{ const a=e.target.closest&&e.target.closest('nav.nextrung a, .fvup:not(.fvsky)'); if(!a) return;
+    mark(stem); },true); /* a rung page is one footing, so its next always moves on */
   if(stem==='r00'){ try{ LS.setItem('ladder:introFolded','1'); }catch(e){} }
 }
 /* On the ladder, the introduction folds away once rung 0 has been clicked for the first time. */
