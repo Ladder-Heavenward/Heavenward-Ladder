@@ -68,7 +68,7 @@
  {"q":"log₂ 7 = ln 7 / ln 2. Which technique?","a":"change-of-base","w":["log-of-a-quotient","log-base-p alone","real-exponent"],"why":"logₚ x = logₛ x / logₛ p."},
  {"q":"2^{3x − 1} = 7. What frees the exponent?","a":"a log of both sides","w":["raise 2 to both sides","divide both sides by 2","take the slope"],"why":"(3x − 1) ln 2 = ln 7."},
  {"q":"log₃ x = 4. What frees x?","a":"raise 3 to both sides","w":["take ln of both sides","divide by log 3","multiply by 3"],"why":"x = 3⁴."},
- {"q":"e^{2x} − 7eˣ + 12 = 0, in u = eˣ?","a":"a quadratic: u² − 7u + 12 = 0","w":["a line: 2u − 7u + 12 = 0","a log equation in u","an exponential in u"],"why":"e^{2x} = (eˣ)²."},
+ {"q":"e^{2x} − 7fˣ + 12 = 0, in u = eˣ?","a":"a quadratic: u² − 7u + 12 = 0","w":["a line: 2u − 7u + 12 = 0","a log equation in u","an exponential in u"],"why":"e^{2x} = (eˣ)²."},
  {"q":"log₂ x + log₂(x − 2) = 3 gives x = 4 or −2. Which stays?","a":"4 only","w":["both","−2 only","neither"],"why":"log₂(−2) has no value."},
  {"q":"0.9ⁿ < 0.01 ⟺ n < 43.7?","a":"no: dividing by ln 0.9 < 0 turns it","w":["yes","no: n < 4.37","no: no n works"],"why":"n > 43.7."},
  {"q":"2ˣ + 2ˣ = 4ˣ?","a":"no: it is 2ˣ⁺¹","w":["yes","no: it is 2²ˣ","no: it is 4ˣ⁺¹"],"why":"4ˣ = 2²ˣ."},
