@@ -1035,9 +1035,11 @@ function qMenu(q,tick,on){
     document.addEventListener('click',e=>{ if(!qmenu.hidden&&!qmenu.contains(e.target)) qmenu.hidden=true; }); }
   const ad=q.textContent.replace(/\s*✓\s*$/,'').trim(), li=q.closest('li');
   const text=li?li.textContent.replace(ad,'').trim():'';
-  qmenu.innerHTML=(tick?'<button type="button" data-a="tick">'+(on?'take off the ✓':'tick ✓')+'</button>':'')+'<button type="button" data-a="prompt">prompt from</button><button type="button" data-a="report">report</button>';
+  qmenu.innerHTML=(tick?'<button type="button" data-a="tick">'+(on?'take off the ✓':'tick ✓')+'</button>':'')+'<button type="button" data-a="prompt">prompt from</button><button type="button" data-a="report">report</button>'
+    +(window.LADDER_DESK&&ED.owner&&li&&li.closest('.stql,.chq,.sayback')?'<button type="button" data-a="qedit">edit</button>':'');
   qmenu.onclick=e=>{ const a=e.target.dataset.a; if(!a) return; qmenu.hidden=true;
     if(a==='tick') tick();
+    if(a==='qedit') txStartQ(li);
     if(a==='prompt'){ copy('About question '+ad+' of the ladder, which asks: “'+text+'”\n\n'); toast('question '+ad+' and its words are copied: paste them to your assistant and ask'); }
     if(a==='report') report({kind:'question',where:ad,text}); };
   const r=q.getBoundingClientRect(); qmenu.hidden=false; const w=qmenu.offsetWidth||220;
@@ -1146,7 +1148,7 @@ function txKind(e){ return e.matches('h1,h2,h3,h4')||!!e.closest('.ladder .t, .s
 function txId(s){ let h=2166136261; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return (h>>>0).toString(36); }
 /* map normalized text positions to (text node, offset), so an edit lands inside the element without flattening its markup */
 function txMap(el){ const map=[]; let out='', sp=true; const w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
-  for(let n=w.nextNode(); n; n=w.nextNode()){ if(n.parentElement&&n.parentElement.closest('button.pa,.txbar')) continue; const t=n.textContent;
+  for(let n=w.nextNode(); n; n=w.nextNode()){ if(n.parentElement&&n.parentElement.closest('button.pa,.txbar,.here')) continue; const t=n.textContent;
     for(let i=0;i<t.length;i++){ const ws=/\s/.test(t[i]); if(ws){ if(sp) continue; out+=' '; sp=true; } else { out+=t[i]; sp=false; } map.push([n,i]); } }
   while(out.endsWith(' ')){ out=out.slice(0,-1); map.pop(); } return {text:out,map}; }
 function txDiff(a,b){ let p=0; while(p<a.length&&p<b.length&&a[p]===b[p]) p++; let s=0; while(s<a.length-p&&s<b.length-p&&a[a.length-1-s]===b[b.length-1-s]) s++;
@@ -1193,6 +1195,10 @@ function txStart(el){ if(TX.busy) return; const pa=el.matches('p[data-pid]')&&!e
     TX.list=TX.list.filter(r=>r.id!==rec.id).concat([rec]); el.classList.add('txedited'); el.dataset.txdone=(el.dataset.txdone?el.dataset.txdone+' ':'')+rec.id; done();
     toast(err?'not saved yet ('+((err&&err.code)||'the database refused it')+'). Your words are kept on this device and go out when the database answers.':'saved: it goes into its page or data file at the next publish'); });
 }
+/* 0.3.48 (Andrew 2026-11-06 11:44 "give my desk a way to edit questions"): a question's menu on the desk has "edit"; it opens
+   the question's words in place, with its address and kind label locked, and saves through the text editor (edits/tx-<id>). */
+function txStartQ(li){ if(!li||TX.busy) return; li.querySelectorAll(':scope>span,:scope>.here').forEach(x=>{ if(x.matches('.qid,.ph,.here,.chid,.tagq,[class^="tag"]')) x.contentEditable='false'; });
+  txStart(li); }
 function txToggle(v){ TX.on=v; document.body.classList.toggle('tx-on',v); const b=document.getElementById('txbtn'); if(b){ b.textContent=v?'✓ Done Editing':'✎ Edit Text'; b.setAttribute('aria-pressed',v); }
   try{ sessionStorage.setItem('tx:on',v?'1':''); }catch(_){} }
 async function txInit(){ if(!window.LADDER_DESK) return;
