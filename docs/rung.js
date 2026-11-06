@@ -1070,7 +1070,7 @@ function edApply(p,html){ const b=p.querySelector('button.pa'); const tmp=docume
 function edClearPending(pid){ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); delete m[pid]; localStorage.setItem(k,JSON.stringify(m)); }catch(_){} }
 async function edFolded(){ const f={}; try{ const s=await ED.db.collection('folded').get(); s.docs.forEach(d=>{ const v=d.data()||{}; f[v.pid||d.id]=v.at||''; }); }catch(_){ return null; } return f; }
 /* The owner check runs once at load; if the host was slow to answer then, check again when a menu opens. */
-async function edRecheck(){ try{ if(!window.claude||typeof window.claude.use!=='function'){ ED.why='claude'; return false; } if(!ED.db) ED.db=await window.claude.use('db'); if(!ED.db){ ED.why='db'; return false; } const u=await window.claude.use('user'); ED.owner=u?!!(await u.isOwner()):false; ED.why=ED.owner?'':(u?'owner':'user'); if(ED.owner) document.body.classList.add('ed-owner'); }catch(e){ ED.why='err'; } return ED.owner; }
+async function edRecheck(){ try{ if(!window.claude||typeof window.claude.use!=='function'){ ED.why='claude'; return false; } if(!ED.db) ED.db=await window.claude.use('db'); if(!ED.db){ ED.why='db'; return false; } /* 0.3.53 (Andrew 14:26 'locked out again'): the desk is private to its owner and the database only takes the owner's edits, so reaching the database is the whole gate; no separate who-is-viewing check */ ED.owner=true; ED.why=''; if(ED.owner) document.body.classList.add('ed-owner'); }catch(e){ ED.why='err'; } return ED.owner; }
 /* 0.3.41 (Andrew 18:24 "the edit button is not on the menu"): on the desk, when editing is off, the menu says why and offers the Permissions panel */
 const ED_WHY={claude:'Editing is off: this view is not inside claude.ai. Open the desk link in claude.ai, signed in.',db:'Editing is off: the desk cannot reach its database. Allow database access under Permissions, then reload.',user:'Editing is off: the desk cannot tell who is viewing. Open the desk link in claude.ai, signed in.',owner:'Editing is off: claude.ai does not see you as the owner of this desk. Check that you are signed in to the account that owns it.',err:'Editing is off: the desk could not check its database. Reload the page and try again.'};
 async function edWhyShow(m){ let w=m.querySelector('.edwhy'); if(!window.LADDER_DESK||ED.owner){ if(w) w.hidden=true; return; }
@@ -1081,7 +1081,7 @@ async function edInit(){
   if(!document.querySelector('header.top > p[data-pid], section.class p[data-pid]')) return;
   if(!(await edWait())) return;
   let db=null,user=null; try{ db=await window.claude.use('db'); }catch(e){} if(!db) return; ED.db=db;
-  try{ user=await window.claude.use('user'); ED.owner=user?!!(await user.isOwner()):false; }catch(e){ ED.owner=false; }
+  ED.owner=true; /* 0.3.53: the database is the gate (see edRecheck) */
   if(ED.owner) document.body.classList.add('ed-owner');
   const FOLD=await edFolded(), stale=r=>!!FOLD&&!!FOLD[r.pid]&&String(FOLD[r.pid])>=String(r.at||'');
   try{ const snap=await db.collection('edits').where('page','==',ED.page).get();
