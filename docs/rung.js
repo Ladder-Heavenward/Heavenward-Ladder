@@ -1148,7 +1148,7 @@ function txKind(e){ return e.matches('h1,h2,h3,h4')||!!e.closest('.ladder .t, .s
 function txId(s){ let h=2166136261; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return (h>>>0).toString(36); }
 /* map normalized text positions to (text node, offset), so an edit lands inside the element without flattening its markup */
 function txMap(el){ const map=[]; let out='', sp=true; const w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
-  for(let n=w.nextNode(); n; n=w.nextNode()){ if(n.parentElement&&n.parentElement.closest('button.pa,.txbar,.here')) continue; const t=n.textContent;
+  for(let n=w.nextNode(); n; n=w.nextNode()){ if(n.parentElement&&n.parentElement.closest('button.pa,.txbar,.here,.stno,.fn')) continue; const t=n.textContent;
     for(let i=0;i<t.length;i++){ const ws=/\s/.test(t[i]); if(ws){ if(sp) continue; out+=' '; sp=true; } else { out+=t[i]; sp=false; } map.push([n,i]); } }
   while(out.endsWith(' ')){ out=out.slice(0,-1); map.pop(); } return {text:out,map}; }
 function txDiff(a,b){ let p=0; while(p<a.length&&p<b.length&&a[p]===b[p]) p++; let s=0; while(s<a.length-p&&s<b.length-p&&a[a.length-1-s]===b[b.length-1-s]) s++;
@@ -1175,6 +1175,8 @@ function txStart(el){ if(TX.busy) return; const pa=el.matches('p[data-pid]')&&!e
   if(pa&&editable(el)){ startEdit(el); return; }
   const before=txMap(el).text, beforeHtml=el.innerHTML, tag=el.tagName.toLowerCase(); TX.busy=el;
   const href=el.getAttribute('href'); if(href!=null){ el.dataset.txhref=href; el.removeAttribute('href'); }
+  /* 0.3.49: a title's address (0a1, 2b3) and a question's labels stay locked, and are left out of the saved words */
+  el.querySelectorAll('.stno,.fn,.qid,.ph,.here,.kind').forEach(x=>x.contentEditable='false');
   el.contentEditable='true'; el.classList.add('txediting'); el.tabIndex=-1; el.focus(); try{ const sel=getSelection(), rg=document.createRange(); rg.selectNodeContents(el); rg.collapse(false); sel.removeAllRanges(); sel.addRange(rg); }catch(_){}
   const bar=document.createElement('div'); bar.className='txbar';
   bar.innerHTML='<button type="button" data-e="save">save</button><button type="button" data-e="cancel">cancel</button><span class="pehint">words only · '+(txKind(el)==='title'?'a title: the next publish changes it everywhere it shows':'the next publish puts it into its source')+'</span>';
