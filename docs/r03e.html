@@ -1,18 +1,25 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="ladder-cert" content="rung"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>3e · Why Infinity Is Chosen, Not Discovered</title>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sets Collect Type, Bigness and Order</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
 <style>
-.pic .panels{grid-template-columns:2fr 3fr}
+.pic .panels{grid-template-columns:1fr 1fr}
 @media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
 .panel{align-content:start;min-width:0}
-.pic .eqbox{font-size:.95rem;white-space:normal}
-#cvB{touch-action:manipulation;cursor:pointer}
-table.vk td:first-child,table.vk th:first-child{text-align:left}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
 .rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
@@ -41,354 +48,111 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r03d.html">← 3d sets collect type, bigness and order</a><a href="r03comp.html">next: 3·comp can a program run forever? →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r03d.html">← 3d inductive sets and the axiom of infinity</a><a href="r03f.html">next: 3f why infinity is chosen, not discovered →</a></p>
   <div class="tags"><span class="tag support">3e · support</span></div>
-  <h1>Why Infinity Is Chosen, Not Discovered</h1>
-  <p data-pid="6e4c12">3c laid the axiom down rather than proving it, and said that nothing earlier on the ladder could prove it. That is a strong claim, and this step makes it good. It does not mean “nobody has found a proof yet”. It means that no proof can exist, and the way to show that is a move you met on 3a·f: build a world in which every earlier principle is true and the statement is false. If the earlier principles could prove the statement, the proof would run in that world too, since a proof uses nothing but the principles and the techs. Then the statement would be true there, and it is not. The world is built in layers from nothing, each layer all the subsets of the one before. Every set in it can be written out completely, and that is exactly why no set in it is inductive.</p>
-  <p data-pid="5b07d2">First, practice. Six footings work the start-and-step argument on the numbers of 3b, say how to find one, and say why describing the whole run gives out. Then the layers.</p>
-  <p class="gesture" data-pid="0fd08d">Build layers: the bottom is empty, and each layer is all the subsets of the layer below. Every earlier tool keeps you inside the layers; every step of membership drops you one layer; and the run of next ones steps down further than any layer allows. So the world has every earlier principle and no inductive set, and the axiom is not a consequence of anything before it.</p>
+  <h1>Sets Collect Type, Bigness and Order</h1>
+  <p data-pid="000767">A set can collect by type, by bigness, or by order, alone or together. This step takes five things and collects them each way. A set keeps none of the order itself: same members, same set. So each order needs a keeper, and the ladder has two, pairs and nesting. The numbers of 3c are kept by nesting, and that is why one number can say both which place and how many.</p>
+  <p class="gesture" data-pid="a80021">Say what the set looks at: type, bigness or order. If it looks at an order, say what keeps it.</p>
 </header>
 
 <section class="class step" data-step="3e1">
-  <h2 class="sthead"><span class="stno">3e1</span>Start and Step</h2>
-  <p data-pid="76e25d">3b showed, set by set, that each named number is the set of those before it: four arguments, one for each name. Arguments of that kind share a shape. Check a claim for 0: that is the <b>start</b>. Then show that whenever the claim holds for a set u, it holds for S(u): that is the <b>step</b>. The step is one argument, with u a letter about which nothing is assumed but the claim.</p>
-  <p data-pid="630891">Run the step once from the start and the claim holds for 1. Run it again and it holds for 2. Four runs reach 4, and each next one you go on to name is reached in one run more.</p>
-  <p data-pid="c6d4da">Start-and-step shape: <b>if a claim holds for 0, and holding for u carries it to S(u), then it holds for 0, 1, 2, 3, 4, and for each next one you go on to name.</b></p>
-  <p data-pid="704581">Saying it for the whole run in one line needs the run as a set, which 3c laid down and 4d puts to work. Until then the shape is used one number at a time, and that is all this step needs. Here it is on a small claim: 0 is in every number after 0.</p>
-  <pre class="lines" data-k="ember" data-label="this step: 0 is in every later number">
-0 \in S(0) @@ start: S(0) is named 1, and 1 = {0} (3b6)
-0 \in S(u) \Rightarrow 0 \in S(S(u)) @@ step: S(u) is a part of its next (the in-its-next technique, 3b4)
-0 \in 1,\ 0 \in 2,\ 0 \in 3,\ 0 \in 4 @@ the step, run from the start once for each name
-\htmlClass{new}{0 \in S(u) \text{ for each } u \text{ of the run}} \quad \blacksquare @@ the start-and-step shape
-  </pre>
-  <p data-pid="3cda83">3b7 read this off the listings: every number after 0 holds the least one, ∅, the set the run started from. Here it comes from the shape, with no listing written out.</p>
+  <h2 class="sthead"><span class="stno">3e1</span>Type</h2>
+  <p data-pid="8c492c">Take five things that are not sets: three cats, a, b and c, and two dogs, d and e. The set C = {a, b, c} collects the cats and leaves out the dogs. D = {d, e} collects the dogs.</p>
+  <p data-pid="a7b191">Now gather the two: {C, D}. It holds all five pets, as types only. Its members are C and D, two of them; the pets are members of its members. It says nothing of how big any pet is, or which came first.</p>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">3e1.1</span><span class="ph understand">understand</span>What are the start and the step? <br>Why does the shape reach 4, yet say nothing yet about the run as a whole?</li>
+      <li><span class="qid">3e1.1</span><span class="ph understand">understand</span>How many members has {C, D}? <br>Where are the pets in it?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="3e2">
-  <h2 class="sthead"><span class="stno">3e2</span>Members Are Parts</h2>
-  <p data-pid="cd82ea">A second claim, whose step needs the claim it is carrying: every member of a number is also a part of it.</p>
-  <pre class="lines" data-k="ember" data-label="this step: members of a number are parts of it">
-\forall y\,(y \in 0 \Rightarrow y \subseteq 0) @@ start: nothing is in 0, so each if has a false first half
-y \in S(u) \Rightarrow y \in u \lor y = u @@ step: the next-membership technique (3b3)
-y \in u \Rightarrow y \subseteq u \subseteq S(u) @@ the claim for u, then in-its-next and the chain technique for part of
-y = u \Rightarrow y \subseteq S(u) @@ in-its-next again
-\htmlClass{new}{y \in S(u) \Rightarrow y \subseteq S(u)} \quad \blacksquare @@ the two cases, joined
-  </pre>
-  <p data-pid="45e2ca">So every member of 0, 1, 2, 3 and 4 is a part of it, and so on for each next one. 2 ∈ 4, and 2 = {0, 1} ⊆ 4.</p>
+  <h2 class="sthead"><span class="stno">3e2</span>Order of Joining</h2>
+  <p data-pid="fe12a4">Say the pets joined the house in the order a, b, c, d, e. Then a is first, b second, c third, d fourth and e fifth.</p>
+  <p data-pid="64e6d1">The member that joined latest, whatever its place, is also called <b>last</b>. e is last now; if another pet joins, e is last no longer. When nothing will come after it, last is also called <b>final</b>.</p>
+  <p data-pid="09178c">Write the pets as a set, {a, b, c, d, e}, and the order is gone: by the same-members axiom it is {e, d, c, b, a} too. The listing shows an order; the set does not keep it. 3e4 says where an order is kept.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">3e2.1</span><span class="ph understand">understand</span>In the step, which case uses the claim for u? <br>Why could the step not be done without it?</li>
+      <li><span class="qid">3e2.1</span><span class="ph understand">understand</span>What is the difference between last and final? <br>Why does {a, b, c, d, e} not keep the order of joining?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="3e3">
-  <h2 class="sthead"><span class="stno">3e3</span>No Number Is Its Own Member</h2>
-  <p data-pid="6134e9">Foundation (3a) already says that no set is its own member. The start-and-step shape gets it for the numbers of the run without foundation, and shows a step that needs help from outside its own claim.</p>
-  <pre class="lines" data-k="ember" data-label="this step: no number is its own member">
-0 \notin 0 @@ start: nothing is in 0
-S(u) \in S(u) \Rightarrow S(u) \in u \lor S(u) = u @@ step: suppose it, until we drop it; next-membership
-S(u) = u \Rightarrow u \in u @@ u ∈ S(u) by in-its-next, and S(u) is u
-S(u) \in u \Rightarrow S(u) \subseteq u \Rightarrow u \in u @@ 3e2 for u, then u ∈ S(u)
-u \in u \text{ clashes with } u \notin u @@ the claim for u
-\htmlClass{new}{S(u) \notin S(u)} \quad \blacksquare @@ the supposition is refuted in both cases
-  </pre>
-  <p data-pid="11e1da">The step did not close on its own claim. The second case needed 3e2, for the same u. 3e2 holds for each number of the run by its own start and step, so it is there to use.</p>
+  <h2 class="sthead"><span class="stno">3e3</span>Bigness Takes the Order</h2>
+  <p data-pid="4267c1">Put the same five pets in a line by size, largest first: say e, a, d, b, c. Once the set looks at bigness, bigness sets the order. e is first because it is largest, and c is last because it is smallest.</p>
+  <p data-pid="7d39c5">The members did not change. The order changed, because what the set looked at changed. So an order is not in the members: it comes from what is looked at.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">3e3.1</span><span class="ph understand">understand</span>Which case of the step needs 3e2? <br>Why is 3e2 there to use for that u?</li>
+      <li><span class="qid">3e3.1</span><span class="ph understand">understand</span>Which pet is first by joining, and which by bigness? <br>What changed between the two orders?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="3e4">
-  <h2 class="sthead"><span class="stno">3e4</span>Starting Further Along</h2>
-  <p data-pid="a784ab">The start need not be 0. Fix a number m of the run and start at its next one. The shape then speaks of the numbers from the start on.</p>
-  <pre class="lines" data-k="ember" data-label="this step: m is in every later number">
-m \in S(m) @@ start: the in-its-next technique
-m \in u \Rightarrow m \in S(u) @@ step: u is a part of S(u)
-2 \in 3,\ 2 \in 4,\ 2 \in S(4) @@ m = 2, the step run from S(2) = 3
-\htmlClass{new}{m \in u \text{ for each } u \text{ after } m} \quad \blacksquare @@ the start-and-step shape, started at S(m)
-  </pre>
-  <p data-pid="f23dea">With 3e2, a member is a part as well: each number is a member and a part of every later one. 3b7 found this for the named sets and said rung 4 proves it for every entry at once. Here it holds one number at a time, as far as you go.</p>
-  <p data-pid="7ab264">Practice, each by a start and a step:</p>
-  <ul>
-    <li data-pid="9a0721">Every member of a number is a number of the run.</li>
-    <li data-pid="3a6eea">Each number is a part of every later one.</li>
-    <li data-pid="c62d93">A member of a member of a number is a member of it.</li>
-  </ul>
+  <h2 class="sthead"><span class="stno">3e4</span>Where the Order Is Kept</h2>
+  <p data-pid="1ff3e8">A set has no order of its own: same members, same set (2c). An order needs a keeper. The ladder has two.</p>
+  <p data-pid="3b7a04"><b>Pairs</b> (2g). A pair (x, y) does keep which comes first. The bigness order is the set of pairs “x is bigger than y”: (e, a), (e, d), (a, d), and so on, one pair for each two pets.</p>
+  <p data-pid="257107"><b>Nesting</b> (3c). The joining order is kept by the sets so far: {a}, {a, b}, {a, b, c}, {a, b, c, d}, {a, b, c, d, e}. Each is a part of the next, and a pet’s place is the first of these sets it is in.</p>
+  <p data-pid="8e8cc6">The numbers of 3c are kept the second way. Each is the set of those before it and is a member and a part of the next (3c7). The order of the run is in its nesting, not in any listing.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">3e4.1</span><span class="ph understand">understand</span>Where does this start-and-step argument start? <br>Why is a start after 0 allowed?</li>
+      <li><span class="qid">3e4.1</span><span class="ph understand">understand</span>Which keeper holds the bigness order here, and which holds the joining order? <br>Which keeps the order of the numbers of 3c?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="3e5">
-  <h2 class="sthead"><span class="stno">3e5</span>Finding a Start and a Step</h2>
-  <p data-pid="c7c410">What to try first. Write the claim as a condition on one letter, P(u). Check P(0). Then suppose P(u), aim at P(S(u)), and unpack S(u) by next-membership: a member of S(u) is in u, or is u. That gives two cases, and each is usually short.</p>
-  <p data-pid="4e1a5e">When the step will not close. The claim for u is too weak to carry itself. Prove a helper claim with its own start and step, as 3e3 used 3e2, or make the claim stronger. A stronger claim is harder to reach and easier to use.</p>
-  <p data-pid="cad692">A step alone proves nothing. Take the claim “there is something in u”. The step holds: u is in S(u), so S(u) always has something in it. The start fails: nothing is in 0. And the claim is false of 0. Check the start every time.</p>
-  <p data-pid="d412a9">The illegal shortcut. Inside the step you may use P(u), and nothing about S(u) but what you prove. Using P(S(u)) to reach P(S(u)) assumes what is to be shown.</p>
+  <h2 class="sthead"><span class="stno">3e5</span>The Two Counts</h2>
+  <p data-pid="dd32f2">“3rd base” is order: which place. “3 to 2” is bigness: how many on each side. They are two counts, and they answer two questions.</p>
+  <p data-pid="71f697">A number of the run answers both. 3 = {0, 1, 2}. As bigness, it has three members. As order, its members are exactly the numbers before it, so it comes after three of them. The run starts at 0, so the count of places before a number and the count of its members agree.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">3e5.1</span><span class="ph understand">understand</span>What do you try when a step will not close? <br>Why does a true step prove nothing without its start?</li>
+      <li><span class="qid">3e5.1</span><span class="ph understand">understand</span>Which question does “3rd base” answer, and which does “3 to 2”? <br>Why can one number of the run answer both?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="3e6">
-  <h2 class="sthead"><span class="stno">3e6</span>Where Description Gives Out</h2>
-  <p data-pid="62b9d5">a = a leaves little room: one thing, the same as itself. Everything = everything leaves none at all: no world could fail it, so it says nothing about any world.</p>
-  <p data-pid="c2e59c">Every set built so far can be written out completely. ∅, {∅}, {0, 1}, {0, 1, 2}: each listing ends. The start-and-step shape reaches each number in a run of steps that ends, one number at a time.</p>
-  <p data-pid="ab619f">A set holding the whole run could not be written out: its listing would not end. Describe it with the tools so far and the description starts to dissolve. Each line you write names one more entry of the run, and never the set that holds them all.</p>
-  <p data-pid="90ad5e">That is why infinity is laid down, not derived (3c). The rest of this step makes the claim exact: no derivation from rungs 0 to 2 is possible.</p>
+  <h2 class="sthead"><span class="stno">3e6</span>Where It Is Going</h2>
+  <p data-pid="5c4cd8">The sets this is really about come later: ℕ, ℤ, ℚ, ℝ and ℂ. Each collects by type, and each brings a bigness and an order of its own.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">3e6.1</span><span class="ph understand">understand</span>Why does a description of the whole run by the tools so far give out? <br>What does that say about how infinity enters the ladder?</li>
+      <li><span class="qid">3e6.1</span><span class="ph understand">understand</span>What three things can a set collect by?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="3e7">
-  <h2 class="sthead"><span class="stno">3e7</span>What “cannot be proved” Means</h2>
-  <p data-pid="e1d91b">Here is the idea in plain words. Suppose infinity could be argued from the axioms of rungs 0 to 2.</p>
-  <p data-pid="961b44">A <b>world</b> is a collection of things with a way of reading ∈ among them.</p>
-  <p data-pid="d781a7">Take a world in which every one of those axioms is true. The argument would work inside that world too, because each of its techs carries true lines to true lines, whatever the letters name. So infinity would be true in that world.</p>
-  <p data-pid="e27563">Turn it round: <b>to show a statement cannot be argued from some axioms, find a world where all of the axioms are true and the statement is not.</b> <a href="r03a.html#5522c1">3a·f13</a> used this world-building move to show that foundation does not follow from the other axioms.</p>
-  <p data-pid="1d5bc0">Saying, of every possible argument at once, that it fails is a claim about arguments as objects. The ladder earns it as a proof at 4a, in the cellar.</p>
-  <p data-pid="213529">The world below is chosen so that both of these are so of it: every principle of rungs 0 to 2 is true, and no set in it is inductive. This step checks both, in words, carefully.</p>
+  <h2 class="sthead"><span class="stno">3e7</span>Illegal Moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\{a, b, c\} \ne \{c, b, a\}\,? @@ same members, same set: a set keeps no order of its own
+\{C, D\} \text{ has five members}\,? @@ it has two, C and D; the pets are members of its members
+\text{last means final}\,? @@ last is the latest so far; it is final only when nothing will come after it
+\text{the third pet is } c\,? @@ third by joining or by bigness? Say what the set looks at
+\text{a set is a list}\,? @@ a list keeps an order; a set keeps only its members
+  </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">3e7.1</span><span class="ph understand">understand</span>What is a world? <br>How does a world show that a statement cannot be argued from some axioms?</li>
+      <li><span class="qid">3e7.1</span><span class="ph understand">understand</span>Why is “{a, b, c} ≠ {c, b, a}” an illegal move?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="3e8">
-  <h2 class="sthead"><span class="stno">3e8</span>Low Marks</h2>
-  <p data-pid="bf97df">Mathematicians use a small mark written low after a name to tell members of a family apart, and this step needs the habit.</p>
-  <p class="eqline" data-pid="02b2f5">From here on, a name may carry a small mark written low after it. The low mark is part of the name.</p>
-  <p class="fp" data-pid="aa61b6">Examples: V, V₀, and V₁ are different names. V<sub>S(k)</sub> is the name whose low mark is S(k).</p>
+  <h2 class="sthead"><span class="stno">3e8</span>Running It Backwards</h2>
+  <p data-pid="882321">Handed a collection, ask what it looks at: type, bigness or order. Handed an order, ask what keeps it: pairs or nesting. Handed “the third”, ask third by what. Handed a number of the run, read its place and its size from its members. Found upward; written downward.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">3e8.1</span><span class="ph understand">understand</span>What is a low mark, and what is it part of?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="3e9">
-  <h2 class="sthead"><span class="stno">3e9</span>The Layers</h2>
-  <p data-pid="6301c5">The layers, in words: the bottom layer has nothing in it; each layer above is all the subsets of the layer below. In marks, the rule for making the next layer from any layer you have:</p>
-  <div class="eqline" data-tex="V_0 = \varnothing,\qquad V_{S(k)} = \mathcal P(V_k)."></div>
-  <p data-pid="bc3e1d">Work the earliest ones out with 2f's keep-or-drop listing. The tools used are all-the-subsets, over and over, and nothing else.</p>
-  <p data-pid="ff2f2a">V₀ is ∅, by the rule's start, and ∅ is named 0. V₁ is all the subsets of ∅. By 2f that is {∅}, which 3b named 1. V₂ is all the subsets of {0}. Keep or drop its only member, and you get ∅ and {0}. So V₂ = {0, 1}, which is 2.</p>
-  <p data-pid="63ed3d">V₃ is all the subsets of {0, 1}. Keep or drop each of the two members, and you get ∅, {0}, {1} and {0, 1}. So V₃ = {0, 1, {1}, 2}. Three of its members are the named sets 0, 1 and 2. The fourth, {1}, has no name: it is the first set in the layers that is not an entry of the run.</p>
-  <p data-pid="fbc9a6">V₄ is all the subsets of V₃, found the same way. Among them is {0, 1, 2}, which is 3. 3 is in V₄ because its members 0, 1, 2 are all in V₃. It was not in V₃, because 2 was not in V₂.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · the layers · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">3e9.1</span><span class="ph understand">understand</span>What is the rule for the layers? <br>Which is the first set in the layers that is not an entry of the run?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="3e10">
-  <h2 class="sthead"><span class="stno">3e10</span>As Far Along as You Like</h2>
-  <p data-pid="c00b97">Each layer is a set you can write out completely by keep-or-drop. So is each of its members, and each member of those, down to ∅: the listing for V₄ is long but it ends. And you may go on: V<sub>S(4)</sub> = 𝒫(V₄) is a set the rule gives you, and 𝒫 of that, and on.</p>
-  <p data-pid="d5efed">“All the layers at once”, as an object, is something else: it needs an axiom beyond the ladder's, which the ladder names only as history. This step does not need it. Everything below is said about the layers you have made, and is true for whichever layer you go on to make, by the same lines.</p>
-  <p data-pid="f54dc7">Saying it of every layer at once, in one line, needs induction and defining by repeating. Until 4d, this step says it one layer at a time and trusts that the same lines work for each new layer: the start-and-step shape of 3e1, run on layers.</p>
-  <p class="eqline" data-pid="00098b">From here on, <b>the layered world</b> is: the sets that are members of some layer.</p>
-  <p data-pid="4111b2">The layered world is a way of talking, like “all sets” on 3a·f, not a set of its own. Nothing below treats it as one.</p>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">3e10.1</span><span class="ph understand">understand</span>What is the layered world, and why is it not a set?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="3e11">
-  <h2 class="sthead"><span class="stno">3e11</span>Each Step of Membership Drops a Layer</h2>
-  <p data-pid="c7353d">Some facts about layers, each a short argument from 2f.</p>
-  <p data-pid="c9baf4"><b>Each layer is inside the next.</b> For instance, V₁ = {0} ⊆ V₂ = {0, 1}.</p>
-  <p data-pid="9fa9ce">V₀ = ∅ ⊆ V₁, by the empty-part technique. And if V<sub>k</sub> ⊆ V<sub>S(k)</sub>, then 𝒫(V<sub>k</sub>) ⊆ 𝒫(V<sub>S(k)</sub>) by the power-keeps-parts technique, which is V<sub>S(k)</sub> ⊆ V<sub>S(S(k))</sub>. That is a start and a step (3e1), the shape this step trusts for now. So, layer by layer as far as you make them, each is inside the next.</p>
-  <p data-pid="a62170"><b>A member of a layer is a part of the layer below.</b> That is what 𝒫 means: u ∈ V<sub>S(k)</sub> exactly when u ⊆ V<sub>k</sub>. Example: 3 ∈ V₄, and 3 ⊆ V₃.</p>
-  <p data-pid="eaf548">So the members of a member of V<sub>S(k)</sub> are all in V<sub>k</sub>: each step of membership drops you a layer. Keep that drop in mind; it is the hinge of this step.</p>
-  <section class="pic" id="pic">
-    <div class="eyebrow">The picture · which layer a set enters at, and what S does to that layer</div>
-    <div class="panel">
-      <div class="chips" role="group" aria-label="the set" id="dch"><span class="m" style="color:var(--muted)">x =</span></div>
-      <div class="chips"><button id="dS">S: the next one</button><button id="dR">start again</button></div>
-      <div class="cap">The panel steps down memberships from x until it reaches ∅; climbing back up from ∅ ∈ V₁, a layer for each step of the longest descent, gives the layer x enters at. Press S and watch the descent gain a step and the layer climb a layer.</div>
-      <div class="eqbox" id="eqD"></div>
-    </div>
-  </section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">3e11.1</span><span class="ph understand">understand</span>Why does each step of membership drop a layer?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="3e12">
-  <h2 class="sthead"><span class="stno">3e12</span>Every Earlier Tool Stays Inside</h2>
-  <p data-pid="f30b4c">One care comes first. When an axiom says “for every set”, read inside the world it says “for every set of the world”. When it says “there is a set”, it speaks of a set of the world. The checks below are made with that reading: each tool, fed sets of the world, hands back a set of the world.</p>
-  <p data-pid="d4e0bb">Take any sets u and v of the world. Since each layer is inside the next, both are in a layer they share, V<sub>k</sub> (whichever of their layers is further along). Now go tool by tool.</p>
-  <p data-pid="156d66">For example, 0 ∈ V₁ and 2 ∈ V₃, so both are in V₃. So {0, 2} ⊆ V₃, and {0, 2} ∈ V₄. Now the same in general.</p>
-  <ul>
-    <li><b>Gather.</b> u, v ∈ V<sub>k</sub>, so {u, v} ⊆ V<sub>k</sub> (listing, then pack ⊆), so {u, v} ∈ 𝒫(V<sub>k</sub>) = V<sub>S(k)</sub>. The gathering is in the world.</li>
-    <li><b>Sift.</b> Say u ∈ V<sub>S(k)</sub>, so u ⊆ V<sub>k</sub>. Any sift of u is a subset of u (the sift-is-part technique), so a subset of V<sub>k</sub> (the chain technique for part of), so a member of V<sub>S(k)</sub>. Sifting stays inside, whatever the condition.</li>
-    <li><b>Merge.</b> Say u ∈ V<sub>S(S(k))</sub>. Its members are in V<sub>S(k)</sub>, so their members are in V<sub>k</sub>; ⋃u is the set of those, so ⋃u ⊆ V<sub>k</sub>, so ⋃u ∈ V<sub>S(k)</sub>. Merging drops a layer and stays inside. Example: ⋃3 = 2, with 3 ∈ V₄ and 2 ∈ V₃.</li>
-    <li><b>All the subsets.</b> Say u ∈ V<sub>S(k)</sub>, so u ⊆ V<sub>k</sub>. Then 𝒫(u) ⊆ 𝒫(V<sub>k</sub>) = V<sub>S(k)</sub> by the power-keeps-parts technique, so 𝒫(u) ∈ V<sub>S(S(k))</sub>. Taking the subsets climbs a layer and stays inside.</li>
-    <li><b>A set exists.</b> ∅ ∈ V₁. (Also 3b's S: S(u) = u ∪ {u} is a merge of a gathering, so it stays inside by the lines above.)</li>
-    <li><b>Same members.</b> Sets u and v of the world with the same members are the same set: that is so of any sets whatever, so of these.</li>
-  </ul>
-  <section class="slides" id="sl6"><div class="eyebrow">The slides · the tools stay inside · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">3e12.1</span><span class="ph understand">understand</span>What does “for every set” mean, read inside the world? <br>What does each tool-by-tool check show?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="3e13">
-  <h2 class="sthead"><span class="stno">3e13</span>Foundation, Inside the World</h2>
-  <p data-pid="afa108">Foundation is true inside because every member of a world set is itself a world set: nothing of a world set is hiding outside the world. Here is the check.</p>
-  <p data-pid="f2cbe9">Read inside the world, the foundation axiom says this. If a condition φ passes up to each set of the world whenever it is so of every member of that set, then φ is so of every set of the world. Suppose φ passes up inside the world.</p>
-  <p data-pid="afe1eb">Call the condition “if x is in the world, then φ(x)” <b>φ-inside</b>. φ-inside passes up for every set whatever. Let u be any set whose members all meet φ-inside, and suppose u is in the world (to prove an if). Every member of u is in the world, because a member of a set in a layer is in the layer below. Example: 3 ∈ V₄, so 2 ∈ V₃. So the ifs give φ of every member of u, and since φ passes up inside the world, φ(u). No case split on whether u is in the world is needed.</p>
-  <p data-pid="ce964e">By the foundation axiom, used outside, φ-inside is so of every set. So φ is so of every set of the world.</p>
-  <p data-pid="8501c2">And the techs of rungs 0 and 1 do not look at what the letters name. They were checked to carry what is true to what is true, whatever the row, and a world is only a way of fixing rows. 1e checked the joining words; the check for every and some is in the cellar. So every axiom of rungs 0 to 2, read inside the layered world, is true there.</p>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">3e13.1</span><span class="ph understand">understand</span>What is φ-inside, and why does it make foundation true in the world?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="3e14">
-  <h2 class="sthead"><span class="stno">3e14</span>No Inductive Set in V₄</h2>
-  <p data-pid="5cc5e9">Now the other half of the check. Suppose some set I of the world were inductive. It is in some layer; take the case I ∈ V₄ to begin with, argued in full, and then see that the layer makes no difference.</p>
-  <p data-pid="5bd44e">Suppose, until we drop it, that I is in V₄ and I is inductive. By the named-sets-are-inductive technique, 0, 1, 2, 3 and 4 are all in I. Since I is in V₄, I is a part of V₃: that is what “all the subsets” means. So 4, a member of I, is in V₃.</p>
-  <p data-pid="bc823c">Now 3 is in 4, and 4 is in V₃, so 4 is a part of V₂. So 3 is in V₂: a step of membership, a layer down. The same move with 2 in 3 puts 2 in V₁. Once more, with 1 in 2, it puts 1 in V₀. But V₀ is ∅, and nothing is in ∅. That clashes. So the supposition is refuted: no inductive set sits in V₄.</p>
-  <section class="slides" id="sl8"><div class="eyebrow">The slides · each step down, a layer down · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">3e14.1</span><span class="ph understand">understand</span>Why is no inductive set a member of V₄?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="3e15">
-  <h2 class="sthead"><span class="stno">3e15</span>The Layer Makes No Difference</h2>
-  <p data-pid="493e24"><b>The run of nexts steps down a layer at each step, and the layers run out.</b></p>
-  <p data-pid="472d49">The layer made no difference. Had I been in V<sub>S(4)</sub>, the named-sets-are-inductive technique would have put S(4) in I. The argument would gain a step: S(4) ∈ V₄, then 4 ∈ V₃, and so down to ∅ exactly as before. For a layer further along, the argument gains a step for each layer further along. The named-sets-are-inductive technique reaches as far along the run as you like, and the run is nested as far as you like: 3b's in-its-next technique gives x ∈ S(x) at every step. Whichever layer you put I in, the run steps down through every layer beneath it and arrives at the empty one. So no set of the world is inductive, and in the layered world the axiom of infinity is false.</p>
-  <section class="slides" id="sl9"><div class="eyebrow">The slides · the run outlasts every layer · ← → keys work</div></section>
-  <section class="pic" id="pic2">
-    <div class="eyebrow">The picture · hunt for an inductive set inside a layer</div>
-    <div class="panel">
-      <div class="knobs"><div class="knob"><label for="kk">the layer V<sub>k</sub></label><input type="range" id="kk" min="1" max="4" step="1" value="4"><output id="ok"></output></div></div>
-      <div class="cap">Every member of the layer is a dot (gold: a named entry of the run). Tap dots to put them in your candidate I (ember ring). Arrows go from each member x of I to S(x): teal if S(x) is in I, ember dashed if it is missing. Arrows off the right edge land outside the layer.</div>
-      <canvas id="cvB"></canvas>
-      <div class="eqbox" id="eqB"></div>
-      <div class="cap">Try to choose I with no ember arrow. Once 0 is in, you cannot: the entry furthest along always has its next one missing, and the layer's own last entry sends its arrow outside.</div>
-    </div>
-  </section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">3e15.1</span><span class="ph understand">understand</span>Why does the layer I sits in make no difference?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="3e16">
-  <h2 class="sthead"><span class="stno">3e16</span>The World Is Not a Set of the World</h2>
-  <p data-pid="5cb0fa">A subtlety deserves its own paragraph, because it is the kind of thing that feels like a cheat until you see it is not. The layered world, taken as a whole, holds 0 and holds the next one after everything it holds: in that sense the whole world “is inductive”. But the world is not a set of the world. It is not a member of any layer; it is a way of talking, as “all sets” was on 3a·f. The axiom says there is a <i>set</i> that is inductive, and inside the world “set” means “member of some layer”. None of those is inductive. The world has the whole run in it, each entry in its turn, and no object that gathers the run up. That is precisely the situation 3c described before the axiom: everything the run produces, and no set to hold it.</p>
-  <section class="slides" id="sl10"><div class="eyebrow">The slides · the world is not a set of the world · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">3e16.1</span><span class="ph understand">understand</span>In what sense is the layered world “inductive”, and why does that not make the axiom true there?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="3e17">
-  <h2 class="sthead"><span class="stno">3e17</span>No Proof Can Exist</h2>
-  <p data-pid="06d158">Put the two halves together. In the layered world, every axiom of rungs 0 to 2 is true: that was the tool-by-tool check. And in the layered world, no set is inductive: that was the argument just given, for any layer.</p>
-  <p data-pid="3f84f2">Suppose, until we drop it, that someone has a proof of “some set is inductive” from those axioms. Read inside the world, it is still a proof. Its axioms are true there, and its techs care nothing for which world they are in. So its last claim is true there: some set of the world is inductive. That clashes with what was just shown. So the supposition is refuted, and no such proof exists.</p>
-  <section class="slides" id="sl11"><div class="eyebrow">The slides · the refutation of a proof · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">3e17.1</span><span class="ph understand">understand</span>How does the layered world refute a supposed proof of “some set is inductive”?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="3e18">
-  <h2 class="sthead"><span class="stno">3e18</span>Independent, Not False</h2>
-  <p data-pid="67b38a">So the axiom of infinity is <b>independent</b> of what came before: not a technique of rungs 0 to 2.</p>
-  <p data-pid="9c4e1a">“Independent” is narrow here. It means only that the axioms of rungs 0 to 2 cannot prove it. It does not mean apart from what came before: the argument used 3b’s next one, the start-and-step shape of 3e1, and the writing the earlier rungs built, and the axiom itself is stated in 3b’s marks. Whether rungs 0 to 2 could refute it is the further question of 3e.4.4.</p>
-  <p data-pid="c56b33">Be clear what this result is not. It does not say the axiom is false. In the ordinary world of mathematics the axiom is taken, and every principle of rungs 0 to 2 is taken with it. Whether that world could ever lead to something totally false is a further question, and the step’s last standing question takes it up. The layered world shows only that the principles do not prove the axiom.</p>
-  <p data-pid="ed8edb">And the layered world is not a <i>mistake</i> to be avoided. It is a perfectly good world of sets, in which a great deal of mathematics can be done, with every entry of the run available and only the run itself missing as an object.</p>
-  <p data-pid="81e22a">That is why the ladder says the axiom is chosen. You may work without it, and some mathematicians do, keeping every number and giving up the set of all of them. You may take it, and then the run is a set like any other, which you can sift, pair, take the subsets of, and quantify over. The ladder takes it. What follows from it is the subject of rung 4: the counting numbers as a set, induction as a technique about that set, and arithmetic built by repeating the next-one step.</p>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">3e18.1</span><span class="ph understand">understand</span>What does “independent” mean here, and what does the result not say?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="3e19">
-  <h2 class="sthead"><span class="stno">3e19</span>Illegal Moves</h2>
-  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
-\begin{aligned}&\text{“the layered world}\\ &\quad\text{shows the axiom is false”}\end{aligned} @@ it shows the axiom is not provable from rungs 0 to 2. In another world, the ordinary one, it is true. A world where a statement fails refutes proofs of it, not the statement
-\begin{aligned}&\text{“the run goes on without}\\ &\quad\text{end, so the axiom is proved”}\end{aligned} @@ the run going on is 3b (never-its-own-next, next-never-empty). The axiom asks for a set holding the run. The layered world has the run going on and no such set: that is the whole point
-\begin{aligned}&\text{“the world holds 0 and every next }\\ &\quad \text{one, so it is inductive, so the }\\ &\quad \text{axiom is true there”}\end{aligned} @@ the world is not a set of the world. The axiom speaks of a set; inside the world, a set is a member of some layer, and none of those is inductive
-4 \in V_4\,? @@ no: 4 ∈ V₃ would be needed (a step of membership, a layer down), and 3 ∈ V₂, 2 ∈ V₁, 1 ∈ V₀ = ∅. 4 enters at the layer after V₄, that is, V_{S(4)}
-P(S(u)) \text{ used inside the step}\,? @@ that assumes what is to be shown: the step may use P(u), and of S(u) only what it proves (3e5)
-I \subseteq V_3 \;\text{ so }\; I \text{ is not inductive} @@ right conclusion, wrong reason as stated: a subset of V₃ is a member of V₄, and the argument for V₄ is what refutes it. Cite that argument, not the inclusion
-\begin{aligned}&\text{“each layer has more members than }\\ &\quad \text{the last, so the layers never run }\\ &\quad \text{out, so…”}\end{aligned} @@ “more” is an order word the ladder has not built, and the line proves nothing anyway: the run outlasts every layer you make, however far along you make them
-  </pre>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">3e19.1</span><span class="ph understand">understand</span>Why is “the layered world shows the axiom is false” an illegal move?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="3e20">
-  <h2 class="sthead"><span class="stno">3e20</span>Running It Backwards</h2>
-  <p data-pid="7ffcc9">Wanting “this statement is not a consequence of those axioms”, you build a world. Say what its sets are and how ∈ is read. Check each axiom inside it, tool by tool, each check a short argument that the tool hands back a set of the world. Find the statement failing there. Then refute a supposed proof, as the argument above does.</p>
-  <p data-pid="5fa275">Wanting the layer a given set enters at, step down its memberships until you reach ∅, by the longest descent you can find. Then climb back up from ∅ ∈ V₁, a layer for each step, and the set enters at the layer you reach. The picture's left panel does this for you.</p>
-  <p data-pid="a90d15">Wanting a set that a given layer cannot hold, take an entry of the run with a membership chain longer than the layer allows. For instance, V₄ cannot hold 4: 4 enters at the layer after V₄. Found upward; written downward.</p>
-  <section class="slides" id="sl14"><div class="eyebrow">The slides · backwards · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">3e20.1</span><span class="ph understand">understand</span>Wanting the layer a given set enters at, how do you find it?</li>
+      <li><span class="qid">3e8.1</span><span class="ph understand">understand</span>Handed the sets {a}, {a, b}, {a, b, c}, which order do they keep, and how?</li>
     </ol>
   </section>
 </section>
@@ -396,146 +160,32 @@ I \subseteq V_3 \;\text{ so }\; I \text{ is not inductive} @@ right conclusion, 
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
-  <div class="chq"><span class="chid">3e.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="V_0 = \varnothing;\ V_{S(k)} = \mathcal{P}(V_k);"></span> <span data-tex-inline="\text{a set is in the world when it}"></span> <span data-tex-inline="\text{is a member of some layer.}"></span></span>Find a statement about sets, other than “some set is inductive”, that rungs 0 to 2 cannot prove, and show that it fails in this layered world. <br>Might rungs 0 to 2 refute it instead, and what would settle it?</div>
-  <div class="chq"><span class="chid">3e.4.2</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="\text{Rex and Pip are}"></span> <span data-tex-inline="\text{dogs: not sets, no members.}"></span> <span data-tex-inline="U_0 = \{\text{Rex}, \text{Pip}\},"></span> <span data-tex-inline="U_{S(k)} = U_0 \cup \mathcal{P}(U_k);"></span> <span data-tex-inline="\text{a thing is in the world when it}"></span> <span data-tex-inline="\text{is a member of some layer.}"></span></span>Does merging stay inside? Is any set of the world inductive? <br>Let each layer be all the subsets of the one before alone: which tool hands back something outside the world?</div>
-  <div class="chq"><span class="chid">3e.4.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="V_3 = \{0, 1, \{1\}, 2\}"></span> <span data-tex-inline="\text{Off limits: every layer below } V_3."></span> <span data-tex-inline="\text{Foot: } \neg\exists I\, (I \text{ is inductive}"></span> <span data-tex-inline="\land\, I \subseteq V_3)"></span></span>Prove the foot.</div>
-  <div class="chq"><span class="chid">3e.4.4</span><span class="tagq">seam</span>A world with no inductive set shows rungs 0 to 2 cannot prove infinity; showing they cannot refute it needs a world where they are all true and some set is inductive. Try to build one. <br>What must you use, or trust, and does that leave the argument where it started?</div>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">3e.4.1</span><span class="tagq">build</span>Five pets join in the order a, b, c, d, e. <br>Write the joining order once as nested sets and once as a set of pairs “x joined before y”. How many pairs are there?</div>
+  <div class="chq"><span class="chid">3e.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\{\,\}"></span></span>Which member of the empty set is first, which last, and which final? <br>What do type, bigness and order say of it?</div>
+  <div class="chq"><span class="chid">3e.4.3</span><span class="tagq">converse</span>Two sets have the same members. <br>Can they keep different orders? Where would the difference have to live?</div>
+  <div class="chq"><span class="chid">3e.4.4</span><span class="tagq">seam</span>A race result lists places; a vote lists totals. <br>Is a podium a set, a list, or something else?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r03d.html">← 3d · sets collect type, bigness and order</a><a href="r03comp.html">3·comp · can a program run forever? →</a></nav>
-
+<nav class="nextrung"><a href="r03d.html">← 3d · inductive sets and the axiom of infinity</a><a href="r03f.html">3f · why infinity is chosen, not discovered →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
-  <h3>Checking every and some inside a world</h3>
-  <p>Read inside the layered world, “every” means every set of the world, and “some” means some set of the world. Each tech of 2b still carries what is true to what is true.</p>
-  <ul>
-    <li>To write ∀x P(x), a proof shows P(x) for an x about which nothing was assumed. Nothing was assumed, so the proof works for any set of the world, and ∀x P(x) is true there.</li>
-    <li>From ∀x P(x), any set t of the world gives P(t). It is one of the sets the every spoke of.</li>
-    <li>From P(t), with t a set of the world, ∃x P(x) is true there. The set t is the example.</li>
-    <li>From ∃x P(x), and a proof that any x with P(x) gives Q, where Q does not mention x, Q is true. The world holds an example, and the proof, run on it, gives Q.</li>
-  </ul>
-  <p>So the techs of rung 1 work in any world, the layered one included. That is the check the class above says was made.</p>
-  <h3>Who said it first</h3>
-  <p>The founder is Richard Dedekind; the author of the first list of axioms is Ernst Zermelo.</p>
-  <aside class="voice para"><p>Dedekind, having tried to prove that an endless collection exists, said in the same book that the numbers are free creations of the human mind, made in order to grasp the differences among things. Zermelo, some years later, wrote the existence of an endless set into his list of axioms without an attempted proof, and his list is the ancestor of the one this ladder uses.</p><cite>Dedekind, Was sind und was sollen die Zahlen? (1888), preface and §66, trans. Beman, 1901; Zermelo, “Untersuchungen über die Grundlagen der Mengenlehre I”, 1908</cite></aside>
   <h3>Accepted names</h3>
-  <p>The layered world is the collection of hereditarily finite sets; the layers are the stages of the cumulative hierarchy.</p>
+  <p>How many members a set has is its <b>cardinal</b> number, or cardinality; which place a member holds in an order is its <b>ordinal</b> number. A set that keeps an order with it is an ordered set; the bigness order here is a strict order. The numbers of 3c, kept by nesting, are the finite von Neumann ordinals, and for them the cardinal and the ordinal agree.</p>
 </section>
-</div>
 
+</div>
 <script src="rung.js"></script>
 <script>
 (function(){
-const {tex,col,stepper}=Rung;
+const {tex,col,stepper,plane}=Rung;
 const R=String.raw;
-function size(cv,ar){ const d=window.devicePixelRatio||1, W=cv.clientWidth||300, H=Math.round(W/ar); cv.width=W*d; cv.height=H*d; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(d,0,0,d,0,0); return {c,W,H}; }
-const vn=j=>{ if(j<=4) return 'V_{'+j+'}'; let s='4'; for(let i=4;i<j;i++) s='S('+s+')'; return 'V_{'+s+'}'; };
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
 
-/* ---------- left: which layer, and the descent ---------- */
-const st=(...m)=>({m}); const same=(p,q)=>p.m.every(x=>q.m.some(y=>same(x,y)))&&q.m.every(y=>p.m.some(x=>same(x,y)));
-function dedupe(m){ const o=[]; m.forEach(x=>{ if(!o.some(y=>same(x,y))) o.push(x); }); return o; }
-const NUM=[st()]; for(let k=1;k<=6;k++) NUM.push(st(...NUM.slice(0,k)));
-const nameOf=t=>{ const i=NUM.findIndex(u=>same(u,t)); if(i<0) return null; if(i<=4) return String(i); let s='4'; for(let j=4;j<i;j++) s='S('+s+')'; return s; };
-const show=t=>{ const nm=nameOf(t); if(nm!==null) return nm; return '\\{'+dedupe(t.m).map(show).join(',\\,')+'\\}'; };
-const depth=t=>t.m.length?1+Math.max(...t.m.map(depth)):0;
-const deepest=t=>t.m.reduce((b,x)=>b===null||depth(x)>depth(b)?x:b,null);
-const XS=[['0',NUM[0]],['1',NUM[1]],['2',NUM[2]],['3',NUM[3]],['4',NUM[4]],['S(4)',NUM[5]],['{1}',st(NUM[1])],['{0, 2}',st(NUM[0],NUM[2])],['{{1}}',st(st(NUM[1]))]];
-let xi=3, cur=XS[xi][1]; const dch=document.getElementById('dch');
-XS.forEach(([lab],i)=>{ const b=document.createElement('button'); b.textContent=lab; if(i===xi) b.className='on'; b.onclick=()=>{ xi=i; cur=XS[i][1]; [...dch.querySelectorAll('button')].forEach(z=>z.classList.toggle('on',z===b)); drawD(); }; dch.appendChild(b); });
-function drawD(){
-  const d=depth(cur); const lines=[]; let t=cur; let k=d;
-  lines.push(`x = ${show(t)} \\in ${vn(d+1)}`);
-  while(t.m.length){ const y=deepest(t); lines.push(`${show(y)} \\in ${show(t)},\\quad ${show(y)} \\in ${vn(k)}`); t=y; k--; }
-  lines.push(`\\varnothing \\in V_1,\\quad \\text{and nothing is in } V_0`);
-  lines.push(`\\htmlClass{new}{x \\text{ enters at } ${vn(d+1)}}${d>0?`,\\ \\text{not in } ${vn(d)}`:''}`);
-  tex(document.getElementById('eqD'),'\\begin{gathered}'+lines.join('\\\\ ')+'\\end{gathered}',true);
-}
-document.getElementById('dS').onclick=()=>{ if(depth(cur)>=6) return; cur=st(...cur.m,cur); [...dch.querySelectorAll('button')].forEach(z=>z.classList.remove('on')); drawD(); };
-document.getElementById('dR').onclick=()=>{ cur=XS[xi][1]; [...dch.querySelectorAll('button')].forEach((z,i)=>z.classList.toggle('on',i===xi)); drawD(); };
-drawD();
-
-/* ---------- right: hunting an inductive set in V_k ---------- */
-const cvB=document.getElementById('cvB'), kk=document.getElementById('kk'), ok=document.getElementById('ok');
-const TOWER=[0,1,2,4,16,65536];
-const NUMC=[0,1,3,11,2059];
-function label(code){ const i=NUMC.indexOf(code); if(i>=0) return String(i); const m=[]; for(let b=0;(1<<b)<=code && b<16;b++) if(code>>b&1) m.push(label(b)); return '{'+m.join(',')+'}'; }
-function texLabel(code){ return label(code).replace(/[{}]/g,x=>'\\'+x); }
-function rank(code){ let r=0; while(TOWER[r]<=code) r++; return r; }
-function succ(code){ return code+Math.pow(2,code); }
-let chosen=new Set([0,1,3,11]); let nodes=[];
-function drawB(){
-  const k=+kk.value, N=TOWER[k]; ok.textContent='V'+String.fromCharCode(0x2080+k);
-  [...chosen].forEach(cd=>{ if(cd>=N) chosen.delete(cd); });
-  const {c,W,H}=size(cvB,k>=4?1.05:1.6); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
-  const rows={}; for(let cd=0;cd<N;cd++){ const r=rank(cd); (rows[r]=rows[r]||[]).push(cd); }
-  const lines=[]; Object.keys(rows).map(Number).sort((a,b)=>a-b).forEach(r=>{ const L=rows[r]; const per=W<520?4:6; for(let i=0;i<L.length;i+=per) lines.push(L.slice(i,i+per)); });
-  const outX=W-26; const usableW=outX-(W<480?36:20);
-  nodes=[]; const top=22, bot=H-24; const nl=lines.length;
-  lines.forEach((L,li)=>{ const y= nl===1? (top+bot)/2 : bot-(bot-top)*li/(nl-1); L.forEach((cd,j)=>{ const x=16+usableW*(j+0.5)/L.length; nodes.push({cd,x,y}); }); });
-  const pos={}; nodes.forEach(nd=>pos[nd.cd]=nd);
-  c.fillStyle=col('--sand'); c.fillRect(outX,0,W-outX,H); c.save(); c.translate(W-9,H/2); c.rotate(-Math.PI/2); c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText('outside V'+String.fromCharCode(0x2080+k),0,0); c.restore();
-  const arrow=(x1,y1,x2,y2,colr,dash)=>{ c.strokeStyle=colr; c.fillStyle=colr; c.lineWidth=1.8; c.setLineDash(dash||[]); c.beginPath(); c.moveTo(x1,y1); const mx=(x1+x2)/2, my=(y1+y2)/2-(Math.abs(x2-x1)<4?0:18); c.quadraticCurveTo(mx,my,x2,y2); c.stroke(); c.setLineDash([]);
-    const a=Math.atan2(y2-my,x2-mx); c.beginPath(); c.moveTo(x2,y2); c.lineTo(x2-8*Math.cos(a-.4),y2-8*Math.sin(a-.4)); c.lineTo(x2-8*Math.cos(a+.4),y2-8*Math.sin(a+.4)); c.closePath(); c.fill(); };
-  [...chosen].forEach(cd=>{ const p=pos[cd]; if(!p) return; const s=succ(cd);
-    if(s<N && pos[s]){ const q=pos[s]; const inI=chosen.has(s); const ang=Math.atan2(q.y-p.y,q.x-p.x); arrow(p.x+12*Math.cos(ang),p.y+12*Math.sin(ang),q.x-13*Math.cos(ang),q.y-13*Math.sin(ang),inI?col('--teal'):col('--ember'),inI?null:[5,4]); }
-    else arrow(p.x+12,p.y,outX+4,p.y,col('--ember'),[5,4]); });
-  const fs=W<380?10:11;
-  nodes.forEach(nd=>{ const isNum=NUMC.includes(nd.cd); const on=chosen.has(nd.cd);
-    c.beginPath(); c.arc(nd.x,nd.y,9,0,7); c.fillStyle=isNum?col('--gold'):col('--muted'); c.globalAlpha=isNum?.9:.55; c.fill(); c.globalAlpha=1;
-    if(on){ c.lineWidth=3; c.strokeStyle=col('--ember'); c.beginPath(); c.arc(nd.x,nd.y,13,0,7); c.stroke(); }
-    c.fillStyle=col('--ink'); c.font=fs+'px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText(label(nd.cd),nd.x,nd.y+24); });
-  c.textAlign='left';
-  const I=[...chosen].sort((a,b)=>a-b);
-  let t='\\begin{gathered}I = '+(I.length?'\\{'+I.map(texLabel).join(',\\,')+'\\}':'\\varnothing')+'\\\\ ';
-  if(!chosen.has(0)) t+='0 \\notin I:\\ \\text{the base part fails}';
-  else { const bad=I.find(cd=>!chosen.has(succ(cd)));
-    if(bad===undefined) t+='\\text{no arrow breaks}';
-    else { const s=succ(bad); const sl= s<N? texLabel(s) : (NUMC.includes(s)? String(NUMC.indexOf(s)) : 'S('+texLabel(bad)+')\\text{, outside } V_{'+k+'}'); t+=`0\\in I,\\ \\text{but } S(${texLabel(bad)}) = ${sl} \\htmlClass{new}{\\notin I}:\\ \\text{not inductive}`; } }
-  tex(document.getElementById('eqB'),t+'\\end{gathered}',true);
-}
-cvB.addEventListener('pointerdown',e=>{ const r=cvB.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top; const hit=nodes.find(nd=>Math.hypot(nd.x-x,nd.y-y)<16); if(hit){ chosen.has(hit.cd)?chosen.delete(hit.cd):chosen.add(hit.cd); drawB(); } });
-kk.oninput=drawB;
-new ResizeObserver(drawB).observe(cvB);
-if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',drawB);
-drawB();
-
-/* ---------- slides ---------- */
-const N='\\htmlClass{new}', K='\\htmlClass{keep}';
-const SYM={'≠':'$\\ne$','∈':'$\\in$','∉':'$\\notin$','⋃':'$\\bigcup$','⇔':'$\\Leftrightarrow$','⊆':'$\\subseteq$','∅':'$\\varnothing$','∪':'$\\cup$','⊥':'$\\bot$','∀':'$\\forall$','∃':'$\\exists$','¬':'$\\neg$','∧':'$\\land$','∨':'$\\lor$','⇒':'$\\Rightarrow$','𝒫':'$\\mathcal P$'};
-const tx=r=>r.replace(/[≠∈∉⋃⇔⊆∅∪⊥∀∃¬∧∨⇒𝒫]/gu,ch=>SYM[ch]);
-const col2=(...rows)=>'\\begin{aligned}'+rows.map(([l,r])=>'&'+l+' &&\\text{'+tx(r)+'}').join('\\\\ ')+'\\end{aligned}';
-const T=s=>'\\text{'+s+'}';
-stepper('#sl3',[
-  {k:'ember',kl:'the layers',t:R`V_0 = \varnothing,\qquad V_{S(k)} = \mathcal P(V_k)`,n:`The bottom is empty; each layer is all the subsets of the one below. The low mark is part of the name, and V with the next one after k as its mark is the layer after V_k.`},
-  {k:'ember',kl:'the layers',t:R`V_1 = \{0\} = 1,\quad V_2 = \{0, 1\} = 2,\quad V_3 = \{0, 1, ${N}{\{1\}}, 2\}`,n:`Keep-or-drop, for V₁, V₂ and V₃. V₃ is where the earliest set that is not a named entry appears: {1}, a subset of 2 that is not a member of 2.`},
-  {k:'ember',kl:'the layers',t:R`V_4 = \mathcal P(\{0, 1, \{1\}, 2\}) \ni ${N}{3}`,n:`Every subset of V₃, by keep-or-drop. Among them {0, 1, 2}, which is 3. The listing ends, as every layer's does. 4 is not in V₄; it enters at the layer after.`}
-],{title:'The slides · the layers · ← → keys work'});
-stepper('#sl6',[
-  {k:'ember',kl:'the tools stay inside',t:col2(['\\text{If }u, v \\in V_k\\text{, then }\\{u,v\\} \\subseteq V_k\\text{.}','gather: listing; pack ⊆'],['\\htmlClass{new}{\\text{So }\\{u,v\\} \\in V_{S(k)}\\text{.}}','pack 𝒫'],['\\text{If }u \\in V_{S(k)}\\text{ and }s \\subseteq u\\text{, then }s \\subseteq V_k\\text{.}','sift: the sift-is-part technique, then chain for part of'],['\\htmlClass{new}{\\text{So }s \\in V_{S(k)}\\text{.}}','pack 𝒫']),n:`Gathering climbs a layer; sifting stays in the same layer. Fed sets of the world, each hands back a set of the world.`},
-  {k:'ember',kl:'the tools stay inside',t:col2(['\\text{If }u \\in V_{S(S(k))}\\text{, then }\\textstyle\\bigcup u \\subseteq V_k\\text{.}','merge: members of members drop a layer and then another'],['\\htmlClass{new}{\\text{So }\\textstyle\\bigcup u \\in V_{S(k)}\\text{.}}','pack 𝒫'],['\\text{If }u \\in V_{S(k)}\\text{, then }\\mathcal P(u) \\subseteq \\mathcal P(V_k)\\text{.}','all the subsets: the power-keeps-parts technique'],['\\htmlClass{new}{\\text{So }\\mathcal P(u) \\in V_{S(S(k))}\\text{.}}','pack 𝒫']),n:`Merging drops a layer; taking the subsets climbs one. The same-members axiom is true for any sets at all. Foundation is true inside because every member of a set of the world is in the world, so a condition that passes up inside the world passes up, read with “if x is in the world”, outside it too. Every axiom of rungs 0 to 2 is true inside.`}
-],{title:'The slides · the tools stay inside · ← → keys work'});
-stepper('#sl8',[
-  {k:'ember',kl:'each step down, a layer down',t:R`u \in V_{S(k)} \;\Leftrightarrow\; u \subseteq V_k \;\Rightarrow\; \big(y \in u \Rightarrow ${N}{y \in V_k}\big)`,n:`What 𝒫 means, read for a layer. A member of a set in a layer is in the layer below. This fact alone carries the step.`}
-],{title:'The slides · each step down, a layer down · ← → keys work'});
-stepper('#sl9',[
-  {k:'ember',kl:'the run outlasts every layer',t:col2(['\\text{Suppose }I \\in V_4\\text{ and }I\\text{ is inductive.}','supposed'],['\\text{Then }0, 1, 2, 3, 4\\text{ are in }I\\text{.}','the named-sets-are-inductive technique'],['\\htmlClass{new}{4\\text{ is in }I\\text{, which is in }V_4\\text{, so }4 \\in V_3\\text{.}}','a step of membership, a layer down']),n:`Suppose an inductive set sits in V₄. The named-sets-are-inductive technique puts the run in it, 4 included. A step down: 4 is in V₃.`},
-  {k:'ember',kl:'the run outlasts every layer',t:col2(['3 \\in 4\\text{, so }3 \\in V_2\\text{.}','3b: each entry is in the next; a layer down'],['2 \\in 3\\text{, so }2 \\in V_1\\text{.}','a layer down'],['\\htmlClass{new}{1 \\in 2\\text{, so }1 \\in V_0\\text{.}}','a layer down'],['\\text{But }V_0\\text{ is empty. Clash.}','V₀ = ∅; the empty-set technique; clash'],['\\htmlClass{new}{\\text{So no inductive set is in }V_4\\text{. }}','refute']),n:` The run is nested, 1 ∈ 2 ∈ 3 ∈ 4, and each step drops a layer. From V₄ the descent reaches V₀, which is empty. In a layer further along the argument is longer by exactly the extra steps, since named-sets-are-inductive and in-its-next reach as far as you like.`}
-],{title:'The slides · the run outlasts every layer · ← → keys work'});
-stepper('#sl10',[
-  {k:'ember',kl:'the world is not a set of the world',t:R`\text{the layered world holds the run; no member of any layer holds the run}`,n:`The world as a whole has 0 and every next one. But it is not in any layer, so it is not a set of the world; it is a way of talking, like “all sets” on 2h. The axiom asks for a set. Inside the world, there is none.`}
-],{title:'The slides · the world is not a set of the world · ← → keys work'});
-stepper('#sl11',[
-  {k:'ember',kl:'the refutation of a proof',t:col2(['\\text{Every axiom of rungs 0 to 2 is true in the layered world.}','the checks'],['\\text{No set of the layered world is inductive.}','the argument, for any layer'],['\\qquad \\text{Suppose the earlier axioms proved that some set is inductive.}','supposed, aiming to refute']),n:`Now the move itself. Suppose the earlier axioms proved the axiom of infinity.`},
-  {k:'ember',kl:'the refutation of a proof',t:col2(['\\qquad \\text{Read in the world, that proof is a proof there.}','its rows are axioms and techs'],['\\qquad \\text{So some set of the world is inductive. Clash.}','the last row is true; clash'],['\\htmlClass{new}{\\text{So there is no such proof. }}','refute']),n:` Independent: not a consequence of what came before. Not false either, since the ordinary world has the axiom and the earlier principles together. Chosen.`}
-],{title:'The slides · the refutation of a proof · ← → keys work'});
-stepper('#sl14',[
-  {k:'ember',kl:'backwards',t:R`\{0, \{1\}\} \;\text{ enters at }\; ?`,n:`Find the layer from the foot: step down memberships. {1} ∈ {0, {1}}, 1 ∈ {1}, 0 ∈ 1, and 0 is ∅. Climb back up a layer for each step: 0 = ∅ is in V₁, 1 in V₂, {1} in V₃, so the set is in V₄ and not in V₃ (where it would need {1} ∈ V₂, and {1} is not a subset of V₁ = {0}).`},
-  {k:'ember',kl:'backwards',t:R`V_4 \;\text{ cannot hold }\; ?`,n:`Wanting a set V₄ cannot hold: take the entry of the run whose name is the layer's own low mark, 4. Its descent 3 ∈ 4, 2 ∈ 3, 1 ∈ 2, 0 ∈ 1 drops a layer at each step: were 4 in V₄, 3 would be in V₃, 2 in V₂, 1 in V₁, and 0 in V₀, which is empty. It enters at the layer after V₄.`}
-],{title:'The slides · backwards · ← → keys work'});
-
-function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
-Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
 })();
 </script>
 <script src="tray.js"></script>
