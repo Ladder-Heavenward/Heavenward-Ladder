@@ -1085,13 +1085,13 @@ async function edInit(){
   if(ED.owner) document.body.classList.add('ed-owner');
   const FOLD=await edFolded(), stale=r=>!!FOLD&&!!FOLD[r.pid]&&String(FOLD[r.pid])>=String(r.at||'');
   try{ const snap=await db.collection('edits').where('page','==',ED.page).get();
-    snap.docs.forEach(d=>{ const v=d.data()||{}; if(stale({pid:v.pid||d.id,at:v.at})) return; const p=document.querySelector('p[data-pid="'+(v.pid||d.id)+'"]'); if(p&&typeof v.html==='string'&&editable(p)) edApply(p,v.html); }); }catch(e){}
+    snap.docs.forEach(d=>{ const v=d.data()||{}; if(stale({pid:v.pid||d.id,at:v.at})) return; const p=document.querySelector('p[data-pid="'+(v.pid||d.id)+'"],li[data-pid="'+(v.pid||d.id)+'"]'); if(p&&typeof v.html==='string'&&editable(p)) edApply(p,v.html); }); }catch(e){}
   if(FOLD) try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); let sent=0;
     for(const pid in m){ const r=m[pid]; if(stale(r)){ delete m[pid]; try{ const dm=JSON.parse(localStorage.getItem('ladder:edit-drafts')||'{}'); delete dm[pid]; localStorage.setItem('ladder:edit-drafts',JSON.stringify(dm)); }catch(_){} continue; }
-      try{ const w=ED.db.doc('edits/'+pid).set(r); w.then(()=>edClearPending(pid),()=>{}); await Promise.race([w,new Promise((_,rj)=>setTimeout(()=>rj(0),10000))]); delete m[pid]; sent++; try{ const dm=JSON.parse(localStorage.getItem('ladder:edit-drafts')||'{}'); delete dm[pid]; localStorage.setItem('ladder:edit-drafts',JSON.stringify(dm)); }catch(_){} const p=r.page===ED.page&&document.querySelector('p[data-pid="'+pid+'"]'); if(p&&editable(p)) edApply(p,r.html); }catch(_){ } }
+      try{ const w=ED.db.doc('edits/'+pid).set(r); w.then(()=>edClearPending(pid),()=>{}); await Promise.race([w,new Promise((_,rj)=>setTimeout(()=>rj(0),10000))]); delete m[pid]; sent++; try{ const dm=JSON.parse(localStorage.getItem('ladder:edit-drafts')||'{}'); delete dm[pid]; localStorage.setItem('ladder:edit-drafts',JSON.stringify(dm)); }catch(_){} const p=r.page===ED.page&&document.querySelector('p[data-pid="'+pid+'"],li[data-pid="'+pid+'"]'); if(p&&editable(p)) edApply(p,r.html); }catch(_){ } }
     localStorage.setItem(k,JSON.stringify(m)); if(sent) toast(sent+' edit'+(sent>1?'s':'')+' saved that had been waiting on this device'); }catch(_){}
   try{ const m=JSON.parse(localStorage.getItem('ladder:edit-drafts')||'{}'); let n=0;
-    for(const pid in m){ const d=m[pid]; if(d.page!==ED.page) continue; if(FOLD[pid]&&Number(new Date(FOLD[pid]))>=Number(d.at||0)) continue; const p=document.querySelector('p[data-pid="'+pid+'"]'); if(!p||!editable(p)) continue;
+    for(const pid in m){ const d=m[pid]; if(d.page!==ED.page) continue; if(FOLD[pid]&&Number(new Date(FOLD[pid]))>=Number(d.at||0)) continue; const p=document.querySelector('p[data-pid="'+pid+'"],li[data-pid="'+pid+'"]'); if(!p||!editable(p)) continue;
       startEdit(p); p.innerHTML=d.html; n++; }
     if(n) toast('your unsaved edit'+(n>1?'s are':' is')+' back, still open: press save when ready'); }catch(_){}
 }
@@ -1142,13 +1142,15 @@ function txOk(e){ if(!e||e.closest(TX_OFF)) return false; if(e.querySelector(TX_
   if(e.querySelector(TX_BLOCK)) return false; return !!txNorm(e.textContent); }
 function txCand(t){ for(let e=t&&t.nodeType===1?t:t&&t.parentElement; e&&e!==document.body; e=e.parentElement){
     if(e.closest(TX_OFF)) return null;
+    /* 0.3.52: a paragraph or list item with an address and inline maths opens in the paragraph editor */
+    if(e.matches('p[data-pid],li[data-pid]')&&!e.closest('.ladder')&&editable(e)) return e;
     if(e.matches(TX_TAGS)||(txOwnText(e)&&getComputedStyle(e).display!=='inline')) return txOk(e)?e:null; }
   return null; }
 function txKind(e){ return e.matches('h1,h2,h3,h4')||!!e.closest('.ladder .t, .stidx, .pn, nav, header.top h1, .fvhead')?'title':'text'; }
 function txId(s){ let h=2166136261; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return (h>>>0).toString(36); }
 /* map normalized text positions to (text node, offset), so an edit lands inside the element without flattening its markup */
 function txMap(el){ const map=[]; let out='', sp=true; const w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
-  for(let n=w.nextNode(); n; n=w.nextNode()){ if(n.parentElement&&n.parentElement.closest('button.pa,.txbar,.here,.stno,.fn')) continue; const t=n.textContent;
+  for(let n=w.nextNode(); n; n=w.nextNode()){ if(n.parentElement&&n.parentElement.closest('button.pa,.txbar,.here,.stno,.fn,.h1tag')) continue; const t=n.textContent;
     for(let i=0;i<t.length;i++){ const ws=/\s/.test(t[i]); if(ws){ if(sp) continue; out+=' '; sp=true; } else { out+=t[i]; sp=false; } map.push([n,i]); } }
   while(out.endsWith(' ')){ out=out.slice(0,-1); map.pop(); } return {text:out,map}; }
 function txDiff(a,b){ let p=0; while(p<a.length&&p<b.length&&a[p]===b[p]) p++; let s=0; while(s<a.length-p&&s<b.length-p&&a[a.length-1-s]===b[b.length-1-s]) s++;
@@ -1171,12 +1173,12 @@ async function txSave(rec){ let err=null; txPend(rec,true);
   for(const wait of [0,1500,4000,9000]){ if(wait){ toast('the database is busy; trying again…'); await new Promise(r=>setTimeout(r,wait)); }
     try{ await Promise.race([ED.db.doc('edits/'+rec.id).set(rec), new Promise((_,rj)=>setTimeout(()=>rj({code:'no answer in 10 seconds'}),10000))]); err=null; break; }catch(x){ err=x; } }
   if(!err) txPend(rec,false); return err; }
-function txStart(el){ if(TX.busy) return; const pa=el.matches('p[data-pid]')&&!el.closest('.ladder');
+function txStart(el){ if(TX.busy) return; const pa=el.matches('p[data-pid],li[data-pid]')&&!el.closest('.ladder');
   if(pa&&editable(el)){ startEdit(el); return; }
   const before=txMap(el).text, beforeHtml=el.innerHTML, tag=el.tagName.toLowerCase(); TX.busy=el;
   const href=el.getAttribute('href'); if(href!=null){ el.dataset.txhref=href; el.removeAttribute('href'); }
   /* 0.3.49: a title's address (0a1, 2b3) and a question's labels stay locked, and are left out of the saved words */
-  el.querySelectorAll('.stno,.fn,.qid,.ph,.here,.kind').forEach(x=>x.contentEditable='false');
+  el.querySelectorAll('.stno,.fn,.qid,.ph,.here,.kind,.h1tag').forEach(x=>x.contentEditable='false');
   el.contentEditable='true'; el.classList.add('txediting'); el.tabIndex=-1; el.focus(); try{ const sel=getSelection(), rg=document.createRange(); rg.selectNodeContents(el); rg.collapse(false); sel.removeAllRanges(); sel.addRange(rg); }catch(_){}
   const bar=document.createElement('div'); bar.className='txbar';
   bar.innerHTML='<button type="button" data-e="save">save</button><button type="button" data-e="cancel">cancel</button><span class="pehint">words only · '+(txKind(el)==='title'?'a title: the next publish changes it everywhere it shows':'the next publish puts it into its source')+'</span>';
