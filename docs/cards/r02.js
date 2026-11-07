@@ -1,5 +1,5 @@
 /* flash cards, r02. */
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["2c"]=[{"q":"cat ∈ {cat, dog}. Is it so?","a":"yes: cat is on the list","w":["no: cat is not a set","no: {cat} is the member","yes: {cat} ⊆ {cat, dog}"],"why":"Being in a listed set is being something on the list."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["2d"]=[{"q":"cat ∈ {cat, dog}. Is it so?","a":"yes: cat is on the list","w":["no: cat is not a set","no: {cat} is the member","yes: {cat} ⊆ {cat, dog}"],"why":"Being in a listed set is being something on the list."},
  {"q":"{cat} ∈ {cat, dog}. Is it so?","a":"no: the members are cat and dog","w":["yes: {cat} is part of it","yes: cat is in it","no: {cat} is not a set"],"why":"{cat} is neither cat nor dog."},
  {"q":"{cat} ⊆ {cat, dog}. Is it so?","a":"yes: its only member is on the list","w":["no: {cat} is not listed","no: cat is not a set","yes: {cat} is a member"],"why":"⊆ asks whether every member is on the list."},
  {"q":"{cat, dog} and {dog, cat, cat}. Same set?","a":"yes: the same members","w":["no: the order differs","no: cat is listed twice","yes: by the self-part technique"],"why":"A set is nothing but its members."},
@@ -10,7 +10,7 @@
  {"q":"cat ∈ {{cat}}. Is it so?","a":"no: its only member is {cat}","w":["yes: cat is inside it","yes: {{cat}} = {cat}","no: {{cat}} is empty"],"why":"A box holding a box holding a cat is not a box holding a cat."},
  {"q":"Ann ∈ r. What is Ann called, to r?","a":"a member, or element","w":["a subset","a part","a listing"],"why":"The accepted name for a member is element."},
  {"q":"u = {Truckee, Merced}; v = {Merced, Truckee, Salinas}. Which holds?","a":"u ⊆ v, and u ≠ v","w":["u = v","v ⊆ u","u ∈ v"],"why":"Salinas is in v and not in u."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["2d"]=[{"q":"{x ∈ {cat, dog, owl} : x can fly}. Which set?","a":"{owl}","w":["{cat, dog}","{cat, dog, owl}","∅"],"why":"Only the owl passes."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["2e"]=[{"q":"{x ∈ {cat, dog, owl} : x can fly}. Which set?","a":"{owl}","w":["{cat, dog}","{cat, dog, owl}","∅"],"why":"Only the owl passes."},
  {"q":"{x ∈ {cat, dog} : x can fly}. Which set?","a":"∅","w":["{owl}","{cat, dog}","not a set: nothing flies"],"why":"Sifting never adds: no flier was there to keep."},
  {"q":"{x ∈ u : φ(x)} ⊆ u, whatever φ. Which technique?","a":"the sift-is-part technique","w":["the self-part technique","the one-empty-set technique","the same-members axiom"],"why":"A sift keeps or drops; it never adds."},
  {"q":"“There is a set.” Which axiom?","a":"the some-set axiom","w":["the sift axiom","the same-members axiom","the empty-set technique"],"why":"It says only that there is one, not which."},
@@ -22,7 +22,7 @@
  {"q":"u = {Eureka, Arcata, Ukiah}. The event “on the coast”, as a sift from u, is what?","a":"a subset of u: {Eureka, Arcata}","w":["a new set with towns beyond u","the town Eureka alone","u itself"],"why":"A sift keeps the members of u that pass."},
  {"q":"No set holds exactly the x with x ∉ x. What argument shows it?","a":"the outsider-set technique","w":["the one-empty-set technique","the sift-is-part technique","the some-set axiom"],"why":"Suppose such a set and the clash comes, by refute and no withheld step."},
  {"q":"Sift from any set the members that are not members of themselves. Is the result a member of itself? Either answer forces the other. What is it called?","a":"the outsider-set argument (Russell's)","w":["the sift axiom","the some-set axiom","the same-members axiom"],"why":"The page names it the outsider-set argument, and gives the accepted name in brackets: Russell's."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["2e"]=[{"q":"d = {owl, bat}, b = {cat, dog, bat}. What is d ∩ b?","a":"{bat}","w":["{owl, bat, cat, dog}","{owl}","{cat, dog}"],"why":"The members of d that are in b."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["2f"]=[{"q":"d = {owl, bat}, b = {cat, dog, bat}. What is d ∩ b?","a":"{bat}","w":["{owl, bat, cat, dog}","{owl}","{cat, dog}"],"why":"The members of d that are in b."},
  {"q":"d = {owl, bat}, b = {cat, dog, bat}. What is d ∪ b?","a":"{owl, bat, cat, dog}","w":["{bat}","{owl, cat, dog}","{{owl, bat}, {cat, dog, bat}}"],"why":"In d or in b, and being in again is nothing."},
  {"q":"d = {owl, bat}, b = {cat, dog, bat}. What is b ∖ d?","a":"{cat, dog}","w":["{owl}","{bat}","{cat, dog, owl}"],"why":"The members of b not in d."},
  {"q":"⋃{{cat, dog}, {dog, owl}}. Which set?","a":"{cat, dog, owl}","w":["{{cat, dog}, {dog, owl}}","{dog}","{cat, owl}"],"why":"Tip the members out together."},
@@ -34,7 +34,7 @@
  {"q":"Which set holds the days in t without rain?","a":"t ∖ rain","w":["∅ ∖ rain","rain ∖ t","everything not in rain"],"why":"There is no set of everything; the days are sifted from t."},
  {"q":"x ∈ c ∖ (d ∩ b), so x ∈ (c ∖ d) ∪ (c ∖ b). Licensed for any sets now?","a":"no: it waits, or needs settled membership","w":["yes: not-through for ∪","yes: both ways, any sets","no: it is never so"],"why":"It is not-through for and, read the withheld way."},
  {"q":"⋃∅. Which set?","a":"∅","w":["{∅}","not a set","{{∅}}"],"why":"No member to tip out."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["2f"]=[{"q":"𝒫({cat, dog}). Its members?","a":"∅, {cat}, {dog}, {cat, dog}","w":["{cat}, {dog}","cat, dog, {cat, dog}","∅, {cat, dog}"],"why":"Every way of keeping or dropping each member."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["2g"]=[{"q":"𝒫({cat, dog}). Its members?","a":"∅, {cat}, {dog}, {cat, dog}","w":["{cat}, {dog}","cat, dog, {cat, dog}","∅, {cat, dog}"],"why":"Every way of keeping or dropping each member."},
  {"q":"∅ ⊆ b, for any set b. Which technique?","a":"the empty-part technique","w":["the empty-set technique","the self-part technique","the power-keeps-parts technique"],"why":"∅ has no member to fail."},
  {"q":"From u ⊆ b, a line reads 𝒫(u) ⊆ 𝒫(b). Which technique?","a":"the power-keeps-parts technique","w":["the empty-part technique","the chain technique for part of","the double-inclusion technique"],"why":"Every part of u is a part of b."},
  {"q":"𝒫(u). What is it called?","a":"the power set of u","w":["the merge of u","the product of u","a sift of u"],"why":"All the subsets of u, gathered as one set."},
@@ -45,7 +45,7 @@
  {"q":"𝒫(u) ∩ 𝒫(b) and 𝒫(u ∩ b). How do they stand?","a":"they are the same set","w":["the first is larger","the second is larger","the same only when u = b"],"why":"The tool treats common members exactly."},
  {"q":"𝒫(u) ∪ 𝒫(b) and 𝒫(u ∪ b). How do they stand?","a":"the first is part of the second","w":["always the same set","the second is part of the first","neither is part of the other"],"why":"Merged members are treated only by an inclusion."},
  {"q":"“For any set u there is the set of all its subsets.” Which axiom?","a":"the power axiom","w":["the merge axiom","the sift axiom","the gather axiom"],"why":"The last tool of the rung."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["2g"]=[{"q":"{{t}, {t, b}}. What is it called?","a":"the ordered pair of t and b","w":["the set {t, b}","the product of t and b","a relation on t"],"why":"Built from gather alone, with t marked as the left entry."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["2h"]=[{"q":"{{t}, {t, b}}. What is it called?","a":"the ordered pair of t and b","w":["the set {t, b}","the product of t and b","a relation on t"],"why":"Built from gather alone, with t marked as the left entry."},
  {"q":"From (t, b) = (c, d), lines read t = c and b = d. Which technique?","a":"the equal-pairs technique","w":["the double-inclusion technique","the same-members axiom","the products-exist technique"],"why":"Same pairs, same left entries, same right entries."},
  {"q":"{Truckee, Merced} × {cat}. Which set?","a":"{(Truckee, cat), (Merced, cat)}","w":["{Truckee, Merced, cat}","{(cat, Truckee), (cat, Merced)}","{{Truckee, cat}, {Merced, cat}}"],"why":"All the pairs, left entry from the first set, right from the second."},
  {"q":"“Has met” on people. Which property does the page give it?","a":"symmetric","w":["transitive","neither of these","reflexive only"],"why":"If x has met y, y has met x."},
@@ -58,7 +58,7 @@
  {"q":"A member used to name its class. What is it called?","a":"a representative","w":["a partition","an entry","a witness"],"why":"Which member you pick does not matter."},
  {"q":"u chopped into pieces that never overlap and cover it. What is that called?","a":"a partition of u","w":["an equivalence class","a product","a power set"],"why":"“Lies in the same piece as” is then an equivalence relation."},
  {"q":"(x, y) is defined as {{x}, {x, y}}, so (x, y) = (u, v) exactly when x = u and y = v. What is it called?","a":"the pair (Kuratowski's)","w":["the outsider-set argument (Russell's)","the sift axiom","the same-members axiom"],"why":"The page names it the pair, and gives the accepted name in brackets: Kuratowski's."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["2h"]=[{"q":"A picture of sets as overlapping regions. Its accepted name?","a":"a Venn diagram","w":["a grid of pairs","a truth table","a partition"],"why":"A drawing is a table you can see."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["2i"]=[{"q":"A picture of sets as overlapping regions. Its accepted name?","a":"a Venn diagram","w":["a grid of pairs","a truth table","a partition"],"why":"A drawing is a table you can see."},
  {"q":"On a drawing of d and b, which region is d ∩ b?","a":"where d and b overlap","w":["all of d and all of b","d outside b","outside both"],"why":"In both."},
  {"q":"Which regions does (d ∖ b) ∪ (b ∖ d) shade?","a":"d and b, without their overlap","w":["only the overlap","all of d and b","outside both"],"why":"In one and not the other."},
  {"q":"(d ∩ b) ∪ ((d ∩ b) ∩ c) rewritten d ∩ b. Which technique?","a":"absorb","w":["say-it-again","units","spread and over or"],"why":"d ∩ b swallows a part of itself."},

@@ -259,7 +259,7 @@ LINKS.forEach(L=>{ if(!L.kinds) L.kinds=['names','add','times']; });
 /* 0.2.1 question pools (Andrew 2026-11-04 19:13): five more kinds of laundry question, each opened by its step.
    true or false · what is x, or [x, y], or [x, y, z] · which function is it · which graph is it · what set is it.
    Each pool checks its own question: exactly one offered answer is right, and no decoy equals it. */
-Object.assign(STEPS,{'1e':['r01e','Tables'],'2h':['r02h','Sets by Hand'],'9a':['r09a','A Function Is Its Pairs'],
+Object.assign(STEPS,{'1e':['r01e','Tables'],'2i':['r02i','Sets by Hand'],'9a':['r09a','A Function Is Its Pairs'],
   '9e':['r09e','Reading and Drawing Graphs'],'27j':['r27j','Solving Systems by Elimination']});
 const S=n=>n<0?'−'+(-n):String(n);
 const lin=(a,b)=>(a===1?'':a===-1?'−':S(a))+'x'+(b===0?'':b>0?' + '+b:' − '+(-b));
@@ -310,7 +310,7 @@ const QP=[
      const html={}; all.forEach(h=>html[h[0]]=svg(h[1]));
      return {index:'q:9e.graph['+k+','+others.map(h=>GRAPHS.indexOf(h))+']', lines:[[g[0],'function']], ask:'Which graph is it?', right:g[0], opts:all.map(h=>h[0]), html,
        why:'Read a few pairs off '+g[0]+' (at x = −1, 0, 1, 2) and find the drawing that holds them all.'}; }},
-  {id:'2h.set', step:'2h', label:'what set is it', open:()=>has('2h'), make(){
+  {id:'2i.set', step:'2i', label:'what set is it', open:()=>has('2i'), make(){
      const base=shuffle(ANIMALS.slice()).slice(0,5), i=rnd(CONDS.length); let j=rnd(CONDS.length-1); if(j>=i) j++;
      const A=CONDS[i], B=CONDS[j], f=rnd(3);
      const test=[a=>A[1](a), a=>A[1](a)||B[1](a), a=>A[1](a)&&!B[1](a)][f];
@@ -318,8 +318,8 @@ const QP=[
      const nm=a=>a[0], right=setTxt(base.filter(test).map(nm));
      const alt=[base.filter(a=>!test(a)).map(nm), base.filter(a=>A[1](a)&&B[1](a)).map(nm), base.filter(a=>B[1](a)).map(nm), base.filter(a=>A[1](a)!==B[1](a)).map(nm), base.map(nm)].map(setTxt);
      const wrong=[...new Set(alt)].filter(w=>w!==right).slice(0,3); if(wrong.length<3) return null;
-     return {index:'q:2h.set['+base.map(nm)+';'+i+','+j+','+f+']', lines:[['U = '+setTxt(base.map(nm)),'given'],[say,'set']], ask:'What set is it?', right, opts:shuffle([right,...wrong]),
-       why:'Chase each member of U through the condition, as 2h chases a member through a sift: '+right+' is what is left.'}; }},
+     return {index:'q:2i.set['+base.map(nm)+';'+i+','+j+','+f+']', lines:[['U = '+setTxt(base.map(nm)),'given'],[say,'set']], ask:'What set is it?', right, opts:shuffle([right,...wrong]),
+       why:'Chase each member of U through the condition, as 2i chases a member through a sift: '+right+' is what is left.'}; }},
   {id:'4j.set', step:'4j', label:'what set is it: by dividing', open:()=>has('4j'), make(){
      const N=12+rnd(9), k=2+rnd(4), U=Array.from({length:N},(_,i)=>i+1);
      const right=setTxt(U.filter(n=>n%k===0)), wrong=[k+1,k===2?4:2,k+2].filter(m=>m!==k).map(m=>setTxt(U.filter(n=>n%m===0)));

@@ -1,26 +1,33 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>2i · Every and Some by Hand</title>
+<html lang="en"><head><meta charset="utf-8"><meta name="ladder-cert" content="rung"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2i · Sets by Hand</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
 <style>
-.panel{align-content:start}
+.pic .panels{grid-template-columns:1fr 1fr}
 @media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
-.panel svg{touch-action:manipulation;user-select:none}
-table.sq{border-collapse:collapse;background:var(--card);font-size:.95rem}
-table.sq td,table.sq th{border:1px solid var(--grid);padding:5px 10px;text-align:left}
-table.sq th{font-family:var(--mono);font-weight:500;color:var(--muted);font-size:.78rem}
-table.sq td.c{font-family:var(--mono);color:var(--ember)}
-.pic .eqbox{font-size:.95rem;white-space:normal}.pic .eqbox .katex-display{white-space:normal}.pic .eqbox .katex-display>.katex{white-space:normal;text-align:left}
-.prem{display:grid;gap:4px;font-family:var(--serif);background:var(--sand);padding:8px 12px;border-radius:4px}
-.prem div{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px}
-.prem .v{font-family:var(--mono);font-size:.76rem}
-.prem .ok{color:var(--teal)} .prem .no{color:var(--ember)}
-.world{font-family:var(--mono);font-size:.76rem;color:var(--muted);line-height:1.5}
-.knobs .knob{min-width:120px}
-@media (max-width:560px){.slide .math{font-size:1.08rem}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.95rem;white-space:normal}
+.venns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.venns canvas{width:100%;display:block;border-radius:4px;touch-action:manipulation}
+.venns .vl{font-family:var(--mono);font-size:.75rem;color:var(--muted);text-align:center;min-height:1.2em}
+.setin{width:100%;font-size:1.05rem}
+.keys{display:flex;flex-wrap:wrap;gap:5px}
+.keys button{padding:5px 10px;font-family:var(--serif);font-size:1.05rem;min-width:2.3rem}
+.keys button.w{font-family:var(--mono);font-size:.8rem}
+.err{font-family:var(--mono);font-size:.8rem;color:var(--ember);min-height:1.1em}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+@media (max-width:420px){.two{grid-template-columns:1fr}}
+.panel svg{touch-action:manipulation;user-select:none;width:100%;height:auto;display:block}
+.pic .eqbox .katex{font-size:1em}
+@media (max-width:560px){#pv .katex,#sv .katex{font-size:.9em}}
+.bench{font-family:var(--serif);font-size:1.08rem;border-left:3px solid var(--teal);padding:6px 16px;font-style:italic}
+table.gp{border-collapse:collapse;background:var(--card);font-family:var(--mono);font-size:.85rem}
+table.gp td,table.gp th{border:1px solid var(--grid);padding:3px 9px;text-align:center}
+table.gp th{color:var(--muted);font-weight:500}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
@@ -49,253 +56,268 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r02h.html">← 2h sets by hand</a><a href="r02stat.html">next: 2·stat who is in either group, and who is in both? →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r02h.html">← 2h pairs in order</a><a href="r02j.html">next: 2j every and some by hand →</a></p>
   <div class="tags"><span class="tag tech">2i · technique</span></div>
-  <h1>Every and Some by Hand</h1>
-  <p data-pid="87342c">2b gave “every” and “some” their marks and their techs. This step is about handling them at speed: writing English into them and back, choosing the right joining word inside each, negating them by pushing a not through, and spotting the statement that looks right and says nothing. Alongside the marks runs the oldest piece of logic there is: four kinds of sentence about every and some, and a diagram of how they oppose one another. With them come the syllogisms, the old arguments built from those four kinds. The syllogisms turn out to be chains of the techs you already own, with a famous form that the techs refuse.</p>
-  <p class="gesture" data-pid="626879">Every goes with if; some goes with and. A not turns each into the other as it passes. When the subject is empty, every is cheap and some is impossible, and the old diagram cracks along exactly the links that assumed otherwise.</p>
+  <h1>Sets by Hand</h1>
+  <p data-pid="eef45f">The rung has its axioms and its techniques. This step is where the hands get fast. It draws sets as regions and shows that a drawing is a table you can see, so that every technique of 2f can be checked by shading. It drills writing sets by a condition, including the shorthand everyone uses for “everything of this form”, and where that shorthand sifts from. It runs the techniques as a tool for simplifying an expression on purpose, a technique named per line. And it marks the places where a step is only licensed for sets you can list. It draws products and relations as grids of pairs and reads the properties of a relation off the grid. And it builds, from the empty set and nothing else, the small sets the next rung will start from. It closes the rung, and says so at the end.</p>
+  <p class="gesture" data-pid="efef5e">Draw a set as a region, read a region as a row. Write a set by naming what you sift from and what passes. Simplify by citing a technique per line. Lay pairs out in a grid and read a relation off it.</p>
 </header>
 
 <section class="class step" data-step="2i1">
-  <h2 class="sthead"><span class="stno">2i1</span>Every and Some Over a List</h2>
-  <p data-pid="5804d9">When the things in question can be listed, an every is an and across the list and a some is an or across it. Example: the people in the room are Ann, Ben and Cal, and P(x) is “x is asleep”. Then:</p>
-  <div class="eqline" data-tex="\begin{aligned}&\forall x\, P(x) \text{ over the room:}\\ &\quad P(\text{Ann}) \land P(\text{Ben}) \land P(\text{Cal}) \\ &\exists x\, P(x) \text{ over the room:}\\ &\quad P(\text{Ann}) \lor P(\text{Ben}) \lor P(\text{Cal})\end{aligned}"></div>
-  <p data-pid="f310f3">Reading an every as an and across a list is a way of seeing, not a technique of the rulebook, and over a room it is foreclosed. The marks ∀ and ∃ on their own range over every thing whatever, not over a room. To swap the every for the and, you would need the room as a collection with exactly these members and nobody else. A collection is a set, and “exactly these and nobody else” is 2c's listing. So the swap holds only over a listed set, as <a href="r02c.html#2c4">2c4</a> showed; over every thing whatever it never holds. Footing 2i2 writes the restriction for statements that range over every thing.</p>
-  <p data-pid="92d543">But the seeing explains everything that follows: <b>whatever 1c and 1f did with ∧ and ∨, this step does with ∀ and ∃.</b> Use an every is keep-a-part, applied to the part you want. Example: with Ann, Ben and Cal, using the every to get “Ann is asleep” is keep-a-part. Show an example is add-an-option: showing Ann asleep gives “Ann or Ben or Cal is asleep”. Use a some is reason by cases over the list. And pushing a not through is not-through.</p>
+  <h2 class="sthead"><span class="stno">2i1</span>A Region Is a Row</h2>
+  <p data-pid="3104d2">Draw a set t as a dashed border, and inside it draw regions for sets d, b, c that overlap. The regions cut t into pieces, and here is the point: <b>each region is a row</b>.</p>
+  <p data-pid="3f1eb5">A thing in t is in d or not, in b or not, in c or not. That is exactly a row of 1e's table for the letters d, b, c. Example: the region where a thing is in d and b and not c is the row TTF.</p>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">2i1.1</span><span class="ph understand">understand</span>Over a list, what do an every and a some become, and why is that reading foreclosed?</li>
+      <li><span class="qid">2i1.1</span><span class="ph understand">understand</span>Why is each region of a drawing a row?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2i2">
-  <h2 class="sthead"><span class="stno">2i2</span>Writing a Restriction</h2>
-  <p data-pid="0efc03">Most everyday sentences restrict their subject. Example: “every cat is an animal” is about cats, not about everything. Let A(x) be “x is a cat” and B(x) “x is an animal”. 2b gave the spellings, and here they are again with their denials:</p>
-  <div class="eqline" data-tex="\begin{aligned}&\text{every } A \text{ is } B:\\ &\quad\forall x\,\big(A(x) \Rightarrow B(x)\big) \\ &\text{no } A \text{ is } B:\\ &\quad\forall x\,\big(A(x) \Rightarrow \neg B(x)\big) \\ &\text{some } A \text{ is } B:\\ &\quad\exists x\,\big(A(x) \land B(x)\big) \\ &\text{some } A \text{ is not } B:\\ &\quad\exists x\,\big(A(x) \land \neg B(x)\big)\end{aligned}"></div>
-  <p data-pid="5ef6e3">Every goes with ⇒; some goes with ∧ (<a href="r02b.html#175a24">2b10</a>). Both swaps are wrong, and the second, ∃x (A(x) ⇒ B(x)), is worse because it looks innocent. Footing 2i3 shows why.</p>
+  <h2 class="sthead"><span class="stno">2i2</span>Shading an Expression</h2>
+  <p data-pid="c2fb08">A set expression built with ∪, ∩, ∖ shades exactly the regions whose row makes its membership statement T. Example: (d ∩ b) ∖ c shades one region, the row TTF, and no other.</p>
+  <p data-pid="bd4d93">The membership statement is a joining of “x ∈ d”, “x ∈ b”, “x ∈ c” by ∨, ∧ and ¬. That is a compound statement in 1e's sense. Shading a region is reading its column at that row.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · a region is a row · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2i2.1</span><span class="ph understand">understand</span>How is a restricted every spelled, and how a restricted some? <br>Which swap is worse, and why?</li>
+      <li><span class="qid">2i2.1</span><span class="ph understand">understand</span>Which regions does a set expression shade?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2i3">
-  <h2 class="sthead"><span class="stno">2i3</span>The Some-With-If Trap</h2>
-  <p data-pid="4e4aed">∃x (A(x) ⇒ B(x)) is made true by anything at all that is not an A, as 1e’s if machine shows. Here is the some-with-⇒ spelling, read in a world where it ought to fail.</p>
-  <p data-pid="a68e84">Take a world with three things: a grey cat t, a shoe s and a black dog r. Let D(x) say “x is a dog” and B(x) say “x is brown”. “Some dog is brown” is not so here: the only dog is black.</p>
-  <p data-pid="5e23e6">Now read it. The shoe is not a dog: that is given. So D(s) ⇒ B(s) has a false condition, and 1e’s if machine keeps an if whose condition fails: “if the shoe is a dog, the shoe is brown” conforms to true. Nothing has been learned about the shoe’s colour.</p>
-  <p data-pid="f6ca9e">Writing that if as a row is <a href="r03a.html">3a9</a>’s free ifs, once boxes are in hand: <span data-tex-inline="D(s) \Rightarrow B(s)"></span>. The if can never be carried through, since the shoe is not a dog.</p>
-  <p data-pid="3461c6">Then show an example, the shoe: <span data-tex-inline="\exists x\,\big(D(x) \Rightarrow B(x)\big)"></span>. So the some-with-⇒ spelling is true in a world where no dog is brown. The spelling said something other than “some dog is brown”.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · the some-with-⇒ trap · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">2i3</span>Same Shading, Same Column</h2>
+  <p data-pid="3425cb">So expressions shade the same regions for every choice of d, b, c exactly when their membership statements have the same column. That is exactly when 1f has a technique between them.</p>
+  <p data-pid="b90635">The left picture lets you type a pair of expressions and see where they differ. A region marked ≠ is a row that convicts the claimed technique, and sets that fill that region are a counterexample.</p>
+  <p data-pid="0becac">2f's caveat, that a listed world settles every membership, carries over. A drawing is a world of listed things. For each thing you can see which regions it is in, so membership is settled, 1f's word. So in a drawing every technique may be used both ways, not-through for and included. The drawing proves nothing about sets you cannot list. It checks the shape of a technique, and it is the best counterexample hunter there is.</p>
+  <p data-pid="1bc645">Their accepted name is Venn diagram. Here they are drawn as regions, which is all they are.</p>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · regions d, b, c in a set t, and the regions an expression shades</div>
+    <div class="panel">
+      <div class="cap">Type a set expression on each side in d, b, c, t, ∅ with ∪ ∩ ∖ and brackets (or tap the keys). Ember: the regions each expression shades. If they differ, the differing regions are marked ≠.</div>
+      <div class="two"><input type="text" class="setin" id="s1" spellcheck="false" autocomplete="off" autocapitalize="off" value="t ∖ (d ∪ b)" aria-label="left expression"><input type="text" class="setin" id="s2" spellcheck="false" autocomplete="off" autocapitalize="off" value="(t ∖ d) ∩ (t ∖ b)" aria-label="right expression"></div>
+      <div class="keys" id="skeys"></div>
+      <div class="chips" role="group" aria-label="pairs"><span class="m" style="color:var(--muted)">try:</span><button data-p="d ∪ (b ∩ c)|(d ∪ b) ∩ (d ∪ c)">spread ∪ over ∩</button><button data-p="d ∪ (b ∩ c)|(d ∪ b) ∩ c">a false regroup</button><button data-p="d ∖ (b ∪ c)|(d ∖ b) ∩ (d ∖ c)">∖ and ∪</button><button data-p="(d ∩ b) ∪ (d ∖ b)|d">split d</button><button data-p="t ∖ (d ∩ b)|(t ∖ d) ∪ (t ∖ b)">Not-through for ∩</button></div>
+      <div class="err" id="serr"></div>
+      <div class="venns"><div><canvas id="v1"></canvas><div class="vl" id="l1"></div></div><div><canvas id="v2"></canvas><div class="vl" id="l2"></div></div></div>
+      <div class="eqbox" id="sv"></div>
+      <div class="cap">Tap any region of the left drawing: its row appears below. A region is a row.</div>
+      <div class="eqbox" id="row"></div>
+    </div>
+  </section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2i3.1</span><span class="ph understand">understand</span>Why is ∃x (A(x) ⇒ B(x)) so in a world where no A is B?</li>
+      <li><span class="qid">2i3.1</span><span class="ph understand">understand</span>When do two expressions shade the same regions? <br>What can a drawing prove, and what can it not?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2i4">
-  <h2 class="sthead"><span class="stno">2i4</span>An Every With Nothing to Check</h2>
-  <p data-pid="4463b2">The same cheapness of ⇒ makes “every living mammoth is purple” true. There is no living mammoth to check, so the if is never broken. The accepted word is that such an every is <b>vacuously</b> so. A vacuous every is not a defect. It is what the if machine does with an empty hypothesis, and 1e showed why it must. It matters for the old sentences, as footing 2i7 shows.</p>
+  <h2 class="sthead"><span class="stno">2i4</span>Combining Sifts</h2>
+  <p data-pid="6580fe">2e gave φ as the letter for any condition. Combining sifts needs another, and here it is:</p>
+  <p class="eqline" data-pid="4daa8d">From here on, <span data-tex-inline="\psi"></span> (the Greek letter psi, in its small form) stands for another condition, a statement with a gap, used when φ is already in use.</p>
+  <p data-pid="7f11c7"><b>Sifting by a compound condition is the same as combining sifts.</b> Each of the following is a technique, proved by chasing a member with 2e's membership line and nothing else:</p>
+  <div class="eqline" data-tex="\begin{aligned}&\text{For any set } t \text{ and conditions } \varphi, \psi,\\ &\text{you may write:}\\[4pt] &\{x \in t : \varphi(x) \land \psi(x)\}\\ &\quad = \{x \in t : \varphi(x)\} \cap \{x \in t : \psi(x)\}\\ &\{x \in t : \varphi(x) \lor \psi(x)\}\\ &\quad = \{x \in t : \varphi(x)\} \cup \{x \in t : \psi(x)\}\\ &\{x \in t : \neg\varphi(x)\}\\ &\quad = t \setminus \{x \in t : \varphi(x)\}\end{aligned}"></div>
+  <p data-pid="a512ea">Example: take t = {cat, dog, owl}, φ “can fly” and ψ “has fur”. The sift by φ is {owl}. The sift by ψ is {cat, dog}. Nothing in t both flies and has fur, so both sides of the first line are ∅.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2i4.1</span><span class="ph understand">understand</span>What is a vacuously true every, and why is it not a defect?</li>
+      <li><span class="qid">2i4.1</span><span class="ph understand">understand</span>What does ψ stand for? <br>What does “sifting by a compound condition is combining sifts” mean?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2i5">
-  <h2 class="sthead"><span class="stno">2i5</span>The Four Old Sentences</h2>
-  <p data-pid="b5f76a">The oldest logic that has come down to us sorts sentences of the form “S is P” into four kinds. Medieval teachers named the kinds with the vowels of the Latin <i>AffIrmo</i> (I affirm) and <i>nEgO</i> (I deny):</p>
-  <div class="tablewrap"><table class="sq">
-    <thead><tr><th></th><th>sentence</th><th>in marks</th></tr></thead>
-    <tbody>
-      <tr><td class="c">A</td><td>every S is P</td><td data-tex-inline="\forall x\,(S(x) \Rightarrow P(x))">∀x (S ⇒ P)</td></tr>
-      <tr><td class="c">E</td><td>no S is P</td><td data-tex-inline="\forall x\,(S(x) \Rightarrow \neg P(x))">∀x (S ⇒ ¬P)</td></tr>
-      <tr><td class="c">I</td><td>some S is P</td><td data-tex-inline="\exists x\,(S(x) \land P(x))">∃x (S ∧ P)</td></tr>
-      <tr><td class="c">O</td><td>some S is not P</td><td data-tex-inline="\exists x\,(S(x) \land \neg P(x))">∃x (S ∧ ¬P)</td></tr>
-    </tbody></table></div>
-  <p data-pid="1a6484">Example, with S for cats and P for animals or for things asleep: A, every cat is an animal; E, no cat is a dog; I, some cat is asleep; O, some cat is not asleep. Here the letters S and P are names of kinds, as A(x) and B(x) were in footing 2i2, and not the statement letters of 1c.</p>
+  <h2 class="sthead"><span class="stno">2i5</span>Chasing a Member Through a Sift</h2>
+  <p data-pid="b7d980">Here is the first, chasing a member. Let y be anything. Unpack the sift: y is in {x ∈ t : φ(x) ∧ ψ(x)} exactly when y is in t, and φ(y) and ψ(y). By 1f's say-it-again and regroup, that is exactly when y is in t and φ(y), and y is in t and ψ(y). Pack the sifts: y is in the sift by φ, and in the sift by ψ. Pack ∩: y is in their intersection. This is true for everything, so by same-members the two sets are the same.</p>
+  <p data-pid="bd2966">So in the left picture, where d is the sift of t by φ and b the sift by ψ, the region “in d and in b” is the sift by φ ∧ ψ, and so on. The drawing of the sets and the table of the conditions are the same object seen from either side.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · sifts combined · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2i5.1</span><span class="ph understand">understand</span>What are the four old kinds of statement? <br>What do S and P stand for in them?</li>
+      <li><span class="qid">2i5.1</span><span class="ph understand">understand</span>How does chasing a member prove the sift by φ ∧ ψ is the intersection of the two sifts?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2i6">
-  <h2 class="sthead"><span class="stno">2i6</span>The Diagram of Opposition</h2>
-  <p data-pid="295394">Then the old logic asks how the four kinds oppose one another, and later teachers drew the answers as a diagram. A and E sit along the top, I and O along the foot, with links between them. (The picture draws the diagram.)</p>
-  <ul>
-    <li><b>Contradictories</b> (the crossing links, A with O and E with I): never both so and never both not so. Each is the other's denial.</li>
-    <li><b>Contraries</b> (A and E): never both so, though both can be not so. Example: “every swan is white” and “no swan is white” are both not so, because some swans are white and some are not.</li>
-    <li><b>Subcontraries</b> (I and O): never both not so.</li>
-    <li><b>Subalterns</b> (A to I, E to O): if every S is P, then some S is P.</li>
-  </ul>
-  <section class="pic" id="pic">
-    <div class="eyebrow">The picture · the diagram of opposition in a world you build</div>
-    <div class="panel">
-      <div class="cap">Tap a bin to put things in it or empty it: things that are S but not P, things that are both, things that are P but not S. (Try S as swans, P as white things.)</div>
-      <svg id="bins" viewBox="0 0 320 120" aria-label="the bins S only, both, P only"></svg>
-      <svg id="square" viewBox="0 0 320 250" aria-label="diagram of opposition"></svg>
-      <div class="eqbox" id="eqs"></div>
-      <div class="cap">Letters: teal so, ember not so. A link is solid teal when its relation is true in this world, dashed ember when the world breaks it. Empty S entirely and watch which links survive.</div>
-    </div>
-  </section>
+  <h2 class="sthead"><span class="stno">2i6</span>Writing a Set by a Condition</h2>
+  <p data-pid="7382ee">The official form is 2e's: name the set you sift from, then the condition. “The capitals of France and Italy” is not a legal sift as it stands. Make it one by naming a set that holds every capital, say the set c of cities of Europe:</p>
+  <div class="eqline" data-tex="\begin{aligned}&\{x \in c : \exists y\,(y \in \{\text{France},\text{Italy}\}\\ &\qquad \land\; x \text{ is the capital of } y)\}\\ &\quad = \{\text{Paris},\text{Rome}\}\end{aligned}"></div>
+  <p data-pid="8de861">Everyone abbreviates that to this, read “the capitals of y, for y in {France, Italy}”:</p>
+  <div class="eqline" data-tex="\{\text{the capital of } y : y \in \{\text{France},\text{Italy}\}\}"></div>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2i6.1</span><span class="ph understand">understand</span>What does each link of the diagram of opposition say?</li>
+      <li><span class="qid">2i6.1</span><span class="ph understand">understand</span>Why is “the capitals of France and Italy” not a legal sift as it stands, and how is it made one?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2i7">
-  <h2 class="sthead"><span class="stno">2i7</span>When the Subject Is Empty</h2>
-  <p data-pid="6f064b">Now the catch. Contraries, subcontraries and subalterns quietly assume that there are some S. Empty the subject (no living mammoths) and A, “every living mammoth is purple”, is vacuously so. So is E, “no living mammoth is purple”. So two contraries are both so. I and O each need a living mammoth to point at, so both are not so. So two subcontraries are both not so, and A no longer gives I.</p>
-  <p data-pid="e1fb5f">Only the crossing links survive, because they are not a fact about mammoths at all. They are the negation techniques of 2b, which may be used whatever the subject. Modern logic keeps the crossing links for every subject. It keeps the other links only when “and there is an S” is added as a given. In the picture of footing 2i6, empty S and watch the diagram crack along exactly those links.</p>
+  <h2 class="sthead"><span class="stno">2i7</span>The Shorthand, and What It Sifts From</h2>
+  <p class="eqline" data-pid="59116f">From here on, <span data-tex-inline="\{\text{the form of } y : y \in s\}"></span> means: the sift, from some set you have, of what the form produces from the members of s.</p>
+  <p data-pid="b3ab59">A form comes before the colon, and after it the set the placeholder runs through. <b>It is always short for a sift from some set you have that contains everything the form can produce.</b> If no such set is in hand, the shorthand names nothing, and that is 2e's illegal sift in disguise.</p>
+  <p data-pid="3d5691">Watch also for the form producing the same thing again, which the set does not record. Example: if Ann and Bea are sisters, this set has their mother as its only member:</p>
+  <div class="eqline" data-tex="\{\text{the mother of } y : y \in \{\text{Ann},\text{Bea}\}\}"></div>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2i7.1</span><span class="ph understand">understand</span>Which links of the diagram survive an empty subject, and why those?</li>
+      <li><span class="qid">2i7.1</span><span class="ph understand">understand</span>What is the shorthand {the form of y : y ∈ s} short for? <br>What must you watch for?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2i8">
-  <h2 class="sthead"><span class="stno">2i8</span>Pushing a Not Through an Every</h2>
-  <p data-pid="f25f69">The denial of “every” is “some … not”, and the denial of “some” is “every … not”, which is “no”. 2b proved these as the techniques not-some and counterexample. 2b also marked the direction that waits: from “not every” to “some … not”.</p>
-  <p data-pid="1ef9c1">Pushing a not through a run of marks takes a move for each mark. Each mark turns into its partner, and the ⇒ inside turns to ∧ by 1f's negated-if. Example first, in words: “not every cat is asleep” becomes “some cat is not asleep”. Here is the same push in marks, on the A line.</p>
-  <p data-pid="ebf841">Start from <span data-tex-inline="\neg\,\forall x\,\big(S(x) \Rightarrow P(x)\big)"></span>: not every S is P. Push the not through the every. The every becomes some-not: <span data-tex-inline="\exists x\,\neg\big(S(x) \Rightarrow P(x)\big)"></span>. That direction waits for rung 7. Over a subject you can list, you look.</p>
-  <p data-pid="88851f">Then push the not through the if, by 1f's negated-if. The negation of an if is an and: <span data-tex-inline="\exists x\,\big(S(x) \land \neg P(x)\big)"></span>. By itself, that is negated-if's rung-7 direction too. Inside a some the place is not turned about, so the step still waits for rung 7, as the rulebook marks it.</p>
-  <p data-pid="99a55d">The result is O, “some S is not P”. <b>The diagram's crossing link is nothing but this push.</b> Two marks change: the every becomes a some, and the ⇒ turns into ∧. Every goes with ⇒, some with ∧, as promised. And the ¬ ends up on the kind P.</p>
-  <p data-pid="bbb5cf">The other way, from O to “not A”, is 2b's counterexample technique and negated-if's licensed direction: good for any subject at all. So the crossing link is true: by techs in the licensed direction, and by looking in the other. That is why the crossing link survives the empty subject: a counterexample kills an every whether or not anything else exists.</p>
-  <section class="slides" id="sl8"><div class="eyebrow">The slides · negating A · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">2i8</span>Practice, Both Ways</h2>
+  <p data-pid="69ca9e">Practice, both ways. {a, e, i, o, u} is {x ∈ l : x is a vowel} with l the letters of the alphabet. It is also {the vowel of y : y ∈ {cat, bed, pig, dog, bus}}, a form that happens to produce each vowel exactly from its word. Two words with the same vowel would produce it twice, and the set would not notice. {Olympia, Salem, Sacramento} is {the capital of y : y ∈ {Washington, Oregon, California}}. It is also {x ∈ c : x is a capital ∧ x is in France, Italy or Spain}, if the facts of geography bear that out, which the ladder cannot check and you can. Different descriptions, same members, same set: that is so by 2d's axiom, and it is why the practice is safe.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2i8.1</span><span class="ph understand">understand</span>What does pushing a not through an every do to its marks? <br>Which direction of the push waits for rung 7?</li>
+      <li><span class="qid">2i8.1</span><span class="ph understand">understand</span>Why is it safe that one set has many descriptions?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2i9">
-  <h2 class="sthead"><span class="stno">2i9</span>A Not Through Several Marks</h2>
-  <p data-pid="7b60cb">With more than one mark the method is the same: a change for each mark. Example: “everyone has a mother”, ∀x ∃y M(y, x). Denied, it becomes ∃x ¬∃y M(y, x), and then ∃x ∀y ¬M(y, x): someone has nobody for a mother. The order of the marks stays put; only the kinds of mark change.</p>
+  <h2 class="sthead"><span class="stno">2i9</span>Driving an Expression to Its Simplest</h2>
+  <p data-pid="601e9f">1f rewrote statements by citing a technique per line; 2f turned them into techniques about sets. Here they are as a tool. <b>Take an expression and drive it to the simplest set it names, each step naming its technique.</b> You will later drive an expression of a very different kind the same way. Each step is a sameness, and names its technique. Using a technique inside the whole is a move: 0b's swap axiom.</p>
+  <p data-pid="ca40a6">The plan for choosing a technique: look first for a part that units or say-it-again collapses. Then look for a spread to run backwards.</p>
+  <p data-pid="8fa174">Take (d ∩ b) ∪ (d ∩ c) ∪ (d ∩ (b ∪ c)). Run the spread technique backwards on the first union: (d ∩ b) ∪ (d ∩ c) is d ∩ (b ∪ c). So the whole is a union of d ∩ (b ∪ c) with itself. By say-it-again, that is d ∩ (b ∪ c).</p>
+  <p data-pid="bd822f">Take (d ∪ b) ∩ (d ∪ ∅). By units, d ∪ ∅ is d. So the whole is (d ∪ b) ∩ d. Turn the intersection about: d ∩ (d ∪ b). By absorb, that is d.</p>
+  <section class="slides" id="sl9"><div class="eyebrow">The slides · driven to its simplest · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2i9.1</span><span class="ph understand">understand</span>How is a not pushed through several marks in a row?</li>
+      <li><span class="qid">2i9.1</span><span class="ph understand">understand</span>What does driving an expression to its simplest mean? <br>What licenses using a technique inside the whole?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2i10">
-  <h2 class="sthead"><span class="stno">2i10</span>Books That Balance, and the Window</h2>
-  <p data-pid="cd11af">Every step so far worked on paper. This step puts a careful paper argument next to the world, to see what the paper can and cannot promise.</p>
-  <aside class="nature">
-    <div class="eyebrow">Anexact, yet rigorous · the ledger, out the window</div>
-    <p data-pid="3c406e"><a href="r01a.html#fc47b4">1a6</a> kept books: every change paid for by its technique, and a description whose books don't balance is wrong. That rule ran one way. The other way is worth a look. A ledger is a list of claims, each with what pays for it. Here is a weather forecast kept as a ledger. Each line is a claim the forecast makes, or is paid for by techs you have.</p>
-    <div class="eqline" data-tex="\begin{aligned}&amp;\text{1.}\quad \neg\,\mathrm{Cloudy}\\ &amp;\quad\text{the forecast}\end{aligned}"></div>
-    <div class="eqline" data-tex="\begin{aligned}&amp;\text{2.}\quad \mathrm{Cloudy} \lor \mathrm{Sunny}\\ &amp;\quad\text{the forecast}\end{aligned}"></div>
-    <div class="eqline" data-tex="\begin{aligned}&amp;\text{3.}\quad \mathrm{Sunny}\\ &amp;\quad\text{split 2: cloudy clashes with 1}\end{aligned}"></div>
-    <div class="eqline" data-tex="\begin{aligned}&amp;\text{4.}\quad \mathrm{Rain} \oplus \mathrm{Sunny}\\ &amp;\quad\text{the forecast: not both}\end{aligned}"></div>
-    <div class="eqline" data-tex="\begin{aligned}&amp;\text{5.}\quad \neg\,\mathrm{Rain}\\ &amp;\quad\text{3, 4, the only-one technique}\end{aligned}"></div>
-    <div class="eqline" data-tex="\begin{aligned}&amp;\text{6.}\quad \neg\,\mathrm{Snow}\\ &amp;\quad\text{the forecast}\end{aligned}"></div>
-    <div class="eqline" data-tex="\begin{aligned}&amp;\text{7.}\quad \neg\,(\mathrm{Rain} \lor \mathrm{Snow})\\ &amp;\quad\text{5, 6, not-through for or}\end{aligned}"></div>
-    <div class="eqline" data-tex="\begin{aligned}&amp;\text{8.}\quad \forall p\; \neg\,\mathrm{Rain}(p)\\ &amp;\quad\text{5, said of each place p}\end{aligned}"></div>
-    <div class="eqline" data-tex="\begin{aligned}&amp;\text{9.}\quad \neg\,\exists p\; \mathrm{Rain}(p)\\ &amp;\quad\text{8, not-some}\end{aligned}"></div>
-    <div class="eqline" data-tex="\begin{aligned}&amp;\text{10.}\quad \forall p\,\big(\mathrm{Rain}(p) \Rightarrow \mathrm{Wet}(p)\big)\\ &amp;\quad\text{the forecast}\end{aligned}"></div>
-    <p data-pid="ff4655">Every line is paid for. Nowhere in town is it raining, and wherever it rains, the ground gets wet. The books balance.</p>
-    <p data-pid="faadb9">Now put your head out the window. There are clouds, and the sun is out too. That denies line 1. A light rain is falling through the sunshine. That is rain and shine together, and it denies line 4. Under the porch roof, rain falls past a dry step. That is a counterexample to line 10, in 2b's sense.</p>
-    <div class="eqline" data-tex="\begin{aligned} &amp;\mathrm{Cloudy} \land \mathrm{Sunny}\\ &amp;\quad\text{denies 1}\\ &amp;\mathrm{Rain} \land \mathrm{Sunny}\\ &amp;\quad\text{denies 4}\\ &amp;\mathrm{Rain}(\mathrm{porch}) \land \neg\,\mathrm{Wet}(\mathrm{porch})\\ &amp;\quad\text{denies 10} \end{aligned}"></div>
-    <p data-pid="bd2e72">One look, and three entries fail. No step failed. Each tech did what it promises: true in, true out. The trouble was in what went in. <b>Books can balance on paper and still be false the moment you look out the window.</b></p>
-    <p data-pid="1fd952">A real forecast keeps 1a's books for the air: water, heat, wind. The ledger is the size of the whole world. Weather anywhere becomes weather here within days, so no town's books balance alone. The books would have to list every parcel of air on Earth, and the sky is a crowd, 2b's other size of statement. No one can write down every parcel. So the ledger is kept in chunks, each many kilometres wide. Each entry is a little off, and the error grows each day the books run forward. That is why a forecast reaches a week or so ahead and stops.</p>
-    <p class="bait" data-pid="825bc3">A forecast reads: “tomorrow it rains somewhere in the valley, or it rains nowhere.” Can a window prove it false? If not, what has it told you?</p>
-  </aside>
+  <h2 class="sthead"><span class="stno">2i10</span>Rewriting on Purpose</h2>
+  <p data-pid="3c6e08">Take d ∖ (b ∪ (d ∖ d)). First, d ∖ d is ∅: nothing is both in d and not in d, by 1f's clash, and the one-empty-set technique names it. So the whole is d ∖ (b ∪ ∅). By units, that is d ∖ b.</p>
+  <p data-pid="d11c8f">And d ∖ b is also (d ∖ b) ∩ d. That is because d ∖ b is part of d (the sift-is-part technique), and a set shares all its members with a set it is part of. Here is why. If s ⊆ d, each member of s is in s and in d, so in s ∩ d. Each member of s ∩ d is in s. So s ∩ d = s, by the same-members axiom. That step is not simpler, but it is a rewriting you may want.</p>
+  <p data-pid="3077cd">The last step shows the other use of techniques. They serve not only for simplifying, but for rewriting on purpose into a shape some later step needs, the way 1f grew a statement. Both directions of a both-ways technique are yours.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2i10.1</span><span class="ph understand">understand</span>What does the look out of the window show about books that balance?</li>
+      <li><span class="qid">2i10.1</span><span class="ph understand">understand</span>Besides simplifying, what is the other use of the techniques?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2i11">
-  <h2 class="sthead"><span class="stno">2i11</span>The Best Syllogism</h2>
-  <p data-pid="2c5aca">A <b>syllogism</b> draws a conclusion from given lines, each an A, E, I or O sentence. The given lines of a syllogism are called its <b>premises</b>. The premises are linked by a <b>middle term</b>, a kind that appears in both premises and vanishes from the conclusion. Example: every mammal is an animal; every dog is a mammal; so every dog is an animal. “Mammal” is the middle term.</p>
-  <p data-pid="2106cd">Medieval students memorised the valid forms by names whose vowels spell the sentence kinds. The best of them is <b>Barbara</b>, A, A, A: every M is P, every S is M, so every S is P. Each valid form is a brief argument by 2b's techs. Barbara's argument uses nothing but a fresh case, using an every, and carrying an if through, again and again.</p>
-  <p data-pid="f670d0">Rows hold every M is P, and every S is M. Let n be any S: a fresh name, with “n is S” said of it.</p>
-  <p data-pid="752e28">Every S is M, so n is M: use the every on n, then carry the if through. The middle term has appeared.</p>
-  <p data-pid="aa1dc8">Every M is P, so n is P: use that every on n, and carry it through. The middle term has done its work and vanishes.</p>
-  <p data-pid="d35215">The case used nothing about n but that n is S, so, back at the margin, every S is P: <span data-tex-inline="\forall x\,(S(x) \Rightarrow P(x))"></span>.</p>
-  <section class="slides" id="sl11"><div class="eyebrow">The slides · Barbara · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">2i11</span>The Step That Is Only for Listed Sets</h2>
+  <p data-pid="23e553">Here is a sameness that looks like a technique and is only a part of one. Split a set by another: everything in d is, you would say, either outside b or inside b, so d = (d ∖ b) ∪ (d ∩ b). Chase a member and watch where it sticks.</p>
+  <p class="eqline" data-pid="4f374a">From here on, ⇐ is ⇒ written the other way round: Q ⇐ P says just what P ⇒ Q says, and it claims nothing new.</p>
+  <p data-pid="688c72">Let x be anything. By merge-membership, and unpacking ∖ and ∩: x is in (d ∖ b) ∪ (d ∩ b) exactly when x is in d and not in b, or x is in d and in b. Run spread backwards, pulling the shared part out in front: x is in d, and x is not in b or is in b.</p>
+  <p data-pid="1d890c">From the union to d is fine. Keep left: x is in d. That direction is a move for any sets. From d back to the union sticks. From x in d alone, you would need “x is not in b, or x is in b”. That is 1f's either-way, for settled statements only. For a listed b, you can look. For any b, it waits for rung 7.</p>
+  <p data-pid="825c0e">So <span data-tex-inline="(d \setminus b) \cup (d \cap b) \subseteq d">(d ∖ b) ∪ (d ∩ b) ⊆ d</span> is a technique for any sets. The sameness is a technique for listed sets only, where membership in b is settled. In the picture it is true, because the picture is listed. On the endless sets of later rungs it is a question until rung 7 answers it. <b>Knowing exactly which step is the settled-only step is the skill; the rest is bookkeeping.</b></p>
+  <section class="slides" id="sl11"><div class="eyebrow">The slides · the settled-only step · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2i11.1</span><span class="ph understand">understand</span>What is a syllogism, and what is its middle term? <br>Which techs does Barbara’s argument use?</li>
+      <li><span class="qid">2i11.1</span><span class="ph understand">understand</span>In d = (d ∖ b) ∪ (d ∩ b), which step is the settled-only step, and what does it need?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2i12">
-  <h2 class="sthead"><span class="stno">2i12</span>Three More Valid Forms</h2>
-  <p data-pid="866d66"><b>Celarent</b> is E, A, E: no M is P, every S is M, so no S is P. Example: no fish is a mammal, every shark is a fish, so no shark is a mammal.</p>
-  <p data-pid="c9f1c0"><b>Darii</b> is A, I, I: every M is P, some S is M, so some S is P. Example: every dog is an animal, some pet is a dog, so some pet is an animal.</p>
-  <p data-pid="274eb1"><b>Ferio</b> is E, I, O: no M is P, some S is M, so some S is not P. Example: no fish has fur, some pet is a fish, so some pet has no fur.</p>
-  <p data-pid="6a252c">The three run the way Barbara runs. Where a premise says “no”, the argument reaches a clash. Where a premise or the conclusion says “some”, the argument calls the example and later shows it.</p>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">2i12.1</span><span class="ph understand">understand</span>How do Celarent, Darii and Ferio run differently from Barbara?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="2i13">
-  <h2 class="sthead"><span class="stno">2i13</span>Two Forms That Fail</h2>
-  <p data-pid="5c04c7">The commonest invalid form is the <b>undistributed middle</b>: every cat is a mammal, every dog is a mammal, so every dog is a cat. Try to run Barbara's argument. You set in the case of any dog and reach mammal, and then no premise leaves mammal. Both kinds sit inside the middle, and the middle never links them. Rex convicts the form: both premises are true, and he is a dog that is not a cat, a counterexample in 2b's sense.</p>
-  <p data-pid="d06460">And a form the old logic accepted fails the modern reading: <b>Darapti</b>, “every M is P, every M is S, so some S is P”. If there are no M, both premises are vacuously so, and the conclusion, a some, has nothing to point at. Example: every unicorn is purple, every unicorn has a horn, so something with a horn is purple. Darapti is the diagram's empty-subject problem again, and it is mended the same way: add “there is an M” as a given.</p>
-  <section class="slides" id="sl13"><div class="eyebrow">The slides · the undistributed middle, and Darapti cracked · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">2i12</span>Products as Grids</h2>
+  <p data-pid="ef84ea"><a href="r02h.html#29ca2e">2h8</a> laid a product out as a grid. Here is {p, q, r} × {x, y}:</p>
+  <div class="tablewrap"><table class="gp"><thead><tr><th></th><th>x</th><th>y</th></tr></thead><tbody><tr><th>p</th><td>(p, x)</td><td>(p, y)</td></tr><tr><th>q</th><td>(q, x)</td><td>(q, y)</td></tr><tr><th>r</th><td>(r, x)</td><td>(r, y)</td></tr></tbody></table></div>
+  <p data-pid="dce907">Every cell is a member of the product and every member is a cell; the grid is the listing. Turn the sets about and the grid turns about. {x, y} × {p, q, r} has a row for x and a row for y, and its cells are the pairs turned about, (x, p) and so on. None of them is a cell of the former grid, by the equal-pairs technique. The right picture lets you choose the sets and tap cells.</p>
   <section class="pic" id="pic2">
-    <div class="eyebrow">The picture · a syllogism bench</div>
+    <div class="eyebrow">The picture · a product as a grid, and a set of its pairs</div>
     <div class="panel">
-      <div class="cap">A small world of creatures, each with its kinds. Choose a form and its terms; the bench checks each premise and the conclusion in this world.</div>
-      <div class="world" id="world"></div>
-      <div class="chips" role="group" aria-label="form" id="forms"><span class="m" style="color:var(--muted)">form:</span></div>
-      <div class="knobs">
-        <div class="knob"><label for="tS">S</label><select id="tS"></select></div>
-        <div class="knob"><label for="tM">M (middle)</label><select id="tM"></select></div>
-        <div class="knob"><label for="tP">P</label><select id="tP"></select></div>
-      </div>
-      <div class="prem" id="prem"></div>
-      <div class="eqbox" id="verd"></div>
-      <div class="cap">A valid form never has both premises true and the conclusion false, in any world. Find terms that convict the undistributed middle, and terms that convict Darapti; then try to convict Barbara and see why you cannot.</div>
+      <div class="chips" role="group" aria-label="left set" id="lset"><span class="m" style="color:var(--muted)">left set:</span></div>
+      <div class="chips" role="group" aria-label="right set" id="rset"><span class="m" style="color:var(--muted)">right set:</span></div>
+      <div class="cap">The grid is the product: a row for each member of the left set, a column for each member of the right, a pair in each cell. Tap cells to choose a set of pairs.</div>
+      <svg id="pg" viewBox="0 0 300 240" aria-label="product grid"></svg>
+      <div class="chips" role="group" aria-label="turn about"><span class="m" style="color:var(--muted)">then:</span><button id="swap">turn the sets about</button></div>
+      <div class="eqbox" id="pv"></div>
+      <div class="cap">Ember cells: the pairs you chose, a subset of the product. Turn the sets about and watch every pair turn about with them: no cell survives, by the equal-pairs technique.</div>
     </div>
   </section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2i13.1</span><span class="ph understand">understand</span>Why does the undistributed middle fail? <br>Why does Darapti fail the modern reading?</li>
+      <li><span class="qid">2i12.1</span><span class="ph understand">understand</span>Why is the grid of u × b the listing of the product? <br>What happens to it when the sets are turned about?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2i13">
+  <h2 class="sthead"><span class="stno">2i13</span>Reading a Relation off Its Dots</h2>
+  <p data-pid="de6206">A relation on a set d (<a href="r02h.html#a2cdb0">2h11</a>) is a choice of cells on the grid of d × d: dot the cells whose pairs are in. Read the properties off the dots.</p>
+  <p data-pid="a973a6">A <b>self-cell</b> is a cell where the row and the column name the same thing.</p>
+  <p data-pid="762164"><b>Reflexive</b>: every self-cell is dotted.</p>
+  <p data-pid="ec09cb"><b>Symmetric</b>: for every dotted cell, the cell with the row and column exchanged is dotted. The dots match across the self-cells.</p>
+  <p data-pid="a4364b"><b>Transitive</b>: whenever the cell at row x column y and the cell at row y column z are dotted, so is the cell at row x column z. The shortcut is always there.</p>
+  <p data-pid="14e3fd">When all of them are true, the dots fall into blocks, and the blocks are the classes. List the members whose rows look alike and you have listed a class. 2h's picture does this on a household. Here is a worked reading on {ant, ape, bee} with “has the same initial as”.</p>
+  <p data-pid="caaa08">The dotted cells are (ant, ant), (ant, ape), (ape, ant), (ape, ape) and (bee, bee). Reflexive: every self-cell is dotted. Check them one by one; an every over a list is an and, as 2j saw. Symmetric: the only dot off the self-cells, (ant, ape), has its match (ape, ant). Transitive: every step and further step has its shortcut. For instance, (ant, ape) and (ape, ant) give (ant, ant), which is in. The blocks are the classes: [ant] = {ant, ape} and [bee] = {bee}.</p>
+  <section class="slides" id="sl13"><div class="eyebrow">The slides · a grid read · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2i13.1</span><span class="ph understand">understand</span>How do you read reflexive, symmetric and transitive off a grid’s dots?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2i14">
-  <h2 class="sthead"><span class="stno">2i14</span>Finding the Missing Premise</h2>
-  <p data-pid="929316">Run a syllogism backwards. Given a conclusion and a premise, find the other: the missing premise must supply the link the middle term makes. Wanting “no S is P” from “every S is M”, you need the middle M kept apart from P: “no M is P”, and the form is Celarent. Wanting “some S is not P” from “no M is P”, you need some S to be M: Ferio. Wanting an every, the premises must both be everys (Barbara, Celarent); a some in the premises gives only a some in the conclusion. The syllogism bench in footing 2i13 lets you try forms against a small world and see which premise is doing the work.</p>
-  <p data-pid="05028f">A writer of puzzle books set chains of syllogisms to be untangled. One gives three lines: babies are illogical; nobody is despised who can manage a crocodile; illogical persons are despised. (“Illogical” means unable to reason; “despised” means looked down on.)</p>
+  <h2 class="sthead"><span class="stno">2i14</span>Built From Nothing</h2>
+  <p data-pid="6a469d">Every tool needs a set to start from, and by 2e's axiom there is one, from which ∅ was sifted. From ∅ alone, by gather and power set, here is a short gallery. Each is written all the way down to braces, with the reason it exists.</p>
+  <p data-pid="e444d3">∅ comes first. Sift a set by x ≠ x. There is a set with no members, by the empty-set axiom, and the one-empty-set technique names it.</p>
+  <p data-pid="2fdbb2">{∅} is ∅ gathered with itself. It is not empty: ∅ is in it.</p>
+  <p data-pid="ecb976">{∅, {∅}} is ∅ gathered with {∅}. Its two members differ: {∅} has a member, and ∅ has none.</p>
+  <p data-pid="4951ac">{{∅}} is {∅} gathered with itself. It is not {∅}: ∅ is in {∅}, and ∅ is not in {{∅}}.</p>
+  <p data-pid="2b2d44">𝒫({∅}) is {∅, {∅}}: keep or drop the only member, ∅. By same-members, it is the same set as the gathering above.</p>
+  <p data-pid="cf6c98">The pair (∅, {∅}) is {{∅}, {∅, {∅}}}. Its left entry is ∅, in every member; its right entry is {∅}.</p>
+  <p data-pid="e610aa">And ⋃{∅, {∅}} = {∅}: tipping out ∅ gives nothing, and tipping out {∅} gives the thing ∅.</p>
+  <p data-pid="371e30">Rung 3 takes the gathering {∅, {∅}} and asks what happens if you keep going. Everything it needs to ask that question has been built here.</p>
+  <section class="slides" id="sl14"><div class="eyebrow">The slides · from the empty set · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2i14.1</span><span class="ph understand">understand</span>Running a syllogism backwards, what must the missing premise supply? <br>Why can a some in the premises not give an every?</li>
+      <li><span class="qid">2i14.1</span><span class="ph understand">understand</span>Why are {∅, {∅}} and {{∅}} different sets?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2i15">
+  <h2 class="sthead"><span class="stno">2i15</span>Illegal Moves</h2>
+  <p data-pid="58fd11">Each of these looks like a use of this step and is not.</p>
+  <div class="brkkey"></div>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
+\text{the drawing shows } a \cap b \subseteq a, \text{ so it is proved}\,? @@ a drawing is a world of listed things: it checks the shape of a technique and hunts counterexamples. The chase or the techniques prove it
+\{\text{the capital of } y : y \text{ is a country}\}\,? @@ no set in hand holds every capital it could produce: 2e's illegal sift in disguise
+a = (a \setminus b) \cup (a \cap b) \text{ for any sets}\,? @@ the step back needs x ∉ b ∨ x ∈ b: settled membership. For listed b, yes; for any b, rung 7
+\{p, q\} \times \{x, y\} = \{x, y\} \times \{p, q\}\,? @@ (p, x) is a cell of the first grid and not of the second: equal-pairs
+\begin{aligned}&\text{a relation with every}\\ &\quad\text{self-cell dotted is symmetric}\,?\end{aligned} @@ reflexive says nothing of turned-about cells: dot (ant, ant), (ape, ape) and (ant, ape) only
+  </pre>
+  <p data-pid="0b5668">The third illegal move, d = (d ∖ b) ∪ (d ∩ b) for any sets, is the one this step was built to catch. The sameness is true in every drawing you will ever make, because every drawing is listed.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2i15.1</span><span class="ph understand">understand</span>Why is the drawing’s showing d ∩ b ⊆ d not a proof?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2i16">
+  <h2 class="sthead"><span class="stno">2i16</span>Where You Stand</h2>
+  <p data-pid="6e130e">You can say what a set is and when sets are the same. You can sift, gather, merge, and take all the subsets. You know that each tool needs a set in hand, and that by an axiom there is a set to start from. You can prove sets the same by chasing a member or by inclusions each way, and you can show with a witness that a sameness cannot stand. You can rewrite by the techniques, and you know which direction waits for rung 7. You can make order out of orderless things, lay out products as grids, read a relation's properties off its dots, and chop a set into classes. You know that nothing is a member of itself and that there is no set of everything, and why. <b>That is the ordinary toolkit of collections, the one every mathematics book assumes without saying so, built here from the ground floor.</b></p>
+  <p class="bench" data-pid="6be36e">Now you can build and take apart collections.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2i16.1</span><span class="ph understand">understand</span>Which sameness of this rung waits for rung 7 before it holds for any sets, and why?</li>
     </ol>
   </section>
 </section>
@@ -303,125 +325,159 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
-  <div class="chq"><span class="chid">2i.4.1</span><span class="tagq">build</span>Find an argument from your own life whose terms sit inside a relation (x is a cousin of y), so that the four old kinds cannot write it; write it in marks and prove it. <br>Push a not through its foot, marking the changes of mark the techs withhold. <br>Does it need a given line that something exists, and if so, which?</div>
-  <div class="chq"><span class="chid">2i.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{Let } N(x) \text{ say } \neg(x = x),"></span> <span data-tex-inline="V(x) \text{ “}x \text{ is a vet”.}"></span> <span data-tex-inline="\text{No given lines.}"></span> <span data-tex-inline="\text{Feet: } \forall x\, (N(x) \Rightarrow V(x))"></span> <span data-tex-inline="\text{and } \forall x\, (N(x) \Rightarrow \neg V(x))"></span></span>Prove both feet. <br>Find which of the four old kinds they are, and the link on the diagram of opposition that having both breaks.</div>
-  <div class="chq"><span class="chid">2i.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{Let } H(x) \text{ say “}x \text{ is a heron}"></span> <span data-tex-inline="\text{at the school pond”,}"></span> <span data-tex-inline="W(x) \text{ “}x \text{ is white”.}"></span> <span data-tex-inline="\text{Given only: } \neg\forall x\, (H(x) \Rightarrow W(x))"></span> <span data-tex-inline="\text{Foot: } \exists x\, H(x)"></span></span>Show that rows holding the given and ∀x ¬H(x) equal ⊥. <br>Argue toward the foot in plain words, as far as you can take it.</div>
-  <div class="chq"><span class="chid">2i.4.4</span><span class="tagq">seam</span>Should “every moose in the school gym is grey” claim that there is a moose in the school gym? <br>What does each answer cost the diagram of opposition?</div>
+  <div class="chq"><span class="chid">2i.4.1</span><span class="tagq">build</span>Write a relation on a listed set of things you know as a sift from its product, with its condition written out. Draw its grid, read off its properties, and mend it into a sameness relation with the fewest added cells. <br>Write the set of its classes in the shorthand, and again as a sift, naming the set it sifts from.</div>
+  <div class="chq"><span class="chid">2i.4.2</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{The subsets of } \{p, q, r\},"></span> <span data-tex-inline="\text{listed by keep-or-drop;}"></span> <span data-tex-inline="\text{the rows of 1e's table}"></span> <span data-tex-inline="\text{for letters } p, q, r."></span></span>Match the subsets with the rows, each to each. What do T and F mean in your matching? <br>Match the regions of a drawing of d, b, c inside t with the subsets of {d, b, c}.</div>
+  <div class="chq"><span class="chid">2i.4.3</span><span class="tagq">edge</span>Is ∅ a relation on ∅? Which of reflexive, symmetric and transitive is it, and if it is a sameness relation, what are its classes and the set of them? <br>On the set whose only member is the owl, which properties survive?</div>
+  <div class="chq"><span class="chid">2i.4.4</span><span class="tagq">seam</span>Let b be the bikes parked for the day at Lincoln, Grant and Hill schools, and x ∼ y say “x and y are parked at the same school”. <br>Is the school where x is parked the class [x]? <br>Should a new kind of thing be made as the class of old things equivalent to one another?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r02h.html">← 2h · sets by hand</a><a href="r02stat.html">2·stat · who is in either group, and who is in both? →</a></nav>
+<nav class="nextrung"><a href="r02h.html">← 2h · pairs in order</a><a href="r02j.html">2j · every and some by hand →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>Who said it first</h3>
-  <p>The four lines and the syllogisms are Aristotle’s; the diagram is the square of opposition, drawn by later commentators from his remarks. The puzzle writer is Lewis Carroll.</p>
-  <blockquote class="voice"><p>“The affirmation ‘every man is white’ is the contradictory of the denial ‘not every man is white’, or again, the proposition ‘no man is white’ is the contradictory of the proposition ‘some men are white’.”</p><cite>Aristotle, On Interpretation 7 (17b), trans. E. M. Edghill (Oxford, 1928)</cite></blockquote>
-  <blockquote class="voice"><p>“If A is predicated of all B, and B of all C, A must be predicated of all C.”</p><cite>Aristotle, Prior Analytics I.4 (25b), trans. A. J. Jenkinson (Oxford, 1928)</cite></blockquote>
-  <p data-pid="dd277d">The ledger out the window: Edward Lorenz found in 1961 that his weather model, rerun from numbers rounded from six decimal places to three, drifted to entirely different weather within about two months of model time. A small error in the entries, run forward, swamps the books. It is why forecasts stop where they do.</p>
-  <aside class="voice para"><p>Lewis Carroll wrote chains of syllogisms meant to be untangled. One gives three lines: babies are illogical; nobody is despised who can manage a crocodile; illogical persons are despised. Carroll asked what follows about babies and crocodiles.</p><cite>Lewis Carroll, Symbolic Logic, Part I (1896); paraphrase</cite></aside>
+  <p>The pictures of overlapping regions are John Venn’s (1880), building on diagrams Leonhard Euler had used in his letters a good deal earlier. Their accepted names are Venn diagrams and Euler diagrams.</p>
 </section>
 </div>
 
 <script src="rung.js"></script>
 <script>
 (function(){
-const {tex,stepper}=Rung;
+const {tex,col,stepper}=Rung;
+const R=String.raw;
 const NS='http://www.w3.org/2000/svg';
-function el(tag,at,parent){ const e=document.createElementNS(NS,tag); for(const k in at) e.setAttribute(k,at[k]); if(parent) parent.appendChild(e); return e; }
 
-/* ---------- left: bins and the diagram ---------- */
-const bins=document.getElementById('bins'), sq=document.getElementById('square');
-let inh={sp:true,both:true,ps:true};
-const BINS=[['sp','S, not P',10],['both','S and P',115],['ps','P, not S',220]];
-function drawBins(){
-  bins.innerHTML='';
-  BINS.forEach(([k,lab,x])=>{ const g=el('g',{style:'cursor:pointer'},bins);
-    el('rect',{x,y:10,width:90,height:100,rx:8,style:'fill:'+(k==='ps'?'var(--teal)':k==='sp'?'var(--ember)':'var(--gold)')+';fill-opacity:'+(inh[k]?'.14':'.04')+';stroke:var(--'+(k==='ps'?'teal':k==='sp'?'ember':'gold')+');stroke-width:2;stroke-dasharray:'+(inh[k]?'0':'5 4')},g);
-    el('text',{x:x+45,y:28,'text-anchor':'middle',style:'fill:var(--ink);font:12px var(--mono)'},g).textContent=lab;
-    if(inh[k]) [[x+25,60],[x+45,78],[x+65,60],[x+45,96]].forEach(([cx,cy])=>el('circle',{cx,cy,r:6,style:'fill:var(--ink)'},g));
-    else el('text',{x:x+45,y:75,'text-anchor':'middle',style:'fill:var(--muted);font:12px var(--mono)'},g).textContent='empty';
-    g.addEventListener('click',()=>{ inh[k]=!inh[k]; drawAll(); }); });
-}
-function drawSquare(){
-  sq.innerHTML='';
-  const A=!inh.sp, E=!inh.both, I=inh.both, O=inh.sp;
-  const P={A:[60,40],E:[260,40],I:[60,210],O:[260,210]}, val={A,E,I,O};
-  const edges=[['A','E','contraries',!(A&&E)],['I','O','subcontraries',(I||O)],['A','I','subaltern',(!A||I)],['E','O','subaltern',(!E||O)],['A','O','',A!==O],['E','I','',E!==I]];
-  edges.forEach(([a,b,lab,ok])=>{ el('line',{x1:P[a][0],y1:P[a][1],x2:P[b][0],y2:P[b][1],style:'stroke:var(--'+(ok?'teal':'ember')+');stroke-width:'+(ok?2.2:2.6)+';'+(ok?'':'stroke-dasharray:7 5')},sq); });
-  const lt=(x,y,t,rot)=>{ const e=el('text',{x,y,'text-anchor':'middle',style:'fill:var(--muted);font:11px var(--mono)'},sq); if(rot) e.setAttribute('transform','rotate('+rot+' '+x+' '+y+')'); e.textContent=t; };
-  lt(160,30,'contraries'); lt(160,232,'subcontraries'); lt(44,125,'subaltern',-90); lt(276,125,'subaltern',90); lt(160,108,'contradictories');
-  for(const k in P){ const [x,y]=P[k]; el('circle',{cx:x,cy:y,r:17,style:'fill:var(--card);stroke:var(--'+(val[k]?'teal':'ember')+');stroke-width:3'},sq);
-    el('text',{x,y:y+6,'text-anchor':'middle',style:'fill:var(--'+(val[k]?'teal':'ember')+');font:600 17px var(--serif)'},sq).textContent=k; }
-  const notes=[]; const Sempty=!inh.sp&&!inh.both;
-  if(A&&E) notes.push('A\\text{ and }E\\text{ both so: contraries broken}');
-  if(!I&&!O) notes.push('I\\text{ and }O\\text{ both not so: subcontraries broken}');
-  if(A&&!I) notes.push('A\\text{ so, }I\\text{ not so: subaltern broken}');
-  if(E&&!O) notes.push('E\\text{ so, }O\\text{ not so: subaltern broken}');
-  const tv=b=>b?'\\htmlClass{keep}{\\text{so}}':'\\htmlClass{new}{\\text{not so}}';
-  tex(document.getElementById('eqs'),`\\begin{gathered} A\\;${tv(A)}\\quad E\\;${tv(E)}\\quad I\\;${tv(I)}\\quad O\\;${tv(O)} \\\\ ${Sempty?'\\text{no S at all: every S-line is vacuous or empty-handed}':'\\text{there is an S}'} \\\\ ${notes.length?notes.join(' \\\\ '):'\\text{every link of the diagram is true here}'} \\end{gathered}`,true);
-}
-function drawAll(){ drawBins(); drawSquare(); }
-drawAll();
+/* ---------- set expressions in d, b, c, t, ∅ ---------- */
+function lex(s){ const out=[]; let i=0; s=s.replace(/\{\s*\}/g,'∅');
+  const W=[['∪','or'],['|','or'],['+','or'],['cup','or'],['∩','and'],['&','and'],['cap','and'],['∖','minus'],['\\','minus'],['-','minus'],['−','minus'],['(','('],[')',')'],['∅','empty'],['Ø','empty']];
+  while(i<s.length){ const ch=s[i]; if(/\s/.test(ch)){i++;continue;} let hit=null;
+    for(const [w,k] of W){ if(s.substr(i,w.length).toLowerCase()===w){ hit=[w,k]; break; } }
+    if(hit){ out.push({k:hit[1]}); i+=hit[0].length; continue; }
+    if(/[dbct]/i.test(ch)){ out.push({k:'var',v:ch.toLowerCase()}); i++; continue; }
+    throw new Error('I can’t read “'+ch+'”: use d, b, c, t, ∅ and ∪ ∩ ∖'); }
+  return out; }
+function parse(s){ const t=lex(s); let p=0; if(!t.length) throw new Error('type an expression'); const pk=()=>t[p]?t[p].k:null;
+  function un(){ let a=it(); while(pk()==='or'||pk()==='minus'){ const op=t[p++].k; const b=it(); a={op,a,b}; } return a; }
+  function it(){ let a=at(); while(pk()==='and'){ p++; const b=at(); a={op:'and',a,b}; } return a; }
+  function at(){ const k=pk(); if(k==='var'){ return {op:'var',v:t[p++].v}; } if(k==='empty'){ p++; return {op:'empty'}; }
+    if(k==='('){ p++; const e=un(); if(pk()!==')') throw new Error('a “(” is never closed'); p++; return e; }
+    throw new Error(k?'something is missing before a mark':'the expression stops too soon'); }
+  const e=un(); if(p<t.length) throw new Error('an unexpected mark'); return e; }
+const OPT={or:'\\cup',and:'\\cap',minus:'\\setminus'};
+function TX(e,parent,side){ if(e.op==='var') return e.v; if(e.op==='empty') return '\\varnothing';
+  const s=TX(e.a,e.op,'L')+' '+OPT[e.op]+' '+TX(e.b,e.op,'R');
+  if(!parent) return s; if(parent===e.op&&(e.op==='or'||e.op==='and')&&side==='L') return s; if(parent===e.op&&e.op==='minus'&&side==='L') return s; return '('+s+')'; }
+function ev(e,m){ switch(e.op){ case 'var': return e.v==='t'?true:m[e.v]; case 'empty': return false;
+  case 'or': return ev(e.a,m)||ev(e.b,m); case 'and': return ev(e.a,m)&&ev(e.b,m); case 'minus': return ev(e.a,m)&&!ev(e.b,m); } }
+const REG=[]; for(let k=0;k<8;k++){ REG.push({d:!(k&4),b:!(k&2),c:!(k&1)}); }
 
-/* ---------- right: the syllogism bench ---------- */
-const W=[['Tibbles',['cat','pet','mammal','furry']],['Rex',['dog','pet','mammal','furry','barker']],['Robin',['bird','flier']],['Pengu',['bird','swimmer']],['Nemo',['fish','pet','swimmer']],['Flit',['mammal','flier','furry']]];
-const TERMS=['cat','dog','bird','fish','mammal','pet','furry','flier','swimmer','barker','living mammoth'];
-document.getElementById('world').innerHTML=W.map(([n,k])=>n+': '+k.join(', ')).join(' · ');
-const has=(n,t)=>W.find(w=>w[0]===n)[1].includes(t);
-const every=(a,b)=>W.every(([n])=>!has(n,a)||has(n,b)), no=(a,b)=>W.every(([n])=>!has(n,a)||!has(n,b)), some=(a,b)=>W.some(([n])=>has(n,a)&&has(n,b)), somenot=(a,b)=>W.some(([n])=>has(n,a)&&!has(n,b));
-const FORMS=[
- {id:'barbara',t:'Barbara',valid:true,p:[['every M is P',(S,M,P)=>every(M,P)],['every S is M',(S,M,P)=>every(S,M)]],c:['every S is P',(S,M,P)=>every(S,P)]},
- {id:'celarent',t:'Celarent',valid:true,p:[['no M is P',(S,M,P)=>no(M,P)],['every S is M',(S,M,P)=>every(S,M)]],c:['no S is P',(S,M,P)=>no(S,P)]},
- {id:'darii',t:'Darii',valid:true,p:[['every M is P',(S,M,P)=>every(M,P)],['some S is M',(S,M,P)=>some(S,M)]],c:['some S is P',(S,M,P)=>some(S,P)]},
- {id:'ferio',t:'Ferio',valid:true,p:[['no M is P',(S,M,P)=>no(M,P)],['some S is M',(S,M,P)=>some(S,M)]],c:['some S is not P',(S,M,P)=>somenot(S,P)]},
- {id:'um',t:'undistributed middle',valid:false,p:[['every P is M',(S,M,P)=>every(P,M)],['every S is M',(S,M,P)=>every(S,M)]],c:['every S is P',(S,M,P)=>every(S,P)]},
- {id:'darapti',t:'Darapti',valid:false,p:[['every M is P',(S,M,P)=>every(M,P)],['every M is S',(S,M,P)=>every(M,S)]],c:['some S is P',(S,M,P)=>some(S,P)]}
-];
-let form='barbara';
-const fh=document.getElementById('forms');
-FORMS.forEach(f=>{ const b=document.createElement('button'); b.textContent=f.t; if(f.id===form) b.classList.add('on'); b.onclick=()=>{ form=f.id; [...fh.querySelectorAll('button')].forEach(x=>x.classList.toggle('on',x===b)); drawSyl(); }; fh.appendChild(b); });
-const tS=document.getElementById('tS'), tM=document.getElementById('tM'), tP=document.getElementById('tP');
-TERMS.forEach(t=>{ tS.add(new Option(t,t)); tM.add(new Option(t,t)); tP.add(new Option(t,t)); }); tS.value='cat'; tM.value='mammal'; tP.value='furry';
-function drawSyl(){
-  const F=FORMS.find(f=>f.id===form), S=tS.value, M=tM.value, P=tP.value; const TT={S,M,P}; const ph=t=>t==='furry'?'furry':'a '+t; const sj=t=>t==='furry'?'furry thing':t; const sub=w=>w.replace(/^(every|no|some) (\w) is (not )?(\w)$/,(m,q,x,n,y)=>q+' '+sj(TT[x])+' is '+(n||'')+ph(TT[y]));
-  const pr=document.getElementById('prem'); pr.innerHTML='';
-  const pv=F.p.map(([w,f])=>{ const v=f(S,M,P); const d=document.createElement('div'); d.innerHTML='<span></span><span class="v '+(v?'ok':'no')+'"></span>'; d.children[0].textContent=sub(w); d.children[1].textContent=v?'true':'false'; pr.appendChild(d); return v; });
-  const cv=F.c[1](S,M,P); const d=document.createElement('div'); d.innerHTML='<span></span><span class="v '+(cv?'ok':'no')+'"></span>'; d.children[0].textContent='so, '+sub(F.c[0]); d.children[1].textContent=cv?'true':'false'; pr.appendChild(d);
-  let v;
-  if(!pv.every(Boolean)) v='A premise is false in this world, so the form is not put to the test here: a syllogism promises its conclusion only when both premises are true.';
-  else if(cv) v='Both premises are true, and so is the conclusion. '+(F.valid?'The form is valid: the techs prove it for any terms at all, so this will happen in every world.':'But the form is not valid: this world happens to agree; another convicts it.');
-  else v='Both premises are true and the conclusion is false: this world convicts the form. '+(F.id==='darapti'?'The middle term is empty, so both everys are vacuous and the some has nothing to point at. Add “there is a '+M+'” as a line and the form goes through.':'The middle term never links S to P.');
-  document.getElementById('verd').textContent=v;
+function sizeCv(cv,ar){ const d=window.devicePixelRatio||1, W=cv.clientWidth||300, H=Math.round(W/ar); cv.width=W*d; cv.height=H*d; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(d,0,0,d,0,0); return {c,W,H}; }
+function geom(W,H){ const r=Math.min(W*0.25,H*0.26), cx=W/2, cy=H*0.47; return {r,C:[[cx-r*0.6,cy-r*0.36],[cx+r*0.6,cy-r*0.36],[cx,cy+r*0.66]],U:[5,5,W-10,H-10]}; }
+function regionAt(g,x,y){ if(x<g.U[0]||y<g.U[1]||x>g.U[0]+g.U[2]||y>g.U[1]+g.U[3]) return -1; const ins=g.C.map(([a,b])=>Math.hypot(x-a,y-b)<g.r); return REG.findIndex(Rw=>Rw.d===ins[0]&&Rw.b===ins[1]&&Rw.c===ins[2]); }
+function centroids(g,W,H){ const S=REG.map(()=>[0,0,0]); for(let x=8;x<W-8;x+=4) for(let y=8;y<H-8;y+=4){ const k=regionAt(g,x,y); if(k>=0){ S[k][0]+=x; S[k][1]+=y; S[k][2]++; } }
+  return S.map(([a,b,n],k)=>k===7?[g.U[0]+18,g.U[1]+g.U[3]-14]:[a/n,b/n]); }
+let E1=null,E2=null,selReg=null; const cv1=document.getElementById('v1'), cv2=document.getElementById('v2');
+function drawRings(cv,E,other){
+  const {c,W,H}=sizeCv(cv,1.1), g=geom(W,H); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
+  if(E) REG.forEach((Rw,k)=>{ if(!ev(E,Rw)) return; c.save(); c.beginPath(); c.rect(...g.U); c.clip();
+    g.C.forEach(([a,b],i)=>{ const inside=[Rw.d,Rw.b,Rw.c][i]; c.beginPath(); if(inside){ c.arc(a,b,g.r,0,Math.PI*2); c.clip(); } else { c.rect(0,0,W,H); c.moveTo(a+g.r,b); c.arc(a,b,g.r,0,Math.PI*2); c.clip('evenodd'); } });
+    c.fillStyle=col('--ember'); c.globalAlpha=.38; c.fillRect(0,0,W,H); c.restore(); });
+  c.globalAlpha=1; c.strokeStyle=col('--muted'); c.lineWidth=1.2; c.setLineDash([4,4]); c.strokeRect(...g.U); c.setLineDash([]);
+  c.font='12px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.fillText('t',g.U[0]+6,g.U[1]+15);
+  const nm=['d','b','c']; g.C.forEach(([a,b],i)=>{ c.strokeStyle=col('--ink'); c.lineWidth=1.8; c.beginPath(); c.arc(a,b,g.r,0,Math.PI*2); c.stroke();
+    c.fillStyle=col('--ink'); c.font='600 15px Source Serif 4, Georgia, serif'; const L=[[-0.85,-0.8],[0.72,-0.8],[-0.98,0.85]][i]; c.fillText(nm[i],a+L[0]*g.r,b+L[1]*g.r); });
+  const cen=centroids(g,W,H);
+  if(E&&other){ c.font='600 14px IBM Plex Mono, monospace'; c.textAlign='center'; REG.forEach((Rw,k)=>{ if(ev(E,Rw)!==ev(other,Rw)){ c.fillStyle=col('--ember'); c.fillText('≠',cen[k][0],cen[k][1]+5); } }); c.textAlign='left'; }
+  if(cv===cv1&&selReg!==null){ c.strokeStyle=col('--teal'); c.lineWidth=2.5; c.beginPath(); c.arc(cen[selReg][0],cen[selReg][1],9,0,Math.PI*2); c.stroke(); }
+  cv._g=g;
 }
-tS.onchange=drawSyl; tM.onchange=drawSyl; tP.onchange=drawSyl; drawSyl();
+const s1=document.getElementById('s1'), s2=document.getElementById('s2');
+function drawSets(){ const er=document.getElementById('serr'); er.textContent=''; E1=E2=null;
+  try{ E1=parse(s1.value); }catch(e){ er.textContent='left: '+e.message; }
+  try{ if(s2.value.trim()) E2=parse(s2.value); }catch(e){ er.textContent+=(er.textContent?' · ':'')+'right: '+e.message; }
+  drawRings(cv1,E1,E2); drawRings(cv2,E2,E1);
+  const l1=document.getElementById('l1'), l2=document.getElementById('l2'); if(E1) tex(l1,TX(E1),false); else l1.textContent='…'; if(E2) tex(l2,TX(E2),false); else l2.textContent='(empty)';
+  const sv=document.getElementById('sv');
+  const rowName=Rw=>['d','b','c'].map(l=>Rw[l]?'T':'F').join('');
+  if(E1&&E2){ const diff=REG.filter(Rw=>ev(E1,Rw)!==ev(E2,Rw)).map(rowName);
+    tex(sv, diff.length?`\\begin{gathered}${TX(E1)} \\ne ${TX(E2)}\\\\ \\text{they differ on the region${diff.length>1?'s':''} for row${diff.length>1?'s':''}}\\\\ \\text{${diff.join(', ')}}\\end{gathered}`:`\\begin{gathered}${TX(E1)} = ${TX(E2)}\\\\ \\text{same regions, so the same set}\\\\ \\text{for every listed d, b, c}\\end{gathered}`,true); }
+  else if(E1) tex(sv,`${TX(E1)}\\quad\\text{shades the ember regions}`,true); else tex(sv,'\\text{…}',true);
+  drawRow(); }
+function drawRow(){ const rw=document.getElementById('row'); if(selReg===null){ tex(rw,'\\text{tap a region on the left}',true); return; }
+  const Rw=REG[selReg], f=b=>b?'\\in':'\\notin';
+  const tv=(E)=>E?(ev(E,Rw)?'\\htmlClass{keep}{\\text{in}}':'\\htmlClass{new}{\\text{out}}'):'';
+  tex(rw,`\\begin{gathered}x ${f(Rw.d)} d,\\, x ${f(Rw.b)} b,\\, x ${f(Rw.c)} c \\quad\\to\\quad \\text{row } ${['d','b','c'].map(l=>Rw[l]?'\\mathrm T':'\\mathrm F').join('\\,')}\\\\ ${E1?TX(E1)+':\\,'+tv(E1):''}${E2?'\\qquad '+TX(E2)+':\\,'+tv(E2):''}\\end{gathered}`,true); }
+cv1.addEventListener('pointerdown',e=>{ const r=cv1.getBoundingClientRect(), k=regionAt(cv1._g,e.clientX-r.left,e.clientY-r.top); selReg=k>=0?k:null; drawSets(); });
+s1.addEventListener('input',drawSets); s2.addEventListener('input',drawSets);
+let lastIn=s1; s1.addEventListener('focus',()=>lastIn=s1); s2.addEventListener('focus',()=>lastIn=s2);
+const keys=document.getElementById('skeys');
+['d','b','c','t','∅','∪','∩','∖','(',')'].forEach(k=>{ const b=document.createElement('button'); b.textContent=k; b.type='button'; b.onmousedown=e=>e.preventDefault(); b.onclick=()=>{ const inp=lastIn, a=inp.selectionStart??inp.value.length, z=inp.selectionEnd??a; inp.setRangeText(/[∪∩∖]/.test(k)?' '+k+' ':k,a,z,'end'); drawSets(); }; keys.appendChild(b); });
+const bs=document.createElement('button'); bs.className='w'; bs.textContent='⌫'; bs.setAttribute('aria-label','delete'); bs.onmousedown=e=>e.preventDefault(); bs.onclick=()=>{ const inp=lastIn, a=inp.selectionStart??inp.value.length, z=inp.selectionEnd??a; if(a===z&&a>0) inp.setRangeText('',a-1,a,'end'); else inp.setRangeText('',a,z,'end'); drawSets(); }; keys.appendChild(bs);
+document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{ const [x,y]=b.dataset.p.split('|'); s1.value=x; s2.value=y; drawSets(); });
+new ResizeObserver(drawSets).observe(cv1);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',drawSets);
+
+/* ---------- right: a product grid ---------- */
+const OPTS=[['{p}',['p']],['{p, q}',['p','q']],['{p, q, r}',['p','q','r']],['{x, y}',['x','y']],['{x, y, z}',['x','y','z']]];
+let li=2, ri=3, chosen=new Set(); const svg=document.getElementById('pg');
+function chips(host,cur,on){ OPTS.forEach(([lab],i)=>{ const b=document.createElement('button'); b.textContent=lab; if(i===cur) b.className='on'; b.onclick=()=>{ [...host.querySelectorAll('button')].forEach(x=>x.classList.toggle('on',x===b)); on(i); }; host.appendChild(b); }); }
+chips(document.getElementById('lset'),li,i=>{ li=i; chosen=new Set(); drawPG(); });
+chips(document.getElementById('rset'),ri,i=>{ ri=i; chosen=new Set(); drawPG(); });
+function el(tag,at){ const e=document.createElementNS(NS,tag); for(const k in at) e.setAttribute(k,at[k]); svg.appendChild(e); return e; }
+function drawPG(){
+  svg.innerHTML=''; const A=OPTS[li][1], B=OPTS[ri][1]; const o=34, s=Math.min(60,Math.floor(250/Math.max(A.length,B.length))); svg.setAttribute('viewBox','0 0 300 '+(o+A.length*s+8));
+  B.forEach((b,j)=>{ const t=el('text',{x:o+j*s+s/2,y:o-10,'text-anchor':'middle',style:'fill:var(--muted);font:12px var(--mono)'}); t.textContent=b; });
+  A.forEach((a,i)=>{ const t=el('text',{x:o-6,y:o+i*s+s/2+4,'text-anchor':'end',style:'fill:var(--muted);font:12px var(--mono)'}); t.textContent=a; });
+  A.forEach((a,i)=>B.forEach((b,j)=>{ const k=a+','+b; const on=chosen.has(k); const r=el('rect',{x:o+j*s,y:o+i*s,width:s,height:s,rx:4,style:'fill:'+(on?'var(--ember)':'var(--card)')+';stroke:var(--grid);cursor:pointer'});
+    const t=el('text',{x:o+j*s+s/2,y:o+i*s+s/2+4,'text-anchor':'middle',style:'pointer-events:none;fill:'+(on?'#fff':'var(--ink)')+';font:12px var(--mono)'}); t.textContent='('+a+','+b+')';
+    r.addEventListener('click',()=>{ chosen.has(k)?chosen.delete(k):chosen.add(k); drawPG(); }); }));
+  const Lx=L=>'\\{'+L.join(',\\,')+'\\}';
+  const prod=A.flatMap(a=>B.map(b=>'('+a+','+b+')'));
+  const ch=[...chosen].map(k=>'('+k+')');
+  const rows=A.map(a=>B.map(b=>'('+a+','+b+')').join(',\\,'));
+  tex(document.getElementById('pv'),`\\begin{gathered}${Lx(A)} \\times ${Lx(B)} = \\{${rows.join(',\\\\ ')}\\}\\\\ \\text{chosen: } ${ch.length?Lx(ch):'\\varnothing'}\\\\ \\subseteq ${Lx(A)} \\times ${Lx(B)}\\end{gathered}`,true);
+}
+document.getElementById('swap').onclick=()=>{ const t=li; li=ri; ri=t; chosen=new Set([...chosen].map(k=>k.split(',').reverse().join(','))); [...document.querySelectorAll('#lset button')].forEach((b,i)=>b.classList.toggle('on',i===li)); [...document.querySelectorAll('#rset button')].forEach((b,i)=>b.classList.toggle('on',i===ri)); drawPG(); };
+drawPG(); drawSets();
 
 /* ---------- slides ---------- */
 const N='\\htmlClass{new}', K='\\htmlClass{keep}';
-stepper('#sl3',[
-  {k:'ember',kl:'the some-with-⇒ trap',t:`\\exists x\\,\\big(D(x) \\Rightarrow B(x)\\big)\\;?`,n:`“Some dog is brown”, misspelt with ⇒. In a world of a grey cat, a shoe and a black dog, it ought to fail. Watch it get proved.`},
-  {k:'ember',kl:'the some-with-⇒ trap',t:`\\begin{aligned}&\\text{The shoe is not a dog.}\\\\ &${N}{\\text{So if the shoe is a dog, it is brown.}}\\end{aligned}`,n:`1e’s if machine: an if whose condition fails conforms to true. The shoe, which is not a dog, satisfies “if it is a dog it is brown”. 3a’s free ifs write it as a row.`},
-  {k:'ember',kl:'the some-with-⇒ trap',t:`${N}{\\text{So something is, if a dog, brown: } \\exists x\\,\\big(D(x) \\Rightarrow B(x)\\big).}`,n:`Show an example: the shoe. The line is proved, and says nothing about dogs. A some goes with ∧: ∃x (D(x) ∧ B(x)), which cannot stand in this world.`}
-],{title:'The slides · the some-with-⇒ trap · ← → keys work'});
-stepper('#sl8',[
-  {k:'ember',kl:'negating A',t:`\\neg\\,\\forall x\\,\\big(S(x) \\Rightarrow P(x)\\big)`,n:`“Not every S is P.” Push the ¬ in, a mark at a time.`},
-  {k:'ember',kl:'negating A',t:`${N}{\\exists x\\,\\neg}\\,\\big(S(x) \\Rightarrow P(x)\\big)`,n:`¬ through ∀ becomes ∃¬. This is the direction that waits for rung 7; over a subject you can list, you look for the thing. The step is still the right reading of what the denial claims.`},
-  {k:'ember',kl:'negating A',t:`\\exists x\\,\\big(${N}{S(x) \\land \\neg P(x)}\\big)`,n:`1f's negated-if: the negation of an if is an and. The result is O: some S is not P. The diagram's crossing link is this push, and the other way (O and A cannot stand together) is 2b's counterexample technique.`}
-],{title:'The slides · negating A · ← → keys work'});
+const col2=(...rows)=>'\\begin{aligned}'+rows.map(([l,r])=>'&'+l+' &&\\text{'+r+'}').join('\\\\ ')+'\\end{aligned}';
+const T=s=>'\\text{'+s+'}';
+stepper('#sl2',[
+  {k:'ember',kl:'a region is a row',t:R`x \in d,\;\; x \in b,\;\; x \notin c \quad\to\quad \text{row } \mathrm T\,\mathrm T\,\mathrm F`,n:`Take the region inside d and b and outside c. Everything in it answers the questions “in d? in b? in c?” the same way, and those answers are a row of 1e's table for the letters d, b, c.`},
+  {k:'ember',kl:'a region is a row',t:R`x \in d \cap (b \setminus c) \;\Leftrightarrow\; x \in d \land (x \in b \land x \notin c)`,n:`An expression's membership is a compound statement in those letters. At row TTF it comes out T, so the expression shades that region; at row TFT it comes out F, so it does not.`},
+  {k:'ember',kl:'a region is a row',t:R`\text{same regions for all } d, b, c \;\Leftrightarrow\; \text{same column} \;\Leftrightarrow\; \text{a technique of 1f}`,n:`So checking a technique by shading is checking columns, and a region marked ≠ is a convicting row. The drawing is a settled world, so every technique may be used both ways in it; for sets you cannot list, 1f's licence column still rules.`}
+],{title:'The slides · a region is a row · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'sifts combined',t:col2(['\\text{Let }y\\text{ be anything.}','speak of everything'],['y\\text{ is in the or-sift exactly when }y \\in t\\text{, and }\\varphi(y)\\text{ or }\\psi(y)\\text{.}','unpack the sift'],['\\htmlClass{new}{\\text{That is: }y \\in t\\text{ and }\\varphi(y)\\text{, or }y \\in t\\text{ and }\\psi(y)\\text{.}}','spread the and over the or, both ways (1f)']),n:`The or-version of the class's technique. Spread y ∈ t over the or.`},
+  {k:'ember',kl:'sifts combined',t:col2(['\\text{That is: }y\\text{ is in the }\\varphi\\text{-sift or in the }\\psi\\text{-sift.}','pack each sift'],['\\text{That is: }y\\text{ is in the merge of the two sifts.}','the merge-membership technique'],['\\htmlClass{new}{\\text{So }\\{x \\in t : \\varphi(x) \\lor \\psi(x)\\} = \\{x \\in t : \\varphi(x)\\} \\cup \\{x \\in t : \\psi(x)\\}\\text{. }}','y was anything; same-members']),n:` Sifting by an or is the union of the sifts; by an and, the intersection; by a not, the difference from t. The table of conditions and the drawing of sets are the same thing.`}
+],{title:'The slides · sifts combined · ← → keys work'});
+stepper('#sl9',[
+  {k:'ember',kl:'driven to its simplest',t:R`(d \cup (d \cap b)) \cap (b \cup (b \setminus b))`,n:`An expression to simplify. Look for a technique that fits a piece: the left bracket is the absorb technique's shape.`},
+  {k:'ember',kl:'driven to its simplest',t:R`= ${N}{d} \cap (b \cup (b \setminus b))`,n:`absorb: d ∪ (d ∩ b) = d. Swap the piece for what it equals: a move cited to 0b's swap axiom, with the technique's sameness.`},
+  {k:'ember',kl:'driven to its simplest',t:R`= d \cap (b \cup ${N}{\varnothing})`,n:`b ∖ b = ∅: no x is both in b and not in b (1f's clash and the one-empty-set technique).`},
+  {k:'ember',kl:'driven to its simplest',t:R`= d \cap ${N}{b}`,n:`Units: b ∪ ∅ = b. The expression named d ∩ b all along, and the chain of equalities is the argument, a technique named at each step.`}
+],{title:'The slides · driven to its simplest · ← → keys work'});
 stepper('#sl11',[
-  {k:'ember',kl:'Barbara',t:`\\begin{aligned}&\\forall x\\,(M(x) \\Rightarrow P(x)),\\\\ &\\forall x\\,(S(x) \\Rightarrow M(x))\\end{aligned}`,n:`The premises: every M is P, every S is M. The goal: every S is P, that is ∀x (S(x) ⇒ P(x)). A goal that is an every of a kind starts with “let n be any S”.`},
-  {k:'ember',kl:'Barbara',t:`\\text{Let } ${N}{n \\text{ be any S.}}`,n:`A fresh case: nothing is said of n but that n is S. The goal inside is “n is P”.`},
-  {k:'ember',kl:'Barbara',t:`\\text{Every S is M, so } ${K}{\\text{if } n \\text{ is S, it is M.}}`,n:`Use the every in “every S is M”: it covers n too, so say it about n (teal: taken from a premise).`},
-  {k:'ember',kl:'Barbara',t:`\\text{So } ${N}{n \\text{ is M.}}`,n:`Carry the if through: n is S, and if n is S it is M, so n is M. The middle term has appeared.`},
-  {k:'ember',kl:'Barbara',t:`\\text{Every M is P, so } ${K}{\\text{if } n \\text{ is M, it is P}}\\text{; so } ${N}{n \\text{ is P.}}`,n:`Use the every in “every M is P” on n, and carry the if through again. The middle term has done its work and vanishes.`},
-    {k:'ember',kl:'Barbara',t:`${N}{\\text{Every S is P: } \\forall x\\,(S(x) \\Rightarrow P(x)).}`,n:`Nothing was used about n but that n is S, so back at the margin: every S is P. The oldest perfect syllogism is carrying an if through, again, in a fresh case.`}
-],{title:'The slides · Barbara · ← → keys work'});
+  {k:'ember',kl:'the settled-only step',t:R`x \in (d \setminus b) \cup (d \cap b) \;\Leftrightarrow\; x \in d \land (x \notin b \lor x \in b)`,n:`merge-membership, unpack, spread backwards. So far every row is an exactly-when for any sets.`},
+  {k:'ember',kl:'the settled-only step',t:R`\Rightarrow\; ${N}{x \in d}`,n:`Keep left. This direction is a move. So (d ∖ b) ∪ (d ∩ b) ⊆ d, a technique for any sets.`},
+  {k:'ember',kl:'the settled-only step',t:R`\Leftarrow\; x \in d \quad\text{needs}\quad ${N}{x \notin b \lor x \in b}`,n:`The other direction needs an or that no tech supplies: 1f's either-way. For listed b, look and see which; for any b, rung 7. Mark the row; that is the skill.`}
+],{title:'The slides · the settled-only step · ← → keys work'});
 stepper('#sl13',[
-  {k:'ember',kl:'the undistributed middle',t:`\\begin{aligned}&\\forall x\\,(P(x) \\Rightarrow M(x)),\\\\ &\\forall x\\,(S(x) \\Rightarrow M(x))\\\\ &\\overset{?}{\\Rightarrow}\\; \\forall x\\,(S(x) \\Rightarrow P(x))\\end{aligned}`,n:`Every P is M, every S is M; so every S is P? Try to run Barbara's proof: from S(n) you reach M(n), and then there is no premise that leaves M. The chain breaks at the middle.`},
-  {k:'ember',kl:'the undistributed middle',t:`\\begin{aligned}&P = \\text{cats},\\; M = \\text{mammals},\\\\ &S = \\text{dogs}:\\quad ${N}{\\text{Rex}}\\end{aligned}`,n:`So build a world where it fails. Both premises are true, and Rex the dog is an S that is not a P: a counterexample kills the every (2b's counterexample technique, good for any statement).`},
-  {k:'ember',kl:'Darapti, cracked',t:`\\begin{aligned}&\\forall x\\,(M(x) \\Rightarrow P(x)),\\;\\; \\forall x\\,(M(x) \\Rightarrow S(x))\\\\ &\\overset{?}{\\Rightarrow}\\; \\exists x\\,(S(x) \\land P(x))\\end{aligned}`,n:`Every M is P; every M is S; so some S is P? Let M be “living mammoth”. Both premises are vacuously true: no living mammoth breaks either if.`},
-  {k:'ember',kl:'Darapti, cracked',t:`\\begin{aligned}&M = \\text{living mammoths},\\; S = \\text{cats},\\; P = \\text{dogs}\\\\ &${N}{\\exists x\\,(S(x) \\land P(x)) \\text{ fails}}\\end{aligned}`,n:`No cat is a dog, so the conclusion is false while both premises are true. The form is convicted. Add the premise “there is an M”, and the argument goes: name the M, use both everys on it, join, show an example.`}
-],{title:'The slides · the undistributed middle, and Darapti cracked · ← → keys work'});
+  {k:'ember',kl:'a grid read',t:R`\{p,q\} \times \{x,y\}:\quad \begin{matrix} & x & y\\ p & (p,x) & (p,y)\\ q & (q,x) & (q,y)\end{matrix}`,n:`A product as a grid: rows for the left set, columns for the right, the pair in each cell. The grid is the listing.`},
+  {k:'ember',kl:'a grid read',t:R`\text{dots at } (p,p), (q,q), (p,q), (q,p) \text{ on } \{p,q\} \times \{p,q\}`,n:`A relation on {p, q}: self-cells dotted (reflexive), (p, q) matched by (q, p) (symmetric), every shortcut present (transitive). An equivalence relation with the only class {p, q}.`}
+],{title:'The slides · a grid read · ← → keys work'});
+stepper('#sl14',[
+  {k:'ember',kl:'from the empty set',t:R`\varnothing,\quad \{\varnothing\},\quad \{\varnothing,\{\varnothing\}\}`,n:`Given by the empty-set axiom; gathered with itself; gathered with the earlier one. Each differs from the one before (same-members, or the not-its-own-gathering technique).`},
+  {k:'ember',kl:'from the empty set',t:R`\mathcal P(\{\varnothing,\{\varnothing\}\}) = \{\varnothing,\{\varnothing\},\{\{\varnothing\}\},\{\varnothing,\{\varnothing\}\}\}`,n:`Keep-or-drop on the members ∅ and {∅}. Every set here is made of braces and nothing else.`},
+  {k:'ember',kl:'from the empty set',t:R`(\varnothing,\{\varnothing\}) = \{\{\varnothing\},\{\varnothing,\{\varnothing\}\}\}`,n:`A pair, all the way down. Rung 3 starts from {∅, {∅}} and keeps gathering; you have everything it needs. Now you can build and take apart collections.`}
+],{title:'The slides · from the empty set · ← → keys work'});
+
+/* long worked lines: stack the note under the line instead of scrolling */
+function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
+Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
 })();
 </script>
 <script src="tray.js"></script>

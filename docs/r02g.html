@@ -1,20 +1,21 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>2g · Pairs in Order</title>
+<title>2g · All the Subsets</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
 <style>
-.pic .panels{grid-template-columns:2fr 3fr}
+.pic .panels{grid-template-columns:3fr 2fr}
 @media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
 .panel{align-content:start;min-width:0}
 .pic .eqbox{font-size:.95rem;white-space:normal}
-.panel svg{touch-action:manipulation;user-select:none;width:100%;height:auto;display:block}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-table.gp{border-collapse:collapse;background:var(--card);font-family:var(--mono);font-size:.85rem}
-table.gp td,table.gp th{border:1px solid var(--grid);padding:3px 8px;text-align:center}
-table.gp th{color:var(--muted);font-weight:500}
+.kd{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:center;font-family:var(--serif)}
+.kd button{font-family:var(--mono);font-size:.78rem;padding:2px 10px}
+.kd button.keep{border-color:var(--ember);color:var(--ember)}
+.pic .eqbox .katex{font-size:1em}
+@media (max-width:560px){#eq2 .katex{font-size:.9em}}
+.lst{font-family:var(--mono);font-size:.82rem;color:var(--muted);line-height:1.5}
 .rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
@@ -44,305 +45,215 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r02f.html">← 2f all the subsets</a><a href="r02h.html">next: 2h sets by hand →</a></p>
-  <div class="tags"><span class="tag support">2g · support</span></div>
-  <h1>Pairs in Order</h1>
-  <p data-pid="906a11">A set has no order: the set of Ann and Ben is the set of Ben and Ann. Yet the ladder will need things that come in an order constantly: a sender and a recipient, an input and an output, a left entry and a right entry. Can orderless tools make order? There is a trick that stuck, and it is built from gather alone. This step builds it, and proves the technique that makes it an order: if two such pairs are the same set, their left entries are the same and so are their right entries. Then it builds what the ladder makes out of pairs. Products are all the pairs you can make from here and from there. Relations are sets of pairs, and are all that “is a parent of” amounts to. Then come the properties a relation can have. Last come sameness relations with their classes: the device by which mathematics says “count these as the same” and manufactures new objects out of old ones.</p>
-  <p class="gesture" data-pid="7f3519">To put one thing before another, write the first alone, and again beside the second. To say how things stand to one another, write the set of pairs that stand so. To treat things as the same, check that the sameness looks back, chains, and is so of each thing, then work with the classes.</p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r02f.html">← 2f gather and merge</a><a href="r02h.html">next: 2h pairs in order →</a></p>
+  <div class="tags"><span class="tag proof">2g · proof</span></div>
+  <h1>All the Subsets</h1>
+  <p data-pid="91c040">The last tool. From a set, the set of all its parts: every set you could make by keeping some of its members and dropping the rest, gathered into a set of their own. It is the tool whose result you cannot write down by tipping things out or picking things through. You have to run through every way of deciding, member by member, keep or drop. The step gives the tool its mark, and shows the keep-or-drop way of listing its result. Then it proves the techniques the rest of the ladder uses daily. The empty set is part of every set, and every set is part of itself, so both are always on the list. The tool respects inclusion. And it treats common members exactly, and merged members only by an inclusion.</p>
+  <p class="gesture" data-pid="17a25f">To list every subset, go through the members and decide each: keep or drop. Every way of deciding is a subset; every subset is a way of deciding. The empty set is the way that drops everything, the set itself the way that keeps everything.</p>
 </header>
 
 <section class="class step" data-step="2g1">
-  <h2 class="sthead"><span class="stno">2g1</span>Order Out of Orderless Things</h2>
-  <p data-pid="c8ba5a">Ann texts Ben. The text has a sender and a receiver, and “Ann texts Ben” is not “Ben texts Ann”. A set cannot record that: {Ann, Ben} = {Ben, Ann} by the same-members axiom, since the same people are in each. So we want an object that says “Ann, then Ben”, and that differs from the object saying “Ben, then Ann”. Here is the trick that stuck: put the earlier thing in alone, and again beside the later one.</p>
-  <p class="eqline" data-pid="fc35d4">From here on, <span data-tex-inline="(t, b)"></span> means: <span data-tex-inline="\{\{t\}, \{t, b\}\}"></span>. Read it “the pair t then b”; t is its left entry and b its right entry.</p>
-  <p data-pid="d458fc">(t, b) is called the ordered pair of t and b. The mark is a name, packed from two gatherings and a third around them.</p>
+  <h2 class="sthead"><span class="stno">2g1</span>All the Subsets, as One Set</h2>
+  <p data-pid="3165a8">2d said what it is for s to be a subset of u: every member of s is a member of u. Now gather all of them. A set may have subsets in great variety, and each of them is a thing, so the set of all of them is a set you should be able to ask for. By the power axiom, there is one:</p>
+  <div class="eqline" data-tex="\begin{aligned}&amp;\text{From here on, } \mathcal P(u) \text{ means: the set of }\\ &amp;\quad \text{all the subsets of } u\text{:}\qquad s \in \mathcal P(u) \;\\ &amp;\quad \Leftrightarrow\; s \subseteq u.\end{aligned}"></div>
+  <div class="eqline" data-tex="\begin{aligned}&amp;\textbf{Axiom Power:}\quad\\ &amp;\quad \text{for any set } u \text{ there is a set } \mathcal P(u).\end{aligned}"></div>
+  <p data-pid="8386ed">Its accepted name is the <b>power set</b> of u. The word “power” here is only a name, and means nothing beyond this line until a later rung gives it work of its own. Read 𝒫(u) as “the subsets of u” or “all the parts of u”. To use a membership in 𝒫(u), unpack it into ⊆ and then into the every-around-an-if. To make one, prove the inclusion and pack. There is nothing else to the mark. It is a name: 𝒫(u) names one set, built from u. Without the power axiom, you could name each part of a set, one at a time, but never hold them all at once.</p>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">2g1.1</span><span class="ph understand">understand</span>What is the pair (t, b) as a set, and what is the trick for?</li>
+      <li><span class="qid">2g1.1</span><span class="ph understand">understand</span>What does 𝒫(u) name? <br>How do you use a membership in it, and how do you make one?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2g2">
-  <h2 class="sthead"><span class="stno">2g2</span>Round Brackets, Three Jobs</h2>
-  <p class="eqline" data-pid="dec17c">From here on, round brackets around a name and another name with a comma between, as in (a, b), also mean this pair. Their jobs from 0a (a name held in a gap, as in P(a)) and from 1b (grouping) still stand. A letter just before the bracket says it is 0a's. A name, a comma and a name inside, with no letter before, say it is a pair.</p>
-  <p data-pid="f1896c">The word <b>pair</b> from here on means this object and nothing else. It exists for any t and b by gathering: {t} and {t, b} by 2e's axiom, then those gathered.</p>
+  <h2 class="sthead"><span class="stno">2g2</span>Curly Capitals, and Collections</h2>
+  <p data-pid="a6386f">A set whose members are themselves sets is called a <b>collection</b>. The mark 𝒫 is a capital P with a flourish, said “curly P”. It is the first of a family. The curly capitals, <span data-tex-inline="\mathcal A, \mathcal B, \mathcal C">𝒜, ℬ, 𝒞</span> and the rest, are said “curly A”, “curly B” and so on, as ∀ and ∃ were named for their shapes. They all behave the same way. <b>A curly capital names a set whose members are themselves sets.</b></p>
+  <p data-pid="b06eea">A curly letter is a name like any other letter. The curl only warns the reader what kind of thing is inside: sets, not cats. 𝒫(u) fits the family, since each of its members is a part of u. The difference is that 𝒫 is a mark that builds a collection from a set, while 𝒜 or ℬ simply names a collection you already have.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2g2.1</span><span class="ph understand">understand</span>What are the three jobs of round brackets, and what tells them apart?</li>
+      <li><span class="qid">2g2.1</span><span class="ph understand">understand</span>What does a curly capital tell the reader? <br>How does 𝒫 differ from a letter like 𝒜?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2g3">
-  <h2 class="sthead"><span class="stno">2g3</span>The Pair Tells Ann From Ben</h2>
-  <p data-pid="f2a814">Watch the trick tell Ann from Ben.</p>
-  <p data-pid="0c2987">Given: Ann ≠ Ben. They are two people. Unpack the pairs. (Ann, Ben) is {{Ann}, {Ann, Ben}}. (Ben, Ann) is {{Ben}, {Ben, Ann}}. {Ann} is listed in the first, so it is a member of (Ann, Ben).</p>
-  <p data-pid="46975a">Put {Ann} ∈ (Ben, Ann) in a row beside the givens. By the listing, {Ann} is {Ben} or {Ann} is {Ben, Ann}. Set in the cases. If {Ann} = {Ben}: Ann is in {Ann}, so by the swap axiom Ann is in {Ben}, so Ann = Ben, which clashes with the given. If {Ann} = {Ben, Ann}: Ben is in that set, so Ben is in {Ann}, so Ben = Ann, the same clash turned about. Both cases close, so the rows equal ⊥: {Ann} cannot stand as a member of (Ben, Ann).</p>
-  <p data-pid="dd782f">So rows that hold (Ann, Ben) = (Ben, Ann) equal ⊥: the swap axiom would carry {Ann} from the first pair into the second, and that cannot stand. The pairs cannot be the same set. Writing that as (Ann, Ben) ≠ (Ben, Ann) is <a href="r03a.html">3a</a>’s output.</p>
+  <h2 class="sthead"><span class="stno">2g3</span>Listing It: Keep or Drop</h2>
+  <p data-pid="ed0e80">How do you write down 𝒫({cat, dog})? <b>Think of a subset as a way of deciding, for each member, whether it is in.</b> Go through the members in turn. Each decision so far gives a set. The next member comes back to every set you have made, kept and dropped.</p>
+  <p data-pid="a996f3">Start with no members decided. There is one way to decide nothing: the empty set. Now decide cat. Drop it, and you have ∅. Keep it, and you have {cat}.</p>
+  <p data-pid="72d50f">Now decide dog. Each set so far comes back twice: once without dog, and once with it. That gives ∅, {cat}, {dog} and {cat, dog}. Those are all the ways of keeping and dropping, and nothing else. So 𝒫({cat, dog}) = {∅, {cat}, {dog}, {cat, dog}}.</p>
+  <p data-pid="970b91">Why is that the whole list? Because a subset of {cat, dog} is fixed by the same-members axiom once you know, of cat and of dog, whether it is in. And those are exactly the decisions made. And why is every set on the list a subset? Because each was made by keeping only members of {cat, dog}.</p>
+  <p data-pid="cb4d23">Spelling the “exactly” out for a particular listed set is a case split on “cat ∈ s or cat ∉ s”. 1f's licence column allows that split for a set whose members are listed, since membership in it is settled.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · a power set listed · ← → keys work</div></section>
   <section class="pic" id="pic">
-    <div class="eyebrow">The picture · pairs built from sets, and whether they tell their entries apart</div>
+    <div class="eyebrow">The picture · every subset of a set, laid out in levels</div>
     <div class="panel">
-      <div class="chips" role="group" aria-label="definition"><span class="m" style="color:var(--muted)">definition:</span><button data-def="k" class="on">the step’s {{t},{t,b}}</button><button data-def="bad">the tempting {t,{b}}</button></div>
-      <div class="grid2">
-        <div><div class="chips" aria-label="left pair"><span class="m" style="color:var(--muted)">left:</span></div><div class="chips" id="p1a"><span class="m">t =</span></div><div class="chips" id="p1b"><span class="m">b =</span></div></div>
-        <div><div class="chips" aria-label="right pair"><span class="m" style="color:var(--muted)">right:</span></div><div class="chips" id="p2a"><span class="m">c =</span></div><div class="chips" id="p2b"><span class="m">d =</span></div></div>
-      </div>
-      <div class="eqbox" id="eqp"></div>
-      <div class="cap">Choose entries for each pair and read whether the sets come out the same. Under the step's definition they are the same exactly when the entries match in order (the equal-pairs technique). Under the tempting definition, hunt for different entries that give the same set.</div>
+      <div class="chips" role="group" aria-label="the set u"><span class="m" style="color:var(--muted)">u =</span><button data-nn="0">∅</button><button data-nn="1">{p}</button><button data-nn="2">{p, q}</button><button data-nn="3" class="on">{p, q, r}</button><button data-nn="4">{p, q, r, s}</button></div>
+      <div class="cap">Every subset of u. Each level up has another member kept. Tap a subset: it lights up, with everything below it that it contains (teal) and everything above it that contains it (ember). The readout lists the subsets of whatever is lit, which is a power set of its own.</div>
+      <canvas id="cv2"></canvas>
+      <div class="eqbox" id="eq2"></div>
+      <div class="cap">Change u from {p, q} to {p, q, r} and watch every subset come back with and without r.</div>
     </div>
   </section>
+  <p data-pid="c082de">The picture lays the subsets out in levels. A set sits above the sets it is made from by keeping another member, with the empty set at the foot and the whole set at the top. Tap any subset, and the picture lights the subsets below it that it contains and the subsets above it that contain it.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2g3.1</span><span class="ph understand">understand</span>Why can (Ann, Ben) = (Ben, Ann) not stand?</li>
+      <li><span class="qid">2g3.1</span><span class="ph understand">understand</span>Why does keep-or-drop list every subset of a listed set, with none missed and none twice?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2g4">
-  <h2 class="sthead"><span class="stno">2g4</span>Reading a Pair Back</h2>
-  <p data-pid="dd4e8e">Reading a pair back: the left entry is the thing in <i>every</i> member of the pair. The right entry is the other thing in the member that has two things in it: the one that is not the left entry. If no member has another thing in it, the right entry is the left entry again. For (Cal, Cal) the pair is {{Cal}, {Cal, Cal}} = {{Cal}, {Cal}} = {{Cal}}, by 1f's say-it-again technique inside the listings, and both entries are Cal. That looks odd and is harmless; the technique below covers it.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · a pair read back · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">2g4</span>Small Power Sets</h2>
+  <p data-pid="6f576d">More, to see the pattern, each with its reason:</p>
+  <p data-pid="abd0ac"><span data-tex-inline="\mathcal P(\{\text{owl}\}) = \{\varnothing, \{\text{owl}\}\}"></span>: drop the owl or keep it.</p>
+  <p data-pid="0e96e6"><span data-tex-inline="\mathcal P(\varnothing) = \{\varnothing\}"></span>: nothing to decide, so the only subset is the one that drops everything, which is ∅ itself. Notice 𝒫(∅) is not empty: it has ∅ as a member.</p>
+  <p data-pid="27c021"><span data-tex-inline="\mathcal P(\{\varnothing\}) = \{\varnothing, \{\varnothing\}\}"></span>: the member being kept or dropped is the empty set itself. Drop it and you have ∅; keep it and you have {∅}.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the power set of the empty set · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2g4.1</span><span class="ph understand">understand</span>How do you read a pair’s entries back from its braces?</li>
+      <li><span class="qid">2g4.1</span><span class="ph understand">understand</span>Why is 𝒫(∅) not empty?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2g5">
-  <h2 class="sthead"><span class="stno">2g5</span>Equal Pairs Have Equal Parts</h2>
-  <p data-pid="8df795">Here is what makes the trick an order.</p>
-  <p data-pid="270d98">Equal-pairs technique: <b>if two pairs are the same set, their left entries are the same and their right entries are the same.</b></p>
-  <p data-pid="12d837">In marks: if (t, b) = (c, d), then t = c and b = d. Nothing else about the definition matters. Any other definition with this property would serve.</p>
-  <p data-pid="099a5d">The plan. {t} is in the right-hand set, and that gives t = c. With t written for c, {t, b} is in the right-hand set, and that gives b = d. Every case split comes from an or that was proved, and none from asking “is it or isn’t it”.</p>
-  <p data-pid="220bbc">Rows hold (t, b) = (c, d). Unpack the pairs: {{t}, {t, b}} = {{c}, {c, d}}. {t} is listed on the left, so it is a member of the left set. By the swap axiom, it is a member of the right set too. By the listing, {t} = {c} or {t} = {c, d}.</p>
-  <p data-pid="c0cf01">By cases. If {t} = {c}: t is in {t}, so t is in {c}, so t = c. If {t} = {c, d}: c is in {c, d}, so c is in {t}, so c = t. Turned about, t = c. Either way, t = c.</p>
+  <h2 class="sthead"><span class="stno">2g5</span>The Empty Set Is Part of Every Set</h2>
+  <p data-pid="a9db15">Whatever u is, 𝒫(u) has ∅ as a member and u as a member. That u is a member is 2d's self-part technique: u ⊆ u, so u ∈ 𝒫(u) by packing. That ∅ is a member needs a technique of its own:</p>
+  <p data-pid="1d8159">Empty-part technique: <b>the empty set is part of every set.</b></p>
+  <p data-pid="28b2cd">Its proof is the standard use of the tech “when nothing is true, everything is permitted”. Everything in ∅ is in b, because nothing is in ∅ that could fail to be: the if's hypothesis is never met. 2e held the empty-part technique in trust, and this step proves it, so that flag is closed. Proof. Let b be any set.</p>
+  <p data-pid="66921c">Let x be any member of ∅: a fresh case. By the empty-set technique, x is not in ∅. That clashes with the case row: the case closes, ⊥. When nothing is true, everything is permitted: so x is in b.</p>
+  <p data-pid="f01569">The line “x is in b” stays in the case; what comes back to the margin is the every. The case used nothing about x but that it is in ∅, so every member of ∅ is in b. Pack ⊆: ∅ ⊆ b.</p>
+  <p data-pid="72e3ba">2j had the word for this: the every is true <i>vacuously</i>. There is no member of ∅ to check, so the check passes. People feel cheated by it when they meet it, and lean on it ever after. The whole keep-or-drop listing begins from the empty set, since the empty set is the way of dropping everything.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2g5.1</span><span class="ph understand">understand</span>What does the equal-pairs technique say? <br>Why would any other definition with this property serve?</li>
+      <li><span class="qid">2g5.1</span><span class="ph understand">understand</span>What does the empty-part technique say, and where does “everything is permitted” come into its proof?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2g6">
-  <h2 class="sthead"><span class="stno">2g6</span>The Right Entries</h2>
-  <p data-pid="424698">Now the right entries. Since t = c, write t where c stood: {{t}, {t, b}} = {{t}, {t, d}}. {t, b} is listed on the left, so it is in the right. So {t, b} = {t} or {t, b} = {t, d}. By cases again.</p>
-  <p data-pid="43b78e">First case: {t, b} = {t}. Then b is in {t}, so b = t. Now {t, d} is listed on the right, so it is in the left: {t, d} = {t} or {t, d} = {t, b}. In the first, {t, d} = {t} outright. In the second, {t, d} = {t, b} and {t, b} = {t}; chain: {t, d} = {t}. So d is in {t}, and d = t. Chain b = t with t = d: b = d.</p>
-  <p data-pid="a7e5e4">Second case: {t, b} = {t, d}. Then b is in {t, d}, so b = t or b = d. If b = d, that is the line we want. If b = t, write t for b: {t, d} = {t, t}. By say-it-again, {t, t} = {t}. Chain: {t, d} = {t}. So d is in {t}, d = t, and chained, b = d. Either way, b = d.</p>
-  <p data-pid="6c4ad9">So in every case b = d. Join it with t = c: the left entries are the same, and the right entries are the same.</p>
-  <section class="slides" id="sl6"><div class="eyebrow">The slides · the pair proof · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">2g6</span>Always on the List</h2>
+  <p data-pid="0824e1">By the empty-part technique, ∅ ⊆ u. Pack 𝒫: ∅ is in 𝒫(u). By the self-part technique, u ⊆ u. Pack 𝒫 again: u is in 𝒫(u).</p>
+  <p data-pid="35c089">So 𝒫(u) is never empty, not even for u = ∅. When u has members, ∅ and u are among the members of 𝒫(u), and they differ: u has a member and ∅ does not, so a member of u is not a member of ∅, and they are not the same set.</p>
+  <p data-pid="132858">A founder of the subject asked a further question. Can the parts of a set all be matched, one each, with its members? Matching is not yet on the ladder; 4k builds it. The step's last standing question takes up what this step can say about it.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2g6.1</span><span class="ph understand">understand</span>In the second half of the proof, why do both cases end with b = d?</li>
+      <li><span class="qid">2g6.1</span><span class="ph understand">understand</span>Which two members does every power set have, and by which techniques?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="2g7">
-  <h2 class="sthead"><span class="stno">2g7</span>The Shape of the Argument</h2>
-  <p data-pid="8be350">Read the shape of the argument. Every or came from “this set is a member of that listed set, so it is one of the things listed”. Every case closed with the same line, so reasoning by cases could close them. No line asked whether a pair's two entries are the same or not; that split would be 1f's either-way, which the ladder does not grant for arbitrary things. The technique is cited as equal-pairs from now on. Once you have it you may forget the braces and think of (t, b) as “t then b”, which is the whole point of the construction. Everything the ladder builds with order stands on this argument.</p>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">2g7.1</span><span class="ph understand">understand</span>Where did every or in the equal-pairs proof come from? <br>Which split did it avoid?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="2g8">
-  <h2 class="sthead"><span class="stno">2g8</span>Products</h2>
-  <p data-pid="67b4c4">All the pairs with left entry from u and right entry from b, gathered into a set:</p>
-  <p class="eqline" data-pid="3078d4">From here on, <span data-tex-inline="u \times b"></span> means: the set of all pairs with left entry in u and right entry in b:</p>
-  <div class="eqline" data-tex="\begin{aligned} &amp;p \in u \times b \Leftrightarrow\\ &amp;\quad\exists x\,\exists y\,(x \in u \land y \in b \land p = (x, y)) \end{aligned}"></div>
-  <p data-pid="8570b4">Its name is the <b>product</b> of u and b; the reason for the name is a matter of counting and is rung 4's. For u = {cat, dog} and b = {red, blue}:</p>
-  <div class="eqline" data-tex="\begin{aligned}&amp;\{\text{cat},\text{dog}\} \times \{\text{red},\text{blue}\} = \{(\text{cat},\text{red}),\\ &amp;\quad (\text{cat},\text{blue}),\,(\text{dog},\text{red}),\,(\text{dog},\text{blue})\}\end{aligned}"></div>
-  <p data-pid="29ca2e">Lay it out as a grid: a row for each member of u, a column for each member of b, and a pair in each cell, the row's member then the column's. 2h draws these.</p>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">2g8.1</span><span class="ph understand">understand</span>What is u × b, and how is it laid out?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="2g9">
-  <h2 class="sthead"><span class="stno">2g9</span>Order Matters in a Product</h2>
-  <p data-pid="5c3041">Order matters. (cat, red) = (red, cat) cannot stand: the equal-pairs technique would give cat = red, and cat ≠ red.</p>
-  <p data-pid="9776df">So u × b and b × u cannot be the same set whenever both have a member and u ≠ b. If either is empty, both products are ∅, and then they are the same set.</p>
-  <p data-pid="e80178">Its accepted name: the Cartesian product.</p>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">2g9.1</span><span class="ph understand">understand</span>Why does order matter in a product? <br>When are u × b and b × u the same set?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="2g10">
-  <h2 class="sthead"><span class="stno">2g10</span>Products Exist</h2>
-  <p data-pid="50591a">Does the product exist? The tools must make it, and here is how. Products-exist technique: <b>for any sets u and b, there is the set u × b.</b> Every pair (x, y) with x ∈ u and y ∈ b is already a member of a set we can build. The product is a sift from that set.</p>
-  <p data-pid="671b18">One example first. The pair (cat, red), from {cat, dog} and {red, blue}, is {{cat}, {cat, red}}. Both {cat} and {cat, red} are parts of {cat, dog, red, blue}.</p>
-  <p data-pid="6cf063">Let x be any member of u and y any member of b: fresh names. By merge-membership, x and y are both in u ∪ b. So {x} and {x, y} are parts of u ∪ b, since each of their members is x or y. Pack 𝒫: {x} and {x, y} are both in 𝒫(u ∪ b).</p>
-  <p data-pid="aa769a">So both members of the pair (x, y) are in 𝒫(u ∪ b), and the pair is a part of 𝒫(u ∪ b). Pack 𝒫 again: (x, y) is in 𝒫(𝒫(u ∪ b)). So every pair from u and b is already in one set we have.</p>
-  <p data-pid="71fd75">Sift that set by the condition “is a pair with left entry in u and right entry in b”. The sift loses nothing, and it keeps exactly those pairs. That sift is u × b.</p>
-  <p data-pid="a8907d">Union, all-the-subsets applied again, and sift: every product on the ladder stands on this sift, and you will never need to think about it again.</p>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">2g10.1</span><span class="ph understand">understand</span>From which set is u × b sifted, and why is every pair from u and b already in it?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="2g11">
-  <h2 class="sthead"><span class="stno">2g11</span>Relations Are Sets of Pairs</h2>
-  <p data-pid="f6d662">2b gave statements with gaps in both places a mark: R(x, y), “x is a parent of y”.</p>
-  <p data-pid="bfeb55">Take a family where Ann is Ben's mother and Ben is Cal's father. “Is a parent of” on {Ann, Ben, Cal} is this set:</p>
-  <div class="eqline" data-tex="\{(\text{Ann},\text{Ben}),(\text{Ben},\text{Cal})\}"></div>
-  <p data-pid="6c9ce3">And that set is all the relation is.</p>
-  <p data-pid="a2cdb0">A <b>relation</b> on a set u is a set of pairs of members of u: any subset of u × u. The relation that goes with a statement R is the set of the pairs of which R is so, a sift:</p>
-  <div class="eqline" data-tex="\begin{aligned} &amp;\{p \in u \times u :\\ &amp;\quad\exists x\,\exists y\,(p = (x,y) \land R(x,y))\} \end{aligned}"></div>
-  <p data-pid="59e3c5">A relation is nothing but its pairs, by the same-members axiom. Writing the pair's membership every time is clumsy, so:</p>
-  <div class="eqline" data-tex="\begin{aligned}&amp;\text{From here on, when } r \text{ is a}\\ &amp;\quad\text{relation, } x \mathrel{r} y \text{ means: } (x, y) \in r.\end{aligned}"></div>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">2g11.1</span><span class="ph understand">understand</span>What is a relation on a set u?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="2g12">
-  <h2 class="sthead"><span class="stno">2g12</span>Three Properties</h2>
-  <p data-pid="620f9c">Small letters for relations, since they are sets, which are things. The mark x r y is a statement with two gaps, packed from a membership. These properties come up constantly, each an every about the pairs, and each easy to see on a grid:</p>
-  <ul>
-    <li><b>reflexive</b>: <span data-tex-inline="\forall x\,(x \in u \Rightarrow x \mathrel{r} x)">∀x (x ∈ u ⇒ x r x)</span>. Every thing stands in the relation to itself. “Has the same mother as” is reflexive; “is a parent of” is not.</li>
-    <li><b>symmetric</b>: <span data-tex-inline="\forall x\,\forall y\,(x \mathrel{r} y \Rightarrow y \mathrel{r} x)">∀x ∀y (x r y ⇒ y r x)</span>. If x r y is true, so is y r x. “Has met” is symmetric; “is a parent of” is not.</li>
-    <li><b>transitive</b>: <span data-tex-inline="\forall x\,\forall y\,\forall z\,(x \mathrel{r} y \land y \mathrel{r} z \Rightarrow x \mathrel{r} z)">∀x ∀y ∀z (x r y ∧ y r z ⇒ x r z)</span>. A step and a further step can be taken as a step. “Is an ancestor of” is transitive; “is a friend of” is not: your friend's friend may be a stranger to you.</li>
-  </ul>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">2g12.1</span><span class="ph understand">understand</span>What do reflexive, symmetric and transitive each say?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="2g13">
-  <h2 class="sthead"><span class="stno">2g13</span>Which Relations Have Which</h2>
-  <p data-pid="fbffb8">Sameness has every property on the list: the self-sameness axiom is reflexive, the turn-about technique symmetric, the chain technique transitive. “Lives in the same town as” has them all. “Is an ancestor of” is transitive and neither of the others. “Has met, or is the same person as” is reflexive and symmetric and not transitive: you have met Ann, and Ann has met Ben, and you may never have met Ben. The picture lets you build a relation on a household and test each property, and when a property fails it points at the pair that is missing.</p>
+  <h2 class="sthead"><span class="stno">2g7</span>How the List Grows, Said Without Counting</h2>
+  <p data-pid="6fbb65">Look again at keep-or-drop. When the set gains another member, every subset you already had comes back as itself and as itself with the newcomer added. Nothing is lost, and every old subset comes back in a version without and a version with. Add a further member and the same happens again to the whole new list. That is why the lists 𝒫 makes grow so quickly. It is why 𝒫(𝒫(u)) is already too long to list by hand even for u = {cat, dog}: it has sixteen members, each a set of sets. How fast, as a matter of counting, is a question for rung 4. Here the fact is structural: <b>each member of u is an independent decision, and the subsets are the ways the decisions can come out.</b></p>
+  <p data-pid="085d14">Said here, not proved; the slides and the picture chase it. In marks, take a set u and a thing c not in u. The subsets of u ∪ {c} split into two kinds. Those that leave c out are exactly the subsets of u. Those that take c in are each a subset of u with c added. The split itself, “c ∈ s or c ∉ s” for an arbitrary s, is 1f's either-way, licensed when membership is settled. For the listed sets of this rung, it is.</p>
   <section class="pic" id="pic2">
-    <div class="eyebrow">The picture · a relation on a household, its properties, and its classes</div>
+    <div class="eyebrow">The picture · a subset, decided member by member</div>
     <div class="panel">
-      <div class="cap">The household h = {Ann, Ben, Cal, Dee, Eve, Fay}. Row x, column y: a dot means x r y, the pair (x, y) is in r. Tap cells to add or remove pairs, or start from a preset. Faint outlines mark the self-cells.</div>
-      <div class="chips" role="group" aria-label="relation"><span class="m" style="color:var(--muted)">r:</span><button data-r="mother" class="on">has the same mother as</button><button data-r="anc">is an ancestor of</button><button data-r="met">has met, or is</button><button data-r="friend">is a friend of</button><button data-r="clear">clear</button></div>
-      <svg id="rel" viewBox="0 0 300 300" aria-label="relation grid"></svg>
-      <div class="chips" role="group" aria-label="close up"><span class="m" style="color:var(--muted)">mend it:</span><button id="cR">add every self-pair</button><button id="cS">add the turned-about pairs</button><button id="cT">add what transitive demands</button></div>
-      <div class="eqbox" id="rv"></div>
-      <div class="cap">Ember dashed: a pair the relation is missing for a property (a self-cell, a turned-about pair, or the shortcut x r z for x r y, y r z, whose cells get teal outlines). When every property is true, dots take their class's colour.</div>
+      <div class="cap">The set b = {owl, cat, bat}, and a newcomer you may add. Decide each member: keep or drop. The readout names the subset you have decided and says why it is in 𝒫(b).</div>
+      <div class="chips" role="group" aria-label="newcomer"><span class="m" style="color:var(--muted)">emu:</span><button id="emuOff" class="on">not in b</button><button id="emuOn">add emu to b</button></div>
+      <div class="kd" id="kd"></div>
+      <div class="eqbox" id="eq3"></div>
+      <div class="lst" id="lst"></div>
     </div>
   </section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2g13.1</span><span class="ph understand">understand</span>Which property does sameness get from each of 0b’s axiom and techniques?</li>
+      <li><span class="qid">2g7.1</span><span class="ph understand">understand</span>When a set gains a member, what happens to its list of subsets?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="2g14">
-  <h2 class="sthead"><span class="stno">2g14</span>Sameness Relations</h2>
-  <p data-pid="0a9ca1">A relation with all the properties on the list is a way of saying “the same, in the respect that matters”: same mother, same initial, same colour.</p>
-  <p class="eqline" data-pid="f3f847">From here on, a <b>sameness relation</b> on u is a relation on u that is reflexive, symmetric and transitive.</p>
-  <p class="eqline" data-pid="262316">From here on, when e is a sameness relation, <span data-tex-inline="x \sim y"></span> means <span data-tex-inline="(x, y) \in e"></span>. Read it “x is equivalent to y”.</p>
-  <p class="eqline" data-pid="8351e1">From here on, “equivalent” is also said of a thing and a thing related by a sameness relation. 1e's “equivalent”, said of a statement and a statement with the same column, keeps its meaning. Which meaning is meant is told by what the word is said of: things, or statements.</p>
+<section class="class step" data-step="2g8">
+  <h2 class="sthead"><span class="stno">2g8</span>The Tool Respects Inclusion</h2>
+  <p data-pid="9bd7c8">Power-keeps-parts technique: <b>if u is part of b, every part of u is a part of b.</b> In marks, 𝒫(u) ⊆ 𝒫(b). The argument is 2d’s chain technique, inside the shape of ⊆.</p>
+  <p data-pid="b4df5b">Let u and b be any sets, with rows holding u ⊆ b. Let s be any member of 𝒫(u): a fresh case. Unpack 𝒫: s ⊆ u. Chain that with u ⊆ b: s ⊆ b. Pack 𝒫: s is in 𝒫(b).</p>
+  <p data-pid="faccef">The case used nothing about s but that it is in 𝒫(u), so, back at the margin, every member of 𝒫(u) is in 𝒫(b). Pack ⊆: 𝒫(u) ⊆ 𝒫(b).</p>
+  <p data-pid="8fbf24">The placeholder is called s because its values are sets; any letter would do. Run backwards, the power-keeps-parts technique also works: from 𝒫(u) ⊆ 𝒫(b), you may write u ⊆ b, because u ∈ 𝒫(u), so u ∈ 𝒫(b), so u ⊆ b. So u ⊆ b and 𝒫(u) ⊆ 𝒫(b) are interchangeable by techs. That is the kind of technique that lets you move a question about sets up to a question about their power sets, and back.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2g14.1</span><span class="ph understand">understand</span>What is a sameness relation? <br>What does x ∼ y mean?</li>
+      <li><span class="qid">2g8.1</span><span class="ph understand">understand</span>What does the power-keeps-parts technique say? <br>Does it run backwards?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="2g15">
-  <h2 class="sthead"><span class="stno">2g15</span>Classes</h2>
-  <p class="eqline" data-pid="6e1c53">From here on, <span data-tex-inline="[x]"></span> means the <b>class</b> of x: everything equivalent to it.</p>
-  <div class="eqline" data-tex="[x] = \{y \in u : y \sim x\}"></div>
-  <p data-pid="5e09c7">[x] is a name, for a set; x ∼ y is a statement, so or not so.</p>
-  <p data-pid="3d5997">On the words {ant, ape, bee, bat, cow, cat, cod} with “has the same initial as”, the classes are these:</p>
-  <div class="eqline" data-tex="\begin{aligned} &amp;[\text{ant}] = \{\text{ant},\text{ape}\}\\ &amp;[\text{bee}] = \{\text{bee},\text{bat}\}\\ &amp;[\text{cow}] = \{\text{cow},\text{cat},\text{cod}\} \end{aligned}"></div>
-  <p data-pid="4a86f6">Notice <span data-tex-inline="[\text{cow}] = [\text{cat}] = [\text{cod}]"></span>: the same set by the same-members axiom, so any member may name the class. A member used to name its class is called a <b>representative</b>, and which you pick does not matter. That freedom is what makes classes usable.</p>
+<section class="class step" data-step="2g9">
+  <h2 class="sthead"><span class="stno">2g9</span>Common Parts, Exactly</h2>
+  <p data-pid="3cf34e">The parts of what u and b share are exactly the parts shared by 𝒫(u) and 𝒫(b):</p>
+  <div class="eqline" data-tex="\mathcal P(u \cap b) = \mathcal P(u) \cap \mathcal P(b)"></div>
+  <p data-pid="42da04"><b>A set is part of both u and b exactly when it is part of their common members.</b> The proof chases a member, with 2f's habit of unpacking everything to joining words and a technique in the middle; the slides have it. For ∪ only an inclusion is true:</p>
+  <section class="slides" id="sl9"><div class="eyebrow">The slides · common parts exactly · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2g15.1</span><span class="ph understand">understand</span>What is the class [x]? <br>What is a representative?</li>
+      <li><span class="qid">2g9.1</span><span class="ph understand">understand</span>What does this footing claim about the parts of u ∩ b?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="2g16">
-  <h2 class="sthead"><span class="stno">2g16</span>Classes Never Partly Overlap</h2>
-  <p data-pid="741344">Classes-never-overlap technique: <b>two classes are either the same or share nothing at all.</b> They never partly overlap.</p>
-  <p data-pid="9b8634">The plan. Rows hold that two classes share a member. Show that the things naming them are equivalent. Then show each class is part of the other, and use double-inclusion.</p>
-  <p data-pid="6b195d">Rows hold c ∈ [x] and c ∈ [y]. Unpack the classes: c ∼ x and c ∼ y. By symmetric, x ∼ c. By transitive, with c ∼ y: x ∼ y.</p>
-  <p data-pid="aa1dbd">Now let z be any member of [x]: a fresh case. Unpack the class: z is in u, and z ∼ x. By transitive, with x ∼ y: z ∼ y. Pack the class: z is in [y]. Back at the margin: every member of [x] is in [y], so [x] ⊆ [y].</p>
-  <p data-pid="4de0ec">The same argument with x and y exchanged, using y ∼ x by symmetric, gives [y] ⊆ [x]. By double-inclusion, [x] = [y].</p>
-  <section class="slides" id="sl16"><div class="eyebrow">The slides · classes never partly overlap · ← → keys work</div></section>
+<section class="class step" data-step="2g10">
+  <h2 class="sthead"><span class="stno">2g10</span>Merged Parts, Only by an Inclusion</h2>
+  <div class="eqline" data-tex="\mathcal P(u) \cup \mathcal P(b) \subseteq \mathcal P(u \cup b)"></div>
+  <p data-pid="897a0a">A part of u is a part of u ∪ b (the power-keeps-parts technique with u ⊆ u ∪ b). That u ⊆ u ∪ b takes two lines. Take x in u. Then x is in u or in b, by adding an option, so x ∈ u ∪ b.</p>
+  <p data-pid="5f5181">The claim 𝒫(u ∪ b) = 𝒫(u) ∪ 𝒫(b) fails the other way, and here is the witness. Take u = {cat}, b = {dog}. Then {cat, dog} ⊆ u ∪ b, so it is in 𝒫(u ∪ b). But it cannot stand as a part of u or of b: each option puts dog in {cat}, or cat in {dog}, and clashes. So rows that hold the sameness equal ⊥: the counterexample technique. This failure is not a licence question like 2f’s not-through; the sameness simply cannot stand, and a set on its own shows it.</p>
+  <section class="slides" id="sl10a"><div class="eyebrow">The slides · merged parts by inclusion only · ← → keys work</div></section>
+  <section class="slides" id="sl10b"><div class="eyebrow">The slides · the witness · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2g16.1</span><span class="ph understand">understand</span>What does the classes-never-overlap technique say, and what is the plan of its proof?</li>
+      <li><span class="qid">2g10.1</span><span class="ph understand">understand</span>Which direction of 𝒫(u ∪ b) = 𝒫(u) ∪ 𝒫(b) holds, and what kills the other?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="2g17">
-  <h2 class="sthead"><span class="stno">2g17</span>Partitions</h2>
-  <p data-pid="b29bc9">And every thing is in some class, its own, by reflexive: x ∼ x, so x ∈ [x]. Put these together and the classes chop u into pieces that do not overlap and together cover u. Such a chopping is called a <b>partition</b> of u.</p>
-  <p data-pid="a1e61c">The connection between a relation and a partition runs backwards too. Take any pieces that do not overlap and cover u. Then “lies in the same piece as” is reflexive, symmetric and transitive, and its classes are exactly the pieces. A sameness relation and a partition are descriptions of the same thing, as the slides show.</p>
-  <section class="slides" id="sl17"><div class="eyebrow">The slides · pieces to a relation · ← → keys work</div></section>
-  <p data-pid="b60956">Why this matters so much: it is how mathematics manufactures new objects. Rung 5 will gather pairs into classes under a sameness it chooses, and each class will be a new object. You need none of rung 5's construction now. What you need is the move: decide what should count as the same, check the properties, and work with the classes, naming each by any representative you like.</p>
+<section class="class step" data-step="2g11">
+  <h2 class="sthead"><span class="stno">2g11</span>In, and Part of, Again</h2>
+  <p data-pid="5c6959">Power sets are where 2d's distinction gets its exercise, because the members of 𝒫(u) are themselves sets, and most of them are also subsets of things. <b>Keep the test: ∈ asks “on the list?”, ⊆ asks “every member on the list?”.</b> The empty set is on the list, by the empty-part technique, and is a part of 𝒫(u) by the same technique, with 𝒫(u) in place of b. And u is always on the list.</p>
+  <div class="eqline" data-tex="\begin{aligned} &amp;\varnothing \in \mathcal P(u) &amp;&amp;\text{on the list}\\ &amp;\varnothing \subseteq \mathcal P(u) &amp;&amp;\text{empty-part}\\ &amp;u \in \mathcal P(u) &amp;&amp;\text{always} \end{aligned}"></div>
+  <p data-pid="1aac48">But <span data-tex-inline="u \subseteq \mathcal P(u)"></span> is true only when every member of u is itself a subset of u. For u = {cat} that fails (cat is not a set), and for u = {∅} it is true (∅ ⊆ {∅}). And a cat is not a subset of anything:</p>
+  <div class="eqline" data-tex="\begin{aligned} &amp;\{\text{cat}\} \in \mathcal P(\{\text{cat},\text{dog}\})\\ &amp;\text{cat} \notin \mathcal P(\{\text{cat},\text{dog}\}) \end{aligned}"></div>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2g17.1</span><span class="ph understand">understand</span>What is a partition? <br>How do sameness relations and partitions correspond?</li>
+      <li><span class="qid">2g11.1</span><span class="ph understand">understand</span>When is u ⊆ 𝒫(u) true?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="2g18">
-  <h2 class="sthead"><span class="stno">2g18</span>Illegal Moves</h2>
+<section class="class step" data-step="2g12">
+  <h2 class="sthead"><span class="stno">2g12</span>Illegal Moves</h2>
   <div class="brkkey"></div>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed">
-(a,b) = \{a,b\}\,? @@ a gathering has no order; the pair does. {Ann, Ben} = {Ben, Ann}, and (Ann, Ben) = (Ben, Ann) cannot stand, as shown above
-(a,b) = (b,a)\,? @@ only when a = b, by the equal-pairs technique. Order is the whole point
-(a,b) = \{a,\{b\}\}\,\text{ as a definition?} @@ it fails equal-pairs. With a = {dog} and b = cat it gives {{dog},{cat}}; with a = {cat} and b = dog it gives {{cat},{dog}}: the same set from different entries. Equal “pairs” with unequal parts
-\begin{aligned}&x \mathrel{r} y,\; y \mathrel{r} x \quad\\ &\quad \text{so } x \mathrel{r} x\text{: hence symmetric}\\ &\quad\text{and transitive give reflexive?}\end{aligned} @@ only for an x that is related to some y. A thing related to nothing breaks it: on {Ann, Ben} the relation {(Ann, Ann)} is symmetric and transitive and not reflexive (Ben)
-a \times b = b \times a\,? @@ the pairs are turned about. {p} × {x} = {(p, x)} and {x} × {p} = {(x, p)}, different sets when p ≠ x
-[x] = [y] \quad\text{so } x = y\,? @@ classes are the same when their members are equivalent, not identical. [cow] = [cat] and cow ≠ cat
+\mathcal P(a) = a\,? @@ the members of 𝒫(a) are the subsets of a, not the members of a. 𝒫({cat}) = {∅, {cat}}, and neither ∅ nor {cat} is a cat
+\mathcal P(\varnothing) = \varnothing\,? @@ ∅ ⊆ ∅ (the empty-part technique, or self-part), so ∅ ∈ 𝒫(∅): the power set of the empty set has a member. 𝒫(∅) = {∅}
+\mathcal P(a \cup b) = \mathcal P(a) \cup \mathcal P(b)\,? @@ only ⊇ is true. a = {cat}, b = {dog}: {cat, dog} is a subset of a ∪ b and of neither a nor b
+s \subseteq a \quad\text{so } s \in a\,? @@ 2d's confusion. s ⊆ a says s ∈ 𝒫(a), which is a different set from a
+\text{cat} \in \mathcal P(\{\text{cat},\text{dog}\})\,? @@ a member of 𝒫(a) is a subset of a, so a set. A cat is not a set, so not a subset, so not on the list; {cat} is
+\mathcal P(a) \subseteq \mathcal P(b) \quad\text{so } a \subseteq b\;\text{: allowed} @@ this one IS a move, by the power-keeps-parts technique run backwards (a ∈ 𝒫(a) ⊆ 𝒫(b)). Put here so you check rather than guess
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2g18.1</span><span class="ph understand">understand</span>Why would (a, b) = {a, {b}} fail as a definition of the pair?</li>
+      <li><span class="qid">2g12.1</span><span class="ph understand">understand</span>Why is cat not in 𝒫({cat, dog}), while {cat} is?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="2g19">
-  <h2 class="sthead"><span class="stno">2g19</span>Running It Backwards</h2>
-  <p data-pid="81184f">Given a set that is a pair, find its entries. The left entry is in every member. If there is a member with another thing in it, that thing is the right entry; if not, the right entry is the left entry again. Given a sameness of pairs, you have a sameness of left entries and of right entries at once: that is the equal-pairs technique, cited, not reproved. Given a relation to test, hunt for a missing pair. Look for a thing without its self-pair, a pair without its turned-about pair, or a step and a further step without the shortcut. A missing pair kills the property, by the counterexample technique. Given classes, read the relation back as “in the same class as”. Given a relation, build the classes by sifting u by “∼ x” for each x. Then check with the classes-never-overlap technique that they do not partly overlap. Found upward; written downward.</p>
+<section class="class step" data-step="2g13">
+  <h2 class="sthead"><span class="stno">2g13</span>Running It Backwards</h2>
+  <p data-pid="60c5ec">Wanting s ∈ 𝒫(u), you want s ⊆ u, so you open “let x be any member of s” and aim at x ∈ u. Wanting 𝒫(u) ⊆ 𝒫(b), you open “let s be any member of 𝒫(u)”, unpack, and need s ⊆ b. So you need u ⊆ b to chain with. Wanting the full list of 𝒫(u) for a listed u, run keep-or-drop. Then check by the same-members axiom that no way of deciding was missed and none written again. Wanting to show a sameness between power sets cannot stand, hunt for a set that is a part of one side’s set and not of the other’s. A power set’s membership is an inclusion, so a witness is a set with a stray member. Found upward; written downward.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2g19.1</span><span class="ph understand">understand</span>Given a relation to test, what do you hunt for, and which technique does a missing pair use?</li>
+      <li><span class="qid">2g13.1</span><span class="ph understand">understand</span>Wanting s ∈ 𝒫(u), what do you aim at, and how do you open?</li>
     </ol>
   </section>
 </section>
@@ -350,27 +261,23 @@ a \times b = b \times a\,? @@ the pairs are turned about. {p} × {x} = {(p, x)} 
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
-  <div class="chq"><span class="chid">2g.4.1</span><span class="tagq">build</span>On a set of places you know, take “is joined to by one road, or is the same place as” as a set of pairs. Which of reflexive, symmetric and transitive is it? <br>Mend it into the smallest sameness relation containing it, adding only the pairs the properties force, and list its classes by representatives.</div>
-  <div class="chq"><span class="chid">2g.4.2</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="r, s \text{ relations on a set } u;"></span> <span data-tex-inline="\text{under each, every } x \in u \text{ has}"></span> <span data-tex-inline="\text{a partner, and any two partners}"></span> <span data-tex-inline="\text{of } x \text{ are the same.}"></span> <span data-tex-inline="\forall x\, \forall y\, (x \mathrel{r} y \Rightarrow x \mathrel{s} y)"></span> <span data-tex-inline="\text{Foot: } r = s"></span></span>Prove the foot.</div>
-  <div class="chq"><span class="chid">2g.4.3</span><span class="tagq">seam</span>Take {t, {t, b}} as a candidate for a shorter pair, t then b. Given: {t, {t, b}} = {c, {c, d}}. <br>Argue toward t = c ∧ b = d in plain words, as far as you can take it, following every case. <br>What must sets do for the cases left open to happen? <br>Does the candidate work as a pair?</div>
+  <div class="chq"><span class="chid">2g.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{(i) } \mathcal{P}(u) \cap \mathcal{P}(b) = \{\varnothing\}"></span> <span data-tex-inline="\text{(ii) the members of } \mathcal{P}(c) \cap \mathcal{P}(d)"></span></span>Take sets u and b of things you know, with no member in common, and prove (i). <br>Then take sets c and d of things with a member in common, find (ii) in terms of what c and d share, and prove it.</div>
+  <div class="chq"><span class="chid">2g.4.2</span><span class="tagq">loop</span><span class="givens"><span data-tex-inline="u \text{ a set; } R \text{ a statement with}"></span> <span data-tex-inline="\text{gaps at both places, settled:}"></span> <span data-tex-inline="R(x, y) \lor \neg R(x, y) \text{ for all } x, y \in u."></span> <span data-tex-inline="\text{For } x \in u, \text{ the pick of } x \text{ is}"></span> <span data-tex-inline="\{y \in u : R(x, y)\}"></span> <span data-tex-inline="\text{(for this answer only).}"></span></span>Write a part d of u as a sift. Show that rows holding “some member of u has d as its pick” equal ⊥.</div>
+  <div class="chq"><span class="chid">2g.4.3</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{Rows hold: a set } u \text{ with } \mathcal{P}(u) \subseteq u;"></span> <span data-tex-inline="r = \{x \in u : x \notin x\};"></span> <span data-tex-inline="r \in r \lor r \notin r."></span></span>Show that the rows equal ⊥. <br>Without the last row, how far do the rows get?</div>
+  <div class="chq"><span class="chid">2g.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="b \text{ any set.}"></span> <span data-tex-inline="\text{Off limits: when nothing is true,}"></span> <span data-tex-inline="\text{everything is permitted.}"></span> <span data-tex-inline="\text{Techniques already proved}"></span> <span data-tex-inline="\text{may be cited.}"></span> <span data-tex-inline="\text{Foot: } \varnothing \subseteq b"></span></span>Prove the foot.</div>
+  <div class="chq"><span class="chid">2g.4.5</span><span class="tagq">seam</span>From 2g.4.2: for every set u and every settled R, rows holding “some member of u has {y ∈ u : ¬R(y, y)} as its pick” equal ⊥. Let u be a set that no listing can finish writing. <br>Does 2g.4.2 show that 𝒫(u) has more members than u, or only that no R reaches every part of u?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r02f.html">← 2f · all the subsets</a><a href="r02h.html">2h · sets by hand →</a></nav>
+<nav class="nextrung"><a href="r02f.html">← 2f · gather and merge</a><a href="r02h.html">2h · pairs in order →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
-  <h3>Other ways the same marks are written</h3>
-  <p>Mathematics writes some of these marks in more than one way, by subject and by century. Each one below means what the mark in this step means; know them on sight.</p>
-  <ul>
-    <li>The pair <span data-tex-inline="(t, b)">(t, b)</span> is also written ⟨t, b⟩, and <span data-tex-inline="u \times b">u × b</span> is called the Cartesian product.</li>
-    <li>For a relation r, the set of left entries of its pairs is called its domain, and the set of right entries its range.</li>
-  </ul>
   <h3>Who said it first</h3>
-  <p>The pair {{t}, {t, b}} is Kazimierz Kuratowski’s (1921), and its accepted name is the Kuratowski ordered pair.</p>
+  <p>The founder who showed that the parts of a set outrun its members is Georg Cantor; the fact is Cantor’s theorem.</p>
+  <aside class="voice para"><p>Cantor showed in 1891 that the parts of a set can never all be matched, one each, with its members: whatever matching you try, some part is left out. He took this as a sign that there is no largest set.</p><cite>Cantor, “Über eine elementare Frage der Mannigfaltigkeitslehre” (1891); paraphrase</cite></aside>
   <h3>Accepted names</h3>
-  <p>A sameness relation is an equivalence relation, and its classes are equivalence classes.</p>
-  <p>The product u × b is the Cartesian product.</p>
+  <p>The power axiom is the axiom of power set.</p>
 </section>
 </div>
 
@@ -379,107 +286,85 @@ a \times b = b \times a\,? @@ the pairs are turned about. {p} × {x} = {(p, x)} 
 (function(){
 const {tex,col,stepper}=Rung;
 const R=String.raw;
-const NS='http://www.w3.org/2000/svg';
 
-/* ---------- left: pairs as sets ---------- */
-const at=n=>({k:'atom',n}), st=(...m)=>({k:'set',m});
-const ENT=[['cat',at('cat')],['dog',at('dog')],['{cat}',st(at('cat'))],['{dog}',st(at('dog'))]];
-const same=(p,q)=>{ if(p.k!==q.k) return false; if(p.k==='atom') return p.n===q.n; return p.m.every(x=>q.m.some(y=>same(x,y)))&&q.m.every(y=>p.m.some(x=>same(x,y))); };
-const show=t=>t.k==='atom'?'\\text{'+t.n+'}':'\\{'+dedupe(t.m).map(show).join(',\\,')+'\\}';
-const plain=t=>t.k==='atom'?t.n:'{'+dedupe(t.m).map(plain).join(', ')+'}';
-function dedupe(m){ const o=[]; m.forEach(x=>{ if(!o.some(y=>same(x,y))) o.push(x); }); return o; }
-let def='k', sel=[0,1,1,0];
-const pairOf=(a,b)=>def==='k'?st(st(a),st(a,b)):st(a,st(b));
-function mk(host,idx){ ENT.forEach(([lab],i)=>{ const b=document.createElement('button'); b.textContent=lab; if(i===sel[idx]) b.className='on'; b.onclick=()=>{ sel[idx]=i; [...host.querySelectorAll('button')].forEach(x=>x.classList.toggle('on',x===b)); drawP(); }; host.appendChild(b); }); }
-mk(document.getElementById('p1a'),0); mk(document.getElementById('p1b'),1); mk(document.getElementById('p2a'),2); mk(document.getElementById('p2b'),3);
-document.querySelectorAll('[data-def]').forEach(b=>b.onclick=()=>{ def=b.dataset.def; document.querySelectorAll('[data-def]').forEach(x=>x.classList.toggle('on',x===b)); drawP(); });
-function drawP(){
-  const [a,b,c,d]=sel.map(i=>ENT[i][1]); const P=pairOf(a,b), Q=pairOf(c,d); const eq=same(P,Q); const partsEq=same(a,c)&&same(b,d);
-  let s=`(${show(a)},${show(b)}) = ${show(P)}\\\\ (${show(c)},${show(d)}) = ${show(Q)}\\\\`;
-  if(eq&&partsEq) s+=`\\htmlClass{keep}{\\text{the same set, and the entries}}\\\\ \\htmlClass{keep}{\\text{match in order}}`;
-  else if(!eq) { const w=P.m.find(x=>!Q.m.some(y=>same(x,y)))||Q.m.find(x=>!P.m.some(y=>same(x,y))); s+=`\\text{different sets: } ${show(w)}\\\\ \\text{is a member of just the pair it came from}`; }
-  else s+=`\\htmlClass{new}{\\text{the same set from different entries:}}\\\\ \\htmlClass{new}{\\text{this definition is not a pair}}`;
-  tex(document.getElementById('eqp'),`\\begin{gathered}${s}\\end{gathered}`,true);
+/* ---------- left: the levels of a power set ---------- */
+const cv2=document.getElementById('cv2'); let n=3;
+const NAMES=['p','q','r','s']; let sel=null, boxes=[];
+function setName(mask,n){ const m=[]; for(let i=0;i<n;i++) if(mask>>i&1) m.push(NAMES[i]); return m.length?'{'+m.join(',')+'}':'∅'; }
+const TXs=m=>setName(m,n).replace('∅','\\varnothing').replace(/[{}]/g,x=>'\\'+x).replace(/,/g,',\\,');
+function size(cv,ar){ const d=window.devicePixelRatio||1, W=cv.clientWidth||300, H=Math.round(W/ar); cv.width=W*d; cv.height=H*d; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(d,0,0,d,0,0); return {c,W,H}; }
+function draw2(){
+  const {c,W,H}=size(cv2,1.25); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
+  const levels=[]; for(let k=0;k<=n;k++) levels.push([]);
+  for(let m=0;m<(1<<n);m++){ let k=0; for(let i=0;i<n;i++) k+=m>>i&1; levels[k].push(m); }
+  boxes=[]; const top=26, bot=H-26;
+  levels.forEach((Lv,k)=>{ const y=n?bot-(bot-top)*k/n:H/2; Lv.forEach((m,j)=>{ const x=W*(j+1)/(Lv.length+1); boxes.push({m,x,y}); }); });
+  const isSub=(p,q)=>(p&q)===p;
+  c.lineWidth=1; boxes.forEach(p=>boxes.forEach(q=>{ if(p.m!==q.m && isSub(p.m,q.m)){ let d=q.m^p.m; if(d&&!(d&(d-1))){ c.strokeStyle=col('--grid'); if(sel!==null && isSub(sel,p.m)) c.strokeStyle=col('--ember'); if(sel!==null && isSub(q.m,sel)) c.strokeStyle=col('--teal'); c.beginPath(); c.moveTo(p.x,p.y); c.lineTo(q.x,q.y); c.stroke(); } } }));
+  c.font=(n>=4?11:13)+'px IBM Plex Mono, monospace'; c.textAlign='center';
+  boxes.forEach(b=>{ const s=setName(b.m,n); const w=c.measureText(s).width+12; let fill=col('--sand'), ink=col('--ink');
+    if(sel!==null){ if(b.m===sel){ fill=col('--ink'); ink=col('--paper'); } else if(isSub(b.m,sel)){ fill=col('--teal'); ink='#fff'; } else if(isSub(sel,b.m)){ fill=col('--ember'); ink='#fff'; } }
+    c.fillStyle=fill; c.beginPath(); c.roundRect?c.roundRect(b.x-w/2,b.y-11,w,22,5):c.rect(b.x-w/2,b.y-11,w,22); c.fill(); c.fillStyle=ink; c.fillText(s,b.x,b.y+4); b.w=w; });
+  c.textAlign='left';
+  const S=sel===null?(1<<n)-1:sel; const subs=[]; for(let m=0;m<(1<<n);m++) if(isSub(m,S)) subs.push(m);
+  subs.sort((p,q)=>{ const k=x=>{let t=0; for(let i=0;i<n;i++) t+=x>>i&1; return t;}; return k(p)-k(q)||p-q; });
+  const kk=x=>{let t=0; for(let i=0;i<n;i++) t+=x>>i&1; return t;}; const lv=[]; subs.forEach(m=>{ (lv[kk(m)]=lv[kk(m)]||[]).push(TXs(m)); });
+  const rowsOut=[]; lv.filter(Boolean).forEach(L=>{ for(let i=0;i<L.length;i+=4) rowsOut.push(L.slice(i,i+4).join(',\\;')); }); const body=rowsOut.join(',\\\\ ');
+  tex(document.getElementById('eq2'),lv.filter(Boolean).length>2?`\\begin{gathered}\\mathcal P(${TXs(S)}) = \\{${body}\\}\\end{gathered}`:`\\mathcal P(${TXs(S)}) = \\{${subs.map(TXs).join(',\\;')}\\}`,true);
 }
-drawP();
+cv2.addEventListener('pointerdown',e=>{ const r=cv2.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top; const hit=boxes.find(b=>Math.abs(x-b.x)<b.w/2+2&&Math.abs(y-b.y)<13); sel=hit?(sel===hit.m?null:hit.m):null; draw2(); });
+document.querySelectorAll('[data-nn]').forEach(b=>b.onclick=()=>{ n=+b.dataset.nn; sel=null; document.querySelectorAll('[data-nn]').forEach(x=>x.classList.toggle('on',x===b)); draw2(); });
+new ResizeObserver(draw2).observe(cv2);
+if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw2);
+draw2();
 
-/* ---------- right: relations on a household ---------- */
-const D=[1,2,3,4,5,6], svg=document.getElementById('rel');
-const NM=['Ann','Ben','Cal','Dee','Eve','Fay'], MOM=[0,0,1,1,1,2];
-const sym=L=>(a,b)=>L.some(([x,y])=>(x===a&&y===b)||(x===b&&y===a));
-const ANC=[[1,2],[1,3],[1,4],[2,3],[2,4],[3,4],[5,6]], FR=[[1,2],[2,3],[5,6]], MET=[[1,2],[2,3],[3,4],[4,5],[5,6]];
-const PRE={mother:(a,b)=>MOM[a-1]===MOM[b-1], anc:(a,b)=>ANC.some(([x,y])=>x===a&&y===b), met:(a,b)=>a===b||sym(MET)(a,b), friend:sym(FR), clear:()=>false};
-let Rl=new Set(); const has=(a,b)=>Rl.has(a+','+b);
-function preset(k){ Rl=new Set(); D.forEach(a=>D.forEach(b=>{ if(PRE[k](a,b)) Rl.add(a+','+b); })); }
-preset('mother');
-function el(tag,at){ const e=document.createElementNS(NS,tag); for(const k in at) e.setAttribute(k,at[k]); svg.appendChild(e); return e; }
-function analyse(){
-  const missR=D.filter(a=>!has(a,a));
-  let missS=null; for(const a of D) for(const b of D) if(!missS&&has(a,b)&&!has(b,a)) missS=[a,b];
-  let missT=null; for(const a of D) for(const b of D) for(const c of D) if(!missT&&has(a,b)&&has(b,c)&&!has(a,c)) missT=[a,b,c];
-  let classes=null; if(!missR.length&&!missS&&!missT){ classes=[]; const seen=new Set(); D.forEach(a=>{ if(seen.has(a)) return; const cl=D.filter(b=>has(a,b)); cl.forEach(x=>seen.add(x)); classes.push(cl); }); }
-  return {missR,missS,missT,classes}; }
-const PAL=['--ember','--teal','--gold','--plum','--moss','--muted'];
-function drawRel(){
-  svg.innerHTML=''; const o=36, s=42; const A=analyse();
-  D.forEach((b,j)=>{ const t=el('text',{x:o+j*s+s/2,y:o-10,'text-anchor':'middle',style:'fill:var(--muted);font:11px var(--mono)'}); t.textContent=NM[b-1]; });
-  D.forEach((a,i)=>{ const t=el('text',{x:o-3,y:o+i*s+s/2+4,'text-anchor':'end',style:'fill:var(--muted);font:11px var(--mono)'}); t.textContent=NM[a-1]; });
-  const tb=el('text',{x:o+3*s,y:12,'text-anchor':'middle',style:'fill:var(--muted);font:11px var(--mono)'}); tb.textContent='y →';
-  const ta=el('text',{x:6,y:o+3*s,'text-anchor':'middle',transform:'rotate(-90 6 '+(o+3*s)+')',style:'fill:var(--muted);font:11px var(--mono)'}); ta.textContent='x →';
-  D.forEach((a,i)=>el('rect',{x:o+i*s+2,y:o+i*s+2,width:s-4,height:s-4,rx:4,style:'fill:none;stroke:var(--muted);stroke-width:1;stroke-dasharray:3 4;opacity:.7;pointer-events:none'}));
-  const clsOf=a=>A.classes?A.classes.findIndex(cl=>cl.includes(a)):-1;
-  D.forEach((a,i)=>D.forEach((b,j)=>{ const r=el('rect',{x:o+j*s,y:o+i*s,width:s,height:s,style:'fill:transparent;stroke:var(--grid);cursor:pointer'});
-    r.addEventListener('click',()=>{ const k=a+','+b; if(Rl.has(k)) Rl.delete(k); else Rl.add(k); document.querySelectorAll('[data-r]').forEach(x=>x.classList.remove('on')); drawRel(); });
-    if(has(a,b)){ const ci=clsOf(a); el('circle',{cx:o+j*s+s/2,cy:o+i*s+s/2,r:8,style:'pointer-events:none;fill:var('+(ci>=0?PAL[ci%PAL.length]:'--ink')+')'}); } }));
-  const dash=(a,b)=>el('rect',{x:o+(b-1)*s+4,y:o+(a-1)*s+4,width:s-8,height:s-8,rx:5,style:'pointer-events:none;fill:none;stroke:var(--ember);stroke-width:2.4;stroke-dasharray:5 3'});
-  const ring=(a,b)=>el('rect',{x:o+(b-1)*s+3,y:o+(a-1)*s+3,width:s-6,height:s-6,rx:5,style:'pointer-events:none;fill:none;stroke:var(--teal);stroke-width:2.4'});
-  A.missR.forEach(a=>dash(a,a)); if(A.missS) dash(A.missS[1],A.missS[0]); if(A.missT){ const [a,b,c]=A.missT; ring(a,b); ring(b,c); dash(a,c); }
-  const ok=b=>b?'\\htmlClass{keep}{\\checkmark}':'\\htmlClass{new}{\\times}';
-  const nm=x=>'\\text{'+NM[x-1]+'}', pr=(x,y)=>'('+nm(x)+','+nm(y)+')';
-  let t=`\\text{reflexive } ${ok(!A.missR.length)}${A.missR.length?'\\;\\text{ missing }'+pr(A.missR[0],A.missR[0]):''}\\\\ \\text{symmetric } ${ok(!A.missS)}${A.missS?'\\;'+pr(A.missS[0],A.missS[1])+'\\text{ but not }'+pr(A.missS[1],A.missS[0]):''}`;
-  t+=`\\\\ \\text{transitive } ${ok(!A.missT)}${A.missT?'\\\\ '+pr(A.missT[0],A.missT[1])+','+pr(A.missT[1],A.missT[2])+'\\text{ but not }'+pr(A.missT[0],A.missT[2]):''}`;
-  t+= A.classes? `\\\\ \\text{an equivalence relation; its classes:}\\\\ ${A.classes.map(cl=>'\\{'+cl.map(nm).join(',')+'\\}').join(',\\;')}` : `\\\\ \\text{not an equivalence relation}`;
-  tex(document.getElementById('rv'),`\\begin{gathered}${t}\\end{gathered}`,true);
+/* ---------- right: keep or drop ---------- */
+const BASE=['owl','cat','bat']; let emu=false; let keep=new Set(['owl','bat']);
+const kd=document.getElementById('kd');
+function members(){ return emu?BASE.concat(['emu']):BASE; }
+function drawKD(){
+  kd.innerHTML=''; members().forEach(m=>{ const n=document.createElement('span'); n.textContent=m; const b=document.createElement('button'); b.type='button'; b.textContent=keep.has(m)?'keep':'drop'; b.className=keep.has(m)?'keep':''; b.onclick=()=>{ keep.has(m)?keep.delete(m):keep.add(m); drawKD(); }; kd.append(n,b); });
+  const ms=members(), s=ms.filter(m=>keep.has(m));
+  const Lx=L=>L.length?'\\{'+L.map(x=>'\\text{'+x+'}').join(',\\,')+'\\}':'\\varnothing';
+  tex(document.getElementById('eq3'),`\\begin{gathered} s = ${Lx(s)}\\\\ s \\subseteq b \\text{ (each kept member is in } b\\text{), so } s \\in \\mathcal P(b)\\end{gathered}`,true);
+  // list all subsets by keep-or-drop
+  let all=[[]]; ms.forEach(m=>{ all=all.concat(all.map(t=>t.concat([m]))); });
+  const lst=document.getElementById('lst'); lst.innerHTML='𝒫(b), by keep-or-drop: '+all.map(t=>'<span style="color:'+(t.every(x=>keep.has(x))&&t.length===s.length?'var(--ember)':'inherit')+'">'+(t.length?'{'+t.join(', ')+'}':'∅')+'</span>').join(' · ')+(emu?'<br>Every member without emu was on the old list; every member with emu is an old member with the newcomer added.':'');
 }
-document.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{ preset(b.dataset.r); document.querySelectorAll('[data-r]').forEach(x=>x.classList.toggle('on',x===b)); drawRel(); });
-const clr=()=>document.querySelectorAll('[data-r]').forEach(x=>x.classList.remove('on'));
-document.getElementById('cR').onclick=()=>{ D.forEach(a=>Rl.add(a+','+a)); clr(); drawRel(); };
-document.getElementById('cS').onclick=()=>{ [...Rl].forEach(k=>{ const [a,b]=k.split(','); Rl.add(b+','+a); }); clr(); drawRel(); };
-document.getElementById('cT').onclick=()=>{ let grew=true; while(grew){ grew=false; for(const a of D) for(const b of D) for(const c of D) if(has(a,b)&&has(b,c)&&!has(a,c)){ Rl.add(a+','+c); grew=true; } } clr(); drawRel(); };
-drawRel();
+document.getElementById('emuOff').onclick=()=>{ emu=false; keep.delete('emu'); document.getElementById('emuOff').classList.add('on'); document.getElementById('emuOn').classList.remove('on'); drawKD(); };
+document.getElementById('emuOn').onclick=()=>{ emu=true; document.getElementById('emuOn').classList.add('on'); document.getElementById('emuOff').classList.remove('on'); drawKD(); };
+drawKD();
 
 /* ---------- slides ---------- */
 const N='\\htmlClass{new}', K='\\htmlClass{keep}';
 const col2=(...rows)=>'\\begin{aligned}'+rows.map(([l,r])=>'&'+l+' &&\\text{'+r+'}').join('\\\\ ')+'\\end{aligned}';
 const T=s=>'\\text{'+s+'}';
+stepper('#sl3',[
+  {k:'ember',kl:'a power set listed',t:R`\mathcal P(\{\text{owl},\text{cat}\})\,?`,n:`Keep or drop, member by member. Start with the only way to decide nothing: ∅.`},
+  {k:'ember',kl:'a power set listed',t:R`\text{owl:}\quad \varnothing,\; ${N}{\{\text{owl}\}}`,n:`Drop the owl, or keep it. Each set so far comes back without, and again with.`},
+  {k:'ember',kl:'a power set listed',t:R`\text{cat:}\quad \varnothing,\; \{\text{owl}\},\; ${N}{\{\text{cat}\}},\; ${N}{\{\text{owl},\text{cat}\}}`,n:`The cat comes back to each. The list is complete: a subset is fixed by what it decides about owl and cat, and every decision has been made.`},
+  {k:'ember',kl:'a power set listed',t:R`\mathcal P(\{\text{owl},\text{cat}\}) = \{\varnothing, \{\text{owl}\}, \{\text{cat}\}, \{\text{owl},\text{cat}\}\}`,n:`∅ (the empty-part technique) and the set itself (the self-part technique) are on it, as they always are.`}
+],{title:'The slides · a power set listed · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'a pair read back',t:R`\{\{\text{Dee}\},\{\text{Dee},\text{Eve}\}\} = (\,?\,,\,?\,)`,n:`Backwards: which pair is this set? The left entry is in every member. Dee is in {Dee} and in {Dee, Eve}; Eve is not in {Dee}. So the left entry is Dee.`},
-  {k:'ember',kl:'a pair read back',t:R`= ${N}{(\text{Dee},\text{Eve})}`,n:`The right entry is the other thing in the member that has another thing in it: Eve. And the equal-pairs technique says no other pair is this set. For {{Fay}} the only member is {Fay}, so both entries are Fay: (Fay, Fay).`}
-],{title:'The slides · a pair read back · ← → keys work'});
-stepper('#sl6',[
-  {k:'ember',kl:'the pair proof',t:R`\text{Given: } (t,b) = (c,d).`,n:`Given. Wanted: t = c and b = d. In hand: the definition, 2c's listing line, the axioms self-sameness and swap, the techniques turn-about and chain, the same-members axiom, and the techs.`},
-  {k:'ember',kl:'the pair proof',t:R`\text{So } \{\{t\},\{t,b\}\} = \{\{c\},\{c,d\}\}.`,n:`Unpack both pairs: substitute for the expression, each pair replaced by the set it stands for.`},
-  {k:'ember',kl:'the pair proof',t:R`\text{So } ${N}{\{t\}} \in ${K}{\{\{c\},\{c,d\}\}}.`,n:`{t} is listed on the left, so it is a member of the left (the self-sameness axiom, add an option); and the left is the same set as the right (teal), so the membership is carried across by the swap axiom.`},
-  {k:'ember',kl:'the pair proof',t:R`\text{So } ${N}{\{t\} = \{c\} \text{ or } \{t\} = \{c,d\}}.`,n:`Unpack the listing on the right: to be a member is to be one of the things listed. This or is proved, and it supplies the cases.`},
-  {k:'ember',kl:'the pair proof',t:R`\text{Case } \{t\} = \{c\}. \text{ Then } t \in \{c\} \text{, so } ${N}{t = c}.`,n:`t ∈ {t}; swap across the case's sameness; the only member of {c} is c.`},
-  {k:'ember',kl:'the pair proof',t:R`\text{Case } \{t\} = \{c,d\}. \text{ Then } c \in \{t\} \text{, so } ${N}{t = c}.`,n:`c ∈ {c, d}; swap the other way (the turn-about technique beforehand); the only member of {t} is t, so c = t, and the turn-about technique. Both cases give t = c: reason by cases. The left entries match.`},
-  {k:'ember',kl:'the pair proof',t:R`\text{So } \{\{t\},\{t,b\}\} = \{\{t\},\{t,d\}\}.`,n:`The swap axiom: write t where c stood in the given sameness. Now the right entries.`},
-  {k:'ember',kl:'the pair proof',t:R`\text{So } ${N}{\{t,b\} = \{t\} \text{ or } \{t,b\} = \{t,d\}}.`,n:`{t, b} is listed on the left, so a member of the right; unpack the listing. The outer cases.`},
-  {k:'ember',kl:'the pair proof',t:R`\begin{aligned}&\text{Case } \{t,b\} = \{t\}. \text{ Then } b = t.\\ &\text{And } \{t,d\} = \{t\} \text{, so } d = t.\\ &\text{So } ${N}{b = d}.\end{aligned}`,n:`b ∈ {t, b} = {t}, so b = t. And {t, d}, listed on the right, is a member of the left, which is now {{t},{t}}; so {t, d} = {t}, so d = t. Chain: b = t = d.`},
-  {k:'ember',kl:'the pair proof',t:R`\text{Case } \{t,b\} = \{t,d\}. \text{ Then } ${N}{b = t \text{ or } b = d}.`,n:`b ∈ {t, b} = {t, d}; unpack the listing. Inner cases, again from a proved or.`},
-  {k:'ember',kl:'the pair proof',t:R`\begin{aligned}&\text{Case } b = d \text{: in hand.}\\ &\text{Case } b = t \text{: then } \{t,d\} = \{t\} \text{, so } d = t.\\ &\text{So } ${N}{b = d}.\end{aligned}`,n:`If b = t, then {t, d} = {t, b} = {t, t} = {t} (chain, and say-it-again inside the listing), so d ∈ {t}, d = t, and b = d by chaining. Reason by cases, inner then outer: b = d.`},
-  {k:'ember',kl:'the pair proof',t:R`\text{So } ${N}{t = c \text{ and } b = d}.`,n:`Join. Equal-pairs technique: equal pairs have equal parts, in order. No step asked whether b = t or not; every split came from a membership in a listed set.`}
-],{title:'The slides · the pair proof · ← → keys work'});
-stepper('#sl16',[
-  {k:'ember',kl:'classes never partly overlap',t:R`\text{If } c \in [x] \text{ and } c \in [y] \text{, is } [x] = [y]\,?`,n:`The classes-never-overlap technique. Rows hold that the classes share a member c. Wanted: the classes are the same set, so inclusions each way.`},
-  {k:'ember',kl:'classes never partly overlap',t:R`c \sim x \text{ and } c \sim y \text{, so } ${N}{x \sim c} \text{, so } ${N}{x \sim y}.`,n:`Unpack the classes (sifts: keep right). Symmetric turns c ∼ x about; transitive joins x ∼ c and c ∼ y.`},
-  {k:'ember',kl:'classes never partly overlap',t:R`\text{Take } z \in [x]. \text{ So } z \sim x \text{, and } ${K}{x \sim y} \text{, so } ${N}{z \sim y} \text{, so } z \in [y].`,n:`Let z be any member of [x]. It is equivalent to x, and x to y (teal, carried), so by transitive z ∼ y; and z ∈ u, so z ∈ [y] by packing the sift.`},
-  {k:'ember',kl:'classes never partly overlap',t:R`[x] \subseteq [y] \text{ and } [y] \subseteq [x] \text{, so } ${N}{[x] = [y]}.`,n:`Back to the margin: every member; pack part of. The same with x and y exchanged, using y ∼ x by symmetric. The double-inclusion technique. Reflexive is what puts every thing in a class to begin with: x ∈ [x].`}
-],{title:'The slides · classes never partly overlap · ← → keys work'});
-stepper('#sl17',[
-  {k:'ember',kl:'pieces to a relation',t:R`h = \{\text{Ann},\text{Eve}\} \cup \{\text{Ben},\text{Dee}\} \cup \{\text{Cal},\text{Fay}\}`,n:`Run classes the other way. Start with pieces that do not overlap and together cover the household.`},
-  {k:'ember',kl:'pieces to a relation',t:R`x \sim y \;\Leftrightarrow\; x \text{ and } y \text{ lie in the same piece}`,n:`Define the relation as “in the same piece as”. Reflexive (your own piece), symmetric (the same piece either way), transitive (the same piece throughout). Its classes are exactly the pieces. An equivalence relation and a partition are the same thing seen from either side.`}
-],{title:'The slides · pieces to a relation · ← → keys work'});
+  {k:'ember',kl:'the power set of the empty set',t:R`\mathcal P(\varnothing) \overset{?}{=} \{\varnothing\}`,n:`Work back from the claim: a sameness, so inclusions each way (the double-inclusion technique). The leftward one is short: ∅ ⊆ ∅ by the empty-part technique, so ∅ ∈ 𝒫(∅), and {∅}'s only member is in.`},
+  {k:'ember',kl:'the power set of the empty set',t:col2([R`\qquad \text{Let } s \text{ be any member of } \mathcal P(\varnothing).`,'a fresh case, for the rightward inclusion'],[R`\qquad \text{So } s \subseteq \varnothing.`,'unpack the power set'],[R`\qquad \text{And } \varnothing \subseteq s.`,'the empty-part technique'],[R`\qquad \text{So } ${N}{s = \varnothing}.`,'the double-inclusion technique'],[R`\qquad \text{So } s \in \{\varnothing\}.`,'pack the listing']),n:`The rightward one: a subset of ∅ is ∅, because ∅ is also a subset of it, and the double-inclusion technique closes the inclusions each way into a sameness.`},
+  {k:'ember',kl:'the power set of the empty set',t:R`${N}{\mathcal P(\varnothing) = \{\varnothing\}}`,n:` Nothing to decide, so exactly the way of deciding nothing. 𝒫(∅) has a member, and is not ∅; rung 3 will make much of exactly that difference.`}
+],{title:'The slides · the power set of the empty set · ← → keys work'});
+stepper('#sl9',[
+  {k:'ember',kl:'common parts exactly',t:R`\mathcal P(u \cap b) \overset{?}{=} \mathcal P(u) \cap \mathcal P(b)`,n:`Chase a member s. s ∈ 𝒫(u ∩ b) unpacks to s ⊆ u ∩ b, an every; so look at a member x of s inside it.`},
+  {k:'ember',kl:'common parts exactly',t:col2([R`s \in \mathcal P(u \cap b)`,'take s, anything'],[R`\text{exactly when every member of } s \text{ is in } u \cap b`,'unpack the power set and part of'],[R`\text{exactly when every member of } s \text{ is } ${N}{\text{in } u \text{ and in } b}`,'unpack the common part']),n:`Inside the every is an if: if x ∈ s, then x is in u and in b. An if with an and in its conclusion is 1f's two-ifs: an if each way.`},
+  {k:'ember',kl:'common parts exactly',t:col2([R`\text{exactly when, for every } x \text{: } ${N}{\text{if } x \in s \text{, then } x \in u \text{; and if } x \in s \text{, then } x \in b}`,'1f: two-ifs, both ways'],[R`\text{exactly when } ${N}{\text{every member of } s \text{ is in } u \text{, and every member of } s \text{ is in } b}`,'an every over an and is an and of everys (2b: use an every and keep, each way)']),n:`Split the and inside the every into an and of everys: both directions are techs of 2b and 1c.`},
+  {k:'ember',kl:'common parts exactly',t:col2([R`\text{exactly when } s \subseteq u \text{ and } s \subseteq b`,'pack part of'],[R`\text{exactly when } s \in \mathcal P(u) \text{ and } s \in \mathcal P(b)`,'pack the power set'],[R`\text{exactly when } s \in \mathcal P(u) \cap \mathcal P(b)`,'pack the common part'],[R`\text{So } ${N}{\mathcal P(u \cap b) = \mathcal P(u) \cap \mathcal P(b)}.`,'speak of everything; same members']),n:` Pack everything back up. The power set treats common members exactly.`}
+],{title:'The slides · common parts exactly · ← → keys work'});
+stepper('#sl10a',[
+  {k:'ember',kl:'merged parts by inclusion only',t:col2([R`\qquad \text{Let } s \text{ be any member of } \mathcal P(u) \cup \mathcal P(b).`,'a fresh case, aiming at an inclusion'],[R`\qquad \text{So } s \in \mathcal P(u) \text{ or } s \in \mathcal P(b).`,'merge-membership'],[R`\qquad \text{Case } s \subseteq u \text{. And } u \subseteq u \cup b \text{, so } ${N}{s \subseteq u \cup b}.`,'work the option; u ⊆ u ∪ b, shown above; the chain technique for part of']),n:`For ∪ try the same and watch it give only an inclusion. A part of u is a part of u ∪ b, by chaining.`},
+  {k:'ember',kl:'merged parts by inclusion only',t:col2([R`\qquad \text{Case } s \subseteq b \text{: the same.}`,''],[R`\qquad \text{So, said once, } s \in \mathcal P(u \cup b).`,'say it once; pack the power set'],[R`\text{So } ${N}{\mathcal P(u) \cup \mathcal P(b) \subseteq \mathcal P(u \cup b)}.`,'back to the margin: every member; pack']),n:` That is the inclusion. The other way would need: from s ⊆ u ∪ b, that s ⊆ u or s ⊆ b. No technique gives it, and the next slide shows why none could.`}
+],{title:'The slides · merged parts by inclusion only · ← → keys work'});
+stepper('#sl10b',[
+  {k:'ember',kl:'the witness',t:R`u = \{\text{cat}\},\; b = \{\text{dog}\}:\qquad ${N}{\{\text{cat},\text{dog}\}} \in \mathcal P(u \cup b)`,n:`{cat, dog} ⊆ {cat} ∪ {dog} by the self-part technique, since the union is {cat, dog}. So it is in the right side.`},
+  {k:'ember',kl:'the witness',t:R`\{\text{cat},\text{dog}\} \in \mathcal P(u) \cup \mathcal P(b) \;=\; \bot`,n:`In that row, either {cat, dog} ⊆ {cat}, and the every puts dog in {cat}, so dog = cat, a clash; or {cat, dog} ⊆ {dog}, and cat = dog, a clash. Both options close: it can stand in neither power set.`},
+  {k:'ember',kl:'the witness',t:R`${N}{\mathcal P(u \cup b) \subseteq \mathcal P(u) \cup \mathcal P(b) \;=\; \bot}`,n:`The inclusion, used on {cat, dog}, would put it in the union of the power sets: ⊥. The counterexample technique. Not a licence question: the sameness simply cannot stand, and a set on its own shows it.`}
+],{title:'The slides · the witness · ← → keys work'});
 
 /* long worked lines: stack the note under the line instead of scrolling */
 function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
