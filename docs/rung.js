@@ -1578,7 +1578,7 @@ function footingView(){
   const pos=document.createElement('span'); pos.className='fvpos'; up.appendChild(pos);
   const sky=document.createElement('button'); sky.type='button'; sky.className='fvnav fvup fvsky'; sky.innerHTML='<span aria-hidden="true">☁</span> blue sky'; sky.hidden=true;
   sky.onclick=()=>{ if(window.LadderSky) LadderSky.supply(); };
-  document.body.append(up,dn,sky);
+  document.body.append(up,dn); if(!window.LADDER_DESK) document.body.append(sky); /* 0.3.57: no blue sky on the desk */
   const label=()=>{ const atEnd=cur>=LASTU, nextPage=atEnd?pageLink(1):null, prevPage=cur<=0?pageLink(-1):null;
     up.hidden=!on||(atEnd&&!nextPage); dn.hidden=!on||(cur<=0&&!prevPage); sky.hidden=!on||!atEnd||!!nextPage||!skyOpen();
     up.setAttribute('aria-label','next: '+(atEnd?(nextPage||''):idOf(cur+1))); dn.setAttribute('aria-label','previous: '+(cur>0?idOf(cur-1):(prevPage||'')));
@@ -1682,10 +1682,10 @@ function supply(){ load().then(L=>{ const st=got(); if(!L.length){ note('The blu
     const nx=L[st.n]; st.n++; st.at=(st.at||[]).concat([Date.now()]); try{ LS.setItem(KEY,JSON.stringify(st)); }catch(e){}
     try{ sessionStorage.setItem('sky:new',nx.page); }catch(e){} if(window.LadderFV&&LadderFV.heights) LadderFV.heights(); else location.href='index.html'; }); }
 function index(){ const sec=document.getElementById('skysec'), top=document.getElementById('skytop'); if(!sec||!top) return;
-  top.querySelector('.skybtn').onclick=supply; top.hidden=true; sec.hidden=true;
+  if(window.LADDER_DESK){ top.hidden=true; top.style.display='none'; } else { top.querySelector('.skybtn').onclick=supply; top.hidden=true; } sec.hidden=true; /* 0.3.57: no blue sky button on the desk */
   if(!window.LADMAP){ const s=document.createElement('script'); s.src='ladmap.js'; s.onload=()=>index(); document.head.appendChild(s); return; }
   if(!endless()&&!window.LADDER_DESK) return;
-  load().then(L=>{ const n=Math.min(got().n,L.length), ol=sec.querySelector('ol');
+  load().then(L=>{ /* 0.3.57: the desk shows every Endless step; the app shows what the blue sky has supplied */ const n=window.LADDER_DESK?L.length:Math.min(got().n,L.length), ol=sec.querySelector('ol');
     const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
     let fresh=null; try{ fresh=sessionStorage.getItem('sky:new'); sessionStorage.removeItem('sky:new'); }catch(e){} window.__skyFresh=fresh;
     if(!n){ sec.hidden=true; return; }
