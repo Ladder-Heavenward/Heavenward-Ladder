@@ -1,4 +1,4 @@
-/* flash cards, r06. */
+/* crosswalk cards, r06. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["6b"]=[{"q":"∃x (x ∈ A). What is A called on this page?","a":"non-empty","w":["not ∅","settled","a collection"],"why":"Non-empty means having a member; A ≠ ∅ gives only ¬¬∃x (x ∈ A)."},
  {"q":"From A ≠ ∅, a line writes “call a member b”. What is wrong?","a":"a call needs ∃x (x ∈ A), and A ≠ ∅ gives only ¬¬∃x (x ∈ A)","w":["nothing: A ≠ ∅ and non-empty are the same","b must be the least member of A","the call needs the choice axiom"],"why":"The non-empty technique runs only one way in full; the other stops at a double negative."},
  {"q":"c : 𝒜 → ⋃𝒜 with c(A) ∈ A for every A ∈ 𝒜. What is c called?","a":"a choice function for 𝒜","w":["a rule for 𝒜","a bijection of 𝒜","the union of 𝒜"],"why":"A choosing function takes each set of the collection to a member of that set."},

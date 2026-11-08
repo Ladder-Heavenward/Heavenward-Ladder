@@ -1,4 +1,4 @@
-/* flash cards, r12. */
+/* crosswalk cards, r12. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["12a"]=[{"q":"[2, 5] keeps both its ends. What is it called?","a":"a closed interval","w":["an open interval","a class of a pair","a half-open stretch"],"why":"A closed interval keeps both its ends; an open one keeps neither."},
  {"q":"Is [1, 2) a closed interval?","a":"no: it keeps only one end","w":["yes: it keeps its left end","yes: its ends are reals","no: its ends are not fractions"],"why":"Closed keeps both ends, open keeps neither; [1, 2) is neither."},
  {"q":"f(c) = 0 for an input c of f. What is c called?","a":"a zero of f","w":["the sup of f","a bound of f","the middle of f"],"why":"A zero of f is an input where f is 0; it is also called a root."},

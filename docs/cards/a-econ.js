@@ -1,4 +1,4 @@
-/* flash cards, a-econ. */
+/* crosswalk cards, a-econ. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["7·econ"]=[{"q":"You cannot know whether she tells. What licenses splitting on “she tells”?","a":"the either-way principle","w":["finite-search","a promise","the stuck-pair technique"],"why":"She tells or she does not; reason in each case (7e)."},
  {"q":"Telling gives 5 < 10 if she tells, and 0 < 1 if she is silent. What technique concludes?","a":"better-either-way","w":["stuck-pair","proof by contradiction","same change to both sides"],"why":"Better in every case of her choice is better whatever she does."},
  {"q":"A pair where neither player does better by changing their own choice alone. What is it called on this page?","a":"stuck","w":["best for both","better either way","enforced"],"why":"(tell, tell) is stuck: a switch alone takes either from 5 years to 10."},

@@ -1,4 +1,4 @@
-/* flash cards, r04. */
+/* crosswalk cards, r04. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["4b"]=[{"q":"A set holds 0, and holds S(x) for each of its members x. What is it called?","a":"inductive","w":["transitive","settled","a stray"],"why":"Inductive has both parts: it holds 0, and it holds the next one after each member."},
  {"q":"ℕ is the sift of an inductive set I by which condition?","a":"in every inductive set","w":["reached from 0 by S","not a stray","a member of I"],"why":"The sift keeps what every inductive set holds; I only supplies the things to sift."},
  {"q":"A line reads: ℕ ⊆ J, so J = ℕ, for an inductive set J. What is wrong?","a":"J may carry cargo past the numbers","w":["ℕ need not be a part of J","J need not hold 0","nothing: lies-below gives it"],"why":"Lies-below puts ℕ inside J; nothing puts J inside ℕ."},

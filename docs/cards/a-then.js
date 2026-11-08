@@ -1,4 +1,4 @@
-/* flash cards, a-then. */
+/* crosswalk cards, a-then. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["7·then"]=[{"q":"2↑↑3. How is it worked out?","a":"from the top down: 2^(2²) = 16","w":["from the bottom up: (2²)² = 16","as 2 · 2 · 2 = 8","as 2³ = 8"],"why":"A tower of b copies of a is worked from the top."},
  {"q":"A line reads 3↑↑3 = (3³)³ = 19 683. What is wrong?","a":"a tower is worked from the top: 3^(3³) = 3²⁷","w":["3↑↑3 is 3³ = 27","nothing: it is 19 683","↑↑ means multiply"],"why":"(3³)³ = 27³; the tower is 3²⁷ = 7 625 597 484 987."},
  {"q":"2↑↑↑3 = 2↑↑(2↑↑2) = 2↑↑4. What licenses each step?","a":"the step of the recursion for ↑↑↑","w":["powers-add-their-counts","digits-of-a-power","last-digit"],"why":"a↑ⁿ⁺¹S(b) = a↑ⁿ(a↑ⁿ⁺¹b)."},

@@ -1,4 +1,4 @@
-/* flash cards, r02. */
+/* crosswalk cards, r02. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["2d"]=[{"q":"cat ∈ {cat, dog}. Is it so?","a":"yes: cat is on the list","w":["no: cat is not a set","no: {cat} is the member","yes: {cat} ⊆ {cat, dog}"],"why":"Being in a listed set is being something on the list."},
  {"q":"{cat} ∈ {cat, dog}. Is it so?","a":"no: the members are cat and dog","w":["yes: {cat} is part of it","yes: cat is in it","no: {cat} is not a set"],"why":"{cat} is neither cat nor dog."},
  {"q":"{cat} ⊆ {cat, dog}. Is it so?","a":"yes: its only member is on the list","w":["no: {cat} is not listed","no: cat is not a set","yes: {cat} is a member"],"why":"⊆ asks whether every member is on the list."},

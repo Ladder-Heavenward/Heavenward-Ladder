@@ -1,4 +1,4 @@
-/* flash cards, r05. */
+/* crosswalk cards, r05. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["5b"]=[{"q":"(k, b) ∼ (c, d) means k + d = b + c. What is the class [k, b] called?","a":"an integer","w":["a pair","a counting number","a difference"],"why":"Its members are the pairs; the class itself is the integer."},
  {"q":"A line speaks of “the integer (3, 5)”. What is wrong?","a":"a pair is a member, never an integer","w":["(3, 5) names 2","3 is less than 5","nothing: it is −2"],"why":"The integer is the class [3, 5]."},
  {"q":"A line reads: [3, 5] = [0, 2], so 3 = 0. True?","a":"no: same-class is the test","w":["yes: equal classes, equal entries","yes: by member-with-a-0","no: [3, 5] ≠ [0, 2]"],"why":"A class has many members."},

@@ -1,4 +1,4 @@
-/* flash cards, a-stat. */
+/* crosswalk cards, a-stat. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["4·stat"]=[{"q":"The mode of a list is the value in the middle. True?","a":"no: it is the value with the largest tally","w":["yes: after sorting","yes: when the list is odd in length","no: it is the least value"],"why":"Wherever it sits."},
  {"q":"A list’s tallies add to what?","a":"the length of the list","w":["the number of different values","the greatest value","the range"],"why":"Tallies-add-up."},
  {"q":"Greatest less least. What is it called?","a":"the range","w":["the mode","the tally","the total"],"why":"The range is the greatest value less the least."},

@@ -1,4 +1,4 @@
-/* flash cards, r09. */
+/* crosswalk cards, r09. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["9a"]=[{"q":"{(1, 4), (1, 6)} as a set of pairs. Is it a function?","a":"no: the input 1 has two outputs","w":["yes: each pair has one output","no: the input 1 has no output","yes: an input may repeat"],"why":"(ii)’s at-most-one fails at 1, so “f(1)” names nothing."},
  {"q":"{(1, 4), (2, 4)} from {1, 2} to ℝ. Is it a function?","a":"yes: two inputs may share an output","w":["no: the output 4 is used twice","no: most reals are never outputs","no: it needs a pair for each real"],"why":"The two promises speak only of inputs: each has exactly one output."},
  {"q":"A table: x is 1, 1, 2 and y is 3, 4, 5. Is y a function of x?","a":"no: the input 1 has two outputs","w":["yes: every x has a y","yes: no y is repeated","no: the input 2 has no output"],"why":"Exactly one output for each input: 1 is paired with 3 and with 4."},

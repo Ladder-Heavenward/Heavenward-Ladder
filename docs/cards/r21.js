@@ -1,4 +1,4 @@
-/* flash cards, r21. */
+/* crosswalk cards, r21. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["21a"]=[{"q": "π, on this step. What is it?", "a": "half the length around a circle of radius 1", "w": ["the length around a circle of radius 1", "the area of a circle of radius 2", "exactly 22/7"], "why": "5c named it as a guess; 21a fixes it."},
  {"q": "L(x) = ∫ₓ¹ dt/√(1 − t²). What does it measure?", "a": "the arc from (1, 0) to the point above x", "w": ["the area under the circle", "the slope of the circle", "the height above x"], "why": "The arc-length technique."},
  {"q": "Length around a circle, divided by length across. What is it?", "a": "π, for every circle", "w": ["2π", "π for the unit circle only", "the radius"], "why": "The round-quotient technique."},

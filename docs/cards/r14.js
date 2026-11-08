@@ -1,4 +1,4 @@
-/* flash cards, r14. */
+/* crosswalk cards, r14. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["14a"]=[{"q":"f(x) = x³ − 3x. f′(x) = 3x² − 3 is 0 at −1 and 1. What are −1 and 1 called?","a":"critical points of f","w":["tops of f","zeros of f","inflection points of f"],"why":"A critical point has slope 0 or none; which are tops is another question."},
  {"q":"f(x) = |x − 2| at 2: no slope there. Is 2 a critical point?","a":"yes: a critical point with no slope","w":["no: the slope is not 0","yes: its slope there is 0","no: f is not continuous at 2"],"why":"A critical point has a slope of 0 or no slope at all."},
  {"q":"x³ at 0: slope 0. Is 0 a top or a bottom?","a":"neither: x³ is below 0 on the left and above on the right","w":["a bottom","a top","both"],"why":"Flat-top runs from a top to slope 0, not back."},

@@ -1,4 +1,4 @@
-/* flash cards, r07. */
+/* crosswalk cards, r07. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["7b"]=[{"q":"For any statement P, P ∨ ¬P. What is the pattern called on the ladder?","a":"the either-way principle","w":["the remaining-option technique","not-not-in","the clash technique"],"why":"An or with no side in hand, named in 1f and laid out here."},
  {"q":"P ∨ ¬P for every statement P. What is its accepted name?","a":"the law of excluded middle","w":["the law of non-contradiction","the double-negation law","the law of cases"],"why":"Of a statement and its denial one is so; a third, a middle, is excluded."},
  {"q":"A column assumes ¬(P ∨ ¬P), refutes P, adds an option, clashes. What does it end on?","a":"¬¬(P ∨ ¬P), by either-way-unrefuted","w":["P ∨ ¬P, by either-way","¬P, by refute","⊥, by clash"],"why":"Denying the principle collapses, but the column stops at a double negative."},

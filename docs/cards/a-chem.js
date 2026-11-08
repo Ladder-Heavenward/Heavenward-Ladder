@@ -1,4 +1,4 @@
-/* flash cards, a-chem. */
+/* crosswalk cards, a-chem. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["5·chem"]=[{"q":"The number in front of a formula, as the 2 in 2 H₂O. What is it called?","a":"its coefficient","w":["its formula mass","its mole number (Avogadro's)","its molar mass"],"why":"Coefficients count the molecules."},
  {"q":"For every element, the atoms going in are the atoms coming out. What is that?","a":"the weighing ledger, as counts","w":["the mole","the limiting reagent","the percent yield"],"why":"The weighing ledger is really a ledger of counts."},
  {"q":"The substance that runs out first and stops the change. What is it called?","a":"the limiting reagent","w":["the theoretical yield","the excess","the coefficient"],"why":"It decides how much product forms."},

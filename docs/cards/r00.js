@@ -1,4 +1,4 @@
-/* flash cards, r00. */
+/* crosswalk cards, r00. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["0a"]=[{"q":"“Shut the gate.” Is it a statement?","a":"no: it commands, and says nothing so or not so","w":["yes: it is about the gate","yes: it is so once the gate is shut","no: it has a gap waiting for a name"],"why":"A statement says how things are; a command says nothing of how the gate is."},
  {"q":"P is “… is grey”. What is P, with nothing after it?","a":"a statement-with-a-gap, still waiting for a name","w":["a statement named whole","a statement, and not so","a name of something grey"],"why":"P alone says nothing until a name fills its gap."},
  {"q":"M is “… lives next door to …”; n names Ann, b names Ben. Are M(n, b) and M(b, n) one statement?","a":"no: the order of the names is part of what is said","w":["yes: neighbours stand or fall together","yes: the same two names fill the gaps","no: M(b, n) is not a statement"],"why":"M(b, n) is “Ben lives next door to Ann”, a different statement."},

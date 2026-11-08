@@ -1,4 +1,4 @@
-/* flash cards, r10. */
+/* crosswalk cards, r10. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["10a"]=[{"q":"lim_{x→3} f(x) = 5. What is 5 called?","a":"a limit of f at 3","w":["the value f(3)","the reach of f at 3","the gap of f at 3"],"why":"The line says f heads to 5 at 3; it says nothing about f(3)."},
  {"q":"{x ∈ ℝ : 0 < |x − 2| < 0.1}. What is this set called?","a":"the neighbourhood of 2 of reach 0.1","w":["the interval (1.9, 2.1)","the target of 2 of gap 0.1","the domain of f near 2"],"why":"The 0 < takes 2 itself out; (1.9, 2.1) keeps it."},
  {"q":"H(x) = (x² − 1)/(x − 1) on ℝ ∖ {1}. What does H have at 1?","a":"a hole: defined near 1, no value at 1","w":["no limit at 1","the value 2 at 1","a value but no limit at 1"],"why":"A hole is defined near a with a not an input; H agrees with x + 1 near 1."},

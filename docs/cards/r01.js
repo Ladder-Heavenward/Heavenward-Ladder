@@ -1,4 +1,4 @@
-/* flash cards, r01. */
+/* crosswalk cards, r01. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["1a"]=[{"q":"x = b, given; b = c, given; x = c, “the chain technique”. What is this layout called?","a":"a two-column proof","w":["a truth listing","a chain of wishes","a ledger of givens"],"why":"Statements down the left, each reason to its right, closed by the end mark."},
  {"q":"b = c given, then x = b given, then x = c. What justifies the last line?","a":"the swap axiom: c written where b stood","w":["the turn-about technique","the self-sameness axiom","pack ︿ on the givens"],"why":"x = b is a claim about b, and b = c lets c stand there."},
  {"q":"A line’s reason reads “obvious”. Does it earn the line?","a":"no: obvious is not a kind of reason","w":["yes, if the line is so","yes, as a given","no: only a technique earns a line"],"why":"A reason is given, an axiom, a move or a proved technique; nothing else."},

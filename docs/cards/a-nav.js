@@ -1,4 +1,4 @@
-/* flash cards, a-nav. */
+/* crosswalk cards, a-nav. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["5·nav"]=[{"q":"1.5 h = 1 h 50 min. True?","a":"no: 0.5 h is 30 min","w":["yes: the digits carry over","yes: by clock-reading","no: it is 1 h 5 min"],"why":"Places after the point are tenths of an hour."},
  {"q":"100 000 s = 1000 min. True?","a":"no: a minute is 60 s","w":["yes: divide by 100","yes: by clock-reading","no: it is 10 000 min"],"why":"The bases are 60, 60 and 24, not 100."},
  {"q":"Two cycles start together. When do they first come back in step?","a":"at the least common multiple of their lengths","w":["at the product of their lengths","at the sum of their lengths","at the longer length"],"why":"Under a four-year rule, dates and weekdays come back in step after 28 years."},

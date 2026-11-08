@@ -1,4 +1,4 @@
-/* flash cards, r13. */
+/* crosswalk cards, r13. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["13a"]=[{"q":"The linear function through (s, f(s)) and (t, f(t)), s ≠ t. What is it called?","a":"the chord of f through s and t","w":["the tangent line of f at s","the slope of f at s","the change Δf"],"why":"Two-points-one-line gives it; it needs two different inputs."},
  {"q":"(f(t) − f(s))/(t − s). What is it?","a":"the slope of the chord","w":["the slope of f at s","the change of f","the tangent line’s value"],"why":"The slope of a linear function is its step m; the chord’s step is this ratio."},
  {"q":"The limit of (f(a + h) − f(a))/h as h → 0. What is it called?","a":"the slope of f at a, f′(a)","w":["a chord slope at a","the change of f at a","the tangent line at a"],"why":"A slope is where the chord slopes head, not any one of them."},

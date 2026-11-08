@@ -1,4 +1,4 @@
-/* flash cards, a-crypt. */
+/* crosswalk cards, a-crypt. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["4·crypt"]=[{"q":"shift₃(y). Which letter is it?","a":"b","w":["27, no letter","a","c"],"why":"Keep the remainder by 26: 24 + 3 = 27 leaves 1."},
  {"q":"The key back from 3. What is it?","a":"23","w":["3","−3","26"],"why":"Key-back: 3 + 23 = 26."},
  {"q":"shift₉ after shift₅. Which one shift is that?","a":"shift₁₄","w":["shift₄₅","shift₄","shift₂₂"],"why":"Shifts-add: keys add, they do not multiply."},

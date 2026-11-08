@@ -1,4 +1,4 @@
-/* flash cards, a-phys. */
+/* crosswalk cards, a-phys. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["6·phys"]=[{"q":"A string makes 55 full swings each second. What is 55 Hz?","a":"its frequency","w":["its interval","its harmonic","its beat"],"why":"Frequency counts full swings per second; 1 Hz = 1/s."},
  {"q":"From 220 Hz up to 330 Hz. What is the interval?","a":"3/2, a fifth","w":["110 Hz, a fifth","4/3, a fourth","2/1, an octave"],"why":"An interval is the ratio g/f, not the difference."},
  {"q":"A fifth then a fourth: a line reads 3/2 + 4/3. What is wrong?","a":"stacking multiplies: 3/2 · 4/3 = 2","w":["the fourth is 3/4","stacking subtracts","nothing: they add to an octave"],"why":"The ear adds what the numbers multiply."},

@@ -1,4 +1,4 @@
-/* flash cards, a-logi. */
+/* crosswalk cards, a-logi. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["6·logi"]=[{"q":"A function f on the jobs with f(j) ∈ D(j) for every job j. What is f called on this page?","a":"an assignment","w":["a fair assignment","a matching","a blocking group"],"why":"It is 6b’s choosing function, picked by job."},
  {"q":"Jobs with 3, 3, 2 and 5 drivers who can take them. How many assignments?","a":"90","w":["13","16","30"],"why":"Counting-pickings: multiply the sizes, 3 · 3 · 2 · 5."},
  {"q":"An assignment that gives no driver two jobs. What is it called?","a":"fair","w":["a choosing function","a rule that picks","blocked"],"why":"f(j) = f(j′) only when j = j′: a matching of jobs with drivers."},

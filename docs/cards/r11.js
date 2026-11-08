@@ -1,4 +1,4 @@
-/* flash cards, r11. */
+/* crosswalk cards, r11. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["11a"]=[{"q":"f(2) = 5 and lim_{x→2} f(x) = 5, f defined near 2. What is f at 2?","a":"continuous at 2","w":["discontinuous at 2","continuous from the right only","a hole at 2"],"why":"The limit at 2 is the value at 2."},
  {"q":"f(3) = 1, but lim_{x→3} f(x) = 4. Which demand fails?","a":"the third: the limit is not the value","w":["the first: 3 is not an input","the second: no limit at 3","none: f is continuous"],"why":"An input, a limit, and the two different: a stray value."},
  {"q":"u(x) = 0 for x < 0, u(x) = 1 for x ≥ 0. Which demand fails at 0?","a":"the second: no limit at 0","w":["the first: u has no value","the third only","none: u(0) = 1"],"why":"The two sides head to 0 and 1: two-sides-differ."},

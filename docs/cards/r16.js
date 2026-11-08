@@ -1,4 +1,4 @@
-/* flash cards, r16. */
+/* crosswalk cards, r16. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["16a"]=[{"q":"g(x) = ∫₁ˣ f(t) dt. What is t called?","a":"a stand-in letter","w":["the moving end","the fixed end","the integrand"],"why":"t names no number outside the integral; 1 and x are the ends, f is the integrand."},
  {"q":"g(x) = ∫₁ˣ f(t) dt, with the 1 held still. What is g called on the page?","a":"the area function of f from 1","w":["an antiderivative of f from 1","the integrand of f from 1","the area-bound of f from 1"],"why":"Hold one end still and move the other: the area so far, as a function."},
  {"q":"g(x) = ∫₁ˣ f(t) dt. What is g(1)?","a":"0","w":["f(1)","1","it has no value"],"why":"∫₁¹ f = 0 for every integrable f."},

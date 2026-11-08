@@ -1,4 +1,4 @@
-/* flash cards, r19. */
+/* crosswalk cards, r19. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["19a"]=[{"q": "[2 3 1] is a shuffle of {1, 2, 3}. Where does it send 3?", "a": "to 1", "w": ["to 2", "to 3", "to nowhere: 3 is not listed"], "why": "The list gives where 1, 2 and 3 go, in order: 3 goes to 1."},
  {"q": "s₁₃ in S₃, written as a list. Which is it?", "a": "[3 2 1]", "w": ["[2 1 3]", "[1 3 2]", "[3 1 2]"], "why": "The swap of 1 and 3 leaves 2 where it is."},
  {"q": "e, in a group. What is it called?", "a": "the identity: the member that does nothing", "w": ["the number e of rung 17", "the inverse of every member", "the last member of the list"], "why": "ea = ae = a for every a: e does nothing."},

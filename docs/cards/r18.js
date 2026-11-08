@@ -1,4 +1,4 @@
-/* flash cards, r18. */
+/* crosswalk cards, r18. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["18a"]=[{"q":"P = (1, 2), Q = (4, 6). What is the pair (3, 4)?","a":"the displacement from P to Q","w":["the distance from P to Q","the midpoint of P and Q","the dot product of P and Q"],"why":"Q − P = (4 − 1, 6 − 2): a displacement, a pair, not a number."},
  {"q":"u · v = u₁v₁ + u₂v₂. What does the dot produce?","a":"a number","w":["a displacement","a point","a statement"],"why":"The dot is an operator: carried out on two displacements, it produces a number."},
  {"q":"u ⊥ v. Is that a name or a statement?","a":"a statement: u · v = 0","w":["a name, for one number","a name, for one displacement","an operator on two displacements"],"why":"u ⊥ v is so or not: it says the dot product is 0."},

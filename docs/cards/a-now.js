@@ -1,4 +1,4 @@
-/* flash cards, the now annexes. */
+/* crosswalk cards, the now annexes. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["22·now"]=[{"q": "In base sixteen, what does the digit C stand for?", "a": "twelve", "w": ["eleven", "thirteen", "fourteen"], "why": "After 9 come A, B, C, D, E, F for ten to fifteen."},
  {"q": "δ_{d+1} = ⌊16 frac(16ᵈπ)⌋. What is this on the page?", "a": "the shift technique", "w": ["the peeling technique", "the fence technique", "the term-by-term technique"], "why": "Multiplying by 16ᵈ slides d digits past the point; the next one is read off."},
  {"q": "Σ 16⁻ᵏ(4/(8k + 1) − 2/(8k + 4) − 1/(8k + 5) − 1/(8k + 6)). What is its total?", "a": "π", "w": ["ln 2", "π/4", "2 ln 2"], "why": "The digit sum, proved through an area on [0, 1/√2]."},

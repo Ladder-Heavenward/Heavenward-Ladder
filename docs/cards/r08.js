@@ -1,4 +1,4 @@
-/* flash cards, r08. */
+/* crosswalk cards, r08. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["8a"]=[{"q":"α ⊆ ℚ has a member, misses a fraction, is closed downward, and has no greatest member. What is α?","a":"a cut: a real number","w":["a fraction","the line","an upper heap"],"why":"The four properties every lower heap of a split has."},
  {"q":"{r ∈ ℚ : r ≤ ½}. Is it a cut?","a":"no: ½ is its greatest member","w":["yes: it is ½*","no: it has no member","yes: it is closed downward"],"why":"(iv) fails; with it, ½ would have two cuts."},
  {"q":"{r ∈ ℚ : r² < 2}. Is it the hole’s cut?","a":"no: 1 is in it and −3 is not","w":["yes: it holds every r with r² < 2","no: it has a greatest member","yes: it misses 2"],"why":"(iii) fails; the negatives must be let in."},

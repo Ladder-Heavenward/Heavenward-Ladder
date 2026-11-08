@@ -1,4 +1,4 @@
-/* flash cards, a-eng. */
+/* crosswalk cards, a-eng. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["8·eng"]=[{"q":"A drawing says 20 ± 0.01 mm. What are 20 and 0.01?","a":"the nominal size and the tolerance","w":["the tolerance and the nominal size","the reading and the tool error","the hole and the shaft"],"why":"A part is good when |x − 20| ≤ 0.01."},
  {"q":"|x − 20| ≤ 0.01. What stretch of the line is that?","a":"[19.99, 20.01]","w":["(19.99, 20.01)","[20, 20.01]","[19.99, 20]"],"why":"Unpack-the-bars: n − d ≤ x ≤ n + d."},
  {"q":"Hole 20.000 to 20.021, shaft 19.980 to 19.993. What does 0.007 ≤ h − s ≤ 0.041 use?","a":"multiply by −1, then same-direction-add","w":["the triangle technique alone","the guard band","subtract least from least"],"why":"−s turns the shaft’s order about; then add least with least."},

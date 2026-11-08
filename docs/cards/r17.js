@@ -1,4 +1,4 @@
-/* flash cards, r17. */
+/* crosswalk cards, r17. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["17a"]=[{"q":"ln x = ∫₁ˣ dt/t for x > 0. What is that line?","a":"the definition of ln","w":["log-bounds","log-rises","a technique from 16f"],"why":"The area function of 1/t from 1 gets a name."},
  {"q":"ln 1 = ?","a":"0","w":["1","no value","½"],"why":"∫₁¹ dt/t = 0."},
  {"q":"Is ln 0.5 positive?","a":"no: for x < 1 the area counts negative","w":["yes: 1/t > 0","yes: it is ½","it has no value"],"why":"ln x = −∫ₓ¹ dt/t for x < 1."},

@@ -1,4 +1,4 @@
-/* flash cards, rung 33. */
+/* crosswalk cards, rung 33. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})['33a']=[
  {q:'A line reads u_t = κu_xx for the temperature in a thin rod. What is the rule called on the page?', a:'the heat rule', w:['the string’s rule','the still-state rule','the carried-along rule'], why:'One slope in time against the second slope in space: heat-rule technique.'},
  {q:'In u_t = κu_xx, κ = K/(ρc). What is K?', a:'how freely heat runs down the slope', w:['the heat held per degree','the density of the rod','the length of the rod'], why:'The flow is −K u_x, the first measured law.'},

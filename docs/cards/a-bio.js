@@ -1,4 +1,4 @@
-/* flash cards, a-bio. */
+/* crosswalk cards, a-bio. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["5·bio"]=[{"q":"A cross of a pure smooth RR and a pure wrinkled rr gives Rr. What is the Rr plant called?","a":"a hybrid","w":["a gamete","a recessive","a test cross"],"why":"A hybrid carries one copy of each."},
  {"q":"From Rr × Rr, RR, Rr and rr each have chance 1/3. True?","a":"no: 1/4, 1/2, 1/4","w":["yes: three genotypes","yes: by equally likely cases","no: 1/2, 1/4, 1/4"],"why":"The equally likely cases are the four pairs; Rr is two of them."},
  {"q":"3 : 1, so of these four peas three are smooth. True?","a":"no: the ratio is of chances","w":["yes: by the grid","yes: by the expected count","no: two of them are smooth"],"why":"Each pea is its own stage; four peas may all be wrinkled."},

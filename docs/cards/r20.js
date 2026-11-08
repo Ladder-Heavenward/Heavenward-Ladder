@@ -1,4 +1,4 @@
-/* flash cards, r20. */
+/* crosswalk cards, r20. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["20a"]=[{"q": "A move f with d(f(P), f(Q)) = d(P, Q) for all P, Q. What is it called?", "a": "an isometry", "w": ["a similarity", "a dilation", "a symmetry"], "why": "An isometry keeps every distance."},
  {"q": "A move with d(f(P), f(Q)) = 3 d(P, Q) for all P, Q. What is it called?", "a": "a similarity with factor 3", "w": ["an isometry", "a slide by 3", "a turn by 3"], "why": "Every length is multiplied by the same k."},
  {"q": "A stretch from a fixed centre, every distance from it doubled. What is it called?", "a": "a dilation, with scale factor 2", "w": ["an isometry", "a flip", "a slide by 2"], "why": "20a’s accepted names: dilation, scale factor."},

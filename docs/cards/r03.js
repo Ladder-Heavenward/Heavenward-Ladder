@@ -1,4 +1,4 @@
-/* flash cards, r03. */
+/* crosswalk cards, r03. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["3c"]=[{"q":"S(x) = x ∪ {x}. What is S(x) called?","a":"the next one after x","w":["the gathering of x","the merge of x","the power set of x"],"why":"It has every member of x, and x besides."},
  {"q":"S(∅). Which set?","a":"{∅}","w":["∅","{{∅}}","{∅, {∅}}"],"why":"∅ ∪ {∅} = {∅}."},
  {"q":"2 names which set?","a":"{0, 1}","w":["{1}","{0, 1, 2}","{{0}}"],"why":"Each named set is the set of those named before it."},

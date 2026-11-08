@@ -951,10 +951,10 @@ function pn(){
   const mk=foot=>{ const n=document.createElement('div'); n.className='pn';
     const b=(a,cls,k)=>a?'<a class="pnb '+cls+'" href="'+a.getAttribute('href')+'"><span class="pk">'+k+'</span><span class="pl">'+clean(a.textContent)+'</span></a>':'<span class="pnb '+cls+' none"></span>';
     const home='<a class="pnb home" href="index.html"><span class="pk">return to</span><span class="pl">the ladder</span></a>';
-    /* the step's flash cards: at the foot only, between previous and next, below the questions and above the basement */
+    /* the step's crosswalk cards: at the foot only, between previous and next, below the questions and above the basement */
     const mid=home; /* 0.2.1: the cards are the crosswalk, opened from the toolbox */
     n.innerHTML=b(prev,'prev','← previous')+mid+b(next,'next','next →');
-    const c=n.querySelector('.cards'); if(c) c.addEventListener('click',()=>{ if(window.LadderCards) LadderCards.open(); else toast('flash cards are loading'); });
+    const c=n.querySelector('.cards'); if(c) c.addEventListener('click',()=>{ if(window.LadderCards) LadderCards.open(); else toast('crosswalk cards are loading'); });
     return n; };
   bottom.innerHTML=''; bottom.appendChild(mk(true)); bottom.classList.add('pnwrap');
   const top=document.querySelector('header.top p.home');
@@ -1381,7 +1381,7 @@ ready(()=>setTimeout(basement,0));
 })();
 
 
-/* ---- flash cards: multiple choice, "know by sight". A rung's steps share one deck; a step's cards join it
+/* ---- crosswalk cards: multiple choice, "know by sight". A rung's steps share one deck; a step's cards join it
    the first time the step is opened. Annexes share a deck by annex type (every chem page, every phys page...).
    Data: cards/rNN.js for a rung, cards/a-<type>.js for an annex type; each pushes into window.LADDER_CARDS[tag] = [
    {q:'prompt', a:'right answer', w:['tempting wrong', ...], why:'one line shown after'} ]. $...$ in any field is TeX. */

@@ -1,4 +1,4 @@
-/* flash cards, r15. */
+/* crosswalk cards, r15. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["15a"]=[{"q":"[1, 3] × [0, 2]. What is it, and its area?","a":"a box of width 2 and height 2: area 4","w":["a box of area 6","a partition of [1, 3]","a region under f: area 2"],"why":"Box-area axiom: width times height."},
  {"q":"0 = x₀ < 0.5 < 1 < 2 = x₃. What is this list?","a":"a partition of [0, 2] into 3 pieces","w":["a partition into 4 pieces","three boxes","a tagged partition"],"why":"A finite list from a to b, strictly increasing."},
  {"q":"x on [0, 2], 4 equal pieces: Σ (i − 1)/2 · ½. What is this sum?","a":"the lower sum L(f, P) = 1.5","w":["the upper sum, 2.5","the area, 2","the left-end sum, but not L"],"why":"x is increasing, so each least value is at the left end."},

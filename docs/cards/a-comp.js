@@ -1,4 +1,4 @@
-/* flash cards, a-comp. */
+/* crosswalk cards, a-comp. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["4·comp"]=[{"q":"A gate whose output is 1 exactly when its two inputs differ. Which is it?","a":"XOR","w":["OR","NAND","AND"],"why":"XOR is 1 on the rows 0, 1 and 1, 0."},
  {"q":"S = A ∨ B as the sum bit of a two-bit adder. Which row fails?","a":"1, 1: the sum bit is 0","w":["0, 0: the sum bit is 1","1, 0: the sum bit is 0","none: OR adds bits"],"why":"OR and XOR differ on exactly the row that carries."},
  {"q":"A + B = 2 · (A · B) + (A ⊕ B). Which technique?","a":"two-bit-adder","w":["full-adder","ripple","marks"],"why":"The AND is the carry and the XOR the sum bit."},

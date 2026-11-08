@@ -1,4 +1,4 @@
-/* flash cards, r22. */
+/* crosswalk cards, r22. */
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["22a"]=[{"q": "For every ε > 0 there is N with |sₙ − L| < ε for all n ≥ N. What does the sequence do?", "a": "it settles, at L", "w": ["it climbs to L", "it crowds but need not settle", "it wanders around L"], "why": "The plain word for heads to; accepted name: converges."},
  {"q": "sₙ ≤ sₙ₊₁ for every n. What is the sequence said to do?", "a": "climb", "w": ["settle", "crowd", "fall"], "why": "Each term is at least the one before."},
  {"q": "An upper bound of the set of terms of a sequence. What is it called on this page?", "a": "a ceiling", "w": ["a limit", "a thread", "a floor"], "why": "A floor is a lower bound."},
