@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Only One Complete Ordered Field</title>
+<title>Clock Arithmetic by Hand</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,96 +48,91 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r43g.html">← 43g finite fields</a><a href="r43i.html">next: 43i modules over a principal ring →</a></p>
-  <div class="tags"><span class="tag proof">43h · proof</span></div>
-  <h1>Only One Complete Ordered Field</h1>
-  <p data-pid="cbd448">Rung eight built the line from cuts of the fractions and proved it was a regular number system with no holes. It mentioned, and left, a further claim: that any two such systems are copies of each other. Rung thirty seven asked for the outline of that claim, and found it needs the least upper bound said of every set. This step proves it in full, and first builds the line a second way, to show what the claim is worth. The second way uses lists of fractions that crowd together, from rung twenty two, and divides them by the lists that head to nothing: a ring divided by a largest ideal, so a field. Cuts and crowding lists look nothing alike. The claim says they are the same field, matched member for member, and that no other matching is possible. So the line is fixed by its rules. How it is built is a choice of scaffolding, and what it is does not depend on the choice.</p>
-  <p class="gesture" data-pid="78d011">Crowding lists of fractions form a ring, the lists heading to 0 form a largest ideal, and the quotient is a field: the line again. Inside any regular number system with no holes sit the fractions, and counting passes every member. Sending each member to the least upper bound of the fractions below it matches any two such systems, keeping sums, products and order, and the only map of the line to itself that keeps plus and times is doing nothing.</p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r43g.html">← 43g primes are endless and thin</a><a href="r43i.html">next: 43i clock powers and secret keys →</a></p>
+  <div class="tags"><span class="tag tech">43h · technique</span></div>
+  <h1>Clock Arithmetic by Hand</h1>
+  <p data-pid="f81f5e">The proof steps of this rung said what is true on a clock. This step is about how long it takes to find out. A power with an exponent of three hundred digits cannot be reached by multiplying one more time, and one more, since the count of products would be a number of three hundred digits too, and no machine there will ever be could finish. Yet a pocket calculator can do it in a blink. The trick is to square: square once and the exponent doubles, square ten times and it has gone up a thousandfold. Write the exponent in twos, square for each place, and multiply in the places that hold a one. The count of products is about twice the number of places, so a power with a three hundred digit exponent takes about two thousand products. The gcd algorithm is fast for the same kind of reason: its remainders halve at least every two rounds. And a power on a big clock can be split onto small clocks, cut down there, and put back.</p>
+  <p class="gesture" data-pid="2c1bb7">Write the exponent in twos; square once per place and multiply where a place holds one. That takes at most about twice the log base two of the exponent in products. The gcd algorithm halves its remainder every two rounds. Splitting a clock into prime power clocks lets each exponent be cut before the work starts.</p>
 </header>
 
 <section class="class step" data-step="43h1">
-  <h2 class="sthead"><span class="stno">43h1</span>The Line Built a Second Way</h2>
-  <p data-pid="f4ad2d">Let C be the set of lists of fractions that crowd together (22c), added and multiplied term by term. Let Z be the lists that head to 0.</p>
-  <p data-pid="16e72b">Crowding-quotient technique: <b>C is a ring that turns about, Z is a largest ideal of C, and so C/Z is a field.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the crowding-quotient technique">
-a, b \in C \Rightarrow |a_n| \le A,\ |b_n| \le B @@ a crowding list is bounded (22c)
-a_n b_n - a_m b_m = a_n(b_n - b_m) + (a_n - a_m)b_m @@ add and take away aₙbₘ
-|a_n b_n - a_m b_m| \le A|b_n - b_m| + B|a_n - a_m| @@ so ab crowds: C is a ring
-z \in Z,\ a \in C \Rightarrow |a_n z_n| \le A|z_n| \to 0 @@ Z swallows multiplying; it holds sums by 10c
-a \notin Z \Rightarrow |a_n| \ge \varepsilon > 0 \text{ for } n \ge N @@ a crowds and does not head to 0
-c_n = 1/a_n \ (n \ge N),\ \ c \in C,\ \ ac - 1 \in Z @@ |1/aₙ − 1/aₘ| ≤ |aₘ − aₙ|/ε²
-\htmlClass{new}{(a + Z)(c + Z) = 1 + Z:\ C/Z \text{ is a field}} \quad \blacksquare @@ every class other than Z has a reciprocal; by 43b’s largest-ideal technique, Z is largest
+  <h2 class="sthead"><span class="stno">43h1</span>Square, Then Multiply</h2>
+  <p data-pid="345911">4i wrote every number in twos: 218 = 128 + 64 + 16 + 8 + 2, written 11011010. 4g’s powers-add-their-counts technique turns that sum into a product of powers whose exponents are powers of 2, and each of those is the square of the one before.</p>
+  <p data-pid="a287c6">Square-and-multiply technique: <b>to find aᵏ on the clock of n, square a again and again to get a, a², a⁴, a⁸, …, each on the clock, and multiply together those whose places in k written in twos hold a 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: 3²¹⁸ on the clock of 1000">
+3,\ 9,\ 81,\ 6561 \equiv 561,\ 561^2 \equiv 721,\ 721^2 \equiv 841,\ 841^2 \equiv 281,\ 281^2 \equiv 961 @@ 3 to the powers 1, 2, 4, …, 128, each the square of the last, kept below 1000
+218 = 2 + 8 + 16 + 64 + 128 @@ the places of 11011010 that hold a 1
+9 \cdot 561 = 5049 \equiv 49,\ \ 49 \cdot 721 \equiv 329 @@ the places 2, 8, 16
+329 \cdot 281 \equiv 449,\ \ 449 \cdot 961 \equiv 489 @@ the places 64 and 128
+\htmlClass{new}{3^{218} \equiv 489 \pmod{1000}} \quad \blacksquare @@ seven squarings and four products
   </pre>
-  <p data-pid="2f6f09">Call a + Z positive when aₙ ≥ ε > 0 for all large n. With that, C/Z is a regular number system, and it has no holes: a bounded set of classes gets a least upper bound by 12e’s halving, with the halving points as a crowding list. The fraction r sits inside as the class of the list r, r, r, …. The class of 1, 3/2, 17/12, 577/408, …, 13m’s tangent steps toward √2, squares to the class of 2.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · a second line · ← → keys work</div></section>
+  <p data-pid="fb1792">No number above 961 · 961, under a million, was ever needed. The power 3²¹⁸ has 105 digits; its last three are 489.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · square and multiply · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">43h1.1</span><span class="ph understand">understand</span>What are the members of C and of Z? <br>What does the crowding-quotient technique say, and why does a crowding list that does not head to 0 have a reciprocal in C/Z?</li>
+      <li><span class="qid">43h1.1</span><span class="ph understand">understand</span>What does the square-and-multiply technique say? <br>Which powers of 3 are multiplied to give 3²¹⁸, and why those?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43h2">
-  <h2 class="sthead"><span class="stno">43h2</span>Fractions Inside Any Line</h2>
-  <p data-pid="b1a6d2">Let L be any regular number system with no holes. In L, 1 is positive (a square, 25b1), so 1 + 1 + ⋯ + 1 is positive for any count of 1s and never 0. So the sums of 1 are a copy of the counting numbers, their differences of ℤ, and their quotients of ℚ: m/n in L is (m · 1)(n · 1)⁻¹.</p>
-  <p data-pid="c5c8c8">Fractions-sit-inside technique: <b>every regular number system L holds a copy of ℚ, keeping sums, products and order; and if L has no holes, counting passes every member, and between any two members of L lies a fraction.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the fractions-sit-inside technique, the second half">
-\text{suppose every } n \cdot 1 \le u \text{ in } L @@ counting bounded
-s = \sup\{n \cdot 1\} @@ L has no holes
-s - 1 < n \cdot 1 \text{ for some } n @@ s − 1 is no upper bound
-\bot:\ (n + 1) \cdot 1 > s @@ so counting passes every member
-w < b \Rightarrow \tfrac{1}{n} < b - w,\ \ \tfrac{m}{n} \in (w, b) \text{ for the least } m \text{ with } \tfrac{m}{n} > w @@ 8e’s fraction-between, read in L
-\htmlClass{new}{\text{the fractions are packed into } L \text{ everywhere}} \quad \blacksquare @@ each line used only the twelve techniques and no holes
+  <h2 class="sthead"><span class="stno">43h2</span>How Many Products</h2>
+  <p data-pid="9df6f8">Power-cost technique: <b>the square-and-multiply technique finds aᵏ on a clock with at most 2⌊log₂ k⌋ products of hours.</b> k written in twos has ⌊log₂ k⌋ + 1 places. There is one squaring for each place after the first, and at most one product for each place after the first that holds a 1.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the cost, counted">
+k \lt 10^{300} \Rightarrow \log_2 k \lt 300 \log_2 10 \approx 997 @@ log of a power (17c); log₂ 10 ≈ 3.32
+\text{square-and-multiply: at most about } 1994 \text{ products} @@ the power-cost technique
+\text{one product at a time: } k - 1 \text{ products, about } 10^{300} @@ the plain road
+\htmlClass{new}{\text{a growth family of } \log k \text{ against one of } k} \quad \blacksquare @@ 39k’s families: the log is far below the power
   </pre>
-  <p data-pid="da47e9">That is 8e’s argument, and the point is only that it never looked at cuts. A regular number system with holes may fail it: 38f’s worlds of the line with endlessly small members have members above every count of 1s.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · fractions inside · ← → keys work</div></section>
+  <p data-pid="62ffd8">Each product is of two hours below n, which for n with 600 digits takes some thousands of digit products by 4i’s rule. So the whole power is millions of digit steps, a small fraction of a second for a chip. That is what makes the next three steps possible.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the cost · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43h2.1</span><span class="ph understand">understand</span>Why does every regular number system hold a copy of ℚ? <br>Which line of the fractions-sit-inside technique spends no holes, and why does a world with endlessly small members fail it?</li>
+      <li><span class="qid">43h2.1</span><span class="ph understand">understand</span>What does the power-cost technique say, and where do the squarings and the products come from? <br>About how many products does an exponent of 300 digits need, and how many on the plain road?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43h3">
-  <h2 class="sthead"><span class="stno">43h3</span>Any Two Lines Are One</h2>
-  <p data-pid="75dd36">Only-line technique: <b>any two regular number systems with no holes, L and L′, are matched by exactly one map that keeps sums, products and order.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the only-line technique">
-h(w) = \sup\nolimits_{L'}\{r \in \mathbb Q : r < w\} @@ the fractions below w in L, read in L′; bounded, so the sup exists (no holes in L′)
-r \in \mathbb Q \Rightarrow h(r) = r @@ the fractions below r have r as their sup (fraction-between)
-w < b \Rightarrow \text{fractions } r < s \text{ with } w < r < s < b \Rightarrow h(w) \le r < s \le h(b) @@ order is kept, strictly: h is one-to-one
-u' \in L' \Rightarrow u' = h(\sup\nolimits_L\{r < u'\}) @@ the same move from L′ back: h is onto
-h(w + b) = h(w) + h(b) @@ fractions below w + b are sums of fractions below w and below b, and the other way
-h(wb) = h(w)h(b) \text{ for } w, b > 0 @@ the same, with products of positive fractions; signs by 8d’s signs-come-out
-\htmlClass{new}{h \text{ is a matching keeping } +, \cdot, <} \quad \blacksquare @@ any such map fixes ℚ and keeps order, so it is this h
+  <h2 class="sthead"><span class="stno">43h3</span>The gcd Is Fast Too</h2>
+  <p data-pid="400eb8">43b found undoes by the gcd algorithm. That would be useless on clocks of hundreds of digits if the algorithm took as many rounds as the numbers are large.</p>
+  <p data-pid="0ba1f2">Halving-remainders technique: <b>in the gcd algorithm, each remainder is less than half of the one two rounds before, so the algorithm on a and b, with b ≤ a, ends within about 2 log₂ b rounds.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the halving-remainders technique">
+r_{i-1} = r_i q + r_{i+1},\ \ r_{i+1} \lt r_i @@ one round (4j7)
+\text{if } r_i \le r_{i-1}/2:\ \ r_{i+1} \lt r_i \le r_{i-1}/2 @@ the remainder falls below
+\text{if } r_i \gt r_{i-1}/2:\ \ q = 1,\ \ r_{i+1} = r_{i-1} - r_i \lt r_{i-1}/2 @@ r_i fits only once
+\htmlClass{new}{r_{i+1} \lt r_{i-1}/2} @@ reason by cases
+\text{after } 2k \text{ rounds the remainder is below } b/2^j @@ induction on j
+\htmlClass{new}{\text{at most } 2\log_2 b + 1 \text{ rounds}} \quad \blacksquare @@ a remainder below 1 is 0
   </pre>
-  <p data-pid="16d34c">Applied to cuts and to C/Z: the cut α goes to the class of any list of fractions that climbs to α. 38e’s countable world of the line, with a bounded set lacking a least upper bound, is not a regular number system with no holes, and the technique says nothing about them. That is the price 38l described: “no holes” is said of every set, and only then does it fix the line.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · one line · ← → keys work</div></section>
+  <p data-pid="304291">For 1071 and 462 it took three rounds; the bound is about 18. The worst pairs are neighbours in the list 1, 1, 2, 3, 5, 8, 13, …, where every quotient is 1, and even there the count of rounds grows only like the log.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the gcd, fast · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43h3.1</span><span class="ph understand">understand</span>What does the only-line technique say, and how is h defined? <br>Why does h send each fraction to itself, and why is it onto?</li>
+      <li><span class="qid">43h3.1</span><span class="ph understand">understand</span>What does the halving-remainders technique say? <br>In which case of its proof is the quotient 1, and why does the remainder still fall below half?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43h4">
-  <h2 class="sthead"><span class="stno">43h4</span>The Line Has No Other Self</h2>
-  <p data-pid="528d40">Rigid-line technique: <b>the only map from ℝ to ℝ that keeps sums and products and sends 1 to 1 is doing nothing.</b> It is not told to keep order. It keeps it anyway.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the rigid-line technique">
-f(w) = f(\sqrt w)^2 \ge 0 \text{ for } w \ge 0 @@ every w ≥ 0 is a square (8f), and f keeps products; squares are not negative (25b1)
-w < b \Rightarrow f(b) - f(w) = f(b - w) \ge 0 @@ f keeps sums; and f(b − w) ≠ 0, since f(b − w)f(1/(b − w)) = f(1) = 1
-f(r) = r \text{ for every fraction } r @@ f(1) = 1, sums of 1, differences, quotients
-r < w < s \Rightarrow r < f(w) < s @@ order kept, fractions fixed
-\htmlClass{new}{f(w) = w} \quad \blacksquare @@ a fraction lies between any two different reals (8e)
+  <h2 class="sthead"><span class="stno">43h4</span>Split the Clock First</h2>
+  <p data-pid="b850bf">On the clock of 1000 = 8 · 125 the exponent-clock technique cuts the exponent on the clock of 400, and 218 is already below 400. On the two small clocks it cuts further, each on the clock of its own count of units.</p>
+  <pre class="lines" data-k="ember" data-label="this step: 3²¹⁸ again, clock by clock">
+c(8) = 4,\ 218 \equiv 2:\ \ 3^{218} \equiv 3^2 = 9 \equiv 1 \pmod 8 @@ the exponent-clock technique (43d3)
+c(125) = 100,\ 218 \equiv 18:\ \ 3^{218} \equiv 3^{18} \equiv 114 \pmod{125} @@ the same; 3¹⁸ by square-and-multiply
+x \equiv 1 \pmod 8,\ \ x \equiv 114 \pmod{125} @@ put back (43c2)
+114 + 125t \equiv 1 \pmod 8:\ \ 2 + 5t \equiv 1,\ \ t \equiv 3 @@ 114 ≡ 2 and 125 ≡ 5 on the clock of 8; [5]⁻¹ = [5]
+\htmlClass{new}{x = 114 + 375 = 489} \quad \blacksquare @@ the same last three digits as 43h1
   </pre>
-  <p data-pid="6a9d07">ℚ(√2) has a second self: a + b√2 ↦ a − b√2 keeps sums and products and moves √2. It breaks order, sending √2 > 0 to −√2. ℂ has a second self too, the flip z ↦ z̄ of 25e. The line has none. 43 makes the selves of a field its study.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · rigid · ← → keys work</div></section>
+  <p data-pid="f53098">Two roads, one answer, and the answer is checked. Splitting pays when the clock is a product of clocks whose sizes are known and the exponent is far larger than their counts of units. On a clock whose factors nobody knows, the split is not available, and 43i builds a lock on exactly that.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · split first · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43h4.1</span><span class="ph understand">understand</span>What does the rigid-line technique say? <br>How does a map that keeps only sums and products come to keep order on ℝ, and why does the same argument fail on ℚ(√2)?</li>
+      <li><span class="qid">43h4.1</span><span class="ph understand">understand</span>How is 3²¹⁸ found on the clocks of 8 and 125, and why may the exponent be cut there? <br>How are the two readings put back together into 489?</li>
     </ol>
   </section>
 </section>
@@ -145,15 +140,15 @@ r < w < s \Rightarrow r < f(w) < s @@ order kept, fractions fixed
 <section class="class step" data-step="43h5">
   <h2 class="sthead"><span class="stno">43h5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-C \text{ is a field: every crowding list not } 0 \text{ has a reciprocal list}\,? @@ 1, 0, 0, … is not 0 and has no reciprocal; only the classes form a field
-\text{any two regular number systems are matched}\,? @@ ℚ and ℝ are both regular; one has holes
-a + b\sqrt2 \mapsto a - b\sqrt2 \text{ keeps order on } \mathbb Q(\sqrt2)\,? @@ it sends √2 − 1 &gt; 0 to −√2 − 1 &lt; 0
-\text{the cuts and the crowding classes are two different lines}\,? @@ the only-line technique matches them, keeping everything the rules can see
+3^{218} = (3^{200})(3^{18}) \text{, and } 3^{200} \text{ by } 199 \text{ products}\,? @@ allowed, and far slower: squaring reaches 3²⁵⁶ in eight products
+2^{402} \equiv 2^{2} \pmod{1000} \text{ since } c(1000) = 400\,? @@ 2 is no unit of the clock of 1000, so the exponent-clock technique does not apply: 2⁴⁰² ≡ 504, not 4
+\text{square first, and reduce at the end}\,? @@ 3¹²⁸ has 62 digits; reduce after every product, so no number passes n²
+\text{the gcd algorithm takes about } b \text{ rounds}\,? @@ at most about 2 log₂ b: the remainder halves every two rounds
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43h5.1</span><span class="ph understand">understand</span>Why is C itself not a field, though C/Z is? <br>Why does a + b√2 ↦ a − b√2 not keep order?</li>
+      <li><span class="qid">43h5.1</span><span class="ph understand">understand</span>Why may 402 not be cut to 2 in 2⁴⁰² on the clock of 1000? <br>Why reduce on the clock after every product, and not once at the end?</li>
     </ol>
   </section>
 </section>
@@ -162,22 +157,22 @@ a + b\sqrt2 \mapsto a - b\sqrt2 \text{ keeps order on } \mathbb Q(\sqrt2)\,? @@ 
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">43h.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\mathbb Q(t):\ \ \tfrac{p(t)}{q(t)} &gt; 0 \text{ when the top coefficients of } p, q \text{ agree in sign}"></span></span>Build the order on fractions of polynomials in t given here, and check the three order techniques of 25b1. <br>Find a member above every count of 1s. Which line of the only-line technique fails for this regular number system?</div>
-  <div class="chq"><span class="chid">43h.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\mathbb Q"></span></span>Find every map from ℚ to ℚ that keeps sums and products and sends 1 to 1, and every one from ℚ(√2) to itself. <br>Find every map from ℝ to ℝ that keeps sums alone and is continuous. Is continuity needed?</div>
-  <div class="chq"><span class="chid">43h.6.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">L regular, every bounded crowding list settles, counting passes every member</span></span>The page built no holes into the matching. Turn it round: if every list in L that crowds settles, and counting passes every member, must L have no holes? <br>Follow 12e’s halving inside L. Which of the two conditions does each line spend, and is either alone enough?</div>
-  <div class="chq"><span class="chid">43h.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">8a.4.4: is √2 the cut, or a new thing the cut produces?</span></span>Rung 8 asked whether √2 is the cut of fractions below it, or something the cut produces. The line has now been built twice, as cuts and as classes of crowding lists, and the only-line technique matches the two. <br>Is √2 the cut, the class, both, or neither? If a matching that keeps every rule is all the rules can see, does the question still have an answer?</div>
+  <div class="chq"><span class="chid">43h.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="219^{96} \pmod{383}"></span></span>Build the square root that 43f.7.1 asked for: find 219⁹⁶ on the clock of 383 by the square-and-multiply technique, writing every squaring. <br>Check that its square is 219, and find the other square root.</div>
+  <div class="chq"><span class="chid">43h.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\gcd(89, 55)"></span></span>Run the gcd algorithm on these and count the rounds. Prove that neighbours in the list 1, 1, 2, 3, 5, 8, … always give quotients of 1 until the end. <br>Is 2 log₂ b near the truth for them, or is the true count nearer a smaller multiple of log₂ b? Find the multiple.</div>
+  <div class="chq"><span class="chid">43h.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="a^{15}"></span></span>Square-and-multiply takes 6 products for a¹⁵. Find a road with 5: a, a², a³, a⁶, … <br>Is square-and-multiply ever the fewest? Find a k below 100 where it is beaten by two products or more, or prove none exists.</div>
+  <div class="chq"><span class="chid">43h.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">7·then: 3↑↑4 = 3^{7\,625\,597\,484\,987}</span></span>Rung 7 found the last digit of a tower of threes by hand. Find the last three digits of 3↑↑4 two ways: square-and-multiply on the clock of 1000 with the full exponent, counting the products, and by cutting the exponent on the clock of 400 first. <br>Which road would still work for 3↑↑5? 43·cb7 takes this further.</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r43g.html">← 43g · finite fields</a><a href="r43i.html">43i · modules over a principal ring →</a></nav>
+<nav class="nextrung"><a href="r43g.html">← 43g · primes are endless and thin</a><a href="r43i.html">43i · clock powers and secret keys →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>Crowding lists are Cauchy sequences, and C/Z is Cantor’s construction of the reals by Cauchy sequences, a completion. Counting passing every member is the Archimedean property. The only-line technique is the uniqueness of the complete ordered field up to isomorphism, its categoricity; the rigid-line technique says the real field has no automorphism but the identity. ℚ(t) with the order given is a non-Archimedean ordered field.</p>
+  <p>Square-and-multiply is binary exponentiation, or exponentiation by squaring; the power-cost technique says modular exponentiation takes O(log k) multiplications. The halving-remainders technique is a form of Lamé’s theorem (1844): the number of steps of Euclid’s algorithm is at most five times the number of decimal digits of the smaller number, the worst case being consecutive Fibonacci numbers. A shortest road to aᵏ is a shortest addition chain; finding one in general is believed to be hard.</p>
   <h3>Who said it first</h3>
-  <p>Georg Cantor and Charles Méray built the reals from crowding lists in 1872, the year of Richard Dedekind’s cuts; Eduard Heine wrote up Cantor’s version the same year. Edward Huntington proved in 1903 that any two complete ordered fields are matched, and Oswald Veblen made such uniqueness a theme in 1904, calling a system with one model up to matching categorical.</p>
+  <p>Squaring to reach a high power is in the Chandaḥśāstra of Piṅgala (before 200 BCE), in a rule for counting metres. Gabriel Lamé proved the step bound in 1844, one of the first results counting the steps of an algorithm. Splitting the clock to cut exponents is how RSA is computed in practice (43i).</p>
   <h3>A proof that is not allowed</h3>
-  <p>“A map of ℝ to itself that keeps sums must be w ↦ cw, since it fixes the fractions up to c.” Not allowed: keeping sums fixes f(r) = rf(1) for fractions r only. Without continuity or order there are maps of ℝ that keep sums and are not w ↦ cw; building one spends choice (6), through a basis of ℝ over ℚ.</p>
+  <p>“3²¹⁸ on the clock of 1000: 218 = 2 · 109, so 3²¹⁸ = 9¹⁰⁹, and 109 is prime, so the little technique gives 9¹⁰⁸ ≡ 1, and 3²¹⁸ ≡ 9.” Not allowed: the little technique is about a prime clock, and here the prime is the exponent, not the clock. The answer is 489.</p>
 </section>
 
 </div>
@@ -192,25 +187,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'crowding lists',t:R`C`,n:`A ring.`},
-  {k:'ember',kl:'heading to 0',t:R`Z \subseteq C`,n:`A largest ideal.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{C/Z \text{ is a field}}`,n:`The line again.`}
-],{title:'The slides · a second line · ← → keys work'});
+  {k:'ember',kl:'twos',t:R`218 = 11011010_{\text{twos}}`,n:`4i.`},
+  {k:'ember',kl:'squares',t:R`3^{2^i} \bmod 1000`,n:`Each the square of the last.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{3^{218} \equiv 489 \pmod{1000}}`,n:`Eleven products.`}
+],{title:'The slides · square and multiply · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'ones',t:R`n \cdot 1 > 0`,n:`1 is a square.`},
-  {k:'ember',kl:'quotients',t:R`m/n = (m \cdot 1)(n \cdot 1)^{-1}`,n:`ℚ in L.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a fraction between any two}}`,n:`With no holes.`}
-],{title:'The slides · fractions inside · ← → keys work'});
+  {k:'ember',kl:'places',t:R`\lfloor \log_2 k \rfloor + 1`,n:`k in twos.`},
+  {k:'ember',kl:'products',t:R`\le 2\lfloor \log_2 k \rfloor`,n:`Squares and ones.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\approx 2000 \text{ against } 10^{300}}`,n:`Logs, not powers.`}
+],{title:'The slides · the cost · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'the map',t:R`h(w) = \sup\{r < w\}`,n:`Fractions below.`},
-  {k:'ember',kl:'kept',t:R`h(w + b) = h(w) + h(b)`,n:`And products, order.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{L \text{ and } L′ \text{ matched}}`,n:`Exactly one way.`}
-],{title:'The slides · one line · ← → keys work'});
+  {k:'ember',kl:'two cases',t:R`r_i \le r_{i-1}/2 \text{ or } q = 1`,n:`Either way.`},
+  {k:'ember',kl:'halving',t:R`r_{i+1} \lt r_{i-1}/2`,n:`Two rounds.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\le 2\log_2 b + 1 \text{ rounds}}`,n:`Logs again.`}
+],{title:'The slides · the gcd, fast · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'squares',t:R`f(w) = f(\sqrt w)^2 \ge 0`,n:`Order from products.`},
-  {k:'ember',kl:'fractions',t:R`f(r) = r`,n:`From 1.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{f = \text{doing nothing}}`,n:`No other self.`}
-],{title:'The slides · rigid · ← → keys work'});
+  {k:'ember',kl:'small clocks',t:R`3^{218} \equiv 1 \pmod 8,\ \equiv 114 \pmod{125}`,n:`Exponents cut.`},
+  {k:'ember',kl:'put back',t:R`114 + 125t,\ t \equiv 3`,n:`43c.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{489 \text{ again}}`,n:`Checked.`}
+],{title:'The slides · split first · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

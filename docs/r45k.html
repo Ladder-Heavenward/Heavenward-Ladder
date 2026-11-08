@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Merging Edits Made Apart</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r45j.html">← 45j who holds which key</a><a href="r45l.html">next: 45l splitting a big job →</a></p>
+  <div class="tags"><span class="tag proof">45k · proof</span></div>
+  <h1>Merging Edits Made Apart</h1>
+  <p data-pid="57feeb">Copies on different machines are edited apart, and edits reach each copy in any order, some twice. This step finds the laws a merge must keep so that copies that have seen the same edits always agree, with no agreement step at all.</p>
+  <p class="gesture" data-pid="80540d">Let merging be grouping-free, order-free and repeat-free. Then a copy is the merge of the set of edits it has seen, and the same set gives the same copy.</p>
+</header>
+
+<section class="class step" data-step="45k1">
+  <h2 class="sthead"><span class="stno">45k1</span>The Problem</h2>
+  <p data-pid="4c817f">Each copy applies edits as they reach it. Different copies get them in different orders, and a resent edit may come twice. The demand: two copies that have seen the same edits hold the same state.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">45k1.1</span><span class="ph understand">understand</span>What is the demand on the copies? <br>Why may an edit arrive twice?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45k2">
+  <h2 class="sthead"><span class="stno">45k2</span>Three Laws</h2>
+  <p data-pid="4ee9a9">Converge technique: <b>if merge is associative, commutative and idempotent, then two copies that have merged the same set of updates, in any order and with any repeats, hold the same state.</b></p>
+  <p data-pid="9e18d6">Associative and commutative make the result of merging a list depend only on what is in it and how often (<a href="r44a.html">44a</a>). Idempotent, x ⊔ x = x as x ∨ x = x in <a href="r44l.html">44l</a>, makes how often not matter. So the state depends only on the set.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">45k2.1</span><span class="ph understand">understand</span>What does the converge technique say? <br>Which law takes care of repeats?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45k3">
+  <h2 class="sthead"><span class="stno">45k3</span>Counters and Sets</h2>
+  <p data-pid="81d727">A count that only grows: each machine keeps a list with one entry per machine, adds only to its own entry, and merges by taking the larger entry place by place. Larger-of is associative, commutative and idempotent. The value is the sum of the entries.</p>
+  <p data-pid="b23b61">A set that only grows merges by union, which also keeps the three laws. Taking things out needs care: a removed item is kept on a second set of removals, so a late copy of its adding cannot bring it back.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">45k3.1</span><span class="ph understand">understand</span>Why is the counter merged by larger-of and not by adding? <br>How can a set allow taking things out?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45k4">
+  <h2 class="sthead"><span class="stno">45k4</span>Text Is Harder</h2>
+  <p data-pid="e0ee3a">In a shared text, “put x at place 5” means something else once another edit has put a letter at place 2. One answer shifts each edit’s places by the edits it meets, and its rules must be right for every order, which is hard to get right. The other gives every letter a lasting name between its neighbours, so places never shift and the three laws can hold again.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">45k4.1</span><span class="ph understand">understand</span>Why does a place in a text change meaning? <br>What do lasting names for letters fix?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45k5">
+  <h2 class="sthead"><span class="stno">45k5</span>Illegal Moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{merge counts by adding}\,? @@ adding is not idempotent: a repeated update counts twice
+\text{the latest clock time wins, safely}\,? @@ clocks drift (45d4): the latest by clock may not be the latest by cause
+</pre>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">45k5.1</span><span class="ph understand">understand</span>Why is adding not a safe merge? <br>Why is the latest clock time not safe?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them.</p>
+  <div class="chq"><span class="chid">45k.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a counter that falls too</span></span>Build a counter that can rise and fall, from two counters that only grow. Show its merge keeps the three laws.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r45j.html">← 45j · who holds which key</a><a href="r45l.html">45l · splitting a big job →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>These are conflict-free replicated data types, CRDTs. A state with a merge keeping the three laws is a join-semilattice. Shifting edits by one another is operational transformation.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

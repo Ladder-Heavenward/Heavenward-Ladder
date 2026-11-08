@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Solving Cubics and Quartics by Hand</title>
+<title>Polynomial Division by Hand</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,100 +48,92 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r44i.html">← 44i what compass and straightedge can build</a><a href="r44k.html">next: 44k symmetry groups of equations, by hand →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r44i.html">← 44i modules over a principal ring</a><a href="r44k.html">next: 44k field extensions by hand →</a></p>
   <div class="tags"><span class="tag tech">44j · technique</span></div>
-  <h1>Solving Cubics and Quartics by Hand</h1>
-  <p data-pid="291959">The formulas of 44a are short to write and long to use. This step uses them. First, look for a whole-number answer, since a cubic with one is a line times a quadratic and needs no cube root. Then shift out the square term, and read the sign of the number under the square root: it says at once whether there are one or three real answers. With one, the cube roots are of real numbers. With three, the cube roots are of numbers in the plane, and the step trades them for a cosine of a third of an angle, which a table or a calculator gives directly. The quartic is the same, one floor deeper: shift, find one answer of its cubic, and split into two quadratics. Each method is checked by putting the answers back.</p>
-  <p class="gesture" data-pid="3cb8de">Try the divisors of the last coefficient first. Shift out the square term and compute D. If the number under the square root is positive, the cubic formula gives one real answer with real cube roots. If it is negative, use cosines of thirds of an angle. A quartic shifts, solves its cubic for one m, and splits into two quadratics.</p>
+  <h1>Polynomial Division by Hand</h1>
+  <p data-pid="56e25a">Division with remainder, done again and again, finds the greatest common factor of two polynomials, as rung four’s oldest recipe found it for two numbers. That is slow by hand and quick to check. There is a faster test, which never divides at all: write the coefficients of the two polynomials into one square grid, shifted along row by row, and take its determinant. It is zero exactly when the two share a factor. The same grid, built with a second letter riding along in the coefficients, throws that letter away and leaves a polynomial in the first letter alone, whose zeros are where two curves meet. Counting the degree of that polynomial gives a bound on how many times two curves can cross: a line meets a parabola at most twice, two conics at most four times, and two curves of degrees m and n at most m times n, unless they share a piece.</p>
+  <p class="gesture" data-pid="0b09f5">Repeated division finds the greatest common factor. A grid of shifted coefficients has determinant zero exactly when two polynomials share a factor. Built with a second letter in the coefficients, it eliminates that letter, and its degree bounds the meetings of two curves by the product of their degrees.</p>
 </header>
 
 <section class="class step" data-step="44j1">
-  <h2 class="sthead"><span class="stno">44j1</span>Whole Answers First</h2>
-  <p data-pid="38cc23">Whole-answer technique: <b>if a cubic or quartic has whole coefficients and top coefficient 1, every rational answer is a whole number dividing the last coefficient.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the whole-answer technique">
-x = \tfrac uv \text{ in lowest terms},\ \ u^n + c_{n-1}u^{n-1}v + \cdots + c_0 v^n = 0 @@ multiply by vⁿ
-v \mid u^n @@ every other term has a factor v
-v = \pm 1 @@ u and v share no prime (4j)
-\htmlClass{new}{x = u \text{ whole, and } u \mid c_0} \quad \blacksquare @@ every term but c₀ has a factor u
+  <h2 class="sthead"><span class="stno">44j1</span>The Remainder Chain</h2>
+  <p data-pid="bec62b">Remainder-chain technique: <b>to find the greatest common factor of f and g over a field, divide f by g, then g by the remainder, then that remainder by the next, until a remainder is 0; the last remainder other than 0 is the greatest common factor, up to a constant.</b> 4j’s split-keeps-divisors technique, with polynomials: f = gq + r and g share exactly the common factors of g and r.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the remainder chain, by hand">
+f = x^4 - 1,\ \ g = x^3 - 2x^2 + 2x - 1 @@ over ℚ
+x^4 - 1 = (x + 2)\,g + (2x^2 - 3x + 1) @@ divide (44c)
+g = (\tfrac12 x - \tfrac14)(2x^2 - 3x + 1) + \tfrac34 (x - 1) @@ divide again
+2x^2 - 3x + 1 = (x - 1)(2x - 1) + 0 @@ the chain stops
+\htmlClass{new}{\text{the greatest common factor is } x - 1} \quad \blacksquare @@ the last remainder other than 0, top coefficient made 1
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: one cubic, done without the formula">
-x^3 - 7x + 6:\ \ \text{divisors of } 6:\ \pm1, \pm2, \pm3, \pm6 @@ the whole-answer technique
-x = 1:\ \ 1 - 7 + 6 = 0 @@ a root
-x^3 - 7x + 6 = (x - 1)(x^2 + x - 6) @@ 43c’s division
-\htmlClass{new}{x = 1,\ 2,\ -3} \quad \blacksquare @@ x² + x − 6 = (x − 2)(x + 3)
-  </pre>
-  <p data-pid="f515cc">Here D = 9 − 343/27 = −100/27 &lt; 0: the cubic formula would have reached 1, 2 and −3 through cube roots of numbers in the plane. Try divisors first.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · whole first · ← → keys work</div></section>
+  <p data-pid="0698f8">Run backwards, the chain writes x − 1 as uf + vg for polynomials u and v, as 4j’s plus-only combination did for numbers. That is the one-maker technique made a recipe: (f, g) = (x − 1). The fractions grow fast, which is why the chain is slow by hand.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · chain · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">44j1.1</span><span class="ph understand">understand</span>What does the whole-answer technique say? <br>Why are x³ − 7x + 6’s answers found here without the cubic formula?</li>
+      <li><span class="qid">44j1.1</span><span class="ph understand">understand</span>What does the remainder-chain technique say, and which technique of 4j does it carry to polynomials? <br>Why is the greatest common factor of x⁴ − 1 and x³ − 2x² + 2x − 1 equal to x − 1?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="44j2">
-  <h2 class="sthead"><span class="stno">44j2</span>One Real Answer: The Formula</h2>
-  <p data-pid="5829ab">One-real technique: <b>if D &gt; 0, the cubic y³ + py + q has one real answer, ∛(−q/2 + √D) + ∛(−q/2 − √D), with real cube roots, and two answers that are flips of each other.</b> It is the cube-formula technique with u, v real; the others, ωu + ω²v and its flip, are not real since u ≠ v.</p>
-  <pre class="lines" data-k="ember" data-label="this step: x³ + 6x − 20">
-p = 6,\ q = -20,\ \ D = 100 + 8 = 108 @@ already shifted: no square term
-u^3 = 10 + \sqrt{108} = 10 + 6\sqrt3,\ \ v^3 = 10 - 6\sqrt3 @@ −q/2 ± √D
-(1 + \sqrt3)^3 = 1 + 3\sqrt3 + 9 + 3\sqrt3 = 10 + 6\sqrt3 @@ a guess, checked
-u + v = (1 + \sqrt3) + (1 - \sqrt3) = 2 @@ uv = 1 − 3 = −2 = −p/3
-\htmlClass{new}{x^3 + 6x - 20 = (x - 2)(x^2 + 2x + 10):\ \ x = 2,\ -1 \pm 3i} \quad \blacksquare @@ divide, then 8i
+  <h2 class="sthead"><span class="stno">44j2</span>A Grid That Tests for a Shared Factor</h2>
+  <p data-pid="3083ae">Let f have degree m and g degree n, over a field. Their <i>resultant</i> Res(f, g) is the determinant of the grid with m + n rows: n rows of f’s coefficients, each shifted one place right of the last, then m rows of g’s.</p>
+  <p data-pid="c76d34">Shared-factor-test technique: <b>Res(f, g) = 0 exactly when f and g share a factor of degree at least 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the shared-factor-test technique">
+\text{share } h \iff uf = vg \text{ for some } u \ne 0,\ \deg u < n,\ \deg v < m @@ if f = hf₁, g = hg₁, take u = g₁, v = f₁; the other way, one factoring (44d) puts all of f’s unsplittables in vg, so one of them divides g
+uf - vg = 0 \text{ is a straight equation in the } m + n \text{ coefficients of } u, v @@ each coefficient of uf − vg is a mix of them
+\text{the grid of that straight map is the resultant’s grid, turned on its side} @@ row by row, the shifted coefficients
+\htmlClass{new}{\text{a nonzero answer} \iff \det = 0} \quad \blacksquare @@ the straight map loses more than 0 exactly when its determinant is 0 (27c, 27e)
   </pre>
-  <p data-pid="a1834a">The guess at the cube root is a whole-answer check in disguise. When no guess comes, the cube roots are computed as decimals, and the answer is as exact as the decimals.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · one real · ← → keys work</div></section>
+  <pre class="lines" data-k="ember" data-label="this step: two tests by hand">
+\mathrm{Res}(x^2 - 3x + 2,\ x^2 - 1) = \det\begin{pmatrix} 1 & -3 & 2 & 0 \\ 0 & 1 & -3 & 2 \\ 1 & 0 & -1 & 0 \\ 0 & 1 & 0 & -1 \end{pmatrix} = 0 @@ they share x − 1
+\htmlClass{new}{\mathrm{Res}(x^2 + 1,\ x - 2) = \det\begin{pmatrix} 1 & 0 & 1 \\ 1 & -2 & 0 \\ 0 & 1 & -2 \end{pmatrix} = 5} \quad \blacksquare @@ no shared factor; 5 = 2² + 1, the value of x² + 1 at the zero of x − 2
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · resultant · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">44j2.1</span><span class="ph understand">understand</span>What does the one-real technique say? <br>For x³ + 6x − 20, why is uv = −2 a check that the right cube roots were chosen?</li>
+      <li><span class="qid">44j2.1</span><span class="ph understand">understand</span>How is the resultant’s grid built from the coefficients of f and g? <br>What does the shared-factor-test technique say, and which technique of rung 27 finishes its proof?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="44j3">
-  <h2 class="sthead"><span class="stno">44j3</span>Three Real Answers: Thirds of an Angle</h2>
-  <p data-pid="d1a2dc">Third-angle technique: <b>if D &lt; 0, put k = 2√(−p/3) and cos θ = (3q / 2p)·√(−3/p); then the three answers of y³ + py + q = 0 are k cos(θ/3), k cos(θ/3 − 120°) and k cos(θ/3 − 240°).</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the third-angle technique">
-y = k c:\ \ k^3c^3 + pkc + q = 0 @@ substitute
-k^2 = -\tfrac{4p}{3}:\ \ k^3c^3 + pkc = \tfrac{k^3}{4}(4c^3 - 3c) @@ pk = −(3/4)k³
-4c^3 - 3c = -\tfrac{4q}{k^3} = \cos\theta,\ \ |\cos\theta| < 1 @@ D &lt; 0 says exactly that (44a3)
-\htmlClass{new}{c = \cos\varphi,\ 3\varphi = \pm\theta + 360^\circ j} \quad \blacksquare @@ cos 3φ = 4cos³φ − 3cosφ (21d); three values of φ, the rest repeat
+  <h2 class="sthead"><span class="stno">44j3</span>Throwing a Letter Away</h2>
+  <p data-pid="02479d">Two curves f(x, y) = 0 and g(x, y) = 0. Read each as a polynomial in y, with coefficients that are polynomials in x. Then Res_y(f, g) is a polynomial in x alone.</p>
+  <p data-pid="d05941">Eliminate-a-letter technique: <b>if (x₀, y₀) is on both curves, then Res_y(f, g) is 0 at x₀; and if the top coefficients in y do not both vanish at x₀, every zero x₀ of Res_y comes from a shared point, perhaps with a complex y₀.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the circle and the hyperbola">
+f = x^2 + y^2 - 5,\ \ g = xy - 2 @@ in y: f = y² + 0·y + (x² − 5), g = x·y − 2
+\mathrm{Res}_y = \det\begin{pmatrix} 1 & 0 & x^2 - 5 \\ x & -2 & 0 \\ 0 & x & -2 \end{pmatrix} = x^4 - 5x^2 + 4 @@ the grid: one row of f, two of g
+x^4 - 5x^2 + 4 = (x - 1)(x + 1)(x - 2)(x + 2) @@ a quadratic in x²
+\htmlClass{new}{(1, 2),\ (2, 1),\ (-1, -2),\ (-2, -1)} \quad \blacksquare @@ y = 2/x at each; each is on the circle
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: x³ − 6x² + 9x − 1">
-x = y + 2:\ \ y^3 - 3y + 1 @@ the shift-out technique: p = 9 − 12, q = −1 + 18 − 18
-k = 2,\ \ \cos\theta = \tfrac{3}{-6}\cdot 1 = -\tfrac12,\ \ \theta = 120^\circ @@ D = 1/4 − 1 &lt; 0
-y = 2\cos 40^\circ,\ 2\cos(-80^\circ),\ 2\cos(-200^\circ) \approx 1.5321,\ 0.3473,\ -1.8794 @@ θ/3 = 40°
-\htmlClass{new}{x \approx 3.5321,\ 2.3473,\ 0.1206} \quad \blacksquare @@ add 2; they add to 6 and multiply to 1, as the coefficients say (44b1)
-  </pre>
-  <p data-pid="cf6974">The same technique on x³ − 7x + 6 gives cos θ ≈ −0.8417, θ ≈ 147.32°, k ≈ 3.0551, and 3.0551 cos 49.107° = 2.000. A cosine table reached the whole answer 2 without any number of the plane.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · three real · ← → keys work</div></section>
+  <p data-pid="d12f09">The parabola y = x² and the line y = x + 2: Res_y(y − x², y − x − 2) = x² − x − 2 = (x − 2)(x + 1), and the meetings are (2, 4) and (−1, 1). Elimination did what substitution does, and it works when nothing can be solved for a letter.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · elimination · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">44j3.1</span><span class="ph understand">understand</span>What does the third-angle technique say? <br>Why does D &lt; 0 make |cos θ| &lt; 1?</li>
+      <li><span class="qid">44j3.1</span><span class="ph understand">understand</span>What does the eliminate-a-letter technique say? <br>Where do x² + y² = 5 and xy = 2 meet, and how does the resultant find the x of each meeting?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="44j4">
-  <h2 class="sthead"><span class="stno">44j4</span>A Quartic by Hand</h2>
-  <p data-pid="ed3f35">Quartic-by-hand technique: <b>shift out the cube term, find one answer m of q² = 4(2m − p)(m² − r), and split (y² + m)² − (√(2m − p) y − q/(2√(2m − p)))² into two quadratics.</b> Try the whole answers of the cubic in m first.</p>
-  <pre class="lines" data-k="ember" data-label="this step: x⁴ + 4x³ + 7x² + 10x + 3">
-x = y - 1:\ \ y^4 + y^2 + 4y - 3 @@ the shift by b/4 = 1
-p = 1,\ q = 4,\ r = -3:\ \ 16 = 4(2m - 1)(m^2 + 3) @@ the cubic in m
-m = 1:\ \ 4 \cdot 1 \cdot 4 = 16 @@ a whole answer
-(y^2 + 1)^2 = y^2 - 4y + 4 = (y - 2)^2 @@ 2m − p = 1, m² − r = 4
-(y^2 - y + 3)(y^2 + y - 1) = 0 @@ a difference of squares
-\htmlClass{new}{x = \tfrac{-1 \pm i\sqrt{11}}{2},\ \ \tfrac{-3 \pm \sqrt5}{2}} \quad \blacksquare @@ 8i twice, then x = y − 1
+  <h2 class="sthead"><span class="stno">44j4</span>How Many Times Two Curves Meet</h2>
+  <p data-pid="a3f18e">Meeting-count technique: <b>two curves of degrees m and n with no shared piece meet in at most mn points.</b> A piece here is a factor of degree at least 1 common to f and g.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the meeting-count technique">
+\text{turn the plane so that no two meetings share an } x @@ finitely many directions are bad (20’s turns)
+\text{in each grid entry, the coefficient of } y^{k} \text{ in } f \text{ has degree at most } m - k \text{ in } x @@ f has degree m
+\text{each term of the determinant has degree at most } mn \text{ in } x @@ count: the entry in row i, column j has degree at most its place’s weight, and the weights add to mn
+\mathrm{Res}_y \ne 0 @@ no shared piece (the shared-factor-test technique, over the fractions of polynomials in x)
+\htmlClass{new}{\text{at most } mn \text{ zeros, so at most } mn \text{ meetings}} \quad \blacksquare @@ at-most-n-zeros (9g); each meeting gives its own x
   </pre>
-  <p data-pid="a47189">The cubic in m factors as −4(m − 1)(2m² + m + 7), so m = 1 is its only real answer. Any answer m with 2m − p ≠ 0 works; a non-real one would give the same four roots by a longer road.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · quartic · ← → keys work</div></section>
+  <p data-pid="4b415b">So a line meets a cubic at most 3 times, and two conics at most 4: the circle and the hyperbola above reach 4. Two circles x² + y² = 1 and x² + y² = 4 never meet: Res_y is the constant 9. The count is exactly mn only after counting complex meetings, meetings twice where curves touch, and meetings at the far points of 29m. <i>Held in trust</i>: that exact count is much higher up the ladder.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · meetings · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">44j4.1</span><span class="ph understand">understand</span>What does the quartic-by-hand technique say? <br>Why is it worth trying whole answers of the cubic in m first?</li>
+      <li><span class="qid">44j4.1</span><span class="ph understand">understand</span>What does the meeting-count technique say, and what is a shared piece? <br>Why can two conics meet at most 4 times, and why do x² + y² = 1 and x² + y² = 4 meet none?</li>
     </ol>
   </section>
 </section>
@@ -149,15 +141,15 @@ m = 1:\ \ 4 \cdot 1 \cdot 4 = 16 @@ a whole answer
 <section class="class step" data-step="44j5">
   <h2 class="sthead"><span class="stno">44j5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\tfrac12 \text{ might be a root of } x^3 - 7x + 6\,? @@ top coefficient 1: only whole divisors of 6
-\text{the third-angle technique with } D > 0\,? @@ then |cos θ| &gt; 1 and no real θ exists
-y = k\cos(\theta/3) \text{ only, one answer}\,? @@ φ = θ/3 − 120° and θ/3 − 240° also have cos 3φ = cos θ
-\text{shift a quartic by } b/3\,? @@ that clears the square term of a cubic; a quartic needs b/4
+\mathrm{Res}(f, g) \ne 0 \text{, so } f \text{ and } g \text{ have no common zero anywhere}\,? @@ true over a field where both split; but the test is about factors over the field the coefficients come from
+x^2 + y^2 = 1 \text{ and } x^2 + y^2 = 4 \text{ meet 4 times, by the meeting-count}\,? @@ the technique says at most 4; here 0
+\text{the last remainder in the chain is the greatest common factor exactly}\,? @@ up to a constant: (3/4)(x − 1) and x − 1 are partners
+(x - y)(x + y) = 0 \text{ and } x - y = 0 \text{ meet at most } 2 \cdot 1 \text{ times}\,? @@ they share the piece x − y and meet along a whole line
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">44j5.1</span><span class="ph understand">understand</span>Why can 1/2 not be a root of x³ − 7x + 6? <br>Why does the third-angle technique fail when D &gt; 0?</li>
+      <li><span class="qid">44j5.1</span><span class="ph understand">understand</span>Why does the meeting-count technique not say that two conics always meet 4 times? <br>Why do (x − y)(x + y) = 0 and x − y = 0 meet endlessly often?</li>
     </ol>
   </section>
 </section>
@@ -166,22 +158,22 @@ y = k\cos(\theta/3) \text{ only, one answer}\,? @@ φ = θ/3 − 120° and θ/3 
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">44j.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x^3 - 3x^2 - 3x - 1"></span></span>Build all three answers: shift, compute D, and use the technique it calls for. <br>Write the real answer with cube roots of whole numbers only.</div>
-  <div class="chq"><span class="chid">44j.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="y^3 - 12y + 16"></span></span>Find D. Which technique applies at the edge between the two? <br>Find the answers by the whole-answer technique, and say what the third-angle technique gives there.</div>
-  <div class="chq"><span class="chid">44j.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="2\cos 20^\circ,\ \ 2\cos 140^\circ,\ \ 2\cos 260^\circ"></span></span>Run the third-angle technique backwards: build the cubic whose answers these are, and check it is rung 21’s. <br>Build a cubic whose answers are 2 cos 10°, 2 cos 130°, 2 cos 250°.</div>
-  <div class="chq"><span class="chid">44j.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="x^4 + 4x^3 + 7x^2 + 10x + 3"></span></span>Reroute the quartic without the cubic in m: look for two quadratics x² + bx + c and x² + dx + e with whole coefficients whose product it is. <br>Which equations on b, c, d, e come out, and why does trying ce = 3 settle them fast?</div>
+  <div class="chq"><span class="chid">44j.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="y^2 = x^3 - x,\ \ y = x"></span></span>Build the resultant in y and find every meeting of the cubic and the line. <br>Then do the same for y² = x³ − x and the circle x² + y² = 2. How many meetings does the meeting-count technique allow, and how many are real?</div>
+  <div class="chq"><span class="chid">44j.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f = x^2 - 2x + 1,\ \ 2x - 2"></span></span>Find Res(f, 2x − 2), where 2x − 2 is f’s slope. <br>Build a proof that a polynomial over ℚ has a repeated zero in ℂ exactly when Res(f, f′) = 0. What is Res(x² + bx + c, 2x + b)?</div>
+  <div class="chq"><span class="chid">44j.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\mathrm{Res}_y(f, g)(x_0) = 0"></span></span>The eliminate-a-letter technique needs the top coefficients in y not both to vanish at x₀. Turn it round and find curves whose resultant is 0 at some x₀ where they do not meet, even with complex y. <br>Try f = xy − 1 and g = xy − 2. What does the far point of 29m have to do with it?</div>
+  <div class="chq"><span class="chid">44j.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\gcd(x^4 - 1,\ x^3 - 2x^2 + 2x - 1)"></span></span>Reroute the first footing’s answer by the shared-factor-test technique: compute Res(x⁴ − 1, x³ − 2x² + 2x − 1). <br>It is 0. Which test tells you more, and which is quicker by hand?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r44i.html">← 44i · what compass and straightedge can build</a><a href="r44k.html">44k · symmetry groups of equations, by hand →</a></nav>
+<nav class="nextrung"><a href="r44i.html">← 44i · modules over a principal ring</a><a href="r44k.html">44k · field extensions by hand →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The whole-answer technique is the rational root theorem for monic polynomials. The third-angle technique is the trigonometric solution of the cubic. The one-real technique is Cardano’s formula in the case of one real root, and the quartic-by-hand technique is Ferrari’s method.</p>
+  <p>The remainder chain is the Euclidean algorithm for polynomials. The resultant’s grid is the Sylvester matrix, and the shared-factor-test technique is the resultant criterion. Res(f, f′) is, up to a factor, the discriminant. The meeting-count technique is the easy half of Bézout’s theorem; the exact count, with complex points, multiplicities and points at infinity, is Bézout’s theorem in the projective plane.</p>
   <h3>Who said it first</h3>
-  <p>François Viète gave the solution by thirds of an angle around 1591, in a work printed in 1615. René Descartes stated the test of trying the divisors of the last coefficient in La Géométrie (1637). The worked quartic is in the shape Lodovico Ferrari solved, published by Gerolamo Cardano in 1545.</p>
+  <p>Étienne Bézout wrote on elimination and the count of meetings in 1779; Isaac Newton had guessed the count earlier. James Joseph Sylvester wrote the resultant’s grid in 1840. Leonhard Euler eliminated a letter from two equations in 1748.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“x³ + 6x − 20 = 0 has u³ = 10 + 6√3 and v³ = 10 − 6√3. The calculator gives ∛(10 + 6√3) ≈ 2.732 and ∛(10 − 6√3) ≈ 0.732, so x ≈ 3.464.” Not allowed: 10 − 6√3 is negative, about −0.392, and its real cube root is −0.732. The check uv = −p/3 = −2 catches it: 2.732 × 0.732 is +2.</p>
+  <p>“x² + 1 and x² + 4 have no real zeros, so Res(x² + 1, x² + 4) = 0.” Not allowed: the test is about shared factors, not about zeros on the line. The two share no factor, and their resultant is 9.</p>
 </section>
 
 </div>
@@ -196,25 +188,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'divisors',t:R`\pm1, \pm2, \pm3, \pm6`,n:`Of the last coefficient.`},
-  {k:'ember',kl:'root',t:R`x = 1`,n:`Try them.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{(x - 1)(x - 2)(x + 3)}`,n:`No cube root.`}
-],{title:'The slides · whole first · ← → keys work'});
+  {k:'ember',kl:'divide',t:R`f = gq + r`,n:`Common factors kept.`},
+  {k:'ember',kl:'again',t:R`g = rq′ + r′`,n:`Until 0.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\gcd = x - 1}`,n:`The last remainder.`}
+],{title:'The slides · chain · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'D',t:R`D = 108 > 0`,n:`One real answer.`},
-  {k:'ember',kl:'cube roots',t:R`1 \pm \sqrt3`,n:`Real.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{x = 2}`,n:`And a flipped pair.`}
-],{title:'The slides · one real · ← → keys work'});
+  {k:'ember',kl:'the grid',t:R`m + n \text{ rows}`,n:`Shifted coefficients.`},
+  {k:'ember',kl:'its meaning',t:R`uf = vg`,n:`A straight map.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\mathrm{Res} = 0 \iff \text{a shared factor}}`,n:`No dividing.`}
+],{title:'The slides · resultant · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'scale',t:R`k = 2\sqrt{-p/3}`,n:`The size.`},
-  {k:'ember',kl:'angle',t:R`\cos\theta = \tfrac{3q}{2p}\sqrt{-3/p}`,n:`Below 1 in size.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{k\cos(\theta/3 - 120^\circ j)}`,n:`Three answers.`}
-],{title:'The slides · three real · ← → keys work'});
+  {k:'ember',kl:'in y',t:R`\mathrm{Res}_y(f, g)`,n:`A polynomial in x.`},
+  {k:'ember',kl:'zeros',t:R`x = \pm 1, \pm 2`,n:`Four.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{four meetings}}`,n:`Circle and hyperbola.`}
+],{title:'The slides · elimination · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'shift',t:R`y^4 + y^2 + 4y - 3`,n:`No cube term.`},
-  {k:'ember',kl:'m',t:R`16 = 4(2m - 1)(m^2 + 3),\ m = 1`,n:`The cubic in m.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{(y^2 - y + 3)(y^2 + y - 1)}`,n:`Two quadratics.`}
-],{title:'The slides · quartic · ← → keys work'});
+  {k:'ember',kl:'degrees',t:R`m,\ n`,n:`Two curves.`},
+  {k:'ember',kl:'resultant',t:R`\deg \mathrm{Res}_y \le mn`,n:`Count the weights.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\le mn \text{ meetings}}`,n:`Unless they share a piece.`}
+],{title:'The slides · meetings · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

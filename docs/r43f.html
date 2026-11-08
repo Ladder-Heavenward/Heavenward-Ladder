@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Field Extensions</title>
+<title>Squares on a Clock</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,110 +48,131 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r43e.html">← 43e where factoring fails</a><a href="r43g.html">next: 43g finite fields →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r43e.html">← 43e a clock hand that reaches every hour</a><a href="r43g.html">next: 43g primes are endless and thin →</a></p>
   <div class="tags"><span class="tag proof">43f · proof</span></div>
-  <h1>Field Extensions</h1>
-  <p data-pid="cd1714">The complex numbers hold the reals, and every complex number is a real plus a real times i: two real numbers fix it. The fractions with the square root of two put in hold the fractions, and two fractions fix each member. That is the dimension of rung twenty seven, spent on a new kind of space: a big field, read as arrows that the small field stretches. The count of arrows in a basis is how far the big field reaches past the small one. When the big field is made by putting in one root of an unsplittable polynomial, the count is the degree of that polynomial, and the field is the polynomials divided by it, as step 43b found the complex numbers to be the real polynomials divided by x squared plus one. And when one field sits inside a second, inside a third, the counts multiply. That one rule settles questions that look hard: the cube root of two is not made from square roots of square roots alone, and the square root of two is not made from the cube root of two.</p>
-  <p class="gesture" data-pid="322eb3">A field inside a bigger one makes the bigger one a space of arrows, and its dimension is the degree. Putting in one root of an unsplittable polynomial of degree d gives a field of degree d, a copy of the polynomials divided by it. Along a tower of fields the degrees multiply, so the degree of any member divides the degree of the field it lies in.</p>
+  <h1>Squares on a Clock</h1>
+  <p data-pid="5c02a6">On the clock of eleven, the squares of the hours land on only five of the ten hours that are not twelve: one, three, four, five and nine. Seven is not a square there, however long you search. On a prime clock exactly half the units are squares, and the full hand of the last step says which: its even powers. A test follows that needs no search: raise to half the count of units, and see whether one comes out. Then the step proves the deepest fact of this rung, found by a young man of eighteen in 1796 after years of trying. Whether one odd prime is a square on the clock of another is tied, by a simple sign, to whether the second is a square on the clock of the first. Two questions about two different clocks turn out to be one. The proof counts points under a slanted line in a box, and nothing else, and it has the feel of a trick until you see why the count must split that way.</p>
+  <p class="gesture" data-pid="552db4">On an odd prime clock half the units are squares, the even powers of a full hand. Raising to half the count of units gives one exactly for squares. A square is told by counting how many multiples land in the upper half of the clock. And for two odd primes, each is a square on the other’s clock in the same way, unless both are three more than a multiple of four, when exactly one is.</p>
 </header>
 
 <section class="class step" data-step="43f1">
-  <h2 class="sthead"><span class="stno">43f1</span>A Big Field Over a Small One</h2>
-  <p data-pid="b66086">Let K be a field inside a field L, with the same plus and times. Read members of L as arrows, added in L, and stretched by members of K, multiplied in L. 27a’s eight rules hold, because they are rules of the field L.</p>
-  <p data-pid="508646">Field-as-space technique: <b>a field L holding a field K is a space of arrows over K, and its dimension is the degree [L : K].</b> The degree may be endless.</p>
-  <pre class="lines" data-k="ember" data-label="this step: three degrees">
-a + bi = a \cdot 1 + b \cdot i,\ \ a, b \in \mathbb R @@ 1 and i build ℂ, and are free: a + bi = 0 only when a = b = 0
-[\mathbb C : \mathbb R] = 2 @@ the same-size technique (27b)
-[\mathbb Q(\sqrt2) : \mathbb Q] = 2 @@ 1 and √2 free over ℚ, since √2 is no fraction (5f)
-\htmlClass{new}{[\mathbb R : \mathbb Q] \text{ is endless}} \quad \blacksquare @@ a space of n arrows over ℚ is listed like ℚⁿ (35a); ℝ cannot be listed (35b)
+  <h2 class="sthead"><span class="stno">43f1</span>Half the Units Are Squares</h2>
+  <p data-pid="fc614d">Let p be an odd prime. An hour [a] with p ∤ a is a <i>square</i> on the clock of p when [x]² = [a] for some [x]. On the clock of 11 the squares of 1 to 10 are 1, 4, 9, 5, 3, 3, 5, 9, 4, 1.</p>
+  <p data-pid="7e32d2">Half-squares technique: <b>on the clock of an odd prime p, exactly (p − 1)/2 of the units are squares, and they are the even powers of any full hand.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the half-squares technique">
+[x]^2 = [y]^2 \iff ([x] - [y])([x] + [y]) = [0] \iff [x] = \pm[y] @@ a prime clock is a field: no zero product (43b4)
+[x] \ne -[x] \text{ for } [x] \ne [0] @@ else [2][x] = [0], and p is odd
+\text{the } p - 1 \text{ units pair off as } \pm[x],\ \text{each pair one square} @@ the line above
+\htmlClass{new}{(p - 1)/2 \text{ squares}} @@ one for each pair
+[g] \text{ a full hand: } [g]^{2j} = ([g]^j)^2 @@ the full-hand technique (43e4): every unit is a power of [g]
+\htmlClass{new}{\text{the squares are } [g]^0, [g]^2, \ldots, [g]^{p-3}} \quad \blacksquare @@ (p − 1)/2 even powers, each a square, and no more squares exist
   </pre>
-  <p data-pid="06aa34">Here ℚ(√2) is the smallest field inside ℝ holding ℚ and √2. Its members are a + b√2 with a, b fractions, and 43k divides them by hand.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · degree · ← → keys work</div></section>
+  <p data-pid="319d82">From here on, for an odd prime p and an integer a, the mark (a ∕ p), written in display lines as a over p inside round brackets, is +1 when [a] is a square unit, −1 when [a] is a unit and not a square, and 0 when p ∣ a. It is not a fraction: the round brackets around it are part of the mark. Read it “a on p”. So (3 ∕ 11) = +1 and (7 ∕ 11) = −1.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · squares · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">43f1.1</span><span class="ph understand">understand</span>How is a field L that holds a field K a space of arrows over K? <br>What is the degree [L : K], and why is [ℝ : ℚ] endless?</li>
+      <li><span class="qid">43f1.1</span><span class="ph understand">understand</span>What does the half-squares technique say, and why do the units pair off? <br>What does the mark (a ∕ p) give, and why is it not a fraction?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43f2">
-  <h2 class="sthead"><span class="stno">43f2</span>Putting in One Root</h2>
-  <p data-pid="67dc6a">Let α in L be a zero of some polynomial over K other than 0. Putting α in, p ↦ p(α), is a ring map from K[x] to L. What it loses is an ideal other than {0}, so by the one-maker technique it is (m) for one polynomial m, chosen with top coefficient 1. This m is α’s <i>least polynomial</i>, as 27g’s least-obeyed technique found one for a grid. It cannot be split: if m = gh, then g(α)h(α) = 0, so g(α) or h(α) is 0, and that one is a multiple of m.</p>
-  <p data-pid="b32836">Root-field technique: <b>if α has least polynomial m of degree d over K, then K(α) is a copy of K[x]/(m), with basis 1, α, …, α^(d − 1), and [K(α) : K] = d.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the root-field technique">
-K[x]/(m) \text{ is a copy of what } p \mapsto p(\alpha) \text{ reaches} @@ the lost-ideal technique (43b)
-(m) \text{ is largest, so that copy is a field} @@ m cannot be split; 43d1’s proof of the unsplittable-is-prime technique; the largest-ideal technique
-\text{so what is reached is } K(\alpha) @@ a field holding K and α, made of polynomials in α
-p = mq + r,\ \ \deg r < d \Rightarrow p(\alpha) = r(\alpha) @@ division (43c); m(α) = 0
-\htmlClass{new}{1, \alpha, \ldots, \alpha^{d-1} \text{ build } K(\alpha) \text{ and are free}} \quad \blacksquare @@ a mix equal to 0 is r(α) = 0 with deg r &lt; d, so r is a multiple of m, so r = 0
+  <h2 class="sthead"><span class="stno">43f2</span>The Test for a Square</h2>
+  <p data-pid="572aaa">Square-test technique: <b>for an odd prime p and p ∤ a, a^((p − 1)/2) ≡ (a ∕ p) (mod p).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the square-test technique">
+h = (p - 1)/2,\ \ ([a]^h)^2 = [a]^{p-1} = [1] @@ the little technique (43d1)
+[a]^h = \pm[1] @@ the roots of x² = 1 on a prime clock (43f1)
+[a] = [g]^k:\ \ [a]^h = [g]^{kh} @@ a full hand [g] (43e4)
+[g]^h \ne [1],\ \text{so } [g]^h = -[1] @@ [g] has order p − 1 = 2h, not h
+[a]^h = (-[1])^k @@ powers of a power
+\htmlClass{new}{[a]^h = [1] \iff k \text{ even} \iff [a] \text{ a square}} \quad \blacksquare @@ the half-squares technique
   </pre>
-  <p data-pid="cd6e70">∛2 has least polynomial x³ − 2 over ℚ, since 43d’s prime-wedge technique showed it cannot be split, and a polynomial that cannot be split with top 1 and zero ∛2 is the least. So [ℚ(∛2) : ℚ] = 3, with basis 1, ∛2, ∛4. And ℝ[x]/(x² + 1) gave ℂ in 43b by exactly this.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · one root · ← → keys work</div></section>
+  <p data-pid="712f83">Two things follow at once. The mark multiplies: (ab ∕ p) = (a ∕ p)(b ∕ p), since (ab)ʰ = aʰbʰ. And −1 is a square on the clock of p exactly when (p − 1)/2 is even, so exactly when p ≡ 1 (mod 4): 2² = 4 ≡ −1 on the clock of 5, 5² = 25 ≡ −1 on the clock of 13, and on the clock of 7 no square is 6.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the test · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43f2.1</span><span class="ph understand">understand</span>What is the least polynomial of α over K, and why can it not be split? <br>What does the root-field technique say about [ℚ(∛2) : ℚ]?</li>
+      <li><span class="qid">43f2.1</span><span class="ph understand">understand</span>What does the square-test technique say? <br>Why is −1 a square on the clock of 13 and not on the clock of 7?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43f3">
-  <h2 class="sthead"><span class="stno">43f3</span>Towers</h2>
-  <p data-pid="5c390b">Tower technique: <b>if K ⊆ L ⊆ M are fields with [M : L] = m and [L : K] = n, then [M : K] = mn.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the tower technique">
-u_1, \ldots, u_n \text{ a basis of } L \text{ over } K;\ \ v_1, \ldots, v_m \text{ of } M \text{ over } L @@ given
-z = \textstyle\sum_j b_j v_j,\ \ b_j = \sum_i c_{ij} u_i,\ c_{ij} \in K @@ write z over L, then each bⱼ over K
-z = \textstyle\sum_{i,j} c_{ij}\, u_i v_j @@ so the mn products build M over K
-\textstyle\sum_{i,j} c_{ij} u_i v_j = 0 \Rightarrow \sum_i c_{ij} u_i = 0 \text{ for each } j @@ the vⱼ are free over L
-\htmlClass{new}{c_{ij} = 0 \text{ for all } i, j:\ [M : K] = mn} \quad \blacksquare @@ the uᵢ are free over K
+  <h2 class="sthead"><span class="stno">43f3</span>Counting the Multiples That Land High</h2>
+  <p data-pid="f0c9bb">Write h = (p − 1)/2. Each hour but [0] is ±r for exactly one r from 1 to h: call r its <i>fold</i>. An hour <i>lands high</i> when its least member between 0 and p is above p/2, so it is −r.</p>
+  <p data-pid="6b2a6e">High-count technique: <b>for an odd prime p and p ∤ a, (a ∕ p) = (−1)^μ, where μ is the number of a, 2a, …, ha that land high on the clock of p.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the high-count technique">
+[ka] = \varepsilon_k [r_k],\ \ \varepsilon_k = \pm1,\ \ 1 \le r_k \le h @@ each multiple, folded
+r_j = r_k \Rightarrow [ja] = \pm[ka] \Rightarrow j = \pm k \Rightarrow j = k @@ cancel [a] (43a4); j + k lies between 2 and p − 1
+\{r_1, \ldots, r_h\} = \{1, \ldots, h\} @@ h different folds, each from 1 to h
+[a]^h\,[h!] = \textstyle\prod_k [ka] = \prod_k \varepsilon_k\,[r_k] = (-1)^\mu\,[h!] @@ multiply the h lines
+\htmlClass{new}{[a]^h = (-1)^\mu \text{, and so } (a \,/\, p) = (-1)^\mu} \quad \blacksquare @@ [h!] is a unit; the square-test technique
   </pre>
-  <p data-pid="5d604a">ℚ(√2, √3), the fractions with both roots put in, sits over ℚ(√2), which sits over ℚ. √3 is not in ℚ(√2), since (a + b√2)² = 3 forces 2ab = 0, and neither a² = 3 nor 2b² = 3 has a fraction answer. So the top step has degree 2, the bottom 2, and the whole tower 4, with basis 1, √2, √3, √6.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · towers · ← → keys work</div></section>
+  <p data-pid="c0a27c">For a = 2 the multiples 2, 4, …, p − 1 land high when they pass p/2. On the clock of 7: 2, 4, 6, and 4 and 6 land high, so μ = 2 and 2 is a square: 3² = 9 ≡ 2. On the clock of 11: 2, 4, 6, 8, 10, and three land high, so 2 is not a square there. Counting in general gives the rule: 2 is a square on the clock of p exactly when p ≡ 1 or 7 (mod 8).</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · sign count · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43f3.1</span><span class="ph understand">understand</span>What does the tower technique say? <br>Why is [ℚ(√2, √3) : ℚ] equal to 4, and what basis does the proof give?</li>
+      <li><span class="qid">43f3.1</span><span class="ph understand">understand</span>What does the high-count technique say? <br>Why are the folds r₁, …, r_h all different, and how does the count show 2 is a square on the clock of 7?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43f4">
-  <h2 class="sthead"><span class="stno">43f4</span>Degrees Divide</h2>
-  <p data-pid="0ce652">Degree-divides technique: <b>if α lies in a field L of finite degree over K, the degree of α’s least polynomial divides [L : K].</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the degree-divides technique">
-K \subseteq K(\alpha) \subseteq L @@ K(α) is the smallest field holding K and α
-[L : K] = [L : K(\alpha)]\,[K(\alpha) : K] @@ the tower technique
-\htmlClass{new}{\deg m_\alpha = [K(\alpha) : K] \text{ divides } [L : K]} \quad \blacksquare @@ the root-field technique
+  <h2 class="sthead"><span class="stno">43f4</span>Each Prime on the Other’s Clock</h2>
+  <p data-pid="cc8a63">Square-swap technique: <b>for different odd primes p and q, (p ∕ q)(q ∕ p) = (−1) to the power ((p − 1)/2)((q − 1)/2): each is a square on the other’s clock in the same way, unless both are 3 more than a multiple of 4, and then exactly one is.</b></p>
+  <p data-pid="ad377b">First, μ can be counted with whole parts. Write ⌊t⌋ for the greatest integer at most t, its <i>whole part</i>; so ⌊17/5⌋ = 3. For odd a with p ∤ a, put T = ⌊a/p⌋ + ⌊2a/p⌋ + ⋯ + ⌊ha/p⌋. Then μ and T are both even or both odd. Let s be the sum of the remainders of ka by p that land low, and l the sum of those that land high, and H = 1 + ⋯ + h. The folds are 1 to h, so s + (μp − l) = H. And by 4j7, aH = pT + s + l. Taking the first from the second, (a − 1)H = pT − μp + 2l. Here a − 1 is even, and p is odd, so T − μ is even.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the square-swap technique">
+\text{the box: } 1 \le x \le h_p,\ 1 \le y \le h_q,\ \ h_p = \tfrac{p-1}2,\ h_q = \tfrac{q-1}2 @@ h_p h_q whole-number points
+qx = py \text{ at no point of the box} @@ p ∣ qx would need p ∣ x, and x &lt; p
+\text{below the line } y = qx/p \text{ in column } x:\ \lfloor qx/p \rfloor \text{ points} @@ the whole part; all lie in the box, since qx/p &lt; q/2
+\textstyle\sum_x \lfloor qx/p\rfloor + \sum_y \lfloor py/q\rfloor = h_p h_q @@ the points above the line, counted by rows, the same way
+\left(\tfrac qp\right)\left(\tfrac pq\right) = (-1)^{T(q, p)}(-1)^{T(p, q)} @@ the high-count technique with μ and T alike in evenness, twice
+\htmlClass{new}{= (-1)^{h_p h_q}} \quad \blacksquare @@ the sum of the two counts
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: two consequences">
-\sqrt2 \in \mathbb Q(\sqrt[3]2) \Rightarrow 2 \mid 3 @@ √2 has degree 2; the field has degree 3
-\sqrt2 \notin \mathbb Q(\sqrt[3]2) @@ 2 does not divide 3
-L \text{ reached by square roots, one at a time} \Rightarrow [L : \mathbb Q] = 2^k @@ each step has degree 1 or 2 (the tower technique)
-\htmlClass{new}{\sqrt[3]2 \notin L:\ 3 \nmid 2^k} \quad \blacksquare @@ the degree-divides technique
-  </pre>
-  <p data-pid="71febc">The second consequence is the heart of 44i, where square roots stand for what a straightedge and compass can reach: doubling a cube means building ∛2, and the degrees say no.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · divides · ← → keys work</div></section>
+  <p data-pid="33ed35">With p = 5 and q = 19, h_p h_q = 2 · 9 is even, so 5 is a square on the clock of 19 exactly when 19 ≡ 4 is a square on the clock of 5, and 4 = 2². So 5 is a square on the clock of 19: 9² = 81 = 4 · 19 + 5.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · square swap · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43f4.1</span><span class="ph understand">understand</span>What does the degree-divides technique say? <br>Why is ∛2 in no field reached from ℚ by putting in square roots one at a time?</li>
+      <li><span class="qid">43f4.1</span><span class="ph understand">understand</span>What does the square-swap technique say? <br>What is counted in the box, and why does no point of the box lie on the line qx = py?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43f5">
-  <h2 class="sthead"><span class="stno">43f5</span>Illegal Moves</h2>
+  <h2 class="sthead"><span class="stno">43f5</span>Deciding a Square by Swapping</h2>
+  <p data-pid="f4d492">With the mark multiplying, the rules for −1 and 2, and the square-swap technique, a question on a big clock shrinks to questions on small ones, much as the gcd algorithm shrinks a pair. Is 219 a square on the clock of 383? Both 383 and 3 are prime.</p>
+  <pre class="lines" data-k="ember" data-label="this step: 219 on the clock of 383">
+219 = 3 \cdot 73:\ \ \left(\tfrac{219}{383}\right) = \left(\tfrac{3}{383}\right)\left(\tfrac{73}{383}\right) @@ the mark multiplies (43f2)
+\left(\tfrac{3}{383}\right) = -\left(\tfrac{383}{3}\right) = -\left(\tfrac{2}{3}\right) = -(-1) = 1 @@ both are 3 more than a multiple of 4; 383 = 3 · 127 + 2; 3 ≡ 3 (mod 8)
+\left(\tfrac{73}{383}\right) = \left(\tfrac{383}{73}\right) = \left(\tfrac{18}{73}\right) @@ 73 ≡ 1 (mod 4); 383 = 5 · 73 + 18
+\left(\tfrac{18}{73}\right) = \left(\tfrac{2}{73}\right)\left(\tfrac{3}{73}\right)^2 = 1 @@ 73 ≡ 1 (mod 8); a square of ±1 is 1
+\htmlClass{new}{\left(\tfrac{219}{383}\right) = 1:\ 219 \text{ is a square on the clock of } 383} \quad \blacksquare @@ the two factors
+  </pre>
+  <p data-pid="1f0c1c">The proof says a square root exists and does not find it. Searching 191 candidates would. 43f.7.1 asks for a quicker road on clocks like 383, which are 3 more than a multiple of 4. And squares on the clock of 8 settle an old question of rung 7: the squares there are 0, 1 and 4, so three squares add to 0, 1, 2, 3, 4, 5 or 6 on the clock of 8, never 7. No number 8k + 7 is a sum of three squares. That every other number not of the form 4ʲ(8k + 7) is one is stated here, and its proof is much higher up the ladder.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · deciding · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">43f5.1</span><span class="ph understand">understand</span>How is 219 on the clock of 383 decided, and which step spends the square-swap technique with a minus sign? <br>Why is no number 8k + 7 a sum of three squares?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="43f6">
+  <h2 class="sthead"><span class="stno">43f6</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-[\mathbb Q(\sqrt2, \sqrt3) : \mathbb Q] = 2 + 2\,? @@ degrees multiply along a tower: 2 · 2 = 4
-x^4 - 4 \text{ has } \sqrt2 \text{ as a zero, so } [\mathbb Q(\sqrt2) : \mathbb Q] = 4\,? @@ the least polynomial is x² − 2; x⁴ − 4 can be split
-[\mathbb Q(\sqrt[3]2) : \mathbb Q] = 3 \text{ because } \sqrt[3]2 \text{ is no fraction}\,? @@ being no fraction gives degree above 1; degree 3 needs x³ − 2 unsplittable
-\mathbb Q(\sqrt2) \text{ and } \mathbb Q(\sqrt3) \text{ both have degree 2, so they are the same field}\,? @@ √3 is not in ℚ(√2)
+\left(\tfrac{3}{7}\right) = \left(\tfrac{7}{3}\right)\,? @@ 3 and 7 are both 3 more than a multiple of 4: the signs differ, and 7 ≡ 1 is a square on the clock of 3 while 3 is not one on the clock of 7
+\left(\tfrac{a}{p}\right) = a/p\,? @@ the mark is ±1 or 0, never a fraction
+\left(\tfrac{15}{7}\right) = \left(\tfrac{7}{15}\right) \cdot (\pm1)\,? @@ the square-swap technique is for two odd primes; 15 = 3 · 5: split first
+-1 \text{ is a square on every prime clock}\,? @@ only when p ≡ 1 (mod 4): on the clock of 7, the squares are 1, 2 and 4
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43f5.1</span><span class="ph understand">understand</span>Why is [ℚ(√2, √3) : ℚ] not 2 + 2? <br>Why does √2 being a zero of x⁴ − 4 not make [ℚ(√2) : ℚ] equal to 4?</li>
+      <li><span class="qid">43f6.1</span><span class="ph understand">understand</span>Why is (3 ∕ 7) not (7 ∕ 3)? <br>Why can the square-swap technique not be used on 15 and 7 as they stand?</li>
     </ol>
   </section>
 </section>
@@ -160,22 +181,22 @@ x^4 - 4 \text{ has } \sqrt2 \text{ as a zero, so } [\mathbb Q(\sqrt2) : \mathbb 
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">43f.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\mathbb Q(\sqrt2, \sqrt[3]2)"></span></span>Find the degree of this field over ℚ, with a basis. <br>Build the least polynomial of √2 + ∛2 over ℚ, and check that its degree is what the degree-divides technique allows.</div>
-  <div class="chq"><span class="chid">43f.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\zeta = e^{2\pi i/5}"></span></span>Find [ℚ(ζ) : ℚ] from the least polynomial of ζ (43d.6.2 has the tool). <br>Is cos(2π/5) in ℚ(ζ)? Find its degree over ℚ, and what that says about building a regular pentagon from square roots.</div>
-  <div class="chq"><span class="chid">43f.6.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">[L : K] = 2</span></span>The degree-divides technique says the degree of a member divides the degree of the field. Turn it round for a field L of degree 2 over ℚ: must L be ℚ(√d) for some whole d? <br>Take any member β of L not in ℚ and complete the square on its least polynomial.</div>
-  <div class="chq"><span class="chid">43f.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">9·cb8: pairs of reals, multiplied by a rule of their own, are a field</span></span>9·cb8 made pairs of reals into a field with a multiplying rule of its own. Do the same for pairs of fractions. <br>Write the rule that makes (a, b) behave as a + b√2. Is the field of pairs the same as ℚ(√2), or only a copy, and does the question even have an answer? Which rule for (a, b) gives a field for d = 3 and fails for d = 4?</div>
+  <div class="chq"><span class="chid">43f.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="p \equiv 3 \pmod 4,\ \ \left(\tfrac ap\right) = 1"></span></span>Build a square root with no search: prove that x = a^((p + 1)/4) has x² ≡ a on the clock of p. <br>Find a square root of 219 on the clock of 383 this way, by the fast powers of 43h when you reach it, or by patience now.</div>
+  <div class="chq"><span class="chid">43f.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="p \equiv 1 \pmod 4"></span></span>Prove that such a prime is a sum of two squares. Hint held back: take x with x² ≡ −1, look at the numbers u + xv for 0 ≤ u, v ≤ ⌊√p⌋, and use pigeonhole. <br>Write 13, 29 and 97 that way. Why can no prime 3 more than a multiple of 4 be a sum of two squares?</div>
+  <div class="chq"><span class="chid">43f.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="a \text{ a square on the clock of every prime } p \nmid a"></span></span>Must a be a perfect square? Try a = 2 and a = −1 with the rules of the page, and then a = 3 with the square-swap technique: find a prime on whose clock 3 is not a square. <br>For a general a that is not a perfect square, what would you need to know about primes in a progression to finish?</div>
+  <div class="chq"><span class="chid">43f.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">a proof of 1785 that assumed a prime in each of certain progressions</span></span>A proof of the square-swap technique was published that assumed, without proof, that a progression like 4k + 1 or 8k + 3 holds a prime with a given behaviour on another clock. The young man who found the first full proof called it no proof. <br>Is a proof that rests on a true but unproved statement a proof? What should it be called while the statement waits, and does it become one when the statement is proved, as it was in 1837 (43g)?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r43e.html">← 43e · where factoring fails</a><a href="r43g.html">43g · finite fields →</a></nav>
+<nav class="nextrung"><a href="r43e.html">← 43e · a clock hand that reaches every hour</a><a href="r43g.html">43g · primes are endless and thin →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A field L holding K is an extension L/K, and [L : K] is its degree; extensions of finite degree are finite extensions. A member with a least polynomial is algebraic over K, and the least polynomial is the minimal polynomial. The root-field technique says K(α) ≅ K[x]/(m_α); the tower technique is the tower law, and the degree-divides technique is often stated as: the degree of an algebraic element divides the degree of any finite extension containing it.</p>
+  <p>A square unit modulo p is a quadratic residue, a non-square a quadratic non-residue. The mark (a ∕ p) is the Legendre symbol. The square-test technique is Euler’s criterion; the rules for −1 and 2 are the first and second supplementary laws. The high-count technique is Gauss’s lemma, and its counting form with T is Eisenstein’s. The square-swap technique is the law of quadratic reciprocity, and the box proof is Eisenstein’s (1844). The whole part ⌊t⌋ is the floor function. Fermat’s theorem on sums of two squares is 43f.7.2. Numbers 4ʲ(8k + 7) are exactly those that are not sums of three squares: Legendre’s three-square theorem.</p>
   <h3>Who said it first</h3>
-  <p>Richard Dedekind read fields as spaces over smaller fields in his supplements to Dirichlet’s lectures (1871 to 1894), and the word degree for [L : K] is his. Leopold Kronecker built K(α) as the polynomials divided by m in 1882. Pierre Wantzel proved in 1837 that doubling the cube and trisecting an angle cannot be done with straightedge and compass, by an argument close to the degree-divides technique. Ernst Steinitz wrote the theory of fields as a whole in 1910.</p>
+  <p>Leonhard Euler guessed reciprocity from tables in the 1740s to 1783. Adrien-Marie Legendre stated it in 1785 and published a proof in 1798 that assumed what Dirichlet proved in 1837, primes in progressions; Gauss criticised it. Carl Friedrich Gauss found the first full proof on 8 April 1796, aged eighteen, published it in 1801, and gave eight proofs in all. Gotthold Eisenstein’s lattice proof is from 1844. The three-square theorem is Legendre’s (1798), completed by Gauss (1801). Fermat claimed the two-squares theorem in 1640; Euler proved it in 1749.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“√2 + √3 is a sum of two members of degree 2, so it has degree 2 or 4, and since it is no fraction, it has degree 2.” Not allowed: being no fraction rules out degree 1 only. The least polynomial of √2 + √3 is x⁴ − 10x² + 1, of degree 4.</p>
+  <p>“3 is a square on the clock of 13, since 4² = 16 ≡ 3. So by the square-swap technique 13 is a square on the clock of 3, so 13 is a square on every clock.” Not allowed: the technique ties two clocks, 3 and 13, and says nothing about a third. 13 ≡ 1 is a square on the clock of 3, and 13 is not a square on the clock of 5, where the squares are 1 and 4 and 13 ≡ 3.</p>
 </section>
 
 </div>
@@ -190,25 +211,30 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'arrows',t:R`a \cdot 1 + b \cdot i`,n:`ℂ over ℝ.`},
-  {k:'ember',kl:'count',t:R`[\mathbb C : \mathbb R] = 2`,n:`A basis of two.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{[\mathbb R : \mathbb Q] \text{ endless}}`,n:`ℝ cannot be listed.`}
-],{title:'The slides · degree · ← → keys work'});
+  {k:'ember',kl:'pairs',t:R`[x]^2 = [y]^2 \iff [x] = \pm[y]`,n:`A field.`},
+  {k:'ember',kl:'half',t:R`(p - 1)/2 \text{ squares}`,n:`One per pair.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\left(\tfrac{3}{11}\right) = 1,\ \left(\tfrac{7}{11}\right) = -1}`,n:`The square mark.`}
+],{title:'The slides · squares · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'lost',t:R`(m) = \{p : p(\alpha) = 0\}`,n:`One maker.`},
-  {k:'ember',kl:'a field',t:R`K[x]/(m)`,n:`m unsplittable.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{[K(\alpha) : K] = \deg m}`,n:`Basis 1, α, …`}
-],{title:'The slides · one root · ← → keys work'});
+  {k:'ember',kl:'half power',t:R`a^{(p-1)/2} \equiv \pm 1`,n:`A root of x² = 1.`},
+  {k:'ember',kl:'full hand',t:R`[g]^{(p-1)/2} = -[1]`,n:`Order p − 1.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\left(\tfrac{-1}{p}\right) = (-1)^{(p-1)/2}}`,n:`p ≡ 1 (mod 4).`}
+],{title:'The slides · the test · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'two bases',t:R`u_i,\ \ v_j`,n:`Over K and over L.`},
-  {k:'ember',kl:'products',t:R`u_i v_j`,n:`A basis over K.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{[M : K] = [M : L][L : K]}`,n:`Degrees multiply.`}
-],{title:'The slides · towers · ← → keys work'});
+  {k:'ember',kl:'fold',t:R`[ka] = \pm[r_k]`,n:`r from 1 to h.`},
+  {k:'ember',kl:'product',t:R`[a]^h[h!] = (-1)^\mu[h!]`,n:`Folds are 1 to h.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\left(\tfrac{a}{p}\right) = (-1)^\mu}`,n:`Count the high ones.`}
+],{title:'The slides · sign count · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'the tower',t:R`K \subseteq K(\alpha) \subseteq L`,n:`Two steps.`},
-  {k:'ember',kl:'the count',t:R`[K(\alpha) : K] \mid [L : K]`,n:`Degrees divide.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\sqrt[3]2 \text{ needs a } 3}`,n:`Not square roots alone.`}
-],{title:'The slides · divides · ← → keys work'});
+  {k:'ember',kl:'box',t:R`h_p \times h_q \text{ points}`,n:`Split by a line.`},
+  {k:'ember',kl:'counts',t:R`T(q, p) + T(p, q) = h_p h_q`,n:`Below and above.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\left(\tfrac pq\right)\left(\tfrac qp\right) = (-1)^{h_p h_q}}`,n:`Two clocks, one question.`}
+],{title:'The slides · square swap · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'multiply',t:R`\left(\tfrac{219}{383}\right) = \left(\tfrac{3}{383}\right)\left(\tfrac{73}{383}\right)`,n:`Split.`},
+  {k:'ember',kl:'swap',t:R`\left(\tfrac{73}{383}\right) = \left(\tfrac{18}{73}\right)`,n:`Smaller clock.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{219 \text{ is a square on } \mathbb Z/383}`,n:`Never searched.`}
+],{title:'The slides · deciding · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

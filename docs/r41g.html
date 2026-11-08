@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Best Corner</title>
+<title>Smaller Machines</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,106 +48,93 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r41f.html">← 41f flows and cuts</a><a href="r41h.html">next: 41h games →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r41f.html">← 41f programs that print themselves</a><a href="r41h.html">next: 41h how long and how much room →</a></p>
   <div class="tags"><span class="tag proof">41g · proof</span></div>
-  <h1>The Best Corner</h1>
-  <p data-pid="98b466">A small glass works has three shops. One frames doors, one frames windows, and the third cuts and fits the glass for both. Each shop has so many hours a week. A batch of doors earns so much, a batch of windows so much more, and each uses hours in two of the shops. How many of each should it make? Rung 18 answered a question of this shape with two unknowns on a sheet of paper: the best plan sits at a corner of the region the limits cut out. A real plan has hundreds of unknowns, and the sheet becomes a space of that many directions; the corners are still where to look, and this step proves it. Then it finds that every such question has a twin. Ask what each shop’s hour is worth, the least prices that would make the shops’ hours at least as valuable as anything they can make. Every set of such prices bounds every plan from above. And the best plan and the best prices meet at exactly the same number. The proof of that runs through a recipe for taking one unknown out of a list of limits, and it ends with a single fact: a list of limits has no answer exactly when a combination of them says that zero is less than a negative number.</p>
-  <p class="gesture" data-pid="979791">Maximise a sum of the unknowns, each times a price, under limits that are sums at most a bound, with every unknown at least 0. If the region has a corner and the sum is bounded, a corner is best. Prices for the limits that cover every unknown’s worth bound every plan. A list of limits has no answer exactly when a combination with weights at least 0 reads 0 at most a negative number. So the best plan and the best prices are equal.</p>
+  <h1>Smaller Machines</h1>
+  <p data-pid="549ca1">The tape machine can do everything a recipe can, and so it inherits every refusal: no machine decides what tape machines do. Take some of its power away, and the refusals go away too. A machine that may not write, and may only read from left to right, is a ticket reader or a lock on a door: it can check a pattern, and every question about it can be answered. Give it a pile of marks it can add to and take from the top, and it can check brackets nested without end. Give it a tape no longer than its input, and it can check more again. Each kind of machine answers to a kind of grammar, and the kinds sit one inside the next, a ladder of machines. This step proves the walls between the first rungs of that ladder with one shape of argument, used twice: a long enough string must pass through some state, or some placeholder, twice, and the loop between can be run again as often as you like. Then it shows that every machine below the tape machine stops, so the refusals of this rung begin exactly at the top.</p>
+  <p class="gesture" data-pid="94d404">A machine that only reads checks a pattern, and patterns join by and, or and not. In a long string it repeats a state, so the loop can be pumped. A stack machine’s grammar repeats a placeholder, so two loops can be pumped together. Every machine with bounded room stops or is caught looping, so all the families below the tape machine are decided.</p>
 </header>
 
 <section class="class step" data-step="41g1">
-  <h2 class="sthead"><span class="stno">41g1</span>Plans and Corners</h2>
-  <p data-pid="b5b6e2">A <i>plan</i> is a list x = (x₁, …, xₙ) of numbers. A <i>limit</i> reads a₁x₁ + ⋯ + aₙxₙ ≤ b. A <i>program</i> asks for the largest value of c · x (27i) over the plans with Ax ≤ b and x ≥ 0, where A is an m × n grid (27d), b a list of m bounds, and ≤ between lists means each entry. The plans that obey every limit are the <i>allowed plans</i>. The accepted name of the whole question is a linear program.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the glass works">
-\text{doors } x,\ \text{windows } y;\ \text{earn } 3x + 5y @@ in thousands of dollars per batch
-x \le 4,\ \ 2y \le 12,\ \ 3x + 2y \le 18,\ \ x, y \ge 0 @@ hours of the door shop, the window shop, the glass shop
-\text{corners } (0,0), (4,0), (4,3), (2,6), (0,6) \text{ give } 0, 12, 27, 36, 30 @@ 18g’s best-corner technique, in the plane
-\htmlClass{new}{(2, 6):\ 36} \quad \blacksquare @@ the best corner
+  <h2 class="sthead"><span class="stno">41g1</span>A Machine That Only Reads</h2>
+  <p data-pid="808dde">12·comp built a machine with no memory: finitely many states, a start, some accepting states, and a table that moves from state to state on each letter. It is a tape machine that never writes and always steps right, and stops at the first blank. A set of strings it checks is called a <i>pattern</i>; its accepted name is a regular language. The tables of 1e work on patterns.</p>
+  <p data-pid="6cfc62">Joined-machines technique: <b>if machines with no memory check A and B, then machines with no memory check A and B, A or B, and the strings not in A.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the joined-machines technique">
+M_A \text{ with }\allowbreak \text{states } p\text{, } M_B \text{ with }\allowbreak \text{states } q @@ given
+\text{new }\allowbreak \text{states: }\allowbreak \text{pairs } (p, q)\text{; }\allowbreak \text{on }\allowbreak \text{a }\allowbreak \text{letter, }\allowbreak \text{move }\allowbreak \text{each }\allowbreak \text{half }\allowbreak \text{by }\allowbreak \text{its }\allowbreak \text{own }\allowbreak \text{table} @@ the two run side by side, as 41a’s turn-taking did, in one step
+\text{accept } (p, q) \text{ when }\allowbreak \text{both }\allowbreak \text{accept, }\allowbreak \text{or }\allowbreak \text{when }\allowbreak \text{either }\allowbreak \text{does} @@ 1e’s and, 1e’s or
+\text{for not } A\text{: }\allowbreak \text{swap }\allowbreak \text{the }\allowbreak \text{accepting }\allowbreak \text{and }\allowbreak \text{the }\allowbreak \text{other }\allowbreak \text{states }\allowbreak \text{of } M_A @@ every string ends in exactly one state (the one-next technique)
+\htmlClass{new}{\text{and, }}\allowbreak \htmlClass{new}{ \text{or }}\allowbreak \htmlClass{new}{ \text{and }}\allowbreak \htmlClass{new}{ \text{not }}\allowbreak \htmlClass{new}{ \text{of }}\allowbreak \htmlClass{new}{ \text{patterns }}\allowbreak \htmlClass{new}{ \text{are }}\allowbreak \htmlClass{new}{ \text{patterns}} \quad \blacksquare @@ the pair machine has p times q states
   </pre>
-  <p data-pid="cce622">In n unknowns, a <i>corner</i> is an allowed plan at which some n of the m + n limits, counting each xⱼ ≥ 0, hold with equality and have rows that make a free list (27b). Those n equations have exactly one answer, so there are at most as many corners as ways to choose n of the m + n limits.</p>
-  <p data-pid="145815">Tight-corner technique: <b>if the allowed plans have a corner and c · x is bounded above on them, some corner gives the largest value.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the tight-corner technique">
-x \text{ allowed, not a corner; its tight rows build less than all } n \text{ directions} @@ the rows of the limits holding with equality there
-d \ne 0 \text{ at right angles to every tight row, with } c \cdot d \ge 0 @@ the kernel is not 0 (27c); take −d if needed
-x + t\,d \text{ stays allowed for small } t \ge 0 \text{; follow it until a new limit is tight} @@ tight limits stay tight; loose ones stay loose a while
-\text{if none ever tightens: } c \cdot d > 0 \text{ is unbounded, and } c \cdot d = 0 \text{ go along } -d @@ the whole line cannot fit: x ≥ 0 stops one side unless d = 0
-x' \text{ allowed, } c \cdot x' \ge c \cdot x \text{, with one more tight row, free from the old ones} @@ d is at right angles to the old rows and not to the new one
-\htmlClass{new}{\text{after at most } n \text{ moves a corner at least as good; the best of the finitely many corners is best}} \quad \blacksquare @@ each move adds a free row
-  </pre>
-  <p data-pid="63a51f">18g’s best-corner technique is the case n = 2, on a bounded region. The difference here is that the region need not be bounded, only the value, and the number of directions is anything.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · corners · ← → keys work</div></section>
+  <p data-pid="76c47a">So whether a pattern machine accepts any string at all is decided: look for an accepting state the start can reach, a search through finitely many states. Whether two pattern machines check the same set is decided too: the set where they differ is a pattern, by the technique, and it is empty or not. Every question 41e found undecidable for tape machines is decided for these.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · patterns · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">41g1.1</span><span class="ph understand">understand</span>What is a corner of the allowed plans in n unknowns? <br>What does the tight-corner technique say, and why does each move of its proof add a row that is free from the old ones?</li>
+      <li><span class="qid">41g1.1</span><span class="ph understand">understand</span>What is a pattern, and which tape machines are machines with no memory? <br>What does the joined-machines technique say, and why is “do these two machines check the same set?” decided for them?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="41g2">
-  <h2 class="sthead"><span class="stno">41g2</span>Prices</h2>
-  <p data-pid="791640">Put a price yᵢ ≥ 0 on each limit: what an hour of shop i is worth. A plan’s product uses up hours, and column j of A says how many of each shop’s hours unit j uses. The prices <i>cover</i> unit j when the hours it uses are worth at least what it earns. With Aᵀ for the grid read with rows as columns, the <i>twin program</i> asks for the least value of b · y over the y with Aᵀy ≥ c and y ≥ 0.</p>
-  <p data-pid="a1b323">Price-bound technique: <b>if x is an allowed plan and y covering prices, then c · x ≤ b · y.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the price-bound technique">
-c \cdot x \le (A^{\mathsf T} y) \cdot x @@ c ≤ Aᵀy entry by entry, and x ≥ 0
-= y \cdot (A x) @@ the same sum of aᵢⱼ yᵢ xⱼ, taken by rows instead of columns
-\htmlClass{new}{\le y \cdot b} \quad \blacksquare @@ Ax ≤ b entry by entry, and y ≥ 0
+  <h2 class="sthead"><span class="stno">41g2</span>Pumping a Loop</h2>
+  <p data-pid="b45425">Pumping technique: <b>if a machine with no memory with q states checks L, then every member w of L with at least q letters can be cut as w = xyz, with y not empty and xy at most q letters long, so that xyⁱz is in L for every i ≥ 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the pumping technique">
+w = w_1 w_2 \cdots w_m \in L,\ \allowbreak \ m \ge q @@ given
+\text{states } s_0, s_1, \dots, s_q \text{ after } 0, 1, \dots, q \text{ letters} @@ q + 1 states named, q states in all
+s_j = s_k \text{ for }\allowbreak \text{some } j \lt k \le q @@ pigeonhole (8·cb5)
+x = w_1 \cdots w_j,\ \allowbreak \ y = w_{j+1} \cdots w_k,\ \allowbreak \ z = \text{the rest} @@ y takes the machine from s_j back to s_j
+\htmlClass{new}{\text{reading } xy^iz \text{ ends }}\allowbreak \htmlClass{new}{ \text{where } xyz \text{ ends: }}\allowbreak \htmlClass{new}{ \text{in } L} \quad \blacksquare @@ the loop is run i times, then z as before
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: prices for the glass works">
-p + 3r \ge 3,\ \ 2q + 2r \ge 5,\ \ p, q, r \ge 0 @@ doors use 1 hour of the door shop and 3 of glass; windows 2 of the window shop and 2 of glass
-y = (0, \tfrac32, 1):\ \ 4 \cdot 0 + 12 \cdot \tfrac32 + 18 \cdot 1 = 36 @@ covering: 0 + 3 = 3, 3 + 2 = 5
-\htmlClass{new}{\text{every plan earns at most } 36\text{, and } (2, 6) \text{ earns } 36} \quad \blacksquare @@ the price-bound technique: both are best
-  </pre>
-  <p data-pid="aebaaf">The door shop’s price is 0: at the best plan its 4 hours are not all used, and an hour more of it would earn nothing. Shops with slack have price 0, and units with a positive amount are covered exactly. That pattern holds at every pair of best answers; 41g.6.3 asks for its proof.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · prices · ← → keys work</div></section>
+  <p data-pid="e4e728">The pumping technique says what every pattern does. To show a set is no pattern, suppose a machine with q states and find a member it cannot pump. The squares: L = strings aⁿ with n a square. Take w to be q² a’s. Any allowed cut has y made of k a’s, with 1 ≤ k ≤ q. Then xy²z has q² + k letters, and q² &lt; q² + k &lt; (q + 1)², so it is not in L.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · pumping · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41g2.1</span><span class="ph understand">understand</span>What are covering prices, and what is the twin program? <br>What does the price-bound technique say, and which two facts about signs does its proof need?</li>
+      <li><span class="qid">41g2.1</span><span class="ph understand">understand</span>What does the pumping technique say, and where does its proof use pigeonhole? <br>Why does the string of q² a’s show that the strings of square length are no pattern?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="41g3">
-  <h2 class="sthead"><span class="stno">41g3</span>Taking One Unknown Out</h2>
-  <p data-pid="80b546">A list of limits Σⱼ aᵢⱼxⱼ ≤ bᵢ, i = 1 to m, may have no answer at all. To settle it, sort the limits by the sign of xₙ’s coefficient. A positive one bounds xₙ above, a negative one below, and a zero one leaves it free.</p>
-  <p data-pid="bb3a69">One-out technique: <b>the limits have an answer exactly when the list made of the zero ones, together with one limit for each pair of an upper and a lower one, has an answer in x₁, …, xₙ₋₁; each new limit is a sum of two old ones with weights at least 0, made so that xₙ drops out.</b> Given an answer of the new list, every lower bound on xₙ is then at most every upper bound, so an xₙ between the largest lower and the smallest upper obeys them all.</p>
-  <p data-pid="797359">No-answer technique: <b>Ax ≤ b has no answer exactly when some y ≥ 0 has yᵀA = 0 and y · b &lt; 0.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the no-answer technique">
-y \ge 0,\ y^{\mathsf T}A = 0,\ y \cdot b < 0,\ \text{and } Ax \le b @@ suppose both
-0 = y^{\mathsf T}A x \le y \cdot b < 0 @@ weights at least 0 keep ≤
-\bot @@ so no answer
-\text{other way: take out } x_n, x_{n-1}, \dots, x_1 \text{ by the one-out technique} @@ induction on n (4c)
-\text{each limit at the end reads } 0 \le b' \text{ and is } y^{\mathsf T}(Ax \le b) \text{ for some } y \ge 0 @@ weights at least 0, multiplied and added
-\htmlClass{new}{\text{no answer} \Rightarrow \text{some final limit has } b' < 0:\ \text{its } y \text{ is the certificate}} \quad \blacksquare @@ the one-out technique, run back up
+  <h2 class="sthead"><span class="stno">41g3</span>A Stack, and Two Loops at Once</h2>
+  <p data-pid="edd82b">A <i>stack machine</i> is a machine with no memory that also keeps a stack: a pile of marks it may add to, or take from, at the top only. It checks the balanced brackets of 12·comp: push at each opening bracket, pop at each closing one, fail if the stack is empty when a pop is needed, and accept when it is empty at the end. Its sets are exactly the sets of strings made by 12·comp’s second family, the grammars with one placeholder on the left of each rule; that is named here and its proof is in the cellar.</p>
+  <p data-pid="63c631">Two-loop technique: <b>if a grammar of the second family has p placeholders, and no right side is longer than b ≥ 2, then every string w that the grammar makes and that is longer than bᵖ can be cut as w = uvxyz, with v and y not both empty, so that uvⁱxyⁱz is made by it for every i ≥ 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-loop technique">
+\text{the }\allowbreak \text{building }\allowbreak \text{of } w \text{ is }\allowbreak \text{a }\allowbreak \text{tree: }\allowbreak \text{each }\allowbreak \text{placeholder }\allowbreak \text{above }\allowbreak \text{the }\allowbreak \text{string }\allowbreak \text{its }\allowbreak \text{rule }\allowbreak \text{wrote} @@ 4d’s recursion, read as a tree, as 38n read proofs
+\text{a }\allowbreak \text{tree }\allowbreak \text{of }\allowbreak \text{height } h \text{ has }\allowbreak \text{at }\allowbreak \text{most } b^h \text{ letters }\allowbreak \text{at }\allowbreak \text{its }\allowbreak \text{foot} @@ each placeholder writes at most b
+|w| \gt b^p \Rightarrow \text{some }\allowbreak \text{path }\allowbreak \text{from }\allowbreak \text{the }\allowbreak \text{top }\allowbreak \text{has }\allowbreak \text{more }\allowbreak \text{than } p \text{ placeholders} @@ the line above, turned round
+\text{some }\allowbreak \text{placeholder } A \text{ appears }\allowbreak \text{twice }\allowbreak \text{on }\allowbreak \text{that }\allowbreak \text{path} @@ pigeonhole (8·cb5)
+\text{the }\allowbreak \text{upper } A \text{ writes } vAy\text{, }\allowbreak \text{the }\allowbreak \text{lower }\allowbreak \text{writes } x @@ cut the tree at the two A’s
+\htmlClass{new}{\text{replace }}\allowbreak \htmlClass{new}{ \text{the }}\allowbreak \htmlClass{new}{ \text{lower }}\allowbreak \htmlClass{new}{ \text{by }}\allowbreak \htmlClass{new}{ \text{the }}\allowbreak \htmlClass{new}{ \text{upper, } i \text{ times: } uv^ixy^iz} \quad \blacksquare @@ the same rules, used again; i = 0 puts x in the upper A’s place
   </pre>
-  <p data-pid="53fd80">So a “no” always comes with a short reason anyone can check, as the marriage technique’s did. Taking unknowns out by the one-out technique is honest and slow: the number of limits can square at every step.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · no answer · ← → keys work</div></section>
+  <p data-pid="d08477">So aⁿbⁿcⁿ is in no grammar of the second family. For a long enough w = aⁿbⁿcⁿ, v and y together lie within two of the three blocks or hold a mix of letters; pumped, either the counts of a, b and c stop being equal, or the letters come out of order. 12·comp wrote a grammar of the third family for it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · two loops · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41g3.1</span><span class="ph understand">understand</span>What does the one-out technique do to a list of limits? <br>What does the no-answer technique say, and why is its certificate easy to check?</li>
+      <li><span class="qid">41g3.1</span><span class="ph understand">understand</span>What is a stack machine, and how does it check balanced brackets? <br>What does the two-loop technique say, and why must some placeholder appear twice on a path?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="41g4">
-  <h2 class="sthead"><span class="stno">41g4</span>Equal Prices</h2>
-  <p data-pid="456448">Equal-prices technique: <b>if the program has an allowed plan and its twin has covering prices, both have best answers, and the best plan earns exactly the least price total.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the equal-prices technique">
-\text{seek } x, y:\ Ax \le b,\ -x \le 0,\ -A^{\mathsf T}y \le -c,\ -y \le 0,\ -c \cdot x + b \cdot y \le 0 @@ an answer is a plan and prices with c · x ≥ b · y
-\text{an answer gives } c \cdot x = b \cdot y \text{, both best} @@ the price-bound technique gives ≤ too
-\text{no answer} \Rightarrow u, p, w, q, \lambda \ge 0:\ A^{\mathsf T}u \ge \lambda c,\ A w \le \lambda b,\ b \cdot u < c \cdot w @@ the no-answer technique, the weights read off by unknown
-\lambda > 0:\ u/\lambda \text{ covers},\ w/\lambda \text{ allowed},\ c \cdot w \le b \cdot u @@ the price-bound technique; against the last line
-\lambda = 0:\ b \cdot u \ge (A x_0) \cdot u \ge 0 \ge (A^{\mathsf T} y_0) \cdot w \ge c \cdot w @@ x₀ allowed and y₀ covering, given; against b · u &lt; c · w
-\htmlClass{new}{\text{an answer exists: } \max c \cdot x = \min b \cdot y} \quad \blacksquare @@ both cases end in ⊥
+  <h2 class="sthead"><span class="stno">41g4</span>The Ladder of Machines</h2>
+  <p data-pid="7bf72d">Each family of 12·comp has its machine: no memory for the first, a stack for the second, a tape no longer than the input for the third, a tape machine for the fourth. The fourth family’s sets are exactly the listed sets. The third’s are below the decided sets.</p>
+  <p data-pid="4dfaa4">Bounded-room technique: <b>if a tape machine never uses more than r cells, then whether it stops is decided: it stops within q · r · mʳ steps, or never, where q is its count of states and m its count of marks.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the bounded-room technique">
+\text{a }\allowbreak \text{configuration }\allowbreak \text{is }\allowbreak \text{a }\allowbreak \text{state, }\allowbreak \text{a }\allowbreak \text{head }\allowbreak \text{place, }\allowbreak \text{and }\allowbreak \text{the } r \text{ cells} @@ 41a1
+\text{at most } q \cdot r \cdot m^r \text{ configurations} @@ stages-multiply (4k)
+\text{a }\allowbreak \text{run }\allowbreak \text{longer }\allowbreak \text{than }\allowbreak \text{that }\allowbreak \text{repeats }\allowbreak \text{a }\allowbreak \text{configuration} @@ pigeonhole
+\text{from }\allowbreak \text{a }\allowbreak \text{repeated }\allowbreak \text{configuration }\allowbreak \text{the }\allowbreak \text{run }\allowbreak \text{repeats }\allowbreak \text{for }\allowbreak \text{ever} @@ the back-again technique (3·comp), with the one-next technique
+\htmlClass{new}{\text{run } q \cdot r \cdot m^r \text{ steps: }}\allowbreak \htmlClass{new}{ \text{stopped, }}\allowbreak \htmlClass{new}{ \text{or }}\allowbreak \htmlClass{new}{ \text{never }}\allowbreak \htmlClass{new}{ \text{will}} \quad \blacksquare @@ a decider
   </pre>
-  <p data-pid="3752ed">Two questions, one about making and one about pricing, have one answer. Rung 28’s lines-up technique priced a single smooth limit by the stretch λ of its gradient; here every limit gets a price, and the limits may have corners. 41n finds both answers at once by hand.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · equal · ← → keys work</div></section>
+  <p data-pid="be634f">A stack machine is not bounded in room, but its stack can be shown never to need to grow past a bound fixed by the grammar for a given input, so it too is decided. So every family below the fourth is decided, and the walls are proper: aⁿbⁿ is in the second family and no pattern (12·comp’s wall, or the pumping technique), aⁿbⁿcⁿ in the third and not the second, and the stopping set in the fourth and not decided. The refusals of 41d live only at the top rung of this ladder.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · bounded · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41g4.1</span><span class="ph understand">understand</span>What does the equal-prices technique say? <br>Which list of limits does its proof show has an answer, and why does that answer give equal values?</li>
+      <li><span class="qid">41g4.1</span><span class="ph understand">understand</span>What does the bounded-room technique say, and why does a run longer than q · r · mʳ steps never stop? <br>Which example separates each family from the one below it?</li>
     </ol>
   </section>
 </section>
@@ -155,15 +142,15 @@ y \ge 0,\ y^{\mathsf T}A = 0,\ y \cdot b < 0,\ \text{and } Ax \le b @@ suppose b
 <section class="class step" data-step="41g5">
   <h2 class="sthead"><span class="stno">41g5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{the best plan is always a corner}\,? @@ some corner is best; a whole edge between two best corners may be best too
-\text{the allowed plans are bounded, since the value is}\,? @@ the region can run off for ever along a direction where c · d ≤ 0
-\text{covering prices total } 40 \text{, so some plan earns } 40\,? @@ prices bound plans from above; the least total equals the best plan, not every total
-\text{a plan obeying } Ax \le b \text{ is allowed}\,? @@ it must also have x ≥ 0
+L \text{ can }\allowbreak \text{be }\allowbreak \text{pumped, }\allowbreak \text{so } L \text{ is }\allowbreak \text{a }\allowbreak \text{pattern}\,? @@ the technique runs one way; some sets that are no pattern pump too (41g.6.3)
+\text{in } w = xyz\text{, choose } y \text{ to }\allowbreak \text{suit }\allowbreak \text{the }\allowbreak \text{proof}\,? @@ the machine chooses the cut; the proof must defeat every cut with xy at most q long
+\text{a }\allowbreak \text{laptop }\allowbreak \text{has }\allowbreak \text{bounded }\allowbreak \text{room, }\allowbreak \text{so }\allowbreak \text{whether }\allowbreak \text{its }\allowbreak \text{programs }\allowbreak \text{stop }\allowbreak \text{is }\allowbreak \text{decided }\allowbreak \text{in }\allowbreak \text{practice}\,? @@ decided by a run of q · r · mʳ steps, with r in the billions: no practice reaches it
+\text{a }\allowbreak \text{stack }\allowbreak \text{machine }\allowbreak \text{with }\allowbreak \text{two }\allowbreak \text{stacks }\allowbreak \text{is }\allowbreak \text{still }\allowbreak \text{below }\allowbreak \text{the }\allowbreak \text{tape }\allowbreak \text{machine}\,? @@ two stacks are a tape, one on each side of the head
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41g5.1</span><span class="ph understand">understand</span>Why is the best plan not always only a corner? <br>Why does a total of covering prices not give a plan that earns it?</li>
+      <li><span class="qid">41g5.1</span><span class="ph understand">understand</span>Why may the proof that a set is no pattern not choose the cut xyz? <br>Why is a machine with two stacks as strong as a tape machine?</li>
     </ol>
   </section>
 </section>
@@ -172,22 +159,22 @@ y \ge 0,\ y^{\mathsf T}A = 0,\ y \cdot b < 0,\ \text{and } Ax \le b @@ suppose b
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">41g.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\max\ 2x + 3y:\ \ x + y \le 4,\ \ x + 3y \le 6,\ \ x, y \ge 0"></span></span>Solve the program at its corners, write its twin, and find covering prices with the same total. <br>Both limits are tight at the best corner: what would a price of 0 on one of them have meant?</div>
-  <div class="chq"><span class="chid">41g.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\max\ x:\ \ x - y \le 1,\ \ -x + y \le -2,\ \ x, y \ge 0"></span></span>Show that this program has no allowed plan, by a certificate from the no-answer technique. <br>What does its twin do? Can a program and its twin both fail to have answers?</div>
-  <div class="chq"><span class="chid">41g.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="c \cdot x = b \cdot y"></span></span>If x is allowed, y covering and c · x = b · y, prove that every limit with yᵢ > 0 holds with equality at x, and every unit with xⱼ > 0 is covered exactly. <br>Turn it round: do those two patterns make an allowed x and covering y both best?</div>
-  <div class="chq"><span class="chid">41g.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">28g: the gradients line up, ∇f = λ∇g</span></span>Rung 28 found the best point on a smooth limit, where the gradient of the value is a stretch λ of the limit’s gradient. <br>At the glass works’ best corner, which two limits are tight, and how is c a sum of their rows with weights at least 0? Read the weights as λ’s. What happens to the 28g recipe at a corner, where the limit has no gradient?</div>
+  <div class="chq"><span class="chid">41g.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">numbers written in twos</span></span>Build a machine with no memory that checks the numerals in twos of the multiples of 5, as a table with its states as remainders. Then build the pair machine for “a multiple of 5 and of 3”, and count its states.</div>
+  <div class="chq"><span class="chid">41g.6.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">any finite set of strings</span></span>Prove that every finite set of strings is a pattern. The squares of 41g2 are endless: find the first place in its proof that needed an endless set.</div>
+  <div class="chq"><span class="chid">41g.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="L = \{a^ib^jc^k : i = 0 \text{ or } j = k\}"></span></span>Show that every member of L with at least one letter can be pumped, with q = 1. Then prove that L is no pattern, by joining it with a pattern and using the joined-machines technique. What does this say about the pumping technique run backwards?</div>
+  <div class="chq"><span class="chid">41g.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">the rat the cat the dog chased bit ran</span></span>One view holds that a language like English needs at least a stack, since its statements nest without end: the rat the cat bit ran; the rat the cat the dog chased bit ran. Another holds that no speaker follows more than two or three nestings, so a machine with no memory, and a large one, describes what people actually say. Which family is English in? Can the question be settled by counting what people say, and if not, by what?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r41f.html">← 41f · flows and cuts</a><a href="r41h.html">41h · games →</a></nav>
+<nav class="nextrung"><a href="r41f.html">← 41f · programs that print themselves</a><a href="r41h.html">41h · how long and how much room →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A program is a linear program, its allowed plans the feasible region (a convex polyhedron), and a corner a vertex or basic feasible solution. The twin is the dual program, and covering prices are dual feasible solutions, or shadow prices. The price-bound technique is weak duality; the equal-prices technique is strong duality. The one-out technique is Fourier–Motzkin elimination, and the no-answer technique is a form of Farkas's lemma. The pattern of 41g.6.3 is complementary slackness. The glass works is the Wyndor Glass example from an operations research textbook of 1967.</p>
+  <p>A machine with no memory is a deterministic finite automaton, and a pattern is a regular language. The joined-machines technique is the product construction, and the closure of regular languages under intersection, union and complement. The pumping technique is the pumping lemma for regular languages, and the two-loop technique the pumping lemma for context-free languages. A stack machine is a pushdown automaton; its languages are the context-free languages. A tape machine bounded by its input is a linear bounded automaton, for the context-sensitive languages. The ladder of families is the Chomsky hierarchy.</p>
   <h3>Who said it first</h3>
-  <p>Joseph Fourier described elimination for inequalities in 1826; Theodore Motzkin rediscovered it in 1936. Gyula Farkas proved his lemma in 1902. Leonid Kantorovich wrote on planning production by programs in 1939, in Leningrad. George Dantzig set out the general question and his recipe in 1947, and John von Neumann, told of it, guessed the twin program at once, from his work on games. Kantorovich and Tjalling Koopmans shared the economics prize of 1975.</p>
+  <p>Michael Rabin and Dana Scott (1959) proved the pumping lemma for regular languages in its first form. Yehoshua Bar-Hillel, Micha Perles and Eli Shamir (1961) proved the lemma for context-free languages. Noam Chomsky (1956, 1959) set out the hierarchy, and Marcel-Paul Schützenberger (1963) and Chomsky showed that pushdown automata check exactly the context-free languages. Sige-Yuki Kuroda (1964) matched linear bounded automata with the third family. The centre-embedding of 41g.6.4 was discussed by George Miller and Chomsky (1963).</p>
   <h3>A proof that is not allowed</h3>
-  <p>“The value rises as we move from (0, 0) toward (2, 6), and falls beyond it, so (2, 6) is best.” Not allowed: rising along one route and falling beyond is a fact about that route. The proof is either the list of every corner, by the tight-corner technique, or a set of covering prices with total 36, by the price-bound technique. The second is shorter and is the one that scales.</p>
+  <p>“aⁿbⁿ is no pattern: take w to be q a’s and then q b’s, and cut it as x and z empty, y all of w. Then y twice over is not in the set.” Not allowed: the cut must have xy at most q long, and here it is 2q. The machine chooses the cut, and the proof must work for every cut it could choose; for that w every allowed y is made of a’s, and that is what the proof uses.</p>
 </section>
 
 </div>
@@ -202,25 +189,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'limits',t:R`Ax \le b,\ x \ge 0`,n:`The allowed plans.`},
-  {k:'ember',kl:'move',t:R`x + t\,d,\ c \cdot d \ge 0`,n:`Until a limit tightens.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a corner is best}}`,n:`Finitely many to check.`}
-],{title:'The slides · corners · ← → keys work'});
+  {k:'ember',kl:'pair',t:R`(p, q)`,n:`Both halves at once.`},
+  {k:'ember',kl:'accept',t:R`\text{both, or either}`,n:`1e’s tables.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{A \cap B,\ A \cup B,\ \text{not } A}`,n:`Still patterns.`}
+],{title:'The slides · patterns · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'cover',t:R`A^{\mathsf T} y \ge c,\ y \ge 0`,n:`Worth at least what it earns.`},
-  {k:'ember',kl:'bound',t:R`c \cdot x \le y \cdot Ax \le y \cdot b`,n:`Two signs.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{36 \le 36}`,n:`Both best.`}
-],{title:'The slides · prices · ← → keys work'});
+  {k:'ember',kl:'states',t:R`s_0, \dots, s_q`,n:`q + 1 names.`},
+  {k:'ember',kl:'loop',t:R`s_j = s_k`,n:`Pigeonhole.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{xy^iz \in L}`,n:`Run the loop again.`}
+],{title:'The slides · pumping · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'sort',t:R`\text{upper, lower, free in } x_n`,n:`Pair them.`},
-  {k:'ember',kl:'drop',t:R`x_n \text{ out, weights} \ge 0`,n:`Same answers.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{y^{\mathsf T}A = 0,\ y \cdot b < 0}`,n:`A certificate.`}
-],{title:'The slides · no answer · ← → keys work'});
+  {k:'ember',kl:'tree',t:R`|w| \gt b^p`,n:`Tall tree.`},
+  {k:'ember',kl:'repeat',t:R`A \Rightarrow vAy,\ \ A \Rightarrow x`,n:`Same placeholder twice.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{uv^ixy^iz}`,n:`Pump both.`}
+],{title:'The slides · two loops · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'seek',t:R`c \cdot x \ge b \cdot y`,n:`Plus both lists of limits.`},
-  {k:'ember',kl:'else',t:R`\lambda > 0 \text{ or } \lambda = 0`,n:`Both clash.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\max c \cdot x = \min b \cdot y}`,n:`Make and price agree.`}
-],{title:'The slides · equal · ← → keys work'});
+  {k:'ember',kl:'count',t:R`q \cdot r \cdot m^r`,n:`Configurations.`},
+  {k:'ember',kl:'repeat',t:R`\text{back again}`,n:`Then for ever.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{bounded room: decided}}`,n:`Refusals only at the top.`}
+],{title:'The slides · bounded · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

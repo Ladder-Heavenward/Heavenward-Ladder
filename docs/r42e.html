@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>A Clock Hand That Reaches Every Hour</title>
+<title>Matchings</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,92 +48,93 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r42d.html">← 42d powers cycle</a><a href="r42f.html">next: 42f squares on a clock →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r42d.html">← 42d flat drawings</a><a href="r42f.html">next: 42f flows and cuts →</a></p>
   <div class="tags"><span class="tag proof">42e · proof</span></div>
-  <h1>A Clock Hand That Reaches Every Hour</h1>
-  <p data-pid="db4de5">On the clock of seven, the powers of three reach every hour but twelve o’clock before they come back. The powers of two reach only three of them. On the clock of twelve no hour does it: every unit there, done twice, is one. So some clocks have a hand that reaches every unit, and some do not. This step proves that every prime clock has one. The proof does not find the hand. It counts. A unit that comes back after d steps is a root of a polynomial of degree d, and on a prime clock such a polynomial has at most d roots, as on the line. That caps how many units can come back after each number of steps. A second count, of fractions sorted by their lowest terms, shows that the caps are all reached, and the cap for the largest number of steps is not zero. Finding the hand is then a matter of testing a few candidates.</p>
-  <p class="gesture" data-pid="72111a">A unit of order m, raised to the power k, has order m over gcd(m, k). On a prime clock a polynomial of degree d has at most d roots. The counts of units of the clocks that divide n add to n. Together these force a unit of order p − 1 on every prime clock, and give the number of them.</p>
+  <h1>Matchings</h1>
+  <p data-pid="d8f5b2">A hospital has night shifts to fill, and each nurse can work some of them and not others. Can every shift get its own nurse? Rung 6 asked a cousin of this question when it picked one member from each of many boxes, and noticed that asking for the picks to be all different is a harder thing. Here the boxes are finite, and the question has a clean answer. An obvious obstacle is a group of shifts that, between them, only a smaller group of nurses can work. The answer is that this is the only obstacle: if every group of shifts can be worked by at least as many nurses as there are shifts in it, then every shift can have its own nurse. The step proves it, and then finds a way to grow any matching that is not yet as large as it can be, along a path that alternates between used and unused links. Last, it turns the question round. The fewest people who can watch every link, a cover, is at least the most links in a matching, and on a two-sided graph the two numbers are the same.</p>
+  <p class="gesture" data-pid="6555fe">A matching is a set of links with no dot in two of them. On a two-sided graph a matching covers one side exactly when every group of dots on that side has at least as many neighbours. A matching is as large as can be exactly when no path alternates from a free dot to a free dot. And the largest matching is the smallest cover.</p>
 </header>
 
 <section class="class step" data-step="42e1">
-  <h2 class="sthead"><span class="stno">42e1</span>A Hand That Reaches Every Unit</h2>
-  <p data-pid="4c4412">A <i>full hand</i> of the clock of n is a unit whose powers are every unit, so a unit whose order is the count of units. [3] is one on the clock of 7, since its powers run 3, 2, 6, 4, 5, 1, and [3] is one on the clock of 10 (42b3). [2] is not one on the clock of 7: 2, 4, 1. The clock of 12 has none, since every unit there squared is [1]. Its accepted name, used from here on, is a <i>primitive root</i>, from the Latin <i>primitivus</i>, first of its kind: every unit is a power of it.</p>
-  <p data-pid="daa0c7">Power-order technique: <b>if [a] has order m, then [a]ᵏ has order m/gcd(m, k).</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the power-order technique">
-g = \gcd(m, k),\ \ m = gm',\ k = gk',\ \ \gcd(m', k') = 1 @@ 5h: dividing out the gcd leaves numbers sharing nothing
-([a]^k)^t = [1] \iff m \mid kt @@ [a]ʲ = [1] exactly when m ∣ j (division with remainder: the remainder is below the order)
-\iff m' \mid k't \iff m' \mid t @@ cancel g; factor-that-shares-nothing (5h)
-\htmlClass{new}{\text{the order of } [a]^k \text{ is } m' = m/\gcd(m, k)} \quad \blacksquare @@ the least such t is m′
-  </pre>
-  <p data-pid="9b16d5">So if [g] is a full hand of a clock with c units, [g]ᵏ is a full hand exactly when gcd(k, c) = 1. On the clock of 7, [3]ᵏ for k = 1 and 5 are full hands: [3] and [5]. That is two, the count of units of the clock of 6.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · full hands · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">42e1</span>Matchings in a Graph</h2>
+  <p data-pid="fcdae7">A <i>matching</i> in a graph is a set M of links, no two of which share a dot. A dot in a link of M is <i>matched</i>; the other end of its link is its <i>partner</i>.</p>
+  <p data-pid="4facc0">The word matching is reused. In 9c a matching was a function that is one-to-one and onto. A matching in a graph gives one: on a two-sided graph with sides X and Y, a matching is exactly a one-to-one function from the matched dots of X onto the matched dots of Y that sends each dot along a link. So the old meaning stays, and the new one is a 9c matching that must travel along links. A matching <i>covers X</i> when every dot of X is matched.</p>
+  <p data-pid="b4aa8e">For a set S of dots, N(S) is the set of dots joined to some dot of S. If a matching covers X, the partners of S are |S| different dots of N(S). So |N(S)| ≥ |S| for every part S of X. In rung 6’s words: each x ∈ X gives a box N({x}), and a matching covering X is a pick from every box with no two picks the same.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · matching · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">42e1.1</span><span class="ph understand">understand</span>What is a full hand, or primitive root, of a clock? <br>What does the power-order technique say, and why are [3] and [5] the full hands of the clock of 7?</li>
+      <li><span class="qid">42e1.1</span><span class="ph understand">understand</span>What is a matching in a graph, and how is a matching on a two-sided graph a matching in the sense of 9c? <br>Why does a matching covering X force |N(S)| ≥ |S| for every part S of X?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42e2">
-  <h2 class="sthead"><span class="stno">42e2</span>Few Roots on a Prime Clock</h2>
-  <p data-pid="b33fc9"><a href="r09g.html">9g</a> proved that a polynomial of degree n has at most n zeros. Its proof used two things only: if f(r) = 0 then f(x) = (x − r)q(x) with q of degree one less, by long division; and a product is 0 only when a factor is. Long division needs undoes for the leading coefficient. The second needs no two nonzero numbers to multiply to 0. A prime clock has both, since it is a field.</p>
-  <p data-pid="39e92e">Few-roots technique: <b>on a prime clock, a polynomial of degree d whose leading coefficient is not [0] has at most d roots.</b> The lines are 9g’s, read on the clock of p. The prime-clock-field technique supplies each undo and the no-zero-product line.</p>
-  <pre class="lines" data-k="ember" data-label="this step: where the few-roots technique stops">
-x^2 - 1 \text{ on the clock of } 8:\ \ [1], [3], [5], [7] @@ 1, 9, 25, 49 are all 1 more than a multiple of 8
-(x - 1)(x + 1) = [0] \text{ at } x = [3]:\ \ [2][4] = [8] = [0] @@ neither factor is [0]: 42a4’s failed cancelling
-x^2 - 1 \text{ on the clock of } 7:\ \ [1], [6] \text{ only} @@ check 2² to 5²: 4, 2, 2, 4
-\htmlClass{new}{\text{a degree-2 polynomial with 4 roots needs a clock that is no field}} \quad \blacksquare @@ the few-roots technique, contrapositive
+  <h2 class="sthead"><span class="stno">42e2</span>The Marriage Technique</h2>
+  <p data-pid="d25221">Marriage technique: <b>on a two-sided graph with sides X and Y, X finite, some matching covers X exactly when every part S of X has |N(S)| ≥ |S|.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the marriage technique, the hard half">
+\text{every } S \subseteq X \text{ has } |N(S)| \ge |S|;\ \text{strong induction on } |X| \text{ (4h)} @@ |X| = 1: the one dot has a neighbour
+\text{case one: every } S \text{ with } \varnothing \ne S \ne X \text{ has } |N(S)| \ge |S| + 1 @@ a spare neighbour everywhere
+\quad \text{match any } x \text{ to any neighbour } y;\ \text{in } G - x - y \text{ each } S \subseteq X - x \text{ lost at most } y @@ |N(S)| − 1 ≥ |S|
+\quad \text{match } X - x \text{ by induction} @@ smaller X
+\text{case two: some } S_0 \text{ with } \varnothing \ne S_0 \ne X \text{ and } |N(S_0)| = |S_0| @@ a tight group
+\quad \text{match } S_0 \text{ into } N(S_0) \text{ by induction} @@ the condition holds inside: N(S) ⊆ N(S₀) for S ⊆ S₀
+\quad T \subseteq X - S_0:\ |N(T) - N(S_0)| = |N(T \cup S_0)| - |N(S_0)| \ge |T| + |S_0| - |S_0| @@ the condition on T ∪ S₀
+\quad \text{match } X - S_0 \text{ into } Y - N(S_0) \text{ by induction} @@ smaller X, and no dot used twice
+\htmlClass{new}{\text{a matching covers } X} \quad \blacksquare @@ the two matchings together
   </pre>
-  <p data-pid="8e7e00">On the clock of 8 every unit squared is [1], so no unit reaches order 4, the count of units: the clock of 8 has no full hand, and the four roots are why.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · few roots · ← → keys work</div></section>
+  <p data-pid="b3e142">Every part S is a lot of checking: 2^|X| parts. The technique is a yes that comes with a certificate for no: if no matching covers X, a single group S with too few neighbours shows it, and anyone can check that group.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · marriage · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42e2.1</span><span class="ph understand">understand</span>What does the few-roots technique say, and which two facts of 9g’s proof does a prime clock supply? <br>Why does x² − 1 have four roots on the clock of 8?</li>
+      <li><span class="qid">42e2.1</span><span class="ph understand">understand</span>What does the marriage technique say? <br>In case two, why does every T outside S₀ still have enough neighbours outside N(S₀)?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42e3">
-  <h2 class="sthead"><span class="stno">42e3</span>The Counts of Units Add Up</h2>
-  <p data-pid="67eb48">Write c(d) for the count of units of the clock of d, so c(1) = 1, c(12) = 4. The letter c is a name for this footing and the next.</p>
-  <p data-pid="7654d3">Divisor-sum technique: <b>for every n ≥ 1, the counts of units c(d) of the clocks whose sizes d divide n add up to n.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the divisor-sum technique">
-\tfrac1n, \tfrac2n, \ldots, \tfrac nn: \ n \text{ fractions} @@ one for each k from 1 to n
-\tfrac kn = \tfrac jd,\ \ \gcd(j, d) = 1,\ \ d \mid n @@ lowest terms, exactly one (5h’s one-lowest-terms technique)
-\tfrac jd \text{ with } d \mid n,\ 1 \le j \le d,\ \gcd(j, d) = 1 \text{ is } \tfrac{jn/d}{n} @@ and each such j/d comes once
-\text{the fractions with bottom } d \text{ number } c(d) @@ the units of the clock of d
-\htmlClass{new}{\textstyle\sum_{d \mid n} c(d) = n} \quad \blacksquare @@ the n fractions, sorted by their bottoms
+  <h2 class="sthead"><span class="stno">42e3</span>Growing a Matching</h2>
+  <p data-pid="4e2613">Given a matching M, a path is <i>alternating</i> when its links are by turns out of M and in M. A <i>growing path</i> is an alternating path whose two ends are both unmatched.</p>
+  <p data-pid="3c19d8">Growing-path technique: <b>a matching is as large as any matching in the graph exactly when there is no growing path for it.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the growing-path technique">
+P \text{ a growing path, with } k \text{ links in } M \text{ and } k + 1 \text{ out} @@ it starts and ends with links out of M
+M' = M \text{ with the links of } P \text{ swapped: in for out} @@ the inside dots of P keep one partner each; the two ends gain one
+|M'| = |M| + 1 @@ so M was not largest
+\text{other way: } |M'| > |M| \text{ for some matching } M' @@ suppose
+\text{the links in exactly one of } M, M' \text{: every dot has at most two, one of each} @@ so the pieces are paths and even cycles that alternate
+\text{some piece has more links of } M' \text{ than of } M @@ the totals differ; cycles share equally
+\htmlClass{new}{\text{that piece is a growing path for } M} \quad \blacksquare @@ a path that starts and ends in M′
   </pre>
-  <p data-pid="209a09">For n = 12: c(1) + c(2) + c(3) + c(4) + c(6) + c(12) = 1 + 1 + 2 + 2 + 2 + 4 = 12. The fractions 1/12, 2/12, …, 12/12 in lowest terms have bottoms 12, 6, 4, 3, 12, 2, 12, 3, 4, 6, 12, 1.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · counts add · ← → keys work</div></section>
+  <p data-pid="c1a806">So a recipe: start with no links, and while a growing path exists, swap along it. Each swap adds one link, so there are at most |V|/2 swaps. Finding a growing path on a two-sided graph is a walk out from the free dots of X in layers, 42k’s recipe. On a graph with odd cycles the search can be fooled, and it took until 1965 to repair it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · grow · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42e3.1</span><span class="ph understand">understand</span>What does the divisor-sum technique say? <br>How are the n fractions k/n sorted in its proof, and how many get the bottom d?</li>
+      <li><span class="qid">42e3.1</span><span class="ph understand">understand</span>What is a growing path, and how does swapping along one make the matching larger? <br>Why does a larger matching M′ give a growing path for M?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42e4">
-  <h2 class="sthead"><span class="stno">42e4</span>Every Prime Clock Has a Full Hand</h2>
-  <p data-pid="f1e58f">Full-hand technique: <b>every prime clock has a full hand, and the clock of p has exactly c(p − 1) of them.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the full-hand technique">
-N(d) = \text{the number of units of order } d,\ \ d \mid p - 1 @@ every order divides p − 1 (42d1)
-N(d) \ge 1:\ [a] \text{ of order } d \Rightarrow [a]^0, \ldots, [a]^{d-1} \text{ are } d \text{ roots of } x^d - 1 @@ different, since d is the least return
-\text{they are all its roots, so every unit of order } d \text{ is some } [a]^k @@ the few-roots technique: at most d
-\text{of those, order } d \text{ exactly when } \gcd(k, d) = 1:\ \ N(d) = c(d) @@ the power-order technique
-\textstyle\sum_{d \mid p-1} N(d) = p - 1 = \sum_{d \mid p-1} c(d),\ \ N(d) \le c(d) @@ every unit has one order; the divisor-sum technique; N(d) is 0 or c(d)
-\htmlClass{new}{N(p - 1) = c(p - 1) \ge 1} \quad \blacksquare @@ no N(d) can fall short, since none is above its c(d)
+  <h2 class="sthead"><span class="stno">42e4</span>Matchings and Covers</h2>
+  <p data-pid="b6432b">A <i>cover</i> is a set K of dots that holds at least one dot of every link: guards at dots, watching every link. Each link of a matching needs its own guard, since no dot holds two of them. So every cover has at least as many dots as every matching has links.</p>
+  <p data-pid="52b7b3">Cover-equals-matching technique: <b>on a two-sided graph, the most links in a matching equals the fewest dots in a cover.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the cover-equals-matching technique">
+M \text{ largest};\ U = \text{unmatched dots of } X;\ Z = \text{dots reached from } U \text{ by alternating paths} @@ a path starts in U along a link out of M
+K = (X - Z) \cup (Y \cap Z) @@ the guards
+y \in Y \cap Z \Rightarrow y \text{ matched, and its partner is in } Z @@ else a growing path (42e3); step on along y’s link in M
+\text{each link of } M \text{ has exactly one end in } K @@ its ends are both in Z or both out of Z, by the last line and U being unmatched
+\text{every dot of } K \text{ is matched} @@ X − Z misses U; Y ∩ Z by the third line
+\{x, y\} \text{ a link},\ x \in Z \Rightarrow y \in Z @@ step along it, out of M or in M
+\htmlClass{new}{K \text{ covers every link, and } |K| = |M|} \quad \blacksquare @@ x ∉ Z puts x in K; x ∈ Z puts y in K
   </pre>
-  <p data-pid="287ba2">The proof shows a full hand exists and does not point at one. To find one, test candidates. [a] is a full hand of the clock of p exactly when [a]^((p − 1)/q) ≠ [1] for every prime q dividing p − 1, since an order below p − 1 divides some (p − 1)/q. On the clock of 13, 12 = 2² · 3: 2⁶ = 64 ≡ 12 and 2⁴ = 16 ≡ 3, so [2] is a full hand. The full hands are [2]ᵏ with gcd(k, 12) = 1: [2], [6], [11], [7]. That is c(12) = 4.</p>
-  <p data-pid="c56453">Which other clocks have full hands is stated, not proved, here: the clocks of 1, 2 and 4, of an odd prime power pᵏ, and of twice one, and no others. [2] is a full hand of the clock of 9. The clock of 8 has none (42e2).</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · a full hand · ← → keys work</div></section>
+  <p data-pid="465858">On a triangle the largest matching has one link and the smallest cover two dots. The two-sided shape is what made the numbers meet. 42f will find the same equality as a special case of one about flows, and 42g as a special case of one about prices.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · covers · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42e4.1</span><span class="ph understand">understand</span>What does the full-hand technique say? <br>Which line of its proof spends the few-roots technique, and how is [2] shown to be a full hand of the clock of 13?</li>
+      <li><span class="qid">42e4.1</span><span class="ph understand">understand</span>What is a cover, and why is every cover at least as large as every matching? <br>What does the cover-equals-matching technique say, and why does it fail on a triangle?</li>
     </ol>
   </section>
 </section>
@@ -141,15 +142,15 @@ N(d) \ge 1:\ [a] \text{ of order } d \Rightarrow [a]^0, \ldots, [a]^{d-1} \text{
 <section class="class step" data-step="42e5">
   <h2 class="sthead"><span class="stno">42e5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{every clock has a full hand}\,? @@ the clocks of 8 and 12 have none: every unit there squared is [1]
-2^{12} \equiv 1 \pmod{13} \Rightarrow [2] \text{ is a full hand}\,? @@ every unit has [a]¹² = [1] (the little technique); the test is the smaller powers 2⁶ and 2⁴
-[a] \text{ full hand} \Rightarrow [a]^2 \text{ full hand}\,? @@ gcd(2, p − 1) = 2 for odd p: [a]² has order (p − 1)/2
-x^2 - 1 \text{ has two roots on every clock}\,? @@ four on the clock of 8; the few-roots technique needs a prime clock
+\text{every dot of } X \text{ has a neighbour, so } X \text{ is covered}\,? @@ two nurses who can both work only the same one shift have one neighbour each and one between them
+\text{no link can be added to } M \text{, so } M \text{ is largest}\,? @@ on the path of three links, the middle link alone blocks both others; the two end links are larger
+\text{largest matching equals smallest cover in every graph}\,? @@ only on two-sided graphs; the triangle has 1 against 2
+|N(S)| \ge |S| \text{ for each single dot } S \text{ suffices}\,? @@ the condition is on every part S, not only single dots
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42e5.1</span><span class="ph understand">understand</span>Why does 2¹² ≡ 1 (mod 13) not show that [2] is a full hand? <br>Why is the square of a full hand of an odd prime clock never a full hand?</li>
+      <li><span class="qid">42e5.1</span><span class="ph understand">understand</span>Why is a matching that cannot be added to not always largest? <br>Why is checking |N(S)| ≥ |S| for single dots not enough?</li>
     </ol>
   </section>
 </section>
@@ -158,22 +159,22 @@ x^2 - 1 \text{ has two roots on every clock}\,? @@ four on the clock of 8; the f
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">42e.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\mathbb Z/41"></span></span>Build a full hand of the clock of 41 by the test with the primes dividing 40. Then list how many units have each order d dividing 40, and check that the counts are c(d) and add to 40.</div>
-  <div class="chq"><span class="chid">42e.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\mathbb Z/9,\ \ \mathbb Z/16"></span></span>Show that [2] is a full hand of the clock of 9. On the clock of 16, find the orders of [3], [5] and [7], and prove that no unit has order 8. <br>Which line of the full-hand technique’s proof breaks on the clock of 16, and which on the clock of 9 does not?</div>
-  <div class="chq"><span class="chid">42e.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="G \text{ finite},\ \ |\{x : x^d = e\}| \le d \text{ for every } d"></span></span>The full-hand technique used only that the units of a prime clock have at most d members with x^d = 1. Turn it round: prove that every finite turn-about group with that property has a member whose powers are the whole group. <br>Does the proof need turn-about anywhere? Which line?</div>
-  <div class="chq"><span class="chid">42e.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">9 of the 23 primes below 100, other than 2 and 5, have [10] as a full hand</span></span>For 7, 17, 19, 23, 29, 47, 59, 61 and 97, the decimal of 1/p has a block of p − 1 digits. Below 1000 it is 60 of 166. <br>Guess the share among all primes, and say what kind of guess it is. Nobody has proved even that the share is above 0. What would a proof have to rule out, and why does the full-hand technique not reach it?</div>
+  <div class="chq"><span class="chid">42e.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{every dot has exactly } k \ge 1 \text{ links}"></span></span>On a two-sided graph where every dot has exactly k links, prove that the sides have the same size and that some matching covers both. <br>A deck of 52 cards dealt into 13 piles of 4: prove that one card can be picked from each pile so that the 13 picks hold each of ace to king once.</div>
+  <div class="chq"><span class="chid">42e.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x_0 \sim y_1, y_2, y_3, \ldots;\ \ x_i \sim y_i \ (i \ge 1)"></span></span>Here X and Y are endless. Check that every finite part S of X has |N(S)| ≥ |S|. <br>Show that no matching covers X. Which line of the marriage technique’s proof needed X finite?</div>
+  <div class="chq"><span class="chid">42e.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="K_{1,3},\ \ C_5"></span></span>On a two-sided graph a smallest cover is as small as a largest matching. On the five-cycle C₅, find both numbers. <br>Turn the technique round: if a graph has largest matching equal to smallest cover, must it be two-sided?</div>
+  <div class="chq"><span class="chid">42e.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">6d.4.1: maximal, but not whole</span></span>Rung 6 found a set that could not be made larger and still was not everything. A matching that cannot be added to is maximal; a largest one is maximum. <br>Prove that a maximal matching has at least half as many links as a maximum one. Is the greedy recipe, adding any link that fits, then a fair recipe or a poor one?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r42d.html">← 42d · powers cycle</a><a href="r42f.html">42f · squares on a clock →</a></nav>
+<nav class="nextrung"><a href="r42d.html">← 42d · flat drawings</a><a href="r42f.html">42f · flows and cuts →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A full hand is a primitive root modulo n, and the full-hand technique says the multiplicative group (ℤ/pℤ)ˣ is cyclic, with φ(p − 1) generators. The power-order technique is the order of a power, ord(aᵏ) = ord(a)/gcd(ord(a), k). The few-roots technique is Lagrange’s theorem on polynomial congruences. The divisor-sum technique is Gauss’s identity Σ_{d∣n} φ(d) = n. The list of moduli with primitive roots is Gauss’s. The share of 42e.6.4 is Artin’s conjecture on primitive roots; its guessed value, Artin’s constant, is about 0.3740.</p>
+  <p>The marriage technique is Hall's marriage theorem, and the condition is Hall's condition; a matching covering X is a system of distinct representatives. A growing path is an augmenting path, and the growing-path technique is Berge's lemma. The cover-equals-matching technique is Kőnig's theorem, or the Kőnig–Egerváry theorem. A cover is a vertex cover. The repair for graphs with odd cycles is Edmonds's blossom algorithm (1965).</p>
   <h3>Who said it first</h3>
-  <p>Leonhard Euler named primitive roots and guessed they exist for every prime in 1773; his proof had a gap. Adrien-Marie Legendre gave a proof in 1785, and Carl Friedrich Gauss gave two in the Disquisitiones (1801), with the divisor sum and the full list of moduli. Emil Artin made his guess in 1927. Christopher Hooley proved it in 1967 on the strength of the unproved hypothesis of 42·now2, and Roger Heath-Brown showed in 1986 that at most two primes fail to be primitive roots for endlessly many primes, without saying which.</p>
+  <p>Dénes Kőnig proved the cover-equals-matching technique in 1931, and Jenő Egerváry a weighted form the same year. Philip Hall proved the marriage technique in 1935; the two-case proof here is Paul Halmos and Herbert Vaughan's of 1950. Claude Berge proved the growing-path technique in 1957. Jack Edmonds's 1965 paper, "Paths, trees, and flowers", is also where a recipe of polynomial cost was first argued to be the right meaning of a good recipe.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“The clock of p has p − 1 units and the full-hand technique shows one of order p − 1. So the clock of n has a unit of order c(n) for every n, by the same proof.” Not allowed: the proof spends the few-roots technique, which needs a field. On the clock of 8 the polynomial x² − 1 has four roots, and the count N(2) is 3, above c(2) = 1.</p>
+  <p>“Match the dots of X one at a time, each to a free neighbour. If the condition holds, a free neighbour is always there.” Not allowed: early choices can use up the only neighbour a later dot has, even when the condition holds. With X = {p, q}, p joined to y₁ and y₂, q joined to y₁ only, matching p to y₁ first leaves q stranded. The growing path through p is what puts it right.</p>
 </section>
 
 </div>
@@ -188,25 +189,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'order m',t:R`[a]^m = [1]`,n:`Least such m.`},
-  {k:'ember',kl:'powers',t:R`\text{order of } [a]^k = m/\gcd(m, k)`,n:`The power-order technique.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{[3], [5] \text{ on the clock of } 7}`,n:`Order 6.`}
-],{title:'The slides · full hands · ← → keys work'});
+  {k:'ember',kl:'links',t:R`\text{no shared dot}`,n:`A set of links.`},
+  {k:'ember',kl:'9c',t:R`X \to Y \text{ one-to-one, along links}`,n:`The old meaning, kept.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|N(S)| \ge |S|}`,n:`If X is covered.`}
+],{title:'The slides · matching · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'field',t:R`\mathbb Z/p`,n:`Undoes; no zero product.`},
-  {k:'ember',kl:'9g',t:R`\text{degree } d \Rightarrow \le d \text{ roots}`,n:`Read on the clock.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{x^2 = 1 \text{ has 4 roots on } \mathbb Z/8}`,n:`No field there.`}
-],{title:'The slides · few roots · ← → keys work'});
+  {k:'ember',kl:'spare',t:R`|N(S)| \ge |S| + 1`,n:`Match any link.`},
+  {k:'ember',kl:'tight',t:R`|N(S_0)| = |S_0|`,n:`Split there.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{X \text{ covered} \iff |N(S)| \ge |S|}`,n:`For every S.`}
+],{title:'The slides · marriage · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'fractions',t:R`\tfrac kn \to \tfrac jd`,n:`Lowest terms.`},
-  {k:'ember',kl:'bottom d',t:R`c(d) \text{ of them}`,n:`Units of the clock of d.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\textstyle\sum_{d\mid 12} c(d) = 12}`,n:`Every n.`}
-],{title:'The slides · counts add · ← → keys work'});
+  {k:'ember',kl:'alternate',t:R`\notin M,\ \in M,\ \notin M, \dots`,n:`Free at both ends.`},
+  {k:'ember',kl:'swap',t:R`|M| + 1`,n:`One more link.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{largest} \iff \text{no growing path}}`,n:`A recipe.`}
+],{title:'The slides · grow · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'order d',t:R`N(d) \in \{0, c(d)\}`,n:`Few roots.`},
-  {k:'ember',kl:'add up',t:R`\textstyle\sum N(d) = \sum c(d)`,n:`Divisor sum.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{N(p - 1) = c(p - 1) \ge 1}`,n:`Every prime clock.`}
-],{title:'The slides · a full hand · ← → keys work'});
+  {k:'ember',kl:'guards',t:R`K \ni \text{an end of each link}`,n:`A cover.`},
+  {k:'ember',kl:'reach',t:R`K = (X - Z) \cup (Y \cap Z)`,n:`From the free dots.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\max |M| = \min |K|}`,n:`On two sides.`}
+],{title:'The slides · covers · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

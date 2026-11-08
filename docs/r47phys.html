@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Why Is Stress a Tensor?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style></style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r47comp.html">← 47·comp can a program’s type say what it does?</a><a href="r47eng.html">next: 47·eng can a machine be built by plugging parts together? →</a></p>
+  <div class="tags"><span class="tag phys">47·phys · physics</span></div>
+  <h1>Why Is Stress a Tensor?</h1>
+  <p data-pid="d22802">Why is stress a tensor? <a href="r33eng.html#33eng6">33·eng</a> wrote the push on a cut through a sheet as a grid of numbers, and <a href="r27phys.html#27phys4">27·phys</a> wrote the spin of a turning body the same way. Both grids were written on axes someone chose. Turn the axes and every number in the grid changes, yet the sheet and the body have not moved. This page finds what the numbers must do when the axes turn, and why they cannot do anything else: the rule is 47h’s tensor product carrying maps along. A quantity that obeys it belongs to the thing measured. A quantity that breaks it belongs to whoever drew the axes.</p>
+  <p class="gesture" data-pid="9cee01">Stress and inertia are readings of two arrows, so each is one reading of the tensor product of space with itself. When the axes turn to the columns of a length-keeper Q, an arrow’s list becomes Qᵀx and the grid of such a reading becomes QᵀGQ. That rule is forced: sending each space V to V ⊗ V and each map f to f ⊗ f is a map of categories. Because of it, the stretches of the grid and its rank are the same on every axes: the principal stresses and the principal inertias belong to the sheet and the body.</p>
+</header>
+
+<section class="class step" data-step="47·phys.1">
+  <h2 class="sthead"><span class="stno">47·phys.1</span>Two Grids, Read Two Ways</h2>
+  <p data-pid="bcea2c"><a href="r33eng.html#33eng6">33·eng6</a> wrote the push per area on a cut whose arrow out of the cut is n, of length 1, as σn, and found σ symmetric. <a href="r27phys.html#27phys4">27·phys4</a> wrote the spin of a body turning at ω as Θω, with Θ = Σ mᵢ(|rᵢ|²I − rᵢrᵢᵀ), also symmetric. A grid that turns an arrow into an arrow can also be read on two arrows: read the arrow it makes along a second arrow.</p>
+  <p data-pid="53b701">Face-and-axis technique: <b>the stress grid read on two arrows of length 1, mᵀσn, is the push along m on the cut facing n; the inertia grid read twice on one arrow u of length 1, uᵀΘu, is the rotational inertia about the axis along u. So each grid is a reading straight in each of two slots, and one reading of ℝ³ ⊗ ℝ³.</b> Proof: mᵀσn = m · (σn) is the part of the push σn along m (27i). For Θ, uᵀΘu = Σ mᵢ(|rᵢ|² − (rᵢ · u)²), and by the right-triangle law (18a) |rᵢ|² − (rᵢ · u)² is ρᵢ², the square of the distance of the piece from the axis, so the sum is 27·phys3’s I = Σ mρ². Each reading is straight in each slot, so by the two-slot technique (<a href="r27h.html#27h2">27h2</a>) it is xᵀGy, and by 47h1 with U = k it runs through ℝ³ ⊗ ℝ³ as one reading.</p>
+  <pre class="lines" data-k="ember" data-label="this page: 27·phys4’s wheel, about its axle">
+\Theta = \begin{pmatrix}0.02 & -0.02 & 0\\ -0.02 & 0.02 & 0\\ 0 & 0 & 0.04\end{pmatrix},\ \ u = (1, 0, 0) @@ two 1 kg lumps at ±(0.1, 0.1, 0) m
+u^{\mathsf T}\Theta u = 0.02 \text{ kg m}^2 @@ the face-and-axis technique
+\htmlClass{new}{\textstyle\sum m\rho^2 = 2 \cdot 1 \cdot (0.1)^2 = 0.02} \quad \blacksquare @@ each lump 0.1 m from the axle, as 27·phys3 counts it
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · two readings · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">47·phys.1.1</span><span class="ph understand">understand</span>What does the face-and-axis technique say each grid reads? <br>For the wheel above, what is the rotational inertia about the axis along (0, 0, 1)?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="47·phys.2">
+  <h2 class="sthead"><span class="stno">47·phys.2</span>Turning the Axes</h2>
+  <p data-pid="fa3ad7">Choose new axes: a right-angled basis of arrows of length 1, written as the columns of a grid Q. By the length-keeper technique (<a href="r27m.html#27m1">27m1</a>) QᵀQ = I, so Q is undone by Qᵀ. An arrow whose list on the old axes is x has the list x′ on the new axes with x = Qx′, so x′ = Qᵀx.</p>
+  <p data-pid="19a50d">New-axes technique: <b>when the axes turn to the columns of a length-keeper Q, an arrow’s list becomes Qᵀx, and the grid of a reading of two arrows becomes QᵀGQ; the number the reading gives does not change.</b> Proof: B(x, y) = xᵀGy = (Qx′)ᵀG(Qy′) = x′ᵀ(QᵀGQ)y′, since the turn of a row of two grids is the row of their turns the other way round.</p>
+  <pre class="lines" data-k="ember" data-label="this page: pure shear, on axes turned by 45°">
+\sigma = \begin{pmatrix}0 & \tau\\ \tau & 0\end{pmatrix},\ \ Q = \tfrac{1}{\sqrt2}\begin{pmatrix}1 & -1\\ 1 & 1\end{pmatrix} @@ 33·eng.4’s sliding sheet; Q turns the axes by 45°
+\sigma Q = \tfrac{\tau}{\sqrt2}\begin{pmatrix}1 & 1\\ 1 & -1\end{pmatrix} @@ row by column
+Q^{\mathsf T}\sigma Q = \tfrac{\tau}{2}\begin{pmatrix}2 & 0\\ 0 & -2\end{pmatrix} @@ the new-axes technique
+\htmlClass{new}{Q^{\mathsf T}\sigma Q = \begin{pmatrix}\tau & 0\\ 0 & -\tau\end{pmatrix}} \quad \blacksquare @@ a pull τ and a push τ, no shear: 33·eng6’s stress-axes technique, read as a turning of the axes
+  </pre>
+  <p data-pid="9960b8">Nothing in the sheet changed. On the first axes the push on every cut slides along the cut; on the turned axes it pulls straight across one cut and pushes straight across the other. One stress, two lists of four numbers.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · new axes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">47·phys.2.1</span><span class="ph understand">understand</span>Why does an arrow’s list become Qᵀx and not Qx when the axes turn to the columns of Q? <br>A stress has the grid with rows (3, 0) and (0, 1). What is its grid on axes turned by 45°?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="47·phys.3">
+  <h2 class="sthead"><span class="stno">47·phys.3</span>The Rule Is a Map of Categories</h2>
+  <p data-pid="ae176a">Why must a stress obey the new-axes technique? Because the rule is not about grids at all. Let f : V → V′ be a straight map. The map (v, w) ↦ f(v) ⊗ f(w) from V × V to V′ ⊗ V′ is straight in each slot, so by 47h1 it runs through V ⊗ V as exactly one straight map, written f ⊗ f, with (f ⊗ f)(v ⊗ w) = f(v) ⊗ f(w).</p>
+  <p data-pid="b25884">Square-the-space technique: <b>sending each space of arrows V to V ⊗ V, and each straight map f to f ⊗ f, is a map of categories (47b): (g ∘ f) ⊗ (g ∘ f) = (g ⊗ g) ∘ (f ⊗ f), and the do-nothing map goes to the do-nothing map. A reading B of V ⊗ V is carried to the new axes as B ∘ (Q ⊗ Q), and in grids that is QᵀGQ.</b> Proof: both sides of the first line send v ⊗ w to g(f(v)) ⊗ g(f(w)); the v ⊗ w reach every member of V ⊗ V as sums (the grid-space technique, 47h1), and two straight maps that agree on the eᵢ ⊗ eⱼ agree everywhere. For the last line, B ∘ (Q ⊗ Q) sends x′ ⊗ y′ to B(Qx′ ⊗ Qy′) = (Qx′)ᵀG(Qy′), which is the new-axes technique; readings run the map first, turned round, as 47b3’s turned-round technique says.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two turnings in a row">
+\text{turn by } Q_1 \text{, then by } Q_2:\ \ x'' = Q_2^{\mathsf T}Q_1^{\mathsf T}x @@ the new-axes technique twice
+G'' = Q_2^{\mathsf T}(Q_1^{\mathsf T}GQ_1)Q_2 = (Q_1Q_2)^{\mathsf T}G\,(Q_1Q_2) @@ the turn of a row, the other way round
+\htmlClass{new}{\text{one turn by } Q_1Q_2 \text{ gives the same grid}} \quad \blacksquare @@ the square-the-space technique: the rule respects running in a row
+  </pre>
+  <p data-pid="1e48eb">So a grid that claims to describe the sheet cannot pick its own rule for new axes. Suppose a rule said “on any axes, the stress has 1 in the top left corner and 0 elsewhere.” Turn the axes a quarter turn: the new-axes technique sends that grid to the one with 1 in the bottom right. The two claims disagree, so the rule describes no sheet. Physics calls a grid of measurements a tensor exactly when its numbers change by the new-axes technique, and the square-the-space technique says that is the same as being one member, or one reading, of a tensor product.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · carried along · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">47·phys.3.1</span><span class="ph understand">understand</span>What does the square-the-space technique say, and why must the rule for two turnings in a row agree with the rule for the single turn Q₁Q₂? <br>Why does “1 in the top left corner on any axes” describe no stress?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="47·phys.4">
+  <h2 class="sthead"><span class="stno">47·phys.4</span>What Every Axes Agree On</h2>
+  <p data-pid="f0dcab">Some things about a grid survive every turning of the axes. Those belong to the sheet or the body itself.</p>
+  <p data-pid="92b6f8">Same-on-every-axes technique: <b>QᵀGQ has the same stretches as G and the same rank. So the principal stresses of a sheet, the principal inertias of a body, and the rank of any reading of two arrows are the same on every axes.</b> Proof: QᵀGQ v′ = λv′ exactly when G(Qv′) = λ(Qv′), multiplying by Q or by Qᵀ, since each undoes the other; so the stretches agree, and the stretched arrows are the same arrows written on the new axes. Q and Qᵀ can be undone, so QᵀGQ reaches the arrows Qᵀ sends from what G reaches, a space of the same dimension (27c).</p>
+  <p data-pid="8b19b5">By the spectral technique (<a href="r31d.html#31d3">31d3</a>) a symmetric σ is λ₁ u₁ ⊗ u₁ + λ₂ u₂ ⊗ u₂ along its square axes, writing u ⊗ u for the grid u uᵀ. A rope in tension carries a stress of rank 1: one pull along one line. The fewest-terms technique (<a href="r47h.html#47h2">47h2</a>) then says how many single pulls a stress needs.</p>
+  <pre class="lines" data-k="ember" data-label="this page: pure shear is no single pull">
+\sigma = \tau\,u_1 \otimes u_1 - \tau\,u_2 \otimes u_2,\ \ u_{1,2} = \tfrac{1}{\sqrt2}(1, \pm 1) @@ the stretches ±τ of 47·phys.2
+\text{rank } \sigma = 2 @@ two stretches that are not 0
+\htmlClass{new}{\text{no } \lambda\, n \otimes n \text{ is a pure shear, on any axes}} \quad \blacksquare @@ the fewest-terms technique and the same-on-every-axes technique
+  </pre>
+  <p data-pid="2a73f6">It is the arithmetic of 47h2’s pair of particles. A pure shear needs a pull and a push, as that joint state needs two terms; neither can be written as one product, and turning the axes, or the lab, does not change that.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · kept · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">47·phys.4.1</span><span class="ph understand">understand</span>What does the same-on-every-axes technique say is kept when the axes turn? <br>A sheet has σ with rows (2, 1) and (1, 2). What are its principal stresses, and is it a single pull?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="47·phys.5">
+  <h2 class="sthead"><span class="stno">47·phys.5</span>Illegal Moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{A tensor is a grid of numbers}\,? @@ a grid is a tensor written on one choice of axes; the new-axes technique says how the writing changes
+\text{Every grid of measured numbers is a tensor}\,? @@ only one whose numbers change by the new-axes technique; “1 in the corner on any axes” is none
+\text{The principal stresses depend on the axes}\,? @@ the same-on-every-axes technique: they are the stretches, kept by every turning
+\text{A pure shear is a pull along the 45}^\circ \text{ line}\,? @@ it is a pull τ along one 45° line and a push τ along the other: rank 2
+\text{The rank of a grid changes when the axes turn}\,? @@ Q can be undone, so the rank is kept
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">47·phys.5.1</span><span class="ph understand">understand</span>Someone says “a tensor is just a matrix.” Using the new-axes technique and the square-the-space technique, say what is missing from that line.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">47·phys.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\pm(0.1, 0, 0),\ \pm(0, 0.2, 0)"></span> <span class="gtx">four 1 kg lumps</span></span>Build the inertia grid Θ of four 1 kg lumps at ±(0.1, 0, 0) m and ±(0, 0.2, 0) m from 27·phys4’s formula. <br>Turn the axes by 30° about (0, 0, 1) and find the new grid with the new-axes technique. Check, with the face-and-axis technique, that both grids give the same rotational inertia about the arrow (cos 30°, sin 30°, 0).</div>
+  <div class="chq"><span class="chid">47·phys.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\sigma = p\,I"></span></span>In still water the push on every cut is the same straight push p. Find QᵀσQ for every length-keeper Q. <br>Which cuts carry shear, and what are the principal stresses? What goes wrong with the stress-axes technique’s claim that the two square cuts are fixed?</div>
+  <div class="chq"><span class="chid">47·phys.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="Q^{\mathsf T}GQ = G \text{ for every turn } Q"></span></span>Turn the same-on-every-axes technique round. Find every 2 by 2 grid G with QᵀGQ = G for every turn Q of the plane. <br>Which of them are symmetric, and which stress is the only one that looks the same on every axes?</div>
+  <div class="chq"><span class="chid">47·phys.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">one side: a tensor is whatever changes by the rule</span> <span class="gtx">the other side: a tensor is a member of a tensor product</span></span>Physics books long said a tensor is a list of numbers, one for each choice of axes, that changes by the new-axes rule. Algebra books say a tensor is a member of V ⊗ V, defined by 47h1’s readings, with no axes at all. The square-the-space technique says the two match. Which is the thing and which is its shadow? Does the answer change for an engineer who must measure σ on a gauge glued to a wall?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r47comp.html">← 47·comp · can a program’s type say what it does?</a><a href="r47eng.html">47·eng · can a machine be built by plugging parts together? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>σ is the Cauchy stress tensor and Θ the inertia tensor; both are tensors of order two, also called second-rank tensors, a use of the word rank different from the rank of a grid on this page. The new-axes technique is the tensor transformation law. A list that changes by Qᵀ is a vector; readings change the other way, and the two kinds are called contravariant and covariant, a difference that vanishes for length-keepers because Q⁻¹ = Qᵀ. The square-the-space technique says the tensor square is a functor. Quantities kept by every turning are invariants; the principal stresses are its eigenvalues. A stress p I is hydrostatic, and σ minus its hydrostatic part is the deviatoric stress. The rank of a joint state is its Schmidt rank.</p>
+  <h3>Who said it first</h3>
+  <p>Augustin-Louis Cauchy described the push on every face of a small tetrahedron by a symmetric grid in 1822, published in 1823 and 1827. The word tensor, used earlier by William Rowan Hamilton for a length, took its present sense in Woldemar Voigt’s crystal physics of 1898. Gregorio Ricci-Curbastro and Tullio Levi-Civita set out the calculus of quantities that change by the rule in 1900, and Albert Einstein wrote gravity in it in 1915. Hassler Whitney defined the tensor product of groups by its readings in 1938, and Nicolas Bourbaki made the universal property the standard definition in 1948.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The principal stresses are the largest and smallest pushes, and turning the axes does not change the sheet, so they cannot change.” <span class="wrong">Not allowed</span> as a proof: the conclusion is right, but the line uses what it should show. That the grid on new axes describes the same sheet is exactly the new-axes technique, and that its stretches are the extreme pushes is 33·eng6; the same-on-every-axes technique is what ties the two.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'stress',t:R`m^{\mathsf T}\sigma n`,n:`Push along m on the cut facing n.`},
+  {k:'ember',kl:'inertia',t:R`u^{\mathsf T}\Theta u`,n:`Rotational inertia about u.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{readings of } \mathbb{R}^3 \otimes \mathbb{R}^3}`,n:`Straight in each slot.`}
+],{title:'The slides · two readings · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'arrow',t:R`x' = Q^{\mathsf T}x`,n:`The list on the new axes.`},
+  {k:'ember',kl:'reading',t:R`G' = Q^{\mathsf T}GQ`,n:`The grid on the new axes.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{x'^{\mathsf T}G'y' = x^{\mathsf T}Gy}`,n:`The number stays.`}
+],{title:'The slides · new axes · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'map',t:R`f \mapsto f \otimes f`,n:`A map of categories.`},
+  {k:'ember',kl:'reading',t:R`B \circ (Q \otimes Q)`,n:`Run Q first.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{G \mapsto Q^{\mathsf T}GQ}`,n:`Forced, not chosen.`}
+],{title:'The slides · carried along · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'stretches',t:R`\lambda(Q^{\mathsf T}GQ) = \lambda(G)`,n:`Same principal stresses.`},
+  {k:'ember',kl:'rank',t:R`\mathrm{rank}\,Q^{\mathsf T}GQ = \mathrm{rank}\,G`,n:`Same fewest terms.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{shear} \ne \text{one pull}}`,n:`On every axes.`}
+],{title:'The slides · kept · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

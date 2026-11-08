@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dots and Links</title>
+<title>Machines With a Tape</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,106 +48,102 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r41.html">← 41 counting alone says how things connect</a><a href="r41b.html">next: 41b trees →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r41.html">← 41 some questions no machine can answer</a><a href="r41b.html">next: 41b other machines, the same reach →</a></p>
   <div class="tags"><span class="tag proof">41a · proof</span></div>
-  <h1>Dots and Links</h1>
-  <p data-pid="8ce0ba">Three ferry docks on Puget Sound, at Fauntleroy, on Vashon Island and at Southworth, are joined by one run of boats, and each dock can reach each other dock without stopping at the third. Draw the docks as dots and the runs as links, and the drawing has thrown away almost everything: the water, the distances, the timetable, the size of the boats. What is left is only which dock is joined to which. This rung asks how much can be known from that alone, and the answer is a great deal. This first step lays the object down. A graph is a set of dots and a set of links, each link joining two different dots. Counting the links at each dot gives a total that is always even, for a reason that takes one line. A walk goes from dot to dot along links, a path never comes back to a dot, and a cycle comes back only to where it began. And one plain question, whether the dots can be split into two sides with every link crossing, has an answer that a count settles: exactly when no cycle has an odd number of links.</p>
-  <p class="gesture" data-pid="9c1b2f">A graph is dots and links, each link a set of two dots. Counting the ends of the links counts each link twice. A walk can be shortened to a path. The dots split into two sides with every link crossing exactly when no cycle is odd.</p>
+  <h1>Machines With a Tape</h1>
+  <p data-pid="329cd8">Rung four said what a recipe for answers is made of: a state, a start, a stop test, a move and an output. It never said what a move is allowed to do, and so it never said which recipes there are. Rung thirty eight built a machine that follows a list, from switches, and counted its steps. That machine is real, and it is messy: it has a memory of a fixed size, an adder, a counter, and a list of instructions that are themselves numbers. This step strips it down until nothing is left but what a recipe needs. A long strip of cells, each holding one mark. A head that sees one cell. A short table that says, for what the head sees and the state the machine is in, what to write, which way to step, and which state to go to. That is all. It looks too weak to do anything. The step shows it computes, decides and lists, that more strips add no reach, and then it names the guess the whole rung stands on: that whatever a person could compute by following rules, such a machine computes too. That guess is not proved. It is a thesis, and this step says why it cannot be anything more, and why it is believed.</p>
+  <p class="gesture" data-pid="d50784">A tape machine reads one cell, writes one mark, steps one cell, and changes state by a finite table. Each configuration has one next. Such machines compute functions, decide sets and list sets, and a set is decided exactly when it and its outside are both listed. Many tapes do no more than one. The thesis says these machines compute whatever a recipe computes.</p>
 </header>
 
 <section class="class step" data-step="41a1">
-  <h2 class="sthead"><span class="stno">41a1</span>A Graph Is Its Links</h2>
-  <p data-pid="94f1e1">A <i>graph</i> G is a set V of <i>dots</i> and a set E of <i>links</i>. Each link is a set {u, w} of two different dots of V, built as 2f builds a set of two. The link {u, w} <i>joins</i> u and w, and u and w are then <i>neighbours</i>. V is finite on this rung unless a page says otherwise.</p>
-  <p data-pid="06e619">The word graph is reused. In 9e a graph was the pairs of a function, drawn in the plane, and that meaning stays for functions. Here a graph is a set of dots with a set of links, and nothing is drawn: a drawing is only a way to look at it. The accepted name comes from the Greek <i>graphein</i>, to write, through the chemists of the 1870s, who wrote a molecule as atoms and bonds.</p>
-  <p data-pid="e8a49e">Write d(v), the <i>links at v</i>, for the number of links that hold v. The three docks have d = 2 each. Kₙ is the graph on n dots with every one of the n(n − 1)/2 possible links, by 4k’s choosing-counts-parts technique with k = 2.</p>
-  <p data-pid="f1cbfb">Ends-count technique: <b>adding the links at every dot counts every link exactly twice.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the ends-count technique">
-P = \{(v, e) : v \in V,\ e \in E,\ v \in e\} @@ the set of ends: a dot together with a link that holds it
-|P| = \textstyle\sum_{v \in V} d(v) @@ sort the ends by their dot; each dot v gives d(v) of them (4k, separate piles)
-|P| = \textstyle\sum_{e \in E} 2 = 2|E| @@ sort the same ends by their link; each link has exactly two dots
-\htmlClass{new}{\textstyle\sum_{v} d(v) = 2|E|} \quad \blacksquare @@ one set, counted two ways
+  <h2 class="sthead"><span class="stno">41a1</span>A Tape and a Table</h2>
+  <p data-pid="032579">7·then met a rulebook machine on a strip of 0s and 1s. Here it gets any marks, an input and an output. A <i>tape machine</i> has a finite set Γ of marks, among them the blank ⊔, and a finite set of states, among them a start state and the stop states. Its <i>table</i> δ gives, for each state that is not a stop state and each mark, three things: a mark to write, a step L or R, and a next state. The <i>tape</i> is a row of cells endless to the right, each holding one mark, all blank but finitely many.</p>
+  <p data-pid="bb9101">A <i>configuration</i> is the whole situation at one moment: the state, the tape, and the cell the head is on. Write it u q v: the tape reads uv, the machine is in state q, and the head is on the first mark of v. The input w is written at the left, the rest blank, the head on the first cell, the state the start. This is 4l’s recipe made exact. The state of 4l is the configuration. The stop test asks whether the state is a stop state, which is settled by looking. The move is one row of the table. The output is what the tape holds at the stop.</p>
+  <p data-pid="f02b79">One-next technique: <b>a configuration whose state is not a stop state has exactly one next configuration, and finding it means looking at one cell.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-next technique">
+u\,q\,s\,v,\ \allowbreak \ q \text{ not }\allowbreak \text{a }\allowbreak \text{stop }\allowbreak \text{state} @@ the head reads the mark s
+\delta(q, s) = (s', \text{R}, q') \text{ is }\allowbreak \text{one }\allowbreak \text{entry} @@ δ is a function (4d2): one value for each pair
+u\,q\,s\,v \to u\,s'\,q'\,v @@ write s′, step right, take state q′; v blank means one more blank cell
+u\,r\,q\,s\,v \to u\,q'\,r\,s'\,v \text{ for }\allowbreak \text{a }\allowbreak \text{step }\allowbreak \text{L} @@ on the first cell a step L stays put
+\htmlClass{new}{\text{one }}\allowbreak \htmlClass{new}{ \text{next }}\allowbreak \htmlClass{new}{ \text{configuration, }}\allowbreak \htmlClass{new}{ \text{from }}\allowbreak \htmlClass{new}{ \text{the }}\allowbreak \htmlClass{new}{ \text{pair } (q, s) \text{ alone}} \quad \blacksquare @@ nothing else of the tape is read
   </pre>
-  <p data-pid="f9a623">So the number of dots with an odd count of links is even: the even counts add to an even number, and the total is even. At a party where some people shake hands, the people who shook an odd number of hands are an even number of people. No graph has links counts 3, 3, 3, 1, 1.</p>
-  <aside class="nature">
-    <div class="eyebrow">Anexact, yet rigorous · connections, not families</div>
-    <p data-pid="ecc1fc">The Washington ferry map draws Vashon Island to scale, with the water blue and the docks where they are. The timetable leaflet draws the same three docks as three circles on a line. One looks like the Sound and one does not. As graphs they are the same object, since the same docks are joined.</p>
-    <p data-pid="aa7257"><b>A graph is known by which dots are joined, not by where the dots are drawn or what they are.</b></p>
-    <p data-pid="311318">Two graphs are the <i>same shape</i> when a matching of their dots (9c) carries links to links and non-links to non-links. Everything this rung proves about a graph is about its links, so it holds for every graph of the same shape. The count of links at each dot is kept by such a matching; so is the number of pieces, and the length of the shortest cycle.</p>
-    <p class="bait" data-pid="5882d1">The three docks of the Fauntleroy run and the three corners of a triangle drawn in chalk: one graph, or two?</p>
-  </aside>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · ends · ← → keys work</div></section>
+  <p data-pid="52b4ae">So a run is 4l’s run: run(0) is the start configuration, and run(n + 1) is the next of run(n) until a stop state comes. One example first, adding 1 to a number written in twos (4i). State r walks right to the first blank, then turns into c. In state c a 1 becomes 0 with a step left, and a 0 or a blank becomes 1, and the machine stops.</p>
+  <pre class="lines" data-k="ember" data-label="this step: 1011 plus one">
+r\,1011 \to 1\,r\,011 \to 10\,r\,11 \to 101\,r\,1 \to 1011\,r\,\sqcup @@ state r on 0 or 1: write it back, step R
+1011\,r\,\sqcup \to 101\,c\,1\sqcup @@ on the blank: step L, take c
+101\,c\,1 \to 10\,c\,10 \to 1\,c\,000 @@ c on 1: write 0, step L; the carry moves left
+\htmlClass{new}{1\,c\,000 \to 1100,\ }\allowbreak \htmlClass{new}{ \text{stopped}} \quad \blacksquare @@ c on 0: write 1, stop; eleven plus one is twelve
+  </pre>
+  <p data-pid="0fad10">Eight steps for four digits. The count grows with the length of the input, as 39k’s counts did. What the table cannot do is look at two far cells at once: everything it learns, it learns by walking.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a tape · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">41a1.1</span><span class="ph understand">understand</span>What is a graph, and how does it differ from the graph of 9e? <br>What does the ends-count technique say, and why must the dots with an odd count of links be an even number?</li>
+      <li><span class="qid">41a1.1</span><span class="ph understand">understand</span>What are the parts of a tape machine, and what is a configuration? <br>What does the one-next technique say, and why is a run of a tape machine one of 4l’s runs?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="41a2">
-  <h2 class="sthead"><span class="stno">41a2</span>Walks, Paths and Cycles</h2>
-  <p data-pid="685571">A <i>walk</i> from u to w is a list of dots v₀ = u, v₁, …, vₖ = w, each joined to the next; its <i>length</i> is k, the number of links used. A <i>path</i> is a walk that meets no dot twice. A <i>cycle</i> is a walk of length at least 3 that ends where it starts and meets no other dot twice.</p>
-  <p data-pid="7982bc">Walk-to-path technique: <b>if a walk joins u to w, a path joins u to w.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the walk-to-path technique">
-\text{among the walks from } u \text{ to } w \text{, take one of least length } k @@ a least member of a set of numbers that has one (4h)
-\text{suppose } v_i = v_j \text{ with } i < j @@ the walk meets a dot twice
-v_0, \dots, v_i, v_{j+1}, \dots, v_k \text{ is a walk of length } k - (j - i) < k @@ cut out the loop between the two meetings
-\htmlClass{new}{\bot:\ \text{the least walk meets no dot twice, so it is a path}} \quad \blacksquare @@ against the choice of the least
+  <h2 class="sthead"><span class="stno">41a2</span>Computing, Deciding, Listing</h2>
+  <p data-pid="57e638">A machine <i>computes</i> a function f on strings when, started on any input w, it stops with f(w) on the tape. Give a machine two stop states, yes and no. It <i>decides</i> a set A of strings when it stops on every input, in yes exactly on the members of A. It <i>lists</i> A when it stops in yes exactly on the members of A; on other strings it may stop in no, or never stop at all.</p>
+  <p data-pid="217787">Reuse, said out loud. 7c called a statement decidable when a constructive column proves it or its denial. From here on a set of strings is decidable when some tape machine decides it. The new meaning fits the old: for each input the run of the machine is a column, step by step, that reaches one answer. Where the two might part, the page says which it means.</p>
+  <p data-pid="bcfef1">Both-sides technique: <b>a set is decided by a machine exactly when the set and the strings outside it are both listed.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the both-sides technique">
+M \text{ decides } A @@ suppose it
+M \text{ lists } A;\ \allowbreak \ M \text{ with }\allowbreak \text{yes }\allowbreak \text{and }\allowbreak \text{no }\allowbreak \text{swapped }\allowbreak \text{lists }\allowbreak \text{the }\allowbreak \text{outside} @@ M stops on every input
+M_1 \text{ lists } A,\ \allowbreak \ M_2 \text{ lists }\allowbreak \text{the }\allowbreak \text{outside} @@ now suppose the other way
+\text{run } M_1, M_2 \text{ on } w \text{ in }\allowbreak \text{turns, }\allowbreak \text{one }\allowbreak \text{step }\allowbreak \text{each} @@ two tapes, one each; 41a3 makes them one
+w \in A \text{ or } w \notin A,\ \allowbreak \text{so }\allowbreak \text{one }\allowbreak \text{of }\allowbreak \text{them }\allowbreak \text{stops} @@ either-way, on a string and a set (7e)
+\htmlClass{new}{\text{answer }}\allowbreak \htmlClass{new}{ \text{yes }}\allowbreak \htmlClass{new}{ \text{if } M_1 \text{ stopped }}\allowbreak \htmlClass{new}{ \text{in }}\allowbreak \htmlClass{new}{ \text{yes, }}\allowbreak \htmlClass{new}{ \text{else }}\allowbreak \htmlClass{new}{ \text{no}} \quad \blacksquare @@ the run stops on every w, and is right
   </pre>
-  <p data-pid="a86694">Being joined by a walk is a sameness relation on V (2h): every dot is joined to itself by the walk of length 0, a walk can be read backwards, and two walks can be put end to end. Its classes are the <i>pieces</i> of G. G is <i>in one piece</i> when it has one class, the word of 34c carried over: a graph drawn with its links as curves is in one piece in 34c’s sense exactly when it is in one piece here.</p>
-  <p data-pid="46faf6">The <i>distance</i> from u to w is the least length of a walk between them. It obeys 34a’s three demands, so a graph in one piece is a space with a distance.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · walks · ← → keys work</div></section>
+  <p data-pid="bd6c09">The proof does not say how long to wait. It says only that the wait ends. That is the gap between listing and deciding: a lister that has not stopped tells you nothing yet. 38b’s proof-listing technique gave a lister of what a collection reaches. Whether a decider can be built from it is 41e’s question.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · three jobs · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41a2.1</span><span class="ph understand">understand</span>What is the difference between a walk, a path and a cycle? <br>What does the walk-to-path technique say, and which line of its proof uses the least walk?</li>
+      <li><span class="qid">41a2.1</span><span class="ph understand">understand</span>What does it mean for a machine to compute a function, to decide a set, and to list a set? <br>What does the both-sides technique say, and why does running two machines in turns stop?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="41a3">
-  <h2 class="sthead"><span class="stno">41a3</span>Two Sides</h2>
-  <p data-pid="4a9b66">A graph is <i>two-sided</i> when V splits into two sets X and Y, with no dot in both, so that every link has one dot in X and one in Y. Six houses on a street and three shops, with a link from each house to each shop it buys from, make a two-sided graph. Kₘ,ₙ is the two-sided graph with m dots on one side, n on the other, and every crossing link.</p>
-  <p data-pid="5ab7d5">Odd-cycle technique: <b>a graph is two-sided exactly when it has no cycle of odd length.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the odd-cycle technique, one way">
-\text{a cycle } v_0, v_1, \dots, v_k = v_0 \text{ in a two-sided graph} @@ suppose
-v_0, v_2, v_4, \dots \in X \text{ and } v_1, v_3, \dots \in Y \text{, if } v_0 \in X @@ every link crosses, so the sides alternate
-v_k = v_0 \in X \text{, so } k \text{ is even} @@ the dot at place k is on v₀’s side exactly when k is even (4j, even or odd)
-\htmlClass{new}{\text{no cycle of a two-sided graph is odd}} \quad \blacksquare @@ 
+  <h2 class="sthead"><span class="stno">41a3</span>More Tapes, No More Reach</h2>
+  <p data-pid="d4c924">A machine with k tapes has k heads and a table that reads k marks at once. It is easier to program: the turn-taking of 41a2 wants one tape for each machine. It computes nothing new.</p>
+  <p data-pid="45c42b">Tracks technique: <b>for every machine with k tapes there is a machine with one tape that computes the same function, and if the first takes t steps on an input of length n, the second takes at most about t(n + t) steps.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the tracks technique">
+\text{one }\allowbreak \text{cell }\allowbreak \text{of }\allowbreak \text{the }\allowbreak \text{new }\allowbreak \text{tape }\allowbreak \text{holds }\allowbreak \text{a }\allowbreak \text{column }\allowbreak \text{of } k \text{ marks, }\allowbreak \text{each }\allowbreak \text{with }\allowbreak \text{a }\allowbreak \text{head }\allowbreak \text{flag }\allowbreak \text{or }\allowbreak \text{not} @@ the marks are the lists of k old marks and flags: still a finite set
+\text{a }\allowbreak \text{sweep }\allowbreak \text{right }\allowbreak \text{reads }\allowbreak \text{the } k \text{ flagged }\allowbreak \text{marks }\allowbreak \text{into }\allowbreak \text{the }\allowbreak \text{state} @@ finitely many lists of k marks: finitely many states
+\text{a }\allowbreak \text{sweep }\allowbreak \text{left }\allowbreak \text{writes }\allowbreak \text{and }\allowbreak \text{moves }\allowbreak \text{each }\allowbreak \text{flag} @@ one row of the old table
+\text{after } t \text{ old }\allowbreak \text{steps }\allowbreak \text{no }\allowbreak \text{head }\allowbreak \text{is }\allowbreak \text{past }\allowbreak \text{cell } n + t @@ each step moves a head one cell
+\htmlClass{new}{\text{each }}\allowbreak \htmlClass{new}{ \text{old }}\allowbreak \htmlClass{new}{ \text{step }}\allowbreak \htmlClass{new}{ \text{costs }}\allowbreak \htmlClass{new}{ \text{at }}\allowbreak \htmlClass{new}{ \text{most }}\allowbreak \htmlClass{new}{ \text{about } 2(n + t) \text{ new }}\allowbreak \htmlClass{new}{ \text{steps}} \quad \blacksquare @@ two sweeps over the used stretch
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: the odd-cycle technique, the other way">
-\text{no odd cycle; take one piece and a dot } r \text{ in it} @@ the pieces can be done one at a time
-X = \{v : \text{distance}(r, v) \text{ even}\},\ \ Y = \{v : \text{distance}(r, v) \text{ odd}\} @@ the sides, by distance from r
-\text{a link } \{u, w\} \text{ inside } X \text{ or inside } Y @@ suppose one does not cross
-\text{least paths } r \to u,\ r \to w \text{ and the link make a closed walk of odd length} @@ two lengths of one parity, plus 1
-\text{a closed walk of odd length holds an odd cycle} @@ induction on the length: cut at a repeated dot; one of the two closed walks is odd and shorter
-\htmlClass{new}{\bot:\ \text{every link crosses, and the graph is two-sided}} \quad \blacksquare @@ against no odd cycle
-  </pre>
-  <p data-pid="6e1794">So a question about every way to split the dots, of which there are 2ⁿ, is settled by looking at the cycles, and by the second proof, at the distances from one dot. A recipe that walks out from r in layers settles it in one pass; 41k builds that recipe.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · two sides · ← → keys work</div></section>
+  <p data-pid="6dab01">So a machine that takes n² steps on k tapes takes about n⁴ on one. 39k’s growth families matter here: the slowdown squares the count, and a count that was a power of n stays a power of n. The same kind of argument gives a tape endless both ways, more marks, or a head that may stay put, and none of them reaches further. 41h leans on this when it says that fast does not depend on which machine.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · tracks · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41a3.1</span><span class="ph understand">understand</span>What is a two-sided graph? <br>What does the odd-cycle technique say, and how does its second proof choose the two sides?</li>
+      <li><span class="qid">41a3.1</span><span class="ph understand">understand</span>What does the tracks technique say? <br>Why does one old step cost at most about 2(n + t) new steps, and why does a power of n stay a power of n?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="41a4">
-  <h2 class="sthead"><span class="stno">41a4</span>How Many Graphs</h2>
-  <p data-pid="fda1b1">On the dots {1, …, n}, a graph is a choice of which of the n(n − 1)/2 possible links to keep. 4k’s settled-parts technique counts the choices.</p>
-  <pre class="lines" data-k="ember" data-label="this step: graphs on n named dots">
-\text{possible links: } \binom{n}{2} = \tfrac{n(n-1)}{2} @@ choosing-counts-parts (4k)
-\text{a graph is a part of the possible links} @@ the definition, with V fixed
-\text{graphs on } n \text{ named dots: } 2^{n(n-1)/2} @@ settled-parts (4k)
-\htmlClass{new}{n = 4:\ 2^6 = 64;\ \ n = 10:\ 2^{45} \approx 3.5 \times 10^{13}} \quad \blacksquare @@ counted
-  </pre>
-  <p data-pid="2558b6">Many of the 64 graphs on four named dots are the same shape: the six graphs with one link are one shape, only the names moved. How many shapes there are is a different count, harder, since it asks what stays when the names are shuffled. There are 11. 41·cb19 counts them with rung 19’s moves.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · how many · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">41a4</span>A Thesis, Not a Technique</h2>
+  <p data-pid="8eff94">Here is the claim the rung needs. <b>Whatever a person can compute by following a finite list of rules, with pencil and paper and no insight, some tape machine computes.</b> It is called a thesis. It cannot be a technique, because one side of it, following a list of rules, was never made exact: 4l named the five parts of a recipe and never said which moves are allowed. If it were made exact, the exact version would be a new definition, and the thesis would be the claim that the definition caught the loose word.</p>
+  <p data-pid="2f4064">Two kinds of evidence hold it up. The first is an analysis of a person computing. They are in one of finitely many states of mind. They look at a bounded patch of paper and change a bounded patch. They shift their attention a bounded distance. Each such step is a few rows of a table, and the tracks technique packs the paper into a tape. The second is what 41b finds: every other exact try at the word, made by people working apart, reaches exactly the same functions.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · loose, then locked</div>
+    <p data-pid="844a0d">The word recipe was gathered loose: gcd, counting on, writing in twos, the proof-check of 38b, all called recipes because they felt alike. The tape machine locks it. From here on “a recipe computes f” is said to mean “a tape machine computes f”, and it is the lock, not the loose word, that the proofs of this rung use.</p>
+    <p data-pid="5e1ab2"><b>Lock the word before you prove anything about it, and say which side of the lock each claim is on.</b></p>
+    <p data-pid="099409">Unlocking runs the steps backward, and here it cannot be done. The lock does not prove it caught every loose recipe. No one has found a recipe it missed in ninety years, and no count of such years would prove it.</p>
+    <p class="bait" data-pid="a48c0f">A spreadsheet in Sacramento recalculates a budget whenever a cell changes. Is that a recipe in 4l’s sense? Which of its parts would you need to lock before a tape machine could be said to do the same?</p>
+  </aside>
+  <p data-pid="c612ae">Without the thesis nothing on this rung breaks as mathematics. What breaks is what it means. 41d proves that no tape machine decides which tape machines stop. Only with the thesis does that become: no recipe at all does.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41a4.1</span><span class="ph understand">understand</span>Why are there 2^(n(n − 1)/2) graphs on n named dots? <br>Why is the number of shapes of graph on four dots smaller than 64?</li>
+      <li><span class="qid">41a4.1</span><span class="ph understand">understand</span>What does the thesis claim, and why can it not be proved as a technique? <br>What two kinds of evidence hold it up, and what is lost from 41d without it?</li>
     </ol>
   </section>
 </section>
@@ -155,15 +151,15 @@ X = \{v : \text{distance}(r, v) \text{ even}\},\ \ Y = \{v : \text{distance}(r, 
 <section class="class step" data-step="41a5">
   <h2 class="sthead"><span class="stno">41a5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{links counts } 3, 3, 2, 1 \text{ belong to some graph}\,? @@ they add to 9, which is odd; the ends-count technique needs an even total
-\text{a walk from } u \text{ to } w \text{ is a path}\,? @@ it may meet a dot twice; only a least walk is sure to be a path
-\text{two drawings that look different are different graphs}\,? @@ a graph is its links; the drawing is not part of it
-\text{no cycle of length 3, so the graph is two-sided}\,? @@ a cycle of 5 links is odd, and has no triangle
+\text{the }\allowbreak \text{machine }\allowbreak \text{lists } A \text{ and }\allowbreak \text{has }\allowbreak \text{run }\allowbreak \text{a }\allowbreak \text{long }\allowbreak \text{time }\allowbreak \text{on } w\text{, so } w \notin A\,? @@ a lister that has not stopped has said nothing; it may stop at the next step
+\text{a }\allowbreak \text{machine }\allowbreak \text{with }\allowbreak \text{two }\allowbreak \text{tapes }\allowbreak \text{computes }\allowbreak \text{more }\allowbreak \text{than }\allowbreak \text{one }\allowbreak \text{with }\allowbreak \text{one}\,? @@ the tracks technique: the same functions, at most about t(n + t) steps
+\text{the }\allowbreak \text{thesis }\allowbreak \text{is }\allowbreak \text{proved }\allowbreak \text{by } 40b\,? @@ 41b proves machines equal to each other; the thesis is about the loose word, which no proof touches
+\text{the }\allowbreak \text{head }\allowbreak \text{reads }\allowbreak \text{the }\allowbreak \text{cell }\allowbreak \text{it }\allowbreak \text{last }\allowbreak \text{wrote }\allowbreak \text{and }\allowbreak \text{the }\allowbreak \text{one }\allowbreak \text{it }\allowbreak \text{will }\allowbreak \text{step }\allowbreak \text{to}\,? @@ one cell, the one under the head (the one-next technique)
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41a5.1</span><span class="ph understand">understand</span>Why can no graph have links counts 3, 3, 2, 1? <br>Why does having no triangle not make a graph two-sided?</li>
+      <li><span class="qid">41a5.1</span><span class="ph understand">understand</span>Why does a long run of a lister on w not show that w is outside the set? <br>Why does 41b not prove the thesis?</li>
     </ol>
   </section>
 </section>
@@ -172,22 +168,22 @@ X = \{v : \text{distance}(r, v) \text{ even}\},\ \ Y = \{v : \text{distance}(r, 
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">41a.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="d = 3, 3, 3, 3, 3, 3"></span></span>Build two graphs on six dots, each with three links at every dot, that are not the same shape. <br>What single count, kept by every matching that carries links, tells them apart?</div>
-  <div class="chq"><span class="chid">41a.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n \ge 2"></span></span>Prove that in every graph with at least two dots, two dots have the same count of links. <br>Does the proof still go through if the graph may have endlessly many dots?</div>
-  <div class="chq"><span class="chid">41a.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="4, 4, 3, 2, 2, 1"></span></span>Every list of link counts with an even total adds up as the ends-count technique demands. Turn it round: must every such list belong to a graph? Settle this list, and 3, 3, 3, 1. <br>Find a test that settles a list by removing its largest count.</div>
-  <div class="chq"><span class="chid">41a.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">9e: the graph of a function, its pairs (x, f(x))</span></span>Rung 9 drew a function’s pairs in the plane and called them its graph. Make a function from a finite set X to a finite set Y into a two-sided graph of this step. <br>Which graphs arise this way? Is the reuse of the word a pun, or does one meaning hold the other?</div>
+  <div class="chq"><span class="chid">41a.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">strings of a’s and b’s</span></span>Build a tape machine with one tape that decides whether a string has as many a’s as b’s. Write its table, and count, roughly, its steps on a string of length n.</div>
+  <div class="chq"><span class="chid">41a.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a }\allowbreak \text{machine }\allowbreak \text{with }\allowbreak \text{no }\allowbreak \text{stop }\allowbreak \text{state}"></span></span>A machine has no stop state at all. Which function does it compute, and which set does it list? Is the empty set decided?</div>
+  <div class="chq"><span class="chid">41a.6.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">4l: an algorithm is sure to stop</span></span>Every recipe of 4l is a tape machine, by the thesis. Turn it round. Is every tape machine a recipe in 4l’s sense? Which tape machines are, and which part of 4l rules the others out?</div>
+  <div class="chq"><span class="chid">41a.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">a thesis, a definition, or a law of nature?</span></span>One view holds that the tape machine is simply what “computable” now means: a definition, nothing to prove. Another holds that it is a claim about people that could be false, and that a mind may see truths no machine reaches. A third holds that it is a claim about the physical world, and that some device might one day compute more. Which of the three is the thesis of 41a4? What would count against each?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r41.html">← 41 · counting alone says how things connect</a><a href="r41b.html">41b · trees →</a></nav>
+<nav class="nextrung"><a href="r41.html">← 41 · some questions no machine can answer</a><a href="r41b.html">41b · other machines, the same reach →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>Dots are vertices (or nodes) and links are edges; the links at v are its degree. The ends-count technique is the handshake lemma. Neighbours are adjacent vertices. Walks, paths and cycles keep their names, and the pieces are the connected components. A two-sided graph is bipartite, and the odd-cycle technique is the characterization of bipartite graphs. Kₙ is the complete graph and Kₘ,ₙ the complete bipartite graph. Graphs of the same shape are isomorphic. The test asked for in 41a.6.3 is the Havel–Hakimi test.</p>
+  <p>A tape machine is a Turing machine; its table is the transition function, a configuration is an instantaneous description, and the stop states are halting states, accepting and rejecting. A function a machine computes is computable, or recursive, and a set a machine decides is decidable or recursive. A set a machine lists is recognizable, or recursively enumerable, or computably enumerable, the name 38·now2 used. The both-sides technique is often stated as: a set is decidable exactly when it and its complement are recognizable. A machine with k tapes is a multitape Turing machine, and the tracks technique says it is simulated with quadratic slowdown. The thesis is the Church–Turing thesis.</p>
   <h3>Who said it first</h3>
-  <p>Leonhard Euler counted the ends of bridges in 1736 (see 41c). James Joseph Sylvester used the word graph in 1878, borrowing it from the chemists' graphic notation, and Arthur Cayley counted trees for chemistry in the 1870s. Dénes Kőnig wrote the first book on the subject in 1936 and proved the odd-cycle technique there in the form used here. Václav Havel (1955) and S. Louis Hakimi (1962) found the test for lists of degrees.</p>
+  <p>Alan Turing described the machine in “On computable numbers, with an application to the Entscheidungsproblem”, written in 1936 and published in 1936 and 1937. His machine stood for a person computing, then called a computer, and his analysis of that person’s states of mind is the first kind of evidence in 41a4. Emil Post described a nearly identical scheme in 1936, independently. Alonzo Church proposed in 1936 that the functions of his λ-calculus (41b) are exactly the effectively calculable ones; Stephen Kleene named the claim Church’s thesis in 1952. Kurt Gödel doubted the earlier proposals and was persuaded by Turing’s analysis. Robin Gandy (1980) asked which physical machines the thesis covers. The view that minds outrun machines was argued by John Lucas (1961) and Roger Penrose (1989).</p>
   <h3>A proof that is not allowed</h3>
-  <p>“Each person at a party shakes an even number of hands or an odd number. Pair the odd ones up as they shake hands with each other; so there is an even number of them.” Not allowed: the odd ones need not shake hands with each other at all. The count is even because the total of all the counts is twice the number of handshakes, not because the odd ones pair off.</p>
+  <p>“Every recipe anyone has written has been turned into a tape machine. So every recipe is a tape machine.” Not allowed as a proof: it is induction under the small case, a list of cases, and a list of cases is evidence for a law, not a proof of a technique. That is why it is called a thesis, and why 41a4 keeps it apart from the techniques.</p>
 </section>
 
 </div>
@@ -202,25 +198,20 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'a link',t:R`e = \{u, w\},\ u \ne w`,n:`A set of two dots.`},
-  {k:'ember',kl:'count twice',t:R`(v, e) \text{ with } v \in e`,n:`Sorted by dot, then by link.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\textstyle\sum_v d(v) = 2|E|}`,n:`Always even.`}
-],{title:'The slides · ends · ← → keys work'});
+  {k:'ember',kl:'table',t:R`\delta(q, s) = (s', \text{R}, q')`,n:`One row.`},
+  {k:'ember',kl:'step',t:R`u\,q\,s\,v \to u\,s'\,q'\,v`,n:`One cell looked at.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{1011 + 1 = 1100}`,n:`Eight steps.`}
+],{title:'The slides · a tape · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'walk',t:R`v_0, v_1, \dots, v_k`,n:`Each joined to the next.`},
-  {k:'ember',kl:'cut',t:R`v_i = v_j \Rightarrow \text{shorter}`,n:`A loop cut out.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{walk} \Rightarrow \text{path}}`,n:`The least walk is a path.`}
-],{title:'The slides · walks · ← → keys work'});
+  {k:'ember',kl:'decide',t:R`\text{stops on every } w`,n:`Yes or no.`},
+  {k:'ember',kl:'list',t:R`\text{stops in yes on members}`,n:`May run for ever.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{decided} \iff \text{both sides listed}}`,n:`Run in turns.`}
+],{title:'The slides · three jobs · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'alternate',t:R`v_0 \in X,\ v_1 \in Y,\ \dots`,n:`Each link crosses.`},
-  {k:'ember',kl:'by distance',t:R`X = \text{even},\ Y = \text{odd}`,n:`From one dot r.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{two-sided} \iff \text{no odd cycle}}`,n:`A count settles a split.`}
-],{title:'The slides · two sides · ← → keys work'});
-stepper('#sl4',[
-  {k:'ember',kl:'links',t:R`\binom{n}{2}`,n:`Possible links.`},
-  {k:'ember',kl:'choose',t:R`2^{\binom{n}{2}}`,n:`Keep or drop each.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{64 \text{ on four named dots}}`,n:`Shapes are fewer.`}
-],{title:'The slides · how many · ← → keys work'});
+  {k:'ember',kl:'column',t:R`(s_1, \dots, s_k) \text{ in one cell}`,n:`Flags mark heads.`},
+  {k:'ember',kl:'sweep',t:R`2(n + t) \text{ moves}`,n:`Read, then write.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{t \text{ steps} \to t(n + t)}`,n:`Same reach.`}
+],{title:'The slides · tracks · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

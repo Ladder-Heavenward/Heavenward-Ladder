@@ -1,26 +1,10 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>No Machine Decides Stopping</title>
+<title>Calls and the Stack</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
-<style>
-.pic .panels{grid-template-columns:1fr 1fr}
-@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
-.panel{align-content:start;min-width:0}
-.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
-@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
-.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
-@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
-.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
-.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
-.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
-.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
-.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
-table.tt td.l{text-align:left}
-
-</style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
    then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
@@ -48,88 +32,77 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r40c.html">← 40c one machine runs them all</a><a href="r40e.html">next: 40e undecidable everywhere →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40c.html">← 40c a name that holds a value</a><a href="r40e.html">next: 40e recursion is induction →</a></p>
   <div class="tags"><span class="tag proof">40d · proof</span></div>
-  <h1>No Machine Decides Stopping</h1>
-  <p data-pid="a6e135">Rung three asked whether a program can run for ever, and found loops that stop, loops that come back, and loops that go on making something new, and it said nobody can always tell. Rung thirty seven ended with a search that finds every proof and never says when there is none, and it left the question of telling the two apart for here. Now the question can be asked exactly. Given the written table of a machine and an input, does the machine stop? The universal machine answers half of it: run the machine, and if it stops, say so. The other half is the trouble. This step proves that no machine answers the whole question for every machine and every input. The proof is the diagonal of the rung on sizes, run on machines instead of digits. A machine that could predict every machine is fed to a machine built to do the opposite of whatever it predicts, and that machine is fed its own table. The rung on switches built a box that says the opposite of itself and found it ticks like a clock. Here there is no clock to run. There is only the refusal: no such predictor exists.</p>
-  <p class="gesture" data-pid="c88524">The machines that stop on their inputs are listed by running them. No machine decides which ones stop: one that did would be fed a machine built to do the opposite of its prediction about itself. So the machines that never stop are not even listed.</p>
+  <h1>Calls and the Stack</h1>
+  <p data-pid="9e0406">A program that multiplies in three places should not copy the multiply three times. A call jumps to one copy and comes back. Coming back needs somewhere to keep where it came from, and <a href="r39n.html">39n</a>’s pile is that place.</p>
+  <p class="gesture" data-pid="9d535d">A call pushes where to come back; a return pops it. A function that calls itself is defining by repeating, run on a pile.</p>
 </header>
 
 <section class="class step" data-step="40d1">
-  <h2 class="sthead"><span class="stno">40d1</span>Stopping Is Listed</h2>
-  <p data-pid="f1e4b0">The <i>stopping set</i> H is the set of strings ⟨M⟩ # w such that M, started on w, stops. Its accepted name is the halting problem.</p>
-  <p data-pid="31f4a9">Stopping-listed technique: <b>a machine lists the stopping set.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the stopping-listed technique">
-\text{on input } x\text{: }\allowbreak \text{check }\allowbreak \text{that } x = \langle M\rangle \# w @@ the table-code technique (40c1); if not, stop in no
-\text{run U on } \langle M\rangle \# w @@ the universal technique (40c2)
-\text{if }\allowbreak \text{U }\allowbreak \text{stops, }\allowbreak \text{stop }\allowbreak \text{in }\allowbreak \text{yes} @@ U stops exactly when M stops on w
-\htmlClass{new}{\text{yes }}\allowbreak \htmlClass{new}{ \text{exactly }}\allowbreak \htmlClass{new}{ \text{on }}\allowbreak \htmlClass{new}{ \text{the }}\allowbreak \htmlClass{new}{ \text{members }}\allowbreak \htmlClass{new}{ \text{of } H} \quad \blacksquare @@ on the others it runs for ever, which a lister may
-  </pre>
-  <p data-pid="82f36f">That is 38b’s proof-listing in a new coat, and it has the same flaw. While U runs, nothing tells whether it is nearly done or never will be. 3·comp caught loops that come back by remembering states; a machine whose tape keeps growing never comes back.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · listed · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">40d1</span>Jump There, Come Back</h2>
+  <p data-pid="63a04f">Give the machine two more kinds. CALL f puts the address of the next line on the pile and jumps to f. RET takes the top address off the pile and jumps to it.</p>
+  <p data-pid="a6b858">So the function is written once, and each call returns to its own caller, because each call left its own way back on top of the pile.</p>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">40d1.1</span><span class="ph understand">understand</span>What is the stopping set H? <br>What does the stopping-listed technique say, and what does its machine do on a string outside H?</li>
+      <li><span class="qid">40d1.1</span><span class="ph understand">understand</span>What do CALL and RET do? <br>How does each call get back to its own caller?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="40d2">
-  <h2 class="sthead"><span class="stno">40d2</span>No Machine Decides Stopping</h2>
-  <p data-pid="e53bc6">No-stop-decider technique: <b>no tape machine decides the stopping set.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the no-stop-decider technique">
-D \text{ decides } H @@ suppose it, to refute it
-E\text{: on } \langle M\rangle\text{, run } D \text{ on } \langle M\rangle \# \langle M\rangle @@ feed M its own code, as 35b looked at the nth digit of the nth real
-\text{if }\allowbreak \text{D }\allowbreak \text{says }\allowbreak \text{yes, }\allowbreak \text{E }\allowbreak \text{loops }\allowbreak \text{for }\allowbreak \text{ever; }\allowbreak \text{if }\allowbreak \text{D }\allowbreak \text{says }\allowbreak \text{no, }\allowbreak \text{E }\allowbreak \text{stops} @@ E does the opposite of what D predicts
-\text{run E on } \langle E\rangle @@ E has a code (40c1); feed E its own
-E \text{ stops }\allowbreak \text{on } \langle E\rangle \iff D \text{ says }\allowbreak \text{no }\allowbreak \text{on } \langle E\rangle \# \langle E\rangle \iff E \text{ does }\allowbreak \text{not }\allowbreak \text{stop }\allowbreak \text{on } \langle E\rangle @@ the two lines above, with D right about every input
-\htmlClass{new}{\bot;\ }\allowbreak \htmlClass{new}{ \text{no such } D} \quad \blacksquare @@ refute (1b)
-  </pre>
-  <p data-pid="8dceed">Lay the machines down the side of a table and their codes along the top, and write in each place whether machine i stops on code j. D would be a machine that reads the whole table. E runs down the diagonal and takes the opposite at each place, so E’s row differs from every row, its own included. That is 35b’s unlisted real, with “stops” for a digit.</p>
-  <p data-pid="9dedff">39g wired a not back into itself, and the box did not settle: so, then not so, a clock. E fed ⟨E⟩ is the same loop of predictions, “if it stops, it does not; if not, it does”, and a machine has no wire in which to oscillate. Its run is one run. What gives way is the supposition that D exists.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · diagonal · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">40d2</span>Why a Pile</h2>
+  <p data-pid="610945">Calls nest: f calls g, and g returns before f does. <b>Returns come in the reverse order of the calls</b>, because a call cannot return until every call it made has returned. That is a pile’s order, last in and first out (<a href="r39n.html">39n1</a>).</p>
+  <p data-pid="dbf632">With a single cell for the way back, g’s call would overwrite f’s, and f would never get home.</p>
   <section class="sayback">
-    <h3>Question</h3>
+    <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">40d2.1</span><span class="ph understand">understand</span>What does the no-stop-decider technique say? <br>What does E do, and why does running E on its own code refute D?</li>
+      <li><span class="qid">40d2.1</span><span class="ph understand">understand</span>Why do returns come in reverse order of calls? <br>What goes wrong with a single cell for the way back?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="40d3">
-  <h2 class="sthead"><span class="stno">40d3</span>Never Stopping Is Not Even Listed</h2>
-  <p data-pid="4070c1">Not-stopping technique: <b>no machine lists the strings ⟨M⟩ # w such that M never stops on w.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the not-stopping technique">
-\text{a }\allowbreak \text{machine }\allowbreak \text{lists }\allowbreak \text{the }\allowbreak \text{never-stopping }\allowbreak \text{strings} @@ suppose it
-\text{strings }\allowbreak \text{that }\allowbreak \text{are }\allowbreak \text{not }\allowbreak \text{of }\allowbreak \text{the }\allowbreak \text{form } \langle M\rangle \# w \text{ are }\allowbreak \text{decided} @@ the table-code technique; add them to the list
-H \text{ and }\allowbreak \text{the }\allowbreak \text{strings }\allowbreak \text{outside } H \text{ are }\allowbreak \text{both }\allowbreak \text{listed} @@ the stopping-listed technique, and the line above
-H \text{ is }\allowbreak \text{decided} @@ the both-sides technique (40a2)
-\htmlClass{new}{\bot} \quad \blacksquare @@ the no-stop-decider technique
-  </pre>
-  <p data-pid="196170">So the two halves are not alike. A machine that stops can always be shown to stop: run it, and the run is the evidence, a list of configurations anyone can check. A machine that never stops has, in general, no such evidence a machine could find. Some do: 3·comp’s loops that come back, and the falling-measure of 4l turned round. 40j collects a few kinds. No finite stock of kinds catches them all.</p>
-  <p data-pid="6ccb1b">And a limit in time changes everything. “M stops on w within t steps” is decided: run U for t steps. The question that cannot be decided is the one with no t attached. 40h asks what happens when t is attached and the answer must come quickly.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · two halves · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">40d3</span>A Function That Calls Itself</h2>
+  <p data-pid="f53582">fact(n): if n = 0, give 1; otherwise give n · fact(n − 1). This is <a href="r04d.html">4d</a>’s defining by repeating, a start and a step, written as a program that calls itself.</p>
+  <pre class="lines" data-k="ember" data-label="this step: fact(3), call by call">
+\text{fact}(3) \text{ calls fact}(2) \text{ calls fact}(1) \text{ calls fact}(0) @@ four ways back on the pile
+\text{fact}(0) = 1 @@ the start; the pile begins to empty
+\text{fact}(1) = 1,\ \text{fact}(2) = 2,\ \text{fact}(3) = 6 @@ each return multiplies
+\htmlClass{new}{\text{fact}(3) = 6} \quad \blacksquare @@ the pile is empty again
+</pre>
   <section class="sayback">
-    <h3>Question</h3>
+    <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">40d3.1</span><span class="ph understand">understand</span>What does the not-stopping technique say, and which two techniques does its proof join? <br>Why is “M stops on w within t steps” decided?</li>
+      <li><span class="qid">40d3.1</span><span class="ph understand">understand</span>How is fact 4d’s defining by repeating? <br>How deep does the pile get for fact(3)?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="40d4">
-  <h2 class="sthead"><span class="stno">40d4</span>Illegal Moves</h2>
-  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{no }\allowbreak \text{machine }\allowbreak \text{decides } H\text{, }\allowbreak \text{so }\allowbreak \text{for }\allowbreak \text{some } M, w \text{ nobody }\allowbreak \text{can }\allowbreak \text{know }\allowbreak \text{if } M \text{ stops }\allowbreak \text{on } w\,? @@ the technique says no single machine is right on every pair; each pair alone may be settled by some argument
-\text{E on } \langle E\rangle \text{ oscillates }\allowbreak \text{between }\allowbreak \text{stopping }\allowbreak \text{and }\allowbreak \text{not}\,? @@ a run is one run; what fails is the supposition that D exists
-\text{a }\allowbreak \text{faster }\allowbreak \text{machine }\allowbreak \text{could }\allowbreak \text{decide } H\,? @@ speed is not the issue: D is refuted whatever its step count
-\text{every }\allowbreak \text{set }\allowbreak \text{that }\allowbreak \text{is }\allowbreak \text{not }\allowbreak \text{decided }\allowbreak \text{is }\allowbreak \text{not }\allowbreak \text{listed}\,? @@ H is listed and not decided
-  </pre>
+  <h2 class="sthead"><span class="stno">40d4</span>Each Call Its Own Names</h2>
+  <p data-pid="9e728b">Each call of fact has its own n: 3, then 2, then 1, then 0. If they shared one cell, fact(2) would overwrite the 3 that fact(3) still needs. So each call puts its names on the pile beside its way back, and a return takes them off.</p>
+  <p data-pid="184abf">Own-names technique: <b>a call’s names live on the pile with its way back, so a call changes no name of any call that is waiting for it.</b></p>
   <section class="sayback">
-    <h3>Question</h3>
+    <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">40d4.1</span><span class="ph understand">understand</span>Why does the no-stop-decider technique not say that some pair M, w can never be settled by anyone? <br>Why is H a set that is listed and not decided?</li>
+      <li><span class="qid">40d4.1</span><span class="ph understand">understand</span>What does the own-names technique say? <br>What would go wrong if every call of fact shared one n?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40d5">
+  <h2 class="sthead"><span class="stno">40d5</span>Illegal Moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{RET goes to the start of the caller}\,? @@ it goes to the line after the call, the address on top of the pile
+\text{a function that calls itself never stops}\,? @@ fact stops when it reaches its start case, 0
+\text{every call of fact shares one } n\,? @@ each call keeps its own n on the pile
+</pre>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">40d5.1</span><span class="ph understand">understand</span>Where does RET go? <br>Why does fact stop?</li>
     </ol>
   </section>
 </section>
@@ -137,52 +110,21 @@ H \text{ is }\allowbreak \text{decided} @@ the both-sides technique (40a2)
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
-  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">40d.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="D_0\text{: }\allowbreak \text{say }\allowbreak \text{yes }\allowbreak \text{exactly }\allowbreak \text{when } \langle M\rangle \text{ has }\allowbreak \text{an }\allowbreak \text{even }\allowbreak \text{number }\allowbreak \text{of }\allowbreak \text{rows}"></span></span>Build the E of 40d2 against this would-be decider, and find the input on which D₀ is wrong. Is D₀ wrong on E’s code, on some other machine’s, or both?</div>
-  <div class="chq"><span class="chid">40d.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\{\langle M\rangle : M \text{ has }\allowbreak \text{two }\allowbreak \text{marks, }\allowbreak \text{five }\allowbreak \text{states }\allowbreak \text{besides }\allowbreak \text{the }\allowbreak \text{stop, }\allowbreak \text{and }\allowbreak \text{stops }\allowbreak \text{on }\allowbreak \text{the }\allowbreak \text{blank }\allowbreak \text{tape}\}"></span></span>Prove that this set is decided, without saying which machine decides it. Until 2024 no one had that machine in hand; 40·now says why. What does that show about the gap between “some machine decides it” and “we have the machine”?</div>
-  <div class="chq"><span class="chid">40d.5.3</span><span class="tagq">converse</span><span class="givens"><span class="gtx">H decided by a machine with an oracle for H</span></span>Give a machine one free move: it may ask whether any ⟨M⟩ # w is in H and be told at once. Run 40d2’s argument on machines with that move. What set do they fail to decide, and what does that say about adding answers to a machine?</div>
-  <div class="chq"><span class="chid">40d.5.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">E does the opposite of what D predicts about E</span></span>One view holds that a person sees that E defeats D, while D cannot, so minds are not machines; it adds that the same holds for the unreached truth of 38i. Another holds that the person sees this only by supposing D is right, and that any machine supposing the same sees it too. Which step of 40d2 does each view lean on? Is “seeing that E defeats D” a proof, and from which givens?</div>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them.</p>
+  <div class="chq"><span class="chid">40d.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">Fibonacci</span></span>Write fib(n) = fib(n − 1) + fib(n − 2), with fib(0) = 0 and fib(1) = 1, as a function that calls itself. Count the calls for fib(5), and say how 39o’s kept answers cut them.</div>
+  <div class="chq"><span class="chid">40d.6.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">a call with no start case</span></span>A function calls itself on n − 1 with no start case. What happens to the pile on a real machine?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r40c.html">← 40c · one machine runs them all</a><a href="r40e.html">40e · undecidable everywhere →</a></nav>
+<nav class="nextrung"><a href="r40c.html">← 40c · a name that holds a value</a><a href="r40e.html">40e · recursion is induction →</a></nav>
+
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The stopping set is the halting problem, written HALT or A_TM in many books; the no-stop-decider technique is the undecidability of the halting problem. The not-stopping technique says the complement of the halting problem is not Turing-recognizable. A machine with a free question about H is an oracle machine, and 40d.5.3 leads to the arithmetical hierarchy and Turing degrees.</p>
-  <h3>Who said it first</h3>
-  <p>Alan Turing proved in 1936 that no machine decides whether a machine ever prints a 0, the form his paper used; the form with stopping is from Martin Davis’s book of 1958, which gave it the name halting problem. Alonzo Church reached the same limit from the λ-calculus in 1936. John Lucas (1961) and Roger Penrose (1989, 1994) argued that minds outrun machines because a mind sees the truth of the diagonal statement; Hilary Putnam (1960) and many since replied that the argument assumes the mind knows its own system is clash-free.</p>
-  <h3>A proof that is not allowed</h3>
-  <p>“Let D run M on w. If M stops, D says yes. If M runs for a million steps without stopping, D says no.” Not allowed as a decider: some machine stops after a million and one steps, and D is wrong on it. Any fixed limit fails, and a limit that grows with M is a function, which 40·now shows no machine computes large enough.</p>
+  <p>A function written once and called from many places is a subroutine. The pile is the call stack, the names a call puts on it make its stack frame, and a function that calls itself is recursive.</p>
 </section>
 
 </div>
 <script src="rung.js"></script>
-<script>
-(function(){
-const {tex,col,stepper,plane}=Rung;
-const R=String.raw;
-const $=id=>document.getElementById(id);
-const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
-const mm=(v,d)=>fm(v,d).replace('-','−');
-const Nw='\\htmlClass{new}';
-
-stepper('#sl1',[
-  {k:'ember',kl:'input',t:R`\langle M\rangle \# w`,n:`A code and a string.`},
-  {k:'ember',kl:'run',t:R`U(\langle M\rangle \# w)`,n:`Wait.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{H \text{ is listed}}`,n:`Yes when it stops.`}
-],{title:'The slides · listed · ← → keys work'});
-stepper('#sl2',[
-  {k:'ember',kl:'suppose',t:R`D \text{ decides } H`,n:`To refute it.`},
-  {k:'ember',kl:'opposite',t:R`E(\langle M\rangle) \text{ stops} \iff \neg\, M(\langle M\rangle) \text{ stops}`,n:`Down the diagonal.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{E(\langle E\rangle)\colon \bot}`,n:`No decider.`}
-],{title:'The slides · diagonal · ← → keys work'});
-stepper('#sl3',[
-  {k:'ember',kl:'stops',t:R`H\ \text{listed}`,n:`The run is the evidence.`},
-  {k:'ember',kl:'never',t:R`\text{outside } H`,n:`Not listed.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{within } t\text{: decided}}`,n:`No t: not.`}
-],{title:'The slides · two halves · ← → keys work'});
-})();
-</script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

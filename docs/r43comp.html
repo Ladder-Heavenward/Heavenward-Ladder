@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>How Can a Damaged Message Still Be Read?</title>
+<title>How Can Strangers Share a Secret?</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,109 +48,114 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r43cb27.html">← 43·cb27 every matrix is nearly diagonal</a><a href="r43crypt.html">next: 43·crypt how do earbuds share a secret in public? →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r43cb37.html">← 43·cb37 last time on the octave and the bar</a><a href="r43phys.html">next: 43·phys why do metals conduct? →</a></p>
   <div class="tags"><span class="tag comp">43·comp · computing</span></div>
-  <h1>How Can a Damaged Message Still Be Read?</h1>
-  <p data-pid="cb0c15">How can a damaged message still be read? A QR code on a parking meter in Seattle can have a third of its squares scratched off, or covered by a sticker, and a phone still reads it. A probe past Neptune sends back pictures with a radio a few watts strong, so faint by the time it reaches a dish in California that some of the bits arrive flipped, and the pictures still come out clean. Neither works by sending the message twice. Each adds a few check symbols, chosen so that every message that could be sent is far from every other, and then a damaged copy is still nearest the one that was sent. The checks are linear algebra over the field of two, and for the QR code over a field of 256. The damaged copy is read by putting it through a grid, and the answer points at the damage. The field of rung forty two is what lets the grid be built, and the count of zeros of a polynomial is what keeps the messages far apart.</p>
-  <p class="gesture" data-pid="6b42ed">A code is a set of words kept far apart. Least distance d finds d − 1 flips and fixes about half that. A code that is a space over the field of two has least distance equal to its lightest word other than 0. A check grid turns a word with one flip into the place of the flip. Over a larger finite field, the values of a polynomial of low degree at many points make a code whose words agree in few places, and that is the QR code’s.</p>
+  <h1>How Can Strangers Share a Secret?</h1>
+  <p data-pid="65462d">How can strangers share a secret? A phone in a café opens a page from a bank it has never met, over a radio link anyone in the room can hear, and in a fraction of a second the two agree a key nobody listening can find. Then every word between them is locked with that key, each packet carries a tag that shows it was not changed on the way, and the bank shows a signed note that it is the bank. Four tools do the work. A lock with one key shared by both sides is fast, and needs a long stream of key that looks random from a short seed. A function easy to run and hard to run backwards lets the clock powers of 43i and 43l agree a key in public. A short fingerprint of a long file lets a signature cover the file. A tag made with the shared key shows the message is whole. This page builds each from the clocks of the rung, proves what can be proved, and is plain about what is only believed.</p>
+  <p class="gesture" data-pid="b320d9">A shared key needs a stream that looks random; a generator that is a straight map on a clock gives itself away in three outputs. Taking square roots on the clock of pq is exactly as hard as splitting pq. A fingerprint built from two clock powers can be matched only by someone who finds a clock log. A tag on a prime clock with a key used once can be forged only by luck, one chance in p. And a signature must go on a fingerprint, or two signatures multiply into a third.</p>
 </header>
 
 <section class="class step" data-step="43comp1">
-  <h2 class="sthead"><span class="stno">43comp1</span>Words Kept Far Apart</h2>
-  <p data-pid="8e7b7c">A <i>word</i> of length n is a list of n bits. The <i>distance</i> between two words is the count of places where they differ: 1011 and 1101 are at distance 2. A <i>code</i> is a set of words that may be sent. Its <i>least distance</i> d is the least distance between two different words of the code. The distance obeys 8h’s triangle inequality: one place at a time, a word can be no farther from a third than the two steps through a second.</p>
-  <p data-pid="bec134">Fix-radius technique: <b>a code with least distance d can find any d − 1 flips, and can fix any t flips when 2t + 1 ≤ d, by reading each received word as the nearest code word.</b></p>
-  <pre class="lines" data-k="ember" data-label="this page: the fix-radius technique">
-\text{sent } c,\ \text{received } r,\ \text{dist}(c, r) \le t @@ at most t flips
-c' \ne c \text{ in the code} \Rightarrow \text{dist}(c', r) \ge \text{dist}(c', c) - \text{dist}(c, r) \ge d - t @@ the triangle inequality
-d - t \ge t + 1 > t @@ 2t + 1 ≤ d
-\htmlClass{new}{c \text{ is the only code word within } t \text{ of } r} \quad \blacksquare @@ so the nearest word is the one sent
+  <h2 class="sthead"><span class="stno">43comp1</span>A Stream of Key From a Seed</h2>
+  <p data-pid="dcafae"><a href="r09crypt.html#f7c8cf">9·crypt</a> showed a pad as long as the message hides everything, and its short-key technique that a short key stretched by a fixed rule cannot hide everything. Every fast lock with a shared key stretches a short seed into a long stream anyway, and asks only that the stream look random to anyone without the seed: that no quick test can tell it from coin tosses better than by guessing. A stream like that is called pseudorandom.</p>
+  <p data-pid="bc708b">The easiest stretch is a straight map on a clock: xₙ₊₁ ≡ a xₙ + c (mod p), with the seed x₀ and the numbers a and c the key. It is useless for secrets.</p>
+  <p data-pid="03a3e4">Three-outputs technique: <b>on a prime clock, three outputs in a row x₀, x₁, x₂ of xₙ₊₁ ≡ a xₙ + c, with x₁ ≢ x₀, give a and c, and so every later output.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the three-outputs technique">
+x_1 \equiv ax_0 + c,\ \ x_2 \equiv ax_1 + c \pmod p @@ the rule, twice
+x_2 - x_1 \equiv a(x_1 - x_0) @@ subtract: c is gone
+a \equiv (x_2 - x_1)(x_1 - x_0)^{-1} @@ x₁ − x₀ is a unit of the prime clock (43b)
+\htmlClass{new}{c \equiv x_1 - ax_0,\ \text{ then } x_3, x_4, \ldots \text{ follow}} \quad \blacksquare @@ the rule run on
   </pre>
-  <p data-pid="e4a118">Sending each bit three times, 000 or 111, has d = 3: it fixes one flip in three, at the price of three bits for one. Adding a single check bit that makes the count of 1s even has d = 2: it finds one flip and cannot say where. The rest of the page does better than both.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · distance · ← → keys work</div></section>
+  <p data-pid="d435cc">On the clock of 101 a stream reads 3, 56, 48. Then x₂ − x₁ ≡ −8 ≡ 93, x₁ − x₀ = 53, and 53⁻¹ ≡ 61, since 53 · 61 = 3233 = 32 · 101 + 1. So a ≡ 93 · 61 ≡ 17 and c ≡ 56 − 51 = 5, and the next output is 17 · 48 + 5 ≡ 13. The streams in use are built from many rounds of mixing, not from one straight map, and nobody has proved any of them pseudorandom. Whether a pseudorandom stretch exists at all is open; a proof would also settle whether one-way functions exist, the subject of the next footing.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a stream · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">43·comp.1.1</span><span class="ph understand">understand</span>What are the distance between two words and the least distance of a code? <br>What does the fix-radius technique say, and how many flips can a code with d = 3 fix?</li>
+      <li><span class="qid">43·comp.1.1</span><span class="ph understand">understand</span>What must a stream from a short seed do to stand in for a pad? <br>What does the three-outputs technique say, and why must x₁ − x₀ be a unit?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43comp2">
-  <h2 class="sthead"><span class="stno">43comp2</span>A Code That Is a Space</h2>
-  <p data-pid="22092f">Read words as arrows over ℤ/2, the field of two: added place by place with 1 + 1 = 0. A <i>straight code</i> is a space of words, the words that a check grid H sends to 0: what H loses (27c). The <i>weight</i> of a word is its count of 1s, so dist(u, v) is the weight of u + v.</p>
-  <p data-pid="2d8736">Lightest-word technique: <b>the least distance of a straight code is the least weight of its words other than 0.</b> dist(u, v) = weight(u + v), and u + v is in the code when u and v are.</p>
-  <pre class="lines" data-k="ember" data-label="this page: the check grid of a code of 16 words">
-H = \begin{pmatrix} 0&0&0&1&1&1&1 \\ 0&1&1&0&0&1&1 \\ 1&0&1&0&1&0&1 \end{pmatrix} @@ column j is j written in twos (4i), for j = 1 to 7
-\text{the code is what } H \text{ loses: dimension } 7 - 3 = 4,\ 2^4 = 16 \text{ words} @@ lost-plus-reached (27c); H reaches all of (ℤ/2)³
-\text{no word of weight 1 or 2: no column is 0, and no two columns are equal} @@ Hv = 0 says the columns at v’s 1s add to 0
-\htmlClass{new}{d = 3:\ \text{columns 1, 2, 3 add to } 0} \quad \blacksquare @@ 001 + 010 + 011 = 000, so 1110000 is a word of weight 3
+  <h2 class="sthead"><span class="stno">43comp2</span>Easy One Way, Hard the Other</h2>
+  <p data-pid="f5fe63">A one-way function is quick to run and slow to run backwards on almost every input. Two from this rung are believed one-way: multiplying two large primes, and a clock power gˣ on a prime clock, both quick by square-and-multiply (43h). Nobody has proved that any function is one-way. What can be proved is that two hard-looking jobs are the same job. Squaring on the clock of n = pq is quick. Taking square roots there is exactly as hard as splitting n.</p>
+  <p data-pid="cfe35e">Root-gives-factor technique: <b>for n = pq with p and q different odd primes, anyone who can find a square root on the clock of n of any square can split n, with a chance at least one half at each try.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the root-gives-factor technique">
+x \text{ a unit chosen at random},\ \ s \equiv x^2 \pmod n @@ only the square is handed over
+s \text{ has four roots: } \pm x \text{ on each of the clocks of } p \text{ and } q @@ the two-clock technique (43c) and few-roots (43e): two roots on each prime clock
+y \text{ returned, and } y \not\equiv \pm x \text{ with chance } \tfrac12 @@ the four roots look alike from s, so y does not depend on which x was chosen
+y^2 \equiv x^2:\ \ n \mid (y - x)(y + x),\ \ n \nmid y - x,\ n \nmid y + x @@ y is x on one clock and −x on the other
+\htmlClass{new}{\gcd(y - x, n) \in \{p, q\}} \quad \blacksquare @@ the gcd by halving remainders (43h3); each try fails with chance at most ½
   </pre>
-  <p data-pid="b7badb">So 7 bits carry 4 bits of message and fix any one flip. Three bits for one did worse: here it is 7 for 4.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · a space · ← → keys work</div></section>
+  <p data-pid="8d587e">On the clock of 77, pick x = 10: s ≡ 100 ≡ 23. The roots of 23 are 10, 32, 45 and 67. If the root-finder returns 32, then gcd(32 − 10, 77) = gcd(22, 77) = 11, and 77 = 7 · 11. If it returns 67 ≡ −10, try again. So a lock whose opening is taking square roots on the clock of pq is exactly as safe as pq is hard to split, a promise the two-key technique of 43i does not have.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · one way · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43·comp.2.1</span><span class="ph understand">understand</span>What are a straight code and the weight of a word? <br>What does the lightest-word technique say, and why does the code of H have least distance 3?</li>
+      <li><span class="qid">43·comp.2.1</span><span class="ph understand">understand</span>What is a one-way function, and what is known and not known about them? <br>What does the root-gives-factor technique say, and why does a root y ≢ ±x split n?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43comp3">
-  <h2 class="sthead"><span class="stno">43comp3</span>The Check Points at the Flip</h2>
-  <p data-pid="99b88a">Flip-finder technique: <b>if a code word c of H’s code arrives with one flip, at place j, then H applied to the received word is column j of H, which is j written in twos.</b> H(c + eⱼ) = Hc + Heⱼ = 0 + column j.</p>
-  <pre class="lines" data-k="ember" data-label="this page: one message, sent, damaged and read">
-\text{message } 1, 0, 1, 1 \text{ at places } 3, 5, 6, 7 @@ the places that are not powers of 2
-\text{check bits at } 1, 2, 4 \text{ make each row of } H \text{ even} @@ place 1: 1 + 0 + 1 = 0; place 2: 1 + 1 + 1 = 1; place 4: 0 + 1 + 1 = 0
-c = 0110011 @@ the word sent; Hc = 0
-r = 0110001 @@ place 6 flipped on the way
-Hr = 110 = 6 @@ the 1s of r are at 2, 3 and 7: 010 + 011 + 111 = 110
-\htmlClass{new}{\text{flip place 6 back: } 0110011,\ \text{message } 1011} \quad \blacksquare @@ the flip-finder technique
+  <h2 class="sthead"><span class="stno">43comp3</span>A Fingerprint Nobody Can Match</h2>
+  <p data-pid="0f64e7"><a href="r22crypt.html#47d718">22·crypt</a> showed every short fingerprint of long files has matches, so only finding one can be made hard, and that a random search finds one after about the square root of the number of fingerprints. Here is a fingerprint where finding a match is provably as hard as a clock log. Take a prime q with p = 2q + 1 prime too, g of order q on the clock of p, and h = g^b with b known to nobody. The fingerprint of a pair (x₁, x₂) of hours of the clock of q is H(x₁, x₂) = g^(x₁) h^(x₂) on the clock of p: q² inputs, q outputs.</p>
+  <p data-pid="92b873">Collision-gives-log technique: <b>any two different pairs with the same fingerprint g^(x₁)h^(x₂) give b, the clock log of h to the base g.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the collision-gives-log technique">
+g^{x_1}h^{x_2} \equiv g^{y_1}h^{y_2} \pmod p @@ a match
+g^{x_1 - y_1} \equiv h^{y_2 - x_2} = g^{b(y_2 - x_2)} @@ divide; h = g^b
+x_1 - y_1 \equiv b(y_2 - x_2) \pmod q @@ exponents live on the clock of the order q (43d3)
+y_2 \ne x_2:\ \text{ else } g^{x_1 - y_1} \equiv 1 \text{ and the pairs agree} @@ the pairs differ
+\htmlClass{new}{b \equiv (x_1 - y_1)(y_2 - x_2)^{-1} \pmod q} \quad \blacksquare @@ q is prime, so y₂ − x₂ is a unit (43b)
   </pre>
-  <p data-pid="c31fb8">No search, no table of 16 words: three sums of bits. That is why the code is cheap in a memory chip, where a stray particle can flip one bit of a stored word.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · the check · ← → keys work</div></section>
+  <p data-pid="60b11e">Small: q = 11, p = 23, g = 2, whose powers are 2, 4, 8, 16, 9, 18, 13, 3, 6, 12, 1, order 11. Let h = 13. Then H(1, 0) = 2, and H(5, 1) = 9 · 13 = 117 ≡ 2. The match gives b ≡ (1 − 5)(1 − 0)⁻¹ ≡ −4 ≡ 7, and 2⁷ = 128 ≡ 13. The fingerprints used every day, such as the one in each web page’s lock, are fast mixers with no such proof; their safety is that years of public attack have found no match.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · a fingerprint · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43·comp.3.1</span><span class="ph understand">understand</span>What does the flip-finder technique say? <br>How does Hr = 110 point to place 6 for the received word 0110001?</li>
+      <li><span class="qid">43·comp.3.1</span><span class="ph understand">understand</span>Why can a fingerprint never be free of matches, and what can be made hard? <br>What does the collision-gives-log technique say, and why must y₂ differ from x₂?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43comp4">
-  <h2 class="sthead"><span class="stno">43comp4</span>How Many Words Fit</h2>
-  <p data-pid="19cdf8">Ball-packing technique: <b>a code of words of length n that fixes t flips has at most 2ⁿ divided by C(n, 0) + C(n, 1) + ⋯ + C(n, t) words.</b> Around each code word lie the words within t of it, C(n, 0) + ⋯ + C(n, t) of them (4k’s choosing), and by the fix-radius technique no two such balls share a word.</p>
-  <pre class="lines" data-k="ember" data-label="this page: the code of H fills its space">
-n = 7,\ t = 1:\ \ C(7, 0) + C(7, 1) = 8 @@ each ball: the word and its 7 one-flip neighbours
-16 \cdot 8 = 128 = 2^7 @@ 16 balls of 8
-\htmlClass{new}{\text{every word of length 7 is within 1 of exactly one code word}} \quad \blacksquare @@ the bound is met: the balls fill the space
+  <h2 class="sthead"><span class="stno">43comp4</span>A Tag That Shows a Message Is Whole</h2>
+  <p data-pid="520518">A lock keeps a message from being read; it does not keep it from being changed. Two sides who share a key add a tag to each message, made from the message and the key, and the receiver remakes the tag and compares. The question is the chance that someone who has seen one message and its tag can make another message with a right tag. On a prime clock, with a key used once, the answer is exact.</p>
+  <p data-pid="ba9a7a">One-time-tag technique: <b>with a key (a, b) chosen at random from the hours of the clock of a prime p and the tag t ≡ am + b, someone who sees one message and its tag makes a right tag for any other message with chance exactly 1/p.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the one-time-tag technique">
+t \equiv am + b \pmod p \text{ seen} @@ p keys fit it: each a, with b ≡ t − am
+m' \ne m,\ \text{ a guess } t' @@ the forger’s try
+am + b \equiv t,\ \ am' + b \equiv t' @@ two straight conditions on (a, b)
+a \equiv (t - t')(m - m')^{-1},\ \ b \equiv t - am @@ m − m′ is a unit (43b): exactly one key fits both
+\htmlClass{new}{\text{one key in } p \text{ gives } t':\ \text{ chance } 1/p} \quad \blacksquare @@ the p keys that fit t were all equally likely
   </pre>
-  <p data-pid="db72ab">Such a code is called perfect, and perfect codes are rare. Most codes in use leave gaps, which lets them find more flips than they fix. 30·comp’s noisy channel technique says that as the length grows, codes exist that fix almost every damaged word at any rate below the line’s capacity; it does not say how to build them. Building them took fifty years.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · counting · ← → keys work</div></section>
+  <p data-pid="680fd8">With p = 101, key (37, 58) and message 20, the tag is 37 · 20 + 58 = 798 ≡ 91. A forger sees (20, 91) and wants a tag for 21. Every one of the 101 tags is the right one for exactly one key that fits what was seen, so the guess is right one time in 101. With a clock of 2¹²⁸ hours the chance is 1 in 3.4 × 10³⁸. Tags in use reuse one key for many messages and are built from fingerprints of the key and the message together; they stand on belief, and this one on proof.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · a tag · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43·comp.4.1</span><span class="ph understand">understand</span>What does the ball-packing technique say, and why can no two balls share a word? <br>Why does every word of length 7 lie within 1 of exactly one word of H’s code?</li>
+      <li><span class="qid">43·comp.4.1</span><span class="ph understand">understand</span>Why does a lock not stop a message being changed, and what does a tag do? <br>What does the one-time-tag technique say, and why does exactly one key fit two tags?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43comp5">
-  <h2 class="sthead"><span class="stno">43comp5</span>Codes From the Values of a Polynomial</h2>
-  <p data-pid="ea1224">Take a finite field F with at least n members, and n different points x₁, …, xₙ in it. A message is k symbols of F, read as the coefficients of a polynomial m of degree below k. Its code word is the list of values m(x₁), …, m(xₙ).</p>
-  <p data-pid="80d2d5">Value-code technique: <b>two different code words agree in at most k − 1 places, so the code has least distance n − k + 1 and fixes any t damaged symbols with 2t ≤ n − k.</b> If m and m′ agree at k places, m − m′ has degree below k and k zeros, so it is 0 (43c3, in a field).</p>
-  <pre class="lines" data-k="ember" data-label="this page: a code on the clock of 7">
-m = 3 + 2x \text{ on } \mathbb Z/7,\ \ k = 2,\ \ x = 0, 1, \ldots, 5 @@ a message of two symbols, six points
-c = (3, 5, 0, 2, 4, 6) @@ the values of m; n − k + 1 = 5, so it fixes 2 damaged symbols
-r = (3, 5, 0, 2, 1, 6) @@ the value at x = 4 damaged
-\text{the line through } (0, 3), (1, 5) \text{ meets 5 of the 6 points} @@ any other line agrees with m at most once, so with r at most twice
-\htmlClass{new}{m = 3 + 2x,\ \text{the symbol at } x = 4 \text{ was } 4} \quad \blacksquare @@ the value-code technique
+  <h2 class="sthead"><span class="stno">43comp5</span>Signing a Fingerprint</h2>
+  <p data-pid="b3c314"><a href="r43i.html#aa4637">43i</a> signs m by s ≡ m^d on the clock of n. Two faults come with signing m itself. A long file is many hours, one power each. And signatures multiply: (m₁m₂)^d ≡ m₁^d m₂^d, so two signatures give a third the signer never made. With 43i’s n = 3233 and d = 2753, the signature on 2 is 1027 and on 3 is 1857, and 1027 · 1857 ≡ 2902, the signature on 6. Both faults go if the signer signs a fingerprint H(m) in place of m.</p>
+  <p data-pid="64388a">Sign-the-fingerprint technique: <b>a signature on H(m) passes for every m′ with H(m′) = H(m), so signing fingerprints is as safe as the signature itself and the hardness of finding a match, and no safer.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the sign-the-fingerprint technique">
+s \equiv H(m)^d,\ \ \text{check: } s^e \equiv H(m) @@ the turned-key technique on the fingerprint
+H(m') = H(m) \Rightarrow s^e \equiv H(m') @@ the check sees only H
+\text{a forger of } m' \text{ needs } s' \text{ with } s'^e \equiv H(m') @@ a new fingerprint needs a new power
+H(m_1)H(m_2) \ne H(m_1m_2) \text{ in general} @@ a fingerprint keeps no products, so the multiplying trick finds no target
+\htmlClass{new}{\text{a forgery is a match of } H \text{ or a power the key alone gives}} \quad \blacksquare @@ the two ways in
   </pre>
-  <p data-pid="eaec01">The QR code works this way over the field of 256 members, one byte to a symbol, built as 43g built fields from a polynomial of degree 8 on ℤ/2. Its highest level gives about 30% of the bytes to checks: the smallest QR code at that level has 26 bytes, 9 of message and 17 of checks, and fixes up to 8 damaged bytes. A scratched or covered patch damages bytes, not scattered bits, and a byte is one symbol however many of its 8 bits are wrong. That is why a field of 256 does better here than the field of two.</p>
-  <section class="slides" id="sl5"><div class="eyebrow">The slides · values · ← → keys work</div></section>
+  <p data-pid="762c2a">The signature also closes the gap 43l left. Two strangers who agree a key by the shared-secret technique cannot tell whether a listener in the middle agreed one with each of them. If the bank signs its half, gᵇ, with a key whose public part the phone already trusts, the listener cannot put her own in its place. That trust comes from a chain of signed notes ending at a few public keys built into the phone.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · signing · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43·comp.5.1</span><span class="ph understand">understand</span>What does the value-code technique say, and which fact of 43c gives it? <br>Why does a field of 256 suit a scratched QR code better than the field of two?</li>
+      <li><span class="qid">43·comp.5.1</span><span class="ph understand">understand</span>Why do signatures on m itself multiply into new ones? <br>What does the sign-the-fingerprint technique say, and how does a signature stop the listener in the middle?</li>
     </ol>
   </section>
 </section>
@@ -158,15 +163,16 @@ r = (3, 5, 0, 2, 1, 6) @@ the value at x = 4 damaged
 <section class="class step" data-step="43comp6">
   <h2 class="sthead"><span class="stno">43comp6</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
-\text{a code with } d = 3 \text{ fixes 3 flips}\,? @@ it finds 2 and fixes 1: 2t + 1 ≤ 3
-Hr = 0 \text{, so no bit was flipped}\,? @@ three flips can land on another code word: 1110000 has H of it 0
-\text{the value code over } \mathbb Z/7 \text{ can have length 10}\,? @@ it needs n different points of the field; ℤ/7 has 7
-\text{a straight code over } \mathbb Z/2 \text{ fixes bursts as well as scattered flips}\,? @@ a burst of 8 flipped bits is 8 flips there, and one damaged byte over the field of 256
+\text{a stream that passes every test I tried is pseudorandom}\,? @@ the straight map passes tallies of digits and falls to three outputs
+\text{multiplying primes is proved one-way}\,? @@ no function is proved one-way; this is believed
+\text{a fingerprint with no matches can be made}\,? @@ more files than fingerprints: 22·crypt’s collision technique
+\text{the one-time tag stays safe with its key used twice}\,? @@ two messages and tags give (a, b) by the one-time-tag technique’s own lines
+\text{the shared-secret technique alone stops a listener who changes messages}\,? @@ she stands in the middle; one side must sign
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43·comp.6.1</span><span class="ph understand">understand</span>Why does Hr = 0 not prove that nothing was flipped? <br>Why can the value code over ℤ/7 not have length 10?</li>
+      <li><span class="qid">43·comp.6.1</span><span class="ph understand">understand</span>Why does passing tests not show a stream is pseudorandom? <br>Why does the one-time tag fall when its key is used twice?</li>
     </ol>
   </section>
 </section>
@@ -175,22 +181,22 @@ Hr = 0 \text{, so no bit was flipped}\,? @@ three flips can land on another code
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">43·comp.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="H \text{ with 4 rows: columns } 1, \ldots, 15 \text{ in twos}"></span></span>Build the code H loses. How many message bits does it carry in 15, and is it perfect? <br>Encode a message of your choice, flip one bit, and find it with the flip-finder technique.</div>
-  <div class="chq"><span class="chid">43·comp.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{add an 8th bit: the sum of all 7}"></span></span>Add to each word of H’s code an eighth bit that makes its count of 1s even. <br>What is the new least distance? What can the longer code do with two flips that the first could not?</div>
-  <div class="chq"><span class="chid">43·comp.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="r = (3, 5, 2, 2, 1, 6)"></span></span>The value code on ℤ/7 above fixes 2 damaged symbols. Read this received word back to its message. <br>Turn it round: with 3 symbols damaged, can a wrong message lie nearer to r than the true one? Build an example.</div>
-  <div class="chq"><span class="chid">43·comp.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">30·comp: a rate below capacity, and almost no errors</span></span>30·comp proved that good codes exist without building any. <br>The code of H carries 4 bits in 7. On a line that flips each bit with chance 1 in 100, independently, what is the chance that a word of 7 has 2 or more flips? Is that the kind of number the noisy channel technique promises, and what would make it smaller?</div>
+  <div class="chq"><span class="chid">43·comp.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="p = 101:\ \ (20, 91),\ (35, t)"></span></span>The same key (37, 58) is used for a second message, 35. Build its tag, and then, as the forger, build the key from the two pairs. <br>Find the tag the forger would now give the message 50.</div>
+  <div class="chq"><span class="chid">43·comp.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n = 77,\ \ s \equiv 4"></span></span>Find all four roots of 4 on the clock of 77, and show which returned roots split 77. <br>What goes wrong in the root-gives-factor technique when n = p², and when x shares a factor with n?</div>
+  <div class="chq"><span class="chid">43·comp.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{split } n \Rightarrow \text{find roots}"></span></span>The root-gives-factor technique: roots split n. Turn it round: if you can split n = pq, can you find square roots of any square on the clock of n? <br>Prove it for p and q with p ≡ q ≡ 3 (mod 4), using the hour s^((p + 1)/4), and find the four roots of 23 on the clock of 77 this way.</div>
+  <div class="chq"><span class="chid">43·comp.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">43i: a lock whose safety stands on a belief</span></span>Almost every lock in use stands on a belief, that some job is slow, which no one has proved and which a quantum machine would break for several of them. <br>The one-time tag and the pad stand on proof, and are hardly used. What is a proof of safety worth when it needs a key as long as the message? Is a belief that has stood forty years of public attack a kind of evidence the ladder can accept, and what kind?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r43cb27.html">← 43·cb27 · every matrix is nearly diagonal</a><a href="r43crypt.html">43·crypt · how do earbuds share a secret in public? →</a></nav>
+<nav class="nextrung"><a href="r43cb37.html">← 43·cb37 · last time on the octave and the bar</a><a href="r43phys.html">43·phys · why do metals conduct? →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The distance is the Hamming distance and the weight the Hamming weight. A straight code is a linear code, written [n, k, d]; the check grid is the parity-check matrix, and H applied to a received word is its syndrome. The code of this page is the [7, 4, 3] Hamming code, and the ball-packing technique is the Hamming bound, met by perfect codes. The value code is a Reed–Solomon code, and its least distance n − k + 1 meets the Singleton bound.</p>
+  <p>A lock with one shared key is a symmetric cipher, and one that adds a stretched stream to the message is a stream cipher; the stretcher is a pseudorandom generator. The straight map on a clock is a linear congruential generator. A one-way function is the same name in every text. The root-gives-factor technique is Rabin’s reduction (1979), and the lock it guards is the Rabin cryptosystem. The fingerprint g^(x₁)h^(x₂) is the Chaum–van Heijst–Pfitzmann hash (1991), and a fingerprint no one can match is collision resistant. A tag is a message authentication code, or MAC; the one-time tag is the Carter–Wegman construction (1979–1981) in its simplest form, and tags in use are HMAC and its kin. Signing a fingerprint is hash-and-sign. The listener in the middle is the man-in-the-middle attack, and the chain of signed notes is a public key infrastructure.</p>
   <h3>Who said it first</h3>
-  <p>Richard Hamming built his code at Bell Labs and published it in 1950, tired of a relay computer that stopped at every error over the weekend. Marcel Golay found perfect codes of length 23 over ℤ/2 and 11 over ℤ/3 in 1949. Irving Reed and Gustave Solomon published the value code in 1960. The two Voyager probes, launched in 1977, used such codes to send pictures from beyond Neptune. Masahiro Hara’s team at Denso Wave designed the QR code in 1994. Claude Shannon proved in 1948 that good codes exist.</p>
+  <p>Whitfield Diffie and Martin Hellman asked for one-way functions with a way back in 1976. Michael Rabin linked square roots to splitting in 1979. Larry Carter and Mark Wegman gave the tags with a proved chance in 1979 and 1981. David Chaum, Eugène van Heijst and Birgit Pfitzmann gave the fingerprint from clock logs in 1991. Joan Boyar showed in 1989 how fast the straight map gives itself away, even when only part of each output is shown.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“The code of H has 16 words of length 7, and 16 is less than 128, so most damaged words are far from every code word, and the code can fix many flips.” Not allowed: the ball-packing technique shows every word of length 7 is within 1 of a code word. A word with two flips lies within 1 of a wrong code word, and is read wrong.</p>
+  <p>“Finding square roots on the clock of n is hard, because finding them on the clock of a prime p is hard.” Not allowed: on a prime clock roots are quick, and for p ≡ 3 (mod 4) the root of s is s^((p + 1)/4), one power. The hardness lives in not knowing p and q; the root-gives-factor technique says exactly that.</p>
 </section>
 
 </div>
@@ -205,30 +211,30 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'places',t:R`\mathrm{dist}(1011, 1101) = 2`,n:`Where they differ.`},
-  {k:'ember',kl:'room',t:R`2t + 1 \le d`,n:`Balls do not overlap.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{nearest word} = \text{sent word}}`,n:`Up to t flips.`}
-],{title:'The slides · distance · ← → keys work'});
+  {k:'ember',kl:'rule',t:R`x_{n+1} \equiv ax_n + c`,n:`A straight map.`},
+  {k:'ember',kl:'subtract',t:R`x_2 - x_1 \equiv a(x_1 - x_0)`,n:`c goes.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{a \equiv 17,\ c \equiv 5}`,n:`The key, from 3, 56, 48.`}
+],{title:'The slides · a stream · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'checks',t:R`Hv = 0`,n:`What H loses.`},
-  {k:'ember',kl:'weight',t:R`\mathrm{dist}(u, v) = \mathrm{wt}(u + v)`,n:`Over ℤ/2.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{d = 3,\ 16 \text{ words}}`,n:`7 bits for 4.`}
-],{title:'The slides · a space · ← → keys work'});
+  {k:'ember',kl:'square',t:R`s \equiv x^2 \pmod{pq}`,n:`Quick.`},
+  {k:'ember',kl:'roots',t:R`\pm x \text{ on each clock}`,n:`Four of them.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\gcd(y - x, n) = p \text{ or } q}`,n:`Roots split n.`}
+],{title:'The slides · one way · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'received',t:R`r = 0110001`,n:`One flip.`},
-  {k:'ember',kl:'check',t:R`Hr = 110`,n:`Column 6.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{place 6}}`,n:`Flipped back.`}
-],{title:'The slides · the check · ← → keys work'});
+  {k:'ember',kl:'hash',t:R`H(x_1, x_2) = g^{x_1}h^{x_2}`,n:`q² to q.`},
+  {k:'ember',kl:'match',t:R`x_1 - y_1 \equiv b(y_2 - x_2)`,n:`On the clock of q.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{b \equiv 7}`,n:`From H(1, 0) = H(5, 1).`}
+],{title:'The slides · a fingerprint · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'ball',t:R`1 + 7 = 8`,n:`Words within 1.`},
-  {k:'ember',kl:'words',t:R`16 \cdot 8 = 2^7`,n:`All of them.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a perfect code}}`,n:`No gaps.`}
-],{title:'The slides · counting · ← → keys work'});
+  {k:'ember',kl:'tag',t:R`t \equiv am + b`,n:`Key (a, b).`},
+  {k:'ember',kl:'two',t:R`(m, t),\ (m\prime, t\prime) \to (a, b)`,n:`One key.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{1/p}`,n:`The forger’s chance.`}
+],{title:'The slides · a tag · ← → keys work'});
 stepper('#sl5',[
-  {k:'ember',kl:'message',t:R`m = 3 + 2x`,n:`Degree below k.`},
-  {k:'ember',kl:'word',t:R`(3, 5, 0, 2, 4, 6)`,n:`Its values.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{d = n - k + 1}`,n:`Two lines agree once.`}
-],{title:'The slides · values · ← → keys work'});
+  {k:'ember',kl:'fault',t:R`1027 \cdot 1857 \equiv 2902`,n:`Two make a third.`},
+  {k:'ember',kl:'fingerprint',t:R`s \equiv H(m)^d`,n:`Sign the short code.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{forge} \Rightarrow \text{match or power}}`,n:`Two ways in.`}
+],{title:'The slides · signing · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

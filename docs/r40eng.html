@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How Do You Know the Compiler Is Right?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40l.html">← 40l compiling by hand</a><a href="r40comp.html">next: 40·comp what did a missing check cost? →</a></p>
+  <div class="tags"><span class="tag eng">40·eng · engineering</span></div>
+  <h1>How Do You Know the Compiler Is Right?</h1>
+  <p data-pid="298ea8">40j proved that a compiler built right shape by shape keeps every run. Real compilers are millions of lines, and nobody has proved most of them. This annex shows how engineers test them anyway, and what a test can and cannot show.</p>
+  <p class="gesture" data-pid="405681">Compile one program two ways and run both. A disagreement proves a fault; agreement only fails to find one.</p>
+</header>
+
+<section class="class step" data-step="40eng1">
+  <h2 class="sthead"><span class="stno">40eng1</span>A Second Opinion</h2>
+  <p data-pid="086dfd">Second-opinion technique: <b>if two compilers turn one program into runs that end in different states from the same start, at least one of them breaks 40j’s demand; if they agree, neither is shown right.</b></p>
+  <p data-pid="ab7e42">Only one final state is right for the program, so two different states cannot both be right. Agreement leaves open that both are wrong the same way.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">40·eng.1.1</span><span class="ph understand">understand</span>What does the second-opinion technique say? <br>Why does agreement not prove both right?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40eng2">
+  <h2 class="sthead"><span class="stno">40eng2</span>Programs Made at Random</h2>
+  <p data-pid="e5d586">A program that writes random programs, all of them with one meaning fixed by the language, feeds the compilers endless tests that nobody had to write. Each disagreement is cut down by hand to the smallest program that still shows it, and that small program goes to the compiler’s makers.</p>
+  <p data-pid="3dd19f">Testing of this kind has found hundreds of faults in the most used compilers. When it was run against a compiler whose middle had been proved right, it found no wrong-code faults in the proved part.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">40·eng.2.1</span><span class="ph understand">understand</span>Why must the random programs have a fixed meaning? <br>What did the proved compiler’s results show?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40eng3">
+  <h2 class="sthead"><span class="stno">40eng3</span>Tests Count Rows, Proofs Do Not</h2>
+  <p data-pid="f79a8c">A compiler takes endless programs, so testing tries some rows of an endless table, as <a href="r01g.html">1g</a> warned. A proof covers every row at once. Tests find faults cheaply and proofs rule them out at a price, so engineers use both.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">40·eng.3.1</span><span class="ph understand">understand</span>Why can testing never cover every program? <br>Why are both tests and proofs used?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40eng4">
+  <h2 class="sthead"><span class="stno">40eng4</span>Illegal Moves</h2>
+  <pre class="lines" data-k="ember" data-label="this annex: tempting, and not allowed" data-wrong="1">
+\text{a thousand tests passed, so it is right}\,? @@ tests try rows; there are endlessly many
+\text{the two compilers disagree, so the newer is wrong}\,? @@ a disagreement shows one is wrong, not which
+</pre>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">40·eng.4.1</span><span class="ph understand">understand</span>Why do passed tests not prove a compiler right? <br>What does a disagreement leave open?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The annex is complete without them.</p>
+  <div class="chq"><span class="chid">40·eng.5.1</span><span class="tagq">seam</span><span class="givens"><span class="gtx">the oracle</span></span>Random testing needs a way to tell a right answer. With two compilers, the oracle is the other one. What if there is only one? Name two other oracles.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r40l.html">← 40l · compiling by hand</a><a href="r40comp.html">40·comp · what did a missing check cost? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Comparing two implementations is differential testing, and generating random programs is fuzzing. Csmith is the best-known random generator of C programs, and CompCert is the C compiler whose middle had been proved right.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

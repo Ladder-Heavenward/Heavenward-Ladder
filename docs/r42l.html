@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Discrete Logarithms</title>
+<title>Best From Best Pieces</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,108 +48,110 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r42k.html">← 42k continued fractions</a><a href="r42cb19.html">next: 42·cb19 the clock as a quotient →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r42k.html">← 42k shortest paths and greedy choices</a><a href="r42m.html">next: 42m keeping things findable →</a></p>
   <div class="tags"><span class="tag tech">42l · technique</span></div>
-  <h1>Discrete Logarithms</h1>
-  <p data-pid="1d6702">Rung seventeen built a function that turns multiplying into adding, the log. A prime clock has one too. Every unit is a power of a full hand, and the count of steps to reach it turns products into sums, on the clock of one less than the prime. On the line the log is easy to compute, by tables or by a few terms of a sum. On a clock nobody knows a fast way. Raising to a power is quick, by squaring; going back, from the hour to the power, seems to need a search, and the best searches known grow far faster than the number of digits. In 1976 two people saw that this one-way street lets strangers agree on a secret while everyone listens. Each picks a power in private, sends the full hand raised to it, and raises what arrives to their own power. Both land on the same hour, and a listener who saw both messages would have to take a log to follow. The step finds logs by hand, shows the best simple search, and shows when the clock gives its logs away.</p>
-  <p class="gesture" data-pid="159ada">With a full hand g, every unit is g to one power on the clock of p − 1, its clock log, and logs turn products into sums. Two people send g to secret powers and each raises what arrives to their own: the same hour. Finding a log by a table of small steps and a stride takes about the root of p products, and when p − 1 has only small primes the log splits clock by clock.</p>
+  <h1>Best From Best Pieces</h1>
+  <p data-pid="79b62c">Rung 39 solved hard questions by remembering the answers to smaller ones and building up, and aligned two strings of letters that way. On a graph that idea has a plain form: every piece of a shortest route is itself a shortest route between its ends. So the distances can be built from the distances of fewer links, or of fewer stops, one layer at a time. This step does it three ways. On one-way links with no cycle, put the dots in an order where every link goes forward, and one pass along the order gives every best route, shortest or longest. When some lengths are negative, the nearest first of the last step fails, but rounds of improvement, each allowing one more link, still work, and one extra round tells whether a cycle of negative total exists, which in money is a way to get rich by trading in a circle. And allowing the stops one at a time gives the distance between every two dots at once. Last, rung 39’s alignment of two strings turns out to be a best route through a grid, and its table is the forward pass.</p>
+  <p class="gesture" data-pid="1cbfa5">A piece of a best route is a best route between its ends. With one-way links and no cycle, an order with every link forward exists, and one pass along it finds every best route. With negative lengths, n − 1 rounds of improvement find every distance, and one more round finds a cycle of negative total if there is one. Allowing the stops one at a time finds every distance at once. An alignment is a best route through a grid.</p>
 </header>
 
 <section class="class step" data-step="42l1">
-  <h2 class="sthead"><span class="stno">42l1</span>The Log on a Clock</h2>
-  <p data-pid="8eca3b">Let [g] be a full hand of the clock of a prime p. By 42e every unit [a] is [g]ᵏ for exactly one k from 0 to p − 2. From here on, that k is the <i>clock log</i> of a to the base g, written log_g a. It is the same mark as 17’s log, given a further job: on a clock, with a full hand named as its base, it names a number from 0 to p − 2. On the line it keeps its old meaning.</p>
-  <p data-pid="ca590f">Clock-log technique: <b>log_g(ab) ≡ log_g a + log_g b (mod p − 1), and log_g(aᵐ) ≡ m log_g a (mod p − 1).</b> For [g]^(j + k) = [g]ʲ[g]ᵏ, and exponents live on the clock of p − 1 (the exponent-clock technique, 42d3).</p>
-  <pre class="lines" data-k="ember" data-label="this step: clock logs on the clock of 13, base 2">
-2^0, \ldots, 2^{11} \equiv 1, 2, 4, 8, 3, 6, 12, 11, 9, 5, 10, 7 \pmod{13} @@ [2] is a full hand (42e4)
-\log_2 3 = 4,\ \ \log_2 5 = 9 @@ read off the list
-\log_2 15 \equiv 4 + 9 = 13 \equiv 1 \pmod{12} @@ the clock-log technique
-\htmlClass{new}{15 \equiv 2 = 2^1 \pmod{13}} \quad \blacksquare @@ the check
+  <h2 class="sthead"><span class="stno">42l1</span>Pieces of a Best Route</h2>
+  <p data-pid="e1733c">Links are one-way here, each (u, w) with a length ℓ(u, w), which may be negative. A path’s length is the sum along it.</p>
+  <p data-pid="9ef2bd">Best-pieces technique: <b>if a path from r to w is shortest, each of its pieces, from a dot u on it to a later dot x on it, is a shortest path from u to x.</b> A shorter path from u to x, put in place of the piece, would give a shorter walk from r to w; if it met the rest of the path, cutting out the loop would shorten it again, as long as no cycle has negative total.</p>
+  <p data-pid="730af5">A one-way graph with no cycle can be put in <i>forward order</i>: a list of its dots in which every link goes from an earlier dot to a later one. Forward-order technique: <b>every finite one-way graph with no cycle has a forward order.</b> Some dot has no link coming in, since walking backwards along links from any dot must stop, or it would repeat a dot and close a cycle. Put that dot first, take it away, and go on by induction.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one pass in forward order">
+\text{dist}(r) = 0;\ \text{for each later } w \text{ in order: } \text{dist}(w) = \min_{(u, w)} \big(\text{dist}(u) + \ell(u, w)\big) @@ every u with a link into w comes earlier
+\text{each } \text{dist}(u) \text{ used is already final} @@ induction along the order
+\text{a shortest path to } w \text{ ends with a link } (u, w) \text{ after a shortest path to } u @@ the best-pieces technique
+\htmlClass{new}{\text{every distance from } r \text{, each link looked at once}} \quad \blacksquare @@ and longest paths the same way, with max for min
   </pre>
-  <p data-pid="90d358">The list was built by multiplying by 2 eleven times. To read a log from it, the whole list was needed. For a clock of six hundred digits the list would have about 10⁶⁰⁰ entries.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · clock logs · ← → keys work</div></section>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · pieces · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">42l1.1</span><span class="ph understand">understand</span>What is the clock log of a to the base g, and why is there exactly one from 0 to p − 2? <br>What does the clock-log technique say, and why is the sum taken on the clock of p − 1?</li>
+      <li><span class="qid">42l1.1</span><span class="ph understand">understand</span>What does the best-pieces technique say? <br>Why does a one-way graph with no cycle always have a dot with no link coming in?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42l2">
-  <h2 class="sthead"><span class="stno">42l2</span>A Secret Agreed in Public</h2>
-  <p data-pid="e0297d">Two people choose a prime p and a full hand g in public. Each picks a power in private, a and b. The first sends A = gᵃ, the second B = gᵇ, both on the clock of p.</p>
-  <p data-pid="6bc504">Shared-secret technique: <b>Bᵃ ≡ Aᵇ (mod p), so both reach the hour g^(ab) without either sending it.</b> Both are g^(ab), by power-of-a-power (4g) carried to the clock.</p>
-  <pre class="lines" data-k="ember" data-label="this step: p = 23, g = 5">
-a = 6:\ \ A = 5^6 \equiv 8 \pmod{23} @@ the first sends 8
-b = 15:\ \ B = 5^{15} \equiv 19 \pmod{23} @@ the second sends 19
-19^6 \equiv 2 \pmod{23} @@ the first raises B to a
-8^{15} \equiv 2 \pmod{23} @@ the second raises A to b
-\htmlClass{new}{\text{the shared hour is } 2} \quad \blacksquare @@ the shared-secret technique
+  <h2 class="sthead"><span class="stno">42l2</span>Rounds of Improvement</h2>
+  <p data-pid="90268a">With cycles and negative lengths, let dₖ(w) be the least length of a walk from r to w with at most k links. Then d₀(r) = 0, and d₀ has no value elsewhere.</p>
+  <p data-pid="820d09">Rounds technique: <b>dₖ(w) is the least of dₖ₋₁(w) and dₖ₋₁(u) + ℓ(u, w) over the links (u, w); if no cycle has negative total, dₙ₋₁ is the distance; and some cycle has negative total exactly when a further round still lowers some value.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the rounds technique">
+\text{a best walk of at most } k \text{ links has at most } k - 1 \text{, or ends with a link } (u, w) @@ the best-pieces technique on its last link
+\text{no negative cycle: a shortest walk is a path, of at most } n - 1 \text{ links} @@ cutting a loop does not lengthen it
+d_{n-1} = d_n = d_{n+1} = \cdots @@ no more links help
+\text{a negative cycle: walking round it again and again lowers some } d_k \text{ for ever} @@ so round n lowers something
+\htmlClass{new}{n - 1 \text{ rounds of } |E| \text{ looks, and one more to test}} \quad \blacksquare @@ cost about n|E|
   </pre>
-  <p data-pid="016e23">A listener sees 23, 5, 8 and 19. To reach 2 the obvious road is a clock log: log₅ 8 = 6. Whether some road avoids the log is not known. Nobody has found one.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · in public · ← → keys work</div></section>
+  <pre class="lines" data-k="ember" data-label="this page: trading in a circle">
+1\ \text{US dollar} \to 1.36\ \text{Canadian};\ 1\ \text{Canadian} \to 0.68\ \text{euro};\ 1\ \text{euro} \to 1.09\ \text{US} @@ rates of the kind quoted in a day’s trading
+\ell = -\ln(\text{rate}):\ \text{a cycle’s total is } -\ln(1.36 \cdot 0.68 \cdot 1.09) @@ logs turn the product into a sum (17c)
+1.36 \cdot 0.68 \cdot 1.09 \approx 1.008 > 1 @@ so the total is below 0
+\htmlClass{new}{\text{a negative cycle: } 0.8\% \text{ for one trip round, before fees}} \quad \blacksquare @@ the rounds technique finds it
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · rounds · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42l2.1</span><span class="ph understand">understand</span>What does the shared-secret technique say, and why do both sides reach the same hour? <br>What does a listener see, and which clock log would let her follow?</li>
+      <li><span class="qid">42l2.1</span><span class="ph understand">understand</span>What does the rounds technique say? <br>Why do n − 1 rounds suffice when no cycle has negative total, and how does trading in a circle become a cycle of negative total?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42l3">
-  <h2 class="sthead"><span class="stno">42l3</span>A Table of Steps and Strides</h2>
-  <p data-pid="8de947">Trying k = 0, 1, 2, … finds a log in up to p − 1 products. A table does better. Write m for the least whole number with m² ≥ p − 1. Every k from 0 to p − 2 is mi + j with j below m and i below m, by division with remainder (4j7).</p>
-  <p data-pid="c19887">Step-and-stride technique: <b>to find log_g a, list g⁰, …, g^(m − 1), then compute a, a·g^(−m), a·g^(−2m), …; the first of these found in the list, a·g^(−mi) = gʲ, gives log_g a = mi + j, after at most about 2m products.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: log₅ 8 on the clock of 23">
-m = 5:\ \ 5^0, \ldots, 5^4 \equiv 1, 5, 2, 10, 4 @@ 5² = 25 ≥ 22: the small steps
-5^5 \equiv 20,\ \ [20]^{-1} = [15] @@ 20 · 15 = 300 = 13 · 23 + 1 (42b2): one stride back
-i = 0:\ 8 \text{ not in the list};\ \ i = 1:\ 8 \cdot 15 = 120 \equiv 5 @@ 5 = 5¹ is in the list
-8 \cdot 5^{-5} \equiv 5^1 \Rightarrow 8 \equiv 5^{5 + 1} @@ multiply back by 5⁵
-\htmlClass{new}{\log_5 8 = 6} \quad \blacksquare @@ the first’s private power, found
+  <h2 class="sthead"><span class="stno">42l3</span>Every Pair at Once</h2>
+  <p data-pid="1019b8">Name the dots 1 to n. Let Dₖ(i, j) be the least length of a path from i to j whose stops, the dots strictly between its ends, are all among 1 to k. D₀(i, j) is ℓ(i, j) if there is a link, 0 if i = j, and no value otherwise.</p>
+  <p data-pid="8aaaaf">Stops-allowed technique: <b>Dₖ(i, j) is the least of Dₖ₋₁(i, j) and Dₖ₋₁(i, k) + Dₖ₋₁(k, j); so with no negative cycle, Dₙ gives every distance after n³ steps.</b> A best path with stops among 1 to k either avoids k, or passes it once, and its two pieces, before and after k, have stops among 1 to k − 1 (the best-pieces technique).</p>
+  <pre class="lines" data-k="ember" data-label="this page: three dots, worked">
+\ell(1,2) = 4,\ \ell(2,3) = -2,\ \ell(1,3) = 5,\ \ell(3,1) = 1 @@ one-way links
+D_2(1, 3) = \min(D_1(1, 3),\ D_1(1, 2) + D_1(2, 3)) = \min(5,\ 4 - 2) = 2 @@ stop 2 allowed
+D_3(2, 1) = \min(D_2(2, 1),\ D_2(2, 3) + D_2(3, 1)) = \min(\text{none},\ -2 + 1) = -1 @@ stop 3 allowed
+\htmlClass{new}{\text{cycles: } 1 \to 2 \to 3 \to 1 \text{ has total } 3 \ge 0,\ \text{so these are distances}} \quad \blacksquare @@ D₃(i, i) = 0 for each i
   </pre>
-  <p data-pid="e1f2e0">About 2√p products, against p. For a clock of six hundred digits, √p has three hundred: still far past any machine. The best methods known for prime clocks are much faster than that, and still slower than any power of the number of digits.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · steps and strides · ← → keys work</div></section>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · all pairs · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42l3.1</span><span class="ph understand">understand</span>What does the step-and-stride technique say, and why is every k some mi + j? <br>How is log₅ 8 found on the clock of 23?</li>
+      <li><span class="qid">42l3.1</span><span class="ph understand">understand</span>What does the stops-allowed technique say? <br>Why does a best path with stops among 1 to k pass dot k at most once?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42l4">
-  <h2 class="sthead"><span class="stno">42l4</span>When the Clock Gives Its Logs Away</h2>
-  <p data-pid="37383e">Logs live on the clock of p − 1. If p − 1 is a product of small prime powers, the remainder technique splits a log into small logs.</p>
-  <p data-pid="cc5204">Split-log technique: <b>if p − 1 = uv with u and v sharing nothing, then log_g a on the clock of u is the log of a^v to the base g^v, which has order u, and likewise for v; the two readings are put back by the remainder technique.</b> For (g^v)^(x) = (gˣ)^v = a^v exactly when x is the log of a, read on the clock of u, by the power-order technique (42e1).</p>
-  <pre class="lines" data-k="ember" data-label="this step: log₂ 10 on the clock of 37">
-36 = 4 \cdot 9 @@ p − 1 split into clocks that share nothing
-2^9 \equiv 31,\ \ 10^9 \equiv 1:\ \ 31^{x} \equiv 1 \Rightarrow x \equiv 0 \pmod 4 @@ [31] has order 4
-2^4 = 16,\ \ 10^4 \equiv 10:\ \ 16^x \equiv 10 @@ [16] has order 9
-16^1, \ldots, 16^6 \equiv 16, 34, 26, 9, 33, 10:\ \ x \equiv 6 \pmod 9 @@ at most nine tries
-\htmlClass{new}{x \equiv 0 \pmod 4,\ x \equiv 6 \pmod 9 \Rightarrow \log_2 10 = 24} \quad \blacksquare @@ the remainder technique (42c2); 2²⁴ ≡ 10 on the clock of 37
+  <h2 class="sthead"><span class="stno">42l4</span>An Alignment Is a Route</h2>
+  <p data-pid="b788ea">39o aligned two strings by a table: an entry for each pair of starting pieces, built from three neighbours. Read the table as a graph. Its dots are the places (i, j), i letters of the first string used and j of the second. A one-way link goes right (a letter of the second against a gap), down (a letter of the first against a gap), or down and right (two letters against each other), with the score of that step as its length. Every link goes forward in the order row by row, and an alignment is a path from (0, 0) to the far corner.</p>
+  <p data-pid="c5da55">Alignment-route technique: <b>the best alignment of two strings is a longest route through their grid, and 39o’s table is the forward pass of the forward-order technique.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: ACGT against AGT">
+\text{score: } +1 \text{ a match},\ -1 \text{ a mismatch},\ -1 \text{ a gap} @@ the scores of 39o
+\text{grid } 5 \times 4 \text{ places; three kinds of link} @@ (i, j) with i ≤ 4, j ≤ 3
+\text{route: } \mathrm{A/A},\ \mathrm{C}/{-},\ \mathrm{G/G},\ \mathrm{T/T} @@ down-right, down, down-right, down-right
+\htmlClass{new}{1 - 1 + 1 + 1 = 2,\ \text{the longest route}} \quad \blacksquare @@ the forward pass gives 2 at the corner
   </pre>
-  <p data-pid="ceedca">So a clock for secrets must have p − 1 with a large prime factor; the usual choice is p = 2q + 1 with q prime too. Even then the exchange has a weak point that is not arithmetic. A listener who can change messages can stand in the middle, agree one secret with each side, and pass everything on. Each side must sign what it sends, by 42i’s turned keys, so the other knows who sent it.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · split logs · ← → keys work</div></section>
+  <p data-pid="7ed84a">So alignment is not a new idea but a graph in disguise, and every trick for routes applies: the layers of 42k to bound how far off the diagonal a good route strays, the cost of n times m for the pass. 42·bio aligns proteins this way before it builds a tree.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · alignment · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42l4.1</span><span class="ph understand">understand</span>What does the split-log technique say? <br>How is log₂ 10 on the clock of 37 split onto the clocks of 4 and 9?</li>
+      <li><span class="qid">42l4.1</span><span class="ph understand">understand</span>What does the alignment-route technique say? <br>What do the three kinds of link in the grid stand for, and why do they all go forward?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42l5">
   <h2 class="sthead"><span class="stno">42l5</span>Illegal Moves</h2>
-  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\log_2 15 = 4 + 9 = 13 \text{ on the clock of } 13\,? @@ logs add on the clock of p − 1 = 12: 13 ≡ 1
-A \cdot B = g^{a + b} \text{ is the shared secret}\,? @@ anyone can multiply A and B; the secret is g^(ab), which needs a or b
-\text{any unit will do for } g\,? @@ a unit of small order leaves few hours to search: g must be a full hand, or of large prime order
-\text{the exchange alone stops a listener who changes messages}\,? @@ she stands in the middle; each side must sign
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{the pieces of a longest path are longest paths, in any graph}\,? @@ in a graph with cycles a longest path must avoid repeats, and its pieces need not be longest; with no cycle it holds
+\text{after } n - 1 \text{ rounds every distance is right}\,? @@ only with no negative cycle; with one, there is no shortest walk
+\text{the nearest first works if every length is raised by the same amount}\,? @@ a path with more links gains more; the best path can change
+D_k(i, j) \text{ uses at most } k \text{ links}\,? @@ it uses stops among 1 to k, and a path with k stops has k + 1 links
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42l5.1</span><span class="ph understand">understand</span>Why is g^(a + b) not the shared secret? <br>Why does the exchange alone not stop a listener who can change the messages?</li>
+      <li><span class="qid">42l5.1</span><span class="ph understand">understand</span>Why does adding the same amount to every length not let the nearest first handle negative lengths? <br>Why do the pieces of a longest path in a graph with cycles not have to be longest?</li>
     </ol>
   </section>
 </section>
@@ -158,22 +160,22 @@ A \cdot B = g^{a + b} \text{ is the shared secret}\,? @@ anyone can multiply A a
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">42l.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="p = 23,\ \ g = 5,\ \ A = 8"></span></span>Build a lock from the shared-secret technique: to send m to the holder of a, pick k, send (gᵏ, m · Aᵏ). Show how she unlocks it with a alone. <br>Lock m = 10 with k = 3, and unlock it.</div>
-  <div class="chq"><span class="chid">42l.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="p = 2q + 1,\ \ q \text{ prime}"></span></span>For p = 23 = 2 · 11 + 1, list the orders of the units, and say which units are full hands. Why is the split-log technique no help here? <br>What does the step-and-stride technique cost for such p, and how does it compare with the split-log on a p with p − 1 = 2⁵ · 3?</div>
-  <div class="chq"><span class="chid">42l.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="g^a,\ g^b \mapsto g^{ab}"></span></span>A fast clock log would break the exchange. Turn it round: if someone could compute g^(ab) from gᵃ and gᵇ fast, could they compute clock logs fast? <br>Settle what you can for small p by hand, and say what is open.</div>
-  <div class="chq"><span class="chid">42l.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">40·phys: a quantum machine would take clock logs fast (1994)</span></span>A listener records today’s exchanges and waits. If a large enough quantum machine is built in twenty years, she reads them then. <br>Is a secret that will be read in twenty years a secret now? What would you need to know to decide whether to trust the exchange today, and which of those things is a technique and which a guess?</div>
+  <div class="chq"><span class="chid">42l.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{tasks: } A\,3,\ B\,2,\ C\,4,\ D\,1,\ E\,2;\ \ A, B \text{ before } C;\ \ B \text{ before } D;\ \ C, D \text{ before } E"></span></span>Each task takes the days given, and some must wait for others. Put the tasks in forward order and find the least number of days for all of them, as a longest route. <br>Which tasks can be late by a day without delaying the end?</div>
+  <div class="chq"><span class="chid">42l.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\ell(1,2) = 1,\ \ell(2,3) = -3,\ \ell(3,1) = 1"></span></span>Run the rounds technique from dot 1 for four rounds. What happens in round 3, and what does it mean? <br>Is there a shortest path from 1 to 3 that meets no dot twice? Is that question easy?</div>
+  <div class="chq"><span class="chid">42l.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{longest paths that meet no dot twice}"></span></span>The best-pieces technique fails for longest paths in graphs with cycles. Show that a recipe for longest paths with no repeated dot would decide whether a graph has a round of the dots (42c). <br>What does 41h then suggest about such a recipe?</div>
+  <div class="chq"><span class="chid">42l.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">29g: the equation of the best path</span></span>Rung 29 found the best path on a curved surface from an equation, and called a best path between two of its points a geodesic. <br>Is every piece of a geodesic a geodesic? Is a geodesic always a shortest path? Find the rung 29 example where it is not, and match it with the failure of the best-pieces technique you have seen here.</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r42k.html">← 42k · continued fractions</a><a href="r42cb19.html">42·cb19 · the clock as a quotient →</a></nav>
+<nav class="nextrung"><a href="r42k.html">← 42k · shortest paths and greedy choices</a><a href="r42m.html">42m · keeping things findable →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The clock log is the discrete logarithm, or index, of a to the base g. The shared-secret technique is the Diffie–Hellman key exchange, and the lock of 42l.6.1 is ElGamal encryption (1985). The step-and-stride technique is Shanks’s baby-step giant-step algorithm (1971); the split-log technique is the Pohlig–Hellman algorithm (1978). Primes p = 2q + 1 with q prime are safe primes, and q a Sophie Germain prime. The listener in the middle is a man-in-the-middle attack. Computing g^(ab) from gᵃ and gᵇ is the computational Diffie–Hellman problem. Recording now to read later is “harvest now, decrypt later”.</p>
+  <p>Building best answers from best pieces is dynamic programming, and the best-pieces technique is Bellman's principle of optimality, or optimal substructure. A one-way graph with no cycle is a directed acyclic graph, and a forward order is a topological sort. The rounds technique is the Bellman–Ford algorithm; the stops-allowed technique is the Floyd–Warshall algorithm. The best alignment is the Needleman–Wunsch alignment (1970), and the longest chain of tasks in 42l.6.1 is the critical path.</p>
   <h3>Who said it first</h3>
-  <p>Gauss tabulated indices in the Disquisitiones (1801). Whitfield Diffie and Martin Hellman published the exchange in “New Directions in Cryptography” (1976), building on Ralph Merkle’s puzzles; Malcolm Williamson had found it at GCHQ in 1974, unpublished until 1997. Taher ElGamal gave the lock and a signature in 1985. Peter Shor’s quantum algorithm for discrete logs and factoring is from 1994.</p>
+  <p>Richard Bellman named dynamic programming in the early 1950s, choosing a name, he wrote, that a congressman could not object to. Alfonso Shimbel (1955), Lester Ford (1956), Edward Moore (1957) and Bellman (1958) found the rounds. Bernard Roy (1959), Robert Floyd (1962) and Stephen Warshall (1962) found the stops-allowed recipe. Saul Needleman and Christian Wunsch aligned proteins this way in 1970. The critical path method was developed at DuPont in 1957.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“log₅ 8 on the clock of 23 is the real log ln 8 / ln 5 ≈ 1.29, rounded to 1.” Not allowed: the clock log is a count of steps round the clock, and it has nothing to do with the size of 8. 5¹ = 5, not 8; the clock log is 6.</p>
+  <p>“A shortest path to w ends with a link (u, w). The path to u is shortest, by the best-pieces technique. So take the nearest u, and the distance to w is that u’s distance plus ℓ(u, w).” Not allowed: the best u is the one with the least dist(u) + ℓ(u, w), not the least dist(u). A far u with a short link can beat a near u with a long one.</p>
 </section>
 
 </div>
@@ -188,25 +190,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'powers',t:R`[a] = [g]^k`,n:`One k.`},
-  {k:'ember',kl:'products',t:R`\log_g ab \equiv \log_g a + \log_g b`,n:`On the clock of p − 1.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\log_2 15 \equiv 1 \pmod{12}}`,n:`On the clock of 13.`}
-],{title:'The slides · clock logs · ← → keys work'});
+  {k:'ember',kl:'cut and paste',t:R`\text{a shorter piece} \Rightarrow \text{a shorter whole}`,n:`Best pieces.`},
+  {k:'ember',kl:'order',t:R`\text{every link forward}`,n:`No cycle.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{one pass}}`,n:`Every distance.`}
+],{title:'The slides · pieces · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'send',t:R`A = g^a,\ B = g^b`,n:`Fast powers.`},
-  {k:'ember',kl:'raise',t:R`B^a = A^b = g^{ab}`,n:`Both sides.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{2 \text{ on the clock of } 23}`,n:`Never sent.`}
-],{title:'The slides · in public · ← → keys work'});
+  {k:'ember',kl:'one more link',t:R`d_k = \min(d_{k-1}, d_{k-1}(u) + \ell)`,n:`Each round.`},
+  {k:'ember',kl:'settle',t:R`d_{n-1}`,n:`Paths have at most n − 1 links.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{round } n \text{ tests}}`,n:`A negative cycle.`}
+],{title:'The slides · rounds · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'steps',t:R`g^0, \ldots, g^{m-1}`,n:`A table.`},
-  {k:'ember',kl:'strides',t:R`a\,g^{-mi}`,n:`Until a hit.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\log_5 8 = 6}`,n:`About 2√p products.`}
-],{title:'The slides · steps and strides · ← → keys work'});
+  {k:'ember',kl:'allow',t:R`D_k(i,j)`,n:`Stops among 1 to k.`},
+  {k:'ember',kl:'split at k',t:R`D_{k-1}(i,k) + D_{k-1}(k,j)`,n:`Two pieces.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{n^3 \text{ steps}}`,n:`Every distance.`}
+],{title:'The slides · all pairs · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'split',t:R`p - 1 = uv`,n:`Sharing nothing.`},
-  {k:'ember',kl:'small logs',t:R`(g^v)^x = a^v`,n:`Order u.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\log_2 10 = 24 \text{ on } \mathbb Z/37}`,n:`Put back.`}
-],{title:'The slides · split logs · ← → keys work'});
+  {k:'ember',kl:'grid',t:R`(i, j)`,n:`Letters used.`},
+  {k:'ember',kl:'links',t:R`\rightarrow,\ \downarrow,\ \searrow`,n:`Gap, gap, pair.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{best alignment} = \text{longest route}}`,n:`The forward pass.`}
+],{title:'The slides · alignment · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

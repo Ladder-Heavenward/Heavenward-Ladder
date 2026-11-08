@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Splitting a Big Job</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r45k.html">← 45k merging edits made apart</a><a href="r45m.html">next: 45m quorums by hand →</a></p>
+  <div class="tags"><span class="tag proof">45l · proof</span></div>
+  <h1>Splitting a Big Job</h1>
+  <p data-pid="c7a40e">A job too big for one machine is cut into pieces for many. This step says when the pieces may be cut any way at all, what limits the gain, and how to use machines you do not trust.</p>
+  <p class="gesture" data-pid="34fdb3">Work on each piece apart, then combine. If combining ignores grouping, any split gives the same answer; the part that must run in a row sets the limit.</p>
+</header>
+
+<section class="class step" data-step="45l1">
+  <h2 class="sthead"><span class="stno">45l1</span>Map, Then Combine</h2>
+  <p data-pid="8ea7c8">Apply f to each piece on its own machine, then combine the results with ⊕.</p>
+  <p data-pid="61e010">Split-combine technique: <b>if ⊕ is associative, every way of grouping the pieces among machines gives the same answer; if it is also commutative, every order does too.</b></p>
+  <p data-pid="5d073f">This is 44a’s laws once more: with grouping free, a long ⊕ needs no brackets, so a tree of machines may combine pairs in any shape. Subtracting is not associative, so it cannot be split freely.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">45l1.1</span><span class="ph understand">understand</span>What does the split-combine technique say? <br>Why is subtracting not a safe combine?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45l2">
+  <h2 class="sthead"><span class="stno">45l2</span>The Part That Will Not Split</h2>
+  <p data-pid="17a92b">If a fraction s of the work must be done in a row, n machines take at least s + (1 − s)/n of the time one machine takes. So the speedup is at most 1/(s + (1 − s)/n), which stays below 1/s however many machines are added (<a href="r17comp.html">17·comp</a>).</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">45l2.1</span><span class="ph understand">understand</span>What is the most n machines can speed up a job with a part s that must run in a row? <br>Why does it stay below 1/s?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45l3">
+  <h2 class="sthead"><span class="stno">45l3</span>Machines That Talk While Working</h2>
+  <p data-pid="4e94ec">Some jobs cannot be cut clean: each piece of a weather map needs its neighbours’ edges each step. Machines then trade edges every round. The work grows with a piece’s area and the talk with its edge, so larger pieces waste less time talking, until there are too few pieces to share.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">45l3.1</span><span class="ph understand">understand</span>Why must weather pieces talk each step? <br>Why do larger pieces waste less on talk?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45l4">
+  <h2 class="sthead"><span class="stno">45l4</span>Volunteers You Cannot Trust</h2>
+  <p data-pid="88c452">Machines lent by strangers may return wrong answers, by fault or on purpose. Send each piece to two or more of them, and accept an answer only when they agree. A cheat is caught unless paired with another cheat giving the same wrong answer.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">45l4.1</span><span class="ph understand">understand</span>How are answers from strangers checked? <br>When does a cheat get through?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45l5">
+  <h2 class="sthead"><span class="stno">45l5</span>Illegal Moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+(a - b) - c = a - (b - c)\,? @@ subtracting is not associative, so it cannot be split freely
+n \text{ machines make it } n \text{ times faster}\,? @@ only if nothing must run in a row and nothing is spent on talk
+</pre>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">45l5.1</span><span class="ph understand">understand</span>Why can subtracting not be split freely? <br>What stops n machines being n times faster?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them.</p>
+  <div class="chq"><span class="chid">45l.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">the largest number</span></span>Write a map and a combine that find the largest number in a long list across many machines. Check the combine’s laws.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r45k.html">← 45k · merging edits made apart</a><a href="r45m.html">45m · quorums by hand →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>Map then combine is MapReduce, whose free tool is Hadoop. The limit of 45l2 is Amdahl’s law. Machines trading messages as they work use message passing, MPI. Lending home computers to science is volunteer computing, as BOINC organises it.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

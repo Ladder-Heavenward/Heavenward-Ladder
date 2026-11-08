@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quorums by Hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r45l.html">← 45l splitting a big job</a><a href="r45n.html">next: 45n vector clocks by hand →</a></p>
+  <div class="tags"><span class="tag tech">45m · technique</span></div>
+  <h1>Quorums by Hand</h1>
+  <p data-pid="e7494a">45f and 45g turned safety into one question: do every two quorums meet, and in enough honest machines? This step is the hand method for any scheme.</p>
+  <p class="gesture" data-pid="eff17d">Add the two smallest quorums and take away n: that is the least they share. Then ask how many machines may fail with a quorum still alive.</p>
+</header>
+
+<section class="class step" data-step="45m1">
+  <h2 class="sthead"><span class="stno">45m1</span>The Overlap</h2>
+  <p data-pid="cb9a00">For quorums of size at least k among n machines, two of them share at least 2k − n. For crashes they must share 1, so 2k > n. For f liars they must share f + 1, so 2k − n ≥ f + 1.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">45m1.1</span><span class="ph understand">understand</span>How small can the overlap of two quorums be? <br>What must it be for crashes, and for liars?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45m2">
+  <h2 class="sthead"><span class="stno">45m2</span>Survival</h2>
+  <p data-pid="51392b">A scheme finishes only if some quorum is alive. With quorums of k among n, it survives n − k failures. Five machines with quorums of 3 survive 2 crashes. Seven with quorums of 5 survive 2 liars: 2 · 5 − 7 = 3 = 2 + 1.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">45m2.1</span><span class="ph understand">understand</span>How many failures does a scheme with quorums of k survive? <br>Check the seven-machine case.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45m3">
+  <h2 class="sthead"><span class="stno">45m3</span>A Grid</h2>
+  <p data-pid="ae84db">Nine machines in a 3 by 3 grid. A quorum is one full row and one full column, 5 machines. Any two quorums meet, because the row of one crosses the column of the other. Quorums of 5 out of 9 are smaller, in a large grid, than a majority would be.</p>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">45m3.1</span><span class="ph understand">understand</span>Why do two grid quorums always meet? <br>How big is a grid quorum among 9?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45m4">
+  <h2 class="sthead"><span class="stno">45m4</span>Illegal Moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{quorums of 2 among 4 are safe}\,? @@ 2 + 2 − 4 = 0: two of them can miss each other
+</pre>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">45m4.1</span><span class="ph understand">understand</span>Why are quorums of 2 among 4 unsafe?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them.</p>
+  <div class="chq"><span class="chid">45m.5.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a 4 by 4 grid</span></span>Count the size of a row-and-column quorum in a 4 by 4 grid, and how many failures it survives in the worst case.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r45l.html">← 45l · splitting a big job</a><a href="r45n.html">45n · vector clocks by hand →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>These are quorum systems. The grid is a grid quorum, and the overlap rule for liars is the Byzantine quorum condition.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

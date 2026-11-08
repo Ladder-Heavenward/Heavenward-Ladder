@@ -1,26 +1,10 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Other Machines, the Same Reach</title>
+<title>Jumps Make Branches and Loops</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
-<style>
-.pic .panels{grid-template-columns:1fr 1fr}
-@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
-.panel{align-content:start;min-width:0}
-.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
-@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
-.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
-@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
-.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
-.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
-.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
-.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
-.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
-table.tt td.l{text-align:left}
-
-</style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
    then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
@@ -48,94 +32,63 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r40a.html">← 40a machines with a tape</a><a href="r40c.html">next: 40c one machine runs them all →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40a.html">← 40a names for numbers</a><a href="r40c.html">next: 40c a name that holds a value →</a></p>
   <div class="tags"><span class="tag proof">40b · proof</span></div>
-  <h1>Other Machines, the Same Reach</h1>
-  <p data-pid="df08b5">In the same year that the tape machine was described, two other answers to the question of what a recipe is were already on the table. One started from rung four’s recursion. Take a few functions too simple to doubt, and allow three ways of making new functions from old: putting one inside another, recursion, and a search for the first number that works. The other threw numbers away altogether. It has one kind of thing, a function, and one move, feeding a function its input, and it builds the numbers themselves out of functions that repeat. The three look nothing alike. A tape has cells, a recursion has equations, a calculus of functions has only brackets. This step proves that they reach exactly the same functions. That is the second kind of evidence for the thesis. It also pays something held in trust since the rung before: every recipe that always stops can be written as a formula of arithmetic, so 38h’s formula for “this number codes a proof” is now built, not assumed.</p>
-  <p class="gesture" data-pid="22e694">Functions built from zero, next and picking, by putting inside, recursion and search, are exactly the functions tape machines compute, and one search is always enough. Their graphs are search formulas, which closes 38h’s flag. A calculus with one move, feeding a function its input, reaches the same functions.</p>
+  <h1>Jumps Make Branches and Loops</h1>
+  <p data-pid="83e8a8">39j3 already had a loop: a jump out when the count is zero, and a jump back to the top. This step names the three shapes a program needs, one after another, one or the other, and again and again. It writes each shape as jumps, and proves that the three are enough.</p>
+  <p class="gesture" data-pid="785b06">An if is one jump that skips; a while is a test at the top and a jump back at the bottom. Every flow chart can be rewritten in the three shapes.</p>
 </header>
 
 <section class="class step" data-step="40b1">
-  <h2 class="sthead"><span class="stno">40b1</span>Functions Built From a Few</h2>
-  <p data-pid="9c0d22">The <i>start functions</i> are zero, Z(x) = 0, next, S(x) = x + 1, and the picks, Pᵢ(x₁, …, xₖ) = xᵢ. Three ways make new functions from old. <i>Putting inside</i>: h(x) = f(g₁(x), …, gₘ(x)). <i>Recursion</i>, 4d’s technique with a parameter: h(x, 0) = f(x) and h(x, y + 1) = g(x, y, h(x, y)). <i>Search</i>: h(x) is the least y with f(x, y) = 0, when there is one and f(x, z) has a value for each z below it; otherwise h(x) has no value.</p>
-  <p data-pid="d8f00c">A function made from the start functions by these three ways is <i>built</i>. Made without search it is <i>built without search</i>, and it has a value at every input, by induction on the building. With search it may have none: the least y with y + x + 1 = 0 never comes. One example first: adding is built without search, add(x, 0) = P₁(x) and add(x, y + 1) = S(add(x, y)), which is 4f’s adding line by line.</p>
-  <p data-pid="0a9b4f">Built-runs technique: <b>every built function is computed by a tape machine.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the built-runs technique">
-Z,\ \allowbreak S,\ \allowbreak P_i \text{: }\allowbreak \text{a }\allowbreak \text{few }\allowbreak \text{rows }\allowbreak \text{each} @@ erase, add one (40a1’s example), keep one input
-f(g_1(x), \dots, g_m(x)) \text{: }\allowbreak \text{run }\allowbreak \text{each } g_j \text{ on }\allowbreak \text{its }\allowbreak \text{own }\allowbreak \text{tape, }\allowbreak \text{then } f @@ the tracks technique (40a3) makes the tapes one
-h(x, y)\text{: }\allowbreak \text{a }\allowbreak \text{counter } c \text{ from } 0 \text{ to } y\text{, with } h(x, c) \text{ kept }\allowbreak \text{on }\allowbreak \text{a }\allowbreak \text{tape} @@ each turn runs g once; the counter stops the loop at y
-\text{search: }\allowbreak \text{try } y = 0, 1, 2, \dots \text{ and }\allowbreak \text{stop }\allowbreak \text{at }\allowbreak \text{the }\allowbreak \text{first } f(x, y) = 0 @@ if none, the machine never stops, and h has no value there
-\htmlClass{new}{\text{every }}\allowbreak \htmlClass{new}{ \text{built }}\allowbreak \htmlClass{new}{ \text{function }}\allowbreak \htmlClass{new}{ \text{is }}\allowbreak \htmlClass{new}{ \text{computed}} \quad \blacksquare @@ induction on the building (4c)
-  </pre>
-  <p data-pid="322dfd">The search is where never stopping enters. A machine built from the first two ways only is a tower of loops whose counts are known before they start, the falling-measure shape of 4l. Search is the loop whose count is not known.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · built · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">40b1</span>Choice Is a Skip</h2>
+  <p data-pid="1dd819">“If A is 0, do P, otherwise do Q” is written with two jumps: JZ yes; Q; JMP end; yes: P; end:.</p>
+  <p data-pid="c19cdf">Branch technique: <b>in the if shape, exactly one of P and Q runs, and then the program goes on at end.</b></p>
+  <p data-pid="7de8fe">A is 0 or it is not. The jump if zero settles that by looking, as 39j1’s machine does. If A is 0, the run skips Q, runs P and reaches end. If not, it runs Q and the jump to end skips P. One path, either way.</p>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">40b1.1</span><span class="ph understand">understand</span>What are the start functions, and what are the three ways of making new functions? <br>What does the built-runs technique say, and which of the three ways can make a machine that never stops?</li>
+      <li><span class="qid">40b1.1</span><span class="ph understand">understand</span>How is an if written with jumps? <br>Why does exactly one of P and Q run?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="40b2">
-  <h2 class="sthead"><span class="stno">40b2</span>Every Machine Is Built, With One Search</h2>
-  <p data-pid="b7e016">Now the other way. Code a configuration u q v as one number: the tape as a numeral in base |Γ|, and the state and the head’s place beside it, packed by 38m’s pair code. Call the code of the start configuration on input x start(e, x), where e codes the table.</p>
-  <p data-pid="fe414e">One-search technique: <b>for every tape machine with code e there are functions next, start and out, built without search, such that the machine’s output on x is out(run(e, x, y)), where y is the least number of steps after which the state is a stop state.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the one-search technique">
-\text{next}(e, c)\text{: }\allowbreak \text{read }\allowbreak \text{the }\allowbreak \text{mark }\allowbreak \text{under }\allowbreak \text{the }\allowbreak \text{head }\allowbreak \text{and }\allowbreak \text{the }\allowbreak \text{state, }\allowbreak \text{look }\allowbreak \text{up }\allowbreak \text{the }\allowbreak \text{row} @@ remainders and quotients by powers of |Γ|: built without search, with cases (the one-next technique)
-\text{run}(e, x, 0) = \text{start}(e, x),\ \allowbreak \ \text{run}(e, x, y + 1) = \text{next}(e, \text{run}(e, x, y)) @@ recursion (40b1), 4l’s run
-\text{halted}(e, c) = 0 \text{ exactly }\allowbreak \text{when }\allowbreak \text{the }\allowbreak \text{state }\allowbreak \text{in } c \text{ is }\allowbreak \text{a }\allowbreak \text{stop }\allowbreak \text{state} @@ a finite check, built without search
-y_0 = \text{the }\allowbreak \text{least } y \text{ with }\allowbreak \text{halted}(e, \text{run}(e, x, y)) = 0 @@ the one search
-\htmlClass{new}{\text{output} = \text{out}(\text{run}(e, x, y_0))} \quad \blacksquare @@ out reads the tape off the code
-  </pre>
-  <p data-pid="8d1e6a">So the tape machine and the built functions reach the same functions, by the built-runs and one-search techniques together. And something more: however many searches a built function used, one search is enough, with everything else built without search. The searches of a big building are folded into the one search for the moment the machine stops.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · one search · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">40b2</span>Repetition Is a Jump Back</h2>
+  <p data-pid="14af6e">“While A is not 0, do P” is written: top: JZ end; P; JMP top; end:. The test is at the top, so P may run no times at all. 39j3’s program has exactly this shape, with the count as A.</p>
+  <p data-pid="2db5b4">The shape has one way in, at top, and one way out, at end. Nothing jumps into the middle of it.</p>
   <section class="sayback">
-    <h3>Question</h3>
+    <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">40b2.1</span><span class="ph understand">understand</span>What does the one-search technique say? <br>Why is next built without search, and where does the one search go?</li>
+      <li><span class="qid">40b2.1</span><span class="ph understand">understand</span>How is a while written with jumps? <br>Why may its body run no times?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="40b3">
-  <h2 class="sthead"><span class="stno">40b3</span>38h’s Flag, Closed</h2>
-  <p data-pid="e942fc">38h1 held in trust that “y is the code of a proof of the statement with code x” is a formula of arithmetic of the right shape, and 38h2 the same for Sub. Both are recipes that always stop. The one-search technique turns every such recipe into arithmetic.</p>
-  <p data-pid="bd5370">Search-graph technique: <b>if a tape machine computes f, then “f(x) = z” is a search formula F(x, z); and when f(n) = m, PA reaches F(n̄, m̄) and ∀z (F(n̄, z) ⇒ z = m̄).</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the search-graph technique">
-F(x, z):\ \exists u\,\exists v\,\exists y\ (\text{the }\allowbreak \text{list }\allowbreak \text{stored }\allowbreak \text{by } u, v \text{ is run}(e, x, 0), \dots, \text{run}(e, x, y)\ \land \cdots) @@ the list-in-one-number technique (38g3) stores the whole run
-\text{each }\allowbreak \text{place }\allowbreak \text{obeys }\allowbreak \text{next; }\allowbreak \text{the }\allowbreak \text{last }\allowbreak \text{is }\allowbreak \text{stopped, }\allowbreak \text{no }\allowbreak \text{earlier }\allowbreak \text{one }\allowbreak \text{is; }\allowbreak \text{out }\allowbreak \text{of }\allowbreak \text{the }\allowbreak \text{last }\allowbreak \text{is } z @@ every check is kept below u, v or y: a bounded formula
-f(n) = m \Rightarrow F(\bar n, \bar m) \text{ is }\allowbreak \text{a }\allowbreak \text{true }\allowbreak \text{search }\allowbreak \text{statement} @@ the run exists: one list, one y
-PA \vdash F(\bar n, \bar m) @@ the search-reached technique (38g4)
-\htmlClass{new}{PA \vdash \forall z\,(F(\bar n, z) \Rightarrow z = \bar m)} \quad \blacksquare @@ two stored runs agree place by place, by PA’s induction line on the place; so their outputs agree
-  </pre>
-  <p data-pid="465b7f">Proof(y, x) is decided by 38b3’s check, so by the both-sides technique it and its denial are both listed, and each is a search formula. Whichever of them is true at given numbers, PA reaches it. That is all 38h1, 38h2 and 38i used. The flag 38h left open is closed here.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · arithmetic · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">40b3</span>Three Shapes Are Enough</h2>
+  <p data-pid="882921"><b>Every flow chart of tests and actions can be rewritten using only sequence, if and while, with one extra cell.</b> Number the boxes of the chart 1 to k, and keep the box to visit next in a cell called next. Each action box does its action and then sets next. Each test box sets next to one box or the other.</p>
+  <pre class="lines" data-k="ember" data-label="this step: any chart as one while">
+\text{next} \leftarrow 1 @@ start at the first box
+\text{while next} \neq 0: @@ box 0 stands for stop
+\quad \text{if next} = 1 \text{ then box 1; } \ldots \text{; if next} = k \text{ then box } k @@ a chain of ifs, one per box
+\htmlClass{new}{\text{the same actions, in the same order}} \quad \blacksquare @@ each turn of the while does what the chart did at one box
+</pre>
+  <p data-pid="83b304">Each turn of the while runs exactly the box the chart would have reached, by the branch technique on each if. So the runs agree, action for action.</p>
   <section class="sayback">
-    <h3>Question</h3>
+    <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">40b3.1</span><span class="ph understand">understand</span>What does the search-graph technique say? <br>Which flag of 38h does it close, and why is it enough that Proof and its denial are both search formulas?</li>
+      <li><span class="qid">40b3.1</span><span class="ph understand">understand</span>How does one extra cell let a while stand in for any chart? <br>Why do the two runs agree?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="40b4">
-  <h2 class="sthead"><span class="stno">40b4</span>A Calculus of Functions</h2>
-  <p data-pid="fa528c">The third answer has only functions. Its <i>terms</i> are placeholders x, y, …; λx.M, the function that sends x to M; and (M N), M fed N. Its one move is <i>feeding</i>: (λx.M) N may be rewritten as M with N put in for x, renaming bound placeholders so that none is caught. A term no feeding move applies to is <i>finished</i>. Numbers are not given. They are built: the numeral of n is the term that does a function n times, n̄ = λf.λx. f(f(⋯ f(x))), with n copies of f.</p>
-  <p data-pid="705c99">Numeral-iterator technique: <b>the term λn.λf.λx. f(n f x) turns the numeral of n into the numeral of n + 1, by feeding alone.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the numeral-iterator technique, on 1">
-\bar 1 = \lambda g.\lambda y.\, g\,y @@ do g once
-(\lambda n.\lambda f.\lambda x.\, f(n\,f\,x))\ \bar 1 \to \lambda f.\lambda x.\, f(\bar 1\,f\,x) @@ feed: put 1̄ in for n
-\bar 1\,f\,x = (\lambda g.\lambda y.\, g\,y)\,f\,x \to (\lambda y.\, f\,y)\,x \to f\,x @@ feed twice
-\htmlClass{new}{\lambda f.\lambda x.\, f(f\,x) = \bar 2} \quad \blacksquare @@ do f twice
-  </pre>
-  <p data-pid="dd5d45">Adding is λm.λn.λf.λx. m f (n f x): do f n times, then m times more. Recursion and search are harder. They need a term that feeds itself to itself, as 38h’s diagonal fed a formula its own code; 40b.6.2 asks for one.</p>
-  <p data-pid="d7a0d9">Equal-reach technique: <b>a function on numbers is reached by feeding exactly when a tape machine computes it.</b> One way: each start function and each of the three ways of 40b1 has a term, so every built function does. The other way: a term is a string, a feeding move is a rewrite of a string, and a machine can apply the leftmost move again and again, stopping at a finished term. That the leftmost order finds the finished term whenever any order does is held in trust here; the cellar names it.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · feeding · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">40b4</span>Why Shapes Beat Jumps</h2>
+  <p data-pid="431eae">A program in the three shapes reads from top to bottom, and each piece has one way in and one way out. So a claim about a piece can be written beside it and proved piece by piece, which 40f and 40g do. A jump into the middle of a loop leaves no such seam.</p>
   <section class="sayback">
-    <h3>Question</h3>
+    <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">40b4.1</span><span class="ph understand">understand</span>What are the terms of the calculus of functions, and what is its one move? <br>What does the numeral-iterator technique say, and what is held in trust in the equal-reach technique?</li>
+      <li><span class="qid">40b4.1</span><span class="ph understand">understand</span>What does one way in and one way out make possible? <br>Why is a jump into the middle of a loop a problem?</li>
     </ol>
   </section>
 </section>
@@ -143,15 +96,14 @@ PA \vdash F(\bar n, \bar m) @@ the search-reached technique (38g4)
 <section class="class step" data-step="40b5">
   <h2 class="sthead"><span class="stno">40b5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{the }\allowbreak \text{least } y \text{ with } f(x, y) = 0 \text{ always }\allowbreak \text{has }\allowbreak \text{a }\allowbreak \text{value}\,? @@ there may be no such y; then the search runs for ever and h has no value at x
-\text{a }\allowbreak \text{function }\allowbreak \text{built }\allowbreak \text{with }\allowbreak \text{three }\allowbreak \text{searches }\allowbreak \text{needs }\allowbreak \text{a }\allowbreak \text{machine }\allowbreak \text{with }\allowbreak \text{three }\allowbreak \text{searches}\,? @@ the one-search technique: one search, everything else built without it
-\text{Proof }\allowbreak \text{is }\allowbreak \text{a }\allowbreak \text{search }\allowbreak \text{formula, }\allowbreak \text{so }\allowbreak \text{PA }\allowbreak \text{reaches }\allowbreak \text{its }\allowbreak \text{denial }\allowbreak \text{when }\allowbreak \text{it }\allowbreak \text{is }\allowbreak \text{false}\,? @@ that needs the denial to be a search formula too: the both-sides technique, since the check is decided
-(\lambda x.\lambda y.\, x)\,y \to \lambda y.\, y\,? @@ y is caught; rename first: λz. y
-  </pre>
+\text{JZ end jumps when } A \neq 0\,? @@ it jumps when A is 0
+\text{a while runs its body at least once}\,? @@ the test is at the top; the body may run no times
+\text{the rewrite needs no new cell}\,? @@ the proof keeps the box number in an extra cell, next
+</pre>
   <section class="sayback">
-    <h3>Question</h3>
+    <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">40b5.1</span><span class="ph understand">understand</span>Why may a search have no value? <br>Why must the bound y be renamed before y is fed to λx.λy. x?</li>
+      <li><span class="qid">40b5.1</span><span class="ph understand">understand</span>When does JZ jump? <br>Why does the rewrite need the extra cell next?</li>
     </ol>
   </section>
 </section>
@@ -159,57 +111,21 @@ PA \vdash F(\bar n, \bar m) @@ the search-reached technique (38g4)
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
-  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">40b.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{mul}(x, 0) = ?,\ \allowbreak \ \text{mul}(x, y + 1) = ?"></span></span>Build multiplying as a function built without search, from adding. Build the term of the calculus of functions that multiplies two numerals, and run it on 2̄ and 2̄ by feeding.</div>
-  <div class="chq"><span class="chid">40b.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="Y = \lambda f.\,(\lambda x.\, f(x\,x))(\lambda x.\, f(x\,x))"></span></span>Feed Y a term g, and show that Y g can be rewritten to g(Y g). What has this to do with 38h’s diagonal? Find a term with no finished form at all.</div>
-  <div class="chq"><span class="chid">40b.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="h_0, h_1, h_2, \dots \text{ the }\allowbreak \text{functions }\allowbreak \text{built }\allowbreak \text{without }\allowbreak \text{search}"></span></span>The functions built without search can be listed, each from its building. Let d(n) = hₙ(n) + 1. Prove that d has a value everywhere, that a tape machine computes it, and that it is not built without search. Which step of the rung before does this repeat, and which technique of this step does it show cannot be improved?</div>
-  <div class="chq"><span class="chid">40b.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">9b.4.4: x ↦ x + 2 + 3 and x ↦ x + 5</span></span>9b.4.4 asked whether two rules giving the same pairs are one function, and whether they are one rule. In the calculus of functions a rule is a term. Are the terms for the two rules the same term? Can feeding take one to the other? Which of the two answers to 9b.4.4 does this calculus take, and what would it cost to take the other?</div>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them.</p>
+  <div class="chq"><span class="chid">40b.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a chart with two crossing loops</span></span>Draw a chart whose two loops cross, each jumping into the other. Rewrite it in the three shapes by this step’s method, then try to do it without the cell next.</div>
+  <div class="chq"><span class="chid">40b.6.2</span><span class="tagq">converse</span><span class="givens"><span class="gtx">shapes into charts</span></span>Every program in the three shapes is a flow chart. Show it, and say why that direction needs no extra cell.</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r40a.html">← 40a · machines with a tape</a><a href="r40c.html">40c · one machine runs them all →</a></nav>
+<nav class="nextrung"><a href="r40a.html">← 40a · names for numbers</a><a href="r40c.html">40c · a name that holds a value →</a></nav>
+
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The start functions are the initial functions (zero, successor, projections); putting inside is composition; the search is minimization, the μ-operator. Functions built without search are the primitive recursive functions, and built functions are the partial recursive, or μ-recursive, functions. The one-search technique is Kleene’s normal form theorem, with Kleene’s T predicate. The search-graph technique is the representability of recursive functions in PA, through Σ₁ definitions. The calculus of functions is the λ-calculus; feeding is β-reduction, renaming is α-conversion, a finished term is in normal form, and the numerals are Church numerals. That the leftmost order reaches the normal form whenever one exists is the standardization theorem (Curry and Feys, 1958). Y is the fixed-point combinator. The function d of 40b.6.3, made concrete, is close to the Ackermann function, total and computable but not primitive recursive.</p>
-  <h3>Who said it first</h3>
-  <p>Thoralf Skolem (1923) built arithmetic from recursion; Kurt Gödel used the primitive recursive functions in 1931 and, after a suggestion of Jacques Herbrand, defined general recursive functions in 1934. Stephen Kleene added the μ-operator and proved the normal form theorem in 1936. Alonzo Church published the λ-calculus in 1936, and Kleene showed that the λ-definable functions are the recursive ones. Alan Turing showed in 1937 that λ-definable and machine-computable are the same. Wilhelm Ackermann gave his function in 1928.</p>
-  <h3>A proof that is not allowed</h3>
-  <p>“Every built function has a value at every input, since each of the three ways makes a function from functions.” Not allowed: it is true of putting inside and of recursion, by induction on the building, and false for search. The least y with y + x + 1 = 0 has no value anywhere.</p>
+  <p>The three shapes are sequence, selection and iteration, and writing only in them is structured programming. The result of 40b3 is the structured program theorem.</p>
 </section>
 
 </div>
 <script src="rung.js"></script>
-<script>
-(function(){
-const {tex,col,stepper,plane}=Rung;
-const R=String.raw;
-const $=id=>document.getElementById(id);
-const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
-const mm=(v,d)=>fm(v,d).replace('-','−');
-const Nw='\\htmlClass{new}';
-
-stepper('#sl1',[
-  {k:'ember',kl:'start',t:R`Z,\ S,\ P_i`,n:`Too simple to doubt.`},
-  {k:'ember',kl:'ways',t:R`\text{inside, recursion, search}`,n:`Three.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{built} \Rightarrow \text{computed}}`,n:`Search may not stop.`}
-],{title:'The slides · built · ← → keys work'});
-stepper('#sl2',[
-  {k:'ember',kl:'step',t:R`\text{next}(e, c)`,n:`No search.`},
-  {k:'ember',kl:'run',t:R`\text{run}(e, x, y)`,n:`Recursion on y.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{out}(\text{run}(e, x, \mu y\,\text{halted}))}`,n:`Search once.`}
-],{title:'The slides · one search · ← → keys work'});
-stepper('#sl3',[
-  {k:'ember',kl:'run',t:R`\exists u\,\exists v\,\exists y\ (\cdots)`,n:`The run in two numbers.`},
-  {k:'ember',kl:'reached',t:R`PA \vdash F(\bar n, \bar m)`,n:`Search-reached.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{38h’s flag closed}}`,n:`Proof is built.`}
-],{title:'The slides · arithmetic · ← → keys work'});
-stepper('#sl4',[
-  {k:'ember',kl:'numeral',t:R`\bar n = \lambda f.\lambda x.\, f^n x`,n:`Do f n times.`},
-  {k:'ember',kl:'next',t:R`\lambda n.\lambda f.\lambda x.\, f(n\,f\,x)`,n:`Once more.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{next}\ \bar 1 \to \bar 2}`,n:`By feeding alone.`}
-],{title:'The slides · feeding · ← → keys work'});
-})();
-</script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

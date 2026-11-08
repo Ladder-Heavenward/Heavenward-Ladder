@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Modules Over a Principal Ring</title>
+<title>Clock Powers and Secret Keys</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,95 +48,91 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r43h.html">← 43h only one complete ordered field</a><a href="r43j.html">next: 43j polynomial division by hand →</a></p>
-  <div class="tags"><span class="tag proof">43i · proof</span></div>
-  <h1>Modules Over a Principal Ring</h1>
-  <p data-pid="f88e64">Rung twenty seven stretched arrows by numbers from a field. Stretch them instead by members of a ring, and most of the theory survives, with one loss: a space no longer needs a basis. The clock of six, stretched by whole numbers, has no free arrow at all, since six times anything is nothing. What replaces the basis, when the ring is principal, is a list of clocks. Every such space with finitely many makers is some copies of the ring itself, side by side with a few clocks, each clock’s size dividing the next. The proof is elimination, as rung twenty seven solved systems, but with only the moves that can be undone over the ring: swap two rows, add a whole multiple of one row to another. Division with remainder does the rest. Read with the whole numbers as the ring, the technique lists every finite group whose combining turns about. Read with the polynomials of a field as the ring, it gives the next newsflash.</p>
-  <p class="gesture" data-pid="2a76da">Arrows stretched by a ring are a module. Over a principal ring, row and column moves that can be undone bring any grid to a diagonal, each entry dividing the next, so every module with finitely many makers is copies of the ring beside clocks of those sizes. With ℤ as the ring, every finite group that turns about is one list of clocks.</p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r43h.html">← 43h clock arithmetic by hand</a><a href="r43j.html">next: 43j is it prime? →</a></p>
+  <div class="tags"><span class="tag tech">43i · technique</span></div>
+  <h1>Clock Powers and Secret Keys</h1>
+  <p data-pid="812968">Every cipher on the ladder so far had one key, and whoever could lock a message could unlock it. To send a secret, the two sides first had to share the key in secret, which is the problem again. In 1977 a lock was published with two keys. One locks and can be printed in a newspaper. The other unlocks and is kept at home. The lock is a power on a clock whose size is a product of two large primes. The unlocking key is another power, the undo of the first on the clock of the count of units. Anyone can compute the count from the two primes, and nobody is known to be able to compute it from their product alone, because nobody knows a fast way to find the two primes again. The same pair of keys, turned round, signs a message: only the holder of the home key could have made the signature, and anyone can check it with the printed one.</p>
+  <p class="gesture" data-pid="dd3eeb">Take two primes and multiply. Pick a locking power that shares nothing with the count of units, and take its undo on the clock of that count as the unlocking power. Then locking and unlocking undo each other on the big clock. The count gives the primes, so finding it is as hard as factoring. Turned round, the pair signs.</p>
 </header>
 
 <section class="class step" data-step="43i1">
-  <h2 class="sthead"><span class="stno">43i1</span>Arrows Stretched by a Ring</h2>
-  <p data-pid="1c65bc">A <i>module</i> over a ring R that turns about is a set M with an adding that obeys 27a’s four adding rules and a stretching by members of R that obeys 27a’s four stretching rules. Over a field it is a space of arrows. Rⁿ, the lists of n members of R, is a module. Every ideal of R is one, and so is every quotient R/I.</p>
-  <p data-pid="f02b04">Group-is-module technique: <b>every group whose combining turns about is a module over ℤ, with n · g the sum of n copies of g, and −n · g its negative.</b> The four stretching rules are 19b’s powers technique written with plus.</p>
-  <pre class="lines" data-k="ember" data-label="this step: what a ring loses that a field kept">
-M = \mathbb Z/6 \text{ over } \mathbb Z @@ a module, by the group-is-module technique
-6 \cdot g = 0 \text{ for every } g @@ six copies of any hour on the clock of six
-c \cdot g = 0 \text{ with } c = 6 \ne 0 @@ so no list in M is free (27b)
-\htmlClass{new}{\mathbb Z/6 \text{ has no basis over } \mathbb Z} \quad \blacksquare @@ a basis would be free
+  <h2 class="sthead"><span class="stno">43i1</span>A Lock With Two Keys</h2>
+  <p data-pid="9cb6c6">Take different primes p and q, and n = pq. By 43d2 the clock of n has c = (p − 1)(q − 1) units. Pick e with gcd(e, c) = 1, and let d be its undo on the clock of c, so ed = 1 + tc for some t ≥ 0. The printed key is (n, e); the home key is d.</p>
+  <p data-pid="188ce6">Two-key technique: <b>with n, e and d as above, (m^e)^d ≡ m (mod n) for every integer m.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-key technique">
+p \nmid m:\ \ m^{ed} = m \cdot (m^{p-1})^{t(q-1)} @@ ed = 1 + t(p − 1)(q − 1); powers add their counts (4g)
+\phantom{p \nmid m:\ \ m^{ed}} \equiv m \cdot 1 = m \pmod p @@ the little technique (43d1)
+p \mid m:\ \ m^{ed} \equiv 0 \equiv m \pmod p @@ both sides are multiples of p
+m^{ed} \equiv m \pmod q @@ the same lines on the clock of q
+\htmlClass{new}{m^{ed} \equiv m \pmod{pq}} \quad \blacksquare @@ the remainder technique’s one-to-one line (43c1): p and q share nothing
   </pre>
-  <p data-pid="e96ed1">A module that has a basis is <i>free</i>: ℤⁿ is free with the n unit lists as a basis. A module with finitely many makers, every member a mix of them, is <i>finitely made</i>. Over a field every finitely made module is free (27b’s grow-to-basis). Over ℤ the clocks are not.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · modules · ← → keys work</div></section>
+  <p data-pid="a94a8c">So a message, written as an hour m of the clock of n, is locked as mᵉ and unlocked by raising to d. The technique holds for every m, even one that shares a prime with n; the second line is why both cases were split.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · two keys · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">43i1.1</span><span class="ph understand">understand</span>What is a module over a ring, and why is every group that turns about one over ℤ? <br>Why has ℤ/6 no basis over ℤ?</li>
+      <li><span class="qid">43i1.1</span><span class="ph understand">understand</span>What does the two-key technique say, and how are n, e and d chosen? <br>Which line spends the little technique, and why is the case p ∣ m split off?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43i2">
-  <h2 class="sthead"><span class="stno">43i2</span>Grids Brought to a Diagonal</h2>
-  <p data-pid="c5290e">Over a ring, the row moves of 27j that can be undone are: swap two rows; add a multiple of one row to another; stretch a row by an undoable member. Column moves likewise.</p>
-  <p data-pid="e8c30b">Diagonal-grid technique: <b>by undoable row and column moves, every grid over ℤ, or over F[x] for a field F, becomes diagonal, with entries d₁, d₂, … each dividing the next.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the diagonal-grid technique">
-\text{bring an entry of least size to the corner, by swaps} @@ size: |n| on ℤ, the degree on F[x]
-\text{divide each entry of its row and column by it: } a = dq + r @@ division with remainder (4j, 43c)
-\text{subtract } q \text{ times the corner’s row or column; a smaller } r \ne 0 \text{ goes to the corner} @@ the size falls each time; it cannot fall forever (4h)
-\text{the corner divides its row and column, which are cleared to } 0 @@ the falling stops only then
-\text{if the corner fails to divide some entry, add that row to the corner’s row, and repeat} @@ the size falls again
-\htmlClass{new}{\text{a diagonal, each entry dividing the next}} \quad \blacksquare @@ the same moves on the grid that is left, by induction
+  <h2 class="sthead"><span class="stno">43i2</span>A Lock Built by Hand</h2>
+  <pre class="lines" data-k="ember" data-label="this step: the primes 61 and 53">
+n = 61 \cdot 53 = 3233,\ \ c = 60 \cdot 52 = 3120 @@ the clock, and its count of units
+e = 17:\ \ 3120 = 17 \cdot 183 + 9,\ \ 17 = 9 + 8,\ \ 9 = 8 + 1 @@ gcd(17, 3120) = 1 (4j12)
+1 = 2 \cdot 9 - 17 = 2 \cdot 3120 - 367 \cdot 17 @@ read back (43b2)
+d \equiv -367 \equiv 2753 \pmod{3120} @@ the home key
+m = 65:\ \ 65^{17} \equiv 2790 \pmod{3233} @@ locked, by square-and-multiply (43h1): 17 = 10001 in twos
+\htmlClass{new}{2790^{2753} \equiv 65 \pmod{3233}} \quad \blacksquare @@ unlocked: the two-key technique
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: one grid by hand">
-\begin{pmatrix} 4 & 6 \\ 6 & 4 \end{pmatrix} \to \begin{pmatrix} 4 & 6 \\ 2 & -2 \end{pmatrix} @@ row 2 less row 1
-\to \begin{pmatrix} 2 & -2 \\ 4 & 6 \end{pmatrix} \to \begin{pmatrix} 2 & -2 \\ 0 & 10 \end{pmatrix} @@ swap; row 2 less twice row 1
-\htmlClass{new}{\to \begin{pmatrix} 2 & 0 \\ 0 & 10 \end{pmatrix}} \quad \blacksquare @@ column 2 plus column 1; 2 divides 10
-  </pre>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · to a diagonal · ← → keys work</div></section>
+  <p data-pid="5a7ebe">Locking took five products: four squarings and one more. Unlocking takes fifteen: 2753 is 101011000001 in twos, so eleven squarings and four products. Real locks use primes of about three hundred digits each, and the printed power is very often 65 537 = 2¹⁶ + 1, which locks in seventeen products.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · by hand · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43i2.1</span><span class="ph understand">understand</span>Which row and column moves can be undone over ℤ? <br>What does the diagonal-grid technique say, and why does the falling size make it stop?</li>
+      <li><span class="qid">43i2.1</span><span class="ph understand">understand</span>How is the home key 2753 found from e = 17 and c = 3120? <br>Why does locking with e = 17 take only five products?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43i3">
-  <h2 class="sthead"><span class="stno">43i3</span>The Structure Technique</h2>
-  <p data-pid="1d53c8">Structure technique: <b>a finitely made module over ℤ, or over F[x], is a copy of Rʳ × R/(d₁) × ⋯ × R/(dₖ) for some r ≥ 0 and members d₁ ∣ d₂ ∣ ⋯ ∣ dₖ, none undoable.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the structure technique">
-m_1, \ldots, m_n \text{ make } M;\ \ \pi : R^n \to M,\ \ (c_i) \mapsto \textstyle\sum c_i m_i @@ onto; M is a copy of Rⁿ divided by what π loses (42·cb19, with stretching)
-K = \text{what } \pi \text{ loses is made by at most } n \text{ members} @@ induction on n: K’s last entries form an ideal, one maker (43d1)
-K = \text{the rows of a grid } A @@ the relations among the makers
-A \to \mathrm{diag}(d_1, \ldots, d_k, 0, \ldots, 0) @@ the diagonal-grid technique; the moves change the makers of Rⁿ and of K, not the quotient
-R^n / K = R/(d_1) \times \cdots \times R/(d_k) \times R^{n-k} @@ a diagonal relation says dᵢ times the iᵗʰ maker is 0, and nothing more
-\htmlClass{new}{\text{drop the } d_i \text{ that are undoable: } R/(1) = 0} \quad \blacksquare @@ r = n − k
+  <h2 class="sthead"><span class="stno">43i3</span>What the Lock Rests On</h2>
+  <p data-pid="6faa65">Anyone with (n, e) can lock. To unlock, the obvious road is d, which needs c. And c needs p and q: or does it? It does, in this sense: c and n together give p and q.</p>
+  <p data-pid="428c13">Count-gives-factors technique: <b>if n = pq for different primes p and q and c = (p − 1)(q − 1), then p and q are the two roots of x² − (n − c + 1)x + n = 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the count-gives-factors technique">
+c = pq - p - q + 1 = n - (p + q) + 1 @@ spread for times
+p + q = n - c + 1,\ \ pq = n @@ the sum and the product of the roots
+(x - p)(x - q) = x^2 - (n - c + 1)x + n @@ spread for times (5i)
+3233,\ 3120:\ \ x^2 - 114x + 3233 = 0 @@ the lock of 43i2
+\htmlClass{new}{x = 57 \pm \sqrt{57^2 - 3233} = 57 \pm 4 = 61,\ 53} \quad \blacksquare @@ the quadratic formula (8i)
   </pre>
-  <p data-pid="d51596">The list d₁ ∣ ⋯ ∣ dₖ is the module’s only such list, up to partners. <i>Held in trust:</i> the proof counts the members killed by each power of each prime, and is in 43i.6.3. The same lines work over every principal ring, with the one-maker technique in place of division at the corner.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · structure · ← → keys work</div></section>
+  <p data-pid="95383d">So finding c from n is as hard as factoring n. Trying every divisor up to √n takes about 10³⁰⁰ tries for a number of six hundred digits. Cleverer methods exist and are much faster than that, and still far slower than any power of the number of digits. In 2020 a number of 250 digits built this way was factored, with about 2700 years of computer time spread over many machines. Nobody has a proof that factoring is slow. 41h’s classes ask that kind of question, and this one is open. The lock rests on a guess from cases: every attempt since 1977 to factor fast has failed.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · what it rests on · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43i3.1</span><span class="ph understand">understand</span>What does the structure technique say? <br>How does a grid of relations enter the proof, and what does a diagonal relation say about the makers?</li>
+      <li><span class="qid">43i3.1</span><span class="ph understand">understand</span>What does the count-gives-factors technique say? <br>Why does it make finding c from n as hard as factoring n?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43i4">
-  <h2 class="sthead"><span class="stno">43i4</span>Every Finite Group That Turns About</h2>
-  <p data-pid="7fafe7">Clock-list technique: <b>every finite group whose combining turns about is a copy of ℤ/d₁ × ⋯ × ℤ/dₖ for exactly one list d₁ ∣ d₂ ∣ ⋯ ∣ dₖ of whole numbers above 1, and its size is d₁ ⋯ dₖ.</b> It is the structure technique over ℤ, with r = 0 because ℤ is endless and the group is not.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the group made by two makers and two relations">
-G = \mathbb Z^2 \text{ divided by the rows } (4, 6),\ (6, 4) @@ makers g, h with 4g + 6h = 0 and 6g + 4h = 0
-\begin{pmatrix} 4 & 6 \\ 6 & 4 \end{pmatrix} \to \begin{pmatrix} 2 & 0 \\ 0 & 10 \end{pmatrix} @@ the diagonal-grid technique (43i2)
-G = \mathbb Z/2 \times \mathbb Z/10,\ \ |G| = 20 @@ the structure technique; |det| = 20
-\htmlClass{new}{\mathbb Z/10 = \mathbb Z/2 \times \mathbb Z/5,\ \ G = \mathbb Z/2 \times \mathbb Z/2 \times \mathbb Z/5} \quad \blacksquare @@ 42c’s remainder technique, 2 and 5 sharing nothing
+  <h2 class="sthead"><span class="stno">43i4</span>Turning the Keys Round</h2>
+  <p data-pid="f1ba2d">The two-key technique did not care which power came first: (m^d)^e = m^(de) = m^(ed). So the home key can lock and the printed key unlock.</p>
+  <p data-pid="aa4637">Turned-key technique: <b>a signature on m is s = m^d on the clock of n, and anyone holding (n, e) accepts it exactly when s^e ≡ m.</b> Only the holder of d is known to be able to make an s that passes, since making one is unlocking a lock that was never locked.</p>
+  <pre class="lines" data-k="ember" data-label="this step: a signature by hand">
+m = 123:\ \ s = 123^{2753} \equiv 2746 \pmod{3233} @@ signed with the home key
+2746^{17} \equiv 123 \pmod{3233} @@ checked with the printed key: the two-key technique, keys turned
+\text{a forger with } m' = 124 \text{ needs } 124^{d} @@ d is unknown to her
+\htmlClass{new}{\text{the check passes for 123 and the signature 2746}} \quad \blacksquare @@ and for no other m with this s
   </pre>
-  <p data-pid="06a067">So the groups of size 8 that turn about are ℤ/8, ℤ/2 × ℤ/4 and ℤ/2 × ℤ/2 × ℤ/2: the lists whose product is 8, each dividing the next. Of size 72 = 2³ · 3² there are 3 · 2 = 6: three ways to split the 2s, two ways to split the 3s, joined by 42c.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · finite groups · ← → keys work</div></section>
+  <p data-pid="713d88">A message is not an hour of a small clock, and signing a long file this way would take one power per hour. 43·comp signs a short fingerprint of the file in its place, and shows why the fingerprint must be one nobody can match on purpose.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · signing · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43i4.1</span><span class="ph understand">understand</span>What does the clock-list technique say? <br>Which three groups of size 8 turn about, and why is ℤ/2 × ℤ/2 × ℤ/2 not ℤ/8?</li>
+      <li><span class="qid">43i4.1</span><span class="ph understand">understand</span>What does the turned-key technique say? <br>Why does the check s^e ≡ m pass for a true signature, and why can a forger not make one?</li>
     </ol>
   </section>
 </section>
@@ -144,15 +140,15 @@ G = \mathbb Z/2 \times \mathbb Z/10,\ \ |G| = 20 @@ the structure technique; |de
 <section class="class step" data-step="43i5">
   <h2 class="sthead"><span class="stno">43i5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\mathbb Z/2 \times \mathbb Z/2 = \mathbb Z/4\,? @@ every member of ℤ/2 × ℤ/2 doubled is 0; 1 in ℤ/4 is not
-\text{stretch a row by } 2 \text{ in the diagonal-grid technique over } \mathbb Z\,? @@ 2 is not undoable in ℤ; the move cannot be undone and changes the quotient
-\mathbb Q \text{ over } \mathbb Z \text{ is finitely made}\,? @@ finitely many fractions have a common bottom b, and 1/(2b) is no mix of them
-\mathbb Z/6 = \mathbb Z/2 \times \mathbb Z/3 \text{, so } \mathbb Z/4 = \mathbb Z/2 \times \mathbb Z/2\,? @@ 42c needs sizes that share nothing; 2 and 2 share 2
+d \text{ is the undo of } e \text{ on the clock of } n\,? @@ on the clock of c, the count of units; on the clock of n the powers would not cancel
+\text{the same message locks to a fresh hour each time}\,? @@ mᵉ is one hour: a spy who guesses “yes” or “no” locks both and compares; real systems pad m with chance first
+e = 3,\ m^3 \lt n \Rightarrow m^3 \text{ is safe}\,? @@ then the lock never went round the clock, and an ordinary cube root unlocks it
+p, q \text{ close together is fine}\,? @@ then √n is near both, and trying near √n finds them at once
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43i5.1</span><span class="ph understand">understand</span>Why is ℤ/2 × ℤ/2 not a copy of ℤ/4? <br>Why can a row not be stretched by 2 in the diagonal-grid technique over ℤ?</li>
+      <li><span class="qid">43i5.1</span><span class="ph understand">understand</span>Why must d be the undo of e on the clock of c, not of n? <br>Why does a small message locked with e = 3 give itself away?</li>
     </ol>
   </section>
 </section>
@@ -161,22 +157,22 @@ G = \mathbb Z/2 \times \mathbb Z/10,\ \ |G| = 20 @@ the structure technique; |de
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">43i.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\begin{pmatrix} 2 &amp; 4 &amp; 4 \\ -6 &amp; 6 &amp; 12 \\ 10 &amp; -4 &amp; -16 \end{pmatrix}"></span></span>Bring this grid to a diagonal by undoable moves over ℤ. <br>Which group is ℤ³ divided by its rows? Write it as a list of clocks of prime-power size.</div>
-  <div class="chq"><span class="chid">43i.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="360 = 2^3 \cdot 3^2 \cdot 5"></span></span>How many groups of size 360 turn about? List them as d₁ ∣ d₂ ∣ ⋯ <br>For which sizes n is there only one, and what is it?</div>
-  <div class="chq"><span class="chid">43i.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\mathbb Z/4 \times \mathbb Z/6 \ \text{ against } \ \mathbb Z/2 \times \mathbb Z/12"></span></span>The structure technique gives a list. Turn it round: can two different lists give the same group? <br>Decide for these two by counting, in each, the members g with 2g = 0, and with 4g = 0. Build from such counts a proof that the list is fixed by the group.</div>
-  <div class="chq"><span class="chid">43i.6.4</span><span class="tagq">reroute</span><span class="givens"><span class="gtx">a group of size p², p prime</span></span>Reroute the case of size p² without grids: if some member has order p², the group is ℤ/p². Otherwise every member other than 0 has order p (19d). <br>Show the group is then a space of arrows over ℤ/p, and use 27b to finish. Where does turning about enter?</div>
+  <div class="chq"><span class="chid">43i.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="p = 11,\ \ q = 17,\ \ e = 7"></span></span>Build the lock: find n, c and d. Lock the message 42 and unlock it, writing every squaring. <br>Then sign 10 and check the signature.</div>
+  <div class="chq"><span class="chid">43i.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="m = 122,\ \ n = 3233"></span></span>The two-key technique works for m sharing a prime with n. Find gcd(122, 3233). <br>What does a message that shares a prime with n give away to anyone who sees it, and how likely is it that a message chosen at random does so, when p and q have three hundred digits?</div>
+  <div class="chq"><span class="chid">43i.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="m^{ed} \equiv m \pmod n \text{ for every } m"></span></span>Must ed ≡ 1 (mod c) for that? Prove that ed ≡ 1 on the clock of the least common multiple of p − 1 and q − 1 is enough. <br>For 61 and 53, find the smallest home key that works for e = 17, and compare it with 2753.</div>
+  <div class="chq"><span class="chid">43i.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">1973, a lock with two keys, kept secret; 1977, the same lock, published</span></span>A mathematician working for a government found this lock in 1973, and it was kept secret for twenty four years. Others found it in 1977 and published it, and it went round the world. <br>Who found it? Is a discovery that nobody may read a discovery, and does the answer change for a technique, which is true whether or not it is read, against an invention, which is only of use when it is?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r43h.html">← 43h · only one complete ordered field</a><a href="r43j.html">43j · polynomial division by hand →</a></nav>
+<nav class="nextrung"><a href="r43h.html">← 43h · clock arithmetic by hand</a><a href="r43j.html">43j · is it prime? →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A module over R is an R-module; a finitely made one is finitely generated, and the structure technique is the structure theorem for finitely generated modules over a principal ideal domain, in its invariant factor form. The diagonal-grid technique is the Smith normal form, and d₁, …, dₖ are the invariant factors. The clock-list technique is the fundamental theorem of finite abelian groups; groups that turn about are abelian groups.</p>
+  <p>The two-key lock is RSA public-key encryption; (n, e) is the public key, d the private key, e the public exponent and d the private exponent. The count c is φ(n), and the least common multiple of 43i.6.3 is Carmichael’s λ(n). The turned-key technique is the RSA signature. Padding with chance is OAEP (for locking) and PSS (for signing). The cube-root attack is the small public exponent attack, and the attack on close primes is Fermat’s factorisation method. The cleverer factoring methods are the quadratic sieve and the general number field sieve.</p>
   <h3>Who said it first</h3>
-  <p>Henry Smith brought whole-number grids to a diagonal in 1861. Leopold Kronecker classified finite groups that turn about in 1870, after Ernst Schering’s work of 1868, and Georg Frobenius and Ludwig Stickelberger proved the list unique in 1878. Emmy Noether and her students, Bartel van der Waerden writing it up in 1930, put the technique in the form of modules over a principal ring.</p>
+  <p>Ron Rivest, Adi Shamir and Leonard Adleman published the lock in 1977 (in Scientific American’s column by Martin Gardner) and in a paper of 1978. Clifford Cocks, at the British government’s GCHQ, found the same lock in 1973, after James Ellis’s idea of a cipher with no shared key (1970); it was declassified in 1997. RSA-250 was factored in February 2020 by Fabrice Boudot, Pierrick Gaudry, Aurore Guillevic, Nadia Heninger, Emmanuel Thomé and Paul Zimmermann. Peter Shor’s method of 1994 (41·phys) would factor fast on a large quantum computer.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“The group ℤ² divided by (4, 6) and (6, 4) has size 4 · 4 − 6 · 6 = −20, so it is ℤ/20.” Not allowed: the size is |det| = 20, but the size does not fix the group. The diagonal is 2 and 10, so it is ℤ/2 × ℤ/10, which has no member of order 20.</p>
+  <p>“m^(ed) = m^(1 + tc) = m · (m^c)^t, and m^c ≡ 1 by the exponent-clock technique, so m^(ed) ≡ m.” Not allowed for every m: the exponent-clock technique needs gcd(m, n) = 1. The page’s proof splits the clocks of p and q to cover the m that share a prime with n.</p>
 </section>
 
 </div>
@@ -191,25 +187,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'stretching',t:R`r \cdot m`,n:`By a ring.`},
-  {k:'ember',kl:'a group',t:R`n \cdot g = g + \cdots + g`,n:`Over ℤ.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{6 \cdot g = 0:\ \text{no basis}}`,n:`Not free.`}
-],{title:'The slides · modules · ← → keys work'});
+  {k:'ember',kl:'clock',t:R`n = pq,\ \ c = (p-1)(q-1)`,n:`The count of units.`},
+  {k:'ember',kl:'keys',t:R`ed \equiv 1 \pmod c`,n:`Undo on the clock of c.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(m^e)^d \equiv m \pmod n}`,n:`Every m.`}
+],{title:'The slides · two keys · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'least to the corner',t:R`a = dq + r`,n:`Divide.`},
-  {k:'ember',kl:'clear',t:R`\text{row and column} \to 0`,n:`Size falls.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\mathrm{diag}(2, 10)}`,n:`Each divides the next.`}
-],{title:'The slides · to a diagonal · ← → keys work'});
+  {k:'ember',kl:'clock',t:R`n = 3233,\ c = 3120`,n:`61 and 53.`},
+  {k:'ember',kl:'keys',t:R`e = 17,\ d = 2753`,n:`An undo.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{65 \to 2790 \to 65}`,n:`Locked, unlocked.`}
+],{title:'The slides · by hand · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'relations',t:R`K = \text{rows of } A`,n:`What π loses.`},
-  {k:'ember',kl:'diagonal',t:R`\mathrm{diag}(d_1, \ldots, d_k)`,n:`By undoable moves.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{R^r \times \textstyle\prod R/(d_i)}`,n:`Copies and clocks.`}
-],{title:'The slides · structure · ← → keys work'});
+  {k:'ember',kl:'sum',t:R`p + q = n - c + 1`,n:`From c.`},
+  {k:'ember',kl:'roots',t:R`x^2 - 114x + 3233`,n:`Factors back.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{61,\ 53}`,n:`c is as hard as p and q.`}
+],{title:'The slides · what it rests on · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'relations',t:R`(4, 6),\ (6, 4)`,n:`Two rows.`},
-  {k:'ember',kl:'diagonal',t:R`2,\ 10`,n:`Each divides the next.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\mathbb Z/2 \times \mathbb Z/10}`,n:`Size 20.`}
-],{title:'The slides · finite groups · ← → keys work'});
+  {k:'ember',kl:'sign',t:R`s = m^d`,n:`Home key.`},
+  {k:'ember',kl:'check',t:R`s^e \equiv m`,n:`Printed key.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2746^{17} \equiv 123 \pmod{3233}}`,n:`Accepted.`}
+],{title:'The slides · signing · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Do Primes Keep Coming Close Together?</title>
+<title>Can We Trust a Proof No One Can Read?</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,107 +48,140 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r42crypt.html">← 42·crypt can a secret be split so any three of five can open it?</a><a href="r42now2.html">next: 42·now2 how regularly are the primes spread? →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r42econ.html">← 42·econ can everyone be paired so no two would rather swap?</a><a href="r42now2.html">next: 42·now2 how big must order be? →</a></p>
   <div class="tags"><span class="tag now">42·now · research front</span></div>
-  <h1>Do Primes Keep Coming Close Together?</h1>
-  <p data-pid="2cef3b">Do primes keep coming close together? Eleven and thirteen are two apart, and so are 101 and 103, and a million has more than eight thousand such pairs below it. Everyone who looks at a table of primes guesses the pairs go on for ever, and nobody has proved it. For a long time nobody could prove even that primes come within any fixed distance of each other again and again: maybe the gaps, which grow on average, grow without limit for every pair. In the spring of 2013 a lecturer who had spent years outside the main stream of the subject sent in a paper proving that some gap under seventy million happens endlessly often. Within weeks a group working in public, on a website anyone could read and post to, had cut the number in stages; a younger worker found a simpler method that autumn; and the group brought the number to 246 the next year. That is where it stands. This page shows why the average gap grows, why a clock forbids some patterns and allows others, how a pattern of numbers with no forbidden hours turns into a bound on gaps, and why the methods that reached 246 cannot by themselves reach 2.</p>
-  <p class="gesture" data-pid="c05c25">Gaps between primes grow on average like ln x, and some are as long as you like. A pattern of offsets can hold primes all at once again and again only if, for every prime p, it misses an hour of the clock of p. In 2013 it was proved that every such pattern of enough numbers holds at least two primes endlessly often, so gaps no wider than the pattern recur; the width came down from 70 million to 246.</p>
+  <h1>Can We Trust a Proof No One Can Read?</h1>
+  <p data-pid="697008">Can we trust a proof no one can read? 42d proved that five colours are enough for any map, and said that four are enough too, by a proof of 1976 that it did not give. That proof is the first famous one that no person has read from end to end: part of it is a computer checking well over a thousand cases. This page shows how such a proof is built. It counts a charge on each dot of a flat graph and finds that the charges always add to 12, which forces small pieces to appear. It shows what it means for a piece to be unable to sit in a smallest map needing five colours, and why the pieces that turn up are too many to check by hand. Then it asks the question the proof raised in 1979 and that has not gone away: is a check that no one can read a proof, and what do we trust when we accept it?</p>
+  <p class="gesture" data-pid="57a653">Give each dot of a flat graph of triangles the charge 6 less its links; the charges add to 12. Moving charge by rules shows that some piece from a fixed list must appear. If no piece on the list can sit in a smallest map needing five colours, four colours suffice. The 1976 list had near two thousand pieces, checked by computer; the 1997 list has 633; in 2005 a proof checker checked the whole proof.</p>
 </header>
 
-<section class="class step" data-step="42now1">
-  <h2 class="sthead"><span class="stno">42now1</span>Gaps Grow, and Some Are Long</h2>
-  <p data-pid="325938"><a href="r42g.html#dc55ce">42g</a> held in trust that π(x) is about x / ln x, so on average the primes near x are about ln x apart. Below a million there are 78 498 primes, an average gap of 12.7, and ln 10⁶ is 13.8. Averages say nothing about the shortest gaps, and a gap can be as long as you like.</p>
-  <p data-pid="60da32">Long-gap technique: <b>for every n ≥ 2, the n − 1 numbers n! + 2, n! + 3, …, n! + n are none of them prime.</b></p>
-  <pre class="lines" data-k="ember" data-label="this page: the long-gap technique">
-2 \le j \le n \Rightarrow j \mid n! @@ j is one of the factors of n!
-j \mid n! + j @@ and j divides j
-1 < j < n! + j @@ a divisor that is neither 1 nor the number
-\htmlClass{new}{n! + j \text{ is not prime for } j = 2, \ldots, n} \quad \blacksquare @@ a run of n − 1
+<section class="class step" data-step="42·now.1">
+  <h2 class="sthead"><span class="stno">42·now.1</span>Four Colours, Guessed and Wrongly Proved</h2>
+  <p data-pid="0c058a">The guess came in 1852, from colouring a map of counties: four colours are enough for any map, so that countries sharing a border differ. As 42d did, put a dot in each country and a link across each border; the map becomes a flat graph and the guess is that every flat graph has four colours.</p>
+  <p data-pid="4ff97a">A proof was published in 1879 and believed for eleven years. It followed the five-colour technique of 42d: take a dot with at most five links, colour the rest, and free a colour for the dot by swaps. With at most four neighbours one swap works, as in 42d. With five neighbours the proof made two swaps, one after the other.</p>
+  <pre class="lines" data-k="ember" data-label="this step: where the 1879 proof failed">
+\text{neighbours coloured } 1, 2, 3, 4, 2 \text{ round the dot} @@ four colours used, two of them 2
+\text{swap } 1 \leftrightarrow 3 \text{ from one neighbour 2, and } 1 \leftrightarrow 4 \text{ from the other} @@ each alone frees nothing for a 2
+\text{each swap is safe alone: its chain is cut off by the other chain} @@ 42d’s swap
+\text{after the first swap, the chains the second relied on can change} @@ the first swap recolours dots on them
+\htmlClass{new}{\text{both swaps together can join what was apart, and leave five colours needed}} @@ found in 1890
   </pre>
-  <p data-pid="7b017a">With n = 7: 5042 to 5047 are six numbers in a row, none prime. The true runs come far sooner: the first gap of 114 is after 492 113, well below a million, and the factorial run of that length starts near 114!, a number of 187 digits. So long gaps are certain and the factorial is a clumsy witness. The question is the other end: do short gaps keep coming?</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · long gaps · ← → keys work</div></section>
+  <p data-pid="d525d1">The flaw was found in 1890, and the proof kept what it could: five colours, the five-colour technique of 42d. The guess for four stayed open for 86 more years.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · 1879 · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">42·now.1.1</span><span class="ph understand">understand</span>Why does the prime-count technique say the average gap near x is about ln x? <br>What does the long-gap technique say, and why is n! + j never prime for 2 ≤ j ≤ n?</li>
+      <li><span class="qid">42·now.1.1</span><span class="ph understand">understand</span>Why does one swap free a colour when the dot has four neighbours? <br>Why can two swaps done one after the other fail when each alone would work?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="42now2">
-  <h2 class="sthead"><span class="stno">42now2</span>Patterns a Clock Forbids</h2>
-  <p data-pid="a7e432">Take offsets h₁ < h₂ < ⋯ < h_k, a pattern, and ask whether n + h₁, …, n + h_k can all be prime for endlessly many n. For the pattern 0, 2, 4 the answer is no: on the clock of 3 the three numbers n, n + 2, n + 4 sit at three different hours, so one of them is at hour 0 and is divisible by 3. Only 3, 5, 7 escape, by being 3 itself.</p>
-  <p data-pid="6d6322">Covered-hours technique: <b>if a pattern fills every hour of the clock of some prime p, then n + h₁, …, n + h_k are all prime for at most finitely many n.</b></p>
-  <pre class="lines" data-k="ember" data-label="this page: the covered-hours technique">
-\{h_i \bmod p\} = \text{every hour of } \mathbb{Z}/p @@ the pattern covers the clock of p
-\text{for each } n,\ \text{some } i \text{ has } n + h_i \equiv 0 \pmod p @@ the hour −n is among the hᵢ
-p \mid n + h_i,\ \ \text{so } n + h_i \text{ is prime only if it is } p @@ a prime with the divisor p is p
-\htmlClass{new}{\text{all prime only for } n + h_i = p:\ \text{ at most } k \text{ values of } n} \quad \blacksquare @@ one for each i
+<section class="class step" data-step="42·now.2">
+  <h2 class="sthead"><span class="stno">42·now.2</span>Charges That Add to 12</h2>
+  <p data-pid="f013ad">Adding links never makes colouring easier, so it is enough to colour flat graphs whose faces are all triangles. Give each dot with d links the charge 6 − d.</p>
+  <p data-pid="a27769">Charge-count technique: <b>in a flat graph with V ≥ 3 dots whose faces are all triangles, the charges 6 − d add to exactly 12.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the charge-count technique">
+3F = 2E @@ each face has 3 links, each link 2 faces
+V - E + \tfrac23 E = 2,\ \ E = 3V - 6 @@ the flat-count technique (42d)
+\textstyle\sum d = 2E = 6V - 12 @@ the ends-count technique (42a)
+\htmlClass{new}{\textstyle\sum (6 - d) = 6V - (6V - 12) = 12} \quad \blacksquare @@ 
   </pre>
-  <p data-pid="06f7a9">A pattern that misses at least one hour of every prime clock is called admissible; only clocks of primes p ≤ k can be covered, since k offsets cannot fill more than k hours. So the test is finite. 0, 2 misses hour 1 on the clock of 2 and hour 1 on the clock of 3: admissible. 0, 2, 6 is admissible; 0, 2, 4 is not. The guess, held by nearly everyone and proved for no pattern of two or more, is that every admissible pattern is all prime endlessly often, with a count that fair shares (42g) predict.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · patterns · ← → keys work</div></section>
+  <p data-pid="eb19c0">So some dot has charge above 0, that is at most five links, the five-or-fewer technique of 42d again. The new use is to move the charge. Moving it between dots keeps the total 12, so if a rule for moving can be shown to leave every dot at 0 or below, something the rule assumed absent must be present.</p>
+  <p data-pid="9c1594">Unavoidable-pair technique: <b>a flat graph of triangles in which every dot has at least five links has a dot of five links next to a dot of five or six.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the unavoidable-pair technique">
+\text{suppose every neighbour of a five-dot has 7 or more links} @@ for contradiction
+\text{each five-dot gives } \tfrac15 \text{ to each of its 5 neighbours} @@ the rule; its charge 1 goes to 0
+\text{round a dot, neighbours next to each other are linked} @@ the faces are triangles
+\text{so no two five-dots are next to each other round a dot of } d \ge 7 @@ else a five-dot would have a five-neighbour
+d \ge 7:\ \ 6 - d + \tfrac15 \lfloor \tfrac d2 \rfloor \le 6 - \tfrac{9d}{10} < 0 @@ at most ⌊d/2⌋ five-neighbours
+\text{six-dots keep } 0 @@ they give and get nothing
+\htmlClass{new}{\text{every charge is at most } 0, \text{ but they add to } 12} \quad \blacksquare @@ a contradiction
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · charges · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42·now.2.1</span><span class="ph understand">understand</span>Why is n, n + 2, n + 4 prime only for n = 3? <br>What does the covered-hours technique say, and why do only the clocks of primes up to k need checking?</li>
+      <li><span class="qid">42·now.2.1</span><span class="ph understand">understand</span>Why do the charges 6 − d add to 12? <br>Why does moving charge prove that some piece must appear?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="42now3">
-  <h2 class="sthead"><span class="stno">42now3</span>Patterns From Large Primes</h2>
-  <p data-pid="839ae2">A pattern of k numbers is easy to make admissible: take primes bigger than k.</p>
-  <p data-pid="263563">Big-primes technique: <b>any k different primes, each larger than k, form an admissible pattern.</b></p>
-  <pre class="lines" data-k="ember" data-label="this page: the big-primes technique">
-p \le k:\ \ \text{no } h_i \text{ is } \equiv 0 \pmod p @@ each hᵢ is a prime larger than k ≥ p, so p does not divide it
-\text{the hour } 0 \text{ of } \mathbb{Z}/p \text{ is missed} @@ for every p ≤ k
-p > k:\ \ k \text{ offsets fill at most } k < p \text{ hours} @@ some hour is missed
-\htmlClass{new}{\text{no prime clock is covered}} \quad \blacksquare @@ the pattern is admissible
+<section class="class step" data-step="42·now.3">
+  <h2 class="sthead"><span class="stno">42·now.3</span>Pieces That Cannot Appear</h2>
+  <p data-pid="cca85f">Suppose some flat graph needs five colours, and take one with the fewest dots. A piece of graph is <i>reducible</i> if it cannot appear in such a smallest graph: whenever the rest is coloured in four, the colouring can be changed by swaps and finished on the piece.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the plan of the proof">
+\text{a dot of 3 links is reducible; a dot of 4 links is reducible} @@ a colour is free, or one swap frees one (42d)
+\text{so a smallest graph has every dot of 5 or more links} @@ and its faces may be taken as triangles
+\text{it has a five next to a five or six} @@ the unavoidable-pair technique
+\text{a list of pieces is unavoidable if every such graph has one} @@ found by rules for moving charge
+\htmlClass{new}{\text{an unavoidable list of reducible pieces proves four colours}} @@ no smallest graph needing five can exist
   </pre>
-  <p data-pid="4be796">With k = 3: 5, 7, 11, width 6. The first proof of bounded gaps, in 2013, took k = 3 500 000 and the 3.5 million primes from 3 500 017 on. The last of them is 63 374 611, so the width of the pattern is 59 874 594, under seventy million. That is where the first bound came from: it is the width of an admissible pattern, not a measured gap. Narrower patterns of the same size exist and were found by search.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · big primes · ← → keys work</div></section>
+  <p data-pid="338c47">The pair of the unavoidable-pair technique is not reducible by itself, and the swaps that would free a colour fail as in 1879. So the list must hold larger pieces, each with a ring of dots round it, and to show a piece reducible means checking every four-colouring of its ring.</p>
+  <pre class="lines" data-k="ember" data-label="this step: how many ring colourings to check">
+\text{colourings of a ring of } m \text{ dots in 4 colours: } 3^m + 3(-1)^m @@ a ring is a cycle
+\text{renaming the colours: } 24 \text{ moves; a swap of two colours keeps the } 2 \text{ two-colourings in the others} @@ m even; the rest keep none but doing nothing
+m = 14:\ \ \tfrac{1}{24}\,(3^{14} + 3 + 6 \cdot 2) = \tfrac{4\,782\,984}{24} @@ the average-kept technique (42·cb19)
+\htmlClass{new}{= 199\,291 \text{ colourings of one ring of 14, each to be finished on the piece}} @@ for one piece of the list
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · reducible · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42·now.3.1</span><span class="ph understand">understand</span>Why does a prime larger than k never sit at hour 0 of the clock of a prime p ≤ k? <br>Why was the first bound on gaps the width of a pattern and not a gap anyone saw?</li>
+      <li><span class="qid">42·now.3.1</span><span class="ph understand">understand</span>What does it mean for a piece to be reducible? <br>Why does an unavoidable list of reducible pieces prove that four colours suffice?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="42now4">
-  <h2 class="sthead"><span class="stno">42now4</span>From Patterns to Gaps</h2>
-  <p data-pid="3733c6">What was proved in 2013, and sharpened in 2014, is this, held in trust here: for k at least 50, every admissible pattern of k offsets has, for endlessly many n, at least two of n + h₁, …, n + h_k prime. The proof weighs each n by how likely it is that many of the n + hᵢ are prime, using fair shares in the hours of many clocks at once (42g, 42c), and shows the weighted count of primes beats one per n.</p>
-  <p data-pid="b757b7">Width-bound technique: <b>if every admissible pattern of k offsets holds two primes endlessly often, then the gap h_k − h₁ of the narrowest admissible pattern of k offsets is reached or beaten by gaps between primes endlessly often.</b></p>
-  <pre class="lines" data-k="ember" data-label="this page: the width-bound technique">
-\text{fix an admissible pattern of } k,\ \text{ width } H = h_k - h_1 @@ the narrowest known
-n + h_i,\ n + h_j \text{ both prime, endlessly often} @@ held in trust: the result of 2013–2014
-|(n + h_j) - (n + h_i)| \le H @@ both lie in the window from n + h₁ to n + h_k
-\text{the primes between them, if any, give a gap smaller still} @@ consecutive primes in the window
-\htmlClass{new}{\text{a gap} \le H \text{ between consecutive primes, endlessly often}} \quad \blacksquare @@ for each such n, and the n go on for ever
+<section class="class step" data-step="42·now.4">
+  <h2 class="sthead"><span class="stno">42·now.4</span>The Proof by Computer</h2>
+  <p data-pid="bc5e03">The 1976 proof had an unavoidable list of near two thousand pieces, found partly by hand with rules for moving charge, and a computer checked each piece reducible, ring colouring by ring colouring, in some 1200 hours. The 1997 proof used a list of 633 pieces and 32 rules for moving charge, and both halves, unavoidable and reducible, were checked by computer in a few hours. In 2005 the whole proof, with the flat drawings and the curves of 42d, was written for a proof checker and checked, line by line, by its small core.</p>
+  <p data-pid="3c0e48">The four-colour result is now this: <b>every flat graph can be coloured with four colours, so that linked dots differ.</b> It is believed by everyone who works on it. No one has found a proof short enough to read, and no one has shown there is none.</p>
+  <pre class="lines" data-k="ember" data-label="this step: what each proof asks us to trust">
+1976:\ \text{the hand work, the programs, the machine} @@ an error in the hand part was found and repaired later
+1997:\ \text{the charge rules by hand; programs anyone can run again} @@ two independent checks
+2005:\ \text{the small core of the checker and the written statement} @@ the small-kernel technique (38·now)
+\htmlClass{new}{\text{the trust moves from a reader to a check anyone can repeat}} @@ 
   </pre>
-  <p data-pid="19ef2f">The record is H = 246, the narrowest admissible pattern of 50 offsets, found by computer search. The route there: 70 million in May 2013; 4680 by the summer, by a public group tightening every step; 600 that November by a new, simpler weighing that also gave three, four, any number of primes within a bounded window; and 246 in 2014 by the group with the new weighing. If a stronger form of fair shares, believed and unproved, holds, the same argument gives 12, and a stronger form still gives 6. It cannot give 2: a weighing of this kind cannot tell numbers with an even count of prime factors from those with an odd count, and twin primes need exactly that. Primes two apart remain open.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · bounded gaps · ← → keys work</div></section>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · by computer · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42·now.4.1</span><span class="ph understand">understand</span>What was proved in 2013 and 2014, and which part does this page hold in trust? <br>What does the width-bound technique say, and why does it need the narrowest admissible pattern?</li>
+      <li><span class="qid">42·now.4.1</span><span class="ph understand">understand</span>What did the computer check in 1976, and what was found by hand? <br>Where does the trust rest in the 2005 proof?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="42now5">
-  <h2 class="sthead"><span class="stno">42now5</span>Illegal Moves</h2>
-  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
-\text{the gap 246 has been seen endlessly often}\,? @@ some gap of at most 246; which one is not known
-0, 2, 4 \text{ is a pattern like any other}\,? @@ it covers the clock of 3: one member is a multiple of 3
-\text{the average gap grows, so short gaps must stop}\,? @@ an average says nothing about the smallest
-\text{a finer weighing will bring 246 down to 2}\,? @@ the methods cannot see an even or odd count of prime factors; 6 at the very best
-\text{8169 pairs below a million, so twins never end}\,? @@ counts of a finite table prove nothing about the endless
+<section class="class step" data-step="42·now.5">
+  <h2 class="sthead"><span class="stno">42·now.5</span>Is a Check No One Reads a Proof?</h2>
+  <p data-pid="2928e6">In 1979 a philosopher argued that the 1976 proof was not a proof in the old sense. A proof, he said, is something a person can survey: read, follow and be convinced by. A computer run cannot be surveyed, so accepting it is trusting an experiment, like a measurement in a laboratory; mathematics with such proofs has a part that is known by experience, not by reason. 14g asked whether a plot drawn by a machine is a proof; this is the same question with the plot made exact.</p>
+  <p data-pid="1d7b89">The reply has three parts. Long arithmetic done by hand is not surveyed either: no one checks the multiplication of two hundred-digit numbers by holding it in mind, only that each step is a step. Every proof that people accept rests on checks they did not make, and errors in long proofs read by people have stood for years, as the 1879 proof did. And the 2005 check narrows what must be trusted to a small core that people can read, and to a statement that says what was proved. What the reply does not give is understanding: a list of 633 pieces says that four colours suffice, and does not say why.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the two positions">
+\text{a proof must be surveyable by a person} @@ so the 1976 proof is an experiment
+\text{a proof is a list of steps each of which can be checked} @@ by a person or a core a person can read
+\text{both agree: the result is true beyond reasonable doubt} @@ no error has been found since 1997
+\htmlClass{new}{\text{they disagree on whether the knowing is the same kind}} @@ the question stays open
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · trust · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42·now.5.1</span><span class="ph understand">understand</span>Why did the 1979 argument call the computer proof an experiment? <br>What does the small core of a proof checker change, and what does it not change?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42·now.6">
+  <h2 class="sthead"><span class="stno">42·now.6</span>Illegal Moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\text{one swap at a dot of five neighbours always frees a colour}\,? @@ the 1879 mistake; two chains can cross
+\text{every flat graph has a dot of five links next to one of five or six}\,? @@ only when every dot has five or more; else a dot of four or fewer
+\text{if a computer checked it, it is a proof without trust}\,? @@ the trust moves to the program and the core; it does not vanish
+\text{a result no one can read through is no more certain than a guess}\,? @@ it is a check that anyone can repeat; a guess is not
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42·now.5.1</span><span class="ph understand">understand</span>Why does the bound 246 not say which gap recurs? <br>Why can no table of twin primes, however long, prove they never end?</li>
+      <li><span class="qid">42·now.6.1</span><span class="ph understand">understand</span>Why is the unavoidable-pair technique false for flat graphs with a dot of four links? <br>Why does a computer check not remove trust?</li>
     </ol>
   </section>
 </section>
@@ -157,22 +190,22 @@ n + h_i,\ n + h_j \text{ both prime, endlessly often} @@ held in trust: the resu
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">42·now.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="k = 4"></span></span>Build the narrowest admissible pattern of four offsets starting at 0. <br>Check every prime clock that could be covered, and find the first n with all four of n + hᵢ prime.</div>
-  <div class="chq"><span class="chid">42·now.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="0, 2, 6, 8, 12"></span></span>Test the pattern 0, 2, 6, 8, 12 on the clocks of 2, 3 and 5. Is it admissible? <br>Find the smallest n with all five prime, if there is one, and say what the clock of 5 forces.</div>
-  <div class="chq"><span class="chid">42·now.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{admissible} \Rightarrow \text{all prime endlessly often}"></span></span>The covered-hours technique: a covered pattern fails. Turn it round: is every admissible pattern all prime endlessly often? <br>Say which part of this is proved for k = 1, which part was proved in 2013 for two members of large patterns, and what would follow from the full converse for twin primes.</div>
-  <div class="chq"><span class="chid">42·now.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">38·now: a proof checked by many hands</span></span>The first bound came from one person working alone for years; the next drops came from dozens of people posting each small improvement in public, errors and all. <br>Is a proof made in public, with every slip seen, more or less trustworthy than one made alone and refereed? What did the public work add that the referee could not?</div>
+  <div class="chq"><span class="chid">42·now.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{a ring of 6 dots, 4 colours}"></span></span>Count the colourings of a ring of 6 dots in 4 colours, and the colourings up to renaming the colours, by the average-kept technique. <br>Check by listing them by the number of colours used.</div>
+  <div class="chq"><span class="chid">42·now.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{every dot has 5 or 6 links}"></span></span>Find a flat graph of triangles in which every dot has five or six links and no two five-dots are next to each other. <br>How many five-dots must it have, by the charge-count technique? Which ball of 42d.6.4 is it the drawing of?</div>
+  <div class="chq"><span class="chid">42·now.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{an unavoidable list of reducible pieces}"></span></span>The plan says an unavoidable list of reducible pieces proves four colours. Turn it round: if four colours suffice, must there be such a list? <br>Is a dot of five links reducible once the four-colour result is known, and does that make the list trivial?</div>
+  <div class="chq"><span class="chid">42·now.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">42j.6.4: a proof that shows no example, and one that no one reads; 14g.4.4: is a plot a proof?</span></span>42j.6.4 asked which you would trust less: a proof that something exists that shows none, or a proof no one can read. <br>Now that you have seen how the computer proof is built, place it: is it more like a long hand calculation, a measurement, or a plot? Give the strongest form of the 1979 argument and the strongest reply. Which do you hold?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r42crypt.html">← 42·crypt · can a secret be split so any three of five can open it?</a><a href="r42now2.html">42·now2 · how regularly are the primes spread? →</a></nav>
+<nav class="nextrung"><a href="r42econ.html">← 42·econ · can everyone be paired so no two would rather swap?</a><a href="r42now2.html">42·now2 · how big must order be? →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>Patterns are prime k-tuples, and the admissible ones those that cover no residue system. The guess that every admissible pattern is all prime endlessly often is the Hardy–Littlewood k-tuple conjecture, and its case 0, 2 the twin prime conjecture. The result of 2013 is bounded gaps between primes, written lim inf (p_(n+1) − p_n) &lt; ∞. The weighing is the Selberg sieve as used by Goldston, Pintz and Yıldırım, refined by Zhang and Maynard; the stronger form of fair shares is the Elliott–Halberstam conjecture, and the obstacle at 6 is the parity problem of sieve theory.</p>
+  <p>The four-colour result is the four colour theorem. The swap is a Kempe chain interchange. The charges and their moving are the discharging method; the charge-count technique is Euler's formula for triangulations, and the unavoidable-pair technique is Wernicke's theorem (1904). A smallest graph needing five colours is a minimal counterexample; a reducible piece is a reducible configuration, and its ring is the ring of the configuration. The 1979 question is the surveyability debate.</p>
   <h3>Who said it first</h3>
-  <p>The k-tuple guess is in G. H. Hardy and J. E. Littlewood (1923). Daniel Goldston, János Pintz and Cem Yıldırım showed in 2005 that gaps are endlessly often far smaller than the average, and bounded if the Elliott–Halberstam conjecture holds. Yitang Zhang proved the bound of 70 million in a paper received by the Annals of Mathematics in April 2013, while a lecturer at the University of New Hampshire. Terence Tao proposed the public project Polymath8, which reached 4680. James Maynard, and independently Tao, found the simpler weighing in November 2013 and got 600; Polymath8b reached 246 in 2014. The long-gap technique is classical; gaps much longer than ln x, endlessly often, are due to Erik Westzynthius (1931) and later Robert Rankin (1938), with the current form by Kevin Ford, Ben Green, Sergei Konyagin, Maynard and Tao (2014–2018).</p>
+  <p>Francis Guthrie guessed four colours in 1852 and his brother passed the question to Augustus De Morgan. Alfred Kempe published his proof in 1879; Percy Heawood found the flaw in 1890 and proved five colours. Paul Wernicke found the unavoidable pair in 1904, and Heinrich Heesch, from the 1930s, the method of charges and reducible pieces. Kenneth Appel and Wolfgang Haken, with John Koch, gave the computer proof in 1976. Neil Robertson, Daniel Sanders, Paul Seymour and Robin Thomas gave the 1997 proof, and Georges Gonthier, with Benjamin Werner, checked it in the Coq proof assistant in 2005. Thomas Tymoczko made the surveyability argument in 1979.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“There are endlessly many primes, and they cannot all be far apart, since the gaps average ln x, so a fixed gap recurs.” Not allowed: an average that grows does not stop every gap from growing too. Gaps could grow like ln x for every pair and keep the average. What forbids that is the result of 2013, and nothing short of it.</p>
+  <p>“A map that needs five colours would need five countries each bordering all the others. Five such countries cannot be drawn flat, since K₅ is not flat (42d). So four colours suffice.” Not allowed: a graph can need more colours than its largest group of dots all linked to each other. A ring of five dots has no three all linked and still needs three colours. Needing five colours does not mean holding K₅, and that is why the problem took 124 years.</p>
 </section>
 
 </div>
@@ -187,25 +220,30 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'average',t:R`\text{gap} \approx \ln x`,n:`Held in trust.`},
-  {k:'ember',kl:'divide',t:R`j \mid n! + j`,n:`2 ≤ j ≤ n.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{n - 1 \text{ in a row, none prime}}`,n:`As long as you like.`}
-],{title:'The slides · long gaps · ← → keys work'});
+  {k:'ember',kl:'guess',t:R`\text{four colours}`,n:`1852.`},
+  {k:'ember',kl:'proof',t:R`\text{two swaps}`,n:`Each alone is safe.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{together they can fail}}`,n:`Found in 1890.`}
+],{title:'The slides · 1879 · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'cover',t:R`\{h_i \bmod 3\} = \{0, 1, 2\}`,n:`For 0, 2, 4.`},
-  {k:'ember',kl:'so',t:R`3 \mid n + h_i`,n:`One is divisible.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{covered} \Rightarrow \text{finitely many}}`,n:`Admissible or not.`}
-],{title:'The slides · patterns · ← → keys work'});
+  {k:'ember',kl:'charge',t:R`6 - d`,n:`On each dot.`},
+  {k:'ember',kl:'total',t:R`\textstyle\sum = 12`,n:`Flat-count.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a five next to a five or six}}`,n:`Move and compare.`}
+],{title:'The slides · charges · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'small p',t:R`p \nmid h_i`,n:`Hour 0 missed.`},
-  {k:'ember',kl:'large p',t:R`k < p`,n:`Too few to cover.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{5, 7, 11;\ \ 3\,500\,017, \ldots}`,n:`Admissible.`}
-],{title:'The slides · big primes · ← → keys work'});
+  {k:'ember',kl:'reducible',t:R`\text{every ring colouring finishes}`,n:`Cannot be in a smallest graph.`},
+  {k:'ember',kl:'unavoidable',t:R`\text{one must appear}`,n:`Moving charge.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{four colours}}`,n:`No smallest graph needs five.`}
+],{title:'The slides · reducible · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'held',t:R`\ge 2 \text{ primes in } n + h_i`,n:`k ≥ 50.`},
-  {k:'ember',kl:'window',t:R`\le H`,n:`Width of the pattern.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{gaps} \le 246 \text{ endlessly often}}`,n:`2014.`}
-],{title:'The slides · bounded gaps · ← → keys work'});
+  {k:'ember',kl:'1976',t:R`\approx 2000 \text{ pieces}`,n:`About 1200 hours.`},
+  {k:'ember',kl:'1997',t:R`633 \text{ pieces, } 32 \text{ rules}`,n:`Hours.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2005: \text{ the small core}}`,n:`A check anyone can repeat.`}
+],{title:'The slides · by computer · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'surveyable',t:R`\text{a person reads it}`,n:`The 1979 view.`},
+  {k:'ember',kl:'checkable',t:R`\text{each step can be checked}`,n:`The reply.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{true; but known how?}}`,n:`Still argued.`}
+],{title:'The slides · trust · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

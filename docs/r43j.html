@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Polynomial Division by Hand</title>
+<title>Is It Prime?</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,92 +48,97 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r43i.html">← 43i modules over a principal ring</a><a href="r43k.html">next: 43k field extensions by hand →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r43i.html">← 43i clock powers and secret keys</a><a href="r43k.html">next: 43k continued fractions →</a></p>
   <div class="tags"><span class="tag tech">43j · technique</span></div>
-  <h1>Polynomial Division by Hand</h1>
-  <p data-pid="56e25a">Division with remainder, done again and again, finds the greatest common factor of two polynomials, as rung four’s oldest recipe found it for two numbers. That is slow by hand and quick to check. There is a faster test, which never divides at all: write the coefficients of the two polynomials into one square grid, shifted along row by row, and take its determinant. It is zero exactly when the two share a factor. The same grid, built with a second letter riding along in the coefficients, throws that letter away and leaves a polynomial in the first letter alone, whose zeros are where two curves meet. Counting the degree of that polynomial gives a bound on how many times two curves can cross: a line meets a parabola at most twice, two conics at most four times, and two curves of degrees m and n at most m times n, unless they share a piece.</p>
-  <p class="gesture" data-pid="0b09f5">Repeated division finds the greatest common factor. A grid of shifted coefficients has determinant zero exactly when two polynomials share a factor. Built with a second letter in the coefficients, it eliminates that letter, and its degree bounds the meetings of two curves by the product of their degrees.</p>
+  <h1>Is It Prime?</h1>
+  <p data-pid="c11018">The lock of the last step needs two primes of three hundred digits, and somebody has to find them. The prime-count technique says about one number in seven hundred near ten to the three hundred is prime, so a few hundred tries at random will meet one. Each try needs an answer to the question: is this number prime? Trying every divisor up to its square root would outlast the stars. The little technique gives a quicker road, run backwards: if a power fails to come back to one, the number is not prime, for certain, and the power is fast. But some numbers that are not prime pass for every base. A sharper test looks at how the power reaches one, and a number that is not prime is caught by most bases, three in four at least. So a test with fifty random bases is wrong with a chance below one in a million million million million million. In 2002 a test was found that is certain and still fast in the sense of rung thirty nine: its steps grow like a power of the number of digits.</p>
+  <p class="gesture" data-pid="9058d8">A number with no prime factor up to its root is prime, and that search is slow. A unit whose power one less than n is not one proves n composite; some composites fool every base. On a prime clock the only square roots of one are plus and minus one, so the chain of squarings toward one must pass minus one; a composite fails that for at least three bases in four. And a test of 2002 is certain and fast.</p>
 </header>
 
 <section class="class step" data-step="43j1">
-  <h2 class="sthead"><span class="stno">43j1</span>The Remainder Chain</h2>
-  <p data-pid="bec62b">Remainder-chain technique: <b>to find the greatest common factor of f and g over a field, divide f by g, then g by the remainder, then that remainder by the next, until a remainder is 0; the last remainder other than 0 is the greatest common factor, up to a constant.</b> 4j’s split-keeps-divisors technique, with polynomials: f = gq + r and g share exactly the common factors of g and r.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the remainder chain, by hand">
-f = x^4 - 1,\ \ g = x^3 - 2x^2 + 2x - 1 @@ over ℚ
-x^4 - 1 = (x + 2)\,g + (2x^2 - 3x + 1) @@ divide (43c)
-g = (\tfrac12 x - \tfrac14)(2x^2 - 3x + 1) + \tfrac34 (x - 1) @@ divide again
-2x^2 - 3x + 1 = (x - 1)(2x - 1) + 0 @@ the chain stops
-\htmlClass{new}{\text{the greatest common factor is } x - 1} \quad \blacksquare @@ the last remainder other than 0, top coefficient made 1
+  <h2 class="sthead"><span class="stno">43j1</span>Divisors up to the Root</h2>
+  <p data-pid="06e915">Root-bound technique: <b>a number n above 1 that is not prime has a prime factor at most √n.</b> If n = jk with 1 &lt; j ≤ k, then j² ≤ jk = n, and a prime divisor of j (4j10) is at most j.</p>
+  <pre class="lines" data-k="ember" data-label="this step: what the root bound costs">
+91:\ \ \sqrt{91} \lt 10,\ \text{try } 2, 3, 5, 7:\ \ 91 = 7 \cdot 13 @@ four tries
+97:\ \ 2, 3, 5, 7 \text{ all fail} @@ so 97 is prime
+n \approx 10^{300}:\ \ \text{primes up to } 10^{150} @@ the prime-count technique: about 10¹⁵⁰/345 of them
+\htmlClass{new}{\text{about } 3 \times 10^{147} \text{ divisions}} \quad \blacksquare @@ the growth family of √n, which is 10 to half the digits
   </pre>
-  <p data-pid="0698f8">Run backwards, the chain writes x − 1 as uf + vg for polynomials u and v, as 4j’s plus-only combination did for numbers. That is the one-maker technique made a recipe: (f, g) = (x − 1). The fractions grow fast, which is why the chain is slow by hand.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · chain · ← → keys work</div></section>
+  <p data-pid="4d73ed">The root bound is certain, and it is slow in the sense of 39k: its steps grow like a power of n itself, not of the number of digits of n. A test that is fast must grow like a power of the digits.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the root bound · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">43j1.1</span><span class="ph understand">understand</span>What does the remainder-chain technique say, and which technique of 4j does it carry to polynomials? <br>Why is the greatest common factor of x⁴ − 1 and x³ − 2x² + 2x − 1 equal to x − 1?</li>
+      <li><span class="qid">43j1.1</span><span class="ph understand">understand</span>What does the root-bound technique say, and why is the smaller factor at most √n? <br>Why is it too slow for a number of three hundred digits?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43j2">
-  <h2 class="sthead"><span class="stno">43j2</span>A Grid That Tests for a Shared Factor</h2>
-  <p data-pid="3083ae">Let f have degree m and g degree n, over a field. Their <i>resultant</i> Res(f, g) is the determinant of the grid with m + n rows: n rows of f’s coefficients, each shifted one place right of the last, then m rows of g’s.</p>
-  <p data-pid="c76d34">Shared-factor-test technique: <b>Res(f, g) = 0 exactly when f and g share a factor of degree at least 1.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the shared-factor-test technique">
-\text{share } h \iff uf = vg \text{ for some } u \ne 0,\ \deg u < n,\ \deg v < m @@ if f = hf₁, g = hg₁, take u = g₁, v = f₁; the other way, one factoring (43d) puts all of f’s unsplittables in vg, so one of them divides g
-uf - vg = 0 \text{ is a straight equation in the } m + n \text{ coefficients of } u, v @@ each coefficient of uf − vg is a mix of them
-\text{the grid of that straight map is the resultant’s grid, turned on its side} @@ row by row, the shifted coefficients
-\htmlClass{new}{\text{a nonzero answer} \iff \det = 0} \quad \blacksquare @@ the straight map loses more than 0 exactly when its determinant is 0 (27c, 27e)
+  <h2 class="sthead"><span class="stno">43j2</span>The Little Test, and Its Liars</h2>
+  <p data-pid="8a2b1f">Run the little technique backwards. If gcd(a, n) = 1 and a^(n − 1) ≢ 1 (mod n), then n is not prime. Such an a is a <i>witness</i>, and it proves n composite without finding a factor. 3³⁴⁰ ≡ 56 on the clock of 341, so 3 is a witness for 341 = 11 · 31, though 2 is not (43d5).</p>
+  <p data-pid="b01b86">Every-base-liar technique: <b>if n has no repeated prime factor, and p − 1 divides n − 1 for every prime p dividing n, then a^(n − 1) ≡ 1 (mod n) for every a with gcd(a, n) = 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: 561 lies for every base">
+561 = 3 \cdot 11 \cdot 17,\ \ 560 = 2 \cdot 280 = 10 \cdot 56 = 16 \cdot 35 @@ 2, 10 and 16 divide 560
+p \in \{3, 11, 17\}:\ \ a^{560} = (a^{p-1})^{560/(p-1)} \equiv 1 \pmod p @@ the little technique on each clock
+\text{three readings of } a^{560}, \text{ each } 1 @@ one prime at a time
+\htmlClass{new}{a^{560} \equiv 1 \pmod{561}} \quad \blacksquare @@ the remainder technique (43c1): 3, 11 and 17 share nothing
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: two tests by hand">
-\mathrm{Res}(x^2 - 3x + 2,\ x^2 - 1) = \det\begin{pmatrix} 1 & -3 & 2 & 0 \\ 0 & 1 & -3 & 2 \\ 1 & 0 & -1 & 0 \\ 0 & 1 & 0 & -1 \end{pmatrix} = 0 @@ they share x − 1
-\htmlClass{new}{\mathrm{Res}(x^2 + 1,\ x - 2) = \det\begin{pmatrix} 1 & 0 & 1 \\ 1 & -2 & 0 \\ 0 & 1 & -2 \end{pmatrix} = 5} \quad \blacksquare @@ no shared factor; 5 = 2² + 1, the value of x² + 1 at the zero of x − 2
-  </pre>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · resultant · ← → keys work</div></section>
+  <p data-pid="0ee539">So the little test can never prove 561 composite, except with a base that shares a factor with it, and those are few: 240 of the 560 hours. Such numbers are endless; there are 43 below a million.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · liars · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43j2.1</span><span class="ph understand">understand</span>How is the resultant’s grid built from the coefficients of f and g? <br>What does the shared-factor-test technique say, and which technique of rung 27 finishes its proof?</li>
+      <li><span class="qid">43j2.1</span><span class="ph understand">understand</span>What is a witness, and what does it prove? <br>What does the every-base-liar technique say, and why does 561 meet its condition?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43j3">
-  <h2 class="sthead"><span class="stno">43j3</span>Throwing a Letter Away</h2>
-  <p data-pid="02479d">Two curves f(x, y) = 0 and g(x, y) = 0. Read each as a polynomial in y, with coefficients that are polynomials in x. Then Res_y(f, g) is a polynomial in x alone.</p>
-  <p data-pid="d05941">Eliminate-a-letter technique: <b>if (x₀, y₀) is on both curves, then Res_y(f, g) is 0 at x₀; and if the top coefficients in y do not both vanish at x₀, every zero x₀ of Res_y comes from a shared point, perhaps with a complex y₀.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the circle and the hyperbola">
-f = x^2 + y^2 - 5,\ \ g = xy - 2 @@ in y: f = y² + 0·y + (x² − 5), g = x·y − 2
-\mathrm{Res}_y = \det\begin{pmatrix} 1 & 0 & x^2 - 5 \\ x & -2 & 0 \\ 0 & x & -2 \end{pmatrix} = x^4 - 5x^2 + 4 @@ the grid: one row of f, two of g
-x^4 - 5x^2 + 4 = (x - 1)(x + 1)(x - 2)(x + 2) @@ a quadratic in x²
-\htmlClass{new}{(1, 2),\ (2, 1),\ (-1, -2),\ (-2, -1)} \quad \blacksquare @@ y = 2/x at each; each is on the circle
+  <h2 class="sthead"><span class="stno">43j3</span>Watching the Power Reach One</h2>
+  <p data-pid="fede5e">Write n − 1 = 2ˢ · d with d odd. The little technique’s power a^(n − 1) is a^d squared s times. On a prime clock the only square roots of [1] are ±[1] (43e2). So the last hour before [1] in the chain a^d, a^(2e), …, a^(n − 1) must be −[1], unless the chain starts at [1].</p>
+  <p data-pid="5c6825">Strong-test technique: <b>if n is an odd prime, n − 1 = 2ˢd with d odd, and n ∤ a, then either a^d ≡ 1, or a^(2ʳd) ≡ −1 for some r below s.</b> A base for which neither happens is a <i>strong witness</i>, and proves n composite.</p>
+  <pre class="lines" data-k="ember" data-label="this step: 561, caught">
+560 = 2^4 \cdot 35 @@ s = 4, d = 35
+2^{35} \equiv 263,\ \ 263^2 \equiv 166,\ \ 166^2 \equiv 67,\ \ 67^2 \equiv 1 \pmod{561} @@ square-and-multiply (43h), then three squarings
+67 \ne \pm 1 \text{ and } 67^2 \equiv 1 @@ a square root of 1 that is neither: impossible on a prime clock
+\htmlClass{new}{561 \text{ is composite, and } 2 \text{ is a strong witness}} @@ the strong-test technique
+561 \mid (67 - 1)(67 + 1),\ \ \gcd(66, 561) = 33 @@ neither factor is a multiple of 561
+\htmlClass{new}{561 = 33 \cdot 17} \quad \blacksquare @@ the odd square root hands over a factor
   </pre>
-  <p data-pid="d12f09">The parabola y = x² and the line y = x + 2: Res_y(y − x², y − x − 2) = x² − x − 2 = (x − 2)(x + 1), and the meetings are (2, 4) and (−1, 1). Elimination did what substitution does, and it works when nothing can be solved for a letter.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · elimination · ← → keys work</div></section>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · laws with a known exception rate</div>
+    <p data-pid="5943d4">For an odd composite n, at most a quarter of the bases from 1 to n − 1 fail to be strong witnesses. That is a technique, held in trust here, proved in 1980. Pick bases at random and independently (30f), k of them.</p>
+    <p data-pid="7310d7"><b>A test that says yes with a stated exception rate is rigorous: the rate is the proof’s output, and it is known before the first base is tried.</b></p>
+    <p data-pid="535433">A composite then passes every round with chance at most 1/4ᵏ. With k = 50 that is below 10⁻³⁰. The test never says “prime” for certain. It says “composite” for certain, or “prime, with an exception rate below 4 to the minus k”, a rate stated before the test is run.</p>
+    <p class="bait" data-pid="9bc5e1">A machine draws 600 random 300-digit odd numbers and runs 50 rounds on each. Bound the chance that some composite among them is called prime. Is the bound a fact about these numbers, or about the drawing?</p>
+  </aside>
+  <p data-pid="d3e635">For 91 = 7 · 13, 18 of the 90 bases lie, which is 20%. For 561 only 10 lie. The bound of a quarter is near the worst case, not the usual one.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the strong test · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43j3.1</span><span class="ph understand">understand</span>What does the eliminate-a-letter technique say? <br>Where do x² + y² = 5 and xy = 2 meet, and how does the resultant find the x of each meeting?</li>
+      <li><span class="qid">43j3.1</span><span class="ph understand">understand</span>What does the strong-test technique say, and why must the chain pass −1 on a prime clock? <br>How does the chain for 561 with base 2 prove 561 composite, and how does it hand over a factor?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43j4">
-  <h2 class="sthead"><span class="stno">43j4</span>How Many Times Two Curves Meet</h2>
-  <p data-pid="a3f18e">Meeting-count technique: <b>two curves of degrees m and n with no shared piece meet in at most mn points.</b> A piece here is a factor of degree at least 1 common to f and g.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the meeting-count technique">
-\text{turn the plane so that no two meetings share an } x @@ finitely many directions are bad (20’s turns)
-\text{in each grid entry, the coefficient of } y^{k} \text{ in } f \text{ has degree at most } m - k \text{ in } x @@ f has degree m
-\text{each term of the determinant has degree at most } mn \text{ in } x @@ count: the entry in row i, column j has degree at most its place’s weight, and the weights add to mn
-\mathrm{Res}_y \ne 0 @@ no shared piece (the shared-factor-test technique, over the fractions of polynomials in x)
-\htmlClass{new}{\text{at most } mn \text{ zeros, so at most } mn \text{ meetings}} \quad \blacksquare @@ at-most-n-zeros (9g); each meeting gives its own x
+  <h2 class="sthead"><span class="stno">43j4</span>Certain, and Still Fast</h2>
+  <p data-pid="06a72b">Binomial-test technique: <b>if gcd(a, n) = 1 and n ≥ 2, then n is prime exactly when (x + a)ⁿ and xⁿ + a have the same coefficients on the clock of n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the binomial-test technique">
+(x + a)^n = \textstyle\sum_k \binom nk a^{n-k} x^k @@ the binomial technique (4k)
+n \text{ prime}: \ n \mid \tbinom nk \text{ for } 0 \lt k \lt n,\ \ a^n \equiv a @@ 43d.6.1; the little technique
+n \text{ not prime}: \ q \text{ a prime},\ q^j \text{ the highest power of } q \text{ dividing } n @@ pick one prime factor
+\tbinom nq = \frac{n(n-1)\cdots(n-q+1)}{q!}:\ \ q^j \nmid \tbinom nq @@ the top has q to the power j only, from n; the bottom takes one q away
+\htmlClass{new}{\text{the coefficient of } x^q \text{ is } \tbinom nq a^{n-q} \not\equiv 0 \pmod n} \quad \blacksquare @@ gcd(a, n) = 1: q ∤ a
   </pre>
-  <p data-pid="4b415b">So a line meets a cubic at most 3 times, and two conics at most 4: the circle and the hyperbola above reach 4. Two circles x² + y² = 1 and x² + y² = 4 never meet: Res_y is the constant 9. The count is exactly mn only after counting complex meetings, meetings twice where curves touch, and meetings at the far points of 29m. <i>Held in trust</i>: that exact count is much higher up the ladder.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · meetings · ← → keys work</div></section>
+  <p data-pid="e3d952">With n = 15 and q = 3: (15 choose 3) = 455, which 3 does not divide, so the coefficient of x³ shows 15 is composite. As it stands the test is slow: (x + a)ⁿ has n + 1 coefficients. The test of 2002 checks the same sameness only on the clock of xʳ − 1 as well, for a small r and a few a, and proves that enough. Its steps grow like a power of the number of digits, so primality is in 41h’s class P. In practice the strong test is used, since it is faster still, and the certain test only where certainty is asked for.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · certain · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43j4.1</span><span class="ph understand">understand</span>What does the meeting-count technique say, and what is a shared piece? <br>Why can two conics meet at most 4 times, and why do x² + y² = 1 and x² + y² = 4 meet none?</li>
+      <li><span class="qid">43j4.1</span><span class="ph understand">understand</span>What does the binomial-test technique say? <br>Why does q to the power j not divide (n choose q) when n is not prime?</li>
     </ol>
   </section>
 </section>
@@ -141,15 +146,15 @@ x^4 - 5x^2 + 4 = (x - 1)(x + 1)(x - 2)(x + 2) @@ a quadratic in x²
 <section class="class step" data-step="43j5">
   <h2 class="sthead"><span class="stno">43j5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\mathrm{Res}(f, g) \ne 0 \text{, so } f \text{ and } g \text{ have no common zero anywhere}\,? @@ true over a field where both split; but the test is about factors over the field the coefficients come from
-x^2 + y^2 = 1 \text{ and } x^2 + y^2 = 4 \text{ meet 4 times, by the meeting-count}\,? @@ the technique says at most 4; here 0
-\text{the last remainder in the chain is the greatest common factor exactly}\,? @@ up to a constant: (3/4)(x − 1) and x − 1 are partners
-(x - y)(x + y) = 0 \text{ and } x - y = 0 \text{ meet at most } 2 \cdot 1 \text{ times}\,? @@ they share the piece x − y and meet along a whole line
+2^{n-1} \equiv 1 \pmod n \Rightarrow n \text{ prime}\,? @@ 341 and 561 pass: the little test proves only “composite”
+50 \text{ rounds passed} \Rightarrow n \text{ is prime}\,? @@ prime with an exception rate below 4⁻⁵⁰, which is not certainty
+\text{a strong witness gives a factor}\,? @@ only when an odd square root of 1 appears, as 67 did; a power that never reaches 1 gives none
+\text{trial division to } n/2 \text{ is needed}\,? @@ the root bound: √n is enough
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43j5.1</span><span class="ph understand">understand</span>Why does the meeting-count technique not say that two conics always meet 4 times? <br>Why do (x − y)(x + y) = 0 and x − y = 0 meet endlessly often?</li>
+      <li><span class="qid">43j5.1</span><span class="ph understand">understand</span>Why does passing 50 rounds of the strong test not make n prime for certain? <br>When does a strong witness hand over a factor, and when does it not?</li>
     </ol>
   </section>
 </section>
@@ -158,22 +163,22 @@ x^2 + y^2 = 1 \text{ and } x^2 + y^2 = 4 \text{ meet 4 times, by the meeting-cou
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">43j.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="y^2 = x^3 - x,\ \ y = x"></span></span>Build the resultant in y and find every meeting of the cubic and the line. <br>Then do the same for y² = x³ − x and the circle x² + y² = 2. How many meetings does the meeting-count technique allow, and how many are real?</div>
-  <div class="chq"><span class="chid">43j.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f = x^2 - 2x + 1,\ \ 2x - 2"></span></span>Find Res(f, 2x − 2), where 2x − 2 is f’s slope. <br>Build a proof that a polynomial over ℚ has a repeated zero in ℂ exactly when Res(f, f′) = 0. What is Res(x² + bx + c, 2x + b)?</div>
-  <div class="chq"><span class="chid">43j.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\mathrm{Res}_y(f, g)(x_0) = 0"></span></span>The eliminate-a-letter technique needs the top coefficients in y not both to vanish at x₀. Turn it round and find curves whose resultant is 0 at some x₀ where they do not meet, even with complex y. <br>Try f = xy − 1 and g = xy − 2. What does the far point of 29m have to do with it?</div>
-  <div class="chq"><span class="chid">43j.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\gcd(x^4 - 1,\ x^3 - 2x^2 + 2x - 1)"></span></span>Reroute the first footing’s answer by the shared-factor-test technique: compute Res(x⁴ − 1, x³ − 2x² + 2x − 1). <br>It is 0. Which test tells you more, and which is quicker by hand?</div>
+  <div class="chq"><span class="chid">43j.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="2047 = 23 \cdot 89"></span></span>Run the strong test on 2047 with base 2, and then with base 3. Which is a strong witness? <br>Build the smallest odd composite for which 2 lies in the strong test, by searching, and say how you would search faster.</div>
+  <div class="chq"><span class="chid">43j.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n = p^2"></span></span>For n the square of an odd prime, find how many bases lie in the little test. Prove that the count is p − 1. <br>Why is a square never a number that lies for every base?</div>
+  <div class="chq"><span class="chid">43j.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="a^{n-1} \equiv 1 \pmod n \text{ for every unit } a"></span></span>Prove the other half of the every-base-liar technique: if every unit lies, n has no repeated prime and p − 1 divides n − 1 for each prime p dividing n. <br>Hint held back: a full hand of the clock of p (43e) and the remainder technique.</div>
+  <div class="chq"><span class="chid">43j.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">30f: chance; 41i: chance in computing</span></span>A lock is built on a number that passed 64 rounds of the strong test. Nobody proves it prime. <br>Is the lock built on a prime? If it is not, is it broken? Some writers called such numbers prime enough for industry. Is a statement with a stated exception rate below 2⁻¹²⁸ a proof, a guess under the large case, or something the ladder has no word for?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r43i.html">← 43i · modules over a principal ring</a><a href="r43k.html">43k · field extensions by hand →</a></nav>
+<nav class="nextrung"><a href="r43i.html">← 43i · clock powers and secret keys</a><a href="r43k.html">43k · continued fractions →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The remainder chain is the Euclidean algorithm for polynomials. The resultant’s grid is the Sylvester matrix, and the shared-factor-test technique is the resultant criterion. Res(f, f′) is, up to a factor, the discriminant. The meeting-count technique is the easy half of Bézout’s theorem; the exact count, with complex points, multiplicities and points at infinity, is Bézout’s theorem in the projective plane.</p>
+  <p>The root-bound technique is trial division. The little test is the Fermat primality test, and a liar a Fermat liar; numbers that lie for every unit are Carmichael numbers, and the every-base-liar technique with 43j.6.3 is Korselt’s criterion. The strong test is the Miller–Rabin test, a strong witness a Miller–Rabin witness, and 2047 the least strong pseudoprime to base 2. The bound of a quarter is the Monier–Rabin bound. The binomial-test technique is the starting point of the AKS primality test, which puts PRIMES in P. Numbers passing a probabilistic test are probable primes; “industrial-grade primes” is Henri Cohen’s phrase.</p>
   <h3>Who said it first</h3>
-  <p>Étienne Bézout wrote on elimination and the count of meetings in 1779; Isaac Newton had guessed the count earlier. James Joseph Sylvester wrote the resultant’s grid in 1840. Leonhard Euler eliminated a letter from two equations in 1748.</p>
+  <p>Robert Carmichael found 561 in 1910; Alwin Korselt gave the criterion in 1899. That Carmichael numbers are endless was proved by William Alford, Andrew Granville and Carl Pomerance in 1994. Gary Miller gave the strong test in 1976, certain if a then unproved hypothesis holds; Michael Rabin made it a test with chance in 1980, and Louis Monier and Rabin proved the bound of a quarter that year. Manindra Agrawal, Neeraj Kayal and Nitin Saxena announced the certain fast test in August 2002; it was published in 2004.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“x² + 1 and x² + 4 have no real zeros, so Res(x² + 1, x² + 4) = 0.” Not allowed: the test is about shared factors, not about zeros on the line. The two share no factor, and their resultant is 9.</p>
+  <p>“The strong test with base 2 says 2047 might be prime, base 3 says 2047 might be prime, … so after many bases the chance that 2047 is prime is near 1.” Not allowed: 2047 is prime or not, and it is not; base 3 is a strong witness. The exception rate is a fact about the drawing of bases, not a chance that a fixed number is prime.</p>
 </section>
 
 </div>
@@ -188,25 +193,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'divide',t:R`f = gq + r`,n:`Common factors kept.`},
-  {k:'ember',kl:'again',t:R`g = rq′ + r′`,n:`Until 0.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\gcd = x - 1}`,n:`The last remainder.`}
-],{title:'The slides · chain · ← → keys work'});
+  {k:'ember',kl:'factor',t:R`n = jk,\ j \le k \Rightarrow j \le \sqrt n`,n:`The smaller one.`},
+  {k:'ember',kl:'97',t:R`2, 3, 5, 7 \nmid 97`,n:`Prime.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\approx 10^{147} \text{ tries at } 10^{300}}`,n:`Too slow.`}
+],{title:'The slides · the root bound · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'the grid',t:R`m + n \text{ rows}`,n:`Shifted coefficients.`},
-  {k:'ember',kl:'its meaning',t:R`uf = vg`,n:`A straight map.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\mathrm{Res} = 0 \iff \text{a shared factor}}`,n:`No dividing.`}
-],{title:'The slides · resultant · ← → keys work'});
+  {k:'ember',kl:'witness',t:R`a^{n-1} \not\equiv 1`,n:`Composite, for certain.`},
+  {k:'ember',kl:'561',t:R`2, 10, 16 \mid 560`,n:`Every prime minus one.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{a^{560} \equiv 1 \pmod{561}}`,n:`Every unit lies.`}
+],{title:'The slides · liars · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'in y',t:R`\mathrm{Res}_y(f, g)`,n:`A polynomial in x.`},
-  {k:'ember',kl:'zeros',t:R`x = \pm 1, \pm 2`,n:`Four.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{four meetings}}`,n:`Circle and hyperbola.`}
-],{title:'The slides · elimination · ← → keys work'});
+  {k:'ember',kl:'chain',t:R`a^d, a^{2d}, \ldots, a^{n-1}`,n:`Squarings.`},
+  {k:'ember',kl:'prime clock',t:R`x^2 = 1 \Rightarrow x = \pm 1`,n:`43e2.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{67^2 \equiv 1,\ 67 \ne \pm1 \Rightarrow 561 \text{ composite}}`,n:`And 33 divides it.`}
+],{title:'The slides · the strong test · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'degrees',t:R`m,\ n`,n:`Two curves.`},
-  {k:'ember',kl:'resultant',t:R`\deg \mathrm{Res}_y \le mn`,n:`Count the weights.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\le mn \text{ meetings}}`,n:`Unless they share a piece.`}
-],{title:'The slides · meetings · ← → keys work'});
+  {k:'ember',kl:'prime',t:R`(x + a)^n \equiv x^n + a`,n:`Counts divisible by n.`},
+  {k:'ember',kl:'composite',t:R`q^j \nmid \tbinom nq`,n:`One coefficient survives.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{prime} \iff \text{the sameness}}`,n:`Fast by 2002.`}
+],{title:'The slides · certain · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

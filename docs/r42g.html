@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Primes Are Endless and Thin</title>
+<title>The Best Corner</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,101 +48,106 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r42f.html">← 42f squares on a clock</a><a href="r42h.html">next: 42h clock arithmetic by hand →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r42f.html">← 42f flows and cuts</a><a href="r42h.html">next: 42h games →</a></p>
   <div class="tags"><span class="tag proof">42g · proof</span></div>
-  <h1>Primes Are Endless and Thin</h1>
-  <p data-pid="d281cc">Rung four proved that the primes never run out: hand the proof a list, and it finds a prime not on it. It said nothing about how many there are below a thousand, or a million, or how far apart they sit. Among the first ten numbers four are prime; among the first thousand, one hundred and sixty eight; among the first million, about one in thirteen. They thin out. This step asks how fast. First, not too fast: the sum of one over each prime grows without bound, slowly, as the log of a log, so the primes are far more plentiful than the squares. Second, the primes are packed into one endless product, and that product is the sum of one over every power of every number, the start of a road that runs to the open question at the end of this rung. Third, a single count of choices fences the number of primes below a bound from above and below. The exact rate, one over the log, was guessed by a boy of fifteen from tables and proved a century later; this step states it and holds it in trust. And the primes are shared out fairly among the hours of every clock, which the step proves in two cases.</p>
-  <p class="gesture" data-pid="cd1e99">The sum of one over each prime passes every bound, at the rate of the log of a log. The sum of one over each power of every number is a product over the primes. The middle count of choices fences how many primes lie below a bound. Near x, about one number in ln x is prime, and each unit hour of a clock gets its fair share of primes.</p>
+  <h1>The Best Corner</h1>
+  <p data-pid="98b466">A small glass works has three shops. One frames doors, one frames windows, and the third cuts and fits the glass for both. Each shop has so many hours a week. A batch of doors earns so much, a batch of windows so much more, and each uses hours in two of the shops. How many of each should it make? Rung 18 answered a question of this shape with two unknowns on a sheet of paper: the best plan sits at a corner of the region the limits cut out. A real plan has hundreds of unknowns, and the sheet becomes a space of that many directions; the corners are still where to look, and this step proves it. Then it finds that every such question has a twin. Ask what each shop’s hour is worth, the least prices that would make the shops’ hours at least as valuable as anything they can make. Every set of such prices bounds every plan from above. And the best plan and the best prices meet at exactly the same number. The proof of that runs through a recipe for taking one unknown out of a list of limits, and it ends with a single fact: a list of limits has no answer exactly when a combination of them says that zero is less than a negative number.</p>
+  <p class="gesture" data-pid="979791">Maximise a sum of the unknowns, each times a price, under limits that are sums at most a bound, with every unknown at least 0. If the region has a corner and the sum is bounded, a corner is best. Prices for the limits that cover every unknown’s worth bound every plan. A list of limits has no answer exactly when a combination with weights at least 0 reads 0 at most a negative number. So the best plan and the best prices are equal.</p>
 </header>
 
 <section class="class step" data-step="42g1">
-  <h2 class="sthead"><span class="stno">42g1</span>Thin, but Not Too Thin</h2>
-  <p data-pid="ffbdc3">22f proved that 1 + ¼ + ⅑ + ⋯ settles, and 22d that 1 + ½ + ⅓ + ⋯ passes every bound. The squares are thin enough that their reciprocals settle. Are the primes?</p>
-  <p data-pid="812bc9">Thin-but-endless technique: <b>for every x ≥ 3, the sum of 1/p over the primes p ≤ x is at least ln ln x − 1, so it passes every bound.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the thin-but-endless technique">
-\textstyle\prod_{p \le x} \frac{1}{1 - 1/p} = \prod_{p \le x}\big(1 + \tfrac1p + \tfrac1{p^2} + \cdots\big) @@ the geometric sum (22e), one for each prime
-\phantom{\textstyle\prod} \ge \textstyle\sum_{n \le x} \tfrac1n \ge \ln x @@ multiply out: each n ≤ x has one prime list (4j18), all its primes ≤ x; the sum beats the area under 1/t (17a)
-\textstyle\sum_{p \le x} -\ln(1 - \tfrac1p) \ge \ln\ln x @@ ln of both sides (17c)
--\ln(1 - t) \le t + t^2 \text{ for } 0 \le t \le \tfrac12 @@ the two sides agree at 0, and the slopes are 1/(1 − t) ≤ 1 + 2t (14’s slopes control heights)
-\textstyle\sum_p \tfrac1{p^2} \le \sum_{n \ge 2} \tfrac{1}{n(n - 1)} = 1 @@ the sum folds: 1/(n − 1) − 1/n
-\htmlClass{new}{\textstyle\sum_{p \le x} \tfrac1p \ge \ln\ln x - 1} \quad \blacksquare @@ the last three lines
+  <h2 class="sthead"><span class="stno">42g1</span>Plans and Corners</h2>
+  <p data-pid="b5b6e2">A <i>plan</i> is a list x = (x₁, …, xₙ) of numbers. A <i>limit</i> reads a₁x₁ + ⋯ + aₙxₙ ≤ b. A <i>program</i> asks for the largest value of c · x (27i) over the plans with Ax ≤ b and x ≥ 0, where A is an m × n grid (27d), b a list of m bounds, and ≤ between lists means each entry. The plans that obey every limit are the <i>allowed plans</i>. The accepted name of the whole question is a linear program.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the glass works">
+\text{doors } x,\ \text{windows } y;\ \text{earn } 3x + 5y @@ in thousands of dollars per batch
+x \le 4,\ \ 2y \le 12,\ \ 3x + 2y \le 18,\ \ x, y \ge 0 @@ hours of the door shop, the window shop, the glass shop
+\text{corners } (0,0), (4,0), (4,3), (2,6), (0,6) \text{ give } 0, 12, 27, 36, 30 @@ 18g’s best-corner technique, in the plane
+\htmlClass{new}{(2, 6):\ 36} \quad \blacksquare @@ the best corner
   </pre>
-  <p data-pid="8e7851">Below a million the sum is about 2.89 and ln ln 10⁶ is about 2.63. The bound is weak and the growth is slow: to pass 4 the sum needs primes into the hundreds of millions. But it does pass every bound, and the squares’ sum never passes 2. So the primes are endless again, in a stronger form, and they are not as thin as the squares.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · thin, not too thin · ← → keys work</div></section>
+  <p data-pid="cce622">In n unknowns, a <i>corner</i> is an allowed plan at which some n of the m + n limits, counting each xⱼ ≥ 0, hold with equality and have rows that make a free list (27b). Those n equations have exactly one answer, so there are at most as many corners as ways to choose n of the m + n limits.</p>
+  <p data-pid="145815">Tight-corner technique: <b>if the allowed plans have a corner and c · x is bounded above on them, some corner gives the largest value.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the tight-corner technique">
+x \text{ allowed, not a corner; its tight rows build less than all } n \text{ directions} @@ the rows of the limits holding with equality there
+d \ne 0 \text{ at right angles to every tight row, with } c \cdot d \ge 0 @@ the kernel is not 0 (27c); take −d if needed
+x + t\,d \text{ stays allowed for small } t \ge 0 \text{; follow it until a new limit is tight} @@ tight limits stay tight; loose ones stay loose a while
+\text{if none ever tightens: } c \cdot d > 0 \text{ is unbounded, and } c \cdot d = 0 \text{ go along } -d @@ the whole line cannot fit: x ≥ 0 stops one side unless d = 0
+x' \text{ allowed, } c \cdot x' \ge c \cdot x \text{, with one more tight row, free from the old ones} @@ d is at right angles to the old rows and not to the new one
+\htmlClass{new}{\text{after at most } n \text{ moves a corner at least as good; the best of the finitely many corners is best}} \quad \blacksquare @@ each move adds a free row
+  </pre>
+  <p data-pid="63a51f">18g’s best-corner technique is the case n = 2, on a bounded region. The difference here is that the region need not be bounded, only the value, and the number of directions is anything.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · corners · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">42g1.1</span><span class="ph understand">understand</span>What does the thin-but-endless technique say? <br>Which line spends 4j18’s one prime list, and why does the sum over n ≤ x beat ln x?</li>
+      <li><span class="qid">42g1.1</span><span class="ph understand">understand</span>What is a corner of the allowed plans in n unknowns? <br>What does the tight-corner technique say, and why does each move of its proof add a row that is free from the old ones?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42g2">
-  <h2 class="sthead"><span class="stno">42g2</span>One Product Over the Primes</h2>
-  <p data-pid="0d3ede">From here on, ζ (the Greek letter zeta, in its small form) names the function on s &gt; 1 with ζ(s) = 1 + 1/2ˢ + 1/3ˢ + ⋯, which settles by 22f’s p-sums. Its capital form is not used. 32b found ζ(2) = π²/6.</p>
-  <p data-pid="9db382">Prime-product technique: <b>for every s &gt; 1, ζ(s) is the endless product over the primes of 1/(1 − p^(−s)).</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the prime-product technique">
-P(x) = \textstyle\prod_{p \le x} \frac{1}{1 - p^{-s}} = \sum_{n \text{ with every prime} \le x} n^{-s} @@ multiply the geometric sums: terms never negative, so the order is free (22g); one prime list each (4j18)
-0 \le \zeta(s) - P(x) \le \textstyle\sum_{n \gt x} n^{-s} @@ every n ≤ x is in P(x)’s sum, and only the larger ones can be missing
-\textstyle\sum_{n \gt x} n^{-s} \to 0 \text{ as } x \to \infty @@ the tail of a settling sum (22d)
-\htmlClass{new}{\zeta(s) = \textstyle\prod_p \frac{1}{1 - p^{-s}}} \quad \blacksquare @@ the partial products settle on ζ(s)
+  <h2 class="sthead"><span class="stno">42g2</span>Prices</h2>
+  <p data-pid="791640">Put a price yᵢ ≥ 0 on each limit: what an hour of shop i is worth. A plan’s product uses up hours, and column j of A says how many of each shop’s hours unit j uses. The prices <i>cover</i> unit j when the hours it uses are worth at least what it earns. With Aᵀ for the grid read with rows as columns, the <i>twin program</i> asks for the least value of b · y over the y with Aᵀy ≥ c and y ≥ 0.</p>
+  <p data-pid="a1b323">Price-bound technique: <b>if x is an allowed plan and y covering prices, then c · x ≤ b · y.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the price-bound technique">
+c \cdot x \le (A^{\mathsf T} y) \cdot x @@ c ≤ Aᵀy entry by entry, and x ≥ 0
+= y \cdot (A x) @@ the same sum of aᵢⱼ yᵢ xⱼ, taken by rows instead of columns
+\htmlClass{new}{\le y \cdot b} \quad \blacksquare @@ Ax ≤ b entry by entry, and y ≥ 0
   </pre>
-  <p data-pid="92c0dc">Take s = 2. The product of (1 − 1/p²) over all primes is 6/π², about 0.6079. Read through rung 30’s chance, it is the share of pairs of numbers that share no prime: a pair misses sharing 2 with chance 1 − ¼, sharing 3 with chance 1 − 1/9, and so on, independently, as the remainder technique (42c) makes exact on each finite clock. So about 61% of pairs of large numbers have gcd 1. The open question of 42·now2 is about where ζ, carried into the complex plane, is 0.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · the product · ← → keys work</div></section>
+  <pre class="lines" data-k="ember" data-label="this step: prices for the glass works">
+p + 3r \ge 3,\ \ 2q + 2r \ge 5,\ \ p, q, r \ge 0 @@ doors use 1 hour of the door shop and 3 of glass; windows 2 of the window shop and 2 of glass
+y = (0, \tfrac32, 1):\ \ 4 \cdot 0 + 12 \cdot \tfrac32 + 18 \cdot 1 = 36 @@ covering: 0 + 3 = 3, 3 + 2 = 5
+\htmlClass{new}{\text{every plan earns at most } 36\text{, and } (2, 6) \text{ earns } 36} \quad \blacksquare @@ the price-bound technique: both are best
+  </pre>
+  <p data-pid="aebaaf">The door shop’s price is 0: at the best plan its 4 hours are not all used, and an hour more of it would earn nothing. Shops with slack have price 0, and units with a positive amount are covered exactly. That pattern holds at every pair of best answers; 42g.6.3 asks for its proof.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · prices · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42g2.1</span><span class="ph understand">understand</span>What does ζ(s) name, and what does the prime-product technique say? <br>Why may the product of geometric sums be multiplied out in any order?</li>
+      <li><span class="qid">42g2.1</span><span class="ph understand">understand</span>What are covering prices, and what is the twin program? <br>What does the price-bound technique say, and which two facts about signs does its proof need?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42g3">
-  <h2 class="sthead"><span class="stno">42g3</span>A Fence From the Middle Count</h2>
-  <p data-pid="9981ef">Write π(x) for the number of primes at most x. Here π names a count, not the round number of rung 21: the letter has a further job, with a counting number or a real inside the brackets, and its old meaning stands wherever it stands alone. So π(10) = 4 and π(100) = 25.</p>
-  <p data-pid="1f308f">Middle-count technique: <b>for every n ≥ 1, π(2n) · ln(2n) ≥ n ln 4 − ln(2n + 1).</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the middle-count technique">
-\tbinom{2n}{n} \ge \tfrac{4^n}{2n + 1} @@ the largest of the 2n + 1 counts of choices, which add to 2²ⁿ (4k’s binomial technique)
-\text{the power of } p \text{ in } m! \text{ is } \textstyle\sum_{j \ge 1} \lfloor m/p^j \rfloor @@ count the multiples of p, of p², … up to m (the whole part, 42f4)
-\text{in } \tbinom{2n}{n}:\ \textstyle\sum_j \big(\lfloor 2n/p^j\rfloor - 2\lfloor n/p^j\rfloor\big),\ \text{each term } 0 \text{ or } 1 @@ ⌊2t⌋ − 2⌊t⌋ is 0 or 1; terms with pʲ &gt; 2n are 0
-p^k \mid \tbinom{2n}{n} \Rightarrow p^k \le 2n @@ k is at most the number of j with pʲ ≤ 2n
-\tbinom{2n}{n} \le (2n)^{\pi(2n)} @@ only primes up to 2n divide it, each to a power at most 2n
-\htmlClass{new}{\pi(2n)\ln(2n) \ge n\ln 4 - \ln(2n + 1)} \quad \blacksquare @@ ln of the first and fifth lines
+  <h2 class="sthead"><span class="stno">42g3</span>Taking One Unknown Out</h2>
+  <p data-pid="80b546">A list of limits Σⱼ aᵢⱼxⱼ ≤ bᵢ, i = 1 to m, may have no answer at all. To settle it, sort the limits by the sign of xₙ’s coefficient. A positive one bounds xₙ above, a negative one below, and a zero one leaves it free.</p>
+  <p data-pid="bb3a69">One-out technique: <b>the limits have an answer exactly when the list made of the zero ones, together with one limit for each pair of an upper and a lower one, has an answer in x₁, …, xₙ₋₁; each new limit is a sum of two old ones with weights at least 0, made so that xₙ drops out.</b> Given an answer of the new list, every lower bound on xₙ is then at most every upper bound, so an xₙ between the largest lower and the smallest upper obeys them all.</p>
+  <p data-pid="797359">No-answer technique: <b>Ax ≤ b has no answer exactly when some y ≥ 0 has yᵀA = 0 and y · b &lt; 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the no-answer technique">
+y \ge 0,\ y^{\mathsf T}A = 0,\ y \cdot b < 0,\ \text{and } Ax \le b @@ suppose both
+0 = y^{\mathsf T}A x \le y \cdot b < 0 @@ weights at least 0 keep ≤
+\bot @@ so no answer
+\text{other way: take out } x_n, x_{n-1}, \dots, x_1 \text{ by the one-out technique} @@ induction on n (4c)
+\text{each limit at the end reads } 0 \le b' \text{ and is } y^{\mathsf T}(Ax \le b) \text{ for some } y \ge 0 @@ weights at least 0, multiplied and added
+\htmlClass{new}{\text{no answer} \Rightarrow \text{some final limit has } b' < 0:\ \text{its } y \text{ is the certificate}} \quad \blacksquare @@ the one-out technique, run back up
   </pre>
-  <p data-pid="0d5ab3">So π(x) is at least about (ln 2 / 2) · x/ln x for large x. The other side of the fence uses the same count: every prime between n and 2n divides (2n)!/(n! n!) once, so their product is at most 4ⁿ, and the product of all primes up to x is below 4ˣ, a standing question. That caps π(x) at a fixed multiple of x/ln x. For n = 50 the fence gives π(100) ≥ 14; the truth is 25.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · the fence · ← → keys work</div></section>
+  <p data-pid="53fd80">So a “no” always comes with a short reason anyone can check, as the marriage technique’s did. Taking unknowns out by the one-out technique is honest and slow: the number of limits can square at every step.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · no answer · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42g3.1</span><span class="ph understand">understand</span>What does the middle-count technique say? <br>Why does every prime power dividing the middle count of choices stay at most 2n?</li>
+      <li><span class="qid">42g3.1</span><span class="ph understand">understand</span>What does the one-out technique do to a list of limits? <br>What does the no-answer technique say, and why is its certificate easy to check?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42g4">
-  <h2 class="sthead"><span class="stno">42g4</span>About One in ln x</h2>
-  <p data-pid="dc55ce">Prime-count technique, held in trust: <b>the share of primes among the numbers up to x settles toward 1/ln x, so that π(x) divided by x/ln x settles on 1.</b> Its proof, through ζ in the complex plane, is much higher up the ladder.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the prime-count technique against the counts">
-\pi(10^3) = 168,\ \ 10^3/\ln 10^3 \approx 144.8,\ \ \text{ratio } 1.161 @@ counted
-\pi(10^6) = 78\,498,\ \ 10^6/\ln 10^6 \approx 72\,382,\ \ \text{ratio } 1.084 @@ counted
-\pi(10^9) = 50\,847\,534,\ \ 10^9/\ln 10^9 \approx 48\,254\,942,\ \ \text{ratio } 1.054 @@ counted
-\htmlClass{new}{\text{the ratios fall toward } 1 \text{, slowly}} @@ the technique says they settle there
+  <h2 class="sthead"><span class="stno">42g4</span>Equal Prices</h2>
+  <p data-pid="456448">Equal-prices technique: <b>if the program has an allowed plan and its twin has covering prices, both have best answers, and the best plan earns exactly the least price total.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the equal-prices technique">
+\text{seek } x, y:\ Ax \le b,\ -x \le 0,\ -A^{\mathsf T}y \le -c,\ -y \le 0,\ -c \cdot x + b \cdot y \le 0 @@ an answer is a plan and prices with c · x ≥ b · y
+\text{an answer gives } c \cdot x = b \cdot y \text{, both best} @@ the price-bound technique gives ≤ too
+\text{no answer} \Rightarrow u, p, w, q, \lambda \ge 0:\ A^{\mathsf T}u \ge \lambda c,\ A w \le \lambda b,\ b \cdot u < c \cdot w @@ the no-answer technique, the weights read off by unknown
+\lambda > 0:\ u/\lambda \text{ covers},\ w/\lambda \text{ allowed},\ c \cdot w \le b \cdot u @@ the price-bound technique; against the last line
+\lambda = 0:\ b \cdot u \ge (A x_0) \cdot u \ge 0 \ge (A^{\mathsf T} y_0) \cdot w \ge c \cdot w @@ x₀ allowed and y₀ covering, given; against b · u &lt; c · w
+\htmlClass{new}{\text{an answer exists: } \max c \cdot x = \min b \cdot y} \quad \blacksquare @@ both cases end in ⊥
   </pre>
-  <p data-pid="9887f0">Fair-shares, held in trust: if gcd(a, n) = 1, the clock of n has endlessly many primes in the hour [a], and each of the c(n) unit hours gets, in the long run, the same share of them. The hours that are not units hold at most one prime each, since every member shares a divisor with n. The step proves two cases whole.</p>
-  <p data-pid="5543e4">Four-clock technique: <b>the hours [1] and [3] of the clock of 4 each hold endlessly many primes.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the four-clock technique">
-p_1, \ldots, p_k \equiv 3 \pmod 4;\ \ N = 4p_1\cdots p_k - 1 \equiv 3 @@ a list of primes in the hour [3]
-\text{a product of numbers in } [1] \text{ is in } [1] @@ carry-to-the-clock (42a2)
-\text{some prime } q \mid N \text{ is in } [3],\ q \ne p_i @@ N is odd and in [3]; q = pᵢ would divide 1 (4j16)
-q_1, \ldots, q_k \equiv 1;\ \ M = (2q_1\cdots q_k)^2 + 1 @@ a list in the hour [1]
-r \mid M \Rightarrow -1 \equiv (2q_1\cdots q_k)^2 \pmod r @@ r is odd and none of the qᵢ
-\htmlClass{new}{-1 \text{ is a square on the clock of } r \text{, so } r \equiv 1 \pmod 4} \quad \blacksquare @@ the square-test technique (42f2): a new prime in [1]
-  </pre>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · one in ln x · ← → keys work</div></section>
+  <p data-pid="3752ed">Two questions, one about making and one about pricing, have one answer. Rung 28’s lines-up technique priced a single smooth limit by the stretch λ of its gradient; here every limit gets a price, and the limits may have corners. 42n finds both answers at once by hand.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · equal · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42g4.1</span><span class="ph understand">understand</span>What do the prime-count technique and fair shares claim, and which of them does the step prove? <br>In the four-clock technique, why must a prime factor of (2q₁⋯q_k)² + 1 be 1 more than a multiple of 4?</li>
+      <li><span class="qid">42g4.1</span><span class="ph understand">understand</span>What does the equal-prices technique say? <br>Which list of limits does its proof show has an answer, and why does that answer give equal values?</li>
     </ol>
   </section>
 </section>
@@ -150,15 +155,15 @@ r \mid M \Rightarrow -1 \equiv (2q_1\cdots q_k)^2 \pmod r @@ r is odd and none o
 <section class="class step" data-step="42g5">
   <h2 class="sthead"><span class="stno">42g5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{the primes are endless, so } \textstyle\sum 1/p \text{ passes every bound}\,? @@ the squares are endless too, and their sum settles; the technique needed the product
-\pi(x) \approx x/\ln x \text{ means } \pi(x) - x/\ln x \to 0\,? @@ the ratio settles on 1; the gap grows without bound: at 10⁹ it is over 2.5 million
-n^2 + n + 41 \text{ is prime for } n = 0, \ldots, 39 \text{, so always}\,? @@ at n = 40 it is 41²; cases are not every case
-\text{every hour of a clock holds endlessly many primes}\,? @@ only the units: the hour [2] of the clock of 4 holds the one prime 2
+\text{the best plan is always a corner}\,? @@ some corner is best; a whole edge between two best corners may be best too
+\text{the allowed plans are bounded, since the value is}\,? @@ the region can run off for ever along a direction where c · d ≤ 0
+\text{covering prices total } 40 \text{, so some plan earns } 40\,? @@ prices bound plans from above; the least total equals the best plan, not every total
+\text{a plan obeying } Ax \le b \text{ is allowed}\,? @@ it must also have x ≥ 0
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42g5.1</span><span class="ph understand">understand</span>Why does the endless-primes technique of 4j16 alone not give that Σ 1/p passes every bound? <br>Why does π(x) ≈ x/ln x not mean that their difference shrinks?</li>
+      <li><span class="qid">42g5.1</span><span class="ph understand">understand</span>Why is the best plan not always only a corner? <br>Why does a total of covering prices not give a plan that earns it?</li>
     </ol>
   </section>
 </section>
@@ -167,22 +172,22 @@ n^2 + n + 41 \text{ is prime for } n = 0, \ldots, 39 \text{, so always}\,? @@ at
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">42g.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\textstyle\prod_{p \le x} p \lt 4^x"></span></span>Build the other side of the fence. Prove the product of the primes up to x is below 4ˣ, by induction on x: for odd x = 2m + 1, the primes between m + 2 and 2m + 1 divide the count (2m + 1 choose m), which is at most 4ᵐ. <br>Turn it into an upper bound for π(x) of the shape C · x/ln x, and find a C that works.</div>
-  <div class="chq"><span class="chid">42g.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="(n + 1)! + 2,\ \ldots,\ (n + 1)! + n + 1"></span></span>Prove these are n numbers in a row with no prime among them, so gaps between primes grow without bound. <br>Find a run of at least 7 numbers with no prime below 100, and compare its length with ln 100. Is a long gap against the prime-count technique?</div>
-  <div class="chq"><span class="chid">42g.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\textstyle\sum_{n \in S} 1/n \text{ passes every bound}"></span></span>The thin-but-endless technique says the primes’ reciprocals pass every bound. Turn it round: if a set S of numbers has reciprocals passing every bound, must S hold endlessly many primes? Must it hold arithmetic progressions of every length? <br>Settle what you can. What is still open?</div>
-  <div class="chq"><span class="chid">42g.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">a book of 1940: the theory of numbers, gloriously useless</span></span>A mathematician wrote in 1940 that the theory of numbers had no use in war or commerce, and was the cleaner for it. In 1977 a lock was published whose key is two primes of a hundred digits each. The prime-count technique says how many such primes there are: about one number in 230 near 10¹⁰⁰. <br>Was the 1940 claim wrong, or is use the wrong way to judge it? Is the prime-count technique pure or applied, and does the answer change when 42i uses it?</div>
+  <div class="chq"><span class="chid">42g.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\max\ 2x + 3y:\ \ x + y \le 4,\ \ x + 3y \le 6,\ \ x, y \ge 0"></span></span>Solve the program at its corners, write its twin, and find covering prices with the same total. <br>Both limits are tight at the best corner: what would a price of 0 on one of them have meant?</div>
+  <div class="chq"><span class="chid">42g.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\max\ x:\ \ x - y \le 1,\ \ -x + y \le -2,\ \ x, y \ge 0"></span></span>Show that this program has no allowed plan, by a certificate from the no-answer technique. <br>What does its twin do? Can a program and its twin both fail to have answers?</div>
+  <div class="chq"><span class="chid">42g.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="c \cdot x = b \cdot y"></span></span>If x is allowed, y covering and c · x = b · y, prove that every limit with yᵢ > 0 holds with equality at x, and every unit with xⱼ > 0 is covered exactly. <br>Turn it round: do those two patterns make an allowed x and covering y both best?</div>
+  <div class="chq"><span class="chid">42g.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">28g: the gradients line up, ∇f = λ∇g</span></span>Rung 28 found the best point on a smooth limit, where the gradient of the value is a stretch λ of the limit’s gradient. <br>At the glass works’ best corner, which two limits are tight, and how is c a sum of their rows with weights at least 0? Read the weights as λ’s. What happens to the 28g recipe at a corner, where the limit has no gradient?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r42f.html">← 42f · squares on a clock</a><a href="r42h.html">42h · clock arithmetic by hand →</a></nav>
+<nav class="nextrung"><a href="r42f.html">← 42f · flows and cuts</a><a href="r42h.html">42h · games →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The thin-but-endless technique is Euler’s proof that Σ 1/p diverges; the sharper Σ_{p ≤ x} 1/p = ln ln x + M + o(1) is Mertens’s second theorem. ζ is the Riemann zeta function, and the prime-product technique the Euler product. π(x) is the prime-counting function. The middle-count technique and the upper bound of 42g.6.1 are Chebyshev’s bounds, and the power of p in m! is Legendre’s formula. The prime-count technique is the prime number theorem. Fair shares is Dirichlet’s theorem on primes in arithmetic progressions, in its strong form (de la Vallée Poussin, 1896). The four-clock technique is its first two cases. Progressions of every length in the primes is the Green–Tao theorem (2004); that a set with reciprocals passing every bound has them is the Erdős conjecture on arithmetic progressions, open.</p>
+  <p>A program is a linear program, its allowed plans the feasible region (a convex polyhedron), and a corner a vertex or basic feasible solution. The twin is the dual program, and covering prices are dual feasible solutions, or shadow prices. The price-bound technique is weak duality; the equal-prices technique is strong duality. The one-out technique is Fourier–Motzkin elimination, and the no-answer technique is a form of Farkas's lemma. The pattern of 42g.6.3 is complementary slackness. The glass works is the Wyndor Glass example from an operations research textbook of 1967.</p>
   <h3>Who said it first</h3>
-  <p>Leonhard Euler found the product and the divergence in 1737. Carl Friedrich Gauss, around 1792, aged fifteen, guessed from tables that the primes thin like 1/ln x; Adrien-Marie Legendre guessed a like formula in 1798. Pafnuty Chebyshev proved the fence in 1850. Peter Gustav Lejeune Dirichlet proved primes in progressions in 1837. Bernhard Riemann carried ζ into the complex plane in 1859, and Jacques Hadamard and Charles de la Vallée Poussin proved the prime number theorem separately in 1896. Atle Selberg and Paul Erdős found proofs without complex numbers in 1948. G. H. Hardy’s A Mathematician’s Apology (1940) is the book of 42g.6.4.</p>
+  <p>Joseph Fourier described elimination for inequalities in 1826; Theodore Motzkin rediscovered it in 1936. Gyula Farkas proved his lemma in 1902. Leonid Kantorovich wrote on planning production by programs in 1939, in Leningrad. George Dantzig set out the general question and his recipe in 1947, and John von Neumann, told of it, guessed the twin program at once, from his work on games. Kantorovich and Tjalling Koopmans shared the economics prize of 1975.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“The chance that a large n is prime is 1/ln n, and the chance that n + 2 is prime is 1/ln(n + 2), so the chance both are is about 1/(ln n)², and summing over n, there are endlessly many twin primes.” Not allowed: primes are not chances, and the two events are not independent: if n is odd, n + 2 is odd too. The count it gives is a guess, the kind 42·now2 weighs. Twin primes are still open.</p>
+  <p>“The value rises as we move from (0, 0) toward (2, 6), and falls beyond it, so (2, 6) is best.” Not allowed: rising along one route and falling beyond is a fact about that route. The proof is either the list of every corner, by the tight-corner technique, or a set of covering prices with total 36, by the price-bound technique. The second is shorter and is the one that scales.</p>
 </section>
 
 </div>
@@ -197,25 +202,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'product',t:R`\textstyle\prod_{p \le x} (1 - 1/p)^{-1} \ge \ln x`,n:`Prime lists.`},
-  {k:'ember',kl:'ln',t:R`\textstyle\sum -\ln(1 - 1/p) \ge \ln\ln x`,n:`Log of a product.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\textstyle\sum_{p \le x} 1/p \ge \ln\ln x - 1}`,n:`Passes every bound.`}
-],{title:'The slides · thin, not too thin · ← → keys work'});
+  {k:'ember',kl:'limits',t:R`Ax \le b,\ x \ge 0`,n:`The allowed plans.`},
+  {k:'ember',kl:'move',t:R`x + t\,d,\ c \cdot d \ge 0`,n:`Until a limit tightens.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a corner is best}}`,n:`Finitely many to check.`}
+],{title:'The slides · corners · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'ζ',t:R`\zeta(s) = \textstyle\sum n^{-s}`,n:`s > 1.`},
-  {k:'ember',kl:'product',t:R`\textstyle\prod_p (1 - p^{-s})^{-1}`,n:`One prime list each.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\textstyle\prod_p (1 - 1/p^2) = 6/\pi^2}`,n:`Pairs sharing nothing.`}
-],{title:'The slides · the product · ← → keys work'});
+  {k:'ember',kl:'cover',t:R`A^{\mathsf T} y \ge c,\ y \ge 0`,n:`Worth at least what it earns.`},
+  {k:'ember',kl:'bound',t:R`c \cdot x \le y \cdot Ax \le y \cdot b`,n:`Two signs.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{36 \le 36}`,n:`Both best.`}
+],{title:'The slides · prices · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'middle count',t:R`\tbinom{2n}{n} \ge 4^n/(2n + 1)`,n:`The largest term.`},
-  {k:'ember',kl:'small powers',t:R`p^k \le 2n`,n:`Each term 0 or 1.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\pi(2n) \ge \frac{n \ln 4 - \ln(2n + 1)}{\ln 2n}}`,n:`From below.`}
-],{title:'The slides · the fence · ← → keys work'});
+  {k:'ember',kl:'sort',t:R`\text{upper, lower, free in } x_n`,n:`Pair them.`},
+  {k:'ember',kl:'drop',t:R`x_n \text{ out, weights} \ge 0`,n:`Same answers.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{y^{\mathsf T}A = 0,\ y \cdot b < 0}`,n:`A certificate.`}
+],{title:'The slides · no answer · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'rate',t:R`\pi(x) \big/ (x/\ln x) \to 1`,n:`Held in trust.`},
-  {k:'ember',kl:'fair shares',t:R`\text{each unit hour, } 1/c(n)`,n:`Held in trust.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{endless primes in } [1] \text{ and } [3] \bmod 4}`,n:`Proved.`}
-],{title:'The slides · one in ln x · ← → keys work'});
+  {k:'ember',kl:'seek',t:R`c \cdot x \ge b \cdot y`,n:`Plus both lists of limits.`},
+  {k:'ember',kl:'else',t:R`\lambda > 0 \text{ or } \lambda = 0`,n:`Both clash.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\max c \cdot x = \min b \cdot y}`,n:`Make and price agree.`}
+],{title:'The slides · equal · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

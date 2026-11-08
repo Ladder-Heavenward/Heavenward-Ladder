@@ -1,26 +1,10 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>One Machine Runs Them All</title>
+<title>A Name That Holds a Value</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
-<style>
-.pic .panels{grid-template-columns:1fr 1fr}
-@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
-.panel{align-content:start;min-width:0}
-.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
-@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
-.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
-@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
-.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
-.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
-.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
-.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
-.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
-table.tt td.l{text-align:left}
-
-</style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
    then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
@@ -48,88 +32,78 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r40b.html">← 40b other machines, the same reach</a><a href="r40d.html">next: 40d no machine decides stopping →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40b.html">← 40b jumps make branches and loops</a><a href="r40d.html">next: 40d calls and the stack →</a></p>
   <div class="tags"><span class="tag proof">40c · proof</span></div>
-  <h1>One Machine Runs Them All</h1>
-  <p data-pid="a963b9">A tape machine is a table, and a table is a short list of rows. Write the rows down as a string, and the machine has become something another machine can read. That is the whole idea of this step, and it changes what a machine is. Until now each job had its own machine: one to add one, one to compare counts, one to check a proof. Here one machine is built that takes two things on its tape, the written table of any machine and an input, and does exactly what that machine would do on that input, step for step, a little slower. The table is no longer wiring. It is data, the same stuff as the input. The processor of the rung before already worked this way, with its instructions stored as numbers in its memory beside the numbers it worked on, and this step says why that was enough to run any program at all. Then a count. Machines can be listed, because their tables are strings. Questions with yes or no answers about numbers cannot be listed, by the rung on sizes. So most such questions are answered by no machine at all, and the next step names one.</p>
-  <p class="gesture" data-pid="4fbd43">A machine’s table is a string, and one machine reads such a string and an input and does what the written machine would do. Program and data are the same stuff. Machines can be listed and the yes-or-no functions on numbers cannot, so most of them are computed by no machine.</p>
+  <h1>A Name That Holds a Value</h1>
+  <p data-pid="0d56e4">In a program a name holds a number, and the number changes. That is a new job for a name. It must be kept apart from <a href="r00a.html">0a</a>’s names, which name one thing all through an argument.</p>
+  <p class="gesture" data-pid="fc202e">x ← x + 1 is a step, not a sameness. A program’s state is what its names hold now, and each step changes it.</p>
 </header>
 
 <section class="class step" data-step="40c1">
-  <h2 class="sthead"><span class="stno">40c1</span>A Machine Written as a String</h2>
-  <p data-pid="e9f17f">Number the states 1, 2, …, k with 1 the start and 2 the stop, the marks 1, 2, …, m with 1 the blank, and the steps L as 1 and R as 2. A row δ(q, s) = (s′, d, q′) is written as five blocks of 0s with a single 1 between neighbouring blocks: q 0s, then s, then s′, then d, then q′. The rows are written one after another with 11 between them. The string is the machine’s <i>code</i>, written ⟨M⟩.</p>
-  <p data-pid="d03679">Table-code technique: <b>every tape machine has a code, a string of 0s and 1s; different tables have different codes; and whether a string is the code of some machine is decided.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the table-code technique">
-\delta(1, 1) = (2, 2, 2) \to 0\,1\,0\,1\,00\,1\,00\,1\,00 @@ state 1 on a blank: write mark 2, step R, stop
-\text{read }\allowbreak \text{back: }\allowbreak \text{split }\allowbreak \text{at } 11\text{, }\allowbreak \text{then }\allowbreak \text{each }\allowbreak \text{row }\allowbreak \text{at }\allowbreak \text{its }\allowbreak \text{four }\allowbreak \text{single } 1\text{s} @@ a block of 0s never holds a 1, so the split is in one way only
-\text{check }\allowbreak \text{each }\allowbreak \text{row: }\allowbreak \text{five }\allowbreak \text{blocks, }\allowbreak \text{none }\allowbreak \text{empty, }\allowbreak \text{no }\allowbreak \text{two }\allowbreak \text{rows }\allowbreak \text{with }\allowbreak \text{the }\allowbreak \text{same } (q, s) @@ a finite check on a finite string
-\htmlClass{new}{\text{a }}\allowbreak \htmlClass{new}{ \text{string }}\allowbreak \htmlClass{new}{ \text{is }}\allowbreak \htmlClass{new}{ \text{a }}\allowbreak \htmlClass{new}{ \text{code, }}\allowbreak \htmlClass{new}{ \text{or }}\allowbreak \htmlClass{new}{ \text{not, }}\allowbreak \htmlClass{new}{ \text{by }}\allowbreak \htmlClass{new}{ \text{a }}\allowbreak \htmlClass{new}{ \text{check }}\allowbreak \htmlClass{new}{ \text{that }}\allowbreak \htmlClass{new}{ \text{stops}} \quad \blacksquare @@ the check is a recipe, and the thesis is not needed: write its table
-  </pre>
-  <p data-pid="7c8c66">Strings of 0s and 1s are listed by length and then in order, as 35a listed pairs. Sift that list for codes, and the machines themselves are listed: M₀, M₁, M₂, …, every machine at least once.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · codes · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">40c1</span>A Step, Not a Sameness</h2>
+  <p data-pid="e03351">Write <span data-tex-inline="x \leftarrow e">x ← e</span> for the step “work out e with the values held now, then put the result in x”. As a statement, <span data-tex-inline="x = x + 1">x = x + 1</span> is totally false for every whole number: no number is its own next (rung 4). As a step it is fine: x held 4, and now it holds 5.</p>
+  <p data-pid="f76c59">Many languages write = for the step. That is the old trouble of <a href="r00b.html">0b9</a>’s jobs of “is”, one mark for two jobs, and the ladder keeps ← for the step.</p>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">40c1.1</span><span class="ph understand">understand</span>How is a row of a table written as a string, and why can the code be read back in one way only? <br>What does the table-code technique say, and how does it list the machines?</li>
+      <li><span class="qid">40c1.1</span><span class="ph understand">understand</span>What does x ← e do? <br>Why is x = x + 1 totally false as a statement but fine as a step?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="40c2">
-  <h2 class="sthead"><span class="stno">40c2</span>The Universal Machine</h2>
-  <p data-pid="b2aa1c">The universal machine U has three tapes. The first holds ⟨M⟩ and never changes. The second holds M’s tape, each of M’s marks written as its block of 0s, with a separator between cells. The third holds M’s state, as a block of 0s. U starts on ⟨M⟩ # w by copying w onto the second tape in that form and writing 0 on the third.</p>
-  <p data-pid="e23687">Universal technique: <b>there is one tape machine U such that for every machine M and every input w, U on ⟨M⟩ # w stops exactly when M on w stops, in the same stop state and with the same output.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: one step of M, done by U">
-\text{read }\allowbreak \text{the }\allowbreak \text{state } q \text{ on }\allowbreak \text{tape }\allowbreak \text{3 }\allowbreak \text{and }\allowbreak \text{the }\allowbreak \text{mark } s \text{ under }\allowbreak \text{M’s }\allowbreak \text{head }\allowbreak \text{on }\allowbreak \text{tape }\allowbreak \text{2} @@ two blocks of 0s
-\text{walk }\allowbreak \text{tape }\allowbreak \text{1 }\allowbreak \text{to }\allowbreak \text{the }\allowbreak \text{row }\allowbreak \text{whose }\allowbreak \text{first }\allowbreak \text{two }\allowbreak \text{blocks }\allowbreak \text{are } 0^q, 0^s @@ compare block lengths by crossing off, a few rows of U’s table
-\text{copy } 0^{s\prime} \text{ onto }\allowbreak \text{tape }\allowbreak \text{2, }\allowbreak \text{move }\allowbreak \text{M’s }\allowbreak \text{head }\allowbreak \text{mark }\allowbreak \text{by } d\text{, copy } 0^{q\prime} \text{ to }\allowbreak \text{tape }\allowbreak \text{3} @@ the row’s other three blocks
-\text{if } q\prime = 2\text{, }\allowbreak \text{stop, }\allowbreak \text{and }\allowbreak \text{tidy }\allowbreak \text{tape }\allowbreak \text{2 }\allowbreak \text{into }\allowbreak \text{M’s }\allowbreak \text{output} @@ M stops exactly when U does
-\htmlClass{new}{\text{one }}\allowbreak \htmlClass{new}{ \text{step }}\allowbreak \htmlClass{new}{ \text{of } M \text{ is }}\allowbreak \htmlClass{new}{ \text{a }}\allowbreak \htmlClass{new}{ \text{bounded }}\allowbreak \htmlClass{new}{ \text{number }}\allowbreak \htmlClass{new}{ \text{of }}\allowbreak \htmlClass{new}{ \text{steps }}\allowbreak \htmlClass{new}{ \text{of } U} \quad \blacksquare @@ the bound grows with the length of ⟨M⟩ and of the cell, never with t
-  </pre>
-  <p data-pid="759b59">So U spends at most c steps on each step of M, with c fixed by M’s code, and by the tracks technique the three tapes become one. U’s own table is fixed and finite. It does not grow with the machines it runs.</p>
-  <p data-pid="003803">That is the stored program. 39j’s processor keeps its instructions as numbers in the same memory as its data, and its fetch-and-run loop reads the next instruction, does it, and reads the next. That loop is U, and the memory is tape 1 and tape 2 at once. Loading a new program is writing a string, not rewiring: the program is data.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · universal · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">40c2</span>The State</h2>
+  <p data-pid="48dbbe">The state of a program is the list of what each name holds, just as <a href="r39j.html">39j2</a>’s state was the list of every cell.</p>
+  <p data-pid="2c65b6">Assignment technique: <b>the step x ← e changes x and nothing else, and the new value of x is the value e had before the step.</b></p>
+  <p data-pid="0eb78a">So a run is a row of states, each made from the one before by one step, and a trace table writes them out, one row per step.</p>
   <section class="sayback">
-    <h3>Question</h3>
+    <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">40c2.1</span><span class="ph understand">understand</span>What does U keep on each of its three tapes? <br>What does the universal technique say, and why is one step of M a bounded number of steps of U?</li>
+      <li><span class="qid">40c2.1</span><span class="ph understand">understand</span>What does the assignment technique say? <br>What is a trace table a list of?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="40c3">
-  <h2 class="sthead"><span class="stno">40c3</span>Most Questions Have No Machine</h2>
-  <p data-pid="15dcb1">A yes-or-no question about numbers is a function g from ℕ to {0, 1}, or, the same thing, the set of n with g(n) = 1. A machine answers it when it decides that set, reading n written in twos.</p>
-  <p data-pid="190d42">Few-machines technique: <b>some yes-or-no question about numbers is answered by no tape machine.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the few-machines technique">
-\text{the }\allowbreak \text{machines }\allowbreak \text{can }\allowbreak \text{be }\allowbreak \text{listed: } M_0, M_1, M_2, \dots @@ the table-code technique (40c1)
-\text{each }\allowbreak \text{machine }\allowbreak \text{decides }\allowbreak \text{at }\allowbreak \text{most }\allowbreak \text{one }\allowbreak \text{set }\allowbreak \text{of }\allowbreak \text{numbers} @@ the one-next technique: each run is fixed by the input
-\text{the }\allowbreak \text{sets }\allowbreak \text{decided }\allowbreak \text{by }\allowbreak \text{a }\allowbreak \text{machine }\allowbreak \text{can }\allowbreak \text{be }\allowbreak \text{listed} @@ follow the list of machines, keeping the ones that decide
-\text{the }\allowbreak \text{sets }\allowbreak \text{of }\allowbreak \text{numbers }\allowbreak \text{cannot }\allowbreak \text{be }\allowbreak \text{listed} @@ the parts-outrun technique (35c), with A = ℕ
-\htmlClass{new}{\text{some }}\allowbreak \htmlClass{new}{ \text{set }}\allowbreak \htmlClass{new}{ \text{of }}\allowbreak \htmlClass{new}{ \text{numbers }}\allowbreak \htmlClass{new}{ \text{is }}\allowbreak \htmlClass{new}{ \text{decided }}\allowbreak \htmlClass{new}{ \text{by }}\allowbreak \htmlClass{new}{ \text{no }}\allowbreak \htmlClass{new}{ \text{machine}} \quad \blacksquare @@ a list of the decided sets misses one
-  </pre>
-  <p data-pid="edba44">The proof is 35c’s diagonal, run on machines: at place n, look at whether machine n says yes to n, and take the other answer. It names no machine and no question. It shows that the questions machines answer are a countable crowd among uncountably many. Which question is missed depends on running each machine on its own number, and the next step does exactly that, carefully.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · counting · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">40c3</span>A Swap Needs a Third Box</h2>
+  <p data-pid="b59620">To swap x and y, the steps x ← y; y ← x fail. After the first, both hold the old y, and the old x is gone. A third name t keeps it:</p>
+  <pre class="lines" data-k="ember" data-label="this step: the swap, traced">
+x = 3,\ y = 8 @@ the start
+t \leftarrow x:\ t = 3 @@ t keeps the old x
+x \leftarrow y:\ x = 8 @@ x takes the old y
+y \leftarrow t:\ y = 3 @@ y takes the old x, from t
+\htmlClass{new}{x = 8,\ y = 3} \quad \blacksquare @@ swapped
+</pre>
   <section class="sayback">
-    <h3>Question</h3>
+    <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">40c3.1</span><span class="ph understand">understand</span>What does the few-machines technique say? <br>Which technique of rung 35 does its proof run, and why does the proof not name the missed question?</li>
+      <li><span class="qid">40c3.1</span><span class="ph understand">understand</span>Why does x ← y; y ← x fail to swap? <br>What is t for?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="40c4">
-  <h2 class="sthead"><span class="stno">40c4</span>Illegal Moves</h2>
-  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-U \text{ has }\allowbreak \text{more }\allowbreak \text{states }\allowbreak \text{than }\allowbreak \text{any }\allowbreak \text{machine }\allowbreak \text{it }\allowbreak \text{runs}\,? @@ U’s table is fixed; it runs machines with any number of states, written on its tape
-U \text{ on } \langle M\rangle \# w \text{ stops, }\allowbreak \text{so } M \text{ stops }\allowbreak \text{on }\allowbreak \text{every }\allowbreak \text{input}\,? @@ only on w; U knows nothing about other inputs
-\text{the list } M_0, M_1, \dots \text{ is }\allowbreak \text{a }\allowbreak \text{list }\allowbreak \text{of }\allowbreak \text{the }\allowbreak \text{questions }\allowbreak \text{machines }\allowbreak \text{answer}\,? @@ many machines decide nothing, and many decide the same set
-\text{some }\allowbreak \text{question }\allowbreak \text{has }\allowbreak \text{no }\allowbreak \text{machine, }\allowbreak \text{so }\allowbreak \text{the }\allowbreak \text{halting }\allowbreak \text{question }\allowbreak \text{has }\allowbreak \text{none}\,? @@ the count names no question; 40d proves the halting one
-  </pre>
+  <h2 class="sthead"><span class="stno">40c4</span>Order Matters</h2>
+  <p data-pid="a1f543">x ← x + 1; y ← 2x and y ← 2x; x ← x + 1 leave different states: from x = 1, the first gives y = 4 and the second y = 2. Steps in a row do not turn about the way an and does (<a href="r01c.html">1c3</a>). A step reads the state the step before it left.</p>
   <section class="sayback">
-    <h3>Question</h3>
+    <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">40c4.1</span><span class="ph understand">understand</span>Why does U not need more states than the machines it runs? <br>Why does the few-machines technique not show which question has no machine?</li>
+      <li><span class="qid">40c4.1</span><span class="ph understand">understand</span>Why do the two orders leave different values of y? <br>Why do steps not turn about as an and does?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40c5">
+  <h2 class="sthead"><span class="stno">40c5</span>Illegal Moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+x \leftarrow x + 1 \text{ says } x = x + 1\,? @@ the step changes x; the sameness is totally false
+x \leftarrow y;\ y \leftarrow x \text{ swaps}\,? @@ after the first step the old x is gone; a third box is needed
+\text{two steps can be run in either order}\,? @@ each step reads the state the one before left
+</pre>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">40c5.1</span><span class="ph understand">understand</span>Why does x ← y; y ← x not swap? <br>Why can two steps not be run in either order?</li>
     </ol>
   </section>
 </section>
@@ -137,52 +111,21 @@ U \text{ on } \langle M\rangle \# w \text{ stops, }\allowbreak \text{so } M \tex
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
-  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">40c.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="0\,1\,0\,1\,00\,1\,00\,1\,0\,11\,0\,1\,00\,1\,0\,1\,0\,1\,00"></span></span>Read this code back into a table with two rows. Run the machine on a blank tape and on the input 2 (one cell holding mark 2), and find what it does.</div>
-  <div class="chq"><span class="chid">40c.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{U on } x \# w,\ \allowbreak \ x \text{ not }\allowbreak \text{a }\allowbreak \text{code}"></span></span>What should U do when the string before # is not a code? Build U so that it stops in no at once on such strings. What does that cost?</div>
-  <div class="chq"><span class="chid">40c.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{a }\allowbreak \text{machine } V \text{ that }\allowbreak \text{stops }\allowbreak \text{on }\allowbreak \text{every }\allowbreak \text{input}"></span></span>U runs every machine, and so it fails to stop on some inputs. Could a machine V stop on every input and still do what M does on w whenever M stops on w, and stop in no when M does not stop? Run 40c3’s diagonal against V before reading 40d.</div>
-  <div class="chq"><span class="chid">40c.5.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">0a: any statement, or anything that happens, can be written in a logical system</span></span>Rung 0 laid down that anything can be written in a logical system, and kept it as an axiom, not a technique. U is one finite table that does what every table does. Does U prove the rung 0 axiom, or only show one place it was right? What would U need to be given before it could represent something that happens, rather than something written?</div>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them.</p>
+  <div class="chq"><span class="chid">40c.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">three names</span></span>Write steps that turn x, y, z into y, z, x using one spare name. Can it be done with none, using only adding and taking away?</div>
+  <div class="chq"><span class="chid">40c.6.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">x ← x</span></span>What does x ← x do to the state? Is it a sameness, a step, or both?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r40b.html">← 40b · other machines, the same reach</a><a href="r40d.html">40d · no machine decides stopping →</a></nav>
+<nav class="nextrung"><a href="r40b.html">← 40b · jumps make branches and loops</a><a href="r40d.html">40d · calls and the stack →</a></nav>
+
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The code ⟨M⟩ is a description or encoding of the Turing machine; the list M₀, M₁, … is an enumeration of Turing machines. U is the universal Turing machine. A processor that keeps its program in the memory it computes in is a stored-program computer, or von Neumann architecture. The few-machines technique is the counting argument that there are uncountably many undecidable languages.</p>
-  <h3>Who said it first</h3>
-  <p>Alan Turing built the universal machine in his paper of 1936; his coding of tables as “description numbers” is the table-code technique. John von Neumann’s draft report on the EDVAC (1945) described a computer storing its program in its memory, and the Manchester Baby ran the first stored program on 21 June 1948. Small universal machines have been studied since Claude Shannon showed in 1956 that two states, or two marks, are enough if the other is allowed to grow; Marvin Minsky gave one with 7 states and 4 marks in 1962.</p>
-  <h3>A proof that is not allowed</h3>
-  <p>“U can run every machine. So U can run every machine to its end and report what happened.” Not allowed: U runs a machine for as long as that machine runs. If the machine never stops, neither does U, and there is no end to report. Whether some other machine could report without waiting is 40d’s question.</p>
+  <p>A name that holds a changing value is a variable, the step is assignment, the list of values is the program’s state, and a row of steps is sequential composition.</p>
 </section>
 
 </div>
 <script src="rung.js"></script>
-<script>
-(function(){
-const {tex,col,stepper,plane}=Rung;
-const R=String.raw;
-const $=id=>document.getElementById(id);
-const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
-const mm=(v,d)=>fm(v,d).replace('-','−');
-const Nw='\\htmlClass{new}';
-
-stepper('#sl1',[
-  {k:'ember',kl:'row',t:R`0^q 1 0^s 1 0^{s\prime} 1 0^d 1 0^{q\prime}`,n:`Five blocks.`},
-  {k:'ember',kl:'rows',t:R`\cdots 11 \cdots`,n:`Joined by 11.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{M_0, M_1, M_2, \dots}`,n:`Machines listed.`}
-],{title:'The slides · codes · ← → keys work'});
-stepper('#sl2',[
-  {k:'ember',kl:'tapes',t:R`\langle M \rangle,\ \text{M’s tape},\ q`,n:`Code, cells, state.`},
-  {k:'ember',kl:'step',t:R`\text{find the row } (q, s)`,n:`Then copy three blocks.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{U(\langle M\rangle \# w) = M(w)}`,n:`One machine, every machine.`}
-],{title:'The slides · universal · ← → keys work'});
-stepper('#sl3',[
-  {k:'ember',kl:'machines',t:R`M_0, M_1, M_2, \dots`,n:`Listed.`},
-  {k:'ember',kl:'questions',t:R`\mathcal P(\mathbb N)`,n:`Not listed (35c).`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{most questions: no machine}}`,n:`None named yet.`}
-],{title:'The slides · counting · ← → keys work'});
-})();
-</script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

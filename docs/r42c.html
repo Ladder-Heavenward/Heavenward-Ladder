@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Several Clocks at Once</title>
+<title>Walking Every Link Once</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,109 +48,90 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r42b.html">← 42b undoing on a clock</a><a href="r42d.html">next: 42d powers cycle →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r42b.html">← 42b trees</a><a href="r42d.html">next: 42d flat drawings →</a></p>
   <div class="tags"><span class="tag proof">42c · proof</span></div>
-  <h1>Several Clocks at Once</h1>
-  <p data-pid="812dfc">A number of soldiers is lined up in threes, and two are left over. In fives, three are left over. In sevens, two. How many soldiers? An old book of puzzles asked this, and answered twenty three. The answer is one of many, since adding one hundred and five changes none of the leftovers, but between one and one hundred and five it is the only one. That is the claim of this step. Reading a number on several clocks at once loses nothing, as long as no two of the clocks share a divisor, and it keeps adding and multiplying. So a question on a big clock can be split into questions on small clocks, answered there, and put back together. The undoes of the last step do the putting back. When two clocks do share a divisor, the readings must agree on the shared part, and that condition is all that goes wrong.</p>
-  <p class="gesture" data-pid="bb9511">If m and n share nothing, an hour of the clock of mn is the same as a pair of hours, one on each, and the pairing keeps plus and times. The pair is put back together with undoes. Clocks that share a divisor can be read together exactly when the readings agree on it.</p>
+  <h1>Walking Every Link Once</h1>
+  <p data-pid="204751">In the town of Königsberg on the Baltic, the river Pregel split the town into four parts: two banks and two islands. Seven bridges joined them. The townspeople asked whether a Sunday walk could cross every bridge exactly once. Nobody found one, and in 1736 it was proved that nobody could, by an argument that never looked at the map again once it had counted the bridges at each part. That argument is the start of this whole rung. A walk that crosses every link once leaves each place it passes through by a different link from the one it came in on, so links come in pairs at every place except where it starts and ends. Counting is enough to say no, and, more surprising, counting is enough to say yes. Then the step asks the question that looks the same and is not: a walk through every dot exactly once. No count of that kind settles it. A strong enough count still forces such a walk, and the step proves one; but in general the question is one of the hard ones of rung 41, where checking an answer is quick and finding one is not.</p>
+  <p class="gesture" data-pid="371dbd">A walk that uses every link once pairs the links at every dot it passes through. So a closed one exists in a graph in one piece exactly when every dot has an even count of links, and an open one exactly when two dots have odd counts. A walk through every dot once has no such test; when every dot has links to at least half the dots, one exists.</p>
 </header>
 
 <section class="class step" data-step="42c1">
-  <h2 class="sthead"><span class="stno">42c1</span>Two Clocks That Share Nothing</h2>
-  <p data-pid="8f36bc">Fix m and n with gcd(m, n) = 1. Read each hour of the clock of mn on both small clocks: [x] goes to the pair ([x] on the clock of m, [x] on the clock of n). That is well defined, since mn ∣ x − y gives m ∣ x − y and n ∣ x − y.</p>
-  <p data-pid="f11a68">Remainder technique: <b>if m and n share no divisor above 1, reading an hour of the clock of mn on the clocks of m and n is a matching of ℤ/mn with the pairs ℤ/m × ℤ/n.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the remainder technique">
-x \equiv y \pmod m,\ \ x \equiv y \pmod n @@ suppose two hours give one pair
-m \mid x - y,\ \ n \mid x - y = nk @@ ﹀ ≡ twice
-m \mid nk \Rightarrow m \mid k @@ factor-that-shares-nothing (5h), since gcd(m, n) = 1
-\htmlClass{new}{mn \mid x - y} @@ x − y = n(mj): one-to-one
-|\mathbb Z/mn| = mn = |\mathbb Z/m \times \mathbb Z/n| @@ clock-hours (42a2); pairs counted by the product rule (4k)
-\htmlClass{new}{\text{the reading is onto}} \quad \blacksquare @@ a one-to-one map between finite sets of one size misses nothing: else pigeonhole (8·cb5) on the map back
+  <h2 class="sthead"><span class="stno">42c1</span>The Seven Bridges</h2>
+  <p data-pid="c384da">Two bridges of Königsberg joined the same two parts. So for this step a graph may have more than one link between two dots: the links are a list, each joining two different dots, and two links with the same dots are still two links. The ends-count technique’s proof did not care, so it still holds. Call a walk that uses every link exactly once a <i>tour of the links</i>, closed if it ends where it began.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the town counted">
+\text{parts: the north bank } N,\ \text{the south bank } S,\ \text{the island } K,\ \text{the east island } L @@ the four dots
+d(K) = 5,\ \ d(N) = 3,\ \ d(S) = 3,\ \ d(L) = 3 @@ two bridges from K to each bank, one from K to L, one from L to each bank
+\text{a tour of the links enters and leaves each dot it passes through, by two different links} @@ each passing uses a pair
+\text{a dot that is neither the start nor the end has an even count} @@ its links are used in pairs
+\htmlClass{new}{\text{four dots have odd counts; at most two can be start and end: no tour}} \quad \blacksquare @@ 
   </pre>
-  <p data-pid="72eeb2">So the soldiers have one count between 0 and 104 for each list of leftovers. The proof says the answer exists. It does not say how to find it, short of trying all 105. The next footing finds it.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · several clocks · ← → keys work</div></section>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · bridges · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">42c1.1</span><span class="ph understand">understand</span>What does the remainder technique say? <br>Which line of its proof needs m and n to share nothing, and why does onto come free?</li>
+      <li><span class="qid">42c1.1</span><span class="ph understand">understand</span>Why does a tour of the links use the links at a passing dot in pairs? <br>Why do four dots with odd counts rule out a tour of the seven bridges?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42c2">
-  <h2 class="sthead"><span class="stno">42c2</span>Putting the Pair Back</h2>
-  <p data-pid="88c394">Each small clock gets a number that is 1 on it and 0 on all the others. On the clock of m, N/m times its undo there is 1; on every other clock it is a multiple of that clock, so 0. Add them, each times its leftover.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the soldiers">
-N = 3 \cdot 5 \cdot 7 = 105 @@ the clocks share nothing
-35 \equiv 2 \pmod 3,\ [2]^{-1} = [2];\ \ 21 \equiv 1 \pmod 5;\ \ 15 \equiv 1 \pmod 7 @@ N/3, N/5, N/7 on their own clocks; undoes by 42b
-e_3 = 35 \cdot 2 = 70,\ \ e_5 = 21,\ \ e_7 = 15 @@ each is 1 on its clock and 0 on the other two
-x = 2 \cdot 70 + 3 \cdot 21 + 2 \cdot 15 = 233 @@ the leftovers 2, 3 and 2
-\htmlClass{new}{x \equiv 233 - 210 = 23 \pmod{105}} \quad \blacksquare @@ 23 = 3 · 7 + 2 = 5 · 4 + 3 = 7 · 3 + 2
+  <h2 class="sthead"><span class="stno">42c2</span>Counting Says Yes</h2>
+  <p data-pid="24dc3a">Even-tour technique: <b>a graph in one piece, with at least one link, has a closed tour of the links exactly when every dot has an even count of links.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the even-tour technique, the yes half">
+\text{every count even; induction on the number of links, strong (4h)} @@ the one way was 42c1
+\text{from a dot } u \text{, walk along unused links, never stopping while a link is free} @@ links are finite, so the walk stops
+\text{the walk stops only at } u @@ entering any other dot uses one link of an even count; one is free to leave by
+\text{the closed walk } W \text{ uses some links; what is left has every count even} @@ W took two at each passing, and two at u
+\text{each piece of what is left has a closed tour of its links} @@ induction: fewer links
+\text{each such piece meets } W @@ the graph is in one piece
+\htmlClass{new}{\text{splice each piece’s tour into } W \text{ at a dot they share: a closed tour of all the links}} \quad \blacksquare @@ 
   </pre>
-  <p data-pid="7d4e22">The three numbers 70, 21 and 15 serve every list of leftovers on these clocks. Any count of soldiers is 70a + 21b + 15c on the clock of 105, where a, b and c are the leftovers in threes, fives and sevens. The old book gave exactly these three numbers as a rhyme.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · putting back · ← → keys work</div></section>
+  <p data-pid="5f67c0">Open-tour technique: <b>a graph in one piece has a tour of the links that is not closed exactly when exactly two dots have odd counts; it runs from one of them to the other.</b> Add one new link between the two odd dots, take the closed tour that the even-tour technique gives, and take the new link out.</p>
+  <p data-pid="c00049">Counting said no to Königsberg, and here it says yes everywhere it can. A snowplough in Truckee that must clear every street once and come back, or a postal round, is a closed tour when the counts are even; when they are not, the cheapest streets to cover twice is the question that is left, and it has a recipe too.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · tour · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42c2.1</span><span class="ph understand">understand</span>How is the number 70 found, and what is it on each of the clocks of 3, 5 and 7? <br>How does the footing put the leftovers 2, 3, 2 back together into 23?</li>
+      <li><span class="qid">42c2.1</span><span class="ph understand">understand</span>What does the even-tour technique say? <br>Why can the walk in its proof stop only at the dot it started from?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42c3">
-  <h2 class="sthead"><span class="stno">42c3</span>The Pairing Keeps Plus and Times</h2>
-  <p data-pid="3326cb">Two-clock technique: <b>if m and n share nothing, the reading of the remainder technique sends sums to sums and products to products, so an hour of the clock of mn is a unit exactly when both its readings are units.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the two-clock technique">
-[x + y] \mapsto ([x + y]_m, [x + y]_n) = ([x]_m + [y]_m, [x]_n + [y]_n) @@ carry-to-the-clock (42a2) on each clock
-[xy] \mapsto ([x]_m[y]_m, [x]_n[y]_n) @@ the same, for times
-[x][y] = [1] \Rightarrow [x]_m[y]_m = [1]_m,\ [x]_n[y]_n = [1]_n @@ a unit reads as two units
-[x]_m[a]_m = [1]_m,\ [x]_n[b]_n = [1]_n \Rightarrow [x][y] = [1] @@ y the hour reading as (a, b): onto (42c1), then one-to-one
-\htmlClass{new}{|(\mathbb Z/mn)^\times| = |(\mathbb Z/m)^\times| \cdot |(\mathbb Z/n)^\times|} \quad \blacksquare @@ the units match the pairs of units; the product rule (4k)
+  <h2 class="sthead"><span class="stno">42c3</span>Through Every Dot Once</h2>
+  <p data-pid="bb54eb">A cycle through every dot of G exactly once is a <i>round of the dots</i>. The two questions sound alike. One asks about links, one about dots. The first is settled by a count at each dot. For the second no such count is known, and finding one would answer the open question of 41h: whether a recipe that checks a proposed answer quickly can always be matched by one that finds an answer quickly. Deciding whether a graph has a round of the dots is one of the questions 41h named as hardest in that family.</p>
+  <p data-pid="7193bd">A strong count still forces a round. Half-the-dots technique: <b>a graph with n ≥ 3 dots, each with links to at least n/2 dots, has a round of the dots.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the half-the-dots technique">
+\text{any two dots not joined share a neighbour} @@ their counts add to at least n, among n − 2 other dots (pigeonhole, 8·cb5); so G is in one piece
+P = v_0, v_1, \dots, v_k \text{ a longest path} @@ it exists: lengths are at most n − 1
+\text{every neighbour of } v_0 \text{ and of } v_k \text{ is on } P @@ else P grows
+A = \{i < k : v_0 \sim v_{i+1}\},\ \ B = \{i < k : v_k \sim v_i\},\ \ |A| + |B| \ge n > k @@ each has at least n/2 members, among the k numbers 0 to k − 1
+\text{some } i \in A \cap B:\ \ v_0, v_{i+1}, v_{i+2}, \dots, v_k, v_i, v_{i-1}, \dots, v_1, v_0 \text{ is a cycle on all of } P @@ two sets too big to miss each other (pigeonhole)
+\text{if a dot is off the cycle, one is joined to it; open the cycle there: a path longer than } P @@ G is in one piece
+\htmlClass{new}{\text{the cycle holds every dot: a round of the dots}} \quad \blacksquare @@ against P longest
   </pre>
-  <p data-pid="273f3c">So the clock of 12 has 2 · 2 = 4 units, two from the clock of 3 and two from the clock of 4. And an equation can be solved clock by clock. x² ≡ 1 on the clock of 15 reads as x ≡ ±1 on the clock of 3 and x ≡ ±1 on the clock of 5: four pairs, so four answers, 1, 4, 11 and 14. On a prime clock x² ≡ 1 has two. 42j turns the extra answers into a test for primes.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · pairs keep the rules · ← → keys work</div></section>
+  <p data-pid="923b9f">The count n/2 cannot be lowered to (n − 1)/2: two copies of Kₘ sharing one dot have 2m − 1 dots, each with at least m − 1 links, and no round, since the shared dot would be passed twice. So a count gives a yes for crowded graphs and says nothing about the thin ones, where the question lives.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · round · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42c3.1</span><span class="ph understand">understand</span>What does the two-clock technique say about sums, products and units? <br>Why does x² ≡ 1 have four answers on the clock of 15?</li>
+      <li><span class="qid">42c3.1</span><span class="ph understand">understand</span>What is a round of the dots, and how does the question of one differ from the question of a tour of the links? <br>What does the half-the-dots technique say, and where does its proof use the pigeonhole technique?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42c4">
-  <h2 class="sthead"><span class="stno">42c4</span>Clocks That Share a Divisor</h2>
-  <p data-pid="1d3acf">Two clocks of 4 and 6 hours share 2. A reading of 3 on the clock of 4 and 1 on the clock of 6 is odd on both, and 7 gives it. A reading of 1 and 2 is odd on one and even on the other, and no integer gives it.</p>
-  <p data-pid="f83b5f">Shared-divisor technique: <b>x ≡ a (mod m) and x ≡ b (mod n) together have an answer exactly when a ≡ b (mod gcd(m, n)), and then all the answers are one hour on the clock of the least common multiple of m and n.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the shared-divisor technique">
-g = \gcd(m, n),\ \ x = a + mj = b + nk @@ suppose an answer
-g \mid m,\ g \mid n \Rightarrow g \mid a - b @@ a − b = nk − mj (divides-a-sum)
-a - b = gt,\ \ mu + nv = g @@ the other way: given; gcd-as-a-sum (42b1)
-x = a - mut @@ try it
-x - b = (a - b) - mut = gt - mut = nvt @@ mu = g − nv
-\htmlClass{new}{x \equiv a \pmod m,\ \ x \equiv b \pmod n} \quad \blacksquare @@ the uniqueness on the clock of the common multiple is the remainder technique’s one-to-one line, with gcd in place of 1, a standing question
-  </pre>
-  <p data-pid="5ac921">Calendars are clocks that share divisors, and the condition is what makes some dates impossible. A rhythm of 260 days and a year of 365 share 5, so a pair of readings that disagree on the clock of 5 never comes; the pairs that can come repeat every 18 980 days, the least common multiple, about 52 years.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · shared divisors · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">42c4.1</span><span class="ph understand">understand</span>What does the shared-divisor technique say? <br>Why do x ≡ 1 (mod 4) and x ≡ 2 (mod 6) have no answer together?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="42c5">
-  <h2 class="sthead"><span class="stno">42c5</span>Illegal Moves</h2>
+  <h2 class="sthead"><span class="stno">42c4</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\mathbb Z/4 \text{ matches } \mathbb Z/2 \times \mathbb Z/2 \text{ keeping plus}\,? @@ 4 and 2 share 2; [1] + [1] ≠ [0] on the clock of 4, while every pair added to itself gives (0, 0)
-x = 2 + 3 + 2 \text{ for the soldiers}\,? @@ the leftovers are weights on 70, 21 and 15, the numbers that are 1 on one clock and 0 on the others
-x \equiv 1 \pmod 4,\ x \equiv 1 \pmod 6 \Rightarrow x \equiv 1 \pmod{24}\,? @@ the clocks share 2; the answers are one hour on the clock of 12: 1 and 13 both work
-\text{one answer, so the only answer}\,? @@ one answer on the clock of the product; every integer in that hour also answers
+\text{every count even, so a closed tour}\,? @@ only in one piece: two separate triangles have even counts and no tour
+\text{the counts settle whether a round of the dots exists}\,? @@ no count is known to; the half-the-dots technique gives yes for some and silence for the rest
+\text{no round of the dots, so some count is below } n/2\,? @@ the converse of the technique; it is true, but it is not what was proved
+\text{a closed tour of the links passes through every dot once}\,? @@ it may pass a dot many times; it is the links that are used once
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42c5.1</span><span class="ph understand">understand</span>Why does the clock of 4 not match the pairs from the clocks of 2 and 2? <br>Why do x ≡ 1 (mod 4) and x ≡ 1 (mod 6) not give x ≡ 1 (mod 24)?</li>
+      <li><span class="qid">42c4.1</span><span class="ph understand">understand</span>Why do even counts not give a closed tour in a graph that is not in one piece? <br>Why does a closed tour of the links not have to be a round of the dots?</li>
     </ol>
   </section>
 </section>
@@ -159,22 +140,22 @@ x \equiv 1 \pmod 4,\ x \equiv 1 \pmod 6 \Rightarrow x \equiv 1 \pmod{24}\,? @@ t
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">42c.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x \equiv 1 \pmod 7,\ \ x \equiv 2 \pmod{11},\ \ x \equiv 3 \pmod{13}"></span></span>Build the three numbers that are 1 on one of these clocks and 0 on the other two, and find x between 0 and 1000. <br>7 · 11 · 13 = 1001. Use it to find the remainder of 123 456 by 1001 by reading 123 456 on the three clocks.</div>
-  <div class="chq"><span class="chid">42c.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x \equiv a \pmod m,\ \ x \equiv b \pmod n,\ \ \gcd(m, n) = g"></span></span>Finish the shared-divisor technique: prove that two answers differ by a multiple of the least common multiple of m and n, and that mn/g is that multiple. <br>What does the technique say when m = n?</div>
-  <div class="chq"><span class="chid">42c.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\mathbb Z/mn \leftrightarrow \mathbb Z/m \times \mathbb Z/n"></span></span>Suppose a matching of ℤ/mn with the pairs keeps plus. Prove that m and n share nothing. <br>Hint held back: which hour of the clock of mn needs the most additions of itself to reach [0], and how many does a pair ever need?</div>
-  <div class="chq"><span class="chid">42c.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">5·nav: dates carried like digits, on clocks of 7, 12, 365</span></span>A date was read on 5·nav as several clocks carried like digits: weekday, month, year. A rhythm of 260 days and one of 365 run side by side in one calendar of Central America. <br>Is a date in that calendar a number, a pair of hours, or a name for an hour on the clock of 18 980? How many different pairs can occur, and why not 260 · 365? If a third rhythm of 9 days is added, how long until all three repeat together?</div>
+  <div class="chq"><span class="chid">42c.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{the bridges of Königsberg, with one more bridge}"></span></span>Add one bridge to the town so that a tour of the links exists, and give one. Where must the new bridge go? <br>Which two bridges taken away, instead, leave a closed tour?</div>
+  <div class="chq"><span class="chid">42c.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="K_{2,3}"></span></span>Show that K₂,₃ has no round of the dots: what happens to the graph when its two-dot side is taken away? <br>Turn that into a test: if taking k dots away leaves more than k pieces, there is no round. Is the test ever passed by a graph with no round?</div>
+  <div class="chq"><span class="chid">42c.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="d(u) + d(w) \ge n \text{ whenever } u \not\sim w"></span></span>The half-the-dots technique asked for n/2 links at every dot. Its proof used less. Prove that this weaker count still gives a round of the dots, for n ≥ 3. <br>Which lines of the proof change?</div>
+  <div class="chq"><span class="chid">42c.5.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">22·logi: a depot and n stops make n!/2 tours</span></span>22·logi counted the tours of a delivery van and found that trying them all outruns any computer. A cheapest tour is a cheapest round of the dots. <br>Is the question “is there a tour of cost at most C” one where checking is quick? Why does nobody expect a count at the dots, like the one for links, to settle it?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r42b.html">← 42b · undoing on a clock</a><a href="r42d.html">42d · powers cycle →</a></nav>
+<nav class="nextrung"><a href="r42b.html">← 42b · trees</a><a href="r42d.html">42d · flat drawings →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The remainder technique is the Chinese remainder theorem, and the two-clock technique the ring isomorphism ℤ/mnℤ ≅ ℤ/mℤ × ℤ/nℤ for coprime m and n, with its consequence φ(mn) = φ(m)φ(n) for Euler’s φ (42d). The shared-divisor technique is the general Chinese remainder theorem. The 260-day count and the 365-day year together are the Calendar Round of the Maya, 52 years long.</p>
+  <p>A graph with repeated links is a multigraph. A closed tour of the links is an Eulerian circuit, an open one an Eulerian trail, and the even-tour technique is Euler's theorem (its yes half was first proved by Carl Hierholzer, published 1873). A round of the dots is a Hamiltonian cycle; the half-the-dots technique is Dirac's theorem (1952) and the weaker count of 42c.5.3 is Ore's theorem (1960). The cheapest street cover is the Chinese postman problem (Meigu Guan, 1960). Deciding whether a Hamiltonian cycle exists is NP-complete (Richard Karp, 1972).</p>
   <h3>Who said it first</h3>
-  <p>The soldiers’ puzzle is in the Sunzi Suanjing, a Chinese book of the third to fifth century. Qin Jiushao gave a general method in 1247. Leonhard Euler and Carl Friedrich Gauss proved it in modern form, Gauss in the Disquisitiones (1801). The rhyme with 70, 21 and 15 is from the Ming dynasty.</p>
+  <p>Leonhard Euler wrote on the bridges of Königsberg in 1736, and gave the count without the yes half's proof. William Rowan Hamilton sold a puzzle in 1857, the Icosian game, asking for a round of the dots of the twelve-sided solid. Gabriel Andrew Dirac proved the half-the-dots technique in 1952.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“The clock of 4 has 4 hours and the pairs on the clocks of 2 and 2 are 4 in number. A set of 4 matches a set of 4, so the remainder technique applies.” Not allowed: any two sets of 4 match, but the technique is about the reading, which must also keep plus and times. The reading [x] ↦ ([x], [x]) on the clocks of 2 is not one-to-one: [0] and [2] both read as ([0], [0]).</p>
+  <p>“Every dot has an even count, so start anywhere and keep walking on unused links: you never get stuck except at the start, so the walk uses every link.” Not allowed: you get stuck only at the start, but you may get stuck there with links still unused elsewhere. The splice is the step this skips.</p>
 </section>
 
 </div>
@@ -189,25 +170,20 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'read',t:R`[x] \mapsto ([x]_m, [x]_n)`,n:`Both small clocks.`},
-  {k:'ember',kl:'one-to-one',t:R`m, n \mid x - y \Rightarrow mn \mid x - y`,n:`Sharing nothing.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\mathbb Z/mn \leftrightarrow \mathbb Z/m \times \mathbb Z/n}`,n:`A matching.`}
-],{title:'The slides · several clocks · ← → keys work'});
+  {k:'ember',kl:'count',t:R`5, 3, 3, 3`,n:`Links at the four parts.`},
+  {k:'ember',kl:'pairs',t:R`\text{in and out}`,n:`At each passing.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{no tour}}`,n:`Four odd dots.`}
+],{title:'The slides · bridges · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'one on its clock',t:R`e_3 = 70,\ e_5 = 21,\ e_7 = 15`,n:`Undoes of N/m.`},
-  {k:'ember',kl:'combine',t:R`2 \cdot 70 + 3 \cdot 21 + 2 \cdot 15`,n:`Leftovers as weights.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{x \equiv 23 \pmod{105}}`,n:`The soldiers.`}
-],{title:'The slides · putting back · ← → keys work'});
+  {k:'ember',kl:'walk',t:R`\text{until stuck}`,n:`Stuck only at the start.`},
+  {k:'ember',kl:'splice',t:R`\text{pieces left over}`,n:`Each meets W.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{all even} \iff \text{closed tour}}`,n:`Counting says yes.`}
+],{title:'The slides · tour · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'sums',t:R`[x + y] \mapsto (\ldots + \ldots,\ \ldots + \ldots)`,n:`Clock by clock.`},
-  {k:'ember',kl:'units',t:R`\text{unit} \iff \text{both readings units}`,n:`Undoes put back.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{|(\mathbb Z/12)^\times| = 2 \cdot 2}`,n:`Counts multiply.`}
-],{title:'The slides · pairs keep the rules · ← → keys work'});
-stepper('#sl4',[
-  {k:'ember',kl:'agree',t:R`a \equiv b \pmod{\gcd(m, n)}`,n:`Needed and enough.`},
-  {k:'ember',kl:'build',t:R`x = a - mut`,n:`From mu + nv = g.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{x \equiv 7 \pmod{12}}`,n:`From 3 mod 4 and 1 mod 6.`}
-],{title:'The slides · shared divisors · ← → keys work'});
+  {k:'ember',kl:'longest',t:R`v_0, \dots, v_k`,n:`Ends see only the path.`},
+  {k:'ember',kl:'cross',t:R`v_0 \sim v_{i+1},\ v_k \sim v_i`,n:`Pigeonhole.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a round of the dots}}`,n:`When counts are at least n/2.`}
+],{title:'The slides · round · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

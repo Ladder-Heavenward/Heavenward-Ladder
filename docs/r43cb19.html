@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Clock as a Quotient</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r43l.html">← 43l discrete logarithms</a><a href="r43cb7.html">next: 43·cb7 last time on the number too big to write down →</a></p>
+  <div class="tags"><span class="tag then">43·cb19 · newsflash for 19</span></div>
+  <h1>The Clock as a Quotient</h1>
+  <p data-pid="d8089c">Rung nineteen shifted a group inside a group and got copies, all the same size, never overlapping, covering everything. On the integers under adding, the multiples of twelve are a group inside, and its copies are the hours of the clock of twelve. Adding hours is adding copies. So the clock was rung nineteen’s copies all along, and rung nineteen had a question it never asked: when can copies themselves be combined into a group? Not always. In the six shuffles of three cards, the copies of one swap cannot be multiplied, since the answer would depend on which member of a copy you picked. They can be exactly when shifting on the left and on the right give the same copies. Such a group inside has a name, and every product-keeping map makes one: the members it sends to doing nothing. Then the map’s image is the group of copies, matched member for member. That one fact names the clock, the sign of a shuffle, and the clock log of the last step as three faces of one move.</p>
+  <p class="gesture" data-pid="96f52a">The hours of a clock are the copies of the multiples of n. Copies of a part-group combine into a group exactly when left and right copies agree, and such a part-group is called normal. What a product-keeping map sends to e is normal, and the group of its copies matches the map’s image.</p>
+</header>
+
+<section class="class step" data-step="43·cb19.1">
+  <h2 class="sthead"><span class="stno">43·cb19.1</span>The Hours Are Copies</h2>
+  <p data-pid="d3f21f">Write nℤ for the multiples of n, {…, −n, 0, n, 2n, …}. It is a part-group of the integers under adding, by <a href="r19d.html#c9554c">19d1</a>’s test: it holds 0, sums of multiples, and negatives. Its copy by a, in 19d2’s words with + for the operation, is a + nℤ.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the copies of 12ℤ">
+b \in a + 12\mathbb Z \iff b - a \in 12\mathbb Z \iff b \equiv a \pmod{12} @@ ﹀ the copy; ﹀ ≡ (43a1)
+\htmlClass{new}{a + 12\mathbb Z = [a]} @@ the copy is the hour
+(a + 12\mathbb Z) + (b + 12\mathbb Z) = (a + b) + 12\mathbb Z @@ adding the sets member by member, by turn-about and regroup
+\htmlClass{new}{[a] + [b] = [a + b]:\ \text{the clock’s adding is adding copies}} \quad \blacksquare @@ 43a2
+  </pre>
+  <p data-pid="5e9028">So ℤ/n is ℤ’s copies of nℤ, and 19d4’s count says there are n of them. Its accepted name ℤ/nℤ reads that way: ℤ over the part-group nℤ. Adding copies worked here because the integers are turn-about. The next footing asks what happens in a group that is not.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · copies · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">43·cb19.1.1</span><span class="ph understand">understand</span>What is nℤ, and why is the copy a + 12ℤ the hour [a]? <br>Why does adding the copies of 12ℤ give the clock’s adding?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="43·cb19.2">
+  <h2 class="sthead"><span class="stno">43·cb19.2</span>When Copies Combine</h2>
+  <p data-pid="ed334e">For a part-group H of G, try to multiply copies by (aH)(bH) = abH. That is a definition on members, so it must be well defined in 5·cb2’s sense: other members a′ ∈ aH and b′ ∈ bH must give a′b′H = abH.</p>
+  <p data-pid="a9ea08">Copies-combine technique: <b>the rule (aH)(bH) = abH is well defined exactly when gH = Hg for every g in G, and then the copies form a group with eH = H doing nothing.</b> From here on, such an H is <i>normal</i> in G, from the Latin <i>norma</i>, a carpenter’s square: it sits square in G, the same from either side. G/H names the group of its copies.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the copies-combine technique">
+gH = Hg:\ \ a' = ah,\ b' = bk \Rightarrow a'b' = a(hb)k = a(bh')k = ab(h'k) @@ hb ∈ Hb = bH, so hb = bh′ for some h′ in H
+a'b'H = abH @@ h′k ∈ H, and a copy is the same from any of its members (19d3)
+\text{well defined} \Rightarrow (gH)(g^{-1}H) = H \text{ for all members } gh \text{ of } gH @@ the other way: e ∈ H, so ghg⁻¹H must be eH = H
+ghg^{-1} \in H \text{ for all } h \Rightarrow gH \subseteq Hg,\ \text{and likewise } Hg \subseteq gH @@ gh = (ghg⁻¹)g; the same with g⁻¹
+\htmlClass{new}{\text{well defined} \iff gH = Hg \text{ for every } g} \quad \blacksquare @@ regroup, e and undoes come from G
+  </pre>
+  <p data-pid="95055e">In S₃, 19d6 found s₁₃{e, s₁₂} ≠ {e, s₁₂}s₁₃: the swap’s part-group is not normal, and its copies cannot be multiplied. The three turns {e, r, r²} are normal: their two copies are the turns and the swaps, from either side, and G/H has two members, a group like the clock of 2. In a turn-about group every part-group is normal.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · normal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">43·cb19.2.1</span><span class="ph understand">understand</span>What does the copies-combine technique say, and what is a normal part-group? <br>Why can the copies of {e, s₁₂} in S₃ not be multiplied?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="43·cb19.3">
+  <h2 class="sthead"><span class="stno">43·cb19.3</span>What a Map Sends to Doing Nothing</h2>
+  <p data-pid="4b1525">34i named product-keeping maps: f from G to G′ with f(ab) = f(a)f(b). Such a map sends e to e′, and undoes to undoes. Write K for the set of members f sends to e′.</p>
+  <p data-pid="07e0dd">Sent-to-e technique: <b>for a product-keeping map f, the set K of members sent to e′ is a normal part-group, and f(a) = f(b) exactly when aK = bK.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the sent-to-e technique">
+f(e) = e',\ \ f(ab) = e'e' = e',\ \ f(a^{-1}) = f(a)^{-1} = e' @@ for a, b in K: the part-group test (19d1)
+f(gkg^{-1}) = f(g)\,e'\,f(g)^{-1} = e' @@ k in K: so gKg⁻¹ ⊆ K, and gK = Kg as in 43·cb19.2
+f(a) = f(b) \iff f(a^{-1}b) = e' \iff a^{-1}b \in K @@ multiply by f(a)⁻¹
+\htmlClass{new}{\iff b \in aK \iff aK = bK} \quad \blacksquare @@ copies never overlap (19d3)
+  </pre>
+  <p data-pid="ec363a">Three maps already on the ladder. k ↦ [k], from ℤ to the clock of n, sends exactly nℤ to [0]. The sign of a shuffle (19e), +1 for even and −1 for odd, keeps products and sends the even shuffles to +1: so the even shuffles are normal in every Sₙ. The determinant of an undoable grid (27d) keeps products and sends to 1 the grids that keep volume. Each set sent to e is normal, without a single copy checked by hand.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · sent to e · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">43·cb19.3.1</span><span class="ph understand">understand</span>What does the sent-to-e technique say? <br>Why are the even shuffles normal in Sₙ?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="43·cb19.4">
+  <h2 class="sthead"><span class="stno">43·cb19.4</span>The Image Is the Group of Copies</h2>
+  <p data-pid="167c86">Image-matching technique: <b>if f is a product-keeping map from G with K the set sent to e′, then aK ↦ f(a) is a matching of G/K with the image of f that keeps products.</b> It is well defined and one-to-one by the sent-to-e technique, both ways of its last line. It is onto the image by definition. It keeps products since f(ab) = f(a)f(b).</p>
+  <pre class="lines" data-k="ember" data-label="this page: three groups of copies, named">
+\mathbb Z \to \mathbb Z/n,\ k \mapsto [k],\ \ K = n\mathbb Z @@ onto
+\mathbb Z/n\mathbb Z \text{ matches the clock of } n @@ the image-matching technique: 43a’s clock, named as a quotient
+S_n \to \{+1, -1\},\ \ K = \text{the even shuffles} @@ onto for n ≥ 2
+S_n/\text{even} \text{ has two members, like the clock of } 2 @@ the image-matching technique
+(\mathbb Z/p)^\times \to \mathbb Z/(p-1),\ \ [g]^k \mapsto [k] @@ 43l1’s clock log turns times into plus; K = {[1]}
+\htmlClass{new}{(\mathbb Z/p)^\times \text{ matches the clock of } p - 1 \text{ under adding}} \quad \blacksquare @@ the image-matching technique, with nothing but [1] sent to [0]
+  </pre>
+  <p data-pid="360599">A quotient of a quotient is a quotient: on the clock of 12, the copies of {[0], [4], [8]} are four, and (ℤ/12)/{[0], [4], [8]} matches the clock of 4. That is the image-matching technique for [k] ↦ [k] from the clock of 12 to the clock of 4, whose set sent to [0] is {[0], [4], [8]}. Rung 46 spends normal part-groups and their quotients to ask which equations have formulas for their roots.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the image · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">43·cb19.4.1</span><span class="ph understand">understand</span>What does the image-matching technique say, and which technique makes the map well defined and one-to-one? <br>How does it show that the units of a prime clock under times match a clock under adding?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="43·cb19.5">
+  <h2 class="sthead"><span class="stno">43·cb19.5</span>Illegal Moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{every part-group has a group of copies}\,? @@ only a normal one: in S₃ the copies of {e, s₁₂} cannot be multiplied
+gH = Hg \Rightarrow gh = hg \text{ for every } h\,? @@ the sets agree, not the members: r{e, r, r²} = {e, r, r²}r while s₁₂ does not turn about with r
+G/K \text{ is a part of } G\,? @@ its members are copies, sets of members of G
+\text{a map with } K = \{e\} \text{ is onto}\,? @@ it is one-to-one; onto is another matter: ℤ → ℤ, k ↦ 2k
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">43·cb19.5.1</span><span class="ph understand">understand</span>Why does gH = Hg not give gh = hg for each h? <br>Why does K = {e} make a map one-to-one and not onto?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">43·cb19.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{19f: the square’s 8 moves},\ \ Z = \{e, r^2\}"></span></span>Prove that Z is normal in the square’s moves, list its four copies, and build the table of G/Z. <br>Is G/Z like the clock of 4, or like the pairs on the clocks of 2 and 2 (43c5)? What single fact decides it?</div>
+  <div class="chq"><span class="chid">43·cb19.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="H \subseteq G,\ \ |G| = 2|H|"></span></span>Prove that a part-group with exactly two copies is always normal. <br>Use it to find, without checking a single product, a normal part-group of the square’s moves with four members.</div>
+  <div class="chq"><span class="chid">43·cb19.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="N \text{ normal in } G"></span></span>The sent-to-e technique makes K normal. Turn it round: is every normal part-group the set sent to e by some product-keeping map? <br>Build the map, and say what its image is.</div>
+  <div class="chq"><span class="chid">43·cb19.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">34i2: ⟨x | xⁿ⟩, a group named by a letter and a word set to nothing</span></span>34i named groups by letters and words. Prove that ⟨x | xⁿ⟩ matches the clock of n, by the presented-map technique and the image-matching technique. <br>Is every group named by letters and words a group of copies of the free group? Copies of what?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r43l.html">← 43l · discrete logarithms</a><a href="r43cb7.html">43·cb7 · last time on the number too big to write down →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A normal part-group is a normal subgroup, written N ⊴ G, and G/N is the quotient group, or factor group. The set sent to e is the kernel, ker f, and the image is im f. The image-matching technique is the first isomorphism theorem, G/ker f ≅ im f. The quotient of a quotient is the third isomorphism theorem, (G/K)/(H/K) ≅ G/H. A second, for a part-group H and a normal N, says HN/N ≅ H/(H ∩ N). The even shuffles are the alternating group Aₙ; the grids of determinant 1 the special linear group SL. The group G/Z of 43·cb19.6.1 is a quotient by the centre. A presented group is the quotient of the free group by the normal closure of its relators.</p>
+  <h3>Who said it first</h3>
+  <p>Évariste Galois singled out normal subgroups (a “décomposition propre”) in his memoir of 1831, published in 1846. Camille Jordan developed quotients and composition series in his Traité of 1870, and Otto Hölder named quotient groups and proved the isomorphism theorems around 1889. Emmy Noether gave them their general form for rings and modules in 1927, which is why they are sometimes called Noether’s isomorphism theorems.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“In S₃, s₁₂H = {s₁₂, e} = H and s₁₃H = {s₁₃, r}, so (s₁₂H)(s₁₃H) = s₁₂s₁₃H, and the copies of H = {e, s₁₂} form a group.” Not allowed: the product depends on the members picked. With e in place of s₁₂ from the first copy, the answer is s₁₃H; with s₁₂ it is s₁₂s₁₃H = r²H = {r², r²s₁₂}, a different copy, since s₁₃ is not in it. H is not normal.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'part-group',t:R`n\mathbb Z \subseteq \mathbb Z`,n:`Under +.`},
+  {k:'ember',kl:'copy',t:R`a + n\mathbb Z = [a]`,n:`An hour.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\mathbb Z/n = \text{copies of } n\mathbb Z}`,n:`19d’s copies.`}
+],{title:'The slides · copies · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'rule',t:R`(aH)(bH) = abH`,n:`On members.`},
+  {k:'ember',kl:'well defined',t:R`gH = Hg \ \forall g`,n:`Square from both sides.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{G/H \text{ is a group}}`,n:`When H is normal.`}
+],{title:'The slides · normal · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'map',t:R`f(ab) = f(a)f(b)`,n:`34i.`},
+  {k:'ember',kl:'K',t:R`\{g : f(g) = e^{\prime}\}`,n:`Normal.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{f(a) = f(b) \iff aK = bK}`,n:`Same copy, same value.`}
+],{title:'The slides · sent to e · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'copies',t:R`G/K`,n:`Normal K.`},
+  {k:'ember',kl:'match',t:R`aK \mapsto f(a)`,n:`Keeps products.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(\mathbb Z/p)^\times \leftrightarrow \mathbb Z/(p-1)}`,n:`The clock log.`}
+],{title:'The slides · the image · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

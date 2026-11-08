@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arrows Matter More Than Things</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.cl-lock{display:none;border-left:3px solid var(--gold);background:var(--sand);padding:10px 14px;border-radius:0 4px 4px 0;max-width:66ch}
+body.cl-locked .cl-lock{display:block} body.cl-locked .cl-body{display:none}
+.cl-lock button{margin-top:6px;font-size:.8rem}
+.claim{border:1px solid var(--grid);border-left:4px solid var(--teal);background:var(--card);border-radius:0 6px 6px 0;padding:10px 16px;max-width:66ch}
+.claim p{margin:.4em 0}
+ul.cl-adds{max-width:66ch;padding-left:1.1em} ul.cl-adds li{margin:.5em 0}
+ul.cl-adds .cl-w{display:none;color:var(--muted);font-style:italic}
+ul.cl-adds li.cl-wait .cl-t{display:none} ul.cl-adds li.cl-wait .cl-w{display:inline}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r47now2.html">← 47·now2 is all of mathematics one theory?</a><a href="floor7concl.html">next: F7·∎ what the advanced floor shows →</a></p>
+  <div class="tags"><span class="tag concl">47·∎ · conclusion</span></div>
+  <h1>Arrows Matter More Than Things</h1>
+  <p class="gesture" data-pid="4020f1">A category is things and arrows that run in a row. Maps of categories carry matched things to matched things, and natural maps are the ones made without choosing. A universal property fixes a thing up to exactly one matching, and a thing is known by the arrows into it.</p>
+</header>
+
+<section class="class">
+  <div class="eyebrow">The conclusion · the rung's claim, in full, and its proof</div>
+  <div class="cl-lock"><p>This page opens once every question on <a href="r47h.html">47h</a> is ticked. The claim below is proved from the steps of this rung, so it waits for them.</p><button type="button" class="cl-peek">reviewing the ladder? open it anyway</button></div>
+  <div class="cl-body">
+  <h3>What the rung set out to show</h3>
+  <p data-pid="9af19e">The survey of rung 47 asked what is left of a thing when only its arrows are looked at. <b>A thing of a category is pinned down, up to exactly one matching, by the arrows into it; so every construction given by a universal property is unique in the one sense that matters, and every statement made with arrows is carried across a matching.</b> The price is that the build of a thing, which set it is, is not a question the arrows answer.</p>
+  <p data-pid="b07c0e"><a href="r47a.html">47a</a> wrote down categories and matched things. <a href="r47b.html">47b</a> mapped categories and found that matched things go to matched things. <a href="r47c.html">47c</a> mapped the maps, and told the natural from the chosen. <a href="r47d.html">47d</a> pinned down products and sums, and <a href="r47e.html">47e</a> every limit and colimit. <a href="r47f.html">47f</a> tied freeing to forgetting. <a href="r47g.html">47g</a> proved a thing is known by its arrows, and <a href="r47h.html">47h</a> pinned the tensor product down by them. This page puts the claim together.</p>
+  <h3>The claim, in full</h3>
+  <div class="claim">
+  <p data-pid="83d6e9"><b>In every category each thing has one do-nothing arrow, each undoable arrow one undoing, and being matched is a sameness relation; every map of categories carries matched things to matched things. A family of arrows closing every square is a natural map, natural maps run in a row and undo, and a space of finite dimension is matched naturally with its readings of readings, while over a field with more than three members no family matching it with its readings is carried along by every matching.</b></p>
+  <p data-pid="8e76a7"><b>Any two things with the same universal property, a product, a sum, a limit or a colimit of one picture, are matched by exactly one arrow that agrees with the property; in Set the sift is a limit, classes are a colimit, and gluing is a colimit in Top. Freeing is left of forgetting, a left map carries sums to sums, and the natural maps from the arrows into A to any F match with F(A); so things with naturally matched arrows into them are matched. The tensor product of spaces of dimension m and n has dimension mn.</b></p>
+  </div>
+  <h3>The Proof</h3>
+  <p data-pid="4901c0">Each part below is a technique already proved on a step of this rung. The proof cites them by name and joins them.</p>
+  <pre class="lines" data-k="ember" data-label="things and arrows">
+\text{one do-nothing arrow at each thing} @@ the one-do-nothing technique (47a)
+\text{one undoing for each undoable arrow; } \cong \text{ a sameness relation} @@ the one-undoing technique (47a)
+\text{a relation makes a category exactly when reflexive and transitive} @@ the order-category technique (47a)
+\htmlClass{new}{A \cong B \Rightarrow F(A) \cong F(B)} \quad \blacksquare @@ the matched-to-matched technique (47b), with the letter-by-letter and turned-round techniques for freeing and readings
+  </pre>
+  <pre class="lines" data-k="ember" data-label="natural maps">
+\text{natural maps run in a row} @@ the square-in-a-row technique (47c)
+V \cong V^{**} \text{ naturally} @@ the double-reading technique (47c)
+\text{no family } V \cong V^* \text{ carried along by every matching} @@ the no-chosen-reading technique (47c), over a field with more than three members
+\htmlClass{new}{\text{a natural matching has a natural undoing}} \quad \blacksquare @@ the natural-undo technique (47c)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="pinned down by arrows">
+A \times B \text{ and } A \sqcup B \text{ are a product and a sum in } \mathbf{Set} @@ the pair-map and cases-map techniques (47d)
+\text{two products, or two sums, are matched by exactly one arrow that agrees} @@ the one-matching technique (47d), and its proof read for any picture (47e)
+\text{sifts are limits; classes and gluing are colimits} @@ the sift-meets, classes-force and glued-is-colimit techniques (47e)
+\htmlClass{new}{\text{every universal property fixes its thing up to one matching}} \quad \blacksquare @@ the same proof, word for word
+  </pre>
+  <pre class="lines" data-k="ember" data-label="a thing is its arrows">
+F \dashv U \text{ for freeing and forgetting; } (\ ) \times B \dashv (\ )^B @@ the free-forgetful and pair-to-function techniques (47f)
+\text{a fixing correspondence from any relation} @@ the fixing technique (47f)
+\text{left maps carry sums to sums} @@ the left-keeps-sums technique (47f)
+(h_A \Rightarrow F) \cong F(A) @@ the arrows-into technique (47g)
+h_A \cong h_B \Rightarrow A \cong B @@ the known-by-arrows technique (47g)
+\htmlClass{new}{V \otimes W \text{ exists, of dimension } mn} \quad \blacksquare @@ the grid-space technique (47h), with the fewest-terms and coprime-clocks techniques
+  </pre>
+  <p data-pid="efd223">So the rung’s claim holds: arrows pin things down as far as anything can, which is exactly one matching, and a thing is known by the arrows into it. Held in trust: the gluing rule of 34i, which 47e read as a colimit, and on the steps after this page, that typed programs all stop, and that a program written for every type is carried along by every program.</p>
+  <h3>What the rest of the rung adds</h3>
+  <p data-pid="ec2000">Each step and annex after the proof steps adds a line to the claim. A line appears here once you have finished its page.</p>
+  <ul class="cl-adds">
+    <li data-after="r47i" data-pid="de8d87"><b><a href="r47i.html">47i universal properties by hand</a></b>: <span class="cl-t">products in the dividing order, counting arrows into S₃, and two fields with no product.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r47j" data-pid="712c23"><b><a href="r47j.html">47j proofs are programs</a></b>: <span class="cl-t">typed terms are tree proofs, and cutting a detour is running the program.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r47cb0" data-pid="380942"><b><a href="r47cb0.html">47·cb0 the same as itself, again</a></b>: <span class="cl-t">rung 0’s sameness beside matching, and which set is three.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r47comp" data-pid="2f091c"><b><a href="r47comp.html">47·comp can a program’s type say what it does?</a></b>: <span class="cl-t">types as things, a program for every type as a natural map, and a join as a limit.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r47phys" data-pid="5137df"><b><a href="r47phys.html">47·phys why is stress a tensor?</a></b>: <span class="cl-t">stress and inertia as readings of a tensor product, the new-axes rule forced by a map of categories, and what every axes agree on.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r47eng" data-pid="461183"><b><a href="r47eng.html">47·eng can a machine be built by plugging parts together?</a></b>: <span class="cl-t">parts in a row and side by side, a loop closed into one part, and the chain grids that keep a loaded drawing honest.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r47now" data-pid="7fe29c"><b><a href="r47now.html">47·now when are two things truly the same?</a></b>: <span class="cl-t">sameness as a type, univalence, and the loops of the circle computed.</span><span class="cl-w">its line appears when you finish it.</span></li>
+    <li data-after="r47now2" data-pid="48ddf7"><b><a href="r47now2.html">47·now2 is all of mathematics one theory?</a></b>: <span class="cl-t">points on clocks, a product that knows them, and the matching of categories proved in 2024.</span><span class="cl-w">its line appears when you finish it.</span></li>
+  </ul>
+  <p data-pid="43c074">That is how far arrows see. They see everything a thing does, and match any two things that do the same; they do not see which set a thing is, and the rung has argued that nothing a mathematician needs is lost. The advanced floor ends here, with the floor’s conclusion next.</p>
+  </div>
+</section>
+
+<nav class="nextrung"><a href="r47now2.html">← 47·now2 · is all of mathematics one theory?</a><a href="floor7concl.html">F7·∎ · what the advanced floor shows →</a></nav>
+</div>
+
+<script src="rung.js"></script>
+<script>
+(function(){
+  const need="r47h";
+  let p={}; try{ p=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
+  let peek=false; try{ peek=sessionStorage.getItem('cl:peek')==='1'; }catch(e){}
+  const done=k=>!!(p[k]&&p[k].v);
+  function apply(){
+    const open=peek||done(need);
+    document.body.classList.toggle('cl-locked',!open);
+    document.querySelectorAll('ul.cl-adds li[data-after]').forEach(li=>li.classList.toggle('cl-wait',!(peek||done(li.dataset.after))));
+    if(open&&done(need)){ const me=(window.ladderPage?ladderPage():(location.pathname.split('/').pop()||'').replace(/\.html?$/,''));
+      if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(me,true,true,true,false);
+      else { try{ p[me]={v:true,a:true,o:true,h:false,t:Date.now()}; LS.setItem('pages:done',JSON.stringify(p)); }catch(e){} } }
+  }
+  const b=document.querySelector('.cl-peek'); if(b) b.addEventListener('click',()=>{ peek=true; try{ sessionStorage.setItem('cl:peek','1'); }catch(e){} apply(); });
+  apply();
+  try{ if(window.MarksSync&&MarksSync.pages) MarksSync.pages().then(q=>{ if(q){ p=Object.assign({},p,q); apply(); } },()=>{}); }catch(e){}
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

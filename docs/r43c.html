@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Division With Remainder for Polynomials</title>
+<title>Several Clocks at Once</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,96 +48,93 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r43b.html">← 43b ideals and quotients</a><a href="r43d.html">next: 43d unique factoring →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r43b.html">← 43b undoing on a clock</a><a href="r43d.html">next: 43d powers cycle →</a></p>
   <div class="tags"><span class="tag proof">43c · proof</span></div>
-  <h1>Division With Remainder for Polynomials</h1>
-  <p data-pid="f8710d">Rung nine divided one polynomial by another, with real coefficients, and found that a number is a zero exactly when a straight factor splits off. Nothing in that work used the real numbers as numbers. It used adding, multiplying, and one reciprocal at each step: the reciprocal of the top coefficient of the divisor. So the same division runs with coefficients on a prime clock, in the fractions, in any field. What it needs is now easy to say exactly, and so is where it breaks. With whole-number coefficients, dividing by two x gets stuck at once. On a clock with zero products, the top coefficients of a product can cancel to nothing, a degree can fall, and a polynomial of degree two can have four zeros. This step sorts the rules that carry from rung nine to every field from the rules that need more.</p>
-  <p class="gesture" data-pid="210173">In a ring with no zero products the degree of a product is the sum of the degrees. Division with a remainder of smaller degree works over every field, and over any ring when the divisor’s top coefficient has a reciprocal. The remainder on dividing by x − r is the value at r, so a zero is a straight factor, and a polynomial of degree n has at most n zeros, in any ring with no zero products.</p>
+  <h1>Several Clocks at Once</h1>
+  <p data-pid="812dfc">A number of soldiers is lined up in threes, and two are left over. In fives, three are left over. In sevens, two. How many soldiers? An old book of puzzles asked this, and answered twenty three. The answer is one of many, since adding one hundred and five changes none of the leftovers, but between one and one hundred and five it is the only one. That is the claim of this step. Reading a number on several clocks at once loses nothing, as long as no two of the clocks share a divisor, and it keeps adding and multiplying. So a question on a big clock can be split into questions on small clocks, answered there, and put back together. The undoes of the last step do the putting back. When two clocks do share a divisor, the readings must agree on the shared part, and that condition is all that goes wrong.</p>
+  <p class="gesture" data-pid="bb9511">If m and n share nothing, an hour of the clock of mn is the same as a pair of hours, one on each, and the pairing keeps plus and times. The pair is put back together with undoes. Clocks that share a divisor can be read together exactly when the readings agree on it.</p>
 </header>
 
 <section class="class step" data-step="43c1">
-  <h2 class="sthead"><span class="stno">43c1</span>Degrees Add, When Nothing Multiplies to 0</h2>
-  <p data-pid="60ea87">The <i>degree</i> of a polynomial other than 0 is the largest k with a coefficient of xᵏ other than 0, and that coefficient is its <i>top coefficient</i>. The zero polynomial has no degree.</p>
-  <p data-pid="fa7f6c">Degree-adds technique: <b>in R[x], with R a cancelling ring, the degree of pq is the degree of p plus the degree of q, and R[x] is a cancelling ring.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the degree-adds technique">
-p = a_m x^m + \cdots,\ \ q = b_n x^n + \cdots,\ \ a_m \ne 0,\ b_n \ne 0 @@ the top coefficients
-(pq)_k = 0 \text{ for } k > m + n @@ every product pᵢqⱼ with i + j = k has i &gt; m or j &gt; n
-(pq)_{m+n} = a_m b_n @@ the only pair is i = m, j = n
-\htmlClass{new}{a_m b_n \ne 0,\ \ \deg pq = m + n} \quad \blacksquare @@ R has no zero products; so pq ≠ 0 too
+  <h2 class="sthead"><span class="stno">43c1</span>Two Clocks That Share Nothing</h2>
+  <p data-pid="8f36bc">Fix m and n with gcd(m, n) = 1. Read each hour of the clock of mn on both small clocks: [x] goes to the pair ([x] on the clock of m, [x] on the clock of n). That is well defined, since mn ∣ x − y gives m ∣ x − y and n ∣ x − y.</p>
+  <p data-pid="f11a68">Remainder technique: <b>if m and n share no divisor above 1, reading an hour of the clock of mn on the clocks of m and n is a matching of ℤ/mn with the pairs ℤ/m × ℤ/n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the remainder technique">
+x \equiv y \pmod m,\ \ x \equiv y \pmod n @@ suppose two hours give one pair
+m \mid x - y,\ \ n \mid x - y = nk @@ ﹀ ≡ twice
+m \mid nk \Rightarrow m \mid k @@ factor-that-shares-nothing (5h), since gcd(m, n) = 1
+\htmlClass{new}{mn \mid x - y} @@ x − y = n(mj): one-to-one
+|\mathbb Z/mn| = mn = |\mathbb Z/m \times \mathbb Z/n| @@ clock-hours (43a2); pairs counted by the product rule (4k)
+\htmlClass{new}{\text{the reading is onto}} \quad \blacksquare @@ a one-to-one map between finite sets of one size misses nothing: else pigeonhole (8·cb5) on the map back
   </pre>
-  <p data-pid="da871a">On ℤ/4, (2x + 1)(2x + 1) = 4x² + 4x + 1 = 1. Two polynomials of degree 1 multiply to one of degree 0, and 2x + 1 is undoable in ℤ/4[x]. In a cancelling ring that cannot happen, and the undoable polynomials are just the undoable constants.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · degrees · ← → keys work</div></section>
+  <p data-pid="72eeb2">So the soldiers have one count between 0 and 104 for each list of leftovers. The proof says the answer exists. It does not say how to find it, short of trying all 105. The next footing finds it.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · several clocks · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">43c1.1</span><span class="ph understand">understand</span>What are the degree and the top coefficient of a polynomial? <br>What does the degree-adds technique say, and where does (2x + 1)² = 1 on ℤ/4 break it?</li>
+      <li><span class="qid">43c1.1</span><span class="ph understand">understand</span>What does the remainder technique say? <br>Which line of its proof needs m and n to share nothing, and why does onto come free?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43c2">
-  <h2 class="sthead"><span class="stno">43c2</span>Dividing Over Any Field</h2>
-  <p data-pid="51ed78">9g’s polynomial-division technique took real coefficients. Its proof was an induction on the degree of p: take away (aₘ/dₖ) x^(m − k) d(x) to kill the top term of p, and divide what is left. The one move that is more than adding and multiplying is the reciprocal of dₖ, the top coefficient of d.</p>
-  <p data-pid="454700">Top-undoable technique: <b>in R[x], if the top coefficient of d has a reciprocal in R, then every p is dq + r with r = 0 or of degree less than d’s; over a field this holds for every d ≠ 0, and q and r are the only ones.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the top-undoable technique">
-p = a_m x^m + \cdots,\ \ d = d_k x^k + \cdots,\ \ m \ge k,\ \ d_k u = 1 @@ given: dₖ is undoable
-p_1 = p - a_m u\, x^{m-k} d @@ its xᵐ coefficient is aₘ − aₘ u dₖ = 0
-p_1 = dq_1 + r \text{ with } \deg r < k \text{ or } r = 0 @@ strong induction on m (4h); for m &lt; k take q = 0, r = p
-p = d\,(q_1 + a_m u\,x^{m-k}) + r @@ put it back
-dq + r = dq' + r' \Rightarrow d(q - q') = r' - r @@ two answers, over a field
-\htmlClass{new}{q = q',\ \ r = r'} \quad \blacksquare @@ the left side has degree at least k unless q = q′ (degree-adds); the right side has degree less than k
+  <h2 class="sthead"><span class="stno">43c2</span>Putting the Pair Back</h2>
+  <p data-pid="88c394">Each small clock gets a number that is 1 on it and 0 on all the others. On the clock of m, N/m times its undo there is 1; on every other clock it is a multiple of that clock, so 0. Add them, each times its leftover.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the soldiers">
+N = 3 \cdot 5 \cdot 7 = 105 @@ the clocks share nothing
+35 \equiv 2 \pmod 3,\ [2]^{-1} = [2];\ \ 21 \equiv 1 \pmod 5;\ \ 15 \equiv 1 \pmod 7 @@ N/3, N/5, N/7 on their own clocks; undoes by 43b
+e_3 = 35 \cdot 2 = 70,\ \ e_5 = 21,\ \ e_7 = 15 @@ each is 1 on its clock and 0 on the other two
+x = 2 \cdot 70 + 3 \cdot 21 + 2 \cdot 15 = 233 @@ the leftovers 2, 3 and 2
+\htmlClass{new}{x \equiv 233 - 210 = 23 \pmod{105}} \quad \blacksquare @@ 23 = 3 · 7 + 2 = 5 · 4 + 3 = 7 · 3 + 2
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: one division on the clock of 5">
-p = x^3 + 2x + 4,\ \ d = 3x + 1,\ \ 3 \cdot 2 = 1 @@ on ℤ/5 the reciprocal of 3 is 2
-p - 2x^2 d = -2x^2 + 2x + 4 = 3x^2 + 2x + 4 @@ kill x³: 2x² · 3x = 6x³ = x³
-3x^2 + 2x + 4 - x\,d = x + 4,\ \ \ x + 4 - 2d = 2 @@ kill x², then x
-\htmlClass{new}{x^3 + 2x + 4 = (3x + 1)(2x^2 + x + 2) + 2} \quad \blacksquare @@ on ℤ/5, checked by multiplying out
-  </pre>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · dividing · ← → keys work</div></section>
+  <p data-pid="7d4e22">The three numbers 70, 21 and 15 serve every list of leftovers on these clocks. Any count of soldiers is 70a + 21b + 15c on the clock of 105, where a, b and c are the leftovers in threes, fives and sevens. The old book gave exactly these three numbers as a rhyme.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · putting back · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43c2.1</span><span class="ph understand">understand</span>Which single move of 9g’s division is more than adding and multiplying? <br>What does the top-undoable technique say, and why does it make q and r the only ones over a field?</li>
+      <li><span class="qid">43c2.1</span><span class="ph understand">understand</span>How is the number 70 found, and what is it on each of the clocks of 3, 5 and 7? <br>How does the footing put the leftovers 2, 3, 2 back together into 23?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43c3">
-  <h2 class="sthead"><span class="stno">43c3</span>The Value Is the Remainder</h2>
-  <p data-pid="b2af20">Divide by x − r. Its top coefficient is 1, so the top-undoable technique works over any ring that turns about.</p>
-  <p data-pid="c4fed5">Remainder-is-value technique: <b>the remainder of p on division by x − r is the constant p(r).</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the remainder-is-value technique">
-p = (x - r)\,q + c @@ the top-undoable technique: the remainder has degree 0, or is 0
-p(r) = (r - r)\,q(r) + c @@ putting r in keeps sums and products (43b3)
-\htmlClass{new}{p(r) = c} \quad \blacksquare @@ r − r = 0
+  <h2 class="sthead"><span class="stno">43c3</span>The Pairing Keeps Plus and Times</h2>
+  <p data-pid="3326cb">Two-clock technique: <b>if m and n share nothing, the reading of the remainder technique sends sums to sums and products to products, so an hour of the clock of mn is a unit exactly when both its readings are units.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-clock technique">
+[x + y] \mapsto ([x + y]_m, [x + y]_n) = ([x]_m + [y]_m, [x]_n + [y]_n) @@ carry-to-the-clock (43a2) on each clock
+[xy] \mapsto ([x]_m[y]_m, [x]_n[y]_n) @@ the same, for times
+[x][y] = [1] \Rightarrow [x]_m[y]_m = [1]_m,\ [x]_n[y]_n = [1]_n @@ a unit reads as two units
+[x]_m[a]_m = [1]_m,\ [x]_n[b]_n = [1]_n \Rightarrow [x][y] = [1] @@ y the hour reading as (a, b): onto (43c1), then one-to-one
+\htmlClass{new}{|(\mathbb Z/mn)^\times| = |(\mathbb Z/m)^\times| \cdot |(\mathbb Z/n)^\times|} \quad \blacksquare @@ the units match the pairs of units; the product rule (4k)
   </pre>
-  <p data-pid="72dbef">So 9g’s factor technique holds over every ring that turns about: r is a zero of p exactly when x − r is a factor. And 9g’s at-most-n-zeros technique holds over every cancelling ring: n zeros r₁, …, rₙ split off one at a time, and a zero s of (x − r₁)q other than r₁ is a zero of q, because (s − r₁)q(s) = 0 with s − r₁ ≠ 0. That step needs no zero products, and only that step. On ℤ/8, x² − 1 has the four zeros 1, 3, 5 and 7.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · values · ← → keys work</div></section>
+  <p data-pid="273f3c">So the clock of 12 has 2 · 2 = 4 units, two from the clock of 3 and two from the clock of 4. And an equation can be solved clock by clock. x² ≡ 1 on the clock of 15 reads as x ≡ ±1 on the clock of 3 and x ≡ ±1 on the clock of 5: four pairs, so four answers, 1, 4, 11 and 14. On a prime clock x² ≡ 1 has two. 43j turns the extra answers into a test for primes.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · pairs keep the rules · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43c3.1</span><span class="ph understand">understand</span>What does the remainder-is-value technique say? <br>Which line of the at-most-n-zeros proof needs a cancelling ring, and how does x² − 1 on ℤ/8 show it?</li>
+      <li><span class="qid">43c3.1</span><span class="ph understand">understand</span>What does the two-clock technique say about sums, products and units? <br>Why does x² ≡ 1 have four answers on the clock of 15?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43c4">
-  <h2 class="sthead"><span class="stno">43c4</span>Division Makes One Maker</h2>
-  <p data-pid="6f75a3">Over a field F, the top-undoable technique says the ideals of F[x] are as simple as those of ℤ.</p>
-  <p data-pid="bd18da">One-maker technique: <b>every ideal of F[x] other than {0} is the multiples of one polynomial: any member of least degree.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the one-maker technique">
-I \ne \{0\},\ \ g \in I,\ g \ne 0,\ \text{of least degree in } I @@ least member of a set of numbers (4h)
-p \in I,\ \ p = gq + r,\ \ \deg r < \deg g \text{ or } r = 0 @@ the top-undoable technique
-r = p - gq \in I @@ I holds multiples and sums
-r = 0 @@ a member of I other than 0 has degree at least deg g
-\htmlClass{new}{I = (g)} \quad \blacksquare @@ every p in I is gq
+  <h2 class="sthead"><span class="stno">43c4</span>Clocks That Share a Divisor</h2>
+  <p data-pid="1d3acf">Two clocks of 4 and 6 hours share 2. A reading of 3 on the clock of 4 and 1 on the clock of 6 is odd on both, and 7 gives it. A reading of 1 and 2 is odd on one and even on the other, and no integer gives it.</p>
+  <p data-pid="f83b5f">Shared-divisor technique: <b>x ≡ a (mod m) and x ≡ b (mod n) together have an answer exactly when a ≡ b (mod gcd(m, n)), and then all the answers are one hour on the clock of the least common multiple of m and n.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the shared-divisor technique">
+g = \gcd(m, n),\ \ x = a + mj = b + nk @@ suppose an answer
+g \mid m,\ g \mid n \Rightarrow g \mid a - b @@ a − b = nk − mj (divides-a-sum)
+a - b = gt,\ \ mu + nv = g @@ the other way: given; gcd-as-a-sum (43b1)
+x = a - mut @@ try it
+x - b = (a - b) - mut = gt - mut = nvt @@ mu = g − nv
+\htmlClass{new}{x \equiv a \pmod m,\ \ x \equiv b \pmod n} \quad \blacksquare @@ the uniqueness on the clock of the common multiple is the remainder technique’s one-to-one line, with gcd in place of 1, a standing question
   </pre>
-  <p data-pid="182ccd">The same lines, with 4j’s division-with-remainder technique, give every ideal of ℤ as nℤ. In ℤ[x], where 2 has no reciprocal, (2, x) is not the multiples of one member: such a member would divide 2, so be ±1 or ±2, and ±1 is not in (2, x), while x is not a multiple of 2. 43d builds on rings where the one-maker technique holds.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · one maker · ← → keys work</div></section>
+  <p data-pid="5ac921">Calendars are clocks that share divisors, and the condition is what makes some dates impossible. A rhythm of 260 days and a year of 365 share 5, so a pair of readings that disagree on the clock of 5 never comes; the pairs that can come repeat every 18 980 days, the least common multiple, about 52 years.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · shared divisors · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43c4.1</span><span class="ph understand">understand</span>What does the one-maker technique say? <br>Why is the ideal (2, x) of ℤ[x] not the multiples of one member?</li>
+      <li><span class="qid">43c4.1</span><span class="ph understand">understand</span>What does the shared-divisor technique say? <br>Why do x ≡ 1 (mod 4) and x ≡ 2 (mod 6) have no answer together?</li>
     </ol>
   </section>
 </section>
@@ -145,15 +142,15 @@ r = 0 @@ a member of I other than 0 has degree at least deg g
 <section class="class step" data-step="43c5">
   <h2 class="sthead"><span class="stno">43c5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-x^2 = 2x \cdot q + r \text{ with } q, r \in \mathbb Z[x],\ \deg r < 1\,? @@ the top of 2x · q is even; x² has top 1; it needs ½
-\deg pq = \deg p + \deg q \text{ on } \mathbb Z/6\,? @@ (2x)(3x) = 6x² = 0
-x^2 - 1 \text{ has at most two zeros on } \mathbb Z/8\,? @@ 1, 3, 5, 7: ℤ/8 has zero products
-p(r) = 0 \text{ for every } r \text{ in } F \Rightarrow p = 0\,? @@ on ℤ/2, x² + x is 0 at 0 and at 1 and is not the zero polynomial
+\mathbb Z/4 \text{ matches } \mathbb Z/2 \times \mathbb Z/2 \text{ keeping plus}\,? @@ 4 and 2 share 2; [1] + [1] ≠ [0] on the clock of 4, while every pair added to itself gives (0, 0)
+x = 2 + 3 + 2 \text{ for the soldiers}\,? @@ the leftovers are weights on 70, 21 and 15, the numbers that are 1 on one clock and 0 on the others
+x \equiv 1 \pmod 4,\ x \equiv 1 \pmod 6 \Rightarrow x \equiv 1 \pmod{24}\,? @@ the clocks share 2; the answers are one hour on the clock of 12: 1 and 13 both work
+\text{one answer, so the only answer}\,? @@ one answer on the clock of the product; every integer in that hour also answers
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43c5.1</span><span class="ph understand">understand</span>Why can x² not be divided by 2x in ℤ[x]? <br>Why is x² + x not the zero polynomial on ℤ/2, though both its values are 0?</li>
+      <li><span class="qid">43c5.1</span><span class="ph understand">understand</span>Why does the clock of 4 not match the pairs from the clocks of 2 and 2? <br>Why do x ≡ 1 (mod 4) and x ≡ 1 (mod 6) not give x ≡ 1 (mod 24)?</li>
     </ol>
   </section>
 </section>
@@ -162,22 +159,22 @@ p(r) = 0 \text{ for every } r \text{ in } F \Rightarrow p = 0\,? @@ on ℤ/2, x�
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">43c.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x^4 + 1,\ \ x^2 + 1 \text{ on } \mathbb Z/3"></span></span>Divide x⁴ + 1 by x² + 1 on ℤ/3, and find the remainder. <br>Then find every zero of x⁴ + 1 on ℤ/3, ℤ/5 and ℤ/17, and check each against the factor technique.</div>
-  <div class="chq"><span class="chid">43c.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x^p - x \text{ on } \mathbb Z/p"></span></span>How many zeros has xᵖ − x on ℤ/p? <br>What does that say about its straight factors, and about how far the values of a polynomial on a finite field fix its coefficients? Compare 9g’s same-coefficients technique.</div>
-  <div class="chq"><span class="chid">43c.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="R \text{ a ring that turns about, } R[x] \text{ has division by every } d \ne 0"></span></span>The top-undoable technique gives division over a field. Turn it round: if R[x] has division with remainder by every d other than 0, must R be a field? <br>Divide the constant 1 by a constant d, and read off what the remainder must be.</div>
-  <div class="chq"><span class="chid">43c.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">5h: on the clock of 8, how many numbers square to 1?</span></span>Rung 5 counted the numbers that square to 1 on the clock of 8 and found more than two. <br>How many are there on the clock of 15, and of 16? Which clocks n have exactly two? Is the count a fact about polynomials, or about the clock?</div>
+  <div class="chq"><span class="chid">43c.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x \equiv 1 \pmod 7,\ \ x \equiv 2 \pmod{11},\ \ x \equiv 3 \pmod{13}"></span></span>Build the three numbers that are 1 on one of these clocks and 0 on the other two, and find x between 0 and 1000. <br>7 · 11 · 13 = 1001. Use it to find the remainder of 123 456 by 1001 by reading 123 456 on the three clocks.</div>
+  <div class="chq"><span class="chid">43c.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x \equiv a \pmod m,\ \ x \equiv b \pmod n,\ \ \gcd(m, n) = g"></span></span>Finish the shared-divisor technique: prove that two answers differ by a multiple of the least common multiple of m and n, and that mn/g is that multiple. <br>What does the technique say when m = n?</div>
+  <div class="chq"><span class="chid">43c.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\mathbb Z/mn \leftrightarrow \mathbb Z/m \times \mathbb Z/n"></span></span>Suppose a matching of ℤ/mn with the pairs keeps plus. Prove that m and n share nothing. <br>Hint held back: which hour of the clock of mn needs the most additions of itself to reach [0], and how many does a pair ever need?</div>
+  <div class="chq"><span class="chid">43c.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">5·nav: dates carried like digits, on clocks of 7, 12, 365</span></span>A date was read on 5·nav as several clocks carried like digits: weekday, month, year. A rhythm of 260 days and one of 365 run side by side in one calendar of Central America. <br>Is a date in that calendar a number, a pair of hours, or a name for an hour on the clock of 18 980? How many different pairs can occur, and why not 260 · 365? If a third rhythm of 9 days is added, how long until all three repeat together?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r43b.html">← 43b · ideals and quotients</a><a href="r43d.html">43d · unique factoring →</a></nav>
+<nav class="nextrung"><a href="r43b.html">← 43b · undoing on a clock</a><a href="r43d.html">43d · powers cycle →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The degree-adds technique says that a polynomial ring over an integral domain is an integral domain, with units the units of R. The top-undoable technique is the division algorithm for monic divisors, and over a field F the statement that F[x] is a Euclidean domain. The remainder-is-value technique is the remainder theorem, and the factor technique is the factor theorem. The one-maker technique says F[x] is a principal ideal domain; ℤ[x] is not one.</p>
+  <p>The remainder technique is the Chinese remainder theorem, and the two-clock technique the ring isomorphism ℤ/mnℤ ≅ ℤ/mℤ × ℤ/nℤ for coprime m and n, with its consequence φ(mn) = φ(m)φ(n) for Euler’s φ (43d). The shared-divisor technique is the general Chinese remainder theorem. The 260-day count and the 365-day year together are the Calendar Round of the Maya, 52 years long.</p>
   <h3>Who said it first</h3>
-  <p>Simon Stevin divided polynomials and took their greatest common divisor by repeated division in 1585. Carl Friedrich Gauss worked with polynomials on prime clocks in an unpublished eighth section of his book of 1801. Évariste Galois wrote with them in 1830, and Richard Dedekind made the comparison of polynomials with whole numbers a theme in 1857.</p>
+  <p>The soldiers’ puzzle is in the Sunzi Suanjing, a Chinese book of the third to fifth century. Qin Jiushao gave a general method in 1247. Leonhard Euler and Carl Friedrich Gauss proved it in modern form, Gauss in the Disquisitiones (1801). The rhyme with 70, 21 and 15 is from the Ming dynasty.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“p has degree 2, so it has at most two zeros, by 9g.” Not allowed as it stands: 9g’s technique was proved for real coefficients, and its proof spends a step that needs no zero products. Over a cancelling ring the citation is good. Over ℤ/8 the claim is false.</p>
+  <p>“The clock of 4 has 4 hours and the pairs on the clocks of 2 and 2 are 4 in number. A set of 4 matches a set of 4, so the remainder technique applies.” Not allowed: any two sets of 4 match, but the technique is about the reading, which must also keep plus and times. The reading [x] ↦ ([x], [x]) on the clocks of 2 is not one-to-one: [0] and [2] both read as ([0], [0]).</p>
 </section>
 
 </div>
@@ -192,25 +189,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'tops',t:R`a_m b_n`,n:`The top of the product.`},
-  {k:'ember',kl:'no zero products',t:R`a_m b_n \ne 0`,n:`Cancelling R.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\deg pq = \deg p + \deg q}`,n:`Degrees add.`}
-],{title:'The slides · degrees · ← → keys work'});
+  {k:'ember',kl:'read',t:R`[x] \mapsto ([x]_m, [x]_n)`,n:`Both small clocks.`},
+  {k:'ember',kl:'one-to-one',t:R`m, n \mid x - y \Rightarrow mn \mid x - y`,n:`Sharing nothing.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\mathbb Z/mn \leftrightarrow \mathbb Z/m \times \mathbb Z/n}`,n:`A matching.`}
+],{title:'The slides · several clocks · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'kill the top',t:R`p - a_m u\, x^{m-k} d`,n:`One reciprocal.`},
-  {k:'ember',kl:'repeat',t:R`\deg r < \deg d`,n:`Strong induction.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{p = dq + r}`,n:`Over any field.`}
-],{title:'The slides · dividing · ← → keys work'});
+  {k:'ember',kl:'one on its clock',t:R`e_3 = 70,\ e_5 = 21,\ e_7 = 15`,n:`Undoes of N/m.`},
+  {k:'ember',kl:'combine',t:R`2 \cdot 70 + 3 \cdot 21 + 2 \cdot 15`,n:`Leftovers as weights.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{x \equiv 23 \pmod{105}}`,n:`The soldiers.`}
+],{title:'The slides · putting back · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'divide',t:R`p = (x - r)q + c`,n:`Top coefficient 1.`},
-  {k:'ember',kl:'put r in',t:R`p(r) = c`,n:`The remainder.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{x - r \mid p \iff p(r) = 0}`,n:`Any ring that turns about.`}
-],{title:'The slides · values · ← → keys work'});
+  {k:'ember',kl:'sums',t:R`[x + y] \mapsto (\ldots + \ldots,\ \ldots + \ldots)`,n:`Clock by clock.`},
+  {k:'ember',kl:'units',t:R`\text{unit} \iff \text{both readings units}`,n:`Undoes put back.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|(\mathbb Z/12)^\times| = 2 \cdot 2}`,n:`Counts multiply.`}
+],{title:'The slides · pairs keep the rules · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'least degree',t:R`g \in I`,n:`Exists.`},
-  {k:'ember',kl:'remainder',t:R`r = p - gq \in I`,n:`Too small to be anything but 0.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{I = (g)}`,n:`One maker.`}
-],{title:'The slides · one maker · ← → keys work'});
+  {k:'ember',kl:'agree',t:R`a \equiv b \pmod{\gcd(m, n)}`,n:`Needed and enough.`},
+  {k:'ember',kl:'build',t:R`x = a - mut`,n:`From mu + nv = g.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{x \equiv 7 \pmod{12}}`,n:`From 3 mod 4 and 1 mod 6.`}
+],{title:'The slides · shared divisors · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

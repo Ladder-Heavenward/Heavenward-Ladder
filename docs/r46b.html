@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Symmetric in the Roots</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r46a.html">← 46a cubics and quartics</a><a href="r46c.html">next: 46c the symmetries of the roots →</a></p>
+  <div class="tags"><span class="tag proof">46b · proof</span></div>
+  <h1>Symmetric in the Roots</h1>
+  <p data-pid="8c4f8c">The coefficients of a polynomial are made from its roots, and made in a way that does not care which root is called first. Shuffle the names of the roots and the coefficients stay put. This step proves the converse, which is much stronger: anything built from the roots by adding and multiplying, if it stays put under every shuffle of the roots, is already built from the coefficients. So a quantity like the sum of the squares of the roots can be found without finding a single root. The proof is a recipe that strips off the largest term again and again, and it stops for the reason the recipes of rung 4 stop. The step ends with the number that tells whether two roots meet, which turns out to be the number under the square root in the cubic formula.</p>
+  <p class="gesture" data-pid="eab456">The coefficients are the elementary symmetric sums of the roots, with signs. Every polynomial in the roots that every shuffle leaves alone is a polynomial in those sums. So a symmetric expression in the roots of a rational polynomial is rational, and the discriminant, the product of the squared differences, is read off the coefficients.</p>
+</header>
+
+<section class="class step" data-step="46b1">
+  <h2 class="sthead"><span class="stno">46b1</span>Coefficients From Roots</h2>
+  <p data-pid="df727f">By 25’s splitting, a polynomial with top coefficient 1 and degree n is (x − r₁)(x − r₂)⋯(x − rₙ) for roots r₁, …, rₙ in ℂ. Write e₁ = r₁ + ⋯ + rₙ for the sum of the roots, e₂ for the sum of the products of two different roots, and on to eₙ = r₁r₂⋯rₙ. These are the <i>elementary symmetric sums</i>.</p>
+  <p data-pid="8228f0">Roots-to-coefficients technique: <b>(x − r₁)⋯(x − rₙ) = xⁿ − e₁xⁿ⁻¹ + e₂xⁿ⁻² − ⋯ + (−1)ⁿeₙ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the roots-to-coefficients technique">
+n = 1:\ \ x - r_1 = x - e_1 @@ the start
+(x - r_1)\cdots(x - r_n)(x - r_{n+1}) @@ suppose it for n roots, and multiply by one more
+\text{the } x^{n+1-k} \text{ term: } (-1)^k\big(e_k + r_{n+1}e_{k-1}\big) @@ from x times the kth term, and −rₙ₊₁ times the (k − 1)th
+e_k + r_{n+1}e_{k-1} = e_k \text{ of the } n + 1 \text{ roots} @@ the k-products without rₙ₊₁, then those with it
+\htmlClass{new}{\text{the sign pattern holds for } n + 1} \quad \blacksquare @@ induction (4c)
+  </pre>
+  <p data-pid="38c0ce">For the cubic y³ + py + q of 46a, e₁ = 0, e₂ = p and e₃ = −q. Each eₖ is unchanged by every shuffle of the roots: a shuffle of r₁, …, rₙ only reorders the terms of each sum.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · coefficients · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">46b1.1</span><span class="ph understand">understand</span>What are the elementary symmetric sums of n roots? <br>What does the roots-to-coefficients technique say about the cubic y³ + py + q?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="46b2">
+  <h2 class="sthead"><span class="stno">46b2</span>Every Symmetric Polynomial Is One in the Sums</h2>
+  <p data-pid="5e3564">A polynomial in letters x₁, …, xₙ is <i>symmetric</i> when every shuffle of the letters (19a) leaves it the same polynomial. Order its terms like a dictionary: x₁ᵃ¹⋯xₙᵃⁿ comes before x₁ᵇ¹⋯xₙᵇⁿ when, at the first place where the powers differ, a is the larger. The first term of a symmetric polynomial has a₁ ≥ a₂ ≥ ⋯ ≥ aₙ, since otherwise the shuffle that swaps two letters would give a term earlier still.</p>
+  <p data-pid="baa34c">Symmetric-is-coefficients technique: <b>every symmetric polynomial is a polynomial in e₁, …, eₙ, and its coefficients stay among whole numbers when the symmetric polynomial’s do.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the symmetric-is-coefficients technique">
+\text{first term } c\,x_1^{a_1}\cdots x_n^{a_n},\ \ a_1 \ge \cdots \ge a_n @@ the dictionary order, and symmetry
+e_1^{a_1 - a_2} e_2^{a_2 - a_3} \cdots e_n^{a_n} \text{ has first term } x_1^{a_1} \cdots x_n^{a_n} @@ the first term of eₖ is x₁⋯xₖ, and first terms multiply
+s' = s - c\,e_1^{a_1 - a_2} \cdots e_n^{a_n} \text{ is symmetric, with a later first term} @@ the first terms cancel; the eₖ are symmetric
+\text{terms of the same total degree are finitely many} @@ each power is at most the degree
+\htmlClass{new}{\text{the recipe stops, and } s \text{ is the sum of what it subtracted}} \quad \blacksquare @@ the falling-measure technique (4l): the first term moves later each time
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the recipe, run once">
+s = x_1^2 + x_2^2 + x_3^2:\ \ \text{first term } x_1^2,\ a = (2, 0, 0) @@ symmetric
+s - e_1^2 = -2(x_1x_2 + x_1x_3 + x_2x_3) = -2e_2 @@ e₁² = s + 2e₂
+\htmlClass{new}{x_1^2 + x_2^2 + x_3^2 = e_1^2 - 2e_2} \quad \blacksquare @@ the next first term was x₁x₂, of shape (1, 1, 0)
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · symmetric · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">46b2.1</span><span class="ph understand">understand</span>When is a polynomial in x₁, …, xₙ symmetric? <br>What does the symmetric-is-coefficients technique say, and why does its recipe stop?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="46b3">
+  <h2 class="sthead"><span class="stno">46b3</span>A Symmetric Quantity Is Rational</h2>
+  <p data-pid="cdad79">Symmetric-is-rational technique: <b>if f has rational coefficients and top coefficient 1, every symmetric polynomial with rational coefficients, evaluated at the roots of f, is a rational number.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the symmetric-is-rational technique">
+s(r_1, \ldots, r_n) = P(e_1, \ldots, e_n) @@ the symmetric-is-coefficients technique, P with rational coefficients
+e_k = (-1)^k \cdot (\text{the coefficient of } x^{n-k}) @@ the roots-to-coefficients technique
+\htmlClass{new}{s(r_1, \ldots, r_n) \in \mathbb Q} \quad \blacksquare @@ a polynomial with rational coefficients at rational numbers
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the cubes of the roots of x³ − 2">
+x^3 - 2:\ \ e_1 = 0,\ e_2 = 0,\ e_3 = 2 @@ roots-to-coefficients
+x_1^3 + x_2^3 + x_3^3 = e_1^3 - 3e_1e_2 + 3e_3 @@ the recipe: first term x₁³, then x₁²x₂, then x₁x₂x₃
+\htmlClass{new}{(\sqrt[3]2)^3 + (\omega\sqrt[3]2)^3 + (\omega^2\sqrt[3]2)^3 = 6} \quad \blacksquare @@ each cube is 2
+  </pre>
+  <p data-pid="433087">A quantity in the roots that is not symmetric need not be rational: ∛2 alone is not. The rest of the rung is built on that difference. A quantity unchanged by some shuffles and not by others lives in a field between ℚ and the roots.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · rational · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">46b3.1</span><span class="ph understand">understand</span>What does the symmetric-is-rational technique say? <br>Why is the sum of the cubes of the roots of x³ − 2 rational though no root is?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="46b4">
+  <h2 class="sthead"><span class="stno">46b4</span>Whether Two Roots Meet</h2>
+  <p data-pid="8a9c67">The product of the squared differences of the roots, Δ = ∏ (rᵢ − rⱼ)² over the pairs i < j, is symmetric: a shuffle reorders the pairs and changes only the signs of the differences, which the squares remove. It is 0 exactly when two roots meet. Its accepted name is the discriminant.</p>
+  <p data-pid="dfd07b">Cubic-discriminant technique: <b>the roots of y³ + py + q have Δ = −4p³ − 27q², which is −108 times the D of 46a.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the cubic-discriminant technique">
+V = \begin{pmatrix} 1 & 1 & 1 \\ r_1 & r_2 & r_3 \\ r_1^2 & r_2^2 & r_3^2 \end{pmatrix},\ \ \det V = (r_2 - r_1)(r_3 - r_1)(r_3 - r_2) @@ the grid of powers; its determinant is 0 when two columns agree (27e), and has degree 3
+\Delta = (\det V)^2 = \det(V V^{\mathsf T}) = \det\begin{pmatrix} 3 & s_1 & s_2 \\ s_1 & s_2 & s_3 \\ s_2 & s_3 & s_4 \end{pmatrix} @@ det-product (27e); entry (i, j) of VVᵀ is the sum of the (i + j − 2)th powers, sₖ
+s_1 = 0,\ s_2 = -2p,\ s_3 = -3q,\ s_4 = 2p^2 @@ symmetric-is-coefficients: e₁ = 0, e₂ = p, e₃ = −q; and rᵢ³ = −prᵢ − q
+\Delta = 3(s_2s_4 - s_3^2) - s_2^3 = 3(-4p^3 - 9q^2) + 8p^3 @@ the cofactors along the first row, with s₁ = 0
+\htmlClass{new}{\Delta = -4p^3 - 27q^2 = -108\,D} \quad \blacksquare @@ D = q²/4 + p³/27
+  </pre>
+  <p data-pid="82ebbd">So 46a’s three-real-roots technique reads: D &lt; 0 exactly when Δ &gt; 0. For y³ − 3y − 1, Δ = 108 − 27 = 81 = 9². That Δ is the square of a rational number will matter on <a href="r46k.html">46k</a>.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · discriminant · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">46b4.1</span><span class="ph understand">understand</span>What is the discriminant of a polynomial, and why is it symmetric? <br>What does the cubic-discriminant technique say, and how is it tied to the D of 46a?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="46b5">
+  <h2 class="sthead"><span class="stno">46b5</span>Illegal Moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+x_1^2x_2 + x_2^2x_3 + x_3^2x_1 \text{ is symmetric}\,? @@ the swap of x₁ and x₂ gives x₂²x₁ + x₁²x₃ + x₃²x₂, a different polynomial; it is kept only by the turns of three
+(r_1 - r_2)(r_1 - r_3)(r_2 - r_3) \text{ is symmetric, so rational}\,? @@ a swap of two roots changes its sign; only its square is symmetric
+x^3 - 2 \text{ has } e_3 = -2\,? @@ the constant is (−1)³e₃, so e₃ = 2
+\text{the recipe may subtract } e_1^{a_1}\cdots e_n^{a_n}\,? @@ its first term would be x₁ to the power a₁ + ⋯ + aₙ, which is not the first term of s
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">46b5.1</span><span class="ph understand">understand</span>Why is x₁²x₂ + x₂²x₃ + x₃²x₁ not symmetric? <br>Why is the product of the differences of the roots not rational in general, though its square is?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">46b.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x_1^3 + x_2^3 + x_3^3"></span></span>Build its expression in e₁, e₂, e₃ by the recipe of the symmetric-is-coefficients technique, writing each first term you strip. <br>Check it at the roots 1, 2, 3.</div>
+  <div class="chq"><span class="chid">46b.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="x^2 + bx + c"></span></span>Find the discriminant of the quadratic from the cubic-discriminant technique’s method, with a grid of two rows. <br>Where have you seen the result before, and what does Δ = 0 mean for the quadratic formula?</div>
+  <div class="chq"><span class="chid">46b.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="x_1^2x_2 + x_2^2x_3 + x_3^2x_1"></span></span>The symmetric-is-coefficients technique needs every shuffle. This polynomial is kept by the turns of three and not by the swaps. Is it still a polynomial in e₁, e₂, e₃? <br>Find what its sum with the swapped polynomial x₂²x₁ + x₁²x₃ + x₃²x₂ is, and what their difference squared is, in the sums.</div>
+  <div class="chq"><span class="chid">46b.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="y^3 - 3y - 1"></span></span>Reroute the discriminant without the grid: find the three roots to four places by 46a3 and multiply the squared differences directly. <br>How close is the product to 81, and why must it be exactly 81?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r46a.html">← 46a · cubics and quartics</a><a href="r46c.html">46c · the symmetries of the roots →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The roots-to-coefficients technique is Vieta’s formulas. The symmetric-is-coefficients technique is the fundamental theorem of symmetric polynomials; the dictionary order is the lexicographic order on monomials. The sums of powers sₖ are the power sums, and the identities that tie them to the eₖ are Newton’s identities. The grid V is the Vandermonde matrix and its determinant the Vandermonde determinant. Δ is the discriminant.</p>
+  <h3>Who said it first</h3>
+  <p>François Viète wrote the coefficients of low degree as sums of roots around 1591, and Albert Girard stated them for every degree in 1629. Isaac Newton gave the identities for the sums of powers in notes of the 1660s, printed in his Arithmetica Universalis (1707). Edward Waring (1770) and Joseph-Louis Lagrange (1770–71) used the symmetric-is-coefficients technique on equations, and Carl Friedrich Gauss gave a proof by the dictionary order in 1816. Alexandre-Théophile Vandermonde’s name is on the grid, from work of 1771.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The sum of the cubes of the roots of x³ − 2 is (e₁)³ = 0, since cubing a sum cubes the parts.” Not allowed: (r₁ + r₂ + r₃)³ has cross terms. The recipe of the symmetric-is-coefficients technique gives e₁³ − 3e₁e₂ + 3e₃ = 6.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'roots',t:R`(x - r_1)(x - r_2)(x - r_3)`,n:`Three roots.`},
+  {k:'ember',kl:'sums',t:R`e_1,\ e_2,\ e_3`,n:`Sum, pairs, product.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{x^3 - e_1x^2 + e_2x - e_3}`,n:`Signs alternate.`}
+],{title:'The slides · coefficients · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'first term',t:R`x_1^{a_1}\cdots x_n^{a_n},\ a_1 \ge \cdots \ge a_n`,n:`Dictionary order.`},
+  {k:'ember',kl:'strip',t:R`e_1^{a_1 - a_2}\cdots e_n^{a_n}`,n:`Same first term.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{s = \text{a polynomial in } e_1, \ldots, e_n}`,n:`The recipe stops.`}
+],{title:'The slides · symmetric · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'symmetric',t:R`x_1^3 + x_2^3 + x_3^3`,n:`Every shuffle keeps it.`},
+  {k:'ember',kl:'sums',t:R`e_1^3 - 3e_1e_2 + 3e_3`,n:`The recipe.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{= 6}`,n:`No root needed.`}
+],{title:'The slides · rational · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'differences',t:R`\Delta = \textstyle\prod_{i<j}(r_i - r_j)^2`,n:`Squares remove the signs.`},
+  {k:'ember',kl:'grid',t:R`\Delta = \det(VV^{\mathsf T})`,n:`Sums of powers.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\Delta = -4p^3 - 27q^2}`,n:`From the coefficients.`}
+],{title:'The slides · discriminant · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

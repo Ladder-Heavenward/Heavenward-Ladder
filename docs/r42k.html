@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Continued Fractions</title>
+<title>Shortest Paths and Greedy Choices</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,126 +48,115 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r42j.html">← 42j is it prime?</a><a href="r42l.html">next: 42l discrete logarithms →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r42j.html">← 42j disorder is impossible</a><a href="r42l.html">next: 42l best from best pieces →</a></p>
   <div class="tags"><span class="tag tech">42k · technique</span></div>
-  <h1>Continued Fractions</h1>
-  <p data-pid="2b4c3a">Run the oldest algorithm on a fraction and write down only the quotients. The fraction comes back as a whole number plus one over a whole number plus one over another, a staircase of fractions inside fractions. Do the same to a number that is no fraction, the root of two, and the staircase never ends, and its steps repeat: one, then two, two, two, for ever. Cut the staircase short and you get fractions, and they are rung five’s near misses for the root of two: three halves, seven fifths, seventeen twelfths. They come closer than any fraction with a smaller bottom can. Cut the staircase for pi and you get twenty two sevenths, rung five’s first guess, and then three hundred and fifty five over one hundred and thirteen, good to seven places. Cut it for how many octaves make a twelfth on a string and you get the reason a piano has twelve keys to the octave. And the same staircase for the root of a whole number finds the whole numbers whose squares differ by one times that number, which a great mathematician once set as a challenge to the English.</p>
-  <p class="gesture" data-pid="d4e8d7">The quotients of the gcd algorithm write a number as a staircase of fractions. Cut it short and the fractions, the convergents, obey a two-term recursion, and neighbours cross-multiply to differ by one. Each convergent is within one over its bottom squared. A repeating staircase is a root of a quadratic, and the convergents of the root of n find x and y with x squared minus n y squared equal to one.</p>
+  <h1>Shortest Paths and Greedy Choices</h1>
+  <p data-pid="18c983">Rung 39 found that taking the best-looking step at every moment, the greedy choice, sometimes gives the best answer and sometimes a poor one, and that a proof is the only way to tell which. On graphs there are two famous places where greed is safe. One is finding the shortest routes from a starting town to every other: settle the nearest town not yet settled, again and again, and every distance settled is final. The other is joining every town by the cheapest network of roads: take the cheapest road that does not close a loop, again and again, and the result is cheapest. Both proofs are exchanges: if the greedy choice were wrong, a better answer could be swapped into a cheaper one. And both fail in a clear place, the first when a road can have negative length, the second when the network must be a single tour. Along the way the step counts the cost of a recipe in a new way, by charging each step to a link or a dot and adding up the charges, so that a dot with many links costs no more in total than the links it has.</p>
+  <p class="gesture" data-pid="21dace">Walk out from a dot in layers to find every distance in links, at a cost of each link looked at twice. With lengths at least 0, settle the nearest unsettled dot; its distance is final. Taking the cheapest link that closes no cycle builds a cheapest spanning tree, because the cheapest link across any split belongs to some cheapest tree. Merging pieces by relabelling the smaller one costs at most n log₂ n in all.</p>
 </header>
 
 <section class="class step" data-step="42k1">
-  <h2 class="sthead"><span class="stno">42k1</span>The gcd Algorithm, Written as a Fraction</h2>
-  <p data-pid="32a469">4j12 ran on 1071 and 462: 1071 = 462 · 2 + 147, 462 = 147 · 3 + 21, 147 = 21 · 7. Divide each line by its divisor and fold: 1071/462 = 2 + 147/462 = 2 + 1/(462/147) = 2 + 1/(3 + 1/7). From here on, [a₀; a₁, …, a_k] names a₀ + 1/(a₁ + 1/(⋯ + 1/a_k)), the <i>staircase</i> with steps a₀, a₁, …, a_k. Cut after a_j, it gives the <i>convergent</i> p_j/q_j. So 1071/462 = [2; 3, 7], with convergents 2, 7/3 and 51/22.</p>
-  <p data-pid="de84b1">Neighbour technique: <b>with p₋₁ = 1, q₋₁ = 0, p₀ = a₀ and q₀ = 1, the convergents obey p_j = a_j p_(j−1) + p_(j−2) and q_j = a_j q_(j−1) + q_(j−2), and neighbours cross-multiply to differ by one: p_j q_(j−1) − p_(j−1) q_j = (−1)^(j−1).</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the neighbour technique">
-[a_0; a_1] = a_0 + \tfrac1{a_1} = \tfrac{a_1 a_0 + 1}{a_1} @@ the recursion for j = 1, with p₋₁ = 1, q₋₁ = 0
-[a_0; \ldots, a_j, a_{j+1}] = [a_0; \ldots, a_j + \tfrac1{a_{j+1}}] @@ a last step split in two
-\text{so } p_{j+1}/q_{j+1} = \tfrac{(a_j + 1/a_{j+1})p_{j-1} + p_{j-2}}{(a_j + 1/a_{j+1})q_{j-1} + q_{j-2}} = \tfrac{a_{j+1}p_j + p_{j-1}}{a_{j+1}q_j + q_{j-1}} @@ induction on j: the recursion holds for any real last step; multiply top and bottom by a_{j+1}
-p_{j+1}q_j - p_j q_{j+1} = (a_{j+1}p_j + p_{j-1})q_j - p_j(a_{j+1}q_j + q_{j-1}) @@ the recursion
-\htmlClass{new}{= -(p_j q_{j-1} - p_{j-1}q_j) = (-1)^{j}} \quad \blacksquare @@ the a_{j+1} terms cancel; induction from p₀q₋₁ − p₋₁q₀ = −1
+  <h2 class="sthead"><span class="stno">42k1</span>Layer by Layer</h2>
+  <p data-pid="62e846">39n’s queue holds things in the order they came, first in, first out. Put a start dot r in it, at distance 0. Then, while the queue is not empty, take out its first dot u, and put in every neighbour of u not yet seen, each at u’s distance plus 1.</p>
+  <p data-pid="3e84e3">Layer-by-layer technique: <b>walking out from r in this way gives every dot its distance from r in links, and looks at each link at most twice.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the layer-by-layer technique">
+\text{the queue holds the dots at distance } k \text{, then some at } k + 1 \text{, never others} @@ induction on the moves: each dot taken out at k adds only k + 1
+\text{a dot at distance } k + 1 \text{ has a neighbour at distance } k @@ the last link of a least walk (42a2)
+\text{it is seen when that neighbour, or an earlier one at } k \text{, is taken out} @@ so it gets k + 1, and no less
+\text{each dot enters the queue once; its links are looked at when it leaves} @@ seen dots are not put in again
+\htmlClass{new}{\text{cost: } |V| \text{ dots and } \textstyle\sum_u d(u) = 2|E| \text{ link looks}} \quad \blacksquare @@ the ends-count technique
   </pre>
-  <p data-pid="df5f38">So every convergent is in lowest terms, since any common divisor of p_j and q_j divides ±1. And neighbours differ by 1/(q_j q_(j−1)): 7/3 − 2 = 1/3, and 51/22 − 7/3 = 1/66.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · staircases · ← → keys work</div></section>
+  <p data-pid="310123">The cost was counted by charging each look to a link, not to a move of the recipe. One move may look at a thousand links, but no link is looked at more than twice over the whole run. Counting by charges is the accepted name’s <i>amortized cost</i>, from the Old French <i>amortir</i>, to deaden: the large moves are paid for by the many small ones. The same walk settles 42a’s odd-cycle question in one pass.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · layers · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">42k1.1</span><span class="ph understand">understand</span>What are the staircase [a₀; a₁, …, a_k] and its convergents? <br>What does the neighbour technique say, and why is every convergent in lowest terms?</li>
+      <li><span class="qid">42k1.1</span><span class="ph understand">understand</span>What does the layer-by-layer technique say? <br>Why is its cost |V| plus 2|E|, even when one dot has very many links?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42k2">
-  <h2 class="sthead"><span class="stno">42k2</span>Staircases That Never End</h2>
-  <p data-pid="b1b53e">For a real x, take a₀ = ⌊x⌋; if x is not a₀, take x₁ = 1/(x − a₀), which is above 1, and go on with x₁. For a fraction this is the gcd algorithm, and it stops. For a number that is no fraction it never stops, since a stop would write x as a fraction.</p>
-  <pre class="lines" data-k="ember" data-label="this step: three endless staircases">
-\sqrt2 = 1 + (\sqrt2 - 1),\ \ \tfrac{1}{\sqrt2 - 1} = \sqrt2 + 1 = 2 + (\sqrt2 - 1) @@ difference of squares: (√2 − 1)(√2 + 1) = 1
-\sqrt2 = [1; 2, 2, 2, \ldots]:\ \ 1,\ \tfrac32,\ \tfrac75,\ \tfrac{17}{12},\ \tfrac{41}{29},\ \ldots @@ the step repeats; the recursion (42k1)
-\tfrac{1+\sqrt5}{2} = [1; 1, 1, 1, \ldots]:\ \ 1,\ 2,\ \tfrac32,\ \tfrac53,\ \tfrac85,\ \ldots @@ x = 1 + 1/x (5g): the step is its own staircase
-\pi = [3; 7, 15, 1, 292, \ldots]:\ \ 3,\ \tfrac{22}7,\ \tfrac{333}{106},\ \tfrac{355}{113},\ \ldots @@ from π’s decimal; the steps never repeat, as far as anyone knows
-\htmlClass{new}{\tfrac{22}{7} - \pi \approx 0.00126,\ \ \tfrac{355}{113} - \pi \approx 2.7 \times 10^{-7}} \quad \blacksquare @@ the large step 292 makes the convergent before it very good
+  <h2 class="sthead"><span class="stno">42k2</span>The Nearest First</h2>
+  <p data-pid="72f95f">Now each link {u, w} has a length ℓ(u, w) ≥ 0, and the distance is the least total length of a path. Keep a <i>settled</i> set, at first {r} with distance 0; write dist(u) for the distance of a settled dot u. Each unsettled dot w has a <i>tentative distance</i> t(w): the least dist(u) + ℓ(u, w) over settled u, or no value. At each move, settle the unsettled dot with the least tentative distance.</p>
+  <p data-pid="7736bc">Nearest-first technique: <b>if every length is at least 0, the tentative distance of a dot, when it is settled, is its distance from r.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the nearest-first technique">
+w \text{ is settled at } t(w) \text{; suppose a path from } r \text{ to } w \text{ is shorter} @@ settled distances so far are right (induction on the moves)
+\text{the path leaves the settled set first along a link } \{u, x\},\ u \text{ settled} @@ r is settled and w is not
+\text{length of the path} \ge \mathrm{dist}(u) + \ell(u, x) \ge t(x) @@ the rest of the path has length at least 0
+t(x) \ge t(w) @@ w had the least tentative distance
+\htmlClass{new}{\bot:\ \text{no path is shorter than } t(w)} \quad \blacksquare @@ 
   </pre>
-  <p data-pid="1ff009">The convergents of √2 are 5f’s near misses, and 8·cb5’s how-near technique measured them. 7f’s climb (p, q) ↦ (p + 2q, p + q) is the step from each convergent of √2 to the next: 3/2 to 7/5 to 17/12. The golden number’s convergents are ratios of neighbours in the list 1, 1, 2, 3, 5, 8, …, and every step is 1, the smallest a step can be. 5b named 22/7 as π’s first guess; it is the first convergent.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · endless · ← → keys work</div></section>
+  <pre class="lines" data-k="ember" data-label="this page: the nearest first, from Seattle">
+\text{about: Seattle–Tacoma 55, Tacoma–Olympia 50, Olympia–Portland 185, Seattle–Ellensburg 175,} @@ road kilometres, rounded
+\text{Ellensburg–Yakima 55, Yakima–Portland 300} @@ the last by the Columbia gorge
+\text{settled in order: Seattle 0, Tacoma 55, Olympia 105, Ellensburg 175, Yakima 230} @@ the least tentative distance each time
+\htmlClass{new}{\text{Portland: } \min(105 + 185,\ 230 + 300) = 290} \quad \blacksquare @@ settled last
+  </pre>
+  <p data-pid="8416c9">The proof used ℓ ≥ 0 in its third line. With one-way links r to x of length 2, r to y of length 3 and y to x of length −2, x is settled at 2 and the path through y has length 1. 42l finds distances when some lengths are negative, at a higher cost.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · nearest first · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42k2.1</span><span class="ph understand">understand</span>How are the steps of an endless staircase found, and why does it never end for a number that is no fraction? <br>Why does π’s convergent 355/113 come so close?</li>
+      <li><span class="qid">42k2.1</span><span class="ph understand">understand</span>What does the nearest-first technique say? <br>Which line of its proof needs every length to be at least 0, and what goes wrong without it?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42k3">
-  <h2 class="sthead"><span class="stno">42k3</span>How Close a Convergent Comes</h2>
-  <p data-pid="bee124">Convergent-bound technique: <b>if x is no fraction, its convergents alternate below and above x, and |x − p_j/q_j| &lt; 1/(q_j q_(j+1)) ≤ 1/q_j².</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the convergent-bound technique">
-x = [a_0; \ldots, a_j, x_{j+1}] = \tfrac{x_{j+1}p_j + p_{j-1}}{x_{j+1}q_j + q_{j-1}} @@ the recursion with the real last step x_{j+1} (42k1)
-x - \tfrac{p_j}{q_j} = \tfrac{p_{j-1}q_j - p_j q_{j-1}}{q_j(x_{j+1}q_j + q_{j-1})} = \tfrac{(-1)^{j}}{q_j(x_{j+1}q_j + q_{j-1})} @@ common bottom; the neighbour technique
-x_{j+1} \gt a_{j+1} \Rightarrow x_{j+1}q_j + q_{j-1} \gt q_{j+1} @@ x_{j+1} is a_{j+1} plus a positive part
-\htmlClass{new}{|x - p_j/q_j| \lt \tfrac{1}{q_j q_{j+1}} \le \tfrac1{q_j^2}} \quad \blacksquare @@ the sign (−1)ʲ alternates; q_{j+1} ≥ q_j
+  <h2 class="sthead"><span class="stno">42k3</span>The Cheapest Tree, Greedily</h2>
+  <p data-pid="8b140a">Each link now has a cost, and a cheapest spanning tree is one whose costs add to the least. A <i>split</i> of the dots is a set S with something in it and something outside; a link <i>crosses</i> it when one end is in S and one out.</p>
+  <p data-pid="03ca66">Cheapest-across technique: <b>for every split, a cheapest link crossing it belongs to some cheapest spanning tree.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the cheapest-across technique">
+T \text{ a cheapest spanning tree},\ e \text{ a cheapest crossing link},\ e \notin T @@ else done
+T + e \text{ has exactly one cycle, through } e @@ the one path in T between e’s ends, and e (42b2)
+\text{the cycle crosses the split again, along a link } f \text{ of } T @@ a closed walk crosses a split an even number of times
+T + e - f \text{ is in one piece with } n - 1 \text{ links: a spanning tree} @@ the any-two-of-three technique
+\htmlClass{new}{\text{cost}(T + e - f) \le \text{cost}(T):\ \text{a cheapest tree holding } e} \quad \blacksquare @@ cost(e) ≤ cost(f)
   </pre>
-  <p data-pid="966617">More is true, and held in trust: a convergent is the best fraction with a bottom no larger, and any fraction p/q with |x − p/q| &lt; 1/(2q²) is a convergent. So no fraction with a bottom below 16 604 comes nearer π than 355/113; the first that does is 52 163/16 604, and the next convergent is 103 993/33 102. And the golden number, with every step 1, is the number whose convergents come least close: its q_(j+1) grows as slowly as any can.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · how close · ← → keys work</div></section>
+  <p data-pid="c863d1">Sort the links by cost, and take each in turn unless it closes a cycle with those already taken. Each link taken is a cheapest link crossing the split between the piece holding one of its ends and the rest: any cheaper crossing link came earlier and was refused, so it closed a cycle inside the taken links, and could not have crossed. By the cheapest-across technique, at each moment the links taken lie in some cheapest tree; at the end they are one.</p>
+  <p data-pid="3303fd">This is where greed is safe, and the exchange is the reason. The tour of a delivery van (22·logi) has no such exchange: taking the nearest stop next can give a tour far longer than the best, as 39o found for greed in general.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · greedy tree · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42k3.1</span><span class="ph understand">understand</span>What does the convergent-bound technique say? <br>Which line spends the neighbour technique, and why do the convergents alternate sides?</li>
+      <li><span class="qid">42k3.1</span><span class="ph understand">understand</span>What does the cheapest-across technique say? <br>Why does the cycle in T + e cross the split a second time, and why is T + e − f a spanning tree?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42k4">
-  <h2 class="sthead"><span class="stno">42k4</span>Twelve Notes to the Octave</h2>
-  <p data-pid="538831">6·phys stacked fifths, each the ratio 3/2, and found that no stack lands on a stack of octaves. In equal steps, k fifths come near j octaves when k log₂(3/2) is near j, so when log₂ 3 = 1 + log₂(3/2) is near (j + k)/k. The convergents of log₂ 3 say which numbers of equal steps to the octave fit a fifth well.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the staircase of log₂ 3">
-\log_2 3 \approx 1.5849625 = [1; 1, 1, 2, 2, 3, 1, 5, \ldots] @@ the steps of 42k2, from the decimal
-1,\ 2,\ \tfrac32,\ \tfrac85,\ \tfrac{19}{12},\ \tfrac{65}{41},\ \tfrac{84}{53},\ \ldots @@ the neighbour recursion
-\tfrac{19}{12}:\ \ 12 \log_2 3 \approx 19.020 @@ 12 steps to the octave: the twelfth, 3 : 1, is 19 steps, 0.02 of a step flat
-\tfrac{84}{53}:\ \ 53 \log_2 3 \approx 84.003 @@ 53 steps: off by three thousandths of a step
-\htmlClass{new}{\text{the bottoms } 5, 12, 41, 53 \text{ are the equal tunings that fit the fifth best for their size}} \quad \blacksquare @@ the convergent-bound technique
+  <h2 class="sthead"><span class="stno">42k4</span>Who Is in Which Piece</h2>
+  <p data-pid="e20e43">The greedy tree needs, for each link, whether its ends are already in one piece. Keep for each dot the name of its piece, and a list of each piece’s dots. Two ends are in one piece exactly when their names match. Taking a link merges two pieces: relabel every dot of the smaller.</p>
+  <p data-pid="117c61">Doubling-piece technique: <b>relabelling the smaller piece at each merge relabels each dot at most log₂ n times, so all the merges together cost at most n log₂ n relabellings.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the doubling-piece technique">
+\text{a dot is relabelled only when its piece joins one at least as large} @@ the smaller is relabelled
+\text{after } j \text{ relabellings its piece has at least } 2^j \text{ dots} @@ each one at least doubles it
+2^j \le n \Rightarrow j \le \log_2 n @@ a piece has at most n dots
+\htmlClass{new}{\text{all relabellings} \le n \log_2 n} \quad \blacksquare @@ charged to the dots, not to the merges
   </pre>
-  <p data-pid="70a95e">So a piano’s twelve keys to the octave are a convergent: its fifth, seven equal steps, misses 3/2 by about 2 hundredths of a step, the comma 8·cb6 shared out. Tunings of 53 steps were proposed for that reason, and the theory of some music of Turkey uses them; their fifth misses by about 3 thousandths of a step, and they are much harder to play.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · tunings · ← → keys work</div></section>
+  <p data-pid="f4a161">One merge may relabel n/2 dots, so the worst single move is costly. Charged to the dots, the total is small, which is the amortized count of the first footing at work again. Sorting the links costs about |E| log₂ |E| comparisons, more than the merges; 42m asks whether anything faster is possible, and finds where the floor is.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · pieces · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42k4.1</span><span class="ph understand">understand</span>Why do the convergents of log₂ 3 say which equal tunings fit a fifth well? <br>How far is 19 steps of the twelve-step tuning from the twelfth 3 : 1?</li>
+      <li><span class="qid">42k4.1</span><span class="ph understand">understand</span>What does the doubling-piece technique say? <br>Why does a dot’s piece at least double each time the dot is relabelled?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42k5">
-  <h2 class="sthead"><span class="stno">42k5</span>Squares That Differ by One Times n</h2>
-  <p data-pid="8c52b2">For a whole number n that is not a square, look for whole numbers x and y with x² − ny² = 1. 8·cb5.4.1 climbed for n = 3. The staircase of √n always repeats, and the convergent just before the end of a block gives x² − ny² = ±1. That is held in trust here, proved in 1770 and the years after.</p>
-  <p data-pid="a61582">Unit-climb technique: <b>if x₁² − ny₁² = 1 with x₁, y₁ &gt; 0, then the pairs given by x_k + y_k√n = (x₁ + y₁√n)ᵏ all have x_k² − ny_k² = 1.</b> For (x + y√n)(x − y√n) = x² − ny², and a product of two such numbers is one of the same kind, with the sizes multiplying.</p>
-  <pre class="lines" data-k="ember" data-label="this step: n = 7, then n = 61">
-\sqrt7 = [2; 1, 1, 1, 4, \ldots]:\ \ 2,\ 3,\ \tfrac52,\ \tfrac83 @@ the block 1, 1, 1, 4 repeats
-8^2 - 7 \cdot 3^2 = 64 - 63 = 1 @@ the convergent before the block’s end
-(8 + 3\sqrt7)^2 = 127 + 48\sqrt7:\ \ 127^2 - 7 \cdot 48^2 = 1 @@ the unit-climb technique, k = 2
-\sqrt{61}:\ \text{a block of } 11 \text{ steps},\ \ 29718^2 - 61 \cdot 3805^2 = -1 @@ an odd block gives −1 first
-\htmlClass{new}{(29718 + 3805\sqrt{61})^2 = 1\,766\,319\,049 + 226\,153\,980\sqrt{61}} \quad \blacksquare @@ squaring turns −1 into 1: the least answer for 61
-  </pre>
-  <p data-pid="94dcd6">A search by trying y = 1, 2, 3, … for 61 would need over two hundred million tries. The staircase needs eleven steps. The size of the least answer jumps about from one n to the next, with the length of the block, and no simple rule gives the block length from n.</p>
-  <section class="slides" id="sl5"><div class="eyebrow">The slides · squares by one · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">42k5.1</span><span class="ph understand">understand</span>What does the unit-climb technique say, and why does a product of two answers give an answer? <br>How does the staircase of √61 lead to its least answer?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="42k6">
-  <h2 class="sthead"><span class="stno">42k6</span>Illegal Moves</h2>
-  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-[1; 2, 2] = 1 + \tfrac12 + \tfrac12\,? @@ the steps nest: 1 + 1/(2 + 1/2) = 7/5
-\tfrac{22}{7} = \pi\,? @@ a convergent, about 0.00126 too large; the next one is below π
-\text{every fraction near } \sqrt2 \text{ is a convergent}\,? @@ 10/7 is near and is not one; only those within 1/(2q²) must be
-x^2 - 61y^2 = 1 \text{ has no answer, since } y = 1, \ldots, 1000 \text{ fail}\,? @@ the least answer has y = 226 153 980: a search is not a proof
+  <h2 class="sthead"><span class="stno">42k5</span>Illegal Moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{the nearest-first technique works with any lengths}\,? @@ with a length −2, x is settled at 2 and a path of length 1 reaches it
+\text{the cheapest link at each dot is in every cheapest tree}\,? @@ in some cheapest tree; with ties there may be others without it
+\text{one merge can relabel } n/2 \text{ dots, so } n \text{ merges cost } n^2/2\,? @@ a dot is relabelled at most log₂ n times; the costly merges are rare
+\text{greed builds the cheapest tree, so it builds the cheapest tour}\,? @@ a tour has no exchange step; the nearest-stop rule can be far from best
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42k6.1</span><span class="ph understand">understand</span>Why is [1; 2, 2] not 1 + ½ + ½? <br>Why does failing for y up to 1000 not show x² − 61y² = 1 has no answer?</li>
+      <li><span class="qid">42k5.1</span><span class="ph understand">understand</span>Why does a negative length break the nearest-first technique? <br>Why is n²/2 not the cost of n merges by the doubling-piece technique?</li>
     </ol>
   </section>
 </section>
@@ -176,22 +165,22 @@ x^2 - 61y^2 = 1 \text{ has no answer, since } y = 1, \ldots, 1000 \text{ fail}\,
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">42k.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\sqrt3,\ \ x^2 - 3y^2 = 1"></span></span>Build the staircase of √3, find its convergents, and find the least answer of x² − 3y² = 1. <br>Compare with 8·cb5.4.1’s climb (2p + 3q, p + 2q) from (2, 1). Which convergents does the climb skip?</div>
-  <div class="chq"><span class="chid">42k.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="[a_0; a_1, \ldots, a_k] \text{ with } a_k \ge 2"></span></span>Prove that every fraction has exactly two staircases, one ending in a step of 1 and one not, and that a number that is no fraction has exactly one. <br>What goes wrong for a step of 0 in the middle?</div>
-  <div class="chq"><span class="chid">42k.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="x = [\overline{a_0; a_1, \ldots, a_k}]"></span></span>Prove that a staircase that repeats from the start is a root of a quadratic with whole-number coefficients. Find the quadratic for [2; 2, 2, …] and for [1; 2, 1, 2, …]. <br>The converse, that every such root has a staircase that repeats, was proved in 1770. Which part of its proof would you try first?</div>
-  <div class="chq"><span class="chid">42k.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">21·bio: the sunflower’s turn by the golden angle</span></span>A sunflower sets each seed a fixed turn on from the last, and the turn is very near the golden share of a full turn. With every step 1, the golden number is the one whose convergents come least close. <br>Is that why the plant uses it, or is the fit an accident of how the bud grows? What measurement would tell a reason from a coincidence here?</div>
+  <div class="chq"><span class="chid">42k.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{lengths: } AB = 4,\ AC = 1,\ CB = 2,\ BD = 5,\ CD = 8,\ DE = 3,\ CE = 10"></span></span>Run the nearest first from A, writing the tentative distances at each move. <br>Build a cheapest spanning tree greedily on the same links, as costs. Are the shortest-path links from A a cheapest tree here? Must they be?</div>
+  <div class="chq"><span class="chid">42k.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{all costs different}"></span></span>Prove that when all link costs are different, the cheapest spanning tree is unique. <br>With all costs equal, how many cheapest spanning trees has K₄?</div>
+  <div class="chq"><span class="chid">42k.6.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{grow one tree from } r"></span></span>Reroute the greedy tree: start from one dot, and at each move take the cheapest link from the tree to a dot outside it. Prove by the cheapest-across technique that this also gives a cheapest tree. <br>How is it like the nearest first, and where does it differ?</div>
+  <div class="chq"><span class="chid">42k.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">22·logi: the nearest-stop rule and its floor</span></span>22·logi found that taking the nearest stop next can be far from the best tour, and bounded every tour from below. A cheapest spanning tree is at most a best tour, since a tour less one link is a spanning path. <br>Walk round a cheapest spanning tree, along each link twice, and skip dots already seen. When lengths obey the triangle inequality, how long is that tour, at worst, compared with the best?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r42j.html">← 42j · is it prime?</a><a href="r42l.html">42l · discrete logarithms →</a></nav>
+<nav class="nextrung"><a href="r42j.html">← 42j · disorder is impossible</a><a href="r42l.html">42l · best from best pieces →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The staircase is a continued fraction, its steps partial quotients, and the cut-off fractions convergents. The neighbour technique is the determinant identity of convergents. The convergent-bound technique is Dirichlet’s approximation for convergents, and “within 1/(2q²) means a convergent” is Legendre’s theorem; the golden number’s worst approximability is Hurwitz’s theorem (1891), with the constant √5. x² − ny² = 1 is Pell’s equation, misnamed by Euler; the least answer is the fundamental solution, and the unit-climb technique generates all positive ones. A repeating staircase is exactly a quadratic irrational: Euler and Lagrange. 53 equal steps is Mercator’s comma tuning.</p>
+  <p>Walking out in layers is breadth-first search. The nearest first is Dijkstra's algorithm (1956, published 1959). The greedy tree is Kruskal's algorithm (1956), and the tree grown from one dot (42k.6.3) is Prim's algorithm (1957, found first by Vojtěch Jarník in 1930). The cheapest-across technique is the cut property. The doubling-piece technique is the union-by-size bound for disjoint sets, and charging is amortized analysis. The tour of 42k.6.4 is the tree-doubling 2-approximation for the metric travelling salesman problem.</p>
   <h3>Who said it first</h3>
-  <p>Brahmagupta (628) solved x² − 92y² = 1 by composing answers, and Bhāskara II’s cyclic method (1150) solved x² − 61y² = 1. Pierre de Fermat set the case 61 as a challenge to English mathematicians in 1657; William Brouncker and John Wallis answered it. Christiaan Huygens used continued fractions to design the gear ratios of a planetarium (1680s). Leonhard Euler named the subject; Joseph-Louis Lagrange proved in 1768 and 1770 that the equation always has an answer and that quadratic roots repeat. 355/113 was found by Zu Chongzhi in the fifth century.</p>
+  <p>Otakar Borůvka found a greedy cheapest tree in 1926, for the electrical network of Moravia. Edsger Dijkstra found the nearest first in 1956, he said in about twenty minutes, sitting at a café in Amsterdam, and published it in 1959. Joseph Kruskal published his recipe in 1956 and Robert Prim his in 1957. Robert Tarjan set out amortized analysis as a method in 1985.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“The convergents of √2 come within 1/q² and π’s do too, so π, like √2, is a root of a quadratic.” Not allowed: every number that is no fraction has convergents within 1/q². What marks a quadratic root is a staircase that repeats, and π’s, as far as anyone has computed, does not; π is not a quadratic root, by its proof much higher up the ladder.</p>
+  <p>“The nearest first settles the closest dot each time, so it settles the dots in order of distance, so every settled distance is right.” Not allowed: settling in order of tentative distance is what the recipe does; that the tentative distance is the true one is what must be proved. The exchange step, that a shorter path would leave the settled set at a dot with smaller tentative distance, is the proof, and it needs lengths at least 0.</p>
 </section>
 
 </div>
@@ -206,30 +195,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'quotients',t:R`\tfrac{1071}{462} = [2; 3, 7]`,n:`The gcd algorithm.`},
-  {k:'ember',kl:'recursion',t:R`p_j = a_j p_{j-1} + p_{j-2}`,n:`And q likewise.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{p_jq_{j-1} - p_{j-1}q_j = \pm 1}`,n:`Neighbours.`}
-],{title:'The slides · staircases · ← → keys work'});
+  {k:'ember',kl:'queue',t:R`k,\ \dots,\ k,\ k+1,\ \dots`,n:`Two layers at most.`},
+  {k:'ember',kl:'charge',t:R`\textstyle\sum_u d(u) = 2|E|`,n:`Each link twice.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|V| + 2|E|}`,n:`Every distance.`}
+],{title:'The slides · layers · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'√2',t:R`[1; 2, 2, 2, \ldots]`,n:`Repeats.`},
-  {k:'ember',kl:'golden',t:R`[1; 1, 1, \ldots]`,n:`All ones.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\pi \approx \tfrac{355}{113}}`,n:`After a step of 15, before 292.`}
-],{title:'The slides · endless · ← → keys work'});
+  {k:'ember',kl:'settle',t:R`\min t(w)`,n:`Among the unsettled.`},
+  {k:'ember',kl:'exchange',t:R`\text{a shorter path leaves at } x`,n:`And t(x) ≥ t(w).`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{t(w) = \mathrm{dist}(w)}`,n:`Final when settled.`}
+],{title:'The slides · nearest first · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'real last step',t:R`x = \tfrac{x_{j+1}p_j + p_{j-1}}{x_{j+1}q_j + q_{j-1}}`,n:`Exact.`},
-  {k:'ember',kl:'difference',t:R`\tfrac{(-1)^j}{q_j(\ldots)}`,n:`Neighbours.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{|x - p_j/q_j| \lt 1/q_j^2}`,n:`And alternating.`}
-],{title:'The slides · how close · ← → keys work'});
+  {k:'ember',kl:'across',t:R`e = \text{cheapest crossing}`,n:`Any split.`},
+  {k:'ember',kl:'swap',t:R`T + e - f`,n:`No dearer.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{greed builds a cheapest tree}}`,n:`An exchange.`}
+],{title:'The slides · greedy tree · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'fifths',t:R`k\log_2 3 \approx j`,n:`Near octaves.`},
-  {k:'ember',kl:'convergents',t:R`\tfrac{19}{12},\ \tfrac{84}{53}`,n:`Of log₂ 3.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{12 \text{ keys to the octave}}`,n:`A convergent.`}
-],{title:'The slides · tunings · ← → keys work'});
-stepper('#sl5',[
-  {k:'ember',kl:'convergent',t:R`8^2 - 7 \cdot 3^2 = 1`,n:`Block’s end.`},
-  {k:'ember',kl:'climb',t:R`(x_1 + y_1\sqrt n)^k`,n:`More answers.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{1\,766\,319\,049^2 - 61 \cdot 226\,153\,980^2 = 1}`,n:`Eleven steps.`}
-],{title:'The slides · squares by one · ← → keys work'});
+  {k:'ember',kl:'names',t:R`\text{same name} \iff \text{same piece}`,n:`A check is one look.`},
+  {k:'ember',kl:'merge',t:R`\text{relabel the smaller}`,n:`At least doubles.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\le n \log_2 n}`,n:`All merges together.`}
+],{title:'The slides · pieces · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

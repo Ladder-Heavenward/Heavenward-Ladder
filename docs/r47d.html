@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pinned Down by Arrows</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r47c.html">← 47c maps between maps</a><a href="r47e.html">next: 47e limits and colimits →</a></p>
+  <div class="tags"><span class="tag proof">47d · proof</span></div>
+  <h1>Pinned Down by Arrows</h1>
+  <p data-pid="31c0c4">Rung two built a pair in order out of sets, and then proved the one fact anyone ever uses about it: two pairs are equal exactly when their first parts are equal and their second parts are equal. Its standing questions tried other ways of building a pair, and found that some work and some do not. The ones that work all have that one fact. This step turns the fact into a description that names no members at all. A product of two things is a thing with an arrow to each, such that any other thing with an arrow to each has exactly one arrow into it that agrees with both. For sets it is the set of pairs. For statements ordered by if, it is and. For groups it is pairs multiplied entry by entry. Turn every arrow round and the same words describe a sum: for sets two copies side by side, for statements or. Such a description does not say what the thing is made of. It pins the thing down anyway, up to exactly one matching, and that is the sameness the rung is about.</p>
+  <p class="gesture" data-pid="85d007">A product of two things is a thing with an arrow to each, through which every other such pair of arrows runs in exactly one way. A sum is the same with every arrow turned round. Sets give pairs and side-by-side copies, statements give and and or, groups give pairs. Any two products of the same two things are matched by exactly one arrow that agrees with the two arrows out.</p>
+</header>
+
+<section class="class step" data-step="47d1">
+  <h2 class="sthead"><span class="stno">47d1</span>A Product, by Its Arrows</h2>
+  <p data-pid="1277a8">Let A and B be things of a category C. A <i>product</i> of A and B is a thing P with arrows p₁ : P → A and p₂ : P → B, such that for every thing X and arrows f : X → A and g : X → B there is exactly one arrow u : X → P with p₁ ∘ u = f and p₂ ∘ u = g. Write ⟨f, g⟩ for that u. A description of this kind, a thing with arrows such that every rival runs through it in exactly one way, is a <i>universal property</i>.</p>
+  <p data-pid="5212d6">Pair-map technique: <b>in Set, the set of pairs A × B, with the maps to the first and the second entry, is a product of A and B.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the pair-map technique">
+p_1(x, y) = x,\ \ p_2(x, y) = y @@ 2h4: reading a pair back
+f : X \to A,\ g : X \to B;\ \ u(z) = (f(z), g(z)) @@ a function into A × B (2h10: the pair exists)
+p_1(u(z)) = f(z),\ \ p_2(u(z)) = g(z) @@ u runs f and g through P
+u' \text{ with } p_1 \circ u' = f,\ p_2 \circ u' = g \Rightarrow u'(z) \text{ has parts } f(z), g(z) @@ suppose a second
+\htmlClass{new}{u' = u} \quad \blacksquare @@ the equal-pairs technique (2h5), at each z; equal functions (9a3)
+  </pre>
+  <p data-pid="3b6989">The product in <b>Grp</b> is G × H with (g, h)(g′, h′) = (g g′, h h′): the same u keeps products when f and g do. In <b>Top</b> it is 34b3’s box product. In the category of statements ordered by ⇒ (47a2), an arrow X → A is “X ⇒ A”, and the product of P and Q is P ∧ Q: P ∧ Q ⇒ P and P ∧ Q ⇒ Q by keep either part, and from X ⇒ P and X ⇒ Q, X ⇒ P ∧ Q by join (1c). In any order, the product of two things is their greatest lower bound, when there is one.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a product · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">47d1.1</span><span class="ph understand">understand</span>What is a product of A and B, by its arrows alone? <br>What does the pair-map technique say, and which technique of 2h gives the “exactly one”?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="47d2">
+  <h2 class="sthead"><span class="stno">47d2</span>Unique up to One Matching</h2>
+  <p data-pid="f03970">The description names no members, so it cannot say which set P is. It says something stronger instead.</p>
+  <p data-pid="c93164">One-matching technique: <b>if P and P′ are both products of A and B, exactly one arrow from P′ to P agrees with the arrows out, and that arrow is a matching.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-matching technique">
+u = \langle p'_1, p'_2 \rangle : P' \to P,\ \ u' = \langle p_1, p_2 \rangle' : P \to P' @@ each is a product: run the other’s arrows through it; exactly one each
+p_1 \circ (u \circ u') = p'_1 \circ u' = p_1,\ \ p_2 \circ (u \circ u') = p_2 @@ brackets free; each runs p₁, p₂ through
+p_1 \circ \mathrm{id}_P = p_1,\ \ p_2 \circ \mathrm{id}_P = p_2 @@ so does the do-nothing arrow
+u \circ u' = \mathrm{id}_P @@ exactly one arrow P → P runs p₁ and p₂ through P
+u' \circ u = \mathrm{id}_{P'} @@ the same, at P′
+\htmlClass{new}{u \text{ is a matching, and the only arrow that agrees}} \quad \blacksquare @@ 47a3
+  </pre>
+  <p data-pid="86350f">So any two products are matched, and in exactly one way that respects what makes them products. The pair of 2h, and any other build whose pairs have the equal-pairs property, give matched products; nothing about the product can tell them apart. That is what “pinned down by arrows” means: not one thing, but one thing up to exactly one matching. The trick of the proof, using “exactly one” on the thing itself to force an arrow to be id, is the whole engine of this rung.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · one matching · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">47d2.1</span><span class="ph understand">understand</span>What does the one-matching technique say about two products of A and B? <br>Which line of its proof uses “exactly one” on P itself, and what does it force?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="47d3">
+  <h2 class="sthead"><span class="stno">47d3</span>A Sum, the Arrows Turned Round</h2>
+  <p data-pid="900988">A <i>sum</i> of A and B is a product of A and B in C^op (47b3): a thing S with arrows i₁ : A → S and i₂ : B → S, such that for every X and arrows f : A → X and g : B → X there is exactly one u : S → X with u ∘ i₁ = f and u ∘ i₂ = g. Write [f, g] for it. The one-matching technique, turned round, says any two sums are matched in exactly one way.</p>
+  <p data-pid="9f7a5d">Cases-map technique: <b>in Set, two copies side by side, A ⊔ B, with each member sent to its copy, is a sum of A and B: a function out of it is a function on A and one on B, taken case by case.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the cases-map technique">
+i_1(x) = (x, 0),\ \ i_2(y) = (y, 1) @@ 35e1: A ⊔ B = (A × {0}) ∪ (B × {1})
+u(x, 0) = f(x),\ \ u(y, 1) = g(y) @@ each member of A ⊔ B is in one copy only: one output each (9a1)
+u \circ i_1 = f,\ \ u \circ i_2 = g @@ by the definition
+u' \circ i_1 = f,\ u' \circ i_2 = g \Rightarrow u'(x, 0) = f(x),\ u'(y, 1) = g(y) @@ suppose a second
+\htmlClass{new}{u' = u} \quad \blacksquare @@ they agree on each copy, and the copies are all of A ⊔ B
+  </pre>
+  <p data-pid="a56e45">In statements ordered by ⇒, the sum of P and Q is P ∨ Q: add an option gives P ⇒ P ∨ Q, and from P ⇒ X and Q ⇒ X, cases worked inside the line (1c) give P ∨ Q ⇒ X. A thing with exactly one arrow to every thing is the sum of nothing at all: in Set it is ∅, with the empty function, and in statements it is ⊥, since ⊥ ⇒ X for every X (1b: when nothing is true, everything is permitted). In <b>Grp</b> the sum of ℤ and ℤ is not ℤ × ℤ. It is the free group on two letters, the loop group of 34i3’s figure eight, and 47i counts arrows to prove the two differ.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · a sum · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">47d3.1</span><span class="ph understand">understand</span>What is a sum of A and B, and how is it a product turned round? <br>What does the cases-map technique say, and what are the sums of P and Q, and of nothing at all, among statements?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="47d4">
+  <h2 class="sthead"><span class="stno">47d4</span>Illegal Moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+P \text{ and } P' \text{ are products of } A, B,\ \text{so } P = P'\,? @@ matched, in exactly one way that agrees; equal is rung 0’s sameness, and the property cannot give it
+A \cup B \text{ is a sum of } A \text{ and } B \text{ in } \mathbf{Set}\,? @@ when A and B share a member, f and g may disagree on it, and no u exists: 35e1 keeps copies apart for this reason
+u \text{ runs } f, g \text{ through } P,\ \text{so } P \text{ is a product}\,? @@ some u for every f, g is half; the property needs exactly one
+\text{the sum of } \mathbb Z \text{ and } \mathbb Z \text{ in } \mathbf{Grp} \text{ is } \mathbb Z \times \mathbb Z\,? @@ in ℤ × ℤ the two copies change places with each other, and a map to S₃ need not let them (47i)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">47d4.1</span><span class="ph understand">understand</span>Why is A ∪ B not a sum of A and B in Set when A and B share a member? <br>Why does the one-matching technique give matched products and not equal ones?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">47d.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{the parts of a set } X,\ \ A \to B \text{ exactly when } A \subseteq B"></span></span>Build the product and the sum of two parts A and B in this order category, and prove the product property for your answer. <br>Which part has exactly one arrow to every part, and which has exactly one arrow from every part?</div>
+  <div class="chq"><span class="chid">47d.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{the empty product}"></span></span>A product of no things at all: a thing T such that every X has exactly one arrow to T. <br>Find it in Set, in Grp, and among statements ordered by ⇒. Is A × T matched with A? Prove it from the property, naming no members.</div>
+  <div class="chq"><span class="chid">47d.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="P \text{ with } p_1, p_2,\ \ Q \cong P \text{ by } h"></span></span>The one-matching technique says products are matched. Turn it round: if Q is matched with a product P by h, is Q a product, and with which arrows out? <br>Prove it. Then find a thing matched with A × B whose arrows out, chosen badly, make it no product.</div>
+  <div class="chq"><span class="chid">47d.5.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">2h.4.3: \{t, \{t, b\}\} \text{ as a shorter pair}</span></span>2h.4.3 tried {t, {t, b}} for the pair t then b, and asked what sets must do for the cases left open to happen. <br>Suppose a build of pairs has the equal-pairs property. Is it then a product in Set? If two builds both are, what can a statement about pairs tell apart between them, and what can it not? Is the question “which set is the pair” still open after this step, or answered?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r47c.html">← 47c · maps between maps</a><a href="r47e.html">47e · limits and colimits →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A universal property defines an object up to unique isomorphism; the one-matching technique is that uniqueness. A product is a categorical product, ⟨f, g⟩ the pairing; a sum is a coproduct, [f, g] the copairing, A ⊔ B the disjoint union. The empty product is a terminal object; the empty sum an initial object. In a partial order the product is the meet and the coproduct the join; in the category of statements and implications they are conjunction and disjunction, and the initial object is falsum. The coproduct of groups is the free product, ℤ ∗ ℤ for the figure eight.</p>
+  <h3>Who said it first</h3>
+  <p>Products and coproducts by arrows were set out by Saunders Mac Lane in “Duality for groups” (1950), where he noticed that the direct product and the free product of groups are dual. Pierre Samuel described universal mappings in 1948, and Nicolas Bourbaki gave “universal problems” a chapter in the 1950s. Kazimierz Kuratowski’s pair {{x}, {x, y}} of 1921 is the build of 2h, and Norbert Wiener’s of 1914, {{{x}, ∅}, {{y}}}, is another that has the equal-pairs property.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“A × B and B × A are both products of A and B, so A × B = B × A.” Not allowed: with the arrows out swapped, B × A is a product of A and B, and the one-matching technique gives the matching (x, y) ↦ (y, x), which is not the sameness of rung 0. For A = {1} and B = {2} the two sets are {(1, 2)} and {(2, 1)}, which are different sets.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'arrows out',t:R`p_1 : P \to A,\ \ p_2 : P \to B`,n:`One to each.`},
+  {k:'ember',kl:'every rival',t:R`f, g \Rightarrow \text{one } u = \langle f, g\rangle`,n:`Exactly one.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{A \times B,\ \ P \wedge Q}`,n:`Pairs; and.`}
+],{title:'The slides · a product · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'both ways',t:R`u : P' \to P,\ \ u' : P \to P'`,n:`Each runs the other through.`},
+  {k:'ember',kl:'itself',t:R`u \circ u^{\prime} = \mathrm{id}_P`,n:`Exactly one arrow P → P.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P \cong P^{\prime} \text{ in one way}}`,n:`Pinned down.`}
+],{title:'The slides · one matching · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'arrows in',t:R`i_1 : A \to S,\ \ i_2 : B \to S`,n:`One from each.`},
+  {k:'ember',kl:'every rival',t:R`f, g \Rightarrow \text{one } [f, g]`,n:`Case by case.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{A \sqcup B,\ \ P \vee Q,\ \ \varnothing,\ \ \bot}`,n:`Copies; or; nothing.`}
+],{title:'The slides · a sum · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What Can’t Be Built, by Hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r46k.html">← 46k symmetry groups of equations, by hand</a><a href="r46cb27.html">next: 46·cb27 groups as matrices →</a></p>
+  <div class="tags"><span class="tag tech">46l · technique</span></div>
+  <h1>What Can’t Be Built, by Hand</h1>
+  <p data-pid="211471">Deciding whether a length can be built with compass and straightedge comes down to one polynomial. Find a polynomial with rational coefficients that the length is a root of. Show it cannot be factored. Read its degree. If the degree is not a power of two, the length cannot be built, and that settles it. If it is a power of two, more is needed, and the group of the polynomial decides. This step runs the test on angles, on regular figures and on lengths, and finds the whole list of regular figures up to twenty sides that can be built. It ends with the pentagon, built line by line, as the smallest case where the test says yes for a reason that is not obvious.</p>
+  <p class="gesture" data-pid="039933">Find the polynomial, prove it irreducible, read the degree. A degree that is not a power of two forbids the construction. An angle can be cut in three exactly when the cubic for the cosine of its third factors over the field of its own cosine. A regular figure can be built exactly when the count of hours of the clock of its number of sides that share no factor with that number is a power of two.</p>
+</header>
+
+<section class="class step" data-step="46l1">
+  <h2 class="sthead"><span class="stno">46l1</span>The Test</h2>
+  <p data-pid="4dcaba">Unbuildable-test technique: <b>to show a number cannot be built, find a polynomial with rational coefficients it is a root of, show the polynomial irreducible, and check that its degree is not a power of 2.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the regular nine-sided figure">
+c = \cos 40^\circ:\ \ 4c^3 - 3c = \cos 120^\circ = -\tfrac12 @@ cos 3θ = 4cos³θ − 3cosθ (21d)
+y = 2c:\ \ y^3 - 3y + 1 = 0 @@ multiply by 2
+y = \pm 1:\ \ -1,\ 3 \ne 0 @@ the whole-answer technique: no rational root, so irreducible
+\htmlClass{new}{[\mathbb Q(\cos 40^\circ) : \mathbb Q] = 3:\ \ \text{the 9-gon cannot be built}} \quad \blacksquare @@ the degree-three technique
+  </pre>
+  <p data-pid="29ab23">So 120° cannot be cut in three either, and since 40° is a third of 120°, the angle a 9-gon needs is out of reach.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the test · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">46l1.1</span><span class="ph understand">understand</span>What does the unbuildable-test technique say, in its three moves? <br>Why does the 9-gon come down to y³ − 3y + 1?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="46l2">
+  <h2 class="sthead"><span class="stno">46l2</span>Which Angles Cut in Three</h2>
+  <p data-pid="9dfed6">Third-of-angle technique: <b>an angle θ whose cosine k is buildable can be cut in three exactly when 4x³ − 3x − k has a root in ℚ(k)’s tower of square roots; when k is rational, exactly when 4x³ − 3x − k has a rational root.</b> If it has none, it is irreducible over ℚ and the degree is 3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: three angles">
+90^\circ:\ \ 4x^3 - 3x = 0,\ \ x = \cos 30^\circ = \tfrac{\sqrt3}{2} @@ k = 0: x(4x² − 3); 30° is built from the equilateral triangle (18j)
+180^\circ:\ \ 4x^3 - 3x + 1 = (x + 1)(2x - 1)^2,\ \ x = \tfrac12 @@ k = −1; 60° is built
+60^\circ:\ \ 8x^3 - 6x - 1,\ \ \text{no rational root} @@ 46i2
+\htmlClass{new}{\arccos\tfrac14:\ \ 16x^3 - 12x - 1,\ \text{roots } \tfrac{u}{v},\ u \mid 1,\ v \mid 16:\ \text{none}} \quad \blacksquare @@ ±1, ±1/2, ±1/4, ±1/8, ±1/16 checked: no third of this angle
+  </pre>
+  <p data-pid="d84257">For a cubic with top coefficient not 1, the whole-answer technique becomes: a rational root u/v in lowest terms has u dividing the last coefficient and v dividing the first. The proof is the same lines, read at both ends.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · thirds · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">46l2.1</span><span class="ph understand">understand</span>What does the third-of-angle technique say? <br>Why can 90° be cut in three though 60° cannot?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="46l3">
+  <h2 class="sthead"><span class="stno">46l3</span>Which Regular Figures</h2>
+  <p data-pid="3d11c7">Write φ(n) for the number of hours of the clock of n that share no factor with n, the units of 43d. The turn by an n-th has a field of degree φ(n), held in trust for n not prime: 46i proved it for 17, and the same test proves it for every prime.</p>
+  <p data-pid="0eaca1">Regular-figure technique: <b>the regular n-gon can be built exactly when φ(n) is a power of 2.</b> The field of the turn is a splitting field with a turn-about group of φ(n) members, so the two-group technique gives one way and the power-of-two technique the other.</p>
+  <pre class="lines" data-k="ember" data-label="this step: n from 3 to 20">
+\varphi(n) = 2, 2, 4, 2, 6, 4, 6, 4, 10, 4, 12, 6, 8, 8, 16, 6, 18, 8 @@ n = 3, 4, …, 20, counted
+\text{powers of 2}:\ 3, 4, 5, 6, 8, 10, 12, 15, 16, 17, 20 @@ build
+\text{not}:\ 7, 9, 11, 13, 14, 18, 19 @@ cannot
+\htmlClass{new}{n = 2^k p_1 \cdots p_j,\ \ p_i \text{ different primes } 2^{2^m} + 1} \quad \blacksquare @@ φ(pᵉ) = pᵉ⁻¹(p − 1) is a power of 2 only for e = 1 and p − 1 a power of 2, and then p = 2^(2^m) + 1
+  </pre>
+  <p data-pid="f1871c">The primes 2^(2^m) + 1 known are 3, 5, 17, 257 and 65 537. 2^32 + 1 = 641 × 6 700 417, and no other prime of the form has been found.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · figures · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">46l3.1</span><span class="ph understand">understand</span>What does the regular-figure technique say? <br>Why can the 15-gon be built though the 9-gon cannot?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="46l4">
+  <h2 class="sthead"><span class="stno">46l4</span>The Pentagon, Built</h2>
+  <pre class="lines" data-k="ember" data-label="this step: the cosine of a fifth of a turn">
+\zeta^5 = 1,\ \zeta \ne 1:\ \ \zeta^2 + \zeta + 1 + \zeta^{-1} + \zeta^{-2} = 0 @@ divide 1 + ζ + ⋯ + ζ⁴ = 0 by ζ²
+y = \zeta + \zeta^{-1} = 2\cos 72^\circ:\ \ y^2 + y - 1 = 0 @@ y² = ζ² + 2 + ζ⁻²
+y = \tfrac{-1 + \sqrt5}{2} @@ 8i; the positive root, since cos 72° &gt; 0
+\htmlClass{new}{\cos 72^\circ = \tfrac{\sqrt5 - 1}{4} \approx 0.30902} \quad \blacksquare @@ halve
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: with the tools">
+\text{centre } O,\ \text{radius } OA = 1,\ OB \perp OA @@ the perpendicular technique (18j)
+M \text{ the midpoint of } OB:\ \ MA = \sqrt{1 + \tfrac14} = \tfrac{\sqrt5}{2} @@ the midpoint technique; the plane’s distance
+\text{circle about } M \text{ through } A \text{ meets the line } OB \text{ at } P,\ \ OP = \tfrac{\sqrt5 - 1}{2} @@ on the far side of O from B: MP = √5/2, MO = 1/2
+\htmlClass{new}{OP = 2\cos 72^\circ:\ \text{the perpendicular to } OA \text{ at distance } OP/2 \text{ cuts the circle at two corners}} \quad \blacksquare @@ bisect OP; the corners at ±72°
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · pentagon · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">46l4.1</span><span class="ph understand">understand</span>How does 2 cos 72° come out of the fifth roots of 1? <br>In the construction, why is OP equal to (√5 − 1)/2?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="46l5">
+  <h2 class="sthead"><span class="stno">46l5</span>Illegal Moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+x^4 - x - 1 \text{ has degree 4, so its roots can be built}\,? @@ its group is all 24 shuffles; 24 is not a power of 2, and the two-group technique fails
+\text{the 9-gon can be built because 3 can}\,? @@ φ(9) = 6: a 9-gon needs 40°, a third of 120°
+8x^3 - 6x - 1 \text{ has the root } \tfrac12\,? @@ 1 − 3 − 1 = −3; a rational root u/v needs u ∣ 1 and v ∣ 8, and none works
+2^{32} + 1 \text{ is prime, so the } (2^{32} + 1)\text{-gon can be built}\,? @@ 641 divides it
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">46l5.1</span><span class="ph understand">understand</span>Why does a degree of 4 not let the roots of x⁴ − x − 1 be built? <br>Why does the 3-gon being buildable not make the 9-gon buildable?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">46l.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="n = 15"></span></span>Build the 15-gon from the 3-gon and the 5-gon: which angle do you get by combining 120° and 72°, and how does it give 24°? <br>Write cos 24° with square roots.</div>
+  <div class="chq"><span class="chid">46l.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\sqrt[4]{2},\ \ \sqrt[3]{3},\ \ \sqrt2 + \sqrt[3]2"></span></span>For each length, decide whether it can be built, and give the polynomial and its degree. <br>Which of the three needs the group, not only the degree?</div>
+  <div class="chq"><span class="chid">46l.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{a regular } n\text{-gon built} \Rightarrow \text{the angle } 360^\circ/n"></span></span>The regular-figure technique goes from n to φ(n). Turn it round: which whole-degree angles 1°, 2°, 3°, … can be built? <br>Find the smallest, and say why 1° cannot.</div>
+  <div class="chq"><span class="chid">46l.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{a marked straightedge}"></span></span>With two marks on the straightedge, a line can be slid through a point until the marks sit on two curves. Find how this cuts any angle in three, and why it escapes the power-of-two technique. <br>What does the tower of a marked straightedge’s numbers look like?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r46k.html">← 46k · symmetry groups of equations, by hand</a><a href="r46cb27.html">46·cb27 · groups as matrices →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>φ is Euler’s totient function. The regular-figure technique is the Gauss–Wantzel theorem, and the primes 2^(2^m) + 1 are the Fermat primes. That the field of the turn by an n-th has degree φ(n) is the irreducibility of the cyclotomic polynomials. The marked straightedge’s move is a neusis.</p>
+  <h3>Who said it first</h3>
+  <p>Pierre de Fermat conjectured in 1640 that every 2^(2^m) + 1 is prime; Leonhard Euler found the factor 641 of 2^32 + 1 in 1732. Carl Friedrich Gauss proved the sufficient condition for the n-gon in 1801 and stated the necessary one; Pierre Wantzel proved it in 1837. Archimedes is credited with the trisection by a marked straightedge. The construction of the pentagon on this step is close to the one in Euclid’s Elements, Book IV.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“60° cannot be cut in three, so no angle can.” Not allowed: the test is about one angle at a time. 90°, 180° and every angle whose cubic factors can be cut in three. Impossibility in general means: no recipe works for every angle, which one counterexample, 60°, proves.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'polynomial',t:R`y^3 - 3y + 1`,n:`For 2 cos 40°.`},
+  {k:'ember',kl:'irreducible',t:R`\pm1 \text{ fail}`,n:`No rational root.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{degree } 3:\ \text{no 9-gon}}`,n:`Not a power of 2.`}
+],{title:'The slides · the test · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'90°',t:R`x(4x^2 - 3)`,n:`Factors.`},
+  {k:'ember',kl:'60°',t:R`8x^3 - 6x - 1`,n:`Does not.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a rational root decides}}`,n:`When cos θ is rational.`}
+],{title:'The slides · thirds · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'count',t:R`\varphi(15) = 8,\ \varphi(9) = 6`,n:`Units of the clock.`},
+  {k:'ember',kl:'test',t:R`\varphi(n) = 2^k`,n:`Power of 2.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{3, 4, 5, 6, 8, 10, 12, 15, 16, 17, 20}`,n:`Up to 20.`}
+],{title:'The slides · figures · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'quadratic',t:R`y^2 + y - 1 = 0`,n:`For 2 cos 72°.`},
+  {k:'ember',kl:'length',t:R`OP = \tfrac{\sqrt5 - 1}{2}`,n:`From MA = √5/2.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\cos 72^\circ = \tfrac{\sqrt5 - 1}{4}}`,n:`Built.`}
+],{title:'The slides · pentagon · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

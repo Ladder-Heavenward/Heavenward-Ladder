@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Groups as Matrices</title>
+<title>Every Matrix Is Nearly Diagonal</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,127 +48,102 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r44l.html">← 44l what can’t be built, by hand</a><a href="r44phys.html">next: 44·phys what are particles built from? →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r44l.html">← 44l Boolean algebra standing on its own</a><a href="r44comp.html">next: 44·comp how can a damaged message still be read? →</a></p>
   <div class="tags"><span class="tag then">44·cb27 · newsflash for 27</span></div>
-  <h1>Groups as Matrices</h1>
-  <p data-pid="27f641">Rung 27 found that the grids that can be undone form a group, and rung 19 found groups wherever something moves. Put the two together the other way round: send each member of a group to a grid, so that doing two members is multiplying their grids. A group can then be studied by straight algebra. This page shows that every such sending of a finite group comes apart into pieces that cannot be split further, by an averaging trick that makes every grid keep lengths. It proves that between two pieces that cannot be split, the only maps that respect the group are nothing or a matching, and on one piece, a stretch. And it reads each piece by one number per member, the sum down the grid’s main diagonal, which stays the same on a conjugate family. Those numbers are perpendicular, like the turnings of rung 32, and a table of them tells everything about the pieces. The last footing is chemistry: the shakes of a water molecule, counted and sorted by its symmetries.</p>
-  <p class="gesture" data-pid="bcc444">A representation sends each member of a group to an undoable grid, products to products. Averaging over the group gives an inner product every grid keeps, so every representation splits into pieces that cannot be split. A map between two such pieces that respects the group is nothing or undoable, and on one piece a stretch of every arrow by one number. Traces, one per family, are perpendicular, and they sort the pieces.</p>
+  <h1>Every Matrix Is Nearly Diagonal</h1>
+  <p data-pid="dedc69">Rung twenty seven found the arrows a grid only stretches, and when there are enough of them the grid is diagonal in their basis. Often there are not enough. The grid that slides the plane along, one row of ones above the diagonal, stretches only one direction, and no basis makes it diagonal. Rung twenty seven left it there. Step 44i gives the answer. Let the grid act on arrows, and let the letter x stand for doing the grid once. Then the arrows are a module over the polynomials, and the structure technique splits it into clocks of polynomials. Each clock, in a basis read off from its polynomial, is a grid with a fixed shape. Over the complex numbers each clock is one stretch on the diagonal with ones just above it. So every square grid of complex numbers is, in the right basis, diagonal except for some ones next to the diagonal, and the ones count how far it falls short.</p>
+  <p class="gesture" data-pid="17c067">A grid makes its arrows a module over F[x], with x acting as the grid. The structure technique splits that module into clocks F[x]/(d), and each clock has a grid of a fixed shape. Over ℂ each clock is a block with one stretch on the diagonal and ones just above. A grid is diagonal in some basis exactly when its least polynomial has no repeated zero.</p>
 </header>
 
 <section class="class step" data-step="44·cb27.1">
-  <h2 class="sthead"><span class="stno">44·cb27.1</span>A Group Sent to Grids</h2>
-  <p data-pid="0fb188">A <i>representation</i> of a group G on a space of arrows V over ℂ, of dimension n, is a map ρ from G to the undoable n × n grids of 27d with ρ(gh) = ρ(g)ρ(h). A space W inside V is <i>kept</i> when ρ(g) sends W into W for every g. A representation is <i>whole</i> when its only kept spaces are 0 and V. Its accepted name is a representation, from the Latin <i>repraesentare</i>, to make present.</p>
-  <pre class="lines" data-k="ember" data-label="this page: three representations of S₃">
-\text{one: } \rho(g) = (1) @@ every member to the 1 × 1 grid 1
-\text{sign: } \rho(g) = (\pm1) @@ +1 for even shuffles, −1 for odd (19e); signs multiply
-\text{shuffle: } \rho(g)e_i = e_{g(i)} \text{ on } \mathbb C^3 @@ each shuffle moves the three unit arrows as it moves 1, 2, 3
-\htmlClass{new}{\text{the shuffle representation keeps } L = \{(t, t, t)\} \text{ and } W = \{x + y + z = 0\}} \quad \blacksquare @@ shuffling the entries keeps them all equal, and keeps their sum
+  <h2 class="sthead"><span class="stno">44·cb27.1</span>A Grid Makes a Module</h2>
+  <p data-pid="fc7403">Let A be a grid with n rows and n columns over a field F. On the arrows Fⁿ, let a polynomial p stretch an arrow v by p · v = p(A)v. The rules of 44i1 hold because grids add and multiply (27d). So Fⁿ is a module over F[x], and x · v = Av.</p>
+  <p data-pid="c13293">Grid-module technique: <b>Fⁿ, with p · v = p(A)v, is a finitely made module over F[x] with no copy of F[x] in it, so it is a copy of F[x]/(d₁) × ⋯ × F[x]/(dₖ) with d₁ ∣ ⋯ ∣ dₖ, each with top coefficient 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the grid-module technique">
+\text{the unit arrows make } F^n @@ over F, so over F[x]
+c(A) = 0 \text{ for } c = \det(A - xI) @@ the own-polynomial technique (27g)
+c \cdot v = 0 \text{ for every } v @@ so no member is free, and r = 0 in the structure technique
+\htmlClass{new}{F^n \cong F[x]/(d_1) \times \cdots \times F[x]/(d_k)} \quad \blacksquare @@ the structure technique (44i), over F[x]
   </pre>
-  <p data-pid="586211">On W, with the turn by a third and a flip of the triangle of 19f as grids, the shuffle representation is the triangle’s own moves in the plane. It is whole: a kept line would be a line every turn by 120° sends to itself, and no such line exists.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · representations · ← → keys work</div></section>
+  <p data-pid="e6b5f9">The last dₖ is 27g’s least polynomial: it kills every arrow, and nothing smaller does. The product d₁ ⋯ dₖ is the own polynomial, up to sign. <i>Held in trust</i>: that the dᵢ are found by bringing xI − A to a diagonal with 44i’s moves over F[x]; the proof is 44·cb27.6.3.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a module · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">44·cb27.1.1</span><span class="ph understand">understand</span>What is a representation of a group, and when is a space kept by it? <br>Why does the shuffle representation of S₃ keep the line of arrows (t, t, t)?</li>
+      <li><span class="qid">44·cb27.1.1</span><span class="ph understand">understand</span>How does a grid A make Fⁿ a module over F[x]? <br>What does the grid-module technique say, and why is there no copy of F[x] among the pieces?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="44·cb27.2">
-  <h2 class="sthead"><span class="stno">44·cb27.2</span>Every Representation Splits</h2>
-  <p data-pid="b4682a">Splitting technique: <b>every representation of a finite group is a sum of whole representations.</b></p>
-  <pre class="lines" data-k="ember" data-label="this page: the splitting technique">
-\langle u, v\rangle_G = \tfrac{1}{|G|}\textstyle\sum_{g \in G}\langle \rho(g)u, \rho(g)v\rangle @@ start from any inner product of 31a, and average
-\langle \rho(h)u, \rho(h)v\rangle_G = \langle u, v\rangle_G @@ as g runs over G, gh does too (19b)
-W \text{ kept} \Rightarrow W^\perp = \{v : \langle v, w\rangle_G = 0 \text{ for all } w \in W\} \text{ kept} @@ ⟨ρ(h)v, w⟩_G = ⟨v, ρ(h⁻¹)w⟩_G = 0, since ρ(h⁻¹)w is in W
-V = W \oplus W^\perp @@ 31b’s closest point: every v is its shadow on W plus the rest
-\htmlClass{new}{\text{split again until every piece is whole}} \quad \blacksquare @@ the dimension falls each time
+  <h2 class="sthead"><span class="stno">44·cb27.2</span>Each Clock Has a Fixed Grid</h2>
+  <p data-pid="17f3e0">Take one piece F[x]/(d), with d = xᵏ + cₖ₋₁xᵏ⁻¹ + ⋯ + c₀. Its members are the remainders of degree below k (44c2), with basis 1, x, …, xᵏ⁻¹.</p>
+  <p data-pid="799262">Companion technique: <b>on F[x]/(d), with basis 1, x, …, x^(k−1), multiplying by x has the grid with ones just below the diagonal and −c₀, …, −cₖ₋₁ in the last column, and its own polynomial is d, up to sign.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the companion technique">
+x \cdot x^j = x^{j+1} \text{ for } j < k - 1 @@ the next basis arrow: a 1 just below the diagonal
+x \cdot x^{k-1} = x^k = -c_0 - c_1 x - \cdots - c_{k-1}x^{k-1} @@ the remainder of xᵏ on dividing by d
+\htmlClass{new}{C_d = \begin{pmatrix} 0 & & & -c_0 \\ 1 & 0 & & -c_1 \\ & \ddots & \ddots & \vdots \\ & & 1 & -c_{k-1} \end{pmatrix}} \quad \blacksquare @@ the images as columns (27d)
   </pre>
-  <p data-pid="d430ff">For the shuffle representation of S₃, the ordinary inner product is already kept by every shuffle, and W is the perpendicular of L. The averaging is needed when a representation comes with grids that stretch. Over a finite group it always works; for the turns of a line by every real amount it is an integral, and for the slides of the line it fails, since a slide cannot be averaged.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · splitting · ← → keys work</div></section>
+  <p data-pid="0392f6">So every grid is, in a suitable basis, a row of these blocks down the diagonal, one for each dᵢ, and zeros elsewhere. Two grids are the same map in two bases exactly when their lists d₁ ∣ ⋯ ∣ dₖ agree: the list is the whole of what a basis cannot change.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · companion · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">44·cb27.2.1</span><span class="ph understand">understand</span>What does the splitting technique say? <br>Why does the averaged inner product make the perpendicular of a kept space kept?</li>
+      <li><span class="qid">44·cb27.2.1</span><span class="ph understand">understand</span>What does the companion technique say? <br>Why does the last column of C_d hold −c₀, …, −cₖ₋₁?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="44·cb27.3">
-  <h2 class="sthead"><span class="stno">44·cb27.3</span>Maps Between Whole Pieces</h2>
-  <p data-pid="b2bb4e">A straight map T from V to V′ <i>respects G</i> when T ρ(g) = ρ′(g) T for every g.</p>
-  <p data-pid="e9c507">One-stretch technique: <b>if V and V′ are whole and T respects G, then T is 0 or undoable; and if V′ = V, then T is a multiple of the identity.</b></p>
-  <pre class="lines" data-k="ember" data-label="this page: the one-stretch technique">
-\text{what } T \text{ loses is kept by } \rho,\ \text{what it reaches is kept by } \rho' @@ Tv = 0 ⇒ Tρ(g)v = ρ′(g)Tv = 0; and ρ′(g)Tv = T(ρ(g)v)
-\text{each is } 0 \text{ or all} @@ both whole
-T \ne 0 \Rightarrow \text{loses only } 0 \text{ and reaches all: undoable} @@ 27c
-V' = V:\ \ T \text{ has a stretch } \lambda @@ 27f: det(T − λI) is a polynomial with a root in ℂ (25)
-T - \lambda I \text{ respects } G \text{ and is not undoable} @@ det = 0
-\htmlClass{new}{T - \lambda I = 0,\ \ T = \lambda I} \quad \blacksquare @@ the first part
+  <h2 class="sthead"><span class="stno">44·cb27.3</span>Over ℂ, Nearly Diagonal</h2>
+  <p data-pid="4140bd">Over ℂ every dᵢ splits into straight factors (25d), so by 43c’s remainder technique, read for polynomials that share no factor, each piece is a product of clocks ℂ[x]/((x − λ)ᵐ).</p>
+  <p data-pid="fc4b3a">Near-diagonal technique: <b>on ℂ[x]/((x − λ)ᵐ), in the basis (x − λ)^(m−1), …, (x − λ), 1, multiplying by x has λ on the diagonal, 1 just above it, and 0 elsewhere.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the near-diagonal technique">
+x \cdot u = \lambda u + (x - \lambda)u @@ add and take away λu
+u = (x - \lambda)^j:\ \ x \cdot u = \lambda (x - \lambda)^j + (x - \lambda)^{j+1} @@ the next basis arrow up, or 0 when j + 1 = m
+\htmlClass{new}{J_m(\lambda) = \begin{pmatrix} \lambda & 1 & & \\ & \lambda & \ddots & \\ & & \ddots & 1 \\ & & & \lambda \end{pmatrix}} \quad \blacksquare @@ the images as columns, in the basis read from the top power down
   </pre>
-  <p data-pid="9c1087">So a whole representation of a turn-about group has dimension 1: every ρ(h) respects G, so each is a multiple of the identity, and every line is kept.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · one stretch · ← → keys work</div></section>
+  <p data-pid="511b65">So every square grid of complex numbers is, in some basis, a row of such blocks down the diagonal. The stretches λ sit on the diagonal, and each block of size m above 1 holds m − 1 ones. The sliding grid of the header is J₂(0), one block, and no basis does better.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · nearly diagonal · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">44·cb27.3.1</span><span class="ph understand">understand</span>When does a straight map respect G? <br>What does the one-stretch technique say, and why does it make every whole representation of a turn-about group one-dimensional?</li>
+      <li><span class="qid">44·cb27.3.1</span><span class="ph understand">understand</span>What does the near-diagonal technique say? <br>Why does x · (x − λ)ʲ give λ on the diagonal and a 1 just above it?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="44·cb27.4">
-  <h2 class="sthead"><span class="stno">44·cb27.4</span>Traces Sort the Pieces</h2>
-  <p data-pid="3b24f9">The <i>trace</i> of a square grid is the sum of its main diagonal, and trace(AB) = trace(BA). The <i>character</i> of ρ is χ(g) = trace ρ(g). It is the same on a conjugate family: trace(ρ(h)ρ(g)ρ(h)⁻¹) = trace ρ(g).</p>
-  <p data-pid="21d96b">Perpendicular-characters technique: <b>for whole representations, (1/|G|) Σ χ(g) times the flip of χ′(g) is 1 when they match and 0 when they do not.</b> The proof averages a straight map over G to make one that respects it, and applies the one-stretch technique; it is held in trust here, and the table below checks it.</p>
-  <pre class="lines" data-k="ember" data-label="this page: the table of S₃">
-\text{families: } e\ (1),\ \text{swaps}\ (3),\ \text{3-loops}\ (2) @@ 44f1: one family per loop shape
-\chi_{\text{one}} = (1, 1, 1),\ \ \chi_{\text{sign}} = (1, -1, 1),\ \ \chi_W = (2, 0, -1) @@ W: the identity, a flip of the plane (stretches 1, −1), a turn by 120° (2 cos 120°)
-\tfrac16(1\cdot 2 + 3 \cdot 1 \cdot 0 + 2 \cdot 1 \cdot (-1)) = 0,\ \ \tfrac16(4 + 0 + 2) = 1 @@ one against W, and W against itself
-\chi_{\mathbb C^3} = (3, 1, 0) = \chi_{\text{one}} + \chi_W @@ fixed points: 3, 1, 0
-\htmlClass{new}{1^2 + 1^2 + 2^2 = 6 = |S_3|} \quad \blacksquare @@ the sizes of the whole pieces, squared, add to the size of the group
+  <h2 class="sthead"><span class="stno">44·cb27.4</span>When It Is Diagonal</h2>
+  <p data-pid="c8542b">Plain-diagonal technique: <b>a grid over ℂ is diagonal in some basis exactly when its least polynomial has no repeated zero.</b> A block Jₘ(λ) with m ≥ 2 has least polynomial (x − λ)ᵐ, and diagonal blocks have least polynomials x − λ; the least polynomial of the whole grid is the largest power of each x − λ that occurs.</p>
+  <pre class="lines" data-k="ember" data-label="this step: one grid by hand">
+A = \begin{pmatrix} 3 & 1 & 0 \\ -1 & 1 & 0 \\ 0 & 0 & 2 \end{pmatrix},\ \ \det(xI - A) = (x - 2)^3 @@ the top block has (x − 3)(x − 1) + 1 = (x − 2)²
+A - 2I = \begin{pmatrix} 1 & 1 & 0 \\ -1 & -1 & 0 \\ 0 & 0 & 0 \end{pmatrix} \ne 0,\ \ (A - 2I)^2 = 0 @@ multiply out
+\text{least polynomial } (x - 2)^2 @@ the least-obeyed technique (27g)
+\htmlClass{new}{A \text{ is } J_2(2) \text{ beside } J_1(2) \text{ in some basis, and is not diagonal in any}} \quad \blacksquare @@ the list is x − 2, (x − 2)²; the plain-diagonal technique
   </pre>
-  <p data-pid="085168">Like 32a’s coefficients, the amount of a whole piece in any representation is its projection: ⟨χ_V, χ_W⟩ counts how many copies of W are in V. That is how a physicist reads off what a symmetric system can do, without solving it.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · characters · ← → keys work</div></section>
+  <p data-pid="5d1b4e">27f’s straighten-out technique gave a diagonal when the stretches are all different. That is a special case: n different stretches make the least polynomial a product of n different straight factors. The grid above has one stretch, 2, three times, and only a plane of arrows it stretches.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · diagonal or not · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">44·cb27.4.1</span><span class="ph understand">understand</span>What is the character of a representation, and why is it the same on a conjugate family? <br>How does the table of S₃ show that ℂ³ is one copy of the one representation and one of W?</li>
+      <li><span class="qid">44·cb27.4.1</span><span class="ph understand">understand</span>What does the plain-diagonal technique say? <br>Why is the grid A of the footing not diagonal in any basis, and which blocks does it have?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="44·cb27.5">
-  <h2 class="sthead"><span class="stno">44·cb27.5</span>How a Water Molecule Shakes</h2>
-  <p data-pid="67085f">Water is bent: an oxygen with two hydrogens at 104.5°. Its symmetries, as 19·chem counted moves of molecules, are four: e; the half turn C about the line that halves the angle; the flip σ across the molecule’s plane; the flip σ′ across the plane that holds the axis and is perpendicular to the molecule. The group is turn-about, so its whole pieces have dimension 1, and there are four: A₁ (1, 1, 1, 1), A₂ (1, 1, −1, −1), B₁ (1, −1, 1, −1), B₂ (1, −1, −1, 1), in the order e, C, σ, σ′.</p>
-  <pre class="lines" data-k="ember" data-label="this page: the three shakes of water">
-\text{each atom moves in 3 directions: a representation of dimension } 9 @@ three atoms
-\chi = (9, -1, 3, 1) @@ only atoms left in place count: 3 · 3; 1 · (−1); 3 · 1; 1 · 1 (a half turn reverses two directions; a flip one)
-\text{copies: } A_1: \tfrac{9 - 1 + 3 + 1}{4} = 3,\ A_2: 1,\ B_1: 3,\ B_2: 2 @@ the projection of the perpendicular-characters technique
-\text{slides of the whole: } A_1 + B_1 + B_2;\ \ \text{turns of the whole: } A_2 + B_1 + B_2 @@ the three directions of space, and the three axes of turning, read the same way
-\htmlClass{new}{\text{shakes: } 2A_1 + B_1}:\ \text{three, all seen in infrared} \quad \blacksquare @@ 9 − 3 − 3 = 3; each moves the molecule’s charge like a slide, so light can drive it
-  </pre>
-  <p data-pid="31e04c">Measured, the three shakes of water vapour lie at 1595, 3657 and 3756 waves per centimetre: the bend and the stretch in A₁, and the lopsided stretch in B₁. Carbon dioxide, straight, has a stretch that keeps its centre and moves no charge, and infrared light cannot drive it; that is one reason the gases of the air differ in how they trap heat.</p>
-  <section class="slides" id="sl5"><div class="eyebrow">The slides · water · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">44·cb27.5.1</span><span class="ph understand">understand</span>What are the four symmetries of a water molecule, and why is each whole piece of dimension 1? <br>How does the character (9, −1, 3, 1) give three shakes?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="44·cb27.6">
-  <h2 class="sthead"><span class="stno">44·cb27.6</span>Illegal Moves</h2>
-  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
-\text{the shuffle representation of } S_3 \text{ on } \mathbb C^3 \text{ is whole}\,? @@ it keeps the line (t, t, t) and the plane x + y + z = 0
-\chi(g) \text{ depends on the basis chosen}\,? @@ trace(PAP⁻¹) = trace(A): a change of basis is a conjugate
-\text{a map respecting } G \text{ between two different whole pieces is a stretch}\,? @@ it is 0: undoable would match them
-\text{water has } 9 \text{ shakes, one per direction of each atom}\,? @@ three are slides of the whole and three turns of the whole
+  <h2 class="sthead"><span class="stno">44·cb27.5</span>Illegal Moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\det(xI - A) = (x - 2)^3 \text{, so } A = 2I \text{ in some basis}\,? @@ the least polynomial decides; here it is (x − 2)², so one block of size 2
+\text{two grids with the same own polynomial are one map in two bases}\,? @@ J₂(2) ⊕ J₁(2) and 2I share (x − 2)³ and differ
+\text{every real grid is nearly diagonal over } \mathbb R\,? @@ the turn by a right angle has no real stretch; over ℝ the companion blocks of x² + 1 remain
+J_2(0)^2 = J_2(0)\,? @@ J₂(0)² = 0: sliding twice slides off the end
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">44·cb27.6.1</span><span class="ph understand">understand</span>Why is the shuffle representation of S₃ on ℂ³ not whole? <br>Why does the character not depend on the basis chosen?</li>
+      <li><span class="qid">44·cb27.5.1</span><span class="ph understand">understand</span>Why does an own polynomial (x − 2)³ not make A equal to 2I in some basis? <br>Why is the turn by a right angle not nearly diagonal over ℝ?</li>
     </ol>
   </section>
 </section>
@@ -177,22 +152,22 @@ T - \lambda I \text{ respects } G \text{ and is not undoable} @@ det = 0
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">44·cb27.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\mathbb Z/4,\ \ \rho(k) = i^k"></span></span>Build all the whole representations of the clock of 4, and their table of characters. <br>Check that the rows are perpendicular and that the squares of the dimensions add to 4.</div>
-  <div class="chq"><span class="chid">44·cb27.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\rho(t) = \begin{pmatrix} 1 &amp; t \\ 0 &amp; 1 \end{pmatrix},\ t \in \mathbb Z"></span></span>This sends the whole numbers under + to grids. Find a kept line, and show it has no kept line beside it. <br>Which line of the splitting technique fails for an endless group?</div>
-  <div class="chq"><span class="chid">44·cb27.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="S_4,\ \ 24 = 1 + 1 + 4 + 9 + 9"></span></span>S₄ has five conjugate families. Turn the technique round: find whole representations of dimensions 1, 1, 2, 3, 3 from rungs 19, 27 and this page, starting with the turns of a cube. <br>Build their table of characters.</div>
-  <div class="chq"><span class="chid">44·cb27.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">27·phys: the axes of a tumbling body</span></span>Rung 27 found the principal axes of a tumbling body as the arrows a symmetric grid only stretches. <br>A body with the symmetries of a cube has all three stretches equal. Which technique of this page says so, and what does a die tumble like?</div>
+  <div class="chq"><span class="chid">44·cb27.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 2 &amp; 1 &amp; 1 \\ 0 &amp; 2 &amp; 1 \\ 0 &amp; 0 &amp; 2 \end{pmatrix}"></span></span>Find the least polynomial of A, its blocks, and a basis in which it is nearly diagonal. <br>Then find Aⁿ for every n from the block form, as 27l found powers by diagonalising.</div>
+  <div class="chq"><span class="chid">44·cb27.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="A^2 = A"></span></span>Which grids over ℂ obey A² = A? <br>Find their least polynomials and blocks. Must they be diagonal? Do the same for A² = 0 and for Aᵐ = I.</div>
+  <div class="chq"><span class="chid">44·cb27.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="xI - A"></span></span>Bring xI − A to a diagonal over ℚ[x] by 44i’s undoable moves for the grid of the fourth footing, and read off 1, x − 2, (x − 2)². <br>Turn it round: build a proof that the diagonal of xI − A is the list d₁ ∣ ⋯ ∣ dₖ of the grid-module technique.</div>
+  <div class="chq"><span class="chid">44·cb27.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">24h: y″ = −n²y, and a rule whose two roots coincide</span></span>24h solved rules on rates by trying e^(rx). For y″ − 4y′ + 4y = 0 the two roots coincide, and trying gives only e^(2x). <br>Write the rule as a grid acting on (y, y′). Which blocks has it? Does the 1 above the diagonal point to a second answer, and is x e^(2x) one?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r44l.html">← 44l · what can’t be built, by hand</a><a href="r44phys.html">44·phys · what are particles built from? →</a></nav>
+<nav class="nextrung"><a href="r44l.html">← 44l · Boolean Algebra Standing on Its Own</a><a href="r44comp.html">44·comp · how can a damaged message still be read? →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A whole representation is irreducible; a map that respects G is an intertwiner or G-map. The splitting technique is Maschke’s theorem, and the averaged inner product is Weyl’s unitary trick. The one-stretch technique is Schur’s lemma. The perpendicular-characters technique is the orthogonality of characters, and the table is a character table. Water’s group is the point group C₂ᵥ; A₁, A₂, B₁, B₂ are Mulliken’s labels, and the count of shakes is the method of normal-mode analysis by group theory; a shake that moves the charge is infrared active.</p>
+  <p>The block of the companion technique is the companion matrix, and the row of companion blocks is the rational canonical form, or Frobenius normal form; d₁, …, dₖ are the invariant factors of A. The blocks Jₘ(λ) are Jordan blocks, and the near-diagonal form is the Jordan normal form; the powers (x − λ)ᵐ are the elementary divisors. The plain-diagonal technique is the criterion for diagonalisability by the minimal polynomial.</p>
   <h3>Who said it first</h3>
-  <p>Georg Frobenius defined characters of finite groups in 1896, from a question Richard Dedekind put to him in letters. Heinrich Maschke proved the splitting technique in 1898 and Issai Schur the lemma in 1905. William Burnside and Frobenius built much of the theory around 1900. Hermann Weyl and Eugene Wigner brought it into quantum mechanics from 1927, and the chemistry of molecular shakes by characters was laid out by E. Bright Wilson in the 1930s.</p>
+  <p>Camille Jordan published the near-diagonal form in his Traité des substitutions of 1870, for grids over finite fields. Karl Weierstrass had the same lists of polynomials in 1868, for pairs of quadratic forms, and Georg Frobenius gave the rational form in 1879. The reading of a grid as a module over F[x] is from the school of Emmy Noether in the 1920s.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“ρ(h) respects G, so by the one-stretch technique every ρ(h) is a multiple of the identity, in every representation.” Not allowed: ρ(h) respects G only when it commutes with every ρ(g), which is so when G is turn-about. For S₃ on W, the turn by 120° is not a multiple of the identity.</p>
+  <p>“A has the three stretches 2, 2 and 2, so it has three stretched arrows, and they make a basis.” Not allowed: a stretch counted three times in the own polynomial may have fewer free stretched arrows. For the grid of the fourth footing, A − 2I loses only a plane, so there are two free stretched arrows, not three.</p>
 </section>
 
 </div>
@@ -207,30 +182,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'map',t:R`\rho(gh) = \rho(g)\rho(h)`,n:`Products to products.`},
-  {k:'ember',kl:'kept',t:R`\rho(g)W \subseteq W`,n:`For every g.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\mathbb C^3 = L \oplus W}`,n:`Two kept pieces.`}
-],{title:'The slides · representations · ← → keys work'});
+  {k:'ember',kl:'x acts',t:R`x \cdot v = Av`,n:`Doing the grid once.`},
+  {k:'ember',kl:'killed',t:R`c(A) = 0`,n:`The own polynomial.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{F^n \cong \textstyle\prod F[x]/(d_i)}`,n:`Clocks of polynomials.`}
+],{title:'The slides · a module · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'average',t:R`\langle u, v \rangle_G = \tfrac1{|G|}\textstyle\sum_g \langle \rho(g)u, \rho(g)v\rangle`,n:`Kept by G.`},
-  {k:'ember',kl:'perpendicular',t:R`W^\perp \text{ kept}`,n:`Closest point.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{V = W_1 \oplus \cdots \oplus W_k}`,n:`Whole pieces.`}
-],{title:'The slides · splitting · ← → keys work'});
+  {k:'ember',kl:'shift',t:R`x \cdot x^j = x^{j+1}`,n:`Ones below.`},
+  {k:'ember',kl:'wrap',t:R`x^k = -\sum c_j x^j`,n:`The last column.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{C_d \text{ has own polynomial } d}`,n:`A fixed grid.`}
+],{title:'The slides · companion · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'kept',t:R`\ker T,\ \ T(V)`,n:`Kept spaces.`},
-  {k:'ember',kl:'whole',t:R`0 \text{ or all}`,n:`Nothing between.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{T = \lambda I}`,n:`On one piece.`}
-],{title:'The slides · one stretch · ← → keys work'});
+  {k:'ember',kl:'split',t:R`x u = \lambda u + (x - \lambda)u`,n:`Add and take away.`},
+  {k:'ember',kl:'block',t:R`J_m(\lambda)`,n:`λ and ones.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{every grid over } \mathbb C}`,n:`Blocks down the diagonal.`}
+],{title:'The slides · nearly diagonal · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'trace',t:R`\chi(g) = \mathrm{tr}\,\rho(g)`,n:`One number a family.`},
-  {k:'ember',kl:'perpendicular',t:R`\langle \chi_i, \chi_j\rangle = 0 \text{ or } 1`,n:`Like turnings.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{(3, 1, 0) = (1, 1, 1) + (2, 0, -1)}`,n:`Read the pieces.`}
-],{title:'The slides · characters · ← → keys work'});
-stepper('#sl5',[
-  {k:'ember',kl:'character',t:R`\chi = (9, -1, 3, 1)`,n:`Atoms left in place.`},
-  {k:'ember',kl:'copies',t:R`3A_1 + A_2 + 3B_1 + 2B_2`,n:`Projections.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{2A_1 + B_1}`,n:`Three shakes.`}
-],{title:'The slides · water · ← → keys work'});
+  {k:'ember',kl:'own',t:R`(x - 2)^3`,n:`One stretch.`},
+  {k:'ember',kl:'least',t:R`(x - 2)^2`,n:`Repeated zero.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{J_2(2) \oplus J_1(2)}`,n:`Not diagonal.`}
+],{title:'The slides · diagonal or not · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

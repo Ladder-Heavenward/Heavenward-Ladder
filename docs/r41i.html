@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Unavoidable</title>
+<title>Chance in Computing</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,96 +48,137 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r41h.html">← 41h games</a><a href="r41j.html">next: 41j disorder is impossible →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r41h.html">← 41h how long and how much room</a><a href="r41j.html">next: 41j machines that read a tape, by hand →</a></p>
   <div class="tags"><span class="tag proof">41i · proof</span></div>
-  <h1>The Unavoidable</h1>
-  <p data-pid="205740">Seattle has more than seven hundred thousand people, and nobody has more than about a hundred and fifty thousand hairs on their head. So at least five people in Seattle have exactly the same number of hairs, and no one needs to count a single head to know it. Some facts are forced by counting alone, before anything is measured. Rung 8 used the simplest of them to prove that every fraction’s digits repeat: more letters than boxes puts two letters in one box. This step sharpens it and puts it to work on a row of numbers, where it forces a long run that only rises or only falls. Then it turns to counting what is left when some things are struck out, by adding back what was struck out twice, taking away what was added back too often, and so on. That gives the chance that when every guest at a dinner takes a coat at random, nobody gets their own: about 37 in 100, nearly the same for ten guests as for ten thousand, and the number behind it is e.</p>
-  <p class="gesture" data-pid="d43657">If more than n times k things go into n boxes, some box gets more than k. So a row of n² + 1 different numbers holds a rising run or a falling run of n + 1. To count what lies in none of several sets, take away the sizes, add back the overlaps of two, take away those of three, and on. The arrangements that move everything are n! times the sum of (−1)ᵏ/k!, the nearest whole number to n!/e.</p>
+  <h1>Chance in Computing</h1>
+  <p data-pid="703918">Is a polynomial written as a long product the same as another written as a long sum? Multiplying out can take more terms than there are atoms. There is a quicker way. Pick numbers at random, put them in for the letters, and compare the two values. If the two polynomials differ, they agree at only a few points, so a random point gives them away almost always. The answer can be wrong. The chance that it is wrong can be computed before the coins are thrown, and pushed as low as anyone likes by throwing again. This step gives the tape machine a supply of fair coins, and asks what that buys. It buys speed on real questions: checking an identity, checking a product of two large tables of numbers in far fewer steps than computing it. It does not buy the power to decide what could not be decided, and it is not known to buy anything that patience without coins could not also do fast. The statistics floor said that an answer with a stated chance of being wrong is still an answer. Here that becomes a class of questions.</p>
+  <p class="gesture" data-pid="66e0bf">A coin machine is wrong at a known rate, and repeating it with a majority vote pushes the rate down. A polynomial that is not zero is zero at a random point with chance at most its degree over the size of the set the point is drawn from. Chance checks a product of tables quickly. Every coin machine can be run on all its coins in small room.</p>
 </header>
 
 <section class="class step" data-step="41i1">
-  <h2 class="sthead"><span class="stno">41i1</span>A Crowded Box</h2>
-  <p data-pid="b26993">8·cb5’s pigeonhole technique put S(q) things into q boxes and found two in one. The count can be pushed.</p>
-  <p data-pid="99f407">Crowded-box technique: <b>if more than n · k things go into n boxes, some box gets more than k.</b> If every box got at most k, the boxes would hold at most n · k in all, by 4k’s separate-piles technique. With k = 1 it is the pigeonhole technique.</p>
-  <pre class="lines" data-k="ember" data-label="this step: heads of hair">
-\text{boxes: } 0, 1, \dots, 150\,000 \text{ hairs; } n = 150\,001 @@ an upper bound, generous, on hairs on one head
-\text{people: } 737\,015 \text{ in Seattle in 2020} @@ the census count
-737\,015 > 4 \cdot 150\,001 = 600\,004 @@ k = 4
-\htmlClass{new}{\text{some five people have exactly the same number of hairs}} \quad \blacksquare @@ the crowded-box technique
+  <h2 class="sthead"><span class="stno">41i1</span>A Machine With Coins</h2>
+  <p data-pid="7779b8">A <i>coin machine</i> is a tape machine with an extra tape of coin flips, each 0 or 1 with chance one half, all independent (30f). On an input its answer is now a chance event. A set A is in the class BPP when a coin machine runs within a power of n steps and, on every input, gives the wrong answer about A with chance at most 1/3.</p>
+  <p data-pid="daf268">One third looks loose. It is not, because the machine can be run again.</p>
+  <p data-pid="299ace">Majority-vote technique: <b>if a coin machine is wrong with chance at most 1/3 on each run, then k independent runs, answered by the majority, are wrong with chance at most 8/k.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the majority-vote technique">
+X = \text{the }\allowbreak \text{number }\allowbreak \text{of }\allowbreak \text{right }\allowbreak \text{runs }\allowbreak \text{out }\allowbreak \text{of } k @@ a sum of k independent counts, each 1 with chance p ≥ 2/3
+E X = kp \ge \tfrac{2k}{3},\ \allowbreak \ \text{Var}\,X = kp(1 - p) \le \tfrac{2k}{9} @@ 30g, with p(1 − p) at most 2/9 for p ≥ 2/3
+\text{the }\allowbreak \text{majority }\allowbreak \text{is }\allowbreak \text{wrong }\allowbreak \text{only }\allowbreak \text{if } X \le \tfrac k2\text{, so } |X - E X| \ge \tfrac k6 @@ 2k/3 − k/2 = k/6
+P(|X - E X| \ge \tfrac k6) \le \frac{2k/9}{(k/6)^2} @@ the spread-bound technique (30h)
+\htmlClass{new}{= \tfrac{8}{k}} \quad \blacksquare @@ (2k/9) · 36/k²
   </pre>
-  <p data-pid="e705f3">Rise-or-fall technique: <b>any row of n² + 1 different numbers holds n + 1 of them, in their order in the row, that rise, or n + 1 that fall.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the rise-or-fall technique">
-L(i) = \text{the length of the longest rising run starting at place } i @@ a label for each of the n² + 1 places
-\text{if some } L(i) \ge n + 1 \text{, done; else every } L(i) \in \{1, \dots, n\} @@ suppose not
-n^2 + 1 > n \cdot n:\ \text{some } n + 1 \text{ places share a label} @@ the crowded-box technique, k = n
-i < j \text{ with } L(i) = L(j):\ \text{if } r_i < r_j \text{ then } L(i) \ge L(j) + 1 @@ put rᵢ in front of the longest rising run from j
-\htmlClass{new}{\text{so } r_i > r_j:\ \text{the } n + 1 \text{ places with one label fall}} \quad \blacksquare @@ the numbers differ
-  </pre>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · crowded · ← → keys work</div></section>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · laws with a known exception rate</div>
+    <p data-pid="688908">A coin machine never makes its answer certain. It makes the chance of error a number fixed before it runs, the same on every input, and it lowers the number by repetition, at a cost in steps that is also fixed in advance.</p>
+    <p data-pid="6b97ae"><b>A coin machine is judged by its chance of error, and that chance is stated before the coins are thrown, for every input alike.</b></p>
+    <p data-pid="b7dcfd">This bound is crude: for an error of one in a million it asks for eight million runs. A sharper bound, the fast-fall technique of 41i5, shows the chance falls by a fixed factor with each run, so a few hundred runs bring it below the chance that a cosmic ray flips a bit in the machine’s memory during the run.</p>
+    <p class="bait" data-pid="add293">A test for whether a number is prime, run at a bank in Seattle, is wrong with chance at most 1/4 each run. How many runs would you ask for before signing a key with it, and against what other risk would you set the chance you accept?</p>
+  </aside>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · coins · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">41i1.1</span><span class="ph understand">understand</span>What does the crowded-box technique say, and how is the pigeonhole technique a case of it? <br>In the rise-or-fall technique, why must two places with the same label hold falling numbers?</li>
+      <li><span class="qid">41i1.1</span><span class="ph understand">understand</span>What is a coin machine, and when is a set in BPP? <br>What does the majority-vote technique say, and which technique of rung 30 does its proof use?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="41i2">
-  <h2 class="sthead"><span class="stno">41i2</span>Adding Back What Was Struck Twice</h2>
-  <p data-pid="03da49">How many of the numbers 1 to 100 are divisible by none of 2, 3 and 5? Strike out the 50 even ones, the 33 multiples of 3, the 20 multiples of 5. The multiples of 6, 10 and 15 were struck twice, and the multiples of 30 three times.</p>
-  <p data-pid="d104a8">Over-and-under technique: <b>the number of members of U lying in none of A₁, …, Aₘ is |U| minus the sizes of the Aᵢ, plus the sizes of the overlaps of two, minus those of three, and so on to the overlap of all m.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the over-and-under technique">
-\text{a member of } U \text{ in none of the } A_i:\ \text{counted once, by } |U|, \text{ and nowhere else} @@ it lies in no overlap
-\text{a member in exactly } r \ge 1 \text{ of them: counted } 1 - \binom{r}{1} + \binom{r}{2} - \cdots \pm \binom{r}{r} \text{ times} @@ it lies in the overlaps of every j of its r sets, and of no others (choosing-counts-parts, 4k)
-= (1 - 1)^r = 0 @@ the two-term-power technique (4k)
-\htmlClass{new}{\text{the total counts exactly the members in none of them}} \quad \blacksquare @@ 
+  <h2 class="sthead"><span class="stno">41i2</span>Is This Identity True?</h2>
+  <p data-pid="e68326">A polynomial in letters x₁, …, xₖ may be given as a formula that is short to write and long to multiply out: (x₁ + y₁)(x₂ + y₂)⋯(x₄₀ + y₄₀) has 2⁴⁰, about a million million, terms. Its value at given numbers is quick to compute. The <i>degree</i> of a term is the sum of its letters’ powers, and the polynomial’s degree is the largest.</p>
+  <p data-pid="9b7716">Random-point technique: <b>if a polynomial p in k letters has degree at most d and is not the zero polynomial, and each letter is given a value drawn at random from a set of s numbers, then p is 0 at that point with chance at most d/s.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the random-point technique">
+k = 1\text{: } p \text{ has }\allowbreak \text{at }\allowbreak \text{most } d \text{ roots, }\allowbreak \text{so }\allowbreak \text{chance }\allowbreak \text{at }\allowbreak \text{most } d/s @@ the root technique (25d): p = u(x − r₁)⋯(x − r_d)
+p = \textstyle\sum_{i=0}^{j} x_1^i\, q_i(x_2, \dots, x_k),\ \allowbreak \ q_j \ne 0 @@ sort by the power of x₁; q_j has degree at most d − j
+P(q_j = 0) \le \tfrac{d - j}{s} @@ the claim for k − 1 letters (induction, 4c)
+\text{if } q_j \ne 0 \text{ at }\allowbreak \text{the }\allowbreak \text{drawn } x_2, \dots\text{, } p \text{ is }\allowbreak \text{a }\allowbreak \text{nonzero }\allowbreak \text{polynomial }\allowbreak \text{in } x_1 \text{ of }\allowbreak \text{degree } j @@ so 0 with chance at most j/s, by the case k = 1
+\htmlClass{new}{P(p = 0) \le \tfrac{d - j}{s} + \tfrac{j}{s} = \tfrac{d}{s}} \quad \blacksquare @@ the chance of an or is at most the sum (30f)
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: 1 to 100, worked">
-100 - (50 + 33 + 20) + (16 + 10 + 6) - 3 @@ multiples of 2, 3, 5; of 6, 10, 15; of 30, counted by dividing and rounding down
-\htmlClass{new}{= 26} \quad \blacksquare @@ 
-  </pre>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · over and under · ← → keys work</div></section>
+  <p data-pid="2d0b93">To test whether two formulas f and g give the same polynomial, test p = f − g. If they are the same, p is 0 everywhere and the test always says so. If not, it says so wrongly with chance at most d/s. For (x + y)³ against x³ + 3x²y + 3xy² + y³, the degree is 3; draw from 1 to 1000 and a wrong pair slips through with chance at most 3/1000. No fast method without coins is known for this question in general.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · identity · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41i2.1</span><span class="ph understand">understand</span>What does the over-and-under technique say? <br>Why is a member lying in exactly r of the sets counted 0 times in all, and which technique of rung 4 shows it?</li>
+      <li><span class="qid">41i2.1</span><span class="ph understand">understand</span>What does the random-point technique say? <br>How does its proof go from one letter to k letters, and which technique of rung 25 starts it?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="41i3">
-  <h2 class="sthead"><span class="stno">41i3</span>Nobody Gets Their Own Coat</h2>
-  <p data-pid="267158">An arrangement of {1, …, n}, a shuffle in 19’s word, <i>moves everything</i> when no i is sent to i. Let Dₙ count them. With Aᵢ the arrangements keeping i where it is, an overlap of j of the Aᵢ keeps j places and arranges the other n − j freely.</p>
-  <p data-pid="056884">Wrong-coats technique: <b>Dₙ = n!(1 − 1/1! + 1/2! − ⋯ + (−1)ⁿ/n!), and for n ≥ 1 it is the whole number nearest n!/e.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the wrong-coats technique">
-D_n = \textstyle\sum_{j=0}^{n} (-1)^j \binom{n}{j} (n - j)! @@ the over-and-under technique; an overlap of j has (n − j)! members (4k)
-= n! \textstyle\sum_{j=0}^{n} \frac{(-1)^j}{j!} @@ n choose j times (n − j)! is n!/j!
-e^{-1} = \textstyle\sum_{j \ge 0} \frac{(-1)^j}{j!} @@ the exp-as-a-sum technique (22j) at −1
-\big|\tfrac{n!}{e} - D_n\big| < \tfrac{n!}{(n + 1)!} = \tfrac{1}{n + 1} \le \tfrac12 @@ the alternating bracket (22g): the error is below the first term left out
-\htmlClass{new}{D_4 = 9,\ \ D_5 = 44,\ \ D_{10} = 1\,334\,961} \quad \blacksquare @@ the nearest whole numbers to 8.83, 44.15, 1 334 960.9
+  <h2 class="sthead"><span class="stno">41i3</span>Checking a Product of Tables</h2>
+  <p data-pid="9ff848">Multiplying two n × n tables of numbers in the plain way takes about n³ multiplications, as 27j’s elimination did. Checking a claimed product AB = C can be done in about n² with coins.</p>
+  <p data-pid="3e43bc">Random-column technique: <b>if AB ≠ C and r is a column of n entries, each 0 or 1 at random, then A(Br) = Cr with chance at most 1/2.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the random-column technique">
+D = AB - C \ne 0\text{, with } d_{ij} \ne 0 @@ some entry differs
+(Dr)_i = d_{ij} r_j + \textstyle\sum_{l \ne j} d_{il} r_l @@ the ith entry of Dr
+\text{fix }\allowbreak \text{every } r_l \text{ with } l \ne j\text{; }\allowbreak \text{at }\allowbreak \text{most }\allowbreak \text{one }\allowbreak \text{of } r_j = 0,\ \allowbreak r_j = 1 \text{ makes }\allowbreak \text{it } 0 @@ the two values differ by d_ij ≠ 0
+\htmlClass{new}{P(Dr = 0) \le \tfrac12} \quad \blacksquare @@ whole chance (30f), over the other entries
   </pre>
-  <p data-pid="5fbb53">So the chance that n guests taking coats at random all get the wrong one is Dₙ/n!, which heads to 1/e ≈ 0.3679, and is within 1/(n + 1)! of it. For ten guests it is 0.367879, already the same to six places.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · coats · ← → keys work</div></section>
+  <pre class="lines" data-k="ember" data-label="this step: one check, worked">
+A = \begin{pmatrix}1&2\\3&4\end{pmatrix},\ \allowbreak B = \begin{pmatrix}1&1\\0&1\end{pmatrix},\ \allowbreak C = \begin{pmatrix}1&3\\3&8\end{pmatrix} @@ the true product has 7 in the corner
+r = \begin{pmatrix}0\\1\end{pmatrix}:\ Br = \begin{pmatrix}1\\1\end{pmatrix},\ \allowbreak A(Br) = \begin{pmatrix}3\\7\end{pmatrix},\ \allowbreak Cr = \begin{pmatrix}3\\8\end{pmatrix} @@ about n² steps each
+\htmlClass{new}{A(Br) \ne Cr:\ C \text{ is wrong}} \quad \blacksquare @@ with r = (1, 0) the check would have passed
+  </pre>
+  <p data-pid="319d18">Twenty columns drawn independently miss a wrong C with chance at most 2⁻²⁰, about one in a million, for 20 · 3n² steps, far below n³ once n is in the thousands.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · product check · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41i3.1</span><span class="ph understand">understand</span>What does the wrong-coats technique say? <br>Why is Dₙ within 1/(n + 1) of n!/e?</li>
+      <li><span class="qid">41i3.1</span><span class="ph understand">understand</span>What does the random-column technique say? <br>Why can at most one of the two values of r_j make the ith entry of Dr zero?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="41i4">
-  <h2 class="sthead"><span class="stno">41i4</span>Illegal Moves</h2>
+  <h2 class="sthead"><span class="stno">41i4</span>Where Chance Sits</h2>
+  <p data-pid="ae7370">All-coins technique: <b>every set in BPP is in PSPACE.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the all-coins technique">
+\text{the }\allowbreak \text{coin }\allowbreak \text{machine }\allowbreak \text{runs }\allowbreak \text{within } n^a \text{ steps, }\allowbreak \text{so }\allowbreak \text{it }\allowbreak \text{reads }\allowbreak \text{at }\allowbreak \text{most } n^a \text{ coins} @@ one coin a step at most
+\text{run }\allowbreak \text{it }\allowbreak \text{on }\allowbreak \text{every }\allowbreak \text{string }\allowbreak \text{of } n^a \text{ coins, }\allowbreak \text{one }\allowbreak \text{after }\allowbreak \text{another, }\allowbreak \text{reusing }\allowbreak \text{the }\allowbreak \text{room} @@ 2 to the n^a runs, each in room at most n^a
+\text{count }\allowbreak \text{the }\allowbreak \text{strings }\allowbreak \text{that }\allowbreak \text{give }\allowbreak \text{yes, }\allowbreak \text{in }\allowbreak \text{a }\allowbreak \text{counter }\allowbreak \text{of } n^a + 1 \text{ digits} @@ room again a power of n
+\htmlClass{new}{\text{say }}\allowbreak \htmlClass{new}{ \text{yes }}\allowbreak \htmlClass{new}{ \text{when }}\allowbreak \htmlClass{new}{ \text{the }}\allowbreak \htmlClass{new}{ \text{count }}\allowbreak \htmlClass{new}{ \text{passes }}\allowbreak \htmlClass{new}{ \text{half}} \quad \blacksquare @@ the right answer has chance at least 2/3, so more than half the strings give it
+  </pre>
+  <p data-pid="0b580c">So P sits in BPP, which sits in PSPACE. Coins do not decide anything undecidable either: run the coin machine on every coin string and the answer comes out without chance, slowly. What coins buy is speed, and whether they buy it in the end is open. For decades the best quick test of whether a number is prime used coins, and in 2002 a test without coins was found that is fast. Many now expect BPP to equal P, with coins replaced by numbers that only look random. That is not proved.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · classes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41i4.1</span><span class="ph understand">understand</span>What does the all-coins technique say, and why does trying every coin string fit in small room? <br>Why do coins not let a machine decide the stopping set?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41i5">
+  <h2 class="sthead"><span class="stno">41i5</span>Errors That Fall Fast</h2>
+  <p data-pid="b13ad0">The majority-vote technique asked for eight million runs to bring the error below one in a million. That is the spread-bound technique’s fault, not the machine’s: the spread bound uses only the spread of X, and X has far more to give. Count the wrong runs instead, and bound a growing function of them with the stray-bound technique of <a href="r30h.html#30h1">30h1</a>.</p>
+  <p data-pid="54063a">Fast-fall technique: <b>if each of k independent runs is wrong with chance at most 1/3, the majority is wrong with chance at most (2√2/3)ᵏ, which is below e^(−k/18).</b> Proof: let W be the number of wrong runs; the majority is wrong only if W ≥ k/2, that is, only if 2^W ≥ 2^(k/2). The stray-bound technique applied to 2^W, which is never negative, gives the chance at most E 2^W / 2^(k/2). The runs are independent, so by the independent-averages-multiply technique (<a href="r30g.html#30g3">30g3</a>) E 2^W is the product of k averages, each (1 − q) · 1 + q · 2 = 1 + q for a run wrong with chance q ≤ 1/3.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the fast-fall technique">
+P(\text{majority wrong}) \le P(2^W \ge 2^{k/2}) \le \frac{E\,2^W}{2^{k/2}} @@ the stray-bound technique (30h1)
+E\,2^W = (1 + q)^k \le (\tfrac43)^k @@ independent-averages-multiply (30g3), q ≤ 1/3
+\frac{(4/3)^k}{2^{k/2}} = \big(\tfrac{2\sqrt2}{3}\big)^k \approx 0.943^k @@ 4/(3√2) = 2√2/3
+\htmlClass{new}{0.943^k = e^{-0.0589k} < e^{-k/18}} \quad \blacksquare @@ ln 0.943 ≈ −0.0589, and 1/18 ≈ 0.0556
+  </pre>
+  <p data-pid="f2de00">One in a million now needs k with 0.943ᵏ below 10⁻⁶: k = 235 runs, against eight million. The base 2 was chosen, not found: for a run wrong with chance 1/3 it is the base that makes (1 − q + qx)/√x smallest, x = (1 − q)/q = 2. A run wrong with chance only a little under one half gains little from each run, and the same count shows how little.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41i5.1</span><span class="ph understand">understand</span>Why does the fast-fall technique bound 2^W and not W itself, and which two techniques of rung 30 does its proof use? <br>How many runs does it ask for to bring the error below one in a billion?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41i6">
+  <h2 class="sthead"><span class="stno">41i6</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{737 015 people, 150 001 boxes, so some box has 5 people exactly}\,? @@ at least 5; the technique gives a floor, not a count
-\text{the rise-or-fall technique holds for } n^2 \text{ numbers}\,? @@ 3, 2, 1, 6, 5, 4, 9, 8, 7 is 9 numbers with no rise or fall of 4
-100 - (50 + 33 + 20) = -3 \text{ counts the numbers with no factor 2, 3 or 5}\,? @@ the multiples of 6, 10, 15 were struck twice; add them back, and so on
-D_n / n! \text{ falls toward 0 as the guests multiply}\,? @@ more guests, more chances for each to be wrong, and more to be right: it settles near 1/e
+p \text{ was } 0 \text{ at }\allowbreak \text{ten }\allowbreak \text{random }\allowbreak \text{points, }\allowbreak \text{so } p \text{ is }\allowbreak \text{the }\allowbreak \text{zero }\allowbreak \text{polynomial}\,? @@ that is a stated chance of error, at most (d/s)¹⁰, not a proof
+\text{a }\allowbreak \text{coin }\allowbreak \text{machine }\allowbreak \text{is }\allowbreak \text{wrong }\allowbreak \text{with }\allowbreak \text{chance } 1/3 \text{ on }\allowbreak \text{most }\allowbreak \text{inputs}\,? @@ BPP asks for 1/3 on every input; a chance over inputs is a different claim
+\text{the }\allowbreak \text{random-point }\allowbreak \text{technique }\allowbreak \text{works }\allowbreak \text{for }\allowbreak \text{any }\allowbreak \text{set }\allowbreak \text{of } s \text{ values, }\allowbreak \text{with } s \le d\,? @@ then d/s ≥ 1 and the bound says nothing
+\text{one }\allowbreak \text{column } r \text{ passed, }\allowbreak \text{so } AB = C\,? @@ a wrong C passes one column with chance up to 1/2
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">41i4.1</span><span class="ph understand">understand</span>Why does the crowded-box technique give at least five people, and not exactly five? <br>Why is 100 − (50 + 33 + 20) not the count?</li>
+      <li><span class="qid">41i6.1</span><span class="ph understand">understand</span>Why do ten zero values at random points not prove that p is the zero polynomial? <br>Why must BPP’s chance of error hold on every input?</li>
     </ol>
   </section>
 </section>
@@ -146,22 +187,22 @@ D_n / n! \text{ falls toward 0 as the guests multiply}\,? @@ more guests, more c
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">41i.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{functions from } \{1, \dots, 4\} \text{ onto } \{1, 2, 3\}"></span></span>Count the functions from a set of 4 onto a set of 3 by the over-and-under technique, and check by listing how the 4 are split. <br>Give the count for n onto k as a sum.</div>
-  <div class="chq"><span class="chid">41i.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="D_0,\ \ D_1,\ \ D_2"></span></span>Find D₀, D₁ and D₂ from the formula and from the definition. Is the nearest-whole-number claim true at n = 0? <br>Prove Dₙ = (n − 1)(Dₙ₋₁ + Dₙ₋₂) by asking where n goes.</div>
-  <div class="chq"><span class="chid">41i.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="n^2 \text{ numbers}"></span></span>The rise-or-fall technique needs n² + 1 numbers. Prove n² is not enough for every n, by a row like the one in the illegal moves. <br>Which rows of 4 numbers have no rise or fall of 3?</div>
-  <div class="chq"><span class="chid">41i.5.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">4j.4.4: S(n) members into n</span></span>Rung 4 asked about S(n) things in n boxes before it had functions, and rung 8 proved the pigeonhole technique by induction on q. <br>Prove the crowded-box technique by induction instead. Which proof would you rather check? Is the pigeonhole technique a fact about counting, or about the numbers, or both?</div>
+  <div class="chq"><span class="chid">41i.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix}2&amp;0&amp;1\\1&amp;1&amp;0\\0&amp;3&amp;1\end{pmatrix},\ \allowbreak B = \begin{pmatrix}1&amp;2&amp;0\\0&amp;1&amp;1\\1&amp;0&amp;2\end{pmatrix}"></span> <span data-tex-inline="C = \begin{pmatrix}3&amp;4&amp;2\\1&amp;3&amp;1\\1&amp;3&amp;4\end{pmatrix}"></span></span>Run the random-column check by hand with each of the eight columns of 0s and 1s, and find how many catch C if it is wrong. Compute AB, and compare the count with the bound 1/2.</div>
+  <div class="chq"><span class="chid">41i.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{right }\allowbreak \text{with }\allowbreak \text{chance } \tfrac12 + \tfrac1n"></span></span>A coin machine is right with chance only one half plus 1/n on inputs of length n. Find how many runs the proof of the majority-vote technique needs to bring the error below 1/3, and whether that is still a power of n.</div>
+  <div class="chq"><span class="chid">41i.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="p(x) = x(x - 1),\ \allowbreak \ S = \{0, 1\}"></span></span>This p is not the zero polynomial, yet it is 0 at every point of S. Does it break the random-point technique? Build a polynomial in two letters of degree 2 that is 0 at every point of {0, 1} × {0, 1} and not zero, and find what the bound says for it.</div>
+  <div class="chq"><span class="chid">41i.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">wrong with chance 2⁻¹⁰⁰</span></span>One view holds that a claim checked by a coin machine with chance of error 2⁻¹⁰⁰ is as good as proved, since a long written proof is more likely than that to hide a slip. Another holds that a proof is a list of lines anyone can check, and a chance, however small, is not a line. Rung 30 called statistics induction with a stated chance of being wrong. Is the coin machine’s answer a proof, a statistic, or something else? What would change your mind?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r41h.html">← 41h · games</a><a href="r41j.html">41j · disorder is impossible →</a></nav>
+<nav class="nextrung"><a href="r41h.html">← 41h · how long and how much room</a><a href="r41j.html">41j · machines that read a tape, by hand →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The crowded-box technique is the generalized pigeonhole principle. The rise-or-fall technique is the Erdős–Szekeres theorem. The over-and-under technique is the inclusion–exclusion principle. Arrangements that move everything are derangements, and Dₙ is the subfactorial, written !n; the coats are the hat-check problem, or the problème des rencontres.</p>
+  <p>A coin machine is a probabilistic Turing machine, and BPP is bounded-error probabilistic polynomial time. The majority-vote technique is amplification; the fast-fall technique is a Chernoff bound, and bounding E e^(tW) through the stray bound is the exponential-moment method. The random-point technique is the Schwartz–Zippel lemma, and testing whether a formula is the zero polynomial is polynomial identity testing. The random-column technique is Freivalds’ algorithm. The all-coins technique is BPP ⊆ PSPACE; it is also known that BPP lies in the second level of the polynomial hierarchy.</p>
   <h3>Who said it first</h3>
-  <p>Pierre Rémond de Montmort counted derangements in 1708, for a card game, and Nicolaus Bernoulli and Leonhard Euler found the formula and its link with e. Abraham de Moivre wrote inclusion–exclusion in 1718; James Joseph Sylvester gave it its general form in 1883. Paul Erdős and George Szekeres proved the rise-or-fall technique in 1935, in the paper that also began 41j. The hair count goes back at least to a book of 1622 by Jean Leurechon, who made the argument for Paris.</p>
+  <p>Herman Chernoff published bounds of this kind in 1952, and credited the exponential trick to Herman Rubin. Rūsiņš Freivalds gave his check in 1977. Jacob Schwartz (1980) and Richard Zippel (1979) proved the random-point bound, with an earlier form by Richard DeMillo and Richard Lipton (1978). Robert Solovay and Volker Strassen (1977) and Michael Rabin (1980, after Gary Miller, 1976) gave coin tests for primes; Manindra Agrawal, Neeraj Kayal and Nitin Saxena (2002) gave a fast test without coins. John Gill defined BPP in 1977. Russell Impagliazzo and Avi Wigderson (1997) showed that BPP equals P if some problems are hard enough in a precise sense.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“The chance that guest i gets their own coat is 1/n, so the chance that nobody does is (1 − 1/n)ⁿ, which heads to 1/e.” Not allowed: the n events are not independent (if every guest but one has their own coat, so does the last). The answer, 1/e, is right in the limit and wrong for every n: for n = 4 the product is 0.316 and the true chance 9/24 = 0.375.</p>
+  <p>“Each run is wrong with chance 1/3, so two runs are both wrong with chance 1/9, and the answer of two runs is wrong with chance 1/9.” Not allowed: with two runs that disagree there is no majority, and the chance both are wrong is not the chance the answer is wrong. Take an odd number of runs, and bound the majority, as the technique does.</p>
 </section>
 
 </div>
@@ -176,20 +217,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'boxes',t:R`> nk \text{ into } n`,n:`Some box has more than k.`},
-  {k:'ember',kl:'labels',t:R`L(i) \le n`,n:`Longest rise from i.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{n + 1 \text{ rise or fall}}`,n:`From n² + 1.`}
-],{title:'The slides · crowded · ← → keys work'});
+  {k:'ember',kl:'runs',t:R`k \text{ independent}`,n:`Majority answer.`},
+  {k:'ember',kl:'spread',t:R`\text{Var}\,X \le \tfrac{2k}{9}`,n:`Each run right with 2/3.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P(\text{wrong}) \le 8/k}`,n:`Repeat to shrink it.`}
+],{title:'The slides · coins · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'strike',t:R`- \textstyle\sum |A_i|`,n:`Once each.`},
-  {k:'ember',kl:'add back',t:R`+ \textstyle\sum |A_i \cap A_j|`,n:`Struck twice.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{(1 - 1)^r = 0}`,n:`Every overlap undone.`}
-],{title:'The slides · over and under · ← → keys work'});
+  {k:'ember',kl:'draw',t:R`x_i \in S,\ |S| = s`,n:`At random.`},
+  {k:'ember',kl:'degree',t:R`\deg p \le d`,n:`Fixes the bound.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P(p = 0) \le d/s}`,n:`Unless p is 0.`}
+],{title:'The slides · identity · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'overlaps',t:R`\binom{n}{j}(n-j)!`,n:`j kept in place.`},
-  {k:'ember',kl:'sum',t:R`n! \textstyle\sum (-1)^j / j!`,n:`Over and under.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{D_n \approx n!/e}`,n:`Chance 1/e.`}
-],{title:'The slides · coats · ← → keys work'});
+  {k:'ember',kl:'draw',t:R`r \in \{0, 1\}^n`,n:`At random.`},
+  {k:'ember',kl:'compare',t:R`A(Br)\ \text{vs}\ Cr`,n:`n² steps.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P(\text{miss}) \le 1/2}`,n:`Per column.`}
+],{title:'The slides · product check · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'inside',t:R`P \subseteq BPP`,n:`Coins unused.`},
+  {k:'ember',kl:'all coins',t:R`2^{n^a} \text{ runs, room } n^a`,n:`Count the yeses.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{BPP \subseteq PSPACE}`,n:`Speed, not reach.`}
+],{title:'The slides · classes · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

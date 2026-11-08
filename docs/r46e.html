@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Groups Taken Apart</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r46d.html">← 46d subgroups and middle fields</a><a href="r46f.html">next: 46f A₅ is simple →</a></p>
+  <div class="tags"><span class="tag proof">46e · proof</span></div>
+  <h1>Groups Taken Apart</h1>
+  <p data-pid="6996d5">Rung 4 took every whole number apart into primes, in only one way. This step does the same for finite groups. A group is cut along a normal part-group into two smaller groups, the part and the quotient, and each of those is cut again, until no piece can be cut. The pieces that cannot be cut are the simple groups. Some groups come apart into pieces that are all clock groups of prime size, and those are the groups that the rest of the rung needs; they are called solvable, for a reason the next steps make plain. The step proves that being solvable passes to parts and quotients and back, that every finite group has a list of pieces, and that the list is the same however the cutting is done, as the prime list of a number is. It does not say that the pieces fix the group. Two different groups can share their pieces, as the step shows.</p>
+  <p class="gesture" data-pid="4af864">A group is solvable when a chain of normal steps takes it down to the identity with every step turn-about. Parts and quotients of a solvable group are solvable, and a group is solvable when a normal part and its quotient are. Every finite group has a chain whose steps are simple, and any two such chains have the same pieces.</p>
+</header>
+
+<section class="class step" data-step="46e1">
+  <h2 class="sthead"><span class="stno">46e1</span>Solvable Groups</h2>
+  <p data-pid="8974e2">From here on, H ◁ G says that H is a normal part-group of G (43·cb19): gHg⁻¹ = H for every g in G. A group is <i>solvable</i> when it has a chain {e} = G₀ ◁ G₁ ◁ ⋯ ◁ Gₖ = G, each a normal part-group of the next (not necessarily of G), with every quotient Gᵢ₊₁/Gᵢ turn-about (19c). Its accepted name, solvable, comes from 46g.</p>
+  <pre class="lines" data-k="ember" data-label="this step: three solvable groups">
+G \text{ turn-about}:\ \ \{e\} \lhd G @@ every part-group of a turn-about group is normal, and G/{e} is G
+S_3:\ \ \{e\} \lhd A_3 \lhd S_3,\ \ \text{quotients of sizes } 3, 2 @@ A₃ has half the members (19e), so it is normal; groups of prime size are clocks, turn-about
+V = \{e, (1\ 2)(3\ 4), (1\ 3)(2\ 4), (1\ 4)(2\ 3)\} \lhd S_4 @@ conjugating a double swap gives a double swap, and these are all of them
+\htmlClass{new}{S_4:\ \ \{e\} \lhd V \lhd A_4 \lhd S_4,\ \ \text{quotients of sizes } 4, 3, 2} \quad \blacksquare @@ V is turn-about (each member is its own undo, and the product of two is the third); sizes 3 and 2 are prime
+  </pre>
+  <p data-pid="5ad31d">So S₃ and S₄ are solvable, and so is every group of 46c’s first footings. The group of x³ − 2 comes apart as a clock of 3 under a clock of 2.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · solvable · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">46e1.1</span><span class="ph understand">understand</span>When is a group solvable? <br>Why is V normal in S₄, and why does that make S₄ solvable?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="46e2">
+  <h2 class="sthead"><span class="stno">46e2</span>Parts and Quotients Stay Solvable</h2>
+  <p data-pid="19f6d3">Solvable-parts technique: <b>a part-group of a solvable group is solvable; a quotient of a solvable group is solvable; and if N ◁ G with N and G/N solvable, then G is solvable.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the solvable-parts technique">
+H \subseteq G:\ \ H_i = H \cap G_i,\ \ H_i \lhd H_{i+1} @@ conjugating by h in Hᵢ₊₁ keeps H and keeps Gᵢ
+H_{i+1}/H_i \to G_{i+1}/G_i,\ \ hH_i \mapsto hG_i \text{ is one-to-one} @@ hGᵢ = Gᵢ with h in H exactly when h is in Hᵢ; the second isomorphism technique (43·cb19)
+\text{a part of a turn-about group is turn-about} @@ so H’s chain has turn-about steps
+G/N:\ \ G_iN/N,\ \ \text{each step an image of } G_{i+1}/G_i @@ gGᵢ ↦ gGᵢN, from Gᵢ₊₁/Gᵢ onto Gᵢ₊₁N/GᵢN, keeps products; an image of a turn-about group is turn-about
+N, G/N \text{ solvable}: \text{ the chain of } N, \text{ then the chain of } G/N \text{ lifted} @@ the part-groups of G/N are M/N with N ⊆ M (43·cb19), and (M′/N)/(M/N) matches M′/M
+\htmlClass{new}{\text{all three}} \quad \blacksquare @@ each chain has turn-about steps
+  </pre>
+  <p data-pid="f7a69c">With this, being solvable is a property that can be read off pieces. The pieces are the next footing.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · parts · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">46e2.1</span><span class="ph understand">understand</span>What does the solvable-parts technique say? <br>Why is a quotient of a solvable group solvable?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="46e3">
+  <h2 class="sthead"><span class="stno">46e3</span>Pieces That Cannot Be Cut</h2>
+  <p data-pid="2fcb94">A group S with more than one member is <i>simple</i> when its only normal part-groups are {e} and S. A <i>chain of pieces</i> of a finite group G is a chain {e} = G₀ ◁ ⋯ ◁ Gₖ = G in which every quotient Gᵢ₊₁/Gᵢ is simple; those quotients are its <i>pieces</i>.</p>
+  <p data-pid="0232ed">Pieces technique: <b>every finite group with more than one member has a chain of pieces; and a finite group is solvable exactly when its pieces are all clocks of prime size.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the pieces technique">
+G \ne \{e\}:\ \text{take } M \lhd G,\ M \ne G, \text{ as large as possible} @@ {e} is one; finitely many choices
+G/M \text{ is simple} @@ a normal part of G/M is N/M with M ⊆ N ◁ G (43·cb19), so N is M or G
+M \text{ has a chain of pieces; add } G @@ induction on the size (19d: |M| &lt; |G|)
+\text{a turn-about simple group has prime size} @@ each member makes a normal part-group; a member of order mp gives one of order p
+\text{solvable: refine each turn-about step into prime steps} @@ a turn-about group of size n has a part-group of prime size p, and its quotient has size n/p
+\htmlClass{new}{\text{solvable} \iff \text{every piece is a clock of prime size}} \quad \blacksquare @@ and the other way: clock pieces are turn-about steps
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · pieces · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">46e3.1</span><span class="ph understand">understand</span>What is a simple group, and what is a chain of pieces? <br>What does the pieces technique say about the pieces of a solvable group?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="46e4">
+  <h2 class="sthead"><span class="stno">46e4</span>The Pieces Are Fixed</h2>
+  <p data-pid="d43823">Same-pieces technique: <b>any two chains of pieces of a finite group have the same pieces, the same number of times each, in some order.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the same-pieces technique">
+\text{chains } \cdots \lhd M \lhd G \text{ and } \cdots \lhd N \lhd G,\ \ M \ne N @@ induction on |G|; if M = N, the chains of M agree by induction
+MN = G @@ MN is normal in G and holds M; G/M is simple, so MN is M or G, and it is not M, since then N ⊆ M, and G/N simple forces N = M
+L = M \cap N:\ \ G/M = MN/M \cong N/L,\ \ G/N \cong M/L @@ the second isomorphism technique (43·cb19)
+\text{take a chain of pieces of } L @@ the pieces technique
+M \text{ has two chains: its own, and } L \text{'s with } M/L \text{ on top} @@ M/L ≅ G/N is simple
+\text{by induction they have the same pieces; so do the two for } N @@ |M|, |N| &lt; |G|
+\htmlClass{new}{\text{both chains of } G \text{ have the pieces of } L,\ G/M,\ G/N} \quad \blacksquare @@ add G/M on one side and G/N on the other
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: one group, two ways, one list">
+\mathbb Z/6:\ \ \{0\} \lhd \{0, 3\} \lhd \mathbb Z/6,\ \ \text{pieces of sizes } 2, 3 @@ the quotient has 3 members
+\mathbb Z/6:\ \ \{0\} \lhd \{0, 2, 4\} \lhd \mathbb Z/6,\ \ \text{pieces of sizes } 3, 2 @@ the other order
+\htmlClass{new}{S_3 \text{ has pieces of sizes } 2, 3 \text{ too}} \quad \blacksquare @@ the same pieces, and a different group
+  </pre>
+  <p data-pid="de10f8">The pieces are fixed, like the primes of a number in 4j. Unlike the primes, they do not fix what they build: ℤ/6 and S₃ share them, and so do ℤ/4 and V. How pieces can be put together is a separate question, and a hard one.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · fixed · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">46e4.1</span><span class="ph understand">understand</span>What does the same-pieces technique say? <br>How do ℤ/6 and S₃ show that the pieces do not fix the group?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="46e5">
+  <h2 class="sthead"><span class="stno">46e5</span>Illegal Moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+\{e, (1\ 2)(3\ 4)\} \lhd V \lhd S_4, \text{ so } \{e, (1\ 2)(3\ 4)\} \lhd S_4\,? @@ conjugating by (1 3) gives (3 2)(1 4), outside it; normal in normal is not normal
+\text{every quotient turn-about, so } G \text{ is turn-about}\,? @@ S₃’s steps are turn-about and S₃ is not
+\text{the pieces fix the group}\,? @@ ℤ/4 and V both have pieces 2, 2; ℤ/6 and S₃ both have 2, 3
+\text{a simple group has prime size}\,? @@ only a turn-about simple group; 46f finds one of size 60
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">46e5.1</span><span class="ph understand">understand</span>Why is {e, (1 2)(3 4)} not normal in S₄ though it is normal in V and V is normal in S₄? <br>Why do turn-about steps not make the group turn-about?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">46e.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="D_4 = \text{the 8 symmetries of the square (19f)}"></span></span>Build a chain of pieces for the square’s group, and list its pieces. <br>Build a second chain through a different part-group of size 4, and check the same-pieces technique on it.</div>
+  <div class="chq"><span class="chid">46e.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="|G| = p^k"></span></span>A group whose size is a power of a prime: is it always solvable? The tools of this step stop short. Find where, and say what fact about such groups would finish it. <br>(46h proves it.)</div>
+  <div class="chq"><span class="chid">46e.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{same pieces} \Rightarrow \text{same group}\,?"></span></span>The same-pieces technique says a group fixes its pieces. Turn it round: find every group of size 8 you can build from rungs 19, 20 and 41, and sort them by their pieces. <br>How many groups share the list 2, 2, 2?</div>
+  <div class="chq"><span class="chid">46e.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="G \text{ solvable} \iff G^{(k)} = \{e\} \text{ for some } k"></span></span>Reroute solvability through turns that fail: the part-group G′ built from every g h g⁻¹ h⁻¹ is normal and G/G′ is turn-about. Write G⁽ᵏ⁾ for G′ taken k times. <br>Prove that G is solvable exactly when some G⁽ᵏ⁾ is {e}, and find S₃′ and S₄′.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r46d.html">← 46d · subgroups and middle fields</a><a href="r46f.html">46f · A₅ is simple →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A chain with normal steps is a subnormal series; with turn-about quotients it shows G is solvable. A chain of pieces is a composition series, and its pieces are the composition factors. The same-pieces technique is the Jordan–Hölder theorem. The proof’s first step uses a maximal normal subgroup. The part-group G′ of 46e.6.4 is the commutator subgroup, and G⁽ᵏ⁾ the derived series. A turn-about group is abelian.</p>
+  <h3>Who said it first</h3>
+  <p>Évariste Galois (1831) singled out the equations whose groups come apart in steps of prime size. Camille Jordan proved in 1869–70 that the sizes of the pieces do not depend on the chain, and Otto Hölder in 1889 that the pieces themselves do not, using quotient groups, which he introduced in the form used here. The name solvable comes from equations solvable by radicals, 46g.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“A part-group H of a solvable G is solvable: take G’s chain and keep the members in H. The steps are the same steps, so they are turn-about.” Not allowed as it stands: the steps of H’s chain are Hᵢ₊₁/Hᵢ, not Gᵢ₊₁/Gᵢ. They are turn-about because they sit one-to-one inside Gᵢ₊₁/Gᵢ, which needs the second isomorphism technique.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'chain',t:R`\{e\} \lhd G_1 \lhd \cdots \lhd G`,n:`Normal steps.`},
+  {k:'ember',kl:'steps',t:R`G_{i+1}/G_i \text{ turn-about}`,n:`Each quotient.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\{e\} \lhd V \lhd A_4 \lhd S_4}`,n:`S₄ comes apart.`}
+],{title:'The slides · solvable · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'part',t:R`H \cap G_i`,n:`Cut the chain.`},
+  {k:'ember',kl:'quotient',t:R`G_iN/N`,n:`Push the chain.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{N,\ G/N \text{ solvable} \Rightarrow G \text{ solvable}}`,n:`And stack.`}
+],{title:'The slides · parts · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'cut',t:R`M \lhd G \text{ as large as possible}`,n:`G/M is simple.`},
+  {k:'ember',kl:'again',t:R`\text{induction on } |G|`,n:`Cut M.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{solvable} \iff \text{prime clocks}}`,n:`Pieces decide.`}
+],{title:'The slides · pieces · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'two tops',t:R`G/M \cong N/L,\ G/N \cong M/L`,n:`The diamond.`},
+  {k:'ember',kl:'induct',t:R`|M|, |N| < |G|`,n:`Smaller groups.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{same pieces, any chain}}`,n:`Like primes.`}
+],{title:'The slides · fixed · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
