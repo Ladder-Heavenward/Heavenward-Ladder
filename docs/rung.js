@@ -1692,7 +1692,7 @@ function index(){ const sec=document.getElementById('skysec'), top=document.getE
     const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
     let fresh=null; try{ fresh=sessionStorage.getItem('sky:new'); sessionStorage.removeItem('sky:new'); }catch(e){} window.__skyFresh=fresh;
     if(!n){ sec.hidden=true; return; }
-    ol.innerHTML=L.slice(0,n).reverse().map(x=>'<li class="k-sky built"><span class="n">∞'+x.n+'</span><span class="t"><a href="'+x.page+'.html">'+esc(x.title)+'</a><span class="kind">'+esc(x.kw)+'</span></span></li>').join('');
+    ol.innerHTML=L.slice(0,n).map(x=>/* 2026-11-08: the list is shown bottom-up (column-reverse), so ∞1 sits lowest and the newest on top */'<li class="k-sky built"><span class="n">∞'+x.n+'</span><span class="t"><a href="'+x.page+'.html">'+esc(x.title)+'</a><span class="kind">'+esc(x.kw)+'</span></span></li>').join('');
     sec.hidden=false;
     if(fresh){ const fa=ol.querySelector('a[href="'+fresh+'.html"]'); if(fa){ const li=fa.closest('li'); li.classList.add('fvhere'); setTimeout(()=>li.scrollIntoView({block:'center'}),80); setTimeout(()=>li.scrollIntoView({block:'center'}),700); } } }); }
 /* 0.3.5 (Andrew 21:57): the Endless floor shows once rung 30 is finished: its core steps passed, its floor certified, or a footing above it climbed */
