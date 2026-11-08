@@ -7,7 +7,6 @@ function hstem(h){ h=h||''; const m=h.match(/^view\.html#(?:.*&)?p=([^&]+)/); if
      [data-tex]          display TeX         [data-tex-inline]   inline TeX
      <pre class="lines" data-k="ember|teal|plain" data-label="…">  one move per line:  TeX @@ note
      <div class="brkkey"></div>   filled with the colour legend for bars
-     <div class="phkey"></div>    filled with the legend for question phases
      .qid (questions) and li>.n (ladder rows) toggle ✓ on click; marks save per page title.
    The desk (☰): the page's questions beside you, and a grapher. Injected automatically. */
 /* the page's name: its file name, or the name the desk viewer gives it (window.LADDER_PAGE) */
@@ -137,7 +136,6 @@ function renderAll(root){
     tex(el,el.getAttribute('data-tex'),true); });
   root.querySelectorAll('[data-tex-inline]').forEach(el=>tex(el,el.getAttribute('data-tex-inline'),false));
   root.querySelectorAll('.brkkey:empty').forEach(el=>el.innerHTML='<span class="ke">ember bar: this page’s trick</span><span class="kt">teal bar: a trick you have passed</span><span class="kp">dotted: a trick further up the ladder</span><span class="kw">red bar: a wrong proof, not allowed</span><span>orange in a line: the move being made · teal in a line: what is carried</span>');
-  root.querySelectorAll('.phkey:empty').forEach(el=>el.innerHTML='The questions come in kinds: <span><span class="ph understand">understand</span>what the footing laid down, in your own words</span><span><span class="ph do">do</span>run it forward</span><span><span class="ph undo">undo</span>run it backward from the result</span><span><span class="ph bend">bend</span>change a piece, predict, find where it breaks</span><span><span class="ph make">make</span>the last set: harder, built on your own making, optional, and needed for the rung’s star</span>');
 }
 
 /* slides: any number per page. container = <section class="slides"> (empty or with an eyebrow) */
