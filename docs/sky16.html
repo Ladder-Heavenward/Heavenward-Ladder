@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Must Some Member Be in Half the Sets?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style></style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="sky15.html">← ∞15 can holes be counted in every dimension?</a><a href="index.html">next: the ladder →</a></p>
+  <div class="tags"><span class="tag now">∞16 · research front</span></div>
+  <h1>Must Some Member Be in Half the Sets?</h1>
+  <p data-pid="f10402">Must some member be in half the sets? Take a family of sets with one rule: whenever two sets are in the family, so is the set of everything in either of them. A question asked in 1979 is whether some single member must then turn up in at least half of the sets of the family. It looks like a puzzle for an afternoon, and for more than forty years nobody could prove even that some member is in one set in a hundred, for every family. In November 2022 a researcher at Google posted a proof of exactly that: one set in a hundred. The proof never looks at the sets one at a time. It picks two sets at random, joins them, and measures how surprising the result is, member by member, with the average surprise of rung 30. Within days several groups had pushed the share to about thirty eight in a hundred, and it then became clear that the same road, taken with two independent picks, stops there. This page builds the two tools the proof runs on: picking at random as a way of proving that something exists, and surprise counted one member at a time. With them it proves by hand that some member is in at least a tenth of the sets, shows where the thirty eight comes from, and shows the wall. Half is still open.</p>
+  <p class="gesture" data-pid="610f3a">A family F closed under ∪, with at least two sets. Pick A and B from F at random, independently. A ∪ B is in F, so its surprise is at most log₂|F|, which is the surprise of A. Count surprise member by member: if every member is missing from A with chance above 9/10, then each member’s share of the surprise grows when A meets B, and H(A ∪ B) &gt; H(A). So some member is in a tenth of the sets. The sharp form of the one-member inequality turns the tenth into (3 − √5)/2 ≈ 0.382, and two independent copies can go no further.</p>
+</header>
+
+<section class="class step" data-step="sky16.1">
+  <h2 class="sthead"><span class="stno">sky16.1</span>Families Closed Under Joining</h2>
+  <p data-pid="80bc5a">Let F be a family of sets whose members come from {1, …, n}. Call F <i>union-closed</i> when S and T in F always give S ∪ T in F, with 2f’s join (<a href="r02f.html#5fc7eb">the merge-membership technique</a>: a thing is in S ∪ T exactly when it is in S or in T). The <i>share</i> of a member i is the fraction of the sets of F that contain i. The question of 1979: in every union-closed family with some set other than ∅, is some member’s share at least ½?</p>
+  <p data-pid="5bedf2">The family of all eight subsets of {1, 2, 3} is union-closed, and each member is in exactly 4 of the 8: half, and no more. So half cannot be raised. The family {∅, {1}, {2}, {1, 2}, {1, 2, 3}} is union-closed too; members 1 and 2 are in 3 of its 5 sets, member 3 in 1 of 5. Here a one-member set settles it.</p>
+  <p data-pid="0985d9">Singleton-half technique: <b>if a union-closed family F contains a one-member set {i}, then i is in at least half the sets of F.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the singleton-half technique">
+S \in F,\ i \notin S \ \Rightarrow\ S \cup \{i\} \in F,\ i \in S \cup \{i\} @@ union-closed, with {i} in F
+S \cup \{i\} = T \cup \{i\},\ i \notin S,\ i \notin T \ \Rightarrow\ S = T @@ take i away from both: the merge-membership technique
+\#\{S \in F : i \notin S\} \le \#\{S \in F : i \in S\} @@ different sets go to different sets
+\htmlClass{new}{\text{the share of } i \text{ is at least } \tfrac12} \quad \blacksquare @@ the sets without i are at most half
+  </pre>
+  <p data-pid="c02756">Most families hold no one-member set, and the trick has nothing to grip. A computer run over every union-closed family on three members, 2⁸ candidate families, finds a member in at least half the sets of each; that is a check of small cases, and the question is about every n.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · union-closed · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">∞16.1.1</span><span class="ph understand">understand</span>What does the singleton-half technique say, and why does joining with {i} never send two sets to the same set? <br>Why does the family of all subsets of {1, 2, 3} show that half cannot be raised?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky16.2">
+  <h2 class="sthead"><span class="stno">sky16.2</span>Proving That Something Exists by Picking at Random</h2>
+  <p data-pid="6ee6f2"><a href="r42j.html#60c636">42j4</a> proved that a colouring with no one-colour group exists by showing that the average count of such groups, over a random colouring, is below 1. Nobody has written such a colouring down for large k. The move works for any random choice, and it is the second tool of this page.</p>
+  <p data-pid="6a4c6d">Some-outcome technique: <b>for a random choice among finitely many outcomes, each with chance above 0: if some property has chance above 0, some outcome has it; and a number that depends on the choice is at least its average for some outcome and at most its average for some outcome.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the some-outcome technique">
+X(\omega) \lt m \text{ for every outcome } \omega @@ suppose it, with m = E X
+\operatorname{E} X = \textstyle\sum_\omega X(\omega) P(\omega) \lt \sum_\omega m\, P(\omega) = m @@ 30g’s average as a sum; every P(ω) &gt; 0
+\operatorname{E} X \lt \operatorname{E} X @@ m = E X
+\htmlClass{new}{X(\omega) \ge \operatorname{E} X \text{ for some } \omega} \quad \blacksquare @@ refute; the same with X turned round gives X(ω) ≤ E X
+  </pre>
+  <p data-pid="0a89d6">The average-below-one technique is the case X = the count of one-colour groups: some colouring has a count at most its average, below 1, so 0. A case for this page: pick a set S from F at random and a member i from {1, …, n} at random. The chance that i ∈ S is the average size of S divided by n, and it is also the average share. So some member has share at least the average size over n. In {∅, {1}, {2}, {1, 2}, {1, 2, 3}} the sizes 0, 1, 1, 2, 3 average 7/5, so some member has share at least 7/15; members 1 and 2 have 3/5.</p>
+  <p data-pid="29ba87">Averaging over members is too weak for the question: a family of small sets has a small average size. The proof of this page averages something else, the surprise. Its accepted name, with this technique, is the probabilistic method.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · random · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞16.2.1</span><span class="ph understand">understand</span>What does the some-outcome technique say, and how is the average-below-one technique of 42j4 a case of it? <br>Why does averaging the share over the members not settle the question of 1979?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky16.3">
+  <h2 class="sthead"><span class="stno">sky16.3</span>Surprise, One Member at a Time</h2>
+  <p data-pid="8fb65e">Pick A from F with every set equally likely, and write A as its list of bits a₁, …, aₙ, with aᵢ = 1 when i ∈ A. By <a href="r30comp.html#6fc574">the surprise-average technique</a>, H(A) = log₂|F|, the most surprise any variable with |F| values can have. The proof needs H counted one bit at a time, and the fact that knowing more never adds surprise. Both come from <a href="r30comp.html#544fe5">the shared-information technique</a>, read one member at a time.</p>
+  <p data-pid="e28785">Member-chain technique: <b>H(a₁, …, aₙ) = H(a₁) + H(a₂ | a₁) + ⋯ + H(aₙ | a₁, …, aₙ₋₁); and knowing more never raises the surprise left: H(X | Y, W) ≤ H(X | Y), and H(X | g(Y)) ≥ H(X | Y) for any function g.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the member-chain technique">
+I(X; Y) = H(X) + H(Y) - H(X, Y) = H(X) - H(X \mid Y) @@ 30comp3
+H(X, Y) = H(Y) + H(X \mid Y) @@ the two read together
+H(a_1, \ldots, a_k) = H(a_1, \ldots, a_{k-1}) + H(a_k \mid a_1, \ldots, a_{k-1}) @@ X = aₖ, Y = the earlier bits; repeat for k = n, …, 2
+H(X \mid Y) - H(X \mid Y, W) = \textstyle\sum_y P(y)\, I(X; W \mid Y = y) \ge 0 @@ the shared-information technique inside each value of Y (the given-chance technique, 30f)
+H(X \mid g(Y)) \ge H(X \mid g(Y), Y) = H(X \mid Y) @@ knowing Y gives g(Y) for nothing
+\htmlClass{new}{\text{the chain, and knowing more never adds}} \quad \blacksquare @@ the member-chain technique
+  </pre>
+  <p data-pid="abdd4d">Take F = {∅, {1}, {1, 2}}, union-closed. H(A) = log₂ 3 = 1.585 bits. Member 1 is in A with chance 2/3, so H(a₁) = h(2/3) = 0.918, with h(p) = p log₂(1/p) + (1 − p) log₂(1/(1 − p)) as in 30comp1. Given a₁ = 1, a₂ is a fair coin, 1 bit; given a₁ = 0, A = ∅ and a₂ = 0, 0 bits. So H(a₂ | a₁) = 2/3, and 0.918 + 0.667 = 1.585.</p>
+  <p data-pid="4dbacf">For the proof write xᵤ for the chance that member i is <i>missing</i> from A, given that the earlier bits are the list u. Then H(aᵢ | a₁, …, aᵢ₋₁) is the average of h(xᵤ) over u, and the average of xᵤ over u is the chance that i ∉ A, which is 1 minus the share of i.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · one at a time · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞16.3.1</span><span class="ph understand">understand</span>What does the member-chain technique say, and how does it split log₂ 3 for the family {∅, {1}, {1, 2}}? <br>Why does knowing more never raise the surprise left, on average?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky16.4">
+  <h2 class="sthead"><span class="stno">sky16.4</span>Missing From Both</h2>
+  <p data-pid="0835fa">Now pick A and B from F, independently. Member i is missing from A ∪ B exactly when it is missing from both. Given the earlier bits of A and of B, the two misses are independent, with chances x and y, so the miss from A ∪ B has chance xy, and its surprise is h(xy). The whole proof turns on comparing h(xy) with h(x) and h(y).</p>
+  <p data-pid="fa9864">Missing-together technique: <b>if U and V are independent bits, 1 with chances x and y, and Z = UV, then h(xy) = x h(y) + y h(x) − I(U; V | Z), with 0 ≤ I(U; V | Z) ≤ 1 − xy; and h(xy) ≥ y h(x).</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the missing-together technique">
+H(U, V) = h(x) + h(y) @@ independent: surprises add (30comp1)
+H(U, V) = H(Z) + H(U \mid Z) + H(V \mid U, Z) @@ the member-chain technique; Z is fixed by U and V
+H(V \mid U, Z) = (1 - x)\, h(y) @@ U = 1: V = Z, known; U = 0: Z = 0, and V is still its own coin
+H(U \mid Z) = H(U \mid Z, V) + I(U; V \mid Z) = (1 - y)\, h(x) + I(U; V \mid Z) @@ the same with U and V swapped
+h(x) + h(y) = h(xy) + (1 - y) h(x) + I(U; V \mid Z) + (1 - x) h(y) @@ put the three in
+I(U; V \mid Z) = (1 - xy)\, I(U; V \mid Z = 0) \le (1 - xy) \cdot 1 @@ Z = 1 fixes both bits; a bit tells at most 1 bit
+h(xy) = H(Z) \ge H(Z \mid V) = y\, h(x) @@ knowing more never adds; V = 1 gives Z = U, V = 0 gives Z = 0
+\htmlClass{new}{h(xy) = x\, h(y) + y\, h(x) - I(U; V \mid Z)} \quad \blacksquare @@ the missing-together technique
+  </pre>
+  <p data-pid="3dcc6e">At x = y = ½: h(¼) = 0.811, and x h(y) + y h(x) = 1, so I(U; V | Z) = 0.189. Directly: given Z = 0, the pair (U, V) is (0, 0), (0, 1) or (1, 0), each with chance ⅓, and I = h(⅓) + h(⅓) − log₂ 3 = 0.252; times the chance ¾ of Z = 0, it is 0.189. If I were 0, a member missing with chance near 1 from each pick would be about twice as surprising in the join. I is what is lost, and the proof must show it is small.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · both missing · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞16.4.1</span><span class="ph understand">understand</span>What does the missing-together technique say? <br>Why is the shared part I(U; V | Z) at most 1 − xy, and how is 0.189 found at x = y = ½?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky16.5">
+  <h2 class="sthead"><span class="stno">sky16.5</span>Some Member Is in a Tenth of the Sets</h2>
+  <p data-pid="d6b170">Write D(x, y) = x h(y) + y h(x) − h(xy), the shared part I(U; V | Z) of the last footing. The proof needs D small against h(x) + h(y). Two cases, each with a bound of the last footing.</p>
+  <pre class="lines" data-k="ember" data-label="this page: D(x, y) ≤ (2/5)(h(x) + h(y))">
+D \le x\, h(y),\ \ D \le y\, h(x) @@ h(xy) ≥ y h(x), and the same with x and y swapped
+x \lt \tfrac23:\ \ D \le \min\big(h(x), \tfrac23 h(y)\big) \le \tfrac25 h(x) + \tfrac35 \cdot \tfrac23 h(y) @@ y ≤ 1; the smaller is at most any weighted average of the two
+x, y \ge \tfrac23:\ \ D \le 1 - xy \le (1 - x) + (1 - y) @@ the missing-together technique
+h(x) \ge 3h(\tfrac23)(1 - x) = 2.755\,(1 - x) \ge \tfrac52 (1 - x) \text{ for } x \ge \tfrac23 @@ h bends down (second slope −1/(p(1 − p) ln 2) below 0), so it lies above its chord from ⅔ to 1
+\htmlClass{new}{D(x, y) \le \tfrac25\big(h(x) + h(y)\big)} \quad \blacksquare @@ both cases, and y &lt; ⅔ as x &lt; ⅔
+  </pre>
+  <p data-pid="19de7d">Union-entropy technique: <b>if F is union-closed with at least two sets, some member is in at least a tenth of the sets of F.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the union-entropy technique">
+\text{every member missing from } A \text{ with chance } m_i \gt \tfrac{9}{10} @@ suppose it, to refute
+A \cup B \in F \ \Rightarrow\ H(A \cup B) \le \log_2 |F| = H(A) @@ union-closed; the surprise-average technique
+H(A \cup B) \ge \textstyle\sum_i H(c_i \mid a_{\lt i}, b_{\lt i}) @@ cᵢ the bit of i in A ∪ B: the member-chain technique, knowing more
+H(c_i \mid a_{\lt i} = u, b_{\lt i} = v) = h(x_u y_v) \ge x_u h(y_v) + y_v h(x_u) - \tfrac25\big(h(x_u) + h(y_v)\big) @@ the missing-together technique and the bound above
+\text{average over } u, v\text{: } \ge 2 m_i H_i - \tfrac45 H_i,\ \ H_i = H(a_i \mid a_{\lt i}) @@ u, v independent (30g); B is a copy of A
+H(A \cup B) \ge \textstyle\sum_i (2m_i - \tfrac45) H_i \gt \sum_i H_i = H(A) @@ 2 · 9/10 − 4/5 = 1, and H(A) = log₂|F| &gt; 0
+\htmlClass{new}{\bot} \quad \blacksquare @@ refute: some member is in at least a tenth of the sets
+  </pre>
+  <p data-pid="81a0b5">The crude two-case bound gives a tenth; the proof of November 2022 gave one in a hundred with a different lemma. Union-closure is spent in one line only, the second: the join of two picks is still a set of F, so the join cannot be more surprising than one pick. Everything else holds for any family.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · a tenth · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞16.5.1</span><span class="ph understand">understand</span>What does the union-entropy technique say, and in which line is union-closure spent? <br>How does the bound D ≤ (2/5)(h(x) + h(y)) lead to a tenth, through 2 · 9/10 − 4/5 = 1?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky16.6">
+  <h2 class="sthead"><span class="stno">sky16.6</span>The Golden Share, and the Wall</h2>
+  <p data-pid="9bdfdf">The two-case bound wastes most of what is there. The sharp one-member inequality, found and proved in the weeks after November 2022 (first with a computer’s help, then by calculus, later in a short proof), is: h(xy) ≥ (x h(y) + y h(x)) / (2φ) for all x, y between 0 and 1, with φ = (√5 − 1)/2 ≈ 0.618. It is held in trust here; a script checks it on a grid of a million points, with equality at x = y = φ, where φ² = 1 − φ and so h(φ²) = h(φ). Put into the last proof, it gives H(A ∪ B) ≥ Σ (mᵢ/φ) Hᵢ, which beats H(A) when every mᵢ &gt; φ: so some member is in at least 1 − φ = (3 − √5)/2 ≈ 0.382 of the sets.</p>
+  <p data-pid="9d2af4">Product-wall technique: <b>if each member of {1, …, n} is put in A independently with chance p, and B is an independent copy, then H(A ∪ B) &lt; H(A) whenever (3 − √5)/2 &lt; p ≤ ½.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the product-wall technique">
+H(A) = n\, h(p) @@ independent bits: surprises add
+\text{a member is missing from } A \cup B \text{ with chance } (1 - p)^2 @@ missing from both, independently
+H(A \cup B) = n\, h\big((1 - p)^2\big) @@ h(q) = h(1 − q)
+(1 - p)^2 \lt p \iff p^2 - 3p + 1 \lt 0 \iff p \gt \tfrac{3 - \sqrt5}{2} @@ the roots of p² − 3p + 1 are (3 ± √5)/2
+(1 - p)^2 \lt p \le \tfrac12 \ \Rightarrow\ h\big((1 - p)^2\big) \lt h(p) @@ h rises on [0, ½]
+\htmlClass{new}{H(A \cup B) \lt H(A)} \quad \blacksquare @@ the product-wall technique
+  </pre>
+  <p data-pid="191c5e">At p = 0.4: h(0.4) = 0.971 and h(0.36) = 0.943, so the join is less surprising than one pick, though every share is below 0.4. This A is not a pick from a union-closed family, so nothing is refuted about families. What is refuted is the road: any proof that uses only “every share below ψ makes the join of two independent picks more surprising” cannot pass (3 − √5)/2. Letting the two picks depend on each other moved the bound, by a computed optimum, to about 0.38234 by 2023.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · the wall · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞16.6.1</span><span class="ph understand">understand</span>What does the product-wall technique say, and where does (3 − √5)/2 come from? <br>Why does it not give a union-closed family with every share below 0.4, and what does it show instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky16.7">
+  <h2 class="sthead"><span class="stno">sky16.7</span>Illegal Moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+A, B \text{ uniform on } F \Rightarrow A \cup B \text{ uniform on } F\,? @@ in {∅, {1}, {1, 2}}, A ∪ B = ∅ only with chance 1/9
+H(A \cup B) \le H(A) \text{ for every family}\,? @@ only when A ∪ B stays in F; for {{1}, {2}}, H(A ∪ B) = 1.5 &gt; 1 = H(A)
+\text{some member is in half the sets, since some share is at least the average}\,? @@ the average share is the average size over n, often far below ½
+\text{a check of the golden inequality on a grid proves it}\,? @@ a grid says nothing between its points; the inequality is held in trust
+\text{the product-wall technique refutes the question at } 0.4\,? @@ its A is not a pick from a union-closed family
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞16.7.1</span><span class="ph understand">understand</span>Why is H(A ∪ B) ≤ H(A) false for the family {{1}, {2}}, and which fact about the family is missing? <br>Why does the product-wall technique say nothing against the question of 1979 itself?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="openq themeend">
+  <div class="eyebrow">Open questions · nobody has the answer yet</div>
+  <h2>Open questions</h2>
+  <p class="chnote">These are open: the field is still asking them. There is no key; a good attempt is a reason, a guess, or a better question.</p>
+  <div class="oq"><span class="oqid">∞16.oq.1</span>Is some member in half the sets? For every union-closed family with a set other than ∅, is some member in at least half of them? The family of all subsets shows half cannot be raised. The best share proved for every family is a little above 0.382, and the question has been open since 1979.</div>
+  <div class="oq"><span class="oqid">∞16.oq.2</span>Can surprise reach half? The product-wall technique shows that two independent picks stop at (3 − √5)/2. Letting the picks depend on each other moved the bound only in the fourth decimal place, to about 0.38234. Is there a way of picking, or a measure other than surprise, that reaches ½, or must a proof of the half look at the structure of the family itself?</div>
+  <div class="oq"><span class="oqid">∞16.oq.3</span>Is the random colouring near the truth? The some-outcome technique, as 42j4 used it, gives a colouring of about 2^(k/2) dots with no one-colour group of k; <a href="r42now2.html">42·now2</a> told how the upper end, near 4^k, was first lowered in 2023. The base √2 at the lower end, from picking at random, has not been raised in nearly eighty years. Is the true count near 2^(k/2), near 4^k, or somewhere between? And can anyone write down, by a fast rule, a colouring of as many dots as the random one promises?</div>
+</section>
+<section class="history themeend">
+  <div class="eyebrow">A short history · told from more than one side</div>
+  <h2>How we got here</h2>
+  <p data-pid="3aeb12">The question is dated to 1979. It has equivalent forms: turn every set into the set of members it lacks, and joins become meetings, so the same question asks about families closed under meeting, where some member must be <i>missing</i> from half the sets. Each form made the question look easier, and none made it easier. Special families fell to clever counting: the singleton-half technique is the simplest of many such cases.</p>
+  <p data-pid="f2e2ba">For four decades every bound that held for all families depended on the size of the family: the share proved for some member shrank as the number of sets grew. Nobody could get a fixed share, not one in a hundred, not one in a million, for every family at once.</p>
+  <p data-pid="f08b44">In November 2022 a researcher at Google posted a short proof that some member is in at least one set in a hundred. The idea was to pick two sets at random, reveal them member by member, and watch the surprise. The story was widely told as an outsider’s win; the tool itself was the average surprise of 1948.</p>
+  <p data-pid="9ca4a4">The response was very fast. Within about a week several groups, working apart, posted papers taking the share to (3 − √5)/2 ≈ 0.382, the bound the original post had already suggested was within reach. One proof of the key one-variable inequality leaned on a computer check; others gave it by calculus, and a short proof followed. A small race then ran to pass 0.382: letting the two random picks depend on each other gave about 0.38234 by computation, in 2022 and 2023.</p>
+  <p data-pid="8af3ac">What is argued now is whether the entropy method has said its last word on the question. One side holds that the wall at 0.382 shows the method measures the wrong thing for the half, and that the half will need the structure of the family, not only its surprise. The other side points out that the method went from no fixed share to 0.38 in a month, after forty years, and that a new way of picking might still move it. No family is known where every member is in fewer than half the sets.</p>
+</section>
+
+<nav class="nextrung"><a href="sky15.html">← ∞15 · can holes be counted in every dimension?</a><a href="index.html">the ladder →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The question is Frankl’s union-closed sets conjecture. The singleton-half technique is the folklore observation that a union-closed family containing a singleton satisfies the conjecture. The some-outcome technique and its uses are the probabilistic method; the average-below-one technique of 42j4 is the first-moment method, and the share argument of sky16.2 is averaging. H is Shannon entropy; the member-chain technique is the chain rule for entropy, with the fact that conditioning reduces entropy. The missing-together technique writes the entropy of an OR (here, of a product of indicators) with the conditional mutual information. The union-entropy technique is Gilmer’s entropy method; the golden inequality is Boppana’s inequality, and (3 − √5)/2 = 1 − φ with φ the golden ratio conjugate. The product-wall technique is the reason the independent-copies approach stops at that constant.</p>
+  <h3>Who said it first</h3>
+  <p>Péter Frankl posed the conjecture in 1979. Paul Erdős made the probabilistic method a standard tool from 1947. Claude Shannon defined entropy in 1948. Justin Gilmer, a researcher at Google, posted the first constant bound, 0.01, in November 2022. Ryan Alweiss, Brice Huang and Mark Sellke; Zachary Chase and Shachar Lovett; Luke Pebody; and Will Sawin, in separate papers, reached (3 − √5)/2 within days and weeks after. Lei Yu computed about 0.38234 from Sawin’s approach; Ravi Boppana gave a short proof of the inequality.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Pick a member i at random; on average it is in the average size over n of the sets, and the sets of a union-closed family are large, since joins only grow; so some member is in half.” Not allowed: the family ∅, {1}, {1, 2}, …, {1, …, k} on n members is union-closed, and its average size over n is k/(2n), far below ½ when n is much larger than k. The conclusion holds there (member 1 is in all but one set), but this argument cannot see it. The proof of this page averages surprise, not size.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+
+stepper('#sl1',[
+  {k:'ember',kl:'rule',t:R`S, T \in F \Rightarrow S \cup T \in F`,n:`Joined sets stay in.`},
+  {k:'ember',kl:'join',t:R`S \mapsto S \cup \{i\}`,n:`One to one.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{share of } i \ge \tfrac12}`,n:`When {i} is in F.`}
+],{title:'The slides · union-closed · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'average',t:R`\operatorname{E} X = \textstyle\sum X(\omega)P(\omega)`,n:`Finitely many outcomes.`},
+  {k:'ember',kl:'if not',t:R`\operatorname{E} X \lt \operatorname{E} X`,n:`Totally false.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\exists\,\omega:\ X(\omega) \ge \operatorname{E} X}`,n:`An outcome nobody named.`}
+],{title:'The slides · random · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'chain',t:R`H(A) = \textstyle\sum_i H(a_i \mid a_{\lt i})`,n:`Bit by bit.`},
+  {k:'ember',kl:'example',t:R`1.585 = 0.918 + 0.667`,n:`Two members.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{H(X \mid Y, W) \le H(X \mid Y)}`,n:`Knowing more never adds.`}
+],{title:'The slides · one at a time · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'add',t:R`h(x) + h(y)`,n:`Two independent bits.`},
+  {k:'ember',kl:'split',t:R`H(Z) + H(U \mid Z) + H(V \mid U, Z)`,n:`Member by member.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{h(xy) = x h(y) + y h(x) - I}`,n:`I ≤ 1 − xy.`}
+],{title:'The slides · both missing · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'cap',t:R`H(A \cup B) \le H(A)`,n:`Union-closed.`},
+  {k:'ember',kl:'grow',t:R`H(A \cup B) \ge \textstyle\sum (2m_i - \tfrac45) H_i`,n:`Member by member.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{some share} \ge \tfrac1{10}}`,n:`Or the join grows.`}
+],{title:'The slides · a tenth · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'sharp',t:R`h(xy) \ge \tfrac{x h(y) + y h(x)}{2\varphi}`,n:`Held in trust.`},
+  {k:'ember',kl:'product',t:R`h(0.36) = 0.943 \lt 0.971 = h(0.4)`,n:`The join shrinks.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\tfrac{3 - \sqrt5}{2} \approx 0.382}`,n:`As far as two independent picks go.`}
+],{title:'The slides · the wall · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

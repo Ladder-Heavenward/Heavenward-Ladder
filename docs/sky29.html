@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Are There Primes in Every Clock Position?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style></style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="sky44.html">← ∞44 how does a filter know where you are?</a><a href="index.html">next: the ladder →</a></p>
+  <div class="tags"><span class="tag then">∞29 · newsflash</span></div>
+  <h1>Are There Primes in Every Clock Position?</h1>
+  <p data-pid="fa6115">Are there primes in every clock position? Put the whole numbers on the clock of ten, so that a number sits at the hour of its last digit. The hours two, four, five, six, eight and zero hold at most one prime each, since every number there shares a factor with ten. The hours one, three, seven and nine share nothing with ten, and below a million each holds close to a quarter of the primes. Does every such hour, on every clock, hold endlessly many primes? Rung 43 proved it for the two odd hours of the clock of four, with two clever tricks that do not reach further, and held the general claim in trust. A memoir read in Berlin in 1837 proved it for every clock. Its method was new and it is still the method: read the hours of a clock through their characters, the maps that turn times into times, as the turnings of rung 32 turn plus into times; attach to each character an endless sum over all the whole numbers; and show that every one of these sums except the plain one stays away from zero at the point one. The page proves the whole of it. The hardest part is the characters whose values are only one and minus one, and for them a count of divisors does the work. The same sums also show that the hours share the primes fairly. The question did not stop there. How far up a clock must you go to find the first prime in a given hour? A bound of 1944 says not past a fixed power of the clock, and the best known power is still argued over. And in 2016 a different method showed that endlessly many primes have no digit seven at all, though such numbers make up a vanishing share of all numbers.</p>
+  <p class="gesture" data-pid="b8d625">On the units G of the clock of n, with c members, there are exactly c characters χ, and (1/c) Σ_χ χ(b)* χ(m) is 1 when m ≡ b and 0 otherwise. Each χ gives L(s, χ) = Σ χ(m)/mˢ = Π_p 1/(1 − χ(p)p^(−s)), and Σ_(m ≡ b) Λ(m)/mˢ = (1/c) Σ_χ χ(b)* D(s, χ)/L(s, χ). The plain character gives about 1/(s − 1); every other gives a bounded amount, because L(1, χ) ≠ 0: the product of all the L(s, χ) is at least 1, and for a real χ the divisor counts Σ_(d∣m) χ(d) are never negative. So Σ_(p ≡ b) ln p / pˢ passes every bound as s falls to 1.</p>
+</header>
+
+<section class="class step" data-step="sky29.1">
+  <h2 class="sthead"><span class="stno">sky29.1</span>Characters of the Units</h2>
+  <p data-pid="819167">Let G be the units of the clock of n (43b), and c = |G| their count, given by <a href="r43d.html#470af8">the unit-count technique</a>; the letter c names it on this page. A <i>character</i> of G is a map χ from G to the complex numbers other than 0 with χ(xy) = χ(x)χ(y). Since x^c = 1 in G (<a href="r43d.html#6b0c0e">the exponent-clock technique</a>), χ(x)^c = 1: every value is a root of 1, with size 1, so its mirror χ(x)* is χ(x⁻¹). The <i>plain character</i> χ₀ is 1 everywhere. Each character is carried to all whole numbers: χ(m) is χ of the hour of m when m shares nothing with n, and 0 otherwise. Then χ(mm′) = χ(m)χ(m′) for all whole m, m′.</p>
+  <p data-pid="48090e">On a prime clock the characters are <a href="sky17.html#sky17.2">sky17.2</a>’s turnings in disguise: a full hand g (<a href="r43e.html#f1e58f">43e4</a>) writes each unit as gʲ, multiplying units adds exponents on the clock of p − 1, and χ(gʲ) = ω^(rj) with ω = e^(2πi/(p − 1)). Most clocks have no full hand (43e). A count that needs none:</p>
+  <p data-pid="561154">Character-stretch technique: <b>let H be a set of units closed under times, g a unit outside it, and m ≥ 2 the least power with gᵐ in H. Then H′ = {hgʲ : h in H, 0 ≤ j &lt; m} has m|H| members, and each character of H stretches to exactly m characters of H′. Stretching from H = {1} up to G: every character of a subgroup H stretches to exactly c/|H| characters of G, and G has exactly c characters.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the character-stretch technique">
+hg^j = h'g^{j'},\ 0 \le j' \le j \lt m \Rightarrow g^{j - j'} = h'h^{-1} \in H \Rightarrow j = j',\ h = h' @@ m is the first return to H: so H′ has m|H| members
+\psi \text{ stretches } \chi \Rightarrow \psi(g)^m = \psi(g^m) = \chi(g^m) @@ times is kept; gᵐ is in H
+w^m = \chi(g^m):\ \text{exactly } m \text{ choices of } w @@ the even-spacing technique (21·cb20.3); χ(gᵐ) ≠ 0
+\psi(hg^j) = \chi(h)w^j;\ \ hg^j \cdot h'g^{j'} = (hh'g^m)\,g^{j + j' - m} \text{ when } j + j' \ge m @@ then ψ gives χ(hh′)χ(gᵐ)w^(j+j′−m) = χ(h)wʲ · χ(h′)w^(j′): times is kept
+\text{each step multiplies the members and the characters by } m @@ H ⊂ H′ ⊂ ⋯ ⊂ G, a unit not yet reached each time
+\htmlClass{new}{\text{each character of } H \text{ has exactly } c/|H| \text{ stretches to } G} \quad \blacksquare @@ from H = {1}: c characters
+  </pre>
+  <p data-pid="4eb438">The clock of 5 has the full hand 2 (powers 2, 4, 3, 1), and its four characters send 2 to 1, i, −1, −i. On the hours 1, 2, 3, 4 they read (1, 1, 1, 1), (1, i, −i, −1), (1, −1, −1, 1), (1, −i, i, −1). The clock of 8 has no full hand: its units 1, 3, 5, 7 all square to 1, and its four characters take only the values 1 and −1, (1, 1, 1, 1), (1, 1, −1, −1), (1, −1, 1, −1), (1, −1, −1, 1). A character whose values are all real, as on the clock of 8, is called <i>real</i>.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · stretching · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">∞29.1.1</span><span class="ph understand">understand</span>What does the character-stretch technique say, and why must ψ(g) be an m-th root of χ(gᵐ)? <br>Why does the clock of 8 have four characters although no unit there has order 4?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky29.2">
+  <h2 class="sthead"><span class="stno">sky29.2</span>Right Angles Both Ways</h2>
+  <p data-pid="3ab637"><a href="r32k.html#2b70a7">32k1</a> found the turnings at right angles, and <a href="sky17.html#sky17.2">sky17.2</a> read that on the clock under plus. Characters of the units are at right angles in two directions at once: summed over the units, and summed over the characters. The second is what picks out an hour.</p>
+  <p data-pid="8538da">Hour-picking technique: <b>Σ over x in G of χ(x) is c when χ = χ₀ and 0 otherwise; Σ over the characters of χ(x) is c when x = 1 and 0 otherwise; so for a unit b and any whole m, (1/c) Σ_χ χ(b)* χ(m) is 1 when m ≡ b (mod n) and 0 otherwise.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the hour-picking technique">
+\chi \ne \chi_0:\ \chi(y) \ne 1 \text{ for some } y;\ \ \textstyle\sum_x \chi(x) = \sum_x \chi(yx) = \chi(y)\sum_x \chi(x) @@ x ↦ yx runs over G once: y has an undo (43b)
+\textstyle\sum_x \chi(x) = 0 @@ (χ(y) − 1) times the sum is 0, and χ(y) − 1 ≠ 0
+x \ne 1 \text{ of order } f:\ \psi(x^j) = e^{2\pi ij/f} \text{ is a character of } \{1, x, \ldots, x^{f-1}\} \text{ with } \psi(x) \ne 1 @@ f ≥ 2
+\psi \text{ stretches to a character of } G;\ \ \textstyle\sum_\chi \chi(x) = \sum_\chi (\psi\chi)(x) = \psi(x)\sum_\chi \chi(x) @@ the character-stretch technique; χ ↦ ψχ runs over the characters once
+\textstyle\sum_\chi \chi(x) = 0;\ \ \chi(b)^*\chi(m) = \chi(b^{-1}m) \text{ for a unit } m @@ sizes are 1; for m not a unit both sides are 0
+\htmlClass{new}{\tfrac1c\textstyle\sum_\chi \chi(b)^*\chi(m) = [m \equiv b \pmod n]} \quad \blacksquare @@ the sum over characters at x = b⁻¹m
+  </pre>
+  <p data-pid="97e618">On the clock of 5 with b = 3: at m = 8 every term is |χ(3)|² = 1, and the average is 1. At m = 7 the terms are χ(3⁻¹ · 7) = χ(2 · 2) = χ(4), the values 1, −1, 1, −1, and they add to 0 (checked by script for every pair of hours on the clocks of 4, 5, 7, 8, 9, 10, 12, 15, 20 and 24). Any question about one hour b becomes c questions about whole-clock sums, one for each character.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · picking · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞29.2.1</span><span class="ph understand">understand</span>What does the hour-picking technique say, and where does its proof use the character-stretch technique? <br>Check that (1/4) Σ_χ χ(3)* χ(7) = 0 on the clock of 5.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky29.3">
+  <h2 class="sthead"><span class="stno">sky29.3</span>Sums That Settle at One</h2>
+  <p data-pid="f91509">For a character χ and s > 0, put L(s, χ) = Σ χ(m)/mˢ, summed over m = 1, 2, 3, …, and D(s, χ) = Σ χ(m) ln m / mˢ. For s > 1 both settle absolutely, by <a href="r22f.html#115570">the p-sum technique</a>. For the plain character L(s, χ₀) is ζ(s) with the primes of n taken out, and it passes every bound as s falls to 1, as 1 + ½ + ⅓ + ⋯ does. Every other character keeps its running totals S(M) = χ(1) + ⋯ + χ(M) small, and that makes its sums settle even at s = 1.</p>
+  <p data-pid="f4f896">Stepped-parts technique: <b>if χ ≠ χ₀ and f(A) ≥ f(A + 1) ≥ ⋯ ≥ 0, then |Σ_(m = A)^M χ(m) f(m)| ≤ 2c f(A) for every M ≥ A.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the stepped-parts technique">
+\textstyle\sum_{m=A}^M \chi(m)f(m) = S(M)f(M) - S(A - 1)f(A) + \sum_{m=A}^{M-1} S(m)\big(f(m) - f(m + 1)\big) @@ χ(m) = S(m) − S(m − 1), regrouped by S(m): parts (16e) in steps
+|S(m)| \le c @@ each full stretch of n hours adds to 0 (the hour-picking technique); a part stretch holds at most c units
+\le c\,f(M) + c\,f(A) + c\big(f(A) - f(M)\big) @@ the differences are at least 0 and fold up
+\htmlClass{new}{\big|\textstyle\sum_{m=A}^M \chi(m)f(m)\big| \le 2c\,f(A)} \quad \blacksquare @@ the stepped-parts technique
+  </pre>
+  <p data-pid="a87f09">Settles-at-one technique: <b>if χ ≠ χ₀, then L(1, χ) = Σ χ(m)/m settles; and for 1 &lt; s ≤ 2, with K = ln 2/2 + 2c ln 3/3, |D(s, χ)| ≤ K, |L(s, χ)| ≤ 2c, and |L(s, χ) − L(1, χ)| ≤ K(s − 1).</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the settles-at-one technique">
+\big|\textstyle\sum_{m=A}^M \tfrac{\chi(m)}{m}\big| \le \tfrac{2c}{A} @@ the stepped-parts technique with f(m) = 1/m
+L(1, \chi) \text{ settles} @@ its running totals crowd (22c2)
+\tfrac{\ln t}{t^u} \text{ falls for } t \ge 3,\ u \ge 1 @@ its slope (1 − u ln t)/t^(u+1) is below 0 once ln t &gt; 1
+|D_M(u)| \le \tfrac{\ln 2}{2} + 2c\,\tfrac{\ln 3}{3} = K @@ D_M the running total to M: m = 2 alone, then stepped parts from 3
+\tfrac1m - \tfrac1{m^s} = \textstyle\int_1^s \tfrac{\ln m}{m^u}\,du @@ the slope of m^(−u) in u is −ln m · m^(−u) (17i)
+|L_M(1) - L_M(s)| = \big|\textstyle\int_1^s D_M(u)\,du\big| \le K(s - 1) @@ a finite sum passes through the integral
+\htmlClass{new}{|L(s, \chi) - L(1, \chi)| \le K(s - 1)} \quad \blacksquare @@ let M grow; |L(s, χ)| ≤ 2c is stepped parts from A = 1
+  </pre>
+  <p data-pid="eaa6b6">On the clock of 4 the one other character is 1, 0, −1, 0, repeating, and L(1, χ) = 1 − ⅓ + ⅕ − ⅐ + ⋯ = 0.7854, which is π/4. There c = 2 and K = 0.347 + 1.465 = 1.81. On the clock of 5 the real character (1, −1, −1, 1) gives L(1, χ) = 0.4304. Neither is 0. That is the whole difficulty: if some L(1, χ) were 0, the next footings would collapse.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · settling · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞29.3.1</span><span class="ph understand">understand</span>What does the stepped-parts technique say, and why is |S(m)| at most c when χ is not the plain character? <br>Why does the settles-at-one technique fail for χ₀?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky29.4">
+  <h2 class="sthead"><span class="stno">sky29.4</span>One Product for Each Character</h2>
+  <p data-pid="a60680"><a href="r43g.html#9db382">The prime-product technique</a> wrote ζ(s) as a product over the primes. Characters keep times, so each L(s, χ) has its own product, and the logarithmic weight Λ(m), which is ln p when m is a power of the prime p and 0 otherwise, separates the primes out.</p>
+  <p data-pid="2bd617">Character-product technique: <b>for s > 1, L(s, χ) = Π_p 1/(1 − χ(p)p^(−s)); |L(s, χ)| ≥ 1/ζ(s) > 0; and L(s, χ) · Σ Λ(m)χ(m)/mˢ = D(s, χ).</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the character-product technique">
+\textstyle\prod_{p \le x} \tfrac{1}{1 - \chi(p)p^{-s}} = \sum_{m:\ \text{all primes} \le x} \tfrac{\chi(m)}{m^s} @@ multiply the geometric sums (22e); χ(p)ᵏ = χ(pᵏ), and χ keeps times; one prime list each (4j18)
+\big|L(s, \chi) - \textstyle\prod_{p \le x}\big| \le \sum_{m \gt x} m^{-s} \to 0 @@ the prime-product technique (43g2), read with χ
+\big|\textstyle\prod_{p \le x} \tfrac{1}{1 - \chi(p)p^{-s}}\big| \ge \prod_{p \le x}\tfrac{1}{1 + p^{-s}} \ge \prod_{p \le x}(1 - p^{-s}) @@ |1 − χ(p)p^(−s)| ≤ 1 + p^(−s), and 1/(1 + t) ≥ 1 − t
+|L(s, \chi)| \ge 1/\zeta(s) @@ the last product settles on 1/ζ(s) (43g2)
+\textstyle\sum_{d \mid m} \Lambda(d) = \ln m @@ m = p₁^(k₁) ⋯ p_r^(k_r): its prime-power divisors give k₁ ln p₁ + ⋯ + k_r ln p_r
+\htmlClass{new}{L(s,\chi)\textstyle\sum_d \tfrac{\Lambda(d)\chi(d)}{d^s} = \sum_m \tfrac{\chi(m)}{m^s}\sum_{d \mid m}\Lambda(d) = D(s, \chi)} \quad \blacksquare @@ multiply absolutely settling sums (26b1), grouped by m = de; χ(d)χ(e) = χ(m)
+  </pre>
+  <p data-pid="17b753">On the clock of 4 at s = 2: L(2, χ) = 1 − 1/9 + 1/25 − ⋯ = 0.915966, the product over the first 20 000 primes agrees to six places, Σ Λ(m)χ(m)/m² = −0.089065, and the product of the two is −0.081580 = D(2, χ) (checked by script). Read the last line backwards: Σ Λ(m)χ(m)/mˢ = D(s, χ)/L(s, χ), a sum over prime powers written through two sums over all numbers. The hour-picking technique turns that into a sum over the prime powers in one hour.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · products · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞29.4.1</span><span class="ph understand">understand</span>What does the character-product technique say, and why is Σ_(d∣m) Λ(d) = ln m? <br>Why can L(s, χ) not be 0 when s > 1?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky29.5">
+  <h2 class="sthead"><span class="stno">sky29.5</span>A Product Never Below One</h2>
+  <p data-pid="2a4798">Suppose L(1, χ) = 0. Near s = 1, L(s, χ) is then at most K(s − 1), small. The plain L(s, χ₀) is large, at most ζ(s) ≤ s/(s − 1) by <a href="r22f.html#fa6fd8">the fence technique</a>. One zero against one pole could balance. Two zeros cannot, and a character that is not real brings its mirror with it.</p>
+  <p data-pid="ac52a5">Never-below-one technique: <b>for s > 1 the product of L(s, χ) over all c characters is a real number at least 1; so L(1, χ) ≠ 0 for every character χ that is not real.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the never-below-one technique">
+x \in G \text{ of order } f:\ \chi(x) \text{ runs over the } f\text{-th roots of } 1\text{, each } c/f \text{ times} @@ the f characters of {1, x, …} each stretch c/f ways (sky29.1)
+\textstyle\prod_\chi (1 - \chi(p)t) = \prod_{w^f = 1}(1 - wt)^{c/f} = (1 - t^f)^{c/f} @@ p ∤ n; zᶠ − 1 = Π(z − w) over the roots, at z = 1/t, times tᶠ
+\textstyle\prod_\chi L(s, \chi) = \prod_{p \nmid n} (1 - p^{-fs})^{-c/f} \ge 1 @@ the character-product technique, c products at once; every factor is real and at least 1
+\chi \ne \chi^*,\ L(1, \chi) = 0 \Rightarrow L(1, \chi^*) = L(1, \chi)^* = 0 @@ χ* is another character; mirror the sum term by term
+1 \le \big(K(s - 1)\big)^2 \cdot \tfrac{s}{s - 1} \cdot (2c)^{c - 3} @@ the settles-at-one technique for χ and χ*; L(s, χ₀) ≤ ζ(s) ≤ s/(s − 1); the rest at most 2c
+\htmlClass{new}{1 \le K^2(2c)^{c - 3}\,s(s - 1) \to 0:\ \bot} \quad \blacksquare @@ s falls to 1: so L(1, χ) ≠ 0
+  </pre>
+  <p data-pid="949e00">On the clock of 5 at s = 2 the product of the four L(2, χ) is 1.048656, and the product over primes, with f = 1, 2, 4 for the hours 1, 4 and 2 or 3, gives the same (checked by script). The technique leaves out exactly the real characters. For them χ = χ*, one zero faces one pole, and K(s − 1) · s/(s − 1) stays bounded: no contradiction. A real character needs its own argument.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · never below one · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞29.5.1</span><span class="ph understand">understand</span>What does the never-below-one technique say, and why is the product over characters of 1 − χ(p)t equal to (1 − tᶠ)^(c/f)? <br>Why does the same argument say nothing about a real character?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky29.6">
+  <h2 class="sthead"><span class="stno">sky29.6</span>The Real Characters</h2>
+  <p data-pid="7685d4">Let χ ≠ χ₀ be real, with values 0, 1 and −1. Count divisors with signs: r(m) = Σ over the divisors d of m of χ(d). The count never goes below 0, and it is at least 1 at every square. Adding r(m)/√m up to x gives a total that grows at least like ln x; but the same total, counted by pairs d, e with de ≤ x, is 2√x L(1, χ) plus a bounded amount. If L(1, χ) were 0, a bounded amount would pass every bound.</p>
+  <p data-pid="398fb5">Square-divisor technique: <b>if χ ≠ χ₀ takes only the values 0, 1, −1, then L(1, χ) ≠ 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the square-divisor technique">
+r(p^k) = 1 + \chi(p) + \cdots + \chi(p)^k \in \{k + 1,\ 1,\ 0 \text{ or } 1\} @@ χ(p) = 1, 0 or −1; with −1 the signs pair off, leaving 1 when k is even
+r(m) = \textstyle\prod_{p^k \| m} r(p^k) \ge 0,\ \ r(j^2) \ge 1 @@ a divisor of m is a choice of a power of each prime of m (4j18), and χ keeps times; a square has even powers
+T(x) = \textstyle\sum_{m \le x} \tfrac{r(m)}{\sqrt m} \ge \sum_{j \le \sqrt x} \tfrac1j \ge \tfrac12\ln x @@ keep only m = j²; the sum beats the area under 1/t (17a)
+T(x) = \textstyle\sum_{d \le y}\tfrac{\chi(d)}{\sqrt d}\sum_{e \le x/d}\tfrac{1}{\sqrt e} + \sum_{e \lt y}\tfrac{1}{\sqrt e}\sum_{y \lt d \le x/e}\tfrac{\chi(d)}{\sqrt d},\ \ y = \sqrt x @@ T(x) = Σ over de ≤ x of χ(d)/√(de): pairs with d ≤ y, and pairs with d &gt; y, where e &lt; y
+\textstyle\sum_{e \le z} \tfrac{1}{\sqrt e} = 2\sqrt z + C_0 + E_z,\ \ |E_z| \le \tfrac{1}{\sqrt z},\ \ C_0 = -1.4604 @@ the fence technique with 1/√t, and its gap settles as in 22f4; checked by script
+|\text{second part}| \le 2\sqrt y \cdot \tfrac{2c}{\sqrt y} = 4c @@ stepped parts with f(d) = 1/√d from y; Σ over e &lt; y of 1/√e ≤ 2√y
+\text{first part} = 2\sqrt x\textstyle\sum_{d \le y}\tfrac{\chi(d)}{d} + C_0\sum_{d \le y}\tfrac{\chi(d)}{\sqrt d} + \sum_{d \le y}\tfrac{\chi(d)}{\sqrt d}E_{x/d} @@ z = x/d, √(x/d)/√d = √x/d
+|T(x) - 2\sqrt x\,L(1, \chi)| \le 4c + 2\sqrt x \cdot \tfrac{2c}{y} + 2c|C_0| + \tfrac{y}{\sqrt x} \le 11c + 1 @@ the tail of L(1, χ) after y and the partial sums with 1/√d, by stepped parts; |E_(x/d)|/√d ≤ 1/√x
+\htmlClass{new}{L(1, \chi) = 0 \Rightarrow \tfrac12\ln x \le 11c + 1 \text{ for every } x:\ \bot} \quad \blacksquare @@ ln x passes every bound
+  </pre>
+  <p data-pid="e7690a">On the clock of 4, at x = 10 000: T(x) = 156.11 and 2√x L(1, χ) = 157.08, a gap of 0.97, well inside 11c + 1 = 23; at x = 200 000 the gap is 0.97 again (checked by script). ∞12 meets these values from the other side. The character of the clock of 20 that is 1 at the hours 1, 3, 7, 9 and −1 at 11, 13, 17, 19 is the one that <a href="sky12.html#sky12.4">sky12.4</a> sorted the primes with, and its L(1, χ) = 1.404963 equals π · 2/√20, where 2 is the class number h(−20). For −23, with h(−23) = 3, the real character of the clock of 23 gives 1.965202 = π · 3/√23. Held in trust: for every discriminant D below −4, L(1, χ) = π h(D)/√(−D), the class number formula of 1839. A class number is at least 1, so this too shows L(1, χ) ≠ 0 for these characters, by the road the 1837 memoir took.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · real characters · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞29.6.1</span><span class="ph understand">understand</span>What does the square-divisor technique say, and why is r(m) never below 0 and at least 1 at a square? <br>How does the split at y = √x keep the pairs with large d under control?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky29.7">
+  <h2 class="sthead"><span class="stno">sky29.7</span>Primes in Every Hour</h2>
+  <p data-pid="0594fe">Everything is in place. The hour-picking technique, put inside the character-product technique, writes the prime powers of one hour through the c quotients D(s, χ)/L(s, χ). One of them grows like 1/(s − 1). The others stay bounded, because no L(1, χ) is 0.</p>
+  <p data-pid="e54cc1">Every-hour technique: <b>if gcd(b, n) = 1, then Σ over the primes p ≡ b (mod n) of ln p / pˢ passes every bound as s falls to 1; so the hour b of the clock of n holds endlessly many primes.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the every-hour technique">
+\textstyle\sum_{m \equiv b} \tfrac{\Lambda(m)}{m^s} = \tfrac1c\sum_\chi \chi(b)^*\,\tfrac{D(s, \chi)}{L(s, \chi)} @@ the hour-picking technique on the character-product technique; L(s, χ) ≠ 0
+0 \le \textstyle\sum_{m \equiv b} \tfrac{\Lambda(m)}{m^s} - \sum_{p \equiv b} \tfrac{\ln p}{p^s} \le \sum_p \tfrac{\ln p}{p(p - 1)} \lt 0.76 @@ the powers pᵏ with k ≥ 2, a geometric sum for each p; checked by script
+\chi \ne \chi_0:\ \big|\tfrac{D(s, \chi)}{L(s, \chi)}\big| \le \tfrac{2K}{|L(1, \chi)|} \text{ once } s - 1 \le \tfrac{|L(1, \chi)|}{2K} @@ the settles-at-one technique; L(1, χ) ≠ 0 by the never-below-one and square-divisor techniques
+\tfrac{D(s, \chi_0)}{L(s, \chi_0)} = \textstyle\sum_{\gcd(m, n) = 1}\tfrac{\Lambda(m)}{m^s} \ge \sum_m \tfrac{\Lambda(m)}{m^s} - \sum_{p \mid n}\tfrac{\ln p}{p - 1} @@ drop the powers of the primes of n
+\textstyle\sum_m \tfrac{\Lambda(m)}{m^s} = \tfrac{1}{\zeta(s)}\sum_m \tfrac{\ln m}{m^s} \ge \tfrac{s - 1}{s}\Big(\tfrac{1}{(s - 1)^2} - \tfrac1e\Big) @@ the character-product technique with χ = 1; ∫₁^∞ ln t/tˢ dt = 1/(s − 1)², and the sum loses at most the bump of ln t/tˢ, below 1/e (22f1); ζ(s) ≤ s/(s − 1)
+\htmlClass{new}{\textstyle\sum_{p \equiv b}\tfrac{\ln p}{p^s} \ge \tfrac{1}{c\,s(s - 1)} - (\text{a fixed amount}) \to \infty} \quad \blacksquare @@ s falls to 1; a finite list of primes would give a bounded sum
+  </pre>
+  <p data-pid="7e820c">The same lines, with the upper fences ζ(s) ≥ 1/(s − 1) and Σ ln m/mˢ ≤ 1/(s − 1)² + 1/e, give more. Even-share technique: <b>(s − 1) Σ over p ≡ b of ln p / pˢ settles on 1/c as s falls to 1.</b> Every unit hour gets the same share of the primes, measured this way. At s = 1.01, (s − 1) Σ Λ(m)/mˢ is already 0.9942. <a href="r43g.html#9887f0">43g4</a> held in trust that the hours get equal shares and that each holds endlessly many primes; the second is paid here in full, the first in this weighted form. The count form, that each hour holds about π(x)/c of the primes up to x, is the prime-count technique of 43g4 carried to clocks, and stays in trust.</p>
+  <p data-pid="3bc013">Below a million the primes ending in 1, 3, 7 and 9 number 19 617, 19 665, 19 621 and 19 593, with 2 and 5 alone in their hours (checked by script). In April 2016 a different method, which also counts with turnings, showed that endlessly many primes have no 7 among their decimal digits, and the same for any other digit. Below a million, 531 440 numbers have no 7, and 34 992 of them are prime. The share of numbers with no 7 falls toward 0 as the numbers grow, (9/10) per extra digit, so these primes form a set too thin for the every-hour technique, as the primes were for ∞17’s density arguments.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · every hour · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞29.7.1</span><span class="ph understand">understand</span>What does the every-hour technique say, and which character makes the sum grow like 1/(s − 1)? <br>Why would a finite list of primes in the hour b contradict it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky29.8">
+  <h2 class="sthead"><span class="stno">sky29.8</span>Illegal Moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{the hour } 5 \text{ of the clock of } 10 \text{ holds endlessly many primes}\,? @@ every number there is a multiple of 5: the technique needs gcd(b, n) = 1
+L(1, \chi) \ne 0 \text{ since every factor } 1/(1 - \chi(p)/p) \text{ is not } 0\,? @@ a settling product of factors other than 0 can settle on 0: Π(1 − 1/p) does
+\text{the never-below-one technique gives } L(1, \chi) \ne 0 \text{ for every } \chi \ne \chi_0\,? @@ a real χ is its own mirror: one zero against one pole leaves the product bounded
+|S(M)| \le c \text{ for the plain character too}\,? @@ S(M) for χ₀ grows like cM/n, and L(1, χ₀) does not settle
+\text{equal shares as } s \to 1 \text{ make the four last digits equal below } 10^6\,? @@ 19 617, 19 665, 19 621, 19 593: a limit fixes no value at any one x
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞29.8.1</span><span class="ph understand">understand</span>Why does the never-below-one technique fail for a real character, and which footing handles those? <br>Why does Π(1 − 1/p) show that a product of nonzero factors can settle on 0?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="openq themeend">
+  <div class="eyebrow">Open questions · nobody has the answer yet</div>
+  <h2>Open questions</h2>
+  <p class="chnote">These are open: the field is still asking them. There is no key; a good attempt is a reason, a guess, or a better question.</p>
+  <div class="oq"><span class="oqid">∞29.oq.1</span>How far up the clock must you go to find the first prime in a unit hour? A bound of 1944 says the first prime in the hour b of the clock of n is below a fixed multiple of a fixed power of n, and a paper published in 2018 brought the power below 5. On the clock of 9973 every unit hour has a prime below 925 949, about n^1.49 (checked by script). What the least power is, nobody knows. <br>Why it is hard: the proofs must exclude, or live with, a possible real character whose L(s, χ) is 0 very close to 1, the zero of ∞29.oq.2.</div>
+  <div class="oq"><span class="oqid">∞29.oq.2</span>Can a real character have L(s, χ) = 0 at some s just below 1? The square-divisor technique shows L(1, χ) ≠ 0, but not how far from 0, and the bounds it gives cannot be made to depend on the clock in the way needed. Such a zero, if it exists, is called exceptional; its absence would follow from the hypothesis of 1859 carried to characters (<a href="r43now2.html">43·now2</a>). It is the same zero that keeps the class number bound of <a href="sky12.html">∞12</a>.oq.2 from having numbers. <br>Do exceptional zeros exist?</div>
+  <div class="oq"><span class="oqid">∞29.oq.3</span>On the clock of 4, the hour 3 has more primes than the hour 1 up to x for most x: 39 322 against 39 175 below a million, and the hour 1 first draws ahead at the prime 26 861 (checked by script). The lead changes endlessly often. <br>In what sense, if any, is the hour 3 ahead most of the time? A precise answer is known only by assuming the hypothesis of 1859 carried to characters together with a second unproved assumption; this page has not revisited the exact figures.</div>
+</section>
+<section class="history themeend">
+  <div class="eyebrow">A short history · told from more than one side</div>
+  <h2>How we got here</h2>
+  <p data-pid="2b7bba">A memoir read in Berlin in 1837 proved that every unit hour of every clock holds endlessly many primes. It brought in two things at once: the characters of the units, and the sums L(s, χ) built from them. It proved a statement about whole numbers alone with sums over all the whole numbers and real numbers s tending to 1, an analytic road to an arithmetic fact; the page has followed it.</p>
+  <p data-pid="63de60">The hard step was the one this page spends two footings on: showing that L(1, χ) is not 0. For a prime clock the memoir settled it directly; for other clocks it needed the class numbers of forms that ∞12 counts, and the formula linking them to L(1, χ) came in 1839 and 1840. The proof of the sixth footing, which counts divisors with signs and needs no class numbers, is one of several later elementary routes; for this page its history has not been revisited.</p>
+  <p data-pid="7d33c6">The counting form, that each unit hour holds about one c-th of the primes up to x, came with the prime count of 1896 (43g4), and is still proved through the complex zeros of the L-functions. So is the question of how evenly: the errors are governed by where the zeros lie, and the hypothesis of 1859, carried to characters, would make them as small as a coin model predicts.</p>
+  <p data-pid="e64579">In 1944 a bound was proved for the least prime in a unit hour: below a fixed power of the clock. For decades the power was pushed down, from numbers in the thousands, and a paper published in 2018 brought it below 5. Throughout, the obstacle was the possible exceptional zero of a real character. Proofs that split into the case where it exists and the case where it does not, each case working for a different reason, became a style of their own; as ∞12 tells for class numbers, such proofs often give no numbers, and whether that counts as knowing is argued.</p>
+  <p data-pid="c97cc8">In April 2016 a preprint proved that endlessly many primes have no 7 among their decimal digits. Such numbers thin out, so the every-hour technique cannot see them; the proof used turnings in a different way. What is argued now is how far such thin sets reach: primes of the form n² + 1 (∞12.oq.4) are thinner still, and no method yet reaches them.</p>
+  <p data-pid="e9350a">A note on the record: 1837, 1839 to 1840, 1944, the powers in the thousands, the 2018 bound below 5 and the 2016 preprint are checked against two sources. The date 1896 for the counting form and the history of the elementary proofs have not been revisited.</p>
+</section>
+
+<nav class="nextrung"><a href="sky44.html">← ∞44 · how does a filter know where you are?</a><a href="index.html">the ladder →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The characters of the units are Dirichlet characters, the plain one the principal character; the character-stretch technique is the extension lemma for characters of finite abelian groups, and the hour-picking technique the orthogonality relations. L(s, χ) is a Dirichlet L-function, D(s, χ) is −L′(s, χ), Λ is the von Mangoldt function, and the character-product technique is the Euler product with the logarithmic derivative. The stepped-parts technique is Abel (partial) summation. The never-below-one technique is the standard argument for complex characters through the product of all L-functions (the Dedekind zeta function of a cyclotomic field, up to finitely many factors); the square-divisor technique is the elementary proof for real characters by the hyperbola method. The every-hour technique is Dirichlet’s theorem on primes in arithmetic progressions, and the even-share technique gives its Dirichlet density. The class number formula is Dirichlet’s. The least prime bound is Linnik’s theorem, the power Linnik’s constant; an exceptional zero is a Siegel zero (or Landau–Siegel zero); the race between hours is Chebyshev’s bias. The 2016 result is Maynard’s theorem on primes with restricted digits.</p>
+  <h3>Who said it first</h3>
+  <p>Peter Gustav Lejeune Dirichlet proved the theorem in 1837 and the class number formula in 1839–40. Yuri Linnik proved the least prime bound in 1944; Triantafyllos Xylouris published the bound below 5 in 2018. James Maynard posted the proof for primes with a missing digit in April 2016.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Each L(s, χ) is a product of factors 1/(1 − χ(p)p^(−s)), none of them 0, so L(1, χ) is not 0, and the every-hour technique follows at once.” Not allowed: at s = 1 the product does not settle in the way that sum and product agree, and an endless product of factors other than 0 can settle on 0, as Π(1 − 1/p) does. The non-vanishing at 1 is the whole content of the theorem, and it takes two footings.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+
+stepper('#sl1',[
+  {k:'ember',kl:'roots',t:R`\psi(g)^m = \chi(g^m)`,n:`m choices.`},
+  {k:'ember',kl:'kept',t:R`\psi(hg^j) = \chi(h)w^j`,n:`Times survives the wrap.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{c \text{ characters}}`,n:`Even with no full hand.`}
+],{title:'The slides · stretching · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'shift',t:R`\textstyle\sum_x \chi(yx) = \chi(y)\sum_x\chi(x)`,n:`Zero unless plain.`},
+  {k:'ember',kl:'other way',t:R`\textstyle\sum_\chi \chi(x) = \psi(x)\sum_\chi \chi(x)`,n:`Zero unless x = 1.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\tfrac1c\textstyle\sum_\chi \chi(b)^*\chi(m) = [m \equiv b]}`,n:`One hour picked.`}
+],{title:'The slides · picking · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'parts',t:R`\chi(m) = S(m) - S(m - 1)`,n:`Totals stay below c.`},
+  {k:'ember',kl:'bound',t:R`|\textstyle\sum \chi f| \le 2c\,f(A)`,n:`Stepped parts.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|L(s,\chi) - L(1,\chi)| \le K(s - 1)}`,n:`Close to its value at 1.`}
+],{title:'The slides · settling · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'product',t:R`L(s,\chi) = \textstyle\prod_p \tfrac{1}{1 - \chi(p)p^{-s}}`,n:`Times is kept.`},
+  {k:'ember',kl:'floor',t:R`|L(s,\chi)| \ge 1/\zeta(s)`,n:`Never 0 past 1.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{L \cdot \textstyle\sum \Lambda\chi\, m^{-s} = D}`,n:`Primes separated out.`}
+],{title:'The slides · products · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'roots',t:R`\textstyle\prod_\chi (1 - \chi(p)t) = (1 - t^f)^{c/f}`,n:`Each root c/f times.`},
+  {k:'ember',kl:'product',t:R`\textstyle\prod_\chi L(s,\chi) \ge 1`,n:`Real factors ≥ 1.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\chi \ne \chi^* \Rightarrow L(1,\chi) \ne 0}`,n:`Two zeros beat one pole.`}
+],{title:'The slides · never below one · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'squares',t:R`r(m) \ge 0,\ r(j^2) \ge 1`,n:`Signed divisor counts.`},
+  {k:'ember',kl:'two counts',t:R`\tfrac12\ln x \le T(x) = 2\sqrt x\,L(1,\chi) + O(1)`,n:`Pairs de ≤ x.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{L(1,\chi) \ne 0}`,n:`A bound cannot pass every bound.`}
+],{title:'The slides · real characters · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'pick',t:R`\textstyle\sum_{m \equiv b} \tfrac{\Lambda(m)}{m^s} = \tfrac1c\sum_\chi \chi(b)^*\tfrac{D}{L}`,n:`One hour, c sums.`},
+  {k:'ember',kl:'pole',t:R`\tfrac{D(s,\chi_0)}{L(s,\chi_0)} \ge \tfrac{1}{s(s - 1)} - \text{const}`,n:`The plain character.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\textstyle\sum_{p \equiv b} \tfrac{\ln p}{p^s} \to \infty}`,n:`Endlessly many.`}
+],{title:'The slides · every hour · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How Well Can Two Numbers Be Approximated at Once?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style></style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="sky33.html">← ∞33 does every number fall to 1?</a><a href="index.html">next: the ladder →</a></p>
+  <div class="tags"><span class="tag now">∞32 · research front</span></div>
+  <h1>How Well Can Two Numbers Be Approximated at Once?</h1>
+  <p data-pid="046dd4">How well can two numbers be approximated at once? A number that is no fraction can still be come close to by fractions, and the question is how close, for the size of the bottom. In 1842 a simple counting argument showed that every such number has endlessly many fractions p/q within one over q squared. The continued fractions of 43k find the best of them. Some numbers resist more than others, and the golden ratio resists most: a constant of √5, found in 1891, is exactly what it allows and no more. Now take two numbers at once and one bottom q for both. Around 1930 it was asked whether, for every pair, q times the miss of the first times the miss of the second can be made as small as you like. If either number is easy to approach, yes at once. The hard pairs are pairs of numbers that each resist, like √2 and √3, and for them the question is still open. In 2006 three mathematicians showed that the pairs that fail, if there are any, form a set so thin that it has dimension 0, by turning the question into one about a flow on a space of grids. Nobody has found a pair that fails, and nobody has found a proof that none does.</p>
+  <p class="gesture" data-pid="007d36">For every real x and every N there is q ≤ N with ‖qx‖ &lt; 1/N, where ‖t‖ is the distance from t to the nearest whole number; so |x − p/q| &lt; 1/q² endlessly often. The convergents are the best fractions, and one of any three in a row is within 1/(√5 q²); for the golden ratio φ no constant above √5 works, since |p² − pq − q²| ≥ 1. For two numbers, q ≤ N² gives ‖qα‖, ‖qβ‖ &lt; 1/N, so q‖qα‖‖qβ‖ &lt; 1; whether the product’s lower limit is always 0 is the open question of about 1930, and the pairs where it is not have dimension 0 (2006).</p>
+</header>
+
+<section class="class step" data-step="sky32.1">
+  <h2 class="sthead"><span class="stno">sky32.1</span>A Crowded Box of Fractional Parts</h2>
+  <p data-pid="b988ba">Write ‖t‖ for the distance from t to the nearest whole number. A fraction p/q is close to x when ‖qx‖ is small: |x − p/q| = ‖qx‖/q for the best p. <a href="r42i.html#99f407">42i</a>’s crowded box does the rest.</p>
+  <p data-pid="946fdd">Crowded-parts technique: <b>for every real x and every whole N ≥ 1 there is a whole q with 1 ≤ q ≤ N and ‖qx‖ &lt; 1/N; so if x is no fraction, |x − p/q| &lt; 1/q² for endlessly many fractions p/q.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the crowded-parts technique">
+0,\ x,\ 2x,\ \ldots,\ Nx:\ \ N + 1 \text{ fractional parts in } [0, 1) @@ the part after the point
+[0, 1) \text{ cut into } N \text{ boxes of width } 1/N @@ more things than boxes
+\text{two share a box: } |(sx - m) - (rx - n)| < 1/N,\ \ 0 \le r < s \le N @@ 42i’s crowded-box technique
+q = s - r \le N:\ \ \|qx\| < 1/N \le 1/q @@ the difference of two
+|x - p/q| < 1/(qN) \le 1/q^2 @@ divide by q
+\htmlClass{new}{\text{as } N \text{ grows, } \|qx\| < 1/N \to 0 \text{ gives new } q \text{ without end}} \quad \blacksquare @@ x is no fraction, so no q has ‖qx‖ = 0
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: x = √2, N = 10">
+\{5\sqrt2\} = 0.0711 \text{ shares the first box with } \{0\} = 0 @@ eleven parts, ten boxes, by script
+q = 5,\ p = 7:\ \ |5\sqrt2 - 7| = 0.0711 < 0.1 @@ the technique’s q
+\htmlClass{new}{|\sqrt2 - 7/5| = 0.0142 < 1/25} \quad \blacksquare @@ checked
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the box · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">∞32.1.1</span><span class="ph understand">understand</span>What does the crowded-parts technique say, and what are the things and the boxes? <br>Why does a number that is no fraction get endlessly many such fractions, not just one?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky32.2">
+  <h2 class="sthead"><span class="stno">sky32.2</span>The Best Fractions</h2>
+  <p data-pid="8bc978"><a href="r43k.html#bee124">43k3</a> found that the convergents p_j/q_j of x’s continued fraction come within 1/(q_j q_(j+1)). They are more than close: no smaller bottom does better.</p>
+  <p data-pid="80cf7e">Best-bottom technique: <b>if x is no fraction and 1 ≤ q &lt; q_(j+1), then ‖qx‖ ≥ |q_j x − p_j|.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the best-bottom technique">
+\begin{pmatrix} p \\ q \end{pmatrix} = u\begin{pmatrix} p_j \\ q_j \end{pmatrix} + v\begin{pmatrix} p_{j+1} \\ q_{j+1} \end{pmatrix},\ \ u, v \text{ whole} @@ the grid of the two has det ±1, 43k1’s neighbour technique
+v = 0 \Rightarrow p/q = p_j/q_j,\ \ |qx - p| = |u|\,|q_jx - p_j| \ge |q_jx - p_j| @@ done
+v \ne 0,\ u = 0 \Rightarrow q \ge q_{j+1} @@ not allowed
+u, v \ne 0 \Rightarrow u, v \text{ have opposite signs} @@ else q = uq_j + vq_(j+1) is ≥ q_(j+1) or ≤ 0
+q_jx - p_j,\ q_{j+1}x - p_{j+1} \text{ have opposite signs} @@ 43k3: the convergents fall on both sides of x
+qx - p = u(q_jx - p_j) + v(q_{j+1}x - p_{j+1}):\ \text{both terms one sign} @@ so no cancelling
+\htmlClass{new}{|qx - p| \ge |u|\,|q_jx - p_j| \ge |q_jx - p_j|} \quad \blacksquare @@ the best-bottom technique
+  </pre>
+  <p data-pid="0b6cac">For π the convergents are 3, 22/7, 333/106, 355/113, 103993/33102, …, from the continued fraction 3, 7, 15, 1, 292, …. By the technique, no bottom below 106 comes as near π in the sense of ‖qπ‖ as 7 does: 7π misses 22 by 0.00885, and the next best bottom below 106, 99, misses by 0.01767. The large 292 is why 355/113 is so good: q² |π − 355/113| = 0.0034, against about 0.06 for 22/7.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the best · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞32.2.1</span><span class="ph understand">understand</span>What does the best-bottom technique say, and where does its proof use that the convergents fall on both sides of x? <br>Why does the 292 in π’s continued fraction make 355/113 so good?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky32.3">
+  <h2 class="sthead"><span class="stno">sky32.3</span>Root Five, and the Hardest Number</h2>
+  <p data-pid="26066a">Can 1/q² be improved to c/q² with c below 1, for every x? Yes, down to 1/√5, and no further.</p>
+  <p data-pid="56801f">Three-convergents technique: <b>if x is no fraction, then of any three convergents in a row at least one has |x − p/q| &lt; 1/(√5 q²).</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the three-convergents technique">
+\text{suppose } j, j + 1 \text{ both fail}:\ \ \tfrac{1}{q_jq_{j+1}} = |x - \tfrac{p_j}{q_j}| + |x - \tfrac{p_{j+1}}{q_{j+1}}| \ge \tfrac{1}{\sqrt5}\big(\tfrac{1}{q_j^2} + \tfrac{1}{q_{j+1}^2}\big) @@ x lies between them; their gap is 1/(q_j q_(j+1)), 43k1
+\lambda = q_{j+1}/q_j:\ \ \lambda + 1/\lambda \le \sqrt5 \Rightarrow \lambda < \varphi = \tfrac{1 + \sqrt5}{2} @@ multiply by q_(j+1)/q_j·√5; λ is a fraction, so not φ
+\text{if } j + 1, j + 2 \text{ also both fail}:\ \ \mu = q_{j+2}/q_{j+1} < \varphi @@ the same
+\mu = \tfrac{c\,q_{j+1} + q_j}{q_{j+1}} \ge 1 + 1/\lambda > 1 + 1/\varphi = \varphi @@ 43k1 with c ≥ 1; and φ = 1 + 1/φ
+\htmlClass{new}{\text{contradiction: one of the three succeeds}} \quad \blacksquare @@ the three-convergents technique
+  </pre>
+  <p data-pid="39ac35">Golden-floor technique: <b>for φ = (1 + √5)/2 and any c &gt; √5, only finitely many fractions have |φ − p/q| &lt; 1/(c q²).</b> φ solves t² − t − 1 = 0, whose other answer is φ′ = (1 − √5)/2. For whole p, q ≥ 1, p² − pq − q² is a whole number, not 0 since φ is no fraction, so |p² − pq − q²| ≥ 1. It equals q²(p/q − φ)(p/q − φ′), so |φ − p/q| ≥ 1/(q² |p/q − φ′|), and as p/q nears φ, |p/q − φ′| nears φ − φ′ = √5, which is below c.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the golden ratio at its limit">
+\varphi = 1 + \tfrac{1}{1 + \tfrac{1}{1 + \cdots}}:\ \ \text{convergents } \tfrac{5}{3}, \tfrac{8}{5}, \tfrac{13}{8}, \tfrac{21}{13}, \ldots @@ every step is 1: the slowest staircase
+q^2|\varphi - p/q|:\ \ 0.4377,\ 0.4508,\ 0.4458,\ 0.4477,\ 0.4470 @@ by script
+\htmlClass{new}{\to 1/\sqrt5 = 0.44721\ldots} \quad \blacksquare @@ the golden-floor technique: no better constant
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · root five · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞32.3.1</span><span class="ph understand">understand</span>What does the three-convergents technique say, and where does its proof use that every step of the continued fraction is at least 1? <br>Why is the golden ratio the hardest number to approach, by the golden-floor technique?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky32.4">
+  <h2 class="sthead"><span class="stno">sky32.4</span>Two Numbers, One Bottom</h2>
+  <p data-pid="d5f5da">Now take α and β and ask for one q that makes ‖qα‖ and ‖qβ‖ both small. The crowded box still works, in a square.</p>
+  <p data-pid="6bbf85">Square-box technique: <b>for every real α, β and whole N ≥ 1, some q with 1 ≤ q ≤ N² has ‖qα‖ &lt; 1/N and ‖qβ‖ &lt; 1/N; so q‖qα‖‖qβ‖ &lt; 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the square-box technique">
+(\{q\alpha\}, \{q\beta\}),\ \ q = 0, 1, \ldots, N^2:\ \ N^2 + 1 \text{ points in } [0, 1)^2 @@ fractional parts, in pairs
+N^2 \text{ boxes of side } 1/N \Rightarrow \text{ two in one box} @@ 42i’s crowded-box technique
+q = s - r \le N^2:\ \ \|q\alpha\| < 1/N,\ \|q\beta\| < 1/N @@ as in sky32.1, coordinate by coordinate
+\htmlClass{new}{q\|q\alpha\|\|q\beta\| < N^2 \cdot \tfrac1N \cdot \tfrac1N = 1} \quad \blacksquare @@ the square-box technique
+  </pre>
+  <p data-pid="4f53dd">The question asked around 1930: is the lower limit of q‖qα‖‖qβ‖ always 0? Call x <i>stubborn</i> when q‖qx‖ stays above some c &gt; 0 for all q, as for the golden ratio and √2, whose continued fractions have bounded steps. If α is not stubborn, q‖qα‖ comes as near 0 as you like, and ‖qβ‖ ≤ ½, so the product does too. So the only possible exceptions are pairs of two stubborn numbers.</p>
+  <pre class="lines" data-k="ember" data-label="this page: √2 and √3, by script up to q = 200 000">
+q = 1:\ 0.1110;\ \ q = 15:\ 0.0615;\ \ q = 41:\ 0.0100 @@ each a new lowest q‖q√2‖‖q√3‖
+q = 10\,864:\ \ 0.00466 @@ the lowest up to 200 000
+\htmlClass{new}{\text{falling, slowly: no proof that it goes to } 0} \quad \blacksquare @@ the question is open for this pair
+  </pre>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · two at once · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞32.4.1</span><span class="ph understand">understand</span>What does the square-box technique say, and why does it need N² + 1 points? <br>Why can a pair fail the 1930 question only if both numbers are stubborn?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky32.5">
+  <h2 class="sthead"><span class="stno">sky32.5</span>Exceptions of Dimension Zero</h2>
+  <p data-pid="4acc31">Stubborn numbers are rare: they have size 0 in <a href="r30a.html#687ed3">30a</a>’s sense, held in trust, so the stubborn pairs have area 0 and almost every pair answers the 1930 question with yes. But they are not few: they have dimension 1 on the line, as much as the line itself, and the stubborn pairs have dimension 2. Size alone cannot rule them out.</p>
+  <p data-pid="a2c6bc">The 2006 result: <b>the pairs for which the lower limit of q‖qα‖‖qβ‖ is not 0 form a set of dimension 0.</b> Told, not proved: dimension here is the finer cousin of <a href="r35h.html#0ec8c0">35h</a>’s, and the proof is far beyond this page. Its shape: from α, β and q build the grid of whole-number points (q, qα − m, qβ − n) in space. A small product is a grid point in a thin region near a pair of planes. Stretching one direction and squeezing the other two, keeping volume, moves the grid; an exception is a grid whose path under these moves never comes near a short vector. The moves form a flow on the space of grids of volume 1, and the proof shows that the only way such paths can be common is in a measure the flow keeps, then classifies all such measures.</p>
+  <pre class="lines" data-k="ember" data-label="this page: why dimension 0 is a strong statement">
+\text{stubborn pairs: area } 0,\ \text{dimension } 2 @@ held in trust
+\text{exceptions} \subseteq \text{stubborn pairs} @@ sky32.4
+\text{exceptions: dimension } 0 @@ the 2006 result
+\htmlClass{new}{\text{thinner than the middle-thirds dust, of dimension } 0.631} \quad \blacksquare @@ 35h2’s box-count technique
+  </pre>
+  <p data-pid="70a208">In 2011 a related question of the 1980s was settled the other way round: pairs that resist approach together, in a weighted sense where q‖qα‖ and q‖qβ‖ are measured on different scales, exist in abundance, and any two such weighted kinds share pairs. So two numbers can be stubborn together in that sense; whether they can be stubborn together in the sense of the product is the open question.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · 2006 · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞32.5.1</span><span class="ph understand">understand</span>What does the 2006 result say, and why is dimension 0 a stronger statement than size 0 here? <br>Why does a small product correspond to a short vector in a grid?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="sky32.6">
+  <h2 class="sthead"><span class="stno">sky32.6</span>Illegal Moves</h2>
+  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed" data-wrong="1">
+\text{the crowded box gives the best fraction}\,? @@ it gives one good q ≤ N; the convergents give the best
+\text{every number allows } |x - p/q| < 1/(3q^2) \text{ endlessly often}\,? @@ not the golden ratio: no constant above √5
+\text{the square box gives } q\|q\alpha\|\|q\beta\| \to 0\,? @@ it gives only &lt; 1
+\text{dimension } 0 \text{ means empty}\,? @@ a single point has dimension 0; the exceptions may exist
+\text{the record } 0.00466 \text{ for } \sqrt2, \sqrt3 \text{ settles that pair}\,? @@ a search finds values; a proof needs every q
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞32.6.1</span><span class="ph understand">understand</span>Why does the square-box technique not answer the 1930 question? <br>Why does dimension 0 not mean that there are no exceptions?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="openq themeend">
+  <div class="eyebrow">Open questions · nobody has the answer yet</div>
+  <h2>Open questions</h2>
+  <p class="chnote">These are open: the field is still asking them. There is no key; a good attempt is a reason, a guess, or a better question.</p>
+  <div class="oq"><span class="oqid">∞32.oq.1</span>For every pair of real numbers α, β, is the lower limit of q‖qα‖‖qβ‖ equal to 0? Asked around 1930. <br>Why it is hard: the only possible exceptions are pairs of stubborn numbers, and for those nothing in the continued fractions of α and β alone controls how the two misses line up for the same q. The 2006 method shows exceptions are very rare, and it gives no way to rule out the last few.</div>
+  <div class="oq"><span class="oqid">∞32.oq.2</span>Does any exception exist at all? No pair has been shown to fail, and no pair of stubborn numbers in general has been shown to pass; for pairs from certain fields of degree 3 the answer has been yes since 1955. <br>Why it is hard: proving a pair fails needs a lower bound for every q at once, and proving it passes needs to find, for every ε, a q that is good for both.</div>
+  <div class="oq"><span class="oqid">∞32.oq.3</span>Is the cube root of 2 stubborn? Its continued fraction begins 1, 3, 1, 5, 1, 1, 4, 1, 1, 8, 1, 14, …, and nobody knows whether its steps stay bounded. It is not even known whether any number solving a whole-number equation of degree 3 or more, and none of lower degree, has unbounded steps, though almost every number does. <br>Why it is hard: degree 2 numbers have repeating continued fractions (43k), and nothing comparable is known one degree up.</div>
+  <div class="oq"><span class="oqid">∞32.oq.4</span>A mixed form, asked in 2004: replace β by a measure of how often q is divisible by a prime p. Is the lower limit of q · ‖qα‖ · (1/p^(number of times p divides q)) always 0? <br>Why it is hard: it mixes the ordinary distance with a distance read on the clocks of pᵏ, and it meets the same obstacle as the original: the methods show exceptions are rare without showing there are none.</div>
+</section>
+<section class="history themeend">
+  <div class="eyebrow">A short history · told from more than one side</div>
+  <h2>How we got here</h2>
+  <p data-pid="5e5668">The counting argument of 1842 settled the one-number question in a few lines, and the box argument behind it is still the first tool anyone tries. The best constant, √5, came in 1891, with the golden ratio as the extreme case. Continued fractions had already shown which fractions are best, and they made the one-number story complete: how well a number can be approached is read off its staircase.</p>
+  <p data-pid="8a477b">The two-number question was asked around 1930. It looks like an exercise, and it resists every exercise-sized attack. A partial answer came in 1955: for two numbers drawn from certain fields of degree 3 the answer is yes, by an argument about the units of that field. For pairs of stubborn numbers in general nothing was known, and it was not clear whether to expect a proof or a counterexample.</p>
+  <p data-pid="21a75b">The 2006 result came from another subject, the study of how flows on spaces of grids mix. Its authors proved that the measures such a flow keeps are of a very special kind, under a condition, and the dimension 0 result fell out. It was printed in a leading journal in 2006.</p>
+  <p data-pid="ea482a">What the result does and does not do is argued over. It shows the exceptions are thinner than any dust of positive dimension, which would be strange if any existed. But the flow method cannot by itself tell a set of dimension 0 from an empty set. In 2011 a related question, posed in the 1980s, about pairs that resist approach together with weights, was settled, and it found such pairs in abundance; for the product of the two misses no such pair is known.</p>
+  <p data-pid="61c304">Work goes on along several roads: on the flow, hoping to remove the last thin set; on mixed forms with primes, posed in 2004; and on computer searches for particular pairs like √2 and √3, which show the product falling, slowly. None is yet a proof, and the question remains a standard test for new methods. The dating about 1930 on this page rests on one source and has not been revisited.</p>
+</section>
+
+<nav class="nextrung"><a href="sky33.html">← ∞33 · does every number fall to 1?</a><a href="index.html">the ladder →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The crowded-parts technique is Dirichlet’s approximation theorem, proved by the pigeonhole principle; the square-box technique is its simultaneous form. The best-bottom technique is the best approximation property of convergents (of the second kind). The three-convergents technique is Hurwitz’s theorem, and √5 is Hurwitz’s constant; the golden-floor technique shows it is sharp. A stubborn number is a badly approximable number; these are the numbers with bounded partial quotients, and they have Lebesgue measure 0 and Hausdorff dimension 1 (Jarník). The 1930 question is Littlewood’s conjecture, and the 2006 result is the theorem of Einsiedler, Katok and Lindenstrauss, through measure rigidity for the action of the diagonal group on SL(3, ℝ)/SL(3, ℤ); The 1955 result, for totally real cubic fields, is Cassels and Swinnerton-Dyer’s. The 2011 result is the proof of Schmidt’s conjecture by Badziahin, Pollington and Velani, on the sets Bad(i, j). The mixed form is the p-adic Littlewood conjecture of de Mathan and Teulié.</p>
+  <h3>Who said it first</h3>
+  <p>Peter Gustav Lejeune Dirichlet proved the approximation theorem in 1842. Adolf Hurwitz proved the √5 result in 1891. John Edensor Littlewood asked the two-number question around 1930. J. W. S. Cassels and H. P. F. Swinnerton-Dyer proved the cubic case in 1955. Manfred Einsiedler, Anatole Katok and Elon Lindenstrauss proved the dimension 0 result (Annals of Mathematics, 2006). Wolfgang Schmidt made his conjecture in the 1980s; Dzmitry Badziahin, Andrew Pollington and Sanju Velani proved it (Annals of Mathematics, 2011). Bernard de Mathan and Olivier Teulié posed the mixed conjecture in 2004.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Almost every pair satisfies the conjecture, so every pair does.” Not allowed: almost every means outside a set of size 0, and a set of size 0, or even of dimension 0, can still hold a pair. The step from almost every to every is exactly the open part.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+
+stepper('#sl1',[
+  {k:'ember',kl:'things',t:R`N + 1 \text{ parts}`,n:`In N boxes.`},
+  {k:'ember',kl:'pair',t:R`\|qx\| < 1/N`,n:`q ≤ N.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|x - p/q| < 1/q^2}`,n:`Endlessly often.`}
+],{title:'The slides · the box · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'grid',t:R`(p, q) = u(p_j, q_j) + v(p_{j+1}, q_{j+1})`,n:`Det ±1.`},
+  {k:'ember',kl:'signs',t:R`uv < 0`,n:`Both terms one sign.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\|qx\| \ge |q_jx - p_j|}`,n:`For q < q_(j+1).`}
+],{title:'The slides · the best · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'two fail',t:R`\lambda < \varphi`,n:`Bottoms grow slowly.`},
+  {k:'ember',kl:'three fail',t:R`\mu > \varphi`,n:`Impossible.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|x - p/q| < 1/\sqrt5 q^2}`,n:`And φ allows no more.`}
+],{title:'The slides · root five · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'points',t:R`N^2 + 1`,n:`In N² boxes.`},
+  {k:'ember',kl:'both',t:R`\|q\alpha\|, \|q\beta\| < 1/N`,n:`One q.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{q\|q\alpha\|\|q\beta\| < 1}`,n:`Not yet → 0.`}
+],{title:'The slides · two at once · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'stubborn',t:R`\text{dimension } 2`,n:`Area 0.`},
+  {k:'ember',kl:'exceptions',t:R`\text{dimension } 0`,n:`Thinner than dust.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{still not none}}`,n:`The question stays open.`}
+],{title:'The slides · 2006 · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
