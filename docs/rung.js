@@ -454,7 +454,7 @@ function marks(){
   /* rung 1's steps moved one letter on (2026-10-25: the boxes page became 1a): carry old marks across */
   const RL=(PAGE.match(/^r01([a-h])$/)||[])[1]; const OLD=RL?'1'+RL:null, NEW=RL?'1'+String.fromCharCode(RL.charCodeAt(0)+1):null;
   /* 0.3.65: footings 38phys9-15 were added, so 38·phys's standing questions moved from 9.k to 16.k: carry old ticks across */
-  const MV=({r38phys:[['c:38·phys.9.','c:38·phys.16.']]})[PAGE]||[], moved=new Set();
+  const MV=({r38phys:[['c:38·phys.9.','c:38·phys.16.']],r43cb19:[['c:43·cb19.6.','c:43·cb19.8.']]})[PAGE]||[], moved=new Set();
   const relabel=()=>{ let ch=false; if(OLD) Object.keys(st).forEach(k=>{ if(k.startsWith('q:'+OLD+'.')){ const nk='q:'+NEW+k.slice(2+OLD.length); if(!(nk in st)){ st[nk]=st[k]; moved.add(nk); ch=true; } } });
     MV.forEach(([f,t])=>Object.keys(st).forEach(k=>{ if(k.startsWith(f)){ const nk=t+k.slice(f.length); if(!(nk in st)){ st[nk]=st[k]; moved.add(nk); ch=true; } } })); return ch; };
   if(OLD&&!Object.keys(st).length){ try{ const old=JSON.parse(LS.getItem('marks:'+(document.title||'').replace(new RegExp('^'+NEW+'\\b'),OLD))||'{}'); Object.assign(st,old); }catch(e){} }
