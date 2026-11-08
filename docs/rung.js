@@ -453,7 +453,10 @@ function marks(){
   let st={}; try{ st=JSON.parse(LS.getItem(KEY)||'{}'); }catch(e){ st={}; }
   /* rung 1's steps moved one letter on (2026-10-25: the boxes page became 1a): carry old marks across */
   const RL=(PAGE.match(/^r01([a-h])$/)||[])[1]; const OLD=RL?'1'+RL:null, NEW=RL?'1'+String.fromCharCode(RL.charCodeAt(0)+1):null;
-  const relabel=()=>{ if(!OLD) return false; let ch=false; Object.keys(st).forEach(k=>{ if(k.startsWith('q:'+OLD+'.')){ const nk='q:'+NEW+k.slice(2+OLD.length); if(!(nk in st)){ st[nk]=st[k]; ch=true; } } }); return ch; };
+  /* 0.3.65: footings 38phys9-15 were added, so 38·phys's standing questions moved from 9.k to 16.k: carry old ticks across */
+  const MV=({r38phys:[['c:38·phys.9.','c:38·phys.16.']]})[PAGE]||[], moved=new Set();
+  const relabel=()=>{ let ch=false; if(OLD) Object.keys(st).forEach(k=>{ if(k.startsWith('q:'+OLD+'.')){ const nk='q:'+NEW+k.slice(2+OLD.length); if(!(nk in st)){ st[nk]=st[k]; moved.add(nk); ch=true; } } });
+    MV.forEach(([f,t])=>Object.keys(st).forEach(k=>{ if(k.startsWith(f)){ const nk=t+k.slice(f.length); if(!(nk in st)){ st[nk]=st[k]; moved.add(nk); ch=true; } } })); return ch; };
   if(OLD&&!Object.keys(st).length){ try{ const old=JSON.parse(LS.getItem('marks:'+(document.title||'').replace(new RegExp('^'+NEW+'\\b'),OLD))||'{}'); Object.assign(st,old); }catch(e){} }
   if(relabel()){ try{ LS.setItem(KEY,JSON.stringify(st)); }catch(e){} }
   const save=id=>{ try{ LS.setItem(KEY,JSON.stringify(st)); }catch(e){} if(window.MarksSync) MarksSync.push(KEY,st,id); };
@@ -476,7 +479,7 @@ function marks(){
     if(it.id.startsWith('q:')) holdMenu(it.el,()=>{ if(window.__qMenu) window.__qMenu(it.el,()=>tick(),it.on()); }); });
   document.querySelectorAll('.qid.auto').forEach(el=>el.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation(); if(window.__qMenu) window.__qMenu(el,null,false); }));
   progress(); gateLadder(true);
-  const go=()=>{ if(window.MarksSync){ const r=MarksSync.init(KEY,st,items); const after=()=>{ if(relabel()){ try{ LS.setItem(KEY,JSON.stringify(st)); }catch(e){} items.forEach(it=>{ if(it.id in st){ it.set(!!st[it.id]); if(it.id.startsWith('q:'+NEW+'.')) MarksSync.push(KEY,st,it.id); } }); } progress(); gateLadder(); }; if(r&&r.then) r.then(after,after); else after(); } };
+  const go=()=>{ if(window.MarksSync){ const r=MarksSync.init(KEY,st,items); const after=()=>{ if(relabel()){ try{ LS.setItem(KEY,JSON.stringify(st)); }catch(e){} items.forEach(it=>{ if(it.id in st){ it.set(!!st[it.id]); if(moved.has(it.id)) MarksSync.push(KEY,st,it.id); } }); } progress(); gateLadder(); }; if(r&&r.then) r.then(after,after); else after(); } };
   if(window.MarksSync) go(); else { const s=document.createElement('script'); s.src='sync.js'; s.onload=go; document.head.appendChild(s); }
   /* pull again whenever the page comes back into view, so a ✓ made on another device shows up without a reload */
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden) go(); });
