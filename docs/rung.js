@@ -1398,7 +1398,7 @@ function info(){
   const t=document.querySelector('header.top .tags .tag'); if(!t||!document.querySelector('.qid')) return null;
   const txt=t.textContent.trim(), i=txt.indexOf(' · '); const tag=(i<0?txt:txt.slice(0,i)).trim();
   const cls=[...t.classList].find(c=>c!=='tag')||'';
-  const rung=parseInt(tag,10); if(isNaN(rung)) return null;
+  const rung=parseInt(tag,10); if(isNaN(rung)) return /^∞\d+$/.test(tag)?{tag,rung:null,annex:null,deck:'sky'}:null;
   const annex=ANNEX.includes(cls)?cls:null;
   return {tag,rung,annex,deck:annex?'a-'+annex:'r'+String(rung).padStart(2,'0')};
 }
@@ -1426,7 +1426,7 @@ function open(){
     close(); box=document.createElement('div'); box.id='cards'; box.setAttribute('role','dialog'); box.setAttribute('aria-label','crosswalk');
     document.body.appendChild(box); document.body.classList.add('cardsopen');
     const rec=get(CR,{}); let queue=shuffle(d.cards.slice()), n=0, right=0;
-    const label=me.annex?('every '+me.annex+' page you have opened'):('rung '+me.rung+', steps opened: '+d.tags.sort().join(', '));
+    const label=me.annex?('every '+me.annex+' page you have opened'):me.rung==null?('the Endless floor, steps opened: '+d.tags.sort((x,y)=>x.slice(1)-y.slice(1)).join(', ')):('rung '+me.rung+', steps opened: '+d.tags.sort().join(', '));
     const show=()=>{
       if(!queue.length){ box.innerHTML='<div class="cd-card"><div class="cd-top"><span>crosswalk</span><button class="cd-x" aria-label="close">×</button></div><p class="cd-q">'+right+' of '+n+' at first sight. Every card missed came back until it was known.</p><div class="cd-foot"><button class="cd-next cd-again">shuffle again</button></div></div>';
         box.querySelector('.cd-x').onclick=close; box.querySelector('.cd-again').onclick=()=>{ close(); open(); }; return; }
