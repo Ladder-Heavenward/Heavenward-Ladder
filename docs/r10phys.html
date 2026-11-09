@@ -54,10 +54,9 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <p class="gesture" data-pid="8cdc5c">Each stage's gap is the last one times the tortoise's speed over the runner's. So each stage's time is the last one times the same fraction, less than one. The time of the first so many stages adds up to the first stage's time, times one less a power of the fraction, over one less the fraction. The power heads to nothing, so the totals head to a finite time, and every stage ends before it. Write each position as a function of time, and the two meet at that very moment. Endless stages take a finite time when they shrink fast enough. Shrinking alone is not enough.</p>
 </header>
 
-<section class="class">
-  <div class="eyebrow">The class · the stages, their times added, powers of a fraction, the total, the moment found directly, when shrinking is not enough</div>
+<section class="class step" data-step="10phys1">
+  <h2 class="sthead"><span class="stno">10phys1</span>The Race, Cut Into Stages</h2>
 
-  <h3>The race, cut into stages</h3>
   <p class="eqline" data-pid="4049c0">From here on, on this page, the runner moves at a steady speed v and the tortoise at a steady speed u, in metres per second, with 0 &lt; u &lt; v. At time 0 the tortoise is D metres ahead. The fraction q = u/v is the tortoise's speed as a share of the runner's, so 0 &lt; q &lt; 1.</p>
   <p data-pid="87a07a">Stage 0 runs from time 0 until the runner reaches the tortoise's starting place. Each next stage runs until the runner reaches the place where the tortoise was when that stage began. Let d_k be the gap at the start of stage k, and t_k the stage's time. So d₀ = D. The runner covers d_k at speed v, in t_k = d_k/v (5j). Meanwhile the tortoise moves u · t_k = q · d_k. That is the next gap.</p>
   <pre class="lines" data-k="teal" data-label="from 9h: the stages, step by step">
@@ -66,8 +65,17 @@ d_k = D\,q^k @@ steps-that-multiply (9h)
 t_k = \tfrac{d_k}{v} = \htmlClass{new}{\tfrac{D}{v}\,q^k} @@ time is distance over speed (5j); a run of times with factor q
   </pre>
   <p data-pid="61f9ec">Here is a race to work by hand, a model. The runner jogs at 5 m/s. A generous tortoise walks at 0.5 m/s, with 100 m start. Then q = 1/10, and the stages take 20 s, 2 s, 0.2 s, 0.02 s, and on. <b>No stage ends with the gap closed, and there is no last stage.</b> The old argument is right about that much.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·phys.1.1</span><span class="ph understand">understand</span>How is the race cut into stages, and what is each stage's time?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>The stage times, added</h3>
+<section class="class step" data-step="10phys2">
+  <h2 class="sthead"><span class="stno">10phys2</span>The Stage Times, Added</h2>
+
   <p data-pid="d41444">Let T_n be the time when stage n − 1 ends: the first n stage times added. 9h's ratio-sum adds a run of steps that multiply, for any factor other than 1.</p>
   <pre class="lines" data-k="teal" data-label="from 9h: ratio-sum">
 T_n = \textstyle\sum_{k \lt n} \tfrac{D}{v}\,q^k = \tfrac{D}{v}\,(1 + q + \cdots + q^{n-1}) @@ factor-out (4k)
@@ -75,8 +83,17 @@ T_n = \textstyle\sum_{k \lt n} \tfrac{D}{v}\,q^k = \tfrac{D}{v}\,(1 + q + \cdots
 20 + 2 + 0.2 + 0.02 = 22.22 @@ the model: four stages, n = 4, q = 1/10
   </pre>
   <p data-pid="09a1df">The totals 20, 22, 22.2, 22.22, 22.222, … grow at every stage, and they seem to settle near 22.2 repeating, which 8·cb5 reads as 200/9. To prove it, the power qⁿ must be shown to head to 0.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·phys.2.1</span><span class="ph understand">understand</span>What is T_n, the time when stage n − 1 ends?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>Powers of a fraction head to 0</h3>
+<section class="class step" data-step="10phys3">
+  <h2 class="sthead"><span class="stno">10phys3</span>Powers of a Fraction Head To 0</h2>
+
   <p data-pid="f0f64c">One small tool first. One-plus-a-power technique: <b>a power of one plus a positive amount is at least one plus that many of the amount.</b> Let h &gt; 0 and let n be a whole number at least 1. Then (1 + h)ⁿ ≥ 1 + nh. For n = 1 it is an equality. If it holds for n, then (1 + h)ⁿ⁺¹ ≥ (1 + nh)(1 + h) = 1 + (n + 1)h + nh² ≥ 1 + (n + 1)h, by keep-order for times (8g), since 1 + h &gt; 0, and nh² ≥ 0. Induction (4c) does the rest. ∎</p>
   <p data-pid="35b5c6">Powers-to-0 technique: <b>the powers of a fraction between 0 and 1 head to 0.</b> Let 0 ≤ q &lt; 1. Then qⁿ → 0 as n → ∞.</p>
   <pre class="lines" data-k="ember" data-label="this page: the powers-to-0 technique">
@@ -88,8 +105,17 @@ q = 0:\ \ q^n = 0 \text{ for } n \ge 1 @@ every term from n = 1 on is the limit 
 \htmlClass{keep}{q^n \to 0} \quad \blacksquare @@ the squeeze, far out (10d, 10f), between 0 and (1/h)(1/n)
   </pre>
   <p data-pid="768f4c">The bound is slow: for q = 2/3 it promises qⁿ &lt; 0.01 from n = 201 on, where in fact n = 12 is enough. A slow bound still proves the limit. The game asks only for some threshold, not the best one.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·phys.3.1</span><span class="ph understand">understand</span>What does powers-to-0 say, and how does one-plus-a-power prove it?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>Endless stages, a finite total</h3>
+<section class="class step" data-step="10phys4">
+  <h2 class="sthead"><span class="stno">10phys4</span>Endless Stages, a Finite Total</h2>
+
   <p data-pid="400283">Stage-sum technique: <b>a run of times that shrink by a fixed factor less than one adds up to a finite total.</b> Let 0 ≤ q &lt; 1 and let c be a real. Then c(1 + q + ⋯ + q^(n−1)) → c/(1 − q) as n → ∞.</p>
   <pre class="lines" data-k="ember" data-label="this page: the stage-sum technique">
 c\,(1 + q + \cdots + q^{n-1}) = \tfrac{c}{1 - q} - \tfrac{c}{1 - q}\,q^n @@ ratio-sum, spread
@@ -104,8 +130,17 @@ T_n = \tfrac{D}{v - u}\,(1 - q^n) \lt \tfrac{D}{v - u} @@ qⁿ &gt; 0: every sta
 \text{model: } \tfrac{100}{5 - 0.5} = 22.\overline{2} \text{ s} @@ 200/9 seconds
   </pre>
   <p data-pid="d63b48">Every one of the endless stages is over before 22.2 repeating seconds. And for any moment before that, some stage ends after it: that is what heading to the limit says, with ε the time still to go. <b>The stages fill exactly the time before the catch, and no more.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·phys.4.1</span><span class="ph understand">understand</span>What does stage-sum say, and what does it make of the stage times?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>The moment, found directly</h3>
+<section class="class step" data-step="10phys5">
+  <h2 class="sthead"><span class="stno">10phys5</span>The Moment, Found Directly</h2>
+
   <p data-pid="bd42a3">9·phys gave a body in uniform motion a position that is a linear function of time. Measure positions from the runner's start.</p>
   <pre class="lines" data-k="teal" data-label="from 9·phys: two positions, one moment">
 x_R(t) = v\,t,\ \ \ x_T(t) = D + u\,t @@ uniform motion: linear functions of time
@@ -114,8 +149,17 @@ t^* = \htmlClass{keep}{\tfrac{D}{v - u}} @@ divide by v − u, positive; the sam
 x_R(t) \gt x_T(t) \text{ for } t \gt t^* @@ (v − u)(t − t*) &gt; 0: after it, the runner is ahead
   </pre>
   <p data-pid="55b05b">Two roads, one answer. The direct road never mentions the stages, and it needs no limit at all. The stages road shows what the old argument missed. <b>Endless stages need not take endless time.</b> The argument counted the stages, and never added up their times. It also smuggled in a stop: it watched the race only until the catch, and then asked why the catch never came.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·phys.5.1</span><span class="ph understand">understand</span>How is the moment found directly, and what did the old argument miss?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>Shrinking Is Not Enough</h3>
+<section class="class step" data-step="10phys6">
+  <h2 class="sthead"><span class="stno">10phys6</span>Shrinking Is Not Enough</h2>
+
   <p data-pid="63ae2e">Does every endless run of shrinking times add up to a finite total? No. Take stage times of 1, ½, ⅓, ¼, … seconds, each shorter than the last, and heading to 0 by one-over-n. Group them: ⅓ + ¼ is more than ¼ + ¼ = ½. The next four, ⅕ to ⅛, are each at least ⅛, so they add to at least ½. And so on.</p>
   <p data-pid="9fe0ab">Grouped-halves technique: <b>adding one over each number from 1 to a power of two gives at least one plus half the count of doublings.</b> In marks, 1 + ½ + ⋯ + 1/2^k ≥ 1 + k/2 for every whole k.</p>
   <pre class="lines" data-k="ember" data-label="this page: the grouped-halves technique">
@@ -124,8 +168,17 @@ k = 0:\ \ 1 \ge 1 @@ the base
 \textstyle\sum_{j \le 2^{k+1}} \tfrac1j \ge 1 + \tfrac{k}{2} + \tfrac12 = \htmlClass{keep}{1 + \tfrac{k + 1}{2}} \quad \blacksquare @@ the hypothesis, plus the new group; induction (4c)
   </pre>
   <p data-pid="6eb936">So for any bound M, past 2^k terms with k &gt; 2M the total is past M: the totals pass every bound (10f), and have no limit (passing-every-bound). A race with these stage times would never end. The difference is speed of shrinking: q^k shrinks by the same factor every time, and 1/k shrinks by less and less.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·phys.6.1</span><span class="ph understand">understand</span>Why is shrinking not enough, and what does grouped-halves say?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>A chase at Hayward Field</h3>
+<section class="class step" data-step="10phys7">
+  <h2 class="sthead"><span class="stno">10phys7</span>A Chase at Hayward Field</h2>
+
   <p data-pid="a107c6">On the track at Hayward Field in Eugene, a miler is 20 m behind with one lap to go. She runs at 6.5 m/s, and the leader at 6.3 m/s, a model. Then q = 6.3/6.5 ≈ 0.969, close to 1, and the stages shrink slowly. The first takes about 3.08 s.</p>
   <pre class="lines" data-k="ember" data-label="this page: a slow-shrinking chase">
 t^* = \tfrac{20}{6.5 - 6.3} = \htmlClass{new}{100 \text{ s}} @@ the moment, directly
@@ -134,79 +187,73 @@ t^* = \tfrac{20}{6.5 - 6.3} = \htmlClass{new}{100 \text{ s}} @@ the moment, dire
 \text{every stage ends before } 100 \text{ s} @@ T_n = 100(1 − qⁿ)
   </pre>
   <p data-pid="460fa5">A lap at 6.5 m/s takes about 62 s. So she runs out of track before the catch, however many stages she completes. The limit gives the moment exactly; the race decides whether it comes in time.</p>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: the race as two positions in time, with the stage ends marked · right: the stage times added, heading to a total or passing every bound</div>
+    <div class="panels">
+      <div class="panel">
+        <div class="kn"><span class="m">tortoise's speed, share of runner's</span><input type="range" id="kq" min="0.05" max="0.95" step="0.05" value="0.1"><output id="oq"></output></div>
+        <div class="kn"><span class="m">head start</span><input type="range" id="kd" min="20" max="200" step="10" value="100"><output id="od"></output></div>
+        <canvas id="cvA"></canvas>
+        <div class="cap">Time across, position up. Teal: the runner at 5 m/s. Plum: the tortoise. Ember dots: where each stage ends on the runner's line, the first 30 of them, crowding toward the meeting point. Dashed gold: the moment found directly.</div>
+        <div class="eqbox" id="eqA"></div>
+      </div>
+      <div class="panel">
+        <div class="chips" id="chr"></div>
+        <canvas id="cvB"></canvas>
+        <div class="cap">The totals T_n of the first n stage times, n = 1 to 60. With a fixed factor they stay below the dashed total and head to it. With times 1, ½, ⅓, … they keep climbing past every line.</div>
+        <div class="verdict" id="vdB"></div>
+      </div>
+    </div>
+  </section>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the stages; each a fixed share of the last; the times added; one-plus-a-power; powers-to-0; stage-sum; the total; the moment directly; grouped-halves; Hayward Field; illegal moves · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·phys.7.1</span><span class="ph understand">understand</span>What does the Hayward Field chase show about the limit and the race?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>Illegal Moves</h3>
-  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+<section class="class step" data-step="10phys8">
+  <h2 class="sthead"><span class="stno">10phys8</span>Illegal Moves</h2>
+
+  <pre class="lines" data-k="ember" data-wrong="1" data-label="this page: tempting, and not allowed">
 \text{endless stages, so endless time}\,? @@ stage-sum: shrinking by a fixed factor q &lt; 1, they add to D/(v − u)
 \text{the times shrink to } 0 \text{, so their total is finite}\,? @@ grouped-halves: 1, ½, ⅓, … shrink to 0 and the totals pass every bound
 \text{the catch happens at the last stage}\,? @@ there is no last stage; the catch is the limit of the stage ends, and no stage ends there
 T_n = \tfrac{D}{v - u} \text{ for } n \text{ large enough}\,? @@ T_n = (D/(v − u))(1 − qⁿ), always short of it; the limit is never a term
 \infty \cdot 0 \text{, so the total is } 0\,? @@ ∞ is not a number (10f); the total is a limit of finite sums
   </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·phys.8.1</span><span class="ph understand">understand</span>Why is “the times shrink to 0, so their total is finite” an illegal move?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>Running It Backwards</h3>
+<section class="class step" data-step="10phys9">
+  <h2 class="sthead"><span class="stno">10phys9</span>Running It Backwards</h2>
+
   <p data-pid="5d01f7">Handed a first stage time t₀ and a total, find the factor: total = t₀/(1 − q), so q = 1 − t₀/total. Handed a catch time and the speeds, find the head start: D = (v − u) t*. Handed a run of shrinking times, ask whether each is at most a fixed q &lt; 1 times the last. If so, the totals stay below t₀/(1 − q). If they shrink by less and less, as 1/k does, nothing is promised.</p>
-
-  <h3>Which rung each step uses</h3>
-  <div class="tablewrap"><table class="tt">
-    <tr><th>step</th><th>the mathematics</th><th>from</th></tr>
-    <tr><td class="l">the stages</td><td class="l">speed, units; steps-that-multiply</td><td><a href="r05j.html">5j</a>, <a href="r09h.html">9h</a></td></tr>
-    <tr><td class="l">their times added</td><td class="l">ratio-sum; factor-out</td><td><a href="r09h.html">9h</a>, <a href="r04k.html">4k</a></td></tr>
-    <tr><td class="l">powers-to-0</td><td class="l">induction; positive-reciprocal; the squeeze; one-over-n</td><td><a href="r04c.html">4c</a>, <a href="r08g.html">8g</a>, <a href="r10d.html">10d</a>, <a href="r10f.html">10f</a></td></tr>
-    <tr><td class="l">stage-sum</td><td class="l">limits-subtract, constant-factor</td><td><a href="r10c.html">10c</a></td></tr>
-    <tr><td class="l">the moment directly</td><td class="l">uniform motion; solving for one letter</td><td><a href="r09phys.html">9·phys</a>, <a href="r05g.html">5g</a></td></tr>
-    <tr><td class="l">grouped-halves</td><td class="l">induction; passing-every-bound</td><td><a href="r04c.html">4c</a>, <a href="r10f.html">10f</a></td></tr>
-  </table></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·phys.9.1</span><span class="ph understand">understand</span>Handed a run of shrinking times, what question tells you whether the total is finite?</li>
+    </ol>
+  </section>
 </section>
 
-<section class="pic" id="pic">
-  <div class="eyebrow">The picture · left: the race as two positions in time, with the stage ends marked · right: the stage times added, heading to a total or passing every bound</div>
-  <div class="panels">
-    <div class="panel">
-      <div class="kn"><span class="m">tortoise's speed, share of runner's</span><input type="range" id="kq" min="0.05" max="0.95" step="0.05" value="0.1"><output id="oq"></output></div>
-      <div class="kn"><span class="m">head start</span><input type="range" id="kd" min="20" max="200" step="10" value="100"><output id="od"></output></div>
-      <canvas id="cvA"></canvas>
-      <div class="cap">Time across, position up. Teal: the runner at 5 m/s. Plum: the tortoise. Ember dots: where each stage ends on the runner's line, the first 30 of them, crowding toward the meeting point. Dashed gold: the moment found directly.</div>
-      <div class="eqbox" id="eqA"></div>
-    </div>
-    <div class="panel">
-      <div class="chips" id="chr"></div>
-      <canvas id="cvB"></canvas>
-      <div class="cap">The totals T_n of the first n stage times, n = 1 to 60. With a fixed factor they stay below the dashed total and head to it. With times 1, ½, ⅓, … they keep climbing past every line.</div>
-      <div class="verdict" id="vdB"></div>
-    </div>
-  </div>
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">10·phys.10.1</span><span class="tagq">build</span>Build chases and runs of your own.<ol class="parts" type="a"><li>Choose a real chase near you: a bike passing a walker on a trail, one ferry gaining on another. <br>Estimate the speeds and the head start, and find the catch, and the stage at which the gap is under 1 cm.</li><li>Prove powers-to-0, every line licensed.</li><li>Prove grouped-halves, every line licensed.</li><li><span class="givens"><span data-tex-inline="t_{k+1} \le q\,t_k,\ \ 0 \le q \lt 1,\ \ t_k \ge 0"></span></span>Prove that the totals never pass t₀/(1 − q).</li></ol></div>
+  <div class="chq"><span class="chid">10·phys.10.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="u = 0"></span></span>Find the stages and the total. <br>How many stages take any time?</div>
+  <div class="chq"><span class="chid">10·phys.10.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="t_k \gt 0,\ \ \text{the totals head to a real}"></span></span>Must each t_(k+1) be at most a fixed q &lt; 1 times t_k?</div>
+  <div class="chq"><span class="chid">10·phys.10.4</span><span class="tagq">seam</span>The page finds the moment of the catch, and shows the stage times add up to it. One reader holds that the old argument is answered. Another holds that it never asked how long the stages take: it asked how anyone can finish an endless list of tasks, one after another, when the list has no last task. Is the old argument answered?</div>
 </section>
-
-<section class="slides" id="sl1"><div class="eyebrow">The slides · the stages; each a fixed share of the last; the times added; one-plus-a-power; powers-to-0; stage-sum; the total; the moment directly; grouped-halves; Hayward Field; illegal moves · ← → keys work</div></section>
-
-<section class="sayback">
-  <div class="eyebrow">Say it back · then work it</div>
-  <h2>Questions</h2>
-  <ol>
-    <li><span class="qid">10·phys.1</span><span class="gname">Cutting the race.</span><span class="gwhy">Do: build the page's pieces.</span>
-      <ol class="sub">
-        <li><span class="qid">10·phys.1.1</span><span class="ph do">do</span><span class="givens"><span data-tex-inline="t_k = \tfrac{D}{v}\,q^k,\ \ q = \tfrac{u}{v}"></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{the seawall in Stanley Park:}"></span> <span data-tex-inline="\text{a runner at } 6\ \text{m/s, a walker}"></span> <span data-tex-inline="\text{at } 1.5\ \text{m/s},\ 90\ \text{m ahead}"></span></span>Find the first three stage times and their total. <br>Find the limit of the totals.</li><li><span class="givens"><span data-tex-inline="\text{the same runner and walker}"></span></span>Find the moment and the place of the catch, by the positions.</li><li><span class="givens"><span data-tex-inline="1 + 0.4 + 0.16 + \cdots"></span></span>Find the limit of the totals.</li><li><span class="givens"><span data-tex-inline="q = \tfrac23,\ \ \varepsilon = 0.01"></span></span>Find a threshold for qⁿ by the page's bound. <br>Then find the least threshold.</li></ol></li>
-      </ol></li>
-    <li><span class="qid">10·phys.2</span><span class="gname">From the total back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
-      <ol class="sub">
-        <li><span class="qid">10·phys.2.1</span><span class="ph undo">undo</span><span class="givens"><span data-tex-inline="t_k = \tfrac{D}{v}\,q^k,\ \ q = \tfrac{u}{v}"></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="t_0 = 40\ \text{s},"></span> <span data-tex-inline="\text{the totals head to } 50\ \text{s}"></span></span>Find q.</li><li><span class="givens"><span data-tex-inline="\text{a catch at } 30\ \text{s};\ \text{runner } 7\ \text{m/s};"></span> <span data-tex-inline="\text{head start } 60\ \text{m}"></span></span>Find the slower speed.</li><li><span class="givens"><span data-tex-inline="T_n = 10\,(1 - 0.8^n)"></span></span>Find t₀, q and the limit.</li><li><span class="givens"><span data-tex-inline="\text{a total of } 12\ \text{s},\ t_0 = 9\ \text{s}"></span></span>Find the factor, and the second and third stage times.</li></ol></li>
-      </ol></li>
-    <li><span class="qid">10·phys.3</span><span class="gname">Where the stages bend.</span><span class="gwhy">Bend: find where the techs stop working.</span>
-      <ol class="sub">
-        <li><span class="qid">10·phys.3.1</span><span class="ph bend">bend</span><span class="givens"><span data-tex-inline="t_k = \tfrac{D}{v}\,q^k,\ \ q = \tfrac{u}{v}"></span></span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="u = v"></span></span>Find the stage times and their totals. <br>Is there a catch?</li><li><span class="givens"><span data-tex-inline="u \gt v"></span></span>Find what the totals do. <br>What does t* = D/(v − u) mean here?</li><li><span class="givens"><span data-tex-inline="\text{stage times } 1, \tfrac12, \tfrac13, \tfrac14, \ldots \text{ s}"></span></span>Find a number of stages after which the total is past 3 s. <br>Then find the least such number.</li><li><span class="givens"><span data-tex-inline="\text{a ball dropped from } 1.8\ \text{m in a gym}"></span> <span data-tex-inline="\text{in Tacoma, each bounce } 0.64 \text{ of the last height};"></span> <span data-tex-inline="\text{a fall of } h \text{ takes } \sqrt{2h/9.8}\ \text{s}"></span></span>Find the total time of every bounce. <br>Does the ball ever stop?</li></ol></li>
-      </ol></li>
-    <li class="optgroup"><span class="qid">10·phys.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder questions that rely on your own making. The page is complete without these; the rung's angel wings need them.</span>
-      <ol class="sub">
-        <li class="opt"><span class="qid">10·phys.4.1</span><span class="tagq">build</span>Build chases and runs of your own.<ol class="parts" type="a"><li>Choose a real chase near you: a bike passing a walker on a trail, one ferry gaining on another. <br>Estimate the speeds and the head start, and find the catch, and the stage at which the gap is under 1 cm.</li><li>Prove powers-to-0, every line licensed.</li><li>Prove grouped-halves, every line licensed.</li><li><span class="givens"><span data-tex-inline="t_{k+1} \le q\,t_k,\ \ 0 \le q \lt 1,\ \ t_k \ge 0"></span></span>Prove that the totals never pass t₀/(1 − q).</li></ol></li>
-        <li class="opt"><span class="qid">10·phys.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="u = 0"></span></span>Find the stages and the total. <br>How many stages take any time?</li>
-        <li class="opt"><span class="qid">10·phys.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="t_k \gt 0,\ \ \text{the totals head to a real}"></span></span>Must each t_(k+1) be at most a fixed q &lt; 1 times t_k?</li>
-        <li class="opt"><span class="qid">10·phys.4.4</span><span class="tagq">seam</span>The page finds the moment of the catch, and shows the stage times add up to it. One reader holds that the old argument is answered. Another holds that it never asked how long the stages take: it asked how anyone can finish an endless list of tasks, one after another, when the list has no last task. Is the old argument answered?</li>
-      </ol></li>
-  </ol>
-  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
-</section>
-
+<div class="themecert themeend"></div>
 <nav class="nextrung"><a href="r10econ.html">← 10·econ · can interest added more often grow without end?</a><a href="r10concl.html">10·∎ · conclusion →</a></nav>
 
 <section class="extra basement">
@@ -214,7 +261,7 @@ T_n = \tfrac{D}{v - u} \text{ for } n \text{ large enough}\,? @@ T_n = (D/(v −
   <h3>Who said it first</h3>
   <p>The race is Zeno of Elea's, from the fifth century BC; the runner is Achilles. Zeno's own book is lost, and the argument comes down through Aristotle's Physics, which answers it by saying that a stretch of time is divisible in the same way as a stretch of road, so endlessly many parts of the road are crossed in endlessly many parts of the time. Archimedes, in the third century BC, added up a run of quarters, 1 + ¼ + 1/16 + ⋯, by showing that the total could be neither more nor less than 4/3. Nicole Oresme, in Paris around 1350, proved by grouping that 1 + ½ + ⅓ + ⋯ passes every bound. The modern reading, with the totals' limit as the meaning of an endless sum, is Augustin-Louis Cauchy's (1821).</p>
   <aside class="voice para"><p>Aristotle answers that Zeno's argument wrongly assumes one cannot pass through or touch endlessly many things in a finite time; but length and time are endlessly divisible in the same way, so the endless parts of the length are passed through in the endless parts of the time.</p><cite>Aristotle, Physics, book VI, chapter 2; paraphrase</cite></aside>
-  <p>The second reader of 10·phys.4.4 was given a sharp form by James Thomson in 1954: a lamp switched on and off at shorter and shorter intervals, endlessly often within two minutes. Is it on or off at the end? Such endless lists of tasks done in a finite time are called supertasks.</p>
+  <p>The second reader of 10·phys.10.4 was given a sharp form by James Thomson in 1954: a lamp switched on and off at shorter and shorter intervals, endlessly often within two minutes. Is it on or off at the end? Such endless lists of tasks done in a finite time are called supertasks.</p>
   <h3>Accepted names</h3>
   <p>The race is <b>Achilles and the tortoise</b>, one of <b>Zeno's paradoxes</b>. A run whose terms are each a fixed factor of the last is a <b>geometric series</b> when its terms are added, and the stage-sum technique is the sum of a <b>geometric series</b>, a/(1 − r) for |r| &lt; 1. An endless sum whose totals head to a limit <b>converges</b>; one whose totals do not <b>diverges</b>. The totals are its <b>partial sums</b>. 1 + ½ + ⅓ + ⋯ is the <b>harmonic series</b>, and grouped-halves is Oresme's proof that it <b>diverges</b>. One-plus-a-power is <b>Bernoulli's inequality</b>.</p>
   <h3>Wrong moves, worked</h3>
@@ -227,6 +274,7 @@ T_n = \tfrac{D}{v - u} \text{ for } n \text{ large enough}\,? @@ T_n = (D/(v −
 </section>
 </div>
 
+<script>/* 0.3.80 Phase B: old tick ids on this page -> new */window.LADDER_MVX={"q:10·phys.4.1": "c:10·phys.10.1", "q:10·phys.4.2": "c:10·phys.10.2", "q:10·phys.4.3": "c:10·phys.10.3", "q:10·phys.4.4": "c:10·phys.10.4"};</script>
 <script src="rung.js"></script>
 <script>
 (function(){

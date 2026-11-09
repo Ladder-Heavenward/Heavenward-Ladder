@@ -54,10 +54,9 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <p class="gesture" data-pid="f6acfb">The daily cost of an order size is the ordering charge, which falls as orders grow, plus the cost of holding stock, which rises. It is least where the two parts are equal. Away from the best size the cost rises slowly: ordering twice the best amount, or half of it, costs only a quarter more. Reorder when the stock falls to what sells while a delivery is on its way, plus a store kept back for the days that sell more.</p>
 </header>
 
-<section class="class">
-  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+<section class="class step" data-step="14logi1">
+  <h2 class="sthead"><span class="stno">14logi1</span>The Balance, from 14h</h2>
 
-  <h3>The balance, from 14h</h3>
   <p data-pid="7ebafd">A feed store in Gonzales sells chicken feed by the bag, about d = 20 bags a day. Each order from the mill costs K = $50 in delivery and handling, whatever its size. Holding one bag for a day costs about h = $0.008, mostly the money tied up in it. Order Q bags at a time. Then there are d/Q orders a day, and the stock falls steadily from Q to 0 between them, so on average Q/2 bags sit on the shelf.</p>
   <div class="brkkey"></div>
   <pre class="lines" data-k="teal" data-label="from 14h: the order that costs least">
@@ -65,8 +64,17 @@ T(Q) = \tfrac{Kd}{Q} + \tfrac{h}{2}Q \text{ on } (0, \infty) @@ ordering cost a 
 Q_b = \sqrt{\tfrac{2Kd}{h}} = \sqrt{\tfrac{2 \cdot 50 \cdot 20}{0.008}} = \sqrt{250\,000} = 500 @@ equal-parts (14h), with a = Kd and b = h/2
 T(500) = 2 + 2 = \$4 \text{ a day} @@ the two parts equal: an order every 25 days
   </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14·logi.1.1</span><span class="ph understand">understand</span>What is the daily cost of an order size, and where is it least?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>How much a wrong order costs</h3>
+<section class="class step" data-step="14logi2">
+  <h2 class="sthead"><span class="stno">14logi2</span>How Much a Wrong Order Costs</h2>
+
   <p data-pid="cb136a">K and h are guesses. Nobody knows the true cost of a bag's day on the shelf to the tenth of a cent. So the useful question is how much an order away from Q_b costs.</p>
   <pre class="lines" data-k="ember" data-label="this page: the cost of a wrong order">
 Kd = \tfrac{h}{2}Q_b^{\,2} @@ Q_b² = 2Kd/h, multiplied by h/2
@@ -80,12 +88,30 @@ T(Q_b) = hQ_b @@ the line above at Q = Q_b
   <tr><th>T/T(Q_b)</th><td>1.25</td><td>1.025</td><td>1</td><td>1.025</td><td>1.083</td><td>1.25</td></tr>
   </table></div>
   <p data-pid="ea21a4">An order half again too big costs about 8% more. Suppose the store guessed K at $100, twice the truth. Its formula then gives √2 Q_b, about 707 bags, and costs ½(√2 + 1/√2) ≈ 1.061 times the least: 6% more for a guess off by a factor of 2. <b>Near the best order, the cost curve is nearly level, so a rough guess of the costs gives nearly the least cost.</b> That is flat-top at work: at Q_b the slope of T is 0, so small misses climb almost nothing.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14·logi.2.1</span><span class="ph understand">understand</span>How much does an order away from Q_b cost, and why does a rough guess do?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>When to order: the lead time</h3>
+<section class="class step" data-step="14logi3">
+  <h2 class="sthead"><span class="stno">14logi3</span>When to Order: The Lead Time</h2>
+
   <p data-pid="62798d">An order from the mill takes L = 4 days to come. Wait for the shelf to empty and the store sells nothing for 4 days. So the store reorders when the stock falls to what sells in 4 days, the reorder point r = dL = 80 bags. If sales were steady, the delivery would arrive just as the last bag left.</p>
   <p data-pid="69b9ed">Sales are not steady. A store's books might show four-day sales anywhere from about 60 to just over 100 bags. Reorder at 80, and the shelf runs empty before the truck comes in about half the cycles, every time four days sell more than 80.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14·logi.3.1</span><span class="ph understand">understand</span>What is the reorder point, and why does r = dL run out half the time?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>The stock kept back</h3>
+<section class="class step" data-step="14logi4">
+  <h2 class="sthead"><span class="stno">14logi4</span>The Stock Kept Back</h2>
+
   <p data-pid="d69d03">So the store reorders a little earlier, at r = dL + s. The s bags are a store kept back for a busy four days. They are never meant to be sold, and they cost hs every day, all year. Where to put r is read off the books with 9·stat's running total. Count the past lead times. Choose r so that the four-day sales were at most r in as many of them as the store wants covered.</p>
   <pre class="lines" data-k="ember" data-label="this page: a reorder point from the books">
 \begin{aligned}&\text{20 past four-day sales, sorted: } 62,\\ &\quad 66, 70, 71, 73, 75, 76, 77, 78, 79,\end{aligned} @@ a year of the store's records, a model
@@ -94,8 +120,17 @@ F(80) = 11,\ \ F(90) = 18,\ \ F(93) = 19 @@ the running total (9·stat): how man
 r = 93:\ \ s = 13 \text{ bags kept back} @@ covers 19 of 20; costs 13 × 0.008 ≈ $0.10 a day
   </pre>
   <p data-pid="f15f18"><b>The stock kept back buys a share of the cycles that do not run out, and each extra bag of it buys less than the last.</b> Going from 19 of 20 covered to 20 of 20 here takes 8 more bags, for one cycle in the records.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14·logi.4.1</span><span class="ph understand">understand</span>How is the stock kept back chosen, and what does it cost?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>Two stores, one shelf</h3>
+<section class="class step" data-step="14logi5">
+  <h2 class="sthead"><span class="stno">14logi5</span>Two Stores, One Shelf</h2>
+
   <p data-pid="ee14ff">Two stores, each selling d a day with the same K and h, each order Q_b and hold Q_b/2 on average. Together they hold Q_b = √(2Kd/h). Merge them into one store selling 2e: it orders √(2K · 2d/h) = √2 · Q_b and holds half that.</p>
   <pre class="lines" data-k="ember" data-label="this page: pooling the stock">
 2 \cdot \tfrac12\sqrt{\tfrac{2Kd}{h}} = \sqrt{\tfrac{2Kd}{h}} @@ two stores' average stock
@@ -111,86 +146,71 @@ r = 93:\ \ s = 13 \text{ bags kept back} @@ covers 19 of 20; costs 13 × 0.008 �
     <p data-pid="aa275a">Because the cost curve is level near its bottom, the rule survives most of these failures with little loss. Its weak point is the reorder point, not the order size.</p>
     <p class="bait" data-pid="8eb0bc">A garden centre in Watsonville sells twice as many bags of soil in April as in a usual month. Should its order in April be twice as big?</p>
   </aside>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: half a year on the shelf · right: the daily cost against the order size</div>
+    <div class="panels">
+      <div class="panel">
+        <div class="lbl">bags on the shelf, day by day, with uneven daily sales</div>
+        <canvas id="cvF"></canvas>
+        <div class="kn"><span class="m">order Q</span><input type="range" id="kQ" min="100" max="1200" step="20" value="500"><output id="oQ"></output></div>
+        <div class="kn"><span class="m">reorder r</span><input type="range" id="kr" min="40" max="160" step="1" value="80"><output id="or"></output></div>
+        <div class="chips" id="fch"></div>
+        <div class="cap">Ink: the stock. Gold dashed: the reorder point. Plum ticks: orders placed; each arrives 4 days later. Ember: days the shelf ran empty. Each day sells from 10 to 30 bags, all equally likely: 20 on average.</div>
+        <div class="verdict" id="vdF"></div>
+      </div>
+      <div class="panel">
+        <div class="lbl">dollars a day against Q</div>
+        <canvas id="cvS"></canvas>
+        <div class="cap">Teal dashed: ordering, Kd/Q. Ember dashed: holding, hQ/2. Ink: their sum T(Q). Gold dot: Q_b = 500. Plum dot: your Q.</div>
+        <div class="eqbox" id="eqF"></div>
+      </div>
+    </div>
+  </section>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the balance; the cost of a wrong order; the table; a wrong guess of K; the lead time; uneven sales; the stock kept back; pooling; illegal moves · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14·logi.5.1</span><span class="ph understand">understand</span>What happens to stock when two stores merge?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>Which rung licenses each step</h3>
-  <div class="tablewrap"><table class="tt">
-  <tr><th class="l">step</th><th class="l">licence</th></tr>
-  <tr><td class="l">K, h and steady sales</td><td class="l">premises, from the store's books</td></tr>
-  <tr><td class="l">the best order</td><td class="l">14h's equal-parts</td></tr>
-  <tr><td class="l">the cost of a wrong order</td><td class="l">algebra; 8g's means for ½(x + 1/x) ≥ 1</td></tr>
-  <tr><td class="l">small misses cost little</td><td class="l">14a's flat-top: slope 0 at the bottom</td></tr>
-  <tr><td class="l">the reorder point</td><td class="l">9·stat's running total, over the records</td></tr>
-  <tr><td class="l">pooling</td><td class="l">algebra on the best order</td></tr>
-  </table></div>
+<section class="class step" data-step="14logi6">
+  <h2 class="sthead"><span class="stno">14logi6</span>Illegal Moves</h2>
 
-  <h3>Illegal Moves</h3>
-  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+  <pre class="lines" data-k="ember" data-wrong="1" data-label="this page: tempting, and not allowed">
 \text{sales double, so the order doubles}\,? @@ it grows by √2
 \begin{aligned}&\text{reorder at } dL \text{, and the shelf never empties}\,\\ &\quad ?\end{aligned} @@ only if every lead time sells exactly dL
 \begin{aligned}&\text{the stock kept back is}\\ &\quad\text{sold, so it costs nothing}\,?\end{aligned} @@ it is there every day: hs a day
 \text{order } 1.5Q_b \text{, cost } 1.5\,T(Q_b)\,? @@ about 1.08 T(Q_b): the curve is level near its bottom
 \text{two stores' stock adds when they merge}\,? @@ pooled, it is 1/√2 of the sum
   </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14·logi.6.1</span><span class="ph understand">understand</span>Why is “sales double, so the order doubles” an illegal move?</li>
+    </ol>
+  </section>
 </section>
 
-<section class="pic" id="pic">
-  <div class="eyebrow">The picture · left: half a year on the shelf · right: the daily cost against the order size</div>
-  <div class="panels">
-    <div class="panel">
-      <div class="lbl">bags on the shelf, day by day, with uneven daily sales</div>
-      <canvas id="cvF"></canvas>
-      <div class="kn"><span class="m">order Q</span><input type="range" id="kQ" min="100" max="1200" step="20" value="500"><output id="oQ"></output></div>
-      <div class="kn"><span class="m">reorder r</span><input type="range" id="kr" min="40" max="160" step="1" value="80"><output id="or"></output></div>
-      <div class="chips" id="fch"></div>
-      <div class="cap">Ink: the stock. Gold dashed: the reorder point. Plum ticks: orders placed; each arrives 4 days later. Ember: days the shelf ran empty. Each day sells from 10 to 30 bags, all equally likely: 20 on average.</div>
-      <div class="verdict" id="vdF"></div>
-    </div>
-    <div class="panel">
-      <div class="lbl">dollars a day against Q</div>
-      <canvas id="cvS"></canvas>
-      <div class="cap">Teal dashed: ordering, Kd/Q. Ember dashed: holding, hQ/2. Ink: their sum T(Q). Gold dot: Q_b = 500. Plum dot: your Q.</div>
-      <div class="eqbox" id="eqF"></div>
-    </div>
-  </div>
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">14·logi.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Bend's milk keeps } 10 \text{ days.}"></span></span>Choose something your household buys often, guess d, K and h, find its best order, and compare it with how you buy it now.<br>Give it a shelf life shorter than one best order lasts, and prove what the best order is under that limit.</div>
+  <div class="chq"><span class="chid">14·logi.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="d = 20,\ h = \$0.008;"></span> <span data-tex-inline="\text{a truck holds } 400 \text{ bags,}"></span> <span data-tex-inline="\$50 \text{ a truck, however full}"></span></span>Find the best order.</div>
+  <div class="chq"><span class="chid">14·logi.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{At } Q_b, \text{ ordering cost a day}"></span> <span data-tex-inline="= \text{holding cost a day.}"></span></span>Prove or refute: a store whose two costs a day are equal is ordering its best order.<br>Decide whether the answer survives the edge question's trucks.</div>
+  <div class="chq"><span class="chid">14·logi.7.4</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="\text{same } d,\ K \text{ and } h;"></span> <span data-tex-inline="\text{Claim: average stock falls}"></span> <span data-tex-inline="\text{by the factor } 1/\sqrt{2}."></span></span>Two stores with these costs merge. Prove the claim.</div>
+  <div class="chq"><span class="chid">14·logi.7.5</span><span class="tagq">seam</span>In 1913 an engineer balanced the cost of each order against the cost of the stock. Forty years later a car maker in Japan cut the time to change a press from hours to minutes, and drove its orders toward a single part, with almost nothing on the shelf. Its critics say it only pushed the stock back onto its suppliers. <br>Was the balance wrong, or were its costs?</div>
 </section>
-
-<section class="slides" id="sl1"><div class="eyebrow">The slides · the balance; the cost of a wrong order; the table; a wrong guess of K; the lead time; uneven sales; the stock kept back; pooling; illegal moves · ← → keys work</div></section>
-
-<section class="sayback">
-  <div class="eyebrow">Say it back · then work it</div>
-  <h2>Questions</h2>
-  <ol>
-    <li><span class="qid">14·logi.1</span><span class="gname">Orders and reorders.</span><span class="gwhy">Do: build the page's pieces.</span>
-      <ol class="sub">
-        <li><span class="qid">14·logi.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="d = 30 \text{ bags a day},"></span> <span data-tex-inline="K = \$60,"></span> <span data-tex-inline="h = \$0.01 \text{ a bag a day}"></span></span>A garden centre in Watsonville sells soil. Find its best order, the days between orders, and the daily cost.</li><li><span class="givens"><span data-tex-inline="d = 30 \text{ bags a day},"></span> <span data-tex-inline="\text{lead time: } 5 \text{ days}"></span></span>Sales are steady. Find the reorder point.</li><li><span class="givens"><span data-tex-inline="d = 30,\ K = \$60,\ h = \$0.01,"></span> <span data-tex-inline="Q = 900"></span></span>The centre orders Q at a time instead of its best order. Find by what share its daily cost rises.</li><li><span class="givens"><span data-tex-inline="\text{Sales: } 128, 141, 150, 155, 137,"></span> <span data-tex-inline="162, 149, 171, 144, 152,"></span> <span data-tex-inline="133, 158, 146, 165, 139,"></span> <span data-tex-inline="151, 147, 186, 143, 156"></span></span>These are twenty past five-day sales. Find the least reorder point that covered all but one of them, and the stock it keeps back.</li></ol></li>
-      </ol></li>
-    <li><span class="qid">14·logi.2</span><span class="gname">From the order back to the costs.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
-      <ol class="sub">
-        <li><span class="qid">14·logi.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="Q_b = 400,\ d = 25 \text{ a day},"></span> <span data-tex-inline="h = \$0.02 \text{ a bag a day}"></span></span>Find K.</li><li><span class="givens"><span data-tex-inline="\text{holding cost at the best order:}"></span> <span data-tex-inline="\$5 \text{ a day}"></span></span>Find the store's ordering cost a day and its daily cost.</li><li><span class="givens"><span data-tex-inline="\text{reorder point: } 220,"></span> <span data-tex-inline="\text{kept back: } 40,"></span> <span data-tex-inline="\text{lead time: } 6 \text{ days}"></span></span>Find d.</li><li><span class="givens"><span data-tex-inline="T(Q)/T(Q_b) = 1.25"></span></span>Find every ratio of Q to the best order that fits.</li></ol></li>
-      </ol></li>
-    <li><span class="qid">14·logi.3</span><span class="gname">Where the rule gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
-      <ol class="sub">
-        <li><span class="qid">14·logi.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="d = 30,\ K = \$60,\ h = \$0.01;"></span> <span data-tex-inline="\$8 \text{ a bag;}"></span> <span data-tex-inline="2\% \text{ off orders of } 1000 \text{ or more}"></span></span>Decide whether the garden centre should order enough for the discount.</li><li><span class="givens"><span data-tex-inline="d = 50,\ K = \$40,"></span> <span data-tex-inline="h = \$0.005 \text{ a carton a day},"></span> <span data-tex-inline="\text{shelf life: } 10 \text{ days}"></span></span>A grocery in Salinas sells milk. Find its best order.</li><li><span class="givens"><span data-tex-inline="d = 30,\ Q = 600,"></span> <span data-tex-inline="\text{lead time: } 30 \text{ days},"></span> <span data-tex-inline="\text{rule: reorder at } 900"></span></span>The rule asks for more bags than ever sit on the shelf. Find what the stock falling to the reorder point must mean.</li><li><span class="givens"><span data-tex-inline="\text{Sat and Sun: } 35 \text{ bags a day;}"></span> <span data-tex-inline="\text{other days: } 14 \text{ a day;}"></span> <span data-tex-inline="\text{lead time: } 4 \text{ days}"></span></span>Decide whether the best order changes from that of a steady sale with the same weekly total, and whether the reorder point does.</li></ol></li>
-      </ol></li>
-    <li class="optgroup"><span class="qid">14·logi.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder questions that rely on your own making. The page is complete without these; the rung's angel wings need them.</span>
-      <ol class="sub">
-        <li class="opt"><span class="qid">14·logi.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{Bend's milk keeps } 10 \text{ days.}"></span></span>Choose something your household buys often, guess d, K and h, find its best order, and compare it with how you buy it now.<br>Give it a shelf life shorter than one best order lasts, and prove what the best order is under that limit.</li>
-        <li class="opt"><span class="qid">14·logi.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="d = 20,\ h = \$0.008;"></span> <span data-tex-inline="\text{a truck holds } 400 \text{ bags,}"></span> <span data-tex-inline="\$50 \text{ a truck, however full}"></span></span>Find the best order.</li>
-        <li class="opt"><span class="qid">14·logi.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{At } Q_b, \text{ ordering cost a day}"></span> <span data-tex-inline="= \text{holding cost a day.}"></span></span>Prove or refute: a store whose two costs a day are equal is ordering its best order.<br>Decide whether the answer survives the edge question's trucks.</li>
-        <li class="opt"><span class="qid">14·logi.4.4</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="\text{same } d,\ K \text{ and } h;"></span> <span data-tex-inline="\text{Claim: average stock falls}"></span> <span data-tex-inline="\text{by the factor } 1/\sqrt{2}."></span></span>Two stores with these costs merge. Prove the claim.</li>
-        <li class="opt"><span class="qid">14·logi.4.5</span><span class="tagq">seam</span>In 1913 an engineer balanced the cost of each order against the cost of the stock. Forty years later a car maker in Japan cut the time to change a press from hours to minutes, and drove its orders toward a single part, with almost nothing on the shelf. Its critics say it only pushed the stock back onto its suppliers. <br>Was the balance wrong, or were its costs?</li>
-      </ol></li>
-  </ol>
-  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
-</section>
-
+<div class="themecert themeend"></div>
 <nav class="nextrung"><a href="r14econ.html">← 14·econ · how much should a factory make?</a><a href="r14concl.html">14·∎ · conclusion →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>Who said it first</h3>
   <aside class="voice para"><p>Ohno likened the stock in a factory to the water in a river. While the water is high it covers the rocks. Lower it, and the rocks show: the machines that break, the parts that come late. Then they can be fixed.</p><cite>Taiichi Ohno, Toyota Production System (1978), the image as it is usually told; paraphrase</cite></aside>
-  <p>The engineer of 1913 is Ford W. Harris, in “How many parts to make at once”, in Factory, The Magazine of Management. R. H. Wilson spread the formula in 1934, and many books call it Wilson’s. In 14·logi.4.5, the car maker is Toyota, and the quick change of a press is Shigeo Shingo’s. The factor 1/√2 for pooled stock was set out by David Maister in 1976.</p>
+  <p>The engineer of 1913 is Ford W. Harris, in “How many parts to make at once”, in Factory, The Magazine of Management. R. H. Wilson spread the formula in 1934, and many books call it Wilson’s. In 14·logi.7.5, the car maker is Toyota, and the quick change of a press is Shigeo Shingo’s. The factor 1/√2 for pooled stock was set out by David Maister in 1976.</p>
   <p>Accepted names: the economic order quantity for Q_b; lead time; reorder point; safety stock for the stock kept back; service level for the share of cycles covered; cycle stock for the rest; inventory position for stock on the shelf plus stock on order; the square-root law for pooling; just-in-time.</p>
   <h3>Wrong moves, worked</h3>
   <pre class="lines" data-k="ember" data-label="14·logi: a worked “proof”, not allowed">
@@ -201,6 +221,7 @@ d = 20,\ L = 4:\ \ r = 80 @@ fine, for steady sales
 </section>
 </div>
 
+<script>/* 0.3.80 Phase B: old tick ids on this page -> new */window.LADDER_MVX={"q:14·logi.4.1": "c:14·logi.7.1", "q:14·logi.4.2": "c:14·logi.7.2", "q:14·logi.4.3": "c:14·logi.7.3", "q:14·logi.4.4": "c:14·logi.7.4", "q:14·logi.4.5": "c:14·logi.7.5"};</script>
 <script src="rung.js"></script>
 <script>
 (function(){

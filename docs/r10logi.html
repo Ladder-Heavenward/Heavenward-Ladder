@@ -54,10 +54,9 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <p class="gesture" data-pid="8d43cb">Count the item-hours two ways: hour by hour, adding how many are waiting, and item by item, adding how long each stays. Divide by the hours: the average number waiting is the arrivals per hour times the average stay. Trucks on the road are trips per hour times hours per trip. And the line can pass on no more per hour than its slowest step: past that, the queue passes every bound.</p>
 </header>
 
-<section class="class">
-  <div class="eyebrow">The class · a day counted two ways, the long run, the trucks, the slow step</div>
+<section class="class step" data-step="10logi1">
+  <h2 class="sthead"><span class="stno">10logi1</span>A Queue, Counted by the Hour</h2>
 
-  <h3>A queue, counted by the hour</h3>
   <p data-pid="2f3a07">Logistics is the work of getting things where they are needed, when they are needed. Its first object is the <b>queue</b>, read broadly: any place where items arrive, stay a while, and leave. A cooler holding pallets is one; so is a dock holding trucks, or a road holding the trucks on it.</p>
   <p class="eqline" data-pid="45b44d">From here on, on this page, time is counted in whole hours, 0, 1, 2, …, and the queue is looked at once in each hour. Item j arrives at hour a_j and leaves at hour d_j, with a_j ≤ d_j. It is in the queue at the hours a_j, a_j + 1, …, d_j − 1, and its <b>stay</b> is W_j = d_j − a_j hours. N(t) names the number of items in the queue at hour t.</p>
   <p data-pid="d9dd0e">A pair (j, t) with item j in the queue at hour t is an <b>item-hour</b>. A truck that waits three hours at a dock makes three item-hours there.</p>
@@ -81,8 +80,17 @@ L = \tfrac1T \textstyle\sum_{t \lt T} N(t) = \tfrac1T \sum_j W_j @@ item-hours
 10 \text{ pallets, stays } 1, 2, 2, 2, 2, 2, 3, 2, 2, 2 @@ by items: 20 pallet-hours, the same
 L = \tfrac{20}{6},\ \ \lambda = \tfrac{10}{6} \text{ per hour},\ \ W = 2 \text{ hours} @@ L = λW: 10/3 = (5/3) · 2
   </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·logi.1.1</span><span class="ph understand">understand</span>What does the item-hours technique say, and what identity does sharing it out give?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>The long run</h3>
+<section class="class step" data-step="10logi2">
+  <h2 class="sthead"><span class="stno">10logi2</span>The Long Run</h2>
+
   <p data-pid="d8daba">A cooler that runs day and night never starts a window empty and ends it empty. Then the item-hours inside the window fall short of the stays: items still in the queue at the end have hours to come. Rung 10 says how much that matters: in the long run, nothing.</p>
   <p data-pid="ee48db">For each T, let L_T be the average number in the queue over hours 0 to T − 1, let λ_T be the arrivals per hour over those hours, and let W_T be the average full stay of the items that arrived in them. These are three sequences (9·cb4), and 10f says what it means for each to head to a limit.</p>
   <p data-pid="9de2c4">Long-run technique: <b>if the queue never holds more than M items, no item stays more than S hours, λ_T → λ and W_T → W, then L_T → λW.</b> Suppose also the queue is empty at hour 0.</p>
@@ -95,8 +103,17 @@ L = \tfrac{20}{6},\ \ \lambda = \tfrac{10}{6} \text{ per hour},\ \ W = 2 \text{ 
 L_T = \lambda_T W_T - (\lambda_T W_T - L_T) \to \htmlClass{keep}{\lambda W - 0} \quad \blacksquare @@ limits-multiply, then limits-subtract
   </pre>
   <p data-pid="6a8f18">The bounds M and S are not decoration. A queue that grows without end has no M, and then L_T need not head anywhere; the slow step below makes one.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·logi.2.1</span><span class="ph understand">understand</span>What does the long-run technique say, and why are the bounds M and S not decoration?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>The trucks</h3>
+<section class="class step" data-step="10logi3">
+  <h2 class="sthead"><span class="stno">10logi3</span>The Trucks</h2>
+
   <p data-pid="8c617e">Read the road as the queue and the trucks as its items. A truck arrives when it sets out on a trip, and leaves when it is back and free. Its stay is the hours per trip: the drive out, the loading, the drive back, the unloading, and any waiting between. So the average number of trucks on the road is the trips started per hour times the hours per trip.</p>
   <p data-pid="fa86af">Truck-count technique: <b>a route needs at least (trips per day) × (hours per trip) ÷ (hours each truck works a day) trucks.</b> Each truck gives at most its working hours to the road each day, and the route uses trips × hours-per-trip truck-hours: the item-hours technique, counted by trucks and by trips.</p>
   <pre class="lines" data-k="ember" data-label="this page: lettuce from Soledad to Salinas">
@@ -106,8 +123,17 @@ L = 6 \times 2.5 = \htmlClass{new}{15} \text{ trucks on the road} @@ the queue i
 \tfrac{60 \times 2.5}{10} = \htmlClass{keep}{15} \text{ trucks, at the least} @@ truck-count; a sixteenth for the one that breaks down
   </pre>
   <p data-pid="09c1c3">Two things change the count, and the identity says by how much. More loads an hour raise λ, and the trucks rise in proportion. Longer trips raise W, and the trucks rise in proportion too. A half-hour wait at the cooler, on every trip, adds 6 × 0.5 = 3 trucks, bought only to stand in a line.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·logi.3.1</span><span class="ph understand">understand</span>What does truck-count say, and what does a half-hour wait at the cooler cost?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>Why a slow step fills the whole line</h3>
+<section class="class step" data-step="10logi4">
+  <h2 class="sthead"><span class="stno">10logi4</span>Why a Slow Step Fills the Whole Line</h2>
+
   <p data-pid="6020dd">A line is a chain of steps that every item passes in turn: loading, driving, unloading, cooling. Write μ for the most items a step can pass on in an hour, its <b>capacity</b>, and D(n) for the items that have left the last step by hour n. Here μ is the Greek letter mu, in its small form: on this page it names a capacity per hour, and its capital form is not used.</p>
   <p data-pid="5613c0">Slowest-step technique: <b>a line passes on no more items an hour than its slowest step: D(n) ≤ μ_min · n.</b> Every item that leaves the line has passed the slowest step, which passes on at most μ_min an hour. ∎ Speeding up any other step does not change the bound.</p>
   <p data-pid="1707b4">Now let items arrive at λ an hour, steadily, with λ &gt; μ_min. By hour n, about λn have arrived and at most μ_min · n have left. So at least (λ − μ_min) · n are still in the line. That is a sequence that passes every bound (10f): for any number B, past n = B/(λ − μ_min) the line holds more than B. They pile up before the slow step, then fill the steps before it, back to the field. By the queue identity, read backwards, a line that keeps growing makes every item stay longer: W = L/λ grows with it.</p>
@@ -118,74 +144,79 @@ L = 6 \times 2.5 = \htmlClass{new}{15} \text{ trucks on the road} @@ the queue i
 \tfrac{D(n)}{n} \to \htmlClass{keep}{5} @@ the cooler's pace, whatever the trucks or the crews do
   </pre>
   <p data-pid="503cc2">When λ ≤ μ_min and arrivals are steady, the line settles instead, and D(n)/n heads to λ: the line passes on what it is given. Real arrivals are not steady, and a line near its capacity wobbles badly. That is why planners leave room above λ; the cellar says a little more.</p>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: a day at a dock, counted by hours and by trucks · right: a line with a slow step</div>
+    <div class="panels">
+      <div class="panel">
+        <div class="lbl">trucks at a loading dock, one look an hour</div>
+        <canvas id="cvD"></canvas>
+        <div class="kn"><span class="m">arrivals per hour</span><input type="range" id="kl" min="1" max="8" step="1" value="4"><output id="ol"></output></div>
+        <div class="kn"><span class="m">longest stay</span><input type="range" id="kw" min="1" max="6" step="1" value="3"><output id="ow"></output></div>
+        <div class="chips"><button id="nd">a new day</button></div>
+        <div class="cap">Arrivals come for 10 hours, a different number each hour around the knob's value; each truck stays from 1 hour to the longest stay. Bars: N(t), the trucks at the dock at hour t; plum after the last arrival. The day runs until the dock is empty. Dashed teal: L.</div>
+        <div class="eqbox" id="eqD"></div>
+      </div>
+      <div class="panel">
+        <div class="lbl">loads waiting in a line of three steps, by hour</div>
+        <canvas id="cvL"></canvas>
+        <div class="kn"><span class="m">loads arriving per hour</span><input type="range" id="ka" min="1" max="10" step="0.5" value="6"><output id="oa"></output></div>
+        <div class="kn"><span class="m">loading capacity</span><input type="range" id="k1" min="1" max="12" step="0.5" value="8"><output id="o1"></output></div>
+        <div class="kn"><span class="m">trucks' capacity</span><input type="range" id="k2" min="1" max="12" step="0.5" value="7"><output id="o2"></output></div>
+        <div class="kn"><span class="m">cooler capacity</span><input type="range" id="k3" min="1" max="12" step="0.5" value="5"><output id="o3"></output></div>
+        <div class="cap">Bars: the loads waiting before loading (ember), before the trucks (plum) and before the cooler (gold), stacked, at each hour 1 to 40. Teal: D(n)/n, the loads out per hour so far, which heads to the least of the arrivals and the capacities. Dashed gold: that least value.</div>
+        <div class="verdict" id="vdL"></div>
+      </div>
+    </div>
+  </section>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a queue; item-hours; counted two ways; the queue identity; a cooler's afternoon; the long run; the trucks; lettuce to Salinas; a wait costs trucks; the slowest step; passing every bound; illegal moves · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·logi.4.1</span><span class="ph understand">understand</span>What does slowest-step say, and what happens when λ > μ_min?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>Illegal Moves</h3>
-  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+<section class="class step" data-step="10logi5">
+  <h2 class="sthead"><span class="stno">10logi5</span>Illegal Moves</h2>
+
+  <pre class="lines" data-k="ember" data-wrong="1" data-label="this page: tempting, and not allowed">
 L = \lambda W \text{ over a window that ends full}\,? @@ only nearly: the hours still to come are missing; it is true in the long run (long-run)
 \text{trucks needed} = \text{trips per day}\,? @@ units: trips per day times hours per trip, over working hours per truck
 \text{a faster truck clears the cooler's queue}\,? @@ slowest-step: the cooler sets the pace; faster trucks only arrive sooner to wait
 \text{average stay} = \tfrac{\text{items}}{\text{arrivals per hour}} \text{ at one hour}\,? @@ L and λ are averages over the window, not one hour's look
 \lambda \gt \mu_{\min} \text{, but the queue settles}\,? @@ at least (λ − μ_min)n wait at hour n: it passes every bound
   </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·logi.5.1</span><span class="ph understand">understand</span>Why is “a faster truck clears the cooler's queue” an illegal move?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>Running It Backwards</h3>
+<section class="class step" data-step="10logi6">
+  <h2 class="sthead"><span class="stno">10logi6</span>Running It Backwards</h2>
+
   <p data-pid="49869b">Handed any two of L, λ and W, find the third: W = L/λ, λ = L/W. Handed a fleet and a trip time, find the most trips a day: trucks × working hours ÷ hours per trip. Handed a line whose output per hour has settled, look for the step whose capacity matches it: that is the slow step. Handed a wish, a shorter wait, shorten the stay or slow the arrivals; nothing else in the identity moves.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·logi.6.1</span><span class="ph understand">understand</span>Handed a line whose output per hour has settled, how do you find the slow step?</li>
+    </ol>
+  </section>
 </section>
 
-<section class="pic" id="pic">
-  <div class="eyebrow">The picture · left: a day at a dock, counted by hours and by trucks · right: a line with a slow step</div>
-  <div class="panels">
-    <div class="panel">
-      <div class="lbl">trucks at a loading dock, one look an hour</div>
-      <canvas id="cvD"></canvas>
-      <div class="kn"><span class="m">arrivals per hour</span><input type="range" id="kl" min="1" max="8" step="1" value="4"><output id="ol"></output></div>
-      <div class="kn"><span class="m">longest stay</span><input type="range" id="kw" min="1" max="6" step="1" value="3"><output id="ow"></output></div>
-      <div class="chips"><button id="nd">a new day</button></div>
-      <div class="cap">Arrivals come for 10 hours, a different number each hour around the knob's value; each truck stays from 1 hour to the longest stay. Bars: N(t), the trucks at the dock at hour t; plum after the last arrival. The day runs until the dock is empty. Dashed teal: L.</div>
-      <div class="eqbox" id="eqD"></div>
-    </div>
-    <div class="panel">
-      <div class="lbl">loads waiting in a line of three steps, by hour</div>
-      <canvas id="cvL"></canvas>
-      <div class="kn"><span class="m">loads arriving per hour</span><input type="range" id="ka" min="1" max="10" step="0.5" value="6"><output id="oa"></output></div>
-      <div class="kn"><span class="m">loading capacity</span><input type="range" id="k1" min="1" max="12" step="0.5" value="8"><output id="o1"></output></div>
-      <div class="kn"><span class="m">trucks' capacity</span><input type="range" id="k2" min="1" max="12" step="0.5" value="7"><output id="o2"></output></div>
-      <div class="kn"><span class="m">cooler capacity</span><input type="range" id="k3" min="1" max="12" step="0.5" value="5"><output id="o3"></output></div>
-      <div class="cap">Bars: the loads waiting before loading (ember), before the trucks (plum) and before the cooler (gold), stacked, at each hour 1 to 40. Teal: D(n)/n, the loads out per hour so far, which heads to the least of the arrivals and the capacities. Dashed gold: that least value.</div>
-      <div class="verdict" id="vdL"></div>
-    </div>
-  </div>
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">10·logi.7.1</span><span class="tagq">build</span>Build routes and logs of your own.<ol class="parts" type="a"><li>Choose a real route near you between two towns. <br>Estimate a trip's hours and a day's trips, and find the fleet. <br>Then find the trucks bought by a 20-minute wait at one end.</li><li><span class="givens"><span data-tex-inline="L = 2,"></span> <span data-tex-inline="W = 3"></span></span>Build a log of 6 items, starting and ending empty, with this L and W over a window you choose.</li><li><span class="givens"><span data-tex-inline="\lambda &gt; \mu_{\min},"></span> <span data-tex-inline="B \text{ is any bound.}"></span></span>Prove that there is an hour past which the line holds more than B items.</li><li>Prove the long-run technique for yourself, every line cited.</li></ol></div>
+  <div class="chq"><span class="chid">10·logi.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{A truck is waved through a}"></span> <span data-tex-inline="\text{gate and gone within the}"></span> <span data-tex-inline="\text{hour: it arrives and leaves}"></span> <span data-tex-inline="\text{at the same hour.}"></span></span>Does the queue identity count it? <br>What does it do to L, λ and W?</div>
+  <div class="chq"><span class="chid">10·logi.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="L = \lambda W \text{ exactly, over some window}"></span></span>Must the queue have been empty at both ends of the window?</div>
+  <div class="chq"><span class="chid">10·logi.7.4</span><span class="tagq">seam</span>A warehouse in Tracy keeps two days of goods on hand, so that no slow step ever stops its trucks. A warehouse in Lathrop keeps a few hours' worth, so that nothing sits waiting. Which is better run?</div>
 </section>
-
-<section class="slides" id="sl1"><div class="eyebrow">The slides · a queue; item-hours; counted two ways; the queue identity; a cooler's afternoon; the long run; the trucks; lettuce to Salinas; a wait costs trucks; the slowest step; passing every bound; illegal moves · ← → keys work</div></section>
-
-<section class="sayback">
-  <div class="eyebrow">Say it back · then work it</div>
-  <h2>Questions</h2>
-  <ol>
-    <li><span class="qid">10·logi.1</span><span class="gname">Counting the queue.</span><span class="gwhy">Do: build the page's pieces.</span>
-      <ol class="sub">
-        <li><span class="qid">10·logi.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Five trucks at a dock in}"></span> <span data-tex-inline="\text{Stockton arrive at hours}"></span> <span data-tex-inline="\text{0, 0, 1, 2, 4 and leave at}"></span> <span data-tex-inline="\text{hours 2, 3, 2, 5, 6.}"></span></span>Find N at each hour from 0 to 5, and both sides of item-hours.</li><li><span class="givens"><span data-tex-inline="\text{Five trucks at a dock in}"></span> <span data-tex-inline="\text{Stockton arrive at hours}"></span> <span data-tex-inline="\text{0, 0, 1, 2, 4 and leave at}"></span> <span data-tex-inline="\text{hours 2, 3, 2, 5, 6.}"></span></span>Over hours 0 to 5, find L, λ and W, and check the queue identity.</li><li><span class="givens"><span data-tex-inline="\text{A route from the Port of}"></span> <span data-tex-inline="\text{Oakland to a warehouse in}"></span> <span data-tex-inline="\text{Tracy runs 40 trips a day.}"></span> <span data-tex-inline="\text{A trip takes 4.5\ hours,}"></span> <span data-tex-inline="\text{and a truck works 10\ hours}"></span> <span data-tex-inline="\text{a day.}"></span></span>Find the least number of trucks.</li><li><span class="givens"><span data-tex-inline="\text{A cooler in Salinas takes}"></span> <span data-tex-inline="\text{in 30 pallets an hour and}"></span> <span data-tex-inline="\text{holds 75 on average.}"></span></span>Find the average stay, in minutes.</li></ol></li>
-      </ol></li>
-    <li><span class="qid">10·logi.2</span><span class="gname">From the count back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
-      <ol class="sub">
-        <li><span class="qid">10·logi.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{A fleet of 12 trucks works}"></span> <span data-tex-inline="\text{10\ hours a day on 3-hour}"></span> <span data-tex-inline="\text{trips.}"></span></span>Find the most trips a day.</li><li><span class="givens"><span data-tex-inline="\text{A queue starts and ends}"></span> <span data-tex-inline="\text{empty,}"></span> <span data-tex-inline="N = 2, 4, 4, 3, 1, 0 \text{ over hours } 0 \text{ to } 5,"></span> <span data-tex-inline="\text{and 7 items passed through.}"></span></span>Find the average stay.</li><li><span class="givens"><span data-tex-inline="\text{A line&#x27;s output has}"></span> <span data-tex-inline="\text{settled at 45 loads an}"></span> <span data-tex-inline="\text{hour.}"></span> <span data-tex-inline="\text{Its steps have capacities}"></span> <span data-tex-inline="\text{60, 45 and 50, and arrivals}"></span> <span data-tex-inline="\text{are 70 an hour.}"></span></span>Name the slow step, and find how many more loads wait after 8 hours than at the start.</li><li><span class="givens"><span data-tex-inline="\text{Trucks on a route average}"></span> <span data-tex-inline="\text{9 on the road, and trips}"></span> <span data-tex-inline="\text{average 1.5\ hours.}"></span></span>Find the trips started per hour.</li></ol></li>
-      </ol></li>
-    <li><span class="qid">10·logi.3</span><span class="gname">Where the count bends.</span><span class="gwhy">Bend: find where the techs stop working.</span>
-      <ol class="sub">
-        <li><span class="qid">10·logi.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Five trucks arrive at}"></span> <span data-tex-inline="\text{hours 0, 0, 1, 2, 4 and}"></span> <span data-tex-inline="\text{leave at hours 2, 3, 2, 5,}"></span> <span data-tex-inline="\text{6.}"></span> <span data-tex-inline="\text{The window stops after}"></span> <span data-tex-inline="\text{hour 3.}"></span></span>Find both sides of item-hours, and the gap.</li><li><span class="givens"><span data-tex-inline="\text{A route has trips of}"></span> <span data-tex-inline="\text{2\ hours and trips of}"></span> <span data-tex-inline="\text{5\ hours, 3 an hour of each.}"></span></span>Find the trucks on the road, and the average stay.</li><li><span class="givens"><span data-tex-inline="\text{Crews fill 6 loads an}"></span> <span data-tex-inline="\text{hour, and a trip takes}"></span> <span data-tex-inline="\text{2.5\ hours, 1.5 of them on}"></span> <span data-tex-inline="\text{the road.}"></span> <span data-tex-inline="\text{The trucks are made 20\%}"></span> <span data-tex-inline="\text{faster on the road.}"></span></span>Find the trucks needed with the cooler able to take 6 loads an hour, and with it able to take 5.</li><li><span class="givens"><span data-tex-inline="\lambda = \mu_{\min},"></span> <span data-tex-inline="\text{The arrivals are steady.}"></span></span>What does the line do? <br>What if the arrivals come in bursts with the same average?</li></ol></li>
-      </ol></li>
-    <li class="optgroup"><span class="qid">10·logi.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder questions that rely on your own making. The page is complete without these; the rung's angel wings need them.</span>
-      <ol class="sub">
-        <li class="opt"><span class="qid">10·logi.4.1</span><span class="tagq">build</span>Build routes and logs of your own.<ol class="parts" type="a"><li>Choose a real route near you between two towns. <br>Estimate a trip's hours and a day's trips, and find the fleet. <br>Then find the trucks bought by a 20-minute wait at one end.</li><li><span class="givens"><span data-tex-inline="L = 2,"></span> <span data-tex-inline="W = 3"></span></span>Build a log of 6 items, starting and ending empty, with this L and W over a window you choose.</li><li><span class="givens"><span data-tex-inline="\lambda &gt; \mu_{\min},"></span> <span data-tex-inline="B \text{ is any bound.}"></span></span>Prove that there is an hour past which the line holds more than B items.</li><li>Prove the long-run technique for yourself, every line cited.</li></ol></li>
-        <li class="opt"><span class="qid">10·logi.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{A truck is waved through a}"></span> <span data-tex-inline="\text{gate and gone within the}"></span> <span data-tex-inline="\text{hour: it arrives and leaves}"></span> <span data-tex-inline="\text{at the same hour.}"></span></span>Does the queue identity count it? <br>What does it do to L, λ and W?</li>
-        <li class="opt"><span class="qid">10·logi.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="L = \lambda W \text{ exactly, over some window}"></span></span>Must the queue have been empty at both ends of the window?</li>
-        <li class="opt"><span class="qid">10·logi.4.4</span><span class="tagq">seam</span>A warehouse in Tracy keeps two days of goods on hand, so that no slow step ever stops its trucks. A warehouse in Lathrop keeps a few hours' worth, so that nothing sits waiting. Which is better run?</li>
-      </ol></li>
-  </ol>
-  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
-</section>
-
+<div class="themecert themeend"></div>
 <nav class="nextrung"><a href="r10crypt.html">← 10·crypt · is a huge number of keys enough?</a><a href="r10econ.html">10·econ · can interest added more often grow without end? →</a></nav>
 
 <section class="extra basement">
@@ -195,7 +226,7 @@ L = \lambda W \text{ over a window that ends full}\,? @@ only nearly: the hours 
   <h3>Who said it first</h3>
   <p>Queueing as mathematics began with Agner Krarup Erlang, who worked out in Copenhagen from 1909 how many lines a telephone exchange needed. Philip Morse noticed in 1958 that L = λW was true in every queue he had solved, and challenged his readers to find one where it failed. John Little proved it in 1961 for queues that run forever, by a long-run argument. Shaler Stidham gave the short proof by counting item-hours in 1974. The slow step that sets a whole line's pace was made the centre of a method of running factories by Eliyahu Goldratt, in the novel The Goal (1984). The just-in-time way of running a line, with little stock, grew at Toyota in Japan from the 1950s under Taiichi Ohno.</p>
   <aside class="voice para"><p>Little began by noting that the formula L = λW had been used for years as something everyone believed, and set out to prove that it is true under very general conditions.</p><cite>John D. C. Little, “A Proof for the Queuing Formula: L = λW”, Operations Research 9 (1961); paraphrase</cite></aside>
-  <p>Accepted names: the queue identity is Little's law, though on this ladder it is a technique: it is proved, not measured. The slow step is the bottleneck, and its capacity the line's throughput. Item-hours are a kind of person-hours or truck-hours. The two ways of running a warehouse in 10·logi.4.4 are called just-in-time and just-in-case.</p>
+  <p>Accepted names: the queue identity is Little's law, though on this ladder it is a technique: it is proved, not measured. The slow step is the bottleneck, and its capacity the line's throughput. Item-hours are a kind of person-hours or truck-hours. The two ways of running a warehouse in 10·logi.7.4 are called just-in-time and just-in-case.</p>
   <h3>Wrong moves, worked</h3>
   <pre class="lines" data-k="ember" data-label="10·logi: a worked “proof”, not allowed">
 \text{the trucks wait at the cooler} @@ fine
@@ -205,6 +236,7 @@ L = \lambda W \text{ over a window that ends full}\,? @@ only nearly: the hours 
 </section>
 </div>
 
+<script>/* 0.3.80 Phase B: old tick ids on this page -> new */window.LADDER_MVX={"q:10·logi.4.1": "c:10·logi.7.1", "q:10·logi.4.2": "c:10·logi.7.2", "q:10·logi.4.3": "c:10·logi.7.3", "q:10·logi.4.4": "c:10·logi.7.4"};</script>
 <script src="rung.js"></script>
 <script>
 (function(){

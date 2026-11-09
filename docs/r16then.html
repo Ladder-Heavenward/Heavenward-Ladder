@@ -54,10 +54,9 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <p class="gesture" data-pid="0637bf">The water in the lake now is the water at the start plus the area under its rate of change since. With a rate in and a rate out, the rate of change is the one less the other. The lake is fullest where that difference changes from positive to negative. From readings, a sum of boxes stands in for the integral.</p>
 </header>
 
-<section class="class">
-  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+<section class="class step" data-step="16then1">
+  <h2 class="sthead"><span class="stno">16then1</span>The Books Balance</h2>
 
-  <h3>The books balance</h3>
   <p data-pid="ab9da3">Net-change technique: <b>if Q has a continuous slope Q′ on [0, T], then Q(T) = Q(0) + ∫₀ᵀ Q′(t) dt.</b> It is area-is-a-change with G = Q. Its accepted name is the net change theorem.</p>
   <pre class="lines" data-k="ember" data-label="16·then: a lake's day">
 \text{in}(t) = 300 + 2t(24 - t),\ \ \text{out}(t) = 450 \quad (\text{m}^3/\text{s},\ t \text{ in hours}) @@ a model: a storm's inflow that peaks at noon; a dam letting out a steady flow
@@ -65,8 +64,17 @@ V'(t) = \text{in}(t) - \text{out}(t) = 2t(24 - t) - 150 @@ what comes in less wh
 \textstyle\int_0^{24} V'(t)\,dt = 2\big(12t^2 - \tfrac{t^3}{3}\big)\Big|_0^{24} - 150 \cdot 24 = 4608 - 3600 = 1008 @@ the table; area-is-a-change. Units: m³/s times hours
 1008 \cdot 3600 \approx 3.63 \times 10^6 \text{ m}^3 @@ an hour is 3600 s: the lake gains about 3.6 million cubic metres
   </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16·then.1.1</span><span class="ph understand">understand</span>What does net-change say, and how much does the model lake gain over the storm day?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>When is the lake fullest?</h3>
+<section class="class step" data-step="16then2">
+  <h2 class="sthead"><span class="stno">16then2</span>When Is the Lake Fullest?</h2>
+
   <pre class="lines" data-k="ember" data-label="16·then: the crest">
 V'(t) = 0 \iff t^2 - 24t + 75 = 0 \iff t = 12 \pm \sqrt{69} @@ 8i's quadratic formula; √69 ≈ 8.31
 V' \lt 0 \text{ on } [0, 3.69),\ \ V' \gt 0 \text{ on } (3.69, 20.31),\ \ V' \lt 0 \text{ after} @@ the sign of the quadratic between and outside its zeros
@@ -74,8 +82,17 @@ V' \lt 0 \text{ on } [0, 3.69),\ \ V' \gt 0 \text{ on } (3.69, 20.31),\ \ V' \lt
 \text{fullest over } [0, 24]: \text{ at } 20.31 \text{ or at an end} @@ candidates (14a): compare V(20.31) with V(0) and V(24)
   </pre>
   <p data-pid="ed824b"><b>The lake is fullest not when the inflow peaks, at noon, but when the inflow, falling again, drops back to the outflow.</b> Until then more is still coming in than going out.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16·then.2.1</span><span class="ph understand">understand</span>When is the lake fullest, and why not at noon?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>From readings</h3>
+<section class="class step" data-step="16then3">
+  <h2 class="sthead"><span class="stno">16then3</span>From Readings</h2>
+
   <pre class="lines" data-k="ember" data-label="16·then: a gauge read every hour">
 \begin{aligned}&\text{rain at a gauge near Tracy, mm/h, read}\\ &\quad\text{on the hour:\ } 0,\ 2,\ 5,\ 9,\ 6,\ 3,\ 1\end{aligned} @@ seven readings, t = 0 to 6 h
 \text{left sum: } (0 + 2 + 5 + 9 + 6 + 3) \cdot 1 = 25 \text{ mm} @@ 15h's strip sum, each hour's height at its start
@@ -92,76 +109,73 @@ V' \lt 0 \text{ on } [0, 3.69),\ \ V' \gt 0 \text{ on } (3.69, 20.31),\ \ V' \lt
     <p data-pid="7ad575">The 1674 measurer above ran the same books on a whole river basin, and they did not close: six times the river's water fell as rain. He did not doubt the books. He went looking for where the rest went, and found the air and the plants.</p>
     <p class="bait" data-pid="40a319">A reservoir's inflow and outflow gauges read true all summer, yet the lake ends the summer 2 million cubic metres lower than the books say. Where could the water have gone?</p>
   </aside>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · what comes in, what goes out, and what is kept</div>
+    <div class="panels">
+      <div class="panel">
+        <div class="lbl">in and out, m³/s, against hours</div>
+        <canvas id="cvF"></canvas>
+        <div class="kn"><span class="m">t</span><input type="range" id="kt" min="0" max="24" step="0.05" value="12"><output id="ot"></output></div>
+        <div class="kn"><span class="m">out</span><input type="range" id="ko" min="300" max="600" step="10" value="450"><output id="oo"></output></div>
+        <div class="cap">Ink: the inflow. Dashed: the outflow, set by the second knob. Teal: where more comes in than goes out, so the lake gains; plum: where it loses. Shaded up to the first knob's hour.</div>
+      </div>
+      <div class="panel">
+        <div class="lbl">the change in the lake, millions of m³, against hours</div>
+        <canvas id="cvV"></canvas>
+        <div class="cap">Ink: V(t) − V(0), the area so far, times 3600. Dots: where in = out, the lake's trough and crest.</div>
+        <div class="verdict" id="vdF"></div>
+        <div class="eqbox" id="eqF"></div>
+      </div>
+    </div>
+  </section>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · net-change; in less out; the day's total; the units; the crest; fullest is not the peak; readings; left and right sums; the Seine; illegal moves · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16·then.3.1</span><span class="ph understand">understand</span>What do readings alone give, and what does net-change add?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>Illegal Moves</h3>
-  <pre class="lines" data-k="ember" data-label="16·then: tempting, and not allowed">
+<section class="class step" data-step="16then4">
+  <h2 class="sthead"><span class="stno">16then4</span>Illegal Moves</h2>
+
+  <pre class="lines" data-k="ember" data-wrong="1" data-label="16·then: tempting, and not allowed">
 \text{the lake is fullest when the inflow peaks}\,? @@ fullest where in − out changes from + to −
 \textstyle\int_0^{24} V'\,dt = V(24)\,? @@ it is V(24) − V(0): the change, not the amount
 1008 \text{ m}^3\,? @@ the rate was per second and the time in hours: multiply by 3600
 \text{left sum} \le \text{total} \le \text{right sum, always}\,? @@ only if the rate never falls; here it rises and falls
   </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16·then.4.1</span><span class="ph understand">understand</span>Why is “∫₀²⁴ V′ dt = V(24)” an illegal move?</li>
+    </ol>
+  </section>
 </section>
 
-<section class="pic" id="pic">
-  <div class="eyebrow">The picture · what comes in, what goes out, and what is kept</div>
-  <div class="panels">
-    <div class="panel">
-      <div class="lbl">in and out, m³/s, against hours</div>
-      <canvas id="cvF"></canvas>
-      <div class="kn"><span class="m">t</span><input type="range" id="kt" min="0" max="24" step="0.05" value="12"><output id="ot"></output></div>
-      <div class="kn"><span class="m">out</span><input type="range" id="ko" min="300" max="600" step="10" value="450"><output id="oo"></output></div>
-      <div class="cap">Ink: the inflow. Dashed: the outflow, set by the second knob. Teal: where more comes in than goes out, so the lake gains; plum: where it loses. Shaded up to the first knob's hour.</div>
-    </div>
-    <div class="panel">
-      <div class="lbl">the change in the lake, millions of m³, against hours</div>
-      <canvas id="cvV"></canvas>
-      <div class="cap">Ink: V(t) − V(0), the area so far, times 3600. Dots: where in = out, the lake's trough and crest.</div>
-      <div class="verdict" id="vdF"></div>
-      <div class="eqbox" id="eqF"></div>
-    </div>
-  </div>
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">16·then.5.1</span><span class="tagq">build</span>Make up a rate in and a rate out of your own for a tank near Modesto, in litres a minute over an hour, so that the rate in peaks before the tank is fullest.<br>Find the net change over the hour, and when the tank is fullest.</div>
+  <div class="chq"><span class="chid">16·then.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{the page's lake}"></span></span>Prove or refute: the lake could be fuller at the start than at the crest.</div>
+  <div class="chq"><span class="chid">16·then.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{two lakes},"></span> <span data-tex-inline="\text{the same net inflow}"></span> <span data-tex-inline="\text{over every hour}"></span></span>Prove or refute: they hold the same amount.</div>
+  <div class="chq"><span class="chid">16·then.5.4</span><span class="tagq">seam</span>Before 1674 the usual answer, from the ancient philosophers to the scholars of that century, was that springs and rivers are fed from below. Seawater was drawn up through the earth, or air turned to water in caverns. Rain, it was said, could never be enough. The measurer of 1674 added up the rain and showed it was more than enough. <br>Does showing that rain is enough prove that rivers come from rain? <br>What else would you want to measure?</div>
 </section>
-
-<section class="slides" id="sl1"><div class="eyebrow">The slides · net-change; in less out; the day's total; the units; the crest; fullest is not the peak; readings; left and right sums; the Seine; illegal moves · ← → keys work</div></section>
-
-<section class="sayback">
-  <div class="eyebrow">Say it back · then work it</div>
-  <h2>Questions</h2>
-  <ol>
-    <li><span class="qid">16·then.1</span><span class="gname">Totals from rates.</span><span class="gwhy">Do: build the page's pieces.</span>
-      <ol class="sub">
-        <li><span class="qid">16·then.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{in: } 40 + 6t \text{ a minute},"></span> <span data-tex-inline="\text{out: } 30 + 9t \text{ a minute},"></span> <span data-tex-inline="0 \le t \le 10"></span></span>Find the change in the number of cars parked in the Oakland garage.</li><li><span class="givens"><span data-tex-inline="\text{in: } 40 + 6t \text{ a minute},"></span> <span data-tex-inline="\text{out: } 30 + 9t \text{ a minute},"></span> <span data-tex-inline="0 \le t \le 10"></span></span>Find when, in those 10 minutes, the garage is fullest.</li><li><span class="givens"><span data-tex-inline="\text{growth rate } 1200 + 30t \text{ people a year}"></span></span>Find the growth of a county near Salem over its first 10 years.</li><li><span class="givens"><span data-tex-inline="\text{on the hour: } 4,\ 7,\ 7,\ 3,\ 0 \text{ mm/h}"></span></span>Find the left and right sums for the rain.</li></ol></li>
-      </ol></li>
-    <li><span class="qid">16·then.2</span><span class="gname">From the total back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
-      <ol class="sub">
-        <li><span class="qid">16·then.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="V(0) = 500 \text{ L},"></span> <span data-tex-inline="V(8) = 380 \text{ L}"></span></span>Find the average rate of change of the tank, and the integral of the rate over [0, 8] that net-change ties it to.</li><li><span class="givens"><span data-tex-inline="\text{the page's lake},"></span> <span data-tex-inline="\text{a steady outflow over } 24 \text{ hours}"></span></span>Find the steady outflow that would leave the lake where it started.</li><li><span class="givens"><span data-tex-inline="r(t) = kt^2,"></span> <span data-tex-inline="[0, 3],"></span> <span data-tex-inline="\text{total } 36"></span></span>Find k.</li><li><span class="givens"><span data-tex-inline="V(t) = 2t^3 - 15t^2 + 24t + 100,"></span> <span data-tex-inline="\text{thousand m}^3"></span></span>Find the lake's net inflow rate, and when it is 0.</li></ol></li>
-      </ol></li>
-    <li><span class="qid">16·then.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
-      <ol class="sub">
-        <li><span class="qid">16·then.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{the page's lake},"></span> <span data-tex-inline="\text{Claim: fullest at noon,},"></span> <span data-tex-inline="\text{when the inflow peaks}"></span></span>Refute the claim with the lake's stored volume.</li><li><span class="givens"><span data-tex-inline="\text{hourly gauge readings: } 0,\ 0,\ 0,\ 0"></span></span>Prove or refute: no rain fell.</li><li><span class="givens"><span data-tex-inline="5 \text{ L/s for } 10 \text{ s},"></span> <span data-tex-inline="\text{then the valve shuts at once}"></span></span>Net-change asked for a continuous rate.<br>Find the total in the tank, and the page that lets net-change give it.</li><li><span class="givens"><span data-tex-inline="\text{rate in litres a minute},"></span> <span data-tex-inline="\text{time in seconds}"></span></span>Find the unit of the integral, and put it right.</li></ol></li>
-      </ol></li>
-    <li class="optgroup"><span class="qid">16·then.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder questions that rely on your own making. The page is complete without these; the rung's angel wings need them.</span>
-      <ol class="sub">
-        <li class="opt"><span class="qid">16·then.4.1</span><span class="tagq">build</span>Make up a rate in and a rate out of your own for a tank near Modesto, in litres a minute over an hour, so that the rate in peaks before the tank is fullest.<br>Find the net change over the hour, and when the tank is fullest.</li>
-        <li class="opt"><span class="qid">16·then.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{the page's lake}"></span></span>Prove or refute: the lake could be fuller at the start than at the crest.</li>
-        <li class="opt"><span class="qid">16·then.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{two lakes},"></span> <span data-tex-inline="\text{the same net inflow}"></span> <span data-tex-inline="\text{over every hour}"></span></span>Prove or refute: they hold the same amount.</li>
-        <li class="opt"><span class="qid">16·then.4.4</span><span class="tagq">seam</span>Before 1674 the usual answer, from the ancient philosophers to the scholars of that century, was that springs and rivers are fed from below. Seawater was drawn up through the earth, or air turned to water in caverns. Rain, it was said, could never be enough. The measurer of 1674 added up the rain and showed it was more than enough. <br>Does showing that rain is enough prove that rivers come from rain? <br>What else would you want to measure?</li>
-      </ol></li>
-  </ol>
-  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
-</section>
-
+<div class="themecert themeend"></div>
 <nav class="nextrung"><a href="r16cb12.html">← 16·cb12 · floating and sinking</a><a href="r16phys.html">16·phys · how far did it go, if you only know how fast? →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>Who said it first</h3>
   <aside class="voice para"><p>Perrault measured the rain and snow that fell over three years on the upper basin of the Seine, worked out how much water that made over the whole basin, and found it about six times what the river carried away in the same time: enough, he concluded, to feed the river and the springs, with plenty lost to the air and the plants.</p><cite>Pierre Perrault, De l’origine des fontaines (1674); paraphrase</cite></aside>
-  <p>In 16·then.4.4, the answer from below runs from Aristotle to Descartes and Athanasius Kircher.</p>
+  <p>In 16·then.5.4, the answer from below runs from Aristotle to Descartes and Athanasius Kircher.</p>
   <h3>Accepted names</h3>
   <p>15h’s strip sums are Riemann sums, after Bernhard Riemann.</p>
 </section>
 </div>
+<script>/* 0.3.80 Phase B: old tick ids on this page -> new */window.LADDER_MVX={"q:16·then.4.1": "c:16·then.5.1", "q:16·then.4.2": "c:16·then.5.2", "q:16·then.4.3": "c:16·then.5.3", "q:16·then.4.4": "c:16·then.5.4"};</script>
 <script src="rung.js"></script>
 <script>
 (function(){

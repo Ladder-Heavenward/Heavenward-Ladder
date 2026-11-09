@@ -54,13 +54,21 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <p class="gesture" data-pid="2c7ed7">Selection sort always takes the same number of comparisons, about half the square of the count. Insertion sort takes from one fewer than the count to the same as selection sort, about a quarter of the square on average. Merge sort takes at most about the count times the number of halvings. When only part of the work can be split over many machines, the part that cannot be split caps the speedup, however many machines there are.</p>
 </header>
 
-<section class="class">
-  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+<section class="class step" data-step="17comp1">
+  <h2 class="sthead"><span class="stno">17comp1</span>The Cost of a Sort</h2>
 
-  <h3>The cost of a sort</h3>
   <p data-pid="2cc08f">A list of n numbers is to be put in rising order. A method for doing it, written as steps a machine can follow, has the accepted name an algorithm. The word comes from a scholar of Baghdad, whose book on reckoning was read in Latin as <i>Algoritmi de numero Indorum</i>. A sorting method that learns about the items only by comparing two of them is a comparison sort. <b>Its cost is the number of comparisons it makes, as a function of n.</b> How that number grows has the accepted name the method's time complexity.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·comp.1.1</span><span class="ph understand">understand</span>What is a comparison sort, and what is its cost?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>Selection sort</h3>
+<section class="class step" data-step="17comp2">
+  <h2 class="sthead"><span class="stno">17comp2</span>Selection Sort</h2>
+
   <p data-pid="713c64">Look through all n items for the least, and swap it into the first place. Then look through the other n − 1 for the least of those, and swap it into the second place. Continue until one item is left. Its accepted name is selection sort.</p>
   <p data-pid="e254bf">Selection-count technique: <b>on every list of n ≥ 1 items, selection sort makes exactly n(n − 1)/2 comparisons.</b></p>
   <pre class="lines" data-k="ember" data-label="17·comp: the selection-count technique">
@@ -68,8 +76,17 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 (n - 1) + (n - 2) + \cdots + 1 + 0 @@ the passes over n, n − 1, …, 1 items, whatever the items are
 = \htmlClass{new}{\tfrac{n(n - 1)}{2}} \quad \blacksquare @@ doubled-sum (4k) with n − 1 in place of n
   </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·comp.2.1</span><span class="ph understand">understand</span>What does selection-count say, and why is the count the same on every list?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>Insertion sort</h3>
+<section class="class step" data-step="17comp3">
+  <h2 class="sthead"><span class="stno">17comp3</span>Insertion Sort</h2>
+
   <p data-pid="3810ef">Keep the front of the list sorted. Take the next item and walk it toward the front, comparing it with each item before it, and stop when the one before is not larger. Its accepted name is insertion sort. A pair of items in the wrong order, the larger first, has the accepted name an inversion.</p>
   <p data-pid="9477d0">Insertion-range technique: <b>on a list of n items, insertion sort makes at least n − 1 and at most n(n − 1)/2 comparisons. It makes n − 1 on a sorted list and n(n − 1)/2 on a list in falling order.</b></p>
   <pre class="lines" data-k="ember" data-label="17·comp: the insertion-range technique">
@@ -84,8 +101,17 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 \text{a list and its reverse}:\ \text{inv} + \text{inv} = \tfrac{n(n - 1)}{2} @@ each of the n(n − 1)/2 pairs is out of order in exactly one of the two
 \text{average over the } n! \text{ orders} = \htmlClass{new}{\tfrac{n(n - 1)}{4}} \quad \blacksquare @@ the orders split into reversed pairs (arrangements, 4k); each pair averages n(n − 1)/4
   </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·comp.3.1</span><span class="ph understand">understand</span>What do insertion-range and insertion-average say?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>Merge sort</h3>
+<section class="class step" data-step="17comp4">
+  <h2 class="sthead"><span class="stno">17comp4</span>Merge Sort</h2>
+
   <p data-pid="7362ee">Two sorted lists can be merged into one by looking only at their fronts: compare the two front items, move the smaller to the output, repeat. Each comparison moves one item. When one list runs out, the rest of the other follows with no comparison. So merging s items with t items takes at most s + t − 1 comparisons. Split a list in half, sort each half by the same method, and merge. Its accepted name is merge sort; a method that uses itself on smaller pieces has the accepted name recursive. It was written out in 1945, among the first programs for a stored-program machine.</p>
   <p data-pid="bdc11b">Merge-count technique: <b>for n = 2ᵏ, merge sort makes at most M(n) comparisons, where M(1) = 0 and M(2n) = 2M(n) + 2n − 1. So M(n) = n log₂ n − n + 1.</b></p>
   <pre class="lines" data-k="ember" data-label="17·comp: the merge-count technique">
@@ -100,8 +126,17 @@ n = 1024:\ \ \tfrac{n(n - 1)}{2} = 523{,}776;\ \ M(n) = 9217 @@ about 57 times f
 n = 2^{20} \approx 10^6:\ \ 5.5 \times 10^{11} \text{ against } 2.0 \times 10^7 @@ at 10⁸ comparisons a second, 90 minutes against a fifth of a second
 \tfrac{n\log_2 n}{n(n - 1)/2} = \tfrac{2}{\ln 2}\cdot\tfrac{\ln n}{n - 1} \to 0 @@ log-loses-to-powers with p = 1: no fixed factor makes up the gap
   </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·comp.4.1</span><span class="ph understand">understand</span>What does merge-count say, and how does it compare with the square?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>Splitting the work</h3>
+<section class="class step" data-step="17comp5">
+  <h2 class="sthead"><span class="stno">17comp5</span>Splitting the Work</h2>
+
   <p data-pid="9d848e">Another way to finish sooner is to give parts of a job to several processors at once. Working one step after another has the accepted name sequential computing. Working on parts at the same time on one machine is parallel computing. Spreading the work over many machines joined by a network is distributed computing. The speedup is the sequential time divided by the parallel time. <b>Some part of almost every job cannot be split</b>: reading the input, the final merge, waiting on the slowest piece.</p>
   <p data-pid="caa886">Speed-up-limit technique: <b>let a job take time 1 on one processor. Let a fraction p of it, with 0 ≤ p &lt; 1, be shared evenly among N processors, while the rest cannot be shared. Then the speedup is S(N) = 1/((1 − p) + p/N). S rises with N, is always less than 1/(1 − p), and heads to 1/(1 − p) as N grows.</b> Its accepted name is Amdahl's law.</p>
   <pre class="lines" data-k="ember" data-label="17·comp: the speed-up-limit technique">
@@ -115,68 +150,64 @@ p = 0.95:\ \ S(8) \approx 5.9,\ \ S(64) \approx 15.4,\ \ \text{cap } 20 @@ a job
 \text{merge sort on two processors}:\ \ M(\tfrac n2) + (n - 1) @@ the halves at once, then one merge: the merge is the unshared part
   </pre>
   <p data-pid="354395">In 1967 a designer of large computers argued that effort spent on making many processors work at once is wasted. It is wasted unless the part of the work done one step at a time is sped up by nearly as much. That part, he said, soon sets the pace.</p>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · a sort, one comparison at a time, and the cap on many processors</div>
+    <div class="panels">
+      <div class="panel">
+        <div class="lbl">a shuffled list of n, part way through the sort</div>
+        <canvas id="cvF"></canvas>
+        <div class="chips" id="fch"></div>
+        <div class="kn"><span class="m">n</span><input type="range" id="kn" min="4" max="48" step="1" value="16"><output id="on"></output></div>
+        <div class="kn"><span class="m">step</span><input type="range" id="ks" min="0" max="1" step="0.001" value="0.4"><output id="os"></output></div>
+        <div class="cap">Bars: the list. Ember: the two items being compared at this step. Plum: the part already in its final place, when the method has one.</div>
+      </div>
+      <div class="panel">
+        <div class="lbl">speedup S(N) against N processors</div>
+        <canvas id="cvL"></canvas>
+        <div class="kn"><span class="m">p</span><input type="range" id="kp" min="0.5" max="0.99" step="0.01" value="0.95"><output id="op"></output></div>
+        <div class="kn"><span class="m">N</span><input type="range" id="kN" min="1" max="64" step="1" value="8"><output id="oN"></output></div>
+        <div class="cap">Ink: S(N) = 1/((1 − p) + p/N). Dashed: the cap 1/(1 − p). Dotted: S = N, perfect sharing. Plum: the knob's N.</div>
+        <div class="verdict" id="vdF"></div>
+        <div class="eqbox" id="eqF"></div>
+      </div>
+    </div>
+  </section>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · cost; selection; selection-count; insertion; insertion-range; inversions; insertion-average; merging; merge-count; how far apart; splitting; speed-up-limit; the cap; illegal moves · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·comp.5.1</span><span class="ph understand">understand</span>What does speed-up-limit say, and what caps a job that is 5% unshared?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>Illegal Moves</h3>
-  <pre class="lines" data-k="ember" data-label="17·comp: tempting, and not allowed">
+<section class="class step" data-step="17comp6">
+  <h2 class="sthead"><span class="stno">17comp6</span>Illegal Moves</h2>
+
+  <pre class="lines" data-k="ember" data-wrong="1" data-label="17·comp: tempting, and not allowed">
 \text{insertion sort is } n(n - 1)/2\,? @@ only on a falling list; a nearly sorted list costs nearly n − 1
 M(n) \text{ for every } n \text{ by the same formula}\,? @@ merge-count is proved for powers of 2; other n split unevenly
 N \text{ processors} \Rightarrow N \text{ times faster}\,? @@ only when p = 1; speed-up-limit caps it at 1/(1 − p)
 \text{fewer comparisons} \Rightarrow \text{faster on every list}\,? @@ for small n a simple method's lighter steps can win
   </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·comp.6.1</span><span class="ph understand">understand</span>Why is “N processors, so N times faster” an illegal move?</li>
+    </ol>
+  </section>
 </section>
 
-<section class="pic" id="pic">
-  <div class="eyebrow">The picture · a sort, one comparison at a time, and the cap on many processors</div>
-  <div class="panels">
-    <div class="panel">
-      <div class="lbl">a shuffled list of n, part way through the sort</div>
-      <canvas id="cvF"></canvas>
-      <div class="chips" id="fch"></div>
-      <div class="kn"><span class="m">n</span><input type="range" id="kn" min="4" max="48" step="1" value="16"><output id="on"></output></div>
-      <div class="kn"><span class="m">step</span><input type="range" id="ks" min="0" max="1" step="0.001" value="0.4"><output id="os"></output></div>
-      <div class="cap">Bars: the list. Ember: the two items being compared at this step. Plum: the part already in its final place, when the method has one.</div>
-    </div>
-    <div class="panel">
-      <div class="lbl">speedup S(N) against N processors</div>
-      <canvas id="cvL"></canvas>
-      <div class="kn"><span class="m">p</span><input type="range" id="kp" min="0.5" max="0.99" step="0.01" value="0.95"><output id="op"></output></div>
-      <div class="kn"><span class="m">N</span><input type="range" id="kN" min="1" max="64" step="1" value="8"><output id="oN"></output></div>
-      <div class="cap">Ink: S(N) = 1/((1 − p) + p/N). Dashed: the cap 1/(1 − p). Dotted: S = N, perfect sharing. Plum: the knob's N.</div>
-      <div class="verdict" id="vdF"></div>
-      <div class="eqbox" id="eqF"></div>
-    </div>
-  </div>
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">17·comp.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="M(8) = 17"></span></span>Make a list of your own of 8 different items on which merge sort makes as few comparisons as it can, and one on which it makes 17.<br>Run both and count.</div>
+  <div class="chq"><span class="chid">17·comp.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n \text{ different items},"></span> <span data-tex-inline="k \text{ yes-or-no answers},"></span> <span data-tex-inline="n\log_2 n"></span></span>Count the orders the items can be in, and the different strings of answers.<br>Prove or refute: some cleverer comparison sort beats the third given by a wide margin.</div>
+  <div class="chq"><span class="chid">17·comp.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{exactly } n(n - 1)/2 \text{ comparisons},"></span> <span data-tex-inline="\text{on every list of } n \text{ items}"></span></span>Prove or refute: a sort with the given is selection sort.</div>
+  <div class="chq"><span class="chid">17·comp.7.4</span><span class="tagq">seam</span>In 1988 a researcher reported speedups of over 1000 on 1024 processors, far past what speed-up-limit seemed to allow for any job with a serial part. His answer was that people given more processors do not run the same job faster. They run a bigger job in the same time, and the serial part does not grow with it. <br>Was the argument of 1967 wrong, or were the two answering different questions? <br>Which question is the one a buyer of processors should ask?</div>
 </section>
-
-<section class="slides" id="sl1"><div class="eyebrow">The slides · cost; selection; selection-count; insertion; insertion-range; inversions; insertion-average; merging; merge-count; how far apart; splitting; speed-up-limit; the cap; illegal moves · ← → keys work</div></section>
-
-<section class="sayback">
-  <div class="eyebrow">Say it back · then work it</div>
-  <h2>Questions</h2>
-  <ol>
-    <li><span class="qid">17·comp.1</span><span class="gname">Sorting, and splitting.</span><span class="gwhy">Do: build the page's pieces.</span>
-      <ol class="sub">
-        <li><span class="qid">17·comp.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="5, 2, 8, 1, 9, 3"></span></span>Sort the list by selection sort, writing the list after each pass, and count the comparisons.</li><li><span class="givens"><span data-tex-inline="5, 2, 8, 1, 9, 3"></span></span>Sort the list by insertion sort, and count its comparisons and its inversions.</li><li><span class="givens"><span data-tex-inline="7, 3, 6, 1, 8, 2, 5, 4,"></span> <span data-tex-inline="M(8) = 17"></span></span>Sort the list by merge sort, showing each merge, and count the comparisons against M(8).</li><li><span class="givens"><span data-tex-inline="80\% \text{ shareable}"></span></span>Find the job's speedup on 4, 16 and endlessly many processors.</li></ol></li>
-      </ol></li>
-    <li><span class="qid">17·comp.2</span><span class="gname">From the count back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
-      <ol class="sub">
-        <li><span class="qid">17·comp.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="4950 \text{ comparisons}"></span></span>Selection sort made the given count.<br>Find the length of the list.</li><li><span class="givens"><span data-tex-inline="1, 2, \ldots, 10,"></span> <span data-tex-inline="\text{exactly } 9 \text{ comparisons}"></span></span>Find every order of the list on which insertion sort makes the given count.</li><li><span class="givens"><span data-tex-inline="1, 2, 3, 4,"></span> <span data-tex-inline="5 \text{ inversions}"></span></span>Write every order of the list with the given inversions.</li><li><span class="givens"><span data-tex-inline="16 \text{ processors},"></span> <span data-tex-inline="\text{speedup } 8"></span></span>Find the fraction of the job that was shareable.</li></ol></li>
-      </ol></li>
-    <li><span class="qid">17·comp.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
-      <ol class="sub">
-        <li><span class="qid">17·comp.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="6 \text{ items},"></span> <span data-tex-inline="M(n) = n\log_2 n - n + 1"></span></span>Run merge sort on 6 items in its worst case, and find whether M(6) still bounds the count.<br>Find the bound now.</li><li><span class="givens"><span data-tex-inline="s \text{ items with } t \text{ items}"></span></span>Find the lists on which merging takes fewer than s + t − 1 comparisons, and how few it can take.</li><li><span class="givens"><span data-tex-inline="2,\ 2',\ 1"></span></span>Run each of the three sorts on the list, and find which keep 2 before 2′.</li><li><span class="givens"><span data-tex-inline="p = 1"></span></span>Run speed-up-limit's formula at p = 1, and write the hypothesis of the technique it breaks.</li></ol></li>
-      </ol></li>
-    <li class="optgroup"><span class="qid">17·comp.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder questions that rely on your own making. The page is complete without these; the rung's angel wings need them.</span>
-      <ol class="sub">
-        <li class="opt"><span class="qid">17·comp.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="M(8) = 17"></span></span>Make a list of your own of 8 different items on which merge sort makes as few comparisons as it can, and one on which it makes 17.<br>Run both and count.</li>
-        <li class="opt"><span class="qid">17·comp.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n \text{ different items},"></span> <span data-tex-inline="k \text{ yes-or-no answers},"></span> <span data-tex-inline="n\log_2 n"></span></span>Count the orders the items can be in, and the different strings of answers.<br>Prove or refute: some cleverer comparison sort beats the third given by a wide margin.</li>
-        <li class="opt"><span class="qid">17·comp.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{exactly } n(n - 1)/2 \text{ comparisons},"></span> <span data-tex-inline="\text{on every list of } n \text{ items}"></span></span>Prove or refute: a sort with the given is selection sort.</li>
-        <li class="opt"><span class="qid">17·comp.4.4</span><span class="tagq">seam</span>In 1988 a researcher reported speedups of over 1000 on 1024 processors, far past what speed-up-limit seemed to allow for any job with a serial part. His answer was that people given more processors do not run the same job faster. They run a bigger job in the same time, and the serial part does not grow with it. <br>Was the argument of 1967 wrong, or were the two answering different questions? <br>Which question is the one a buyer of processors should ask?</li>
-      </ol></li>
-  </ol>
-  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
-</section>
-
+<div class="themecert themeend"></div>
 <nav class="nextrung"><a href="r17phys.html">← 17·phys · is light a dot or a flow?</a><a href="r17crypt.html">17·crypt · how long would it take to guess a password? →</a></nav>
 
 <section class="extra basement">
@@ -185,9 +216,10 @@ N \text{ processors} \Rightarrow N \text{ times faster}\,? @@ only when p = 1; s
   <p>The word algorithm is from the name of Muhammad ibn Musa al-Khwārizmī. Merge sort was written out by John von Neumann in 1945.</p>
   <aside class="voice para"><p>Knuth reports that computer makers of the 1960s estimated more than a quarter of their machines’ running time went to sorting, and argues that sorting is an ideal subject for learning how algorithms are designed and their costs analysed.</p><cite>Donald Knuth, The Art of Computer Programming, vol. 3 (1973); paraphrase</cite></aside>
   <aside class="voice para"><p>Amdahl argued that effort spent on making many processors work at once is wasted unless the part of the work done one step at a time is sped up by nearly as much, because that part soon sets the pace.</p><cite>Gene Amdahl, Validity of the single processor approach to achieving large scale computing capabilities (1967); paraphrase</cite></aside>
-  <p>In 17·comp.4.4, the researcher of 1988 is John Gustafson.</p>
+  <p>In 17·comp.7.4, the researcher of 1988 is John Gustafson.</p>
 </section>
 </div>
+<script>/* 0.3.80 Phase B: old tick ids on this page -> new */window.LADDER_MVX={"q:17·comp.4.1": "c:17·comp.7.1", "q:17·comp.4.2": "c:17·comp.7.2", "q:17·comp.4.3": "c:17·comp.7.3", "q:17·comp.4.4": "c:17·comp.7.4"};</script>
 <script src="rung.js"></script>
 <script>
 (function(){

@@ -58,10 +58,9 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <p class="gesture" data-pid="a84556">A key is a matching of the alphabet with itself; it encrypts letter by letter, and its inverse decrypts. There are twenty-six factorial keys. But each cipher letter’s tally is the tally of the plain letter it stands for, so the tallies, ranked against English, read the key off a letter at a time.</p>
 </header>
 
-<section class="class">
-  <div class="eyebrow">The class · the cipher, its keys, the tallies, the attack</div>
+<section class="class step" data-step="10crypt1">
+  <h2 class="sthead"><span class="stno">10crypt1</span>A Key Is a Bijection</h2>
 
-  <h3>A key is a bijection</h3>
   <p class="eqline" data-pid="d0d8fd">From here on, on this page, 𝒜 names the set of the 26 letters, and a text is a list of letters, a function from n to 𝒜 (9·cb4's lists). m names a plain text and c a cipher text, as on 9·crypt; m_i is the letter at place i.</p>
   <p data-pid="7eaceb">A <b>substitution cipher</b> takes as its key a bijection g : 𝒜 → 𝒜 and encrypts letter by letter: c_i = g(m_i) at every place i. Decrypting is m_i = g⁻¹(c_i), by 9d's there-and-back. So the key that decrypts is the way back, g⁻¹, and it is again a bijection of 𝒜. The key must be a bijection. If it were not one-to-one, two letters would land on one, and the reader could not tell which was meant. The worked key below is the keyboard's top row, then the middle row, then the bottom row: A ↦ Q, B ↦ W, C ↦ E, and so on to Z ↦ M.</p>
   <pre class="lines" data-k="ember" data-label="this page: the keyboard key">
@@ -69,8 +68,17 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 g(\text{THE}) = \htmlClass{new}{\text{ZIT}} @@ letter by letter
 g^{-1}(\text{ZIT}) = \htmlClass{keep}{\text{THE}} @@ there-and-back: read the table from right to left (9d's swapped pairs)
   </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·crypt.1.1</span><span class="ph understand">understand</span>What is the key of a substitution cipher, and why must it be a bijection?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>Counting the keys</h3>
+<section class="class step" data-step="10crypt2">
+  <h2 class="sthead"><span class="stno">10crypt2</span>Counting the Keys</h2>
+
   <p data-pid="0e8798">Keys technique: <b>the substitution ciphers on 26 letters have exactly 26! keys.</b> A bijection g : 𝒜 → 𝒜 is fixed by its list g(A), g(B), …, g(Z), which uses each letter once. That list is an arrangement of 𝒜 (4k), and each arrangement is the list of exactly one bijection. By 4k's arrangements technique there are 26! of them. ∎</p>
   <pre class="lines" data-k="teal" data-label="from 4k and 8·phys: how many">
 26! = 403\,291\,461\,126\,605\,635\,584\,000\,000 @@ 26 · 25 · ⋯ · 1
@@ -78,8 +86,17 @@ g^{-1}(\text{ZIT}) = \htmlClass{keep}{\text{THE}} @@ there-and-back: read the ta
 \tfrac{4.03 \times 10^{26}}{10^{9} \text{ per s}} \approx 4.03 \times 10^{17} \text{ s} \approx 1.3 \times 10^{10} \text{ years} @@ a year is about 3.16 × 10⁷ s; the universe is about 1.4 × 10¹⁰ years old
   </pre>
   <p data-pid="19eece">The shifts of 4·crypt are among these keys. With letters as 0 to 25, the shift by k sends x to the remainder of x + k on division by 26. There are 26 shifts, counting the shift by 0, which hides nothing. A shift by j after a shift by k is the shift by the remainder of j + k (4·crypt's shifts-add), and the shift by 26 − k undoes the shift by k (its key-back). So 26 of the 26! keys are shifts, and a shift is fixed by where it sends one letter. A general key is fixed only by where it sends 25 letters; the 26th has one place left.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·crypt.2.1</span><span class="ph understand">understand</span>How many substitution keys are there, and how many of them are shifts?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>The tallies travel with the letters</h3>
+<section class="class step" data-step="10crypt3">
+  <h2 class="sthead"><span class="stno">10crypt3</span>The Tallies Travel with the Letters</h2>
+
   <p data-pid="db0b0e">9·stat's frequency function gives each letter its tally in a text. Write f_m for the plain text's and f_c for the cipher text's, both as functions 𝒜 → ℕ, with tally 0 for a letter that does not appear.</p>
   <p data-pid="77ef48">Tallies-travel technique: <b>for every letter x, the cipher text holds g(x) exactly as often as the plain text holds x: f_c(g(x)) = f_m(x).</b> So f_c = f_m ∘ g⁻¹.</p>
   <pre class="lines" data-k="ember" data-label="this page: the tallies-travel technique">
@@ -89,12 +106,30 @@ c_i = g(x) \iff g(m_i) = g(x) @@ the cipher: c_i = g(m_i)
 f_c(g(x)) = \htmlClass{keep}{f_m(x)} \quad \blacksquare @@ one set of places, one number of members (4k)
   </pre>
   <p data-pid="7f6bc1">The key moves every tally to a new letter. It cannot change the tallies themselves: the cipher text's list of tallies, put in order, is the plain text's. A bar chart of the cipher text is the plain text's bar chart with its labels shuffled. Whoever knows the plain text's chart can put the labels back.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·crypt.3.1</span><span class="ph understand">understand</span>What does tallies-travel say, and what can the key not change?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>English has a chart</h3>
+<section class="class step" data-step="10crypt4">
+  <h2 class="sthead"><span class="stno">10crypt4</span>English Has a Chart</h2>
+
   <p data-pid="a8d44a">Count the letters of a long stretch of English prose and share each tally by the total. The shares come out nearly the same from book to book: E about 12.7%, T 9.1%, A 8.2%, O 7.5%, I 7.0%, N 6.7%, down to Q and Z, each under 0.1%. <b>That is a law in the ladder's sense: a measured regularity, with a range and with exceptions.</b> Its range is long English prose. Short texts wander from it, lists and names wander further, and a novel of 1939 runs to some 50 000 words without a single E.</p>
   <p data-pid="739fbc">Rung 10 gives the law its shape. Take one long text, and let u_n be the share of E among its first n letters: a sequence. The law guesses that such sequences head to about 12.7%, in 10f's sense. That is a guess about every n, and no finite text can prove it. What a text can show is how near it comes. In this page's passage about the Salinas River (402 letters), u_n is 10% at n = 50, 12% at 100, 13% at 200 and 13.9% at 402. Against a challenger's ε of 3 percentage points, it stays within ε of 12.7% from n = 54 on. Against an ε of 2, only from n = 341 on. Against an ε of 1, it never settles inside this passage. The attacker does not need the limit. She needs the top few letters in nearly the right order, and a few hundred letters give her that.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·crypt.4.1</span><span class="ph understand">understand</span>In what sense is the English letter chart a law, and how much of it does the attacker need?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>Breaking it without a key</h3>
+<section class="class step" data-step="10crypt5">
+  <h2 class="sthead"><span class="stno">10crypt5</span>Breaking It Without a Key</h2>
+
   <p data-pid="cf3ffe">The attack runs the tallies-travel technique backwards. Tally the cipher text. Its most frequent letter is probably g(E), the next g(T) or g(A), and so on down. Guess g⁻¹ from the ranks, then mend the guess with words: THE is the commonest word, and a guess that turns ZIT into TNE wants N and H swapped.</p>
   <pre class="lines" data-k="ember" data-label="this page: the Salinas passage under the keyboard key">
 f_c:\ \ \text{T } 56,\ \text{Z } 35,\ \text{Q } 33,\ \text{K } 31,\ \text{F } 30,\ \text{I } 26,\ \ldots @@ the cipher text's top tallies
@@ -104,71 +139,76 @@ f_c:\ \ \text{T } 56,\ \text{Z } 35,\ \text{Q } 33,\ \text{K } 31,\ \text{F } 30
   </pre>
   <p data-pid="dd6d3f">Each mended letter makes the next one easier, and the work never touches the 26! keys. It grows with the length of the text, not with the number of keys. <b>A huge number of keys guards against one attack only: trying them all.</b> A cipher is as strong as the cheapest attack on it, and here the cheapest attack uses the one thing the key cannot change.</p>
   <p data-pid="d0330f">A shift falls faster still. One tally is enough: if the top letter of the cipher text is X, then E went to X, and the shift is the remainder of 23 − 4 = 19. A general key needs a tally for each letter, and the rare letters, Q, Z, J, X, are settled last, by words.</p>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · left: a share heading for English's, and a challenger's ε · right: the tally attack, by hand</div>
+    <div class="panels">
+      <div class="panel">
+        <div class="lbl">share of a letter among the first n letters of the Salinas passage</div>
+        <canvas id="cvS"></canvas>
+        <div class="chips" id="lch"></div>
+        <div class="kn"><span class="m">ε</span><input type="range" id="ke" min="0.5" max="6" step="0.5" value="3"><output id="oe"></output></div>
+        <div class="cap">Ink: the share u_n against n. Dashed gold: English's share, the law. Shaded: within ε of it. Teal from the n where the share enters the band and stays to the end of the passage; ember if it never settles there.</div>
+        <div class="verdict" id="vdS"></div>
+      </div>
+      <div class="panel">
+        <div class="chips" id="kch"></div>
+        <canvas id="cvT"></canvas>
+        <div class="swap"><span class="m">read cipher letter</span><select id="sa"></select><span class="m">as</span><select id="sb"></select><button id="rk">guess by rank</button></div>
+        <div class="ctext" id="ct"></div>
+        <div class="cap">Bars: the cipher text's tallies, most frequent first, each labelled with its cipher letter and, below, the plain letter it is now read as. Text: cipher letters in grey, and below them your reading, teal where right, ember where wrong. Choosing a reading swaps it with the letter that had it.</div>
+        <div class="verdict" id="vdT"></div>
+      </div>
+    </div>
+  </section>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a key is a bijection; the keyboard key; 26! keys; the age of the universe; shifts among them; the tallies travel; English's chart; a share as a sequence; ε and the passage; guess by rank; mend by words; the cheapest attack; illegal moves · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·crypt.5.1</span><span class="ph understand">understand</span>How is a substitution cipher broken without a key, and why does the number of keys not matter?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>Illegal Moves</h3>
-  <pre class="lines" data-k="ember" data-label="this page: tempting, and not allowed">
+<section class="class step" data-step="10crypt6">
+  <h2 class="sthead"><span class="stno">10crypt6</span>Illegal Moves</h2>
+
+  <pre class="lines" data-k="ember" data-wrong="1" data-label="this page: tempting, and not allowed">
 26! \text{ keys, so it takes } 10^{10} \text{ years to break}\,? @@ that is the time to try every key; the tally attack tries none
 \text{the top cipher letter is } g(\text{E})\,? @@ only probably: a law, not a technique. In a short text it may be g(T) or g(A)
 g \text{ sends A to B and B to B}\,? @@ not one-to-one: no g⁻¹, and the reader cannot tell A from B
 \begin{aligned}&\text{encrypting twice with}\\ &\quad\text{two keys is stronger}\,?\end{aligned} @@ h ∘ g is one bijection (bijections-compose): one key of the same kind
 f_c = f_m\,? @@ f_c = f_m ∘ g⁻¹: the tallies are the same numbers on different letters
   </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·crypt.6.1</span><span class="ph understand">understand</span>Why is “26! keys, so it takes 10¹⁰ years to break” an illegal move?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>Running It Backwards</h3>
+<section class="class step" data-step="10crypt7">
+  <h2 class="sthead"><span class="stno">10crypt7</span>Running It Backwards</h2>
+
   <p data-pid="0cb89f">Handed g, decrypt with g⁻¹: read the key's table from right to left. Handed a cipher text and no key, tally it, rank the tallies against English, and mend the guess with common words. Handed two texts and asked whether one is a substitution of the other, compare the tallies first: if their ordered lists differ, no key joins them (tallies-travel, turned about). Handed a wish, a cipher whose tallies say nothing, change the cipher, not the count of keys: the tallies must stop travelling with the letters.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·crypt.7.1</span><span class="ph understand">understand</span>Handed two texts, how do you tell whether one is a substitution of the other?</li>
+    </ol>
+  </section>
 </section>
 
-<section class="pic" id="pic">
-  <div class="eyebrow">The picture · left: a share heading for English's, and a challenger's ε · right: the tally attack, by hand</div>
-  <div class="panels">
-    <div class="panel">
-      <div class="lbl">share of a letter among the first n letters of the Salinas passage</div>
-      <canvas id="cvS"></canvas>
-      <div class="chips" id="lch"></div>
-      <div class="kn"><span class="m">ε</span><input type="range" id="ke" min="0.5" max="6" step="0.5" value="3"><output id="oe"></output></div>
-      <div class="cap">Ink: the share u_n against n. Dashed gold: English's share, the law. Shaded: within ε of it. Teal from the n where the share enters the band and stays to the end of the passage; ember if it never settles there.</div>
-      <div class="verdict" id="vdS"></div>
-    </div>
-    <div class="panel">
-      <div class="chips" id="kch"></div>
-      <canvas id="cvT"></canvas>
-      <div class="swap"><span class="m">read cipher letter</span><select id="sa"></select><span class="m">as</span><select id="sb"></select><button id="rk">guess by rank</button></div>
-      <div class="ctext" id="ct"></div>
-      <div class="cap">Bars: the cipher text's tallies, most frequent first, each labelled with its cipher letter and, below, the plain letter it is now read as. Text: cipher letters in grey, and below them your reading, teal where right, ember where wrong. Choosing a reading swaps it with the letter that had it.</div>
-      <div class="verdict" id="vdT"></div>
-    </div>
-  </div>
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">10·crypt.8.1</span><span class="tagq">build</span>Build ciphers of your own.<ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Use 100 symbols, each}"></span> <span data-tex-inline="\text{letter getting as many as}"></span> <span data-tex-inline="\text{its share in percent,}"></span> <span data-tex-inline="\text{rounded, so that each}"></span> <span data-tex-inline="\text{symbol is used about}"></span> <span data-tex-inline="\text{equally often.}"></span></span>Find how many E gets, and what goes wrong for the letters under 0.5%.</li><li>Write two sentences of your own about a place you know, at least 150 letters. <br>Encrypt them with a key of your own, and break the result from its tallies. <br>Count the letters you got from ranks alone.</li><li><span class="givens"><span data-tex-inline="j \text{ and } k \text{ are shifts, from 0}"></span> <span data-tex-inline="\text{to 25.}"></span></span>Prove that the shift by j after the shift by k is the shift by the remainder of j plus k, and that the shift by 26 less k undoes the shift by k.</li><li><span class="givens"><span data-tex-inline="B = 10^{26}"></span></span>Find the least n for which an alphabet of n letters has more than B keys.</li></ol></div>
+  <div class="chq"><span class="chid">10·crypt.8.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{The plain text is the}"></span> <span data-tex-inline="\text{alphabet once, A to Z.}"></span></span>Find how much of the key the cipher text's tallies fix, and how much the cipher text fixes.</div>
+  <div class="chq"><span class="chid">10·crypt.8.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{Two texts of one length}"></span> <span data-tex-inline="\text{have the same ordered list}"></span> <span data-tex-inline="\text{of tallies.}"></span></span>Must one be a substitution of the other?</div>
+  <div class="chq"><span class="chid">10·crypt.8.4</span><span class="tagq">seam</span>A firm in Sacramento keeps its cipher's method secret, as well as its keys. A firm in Oakland publishes its method and keeps only its keys secret. Which firm's messages are safer?</div>
 </section>
-
-<section class="slides" id="sl1"><div class="eyebrow">The slides · a key is a bijection; the keyboard key; 26! keys; the age of the universe; shifts among them; the tallies travel; English's chart; a share as a sequence; ε and the passage; guess by rank; mend by words; the cheapest attack; illegal moves · ← → keys work</div></section>
-
-<section class="sayback">
-  <div class="eyebrow">Say it back · then work it</div>
-  <h2>Questions</h2>
-  <ol>
-    <li><span class="qid">10·crypt.1</span><span class="gname">Keys and tallies.</span><span class="gwhy">Do: build the page's pieces.</span>
-      <ol class="sub">
-        <li><span class="qid">10·crypt.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{An alphabet has the}"></span> <span data-tex-inline="\text{4\ letters A, B, C, D.}"></span></span>Find the number of substitution keys and the number of shifts.</li><li><span class="givens"><span data-tex-inline="\text{There are } 26! \text{ keys, and a}"></span> <span data-tex-inline="\text{machine tries } 10^{12} \text{ keys a}"></span> <span data-tex-inline="\text{second.}"></span></span>Find the years it takes to try them all, in scientific form to 2 figures.</li><li><span class="givens"><span data-tex-inline="\text{A shift sends WKH to}"></span> <span data-tex-inline="\text{THE.}"></span></span>Find the shift, and decrypt WXUORFN.</li><li><span class="givens"><span data-tex-inline="g:\ \text{ABCDEFG} \mapsto \text{QWERTYU},"></span> <span data-tex-inline="\text{HIJKLM} \mapsto \text{IOPASD},"></span> <span data-tex-inline="\text{NOPQRST} \mapsto \text{FGHJKLZ},"></span> <span data-tex-inline="\text{UVWXYZ} \mapsto \text{XCVBNM}"></span></span>Find g at TRACY, and its inverse at GKTUGF.</li></ol></li>
-      </ol></li>
-    <li><span class="qid">10·crypt.2</span><span class="gname">From the tallies back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
-      <ol class="sub">
-        <li><span class="qid">10·crypt.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="g:\ \text{ABCDEFG} \mapsto \text{QWERTYU},"></span> <span data-tex-inline="\text{HIJKLM} \mapsto \text{IOPASD},"></span> <span data-tex-inline="\text{NOPQRST} \mapsto \text{FGHJKLZ},"></span> <span data-tex-inline="\text{UVWXYZ} \mapsto \text{XCVBNM}"></span></span>Find the way back, the inverse of g, at Q, W, E, R, T and Y.</li><li><span class="givens"><span data-tex-inline="\text{A plain text&#x27;s tallies are}"></span> <span data-tex-inline="\text{E 9, T 6, A 4, O 2, I 1.}"></span> <span data-tex-inline="\text{Its cipher text&#x27;s are K 2,}"></span> <span data-tex-inline="\text{P 9, R 1, V 6, X 4.}"></span></span>Find the key g at E, T, A, O and I.</li><li><span class="givens"><span data-tex-inline="\text{A shift&#x27;s cipher text has}"></span> <span data-tex-inline="\text{its top tally at J.}"></span> <span data-tex-inline="\text{Assume the top plain}"></span> <span data-tex-inline="\text{letter is E.}"></span></span>Find the shift and the decrypting shift.</li><li><span class="givens"><span data-tex-inline="\text{A plain text uses}"></span> <span data-tex-inline="\text{16\ letters, each with a}"></span> <span data-tex-inline="\text{different tally, and not}"></span> <span data-tex-inline="\text{the other 10.}"></span></span>How many keys give the same cipher text from it?</li></ol></li>
-      </ol></li>
-    <li><span class="qid">10·crypt.3</span><span class="gname">Where the attack bends.</span><span class="gwhy">Bend: find where the techs stop working.</span>
-      <ol class="sub">
-        <li><span class="qid">10·crypt.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{In a plain text, S and O}"></span> <span data-tex-inline="\text{have the same tally.}"></span></span>What can the tallies of the cipher text not settle?</li><li><span class="givens"><span data-tex-inline="\text{The cipher text is}"></span> <span data-tex-inline="\text{MEETMEATNOON under}"></span> <span data-tex-inline="\text{some key.}"></span></span>What do its tallies give? <br>Find the cipher letters whose plain letters ranking cannot settle.</li><li><span class="givens"><span data-tex-inline="\text{Encrypt with a key } g \text{, then}"></span> <span data-tex-inline="\text{with a second key } h \text{.}"></span></span>Is the result a substitution cipher? <br>How many keys does the pair add?</li><li><span class="givens"><span data-tex-inline="\text{Let E go to any of three}"></span> <span data-tex-inline="\text{symbols, chosen afresh each}"></span> <span data-tex-inline="\text{time.}"></span></span>Is encrypting still a function on letters? <br>Is decrypting?</li></ol></li>
-      </ol></li>
-    <li class="optgroup"><span class="qid">10·crypt.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder questions that rely on your own making. The page is complete without these; the rung's angel wings need them.</span>
-      <ol class="sub">
-        <li class="opt"><span class="qid">10·crypt.4.1</span><span class="tagq">build</span>Build ciphers of your own.<ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{Use 100 symbols, each}"></span> <span data-tex-inline="\text{letter getting as many as}"></span> <span data-tex-inline="\text{its share in percent,}"></span> <span data-tex-inline="\text{rounded, so that each}"></span> <span data-tex-inline="\text{symbol is used about}"></span> <span data-tex-inline="\text{equally often.}"></span></span>Find how many E gets, and what goes wrong for the letters under 0.5%.</li><li>Write two sentences of your own about a place you know, at least 150 letters. <br>Encrypt them with a key of your own, and break the result from its tallies. <br>Count the letters you got from ranks alone.</li><li><span class="givens"><span data-tex-inline="j \text{ and } k \text{ are shifts, from 0}"></span> <span data-tex-inline="\text{to 25.}"></span></span>Prove that the shift by j after the shift by k is the shift by the remainder of j plus k, and that the shift by 26 less k undoes the shift by k.</li><li><span class="givens"><span data-tex-inline="B = 10^{26}"></span></span>Find the least n for which an alphabet of n letters has more than B keys.</li></ol></li>
-        <li class="opt"><span class="qid">10·crypt.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{The plain text is the}"></span> <span data-tex-inline="\text{alphabet once, A to Z.}"></span></span>Find how much of the key the cipher text's tallies fix, and how much the cipher text fixes.</li>
-        <li class="opt"><span class="qid">10·crypt.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{Two texts of one length}"></span> <span data-tex-inline="\text{have the same ordered list}"></span> <span data-tex-inline="\text{of tallies.}"></span></span>Must one be a substitution of the other?</li>
-        <li class="opt"><span class="qid">10·crypt.4.4</span><span class="tagq">seam</span>A firm in Sacramento keeps its cipher's method secret, as well as its keys. A firm in Oakland publishes its method and keeps only its keys secret. Which firm's messages are safer?</li>
-      </ol></li>
-  </ol>
-  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
-</section>
-
+<div class="themecert themeend"></div>
 <nav class="nextrung"><a href="r10bio.html">← 10·bio · how fast can an enzyme go?</a><a href="r10logi.html">10·logi · how many trucks does a route need? →</a></nav>
 
 <section class="extra basement">
@@ -176,7 +216,7 @@ f_c = f_m\,? @@ f_c = f_m ∘ g⁻¹: the tallies are the same numbers on differ
   <h3>Who said it first</h3>
   <p>The tally attack was first written down by the Arab philosopher al-Kindi, in Baghdad in the ninth century, in a treatise on deciphering secret messages. In 1586 the letters of Mary, Queen of Scots, written in a substitution cipher with extra symbols for common words, were broken by Thomas Phelippes; they helped send her to her death in 1587. Edgar Allan Poe's story “The Gold-Bug” (1843) walks a reader through the attack. The novel without an E is Ernest Vincent Wright's Gadsby (1939). The demand that a cipher stay safe when everything but the key is known was set out by Auguste Kerckhoffs in “La cryptographie militaire” (1883).</p>
   <aside class="voice para"><p>Al-Kindi advised the reader to find a long plain text in the same language, count each letter in it, and then match the most frequent letter of the cipher text to the most frequent letter of the plain text, and so on down.</p><cite>al-Kindi, Risāla fī istikhrāj al-muʿammā (ninth century); paraphrase</cite></aside>
-  <p>Accepted names: a substitution cipher on one alphabet is a simple substitution or monoalphabetic cipher; a shift is a Caesar cipher; the set of keys is the key space; trying every key is a brute-force attack; the tally attack is frequency analysis. A cipher that gives a letter several symbols is a homophonic cipher. The demand in 10·crypt.4.4 is Kerckhoffs's principle.</p>
+  <p>Accepted names: a substitution cipher on one alphabet is a simple substitution or monoalphabetic cipher; a shift is a Caesar cipher; the set of keys is the key space; trying every key is a brute-force attack; the tally attack is frequency analysis. A cipher that gives a letter several symbols is a homophonic cipher. The demand in 10·crypt.8.4 is Kerckhoffs's principle.</p>
   <h3>Wrong moves, worked</h3>
   <pre class="lines" data-k="ember" data-label="10·crypt: a worked “proof”, not allowed">
 \text{an attack must find } g @@ fine
@@ -186,6 +226,7 @@ f_c = f_m\,? @@ f_c = f_m ∘ g⁻¹: the tallies are the same numbers on differ
 </section>
 </div>
 
+<script>/* 0.3.80 Phase B: old tick ids on this page -> new */window.LADDER_MVX={"q:10·crypt.4.1": "c:10·crypt.8.1", "q:10·crypt.4.2": "c:10·crypt.8.2", "q:10·crypt.4.3": "c:10·crypt.8.3", "q:10·crypt.4.4": "c:10·crypt.8.4"};</script>
 <script src="rung.js"></script>
 <script>
 (function(){

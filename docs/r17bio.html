@@ -54,17 +54,25 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <p class="gesture" data-pid="811d84">Unchecked, a population grows at a rate fixed by its size, and grows by a fixed factor in equal times. With a ceiling, growth slows by the share of room already taken. The logarithm of the ratio between those living and the room left then climbs in a straight line, and the population climbs an S toward the ceiling. Growth is fastest when the population is half the ceiling.</p>
 </header>
 
-<section class="class">
-  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+<section class="class step" data-step="17bio1">
+  <h2 class="sthead"><span class="stno">17bio1</span>Unchecked</h2>
 
-  <h3>Unchecked</h3>
   <p data-pid="5d6612">Suppose each member of a population adds, on average, r new members per unit time. Then P′ = rP, and P = P₀e<sup>rt</sup> by proportional-slope. r has the accepted name the intrinsic rate of increase. The population doubles every ln 2 / r (doubling-time).</p>
   <pre class="lines" data-k="ember" data-label="17·bio: unchecked">
 \text{a bacterium dividing every } 20 \text{ min}:\ \ P = P_0 \cdot 2^{3t} @@ t in hours; 17j
 P(24) = P_0 \cdot 2^{72} \approx 4.7 \times 10^{21}\,P_0 @@ from one cell of about 10⁻¹² g, some 4700 tonnes in a day, if nothing stopped it
   </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·bio.1.1</span><span class="ph understand">understand</span>What does unchecked growth look like, and what would one bacterium become in a day?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>A ceiling</h3>
+<section class="class step" data-step="17bio2">
+  <h2 class="sthead"><span class="stno">17bio2</span>A Ceiling</h2>
+
   <p class="eqline" data-pid="32a85f">Let the rate per member fall in a straight line from r, when P is small, to 0 when P reaches K: P′ = rP(1 − P/K). K has the accepted name carrying capacity; the equation is the logistic equation.</p>
   <p data-pid="9425e3">Logistic-solution technique: <b>if P′ = rP(1 − P/K) and 0 &lt; P₀ &lt; K, then, while 0 &lt; P &lt; K, P(t) = K/(1 + Ce<sup>−rt</sup>) with C = (K − P₀)/P₀.</b></p>
   <pre class="lines" data-k="ember" data-label="17·bio: the logistic-solution technique">
@@ -87,67 +95,63 @@ C = 9,\ \ P(10) = \tfrac{5000}{1 + 9e^{-3}} \approx 3453 @@ logistic-solution
   </pre>
   <p data-pid="27effd">Many things set K: food, nesting sites, predators, disease. <b>A K that falls, when a forest is cut or a river dammed, drags the population down with it.</b> A population above K shrinks, since then P′ &lt; 0. Two species that share a food each lower the other's ceiling.</p>
   <p data-pid="ddcc60">In 1845 a Belgian mathematician proposed that the obstacles to a population's growth increase in proportion to the excess of the population over a certain size. He named the curve that results the logistic, and fitted it to the censuses of France, Belgium and Essex.</p>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · exponential and logistic, and the rate against the size</div>
+    <div class="panels">
+      <div class="panel">
+        <div class="lbl">P against years, K = 5000</div>
+        <canvas id="cvF"></canvas>
+        <div class="kn"><span class="m">r</span><input type="range" id="kr" min="0.05" max="1" step="0.01" value="0.3"><output id="or"></output></div>
+        <div class="kn"><span class="m">P₀</span><input type="range" id="kP" min="50" max="4900" step="10" value="500"><output id="oP"></output></div>
+        <div class="kn"><span class="m">t</span><input type="range" id="kt" min="0" max="40" step="0.1" value="10"><output id="ot"></output></div>
+        <div class="cap">Ink: the logistic curve. Dashed ember: P₀e<sup>rt</sup>, which starts the same. Dashed: K. Plum: the knob's t. Teal: the moment of fastest growth.</div>
+      </div>
+      <div class="panel">
+        <div class="lbl">P′ against P: the rate of growth against the size</div>
+        <canvas id="cvL"></canvas>
+        <div class="cap">Ink: rP(1 − P/K), a hill with its top at K/2. Dashed ember: rP, the unchecked rate. Plum: the population at the knob's t.</div>
+        <div class="verdict" id="vdF"></div>
+        <div class="eqbox" id="eqF"></div>
+      </div>
+    </div>
+  </section>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · unchecked; a day of bacteria; the ceiling; logistic-solution's G; G′ = r; logistic-solution; fastest-growth; the elk; what sets K; the logistic, named; illegal moves · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·bio.2.1</span><span class="ph understand">understand</span>What does logistic-solution say, and when is growth fastest?</li>
+    </ol>
+  </section>
+</section>
 
-  <h3>Illegal Moves</h3>
-  <pre class="lines" data-k="ember" data-label="17·bio: tempting, and not allowed">
+<section class="class step" data-step="17bio3">
+  <h2 class="sthead"><span class="stno">17bio3</span>Illegal Moves</h2>
+
+  <pre class="lines" data-k="ember" data-wrong="1" data-label="17·bio: tempting, and not allowed">
 \text{logistic growth is fastest at the start}\,? @@ at P = K/2; the start is slow when P₀ is small
 P \to K \Rightarrow P = K \text{ at some time}\,? @@ Ce^(−rt) &gt; 0 for every t: it is approached, not reached
 \text{fit to a few years, the curve gives } K\,? @@ early on the logistic and the exponential look alike; K is barely seen
 P_0 \gt K \Rightarrow \text{logistic-solution fails}\,? @@ the same steps work with ln(P − K); P falls toward K from above
   </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·bio.3.1</span><span class="ph understand">understand</span>Why is “logistic growth is fastest at the start” an illegal move?</li>
+    </ol>
+  </section>
 </section>
 
-<section class="pic" id="pic">
-  <div class="eyebrow">The picture · exponential and logistic, and the rate against the size</div>
-  <div class="panels">
-    <div class="panel">
-      <div class="lbl">P against years, K = 5000</div>
-      <canvas id="cvF"></canvas>
-      <div class="kn"><span class="m">r</span><input type="range" id="kr" min="0.05" max="1" step="0.01" value="0.3"><output id="or"></output></div>
-      <div class="kn"><span class="m">P₀</span><input type="range" id="kP" min="50" max="4900" step="10" value="500"><output id="oP"></output></div>
-      <div class="kn"><span class="m">t</span><input type="range" id="kt" min="0" max="40" step="0.1" value="10"><output id="ot"></output></div>
-      <div class="cap">Ink: the logistic curve. Dashed ember: P₀e<sup>rt</sup>, which starts the same. Dashed: K. Plum: the knob's t. Teal: the moment of fastest growth.</div>
-    </div>
-    <div class="panel">
-      <div class="lbl">P′ against P: the rate of growth against the size</div>
-      <canvas id="cvL"></canvas>
-      <div class="cap">Ink: rP(1 − P/K), a hill with its top at K/2. Dashed ember: rP, the unchecked rate. Plum: the population at the knob's t.</div>
-      <div class="verdict" id="vdF"></div>
-      <div class="eqbox" id="eqF"></div>
-    </div>
-  </div>
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">17·bio.4.1</span><span class="tagq">build</span>Make a population of your own that starts above its ceiling.<br>Solve the logistic for it, as the page did below the ceiling, and find its limit as t grows.</div>
+  <div class="chq"><span class="chid">17·bio.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{logistic curve},"></span> <span data-tex-inline="\text{time from } K/2 \text{ back to } K/4,"></span> <span data-tex-inline="\text{time from } K/2 \text{ on to } 3K/4"></span></span>Prove or refute: the two times are equal.</div>
+  <div class="chq"><span class="chid">17·bio.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{rises in an S},"></span> <span data-tex-inline="\text{from near } 0 \text{ to near a ceiling}"></span></span>Prove or refute: a population with the given curve obeys the logistic equation.</div>
+  <div class="chq"><span class="chid">17·bio.4.4</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="P' = rP\big(1 - \tfrac PK\big) - H"></span></span>A fishery off Monterey takes H fish a year from a stock so.<br>Find the H for which a steady stock exists, and the largest such H.</div>
+  <div class="chq"><span class="chid">17·bio.4.5</span><span class="tagq">seam</span>In 1920 two biologists fitted the logistic curve to the United States censuses from 1790 to 1910. They found it fit closely, called it a law of population growth, and gave a ceiling near 197 million. The country passed that in 1968 and kept going. <br>Was the fit wrong, or the claim? <br>What would a law of population growth have to do that a close fit does not?</div>
 </section>
-
-<section class="slides" id="sl1"><div class="eyebrow">The slides · unchecked; a day of bacteria; the ceiling; logistic-solution's G; G′ = r; logistic-solution; fastest-growth; the elk; what sets K; the logistic, named; illegal moves · ← → keys work</div></section>
-
-<section class="sayback">
-  <div class="eyebrow">Say it back · then work it</div>
-  <h2>Questions</h2>
-  <ol>
-    <li><span class="qid">17·bio.1</span><span class="gname">Populations.</span><span class="gwhy">Do: build the page's pieces.</span>
-      <ol class="sub">
-        <li><span class="qid">17·bio.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{doubles every } 90 \text{ minutes}"></span></span>Find r per hour for the yeast, and the factor in 12 hours.</li><li><span class="givens"><span data-tex-inline="K = 1200,"></span> <span data-tex-inline="P_0 = 200,"></span> <span data-tex-inline="r = 0.4 \text{ a year}"></span></span>Find P(5).</li><li><span class="givens"><span data-tex-inline="K = 1200,"></span> <span data-tex-inline="P_0 = 200,"></span> <span data-tex-inline="r = 0.4 \text{ a year}"></span></span>Find when growth is fastest, and how fast it is then.</li><li><span class="givens"><span data-tex-inline="P = \dfrac{K}{1 + Ce^{-rt}},"></span> <span data-tex-inline="P' = rP\big(1 - \tfrac PK\big)"></span></span>Prove by its slope that P satisfies the equation.</li></ol></li>
-      </ol></li>
-    <li><span class="qid">17·bio.2</span><span class="gname">From the curve back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
-      <ol class="sub">
-        <li><span class="qid">17·bio.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="P = \dfrac{800}{1 + 15e^{-0.5t}}"></span></span>Find K, r and the starting population.</li><li><span class="givens"><span data-tex-inline="\text{fastest growth: } 60 \text{ a year},"></span> <span data-tex-inline="\text{at } P = 400,"></span> <span data-tex-inline="\text{logistic}"></span></span>Find K and r.</li><li><span class="givens"><span data-tex-inline="90 \text{ in } 1972,"></span> <span data-tex-inline="3500 \text{ in } 2008,"></span> <span data-tex-inline="r \text{ steady},"></span> <span data-tex-inline="K \text{ far above}"></span></span>Sea otters off Vancouver Island numbered so.<br>Find r.</li><li><span class="givens"><span data-tex-inline="P = \tfrac34 K"></span></span>Find the fraction of its fastest rate at which the population is growing.</li></ol></li>
-      </ol></li>
-    <li><span class="qid">17·bio.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
-      <ol class="sub">
-        <li><span class="qid">17·bio.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="P_0 = 6000,"></span> <span data-tex-inline="\text{above } K"></span></span>Find what the model predicts for the elk.</li><li><span class="givens"><span data-tex-inline="\text{a } K \text{ that never changes},"></span> <span data-tex-inline="\text{a rate that falls in a straight line},"></span> <span data-tex-inline="\text{young that breed at once}"></span></span>Find which assumption of the logistic is least likely for elk.</li><li><span class="givens"><span data-tex-inline="\text{a fit over the first five years},"></span> <span data-tex-inline="\text{gives } r \text{ well and } K \text{ badly}"></span></span>Build two logistic curves with one r and starting population and different K that stay within 5% of each other for five years.</li><li><span class="givens"><span data-tex-inline="u = 1/P"></span></span>Solve the logistic again with u, and find the page whose equation u satisfies.</li></ol></li>
-      </ol></li>
-    <li class="optgroup"><span class="qid">17·bio.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder questions that rely on your own making. The page is complete without these; the rung's angel wings need them.</span>
-      <ol class="sub">
-        <li class="opt"><span class="qid">17·bio.4.1</span><span class="tagq">build</span>Make a population of your own that starts above its ceiling.<br>Solve the logistic for it, as the page did below the ceiling, and find its limit as t grows.</li>
-        <li class="opt"><span class="qid">17·bio.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{logistic curve},"></span> <span data-tex-inline="\text{time from } K/2 \text{ back to } K/4,"></span> <span data-tex-inline="\text{time from } K/2 \text{ on to } 3K/4"></span></span>Prove or refute: the two times are equal.</li>
-        <li class="opt"><span class="qid">17·bio.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{rises in an S},"></span> <span data-tex-inline="\text{from near } 0 \text{ to near a ceiling}"></span></span>Prove or refute: a population with the given curve obeys the logistic equation.</li>
-        <li class="opt"><span class="qid">17·bio.4.4</span><span class="tagq">world</span><span class="givens"><span data-tex-inline="P' = rP\big(1 - \tfrac PK\big) - H"></span></span>A fishery off Monterey takes H fish a year from a stock so.<br>Find the H for which a steady stock exists, and the largest such H.</li>
-        <li class="opt"><span class="qid">17·bio.4.5</span><span class="tagq">seam</span>In 1920 two biologists fitted the logistic curve to the United States censuses from 1790 to 1910. They found it fit closely, called it a law of population growth, and gave a ceiling near 197 million. The country passed that in 1968 and kept going. <br>Was the fit wrong, or the claim? <br>What would a law of population growth have to do that a close fit does not?</li>
-      </ol></li>
-  </ol>
-  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
-</section>
-
+<div class="themecert themeend"></div>
 <nav class="nextrung"><a href="r17chem.html">← 17·chem · how sour is it, and how long until half is gone?</a><a href="r17phys.html">17·phys · is light a dot or a flow? →</a></nav>
 
 <section class="extra basement">

@@ -53,10 +53,9 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <p class="gesture" data-pid="410f80">A password of a given length from a given set of symbols is one of the set's size to the power of the length. Its bits are the log base two of that count, which is the length times the bits of one symbol. One more symbol adds a whole symbol's worth of bits. A bigger set of symbols adds only a little to each. On average a guesser finds a randomly chosen password after trying half of them, and every ten bits multiply the time by about a thousand. All of this measures the way a password was chosen. A password a person made up is guessed in the order people make them up, and its bits are far fewer than its length suggests.</p>
 </header>
 
-<section class="class">
-  <div class="eyebrow">The class · read it through, then work the picture and the slides</div>
+<section class="class step" data-step="17crypt1">
+  <h2 class="sthead"><span class="stno">17crypt1</span>Counting the Passwords</h2>
 
-  <h3>Counting the passwords</h3>
   <p data-pid="793a7d">From here on, on this page, an alphabet is the set of symbols a password may use, and A is the number of its members. A password of length L is a list of L symbols from it: a function from L to the alphabet, as 10·crypt's texts were. By counted-functions (4k) there are A^L of them.</p>
   <p data-pid="ed3476">The common alphabets: 26 lowercase letters; 52 with capitals; 62 with digits too; 95 for every symbol a keyboard types, space included. A word list for dice has 7776 = 6⁵ words, one for each throw of five dice, and a passphrase is a list of words from it.</p>
   <pre class="lines" data-k="ember" data-label="17·crypt: three counts">
@@ -64,7 +63,17 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 95^8 \approx 6.63 \times 10^{15} @@ 8 symbols from the whole keyboard
 26^{12} \approx \htmlClass{new}{9.54 \times 10^{16}} @@ 12 lowercase letters: more than the 8 from the whole keyboard
   </pre>
-  <h3>Bits</h3>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·crypt.1.1</span><span class="ph understand">understand</span>How many passwords of length L are there over an alphabet of A symbols, and which is larger, 8 keyboard symbols or 12 lowercase letters?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17crypt2">
+  <h2 class="sthead"><span class="stno">17crypt2</span>Bits</h2>
+
   <p data-pid="a79d67">From here on, on this page, the bits of a way of choosing among N passwords, each equally likely, are log₂ N. One bit is one fair coin toss: N = 2^b.</p>
   <p data-pid="db67dc">Bits technique: <b>the bits of a password chosen at random are its length times the bits of one symbol.</b> Precisely: log₂(A^L) = L log₂ A.</p>
   <pre class="lines" data-k="ember" data-label="17·crypt: the bits technique">
@@ -82,7 +91,17 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 \text{to match at length } L:\ \ k \log_2 26 \ge L \log_2 \tfrac{95}{26} \iff k \ge \htmlClass{new}{0.40\,L} @@ about four letters for every ten in the password
   </pre>
   <p data-pid="7f98a0">And length is easy to remember. Twelve lowercase letters, or a few words, are easier to type than eight symbols from every row of the keyboard, and they have more bits.</p>
-  <h3>Bits into years</h3>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·crypt.2.1</span><span class="ph understand">understand</span>What does the bits technique say, and what does length-beats-symbols add?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17crypt3">
+  <h2 class="sthead"><span class="stno">17crypt3</span>Bits Into Years</h2>
+
   <p data-pid="12cc49">A guesser tries the passwords one at a time, in some order, never twice. If the password was chosen at random, every place in the order is equally likely. The average place is (1 + 2 + ⋯ + N)/N = (N + 1)/2, by doubled-sum (4k). So on average a guesser needs about half the count.</p>
   <p data-pid="10d3eb">How fast is a guesser? A site does not keep the passwords. It keeps a scrambled form of each that can be checked against a guess but not run backwards. When a site's stored file is stolen, the thief can test guesses on his own machines as fast as they run. In 2023 one gaming graphics card could test on the order of 10¹¹ guesses a second against a fast scrambled form, and on the order of 10⁵ against a slow form built to resist guessing.</p>
   <p data-pid="092a54">Years technique: <b>every ten more bits multiply the time to guess by about a thousand.</b> Precisely: at g guesses a second, the average time for b bits is about 2^(b − 1)/g seconds, and 2^10 = 1024. A year is about 3.16 × 10⁷ s, about 2^24.9 s.</p>
@@ -93,7 +112,17 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 \tfrac{7776^6}{2 \cdot 10^{11}} \approx 1.1 \times 10^{12} \text{ s} \approx \htmlClass{new}{35\,000 \text{ years}} @@ 77.5 bits, six dice words, fast form
   </pre>
   <p data-pid="0ddb1a">The slow form bought six powers of ten, about 20 bits, without the user doing anything. That is the site's share of the work. A site that locks an account after a few wrong tries makes a guesser on the site itself slower still, a few guesses a day.</p>
-  <h3>What the count assumes</h3>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·crypt.3.1</span><span class="ph understand">understand</span>What does the years technique say, and what does a slow scrambled form buy?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17crypt4">
+  <h2 class="sthead"><span class="stno">17crypt4</span>What the Count Assumes</h2>
+
   <p data-pid="6e85c8">Everything above assumed that each password was equally likely. People do not choose that way. In 2009 a list of about 32 million passwords leaked from a games website, stored as plain text. The most common, 123456, was used by about 290 000 accounts. A guesser starts from such lists, then common words, then words with a capital at the front and a digit or a mark at the end.</p>
   <p data-pid="539f1b">So "Password1!" has 10 symbols from 95, which the count makes 65.7 bits. It sits near the top of every guessing list. Its bits are what was random in choosing it, and very little was.</p>
   <aside class="nature">
@@ -103,8 +132,37 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
     <p data-pid="b24bde">The same string can carry many sizes of bits. Twenty-five lowercase letters thrown with dice are 117.5 bits. The same twenty-five letters, made of four words from a 7776-word list, are 51.7 bits. As four words from a famous joke about passwords, they are almost none.</p>
     <p class="bait" data-pid="2f6709">Two people each type ten lowercase letters. One rolled dice for every letter. The other typed the first letters of the lines of a well-known song. Which password has 47 bits?</p>
   </aside>
-  <h3>Illegal Moves</h3>
-  <pre class="lines" data-k="ember" data-label="17·crypt: tempting, and not allowed">
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · count, bits and years</div>
+    <div class="panels">
+      <div class="panel">
+        <div class="lbl">bits against length, for three alphabets</div>
+        <canvas id="cvB"></canvas>
+        <div class="cap">Ink: 26 lowercase letters, 4.70 bits each. Ember: 95 keyboard symbols, 6.57 each. Teal: dice words, 12.92 each. Plum: the bits that take the guesser a hundred years on average at the chosen speed. The dot is your choice.</div>
+      </div>
+      <div class="panel">
+        <div class="lbl">your choice</div>
+        <div class="kn"><span class="m">alphabet</span><select id="ka"><option value="10">10 digits</option><option value="26" selected>26 lowercase</option><option value="36">36 lowercase and digits</option><option value="52">52 letters</option><option value="62">62 letters and digits</option><option value="95">95 keyboard symbols</option><option value="7776">7776 dice words</option></select><output id="oa"></output></div>
+        <div class="kn"><span class="m">length L</span><input type="range" id="kl" min="1" max="24" step="1" value="12"><output id="ol"></output></div>
+        <div class="kn"><span class="m">guesses a second</span><input type="range" id="kg" min="0" max="12" step="1" value="11"><output id="og"></output></div>
+        <div class="verdict" id="vdB"></div>
+        <div class="eqbox" id="eqB"></div>
+      </div>
+    </div>
+  </section>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the count; bits; the bits technique; one symbol; length-beats-symbols; half on average; the guesser; years; six dice words; what the count assumes; two sizes of truth; illegal moves · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·crypt.4.1</span><span class="ph understand">understand</span>What does the count assume, and what are the bits of “Password1!”?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17crypt5">
+  <h2 class="sthead"><span class="stno">17crypt5</span>Illegal Moves</h2>
+
+  <pre class="lines" data-k="ember" data-wrong="1" data-label="17·crypt: tempting, and not allowed">
 \text{more kinds of symbol beat more length}\,? @@ 8 from 95: 52.6 bits; 12 from 26: 56.4 bits
 \log_2 (A^L) = (\log_2 A)^L\,? @@ log-of-a-power: L log₂ A
 \log_2 (26 + 26) = \log_2 26 + \log_2 26\,? @@ logs turn multiplying into adding, not adding: log₂ 52 ≈ 5.70
@@ -112,63 +170,31 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 \text{the guesser needs all } N \text{ tries}\,? @@ about N/2 on average, and possibly the first
 \text{10 symbols from 95 have 65.7 bits, whoever chose them}\,? @@ only if each symbol was chosen at random
   </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·crypt.5.1</span><span class="ph understand">understand</span>Why is “twice the bits, twice the time” an illegal move?</li>
+    </ol>
+  </section>
 </section>
 
-<section class="pic" id="pic">
-  <div class="eyebrow">The picture · count, bits and years</div>
-  <div class="panels">
-    <div class="panel">
-      <div class="lbl">bits against length, for three alphabets</div>
-      <canvas id="cvB"></canvas>
-      <div class="cap">Ink: 26 lowercase letters, 4.70 bits each. Ember: 95 keyboard symbols, 6.57 each. Teal: dice words, 12.92 each. Plum: the bits that take the guesser a hundred years on average at the chosen speed. The dot is your choice.</div>
-    </div>
-    <div class="panel">
-      <div class="lbl">your choice</div>
-      <div class="kn"><span class="m">alphabet</span><select id="ka"><option value="10">10 digits</option><option value="26" selected>26 lowercase</option><option value="36">36 lowercase and digits</option><option value="52">52 letters</option><option value="62">62 letters and digits</option><option value="95">95 keyboard symbols</option><option value="7776">7776 dice words</option></select><output id="oa"></output></div>
-      <div class="kn"><span class="m">length L</span><input type="range" id="kl" min="1" max="24" step="1" value="12"><output id="ol"></output></div>
-      <div class="kn"><span class="m">guesses a second</span><input type="range" id="kg" min="0" max="12" step="1" value="11"><output id="og"></output></div>
-      <div class="verdict" id="vdB"></div>
-      <div class="eqbox" id="eqB"></div>
-    </div>
-  </div>
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">17·crypt.6.1</span><span class="tagq">build</span>Make a way of choosing passwords of your own, with dice, coins or a deck of cards.<br>Find its bits, and the average time to guess at 10¹¹ guesses a second.</div>
+  <div class="chq"><span class="chid">17·crypt.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="A = 26,"></span> <span data-tex-inline="\text{no letter used twice}"></span></span>Find the bits for L = 8 and for L = 26.<br>Find how many bits the rule costs at each length.</div>
+  <div class="chq"><span class="chid">17·crypt.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="N \text{ passwords},"></span> <span class="gtx">every order of guessing finds the chosen one</span> <span class="gtx">in (N + 1)/2 guesses on average</span></span>Prove or refute: each of the N is chosen equally often.</div>
+  <div class="chq"><span class="chid">17·crypt.6.4</span><span class="tagq">seam</span>In 2003 a standards office advised that passwords mix capitals, digits and symbols, and be changed every ninety days. In 2017 the same office withdrew both rules. People made to add a symbol had added it in the same few places, and people made to change a password had changed one character. Yet a site that hands out random passwords gets them written on notes stuck to screens.<br>Should a site set rules for the passwords people choose, or choose for them?</div>
 </section>
-
-<section class="slides" id="sl1"><div class="eyebrow">The slides · the count; bits; the bits technique; one symbol; length-beats-symbols; half on average; the guesser; years; six dice words; what the count assumes; two sizes of truth; illegal moves · ← → keys work</div></section>
-
-<section class="sayback">
-  <div class="eyebrow">Say it back · then work it</div>
-  <h2>Questions</h2>
-  <ol>
-    <li><span class="qid">17·crypt.1</span><span class="gname">Counts and bits.</span><span class="gwhy">Do: build the page's pieces.</span>
-      <ol class="sub">
-        <li><span class="qid">17·crypt.1.1</span><span class="ph do">do</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A = 36,"></span> <span data-tex-inline="L = 10"></span></span>Find the count in scientific form, and the bits.</li><li><span class="givens"><span data-tex-inline="\text{PINs of } 4 \text{ digits},"></span> <span data-tex-inline="\text{PINs of } 6 \text{ digits}"></span></span>Find the bits of each.</li><li><span class="givens"><span data-tex-inline="5 \text{ words from } 7776,"></span> <span data-tex-inline="10^{11} \text{ guesses a second}"></span></span>Find the bits and the average time to guess.</li><li><span class="givens"><span data-tex-inline="A = 95,"></span> <span data-tex-inline="L = 9,"></span> <span data-tex-inline="10^{5} \text{ guesses a second}"></span></span>Find the average time to guess, in years.</li></ol></li>
-      </ol></li>
-    <li><span class="qid">17·crypt.2</span><span class="gname">From the bits back.</span><span class="gwhy">Undo: run the page's techs backwards.</span>
-      <ol class="sub">
-        <li><span class="qid">17·crypt.2.1</span><span class="ph undo">undo</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="A = 26,"></span> <span data-tex-inline="\text{at least } 80 \text{ bits}"></span></span>Find the least length.</li><li><span class="givens"><span data-tex-inline="L = 12,"></span> <span data-tex-inline="71.5 \text{ bits}"></span></span>Find A.</li><li><span class="givens"><span data-tex-inline="10^{11} \text{ guesses a second},"></span> <span data-tex-inline="1000 \text{ years on average}"></span></span>Find the bits.</li><li><span class="givens"><span data-tex-inline="5 \text{ words},"></span> <span data-tex-inline="60 \text{ bits}"></span></span>Find the length of the word list.</li></ol></li>
-      </ol></li>
-    <li><span class="qid">17·crypt.3</span><span class="gname">Where it gives.</span><span class="gwhy">Bend: find where the techs stop working.</span>
-      <ol class="sub">
-        <li><span class="qid">17·crypt.3.1</span><span class="ph bend">bend</span><ol class="parts" type="a"><li><span class="givens"><span data-tex-inline="\text{length } 9,"></span> <span data-tex-inline="\text{one digit, last},"></span> <span data-tex-inline="\text{the rest lowercase}"></span></span>Find the bits.<br>Find the bits of 9 symbols from 36 with no rule, and which way the rule moved them.</li><li><span class="givens"><span data-tex-inline="A = 26,"></span> <span data-tex-inline="\text{any length from } 1 \text{ to } 8"></span></span>Find the count and the bits.<br>How many bits do the shorter lengths add to length 8 alone?</li><li><span class="givens"><span class="gtx">one of the 10 000 commonest passwords, at random;</span> <span class="gtx">then one digit and a ! added at the end</span></span>Find the bits.</li><li><span class="givens"><span class="gtx">two passwords of 40 bits each,</span> <span data-tex-inline="\text{chosen apart},"></span> <span data-tex-inline="\text{both needed}"></span></span>Find the bits when the site checks them together, and when it reports which one was wrong.</li></ol></li>
-      </ol></li>
-    <li class="optgroup"><span class="qid">17·crypt.4</span><span class="gname">Make.</span><span class="gwhy">Optional. Harder questions that rely on your own making. The page is complete without these; the rung's angel wings need them.</span>
-      <ol class="sub">
-        <li class="opt"><span class="qid">17·crypt.4.1</span><span class="tagq">build</span>Make a way of choosing passwords of your own, with dice, coins or a deck of cards.<br>Find its bits, and the average time to guess at 10¹¹ guesses a second.</li>
-        <li class="opt"><span class="qid">17·crypt.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="A = 26,"></span> <span data-tex-inline="\text{no letter used twice}"></span></span>Find the bits for L = 8 and for L = 26.<br>Find how many bits the rule costs at each length.</li>
-        <li class="opt"><span class="qid">17·crypt.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="N \text{ passwords},"></span> <span class="gtx">every order of guessing finds the chosen one</span> <span class="gtx">in (N + 1)/2 guesses on average</span></span>Prove or refute: each of the N is chosen equally often.</li>
-        <li class="opt"><span class="qid">17·crypt.4.4</span><span class="tagq">seam</span>In 2003 a standards office advised that passwords mix capitals, digits and symbols, and be changed every ninety days. In 2017 the same office withdrew both rules. People made to add a symbol had added it in the same few places, and people made to change a password had changed one character. Yet a site that hands out random passwords gets them written on notes stuck to screens.<br>Should a site set rules for the passwords people choose, or choose for them?</li>
-      </ol></li>
-  </ol>
-  <p><small>Answer any question by its label in chat. Checking rule stands: wrong, and I point at the step; right, and I say so and list the steps back.</small></p>
-</section>
-
+<div class="themecert themeend"></div>
 <nav class="nextrung"><a href="r17comp.html">← 17·comp · what is the quickest way to sort a list?</a><a href="r17concl.html">17·∎ · conclusion →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>Who said it first</h3>
   <aside class="voice para"><p>Shannon proposed measuring information by the logarithm of the number of possible messages, and wrote that with logarithms to the base 2 the units may be called binary digits, or more briefly bits, a word suggested by J. W. Tukey.</p><cite>Claude Shannon, A Mathematical Theory of Communication (1948); paraphrase</cite></aside>
-  <p>The rules of 17·crypt.4.4 are Appendix A of the United States National Institute of Standards and Technology's Special Publication 800-63 (2003), written by Bill Burr. Its 2017 revision, 800-63B, dropped the rules for mixing kinds of symbol and for changing passwords on a schedule, and asked sites to check new passwords against lists of leaked ones. Burr told a newspaper in 2017 that he regretted much of what he had written.</p>
+  <p>The rules of 17·crypt.6.4 are Appendix A of the United States National Institute of Standards and Technology's Special Publication 800-63 (2003), written by Bill Burr. Its 2017 revision, 800-63B, dropped the rules for mixing kinds of symbol and for changing passwords on a schedule, and asked sites to check new passwords against lists of leaked ones. Burr told a newspaper in 2017 that he regretted much of what he had written.</p>
   <p>The dice word list is Diceware, published by Arnold Reinhold in 1995; the Electronic Frontier Foundation published a long list of 7776 words for it in 2016. The leaked list of 2009 was RockYou's. The famous joke about passwords made of four common words is a comic strip of 2011 by Randall Munroe.</p>
   <p>Accepted names: the bits of a way of choosing are its entropy, measured in bits; trying every password is a brute-force attack, and trying the likely ones first a dictionary attack; the scrambled form a site keeps is a password hash, and the slow forms are key-stretching hashes such as bcrypt (1999) and Argon2 (2015); locking out after wrong tries is rate limiting.</p>
   <h3>Wrong moves, worked</h3>
@@ -179,6 +205,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   </pre>
 </section>
 </div>
+<script>/* 0.3.80 Phase B: old tick ids on this page -> new */window.LADDER_MVX={"q:17·crypt.4.1": "c:17·crypt.6.1", "q:17·crypt.4.2": "c:17·crypt.6.2", "q:17·crypt.4.3": "c:17·crypt.6.3", "q:17·crypt.4.4": "c:17·crypt.6.4"};</script>
 <script src="rung.js"></script>
 <script>
 (function(){
