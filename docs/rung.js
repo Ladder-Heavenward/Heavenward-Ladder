@@ -995,12 +995,13 @@ function addresses(info){
     const b=document.createElement('button'); b.type='button'; b.className='pa'; b.textContent=ad; b.setAttribute('aria-label','paragraph '+ad+': prompt, report or leave a note');
     b.addEventListener('click',e=>{ e.stopPropagation(); openMenu(p,b); }); p.appendChild(document.createTextNode(' ')); p.appendChild(b); });
   menu=document.createElement('div'); menu.className='pamenu'; menu.hidden=true;
-  menu.innerHTML='<button type="button" data-a="prompt">prompt from</button><button type="button" data-a="report">report</button><button type="button" data-a="note">leave a note</button><button type="button" data-a="final" hidden>final pass</button>';
+  menu.innerHTML='<button type="button" data-a="prompt">prompt from</button><button type="button" data-a="report">report</button><button type="button" data-a="note">leave a note</button><button type="button" data-a="final" hidden>final pass</button><button type="button" data-a="fold" hidden>collapse</button>';
   document.body.appendChild(menu);
   menu.addEventListener('click',e=>{ const a=e.target.dataset.a; if(!a||!cur) return; const ad=cur.dataset.addr;
     const text=[...cur.childNodes].filter(n=>!(n.classList&&n.classList.contains('pa'))).map(n=>n.textContent).join('').trim();
     if(a==='prompt'){ copy('About paragraph '+ad+' of the ladder, which reads: “'+text+'”\n\n'); toast('paragraph '+ad+' and its words are copied: paste them to your assistant and ask'); }
     if(a==='edit'){ menu.hidden=true; startEdit(cur); return; }
+    if(a==='fold'){ menu.hidden=true; edFold(cur); return; } /* Phase G */
     if(a==='final'){ menu.hidden=true; markFinal(cur); return; }
     if(a==='note'){ menu.hidden=true; noteEdit(cur); return; }
     if(a==='report'){ menu.hidden=true; report({kind:'paragraph',where:ad,pid:cur.dataset.pid,text}); return; }
@@ -1075,7 +1076,7 @@ function reportQuestions(){}
    the site's database, edits/<pid> {pid, page, html, at}, shown to every reader at once, and folded
    into the page's source at the next publish. Paragraphs with typeset maths are left alone. */
 const ED={db:null,owner:false,page:ladderPage()};
-function edWait(){ return Promise.resolve(false); return new Promise(res=>{ let n=0; (function t(){ if(window.claude&&typeof window.claude.use==='function') return res(true); if(++n>40) return res(false); setTimeout(t,250); })(); }); }
+function edWait(){ return Promise.resolve(false); return new Promise(res=>{ let n=0; (function t(){ if(window.claude&&typeof window.claude.use==='function') return res(true); if(++n>120) return res(false); setTimeout(t,250); /* 2026-11-09: wait up to 30 s for the host */ })(); }); }
 /* 0.3.42 (Andrew 18:28): a paragraph with inline maths is editable too. Each inline formula is one locked piece in the editor
    (it can be moved past or deleted, not changed), and is saved back as its TeX source. Display maths and code stay out. */
 function editable(p){ if(p.querySelector('[data-tex],code')) return false; return [...p.querySelectorAll('.katex')].every(k=>k.closest('[data-tex-inline]')); }
@@ -1090,36 +1091,75 @@ function edClean(node){ const out=document.createElement('div');
     else walk(n,dst); }); })(node,out);
   return out.innerHTML.replace(/\s+/g,' ').trim(); }
 function edApply(p,html){ const b=p.querySelector('button.pa'); const tmp=document.createElement('div'); tmp.innerHTML=html;
-  p.innerHTML=edClean(tmp); edTex(p); if(b){ p.appendChild(document.createTextNode(' ')); p.appendChild(b); } p.classList.add('pedited'); }
+  p.innerHTML=edClean(tmp); edTex(p); if(b){ p.appendChild(document.createTextNode(' ')); p.appendChild(b); } p.classList.add('pedited'); if(!p.textContent.replace(/\s+/g,'')) p.setAttribute('data-collapsed','1'); /* Phase G: emptied = collapsed, never deleted */ }
+/* 2026-11-09 (Andrew 16:47 "it always says the updates failed"): the write lands but set() often does not answer within the
+   10 s, so every save said "not saved yet". Now a slow set() is followed by reading the document back: if the stored time stamp is
+   the one just written, the save is confirmed. Only when neither answers is it "not saved yet". */
+async function edPut(path,rec){ const ref=ED.db.doc(path); let done=false; const w=ref.set(rec); w.then(()=>{ done=true; },()=>{});
+  /* 2026-11-09 (Andrew 16:49): the box stays open only until the edit is seen in the queue. From 1.2 s on, the document is read
+     back every 1.5 s while set() is still silent; the first answer that matches the time stamp just written closes the box. */
+  const seen=async()=>{ try{ const s=await Promise.race([ref.get(),new Promise((_,rj)=>setTimeout(()=>rj(0),4000))]); const v=s&&(typeof s.data==='function'?s.data():s)||null; return !!(v&&v.at===rec.at); }catch(e){ return false; } };
+  const t0=Date.now(); await new Promise(r=>setTimeout(r,1200));
+  while(Date.now()-t0<20000){ if(done) return null; if(await seen()) return null; await new Promise(r=>setTimeout(r,1500)); if(done) return null; }
+  return {code:'no answer in 20 seconds'}; }
+/* ---- the outbox (2026-11-09 17:03). ladder:pending-edits holds every edit not yet confirmed in the database, by pid (text edits
+   by their tx id, sent by txInit). edSync drains it in the background: one edPut per record, newest copy of each pid, the badge
+   counting what still waits. It never blocks the editor. */
+function edOutAll(){ try{ return JSON.parse(localStorage.getItem('ladder:pending-edits')||'{}'); }catch(_){ return {}; } }
+function edOutPut(rec){ try{ const m=edOutAll(); m[rec.pid]=rec; localStorage.setItem('ladder:pending-edits',JSON.stringify(m)); }catch(_){} edBadge(); }
+function edBadge(){ if(!window.LADDER_DESK) return; const m=edOutAll(); const n=Object.keys(m).length;
+  let b=document.getElementById('edout'); if(!n){ if(b){ b.textContent='all edits sent'; b.classList.add('ok'); setTimeout(()=>{ const x=document.getElementById('edout'); if(x&&x.classList.contains('ok')) x.remove(); },2500); } return; }
+  if(!b){ b=document.createElement('button'); b.type='button'; b.id='edout'; b.title='edits saved on this device, not yet in the database · tap to send now'; b.style.cssText='position:fixed;left:10px;bottom:10px;z-index:60;font:600 .72rem/1 system-ui,sans-serif;padding:6px 9px;border-radius:999px;border:1px solid rgba(0,0,0,.15);background:#fff6d6;color:#5a4a1a;box-shadow:0 1px 4px rgba(0,0,0,.15);cursor:pointer'; b.onclick=()=>{ toast('sending'); edSync(true); }; document.body.appendChild(b); }
+  b.classList.remove('ok'); b.style.background=ED.db?'#fff6d6':'#f3e6e6'; b.textContent=n+' edit'+(n===1?'':'s')+' waiting to send'+(ED.db?'':' · database not reached yet'); }
+let edSyncBusy=false, edSyncTimer=0;
+async function edSync(now){ if(!window.LADDER_DESK) return; edBadge(); clearTimeout(edSyncTimer); if(edSyncBusy) return; edSyncBusy=true;
+  try{ if(!ED.db){ try{ if(window.claude&&typeof window.claude.use==='function') ED.db=await Promise.race([window.claude.use('db'),new Promise((_,rj)=>setTimeout(()=>rj(0),6000))]); }catch(_){ ED.db=null; } if(ED.db){ ED.owner=true; document.body.classList.add('ed-owner'); } }
+    if(ED.db){ const m=edOutAll(); for(const pid in m){ const r=m[pid]; if(!r||r.kind==='text') continue; const err=await edPut('edits/'+pid,r); if(err) break; const cur=edOutAll(); if(cur[pid]&&cur[pid].at===r.at){ delete cur[pid]; localStorage.setItem('ladder:pending-edits',JSON.stringify(cur)); try{ const dm=JSON.parse(localStorage.getItem('ladder:edit-drafts')||'{}'); delete dm[pid]; localStorage.setItem('ladder:edit-drafts',JSON.stringify(dm)); }catch(_){} } edBadge(); } } }
+  finally{ edSyncBusy=false; edBadge(); const left=Object.keys(edOutAll()).filter(k=>{ const r=edOutAll()[k]; return !r||r.kind!=='text'; }).length; if(left) edSyncTimer=setTimeout(()=>edSync(),15000); } }
+function edLocal(){ /* the outbox laid over the page before the database answers */ const m=edOutAll(); let n=0; for(const pid in m){ const r=m[pid]; if(!r||r.kind==='text'||r.page!==ED.page) continue; const p=document.querySelector('p[data-pid="'+pid+'"],li[data-pid="'+pid+'"]'); if(p&&typeof r.html==='string'){ edApply(p,r.html); n++; } if(p&&'collapsed' in r){ if(r.collapsed) p.setAttribute('data-collapsed','1'); else p.removeAttribute('data-collapsed'); } } edBadge(); return n; }
+if(window.LADDER_DESK){ ['online','focus'].forEach(ev=>addEventListener(ev,()=>{ if(Object.keys(edOutAll()).length) edSync(); })); document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&Object.keys(edOutAll()).length) edSync(); }); }
+/* Phase G (Andrew 2026-11-09 16:29): collapse a paragraph instead of emptying it. The paragraph keeps its address and its screen
+   (a stub in the app's swipe row); the flag is saved with the paragraph's current words as an edit, and the fold at release writes
+   data-collapsed on the paragraph. An edit whose words are empty is read as collapsed too, never as a deletion. */
+async function edFold(p){ if(!edOn()) return; const pid=p.dataset.pid; const was=p.hasAttribute('data-collapsed');
+  if(was) p.removeAttribute('data-collapsed'); else p.setAttribute('data-collapsed','1');
+  const c=p.cloneNode(true); c.querySelectorAll('button.pa').forEach(b=>b.remove()); const html=edClean(c);
+  const rec={pid,page:ED.page,html,collapsed:!was,at:new Date().toISOString()};
+  edOutPut(rec); toast(was?'uncollapsed: it is a full screen again':'collapsed: the screen stays, folded, and the chain keeps its numbers'); edSync(); }
 function edClearPending(pid){ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); delete m[pid]; localStorage.setItem(k,JSON.stringify(m)); }catch(_){} }
 async function edFolded(){ const f={}; try{ const s=await ED.db.collection('folded').get(); s.docs.forEach(d=>{ const v=d.data()||{}; f[v.pid||d.id]=v.at||''; }); }catch(_){ return null; } return f; }
 /* The owner check runs once at load; if the host was slow to answer then, check again when a menu opens. */
 async function edRecheck(){ try{ if(!window.claude||typeof window.claude.use!=='function'){ ED.why='claude'; return false; } if(!ED.db) ED.db=await window.claude.use('db'); if(!ED.db){ ED.why='db'; return false; } /* 0.3.53 (Andrew 14:26 'locked out again'): the desk is private to its owner and the database only takes the owner's edits, so reaching the database is the whole gate; no separate who-is-viewing check */ ED.owner=true; ED.why=''; if(ED.owner) document.body.classList.add('ed-owner'); }catch(e){ ED.why='err'; } return ED.owner; }
 /* 0.3.41 (Andrew 18:24 "the edit button is not on the menu"): on the desk, when editing is off, the menu says why and offers the Permissions panel */
 const ED_WHY={claude:'Editing is off: this view is not inside claude.ai. Open the desk link in claude.ai, signed in.',db:'Editing is off: the desk cannot reach its database. Allow database access under Permissions, then reload.',user:'Editing is off: the desk cannot tell who is viewing. Open the desk link in claude.ai, signed in.',owner:'Editing is off: claude.ai does not see you as the owner of this desk. Check that you are signed in to the account that owns it.',err:'Editing is off: the desk could not check its database. Reload the page and try again.'};
-async function edWhyShow(m){ let w=m.querySelector('.edwhy'); if(!window.LADDER_DESK||ED.owner){ if(w) w.hidden=true; return; }
+async function edWhyShow(m){ let w=m.querySelector('.edwhy'); if(!window.LADDER_DESK||edOn()){ if(w) w.hidden=true; return; }
   if(!w){ w=document.createElement('div'); w.className='edwhy'; w.style.cssText='font-size:.78rem;line-height:1.35;max-width:16rem;padding:6px 8px;color:var(--muted,#666);border-top:1px solid rgba(0,0,0,.1);white-space:normal'; m.appendChild(w); }
   w.hidden=false; w.textContent=ED_WHY[ED.why]||ED_WHY.err;
   try{ const pm=window.claude&&await window.claude.use('permissions'); if(pm&&pm.manage){ const b=document.createElement('button'); b.type='button'; b.textContent='Open Permissions'; b.style.cssText='display:block;margin-top:4px'; b.onclick=e=>{ e.stopPropagation(); pm.manage().catch(()=>toast('Open the Permissions menu at the top of the desk')); }; w.appendChild(b); } }catch(_){} }
 async function edInit(){
   if(!document.querySelector('header.top > p[data-pid], section.class p[data-pid]')) return;
-  if(!(await edWait())) return;
+  if(window.LADDER_DESK){ document.body.classList.add('ed-owner'); edLocal(); setTimeout(()=>edSync(),300); }
+  if(!(await edWait())){ edBadge(); return; }
   let db=null,user=null; try{ db=await window.claude.use('db'); }catch(e){} if(!db) return; ED.db=db;
   ED.owner=true; /* 0.3.53: the database is the gate (see edRecheck) */
   if(ED.owner) document.body.classList.add('ed-owner');
   const FOLD=await edFolded(), stale=r=>!!FOLD&&!!FOLD[r.pid]&&String(FOLD[r.pid])>=String(r.at||'');
+  /* 2026-11-09 (Andrew 16:42 "the edits don't populate"): every edit logged for this page is laid over the page as loaded (from the
+     site, or the bundle), editable in place or not; what was shown is said in a toast so the desk never goes quiet about it. */
+  let shownEd=0, skippedEd=0, edErr=null;
   try{ const snap=await db.collection('edits').where('page','==',ED.page).get();
-    snap.docs.forEach(d=>{ const v=d.data()||{}; if(stale({pid:v.pid||d.id,at:v.at})) return; const p=document.querySelector('p[data-pid="'+(v.pid||d.id)+'"],li[data-pid="'+(v.pid||d.id)+'"]'); if(p&&typeof v.html==='string'&&editable(p)) edApply(p,v.html); }); }catch(e){}
-  if(FOLD) try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); let sent=0;
-    for(const pid in m){ const r=m[pid]; if(stale(r)){ delete m[pid]; try{ const dm=JSON.parse(localStorage.getItem('ladder:edit-drafts')||'{}'); delete dm[pid]; localStorage.setItem('ladder:edit-drafts',JSON.stringify(dm)); }catch(_){} continue; }
-      try{ const w=ED.db.doc('edits/'+pid).set(r); w.then(()=>edClearPending(pid),()=>{}); await Promise.race([w,new Promise((_,rj)=>setTimeout(()=>rj(0),10000))]); delete m[pid]; sent++; try{ const dm=JSON.parse(localStorage.getItem('ladder:edit-drafts')||'{}'); delete dm[pid]; localStorage.setItem('ladder:edit-drafts',JSON.stringify(dm)); }catch(_){} const p=r.page===ED.page&&document.querySelector('p[data-pid="'+pid+'"],li[data-pid="'+pid+'"]'); if(p&&editable(p)) edApply(p,r.html); }catch(_){ } }
-    localStorage.setItem(k,JSON.stringify(m)); if(sent) toast(sent+' edit'+(sent>1?'s':'')+' saved that had been waiting on this device'); }catch(_){}
+    snap.docs.forEach(d=>{ const v=d.data()||{}; if(v.kind==='text') return; if(stale({pid:v.pid||d.id,at:v.at})){ skippedEd++; return; } const ob=edOutAll()[v.pid||d.id]; if(ob&&ob.kind!=='text'&&String(ob.at||'')>String(v.at||'')) { shownEd++; return; } const p=document.querySelector('p[data-pid="'+(v.pid||d.id)+'"],li[data-pid="'+(v.pid||d.id)+'"]'); if(p&&typeof v.html==='string'){ edApply(p,v.html); shownEd++; } if(p&&'collapsed' in v){ if(v.collapsed) p.setAttribute('data-collapsed','1'); else p.removeAttribute('data-collapsed'); } }); }catch(e){ edErr=e; }
+  if(window.LADDER_DESK){ const from=window.LADDER_SOURCE==='site'?'page from the ladder’s site':window.LADDER_SOURCE==='bundle'?'page from the desk’s own copy':'page';
+    toast(from+(edErr?' · the database did not answer':' · '+(shownEd?shownEd+' edit'+(shownEd===1?'':'s')+' from the database shown':'no unfolded edits for this page')+(skippedEd?' · '+skippedEd+' already folded':''))); }
+  if(FOLD) try{ const m=edOutAll(); let drop=0; for(const pid in m){ const r=m[pid]; if(r&&r.kind!=='text'&&stale(r)){ delete m[pid]; drop++; try{ const dm=JSON.parse(localStorage.getItem('ladder:edit-drafts')||'{}'); delete dm[pid]; localStorage.setItem('ladder:edit-drafts',JSON.stringify(dm)); }catch(_){} } } if(drop) localStorage.setItem('ladder:pending-edits',JSON.stringify(m)); }catch(_){}
+  edSync(); /* the outbox goes out in the background; the badge says what still waits */
   try{ const m=JSON.parse(localStorage.getItem('ladder:edit-drafts')||'{}'); let n=0;
     for(const pid in m){ const d=m[pid]; if(d.page!==ED.page) continue; if(FOLD[pid]&&Number(new Date(FOLD[pid]))>=Number(d.at||0)) continue; const p=document.querySelector('p[data-pid="'+pid+'"],li[data-pid="'+pid+'"]'); if(!p||!editable(p)) continue;
       startEdit(p); p.innerHTML=d.html; n++; }
     if(n) toast('your unsaved edit'+(n>1?'s are':' is')+' back, still open: press save when ready'); }catch(_){}
 }
-function startEdit(p){ if(!ED.db||!ED.owner||!editable(p)||p.isContentEditable) return;
+const edOn=()=>ED.owner||!!window.LADDER_DESK; /* outbox 2026-11-09: on the desk editing is always on; the database is reached in the background */
+function startEdit(p){ if(!edOn()||!editable(p)||p.isContentEditable) return;
   const b=p.querySelector('button.pa'); if(b) b.remove(); const before=p.innerHTML;
   p.querySelectorAll('[data-tex-inline]').forEach(el=>el.contentEditable='false');
   p.contentEditable='true'; p.classList.add('pediting'); p.focus();
@@ -1132,23 +1172,16 @@ function startEdit(p){ if(!ED.db||!ED.owner||!editable(p)||p.isContentEditable) 
   const done=()=>{ clearTimeout(dt); dset(null); done0(); };
   bar.addEventListener('click',async e=>{ const k=e.target.dataset.e; if(!k) return;
     if(k==='cancel'){ p.innerHTML=before; done(); return; }
-    const html=edClean(p); e.target.disabled=true;
-    const rec={pid:p.dataset.pid,page:ED.page,html,at:new Date().toISOString()}; let err=null;
-    for(const wait of [0,1500,4000,9000]){ if(wait){ toast('the database is busy; trying again…'); await new Promise(r=>setTimeout(r,wait)); }
-      try{ const w=ED.db.doc('edits/'+p.dataset.pid).set(rec); w.then(()=>edClearPending(rec.pid),()=>{}); await Promise.race([w, new Promise((_,rj)=>setTimeout(()=>rj({code:'no answer in 10 seconds'}),10000))]); err=null; break; }catch(x){ err=x; } }
-    if(!err){ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); delete m[p.dataset.pid]; localStorage.setItem(k,JSON.stringify(m)); }catch(_){}
-      p.innerHTML=html; edTex(p); p.classList.add('pedited'); done(); toast('saved: every reader sees it now, and it goes into the page at the next publish'); }
-    else{ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); m[p.dataset.pid]=rec; localStorage.setItem(k,JSON.stringify(m)); }catch(_){}
-      e.target.disabled=false; toast('not saved yet ('+((err&&err.code)||'the database refused it')+'). Your words are kept on this device and will be sent when the database answers.'); } });
+    const html=edClean(p); const rec={pid:p.dataset.pid,page:ED.page,html,at:new Date().toISOString()};
+    p.innerHTML=html; edTex(p); p.classList.add('pedited'); done(); edOutPut(rec); toast('saved on this device · sending to the database'); edSync(); });
 }
 /* 0.3.10 final pass (Andrew 23:57): a paragraph he has re-edited down to plain, concise sentences, the promise that "the ladder
    trusts your English completely" kept, reads in a slightly different ink. Every paragraph he saves through the editor is final
    pass; one already right can be marked as it stands. The mark is an edit of the paragraph's own words, so it rides the edit
    pipeline: shown live as .pedited, and the fold writes class="fp" into the page. */
-async function markFinal(p){ if(!ED.db||!ED.owner||!editable(p)) return;
+async function markFinal(p){ if(!edOn()||!editable(p)) return;
   const rec={pid:p.dataset.pid,page:ED.page,html:edClean(p),at:new Date().toISOString(),final:true};
-  try{ await Promise.race([ED.db.doc('edits/'+rec.pid).set(rec),new Promise((_,rj)=>setTimeout(()=>rj(0),10000))]); p.classList.add('pedited'); toast('marked final pass: it goes into the page at the next publish'); }
-  catch(e){ toast('not marked yet: the database did not answer. Try again in a moment.'); } }
+  p.classList.add('pedited'); edOutPut(rec); toast('marked final pass · sending to the database'); edSync(); }
 /* 0.3.15 the desk's text editor (Andrew 21:57, 02:40 "i need the desk immediately"): on the desk the owner can edit the words of any
    title or paragraph without typeset maths, graphs or slides, anywhere they show: page and index titles, footing names, step blurbs,
    and the words that come from the data files (seeds, links, answers, questions, crosswalk cards). "✎ edit text" turns it on; a tap
@@ -1194,8 +1227,7 @@ function txOverlay(){ if(!TX.list.length) return; const pend=TX.list.filter(r=>!
     els.forEach(el=>txApplyTo(el,r)); } }
 function txPend(rec,keep){ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); if(keep) m[rec.id]=rec; else delete m[rec.id]; localStorage.setItem(k,JSON.stringify(m)); }catch(_){} }
 async function txSave(rec){ let err=null; txPend(rec,true);
-  for(const wait of [0,1500,4000,9000]){ if(wait){ toast('the database is busy; trying again…'); await new Promise(r=>setTimeout(r,wait)); }
-    try{ await Promise.race([ED.db.doc('edits/'+rec.id).set(rec), new Promise((_,rj)=>setTimeout(()=>rj({code:'no answer in 10 seconds'}),10000))]); err=null; break; }catch(x){ err=x; } }
+  err=await edPut('edits/'+rec.id,rec); /* 2026-11-09: confirmed by reading back */
   if(!err) txPend(rec,false); return err; }
 function txStart(el){ if(TX.busy) return; const pa=el.matches('p[data-pid],li[data-pid]')&&!el.closest('.ladder');
   if(pa&&editable(el)){ startEdit(el); return; }
@@ -1244,7 +1276,7 @@ async function txInit(){ if(!window.LADDER_DESK) return;
   txOverlay(); let t=0; new MutationObserver(()=>{ if(TX.busy) return; clearTimeout(t); t=setTimeout(txOverlay,250); }).observe(document.body,{childList:true,subtree:true});
 }
 window.LadderText={on:()=>txToggle(true),off:()=>txToggle(false),list:()=>TX.list};
-function openMenu(p,b){ cur=p; const r=b.getBoundingClientRect(); const fb=menu.querySelector('[data-a=final]'); if(fb){ const done=p.classList.contains('fp')||p.classList.contains('pedited'); fb.hidden=!(ED.owner&&editable(p)&&!done); } const eb=menu.querySelector('[data-a=edit]'); if(eb){ eb.hidden=!(ED.owner&&editable(p)); if(!ED.owner&&editable(p)) edRecheck().then(ok=>{ if(ok&&cur===p) eb.hidden=false; edWhyShow(menu); }); else edWhyShow(menu); } menu.hidden=false;
+function openMenu(p,b){ cur=p; const r=b.getBoundingClientRect(); const fb=menu.querySelector('[data-a=final]'); if(fb){ const done=p.classList.contains('fp')||p.classList.contains('pedited'); fb.hidden=!(edOn()&&editable(p)&&!done); } const fo=menu.querySelector('[data-a=fold]'); if(fo){ fo.hidden=!edOn(); fo.textContent=p.hasAttribute('data-collapsed')?'uncollapse':'collapse'; } const eb=menu.querySelector('[data-a=edit]'); if(eb){ eb.hidden=!(edOn()&&editable(p)); if(!edOn()&&editable(p)) edRecheck().then(ok=>{ if(ok&&cur===p) eb.hidden=false; edWhyShow(menu); }); else edWhyShow(menu); } menu.hidden=false;
   const w=menu.offsetWidth||220; menu.style.left=Math.max(8,Math.min(window.innerWidth-w-8,r.left+r.width/2-w/2))+'px';
   menu.style.top=(r.bottom+window.scrollY+6)+'px'; }
 /* the non-skid key: the annex tags show or hide their annexes; the geometry-transform mark waits for the geometry floor */
@@ -1611,7 +1643,7 @@ function footingView(){
      view, reaching a footing opens it, and the page view's record (steps:<page>) keeps up */
   const reveal=()=>{ units[cur].forEach(el=>{ if(el.hidden&&el.matches('section.step')) el.hidden=false; });
     const i=steps.indexOf(units[cur].find(el=>steps.includes(el))); if(i>=0) try{ const K='steps:'+P, o=parseInt(LS.getItem(K)||'1',10)||1; if(i+1>o) LS.setItem(K,String(i+1)); }catch(e){} };
-  const paint=()=>{ reveal(); units.forEach((u,n)=>u.forEach(el=>el.classList.toggle('fv-on',n===cur))); document.body.classList.toggle('fv-notend',cur<N-1); label(); };
+  const paint=()=>{ reveal(); units.forEach((u,n)=>u.forEach(el=>el.classList.toggle('fv-on',n===cur))); document.body.classList.toggle('fv-notend',cur<N-1); label(); if(window.LadderFV&&LadderFV.onPaint) try{ LadderFV.onPaint(units[cur],cur,{on,N,LASTU,ONE}); }catch(e){} /* Phase G */ };
   const remember=()=>{ try{ LS.setItem(LK,JSON.stringify({page:P,id:idOf(cur),t:Date.now()})); }catch(e){} if(cur<=LASTU) climbed(P,idOf(cur),cur); };
   const top=()=>{ window.scrollTo(0,0); };
   function setMode(v){ on=v; document.body.classList.toggle('fv',on); if(on) paint(); else units.forEach(u=>u.forEach(el=>el.classList.remove('fv-on'))); label();
@@ -1626,7 +1658,7 @@ function footingView(){
       f.push({transform:'translateY('+y.toFixed(1)+'px)',opacity:outgoing?1-0.35*e*e:0.35+0.65*e}); }
     return f; };
   function go(n,opts){ opts=opts||{}; n=Math.max(0,Math.min(N-1,n)); if(n===cur&&!opts.force){ return; } if(busy) return;
-    const from=cur, dir=n>from?1:-1; cur=n;
+    const from=cur, dir=n>from?1:-1; cur=n; window.LadderFV.dir=dir; window.LadderFV.wantEl=opts.el||null; /* Phase G: the swipe row starts at its far end when the climb goes back */
     if(!on||REDUCE()||opts.instant||from===n){ paint(); top(); remember(); if(opts.el) opts.el.scrollIntoView({block:'start'}); return; }
     busy=true;
     const H=innerHeight, W=Math.min(innerWidth,wrap.clientWidth||innerWidth);
@@ -1643,7 +1675,7 @@ function footingView(){
   }
   const fwd=()=>{ if(cur>=LASTU){ const h=pageLink(1); if(h) leave(h,1); return; } go(cur+1); };
   const back=()=>{ if(cur<=0){ const h=pageLink(-1); if(h) leave(h,-1); return; } go(Math.min(cur-1,LASTU)); };
-  up.onclick=fwd; dn.onclick=back;
+  up.onclick=fwd; dn.onclick=back; window.LadderFV.fwd=fwd; window.LadderFV.back=back; /* Phase G: the row's ends climb */
   /* 0.3.40 (Andrew 12:08): on a keyboard, ↑ climbs to the next footing and ↓ goes back, as the ▲ and ▼ buttons do */
   document.addEventListener('keydown',e=>{ if(!on||busy||e.defaultPrevented||e.altKey||e.ctrlKey||e.metaKey||e.shiftKey) return;
     if(e.key!=='ArrowUp'&&e.key!=='ArrowDown') return;
@@ -1652,7 +1684,7 @@ function footingView(){
     const b=e.key==='ArrowUp'?up:dn; if(b.hidden) return; e.preventDefault(); b.click(); });
   /* one finger: past the top edge of a footing, pulling down climbs to the next; past its bottom edge, pushing up goes back */
   let sy=null, sx=0, mode=0;
-  const shut=t=>!!(t.closest&&t.closest('.slides,.pic,canvas,input,textarea,select,button,a,.mg,#desk,#lbar,.chq,.sayback .qid'));
+  const shut=t=>!!(t.closest&&t.closest('.slides,.pic,canvas,input,textarea,select,button,a,.mg,#desk,#lbar,.chq,.sayback .qid,.swbar,.unlocknote'));
   addEventListener('touchstart',e=>{ if(!on||busy||e.touches.length!==1||shut(e.target)) { sy=null; return; }
     sy=e.touches[0].clientY; sx=e.touches[0].clientX;
     const atTop=wrap.getBoundingClientRect().top>=-2, atFoot=innerHeight+scrollY>=document.documentElement.scrollHeight-4;
@@ -2301,4 +2333,109 @@ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded'
   const go=()=>{ fit(); setTimeout(fit,400); setTimeout(fit,1500); setTimeout(fit,3000); };
   if(document.readyState==='complete') go(); else addEventListener('load',go);
   window.LadderFitTags=fit;
+})();
+
+/* ---- Phase G (Andrew 2026-11-09 16:26, 16:29): swipe screens. In the footing view on floor 1 (rungs 0-7, their annexes and the
+   floor 1 pages) a footing is a row of screens: one paragraph, one slide deck or one graphic object (picture, line block, table,
+   column) to a screen, the footing's question last. A displayed equation line, a block's key or a caption rides with the screen
+   before it. Swipe left (or →, or the ▶ button) advances along the row; at the end of the row it climbs to the next footing, so
+   one gesture walks the whole ladder. Swipe right (or ←, ◀) returns; before the first screen it goes back to the previous
+   footing's last screen. Up and down keep their job: footings, steps, rungs and floors. The desk (page view) is untouched.
+   A paragraph or a deck marked data-collapsed (the desk's "collapse", or a paragraph emptied on the desk) keeps its screen as a
+   stub with its address, so the chain never renumbers; a tap opens it for this visit. */
+(function(){
+'use strict';
+if(window.LADDER_DESK) return;
+const PAGES=window.LADDER_SWIPE_PAGES||/^(r0[0-7]|floor1)/;
+const ADVANCE_ON_SWIPE_LEFT=true; /* finger moves left = the row moves on, as pages turn; flip for the other reading */
+const pg=()=>window.ladderPage?ladderPage():'';
+const ATTACH=/(^|\s)(eqline|eqline-words|brkkey|eyebrow|lbl|cap|lp|lv|first|dividend|tablewrap-cap)(\s|$)/;
+let screens=[], k=0, on=false, bar=null, L=null, R=null, posEl=null, dots=null, step=null;
+const folded=el=>el.hasAttribute('data-collapsed')||(el.matches('p[data-pid]')&&!el.textContent.replace(/\s+/g,'').replace(/^[\d\w.·]+$/,'').length);
+function clear(){ document.querySelectorAll('[data-sw]').forEach(x=>{ x.removeAttribute('data-sw'); x.classList.remove('sw-on','sw-open','sw-stub'); }); screens=[]; }
+function build(els){ clear(); step=els.find(e=>e.matches&&e.matches('section.step')); if(!step) return;
+  [...step.children].forEach(ch=>{ if(ch.matches('h2,.sthead,.stnext,script,style,template')||ch.hidden) return;
+    if(ATTACH.test(ch.className||'')&&screens.length){ screens[screens.length-1].push(ch); return; } screens.push([ch]); });
+  els.forEach(e=>{ if(e!==step&&e.matches&&e.matches('section,figure,.slides,.pic')&&!e.matches('header.top,nav,.pn')) screens.push([e]); });
+  screens.forEach((s,i)=>s.forEach(x=>{ x.setAttribute('data-sw',i); if(folded(x)){ x.classList.add('sw-stub'); if(!x.dataset.addr) x.dataset.addr=x.matches('.slides')?'slides':x.matches('.pic')?'picture':x.matches('pre')?'lines':x.matches('.sayback')?'question':'·'; } })); }
+function ui(){ if(bar) return; bar=document.createElement('div'); bar.className='swbar'; bar.hidden=true;
+  L=document.createElement('button'); L.type='button'; L.className='swnav swl'; L.innerHTML='<span aria-hidden="true">◀</span>'; L.setAttribute('aria-label','previous screen');
+  R=document.createElement('button'); R.type='button'; R.className='swnav swr'; R.innerHTML='<span class="swpos"></span><span aria-hidden="true">▶</span>'; R.setAttribute('aria-label','next screen');
+  dots=document.createElement('div'); dots.className='swdots'; posEl=R.querySelector('.swpos');
+  bar.append(L,dots,R); document.body.appendChild(bar); L.onclick=()=>ret(null); R.onclick=()=>adv(null); }
+const deckOf=el=>el&&el.closest&&el.closest('.slides');
+const api=deck=>deck&&(window.__steppers||[]).find(a=>a.container===deck)||null;
+const deckN=deck=>deck?deck.querySelectorAll('.dots i').length:0;
+function show(i,opts){ opts=opts||{}; if(!screens.length) return; k=Math.max(0,Math.min(screens.length-1,i));
+  screens.forEach((s,j)=>s.forEach(x=>{ x.classList.toggle('sw-on',j===k); if(j!==k) x.classList.remove('sw-open'); }));
+  if(!opts.keep) window.scrollTo(0,0);
+  const n=screens.length; posEl.textContent=n>1?(k+1)+' / '+n:''; L.disabled=false; R.disabled=false;
+  dots.innerHTML=''; if(n>1&&n<=14) screens.forEach((s,j)=>{ const d=document.createElement('i'); d.className=(j===k?'on':'')+(s[0].classList.contains('sw-stub')?' stub':''); d.onclick=()=>show(j); dots.appendChild(d); });
+  bar.hidden=!on||n<2; if(window.LadderNotices) LadderNotices.tick(); }
+function adv(a){ const cur=screens[k]&&screens[k][0]; const deck=cur&&cur.matches('.slides')&&!cur.classList.contains('sw-stub')?cur:null; const A=a||api(deck);
+  if(A&&A.i<deckN(A.container)-1){ A.show(A.i+1); return; }
+  if(k<screens.length-1) show(k+1); else if(window.LadderFV&&LadderFV.fwd) LadderFV.fwd(); }
+function ret(a){ const cur=screens[k]&&screens[k][0]; const deck=cur&&cur.matches('.slides')&&!cur.classList.contains('sw-stub')?cur:null; const A=a||api(deck);
+  if(A&&A.i>0){ A.show(A.i-1); return; }
+  if(k>0) show(k-1); else if(window.LadderFV&&LadderFV.back) LadderFV.back(); }
+/* the footing view tells us each time it paints a footing */
+window.LadderFV=window.LadderFV||{};
+LadderFV.onPaint=function(els,cur,info){ ui(); if(!PAGES.test(pg())||!info||!info.on){ on=false; document.body.classList.remove('sw'); clear(); bar.hidden=true; return; }
+  build(els); on=screens.length>0; document.body.classList.toggle('sw',on); if(!on){ bar.hidden=true; return; }
+  let want=0; const el=LadderFV.wantEl; LadderFV.wantEl=null;
+  if(el){ const i=screens.findIndex(s=>s.some(x=>x===el||x.contains(el))); if(i>=0) want=i; }
+  else if(LadderFV.dir<0) want=screens.length-1;
+  show(want,{keep:!!el}); };
+/* gestures */
+let tx=null, ty=null;
+const shut=t=>!!(t.closest&&t.closest('canvas,input,textarea,select,.mg,#desk,#lbar,.chq,#stick,.pic,.grapher,.gt,[contenteditable="true"]'));
+addEventListener('touchstart',e=>{ if(!on||e.touches.length!==1||shut(e.target)){ tx=null; return; } tx=e.touches[0].clientX; ty=e.touches[0].clientY; },{passive:true});
+addEventListener('touchend',e=>{ if(tx==null||!on) return; const t=e.changedTouches[0], dx=t.clientX-tx, dy=t.clientY-ty; tx=null;
+  if(Math.abs(dx)<60||Math.abs(dx)<1.4*Math.abs(dy)) return;
+  const a=api(deckOf(e.target)); const fwd=ADVANCE_ON_SWIPE_LEFT?dx<0:dx>0; if(fwd) adv(a); else ret(a); },{passive:true});
+document.addEventListener('keydown',e=>{ if(!on||e.defaultPrevented||e.altKey||e.ctrlKey||e.metaKey||e.shiftKey) return; if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft') return;
+  const t=e.target; if(t&&(t.isContentEditable||/INPUT|TEXTAREA|SELECT/.test(t.tagName))) return;
+  if(document.querySelector('#desk.open,#stick,#agreebox:not([hidden])')||document.body.classList.contains('stickopen')||document.body.classList.contains('cardsopen')||document.body.classList.contains('toolpage')) return;
+  e.preventDefault(); e.stopPropagation(); if(e.key==='ArrowRight') adv(null); else ret(null); },true);
+/* a collapsed screen opens for this visit when tapped */
+document.addEventListener('click',e=>{ if(!on) return; const s=e.target.closest&&e.target.closest('.sw-stub.sw-on'); if(!s||s.classList.contains('sw-open')||e.target.closest('a,button,input')) return; s.classList.add('sw-open'); });
+window.LadderSwipe={show,adv,ret,screens:()=>screens,at:()=>k,on:()=>on};
+})();
+
+/* ---- Phase G: unlock notices (Andrew 2026-11-09 16:26). One line when something new opens: a tool in the toolbox, an annex in the
+   catalogue, a question pool in the laundry, a star. At most one per screen; the rest wait in a queue kept in the marks and show on
+   later screens. The first time this version runs, what is already open is taken as read and announced to nobody. */
+(function(){
+'use strict';
+if(window.LADDER_DESK) return;
+const J=(k,d)=>{ try{ const v=JSON.parse(LS.getItem(k)||'null'); return v==null?d:v; }catch(e){ return d; } };
+const put=(k,v)=>{ try{ LS.setItem(k,JSON.stringify(v)); }catch(e){} };
+const QK='ladder:notices', SEEN='ladder:noticed', SNAP='ladder:unlocksnap';
+let shown=false, box=null, base=false;
+function queue(key,msg){ const seen=J(SEEN,{}); if(seen[key]) return; seen[key]=Date.now(); put(SEEN,seen); if(base) return; const q=J(QK,[]); q.push({k:key,m:msg,t:Date.now()}); put(QK,q); }
+function render(n){ if(box) box.remove(); box=document.createElement('div'); box.className='unlocknote'; box.setAttribute('role','status');
+  box.innerHTML='<span class="un-k">new</span><span class="un-m"></span><button type="button" class="un-x" aria-label="close">×</button>';
+  box.querySelector('.un-m').textContent=n.m; box.querySelector('.un-x').onclick=()=>{ box.classList.remove('on'); setTimeout(()=>box&&box.remove(),250); };
+  document.body.appendChild(box); requestAnimationFrame(()=>box.classList.add('on'));
+  clearTimeout(render.h); render.h=setTimeout(()=>{ if(box){ box.classList.remove('on'); setTimeout(()=>box&&box.remove(),300); } },8000); }
+function next(){ if(shown) return; if(document.querySelector('#stick,#agreebox:not([hidden]),#splash:not([hidden])')||document.body.classList.contains('cardsopen')) return;
+  const q=J(QK,[]); if(!q.length) return; const n=q.shift(); put(QK,q); shown=true; render(n); }
+/* what is open now */
+const once={}; function script(src,test){ if(test&&test()) return Promise.resolve(true); if(once[src]) return once[src];
+  return once[src]=new Promise(res=>{ const s=document.createElement('script'); s.src=src; s.onload=()=>res(true); s.onerror=()=>res(false); document.head.appendChild(s); }); }
+function high(){ const P=J('pages:done',{}); let h=-1; for(const k in P){ const m=k.match(/^open:r(\d+)$/); if(m&&P[k]&&P[k].v) h=Math.max(h,+m[1]); } return h; }
+async function scan(){ const U=window.LadderUnlock; if(!U) return;
+  await Promise.all([script('ladmap.js',()=>window.LADMAP),script('cardmap.js',()=>window.LADDER_CARDMAP),script('annexes.js',()=>window.LADDER_ANNEXES)]);
+  base=!J(SNAP,null);
+  const TOOLS=[['r00a','the measuring stick and the standing questions'],['r00b','the techniques, read in one place'],['r01e','the laundry and its question pools'],['r09e','the graph view, for reading and drawing graphs'],[U.firstAnnex(),'the annexes catalogue']];
+  TOOLS.forEach(([s,name])=>{ if(s&&U.reached(s)) queue('tool:'+s,'The toolbox has a new tool: '+name+'.'); });
+  const D=window.LADDER_ANNEXES; if(D){ const h=high(); D.order.forEach(k=>(D.subj[k]||[]).forEach(a=>{ if(a[3]<=h) queue('annex:'+a[0],'A new annex is open in the toolbox: '+a[1]+' ('+D.names[k]+').'); })); }
+  const CM=window.LADDER_CARDMAP||{}; Object.keys(CM).forEach(s=>{ const t=CM[s]&&CM[s][0]; if(t&&/^r\d\d[a-z]$/.test(s)&&U.reached(s)&&U.passed&&U.passed(s)) queue('pool:'+s,'The laundry has new questions: '+t+'’s pool.'); });
+  const b=document.querySelector('.lb-counts'); if(b){ const v={blue:+(b.querySelector('.lc-blue b')||{}).textContent||0,gold:+(b.querySelector('.lc-gold b')||{}).textContent||0,wings:+(b.querySelector('.lc-wing b')||{}).textContent||0}, old=J(SNAP,null)||{};
+    if(!base){ if(v.blue>(old.blue||0)) queue('blue:'+v.blue,'A blue star: a step with every footing question cleared.'); if(v.gold>(old.gold||0)) queue('gold:'+v.gold,'A gold star: a section measured.'); if(v.wings>(old.wings||0)) queue('wings:'+v.wings,'Angel wings: a rung with its blue star, its gold star and every standing question cleared.'); }
+    put(SNAP,Object.assign({t:Date.now()},v)); } else if(base) put(SNAP,{t:Date.now()});
+  base=false; next(); }
+window.LadderNotices={tick(){ shown=false; scan(); },queue,next};
+const go=()=>setTimeout(()=>scan(),1400);
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
 })();
