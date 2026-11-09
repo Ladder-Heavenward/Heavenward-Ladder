@@ -175,7 +175,7 @@ r \text{ meetings going on at } s @@ those r − 1, and M
       </div>
     </div>
   </section>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · meetings as stretches of time; going on; the busiest start; four at 10:15; room-count; the first-free-room rule; the technique; the search nobody runs; illegal moves · ← → keys work</div></section>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · meetings as stretches of time; going on; the busiest start; four at 10:15; room-count; the first-free-room rule; the technique; the search nobody runs; moves to check · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
@@ -185,19 +185,19 @@ r \text{ meetings going on at } s @@ those r − 1, and M
 </section>
 
 <section class="class step" data-step="7logi6">
-  <h2 class="sthead"><span class="stno">7logi6</span>Illegal Moves</h2>
+  <h2 class="sthead"><span class="stno">7logi6</span>Moves to Check</h2>
 
-  <pre class="lines" data-k="ember" data-wrong="1" data-label="this page: tempting, and not allowed">
-\begin{aligned}&8 \text{ meetings, } 3 \text{ rooms:}\\ &\quad\text{it cannot fit}\,?\end{aligned} @@ rooms are reused; count the meetings going on at one moment, not all day
-\begin{aligned}&A \text{ ends at } 10{:}30, \text{ so it is}\\ &\quad\text{going on at } 10{:}30\,?\end{aligned} @@ s ≤ t &lt; e: a meeting is not going on at its end
-\begin{aligned}&\text{check every minute of the}\\ &\quad\text{day for the most at once}\,?\end{aligned} @@ busiest-start: only the starts need checking
-\begin{aligned}&\text{the rule opened } 4 \text{ rooms, so}\\ &\quad\text{a cleverer schedule uses } 3\,?\end{aligned} @@ it opened room 4 only with 4 meetings going on: room-count forbids 3
-\begin{aligned}&\text{at most } 3 \text{ at each start, but}\\ &\quad 4 \text{ at some minute between}\,?\end{aligned} @@ busiest-start: the most at once is reached at a start
+  <pre class="lines" data-k="check" data-label="this page: moves to check">
+\begin{aligned}&8 \text{ meetings, } 3 \text{ rooms:}\\ &\quad\text{it cannot fit}\,?\end{aligned} @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; rooms are reused; count the meetings going on at one moment, not all day
+\begin{aligned}&A \text{ ends at } 10{:}30, \text{ so it is}\\ &\quad\text{going on at } 10{:}30\,?\end{aligned} @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; s ≤ t &lt; e: a meeting is not going on at its end
+\begin{aligned}&\text{check every minute of the}\\ &\quad\text{day for the most at once}\,?\end{aligned} @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; busiest-start: only the starts need checking
+\begin{aligned}&\text{the rule opened } 4 \text{ rooms, so}\\ &\quad\text{a cleverer schedule uses } 3\,?\end{aligned} @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it opened room 4 only with 4 meetings going on: room-count forbids 3
+\begin{aligned}&\text{at most } 3 \text{ at each start, but}\\ &\quad 4 \text{ at some minute between}\,?\end{aligned} @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; busiest-start: the most at once is reached at a start
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">7·logi.6.1</span><span class="ph understand">understand</span>Why is “at most 3 at each start, but 4 at some minute between” an illegal move?</li>
+      <li><span class="qid">7·logi.6.1</span><span class="ph understand">understand</span>Why is “at most 3 at each start, but 4 at some minute between” a move to check?</li>
     </ol>
   </section>
 </section>
@@ -222,7 +222,7 @@ r \text{ meetings going on at } s @@ those r − 1, and M
   <h3>Accepted names</h3>
   <p>A stretch of time from s up to, but not including, e is a <b>half-open interval</b>. The problem is <b>interval scheduling</b>, or <b>interval partitioning</b>. The most going on at once is the <b>depth</b> of the list. The graph that joins clashing meetings is an <b>interval graph</b>, and giving rooms is <b>colouring</b> it. The first-free-room rule is a <b>greedy algorithm</b>. That depth is enough says interval graphs are <b>perfect</b>. That every two clashing stretches all share a moment is the simplest case of <b>Helly's theorem</b> (Eduard Helly, 1913).</p>
   <h3>Wrong moves, worked</h3>
-  <pre class="lines" data-k="ember" data-label="7·logi: a worked “proof”, not allowed">
+  <pre class="lines" data-k="check" data-label="7·logi: a worked “proof”, not allowed">
 \text{at no start are more than } 3 \text{ going on} @@ fine: checked at each start
 \text{so give each meeting room } 1, 2 \text{ or } 3 \text{ by its place in the list, in turns} @@ a rule that ignores the times
 \text{so } 3 \text{ rooms hold them} @@ not allowed: a count is not a schedule; turns by list place can put two that clash in one room
@@ -300,8 +300,8 @@ stepper('#sl1',[
   {k:'ember',kl:'the first-free-room technique',t:R`\text{room } r \text{ opened at } s \Rightarrow r \text{ going on at } s`,n:`So the rule never opens more than w rooms.`},
   {k:'ember',kl:'exactly w',t:R`${Nw}{\text{rooms needed} = w}`,n:`Room-count gives at least w; the rule gives at most w.`},
   {k:'teal',kl:'the search nobody runs',t:R`3^{30} = 205\,891\,132\,094\,649`,n:`Every way to put 30 meetings in 3 rooms. Settled, by finite-search, and far too slow.`},
-  {k:'ember',kl:'illegal',t:R`8 \text{ meetings} \gt 3 \text{ rooms}\,?`,n:`Rooms are reused. Count the meetings going on at one moment, not all day.`}
-],{title:'The slides · meetings as stretches of time; going on; the busiest start; four at 10:15; room-count; the first-free-room rule; the technique; the search nobody runs; illegal moves · ← → keys work'});
+  {k:'plain',kl:'outside the plan',t:R`8 \text{ meetings} \gt 3 \text{ rooms}\,?`,n:`Rooms are reused. Count the meetings going on at one moment, not all day.`}
+],{title:'The slides · meetings as stretches of time; going on; the busiest start; four at 10:15; room-count; the first-free-room rule; the technique; the search nobody runs; moves to check · ← → keys work'});
 
 function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
 Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);

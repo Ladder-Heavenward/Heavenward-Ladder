@@ -189,7 +189,7 @@ p + 0 = 26 \cdot 0 + p,\ \ p \lt 26 @@ p is a letter
       </div>
     </div>
   </section>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · letters as numbers; past z; shifts-add; key-back; counting the keys; trying them all; the scrambled alphabet; illegal moves · ← → keys work</div></section>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · letters as numbers; past z; shifts-add; key-back; counting the keys; trying them all; the scrambled alphabet; moves to check · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
@@ -199,20 +199,20 @@ p + 0 = 26 \cdot 0 + p,\ \ p \lt 26 @@ p is a letter
 </section>
 
 <section class="class step" data-step="4crypt6">
-  <h2 class="sthead"><span class="stno">4crypt6</span>Illegal Moves</h2>
+  <h2 class="sthead"><span class="stno">4crypt6</span>Moves to Check</h2>
 
-  <pre class="lines" data-k="ember" data-wrong="1" data-label="this page: tempting, and not allowed">
-\text{shift}_3(\text{y}) = 27\,? @@ 27 is no letter: keep the remainder by 26, which is 1, so b
-\text{the key back from } 3 \text{ is } 3\,? @@ shifting by 3 again is shifting by 6 (shifts-add); the key back is 23
-\text{shift}_9(\text{shift}_5(p)) = \text{shift}_{45}(p)\,? @@ keys add, they do not multiply: shift by 14
-26 \text{ keys, so } 26 \text{ tries}\,? @@ key 0 changes nothing, and key 26 is key 0: 25 tries
-\text{shift}_{30} \text{ is a new key}\,? @@ only the remainder of the key by 26 matters: it is key 4
-\begin{aligned}&\text{so many keys that no one can}\\ &\quad\text{try them all, so the secret is safe}\,?\end{aligned} @@ a scrambled alphabet has 26! keys and falls to counting letters
+  <pre class="lines" data-k="check" data-label="this page: moves to check">
+\text{shift}_3(\text{y}) = 27\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; 27 is no letter: keep the remainder by 26, which is 1, so b
+\text{the key back from } 3 \text{ is } 3\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; shifting by 3 again is shifting by 6 (shifts-add); the key back is 23
+\text{shift}_9(\text{shift}_5(p)) = \text{shift}_{45}(p)\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; keys add, they do not multiply: shift by 14
+26 \text{ keys, so } 26 \text{ tries}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; key 0 changes nothing, and key 26 is key 0: 25 tries
+\text{shift}_{30} \text{ is a new key}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only the remainder of the key by 26 matters: it is key 4
+\begin{aligned}&\text{so many keys that no one can}\\ &\quad\text{try them all, so the secret is safe}\,?\end{aligned} @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; a scrambled alphabet has 26! keys and falls to counting letters
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">4·crypt.6.1</span><span class="ph understand">understand</span>Why is “shift_9(shift_5(p)) = shift_45(p)” an illegal move?</li>
+      <li><span class="qid">4·crypt.6.1</span><span class="ph understand">understand</span>Why is “shift_9(shift_5(p)) = shift_45(p)” a move to check?</li>
     </ol>
   </section>
 </section>
@@ -238,7 +238,7 @@ p + 0 = 26 \cdot 0 + p,\ \ p \lt 26 @@ p is a letter
   <h3>Accepted names</h3>
   <p>A shift is a <b>Caesar cipher</b>, and the shift by 13 is <b>ROT13</b>. The message is the <b>plaintext</b> and the secret text the <b>ciphertext</b>. Writing the secret is <b>encryption</b>, and reading it with the key is <b>decryption</b>. Trying every key is a <b>brute-force attack</b>, and the set of all keys is the <b>key space</b>. A scrambled alphabet is a <b>substitution cipher</b>, and breaking one by counting letters is <b>frequency analysis</b>. Taking remainders by 26 is arithmetic <b>modulo 26</b>. Kerckhoffs's rule is <b>Kerckhoffs's principle</b>, and its opposite is called <b>security through obscurity</b>.</p>
   <h3>Wrong moves, worked</h3>
-  <pre class="lines" data-k="ember" data-label="4·crypt: a worked “proof”, not allowed">
+  <pre class="lines" data-k="check" data-label="4·crypt: a worked “proof”, not allowed">
 \text{shift}_k \text{ and shift}_m \text{ are two locks} @@ fine
 \text{so shifting by both is twice as hard to break} @@ not allowed: shifts-add makes the two one shift, by the remainder of k + m
 \text{so } 25 \cdot 25 = 625 \text{ keys to try} @@ false: still 25
@@ -287,9 +287,9 @@ stepper('#sl1',[
   {k:'ember',kl:'trying them all',t:R`\text{shift}_{23}(\text{DUWLFKRNHV}) = ${Nw}{\text{artichokes}}`,n:`24 keys back read nonsense; one reads English. The key was 3.`},
   {k:'teal',kl:'the scrambled alphabet',t:R`26! = 403\,291\,461\,126\,605\,635\,584\,000\,000`,n:`Arrangements (4k). At a thousand million keys a second, about 12 800 million years.`},
   {k:'ember',kl:'counting letters',t:R`\text{e: about } 120 \text{ to } 130 \text{ in } 1000`,n:`A shift moves the pile of tallies along and keeps its shape.`},
-  {k:'ember',kl:'illegal',t:R`\text{shift}_9(\text{shift}_5(p)) \ne \text{shift}_{45}(p)`,n:`Keys add: shift by 14.`},
-  {k:'ember',kl:'illegal',t:R`\text{two shifts} \ne 625 \text{ keys}`,n:`Two shifts are one shift. Still 25 keys.`}
-],{title:'The slides · letters as numbers; past z; shifts-add; key-back; counting the keys; trying them all; the scrambled alphabet; illegal moves · ← → keys work'});
+  {k:'plain',kl:'outside the plan',t:R`\text{shift}_9(\text{shift}_5(p)) \ne \text{shift}_{45}(p)`,n:`Keys add: shift by 14.`},
+  {k:'plain',kl:'outside the plan',t:R`\text{two shifts} \ne 625 \text{ keys}`,n:`Two shifts are one shift. Still 25 keys.`}
+],{title:'The slides · letters as numbers; past z; shifts-add; key-back; counting the keys; trying them all; the scrambled alphabet; moves to check · ← → keys work'});
 function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
 Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
 })();
