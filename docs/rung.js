@@ -2067,9 +2067,10 @@ function catalogue(want){ data().then(D=>{ if(!D) return;
   const box=document.createElement('div'); box.id='stick'; box.setAttribute('role','dialog'); box.setAttribute('aria-label','the annexes'); document.body.appendChild(box); document.body.classList.add('stickopen');
   const h=high(), P=get('pages:done',{}), here=page();
   const sec=k=>{ const L=D.subj[k]||[]; if(!L.length) return ''; const open=L.filter(a=>isOpen(a,h)), nx=nextAt(L,h);
-    const sum=D.names[k]+' · '+(open.length?(open.length===L.length?'all '+L.length+' open':open.length+' open'):(nx?nx.replace('next annex','first annex'):''));
+    /* 2026-11-09 (Andrew 16:32): one wording for every subject, n of m open; the line takes its subject's tag colour from the index */
+    const sum=D.names[k]+' · '+(open.length?open.length+' of '+L.length+' open':(nx?nx.replace('next annex','first annex'):''));
     const show=want?k===want:(open.some(a=>a[0]===here));
-    return '<details class="sk-fl"'+(show?' open':'')+'><summary>'+esc(sum)+'</summary><ul class="sk-list">'
+    return '<details class="sk-fl k-'+esc(k)+'"'+(show?' open':'')+'><summary>'+esc(sum)+'</summary><ul class="sk-list">'
       +open.map(a=>'<li><a href="'+a[0]+'.html">'+esc(a[1])+'</a> <span class="sk-st">'+esc(a[2])+(P[a[0]]&&P[a[0]].v?' ✓':'')+'</span></li>').join('')
       +(nx?'<li class="sk-st">'+esc(open.length?nx:nx.replace('next annex','first annex'))+'</li>':'')+'</ul></details>'; };
   box.innerHTML='<div class="sk-card"><div class="sk-top"><span>the annexes</span><button type="button" class="sk-x" aria-label="close">×</button></div>'
