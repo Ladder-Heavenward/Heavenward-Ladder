@@ -63,12 +63,16 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <h2 class="sthead"><span class="stno">6stat1</span>A Sample Is a Pick</h2>
 
   <p data-pid="8819f0">Oregon has 36 counties. Say a state study can afford to test the well water in 4 of them. The whole set of 36 is the <b>population</b>, and the 4 tested are a <b>sample</b>. A sample of 4 is a part of the population with 4 members. So picking a sample is picking one member from one set: the set of all parts with 4 members.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{a sample of 4} \in \{X \subseteq \text{counties} : X \text{ has 4}\}\end{aligned}"></div>
   <pre class="lines" data-k="teal" data-label="from 4k: n choose k">
 \binom{36}{4} = \tfrac{36 \cdot 35 \cdot 34 \cdot 33}{4 \cdot 3 \cdot 2 \cdot 1} = \htmlClass{new}{58\,905} @@ choosing-counts-parts: the number of samples of 4
   </pre>
   <p data-pid="fd847b">That is one set with 58 905 members, so 6c's finite-choice picks from it with no axiom. Picking is never the problem. The problem is which pick. A rule that picks is easy to write. Take the first four in the alphabet: Baker, Benton, Clackamas and Clatsop. That is 6b's least-chooses, with the alphabet as the order. It names the same four every time, and nothing about the alphabet makes those four like the state.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;c(\text{all}) = \text{first four by alphabet} \quad\text{a rule}\end{aligned}"></div>
   <p class="eqline" data-pid="364fb0">From here on, on this page, a sample of k from a population of N members is <b>fair</b> when each of the parts with k members is equally likely to be the one picked.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{fair} \quad\text{﹀}\quad \text{each } k\text{-part equally likely}\end{aligned}"></div>
   <p data-pid="1fbd21">Write all 36 names on tickets, mix them in a drum, and draw 4 without putting any back. Every list of 4 different tickets in the order drawn is equally likely, and each part of 4 comes from 4 · 3 · 2 · 1 = 24 such lists. So each part is equally likely: a fair sample. A fair draw is a pick that looks at nothing about the members. In 6b's words, it treats them as socks.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;4 \cdot 3 \cdot 2 \cdot 1 = 24 \text{ lists per part} \quad\text{so fair}\end{aligned}"></div>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
@@ -81,6 +85,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <h2 class="sthead"><span class="stno">6stat2</span>Each Member's Chance</h2>
 
   <p data-pid="ac9689">In a fair sample of 4 counties, what is Lane County's chance of being in? Count the parts with Lane in them, and divide by all the parts. Fair-share technique: <b>in a fair sample of k from N, each member's chance of being in is k/N.</b> The proof counts one set of pairs in two ways.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;P(x \text{ in}) = \tfrac{k}{N}\end{aligned}"></div>
   <pre class="lines" data-k="ember" data-label="this page: the fair-share technique">
 \text{parts holding } x:\ \binom{N-1}{k-1} @@ x is in; pick the other k − 1 from the N − 1 others (choosing-counts-parts)
 \text{pairs (a part, one of its members)}:\ \binom{N}{k} \cdot k @@ stages-multiply: the part, then one of its k members
@@ -89,6 +94,7 @@ P(x \text{ is in}) = \binom{N-1}{k-1} \Big/ \binom{N}{k} @@ chance as a fraction
 \htmlClass{new}{P(x \text{ is in}) = \tfrac{k}{N}} \quad \blacksquare @@ the two counts are the same, so the bottom is N/k times the top (5c)
   </pre>
   <p data-pid="36cbf6">For Lane, 6545 of the 58 905 samples hold it, and 6545/58 905 = 4/36 = 1/9. Every county gets the same 1/9. The coast and the high desert are treated alike.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\tfrac{6545}{58\,905} = \tfrac{4}{36} = \tfrac{1}{9} \quad\text{every county}\end{aligned}"></div>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
@@ -101,6 +107,7 @@ P(x \text{ is in}) = \binom{N-1}{k-1} \Big/ \binom{N}{k} @@ chance as a fraction
   <h2 class="sthead"><span class="stno">6stat3</span>Right on Average</h2>
 
   <p data-pid="b5822a">Seven of Oregon's counties touch the Pacific: Clatsop, Tillamook, Lincoln, Lane, Douglas, Coos and Curry. The share on the coast is 7/36. How many coastal counties does a fair sample of 4 hold? It varies from sample to sample, so ask for the expected value, 5·stat's average over the equally likely cases. Fair-sample technique: <b>if m of the N members have a property, a fair sample of k holds k · m/N of them on average, so its share is m/N on average.</b></p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\mathrm{E}(\text{with the property}) = k \cdot \tfrac{m}{N}\end{aligned}"></div>
   <pre class="lines" data-k="ember" data-label="this page: the fair-sample technique">
 X = X_1 + X_2 + \cdots + X_m @@ X counts the members with the property in the sample; X_i is 1 when the ith of them is in, 0 when not
 E\, X_i = 1 \cdot \tfrac{k}{N} + 0 = \tfrac{k}{N} @@ fair-share; a payout of 1 with chance k/N
@@ -108,15 +115,18 @@ E\, X = m \cdot \tfrac{k}{N} @@ expected-values-add, m times
 \htmlClass{new}{E\, \tfrac{X}{k} = \tfrac{m}{N}} \quad \blacksquare @@ shift-and-stretch, with r = 1/k and b = 0
   </pre>
   <p data-pid="c826d1">For the counties, a fair sample of 4 holds 4 · 7/36 = 7/9 coastal counties on average, and its share is 7/36 on average: the state's own share. No sample holds 7/9 of a county. The average is a fact about all 58 905 samples together, not about any one of them.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;4 \cdot \tfrac{7}{36} = \tfrac{7}{9} \quad\text{on average}\end{aligned}"></div>
 
   <aside class="nature">
     <div class="eyebrow">Anexact, yet rigorous · counting</div>
     <p data-pid="727c70">Right on average is not right every time. Count the samples of 4 by how many coastal counties they hold. A sample with j of them picks j of the 7 coastal and 4 − j of the 29 inland, so stages-multiply gives the count.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\binom{7}{j}\binom{29}{4 - j} \quad j \text{ coastal}\end{aligned}"></div>
     <div class="tablewrap"><table class="tt">
       <tr><th>coastal in the sample</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th></tr>
       <tr><th>samples</th><td>23 751</td><td>25 578</td><td>8526</td><td>1015</td><td>35</td></tr>
     </table></div>
     <p data-pid="9daf6c">They add to 58 905. Four samples in ten hold no coastal county at all, and 35 hold nothing else. A study that drew one of those would have a fair sample and a strange answer. Fair does not mean typical. It means you know the shape of the pile you drew from.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\tfrac{23\,751}{58\,905} \approx 0.40 \quad\text{none coastal}\end{aligned}"></div>
     <p data-pid="36c682"><b>The spread is part of the answer, not noise around it.</b></p>
     <p data-pid="483ac3">Bigger samples pile closer to the middle. That is why a sample of a thousand voters can speak for a state, and a sample of 4 counties cannot speak for much.</p>
     <p class="bait" data-pid="e6b4ad">Draw 18 of the 36 counties fairly. How many coastal counties should you expect, and how likely is a sample with none?</p>
@@ -141,6 +151,7 @@ E\, X = m \cdot \tfrac{k}{N} @@ expected-values-add, m times
 \htmlClass{new}{\tfrac{200}{260} = \tfrac{10}{13} \approx 77\%} @@ the poll's share in favour, against 40% in the town
   </pre>
   <p data-pid="984701">The expected counts are in the ratio of chance times number. When every member's chance is the same, that ratio is the town's own ratio, which is the fair-sample technique again. When the chance depends on the answer, the ratio tilts. <b>When the chance of being picked depends on the answer, the sample leans toward the answer that is easier to pick.</b> No amount of size fixes it: a million such answers lean exactly as far as 260.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{expected counts} \propto \text{chance} \times \text{number}\\ &amp;\text{chance equal} \Rightarrow \text{the town\textquoteright s ratio}\end{aligned}"></div>
   <p data-pid="b0ea71">In 1936 an American magazine mailed about 10 million ballots before the presidential election. Its names came largely from telephone books, car registrations and its own subscribers, which in 1936 meant the better-off. About 2.4 million came back, from those who cared to answer. It forecast that the loser would win, with about 57 percent. The winner took about 61 percent of the vote. A much smaller poll, built to be fair, called it right.</p>
   <section class="sayback">
     <h3>Question</h3>

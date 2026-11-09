@@ -61,8 +61,11 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 
   <p data-pid="7bd94f">A cave has one mouth. A little way in, the passage splits in two, a left passage and a right passage. Deep inside, the two passages join again, but where they join stands a locked door. The door opens only to someone who says the secret word. So from the left passage you can reach the right one only through the door.</p>
   <p data-pid="3cd44d">The <b>prover</b> says she knows the word. The <b>checker</b> wants to be convinced, and she will not say the word. So they play rounds. In each round the checker waits outside, where he cannot see the fork. The prover walks in and takes the left passage or the right one. Then the checker walks to the fork, tosses a fair coin, and calls out a side: left or right. The prover must come out of the side he calls.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{coin: left or right, each } \tfrac12\end{aligned}"></div>
   <p data-pid="35e766">If she knows the word, she can always do it. If she is in the called passage, she walks back out. If not, she opens the door and comes out the other side. If she does not know the word, she is stuck in the passage she chose. She comes out the called side only when she happened to choose it.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{knows: passes every round}\\ &amp;\text{cheat: passes iff side} = \text{call}\end{aligned}"></div>
   <p class="eqline" data-pid="ec661d">From here on, on this page, a <b>cheat</b> is a prover who does not know the word, and a round is <b>passed</b> when the prover comes out of the side called.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{cheat} \quad\text{﹀}\quad \text{does not know the word}\\ &amp;\text{passed} \quad\text{﹀}\quad \text{out the side called}\end{aligned}"></div>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
@@ -75,6 +78,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <h2 class="sthead"><span class="stno">7crypt2</span>One Round, Then Many</h2>
 
   <p data-pid="72e8c6">In one round, the coin has two equally likely calls. A cheat's side is fixed before the call, and exactly one of the two calls matches it. So a cheat passes one round with chance 1/2, by 5·stat's chance as a fraction. Half the time is no proof of anything. So they play again.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;P(\text{cheat passes one round}) = \tfrac12\end{aligned}"></div>
   <p data-pid="1bb680">Cheat's-chance technique: <b>a cheat passes n rounds in a row with chance 1/2ⁿ, however she plays.</b> She may choose each side by any plan, and her plan may use the calls she has heard so far. The proof counts lists of calls.</p>
   <pre class="lines" data-k="ember" data-label="this page: the cheat's-chance technique">
 2^n \text{ lists of calls, equally likely} @@ counted-functions (4k): a call for each of n rounds, from {left, right}; the coin is fair
@@ -85,7 +89,9 @@ n = 0:\ \text{one list, the empty one, and it passes} @@ induction on n (4c)
 \htmlClass{new}{1 \text{ list of } 2^n:\ P(\text{pass}) = \tfrac{1}{2^n}} \quad \blacksquare @@ chance as a fraction
   </pre>
   <p data-pid="19cbbb">A cheat who tosses a coin of her own to choose her sides does no better. For each way her own coin falls, she passes exactly one list in 2ⁿ, so her chance is 1/2ⁿ whatever her coin does. Ten rounds bring a cheat's chance down to 1/1024. Twenty bring it to 1/1 048 576, about one in a million. Each round halves it.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;P(\text{cheat passes } 10) = \tfrac{1}{1024}\\ &amp;P(\text{cheat passes } 20) = \tfrac{1}{1\,048\,576}\end{aligned}"></div>
   <p data-pid="cb8616">One failed round settles the matter the other way. A prover who knows the word passes every round. So a prover who fails a round does not know it, by 4e's refutation: suppose she knows; then she passes; she failed; a collision. <b>One failure refutes the claim; no run of passes proves it outright.</b></p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{knows} \Rightarrow \text{passes every round}\\ &amp;\text{failed one, so } \neg\text{knows}\end{aligned}"></div>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
@@ -105,12 +111,15 @@ n = 0:\ \text{one list, the empty one, and it passes} @@ induction on n (4c)
 \htmlClass{new}{\text{she passed } 20:\ \text{she knows, or a } \tfrac{1}{1\,048\,576} \text{ chance came off}} @@ reasoning by cases: the two cases, with what each allows
   </pre>
   <p data-pid="d35282">That is the verdict. It is not “she knows”. It is an or, and one side of the or has a chance attached that the checker chose himself. He can make it as small as he likes by playing more rounds.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{she knows} \lor \text{luck of } \tfrac{1}{2^n}\end{aligned}"></div>
 
   <aside class="nature">
     <div class="eyebrow">Anexact, yet rigorous · laws with a known exception rate</div>
     <p data-pid="d220e0">The checker's verdict is a rule he lives by: after 20 passed rounds, treat her as knowing the word. It is not certain. It can be wrong, and the page knows exactly how often and which way. It passes a cheat with chance 1/1 048 576. It never fails a prover who knows. The error runs in one direction only.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;P(\text{cheat passes } 20) = \tfrac{1}{2^{20}}\\ &amp;P(\text{knower fails}) = 0\end{aligned}"></div>
     <p data-pid="7662e9"><b>State the rule, its range, and the direction it fails past the edge.</b></p>
     <p data-pid="db9e30">The range is part of the rule. The 1/2ⁿ holds only in a cave where the door is the one way between the passages, and only when the calls are fair tosses made after she has chosen. A checker who always calls left, or who calls the side she did not come out of last time, can be read, and a cheat who reads him passes every round. A second, hidden tunnel does the same. Past the edge, the rule fails toward letting cheats through.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\tfrac{1}{2^n} \text{ only if: one door, fair coin,}\\ &amp;\qquad \text{call after her choice}\end{aligned}"></div>
     <p class="bait" data-pid="eb7219">A thief tries the cave a million times, once with each of a million stolen claims, and the checker plays 20 rounds each time. How many of the million would you expect to get through?</p>
   </aside>
   <section class="sayback">
@@ -134,6 +143,7 @@ P(\text{left} \mid \text{kept}) = \tfrac{1/4}{1/2} = \tfrac12 @@ of the 4 equall
 \htmlClass{new}{\text{every list of } n \text{ calls: } \tfrac{1}{2^n} \text{ in both, each met}} \quad \blacksquare @@ chance-product, round by round
   </pre>
   <p data-pid="b2f90c">So the record carries nothing that needs the word. Whatever the checker could work out from it, he could have worked out from a film he made himself. <b>A proof can convince the one who checks it and tell him nothing else.</b></p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{same chances} \Rightarrow \text{nothing learned}\end{aligned}"></div>
   <p data-pid="5c1fbe">It has an odd side effect. Show the film to a friend in Salem, and the friend shrugs. The film could have been cut, and it would look exactly the same. What convinced the checker was not the record. It was that he tossed the coins himself, live, after she had gone in. The proof lives in the doing, and does not travel.</p>
   <section class="sayback">
     <h3>Question</h3>
@@ -147,6 +157,7 @@ P(\text{left} \mid \text{kept}) = \tfrac{1/4}{1/2} = \tfrac12 @@ of the 4 equall
   <h2 class="sthead"><span class="stno">7crypt5</span>Cards, and Keys</h2>
 
   <p data-pid="024821">The cave is a story, but the shape is everywhere. A friend cannot tell red from green, and holds two cards that look the same to him. You say one is red and one is green. He shows you a card, hides both behind his back, tosses a coin, and swaps the cards or not. Then he shows you a card again, and you say whether he swapped. If the cards were really alike to you too, you would be guessing, and you would be right with chance 1/2. After 15 rounds of being right, the chance of guessing your way through is 1/32 768. He is convinced the cards differ, and he still has no idea which one is red.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;P(\text{guessing right } 15) = \tfrac{1}{32\,768}\end{aligned}"></div>
   <p data-pid="88ca43">Computers use the same idea to show they hold a secret key without sending it. A login of this kind never puts the password on the wire. Since 2016 the digital currency Zcash has used proofs of this family to show that a payment is valid without showing who paid whom, or how much. 4·crypt's shift was beaten by trying all 25 keys. Here there is nothing to try: the checker never sees a single letter of the secret.</p>
   <section class="pic" id="pic">
     <div class="eyebrow">The picture · left: the cave, round by round · right: a real film and a cut one</div>
