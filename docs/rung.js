@@ -455,7 +455,7 @@ function marks(){
   const MV=({r38phys:[['c:38·phys.9.','c:38·phys.16.']],r43cb19:[['c:43·cb19.6.','c:43·cb19.8.']]})[PAGE]||[], moved=new Set();
   const relabel=()=>{ let ch=false; if(OLD) Object.keys(st).forEach(k=>{ if(k.startsWith('q:'+OLD+'.')){ const nk='q:'+NEW+k.slice(2+OLD.length); if(!(nk in st)){ st[nk]=st[k]; moved.add(nk); ch=true; } } });
     MV.forEach(([f,t])=>Object.keys(st).forEach(k=>{ if(k.startsWith(f)){ const nk=t+k.slice(f.length); if(!(nk in st)){ st[nk]=st[k]; moved.add(nk); ch=true; } } }));
-    if(mvx()) ch=true; return ch; };
+    if(mvx()) ch=true; if(mv2()) ch=true; return ch; };
   /* 0.3.80 Phase B: on the 84 converted annex pages the page carries LADDER_MVX {old q: id: new id}. Every old q: tick moves to its
      new id or, when its question was retired, is set false (its id may now name a new understand question). The changed ids get a
      fresh time so sync keeps them over the older remote copy. The first run sets the flag mv:B; later runs (after sync) only touch q: ticks older than the flag, i.e. stale copies from another device. */
@@ -466,6 +466,16 @@ function marks(){
       if(nk&&!st[nk]){ st[nk]=true; ids.push(nk); moved.add(nk); }
       st[k]=false; ids.push(k); moved.add(k); });
     if(!done){ st['mv:B']=true; ids.push('mv:B'); moved.add('mv:B'); }
+    if(ids.length){ ids.forEach(i=>T[i]=t0); try{ LS.setItem(KEY+':t',JSON.stringify(T)); }catch(e){} }
+    return ids.length>0; }
+  /* 0.3.83: LADDER_MV2 {f: flag, m: {old q: id: new q: id}} moves only the mapped ticks and keeps every other tick. Old ids are taken
+     from the highest down, so a chain (3f19 -> 3f20, 3f20 -> 3f21) does not cascade. Same flag and time rule as mvx. */
+  function mv2(){ const X=window.LADDER_MV2; if(!X||!X.m) return false; const t0=Date.now(), ids=[];
+    let T={}; try{ T=JSON.parse(LS.getItem(KEY+':t')||'{}')||{}; }catch(e){}
+    const done=!!st[X.f], ft=+T[X.f]||0;
+    Object.keys(X.m).sort((a,b)=>b.localeCompare(a,undefined,{numeric:true})).forEach(k=>{ if(!st[k]) return; if(done&&(+T[k]||0)>=ft) return;
+      const nk=X.m[k]; st[nk]=true; st[k]=false; ids.push(nk,k); moved.add(nk); moved.add(k); });
+    if(!done){ st[X.f]=true; ids.push(X.f); moved.add(X.f); }
     if(ids.length){ ids.forEach(i=>T[i]=t0); try{ LS.setItem(KEY+':t',JSON.stringify(T)); }catch(e){} }
     return ids.length>0; }
   if(OLD&&!Object.keys(st).length){ try{ const old=JSON.parse(LS.getItem('marks:'+(document.title||'').replace(new RegExp('^'+NEW+'\\b'),OLD))||'{}'); Object.assign(st,old); }catch(e){} }
@@ -490,7 +500,7 @@ function marks(){
     if(it.id.startsWith('q:')) holdMenu(it.el,()=>{ if(window.__qMenu) window.__qMenu(it.el,()=>tick(),it.on()); }); });
   document.querySelectorAll('.qid.auto').forEach(el=>el.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation(); if(window.__qMenu) window.__qMenu(el,null,false); }));
   progress(); gateLadder(true);
-  const go=()=>{ if(window.MarksSync){ const r=MarksSync.init(KEY,st,items); const after=()=>{ if(relabel()){ try{ LS.setItem(KEY,JSON.stringify(st)); }catch(e){} items.forEach(it=>{ if(it.id in st){ it.set(!!st[it.id]); if(moved.has(it.id)) MarksSync.push(KEY,st,it.id); } }); ['mv:B'].concat(Object.keys(window.LADDER_MVX||{})).forEach(id=>{ if(moved.has(id)) MarksSync.push(KEY,st,id); }); } progress(); gateLadder(); }; if(r&&r.then) r.then(after,after); else after(); } };
+  const go=()=>{ if(window.MarksSync){ const r=MarksSync.init(KEY,st,items); const after=()=>{ if(relabel()){ try{ LS.setItem(KEY,JSON.stringify(st)); }catch(e){} items.forEach(it=>{ if(it.id in st){ it.set(!!st[it.id]); if(moved.has(it.id)) MarksSync.push(KEY,st,it.id); } }); ['mv:B',(window.LADDER_MV2||{}).f].concat(Object.keys(window.LADDER_MVX||{}),Object.keys((window.LADDER_MV2||{}).m||{})).forEach(id=>{ if(moved.has(id)) MarksSync.push(KEY,st,id); }); } progress(); gateLadder(); }; if(r&&r.then) r.then(after,after); else after(); } };
   if(window.MarksSync) go(); else { const s=document.createElement('script'); s.src='sync.js'; s.onload=go; document.head.appendChild(s); }
   /* pull again whenever the page comes back into view, so a ✓ made on another device shows up without a reload */
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden) go(); });

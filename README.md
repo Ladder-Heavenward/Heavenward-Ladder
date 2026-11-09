@@ -1,6 +1,6 @@
 # The Ladder
 
-**Version 0.3.82**
+**Version 0.3.83**
 
 A climb through mathematics, one step at a time, from the first argument to the edge of research.
 
