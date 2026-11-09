@@ -66,6 +66,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <div class="lp">start: x is 0
 while x ≠ 4: x becomes S(x)</div>
   <p data-pid="1fb736">The machine checks 0 ≠ 4: true, so x becomes 1. Then 1 ≠ 4, and x becomes 2. Then 2, then 3, then 4. Now the test 4 ≠ 4 is false, and the loop stops at 4. Each value it passed through is a name of 3c5, made by S from the one before.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;0 \ne 4\text{: } x \text{ becomes } 1;\ 1 \ne 4\text{: } 2\\ &amp;\ldots;\ 4 \ne 4 \text{ false: stop at } 4\end{aligned}"></div>
   <p data-pid="46dc8a"><b>A loop does its body again and again, checking its test before each pass, and stops the first time the test is false.</b> A loop that stops is one whose test, sooner or later, comes out false.</p>
   <section class="slides" id="sl1"><div class="eyebrow">The slides · a loop · ← → keys work</div></section>
   <section class="sayback">
@@ -82,6 +83,7 @@ while x ≠ 4: x becomes S(x)</div>
   <div class="lp">start: x is 1
 while x ≠ ∅: x becomes S(x)</div>
   <p data-pid="8a2a5f">Before the first pass, x is 1, which has 0 as a member. So 1 ≠ ∅, and the test is true. Before any later pass, x has just been made by the body. Let y be the value the body was given. Then x is S(y), and the next-never-empty technique says S(y) ≠ ∅. Nothing was supposed about y, so this is true before every later pass.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;x = 1 \ne \varnothing \quad\text{first pass}\\ &amp;x = S(y) \ne \varnothing \quad\text{next-never-empty}\end{aligned}"></div>
   <p data-pid="ccb0fe">So the test is true before every pass, and the loop never stops. That is a proof about every pass the loop will ever make. No one watched them. <b>A loop whose body always makes a next one, with the test “not yet empty”, never stops.</b></p>
   <p data-pid="790712">It never comes back to a value it had, either. 3c10 found that the names 0 to 4 and S(4) differ, each from each, and 3c’s run never lands where it has been. That every value is new, however far the loop runs, is held in trust here; rung 4 proves that different sets have different next ones.</p>
   <p data-pid="cac1b9">A test can also miss. Start the first loop from {1} instead of 0. Each pass makes a next one of a set outside the run, and 3c13 found that it stays outside. So x is never 4, the test never fails, and the loop that stopped from 0 runs forever from {1}.</p>
@@ -102,6 +104,7 @@ while x is a colour of the signal:
   x becomes the colour after x
 (after green comes yellow, after yellow red, after red green)</div>
   <p data-pid="54e2b3">The run is green, yellow, red, green, and there it is back where it started. The test looks only at x, and the body looks only at x. So from green, the loop does exactly what it did the last time it was at green. It makes yellow, then red, then green, again and again.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{green} \to \text{yellow} \to \text{red} \to \text{green}\end{aligned}"></div>
   <p data-pid="c12544">Back-again technique: <b>a loop whose test and body look only at x, and that comes back to a value it had, runs forever.</b> Here is why. When the loop was at that value before, it went on, so the test was true there. Now it is at the same value, so the test is true again, and the body makes the same next value. From there it repeats what it did, and comes back again.</p>
   <p data-pid="42c895">So there are two ways to run forever. The signal comes back, round and round. The next-one loop of 3·comp2 goes on and never comes back. A loop that comes back is easy to catch: keep a list of the values it has had, and stop when one turns up again. A loop that never comes back makes a new value on every pass, and the list never helps.</p>
   <section class="slides" id="sl3"><div class="eyebrow">The slides · back again · ← → keys work</div></section>
@@ -120,8 +123,10 @@ while x is a colour of the signal:
 while u ≠ ∅: pick a member c of u;
   u becomes u ∖ {c}</div>
   <p data-pid="cd4eb2">Each pass takes a member out and puts nothing back. The new u is a sift of the old one, so it is part of the old one (2e8). Take u = {van, truck, bike}. The passes might give {truck, bike}, then {bike}, then ∅, and the loop stops. Every order of picking empties it.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;u = \{\text{van},\text{truck},\text{bike}\}\\ &amp;\{\text{truck},\text{bike}\},\ \{\text{bike}\},\ \varnothing \quad\text{stop}\end{aligned}"></div>
   <p data-pid="cf2600">Shrinking-work technique, held in trust: <b>a loop that takes a member out of a set you can write down, on each pass, and puts nothing back, empties the set and stops.</b> For any one set you write down, you can write out the passes and watch it empty. That it works for every such set at once is a claim about how many members a set has, and rung 4 builds that.</p>
   <p data-pid="a0a908">3c11’s merging back is a shrinking loop too. Start x at 4, and while x ≠ 0, let x become ⋃x. The run is 4, 3, 2, 1, 0, and it stops.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;4,\ \textstyle\bigcup 4 = 3,\ 2,\ 1,\ 0 \quad\text{stop}\end{aligned}"></div>
   <p data-pid="ad46c3">Now take away the words “you can write down”. Let I be an inductive set, which the axiom of 3d gives. Run the deck loop on I, taking out 0, then 1, then 2, and on. Each pass takes a member out, and I still never empties. The next one after the member taken out last is in I, by the step part of inductive. It was never taken out, since every member taken out so far came before it; that last fact is held in trust until rung 4. Shrinking is enough for a set you can finish writing. It is not enough for an endless one.</p>
   <section class="slides" id="sl4"><div class="eyebrow">The slides · shrinking work · ← → keys work</div></section>
   <section class="pic" id="pic">
@@ -145,6 +150,7 @@ while u ≠ ∅: pick a member c of u;
   <h2 class="sthead"><span class="stno">3comp5</span>Why Nobody Can Always Tell</h2>
   <p data-pid="ff7745">The page has settled three loops by argument: one never stops, one comes back, one shrinks and stops. Could a program do this work for us? Picture a checker, a program that reads any program and answers “stops” or “runs forever”, and is always right.</p>
   <p data-pid="f2ad0b">Here is a sketch of why there can be none, held in trust. Build a program that reads its own text, asks the checker about itself, and does the opposite. If the checker says “stops”, it runs a loop that never stops. If the checker says “runs forever”, it stops at once. Suppose the checker says “stops”: then the program runs forever, and the checker was wrong. Suppose it says “runs forever”: then the program stops, and the checker was wrong again. Both cases clash with “always right”, so refute: no such checker.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\qquad\text{suppose the checker says stops}\\ &amp;\qquad\text{the program runs forever: } \bot\\ &amp;\qquad\text{says runs forever: it stops: } \bot\\ &amp;\text{no checker} \quad\text{refute}\end{aligned}"></div>
   <p data-pid="b19781">That is the shape of 2e4’s catalogue and 2e14’s outsider set: a thing asked about itself, made to do the opposite. The full argument needs programs as objects that programs can read, and it is much higher up the ladder. <b>No checker can read every program and always tell, rightly, whether it stops.</b> Each loop on this page was settled by an argument made for that loop, and no single method makes them all.</p>
   <aside class="nature">
     <div class="eyebrow">Anexact, yet rigorous · the universe, gathering</div>
