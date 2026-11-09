@@ -63,7 +63,7 @@
  {"q":"Which regions does (d ∖ b) ∪ (b ∖ d) shade?","a":"d and b, without their overlap","w":["only the overlap","all of d and b","outside both"],"why":"In one and not the other."},
  {"q":"(d ∩ b) ∪ ((d ∩ b) ∩ c) rewritten d ∩ b. Which technique?","a":"absorb","w":["say-it-again","units","spread and over or"],"why":"d ∩ b swallows a part of itself."},
  {"q":"b ∪ ∅ rewritten b. Which technique?","a":"units","w":["absorb","say-it-again","the empty-part technique"],"why":"The empty set is the unit of ∪."},
- {"q":"A step of a working needs x ∈ b ∨ x ∉ b. What kind of step is it?","a":"settled-only","w":["licensed for any sets","vacuous","a sift"],"why":"It is the either-way principle, for listed sets only."},
+ {"q":"A step of a working needs x ∈ b ∨ x ∉ b. What kind of step is it?","a":"settled-only","w":["licensed for any sets","an empty truth","a sift"],"why":"It is the either-way principle, for listed sets only."},
  {"q":"A relation on {ant, ape} drawn as a grid, every diagonal cell filled. Which property shows?","a":"reflexive","w":["symmetric","transitive","an equivalence relation"],"why":"Each thing related to itself."},
  {"q":"On the grid, each filled cell has its turned-about cell filled. Which property?","a":"symmetric","w":["reflexive","transitive","an equivalence relation"],"why":"x r y gives y r x."},
  {"q":"{the capital of y : y ∈ s}. What is it?","a":"the things the form makes, for y running through s","w":["the set s itself","a sift of s by “is a capital”","the pairs (y, capital) from s"],"why":"A form before the colon, and after it the set the placeholder runs through."},

@@ -71,7 +71,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <p class="eqline" data-pid="ca0949">From here on, for a partial order ≼ on W, these four words mean the lines below, in order. A part C of W is a <b>chain</b> when any two of its members compare. u is an <b>upper bound</b> of a part C when it is in W and above every member of C. m is a <b>maximal member</b> of W when nothing in W is above m but m itself. And m is a <b>least member</b> of a part X when it is in X and below every member of X.</p>
   <div class="eqline" data-tex="\begin{aligned} &amp;\text{chain:}\\ &amp;\quad\forall x \in C\,\forall y \in C\,(x \preccurlyeq y \lor y \preccurlyeq x)\\ &amp;\text{upper bound:}\\ &amp;\quad u \in W \land \forall x \in C\,(x \preccurlyeq u)\\ &amp;\text{maximal:}\\ &amp;\quad m \in W \land \forall x \in W\,(m \preccurlyeq x \Rightarrow x = m)\\ &amp;\text{least:}\\ &amp;\quad m \in X \land \forall x \in X\,(m \preccurlyeq x) \end{aligned}"></div>
   <p class="eqline" data-pid="1d1383">This chain is a set. 4d's chain of samenesses, a = b = c, and 4i's chain of order, 1 ≤ i ≤ k, are pieces of writing and keep their meanings.</p>
-  <p data-pid="b0c3e4">Under ∣, {1, 2, 4, 8} is a chain and {2, 3} is not, and 24 is an upper bound of {2, 3, 4}. In {1, 2, 3, 4, 6}, both 4 and 6 are maximal. Nothing in the set is a multiple of either but itself, and neither is above everything. <b>That is the difference between maximal and greatest: a maximal member has nothing above it, a greatest member is above everything.</b> Under ⊆ on {∅, {cat}, {dog}}, {cat} and {dog} are both maximal and nothing is greatest. ∅ is a chain under any order, vacuously, and every member of the set is an upper bound of it. The least-member line agrees with 4h's when ≼ is ≤. And there is never more than one. One-least-member technique: <b>if m and m′ are least members of X, then m = m′</b>: each is below the other, since each is in X; antisymmetric. ∎</p>
+  <p data-pid="b0c3e4">Under ∣, {1, 2, 4, 8} is a chain and {2, 3} is not, and 24 is an upper bound of {2, 3, 4}. In {1, 2, 3, 4, 6}, both 4 and 6 are maximal. Nothing in the set is a multiple of either but itself, and neither is above everything. <b>That is the difference between maximal and greatest: a maximal member has nothing above it, a greatest member is above everything.</b> Under ⊆ on {∅, {cat}, {dog}}, {cat} and {dog} are both maximal and nothing is greatest. ∅ is a chain under any order, as an empty truth, and every member of the set is an upper bound of it. The least-member line agrees with 4h's when ≼ is ≤. And there is never more than one. One-least-member technique: <b>if m and m′ are least members of X, then m = m′</b>: each is below the other, since each is in X; antisymmetric. ∎</p>
   <section class="slides" id="sl2"><div class="eyebrow">The slides · chains and maximal members · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
@@ -392,7 +392,7 @@ function drawZ(){
   c.textAlign='left';
   const L=[]; const sel=Csel.map(i=>F[i]);
   const pT=p=>{ const pr=p.map((v,k)=>v===null?null:`(${STN[k]},\\ \\text{${NAMES[k][SETS[k].indexOf(v)]}})`).filter(Boolean); return pr.length?`\\{${pr.join(',\\ ')}\\}`:'\\varnothing'; };
-  if(!sel.length){ L.push(`\\mathcal C = \\varnothing:\\ \\text{a chain, vacuously}`); L.push(`\\text{upper bound: } \\textstyle\\bigcup\\varnothing = \\varnothing \\in \\mathcal F`); }
+  if(!sel.length){ L.push(`\\mathcal C = \\varnothing:\\ \\text{a chain, an empty truth}`); L.push(`\\text{upper bound: } \\textstyle\\bigcup\\varnothing = \\varnothing \\in \\mathcal F`); }
   else { let bad=null; for(let a=0;a<sel.length&&!bad;a++) for(let b=a+1;b<sel.length;b++) if(!sub(sel[a],sel[b])&&!sub(sel[b],sel[a])){ bad=[sel[a],sel[b]]; break; }
     if(bad){ L.push(`\\htmlClass{new}{\\text{not a chain: ${lab(bad[0])} and ${lab(bad[1])}}}`); L.push(`\\text{do not compare}`);
       const u=[0,1,2].map(k=>{ const vs=[...new Set(sel.map(p=>p[k]).filter(v=>v!==null))]; return vs; }); const clash=u.some(v=>v.length>1);
@@ -418,7 +418,7 @@ stepper('#sl1',[
   {k:'ember',kl:'partial order',t:R`\text{reflexive} \land \text{antisymmetric} \land \text{transitive}:\ \ x \preccurlyeq y`,n:`Read “x is below y”. Some pairs may not compare: {cat} and {dog} under ⊆; 2 and 3 under ∣.`}
 ],{title:'The slides · partial orders · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'chain',t:R`\forall x, y \in C\,(x \preccurlyeq y \lor y \preccurlyeq x)`,n:`A part in which any two compare. {1, 2, 4, 8} under ∣ is one; {2, 3} is not; ∅ is one, vacuously.`},
+  {k:'ember',kl:'chain',t:R`\forall x, y \in C\,(x \preccurlyeq y \lor y \preccurlyeq x)`,n:`A part in which any two compare. {1, 2, 4, 8} under ∣ is one; {2, 3} is not; ∅ is one, as an empty truth.`},
   {k:'ember',kl:'upper bound, maximal',t:R`\forall x \in C\,(x \preccurlyeq u);\qquad m \preccurlyeq x \Rightarrow ${N}{x = m}`,n:`An upper bound is above all of C. A maximal member has nothing above it but itself, which is not the same as being above everything.`},
   {k:'ember',kl:'maximal, not greatest',t:R`\{1, 2, 3, 4, 6\} \text{ under } \mid:\ \ 4 \text{ and } 6 \text{ maximal}`,n:`Neither divides the other, and nothing else in the set is a multiple of either. No greatest member.`}
 ],{title:'The slides · chains and maximal members · ← → keys work'});
