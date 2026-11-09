@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vector Clocks by Hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r45n.html">← 45n quorums by hand</a><a href="r45eng.html">next: 45·eng what do switches, hubs and routers do? →</a></p>
+  <div class="tags"><span class="tag tech">45o · technique</span></div>
+  <h1>Vector Clocks by Hand</h1>
+  <p data-pid="418ed4">45e built the stamps. This step stamps a small run by hand and reads the order straight off the stamps.</p>
+  <p class="gesture" data-pid="1c157b">Tick your own entry; on receipt, take the larger place by place, then tick. Compare entry by entry.</p>
+</header>
+
+<section class="class step" data-step="45o1">
+  <h2 class="sthead"><span class="stno">45o1</span>Stamp the Run</h2>
+  <p data-pid="9c2df2">Three machines P, Q, R. P does a and sends to Q. Q does b, then receives P’s message at c. R does d and sends to Q, which receives at e. Here e means an event at Q, not 17e's number e.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the stamps">
+a = (1,0,0),\ \text{send} @@ P ticks its own entry
+b = (0,1,0) @@ Q ticks
+c = (1,2,0) @@ Q takes the larger of (0,1,0) and (1,0,0), then ticks
+d = (0,0,1),\ \text{send} @@ R ticks
+\htmlClass{new}{e = (1,3,1)} \quad \blacksquare @@ Q takes the larger of (1,2,0) and (0,0,1), then ticks
+</pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45o1.1</span><span class="ph understand">understand</span>How is c’s stamp made? <br>How is e’s stamp made?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45o2">
+  <h2 class="sthead"><span class="stno">45o2</span>Read the Order</h2>
+  <p data-pid="e055c9">a → e, since (1,0,0) ≤ (1,3,1) in every place. a and b are concurrent: (1,0,0) and (0,1,0) are each larger somewhere. a and d are concurrent too. Every event before e is below it, as the list-stamp technique promised.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45o2.1</span><span class="ph understand">understand</span>Why is a → e? <br>Why are a and b concurrent?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45o3">
+  <h2 class="sthead"><span class="stno">45o3</span>Illegal Moves</h2>
+  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
+(1,0,0) < (0,1,0) \text{ since } 1 + 0 + 0 = 0 + 1 + 0\,? @@ compare place by place, not by sums
+</pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45o3.1</span><span class="ph understand">understand</span>Why are stamps compared place by place and not by their sums?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them.</p>
+  <div class="chq"><span class="chid">45o.4.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">your own run</span></span>Make up a run of four machines and six messages. Stamp it, and list every concurrent pair.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r45n.html">← 45n · quorums by hand</a><a href="r45eng.html">45·eng · what do switches, hubs and routers do? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>These are vector clocks, compared in the product order.</p>
+</section>
+
+</div>
+<script>/* 0.3.88 Phase I: new 45a, old r45n is now r45o; old ticks -> new ids */window.LADDER_MV2={f:"mv:I",m:{"q:45n1.1": "q:45o1.1", "q:45n2.1": "q:45o2.1", "q:45n3.1": "q:45o3.1", "c:45n.4.1": "c:45o.4.1"}};</script><script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

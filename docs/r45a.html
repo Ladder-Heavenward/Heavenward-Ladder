@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Machines That Only Talk</title>
+<title>Numbers for Every Machine</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -32,72 +32,74 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r45.html">← 45 many machines, one answer</a><a href="r45b.html">next: 45b the two generals →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r45.html">← 45 many machines, one answer</a><a href="r45b.html">next: 45b machines that only talk →</a></p>
   <div class="tags"><span class="tag proof">45a · proof</span></div>
-  <h1>Machines That Only Talk</h1>
-  <p data-pid="ee7f97">Until now one machine did the work. From here many machines share it, and they share nothing but messages. This step sets down what a machine can know in such a network, and the one fact that every later impossibility leans on.</p>
-  <p class="gesture" data-pid="d9b149">A machine knows its own state and the messages it has received, nothing more. Two runs that look the same to it get the same move from it.</p>
+  <h1>Numbers for Every Machine</h1>
+  <p data-pid="89b3c6">Before machines can agree they must find each other, and before a message can be lost it must be addressed. This step sets down the one protocol every later step rides on: a number of fixed width for every machine, a cut in that number that names its network, and a packet that each router passes one hop onward by the longest prefix it knows. What the protocol promises is little, and the little is exact.</p>
+  <p class="gesture" data-pid="7ab5d8">Every machine carries a number of fixed width. A router reads the destination, finds the longest prefix it matches, and passes the packet one hop on. Nothing else is promised.</p>
 </header>
 
 <section class="class step" data-step="45a1">
-  <h2 class="sthead"><span class="stno">45a1</span>The Model</h2>
-  <p data-pid="1c49ab">There are n machines joined by links. Each machine follows its own program, as in rung 40. A message sent may arrive after any delay, may be lost, and may arrive after a message sent later. There is no clock that all machines share.</p>
-  <p data-pid="b80d6e">A machine’s view is its own state and the list of messages it has received so far. Its next move is a function of its view and of nothing else.</p>
+  <h2 class="sthead"><span class="stno">45a1</span>A Number of Fixed Width</h2>
+  <p data-pid="4b19a8">The internet is a network of networks. Every machine on it, or every link a machine has, carries one number, and the whole design rests on the number having a fixed width: 32 bits in the older protocol, 128 in the newer. A 32-bit number has 2³² values, which is 4,294,967,296; a 128-bit number has 2¹²⁸, about 3.4 × 10³⁸.</p>
+  <p data-pid="464bf3">People do not read 32 bits at a glance, so the number is written in groups. The 32-bit form is four groups of 8 bits, each written in decimal and separated by dots: 192.0.2.17. The 128-bit form is eight groups of 16 bits, each written in hexadecimal and separated by colons: 2001:0db8:0000:0000:0000:0000:0000:0001. The grouping is for the eye. The machine sees one number.</p>
+  <p data-pid="171d57">Fixed-width technique: <b>a written number of fixed width can be read back whatever is left out of it, as long as what is left out can be counted from the width.</b> The next footing spends this.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45a1.1</span><span class="ph understand">understand</span>What is a machine’s view? <br>What may happen to a message?</li>
+      <li><span class="qid">45a1.1</span><span class="ph understand">understand</span>How many values does a 32-bit number take? <br>What is the grouping for?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45a2">
-  <h2 class="sthead"><span class="stno">45a2</span>Runs That Look the Same</h2>
-  <p data-pid="225faa">Same-view technique: <b>if two runs give a machine the same view, the machine makes the same move in both.</b></p>
-  <p data-pid="73cbf8">Its move is a function of its view (45a1), and a function gives one value for one input (9a). So any argument that a machine must act differently in two runs must first show that its views differ.</p>
+  <h2 class="sthead"><span class="stno">45a2</span>Why Two Colons Can Stand for Zeros</h2>
+  <p data-pid="d4f8c9">Most 128-bit addresses hold a long run of zero groups, and writing eight groups out is tiresome. The rule is this. Leading zeros in a group may be dropped, because a group is a number and 0db8 is db8. One run of consecutive all-zero groups may be replaced by a double colon. So the address above is 2001:db8::1.</p>
+  <p data-pid="1f2bbf">Here is why the double colon can be read back. There are always eight groups. The written form shows some of them, say s. Then the double colon stands for exactly 8 − s groups of zeros, and nothing is lost. In 2001:db8::1 three groups show, so the colon stands for five.</p>
+  <p data-pid="8d1cd6">And here is why it may appear only once. Suppose two double colons stood for k missing groups between them. The k could be split as 1 and k − 1, or 2 and k − 2, and so on: k − 1 ways, every one a different address. One double colon has one reading; two have many. So the rule is a theorem of fixed width, not a convention.</p>
+  <p data-pid="42c342">The accepted written form adds three choices so that every address has one spelling: the double colon stands for the longest run, the first if two are equal, and never for a single zero group, which is written 0. Letters are lower case. The 32-bit form has no such rule, since 192.0.2.0 is short already.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45a2.1</span><span class="ph understand">understand</span>What does the same-view technique say? <br>Why does it follow from the model?</li>
+      <li><span class="qid">45a2.1</span><span class="ph understand">understand</span>How many zero groups does :: stand for in 2001:db8::1? <br>Why may it not appear twice?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45a3">
-  <h2 class="sthead"><span class="stno">45a3</span>Slow or Dead</h2>
-  <p data-pid="3432a1"><b>When delays have no bound, no machine can tell a crashed machine from a slow one.</b> Take any run in which B has crashed, and stop it at any moment. Now take the run in which B is alive but every message B sent is still on its way. A has received the same messages in both, so by the same-view technique it acts the same in both.</p>
-  <p data-pid="a177f1">So any rule of the form “if B has not answered, B is dead” is wrong in some run. Waiting longer only moves the moment.</p>
+  <h2 class="sthead"><span class="stno">45a3</span>The Cut: Prefix and Host</h2>
+  <p data-pid="16a78e">A router cannot hold a line for every machine in the world. So the number is cut at a chosen bit. The first p bits are the prefix, which names a network; the rest name a machine within it. The cut is written after a slash: 192.0.2.0/24 is every address whose first 24 bits are those of 192.0.2.0, which is 256 addresses, 192.0.2.0 to 192.0.2.255. A prefix of length p covers 2³²⁻ᵖ addresses, or 2¹²⁸⁻ᵖ in the longer form.</p>
+  <p data-pid="124371">The cut gives the number a shape that counting alone does not. Every machine on one network shares one prefix, so a router far away needs one line for all of them: where to send anything beginning 192.0.2. A network can be cut again at a deeper bit, so that one prefix holds many smaller ones, each a prefix in its own right. The lines a router holds are prefixes, never single machines, unless a prefix is all 128 or all 32 bits long.</p>
+  <p data-pid="e1e70f">Two prefixes either nest or are disjoint. If one address lies in both, the shorter is a beginning of the longer, so the longer lies wholly within the shorter. That is the fact that makes the next footing's rule well defined.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45a3.1</span><span class="ph understand">understand</span>Why can A not tell a dead B from a slow one? <br>Why does waiting longer not help?</li>
+      <li><span class="qid">45a3.1</span><span class="ph understand">understand</span>How many addresses does a /20 cover? <br>Why can two prefixes that share an address not overlap partly?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45a4">
-  <h2 class="sthead"><span class="stno">45a4</span>Bounds Change the Model</h2>
-  <p data-pid="d81137">If every message arrives within a known time d, and every machine takes its steps at a known pace, then silence for longer than d means a crash. That is a different model, with bounds. Real networks lie between the two: the bounds usually hold, and sometimes do not.</p>
-  <p data-pid="b608e7">The rest of the rung says which model each result needs, because a result proved with bounds can fail without them.</p>
+  <h2 class="sthead"><span class="stno">45a4</span>Best Effort, One Hop at a Time</h2>
+  <p data-pid="f12a2d">A message is cut into packets. Each packet carries a header and a load. The header holds the source number, the destination number, the length, a hop count, and a few marks; the load is whatever the layer above wrote. Each router reads only the destination. It looks through its lines for the prefixes the destination matches and chooses the longest, which is the most specific; it passes the packet to the next hop that line names; and it lowers the hop count by one. A packet whose count reaches 0 is thrown away, so that a loop between routers cannot carry a packet for ever.</p>
+  <p data-pid="78fab0">Longest-prefix technique: <b>send toward the next hop of the longest prefix the destination matches; a more specific line beats a shorter one.</b> The prefix of length 0 matches everything and is the default route, used when nothing longer matches. By 45a3 the matching prefixes nest, so the longest is unique, and the rule always names one hop.</p>
+  <p data-pid="0567be">Notice what no router knows: the path. Each knows a next hop, and the path is the sum of choices no one sees whole. And notice what the protocol promises: that each router will try. A packet may be lost, delayed, delivered twice, or delivered after one sent later. This is best effort, and it is exactly the model of 45b. Everything a machine can rely on beyond it is built above, in 45c's handshakes and 45d's counters.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45a4.1</span><span class="ph understand">understand</span>What does a known bound on delay make possible? <br>Why does the rung say which model each result needs?</li>
+      <li><span class="qid">45a4.1</span><span class="ph understand">understand</span>Which line does a router use when several prefixes match? <br>What does best effort promise, and what does it not?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45a5">
-  <h2 class="sthead"><span class="stno">45a5</span>Illegal Moves</h2>
-  <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{no answer for a long time, so it crashed}\,? @@ with no bound on delay, a slow machine looks the same
-\text{messages arrive in the order they were sent}\,? @@ the model allows any order
-\text{every machine can read the time}\,? @@ there is no shared clock; 45d orders events without one
-</pre>
+  <h2 class="sthead"><span class="stno">45a5</span>What the Number Does Not Say</h2>
+  <p data-pid="43ecee">The number says where, not who. It belongs to a place in the network, so it changes when a machine moves, a machine with two links has two, and many machines may stand behind one, as 45·comp tells. Nothing in the header proves the source number is true, since any machine may write any number there; that is the door 45g's liars come through. And since no router keeps the packet, nothing in the network remembers that a packet passed. Whatever is to be sure, the ends must make sure of, by messages of their own.</p>
+  <p data-pid="01c4f5">So the protocol is small on purpose. It names, it cuts, it forwards, and it drops. Every certainty the rest of the rung wins is won on top of a floor that promises nothing but a try, and the proofs that follow are sharp because the floor is.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45a5.1</span><span class="ph understand">understand</span>Why is a long silence not proof of a crash? <br>Why may messages arrive out of order?</li>
+      <li><span class="qid">45a5.1</span><span class="ph understand">understand</span>Does the number name a machine or a place? <br>Where must certainty be made?</li>
     </ol>
   </section>
 </section>
@@ -106,16 +108,17 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them.</p>
-  <div class="chq"><span class="chid">45a.6.1</span><span class="tagq">seam</span><span class="givens"><span class="gtx">what a timeout buys</span></span>A program declares a machine dead after ten seconds of silence. In which runs is it wrong, and what harm can that do? What would you need to know to make it never wrong?</div>
+  <div class="chq"><span class="chid">45a.6.1</span><span class="tagq">seam</span><span class="givens"><span class="gtx">two lines, one packet</span></span>A router holds a line for 10.24.0.0/13 toward one neighbour and a line for 10.24.12.0/22 toward another. A packet arrives for 10.24.13.1. Which way does it go, and why must a router that announces the shorter prefix also hold a line that drops what matches it and nothing longer?</div>
+  <div class="chq"><span class="chid">45a.6.2</span><span class="tagq">build</span><span class="givens"><span class="gtx">a spelling with one reading</span></span>Write a rule for leaving groups out of the 32-bit dotted form, and either prove that every address keeps one reading under it or show the address that gets two.</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r45.html">← 45 · many machines, one answer</a><a href="r45b.html">45b · the two generals →</a></nav>
+<nav class="nextrung"><a href="r45.html">← 45 · many machines, one answer</a><a href="r45b.html">45b · machines that only talk →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The model without bounds is the asynchronous model; with bounds it is synchronous; the usual case between is partial synchrony. The same-view technique is the indistinguishability argument, and a machine that stops for good has a crash fault.</p>
+  <p>The protocol is the Internet Protocol, IP, specified for 32-bit addresses in RFC 791 (1981) and for 128-bit addresses in RFC 2460 (1998), now RFC 8200 (2017). The 32-bit written form is dotted decimal; the 16-bit groups of the 128-bit form are hextets, and their one spelling is laid down in RFC 5952 (2010). The cut is the prefix length, and the slash form is CIDR notation; the older form of the same cut was the subnet mask. A packet is a datagram, the hop count is the time to live in the older protocol and the hop limit in the newer, and the rule of 45a4 is longest-prefix match. The promise of a try is best effort, and the claim of 45a5 that certainty lives at the ends is the end-to-end argument.</p>
 </section>
 
 </div>

@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Two Generals</title>
+<title>Machines That Only Talk</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -32,60 +32,57 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r45a.html">← 45a machines that only talk</a><a href="r45c.html">next: 45c handshakes →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r45a.html">← 45a numbers for every machine</a><a href="r45c.html">next: 45c the two generals →</a></p>
   <div class="tags"><span class="tag proof">45b · proof</span></div>
-  <h1>The Two Generals</h1>
-  <p data-pid="ac782b">Two generals must attack together or not at all, and their only link is a messenger who may be caught. This step proves that no plan, however long, is safe.</p>
-  <p class="gesture" data-pid="f9c2b6">The sender of the last message cannot know it arrived, so it was not needed. Remove it, and the next, down to none.</p>
+  <h1>Machines That Only Talk</h1>
+  <p data-pid="ee7f97">Until now one machine did the work. From here many machines share it, and they share nothing but messages. This step sets down what a machine can know in such a network, and the one fact that every later impossibility leans on.</p>
+  <p class="gesture" data-pid="d9b149">A machine knows its own state and the messages it has received, nothing more. Two runs that look the same to it get the same move from it.</p>
 </header>
 
 <section class="class step" data-step="45b1">
-  <h2 class="sthead"><span class="stno">45b1</span>The Puzzle</h2>
-  <p data-pid="a56e4b">General A alone knows whether to attack today. Every plan of messages must meet three demands. If A’s answer is no, nobody attacks. If it is yes and no messenger is caught, both attack. And never does one attack alone.</p>
+  <h2 class="sthead"><span class="stno">45b1</span>The Model</h2>
+  <p data-pid="1c49ab">There are n machines joined by links. Each machine follows its own program, as in rung 40. A message sent may arrive after any delay, may be lost, and may arrive after a message sent later. There is no clock that all machines share.</p>
+  <p data-pid="b80d6e">A machine’s view is its own state and the list of messages it has received so far. Its next move is a function of its view and of nothing else.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45b1.1</span><span class="ph understand">understand</span>What three demands must a plan meet? <br>Who knows whether to attack?</li>
+      <li><span class="qid">45b1.1</span><span class="ph understand">understand</span>What is a machine’s view? <br>What may happen to a message?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45b2">
-  <h2 class="sthead"><span class="stno">45b2</span>Remove the Last Message</h2>
-  <p data-pid="a860c6">Last-message technique: <b>in a plan that meets the demands, if a run ends with both attacking, then the same run with its last delivered message lost also ends with both attacking.</b></p>
-  <p data-pid="1cec48">The sender’s view is the same whether the last message arrived or not, because nothing came back after it. So the sender acts the same, and attacks (45a2). The two never act apart, so the receiver attacks too.</p>
+  <h2 class="sthead"><span class="stno">45b2</span>Runs That Look the Same</h2>
+  <p data-pid="225faa">Same-view technique: <b>if two runs give a machine the same view, the machine makes the same move in both.</b></p>
+  <p data-pid="73cbf8">Its move is a function of its view (45b1), and a function gives one value for one input (9a). So any argument that a machine must act differently in two runs must first show that its views differ.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45b2.1</span><span class="ph understand">understand</span>What does the last-message technique say? <br>Why does the sender act the same?</li>
+      <li><span class="qid">45b2.1</span><span class="ph understand">understand</span>What does the same-view technique say? <br>Why does it follow from the model?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45b3">
-  <h2 class="sthead"><span class="stno">45b3</span>Down to No Messages</h2>
-  <p data-pid="df47c3">Start from the run where A says yes and nothing is lost: both attack. Remove the last delivered message, then the one before, and so on. Each time both still attack, by the last-message technique. After finitely many steps, A says yes, no message arrives, and both attack.</p>
-  <pre class="lines" data-k="ember" data-label="this step: no plan is safe">
-\text{A says yes, nothing arrives: B attacks} @@ the end of the removals
-\text{A says no, nothing arrives: B’s view is the same} @@ B has received nothing in either run
-\text{so B attacks when A said no} @@ the same-view technique (45a2)
-\htmlClass{new}{\text{the first demand fails}} \quad \blacksquare @@ no plan meets all three
-</pre>
+  <h2 class="sthead"><span class="stno">45b3</span>Slow or Dead</h2>
+  <p data-pid="3432a1"><b>When delays have no bound, no machine can tell a crashed machine from a slow one.</b> Take any run in which B has crashed, and stop it at any moment. Now take the run in which B is alive but every message B sent is still on its way. A has received the same messages in both, so by the same-view technique it acts the same in both.</p>
+  <p data-pid="a177f1">So any rule of the form “if B has not answered, B is dead” is wrong in some run. Waiting longer only moves the moment.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45b3.1</span><span class="ph understand">understand</span>Why do both still attack after every removal? <br>Why must B attack when A said no?</li>
+      <li><span class="qid">45b3.1</span><span class="ph understand">understand</span>Why can A not tell a dead B from a slow one? <br>Why does waiting longer not help?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45b4">
-  <h2 class="sthead"><span class="stno">45b4</span>What Is Left</h2>
-  <p data-pid="019bc9">Certainty is gone, but chance is not. Send k messengers, each caught with chance q, and all are caught with chance qᵏ (<a href="r41i.html">41i</a>). Agreement then holds with chance 1 − qᵏ, as close to 1 as you like, and never equal to it. Every protocol on a lossy link lives here.</p>
+  <h2 class="sthead"><span class="stno">45b4</span>Bounds Change the Model</h2>
+  <p data-pid="d81137">If every message arrives within a known time d, and every machine takes its steps at a known pace, then silence for longer than d means a crash. That is a different model, with bounds. Real networks lie between the two: the bounds usually hold, and sometimes do not.</p>
+  <p data-pid="b608e7">The rest of the rung says which model each result needs, because a result proved with bounds can fail without them.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45b4.1</span><span class="ph understand">understand</span>What does sending k messengers buy? <br>Why is it never certainty?</li>
+      <li><span class="qid">45b4.1</span><span class="ph understand">understand</span>What does a known bound on delay make possible? <br>Why does the rung say which model each result needs?</li>
     </ol>
   </section>
 </section>
@@ -93,13 +90,14 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <section class="class step" data-step="45b5">
   <h2 class="sthead"><span class="stno">45b5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{acknowledge the acknowledgments until sure}\,? @@ the last acknowledgment can always be lost; it was not needed
-\text{the generals fail because one lies}\,? @@ nobody lies here; messages are lost. Liars are 45g
+\text{no answer for a long time, so it crashed}\,? @@ with no bound on delay, a slow machine looks the same
+\text{messages arrive in the order they were sent}\,? @@ the model allows any order
+\text{every machine can read the time}\,? @@ there is no shared clock; 45e orders events without one
 </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45b5.1</span><span class="ph understand">understand</span>Why do acknowledgments of acknowledgments not help? <br>How is this different from lying?</li>
+      <li><span class="qid">45b5.1</span><span class="ph understand">understand</span>Why is a long silence not proof of a crash? <br>Why may messages arrive out of order?</li>
     </ol>
   </section>
 </section>
@@ -108,19 +106,19 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them.</p>
-  <div class="chq"><span class="chid">45b.6.1</span><span class="tagq">converse</span><span class="givens"><span class="gtx">a link that never loses</span></span>If no messenger can be caught but delays have no bound, can the generals agree? What if delays are bounded?</div>
+  <div class="chq"><span class="chid">45b.6.1</span><span class="tagq">seam</span><span class="givens"><span class="gtx">what a timeout buys</span></span>A program declares a machine dead after ten seconds of silence. In which runs is it wrong, and what harm can that do? What would you need to know to make it never wrong?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r45a.html">← 45a · machines that only talk</a><a href="r45c.html">45c · handshakes →</a></nav>
+<nav class="nextrung"><a href="r45a.html">← 45a · numbers for every machine</a><a href="r45c.html">45c · the two generals →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>This is the two generals problem, or coordinated attack. Its proof is the standard example of an indistinguishability argument.</p>
+  <p>The model without bounds is the asynchronous model; with bounds it is synchronous; the usual case between is partial synchrony. The same-view technique is the indistinguishability argument, and a machine that stops for good has a crash fault.</p>
 </section>
 
 </div>
-<script src="rung.js"></script>
+<script>/* 0.3.88 Phase I: new 45a, old r45a is now r45b; old ticks -> new ids */window.LADDER_MV2={f:"mv:I",m:{"q:45a1.1": "q:45b1.1", "q:45a2.1": "q:45b2.1", "q:45a3.1": "q:45b3.1", "q:45a4.1": "q:45b4.1", "q:45a5.1": "q:45b5.1", "c:45a.6.1": "c:45b.6.1"}};</script><script src="rung.js"></script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

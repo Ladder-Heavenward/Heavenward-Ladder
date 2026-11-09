@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Commit Together or Not at All</title>
+<title>Order Without a Clock</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -32,58 +32,72 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r45d.html">← 45d order without a clock</a><a href="r45f.html">next: 45f agreement despite crashes →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r45d.html">← 45d handshakes</a><a href="r45f.html">next: 45f commit together or not at all →</a></p>
   <div class="tags"><span class="tag proof">45e · proof</span></div>
-  <h1>Commit Together or Not at All</h1>
-  <p data-pid="7edf0f">One change touches several databases on several machines. Either every one of them makes it, or none does. This step builds the standard method, proves it safe, and shows where it gets stuck.</p>
-  <p class="gesture" data-pid="416ddd">Ask everyone to promise; commit only if all promise. A machine that has promised must wait to be told.</p>
+  <h1>Order Without a Clock</h1>
+  <p data-pid="13db52">With no shared clock, “before” has to come from the messages. This step defines the only before that matters, the one along which one event can affect another, and two ways to stamp events with it.</p>
+  <p class="gesture" data-pid="e62c7c">e comes before f if a chain of steps and messages leads from e to f. A counter respects that order; a list of counters captures it.</p>
 </header>
 
 <section class="class step" data-step="45e1">
-  <h2 class="sthead"><span class="stno">45e1</span>Ask, Then Tell</h2>
-  <p data-pid="5f320a">A coordinator asks every machine to prepare. Each votes yes, after writing the change where a crash cannot erase it, and promising to commit if told. Or it votes no. If every vote is yes, the coordinator decides commit, and otherwise it decides abort. Then it tells everyone.</p>
-  <p data-pid="dcb5cf">Two-phase technique: <b>no two machines finish differently, and the change is committed only if every machine voted yes.</b></p>
-  <p data-pid="5b41c8">Only the coordinator decides, and every machine does what it is told. The coordinator decides commit only after every yes has arrived.</p>
+  <h2 class="sthead"><span class="stno">45e1</span>Happened Before</h2>
+  <p data-pid="bd94b0">Say e → f when e and f are on one machine and e comes first, or e sends a message that f receives, or a chain of these leads from e to f. Two events with neither e → f nor f → e are concurrent: neither could have affected the other.</p>
+  <p data-pid="92e86e">The arrow is an order that leaves some pairs uncompared. It never runs from an event to itself, and chains of it are again arrows.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45e1.1</span><span class="ph understand">understand</span>What are the two phases? <br>Why can no two machines finish differently?</li>
+      <li><span class="qid">45e1.1</span><span class="ph understand">understand</span>When is e → f? <br>What does it mean for two events to be concurrent?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45e2">
-  <h2 class="sthead"><span class="stno">45e2</span>Waiting on a Dead Coordinator</h2>
-  <p data-pid="8c8802">A machine that voted yes and then hears nothing cannot decide alone. If it aborts, the coordinator may have decided commit. If it commits, another machine may have voted no. Its view is the same in both runs (45a2), so any choice is wrong in one of them. It must wait, and while it waits it holds the change locked.</p>
+  <h2 class="sthead"><span class="stno">45e2</span>Counters</h2>
+  <p data-pid="580027">Each machine keeps a counter. It adds 1 before each event, and puts the counter on each message it sends. On receipt it sets its counter to the larger of its own and the one received, then adds 1.</p>
+  <p data-pid="bd6041">Counter technique: <b>if e → f then L(e) < L(f).</b></p>
+  <p data-pid="5c29b5">Along a machine the counter rises at each event. Across a message the receipt is stamped above the sending. So along any chain the stamps rise. The converse fails: L(e) < L(f) can hold for concurrent events.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45e2.1</span><span class="ph understand">understand</span>Why can a yes voter not decide on its own? <br>What does it hold while it waits?</li>
+      <li><span class="qid">45e2.1</span><span class="ph understand">understand</span>What does the counter technique say? <br>Why does the converse fail?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45e3">
-  <h2 class="sthead"><span class="stno">45e3</span>A Third Phase, and Its Price</h2>
-  <p data-pid="9a1204">A third phase tells everyone “all voted yes” before anyone commits, so no machine is ever one step from both outcomes. A machine left alone can then decide by timeout. But a timeout is safe only if delays are bounded (45a4). In the model without bounds, 45f shows that no method is safe and always finishes.</p>
+  <h2 class="sthead"><span class="stno">45e3</span>Lists of Counters</h2>
+  <p data-pid="32b102">Each machine keeps a list of n counters, one per machine. It adds 1 to its own entry at each event, and sends its list on each message. On receipt it takes the larger of each pair of entries, then adds 1 to its own.</p>
+  <p data-pid="4fbe9b">List-stamp technique: <b>e → f exactly when V(e) ≤ V(f) in every entry and V(e) ≠ V(f).</b></p>
+  <p data-pid="6f5eee">Entry i of V(f) counts the events of machine i that lead to f. So V(e) ≤ V(f) everywhere says every event leading to e leads to f, and that holds just when e itself leads to f. Two lists neither of which is below the other mark concurrent events.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45e3.1</span><span class="ph understand">understand</span>What does the third phase add? <br>Which model must hold for its timeout to be safe?</li>
+      <li><span class="qid">45e3.1</span><span class="ph understand">understand</span>What does the list-stamp technique say? <br>How do two lists show that events are concurrent?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45e4">
-  <h2 class="sthead"><span class="stno">45e4</span>Illegal Moves</h2>
+  <h2 class="sthead"><span class="stno">45e4</span>Why Not Just Clocks</h2>
+  <p data-pid="b232b3">Real clocks drift apart. Order by clock times can put a reply before the question it answers. Stamps follow cause instead of time, and cause is what a program’s correctness depends on.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45e4.1</span><span class="ph understand">understand</span>What goes wrong ordering events by clock times? <br>What do stamps follow instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45e5">
+  <h2 class="sthead"><span class="stno">45e5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{a yes voter may commit on a timeout}\,? @@ another machine may have voted no
-\text{two-phase commit survives a coordinator crash}\,? @@ it stays safe but may wait for ever
+L(e) < L(f),\ \text{so } e \to f\,? @@ counters respect the order, but do not capture it
+\text{concurrent means at the same moment}\,? @@ it means neither could affect the other; the moments may be far apart
 </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45e4.1</span><span class="ph understand">understand</span>Why may a yes voter not commit on a timeout? <br>What does a coordinator crash cost?</li>
+      <li><span class="qid">45e5.1</span><span class="ph understand">understand</span>Why does L(e) < L(f) not give e → f? <br>What does concurrent mean?</li>
     </ol>
   </section>
 </section>
@@ -92,19 +106,19 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them.</p>
-  <div class="chq"><span class="chid">45e.5.1</span><span class="tagq">seam</span><span class="givens"><span class="gtx">safe or live</span></span>A method may promise never to finish wrongly, or promise always to finish. Which does two-phase commit keep, and which does it give up? Why can it not keep both in 45a’s model?</div>
+  <div class="chq"><span class="chid">45e.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">three machines</span></span>Draw three machines exchanging four messages. Stamp every event with counters and with lists, and mark every concurrent pair.</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r45d.html">← 45d · order without a clock</a><a href="r45f.html">45f · agreement despite crashes →</a></nav>
+<nav class="nextrung"><a href="r45d.html">← 45d · handshakes</a><a href="r45f.html">45f · commit together or not at all →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>This is two-phase commit, and the third phase makes three-phase commit. A method that may wait for ever on one machine is blocking. “Never wrong” and “always finishes” are safety and liveness.</p>
+  <p>The arrow is the happened-before relation. The counters are Lamport clocks, and the lists are vector clocks.</p>
 </section>
 
 </div>
-<script src="rung.js"></script>
+<script>/* 0.3.88 Phase I: new 45a, old r45d is now r45e; old ticks -> new ids */window.LADDER_MV2={f:"mv:I",m:{"q:45d1.1": "q:45e1.1", "q:45d2.1": "q:45e2.1", "q:45d3.1": "q:45e3.1", "q:45d4.1": "q:45e4.1", "q:45d5.1": "q:45e5.1", "c:45d.6.1": "c:45e.6.1"}};</script><script src="rung.js"></script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

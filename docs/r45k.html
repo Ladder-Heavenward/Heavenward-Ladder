@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Merging Edits Made Apart</title>
+<title>Who Holds Which Key</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -32,55 +32,56 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r45j.html">← 45j who holds which key</a><a href="r45l.html">next: 45l splitting a big job →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r45j.html">← 45j news without a leader</a><a href="r45l.html">next: 45l merging edits made apart →</a></p>
   <div class="tags"><span class="tag proof">45k · proof</span></div>
-  <h1>Merging Edits Made Apart</h1>
-  <p data-pid="57feeb">Copies on different machines are edited apart, and edits reach each copy in any order, some twice. This step finds the laws a merge must keep so that copies that have seen the same edits always agree, with no agreement step at all.</p>
-  <p class="gesture" data-pid="80540d">Let merging be grouping-free, order-free and repeat-free. Then a copy is the merge of the set of edits it has seen, and the same set gives the same copy.</p>
+  <h1>Who Holds Which Key</h1>
+  <p data-pid="1cee32">Millions of keys sit on thousands of machines, and machines come and go. This step shows how a machine finds the one that holds a key, knowing only a few others.</p>
+  <p class="gesture" data-pid="f7db58">Put keys and machines on one clock; each key lives with the next machine round. Jump half the remaining way each hop.</p>
 </header>
 
 <section class="class step" data-step="45k1">
-  <h2 class="sthead"><span class="stno">45k1</span>The Problem</h2>
-  <p data-pid="4c817f">Each copy applies edits as they reach it. Different copies get them in different orders, and a resent edit may come twice. The demand: two copies that have seen the same edits hold the same state.</p>
+  <h2 class="sthead"><span class="stno">45k1</span>Keys on a Ring</h2>
+  <p data-pid="88f355">Scramble every key and every machine’s name into a number on a clock of 2ᵐ hours (43a). A key is held by the first machine at or after it, going round. </p>
+  <p data-pid="af2fca">Ring-move technique: <b>when a machine joins or leaves, only the keys between it and the machine before it change hands.</b></p>
+  <p data-pid="d82c19">Every other key still has the same first machine after it. With n machines spread evenly, that is about 1/n of the keys. Holding keys at “key mod n” instead would move almost all of them whenever n changes.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45k1.1</span><span class="ph understand">understand</span>What is the demand on the copies? <br>Why may an edit arrive twice?</li>
+      <li><span class="qid">45k1.1</span><span class="ph understand">understand</span>What does the ring-move technique say? <br>Why does “key mod n” move almost every key?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45k2">
-  <h2 class="sthead"><span class="stno">45k2</span>Three Laws</h2>
-  <p data-pid="4ee9a9">Converge technique: <b>if merge is associative, commutative and idempotent, then two copies that have merged the same set of updates, in any order and with any repeats, hold the same state.</b></p>
-  <p data-pid="9e18d6">Associative and commutative make the result of merging a list depend only on what is in it and how often (<a href="r44a.html">44a</a>). Idempotent, x ⊔ x = x as x ∨ x = x in <a href="r44l.html">44l</a>, makes how often not matter. So the state depends only on the set.</p>
+  <h2 class="sthead"><span class="stno">45k2</span>Fingers That Halve</h2>
+  <p data-pid="5afef2">Each machine knows the machines about 1/2, 1/4, 1/8, … of the way round from it. To find a key, jump to the farthest known machine not past the key, and repeat. Each hop at least halves the distance left, so a lookup takes at most m hops, and about log₂ n with n machines spread evenly (39l).</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45k2.1</span><span class="ph understand">understand</span>What does the converge technique say? <br>Which law takes care of repeats?</li>
+      <li><span class="qid">45k2.1</span><span class="ph understand">understand</span>Why does each hop halve the distance left? <br>How many hops does a lookup take?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45k3">
-  <h2 class="sthead"><span class="stno">45k3</span>Counters and Sets</h2>
-  <p data-pid="81d727">A count that only grows: each machine keeps a list with one entry per machine, adds only to its own entry, and merges by taking the larger entry place by place. Larger-of is associative, commutative and idempotent. The value is the sum of the entries.</p>
-  <p data-pid="b23b61">A set that only grows merges by union, which also keeps the three laws. Taking things out needs care: a removed item is kept on a second set of removals, so a late copy of its adding cannot bring it back.</p>
+  <h2 class="sthead"><span class="stno">45k3</span>Distance by Exactly-One</h2>
+  <p data-pid="03c714">Another way to measure: write two names in twos and put 1 where they differ. That is exactly-one of 39a3, taken place by place, read as a number. It is a distance: 0 only from a name to itself, the same both ways, and d(a, c) ≤ d(a, b) + d(b, c).</p>
+  <p data-pid="0ac4f8">The last holds because a ⊕ c = (a ⊕ b) ⊕ (b ⊕ c), and x ⊕ y ≤ x + y, since exactly-one never carries. Each hop fixes at least one more leading place, so again about log₂ n hops.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45k3.1</span><span class="ph understand">understand</span>Why is the counter merged by larger-of and not by adding? <br>How can a set allow taking things out?</li>
+      <li><span class="qid">45k3.1</span><span class="ph understand">understand</span>How is the exactly-one distance worked out? <br>Why does it obey the triangle law?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45k4">
-  <h2 class="sthead"><span class="stno">45k4</span>Text Is Harder</h2>
-  <p data-pid="e0ee3a">In a shared text, “put x at place 5” means something else once another edit has put a letter at place 2. One answer shifts each edit’s places by the edits it meets, and its rules must be right for every order, which is hard to get right. The other gives every letter a lasting name between its neighbours, so places never shift and the three laws can hold again.</p>
+  <h2 class="sthead"><span class="stno">45k4</span>Why Not One List</h2>
+  <p data-pid="92c243">One list of every key is one machine to fail and one machine to ask. A ring asks each machine to know only about log₂ n others, and the work of answering is shared by all.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45k4.1</span><span class="ph understand">understand</span>Why does a place in a text change meaning? <br>What do lasting names for letters fix?</li>
+      <li><span class="qid">45k4.1</span><span class="ph understand">understand</span>What is wrong with one central list? <br>How many others must each machine know on the ring?</li>
     </ol>
   </section>
 </section>
@@ -88,13 +89,13 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <section class="class step" data-step="45k5">
   <h2 class="sthead"><span class="stno">45k5</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{merge counts by adding}\,? @@ adding is not idempotent: a repeated update counts twice
-\text{the latest clock time wins, safely}\,? @@ clocks drift (45d4): the latest by clock may not be the latest by cause
+\text{a new machine moves every key}\,? @@ on the ring only the keys just before it move
+\text{exactly-one distance breaks the triangle law}\,? @@ it keeps it: exactly-one never carries
 </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45k5.1</span><span class="ph understand">understand</span>Why is adding not a safe merge? <br>Why is the latest clock time not safe?</li>
+      <li><span class="qid">45k5.1</span><span class="ph understand">understand</span>Which keys move when a machine joins? <br>Why does the exactly-one distance keep the triangle law?</li>
     </ol>
   </section>
 </section>
@@ -103,19 +104,19 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them.</p>
-  <div class="chq"><span class="chid">45k.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a counter that falls too</span></span>Build a counter that can rise and fall, from two counters that only grow. Show its merge keeps the three laws.</div>
+  <div class="chq"><span class="chid">45k.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a ring of 16</span></span>Place 5 machines on a clock of 16 hours at random. List each one’s fingers, and look up three keys by hand, counting the hops.</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r45j.html">← 45j · who holds which key</a><a href="r45l.html">45l · splitting a big job →</a></nav>
+<nav class="nextrung"><a href="r45j.html">← 45j · news without a leader</a><a href="r45l.html">45l · merging edits made apart →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>These are conflict-free replicated data types, CRDTs. A state with a merge keeping the three laws is a join-semilattice. Shifting edits by one another is operational transformation.</p>
+  <p>This is consistent hashing, and a network that spreads keys this way is a distributed hash table. The halving fingers are Chord’s finger tables, and the exactly-one distance is Kademlia’s XOR metric, used by BitTorrent.</p>
 </section>
 
 </div>
-<script src="rung.js"></script>
+<script>/* 0.3.88 Phase I: new 45a, old r45j is now r45k; old ticks -> new ids */window.LADDER_MV2={f:"mv:I",m:{"q:45j1.1": "q:45k1.1", "q:45j2.1": "q:45k2.1", "q:45j3.1": "q:45k3.1", "q:45j4.1": "q:45k4.1", "q:45j5.1": "q:45k5.1", "c:45j.6.1": "c:45k.6.1"}};</script><script src="rung.js"></script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

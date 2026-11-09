@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Agreement Despite Crashes</title>
+<title>Commit Together or Not at All</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -32,71 +32,58 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r45e.html">← 45e commit together or not at all</a><a href="r45g.html">next: 45g agreement despite liars →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r45e.html">← 45e order without a clock</a><a href="r45g.html">next: 45g agreement despite crashes →</a></p>
   <div class="tags"><span class="tag proof">45f · proof</span></div>
-  <h1>Agreement Despite Crashes</h1>
-  <p data-pid="3a8631">Many machines hold copies, and they must agree on one value even if some crash. This step gives the one counting fact that every working method rests on, and the theorem that says why none is perfect.</p>
-  <p class="gesture" data-pid="7cf422">Any two majorities share a machine, so what one majority accepted the next will hear. But with no bound on delay, no fixed method is sure to finish.</p>
+  <h1>Commit Together or Not at All</h1>
+  <p data-pid="7edf0f">One change touches several databases on several machines. Either every one of them makes it, or none does. This step builds the standard method, proves it safe, and shows where it gets stuck.</p>
+  <p class="gesture" data-pid="416ddd">Ask everyone to promise; commit only if all promise. A machine that has promised must wait to be told.</p>
 </header>
 
 <section class="class step" data-step="45f1">
-  <h2 class="sthead"><span class="stno">45f1</span>What Agreement Asks</h2>
-  <p data-pid="a3e1ed">Each machine proposes a value. Three demands: every machine that decides decides the same value; the value decided was proposed by someone; and every machine that does not crash decides in the end.</p>
+  <h2 class="sthead"><span class="stno">45f1</span>Ask, Then Tell</h2>
+  <p data-pid="5f320a">A coordinator asks every machine to prepare. Each votes yes, after writing the change where a crash cannot erase it, and promising to commit if told. Or it votes no. If every vote is yes, the coordinator decides commit, and otherwise it decides abort. Then it tells everyone.</p>
+  <p data-pid="dcb5cf">Two-phase technique: <b>no two machines finish differently, and the change is committed only if every machine voted yes.</b></p>
+  <p data-pid="5b41c8">Only the coordinator decides, and every machine does what it is told. The coordinator decides commit only after every yes has arrived.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45f1.1</span><span class="ph understand">understand</span>What are the three demands? <br>Which one is about finishing?</li>
+      <li><span class="qid">45f1.1</span><span class="ph understand">understand</span>What are the two phases? <br>Why can no two machines finish differently?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45f2">
-  <h2 class="sthead"><span class="stno">45f2</span>Any Two Majorities Meet</h2>
-  <p data-pid="1bc367">Majority-overlap technique: <b>of n machines, any two sets each holding more than n/2 of them share at least one machine.</b></p>
-  <p data-pid="838a17">Their sizes add to more than n, and there are only n machines to go round (<a href="r04k.html">4k</a>).</p>
-  <p data-pid="77f7cb">So if a majority has accepted a value, any later majority contains a machine that knows it. Working methods use this as follows. A leader with a numbered ballot first asks a majority what they have accepted. It must then propose the value from the highest ballot it hears of. Finally it asks a majority to accept. Two leaders cannot have different values chosen, because their majorities meet. Leaders elected for numbered terms by majority vote, one vote per machine per term, are at most one per term for the same reason.</p>
+  <h2 class="sthead"><span class="stno">45f2</span>Waiting on a Dead Coordinator</h2>
+  <p data-pid="8c8802">A machine that voted yes and then hears nothing cannot decide alone. If it aborts, the coordinator may have decided commit. If it commits, another machine may have voted no. Its view is the same in both runs (45b2), so any choice is wrong in one of them. It must wait, and while it waits it holds the change locked.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45f2.1</span><span class="ph understand">understand</span>What does the majority-overlap technique say? <br>Why can two leaders not have different values chosen?</li>
+      <li><span class="qid">45f2.1</span><span class="ph understand">understand</span>Why can a yes voter not decide on its own? <br>What does it hold while it waits?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45f3">
-  <h2 class="sthead"><span class="stno">45f3</span>No Fixed Method Always Decides</h2>
-  <p data-pid="203e52"><b>In the model without bounds, if even one machine may crash, no fixed method meets all three demands in every run.</b> This footing states the theorem and the shape of its proof, which is long.</p>
-  <p data-pid="e4cc5f">Call a state open when runs from it can still end in either value. Some start state is open, by a row of starts that differ in one machine’s proposal, together with 45a3: that machine may be the one that crashes. From an open state, a message can always be held back long enough that the next state is open again. Slow-or-dead is what makes the holding back look like a crash. So a run exists that stays open for ever, and never decides.</p>
+  <h2 class="sthead"><span class="stno">45f3</span>A Third Phase, and Its Price</h2>
+  <p data-pid="9a1204">A third phase tells everyone “all voted yes” before anyone commits, so no machine is ever one step from both outcomes. A machine left alone can then decide by timeout. But a timeout is safe only if delays are bounded (45b4). In the model without bounds, 45g shows that no method is safe and always finishes.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45f3.1</span><span class="ph understand">understand</span>What does the theorem say, and which model does it need? <br>What keeps the run open for ever?</li>
+      <li><span class="qid">45f3.1</span><span class="ph understand">understand</span>What does the third phase add? <br>Which model must hold for its timeout to be safe?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45f4">
-  <h2 class="sthead"><span class="stno">45f4</span>The Ways Around</h2>
-  <p data-pid="7dbca6">Real systems give up a little. They keep the first two demands always, and finish whenever the network behaves for long enough, so they never decide wrongly but may stall. Or they use chance, and finish with chance 1. The theorem forbids only a fixed method that is sure to finish in every run.</p>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">45f4.1</span><span class="ph understand">understand</span>Which demands do real systems always keep? <br>What does chance buy?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="45f5">
-  <h2 class="sthead"><span class="stno">45f5</span>Illegal Moves</h2>
+  <h2 class="sthead"><span class="stno">45f4</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-\text{a majority of 4 is 2}\,? @@ more than half: 3. Two sets of 2 out of 4 may not meet
-\text{the theorem says agreement is impossible}\,? @@ it says no fixed method finishes in every run; agreement happens every day
-\text{two leaders in one term}\,? @@ each needs a majority of votes, one vote per machine per term
+\text{a yes voter may commit on a timeout}\,? @@ another machine may have voted no
+\text{two-phase commit survives a coordinator crash}\,? @@ it stays safe but may wait for ever
 </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45f5.1</span><span class="ph understand">understand</span>Why is 2 not a majority of 4? <br>What exactly does the theorem forbid?</li>
+      <li><span class="qid">45f4.1</span><span class="ph understand">understand</span>Why may a yes voter not commit on a timeout? <br>What does a coordinator crash cost?</li>
     </ol>
   </section>
 </section>
@@ -105,19 +92,19 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them.</p>
-  <div class="chq"><span class="chid">45f.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">five machines</span></span>With five machines and majorities of three, how many crashes can a method survive and still finish? Why not three crashes?</div>
+  <div class="chq"><span class="chid">45f.5.1</span><span class="tagq">seam</span><span class="givens"><span class="gtx">safe or live</span></span>A method may promise never to finish wrongly, or promise always to finish. Which does two-phase commit keep, and which does it give up? Why can it not keep both in 45b’s model?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r45e.html">← 45e · commit together or not at all</a><a href="r45g.html">45g · agreement despite liars →</a></nav>
+<nav class="nextrung"><a href="r45e.html">← 45e · order without a clock</a><a href="r45g.html">45g · agreement despite crashes →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The demands are agreement, validity and termination. The theorem of 45f3 is the FLP impossibility result, named for Fischer, Lynch and Paterson. Methods built on majority-overlap include Paxos, Raft, Zab and Viewstamped Replication. An open state is called bivalent.</p>
+  <p>This is two-phase commit, and the third phase makes three-phase commit. A method that may wait for ever on one machine is blocking. “Never wrong” and “always finishes” are safety and liveness.</p>
 </section>
 
 </div>
-<script src="rung.js"></script>
+<script>/* 0.3.88 Phase I: new 45a, old r45e is now r45f; old ticks -> new ids */window.LADDER_MV2={f:"mv:I",m:{"q:45e1.1": "q:45f1.1", "q:45e2.1": "q:45f2.1", "q:45e3.1": "q:45f3.1", "q:45e4.1": "q:45f4.1", "c:45e.5.1": "c:45f.5.1"}};</script><script src="rung.js"></script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

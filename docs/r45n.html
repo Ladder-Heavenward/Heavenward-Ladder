@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Vector Clocks by Hand</title>
+<title>Quorums by Hand</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -32,51 +32,55 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r45m.html">← 45m quorums by hand</a><a href="r45eng.html">next: 45·eng what do switches, hubs and routers do? →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r45m.html">← 45m splitting a big job</a><a href="r45o.html">next: 45o vector clocks by hand →</a></p>
   <div class="tags"><span class="tag tech">45n · technique</span></div>
-  <h1>Vector Clocks by Hand</h1>
-  <p data-pid="418ed4">45d built the stamps. This step stamps a small run by hand and reads the order straight off the stamps.</p>
-  <p class="gesture" data-pid="1c157b">Tick your own entry; on receipt, take the larger place by place, then tick. Compare entry by entry.</p>
+  <h1>Quorums by Hand</h1>
+  <p data-pid="e7494a">45g and 45h turned safety into one question: do every two quorums meet, and in enough honest machines? This step is the hand method for any scheme.</p>
+  <p class="gesture" data-pid="eff17d">Add the two smallest quorums and take away n: that is the least they share. Then ask how many machines may fail with a quorum still alive.</p>
 </header>
 
 <section class="class step" data-step="45n1">
-  <h2 class="sthead"><span class="stno">45n1</span>Stamp the Run</h2>
-  <p data-pid="9c2df2">Three machines P, Q, R. P does a and sends to Q. Q does b, then receives P’s message at c. R does d and sends to Q, which receives at e. Here e means an event at Q, not 17e's number e.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the stamps">
-a = (1,0,0),\ \text{send} @@ P ticks its own entry
-b = (0,1,0) @@ Q ticks
-c = (1,2,0) @@ Q takes the larger of (0,1,0) and (1,0,0), then ticks
-d = (0,0,1),\ \text{send} @@ R ticks
-\htmlClass{new}{e = (1,3,1)} \quad \blacksquare @@ Q takes the larger of (1,2,0) and (0,0,1), then ticks
-</pre>
+  <h2 class="sthead"><span class="stno">45n1</span>The Overlap</h2>
+  <p data-pid="cb9a00">For quorums of size at least k among n machines, two of them share at least 2k − n. For crashes they must share 1, so 2k > n. For f liars they must share f + 1, so 2k − n ≥ f + 1.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45n1.1</span><span class="ph understand">understand</span>How is c’s stamp made? <br>How is e’s stamp made?</li>
+      <li><span class="qid">45n1.1</span><span class="ph understand">understand</span>How small can the overlap of two quorums be? <br>What must it be for crashes, and for liars?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45n2">
-  <h2 class="sthead"><span class="stno">45n2</span>Read the Order</h2>
-  <p data-pid="e055c9">a → e, since (1,0,0) ≤ (1,3,1) in every place. a and b are concurrent: (1,0,0) and (0,1,0) are each larger somewhere. a and d are concurrent too. Every event before e is below it, as the list-stamp technique promised.</p>
+  <h2 class="sthead"><span class="stno">45n2</span>Survival</h2>
+  <p data-pid="51392b">A scheme finishes only if some quorum is alive. With quorums of k among n, it survives n − k failures. Five machines with quorums of 3 survive 2 crashes. Seven with quorums of 5 survive 2 liars: 2 · 5 − 7 = 3 = 2 + 1.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45n2.1</span><span class="ph understand">understand</span>Why is a → e? <br>Why are a and b concurrent?</li>
+      <li><span class="qid">45n2.1</span><span class="ph understand">understand</span>How many failures does a scheme with quorums of k survive? <br>Check the seven-machine case.</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45n3">
-  <h2 class="sthead"><span class="stno">45n3</span>Illegal Moves</h2>
+  <h2 class="sthead"><span class="stno">45n3</span>A Grid</h2>
+  <p data-pid="ae84db">Nine machines in a 3 by 3 grid. A quorum is one full row and one full column, 5 machines. Any two quorums meet, because the row of one crosses the column of the other. Quorums of 5 out of 9 are smaller, in a large grid, than a majority would be.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45n3.1</span><span class="ph understand">understand</span>Why do two grid quorums always meet? <br>How big is a grid quorum among 9?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45n4">
+  <h2 class="sthead"><span class="stno">45n4</span>Illegal Moves</h2>
   <pre class="lines" data-k="ember" data-label="this step: tempting, and not allowed" data-wrong="1">
-(1,0,0) < (0,1,0) \text{ since } 1 + 0 + 0 = 0 + 1 + 0\,? @@ compare place by place, not by sums
+\text{quorums of 2 among 4 are safe}\,? @@ 2 + 2 − 4 = 0: two of them can miss each other
 </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45n3.1</span><span class="ph understand">understand</span>Why are stamps compared place by place and not by their sums?</li>
+      <li><span class="qid">45n4.1</span><span class="ph understand">understand</span>Why are quorums of 2 among 4 unsafe?</li>
     </ol>
   </section>
 </section>
@@ -85,19 +89,19 @@ d = (0,0,1),\ \text{send} @@ R ticks
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them.</p>
-  <div class="chq"><span class="chid">45n.4.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">your own run</span></span>Make up a run of four machines and six messages. Stamp it, and list every concurrent pair.</div>
+  <div class="chq"><span class="chid">45n.5.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a 4 by 4 grid</span></span>Count the size of a row-and-column quorum in a 4 by 4 grid, and how many failures it survives in the worst case.</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r45m.html">← 45m · quorums by hand</a><a href="r45eng.html">45·eng · what do switches, hubs and routers do? →</a></nav>
+<nav class="nextrung"><a href="r45m.html">← 45m · splitting a big job</a><a href="r45o.html">45o · vector clocks by hand →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>These are vector clocks, compared in the product order.</p>
+  <p>These are quorum systems. The grid is a grid quorum, and the overlap rule for liars is the Byzantine quorum condition.</p>
 </section>
 
 </div>
-<script src="rung.js"></script>
+<script>/* 0.3.88 Phase I: new 45a, old r45m is now r45n; old ticks -> new ids */window.LADDER_MV2={f:"mv:I",m:{"q:45m1.1": "q:45n1.1", "q:45m2.1": "q:45n2.1", "q:45m3.1": "q:45n3.1", "q:45m4.1": "q:45n4.1", "c:45m.5.1": "c:45n.5.1"}};</script><script src="rung.js"></script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

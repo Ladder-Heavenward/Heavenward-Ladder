@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How Did the Numbers Run Out, and the Network Keep Running?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r45eng.html">← 45·eng what do switches, hubs and routers do?</a><a href="r45econ.html">next: 45·econ why do strangers keep the chain honest? →</a></p>
+  <div class="tags"><span class="tag comp">45·comp · computing</span></div>
+  <h1>How Did the Numbers Run Out, and the Network Keep Running?</h1>
+  <p data-pid="da5034">45a gave every machine a 32-bit number, and 2³² looked like plenty in 1981. By 2011 the last of them had been handed out, and the newer 128-bit numbers were still rare. This annex follows the thirty years in between: each fix was a small theorem about the cut in the number, each bought time, each had a cost, and the network never stopped.</p>
+  <p class="gesture" data-pid="dd475c">Cut the number at any bit, share one number among many machines, and race the two protocols against each other: three fixes that kept a 1981 address space alive into its fifth decade.</p>
+</header>
+
+<section class="class step" data-step="45comp1">
+  <h2 class="sthead"><span class="stno">45comp1</span>Plenty, Cut Badly</h2>
+  <p data-pid="450cb5">The 1981 design did not cut the number at any bit, as 45a3 allows, but at three fixed places. A class A network took the first 8 bits as prefix and left 24 for machines: 128 such networks, each of about 16.7 million addresses. A class B network cut at 16 bits: 16,384 networks of 65,536. A class C cut at 24: 2,097,152 networks of 254 usable addresses. The first bits of the number told a router which class it was reading, so routers needed no mask.</p>
+  <p data-pid="929732">Fixed cuts waste. An organisation of 2,000 machines is too big for a class C and takes a class B, leaving some 63,000 addresses idle. By February 1992, 5,467 of the 16,382 class B networks were given out, and the rate pointed to none left in about fifteen months. The space was not full. It was cut so that the useful sizes ran out first.</p>
+  <p data-pid="367a85">The second trouble was the routers. Every network needed its own line in every default-free router, and the count of lines, about 4,700 in January 1992, had doubled every ten months or so since 1988. Hardware and the people running it could not keep that up.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45·comp.1.1</span><span class="ph understand">understand</span>Why did class B networks run out before the address space did? <br>What grew along with the count of networks?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45comp2">
+  <h2 class="sthead"><span class="stno">45comp2</span>Cut at Any Bit</h2>
+  <p data-pid="cede95">The first fix moved the cut. In 1985 a network was allowed to cut its own space again at a deeper bit, with a mask saying where: subnetting. In 1993 the classes were dropped altogether, and a prefix became any length from 0 to 32, written with the slash of 45a3. An organisation of 2,000 machines takes a /21, which is 2,048 addresses, and wastes 48 instead of 63,000.</p>
+  <p data-pid="be15c6">The same move shrank the routers' tables, by a theorem. A block of 2ᵏ addresses that begins at a multiple of 2ᵏ is exactly one prefix of length 32 − k, since its addresses agree on the first 32 − k bits and run through every value of the last k. So if a provider is given one such block and hands its customers pieces of it, the rest of the world needs one line for the provider, and the customers' lines live only inside the provider's routers. The longest-prefix rule of 45a4 makes this safe: a customer who moves to another provider keeps the longer line, and it wins over the aggregate.</p>
+  <p data-pid="27d6f1">The theorem bought twenty years, not for ever. Blocks are given out and split and traded, and at the start of 2026 the default-free table held about 1,050,000 lines for 32-bit prefixes, growing about 5 percent a year, with 84 percent of the lines /22 or smaller. The cut can be moved; it cannot make 2³² larger.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45·comp.2.1</span><span class="ph understand">understand</span>When is a block of 2ᵏ addresses one prefix? <br>Why does a provider's one line stand for all its customers?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45comp3">
+  <h2 class="sthead"><span class="stno">45comp3</span>One Number for Many</h2>
+  <p data-pid="18ad0e">The second fix broke 45a's rule of one number per machine, on purpose. In 1994 a router at the edge of a private network was allowed to rewrite the source number of every packet leaving, to its own, and to keep a table so that answers could be written back to the machine inside. Inside, machines use numbers that are not unique in the world; in 1996 three blocks were set aside for that use, 10.0.0.0/8, 172.16.0.0/12 and 192.168.0.0/16, and the same numbers are used in millions of homes at once.</p>
+  <p data-pid="f2007a">What makes one number carry many machines is the layer above. A connection is told apart not by the number alone but by the number and a 16-bit port, so one outside number holds up to 65,536 conversations at once, and the translating router gives each inside conversation its own port. The design was written down as a short-term measure, and said so.</p>
+  <p data-pid="2170dc">The cost is 45a5 made worse. A machine inside has no number the world can reach, so nothing outside can begin a conversation with it; a protocol that writes numbers into its load breaks when the header is rewritten and the load is not; and the router at the edge must now remember every conversation, which 45a's routers never had to do. The end-to-end argument was not refuted. It was traded for addresses.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45·comp.3.1</span><span class="ph understand">understand</span>What lets one outside number serve many inside machines? <br>Name one thing it breaks.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45comp4">
+  <h2 class="sthead"><span class="stno">45comp4</span>The Pool Runs Dry</h2>
+  <p data-pid="36ba9e">The numbers were handed down in tiers: one central registry gave /8 blocks to five regional registries, which gave smaller blocks to providers. On 3 February 2011 the central pool gave out its last five /8 blocks, one to each region, and had nothing left. The regions then ran down in turn: Asia and the Pacific reached its final /8 in April 2011, Europe in September 2012, Latin America began rationing in June 2014, North America's pool emptied in September 2015, and Africa, last, entered its final phase in 2017 and tightened again in 2019 and 2020.</p>
+  <p data-pid="1b831f">Running out did not mean stopping. Each region kept a rule for its last /8, handing a new provider one small block and no more, so that a newcomer could still reach the world; Europe made its last such /22 in November 2019. And blocks already given became goods. Holders who had been given a /16 in the 1980s and used a fraction of it sold the rest, and a market in 32-bit numbers has run since, where a single address has cost tens of dollars.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45·comp.4.1</span><span class="ph understand">understand</span>What happened on 3 February 2011? <br>How could a new provider still get numbers afterwards?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45comp5">
+  <h2 class="sthead"><span class="stno">45comp5</span>Sharing at the Carrier</h2>
+  <p data-pid="e84d35">When providers themselves ran short, 45comp3 was done twice. The home router already shares one number among a household; the provider now shares one public number among many households, rewriting a second time at its own edge. In 2012 a block, 100.64.0.0/10, was set aside for the numbers between the two rewritings, so that they clash neither with the private blocks a home might use nor with the public ones.</p>
+  <p data-pid="06351b">Count what one public number can carry. It has 65,536 ports, less the reserved ones; if each household is given a fixed share of, say, 1,024, one number serves about 60 households, and a city provider needs a few thousand public numbers for a few hundred thousand homes. The costs climb with the sharing: the provider's edge must hold every conversation of every household, a household that opens too many conversations runs out of ports, and a complaint about one number now names dozens of homes, so the provider must keep logs to say which.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45·comp.5.1</span><span class="ph understand">understand</span>Why was a third block of non-public numbers needed? <br>What limits how many households one public number can carry?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45comp6">
+  <h2 class="sthead"><span class="stno">45comp6</span>The Longer Number, Slowly</h2>
+  <p data-pid="f95829">The lasting fix was the 128-bit number, specified in 1998 and made a full standard in 2017. Every machine can have its own again, and the sharing of 45comp3 and 45comp5 is unneeded. But the new protocol does not understand the old, nor the old the new, and no one gains by moving alone: a machine with only new numbers cannot reach a server with only old ones. So the move was built as a set of bridges, each a small theorem about carrying one protocol inside the other.</p>
+  <p data-pid="91ade9">Run both: a machine with a number of each kind speaks either, and the two networks overlap on the same links. Tunnel: a new packet is wrapped as the load of an old one and unwrapped on the far side; from 2001 the old number itself could be embedded in the new one, so the tunnel's far end could be computed from the destination and needed no table; later a provider could do the same with its own prefix in place of the fixed one. Translate: for a machine with only new numbers, a router at the edge rewrites a new packet into an old one, with the old server's 32 bits embedded in a 96-bit prefix, and the name service hands out such synthetic numbers, so the machine never knows; and when a program insists on an old number, the machine translates once more inside itself, so that the packet is translated twice and arrives in the form it left.</p>
+  <p data-pid="1b5ee8">Race: a machine with both kinds tries the new first and the old a fraction of a second later, and keeps whichever connects, so that a broken new path costs a user nothing visible. That rule, from 2012, is what let the big services turn the new protocol on for good on 6 June 2012 without harm. Adoption then grew for a decade and more. By one large service's count, 49.6 percent of its users reached it over the new protocol in June 2025 and 50.1 percent on 28 March 2026, the first day past half, with France and India above 70 percent and other countries under 10. An average over several measures stands near 43 percent. The 1981 numbers still carry about half the traffic, forty-five years on.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45·comp.6.1</span><span class="ph understand">understand</span>Why can no one gain by moving to the new numbers alone? <br>What does the race rule do?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45comp7">
+  <h2 class="sthead"><span class="stno">45comp7</span>Illegal Moves</h2>
+  <pre class="lines" data-k="ember" data-label="this annex: tempting, and not allowed" data-wrong="1">
+\text{the numbers ran out, so the network stopped growing}\,? @@ the cut moved, numbers were shared, and the longer numbers came
+\text{sharing one number is a wall against the outside}\,? @@ it stops inbound conversations as a side effect; it was never a proof of safety
+\text{the new protocol replaced the old}\,? @@ both run; about half the traffic still uses the 1981 numbers
+\text{a block of } 2^k \text{ addresses is always one prefix}\,? @@ only when it begins at a multiple of 2ᵏ
+</pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45·comp.7.1</span><span class="ph understand">understand</span>Which three fixes kept the network growing after the numbers ran out? <br>When is a block of 2ᵏ addresses not one prefix?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The annex is complete without them.</p>
+  <div class="chq"><span class="chid">45·comp.8.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a provider with 2,000 customers</span></span>A provider holds 203.0.0.0/14 and has customers of 300, 1,200, 40 and 5,000 machines. Cut its block into one prefix for each, aligned as 45comp2 requires, say how many addresses each wastes, and show that the rest of the world still needs one line.</div>
+  <div class="chq"><span class="chid">45·comp.8.2</span><span class="tagq">debate</span><span class="givens"><span class="gtx">who pays to move</span></span>Using 45·econ's reading of rewards, say who gains when one provider alone turns on the longer numbers, who gains when all do, and what rule could make the first mover whole.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r45eng.html">← 45·eng · what do switches, hubs and routers do?</a><a href="r45econ.html">45·econ · why do strangers keep the chain honest? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The fixed cuts are classful addressing, from RFC 791 (1981); moving the cut inside a network is subnetting, RFC 950 (1985); dropping the classes is classless inter-domain routing, CIDR, RFC 1519 (1993), now RFC 4632, and the provider's one line is route aggregation. Rewriting numbers at the edge is network address translation, NAT, RFC 1631 (1994), now RFC 3022, with ports NAPT; the three private blocks are RFC 1918 (1996). The central registry is IANA and the five regional registries are APNIC, RIPE NCC, LACNIC, ARIN and AFRINIC. Sharing at the provider is carrier-grade NAT, and 100.64.0.0/10 is the shared address space of RFC 6598 (2012). The longer numbers are IPv6, RFC 2460 (1998) and RFC 8200 (2017); running both is dual stack; the tunnels are 6in4, 6to4 (RFC 3056, prefix 2002::/16), Teredo and 6rd (RFC 5969); the translators are NAT64 with DNS64 (RFC 6146 and 6147) and 464XLAT (RFC 6877); the race is Happy Eyeballs, RFC 6555 (2012) and RFC 8305 (2017); the day was World IPv6 Launch. The adoption counts are Google's IPv6 statistics and the Internet Society's Pulse; the table size is from the APNIC report BGP in 2025.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
