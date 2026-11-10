@@ -402,7 +402,10 @@ function mutations(t,c){ const out=[]; const re=/\d+/g; let m;
   return shuffle([...new Set(out)].filter(x=>x!==t)); }
 
 /* --- Check Proofs: a seed, several links, one bad line. --- */
-function proofQ(P,used){
+function proofQ(P,used,last){ const pq=P.qps.filter(Q=>qmode(Q)==='proof'), pool=()=>pq.length?poolQ(pq,used,last||[]):null;
+  if(pq.length&&Math.random()<Math.min(0.5,0.15*pq.length)){ const q=pool(); if(q) return q; }
+  return (P.seeds.length?proofQ0(P,used):null)||pool(); }
+function proofQ0(P,used){
   for(let tries=0;tries<120;tries++){
     const s=pick(P.seeds), c=s.make(), W=world(c);
     if(c.kind==='say') continue;
@@ -458,7 +461,7 @@ function drawSteps(ops,E0,count,nonneg){ const steps=[]; let E=E0;
     const N=apply(O.id,E,n); if(Math.abs(N.v)>999) continue; steps.push({id:O.id,n}); E=N; }
   return {steps,E}; }
 function workQ(P,used,last){
-  const seeds=P.seeds.filter(s=>['add','times','num','int'].includes(SKIND[s.id])), wq=P.qps.filter(Q=>WORKQ.includes(Q.id));
+  const seeds=P.seeds.filter(s=>['add','times','num','int'].includes(SKIND[s.id])), wq=P.qps.filter(Q=>qmode(Q)==='work');
   const canChain=seeds.length&&P.ops.length;
   const tseeds=P.seeds.filter(s=>TERMK.includes(SKIND[s.id])&&chainLinks(P,SKIND[s.id]).length);
   if(tseeds.length&&(Math.random()<0.4||!(canChain||wq.length))) for(let tries=0;tries<30;tries++){ const s=pick(tseeds), q=chainWorkQ(P,used,s,s.make()); if(q) return q; }
@@ -509,7 +512,8 @@ const BANK=[
 BANK.forEach(B=>{ B.open=()=>measured(B.step); });
 const unit=(u,n)=>Math.abs(n)===1?u[0]:u[1];
 const say=(B,key,n)=>B[key].replace('{n}',n).replace('{u1}',unit(B.u1,n)).replace('{u2}',unit(B.u2,n));
-function wordQ(P,used){ const a=()=>countQ(P,used), b=()=>sayQ(P,used), order=Math.random()<0.45?[b,a]:[a,b]; return order[0]()||order[1](); }
+function wordQ(P,used,last){ const wq=P.qps.filter(Q=>qmode(Q)==='word'), c=()=>wq.length?poolQ(wq,used,last||[]):null, a=()=>countQ(P,used), b=()=>sayQ(P,used);
+  const order=shuffle([a,b,c].concat(wq.length>2?[c]:[])); for(const f of order){ const q=f(); if(q) return q; } return null; }
 function countQ(P,used){
   const seeds=P.seeds.filter(s=>['add','times','num'].includes(SKIND[s.id])), ops=P.ops.filter(O=>O.word), cbank=P.bank.filter(B=>!B.kind); if(!seeds.length||!ops.length||!cbank.length) return null;
   for(let tries=0;tries<160;tries++){
@@ -561,7 +565,7 @@ function licQ(P,used,last){ if(!P.seeds.length||!P.links.length) return null;
     return {index, a3:[names?s.id:s.id+c.ix,L.id,names?'places'+c.ix:DASH], step:L.step, stack:!!(c.t||L.rule), lines:out.lines, ask:'Which technique licenses the line marked ?', right:L.name, opts:shuffle([L.name,...wrong]), why:out.why}; }
   return null; }
 function readQ(P,used,last){
-  const rq=P.qps.filter(Q=>!WORKQ.includes(Q.id));
+  const rq=P.qps.filter(Q=>qmode(Q)==='read');
   const card=()=>{ for(let t=0;t<40&&P.cps.length;t++){ const C=pick(P.cps), x=C.make(); if(!x||used[x.index]) continue; return Object.assign({a3:[x.addr,C.id,DASH]},x); } return null; };
   const ways=[[card,P.cps.length?4:0],[()=>rq.length?poolQ(rq,used,last):null,rq.length?3:0],[()=>licQ(P,used,last),P.links.length&&P.seeds.length?3:0]].filter(w=>w[1]);
   while(ways.length){ let r=Math.random()*ways.reduce((a,w)=>a+w[1],0), i=0; while(i<ways.length-1&&r>=ways[i][1]){ r-=ways[i][1]; i++; } const q=ways[i][0](); if(q) return q; ways.splice(i,1); }
@@ -748,7 +752,7 @@ SKIND['1d.sayings']='say';
  ['weather.frost','the sky is clear','the night is cold'],['weather.river','the river is high','the ferry is tied up'],['weather.ice','the ground is frozen','the puddles are iced over']]
  .forEach(([id,p,q])=>BANK.push({id,step:'1d',kind:'prop',p,q,open:()=>measured('1d')}));
 const notSay=s=>s.replace(/ (is|are) /,' $1 not '), capFirst=s=>s.charAt(0).toUpperCase()+s.slice(1);
-function sayQ(P,used){ const seeds=P.seeds.filter(s=>SKIND[s.id]==='say'), bank=P.bank.filter(B=>B.kind==='prop'); if(!seeds.length||!bank.length) return null;
+function sayQ(P,used){ const seeds=P.seeds.filter(s=>SKIND[s.id]==='say'&&(!P.use||P.use(s))) /* the sentence is the question, so its rung must be switched on */, bank=P.bank.filter(B=>B.kind==='prop'); if(!seeds.length||!bank.length) return null;
   const links=chainLinks(P,'prop');
   for(let tries=0;tries<60;tries++){ const s=pick(seeds), c=s.make(), B=pick(bank), [text,form]=SAYINGS[c.k];
     const X=c.turn?'Q':'P', Y=c.turn?'P':'Q', cl={P:B.p,Q:B.q}, say=capFirst(text.replace('{X}',cl[X]).replace('{Y}',cl[Y]).replace('{nX}',notSay(cl[X])).replace('{nY}',notSay(cl[Y])));
@@ -780,15 +784,305 @@ QP.push({id:'1g.rows',step:'1g',label:'how many rows',open:()=>measured('1g'),ma
       why:said?'Nothing is looked at: the new line is written only from the lines already written. The guess is in the lines it starts from.':'A word for all the cases is gathered from the cases looked at. More cases make the guess harder to shake, and never finish it.'}; }}
 );
 
+/* ===== Laundry 5, rung 2 (floor 1 pools, stage B): 2a 2b 2c 2d 2e 2f 2g 2h 2j 2k =====
+   A question pool may now sit under any of the four kinds (mode:'proof' | 'work' | 'word'; none = Understanding).
+   Three small checkers stand behind every answer here: listed sets worked out member by member; every-and-some lines read
+   in a listed world, or in every world of up to three kinds at once; and the four old sentences read the same way. */
+const qmode=Q=>Q.mode||(WORKQ.includes(Q.id)?'work':'read');
+Object.assign(STEPS,{'2a':['r02a','Arrange Your Series'],'2b':['r02b','Every and Some'],'2c':['r02c','Claims Built in Layers'],'2d':['r02d','Membership and Same Members'],
+  '2e':['r02e','Sifting, and a Set to Start From'],'2f':['r02f','Gather and Merge'],'2g':['r02g','All the Subsets'],'2h':['r02h','Pairs in Order'],
+  '2j':['r02j','Every and Some by Hand'],'2k':['r02k','What Holds of the Set']});
+
+/* --- listed sets: a member is a word, a pair, or a listed set --- */
+const lkey=x=>typeof x==='string'?x:x.p?'('+lkey(x.p[0])+';'+lkey(x.p[1])+')':'{'+x.s.map(lkey).sort().join(',')+'}';
+const lset=xs=>{ const seen={}, s=[]; xs.forEach(x=>{ const k=lkey(x); if(!seen[k]){ seen[k]=1; s.push(x); } }); return {s}; };
+const lshow=x=>typeof x==='string'?x:x.p?'('+lshow(x.p[0])+', '+lshow(x.p[1])+')':x.s.length?'{'+x.s.map(lshow).join(', ')+'}':'∅';
+const lhas=(S,x)=>S.s.some(y=>lkey(y)===lkey(x)), lsub=(A,B)=>A.s.every(x=>lhas(B,x)), lsame=(A,B)=>lkey(A)===lkey(B);
+const lun=(A,B)=>lset(A.s.concat(B.s)), lint=(A,B)=>lset(A.s.filter(x=>lhas(B,x))), lless=(A,B)=>lset(A.s.filter(x=>!lhas(B,x)));
+const lpow=A=>{ let out=[lset([])]; A.s.forEach(x=>{ out=out.concat(out.map(S=>lset(S.s.concat([x])))); }); return lset(out); };
+const lval=(t,env)=>t.v?(t.v==='∅'?lset([]):env[t.v]):t.o==='∪'?lun(lval(t.a,env),lval(t.b,env)):t.o==='∩'?lint(lval(t.a,env),lval(t.b,env)):lless(lval(t.a,env),lval(t.b,env));
+const listed=xs=>xs.length===1?'the '+xs[0]:xs.slice(0,-1).map(x=>'the '+x).join(', ')+' and the '+xs[xs.length-1];
+const take=(xs,n)=>shuffle(xs.slice()).slice(0,n);
+
+/* --- the bank of things: what is said of them is laid down as given in each question, never left to be looked up --- */
+const THINGS=[
+  {id:'things.zoo',things:['owl','bat','cat','dog','cod','bee'],props:[['can fly','F',['owl','bat','bee']],['is a mammal','M',['bat','cat','dog']],['lives in water','W',['cod']]]},
+  {id:'things.market',things:['apple','pear','plum','kale','leek','beet'],props:[['is a fruit','F',['apple','pear','plum']],['has a stone','S',['plum']],['grows under the ground','U',['beet']]]},
+  {id:'things.shed',things:['saw','file','drill','rake','hoe','spade'],props:[['is a garden tool','G',['rake','hoe','spade']],['has a motor','M',['drill']],['has teeth','T',['saw','rake','file']]]}];
+THINGS.forEach(B=>BANK.push(Object.assign(B,{step:'2b',kind:'things',open:()=>measured('2b')||measured('2d')})));
+/* kinds for the every-and-some sentences: nouns, and what may be said of one */
+const KINDS=[
+  {id:'kinds.pets',nouns:[['cat','C'],['dog','D'],['animal','A']],adjs:[['grey','G'],['asleep','S'],['old','O']]},
+  {id:'kinds.orchard',nouns:[['pear','P'],['apple','A'],['fruit','F']],adjs:[['ripe','R'],['green','G'],['bruised','B']]},
+  {id:'kinds.harbor',nouns:[['ferry','F'],['barge','B'],['boat','T']],adjs:[['loaded','L'],['moored','M'],['red','R']]}];
+KINDS.forEach(B=>BANK.push(Object.assign(B,{step:'2b',kind:'kinds',open:()=>measured('2b')})));
+const aOf=w=>(/^[aeiou]/.test(w)?'an ':'a ')+w;
+
+/* --- every-and-some lines over statements with one gap. A line is {q, neg, body}; body is a term over the letters. --- */
+const mshowBody=t=>tshow(t).replace(/[A-Z]/g,m=>m+'(x)');
+const mshow=f=>(f.neg?'¬':'')+(f.q?f.q+'x '+(f.body.o&&f.body.o!=='¬'?'('+mshowBody(f.body)+')':mshowBody(f.body)):mshowBody(f.body));
+const mline=(q,body,neg)=>({q,neg:!!neg,body:typeof body==='string'?tparse(body):body});
+/* so or not so in a world given as a list of things, each an env of its letters */
+const mval=(f,world)=>{ const v=f.q==='∀'?world.every(e=>tval(f.body,e)):world.some(e=>tval(f.body,e)); return f.neg?!v:v; };
+/* every world there is for these letters: each kind of thing (a row of the letters) is in the world or not; no world is empty */
+function mworlds(L){ const types=[]; for(let m=0;m<(1<<L.length);m++){ const e={}; L.forEach((v,i)=>e[v]=!!(m&(1<<i))); types.push(e); }
+  const out=[]; for(let w=1;w<(1<<types.length);w++) out.push(types.filter((t,i)=>w&(1<<i))); return out; }
+const mletters=fs=>[...new Set([].concat(...fs.map(f=>tatoms(f.body))))].sort();
+const msame=(f,g)=>mworlds(mletters([f,g])).every(w=>mval(f,w)===mval(g,w));
+const mgives=(fs,g)=>mworlds(mletters(fs.concat([g]))).every(w=>!fs.every(f=>mval(f,w))||mval(g,w));
+
+/* ---------- 2a Arrange Your Series ---------- */
+QP.push({id:'2a.cases',step:'2a',mode:'proof',label:'rows and cases',open:()=>measured('2a'),make(){
+    const [p,q,r,s]=shuffle(['P','Q','R','S']), v=rnd(4), closed=Math.random()<0.35; let rows, bad, why;
+    const cite='carry an if through, rows ';
+    if(closed){ /* one case clashes with a given and is closed; the other reaches the row */
+      rows=[[p+' ∨ '+q,'given'],['¬'+q,'given'],[p+' ⇒ '+r,'given'],['│ '+p,'case'],['│ '+r,cite+'3 and 4'],['│ '+q,'case'],['│ ⊥','clash, rows 2 and 6'],['│ '+r,'when nothing is true, everything is permitted, row 7'],[r,'reason by cases, rows 1, 5 and 8']];
+      if(v===0){ rows[7]=['│ '+r,cite+'3 and 4']; bad=8; why='Row 8 sits in the '+q+' case and cites row 4, the case row of the '+p+' case. A case may use its own rows and the rows above it at the margin, never the rows of another case.'; }
+      else if(v===1){ rows[6]=['│ ⊥','clash, rows 3 and 6']; bad=7; why='A clash needs a row and its denial. Rows 3 and 6 are “'+p+' ⇒ '+r+'” and “'+q+'”: neither denies the other. The denial of '+q+' is row 2.'; }
+      else if(v===2){ rows[8]=[s,'reason by cases, rows 1, 5 and 8']; bad=9; why='A row comes back to the margin only when every case reached it. The cases reached '+r+', and row 9 writes '+s+'.'; }
+      else { rows[7]=['│ '+r,'when nothing is true, everything is permitted, row 5']; bad=8; why='That move needs ⊥ in hand. Row 5 is '+r+', not ⊥, and it is a row of the other case. The '+q+' case reached ⊥ at row 7.'; } }
+    else{ rows=[[p+' ∨ '+q,'given'],[p+' ⇒ '+r,'given'],[q+' ⇒ '+r,'given'],['│ '+p,'case'],['│ '+r,cite+'2 and 4'],['│ '+q,'case'],['│ '+r,cite+'3 and 6'],[r,'reason by cases, rows 1, 5 and 7']];
+      if(v===0){ rows[6]=['│ '+r,cite+'2 and 4']; bad=7; why='Row 7 sits in the '+q+' case and cites row 4, the case row of the '+p+' case. A case may use its own rows and the rows above it at the margin, never the rows of another case.'; }
+      else if(v===1){ rows[2]=[q+' ⇒ '+s,'given']; rows[6]=['│ '+s,cite+'3 and 6']; bad=8; why='A row comes back to the margin only when every case reached it. The '+p+' case reached '+r+' and the '+q+' case reached '+s+', so row 8 is not earned.'; }
+      else if(v===2){ rows[4]=['│ '+r,cite+'3 and 4']; bad=5; why='Row 3 is “'+q+' ⇒ '+r+'”, and row 4 is '+p+'. An if fires only on its own condition, so rows 3 and 4 give nothing. Row 2 was the row to cite.'; }
+      else { rows.splice(7,0,['│ '+q+' ∧ '+p,'join, rows 6 and 4']); rows[8]=[r,'reason by cases, rows 1, 5 and 7']; bad=8; why='Row 8 joins the case row of the '+q+' case with row 4, the case row of the '+p+' case. What one case writes belongs to that one way things could be, and to no other.'; } }
+    const der=rows.map((x,i)=>i+1).filter(i=>rows[i-1][1]!=='given'&&rows[i-1][1]!=='case');
+    return {index:'q:2a.cases['+[p,q,r,s].join('')+','+(closed?'c':'o')+v+']', a3:['1d.letters['+[p,q,r].join('')+']','2a.cases',DASH], stack:true, lines:rows,
+      ask:'One row does not follow from the rows it cites. Which row is the bad row?', right:'row '+bad, opts:der.map(i=>'row '+i), lead:'The bad row is row '+bad+'. ', why}; }});
+QP.push({id:'2a.stand',step:'2a',mode:'work',label:'givens that can stand together',open:()=>measured('2a'),make(){
+    const POOL=['P ∨ Q','¬P','¬Q','P ⇒ Q','Q ⇒ P','P ∧ Q','¬(P ∧ Q)','P ⇔ Q','¬P ∨ ¬Q','P','Q','Q ⇒ ¬P'];
+    for(let tries=0;tries<40;tries++){ const gs=take(POOL,2+rnd(2)), T=gs.map(tparse), rows=trows([tparse('P'),tparse('Q')]).rows, ok=rows.filter(e=>T.every(t=>tval(t,e)));
+      if(ok.length>1) continue; const name=e=>'the row where P is '+(e.P?'T':'F')+' and Q is '+(e.Q?'T':'F'), none='no row: these givens cannot stand together';
+      const right=ok.length?name(ok[0]):none, three=ok.length?shuffle([right,...shuffle(rows.map(name).filter(o=>o!==right)).slice(0,2)]):shuffle(rows.map(name)).slice(0,3);
+      return {index:'q:2a.stand['+gs.join(';')+']', stack:true, lines:gs.map(g=>[g,'given']), ask:'In which row is every given so?', right, opts:three.concat([none]),
+        why:ok.length?'Showing that givens can stand together takes one row: name it and check each given in it. In that row '+gs.map(g=>'“'+g+'” is T').join(', ')+'. In every other row some given is F.':'Showing that givens cannot stand together takes every row: '+rows.map(e=>'with P '+(e.P?'T':'F')+' and Q '+(e.Q?'T':'F')+', “'+gs[T.findIndex(t=>!tval(t,e))]+'” is F').join('; ')+'.'}; }
+    return null; }});
+
+/* ---------- 2b Every and Some ---------- */
+QP.push({id:'2b.world',step:'2b',mode:'work',label:'a world for a line',open:()=>measured('2b'),make(){
+    for(let tries=0;tries<40;tries++){ const B=pick(THINGS), W=take(B.things,3+rnd(2)), [p1,p2]=take(B.props,2), a=p1[1], b=p2[1];
+      const world=W.map(t=>({name:t,[a]:p1[2].includes(t),[b]:p2[2].includes(t)}));
+      const C=shuffle([mline('∀',a),mline('∃',a),mline('∀',b),mline('∃',b),mline('∀',a+' ⇒ '+b),mline('∀',b+' ⇒ '+a),mline('∃',a+' ∧ '+b),mline('∀',a+' ∨ '+b),mline('∃',a+' ∧ ¬'+b),mline('∃',b+' ∧ ¬'+a),mline('∀','¬'+a),mline('∃',a+' ∧ '+b,true)]);
+      const so=C.filter(f=>mval(f,world)), not=C.filter(f=>!mval(f,world)); if(!so.length||not.length<3) continue;
+      const R=so[0], wrong=not.slice(0,3), say=(pw,ts)=>ts.length?'so of '+listed(ts):'so of none of them';
+      const witness=f=>{ if(f.neg) return 'it denies a some, and no thing here passes'; if(f.q==='∃'){ const e=world.find(e=>tval(f.body,e)); return 'the '+e.name+' is an example'; } return 'each of the '+W.length+' things passes when it is checked in turn'; };
+      const fails=f=>{ if(f.neg||f.q==='∀'){ const e=world.find(e=>f.neg?tval(f.body,e):!tval(f.body,e)); return 'the '+e.name+(f.neg?' is an example of what it denies':' fails it'); } return 'no thing here is an example'; };
+      return {index:'q:2b.world['+B.id.slice(7)+';'+W.join(',')+';'+a+b+';'+mshow(R)+']', a3:['2b.world['+a+b+']',DASH,B.id],
+        story:'A world of '+W.length+' things: '+listed(W)+'. '+a+'(x) says “x '+p1[0]+'”: '+say(p1[0],W.filter(t=>p1[2].includes(t)))+'. '+b+'(x) says “x '+p2[0]+'”: '+say(p2[0],W.filter(t=>p2[2].includes(t)))+'.',
+        lines:[], ask:'Which line is so in this world?', right:mshow(R), opts:shuffle([R,...wrong]).map(mshow), lead:'It is '+mshow(R)+'. ',
+        why:'In this world '+witness(R)+'. The others are not so: '+wrong.map(f=>mshow(f)+' ('+fails(f)+')').join('; ')+'.'}; }
+    return null; }});
+/* sentences into marks: 2b's two spellings, and 2c's layers */
+const SENT=[
+  {k:'every',step:'2b',say:(n,a)=>'Every '+n[0]+' is '+a[0]+'.',f:(n,a)=>mline('∀',n[1]+' ⇒ '+a[1]),why:'Every goes with ⇒: the line promises '+'something of each thing that passes the first test, and says nothing of the rest.'},
+  {k:'some',step:'2b',say:(n,a)=>'Some '+n[0]+' is '+a[0]+'.',f:(n,a)=>mline('∃',n[1]+' ∧ '+a[1]),why:'Some goes with ∧: an example must pass both tests at once.'},
+  {k:'no',step:'2c',say:(n,a)=>'No '+n[0]+' is '+a[0]+'.',f:(n,a)=>Math.random()<0.5?mline('∀',n[1]+' ⇒ ¬'+a[1]):mline('∃',n[1]+' ∧ '+a[1],true),why:'“No” is an every with a not inside, or a not in front of a some. Find the main mark first, then work inward.'},
+  {k:'everyadj',step:'2c',say:(n,a,b)=>'Every '+a[0]+' '+n[0]+' is '+b[0]+'.',f:(n,a,b)=>mline('∀','('+n[1]+' ∧ '+a[1]+') ⇒ '+b[1]),why:'The main mark is the every, of the kind “'+'two tests joined”: the and is built first, the if is put in front of it, and the gap is bound last.'},
+  {k:'everyor',step:'2c',say:(n,a,b)=>'Every '+n[0]+' is '+a[0]+' or '+b[0]+'.',f:(n,a,b)=>mline('∀',n[1]+' ⇒ ('+a[1]+' ∨ '+b[1]+')'),why:'Join the last two with or, put the if in front, bind the gap: the every is the main mark and reaches the whole bracket.'},
+  {k:'somenot',step:'2c',say:(n,a,b)=>'Some '+n[0]+' is '+a[0]+' and not '+b[0]+'.',f:(n,a,b)=>mline('∃',n[1]+' ∧ ('+a[1]+' ∧ ¬'+b[1]+')'),why:'A some wants an example that passes every part at once, so its parts are joined with ∧, and the not sits on the one part it denies.'}];
+function sentQ(step){ const S=pick(SENT.filter(x=>x.step===step)), B=pick(KINDS), n=pick(B.nouns), [a,b]=take(B.adjs,2), R=S.f(n,a,b), L=tatoms(R.body);
+  const swapQ=f=>mline(f.q==='∀'?'∃':'∀',f.body,f.neg), cand=[];
+  const body=R.body, alt=o=>({o,a:body.a,b:body.b});
+  if(body.o==='⇒'){ cand.push(mline(R.q,alt('∧'),R.neg),mline('∃',alt('⇒')),mline('∃',alt('∧')),mline(R.q,{o:'⇒',a:body.b,b:body.a},R.neg)); }
+  if(body.o==='∧'){ cand.push(mline(R.q,alt('⇒'),R.neg),mline('∀',alt('∧')),mline('∀',alt('⇒')),mline(R.q,alt('∨'),R.neg)); }
+  tslips(body).forEach(z=>cand.push(mline(R.q,z,R.neg))); cand.push(swapQ(R),mline(R.q,body,!R.neg));
+  const wrong=[]; shuffle(cand.slice(0,4)).concat(shuffle(cand.slice(4))).forEach(f=>{ const k=mshow(f); if(wrong.length<3&&k!==mshow(R)&&!wrong.includes(k)&&!msame(f,R)&&mletters([f]).length===L.length) wrong.push(k); });
+  if(wrong.length<3) return null;
+  const all=B.nouns.concat(B.adjs), defs=L.map(l=>{ const w=all.find(x=>x[1]===l), noun=B.nouns.includes(w); return 'Let '+l+'(x) be “x is '+(noun?aOf(w[0]):w[0])+'”.'; }).join(' ');
+  return {index:'q:'+step+'.say['+S.k+';'+B.id.slice(6)+';'+n[1]+a[1]+(b?b[1]:'')+';'+mshow(R)+']', a3:[step+'.sentences['+S.k+']',DASH,B.id], story:defs+' The sentence: “'+S.say(n,a,b)+'”', lines:[],
+    ask:'Which line writes the sentence in marks?', right:mshow(R), opts:shuffle([mshow(R),...wrong]), lead:'It is '+mshow(R)+'. ', why:S.why}; }
+QP.push({id:'2b.say',step:'2b',mode:'word',label:'every and some in marks',open:()=>measured('2b'),make:()=>sentQ('2b')});
+
+/* ---------- 2c Claims Built in Layers ---------- */
+QP.push({id:'2c.say',step:'2c',mode:'word',label:'a sentence in layers',open:()=>measured('2c'),make:()=>sentQ('2c')});
+QP.push({id:'2c.main',step:'2c',label:'the main mark',open:()=>measured('2c'),make(){
+    const B=pick(KINDS), n=pick(B.nouns), [a,b]=take(B.adjs,2), S=pick(SENT), f=S.f(n,a,b), bare=Math.random()<0.3&&f.body.o;
+    const g=bare?{q:'',neg:false,body:f.body}:f, text=mshow(g), right=g.neg?'¬':g.q||g.body.o;
+    const name={'∀':'∀, the every','∃':'∃, the some','¬':'¬, the not','⇒':'⇒, the if','∧':'∧, the and','∨':'∨, the or'};
+    const inside=[...new Set((text.match(/[∀∃¬⇒∧∨]/g)||[]))].filter(m=>m!==right), pad=shuffle(['∀','∃','¬','⇒','∧','∨'].filter(m=>m!==right&&!inside.includes(m)));
+    const wrong=inside.concat(pad).slice(0,3);
+    return {index:'q:2c.main['+text+']', lines:[[text,bare?'a statement with a gap':'statement']], ask:'Which mark is its main mark?', right:name[right], opts:shuffle([right,...wrong]).map(m=>name[m]),
+      why:'A statement is built one mark at a time, and the last mark put on is its main mark. Here every other mark sits inside the reach of '+right+'.'}; }});
+
+/* ---------- 2d Membership and Same Members ---------- */
+QP.push({id:'2d.inpart',step:'2d',label:'in, or part of',open:()=>measured('2d'),make(){
+    for(let tries=0;tries<40;tries++){ const B=pick(THINGS), [a,b,c]=take(B.things,3), shape=rnd(4);
+      const S=shape===0?lset([a,b]):shape===1?lset([a,lset([b])]):shape===2?lset([lset([a]),b]):lset([a,lset([a,b]),c]);
+      const cand=[]; [a,b,c].forEach(t=>{ cand.push([t,'∈'],[lset([t]),'∈'],[lset([t]),'⊆']); }); cand.push([lset([a,b]),'⊆'],[lset([a,b]),'∈'],[lset([lset([a])]),'⊆'],[lset([lset([b])]),'⊆']);
+      const so=x=>x[1]==='∈'?lhas(S,x[0]):lsub(x[0],S), show=x=>lshow(x[0])+' '+x[1]+' '+lshow(S);
+      const yes=shuffle(cand.filter(so)), no=shuffle(cand.filter(x=>!so(x))); if(!yes.length||no.length<3) continue; const R=yes[0], wrong=no.slice(0,3);
+      const whyR=R[1]==='∈'?lshow(R[0])+' is on the list of '+lshow(S):'every member of '+lshow(R[0])+' is on the list of '+lshow(S);
+      const whyW=x=>x[1]==='∈'?lshow(x[0])+' is not on the list':lshow(x[0].s.find(y=>!lhas(S,y)))+' is in '+lshow(x[0])+' and is not on the list';
+      return {index:'q:2d.inpart['+lshow(S)+';'+show(R)+']', a3:['2d.inpart['+shape+']',DASH,B.id], lines:[], ask:'Which line is so?', right:show(R), opts:shuffle([R,...wrong]).map(show), lead:'It is '+show(R)+'. ',
+        why:'∈ asks whether a thing is on the list; ⊆ asks whether every member of a thing is on the list. Here '+whyR+'. The others: '+wrong.map(whyW).join('; ')+'.'}; }
+    return null; }});
+QP.push({id:'2d.same',step:'2d',mode:'work',label:'the same set',open:()=>measured('2d'),make(){
+    const B=pick(THINGS), [a,b,c,d]=take(B.things,4), three=Math.random()<0.5, base=three?[a,b,c]:[a,b];
+    const sh=xs=>'{'+xs.join(', ')+'}', given=three?pick([[a,b,c,a],[b,a,c,b],[c,c,a,b]]):pick([[a,b,a],[b,a,b],[a,a,b]]);
+    const right=three?pick([[c,a,b],[b,c,a],[c,b,a]]):[b,a];
+    const wrong=shuffle(three?[sh([a,b]),sh([a,b,c,d]),'{{'+[a,b,c].join(', ')+'}}',sh([a,c]),'{'+a+', {'+b+', '+c+'}}']:[sh([a]),sh([a,b,c]),'{{'+a+', '+b+'}}',sh([b]),'{{'+a+'}, {'+b+'}}']).slice(0,3);
+    return {index:'q:2d.same['+sh(given)+'>'+sh(right)+']', a3:['2d.same',DASH,B.id], lines:[[sh(given),'a set, listed']], ask:'Which list names the same set?', right:sh(right), opts:shuffle([sh(right),...wrong]),
+      why:'A set is known by what is on its list and nothing else. A repeat and a new order name the same set, since the same things are in each: the same-members axiom. Each other list drops a member, adds one, or lists a set where a member stood.'}; }});
+
+/* ---------- 2e Sifting ---------- */
+QP.push({id:'2e.sift',step:'2e',mode:'word',label:'a sift',open:()=>measured('2e'),make(){
+    for(let tries=0;tries<40;tries++){ const B=pick(THINGS), P=pick(B.props), W=take(B.things,3+rnd(2)), pass=W.filter(t=>P[2].includes(t)), fail=W.filter(t=>!P[2].includes(t));
+      const out=B.things.filter(t=>!W.includes(t)&&P[2].includes(t)); const u=lset(W), R=lset(pass);
+      const cand=[lset(fail),u,out.length?lset(pass.concat([out[0]])):null,pass.length>1?lset(pass.slice(1)):null,fail.length?lset(pass.concat([fail[0]])):null,lset([]),out.length?lset([out[0]]):null].filter(Boolean);
+      const wrong=[]; cand.forEach(x=>{ const k=lshow(x); if(wrong.length<3&&!lsame(x,R)&&!wrong.includes(k)) wrong.push(k); }); if(wrong.length<3) continue;
+      const facts='Given, of the members of u: “x '+P[0]+'” is so of '+(pass.length?listed(pass):'none of them')+(fail.length&&pass.length?', and not so of '+listed(fail):'')+'.';
+      return {index:'q:2e.sift['+B.id.slice(7)+';'+W.join(',')+';'+P[1]+']', a3:['2e.sift['+P[1]+']',DASH,B.id], story:'Let u = '+lshow(u)+'. '+facts, lines:[['{x ∈ u : x '+P[0]+'}','a sift of u']],
+        ask:'Which set is it?', right:lshow(R), opts:shuffle([lshow(R),...wrong]), lead:'It is '+lshow(R)+'. ',
+        why:'The sift keeps exactly the members of u that pass the condition'+(pass.length?': '+listed(pass):', and here none passes, so it is the empty set')+'. Sifting never adds: whatever the condition, the sifted set is part of u'+(out.length?', so the '+out[0]+', which is not in u, is not in it':'')+'.'}; }
+    return null; }});
+
+/* ---------- 2f Gather and Merge ---------- */
+QP.push({id:'2f.sets',step:'2f',mode:'work',label:'union, common members, members left over',open:()=>measured('2f'),make(){
+    const EX=['d ∪ b','d ∩ b','d ∖ b','b ∖ d','(d ∪ b) ∖ c','(d ∩ b) ∪ c','d ∩ (b ∪ c)','d ∖ (b ∩ c)','(d ∖ b) ∪ (b ∖ d)','(d ∪ c) ∩ b','d ∪ (b ∩ c)','(d ∖ c) ∩ b','c ∖ (d ∪ b)','(c ∖ d) ∩ (c ∖ b)'];
+    for(let tries=0;tries<40;tries++){ const B=pick(THINGS), ex=pick(EX), t=tparse(ex), L=tatoms(t), ps=shuffle(B.props.slice());
+      const env={d:lset(ps[0][2]),b:lset(take(B.things,3)),c:lset(ps[1][2].concat(take(B.things,1)))}; const R=lval(t,env);
+      const wrong=[]; tslips(t).map(z=>lval(z,env)).concat([env.d,env.b,lun(env.d,env.b),lint(env.d,env.b),lset([])]).forEach(x=>{ const k=lshow(x); if(wrong.length<3&&!lsame(x,R)&&!wrong.includes(k)) wrong.push(k); });
+      if(wrong.length<3) continue;
+      return {index:'q:2f.sets['+B.id.slice(7)+';'+L.map(l=>lshow(env[l])).join(';')+';'+ex+']', a3:['2f.sets['+ex+']',DASH,B.id], stack:true, lines:L.map(l=>[l+' = '+lshow(env[l]),'given']).concat([[ex,'a set']]),
+        ask:'Which set is it?', right:lshow(R), opts:shuffle([lshow(R),...wrong]), lead:'It is '+lshow(R)+'. ',
+        why:'Read each mark off its membership line: a thing is in a union when it is in one side or the other, in the common members when it is in both, and in the members left over when it is in the first and not in the second. Worked from the inside brackets out, that leaves '+lshow(R)+'.'}; }
+    return null; }});
+QP.push({id:'2f.merge',step:'2f',mode:'work',label:'a merge',open:()=>measured('2f'),make(){
+    for(let tries=0;tries<40;tries++){ const B=pick(THINGS), [a,b,c,d]=take(B.things,4), shape=rnd(4);
+      const s=shape===0?lset([lset([a,b]),lset([b,c])]):shape===1?lset([lset([a,b])]):shape===2?lset([lset([a]),lset([b,c]),lset([c,d])]):lset([lset([a,b]),lset([])]);
+      const R=s.s.reduce((x,y)=>lun(x,y),lset([])), wrong=[];
+      [s.s.reduce((x,y)=>lint(x,y)),s,lset([R]),lset(R.s.slice(1)),lset([a,b,c,d]),lset([])].forEach(x=>{ const k=lshow(x); if(wrong.length<3&&!lsame(x,R)&&!wrong.includes(k)) wrong.push(k); });
+      if(wrong.length<3) continue;
+      return {index:'q:2f.merge['+lshow(s)+']', a3:['2f.merge['+shape+']',DASH,B.id], lines:[['⋃'+lshow(s),'a merge']], ask:'Which set is it?', right:lshow(R), opts:shuffle([lshow(R),...wrong]), lead:'It is '+lshow(R)+'. ',
+        why:'Tip every member of the set out and gather up everything that fell: a thing is in the merge exactly when it is in some member. The members here are '+s.s.map(lshow).join(' and ')+'.'}; }
+    return null; }});
+/* the set techniques of 2f10, each a technique of 1f under the same name; the not-through technique for intersection is one inclusion only, so it is no link of a sameness chain */
+LINKS.push(
+  rwLink('2f.sturnabout','2f','the turn-about technique for union and intersection',[['A ∪ B','B ∪ A'],['A ∩ B','B ∩ A']],'set'),
+  rwLink('2f.sregroup','2f','the regroup technique for union and intersection',[['(A ∪ B) ∪ C','A ∪ (B ∪ C)'],['(A ∩ B) ∩ C','A ∩ (B ∩ C)']],'set'),
+  rwLink('2f.sagain','2f','the say-it-again technique for sets',[['A ∪ A','A'],['A ∩ A','A']],'set'),
+  rwLink('2f.sabsorb','2f','the absorb technique for sets',[['A ∪ (A ∩ B)','A'],['A ∩ (A ∪ B)','A']],'set'),
+  rwLink('2f.sspreadand','2f','the spread technique for intersection over union',[['A ∩ (B ∪ C)','(A ∩ B) ∪ (A ∩ C)']],'set'),
+  rwLink('2f.sspreador','2f','the spread technique for union over intersection',[['A ∪ (B ∩ C)','(A ∪ B) ∩ (A ∪ C)']],'set'),
+  rwLink('2f.sunits','2f','the units technique for sets',[['A ∪ ∅','A'],['A ∩ ∅','∅']],'set'),
+  rwLink('2f.snotor','2f','the not-through technique for union',[['C ∖ (A ∪ B)','(C ∖ A) ∩ (C ∖ B)']],'set'));
+const SET_SEEDS=['d ∩ (b ∪ c)','d ∪ (b ∩ c)','(d ∪ b) ∩ c','(d ∩ b) ∪ c','c ∖ (d ∪ b)','(d ∩ b) ∪ (d ∩ c)','(d ∪ b) ∩ (d ∪ c)','d ∪ (d ∩ b)','d ∩ (d ∪ b)','(d ∪ b) ∪ c','(d ∩ b) ∩ c','(c ∖ d) ∩ (c ∖ b)',
+  '(d ∩ b) ∪ (b ∩ d)','d ∩ (b ∪ d)','(d ∪ ∅) ∩ b','(d ∩ d) ∪ b','c ∖ (b ∪ (d ∩ b))','(d ∪ b) ∩ (b ∪ d)','d ∪ (b ∪ d)','(d ∩ c) ∪ (b ∩ c)','c ∖ ((d ∪ b) ∪ d)','(d ∩ (b ∪ c)) ∪ d'];
+SEEDS.push({id:'2f.sets',step:'2f',label:'sets, by letter',open:()=>measured('2f'),
+  make(){ const k=rnd(SET_SEEDS.length), L=shuffle(['d','b','c']); return {kind:'set',t:relabel(tparse(SET_SEEDS[k]),{d:L[0],b:L[1],c:L[2]}),ix:'['+k+','+L.join('')+']'}; }});
+SKIND['2f.sets']='set';
+
+/* ---------- 2g All the Subsets ---------- */
+QP.push({id:'2g.power',step:'2g',mode:'work',label:'all the subsets',open:()=>measured('2g'),make(){
+    const B=pick(THINGS), n=1+rnd(2), xs=take(B.things,n), u=lset(xs), R=lpow(u), [a,b]=xs;
+    const cand=n===1?[lset([lset([a])]),lset([a]),lset([lset([]),a]),lset([lset([])]),lset([lset([]),lset([lset([a])])])]
+      :[lset([lset([a]),lset([b]),lset([a,b])]),lset([lset([]),lset([a]),lset([b])]),lset([lset([]),a,b,lset([a,b])]),lset([lset([a]),lset([b])]),u];
+    const wrong=shuffle(cand.map(lshow).filter(k=>k!==lshow(R))).slice(0,3);
+    return {index:'q:2g.power['+lshow(u)+']', a3:['2g.power['+n+']',DASH,B.id], lines:[['𝒫('+lshow(u)+')','the set of all the subsets']], ask:'Which set is it?', right:lshow(R), opts:shuffle([lshow(R),...wrong]), lead:'It is '+lshow(R)+'. ',
+      why:'Keep or drop: go through the members in turn, and each set made so far comes back kept and dropped. Dropping everything gives ∅, keeping everything gives '+lshow(u)+' itself, and both are always on the list. The members of 𝒫 are subsets, never the bare members.'}; }},
+  {id:'2g.missing',step:'2g',mode:'work',label:'keep or drop',open:()=>measured('2g'),make(){
+    const B=pick(THINGS), xs=take(B.things,3), u=lset(xs), all=shuffle(lpow(u).s), gone=all[0], kept=all.slice(1), wrong=shuffle(kept).slice(0,3);
+    return {index:'q:2g.missing['+lshow(u)+';'+lshow(gone)+']', a3:['2g.missing',DASH,B.id], stack:true, lines:[['u = '+lshow(u),'given'],[kept.map(lshow).join(', '),'subsets of u, one short']],
+      ask:'Which subset of u is missing from the list?', right:lshow(gone), opts:shuffle([gone,...wrong]).map(lshow), lead:'It is '+lshow(gone)+'. ',
+      why:'Each member is kept or dropped, so three members give eight subsets, from ∅ (drop all) to u itself (keep all). Seven are listed, and '+lshow(gone)+' is the one that is not.'}; }},
+  {id:'2g.inpower',step:'2g',label:'in, and part of, again',open:()=>measured('2g'),make(){
+    for(let tries=0;tries<40;tries++){ const B=pick(THINGS), [a,b,c]=take(B.things,3), u=lset([a,b]), PW=lpow(u), e=lset([]);
+      const cand=[[e,'∈'],[a,'∈'],[lset([a]),'∈'],[lset([a]),'⊆'],[u,'∈'],[u,'⊆'],[lset([lset([a])]),'⊆'],[lset([lset([a])]),'∈'],[e,'⊆'],[lset([c]),'∈'],[lset([a,c]),'∈'],[lset([e]),'⊆'],[lset([lset([a]),lset([b])]),'⊆'],[b,'∈']];
+      const so=x=>x[1]==='∈'?lhas(PW,x[0]):lsub(x[0],PW), show=x=>lshow(x[0])+' '+x[1]+' 𝒫('+lshow(u)+')';
+      const yes=shuffle(cand.filter(so)), no=shuffle(cand.filter(x=>!so(x))); const R=yes[0], wrong=no.slice(0,3);
+      return {index:'q:2g.inpower['+lshow(u)+';'+show(R)+']', a3:['2g.inpower',DASH,B.id], lines:[], ask:'Which line is so?', right:show(R), opts:shuffle([R,...wrong]).map(show), lead:'It is '+show(R)+'. ',
+        why:'The members of 𝒫('+lshow(u)+') are the subsets of '+lshow(u)+': '+PW.s.map(lshow).join(', ')+'. ∈ asks whether a thing is on that list; ⊆ asks whether every member of a thing is on it.'}; }
+    return null; }});
+
+/* ---------- 2h Pairs in Order ---------- */
+QP.push({id:'2h.equal',step:'2h',mode:'work',label:'equal pairs',open:()=>measured('2h'),make(){
+    const B=pick(THINGS), [a,b,c]=take(B.things,3), v=rnd(3);
+    const L=v===0?'(x, '+b+') = ('+a+', y)':v===1?'('+a+', x) = (y, '+b+')':'(x, y) = ('+a+', '+b+')';
+    const xa=v===1?b:a, yb=v===1?a:b, right='x = '+xa+' and y = '+yb;
+    return {index:'q:2h.equal['+L+']', a3:['2h.equal['+v+']',DASH,B.id], lines:[[L,'given']], ask:'What does the line give?', right, opts:shuffle([right,'x = '+yb+' and y = '+xa,'x = y','x = '+xa+' and y = '+c]),
+      why:'The equal-pairs technique: if two pairs are the same set, their left entries are the same and their right entries are the same. Left with left, right with right.'}; }},
+  {id:'2h.product',step:'2h',mode:'work',label:'a product',open:()=>measured('2h'),make(){
+    const [B1,B2]=take(THINGS,2), n=1+rnd(2), m=n===1?2:1+rnd(2), u=take(B1.things,n), b=take(B2.things,m), pr=(x,y)=>({p:[x,y]});
+    const R=lset([].concat(...u.map(x=>b.map(y=>pr(x,y))))), cand=[lset([].concat(...b.map(y=>u.map(x=>pr(y,x))))),lset(u.concat(b)),lset(u.map((x,i)=>pr(x,b[i%b.length]))),lset([lset(u),lset(b)]),lset([pr(lset(u),lset(b))])];
+    const wrong=[]; cand.forEach(x=>{ const k=lshow(x); if(wrong.length<3&&!lsame(x,R)&&!wrong.includes(k)) wrong.push(k); }); if(wrong.length<3) return null;
+    return {index:'q:2h.product['+lshow(lset(u))+'×'+lshow(lset(b))+']', a3:['2h.product['+n+'×'+m+']',DASH,B1.id+'+'+B2.id], stack:true, lines:[['u = '+lshow(lset(u)),'given'],['b = '+lshow(lset(b)),'given'],['u × b','the product']],
+      ask:'Which set is it?', right:lshow(R), opts:shuffle([lshow(R),...wrong]), lead:'It is '+lshow(R)+'. ',
+      why:'The product is the set of all pairs with left entry in u and right entry in b: '+(n*m)+' pair'+(n*m>1?'s':'')+' here. Order matters in a pair, so the left entries all come from u.'}; }},
+  {id:'2h.relation',step:'2h',label:'three properties',open:()=>measured('2h'),make(){
+    for(let tries=0;tries<60;tries++){ const B=pick(THINGS), U=take(B.things,3), prs=[]; U.forEach(x=>U.forEach(y=>{ if(Math.random()<0.42) prs.push([x,y]); })); if(prs.length<2||prs.length>6) continue;
+      const hasP=(x,y)=>prs.some(p=>p[0]===x&&p[1]===y), refl=U.every(x=>hasP(x,x)), sym=prs.every(p=>hasP(p[1],p[0])), trans=prs.every(p=>prs.every(q=>p[1]!==q[0]||hasP(p[0],q[1])));
+      const props=[['reflexive',refl],['symmetric',sym],['transitive',trans]], yes=props.filter(p=>p[1]); if(yes.length>1) continue; if(!yes.length&&Math.random()<0.6) continue;
+      const right=yes.length?yes[0][0]:'none of the three';
+      const miss={reflexive:()=>{ const x=U.find(x=>!hasP(x,x)); return 'not reflexive: ('+x+', '+x+') is not in it'; }, symmetric:()=>{ const p=prs.find(p=>!hasP(p[1],p[0])); return 'not symmetric: ('+p[0]+', '+p[1]+') is in it and ('+p[1]+', '+p[0]+') is not'; },
+        transitive:()=>{ let w; prs.forEach(p=>prs.forEach(q=>{ if(!w&&p[1]===q[0]&&!hasP(p[0],q[1])) w=[p,q]; })); return 'not transitive: ('+w[0].join(', ')+') and ('+w[1].join(', ')+') are in it and ('+w[0][0]+', '+w[1][1]+') is not'; }};
+      return {index:'q:2h.relation['+U.join(',')+';'+prs.map(p=>p.join('>')).join(',')+']', a3:['2h.relation',DASH,B.id], stack:true, lines:[['u = '+lshow(lset(U)),'given'],['r = {'+prs.map(p=>'('+p.join(', ')+')').join(', ')+'}','a relation on u']],
+        ask:'Which of the three properties does r have?', right, opts:['reflexive','symmetric','transitive','none of the three'], lead:'It is '+right+'. ',
+        why:(yes.length?'Each property is an every about the pairs, and r passes this one. ':'')+'It is '+props.filter(p=>!p[1]).map(p=>miss[p[0]]()).join('; ')+'.'}; }
+    return null; }});
+
+/* ---------- 2j Every and Some by Hand: the four old sentences and the four valid forms ---------- */
+const TERMS3=[['terrier','dog','mammal','bird'],['oak','tree','plant','stone'],['salmon','fish','animal','tree'],['tulip','flower','plant','tool'],['ferry','boat','vessel','bridge']];
+TERMS3.forEach((x,i)=>BANK.push({id:'terms.'+x[1],step:'2j',kind:'terms',w:x,open:()=>measured('2j')}));
+/* a sentence is [kind, subject letter, predicate letter]; kinds A E I O as 2j5 spells them */
+const osent=(k,s,p,W)=>k==='A'?'every '+W[s]+' is '+aOf(W[p]):k==='E'?'no '+W[s]+' is '+aOf(W[p]):k==='I'?'some '+W[s]+' is '+aOf(W[p]):'some '+W[s]+' is not '+aOf(W[p]);
+const oline=(k,s,p)=>k==='A'?mline('∀',s+' ⇒ '+p):k==='E'?mline('∀',s+' ⇒ ¬'+p):k==='I'?mline('∃',s+' ∧ '+p):mline('∃',s+' ∧ ¬'+p);
+const FORMS=[['Barbara','A','A','A'],['Celarent','E','A','E'],['Darii','A','I','I'],['Ferio','E','I','O']];
+const cap=s=>s[0].toUpperCase()+s.slice(1);
+function formDraw(){ const T=pick(BANK.filter(b=>b.kind==='terms')), F=pick(FORMS), neg=F[1]==='E', W={S:T.w[0],M:T.w[1],P:neg?T.w[3]:T.w[2]};
+  return {T,F,W,prem:[[F[1],'M','P'],[F[2],'S','M']],concl:[F[3],'S','P']}; }
+QP.push({id:'2j.forms',step:'2j',label:'the four valid forms',open:()=>measured('2j'),make(){
+    const D=formDraw(), say=x=>cap(osent(x[0],x[1],x[2],D.W))+'.';
+    return {index:'q:2j.forms['+D.F[0]+';'+D.T.id+']', a3:['2j.forms',DASH,D.T.id], stack:true, lines:[[say(D.prem[0]),'given'],[say(D.prem[1]),'given'],[say(D.concl),null]], ask:'Which technique licenses the line marked ?', right:D.F[0], opts:FORMS.map(f=>f[0]),
+      why:D.F[0]+' is '+D.F.slice(1).join(', ')+': '+(D.F[1]==='A'?'every M is P':'no M is P')+', '+(D.F[2]==='A'?'every S is M':'some S is M')+', so '+(D.F[3]==='A'?'every S is P':D.F[3]==='E'?'no S is P':D.F[3]==='I'?'some S is P':'some S is not P')+'. The middle term here is “'+D.W.M+'”.'}; }},
+  {id:'2j.follows',step:'2j',mode:'work',label:'what follows',open:()=>measured('2j'),make(){
+    const D=formDraw(), P=D.prem.map(x=>oline(...x)), all=[]; ['A','E','I','O'].forEach(k=>{ all.push([k,'S','P'],[k,'P','S']); });
+    const gives=all.filter(x=>mgives(P,oline(...x))), key=x=>x.join(''), right=D.concl;
+    const wrong=shuffle(all.filter(x=>key(x)!==key(right)&&!gives.some(g=>key(g)===key(x)))).slice(0,3), say=x=>cap(osent(x[0],x[1],x[2],D.W))+'.';
+    if(!gives.some(g=>key(g)===key(right))||wrong.length<3) return null;
+    return {index:'q:2j.follows['+D.F[0]+';'+D.T.id+';'+wrong.map(key).join(',')+']', a3:['2j.follows['+D.F[0]+']',DASH,D.T.id], stack:true, lines:[[say(D.prem[0]),'given'],[say(D.prem[1]),'given'],['▢','so']],
+      ask:'Which line follows from the two givens?', right:say(right), opts:shuffle([right,...wrong]).map(say), lead:'It is “'+say(right)+'” ',
+      why:'The form is '+D.F[0]+'. The middle term “'+D.W.M+'” links the givens and vanishes from the conclusion. Each other line has a world where both givens are so and it is not.'}; }},
+  {id:'2j.bad',step:'2j',mode:'proof',label:'a form that fails',open:()=>measured('2j'),make(){
+    for(let tries=0;tries<40;tries++){ const D1=formDraw(), D2=formDraw(); if(D1.T===D2.T||D1.F===D2.F) continue; const which=rnd(2), D=[D1,D2][which];
+      const P=D.prem.map(x=>oline(...x)), all=[]; ['A','E','I','O'].forEach(k=>{ all.push([k,'S','P'],[k,'P','S']); });
+      const slip=shuffle(all.filter(x=>!mgives(P,oline(...x))&&(x[0]===D.concl[0]||x[1]===D.concl[1])))[0]; if(!slip) continue;
+      const say=(x,W)=>cap(osent(x[0],x[1],x[2],W))+'.', rows=[];
+      [D1,D2].forEach((d,i)=>{ const base=rows.length; rows.push([say(d.prem[0],d.W),'given'],[say(d.prem[1],d.W),'given'],[i===which?say(slip,d.W):say(d.concl,d.W),d.F[0]+', on lines '+(base+1)+' and '+(base+2)]); });
+      const bad=which*3+3;
+      return {index:'q:2j.bad['+D1.F[0]+D1.T.id+';'+D2.F[0]+D2.T.id+';'+which+slip.join('')+']', a3:['2j.bad',D1.F[0]+'+'+D2.F[0],D1.T.id+'+'+D2.T.id], stack:true, lines:rows,
+        ask:'One line does not follow from what it cites. Which line is the bad line?', right:'line '+bad, opts:['line 3','line 6'], lead:'The bad line is line '+bad+'. ',
+        why:D.F[0]+' licenses “'+say(D.concl,D.W)+'” from those two givens. The line as written does not follow: there is a world where both givens are so and it is not.'}; }
+    return null; }},
+  {id:'2j.denial',step:'2j',label:'the crossing links',open:()=>measured('2j'),make(){
+    const T=pick(BANK.filter(b=>b.kind==='terms')), B=pick(KINDS), a=pick(B.adjs)[0], n=pick(B.nouns)[0], k=pick(['A','E','I','O']), cross={A:'O',O:'A',E:'I',I:'E'};
+    const say=k=>k==='A'?'Every '+n+' is '+a+'.':k==='E'?'No '+n+' is '+a+'.':k==='I'?'Some '+n+' is '+a+'.':'Some '+n+' is not '+a+'.';
+    return {index:'q:2j.denial['+k+';'+n+';'+a+']', a3:['2j.denial['+k+']',DASH,B.id], lines:[[say(k),'a sentence']], ask:'Which sentence is its denial: never both so, and never both not so?', right:say(cross[k]), opts:shuffle(['A','E','I','O'].filter(x=>x!==k).map(say)),
+      why:'The crossing links: an every sentence and its some-not sentence, and a no sentence and its some sentence, are each the other’s denial, whatever the subject. The other pairs can both be so, or both be not so, when the subject is empty.'}; }});
+
+/* ---------- 2k What Holds of the Set ---------- */
+QP.push({id:'2k.carries',step:'2k',label:'what the set hands to its members',open:()=>measured('2k'),make(){
+    const B=pick(THINGS), P=pick(B.props.filter(p=>p[2].length>1)), t=pick(P[2]), name='{x ∈ u : x '+P[0]+'}';
+    const C=[['The '+t+' '+P[0]+'.',true,'the condition made the members members, so it holds of each one'],
+      ['Everything in the set '+P[0]+'.',true,'a guess about the set is a guess about every member, made once'],
+      ['The '+t+' has '+P[2].length+' members.',false,'the count belongs to the set, and the '+t+' is a member, not the set'],
+      ['The '+t+' is a set.',false,'a member is not the set'],
+      ['The '+t+' is part of u.',false,'the set is part of u; the '+t+' is in u, a member'],
+      ['Everything in u '+P[0]+'.',false,'the condition was handed to what the sift kept, not to all of u']];
+    const R=pick(C.filter(c=>c[1])), wrong=shuffle(C.filter(c=>!c[1])).slice(0,3);
+    return {index:'q:2k.carries['+B.id.slice(7)+';'+P[1]+';'+t+';'+R[0]+';'+wrong.map(w=>w[0].length).join('')+']', a3:['2k.carries',DASH,B.id], story:'A set u of things is sifted: '+name+'. The sifted set has '+P[2].length+' members, and the '+t+' is one of them.', lines:[],
+      ask:'Which line does this make sure?', right:R[0], opts:shuffle([R,...wrong]).map(c=>c[0]), lead:'It is “'+R[0]+'” ',
+      why:'A set made by a condition hands that condition to every member: '+R[2]+'. It does not carry what holds only of the whole. The others: '+wrong.map(w=>w[2]).join('; ')+'.'}; }});
+
 const MAKE={proof:proofQ, work:workQ, word:wordQ, read:readQ};
 
 const toggled=()=>[...LINKS,...QP,...CARDP,...OPS,...MOVES];
 function avail(mode){ const oS=SEEDS.filter(s=>s.open()), kinds=oS.map(s=>SKIND[s.id]), oO=OPS.filter(o=>o.open());
-  if(mode==='proof') return oS.length>0&&LINKS.filter(l=>l.open()).length>=2;
+  const qp=m=>QP.some(Q=>Q.open()&&qmode(Q)===m);
+  if(mode==='proof') return (oS.length>0&&LINKS.filter(l=>l.open()).length>=2)||qp('proof');
   const chainable=oS.some(s=>TERMK.includes(SKIND[s.id])&&s.id!=='1d.letters'&&LINKS.filter(l=>l.open()&&l.rule&&l.kinds.includes(SKIND[s.id])).length>=2);
-  if(mode==='work') return chainable||(oO.length>0&&kinds.some(k=>['add','times','num','int'].includes(k)))||QP.some(Q=>Q.open()&&WORKQ.includes(Q.id));
-  if(mode==='word') return (BANK.some(b=>b.open()&&!b.kind)&&oO.some(o=>o.word)&&kinds.some(k=>['add','times','num'].includes(k)))||(BANK.some(b=>b.open()&&b.kind==='prop')&&kinds.includes('say'));
-  return QP.some(Q=>Q.open()&&!WORKQ.includes(Q.id))||CARDP.some(C=>C.open())||(oS.length>0&&LINKS.some(l=>l.open())); }
+  if(mode==='work') return chainable||(oO.length>0&&kinds.some(k=>['add','times','num','int'].includes(k)))||qp('work');
+  if(mode==='word') return (BANK.some(b=>b.open()&&!b.kind)&&oO.some(o=>o.word)&&kinds.some(k=>['add','times','num'].includes(k)))||(BANK.some(b=>b.open()&&b.kind==='prop')&&kinds.includes('say'))||qp('word');
+  return qp('read')||CARDP.some(C=>C.open())||(oS.length>0&&LINKS.some(l=>l.open())); }
 const OPENS={proof:'0b',work:'1f',word:'1d',read:'0a'};
 function modeNow(){ const m=(get('rand:mode',null)||{}).m||'proof'; /* kept as an object: the record hands a bare word back unquoted */ if(MODES.some(M=>M.id===m)&&avail(m)) return m; const f=MODES.find(M=>avail(M.id)); return f?f.id:m; }
 
@@ -804,7 +1098,7 @@ function build(mode){
   for(const stray of passes){
     const use=P=>P.open()&&(stray?isOff(P):!isOff(P));
     const P={isOff, seeds:SEEDS.filter(s=>s.open()), bank:BANK.filter(b=>b.open()), links:LINKS.filter(use), qps:QP.filter(use), ops:OPS.filter(use),
-      cps:CARDP.filter(C=>use(C)&&C.ready()), openL:LINKS.filter(l=>l.open()), moves:MOVES.filter(use)};
+      cps:CARDP.filter(C=>use(C)&&C.ready()), openL:LINKS.filter(l=>l.open()), moves:MOVES.filter(use), use};
     const q=MAKE[mode](P,used,last); if(q){ q.stray=stray; q.mode=mode; return q; } }
   return {closed:'The rungs switched on hold no fresh question of this kind. Switch on another rung below, or pick another kind above. Each step you pass adds its pools.'};
 }
