@@ -2268,6 +2268,116 @@ QP.push({id:'12f.average',step:'12f',mode:'work',label:'the averaging step',open
     return {index:'q:12f.average[t;'+n+';'+fshow(u)+']', lines:[['n = '+n+', u = '+fshow(u),'u > 0 and u² > n']], ask:'Which trap does the root-trap technique give for √'+n+'?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'Root-trap: if u² > n, then n/u < √n < u. Here n/u = '+fshow(nu)+', and the trap has width (u² − n)/u = '+fshow(fsub(u,nu))+'.'}; }});
 
+/* ===== Laundry 5, rung 13 (floor 3 pools, stage L): 13a to 13n, slopes ===== */
+Object.assign(STEPS,{'13a':['r13a','The Slope at a Point'],'13b':['r13b','A Slope Means No Gap'],'13c':['r13c','The Product Rule'],'13d':['r13d','The Power Rule'],'13e':['r13e','The Chain Rule'],'13f':['r13f','A Joint Has No Slope'],'13g':['r13g','The Growing Square'],
+  '13h':['r13h','Powers, Constants and Sums'],'13i':['r13i','Products and Quotients'],'13j':['r13j','The Chain Rule by Hand'],'13k':['r13k','The Tangent Line and the Nearby Line'],'13l':['r13l','Implicit Slopes and the Inverse Dodge'],'13m':['r13m','Homing in on a Root With Tangent Lines, and How Errors Spread'],'13n':['r13n','Units and Standards']});
+const dp13=cs=>cs.length<2?[0]:cs.slice(0,-1).map((c,i)=>c*(cs.length-1-i));
+const poly13=cs=>{ let i=0; while(i<cs.length-1&&cs[i]===0) i++; const s=poly9(cs.slice(i)); return s===''?'0':s; };
+const num13=(right,alts,n)=>uniq(right,alts.map(a=>typeof a==='number'?sg(a):a),n||3);
+
+/* ---------- 13a The Slope at a Point, 13g The Growing Square ---------- */
+QP.push({id:'13a.slope',step:'13a',mode:'work',label:'first slopes',open:()=>measured('13a'),make(){
+    const k=rnd(4), w=pick([-4,-3,-2,-1,1,2,3,4,5]), m=pick([-3,-2,2,3,5]), b=rnd(9)-4;
+    const [ex,v,alts,why]=k===0?[lin9(m,b),fint(m),[fint(m*w+b),fint(b),fint(m*w),fint(0)],'Slope-of-a-line: mx + b has the slope m at every real.']:k===1?['x²',fint(2*w),[fint(w*w),fint(w),fint(2),fint(-2*w)],'Slope-of-x²: (x²)′ = 2x.']
+      :k===2?['x³',fint(3*w*w),[fint(w*w*w),fint(3*w),fint(2*w),fint(w*w)],'Slope-of-x³: (x³)′ = 3x².']:['1/x',fr(-1,w*w),[fr(1,w*w),fr(1,w),fr(-1,w),fint(-w*w)],'Slope-of-one-over-x: at every w ≠ 0, (1/x)′ = −1/x².'];
+    const right=fshow(v), wrong=uniq(right,alts.map(fshow),3); if(wrong.length<3) return null;
+    return {index:'q:13a.slope['+ex+';'+w+']', lines:[['f(x) = '+ex,'at the input '+sg(w)]], ask:'What is the slope of f there?', right, opts:shuffle([right,...wrong]), lead:'', why:why+' At '+sg(w)+' that is '+right+'.'}; }},
+  {id:'13a.chord',step:'13a',mode:'work',label:'chord slopes',open:()=>measured('13a'),make(){
+    const w=rnd(7)-3, h=pick([1,2,-1,3]), a=rnd(7)-3, f=x=>x*x+a*x, v=(f(w+h)-f(w))/h, right=sg(v), wrong=num13(right,[2*w+a,f(w+h)-f(w),v+h,2*w,v-1,f(w+h)]); if(wrong.length<3) return null;
+    return {index:'q:13a.chord['+w+';'+h+';'+a+']', lines:[['f(x) = '+poly13([1,a,0]),'from the input '+sg(w)+' to the input '+sg(w+h)]], ask:'What is the chord slope?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'(f('+sg(w+h)+') − f('+sg(w)+'))/'+par10(h)+' = ('+sg(f(w+h))+' − '+par10(f(w))+')/'+par10(h)+' = '+right+'. As a polynomial in h the chord slope is '+poly13([1,2*w+a]).replace(/x/g,'h')+', and the slope at '+sg(w)+' is what is left when h heads to 0: '+sg(2*w+a)+'.'}; }},
+  {id:'13g.square',step:'13g',mode:'work',label:'the growing square',open:()=>measured('13g'),make(){
+    const w=2+rnd(8), h=1+rnd(3), v=2*w*h+h*h, right=String(v), wrong=num13(right,[h*h,2*w*h,2*w+h,(w+h)*(w+h),w*h]);
+    return {index:'q:13g.square['+w+';'+h+']', lines:[['a square of side '+w,'its side grows by '+h]], ask:'By how much does its area grow?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'(w + h)² − w² = 2wh + h²: two strips of '+w+' by '+h+', and a corner of '+h+' by '+h+'. Divide by h and the strips leave 2w while the corner leaves h, which heads to 0. That is why the slope of x² is 2x.'}; }});
+
+/* ---------- 13b A Slope Means No Gap, 13f A Joint Has No Slope ---------- */
+const B13=[
+  ['f has a slope at w. What follows about continuity?','f is continuous at w',['nothing','f is continuous everywhere','f is a line near w'],'Slope-means-no-gap: the change f(w + h) − f(w) is the chord slope times h, and that heads to 0.'],
+  ['f is continuous at w. Must f have a slope at w?','no: |x| is continuous at 0 and has no slope there',['yes: continuity gives a slope','yes, unless f is a constant','no: a continuous function never has a slope'],'The chord slopes of |x| from 0 are 1 to the right and −1 to the left. No gap, and no slope.'],
+  ['When does a function have a slope at a joint?','exactly when its pieces arrive there with the same slope',['whenever it is continuous there','never','whenever both pieces are lines'],'Two-side-slopes: a slope exists exactly when the slopes from the two sides exist and agree.'],
+  ['What is the slope at w, in words?','the limit of the chord slopes from w, as the step h heads to 0',['the chord slope for a small step h','the value of f at w','the limit of f at w'],'A chord slope needs two inputs. The slope at a point is where the chord slopes head, and it is one real or there is none.']];
+QP.push({id:'13b.gap',step:'13b',label:'a slope means no gap',open:()=>measured('13b'),make(){ return writtenQ('13b.gap',B13); }},
+  {id:'13f.joint',step:'13f',label:'a slope at a joint',open:()=>measured('13f'),make(){
+    const w=rnd(7)-3, m1=pick([-3,-2,-1,1,2,3]), b1=rnd(9)-4, kind=rnd(3), m2=kind===0?m1:pick([-3,-2,-1,1,2,3].filter(m=>m!==m1)), lv=m1*w+b1, b2=kind===2?lv-m2*w+pick([-2,-1,1,2]):lv-m2*w;
+    const opts=['yes: the slope there is '+sg(m1),'no: the pieces arrive with the slopes '+sg(m1)+' and '+sg(m2),'no: f has a gap there, so it has no slope','yes: the slope there is '+fshow(fr(m1+m2,2))], right=opts[kind];
+    return {index:'q:13f.joint['+w+';'+m1+';'+b1+';'+m2+';'+b2+']', lines:[['f(x) = '+lin9(m1,b1),'for x ≤ '+sg(w)],['f(x) = '+lin9(m2,b2),'for x > '+sg(w)]], ask:'Has f a slope at '+sg(w)+'?', right, opts:kind===0?[opts[0],'no: the pieces arrive with different slopes',opts[2],'no: a joint never has a slope']:opts, lead:'',
+      why:kind===2?'The left piece gives '+sg(lv)+' at the joint and the right piece heads to '+sg(m2*w+b2)+'. A slope means no gap, so a gap means no slope.':'The pieces meet at the height '+sg(lv)+'. Joint-slopes: a slope exists exactly when the pieces arrive with the same slope. '+(kind===0?'Both arrive with '+sg(m1)+'.':'Slopes are not averaged.')}; }});
+
+/* ---------- 13c, 13e, 13f, 13i, 13l: the rules, from a table of values ---------- */
+QP.push({id:'13c.product',step:'13c',mode:'work',label:'the product rule',open:()=>measured('13c'),make(){
+    const w=rnd(5), f=pick([-3,-2,2,3,4]), df=pick([-2,-1,1,2,3]), g=pick([-4,-2,1,3,5]), dg=pick([-3,-1,2,4]), v=df*g+f*dg, right=sg(v), wrong=num13(right,[df*dg,f*g,df*g-f*dg,df+dg,f*dg]); if(wrong.length<3) return null;
+    return {index:'q:13c.product['+[f,df,g,dg].join(';')+']', lines:[['f('+w+') = '+sg(f)+', f′('+w+') = '+sg(df),'given'],['g('+w+') = '+sg(g)+', g′('+w+') = '+sg(dg),'given']], ask:'What is (fg)′('+w+')?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Product for slopes: (fg)′ = f′g + fg′ = '+par10(df)+' · '+par10(g)+' + '+par10(f)+' · '+par10(dg)+' = '+right+'. The slope of a product is not the product of the slopes.'}; }},
+  {id:'13e.chain',step:'13e',mode:'work',label:'the chain rule',open:()=>measured('13e'),make(){
+    const w=1+rnd(4), g=w+2+rnd(4), dg=pick([-3,-2,2,3,4]), dfg=pick([-2,-1,3,5]), dfw=pick([-4,1,2,6].filter(x=>x!==dfg)), v=dfg*dg, right=sg(v), wrong=num13(right,[dfw*dg,dfg+dg,dfg,dfw*dfg,dg]); if(wrong.length<3) return null;
+    return {index:'q:13e.chain['+[w,g,dg,dfg,dfw].join(';')+']', lines:[['g('+w+') = '+g+', g′('+w+') = '+sg(dg),'given'],['f′('+w+') = '+sg(dfw)+', f′('+g+') = '+sg(dfg),'given']], ask:'What is (f ∘ g)′('+w+')?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Chain for slopes: rates through a chain multiply, the outside’s taken where the inside stands. The inside stands at g('+w+') = '+g+', so (f ∘ g)′('+w+') = f′('+g+') · g′('+w+') = '+par10(dfg)+' · '+par10(dg)+' = '+right+'.'}; }},
+  {id:'13i.quotient',step:'13i',mode:'work',label:'the quotient rule',open:()=>measured('13i'),make(){
+    const w=rnd(5), f=pick([-3,-2,2,3,4]), df=pick([-2,-1,1,2,3]), g=pick([-2,-1,1,2]), dg=pick([-3,-1,2,4]), v=fr(df*g-f*dg,g*g), right=fshow(v), wrong=uniq(right,[fshow(fr(df*g+f*dg,g*g)),fshow(fr(df,dg)),fshow(fr(f*dg-df*g,g*g)),fshow(fint(df*g-f*dg)),fshow(fr(f,g))],3); if(wrong.length<3) return null;
+    return {index:'q:13i.quotient['+[f,df,g,dg].join(';')+']', lines:[['f('+w+') = '+sg(f)+', f′('+w+') = '+sg(df),'given'],['g('+w+') = '+sg(g)+', g′('+w+') = '+sg(dg),'given']], ask:'What is (f/g)′('+w+')?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Quotient for slopes: (f/g)′ = (f′g − fg′)/g² = ('+par10(df)+' · '+par10(g)+' − '+par10(f)+' · '+par10(dg)+')/'+(g*g)+' = '+right+'. The bottom is a square, so the sign of the slope is the sign of the top.'}; }},
+  {id:'13l.inverse',step:'13l',mode:'work',label:'the inverse dodge',open:()=>measured('13l'),make(){
+    if(Math.random()<0.5){ const x0=1+rnd(4), y0=x0+3+rnd(5), d=pick([-4,-3,-2,2,3,4,5]), right=fshow(fr(1,d)), wrong=uniq(right,[fshow(fint(d)),fshow(fr(-1,d)),fshow(fr(1,y0)),fshow(fint(-d)),fshow(fr(x0,y0))],3); if(wrong.length<3) return null;
+      return {index:'q:13l.inverse[i;'+x0+';'+y0+';'+d+']', lines:[['f('+x0+') = '+y0+', f′('+x0+') = '+sg(d),'f keeps order or turns it about near '+x0],['g undoes f','so g('+y0+') = '+x0]], ask:'What is g′('+y0+')?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'Inverse-slope: g′(y₀) · f′(x₀) = 1, so g′('+y0+') = 1/f′('+x0+') = '+right+'. Run backwards, a rate is turned upside down.'}; }
+    const [a,b,r]=pick([[3,4,5],[4,3,5],[5,12,13],[12,5,13],[6,8,10],[8,6,10]]), sa=pick([1,-1])*a, sb=pick([1,-1])*b, right=fshow(fr(-sa,sb)), wrong=uniq(right,[fshow(fr(sa,sb)),fshow(fr(-sb,sa)),fshow(fr(sb,sa)),fshow(fr(-sa,r))],3); if(wrong.length<3) return null;
+    return {index:'q:13l.inverse[c;'+sa+';'+sb+']', lines:[['x² + y² = '+(r*r),'y is a function of x near the point'],['the point ('+sg(sa)+', '+sg(sb)+')','on the curve']], ask:'What is the slope of y there?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Take the slope of both sides, with y a function of x: 2x + 2y · y′ = 0, by the chain rule. So y′ = −x/y = '+right+' at the point.'}; }});
+
+/* ---------- 13d The Power Rule, 13h, 13j by hand ---------- */
+QP.push({id:'13d.poly',step:'13d',mode:'work',label:'a polynomial, term by term',open:()=>measured('13d'),make(){
+    const n=2+rnd(3), cs=[pick([1,2,3,-1,-2])]; for(let i=0;i<n;i++) cs.push(Math.random()<0.3?0:rnd(11)-5); const d=dp13(cs), right=poly13(d);
+    const keep=cs.slice(0,-1).concat([0]), wrong=uniq(right,[poly13(cs.slice(0,-1)),poly13(d.concat([cs[n]])),poly13(d.map((c,i)=>i===0?cs[0]:c)),poly13(keep.map((c,i)=>c*(n-i))),poly13(d.map(c=>-c))],3); if(wrong.length<3) return null;
+    return {index:'q:13d.poly['+poly13(cs)+']', lines:[['p(x) = '+poly13(cs),'a polynomial']], ask:'What is p′(x)?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Polynomial-slope: term by term. The power comes down as a factor and the power drops by one; a constant factor stays; a constant alone has slope 0.'}; }},
+  {id:'13d.check',step:'13d',mode:'proof',label:'is it the slope',open:()=>measured('13d'),make(){
+    const cs=[pick([1,2,3,-1]),rnd(9)-4,rnd(9)-4,rnd(9)-4], d=dp13(cs), bad=pick([null,null,d.concat([cs[3]]),[cs[0],d[1],d[2]],cs.slice(0,3)]), off=bad||d, ok=poly13(off)===poly13(d), opts=['it is the slope of line 1','it is not the slope of line 1'];
+    return {index:'q:13d.check['+poly13(cs)+';'+poly13(off)+']', stack:true, lines:[['p(x) = '+poly13(cs),'given'],['p′(x) = '+poly13(off),'power for slopes, term by term, on line 1']], ask:'Is line 2 right?', right:opts[ok?0:1], opts, lead:'',
+      why:'Term by term the slope is '+poly13(d)+'. Each power comes down as a factor and drops by one, and the constant goes to 0.'}; }},
+  {id:'13h.fraction',step:'13h',mode:'work',label:'fraction powers',open:()=>measured('13h'),make(){
+    const [b,q,p]=pick([[3,2,1],[2,2,1],[4,2,1],[2,2,3],[3,2,3],[2,3,1],[2,3,2],[3,3,1],[2,3,4],[5,2,1],[2,4,1],[2,2,5]]), w=b**q, v=fmul(fr(p,q),p>=q?fint(b**(p-q)):fr(1,b**(q-p))), right=fshow(v);
+    const wrong=uniq(right,[fshow(fr(p,q)),fshow(fint(b**p)),fshow(fmul(fr(p,q),fint(b**p))),fshow(fr(1,b**(q-1)||1)),fshow(fmul(v,fint(q)))],3); if(wrong.length<3) return null;
+    return {index:'q:13h.fraction['+w+';'+p+'/'+q+']', lines:[['f(x) = x^('+p+'/'+q+')','at the input '+w]], ask:'What is the slope of f there?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Fraction-power for slopes: the power rule holds for every fraction power at a positive input. The slope is ('+p+'/'+q+') · x^('+p+'/'+q+' − 1), and at '+w+', whose '+(q===2?'square':q===3?'cube':'fourth')+' root is '+b+', that is '+right+'.'}; }},
+  {id:'13j.byhand',step:'13j',mode:'work',label:'the chain rule by hand',open:()=>measured('13j'),make(){
+    const a=pick([-3,-2,2,3,4,5]), b=rnd(9)-4, n=2+rnd(4), sup=['','','²','³','⁴','⁵','⁶'], inn='('+lin9(a,b)+')', right=sg(n*a)+inn+(n-1===1?'':sup[n-1]), wrong=uniq(right,[sg(n)+inn+(n-1===1?'':sup[n-1]),sg(n*a)+inn+sup[n],sg(a)+inn+(n-1===1?'':sup[n-1]),sg(n)+'('+sg(a)+')'+(n-1===1?'':sup[n-1])],3);
+    return {index:'q:13j.byhand['+a+';'+b+';'+n+']', lines:[['f(x) = '+inn+sup[n],'an inside and an outside']], ask:'What is f′(x)?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The outside is a power: its slope, taken where the inside stands, is '+n+inn+(n-1===1?'':sup[n-1])+'. The inside is a line with slope '+sg(a)+'. Rates through a chain multiply: '+n+' · '+par10(a)+' = '+sg(n*a)+'.'}; }});
+
+/* ---------- 13k The Tangent Line and the Nearby Line ---------- */
+QP.push({id:'13k.tangent',step:'13k',mode:'work',label:'the tangent line',open:()=>measured('13k'),make(){
+    if(Math.random()<0.55){ const cube=Math.random()<0.4, x0=pick([-3,-2,-1,1,2,3]), f=cube?x0**3:x0*x0, m=cube?3*x0*x0:2*x0, b=f-m*x0, right='y = '+lin9(m,b), wrong=uniq(right,['y = '+lin9(m,f),'y = '+lin9(m,-b),'y = '+lin9(f,m),'y = '+lin9(m,0),'y = '+lin9(m,b+1)],3); if(wrong.length<3) return null;
+      return {index:'q:13k.tangent[l;'+(cube?3:2)+';'+x0+']', lines:[['f(x) = '+(cube?'x³':'x²'),'at the input '+sg(x0)]], ask:'Which is the tangent line there?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'The tangent line goes through ('+sg(x0)+', '+sg(f)+') with the slope f′('+sg(x0)+') = '+sg(m)+': y = '+sg(f)+' + '+par10(m)+'(x'+pm(-x0)+') = '+lin9(m,b)+'. Its error shrinks faster than the step, and it is the only line through the point that does so.'}; }
+    const r=2+rnd(8), h=pick([1,2,-1,3]), est=fadd(fint(r),fr(h,2*r)), right=fshow(est), wrong=uniq(right,[fshow(fadd(fint(r),fr(h,r))),fshow(fadd(fint(r),fr(h,2))),fshow(fint(r)),fshow(fadd(fint(r),fr(1,2*r*h))),fshow(fadd(est,fint(1)))],3); if(wrong.length<3) return null;
+    return {index:'q:13k.tangent[n;'+r+';'+h+']', lines:[['√'+(r*r+h),'to be estimated from √'+(r*r)+' = '+r]], ask:'What does the nearby line give?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The nearby line of √ at x₀ is √x₀ + h/(2√x₀) = '+r+' + '+par10(h)+'/'+(2*r)+' = '+right+'. Root’s-nearby-line: this is a little more than the true root, since √ bends downward.'}; }});
+
+/* ---------- 13m Homing in on a Root; How Errors Spread ---------- */
+QP.push({id:'13m.newton',step:'13m',mode:'work',label:'a step along the tangent line',open:()=>measured('13m'),make(){
+    if(Math.random()<0.6){ const cube=Math.random()<0.4, n=pick(cube?[2,3,5,7,10]:[2,3,5,6,7,10]), x=cube?pick([fint(1),fint(2),fr(3,2)]):pick([fint(1),fint(2),fint(3),fr(3,2)]), fx=fsub(cube?fmul(x,fmul(x,x)):fmul(x,x),fint(n)), d=cube?fmul(fint(3),fmul(x,x)):fmul(fint(2),x), nx=fsub(x,fmul(fx,fr(d.q,d.p))), right=fshow(nx);
+      const wrong=uniq(right,[fshow(fadd(x,fmul(fx,fr(d.q,d.p)))),fshow(fsub(x,fx)),fshow(fmul(fx,fr(d.q,d.p))),fshow(fhalf(fadd(x,fint(n)))),fshow(fadd(nx,fint(1)))],3); if(wrong.length<3) return null;
+      return {index:'q:13m.newton[s;'+(cube?3:2)+';'+n+';'+fshow(x)+']', lines:[['f(x) = '+(cube?'x³':'x²')+' − '+n,'a zero is wanted'],['the guess '+fshow(x),'slide down the tangent line to the axis']], ask:'What is the next guess?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'The tangent line at the guess meets the axis at x − f(x)/f′(x). Here f('+fshow(x)+') = '+fshow(fx)+' and f′('+fshow(x)+') = '+fshow(d)+', so the next guess is '+right+'. Once a guess is close, each new guess about doubles the number of correct places.'}; }
+    const p=2+rnd(3), e=pick([1,2,3]), what=['','','the area of a square','the volume of a cube','a fourth power'][p], right='about '+(p*e)+'%', wrong=uniq(right,['about '+e+'%','about '+(e**p)+'%','about '+(e+p)+'%','about '+fshow(fr(e,p))+'%','about '+(2*p*e)+'%'],3); if(wrong.length<3) return null;
+    return {index:'q:13m.newton[e;'+p+';'+e+']', lines:[['a length is measured to within '+e+'%','a relative error'],[what+' is worked from it','a power: '+p]], ask:'How large is the relative error of the result?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Relative-errors: through a power, the relative error is multiplied by the power. '+p+' · '+e+'% = '+(p*e)+'%, for small errors.'}; }});
+
+/* ---------- 13n Units and Standards ---------- */
+QP.push({id:'13n.units',step:'13n',mode:'word',label:'the units of a rate',open:()=>measured('13n'),make(){
+    if(Math.random()<0.5){ const [story,out,inp]=pick([['A tank’s depth in metres is recorded against the time in minutes.','metres','minute'],['A cart’s distance in kilometres is recorded against the time in hours.','kilometres','hour'],['A wire’s cost in coins is recorded against its length in metres.','coins','metre'],['A balloon’s volume in litres is recorded against its height in metres.','litres','metre'],['A kiln’s heat in degrees is recorded against the time in hours.','degrees','hour']]);
+      const right=out+' per '+inp, wrong=[inp+'s per '+out.replace(/s$/,''),out+' times '+inp+'s',out];
+      return {index:'q:13n.units[u;'+out+';'+inp+']', a3:['13n.units[rate]',DASH,DASH], story, lines:[], ask:'In what units is the slope of the record?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'Rate-units: a slope is a change of output over a change of input, so it has the units of the output over the units of the input.'}; }
+    if(Math.random()<0.5){ const [thing,out,inp,noun]=pick([['A tank’s depth','metres','minute','time'],['A cart’s distance','kilometres','hour','time'],['A wire’s cost','coins','metre','length'],['A balloon’s volume','litres','metre','height'],['A kiln’s heat','degrees','hour','time']]);
+      const t1=2+rnd(4), dt=2+rnd(5), y1=2+rnd(9), k=1+rnd(6), dy=k*dt+pick([0,0,1,2].filter(e=>e<dt)), v=fr(dy,dt), right=fshow(v)+' '+out+' per '+inp, wrong=uniq(right,[fshow(fr(dt,dy))+' '+out+' per '+inp,fshow(v)+' '+inp+'s per '+out.replace(/s$/,''),dy+' '+out+' per '+inp,fshow(fr(y1+dy,t1+dt))+' '+out+' per '+inp],3); if(wrong.length<3) return null;
+      return {index:'q:13n.units[r;'+out+';'+t1+';'+dt+';'+y1+';'+dy+']', a3:['13n.units[average]',DASH,DASH], story:thing+' goes from '+y1+' '+out+' to '+(y1+dy)+' '+out+' as the '+noun+' goes from '+t1+' '+inp+'s to '+(t1+dt)+' '+inp+'s.', lines:[], ask:'What is the average rate over that stretch?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'A rate is a change of output over a change of input: '+dy+' '+out+' over '+dt+' '+inp+'s is '+right+'. The units are those of the output over those of the input.'}; }
+    const ms=pick([5,10,15,20,25,30,35,40]), kmh=ms*18/5, up=Math.random()<0.5, right=up?kmh+' kilometres per hour':ms+' metres per second', wrong=up?[(ms*60)+' kilometres per hour',fshow(fr(ms*5,18))+' kilometres per hour',(ms*1000)+' kilometres per hour']:[(kmh*1000)+' metres per second',fshow(fr(kmh*18,5))+' metres per second',(kmh*60)+' metres per second'];
+    return {index:'q:13n.units[c;'+ms+';'+(up?'u':'d')+']', a3:['13n.units[convert]',DASH,DASH], story:'A train moves at '+(up?ms+' metres per second':kmh+' kilometres per hour')+'. There are 1000 metres in a kilometre and 3600 seconds in an hour.', lines:[], ask:'What is that in '+(up?'kilometres per hour':'metres per second')+'?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Conversion: multiply by fractions equal to 1 whose bottoms cancel the old units. '+(up?ms+' · 3600/1000 = '+kmh:kmh+' · 1000/3600 = '+ms)+'. For a rate, the top unit and the bottom unit are each converted.'}; }});
+
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 
