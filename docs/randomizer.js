@@ -1198,6 +1198,137 @@ QP.push({id:'3g.keep',step:'3g',label:'start, and keep it',open:()=>measured('3g
     return {index:'q:3g.keep['+k+';'+v+']', lines:[[told,'what is known']], ask:'Does the guess “every '+thing+' '+prop+'” cover every place the steps reach?', right:opts[v], opts, lead:'',
       why:['What holds at the start, and is kept by each step, holds of everything the steps reach. You check the start once and the step once, and the guess covers the rest.','The step only carries what the start hands it. With no start, nothing is carried.','The step has to keep the claim every time, with no exception. One step that breaks it, and the guess stops there.','Looking at cases is not the step. The step is one argument, from any one to its next.'][v]}; }});
 
+/* ===== Laundry 5, rung 4 (floor 1 pools, stage D): 4a 4b 4c 4d 4e 4i 4l 4m (4f 4g 4h 4j 4k had pools already) ===== */
+Object.assign(STEPS,{'4a':['r04a','Prove It'],'4b':['r04b','The Smallest Inductive Set'],'4c':['r04c','Induction'],'4d':['r04d','Defining by Repeating'],'4e':['r04e','Proof Shapes'],
+  '4i':['r04i','Writing Numbers'],'4l':['r04l','What a Recipe for Answers Is Made Of'],'4m':['r04m','Processes Without Things']});
+const setOf=xs=>xs.length?'{'+xs.join(', ')+'}':'∅';
+
+/* ---------- 4a: a proof is a list of lines, each a pair (suppositions, statement); the citing rule ---------- */
+QP.push({id:'4a.lean',step:'4a',mode:'proof',label:'the citing rule',open:()=>measured('4a'),make(){
+    const L=['P','Q','R'], sub=()=>L.filter(()=>Math.random()<0.45), k=2+rnd(5); let j=rnd(8), Sj=sub(), Sk=sub(); if(Math.random()<0.25) Sj=Sk.filter(()=>Math.random()<0.6);
+    if(j===k) j=k-1; const before=j<k, part=Sj.every(x=>Sk.includes(x)), st=pick(L), st2=pick(L);
+    const opts=['allowed','not allowed: line '+j+' does not come before line '+k,'not allowed: '+setOf(Sj)+' is not a part of '+setOf(Sk)];
+    const right=!before?opts[1]:!part?opts[2]:opts[0];
+    return {index:'q:4a.lean['+j+setOf(Sj)+st2+';'+k+setOf(Sk)+st+']', stack:true, lines:[['line '+j+': ('+setOf(Sj)+', '+st2+')','a line: what it stands under, and its statement'],['line '+k+': ('+setOf(Sk)+', '+st+')','cites line '+j]],
+      ask:'May line '+k+' lean on line '+j+'?', right, opts, lead:'',
+      why:'Citing rule: a line may lean on a line before it only if that line’s suppositions are a part of its own. '+(!before?'Line '+j+' is not before line '+k+'.':part?setOf(Sj)+' is a part of '+setOf(Sk)+(Sj.length?'':': ∅ is a part of every collection')+', so nothing leaned on has been dropped.':'Line '+j+' stands under '+Sj.filter(x=>!Sk.includes(x)).join(' and ')+', and line '+k+' does not.')}; }});
+
+/* ---------- 4b: the numbers, sifted from an inductive set; strays ---------- */
+QP.push({id:'4b.number',step:'4b',label:'a number, or a stray',open:()=>measured('4b'),make(){
+    const N=NUMS, STRAY=[lset([N[1]]),lset([N[2]]),lset([N[0],N[2]]),lset([N[1],N[2]]),lset([lset([N[1]])]),lset([N[0],lset([N[1]])]),lset([N[3]]),lset([N[0],N[1],N[3]])];
+    const isNext=s=>s.s.some(x=>typeof x!=='string'&&lsame(nS(x),s)), strays=STRAY.filter(s=>s.s.length&&!isNext(s)), wantNum=Math.random()<0.5, k=1+rnd(4);
+    const full=n=>'{'+n.s.map(nname).join(', ')+'}';
+    if(wantNum){ const wrong=take(strays,3).map(nlist);
+      return {index:'q:4b.number[n'+k+';'+wrong.join('')+']', lines:[], ask:'Which set is a number, a member of ℕ?', right:full(N[k]), opts:shuffle([full(N[k]),...wrong]), lead:'It is '+full(N[k])+'. ',
+        why:full(N[k])+' is '+k+', the next one after '+(k-1)+', and the next one after a number is a number. Each other set is not 0 and is nobody’s next one, so by the strays technique it can be sifted away from an inductive set and is no number.'}; }
+    const s=pick(strays), wrong=take([1,2,3,4],3).map(i=>full(N[i]));
+    return {index:'q:4b.number[s'+nlist(s)+';'+wrong.join('')+']', lines:[], ask:'Which set is a stray: in no way a number?', right:nlist(s), opts:shuffle([nlist(s),...wrong]), lead:'It is '+nlist(s)+'. ',
+      why:nlist(s)+' is not 0, and it is nobody’s next one: no member x of it has x ∪ {x} equal to it. The strays technique sifts it away. The others are 1 to 4 written out, each the next one after the one before.'}; }});
+
+/* ---------- 4c: induction: base, step, hypothesis ---------- */
+const PHI=[t=>t+' ∉ '+t,t=>'0 ⊆ '+t,t=>t+' ≠ S('+t+')',t=>'⋃S('+t+') = '+t,t=>'every member of '+t+' is a part of '+t];
+const IND=[
+  ['A proof by induction checks φ(0), φ(1), φ(2), φ(3) and φ(4), and stops. What is missing?','the step: one argument from φ(n) to φ(S(n)), for any number n',['nothing: five cases are enough','the base','the case φ(5)'],'Cases looked at are not the step. The step is one argument, with n any number, and the base hands it its first case.'],
+  ['The step is proved: for any number n, if φ(n) then φ(S(n)). The base φ(0) was never checked. What stands?','nothing yet: the step only carries what the base hands it',['φ of every number','φ of every number but 0','φ(0)'],'The dominoes: the spacing is the step and the push is the base. With no push, no domino falls.'],
+  ['Inside the step, φ(n) is supposed. Is that supposing what you want to prove?','no: it supposes φ of one number n, to reach φ of its next one',['yes, and so induction is a circle','yes, but the base repairs it','no: φ(n) is a given'],'The induction hypothesis is φ(n) for one number n, supposed in a box. What is wanted is φ of every number. The box reports only the if from n to S(n).'],
+  ['A step never uses its hypothesis: it reaches φ(S(n)) whatever is so of n. Is the induction still sound?','yes: a step that does not need its hypothesis is still a step',['no: the hypothesis must be used','no: then the base is not needed','only if φ(0) fails'],'Zero-or-a-next is proved this way: S(n) is the next one after n, whatever is so of n. The if from φ(n) to φ(S(n)) holds all the same.']];
+QP.push({id:'4c.pieces',step:'4c',label:'base, step, hypothesis',open:()=>measured('4c'),make(){
+    if(Math.random()<0.3){ const k=rnd(IND.length), [ask,right,wrong,why]=IND[k]; return {index:'q:4c.pieces[w'+k+']', lines:[], ask, right, opts:shuffle([right,...wrong]), lead:'', why}; }
+    const k=rnd(PHI.length), f=PHI[k], v=rnd(3), want=[f('0'),f('n'),f('S(n)')][v];
+    const ask=['Which line is the base?','Which line is the induction hypothesis, supposed inside the step?','Which line must the step reach?'][v];
+    return {index:'q:4c.pieces['+k+';'+v+']', lines:[['φ(n): '+f('n'),'the condition, for a number n']], ask, right:want, opts:shuffle([f('0'),f('n'),f('S(n)'),f('S(0)')]), lead:'It is “'+want+'”. ',
+      why:'The base is φ(0). The step is ∀n ∈ ℕ (φ(n) ⇒ φ(S(n))): inside it φ(n) is supposed, the induction hypothesis, and φ(S(n)) is what must be reached.'}; }});
+
+/* ---------- 4d: defining by repeating ---------- */
+QP.push({id:'4d.repeat',step:'4d',mode:'work',label:'a start and a step',open:()=>measured('4d'),make(){
+    const B=pick(THINGS), n=2+rnd(2), A=take(B.things,n), k=2+rnd(3), cyc=Math.random()<0.7;
+    const g={}; if(cyc) A.forEach((x,i)=>g[x]=A[(i+1)%n]); else { A.forEach((x,i)=>g[x]=A[Math.min(i+1,n-1)]); }
+    let y=A[0]; const run=[y]; for(let i=0;i<k;i++){ y=g[y]; run.push(y); }
+    const opts=shuffle(A.slice()); if(opts.length<2) return null;
+    return {index:'q:4d.repeat['+A.join(',')+';'+(cyc?'c':'s')+';'+k+']', a3:['4d.repeat['+k+']',DASH,B.id], stack:true,
+      lines:[['A = '+setOf(A),'given'],['g = {'+A.map(x=>'('+x+', '+g[x]+')').join(', ')+'}','a function from A to A'],['f(0) = '+A[0],'the start'],['f(S(n)) = g(f(n))','the step'],['f('+k+')','▢']],
+      ask:'Recursion gives exactly one such f. What is f('+k+')?', right:y, opts, lead:'It is '+y+'. ',
+      why:'Each value comes from the value before, by g: '+run.map((v,i)=>'f('+i+') = '+v).join(', ')+'.'}; }},
+  {id:'4d.function',step:'4d',label:'a function is its pairs',open:()=>measured('4d'),make(){
+    for(let tries=0;tries<40;tries++){ const [B1,B2]=take(THINGS,2), A=take(B1.things,3), Bs=take(B2.things,2), kind=rnd(3);
+      let prs=A.map(x=>[x,pick(Bs)]); if(kind===1) prs.push([A[0],Bs.find(y=>y!==prs[0][1])]); if(kind===2) prs=prs.slice(1);
+      const OPT=['a function from A to B','not a function: one input has two outputs','not a function from A to B: an input has no output','not a function: an output is used twice'], right=OPT[kind];
+      return {index:'q:4d.function['+kind+';'+prs.map(p=>p.join('>')).join(',')+']', a3:['4d.function['+kind+']',DASH,B1.id+'+'+B2.id], stack:true, lines:[['A = '+setOf(A),'given'],['B = '+setOf(Bs),'given'],['f = {'+shuffle(prs).map(p=>'('+p.join(', ')+')').join(', ')+'}','a set of pairs']],
+        ask:'Is f a function from A to B?', right, opts:OPT, lead:'',
+        why:'A function from A to B is a set of pairs with left entry in A and right entry in B, in which every member of A is the left entry of exactly one pair. Two inputs may share an output.'}; }
+    return null; }});
+
+/* ---------- 4e: proof shapes: the goal's outermost mark ---------- */
+const SHAPES={'⇒':'Suppose the first half. Reach the second. Close the box: prove an if.','∀':'Let n be anything. Reach the claim for n. n was anything: speak of everything.','∃':'Take a particular thing. Reach the claim for it. Show an example.',
+  '∧':'Give an argument for each half, then join.','∨':'Give an argument for either side, then add an option.','⇔':'Prove an if each way, then join and pack.','¬':'Suppose the statement without its not. Reach ⊥. Refute.'};
+QP.push({id:'4e.shape',step:'4e',label:'the goal’s outermost mark',open:()=>measured('4e'),make(){
+    const B=pick(KINDS), n=pick(B.nouns), [a,b]=take(B.adjs,2), v=rnd(7); let text, m;
+    if(v<3){ const S=pick(SENT), f=S.f(n,a,b); text=mshow(f); m=f.neg?'¬':f.q; }
+    else{ const [p,q]=shuffle(['P','Q','R']).slice(0,2); [text,m]=[[p+' ⇒ '+q,'⇒'],[p+' ∧ '+q,'∧'],[p+' ∨ '+q,'∨'],[p+' ⇔ '+q,'⇔'],['¬('+p+' ∧ '+q+')','¬'],['('+p+' ∧ '+q+') ⇒ '+p,'⇒'],['¬'+p+' ∨ '+q,'∨'],[p+' ⇒ ('+q+' ∨ '+p+')','⇒']][rnd(8)]; }
+    const wrong=shuffle(Object.keys(SHAPES).filter(k=>k!==m)).slice(0,3);
+    return {index:'q:4e.shape['+text+';'+wrong.join('')+']', lines:[[text,'the goal']], ask:'Which skeleton does the goal’s outermost mark call for?', right:SHAPES[m], opts:shuffle([m,...wrong]).map(k=>SHAPES[k]), lead:'',
+      why:'The outermost mark of the goal decides the opening and closing lines before anything else is known. Here it is '+m+'.'}; }});
+
+/* ---------- 4i: writing numbers ---------- */
+QP.push({id:'4i.first',step:'4i',mode:'work',label:'which mark is worked first',open:()=>measured('4i'),make(){
+    const a=1+rnd(6), b=2+rnd(5), c=2+rnd(5), v=rnd(4);
+    const [text,val,alt]=v===0?[a+' + '+b+' · '+c,a+b*c,(a+b)*c]:v===1?[a+' · '+b+' + '+c,a*b+c,a*(b+c)]:v===2?[a+' + '+b+' · '+c+' + '+a,a+b*c+a,(a+b)*(c+a)]:[a+' · '+b+' + '+c+' · '+b,a*b+c*b,a*(b+c)*b];
+    const wrong=[...new Set([alt,val+1,val-1,v===2?(a+b)*c+a:alt+b,val+b])].filter(x=>x!==val&&x>0).slice(0,3); if(wrong.length<3||alt===val) return null;
+    return {index:'q:4i.first['+text+']', lines:[[text+' = ▢','a line without brackets']], ask:'What fills the box ▢?', right:String(val), opts:shuffle([val,...wrong]).map(String), lead:'It is '+val+'. ',
+      why:'A line written without brackets is read by the ladder of operations, highest first: products before sums. So the products are worked first and then added. Reading it the other way gives '+alt+'.'}; }},
+  {id:'4i.split',step:'4i',mode:'work',label:'splitting by a base',open:()=>measured('4i'),make(){
+    const b=2+rnd(9), q=1+rnd(9), r=rnd(b), x=b*q+r, show=(q,r)=>b+' · '+q+' + '+r;
+    const wrong=[...new Set([show(q-1,r+b),show(q+1,r),show(q,r+1),q>1?show(q-2,r+2*b):show(q,r+2),b!==q?q+' · '+b+' + '+(r+b):show(q+1,r+1)])].filter(o=>o!==show(q,r)).slice(0,3);
+    return {index:'q:4i.split['+x+';'+b+']', lines:[[String(x),'a number'],['b = '+b,'the base']], ask:'Which line splits the number by the base?', right:show(q,r), opts:shuffle([show(q,r),...wrong]), lead:'It is '+x+' = '+show(q,r)+'. ',
+      why:'Split-by-a-base: the number is b times some number, plus a number less than b. Here '+r+' < '+b+'. A number splits by a base in only one way, so a line whose last place is not less than '+b+', or whose sum is not '+x+', is not the split.'}; }},
+  {id:'4i.read',step:'4i',mode:'work',label:'a row of digits names a number',open:()=>measured('4i'),make(){
+    const two=Math.random()<0.45;
+    if(two){ const x=5+rnd(27), bits=x.toString(2), rev=parseInt(bits.split('').reverse().join(''),2), wrong=[...new Set([rev,x+1,x-1,bits.split('').filter(c=>c==='1').length,x+2,x*2])].filter(y=>y!==x&&y>0).slice(0,3);
+      return {index:'q:4i.read[2;'+bits+']', lines:[[bits+'₂','a numeral in twos']], ask:'Which number does it name?', right:String(x), opts:shuffle([x,...wrong]).map(String), lead:'It is '+x+'. ',
+        why:'Read from the left, and at each step double what you have and add the next bit: '+bits.split('').reduce((acc,c)=>{ const w=acc.w*2+Number(c); acc.s.push(w); acc.w=w; return acc; },{w:0,s:[]}).s.join(', ')+'.'}; }
+    const d=[1+rnd(9),rnd(10),rnd(10)], x=d[0]*100+d[1]*10+d[2], right='('+d[0]+' · 10 + '+d[1]+') · 10 + '+d[2];
+    const wrong=[d[0]+' + '+d[1]+' + '+d[2],'('+d[2]+' · 10 + '+d[1]+') · 10 + '+d[0],d[0]+' · 10 + '+d[1]+' · 10 + '+d[2],'('+d[0]+' + '+d[1]+') · 10 + '+d[2]];
+    const ok=[...new Set(wrong)].filter(o=>o!==right).slice(0,3);
+    return {index:'q:4i.read[10;'+x+']', lines:[[String(x),'a tens numeral']], ask:'Which line is the reading rule at work on it?', right, opts:shuffle([right,...ok]), lead:'It is '+right+'. ',
+      why:'Take the digits from the left, and at each step multiply what you have by ten and add the next digit. Digits side by side are not added.'}; }},
+  {id:'4i.write',step:'4i',mode:'work',label:'writing a number down',open:()=>measured('4i'),make(){
+    const x=5+rnd(27), bits=x.toString(2), wrong=[...new Set([bits.split('').reverse().join(''),(x+1).toString(2),(x-1).toString(2),bits+'0',(x^2).toString(2)])].filter(o=>o!==bits&&o[0]==='1').slice(0,3); if(wrong.length<3) return null;
+    const steps=[]; let q=x; while(q>0){ steps.push(q+' = 2 · '+Math.floor(q/2)+' + '+(q%2)); q=Math.floor(q/2); }
+    return {index:'q:4i.write['+x+']', lines:[[String(x),'a number']], ask:'Which numeral in twos names it?', right:bits+'₂', opts:shuffle([bits,...wrong]).map(o=>o+'₂'), lead:'It is '+bits+'₂. ',
+      why:'Split by 2, split the quotient by 2, and so on until it is 0: '+steps.join('; ')+'. The last places, read from the last split back, are the bits.'}; }});
+
+/* ---------- 4l: algorithms: state, start, stop test, move, output; measure and kept statement ---------- */
+const ALGOS=[
+  {k:'add',name:'adding by counting on',state:'(s, k)',start:(a,b)=>[a,b],stop:'k = 0',move:'(s, S(j)) ↦ (S(s), j)',out:'s',step:([s,k])=>[s+1,k-1],measure:'k',kept:(a,b)=>'s + k = '+(a+b),grows:'s',sum:'s + k'},
+  {k:'times',name:'multiplying by repeated adding of a',state:'(p, k)',start:(a,b)=>[0,b],stop:'k = 0',move:'(p, S(j)) ↦ (p + a, j)',out:'p',step:([p,k],a)=>[p+a,k-1],measure:'k',kept:(a,b)=>'p + a · k = '+(a*b),grows:'p',sum:'p + k'},
+  {k:'down',name:'counting both down',state:'(u, k)',start:(a,b)=>[a,b],stop:'k = 0',move:'(S(i), S(j)) ↦ (i, j)',out:'u',step:([u,k])=>[u-1,k-1],measure:'k',kept:(a,b)=>'u = k + '+(a-b),grows:'',sum:'u + k'}];
+QP.push({id:'4l.run',step:'4l',mode:'work',label:'the run of an algorithm',open:()=>measured('4l'),make(){
+    const A=pick(ALGOS), b=2+rnd(3), a=A.k==='down'?b+1+rnd(4):2+rnd(5), m=1+rnd(b), sh=s=>'('+s.join(', ')+')'; let s=A.start(a,b); const run=[s]; for(let i=0;i<b;i++){ s=A.step(s,a); run.push(s); }
+    const out=run[b][0], askOut=Math.random()<0.4, right=askOut?String(out):sh(run[m]);
+    const wrong=askOut?[...new Set([out+1,out-1,run[b-1][0],a,b,a+b+1])].filter(x=>x!==out&&x>=0).slice(0,3).map(String)
+      :[...new Set([m>0?sh(run[m-1]):'',m<b?sh(run[m+1]):'',sh([run[m][0],run[m][1]+1]),sh([run[m][0]+1,run[m][1]]),sh([run[m][1],run[m][0]])])].filter(x=>x&&x!==right).slice(0,3);
+    if(wrong.length<3) return null;
+    return {index:'q:4l.run['+A.k+';'+a+','+b+';'+(askOut?'o':m)+']', a3:['4l.run['+A.k+']',DASH,DASH], stack:true,
+      lines:[['state: '+A.state,A.name+(A.k==='times'?', a = '+a:'')],['start: '+sh(run[0]),'the state made from the input'],['stop test: '+A.stop,'settled'],['move: '+A.move,'used only when the stop test fails'],['output: '+A.out,'read off at the stop']],
+      ask:askOut?'What is the output of this run?':'What is the state after '+m+' move'+(m>1?'s':'')+'?', right, opts:shuffle([right,...wrong]), lead:'It is '+right+'. ', why:'The run: '+run.map(sh).join(' ↦ ')+'. The stop test passes at '+sh(run[b])+', and the output is read off there.'}; }},
+  {id:'4l.why',step:'4l',label:'why it stops, why it is right',open:()=>measured('4l'),make(){
+    const A=pick(ALGOS.filter(x=>x.grows)), b=2+rnd(3), a=2+rnd(5), v=rnd(2);
+    const lines=[['state: '+A.state,A.name+(A.k==='times'?', a = '+a:'')],['start: ('+A.start(a,b).join(', ')+')','the state made from the input'],['move: '+A.move,'used only when the stop test fails']];
+    return v===0?{index:'q:4l.why[m;'+A.k+';'+a+','+b+']', stack:true, lines, ask:'Which counting number read off the state is smaller after every move?', right:A.measure, opts:shuffle([A.measure,A.grows,A.sum,'none: the state only grows']), lead:'It is '+A.measure+'. ',
+        why:'Falling-measure technique: if a counting number read off the state is smaller after every move, every run stops. Each move takes '+A.measure+' from S(j) to j. '+A.grows+' grows'+(A.k==='add'?', and '+A.sum+' stays the same.':'.')}
+      :{index:'q:4l.why[k;'+A.k+';'+a+','+b+']', stack:true, lines, ask:'Which statement is true at the start and kept by every move?', right:A.kept(a,b), opts:shuffle([A.kept(a,b),A.grows+' = '+A.start(a,b)[0],A.measure+' = '+b,A.grows+' < '+A.measure]), lead:'It is '+A.kept(a,b)+'. ',
+        why:'Kept-statement technique: a statement true at the start, and kept by every move, is true at the stop. At the stop '+A.measure+' = 0, so the kept statement reads off the answer. Stopping alone is not enough.'}; }});
+
+/* ---------- 4m: processes without things ---------- */
+const UNITS=['crates','hours','miles','sacks','days','apples','stones','pages','rows','boxes'];
+QP.push({id:'4m.forgets',step:'4m',mode:'word',label:'the operator forgets the things',open:()=>measured('4m'),make(){
+    const [u1,u2]=take(UNITS,2), a=2+rnd(7), b=2+rnd(7), plus=Math.random()<0.5; if(a===b) return null;
+    const tell=u=>plus?a+' '+u+', and then '+b+' more '+u:a+' lots of '+b+' '+u;
+    const right=plus?a+' + '+b+' = '+(a+b):a+' · '+b+' = '+(a*b), wrong=[plus?a+' · '+b+' = '+(a*b):a+' + '+b+' = '+(a+b),a+' + '+a+' = '+(2*a),b+' · '+b+' = '+(b*b)];
+    return {index:'q:4m.forgets['+(plus?'+':'·')+';'+a+','+b+';'+u1+','+u2+']', a3:[(plus?'4f.plus':'4g.by')+'['+a+','+b+']',DASH,'units.'+u1+'+'+u2], story:'One story: '+tell(u1)+'. Another story: '+tell(u2)+'.', lines:[],
+      ask:'Which one line answers both stories?', right, opts:shuffle([right,...wrong]), lead:'It is '+right+'. ',
+      why:'The operator works on the count and never asks what is counted. The things are taken out, the one line is worked once, and the answer goes back to each story as '+(plus?a+b:a*b)+' '+u1+' and '+(plus?a+b:a*b)+' '+u2+'.'}; }});
+
 const MAKE={proof:proofQ, work:workQ, word:wordQ, read:readQ};
 
 const toggled=()=>[...LINKS,...QP,...CARDP,...OPS,...MOVES];
