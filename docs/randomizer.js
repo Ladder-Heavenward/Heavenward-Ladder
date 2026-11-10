@@ -2192,6 +2192,82 @@ QP.push({id:'10a.answer',step:'10a',mode:'proof',label:'does the reach answer',o
     const all=['a removable break: change the one value at noon to '+a,'a jump: no value at noon can mend it','none: the record is continuous at noon','a break that passes every bound'];
     return {index:'q:11a.mend['+k+';'+a+';'+b+']', a3:['11a.mend['+k+']',DASH,DASH], story, lines:[], ask:'What kind of break has the record at noon?', right, opts:shuffle(all), lead:'', why}; }});
 
+/* ===== Laundry 5, rung 12 (floor 3 pools, stage K): 12a to 12f, skipping nothing on the way ===== */
+Object.assign(STEPS,{'12a':['r12a','The Intermediate Value Technique'],'12b':['r12b','Bounded on a Closed Interval'],'12c':['r12c','The Highest-and-Lowest Technique'],'12d':['r12d','Why Having No Holes Matters'],'12e':['r12e','Bisection by Hand'],'12f':['r12f','Square Root by Hand']});
+const btw12=(a,b)=>'between '+sg(a)+' and '+sg(b);
+
+/* ---------- 12a The Intermediate Value Technique ---------- */
+const A12=[
+  ['f(x) = 1/x has f(−1) < 0 < f(1), and no zero between −1 and 1. Why does the in-between-value technique not apply?','f is not continuous on [−1, 1]: it is not even defined at 0',['the interval is not closed','the end values have the same sign','it does apply, and the zero is 0'],'The technique asks for continuity on the whole closed interval, ends included. One missing input is enough to let a function skip 0.'],
+  ['f is continuous on [v, w], and y is between f(v) and f(w). What follows?','y is a value of f: some c between v and w has f(c) = y',['f(v) = y or f(w) = y','exactly one c has f(c) = y','nothing, unless y = 0'],'The general form: any height between the two end values is taken. Apply the zero form to f(x) − y.'],
+  ['f is continuous on [v, w] and f(v) < 0 < f(w). Does the technique say how many zeros f has?','no: at least one, and there may be more',['yes: exactly one','yes: an odd number','yes: two'],'It proves that a zero exists between v and w. It does not count them, and it does not say where.'],
+  ['What does continuity on a closed interval [v, w] promise at the ends?','the same as inside, with only the inputs of [v, w] looked at',['nothing: the ends are left out','continuity from both sides, using inputs outside','that f is 0 at the ends'],'Closed-interval-continuity: one promise, made alike at every input, ends included.']];
+QP.push({id:'12a.trap',step:'12a',mode:'work',label:'a zero in between',open:()=>measured('12a'),make(){
+    for(let t=0;t<60;t++){ const cs=[1,rnd(5)-2,rnd(9)-6,rnd(9)-4], ch=[], same=[]; for(let k=-4;k<4;k++){ const a=ev9(cs,k), b=ev9(cs,k+1); if(a*b<0) ch.push(k); else if(a*b>0) same.push(k); } if(!ch.length||same.length<3) continue;
+      const k=pick(ch), W=take(same,3), right=btw12(k,k+1);
+      return {index:'q:12a.trap['+poly9(cs)+';'+k+';'+W.join(',')+']', lines:[['p(x) = '+poly9(cs),'a polynomial, so continuous on every closed interval']], ask:'Between which two integers must p have a zero?', right, opts:shuffle([right,...W.map(j=>btw12(j,j+1))]), lead:'',
+        why:'p('+sg(k)+') = '+sg(ev9(cs,k))+' and p('+sg(k+1)+') = '+sg(ev9(cs,k+1))+': the signs differ, so the in-between-value technique gives a zero between them. At the ends of each other pair p has one sign, and the technique says nothing there.'}; }
+    return null; }},
+  {id:'12a.needs',step:'12a',label:'what the technique asks',open:()=>measured('12a'),make(){ return writtenQ('12a.needs',A12); }},
+  {id:'12a.licensed',step:'12a',mode:'proof',label:'is the zero licensed',open:()=>measured('12a'),make(){
+    const v=rnd(7)-3, w=v+1+rnd(4), k=rnd(4), fv=pick([-5,-4,-3,-2,-1,1,2,3,4]), fw=(k===1?Math.sign(fv):-Math.sign(fv))*(1+rnd(5)), cont=k!==2, ok=cont&&fv*fw<0, opts=['it is licensed','it is not licensed'];
+    return {index:'q:12a.licensed['+v+';'+w+';'+fv+';'+fw+';'+k+']', stack:true, lines:[[cont?'f is continuous on ['+sg(v)+', '+sg(w)+']':'f is continuous on ['+sg(v)+', '+sg(w)+'] but for one input inside','given'],['f('+sg(v)+') = '+sg(fv)+' and f('+sg(w)+') = '+sg(fw),'given'],['f has a zero c with '+sg(v)+' < c < '+sg(w),'the in-between-value technique, on lines 1 and 2']], ask:'Is line 3 licensed?', right:opts[ok?0:1], opts, lead:'',
+      why:ok?'f is continuous on the closed interval and its end values have different signs, so 0 is taken somewhere between.':!cont?'One break is enough for a function to step over 0. The technique needs continuity at every input of the closed interval.':'Both end values have the same sign. f may still have a zero, and this technique does not give one.'}; }},
+  {id:'12a.reading',step:'12a',mode:'word',label:'every reading in between',open:()=>measured('12a'),make(){
+    const a=rnd(9)-6, b=a+3+rnd(8), [what,unit]=pick([['A thermometer’s record','degrees'],['A depth gauge’s record','metres'],['A balance’s record','units']]), inside=a+1+rnd(b-a-1), out=[a-1-rnd(3),b+1+rnd(3),a-4-rnd(3),b+5].map(sg), right=sg(inside);
+    return {index:'q:12a.reading['+a+';'+b+';'+inside+';'+out.join(',')+']', a3:['12a.reading',DASH,DASH], story:what+' is continuous from noon to two. It reads '+sg(a)+' '+unit+' at noon and '+sg(b)+' at two.', lines:[], ask:'Which reading must it have shown at some moment between?', right, opts:shuffle([right,...uniq(right,out,3)]), lead:'',
+      why:'Any height between the two end values is taken. '+right+' lies between '+sg(a)+' and '+sg(b)+'. A reading outside that stretch may have happened, and nothing makes it.'}; }});
+
+/* ---------- 12b Bounded on a Closed Interval ---------- */
+QP.push({id:'12b.bound',step:'12b',mode:'work',label:'a bound for a polynomial',open:()=>measured('12b'),make(){
+    const cs=[pick([1,2,-1,-2]),rnd(9)-4,rnd(9)-4], v=rnd(5)-4, w=v+1+rnd(4), R=Math.max(Math.abs(v),Math.abs(w)), B=Math.abs(cs[0])*R*R+Math.abs(cs[1])*R+Math.abs(cs[2]), right=String(B);
+    const wrong=uniq(right,[Math.abs(ev9(cs,R)),Math.abs(cs[0])+Math.abs(cs[1])+Math.abs(cs[2]),B+R,Math.abs(ev9(cs,w)),B-1,R*R].map(String),3); if(wrong.length<3||R===1) return null;
+    return {index:'q:12b.bound['+poly9(cs)+';'+v+';'+w+']', lines:[['p(x) = '+poly9(cs),'on ['+sg(v)+', '+sg(w)+']']], ask:'Which bound does the polynomial-bound technique give for |p(x)| there?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'With R = max(|'+sg(v)+'|, |'+sg(w)+'|) = '+R+', |p(x)| ≤ Σ |u_k| R^k = '+Math.abs(cs[0])+' · '+(R*R)+' + '+Math.abs(cs[1])+' · '+R+' + '+Math.abs(cs[2])+' = '+right+'. Sizes are taken term by term, so signs cannot help by cancelling. It is a bound, not the greatest value.'}; }});
+
+/* ---------- 12c The Highest-and-Lowest Technique ---------- */
+const C12=[
+  ['f(x) = x on the open interval (0, 1). Does f reach a greatest value there?','no: its values pass every real below 1 and never reach 1',['yes: 1','yes: 1/2','no: f is not continuous there'],'Highest-and-lowest asks for a closed interval. On (0, 1) the least upper bound of the values is 1, and no input gives it.'],
+  ['f(x) = 1/x on (0, 1]. Is f bounded there?','no: it passes every bound near 0',['yes: by 1','yes: by its value at 1/2','yes: every continuous function is bounded'],'Bounded-on-a-closed-interval needs both ends in. Here one end is missing, and f runs away towards it.'],
+  ['f is continuous on [v, w]. What does the highest-and-lowest technique give?','inputs where f takes a greatest value and a least value on [v, w]',['a bound only: the greatest value may not be reached','a zero of f','the places where f is greatest'],'The values have a least upper bound by no-holes, and continuity on the closed interval makes it a value. Where it is reached, the technique does not say.'],
+  ['When does f reach its greatest value on A at c?','when c ∈ A and f(c) is the least upper bound of the values of f on A',['when f(c) is an upper bound of the values','when f(c) > 0','when c is an end of A'],'Greatest-is-reached: the sup of the values exists and is itself a value.']];
+QP.push({id:'12c.extremes',step:'12c',mode:'work',label:'highest and lowest on a closed interval',open:()=>measured('12c'),make(){
+    const h=rnd(9)-4, k=rnd(9)-4, v=rnd(9)-6, w=v+1+rnd(5), f=x=>(x-h)*(x-h)+k, least=Math.random()<0.5, inside=v<=h&&h<=w, lo=inside?k:Math.min(f(v),f(w)), hi=Math.max(f(v),f(w)), val=least?lo:hi, right=sg(val);
+    const wrong=uniq(right,[sg(least?hi:lo),sg(k),sg(f(v)),sg(f(w)),sg(val+1),sg(h)],3); if(wrong.length<3) return null;
+    return {index:'q:12c.extremes['+h+';'+k+';'+v+';'+w+';'+(least?'l':'g')+']', lines:[['f(x) = (x'+(h===0?'':pm(-h))+')²'+(k===0?'':pm(k)),'on ['+sg(v)+', '+sg(w)+']']], ask:least?'What is the least value of f there?':'What is the greatest value of f there?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'A square is never negative, so f is least where x = '+sg(h)+(inside?', which is in the interval: the least value is '+sg(k)+'.':', which is outside the interval: the least value is at the nearer end, '+sg(lo)+'.')+' The greatest value is at the end further from '+sg(h)+': f('+sg(v)+') = '+sg(f(v))+', f('+sg(w)+') = '+sg(f(w))+'.'}; }},
+  {id:'12c.closed',step:'12c',label:'why the interval is closed',open:()=>measured('12c'),make(){ return writtenQ('12c.closed',C12); }});
+
+/* ---------- 12d Why Having No Holes Matters ---------- */
+const D12=[
+  ['Over the fractions alone, f(x) = x² − 2 has f(1) < 0 < f(2). Has it a zero among the fractions between 1 and 2?','no: no fraction squares to 2',['yes: 3/2','yes: 7/5','yes, by the in-between-value technique'],'f is continuous over ℚ and changes sign, and still skips 0: the zero would be at the hole. The technique rests on no-holes.'],
+  ['Over the fractions, g(x) = −(x² − 2)² is continuous and bounded between 1 and 2. Has it a greatest value there?','no: its values come as near 0 as you like and never reach it',['yes: 0','yes: −1','yes, by the highest-and-lowest technique'],'The greatest value would be 0, taken where x² = 2. Over ℚ that input is missing.'],
+  ['Which fact about the line do the three techniques of this rung rest on?','no-holes: every set of reals with a member and an upper bound has a least upper bound',['every real is a fraction','every function is continuous','counting passes any real, and nothing more'],'Take the holes back and each technique fails, as the fractions show.'],
+  ['Over ℚ there is a function that is continuous at every fraction and takes only the values −1 and 1. What makes that possible?','the hole: the step is made where no fraction stands',['a break at a fraction','the either-way principle failing','fractions not comparing'],'Hole-makes-a-step: −1 below the hole and 1 above it. On the line the same recipe has a break at √2.']];
+QP.push({id:'12d.holes',step:'12d',label:'why having no holes matters',open:()=>measured('12d'),make(){ return writtenQ('12d.holes',D12); }});
+
+/* ---------- 12e Bisection by Hand ---------- */
+QP.push({id:'12e.bisect',step:'12e',mode:'work',label:'halving a trap',open:()=>measured('12e'),make(){
+    const k=rnd(3), n=pick([2,3,5,6,7,10,11]), lo0=Math.floor(Math.sqrt(n));
+    if(k===0){ let c=fint(lo0), d=fint(lo0+1); const steps=rnd(3); for(let i=0;i<steps;i++){ const m=fhalf(fadd(c,d)); if(m.p*m.p<n*m.q*m.q) c=m; else d=m; } const m=fhalf(fadd(c,d)), low=m.p*m.p<n*m.q*m.q, iv=(a,b)=>'['+fshow(a)+', '+fshow(b)+']', right=low?iv(m,d):iv(c,m);
+      return {index:'q:12e.bisect[h;'+n+';'+fshow(c)+';'+fshow(d)+']', lines:[['f(x) = x² − '+n,'continuous'],[iv(c,d),'a trap: f is negative at the left end and positive at the right']], ask:'The middle is '+fshow(m)+'. Which half is the next trap?', right, opts:shuffle([right,low?iv(c,m):iv(m,d),iv(c,d),'neither: the middle is a zero']), lead:'',
+        why:'f('+fshow(m)+') = '+fshow(fsub(fmul(m,m),fint(n)))+', which is '+(low?'negative, so the sign change is in the right half.':'positive, so the sign change is in the left half.')+' Middle-of-a-trap: the middle is a zero, or exactly one half is a trap.'}; }
+    if(k===1){ const u=rnd(5), w=u+pick([1,2,4]), h=2+rnd(5), d=fr(w-u,2**h), right=fshow(d), wrong=uniq(right,[fshow(fr(w-u,2*h)),fshow(fr(w-u,2**(h-1))),fshow(fr(w-u,2**(h+1))),fshow(fr(1,h)),fshow(fr(w-u,h*h))],3); if(wrong.length<3) return null;
+      return {index:'q:12e.bisect[w;'+u+';'+w+';'+h+']', lines:[['['+u+', '+w+']','a trap'],[h+' halvings','no tested middle was a zero']], ask:'How wide is the trap now?', right, opts:shuffle([right,...wrong]), lead:'', why:'Halvings-width: after n halvings the width is (v − u)/2ⁿ = '+(w-u)+'/'+(2**h)+' = '+right+'. Each halving is one more place in twos.'}; }
+    const even=[['x² + 1',0],['x⁴ + 3',0],['x⁶ + x² + 1',0],['x² + 2x + 5',0],['x⁴ + x² + 2',0]], odd=[['x³ − 5x + 1',1],['x⁵ + x + 7',1],['x³ + 4',1],['−x³ + 2x² − 9',1],['x⁷ − 3x⁴ + 2',1]], R=pick(odd), W=take(even,3);
+    return {index:'q:12e.bisect[odd;'+R[0]+';'+W.map(w=>w[0]).join(';')+']', lines:[], ask:'Which polynomial must have a zero on the line?', right:R[0], opts:shuffle([R,...W]).map(x=>x[0]), lead:'It is '+R[0]+'. ',
+      why:'Odd-degree-zero: a polynomial of odd degree passes every bound one way and below every bound the other, so it changes sign, and the in-between-value technique gives a zero. Each of the others is a sum of squares and a positive number, and is never 0.'}; }});
+
+/* ---------- 12f Square Root by Hand ---------- */
+QP.push({id:'12f.average',step:'12f',mode:'work',label:'the averaging step',open:()=>measured('12f'),make(){
+    const n=pick([2,3,5,6,7,10]), u=pick([fint(Math.floor(Math.sqrt(n))+1),fr(2*Math.floor(Math.sqrt(n))+3,2),fint(Math.floor(Math.sqrt(n))+2)]), nu=fmul(fint(n),fr(u.q,u.p)), k=rnd(2);
+    if(k===0){ const v=fhalf(fadd(u,nu)), right=fshow(v), wrong=uniq(right,[fshow(nu),fshow(fhalf(fadd(u,fint(n)))),fshow(fadd(u,nu)),fshow(fhalf(u)),fshow(fsub(u,nu))],3); if(wrong.length<3) return null;
+      return {index:'q:12f.average[s;'+n+';'+fshow(u)+']', lines:[['n = '+n+', u = '+fshow(u),'u² > n'],['u′ = (u + n/u)/2','the averaging step']], ask:'Which fraction is u′?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'n/u = '+fshow(nu)+', and half of '+fshow(u)+' + '+fshow(nu)+' is '+right+'. Square-overshoot: u′² − n = (u² − n)²/(4u²) = '+fshow(fsub(fmul(v,v),fint(n)))+', never negative, and far smaller than the overshoot before.'}; }
+    const iv=(a,b)=>'['+fshow(a)+', '+fshow(b)+']', right=iv(nu,u), wrong=uniq(right,[iv(u,nu),iv(fint(0),u),iv(nu,fint(n)),iv(fhalf(u),u)],3); if(wrong.length<3) return null;
+    return {index:'q:12f.average[t;'+n+';'+fshow(u)+']', lines:[['n = '+n+', u = '+fshow(u),'u > 0 and u² > n']], ask:'Which trap does the root-trap technique give for √'+n+'?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Root-trap: if u² > n, then n/u < √n < u. Here n/u = '+fshow(nu)+', and the trap has width (u² − n)/u = '+fshow(fsub(u,nu))+'.'}; }});
+
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 
