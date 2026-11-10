@@ -1,4 +1,5 @@
-/* The randomizer (the learner calls it the laundry). Build 3 (0.0.523): pools through rung 5.
+/* The randomizer (the learner calls it the laundry). Build 4 (2026-11-10): four kinds of work on one switch, each question a seed,
+   a number of links and a bank, addressed seed.link.bank; pools switched by rung. Build 3 (0.0.523): pools through rung 5.
    A seed pool makes a claim; a link pool acts on it with a technique; the question asks about one level.
    Rules (Andrew 2026-10-31): an axiom is never the answer to "which licenses this line"; it may only be a decoy.
    Every question is checked: exactly one offered technique licenses the marked line. The same right answer
@@ -336,76 +337,294 @@ function poisson(l){ let k=0,p=Math.exp(-l),s=p; const u=Math.random(); while(u>
 function strayDue(){ const day=new Date().toISOString().slice(0,10); let s=get('rand:strays',null);
   if(!s||s.day!==day){ s={day,due:poisson(0.25),served:0}; put('rand:strays',s); } return s; }
 
-function build(){
-  const off=get('rand:off',{}), isOff=P=>!!(off['step:'+P.step]||off[P.id]);
-  if(!LINKS.some(l=>l.open())&&!QP.some(P=>P.open())&&!CARDP.some(P=>P.open())) return {closed:'The laundry opens with the crosswalk of the first step you reach, and its technique pools open as you pass measuring sticks.'};
-  const openS=SEEDS.filter(s=>s.open()), openL=LINKS.filter(l=>l.open());
-  let seeds=openS.filter(s=>!isOff(s)), links=openL.filter(l=>!isOff(l));
-  const qps=QP.filter(P=>P.open()&&!isOff(P)), cps=CARDP.filter(P=>P.open()&&!isOff(P)&&P.ready()), linkOK=seeds.length&&links.length;
-  if(!linkOK&&!qps.length&&!cps.length) return {closed:seeds.length||openS.length||qps.length?'Pick at least one claim pool and one technique pool, or one question pool, below.':'Every step is switched off below. Switch one on.'};
-  const used=get('rand:seen',{});
-  const st=strayDue(), offL=openL.filter(l=>isOff(l)), offS=openS.filter(s=>isOff(s));
-  let stray=false;
-  if(st.due>st.served&&(offL.length||offS.length)){ stray=true; if(offL.length) links=offL; if(offS.length&&!offL.length) seeds=offS; }
-  const last=get('rand:last',[]);
-  if(cps.length&&(!stray&&!(linkOK||qps.length)||Math.random()<0.4)) for(let tries=0;tries<40;tries++){ const x=pick(cps).make(); if(!x||used[x.index]) continue; return x; }
-  if(qps.length&&!stray&&(!linkOK||Math.random()<0.5)) for(let tries=0;tries<60;tries++){ const P=pick(qps), x=P.make(); if(!x||used[x.index]) continue;
+/* ===== Laundry 4 (Andrew 2026-11-10 18:43Z) =====
+   The main switch is between four kinds of work: checking a proof to find the bad line, working an equation to completion,
+   word problems (attach the real-world inputs to the equation and get the output), and comprehension.
+   Each question takes a seed (an address in a seed pool) and a number of links (addresses in link pools) and fits them together;
+   terms and units of measure come from a bank (an address in a bank pool). The foot of every question lists seed.link.bank
+   and opens the report form. Pools are switched by rung and unlocked by step. */
+const rungOf=t=>{ const n=parseInt(t,10); return isNaN(n)?99:n; };
+const MODES=[{id:'proof',label:'Check Proofs',say:'One line in the proof is bad. Find it.'},
+  {id:'work',label:'Work Equations',say:'Work the equation to completion.'},
+  {id:'word',label:'Word Problems',say:'Attach the inputs to the equation and get the output.'},
+  {id:'read',label:'Comprehension',say:'Know it by sight.'}];
+const WORKQ=['5g.x','5g.xy','27j.xyz'], DASH='–';
+const SKIND={'0a.names':'names','4f.add':'add','4g.times':'times','4h.numbers':'num','5b.integers':'int','5c.fractions':'frac'};
+
+/* --- Reading a line: does it hold? true, false, or null when the line cannot be read as numbers or names. --- */
+const SUPMAP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁺':'+','⁽':'(','⁾':')'};
+function num(s){ const tk=[]; let i=0; s=String(s);
+  while(i<s.length){ const ch=s[i];
+    if(ch===' '){ i++; continue; }
+    if(ch>='0'&&ch<='9'){ let j=i; while(j<s.length&&s[j]>='0'&&s[j]<='9') j++; tk.push(['n',Number(s.slice(i,j))]); i=j; continue; }
+    if(ch in SUPMAP){ let j=i,u=''; while(j<s.length&&(s[j] in SUPMAP)){ u+=SUPMAP[s[j]]; j++; } tk.push(['p',num(u)]); i=j; continue; }
+    if('()+−·/:^S'.indexOf(ch)>=0){ tk.push([ch]); i++; continue; }
+    throw new Error('unread'); }
+  let k=0; const at=c=>k<tk.length&&tk[k][0]===c, need=c=>{ if(!at(c)) throw new Error('unread'); k++; };
+  const base=()=>{ if(at('n')) return tk[k++][1]; if(at('S')){ k++; need('('); const v=expr(); need(')'); return v+1; } if(at('(')){ k++; const v=expr(); need(')'); return v; } throw new Error('unread'); };
+  const power=()=>{ let b=base(); if(at('p')) b=Math.pow(b,tk[k++][1]); else if(at('^')){ k++; b=Math.pow(b,base()); } return b; };
+  const unary=()=>{ if(at('−')){ k++; return -unary(); } return power(); };
+  const term=()=>{ let v=unary(); for(;;){ if(at('·')){ k++; v*=unary(); } else if(at('/')||at(':')){ k++; const w=unary(); if(w===0) throw new Error('unread'); v/=w; } else if(at('(')){ v*=unary(); } else break; } return v; };
+  function expr(){ let v=term(); while(at('+')||at('−')){ const o=tk[k++][0], w=term(); v=o==='+'?v+w:v-w; } return v; }
+  const v=expr(); if(k!==tk.length||!isFinite(v)) throw new Error('unread'); return v; }
+function splitTop(t,sep){ const out=[]; let d=0,last=0; for(let i=0;i<t.length;i++){ const ch=t[i]; if(ch==='(') d++; else if(ch===')') d--; else if(d===0&&t.startsWith(sep,i)){ out.push(t.slice(last,i)); last=i+sep.length; i=last-1; } } out.push(t.slice(last)); return out; }
+function unwrap(t){ t=t.trim(); for(;;){ if(t[0]!=='('||t[t.length-1]!==')') return t; let d=0,whole=true; for(let i=0;i<t.length-1;i++){ if(t[i]==='(') d++; else if(t[i]===')') d--; if(d===0){ whole=false; break; } } if(!whole) return t; t=t.slice(1,-1).trim(); } }
+const RELS=[' = ',' ≠ ',' < ',' ≤ ',' ∣ ',' | '];
+function relParts(t){ const parts=[], ops=[]; let d=0,last=0; for(let i=0;i<t.length;i++){ const ch=t[i]; if(ch==='(') d++; else if(ch===')') d--; else if(d===0&&ch===' '){ const r=RELS.find(x=>t.startsWith(x,i)); if(r){ parts.push(t.slice(last,i)); ops.push(r.trim()); last=i+r.length; i=last-1; } } } parts.push(t.slice(last)); return {parts,ops}; }
+function H(t,W){ t=t.trim(); const u=unwrap(t); if(u!==t) return H(u,W);
+  let p=splitTop(t,', and '); if(p.length>1) return p.map(x=>H(x,W)).every(Boolean);
+  p=splitTop(t,' ⊕ '); if(p.length>1) return p.map(x=>H(x,W)).filter(Boolean).length===1;
+  p=splitTop(t,' ∨ '); if(p.length>1) return p.map(x=>H(x,W)).some(Boolean);
+  p=splitTop(t,' ∧ '); if(p.length>1) return p.map(x=>H(x,W)).every(Boolean);
+  if(t[0]==='¬') return !H(t.slice(1),W);
+  const par=t.match(/^(.*) is (odd|even)$/); if(par){ const v=num(par[1]); if(!Number.isInteger(v)) throw new Error('unread'); return (Math.abs(v%2)===1)===(par[2]==='odd'); }
+  const R=relParts(t); if(!R.ops.length) throw new Error('unread');
+  const names=W&&R.parts.some(x=>W.all.includes(x.trim()));
+  if(names){ if(R.parts.length!==2) throw new Error('unread'); const a=R.parts[0].trim(), b=R.parts[1].trim();
+    if(!W.all.includes(a)||!W.all.includes(b)) throw new Error('unread');
+    const same=a===b||(W.same.includes(a)&&W.same.includes(b));
+    if(R.ops[0]==='=') return same; if(R.ops[0]==='≠') return !same; throw new Error('unread'); }
+  const v=R.parts.map(num), near=(a,b)=>Math.abs(a-b)<=1e-9*Math.max(1,Math.abs(a),Math.abs(b));
+  return R.ops.every((o,i)=>{ const a=v[i], b=v[i+1];
+    if(o==='=') return near(a,b); if(o==='≠') return !near(a,b); if(o==='<') return a<b&&!near(a,b); if(o==='≤') return a<b||near(a,b);
+    if(!Number.isInteger(a)||!Number.isInteger(b)||a===0) throw new Error('unread'); return b%a===0; }); }
+function holds(t,W){ try{ return !!H(String(t),W); }catch(e){ return null; } }
+const world=c=>c.kind==='names'?{same:[c.l,c.r,c.m],all:[c.l,c.r,c.m,c.n]}:null;
+
+/* --- The ways a line goes bad: a number off by one or two, a sameness turned to a difference, the sides of an order turned, a wrong name. --- */
+function mutations(t,c){ const out=[]; const re=/\d+/g; let m;
+  while((m=re.exec(t))){ const n=Number(m[0]); [n+1,n-1,n+2].forEach(v=>{ if(v>=0) out.push(t.slice(0,m.index)+v+t.slice(m.index+m[0].length)); }); }
+  const R=relParts(t);
+  if(R.ops.length===1){ const [a,b]=R.parts, o=R.ops[0];
+    if(o==='=') out.push(a+' ≠ '+b); if(o==='≠') out.push(a+' = '+b); if(o==='<'||o==='≤') out.push(b+' '+o+' '+a); }
+  else{ if(t.indexOf(' = ')>=0) out.push(t.replace(' = ',' ≠ ')); else if(t.indexOf(' ≠ ')>=0) out.push(t.replace(' ≠ ',' = ')); }
+  if(c.kind==='names') [c.l,c.r,c.m].forEach(x=>{ const i=t.indexOf(x); if(i>=0) out.push(t.slice(0,i)+c.n+t.slice(i+x.length)); });
+  return shuffle([...new Set(out)].filter(x=>x!==t)); }
+
+/* --- Check Proofs: a seed, several links, one bad line. --- */
+function proofQ(P,used){
+  for(let tries=0;tries<120;tries++){
+    const s=pick(P.seeds), c=s.make(), W=world(c);
+    if(c.kind==='names'&&[c.l,c.r,c.m].includes(c.n)) continue;
+    const fit=shuffle(P.links.filter(L=>L.kinds.includes(c.kind))); if(fit.length<2) continue;
+    const want=Math.min(fit.length,fit.length>=3?3+rnd(2):2);
+    const lines=[], der=[];
+    for(const L of fit){ if(der.length>=want) break; let out; try{ out=L.act(c); }catch(e){ continue; }
+      const d=out.lines.filter(x=>!x[1]); if(d.length!==1) continue; const text=d[0][0];
+      if(lines.some(x=>x.t===text)) continue;
+      const gs=out.lines.filter(x=>x[1]).map(x=>x[0]);
+      if(gs.some(g=>holds(g,W)===false)||holds(text,W)===false) continue;
+      const all=lines.map(x=>x.t).concat(gs); if(!L.lic(all,text)) continue;
+      const add=gs.filter(g=>!lines.some(x=>x.t===g)); if(lines.length+add.length+1>10) continue;
+      add.forEach(g=>lines.push({t:g,w:'given'})); lines.push({t:text,w:L.name,L}); der.push(lines.length-1); }
+    if(der.length<2) continue;
+    for(const j of shuffle(der.slice())){ const orig=lines[j].t, L=lines[j].L, others=lines.filter((x,i)=>i!==j).map(x=>x.t);
+      const bad=mutations(orig,c).find(t=>!others.includes(t)&&holds(t,W)!==true&&!LINKS.some(X=>{ try{ return X.lic(others,t); }catch(e){ return false; } }));
+      if(!bad) continue;
+      const ids=der.map(i=>lines[i].L.id), index='p:'+s.id+c.ix+'.'+ids.join('+')+'#'+ids.indexOf(L.id)+':'+bad;
+      if(used[index]) continue;
+      const names=c.kind==='names';
+      return {index, a3:[names?s.id:s.id+c.ix, ids.join('+'), names?'places'+c.ix:DASH], step:L.step, steps:[...new Set(der.map(i=>lines[i].L.step))], stack:true,
+        lines:lines.map((x,i)=>[i===j?bad:x.t,x.w]), ask:'One line does not follow from what it cites. Which line is the bad line?',
+        right:'line '+(j+1), opts:der.map(i=>'line '+(i+1)), lead:'The bad line is line '+(j+1)+'. ',
+        why:'Line '+(j+1)+' cites '+L.name+'. That technique licenses “'+orig+'”, and the line as written does not follow.'}; } }
+  return null; }
+
+/* --- Operations: the links of an equation that is worked to completion, and of a word problem. --- */
+const OPS=[{id:'4f.plus',step:'4f',label:'adding',word:true},{id:'4g.by',step:'4g',label:'multiplying',word:true},{id:'4g.squared',step:'4g',label:'squaring'},
+  {id:'5b.minus',step:'5b',label:'subtracting',word:true},{id:'5e.negated',step:'5e',label:'the negative of'}];
+OPS.forEach(O=>{ O.open=()=>measured(O.step); });
+const wrapTo=(E,p)=>E.p<p?'('+E.t+')':E.t;
+function apply(id,E,n){
+  if(id==='4f.plus') return {t:E.t+' + '+n, v:E.v+n, p:1};
+  if(id==='5b.minus') return {t:E.t+' − '+n, v:E.v-n, p:1};
+  if(id==='4g.by') return {t:wrapTo(E,2)+' · '+n, v:E.v*n, p:2};
+  if(id==='4g.squared') return {t:wrapTo(E,3)+'²', v:E.v*E.v, p:3};
+  return {t:'−('+E.t+')', v:-E.v, p:2}; }
+const startOf=c=>c.kind==='add'?{t:c.a+' + '+c.b,v:c.c,p:1}:c.kind==='times'?{t:c.a+' · '+c.b,v:c.c,p:2}:c.kind==='num'?{t:String(c.a),v:c.a,p:3}:c.kind==='int'?{t:I(c.x),v:c.x,p:3}:null;
+const chain=(E,steps)=>steps.reduce((e,s)=>apply(s.id,e,s.n),E);
+/* the value of a line read with no parentheses: times before plus and minus (the slip of dropping the grouping) */
+function flat(t){ const s=t.replace(/[()]/g,''); try{ return num(s); }catch(e){ return null; } }
+const stepAddr=steps=>steps.map(s=>s.id+(s.n!=null?'['+s.n+']':'')).join('+')||DASH;
+function drawSteps(ops,E0,count,nonneg){ const steps=[]; let E=E0;
+  for(let i=0;i<count;i++){ const O=pick(ops); let n=null;
+    if(O.id==='4f.plus') n=1+rnd(Math.max(2,top()));
+    else if(O.id==='5b.minus'){ n=1+rnd(Math.max(2,top())); if(nonneg&&n>E.v) n=E.v; if(n<1) continue; }
+    else if(O.id==='4g.by') n=2+rnd(8);
+    else if(O.id==='4g.squared'){ if(Math.abs(E.v)>12||steps.some(s=>s.id===O.id)) continue; }
+    else if(steps.length&&steps[steps.length-1].id===O.id) continue;
+    const N=apply(O.id,E,n); if(Math.abs(N.v)>999) continue; steps.push({id:O.id,n}); E=N; }
+  return {steps,E}; }
+function workQ(P,used,last){
+  const seeds=P.seeds.filter(s=>['add','times','num','int'].includes(SKIND[s.id])), wq=P.qps.filter(Q=>WORKQ.includes(Q.id));
+  const canChain=seeds.length&&P.ops.length;
+  if(wq.length&&(!canChain||Math.random()<0.35)){ const q=poolQ(wq,used,last); if(q) return q; }
+  if(canChain) for(let tries=0;tries<120;tries++){
+    const s=pick(seeds), c=s.make(), neg=measured('5b'), deep=Math.min(3,1+P.ops.length);
+    const solve=measured('5g')&&(c.kind==='num'||c.kind==='int')&&Math.random()<0.5;
+    if(solve){ const x=c.kind==='num'?c.a:c.x, ops=P.ops.filter(O=>O.word); if(!ops.length) continue;
+      const D=drawSteps(ops,{t:'x',v:x,p:3},1+rnd(deep),!neg); if(!D.steps.length) continue;
+      const index='w:'+s.id+c.ix+'.'+stepAddr(D.steps)+'?x'; if(used[index]) continue;
+      const right=S(x), again=chain({t:'',v:D.E.v,p:3},D.steps).v;
+      const wrong=[...new Set([D.E.v,again,x+1,x-1,-x,x+2].filter(v=>v!==x&&(neg||v>=0)).map(S))].slice(0,3); if(wrong.length<3) continue;
+      const undo=[]; let cur=D.E.v; D.steps.slice().reverse().forEach(st=>{ const prev=st.id==='4f.plus'?cur-st.n:st.id==='5b.minus'?cur+st.n:cur/st.n;
+        undo.push(st.id==='4f.plus'?S(cur)+' − '+st.n+' = '+S(prev):st.id==='5b.minus'?S(cur)+' + '+st.n+' = '+S(prev):S(cur)+' = '+S(prev)+' · '+st.n); cur=prev; });
+      return {index, a3:[s.id+c.ix,stepAddr(D.steps)+'?x',DASH], step:'5g', steps:['5g',...new Set(D.steps.map(t=>t.id.split('.')[0]))], lines:[[D.E.t+' = '+S(D.E.v),'']],
+        ask:'What is x?', right, opts:shuffle([right,...wrong]), lead:'x is '+right+'. ',
+        why:'Make the same change to both sides, undoing the last change first: '+undo.join('; ')+'. So x = '+right+'.'}; }
+    const E0=P.isOff(s)&&(c.kind==='add'||c.kind==='times')?{t:String(c.a),v:c.a,p:3}:startOf(c); if(!E0) continue; /* a seed from a rung switched off lends its number only */
+    const D=drawSteps(P.ops,E0,1+rnd(deep),!neg); if(!D.steps.length) continue;
+    const index='w:'+s.id+c.ix+'.'+stepAddr(D.steps); if(used[index]) continue;
+    const E=D.E, alts=[flat(E.t)];
+    D.steps.forEach((st,i)=>{ const swap=st.id==='4f.plus'?'4g.by':st.id==='4g.by'?'4f.plus':st.id==='5b.minus'?'4f.plus':null;
+      if(swap) alts.push(chain(E0,D.steps.map((x,k)=>k===i?{id:swap,n:x.n}:x)).v);
+      if(st.id==='4g.squared'){ const before=chain(E0,D.steps.slice(0,i)); alts.push(chain({t:'',v:before.v*2,p:3},D.steps.slice(i+1)).v); }
+      if(st.id==='5e.negated'){ const before=chain(E0,D.steps.slice(0,i)); alts.push(chain({t:'',v:before.v,p:3},D.steps.slice(i+1)).v); }
+      if(st.n!=null) alts.push(chain(E0,D.steps.map((x,k)=>k===i?{id:x.id,n:x.n+1}:x)).v); });
+    alts.push(E.v+1,E.v-1,E.v+2,E.v+10);
+    const wrong=[...new Set(alts.filter(v=>v!==null&&v!==E.v&&Math.abs(v)<=9999&&(neg||v>=0)).map(S))].slice(0,3); if(wrong.length<3) continue;
+    const work=[]; let e=E0; if(E0.p<3) work.push(E0.t+' = '+S(E0.v));
+    D.steps.forEach(st=>{ const nx=apply(st.id,{t:I(e.v),v:e.v,p:3},st.n); work.push(nx.t+' = '+S(nx.v)); e=nx; });
+    return {index, a3:[s.id+c.ix,stepAddr(D.steps),DASH], step:s.step, steps:[...new Set([s.step,...D.steps.map(t=>t.id.split('.')[0])])], lines:[[E.t+' = ▢','']],
+      ask:'What number fills the box ▢?', right:S(E.v), opts:shuffle([S(E.v),...wrong]), lead:'The box holds '+S(E.v)+'. ',
+      why:'Work from the inside out: '+work.join('; ')+'.'}; }
+  if(wq.length) return poolQ(wq,used,last);
+  return null; }
+
+/* --- The bank: terms and units of measure for the word problems. No person is named; the places are the ladder's own. --- */
+const BANK=[
+  {id:'salinas.lettuce',step:'4f',u1:['crate','crates'],u2:['head','heads'],start:'A packing shed in Salinas fills {n} {u1} of lettuce before noon.',plus:'It fills {n} more {u1} after noon.',minus:'It sends {n} {u1} back as too small.',by:'Each crate holds {n} {u2}.',plus2:'It adds {n} loose {u2} from the last row.',minus2:'It sets {n} {u2} aside as bruised.'},
+  {id:'wenatchee.apples',step:'4f',u1:['bin','bins'],u2:['box','boxes'],start:'An orchard near Wenatchee picks {n} {u1} of apples on the first day.',plus:'It picks {n} more {u1} on the second day.',minus:'It holds {n} {u1} back for cider.',by:'Each bin fills {n} {u2}.',plus2:'It adds {n} {u2} of windfalls.',minus2:'It gives {n} {u2} to the pickers.'},
+  {id:'astoria.salmon',step:'4f',u1:['tote','totes'],u2:['can','cans'],start:'A cannery in Astoria takes in {n} {u1} of salmon from the first boat.',plus:'It takes in {n} more {u1} from the second boat.',minus:'It sends {n} {u1} on fresh.',by:'Each tote fills {n} {u2}.',plus2:'It adds {n} {u2} left from the day before.',minus2:'It throws out {n} {u2} that fail the seal check.'},
+  {id:'tillamook.cheese',step:'4f',u1:['rack','racks'],u2:['wheel','wheels'],start:'A creamery in Tillamook sets {n} {u1} of cheese to age.',plus:'It sets {n} more {u1} the next day.',minus:'It sells {n} {u1} young.',by:'Each rack holds {n} {u2}.',plus2:'It adds {n} {u2} from the floor.',minus2:'It cuts {n} {u2} for samples.'},
+  {id:'skagit.bulbs',step:'4f',u1:['row','rows'],u2:['bulb','bulbs'],start:'A farm in the Skagit Valley plants {n} {u1} of tulips in the morning.',plus:'It plants {n} more {u1} in the afternoon.',minus:'It loses {n} {u1} to the rain.',by:'Each row takes {n} {u2}.',plus2:'It plants {n} spare {u2} by the gate.',minus2:'It loses {n} {u2} to voles.'},
+  {id:'hoodriver.pears',step:'4f',u1:['bin','bins'],u2:['gallon','gallons'],start:'A press in Hood River crushes {n} {u1} of pears before noon.',plus:'It crushes {n} more {u1} after noon.',minus:null,by:'Each bin gives {n} {u2} of juice.',plus2:'It adds {n} {u2} left in the tank.',minus2:'It draws off {n} {u2} for tasting.'},
+  {id:'columbia.barge',step:'5j',u1:['hour','hours'],u2:['mile','miles'],start:'A barge on the Columbia runs for {n} {u1} on the first day.',plus:'It runs for {n} more {u1} on the second day.',minus:'It must take off {n} {u1} spent waiting at a lock.',by:'It makes {n} {u2} each hour.',plus2:'It is then towed {n} more {u2}.',minus2:'It then drifts back {n} {u2}.'},
+  {id:'modesto.almonds',step:'5j',u1:['sack','sacks'],u2:['pound','pounds'],start:'A huller near Modesto takes in {n} {u1} of almonds from one orchard.',plus:'It takes in {n} more {u1} from a second orchard.',minus:'It turns away {n} {u1} as wet.',by:'Each sack weighs {n} {u2}.',plus2:'It adds {n} {u2} of floor sweepings.',minus2:'It takes off {n} {u2} of hulls.'}
+];
+BANK.forEach(B=>{ B.open=()=>measured(B.step); });
+const unit=(u,n)=>Math.abs(n)===1?u[0]:u[1];
+const say=(B,key,n)=>B[key].replace('{n}',n).replace('{u1}',unit(B.u1,n)).replace('{u2}',unit(B.u2,n));
+function wordQ(P,used){
+  const seeds=P.seeds.filter(s=>['add','times','num'].includes(SKIND[s.id])), ops=P.ops.filter(O=>O.word); if(!seeds.length||!ops.length||!P.bank.length) return null;
+  for(let tries=0;tries<160;tries++){
+    const s=pick(seeds), c=s.make(), B=pick(P.bank), story=[], steps=[], nums=[c.a], told={}; let two=false, E={t:String(c.a),v:c.a,p:3};
+    if(c.a<1) continue; story.push(say(B,'start',c.a));
+    const put=(id,n)=>{ const key=(id==='4f.plus'?'plus':id==='5b.minus'?'minus':'by')+(two&&id!=='4g.by'?'2':''); if(!B[key]||told[key]) return false; /* each sentence of the bank is told once in a story */
+      if(id==='4g.by'){ if(two||n<2) return false; } if(id==='5b.minus'&&(n<1||n>=E.v)) return false; if(id==='4f.plus'&&n<1) return false;
+      const N=apply(id,E,n); if(N.v>999) return false; told[key]=1; story.push(say(B,key,n)); steps.push({id,n}); nums.push(n); E=N; if(id==='4g.by') two=true; return true; };
+    const lend=P.isOff(s)||(c.kind==='add'&&!ops.some(O=>O.id==='4f.plus'))||(c.kind==='times'&&!ops.some(O=>O.id==='4g.by'));
+    if(!lend&&c.kind==='add'&&!put('4f.plus',c.b)) continue;
+    if(!lend&&c.kind==='times'&&!put('4g.by',c.b)) continue;
+    const own=steps.length; /* the seed's own change, when it brings one */
+    const more=1+rnd(Math.min(2,ops.length)); /* one or two links past the seed, as far as the bank's sentences allow */
+    for(let i=0,g=0;i<more&&g<12;g++){ const O=pick(ops), n=O.id==='4g.by'?2+rnd(8):1+rnd(Math.max(2,Math.min(top(),E.v-1))); if(put(O.id,n)) i++; }
+    if(!steps.length) continue;
+    const U=two?B.u2:B.u1, opt=(t,v,u)=>t+' = '+v+' '+unit(u,v), right=opt(E.t,E.v,U), wrong=[];
+    const start=n=>({t:String(n),v:n,p:3}), take=(X,u)=>{ const o=opt(X.t,X.v,u||U); if(X.v>=0&&X.v<=9999&&(X.v!==E.v||u)&&o!==right&&!wrong.includes(o)) wrong.push(o); };
+    const f=flat(E.t); if(f!==null&&f!==E.v) take({t:E.t.replace(/[()]/g,''),v:f});
+    const known=OPS.filter(O=>O.word&&O.open()).map(O=>O.id); /* a wrong line uses only the changes the learner has met */
+    shuffle(steps.map((x,i)=>i)).forEach(i=>shuffle(known.filter(id=>id!==steps[i].id)).forEach(swap=>take(chain(start(c.a),steps.map((x,k)=>k===i?{id:swap,n:x.n}:x)))));
+    for(let i=0;i<nums.length;i++) for(let j=i+1;j<nums.length;j++) if(nums[i]!==nums[j]){ const m=nums.slice(); [m[i],m[j]]=[m[j],m[i]]; take(chain(start(m[0]),steps.map((x,k)=>({id:x.id,n:m[k+1]})))); }
+    for(let i=0;i<nums.length;i++) for(let j=0;j<nums.length;j++) if(i!==j&&nums[i]!==nums[j]){ const m=nums.slice(); m[j]=m[i]; take(chain(start(m[0]),steps.map((x,k)=>({id:x.id,n:m[k+1]})))); } /* one input attached twice */
+    if(two) wrong.splice(Math.min(2,wrong.length),0,opt(E.t,E.v,B.u1));
+    const w=[...new Set(wrong)].filter(o=>o!==right).slice(0,3); if(w.length<2) continue;
+    const index='d:'+s.id+c.ix+'.'+stepAddr(steps.slice(own))+'.'+B.id; if(used[index]) continue;
+    return {index, a3:[s.id+c.ix,stepAddr(steps.slice(own)),B.id], step:s.step, steps:[...new Set([s.step,...steps.map(t=>t.id.split('.')[0]),B.step])], story:story.join(' '), lines:[],
+      ask:'Which line attaches the numbers correctly and gives the output?', right, opts:shuffle([right,...w]), lead:'It is '+right+'. ',
+      why:'Each sentence makes one change, in order: '+E.t+' = '+E.v+'.'+(two?' The count starts in '+B.u1[1]+' and is in '+B.u2[1]+' after the sentence that says how many '+B.u2[1]+' each '+B.u1[0]+' stands for.':' The count stays in '+B.u1[1]+'.')}; }
+  return null; }
+
+/* --- Comprehension: the crosswalk cards, the techniques, the standing questions, the sight questions, and which technique licenses a line. --- */
+function poolQ(qps,used,last){
+  for(let tries=0;tries<60;tries++){ const Q=pick(qps), x=Q.make(); if(!x||used[x.index]) continue;
     if(x.opts.length>2&&last.length>=2&&last[0]===x.right&&last[1]===x.right) continue;
     if(x.opts.filter(o=>o===x.right).length!==1) continue;
-    return Object.assign({addr:x.index.slice(2), stray:false, step:P.step, lead:'The answer is '+x.right+'. '}, x); }
-  const rights=new Set(links.map(l=>l.name));
-  if(linkOK) for(let tries=0;tries<120;tries++){
-    const s=pick(seeds), c=s.make();
-    const fit=links.filter(L=>L.kinds.includes(c.kind)); if(!fit.length) continue;
-    const L=pick(fit);
-    const level=((c.kind==='add'||c.kind==='times')&&Math.random()<0.3)?'seed':'link';
-    if(level==='link'){
-      if(rights.size>1&&tries<100&&last.length>=2&&last[0]===L.name&&last[1]===L.name) continue;
-      const out=L.act(c), index='link:'+L.id+'(nest '+s.id+c.ix+')';
-      if(used[index]) continue;
-      const lic=licensers(out.lines); if(lic.length!==1||lic[0]!==L.name) continue;
-      const others=shuffle(openL.filter(x=>x.name!==L.name).map(x=>x.name)).slice(0,2);
-      const wrong=others.concat(shuffle(AX.slice())).slice(0,3);
-      return {index, addr:s.id+c.ix+'.'+L.id, stray, step:L.step, lines:out.lines, ask:'Which technique licenses the line marked ?', right:L.name, opts:shuffle([L.name,...wrong]), why:out.why};
-    }
-    if(c.kind!=='add'&&c.kind!=='times') continue;
-    const si='seed:'+s.id+c.ix; if(used[si]) continue;
-    const r=String(c.c), op=c.kind==='add'?' + ':' · ', lim=has('4h')?999:Math.max(4,c.c+2);
-    const pool=[c.c+1,c.c-1,c.a*c.b,c.a+c.b,Number(String(c.a)+String(c.b)),c.c+2,c.c-2,c.a,c.b,0,1,2,3,4].filter(x=>x>=0&&x<=lim&&String(x)!==r);
-    const wrong=shuffle([...new Set(pool.map(String))]).slice(0,3);
-    return {index:si, addr:s.id+c.ix, stray, step:s.step, lead:'The box holds '+r+'. ', lines:[[c.l+' = ▢',null]], ask:'What number fills the box ▢?', right:r, opts:shuffle([r,...wrong]),
-      why:c.kind==='add'?c.a+' + '+c.b+' unfolds, by plus-a-next and plus-zero, to '+r+'.':c.a+' · '+c.b+' unfolds, by times-a-next and times-zero, to '+r+'.'};
-  }
-  return {closed:'Every question these pools hold has been asked. Each step you open adds its pools.'};
+    return Object.assign({a3:[x.index.slice(2),DASH,DASH], step:Q.step, lead:'The answer is '+x.right+'. '}, x); }
+  return null; }
+function licQ(P,used,last){ if(!P.seeds.length||!P.links.length) return null;
+  const rights=new Set(P.links.map(l=>l.name));
+  for(let tries=0;tries<120;tries++){ const s=pick(P.seeds), c=s.make();
+    if(c.kind==='names'&&[c.l,c.r,c.m].includes(c.n)) continue;
+    const fit=P.links.filter(L=>L.kinds.includes(c.kind)); if(!fit.length) continue; const L=pick(fit);
+    if(rights.size>1&&tries<100&&last.length>=2&&last[0]===L.name&&last[1]===L.name) continue;
+    const out=L.act(c), index='link:'+L.id+'(nest '+s.id+c.ix+')'; if(used[index]) continue;
+    const lic=licensers(out.lines); if(lic.length!==1||lic[0]!==L.name) continue;
+    const others=shuffle(P.openL.filter(x=>x.name!==L.name).map(x=>x.name)).slice(0,2), wrong=others.concat(shuffle(AX.slice())).slice(0,3);
+    const names=c.kind==='names';
+    return {index, a3:[names?s.id:s.id+c.ix,L.id,names?'places'+c.ix:DASH], step:L.step, lines:out.lines, ask:'Which technique licenses the line marked ?', right:L.name, opts:shuffle([L.name,...wrong]), why:out.why}; }
+  return null; }
+function readQ(P,used,last){
+  const rq=P.qps.filter(Q=>!WORKQ.includes(Q.id));
+  const card=()=>{ for(let t=0;t<40&&P.cps.length;t++){ const C=pick(P.cps), x=C.make(); if(!x||used[x.index]) continue; return Object.assign({a3:[x.addr,C.id,DASH]},x); } return null; };
+  const ways=[[card,P.cps.length?4:0],[()=>rq.length?poolQ(rq,used,last):null,rq.length?3:0],[()=>licQ(P,used,last),P.links.length&&P.seeds.length?3:0]].filter(w=>w[1]);
+  while(ways.length){ let r=Math.random()*ways.reduce((a,w)=>a+w[1],0), i=0; while(i<ways.length-1&&r>=ways[i][1]){ r-=ways[i][1]; i++; } const q=ways[i][0](); if(q) return q; ways.splice(i,1); }
+  return null; }
+const MAKE={proof:proofQ, work:workQ, word:wordQ, read:readQ};
+
+const toggled=()=>[...LINKS,...QP,...CARDP,...OPS];
+function avail(mode){ const oS=SEEDS.filter(s=>s.open()), kinds=oS.map(s=>SKIND[s.id]), oO=OPS.filter(o=>o.open());
+  if(mode==='proof') return oS.length>0&&LINKS.filter(l=>l.open()).length>=2;
+  if(mode==='work') return (oO.length>0&&kinds.some(k=>['add','times','num','int'].includes(k)))||QP.some(Q=>Q.open()&&WORKQ.includes(Q.id));
+  if(mode==='word') return BANK.some(b=>b.open())&&oO.some(o=>o.word)&&kinds.some(k=>['add','times','num'].includes(k));
+  return QP.some(Q=>Q.open()&&!WORKQ.includes(Q.id))||CARDP.some(C=>C.open())||(oS.length>0&&LINKS.some(l=>l.open())); }
+const OPENS={proof:'0b',work:'4f',word:'4f',read:'0a'};
+function modeNow(){ const m=(get('rand:mode',null)||{}).m||'proof'; /* kept as an object: the record hands a bare word back unquoted */ if(MODES.some(M=>M.id===m)&&avail(m)) return m; const f=MODES.find(M=>avail(M.id)); return f?f.id:m; }
+
+function build(mode){
+  mode=mode||modeNow();
+  const off=get('rand:off',{}), isOff=P=>!!off['rung:'+rungOf(P.step)];
+  if(![...SEEDS,...toggled(),...BANK].some(P=>P.open())) return {closed:'The laundry opens with the crosswalk of the first step you reach, and its technique pools open as you pass measuring sticks.'};
+  if(!avail(mode)) return {closed:mode==='read'?'Comprehension opens with the crosswalk of the first step you reach.':MODES.find(M=>M.id===mode).label+' opens when you pass the measuring stick of '+OPENS[mode]+'.'};
+  const used=get('rand:seen',{}), last=get('rand:last',[]), st=strayDue();
+  const anyOn=toggled().some(P=>P.open()&&!isOff(P)), anyOff=toggled().some(P=>P.open()&&isOff(P));
+  if(!anyOn) return {closed:'Every rung is switched off below. Switch one on.'};
+  const passes=(st.due>st.served&&anyOff)?[true,false]:[false];
+  for(const stray of passes){
+    const use=P=>P.open()&&(stray?isOff(P):!isOff(P));
+    const P={isOff, seeds:SEEDS.filter(s=>s.open()), bank:BANK.filter(b=>b.open()), links:LINKS.filter(use), qps:QP.filter(use), ops:OPS.filter(use),
+      cps:CARDP.filter(C=>use(C)&&C.ready()), openL:LINKS.filter(l=>l.open())};
+    const q=MAKE[mode](P,used,last); if(q){ q.stray=stray; q.mode=mode; return q; } }
+  return {closed:'The rungs switched on hold no fresh question of this kind. Switch on another rung below, or pick another kind above. Each step you pass adds its pools.'};
 }
 
+/* Pools are switched by rung; inside a rung each pool unlocks with its step. */
 function picker(q){
   const off=get('rand:off',{}), by={};
-  [...SEEDS,...LINKS,...QP,...CARDP].filter(x=>x.open()).forEach(P=>{ const b=by[P.step]=by[P.step]||new Set(); b.add(P.kind==='cards'?'crosswalk':P.kind==='sq'?'standing questions':'techniques'); });
+  const src=P=>P.kind==='cards'?'crosswalk':P.kind==='sq'?'standing questions':P.kind==='tech'?'techniques':OPS.includes(P)?'operations':BANK.includes(P)?'bank':SEEDS.includes(P)?'seeds':LINKS.includes(P)?'links':'questions';
+  [...SEEDS,...toggled(),...BANK].filter(P=>P.open()).forEach(P=>{ const r=rungOf(P.step), b=by[r]=by[r]||{steps:new Set(),src:new Set()}; b.steps.add(P.step); b.src.add(src(P)); });
   const M=window.LADDER_CARDMAP||{}, stemOf=t=>{ for(const s in M) if(M[s][0]===t) return s; return STEPS[t]?STEPS[t][0]:t; };
-  const order=Object.keys(by).sort((x,y)=>stemOf(x)<stemOf(y)?-1:1);
-  const rows=order.map(t=>'<label class="rzp"><input type="checkbox" data-id="step:'+esc(t)+'"'+(off['step:'+t]?'':' checked')+'> '+esc(t)+' <span class="rzsrc">'+[...by[t]].join(', ')+'</span></label>').join('');
-  return '<details class="rzpick"'+(q.closed?' open':'')+'><summary>pools, one to a step</summary>'+(rows||'<p class="dnote">None open yet.</p>')+'</details>';
+  const rows=Object.keys(by).map(Number).sort((a,b)=>a-b).map(r=>{ const steps=[...by[r].steps].sort((x,y)=>stemOf(x)<stemOf(y)?-1:1);
+    return '<label class="rzp"><input type="checkbox" data-id="rung:'+r+'"'+(off['rung:'+r]?'':' checked')+'> rung '+r+' <span class="rzsrc">'+esc(steps.join(' '))+' · '+[...by[r].src].join(', ')+'</span></label>'; }).join('');
+  return '<details class="rzpick"'+(q.closed?' open':'')+'><summary>pools, one switch to a rung</summary>'+(rows||'<p class="dnote">None open yet.</p>')+'</details>';
 }
 
+function style(){ if(document.getElementById('rz4css')) return; const s=document.createElement('style'); s.id='rz4css';
+  s.textContent='.rzmodes{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 0 10px}.rzmode{padding:8px 6px;border-radius:8px;border:1px solid var(--line,#ccc);background:transparent;color:inherit;font:inherit;font-size:.92rem;cursor:pointer;min-width:0}.rzmode[aria-pressed="true"]{border-color:currentColor;box-shadow:inset 0 0 0 1px currentColor;font-weight:600}.rzmode:disabled{opacity:.45;cursor:default}.rzmode small{display:block;font-size:.7rem;opacity:.75;font-weight:400}.rzstory{margin:10px 0;line-height:1.55}.rzl.rzs{grid-template-columns:1.6em minmax(0,1fr)}.rzl.rzs .rzw{grid-column:2;font-size:.8em}.rzt{overflow-wrap:anywhere}.rzaddr{font-family:var(--mono,monospace);font-size:.72rem;color:var(--muted,#777);margin-top:14px}.rzaddr .rzseed{overflow-wrap:anywhere;text-align:left}';
+  document.head.appendChild(s); }
+
 function render(box){
-  const S=window.LadderStick;
+  const S=window.LadderStick; style();
   if((!window.LADDER_CARDMAP||!window.LADDER_SQHAS)&&S&&!render.maps){ render.maps=1; box.innerHTML='<p class="dnote">Gathering the pools…</p>'; Promise.all([S.maps(),load('sq/has.js')]).then(()=>Promise.all((window.LADDER_SQHAS||[]).map(st=>load('sq/'+st+'.js')))).then(()=>render(box)); return; }
   cardPools(); const wantD=CARDP.filter(P=>P.open()&&!P.ready()&&!deckOnce[P.file]);
   if(wantD.length){ box.innerHTML='<p class="dnote">Gathering the pools…</p>'; needDecks().then(()=>render(box)); return; }
-  const q=build(), right=get('rand:right',0);
-  if(window.MathKeys){ const off=get('rand:off',{}), K=new Set(); [...SEEDS,...LINKS,...QP].filter(P=>P.open()&&!off[P.id]).forEach(P=>(P.keys||[]).forEach(k=>K.add(k))); MathKeys.limit(K,'the laundry’s chosen pools'); }
-  if(q.closed&&!LINKS.some(l=>l.open())&&!CARDP.some(P=>P.open())){ box.innerHTML='<p class="dnote">'+esc(q.closed)+'</p>'; return; }
-  const wire=()=>box.querySelectorAll('.rzpick input').forEach(i=>i.onchange=()=>{ const o=get('rand:off',{}); if(i.checked) delete o[i.dataset.id]; else o[i.dataset.id]=1; put('rand:off',o); render(box); });
-  if(q.closed){ box.innerHTML='<p class="dnote">'+esc(q.closed)+'</p>'+picker(q); wire(); return; }
-  box.innerHTML='<p class="dnote">Practice drawn from the pools your steps have opened. A question never comes twice. Right answers so far: <b>'+right+'</b>.</p>'
-    +'<div class="rzlines">'+q.lines.map(([t,w],i)=>'<div class="rzl"><span class="rzn">'+(i+1)+'</span><span class="rzt">'+esc(t)+'</span><span class="rzw">'+(w?esc(w):'?')+'</span></div>').join('')+'</div>'
+  const mode=modeNow(), q=build(mode), right=get('rand:right',0), MD=MODES.find(M=>M.id===mode);
+  if(window.MathKeys){ const off=get('rand:off',{}), K=new Set(); [...SEEDS,...LINKS,...QP].filter(P=>P.open()&&!off['rung:'+rungOf(P.step)]).forEach(P=>(P.keys||[]).forEach(k=>K.add(k))); MathKeys.limit(K,'the laundry’s chosen pools'); }
+  if(q.closed&&![...SEEDS,...toggled(),...BANK].some(P=>P.open())){ box.innerHTML='<p class="dnote">'+esc(q.closed)+'</p>'; return; }
+  const sw='<div class="rzmodes" role="group" aria-label="kind of question">'+MODES.map(M=>{ const ok=avail(M.id); return '<button type="button" class="rzmode" data-m="'+M.id+'" aria-pressed="'+(M.id===mode)+'"'+(ok?'':' disabled')+'>'+esc(M.label)+(ok?'':'<small>opens at '+OPENS[M.id]+'</small>')+'</button>'; }).join('')+'</div>';
+  const wire=()=>{ box.querySelectorAll('.rzpick input').forEach(i=>i.onchange=()=>{ const o=get('rand:off',{}); if(i.checked) delete o[i.dataset.id]; else o[i.dataset.id]=1; put('rand:off',o); render(box); });
+    box.querySelectorAll('.rzmode').forEach(b=>b.onclick=()=>{ put('rand:mode',{m:b.dataset.m}); render(box); }); };
+  if(q.closed){ box.innerHTML=sw+'<p class="dnote">'+esc(q.closed)+'</p>'+picker(q); wire(); return; }
+  const addr=q.a3.join(' . ');
+  box.innerHTML=sw+'<p class="dnote">'+esc(MD.say)+' A question never comes twice. Right answers so far: <b>'+right+'</b>.</p>'
+    +(q.story?'<p class="rzstory">'+esc(q.story)+'</p>':'')
+    +(q.lines.length?'<div class="rzlines">'+q.lines.map(([t,w],i)=>'<div class="rzl'+(q.stack?' rzs':'')+'"><span class="rzn">'+(i+1)+'</span><span class="rzt">'+esc(t)+'</span><span class="rzw">'+(w===null?'?':esc(w))+'</span></div>').join('')+'</div>':'')
     +'<p class="rzask">'+esc(q.ask)+'</p><div class="rzopts">'+q.opts.map(o=>'<button type="button" class="rzo'+(q.html?' rzg':'')+'" data-v="'+esc(o).replace(/"/g,'&quot;')+'"'+(q.html?' aria-label="'+esc(o)+'">'+q.html[o]:'>'+esc(o))+'</button>').join('')+'</div>'
     +'<p class="rzwhy" hidden></p><p><button type="button" class="dlink rznext">another question</button></p>'
-    +'<p class="dnote">If this question does not make sense, report it: <button type="button" class="rzseed" title="report this question">seed.link</button></p>'+picker(q);
+    +'<p class="rzaddr">seed . link . bank<br><button type="button" class="rzseed" title="report this question">'+esc(addr)+'</button><br>If this question does not make sense, tap its address to report it.</p>'+picker(q);
   wire();
   if(/\$[^$]+\$/.test(q.ask)&&window.katex){ const el=box.querySelector('.rzask'); el.innerHTML=''; String(q.ask).split(/(\$[^$]+\$)/).forEach(t=>{ if(/^\$[^$]+\$$/.test(t)){ const sp=document.createElement('span'); try{ katex.render(t.slice(1,-1),sp,{throwOnError:false}); }catch(e){ sp.textContent=t; } el.appendChild(sp); } else el.appendChild(document.createTextNode(t)); }); }
-  box.querySelector('.rzseed').onclick=()=>{ if(window.__report) window.__report({kind:'laundry',where:'seed.link '+btoa(unescape(encodeURIComponent(q.addr))).replace(/=+$/,''),text:q.lines.map(l=>l[0]).join(' / ')+' | '+q.ask}); };
+  box.querySelector('.rzseed').onclick=()=>{ if(window.__report) window.__report({kind:'laundry',where:'seed.link.bank '+addr+' ('+MD.label+')',text:(q.story?q.story+' | ':'')+q.lines.map(l=>l[0]).join(' / ')+' | '+q.ask+' | offered: '+q.opts.join(' ; ')}); };
   const why=box.querySelector('.rzwhy'); let done=false;
   box.querySelectorAll('.rzo').forEach(b=>b.onclick=()=>{ if(done) return; done=true;
     const ok=b.dataset.v===q.right;
@@ -416,7 +635,7 @@ function render(box){
     if(q.stray){ const s=strayDue(); s.served++; put('rand:strays',s); const lg=get('rand:straylog',[]); lg.push({day:s.day,index:q.index}); put('rand:straylog',lg); }
     if(ok) put('rand:right',get('rand:right',0)+1);
     const ax=!ok&&AX.includes(b.dataset.v)?' An axiom stands under every technique above it; the question asks for the technique built over it.':'';
-    why.hidden=false; why.innerHTML=esc((ok?'Right. ':(q.lead||'The line holds by '+q.right+'. '))+q.why+ax)+' Built at '+stepLink(q.step)+'.'; });
+    why.hidden=false; why.innerHTML=esc((ok?'Right. ':(q.lead||'The line holds by '+q.right+'. '))+q.why+ax)+' Built at '+(q.steps||[q.step]).map(stepLink).join(', ')+'.'; });
   box.querySelector('.rznext').onclick=()=>render(box);
 }
 
@@ -450,6 +669,6 @@ function sqQ(P){ const S=window.LADDER_SQ||{}, ids=Object.keys(S).filter(id=>id.
   const id=pick(ids), tr=S[id], ns=Object.keys(tr.n).filter(k=>(tr.n[k].c||[]).length>1); if(!ns.length) return null; const k=pick(ns), N=tr.n[k];
   const r=N.c.find(c=>c.go||c.win); if(!r) return null;
   return {index:'s:'+id+'#'+k, addr:id+'#'+k, stray:false, step:P.step, lines:[], ask:N.t, right:r.t, opts:shuffle(N.c.map(c=>c.t)).slice(0,4), why:r.why||'', lead:'The path goes by: '+r.t+'. '}; }
-window.LadderRandomizer={render, build, parseNames, licensers, LINKS, SEEDS, QP, measured, cardPools, CARDP};
+window.LadderRandomizer={render, build, parseNames, licensers, LINKS, SEEDS, QP, measured, cardPools, CARDP, MODES, OPS, BANK, holds, mutations, avail, MAKE};
 const pane=document.getElementById('dp-rand'); if(pane){ let box=pane.querySelector('.rzbox'); if(!box){ box=document.createElement('div'); box.className='rzbox'; pane.innerHTML=''; pane.appendChild(box); } render(box); }
 })();
