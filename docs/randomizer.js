@@ -2832,6 +2832,160 @@ QP.push({id:'16j.slices',step:'16j',label:'slices',open:()=>measured('16j'),make
     return {index:'q:16j.mass['+[what,A,a,b,h].join(';')+']', a3:['16j.mass',DASH,DASH], story:what+' stands '+h+' metres deep, with a level cross section of '+A+' square metres. At the depth x metres its density is '+a+' + '+b+'x kilograms per cubic metre.', lines:[], ask:'What is its mass?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'Density: the mass is ∫ ρ(x)A(x) dx = '+A+' · '+int15(0,h,'('+a+' + '+b+'x) dx')+' = '+A+' · ('+(a*h)+' + '+(b*h*h/2)+') = '+m+'. The top density alone gives too little, and the bottom density alone too much.'}; }});
 
+/* ===== Laundry 5, rung 17 (floor 3 pools, stage P): 17a to 17k, ln and exp ===== */
+Object.assign(STEPS,{'17a':['r17a','The Log as an Area'],'17b':['r17b','Its Slope'],'17c':['r17c','ln(xy) = ln x + ln y'],'17d':['r17d','ln Reaches Every Height'],'17e':['r17e','exp and e'],'17f':['r17f','exp Is Its Own Slope'],
+  '17g':['r17g','pˣ for Any Real x'],'17h':['r17h','Logs and Exponents by Hand'],'17i':['r17i','Slopes of e and ln'],'17j':['r17j','Growth and Decay'],'17k':['r17k','Partial Fractions Into Logs']});
+const ln17=f=>fsame(f,fint(1))?'0':f.q===1?'ln '+f.p:'ln('+fshow(f)+')', E17=k=>'e'+(k===1?'':sup15(k))+'ˣ', co17=c=>c===1?'':c===-1?'−':sg(c);
+const comb17=(i,j)=>{ const t=[]; if(i) t.push([i,'a']); if(j) t.push([j,'b']); if(!t.length) return '0'; return t.map(([c,l],n)=>{ const a=Math.abs(c), body=(a===1?'':a)+l; return n===0?(c<0?'−':'')+body:(c<0?' − ':' + ')+body; }).join(''); };
+const two17=(A1,s1,A2,s2)=>(A1<0?'−':'')+(Math.abs(A1)===1&&s1[0]==='l'?'':Math.abs(A1))+s1+(A2<0?' − ':' + ')+(Math.abs(A2)===1&&s2[0]==='l'?'':Math.abs(A2))+s2;
+
+/* ---------- 17a The Log as an Area ---------- */
+const A17=[
+  ['What is ln x, for x > 0?','the area under 1/t from 1 to x',['the area under t from 0 to x','the slope of 1/x at x','the power line of the table at n = −1'],'ln x = ∫₁ˣ dt/t. It fills the entry the table of powers left missing.'],
+  ['What is the sign of ln x for 0 < x < 1?','negative',['positive','it is 0','it has no value'],'Log-rises: ln 1 = 0 and ln increases, so left of 1 it is below 0. The area is counted from 1 backwards.'],
+  ['Has ln 0 a value?','no: 1/t is not bounded on [0, 1], and ln is defined only for x > 0',['yes: 0','yes: −1','yes: 1'],'The stretch from 1 to x must stay clear of 0. So ln has no value at 0 or at any negative number.'],
+  ['Which bounds hold for every x > 0?','1 − 1/x ≤ ln x ≤ x − 1',['x − 1 ≤ ln x ≤ 1 − 1/x','0 ≤ ln x ≤ x','1/x ≤ ln x ≤ x'],'Log-bounds: between 1 and x the height 1/t lies between 1/x and 1. Equality only at x = 1.']];
+QP.push({id:'17a.area',step:'17a',label:'the log as an area',open:()=>measured('17a'),make(){ return writtenQ('17a.area',A17); }},
+  {id:'17a.bounds',step:'17a',mode:'work',label:'two bounds',open:()=>measured('17a'),make(){
+    const x=pick([fint(2),fint(3),fint(4),fint(5),fint(6),fr(3,2),fr(5,4),fr(4,3),fr(5,2),fr(1,2),fr(2,3),fr(3,4),fr(1,3),fr(5,3),fr(7,4),fint(7),fint(8),fint(10),fr(7,2),fr(1,4),fr(2,5),fr(4,5),fr(7,5),fr(9,4)]), one=fint(1), inv=fr(x.q,x.p), lo=fsub(one,inv), hi=fsub(x,one), b=(u,v)=>fshow(u)+' and '+fshow(v), right=b(lo,hi);
+    const wrong=uniq(right,[b(inv,x),b(hi,x),b(fint(0),hi),b(fsub(one,x),fsub(inv,one)),b(lo,x),b(inv,hi)],3); if(wrong.length<3) return null;
+    return {index:'q:17a.bounds['+fshow(x)+']', lines:[['ln '+(x.q===1?x.p:'('+fshow(x)+')'),'to be trapped by log-bounds']], ask:'Between which two numbers does the technique put it?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Log-bounds: 1 − 1/x ≤ ln x ≤ x − 1. With x = '+fshow(x)+': 1 − '+fshow(inv)+' = '+fshow(lo)+', and '+fshow(x)+' − 1 = '+fshow(hi)+'.'}; }});
+
+/* ---------- 17b Its Slope ---------- */
+QP.push({id:'17b.slope',step:'17b',mode:'work',label:'the slope of ln, and areas under 1/x',open:()=>measured('17b'),make(){
+    const k=rnd(3);
+    if(k===0||k===1){ const a=pick([fint(2),fint(3),fint(4),fint(5),fint(8),fr(1,2),fr(1,3),fr(2,3),fr(3,2),fr(5,2)]), m=2+rnd(5), inv=fr(a.q,a.p), right=fshow(inv), wrong=uniq(right,k===0?[fshow(a),ln17(a),fshow(fneg(fmul(inv,inv))),fshow(fmul(inv,inv)),'0']:[fshow(fmul(fint(m),inv)),fshow(fmul(fr(1,m),inv)),String(m),fshow(fr(1,m)),fshow(a)],3); if(wrong.length<3) return null;
+      return {index:'q:17b.slope['+(k?'k'+m:'p')+';'+fshow(a)+']', lines:[['f(x) = '+(k?'ln('+m+'x)':'ln x'),'for x > 0']], ask:'What is f′('+fshow(a)+')?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:k?'ln('+m+'x) = ln '+m+' + ln x, and a constant has slope 0. Or by the chain rule: '+m+' · 1/('+m+'x) = 1/x. At '+fshow(a)+' that is '+right+'.':'Slope-of-log: ln′(x) = 1/x. At '+fshow(a)+' that is '+right+'.'}; }
+    const u=1+rnd(5), v=u+1+rnd(5), neg=Math.random()<0.35, R=neg?fr(u,v):fr(v,u), right=ln17(R), wrong=uniq(right,[ln17(neg?fr(v,u):fr(u,v)),ln17(fint(v-u)),fshow(fsub(fr(1,u),fr(1,v))),ln17(fint(u*v)),ln17(fint(v)),'it has no value'],3); if(wrong.length<3) return null;
+    return {index:'q:17b.slope[a;'+u+';'+v+';'+(neg?'n':'p')+']', lines:[[neg?int15(-v,-u,'dx/x'):int15(u,v,'dx/x'),'an interval that does not contain 0']], ask:'What is it?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Area-under-1/x: ∫ dx/x = ln|x| + C on an interval clear of 0. '+(neg?'ln|'+sg(-u)+'| − ln|'+sg(-v)+'| = ln '+u+' − ln '+v:'ln '+v+' − ln '+u)+' = '+right+'.'+(neg?' Left of 0 the height 1/x is negative, and so is the area.':'')}; }});
+
+/* ---------- 17c ln(xy) = ln x + ln y ---------- */
+const chk17=()=>{ const x=2+rnd(8), y=pick([2,3,4,5,6,7,8,9].filter(z=>z!==x)), r=2+rnd(5), k=rnd(4), bad=Math.random()<0.5;
+  return k===0?{l1:'ln '+(x*y),l2:bad?'ln '+x+' · ln '+y:'ln '+x+' + ln '+y,cite:'log-of-a-product',bad,why:'Log-of-a-product: ln(xy) = ln x + ln y. A product inside becomes a sum outside, not a product of logs.'}
+    :k===1?{l1:'ln '+x+' + ln '+y,l2:'ln '+(bad?x+y:x*y),cite:'log-of-a-product',bad,why:'Log-of-a-product, read backwards: ln x + ln y = ln(xy), here ln '+(x*y)+'. There is no technique for ln(x + y).'}
+    :k===2?{l1:'ln('+x+'/'+y+')',l2:bad?'ln '+x+' / ln '+y:'ln '+x+' − ln '+y,cite:'log-of-a-quotient',bad,why:'Log-of-a-quotient: ln(x/y) = ln x − ln y. The quotient of two logs is another thing: it is a log to another base.'}
+    :{l1:'ln('+x+sup15(r)+')',l2:bad?'(ln '+x+')'+sup15(r):r+' ln '+x,cite:'log-of-a-power',bad,why:'Log-of-a-power: ln(xʳ) = r ln x. The exponent comes down in front. It does not stay as a power of the log.'}; };
+QP.push({id:'17c.rules',step:'17c',mode:'work',label:'products, quotients and powers',open:()=>measured('17c'),make(){
+    const i=rnd(6)-2, j=rnd(6)-2; if(!i&&!j) return null; const N=fr(2**Math.max(i,0)*3**Math.max(j,0),2**Math.max(-i,0)*3**Math.max(-j,0)), right=comb17(i,j), wrong=uniq(right,[comb17(j,i),comb17(i,-j),comb17(-i,j),comb17(i+1,j),comb17(i,j+1),comb17(2*i,j),comb17(i,2*j),comb17(i-1,j)],3); if(wrong.length<3) return null;
+    return {index:'q:17c.rules['+i+';'+j+']', lines:[['a = ln 2 and b = ln 3','two names']], ask:'What is ln '+(N.q===1?N.p:'('+fshow(N)+')')+', in a and b?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:fshow(N)+' = '+[i?'2'+(i===1?'':sup15(i)):'',j?'3'+(j===1?'':sup15(j)):''].filter(Boolean).join(' · ')+'. Log-of-a-product and log-of-a-power give '+right.replace(/a/g,'ln 2').replace(/b/g,'ln 3').replace(/(\d)ln/g,'$1 ln')+', which is '+right+'. A power below 0 is a quotient, and its log is taken away.'}; }},
+  {id:'17c.check',step:'17c',mode:'proof',label:'does the log line follow',open:()=>measured('17c'),make(){
+    const c=chk17(), opts=['it follows from line 1','it does not follow from line 1'];
+    return {index:'q:17c.check['+c.l1+';'+c.l2+']', stack:true, lines:[[c.l1,'given'],['= '+c.l2,c.cite+', on line 1']], ask:'Is line 2 right?', right:opts[c.bad?1:0], opts, lead:'', why:c.why}; }});
+
+/* ---------- 17d ln Reaches Every Height ---------- */
+const D17=[
+  ['The slope of ln heads to 0 far out. Is ln bounded?','no: ln 2ⁿ = n ln 2 ≥ n/2 for every n',['yes','yes: by 1','no: its slope grows without bound'],'Log-unbounded: a shrinking slope does not make a ceiling. ln passes every bound, slowly.'],
+  ['For a given real c, how many x > 0 have ln x = c?','exactly one',['none when c < 0','at least one, and perhaps more','two'],'Log-onto-ℝ: ln is continuous and reaches above and below c, so it takes c, and it rises, so only once.'],
+  ['Which wins far out, ln x or √x?','√x: ln x/xᵖ heads to 0 for every rational p > 0',['ln x','neither: their ratio heads to 1','it depends on the base of the log'],'Log-loses-to-powers: ln is outgrown by every positive power of x, however small.'],
+  ['As x heads to 0 from the right, what does ln x do?','it passes every bound downward',['it heads to 0','it heads to −1','it passes every bound upward'],'ln 2⁻ⁿ = −n ln 2 ≤ −n/2. The area from 1 back toward 0 has no floor.']];
+QP.push({id:'17d.reach',step:'17d',label:'no ceiling, no floor',open:()=>measured('17d'),make(){ return writtenQ('17d.reach',D17); }});
+
+/* ---------- 17e exp and e ---------- */
+const E17w=[
+  ['What is exp x?','the one positive number whose ln is x',['the number x multiplied by itself e times','the area under 1/t from 1 to x','the slope of ln at x'],'exp undoes ln. It exists, and is one function, because ln takes every real height exactly once.'],
+  ['What is e?','the number whose ln is 1',['ln 1','the slope of ln at 1','the area under 1/t from 0 to 1'],'e = exp 1: the place past 1 where the area under 1/t from 1 reaches 1. And 2 < e < 3.'],
+  ['Is exp(xy) = exp x · exp y?','no: adding becomes multiplying, exp(x + y) = exp x · exp y',['yes','yes, for positive x and y','no: exp(xy) = exp x + exp y'],'exp(1 · 1) = e, but e · e = e². The technique is about sums.'],
+  ['Where does (1 + 1/n)ⁿ head as n grows?','to e',['to 1, since 1 + 1/n heads to 1','past every bound','to 2'],'e-as-a-limit: (1 + 1/n)ⁿ ≤ e ≤ (1 + 1/n)ⁿ⁺¹. The base shrinks toward 1 while the exponent grows, and neither wins outright.']];
+QP.push({id:'17e.e',step:'17e',label:'exp and e',open:()=>measured('17e'),make(){ return writtenQ('17e.e',E17w); }},
+  {id:'17e.exp',step:'17e',mode:'work',label:'adding becomes multiplying',open:()=>measured('17e'),make(){
+    if(Math.random()<0.3){ const n=1+rnd(4), lo=fr((n+1)**n,n**n), hi=fr((n+1)**(n+1),n**(n+1)), b=(u,v)=>fshow(u)+' ≤ e ≤ '+fshow(v), right=b(lo,hi), wrong=uniq(right,[b(fr(n+1,n),lo),b(lo,fmul(lo,fint(2))),b(fint(n),fint(n+1)),b(fr(n**n,(n+1)**n),lo),b(lo,fadd(lo,fint(1)))],3); if(wrong.length<3) return null;
+      return {index:'q:17e.exp[e;'+n+']', lines:[['(1 + 1/n)ⁿ ≤ e ≤ (1 + 1/n)ⁿ⁺¹','e-as-a-limit'],['n = '+n,'given']], ask:'Which bounds does it give?', right, opts:shuffle([right,...wrong]), lead:'', why:'1 + 1/'+n+' = '+fshow(fr(n+1,n))+'. Its power '+n+' is '+fshow(lo)+', and its power '+(n+1)+' is '+fshow(hi)+'.'}; }
+    const A=pick([fint(2),fint(3),fint(4),fint(5),fint(9),fr(1,2),fr(3,2)]), B=pick([fint(2),fint(3),fint(5),fint(7),fr(1,3)].filter(z=>!fsame(z,A))), k=rnd(4), invB=fr(B.q,B.p), invA=fr(A.q,A.p);
+    const [ask,R,alts]=k===0?['exp(x + y)',fmul(A,B),[fadd(A,B),fmul(A,invB),fsub(A,B),fmul(A,A)]]:k===1?['exp(x − y)',fmul(A,invB),[fsub(A,B),fmul(A,B),fmul(B,invA),fneg(fmul(A,B))]]:k===2?['exp(−x)',invA,[fneg(A),fsub(fint(1),A),A,fneg(invA)]]:['exp(2x)',fmul(A,A),[fmul(fint(2),A),fadd(A,fint(2)),fmul(A,B),fmul(fint(4),A)]];
+    const right=fshow(R), wrong=frs16(right,alts.concat([fadd(R,fint(1))])); if(wrong.length<3) return null;
+    return {index:'q:17e.exp[r;'+[fshow(A),fshow(B),k].join(';')+']', lines:[['exp x = '+fshow(A)+' and exp y = '+fshow(B),'given']], ask:'What is '+ask+'?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Adding-becomes-multiplying: '+(k===0?'exp(x + y) = exp x · exp y':k===1?'exp(x − y) = exp x · exp(−y) = exp x/exp y':k===2?'exp(−x) = 1/exp x':'exp(2x) = exp(x + x) = (exp x)²')+' = '+right+'.'}; }});
+
+/* ---------- 17f exp Is Its Own Slope ---------- */
+const F17=[
+  ['Is (eˣ)′ = x eˣ⁻¹?','no: the power rule is for a fixed exponent, and (eˣ)′ = eˣ',['yes','yes, for x > 0','no: (eˣ)′ = e'],'Slope-of-exp: exp is its own slope. Here the exponent is the variable, not a fixed number.'],
+  ['f′(x) = f(x) at every x of an interval. What must f be?','Ceˣ, for some constant C',['eˣ, and nothing else','eˣ + C, for some constant C','any pˣ with p > 0'],'Slope-equals-size: f(x)e⁻ˣ has slope 0, so it is constant. C = 0 is allowed, the function that is 0 everywhere.'],
+  ['What is the slope of exp at 0?','1',['0','e','1/e'],'exp′(0) = exp 0 = 1, since ln 1 = 0.'],
+  ['f′ = kf on an interval containing 0, and f(0) is known. How many functions fit?','exactly one: f(0)e^(kx)',['one for each real C','none, unless k = 1','two'],'Proportional-slope: the whole course of f is fixed by its rule of change and one value.']];
+QP.push({id:'17f.only',step:'17f',label:'the only one',open:()=>measured('17f'),make(){ return writtenQ('17f.only',F17); }},
+  {id:'17f.slope',step:'17f',mode:'work',label:'slopes with e',open:()=>measured('17f'),make(){
+    const k=pick([2,3,4,5,6,-1,-2,-3,-4]);
+    if(Math.random()<0.5){ const right=co17(k)+E17(k), wrong=uniq(right,[E17(k),co17(k)+'x·e'+sup15(k)+'ˣ⁻¹',(k<0?'−':'')+E17(k)+'/'+Math.abs(k),co17(-k)+E17(k)],3);
+      return {index:'q:17f.slope[d;'+k+']', lines:[['f(x) = '+E17(k),'at every real']], ask:'Which is f′(x)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Chain for slopes, with slope-of-exp: the outside is its own slope, and the inside '+co17(k)+'x has the slope '+sg(k)+'. So f′(x) = '+right+'.'}; }
+    const c=pick([-5,-3,-2,2,3,4,5,6,7,8,9].filter(z=>z!==k)), right=co17(c)+E17(k), wrong=uniq(right,[co17(k)+E17(c),co17(c)+'eˣ',lin9(k,c),co17(c)+E17(k)+pm(k),co17(c*k)+E17(k)],3);
+    return {index:'q:17f.slope[p;'+k+';'+c+']', lines:[['f′(x) = '+co17(k)+'f(x)','at every real'],['f(0) = '+sg(c),'given']], ask:'Which is f(x)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Proportional-slope: f′ = kf gives f(x) = f(0)e^(kx). Here k = '+sg(k)+' and f(0) = '+sg(c)+'. Check: its slope is '+sg(k)+' times itself, and e⁰ = 1.'}; }});
+
+/* ---------- 17g pˣ for Any Real x ---------- */
+const G17=[
+  ['What is pˣ, for p > 0 and a real x?','exp(x ln p)',['p multiplied by itself x times','ln(x exp p)','x exp p'],'The definition. For a rational x it agrees with the powers and roots of rung 8 (powers-agree).'],
+  ['Is (2ˣ)′ = x 2ˣ⁻¹?','no: the exponent varies, and the slope is 2ˣ ln 2',['yes','yes, for whole x','no: the slope is 2ˣ'],'Slope-of-pˣ: (pˣ)′ = pˣ ln p. The power rule is for a fixed exponent and a varying base.'],
+  ['Is (−8)ˣ = e^(x ln(−8))?','no: ln(−8) has no value, and pˣ is defined for p > 0',['yes','yes, for whole x only, by this definition','no: it is −e^(x ln 8)'],'The definition goes through ln p, which needs p > 0.'],
+  ['What is ln(pˣ), for p > 0 and a real x?','x ln p',['(ln p)ˣ','p ln x','ln p + ln x'],'Real-exponent: log-of-a-power now holds for every real exponent.']];
+QP.push({id:'17g.def',step:'17g',label:'pˣ by its definition',open:()=>measured('17g'),make(){ return writtenQ('17g.def',G17); }},
+  {id:'17g.power',step:'17g',mode:'work',label:'logs to a base, and the slope of pˣ',open:()=>measured('17g'),make(){
+    if(Math.random()<0.55){ const p=pick([2,2,3,5,10]), n=p===2?rnd(9)-3:p===3?rnd(7)-3:rnd(6)-2, N=n<0?'(1/'+(p**-n)+')':String(p**n), right=sg(n), wrong=num13(right,[-n,n+1,n-1,p,n*p,p**Math.abs(n),n+2]); if(wrong.length<3) return null;
+      return {index:'q:17g.power[l;'+p+';'+n+']', lines:[['log'+sub15(p)+' '+N,'a log to the base '+p]], ask:'What is it?', right, opts:shuffle([right,...wrong]), lead:'', why:'log'+sub15(p)+' y is the x with '+p+'ˣ = y. '+p+sup15(n)+' = '+(n<0?'1/'+(p**-n):p**n)+', so it is '+right+'.'}; }
+    const p=pick([2,3,5]), a=rnd(4), v=p**a, right=(v===1?'':v+' ')+'ln '+p, wrong=uniq(right,[String(a*p**Math.max(a-1,0)),String(v),'ln '+p,v+'/ln '+p,(v*p)+' ln '+p,(a?a+' ':'2 ')+'ln '+p],3); if(wrong.length<3) return null;
+    return {index:'q:17g.power[s;'+p+';'+a+']', lines:[['f(x) = '+p+'ˣ','at every real']], ask:'What is f′('+a+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'Slope-of-pˣ: ('+p+'ˣ)′ = '+p+'ˣ ln '+p+'. At '+a+' that is '+right+'. The power rule does not apply: the exponent is the variable.'}; }});
+
+/* ---------- 17h Logs and Exponents by Hand ---------- */
+QP.push({id:'17h.base',step:'17h',mode:'work',label:'changing base, and equations',open:()=>measured('17h'),make(){
+    const k=rnd(3);
+    if(k===0){ const p=pick([2,3]), a=pick([2,3]), b=pick([1,2,3,4,5].filter(z=>z!==a)), base=p**a, N=p**b, R=fr(b,a), right=fshow(R), wrong=frs16(right,[fr(a,b),fr(N,base),fint(b-a),fint(b),fint(a),fr(b,a*p)]); if(wrong.length<3) return null;
+      return {index:'q:17h.base[c;'+base+';'+N+']', lines:[['log'+sub15(base)+' '+N,'a log to the base '+base]], ask:'What is it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Change-of-base, through the base '+p+': log'+sub15(p)+' '+N+' / log'+sub15(p)+' '+base+' = '+b+'/'+a+(fshow(R)===b+'/'+a?'':' = '+right)+'.'}; }
+    if(k===1){ const m=2+rnd(4), n=m+1+rnd(4), right='x = ln '+m+' or x = ln '+n, wrong=['x = '+m+' or x = '+n,'x = ln '+(m+n),'x = ln '+(m*n),'x = e'+sup15(m)+' or x = e'+sup15(n)];
+      return {index:'q:17h.base[q;'+m+';'+n+']', lines:[['e²ˣ − '+(m+n)+'eˣ + '+(m*n)+' = 0','a quadratic in eˣ']], ask:'What are its solutions?', right, opts:shuffle([right,...take(wrong,3)]), lead:'', why:'(eˣ − '+m+')(eˣ − '+n+') = 0, so eˣ = '+m+' or eˣ = '+n+'. Take ln of both sides: ln is one to one.'}; }
+    const [r,a,n,o]=pick([[4,2,3,-2],[8,6,4,-2],[4,3,2,-1],[8,7,3,-1],[2,1,1,-1],[8,4,5,-4],[16,14,5,-2],[16,12,6,-4]]), opts=['x = '+r+' only','x = '+r+' or x = '+sg(o),'x = '+sg(o)+' only','no solution'];
+    return {index:'q:17h.base[d;'+r+';'+a+']', lines:[['log₂ x + log₂(x − '+a+') = '+n,'to be solved']], ask:'What are its solutions?', right:opts[0], opts, lead:'', why:'log-of-a-product: log₂(x(x − '+a+')) = '+n+', so x(x − '+a+') = '+(2**n)+', and x = '+r+' or x = '+sg(o)+'. But log₂('+sg(o)+') has no value: check the domain. Only '+r+' is left.'}; }},
+  {id:'17h.fit',step:'17h',mode:'word',label:'from two measurements',open:()=>measured('17h'),make(){
+    const [what,unit]=pick([['The count of cells in a culture','hour'],['The number of weed patches on a pond','week'],['The number who have heard a rumour','day'],['The number of mould spots on a wall','day']]), b=pick([2,2,3]), A=2+rnd(7), t1=1+rnd(2), d=2+rnd(2), t2=t1+d, Y1=A*b**t1, Y2=A*b**t2, fac=Math.random()<0.5;
+    const right=String(fac?b:A), wrong=uniq(right,(fac?[b**d,(Y2-Y1)/d,d,b+1,Y2/Y1/d]:[Y1,Y1-(Y2-Y1)/d*t1,Y1/t1,A*b,Y1/b**(t1-1)*1+1]).filter(z=>Number.isInteger(z)&&z>=0).map(String),3); if(wrong.length<3) return null;
+    return {index:'q:17h.fit['+[what,b,A,t1,t2,fac?'f':'a'].join(';')+']', a3:['17h.fit['+(fac?'factor':'start')+']',DASH,DASH], story:what+' grows by equal factors in equal times. It is '+Y1+' at '+unit+' '+t1+' and '+Y2+' at '+unit+' '+t2+'.', lines:[], ask:fac?'By what factor does it grow each '+unit+'?':'What was it at '+unit+' 0?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'y = A bᵗ. The ratio '+Y2+'/'+Y1+' = '+(b**d)+' is b'+sup15(d)+', so b = '+b+'. Then A = '+Y1+'/'+b+sup15(t1)+' = '+A+'. The start cancels in the ratio, which is why two measurements are enough.'}; }});
+
+/* ---------- 17i Slopes of e and ln ---------- */
+const I17=[
+  ['What is (xˣ)′, for x > 0?','xˣ(ln x + 1)',['x · xˣ⁻¹','xˣ ln x','xˣ'],'Log-slope: ln(xˣ) = x ln x has the slope ln x + 1, and f′ = f · (ln f)′. Neither the power rule nor slope-of-pˣ fits, since base and exponent both vary.'],
+  ['What is ∫ ln x dx?','x ln x − x + C',['1/x + C','x ln x + C','(ln x)²/2 + C'],'Parts, with f = ln x and g′ = 1. Check: (x ln x − x)′ = ln x + 1 − 1.'],
+  ['Which wins far out, x¹⁰⁰ or 2ˣ?','2ˣ: xʳ/bˣ heads to 0 for every real r and every b > 1',['x¹⁰⁰','neither: their ratio heads to 1','x¹⁰⁰ until 100, and after that neither'],'Exponentials-pass-powers: bˣ eventually passes every polynomial, and stays past it.'],
+  ['What is (ln f)′, where f > 0 has a slope?','f′/f',['1/f','f′ ln f','ln f′'],'Chain for slopes with slope-of-log. Read backwards, ∫ g′/g = ln|g| + C.']];
+QP.push({id:'17i.races',step:'17i',label:'taking ln first',open:()=>measured('17i'),make(){ return writtenQ('17i.races',I17); }},
+  {id:'17i.logslope',step:'17i',mode:'work',label:'slopes over values',open:()=>measured('17i'),make(){
+    const k=rnd(3), c=1+rnd(5);
+    if(k===0){ const g='x² + '+c, right='ln('+g+') + C', wrong=['1/('+g+') + C','2x ln('+g+') + C','x²/('+g+') + C'];
+      return {index:'q:17i.logslope[i;'+c+']', lines:[['∫ 2x/('+g+') dx','a slope over its value']], ask:'Which is it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Area-under-g′/g: the top 2x is the slope of the bottom '+g+', so the integral is ln|'+g+'| + C. The bars may go, since '+g+' > 0.'}; }
+    if(k===1){ const b=1+rnd(4), R=fr(b*b+c,c), right=ln17(R), wrong=uniq(right,[ln17(fint(b*b+c)),ln17(fint(b*b)),ln17(fr(c,b*b+c)),fshow(fsub(fr(1,c),fr(1,b*b+c))),ln17(fint(b*b+2*c)),fshow(fr(b*b,c))],3); if(wrong.length<3) return null;
+      return {index:'q:17i.logslope[d;'+c+';'+b+']', lines:[[int15(0,b,'2x/(x² + '+c+') dx'),'a slope over its value']], ask:'What is it?', right, opts:shuffle([right,...wrong]), lead:'', why:'An antiderivative is ln(x² + '+c+'). Between the ends: ln '+(b*b+c)+' − ln '+c+' = '+right+', by log-of-a-quotient.'}; }
+    const a=rnd(5)-2, u=a+1+rnd(3), v=u+1+rnd(4), R=fr(v-a,u-a), right=ln17(R), wrong=uniq(right,[ln17(fr(v,u)),ln17(fint(v-u)),fshow(fsub(fr(1,u-a),fr(1,v-a))),ln17(fr(u-a,v-a)),ln17(fint(v-a)),ln17(fint((v-a)*(u-a)))],3); if(wrong.length<3||u<=0) return null;
+    return {index:'q:17i.logslope[s;'+[a,u,v].join(';')+']', lines:[[int15(u,v,'dx/'+fac14(a)),'the bottom is not 0 on the interval']], ask:'What is it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Area-under-1/x with a straight inside: an antiderivative is ln|'+(a===0?'x':'x'+pm(-a))+'|. Between the ends: ln '+(v-a)+' − ln '+(u-a)+' = '+right+'.'}; }});
+
+/* ---------- 17j Growth and Decay ---------- */
+QP.push({id:'17j.growth',step:'17j',mode:'work',label:'equal steps, equal factors',open:()=>measured('17j'),make(){
+    if(Math.random()<0.5){ const kk=pick([fr(1,2),fr(1,3),fr(1,5),fr(1,10),fint(2),fint(3),fr(2,3),fr(3,4),fr(1,4)]), neg=Math.random()<0.5, c=fr(kk.q,kk.p), T=f=>fsame(f,fint(1))?'ln 2':f.q===1?f.p+' ln 2':'('+fshow(f)+') ln 2', right=T(c), wrong=uniq(right,[T(kk),fshow(fmul(fint(2),c)),fshow(c),'ln '+(c.q===1?2*c.p:'('+fshow(fmul(fint(2),c))+')'),T(fmul(fint(2),c))],3); if(wrong.length<3) return null;
+      return {index:'q:17j.growth[t;'+fshow(kk)+';'+(neg?'h':'d')+']', lines:[['y = y₀e^(kt), with k = '+(neg?'−':'')+fshow(kk),'given']], ask:'How long does y take to '+(neg?'halve':'double')+'?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'Doubling-time: e^(kT) = '+(neg?'1/2':'2')+' exactly when T = ln 2/|k|. Here |k| = '+fshow(kk)+', so T = '+right+', from whatever instant the count starts.'}; }
+    const A=2+rnd(8), r=pick([2,3,4]), h=pick([2,3,5]), geo=Math.random()<0.5, v=geo?A*r*r:A+2*(A*r-A), right=String(v), wrong=uniq(right,[geo?A+2*(A*r-A):A*r*r,2*A*r,A*r**3,A*r+r,A*r+A].map(String),3); if(wrong.length<3) return null;
+    return {index:'q:17j.growth[s;'+[A,r,h,geo?'g':'l'].join(';')+']', lines:[['y changes by equal '+(geo?'factors':'steps')+' in equal times','given'],['y(0) = '+A+' and y('+h+') = '+(A*r),'given']], ask:'What is y('+(2*h)+')?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:geo?'Equal-steps-equal-factors: over each stretch of '+h+' the factor is '+r+'. '+(A*r)+' · '+r+' = '+right+'. This is y₀e^(kt).':'Equal steps: over each stretch of '+h+' the step is '+(A*r-A)+'. '+(A*r)+' + '+(A*r-A)+' = '+right+'. This is the line y₀ + mt, not an exponential.'}; }},
+  {id:'17j.cooling',step:'17j',mode:'word',label:'cooling',open:()=>measured('17j'),make(){
+    const what=pick(['A loaf from the oven','A forged bar','A pot of broth','A kiln brick']), room=pick([10,15,20,25]), [n,D]=pick([[2,40],[2,80],[2,120],[2,160],[3,90],[3,180],[4,80],[4,160]]), h=pick([5,10,15,20]), T0=room+D, T1=room+D/n, T2=room+D/(n*n), right=T2+' degrees';
+    const wrong=uniq(right,[sg(T1-(T0-T1))+' degrees',room+' degrees',(room+D/(2*n))+' degrees',(T1-10)+' degrees',(T2+10)+' degrees'],3); if(wrong.length<3) return null;
+    return {index:'q:17j.cooling['+[what,room,D,n,h].join(';')+']', a3:['17j.cooling',DASH,DASH], story:what+' at '+T0+' degrees is left in a room at '+room+' degrees. After '+h+' minutes it is at '+T1+' degrees.', lines:[], ask:'By the law of cooling, what is its temperature after '+(2*h)+' minutes?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The law of cooling: the difference from the room decays by equal factors in equal times. It went from '+D+' to '+(D/n)+' in '+h+' minutes, a factor of 1/'+n+'. After '+h+' more it is '+(D/(n*n))+', so the temperature is '+room+' + '+(D/(n*n))+' = '+T2+'. Equal steps would give '+sg(T1-(T0-T1))+'.'}; }});
+
+/* ---------- 17k Partial Fractions Into Logs ---------- */
+const K17=[
+  ['Can x²/((x − 1)(x + 1)) be split as A/(x − 1) + B/(x + 1)?','no: the top’s degree is not less than the bottom’s, so divide first',['yes, with A = 1 and B = 1','yes, with A = 1/2 and B = −1/2','no: such a quotient has no antiderivative'],'x²/(x² − 1) = 1 + 1/(x² − 1). Straight-factors asks for a top of lower degree.'],
+  ['By the cover-up rule, how is the number over (x − c) found?','cover (x − c) in the bottom, and put x = c into what is left',['put x = 0 into the whole quotient','take the slope of the bottom at c','cover the top, and put x = c into the bottom'],'Aᵢ = p(cᵢ)/qᵢ(cᵢ), with qᵢ the bottom without its factor (x − cᵢ).'],
+  ['After the split, what does a piece A/(x − c) integrate to?','A ln|x − c|',['−A/(x − c)²','A/(x − c)²','A ln x − c'],'Area-under-1/x with a straight inside, on an interval that does not contain c.'],
+  ['Does straight-factors split 1/(x − 1)² as A/(x − 1) + B/(x − 1)?','no: the technique needs different factors',['yes, with A = B = 1/2','yes, with A = 1 and B = −1','yes, with A = 1 and B = 0'],'The right side is (A + B)/(x − 1), which is never 1/(x − 1)². The cᵢ must be different reals.']];
+QP.push({id:'17k.cover',step:'17k',label:'the cover-up rule',open:()=>measured('17k'),make(){ return writtenQ('17k.cover',K17); }},
+  {id:'17k.split',step:'17k',mode:'work',label:'the split, and its logs',open:()=>measured('17k'),make(){
+    const c1=rnd(6)-3, c2=c1+1+rnd(3), A1=pick([-3,-2,-1,1,2,3,4]), A2=pick([-3,-2,-1,1,2,3,4]); if(A1+A2===0) return null;
+    const top=lin9(A1+A2,-(A1*c2+A2*c1)), bot=fac14(c1)+fac14(c2), logs=Math.random()<0.5, s1=logs?'ln|'+(c1===0?'x':'x'+pm(-c1))+'|':'/'+fac14(c1), s2=logs?'ln|'+(c2===0?'x':'x'+pm(-c2))+'|':'/'+fac14(c2), form=(a,b)=>two17(a,logs?' '+s1:s1,b,logs?' '+s2:s2).replace(/(^|− |\+ )1 ln/g,'$1ln').replace(/^−1 ln/,'−ln')+(logs?' + C':'');
+    const right=form(A1,A2), wrong=uniq(right,[form(A2,A1),form(A1,-A2),form(-A1,A2),form(A1+A2,-(A1*c2+A2*c1)||1),form(A1+1,A2),form(A1,A2+1)],3); if(wrong.length<3) return null;
+    return {index:'q:17k.split['+[c1,c2,A1,A2,logs?'l':'s'].join(';')+']', lines:[[(logs?'∫ ':'')+'('+top+')/('+bot+')'+(logs?' dx':''),logs?'on an interval clear of '+sg(c1)+' and '+sg(c2):'to be split into straight pieces']], ask:logs?'Which is it?':'Which split is it?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Cover-up: cover '+fac14(c1)+' and put x = '+sg(c1)+', giving '+sg(A1*(c1-c2))+'/'+par10(c1-c2)+' = '+sg(A1)+'. Cover '+fac14(c2)+' and put x = '+sg(c2)+', giving '+sg(A2*(c2-c1))+'/'+par10(c2-c1)+' = '+sg(A2)+'.'+(logs?' Then each piece is a log.':'')}; }});
+
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 
