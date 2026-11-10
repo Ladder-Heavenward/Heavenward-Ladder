@@ -812,6 +812,16 @@ header.top.vh{position:absolute!important;width:1px!important;height:1px!importa
 .rows .row:has(.vd-a) .m{box-shadow:inset 3px 0 0 var(--wrong);padding-left:8px}
 
 /* ---- Phase G: swipe screens (2026-11-09) */
+/* 2026-11-10 (Andrew 15:10): the page waits for rung.js's first paint, so the footing view never flashes the whole step; after 2.5 s it shows anyway */
+html:not(.lk-paint) body>.wrap{visibility:hidden;animation:lkshow 0s 2.5s forwards}
+@keyframes lkshow{to{visibility:visible}}
+/* the slide between screens: the new one comes in from the direction of travel (the old one leaves as a ghost made in rung.js) */
+@keyframes swinF{from{transform:translateX(100vw);opacity:.5}to{transform:none;opacity:1}}
+@keyframes swinB{from{transform:translateX(-100vw);opacity:.5}to{transform:none;opacity:1}}
+body.fv.sw .sw-on.sw-in-f{animation:swinF .32s cubic-bezier(.2,.7,.2,1) both}
+body.fv.sw .sw-on.sw-in-b{animation:swinB .32s cubic-bezier(.2,.7,.2,1) both}
+.swghost .sw-stub,.swghost .pa{pointer-events:none}
+@media (prefers-reduced-motion:reduce){body.fv.sw .sw-on.sw-in-f,body.fv.sw .sw-on.sw-in-b{animation:none}}
 body.fv.sw [data-fvu].fv-on [data-sw]:not(.sw-on){display:none!important}
 .swbar{position:fixed;left:0;right:0;bottom:calc(var(--lbh) + 10px);z-index:9390;pointer-events:none;display:flex;justify-content:space-between;align-items:center;padding:0 10px}
 .swbar[hidden]{display:none}
