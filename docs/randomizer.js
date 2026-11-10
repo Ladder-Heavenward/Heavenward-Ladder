@@ -4873,6 +4873,214 @@ QP.push({id:'24l.sums',step:'24l',label:'sums that solve rules',open:()=>measure
     const B=x=>x.p===0?'s':'(s'+(x.p<0?' + ':' − ')+fshow(fr(Math.abs(x.p),x.q))+')'; const right=f(s1,s2), wrong=uniq(right,[f(fneg(s2),fneg(s1)),f(s1,fadd(s2,fint(1))),f(fsub(s1,fint(1)),s2),f(s1,s1),f(s2,s2),f(fint(0),fint(1)),f(p0,q0)],3); if(wrong.length<3) return null;
     return {index:'q:24l.recipe[p;'+[fshow(s1),fshow(s2)].join(';')+']', lines:[['x²y″ + x·p(x)y′ + q(x)y = 0, with p(0) = '+fshow(p0)+' and q(0) = '+fshow(q0),'a rule with a bad point at 0'],['s(s − 1) + p(0)s + q(0) = 0','the starting-power technique']], ask:'Which starting powers s does it allow?', right, opts:shuffle([right,...wrong]), lead:'', why:'With these numbers the equation s(s − 1) + p(0)s + q(0) = 0 factors as '+(fsame(s1,s2)?B(s1)+'²':B(s1)+B(s2))+' = 0.'+(fsame(s1,s2)?' A double root gives only one sum; the second solution needs ln x.':'')}; }});
 
+/* ===== Laundry 5, rung 25 (floor 5 pools, stage X): 25a to 25f ===== */
+Object.assign(STEPS,{'25a':['r25a','The Pairs Looked Back On'],'25b':['r25b','A Field With No Order'],'25c':['r25c','The Size of a Product'],'25d':['r25d','Every Polynomial Has a Root'],'25e':['r25e','Roots in Pairs'],'25f':['r25f','Maps of the Plane']});
+const cx25=(a,b)=>b===0?sg(a):(a===0?'':sg(a)+(b<0?' − ':' + '))+(a===0&&b<0?'−':'')+(Math.abs(b)===1?'':Math.abs(b))+'i';
+const pc25=(a,b)=>(b===0&&a>=0)||(a===0&&b>0)?cx25(a,b):'('+cx25(a,b)+')';
+const TRIP25=[[3,4,5],[4,3,5],[5,12,13],[12,5,13],[8,15,17],[6,8,10],[8,6,10]], s25=()=>pick([1,-1]), nz25=n=>(1+rnd(n))*s25();
+const z25=()=>{ const [a,b,r]=pick(TRIP25); return [a*s25(),b*s25(),r]; };
+const tm25=ts=>{ let s=''; ts.filter(t=>t[0]!==0).forEach(([c,x],i)=>{ const a=Math.abs(c); s+=(i===0?(c<0?'−':''):(c<0?' − ':' + '))+(x===''?a:(a===1?'':a)+x); }); return s; };
+const circ25=(A,B,C,D,x,y)=>tm25([[A,Math.abs(A)===1?x+'² + '+y+'²':'('+x+'² + '+y+'²)'],[B,x],[C,y],[D,'']])+' = 0';
+
+/* ---------- 25a The Pairs Looked Back On ---------- */
+const WA25=[
+  ['Is |a + bi| = a + b?','no: the size is √(a² + b²), the distance from 0',['yes','yes, when a and b are both positive','no: the size is a² + b²'],'The size of z is its distance from 0, by the distance of 18a.'],
+  ['Is the flip of zw equal to z̄ · w?','no: the flip goes on both factors, z̄ · w̄',['yes','no: flips do not go through products at all','no: the flip of a product is the product, unflipped'],'Flip technique: the flip of a product is the product of the flips.'],
+  ['Is z z̄ = a² − b², for z = a + bi?','no: −b²i² = +b², so z z̄ = a² + b², the size squared',['yes','no: z z̄ = 2a','no: z z̄ = a² + b²i'],'Flip technique: (a + bi)(a − bi) = a² + b² = |z|². The bi terms cancel.'],
+  ['Is i a new number assumed to exist?','no: i is the pair (0, 1), the quarter turn: built, not assumed',['yes: it is assumed, with i² = −1','yes: it is the one assumption of the rung','no: i is a real number, √−1'],'The pair product gives (0, 1) · (0, 1) = (−1, 0).'],
+  ['When is z on the floor?','exactly when z̄ = z',['exactly when z̄ = −z','exactly when z z̄ = 0','exactly when |z| = 1'],'Flip technique: z̄ = z says −b = b, so b = 0.'],
+  ['What is z + z̄, for z = a + bi?','2a, twice the floor part, a real number',['2bi, twice the upright part','a² + b²','0'],'The upright parts cancel: (a + bi) + (a − bi) = 2a.']];
+QP.push({id:'25a.pairs',step:'25a',label:'floor, upright, size, flip',open:()=>measured('25a'),make(){ return writtenQ('25a.pairs',WA25); }},
+  {id:'25a.flip',step:'25a',mode:'work',label:'flips and sizes',open:()=>measured('25a'),make(){
+    const t=rnd(5), a=nz25(5), b=nz25(5), c=nz25(4), d=nz25(4), Z=cx25(a,b);
+    if(t===0){ const right=cx25(a,-b), wrong=uniq(right,[cx25(-a,b),cx25(-a,-b),cx25(b,a),Z],3);
+      return {index:'q:25a.flip[f;'+[a,b].join(';')+']', lines:[['z = '+Z,'a number of ℂ']], ask:'Which is its flip z̄?', right, opts:shuffle([right,...wrong]), lead:'', why:'The flip keeps the floor part and turns the upright part over. In the picture it is the mirror in the floor.'}; }
+    if(t===1){ const [p,q,r]=z25(), right=String(r), wrong=uniq(right,[String(Math.abs(p)+Math.abs(q)),String(r*r),String(Math.max(Math.abs(p),Math.abs(q))),String(r+1)],3);
+      return {index:'q:25a.flip[s;'+[p,q].join(';')+']', lines:[['z = '+cx25(p,q),'a number of ℂ']], ask:'Which is its size |z|?', right, opts:shuffle([right,...wrong]), lead:'', why:'|z| = √('+par10(p)+'² + '+par10(q)+'²) = √'+r*r+' = '+r+', the distance from 0.'}; }
+    if(t===2){ const N=a*a+b*b, right=String(N), wrong=uniq(right,[sg(a*a-b*b),sg(2*a),cx25(a*a-b*b,2*a*b),cx25(N,1),String(N+1)],3);
+      return {index:'q:25a.flip[n;'+[a,b].join(';')+']', lines:[['z = '+Z,'a number of ℂ']], ask:'What is z z̄?', right, opts:shuffle([right,...wrong]), lead:'', why:'Flip technique: z z̄ = '+par10(a)+'² + '+par10(b)+'² = '+N+', the size squared. The bi terms cancel, and −b²i² = +b².'}; }
+    if(t===3){ const right=cx25(a*c-b*d,a*d+b*c), wrong=uniq(right,[cx25(a*c+b*d,a*d+b*c),cx25(a*c,b*d),cx25(a*c-b*d,a*d-b*c),cx25(a+c,b+d)],3); if(wrong.length<3) return null;
+      return {index:'q:25a.flip[p;'+[a,b,c,d].join(';')+']', lines:[['z = '+Z+' and w = '+cx25(c,d),'two numbers of ℂ']], ask:'What is zw?', right, opts:shuffle([right,...wrong]), lead:'', why:'The pair product: (ac − bd) + (ad + bc)i, with a = '+sg(a)+', b = '+sg(b)+', c = '+sg(c)+', d = '+sg(d)+'. The floor part is '+sg(a*c)+' − '+par10(b*d)+' = '+sg(a*c-b*d)+', and the upright part is '+sg(a*d)+' + '+par10(b*c)+' = '+sg(a*d+b*c)+'.'}; }
+    const right=sg(2*a), wrong=uniq(right,[cx25(0,2*b),String(a*a+b*b),'0',cx25(2*a,2*b),sg(a)],3);
+    return {index:'q:25a.flip[t;'+[a,b].join(';')+']', lines:[['z = '+Z,'a number of ℂ']], ask:'What is z + z̄?', right, opts:shuffle([right,...wrong]), lead:'', why:'('+Z+') + ('+cx25(a,-b)+') = '+sg(2*a)+': the upright parts cancel, and twice the floor part is left.'}; }},
+  {id:'25a.line',step:'25a',mode:'proof',label:'what the flip licenses',open:()=>measured('25a'),make(){
+    const a=nz25(5), b=nz25(5), c=nz25(4), d=nz25(4), [p,q,r]=z25(), Z=cx25(a,b), W=cx25(c,d), V=[
+      ['p1',[['z = '+Z,'given'],['z z̄ = '+(a*a+b*b),'the flip technique: z z̄ = |z|²']],2,0,'z z̄ = '+par10(a)+'² + '+par10(b)+'² = '+(a*a+b*b)+'.'],
+      ['p2',[['z = '+cx25(p,q),'given'],['|z| = '+(Math.abs(p)+Math.abs(q)),'the size']],2,1,'The size is √('+par10(p)+'² + '+par10(q)+'²) = '+r+', the distance from 0, not the sum of the parts.'],
+      ['p3',[['z̄ = z','given'],['z is on the floor','the flip technique']],2,0,'z̄ = z says −b = b, so the upright part is 0.'],
+      ['p4',[['z z̄ = '+(a*a+b*b),'given'],['z is on the floor','z z̄ is a real number']],2,1,'z z̄ = |z|² is real for every z. '+Z+' has z z̄ = '+(a*a+b*b)+' and is off the floor.'],
+      ['p5',[['z = '+Z+' and w = '+W,'given'],['the flip of zw is ('+cx25(a,-b)+')('+cx25(c,-d)+')','the flip technique']],2,0,'The flip of a product is the product of the flips.'],
+      ['p6',[['z = '+Z+' and w = '+W,'given'],['the flip of zw is ('+cx25(a,-b)+')('+W+')','the flip technique']],2,1,'The flip goes on both factors, and w = '+W+' is not its own flip.'],
+      ['p7',[['z = '+Z+' and w = '+W,'given'],['the flip of z + w is '+cx25(a+c,-(b+d)),'the flip technique']],2,0,'The flip of a sum is the sum of the flips: ('+cx25(a,-b)+') + ('+cx25(c,-d)+').']];
+    const [tag,lines,n,rr,why]=pick(V);
+    return {index:'q:25a.line['+[tag,a,b,c,d,p,q].join(';')+']', stack:true, lines, ask:'Is line '+n+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 25b A Field With No Order ---------- */
+const WB25=[
+  ['Is i > 0?','the claim has no meaning: there is no order on ℂ',['yes: i is above the floor','no: i < 0','no: i = 0'],'No-order technique: no choice of positives in ℂ obeys the three order techniques.'],
+  ['Is z² ≥ 0 for every z in ℂ?','no: i² = −1, and ≥ means nothing off the floor',['yes: a square is never negative','yes, by the flip technique','no: only when z has size 1'],'Square-never-negative is a fact about the line.'],
+  ['May you write |z − 1| < 0.01 for z in ℂ?','yes: both sides are reals, and reals compare',['no: ℂ has no order, so no inequality may be written','only when z is on the floor','only when z is positive'],'Size-compare technique: every inequality in ℂ is an inequality between reals.'],
+  ['What did the proof of no order on ℂ use about ℂ?','only that some number squares to −1',['that ℂ is a plane','that i is the quarter turn','that sizes multiply'],'Any field with a number whose square is −1 has no order.'],
+  ['In a field with an order, what is x² when x ≠ 0?','positive',['positive or negative, as x is','sometimes 0','not decided by the order'],'Three-way leaves two cases, x positive or −x positive, and positive-product gives a positive square in both.'],
+  ['What is an order on a field?','a choice of which members are positive that obeys the three-way, positive-sum and positive-product techniques',['a list of its members from least to greatest','a size |z| for each member','any way to say which of two members comes first'],'Then w < z means z − w is positive.']];
+const O25=['it has a meaning, and it is true','it has a meaning, and it is false','it has no meaning: there is no order on ℂ'];
+QP.push({id:'25b.order',step:'25b',label:'what an order needs',open:()=>measured('25b'),make(){ return writtenQ('25b.order',WB25); }},
+  {id:'25b.compare',step:'25b',mode:'work',label:'which claims compare',open:()=>measured('25b'),make(){
+    const t=rnd(6), [a,b,r]=z25(), [c,d,s]=z25(), Z=cx25(a,b), W=cx25(c,d), m=nz25(6); let claim, i, why;
+    if(t===0){ if(r===s) return null; const lt=Math.random()<0.5; claim='|'+Z+'| '+(lt?'<':'>')+' |'+W+'|'; i=(lt?r<s:r>s)?0:1; why='Size-compare technique: the sizes are '+r+' and '+s+', two reals, and reals compare.'; }
+    else if(t===1){ claim=Z+' < '+W; i=2; why='Neither number is on the floor. No-order technique: no choice of positives in ℂ obeys the three order techniques, so < says nothing here.'; }
+    else if(t===2){ if(a===c) return null; claim='the floor part of '+Z+' is less than the floor part of '+W; i=a<c?0:1; why='Floor parts are reals: '+sg(a)+' and '+sg(c)+'. Each compares by the order of the line.'; }
+    else if(t===3){ const lt=Math.random()<0.6; claim='('+cx25(0,m)+')² '+(lt?'<':'>')+' 0'; i=lt?0:1; why='('+cx25(0,m)+')² = −'+m*m+', a number on the floor, and −'+m*m+' < 0 there. On the floor the order is the old one.'; }
+    else if(t===4){ claim=Z+' > 0'; i=2; why=Z+' is off the floor. Whatever were called positive in ℂ, −1 would come out positive too.'; }
+    else { const [e,f,g]=z25(), k=g+pick([-2,-1,1,2]); claim='|z − w| < '+k+', for z = '+cx25(c+e,d+f)+' and w = '+W; i=g<k?0:1; why='z − w = '+cx25(e,f)+', of size '+g+'. Sizes are reals, so the claim compares '+g+' with '+k+'.';
+      return {index:'q:25b.compare[d;'+[c,d,e,f,k].join(';')+']', lines:[[claim,'a claim about numbers of ℂ']], ask:'What of this claim?', right:O25[i], opts:O25, lead:'', why}; }
+    return {index:'q:25b.compare['+[t,a,b,c,d,m].join(';')+']', lines:[[claim,'a claim about numbers of ℂ']], ask:'What of this claim?', right:O25[i], opts:O25, lead:'', why}; }},
+  {id:'25b.line',step:'25b',mode:'proof',label:'order, or only size',open:()=>measured('25b'),make(){
+    const [a,b,r]=z25(), [c,d,s]=z25(), Z=cx25(a,b), F=pick(['a field','a number system','ℚ','ℝ']), V=[
+      ['o1',[['an order on '+F+', and x ≠ 0 in it','given'],['x² is positive','positive-product, in both cases the three-way technique leaves']],2,0,'If x is positive, x · x is positive. If x = −p with p positive, x · x = p · p, positive again.'],
+      ['o2',[['suppose an order on ℂ','for contradiction'],['i is positive','i is above the floor']],2,1,'Above the floor is a picture, not an order. The proof needs neither case: i ≠ 0, so its square is positive either way.'],
+      ['o3',[['suppose an order on ℂ','for contradiction'],['−1 = i² is positive','a square other than 0 is positive']],2,0,'i ≠ 0, and in a field with an order every square other than 0 is positive.'],
+      ['o4',[['|z| = '+r+' and |w| = '+(r+s),'given'],['|z| < |w|','sizes are reals, and reals compare']],2,0,'Size-compare technique: '+r+' < '+(r+s)+' is a claim about two reals.'],
+      ['o5',[['|z| = '+r+' and |w| = '+(r+s),'given'],['z < w','the size-compare technique']],2,1,'The sizes compare. The numbers do not, unless both are on the floor.'],
+      ['o6',[['z = '+Z,'given'],['z² ≥ 0','square-never-negative (8g)']],2,1,'8g is about the line. z² = '+cx25(a*a-b*b,2*a*b)+' is off the floor, where ≥ means nothing.'],
+      ['o7',[['z = '+Z,'given'],['|z| ≥ 0, and |z| = 0 only for z = 0','the size is a square root of a sum of squares']],2,0,'a² + b² = 0 only when a = b = 0.']];
+    const [tag,lines,n,rr,why]=pick(V);
+    return {index:'q:25b.line['+[tag,a,b,s,F].join(';')+']', stack:true, lines, ask:'Is line '+n+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 25c The Size of a Product ---------- */
+const WC25=[
+  ['Is |z + w| = |z| + |w|?','only when z and w point the same way; |1 + (−1)| = 0',['yes, always','yes, when z and w are both off the floor','never'],'Plane-triangle technique: |z + w| ≤ |z| + |w|. One side of a triangle is never longer than the other two together.'],
+  ['Is |z²| = z²?','no: the left side is a real number, and z² need not be; |i²| = 1',['yes, always','yes: a square is its own size','no: |z²| = −z²'],'Product-size technique: |z²| = |z|².'],
+  ['Is |z − w| ≤ |z| − |w|?','no: the fence runs the other way, |z| − |w| ≤ |z − w|',['yes, always','yes, when |z| ≥ |w|','no: |z − w| = |z| + |w|'],'With z = 0 the right side is negative, and a size is never negative.'],
+  ['|a + bi| ≤ |a| + |b|. Is |a + bi| = |a| + |b|, then?','no: a fence is not a sameness; |3 + 4i| = 5 < 7',['yes','yes, when a and b are positive','no: |a + bi| is the larger of |a| and |b|'],'The size is √(a² + b²).'],
+  ['Does the proof of |zw| = |z||w| need the out-and-round form?','no: the flip technique does it, with no angle',['yes: lengths multiply and turns add','yes, when z is off the floor','no: it needs the plane triangle'],'|zw|² = (zw) times the flip of zw = (z z̄)(w w̄) = |z|²|w|².'],
+  ['When does a list zₙ in ℂ settle at L?','when |zₙ − L| heads to 0, which is exactly when its floor parts and its upright parts both settle',['when its floor parts settle','when |zₙ| settles at |L|','when zₙ < L from some n on'],'Each part is at most the size, and the size is at most the sum of the parts’ sizes.']];
+const U25=[['3 + 4i',5],['−2',2],['i',1],['−3i',3],['1',1],['4 − 3i',5],['2i',2],['−1',1],['3',3]];
+QP.push({id:'25c.size',step:'25c',label:'sizes and the triangle',open:()=>measured('25c'),make(){ return writtenQ('25c.size',WC25); }},
+  {id:'25c.work',step:'25c',mode:'work',label:'sizes by hand',open:()=>measured('25c'),make(){
+    const t=rnd(4), [a,b,p]=z25(), [c,d,q]=z25(), Z=cx25(a,b), W=cx25(c,d);
+    if(t===0){ const k=rnd(4), [what,right,why]=[['|zw|',String(p*q),'Product-size technique: |zw| = |z||w| = '+p+' · '+q+'.'],['|z/w|',fshow(fr(p,q)),'Product-size technique: |1/w| = 1/|w|, so |z/w| = |z|/|w| = '+p+'/'+q+(fshow(fr(p,q))===p+'/'+q?'':' = '+fshow(fr(p,q)))+'.'],['|z²|',String(p*p),'Sizes multiply: |z²| = |z|² = '+p+'².'],['|1/z|','1/'+p,'Product-size technique: |1/z| = 1/|z|.']][k];
+      const wrong=uniq(right,shuffle([String(p+q),String(p*q),fshow(fr(p,q)),'1/'+p,String(p*p),String(2*p),String(Math.abs(p-q)),String(p)]),3);
+      return {index:'q:25c.work[m;'+[k,a,b,c,d].join(';')+']', lines:[['z = '+Z+' and w = '+W,'two numbers of ℂ'],['|z| = '+p+' and |w| = '+q,'their sizes']], ask:'What is '+what+'?', right, opts:shuffle([right,...wrong]), lead:'', why}; }
+    if(t===1){ const P=2+rnd(8), Q=P+1+rnd(6), op=pick(['+','−']), right='it is at least '+(Q-P)+' and at most '+(P+Q), wrong=['it is exactly '+(P+Q),'it is at most '+(Q-P),'it is at least '+(P+Q)];
+      return {index:'q:25c.work[t;'+[P,Q,op].join(';')+']', lines:[['|z| = '+P+' and |w| = '+Q,'two sizes']], ask:'What does the plane-triangle technique say of |z '+op+' w|?', right, opts:shuffle([right,...wrong]), lead:'', why:'|z '+op+' w| ≤ |z| + |w| = '+(P+Q)+', and ||z| − |w|| = '+(Q-P)+' ≤ |z '+op+' w|.'+(op==='+'?' The second half holds for a sum too, since |−w| = |w|.':'')}; }
+    if(t===2){ const [u0,u1,u2]=take(U25,3), rho=2+rnd(2), B=u0[1]+u1[1]*rho+u2[1]*rho*rho, right=String(B), wrong=uniq(right,[String(u0[1]+u1[1]+u2[1]),String((u0[1]+u1[1]+u2[1])*rho),String(u2[1]*rho*rho),String(u0[1]+u1[1]*rho+u2[1]*rho),String(B+rho)],3); if(wrong.length<3) return null;
+      return {index:'q:25c.work[v;'+[u0[0],u1[0],u2[0],rho].join(';')+']', lines:[['p(z) = u₀ + u₁z + u₂z²','a polynomial'],['u₀ = '+u0[0]+', u₁ = '+u1[0]+', u₂ = '+u2[0],'the numbers in front']], ask:'Which ceiling does the value-fence technique give for |p(z)| on |z| ≤ '+rho+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'|p(z)| ≤ |u₀| + |u₁||z| + |u₂||z|² ≤ '+u0[1]+' + '+u1[1]+' · '+rho+' + '+u2[1]+' · '+rho*rho+' = '+B+'.'}; }
+    const [e,f,g]=z25(), wx=e-a, wy=f-b; if(wx===0&&wy===0) return null;
+    const right=String(g), wrong=uniq(right,[String(g+p),String(Math.abs(e)+Math.abs(f)),String(g+1),String(p),String(g*g)],3);
+    return {index:'q:25c.work[a;'+[a,b,e,f].join(';')+']', lines:[['z = '+Z+' and w = '+cx25(wx,wy),'two numbers of ℂ']], ask:'What is |z + w|?', right, opts:shuffle([right,...wrong]), lead:'', why:'z + w = '+cx25(e,f)+', and its size is √('+par10(e)+'² + '+par10(f)+'²) = '+g+'. The plane triangle gives only a ceiling, |z| + |w|.'}; }},
+  {id:'25c.line',step:'25c',mode:'proof',label:'a fence, or a sameness',open:()=>measured('25c'),make(){
+    const P=2+rnd(8), Q=P+1+rnd(6), n=2+rnd(3), V=[
+      ['s1',[['|z| = '+Q+' and |w| = '+P,'given'],['|zw| = '+P*Q,'the product-size technique']],2,0,'|zw| = |z||w|, a sameness.'],
+      ['s2',[['|z| = '+Q+' and |w| = '+P,'given'],['|z + w| = '+(P+Q),'the plane-triangle technique']],2,1,'The triangle gives a fence, |z + w| ≤ '+(P+Q)+'. The two are the same only when z and w point the same way.'],
+      ['s3',[['|z| = '+Q+' and |w| = '+P,'given'],['|z + w| ≤ '+(P+Q),'the plane-triangle technique']],2,0,'|z + w| ≤ |z| + |w|.'],
+      ['s4',[['|z| = '+Q+' and |w| = '+P,'given'],['|z − w| ≥ '+(Q-P),'the plane-triangle technique, its second half']],2,0,'||z| − |w|| ≤ |z − w|.'],
+      ['s5',[['|z| = '+Q+' and |w| = '+P,'given'],['|z − w| ≤ '+(Q-P),'the plane-triangle technique']],2,1,'The fence runs the other way: '+(Q-P)+' ≤ |z − w|. With w = −z·'+P+'/'+Q+' the size of z − w is '+(P+Q)+'.'],
+      ['s6',[['|z| = '+P,'given'],['|z'+sup15(n)+'| = '+P**n,'sizes multiply, '+(n-1)+(n===2?' time':' times')]],2,0,'|zⁿ| = |z|ⁿ.'],
+      ['s7',[['|z| = '+P,'given'],['z² = '+P*P,'|z²| = |z|²']],2,1,'|z²| = '+P*P+' is licensed. z² itself need not be real: with z = '+cx25(0,P)+' it is −'+P*P+'.']];
+    const [tag,lines,k,rr,why]=pick(V);
+    return {index:'q:25c.line['+[tag,P,Q,n].join(';')+']', stack:true, lines, ask:'Is line '+k+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }},
+  {id:'25c.walk',step:'25c',mode:'word',label:'two legs',open:()=>measured('25c'),make(){
+    const [E,N,s]=pick([[6,8,10],[5,12,13],[8,15,17],[9,12,15],[12,16,20],[12,5,13],[8,6,10]]), a=1+rnd(E-1), b=1+rnd(N-1), c=E-a, d=N-b, what=pick(['A drone','A kite buggy','A survey boat','A walker']);
+    const right=s+' km', wrong=[(E+N)+' km',Math.max(E,N)+' km',2*s+' km'];
+    return {index:'q:25c.walk['+[what,a,b,E,N].join(';')+']', a3:['25c.walk',DASH,DASH], story:what+' goes '+a+' km east and '+b+' km north, the step '+cx25(a,b)+', and then '+c+' km east and '+d+' km north, the step '+cx25(c,d)+'.', lines:[], ask:'How far is it from its start?', right, opts:shuffle([right,...wrong]), lead:'', why:'The two steps add as pairs to '+cx25(E,N)+', of size √('+E+'² + '+N+'²) = '+s+'. The plane triangle says only that this is at most the lengths of the two legs together.'}; }});
+
+/* ---------- 25d Every Polynomial Has a Root ---------- */
+const WD25=[
+  ['|p| heads past every ceiling far out. Does that give it a least value?','not by itself: it keeps the least inside a disc; a settling thread and the value fence are what reach it',['yes: nothing more is needed','no: |p| has no least value','yes, at z = 0'],'Lowest-size technique: some z₀ in ℂ has |p(z₀)| ≤ |p(z)| for every z.'],
+  ['Is a least value of |p| on the line a root?','no: x² + 1 is least at 0 on the line, where it is 1; the push-down needs a direction off the line',['yes, by the push-down technique','yes, when p has real numbers in front','no: |p| has no least value on the line'],'Push-down technique: if p(z₀) ≠ 0, some z has |p(z)| < |p(z₀)|. That z may lie off the line.'],
+  ['Has zⁿ = c one root, c^(1/n)?','no: it has n of them, one turn of 2π/n apart, when c ≠ 0',['yes','no: it has two, s and −s','yes, when c is positive'],'Equal parts of a turn (21·cb20.3).'],
+  ['Has every polynomial with real numbers in front a real root?','no: x² + 1; the root technique promises roots in ℂ only',['yes, by the root technique','yes, when its degree is even','no: none of them has'],'Root technique: every polynomial of degree n ≥ 1 with complex numbers in front has a root in ℂ.'],
+  ['p has degree n ≥ 1, with complex numbers in front. How many roots has it in ℂ, counted with repeats?','exactly n',['at most n, and maybe none','n when the numbers in front are real, fewer otherwise','endlessly many'],'Root technique: p(z) = uₙ(z − r₁)(z − r₂)⋯(z − rₙ) for some r₁, …, rₙ in ℂ.'],
+  ['Does the proof of the lowest-size technique say where z₀ is?','no: only that the least size is reached somewhere',['yes: z₀ = 0','yes: z₀ is on the circle |z| = ρ','yes: z₀ is the root nearest 0'],'That is enough for the push-down: if p(z₀) were not 0, some size would be lower still.']];
+const RT25=[['1','(z − 1)'],['i','(z − i)'],['−2','(z + 2)'],['2 + i','(z − 2 − i)'],['−i','(z + i)'],['3','(z − 3)'],['−1 + i','(z + 1 − i)']];
+QP.push({id:'25d.root',step:'25d',label:'why a root must come',open:()=>measured('25d'),make(){ return writtenQ('25d.root',WD25); }},
+  {id:'25d.work',step:'25d',mode:'work',label:'roots and radii',open:()=>measured('25d'),make(){
+    const t=rnd(4), k=1+rnd(3), a=nz25(3), b=1+rnd(4);
+    if(t===0){ const n=2+rnd(2), un=pick([1,2,4]), us=[]; for(let j=0;j<n;j++) us.push(nz25(6)); const S=us.reduce((x,y)=>x+Math.abs(y),0), R=fr(2*S,un), P=pol23([[un,n],...us.map((u,j)=>[u,n-1-j])],'z');
+      const right=fshow(R), wrong=frs16(right,[fr(S,un),fint(2*S),fint(1),fr(2*(S+un),un),fint(S)]); if(wrong.length<3) return null;
+      return {index:'q:25d.work[r;'+[un,...us].join(';')+']', lines:[['p(z) = '+P,'a polynomial']], ask:'Which radius R does the far-out technique give?', right, opts:shuffle([right,...wrong]), lead:'', why:'R = max(1, 2(|u₀| + ⋯ + |uₙ₋₁|)/|uₙ|) = max(1, 2 · '+S+'/'+un+') = '+right+'. From there out, |p(z)| ≥ '+(un===4?'2':'')+'|z|'+sup15(n)+(un===1?'/2':'')+'.'}; }
+    if(t===1){ if(Math.random()<0.5){ const right=[sg(k),cx25(0,k),sg(-k),cx25(0,-k)].join(', '), wrong=[k+' only',k+' and −'+k,cx25(0,k)+' and '+cx25(0,-k)];
+        return {index:'q:25d.work[q;4;'+k+']', lines:[['z⁴ = '+k**4,'an equation in ℂ']], ask:'Which are all its roots?', right, opts:shuffle([right,...wrong]), lead:'', why:'It has 4 roots, a quarter turn apart, each of size '+k+'. Check: '+(k===1?'i⁴ = i² · i² = 1.':'('+cx25(0,k)+')⁴ = '+k**4+' · i⁴, and i⁴ = 1.')}; }
+      const right=cx25(0,k)+' and '+cx25(0,-k), wrong=[k+' and −'+k,cx25(0,k)+' only','none: a square is never negative'];
+      return {index:'q:25d.work[q;2;'+k+']', lines:[['z² = −'+k*k,'an equation in ℂ']], ask:'Which are all its roots?', right, opts:shuffle([right,...wrong]), lead:'', why:'It has 2 roots, a half turn apart. ('+cx25(0,k)+')² = '+k*k+' · i² = −'+k*k+', and the same for its negative.'}; }
+    if(t===2){ const N=a*a+b*b, f=(x,y,u,v)=>cx25(x,y)+' and '+cx25(u,v), right=f(a,b,a,-b), wrong=uniq(right,[f(-a,b,-a,-b),f(a,b,-a,-b),'it has no root in ℂ',f(b,a,b,-a)],3);
+      return {index:'q:25d.work[c;'+[a,b].join(';')+']', lines:[['p(z) = '+pol23([[1,2],[-2*a,1],[N,0]],'z'),'a polynomial']], ask:'Which are its roots?', right, opts:shuffle([right,...wrong]), lead:'', why:'p(z) = (z'+pm(-a)+')² + '+b*b+', which is 0 when z'+pm(-a)+' = ±'+cx25(0,b)+'. Check: the two roots add to '+sg(2*a)+' and multiply to '+N+'.'}; }
+    const [r1,r2,r3]=take(RT25,3), e1=1+rnd(3), e2=1+rnd(3), e3=1+rnd(2), n=e1+e2+e3, pw=(x,e)=>x[1]+(e===1?'':sup15(e)); if(n===3) return null;
+    const g=(x,y)=>x+' counted with repeats, '+y+' different', right=g(n,3), wrong=[g(3,3),g(n,n),g(3,n)];
+    return {index:'q:25d.work[n;'+[r1[0],e1,r2[0],e2,r3[0],e3].join(';')+']', lines:[['p(z) = '+pw(r1,e1)+pw(r2,e2)+pw(r3,e3),'a polynomial, in line factors']], ask:'How many roots has it in ℂ?', right, opts:shuffle([right,...wrong]), lead:'', why:'Its degree is '+[e1,e2,e3].join(' + ')+' = '+n+', and the root technique gives that many roots counted with repeats. The different ones are '+r1[0]+', '+r2[0]+' and '+r3[0]+'.'}; }},
+  {id:'25d.line',step:'25d',mode:'proof',label:'what brings the root',open:()=>measured('25d'),make(){
+    const n=2+rnd(5), f=pick(['p','q','f']), k=1+rnd(6), V=[
+      ['r1',[[f+' has degree '+n+', with complex numbers in front','given'],[f+' has a root in ℂ','the root technique']],2,0,'Every polynomial of degree n ≥ 1 with complex numbers in front has a root in ℂ.'],
+      ['r2',[[f+' has degree '+2*Math.ceil(n/2)+', with real numbers in front','given'],[f+' has a root on the floor','the root technique']],2,1,'The root technique promises roots in ℂ only. x² + '+k+' has none on the floor.'],
+      ['r3',[['|'+f+'(z)| heads past every ceiling as z moves away from 0','the far-out technique'],['|'+f+'| has a least value','the far-out technique']],2,1,'Far-out only keeps the least inside a disc. A settling thread and the value fence are what reach it.'],
+      ['r4',[['|'+f+'(z₀)| ≤ |'+f+'(z)| for every z in ℂ','the lowest-size technique'],[f+'(z₀) = 0','if not, the push-down technique gives a smaller size']],2,0,'A least size that is not 0 could be pushed lower, so it is 0.'],
+      ['r5',[['on the line, x² + '+k+' is least at x = 0','square-never-negative'],['0 is a root of x² + '+k,'a least value of |p| is a root']],2,1,'At 0 it is '+k+'. The push-down needs a direction off the line, and the least on the line need not be the least on the plane.'],
+      ['r6',[[f+' has degree '+n+', and r is a root of it','given'],[f+'(z) = (z − r) · g(z), with g of degree '+(n-1),'divide by z − r: the remainder is '+f+'(r) = 0']],2,0,'Dividing out one root at a time is how the root technique reaches all '+n+' line factors.'],
+      ['r7',[['z'+sup15(n)+' = '+(k+1),'given'],['z = '+(k+1)+'^(1/'+n+'), and no other z','take the root']],2,1,'It has '+n+' roots, one turn of '+pi21(2,n)+' apart.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:25d.line['+[tag,n,f,k].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 25e Roots in Pairs ---------- */
+const WE25=[
+  ['Is √−4 · √−9 = √36 = 6?','no: roots go through products only for numbers ≥ 0 on the floor; 2i · 3i = −6',['yes','no: it is 6i','no: √−4 means nothing in ℂ'],'Root-choice technique: what always holds is √z √w = ±√(zw).'],
+  ['p(r) = 0. Is p(r̄) = 0, for every polynomial p?','no: the flipped-root technique needs real numbers in front',['yes, always','yes, when r is off the floor','no: never'],'z − i has the root i and not −i.'],
+  ['x⁴ + 1 has no real root. Has it no real factors, then?','no real lines, but two real quadratics: (x² + √2x + 1)(x² − √2x + 1)',['yes: no root, no factor','it has four real lines','it has one real quadratic, squared'],'Real-pieces technique: real lines and real quadratics are always enough.'],
+  ['Is ∫ dx/(x − i) = ln|x − i| + C?','no: the slope of ln|x − i| = ½ ln(x² + 1) is x/(x² + 1); join the flipped pair first',['yes: the area of 1/(x − c) is ln|x − c|','yes, for x > 0','no: 1/(x − i) has no area'],'Paired-fractions technique: each flipped pair gives one piece (Bx + C)/(x² + bx + c) with real B and C.'],
+  ['Into which pieces does every real polynomial split?','real lines x − c and real quadratics x² + bx + c with b² − 4c < 0',['real lines only','real lines, quadratics and sometimes cubics','only lines with complex numbers in front'],'Real-pieces technique. No piece of higher degree is ever needed.'],
+  ['How many square roots has w ≠ 0 in ℂ?','exactly two, s and −s',['one, √w','two when w is on the floor, and none otherwise','endlessly many'],'z² = w says (z − s)(z + s) = 0, and a product is 0 only if a factor is.']];
+QP.push({id:'25e.pairs',step:'25e',label:'mirrored roots',open:()=>measured('25e'),make(){ return writtenQ('25e.pairs',WE25); }},
+  {id:'25e.work',step:'25e',mode:'work',label:'pairs and pieces',open:()=>measured('25e'),make(){
+    const t=rnd(5), s=nz25(4), u=1+rnd(4), N=s*s+u*u, R=cx25(s,u), Rb=cx25(s,-u);
+    if(t===0){ const q=(b,c)=>pol23([[1,2],[b,1],[c,0]],'x'), right=q(-2*s,N), wrong=uniq(right,[q(2*s,N),q(-2*s,s*s-u*u),q(-s,N),q(-2*s,-N)],3); if(wrong.length<3) return null;
+      return {index:'q:25e.work[q;'+[s,u].join(';')+']', lines:[[R+' is a root of a real polynomial p','given'],[Rb+' is a root of p too','the flipped-root technique']], ask:'Which real quadratic do the two roots make?', right, opts:shuffle([right,...wrong]), lead:'', why:'(x − r)(x − r̄) = x² − (r + r̄)x + r r̄, with r + r̄ = '+sg(2*s)+' and r r̄ = '+par10(s)+'² + '+u+'² = '+N+'.'}; }
+    if(t===1){ const right=Rb+' is a root, and the third root is on the floor', wrong=[Rb+' is a root, and the third root is off the floor','the other two roots may be any numbers of ℂ',cx25(-s,u)+' is a root, and the third root is on the floor'];
+      return {index:'q:25e.work[c;'+[s,u].join(';')+']', lines:[['p is a real polynomial of degree 3','given'],['p('+R+') = 0','given']], ask:'What of its other roots?', right, opts:shuffle([right,...wrong]), lead:'', why:'Flipped-root technique: '+Rb+' is a root. A third root off the floor would bring its own flip, a fourth root, and a polynomial of degree 3 has 3.'}; }
+    if(t===2){ const m=2+rnd(4), n=m+1+rnd(3), right='−'+m*n, wrong=[String(m*n),cx25(0,m*n),cx25(0,-m*n)];
+      return {index:'q:25e.work[r;'+[m,n].join(';')+']', lines:[[cx25(0,m)+' is a square root of −'+m*m+', and '+cx25(0,n)+' of −'+n*n,'check: square them']], ask:'What is '+cx25(0,m)+' · '+cx25(0,n)+'?', right, opts:shuffle([right,...wrong]), lead:'', why:m+' · '+n+' · i² = −'+m*n+'. √('+m*m+' · '+n*n+') = '+m*n+' is the other square root of the product: √z √w = ±√(zw), and here the sign is −.'}; }
+    if(t===3){ const n=3+rnd(5), ev=[], od=[]; for(let j=0;j<=n;j++) (j%2?od:ev).push(j); const L=x=>x.length===1?String(x[0]):x.slice(0,-1).join(', ')+' or '+x[x.length-1];
+      const right=L(ev), wrong=uniq(right,['any number from 0 to '+n,L(od),'exactly '+n,L(ev.filter(j=>j>0))],3);
+      return {index:'q:25e.work[d;'+n+']', lines:[['p is a real polynomial of degree '+n,'given']], ask:'How many of its '+n+' roots, counted with repeats, can lie off the floor?', right, opts:shuffle([right,...wrong]), lead:'', why:'Flipped-root technique: the roots off the floor come in mirrored pairs, so their count is even.'+(n%2?' The degree is odd, so at least one root is on the floor.':'')}; }
+    const c=nz25(4), [qt,nm]=pick([['x² + 1','x² + 1'],['x² + 4','x² + 4'],['x² + 2x + 2','x² + 2x + 2'],['x² − 2x + 5','x² − 2x + 5']]), L='(x'+pm(-c)+')';
+    const right='A/'+L+' + (Bx + C)/('+qt+')', wrong=['A/'+L+' + B/('+qt+')','A/'+L+' + B/'+L+'² + C/('+qt+')','(Ax + B)/'+L+' + C/('+qt+')'];
+    return {index:'q:25e.work[f;'+[c,qt].join(';')+']', lines:[['1/('+L+'('+qt+'))','a quotient of real polynomials'],[qt+' has no root on the floor','its b² − 4c is under 0']], ask:'Into which pieces does it split, with A, B and C real?', right, opts:shuffle([right,...wrong]), lead:'', why:'Paired-fractions technique: A/(x − c) for the root on the floor, and (Bx + C)/(x² + bx + c) for the flipped pair.'}; }},
+  {id:'25e.line',step:'25e',mode:'proof',label:'real in front, or not',open:()=>measured('25e'),make(){
+    const s=nz25(4), u=1+rnd(4), m=2+rnd(4), n=m+1+rnd(3), k=1+rnd(8), od=3+2*rnd(3), R=cx25(s,u), Rb=cx25(s,-u), V=[
+      ['e1',[['p is a real polynomial, and p('+R+') = 0','given'],['p('+Rb+') = 0','the flipped-root technique']],2,0,'The flip of p(r) is p(r̄) when every number in front is its own flip.'],
+      ['e2',[['p(z) = z − ('+R+'), and p('+R+') = 0','given'],['p('+Rb+') = 0','the flipped-root technique']],2,1,'The technique needs real numbers in front. Here p('+Rb+') = '+cx25(0,-2*u)+'.'],
+      ['e3',[['√−'+m*m+' · √−'+n*n,'given'],['= √('+m*m+' · '+n*n+') = '+m*n,'roots go through products (8i)']],2,1,'8i is for numbers ≥ 0 on the floor. '+cx25(0,m)+' · '+cx25(0,n)+' = −'+m*n+'.'],
+      ['e4',[['s² = w and w ≠ 0','given'],['the square roots of w are s and −s, and no others','z² = w says (z − s)(z + s) = 0']],2,0,'A product is 0 only if a factor is, in the field ℂ.'],
+      ['e5',[['x⁴ + '+k+' has no real root','a fourth power is never negative'],['x⁴ + '+k+' has no real factors','it has no real root']],2,1,'No real lines, but the real-pieces technique gives two real quadratics.'],
+      ['e6',[['p is a real polynomial of degree '+od,'given'],['p has a root on the floor','its roots off the floor pair up, and '+od+' is odd']],2,0,'An even count of roots off the floor leaves at least one of the '+od+' on the floor.'],
+      ['e7',[['p is a real polynomial of degree '+(od+1),'given'],['p has a root on the floor','its roots off the floor pair up']],2,1,'With an even degree every root may be off the floor: x² + '+k+'.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:25e.line['+[tag,s,u,m,n,k,od].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 25f Maps of the Plane ---------- */
+const WF25=[
+  ['Does z ↦ 1/z send the circle |z − 2| = 1 to the circle with centre ½?','no: centres do not go to centres; the image has centre 2/3 and radius 1/3',['yes: 1/2 is where the centre goes','no: the image is a line','no: the image is not a circle or a line'],'The circle crosses the floor at 1 and 3, which go to 1 and 1/3.'],
+  ['Is 1/(z + w) = 1/z + 1/w?','no: 1/(1 + 1) = ½, but 1/1 + 1/1 = 2; 1/z keeps products, not sums',['yes','yes, when z and w are on the floor','no: 1/(z + w) = 1/z · 1/w'],'1/(zw) = (1/z)(1/w) holds. The same with + does not.'],
+  ['Does z ↦ az + b keep distances?','only when |a| = 1; it multiplies them by |a|',['yes, always','never','only when b = 0'],'Straight-map technique: |(az + b) − (aw + b)| = |a||z − w|.'],
+  ['Is z ↦ z̄ a straight map?','no: it changes which way round triangles go, and every straight map keeps that',['yes, with a = −1','yes, with a = i','no: it does not keep distances'],'A straight map is a turn, a stretch and a slide. None of them is a mirror.'],
+  ['What does z ↦ 1/z do to the circle |z| = 1?','it keeps the circle, sending each z on it to z̄',['it fixes every point of it','it sends it to a line','it sends it to its centre'],'Inside-out technique: 1/z = z̄/|z|², and |z|² = 1 on that circle.'],
+  ['Which points does z ↦ az + b fix, when a ≠ 1?','exactly one, z* = b/(1 − a)',['none','0 only','every point of a line'],'Straight-map technique: it is the turn and stretch by a about z*.']];
+QP.push({id:'25f.maps',step:'25f',label:'straight maps and inside out',open:()=>measured('25f'),make(){ return writtenQ('25f.maps',WF25); }},
+  {id:'25f.work',step:'25f',mode:'work',label:'maps by hand',open:()=>measured('25f'),make(){
+    const t=rnd(5), p=nz25(4), q=nz25(4);
+    if(t===0){ const ai=Math.random()<0.4, a=pick([2,3,-1,-2]), bx=ai?p+q:(1-a)*p, by=ai?q-p:(1-a)*q, at=ai?'i':sg(a);
+      const right=cx25(p,q), wrong=uniq(right,[cx25(bx,by),cx25(-p,-q),cx25(q,p),'0',cx25(p,-q)],3);
+      return {index:'q:25f.work[x;'+[at,p,q].join(';')+']', lines:[['z ↦ az + b, with a = '+at+' and b = '+cx25(bx,by),'a straight map']], ask:'Which point does it fix?', right, opts:shuffle([right,...wrong]), lead:'', why:'Straight-map technique: z* = b/(1 − a) = '+pc25(bx,by)+'/'+(ai?'(1 − i)':par10(1-a))+' = '+right+'. Check: a · z* + b comes back to '+right+'.'}; }
+    if(t===1){ const N=p*p+q*q, f=(x,y,n)=>'('+cx25(x,y)+')/'+n, right=f(p,-q,N), wrong=uniq(right,[f(p,q,N),cx25(p,-q),f(-p,q,N),f(p,-q,Math.abs(p)+Math.abs(q))],3);
+      return {index:'q:25f.work[i;'+[p,q].join(';')+']', lines:[['z = '+cx25(p,q),'a number of ℂ other than 0']], ask:'What is 1/z?', right, opts:shuffle([right,...wrong]), lead:'', why:'Inside-out technique: 1/z = z̄/|z|², and |z|² = '+par10(p)+'² + '+par10(q)+'² = '+N+'.'}; }
+    if(t===2){ const [a,b,r]=z25(), d=2+rnd(6), right=String(r*d), wrong=uniq(right,[String(d),String(r+d),String(d*(Math.abs(a)+Math.abs(b))),String(r*r*d)],3);
+      return {index:'q:25f.work[d;'+[a,b,d].join(';')+']', lines:[['z ↦ ('+cx25(a,b)+')z + '+pc25(q,p),'a straight map'],['two points are '+d+' apart','given']], ask:'How far apart are their images?', right, opts:shuffle([right,...wrong]), lead:'', why:'Straight-map technique: it multiplies every distance by |a| = |'+cx25(a,b)+'| = '+r+'. The slide changes no distance.'}; }
+    if(t===3){ const a=nz25(4), b=nz25(4), c=nz25(4), d=nz25(4); if(a*d-b*c===0) return null;
+      const lin=(x,v,y)=>cf22(x,v)+pm(y), f=(x,y,u,v)=>'w ↦ ('+lin(x,'w',y)+')/('+lin(u,'w',v)+')', right=f(d,-b,-c,a), wrong=uniq(right,[f(a,b,c,d),f(d,b,c,a),f(c,d,a,b),f(d,-b,c,a),f(-d,b,-c,a)],3); if(wrong.length<3) return null;
+      return {index:'q:25f.work[u;'+[a,b,c,d].join(';')+']', lines:[['z ↦ ('+lin(a,'z',b)+')/('+lin(c,'z',d)+')','a map with four numbers, ad − bc = '+sg(a*d-b*c)]], ask:'Which map undoes it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Four-number technique: the undoing is w ↦ (dw − b)/(−cw + a), with a = '+sg(a)+', b = '+sg(b)+', c = '+sg(c)+', d = '+sg(d)+'.'}; }
+    const c=1+rnd(4), e=pick([0,0,1,-1,2]), r=1+rnd(3), B=-2*c, C=-2*e, D=c*c+e*e-r*r;
+    const right=circ25(D,B,-C,1,'u','v'), wrong=uniq(right,[circ25(D,B,C,1,'u','v'),circ25(1,B,-C,D,'u','v'),circ25(D,-B,-C,1,'u','v'),circ25(D,B,-C,-1,'u','v'),circ25(D+1,B,-C,1,'u','v')],3);
+    return {index:'q:25f.work[k;'+[c,e,r].join(';')+']', lines:[[circ25(1,B,C,D,'x','y'),'the circle with centre '+cx25(c,e)+' and radius '+r],['z ↦ 1/z = u + iv','inside out']], ask:'Where do its points other than 0 go?', right, opts:shuffle([right,...wrong]), lead:'', why:'Circle-or-line technique: A(x² + y²) + Bx + Cy + D = 0 goes to D(u² + v²) + Bu − Cv + A = 0. A and D swap, and C changes sign.'+(D===0?' Here D = 0: the circle runs through 0, and its image is a line.':'')}; }});
+
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 
