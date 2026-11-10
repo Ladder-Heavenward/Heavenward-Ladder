@@ -2378,6 +2378,133 @@ QP.push({id:'13n.units',step:'13n',mode:'word',label:'the units of a rate',open:
     return {index:'q:13n.units[c;'+ms+';'+(up?'u':'d')+']', a3:['13n.units[convert]',DASH,DASH], story:'A train moves at '+(up?ms+' metres per second':kmh+' kilometres per hour')+'. There are 1000 metres in a kilometre and 3600 seconds in an hour.', lines:[], ask:'What is that in '+(up?'kilometres per hour':'metres per second')+'?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'Conversion: multiply by fractions equal to 1 whose bottoms cancel the old units. '+(up?ms+' · 3600/1000 = '+kmh:kmh+' · 1000/3600 = '+ms)+'. For a rate, the top unit and the bottom unit are each converted.'}; }});
 
+/* ===== Laundry 5, rung 14 (floor 3 pools, stage M): 14a to 14i, what slopes say ===== */
+Object.assign(STEPS,{'14a':['r14a','Zero Slope at a Top or Bottom'],'14b':['r14b','Level Ends, a Level Point Between'],'14c':['r14c','The Mean Value Technique'],'14d':['r14d','Zero Slope Means Flat'],'14e':['r14e','Same Slopes, Same Shape Lifted'],
+  '14f':['r14f','Crest and Trough'],'14g':['r14g','The Bend and Sketching'],'14h':['r14h','Optimising'],'14i':['r14i','When Top and Bottom Both Vanish, and Growth Races']});
+const fac14=r=>r===0?'x':'(x'+pm(-r)+')', eq14=(a,b)=>a===b?a:a+' = '+b;
+
+/* ---------- 14a Zero Slope at a Top or Bottom ---------- */
+const A14=[
+  ['f has a top at c and a slope at c. What follows?','f′(c) = 0',['f″(c) < 0','f(c) is the greatest value of f on its whole domain','nothing'],'Flat-top: a top or a bottom where there is a slope has the slope 0. A top is greatest among its neighbours only.'],
+  ['f′(c) = 0. Must f have a top or a bottom at c?','no: x³ has the slope 0 at 0 and neither there',['yes: a top or a bottom','yes, whenever f is a polynomial','no: the slope is never 0 at a top'],'Flat-top runs one way. Slope 0 puts c on the list of candidates and decides nothing more.'],
+  ['Which inputs are the critical points of f?','those inside the domain where the slope is 0 or there is no slope',['those where the slope is 0, and no others','those where f is 0','the ends of the domain'],'A top or bottom inside has slope 0 or no slope. Either way it is on the list.'],
+  ['f is continuous on [α, β]. Where can its greatest value be reached?','at α, at β, or at a critical point inside',['only at a critical point inside','only at α or at β','only where the slope is 0'],'Candidates: highest-and-lowest gives a greatest value, and flat-top says an inside one is at a critical point.']];
+QP.push({id:'14a.flat',step:'14a',label:'flat at a top',open:()=>measured('14a'),make(){ return writtenQ('14a.flat',A14); }},
+  {id:'14a.candidates',step:'14a',mode:'work',label:'the candidates',open:()=>measured('14a'),make(){
+    const c=pick([1,1,2]), k=rnd(9)-4, lo=-c-rnd(3), hi=lo+2+rnd(5), top=Math.random()<0.5, cs=[1,0,-3*c*c,k], f=x=>ev9(cs,x), cand=[lo,hi]; if(-c>lo&&-c<hi) cand.push(-c); if(c>lo&&c<hi) cand.push(c);
+    const vals=cand.map(f), best=top?Math.max(...vals):Math.min(...vals), other=top?Math.min(...vals):Math.max(...vals), right=sg(best), wrong=num13(right,vals.concat([other,k,f(0)+1,best+(top?2:-2),-best,best+(top?c:-c)])); if(wrong.length<3) return null;
+    return {index:'q:14a.candidates['+[c,k,lo,hi,top?'t':'b'].join(';')+']', lines:[['f(x) = '+poly13(cs),'on ['+sg(lo)+', '+sg(hi)+']']], ask:'What is the '+(top?'greatest':'least')+' value of f there?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'f′(x) = '+poly13(dp13(cs))+' is 0 at '+sg(-c)+' and at '+c+'. The candidates are the two ends and the critical points inside: '+cand.map(x=>'f('+sg(x)+') = '+sg(f(x))).join(', ')+'. The '+(top?'greatest':'least')+' of these is '+right+'.'}; }});
+
+/* ---------- 14b Level Ends, a Level Point Between ---------- */
+const B14=[
+  ['|x| on [−1, 1] has level ends and no slope 0 inside. Which hypothesis fails?','a slope at every input inside: there is none at 0',['continuity on [−1, 1]','equal values at the ends','none: the technique fails here'],'Take away the slope at one input and the conclusion can fail. The bottom of |x| is at 0, where flat-top cannot be cited.'],
+  ['Level-ends gives a c inside with f′(c) = 0. How many does it promise?','at least one',['exactly one','exactly one, at the middle','one for each end'],'The technique says some c. x³ − x on [−1, 1] has two, and neither is the middle.'],
+  ['f′(c) = 0 for some c inside (α, β). Does f(α) = f(β) follow?','no: x³ on [−1, 2] has the slope 0 at 0 and unequal ends',['yes','yes, whenever f is continuous','no: a slope inside is never 0'],'Level-ends runs from equal ends to a level point, and not back.'],
+  ['A polynomial’s slope has at most k zeros. What does zeros-of-slopes, turned about, say?','the polynomial has at most k + 1 zeros',['the polynomial has at most k zeros','the polynomial has exactly k + 1 zeros','the polynomial has at least k + 1 zeros'],'Between each neighbouring pair of zeros of p there is a zero of p′. More than k + 1 zeros of p would force more than k zeros of p′.']];
+QP.push({id:'14b.needs',step:'14b',label:'each hypothesis is needed',open:()=>measured('14b'),make(){ return writtenQ('14b.needs',B14); }},
+  {id:'14b.zeros',step:'14b',mode:'work',label:'counting zeros by slopes',open:()=>measured('14b'),make(){
+    const k=rnd(3);
+    if(k===0){ const n=2+rnd(6), right=String(n-1), wrong=uniq(right,[String(n),String(n+1),String(n-2),String(2*n)],3);
+      return {index:'q:14b.zeros[f;'+n+']', lines:[['a polynomial p has '+n+' different zeros','given']], ask:'At least how many zeros has p′?', right, opts:shuffle([right,...wrong]), lead:'', why:'Zeros-of-slopes: level-ends puts a zero of p′ strictly between each neighbouring pair of zeros of p. '+n+' zeros have '+(n-1)+' gaps between neighbours.'}; }
+    if(k===1){ const n=rnd(6), right=String(n+1), wrong=uniq(right,[String(n),String(n+2),String(2*n+2),String(n+3)],3);
+      return {index:'q:14b.zeros[b;'+n+']', lines:[['the slope p′ of a polynomial p has '+(n===0?'no zeros':'at most '+n+' zero'+(n===1?'':'s')),'given']], ask:'At most how many zeros has p?', right, opts:shuffle([right,...wrong]), lead:'', why:'Zeros-of-slopes, turned about: '+(n+2)+' zeros of p would force '+(n+1)+' zeros of p′, one between each neighbouring pair.'}; }
+    const a=1+rnd(6), b=rnd(13)-6, cs=[1,0,a,b], right='exactly one', opts=['none','exactly one','exactly two','exactly three'];
+    return {index:'q:14b.zeros[c;'+a+';'+b+']', lines:[['p(x) = '+poly13(cs),'a polynomial of odd degree']], ask:'How many zeros has p?', right, opts, lead:'', why:'p′(x) = '+poly13(dp13(cs))+' is at least '+a+', so it has no zeros, and p has at most one. A polynomial of odd degree has at least one (12a). So exactly one.'}; }},
+  {id:'14b.licensed',step:'14b',mode:'proof',label:'is the level point licensed',open:()=>measured('14b'),make(){
+    const a=rnd(7)-3, b=a+1+rnd(4), k=rnd(5), u=rnd(11)-5, v=k===1?u+pick([-3,-2,-1,1,2,3]):u, ok=k===0||k===4, opts=['it is licensed','it is not licensed'], I='['+sg(a)+', '+sg(b)+']', J='('+sg(a)+', '+sg(b)+')';
+    return {index:'q:14b.licensed['+[a,b,u,v,k].join(';')+']', stack:true, lines:[[k===2?'f is continuous on '+J+', and not at '+sg(b):'f is continuous on '+I,'given'],[k===3?'f has a slope at every input of '+J+' but one':'f has a slope at every input of '+J,'given'],['f('+sg(a)+') = '+sg(u)+' and f('+sg(b)+') = '+sg(v),'given'],['f′(c) = 0 for some c with '+sg(a)+' < c < '+sg(b),'the level-ends technique, on lines 1 to 3']], ask:'Is line 4 licensed?', right:opts[ok?0:1], opts, lead:'',
+      why:ok?'f is continuous on the closed interval, has a slope at every input inside, and its end values are equal. Those are the three hypotheses.':k===1?'The end values differ. Average-slope still gives a c whose slope is the chord slope, and that is not 0 here.':k===2?'Without continuity at the end, highest-and-lowest cannot be cited: x on [0, 1) with the value 0 put at 1 has level ends and the slope 1 everywhere inside.':'One input without a slope is enough: |x| on [−1, 1] has level ends, and its bottom is at the one input where it has no slope.'}; }});
+
+/* ---------- 14c The Mean Value Technique ---------- */
+QP.push({id:'14c.average',step:'14c',mode:'work',label:'the average slope',open:()=>measured('14c'),make(){
+    const a=rnd(7)-3, d=1+rnd(5), b=a+d, u=rnd(13)-6;
+    if(Math.random()<0.5){ const v=u+pick([-9,-7,-6,-5,-4,-3,-2,-1,1,2,3,4,5,6,8,9]), s=fr(v-u,d), right=fshow(s), wrong=uniq(right,[fshow(fint(v-u)),fshow(fneg(s)),fshow(fr(u+v,2)),fshow(fr(d,v-u)),fshow(fint(0)),fshow(fadd(s,fint(1)))],3); if(wrong.length<3) return null;
+      return {index:'q:14c.average[s;'+[a,b,u,v].join(';')+']', lines:[['f is continuous on ['+sg(a)+', '+sg(b)+'], with a slope at every input inside','given'],['f('+sg(a)+') = '+sg(u)+' and f('+sg(b)+') = '+sg(v),'given']], ask:'Which slope must f have at some input between?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'Average-slope: some c inside has f′(c) equal to the chord slope, ('+sg(v)+' − '+par10(u)+')/('+sg(b)+' − '+par10(a)+') = '+right+'.'}; }
+    const K=1+rnd(5), most=Math.random()<0.5, v=most?u+K*d:u-K*d, right=sg(v), wrong=num13(right,[most?u-K*d:u+K*d,u+K,K*d,u+K+d,u*K,v+(most?1:-1),u-K]); if(wrong.length<3) return null;
+    return {index:'q:14c.average[b;'+[a,b,u,K,most?'m':'l'].join(';')+']', lines:[['f is continuous on ['+sg(a)+', '+sg(b)+'], and |f′(x)| ≤ '+K+' at every input inside','given'],['f('+sg(a)+') = '+sg(u),'given']], ask:'What is the '+(most?'most':'least')+' that f('+sg(b)+') can be?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Slope-bound: |f('+sg(b)+') − f('+sg(a)+')| ≤ '+K+' · '+d+' = '+(K*d)+'. So f('+sg(b)+') lies from '+sg(u-K*d)+' to '+sg(u+K*d)+'.'}; }},
+  {id:'14c.speed',step:'14c',mode:'word',label:'the average speed is a speed',open:()=>measured('14c'),make(){
+    const [who,dist,time]=pick([['A cart','kilometres','hour'],['A barge','kilometres','hour'],['A runner','metres','second'],['A lift','metres','second']]), T=2+rnd(5);
+    if(Math.random()<0.5){ const D=T*(2+rnd(8))+pick([0,0,1]), s=fr(D,T), u=' '+dist+' per '+time, right=fshow(s)+u, wrong=uniq(right,[D*T+u,fshow(fr(T,D))+u,D+u,fshow(fr(D,2*T))+u,(D+T)+u],3); if(wrong.length<3) return null;
+      return {index:'q:14c.speed[a;'+who+';'+D+';'+T+']', a3:['14c.speed[average]',DASH,DASH], story:who+' covers '+D+' '+dist+' in '+T+' '+time+'s. Its position has a velocity at every instant.', lines:[], ask:'Which velocity did it have at some instant?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'The average velocity is the chord slope, '+eq14(D+'/'+T,fshow(s))+'. Average-slope: at some instant between, the velocity was exactly that.'}; }
+    const K=3+rnd(10), u=' '+dist, right=(K*T)+u, wrong=uniq(right,[(K+T)+u,K+u,fshow(fr(K,T))+u,(K*T*2)+u,(K*(T-1))+u],3); if(wrong.length<3) return null;
+    return {index:'q:14c.speed[b;'+who+';'+K+';'+T+']', a3:['14c.speed[bound]',DASH,DASH], story:who+' moves for '+T+' '+time+'s, and its speed is never more than '+K+' '+dist+' per '+time+'.', lines:[], ask:'At most how far is it from where it began?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Slope-bound: a bound on every slope bounds the change. '+K+' '+dist+' per '+time+' times '+T+' '+time+'s is '+(K*T)+' '+dist+'.'}; }});
+
+/* ---------- 14d Zero Slope Means Flat ---------- */
+const D14=[
+  ['f has the slope 0 at every input of an interval. What follows?','f is constant on the interval',['f is 0 on the interval','f is increasing on the interval','nothing'],'Zero-slope-is-constant: for any two inputs, average-slope gives a chord slope equal to some slope between, which is 0.'],
+  ['f has the slope 0 at every input of its domain, and the domain is two separate intervals. Must f be constant?','no: it may hold one value on each interval',['yes','yes, whenever f has a slope everywhere','no: its slope must somewhere differ from 0'],'The technique speaks of an interval. Across a break there is no chord to apply average-slope to.'],
+  ['x³ is increasing on ℝ. Is its slope positive at every input?','no: the slope is 0 at 0, and one such input does no harm',['yes','no: x³ is not increasing on ℝ','no: its slope is negative left of 0'],'Positive-but-finitely: a slope positive at every input but finitely many, where it is 0, still gives an increasing function.'],
+  ['To prove f(x) ≥ g(x) for every x ≥ w, what is enough?','the gap f − g is at least 0 at w, and its slope is at least 0 after w',['f′(x) ≥ g′(x) for every x ≥ w','f(w) ≥ g(w)','f and g are both increasing'],'Slope-sign-order on the gap: it starts at least 0 and never falls.']];
+QP.push({id:'14d.constant',step:'14d',label:'flat, rising, falling',open:()=>measured('14d'),make(){ return writtenQ('14d.constant',D14); }},
+  {id:'14d.sign',step:'14d',mode:'work',label:'the sign of the slope',open:()=>measured('14d'),make(){
+    const r=rnd(7)-4, s=r+1+rnd(4), a=pick([-3,-2,-1,1,2,3]), inc=Math.random()<0.5, mid=(a<0)===inc, opts=['between '+sg(r)+' and '+sg(s),'left of '+sg(r)+' and right of '+sg(s),'left of '+sg(r)+' only','right of '+sg(s)+' only'], right=opts[mid?0:1];
+    return {index:'q:14d.sign['+[a,r,s,inc?'i':'d'].join(';')+']', lines:[['f′(x) = '+(a===1?'':a===-1?'−':sg(a))+fac14(r)+fac14(s),'at every real']], ask:'Where is f '+(inc?'increasing':'decreasing')+'?', right, opts, lead:'',
+      why:'Between '+sg(r)+' and '+sg(s)+' the two factors have different signs, and outside they have the same sign. With the '+(a>0?'positive':'negative')+' number in front, f′ is '+(a>0?'negative':'positive')+' between and '+(a>0?'positive':'negative')+' outside. Slope-sign-order: f is '+(inc?'increasing':'decreasing')+' where f′ is '+(inc?'positive':'negative')+'.'}; }});
+
+/* ---------- 14e Same Slopes, Same Shape Lifted ---------- */
+const E14=[
+  ['f and g have the same slope at every input of an interval. What follows?','f = g + C on the interval, for some real C',['f = g on the interval','f = C · g on the interval, for some real C','nothing'],'Same-slopes: the difference f − g has slope 0 on the interval, so it is constant.'],
+  ['What does “+ C” say in an antiderivative?','there is a whole family: one antiderivative for each real C',['there is an error still to be found','the antiderivative is known only near 0','C is a constant that may be dropped'],'All-antiderivatives: if F is one, the antiderivatives on an interval are exactly the functions F + C.'],
+  ['F′ is known on an interval, and one value of F is known. How many functions fit?','exactly one',['one for each real C','none','two'],'The family F + C has one member through each height at a given input. The one value picks C.'],
+  ['F″ is known on an interval. How many constants does F carry?','two',['one','none','three'],'Each run backwards from a slope brings one constant. Two values, or a value and a slope, pick them.']];
+QP.push({id:'14e.same',step:'14e',label:'the family + C',open:()=>measured('14e'),make(){ return writtenQ('14e.same',E14); }},
+  {id:'14e.anti',step:'14e',mode:'work',label:'the antiderivative through a point',open:()=>measured('14e'),make(){
+    const cube=Math.random()<0.4, C=pick([-5,-4,-3,-2,-1,1,2,3,4,5]), F=cube?[pick([1,1,2,-1]),rnd(5)-2,rnd(7)-3,C]:[pick([1,2,3,-1,-2]),rnd(9)-4,C], x0=pick([-2,-1,0,1,2]), v=ev9(F,x0), f=dp13(F), withC=c=>poly13(F.slice(0,-1).concat([c]));
+    const right=withC(C), wrong=uniq(right,[withC(0),withC(v),withC(-C),withC(C+x0),poly13(dp13(f)),withC(C+1)],3); if(wrong.length<3) return null;
+    return {index:'q:14e.anti['+right+';'+x0+']', lines:[['F′(x) = '+poly13(f),'at every real'],['F('+sg(x0)+') = '+sg(v),'given']], ask:'Which is F(x)?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Run the slope rules backwards term by term: F(x) = '+withC(0).replace(/^0$/,'')+' + C. All-antiderivatives: every antiderivative has that shape. F('+sg(x0)+') = '+sg(v)+' gives C = '+sg(C)+'.'}; }});
+
+/* ---------- 14f Crest and Trough ---------- */
+QP.push({id:'14f.test',step:'14f',mode:'work',label:'the two tests',open:()=>measured('14f'),make(){
+    const c=rnd(11)-5;
+    if(Math.random()<0.55){ const k=rnd(5), d=k===3?pick([-4,-3,-2,-1,1,2,3,4]):0, e=k===0?1+rnd(6):k===1?-1-rnd(6):k===2?0:pick([-5,-3,-1,2,4,6]), opts=['a bottom','a top','neither: the slope there is not 0','the second test does not decide'], right=d!==0?opts[2]:e===0?opts[3]:e>0?opts[0]:opts[1];
+      return {index:'q:14f.test[2;'+[c,d,e].join(';')+']', lines:[['f′('+sg(c)+') = '+sg(d),'given'],['f″('+sg(c)+') = '+sg(e),'given']], ask:'What has f at '+sg(c)+'?', right, opts, lead:'',
+        why:d!==0?'A top or bottom where there is a slope has the slope 0 (flat-top). Here the slope is '+sg(d)+', whatever the second slope is.':e===0?'The second test speaks only when f″(c) is not 0. x⁴ has a bottom at 0 and x³ has neither, both with f″(0) = 0. Fall back on the signs of f′.':'Second-test: f′(c) = 0 and f″(c) '+(e>0?'> 0 give a bottom':'< 0 give a top')+'. The slope is '+(e>0?'rising':'falling')+' through 0 there.'}; }
+    const l=pick([1,-1]), r=pick([1,-1]), opts=['a bottom','a top','neither','the first test does not decide'], right=l===r?opts[2]:l<0?opts[0]:opts[1], sn=x=>x>0?'> 0':'< 0';
+    return {index:'q:14f.test[1;'+[c,l,r].join(';')+']', lines:[['f is continuous around '+sg(c),'given'],['f′ '+sn(l)+' just left of '+sg(c)+', and f′ '+sn(r)+' just right of it','given']], ask:'What has f at '+sg(c)+'?', right, opts, lead:'',
+      why:'First-test: '+(l===r?'f′ has one sign on both sides, so f '+(l>0?'climbs':'falls')+' through '+sg(c)+': neither.':l<0?'f falls to '+sg(c)+' and climbs after it: a bottom.':'f climbs to '+sg(c)+' and falls after it: a top.')+' The test needs no slope at '+sg(c)+' itself.'}; }});
+
+/* ---------- 14g The Bend and Sketching ---------- */
+QP.push({id:'14g.bend',step:'14g',mode:'work',label:'where the bend turns',open:()=>measured('14g'),make(){
+    const a=pick([1,1,-1,2]), k=pick([-3,-2,-1,1,2,3]), cs=[a,3*a*k,rnd(9)-4,rnd(9)-4], d2=dp13(dp13(cs));
+    if(Math.random()<0.5){ const right='at '+sg(-k), wrong=uniq(right,['at '+sg(k),'at '+sg(-3*k),'at 0','at '+sg(-2*k),'there is none'],3);
+      return {index:'q:14g.bend[i;'+poly13(cs)+']', lines:[['f(x) = '+poly13(cs),'at every real']], ask:'Where is the inflection point of f?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'f″(x) = '+poly13(d2)+' is 0 at '+sg(-k)+' and changes sign there, so the bend turns. A zero of f″ alone is not enough: the sign must change.'}; }
+    const up=Math.random()<0.5, opts=['right of '+sg(-k),'left of '+sg(-k),'everywhere','nowhere'], right=opts[(a>0)===up?0:1];
+    return {index:'q:14g.bend[u;'+poly13(cs)+';'+(up?'u':'d')+']', lines:[['f(x) = '+poly13(cs),'at every real']], ask:'Where does f bend '+(up?'up':'down')+'?', right, opts, lead:'',
+      why:'f″(x) = '+poly13(d2)+' is positive '+(a>0?'right':'left')+' of '+sg(-k)+' and negative '+(a>0?'left':'right')+' of it. Bends-up: where f″ > 0 the slope f′ is increasing and f bends up. Where f″ < 0, f bends down.'}; }});
+
+/* ---------- 14h Optimising ---------- */
+QP.push({id:'14h.equal',step:'14h',mode:'work',label:'two parts that pull apart',open:()=>measured('14h'),make(){
+    const m=1+rnd(6), t=2+rnd(9), k=m*t*t, where=Math.random()<0.5, right=String(where?t:2*m*t), wrong=uniq(right,(where?[t*t,2*t,m*t,k,t+1,2*m*t]:[m*t,k+m,2*m*t*t,4*m*t,t,k]).map(String),3); if(wrong.length<3) return null;
+    return {index:'q:14h.equal['+[k,m,where?'w':'v'].join(';')+']', lines:[['C(x) = '+k+'/x + '+(m===1?'':m)+'x','for x > 0']], ask:where?'At which x is C least?':'What is the least value of C?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Equal-parts: k/x + mx is least at x = √(k/m) = √'+(t*t)+' = '+t+', where the two parts are equal: '+k+'/'+t+' = '+(m*t)+' and '+(m===1?'':m+' · ')+t+' = '+(m*t)+'. The least value is 2√(km) = '+(2*m*t)+'.'}; }},
+  {id:'14h.fare',step:'14h',mode:'word',label:'the price that brings in most',open:()=>measured('14h'),make(){
+    const [who,things,word]=pick([['A ferry sells','tickets','fare'],['A stall sells','loaves','price'],['A hall sells','seats','price'],['A press sells','pamphlets','price']]), B=pick([10,20,25,40,50]), p=3+rnd(18), A=2*B*p, right=p+' coins', wrong=uniq(right,[(2*p)+' coins',B+' coins',(p+1)+' coins',Math.round(p/2)+' coins',(p*B)+' coins'],3); if(wrong.length<3) return null;
+    return {index:'q:14h.fare['+[things,A,B].join(';')+']', a3:['14h.fare',DASH,DASH], story:who+' '+A+' − '+B+'p '+things+' a day at a '+word+' of p coins, for p from 0 to '+(2*p)+'.', lines:[], ask:'Which '+word+' brings in the most money?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The goal is the money in, p('+A+' − '+B+'p) = '+A+'p − '+B+'p². Its slope '+A+' − '+(2*B)+'p is 0 at p = '+p+'. The ends bring in 0 and the critical point brings in '+(p*(A-B*p))+', so by candidates it is the greatest.'}; }});
+
+/* ---------- 14i When Top and Bottom Both Vanish, and Growth Races ---------- */
+const I14=[
+  ['What is checked first, before the slope-ratio technique is used?','the form: top and bottom must both head to 0',['that the top has a limit','that the quotient has a slope','nothing: it applies to every fraction'],'(x + 1)/(x + 2) at 0 is not 0/0. Its limit is 1/2 by substitution, and the ratio of slopes would say 1.'],
+  ['Which ratio does the slope-ratio technique take?','the slope of the top over the slope of the bottom',['the slope of the quotient','the top over the slope of the bottom','the slope of the bottom over the slope of the top'],'f′/g′, each slope taken separately. The slope of the quotient f/g is another thing (quotient for slopes).'],
+  ['f′(x)/g′(x) has no limit. What does the technique say about f(x)/g(x)?','nothing: another road may still find the limit',['it has no limit','it heads to 0','it passes every bound'],'The technique runs one way: if the ratio of slopes heads to L, so does the ratio. Otherwise it is silent.'],
+  ['When does g outgrow f?','when f(x)/g(x) heads to 0 far out',['when g(x) > f(x) far out','when g(x) − f(x) passes every bound','when g′(x) > f′(x) far out'],'2x is above x far out and their difference passes every bound, yet x/2x heads to 1/2: a tie, in the sense of the ratio.']];
+QP.push({id:'14i.race',step:'14i',label:'the form and the race',open:()=>measured('14i'),make(){ return writtenQ('14i.race',I14); }},
+  {id:'14i.ratio',step:'14i',mode:'work',label:'the ratio of slopes',open:()=>measured('14i'),make(){
+    const w=pick([-3,-2,-1,1,2,3]), a=rnd(9)-4, b=rnd(9)-4; if(a===b||w+b===0||w+a===0) return null;
+    if(Math.random()<0.7){ const f=[1,a-w,-a*w], g=[1,b-w,-b*w], v=fr(w+a,w+b), right=fshow(v), wrong=uniq(right,[fshow(fr(w+b,w+a)),fshow(fneg(v)),fshow(fint(1)),fshow(fint(0)),fshow(fr(a*w,b*w===0?1:b*w)),fshow(fadd(v,fint(1)))],3); if(wrong.length<3) return null;
+      return {index:'q:14i.ratio[z;'+[w,a,b].join(';')+']', lines:[['f(x) = '+poly13(f),'the top'],['g(x) = '+poly13(g),'the bottom']], ask:'To which real does f(x)/g(x) head as x heads to '+sg(w)+'?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'f('+sg(w)+') = 0 and g('+sg(w)+') = 0: the form is 0/0. Slope-ratio: f′(x)/g′(x) = ('+poly13(dp13(f))+')/('+poly13(dp13(g))+') heads to '+eq14(par10(w+a)+'/'+par10(w+b),right)+'. Factoring out (x'+pm(-w)+') agrees.'}; }
+    const v=fr(w+a,w+b), right=fshow(v), wrong=uniq(right,[fshow(fint(1)),fshow(fr(w+b,w+a)),fshow(fint(0)),fshow(fr(a,b===0?1:b)),fshow(fneg(v))],3); if(wrong.length<3) return null;
+    return {index:'q:14i.ratio[n;'+[w,a,b].join(';')+']', lines:[['f(x) = '+lin9(1,a),'the top'],['g(x) = '+lin9(1,b),'the bottom']], ask:'To which real does f(x)/g(x) head as x heads to '+sg(w)+'?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The bottom heads to '+sg(w+b)+', not 0, so the form is not 0/0 and substitution decides: '+eq14(par10(w+a)+'/'+par10(w+b),right)+'. The ratio of the slopes is 1, and the technique does not apply here.'}; }});
+
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 
