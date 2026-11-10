@@ -2662,6 +2662,176 @@ QP.push({id:'15i.endless',step:'15i',label:'endless sums',open:()=>measured('15i
     const p=2+rnd(4), b=1+rnd(3), R=fr(b**(p+1),p+1), right=fshow(R), wrong=uniq(right,[fshow(fr(b**p,p)),fshow(fint(b**(p+1))),fshow(fint(p*b**(p-1))),fshow(fr(b**(p+1),p)),fshow(fr(b**p,p+1)),fshow(fint(b**p)),fshow(fr(1,p))],3); if(wrong.length<3) return null;
     return {index:'q:15i.ratio[p;'+p+';'+b+']', lines:[['f(x) = x'+sup15(p),'on [0, '+b+']']], ask:'What is '+int15(0,b,'x'+sup15(p)+' dx')+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Area-under-a-power, by the shrinking cut: bᵏ⁺¹/(k + 1) = '+(b**(p+1))+'/'+(p+1)+(fshow(R)===(b**(p+1))+'/'+(p+1)?'':' = '+right)+'.'}; }});
 
+/* ===== Laundry 5, rung 16 (floor 3 pools, stage O): 16a to 16j, the area function and its uses ===== */
+Object.assign(STEPS,{'16a':['r16a','The Area Function'],'16b':['r16b','Its Slope Is the Height'],'16c':['r16c','Evaluating by Antiderivatives'],'16d':['r16d','Substitution'],'16e':['r16e','Parts'],'16f':['r16f','The Table Run Backwards'],
+  '16g':['r16g','Definite Integrals and Areas'],'16h':['r16h','Substitution and Parts by Hand'],'16i':['r16i','Improper Integrals'],'16j':['r16j','Volumes by Cross Sections']});
+const fact16=n=>n<2?1:n*fact16(n-1), pw16=(b,n)=>b+(n===1?'':sup15(n)), DIV16='it diverges', frs16=(right,fs,n)=>uniq(right,fs.map(fshow),n||3);
+
+/* ---------- 16a The Area Function ---------- */
+const A16=[
+  ['In ∫ₚ^q f(x) dx, what does the letter x name?','no number: it is a stand-in, and any letter not in use will do',['the right end q','the width of a piece','an unknown to be solved for'],'The integral is one number made from all the values of f on [p, q]. The letter only says which slot of f is run through.'],
+  ['f is integrable and jumps at c. What can be said of its area function F at c?','F is continuous at c',['F jumps at c too','F has no value at c','F has a slope at c'],'Area-never-jumps: if |f| ≤ M then |F(y) − F(x)| ≤ M|y − x|. A jump in the height makes a corner in the area, not a jump.'],
+  ['Is an area function F(x) = ∫ₛˣ f(t) dt never negative?','no: left of s, or where f is negative, it counts negative',['yes','yes, whenever f is continuous','no: it is negative at every x but s'],'F(s) = 0, and from there the area is added with its sign and with the direction of travel.'],
+  ['|f(t)| ≤ M at every t of [p, q]. What bounds the integral?','|∫ₚ^q f| ≤ M(q − p)',['|∫ₚ^q f| ≤ M','∫ₚ^q f = M(q − p)','|∫ₚ^q f| ≤ M/(q − p)'],'Area-bound: −M ≤ f ≤ M, and smaller-function-smaller-area on both sides.']];
+QP.push({id:'16a.letter',step:'16a',label:'the stand-in letter and the area function',open:()=>measured('16a'),make(){ return writtenQ('16a.letter',A16); }},
+  {id:'16a.areafn',step:'16a',mode:'work',label:'three area functions',open:()=>measured('16a'),make(){
+    const k=rnd(3);
+    if(k===0){ const c=pick([-3,-2,2,3,4,5]), s=rnd(7)-3, a=pick([-4,-3,-2,-1,0,1,2,3,4,5,6].filter(x=>x!==s)), right=sg(c*(a-s)), wrong=num13(right,[c*a,c*(s-a),c,c*(a+s),a-s,c*(a-s)+c]); if(wrong.length<3) return null;
+      return {index:'q:16a.areafn[k;'+[c,s,a].join(';')+']', lines:[['f(t) = '+sg(c),'at every real'],['F(x) = ∫'+sub15(s)+'ˣ f(t) dt','the area function of f from '+sg(s)]], ask:'What is F('+sg(a)+')?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'A constant’s sums are all k(x − s): '+par10(c)+' · ('+sg(a)+' − '+par10(s)+') = '+right+'.'+(a<s?' Left of '+sg(s)+' the area counts with the sign turned about.':'')}; }
+    const a=1+rnd(6), sq=k===2, R=sq?fr(a**3,3):fr(a*a,2), right=fshow(R), wrong=frs16(right,sq?[fr(a*a,2),fint(a**3),fint(a*a),fr(a**3,2),fint(2*a),fr(a,3)]:[fint(a*a),fint(a),fr(a,2),fr(a**3,3),fint(1),fr(a*a,4)]); if(wrong.length<3) return null;
+    return {index:'q:16a.areafn['+(sq?'q':'l')+';'+a+']', lines:[['f(t) = '+(sq?'t²':'t'),'at every real'],['F(x) = ∫₀ˣ f(t) dt','the area function of f from 0']], ask:'What is F('+a+')?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:(sq?'Area-under-a-power: F(x) = x³/3':'The area under t from 0 to x is x²/2')+', so F('+a+') = '+right+'.'}; }});
+
+/* ---------- 16b Its Slope Is the Height ---------- */
+const B16=[
+  ['F(x) = ∫ₚˣ f(t) dt, and f is continuous at c. What is F′(c)?','f(c)',['f(c) − f(p)','f′(c)','F(c)'],'Area-slope: the slope of the area function is the height of f there. The lower end p does not enter.'],
+  ['Does every function continuous on an interval have an antiderivative there?','yes: its area function is one',['only polynomials do','only when a formula can be found','no'],'Antiderivative-exists: F(x) = ∫ₚˣ f(t) dt has F′ = f at every input of the interval, formula or no formula.'],
+  ['f jumps at c. Must its area function have a slope at c?','no: the slopes from the two sides can differ',['yes, and it is f(c)','yes, and it is 0','no: the area function is not continuous there'],'For the unit step from 0, F is 0 left of 0 and x right of it: slopes 0 and 1 from the two sides.'],
+  ['What is the slope of ∫ₓ^q f(t) dt, as a function of x?','−f(x)',['f(x)','f(q) − f(x)','0'],'∫ₓ^q f = −∫_q^x f: the moving end is the lower one, and the sign turns about.']];
+QP.push({id:'16b.first',step:'16b',label:'the first fundamental technique',open:()=>measured('16b'),make(){ return writtenQ('16b.first',B16); }},
+  {id:'16b.slope',step:'16b',mode:'work',label:'the slope of an area function',open:()=>measured('16b'),make(){
+    const k=rnd(3), cs=[pick([1,2,-1]),rnd(7)-3,rnd(9)-4], f=x=>ev9(cs,x), c=pick([-2,-1,1,2,3]);
+    if(k===0){ const p=pick([-3,-2,0,1,4].filter(x=>x!==c)), right=sg(f(c)), wrong=num13(right,[f(c)-f(p),2*cs[0]*c+cs[1],0,f(p),-f(c),f(c)+f(p)]); if(wrong.length<3) return null;
+      return {index:'q:16b.slope[u;'+[poly13(cs),p,c].join(';')+']', lines:[['f(t) = '+poly13(cs).replace(/x/g,'t'),'at every real'],['F(x) = ∫'+sub15(p)+'ˣ f(t) dt','an area function']], ask:'What is F′('+sg(c)+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'Area-slope: F′(c) = f(c). f('+sg(c)+') = '+right+'. The lower end '+sg(p)+' changes F by a constant and its slope not at all.'}; }
+    if(k===1){ const q=c+1+rnd(4), right=sg(-f(c)), wrong=num13(right,[f(c),f(q)-f(c),-(2*cs[0]*c+cs[1]),0,f(q),-f(q)]); if(wrong.length<3) return null;
+      return {index:'q:16b.slope[l;'+[poly13(cs),q,c].join(';')+']', lines:[['f(t) = '+poly13(cs).replace(/x/g,'t'),'at every real'],['G(x) = ∫ₓ'+sup15(q)+' f(t) dt','the moving end is the lower one']], ask:'What is G′('+sg(c)+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'G(x) = −∫'+sub15(q)+'ˣ f(t) dt, so G′(c) = −f(c). f('+sg(c)+') = '+sg(f(c))+', and G′('+sg(c)+') = '+right+'.'}; }
+    const m=pick([1,2,3]), b=rnd(7)-3, g=t=>m*t+b, p=pick([0,1,2]), val=g(c*c)*2*c, right=sg(val), wrong=num13(right,[g(c*c),g(c)*2*c,2*c,g(c*c)*c*c,g(c),-val]); if(wrong.length<3) return null;
+    return {index:'q:16b.slope[m;'+[m,b,p,c].join(';')+']', lines:[['f(t) = '+lin9(m,b).replace(/x/g,'t'),'at every real'],['H(x) = ∫'+sub15(p)+'^(x²) f(t) dt','the upper end moves as x²']], ask:'What is H′('+sg(c)+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'Moving-end: H(x) = F(x²), so by the chain rule H′(x) = f(x²) · 2x. At '+sg(c)+': f('+(c*c)+') · '+par10(2*c)+' = '+par10(g(c*c))+' · '+par10(2*c)+' = '+right+'.'}; }});
+
+/* ---------- 16c Evaluating by Antiderivatives ---------- */
+QP.push({id:'16c.change',step:'16c',mode:'work',label:'an area is a change',open:()=>measured('16c'),make(){
+    if(Math.random()<0.65){ const a=pick([1,1,2,-1]), b=rnd(5)-2, c=rnd(7)-3, f=[3*a,2*b,c], G=[a,b,c,0], p=rnd(4)-2, q=p+1+rnd(3), v=ev9(G,q)-ev9(G,p), right=sg(v), wrong=num13(right,[ev9(G,q)+ev9(G,p),ev9(f,q)-ev9(f,p),ev9(G,q),-v,(q-p)*ev9(f,q),v+1,v-c]); if(wrong.length<3) return null;
+      return {index:'q:16c.change[p;'+[poly13(f),p,q].join(';')+']', lines:[['f(x) = '+poly13(f),'on ['+sg(p)+', '+sg(q)+']']], ask:'What is '+int15(p,q,'f(x) dx')+'?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'G(x) = '+poly13(G)+' has G′ = f. Area-is-a-change: G('+sg(q)+') − G('+sg(p)+') = '+sg(ev9(G,q))+' − '+par10(ev9(G,p))+' = '+right+'.'}; }
+    const p=1+rnd(4), q=p+1+rnd(4), R=fsub(fr(1,p),fr(1,q)), right=fshow(R), wrong=frs16(right,[fneg(R),fsub(fr(1,p*p),fr(1,q*q)),fint(q-p),fr(1,q-p),fadd(fr(1,p),fr(1,q)),fr(1,p*q*q)]); if(wrong.length<3) return null;
+    return {index:'q:16c.change[i;'+p+';'+q+']', lines:[['f(x) = 1/x²','on ['+p+', '+q+']']], ask:'What is '+int15(p,q,'dx/x²')+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'(−1/x)′ = 1/x² on the interval, which stays clear of 0. Inverse-square-area: 1/p − 1/q = 1/'+p+' − 1/'+q+' = '+right+'.'}; }},
+  {id:'16c.licensed',step:'16c',mode:'proof',label:'is the change licensed',open:()=>measured('16c'),make(){
+    const k=rnd(3), a=1+rnd(7), b=a+1+rnd(7), [p,q]=k===0?[a,b]:k===1?[-b,-a]:[-a,1+rnd(8)], val=fshow(fsub(fr(1,p),fr(1,q))), ok=k!==2, opts=['it is licensed','it is not licensed'];
+    return {index:'q:16c.licensed['+p+';'+q+']', stack:true, lines:[['G(x) = −1/x','G′(x) = 1/x² at every x ≠ 0'],[int15(p,q,'dx/x²')+' = G('+sg(q)+') − G('+sg(p)+') = '+val,'area-is-a-change, on line 1']], ask:'Is line 2 licensed?', right:opts[ok?0:1], opts, lead:'',
+      why:ok?'0 is not in ['+sg(p)+', '+sg(q)+'], so 1/x² is continuous there and G is an antiderivative of it on the whole interval.':'0 lies in ['+sg(p)+', '+sg(q)+']. There 1/x² is not bounded, so it has no integral, and G has no value at 0. The answer '+val+' is negative for a function that is never negative.'}; }});
+
+/* ---------- 16d Substitution ---------- */
+const D16=[
+  ['After r = g(x), which ends does the integral in r carry?','g(v) and g(w), the values of r at the old ends',['v and w, as before','0 and 1','none: the ends are dropped'],'Substitution for areas: ∫ᵥʷ f(g(x)) g′(x) dx = ∫ from g(v) to g(w) of f(r) dr. The ends belong to the letter.'],
+  ['What is the line dr = g′(x) dx?','a reminder of the substitution technique, not a statement about numbers',['an equation between two small numbers','a slope','a definition of dx'],'It says that g′(x) dx beside a function of g(x) may be traded for dr.'],
+  ['∫ (x² + 1)³ dx: can r = x² + 1 be used as it stands?','no: there is no 2x beside it to become dr',['yes: the answer is (x² + 1)⁴/4 + C','yes: the answer is (x² + 1)⁴/(8x) + C','no: substitution is for definite integrals only'],'Check by the slope: ((x² + 1)⁴/4)′ = 2x(x² + 1)³. Expand the cube instead.'],
+  ['Which of these functions is even?','x⁴ + x²',['x³','x² + x','x'],'Even: f(−x) = f(x). The names come from the powers. A sum of an even and an odd power is neither.']];
+QP.push({id:'16d.ends',step:'16d',label:'the bookkeeping',open:()=>measured('16d'),make(){ return writtenQ('16d.ends',D16); }},
+  {id:'16d.subst',step:'16d',mode:'work',label:'the chain rule, backwards',open:()=>measured('16d'),make(){
+    const k=rnd(3), n=2+rnd(3);
+    if(k===0){ const c=1+rnd(4), v=rnd(3), w=v+1+rnd(2), gv=v*v+c, gw=w*w+c, body=pw16('r',n)+' dr', right=int15(gv,gw,body), wrong=uniq(right,[int15(v,w,body),int15(gv,gw,'2'+body),int15(v,w,'2'+body),int15(gw,gv,body),int15(gv,gw,pw16('r',n+1)+' dr')],3);
+      return {index:'q:16d.subst[e;'+[c,n,v,w].join(';')+']', lines:[[int15(v,w,'2x(x² + '+c+')'+sup15(n)+' dx'),'to be rewritten'],['r = x² + '+c+', dr = 2x dx','the substitution']], ask:'Which integral in r is it?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'2x dx is traded for dr, and the ends for the values of r there: x = '+v+' gives r = '+gv+', and x = '+w+' gives r = '+gw+'.'}; }
+    if(k===1){ const p=1+rnd(5), A=pick([-6,-4,-3,-2,2,3,4,5,7]), odd=Math.random()<0.5, right=sg(odd?0:2*A), wrong=num13(right,[A,odd?2*A:0,-A,-2*A,A*p]); if(wrong.length<3) return null;
+      return {index:'q:16d.subst[o;'+[p,A,odd?'o':'e'].join(';')+']', lines:[['f is '+(odd?'odd':'even')+' and continuous on ['+sg(-p)+', '+p+']','given'],[int15(0,p,'f')+' = '+sg(A),'given']], ask:'What is '+int15(-p,p,'f')+'?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'Odd-and-even-areas: the left half is '+(odd?'the right half with its sign turned about, so the two cancel.':'equal to the right half, so the whole is twice '+sg(A)+'.')}; }
+    const m=pick([2,3,4,5]), b=pick([-3,-2,-1,1,2,3]), ins='('+lin9(m,b)+')', right=ins+sup15(n+1)+'/'+(m*(n+1))+' + C', wrong=uniq(right,[ins+sup15(n+1)+'/'+(n+1)+' + C',m+ins+sup15(n+1)+'/'+(n+1)+' + C',(n*m)+ins+(n===2?'':sup15(n-1))+' + C',ins+sup15(n+1)+'/'+m+' + C'],3);
+    return {index:'q:16d.subst[s;'+[m,b,n].join(';')+']', lines:[['∫ '+ins+sup15(n)+' dx','a straight inside']], ask:'Which is it?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Straight-inside: with F′ = f, ∫ f(kx + m) dx = (1/k)F(kx + m) + C. Here F(r) = r'+sup15(n+1)+'/'+(n+1)+' and k = '+m+'. Check by the slope: the chain rule brings the '+m+' back.'}; }});
+
+/* ---------- 16e Parts ---------- */
+const E16=[
+  ['Parts trades ∫ f g′ for which integral?','∫ f′ g',['∫ f′ g′','∫ f g','∫ (fg)′'],'From (fg)′ = f′g + fg′: the leftover is the product rule’s other term.'],
+  ['On a definite integral from p to q, how is the fg term of parts taken?','between the ends: f(q)g(q) − f(p)g(p)',['at the upper end only','it is dropped','as f(q)g(p)'],'∫ₚ^q fg′ = fg|ₚ^q − ∫ₚ^q f′g. The bar means the value at q less the value at p.'],
+  ['Which rule for slopes does parts run backwards?','the product rule',['the chain rule','the quotient rule','the power rule'],'Substitution is the chain rule backwards. Parts is the product rule backwards.'],
+  ['In ∫ x(1 − x)⁴ dx, why take f = x and g′ = (1 − x)⁴?','x gets simpler when its slope is taken, and (1 − x)⁴ is easy to undo',['the first factor is always f','x is always f','because x has no antiderivative'],'The choice is free. A good one leaves an easier integral behind.']];
+QP.push({id:'16e.choose',step:'16e',label:'the product rule, backwards',open:()=>measured('16e'),make(){ return writtenQ('16e.choose',E16); }},
+  {id:'16e.parts',step:'16e',mode:'work',label:'parts, and a family of areas',open:()=>measured('16e'),make(){
+    if(Math.random()<0.5){ const m=rnd(5), n=1+rnd(4), R=fr(fact16(m)*fact16(n),fact16(m+n+1)), right=fshow(R), wrong=frs16(right,[fr(1,(m+1)*(n+1)),fr(fact16(m)*fact16(n),fact16(m+n)),fr(1,m+n+1),fr(fact16(m)*fact16(n),fact16(m+n+2)),fr(1,fact16(m+n+1)),fr(1,(m+1)*(n+2))]); if(wrong.length<3) return null;
+      return {index:'q:16e.parts[b;'+m+';'+n+']', lines:[[int15(0,1,(m===0?'':pw16('x',m))+pw16('(1 − x)',n)+' dx'),'one of a family of areas']], ask:'What is it?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'Areas-under-xᵐ(1 − x)ⁿ: m! n!/(m + n + 1)! = '+fact16(m)+' · '+fact16(n)+'/'+fact16(m+n+1)+' = '+right+', with no expanding. Each use of parts moves one power from (1 − x) to x.'}; }
+    const p=rnd(3), q=p+1+rnd(3), fp=rnd(7)-3, fq=rnd(7)-3, gp=rnd(7)-3, gq=rnd(7)-3, K=rnd(11)-5, bar=fq*gq-fp*gp, v=bar-K, right=sg(v), wrong=num13(right,[bar+K,fq*gq-K,-K,bar,fq*gq+fp*gp-K,K-bar,v+1]); if(wrong.length<3) return null;
+    return {index:'q:16e.parts[t;'+[p,q,fp,fq,gp,gq,K].join(';')+']', lines:[['f('+p+') = '+sg(fp)+', f('+q+') = '+sg(fq),'given'],['g('+p+') = '+sg(gp)+', g('+q+') = '+sg(gq),'given'],[int15(p,q,'f′g')+' = '+sg(K),'given']], ask:'What is '+int15(p,q,'fg′')+'?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Parts for areas: fg between the ends, less the other integral. ('+par10(fq)+' · '+par10(gq)+' − '+par10(fp)+' · '+par10(gp)+') − '+par10(K)+' = '+right+'.'}; }});
+
+/* ---------- 16f The Table Run Backwards ---------- */
+const F16=[
+  ['What does the power line of the table give for ∫ x⁻¹ dx?','nothing: −1 is the one exponent it leaves out',['x⁰/0 + C','1 + C','−x⁻² + C'],'x⁰/0 is no function. No-power-for-1/x: no c xʳ has the slope 1/x. The entry waits for a new function.'],
+  ['How is a claimed antiderivative checked?','take its slope and compare with the integrand',['put x = 0 in it','integrate it once more','it cannot be checked'],'Every line of the table is a slope rule read backwards, so the slope is the test.'],
+  ['G′(x) = x⁻² at every x ≠ 0. Must G be −1/x + C for one real C?','no: the domain is two intervals, and each may carry its own constant',['yes','yes, by all-antiderivatives','no: x⁻² has no antiderivative'],'All-antiderivatives is about one interval. Left and right of 0 the constants are free of each other.'],
+  ['G′ is known on an interval. What pins the constant?','one value of G',['the slope of G at one input','nothing: it stays free','the value of G′ at 0'],'An initial condition G(x₀) = y₀ picks one member of the family G + C.']];
+QP.push({id:'16f.missing',step:'16f',label:'the constant and the missing entry',open:()=>measured('16f'),make(){ return writtenQ('16f.missing',F16); }},
+  {id:'16f.table',step:'16f',mode:'work',label:'the table, backwards',open:()=>measured('16f'),make(){
+    const k=rnd(3), n=2+rnd(5);
+    if(k===0){ const right='x'+sup15(n+1)+'/'+(n+1)+' + C', wrong=[n+pw16('x',n-1)+' + C','x'+sup15(n+1)+' + C','x'+sup15(n+1)+'/'+n+' + C'];
+      return {index:'q:16f.table[p;'+n+']', lines:[['∫ x'+sup15(n)+' dx','from the table']], ask:'Which is it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Power for slopes, backwards: raise the exponent by one and divide by the new exponent. Check: (x'+sup15(n+1)+'/'+(n+1)+')′ = x'+sup15(n)+'.'}; }
+    if(k===1){ const right='−1/('+(n-1===1?'':n-1)+pw16('x',n-1)+') + C', wrong=['1/('+(n-1===1?'':n-1)+pw16('x',n-1)+') + C','−1/('+(n+1)+'x'+sup15(n+1)+') + C','−'+n+'/x'+sup15(n+1)+' + C'];
+      return {index:'q:16f.table[n;'+n+']', lines:[['∫ dx/x'+sup15(n),'for x > 0']], ask:'Which is it?', right:right.replace('(x)','x'), opts:shuffle([right,...wrong]).map(o=>o.replace('(x)','x')), lead:'', why:'x⁻ⁿ has the antiderivative x¹⁻ⁿ/(1 − n): the exponent rises by one, to '+sg(1-n)+', and the new exponent divides. Check by the slope.'}; }
+    const a=pick([1,1,2,-1]), b=rnd(5)-2, c=rnd(7)-3, C=pick([-4,-3,-2,-1,1,2,3,4]), f=[3*a,2*b,c], G=[a,b,c,C], G0=[a,b,c,0], x0=pick([0,1,-1]), x1=pick([2,-2,3].filter(x=>x!==x0)), y0=ev9(G,x0), v=ev9(G,x1), right=sg(v), wrong=num13(right,[ev9(G0,x1),ev9(G0,x1)+y0,y0+ev9(f,x1),ev9(f,x1),v-2*C,v+1]); if(wrong.length<3) return null;
+    return {index:'q:16f.table[i;'+[poly13(f),x0,y0,x1].join(';')+']', lines:[['G′(x) = '+poly13(f),'the demand'],['G('+sg(x0)+') = '+sg(y0),'the condition']], ask:'What is G('+sg(x1)+')?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The table gives G(x) = '+poly13(G0)+' + C. The condition gives C = '+sg(C)+'. Then G('+sg(x1)+') = '+right+'.'}; }});
+
+/* ---------- 16g Definite Integrals and Areas ---------- */
+const G16=[
+  ['f changes from positive to negative at c. What has its area function F at c?','a top',['a bottom','a zero','a jump'],'F′ = f, so F climbs while f is positive and falls after. First-test gives a top.'],
+  ['x and x² cross at 1. Is the area between them on [0, 2] equal to ∫₀² (x − x²) dx?','no: cut at 1 and swap, since x² is above x on [1, 2]',['yes','yes, once bars are put around the answer','no: the region has no area'],'Area-between needs the upper graph first on each stretch. ∫₀¹ (x − x²) + ∫₁² (x² − x) = 1/6 + 5/6 = 1.'],
+  ['For a velocity v, what does ∫ |v| count?','the distance travelled',['the displacement','the average speed','the acceleration'],'∫ v is the net change of position, the displacement. ∫ |v| counts every stretch as positive.'],
+  ['On a stretch where f > 0, what does the area function F do?','it increases',['it is positive','it bends up','it stays constant'],'F′ = f > 0, and slope-sign-order. Whether F is positive depends on where the area is counted from.']];
+QP.push({id:'16g.reading',step:'16g',label:'reading an area function',open:()=>measured('16g'),make(){ return writtenQ('16g.reading',G16); }},
+  {id:'16g.between',step:'16g',mode:'work',label:'the region between two graphs',open:()=>measured('16g'),make(){
+    const k=rnd(4);
+    if(k===3){ const m=1+rnd(4), n=m+1+rnd(5-m), R=fsub(fr(1,m+1),fr(1,n+1)), right=fshow(R), wrong=frs16(right,[fr(1,n-m),fadd(fr(1,m+1),fr(1,n+1)),fr(1,(m+1)*(n+1)),fsub(fr(1,m),fr(1,n)),fr(1,m+n+1),fr(1,n+1)]); if(wrong.length<3) return null;
+      return {index:'q:16g.between[p;'+m+';'+n+']', lines:[['y = '+pw16('x',m)+' and y = '+pw16('x',n),'for 0 ≤ x ≤ 1; they meet at 0 and at 1']], ask:'What is the area between them?', right, opts:shuffle([right,...wrong]), lead:'', why:'Between 0 and 1 the lower power is above. '+int15(0,1,'('+pw16('x',m)+' − '+pw16('x',n)+') dx')+' = 1/'+(m+1)+' − 1/'+(n+1)+' = '+right+'.'}; }
+    if(k===0){ const a=1+rnd(8), R=fr(a**3,6), right=fshow(R), wrong=frs16(right,[fr(a**3,3),fr(a**3,2),fr(a*a,2),fr(a*a,6),fint(a**3),fr(a**3,12)]); if(wrong.length<3) return null;
+      return {index:'q:16g.between[l;'+a+']', lines:[['y = '+(a===1?'':a)+'x and y = x²','they cross at 0 and at '+a]], ask:'What is the area between them?', right, opts:shuffle([right,...wrong]), lead:'', why:'On [0, '+a+'] the line is above. Area-between: '+int15(0,a,'('+(a===1?'':a)+'x − x²) dx')+' = '+a+' · '+(a*a)+'/2 − '+(a**3)+'/3 = '+right+'.'}; }
+    if(k===1){ const m=1+rnd(6), R=fr(2*m**3,3), right=fshow(R), wrong=frs16(right,[fr(m**3,3),fint(m**3),fr(4*m**3,3),fr(m**3,2),fint(m*m),fr(2*m*m,3)]); if(wrong.length<3) return null;
+      return {index:'q:16g.between[c;'+m+']', lines:[['y = '+(m*m)+' and y = x²','for 0 ≤ x ≤ '+m]], ask:'What is the area between them?', right, opts:shuffle([right,...wrong]), lead:'', why:'The level line is above. '+int15(0,m,'('+(m*m)+' − x²) dx')+' = '+(m**3)+' − '+(m**3)+'/3 = '+right+'.'}; }
+    const b=2+rnd(5), G=x=>fsub(fr(x**3,3),fr(x*x,2)), R=fadd(fr(1,6),fsub(G(b),G(1))), right=fshow(R), N=fsub(fr(b*b,2),fr(b**3,3)), wrong=frs16(right,[fr(Math.abs(N.p),N.q),N,fsub(G(b),G(1)),fadd(R,fr(1,6)),fr(b**3,3),fr(b*b,2)]); if(wrong.length<3) return null;
+    return {index:'q:16g.between[x;'+b+']', lines:[['y = x and y = x²','for 0 ≤ x ≤ '+b+'; they cross at 1']], ask:'What is the area between them?', right, opts:shuffle([right,...wrong]), lead:'', why:'Cut at the crossing and put the upper graph first on each stretch: ∫₀¹ (x − x²) dx + '+int15(1,b,'(x² − x) dx')+' = 1/6 + '+fshow(fsub(G(b),G(1)))+' = '+right+'.'}; }},
+  {id:'16g.travel',step:'16g',mode:'word',label:'net and total',open:()=>measured('16g'),make(){
+    const who=pick(['A shuttle on a track','A float on a line','A slide on a rail','A cart on a track']), c=1+rnd(4), b=c+1+rnd(4), net=fsub(fr(b*b,2),fint(c*b)), tot=fadd(fr(c*c,2),fr((b-c)*(b-c),2)), dist=Math.random()<0.5, right=fshow(dist?tot:net)+' metres';
+    const wrong=uniq(right,[fshow(dist?net:tot)+' metres',fshow(fr(b*b,2))+' metres',(c*b)+' metres',fshow(fr((b-c)*(b-c),2))+' metres',fshow(fint(b-c))+' metres',fshow(fneg(dist?tot:net))+' metres'],3); if(wrong.length<3) return null;
+    return {index:'q:16g.travel['+[who,c,b,dist?'d':'n'].join(';')+']', a3:['16g.travel['+(dist?'total':'net')+']',DASH,DASH], story:who+' has the velocity t − '+c+' metres per second at the time t seconds, for t from 0 to '+b+'.', lines:[], ask:dist?'What distance does it travel?':'What is its displacement?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The velocity is negative before t = '+c+' and positive after. Backwards it covers '+fshow(fr(c*c,2))+' metres, forwards '+fshow(fr((b-c)*(b-c),2))+'. The displacement is the net area, '+fshow(net)+'. The distance is the total area, '+fshow(tot)+'.'}; }});
+
+/* ---------- 16h Substitution and Parts by Hand ---------- */
+QP.push({id:'16h.byhand',step:'16h',mode:'work',label:'by hand',open:()=>measured('16h'),make(){
+    if(Math.random()<0.55){ const b=1+rnd(3), c=1+rnd(3), n=1+rnd(b===3?2:3), lo=c, hi=b*b+c, R=fr(hi**(n+1)-lo**(n+1),n+1), right=fshow(R), wrong=frs16(right,[fr(b**(n+1),n+1),fr(hi**(n+1),n+1),fint(hi**(n+1)-lo**(n+1)),fr(hi**(n+1)-lo**(n+1),2*(n+1)),fr(hi**n-lo**n,n),fint(hi**n)]); if(wrong.length<3) return null;
+      return {index:'q:16h.byhand[s;'+[b,c,n].join(';')+']', lines:[[int15(0,b,'2x'+pw16('(x² + '+c+')',n)+' dx'),'an inside with its slope beside it']], ask:'What is it?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'r = x² + '+c+', dr = 2x dx, and r runs from '+lo+' to '+hi+'. '+int15(lo,hi,pw16('r',n)+' dr')+' = ('+(hi**(n+1))+' − '+(lo**(n+1))+')/'+(n+1)+' = '+right+'. The ends '+0+' and '+b+' belong to x.'}; }
+    const n=2+rnd(6); let J=fint(1); for(let i=1;i<n;i++) J=fmul(J,fr(2*i,2*i+1)); const R=fmul(J,fr(2*n,2*n+1)), right=fshow(R), wrong=frs16(right,[fmul(J,fr(2*n+1,2*n)),fmul(J,fr(n,n+1)),fmul(J,fr(2*n,2*n-1)),fmul(J,fr(1,2*n+1)),fmul(J,fr(2*n-1,2*n+1)),fr(1,2*n+1)]); if(wrong.length<3) return null;
+    return {index:'q:16h.byhand[j;'+n+']', lines:[['Jₙ = ∫₀¹ (1 − x²)ⁿ dx','one integral through a smaller one'],['J'+sub15(n-1)+' = '+fshow(J),'given']], ask:'What is J'+sub15(n)+'?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Areas-under-(1 − x²)ⁿ: Jₙ = (2n/(2n + 1)) Jₙ₋₁. With n = '+n+': '+(2*n)+'/'+(2*n+1)+' · '+fshow(J)+' = '+right+'. Each is a product of even numbers over odd ones.'}; }});
+
+/* ---------- 16i Improper Integrals ---------- */
+const I16=[
+  ['0 ≤ f(x) ≤ g(x) far out, and ∫ g out to forever converges. What follows?','∫ f converges too, and is at most ∫ g',['nothing','∫ f diverges','∫ f equals ∫ g'],'Comparison: the area function of f is increasing and bounded above, so it heads to a number.'],
+  ['0 ≤ f(x) ≤ g(x) far out, and ∫ f out to forever converges. What follows for g?','nothing: ∫ g may converge or diverge',['∫ g converges','∫ g diverges','∫ g is at most ∫ f'],'Comparison runs from the larger to the smaller. 1/x² ≤ 1/x for x ≥ 1: the first converges and the second does not.'],
+  ['∫₋₁¹ x⁻² dx: what must be done first?','split at 0, the bad point, and take each side as a limit',['nothing: −1/x between the ends gives −2','take bars around x','swap the ends'],'In-to-0: ∫₀¹ x⁻² dx diverges, so the whole diverges. The −2 is the mark of a missed bad point.'],
+  ['What does ∫ₐ^∞ f(x) dx mean?','the limit of ∫ₐᵇ f(x) dx as b passes every bound, when it exists',['a sum over endlessly many pieces at once','the area function’s value at ∞','the upper integral of f'],'There is no input ∞. The mark names a limit of ordinary integrals, when there is one.']];
+const px16=p=>p.q===1?(p.p===1?'1/x':'1/x'+sup15(p.p)):(p.p===1&&p.q===2?'1/√x':'1/x^('+fshow(p)+')');
+QP.push({id:'16i.compare',step:'16i',label:'out to forever',open:()=>measured('16i'),make(){ return writtenQ('16i.compare',I16); }},
+  {id:'16i.improper',step:'16i',mode:'work',label:'the powers',open:()=>measured('16i'),make(){
+    const out=Math.random()<0.5, p=pick(out?[fint(2),fint(3),fint(4),fint(5),fr(3,2),fr(5,2),fr(4,3),fr(5,3),fr(7,4),fr(5,4),fint(1),fr(1,2),fr(2,3),fr(3,4),fr(1,3)]:[fr(1,2),fr(1,3),fr(2,3),fr(3,4),fr(1,4),fr(4,5),fr(1,5),fr(2,5),fint(1),fint(2),fr(3,2),fint(3),fr(5,4),fr(4,3)]), one=fint(1), conv=out?fless(one,p):fless(p,one), d=out?fsub(p,one):fsub(one,p);
+    const val=conv?fr(d.q,d.p):null, right=conv?fshow(val):DIV16, flip=fsame(p,one)?fint(1):fr(Math.abs(d.q),Math.abs(d.p)), wrong=uniq(right,[DIV16,fshow(flip),fshow(p),'0',fshow(fr(p.q,p.p)),fshow(fadd(flip,one)),'1'],3); if(wrong.length<3) return null;
+    return {index:'q:16i.improper['+(out?'o':'i')+';'+fshow(p)+']', lines:[[(out?'∫₁^∞ ':'∫₀¹ ')+px16(p)+' dx',out?'out to forever':'in to the bad point 0']], ask:'What is it?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:out?'Out-to-forever: ∫₁^∞ x⁻ᵖ dx converges exactly when p > 1, to 1/(p − 1). Here p = '+fshow(p)+(conv?', and the area is '+right+'.':', so it diverges: the area up to b passes every bound.')
+        :'In-to-0: ∫₀¹ x⁻ᵖ dx converges exactly when p < 1, to 1/(1 − p). Here p = '+fshow(p)+(conv?', and the area is '+right+'.':', so it diverges: the area from c to 1 passes every bound as c heads to 0.')}; }});
+
+/* ---------- 16j Volumes by Cross Sections ---------- */
+const J16=[
+  ['Is a pyramid’s volume half its base times its height?','no: the slice shrinks as the square of x/h, and the volume is Bh/3',['yes','no: it is Bh/4','no: it is Bh'],'∫₀ʰ B(x/h)² dx = Bh/3. A half is right for a triangle, where the slice shrinks as x/h.'],
+  ['Two solids lie between the same walls, and their slices at each x have the same area. What follows?','they have the same volume',['they have the same shape','they have the same surface','nothing'],'Matching-slices: the volume is the integral of the slice areas, and the two integrands agree.'],
+  ['A slice is a square with the side √x − x². What is its area?','(√x − x²)²',['√x − x²','x − x⁴','2(√x − x²)'],'That expression is the side. The area is its square, x − 2x^(5/2) + x⁴.'],
+  ['By cross sections, what is a solid’s volume?','the integral of the areas of its slices',['the sum of the lengths of its edges','its base area times its greatest height','the area of its largest slice times its length'],'Cross-sections: thin slabs of volume A(x)Δx squeeze the volume to ∫ A(x) dx.']];
+QP.push({id:'16j.slices',step:'16j',label:'slices',open:()=>measured('16j'),make(){ return writtenQ('16j.slices',J16); }},
+  {id:'16j.volume',step:'16j',mode:'work',label:'prisms, pyramids and known slices',open:()=>measured('16j'),make(){
+    const k=rnd(4), B=2+rnd(11), h=2+rnd(7);
+    if(k===0){ const R=fr(B*h,3), right=fshow(R), wrong=frs16(right,[fr(B*h,2),fint(B*h),fint(B+h),fr(B*h,6),fr(B*h*h,3),fr(B,3)]); if(wrong.length<3) return null;
+      return {index:'q:16j.volume[y;'+B+';'+h+']', lines:[['a pyramid: the slice at x is the base shrunk by x/h each way','for 0 ≤ x ≤ h'],['the base has area '+B+', and h = '+h,'given']], ask:'What is its volume?', right, opts:shuffle([right,...wrong]), lead:'', why:'Pyramid: A(x) = B(x/h)², and ∫₀ʰ B(x/h)² dx = Bh/3 = '+B+' · '+h+'/3 = '+right+'.'}; }
+    if(k===1){ const right=String(B*h), wrong=uniq(right,[fshow(fr(B*h,3)),fshow(fr(B*h,2)),String(B+h),String(B*B*h),String(B*h*h)],3); if(wrong.length<3) return null;
+      return {index:'q:16j.volume[r;'+B+';'+h+']', lines:[['every slice has the area '+B,'for 0 ≤ x ≤ '+h]], ask:'What is the volume?', right, opts:shuffle([right,...wrong]), lead:'', why:'Prism: '+int15(0,h,B+' dx')+' = Bh = '+right+'. The shape of the slice does not matter, only its area.'}; }
+    if(k===2){ const hh=1+rnd(5), R=fr(hh**3,3), right=fshow(R), wrong=frs16(right,[fr(hh**3,2),fint(hh**3),fint(hh*hh),fr(hh*hh,2),fint(2*hh),fr(hh**4,4)]); if(wrong.length<3) return null;
+      return {index:'q:16j.volume[s;'+hh+']', lines:[['the slice at x is a square of side x','for 0 ≤ x ≤ '+hh]], ask:'What is the volume?', right, opts:shuffle([right,...wrong]), lead:'', why:'Cross-sections: A(x) = x², and '+int15(0,hh,'x² dx')+' = '+(hh**3)+'/3'+(fshow(R)===(hh**3)+'/3'?'':' = '+right)+'.'}; }
+    const a=1+rnd(5), hh=1+rnd(5), R=fr(a*hh*hh,2), right=fshow(R), wrong=frs16(right,[fint(a*hh*hh),fint(a*hh),fr(a*hh,2),fr(a*hh**3,3),fr(a*a*hh,2),fint(a+hh)]); if(wrong.length<3) return null;
+    return {index:'q:16j.volume[l;'+a+';'+hh+']', lines:[['the slice at x has the area '+(a===1?'':a)+'x','for 0 ≤ x ≤ '+hh]], ask:'What is the volume?', right, opts:shuffle([right,...wrong]), lead:'', why:'Cross-sections: '+int15(0,hh,(a===1?'':a)+'x dx')+' = '+eq14((a===1?'':a+' · ')+(hh*hh)+'/2',right)+'.'}; }},
+  {id:'16j.mass',step:'16j',mode:'word',label:'mass by slices',open:()=>measured('16j'),make(){
+    const what=pick(['A column of settling mud','A tank of brine','A vat of slurry','A core of wet clay']), A=pick([2,3,4,5]), a=pick([1000,1100,1200,1300]), b=pick([50,100,150]), h=pick([2,4]), m=A*(a*h+b*h*h/2), right=m+' kilograms';
+    const wrong=uniq(right,[(A*a*h)+' kilograms',(A*(a+b*h)*h)+' kilograms',(a*h+b*h*h/2)+' kilograms',(A*(a*h+b*h*h))+' kilograms',(A*(a+b*h))+' kilograms'],3); if(wrong.length<3) return null;
+    return {index:'q:16j.mass['+[what,A,a,b,h].join(';')+']', a3:['16j.mass',DASH,DASH], story:what+' stands '+h+' metres deep, with a level cross section of '+A+' square metres. At the depth x metres its density is '+a+' + '+b+'x kilograms per cubic metre.', lines:[], ask:'What is its mass?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Density: the mass is ∫ ρ(x)A(x) dx = '+A+' · '+int15(0,h,'('+a+' + '+b+'x) dx')+' = '+A+' · ('+(a*h)+' + '+(b*h*h/2)+') = '+m+'. The top density alone gives too little, and the bottom density alone too much.'}; }});
+
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 
