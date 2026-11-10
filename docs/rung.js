@@ -956,7 +956,9 @@ if(!document.getElementById('desk')){ Rung._desk(); window.__deskInit(); }
 const ready=f=>{ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',f); else f(); };
 const KIND={theory:'Theory',proof:'Proof',support:'Support',technique:'Technique','call back':'Call back',physics:'Physics',applied:'Applied',chemistry:'Chemistry',biology:'Biology',computing:'Computing',newsflash:'Newsflash',statistics:'Statistics',floor:'Floor',exam:'Exam',test:'Test',quiz:'Quiz',conclusion:'Conclusion'};
 function tagInfo(){
-  const t=document.querySelector('header.top .tags .tag'); if(!t) return null;
+  const t=document.querySelector('header.top .tags .tag');
+  /* 2026-11-10 (Andrew 11:01): floor and rung pages carry no tag line, so their paragraphs had no addresses and no edit menu; the file name labels them (floor1 -> F1, r00 -> 0) */
+  if(!t){ const m=/(?:^|\/)(floor(\d+)|r(\d\d))\.html$/.exec(location.pathname); if(!m) return null; return {label:m[2]?'F'+m[2]:String(Number(m[3])),kind:''}; }
   const txt=t.textContent.trim(), i=txt.indexOf(' · ');
   const label=(i<0?txt:txt.slice(0,i)).replace(/^Rung\s+/,'').replace(/^Floor\s+/,'F');
   let kind=(i<0?'':txt.slice(i+3)).trim().replace(/ to .*$/,'');
