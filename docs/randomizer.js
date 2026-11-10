@@ -2505,6 +2505,163 @@ QP.push({id:'14i.race',step:'14i',label:'the form and the race',open:()=>measure
     return {index:'q:14i.ratio[n;'+[w,a,b].join(';')+']', lines:[['f(x) = '+lin9(1,a),'the top'],['g(x) = '+lin9(1,b),'the bottom']], ask:'To which real does f(x)/g(x) head as x heads to '+sg(w)+'?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'The bottom heads to '+sg(w+b)+', not 0, so the form is not 0/0 and substitution decides: '+eq14(par10(w+a)+'/'+par10(w+b),right)+'. The ratio of the slopes is 1, and the technique does not apply here.'}; }});
 
+/* ===== Laundry 5, rung 15 (floor 3 pools, stage N): 15a to 15i, areas by sums ===== */
+Object.assign(STEPS,{'15a':['r15a','Partitions, Lower and Upper Sums'],'15b':['r15b','Every Under-Estimate Is Below Every Over-Estimate'],'15c':['r15c','Integrable, and the Sign ∫'],'15d':['r15d','The Area Under x, Worked to the End'],'15e':['r15e','Areas Add, Scale, Split'],
+  '15f':['r15f','Every Continuous Curve Has an Area'],'15g':['r15g','Sums and Σ by Hand'],'15h':['r15h','Sums of Thin Strips by Hand'],'15i':['r15i','Geometric Sums']});
+const sub15=n=>String(n).split('').map(ch=>ch==='-'?'₋':'₀₁₂₃₄₅₆₇₈₉'[+ch]).join(''), sup15=n=>String(n).split('').map(ch=>ch==='-'?'⁻':'⁰¹²³⁴⁵⁶⁷⁸⁹'[+ch]).join('');
+const int15=(u,v,b)=>'∫'+sub15(u)+sup15(v)+' '+b, fsum15=xs=>xs.reduce((s,x)=>fadd(s,x),fint(0)), fs15=xs=>uniq('',xs.map(fshow),9), plus15=xs=>xs.map(fshow).join(' + ').replace(/\+ −/g,'− ');
+
+/* ---------- 15a Partitions, Lower and Upper Sums ---------- */
+const A15=[
+  ['What is the area of the box [p, q] × [c, d]?','(q − p)(d − c)',['(q − p) + (d − c)','qd − pc','(q − c)(d − p)'],'Box-area: width times height. It is an axiom, one of three that say what area must obey.'],
+  ['On a piece where f is decreasing, where is its least value on the piece?','at the right end of the piece',['at the left end of the piece','at the middle of the piece','it has none'],'The least is at the left end only where f is increasing on the piece. For a falling f the ends trade places.'],
+  ['The region under f has an area A obeying the area axioms. Which holds for every partition P?','L(f, P) ≤ A ≤ U(f, P)',['L(f, P) = A','A ≤ L(f, P)','U(f, P) ≤ A'],'Boxes-trap-the-area: the lower boxes lie inside the region and the region lies inside the upper boxes.'],
+  ['Which list is a partition of [0, 1]?','0, 1/3, 1/2, 1',['0, 1/2, 1/2, 1','1/4, 1/2, 1','0, 1/2, 3/4'],'A partition is a finite list from the left end to the right end, strictly increasing: no piece of width 0.']];
+QP.push({id:'15a.boxes',step:'15a',label:'boxes and partitions',open:()=>measured('15a'),make(){ return writtenQ('15a.boxes',A15); }},
+  {id:'15a.sums',step:'15a',mode:'work',label:'a lower or an upper sum',open:()=>measured('15a'),make(){
+    const u=rnd(3), n=2+rnd(3), h=Math.random()<0.4?fr(1,2):fint(1), k=rnd(3), c=rnd(5), m=1+rnd(3), K=10+rnd(11), low=Math.random()<0.5;
+    const f=x=>k===0?fadd(fmul(x,x),fint(c)):k===1?fadd(fmul(fint(m),x),fint(c)):fsub(fint(K),fmul(x,x)), ex=k===0?poly13([1,0,c]):k===1?lin9(m,c):K+' − x²', inc=k!==2;
+    const xs=[]; for(let i=0;i<=n;i++) xs.push(fadd(fint(u),fmul(fint(i),h))); const vs=xs.map(f), lefts=vs.slice(0,n), rights=vs.slice(1), SL=fmul(h,fsum15(lefts)), SR=fmul(h,fsum15(rights)), useLeft=inc===low, R=useLeft?SL:SR, O=useLeft?SR:SL, right=fshow(R);
+    const wrong=uniq(right,[fshow(O),fshow(fsum15(useLeft?lefts:rights)),fshow(fmul(h,fsum15(vs))),fshow(fhalf(fadd(SL,SR))),fshow(fadd(R,h)),fshow(fsub(O,R))],3); if(wrong.length<3) return null;
+    return {index:'q:15a.sums['+[ex,u,n,fshow(h),low?'L':'U'].join(';')+']', lines:[['f(x) = '+ex,'on ['+u+', '+fshow(xs[n])+'], in '+n+' equal pieces']], ask:'What is the '+(low?'lower':'upper')+' sum?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'f is '+(inc?'increasing':'decreasing')+' there, so on each piece its '+(low?'least':'greatest')+' value is at the '+(useLeft?'left':'right')+' end. The width '+fshow(h)+' times ('+plus15(useLeft?lefts:rights)+') is '+right+'.'}; }});
+
+/* ---------- 15b Every Under-Estimate Is Below Every Over-Estimate ---------- */
+const B15=[
+  ['Q refines P. Which chain holds?','L(f, P) ≤ L(f, Q) ≤ U(f, Q) ≤ U(f, P)',['L(f, Q) ≤ L(f, P) ≤ U(f, P) ≤ U(f, Q)','L(f, P) ≤ U(f, P) ≤ L(f, Q) ≤ U(f, Q)','L(f, P) = L(f, Q) and U(f, P) = U(f, Q)'],'Refining-tightens: more points, kept from P, can only raise the lower sum and lower the upper sum.'],
+  ['P and Q are any two partitions of [u, v]. What is sure?','L(f, P) ≤ U(f, Q)',['L(f, P) ≤ L(f, Q)','U(f, P) ≤ U(f, Q)','nothing, unless one refines the other'],'Every-lower-below-every-upper: pass through the common refinement, which refines both.'],
+  ['Q has more points than P. Must U(f, Q) ≤ U(f, P)?','no: only when Q refines P',['yes','yes, when the pieces of each are equal','no: more points always loosen the bound'],'Halves and thirds: neither refines the other, and a narrow peak at 1/3 makes the thirds give the larger upper sum.'],
+  ['S is a non-empty part of a bounded set T. Which holds?','inf T ≤ inf S ≤ sup S ≤ sup T',['inf S ≤ inf T ≤ sup T ≤ sup S','inf S = inf T and sup S = sup T','inf T ≤ sup T ≤ inf S ≤ sup S'],'Smaller-set-tighter-bound: every bound of T is a bound of S, and S may have tighter ones.']];
+QP.push({id:'15b.chain',step:'15b',label:'refining tightens',open:()=>measured('15b'),make(){ return writtenQ('15b.chain',B15); }},
+  {id:'15b.refine',step:'15b',mode:'work',label:'the common refinement',open:()=>measured('15b'),make(){
+    const pool=[fr(1,4),fr(1,3),fr(1,2),fr(2,3),fr(3,4)], set=xs=>'{'+[fint(0),...xs.slice().sort((a,b)=>a.p*b.q-b.p*a.q),fint(1)].map(fshow).join(', ')+'}', has=(xs,x)=>xs.some(y=>fsame(x,y));
+    const P=take(pool,1+rnd(2)), Q=take(pool,1+rnd(3)), U=P.concat(Q.filter(x=>!has(P,x))), I=P.filter(x=>has(Q,x));
+    if(Math.random()<0.55){ const right=set(U), wrong=uniq(right,[set(I),set(P),set(Q),set(U.slice(1)),set(U.concat(pool.filter(x=>!has(U,x)).slice(0,1))),set(pool)],3); if(wrong.length<3||U.length===P.length||U.length===Q.length) return null;
+      return {index:'q:15b.refine[c;'+set(P)+';'+set(Q)+']', lines:[['P = '+set(P),'a partition of [0, 1]'],['Q = '+set(Q),'a partition of [0, 1]']], ask:'Which is the common refinement of P and Q?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'The common refinement has the points of P and the points of Q together, in increasing order. It refines both, which is what lets every lower sum be compared with every upper sum.'}; }
+    const ok=I.length===P.length, opts=['yes: every point of P is a point of Q','no: P has a point that Q lacks','yes: Q has more points','no: Q has fewer points'], right=opts[ok?0:1];
+    return {index:'q:15b.refine[r;'+set(P)+';'+set(Q)+']', lines:[['P = '+set(P),'a partition of [0, 1]'],['Q = '+set(Q),'a partition of [0, 1]']], ask:'Is Q a refinement of P?', right, opts:[opts[0],opts[1],Q.length>P.length?opts[2]:'yes: the two have the same ends',Q.length<P.length?opts[3]:'no: the pieces of Q are not equal'], lead:'',
+      why:'Q refines P when every point of P is a point of Q. The count of points decides nothing.'}; }});
+
+/* ---------- 15c Integrable, and the Sign ∫ ---------- */
+const C15=[
+  ['When is a bounded f integrable on [u, v]?','when its lower integral equals its upper integral',['when it has a lower sum','when its values are never negative','always'],'The lower integral is the sup of the lower sums, the upper integral the inf of the upper sums. Integrable: the two agree.'],
+  ['On [0, 1], q is 1 at fractions and 0 elsewhere. Is q integrable?','no: every lower sum is 0 and every upper sum is 1',['yes: its integral is 1/2','yes: its integral is 0','no: q is not bounded'],'Every piece holds a fraction and a non-fraction. The lower integral is 0 and the upper integral is 1.'],
+  ['What does the gap-closes technique ask for?','for every ε > 0, some partition with U − L < ε',['for every ε > 0, every partition with U − L < ε','one partition with U = L','equal pieces, and nothing else'],'The definition speaks of all partitions at once. The test asks for one partition for each ε.'],
+  ['f is integrable, and a number A lies between L(f, P) and U(f, P) for every partition P. What is A?','the integral of f',['any number between the sums','the lower integral, which may be less than the integral','the average value of f'],'Exactly-one-between: only one number is trapped by every pair of sums.']];
+QP.push({id:'15c.integrable',step:'15c',label:'integrable',open:()=>measured('15c'),make(){ return writtenQ('15c.integrable',C15); }},
+  {id:'15c.steps',step:'15c',mode:'work',label:'constants and one step',open:()=>measured('15c'),make(){
+    const u=rnd(7)-3, d1=1+rnd(4), a=pick([-3,-2,-1,1,2,3,4,5]);
+    if(Math.random()<0.4){ const v=u+d1, right=sg(a*d1), wrong=num13(right,[a,a*v,a*(v+u),a+d1,a*d1+a,-a*d1]); if(wrong.length<3) return null;
+      return {index:'q:15c.steps[c;'+[a,u,v].join(';')+']', lines:[['f(x) = '+sg(a),'on ['+sg(u)+', '+sg(v)+']']], ask:'What is '+int15(u,v,'f(x) dx')+'?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'On every piece the least and the greatest are both '+sg(a)+', so every lower sum and every upper sum is '+par10(a)+' · ('+sg(v)+' − '+par10(u)+') = '+right+'.'}; }
+    const c=u+d1, d2=1+rnd(4), v=c+d2, b=pick([-3,-2,-1,1,2,3,4,5].filter(x=>x!==a)), val=a*d1+b*d2, right=sg(val), wrong=num13(right,[(a+b)*(d1+d2),a+b,a*d1,b*d2,a*d2+b*d1,val+b]); if(wrong.length<3) return null;
+    return {index:'q:15c.steps[s;'+[a,b,u,c,v].join(';')+']', lines:[['f = '+sg(a)+' on ['+sg(u)+', '+sg(c)+')','the first stretch'],['f = '+sg(b)+' on ['+sg(c)+', '+sg(v)+']','the second stretch']], ask:'What is '+int15(u,v,'f(x) dx')+'?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'One jump does no harm: a narrow piece around '+sg(c)+' closes the gap. The integral is '+par10(a)+' · '+d1+' + '+par10(b)+' · '+d2+' = '+right+'.'}; }});
+
+/* ---------- 15d The Area Under x, Worked to the End ---------- */
+QP.push({id:'15d.line',step:'15d',mode:'work',label:'the area under x',open:()=>measured('15d'),make(){
+    const u=rnd(8), v=u+1+rnd(6), R=fr(v*v-u*u,2), right=fshow(R), wrong=uniq(right,[fshow(fr((v-u)*(v-u),2)),fshow(fint(v*v-u*u)),fshow(fr(v-u,2)),fshow(fr(v*v+u*u,2)),fshow(fint(v-u)),fshow(fint(v)),fshow(fint(v*v))],3); if(wrong.length<3) return null;
+    return {index:'q:15d.line['+u+';'+v+']', lines:[['f(x) = x','on ['+u+', '+v+']']], ask:'What is '+int15(u,v,'x dx')+'?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The lower and upper sums for n equal pieces differ by (v − u)²/n and trap one number: (v² − u²)/2 = ('+(v*v)+' − '+(u*u)+')/2 = '+right+'. It is not (v − u)²/2 unless u = 0.'}; }},
+  {id:'15d.rest',step:'15d',mode:'word',label:'from rest',open:()=>measured('15d'),make(){
+    const who=pick(['A sled','A cart','A lift','A barge']), a=pick([2,3,4,5,6,8]), T=2+rnd(6), R=fr(a*T*T,2), right=fshow(R)+' metres', wrong=uniq(right,[(a*T*T)+' metres',(a*T)+' metres',fshow(fr(a*T,2))+' metres',(2*a*T*T)+' metres',fshow(fr(a*a*T,2))+' metres'],3); if(wrong.length<3) return null;
+    return {index:'q:15d.rest['+[who,a,T].join(';')+']', a3:['15d.rest',DASH,DASH], story:who+' starts from rest. Its velocity grows steadily, by '+a+' metres per second each second.', lines:[], ask:'How far has it gone after '+T+' seconds?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The distance is the area under the velocity v(t) = '+a+'t from 0 to '+T+': ½ · '+a+' · '+T+'² = '+fshow(R)+'. The final velocity '+(a*T)+' times '+T+' would count a whole box, twice too much.'}; }});
+
+/* ---------- 15e Areas Add, Scale, Split ---------- */
+const E15=[
+  [int15(0,2,'(x − 1) dx')+' = 0. What does that say?','the area above the axis equals the area below it',['there is no region between the graph and the axis','x − 1 is 0 on [0, 2]','x − 1 is not integrable on [0, 2]'],'The integral is the signed area. The area between the graph and the axis is '+int15(0,2,'|x − 1| dx')+' = 1.'],
+  ['Is ∫ fg always ∫ f · ∫ g?','no: on [0, 1], ∫ x · x = 1/3, not 1/2 · 1/2',['yes','yes, whenever f = g','no: a product is never integrable'],'Areas add and scale. Nothing here says they multiply.'],
+  ['f and g are integrable on [u, v], and f(x) ≤ g(x) at every x there. What follows?','∫ f ≤ ∫ g',['∫ f < ∫ g','f′ ≤ g′','nothing'],'Smaller-function-smaller-area: g − f is never negative, so its lower sums are at least 0.'],
+  ['f takes both signs on [u, v]. What does ∫ f count?','the area above the axis minus the area below it',['the whole area between the graph and the axis','only the area above the axis','nothing: it is not defined'],'f = f⁺ − f⁻, with both parts never negative, and ∫ f = ∫ f⁺ − ∫ f⁻.']];
+QP.push({id:'15e.signed',step:'15e',label:'what the rules count',open:()=>measured('15e'),make(){ return writtenQ('15e.signed',E15); }},
+  {id:'15e.rules',step:'15e',mode:'work',label:'no new sums',open:()=>measured('15e'),make(){
+    const u=rnd(5)-2, d1=1+rnd(3), c=u+d1, d2=1+rnd(3), v=c+d2, A=rnd(13)-6, B=rnd(13)-6, k=rnd(4);
+    if(k===0){ const whole=Math.random()<0.5, right=sg(whole?A+B:B), wrong=num13(right,whole?[A-B,A*B,B-A,A+B+1,A,B]:[A+B+A,A-B,-B,A,B+1,A+B]); if(wrong.length<3) return null;
+      return {index:'q:15e.rules[s;'+[u,c,v,A,B,whole?'w':'p'].join(';')+']', lines:[[int15(u,c,'f')+' = '+sg(A),'given'],[whole?int15(c,v,'f')+' = '+sg(B):int15(u,v,'f')+' = '+sg(A+B),'given']], ask:'What is '+(whole?int15(u,v,'f'):int15(c,v,'f'))+'?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'Interval-cut-in-two: '+int15(u,v,'f')+' = '+int15(u,c,'f')+' + '+int15(c,v,'f')+'. '+(whole?sg(A)+' + '+par10(B):sg(A+B)+' − '+par10(A))+' = '+right+'.'}; }
+    if(k===1){ const m=pick([2,3,4,5]), s=pick([1,-1]), val=m*A+s*B, right=sg(val), wrong=num13(right,[A+s*B,m*(A+s*B),m*A-s*B,m*A*B,m+A+B,val+m]); if(wrong.length<3) return null;
+      return {index:'q:15e.rules[l;'+[u,v,A,B,m,s].join(';')+']', lines:[[int15(u,v,'f')+' = '+sg(A),'given'],[int15(u,v,'g')+' = '+sg(B),'given']], ask:'What is '+int15(u,v,'('+m+'f '+(s>0?'+':'−')+' g)')+'?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'Areas-scale and areas-add: '+m+' · '+par10(A)+' '+(s>0?'+':'−')+' '+par10(B)+' = '+right+'.'}; }
+    const lo=rnd(7)-3, hi=lo+1+rnd(5), most=Math.random()<0.5, w=v-u, val=(most?hi:lo)*w, right=sg(val), wrong=num13(right,[(most?lo:hi)*w,most?hi:lo,(hi-lo)*w,(hi+lo)*w,val+w,hi*v-lo*u]); if(wrong.length<3) return null;
+    return {index:'q:15e.rules[b;'+[u,v,lo,hi,most?'m':'l'].join(';')+']', lines:[[sg(lo)+' ≤ f(x) ≤ '+sg(hi)+' at every x of ['+sg(u)+', '+sg(v)+']','f integrable there']], ask:'What is the '+(most?'most':'least')+' that '+int15(u,v,'f')+' can be?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Smaller-function-smaller-area: m(v − u) ≤ ∫ f ≤ M(v − u). The width is '+w+', so the integral lies from '+sg(lo*w)+' to '+sg(hi*w)+'.'}; }});
+
+/* ---------- 15f Every Continuous Curve Has an Area ---------- */
+const F15=[
+  ['f is continuous on [u, v]. Is f integrable there?','yes: continuity on a closed interval is enough',['only if f is increasing','only if f is a polynomial','not always'],'Continuous-is-integrable: uniform continuity gives one width that makes every piece’s gap small at once.'],
+  ['f is integrable on [u, v]. Must f be continuous there?','no: an increasing function with jumps is integrable',['yes','yes, except at the two ends','no: an integrable function is never continuous'],'Continuity is enough, not needed. For n equal pieces an increasing f has U − L = (f(v) − f(u))(v − u)/n.'],
+  ['What does uniform continuity add to continuity at each input?','for each ε, one δ serves every input at once',['for each δ, one ε serves every input at once','a slope at every input','a bound on the values of f'],'The difference is the order of the choices: the δ may not depend on the input.'],
+  ['Is 1/x uniformly continuous on (0, 1]?','no: 1/n and 1/(n + 1) draw together while their values stay 1 apart',['yes: it is continuous there','yes: every continuous function is','no: it is not continuous there'],'Evenly-continuous needs a closed interval. On (0, 1] no single δ serves near 0.']];
+QP.push({id:'15f.enough',step:'15f',label:'continuity is enough, not needed',open:()=>measured('15f'),make(){ return writtenQ('15f.enough',F15); }},
+  {id:'15f.average',step:'15f',mode:'work',label:'the average value',open:()=>measured('15f'),make(){
+    const k=rnd(3), u=rnd(5), w=2+rnd(5), v=u+w;
+    if(k===0){ const I=pick([-9,-6,-5,-3,3,4,5,6,8,9,10,12,15]), R=fr(I,w), right=fshow(R), wrong=uniq(right,[fshow(fint(I*w)),fshow(fint(I)),fshow(fr(w,I)),fshow(fr(I,v)),fshow(fr(I,2)),fshow(fint(I-w))],3); if(wrong.length<3) return null;
+      return {index:'q:15f.average[i;'+[u,v,I].join(';')+']', lines:[[int15(u,v,'f')+' = '+sg(I),'f continuous on ['+u+', '+v+']']], ask:'Which value must f take somewhere on ['+u+', '+v+']?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'Average-height: some c in the interval has f(c) equal to the average value, the integral over the width: '+sg(I)+'/'+w+(fshow(R)===sg(I)+'/'+w?'':' = '+right)+'.'}; }
+    if(k===1){ const R=fr(u+v,2), right=fshow(R), wrong=uniq(right,[fshow(fr(v*v-u*u,2)),fshow(fint(u+v)),fshow(fr(v-u,2)),fshow(fint(v)),fshow(fr(v,2)),fshow(fint(u))],3); if(wrong.length<3) return null;
+      return {index:'q:15f.average[x;'+u+';'+v+']', lines:[['f(x) = x','on ['+u+', '+v+']']], ask:'What is the average value of f there?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'The integral is (v² − u²)/2 = '+fshow(fr(v*v-u*u,2))+', and the width is '+w+'. Their quotient is (u + v)/2 = '+right+', the value at the middle.'}; }
+    const b=1+rnd(6), R=fr(b*b,3), right=fshow(R), wrong=uniq(right,[fshow(fr(b*b*b,3)),fshow(fr(b*b,2)),fshow(fint(b*b)),fshow(fr(b*b,4)),fshow(fr(b,3)),fshow(fr(b,2))],3); if(wrong.length<3) return null;
+    return {index:'q:15f.average[q;'+b+']', lines:[['f(x) = x²','on [0, '+b+']']], ask:'What is the average value of f there?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The integral is b³/3 = '+fshow(fr(b*b*b,3))+', and the width is '+b+'. Their quotient is b²/3 = '+right+'.'}; }});
+
+/* ---------- 15g Sums and Σ by Hand ---------- */
+const sum15=()=>{ const n=3+rnd(6), k=rnd(6), T=n*(n+1)/2, c=2+rnd(8), a=2+rnd(4), b=1+rnd(6), to=', for i from 1 to '+n;
+  return k===0?{t:'Σ (2i − 1)'+to,v:n*n,alts:[n*(n+1),2*n-1,n*n-1,(n+1)*(n+1),T],why:'Odd-numbers-make-squares: the first n odd numbers add to n².',cite:'odd-numbers-make-squares'}
+    :k===1?{t:'Σ i²'+to,v:n*(n+1)*(2*n+1)/6,alts:[T*T,n*n,T,n*n*n,n*(n+1)*(2*n+1)/6+n],why:'Sum-of-squares: n(n + 1)(2n + 1)/6.',cite:'sum-of-squares'}
+    :k===2?{t:'Σ i³'+to,v:T*T,alts:[n*(n+1)*(2*n+1)/6,n*n*n,T,T*T-n,T*n],why:'Sum-of-cubes: (n(n + 1)/2)², the square of the sum 1 + 2 + ⋯ + n.',cite:'sum-of-cubes'}
+    :k===3?{t:'Σ '+c+to,v:n*c,alts:[c,n+c,c*T,(n+1)*c,(n-1)*c],why:'Sums-are-linear: n copies of c add to nc.',cite:'sums-are-linear'}
+    :k===4?{t:'Σ ('+a+'i + '+b+')'+to,v:a*T+b*n,alts:[a*T+b,a*n+b,a*n+b*n,a*T,(a+b)*T],why:'Sums-are-linear: '+a+' · (1 + 2 + ⋯ + n) + n · '+b+', with 1 + 2 + ⋯ + n = n(n + 1)/2 = '+T+'.',cite:'sums-are-linear and the doubled sum'}
+    :{t:'Σ ((i + 1)² − i²)'+to,v:(n+1)*(n+1)-1,alts:[(n+1)*(n+1),n*n,2*n+1,n*n-1,(n+1)*(n+1)+1],why:'Collapsing-sum: every middle term is added once and taken away once. What is left is (n + 1)² − 1².',cite:'collapsing-sum'}; };
+QP.push({id:'15g.sum',step:'15g',mode:'work',label:'sums by hand',open:()=>measured('15g'),make(){
+    const s=sum15(), right=String(s.v), wrong=uniq(right,s.alts.map(String),3); if(wrong.length<3) return null;
+    return {index:'q:15g.sum['+s.t+']', lines:[[s.t,'a sum']], ask:'What is the sum?', right, opts:shuffle([right,...wrong]), lead:'', why:s.why+' Here that is '+right+'.'}; }},
+  {id:'15g.check',step:'15g',mode:'proof',label:'is the sum right',open:()=>measured('15g'),make(){
+    const s=sum15(), bad=Math.random()<0.5, alts=uniq(String(s.v),s.alts.map(String),5), shown=bad?pick(alts.slice(0,3)):String(s.v), opts=['it is the sum of line 1','it is not the sum of line 1'];
+    return {index:'q:15g.check['+s.t+';'+shown+']', stack:true, lines:[[s.t,'given'],['= '+shown,s.cite+', on line 1']], ask:'Is line 2 right?', right:opts[bad?1:0], opts, lead:'', why:s.why+' Here that is '+s.v+(bad?', not '+shown:'')+'.'}; }});
+
+/* ---------- 15h Sums of Thin Strips by Hand ---------- */
+QP.push({id:'15h.strip',step:'15h',mode:'work',label:'left, right and midpoint sums',open:()=>measured('15h'),make(){
+    const u=rnd(3), n=2+rnd(3), sq=Math.random()<0.5, c=rnd(5), m=pick([-2,-1,1,2,3]), f=x=>sq?x*x+c:m*x+c, ex=sq?poly13([1,0,c]):lin9(m,c), kind=rnd(3), tags=k=>Array.from({length:n},(_,i)=>u+2*i+k), S=k=>2*tags(k).reduce((s,x)=>s+f(x),0);
+    const right=sg(S(kind)), wrong=num13(right,[S((kind+1)%3),S((kind+2)%3),S(kind)/2,S(kind)+2,2*tags(0).concat([u+2*n]).reduce((s,x)=>s+f(x),0),S(kind)-2]); if(wrong.length<3) return null;
+    return {index:'q:15h.strip['+[ex,u,n,kind].join(';')+']', lines:[['f(x) = '+ex,'on ['+u+', '+(u+2*n)+'], in '+n+' equal pieces'],['the tags','at the '+['left ends','middles','right ends'][kind]+' of the pieces']], ask:'What is the strip sum?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Each piece has the width 2. The tags are '+tags(kind).join(', ')+', with the heights '+tags(kind).map(x=>sg(f(x))).join(', ')+'. The width times their sum is '+right+'.'}; }},
+  {id:'15h.exact',step:'15h',mode:'work',label:'exact areas under powers',open:()=>measured('15h'),make(){
+    const k=rnd(3);
+    if(k===0){ const u=rnd(4), v=u+1+rnd(3), R=fr(v**3-u**3,3), right=fshow(R), wrong=uniq(right,[fshow(fr((v-u)**3,3)),fshow(fint(v**3-u**3)),fshow(fr(v*v-u*u,2)),fshow(fint(v*v-u*u)),fshow(fr(v**3,3)),fshow(fr(v**3+u**3,3)),fshow(fint(v**3))],3); if(wrong.length<3) return null;
+      return {index:'q:15h.exact[2;'+u+';'+v+']', lines:[['f(x) = x²','on ['+u+', '+v+']']], ask:'What is '+int15(u,v,'x² dx')+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'The area under x² from 0 to b is b³/3, and interval-cut-in-two gives (v³ − u³)/3 = ('+(v**3)+' − '+(u**3)+')/3 = '+right+'.'}; }
+    if(k===1){ const b=1+rnd(4), R=fr(b**4,4), right=fshow(R), wrong=uniq(right,[fshow(fr(b**3,3)),fshow(fint(b**4)),fshow(fint(3*b*b)),fshow(fr(b**4,3)),fshow(fr(b**3,4)),fshow(fint(b**3))],3); if(wrong.length<3) return null;
+      return {index:'q:15h.exact[3;'+b+']', lines:[['f(x) = x³','on [0, '+b+']']], ask:'What is '+int15(0,b,'x³ dx')+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'The squeeze with sum-of-cubes gives b⁴/4 = '+(b**4)+'/4'+(fshow(R)===(b**4)+'/4'?'':' = '+right)+'.'}; }
+    const b=1+rnd(3), a=pick([1,2,3,6]), c=pick([-4,-2,0,2,4]), d=rnd(7)-3, cs=[a,c,d], R=fadd(fadd(fr(a*b**3,3),fr(c*b*b,2)),fint(d*b)), right=fshow(R), wrong=uniq(right,[fshow(fint(ev9(cs,b))),fshow(fint(a*b**3+c*b*b+d*b)),fshow(fint(2*a*b+c)),fshow(fadd(R,fint(d))),fshow(fsub(R,fint(d*b))),fshow(fneg(R)),fshow(fadd(R,fint(1)))],3); if(wrong.length<3) return null;
+    return {index:'q:15h.exact[p;'+poly13(cs)+';'+b+']', lines:[['f(x) = '+poly13(cs),'on [0, '+b+']']], ask:'What is '+int15(0,b,'f(x) dx')+'?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Areas-add and areas-scale, term by term: '+a+' · '+(b**3)+'/3'+(c?pm(c)+' · '+(b*b)+'/2':'')+(d?pm(d)+' · '+b:'')+' = '+right+'. No new sums are needed.'}; }},
+  {id:'15h.readings',step:'15h',mode:'word',label:'an integral from measurements',open:()=>measured('15h'),make(){
+    const [what,unit,total]=pick([['A pump’s flow','litres per hour','litres'],['An array’s power','kilowatts','kilowatt-hours'],['A stream’s flow','cubic metres per hour','cubic metres'],['A mill’s output','sacks per hour','sacks']]), w=pick([2,3,4]), n=3+rnd(3), rs=Array.from({length:n},()=>1+rnd(9)), sum=rs.reduce((s,x)=>s+x,0), right=(w*sum)+' '+total, wrong=uniq(right,[sum+' '+total,(sum*n)+' '+total,(w*n*Math.max(...rs))+' '+total,fshow(fr(sum,n))+' '+total,(w*sum+w)+' '+total,(w*n)+' '+total],3); if(wrong.length<3) return null;
+    return {index:'q:15h.readings['+[unit,w,rs.join(',')].join(';')+']', a3:['15h.readings',DASH,DASH], story:what+' is read at the middle of each '+w+'-hour stretch, for '+n+' stretches in a row. The readings are '+rs.join(', ')+' '+unit+'.', lines:[], ask:'What does the midpoint sum give for the whole time?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'A strip sum: each reading times the width of its stretch. '+w+' · ('+rs.join(' + ')+') = '+(w*sum)+'. The integral is within U − L of it, and readings alone do not say how large that is.'}; }});
+
+/* ---------- 15i Geometric Sums ---------- */
+const I15=[
+  ['1 + 2 + 4 + ⋯ : does the endless-ratio-sum technique give 1/(1 − 2) = −1?','no: it needs |r| < 1, and these partial sums pass every bound',['yes','no: the sum is 0','yes, once the signs are turned about'],'For |r| ≥ 1 and c ≠ 0 the series diverges. The formula c/(1 − r) says nothing there.'],
+  ['What is the endless sum of a series?','the number its partial sums head to, when there is one',['its last partial sum','all of its terms added at once','its greatest term'],'There is no last term. The mark Σ with ∞ above names a limit of partial sums.'],
+  ['What does 0.999… name?','1: the number its truncations head to',['a number just below 1','the greatest number below 1','nothing'],'9/10 · (1 + 1/10 + 1/100 + ⋯) = 9/10 · 1/(1 − 1/10) = 1.'],
+  ['For which r does rⁿ head to 0?','for |r| < 1',['for r < 1','for 0 < r ≤ 1','for every r'],'Small-powers-vanish. (−2)ⁿ is below 1 at every odd n and heads to nothing, and 1ⁿ stays at 1.']];
+QP.push({id:'15i.endless',step:'15i',label:'endless sums',open:()=>measured('15i'),make(){ return writtenQ('15i.endless',I15); }},
+  {id:'15i.ratio',step:'15i',mode:'work',label:'sums by a ratio',open:()=>measured('15i'),make(){
+    const k=rnd(5), NO='no sum: the series diverges';
+    if(k===0){ const r=pick([2,2,3]), n=5+rnd(r===2?4:2), v=(r**n-1)/(r-1), right=String(v), wrong=uniq(right,[r**n,r**n+1,r**(n-1),v+r,v-1,2*r**(n-1)].map(String),3); if(wrong.length<3) return null;
+      return {index:'q:15i.ratio[f;'+r+';'+n+']', lines:[['1 + '+r+' + '+(r*r)+' + ⋯ + '+(r**(n-1)),n+' terms, each '+r+' times the one before']], ask:'What is the sum?', right, opts:shuffle([right,...wrong]), lead:'', why:'Finite-ratio-sum: (1 − rⁿ)/(1 − r) = ('+(r**n)+' − 1)/('+r+' − 1) = '+right+'.'}; }
+    if(k===1||k===2){ const c=1+rnd(5), conv=k===1, r=conv?pick([fr(1,2),fr(1,3),fr(2,3),fr(1,4),fr(3,4),fr(-1,2),fr(1,5),fr(-1,3)]):pick([fint(2),fint(3),fint(-1),fint(1),fr(3,2),fint(-2)]), t=[fint(c),fmul(fint(c),r),fmul(fint(c),fmul(r,r))], one=fint(1), form=fsame(r,one)?null:fmul(fint(c),fr(fsub(one,r).q,fsub(one,r).p));
+      const right=conv?fshow(form):NO, wrong=uniq(right,(conv?[NO,fshow(fmul(fint(c),fr(fadd(one,r).q,fadd(one,r).p))),fshow(fmul(form,r)),fshow(fint(2*c)),fshow(fsum15(t))]:[form?fshow(form):'0',fshow(fint(c)),'0',fshow(fsum15(t)),fshow(fint(-c))]),3); if(wrong.length<3) return null;
+      return {index:'q:15i.ratio[e;'+c+';'+fshow(r)+']', lines:[[plus15(t)+' + ⋯','each term '+fshow(r)+' times the one before, without end']], ask:'What is the endless sum?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:conv?'Endless-ratio-sum: |r| < 1, so the sum is c/(1 − r) = '+c+'/('+fshow(fsub(one,r))+') = '+right+'.':'Here |r| ≥ 1, so the terms do not head to 0 and the partial sums head to no number. The formula c/(1 − r) needs |r| < 1.'}; }
+    if(k===3){ const ab=10+rnd(89); if(ab%11===0||ab%10===0) return null; const R=fr(ab,99), right=fshow(R), wrong=uniq(right,[fshow(fr(ab,100)),fshow(fr(ab,90)),fshow(fr(ab,999)),fshow(fr(ab+1,99)),fshow(fr(ab,9*11*10))],3); if(wrong.length<3) return null;
+      return {index:'q:15i.ratio[d;'+ab+']', lines:[['0.'+ab+ab+ab+'…','the block '+ab+' repeats without end']], ask:'Which fraction is it?', right, opts:shuffle([right,...wrong]), lead:'', why:'It is '+ab+'/100 · (1 + 1/100 + 1/100² + ⋯) = '+ab+'/100 · 1/(1 − 1/100) = '+ab+'/99'+(fshow(R)===ab+'/99'?'':' = '+right)+', by endless-ratio-sum with r = 1/100.'}; }
+    const p=2+rnd(4), b=1+rnd(3), R=fr(b**(p+1),p+1), right=fshow(R), wrong=uniq(right,[fshow(fr(b**p,p)),fshow(fint(b**(p+1))),fshow(fint(p*b**(p-1))),fshow(fr(b**(p+1),p)),fshow(fr(b**p,p+1)),fshow(fint(b**p)),fshow(fr(1,p))],3); if(wrong.length<3) return null;
+    return {index:'q:15i.ratio[p;'+p+';'+b+']', lines:[['f(x) = x'+sup15(p),'on [0, '+b+']']], ask:'What is '+int15(0,b,'x'+sup15(p)+' dx')+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Area-under-a-power, by the shrinking cut: bᵏ⁺¹/(k + 1) = '+(b**(p+1))+'/'+(p+1)+(fshow(R)===(b**(p+1))+'/'+(p+1)?'':' = '+right)+'.'}; }});
+
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 
