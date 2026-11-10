@@ -1456,6 +1456,7 @@ function basement(){
   const head=document.createElement('div'); head.className='bhead'; head.innerHTML='<span class="bn">−'+lab+'</span> cellar';
   const eb=b.querySelector('.eyebrow'); if(eb) eb.replaceWith(head); else b.prepend(head);
   b.id=b.id||'basement';
+  if(!window.LADDER_DESK){ b.hidden=true; b.classList.add('shut'); return; } /* 2026-11-10 (Andrew 15:51): in the app the cellar is reached only through the toolbox; the pull past the foot fought the footing view */
   const lip=document.createElement('button'); lip.type='button'; lip.className='blip';
   lip.innerHTML='<span class="bar"></span><span class="bl">keep going down: the cellar</span>';
   b.before(lip);
@@ -1733,7 +1734,7 @@ function footingView0(){
     old.forEach(el=>{ el.classList.add('fv-on'); ghost.appendChild(el); }); document.body.appendChild(ghost);
     reveal(); units[n].forEach(el=>el.classList.add('fv-on')); label(); top();
     /* 2026-11-10 (Andrew 15:48): the incoming footing's screens exist before it lifts in, so one screen arrives, not the whole footing */
-    if(window.LadderFV&&LadderFV.onPaint) try{ const keepEl=LadderFV.wantEl; LadderFV.onPaint(units[n],n,{on,N,LASTU,ONE}); LadderFV.wantEl=keepEl; }catch(e){}
+    if(window.LadderFV&&LadderFV.onPaint) try{ const keepEl=LadderFV.wantEl, keepLast=LadderFV.wantLast; LadderFV.onPaint(units[n],n,{on,N,LASTU,ONE}); LadderFV.wantEl=keepEl; LadderFV.wantLast=keepLast; }catch(e){}
     const inc=units[n];
     const a1=ghost.animate(cam(dir,H,W,true),{duration:560,easing:'linear',fill:'forwards'});
     const a2=inc.map(el=>el.animate(cam(dir,H,W,false),{duration:560,easing:'linear'}));
@@ -2435,9 +2436,10 @@ const ATTACH=/(^|\s)(eqline|eqline-words|brkkey|eyebrow|lbl|cap|lp|lv|first|divi
 const texbox=el=>!!(el&&el.matches&&(el.matches('pre,.eqline,.eqline-words,.lines,.texline,.katex-display')||el.querySelector('.katex-display,pre')));
 let screens=[], k=0, on=false, bar=null, L=null, R=null, posEl=null, dots=null, step=null;
 const folded=el=>el.hasAttribute('data-collapsed')||(el.matches('p[data-pid]')&&!el.textContent.replace(/\s+/g,'').replace(/^[\d\w.·]+$/,'').length);
-function clear(){ document.querySelectorAll('[data-sw]').forEach(x=>{ if(x.closest('.fvghost')) return; /* the outgoing footing keeps its screen while it leaves */ x.removeAttribute('data-sw'); x.classList.remove('sw-on','sw-open','sw-stub'); }); screens=[]; }
+function clear(){ document.querySelectorAll('.brk.sw-rows').forEach(b=>{ if(!b.closest('.fvghost')) b.classList.remove('sw-rows','sw-has'); }); document.querySelectorAll('[data-sw]').forEach(x=>{ if(x.closest('.fvghost')) return; /* the outgoing footing keeps its screen while it leaves */ x.removeAttribute('data-sw'); x.classList.remove('sw-on','sw-open','sw-stub'); }); screens=[]; }
 function build(els){ clear(); step=els.find(e=>e.matches&&e.matches('section.step')); if(!step) return;
-  [...step.children].forEach(ch=>{ if(ch.matches('h2,.sthead,.stnext,script,style,template')||ch.hidden) return; if(ch.matches('p[data-pid]')&&folded(ch)) return; /* 2026-11-10 (Andrew 12:08): an emptied or collapsed paragraph is no screen; the chain closes up */
+  [...step.children].forEach(ch=>{ if(ch.matches('h2,.sthead,.stnext,script,style,template')||ch.hidden) return; if(ch.matches('p[data-pid]')&&folded(ch)) return;
+    if(ch.matches('.brk.brk-check')){ const rows=[...ch.querySelectorAll(':scope>.rows>.row')]; if(rows.length>1){ ch.classList.add('sw-rows'); rows.forEach(r=>screens.push([r])); return; } } /* 2026-11-10 (Andrew 15:51): one move to a screen */ /* 2026-11-10 (Andrew 12:08): an emptied or collapsed paragraph is no screen; the chain closes up */
     if(ATTACH.test(ch.className||'')&&screens.length&&!(texbox(ch)&&screens[screens.length-1].some(texbox))){ screens[screens.length-1].push(ch); return; } screens.push([ch]); }); /* 2026-11-10 (Andrew 15:44): one TeX box to a screen */
   els.forEach(e=>{ if(e!==step&&e.matches&&e.matches('section,figure,.slides,.pic')&&!e.matches('header.top,nav,.pn')) screens.push([e]); });
   screens.forEach((s,i)=>s.forEach(x=>{ x.setAttribute('data-sw',i); if(folded(x)){ x.classList.add('sw-stub'); if(!x.dataset.addr) x.dataset.addr=x.matches('.slides')?'slides':x.matches('.pic')?'picture':x.matches('pre')?'lines':x.matches('.sayback')?'question':'·'; } })); }
@@ -2459,6 +2461,7 @@ function swGhostOut(g,dir){ const done=()=>{ try{ g.remove(); }catch(_){} }; try
 function show(i,opts){ opts=opts||{}; if(!screens.length) return; const prev=k; k=Math.max(0,Math.min(screens.length-1,i));
   const anim=!!opts.anim&&prev!==k&&!SWREDUCE()&&!!screens[prev]&&document.body.classList.contains('sw'); const dir=k>prev?1:-1; const ghost=anim&&document.documentElement.scrollHeight<=innerHeight*1.5?swGhost(screens[prev]):null; /* 2026-11-10 15:29: no ghost of a long screen */
   screens.forEach((s,j)=>s.forEach(x=>{ x.classList.toggle('sw-on',j===k); if(j!==k) x.classList.remove('sw-open'); x.classList.remove('sw-in-f','sw-in-b'); }));
+  document.querySelectorAll('.brk.sw-rows').forEach(b=>b.classList.toggle('sw-has',!!b.querySelector(':scope>.rows>.row.sw-on')));
   if(anim){ screens[k].forEach(x=>{ void x.offsetWidth; x.classList.add(dir>0?'sw-in-f':'sw-in-b'); x.addEventListener('animationend',()=>x.classList.remove('sw-in-f','sw-in-b'),{once:true}); }); if(ghost) swGhostOut(ghost,dir); }
   if(!opts.keep) window.scrollTo(0,0);
   const n=screens.length; posEl.textContent=n>1?(k+1)+' / '+n:''; L.disabled=false; R.disabled=false;
@@ -2469,14 +2472,15 @@ function adv(a){ const cur=screens[k]&&screens[k][0]; const deck=cur&&cur.matche
   if(k<screens.length-1) show(k+1,{anim:true}); else if(window.LadderFV&&LadderFV.fwd) LadderFV.fwd(); }
 function ret(a){ const cur=screens[k]&&screens[k][0]; const deck=cur&&cur.matches('.slides')&&!cur.classList.contains('sw-stub')?cur:null; const A=a||api(deck);
   if(A&&A.i>0){ A.show(A.i-1); return; }
-  if(k>0) show(k-1,{anim:true}); else if(window.LadderFV&&LadderFV.back) LadderFV.back(); }
+  if(k>0) show(k-1,{anim:true}); else if(window.LadderFV&&LadderFV.back){ LadderFV.wantLast=true; LadderFV.back(); } }
 /* the footing view tells us each time it paints a footing */
 window.LadderFV=window.LadderFV||{};
 LadderFV.onPaint=function(els,cur,info){ ui(); if(!PAGES.test(pg())||!info||!info.on){ on=false; document.body.classList.remove('sw'); clear(); bar.hidden=true; return; }
   build(els); on=screens.length>0; document.body.classList.toggle('sw',on); if(!on){ bar.hidden=true; return; }
   let want=0; const el=LadderFV.wantEl; LadderFV.wantEl=null;
   if(el){ const i=screens.findIndex(s=>s.some(x=>x===el||x.contains(el))); if(i>=0) want=i; }
-  else if(LadderFV.dir<0) want=screens.length-1;
+  else if(LadderFV.wantLast) want=screens.length-1; /* 2026-11-10 (Andrew 15:53): the climb down lands on the first screen; only a swipe back from a row's start lands on the last */
+  LadderFV.wantLast=false;
   show(want,{keep:!!el}); };
 /* gestures */
 let tx=null, ty=null;
