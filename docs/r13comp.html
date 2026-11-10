@@ -124,7 +124,7 @@ x_2 = 0.1417,\ \ x_3 = 0.14284777,\ \ x_4 = 0.1428571422\cdots @@ errors about 0
   <h2 class="sthead"><span class="stno">13comp4</span>Where Each One Fails</h2>
 
   <p data-pid="19caec">Halving needs a trap to start, and a function continuous on it. Handed x² on [−1, 1], it cannot start: both ends are positive, though 0 is a zero. Handed a function with a jump, it closes on the jump and reports a zero that is not there. But given a true trap, it never fails.</p>
-  <p data-pid="29430f">The tangent step needs nothing to start but a guess, and 13m showed three ways it can mislead. On x³ − 2x + 2 from 0 it goes 0, 1, 0, 1 for ever. On the cube root it doubles its distance at every step. Near a level tangent it lands far away. A machine running the tangent program alone cannot see any of this. It only sees numbers that keep changing.</p>
+  <p data-pid="29430f">The tangent step needs nothing to start but a guess, and 13m6 showed three ways it can mislead. On x³ − 2x + 2 from 0 it goes 0, 1, 0, 1 for ever. On the cube root it doubles its distance at every step. Near a level tangent it lands far away. A machine running the tangent program alone cannot see any of this. It only sees numbers that keep changing.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
@@ -193,7 +193,7 @@ x = 0.001:\ t \approx -0.00027 \notin [0.001, 0.02] @@ the tangent step heads fo
       </div>
     </div>
   </section>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · a program; the machine's numbers; the halving program; one bit per step; the tangent program; reciprocal-step; where each fails; the safe program; safe-step; the cycle caught; the loan; illegal moves · ← → keys work</div></section>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a program; the machine's numbers; the halving program; one bit per step; the tangent program; reciprocal-step; where each fails; the safe program; safe-step; the cycle caught; the loan; moves to check · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
@@ -203,19 +203,19 @@ x = 0.001:\ t \approx -0.00027 \notin [0.001, 0.02] @@ the tangent step heads fo
 </section>
 
 <section class="class step" data-step="13comp7">
-  <h2 class="sthead"><span class="stno">13comp7</span>Illegal Moves</h2>
+  <h2 class="sthead"><span class="stno">13comp7</span>Moves to Check</h2>
 
-  <pre class="lines" data-k="ember" data-wrong="1" data-label="13·comp: tempting, and not allowed">
-\begin{aligned}&\text{the tangent step is}\\ &\quad\text{faster, so use it alone}\,?\end{aligned} @@ on x³ − 2x + 2 from 0 it never arrives; the trap is what makes it safe
-\begin{aligned}&\text{halving found a trap of width } 10^{-12},\\ &\quad \text{ so there is a zero in it}\,?\end{aligned} @@ only if f is continuous there; on a jump the traps close on no zero
-\text{keep halving until the width is } 0\,? @@ the machine's numbers have holes; stop when the middle is an end
-\begin{aligned}&\text{the guesses stopped changing, so } f(x)\\ &\quad = 0\,?\end{aligned} @@ the machine's f(x) is rounded too; report the trap
-f(m) \text{ has the sign of } f(d) \Rightarrow d \leftarrow m,\ \text{then } c \leftarrow m\,? @@ one box changes per split: the half kept must still be a trap
+  <pre class="lines" data-k="check" data-label="13·comp: moves to check">
+\begin{aligned}&\text{the tangent step is}\\ &\quad\text{faster, so use it alone}\,?\end{aligned} @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; on x³ − 2x + 2 from 0 it never arrives; the trap is what makes it safe
+\begin{aligned}&\text{halving found a trap of width } 10^{-12},\\ &\quad \text{ so there is a zero in it}\,?\end{aligned} @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only if f is continuous there; on a jump the traps close on no zero
+\text{keep halving until the width is } 0\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the machine's numbers have holes; stop when the middle is an end
+\begin{aligned}&\text{the guesses stopped changing, so } f(x)\\ &\quad = 0\,?\end{aligned} @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the machine's f(x) is rounded too; report the trap
+f(m) \text{ has the sign of } f(d) \Rightarrow d \leftarrow m,\ \text{then } c \leftarrow m\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; one box changes per split: the half kept must still be a trap
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">13·comp.7.1</span><span class="ph understand">understand</span>Why is “the tangent step is faster, so use it alone” an illegal move?</li>
+      <li><span class="qid">13·comp.7.1</span><span class="ph understand">understand</span>Why is “the tangent step is faster, so use it alone” a move to check?</li>
     </ol>
   </section>
 </section>
@@ -252,7 +252,7 @@ f(m) \text{ has the sign of } f(d) \Rightarrow d \leftarrow m,\ \text{then } c \
   <h3>Accepted names</h3>
   <p>The halving program is the bisection method; the tangent program is Newton's method, or the Newton–Raphson method. A program that keeps a trap and steps inside it is a safeguarded or hybrid method; the best known is Brent's method. The machine's numbers are floating-point numbers, and the gap after 1 is the machine epsilon. A box is a variable, and x ← v is an assignment.</p>
   <h3>Wrong moves, worked</h3>
-  <pre class="lines" data-k="ember" data-label="13·comp: a worked “proof”, not allowed">
+  <pre class="lines" data-k="check" data-label="13·comp: a worked “proof”, not allowed">
 \text{each tangent step lands inside the trap} @@ not allowed: on x³ − 2x + 2 from 0 the step goes to 1, outside [−2, −1]
 \text{so the safe program never needs to halve} @@ false: instruction 4 is what catches the fly-off
 \text{so it is always as fast as the tangent step} @@ false: far from the zero it can be as slow as halving
@@ -316,8 +316,8 @@ stepper('#sl1',[
   {k:'ember',kl:'safe-step',t:R`\htmlClass{new}{d - c \le \tfrac{q - p}{2^n}}`,n:`A trap always, and at least halving.`},
   {k:'ember',kl:'the cycle caught',t:R`-1.8 \to -1.76995 \to -1.7692923542`,n:`x³ − 2x + 2 from the trap [−2, 1].`},
   {k:'ember',kl:'the loan',t:R`i \approx 0.0050004`,n:`About 6% a year; the useless zero at 0 is kept out.`},
-  {k:'ember',kl:'illegal',t:R`\text{width} \to 0\,?`,n:`Stop when the middle is an end.`}
-],{title:'The slides · a program; the machine\'s numbers; the halving program; one bit per step; the tangent program; reciprocal-step; where each fails; the safe program; safe-step; the cycle caught; the loan; illegal moves · ← → keys work'});
+  {k:'plain',kl:'outside the collect',t:R`\text{width} \to 0\,?`,n:`Stop when the middle is an end.`}
+],{title:'The slides · a program; the machine\'s numbers; the halving program; one bit per step; the tangent program; reciprocal-step; where each fails; the safe program; safe-step; the cycle caught; the loan; moves to check · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

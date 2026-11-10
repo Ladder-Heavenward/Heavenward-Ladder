@@ -51,12 +51,14 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <div class="tags"><span class="tag stat">9·stat · statistics</span></div>
   <h1>What Does a List of Data Look Like?</h1>
   <p data-pid="cbc93e">What does a list of data look like? 4·stat's tallies, 5·stat's middles and 8·stat's spread were all numbers worked out from a list. Rung 9 says a function is its pairs, and a tally table is exactly that: each value paired with how often it comes. So data can be drawn, the way any function is drawn. A drawing shows at a glance what the numbers took a page to say: where the middle is, and how wide the spread is. It shows whether one side trails off further than the other, and whether there is one bump or two. This page draws data three ways and asks what each drawing can hide.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\textstyle\sum_v f(v) = n;\quad F(x)\ :=\ \#\{i : x_i \le x\}\end{aligned}"></div>
   <p class="gesture" data-pid="44566d">The tally of each value is a function, and its values add up to the length of the list. A histogram counts the values in each of a row of equal bins. The running total counts the values at or below each point: it never goes down, climbs from nothing to the whole list, and jumps by the tally at each value. The median is where the running total first reaches half the list. Data that looks the same flipped about a centre has both its mean and its median at that centre.</p>
 </header>
 
 <section class="class step" data-step="9stat1">
   <h2 class="sthead"><span class="stno">9stat1</span>The Tally Function</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;f : V \to \mathbb N;\quad \textstyle\sum_v f(v) = n;\quad \bar x = \tfrac1n \sum_v v f(v)\end{aligned}"></div>
   <p class="eqline" data-pid="e759ff">From here on, for data x₀, …, x₍ₙ₋₁₎, its frequency function is f: V → ℕ, where V is the set of values that appear and f(v) is the tally of v. By 9a it is a function: each value has exactly one tally. Frequency technique: <b>Σᵥ f(v) = n, x̄ = (1/n) Σᵥ v f(v), and σ² = (1/n) Σᵥ (v − x̄)² f(v). Two lists with the same frequency function have the same mean, median, quartiles, range, modes and σ.</b> The sums are tallies-add-up and 5·stat's grouping, done once for each value. The median and quartiles come from the sorted list, which by sorting is fixed by the tallies alone.</p>
   <p data-pid="63c959">Drawn with a column of dots over each value, one dot for each time it comes, f has the accepted name a dot plot. Drawn as bars, with heights f(v), it is a bar chart of frequencies. The order the values came in is lost either way. <b>Frequency says that none of 5·stat's or 8·stat's numbers needed it.</b></p>
   <section class="sayback">
@@ -70,7 +72,9 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <section class="class step" data-step="9stat2">
   <h2 class="sthead"><span class="stno">9stat2</span>Bins</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{bins } [s, s + w),\ [s + w, s + 2w),\ \ldots\end{aligned}"></div>
   <p data-pid="fcd605">When the values are many and seldom repeat, such as lengths to the millimetre, each value's tally is 0 or 1 and the dot plot is a comb. So the line is cut into bins of one width w, starting at a point s: [s, s + w), [s + w, s + 2w), and so on. Each holds its left end and not its right. The count of a bin is how many values fall in it. The bars of those counts, side by side, have the accepted name a histogram.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;x \in \text{bin } \lfloor (x - s)/w \rfloor;\quad \text{counts add to } n\end{aligned}"></div>
   <p data-pid="ffa028">Bins technique: <b>every value falls in exactly one bin, so the bin counts add to n. Joining two neighbouring bins into one gives a bin whose count is the sum of theirs.</b> For the first part, the value x is in the bin numbered by the whole part of (x − s)/w, and in no other, since the bins share no point. The second is separate-piles. So halving the width can only split each bar in two, never move a value to a far bin. But a new start s, or a new width that is not a half, can change the picture's shape.</p>
 
   <aside class="nature">
@@ -91,7 +95,9 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <section class="class step" data-step="9stat3">
   <h2 class="sthead"><span class="stno">9stat3</span>The Running Total</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;F : \mathbb R \to \mathbb N;\quad F(x)\ :=\ \#\{i : x_i \le x\}\end{aligned}"></div>
   <p class="eqline" data-pid="e166d0">From here on, the running total of the data is the function F: ℝ → ℕ with F(x) the number of values at most x. Its accepted name is the cumulative frequency, and F(x)/n is the empirical distribution function. Its graph is sometimes called an ogive.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;s \le t \Rightarrow F(s) \le F(t);\quad F(v) - F(u) = f(v)\end{aligned}"></div>
   <p data-pid="d21b3d">Running-total technique: <b>F never goes down: s ≤ t gives F(s) ≤ F(t). F(x) = 0 for x below the least value and F(x) = n from the greatest value on. At each value v, F(v) − F(u) = f(v), where u is the next value below v that appears, or F(v) = f(v) when v is the least. So F and f each fix the other.</b> If s ≤ t, every value at most s is at most t. So the first set is a part of the second (4k's counting of parts). The rest is tallies-add-up, said one value at a time.</p>
   <p data-pid="e51fe7"><b>So the median can be read off F's graph.</b> When n is odd, the median is the least value v with F(v) ≥ (n + 1)/2. When n is even, it is the mean of the least v with F(v) ≥ n/2 and the least v with F(v) ≥ n/2 + 1. The quartiles are read the same way off the two halves.</p>
   <pre class="lines" data-k="ember" data-label="9·stat: worked">
@@ -111,6 +117,7 @@ F(3) = 1,\ F(7) = 3,\ F(8) = 4,\ F(12) = 7,\ F(15) = 8 @@ running-total: each st
 <section class="class step" data-step="9stat4">
   <h2 class="sthead"><span class="stno">9stat4</span>Shape</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{symmetric about } c \Rightarrow \bar x = \text{median} = c\end{aligned}"></div>
   <p data-pid="b56c30">A list is symmetric about c when sending every value x to 2d − x, as far from c on the other side, gives a list with the same frequency function. Symmetric-centre technique: <b>if a list is symmetric about c, its mean and its median are both c.</b> By shift-and-stretch with p = −1 and b = 2c, the sent list has mean 2d − x̄. By frequency the two lists have the same mean, so x̄ = 2c − x̄ and x̄ = c. The median of the sent list is 2d − m, since sending the sorted list turns its order about, end for end. Frequency makes that m too.</p>
   <p data-pid="a2cae1">A list whose histogram trails off further on the right than the left has the accepted name skewed right, and the other way, skewed left. One bump makes it unimodal, two bumps bimodal. These words are read off a picture and have no single line that settles them. A common rule says that a right skew pulls the mean above the median, since a few large values drag the mean (5·stat's hot tub). It is often true and not always. The list 2, 2, 3, 3, 3, 6, 6, 6, 8, 9, 15 reaches 9 above its median of 6 and only 4 below it, so it trails off to the right. Yet its mean, 63/11 ≈ 5.73, is below the median. <b>Checking with numbers beats trusting the rule.</b></p>
   <p data-pid="891d0b">A statistician of the last century put it this way: the greatest value of a picture is when it forces us to notice what we never expected to see.</p>

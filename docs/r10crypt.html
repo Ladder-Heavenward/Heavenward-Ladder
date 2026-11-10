@@ -55,12 +55,14 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <div class="tags"><span class="tag crypt">10·crypt · cryptography</span></div>
   <h1>Is a Huge Number of Keys Enough?</h1>
   <p data-pid="b34190">Is a huge number of keys enough? 4·crypt's shift had 25 keys worth trying, and an attacker tried them all in a few minutes. The obvious repair is more keys. Let the key send each letter anywhere at all, so long as no two letters land on the same one. Then the keys number about four hundred million million million million, more than a machine trying a billion a second could finish in the age of the universe. For centuries, people who used such ciphers trusted them with their lives. It is hard to see why they were not, because the count is real. This page builds the cipher as a function and counts its keys. Then it proves that the key moves every letter's tally without changing it, and breaks the cipher from the tallies, without trying a single key.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;g : \mathcal A \to \mathcal A \text{ a bijection};\quad c_i = g(m_i)\\ &amp;26! \text{ keys};\quad f_c = f_m \circ g^{-1}\end{aligned}"></div>
   <p class="gesture" data-pid="a84556">A key is a matching of the alphabet with itself; it encrypts letter by letter, and its inverse decrypts. There are twenty-six factorial keys. But each cipher letter’s tally is the tally of the plain letter it stands for, so the tallies, ranked against English, read the key off a letter at a time.</p>
 </header>
 
 <section class="class step" data-step="10crypt1">
   <h2 class="sthead"><span class="stno">10crypt1</span>A Key Is a Bijection</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\mathcal A\ :=\ \text{the 26 letters};\quad \text{a text} : n \to \mathcal A\end{aligned}"></div>
   <p class="eqline" data-pid="d0d8fd">From here on, on this page, 𝒜 names the set of the 26 letters, and a text is a list of letters, a function from n to 𝒜 (9·cb4's lists). m names a plain text and c a cipher text, as on 9·crypt; m_i is the letter at place i.</p>
   <p data-pid="7eaceb">A <b>substitution cipher</b> takes as its key a bijection g : 𝒜 → 𝒜 and encrypts letter by letter: c_i = g(m_i) at every place i. Decrypting is m_i = g⁻¹(c_i), by 9d's there-and-back. So the key that decrypts is the way back, g⁻¹, and it is again a bijection of 𝒜. The key must be a bijection. If it were not one-to-one, two letters would land on one, and the reader could not tell which was meant. The worked key below is the keyboard's top row, then the middle row, then the bottom row: A ↦ Q, B ↦ W, C ↦ E, and so on to Z ↦ M.</p>
   <pre class="lines" data-k="ember" data-label="this page: the keyboard key">
@@ -85,6 +87,7 @@ g^{-1}(\text{ZIT}) = \htmlClass{keep}{\text{THE}} @@ there-and-back: read the ta
 \approx \htmlClass{new}{4.03 \times 10^{26}} @@ scientific form, 3 figures
 \tfrac{4.03 \times 10^{26}}{10^{9} \text{ per s}} \approx 4.03 \times 10^{17} \text{ s} \approx 1.3 \times 10^{10} \text{ years} @@ a year is about 3.16 × 10⁷ s; the universe is about 1.4 × 10¹⁰ years old
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{shift by } k:\ x \mapsto (x + k) \bmod 26;\quad 26 \text{ shifts}\end{aligned}"></div>
   <p data-pid="19eece">The shifts of 4·crypt are among these keys. With letters as 0 to 25, the shift by k sends x to the remainder of x + k on division by 26. There are 26 shifts, counting the shift by 0, which hides nothing. A shift by j after a shift by k is the shift by the remainder of j + k (4·crypt's shifts-add), and the shift by 26 − k undoes the shift by k (its key-back). So 26 of the 26! keys are shifts, and a shift is fixed by where it sends one letter. A general key is fixed only by where it sends 25 letters; the 26th has one place left.</p>
   <section class="sayback">
     <h3>Question</h3>
@@ -97,6 +100,7 @@ g^{-1}(\text{ZIT}) = \htmlClass{keep}{\text{THE}} @@ there-and-back: read the ta
 <section class="class step" data-step="10crypt3">
   <h2 class="sthead"><span class="stno">10crypt3</span>The Tallies Travel with the Letters</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;f_m, f_c : \mathcal A \to \mathbb N\end{aligned}"></div>
   <p data-pid="db0b0e">9·stat's frequency function gives each letter its tally in a text. Write f_m for the plain text's and f_c for the cipher text's, both as functions 𝒜 → ℕ, with tally 0 for a letter that does not appear.</p>
   <p data-pid="77ef48">Tallies-travel technique: <b>for every letter x, the cipher text holds g(x) exactly as often as the plain text holds x: f_c(g(x)) = f_m(x).</b> So f_c = f_m ∘ g⁻¹.</p>
   <pre class="lines" data-k="ember" data-label="this page: the tallies-travel technique">
@@ -105,6 +109,7 @@ c_i = g(x) \iff g(m_i) = g(x) @@ the cipher: c_i = g(m_i)
 \{i : c_i = g(x)\} = \{i : m_i = x\} @@ Ext: the same places
 f_c(g(x)) = \htmlClass{keep}{f_m(x)} \quad \blacksquare @@ one set of places, one number of members (4k)
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;f_c(g(x)) = f_m(x)\\ &amp;\text{the tallies move, unchanged}\end{aligned}"></div>
   <p data-pid="7f6bc1">The key moves every tally to a new letter. It cannot change the tallies themselves: the cipher text's list of tallies, put in order, is the plain text's. A bar chart of the cipher text is the plain text's bar chart with its labels shuffled. Whoever knows the plain text's chart can put the labels back.</p>
   <section class="sayback">
     <h3>Question</h3>
@@ -117,7 +122,9 @@ f_c(g(x)) = \htmlClass{keep}{f_m(x)} \quad \blacksquare @@ one set of places, on
 <section class="class step" data-step="10crypt4">
   <h2 class="sthead"><span class="stno">10crypt4</span>English Has a Chart</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{E } 12.7\%,\ \text{T } 9.1\%,\ \text{A } 8.2\%,\ \text{O } 7.5\%\end{aligned}"></div>
   <p data-pid="a8d44a">Count the letters of a long stretch of English prose and share each tally by the total. The shares come out nearly the same from book to book: E about 12.7%, T 9.1%, A 8.2%, O 7.5%, I 7.0%, N 6.7%, down to Q and Z, each under 0.1%. <b>That is a law in the ladder's sense: a measured regularity, with a range and with exceptions.</b> Its range is long English prose. Short texts wander from it, lists and names wander further, and a novel of 1939 runs to some 50 000 words without a single E.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;u_n\ :=\ \text{share of E in the first } n\\ &amp;u_n \to 0.127\ \text{(a guess)}\end{aligned}"></div>
   <p data-pid="739fbc">Rung 10 gives the law its shape. Take one long text, and let u_n be the share of E among its first n letters: a sequence. The law guesses that such sequences head to about 12.7%, in 10f's sense. That is a guess about every n, and no finite text can prove it. What a text can show is how near it comes. In this page's passage about the Salinas River (402 letters), u_n is 10% at n = 50, 12% at 100, 13% at 200 and 13.9% at 402. Against a challenger's ε of 3 percentage points, it stays within ε of 12.7% from n = 54 on. Against an ε of 2, only from n = 341 on. Against an ε of 1, it never settles inside this passage. The attacker does not need the limit. She needs the top few letters in nearly the right order, and a few hundred letters give her that.</p>
   <section class="sayback">
     <h3>Question</h3>
@@ -138,6 +145,7 @@ f_c:\ \ \text{T } 56,\ \text{Z } 35,\ \text{Q } 33,\ \text{K } 31,\ \text{F } 30
 \text{I} \to \text{H},\ \text{O} \to \text{I},\ \ldots \Rightarrow \htmlClass{new}{\text{THESALINAS}} @@ mended by words, a letter at a time
   </pre>
   <p data-pid="dd6d3f">Each mended letter makes the next one easier, and the work never touches the 26! keys. It grows with the length of the text, not with the number of keys. <b>A huge number of keys guards against one attack only: trying them all.</b> A cipher is as strong as the cheapest attack on it, and here the cheapest attack uses the one thing the key cannot change.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{top letter X} \Rightarrow g(\text{E}) = \text{X}\\ &amp;\text{shift} = 23 - 4 = 19\end{aligned}"></div>
   <p data-pid="d0330f">A shift falls faster still. One tally is enough: if the top letter of the cipher text is X, then E went to X, and the shift is the remainder of 23 − 4 = 19. A general key needs a tally for each letter, and the rare letters, Q, Z, J, X, are settled last, by words.</p>
   <section class="pic" id="pic">
     <div class="eyebrow">The picture · left: a share heading for English's, and a challenger's ε · right: the tally attack, by hand</div>

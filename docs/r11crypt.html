@@ -55,12 +55,14 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <div class="tags"><span class="tag crypt">11·crypt · cryptography</span></div>
   <h1>Is a Keyword Safer Than One Shift?</h1>
   <p data-pid="2a9b3e">Is a keyword safer than one shift? 10·crypt broke a cipher with twenty-six factorial keys, because each plain letter always became the same cipher letter, and its tally went with it. The repair that ruled for three centuries was to stop that: take a keyword, and shift the first letter by the keyword's first letter, the second by its second, and so on, starting the keyword again when it runs out. Now E becomes a different letter at different places, and the cipher text's chart comes out nearly flat. It was called the cipher nobody could read. It is hard to see how to start on it, because the tallies seem to have nothing left to say. This page shows that they do. Repeats in the cipher text give away the keyword's length, by 4j's common divisors. Counting coincidences tells English from noise, and confirms the length; rung 11 says why the count can be trusted on a long text, and where its estimate breaks. Then each shift falls to tallies, one at a time.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;c_i = m_i + k_{r(i)} \bmod 26;\quad L \mid (j - i)\end{aligned}"></div>
   <p class="gesture" data-pid="0cbf68">A keyword is a run of shifts in turn, one per letter of the keyword, so every letter that falls under the same keyword letter is one shift cipher. Repeated stretches of cipher text lie a multiple of the keyword’s length apart, so the length divides their distances. Cut the text into that many columns: with the right length each column counts coincidences like English, about 66 in a thousand, and with a wrong length like noise, about 38 in a thousand. Then break each column as a shift.</p>
 </header>
 
 <section class="class step" data-step="11crypt1">
   <h2 class="sthead"><span class="stno">11crypt1</span>Several Shifts in Turn</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;k_0, \ldots, k_{L-1};\quad r(i)\ :=\ i \bmod L\\ &amp;c_i = (m_i + k_{r(i)}) \bmod 26\end{aligned}"></div>
   <p class="eqline" data-pid="085342">From here on, on this page, letters are numbers 0 to 25 (A = 0, Z = 25), as on 4·crypt, and a keyword is a list k_0, k_1, …, k_{L−1} of L letters. For a place i of the text, r(i) names the remainder of i on division by L (4j). The <b>keyword cipher</b> encrypts the letter at place i by the shift k_{r(i)}: c_i is the remainder of m_i + k_{r(i)} on division by 26.</p>
   <p data-pid="3d33fd">So places 0, L, 2L, … all use the shift k_0; places 1, L + 1, 2L + 1, … all use k_1; and so on. <b>A keyword cipher of length L is L shift ciphers, interleaved.</b> Each set of places with one remainder is a <b>column</b>: write the text in rows of L letters, and the columns stand under each other.</p>
   <pre class="lines" data-k="ember" data-label="this page: Monterey Bay under OTTER">
@@ -68,6 +70,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 \text{MONTE} \mapsto (12 + 14,\ 14 + 19,\ 13 + 19,\ 19 + 4,\ 4 + 17) @@ letter plus key letter, place by place
 \mapsto \htmlClass{new}{\text{AHGXV}} @@ remainders by 26: 0, 7, 6, 23, 21
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;570 \text{ letters};\quad \text{OTTER}:\ L = 5\end{aligned}"></div>
   <p data-pid="d8f001">The page's plain text is a passage of 570 letters about Monterey Bay: its deep canyon, the cold water that wells up each spring and summer, and the life and the fog that come with it. Under OTTER, its E's become S, X, X, I and V by turns. The tallies no longer travel with the letters. The plain text's top letter, E, makes up 12.6% of it; the cipher text's top letter, V, makes up only 7.4%. By 4k's counted-functions technique there are 26⁵, about 1.2 × 10⁷, keywords of 5 letters, and a longer keyword gives far more.</p>
   <section class="sayback">
     <h3>Question</h3>
@@ -80,6 +83,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <section class="class step" data-step="11crypt2">
   <h2 class="sthead"><span class="stno">11crypt2</span>Repeats Give Away the Length</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;L \mid (j - i) \Rightarrow r(i + t) = r(j + t)\end{aligned}"></div>
   <p data-pid="cf9086">Repeats technique: <b>if a plain stretch stands at places i and j, and L divides j − i, then the cipher text holds the same stretch at both places.</b> Places i + t and j + t have the same remainder on division by L, since j + t = (i + t) + (j − i) and L divides j − i (remainders-add). So each letter of the two stretches gets the same shift, and the same plain letter becomes the same cipher letter. ∎</p>
   <p data-pid="0a4845">An attacker sees only cipher text, so she runs the technique backwards, as a guess. A long repeated cipher stretch probably came from a repeated plain stretch, THE or AND or a repeated word, met by the keyword at the same point. Then L divides the distance. If L divides several distances, then by 4j's greatest-common-divisor technique L divides their greatest common divisor.</p>
   <pre class="lines" data-k="ember" data-label="this page: the repeats of KVX">
@@ -88,6 +92,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 \text{greatest common divisor} = \htmlClass{new}{5} @@ 5 divides each; 25 and 35 share only 1 and 5 (4j)
 L \mid 5:\ \ L = 5 \text{ or } L = 1 @@ L = 1 would be one shift, and 10·crypt's chart would show it
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\gcd \text{ of 80 distances}:\ 5\end{aligned}"></div>
   <p data-pid="9958d2">Not every repeat is honest. Two different plain stretches can meet different shifts and come out the same by accident. Over all 80 distances between repeated three-letter stretches in this cipher text, their greatest common divisor is 1: a few stray repeats spoil it. The cure is a tally, not a single divisor. Of the 80 distances, 73 are multiples of 5, 43 of 2 and 34 of 3. Five stands far above the rest.</p>
   <section class="sayback">
     <h3>Question</h3>
@@ -101,8 +106,11 @@ L \mid 5:\ \ L = 5 \text{ or } L = 1 @@ L = 1 would be one shift, and 10·crypt'
   <h2 class="sthead"><span class="stno">11crypt3</span>Counting Coincidences</h2>
 
   <p data-pid="850844">A second test needs no repeats at all. Pick two different places of a text. Do they hold the same letter? Count the pairs that do, and share the count by all the pairs.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\kappa\ :=\ \tfrac{\sum_x f(x)(f(x) - 1)}{n(n - 1)}\end{aligned}"></div>
   <p class="eqline" data-pid="e28271">From here on, on this page, for a text of n letters with tallies f(x), its <b>coincidence rate</b> is κ = Σ_x f(x)(f(x) − 1) / (n(n − 1)), summed over the 26 letters. Here κ is the Greek letter kappa, in its small form: on this page it names a coincidence rate, and its capital form is not used.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\tbinom{n}{2} \text{ pairs};\quad f(x)(f(x) - 1)/2 \text{ matching}\\ &amp;\kappa_E \approx 0.066\end{aligned}"></div>
   <p data-pid="ee3c6d">By 4k's choosing-counts-parts technique a text of n letters has n(n − 1)/2 pairs of places, and the letter x makes f(x)(f(x) − 1)/2 of them matching pairs; the halves cancel. Long English prose gives κ about 0.066: E's pair with E's, T's with T's. A text in which every letter turned up equally often would give about 1/26, or 0.0385. Call these κ_E and κ_flat.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\kappa \text{ unchanged by a shift};\quad \kappa_{\text{flat}} = \tfrac{1}{26} \approx 0.038\end{aligned}"></div>
   <p data-pid="ddbdd5">Two facts make κ useful. First, a shift does not change it: the tallies travel (10·crypt), so the list of numbers f(x) is the same, and so is the sum. Each column of a keyword cipher has the κ of its plain letters. Second, κ of a long text can be trusted, and rung 10 says why.</p>
   <p data-pid="b6668c">Coincidence-limit technique: <b>if the share of each letter in the first n letters of a text heads to a limit as n grows, then κ of the first n letters heads to the sum of the squares of those limits.</b> Write p_x(n) = f_n(x)/n for the share, P_x for its limit, and s_n = Σ_x p_x(n)².</p>
   <pre class="lines" data-k="ember" data-label="this page: the coincidence-limit technique">
@@ -111,6 +119,7 @@ p_x(n)^2 \to P_x^2,\quad s_n \to \textstyle\sum_x P_x^2 @@ limits-multiply, then
 \tfrac{n}{n - 1} \to 1,\quad \tfrac{1}{n - 1} \to 0 @@ one-over-n, written backwards by one place; rational-functions-far-out
 \kappa_n \to \htmlClass{keep}{\textstyle\sum_x P_x^2 \cdot 1 - 0} \quad \blacksquare @@ limits-multiply and limits-subtract
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\textstyle\sum_x P_x^2 \approx 0.066\end{aligned}"></div>
   <p data-pid="158397">With English's chart for the P_x, the sum of squares is about 0.066: that is where κ_E comes from. A short text wanders from it, as 10·crypt's shares did; a long one sits close. It is still a guess, resting on English's chart, which is a law and not a technique.</p>
   <section class="sayback">
     <h3>Question</h3>
@@ -123,11 +132,13 @@ p_x(n)^2 \to P_x^2,\quad s_n \to \textstyle\sum_x P_x^2 @@ limits-multiply, then
 <section class="class step" data-step="11crypt4">
   <h2 class="sthead"><span class="stno">11crypt4</span>The Column Test, and an Estimate That Breaks</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{right } L:\ \kappa \approx 0.066;\quad \text{wrong } L:\ \kappa \to 0.038\end{aligned}"></div>
   <p data-pid="6b15d2">Cut the cipher text into L columns for each trial L, find κ of each column, and average. With the right L, each column is one shift of English: κ near 0.066. With a wrong L, each column mixes several shifts, its chart is flattened, and κ falls toward 0.0385.</p>
   <div class="tablewrap"><table class="tt">
     <tr><th>trial L</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr>
     <tr><td class="l">average κ of the columns</td><td>0.046</td><td>0.045</td><td>0.046</td><td>0.045</td><td><b>0.068</b></td><td>0.047</td><td>0.046</td><td>0.045</td><td>0.048</td><td>0.067</td></tr>
   </table></div>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;L = 5 \text{ and } L = 10:\ \text{OTTEROTTER}\end{aligned}"></div>
   <p data-pid="432446">Five, and its multiple ten, stand out. Ten works too, since a keyword of 5 letters is also a keyword of 10: OTTEROTTER.</p>
   <p data-pid="c792a6">There is a quicker guess, from κ of the whole cipher text. About one pair in L lies in a single column, where letters match at English's rate. The other pairs lie across columns, where different shifts make matches about as rare as in noise. So κ ≈ κ_E/L + κ_flat(1 − 1/L). Run it backwards for L by 5g's techs, and call the result g(κ), a name for the estimate of L as a function of κ:</p>
   <pre class="lines" data-k="ember" data-label="this page: the length estimate">
@@ -136,6 +147,7 @@ L \approx g(\kappa) = \htmlClass{new}{\tfrac{\kappa_E - \kappa_{\text{flat}}}{\k
 g(0.0459) \approx 3.7 @@ the OTTER cipher text: a guess of about 4
 g(0.0440) \approx 5.0 @@ the κ the guess itself predicts for L = 5
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;g \text{ rational in } \kappa;\quad \text{endless break at } \kappa_{\text{flat}}\end{aligned}"></div>
   <p data-pid="d84696">g is a rational function of κ, so it is continuous at every input (11d). Its one break is at κ_flat, where the bottom is 0, and the break is of the endless kind (11f): as κ heads to κ_flat from above, g(κ) passes every bound. <b>Near κ_flat the estimate is useless: a tiny wobble in κ makes a huge change in L.</b> Here a change of 0.002 in κ moves the guess from 3.7 to 5.0. The cipher text's κ is only measured, from a few hundred letters, so g gives a place to start, and the column test decides.</p>
   <section class="sayback">
     <h3>Question</h3>
@@ -156,6 +168,7 @@ g(0.0440) \approx 5.0 @@ the κ the guess itself predicts for L = 5
 \text{columns } 3, 4:\ \text{W, I} \Rightarrow 4 = \text{E};\ \ \text{K, V} \Rightarrow 17 = \text{R} @@ S ↦ W and E ↦ I; T ↦ K and E ↦ V
 \Rightarrow \htmlClass{keep}{\text{OTTER}} @@ every column agrees with its chart's best fit
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{work} \sim L,\ \text{not } 26^L\end{aligned}"></div>
   <p data-pid="a016f8">So is a keyword safer than one shift? Yes: it needs more text, and more work, and the attacker must find L before she can begin. But the work grows with L, not with the 26^L keywords. A keyword as long as the message would leave every column one letter long, with no tallies to read. A keyword as long as the message, chosen by chance and used once, is 9·crypt's pad, written in letters.</p>
   <section class="pic" id="pic">
     <div class="eyebrow">The picture · left: repeats, and the divisors of their distances · right: the column test, and the keyword read back</div>

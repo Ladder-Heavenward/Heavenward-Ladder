@@ -51,6 +51,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <div class="tags"><span class="tag comp">8·comp · computing</span></div>
   <h1>Why Is 0.1 + 0.2 Not 0.3 on a Computer?</h1>
   <p data-pid="b42e5a">Why is 0.1 + 0.2 not 0.3 on a computer? Ask almost any programming language to add one tenth and two tenths, and it prints a three, then fifteen zeros, then a four. Ask it whether the sum is three tenths, and it answers no. Programmers meet this in their first week, and it has cost real money. In the early eighties a stock index in Vancouver lost nearly half its value on paper in under two years, while the market under it rose. People ask the question because the machine looks broken. What makes it hard is that nothing is broken. The machine keeps every number in twos, with a fixed count of bits, and one tenth has no numeral in twos that ends. So the machine keeps a nearby fraction in its place. This page proves that one tenth has no ending numeral in twos. It says how far the kept number can sit from the true one. It adds those distances with rung 8's triangle technique. And it shows why a test of sameness fails where a test of distance works.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\tfrac{1}{10} \text{ in twos: never ends}\\ &amp;|\mathrm{st}(x) - x| \le 2^{-s}|x|\\ &amp;\mathrm{st}(\mathrm{st}(0.1) + \mathrm{st}(0.2)) \ne \mathrm{st}(0.3)\end{aligned}"></div>
   <p class="gesture" data-pid="3bec3d">Write the number in twos. If its bottom has a prime other than two, the numeral never ends, and the machine keeps only its first few bits, rounded. The kept number sits within half a gap of the true one, and half a gap is a fixed small share of the number's size. Each sum carries the two distances it was handed and makes one of its own. So two roads to three tenths can end on two neighbouring kept numbers, a gap apart. Ask whether two results are near each other, not whether they are the same.</p>
 </header>
 
@@ -58,8 +59,10 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <h2 class="sthead"><span class="stno">8comp1</span>A Machine Keeps a Fixed Count of Bits</h2>
 
   <p data-pid="bc5967">A computer's memory is a long row of bits, 4i's digits in twos. A whole number fits in a row of bits as its numeral in twos. A real number with endless digits cannot fit at all. So machines keep reals in 8·phys's scientific form, with 2 in place of ten. One-scientific-form's proof never used anything about ten but that it is more than 1. With 2 in its place it says: <b>every positive real is u · 2ⁿ for exactly one integer n and one real u with 1 ≤ u &lt; 2.</b> The machine keeps the sign, the power n, and the first few bits of u.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;s\text{-bit machine keeps } 0 \text{ and } \pm m \cdot 2^k,\\ &amp;\qquad k \in \mathbb Z,\ 2^{s-1} \le m &lt; 2^s\\ &amp;\text{today: } s = 53,\ -1074 \le k \le 971\end{aligned}"></div>
   <p class="eqline" data-pid="3966f9">From here on, on this page, an s-bit machine is a machine that keeps exactly 0 and the reals ±m · 2^k, where k is an integer and m is a number with 2^(s−1) ≤ m &lt; 2^s. Such a real is a kept number. So m has exactly s bits in twos, its first bit 1. Nearly every computer today has a 53-bit machine inside it, with k kept in a range from about −1074 to 971. On this page the range is ignored, except in one question.</p>
   <p data-pid="bb1467">A 5-bit machine is small enough to work by hand. Its m run from 16 to 31. Between 1 and 2 it keeps 16/16, 17/16, …, 31/16, and then 2 itself: sixteen kept numbers, 1/16 apart. Between 2 and 4 it keeps the same pattern doubled, 1/8 apart. Between ½ and 1 it is halved, 1/32 apart. <b>The kept numbers are evenly spaced between neighbouring powers of two, and the spacing doubles at each power.</b></p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;2^n \le x &lt; 2^{n+1} \Rightarrow \text{gap at } x = 2^{n+1-s}\end{aligned}"></div>
   <p class="eqline" data-pid="87021b">From here on, on this page, the gap at x is the spacing of the kept numbers between the powers of two around x. If 2ⁿ ≤ x &lt; 2ⁿ⁺¹, the gap is 2^(n+1−s).</p>
   <section class="sayback">
     <h3>Question</h3>
@@ -72,6 +75,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <section class="class step" data-step="8comp2">
   <h2 class="sthead"><span class="stno">8comp2</span>One Tenth Has No Ending Numeral in Twos</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{ends after } k \text{ places} \Leftrightarrow \tfrac{m}{2^k}\\ &amp;\tfrac{1}{10} = \tfrac{m}{2^k}\,?\end{aligned}"></div>
   <p data-pid="b7f228">A numeral in twos that ends after k places names m/2^k for some number m: that is 4i's reading rule, with the point shifted (8·cb5's shift-the-point). So one tenth has an ending numeral in twos exactly when it is some m/2^k.</p>
   <p data-pid="1d304d">No-ending-twos technique: <b>one tenth is not a number divided by a power of two.</b> Let m and k be numbers.</p>
   <pre class="lines" data-k="ember" data-label="this page: the no-ending-twos technique">
@@ -89,6 +93,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 12 = 10 + \htmlClass{new}{2} @@ bit 1, remainder 2: a remainder seen before
 \tfrac{1}{10} = 0.0\overline{0011}_2 @@ repeating-decimal's rightward half, in twos: from here the bits come round
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\tfrac{1}{10} = 1.1001\,1001\,1001\ldots_2 \cdot 2^{-4}\end{aligned}"></div>
   <p data-pid="bfce8f">So in scientific form in twos, one tenth is 1.1001 1001 1001…₂ · 2⁻⁴, and the block 1001 never stops. A machine with any fixed count of bits must stop it somewhere.</p>
   <section class="sayback">
     <h3>Question</h3>
@@ -115,6 +120,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 |\mathrm{st}(x) - x| \le \tfrac{g}{2} @@ the nearer of the two ends is at most half the stretch away (unpack-the-bars, 8h)
 \tfrac{g}{2} = 2^{n-s} = 2^{-s} \cdot 2^n \le \htmlClass{keep}{2^{-s}\,x} \quad \blacksquare @@ powers-add-their-counts; 2ⁿ ≤ x, times the positive 2^(−s) (8g)
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;2^{-53} \approx 1.1 \cdot 10^{-16}\\ &amp;4392 \cdot 2^{-53} \approx 4.9 \cdot 10^{-13}\ \text{m}\end{aligned}"></div>
   <p data-pid="bcf15c">For the 53-bit machine, 2⁻⁵³ ≈ 1.1 · 10⁻¹⁶. Every kept number is within about a ten-thousand-millionth of a millionth of its own size of the true one. That is close: Mount Rainier's height of 4392 m, kept, is off by at most 4392 · 2⁻⁵³ ≈ 4.9 · 10⁻¹³ m. But it is not nothing.</p>
   <p data-pid="0cbd24">Here are the three numbers of the title on the 53-bit machine, as exact fractions, written out in tens. The fifty-odd digits are exact: each kept number is a fraction with a power of two at the bottom, and its decimal ends.</p>
   <div class="tablewrap"><table class="tt">
@@ -123,13 +129,16 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
     <tr><td>0.2</td><td class="l">0.2000000000000000111022302462515654…</td><td>+1.1 · 10⁻¹⁷</td></tr>
     <tr><td>0.3</td><td class="l">0.2999999999999999888977697537484345…</td><td>−1.1 · 10⁻¹⁷</td></tr>
   </table></div>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\mathrm{st}(0.1) &gt; 0.1,\ \mathrm{st}(0.2) &gt; 0.2,\ \mathrm{st}(0.3) &lt; 0.3\end{aligned}"></div>
   <p data-pid="bf3dbf">The first two are kept a little high and the third a little low. That alone decides the title.</p>
 
   <aside class="nature">
     <div class="eyebrow">Anexact, yet rigorous · the cloud, stored</div>
     <p data-pid="54e85c">8·cb5 met a principle of 1a's second kind of care: some things are there but can't be pinned to a dot. √2 has no decimal that ends, so every decimal of √2 you write carries a width. 8·phys gave a measurement a width from its instrument. A machine gives every number it keeps a width from its count of bits.</p>
-    <p data-pid="bc03ba"><b>A kept number stands for a stretch of the line, not a dot, so test stretches, not dots.</b></p>
-    <p data-pid="ae6c66">st(0.1) is exact as a fraction: 3602879701896397/2⁵⁵. It is also the kept number of every real within half a gap of it. Which one the program meant is lost. The half-gap technique says how wide the loss can be. Be rigorous about that width, and the dot stops mattering.</p>
+    <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{a kept number is a stretch, not a dot}\end{aligned}"></div>
+  <p data-pid="bc03ba"><b>A kept number stands for a stretch of the line, not a dot, so test stretches, not dots.</b></p>
+    <div class="eqline c6" data-tex="\begin{aligned}&amp;\mathrm{st}(0.1) = \tfrac{3602879701896397}{2^{55}}\end{aligned}"></div>
+  <p data-pid="ae6c66">st(0.1) is exact as a fraction: 3602879701896397/2⁵⁵. It is also the kept number of every real within half a gap of it. Which one the program meant is lost. The half-gap technique says how wide the loss can be. Be rigorous about that width, and the dot stops mattering.</p>
     <p class="bait" data-pid="4dd733">A billing program in Olympia adds three charges of 10, 20 and 30 cents, written in dollars, and compares the total with 60 cents. It reports a mismatch. Did anyone pay the wrong amount?</p>
   </aside>
   <section class="sayback">
@@ -143,6 +152,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <section class="class step" data-step="8comp4">
   <h2 class="sthead"><span class="stno">8comp4</span>How Gaps Add</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{machine sum}\ :=\ \mathrm{st}(\mathrm{st}(p) + \mathrm{st}(q))\end{aligned}"></div>
   <p data-pid="7abc6f">The machine cannot add p and q. It adds st(p) and st(q) exactly, then keeps the result: its sum is st(st(p) + st(q)). Each st along the way moves the number by at most its half-gap. 8h's triangle technique adds the moves up.</p>
   <p data-pid="4b0170">Adding-gaps technique: <b>the machine's sum is off from the true sum by at most the two half-gaps it was handed plus the half-gap of its own rounding.</b> Let p and q be reals, and write u for 2^(−s).</p>
   <pre class="lines" data-k="ember" data-label="this page: the adding-gaps technique">
@@ -160,7 +170,9 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 \mathrm{st}(\mathrm{st}(0.1) + \mathrm{st}(0.2)) = \htmlClass{new}{0.30000000000000004440\ldots} @@ printed as 0.30000000000000004
 \mathrm{st}(0.3) = \htmlClass{keep}{0.29999999999999998889\ldots} @@ one gap below: the two roads end on neighbours
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\mathrm{st}(0.1) = \tfrac{26}{256},\ \mathrm{st}(0.2) = \tfrac{26}{128}\\ &amp;\text{sum } \tfrac{78}{256} \to \tfrac{20}{64};\quad \mathrm{st}(0.3) = \tfrac{19}{64}\end{aligned}"></div>
   <p data-pid="54691c">The 5-bit machine shows the same thing large enough to see. st(0.1) = 26/256 and st(0.2) = 26/128, both kept high. Their sum is 78/256 = 0.3046875. Between ¼ and ½ the gap is 1/64, and 0.3046875 is exactly halfway between 19/64 and 20/64. The tie goes to 20/64 = 0.3125. But st(0.3) = 19/64 = 0.296875. Again the two roads end one gap apart.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;10 \times \mathrm{st}(0.1) \to 0.9999999999999999\\ &amp;n \text{ additions: } n \text{ half-gaps}\end{aligned}"></div>
   <p data-pid="ca6c47">Errors pile up with the number of steps. Add st(0.1) to itself ten times on the 53-bit machine, keeping after each addition, and the result prints as 0.9999999999999999, one gap below 1. On the 5-bit machine the same ten additions end at 31/32. The bound grows with each step: n additions, each adding a half-gap of its own.</p>
   <section class="sayback">
     <h3>Question</h3>
@@ -180,6 +192,7 @@ c_3 \le x \lt c_3 + 0.001 @@ the digit rule (8·cb5): each cut-off loses between
 \text{rounded instead: each move is within } 0.0005 \text{, either way} @@ half-gap, with the gap 0.001
 \text{November 1983: } \htmlClass{new}{524.811} \text{ shown}, \ \ \htmlClass{keep}{1098.892} \text{ recomputed} @@ about 574 points lost, with no trade to blame
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{cut-offs: every loss one way}\\ &amp;10^6 \times 0.0005 \approx \text{several hundred points}\end{aligned}"></div>
   <p data-pid="bdb208"><b>Losses that all point one way add up; they never cancel.</b> Over some twenty months and well over a million updates, an average loss near 0.0005 a time is several hundred points. Rounding to the nearest would have pointed the moves both ways. How far moves that point both ways cancel is a question about chance, for the statistics rungs. Cutting off made it no question at all.</p>
   <section class="sayback">
     <h3>Question</h3>
@@ -192,8 +205,11 @@ c_3 \le x \lt c_3 + 0.001 @@ the digit rule (8·cb5): each cut-off loses between
 <section class="class step" data-step="8comp6">
   <h2 class="sthead"><span class="stno">8comp6</span>Why a Test of Sameness Fails, and What to Test Instead</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\mathrm{st}(\mathrm{st}(0.1) + \mathrm{st}(0.2)) \ne \mathrm{st}(0.3)\\ &amp;\qquad\text{right about the dots}\end{aligned}"></div>
   <p data-pid="95b556">A program that asks whether st(st(0.1) + st(0.2)) is st(0.3) compares two kept numbers. They are different kept numbers, so the answer is no, though both roads set out for 3/10. The machine is right about the dots. The question was wrong.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;|p - x| \le d_1,\ |q - x| \le d_2 \Rightarrow |p - q| \le d_1 + d_2\end{aligned}"></div>
   <p data-pid="bbc09b">Near-enough technique: <b>if two results are each within known distances of the same real, they are within the sum of those distances of each other.</b> Let p be within d₁ of x, and q within d₂ of x. Then |p − q| ≤ |p − x| + |x − q| ≤ d₁ + d₂, by triangle and size-of-a-negative (8h). ∎ So the test |p − q| ≤ d₁ + d₂ never calls two roads to one real different. Its price: it may call two different reals the same, when they are closer than d₁ + d₂. Choosing the distances is the programmer's work, and the adding-gaps technique is where they come from.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{whole cents below } 2^{53}\text{: no gap}\end{aligned}"></div>
   <p data-pid="dbcf32">A second way out is to keep only numbers the machine can hold exactly. A whole number of cents, below 2⁵³, is kept with no gap at all. A bank that counts in cents adds 10 + 20 and gets 30.</p>
   <section class="pic" id="pic">
     <div class="eyebrow">The picture · left: the kept numbers near a real, and the stretch each one stands for · right: two roads to one sum</div>

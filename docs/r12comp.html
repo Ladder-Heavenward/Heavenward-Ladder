@@ -213,7 +213,7 @@ a^ib^i \in L,\ \ a^jb^i \notin L @@ the machine says yes to both or to neither
       </div>
     </div>
   </section>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · strings; a grammar; reachable by recursion; sentences; four families; the machine with no memory; remainder-machine; the depth walk; step-walk; bounded-depth; the no-memory wall; bounded and unbounded; illegal moves · ← → keys work</div></section>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · strings; a grammar; reachable by recursion; sentences; four families; the machine with no memory; remainder-machine; the depth walk; step-walk; bounded-depth; the no-memory wall; bounded and unbounded; moves to check · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
@@ -223,20 +223,20 @@ a^ib^i \in L,\ \ a^jb^i \notin L @@ the machine says yes to both or to neither
 </section>
 
 <section class="class step" data-step="12comp8">
-  <h2 class="sthead"><span class="stno">12comp8</span>Illegal Moves</h2>
+  <h2 class="sthead"><span class="stno">12comp8</span>Moves to Check</h2>
 
-  <pre class="lines" data-k="ember" data-wrong="1" data-label="12·comp: tempting, and not allowed">
-\begin{aligned}&\text{I can't build a machine}\\ &\quad\text{for it, so none exists}\,?\end{aligned} @@ that is a report on you; the no-memory wall is a proof about every machine
-\begin{aligned}&\text{a machine with more}\\ &\quad\text{states checks } a^nb^n\,?\end{aligned} @@ the proof works for every q: a machine with q states fails on aⁱbⁱ against aʲbⁱ, i &lt; j ≤ q
-\text{count the a's up to a million}\,? @@ a machine of a million and a few states checks n up to a million; it fails at the next
-\text{a sentence may keep a placeholder}\,? @@ a sentence is plain letters; aaSbb is reachable but not a sentence
-\text{the walk can jump from } 0 \text{ to } -2\,? @@ step-walk: it moves by one, so it passes −1
-\begin{aligned}&\text{rules can be applied in any}\\ &\quad\text{order, so every string is reachable}\,?\end{aligned} @@ only what the rules build: ba is no sentence of S → aSb, S → ab
+  <pre class="lines" data-k="check" data-label="12·comp: moves to check">
+\begin{aligned}&\text{I can't build a machine}\\ &\quad\text{for it, so none exists}\,?\end{aligned} @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; that is a report on you; the no-memory wall is a proof about every machine
+\begin{aligned}&\text{a machine with more}\\ &\quad\text{states checks } a^nb^n\,?\end{aligned} @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the proof works for every q: a machine with q states fails on aⁱbⁱ against aʲbⁱ, i &lt; j ≤ q
+\text{count the a's up to a million}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a machine of a million and a few states checks n up to a million; it fails at the next
+\text{a sentence may keep a placeholder}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; a sentence is plain letters; aaSbb is reachable but not a sentence
+\text{the walk can jump from } 0 \text{ to } -2\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; step-walk: it moves by one, so it passes −1
+\begin{aligned}&\text{rules can be applied in any}\\ &\quad\text{order, so every string is reachable}\,?\end{aligned} @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only what the rules build: ba is no sentence of S → aSb, S → ab
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">12·comp.8.1</span><span class="ph understand">understand</span>Why is “a machine with more states checks aⁿbⁿ” an illegal move?</li>
+      <li><span class="qid">12·comp.8.1</span><span class="ph understand">understand</span>Why is “a machine with more states checks aⁿbⁿ” a move to check?</li>
     </ol>
   </section>
 </section>
@@ -274,7 +274,7 @@ a^ib^i \in L,\ \ a^jb^i \notin L @@ the machine says yes to both or to neither
   <h3>Accepted names</h3>
   <p>A machine with no memory is a deterministic finite automaton, and the languages it checks are the regular languages. The no-memory wall's argument, in its general form, is the pumping lemma for regular languages. Counting the strings a machine must tell apart, as in 12·comp.10.3, is the Myhill–Nerode technique. A machine with a stack is a pushdown automaton, one with memory as long as its input a linear bounded automaton, and one with a memory without end a Turing machine.</p>
   <h3>Wrong moves, worked</h3>
-  <pre class="lines" data-k="ember" data-label="12·comp: a worked “proof”, not allowed">
+  <pre class="lines" data-k="check" data-label="12·comp: a worked “proof”, not allowed">
 \text{a machine with } q \text{ states reads } a^n b^n @@ fine
 \text{if } n \gt q,\ \text{it repeats a state, so it loops for ever} @@ not allowed: a machine never loops; it reads each letter once and stops at the end
 \text{so it cannot check } a^nb^n @@ the conclusion is right; the reason is pigeonhole on aⁱbⁱ against aʲbⁱ
@@ -340,8 +340,8 @@ stepper('#sl1',[
   {k:'ember',kl:'bounded-depth',t:R`k + 2 \text{ states}`,n:`Depth at most k: one state per depth, and one dead.`},
   {k:'ember',kl:'the no-memory wall',t:R`\htmlClass{new}{a^ib^i,\ a^jb^i \text{ end alike}}`,n:`Pigeonhole: q + 1 strings, q states.`},
   {k:'ember',kl:'bounded and unbounded',t:R`\text{depth} \le k:\ \text{yes};\ \ \text{every depth}:\ \text{no}`,n:`The line is 12b's word: bounded.`},
-  {k:'ember',kl:'illegal',t:R`\text{more states} \ne \text{enough states}`,n:`The proof works for every q.`}
-],{title:'The slides · strings; a grammar; reachable by recursion; sentences; four families; the machine with no memory; remainder-machine; the depth walk; step-walk; bounded-depth; the no-memory wall; bounded and unbounded; illegal moves · ← → keys work'});
+  {k:'plain',kl:'outside the plan',t:R`\text{more states} \ne \text{enough states}`,n:`The proof works for every q.`}
+],{title:'The slides · strings; a grammar; reachable by recursion; sentences; four families; the machine with no memory; remainder-machine; the depth walk; step-walk; bounded-depth; the no-memory wall; bounded and unbounded; moves to check · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

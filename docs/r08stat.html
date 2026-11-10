@@ -51,13 +51,16 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <div class="tags"><span class="tag stat">8·stat · statistics</span></div>
   <h1>How Spread Out Is a List?</h1>
   <p data-pid="92b2c7">How spread out is a list? 5·stat found two middles for a list, the mean and the median, and watched one wild value drag the first and leave the second alone. Neither says how spread out the list is. Spread is a distance from the middle, and distance needed rung 8's absolute value; the usual measure also needs a square root, which rung 8 has just built. This page measures spread, and then settles which middle is the right one. It turns out to depend on how you count a miss: by its size, or by its size squared. The last part measures whether two lists rise and fall together, and proves the measure can never pass 1.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\sigma^2 = \text{mean of } (x_i - \bar x)^2;\quad \sigma = \sqrt{\sigma^2}\\ &amp;\#\{i : |x_i - \bar x| &gt; k\sigma\} &lt; n/k^2;\quad -1 \le r \le 1\end{aligned}"></div>
   <p class="gesture" data-pid="fe21cd">The variance is the mean of the squared distances from the mean; the standard deviation is its square root. The mean is the centre that makes the total of squared misses least; the median makes the total of plain misses least. Few values lie far out: at most a quarter lie more than two standard deviations away, at most a ninth more than three. And a correlation always lies between −1 and 1.</p>
 </header>
 
 <section class="class step" data-step="8stat1">
   <h2 class="sthead"><span class="stno">8stat1</span>Spread</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{deviation}\ :=\ x_i - \bar x;\quad \textstyle\sum_i (x_i - \bar x) = 0\\ &amp;\sigma^2\ :=\ \tfrac1n \textstyle\sum_i (x_i - \bar x)^2;\quad \sigma\ :=\ \sqrt{\sigma^2}\end{aligned}"></div>
   <p class="eqline" data-pid="cfa4ce">From here on, for real data x₀, …, x₍ₙ₋₁₎ with mean x̄, the deviation of xᵢ is xᵢ − x̄. The variance is σ² = (1/n) Σᵢ (xᵢ − x̄)², and the standard deviation is σ = √(σ²), which exists by 8f since each square is not negative (square-never-negative). The deviations always add to 0, since Σᵢ xᵢ = n x̄; that is why their squares are used, or their sizes.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;s^2\ :=\ \tfrac{1}{n-1} \textstyle\sum_i (x_i - \bar x)^2\end{aligned}"></div>
   <p data-pid="c40002">Sometimes the list is a sample taken from a larger group, and the aim is to guess the spread of the group. Then books divide by n − 1 instead of n and write s² and s. That version has the accepted name the sample variance, and the one above the population variance. A test question says which it wants; a calculator usually shows both.</p>
   <p data-pid="259421">Squared-misses technique: <b>for every real c, Σᵢ (xᵢ − c)² = Σᵢ (xᵢ − x̄)² + n(x̄ − c)². So the sum is least exactly at c = x̄, and σ² = (the mean of the xᵢ²) − x̄².</b></p>
   <pre class="lines" data-k="ember" data-label="8·stat: the squared-misses technique">
@@ -68,6 +71,7 @@ x_i - c = (x_i - \bar x) + (\bar x - c) @@ adding-keeps-answers
 n(\bar x - c)^2 \ge 0,\ = 0 \Leftrightarrow c = \bar x @@ square-never-negative; a square is 0 only at 0
 \htmlClass{new}{c = 0:\ \ n\sigma^2 = \textstyle\sum_i x_i^2 - n\bar x^2} \quad \blacksquare @@ divide by n
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;x \mapsto px + b\ \Rightarrow\ \sigma \mapsto |p|\,\sigma\end{aligned}"></div>
   <p data-pid="0c651c">The shift-and-stretch technique of 5·stat carries over. Replacing each x by px + b multiplies every deviation by p. <b>So σ becomes |p|σ, and the shift b does nothing to the spread.</b></p>
   <section class="sayback">
     <h3>Question</h3>
@@ -88,6 +92,7 @@ y_0 \le \dots \le y_{n-1} @@ 5·stat's sorting; the sum is the same in sorted or
 \begin{aligned}&\text{every pair holds the}\\ &\quad\text{middle between its ends}\end{aligned} @@ y₍ᵢ₎ ≤ m ≤ y₍ₙ₋₁₋ᵢ₎ by the sort; and a lone middle value, when n is odd, adds |yₘ − c| ≥ 0
 \begin{aligned}&\htmlClass{new}{\textstyle\sum_i |y_i - c| \ge \sum_{\text{pairs}} (y_{n-1-i} - y_i) }\\ &\quad \htmlClass{new}{= \sum_i |y_i - m|} \quad \blacksquare\end{aligned} @@ equality exactly when c is in every pair's stretch, and at the lone middle
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{median: least } \textstyle\sum |x_i - c|\\ &amp;\text{mean: least } \textstyle\sum (x_i - c)^2\end{aligned}"></div>
   <p data-pid="713fee">So the question “which middle is best?” has two answers, and each is right for its count. <b>Count a miss by its size and the best guess is the median. Count it by its size squared, which punishes a big miss far more than a small one, and the best guess is the mean.</b> One astronomer, fitting the shape of the Earth in 1757, counted sizes. Others in 1805 and 1809 counted squares, which give answers by algebra alone, and the squares won the textbooks. Counting squares has the accepted name the method of least squares.</p>
   <section class="sayback">
     <h3>Question</h3>
@@ -100,6 +105,7 @@ y_0 \le \dots \le y_{n-1} @@ 5·stat's sorting; the sum is the same in sorted or
 <section class="class step" data-step="8stat3">
   <h2 class="sthead"><span class="stno">8stat3</span>How Many Can Be Far Out</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\forall k &gt; 0:\ \#\{i : |x_i - \bar x| &gt; k\sigma\} &lt; n/k^2\end{aligned}"></div>
   <p data-pid="67cee6">Far-from-the-mean bound technique: <b>for every k &gt; 0 and σ &gt; 0, fewer than n/k² of the values lie more than kσ from the mean.</b> Each such value adds more than k²σ² to Σᵢ(xᵢ − x̄)², which is nσ², and nothing in the sum is negative. So (their number) · k²σ² &lt; nσ². It was proved in 1853, and again in 1867. For k = 2: fewer than a quarter of any list lie more than 2σ from its mean, whatever the list.</p>
   <p data-pid="5f5554">The worked lines read 5h’s ≈ for a real, as 5h read it for a fraction: σ ≈ 6.54 says σ rounds to 6.54 at two places. That needs no new line, since it is checked on the squares: 6.535² ≤ 42.8 &lt; 6.545² gives 6.535 ≤ σ &lt; 6.545 (powers-keep-order, read backwards).</p>
   <pre class="lines" data-k="ember" data-label="8·stat: worked">
@@ -113,8 +119,10 @@ y_0 \le \dots \le y_{n-1} @@ 5·stat's sorting; the sum is the same in sorted or
   <aside class="nature">
     <div class="eyebrow">Anexact, yet rigorous · counting, again</div>
     <p data-pid="fc197e">4k found a principle of the second kind of care in a pile of coin tosses: random things in a crowd make a steady shape. 4·stat wrote the pile down as a tally table, with the range as its crudest width. 4·crypt read the shape of a pile of letters, and 5·stat gave a list its middle. This page gives a list the second number its shape needs: how wide it is.</p>
-    <p data-pid="4e427f"><b>The spread is part of the answer, not noise around it.</b></p>
-    <p data-pid="bbffc7">Five July highs in Redding have a mean of 72 °F. The mean alone says little about tomorrow. With σ ≈ 6.5 it says something, and the far-from-the-mean bound says it for every list: fewer than a quarter of the values lie more than 13 °F from the middle.</p>
+    <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{the spread is part of the answer}\end{aligned}"></div>
+  <p data-pid="4e427f"><b>The spread is part of the answer, not noise around it.</b></p>
+    <div class="eqline c6" data-tex="\begin{aligned}&amp;\bar x = 72,\ \sigma \approx 6.5\\ &amp;\Rightarrow\ \text{fewer than } n/4 \text{ beyond } 13\end{aligned}"></div>
+  <p data-pid="bbffc7">Five July highs in Redding have a mean of 72 °F. The mean alone says little about tomorrow. With σ ≈ 6.5 it says something, and the far-from-the-mean bound says it for every list: fewer than a quarter of the values lie more than 13 °F from the middle.</p>
     <p class="bait" data-pid="986699">Two towns both have a mean July high of 72 °F. In one σ is 2 °F, in the other 12 °F. Packing for a week in July, what do you bring to each?</p>
   </aside>
   <section class="sayback">

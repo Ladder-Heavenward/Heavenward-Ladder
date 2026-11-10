@@ -51,6 +51,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <div class="tags"><span class="tag logi">10·logi · logistics</span></div>
   <h1>How Many Trucks Does a Route Need?</h1>
   <p data-pid="3f853e">How many trucks does a route need? Every summer morning in the Salinas Valley, crews cut lettuce in the fields, and trucks carry it to the coolers in Salinas, where it is chilled within hours of being cut. Too few trucks, and cut lettuce wilts in the sun. Too many, and drivers sit idle and are paid to wait. The question is hard because nothing about it stays still: trucks leave at odd times, some trips run long, and a jam at the cooler backs up into the fields. This page proves one exact fact about any queue at all: the number of items in it, on average, is how often they arrive times how long each one stays. It proves the fact for a day by counting, and for the long run by rung 10's limits. Then it counts the trucks, and shows why one slow step fills the whole line.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\textstyle\sum_t N(t) = \sum_j W_j;\quad L = \lambda W\end{aligned}"></div>
   <p class="gesture" data-pid="8d43cb">Count the item-hours two ways: hour by hour, adding how many are waiting, and item by item, adding how long each stays. Divide by the hours: the average number waiting is the arrivals per hour times the average stay. Trucks on the road are trips per hour times hours per trip. And the line can pass on no more per hour than its slowest step: past that, the queue passes every bound.</p>
 </header>
 
@@ -58,7 +59,9 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <h2 class="sthead"><span class="stno">10logi1</span>A Queue, Counted by the Hour</h2>
 
   <p data-pid="2f3a07">Logistics is the work of getting things where they are needed, when they are needed. Its first object is the <b>queue</b>, read broadly: any place where items arrive, stay a while, and leave. A cooler holding pallets is one; so is a dock holding trucks, or a road holding the trucks on it.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{item } j:\ a_j \le d_j;\quad W_j\ :=\ d_j - a_j\\ &amp;N(t)\ :=\ \#\{j : a_j \le t &lt; d_j\}\end{aligned}"></div>
   <p class="eqline" data-pid="45b44d">From here on, on this page, time is counted in whole hours, 0, 1, 2, …, and the queue is looked at once in each hour. Item j arrives at hour a_j and leaves at hour d_j, with a_j ≤ d_j. It is in the queue at the hours a_j, a_j + 1, …, d_j − 1, and its <b>stay</b> is W_j = d_j − a_j hours. N(t) names the number of items in the queue at hour t.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{item-hour}\ :=\ (j, t) \text{ with } a_j \le t &lt; d_j\end{aligned}"></div>
   <p data-pid="d9dd0e">A pair (j, t) with item j in the queue at hour t is an <b>item-hour</b>. A truck that waits three hours at a dock makes three item-hours there.</p>
   <p data-pid="095b61">Item-hours technique: <b>if every item that is ever in the queue during hours 0 to T − 1 arrives and leaves within those hours, then Σ_{t&lt;T} N(t) = Σ_j W_j.</b></p>
   <pre class="lines" data-k="ember" data-label="this page: the item-hours technique">
@@ -92,6 +95,7 @@ L = \tfrac{20}{6},\ \ \lambda = \tfrac{10}{6} \text{ per hour},\ \ W = 2 \text{ 
   <h2 class="sthead"><span class="stno">10logi2</span>The Long Run</h2>
 
   <p data-pid="d8daba">A cooler that runs day and night never starts a window empty and ends it empty. Then the item-hours inside the window fall short of the stays: items still in the queue at the end have hours to come. Rung 10 says how much that matters: in the long run, nothing.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;L_T,\ \lambda_T,\ W_T:\ \text{three sequences}\end{aligned}"></div>
   <p data-pid="ee48db">For each T, let L_T be the average number in the queue over hours 0 to T − 1, let λ_T be the arrivals per hour over those hours, and let W_T be the average full stay of the items that arrived in them. These are three sequences (9·cb4), and 10f says what it means for each to head to a limit.</p>
   <p data-pid="9de2c4">Long-run technique: <b>if the queue never holds more than M items, no item stays more than S hours, λ_T → λ and W_T → W, then L_T → λW.</b> Suppose also the queue is empty at hour 0.</p>
   <pre class="lines" data-k="ember" data-label="this page: the long-run technique">
@@ -102,6 +106,7 @@ L = \tfrac{20}{6},\ \ \lambda = \tfrac{10}{6} \text{ per hour},\ \ W = 2 \text{ 
 \lambda_T W_T - L_T \to 0 @@ the squeeze, far out (10d, 10f), between 0 and MS/T
 L_T = \lambda_T W_T - (\lambda_T W_T - L_T) \to \htmlClass{keep}{\lambda W - 0} \quad \blacksquare @@ limits-multiply, then limits-subtract
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;N(t) \le M,\ W_j \le S:\ \text{the bounds}\end{aligned}"></div>
   <p data-pid="6a8f18">The bounds M and S are not decoration. A queue that grows without end has no M, and then L_T need not head anywhere; the slow step below makes one.</p>
   <section class="sayback">
     <h3>Question</h3>
@@ -114,6 +119,7 @@ L_T = \lambda_T W_T - (\lambda_T W_T - L_T) \to \htmlClass{keep}{\lambda W - 0} 
 <section class="class step" data-step="10logi3">
   <h2 class="sthead"><span class="stno">10logi3</span>The Trucks</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{trucks on the road} = \text{trips/hour} \times \text{hours/trip}\end{aligned}"></div>
   <p data-pid="8c617e">Read the road as the queue and the trucks as its items. A truck arrives when it sets out on a trip, and leaves when it is back and free. Its stay is the hours per trip: the drive out, the loading, the drive back, the unloading, and any waiting between. So the average number of trucks on the road is the trips started per hour times the hours per trip.</p>
   <p data-pid="fa86af">Truck-count technique: <b>a route needs at least (trips per day) × (hours per trip) ÷ (hours each truck works a day) trucks.</b> Each truck gives at most its working hours to the road each day, and the route uses trips × hours-per-trip truck-hours: the item-hours technique, counted by trucks and by trips.</p>
   <pre class="lines" data-k="ember" data-label="this page: lettuce from Soledad to Salinas">
@@ -122,6 +128,7 @@ L_T = \lambda_T W_T - (\lambda_T W_T - L_T) \to \htmlClass{keep}{\lambda W - 0} 
 L = 6 \times 2.5 = \htmlClass{new}{15} \text{ trucks on the road} @@ the queue identity
 \tfrac{60 \times 2.5}{10} = \htmlClass{keep}{15} \text{ trucks, at the least} @@ truck-count; a sixteenth for the one that breaks down
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;6 \times 0.5 = 3 \text{ more trucks}\end{aligned}"></div>
   <p data-pid="09c1c3">Two things change the count, and the identity says by how much. More loads an hour raise λ, and the trucks rise in proportion. Longer trips raise W, and the trucks rise in proportion too. A half-hour wait at the cooler, on every trip, adds 6 × 0.5 = 3 trucks, bought only to stand in a line.</p>
   <section class="sayback">
     <h3>Question</h3>
@@ -134,7 +141,9 @@ L = 6 \times 2.5 = \htmlClass{new}{15} \text{ trucks on the road} @@ the queue i
 <section class="class step" data-step="10logi4">
   <h2 class="sthead"><span class="stno">10logi4</span>Why a Slow Step Fills the Whole Line</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\mu:\ \text{capacity of a step}\\ &amp;D(n):\ \text{items out by hour } n\end{aligned}"></div>
   <p data-pid="6020dd">A line is a chain of steps that every item passes in turn: loading, driving, unloading, cooling. Write μ for the most items a step can pass on in an hour, its <b>capacity</b>, and D(n) for the items that have left the last step by hour n. Here μ is the Greek letter mu, in its small form: on this page it names a capacity per hour, and its capital form is not used.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;D(n) \le \mu_{\min} \cdot n\end{aligned}"></div>
   <p data-pid="5613c0">Slowest-step technique: <b>a line passes on no more items an hour than its slowest step: D(n) ≤ μ_min · n.</b> Every item that leaves the line has passed the slowest step, which passes on at most μ_min an hour. ∎ Speeding up any other step does not change the bound.</p>
   <p data-pid="1707b4">Now let items arrive at λ an hour, steadily, with λ &gt; μ_min. By hour n, about λn have arrived and at most μ_min · n have left. So at least (λ − μ_min) · n are still in the line. That is a sequence that passes every bound (10f): for any number B, past n = B/(λ − μ_min) the line holds more than B. They pile up before the slow step, then fill the steps before it, back to the field. By the queue identity, read backwards, a line that keeps growing makes every item stay longer: W = L/λ grows with it.</p>
   <pre class="lines" data-k="ember" data-label="this page: a cooler that is too slow">
@@ -143,6 +152,7 @@ L = 6 \times 2.5 = \htmlClass{new}{15} \text{ trucks on the road} @@ the queue i
 \text{hour } 10:\ \ \htmlClass{new}{10} \text{ trucks waiting} @@ the last load of the day waits about 2 hours (10 ahead, 5 an hour)
 \tfrac{D(n)}{n} \to \htmlClass{keep}{5} @@ the cooler's pace, whatever the trucks or the crews do
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\lambda \le \mu_{\min} \Rightarrow \tfrac{D(n)}{n} \to \lambda\end{aligned}"></div>
   <p data-pid="503cc2">When λ ≤ μ_min and arrivals are steady, the line settles instead, and D(n)/n heads to λ: the line passes on what it is given. Real arrivals are not steady, and a line near its capacity wobbles badly. That is why planners leave room above λ; the cellar says a little more.</p>
   <section class="pic" id="pic">
     <div class="eyebrow">The picture · left: a day at a dock, counted by hours and by trucks · right: a line with a slow step</div>

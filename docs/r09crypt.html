@@ -59,6 +59,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <div class="tags"><span class="tag crypt">9·crypt · cryptography</span></div>
   <h1>Can a Code Be Truly Unbreakable?</h1>
   <p data-pid="395ec5">Can a code be truly unbreakable? People have hidden messages for as long as they have written them. For as long, other people have read what was hidden. Many ciphers were called unbreakable, and nearly all of them were broken, usually by a patient reader with tallies and a good guess. So the question sounds like a boast. It is hard because "unbreakable" has to mean something exact. It cannot mean "nobody has broken it yet". It has to mean that the secret text, on its own, tells a reader nothing about the message. This page builds a cipher that meets that demand, from 4·comp's exclusive or. It proves that a key used once hides everything but the length. Then it shows how a key used twice gives both messages away, as it did to real spies in the 1940s.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;c = m \oplus k;\quad m = c \oplus k\end{aligned}"></div>
   <p class="gesture" data-pid="131328">Write the message in bits, and a key of bits as long as it, chosen by coin tosses. The secret text is the message and the key joined by exclusive or, place by place, and the same joining with the same key runs it back. Used once, every message of that length fits the secret text with exactly one key. Used twice, the key cancels, and the two secret texts joined give the two messages joined.</p>
 </header>
 
@@ -66,7 +67,9 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <h2 class="sthead"><span class="stno">9crypt1</span>Ciphers, Keys and Secret Text</h2>
 
   <p data-pid="7a53af">A <b>cipher</b> is a pair of rules. One turns a message into secret text with the help of a <b>key</b>; the other turns the secret text back into the message, with the same key. The message is called the <b>plain text</b>, and the secret text the <b>cipher text</b>. Turning plain text into cipher text is <b>encrypting</b>; turning it back is <b>decrypting</b>. 4·crypt's shift was a cipher: its key was how far to count on, and there were only 25 keys worth trying. An attacker tried them all.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{A} = 00000,\ \text{B} = 00001,\ \ldots,\ \text{Z} = 11001\end{aligned}"></div>
   <p class="eqline" data-pid="2b20aa">From here on, on this page, m names a message, k a key and c a cipher text, each a list of bits. A letter is written as its place in the alphabet, counting from A = 0 to Z = 25, in five bits (4i's numerals in twos): A is 00000, B is 00001, L is 01011, Z is 11001.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{a list of } n \text{ bits} : n \to 2;\quad 2^n \text{ of them}\\ &amp;2^{20} = 1\,048\,576\end{aligned}"></div>
   <p data-pid="c9fb20">A list of n bits is a function from n to 2 = {0, 1}: it gives each place 0, 1, …, n − 1 a bit. By 4k's counted-functions technique there are 2ⁿ of them. A word of four letters is 20 bits, and there are 2²⁰ = 1 048 576 lists of 20 bits.</p>
   <section class="sayback">
     <h3>Question</h3>
@@ -79,6 +82,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <section class="class step" data-step="9crypt2">
   <h2 class="sthead"><span class="stno">9crypt2</span>Exclusive or, Place by Place</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;(m \oplus k)(i)\ :=\ m(i) \oplus k(i)\end{aligned}"></div>
   <p class="eqline" data-pid="f6b2e6">From here on, on this page, for lists m and k of n bits, m ⊕ k names the list of n bits whose bit at each place i is m(i) ⊕ k(i). 4·comp's ⊕ joined two single marks, 1 when exactly one of them is 1. Here it joins two lists of the same length, one place at a time. On lists of one bit it is the old ⊕.</p>
   <p data-pid="c90625">Four facts about single bits, each checked on its rows, as 4·comp checked its samenesses. Write 0 here for a list of zeros.</p>
   <pre class="lines" data-k="teal" data-label="from 4·comp: samenesses, checked row by row">
@@ -87,6 +91,7 @@ A \oplus A = \htmlClass{new}{0} @@ rows: 0 ⊕ 0 = 0, 1 ⊕ 1 = 0. Exactly one o
 A \oplus B = B \oplus A @@ four rows; "exactly one of" does not care about order
 (A \oplus B) \oplus C = A \oplus (B \oplus C) @@ eight rows: each side is 1 exactly when an odd number of A, B, C are 1
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;m \oplus 0 = m;\quad m \oplus m = 0;\quad m \oplus k = k \oplus m\\ &amp;(m \oplus k) \oplus j = m \oplus (k \oplus j)\end{aligned}"></div>
   <p data-pid="078990">Each fact is true at every place, so it is true for lists of bits, place by place. That is all the algebra the pad needs.</p>
   <section class="sayback">
     <h3>Question</h3>
@@ -99,6 +104,7 @@ A \oplus B = B \oplus A @@ four rows; "exactly one of" does not care about order
 <section class="class step" data-step="9crypt3">
   <h2 class="sthead"><span class="stno">9crypt3</span>The Pad</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;E_k(m)\ :=\ m \oplus k\end{aligned}"></div>
   <p class="eqline" data-pid="97d84b">From here on, on this page, for a key k of n bits, E_k names the function from lists of n bits to lists of n bits given by E_k(m) = m ⊕ k. Encrypting is E_k. The cipher that uses it, with a key as long as the message and used for one message only, is the <b>pad</b>.</p>
   <p data-pid="ee7bce">Own-way-back technique: <b>E_k ∘ E_k = id: the same key, used the same way, undoes itself.</b></p>
   <pre class="lines" data-k="ember" data-label="this page: the own-way-back technique">
@@ -131,6 +137,7 @@ E_{m \oplus c}(m) = m \oplus (m \oplus c) = (m \oplus m) \oplus c = 0 \oplus c =
 m \oplus k = c \Rightarrow m \oplus (m \oplus k) = m \oplus c @@ only one key: ⊕ m on both sides (substitute for the expression)
 \Rightarrow \htmlClass{new}{k = m \oplus c} \quad \blacksquare @@ the left side is k, by the first line's techs
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;k \mapsto k \oplus c = E_c:\\ &amp;\qquad\text{a bijection, keys} \to \text{messages}\end{aligned}"></div>
   <p data-pid="a35f03">Read it as a function. Fix the cipher text c. The rule k ↦ k ⊕ c sends each key to the message it decrypts c into. It is E_c, so it undoes itself, so it is a bijection from the keys onto the messages of length n. Trying every key lists every message of that length, each exactly once. For LODI's cipher text, the key 10011 01001 10000 10111 gives OAKS, and 10001 01001 10110 00101 gives MAMA. Nothing in the list points at LODI.</p>
   <p data-pid="268db8">That is the exact sense of "hides everything". It needs the key to have been picked with no pattern an attacker could guess: coin tosses, not a phrase from a book. Then the attacker has no reason to prefer one key, and so none to prefer one message. The cipher text says how long the message is, and nothing else.</p>
   <section class="sayback">
@@ -144,6 +151,7 @@ m \oplus k = c \Rightarrow m \oplus (m \oplus k) = m \oplus c @@ only one key: �
 <section class="class step" data-step="9crypt5">
   <h2 class="sthead"><span class="stno">9crypt5</span>Why the Key Must Be as Long as the Message</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;r &lt; n \Rightarrow 2^r &lt; 2^n:\ \text{some message ruled out}\end{aligned}"></div>
   <p data-pid="9e1076">Short-key technique: <b>if the keys are fewer than the messages, some cipher text rules some message out.</b> Suppose the keys have r bits, with r &lt; n, and each is stretched to n bits by a fixed rule, say by repeating it. Fix a cipher text c. The messages that fit c are the outputs of k ↦ (k stretched) ⊕ c, one for each key. So there are at most 2ʳ of them (each fitting message is counted by at least one key). There are 2ⁿ messages, and 2ʳ &lt; 2ⁿ. So some message of length n fits no key at all. ∎ The attacker learns something: that message was not sent. With a short repeated key she learns far more than that, as later cryptography pages show.</p>
   <p data-pid="c97af1">So the price of the pad is its key. Every bit ever sent costs a bit of key, made in advance, carried to the other side, and burned after one use.</p>
 
@@ -179,6 +187,7 @@ m_1 \oplus m_2 = 01011\ 01010\ 01111\ 10000\ \cdots @@ from the two cipher texts
 \text{crib MEET at place } 1:\ \text{G, L, U, A} @@ GLUA: nonsense, so that place is dropped
   </pre>
   <p data-pid="006106">Each correct guess in one message gives letters of the other, which suggest new guesses. The whole of both messages can come out this way, and then the key too: k = m₁ ⊕ c₁, by one-key-each. In 1942, under the pressure of war, a Soviet office printed some pages of its pads twice. American codebreakers found the repeats, and over the following decades read parts of thousands of messages. They named spies who had never been suspected.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;E_j \circ E_k = E_{k \oplus j}\end{aligned}"></div>
   <p data-pid="049629">Two pads in a row are one pad: E_j ∘ E_k = E_{k ⊕ j}, by regroup. So encrypting twice with two keys is no stronger than once, and a key used twice is not rescued by a second key used twice.</p>
   <section class="pic" id="pic">
     <div class="eyebrow">The picture · left: the pad used once, and every message fits · right: the pad used twice, and a crib dragged along</div>
