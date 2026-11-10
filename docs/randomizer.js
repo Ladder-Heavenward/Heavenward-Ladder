@@ -5081,6 +5081,424 @@ QP.push({id:'25f.maps',step:'25f',label:'straight maps and inside out',open:()=>
     const right=circ25(D,B,-C,1,'u','v'), wrong=uniq(right,[circ25(D,B,C,1,'u','v'),circ25(1,B,-C,D,'u','v'),circ25(D,-B,-C,1,'u','v'),circ25(D,B,-C,-1,'u','v'),circ25(D+1,B,-C,1,'u','v')],3);
     return {index:'q:25f.work[k;'+[c,e,r].join(';')+']', lines:[[circ25(1,B,C,D,'x','y'),'the circle with centre '+cx25(c,e)+' and radius '+r],['z ↦ 1/z = u + iv','inside out']], ask:'Where do its points other than 0 go?', right, opts:shuffle([right,...wrong]), lead:'', why:'Circle-or-line technique: A(x² + y²) + Bx + Cy + D = 0 goes to D(u² + v²) + Bu − Cv + A = 0. A and D swap, and C changes sign.'+(D===0?' Here D = 0: the circle runs through 0, and its image is a line.':'')}; }});
 
+/* ===== Laundry 5, rung 26 (floor 5 pools, stage Y), part 1: 26a to 26f ===== */
+Object.assign(STEPS,{'26a':['r26a','e to an Imaginary Power'],'26b':['r26b','The Exponential Still Turns Adding Into Multiplying'],'26c':['r26c','The Logarithm of −1'],'26d':['r26d','A Complex Slope'],'26e':['r26e','Integrals Round a Loop'],'26f':['r26f','No Hole, No Total'],'26g':['r26g','The Rim Fixes the Inside'],'26h':['r26h','Residues'],'26i':['r26i','e^(iθ) by Hand'],'26j':['r26j','Why 1/(1 + x²) Has Radius 1'],'26k':['r26k','Real Integrals by Residues'],'26l':['r26l','The Factorial Past the Counting Numbers']});
+const en26=a=>a===0?'1':a===1?'e':'e'+sup15(a), pii26=(n,d)=>{ const s=pi21(n,d||1); return s==='0'?'0':s.replace('π','πi'); };
+const ue26=(u,a)=>a===0?['1','i','−1','−i'][u]:['','i','−','−i'][u]+en26(a);
+const O26=['0','2πi','−2πi','πi'];
+
+/* ---------- 26a e to an Imaginary Power ---------- */
+const WA26=[
+  ['Is e^(iθ) = (e^i)^θ, a real power of a number?','no: e^(iθ) is defined by the sum; powers with complex numbers wait for the logarithm of 26c',['yes','yes, for θ > 0','no: e^(iθ) has no meaning'],'For every z in ℂ, e^z = 1 + z + z²/2! + z³/3! + ⋯.'],
+  ['Does e^(iθ) grow as θ grows?','no: its size is 1 for every real θ; it turns, it does not grow',['yes, like e^θ','yes, but more slowly than e^θ','no: it shrinks toward 0'],'Turn-growth technique: e^(iθ) = cos θ + i sin θ, and cos²θ + sin²θ = 1.'],
+  ['Σ zₖ settles. Does Σ |zₖ| settle?','not always: the technique runs one way only; Σ (−1)ᵏ/k settles but Σ 1/k does not',['yes, always','yes, when every zₖ is real','no, never'],'Plane-size technique: if Σ |zₖ| settles, then Σ zₖ settles.'],
+  ['e^(2πi) = 1. Is 2πi = 0, then?','no: e^z is not one-to-one on ℂ; e^(iθ) repeats every whole turn',['yes: e^z = 1 only at z = 0','yes, on the floor','no: e^(2πi) is not 1'],'On the floor e^x is one-to-one. Off it, a whole turn comes back to the same point.'],
+  ['What is e^(iθ), for real θ?','cos θ + i sin θ',['cos θ − i sin θ','sin θ + i cos θ','e^θ(cos 1 + i sin 1)'],'Turn-growth technique: the even pieces of the sum are the cosine sum, and the odd pieces, divided by i, are the sine sum.'],
+  ['How is e^z given for every z in ℂ?','by the sum 1 + z + z²/2! + z³/3! + ⋯, which settles for every z',['as e multiplied by itself z times','by e^(a + bi) = e^a + e^(bi)','only for z on the floor'],'Σ |z|ᵏ/k! = e^|z| settles, so the plane-size technique applies.']];
+const EV26=[['π/2','i'],['π','−1'],['3π/2','−i'],['2π','1'],['π/3','1/2 + (√3/2)i'],['π/4','(1 + i)/√2'],['π/6','√3/2 + (1/2)i'],['2π/3','−1/2 + (√3/2)i'],['−π/2','−i'],['3π','−1']];
+const SM26=[['Σ iᵏ/k²',0,'The sizes are 1/k², and Σ 1/k² settles.'],['Σ (i/2)ᵏ',0,'The sizes are 1/2ᵏ, a ratio sum with ratio 1/2.'],['Σ iᵏ',1,'Every piece has size 1.'],['Σ (2i)ᵏ',1,'The pieces have sizes 2ᵏ.'],['Σ (3 + 4i)ᵏ/10ᵏ',0,'|3 + 4i| = 5, so the sizes are 1/2ᵏ, a ratio sum with ratio 1/2.'],['Σ (3 + 4i)ᵏ/5ᵏ',1,'|3 + 4i| = 5, so every piece has size 1.'],['Σ (iθ)ᵏ/k!, for a real θ',0,'The sizes are |θ|ᵏ/k!, the sum for e^|θ|.'],['Σ iᵏ/k³',0,'The sizes are 1/k³, and Σ 1/k³ settles.']];
+QP.push({id:'26a.turn',step:'26a',label:'growth fed a turn',open:()=>measured('26a'),make(){ return writtenQ('26a.turn',WA26); }},
+  {id:'26a.work',step:'26a',mode:'work',label:'points on the circle',open:()=>measured('26a'),make(){
+    const t=rnd(4);
+    if(t===0){ const [th,right]=pick(EV26), wrong=uniq(right,shuffle(EV26.map(v=>v[1])),3);
+      return {index:'q:26a.work[v;'+th+']', lines:[['θ = '+th,'a real number']], ask:'What is e^(iθ)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Turn-growth technique: e^(iθ) = cos θ + i sin θ, the point of the circle of size 1 at the turn θ.'}; }
+    if(t===1){ const c=2+rnd(6), b=1+rnd(9), right=String(c), wrong=uniq(right,[c+en26(b),String(c*b),String(c+b),'1',en26(b)],3);
+      return {index:'q:26a.work[s;'+[c,b].join(';')+']', lines:[['z = '+c+'e^('+(b===1?'':b)+'i)','a number of ℂ']], ask:'What is |z|?', right, opts:shuffle([right,...wrong]), lead:'', why:'|e^(iθ)| = 1 for every real θ, and sizes multiply, so |z| = '+c+'. The '+b+' is a turn, in radians.'}; }
+    if(t===2){ const q=pick([2,3,4,6]), p=1+rnd(q-1), k=pick([1,2,-1]), f=(n,d)=>'e^('+pii26(n,d)+')', right=f(p+2*q*k,q), wrong=uniq(right,[f(p+q,q),f(-p,q),f(p+2*q*k+1,q)],3);
+      if(wrong.includes(f(p,q))) return null;
+      return {index:'q:26a.work[r;'+[p,q,k].join(';')+']', lines:[['z = '+f(p,q),'a point of the circle of size 1']], ask:'Which of these is the same number?', right, opts:shuffle([right,...wrong]), lead:'', why:'e^(iθ) repeats every whole turn: the exponents differ by '+pii26(2*k,1)+'.'}; }
+    const [sum,i,why]=pick(SM26), O=['it settles: the sizes sum, and the plane-size technique applies','it does not settle: its pieces do not head to 0','it settles only on the floor','nothing can be said of a sum off the floor'];
+    return {index:'q:26a.work[m;'+sum+']', lines:[[sum,'a sum of complex numbers']], ask:'Does it settle?', right:O[i], opts:shuffle(O.slice()), lead:'', why:why+(i?' Pieces that do not head to 0 cannot sum.':' Plane-size technique: if Σ |zₖ| settles, then Σ zₖ settles.')}; }},
+  {id:'26a.line',step:'26a',mode:'proof',label:'a turn, not a growth',open:()=>measured('26a'),make(){
+    const n=1+rnd(9), V=[
+      ['a1',[['θ = '+n,'a real number'],['|e^('+(n===1?'':n)+'i)| = 1','cos²θ + sin²θ = 1']],2,0,'e^(iθ) = cos θ + i sin θ, of size 1 for every real θ.'],
+      ['a2',[['e^('+pii26(2*n,1)+') = 1 = e⁰','whole turns'],[pii26(2*n,1)+' = 0','equal powers have equal exponents']],2,1,'e^z is not one-to-one on ℂ. It repeats every whole turn.'],
+      ['a3',[['Σ |zₖ| settles','given'],['Σ zₖ settles','the plane-size technique']],2,0,'Each part of zₖ is at most its size, so both parts settle in size.'],
+      ['a4',[['Σ zₖ settles','given'],['Σ |zₖ| settles','the plane-size technique']],2,1,'The technique runs one way only. Σ (−1)ᵏ/k settles and Σ 1/k does not.'],
+      ['a6',[['e^(iπ) = cos π + i sin π','the turn-growth technique'],['e^(iπ) = −1','cos π = −1 and sin π = 0']],2,0,'The half turn lands on −1.'],
+      ['a7',[['θ = '+(2*n+1)+'/2','a real number'],['e^(iθ) = (e^i)^('+(2*n+1)+'/2), one number','a power of a power']],2,1,'A power with a fraction for exponent is a root, and roots in ℂ are many-valued. e^(iθ) is defined by the sum.']];
+    const [tag,lines,k,rr,why]=pick(V);
+    return {index:'q:26a.line['+[tag,n].join(';')+']', stack:true, lines, ask:'Is line '+k+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+QP.push({id:'26a.wheel',step:'26a',mode:'word',label:'a mark on a wheel',open:()=>measured('26a'),make(){
+    const R=2+rnd(5), q=1+rnd(6), what=pick(['A chalk mark','A valve cap','A dab of paint','A reflector']), U=[[1,0],[0,1],[-1,0],[0,-1]], [x,y]=U[q%4], f=v=>cx25(R*v[0],R*v[1]);
+    const right=f([x,y]), wrong=U.filter(v=>v[0]!==x||v[1]!==y).map(f);
+    return {index:'q:26a.wheel['+[what,R,q].join(';')+']', a3:['26a.wheel',DASH,DASH], story:what+' sits on the rim of a wheel of radius '+R+'. The hub is at 0 of the plane, and the mark starts at the point '+R+'. The wheel turns anticlockwise through θ = '+pi21(q,2)+'.', lines:[], ask:'At which point is the mark now?', right, opts:shuffle([right,...wrong]), lead:'', why:'Turn-growth technique: the mark is at '+R+'e^(iθ) = '+R+'(cos θ + i sin θ). '+pi21(q,2)+' is '+q+(q===1?' quarter turn':' quarter turns')+', which lands on '+right+'.'}; }});
+
+/* ---------- 26b The Exponential Still Turns Adding Into Multiplying ---------- */
+const WB26=[
+  ['Is |e^(a + bi)| = e^|a + bi|?','no: the size is e^a; the turn adds nothing to the length',['yes','no: the size is e^b','no: the size is 1'],'Growth-and-turn technique: e^z = e^a(cos b + i sin b).'],
+  ['Is e^z = 0 for some z?','no: e^z e^(−z) = 1',['yes, far to the left','yes, at z = πi','yes, at z = 0'],'Growth-and-turn technique: e^z is never 0, and 1/e^z = e^(−z).'],
+  ['e^z = e^w. Is z = w?','only up to a whole number of 2πi',['yes','yes, when z and w are off the floor','no: then z = −w'],'Whole-turn technique: e^z = e^w exactly when z − w is a whole number of 2πi.'],
+  ['Is (e^z)^w = e^(zw)?','not in general: powers with complex numbers are many-valued',['yes, always','yes, by the plane-adding technique','no: (e^z)^w = e^(z + w)'],'The plane-adding technique is about sums of exponents. 26c shows how the power rule fails.'],
+  ['What is e^(z + w)?','e^z e^w, for all z and w in ℂ',['e^z + e^w','e^(zw)','e^z e^w, but only for real z and w'],'Plane-adding technique.'],
+  ['When is e^z = 1?','exactly when z = 2πik for some whole number k',['only at z = 0','whenever z is on the upright','whenever |z| = 1'],'Whole-turn technique.']];
+const EQ26=[['1','2πik','0'],['−1','πi + 2πik','πi'],['i','πi/2 + 2πik','πi/2'],['−i','−πi/2 + 2πik','−πi/2'],['e','1 + 2πik','1'],['−e','1 + πi + 2πik','1 + πi'],['e²','2 + 2πik','2']];
+QP.push({id:'26b.adds',step:'26b',label:'adding into multiplying',open:()=>measured('26b'),make(){ return writtenQ('26b.adds',WB26); }},
+  {id:'26b.work',step:'26b',mode:'work',label:'growth and turn',open:()=>measured('26b'),make(){
+    const t=rnd(4), a=rnd(4), u=rnd(4);
+    if(t===0){ const tn=['2πi','πi/2','πi','−πi/2'][[0,1,2,3][u]], z=(a===0?'':a+(tn[0]==='−'?' − ':' + '))+(a===0?tn:tn.replace('−','')), right=ue26(u,a), wrong=uniq(right,[ue26((u+2)%4,a),ue26((u+1)%4,a),ue26((u+3)%4,a),ue26(u,a+1)],3);
+      return {index:'q:26b.work[v;'+[a,u].join(';')+']', lines:[['z = '+z,'a number of ℂ']], ask:'What is e^z?', right, opts:shuffle([right,...wrong]), lead:'', why:'Growth-and-turn technique: e^(a + bi) = e^a(cos b + i sin b). The size is '+en26(a)+', and the turn '+tn.replace('i','').replace('−','−')+' lands on '+['1','i','−1','−i'][u]+'.'}; }
+    if(t===1){ const [p,q,r]=z25(), right=en26(p), wrong=uniq(right,[en26(r),en26(q),en26(Math.abs(p)+Math.abs(q)),'1',en26(-p)],3);
+      return {index:'q:26b.work[s;'+[p,q].join(';')+']', lines:[['z = '+cx25(p,q),'a number of ℂ']], ask:'What is |e^z|?', right, opts:shuffle([right,...wrong]), lead:'', why:'Growth-and-turn technique: |e^z| = e^a, with a = '+sg(p)+' the floor part. The upright part '+sg(q)+' only turns.'}; }
+    if(t===2){ if(Math.random()<0.15){ const right='no z at all', wrong=['z = 0','z = 2πik, for every whole k','z = −1 + 2πik, for every whole k'];
+        return {index:'q:26b.work[e;0]', lines:[['e^z = 0','an equation in ℂ']], ask:'Which z solve it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Growth-and-turn technique: e^z e^(−z) = 1, so e^z is never 0.'}; }
+      const [c,all,one]=pick(EQ26), right='z = '+all+', for every whole k', wrong=uniq(right,['z = '+one+' only','z = '+all.replace('2πik','πik')+', for every whole k','no z at all','z = '+(one==='0'?'πi + ':one==='πi'?'':one[0]==='−'?one.slice(1)+' + ':'−'+one+' + ')+'2πik, for every whole k'],3);
+      return {index:'q:26b.work[e;'+c+']', lines:[['e^z = '+c,'an equation in ℂ']], ask:'Which z solve it?', right, opts:shuffle([right,...wrong]), lead:'', why:'e^('+one+') = '+c+'. Whole-turn technique: e^z = e^w exactly when z − w is a whole number of 2πi.'}; }
+    const p=nz25(4), q=nz25(4), f=(x,y)=>'e^('+cx25(x,y)+')', right=f(-p,-q), wrong=uniq(right,[f(p,-q),f(-p,q),f(p,q),'1/'+f(-p,-q)],3);
+    return {index:'q:26b.work[i;'+[p,q].join(';')+']', lines:[['z = '+cx25(p,q),'a number of ℂ']], ask:'What is 1/e^z?', right, opts:shuffle([right,...wrong]), lead:'', why:'Plane-adding technique: e^z e^(−z) = e⁰ = 1, so 1/e^z = e^(−z).'}; }},
+  {id:'26b.line',step:'26b',mode:'proof',label:'equal powers',open:()=>measured('26b'),make(){
+    const [p,q,r]=z25(), a=1+rnd(6), k=1+rnd(4), Z=cx25(p,q), V=[
+      ['b1',[['z = '+Z,'given'],['|e^z| = '+en26(p),'the growth-and-turn technique']],2,0,'|e^(a + bi)| = e^a.'],
+      ['b2',[['e^z = e^w','given'],['z = w','equal powers have equal exponents']],2,1,'Whole-turn technique: z and w may differ by a whole number of 2πi.'],
+      ['b3',[['e^z = e^w','given'],['z − w = 2πik for some whole k','the whole-turn technique']],2,0,'e^(z − w) = 1 exactly when z − w = 2πik.'],
+      ['b4',[['z = '+Z,'given'],['e^z ≠ 0','e^z e^(−z) = e⁰ = 1, by the plane-adding technique']],2,0,'A product that is 1 has no factor 0.'],
+      ['b5',[['z = '+Z,'given'],['|e^z| = '+en26(r),'the size of the exponent is '+r]],2,1,'The size is e^a with a = '+sg(p)+' the floor part. The upright part only turns.'],
+      ['b6',[['z = '+a+' + '+pii26(2*k,1),'given'],['e^z = '+en26(a),'e^('+pii26(2*k,1)+') = 1, and the plane-adding technique']],2,0,'e^z = '+en26(a)+' · e^('+pii26(2*k,1)+'), and whole turns give 1.'],
+      ['b7',[['e^z = '+en26(a),'given'],['z = '+a,'take ln of both sides']],2,1,'z = '+a+' + 2πik for any whole k. ln undoes exp on the line only.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:26b.line['+[tag,p,q,a,k].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 26c The Logarithm of −1 ---------- */
+const WC26=[
+  ['Is Log(zw) = Log z + Log w, always?','only up to a whole turn: Log(−1) + Log(−1) = 2πi, and Log 1 = 0',['yes, always','never','yes, whenever z and w are off the floor'],'Main-log technique: it holds only when the turns of z and w add to an angle in (−π, π].'],
+  ['1 = √1 = √((−1)(−1)) = √−1 √−1 = i² = −1. Which step fails?','√((−1)(−1)) = √−1 √−1: square roots are two-valued in ℂ, and the product law for roots fails',['i² = −1','√1 = 1','(−1)(−1) = 1'],'Many-powers technique: z^(1/2) has exactly 2 values.'],
+  ['Is log 0 = −∞?','no: e^w is never 0, so 0 has no logarithm',['yes','no: log 0 = 0','no: log 0 = πi'],'Plane-log technique: z = 0 has no logarithm.'],
+  ['e^(Log z) = z. Is Log(e^w) = w, then?','only when the upright part of w lies in (−π, π]: Log(e^(2πi)) = 0',['yes, always','never','only when w is on the floor'],'Log picks the one logarithm with its turn in (−π, π].'],
+  ['How many logarithms has z ≠ 0?','endlessly many: ln r + i(θ + 2πk), one for each whole number k',['one','two','none, unless z is positive'],'Plane-log technique, for z = r e^(iθ).'],
+  ['How many values has z^(1/n), for z ≠ 0?','exactly n',['one','two','endlessly many'],'Many-powers technique: e^(2πik/n) repeats when k grows by n.']];
+const LG26=k=>[['−1','πi',['0','−πi','it has none']],['i','πi/2',['πi','−πi/2','0']],['−i','−πi/2',['πi/2','3πi/2','πi']],['−e','1 + πi',['1','−1','1 − πi']],['−'+k,'ln '+k+' + πi',['ln '+k,'−ln '+k,'ln '+k+' − πi']],[k+'i','ln '+k+' + πi/2',['ln '+k,'ln '+k+' + πi','ln '+k+' − πi/2']],['−'+k+'i','ln '+k+' − πi/2',['ln '+k+' + πi/2','ln '+k+' + 3πi/2','ln '+k]],['ei','1 + πi/2',['1','πi/2','e + πi/2']]];
+const TQ26=[['1',0],['i',1],['−1',2],['−i',-1]], NV26=[['(−8)^(1/3)',3],['i^(1/4)',4],['(1 + i)⁵',1],['2^i',0],['i^i',0],['(−1)^(1/2)',2],['(3 − i)⁻²',1],['(−4)^(1/5)',5],['i^(√2)',0]];
+QP.push({id:'26c.logs',step:'26c',label:'every logarithm',open:()=>measured('26c'),make(){ return writtenQ('26c.logs',WC26); }},
+  {id:'26c.work',step:'26c',mode:'work',label:'logarithms and powers',open:()=>measured('26c'),make(){
+    const t=rnd(4), k=2+rnd(8);
+    if(t===0){ const [z,right,wrong]=pick(LG26(k));
+      return {index:'q:26c.work[m;'+z+']', lines:[['z = '+z,'a number of ℂ']], ask:'What is Log z, the main logarithm?', right, opts:shuffle([right,...wrong]), lead:'', why:'Log z = ln|z| + iθ, with the turn θ taken in (−π, π].'}; }
+    if(t===1){ const [z,all,one]=pick([['−1','πi + 2πik','πi'],['i','πi/2 + 2πik','πi/2'],['1','2πik','0'],['−i','−πi/2 + 2πik','−πi/2'],['−'+k,'ln '+k+' + πi + 2πik','ln '+k+' + πi'],[String(k),'ln '+k+' + 2πik','ln '+k]]);
+      const right=all+', for every whole k', wrong=uniq(right,[one+' only',all.replace('2πik','πik')+', for every whole k','it has none',(one==='0'?'πi':'0')+' only'],3);
+      return {index:'q:26c.work[a;'+z+']', lines:[['z = '+z,'a number of ℂ']], ask:'Which are all the logarithms of z?', right, opts:shuffle([right,...wrong]), lead:'', why:'Plane-log technique: every z ≠ 0, written r e^(iθ), has exactly the logarithms ln r + i(θ + 2πk).'}; }
+    if(t===2){ const [x,n]=pick(NV26), f=m=>m===0?'endlessly many':m===1?'one':'exactly '+m, right=f(n), wrong=uniq(right,shuffle([f(0),f(1),f(2),f(3),f(4)]),3);
+      return {index:'q:26c.work[n;'+x+']', lines:[[x,'a power in ℂ']], ask:'How many values has it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Many-powers technique: zⁿ has one value for whole n; z^(1/n) has exactly n values; and z^w has endlessly many when w is not a fraction.'}; }
+    const [z,a]=pick(TQ26.slice(1)), [w,b]=pick(TQ26.slice(1)), s=a+b, ok=s>-2&&s<=2, hf=m=>m===0?'0':pii26(m,2), right=ok?'yes: the turns add to an angle in (−π, π]':'no: the two differ by 2πi', wrong=ok?['no: the two differ by 2πi','no: the two differ by πi','yes: it holds for all z and w']:['yes: the turns add to an angle in (−π, π]','no: the two differ by πi','yes: it holds for all z and w'];
+    const prod=TQ26.find(v=>((v[1]-s)%4+4)%4===0);
+    return {index:'q:26c.work[p;'+[z,w].join(';')+']', lines:[['z = '+z+' and w = '+w,'two numbers of ℂ']], ask:'Is Log(zw) = Log z + Log w here?', right, opts:shuffle([right,...wrong]), lead:'', why:'Log z + Log w = '+hf(a)+' + '+(b<0?'('+hf(b)+')':hf(b))+' = '+hf(s)+', and zw = '+prod[0]+' has Log(zw) = '+hf(prod[1])+'.'}; }},
+  {id:'26c.line',step:'26c',mode:'proof',label:'one value, or many',open:()=>measured('26c'),make(){
+    const k=2+rnd(8), n=2+rnd(5), a=1+rnd(5), V=[
+      ['c1',[['z = −'+k,'given'],['e^(Log z) = −'+k,'the main-log technique']],2,0,'e^(Log z) = z for every z ≠ 0.'],
+      ['c2',[['w = '+a+' + '+pii26(2*n+1,1),'given'],['Log(e^w) = w','Log undoes exp']],2,1,'Only when the upright part of w lies in (−π, π]. Here Log(e^w) = '+a+' + πi.'],
+      ['c3',[['Log(−'+k+') = ln '+k+' + πi','the main logarithm'],['Log((−'+k+')(−'+k+')) = 2 ln '+k+' + 2πi','the logarithm of a product is the sum']],2,1,'The turns add to 2π, outside (−π, π]. Log('+k*k+') = 2 ln '+k+', on the floor.'],
+      ['c4',[['z = 0','given'],['log z = −∞','e^w heads to 0 far to the left']],2,1,'e^w is never 0, so 0 has no logarithm. −∞ is not a number of ℂ.'],
+      ['c5',[['z = '+k,'a positive number on the floor'],['Log z = ln '+k,'the main-log technique']],2,0,'Log agrees with ln on the positive floor: the turn of a positive real is 0.'],
+      ['c6',[['z ≠ 0 and n = '+n,'given'],['z^(1/'+n+') has exactly '+n+' values','the many-powers technique']],2,0,'e^(2πik/'+n+') repeats when k grows by '+n+'.'],
+      ['c7',[['z = '+k+' and w = '+(k+a),'two positive numbers on the floor'],['Log(zw) = Log z + Log w','the turns add to 0, which lies in (−π, π]']],2,0,'On the positive floor Log is ln, and the old rule holds.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:26c.line['+[tag,k,n,a].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 26d A Complex Slope ---------- */
+const WD26=[
+  ['z̄ is a reflection. Is its slope −1?','no: along the floor the rise over run is 1, along the upright −1; there is no single slope',['yes','no: its slope is 1','no: its slope is i'],'Two-ways technique: with a complex slope, the two directions give the same number.'],
+  ['f = u + iv, with u and v smooth. Has f a complex slope?','not always: the flip has u = x and v = −y, as smooth as can be, and no complex slope',['yes, always','yes, when u and v are polynomials','no, never'],'A complex slope asks the rise over run to head to one number from every direction.'],
+  ['The rise over run of f at z₀ settles along the floor. Does f′(z₀) exist?','not yet: one direction is not every direction',['yes','yes, if it settles at a real number','no: then it cannot exist'],'h may head to 0 from any direction in the plane.'],
+  ['Is (e^z)′ = ze^(z − 1)?','no: that is the power rule misused; the variable is in the exponent, and exp′ = exp',['yes','no: (e^z)′ = e^(z − 1)','no: e^z has no complex slope'],'Plane-exp-slope technique: exp has a complex slope at every z, and exp′(z) = exp z.'],
+  ['What is (1/z)′, for z ≠ 0?','−1/z²',['1/z²','ln z','−1/z'],'Plane-slope technique: rung 13’s rules hold for complex slopes.'],
+  ['f has a complex slope at z₀. How do its rise over run along the floor (h = t) and along the upright (h = it) compare?','they head to the same number',['one heads to the flip of the other','one heads to the negative of the other','nothing ties them'],'Two-ways technique.']];
+const TW26=[['z̄','1','−1',0],['the floor part of z','1','0',0],['the upright part of z','0','−i',0],['iz','i','i',1],['z², at z₀ = 1 + i','2 + 2i','2 + 2i',1],['z + z̄','2','0',0],['3z + 2','3','3',1],['z̄², at z₀ = 1','2','−2',0]];
+const IV26=[['i','1'],['2i','1/4'],['2','−1/4'],['1 + i','i/2'],['3i','1/9'],['−1','−1'],['1 − i','−i/2'],['−2i','1/4'],['3','−1/9']];
+QP.push({id:'26d.slope',step:'26d',label:'a slope from every side',open:()=>measured('26d'),make(){ return writtenQ('26d.slope',WD26); }},
+  {id:'26d.work',step:'26d',mode:'work',label:'slopes in the plane',open:()=>measured('26d'),make(){
+    const t=rnd(4), p=nz25(3), q=nz25(3), a=nz25(5);
+    if(t===0){ const right=cx25(2*p+a,2*q), wrong=uniq(right,[cx25(2*p,2*q),cx25(p*p-q*q+a*p,2*p*q+a*q),cx25(2*p+a,-2*q),cx25(2*p+a,q),cx25(p+a,q)],3); if(wrong.length<3) return null;
+      return {index:'q:26d.work[p;'+[a,p,q].join(';')+']', lines:[['f(z) = z²'+(a<0?' − ':' + ')+(Math.abs(a)===1?'':Math.abs(a))+'z','a polynomial'],['z₀ = '+cx25(p,q),'a point of ℂ']], ask:'What is f′(z₀)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Plane-slope technique: f′(z) = 2z'+pm(a)+', by rung 13’s rules. At z₀ that is 2('+cx25(p,q)+')'+pm(a)+' = '+right+'.'}; }
+    if(t===1){ const [z,right]=pick(IV26), wrong=uniq(right,shuffle(IV26.map(v=>v[1]).concat(['1/2','−1','i'])),3);
+      return {index:'q:26d.work[i;'+z+']', lines:[['f(z) = 1/z','for z ≠ 0'],['z₀ = '+z,'a point of ℂ']], ask:'What is f′(z₀)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Plane-slope technique: (1/z)′ = −1/z². Here z₀² = '+({'i':'−1','2i':'−4','2':'4','1 + i':'2i','3i':'−9','−1':'1','1 − i':'−2i','−2i':'−4','3':'9'})[z]+'.'}; }
+    if(t===2){ const [f,A,B,has]=pick(TW26), O=['they agree, as they must: f has a complex slope there','they differ, so f has no complex slope there','they differ, so the slope is the number halfway between them','they agree, so f has no complex slope there'];
+      return {index:'q:26d.work[w;'+f+']', lines:[['f(z) = '+f,'a function on ℂ'],['along the floor (h = t) the rise over run heads to '+A,'worked out'],['along the upright (h = it) it heads to '+B,'worked out']], ask:'What does the two-ways technique say?', right:O[has?0:1], opts:shuffle(O.slice()), lead:'', why:has?'This f is built by rung 13’s rules from z, so it has a complex slope, and every direction gives the same number.':'Two-ways technique: with a complex slope the two directions head to the same number. '+A+' is not '+B+'.'}; }
+    const k=pick([2,3,-1,'i',-2,5]), ks=typeof k==='number'?sg(k):k, kc=typeof k==='number'?cf22(k,''):k, ez='e^('+kc+'z)';
+    if(Math.random()<0.3){ const right='(1 + z)e^z', wrong=['e^z','ze^z','z²e^(z − 1)'];
+      return {index:'q:26d.work[x;z]', lines:[['f(z) = ze^z','a product']], ask:'What is f′(z)?', right, opts:shuffle([right,...wrong]), lead:'', why:'The product rule holds for complex slopes: 1 · e^z + z · e^z, with exp′ = exp.'}; }
+    const right=(kc==='−'?'−':kc)+ez, wrong=uniq(right,[ez,kc+'ze^('+kc+'z − 1)',ez+'/'+(typeof k==='number'?par10(k):k),(typeof k==='number'?cf22(-k,''):'−i')+ez],3);
+    return {index:'q:26d.work[x;'+ks+']', lines:[['f(z) = '+ez,'a chain']], ask:'What is f′(z)?', right, opts:shuffle([right,...wrong]), lead:'', why:'The chain rule holds for complex slopes, and exp′ = exp: the inside slope '+ks+' comes out in front.'}; }},
+  {id:'26d.line',step:'26d',mode:'proof',label:'one direction, or all',open:()=>measured('26d'),make(){
+    const n=2+rnd(7), k=nz25(6), f=pick(['f','g','h']), V=[
+      ['d1',[[f+'(z) = z'+sup15(n),'given'],[f+'′(z) = '+n+'z'+(n===2?'':sup15(n-1))+' at every z','the plane-slope technique']],2,0,'Rung 13’s rules hold for complex slopes.'],
+      ['d2',[[f+'(z) = z̄','given'],[f+'′(z) = −1','the flip is a reflection']],2,1,'Along the floor the rise over run is 1, along the upright −1. There is no single slope.'],
+      ['d3',[['along the floor, the rise over run of '+f+' at z₀ heads to '+sg(k),'worked out'],[f+'′(z₀) = '+sg(k),'what a slope is']],2,1,'One direction is not every direction.'],
+      ['d4',[[f+'(z) = e^z','given'],[f+'′(z) = ze^(z − 1)','the power rule']],2,1,'The variable is in the exponent. exp′ = exp.'],
+      ['d5',[[f+' has a complex slope at z₀, and along the floor its rise over run heads to '+sg(k),'given'],['along the upright (h = it) it heads to '+sg(k)+' too','the two-ways technique']],2,0,'With a complex slope, every direction heads to the same number, '+f+'′(z₀).'],
+      ['d6',[[f+'(z) = '+n+'/z, for z ≠ 0','given'],[f+'′(z) = −'+n+'/z²','the plane-slope technique']],2,0,'(1/z)′ = −1/z², and a constant in front stays in front.'],
+      ['d7',[[f+' = u + iv, with u and v smooth','given'],[f+' has a complex slope','its parts are smooth']],2,1,'The flip has u = x and v = −y, as smooth as can be, and no complex slope.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:26d.line['+[tag,n,k,f].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 26e Integrals Round a Loop ---------- */
+const WE26=[
+  ['Is ∮ dz/z round |z| = 1 equal to [Log z] = 0?','no: Log has no complex slope across the negative floor; no undoing works all the way round 0',['yes: only the ends count','no: Log is not an undoing of 1/z anywhere','yes, anticlockwise'],'Circle-powers technique: the total is 2πi.'],
+  ['Is |∫_γ f dz| ≤ max|f| · |end − start|?','no: the fence uses the length of the path, not the gap between its ends; a loop has gap 0',['yes','yes, for straight and curved paths alike','no: there is no fence at all'],'Path-fence technique: if |f| ≤ M on the path, and the path has length L, then |∫_γ f(z) dz| ≤ ML.'],
+  ['Is ∫_γ z̄ dz = [z̄²/2]?','no: the flip has no complex slope, so there is no undoing to use',['yes, by the path-ends technique','yes, for loops','no: the undoing is z̄²'],'The path-ends technique needs an F with complex slope F′ = f.'],
+  ['Is ∮ dz/z round |z| = 1 equal to 2π?','no: the i stays, since γ′ = ie^(it); the total is 2πi',['yes','no: it is 0','no: it is 2πr'],'γ(t) = e^(it), so f(γ(t))γ′(t) = i for every t.'],
+  ['Once round the circle |z| = r anticlockwise, what is ∫ zⁿ dz for a whole n?','2πi when n = −1, and 0 for every other whole n',['2πi for every n','0 for every n','2πi rⁿ⁺¹'],'Circle-powers technique.'],
+  ['F′ = f on an open set holding a loop. What is the total of f round the loop?','0: the two ends are the same point',['2πi','F at the centre of the loop','the length of the loop'],'Path-ends technique: ∫_γ f(z) dz = F(γ(v)) − F(γ(u)).']];
+const UN26=[['e^z',0,'e^z is its own undoing on all of ℂ, so only the ends count.'],['1/z²',0,'−1/z is an undoing on the set of z ≠ 0, which holds the loop.'],['1/z',1,'Circle-powers technique, with n = −1. No undoing works all the way round 0.'],['z³',0,'z⁴/4 is an undoing on all of ℂ.'],['1/z³',0,'−1/(2z²) is an undoing on the set of z ≠ 0.'],['−1/z',2,'Circle-powers technique: −1 times 2πi.'],['z² + 1/z',1,'z² totals 0 and 1/z totals 2πi.'],['1/(2z)',3,'Half of the total of 1/z.']];
+QP.push({id:'26e.loop',step:'26e',label:'only the ends count',open:()=>measured('26e'),make(){ return writtenQ('26e.loop',WE26); }},
+  {id:'26e.work',step:'26e',mode:'work',label:'totals along paths',open:()=>measured('26e'),make(){
+    const t=rnd(4), r=1+rnd(5);
+    if(t===0){ const c=pick([0,1,2,3,-1,-2,4]), a=nz25(5), b=nz25(5), f=tm25([[a,'z²'],[c,'/z'],[b,'/z²']]).replace(/(\d*)\/z/g,(m,d)=>(d||'1')+'/z');
+      const right=pii26(2*c,1), wrong=uniq(right,[pii26(2*(a+b+c),1),'0',pi21(2*c,1),pii26(c,1),pii26(2*a,1),pii26(2*b,1)],3); if(wrong.length<3) return null;
+      return {index:'q:26e.work[c;'+[a,c,b,r].join(';')+']', lines:[['f(z) = '+f,'a function on z ≠ 0'],['γ runs once round |z| = '+r+', anticlockwise','a loop']], ask:'What is ∫_γ f(z) dz?', right, opts:shuffle([right,...wrong]), lead:'', why:'Circle-powers technique: only the 1/z piece counts, and it totals 2πi times its coefficient'+(c===0?'. There is no 1/z piece here.':', '+sg(c)+'.')}; }
+    if(t===1){ const a=rnd(4)-1, b=rnd(3), c=nz25(3), d=nz25(3); if(a===c&&b===d) return null; const sq=(x,y)=>[x*x-y*y,2*x*y], V=sq(c,d), U=sq(a,b), right=cx25(V[0]-U[0],V[1]-U[1]), W=sq(c-a,d-b);
+      const wrong=uniq(right,[cx25(W[0],W[1]),cx25(V[0]+U[0],V[1]+U[1]),cx25(U[0]-V[0],U[1]-V[1]),cx25(2*(c-a),2*(d-b)),cx25(V[0],V[1]),'0'],3); if(wrong.length<3) return null;
+      return {index:'q:26e.work[e;'+[a,b,c,d].join(';')+']', lines:[['f(z) = 2z','it has the undoing F(z) = z² on all of ℂ'],['γ is any path from '+cx25(a,b)+' to '+cx25(c,d),'a path']], ask:'What is ∫_γ f(z) dz?', right, opts:shuffle([right,...wrong]), lead:'', why:'Path-ends technique: F(end) − F(start) = ('+cx25(c,d)+')² − '+(a===0&&b===0?'0':(b===0&&a>0?String(a):'('+cx25(a,b)+')')+'²')+' = '+pc25(V[0],V[1])+' − '+pc25(U[0],U[1])+' = '+right+'. The path between does not matter.'}; }
+    if(t===2){ const M=1+rnd(5);
+      if(Math.random()<0.5){ const right=pi21(2*M*r,1), wrong=uniq(right,[pi21(M*r,1),String(M*r),pi21(2*M,1),pi21(M*r*r,1),pi21(2*r,1)],3); if(wrong.length<3) return null;
+        return {index:'q:26e.work[f;c;'+[M,r].join(';')+']', lines:[['|f| ≤ '+M+' on the circle |z| = '+r,'given'],['γ runs once round that circle','a loop of length '+pi21(2*r,1)]], ask:'Which fence does the path-fence technique give for |∫_γ f(z) dz|?', right, opts:shuffle([right,...wrong]), lead:'', why:'|∫_γ f(z) dz| ≤ ML = '+M+' · '+pi21(2*r,1)+'. The gap between the ends of a loop is 0, and that is not what the fence uses.'}; }
+      const [p,q,L]=z25(), right=String(M*L), wrong=uniq(right,[String(M),String(M*(Math.abs(p)+Math.abs(q))),String(M*L*L),String(M+L),String(L)],3); if(wrong.length<3) return null;
+      return {index:'q:26e.work[f;s;'+[M,p,q].join(';')+']', lines:[['|f| ≤ '+M+' on the straight path γ from 0 to '+cx25(p,q),'given']], ask:'Which fence does the path-fence technique give for |∫_γ f(z) dz|?', right, opts:shuffle([right,...wrong]), lead:'', why:'The path has length |'+cx25(p,q)+'| = '+L+', and |∫_γ f(z) dz| ≤ ML = '+M+' · '+L+'.'}; }
+    const [f,i,why]=pick(UN26);
+    return {index:'q:26e.work[u;'+[f,r].join(';')+']', lines:[['f(z) = '+f,'a function'],['γ runs once round |z| = '+r+', anticlockwise','a loop']], ask:'What is ∫_γ f(z) dz?', right:O26[i], opts:shuffle(O26.slice()), lead:'', why}; }},
+  {id:'26e.line',step:'26e',mode:'proof',label:'an undoing, or none',open:()=>measured('26e'),make(){
+    const r=1+rnd(6), M=1+rnd(6), L=2+rnd(8), n=pick([-5,-4,-3,-2,2,3,4,5]), f=pick(['f','g','h']), V=[
+      ['e1',[['F′ = '+f+' on an open set holding the loop γ','given'],['∫_γ '+f+'(z) dz = 0','the path-ends technique: the ends are the same point']],2,0,'∫_γ f(z) dz = F(γ(v)) − F(γ(u)), and a loop has γ(u) = γ(v).'],
+      ['e2',[['γ runs once round |z| = '+r,'given'],['∫_γ dz/z = [Log z] = 0','the path-ends technique']],2,1,'Log has no complex slope across the negative floor, which the loop crosses. The total is 2πi.'],
+      ['e3',[['|'+f+'| ≤ '+M+' on γ, and γ has length '+L,'given'],['|∫_γ '+f+'(z) dz| ≤ '+M*L,'the path-fence technique']],2,0,'|∫_γ f(z) dz| ≤ ML.'],
+      ['e4',[['|'+f+'| ≤ '+M+' on γ, and the ends of γ are '+L+' apart','given'],['|∫_γ '+f+'(z) dz| ≤ '+M*L,'the path-fence technique']],2,1,'The fence uses the length of the path, not the gap between its ends.'],
+      ['e5',[['γ runs once round |z| = '+r,'given'],['∫_γ z'+sup15(n)+' dz = 0','z'+sup15(n+1)+'/'+par10(n+1)+' is an undoing on the set of z ≠ 0']],2,0,'The set of z ≠ 0 is open and holds the loop, so only the ends count.'],
+      ['e6',[['γ is a path from u to v','given'],['∫_γ z̄ dz = [z̄²/2]','the path-ends technique']],2,1,'The flip has no complex slope, so z̄²/2 is not an undoing of it.'],
+      ['e7',[['γ runs once round |z| = '+r+', anticlockwise','given'],['∫_γ dz/z = 2πi','the circle-powers technique, n = −1']],2,0,'γ(t) = '+(r===1?'':r)+'e^(it), and f(γ(t))γ′(t) = i for every t.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:26e.line['+[tag,r,M,L,n,f].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 26f No Hole, No Total ---------- */
+const WF26=[
+  ['Is ∮ dz/z round |z| = 1 equal to 0, by the disc-undoing technique?','no: 1/z is not continuous at 0 and has no value there; the exception point must keep f continuous',['yes: 1/z has a slope at every point but one','yes, since 0 is the centre','no: 1/z has no complex slope anywhere'],'Disc-undoing technique: f is to be continuous on the whole disc, with a complex slope at every point but at most one.'],
+  ['Is ∮ z̄ dz = 0 round every loop?','no: the flip has no complex slope; round |z| = 1 it totals 2πi',['yes: the flip is continuous','yes, by the triangle-total technique','no: it is 2πi round every loop'],'On |z| = 1 the flip is 1/z.'],
+  ['The triangle is cut in four. Is the total round each quarter a quarter of the whole?','no: only their sum is the whole; one of them is at least a quarter in size',['yes','no: each is the whole','no: each is 0'],'The four inner edges are run once each way and cancel. The plane triangle then gives one quarter of size at least a quarter.'],
+  ['Does F(z) = ∫ of f along the segment from c to z work on any set?','no: the segment from c to z must stay inside, and the triangles too: a disc, not a ring',['yes','yes, if f is continuous','no: it works on no set'],'On a ring round a hole, a segment may leave the set.'],
+  ['Has 1/z an undoing on a set holding the circle |z| = 1?','no: round that circle it totals 2πi, and an undoing would make the total 0',['yes: Log z','yes: ln|z|','no: 1/z has no complex slope anywhere'],'Hole technique.'],
+  ['f has a complex slope at every point of an open set holding a closed triangle and its inside. What is ∮ of f round the triangle?','0',['2πi','the area of the triangle','f at its middle'],'Triangle-total technique: cut, keep the worst quarter, and repeat.']];
+const DU26=[['e^z',0,'It has a complex slope at every point.'],['z̄',1,'The flip has no complex slope at any point.'],['1/z',2,'It has no value at 0, a point of the disc.'],['(sin z)/z, with the value 1 at 0',0,'With that value it is continuous at 0, and it has a complex slope at every other point.'],['z² + 3z',0,'It has a complex slope at every point.'],['1/(z − 3)',0,'Its trouble at 3 lies outside the disc.'],['1/(z − 1)',2,'It has no value at 1, a point of the disc.'],['|z|²',1,'|z|² = z z̄ has a complex slope only at 0.']];
+QP.push({id:'26f.hole',step:'26f',label:'no hole, no total',open:()=>measured('26f'),make(){ return writtenQ('26f.hole',WF26); }},
+  {id:'26f.work',step:'26f',mode:'work',label:'discs and holes',open:()=>measured('26f'),make(){
+    const t=rnd(3);
+    if(t===0){ const p=nz25(5), up=Math.random()<0.4, P=up?cx25(0,p):sg(p), bot=up?(p<0?'z + '+cx25(0,-p):'z − '+cx25(0,p)):'z'+pm(-p), inside=Math.random()<0.5; let loop, r;
+      if(inside){ r=1+rnd(3); loop='|'+bot+'| = '+r; } else { r=1+rnd(Math.abs(p)-1||1); if(r>=Math.abs(p)) return null; loop='|z| = '+r; }
+      return {index:'q:26f.work[h;'+[P,loop].join(';')+']', lines:[['f(z) = 1/('+bot+')','it has a complex slope at every point but '+P],['γ runs once round '+loop+', anticlockwise','a loop']], ask:'What is ∮ of f round γ?', right:O26[inside?1:0], opts:shuffle(O26.slice()), lead:'', why:inside?'The loop is a circle about '+P+', and the circle-powers technique gives 2πi, slid to that centre. The hole technique says no undoing works round it.':'The point '+P+' lies outside the loop. A disc holds the loop and leaves '+P+' out, and the disc-undoing technique gives the total 0.'}; }
+    if(t===1){ const [f,i,why]=pick(DU26), O=['yes: it is continuous there, with a complex slope at every point but at most one','no: it lacks a complex slope at more than one point of the disc','no: it is not continuous on the whole disc','no: the technique needs a ring, not a disc'];
+      return {index:'q:26f.work[d;'+f+']', lines:[['f(z) = '+f,'a function'],['D is the open disc |z| < 2','a disc']], ask:'Does the disc-undoing technique give f an undoing on D?', right:O[i], opts:shuffle(O.slice()), lead:'', why}; }
+    const n=2+rnd(3), L=pick([16,32,48,64,80]), S=pick([64,128,192,256]);
+    if(Math.random()<0.5){ const right=fshow(fr(L,2**n)), wrong=frs16(right,[fr(L,4**n),fr(L,2*n),fr(L,n),fint(L),fr(L,2**(n-1))]); if(wrong.length<3) return null;
+      return {index:'q:26f.work[q;L;'+[L,n].join(';')+']', lines:[['the triangle T has a rim of length '+L,'given'],['join the midpoints and keep one quarter, '+n+' times','the halving of the triangle-total technique']], ask:'How long is the rim of the small triangle?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each halving halves every side, so the rim is '+L+'/2'+sup15(n)+' = '+right+'.'}; }
+    const right='at least '+fshow(fr(S,4**n)), wrong=['exactly '+fshow(fr(S,4**n)),'at most '+fshow(fr(S,4**n)),'at least '+fshow(fr(S,2**n))];
+    return {index:'q:26f.work[q;S;'+[S,n].join(';')+']', lines:[['the total of f round T has size '+S,'suppose'],['join the midpoints and keep the worst quarter, '+n+' times','the halving of the triangle-total technique']], ask:'What is the size of the total round the small triangle?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each time, one of the four quarters has a total of size at least a quarter of the last. After '+n+' times that is at least '+S+'/4'+sup15(n)+' = '+fshow(fr(S,4**n))+'.'}; }},
+  {id:'26f.line',step:'26f',mode:'proof',label:'a disc, or a ring',open:()=>measured('26f'),make(){
+    const r=1+rnd(5), R=r+1+rnd(4), f=pick(['f','g','h']), V=[
+      ['f1',[[f+' has a complex slope on an open set holding the triangle T and its inside','given'],['∮ round T of '+f+' is 0','the triangle-total technique']],2,0,'Cut, keep the worst quarter, and repeat.'],
+      ['f2',[[f+'(z) = 1/z, and C is the circle |z| = '+r,'given'],['∮ round C of '+f+' is 0','the disc-undoing technique']],2,1,'1/z is not continuous at 0, inside C. The total is 2πi.'],
+      ['f3',[[f+'(z) = z̄, and C is the circle |z| = '+r,'given'],['∮ round C of '+f+' is 0','the triangle-total technique']],2,1,'The flip has no complex slope. Round C it totals 2πi · '+r*r+'.'],
+      ['f4',[[f+' is continuous on the open disc |z| < '+R+', with a complex slope at every point of it but one','given'],[f+' has an undoing on that disc','the disc-undoing technique']],2,0,'F(z) is the integral of f along the straight segment from the centre to z.'],
+      ['f5',[[f+' has a complex slope at every point of the ring '+r+' < |z| < '+R,'given'],[f+' has an undoing on the ring','the disc-undoing technique']],2,1,'A ring is not a disc: 1/z has a complex slope on the ring and no undoing there.'],
+      ['f6',[['round |z| = 1, 1/z totals 2πi','the circle-powers technique'],['1/z has no undoing on any set holding that circle','an undoing would make the total 0, by the path-ends technique']],2,0,'Hole technique.'],
+      ['f7',[[f+' has a complex slope at every point of the open disc |z| < '+R,'given'],['∮ of '+f+' round the circle |z| = '+r+' is 0','the disc-undoing technique: the loop lies in the disc']],2,0,'f has an undoing on the disc, and the circle |z| = '+r+' is a loop in it.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:26f.line['+[tag,r,R,f].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ===== Laundry 5, rung 26 (floor 5 pools, stage Y), part 2: 26g to 26l ===== */
+
+/* ---------- 26g The Rim Fixes the Inside ---------- */
+const WG26=[
+  ['Is sin z bounded by 1?','only on the floor: sin(iy) grows like e^|y|/2',['yes, on all of ℂ','no: not even on the floor','yes, off the floor'],'Bounded-constant technique: a function with a complex slope at every z, bounded on all of ℂ, is constant. sin z is not constant.'],
+  ['f is smooth on ℝ. Is f a power sum?','not always: e^(−1/x²); the rebuilt-in-the-plane technique needs a complex slope on a disc',['yes, always','yes, about 0','never'],'Smooth on the line is weaker than a complex slope on a disc.'],
+  ['Does the rim formula give f(z) for z outside the circle C?','no: outside, ζ ↦ f(ζ)/(ζ − z) has a slope inside C, so the total is 0',['yes','no: it gives −f(z)','no: it gives 2πi f(z)'],'Rim technique: the formula is for z with |z − w| < r.'],
+  ['Is the reach of a power sum set by where its real graph misbehaves?','no: by the nearest trouble in the plane; 1/(1 + x²) is smooth on the whole line',['yes','yes, for quotients of polynomials','no: every power sum reaches everywhere'],'Rebuilt-in-the-plane technique: the sum holds on every disc on which f has a complex slope.'],
+  ['f has a complex slope at every z in ℂ, and |f(z)| ≤ M for all z. What is f?','constant',['a polynomial of degree 1','e^z','0'],'Bounded-constant technique.'],
+  ['f has a complex slope on the open disc |z − w| < R. What follows?','f is a power sum Σ uₖ(z − w)ᵏ on that whole disc',['f is a polynomial','f is bounded on the disc','nothing more'],'Rebuilt-in-the-plane technique: one complex slope brings every higher slope and the whole sum.']];
+const BC26=[['a function with a complex slope at every z and |f(z)| ≤ 7 for all z',0,'Both conditions hold.'],['sin z',1,'sin(iy) grows like e^|y|/2. It is bounded on the floor only.'],['e^z',1,'e^x passes every ceiling on the floor.'],['1/(1 + z²)',2,'It has poles at ±i.'],['e^(iz)',1,'At z = −iy it is e^y, which passes every ceiling.'],['a polynomial of degree 3',1,'Far-out technique: |p(z)| passes every ceiling as z moves away from 0.'],['1/(z² + 4)',2,'It has poles at ±2i.'],['1/(1 + |z|²)',2,'It is bounded, but |z|² = z z̄ brings in the flip, and it has no complex slope off 0.']];
+QP.push({id:'26g.rim',step:'26g',label:'the rim fixes the inside',open:()=>measured('26g'),make(){ return writtenQ('26g.rim',WG26); }},
+  {id:'26g.work',step:'26g',mode:'work',label:'rim values and fences',open:()=>measured('26g'),make(){
+    const t=rnd(3);
+    if(t===0){ const c=nz25(5), zi=Math.random()<0.3, p=1+rnd(3), zt=zi?'i':String(p), fz=zi?c-1:p*p+c, inside=Math.random()<0.65, R=inside?(zi?1:p)+1+rnd(2):((zi?1:p)>1?(zi?1:p)-1:0.5); if(fz===0) return null;
+      const bot=zi?'ζ − i':'ζ − '+p, Rt=R===0.5?'1/2':String(R), right=inside?pii26(2*fz,1):'0', wrong=uniq(right,[pii26(2*fz,1),'0',pii26(fz,1),pi21(2*fz,1),sg(fz),pii26(2*c,1)],3); if(wrong.length<3) return null;
+      return {index:'q:26g.work[r;'+[c,zt,Rt].join(';')+']', lines:[['f(ζ) = ζ²'+pm(c),'it has a complex slope at every point'],['C is the circle |ζ| = '+Rt+', anticlockwise','a loop']], ask:'What is ∮ round C of f(ζ)/('+bot+') dζ?', right, opts:shuffle([right,...wrong]), lead:'', why:inside?'Rim technique: '+zt+' is inside C, so the total is 2πi · f('+zt+') = 2πi · '+par10(fz)+'.':zt+' is outside C, so ζ ↦ f(ζ)/('+bot+') has a complex slope on a disc holding C, and the total is 0.'}; }
+    if(t===1){ const M=pick([2,3,4,6,8,12]), r=2+rnd(2), k=1+rnd(3), right=fshow(fr(M,r**k)), wrong=frs16(right,[fr(M,r*k),fint(M*r**k),fr(M,r),fr(M*k,r**k),fint(M),fr(M,r**(k+1))]); if(wrong.length<3) return null;
+      return {index:'q:26g.work[f;'+[M,r,k].join(';')+']', lines:[['f has a complex slope on the disc |z| < '+(r+1),'given'],['|f| ≤ '+M+' on the circle |z| = '+r,'given'],['f(z) = Σ uₖzᵏ on that disc','the rebuilt-in-the-plane technique']], ask:'Which fence does the technique give for |u'+sub15(k)+'|?', right, opts:shuffle([right,...wrong]), lead:'', why:'|uₖ| ≤ M/rᵏ = '+M+'/'+r+(k===1?'':sup15(k))+(right===M+'/'+r**k?'':' = '+right)+'.'}; }
+    const [f,i,why]=pick(BC26), O=['yes: f is constant','no: f is not bounded on ℂ','no: f lacks a complex slope at some point of ℂ','yes: f is 0'];
+    return {index:'q:26g.work[b;'+f+']', lines:[['f is '+f,'a function']], ask:'Does the bounded-constant technique make f constant?', right:O[i], opts:shuffle(O.slice()), lead:'', why:why+' The technique needs a complex slope at every z in ℂ and one bound for all z.'}; }},
+  {id:'26g.line',step:'26g',mode:'proof',label:'inside the rim',open:()=>measured('26g'),make(){
+    const M=2+rnd(8), r=1+rnd(5), k=1+rnd(4), f=pick(['f','g','h']), V=[
+      ['g1',[[f+' has a complex slope at every z in ℂ, and |'+f+'(z)| ≤ '+M+' for all z','given'],[f+' is constant','the bounded-constant technique']],2,0,'Both conditions hold.'],
+      ['g2',[['|sin x| ≤ 1 for every real x','the circle functions'],['sin z is constant','the bounded-constant technique']],2,1,'The bound holds on the floor only. sin(iy) grows like e^|y|/2.'],
+      ['g3',[[f+' has a complex slope on a disc holding the circle C: |ζ| = '+r+' and its inside, and |z| < '+r,'given'],[f+'(z) = (1/2πi) ∮ round C of '+f+'(ζ)/(ζ − z) dζ','the rim technique']],2,0,'z is inside C.'],
+      ['g4',[[f+' has a complex slope on a disc holding the circle C: |ζ| = '+r+' and its inside, and |z| > '+r,'given'],[f+'(z) = (1/2πi) ∮ round C of '+f+'(ζ)/(ζ − z) dζ','the rim technique']],2,1,'z is outside C. There the total is 0, whatever f(z) is.'],
+      ['g5',[[f+' is smooth on ℝ','given'],[f+' is a power sum about 0','the rebuilt-in-the-plane technique']],2,1,'The technique needs a complex slope on a disc. e^(−1/x²) is smooth and is not its sum.'],
+      ['g6',[[f+'(z) = Σ uₖzᵏ on |z| < '+(r+1)+', and |'+f+'| ≤ '+M+' on |z| = '+r,'given'],['|u'+sub15(k)+'| ≤ '+M+'/'+r+(k===1?'':sup15(k)),'the rebuilt-in-the-plane technique']],2,0,'|uₖ| ≤ M/rᵏ, where M is the largest |f| on the circle.'],
+      ['g7',[[f+' has a complex slope at every z in ℂ, and |'+f+'(x)| ≤ '+M+' for every real x','given'],[f+' is constant','the bounded-constant technique']],2,1,'The bound is needed for all z in ℂ, not on the floor alone.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:26g.line['+[tag,M,r,k,f].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 26h Residues ---------- */
+const WH26=[
+  ['Is Res(1/z², 0) = 1?','no: there is no 1/z piece; the residue is 0',['yes','no: it is 2','no: it is −1'],'The residue is b₁, the coefficient of 1/(z − w) in the pole split.'],
+  ['Is ∮ dz/(z − 2) round |z| = 1 equal to 2πi?','no: the pole at 2 lies outside the circle; the total is 0',['yes','no: it is 4πi','no: it is πi'],'Residue technique: only the poles inside C count.'],
+  ['Is Res(e^z/z², 0) = e⁰ = 1, by putting z = 0 in e^z?','that rule is for poles of order 1; here it agrees only by luck: for e^(2z)/z² the residue is 2',['yes: that is the rule for every pole','no: the residue is 0','no: the residue is 1/2'],'Write e^z = 1 + z + ⋯ and divide by z²: the 1/z piece has coefficient 1.'],
+  ['Is ∮ round C of f equal to 2πi times the sum of residues, for any f?','only where the troubles inside are poles and f has a complex slope elsewhere on the disc',['yes, for any f','yes, for any continuous f','no: only for polynomials'],'Residue technique.'],
+  ['What is the residue of f at a pole w?','b₁, the coefficient of 1/(z − w) in the pole split',['the value f(w)','the order of the pole','the coefficient of the highest power of 1/(z − w)'],'Pole-split technique: f(z) = b_m/(z − w)ᵐ + ⋯ + b₁/(z − w) + h(z). Only the b₁ piece has a total round w.'],
+  ['p has no root on the circle C. What does (1/2πi) ∮ round C of p′/p count?','the roots of p inside C, counted with repeats',['the roots of p′ inside C','the degree of p','the roots of p outside C'],'Root-count technique.']];
+const R2H26=(k,a,b)=>[['e^('+k+'z)/z²',String(k),'e^('+k+'z) = 1 + '+k+'z + ⋯, so the 1/z piece has coefficient '+k+'.'],['('+tm25([[1,'z²'],[a,'z'],[b,'']])+')/z²',sg(a),'Divide each term by z²: 1'+(a<0?' − ':' + ')+Math.abs(a)+'/z'+(b<0?' − ':' + ')+Math.abs(b)+'/z².'],['('+cf22(a,'z')+pm(b)+')/z³','0','Divide each term by z³: there is no 1/z piece.'],['(sin z)/z²','1','sin z = z − z³/3! + ⋯, so (sin z)/z² = 1/z − z/3! + ⋯.'],['e^z/z³','1/2','e^z = 1 + z + z²/2 + ⋯, and the z² term over z³ is (1/2)/z.'],['(cos z)/z','1','cos z = 1 − z²/2 + ⋯, so the 1/z piece has coefficient 1.'],['(cos z)/z²','0','cos z has no z term, so there is no 1/z piece.']];
+QP.push({id:'26h.res',step:'26h',label:'what a residue is',open:()=>measured('26h'),make(){ return writtenQ('26h.res',WH26); }},
+  {id:'26h.work',step:'26h',mode:'work',label:'residues by hand',open:()=>measured('26h'),make(){
+    const t=rnd(4), a=nz25(4), b=nz25(5), p=nz25(4), q=nz25(4);
+    if(t===0){ if(p===q||a*p+b===0||a*q+b===0) return null; const R=fr(a*p+b,p-q), right=fshow(R), wrong=frs16(right,[fr(a*q+b,q-p),fint(a*p+b),fr(a*p+b,q-p),fr(1,p-q),fint(a)]); if(wrong.length<3) return null;
+      return {index:'q:26h.work[s;'+[a,b,p,q].join(';')+']', lines:[['f(z) = ('+cf22(a,'z')+pm(b)+')/((z'+pm(-p)+')(z'+pm(-q)+'))','it has poles of order 1 at '+sg(p)+' and '+sg(q)]], ask:'What is Res(f, '+sg(p)+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'At a pole of order 1, cover the factor z'+pm(-p)+' and put z = '+sg(p)+' in the rest: ('+sg(a*p)+pm(b)+')/('+sg(p)+pm(-q)+') = '+right+'.'}; }
+    if(t===1){ const P=1+rnd(2), Q=P+2+rnd(2), R=Math.random()<0.5?P+1:Q+1, s1=s25(), s2=s25(), tot=R>Q?a+b:a;
+      const right=pii26(2*tot,1), wrong=uniq(right,[pii26(2*(a+b),1),pii26(2*a,1),pii26(2*b,1),'0',pii26(tot,1),pi21(2*tot,1)],3); if(wrong.length<3) return null;
+      return {index:'q:26h.work[t;'+[a,b,s1*P,s2*Q,R].join(';')+']', lines:[['f(z) = '+tm25([[a,'/(z'+pm(-s1*P)+')'],[b,'/(z'+pm(-s2*Q)+')']]).replace(/(^|[^0-9])\//g,(m,c)=>c+'1/'),'two poles of order 1'],['C is the circle |z| = '+R+', anticlockwise','a loop']], ask:'What is ∮ round C of f?', right, opts:shuffle([right,...wrong]), lead:'', why:'Residue technique: '+(R>Q?'both poles are inside C, with residues '+sg(a)+' and '+sg(b):'only the pole at '+sg(s1*P)+' is inside C, with residue '+sg(a))+', so the total is 2πi · '+par10(tot)+'.'}; }
+    if(t===2){ const rs=[[1,1+rnd(3)],[-3,1+rnd(2)],[5,1+rnd(3)],[-6,1+rnd(2)]].filter(()=>Math.random()<0.8), R=pick([2,4]); if(rs.length<2) return null;
+      const ins=rs.filter(v=>Math.abs(v[0])<R), n=ins.reduce((x,v)=>x+v[1],0), deg=rs.reduce((x,v)=>x+v[1],0), right=String(n), wrong=uniq(right,[String(ins.length),String(deg),String(deg-n),String(rs.length),String(n+1)],3); if(wrong.length<3) return null;
+      return {index:'q:26h.work[c;'+[rs.join('|'),R].join(';')+']', lines:[['p(z) = '+rs.map(v=>'(z'+pm(-v[0])+')'+(v[1]===1?'':sup15(v[1]))).join(''),'a polynomial, in line factors'],['C is the circle |z| = '+R,'no root of p lies on it']], ask:'What is (1/2πi) ∮ round C of p′/p?', right, opts:shuffle([right,...wrong]), lead:'', why:'Root-count technique: it is the number of roots of p inside C, counted with repeats. '+(ins.length?'Inside are '+ins.map(v=>sg(v[0])+(v[1]===1?'':' ('+v[1]+' times)')).join(' and ')+'.':'No root lies inside.')}; }
+    const k=2+rnd(4), [f,right,why]=pick(R2H26(k,a,b)), wrong=uniq(right,shuffle(['0','1','1/2',String(k),sg(a),sg(b),'2','−1',String(k*k)]),3);
+    return {index:'q:26h.work[o;'+f+']', lines:[['f(z) = '+f,'it has a pole at 0']], ask:'What is Res(f, 0)?', right, opts:shuffle([right,...wrong]), lead:'', why:why+' The residue is the coefficient of 1/z.'}; }},
+  {id:'26h.line',step:'26h',mode:'proof',label:'which poles count',open:()=>measured('26h'),make(){
+    const k=2+rnd(7), p=2+rnd(5), r=1+rnd(p-1), n=1+rnd(6), V=[
+      ['h1',[['f(z) = '+k+'/z²','given'],['Res(f, 0) = '+k,'the number on top']],2,1,'There is no 1/z piece, so the residue is 0.'],
+      ['h2',[['f(z) = 1/(z − '+p+'), and C is the circle |z| = '+r,'given'],['∮ round C of f is 2πi','the residue technique']],2,1,'The pole at '+p+' lies outside C. The total is 0.'],
+      ['h3',[['f(z) = 1/(z − '+r+'), and C is the circle |z| = '+(p+1),'given'],['∮ round C of f is 2πi','the residue technique: the pole at '+r+' is inside, with residue 1']],2,0,'2πi times the one residue inside.'],
+      ['h4',[['f(z) = e^('+k+'z)/z²','given'],['Res(f, 0) = e⁰ = 1','put z = 0 in the top']],2,1,'That rule is for poles of order 1. Here the 1/z piece has coefficient '+k+'.'],
+      ['h5',[['p has no root on C, and '+n+(n===1?' root':' roots')+' inside C, counted with repeats','given'],['(1/2πi) ∮ round C of p′/p = '+n,'the root-count technique']],2,0,'Each root of order m gives p′/p a pole of order 1 with residue m.'],
+      ['h6',[['f(z) = g(z)/(z − '+p+'), and g has a complex slope at '+p,'given'],['Res(f, '+p+') = g('+p+')','a pole of order 1: put z = '+p+' in the top']],2,0,'g(z) = g('+p+') + ⋯, so the 1/(z − '+p+') piece has coefficient g('+p+').'],
+      ['h7',[['f has a complex slope at every point inside C but '+n+', where it has poles','given'],['∮ round C of f is 2πi · '+n,'the residue technique']],2,n===1?1:1,'The total is 2πi times the sum of the residues, not the number of poles.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:26h.line['+[tag,k,p,r,n].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 26i e^(iθ) by Hand ---------- */
+const WI26=[
+  ['Is cos³θ = cos 3θ?','no: a power of the cosine is not the cosine of a multiple; cos³θ = (3 cos θ + cos 3θ)/4',['yes','no: cos³θ = 3 cos θ','no: cos³θ = cos θ³'],'Power-to-sum technique.'],
+  ['Is (cos θ + i sin θ)ⁿ = cosⁿθ + i sinⁿθ?','no: the power of a sum is not the sum of the powers; it is cos nθ + i sin nθ',['yes','no: it is n cos θ + in sin θ','no: it is cos θⁿ + i sin θⁿ'],'Many-angle technique. The middle terms of the two-term power carry the turn.'],
+  ['cos θ is the floor part of e^(iθ). Is cos²θ the floor part of e^(2iθ)?','no: the floor part of a product is not the product of the floor parts; cos 2θ = cos²θ − sin²θ',['yes','no: it is the upright part of e^(2iθ)','no: e^(2iθ) has no floor part'],'Part-reading technique: multiply out first, then read the parts.'],
+  ['Is e^(iθ) + e^(−iθ) = 2i sin θ?','no: the sum is 2 cos θ; the difference is 2i sin θ',['yes','no: the sum is 2 sin θ','no: the sum is 0'],'Power-to-sum technique: cos θ = (e^(iθ) + e^(−iθ))/2 and sin θ = (e^(iθ) − e^(−iθ))/(2i).'],
+  ['How does the part-reading technique prove a fact about cos and sin?','find one complex number two ways; then the floor parts agree, and the upright parts agree',['try the fact at a few angles','draw the triangle and measure','take the slope of both sides'],'Equal pairs have equal parts.'],
+  ['What is (cos θ + i sin θ)ⁿ, for a whole n?','cos nθ + i sin nθ',['cosⁿθ + i sinⁿθ','n cos θ + in sin θ','cos θⁿ + i sin θⁿ'],'Many-angle technique: multiplying adds turns.']];
+const MA26=[['cos 2θ','c² − s²',['c² + s²','2cs','2c² + 1']],['sin 2θ','2cs',['c² − s²','cs','2c²s²']],['cos 3θ','c³ − 3cs²',['c³ + 3cs²','3c²s − s³','c³ − s³']],['sin 3θ','3c²s − s³',['3c²s + s³','c³ − 3cs²','3cs − s³']],['cos 4θ','c⁴ − 6c²s² + s⁴',['c⁴ + 6c²s² + s⁴','4c³s − 4cs³','c⁴ − s⁴']],['sin 4θ','4c³s − 4cs³',['4c³s + 4cs³','c⁴ − 6c²s² + s⁴','4cs']]];
+const PS26=[['cos²θ','(1 + cos 2θ)/2',['(1 − cos 2θ)/2','cos 2θ','(cos 2θ)/2']],['sin²θ','(1 − cos 2θ)/2',['(1 + cos 2θ)/2','−cos 2θ','(sin 2θ)/2']],['cos³θ','(3 cos θ + cos 3θ)/4',['cos 3θ','(cos θ + 3 cos 3θ)/4','(3 cos θ − cos 3θ)/4']],['sin³θ','(3 sin θ − sin 3θ)/4',['sin 3θ','(3 sin θ + sin 3θ)/4','(sin θ − 3 sin 3θ)/4']],['cos θ sin θ','(sin 2θ)/2',['sin 2θ','(cos 2θ)/2','(1 + sin 2θ)/2']],['cos⁴θ','(3 + 4 cos 2θ + cos 4θ)/8',['cos 4θ','(1 + cos 4θ)/2','(3 − 4 cos 2θ + cos 4θ)/8']]];
+const SD26=[['e^(iθ) + e^(−iθ)','π/3','1'],['e^(iθ) + e^(−iθ)','π','−2'],['e^(iθ) + e^(−iθ)','π/2','0'],['e^(iθ) + e^(−iθ)','2π/3','−1'],['e^(iθ) − e^(−iθ)','π/2','2i'],['e^(iθ) − e^(−iθ)','π/6','i'],['e^(iθ) − e^(−iθ)','π','0'],['e^(iθ) − e^(−iθ)','3π/2','−2i'],['e^(iθ) + e^(−iθ)','0','2'],['e^(iθ) − e^(−iθ)','−π/6','−i']];
+const PW26=[['π/6',6,'−1'],['π/4',4,'−1'],['π/4',8,'1'],['π/3',3,'−1'],['π/2',3,'−i'],['π/6',3,'i'],['π/3',6,'1'],['π/4',2,'i'],['π/4',6,'−i'],['π/6',9,'−i'],['π/3',9,'−1'],['π/6',12,'1']];
+QP.push({id:'26i.hand',step:'26i',label:'reading the parts',open:()=>measured('26i'),make(){ return writtenQ('26i.hand',WI26); }},
+  {id:'26i.work',step:'26i',mode:'work',label:'angles by multiplying out',open:()=>measured('26i'),make(){
+    const t=rnd(4);
+    if(t===0){ const [x,right,wrong]=pick(MA26), n=x.slice(4,5);
+      return {index:'q:26i.work[m;'+x+']', lines:[['c = cos θ and s = sin θ','short names'],['(c + is)'+sup15(+n)+' = cos '+n+'θ + i sin '+n+'θ','the many-angle technique']], ask:'Which is '+x+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Multiply out (c + is)'+sup15(+n)+' by the two-term power, with i² = −1. '+(x[0]==='c'?'The floor part':'The upright part')+' is '+right+'.'}; }
+    if(t===1){ const [x,right,wrong]=pick(PS26);
+      return {index:'q:26i.work[p;'+x+']', lines:[['cos θ = (e^(iθ) + e^(−iθ))/2 and sin θ = (e^(iθ) − e^(−iθ))/(2i)','the power-to-sum technique']], ask:'Which sum is '+x+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Multiply out the powers of e^(iθ) and e^(−iθ), and pair e^(ikθ) with e^(−ikθ): each pair is 2 cos kθ or 2i sin kθ.'}; }
+    if(t===2){ const [x,th,right]=pick(SD26), wrong=uniq(right,shuffle(['0','1','−1','2','−2','i','−i','2i','−2i']),3);
+      return {index:'q:26i.work[s;'+[x,th].join(';')+']', lines:[['θ = '+th,'a real number']], ask:'What is '+x+'?', right, opts:shuffle([right,...wrong]), lead:'', why:x.includes('+')?'The sum is 2 cos θ: the upright parts cancel.':'The difference is 2i sin θ: the floor parts cancel.'}; }
+    const [th,n,right]=pick(PW26), O=['1','−1','i','−i'];
+    return {index:'q:26i.work[w;'+[th,n].join(';')+']', lines:[['z = cos('+th+') + i sin('+th+')','a point of the circle of size 1']], ask:'What is z'+sup15(n)+'?', right, opts:shuffle(O.slice()), lead:'', why:'Many-angle technique: z'+sup15(n)+' = cos('+n+' · '+th+') + i sin('+n+' · '+th+'), and '+n+' · '+th+' = '+pi21(n,+th.split('/')[1])+'.'}; }},
+  {id:'26i.line',step:'26i',mode:'proof',label:'powers and multiples',open:()=>measured('26i'),make(){
+    const n=2+rnd(8), V=[
+      ['i1',[['z = cos θ + i sin θ','given'],['z'+sup15(n)+' = cos '+n+'θ + i sin '+n+'θ','the many-angle technique']],2,0,'Multiplying adds turns, '+n+' times over.'],
+      ['i2',[['z = cos θ + i sin θ','given'],['z'+sup15(n)+' = cos'+sup15(n)+'θ + i sin'+sup15(n)+'θ','the power goes on each term']],2,1,'The power of a sum is not the sum of the powers. The middle terms carry the turn.'],
+      ['i3',[['cos θ is the floor part of e^(iθ)','the turn-growth technique'],['cos'+sup15(n)+'θ is the floor part of e^('+n+'iθ)','raise both to the power '+n]],2,1,'The floor part of a product is not the product of the floor parts. The floor part of e^('+n+'iθ) is cos '+n+'θ.'],
+      ['i4',[['e^(iθ) = cos θ + i sin θ and e^(−iθ) = cos θ − i sin θ','the turn-growth technique'],['e^(iθ) + e^(−iθ) = 2 cos θ','add: the upright parts cancel']],2,0,'So cos θ = (e^(iθ) + e^(−iθ))/2.'],
+      ['i5',[['e^(iθ) = cos θ + i sin θ and e^(−iθ) = cos θ − i sin θ','the turn-growth technique'],['e^(iθ) − e^(−iθ) = 2 sin θ','subtract: the floor parts cancel']],2,1,'The i stays: the difference is 2i sin θ.'],
+      ['i6',[['a + bi = c + di, with a, b, c and d real','one complex number, found two ways'],['a = c and b = d','the part-reading technique']],2,0,'Equal pairs have equal parts.'],
+      ['i7',[['cos '+n+'θ + i sin '+n+'θ = (cos θ + i sin θ)'+sup15(n),'the many-angle technique'],['cos '+n+'θ is the floor part of the right side, multiplied out','the part-reading technique']],2,0,'The floor parts of the two sides agree.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:26i.line['+[tag,n].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 26j Why 1/(1 + x²) Has Radius 1 ---------- */
+const WJ26=[
+  ['1/(1 + x²) is smooth on the whole line. Does its power sum about 0 reach everywhere?','no: the reach is set by the nearest trouble in the plane, ±i, at distance 1',['yes: it has no trouble on the line','no: it reaches 2','no: it has no power sum'],'Nearest-trouble technique.'],
+  ['Is the reach the distance to the nearest root of the bottom on the floor?','no: in the plane; x² − 2x + 5 has no root on the floor, yet its roots 1 ± 2i stop the sum',['yes','yes, when the bottom has degree 2','no: the bottom does not matter'],'Nearest-trouble technique: the power sum reaches exactly to the nearest root of q in the plane.'],
+  ['f is smooth on (−1, 1). Has it a power sum about 0 reaching 1?','not always: e^(−1/x²) is smooth and not its sum at all; it has no complex slope near 0',['yes, always','yes, when f is bounded','never'],'The plane-reach technique needs a complex slope on a disc.'],
+  ['1 is not ±i. Does 1 − x² + x⁴ − ⋯ settle at x = 1?','no: at the reach itself anything can happen; here the pieces are ±1 and do not head to 0',['yes: 1 is not a trouble','yes, at ½','no: 1 is a root of the bottom'],'The reach is 1, and x = 1 is at the reach.'],
+  ['f = p/q, with real polynomials sharing no root. How far does its power sum about w reach?','exactly to the nearest root of q in the plane',['to the nearest root of q on the floor','to the nearest root of p','everywhere'],'Nearest-trouble technique.'],
+  ['A power sum equals f on |z − w| < d, and f has a pole at distance d from w. What of its reach?','it is at most d',['it is more than d','it is endless','nothing can be said'],'Pole-wall technique.']];
+const RH26=[['e^x','endless','e^z has a complex slope at every z.'],['sin x','endless','sin z has a complex slope at every z.'],['1/(x − 3)','3','The bottom has its root at 3.'],['1/(1 + x²)','1','The bottom has its roots at ±i.'],['x/(x² + 4)','2','The bottom has its roots at ±2i.'],['1/(x² − 9)','3','The bottom has its roots at ±3.'],['x² − 5x + 1','endless','A polynomial has a complex slope at every z.'],['1/(x² + 9)','3','The bottom has its roots at ±3i.'],['1/((x − 1)(x² + 4))','1','The roots of the bottom are 1 and ±2i, and 1 is nearest.'],['1/((x − 3)(x² + 4))','2','The roots of the bottom are 3 and ±2i, and ±2i are nearest.']];
+QP.push({id:'26j.reach',step:'26j',label:'trouble off the line',open:()=>measured('26j'),make(){ return writtenQ('26j.reach',WJ26); }},
+  {id:'26j.work',step:'26j',mode:'work',label:'how far a sum reaches',open:()=>measured('26j'),make(){
+    const t=rnd(3), [u,v,r]=pick(TRIP25);
+    if(t===0){ const w=u*s25(), right=String(r), wrong=uniq(right,[String(v),String(u),String(u*u+v*v),'endless',String(u+v)],3);
+      return {index:'q:26j.work[a;'+[w,v].join(';')+']', lines:[['f(x) = 1/(x² + '+v*v+')','smooth on the whole line'],['its power sum about w = '+sg(w),'by rung 23']], ask:'How far does the sum reach?', right, opts:shuffle([right,...wrong]), lead:'', why:'Nearest-trouble technique: the roots of the bottom are ±'+cx25(0,v)+', and from '+sg(w)+' each is √('+u+'² + '+v+'²) = '+r+' away.'}; }
+    if(t===1){ const s=nz25(4), w=s+u*s25(), N=s*s+v*v, right=String(r), wrong=uniq(right,[String(v),String(u),'endless',String(Math.abs(w)),String(u+v)],3); if(wrong.length<3) return null;
+      return {index:'q:26j.work[q;'+[s,v,w].join(';')+']', lines:[['f(x) = 1/('+pol23([[1,2],[-2*s,1],[N,0]],'x')+')','the bottom has no root on the floor'],['its power sum about w = '+sg(w),'by rung 23']], ask:'How far does the sum reach?', right, opts:shuffle([right,...wrong]), lead:'', why:'Nearest-trouble technique: the roots of the bottom are '+cx25(s,v)+' and '+cx25(s,-v)+'. From '+sg(w)+' each is √('+u+'² + '+v+'²) = '+r+' away.'}; }
+    const [f,right,why]=pick(RH26), O=['1','2','3','endless'];
+    return {index:'q:26j.work[h;'+f+']', lines:[['f(x) = '+f,'a function on the line'],['its power sum about 0','by rung 23']], ask:'How far does the sum reach?', right, opts:shuffle(O.slice()), lead:'', why:why+' The sum reaches to the nearest trouble in the plane.'}; }},
+  {id:'26j.line',step:'26j',mode:'proof',label:'the nearest trouble',open:()=>measured('26j'),make(){
+    const k=1+rnd(8), d=2+rnd(7), f=pick(['f','g','h']), V=[
+      ['j1',[[f+'(x) = 1/(x² + '+k*k+') is smooth on the whole line','given'],['its power sum about 0 settles for every x','it is smooth everywhere']],2,1,'The reach is set in the plane. The roots ±'+cx25(0,k)+' of the bottom stop the sum at '+k+'.'],
+      ['j2',[[f+'(x) = 1/(x² + '+k*k+')','given'],['its power sum about 0 reaches exactly '+k,'the nearest-trouble technique: the roots of the bottom are ±'+cx25(0,k)]],2,0,'Both roots are '+k+' away from 0.'],
+      ['j3',[['x² − 2x + '+(1+k*k)+' has no root on the floor','its b² − 4c is under 0'],['the power sum of 1/(x² − 2x + '+(1+k*k)+') about 1 reaches everywhere','no trouble on the floor']],2,1,'Its roots 1 ± '+cx25(0,k)+' are '+k+' away from 1, and they stop the sum.'],
+      ['j4',[['the power sum of '+f+' about 0 reaches '+d,'given'],['the sum settles at x = '+d,d+' is within the reach']],2,1,'At the reach itself anything can happen. Only |x| < '+d+' is promised.'],
+      ['j5',[['a power sum equals '+f+' on |z| < '+d+', and '+f+' has a pole at a point of size '+d,'given'],['the reach of the sum is at most '+d,'the pole-wall technique']],2,0,'A sum that reached past the pole would be bounded near it, and f is not.'],
+      ['j6',[[f+' has a complex slope at every z with |z| < '+d+', and is real on the floor','given'],['rung 23’s power sum of '+f+' about 0 reaches at least '+d,'the plane-reach technique']],2,0,'The sum equals f on that whole disc.'],
+      ['j7',[[f+' is smooth on (−'+d+', '+d+')','given'],['its power sum about 0 reaches '+d,'the plane-reach technique']],2,1,'The technique needs a complex slope on a disc, and smooth on the line is not that.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:26j.line['+[tag,k,d,f].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 26k Real Integrals by Residues ---------- */
+const WK26=[
+  ['Is ∫ cos x/(1 + x²) dx over the line equal to 2πi Res(cos z/(1 + z²), i)?','no: cos z grows over the top, so the arc does not fade; use e^(iz) and take the floor part',['yes','no: the residue is at −i','no: the area diverges'],'Upper-wave technique: |e^(ikz)| ≤ 1 above the floor, for k ≥ 0.'],
+  ['Is ∫ x dx/(1 + x²) over the line equal to 2πi Res(z/(1 + z²), i) = πi?','no: the arc does not fade, and the area itself diverges',['yes','no: it is π','no: it is −πi'],'On the arc, R · M_R heads to 1, not to 0.'],
+  ['Is ∮ round H_R of dz/(1 + z²) equal to 2πi(Res at i + Res at −i)?','no: −i lies below the floor, outside the half-disc; the total is π',['yes: both are poles','no: neither pole is inside','no: only −i is inside'],'Half-disc technique: the poles above the floor of size less than R.'],
+  ['Does ∫ from 0 to ∞ of (sin x)/x dx converge by comparison with 1/x?','no: comparison needs a function ≥ 0 and a bigger area that converges; ∫ 1/x diverges',['yes','yes, since |sin x| ≤ 1','no: the area diverges'],'The area does converge, by another road.'],
+  ['When does the integral along the upper half circle fade?','when R · M_R heads to 0, with |f| ≤ M_R on the half circle of radius R',['when M_R heads to 0','always','when f has no pole on the floor'],'Fading-arc technique: the arc has length πR, so the fence is πR · M_R.'],
+  ['Which poles count in the half-disc technique?','those above the floor, of size less than R',['all of them','those on the floor','those below the floor'],'H_R runs along the floor from −R to R and back over the upper half circle.']];
+const FA26=[['1/(1 + z²)',0,'R · M_R is about 1/R.'],['z/(1 + z²)',1,'R · M_R heads to 1.'],['1/(1 + z⁴)',0,'R · M_R is about 1/R³.'],['z²/(1 + z⁴)',0,'R · M_R is about 1/R.'],['z³/(1 + z⁴)',1,'R · M_R heads to 1.'],['1/(z² + 4)',0,'R · M_R is about 1/R.'],['z²/(1 + z²)',2,'M_R heads to 1, so R · M_R is about R.'],['z/(z² + 9)²',0,'R · M_R is about 1/R².']];
+QP.push({id:'26k.arc',step:'26k',label:'the arc and the poles',open:()=>measured('26k'),make(){ return writtenQ('26k.arc',WK26); }},
+  {id:'26k.work',step:'26k',mode:'work',label:'areas by residues',open:()=>measured('26k'),make(){
+    const t=rnd(5), a=1+rnd(5), k=1+rnd(3);
+    if(t===0){ const right=pi21(1,a), wrong=uniq(right,[pi21(2,a),pi21(1,a*a),pi21(1,2*a),pii26(1,a),pi21(a,1),'2π'],3); if(wrong.length<3) return null;
+      return {index:'q:26k.work[a;'+a+']', lines:[['f(z) = 1/(z² + '+a*a+')','the arc fades: R · M_R is about 1/R'],['the one pole above the floor is '+cx25(0,a)+', with residue 1/('+cx25(0,2*a)+')','a pole of order 1']], ask:'What is ∫ dx/(x² + '+a*a+') over the whole line?', right, opts:shuffle([right,...wrong]), lead:'', why:'Half-disc technique: 2πi · 1/('+cx25(0,2*a)+') = '+right+'. The i cancels, as it must for a real area.'}; }
+    if(t===1){ const right='−i/'+2*a, wrong=['i/'+2*a,'1/'+2*a,'−1/'+2*a];
+      return {index:'q:26k.work[r;'+a+']', lines:[['f(z) = 1/(z² + '+a*a+') = 1/((z − '+cx25(0,a)+')(z + '+cx25(0,a)+'))','two poles of order 1']], ask:'What is Res(f, '+cx25(0,a)+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'Cover z − '+cx25(0,a)+' and put z = '+cx25(0,a)+' in the rest: 1/('+cx25(0,2*a)+') = −i/'+2*a+', since 1/i = −i.'}; }
+    if(t===2){ const [f,i,why]=pick(FA26), O=['yes: R · M_R heads to 0','no: R · M_R heads to a number other than 0','no: R · M_R passes every ceiling'];
+      return {index:'q:26k.work[f;'+f+']', lines:[['f(z) = '+f,'a quotient of polynomials'],['|f| ≤ M_R on the upper half circle of radius R','for large R']], ask:'Does the fading-arc technique make the arc fade?', right:O[i], opts:O, lead:'', why:why+' Count the degree of the bottom less the degree of the top: the arc fades when it is 2 or more.'}; }
+    if(t===3){ const x=nz25(5), y=1+rnd(4), right=en26(-k*y), wrong=uniq(right,[en26(k*y),'1',en26(-k*Math.abs(x)),en26(-y),en26(-k*(Math.abs(x)+y))],3); if(wrong.length<3) return null;
+      return {index:'q:26k.work[w;'+[k,x,y].join(';')+']', lines:[['z = '+cx25(x,y)+' and k = '+k,'a point above the floor']], ask:'What is |e^(ikz)|?', right, opts:shuffle([right,...wrong]), lead:'', why:'Upper-wave technique: ikz = '+cx25(-k*y,k*x)+', and the size of e to it is e to its floor part, '+sg(-k*y)+'. Above the floor the wave e^(ikz) only shrinks.'}; }
+    const f=(n,d,c)=>(c===2?'2':'')+'π'+en26(n)+(d===1?'':'/'+d), right=f(-k*a,a,1), wrong=uniq(right,[f(k*a,a,1),pi21(1,a),f(-k*a,a,2),f(-k,a,1),f(-a,a,1)],3); if(wrong.length<3) return null;
+    return {index:'q:26k.work[c;'+[k,a].join(';')+']', lines:[['g(z) = e^('+(k===1?'':k)+'iz)/(z² + '+a*a+')','the arc fades, by the upper-wave technique'],['Res(g, '+cx25(0,a)+') = '+en26(-k*a)+'/('+cx25(0,2*a)+')','put z = '+cx25(0,a)+' in the rest']], ask:'What is ∫ cos('+(k===1?'':k)+'x)/(x² + '+a*a+') dx over the whole line?', right, opts:shuffle([right,...wrong]), lead:'', why:'2πi · '+en26(-k*a)+'/('+cx25(0,2*a)+') = '+right+', and the area with the cosine is the floor part of that.'}; }},
+  {id:'26k.line',step:'26k',mode:'proof',label:'does the arc fade',open:()=>measured('26k'),make(){
+    const a=1+rnd(5), c=2+rnd(7), k=1+rnd(5), V=[
+      ['k1',[['f(z) = cos z/(z² + '+a*a+')','given'],['the arc fades','|cos z| ≤ 1']],2,1,'|cos z| ≤ 1 holds on the floor only. cos z grows over the top; use e^(iz) and take the floor part.'],
+      ['k2',[['k = '+k+', and z has upright part y ≥ 0','given'],['|e^('+(k===1?'':k)+'iz)| = e^(−'+(k===1?'':k)+'y) ≤ 1','the upper-wave technique']],2,0,'The floor part of ikz is −ky.'],
+      ['k3',[['f(z) = 1/(z² + '+a*a+'), and R > '+a,'given'],['∮ round H_R of f is 2πi(Res(f, '+cx25(0,a)+') + Res(f, '+cx25(0,-a)+'))','the half-disc technique']],2,1,cx25(0,-a)+' lies below the floor, outside the half-disc.'],
+      ['k4',[['f(z) = 1/(z² + '+a*a+'), and R > '+a,'given'],['∮ round H_R of f is 2πi Res(f, '+cx25(0,a)+')','the half-disc technique: '+cx25(0,a)+' is the one pole above the floor']],2,0,'Only the poles above the floor of size less than R count.'],
+      ['k5',[['|f(z)| ≤ '+c+'/R² on the upper half circle of radius R','given'],['the integral of f along that half circle heads to 0','the fading-arc technique: R · '+c+'/R² = '+c+'/R heads to 0']],2,0,'The fence is πR · M_R.'],
+      ['k6',[['|f(z)| ≤ '+c+'/R on the upper half circle of radius R','given'],['the integral of f along that half circle heads to 0','the fading-arc technique']],2,1,'R · M_R = '+c+', which does not head to 0. The technique says nothing here.'],
+      ['k7',[['|sin x| ≤ 1','the circle functions'],['∫ from 0 to ∞ of (sin x)/x dx converges','comparison with 1/x']],2,1,'Comparison needs a bigger area that converges, and ∫ 1/x diverges.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:26k.line['+[tag,a,c,k].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 26l The Factorial Past the Counting Numbers ---------- */
+const WL26=[
+  ['Is Γ(n) = n!?','no: Γ(n + 1) = n!; Γ(5) = 4! = 24, not 120',['yes','no: Γ(n) = (n + 1)!','no: Γ(n) = n'],'Factorial-step technique.'],
+  ['Is Γ(0) = 0! = 1?','no: Γ(1) = 0! = 1; Γ(0) has no value',['yes','no: Γ(0) = 0','no: Γ(0) = −1'],'The area diverges at 0, and the step rule would divide by 0.'],
+  ['Is Γ(−½) the area ∫ from 0 to ∞ of x^(−3/2) e^(−x) dx?','no: that area diverges at 0; below 0, Γ is the step-down value, not the area',['yes','yes, since e^(−x) fades','no: Γ(−½) has no value'],'Step-down technique: Γ(−½) = Γ(½)/(−½).'],
+  ['Is Γ(s + 1) the only smooth function equal to n! at every whole n?','no: Γ(s + 1) + sin πs agrees with it at every whole number',['yes','yes, among functions with a slope','no: there is no such function'],'More must be asked than the values at the whole numbers.'],
+  ['What is Γ(½)?','√π',['½','π/2','√π/2'],'Bell-area technique: ∫ from 0 to ∞ of e^(−y²) dy = √π/2, so Γ(1/2) = √π.'],
+  ['For which real s does the area ∫ from 0 to ∞ of x^(s − 1) e^(−x) dx converge?','for every s > 0',['for every real s','for whole s only','for s ≥ 1 only'],'Two-ends technique: at the end that runs off, and at the end where the power may climb.']];
+const GH26=[['1/2','√π'],['3/2','√π/2'],['5/2','3√π/4'],['7/2','15√π/8'],['−1/2','−2√π'],['−3/2','4√π/3'],['0','it has no value'],['−1','it has no value'],['−2','it has no value']];
+QP.push({id:'26l.gamma',step:'26l',label:'the factorial between',open:()=>measured('26l'),make(){ return writtenQ('26l.gamma',WL26); }},
+  {id:'26l.work',step:'26l',mode:'work',label:'values of Γ',open:()=>measured('26l'),make(){
+    const t=rnd(4), n=2+rnd(6);
+    if(t===0){ const right=String(fact16(n-1)), wrong=uniq(right,[String(fact16(n)),String(fact16(n-2)),String(n*(n-1)),String(fact16(n+1)),String(n)],3); if(wrong.length<3) return null;
+      return {index:'q:26l.work[w;'+n+']', lines:[['Γ(n + 1) = n! for every whole n ≥ 0','the factorial-step technique']], ask:'What is Γ('+n+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'Γ('+n+') = Γ('+(n-1)+' + 1) = '+(n-1)+'! = '+right+'. The step is one behind the factorial.'}; }
+    if(t===1){ const [s,right]=pick(GH26), wrong=uniq(right,shuffle(GH26.map(v=>v[1]).concat(['2√π','−√π/2','1','0'])),3);
+      return {index:'q:26l.work[h;'+s+']', lines:[['Γ(1/2) = √π','the bell-area technique'],['Γ(s + 1) = s Γ(s)','the factorial-step and step-down techniques']], ask:'What is Γ('+s+')?', right, opts:shuffle([right,...wrong]), lead:'', why:right==='it has no value'?'At 0, −1, −2, … the step-down value would divide by 0.':s==='1/2'?'It is the bell area, with x = y².':s[0]==='−'?'Step down: Γ(s) = Γ(s + 1)/s, from Γ(1/2) = √π.':'Step up from Γ(1/2) = √π: each step multiplies by s.'}; }
+    if(t===2){ const m=1+rnd(3), top=n+m; let v=1; for(let j=n;j<top;j++) v*=j;
+      const right=String(v), wrong=uniq(right,[String(v*top),String(top),String(m),String(v/n*(n-1)||1),String(top*n),String(fact16(m))],3); if(wrong.length<3) return null;
+      return {index:'q:26l.work[q;'+[n,m].join(';')+']', lines:[['Γ(s + 1) = s Γ(s)','the factorial-step technique']], ask:'What is Γ('+top+')/Γ('+n+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'Step down from '+top+' to '+n+': the factors are '+Array.from({length:m},(_,j)=>top-1-j).join(' · ')+' = '+right+'.'}; }
+    const S=fr(2*rnd(4)+1,2), right=fshow(S), wrong=frs16(right,[fadd(S,fint(1)),fsub(S,fint(1)),fr(S.q,S.p),fmul(S,fint(2))]); if(wrong.length<3) return null;
+    return {index:'q:26l.work[s;'+right+']', lines:[['Γ('+fshow(fadd(S,fint(1)))+') = c · Γ('+right+')','the factorial-step technique']], ask:'Which number is c?', right, opts:shuffle([right,...wrong]), lead:'', why:'Γ(s + 1) = s Γ(s), with s = '+right+'.'}; }},
+  {id:'26l.line',step:'26l',mode:'proof',label:'one step behind',open:()=>measured('26l'),make(){
+    const n=3+rnd(5), S=fr(2*rnd(5)+1,2), m=1+rnd(4), V=[
+      ['l1',[['n = '+n,'a whole number'],['Γ('+n+') = '+n+'! = '+fact16(n),'the factorial-step technique']],2,1,'Γ(n + 1) = n!, so Γ('+n+') = '+(n-1)+'! = '+fact16(n-1)+'.'],
+      ['l2',[['n = '+n,'a whole number'],['Γ('+(n+1)+') = '+n+'! = '+fact16(n),'the factorial-step technique']],2,0,'Γ(n + 1) = n!.'],
+      ['l3',[['s = '+fshow(S),'a real number over 0'],['Γ('+fshow(fadd(S,fint(1)))+') = '+fpar22(S)+' · Γ('+fshow(S)+')','the factorial-step technique']],2,0,'Γ(s + 1) = s Γ(s) for every real s > 0.'],
+      ['l4',[['Γ(1) = 0! = 1','the factorial-step technique'],['Γ(0) = Γ(1)/0','the step-down technique']],2,1,'The step-down technique leaves out s = 0, −1, −2, …, where it would divide by 0.'],
+      ['l5',[['s = −'+fshow(S),'a real number under 0'],['Γ(s) = ∫ from 0 to ∞ of x^(s − 1) e^(−x) dx','what Γ is']],2,1,'That area diverges at 0 for s ≤ 0. Below 0, Γ is the step-down value.'],
+      ['l6',[['Γ(1/2) = √π','the bell-area technique'],['Γ(3/2) = √π/2','the factorial-step technique, with s = 1/2']],2,0,'Γ(3/2) = (1/2) Γ(1/2).'],
+      ['l7',[['f is smooth, and f(n) = n! for every whole n ≥ 0','given'],['f(s) = Γ(s + 1) for every s > 0','they agree at every whole number']],2,1,'Γ(s + 1) + '+(m===1?'':m+' ')+'sin πs agrees with n! at every whole number too.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:26l.line['+[tag,n,fshow(S),m].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 
