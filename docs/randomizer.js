@@ -1073,6 +1073,131 @@ QP.push({id:'2k.carries',step:'2k',label:'what the set hands to its members',ope
       ask:'Which line does this make sure?', right:R[0], opts:shuffle([R,...wrong]).map(c=>c[0]), lead:'It is “'+R[0]+'” ',
       why:'A set made by a condition hands that condition to every member: '+R[2]+'. It does not carry what holds only of the whole. The others: '+wrong.map(w=>w[2]).join('; ')+'.'}; }});
 
+/* ===== Laundry 5, rung 3 (floor 1 pools, stage C): 3a 3b 3c 3d 3e 3f 3g ===== */
+Object.assign(STEPS,{'3a':['r03a','Earning Outputs'],'3b':['r03b','Necessary and Possible'],'3c':['r03c','The Next One'],'3d':['r03d','Inductive Sets and the Axiom of Infinity'],
+  '3e':['r03e','Sets Collect Type, Bigness and Order'],'3f':['r03f','Why Infinity Is Chosen, Not Discovered'],'3g':['r03g','Raining, All the Way']});
+
+/* the named sets of 3c: 0 is ∅ and each next one is S(x) = x ∪ {x}; a listed set is shown with the names it has */
+const nS=x=>lun(x,lset([x])), NUMS=[lset([])]; for(let i=1;i<=5;i++) NUMS.push(nS(NUMS[i-1]));
+const nname=x=>{ if(typeof x==='string') return x; const i=NUMS.findIndex(n=>lsame(n,x)); return i>=0&&i<=4?String(i):i===5?'S(4)':'{'+x.s.map(nname).join(', ')+'}'; };
+const nlist=x=>'{'+x.s.map(nname).join(', ')+'}';
+
+/* ---------- 3a Earning Outputs: boxes ---------- */
+function boxDraw(){ const [p,q,r]=shuffle(['P','Q','R','S']).slice(0,3), cite='carry an if through, rows ', kind=pick(['if','refute','free']);
+  if(kind==='if') return {kind,p,q,r,out:p+' ⇒ '+r,rows:[[p+' ⇒ '+q,'given'],[q+' ⇒ '+r,'given'],['│ '+p,'suppose'],['│ '+q,cite+'1 and 3'],['│ '+r,cite+'2 and 4'],[p+' ⇒ '+r,'prove an if, rows 3 to 5']],
+    slips:[[6,r,'A row outside a box may never lean on a row inside it. '+r+' was reached only under the supposition '+p+', so the box’s report is the if: '+p+' ⇒ '+r+'.'],[6,r+' ⇒ '+p,'The box supposed '+p+' and reached '+r+', so its report runs from '+p+' to '+r+', not back.'],
+      [5,null,'Row 2 is “'+q+' ⇒ '+r+'”. Rows 1 and 4 are “'+p+' ⇒ '+q+'” and “'+q+'”: that if fires only on '+p+', and gives '+q+' again, not '+r+'.',cite+'1 and 4']],
+    decoys:[r,r+' ⇒ '+p,q+' ⇒ '+r,p+' ∧ '+r]};
+  if(kind==='refute') return {kind,p,q,r,out:'¬'+p,rows:[[p+' ⇒ '+q,'given'],['¬'+q,'given'],['│ '+p,'suppose'],['│ '+q,cite+'1 and 3'],['│ ⊥','clash, rows 2 and 4'],['¬'+p,'refute, rows 3 to 5']],
+    slips:[[6,p,'Refute writes the denial of what the box supposed. The box supposed '+p+' and reached ⊥, so its output is ¬'+p+'.'],[6,'⊥','⊥ was reached only under the supposition. The box closes and reports ¬'+p+'; nothing totally false stands at the margin.'],
+      [5,null,'A clash needs a statement and its denial. Rows 1 and 4 are “'+p+' ⇒ '+q+'” and “'+q+'”; the denial of '+q+' is row 2.','clash, rows 1 and 4']],
+    decoys:[p,'⊥','¬'+q+' ⇒ '+p,'¬¬'+p]};
+  return {kind,p,q,r,out:p+' ⇒ '+q,rows:[['¬'+p,'given'],['│ '+p,'suppose'],['│ ⊥','clash, rows 1 and 2'],['│ '+q,'when nothing is true, everything is permitted, row 3'],[p+' ⇒ '+q,'prove an if, rows 2 to 4']],
+    slips:[[5,q,q+' was reached only inside the box, from ⊥. Outside the box only the report stands: '+p+' ⇒ '+q+', a free if from the denied condition.'],[5,q+' ⇒ '+p,'The box supposed '+p+' and reached '+q+', so its report is '+p+' ⇒ '+q+'.'],
+      [4,null,'That move needs ⊥ in hand, and row 3 is the row that holds it. Row 2 is only the supposition.','when nothing is true, everything is permitted, row 2']],
+    decoys:[q,q+' ⇒ '+p,'¬'+q,p+' ∧ '+q]}; }
+QP.push({id:'3a.box',step:'3a',mode:'proof',label:'boxes',open:()=>measured('3a'),make(){
+    const D=boxDraw(), v=rnd(D.slips.length), [at,text,why,reason]=D.slips[v], rows=D.rows.map(x=>x.slice());
+    if(text!==null) rows[at-1][0]=text; if(reason) rows[at-1][1]=reason;
+    const der=rows.map((x,i)=>i+1).filter(i=>rows[i-1][1]!=='given'&&rows[i-1][1]!=='suppose');
+    return {index:'q:3a.box['+D.kind+';'+D.p+D.q+D.r+';'+v+']', a3:['1d.letters['+D.p+D.q+D.r+']','3a.box',DASH], stack:true, lines:rows,
+      ask:'One row does not follow from the rows it cites. Which row is the bad row?', right:'row '+at, opts:der.map(i=>'row '+i), lead:'The bad row is row '+at+'. ', why}; }},
+  {id:'3a.output',step:'3a',mode:'work',label:'what a box reports',open:()=>measured('3a'),make(){
+    const D=boxDraw(), rows=D.rows.map(x=>x.slice()), n=rows.length; rows[n-1][0]='▢';
+    return {index:'q:3a.output['+D.kind+';'+D.p+D.q+D.r+']', a3:['1d.letters['+D.p+D.q+D.r+']','3a.output',DASH], stack:true, lines:rows, ask:'The box is closed. What does row '+n+' write?', right:D.out, opts:shuffle([D.out,...shuffle(D.decoys).slice(0,3)]),
+      lead:'It writes '+D.out+'. ', why:D.kind==='refute'?'Refute: the box supposed '+D.p+' and reached ⊥, so the output is the denial of the supposition.':'Prove an if: the box supposed '+D.p+' and reached '+(D.kind==='if'?D.r:D.q)+', so the output is the if from the one to the other. It leans on nothing that was only tried.'}; }});
+
+/* ---------- 3b Necessary and Possible ---------- */
+const MODAL=[
+  ['Necessarily, if {p}, then {q}.','□(P ⇒ Q)',['P ⇒ □Q','◇(P ⇒ Q)','□P ⇒ Q'],'The □ sits in front of the whole if: whatever else is so, the if holds. Sliding it onto the result claims more.'],
+  ['If {p}, then necessarily {q}.','P ⇒ □Q',['□(P ⇒ Q)','P ⇒ ◇Q','□P ⇒ Q'],'Here the □ sits on the result alone: the if hands over a necessity. That claims more than a necessary if.'],
+  ['Possibly, {p} and {q}.','◇(P ∧ Q)',['□(P ∧ Q)','◇P ∧ Q','◇P ⇒ ◇Q'],'Possible is a some over the ways things could go: at least one way holds both together, so the ◇ reaches the whole and.'],
+  ['It is not possible that {p}.','¬◇P',['◇¬P','¬□P','□P'],'The not is put on last, in front of the ◇: no way of supposing it escapes a clash.'],
+  ['Possibly, it is not so that {p}.','◇¬P',['¬◇P','□¬P','¬□¬P'],'The ◇ is the main mark and the not sits inside it: some way things could go holds the denial.'],
+  ['Necessarily, {p}.','□P',['◇P','¬◇P','P ⇒ □P'],'Necessary is an every over the ways things could go: whatever you suppose, it comes out.']];
+QP.push({id:'3b.say',step:'3b',mode:'word',label:'necessary and possible in marks',open:()=>measured('3b'),make(){
+    const k=rnd(MODAL.length), [text,right,wrong,why]=MODAL[k], B=pick(BANK.filter(b=>b.kind==='prop')), two=/\{q\}/.test(text);
+    return {index:'q:3b.say['+k+';'+B.id+']', a3:['3b.sentences['+k+']',DASH,B.id], story:'Let P be “'+B.p+'”.'+(two?' Let Q be “'+B.q+'”.':'')+' The sentence: “'+text.replace('{p}',B.p).replace('{q}',B.q)+'”', lines:[],
+      ask:'Which line writes the sentence in marks?', right, opts:shuffle([right,...wrong]), lead:'It is '+right+'. ', why}; }},
+  {id:'3b.gives',step:'3b',label:'the two together',open:()=>measured('3b'),make(){
+    const p=pick(['P','Q','R']), v=rnd(2);
+    return v===0?{index:'q:3b.gives['+p+'0]', lines:[['□'+p,'in hand']], ask:'Which line does it give?', right:'¬◇¬'+p, opts:shuffle(['¬◇¬'+p,'◇¬'+p,'¬◇'+p,'□¬'+p]),
+        why:'If '+p+' is necessary, then not-'+p+' is not possible: every way reaches '+p+', so no way holds its denial without a clash. It is the way an every gives “no counterexample”.'}
+      :{index:'q:3b.gives['+p+'1]', lines:[['¬◇¬'+p,'in hand']], ask:'Can □'+p+' be written from it, with the techs of this rung?', right:'not yet: the way back waits for rung 7', opts:['yes: each gives the other','not yet: the way back waits for rung 7','yes, by refute','no: it is totally false'],
+        why:'□'+p+' gives ¬◇¬'+p+'. The way back, from “not-'+p+' is not possible” to “'+p+' is necessary”, needs the step from ¬¬ that no tech yet takes.'}; }});
+
+/* ---------- 3c The Next One ---------- */
+QP.push({id:'3c.next',step:'3c',mode:'work',label:'the next one',open:()=>measured('3c'),make(){
+    const v=rnd(4); let x, show, R, cand, why;
+    if(v===0){ const k=rnd(4); x=NUMS[k]; show='S('+k+')'; R=nS(x); cand=[NUMS[k],lset([x]),lset([x,lset([x])]),NUMS[k+2]||NUMS[0]];
+      const wrong=[...new Set(cand.map(nlist))].filter(o=>o!==nlist(R)).slice(0,3); if(wrong.length<3) return null;
+      return {index:'q:3c.next[n'+k+']', lines:[[show,'the next one']], ask:'Which listed set is it?', right:nlist(R), opts:shuffle([nlist(R),...wrong]),
+        why:'S(x) = x ∪ {x}: whatever x had in it, together with x itself as a new member. So '+show+' has the members of '+k+' and '+k+' itself: '+nlist(R)+', which is named '+nname(R)+'.'}; }
+    if(v===1){ const a=1+rnd(3), b=rnd(a); x=lset(Math.random()<0.5?[NUMS[a]]:[NUMS[b],NUMS[a]].filter((y,i,ar)=>ar.findIndex(z=>lsame(z,y))===i)); if(NUMS.some(n=>lsame(n,x))) return null;
+      R=nS(x); cand=[lset([x,lset([x])]),lset([x]),lun(x,lset([lset([x])])),lset(x.s.concat(x.s.map(nS)))];
+      const wrong=[...new Set(cand.map(nlist))].filter(o=>o!==nlist(R)).slice(0,3); if(wrong.length<3) return null;
+      return {index:'q:3c.next[s'+nlist(x)+']', lines:[['S('+nlist(x)+')','the next one']], ask:'Which listed set is it?', right:nlist(R), opts:shuffle([nlist(R),...wrong]),
+        why:'S is a move on any set: S(x) = x ∪ {x}. The result keeps every member of '+nlist(x)+' and adds '+nlist(x)+' itself as one new member.'}; }
+    if(v===2){ const k=2+rnd(3); R=NUMS[k-1];
+      return {index:'q:3c.next[m'+k+']', lines:[['⋃'+k,'a merge']], ask:'Which named set is it?', right:String(k-1), opts:shuffle([String(k-1),String(k),String(k-2),k<4?String(k+1):'S(4)']),
+        why:'Merging runs S backwards on the named sets: every member of '+k+' is also a part of '+k+', so tipping the members out gives nothing that was not already in the largest of them, '+(k-1)+'.'}; }
+    const k=1+rnd(4), wr=[...new Set(['{'+Array.from({length:k},(_,i)=>i+1).join(', ')+'}','{'+k+'}',k>1?'{'+(k-1)+'}':'∅',nlist(NUMS[k+1]),nlist(NUMS[k-1])])].filter(o=>o!==nlist(NUMS[k])).slice(0,3);
+    return {index:'q:3c.next[l'+k+']', lines:[[String(k),'a named set']], ask:'Which listed set does the name stand for?', right:nlist(NUMS[k]), opts:shuffle([nlist(NUMS[k]),...wr]),
+      why:'Each named set is the set of exactly the ones named before it: '+k+' = '+nlist(NUMS[k])+'.'}; }},
+  {id:'3c.names',step:'3c',label:'members and parts of the named sets',open:()=>measured('3c'),make(){
+    const cand=[]; for(let a=0;a<=4;a++) for(let b=0;b<=4;b++){ cand.push([a,'∈',b,a<b],[a,'⊆',b,a<=b]); if(a!==b) cand.push([a,'=',b,false]); }
+    const yes=shuffle(cand.filter(c=>c[3]&&c[0]!==c[2])), no=shuffle(cand.filter(c=>!c[3])), R=yes[0], wrong=[]; no.forEach(c=>{ if(wrong.length<3&&!wrong.some(w=>w[1]===c[1]&&wrong.filter(z=>z[1]===c[1]).length>=2)) wrong.push(c); });
+    const show=c=>c[0]+' '+c[1]+' '+c[2];
+    return {index:'q:3c.names['+show(R)+';'+wrong.map(show).join(',')+']', lines:[], ask:'Which line is so of the named sets?', right:show(R), opts:shuffle([R,...wrong]).map(show), lead:'It is '+show(R)+'. ',
+      why:'Each named set is the set of the ones named before it. So one is a member of another exactly when it is named earlier, and a part of another exactly when it is named earlier or is the same. Here '+R[2]+' = '+nlist(NUMS[R[2]])+'.'}; }});
+
+/* ---------- 3d Inductive Sets ---------- */
+QP.push({id:'3d.witness',step:'3d',label:'not inductive: the witness',open:()=>measured('3d'),make(){
+    for(let tries=0;tries<40;tries++){ const I=[0,1,2,3,4].filter(()=>Math.random()<0.6); if(!I.length) continue; const has=k=>I.includes(k), nm=k=>k===5?'S(4)':String(k);
+      const base=['the base part: 0 is not in it',!has(0)], step=k=>['the step part at '+k+': '+k+' is in it and '+nm(k+1)+' is not',has(k)&&!has(k+1)];
+      const all=[base,...[0,1,2,3,4].map(step)], yes=shuffle(all.filter(c=>c[1])), no=shuffle(all.filter(c=>!c[1])); if(!yes.length||no.length<3) continue;
+      const R=yes[0], wrong=no.slice(0,3), text='{'+I.join(', ')+'}';
+      return {index:'q:3d.witness['+text+';'+R[0].slice(0,22)+']', lines:[['I = '+text,'given']], ask:'I is not inductive. Which witness shows it?', right:R[0], opts:shuffle([R,...wrong]).map(c=>c[0]), lead:'It is '+R[0]+'. ',
+        why:'Inductive means: the set holds 0, and whenever it holds a set it holds that set’s next one. A witness is 0 missing, or a member whose next one is missing. A step part can only fail at a member: where the set does not hold x, the if has a false first half.'}; }
+    return null; }});
+
+/* ---------- 3e Sets Collect Type, Bigness and Order ---------- */
+const COUNTED=[['barge','in the tow'],['crate','off the truck'],['sack','on the scale'],['tulip','in the row'],['ferry','of the morning'],['bin','in the shed'],['salmon','over the ladder'],['pear','in the box']];
+const ORD=['','1st','2nd','3rd','4th','5th','6th','7th','8th','9th'];
+QP.push({id:'3e.counts',step:'3e',label:'the two counts',open:()=>measured('3e'),make(){
+    const [w,where]=pick(COUNTED), n=2+rnd(8), order=Math.random()<0.5, text=order?'the '+ORD[n]+' '+w+' '+where:n+' '+w+(w==='salmon'?'':'s')+' '+where;
+    return {index:'q:3e.counts['+text+']', lines:[[text,'a count']], ask:'Which question does the number answer?', right:order?'order: which place':'bigness: how many', opts:['order: which place','bigness: how many'],
+      why:order?'“'+ORD[n]+'” says which place, as “3rd base” does. It does not say how many there are in all.':'“'+n+'” says how many, as “3 to 2” does. It does not say which came first.'}; }},
+  {id:'3e.type',step:'3e',mode:'work',label:'members, and members of members',open:()=>measured('3e'),make(){
+    const B=pick(THINGS), ps=take(B.props.filter(p=>p[2].length>=1),2), C=lset(ps[0][2]), D=lset(ps[1][2].filter(t=>!ps[0][2].includes(t))); if(!D.s.length||lsame(C,D)) return null;
+    const n=C.s.length+D.s.length, opts=[...new Set(['2',String(n),String(C.s.length),String(D.s.length),String(n+2)])]; if(opts.length<3) return null;
+    return {index:'q:3e.type['+lshow(C)+';'+lshow(D)+']', a3:['3e.type',DASH,B.id], stack:true, lines:[['C = '+lshow(C),'given'],['D = '+lshow(D),'given'],['{C, D}','a set']], ask:'How many members has {C, D}?', right:'2', opts:shuffle(opts.slice(0,4)),
+      why:'Its members are C and D, two of them. The '+n+' things are members of its members: {C, D} holds them as types only.'}; }});
+
+/* ---------- 3f Why Infinity Is Chosen ---------- */
+const F3=[
+  ['The claim P is to be shown of every named number. Which checks make the start-and-step shape?','P(0); and for any u, if P(u) then P(S(u))',['P(0), P(1), P(2), P(3) and P(4), one argument each','for any u, if P(u) then P(S(u)), and nothing else','P(0) and P(S(0))'],'Check the claim for 0: the start. Show that whenever it holds for a set u it holds for S(u): the step. The step is one argument, with u any set.'],
+  ['The start is moved to S(2). Of which numbers does the shape then speak?','the numbers from S(2) on',['every number from 0 on','the number S(2) only','the numbers before S(2)'],'The start need not be 0. Fix a number and start at its next one: the shape then speaks of the numbers from the start on.'],
+  ['The layers: the bottom layer has nothing in it, and each layer above is all the subsets of the layer below. Which set is V₁?','{0}',['∅','{0, 1}','{1}'],'V₀ = ∅, and V₁ = 𝒫(V₀) = 𝒫(∅) = {∅}, which is {0}.'],
+  ['The layers: V₀ = ∅, and each layer above is all the subsets of the layer below. Which set is V₂?','{0, 1}',['{0}','{0, 1, 2}','{1, 2}'],'V₁ = {0}, and V₂ = 𝒫({0}) = {∅, {0}}, which is {0, 1}.'],
+  ['The layers: V₂ = {0, 1}, and V₃ is all its subsets. Which set is V₃?','{0, 1, {1}, 2}',['{0, 1, 2}','{0, 1, 2, 3}','{{0}, {1}, {0, 1}}'],'Keep or drop on {0, 1}: ∅, {0}, {1} and {0, 1}. By their names: 0, 1, {1} and 2.'],
+  ['In the layered world every axiom of rungs 0 to 2 is true, and no set is inductive. What does that show of the axiom of infinity?','no proof of it from the axioms of rungs 0 to 2 can exist',['it is false','it is true in every world','it can be proved from the axioms of rungs 0 to 2'],'A world where the axioms hold and a statement fails refutes every supposed proof of the statement from them. It does not make the statement false: in another world it is true. Independent, not false.'],
+  ['A line has held in a thousand worlds that were checked. What does that show?','nothing final: the next world may fail it, and the worlds do not run out',['that the line is always so','that the line has a proof','that the line is an axiom'],'One world is enough to refute a proof. No number of worlds makes one.'],
+  ['The step of a start-and-step argument will not close. What is the usual cause, and the cure?','the claim for u is too weak to carry; make the claim stronger',['the start was wrong; start at 1','the step needs every case written out','the claim is false'],'When the step will not close, the claim for u is too weak to carry the claim for S(u). A stronger claim gives the step more to lean on.']];
+QP.push({id:'3f.shape',step:'3f',label:'start and step, layers and worlds',open:()=>measured('3f'),make(){
+    const k=rnd(F3.length), [ask,right,wrong,why]=F3[k], ws=shuffle(wrong.slice());
+    return {index:'q:3f.shape['+k+';'+ws.map(w=>w.length).join('.')+']', lines:[], ask, right, opts:shuffle([right,...ws]), lead:'It is: '+right+'. ', why}; }});
+
+/* ---------- 3g Raining, All the Way ---------- */
+const RUNS=[['crate on the line','is sealed'],['drop that falls','is rain'],['barge in the tow','is lashed to the one ahead'],['row of the field','is planted'],['step of the stair','holds your weight'],['page of the ledger','balances']];
+QP.push({id:'3g.keep',step:'3g',label:'start, and keep it',open:()=>measured('3g'),make(){
+    const k=rnd(RUNS.length), [thing,prop]=RUNS[k], v=rnd(4);
+    const startOk='The first '+thing+' '+prop+'.', stepOk='Whenever one '+thing+' '+prop+', the next '+prop+' too.';
+    const told=v===0?startOk+' '+stepOk:v===1?stepOk+' Nothing is said of the first '+thing+'.':v===2?startOk+' Whenever one '+thing+' '+prop+', the next '+prop+' too, except after every tenth.':'The first five were looked at, and each '+prop+'.';
+    const opts=['yes: the start holds and every step keeps it','no: the start was never checked','no: one step breaks it, and the guess stops there','no: five looked at are not a step'];
+    return {index:'q:3g.keep['+k+';'+v+']', lines:[[told,'what is known']], ask:'Does the guess “every '+thing+' '+prop+'” cover every place the steps reach?', right:opts[v], opts, lead:'',
+      why:['What holds at the start, and is kept by each step, holds of everything the steps reach. You check the start once and the step once, and the guess covers the rest.','The step only carries what the start hands it. With no start, nothing is carried.','The step has to keep the claim every time, with no exception. One step that breaks it, and the guess stops there.','Looking at cases is not the step. The step is one argument, from any one to its next.'][v]}; }});
+
 const MAKE={proof:proofQ, work:workQ, word:wordQ, read:readQ};
 
 const toggled=()=>[...LINKS,...QP,...CARDP,...OPS,...MOVES];
