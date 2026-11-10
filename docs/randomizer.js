@@ -347,7 +347,7 @@ const rungOf=t=>{ const n=parseInt(t,10); return isNaN(n)?99:n; };
 const MODES=[{id:'proof',label:'Check Proofs',say:'One line in the proof is bad. Find it.'},
   {id:'work',label:'Work Equations',say:'Work the equation to completion.'},
   {id:'word',label:'Word Problems',say:'Attach the inputs to the equation and get the output.'},
-  {id:'read',label:'Comprehension',say:'Know it by sight.'}];
+  {id:'read',label:'Understanding',say:'Know it by sight.'}];
 const WORKQ=['5g.x','5g.xy','27j.xyz'], DASH='–';
 const SKIND={'0a.names':'names','4f.add':'add','4g.times':'times','4h.numbers':'num','5b.integers':'int','5c.fractions':'frac'};
 
@@ -405,6 +405,8 @@ function mutations(t,c){ const out=[]; const re=/\d+/g; let m;
 function proofQ(P,used){
   for(let tries=0;tries<120;tries++){
     const s=pick(P.seeds), c=s.make(), W=world(c);
+    if(c.kind==='say') continue;
+    if(TERMK.includes(c.kind)){ const q=chainProofQ(P,used,s,c); if(q) return q; continue; }
     if(c.kind==='names'&&[c.l,c.r,c.m].includes(c.n)) continue;
     const fit=shuffle(P.links.filter(L=>L.kinds.includes(c.kind))); if(fit.length<2) continue;
     const want=Math.min(fit.length,fit.length>=3?3+rnd(2):2);
@@ -458,6 +460,8 @@ function drawSteps(ops,E0,count,nonneg){ const steps=[]; let E=E0;
 function workQ(P,used,last){
   const seeds=P.seeds.filter(s=>['add','times','num','int'].includes(SKIND[s.id])), wq=P.qps.filter(Q=>WORKQ.includes(Q.id));
   const canChain=seeds.length&&P.ops.length;
+  const tseeds=P.seeds.filter(s=>TERMK.includes(SKIND[s.id])&&chainLinks(P,SKIND[s.id]).length);
+  if(tseeds.length&&(Math.random()<0.4||!(canChain||wq.length))) for(let tries=0;tries<30;tries++){ const s=pick(tseeds), q=chainWorkQ(P,used,s,s.make()); if(q) return q; }
   if(wq.length&&(!canChain||Math.random()<0.35)){ const q=poolQ(wq,used,last); if(q) return q; }
   if(canChain) for(let tries=0;tries<120;tries++){
     const s=pick(seeds), c=s.make(), neg=measured('5b'), deep=Math.min(3,1+P.ops.length);
@@ -505,10 +509,11 @@ const BANK=[
 BANK.forEach(B=>{ B.open=()=>measured(B.step); });
 const unit=(u,n)=>Math.abs(n)===1?u[0]:u[1];
 const say=(B,key,n)=>B[key].replace('{n}',n).replace('{u1}',unit(B.u1,n)).replace('{u2}',unit(B.u2,n));
-function wordQ(P,used){
-  const seeds=P.seeds.filter(s=>['add','times','num'].includes(SKIND[s.id])), ops=P.ops.filter(O=>O.word); if(!seeds.length||!ops.length||!P.bank.length) return null;
+function wordQ(P,used){ const a=()=>countQ(P,used), b=()=>sayQ(P,used), order=Math.random()<0.45?[b,a]:[a,b]; return order[0]()||order[1](); }
+function countQ(P,used){
+  const seeds=P.seeds.filter(s=>['add','times','num'].includes(SKIND[s.id])), ops=P.ops.filter(O=>O.word), cbank=P.bank.filter(B=>!B.kind); if(!seeds.length||!ops.length||!cbank.length) return null;
   for(let tries=0;tries<160;tries++){
-    const s=pick(seeds), c=s.make(), B=pick(P.bank), story=[], steps=[], nums=[c.a], told={}; let two=false, E={t:String(c.a),v:c.a,p:3};
+    const s=pick(seeds), c=s.make(), B=pick(cbank), story=[], steps=[], nums=[c.a], told={}; let two=false, E={t:String(c.a),v:c.a,p:3};
     if(c.a<1) continue; story.push(say(B,'start',c.a));
     const put=(id,n)=>{ const key=(id==='4f.plus'?'plus':id==='5b.minus'?'minus':'by')+(two&&id!=='4g.by'?'2':''); if(!B[key]||told[key]) return false; /* each sentence of the bank is told once in a story */
       if(id==='4g.by'){ if(two||n<2) return false; } if(id==='5b.minus'&&(n<1||n>=E.v)) return false; if(id==='4f.plus'&&n<1) return false;
@@ -535,7 +540,7 @@ function wordQ(P,used){
       why:'Each sentence makes one change, in order: '+E.t+' = '+E.v+'.'+(two?' The count starts in '+B.u1[1]+' and is in '+B.u2[1]+' after the sentence that says how many '+B.u2[1]+' each '+B.u1[0]+' stands for.':' The count stays in '+B.u1[1]+'.')}; }
   return null; }
 
-/* --- Comprehension: the crosswalk cards, the techniques, the standing questions, the sight questions, and which technique licenses a line. --- */
+/* --- Understanding (was Comprehension until 2026-11-10 19:46Z): the crosswalk cards, the techniques, the standing questions, the sight questions, and which technique licenses a line. --- */
 function poolQ(qps,used,last){
   for(let tries=0;tries<60;tries++){ const Q=pick(qps), x=Q.make(); if(!x||used[x.index]) continue;
     if(x.opts.length>2&&last.length>=2&&last[0]===x.right&&last[1]===x.right) continue;
@@ -548,11 +553,12 @@ function licQ(P,used,last){ if(!P.seeds.length||!P.links.length) return null;
     if(c.kind==='names'&&[c.l,c.r,c.m].includes(c.n)) continue;
     const fit=P.links.filter(L=>L.kinds.includes(c.kind)); if(!fit.length) continue; const L=pick(fit);
     if(rights.size>1&&tries<100&&last.length>=2&&last[0]===L.name&&last[1]===L.name) continue;
-    const out=L.act(c), index='link:'+L.id+'(nest '+s.id+c.ix+')'; if(used[index]) continue;
+    const out=L.act(c); if(!out) continue; const index='link:'+L.id+'(nest '+s.id+c.ix+')'+(c.t||L.rule?':'+out.lines.map(x=>x[0]).join('/'):''); if(used[index]) continue;
     const lic=licensers(out.lines); if(lic.length!==1||lic[0]!==L.name) continue;
-    const others=shuffle(P.openL.filter(x=>x.name!==L.name).map(x=>x.name)).slice(0,2), wrong=others.concat(shuffle(AX.slice())).slice(0,3);
+    const near=shuffle(P.openL.filter(x=>x.name!==L.name&&x.kinds.some(k=>L.kinds.includes(k))).map(x=>x.name)), far=shuffle(P.openL.filter(x=>x.name!==L.name).map(x=>x.name));
+    const others=[...new Set(near.concat(far))].slice(0,c.kind==='prop'||c.kind==='set'?3:2), wrong=others.concat(shuffle(AX.slice())).slice(0,3);
     const names=c.kind==='names';
-    return {index, a3:[names?s.id:s.id+c.ix,L.id,names?'places'+c.ix:DASH], step:L.step, lines:out.lines, ask:'Which technique licenses the line marked ?', right:L.name, opts:shuffle([L.name,...wrong]), why:out.why}; }
+    return {index, a3:[names?s.id:s.id+c.ix,L.id,names?'places'+c.ix:DASH], step:L.step, stack:!!(c.t||L.rule), lines:out.lines, ask:'Which technique licenses the line marked ?', right:L.name, opts:shuffle([L.name,...wrong]), why:out.why}; }
   return null; }
 function readQ(P,used,last){
   const rq=P.qps.filter(Q=>!WORKQ.includes(Q.id));
@@ -560,22 +566,237 @@ function readQ(P,used,last){
   const ways=[[card,P.cps.length?4:0],[()=>rq.length?poolQ(rq,used,last):null,rq.length?3:0],[()=>licQ(P,used,last),P.links.length&&P.seeds.length?3:0]].filter(w=>w[1]);
   while(ways.length){ let r=Math.random()*ways.reduce((a,w)=>a+w[1],0), i=0; while(i<ways.length-1&&r>=ways[i][1]){ r-=ways[i][1]; i++; } const q=ways[i][0](); if(q) return q; ways.splice(i,1); }
   return null; }
+/* ===== Laundry 5 (Andrew 2026-11-10 19:46Z: "Go ahead and do those floor 1 pools"; 19:49Z: "after floor 1 continue filling in pools by floor") =====
+   Terms: one reader and writer for statements (¬ ∧ ∨ ⇒ ⇔ ⊤ ⊥) and for sets (∪ ∩ ∖ ∅). A rewrite technique is a pair of patterns;
+   a chain is a seed rewritten link by link, each line citing its technique. A line is checked by its column: every way its letters can come out. */
+const TBIN='∧∨⇒⇔⊕∪∩∖', TMETA='ABC';
+function tparse(s){ s=String(s); let i=0;
+  const ws=()=>{ while(s[i]===' ') i++; };
+  const unary=()=>{ ws(); const ch=s[i]; if(ch===undefined) throw new Error('term');
+    if(ch==='¬'){ i++; return {o:'¬',a:unary()}; }
+    if(ch==='('){ i++; const e=expr(); ws(); if(s[i]!==')') throw new Error('term'); i++; return e; }
+    if(!/^[A-Za-z⊤⊥∅]$/.test(ch)) throw new Error('term'); i++; return {v:ch}; };
+  function expr(){ const a=unary(); ws(); const o=s[i]; if(o!==undefined&&TBIN.indexOf(o)>=0){ i++; const b=unary(); return {o,a,b}; } return a; }
+  const e=expr(); ws(); if(i!==s.length) throw new Error('term'); return e; }
+const tsub=t=>t.o&&t.o!=='¬'?'('+tshow(t)+')':tshow(t);
+function tshow(t){ return t.v?t.v:t.o==='¬'?'¬'+tsub(t.a):tsub(t.a)+' '+t.o+' '+tsub(t.b); }
+function tmatch(p,t,env){ if(p.v){ if(TMETA.indexOf(p.v)>=0){ if(env[p.v]) return tshow(env[p.v])===tshow(t); env[p.v]=t; return true; } return t.v===p.v; }
+  if(p.o!==t.o) return false; return tmatch(p.a,t.a,env)&&(p.o==='¬'||tmatch(p.b,t.b,env)); }
+const tinst=(p,env)=>p.v?(env[p.v]||p):p.o==='¬'?{o:'¬',a:tinst(p.a,env)}:{o:p.o,a:tinst(p.a,env),b:tinst(p.b,env)};
+const tleaves=t=>t.v?[t.v]:t.o==='¬'?tleaves(t.a):tleaves(t.a).concat(tleaves(t.b));
+const tvars=p=>[...new Set(tleaves(p).filter(v=>TMETA.indexOf(v)>=0))];
+const tatoms=t=>[...new Set(tleaves(t).filter(v=>'⊤⊥∅'.indexOf(v)<0))];
+function trew(t,rule){ const out=[], seen={}, self=tshow(t);
+  const walk=(n,put)=>{ rule.pairs.forEach(([l,r])=>[[l,r,'→'],[r,l,'←']].forEach(([from,to,dir])=>{ const fv=tvars(from); if(!tvars(to).every(v=>fv.includes(v))) return;
+      const env={}; if(!tmatch(from,n,env)) return; const res=put(tinst(to,env)), key=tshow(res); if(key===self||seen[key]) return; seen[key]=1; out.push({t:res,dir}); }));
+    if(n.o==='¬') walk(n.a,x=>put({o:'¬',a:x})); else if(n.o){ walk(n.a,x=>put({o:n.o,a:x,b:n.b})); walk(n.b,x=>put({o:n.o,a:n.a,b:x})); } };
+  walk(t,x=>x); return out; }
+function tval(t,env){ if(t.v) return t.v==='⊤'?true:(t.v==='⊥'||t.v==='∅')?false:!!env[t.v];
+  if(t.o==='¬') return !tval(t.a,env); const a=tval(t.a,env), b=tval(t.b,env);
+  return t.o==='∧'||t.o==='∩'?a&&b:t.o==='∨'||t.o==='∪'?a||b:t.o==='⇒'?!a||b:t.o==='⇔'?a===b:t.o==='⊕'?a!==b:a&&!b; }
+function trows(ts){ const L=[...new Set([].concat(...ts.map(tatoms)))].sort(), rows=[]; for(let m=0;m<(1<<L.length);m++){ const env={}; L.forEach((v,i)=>env[v]=!(m&(1<<(L.length-1-i)))); rows.push(env); } return {L,rows}; }
+const tequiv=(a,b)=>trows([a,b]).rows.every(env=>tval(a,env)===tval(b,env));
+/* the row that tells two lines apart, said the way the kind says it */
+function tapart(a,b,kind){ const R=trows([a,b]), env=R.rows.find(e=>tval(a,e)!==tval(b,e)); if(!env) return '';
+  return kind==='set'?'a thing that is '+R.L.map(v=>(env[v]?'in ':'not in ')+v).join(' and ')+' is in one and not in the other':'in the row where '+R.L.map(v=>v+' is '+(env[v]?'T':'F')).join(', ')+' they give different marks'; }
+/* the slips: one mark turned into its neighbour, a not dropped or added, the sides of an if or a less turned */
+function tslips(t){ const out=[]; const flip={'∧':'∨','∨':'∧','∪':'∩','∩':'∪','⇔':'⇒'};
+  const walk=(n,put)=>{ if(n.v){ if('⊤⊥∅'.indexOf(n.v)<0&&'∪∩∖'.indexOf(put.sig||'')<0) out.push(put({o:'¬',a:n})); return; }
+    if(n.o==='¬'){ out.push(put(n.a)); walk(n.a,Object.assign(x=>put({o:'¬',a:x}),{sig:put.sig})); return; }
+    if(flip[n.o]) out.push(put({o:flip[n.o],a:n.a,b:n.b})); if(n.o==='⇒'||n.o==='∖') out.push(put({o:n.o,a:n.b,b:n.a}));
+    if(n.o==='∖') out.push(put({o:'∩',a:n.a,b:n.b}));
+    walk(n.a,Object.assign(x=>put({o:n.o,a:x,b:n.b}),{sig:put.sig})); walk(n.b,Object.assign(x=>put({o:n.o,a:n.a,b:x}),{sig:put.sig})); };
+  const sig=tleaves(t).length&&/[∪∩∖]/.test(tshow(t))?'∪':''; walk(t,Object.assign(x=>x,{sig}));
+  return shuffle(out.filter((x,i)=>out.findIndex(y=>tshow(y)===tshow(x))===i)); }
+
+/* A chain grown at random only gets longer (1f16), so a link is kept only when its line stays tidy: no third not in a row,
+   no new ⊤ or ⊥ (but for not-as-if, once), and no growth by the techniques whose backward reading only pads a line. */
+const PADS=/\.(again|absorb|units|notnot|notasif|sagain|sabsorb|sunits)$/, tcount=(k,re)=>(k.match(re)||[]).length;
+function tidy(cur,res,L){ const a=tshow(cur), b=tshow(res); if(b.length>33||b.indexOf('¬¬¬')>=0) return false;
+  const grew=b.length>a.length, consts=tcount(b,/[⊤⊥∅]/g)>tcount(a,/[⊤⊥∅]/g);
+  if(L.id==='1d.notasif') return !consts||(tcount(a,/[⊤⊥]/g)===0&&Math.random()<0.5);
+  if(consts) return false;
+  if(grew&&PADS.test(L.id)) return /\.notnot$/.test(L.id)&&a.indexOf('¬¬')<0&&Math.random()<0.25;
+  return b.length<=a.length+13; }
+/* a rewrite technique as a link pool: it licenses a line that is a line above it with one piece rewritten */
+function rwLink(id,step,name,pairs,kind){ const rule={pairs:pairs.map(p=>p.map(tparse))};
+  return {id,step,name,kinds:[kind],rule,open:()=>measured(step),
+    lic:(g,t)=>{ let T; try{ T=tshow(tparse(t.replace(/^= /,''))); }catch(e){ return false; }
+      return g.some(x=>{ let G; try{ G=tparse(String(x).replace(/^= /,'')); }catch(e){ return false; } return trew(G,rule).some(r=>tshow(r.t)===T); }); },
+    act(c){ if(!c.t) return null; const rs=trew(c.t,rule).filter(r=>tidy(c.t,r.t,this)); if(!rs.length) return null; const r=pick(rs);
+      return {lines:[[tshow(c.t),'given'],[(kind==='set'?'= ':'')+tshow(r.t),null]], why:'Line 2 is line 1 with one piece rewritten by '+name+', read '+(r.dir==='→'?'forward':'backward')+'.'}; }}; }
+
+/* --- Rung 1: the rulebook of 1f, each technique in the marks of its table --- */
+Object.assign(STEPS,{'0c':['r00c','Guess, Work'],'1a':['r01a','Line It All Up'],'1d':['r01d','If, and Exactly When'],'1f':['r01f','Rewriting by the Rulebook'],'1g':['r01g','Too Many Rows']});
+LINKS.push(
+  rwLink('1f.turnabout','1f','the turn-about rewrite for And and for Or',[['A ∧ B','B ∧ A'],['A ∨ B','B ∨ A']],'prop'),
+  rwLink('1f.regroup','1f','the regroup rewrite',[['(A ∧ B) ∧ C','A ∧ (B ∧ C)'],['(A ∨ B) ∨ C','A ∨ (B ∨ C)']],'prop'),
+  rwLink('1f.spreadand','1f','the spread rewrite for and over or',[['A ∧ (B ∨ C)','(A ∧ B) ∨ (A ∧ C)']],'prop'),
+  rwLink('1f.spreador','1f','the spread rewrite for or over and',[['A ∨ (B ∧ C)','(A ∨ B) ∧ (A ∨ C)']],'prop'),
+  rwLink('1f.again','1f','the say-it-again rewrite',[['A ∧ A','A'],['A ∨ A','A']],'prop'),
+  rwLink('1f.absorb','1f','the absorb rewrite',[['A ∧ (A ∨ B)','A'],['A ∨ (A ∧ B)','A']],'prop'),
+  rwLink('1f.notor','1f','the not-through rewrite for or',[['¬(A ∨ B)','¬A ∧ ¬B']],'prop'),
+  rwLink('1f.notand','1f','the not-through rewrite for and',[['¬(A ∧ B)','¬A ∨ ¬B']],'prop'),
+  rwLink('1f.notnot','1f','the not-not rewrite',[['¬¬A','A']],'prop'),
+  rwLink('1f.ifasor','1f','the if-as-or rewrite',[['A ⇒ B','¬A ∨ B']],'prop'),
+  rwLink('1f.turndeny','1f','the turn-and-deny rewrite',[['A ⇒ B','¬B ⇒ ¬A']],'prop'),
+  rwLink('1f.negif','1f','the negated-if rewrite',[['¬(A ⇒ B)','A ∧ ¬B']],'prop'),
+  rwLink('1f.twoifs','1f','the two-ifs rewrite',[['A ⇔ B','(A ⇒ B) ∧ (B ⇒ A)']],'prop'),
+  rwLink('1f.cases','1f','the cases rewrite',[['(A ⇒ C) ∧ (B ⇒ C)','(A ∨ B) ⇒ C']],'prop'),
+  rwLink('1f.inturn','1f','the hypotheses-in-turn rewrite',[['(A ∧ B) ⇒ C','A ⇒ (B ⇒ C)']],'prop'),
+  rwLink('1f.clash','1f','the clash rewrite',[['A ∧ ¬A','⊥']],'prop'),
+  rwLink('1f.eitherway','1f','the either-way principle',[['A ∨ ¬A','⊤']],'prop'),
+  rwLink('1f.units','1f','the units rewrite',[['A ∧ ⊤','A'],['A ∨ ⊥','A'],['A ∧ ⊥','⊥'],['A ∨ ⊤','⊤']],'prop'),
+  /* 1d: the techniques of the if */
+  rwLink('1d.notasif','1d','the not-as-if technique',[['¬A','A ⇒ ⊥']],'prop'),
+  {id:'1d.chainif',step:'1d',name:'the chain technique for If',kinds:['prop'],open:()=>measured('1d'),
+   lic:(g,t)=>{ let T; try{ T=tparse(t); }catch(e){ return false; } if(T.o!=='⇒') return false; const G=[]; g.forEach(x=>{ try{ const y=tparse(x); if(y.o==='⇒') G.push(y); }catch(e){} });
+     return G.some(x=>tshow(x.a)===tshow(T.a)&&tshow(x.b)!==tshow(T.b)&&G.some(y=>tshow(y.a)===tshow(x.b)&&tshow(y.b)===tshow(T.b))); },
+   act:c=>{ if(!c.L) return null; const [p,q,r]=c.L; return {lines:[[p+' ⇒ '+q,'given'],[q+' ⇒ '+r,'given'],[p+' ⇒ '+r,null]], why:'Line 3 joins the two ifs through their shared middle: if '+p+' then '+q+', and if '+q+' then '+r+'; so if '+p+' then '+r+'.'}; }},
+  {id:'1d.freeif',step:'1d',name:'the free-if technique',kinds:['prop'],open:()=>measured('1d'),
+   lic:(g,t)=>{ let T; try{ T=tparse(t); }catch(e){ return false; } if(T.o!=='⇒') return false; return g.includes(tshow({o:'¬',a:T.a}))||g.includes(tshow(T.b)); },
+   act:c=>{ if(!c.L) return null; const [p,q]=c.L, held=Math.random()<0.5; return {lines:[[held?q:'¬'+p,'given'],[p+' ⇒ '+q,null]], why:held?'The conclusion is held, so the if is free: whatever is supposed, '+q+' is already in hand.':'The hypothesis is denied, so the if is free: it promises nothing that can be called in.'}; }}
+);
+
+/* seeds of statements: each is a start for a chain; the letters are dealt afresh each time */
+const PROP_SEEDS=['¬(P ∧ Q)','¬(P ∨ Q)','¬¬P ∧ Q','P ⇒ Q','¬(P ⇒ Q)','P ⇔ Q','(P ⇒ R) ∧ (Q ⇒ R)','(P ∧ Q) ⇒ R','P ∧ (Q ∨ R)','P ∨ (Q ∧ R)','(P ∧ Q) ∨ (P ∧ ¬Q)','P ∧ (P ∨ Q)','P ∨ (P ∧ Q)',
+  '(P ∧ Q) ∧ R','(P ∨ Q) ∨ R','¬(P ∧ ¬Q)','¬(¬P ∨ Q)','(P ∨ Q) ⇒ R','P ⇒ (Q ⇒ R)','¬(P ⇒ ¬Q)','(P ∧ ¬P) ∨ Q','(P ∨ ¬P) ∧ Q','(P ∧ ⊤) ∨ Q','¬(P ∧ (Q ∨ R))','¬((P ⇒ Q) ∧ R)','(P ⇒ Q) ∧ (Q ⇒ P)',
+  '¬P ⇒ ¬Q','(¬P ∨ Q) ∧ P','¬(¬P ∧ ¬Q)','(P ∧ P) ∨ Q','¬¬(P ∨ Q)','P ⇒ (Q ∧ R)','(P ∧ Q) ∨ R','¬(P ⇔ Q)','(P ∨ ⊥) ∧ Q','¬(P ∨ (Q ∧ R))','(P ⇒ Q) ∨ R','¬P ∨ (P ∧ Q)','(P ⇒ ⊥) ∨ Q','P ⇒ (Q ⇒ ⊥)','¬(P ⇒ ⊥)','¬¬P ⇒ Q','(P ∧ Q) ⇒ ⊥'];
+const relabel=(t,map)=>t.v?{v:map[t.v]||t.v}:t.o==='¬'?{o:'¬',a:relabel(t.a,map)}:{o:t.o,a:relabel(t.a,map),b:relabel(t.b,map)};
+SEEDS.push({id:'1f.statements',step:'1f',label:'statements to rewrite',open:()=>measured('1f'),
+  make(){ const k=rnd(PROP_SEEDS.length), L=shuffle(['P','Q','R']); return {kind:'prop',t:relabel(tparse(PROP_SEEDS[k]),{P:L[0],Q:L[1],R:L[2]}),L,ix:'['+k+','+L.join('')+']'}; }});
+SKIND['1f.statements']='prop';
+/* a seed of letters alone is enough for 1d's ifs, so the statements open with 1d for those */
+SEEDS.push({id:'1d.letters',step:'1d',label:'letters for statements',open:()=>measured('1d'),
+  make(){ const L=shuffle(['P','Q','R']); return {kind:'prop',t:null,L,ix:'['+L.join('')+']'}; }});
+SKIND['1d.letters']='prop';
+
+/* checks that ride on a chain: 1a's rule that a reason may cite only lines above it */
+const MOVES=[{id:'1a.upward',step:'1a',label:'reasons point upward'}];
+MOVES.forEach(M=>{ M.open=()=>measured(M.step); });
+
+const TERMK=['prop','set'], shortName=n=>n.replace(/^the /,'');
+function chainBuild(c,links,n,spoilAt){ const kind=c.kind, lines=[{t:c.t}], seenT={}; seenT[tshow(c.t)]=1; let spoiled=null;
+  for(let k=1;k<=n;k++){ const cur=lines[lines.length-1].t, cand=[];
+    links.forEach(L=>trew(cur,L.rule).forEach(r=>{ const key=tshow(r.t); if(!seenT[key]&&tidy(cur,r.t,L)) cand.push({L,r}); }));
+    if(!cand.length) break;
+    const prevL=lines[lines.length-1].L, fresh=cand.filter(x=>x.L!==prevL); if(fresh.length){ cand.length=0; fresh.forEach(x=>cand.push(x)); } /* the same technique twice running only when nothing else fits */
+    const L=pick([...new Set(cand.map(x=>x.L))]), x=pick(cand.filter(y=>y.L===L)); let t=x.r.t;
+    if(k===spoilAt){ const slip=tslips(t).find(z=>trows([z,cur]).rows.some(env=>tval(cur,env)&&!tval(z,env))&& /* the slip must fail on a row where the line above holds, so nothing above can license it */ !seenT[tshow(z)]&&tshow(z).length<=33); if(!slip) return null; spoiled={orig:t,L,apart:tapart(slip,t,kind)}; t=slip; }
+    seenT[tshow(t)]=1; lines.push({t,L,dir:x.r.dir}); }
+  if(lines.length-1<n) return null; return {lines,spoiled}; }
+const chainLinks=(P,kind)=>P.links.filter(L=>L.rule&&L.kinds.includes(kind));
+/* a seed of bare letters: a short column of givens and lines drawn from them by 1d's techniques, one line spoiled.
+   The spoiled line is checked against every row: it must fail on some row where all the other lines hold. */
+function lettersProofQ(P,used,s,c){ const have=id=>P.links.find(L=>L.id===id), CH=have('1d.chainif'), FR=have('1d.freeif'), NA=have('1d.notasif');
+  if([CH,FR,NA].filter(Boolean).length<2) return null;
+  for(let tries=0;tries<40;tries++){ const [p,q,r]=shuffle(c.L.slice()), lines=[], der=[], cited={};
+    const given=t=>{ let i=lines.findIndex(x=>x.t===t); if(i<0){ lines.push({t,w:'given'}); i=lines.length-1; } if(lines[i].L) cited[i]=1; return i+1; };
+    const blocks=shuffle([CH&&'ch',FR&&'fr',NA&&'na'].filter(Boolean)).slice(0,2+rnd(2));
+    blocks.forEach(b=>{
+      if(b==='ch'){ const a=given(p+' ⇒ '+q), d=given(q+' ⇒ '+r); lines.push({t:p+' ⇒ '+r,L:CH,w:shortName(CH.name)+', on lines '+a+' and '+d,slips:[r+' ⇒ '+p,p+' ⇒ ¬'+r,'¬'+p+' ⇒ '+r]}); }
+      if(b==='fr'){ const held=Math.random()<0.5, x=held?r:q, y=held?q:r, a=given(held?y:'¬'+x); lines.push({t:x+' ⇒ '+y,L:FR,w:shortName(FR.name)+', on line '+a,slips:[y+' ⇒ '+x,held?x+' ⇒ ¬'+y:'¬'+x+' ⇒ '+y]}); }
+      if(b==='na'){ const x=blocks.includes('fr')?p:pick([p,q,r]), a=given('¬'+x); lines.push({t:x+' ⇒ ⊥',L:NA,w:shortName(NA.name)+', on line '+a,slips:['¬'+x+' ⇒ ⊥']}); }
+      der.push(lines.length-1); });
+    const T=lines.map(x=>tparse(x.t)), rows=trows(T.concat(c.L.map(v=>tparse(v)))).rows;
+    if(!rows.some(env=>T.every(t=>tval(t,env)))) continue; /* the givens must be able to hold together */
+    const free=der.filter(i=>!cited[i]); if(!free.length) continue; const j=pick(free), others=T.filter((t,i)=>i!==j); /* a line that a later line cites is never the spoiled one */
+    const bad=shuffle(lines[j].slips).find(z=>{ const Z=tparse(z); return !lines.some(x=>x.t===z)&&rows.some(env=>others.every(t=>tval(t,env))&&!tval(Z,env)); });
+    if(!bad) continue;
+    const ids=der.map(i=>lines[i].L.id), index='p:'+s.id+c.ix+'.'+ids.join('+')+'#'+(j+1)+':'+bad; if(used[index]) continue;
+    return {index, a3:[s.id+c.ix, ids.join('+'), DASH], step:'1d', steps:['1d'], stack:true,
+      lines:lines.map((x,i)=>[i===j?bad:x.t,x.w]), ask:'One line does not follow from what it cites. Which line is the bad line?',
+      right:'line '+(j+1), opts:der.map(i=>'line '+(i+1)), lead:'The bad line is line '+(j+1)+'. ',
+      why:'Line '+(j+1)+' cites '+lines[j].L.name+'. That technique licenses “'+lines[j].t+'”, and the line as written does not follow.'}; }
+  return null; }
+function chainProofQ(P,used,s,c){ if(!c.t) return lettersProofQ(P,used,s,c); const links=chainLinks(P,c.kind); if(links.length<2) return null; const eq=c.kind==='set'?'= ':'';
+  for(let tries=0;tries<40;tries++){ const n=2+rnd(3), upward=P.moves.some(M=>M.id==='1a.upward')&&n>=3&&Math.random()<0.22;
+    const j=upward?2+rnd(n-1):2+rnd(n), B=chainBuild(c,links,n,upward?0:j-1); if(!B) continue;
+    const ids=B.lines.slice(1).map(x=>x.L.id); let cite=B.lines.map((x,i)=>i); /* line i+1 cites line i */
+    const reason=(x,i,to)=>shortName(x.L.name)+', on line '+to;
+    let lines, why, lead='The bad line is line '+j+'. ';
+    if(upward){ const below=j+1+rnd(n+1-j); lines=B.lines.map((x,i)=>[(i?eq:'')+tshow(x.t),i?reason(x,i,i+1===j?below:i):'given']);
+      why='Line '+j+' cites line '+below+', which is below it. A reason may cite only lines above it.'; }
+    else{ lines=B.lines.map((x,i)=>[(i?eq:'')+tshow(x.t),i?reason(x,i,i):'given']);
+      why='Line '+j+' cites '+B.spoiled.L.name+'. That takes line '+(j-1)+' to “'+tshow(B.spoiled.orig)+'”. The line as written says something else: '+B.spoiled.apart+'.'; }
+    const index='p:'+s.id+c.ix+'.'+ids.join('+')+(upward?'^':'#')+j+':'+lines[j-1][0]; if(used[index]) continue;
+    return {index, a3:[s.id+c.ix, ids.join('+')+(upward?'+1a.upward':''), DASH], step:B.lines[j-1].L.step, steps:[...new Set(B.lines.slice(1).map(x=>x.L.step).concat(upward?['1a']:[]))], stack:true,
+      lines, ask:'One line does not follow from what it cites. Which line is the bad line?', right:'line '+j, opts:B.lines.slice(1).map((x,i)=>'line '+(i+2)), lead, why}; }
+  return null; }
+/* Work: the chain is given with its last line left as a box; the learner works it to completion */
+function chainWorkQ(P,used,s,c){ const links=chainLinks(P,c.kind); if(!links.length||!c.t) return null; const eq=c.kind==='set'?'= ':'';
+  for(let tries=0;tries<40;tries++){ const n=1+rnd(Math.min(3,links.length)), B=chainBuild(c,links,n,0); if(!B) continue;
+    const last=B.lines[n], prev=B.lines[n-1].t, valid=trew(prev,last.L.rule).map(r=>tshow(r.t)), right=tshow(last.t);
+    const wrong=[]; tslips(last.t).forEach(z=>{ const k=tshow(z); if(wrong.length<2&&!tequiv(z,prev)&&!valid.includes(k)&&k.length<=33&&!wrong.includes(k)) wrong.push(k); });
+    shuffle(links.filter(L=>L!==last.L)).forEach(L=>trew(prev,L.rule).forEach(r=>{ const k=tshow(r.t); if(wrong.length<3&&!valid.includes(k)&&!wrong.includes(k)&&k.length<=33) wrong.push(k); }));
+    tslips(prev).forEach(z=>{ const k=tshow(z); if(wrong.length<3&&!valid.includes(k)&&!wrong.includes(k)&&k!==tshow(prev)) wrong.push(k); });
+    if(wrong.length<3) continue;
+    const ids=B.lines.slice(1).map(x=>x.L.id), index='w:'+s.id+c.ix+'.'+ids.join('+')+'>'+right; if(used[index]) continue;
+    return {index, a3:[s.id+c.ix,ids.join('+'),DASH], step:last.L.step, steps:[...new Set(B.lines.slice(1).map(x=>x.L.step))], stack:true,
+      lines:B.lines.map((x,i)=>[i===n?eq+'▢':(i?eq:'')+tshow(x.t),i?shortName(x.L.name)+', on line '+i:'given']),
+      ask:'What fills the box ▢?', right:eq+right, opts:shuffle([right,...wrong]).map(o=>eq+o), lead:'The box holds '+right+'. ',
+      why:'Line '+(n+1)+' is line '+n+' with one piece rewritten by '+last.L.name+', read '+(last.dir==='→'?'forward':'backward')+'.'}; }
+  return null; }
+
+/* --- Rung 1 bank: weather statements, and the ways English says a rule (1f10's table) --- */
+const SAYINGS=[['If {X}, then {Y}.','X ⇒ Y'],['{Y} if {X}.','X ⇒ Y'],['{Y} whenever {X}.','X ⇒ Y'],['{X} only if {Y}.','X ⇒ Y'],['{X} unless {Y}.','¬Y ⇒ X'],['{X} exactly when {Y}.','X ⇔ Y'],
+  ['{X} if and only if {Y}.','X ⇔ Y'],['{X}, and {nY}.','X ∧ ¬Y'],['It is not so that both {X} and {Y}.','¬(X ∧ Y)'],['If {nY}, then {nX}.','¬Y ⇒ ¬X']];
+SEEDS.push({id:'1d.sayings',step:'1d',label:'ways English says a rule',open:()=>measured('1d'),
+  make(){ const k=rnd(SAYINGS.length), turn=rnd(2); return {kind:'say',k,turn,ix:'['+k+','+turn+']'}; }});
+SKIND['1d.sayings']='say';
+[['weather.rain','it is raining','the street is wet'],['weather.snow','it is snowing','the pass is closed'],['weather.fog','the wind is from the south','the fog is lifting'],
+ ['weather.frost','the sky is clear','the night is cold'],['weather.river','the river is high','the ferry is tied up'],['weather.ice','the ground is frozen','the puddles are iced over']]
+ .forEach(([id,p,q])=>BANK.push({id,step:'1d',kind:'prop',p,q,open:()=>measured('1d')}));
+const notSay=s=>s.replace(/ (is|are) /,' $1 not '), capFirst=s=>s.charAt(0).toUpperCase()+s.slice(1);
+function sayQ(P,used){ const seeds=P.seeds.filter(s=>SKIND[s.id]==='say'), bank=P.bank.filter(B=>B.kind==='prop'); if(!seeds.length||!bank.length) return null;
+  const links=chainLinks(P,'prop');
+  for(let tries=0;tries<60;tries++){ const s=pick(seeds), c=s.make(), B=pick(bank), [text,form]=SAYINGS[c.k];
+    const X=c.turn?'Q':'P', Y=c.turn?'P':'Q', cl={P:B.p,Q:B.q}, say=capFirst(text.replace('{X}',cl[X]).replace('{Y}',cl[Y]).replace('{nX}',notSay(cl[X])).replace('{nY}',notSay(cl[Y])));
+    const t0=relabel(tparse(form),{X,Y}), n=links.length?rnd(3):0, CB=n?chainBuild({kind:'prop',t:t0},links,n,0):{lines:[{t:t0}]}; if(!CB) continue;
+    const fin=CB.lines[CB.lines.length-1].t, right=tshow(fin), names=CB.lines.slice(1).map(x=>x.L.name);
+    const base=[relabel(tparse(form),{X:Y,Y:X}),tparse('P ⇒ Q'),tparse('Q ⇒ P'),tparse('P ⇔ Q'),tparse('¬P ⇒ Q'),tparse('¬Q ⇒ P'),tparse('P ∧ ¬Q'),tparse('¬(P ∧ Q)')];
+    const fam=n?tslips(fin).concat(base):base.concat(tslips(fin)); /* after a rewrite the wrong lines are slips of the line reached; before one, the if's relatives */
+    const wrong=[]; fam.forEach(z=>{ const k=tshow(z); if(wrong.length<3&&!tequiv(z,fin)&&!wrong.includes(k)&&k.length<=33) wrong.push(k); }); if(wrong.length<3) continue;
+    const ids=CB.lines.slice(1).map(x=>x.L.id), index='d:'+s.id+c.ix+'.'+(ids.join('+')||DASH)+'.'+B.id+'>'+right; if(used[index]) continue;
+    return {index, a3:[s.id+c.ix,ids.join('+')||DASH,B.id], step:'1d', steps:[...new Set(['1d',...CB.lines.slice(1).map(x=>x.L.step)])],
+      story:'Let P be “'+B.p+'”. Let Q be “'+B.q+'”. The rule: “'+say+'”'+(names.length?' Write the rule in marks, then rewrite it by '+names.join(', and then by ')+'.':''), lines:[],
+      ask:names.length?'Which line do you reach?':'Which line writes the rule in marks?', right, opts:shuffle([right,...wrong]), lead:'It is '+right+'. ',
+      why:'The rule in marks is '+tshow(t0)+'.'+(names.length?' Rewritten: '+CB.lines.slice(1).map(x=>tshow(x.t)).join(', then ')+'.':'')}; }
+  return null; }
+
+/* --- Question pools for the steps that teach no technique of their own --- */
+WORKQ.push('1g.rows');
+QP.push({id:'1g.rows',step:'1g',label:'how many rows',open:()=>measured('1g'),make(){
+    const k=rnd(PROP_SEEDS.length), four=Math.random()<0.3, t=four?{o:pick(['∧','∨','⇒']),a:tparse(PROP_SEEDS[k]),b:{v:'S'}}:tparse(PROP_SEEDS[k]), n=tatoms(t).length, right=String(1<<n);
+    const wrong=[...new Set([2*n,n*n,1<<(n+1),1<<(n-1),n+1,2*n+1].map(String))].filter(x=>x!==right&&x!=='1'&&x!=='0').slice(0,3);
+    return {index:'q:1g.rows['+k+','+(four?1:0)+']', lines:[[tshow(t),'statement']], ask:'How many rows does its table need?', right, opts:shuffle([right,...wrong]),
+      why:'It has '+n+' different letter'+(n===1?'':'s')+', and each letter doubles the rows: '+Array.from({length:n},()=>'2').join(' · ')+' = '+right+'.'}; }},
+  {id:'0c.work',step:'0c',label:'said or seen',open:()=>measured('0c'),make(){
+    const said=Math.random()<0.5; let text, index;
+    if(said){ const i=rnd(NAMES.length), [l,r,m]=NAMES[i]; text='From “'+l+' = '+r+'” and “'+r+' = '+m+'”, you write “'+l+' = '+m+'”.'; index='q:0c.work[s'+i+']'; }
+    else{ const C=[['crates','crate','lettuce'],['bins','bin','apples'],['totes','tote','salmon'],['sacks','sack','almonds'],['bins','bin','pears']], i=rnd(C.length), [us,u,thing]=C[i], n=3+rnd(7);
+      text='You open '+n+' '+us+' and find '+thing+' in each one, and you say “every '+u+' here holds '+thing+'”.'; index='q:0c.work[c'+i+','+n+']'; }
+    return {index, lines:[[text,'working']], ask:'Is this working from what is said, or from what is seen?', right:said?'from what is said':'from what is seen', opts:['from what is said','from what is seen'],
+      why:said?'Nothing is looked at: the new line is written only from the lines already written. The guess is in the lines it starts from.':'A word for all the cases is gathered from the cases looked at. More cases make the guess harder to shake, and never finish it.'}; }}
+);
+
 const MAKE={proof:proofQ, work:workQ, word:wordQ, read:readQ};
 
-const toggled=()=>[...LINKS,...QP,...CARDP,...OPS];
+const toggled=()=>[...LINKS,...QP,...CARDP,...OPS,...MOVES];
 function avail(mode){ const oS=SEEDS.filter(s=>s.open()), kinds=oS.map(s=>SKIND[s.id]), oO=OPS.filter(o=>o.open());
   if(mode==='proof') return oS.length>0&&LINKS.filter(l=>l.open()).length>=2;
-  if(mode==='work') return (oO.length>0&&kinds.some(k=>['add','times','num','int'].includes(k)))||QP.some(Q=>Q.open()&&WORKQ.includes(Q.id));
-  if(mode==='word') return BANK.some(b=>b.open())&&oO.some(o=>o.word)&&kinds.some(k=>['add','times','num'].includes(k));
+  const chainable=oS.some(s=>TERMK.includes(SKIND[s.id])&&s.id!=='1d.letters'&&LINKS.filter(l=>l.open()&&l.rule&&l.kinds.includes(SKIND[s.id])).length>=2);
+  if(mode==='work') return chainable||(oO.length>0&&kinds.some(k=>['add','times','num','int'].includes(k)))||QP.some(Q=>Q.open()&&WORKQ.includes(Q.id));
+  if(mode==='word') return (BANK.some(b=>b.open()&&!b.kind)&&oO.some(o=>o.word)&&kinds.some(k=>['add','times','num'].includes(k)))||(BANK.some(b=>b.open()&&b.kind==='prop')&&kinds.includes('say'));
   return QP.some(Q=>Q.open()&&!WORKQ.includes(Q.id))||CARDP.some(C=>C.open())||(oS.length>0&&LINKS.some(l=>l.open())); }
-const OPENS={proof:'0b',work:'4f',word:'4f',read:'0a'};
+const OPENS={proof:'0b',work:'1f',word:'1d',read:'0a'};
 function modeNow(){ const m=(get('rand:mode',null)||{}).m||'proof'; /* kept as an object: the record hands a bare word back unquoted */ if(MODES.some(M=>M.id===m)&&avail(m)) return m; const f=MODES.find(M=>avail(M.id)); return f?f.id:m; }
 
 function build(mode){
   mode=mode||modeNow();
   const off=get('rand:off',{}), isOff=P=>!!off['rung:'+rungOf(P.step)];
   if(![...SEEDS,...toggled(),...BANK].some(P=>P.open())) return {closed:'The laundry opens with the crosswalk of the first step you reach, and its technique pools open as you pass measuring sticks.'};
-  if(!avail(mode)) return {closed:mode==='read'?'Comprehension opens with the crosswalk of the first step you reach.':MODES.find(M=>M.id===mode).label+' opens when you pass the measuring stick of '+OPENS[mode]+'.'};
+  if(!avail(mode)) return {closed:mode==='read'?'Understanding opens with the crosswalk of the first step you reach.':MODES.find(M=>M.id===mode).label+' opens when you pass the measuring stick of '+OPENS[mode]+'.'};
   const used=get('rand:seen',{}), last=get('rand:last',[]), st=strayDue();
   const anyOn=toggled().some(P=>P.open()&&!isOff(P)), anyOff=toggled().some(P=>P.open()&&isOff(P));
   if(!anyOn) return {closed:'Every rung is switched off below. Switch one on.'};
@@ -583,7 +804,7 @@ function build(mode){
   for(const stray of passes){
     const use=P=>P.open()&&(stray?isOff(P):!isOff(P));
     const P={isOff, seeds:SEEDS.filter(s=>s.open()), bank:BANK.filter(b=>b.open()), links:LINKS.filter(use), qps:QP.filter(use), ops:OPS.filter(use),
-      cps:CARDP.filter(C=>use(C)&&C.ready()), openL:LINKS.filter(l=>l.open())};
+      cps:CARDP.filter(C=>use(C)&&C.ready()), openL:LINKS.filter(l=>l.open()), moves:MOVES.filter(use)};
     const q=MAKE[mode](P,used,last); if(q){ q.stray=stray; q.mode=mode; return q; } }
   return {closed:'The rungs switched on hold no fresh question of this kind. Switch on another rung below, or pick another kind above. Each step you pass adds its pools.'};
 }
@@ -591,7 +812,7 @@ function build(mode){
 /* Pools are switched by rung; inside a rung each pool unlocks with its step. */
 function picker(q){
   const off=get('rand:off',{}), by={};
-  const src=P=>P.kind==='cards'?'crosswalk':P.kind==='sq'?'standing questions':P.kind==='tech'?'techniques':OPS.includes(P)?'operations':BANK.includes(P)?'bank':SEEDS.includes(P)?'seeds':LINKS.includes(P)?'links':'questions';
+  const src=P=>P.kind==='cards'?'crosswalk':P.kind==='sq'?'standing questions':P.kind==='tech'?'techniques':OPS.includes(P)?'operations':MOVES.includes(P)?'checks':BANK.includes(P)?'bank':SEEDS.includes(P)?'seeds':LINKS.includes(P)?'links':'questions';
   [...SEEDS,...toggled(),...BANK].filter(P=>P.open()).forEach(P=>{ const r=rungOf(P.step), b=by[r]=by[r]||{steps:new Set(),src:new Set()}; b.steps.add(P.step); b.src.add(src(P)); });
   const M=window.LADDER_CARDMAP||{}, stemOf=t=>{ for(const s in M) if(M[s][0]===t) return s; return STEPS[t]?STEPS[t][0]:t; };
   const rows=Object.keys(by).map(Number).sort((a,b)=>a-b).map(r=>{ const steps=[...by[r].steps].sort((x,y)=>stemOf(x)<stemOf(y)?-1:1);
@@ -669,6 +890,6 @@ function sqQ(P){ const S=window.LADDER_SQ||{}, ids=Object.keys(S).filter(id=>id.
   const id=pick(ids), tr=S[id], ns=Object.keys(tr.n).filter(k=>(tr.n[k].c||[]).length>1); if(!ns.length) return null; const k=pick(ns), N=tr.n[k];
   const r=N.c.find(c=>c.go||c.win); if(!r) return null;
   return {index:'s:'+id+'#'+k, addr:id+'#'+k, stray:false, step:P.step, lines:[], ask:N.t, right:r.t, opts:shuffle(N.c.map(c=>c.t)).slice(0,4), why:r.why||'', lead:'The path goes by: '+r.t+'. '}; }
-window.LadderRandomizer={render, build, parseNames, licensers, LINKS, SEEDS, QP, measured, cardPools, CARDP, MODES, OPS, BANK, holds, mutations, avail, MAKE};
+window.LadderRandomizer={render, build, parseNames, licensers, LINKS, SEEDS, QP, measured, cardPools, CARDP, MODES, OPS, BANK, MOVES, holds, mutations, avail, MAKE, T:{tparse,tshow,trew,tequiv,tslips,tval,trows}};
 const pane=document.getElementById('dp-rand'); if(pane){ let box=pane.querySelector('.rzbox'); if(!box){ box=document.createElement('div'); box.className='rzbox'; pane.innerHTML=''; pane.appendChild(box); } render(box); }
 })();
