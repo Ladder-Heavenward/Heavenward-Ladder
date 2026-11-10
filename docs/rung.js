@@ -1732,6 +1732,8 @@ function footingView0(){
     const old=units[from], marks=old.map(el=>{ const c=document.createComment('fv'); el.replaceWith(c); return c; });
     old.forEach(el=>{ el.classList.add('fv-on'); ghost.appendChild(el); }); document.body.appendChild(ghost);
     reveal(); units[n].forEach(el=>el.classList.add('fv-on')); label(); top();
+    /* 2026-11-10 (Andrew 15:48): the incoming footing's screens exist before it lifts in, so one screen arrives, not the whole footing */
+    if(window.LadderFV&&LadderFV.onPaint) try{ const keepEl=LadderFV.wantEl; LadderFV.onPaint(units[n],n,{on,N,LASTU,ONE}); LadderFV.wantEl=keepEl; }catch(e){}
     const inc=units[n];
     const a1=ghost.animate(cam(dir,H,W,true),{duration:560,easing:'linear',fill:'forwards'});
     const a2=inc.map(el=>el.animate(cam(dir,H,W,false),{duration:560,easing:'linear'}));
@@ -2433,7 +2435,7 @@ const ATTACH=/(^|\s)(eqline|eqline-words|brkkey|eyebrow|lbl|cap|lp|lv|first|divi
 const texbox=el=>!!(el&&el.matches&&(el.matches('pre,.eqline,.eqline-words,.lines,.texline,.katex-display')||el.querySelector('.katex-display,pre')));
 let screens=[], k=0, on=false, bar=null, L=null, R=null, posEl=null, dots=null, step=null;
 const folded=el=>el.hasAttribute('data-collapsed')||(el.matches('p[data-pid]')&&!el.textContent.replace(/\s+/g,'').replace(/^[\d\w.·]+$/,'').length);
-function clear(){ document.querySelectorAll('[data-sw]').forEach(x=>{ x.removeAttribute('data-sw'); x.classList.remove('sw-on','sw-open','sw-stub'); }); screens=[]; }
+function clear(){ document.querySelectorAll('[data-sw]').forEach(x=>{ if(x.closest('.fvghost')) return; /* the outgoing footing keeps its screen while it leaves */ x.removeAttribute('data-sw'); x.classList.remove('sw-on','sw-open','sw-stub'); }); screens=[]; }
 function build(els){ clear(); step=els.find(e=>e.matches&&e.matches('section.step')); if(!step) return;
   [...step.children].forEach(ch=>{ if(ch.matches('h2,.sthead,.stnext,script,style,template')||ch.hidden) return; if(ch.matches('p[data-pid]')&&folded(ch)) return; /* 2026-11-10 (Andrew 12:08): an emptied or collapsed paragraph is no screen; the chain closes up */
     if(ATTACH.test(ch.className||'')&&screens.length&&!(texbox(ch)&&screens[screens.length-1].some(texbox))){ screens[screens.length-1].push(ch); return; } screens.push([ch]); }); /* 2026-11-10 (Andrew 15:44): one TeX box to a screen */
