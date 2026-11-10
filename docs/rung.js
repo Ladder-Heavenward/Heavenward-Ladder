@@ -1266,9 +1266,13 @@ function txOverlay(){ if(!TX.list.length) return; const pend=TX.list.filter(r=>!
     els=els.filter(e=>!els.some(o=>o!==e&&e.contains(o))); /* the innermost holder of the words, not its row too */
     els.forEach(el=>txApplyTo(el,r)); } }
 function txPend(rec,keep){ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); if(keep) m[rec.id]=rec; else delete m[rec.id]; localStorage.setItem(k,JSON.stringify(m)); }catch(_){} }
-async function txSave(rec){ let err=null; txPend(rec,true);
-  err=await edPut('edits/'+rec.id,rec); /* 2026-11-09: confirmed by reading back */
-  if(!err) txPend(rec,false); return err; }
+async function txSave(rec){ txPend(rec,true); if(!ED.db) return {code:'no database'}; let err=null; try{ err=await edPut('edits/'+rec.id,rec); }catch(e){ err={code:'refused'}; } return err; } /* 2026-11-10: the record stays in the outbox for the sweep */
+/* 2026-11-10 (Andrew 15:29): the device's title and list edits are laid over the page at load, as paragraph edits are */
+function txLocal(){ let n=0; try{ const m=JSON.parse(localStorage.getItem('ladder:pending-edits')||'{}'); for(const id in m){ const r=m[id]; if(!r||r.kind!=='text'||r.page!==ED.page||!r.old_text||!r.new_html) continue;
+    const els=[...document.querySelectorAll(r.tag||TX_TAGS)].filter(e=>!e.closest(TX_OFF)); let el=els.find(e=>txMap(e).text===r.old_text); if(!el){ if(els.some(e=>txMap(e).text===r.new_text)) continue; el=null; } if(!el) continue;
+    const tmp=document.createElement('div'); tmp.innerHTML=r.new_html; const keep=[...el.querySelectorAll('.stno,.fn,.qid,.ph,.here,.kind,.h1tag')]; /* the locked address or label stays as it was; edClean had kept only its words */
+    keep.forEach(k=>{ const kt=(k.textContent||'').trim(); if(!kt) return; const w=document.createTreeWalker(tmp,NodeFilter.SHOW_TEXT); const tn=w.nextNode(); if(tn&&tn.textContent.trimStart().startsWith(kt)) tn.textContent=tn.textContent.trimStart().slice(kt.length); });
+    el.innerHTML=''; keep.forEach(k=>el.appendChild(k)); el.append(...tmp.childNodes); el.classList.add('txedited'); el.dataset.txdone=id; n++; } }catch(_){} return n; }
 function txStart(el){ if(TX.busy) return; const pa=el.matches('p[data-pid],li[data-pid]')&&!el.closest('.ladder');
   if(pa&&editable(el)){ startEdit(el); return; }
   const before=txMap(el).text, beforeHtml=el.innerHTML, tag=el.tagName.toLowerCase(); TX.busy=el;
@@ -1291,9 +1295,9 @@ function txStart(el){ if(TX.busy) return; const pa=el.matches('p[data-pid],li[da
     const tmpA=document.createElement('div'); tmpA.innerHTML=beforeHtml;
     const rec={kind:'text',id:'tx-'+txId(ED.page+'|'+before),page:ED.page,tag,role:txKind(el),old_text:before,new_text:after,old_html:edClean(tmpA),new_html:edClean(el),at:new Date().toISOString()};
     const prev=TX.list.find(r=>r.new_text===before&&!r.folded); if(prev){ rec.id=prev.id; rec.old_text=prev.old_text; rec.old_html=prev.old_html; rec.page=prev.page; }
-    e.target.disabled=true; const err=await txSave(rec);
-    TX.list=TX.list.filter(r=>r.id!==rec.id).concat([rec]); el.classList.add('txedited'); el.dataset.txdone=(el.dataset.txdone?el.dataset.txdone+' ':'')+rec.id; done();
-    toast(err?'not saved yet ('+((err&&err.code)||'the database refused it')+'). Your words are kept on this device and go out when the database answers.':'saved: it goes into its page or data file at the next publish'); });
+    /* 2026-11-10 (Andrew 15:29): the outbox is the record; the editor never waits on the database */
+    txPend(rec,true); TX.list=TX.list.filter(r=>r.id!==rec.id).concat([rec]); el.classList.add('txedited'); el.dataset.txdone=(el.dataset.txdone?el.dataset.txdone+' ':'')+rec.id; done();
+    try{ edBadge(); }catch(_){} toast('kept for the sweep · it goes into its page at the next release'); try{ if(ED.db) txSave(rec).catch(()=>{}); }catch(_){} });
 }
 /* 0.3.48 (Andrew 2026-11-06 11:44 "give my desk a way to edit questions"): a question's menu on the desk has "edit"; it opens
    the question's words in place, with its address and kind label locked, and saves through the text editor (edits/tx-<id>). */
@@ -1307,11 +1311,11 @@ async function txInit(){ if(!window.LADDER_DESK) return;
   { const b=document.createElement('button'); b.type='button'; b.id='txbtn'; b.className='txbtn'; b.style.cssText='position:fixed;left:10px;bottom:calc(var(--lbh,48px) + 98px);z-index:9600'; document.body.appendChild(b); /* 2026-11-10 15:01: above the badge, over every bar */
     b.addEventListener('click',e=>{ e.stopPropagation(); if(TX.busy) return; txToggle(!TX.on); });
     let st=''; try{ st=sessionStorage.getItem('tx:on')||''; }catch(_){} txToggle(!!st); }
+  try{ txLocal(); }catch(_){}
   try{ await Promise.race([edRecheck(),new Promise(r=>setTimeout(r,12000))]); }catch(_){}
   const FOLD=(ED.db&&await edFolded())||{};
   try{ if(!ED.db) throw 0; const s=await ED.db.collection('edits').where('kind','==','text').get(); TX.list=s.docs.map(d=>d.data()||{}).filter(r=>r.old_text&&r.new_text).map(r=>Object.assign(r,{folded:!!FOLD[r.id]&&String(FOLD[r.id])>=String(r.at||'')})); }catch(e){}
-  try{ const m=JSON.parse(localStorage.getItem('ladder:pending-edits')||'{}'); let n=0; for(const id in m){ const r=m[id]; if(!r||r.kind!=='text') continue; if(!(await txSave(r))) n++; TX.list=TX.list.filter(x=>x.id!==id).concat([r]); }
-    if(n) toast(n+' edit'+(n>1?'s':'')+' saved that had been waiting on this device'); }catch(_){}
+  try{ const m=JSON.parse(localStorage.getItem('ladder:pending-edits')||'{}'); for(const id in m){ const r=m[id]; if(!r||r.kind!=='text') continue; TX.list=TX.list.filter(x=>x.id!==id).concat([r]); } }catch(_){} /* 2026-11-10: listed, not re-sent; the sweep takes them */
   try{ const m=JSON.parse(localStorage.getItem('ladder:pending-edits')||'{}'); for(const id in m){ const r=m[id]; if(r&&r.kind==='text'&&!TX.list.some(x=>x.id===id)) TX.list.push(r); } }catch(_){}
   window.addEventListener('click',e=>{ if(!TX.on||TX.busy&&TX.busy.contains(e.target)) return; if(e.target.closest&&e.target.closest('#txbtn,.txbar,.pebar,#desk,.dtop,.lnav,#ladderbtn')) return;
     const el=txCand(e.target); e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); if(TX.busy) return; if(el) txStart(el); else toast('that one has maths, a graph or a slide in it, so it stays as it is'); },true);
@@ -1605,8 +1609,24 @@ function placeOf(stem){ const M=window.LADMAP; if(stem==='start') return -2000; 
   if(suf==='') return r*1000+10; if(suf==='concl') return r*1000+950; if(OPTX.test(suf)) return null;
   if(!M) return null; for(const [,rungs] of M) for(const [rr,core,annex] of rungs) if(rr===r){ const all=core.concat(annex).map(x=>x[0]); const i=all.indexOf(stem); return i<0?null:r*1000+20+i; }
   return null; }
-function climbed(P,id,n){ const pl=placeOf(P); if(pl==null) return; const ord=pl*1000+n, f=furthest();
-  if(!f||!(f.ord>=ord)) try{ LS.setItem(FK,JSON.stringify({page:P,id,ord,t:Date.now()})); }catch(e){} }
+/* 2026-11-10 (Andrew 15:29, a locked floor's page opened and unlocked everything below): a page two or more rungs past the record
+   is not climbed by being opened; only a certificate (measured in) reaches that far */
+function certReach(){ let r=-1; try{ for(let i=0;i<LS.length;i++){ const k=LS.key(i)||''; const m=k.match(/^cert:(.+)$/); if(!m) continue; const pl=placeOf(m[1]); if(pl!=null) r=Math.max(r,Math.floor(pl/1000)); } }catch(e){} return r; }
+function climbable(P,f){ const pl=placeOf(P); if(pl==null) return false; const r=Math.floor(pl/1000); const fr=f&&f.ord!=null?Math.floor(f.ord/1e6):-1; return r<=fr+1||r<=certReach()+1; }
+function climbed(P,id,n){ const pl=placeOf(P); if(pl==null) return; const ord=pl*1000+n, f=furthest(); if(f&&f.ord>=ord) return; if(f&&!climbable(P,f)) return;
+  try{ LS.setItem(FK,JSON.stringify({page:P,id,ord,t:Date.now()})); }catch(e){} }
+/* a record that got past the climb that way (before this fix) goes back to the end of the contiguous climb the record knows:
+   the stems it holds (steps:, open:, passed pages) in climb order, rung by rung, with no jump of two rungs that no certificate covers */
+function climbChain(){ let P={}; try{ P=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){} const stems=new Set();
+  try{ for(let i=0;i<LS.length;i++){ const k=LS.key(i)||''; if(/^steps:/.test(k)) stems.add(k.slice(6)); } }catch(e){}
+  Object.keys(P).forEach(k=>{ if(!/^open:/.test(k)&&P[k]&&P[k].v) stems.add(k); }); /* open:rNN rows follow the furthest record, so they do not count */
+  const list=[...stems].map(s=>[placeOf(s),s]).filter(x=>x[0]!=null).sort((a,b)=>a[0]-b[0]); const cr=certReach(); let cur=-1, best=null, cut=[];
+  list.forEach(([pl,s])=>{ const r=Math.floor(pl/1000); if(best!==null&&r>cur+1&&r>cr+1){ cut.push(s); return; } cur=Math.max(cur,r); best=s; }); return {best,cut}; }
+function repairFurthest(){ try{ const f=furthest(); if(!f||!f.page||!window.LADMAP) return false; const ch=climbChain(); const bad=ch.cut.indexOf(f.page)>=0||(ch.best&&!climbable(f.page,{ord:(placeOf(ch.best)||0)*1000})); if(!bad) return false;
+    if(ch.best){ LS.setItem(FK,JSON.stringify({page:ch.best,id:'top',ord:(placeOf(ch.best)||0)*1000,t:Date.now()})); } else LS.removeItem(FK);
+    ch.cut.forEach(s=>{ try{ LS.removeItem('steps:'+s); }catch(e){} });
+    try{ const br=ch.best?Math.floor((placeOf(ch.best)||0)/1000):-1; const P=JSON.parse(LS.getItem('pages:done')||'{}')||{}; let ch2=false; Object.keys(P).forEach(k=>{ const m=k.match(/^open:r(\d+)$/); if(m&&+m[1]>br+1){ delete P[k]; ch2=true; } }); if(ch2) LS.setItem('pages:done',JSON.stringify(P)); }catch(e){}
+    LS.removeItem('ladder:notices'); LS.removeItem('ladder:unlocksnap'); return true; }catch(e){ return false; } }
 /* no record yet (before 0.3.2): the furthest page the record knows, opened at its top */
 function guess(){ let P={}; try{ P=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
   const stems=new Set(Object.keys(P).filter(k=>!/^open:/.test(k)));
@@ -1614,7 +1634,7 @@ function guess(){ let P={}; try{ P=JSON.parse(LS.getItem('pages:done')||'{}')||{
   Object.keys(P).forEach(k=>{ const m=k.match(/^open:(r\d+)$/); if(m&&P[k].v) stems.add(m[1]); });
   let best=null, bo=-1; stems.forEach(s=>{ const o=placeOf(s); if(o!=null&&o>bo){ bo=o; best=s; } }); return best?{page:best,id:null}:null; }
 window.LadderFV={
-  last,furthest,placeOf,climbed,
+  last,furthest,placeOf,climbed,climbChain,repairFurthest,certReach,
   resumeHref(){ const l=furthest()||guess(); return l&&l.page?href(l.page,l.id&&l.id!=='top'?l.id:null):null; },
   resume(){ const l=furthest()||guess(), h=this.resumeHref(); if(!h) return false;
     if(l.page===page()&&this.goId){ this.goId(l.id); return true; }
@@ -1756,6 +1776,7 @@ function footingView0(){
   let pref=null; try{ pref=(JSON.parse(LS.getItem('ladder:view')||'{}')||{})[P]; }catch(e){}
   setMode(ss.get('fv:off')==='1'?false:want?want==='fv':(pref&&window.LADDER_DESK?pref==='fv':true)); /* fv:off = page view for checks */
   if(on){ if(!toHash()) go(0,{instant:true,force:true}); }
+  try{ if(repairFurthest()) toast('the climb record was set back to your furthest footing'); }catch(e){}
   window.LadderFV.toggle=()=>{ const el=units[cur]&&units[cur][0]; setMode(!on); if(!on&&el&&cur>0) el.scrollIntoView({block:'start'}); else if(on) go(cur,{instant:true,force:true}); };
   window.LadderFV.go=n=>go(n);
   window.LadderFV.here=()=>({id:idOf(cur),els:on?units[cur]:[...document.querySelectorAll('.wrap>section.class.step')].filter(s=>{ const r=s.getBoundingClientRect(); return r.top<innerHeight*.5&&r.bottom>0; }).slice(0,1)});
@@ -2428,9 +2449,9 @@ function swGhost(els){ try{ const g=document.createElement('div'); g.className='
     let any=false; els.forEach(el=>{ const r=el.getBoundingClientRect(); if(r.height<=0||r.bottom<0||r.top>innerHeight) return; const c=el.cloneNode(true); c.querySelectorAll('[id]').forEach(x=>x.removeAttribute('id')); c.removeAttribute('id'); c.classList.remove('sw-in-f','sw-in-b');
       c.style.cssText='position:absolute;left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;margin:0;box-sizing:border-box;animation:none'; g.appendChild(c); any=true; });
     if(!any) return null; document.body.appendChild(g); return g; }catch(_){ return null; } }
-function swGhostOut(g,dir){ const done=()=>{ try{ g.remove(); }catch(_){} }; try{ const a=g.animate([{transform:'none',opacity:1},{transform:'translateX('+(-dir*innerWidth)+'px)',opacity:.5}],{duration:320,easing:'cubic-bezier(.2,.7,.2,1)',fill:'forwards'}); a.onfinish=done; a.oncancel=done; }catch(_){ done(); } setTimeout(done,600); }
+function swGhostOut(g,dir){ const done=()=>{ try{ g.remove(); }catch(_){} }; try{ const a=g.animate([{transform:'none',opacity:1},{transform:'translateX('+(-dir*innerWidth)+'px)'}],{duration:190,easing:'cubic-bezier(.2,.7,.2,1)',fill:'forwards'}); a.onfinish=done; a.oncancel=done; }catch(_){ done(); } setTimeout(done,600); }
 function show(i,opts){ opts=opts||{}; if(!screens.length) return; const prev=k; k=Math.max(0,Math.min(screens.length-1,i));
-  const anim=!!opts.anim&&prev!==k&&!SWREDUCE()&&!!screens[prev]&&document.body.classList.contains('sw'); const dir=k>prev?1:-1; const ghost=anim?swGhost(screens[prev]):null;
+  const anim=!!opts.anim&&prev!==k&&!SWREDUCE()&&!!screens[prev]&&document.body.classList.contains('sw'); const dir=k>prev?1:-1; const ghost=anim&&document.documentElement.scrollHeight<=innerHeight*1.5?swGhost(screens[prev]):null; /* 2026-11-10 15:29: no ghost of a long screen */
   screens.forEach((s,j)=>s.forEach(x=>{ x.classList.toggle('sw-on',j===k); if(j!==k) x.classList.remove('sw-open'); x.classList.remove('sw-in-f','sw-in-b'); }));
   if(anim){ screens[k].forEach(x=>{ void x.offsetWidth; x.classList.add(dir>0?'sw-in-f':'sw-in-b'); x.addEventListener('animationend',()=>x.classList.remove('sw-in-f','sw-in-b'),{once:true}); }); if(ghost) swGhostOut(ghost,dir); }
   if(!opts.keep) window.scrollTo(0,0);
