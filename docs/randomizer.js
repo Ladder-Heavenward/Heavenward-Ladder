@@ -2049,6 +2049,149 @@ QP.push({id:'9d.there',step:'9d',mode:'proof',label:'there and back',open:()=>me
     return {index:'q:9d.there['+m+';'+b+';'+hs+']', stack:true, lines:[['f(x) = '+lin9(m,b),'given, on ℝ'],['h(x) = '+hs,'offered as f⁻¹'],['h(f(x)) = x','there-and-back, on lines 1 and 2']], ask:'Does line 3 hold?', right:opts[ok?0:1], opts, lead:'',
       why:'There-and-back: f⁻¹(f(x)) = x for every x. Try x = 1: f(1) = '+sg(m+b)+', and h('+sg(m+b)+') = '+fshow(fr(Math.round(h(m+b)*m*m),m*m))+'. '+(ok?'Running backwards undoes the last step first: add '+sg(-b)+', then divide by '+sg(m)+'.':'The inverse undoes the last step first: add '+sg(-b)+', then divide by '+sg(m)+', which is '+inv(m,-b)+'.')}; }});
 
+/* ===== Laundry 5, rungs 10 and 11 (floor 2 pools, stage J): limits and continuity ===== */
+Object.assign(STEPS,{'10a':['r10a','The Challenge and the Answer'],'10b':['r10b','A Function Can’t Head Two Ways'],'10c':['r10c','Limits Add, Multiply and Divide'],'10d':['r10d','The Squeeze'],'10e':['r10e','From the Left and From the Right'],'10f':['r10f','Computing Limits'],'10g':['r10g','Playing the Challenge Game'],
+  '11a':['r11a','Continuity'],'11b':['r11b','Sums and Products'],'11c':['r11c','Continuous After Continuous'],'11d':['r11d','Every Polynomial Is Continuous'],'11e':['r11e','A Joint Doesn’t Break Continuity'],'11f':['r11f','Finding the Breaks']});
+const NOLIM='it heads to no real', par10=n=>n<0?'('+sg(n)+')':String(n);
+
+/* ---------- 10a The Challenge and the Answer ---------- */
+QP.push({id:'10a.reach',step:'10a',mode:'work',label:'a reach for every challenge',open:()=>measured('10a'),make(){
+    const m=pick([-5,-4,-3,-2,2,3,4,5,10]), b=rnd(11)-5, w=rnd(7)-3, e=pick([fr(1,2),fr(1,10),fr(1,100),fr(3,10),fr(1,5),fr(1,4)]), d=fmul(e,fr(1,Math.abs(m))), right=fshow(d);
+    const wrong=uniq(right,[fshow(e),fshow(fmul(e,fint(Math.abs(m)))),fshow(fmul(d,fint(2))),fshow(fadd(e,fint(Math.abs(m)))),fshow(fr(1,Math.abs(m)))],3); if(wrong.length<3) return null;
+    return {index:'q:10a.reach['+m+';'+b+';'+w+';'+fshow(e)+']', lines:[['f(x) = '+lin9(m,b),'heading to '+sg(m*w+b)+' as x → '+sg(w)],['ε = '+fshow(e),'the challenge']], ask:'Which is the greatest reach δ that answers the challenge?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'|f(x) − '+par10(m*w+b)+'| = '+Math.abs(m)+' · |x − '+par10(w)+'|. That is below ε exactly when |x − '+par10(w)+'| is below ε/'+Math.abs(m)+' = '+right+'. Any smaller reach answers too; none greater does.'}; }},
+  {id:'10a.heads',step:'10a',mode:'work',label:'where it heads',open:()=>measured('10a'),make(){
+    const k=rnd(3), w=pick([-4,-3,-2,-1,1,2,3,4,5]), m=pick([-3,-2,2,3,4]), b=rnd(9)-4;
+    const [ex,v,alts,why]=k===0?[lin9(m,b),fint(m*w+b),[fint(m*w),fint(m+w+b),fint(b),fint(m*w-b)],'Line-limit: mx + b heads to mw + b.']:k===1?['x²',fint(w*w),[fint(2*w),fint(w),fint(-w*w),fint(w*w+1)],'Square-limit: x² heads to w².']:['1/x',fr(1,w),[fint(w),fr(-1,w),fint(0),fr(1,w+1===0?2:w+1)],'One-over-x-limit: for w ≠ 0, 1/x heads to 1/w.'];
+    const right=fshow(v), wrong=uniq(right,alts.map(fshow),3); if(wrong.length<3) return null;
+    return {index:'q:10a.heads['+ex+';'+w+']', lines:[['f(x) = '+ex,'as x → '+sg(w)]], ask:'To which real does f(x) head?', right, opts:shuffle([right,...wrong]), lead:'', why:why+' Here that is '+right+'.'}; }});
+
+/* ---------- 10b A Function Can't Head Two Ways ---------- */
+const B10=[
+  ['f heads to L at w, and f heads to M at w. What follows?','L = M: a function has at most one limit at a place',['nothing','L < M','f is a constant'],'One-limit. If L ≠ M, take ε with 2ε ≤ |L − M|: no output is within ε of both.'],
+  ['f(x) < g(x) near w, f heads to L and g heads to M. What follows?','L ≤ M, and L = M may happen',['L < M','L = M','nothing'],'Limits keep order, as ≤. A strict order between the functions may close up at the limit: x² and 2x² at 0.'],
+  ['f heads to L at w, and L > 0. What follows near w?','f(x) > L/2 > 0 in some neighbourhood of w',['f(x) = L in some neighbourhood of w','f(x) > L in some neighbourhood of w','nothing about f near w'],'Sign-kept-near: answer the challenge ε = L/2.'],
+  ['Does the value f(w) matter to the limit of f at w?','no: the limit looks only at inputs near w and other than w',['yes: the limit is f(w)','yes: f must be defined at w','only when f(w) = 0'],'Agreeing-near: functions that agree near w, whatever they do at w, have the same limit there.']];
+QP.push({id:'10b.one',step:'10b',label:'one limit, and order kept',open:()=>measured('10b'),make(){ return writtenQ('10b.one',B10); }});
+
+/* ---------- 10c Limits Add, Multiply and Divide ---------- */
+QP.push({id:'10c.rules',step:'10c',mode:'work',label:'limits add, multiply and divide',open:()=>measured('10c'),make(){
+    const L=pick([-6,-4,-3,-2,2,3,4,6,8]), k=rnd(6), M=k===2&&Math.random()<0.3?0:pick([-4,-2,-1,1,2,3,5]), c=pick([-3,-2,2,3,5]), na='the technique does not apply: the bottom heads to 0';
+    const [ex,right,alts,name]=k===0?['f(x) + g(x)',sg(L+M),[L*M,L-M,L,M],'Limits-add']:k===1?['f(x) · g(x)',sg(L*M),[L+M,L-M,L,-L*M],'Limits-multiply']
+      :k===2?['f(x)/g(x)',M===0?na:fshow(fr(L,M)),M===0?[0,L,1]:[L*M,L-M,L+M],'Limits-divide, which asks that the bottom’s limit is not 0']:k===3?[c+' · f(x)'.replace(/^-/,'−'),sg(c*L),[c+L,L,c,-c*L],'Constant-factor']
+      :k===4?['f(x) − g(x)',sg(L-M),[L+M,M-L,L*M,L],'Limits-subtract']:['f(x) · f(x) · f(x)',sg(L*L*L),[3*L,L*L,L,-L*L*L],'Power-limit'];
+    const wrong=uniq(right,alts.map(a=>typeof a==='number'?sg(a):a).concat(k===2&&M!==0?[na]:[]).reverse(),3); if(wrong.length<3) return null;
+    return {index:'q:10c.rules['+k+';'+L+';'+M+';'+c+']', lines:[['f heads to '+sg(L)+', and g heads to '+sg(M),'both as x → w'],[ex.replace(/^-/,'−'),'as x → w']], ask:'To which real does it head?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:name+'. '+(k===2&&M===0?'With the bottom heading to 0 the quotient may head anywhere or nowhere; another road is needed, such as factoring.':'The limit of the combination is the combination of the limits.')}; }},
+  {id:'10c.subst',step:'10c',mode:'work',label:'substitution',open:()=>measured('10c'),make(){
+    const cs=[pick([1,2,-1]),rnd(7)-3,rnd(9)-4], w=pick([-3,-2,-1,1,2,3]), rat=Math.random()<0.4, a=pick([-4,-3,-2,2,3,4].filter(z=>z!==w)), top=ev9(cs,w), v=rat?fr(top,w-a):fint(top);
+    const ex=rat?'('+poly9(cs)+')/(x'+pm(-a)+')':poly9(cs), right=fshow(v), wrong=uniq(right,[fshow(fint(ev9(cs,-w))),fshow(fint(cs[2])),fshow(fadd(v,fint(1))),fshow(fneg(v)),fshow(rat?fint(top):fint(ev9(cs,w+1)))],3); if(wrong.length<3) return null;
+    return {index:'q:10c.subst['+ex+';'+w+']', lines:[['f(x) = '+ex,'as x → '+sg(w)]], ask:'To which real does f(x) head?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Substitution: a polynomial heads to its value at w'+(rat?', and a rational function does too when the bottom is not 0 there. The top is '+sg(top)+' and the bottom is '+sg(w-a)+'.':': p('+sg(w)+') = '+right+'.')}; }});
+
+/* ---------- 10d The Squeeze ---------- */
+QP.push({id:'10d.squeeze',step:'10d',label:'the squeeze',open:()=>measured('10d'),make(){
+    const a=rnd(11)-5, same=Math.random()<0.6, b=same?a:a+1+rnd(4), k=rnd(2);
+    if(k===0){ const right=same?'f heads to '+sg(a)+' too':'nothing yet: the limit of f, if it has one, is from '+sg(a)+' to '+sg(b), wrong=same?['nothing: f may head anywhere','f heads to '+sg(a+1),'f has no limit at w']:['f heads to '+sg(a),'f heads to '+sg(b),'f has no limit at w'];
+      return {index:'q:10d.squeeze[s;'+a+';'+b+']', lines:[['g(x) ≤ f(x) ≤ h(x)','in a neighbourhood of w'],['g heads to '+sg(a)+', and h heads to '+sg(b),'as x → w']], ask:'What does that settle about f at w?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:same?'The squeeze: caught between two functions that head to one real, f has nowhere else to go.':'The squeeze needs both sides to head to the same real. Here limits-keep-order gives only bounds, and f may still head nowhere.'}; }
+    const n=2+rnd(3), right='0', P=['','','x²','x³','x⁴'][n];
+    return {index:'q:10d.squeeze[z;'+n+';'+a+']', lines:[['|f(x)| ≤ '+P.replace('x','|x|'),'in a neighbourhood of 0']], ask:'To which real does f(x) head as x → 0?', right, opts:shuffle(['0','1',NOLIM,'it cannot be told from this']), lead:'',
+      why:'Squeezed-to-0: |f(x)| is at most a function that heads to 0, so f heads to 0. Nothing more about f is needed, not even a formula.'}; }});
+
+/* ---------- 10e From the Left and From the Right ---------- */
+QP.push({id:'10e.sides',step:'10e',mode:'work',label:'two sides',open:()=>measured('10e'),make(){
+    for(let t=0;t<40;t++){ const w=rnd(7)-3, m1=pick([-2,-1,1,2,3]), b1=rnd(9)-4, m2=pick([-2,-1,1,2,3]), agree=Math.random()<0.4, lv=m1*w+b1, b2=agree?lv-m2*w:rnd(9)-4, rv=m2*w+b2, k=rnd(3); if(!agree&&lv===rv) continue; if(m1===m2&&b1===b2) continue;
+      const ask=['To which real does f(x) head as x → '+sg(w)+' from the left?','To which real does f(x) head as x → '+sg(w)+' from the right?','To which real does f(x) head as x → '+sg(w)+'?'][k], right=k===0?sg(lv):k===1?sg(rv):lv===rv?sg(lv):NOLIM;
+      const wrong=uniq(right,[sg(k===0?rv:lv),sg(k===2?rv:lv+rv),NOLIM,sg(lv+1),sg(rv-1),sg(b1)],3); if(wrong.length<3) continue;
+      return {index:'q:10e.sides['+w+';'+m1+';'+b1+';'+m2+';'+b2+';'+k+']', lines:[['f(x) = '+lin9(m1,b1),'for x < '+sg(w)],['f(x) = '+lin9(m2,b2),'for x > '+sg(w)]], ask, right, opts:shuffle([right,...wrong]), lead:'',
+        why:'From the left f is '+lin9(m1,b1)+', heading to '+sg(lv)+'. From the right it is '+lin9(m2,b2)+', heading to '+sg(rv)+'. '+(lv===rv?'Two-sides-agree: the limit is '+sg(lv)+'.':'Two-sides-differ: f has no limit at '+sg(w)+'.')}; }
+    return null; }});
+
+/* ---------- 10f Computing Limits ---------- */
+QP.push({id:'10f.compute',step:'10f',mode:'work',label:'computing limits',open:()=>measured('10f'),make(){
+    const k=rnd(4);
+    if(k===0){ const a=pick([-5,-4,-3,-2,-1,1,2,3,4,5]), right=sg(2*a), ex='(x² − '+(a*a)+')/(x'+pm(-a)+')';
+      return {index:'q:10f.compute[r;'+a+']', lines:[['f(x) = '+ex,'as x → '+sg(a)+'; f is not defined at '+sg(a)]], ask:'To which real does f(x) head?', right, opts:shuffle([right,...uniq(right,[sg(a),'0',NOLIM,sg(a*a),sg(-2*a)],3)]), lead:'',
+        why:'Substitution gives 0/0, so factor: x² − '+(a*a)+' = (x'+pm(-a)+')(x'+pm(a)+'). Near '+sg(a)+', and not at it, f agrees with x'+pm(a)+', and agreeing-near gives the limit '+right+'.'}; }
+    if(k===1){ const n=1+rnd(3), m=1+rnd(3), an=pick([-3,-2,1,2,3,4,6]), bm=pick([1,2,3,4,5]), P=d=>['','x','x²','x³'][d], top=(Math.abs(an)===1?(an<0?'−':''):sg(an))+P(n)+' + 1', bot=(bm===1?'':bm)+P(m)+' − 7';
+      const right=n===m?fshow(fr(an,bm)):n<m?'0':NOLIM, wrong=uniq(right,['0',NOLIM,fshow(fr(an,bm)),'1',fshow(fr(bm,an)),fshow(fr(-1,7))],3);
+      return {index:'q:10f.compute[far;'+top+';'+bot+']', lines:[['f(x) = ('+top+')/('+bot+')','as x → ∞']], ask:'To which real does f(x) head, far out?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'Rational-functions-far-out: compare the degrees. '+(n===m?'They are the same, so the limit is the ratio of the leading coefficients, '+right+'.':n<m?'The bottom’s is greater, so the limit is 0.':'The top’s is greater, so f passes every bound and has no limit.')}; }
+    if(k===2){ const r=1+rnd(6), w=rnd(9)-4, c=r*r-w, right=String(r);
+      return {index:'q:10f.compute[root;'+w+';'+c+']', lines:[['f(x) = √(x'+(c===0?'':pm(c))+')','as x → '+sg(w)]], ask:'To which real does f(x) head?', right, opts:shuffle([right,...uniq(right,[String(r*r),sg(-r),String(r+1),NOLIM,'0'],3)]), lead:'',
+        why:'Root-limit: for w + c > 0, √(x + c) heads to √(w + c) = √'+(r*r)+' = '+r+'.'}; }
+    const side=pick(['the right','the left']), a=rnd(7)-3;
+    return {index:'q:10f.compute[inf;'+a+';'+side+']', lines:[['f(x) = 1/(x'+(a===0?'':pm(-a))+')','as x → '+sg(a)+' from '+side]], ask:'To which real does f(x) head?', right:NOLIM, opts:shuffle([NOLIM,...uniq(NOLIM,['0','1',sg(a),'−1',sg(a+2)],3)]), lead:'',
+      why:'Near '+sg(a)+' the bottom is as small as you like, so f passes '+(side==='the right'?'every bound':'below every bound')+'. Passing-every-bound: f has no limit from '+side+' at '+sg(a)+'.'}; }});
+
+/* ---------- 10g Playing the Challenge Game ---------- */
+const G10=[
+  ['In the challenge game for “f heads to L at w”, who moves first, and with what?','the challenger, with a positive ε; the answer is a reach δ',['the answerer, with a reach δ; the challenge is an ε','the challenger, with an input x','the answerer, with the limit L'],'∀ε > 0 ∃δ > 0: the reach may depend on the challenge, so the challenge comes first.'],
+  ['Which line says that f does not head to L at z?','∃ε > 0 ∀δ > 0 ∃x (0 < |x − z| < δ ∧ ε ≤ |f(x) − L|)',['∀ε > 0 ∃δ > 0 ∃x (0 < |x − z| < δ ∧ ε ≤ |f(x) − L|)','∃ε > 0 ∃δ > 0 ∀x (0 < |x − z| < δ ⇒ ε ≤ |f(x) − L|)','∀ε > 0 ∀δ > 0 ∀x (0 < |x − z| < δ ⇒ |f(x) − L| < ε)'],'Not-heading-to: push the not through, and each ∀ turns to ∃ and each ∃ to ∀. One challenge that no reach answers is enough.'],
+  ['To show f does not head to L at z, what must be produced?','one ε, and for every δ an input within δ of z whose output is at least ε from L',['one δ, and for every ε an input that fails','an input x with f(x) ≠ L','every ε, each with a reach that fails'],'The roles turn about: you pick the challenge, and must beat every reach.'],
+  ['A reach δ answers the challenge ε. Does a smaller reach answer it too?','yes: fewer inputs are let in, and each of them still passes',['no: the reach must be exact','only when f is a line','only when ε is made smaller too'],'That is why the lesser of two reaches serves two demands at once.']];
+QP.push({id:'10g.game',step:'10g',label:'the challenge game',open:()=>measured('10g'),make(){ return writtenQ('10g.game',G10); }});
+
+/* ---------- 11a Continuity, 11e joints, 11f breaks ---------- */
+QP.push({id:'11a.at',step:'11a',label:'continuous at a place',open:()=>measured('11a'),make(){
+    for(let t=0;t<40;t++){ const w=rnd(7)-3, m1=pick([-2,-1,1,2,3]), b1=rnd(9)-4, m2=pick([-2,-1,1,2,3]), kind=rnd(3), lv=m1*w+b1, b2=kind===2?rnd(9)-4:lv-m2*w, rv=m2*w+b2, fw=kind===0?lv:kind===1?lv+pick([-2,-1,1,2]):lv; if(kind===2&&lv===rv) continue;
+      const opts=['yes: both sides head to f('+sg(w)+')','no: the sides agree, and f('+sg(w)+') is somewhere else','no: the two sides head to different reals','no: f is not defined at '+sg(w)], right=opts[kind];
+      return {index:'q:11a.at['+w+';'+m1+';'+b1+';'+m2+';'+b2+';'+fw+']', lines:[['f(x) = '+lin9(m1,b1),'for x < '+sg(w)],['f('+sg(w)+') = '+sg(fw),null],['f(x) = '+lin9(m2,b2),'for x > '+sg(w)]], ask:'Is f continuous at '+sg(w)+'?', right, opts, lead:'',
+        why:'Glued-functions: f is continuous at w exactly when the limit from the left, f(w) and the limit from the right are one real. Here they are '+sg(lv)+', '+sg(fw)+' and '+sg(rv)+'.'+(kind===1?' The break is removable: mend f by moving f('+sg(w)+') to '+sg(lv)+'.':'')}; }
+    return null; }},
+  {id:'11e.joint',step:'11e',mode:'work',label:'making the joint hold',open:()=>measured('11e'),make(){
+    const w=pick([-3,-2,-1,1,2,3]), m1=pick([-2,-1,1,2,3]), b1=rnd(9)-4, m2=pick([-3,-2,2,3,4].filter(m=>m!==m1)), lv=m1*w+b1, c=lv-m2*w, right=sg(c), wrong=uniq(right,[sg(b1),sg(lv),sg(lv+m2*w),sg(-c),sg(c+1)],3); if(wrong.length<3) return null;
+    return {index:'q:11e.joint['+w+';'+m1+';'+b1+';'+m2+']', lines:[['f(x) = '+lin9(m1,b1),'for x ≤ '+sg(w)],['f(x) = '+(m2===1?'':sg(m2))+'x + c','for x > '+sg(w)]], ask:'Which c makes f continuous at '+sg(w)+'?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The left piece gives f('+sg(w)+') = '+sg(lv)+'. The right piece heads to '+sg(m2*w)+' + c. Glued-functions asks the two to be the same: c = '+right+'. A joint does not break continuity; the pieces may still climb at different rates.'}; }},
+  {id:'11f.breaks',step:'11f',mode:'work',label:'finding the breaks',open:()=>measured('11f'),make(){
+    const k=rnd(3);
+    if(k===0){ const f=frq(-4,4); if(f.q===1&&Math.random()<0.5) return null; const v=Math.floor(f.p/f.q), right=sg(v);
+      return {index:'q:11f.breaks[fl;'+fshow(f)+']', lines:[['x = '+fshow(f),'a real']], ask:'Which integer n has n ≤ x < n + 1? It is the floor of x.', right, opts:shuffle([right,...uniq(right,[sg(v+1),sg(v-1),sg(Math.trunc(f.p/f.q)),sg(-v),sg(v+2)],3)]), lead:'',
+        why:'The floor technique: exactly one integer n has n ≤ x < n + 1. '+sg(v)+' ≤ '+fshow(f)+' < '+sg(v+1)+'. Below 0 the floor steps down, away from 0. The floor function breaks at every integer, by a jump.'}; }
+    const a=pick([-4,-3,-2,-1,1,2,3,4]);
+    if(k===1){ const right='a removable break: mend it with the value '+sg(2*a);
+      return {index:'q:11f.breaks[rem;'+a+']', lines:[['f(x) = (x² − '+(a*a)+')/(x'+pm(-a)+')','not defined at '+sg(a)]], ask:'What kind of break has f at '+sg(a)+'?', right, opts:shuffle([right,'a removable break: mend it with the value 0','a jump: the two sides head to different reals','no mending: f passes every bound there']), lead:'',
+        why:'Near '+sg(a)+' f agrees with x'+pm(a)+', which heads to '+sg(2*a)+'. The limit is there and only the value is missing: mended-function fills it in, and the mended function is continuous at '+sg(a)+'.'}; }
+    const b=pick([-4,-3,-2,-1,1,2,3,4].filter(z=>z!==a)), lo=Math.min(a,b), hi=Math.max(a,b), right='at every real but '+sg(lo)+' and '+sg(hi);
+    return {index:'q:11f.breaks[rat;'+lo+';'+hi+']', lines:[['f(x) = (x + 7)/((x'+pm(-lo)+')(x'+pm(-hi)+'))','a rational function']], ask:'Where is f continuous?', right, opts:shuffle([right,'at every real','at every real but −7','at '+sg(lo)+' and '+sg(hi)+' only']), lead:'',
+      why:'Rational-functions-are-continuous: p/q is continuous at every input, and its inputs are the reals where the bottom is not 0.'}; }});
+
+/* ---------- 11b, 11c, 11d ---------- */
+const B11=[
+  ['f and g are continuous at w. Which of these need not be continuous at w?','f/g, unless g(w) ≠ 0',['f + g','fg','3f − g'],'Continuous-sums, continuous-products, and continuous-quotients with its one condition: the bottom is not 0 at w.'],
+  ['1/x is not defined at 0. Is 1/x a continuous function?','yes: it is continuous at every input, and 0 is not an input',['no: it breaks at 0','no: it passes every bound','only on the positive reals'],'A function is continuous when it is continuous at every input. A place outside the domain is not a place where it fails.'],
+  ['Where is a polynomial continuous?','at every real',['at every real but its zeros','at every fraction only','it depends on the degree'],'Polynomials-are-continuous: lines are, products and sums of continuous functions are, and peeling off the constant carries the induction.'],
+  ['Is there a polynomial p with p(x) = |x| for every real x?','no: |x| is continuous everywhere and still is no polynomial',['yes: p(x) = x','yes: p(x) = √(x²), which is x','no: |x| is not continuous at 0'],'Size-is-not-a-polynomial. |x| is continuous at every real; at 0 it has a joint whose pieces climb at the rates −1 and 1.'],
+  ['q is 1 at fractions and 0 at irrationals. Where is x ↦ x · q(x) continuous?','at 0 only',['nowhere','everywhere','at every fraction'],'|x · q(x)| ≤ |x|, so it is squeezed to 0 at 0, and its value there is 0. At every other place it heads nowhere.'],
+  ['f is continuous at w, and a sequence of inputs has x_n → w. What follows?','f(x_n) → f(w)',['f(x_n) = f(w) from some n on','nothing','x_n = w from some n on'],'Sequences-go-through. The test runs back as well: if it holds for every such sequence, f is continuous at w.']];
+QP.push({id:'11b.keep',step:'11b',label:'what stays continuous',open:()=>measured('11b'),make(){ return writtenQ('11b.keep',B11.slice(0,2)); }},
+  {id:'11d.poly',step:'11d',label:'polynomials, and what is not one',open:()=>measured('11d'),make(){ return writtenQ('11d.poly',B11.slice(2,4)); }},
+  {id:'11e.through',step:'11e',label:'sequences go through',open:()=>measured('11e'),make(){ return writtenQ('11e.through',B11.slice(4,6)); }},
+  {id:'11c.inside',step:'11c',mode:'work',label:'the limit passes inside',open:()=>measured('11c'),make(){
+    const r=1+rnd(6), w=pick([-3,-2,-1,1,2,3]), m=pick([1,2,3,-1,-2]), b=r*r-m*w, k=rnd(2), v=k===0?r:r*r*r, ex=k===0?'√('+lin9(m,b)+')':'('+lin9(m,b)+')³'.replace('³','')+' · √('+lin9(m,b)+')';
+    const right=String(v), wrong=uniq(right,[String(r*r),String(k===0?r+1:r*r*r+1),NOLIM,sg(-v),'0'],3);
+    return {index:'q:11c.inside['+k+';'+m+';'+b+';'+w+']', lines:[['g(x) = '+lin9(m,b),'heading to '+(r*r)+' as x → '+sg(w)],['f(g(x)) = '+ex,'as x → '+sg(w)]], ask:'To which real does f(g(x)) head?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Limit-passes-inside: g heads to '+(r*r)+', and the outside function is continuous there, so the limit is the outside function at '+(r*r)+': '+(k===0?'√'+(r*r)+' = '+r:(r*r)+' · √'+(r*r)+' = '+v)+'.'}; }});
+
+/* ---------- rungs 10 and 11, Check Proofs and Word Problems ---------- */
+QP.push({id:'10a.answer',step:'10a',mode:'proof',label:'does the reach answer',open:()=>measured('10a'),make(){
+    const m=pick([-5,-4,-3,-2,2,3,4,5]), b=rnd(11)-5, w=rnd(7)-3, e=pick([fr(1,2),fr(1,10),fr(1,5),fr(1,4),fr(3,10)]), best=fmul(e,fr(1,Math.abs(m))), d=pick([best,fhalf(best),e,fmul(e,fint(Math.abs(m))),fmul(best,fint(2))]);
+    const ok=!fless(best,d), opts=['it answers: every x within δ of '+sg(w)+' lands within ε','it does not answer: some x within δ lands ε or more away'];
+    return {index:'q:10a.answer['+m+';'+b+';'+w+';'+fshow(e)+';'+fshow(d)+']', stack:true, lines:[['f(x) = '+lin9(m,b),'heading to '+sg(m*w+b)+' as x → '+sg(w)],['ε = '+fshow(e),'the challenge'],['δ = '+fshow(d),'the answer offered']], ask:'Does the reach on line 3 answer the challenge?', right:opts[ok?0:1], opts, lead:'',
+      why:'|f(x) − '+par10(m*w+b)+'| = '+Math.abs(m)+' · |x − '+par10(w)+'|, so within δ of '+sg(w)+' the output is within '+Math.abs(m)+' · '+fshow(d)+' = '+fshow(fmul(d,fint(Math.abs(m))))+' of the target. '+(ok?'That is at most ε.':'That is more than ε. The greatest reach that answers is ε/'+Math.abs(m)+' = '+fshow(best)+'.')}; }},
+  {id:'10a.dial',step:'10a',mode:'word',label:'how close is close enough',open:()=>measured('10a'),make(){
+    const m=pick([2,3,4,5,10]), w=2+rnd(8), e=pick([fr(1,2),fr(1,10),fr(1,5),fr(1,4)]), d=fmul(e,fr(1,m)), [story,unit]=pick([['A saw cuts a plank '+m+' centimetres long for each mark on its dial.','centimetres'],['A pump delivers '+m+' litres for each turn of its wheel.','litres'],['A press makes a sheet '+m+' millimetres thick for each notch of its lever.','millimetres']]);
+    const right='within '+fshow(d), wrong=uniq(right,['within '+fshow(e),'within '+fshow(fmul(e,fint(m))),'within '+fshow(fmul(d,fint(2))),'within '+fshow(fr(1,m))],3); if(wrong.length<3) return null;
+    return {index:'q:10a.dial['+m+';'+w+';'+fshow(e)+';'+unit+']', a3:['10a.dial['+m+']',DASH,DASH], story:story+' The output must come within '+fshow(e)+' of '+(m*w)+' '+unit+'.', lines:[], ask:'How close to '+w+' must the setting be? Give the greatest reach.', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The output is '+m+' times the setting, so its distance from '+(m*w)+' is '+m+' times the setting’s distance from '+w+'. The challenge is '+fshow(e)+', and the reach that answers it is ('+fshow(e)+')/'+m+' = '+fshow(d)+'.'}; }},
+  {id:'11a.mend',step:'11a',mode:'word',label:'a break in the record',open:()=>measured('11a'),make(){
+    const a=10+rnd(30), k=rnd(3), b=a+pick([-6,-4,4,6]), [story,right,why]=k===0?['A gauge reads '+a+' just before noon and '+a+' just after. The reading logged at noon is '+b+'.','a removable break: change the one value at noon to '+a,'Both sides head to '+a+', and only the value is elsewhere. Mending that one value makes the record continuous at noon.']
+      :k===1?['A gauge reads '+a+' just before noon and '+b+' just after.','a jump: no value at noon can mend it','The two sides head to different reals, so the record has no limit at noon, whatever is logged there.']
+      :['A gauge reads '+a+' just before noon, '+a+' at noon, and '+a+' just after.','none: the record is continuous at noon','The limit from the left, the value and the limit from the right are one real.'];
+    const all=['a removable break: change the one value at noon to '+a,'a jump: no value at noon can mend it','none: the record is continuous at noon','a break that passes every bound'];
+    return {index:'q:11a.mend['+k+';'+a+';'+b+']', a3:['11a.mend['+k+']',DASH,DASH], story, lines:[], ask:'What kind of break has the record at noon?', right, opts:shuffle(all), lead:'', why}; }});
+
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 
