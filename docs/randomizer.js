@@ -1733,6 +1733,205 @@ QP.push({id:'7g.data',step:'7g',mode:'word',label:'yes or no is data',open:()=>m
     const k=rnd(G7.length), [story,ask,right,wrong,why]=G7[k], ws=shuffle(wrong.slice());
     return {index:'q:7g.data['+k+';'+ws.map(w=>w.length).join('.')+']', a3:['7g.data['+k+']',DASH,DASH], story, lines:[], ask, right, opts:shuffle([right,...ws]), lead:'', why}; }});
 
+/* ===== Laundry 5, rung 8 (floor 2 pools, stage H): 8a to 8i, the line ===== */
+Object.assign(STEPS,{'8a':['r08a','A Real Number Is a Cut'],'8b':['r08b','Any Two Reals Compare'],'8c':['r08c','The Least Upper Bound'],'8d':['r08d','Adding and Multiplying Cuts'],'8e':['r08e','Counting Passes Any Real'],
+  '8f':['r08f','Two Has a Square Root on the Line'],'8g':['r08g','Inequalities'],'8h':['r08h','Absolute Value and Distance on the Line'],'8i':['r08i','Roots, Powers and the Quadratic Formula']});
+const fless=(a,b)=>a.p*b.q<b.p*a.q, fneg=f=>fr(-f.p,f.q), fsub=(a,b)=>fadd(a,fneg(b)), fint=n=>fr(n,1), fhalf=f=>fr(f.p,2*f.q);
+const star=f=>(f.q===1&&f.p>=0?fshow(f):'('+fshow(f)+')')+'*';
+const frq=(lo,hi)=>{ for(;;){ const q=1+rnd(6), p=lo*q+rnd((hi-lo)*q+1), f=fr(p,q); return f; } };   /* a fraction from lo to hi */
+const sg=n=>n<0?'−'+(-n):String(n), pm=n=>n<0?' − '+(-n):' + '+n;
+
+/* ---------- 8a A Real Number Is a Cut ---------- */
+const CUT4=['(i): it has no member','(ii): it misses no fraction','(iii): it is not closed downward','(iv): it has a greatest member'];
+QP.push({id:'8a.cut',step:'8a',label:'the four properties of a cut',open:()=>measured('8a'),make(){
+    const r=fshow(frq(-2,3)), sets=[['{s ∈ ℚ : s < '+r+'}',-1],['{s ∈ ℚ : s < 0 ∨ s² < 2}',-1],['{s ∈ ℚ : s ≤ '+r+'}',3],['{s ∈ ℚ : s > '+r+'}',2],['ℚ',1],['∅',0],['{s ∈ ℚ : s² < 2}',2],['{'+r+'}',2]];
+    if(Math.random()<0.5){ const R=pick(sets.filter(s=>s[1]<0)), wrong=take(sets.filter(s=>s[1]>=0),3);
+      return {index:'q:8a.cut[is;'+R[0]+';'+wrong.map(w=>w[0]).join(';')+']', lines:[], ask:'Which set of fractions is a cut?', right:R[0], opts:shuffle([R,...wrong]).map(s=>s[0]), lead:'It is '+R[0]+'. ',
+        why:'A cut has a member, misses some fraction, is closed downward, and has no greatest member. The others fail: '+wrong.map(w=>w[0]+' by '+CUT4[w[1]].slice(0,w[1]===0?3:w[1]===1?4:w[1]===2?5:4)).join('; ')+'.'}; }
+    const B=pick(sets.filter(s=>s[1]>=0)), right=CUT4[B[1]];
+    return {index:'q:8a.cut[not;'+B[0]+']', lines:[[B[0],'a set of fractions']], ask:'The set is not a cut. Which of the four properties fails first?', right, opts:CUT4.slice(), lead:'',
+      why:['A cut has a member, and ∅ has none.','A cut misses some fraction, and ℚ misses none.','A cut is closed downward: with a member it holds every fraction below that member. This set leaves out fractions below one of its members.','A cut has no greatest member. This set has one, the fraction '+r+' itself; with it, that fraction would have two cuts.'][B[1]]}; }},
+  {id:'8a.member',step:'8a',mode:'work',label:'the fractions below',open:()=>measured('8a'),make(){
+    for(let t=0;t<60;t++){ const hole=Math.random()<0.5, r=frq(0,2), inn=hole?(f=>f.p<0||f.p*f.p<2*f.q*f.q):(f=>fless(f,r)), C=[]; for(let i=0;i<14;i++) C.push(frq(hole&&Math.random()<0.2?-3:0,3));
+      const yes=C.filter(inn), no=C.filter(f=>!inn(f)&&f.p>=0), R=yes[0], wrong=uniq(R?fshow(R):'',no.map(fshow),3); if(!R||wrong.length<3||(!hole&&r.p===0)) continue;
+      const name=hole?'α = {r ∈ ℚ : r < 0 ∨ r² < 2}':star(r)+' = {s ∈ ℚ : s < '+fshow(r)+'}', right=fshow(R);
+      return {index:'q:8a.member['+(hole?'hole':fshow(r))+';'+right+';'+wrong.join(';')+']', lines:[[name,hole?'the hole’s heap':'the cut of '+fshow(r)]], ask:'Which fraction is a member of it?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:hole?(R.p<0?'Every negative fraction is let in: without them the set would not be closed downward.':right+' squares to '+fshow(fmul(R,R))+', which is less than 2.')+' Each other fraction is positive and squares to more than 2.':'The members of the cut of '+fshow(r)+' are the fractions below '+fshow(r)+'. The fraction '+fshow(r)+' itself is not one of them.'}; }
+    return null; }},
+  {id:'8a.step',step:'8a',mode:'work',label:'the hole’s step',open:()=>measured('8a'),make(){
+    const r=pick([fr(1,1),fr(4,3),fr(7,5),fr(3,2),fr(1,2),fr(2,1),fr(5,4),fr(0,1),fr(3,1)]), two=fint(2), s=fmul(fadd(fmul(two,r),two),fr(fadd(r,two).q,fadd(r,two).p)), right=fshow(s);
+    const wrong=uniq(right,[fshow(fmul(fadd(r,two),fr(fadd(fmul(two,r),two).q,fadd(fmul(two,r),two).p))),fshow(fadd(r,fr(1,2))),fshow(fmul(fadd(fmul(two,r),fint(1)),fr(fadd(r,two).q,fadd(r,two).p))),fshow(fadd(r,fint(1))),fshow(fmul(r,r))],3); if(wrong.length<3) return null;
+    const low=s.p*s.p<2*s.q*s.q;
+    return {index:'q:8a.step['+fshow(r)+']', lines:[['r = '+fshow(r),'a fraction, not negative'],['s = (2r + 2)/(r + 2)','the hole’s step']], ask:'Which fraction is s?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'(2 · '+fshow(r)+' + 2)/('+fshow(r)+' + 2) = '+right+'. Its square is '+fshow(fmul(s,s))+', '+(low?'still below 2, and s is above r: the lower heap has no greatest member.':'still above 2, and s is below r: the upper heap has no least member.')}; }});
+
+/* ---------- 8b Any Two Reals Compare ---------- */
+const B8=[
+  ['{0} and {1} are parts of ℚ, and neither is a part of the other. Does that refute any-two-compare on ℝ?','no: neither set is a cut, and the technique speaks of reals',['yes: any two sets of fractions compare','yes, unless either-way is dropped','no: {0} is a part of {1}'],'Of any two cuts, one is a part of the other. Closed downward is what makes it so.'],
+  ['The proof of any-two-compare on ℝ cites either-way. Could a cleverer column avoid it?','no: the comparison is exactly as strong as the either-way principle',['yes: by finite-search','yes: by the choosing axiom alone','nobody knows'],'Comparing-gives-either-way: if any two reals compare, then P ∨ ¬P, for any statement P.'],
+  ['For reals α and β, how many of α < β, α = β, β < α hold?','exactly one',['at least one, perhaps two','at most one, perhaps none','all three, when α = β'],'Three-way-order on ℝ. At least one, by any-two-compare; no two together, since ⊆ both ways is sameness.'],
+  ['On the line, what does α ≤ β mean?','α ⊆ β: every fraction in α is in β',['β ⊆ α','α has fewer members than β','some fraction is in α and not in β'],'Order is being a part of. And α < β means α ≤ β and α ≠ β.']];
+QP.push({id:'8b.greater',step:'8b',mode:'work',label:'the greater is the merge',open:()=>measured('8b'),make(){
+    for(let t=0;t<40;t++){ const r=frq(-2,3), s=frq(-2,3); if(fsame(r,s)) continue; const lo=fless(r,s)?r:s, hi=fless(r,s)?s:r, k=rnd(4), ex=[star(r)+' ∪ '+star(s),star(r)+' ∩ '+star(s),'max('+star(r)+', '+star(s)+')','min('+star(r)+', '+star(s)+')'][k], up=k===0||k===2;
+      const right=star(up?hi:lo), wrong=uniq(right,[star(up?lo:hi),star(fadd(r,s)),'ℚ','∅'],3);
+      return {index:'q:8b.greater['+k+';'+fshow(r)+';'+fshow(s)+']', lines:[[ex,'two cuts of fractions']], ask:'Which real is it?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:fshow(lo)+' < '+fshow(hi)+', so '+star(lo)+' ⊆ '+star(hi)+'. The greater of two reals is their union and the lesser is what they share: max(α, β) = α ∪ β and min(α, β) = α ∩ β.'}; }
+    return null; }},
+  {id:'8b.witness',step:'8b',label:'a witness for less',open:()=>measured('8b'),make(){
+    for(let t=0;t<40;t++){ const r=frq(-1,2), s=fadd(r,fr(1+rnd(3),1+rnd(3))), mid=fhalf(fadd(r,s)), R=Math.random()<0.35?r:mid, wrong=uniq(fshow(R),[fshow(s),fshow(fsub(r,fr(1,2))),fshow(fadd(s,fr(1,3))),fshow(fsub(r,fint(1)))],3); if(wrong.length<3) continue;
+      return {index:'q:8b.witness['+fshow(r)+';'+fshow(s)+';'+fshow(R)+']', lines:[[star(r)+' < '+star(s),'to be shown']], ask:'Which fraction is a witness: in '+star(s)+' and not in '+star(r)+'?', right:fshow(R), opts:shuffle([fshow(R),...wrong]), lead:'',
+        why:'Witness-for-less: α < β exactly when some fraction is in β and not in α. '+fshow(R)+' is below '+fshow(s)+' and not below '+fshow(r)+(fsame(R,r)?': a fraction is not a member of its own cut.':'.')}; }
+    return null; }},
+  {id:'8b.three',step:'8b',label:'order on the line',open:()=>measured('8b'),make(){ return writtenQ('8b.three',B8); }});
+
+/* ---------- 8c The Least Upper Bound ---------- */
+const C8=[
+  ['What does no-holes say?','every set of reals with a member and an upper bound has a least upper bound, and it is the union',['every set of reals has a greatest member','every set of fractions has a least upper bound among the fractions','every real is a fraction’s cut'],'sup S = ⋃S. The union of the cuts is itself a cut, and nothing smaller is above them all.'],
+  ['The hole’s heap has fractions above it: 3/2 and 2. Has it a least upper bound among the fractions?','no: below any fraction bound there is a smaller one',['yes: 3/2','yes: 7/5','yes: 2'],'The fractions are not complete. On the line the same heap is a real, and it is its own least upper bound.'],
+  ['Is sup S always a member of S?','sometimes: for {1*, 2*, 3*} yes, for the cuts of 1 − 1/n no',['always','never','only when S is infinite'],'No member of {(1 − 1/n)*} reaches 1*, and 1* is the least real above them all.'],
+  ['Why is ⋃{n* : n ∈ ℕ} not a real?','it misses no fraction: the set has no upper bound',['it has no member','it has a greatest member','it is not closed downward'],'Union-of-cuts needs a member and an upper bound. Without the bound the union is all of ℚ, and (ii) fails.'],
+  ['To show σ = sup S without writing the union, what two things are shown?','σ is an upper bound of S, and nothing smaller is',['σ is in S, and σ is positive','σ is a fraction, and S is finite','σ is above one member of S, and below another'],'A least upper bound is an upper bound that is at most every upper bound.']];
+QP.push({id:'8c.sup',step:'8c',mode:'work',label:'the least upper bound',open:()=>measured('8c'),make(){
+    const k=rnd(5), c=1+rnd(5);
+    const [S,right,cands,why]=k===0?(()=>{ const fs=[frq(-1,4),frq(-1,4),frq(-1,4)], mx=fs.reduce((a,b)=>fless(a,b)?b:a), mn=fs.reduce((a,b)=>fless(a,b)?a:b); return ['{'+fs.map(star).join(', ')+'}',star(mx)+', a member of S',[star(mx)+', not a member of S',star(mn)+', a member of S',star(fadd(mx,fint(1)))+', not a member of S','S has none'],'A set with a greatest member has that member as its least upper bound.']; })()
+      :k===1?['{('+c+' − 1/n)* : n ∈ ℕ, n ≠ 0}',c+'*, not a member of S',[c+'*, a member of S',(c-1)+'*, a member of S',(c+1)+'*, not a member of S','S has none'],'Every '+c+' − 1/n is below '+c+', and a fraction below '+c+' is below some '+c+' − 1/n. So the union is '+c+'*, and no member reaches it.']
+      :k===2?['{n* : n ∈ ℕ}','S has none: it has no upper bound',['0*, a member of S','1*, a member of S','ℚ, not a member of S','the greatest number’s cut'],'Counting passes any real, so no real is above every n*. The union is all of ℚ, which is not a cut.']
+      :k===3?['{(1/n)* : n ∈ ℕ, n ≠ 0}','1*, a member of S',['0*, not a member of S','0*, a member of S','1*, not a member of S','S has none'],'The greatest member is (1/1)* = 1*. The greatest lower bound is 0*, and that one is not a member.']
+      :['{x ∈ ℝ : x < '+c+'}',c+'*, not a member of S',[c+'*, a member of S',(c-1)+'*, a member of S',(c+1)+'*, not a member of S','S has none'],c+' is above every member, and below '+c+' there is always a real still in S: a fraction lies between any two reals.'];
+    const wrong=uniq(right,shuffle(cands),3);
+    return {index:'q:8c.sup['+k+';'+S+']', lines:[['S = '+S,'a set of reals']], ask:'What is sup S, the least upper bound?', right, opts:shuffle([right,...wrong]), lead:'', why}; }},
+  {id:'8c.holes',step:'8c',label:'no holes',open:()=>measured('8c'),make(){ return writtenQ('8c.holes',C8); }});
+
+/* ---------- 8d Adding and Multiplying Cuts ---------- */
+const D8=[
+  ['The tempting −α is the negatives of the fractions α misses. Why is it wrong?','for α = r* it has a greatest member, −r: (iv) fails',['it has no member','it is not closed downward','it is all of ℚ'],'The cure is to ask for room: the negatives of the fractions with some missed fraction below them.'],
+  ['When is a real α positive?','when 0* < α, which is exactly when 0 ∈ α',['when every member of α is positive','when α has a positive member and no negative one','when α misses 0'],'By members-are-the-fractions-below, 0 ∈ α exactly when 0* < α. A positive cut still holds every negative fraction.'],
+  ['For positive cuts α and β, the products rs of positive r ∈ α and s ∈ β are gathered. What else must be let in?','every fraction at most 0',['nothing','every fraction below 1','the fractions α and β both miss'],'The positive products alone would miss the negatives, and the set would not be closed downward.'],
+  ['Cuts have no representatives. How is each operation on cuts built?','as a sift of ℚ, which then has to be checked to be a cut',['on a representative, checking the choice does not matter','by recursion on the numbers','by the choosing axiom'],'A cut is one set. So α + β is {r + s : r ∈ α, s ∈ β}, and the four properties are checked for it.'],
+  ['What is a complete ordered field?','a regular number system with an order that agrees with its arithmetic, and no holes',['any set with an adding and a multiplying','the fractions with their order','a number system where every member is a fraction'],'ℝ, with its + and ·, 0 and 1, negatives, reciprocals and positive, is one. ℚ is ordered and regular, and has holes.']];
+QP.push({id:'8d.agree',step:'8d',mode:'work',label:'the fractions keep their arithmetic',open:()=>measured('8d'),make(){
+    for(let t=0;t<40;t++){ const r=frq(-2,3), s=frq(-2,3), k=rnd(4); if(r.p===0||s.p===0) continue;
+      const [ex,v,alts,name]=k===0?[star(r)+' + '+star(s),fadd(r,s),[fmul(r,s),fsub(r,s),fr(r.p+s.p,r.q+s.q)],'Fraction-sums-agree: (r + s)* = r* + s*.']:k===1?[star(r)+' · '+star(s),fmul(r,s),[fadd(r,s),fneg(fmul(r,s)),fr(r.p*s.q,r.q*s.p)],'Fraction-products-agree: (rs)* = r*s*.']
+        :k===2?['−('+star(r)+')',fneg(r),[r,fr(r.q,r.p),fsub(fint(1),r)],'Fraction-negatives-agree: (−r)* = −(r*).']:['('+star(r)+')⁻¹',fr(r.q,r.p),[fneg(r),r,fsub(fint(1),r)],'Fraction-reciprocals-agree: (r⁻¹)* = (r*)⁻¹ for r ≠ 0.'];
+      const right=star(v), wrong=uniq(right,alts.map(star).concat([star(fadd(v,fint(1)))]),3); if(wrong.length<3) continue;
+      return {index:'q:8d.agree['+ex+']', lines:[[ex,'worked on the line']], ask:'Which real is it?', right, opts:shuffle([right,...wrong]), lead:'', why:name+' Where a real is meant, a rational r names the real r*, and the arithmetic of the fractions is kept.'}; }
+    return null; }},
+  {id:'8d.built',step:'8d',label:'what has to be built',open:()=>measured('8d'),make(){ return writtenQ('8d.built',D8); }});
+
+/* ---------- 8e Counting Passes Any Real ---------- */
+QP.push({id:'8e.passes',step:'8e',mode:'work',label:'counting passes',open:()=>measured('8e'),make(){
+    for(let t=0;t<40;t++){ if(Math.random()<0.5){ const a=frq(1,30), n=Math.floor(a.p/a.q)+1, right=String(n), wrong=uniq(right,[n-1,n+1,a.p,a.q].filter(x=>x>=0).map(String),3); if(wrong.length<3) continue;
+        return {index:'q:8e.passes[up;'+fshow(a)+']', lines:[['α = '+fshow(a),'a real']], ask:'Counting passes α. Which is the least number n with α < n?', right, opts:shuffle([right,...wrong]), lead:'', why:(n-1)+' ≤ '+fshow(a)+' < '+n+'. Counting eventually passes any real; here it does so at '+n+'.'}; }
+      const p=1+rnd(3), q=p+1+rnd(20), a=fr(p,q); if(a.p===0) continue; const n=Math.floor(a.q/a.p)+1, right=String(n), wrong=uniq(right,[n-1,n+1,a.q,n+2].filter(x=>x>0).map(String),3); if(wrong.length<3) continue;
+      return {index:'q:8e.passes[down;'+fshow(a)+']', lines:[['α = '+fshow(a),'a positive real']], ask:'Which is the least number n, not 0, with 1/n < α?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'1/n < '+fshow(a)+' exactly when '+fshow(fr(a.q,a.p))+' < n. The least such number is '+n+': 1/'+n+' is below α and 1/'+(n-1)+' is not.'}; }
+    return null; }},
+  {id:'8e.between',step:'8e',mode:'work',label:'a fraction between',open:()=>measured('8e'),make(){
+    for(let t=0;t<40;t++){ const a=frq(-1,3), b=fadd(a,fr(1,1+rnd(6))), m=fhalf(fadd(a,b)), right=fshow(m), wrong=uniq(right,[fshow(a),fshow(b),fshow(fadd(b,fsub(b,a))),fshow(fsub(a,fsub(b,a))),fshow(fadd(a,b))].filter(w=>{ const f=w; return true; }),3);
+      const btw=f=>fless(a,f)&&fless(f,b); if(wrong.length<3||btw(fadd(a,b))&&wrong.includes(fshow(fadd(a,b)))) continue;
+      return {index:'q:8e.between['+fshow(a)+';'+fshow(b)+']', lines:[[fshow(a)+' < r < '+fshow(b),'a fraction r is wanted']], ask:'Which fraction lies strictly between the two?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'Half the sum of two fractions lies between them: ('+fshow(a)+' + '+fshow(b)+')/2 = '+right+'. Fraction-between says more: between any two reals there is a fraction, so ℚ is dense in ℝ.'}; }
+    return null; }});
+
+/* ---------- 8f Two Has a Square Root on the Line ---------- */
+const F8=[
+  ['Two expressions with roots are to be shown the same. What does the uniqueness method ask?','that both are non-negative and have the same square',['that both are fractions','that their difference is small','that one is the square of the other'],'One-root: for non-negative x and y, x² = y² gives x = y.'],
+  ['A real with a given square is wanted. How does the line supply it?','as the least upper bound of what falls short',['as the greatest fraction that falls short','by the choosing axiom','by trying fractions until one fits'],'S = {x : 0 ≤ x ∧ x² < 2} has a member and an upper bound, so no-holes gives σ = sup S. Too small and too big are both refuted, so σ² = 2.'],
+  ['Is {r ∈ ℚ : r² < 2} the real √2?','no: it is not a cut, and √2 lets the negatives in',['yes','no: it has a greatest member','no: √2 is a fraction'],'It leaves out −2, which is below its member 0. The hole’s cut is {r ∈ ℚ : r < 0 ∨ r² < 2}.'],
+  ['For every real x, what can be said of x²?','0 ≤ x²',['0 < x²','x ≤ x²','x² ≤ x'],'Square-never-negative. A positive times a positive and a negative times a negative are both positive, and 0² = 0.']];
+QP.push({id:'8f.root',step:'8f',mode:'work',label:'square roots on the line',open:()=>measured('8f'),make(){
+    if(Math.random()<0.5){ const sq=[1,4,9,16,25,36,49,64,81,100], u=2+rnd(98); if(sq.includes(u)) return null; const f=Math.floor(Math.sqrt(u)), say=n=>'between '+n+' and '+(n+1), right=say(f);
+      return {index:'q:8f.root[bt;'+u+']', lines:[['x ≥ 0 and x² = '+u,'the square-root technique gives one such real']], ask:'Between which two numbers does x lie?', right, opts:shuffle([right,...uniq(right,[say(f-1),say(f+1),say(Math.floor(u/2)),say(f+2)],3)]), lead:'',
+        why:f+'² = '+(f*f)+' < '+u+' < '+((f+1)*(f+1))+' = '+(f+1)+'². Powers keep order, so '+f+' < x < '+(f+1)+'.'}; }
+    const p=1+rnd(9), q=1+rnd(6), f=fr(p,q), u=fmul(f,f), right=fshow(f), wrong=uniq(right,[fshow(fneg(f)),fshow(fhalf(u)),fshow(u),fshow(fmul(u,u)),fshow(fadd(f,fint(1)))],3);
+    return {index:'q:8f.root[sq;'+fshow(u)+']', lines:[['x ≥ 0 and x² = '+fshow(u),'one real only']], ask:'Which real is x?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:right+' is not negative and squares to '+fshow(u)+'. By one-root there is no other: √('+fshow(u)+') = '+right+'.'+(wrong.includes(fshow(fneg(f)))?' '+fshow(fneg(f))+' has the same square, and is negative.':'')}; }},
+  {id:'8f.method',step:'8f',label:'roots by least upper bound',open:()=>measured('8f'),make(){ return writtenQ('8f.method',F8); }});
+
+/* ---------- 8g Inequalities ---------- */
+QP.push({id:'8g.linear',step:'8g',mode:'work',label:'linear inequalities',open:()=>measured('8g'),make(){
+    for(let t=0;t<40;t++){ const a=pick([-5,-4,-3,-2,2,3,4,5]), b=rnd(13)-6, k=rnd(11)-5, c=a*k+b, op=pick(['<','>','≤','≥']), flip={'<':'>','>':'<','≤':'≥','≥':'≤'}; if(k===0||b===0) continue;
+      const line=sg(b)+(a<0?' − '+(-a):' + '+a)+'x '+op+' '+sg(c), ans=a<0?flip[op]:op, right='x '+ans+' '+sg(k), wrong=uniq(right,['x '+flip[ans]+' '+sg(k),'x '+ans+' '+sg(-k),'x '+flip[ans]+' '+sg(-k)],3);
+      return {index:'q:8g.linear['+line+']', lines:[[line,'the question']], ask:'Which line is the answer?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'Add '+sg(-b)+' to both sides: order kept. Then multiply both sides by 1/'+(a<0?'('+sg(a)+')':a)+': '+(a<0?'a negative, so the order turns about.':'a positive, so the order is kept.')+' Check a value: at x = '+sg(k)+' the two sides are the same.'}; }
+    return null; }},
+  {id:'8g.chart',step:'8g',mode:'work',label:'sign charts',open:()=>measured('8g'),make(){
+    const a=rnd(9)-5, b=a+1+rnd(5), neg=Math.random()<0.5, strict=Math.random()<0.7, fac=n=>'(x'+(n===0?'':pm(-n))+')', line=fac(a).replace('(x)','x')+fac(b).replace('(x)','x')+' '+(neg?(strict?'<':'≤'):(strict?'>':'≥'))+' 0';
+    const ins=strict?'('+sg(a)+', '+sg(b)+')':'['+sg(a)+', '+sg(b)+']', ins2=strict?'['+sg(a)+', '+sg(b)+']':'('+sg(a)+', '+sg(b)+')', out='x '+(strict?'<':'≤')+' '+sg(a)+' or '+sg(b)+' '+(strict?'<':'≤')+' x', out2='x '+(strict?'≤':'<')+' '+sg(a)+' or '+sg(b)+' '+(strict?'≤':'<')+' x';
+    const right=neg?ins:out, wrong=neg?[ins2,out,'x '+(strict?'<':'≤')+' '+sg(b)]:[out2,ins,'x '+(strict?'>':'≥')+' '+sg(b)];
+    return {index:'q:8g.chart['+line+']', lines:[[line,'the question']], ask:'Read the sign chart. Where does the line hold?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The factors are 0 at '+sg(a)+' and at '+sg(b)+'. Below '+sg(a)+' both are negative, so the product is positive; between them one is negative, so it is negative; above '+sg(b)+' both are positive. '+(strict?'The ends make the product 0, and are left out.':'The ends make the product 0, and are let in.')}; }},
+  {id:'8g.turn',step:'8g',mode:'proof',label:'a negative turns the order about',open:()=>measured('8g'),make(){
+    const p=rnd(9)-4, q=p+1+rnd(5), s=pick([-3,-2,-1,2,3]), add=Math.random()<0.3, turned=Math.random()<0.5;
+    const l2=add?[(p+s),(turned?'>':'<'),(q+s)]:[p*s,(turned?'>':'<'),q*s], ok=l2[1]==='<'?l2[0]<l2[2]:l2[0]>l2[2], opts=['the line is licensed','the line is not licensed'];
+    return {index:'q:8g.turn['+p+';'+q+';'+s+';'+(add?'a':'m')+(turned?'t':'k')+']', stack:true, lines:[[sg(p)+' < '+sg(q),'given'],[sg(l2[0])+' '+l2[1]+' '+sg(l2[2]),(add?'add '+sg(s)+' to both sides':'multiply both sides by '+sg(s))+(turned?', and turn the order about':', order kept')]], ask:'Is line 2 licensed?', right:opts[ok?0:1], opts, lead:'',
+      why:add?'Adding the same real keeps the order: the difference of the two sides is unchanged. The order is never turned about for adding.':s<0?'Negative-reverses-order: p < q and s < 0 give qs < ps. Multiplying by a negative turns the order about, every time.':'Multiplying by a positive keeps strict order. The order is turned about only for a negative.'}; }});
+
+/* ---------- 8h Absolute Value and Distance on the Line ---------- */
+QP.push({id:'8h.size',step:'8h',mode:'work',label:'size and distance',open:()=>measured('8h'),make(){
+    const p=rnd(19)-9, q=rnd(19)-9, k=rnd(4); if(p===0||q===0||p===q) return null;
+    const [ex,v,alts,why]=k===0?['|'+sg(p)+' − '+(q<0?'('+sg(q)+')':q)+'|',Math.abs(p-q),[Math.abs(p+q),Math.abs(p)-Math.abs(q),p-q,Math.abs(p)+Math.abs(q)],'|p − q| is the distance between p and q on the line: '+sg(p)+' − '+(q<0?'('+sg(q)+')':q)+' = '+sg(p-q)+', and its size is '+Math.abs(p-q)+'.']
+      :k===1?['|'+sg(p)+' · '+(q<0?'('+sg(q)+')':q)+'|',Math.abs(p*q),[p*q,-Math.abs(p*q),Math.abs(p)+Math.abs(q),Math.abs(p+q)],'Size-of-a-product: |pq| = |p| |q| = '+Math.abs(p)+' · '+Math.abs(q)+'.']
+      :k===2?['|'+sg(p)+' + '+(q<0?'('+sg(q)+')':q)+'|',Math.abs(p+q),[Math.abs(p)+Math.abs(q),Math.abs(p-q),p+q,-Math.abs(p+q)],'Work inside the bars first: '+sg(p+q)+', whose size is '+Math.abs(p+q)+'. The triangle technique says only that this is at most |p| + |q| = '+(Math.abs(p)+Math.abs(q))+'.']
+      :['√(('+sg(p)+')²)',Math.abs(p),[p,-Math.abs(p),p*p,-p],'Size-squared: √(p²) = |p|. A root is never negative.'];
+    const right=sg(v), wrong=uniq(right,alts.concat([v+1,v+2,v+3]).map(sg),3);
+    return {index:'q:8h.size['+ex+']', lines:[[ex,'to be worked']], ask:'Which number is it?', right, opts:shuffle([right,...wrong]), lead:'', why}; }},
+  {id:'8h.unpack',step:'8h',mode:'work',label:'unpack the bars',open:()=>measured('8h'),make(){
+    const c=rnd(13)-6, d=1+rnd(6), k=rnd(4), lo=c-d, hi=c+d, bar='|x'+(c===0?'':pm(-c))+'|';
+    const [line,right,wrong,why]=k===0?[bar+' < '+d,'('+sg(lo)+', '+sg(hi)+')',['['+sg(lo)+', '+sg(hi)+']','x < '+sg(lo)+' or '+sg(hi)+' < x','('+sg(-hi)+', '+sg(hi)+')'],'Unpack-the-bars: |p| < d exactly when −d < p < d. So '+sg(-d)+' < x'+(c===0?'':pm(-c))+' < '+d+', and adding '+sg(c)+' throughout gives the stretch.']
+      :k===1?[bar+' ≤ '+d,'['+sg(lo)+', '+sg(hi)+']',['('+sg(lo)+', '+sg(hi)+')','x ≤ '+sg(lo)+' or '+sg(hi)+' ≤ x','['+sg(-hi)+', '+sg(hi)+']'],'Unpack-the-bars: |p| ≤ d exactly when −d ≤ p ≤ d. The ends are at distance '+d+' from '+sg(c)+', and are let in.']
+      :k===2?[bar+' = '+d,'x = '+sg(lo)+' or x = '+sg(hi),['x = '+sg(hi),'x = '+sg(-hi)+' or x = '+sg(hi),'x = '+sg(lo)],'The two reals at distance '+d+' from '+sg(c)+': one each side.']
+      :[bar+' > '+d,'x < '+sg(lo)+' or '+sg(hi)+' < x',['('+sg(lo)+', '+sg(hi)+')','x > '+sg(hi),'x ≤ '+sg(lo)+' or '+sg(hi)+' ≤ x'],'Further than '+d+' from '+sg(c)+': the outside of the stretch from '+sg(lo)+' to '+sg(hi)+', ends left out.'];
+    const w=uniq(right,wrong,3); if(w.length<3||(k===2&&(lo===0||hi===0||lo===-hi))) return null;
+    return {index:'q:8h.unpack['+line+']', lines:[[line,'the question']], ask:'Which reals x make the line hold?', right, opts:shuffle([right,...w]), lead:'', why:bar+' is the distance from x to '+sg(c)+'. '+why}; }},
+  {id:'8h.triangle',step:'8h',label:'the triangle technique',open:()=>measured('8h'),make(){
+    const eq=Math.random()<0.5, same=()=>{ const s=pick([1,-1]); return [s*(1+rnd(8)),s*(1+rnd(8))]; }, opp=()=>{ const s=pick([1,-1]); return [s*(1+rnd(8)),-s*(1+rnd(8))]; }, sh=x=>'a = '+sg(x[0])+', b = '+sg(x[1]);
+    const R=(eq?same:opp)(), W=[]; for(let i=0;i<20&&W.length<3;i++){ const w=(eq?opp:same)(); if(!W.some(x=>sh(x)===sh(w))) W.push(w); } if(W.length<3) return null;
+    return {index:'q:8h.triangle['+(eq?'=':'<')+';'+sh(R)+';'+W.map(sh).join(';')+']', lines:[['|a + b| '+(eq?'=':'<')+' |a| + |b|','to hold']], ask:'For which pair does the line hold?', right:sh(R), opts:shuffle([R,...W]).map(sh), lead:'',
+      why:'Triangle: |a + b| ≤ |a| + |b|, always. The two sides are the same when a and b have the same sign, and the left is smaller when the signs differ. Here |'+sg(R[0])+' + '+(R[1]<0?'('+sg(R[1])+')':R[1])+'| = '+Math.abs(R[0]+R[1])+' and |a| + |b| = '+(Math.abs(R[0])+Math.abs(R[1]))+'.'}; }});
+
+/* ---------- 8i Roots, Powers and the Quadratic Formula ---------- */
+const quad8=(b,c)=>'x²'+(b===0?'':(b<0?' − ':' + ')+(Math.abs(b)===1?'':Math.abs(b))+'x')+(c===0?'':pm(c))+' = 0';
+const POW8=[[2,3,2],[3,3,2],[2,4,3],[2,2,3],[3,2,3],[2,5,2],[2,3,4],[5,2,1],[2,6,5],[10,3,2],[3,4,3],[4,2,3]];
+QP.push({id:'8i.disc',step:'8i',mode:'work',label:'counting answers by the discriminant',open:()=>measured('8i'),make(){
+    const b=rnd(13)-6, c=rnd(15)-5, D=b*b-4*c, line=quad8(b,c), right=D>0?'two':D===0?'one':'none on the line';
+    return {index:'q:8i.disc['+line+']', lines:[[line,'the question']], ask:'How many answers has it on the line?', right, opts:['two','one','none on the line','endlessly many'], lead:'',
+      why:'The discriminant b² − 4tc is '+(b*b)+' − 4 · 1 · '+(c<0?'('+sg(c)+')':c)+' = '+sg(D)+'. If it is positive there are two answers; if it is 0, one; if it is negative, none on the line: a square is never negative.'}; }},
+  {id:'8i.solve',step:'8i',mode:'work',label:'the quadratic formula',open:()=>measured('8i'),make(){
+    const r=rnd(13)-6, s=rnd(13)-6; if(r===s||r===-s||r===0||s===0) return null; const lo=Math.min(r,s), hi=Math.max(r,s), b=-(r+s), c=r*s, line=quad8(b,c), say=(x,y)=>'x = '+sg(Math.min(x,y))+' or x = '+sg(Math.max(x,y));
+    const right=say(lo,hi), wrong=uniq(right,[say(-lo,-hi),say(lo,-hi),say(-lo,hi),say(b,c)],3); if(wrong.length<3) return null;
+    return {index:'q:8i.solve['+line+']', lines:[[line,'the question']], ask:'Which reals answer it?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'x = (−b ± √(b² − 4tc))/(2t) = ('+sg(-b)+' ± √'+(b*b-4*c)+')/2 = ('+sg(-b)+' ± '+(hi-lo)+')/2. Check by sum and product: the answers add to '+sg(r+s)+' and multiply to '+sg(c)+'.'}; }},
+  {id:'8i.complete',step:'8i',mode:'work',label:'completing the sameness',open:()=>measured('8i'),make(){
+    const h=pick([-6,-5,-4,-3,-2,-1,1,2,3,4,5,6]), b=2*h, ex='x²'+(b<0?' − ':' + ')+Math.abs(b)+'x', f=(m,k)=>'(x'+pm(m)+')²'+pm(k), right=f(h,-h*h), wrong=uniq(right,[f(h,h*h),f(b,-b*b),f(-h,-h*h),f(b,-h*h)],3);
+    return {index:'q:8i.complete['+ex+']', lines:[[ex,'to be completed']], ask:'Which line is the same, for every x?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'x² + bx = (x + b/2)² − (b/2)². Half of '+sg(b)+' is '+sg(h)+', and its square is '+(h*h)+'. Expand to check: (x'+pm(h)+')² = x²'+(b<0?' − ':' + ')+Math.abs(b)+'x + '+(h*h)+'.'}; }},
+  {id:'8i.powers',step:'8i',mode:'work',label:'fractions in the high place',open:()=>measured('8i'),make(){
+    const [base,q,p]=pick(POW8), u=base**q, neg=Math.random()<0.3, v=base**p, ex=u+'^('+(neg?'−':'')+p+'/'+q+')', right=neg?'1/'+v:String(v);
+    const wrong=uniq(right,[neg?String(v):'1/'+v,String(Math.round(u*p/q)),neg?'−'+v:String(base**(p+1)),String(base),neg?'−1/'+v:String(u)],3); if(wrong.length<3) return null;
+    return {index:'q:8i.powers['+ex+']', lines:[[ex,'to be worked']], ask:'Which real is it?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The bottom of the fraction takes a root and the top takes a power: the '+(q===2?'square':q===3?'cube':q+'th')+' root of '+u+' is '+base+', and '+base+' to the power '+p+' is '+v+'.'+(neg?' A negative in the high place is the reciprocal: 1/'+v+'.':'')}; }},
+  {id:'8i.strangers',step:'8i',mode:'work',label:'check after squaring',open:()=>measured('8i'),make(){
+    const b=1+rnd(4), m=2+rnd(3), x0=b+m, a=m*m-x0, x1=2*b+1-x0, line='√(x'+(a===0?'':pm(a))+') = x − '+b, lo=Math.min(x0,x1), hi=Math.max(x0,x1); if(x0===x1) return null;
+    const right='x = '+sg(x0)+' only', opts=[right,'x = '+sg(x1)+' only','both','neither'];
+    return {index:'q:8i.strangers['+line+']', lines:[[line,'the question'],['x = '+sg(lo)+' or x = '+sg(hi),'after squaring both sides, and solving']], ask:'Which of the two answers the question itself?', right, opts:shuffle(opts), lead:'',
+      why:'Squaring adds strangers, so check every answer in the original. At x = '+sg(x0)+': √'+(x0+a)+' = '+m+' and '+x0+' − '+b+' = '+m+'. At x = '+sg(x1)+': √'+(x1+a)+' = '+(m-1)+', and '+sg(x1)+' − '+b+' = '+sg(x1-b)+', which is negative; a root is never negative.'}; }});
+
+/* ---------- rung 8, Word Problems ---------- */
+QP.push({id:'8h.reach',step:'8h',mode:'word',label:'a middle and a reach',open:()=>measured('8h'),make(){
+    const [what,unit]=pick([['A gauge','degrees'],['The fill of a sack','kilos'],['The length of a cut plank','centimetres'],['A ferry’s crossing time','minutes'],['The level in a tank','litres']]), c=10+rnd(80), d=2+rnd(5), strict=Math.random()<0.4, op=strict?'<':'≤', opp=strict?'>':'≥';
+    const right='|x − '+c+'| '+op+' '+d, wrong=['|x − '+d+'| '+op+' '+c,'|x + '+c+'| '+op+' '+d,'|x − '+c+'| '+opp+' '+d];
+    return {index:'q:8h.reach['+c+';'+d+';'+op+']', a3:['8h.reach['+op+']',DASH,DASH], story:what+', x, must come '+(strict?'closer than '+d+' '+unit+' to ':'within '+d+' '+unit+' of ')+c+'.', lines:[], ask:'Which line says so?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'|x − '+c+'| is the distance from x to '+c+' on the line. '+(strict?'Closer than':'Within')+' '+d+' is “'+op+' '+d+'”. Unpacked, it is the stretch from '+(c-d)+' to '+(c+d)+', ends '+(strict?'left out.':'let in.')}; }},
+  {id:'8g.story',step:'8g',mode:'word',label:'an inequality from a story',open:()=>measured('8g'),make(){
+    const [thing,box]=pick([['sack','cart'],['crate','barge'],['bale','wagon'],['drum','lift']]), w=2+rnd(8), b=[1,2,3,4,5,6,7,8,9,10].filter(x=>x!==w)[rnd(9)], n=3+rnd(8), cap=b+w*n+rnd(w), most=Math.floor((cap-b)/w);
+    if(Math.random()<0.5){ const right=b+' + '+w+'x ≤ '+cap, wrong=[b+' + '+w+'x < '+cap,w+' + '+b+'x ≤ '+cap,b+' + '+w+'x ≥ '+cap];
+      return {index:'q:8g.story[line;'+w+';'+b+';'+cap+']', a3:['8g.story[line]',DASH,DASH], story:'A '+box+' carries at most '+cap+' kilos. A box of '+b+' kilos is on it already, and each '+thing+' weighs '+w+' kilos. x '+thing+'s are loaded.', lines:[], ask:'Which line must hold?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'The load is the box and x '+thing+'s: '+b+' + '+w+'x. “At most” lets the two sides be the same, so the mark is ≤.'}; }
+    const right=String(most), wrong=uniq(right,[most+1,most-1,Math.floor(cap/w),Math.ceil((cap-b)/w)+1].map(String),3); if(wrong.length<3) return null;
+    return {index:'q:8g.story[most;'+w+';'+b+';'+cap+']', a3:['8g.story[most]',DASH,DASH], story:'A '+box+' carries at most '+cap+' kilos. A box of '+b+' kilos is on it already, and each '+thing+' weighs '+w+' kilos.', lines:[[b+' + '+w+'x ≤ '+cap,'x counts the '+thing+'s']], ask:'What is the greatest number of '+thing+'s it can take?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Add −'+b+' to both sides: '+w+'x ≤ '+(cap-b)+'. Multiply by 1/'+w+', a positive, so the order is kept: x ≤ '+fshow(fr(cap-b,w))+'. The greatest number that fits is '+most+'.'}; }});
+
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 
