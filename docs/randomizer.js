@@ -1329,6 +1329,108 @@ QP.push({id:'4m.forgets',step:'4m',mode:'word',label:'the operator forgets the t
       ask:'Which one line answers both stories?', right, opts:shuffle([right,...wrong]), lead:'It is '+right+'. ',
       why:'The operator works on the count and never asks what is counted. The things are taken out, the one line is worked once, and the answer goes back to each story as '+(plus?a+b:a*b)+' '+u1+' and '+(plus?a+b:a*b)+' '+u2+'.'}; }});
 
+/* ===== Laundry 5, rung 5 (floor 1 pools, stage E): 5a 5d 5h 5k (5b 5c 5e 5f 5g 5i 5j had pools already) ===== */
+Object.assign(STEPS,{'5a':['r05a','Equations Revisited'],'5d':['r05d','The Rules of Arithmetic'],'5h':['r05h','Fractions by Hand, and Decimals'],'5k':['r05k','Working With the Gap']});
+/* fractions: a pair in lowest terms with its denominator positive */
+const fgcd=(a,b)=>{ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a||1; };
+const fr=(p,q)=>{ if(q<0){ p=-p; q=-q; } const g=fgcd(p,q); return {p:p/g,q:q/g}; };
+const fshow=f=>(f.p<0?'−':'')+Math.abs(f.p)+(f.q===1?'':'/'+f.q), fraw=(p,q)=>(p<0?'−':'')+Math.abs(p)+'/'+q;
+const fadd=(a,b)=>fr(a.p*b.q+b.p*a.q,a.q*b.q), fmul=(a,b)=>fr(a.p*b.p,a.q*b.q), fsame=(a,b)=>a.p===b.p&&a.q===b.q;
+const uniq=(right,cands,n)=>{ const out=[]; cands.forEach(c=>{ if(c!==right&&!out.includes(c)&&out.length<(n||3)) out.push(c); }); return out; };
+
+/* ---------- 5a Equations Revisited ---------- */
+const OPCHK={'=':(a,b)=>a===b,'≠':(a,b)=>a!==b,'<':(a,b)=>a<b,'≤':(a,b)=>a<=b,'>':(a,b)=>a>b,'≥':(a,b)=>a>=b};
+function numLine(want){ for(let t=0;t<60;t++){ const a=1+rnd(8), b=1+rnd(8), c=2+rnd(4), k=rnd(4), [ex,v]=k===0?[a+' + '+b,a+b]:k===1?[a+' · '+b,a*b]:k===2?[a+' + '+b+' · '+c,a+b*c]:[String(a),a];
+    const op=pick(Object.keys(OPCHK)), r=v+pick([0,0,1,-1,2,-2,b]); if(r<0) continue; if(OPCHK[op](v,r)===want) return ex+' '+op+' '+r; } return null; }
+QP.push({id:'5a.conforms',step:'5a',label:'the operator’s condition',open:()=>measured('5a'),make(){
+    const yes=Math.random()<0.6, R=numLine(yes), wrong=[]; for(let i=0;i<12&&wrong.length<3;i++){ const w=numLine(!yes); if(w&&!wrong.includes(w)&&w!==R) wrong.push(w); } if(!R||wrong.length<3) return null;
+    return {index:'q:5a.conforms['+R+';'+wrong.join(';')+']', lines:[], ask:yes?'Which line conforms to its operator’s condition?':'Which line does not conform to its operator’s condition?', right:R, opts:shuffle([R,...wrong]), lead:'It is '+R+'. ',
+      why:'Each operator has its own condition: = conforms when its sides name one number, ≠ when the = inside it does not, < when the left side is less, ≤ when it is less or the same. Work each side, products before sums, and compare.'}; }});
+const MOVES5=[['the sides are turned about, and the sign is left as it is',(op,a,b)=>[b,op,a]],['the same number is added to both sides',(op,a,b,k)=>[a+k,op,b+k]],['both sides are multiplied by the same number, not 0',(op,a,b,k)=>[a*k,op,b*k]],['both sides are multiplied by 0',(op,a,b)=>[0,op,0]]];
+QP.push({id:'5a.moves',step:'5a',mode:'proof',label:'each operator, its moves',open:()=>measured('5a'),make(){
+    for(let t=0;t<40;t++){ const op=pick(['=','≠','<','≤']), a=1+rnd(8), b=op==='='?a:op==='≤'&&Math.random()<0.4?a:a+1+rnd(5), k=2+rnd(4), mv=rnd(MOVES5.length), [say,f]=MOVES5[mv];
+      const [x,o,y]=f(op,a,b,k), keeps=OPCHK[o](x,y), right=keeps?'the move keeps the condition':'the move breaks the condition';
+      return {index:'q:5a.moves['+a+op+b+';'+mv+';'+k+']', stack:true, lines:[[a+' '+op+' '+b,'a line that conforms'],[x+' '+o+' '+y,say+(mv===1||mv===2?': '+k:'')]], ask:'Does the move keep the condition of the line’s operator?', right, opts:['the move keeps the condition','the move breaks the condition'], lead:'',
+        why:'A move is allowed in a line only if it keeps the condition of that line’s operator. '+(keeps?'“'+x+' '+o+' '+y+'” conforms.':'“'+x+' '+o+' '+y+'” does not conform.')+' '+['= and ≠ turn about freely; < and ≤ turn about only if the sign turns about too.','Adding the same to both sides keeps every exact condition.','Multiplying both sides by the same number other than 0 keeps every exact condition.','Multiplying by 0 keeps = and ≤, and breaks ≠ and <: both sides become 0.'][mv]}; }
+    return null; }});
+QP.push({id:'5a.gap',step:'5a',mode:'work',label:'asking backwards',open:()=>measured('5a'),make(){
+    const plus=Math.random()<0.5, a=2+rnd(7), x=1+rnd(7), stuck=Math.random()<0.3, none='no counting number does';
+    const c=plus?(stuck?a-1-rnd(Math.min(a-1,3)):a+x):(stuck?a*x+1+rnd(a-1):a*x), line=a+(plus?' + ':' · ')+'x = '+c;
+    const right=stuck?none:String(x), nums=uniq(right,[x,x+1,x-1,plus?c:c-a,plus?a+c:a,x+2].filter(n=>n>=0).map(String),3);
+    return {index:'q:5a.gap['+line+']', lines:[[line,'a line with a gap']], ask:'Which number, put in the gap, makes the line conform?', right, opts:shuffle(stuck?nums:[String(x),...nums.slice(0,2)]).concat([none]), lead:'',
+      why:stuck?(plus?'Whatever number x is, '+a+' ≤ '+a+' + x, and '+c+' is less than '+a+'. The line can be written, and no counting number makes it an equation.':a+' · '+Math.floor(c/a)+' = '+(a*Math.floor(c/a))+' and '+a+' · '+(Math.floor(c/a)+1)+' = '+(a*(Math.floor(c/a)+1))+': '+c+' falls between them, so no counting number put in the gap makes the line conform.')
+        :'This runs '+(plus?'adding':'multiplying')+' backwards: '+a+(plus?' + ':' · ')+x+' = '+c+'.'}; }});
+
+/* ---------- 5d The Rules of Arithmetic ---------- */
+const frnd=()=>{ for(;;){ const f=fr(1+rnd(7),2+rnd(6)); if(f.q>1) return f; } };
+const RULES5=[
+  ['the turn-about technique for plus on ℚ',(w,b,c)=>w+' + '+b+' = '+b+' + '+w],['the regroup technique for plus on ℚ',(w,b,c)=>'('+w+' + '+b+') + '+c+' = '+w+' + ('+b+' + '+c+')'],
+  ['the plus-zero technique on ℚ',(w)=>w+' + 0 = '+w],['the negative technique on ℚ',(w)=>w+' + (−'+w+') = 0'],
+  ['the turn-about technique for times on ℚ',(w,b)=>w+' · '+b+' = '+b+' · '+w],['the regroup technique for times on ℚ',(w,b,c)=>'('+w+' · '+b+') · '+c+' = '+w+' · ('+b+' · '+c+')'],
+  ['the times-one technique on ℚ',(w)=>w+' · 1 = '+w],['the reciprocal technique on ℚ',(w,b,c,W)=>w+' · '+W.q+'/'+W.p+' = 1'],
+  ['the spread technique on ℚ',(w,b,c)=>w+' · ('+b+' + '+c+') = '+w+' · '+b+' + '+w+' · '+c]];
+QP.push({id:'5d.name',step:'5d',label:'the twelve techniques',open:()=>measured('5d'),make(){
+    const W=frnd(), B=frnd(), C=frnd(); if(fsame(W,B)||fsame(B,C)||fsame(W,C)||W.p===1) return null; const k=rnd(RULES5.length), [name,f]=RULES5[k], line=f(fshow(W),fshow(B),fshow(C),W);
+    const same=k<4?[0,1,2,3]:k<8?[4,5,6,7]:[1,5,0,4], wrong=uniq(name,shuffle(same.map(i=>RULES5[i][0])).concat(shuffle(RULES5.map(r=>r[0]))),3);
+    return {index:'q:5d.name['+k+';'+line+']', lines:[[line,null]], ask:'Which technique licenses the line marked ?', right:name, opts:shuffle([name,...wrong]), why:'The line is '+name+', with these rationals in its letters. Each of the twelve techniques holds for any rationals.'}; }});
+QP.push({id:'5d.positive',step:'5d',mode:'work',label:'three-way',open:()=>measured('5d'),make(){
+    const p=pick([-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6]), q=pick([-5,-4,-3,-2,2,3,4,5]), text='('+(p<0?'−'+(-p):p)+')/('+(q<0?'−'+(-q):q)+')', pq=p*q;
+    const opts=['it is positive','it is 0','its negative is positive'], right=pq>0?opts[0]:pq===0?opts[1]:opts[2];
+    return {index:'q:5d.positive['+p+'/'+q+']', lines:[[text,'a rational, by one of its members']], ask:'Exactly one of the three holds. Which?', right, opts, lead:'',
+      why:'A rational p/q is positive when the product pq is a positive integer. Here pq = '+(pq<0?'−'+(-pq):pq)+'. The sign of the numerator alone does not decide it: (−2)/(−3) is 2/3.'}; }});
+
+/* ---------- 5h Fractions by Hand, and Decimals ---------- */
+QP.push({id:'5h.lowest',step:'5h',mode:'work',label:'lowest terms',open:()=>measured('5h'),make(){
+    const f=frnd(), k=pick([2,3,4,5,6,8,10]), p=f.p*k, q=f.q*k, right=fshow(f);
+    const wrong=uniq(right,[fraw(p-k,q-k),k%2===0&&k>2?fraw(p/2,q/2):fraw(f.q,f.p),fraw(f.p+1,f.q),fraw(f.p,f.q+1),fraw(f.q,f.p)].filter(o=>!/\/0$|^0\//.test(o)),3); if(wrong.length<3) return null;
+    return {index:'q:5h.lowest['+p+'/'+q+']', lines:[[fraw(p,q),'a fraction, by one of its members']], ask:'Which member names it in lowest terms?', right, opts:shuffle([right,...wrong]), lead:'It is '+right+'. ',
+      why:'Choosing a member: divide the numerator and the denominator by their gcd, '+k*fgcd(f.p,f.q)+'. '+p+' = '+k+' · '+f.p+' and '+q+' = '+k+' · '+f.q+', and '+f.p+' and '+f.q+' share no factor but 1. Taking the same number away from both is not scaling.'}; }},
+  {id:'5h.add',step:'5h',mode:'work',label:'adding fractions',open:()=>measured('5h'),make(){
+    const a=frnd(), b=frnd(); if(a.q===b.q) return null; const s=fadd(a,b), right=fshow(s);
+    const wrong=uniq(right,[fraw(a.p+b.p,a.q+b.q),fraw(a.p+b.p,a.q*b.q),fraw(a.p*b.q+b.p*a.q,a.q+b.q),fshow(fr(a.p*b.p,a.q*b.q)),fshow(fr(a.p+b.p,Math.max(a.q,b.q)))],3); if(wrong.length<3) return null;
+    return {index:'q:5h.add['+fshow(a)+'+'+fshow(b)+']', lines:[[fshow(a)+' + '+fshow(b)+' = ▢','a sum']], ask:'What fills the box ▢, in lowest terms?', right, opts:shuffle([right,...wrong]), lead:'It is '+right+'. ',
+      why:'Adding is only easy over one denominator, so rename both first: '+fraw(a.p*b.q,a.q*b.q)+' + '+fraw(b.p*a.q,a.q*b.q)+' = '+fraw(a.p*b.q+b.p*a.q,a.q*b.q)+(fraw(a.p*b.q+b.p*a.q,a.q*b.q)===right?'':' = '+right)+'. Adding numerators and adding denominators gives '+fraw(a.p+b.p,a.q+b.q)+', which lies between the two fractions and is not their sum.'}; }},
+  {id:'5h.times',step:'5h',mode:'work',label:'multiplying, and cancelling first',open:()=>measured('5h'),make(){
+    const a=frnd(), b=frnd(); if(fsame(a,b)) return null; const s=fmul(a,b), right=fshow(s);
+    const wrong=uniq(right,[fshow(fr(a.p*b.q,a.q*b.p)),fraw(a.p+b.p,a.q+b.q),fshow(fadd(a,b)),fraw(a.p*b.p,a.q+b.q),fraw(a.p*b.p+1,a.q*b.q)],3); if(wrong.length<3) return null;
+    return {index:'q:5h.times['+fshow(a)+'·'+fshow(b)+']', lines:[[fshow(a)+' · '+fshow(b)+' = ▢','a product']], ask:'What fills the box ▢, in lowest terms?', right, opts:shuffle([right,...wrong]), lead:'It is '+right+'. ',
+      why:'Multiply numerators and multiply denominators: ('+a.p+' · '+b.p+')/('+a.q+' · '+b.q+') = '+fraw(a.p*b.p,a.q*b.q)+(fraw(a.p*b.p,a.q*b.q)===right?'':' = '+right+', and cancelling a shared factor first keeps the numbers small')+'.'}; }},
+  {id:'5h.decimal',step:'5h',mode:'work',label:'decimals',open:()=>measured('5h'),make(){
+    if(Math.random()<0.5){ const fin=[2,4,5,8,10,16,20,25,40,50], non=[3,6,7,9,11,12,14,15,18,21,30], pk=q=>{ for(;;){ const p=1+rnd(q-1); if(fgcd(p,q)===1) return p+'/'+q; } };
+      const R=pk(pick(fin)), wrong=uniq(R,take(non,3).map(pk),3);
+      return {index:'q:5h.decimal[f'+R+';'+wrong.join(',')+']', lines:[], ask:'Which fraction has a finite decimal?', right:R, opts:shuffle([R,...wrong]), lead:'It is '+R+'. ',
+        why:'Finite-decimal technique: a fraction has a finite decimal exactly when its denominator in lowest terms has no prime in its prime list but 2 and 5. Each other denominator here holds a 3, a 7 or an 11.'}; }
+    const q=pick([4,5,8,20,25,40]), p=(()=>{ for(;;){ const p=1+rnd(q-1); if(fgcd(p,q)===1) return p; } })(), v=p/q, dec=String(v), right=p+'/'+q, digits=dec.split('.')[1];
+    const wrong=uniq(right,[fshow(fr(Number(digits),100===Math.pow(10,digits.length)?1000:100)),fshow(fr(1,Number(digits))),fshow(fr(Number(digits),Math.pow(10,digits.length)+1)),fshow(fr(p,q+1)),fshow(fr(p+1,q))].filter(o=>/\//.test(o)),3); if(wrong.length<3) return null;
+    return {index:'q:5h.decimal[d'+dec+']', lines:[[dec,'a finite decimal']], ask:'Which fraction does it name, in lowest terms?', right, opts:shuffle([right,...wrong]), lead:'It is '+right+'. ',
+      why:dec+' = '+Number(digits)+'/'+Math.pow(10,digits.length)+': the digits after the point, read by the reading rule, over the power of ten with as many places. In lowest terms that is '+right+'.'}; }},
+  {id:'5h.round',step:'5h',mode:'work',label:'rounding',open:()=>measured('5h'),make(){
+    const k=100+rnd(900), third=rnd(10), v=(k*10+third)/1000, show=n=>(n/100).toFixed(2), right=show(third>=5?k+1:k);
+    const wrong=uniq(right,[show(third>=5?k:k+1),show(k-1),(k/100).toFixed(1),show(k+2)],3);
+    return {index:'q:5h.round['+v.toFixed(3)+']', lines:[[v.toFixed(3),'a decimal']], ask:'What is it rounded to two places?', right, opts:shuffle([right,...wrong]), lead:'It is '+right+'. ',
+      why:'It lies from '+show(k)+' up to '+show(k+1)+'. The difference up from '+show(k)+' is '+third+' thousandths, and the difference up to '+show(k+1)+' is '+(10-third)+' thousandths'+(third===5?'. The two are the same, and the line sends it up: that choice is a convention.':', so the nearer one is '+right+'.')}; }},
+  {id:'5h.percent',step:'5h',mode:'word',label:'percent',open:()=>measured('5h'),make(){
+    const n=pick([5,10,20,25,40,50,75]), unit=pick(UNITS), v=rnd(3);
+    if(v===0){ const w=20*(1+rnd(12)), val=n*w/100, right=val+' '+unit, wrong=uniq(right,[n+w,w-n,val*2,val/2,val+n,w*n/10,val+10].filter(x=>x>0&&Number.isInteger(x)).map(x=>x+' '+unit),3); if(wrong.length<3) return null;
+      return {index:'q:5h.percent[of;'+n+';'+w+';'+unit+']', a3:['5h.percent[of]',DASH,'units.'+unit], story:'A load of '+w+' '+unit+'. '+n+'% of the load is set aside.', lines:[], ask:'How much is set aside?', right, opts:shuffle([right,...wrong]), lead:'It is '+right+'. ',
+        why:n+'% names '+n+'/100, and '+n+'% of '+w+' is ('+n+'/100) · '+w+' = '+val+'.'}; }
+    const up=v===1, f=fr(up?100+n:100-n,100), right=fshow(f), wrong=uniq(right,[fshow(fr(n,100)),fshow(fr(up?100-n:100+n,100)),fshow(fr(100,up?100+n:100-n)),String(n),fshow(fr(n+1,100))],3);
+    return {index:'q:5h.percent['+(up?'rise':'fall')+';'+n+']', a3:['5h.percent['+(up?'rise':'fall')+']',DASH,'units.'+unit], story:'A count of '+unit+' '+(up?'rises':'falls')+' by '+n+'%.', lines:[], ask:'A percent change is multiplying by one fraction. Which fraction?', right, opts:shuffle([right,...wrong]), lead:'It is '+right+'. ',
+      why:'A '+(up?'rise':'fall')+' of '+n+'% multiplies by 1 '+(up?'+':'−')+' '+n+'/100 = '+fraw(up?100+n:100-n,100)+(fraw(up?100+n:100-n,100)===right?'':' = '+right)+'.'}; }});
+
+/* ---------- 5k Working With the Gap ---------- */
+const GAPS=[['n + n is even',n=>(n+n)%2===0],['n · (n + 1) is even',n=>(n*(n+1))%2===0],['n + (n + 1) is odd',n=>(2*n+1)%2===1],['n · n + n is even',n=>(n*n+n)%2===0],['2 · n + 1 is odd',n=>(2*n+1)%2===1],['n · 2 is even',n=>true],
+  ['n · n is even',n=>(n*n)%2===0],['n + 1 is odd',n=>(n+1)%2===1],['n · (n + 2) is even',n=>(n*(n+2))%2===0],['3 · n is odd',n=>(3*n)%2===1],['n + n + n is even',n=>(3*n)%2===0],['n · n + 1 is odd',n=>(n*n+1)%2===1],['n + 2 is even',n=>(n+2)%2===0],['n · n is more than n',n=>n*n>n]];
+QP.push({id:'5k.gap',step:'5k',label:'the letter stays empty',open:()=>measured('5k'),make(){
+    const all=n=>{ for(let i=0;i<=30;i++) if(!n(i)) return i; return -1; }, T=GAPS.filter(g=>all(g[1])<0), F=GAPS.filter(g=>all(g[1])>=0), R=pick(T), wrong=take(F,3);
+    return {index:'q:5k.gap['+R[0]+';'+wrong.map(w=>w[0]).join(';')+']', lines:[], ask:'n is any counting number, and the gap stays empty. Which line holds for every filling at once?', right:R[0], opts:shuffle([R,...wrong]).map(g=>g[0]), lead:'It is “'+R[0]+'”. ',
+      why:'The empty gap keeps the guess general: no n is tried, and the line holds down the whole series. Each other line fails at some filling: '+wrong.map(w=>'“'+w[0]+'” at n = '+all(w[1])).join('; ')+'.'}; }},
+  {id:'5k.scale',step:'5k',mode:'word',label:'worked without being filled',open:()=>measured('5k'),make(){
+    const thing=pick(['orange','crate','sack','ticket','tulip bulb','ferry crossing']), k=2+rnd(4), words=['','','doubled','tripled','multiplied by 4','multiplied by 5'][k];
+    const right='it is '+words+', whatever n and c are', wrong=['it grows by '+k+', whatever n and c are','it is multiplied by '+k+' · n','nothing can be said until n and c are filled in'];
+    return {index:'q:5k.scale['+thing+';'+k+']', a3:['5k.scale['+k+']',DASH,DASH], story:'One '+thing+' costs c, so n of them cost n · c. Then the price of one is '+words+'.', lines:[], ask:'What happens to the cost of n of them?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'n · ('+k+' · c) = '+k+' · (n · c), by regroup and turn-about for times. Nothing was filled in, and the answer holds for every filling at once.'}; }});
+
 const MAKE={proof:proofQ, work:workQ, word:wordQ, read:readQ};
 
 const toggled=()=>[...LINKS,...QP,...CARDP,...OPS,...MOVES];
