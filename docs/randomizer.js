@@ -1932,6 +1932,123 @@ QP.push({id:'8h.reach',step:'8h',mode:'word',label:'a middle and a reach',open:(
     return {index:'q:8g.story[most;'+w+';'+b+';'+cap+']', a3:['8g.story[most]',DASH,DASH], story:'A '+box+' carries at most '+cap+' kilos. A box of '+b+' kilos is on it already, and each '+thing+' weighs '+w+' kilos.', lines:[[b+' + '+w+'x ≤ '+cap,'x counts the '+thing+'s']], ask:'What is the greatest number of '+thing+'s it can take?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'Add −'+b+' to both sides: '+w+'x ≤ '+(cap-b)+'. Multiply by 1/'+w+', a positive, so the order is kept: x ≤ '+fshow(fr(cap-b,w))+'. The greatest number that fits is '+most+'.'}; }});
 
+/* ===== Laundry 5, rung 9 (floor 2 pools, stage I): 9a to 9h, functions (9a.which and 9e.graph were there already) ===== */
+Object.assign(STEPS,{'9b':['r09b','Composing, and Brackets Don’t Matter'],'9c':['r09c','One-to-One, Onto, Bijection'],'9d':['r09d','Running Backwards'],'9f':['r09f','Composing and Inverting by Hand'],'9g':['r09g','Polynomials and Rational Functions'],'9h':['r09h','Steps That Add, Steps That Multiply']});
+/* a listed function from A to B, as its pairs */
+const fn9=(A,B,kind)=>{ for(let t=0;t<200;t++){ const f={}; if(kind==='bij'){ const s=shuffle(B.slice()); A.forEach((a,i)=>f[a]=s[i]); } else A.forEach(a=>f[a]=pick(B));
+    const one=new Set(A.map(a=>f[a])).size===A.length, onto=B.every(b=>A.some(a=>f[a]===b)); if(!kind||kind==='bij'||(kind==='one'&&one&&!onto)||(kind==='onto'&&onto&&!one)||(kind==='none'&&!one&&!onto)) return {f,one,onto}; } return null; };
+const prs9=(A,f)=>'{'+A.map(a=>'('+a+', '+f[a]+')').join(', ')+'}', set9=s=>'{'+s.join(', ')+'}';
+const lin9=(m,b)=>(m===1?'x':m===-1?'−x':sg(m)+'x')+(b===0?'':pm(b));
+
+/* ---------- 9a A Function Is Its Pairs ---------- */
+QP.push({id:'9a.range',step:'9a',mode:'work',label:'inputs and outputs',open:()=>measured('9a'),make(){
+    const A=[1,2,3,4].slice(0,3+rnd(2)), B=[5,6,7,8,9].slice(0,3+rnd(3)), F=fn9(A,B), ran=[...new Set(A.map(a=>F.f[a]))].sort((x,y)=>x-y), dom=Math.random()<0.3;
+    const right=set9(dom?A:ran), wrong=uniq(right,[set9(B),set9(dom?ran:A),set9(B.filter(b=>!ran.includes(b))),set9(ran.slice(1)),set9(A.concat(B))],3); if(wrong.length<3) return null;
+    return {index:'q:9a.range['+(dom?'d':'r')+';'+prs9(A,F.f)+';'+B.length+']', lines:[['f = '+prs9(A,F.f),'f : A → B, with B = '+set9(B)]], ask:dom?'Which set is dom f?':'Which set is ran f?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:dom?'The pairs fix the inputs: dom f is the set of left entries, and that is A.':'ran f = {f(x) : x ∈ A}, the right entries that are used. It is a part of B, and need not be all of it.'}; }});
+
+/* ---------- 9b Composing ---------- */
+QP.push({id:'9b.compose',step:'9b',mode:'work',label:'one function after another',open:()=>measured('9b'),make(){
+    for(let t=0;t<40;t++){ const A=[1,2,3], f=fn9(A,A).f, g=fn9(A,A).f, x=pick(A), gf=Math.random()<0.6, v=gf?g[f[x]]:f[g[x]], right=String(v), other=String(gf?f[g[x]]:g[f[x]]);
+      const wrong=uniq(right,[other,String(f[x]),String(g[x]),String(x),...A.map(String)],3); if(wrong.length<2||other===right) continue;
+      return {index:'q:9b.compose['+prs9(A,f)+';'+prs9(A,g)+';'+x+(gf?'gf':'fg')+']', lines:[['f = '+prs9(A,f),'from {1, 2, 3} to itself'],['g = '+prs9(A,g),null]], ask:'What is ('+(gf?'g ∘ f':'f ∘ g')+')('+x+')?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:gf?'(g ∘ f)(x) = g(f(x)): the inside function goes first. f('+x+') = '+f[x]+', and g('+f[x]+') = '+v+'.':'(f ∘ g)(x) = f(g(x)): the inside function goes first. g('+x+') = '+g[x]+', and f('+g[x]+') = '+v+'.'}; }
+    return null; }},
+  {id:'9b.order',step:'9b',mode:'work',label:'composing order matters',open:()=>measured('9b'),make(){
+    const a=pick([-4,-3,-2,-1,1,2,3,4,5]), k=pick([-3,-2,2,3,4]), gf=Math.random()<0.5, right=gf?lin9(k,k*a):lin9(k,a), wrong=uniq(right,[gf?lin9(k,a):lin9(k,k*a),lin9(k+1,a),lin9(k,k+a),lin9(1,k*a)],3); if(wrong.length<3) return null;
+    return {index:'q:9b.order['+a+';'+k+(gf?'gf':'fg')+']', lines:[['f(x) = '+lin9(1,a),'on ℝ'],['g(x) = '+lin9(k,0),'on ℝ']], ask:'What is ('+(gf?'g ∘ f':'f ∘ g')+')(x)?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:gf?'g(f(x)) = '+sg(k)+'(x'+pm(a)+') = '+right+'. The other order gives '+lin9(k,a)+': composing order matters.':'f(g(x)) = '+lin9(k,0)+pm(a)+'. The other order gives '+lin9(k,k*a)+': composing order matters.'}; }});
+
+/* ---------- 9c One-to-One, Onto, Bijection ---------- */
+const C9=[
+  ['g ∘ f is one-to-one. What follows?','f is one-to-one',['g is one-to-one','both are one-to-one','f is onto'],'One-to-one-inside: if two inputs had one output under f, they would have one output under g ∘ f.'],
+  ['g ∘ f is onto C. What follows?','g is onto C',['f is onto its codomain','both are onto','g is one-to-one'],'Onto-outside: every member of C is an output of g ∘ f, and so an output of g.'],
+  ['g is one-to-one and g ∘ f = g ∘ h. What follows?','f = h: a one-to-one function cancels on the outside',['nothing','f and h are one-to-one','g is the identity'],'g(f(x)) = g(h(x)) at every x, and g is one-to-one, so f(x) = h(x) at every x.'],
+  ['f is onto B and g ∘ f = h ∘ f. What follows?','g = h: an onto function cancels on the inside',['nothing','g and h are onto','f is the identity'],'Every member of B is f(x) for some x, and g and h agree there.'],
+  ['What is a matching between X and Y, in this rung’s words?','a bijection from X to Y',['a one-to-one function from X to Y','a function onto Y','any set of pairs from X × Y'],'Matchings-are-bijections: one-to-one and onto.']];
+QP.push({id:'9c.kind',step:'9c',label:'one-to-one, onto, or both',open:()=>measured('9c'),make(){
+    const k=pick(['bij','one','onto','none']), A=[1,2,3,4].slice(0,k==='onto'?4:3), B=[5,6,7,8].slice(0,k==='one'?4:k==='onto'?3:3), F=fn9(A,B,k); if(!F) return null;
+    const opts=['one-to-one, and not onto B','onto B, and not one-to-one','a bijection','neither one-to-one nor onto B'], right=opts[F.one&&F.onto?2:F.one?0:F.onto?1:3];
+    const twice=A.find(a=>A.some(b=>b!==a&&F.f[a]===F.f[b])), miss=B.find(b=>!A.some(a=>F.f[a]===b));
+    return {index:'q:9c.kind['+prs9(A,F.f)+';'+B.length+']', lines:[['f = '+prs9(A,F.f),'f : A → B, with B = '+set9(B)]], ask:'Which is f?', right, opts, lead:'',
+      why:(F.one?'No output is used twice, so f is one-to-one.':'The output '+F.f[twice]+' is used twice, so f is not one-to-one.')+' '+(F.onto?'Every member of B is an output, so f is onto B.':miss+' is no output, so f is not onto B.')}; }},
+  {id:'9c.compose',step:'9c',label:'what composing keeps',open:()=>measured('9c'),make(){ return writtenQ('9c.compose',C9); }});
+
+/* ---------- 9d Running Backwards ---------- */
+QP.push({id:'9d.back',step:'9d',mode:'work',label:'swapped pairs',open:()=>measured('9d'),make(){
+    const k=pick(['bij','bij','one','onto']), A=[1,2,3,4].slice(0,k==='onto'?4:3), B=[5,6,7,8].slice(0,k==='one'?4:3), F=fn9(A,B,k); if(!F) return null;
+    if(k==='bij'){ const y=pick(B), x=A.find(a=>F.f[a]===y), right=String(x), wrong=uniq(right,A.map(String).concat([String(y)]),3);
+      return {index:'q:9d.back[v;'+prs9(A,F.f)+';'+y+']', lines:[['f = '+prs9(A,F.f),'a bijection from '+set9(A)+' to '+set9(B)]], ask:'What is f⁻¹('+y+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'Swapped-pairs: (x, y) ∈ f exactly when (y, x) ∈ f⁻¹. ('+x+', '+y+') ∈ f, so f⁻¹('+y+') = '+x+'.'}; }
+    const opts=['yes: f is a bijection','no: f is not one-to-one, so some input of f⁻¹ would have two outputs','no: f is not onto B, so some member of B would have no output','no: f⁻¹ is not a set of pairs'], right=opts[k==='one'?2:1];
+    return {index:'q:9d.back[is;'+prs9(A,F.f)+']', lines:[['f = '+prs9(A,F.f),'f : A → B, with B = '+set9(B)]], ask:'Is f⁻¹, the swapped pairs, a function from B to A?', right, opts, lead:'',
+      why:'Swapped-pairs-function: f⁻¹ : B → A exactly when f is one-to-one and onto B. The swapped pairs are always a set of pairs; whether they make a function is the question.'}; }},
+  {id:'9d.undo',step:'9d',mode:'work',label:'inverting by hand',open:()=>measured('9d'),make(){
+    const m=pick([-4,-3,-2,2,3,4,5]), b=pick([-6,-5,-4,-3,-2,-1,1,2,3,4,5,6]), inv=(mm,bb)=>'(x'+pm(bb)+')/'+(mm<0?'('+sg(mm)+')':mm), right=inv(m,-b), wrong=uniq(right,[inv(m,b),lin9(m,-b),'x/'+(m<0?'('+sg(m)+')':m)+pm(-b),lin9(-m,-b)],3);
+    return {index:'q:9d.undo['+m+';'+b+']', lines:[['f(x) = '+lin9(m,b),'a bijection from ℝ to ℝ']], ask:'What is f⁻¹(x)?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'f multiplies by '+sg(m)+' and then adds '+sg(b)+'. Running backwards undoes the last step first: add '+sg(-b)+', then divide by '+sg(m)+'. That is socks-and-shoes: (g ∘ f)⁻¹ = f⁻¹ ∘ g⁻¹.'}; }});
+
+/* ---------- 9e Reading and Drawing Graphs ---------- */
+const EO9=[['x²',0],['x⁴',0],['x⁶',0],['x² + 1',0],['|x|',0],['x⁴ − x²',0],['x³',1],['x⁵',1],['x',1],['x³ + x',1],['x⁵ − x',1],['x² + x',2],['x + 1',2],['x³ + 1',2],['x² − x',2]];
+QP.push({id:'9e.line',step:'9e',mode:'work',label:'two points, one line',open:()=>measured('9e'),make(){
+    for(let t=0;t<40;t++){ const x1=rnd(9)-4, x2=x1+1+rnd(4), y1=rnd(13)-6, y2=rnd(13)-6, m=fr(y2-y1,x2-x1), st=fsub(fint(y1),fmul(m,fint(x1))), step=Math.random()<0.6;
+      const right=fshow(step?m:st), wrong=uniq(right,[fshow(step?fr(x2-x1,(y2-y1)||1):fint(y1)),fshow(fneg(step?m:st)),fshow(step?fr(y2+y1,x2-x1):fadd(fint(y1),fmul(m,fint(x1)))),fshow(step?fint(y2-y1):fint(y2)),fshow(fadd(step?m:st,fint(1)))],3); if(wrong.length<3) continue;
+      return {index:'q:9e.line['+x1+','+y1+';'+x2+','+y2+';'+(step?'m':'b')+']', lines:[['('+sg(x1)+', '+sg(y1)+') and ('+sg(x2)+', '+sg(y2)+')','two pairs of one linear function f(x) = mx + b']], ask:step?'What is the step m?':'What is the start b?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'Two-points-one-line: m = (y₂ − y₁)/(x₂ − x₁) = '+sg(y2-y1)+'/'+(x2-x1)+' = '+fshow(m)+', and the start is y₁ − mx₁ = '+fshow(st)+'.'}; }
+    return null; }},
+  {id:'9e.even',step:'9e',label:'even and odd functions',open:()=>measured('9e'),make(){
+    const k=rnd(3), R=pick(EO9.filter(e=>e[1]===k)), wrong=take(EO9.filter(e=>e[1]!==k),3), ask=['Which is an even function: f(−x) = f(x) for every x?','Which is an odd function: f(−x) = −f(x) for every x?','Which is neither an even nor an odd function?'][k];
+    return {index:'q:9e.even['+k+';'+R[0]+';'+wrong.map(w=>w[0]).join(';')+']', lines:[], ask, right:'x ↦ '+R[0], opts:shuffle([R,...wrong]).map(e=>'x ↦ '+e[0]), lead:'It is x ↦ '+R[0]+'. ',
+      why:'x ↦ xⁿ is an even function when n is even and an odd function when n is odd. A sum of even powers is even, a sum of odd powers is odd, and a mix of the two is neither: try x = 1 and x = −1.'}; }});
+
+/* ---------- 9f Composing and Inverting by Hand ---------- */
+QP.push({id:'9f.domain',step:'9f',mode:'work',label:'the natural domain',open:()=>measured('9f'),make(){
+    const a=rnd(13)-6, k=rnd(4), xa='x'+(a===0?'':pm(-a)), ax=sg(a)+' − x';
+    const [ex,right,why]=k===0?['√('+xa+')','x ≥ '+sg(a),'A root takes only what is not negative: '+xa+' ≥ 0.']:k===1?['1/('+xa+')','x ≠ '+sg(a),'A reciprocal takes everything but 0: '+xa+' ≠ 0.']
+      :k===2?['1/√('+xa+')','x > '+sg(a),'The root needs '+xa+' ≥ 0, and the reciprocal needs the root not to be 0. Together: '+xa+' > 0.']:['√('+ax+')','x ≤ '+sg(a),'A root takes only what is not negative: '+ax+' ≥ 0, so x ≤ '+sg(a)+'.'];
+    const all=['x ≥ '+sg(a),'x ≠ '+sg(a),'x > '+sg(a),'x ≤ '+sg(a),'every real x'];
+    return {index:'q:9f.domain['+ex+']', lines:[['x ↦ '+ex,'a formula with no domain stated']], ask:'What is its natural domain?', right, opts:shuffle([right,...take(all.filter(o=>o!==right),3)]), lead:'',
+      why:'The natural domain of x ↦ g(f(x)) is {x ∈ dom f : f(x) ∈ dom g}: the inside must give something the outside can take. '+why}; }});
+
+/* ---------- 9g Polynomials and Rational Functions ---------- */
+const poly9=cs=>{ const n=cs.length-1; return cs.map((c,i)=>{ const d=n-i; if(c===0) return ''; const a=Math.abs(c), body=(d===0?String(a):(a===1?'':a)+'x'+(d===1?'':['','','²','³','⁴'][d])); return (i===0?(c<0?'−':''):(c<0?' − ':' + '))+body; }).join(''); };
+const ev9=(cs,x)=>cs.reduce((s,c)=>s*x+c,0);
+QP.push({id:'9g.remainder',step:'9g',mode:'work',label:'dividing by x − r',open:()=>measured('9g'),make(){
+    const cs=[pick([1,1,2,-1]),rnd(9)-4,rnd(9)-4,rnd(11)-5], r=pick([-2,-1,1,2,3]), v=ev9(cs,r), right=sg(v), wrong=uniq(right,[ev9(cs,-r),cs[3],v+1,ev9(cs,r+1),-v,v-r].map(sg),3); if(wrong.length<3) return null;
+    return {index:'q:9g.remainder['+poly9(cs)+';'+r+']', lines:[['p(x) = '+poly9(cs),'a polynomial'],['d(x) = x'+pm(-r),'the divisor']], ask:'What is the remainder when p is divided by d?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'p(x) = (x'+pm(-r)+')q(x) + r, with the remainder a constant. Put x = '+sg(r)+': the first part is 0, so the remainder is p('+sg(r)+') = '+right+'.'+(v===0?' So '+sg(r)+' is a zero of p, and x'+pm(-r)+' is a factor.':'')}; }},
+  {id:'9g.zeros',step:'9g',mode:'work',label:'zeros and factors',open:()=>measured('9g'),make(){
+    if(Math.random()<0.5){ const zs=take([-4,-3,-2,-1,1,2,3,4,5],3).sort((a,b)=>a-b), fac=z=>'(x'+pm(-z)+')', right=set9(zs.map(sg)), wrong=uniq(right,[set9(zs.map(z=>-z).sort((a,b)=>a-b).map(sg)),set9(zs.slice(0,2).map(sg)),set9([zs[0],zs[1],-zs[2]].sort((a,b)=>a-b).map(sg)),set9(zs.map(z=>z+1).map(sg))],3); if(wrong.length<3) return null;
+      return {index:'q:9g.zeros[f;'+zs.join(',')+']', lines:[['p(x) = '+zs.map(fac).join(''),'a polynomial of degree 3']], ask:'Which is its set of zeros?', right, opts:shuffle([right,...wrong]), lead:'', why:'Factor technique: r is a zero of p exactly when x − r is a factor. A product is 0 exactly when a factor is, and a polynomial of degree 3 has at most 3 zeros.'}; }
+    const un=pick([2,3,4,6]), u0=pick([1,2,3,5,6]), dv=n=>[1,2,3,4,5,6].filter(d=>n%d===0), ok=f=>dv(u0).includes(Math.abs(f.p))&&dv(un).includes(f.q), C=[]; for(let p=1;p<=6;p++) for(let q=1;q<=6;q++){ const f=fr(pick([1,-1])*p,q); if(!C.some(c=>fsame(c,f))) C.push(f); }
+    const bad=shuffle(C.filter(f=>!ok(f))), good=shuffle(C.filter(ok)); if(!bad.length||good.length<3) return null; const right=fshow(bad[0]);
+    return {index:'q:9g.zeros[q;'+un+';'+u0+';'+right+']', lines:[['p(x) = '+un+'x³ + ⋯ + '+u0,'integer coefficients; only the first and the last are shown']], ask:'Which fraction cannot be a zero of p?', right, opts:shuffle([right,...good.slice(0,3).map(fshow)]), lead:'',
+      why:'Fraction-zeros: if p/q in lowest terms is a zero, then p divides the last coefficient, '+u0+', and q divides the leading one, '+un+'. '+right+' fails that test. The others pass it, which makes them candidates only.'}; }});
+
+/* ---------- 9h Steps That Add, Steps That Multiply ---------- */
+QP.push({id:'9h.steps',step:'9h',mode:'work',label:'steps that add, steps that multiply',open:()=>measured('9h'),make(){
+    const k=rnd(3), f0=1+rnd(6), n=3+rnd(4);
+    if(k===0){ const d=pick([-3,-2,2,3,4,5]), v=f0+n*d, right=sg(v), wrong=uniq(right,[f0+(n-1)*d,f0+(n+1)*d,f0*n+d,n*d,f0+n+d].map(sg),3);
+      return {index:'q:9h.steps[+;'+f0+';'+d+';'+n+']', lines:[['f(0) = '+f0,'the start'],['f(n + 1) = f(n)'+pm(d),'for every n']], ask:'What is f('+n+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'Steps-that-add: f(n) = f(0) + nd = '+f0+' + '+n+' · '+(d<0?'('+sg(d)+')':d)+' = '+right+'.'}; }
+    if(k===1){ const b=pick([2,3,2,10]), nn=Math.min(n,b===10?4:5), v=f0*b**nn, right=String(v), wrong=uniq(right,[f0*b**(nn-1),f0*b**(nn+1),f0+nn*b,f0*b*nn,(f0*b)**2].map(String),3);
+      return {index:'q:9h.steps[×;'+f0+';'+b+';'+nn+']', lines:[['f(0) = '+f0,'the start'],['f(n + 1) = '+b+' · f(n)','for every n']], ask:'What is f('+nn+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'Steps-that-multiply: f(n) = f(0)bⁿ = '+f0+' · '+Array(nn).fill(b).join(' · ')+' = '+right+'.'}; }
+    const b=pick([2,3,4,5]), nn=3+rnd(3), v=(b**nn-1)/(b-1), ex=Array.from({length:nn},(_,i)=>i===0?'1':i===1?String(b):b+['','','²','³','⁴','⁵'][i]).join(' + '), right=String(v), wrong=uniq(right,[b**nn-1,b**nn,v+b**nn,(b**(nn-1)-1)/(b-1),v-1].map(String),3);
+    return {index:'q:9h.steps[Σ;'+b+';'+nn+']', lines:[[ex,'a sum of '+nn+' terms']], ask:'What does the sum come to?', right, opts:shuffle([right,...wrong]), lead:'', why:'Ratio-sum: 1 + b + ⋯ + bⁿ⁻¹ = (bⁿ − 1)/(b − 1) = ('+(b**nn)+' − 1)/'+(b-1)+' = '+right+'.'}; }},
+  {id:'9h.story',step:'9h',mode:'word',label:'adding or multiplying',open:()=>measured('9h'),make(){
+    const add=Math.random()<0.5, f0=pick([20,40,50,100,200]), n=3+rnd(3);
+    if(add){ const d=pick([5,10,15,20,25]), [story,unit]=pick([['A tank holds '+f0+' litres, and '+d+' litres are poured in every hour.','litres'],['A stack has '+f0+' crates, and '+d+' more are added every day.','crates'],['A jar holds '+f0+' coins, and '+d+' coins go in every week.','coins']]);
+      const right=String(f0+n*d), wrong=uniq(right,[f0*d*n,f0+(n-1)*d,f0+d,(f0+d)*n,f0+n*d+d].map(String),3);
+      return {index:'q:9h.story[+;'+f0+';'+d+';'+n+';'+unit+']', a3:['9h.story[+]',DASH,DASH], story, lines:[], ask:'How many '+unit+' after '+n+' such steps?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each step adds the same amount, so these are steps that add: f(n) = f(0) + nd = '+f0+' + '+n+' · '+d+' = '+right+'.'}; }
+    const b=pick([2,3]), [story,unit]=pick([['A culture holds '+f0+' cells, and the count '+(b===2?'doubles':'triples')+' every hour.','cells'],['A rumour is known to '+f0+' people, and the count '+(b===2?'doubles':'triples')+' every day.','people'],['A pond has '+f0+' lily pads, and the count '+(b===2?'doubles':'triples')+' every week.','lily pads']]);
+    const right=String(f0*b**n), wrong=uniq(right,[f0+n*b,f0*b*n,f0*b**(n-1),f0*b**(n+1),f0*n].map(String),3);
+    return {index:'q:9h.story[×;'+f0+';'+b+';'+n+';'+unit+']', a3:['9h.story[×]',DASH,DASH], story, lines:[], ask:'How many '+unit+' after '+n+' such steps?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each step multiplies by the same number, so these are steps that multiply: f(n) = f(0)bⁿ = '+f0+' · '+Array(n).fill(b).join(' · ')+' = '+right+'.'}; }});
+
+/* ---------- rung 9, Check Proofs ---------- */
+QP.push({id:'9d.there',step:'9d',mode:'proof',label:'there and back',open:()=>measured('9d'),make(){
+    const m=pick([-4,-3,-2,2,3,4,5]), b=pick([-6,-5,-4,-3,-2,-1,1,2,3,4,5,6]), inv=(mm,bb)=>'(x'+pm(bb)+')/'+(mm<0?'('+sg(mm)+')':mm);
+    const H=[[inv(m,-b),x=>(x-b)/m],[inv(m,b),x=>(x+b)/m],['x/'+(m<0?'('+sg(m)+')':m)+pm(-b),x=>x/m-b],[inv(m,-b),x=>(x-b)/m],[lin9(m,-b),x=>m*x-b]], [hs,h]=pick(H), ok=[0,1,2,5].every(x=>Math.abs(h(m*x+b)-x)<1e-9), opts=['it holds for every x: h runs f backwards','it does not hold: h is not f⁻¹'];
+    return {index:'q:9d.there['+m+';'+b+';'+hs+']', stack:true, lines:[['f(x) = '+lin9(m,b),'given, on ℝ'],['h(x) = '+hs,'offered as f⁻¹'],['h(f(x)) = x','there-and-back, on lines 1 and 2']], ask:'Does line 3 hold?', right:opts[ok?0:1], opts, lead:'',
+      why:'There-and-back: f⁻¹(f(x)) = x for every x. Try x = 1: f(1) = '+sg(m+b)+', and h('+sg(m+b)+') = '+fshow(fr(Math.round(h(m+b)*m*m),m*m))+'. '+(ok?'Running backwards undoes the last step first: add '+sg(-b)+', then divide by '+sg(m)+'.':'The inverse undoes the last step first: add '+sg(-b)+', then divide by '+sg(m)+', which is '+inv(m,-b)+'.')}; }});
+
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 
