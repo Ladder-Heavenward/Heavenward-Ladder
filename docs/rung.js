@@ -241,6 +241,7 @@ function progress(){
   }
   placeHere();
   if(window.__barStats) window.__barStats();
+  if(window.LadderSky&&LadderSky.histLinks) LadderSky.histLinks();
 }
 /* certification (Andrew, 2026-10-29): one kind, replacing quiz, test and exam. A gold button shows once the
    required questions (x.1 to x.3) are ticked; sat under a proctor it becomes a green check, sat on your own a gold star.
@@ -1741,7 +1742,7 @@ function index(){ const sec=document.getElementById('skysec'), top=document.getE
   if(window.LADDER_DESK){ top.hidden=true; top.style.display='none'; } else { top.querySelector('.skybtn').onclick=supply; top.hidden=true; } sec.hidden=true; /* 0.3.57: no blue sky button on the desk */
   if(!window.LADMAP){ const s=document.createElement('script'); s.src='ladmap.js'; s.onload=()=>index(); document.head.appendChild(s); return; }
   if(!endless()&&!window.LADDER_DESK) return;
-  load().then(L=>{ /* 0.3.57: the desk shows every Endless step; the app shows what the blue sky has supplied */ const n=window.LADDER_DESK?L.length:Math.min(got().n,L.length), ol=sec.querySelector('ol');
+  load().then(L=>{ histRow(L); /* 0.3.57: the desk shows every Endless step; the app shows what the blue sky has supplied */ const n=window.LADDER_DESK?L.length:Math.min(got().n,L.length), ol=sec.querySelector('ol');
     const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
     let fresh=null; try{ fresh=sessionStorage.getItem('sky:new'); sessionStorage.removeItem('sky:new'); }catch(e){} window.__skyFresh=fresh;
     if(!n){ sec.hidden=true; return; }
@@ -1762,8 +1763,20 @@ function open(){ const M=window.LADMAP; if(!M||!M.length) return false; const F=
   let c=null; try{ c=JSON.parse(LS.getItem('cert:floor'+F[0]+'concl')||'null'); }catch(e){}
   if(c&&c.via!=='measure') return true;
   return F[1].length>0&&F[1].every(([,core])=>core.every(([s])=>P[s]&&P[s].v)); }
-window.LadderSky={supply,load,open,endless,count:()=>got().n};
-const go=()=>{ index(); };
+/* the History step (Andrew 2026-11-10 02:00-02:12): the fixed top of the ladder, one after the last infinity step; every new
+   infinity step goes between the last one and it; hidden until the last infinity step is passed; no questions on its pages.
+   Its row is #histsec in the index; its pages are hist0 (mathematics as a form) and hist1-hist6 (one per era). */
+function histOpen(L){ if(!L||!L.length) return false; if(got().n<L.length) return false; let P={}; try{ P=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
+  const last=L[L.length-1].page; return !!(P[last]&&P[last].v); }
+function histRow(L){ const hs=document.getElementById('histsec'); if(!hs) return; hs.hidden=!(window.LADDER_DESK||histOpen(L)); }
+function histLinks(){ const pg=ladderPage(); if(!/^(sky\d+|hist0)$/.test(pg)) return; load().then(L=>{ if(!L.length) return; const last=L[L.length-1];
+  const lab=(a,t)=>{ const l=a.classList.contains('pnb')?a.querySelector('.pl'):null; if(l) l.textContent=t; else a.textContent=t; };
+  if(pg===last.page){ if(!histOpen(L)) return;
+    document.querySelectorAll('.pn a.pnb.next, header.top .home a, nav.nextrung a').forEach(a=>{ if(/^index\.html/.test(a.getAttribute('href')||'')&&(a.classList.contains('next')||/→/.test(a.textContent))){ a.setAttribute('href','hist0.html'); lab(a,a.classList.contains('pnb')?'the top · the history of mathematics':'next: the top · the history of mathematics →'); } }); }
+  else if(pg==='hist0'){ const t=String(last.title||''), tt='∞'+last.n+' · '+t.toLowerCase();
+    document.querySelectorAll('.pn a.pnb.prev, header.top .home a, nav.nextrung a').forEach(a=>{ if(/^sky\d+\.html/.test(a.getAttribute('href')||'')){ a.setAttribute('href',last.page+'.html'); lab(a,a.classList.contains('pnb')?tt:'← '+tt); } }); } }); }
+window.LadderSky={supply,load,open,endless,count:()=>got().n,histOpen,histLinks};
+const go=()=>{ index(); histLinks(); };
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
 })();
 
