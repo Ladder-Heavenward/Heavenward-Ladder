@@ -958,7 +958,7 @@ const KIND={theory:'Theory',proof:'Proof',support:'Support',technique:'Technique
 function tagInfo(){
   const t=document.querySelector('header.top .tags .tag');
   /* 2026-11-10 (Andrew 11:01): floor and rung pages carry no tag line, so their paragraphs had no addresses and no edit menu; the file name labels them (floor1 -> F1, r00 -> 0) */
-  if(!t){ const m=/(?:^|\/)(floor(\d+)|r(\d\d))\.html$/.exec(location.pathname); if(!m) return null; return {label:m[2]?'F'+m[2]:String(Number(m[3])),kind:''}; }
+  if(!t){ const pg=window.LADDER_PAGE||(location.pathname.split('/').pop()||'').replace(/\.html?$/,''); const m=/^(floor(\d+)|r(\d\d))$/.exec(pg); if(!m) return null; return {label:m[2]?'F'+m[2]:String(Number(m[3])),kind:''}; }
   const txt=t.textContent.trim(), i=txt.indexOf(' · ');
   const label=(i<0?txt:txt.slice(0,i)).replace(/^Rung\s+/,'').replace(/^Floor\s+/,'F');
   let kind=(i<0?'':txt.slice(i+3)).trim().replace(/ to .*$/,'');
@@ -992,7 +992,7 @@ function toast(msg){ let t=document.getElementById('patoast'); if(!t){ t=documen
   t.textContent=msg; t.classList.add('on'); clearTimeout(toast.h); toast.h=setTimeout(()=>t.classList.remove('on'),Math.max(2200,msg.length*70)); }
 const copy=s=>{ try{ navigator.clipboard.writeText(s).then(()=>{},()=>{}); }catch(e){} };
 function addresses(info){
-  const ps=[...document.querySelectorAll('header.top > p[data-pid], section.class p[data-pid]')]; if(!ps.length) return;
+  const ps=[...document.querySelectorAll('header.top > p[data-pid], section.class p[data-pid]')].filter(p=>!(p.hasAttribute('data-collapsed')||!p.textContent.replace(/\s+/g,''))); if(!ps.length) return;
   const per={};
   ps.forEach((p,i)=>{ const top=!!p.closest('header.top'), st=p.closest('section.step'), k=top?info.label+'.top':(st?st.dataset.step:info.label); per[k]=(per[k]||0)+1; const ad=top?k+'.'+per[k]:k+'.0.'+per[k]; p.dataset.addr=ad; p.id=p.id||'p-'+p.dataset.pid;
     const b=document.createElement('button'); b.type='button'; b.className='pa'; b.textContent=ad; b.setAttribute('aria-label','paragraph '+ad+': prompt, report or leave a note');
@@ -1098,28 +1098,44 @@ function edApply(p,html){ const b=p.querySelector('button.pa'); const tmp=docume
 /* 2026-11-09 (Andrew 16:47 "it always says the updates failed"): the write lands but set() often does not answer within the
    10 s, so every save said "not saved yet". Now a slow set() is followed by reading the document back: if the stored time stamp is
    the one just written, the save is confirmed. Only when neither answers is it "not saved yet". */
-async function edPut(path,rec){ const ref=ED.db.doc(path); let done=false; const w=ref.set(rec); w.then(()=>{ done=true; },()=>{});
+async function edPut(path,rec){ const ref=ED.db.doc(path); let done=false; let fail=null; const w=ref.set(rec); w.then(()=>{ done=true; },e=>{ fail=e||new Error('refused'); });
   /* 2026-11-09 (Andrew 16:49): the box stays open only until the edit is seen in the queue. From 1.2 s on, the document is read
      back every 1.5 s while set() is still silent; the first answer that matches the time stamp just written closes the box. */
   const seen=async()=>{ try{ const s=await Promise.race([ref.get(),new Promise((_,rj)=>setTimeout(()=>rj(0),4000))]); const v=s&&(typeof s.data==='function'?s.data():s)||null; return !!(v&&v.at===rec.at); }catch(e){ return false; } };
   const t0=Date.now(); await new Promise(r=>setTimeout(r,1200));
-  while(Date.now()-t0<20000){ if(done) return null; if(await seen()) return null; await new Promise(r=>setTimeout(r,1500)); if(done) return null; }
-  return {code:'no answer in 20 seconds'}; }
+  while(Date.now()-t0<20000){ if(done) return null; if(fail&&!(await seen())) return {code:'refused',msg:String(fail.message||fail.code||fail)}; if(await seen()) return null; await new Promise(r=>setTimeout(r,1500)); if(done) return null; }
+  return {code:'no answer in 20 seconds',msg:'no answer in 20 seconds'}; }
 /* ---- the outbox (2026-11-09 17:03). ladder:pending-edits holds every edit not yet confirmed in the database, by pid (text edits
    by their tx id, sent by txInit). edSync drains it in the background: one edPut per record, newest copy of each pid, the badge
    counting what still waits. It never blocks the editor. */
+/* 2026-11-10 (Andrew 11:55): the waiting edits as Markdown, one section per edit, for the sweep */
+function edMdText(html){ const d=document.createElement('div'); d.innerHTML=html||''; d.querySelectorAll('button.pa').forEach(x=>x.remove()); d.querySelectorAll('br').forEach(x=>x.replaceWith('\n')); d.querySelectorAll('b,strong').forEach(x=>{ x.replaceWith('**'+x.textContent+'**'); }); d.querySelectorAll('i,em').forEach(x=>{ x.replaceWith('*'+x.textContent+'*'); }); d.querySelectorAll('[data-tex-inline]').forEach(x=>{ x.replaceWith('$'+x.getAttribute('data-tex-inline')+'$'); }); return d.textContent.replace(/\n{3,}/g,'\n\n').trim(); }
+function edMarkdown(){ const m=edOutAll(); const ks=Object.keys(m).sort((a,b)=>String(m[a].at||'').localeCompare(String(m[b].at||''))); const out=['# Ladder desk edits · '+ks.length+' waiting · '+new Date().toISOString()];
+  for(const k of ks){ const r=m[k]||{}; if(r.kind==='text'){ out.push('','## '+(r.page||'?')+' · text · '+k+' · '+(r.at||''),'old: '+(r.old_text||''),'new: '+(r.new_text||'')); continue; }
+    const p=document.querySelector('[data-pid="'+k+'"]'); const ad=p&&p.dataset.addr?' · '+p.dataset.addr:''; out.push('','## '+(r.page||'?')+' · '+k+ad+' · '+(r.at||'')+(('collapsed' in r)?(r.collapsed?' · collapsed':' · uncollapsed'):''), typeof r.html==='string'?(edMdText(r.html)||'(emptied)'):''); }
+  return out.join('\n'); }
+function edShowMd(md){ let ok=false; try{ navigator.clipboard.writeText(md).then(()=>toast('edits copied as text · paste them to Claude'),()=>{}); ok=true; }catch(_){}
+  let box=document.getElementById('edmd'); if(!box){ box=document.createElement('div'); box.id='edmd'; box.style.cssText='position:fixed;left:10px;right:10px;bottom:calc(var(--lbh,48px) + 52px);z-index:9600;background:#fff;border:1px solid rgba(0,0,0,.2);border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,.2);padding:8px;font:.78rem/1.3 system-ui,sans-serif;max-height:50vh;display:grid;gap:6px'; box.innerHTML='<div><b>Waiting edits as text</b> · select all and copy, paste to Claude <button type="button" style="float:right">close</button></div><textarea readonly style="width:100%;height:32vh;font:.72rem/1.3 ui-monospace,monospace"></textarea>'; box.querySelector('button').onclick=()=>box.remove(); document.body.appendChild(box); }
+  const ta=box.querySelector('textarea'); ta.value=md; ta.focus(); ta.select(); if(!ok) toast('select the text and copy it'); }
 function edOutAll(){ try{ return JSON.parse(localStorage.getItem('ladder:pending-edits')||'{}'); }catch(_){ return {}; } }
 function edOutPut(rec){ try{ const m=edOutAll(); m[rec.pid]=rec; localStorage.setItem('ladder:pending-edits',JSON.stringify(m)); }catch(_){} edBadge(); }
 function edBadge(){ if(!window.LADDER_DESK) return; const m=edOutAll(); const n=Object.keys(m).length;
-  let b=document.getElementById('edout'); if(!n){ if(b){ b.textContent='all edits sent'; b.classList.add('ok'); setTimeout(()=>{ const x=document.getElementById('edout'); if(x&&x.classList.contains('ok')) x.remove(); },2500); } return; }
-  if(!b){ b=document.createElement('button'); b.type='button'; b.id='edout'; b.title='edits saved on this device, not yet in the database · tap to send now'; b.style.cssText='position:fixed;left:10px;bottom:10px;z-index:60;font:600 .72rem/1 system-ui,sans-serif;padding:6px 9px;border-radius:999px;border:1px solid rgba(0,0,0,.15);background:#fff6d6;color:#5a4a1a;box-shadow:0 1px 4px rgba(0,0,0,.15);cursor:pointer'; b.onclick=()=>{ toast('sending'); edSync(true); }; document.body.appendChild(b); }
-  b.classList.remove('ok'); b.style.background=ED.db?'#fff6d6':'#f3e6e6'; b.textContent=n+' edit'+(n===1?'':'s')+' waiting to send'+(ED.db?'':' · database not reached yet'); }
+  let b=document.getElementById('edout'); if(!n){ if(b){ b.textContent='no edits since the last sweep'; b.classList.add('ok'); setTimeout(()=>{ const x=document.getElementById('edout'); if(x&&x.classList.contains('ok')) x.remove(); },2500); } return; }
+  if(!b){ b=document.createElement('button'); b.type='button'; b.id='edout'; b.title='edits made on this device since the last sweep · tap to copy them as text for Claude'; b.style.cssText='position:fixed;left:10px;bottom:calc(var(--lbh,48px) + 60px);z-index:9600;font:600 .72rem/1 system-ui,sans-serif;padding:6px 9px;border-radius:999px;border:1px solid rgba(0,0,0,.15);background:#fff6d6;color:#5a4a1a;box-shadow:0 1px 4px rgba(0,0,0,.15);cursor:pointer'; b.onclick=()=>{ const md=edMarkdown(); edShowMd(md); edSync(true); }; document.body.appendChild(b); }
+  b.classList.remove('ok'); b.style.background=ED.db?'#fff6d6':'#f3e6e6'; const DM=window.LADDER_MAP||{}; b.textContent=(DM.desk?'desk '+DM.desk+(DM.commit?' · '+DM.commit:'')+' · ':(DM.commit?DM.commit+' · ':''))+n+' edit'+(n===1?'':'s')+' since the last sweep · tap for the text'; }
 let edSyncBusy=false, edSyncTimer=0;
 async function edSync(now){ if(!window.LADDER_DESK) return; edBadge(); clearTimeout(edSyncTimer); if(edSyncBusy) return; edSyncBusy=true;
-  try{ if(!ED.db){ try{ if(window.claude&&typeof window.claude.use==='function') ED.db=await Promise.race([window.claude.use('db'),new Promise((_,rj)=>setTimeout(()=>rj(0),6000))]); }catch(_){ ED.db=null; } if(ED.db){ ED.owner=true; document.body.classList.add('ed-owner'); } }
-    if(ED.db){ const m=edOutAll(); for(const pid in m){ const r=m[pid]; if(!r||r.kind==='text') continue; const err=await edPut('edits/'+pid,r); if(err) break; const cur=edOutAll(); if(cur[pid]&&cur[pid].at===r.at){ delete cur[pid]; localStorage.setItem('ladder:pending-edits',JSON.stringify(cur)); try{ const dm=JSON.parse(localStorage.getItem('ladder:edit-drafts')||'{}'); delete dm[pid]; localStorage.setItem('ladder:edit-drafts',JSON.stringify(dm)); }catch(_){} } edBadge(); } } }
+  try{ if(!ED.db){ try{ if(window.claude&&typeof window.claude.use==='function') ED.db=await Promise.race([edGetDb(),new Promise((_,rj)=>setTimeout(()=>rj(0),15000))]); }catch(_){ ED.db=null; } if(ED.db){ ED.owner=true; document.body.classList.add('ed-owner'); } }
+    if(ED.db){ const m=edOutAll(); for(const pid in m){ const r=m[pid]; if(!r||r.kind==='text') continue; const err=await edPut('edits/'+pid,r); if(err){ const msg=err.msg||err.code||'not sent'; if(ED.lastErr!==msg){ ED.lastErr=msg; toast('edit not sent · '+msg); } break; } ED.lastErr=''; const cur=edOutAll(); if(cur[pid]&&cur[pid].at===r.at){ delete cur[pid]; localStorage.setItem('ladder:pending-edits',JSON.stringify(cur)); try{ const dm=JSON.parse(localStorage.getItem('ladder:edit-drafts')||'{}'); delete dm[pid]; localStorage.setItem('ladder:edit-drafts',JSON.stringify(dm)); }catch(_){} } edBadge(); } } }
   finally{ edSyncBusy=false; edBadge(); const left=Object.keys(edOutAll()).filter(k=>{ const r=edOutAll()[k]; return !r||r.kind!=='text'; }).length; if(left) edSyncTimer=setTimeout(()=>edSync(),15000); } }
-function edLocal(){ /* the outbox laid over the page before the database answers */ const m=edOutAll(); let n=0; for(const pid in m){ const r=m[pid]; if(!r||r.kind==='text'||r.page!==ED.page) continue; const p=document.querySelector('p[data-pid="'+pid+'"],li[data-pid="'+pid+'"]'); if(p&&typeof r.html==='string'){ edApply(p,r.html); n++; } if(p&&'collapsed' in r){ if(r.collapsed) p.setAttribute('data-collapsed','1'); else p.removeAttribute('data-collapsed'); } } edBadge(); return n; }
+/* 2026-11-10 (Andrew 12:08): an edit that already stands in the published page was swept; drop it from the device */
+function edNorm(html){ const d=document.createElement('div'); d.innerHTML=html||''; d.querySelectorAll('button.pa,.pebar').forEach(x=>x.remove()); return d.textContent.replace(/\s+/g,' ').trim(); }
+function edSweepClear(){ const m=edOutAll(); let gone=0; for(const k in m){ const r=m[k]; if(!r||r.page!==ED.page) continue;
+    if(r.kind==='text'){ const want=String(r.new_text||'').replace(/\s+/g,' ').trim(); if(want&&document.body.textContent.replace(/\s+/g,' ').indexOf(want)>=0){ delete m[k]; gone++; } continue; }
+    const p=document.querySelector('p[data-pid="'+k+'"],li[data-pid="'+k+'"]'); if(!p) continue; const same=(typeof r.html!=='string')||edNorm(r.html)===edNorm(p.innerHTML); const col=('collapsed' in r)?(!!r.collapsed===p.hasAttribute('data-collapsed')):true; const emptied=(typeof r.html==='string'&&!edNorm(r.html)&&(p.hasAttribute('data-collapsed')||!edNorm(p.innerHTML)));
+    if((same&&col)||emptied){ delete m[k]; gone++; } }
+  if(gone){ try{ localStorage.setItem('ladder:pending-edits',JSON.stringify(m)); }catch(_){} } return gone; }
+function edLocal(){ /* the outbox laid over the page */ edSweepClear(); const m=edOutAll(); let n=0; for(const pid in m){ const r=m[pid]; if(!r||r.kind==='text'||r.page!==ED.page) continue; const p=document.querySelector('p[data-pid="'+pid+'"],li[data-pid="'+pid+'"]'); if(p&&typeof r.html==='string'){ edApply(p,r.html); n++; } if(p&&'collapsed' in r){ if(r.collapsed) p.setAttribute('data-collapsed','1'); else p.removeAttribute('data-collapsed'); } } edBadge(); return n; }
 if(window.LADDER_DESK){ ['online','focus'].forEach(ev=>addEventListener(ev,()=>{ if(Object.keys(edOutAll()).length) edSync(); })); document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&Object.keys(edOutAll()).length) edSync(); }); }
 /* Phase G (Andrew 2026-11-09 16:29): collapse a paragraph instead of emptying it. The paragraph keeps its address and its screen
    (a stub in the app's swipe row); the flag is saved with the paragraph's current words as an edit, and the fold at release writes
@@ -1132,18 +1148,24 @@ async function edFold(p){ if(!edOn()) return; const pid=p.dataset.pid; const was
 function edClearPending(pid){ try{ const k='ladder:pending-edits', m=JSON.parse(localStorage.getItem(k)||'{}'); delete m[pid]; localStorage.setItem(k,JSON.stringify(m)); }catch(_){} }
 async function edFolded(){ const f={}; try{ const s=await ED.db.collection('folded').get(); s.docs.forEach(d=>{ const v=d.data()||{}; f[v.pid||d.id]=v.at||''; }); }catch(_){ return null; } return f; }
 /* The owner check runs once at load; if the host was slow to answer then, check again when a menu opens. */
-async function edRecheck(){ try{ if(!window.claude||typeof window.claude.use!=='function'){ ED.why='claude'; return false; } if(!ED.db) ED.db=await window.claude.use('db'); if(!ED.db){ ED.why='db'; return false; } /* 0.3.53 (Andrew 14:26 'locked out again'): the desk is private to its owner and the database only takes the owner's edits, so reaching the database is the whole gate; no separate who-is-viewing check */ ED.owner=true; ED.why=''; if(ED.owner) document.body.classList.add('ed-owner'); }catch(e){ ED.why='err'; } return ED.owner; }
+/* 2026-11-10 (Andrew 11:37 'half the time it doesn't load in'): the desk's view page asks for the database handle before it rewrites the
+   document (window.LADDER_DBP); take that first, and only then ask the host again from this document. */
+function edTop(){ try{ return window.top===window; }catch(_){ return false; } }
+/* 2026-11-10 (Andrew 11:45): read the db grant without prompting, ask once per load while it is still to be asked, and remember the state for the badge */
+async function edPerm(){ try{ if(!window.claude||typeof window.claude.use!=='function') return ''; const pm=await Promise.race([window.claude.use('permissions'),new Promise(r=>setTimeout(()=>r(null),8000))]); if(!pm||!pm.state) return ''; let st=await pm.state('db'); if(st==='prompt'&&!ED.asked){ ED.asked=true; const r=await pm.request(['db']); st=(r&&r.db)||st; } ED.perm=st||''; return ED.perm; }catch(_){ return ''; } }
+async function edGetDb(){ if(edTop()){ ED.why='top'; return null; } await edPerm(); let d=null; try{ if(window.LADDER_DBP) d=await Promise.race([window.LADDER_DBP,new Promise(r=>setTimeout(()=>r(null),12000))]); }catch(_){ d=null; } if(!d){ try{ d=await window.claude.use('db'); }catch(_){ d=null; } } return d||null; }
+async function edRecheck(){ try{ if(!window.claude||typeof window.claude.use!=='function'){ ED.why='claude'; return false; } if(!ED.db) ED.db=await edGetDb(); if(!ED.db){ if(ED.why!=='top') ED.why=(ED.perm==='denied')?'db':'db'; return false; } /* 0.3.53 (Andrew 14:26 'locked out again'): the desk is private to its owner and the database only takes the owner's edits, so reaching the database is the whole gate; no separate who-is-viewing check */ ED.owner=true; ED.why=''; if(ED.owner) document.body.classList.add('ed-owner'); }catch(e){ ED.why='err'; } return ED.owner; }
 /* 0.3.41 (Andrew 18:24 "the edit button is not on the menu"): on the desk, when editing is off, the menu says why and offers the Permissions panel */
-const ED_WHY={claude:'Editing is off: this view is not inside claude.ai. Open the desk link in claude.ai, signed in.',db:'Editing is off: the desk cannot reach its database. Allow database access under Permissions, then reload.',user:'Editing is off: the desk cannot tell who is viewing. Open the desk link in claude.ai, signed in.',owner:'Editing is off: claude.ai does not see you as the owner of this desk. Check that you are signed in to the account that owns it.',err:'Editing is off: the desk could not check its database. Reload the page and try again.'};
+const ED_WHY={top:'Editing is off: this address is the desk’s page on its own, outside claude.ai. Open the desk from its claude.ai link (the pinned artifact), not from a bookmark or a new tab of this address.',claude:'Editing is off: this view is not inside claude.ai. Open the desk link in claude.ai, signed in.',db:'Editing is off: the desk cannot reach its database. Allow database access under Permissions, then reload.',user:'Editing is off: the desk cannot tell who is viewing. Open the desk link in claude.ai, signed in.',owner:'Editing is off: claude.ai does not see you as the owner of this desk. Check that you are signed in to the account that owns it.',err:'Editing is off: the desk could not check its database. Reload the page and try again.'};
 async function edWhyShow(m){ let w=m.querySelector('.edwhy'); if(!window.LADDER_DESK||edOn()){ if(w) w.hidden=true; return; }
   if(!w){ w=document.createElement('div'); w.className='edwhy'; w.style.cssText='font-size:.78rem;line-height:1.35;max-width:16rem;padding:6px 8px;color:var(--muted,#666);border-top:1px solid rgba(0,0,0,.1);white-space:normal'; m.appendChild(w); }
   w.hidden=false; w.textContent=ED_WHY[ED.why]||ED_WHY.err;
   try{ const pm=window.claude&&await window.claude.use('permissions'); if(pm&&pm.manage){ const b=document.createElement('button'); b.type='button'; b.textContent='Open Permissions'; b.style.cssText='display:block;margin-top:4px'; b.onclick=e=>{ e.stopPropagation(); pm.manage().catch(()=>toast('Open the Permissions menu at the top of the desk')); }; w.appendChild(b); } }catch(_){} }
 async function edInit(){
   if(!document.querySelector('header.top > p[data-pid], section.class p[data-pid]')) return;
-  if(window.LADDER_DESK){ document.body.classList.add('ed-owner'); edLocal(); setTimeout(()=>edSync(),300); }
+  if(window.LADDER_DESK){ document.body.classList.add('ed-owner'); const nl=edLocal(); const nw=Object.keys(edOutAll()).length; if(nw) toast(nw+' edit'+(nw===1?'':'s')+' since the last sweep · tap the badge for the text'); setTimeout(()=>edSync(),300); }
   if(!(await edWait())){ edBadge(); return; }
-  let db=null,user=null; try{ db=await window.claude.use('db'); }catch(e){} if(!db) return; ED.db=db;
+  let db=null,user=null; try{ db=await edGetDb(); }catch(e){} if(!db) return; ED.db=db;
   ED.owner=true; /* 0.3.53: the database is the gate (see edRecheck) */
   if(ED.owner) document.body.classList.add('ed-owner');
   const FOLD=await edFolded(), stale=r=>!!FOLD&&!!FOLD[r.pid]&&String(FOLD[r.pid])>=String(r.at||'');
@@ -1176,7 +1198,7 @@ function startEdit(p){ if(!edOn()||!editable(p)||p.isContentEditable) return;
   bar.addEventListener('click',async e=>{ const k=e.target.dataset.e; if(!k) return;
     if(k==='cancel'){ p.innerHTML=before; done(); return; }
     const html=edClean(p); const rec={pid:p.dataset.pid,page:ED.page,html,at:new Date().toISOString()};
-    p.innerHTML=html; edTex(p); p.classList.add('pedited'); done(); edOutPut(rec); toast('saved on this device · sending to the database'); edSync(); });
+    p.innerHTML=html; edTex(p); p.classList.add('pedited'); done(); edOutPut(rec); toast('saved · it counts on the badge until the next sweep'); edSync(); });
 }
 /* 0.3.10 final pass (Andrew 23:57): a paragraph he has re-edited down to plain, concise sentences, the promise that "the ladder
    trusts your English completely" kept, reads in a slightly different ink. Every paragraph he saves through the editor is final
@@ -1265,11 +1287,12 @@ function txStartQ(li){ if(!li||TX.busy) return; li.querySelectorAll(':scope>span
 function txToggle(v){ TX.on=v; document.body.classList.toggle('tx-on',v); const b=document.getElementById('txbtn'); if(b){ b.textContent=v?'✓ Done Editing':'✎ Edit Text'; b.setAttribute('aria-pressed',v); }
   try{ sessionStorage.setItem('tx:on',v?'1':''); }catch(_){} }
 async function txInit(){ if(!window.LADDER_DESK) return;
-  const ok=await edWait(); if(!ok) return; await edRecheck(); if(!ED.db||!ED.owner) return;
-  const FOLD=await edFolded()||{};
-  try{ const s=await ED.db.collection('edits').where('kind','==','text').get(); TX.list=s.docs.map(d=>d.data()||{}).filter(r=>r.old_text&&r.new_text).map(r=>Object.assign(r,{folded:!!FOLD[r.id]&&String(FOLD[r.id])>=String(r.at||'')})); }catch(e){}
+  await edRecheck(); ED.owner=true; document.body.classList.add('ed-owner'); /* 2026-11-10 (Andrew 12:08): the sweep goes by paste; no database needed */
+  const FOLD=(ED.db&&await edFolded())||{};
+  try{ if(!ED.db) throw 0; const s=await ED.db.collection('edits').where('kind','==','text').get(); TX.list=s.docs.map(d=>d.data()||{}).filter(r=>r.old_text&&r.new_text).map(r=>Object.assign(r,{folded:!!FOLD[r.id]&&String(FOLD[r.id])>=String(r.at||'')})); }catch(e){}
   try{ const m=JSON.parse(localStorage.getItem('ladder:pending-edits')||'{}'); let n=0; for(const id in m){ const r=m[id]; if(!r||r.kind!=='text') continue; if(!(await txSave(r))) n++; TX.list=TX.list.filter(x=>x.id!==id).concat([r]); }
     if(n) toast(n+' edit'+(n>1?'s':'')+' saved that had been waiting on this device'); }catch(_){}
+  try{ const m=JSON.parse(localStorage.getItem('ladder:pending-edits')||'{}'); for(const id in m){ const r=m[id]; if(r&&r.kind==='text'&&!TX.list.some(x=>x.id===id)) TX.list.push(r); } }catch(_){}
   const b=document.createElement('button'); b.type='button'; b.id='txbtn'; b.className='txbtn'; document.body.appendChild(b);
   b.addEventListener('click',e=>{ e.stopPropagation(); if(TX.busy) return; txToggle(!TX.on); });
   let st=''; try{ st=sessionStorage.getItem('tx:on')||''; }catch(_){} txToggle(!!st);
@@ -1393,10 +1416,10 @@ function steps(){
 function pids(){ document.querySelectorAll('[data-pid]').forEach(p=>{ const id=p.dataset.pid; if(id&&!p.id&&!document.getElementById(id)) p.id=id; });
   /* a link may also name the address the page shows (1b1.0.3): turn it into the paragraph's pid before the steps open */
   const h=decodeURIComponent(location.hash.slice(1)); if(!h||document.getElementById(h)) return; const info=tagInfo(); if(!info) return;
-  const per={}; const ps=[...document.querySelectorAll('header.top > p[data-pid], section.class p[data-pid]')];
+  const per={}; const ps=[...document.querySelectorAll('header.top > p[data-pid], section.class p[data-pid]')].filter(p=>!(p.hasAttribute('data-collapsed')||!p.textContent.replace(/\s+/g,'')));
   for(const p of ps){ const top=!!p.closest('header.top'), st=p.closest('section.step'), k=top?info.label+'.top':(st?st.dataset.step:info.label); per[k]=(per[k]||0)+1; const ad=top?k+'.'+per[k]:k+'.0.'+per[k]; if(ad===h){ history.replaceState(null,'','#'+p.dataset.pid); break; } } }
 function toPid(){ const h=location.hash.slice(1); const t=h&&document.getElementById(h); if(t&&t.dataset&&t.dataset.pid) setTimeout(()=>t.scrollIntoView({block:'center'}),60); }
-ready(()=>{ pids(); steps(); const info=tagInfo(); if(info){ titles(info); addresses(info); edInit(); } txInit(); if(window.LADDER_DESK) setTimeout(()=>document.querySelectorAll('.rungs details.stidx').forEach(d=>d.open=true),0); toPid(); reportQuestions(); pn(); nonskid(); greek(); curly();
+ready(()=>{ document.documentElement.classList.add(window.LADDER_DESK?'isdesk':'isapp'); pids(); steps(); const info=tagInfo(); if(info){ titles(info); addresses(info); edInit(); } txInit(); if(window.LADDER_DESK) setTimeout(()=>document.querySelectorAll('.rungs details.stidx').forEach(d=>d.open=true),0); toPid(); reportQuestions(); pn(); nonskid(); greek(); curly();
   const fit=()=>{ stackTables(); liftLong(); }; window.__fit=fit;
   setTimeout(fit,400); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>setTimeout(fit,100)); });
 })();
@@ -2369,7 +2392,7 @@ let screens=[], k=0, on=false, bar=null, L=null, R=null, posEl=null, dots=null, 
 const folded=el=>el.hasAttribute('data-collapsed')||(el.matches('p[data-pid]')&&!el.textContent.replace(/\s+/g,'').replace(/^[\d\w.·]+$/,'').length);
 function clear(){ document.querySelectorAll('[data-sw]').forEach(x=>{ x.removeAttribute('data-sw'); x.classList.remove('sw-on','sw-open','sw-stub'); }); screens=[]; }
 function build(els){ clear(); step=els.find(e=>e.matches&&e.matches('section.step')); if(!step) return;
-  [...step.children].forEach(ch=>{ if(ch.matches('h2,.sthead,.stnext,script,style,template')||ch.hidden) return;
+  [...step.children].forEach(ch=>{ if(ch.matches('h2,.sthead,.stnext,script,style,template')||ch.hidden) return; if(ch.matches('p[data-pid]')&&folded(ch)) return; /* 2026-11-10 (Andrew 12:08): an emptied or collapsed paragraph is no screen; the chain closes up */
     if(ATTACH.test(ch.className||'')&&screens.length){ screens[screens.length-1].push(ch); return; } screens.push([ch]); });
   els.forEach(e=>{ if(e!==step&&e.matches&&e.matches('section,figure,.slides,.pic')&&!e.matches('header.top,nav,.pn')) screens.push([e]); });
   screens.forEach((s,i)=>s.forEach(x=>{ x.setAttribute('data-sw',i); if(folded(x)){ x.classList.add('sw-stub'); if(!x.dataset.addr) x.dataset.addr=x.matches('.slides')?'slides':x.matches('.pic')?'picture':x.matches('pre')?'lines':x.matches('.sayback')?'question':'·'; } })); }
