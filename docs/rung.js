@@ -1776,7 +1776,9 @@ function footingView0(){
   let pref=null; try{ pref=(JSON.parse(LS.getItem('ladder:view')||'{}')||{})[P]; }catch(e){}
   setMode(ss.get('fv:off')==='1'?false:want?want==='fv':(pref&&window.LADDER_DESK?pref==='fv':true)); /* fv:off = page view for checks */
   if(on){ if(!toHash()) go(0,{instant:true,force:true}); }
-  try{ if(repairFurthest()) toast('the climb record was set back to your furthest footing'); }catch(e){}
+  /* what needs ladmap.js runs when it arrives: the climb record of this footing and its repair */
+  window.LadderFV.mapReady=()=>{ try{ if(repairFurthest()) toast('the climb record was set back to your furthest footing'); }catch(e){} try{ if(on) remember(); }catch(e){} };
+  if(window.LADMAP) window.LadderFV.mapReady();
   window.LadderFV.toggle=()=>{ const el=units[cur]&&units[cur][0]; setMode(!on); if(!on&&el&&cur>0) el.scrollIntoView({block:'start'}); else if(on) go(cur,{instant:true,force:true}); };
   window.LadderFV.go=n=>go(n);
   window.LadderFV.here=()=>({id:idOf(cur),els:on?units[cur]:[...document.querySelectorAll('.wrap>section.class.step')].filter(s=>{ const r=s.getBoundingClientRect(); return r.top<innerHeight*.5&&r.bottom>0; }).slice(0,1)});
@@ -1784,7 +1786,8 @@ function footingView0(){
 }
 const ladmap=()=>window.LADMAP?Promise.resolve():new Promise(res=>{ const s=document.createElement('script'); s.src='ladmap.js'; s.onload=s.onerror=()=>res(); document.head.appendChild(s); });
 window.LadderFV.ladmap=ladmap;
-ready(()=>{ /* 0.2.1: rung and floor pages carry no tags */ if(/^(r\d+|floor\d+)$/.test(page())) document.querySelectorAll(".top .tags").forEach(t=>t.remove()); ladmap().then(()=>{ onIndex(); setTimeout(footingView,60); }); });
+ready(()=>{ /* 0.2.1: rung and floor pages carry no tags */ if(/^(r\d+|floor\d+)$/.test(page())) document.querySelectorAll(".top .tags").forEach(t=>t.remove()); footingView(); /* 2026-11-10 (Andrew 15:41): the footing view and its screens are built before the first frame, without the map */
+  ladmap().then(()=>{ onIndex(); try{ if(window.LadderFV&&LadderFV.mapReady) LadderFV.mapReady(); }catch(e){} }); });
 })();
 
 /* ---- 0.2.1 the blue sky (Andrew 2026-11-04 19:13, 19:53): the Endless floor's steps come one at a time. The button sits at the very top
