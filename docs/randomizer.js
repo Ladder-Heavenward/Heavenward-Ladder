@@ -3176,6 +3176,182 @@ QP.push({id:'18j.rules',step:'18j',label:'the rules of the game',open:()=>measur
     const r=1+rnd(8), right=String(2*r*r), wrong=uniq(right,[r*r,4*r*r,2*r,4*r,r*r*r].map(String),3); if(wrong.length<3) return null;
     return {index:'q:18j.root[q;'+r+']', lines:[['a circle of radius '+r,'drawn'],['a diameter and the diameter perpendicular to it meet the circle at four corners','the square technique']], ask:'What is the area of the square with those corners?', right, opts:shuffle([right,...wrong]), lead:'', why:'Neighbouring corners are '+r+' along and '+r+' up from each other, so by right-triangle the side squared is '+r+'² + '+r+'² = '+right+'. That is the area.'}; }});
 
+/* ===== Laundry 5, rung 19 (floor 4 pools, stage R): 19a to 19f, groups ===== */
+Object.assign(STEPS,{'19a':['r19a','Groups Defined'],'19b':['r19b','One Identity, One Inverse Each'],'19c':['r19c','Socks and Shoes'],'19d':['r19d','A Part’s Size Divides the Whole’s'],'19e':['r19e','Parity of Shuffles'],'19f':['r19f','Symmetries by Hand']});
+const sh19=l=>'['+l.join(' ')+']', comp19=(a,b)=>b.map(v=>a[v-1]), inv19=a=>{ const r=[]; a.forEach((v,i)=>{ r[v-1]=i+1; }); return r; }, id19=n=>Array.from({length:n},(_,i)=>i+1), isid19=a=>a.every((v,i)=>v===i+1);
+const perm19=n=>{ let p; do{ p=shuffle(id19(n)); }while(isid19(p)); return p; }, ord19=a=>{ let p=a, k=1; while(!isid19(p)){ p=comp19(a,p); k++; } return k; };
+const N19=a=>{ let c=0; a.forEach((v,i)=>{ for(let j=i+1;j<a.length;j++) if(v>a[j]) c++; }); return c; }, sup19=n=>String(n).split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[+d]).join(''), gcd19=(a,b)=>b?gcd19(b,a%b):a;
+const any19=n=>sh19(shuffle(id19(n))), go19=(i,x,y)=>x===i&&y===i?i+' stays':i+' goes to '+x+' and then to '+y;
+const L19='abcdghkptuvw'.split(''), set19=l=>'{'+l.slice().sort((x,y)=>x-y).join(', ')+'}';
+
+/* ---------- 19a Groups Defined ---------- */
+const A19=[
+  ['For moves, which is done first in ab?','b: ab is a after b',['a: read from the left','either: the order never matters','both at once'],'ab(x) is a(b(x)). The move next to x is done first.'],
+  ['Is ab = ba in every group?','no: in S₃, s₁₂s₂₃ = [2 3 1] and s₂₃s₁₂ = [3 1 2]',['yes','yes, whenever the group is finite','no: it holds in no group'],'A group with ab = ba for all its members is turn-about. S₃ is not. The turns of a wheel are.'],
+  ['Which four demands make a group?','results stay in it, brackets do not matter, one member does nothing, every member can be undone',['results stay in it, brackets do not matter, one member does nothing, ab = ba','brackets do not matter, one member does nothing, every member can be undone, it is finite','results stay in it, one member does nothing, every member can be undone, ab = ba'],'Turn-about is not demanded, and neither is being finite.'],
+  ['A whole turn of a wheel: which member of the group of turns is it?','the one that does nothing',['the last one','the undo of the half turn','it is not a member'],'A whole turn puts every spoke back where it was. As a move it is the same as no turn.']];
+const P19=[
+  ['ℕ with +: is it a group?','no: 1 cannot be undone in ℕ',['yes','no: brackets matter','no: no member does nothing'],'0 does nothing, and + regroups. But 1 + n = 0 has no answer in ℕ.'],
+  ['ℤ with ·: is it a group?','no: 2 cannot be undone in ℤ',['yes','no: brackets matter','no: no member does nothing'],'1 does nothing, and · regroups. But 2 · n = 1 has no answer in ℤ.'],
+  ['ℤ with +: is it a group?','yes',['no: 0 cannot be undone','no: brackets matter','no: a sum can leave ℤ'],'A sum of whole numbers is a whole number, + regroups, 0 does nothing, and −a undoes a.'],
+  ['ℚ without 0, with ·: is it a group?','yes',['no: 2 cannot be undone','no: a product can leave it','no: no member does nothing'],'A product of non-zero fractions is not zero, · regroups, 1 does nothing, and 1/a undoes a.'],
+  ['ℤ with −: is it a group?','no: brackets matter, as (1 − 1) − 1 is not 1 − (1 − 1)',['yes','no: a difference can leave ℤ','yes, and it is turn-about'],'(1 − 1) − 1 = −1 and 1 − (1 − 1) = 1. The second demand fails.'],
+  ['e and the three swaps s₁₂, s₂₃, s₁₃ of three cards, composed: is it a group?','no: s₁₂s₂₃ = [2 3 1] is not among them',['yes','no: s₁₂ cannot be undone','no: brackets matter'],'Each swap undoes itself, and composing always regroups. But a swap after a swap can take all three cards round.'],
+  ['The turns of a wheel by whole numbers of twelfths, one after another: is it a group?','yes, with 12 members',['yes, with 11 members','no: a whole turn cannot be undone','no: two turns in a row can leave the family'],'Turns add, the whole turn does nothing, and the turn by k twelfths is undone by the turn by 12 − k. Counting the one that does nothing, there are 12.']];
+QP.push({id:'19a.moves',step:'19a',label:'moves that combine',open:()=>measured('19a'),make(){ return writtenQ('19a.moves',A19); }},
+  {id:'19a.pass',step:'19a',label:'which families pass',open:()=>measured('19a'),make(){ return writtenQ('19a.pass',P19); }},
+  {id:'19a.compose',step:'19a',mode:'work',label:'one shuffle after another',open:()=>measured('19a'),make(){
+    const k=rnd(3), n=k===0?3+rnd(2):4+rnd(2), a=perm19(n), b=perm19(n), rs=()=>sh19(perm19(n));
+    if(k===0){ const ba=Math.random()<0.5, [f,g]=ba?[b,a]:[a,b], c=comp19(f,g), right=sh19(c), wrong=uniq(right,[sh19(comp19(g,f)),sh19(inv19(c)),sh19(a),sh19(b),rs(),rs(),rs(),rs()],3); if(wrong.length<3) return null;
+      return {index:'q:19a.compose[c;'+[sh19(a),sh19(b),ba?1:0].join(';')+']', lines:[['a = '+sh19(a)+' and b = '+sh19(b),'two shuffles, each a list of where 1, 2, … go']], ask:'Which shuffle is '+(ba?'ba':'ab')+'?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:(ba?'ba is b after a: a':'ab is a after b: b')+' is done first. '+id19(n).map(i=>go19(i,g[i-1],c[i-1])).join(', ')+'.'}; }
+    if(k===1){ const c=inv19(a), right=sh19(c), wrong=uniq(right,[sh19(a),sh19(a.slice().reverse()),sh19(comp19(a,a)),rs(),rs(),rs(),rs()],3); if(wrong.length<3) return null;
+      return {index:'q:19a.compose[u;'+sh19(a)+']', lines:[['a = '+sh19(a),'a shuffle, as a list of where 1, 2, … go']], ask:'Which shuffle undoes a?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'a sends i to a(i), so its undo sends a(i) back to i: '+id19(n).map(i=>a[i-1]+' goes back to '+i).join(', ')+'. Done after a, it leaves '+sh19(id19(n))+', the shuffle that does nothing.'}; }
+    const c=comp19(a,a), right=isid19(c)?'e':sh19(c), wrong=uniq(right,[sh19(a),sh19(inv19(a)),'e',sh19(a.slice().reverse()),rs(),rs(),rs()],3); if(wrong.length<3) return null;
+    return {index:'q:19a.compose[s;'+sh19(a)+']', lines:[['a = '+sh19(a),'a shuffle, as a list of where 1, 2, … go']], ask:'Which shuffle is aa, a done twice?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:id19(n).map(i=>go19(i,a[i-1],c[i-1])).join(', ')+'.'+(isid19(c)?' Everything is back in place: a undoes itself.':'')}; }},
+  {id:'19a.wheel',step:'19a',mode:'word',label:'turns of a wheel',open:()=>measured('19a'),make(){
+    const who=pick(['A wheel','A dial','A turntable','A valve handle']), a=1+rnd(11), b=1+rnd(11), s=(a+b)%12, undo=Math.random()<0.4, t=v=>v%12===0?'no turn at all':'on by '+(v%12)+' mark'+(v%12===1?'':'s'), right=t(undo?12-s:s),
+      wrong=uniq(right,(undo?[s,12-a,12-b,Math.abs(a-b),s+1,s+6]:[12-s,Math.abs(a-b),a*b,s+1,s+11,a]).map(v=>t(v+12)),3); if(wrong.length<3) return null;
+    return {index:'q:19a.wheel['+[who,a,b,undo?'u':'s'].join(';')+']', a3:['19a.wheel',DASH,DASH], story:who+' has 12 marks, evenly spaced round it. It is turned on by '+a+' mark'+(a===1?'':'s')+', and then on by '+b+' mark'+(b===1?'':'s')+'.', lines:[], ask:undo?'Which turn of fewer than 12 marks puts it back where it began?':'Which turn of fewer than 12 marks does the same as the two together?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Turns add: '+a+' + '+b+' = '+(a+b)+' marks'+(a+b>=12?', and a whole turn of 12 marks does nothing, which leaves '+s:'')+'.'+(undo?' To undo it, turn on by the rest of a whole turn: 12 − '+s+' = '+(12-s)+(s===0?', a whole turn, which is no turn at all':'')+'.':'')}; }});
+
+/* ---------- 19b One Identity, One Inverse Each ---------- */
+const B19=[
+  ['How many members of a group do nothing?','exactly one',['at least one','one for each side','one for each member'],'One-identity: if e and e′ both do nothing, then ee′ is e′ and it is e, so they are the same member.'],
+  ['In a group, ab = ca. Does b = c follow?','no: cancel only on the same side',['yes, by the cancel technique','yes, since a has an inverse','no: nothing ever cancels in a group'],'In S₃, r s₁₂ = s₁₂ r², both being s₁₃, and r is not r².'],
+  ['What is the one answer of ax = b?','x = a⁻¹b',['x = ba⁻¹','x = b⁻¹a','x = ab⁻¹'],'a is on the left, so a⁻¹ goes on the left of both sides: a⁻¹(ax) = a⁻¹b.'],
+  ['What is (a⁻¹)⁻¹?','a',['a⁻¹','e','a²'],'Undo-the-undo: aa⁻¹ = a⁻¹a = e says that a undoes a⁻¹, and by one-inverse nothing else does.'],
+  ['What is the order of a member a?','the least n ≥ 1 with aⁿ = e',['the number of members of the group','the least n ≥ 0 with aⁿ = e','the place of a in a list of the members'],'It is how soon the move comes back. a⁰ = e for every a, so n = 0 would tell nothing.']];
+QP.push({id:'19b.one',step:'19b',label:'one way to do nothing, one way to undo',open:()=>measured('19b'),make(){ return writtenQ('19b.one',B19); }},
+  {id:'19b.solve',step:'19b',mode:'work',label:'one answer',open:()=>measured('19b'),make(){
+    const n=3+rnd(2), a=perm19(n), b=perm19(n), left=Math.random()<0.5; if(sh19(a)===sh19(b)) return null; const ai=inv19(a), x=left?comp19(ai,b):comp19(b,ai), right=sh19(x), wrong=uniq(right,[sh19(left?comp19(b,ai):comp19(ai,b)),sh19(comp19(a,b)),sh19(comp19(b,a)),sh19(comp19(inv19(b),a)),any19(n),any19(n),any19(n),any19(n),any19(n),any19(n),any19(n),any19(n)],3); if(wrong.length<3) return null;
+    return {index:'q:19b.solve['+[sh19(a),sh19(b),left?'l':'r'].join(';')+']', lines:[['a = '+sh19(a)+' and b = '+sh19(b),'two shuffles'],[left?'ax = b':'xa = b','to be solved for x']], ask:'Which shuffle is x?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'One-answer: x = '+(left?'a⁻¹b':'ba⁻¹')+', with a⁻¹ = '+sh19(ai)+'. That is '+(left?'a⁻¹ after b':'b after a⁻¹')+': '+right+'. Check: '+(left?'a after x':'x after a')+' is '+sh19(left?comp19(a,x):comp19(x,a))+', which is b.'}; }},
+  {id:'19b.order',step:'19b',mode:'work',label:'how soon a move comes back',open:()=>measured('19b'),make(){
+    const k=rnd(3);
+    if(k===0){ const n=4+rnd(3), a=perm19(n), o=ord19(a), right=String(o), wrong=uniq(right,[n,a.filter((v,i)=>v!==i+1).length,o+1,o-1,2*o,2,3,4].filter(v=>v>=1).map(String),3), pw=[]; let p=a; for(let i=2;i<=o;i++){ p=comp19(a,p); pw.push('a'+sup19(i)+' = '+(i===o?'e':sh19(p))); }
+      return {index:'q:19b.order[s;'+sh19(a)+']', lines:[['a = '+sh19(a),'a shuffle of '+n+' things']], ask:'What is the order of a?', right, opts:shuffle([right,...wrong]), lead:'', why:'Keep doing a until everything is back: '+pw.join(', ')+'. The order is the least n ≥ 1 with aⁿ = e.'}; }
+    if(k===1){ const t=1+rnd(11), g=gcd19(t,12), o=12/g, right=String(o), wrong=uniq(right,[t,12,12-t,g,o+1,o*2,6,4,3].filter(v=>v>=1).map(String),3);
+      return {index:'q:19b.order[w;'+t+']', lines:[['the turn of a wheel by '+t+' twelfth'+(t===1?'':'s')+' of a whole turn','a member of the group of 12 turns']], ask:'What is its order?', right, opts:shuffle([right,...wrong]), lead:'', why:'Done '+o+' times it is '+(o*t)+' twelfths, which is '+(o*t/12)+' whole turn'+(o*t===12?'':'s')+' and so does nothing. Done fewer times, it never comes to a whole number of turns.'}; }
+    const o=3+rnd(7), q=1+rnd(6), r=rnd(o), m=q*o+r, f=v=>v===0?'e':v===1?'a':'a'+sup19(v), right=f(r), wrong=uniq(right,[f((r+1)%o),f((r+o-1)%o),f(m%(o+1)),f(q%o),'e','a',f(2)],3); if(wrong.length<3) return null;
+    return {index:'q:19b.order[p;'+o+';'+m+']', lines:[['a has the order '+o,'given']], ask:'Which is a'+sup19(m)+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Powers technique: '+m+' = '+q+' · '+o+(r?' + '+r:'')+', so a'+sup19(m)+' = (a'+sup19(o)+')'+sup19(q)+(r?' · '+f(r):'')+' = '+(r?'e · '+f(r)+' = '+f(r):'e')+'.'}; }},
+  {id:'19b.cancel',step:'19b',mode:'proof',label:'cancel on the same side',open:()=>measured('19b'),make(){
+    const [a,b,c,d]=take(L19,4), k=rnd(12), opts=['it is licensed','it is not licensed'], sw=Math.random()<0.5, eq=(x,y)=>sw?y+' = '+x:x+' = '+y;
+    const K=[[a+b+' = '+a+c,eq(b,c),'the cancel technique',1,'Combine both sides with '+a+'⁻¹ on the left, where '+a+' is.'],
+      [b+a+' = '+c+a,eq(b,c),'the cancel technique',1,'Combine both sides with '+a+'⁻¹ on the right, where '+a+' is.'],
+      [a+b+' = '+c+a,eq(b,c),'the cancel technique',0,a+' is on the left of one side and on the right of the other. Cancel only on the same side: in S₃, r s₁₂ = s₁₂ r², and r is not r².'],
+      [a+'x = '+b,'x = '+a+'⁻¹'+b,'the one-answer technique',1,a+' is on the left, so '+a+'⁻¹ goes on the left of both sides.'],
+      [a+'x = '+b,'x = '+b+a+'⁻¹','the one-answer technique',0,a+' is on the left, so '+a+'⁻¹ must go on the left: x = '+a+'⁻¹'+b+'. In a group that is not turn-about, '+b+a+'⁻¹ can be a different member.'],
+      ['x'+a+' = '+b,'x = '+b+a+'⁻¹','the one-answer technique',1,a+' is on the right, so '+a+'⁻¹ goes on the right of both sides.'],
+      ['x'+a+' = '+b,'x = '+a+'⁻¹'+b,'the one-answer technique',0,a+' is on the right, so '+a+'⁻¹ must go on the right: x = '+b+a+'⁻¹.'],
+      [a+b+' = e',eq(b,a+'⁻¹'),'the one-answer technique',1,a+'x = e has exactly one answer, '+a+'⁻¹e = '+a+'⁻¹, and '+b+' is an answer.'],
+      [a+'² = e',eq(a,'e'),'the cancel technique',0,'A swap done twice does nothing, and a swap is not e. From '+a+a+' = e, cancelling gives only '+a+' = '+a+'⁻¹.'],
+      [a+b+c+' = '+a+b+d,eq(c,d),'the cancel technique, twice',1,'Cancel '+a+' on the left, and then '+b+' on the left.'],
+      [a+b+c+' = '+d+b+c,eq(a,d),'the cancel technique, twice',1,'Cancel '+c+' on the right, and then '+b+' on the right.'],
+      [a+b+c+' = '+b+c+d,eq(a,d),'the cancel technique, twice',0,b+c+' is on the right of one side and on the left of the other, so nothing cancels.']][k];
+    return {index:'q:19b.cancel['+[k,a,b,c,d,sw?1:0].join(';')+']', stack:true, lines:[[K[0],'given, in a group'],[K[1],K[2]]], ask:'Is line 2 licensed?', right:opts[K[3]?0:1], opts, lead:'', why:K[4]}; }});
+
+/* ---------- 19c Socks and Shoes ---------- */
+const C19=[
+  ['What is (ab)⁻¹ in any group?','b⁻¹a⁻¹',['a⁻¹b⁻¹','ba','a⁻¹b'],'Socks-and-shoes: ab is b first and then a, so undo a first and then b. (ab)(b⁻¹a⁻¹) = a(bb⁻¹)a⁻¹ = e.'],
+  ['When is (ab)⁻¹ = a⁻¹b⁻¹ for all a and b?','exactly when the group is turn-about',['in every group','in no group','exactly when the group is finite'],'Turn-about-undo. In S₃, with a = s₁₂ and b = s₂₃, (ab)⁻¹ = r² and a⁻¹b⁻¹ = r.'],
+  ['Is (ab)² = a²b² in every group?','no: it needs ab = ba',['yes, by the powers technique','yes, by regrouping','no: it holds in no group'],'(ab)² = abab. Set it equal to aabb and cancel a on the left and b on the right: ba = ab.'],
+  ['Socks went on, then shoes, then a coat. Which comes off first?','the coat',['the socks','the shoes','any of them'],'Undress-in-reverse: whatever went on last comes off first.'],
+  ['What is (abc)⁻¹?','c⁻¹b⁻¹a⁻¹',['a⁻¹b⁻¹c⁻¹','b⁻¹c⁻¹a⁻¹','cba'],'Undress-in-reverse: the undoes come in the opposite order.']];
+QP.push({id:'19c.last',step:'19c',label:'undo the last move first',open:()=>measured('19c'),make(){ return writtenQ('19c.last',C19); }},
+  {id:'19c.undo',step:'19c',mode:'work',label:'undoing two moves and more',open:()=>measured('19c'),make(){
+    if(Math.random()<0.5){ const n=3+rnd(2), a=perm19(n), b=perm19(n), ab=comp19(a,b), c=inv19(ab), right=sh19(c), wrong=uniq(right,[sh19(comp19(inv19(a),inv19(b))),sh19(ab),sh19(comp19(b,a)),sh19(inv19(a)),sh19(inv19(b)),sh19(perm19(n)),sh19(perm19(n)),sh19(perm19(n))],3); if(wrong.length<3) return null;
+      return {index:'q:19c.undo[l;'+sh19(a)+';'+sh19(b)+']', lines:[['a = '+sh19(a)+' and b = '+sh19(b),'two shuffles']], ask:'Which shuffle is (ab)⁻¹?', right, opts:shuffle([right,...wrong]), lead:'', why:'Socks-and-shoes: (ab)⁻¹ = b⁻¹a⁻¹, with a⁻¹ = '+sh19(inv19(a))+' and b⁻¹ = '+sh19(inv19(b))+'. b⁻¹ after a⁻¹ is '+right+'. Check: ab = '+sh19(ab)+', and '+right+' sends each number back.'}; }
+    const n=3+rnd(2), ls=take(L19,n), fl=ls.map(()=>Math.random()<0.4), tok=(l,i)=>l+(i?'⁻¹':''), str=(xs,fs)=>xs.map((l,i)=>tok(l,fs[i])).join(''), rl=ls.slice().reverse(), rf=fl.slice().reverse().map(v=>!v), right=str(rl,rf), one=rf.slice(); one[0]=!one[0]; const two=rf.slice(); two[n-1]=!two[n-1];
+    const wrong=uniq(right,[str(ls,fl.map(v=>!v)),str(rl,fl.slice().reverse()),str(rl,one),str(rl,two),str(ls,fl)],3); if(wrong.length<3) return null;
+    return {index:'q:19c.undo[s;'+str(ls,fl)+']', lines:[['('+str(ls,fl)+')⁻¹','to be written without brackets']], ask:'Which is it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Undress-in-reverse: undo each move, last one first.'+(fl.some(v=>v)?' Where a move is already an undo, undo-the-undo gives the move back.':'')}; }},
+  {id:'19c.line',step:'19c',mode:'proof',label:'does the order matter here',open:()=>measured('19c'),make(){
+    const [a,b,c]=take(L19,3), [G,ta]=pick([['the turns of a wheel by twelfths',1],['the quarter turns {e, q, q², q³}',1],['ℚ without 0, with ·',1],['a turn-about group',1],['S₃',0],['S₄',0],['the shuffles of five cards',0],['a group',2]]), k=rnd(6), opts=['it is licensed','it is not licensed'];
+    const [claim,reason,need]=[['('+a+b+')⁻¹ = '+a+'⁻¹'+b+'⁻¹','turn-about-undo',1],['('+a+b+')² = '+a+'²'+b+'²','regroup and turn about',1],['('+a+b+')⁻¹ = '+b+'⁻¹'+a+'⁻¹','socks-and-shoes',0],[a+b+' = '+b+a,'turn about',1],['('+a+b+c+')⁻¹ = '+c+'⁻¹'+b+'⁻¹'+a+'⁻¹','undress-in-reverse',0],['('+a+b+c+')⁻¹ = '+a+'⁻¹'+b+'⁻¹'+c+'⁻¹','undress-in-reverse, then turn about',1]][k], ok=!need||ta===1;
+    return {index:'q:19c.line['+[k,G,a,b,c].join(';')+']', stack:true, lines:[[(k>3?a+', '+b+' and '+c:a+' and '+b)+' are any members of '+G,'given'],[claim,reason]], ask:'Is line 2 licensed?', right:opts[ok?0:1], opts, lead:'',
+      why:!need?'It holds in every group: undo the last move first. No turning about is used.':ta===1?'This group is turn-about, so its members may change places, and the line follows.':ta===0?'This group is not turn-about: already s₁₂s₂₃ = [2 3 1] and s₂₃s₁₂ = [3 1 2] differ. The line needs members to change places.':'The line needs '+a+b+' = '+b+a+'. Some groups are turn-about and S₃ is not, so the word group alone does not license it.'}; }});
+
+/* ---------- 19d A Part's Size Divides the Whole's ---------- */
+const D19=[
+  ['A group has 12 members. Can a part-group of it have 5?','no: 5 does not divide 12',['yes','yes, if the group is turn-about','no: a part-group has an even number of members'],'Part-divides-whole: the copies of the part-group are all of its size and sort the 12 members with none left over.'],
+  ['m divides the size of a finite group. Must the group have a part-group of m members?','no: the technique goes one way only',['yes, by part-divides-whole','yes: take any m members','no: never, unless m = 1'],'Part-divides-whole says what a part-group’s size must do. It does not promise a part-group for each divisor.'],
+  ['When is the copy aH a part-group?','only when a is in H, and then aH = H',['always','never','only when a = e'],'A part-group holds e. e = ah means a = h⁻¹, a member of H.'],
+  ['Two copies aH and bH share one member. What follows?','they are the same set',['they share exactly one member','a = b','H has one member'],'Copies-never-overlap: two copies are the same set or share no member.'],
+  ['A group has a prime number of members. Which part-groups does it have?','only {e} and the whole group',['none','one for each member','one of each size up to the prime'],'A part-group’s size divides the prime, so it is 1 or the prime.']];
+QP.push({id:'19d.part',step:'19d',label:'groups inside groups',open:()=>measured('19d'),make(){ return writtenQ('19d.part',D19); }},
+  {id:'19d.sizes',step:'19d',mode:'work',label:'sizes that divide',open:()=>measured('19d'),make(){
+    const k=rnd(4), n=pick([12,18,20,24,28,30,36,40,42,45,48,60]), ds=id19(n).filter(v=>v>1&&v<n&&n%v===0), nd=id19(n).filter(v=>v>1&&n%v!==0);
+    if(k===0||k===2){ const right=String(pick(ds)), wrong=take(nd,3).map(String);
+      return {index:'q:19d.sizes['+[k,n,right].concat(wrong).join(';')+']', lines:[['a group of '+n+' members','given']], ask:k===0?'Which of these can be the size of a part-group of it?':'Which of these can be the order of a member of it?', right, opts:shuffle([right,...wrong]), lead:'', why:(k===0?'Part-divides-whole':'Order-divides')+': the number must divide '+n+'. '+right+' does, since '+n+' = '+right+' · '+(n/right)+'. None of the others does.'}; }
+    if(k===1){ const m=pick(ds), right=String(n/m), wrong=uniq(right,[n-m,m,n/m+1,n/m-1,n,n+m].filter(v=>v>=1).map(String),3); if(wrong.length<3) return null;
+      return {index:'q:19d.sizes[c;'+n+';'+m+']', lines:[['a group of '+n+' members','given'],['a part-group H of '+m+' members','given']], ask:'How many different copies aH are there?', right, opts:shuffle([right,...wrong]), lead:'', why:'Every copy has '+m+' members, and the copies sort all '+n+' members with no overlap: '+n+' = '+right+' · '+m+'.'}; }
+    const p=pick([5,7,11,13,17,19,23]), right=String(p), wrong=uniq(right,['1','2',String(p-1),String((p-1)/2),String(p+1)],3);
+    return {index:'q:19d.sizes[p;'+p+']', lines:[['a group of '+p+' members','given'],['a is a member, and a is not e','given']], ask:'What is the order of a?', right, opts:shuffle([right,...wrong]), lead:'', why:'Order-divides: the order divides '+p+', a prime, so it is 1 or '+p+'. Only e has the order 1.'}; }},
+  {id:'19d.copies',step:'19d',mode:'work',label:'shifted copies on the wheel',open:()=>measured('19d'),make(){
+    const d=pick([2,3,4,6]), H=id19(12/d).map(i=>(i-1)*d), a=1+rnd(11), cp=x=>set19(H.map(h=>(x+h)%12)), k=rnd(3), top=[['the turns of a wheel by twelfths, k for the turn by k twelfths','the group'],['H = '+set19(H),'a part-group']];
+    if(k===0){ const right=cp(a), wrong=uniq(right,[set19(H),cp(a+1),cp(a+d-1),set19(H.map((h,i)=>(a+i)%12)),set19(uniq(-1,H.map(h=>(a*h)%12),12)),cp(a+2)],3); if(wrong.length<3) return null;
+      return {index:'q:19d.copies[s;'+d+';'+a+']', lines:top, ask:'Which set is the copy '+a+' + H?', right, opts:shuffle([right,...wrong]), lead:'', why:'Add '+a+' to each member of H, taking away 12 when the sum reaches 12: '+right+'.'+(a%d===0?' Since '+a+' is in H, the copy is H itself.':'')}; }
+    if(k===1){ const right=String(d), wrong=uniq(right,[12/d,12,12-12/d,d+1,d-1,11].filter(v=>v>=1).map(String),3);
+      return {index:'q:19d.copies[n;'+d+']', lines:top, ask:'How many different copies has H?', right, opts:shuffle([right,...wrong]), lead:'', why:'H has '+(12/d)+' members, every copy has as many, and the copies sort the 12 turns: 12 = '+d+' · '+(12/d)+'.'}; }
+    if(d===2) return null; const y=(a+d*(1+rnd(12/d-1)))%12, bad=id19(12).map(v=>v-1).filter(v=>(v-a)%d!==0), right=String(y), wrong=take(bad,3).map(String);
+    return {index:'q:19d.copies[m;'+[d,a,y].concat(wrong).join(';')+']', lines:top, ask:'Which of these lies in the same copy as '+a+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'The copy of '+a+' is '+cp(a)+', and '+y+' is in it. Two turns lie in one copy exactly when they differ by a member of H.'}; }});
+
+/* ---------- 19e Parity of Shuffles ---------- */
+const E19=[
+  ['What does N(σ) count?','the pairs of places i < j with σ(i) > σ(j)',['the things that σ moves','the swaps in the shortest string for σ','the order of σ'],'A pair is out of order when the bigger number comes first in the list. [3 2 1] is one swap and has three pairs out of order.'],
+  ['A shuffle moves an even number of things. Is it even?','not always: a swap moves two things and is odd',['yes','yes, when it has the order 2','no: never'],'Even and odd go by N(σ), or by the length of any string of swaps. [2 3 1] moves three things and is even.'],
+  ['A shuffle has the order 2. Is it odd?','not always: [2 1 4 3] has the order 2 and is even',['yes: it is a swap','yes, by the parity technique','no: never'],'[2 1 4 3] is two swaps, s₁₂ and s₃₄.'],
+  ['One string of swaps for σ has 7 swaps. Can another have 10?','no: every string for σ is odd in length',['yes','yes, if σ moves enough things','no: every string for σ has exactly 7'],'Parity technique. Strings of 9 or 11 swaps exist: add a swap and the same swap again.'],
+  ['How many of the n! shuffles of {1, …, n} are even, for n ≥ 2?','half of them: n!/2',['all but the swaps','(n − 1)!','n'],'Half-are-even: doing s₁₂ after each even shuffle matches the even ones with the odd ones.']];
+QP.push({id:'19e.even',step:'19e',label:'even and odd',open:()=>measured('19e'),make(){ return writtenQ('19e.even',E19); }},
+  {id:'19e.count',step:'19e',mode:'work',label:'pairs out of order',open:()=>measured('19e'),make(){
+    const n=4+rnd(3), a=perm19(n), N=N19(a), right=String(N), mv=a.filter((v,i)=>v!==i+1).length, wrong=uniq(right,[N+1,N-1,mv,n*(n-1)/2-N,N+2,n].filter(v=>v>=0).map(String),3), ps=[]; a.forEach((v,i)=>{ for(let j=i+1;j<n;j++) if(v>a[j]) ps.push(v+' before '+a[j]); });
+    return {index:'q:19e.count['+sh19(a)+']', lines:[['σ = '+sh19(a),'a shuffle']], ask:'What is N(σ), the number of pairs out of order?', right, opts:shuffle([right,...wrong]), lead:'', why:'Go through the list and count each bigger number that comes before a smaller one: '+ps.join(', ')+'.'}; }},
+  {id:'19e.parity',step:'19e',mode:'work',label:'which shuffles are even',open:()=>measured('19e'),make(){
+    const k=rnd(3);
+    if(k===0){ const n=4+rnd(2), ev=Math.random()<0.5, good=[], bad=[]; for(let i=0;i<40&&(good.length<1||bad.length<3);i++){ const p=perm19(n), s=sh19(p); if((N19(p)%2===0)===ev){ if(!good.length) good.push(p); } else if(!bad.some(b=>sh19(b)===s)) bad.push(p); } if(good.length<1||bad.length<3) return null;
+      const right=sh19(good[0]), wrong=bad.slice(0,3).map(sh19);
+      return {index:'q:19e.parity[w;'+[right].concat(wrong).join(';')+']', lines:[['four shuffles of {1, …, '+n+'}','one of them is '+(ev?'even':'odd')]], ask:'Which one is '+(ev?'even':'odd')+'?', right, opts:shuffle([right,...wrong]), lead:'', why:right+' has '+N19(good[0])+' pair'+(N19(good[0])===1?'':'s')+' out of order, an '+(ev?'even':'odd')+' number. The others have '+bad.slice(0,3).map(N19).join(', ')+'.'}; }
+    if(k===1){ const n=3+rnd(6), f=fact16(n), right=String(f/2), wrong=uniq(right,[f,fact16(n-1),n*(n-1)/2,2*n,f/2-1,f/n].map(String),3); if(wrong.length<3) return null;
+      return {index:'q:19e.parity[a;'+n+']', lines:[['Aₙ, the even shuffles of {1, …, n}, with n = '+n,'a part-group of Sₙ']], ask:'How many members has it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Half-are-even: n!/2 = '+f+'/2 = '+right+'.'}; }
+    const m=2+rnd(9), j=2+rnd(9), ev=(m+j)%2===0, opts=['even','odd','even only when σ and τ turn about','it depends on which swaps were used'];
+    return {index:'q:19e.parity[p;'+m+';'+j+']', lines:[['σ is a string of '+m+' swaps','given'],['τ is a string of '+j+' swaps','given']], ask:'Is στ even or odd?', right:opts[ev?0:1], opts, lead:'', why:'Put the two strings end to end: a string of '+m+' + '+j+' = '+(m+j)+' swaps for στ. By the parity technique every string for στ is then '+(ev?'even':'odd')+' in length.'}; }},
+  {id:'19e.swaps',step:'19e',mode:'proof',label:'can it be that many swaps',open:()=>measured('19e'),make(){
+    const n=4+rnd(2), a=perm19(n), N=N19(a), m=n-1+rnd(7), ok=(m-N)%2===0, opts=['it can be true','it cannot be true'];
+    return {index:'q:19e.swaps['+sh19(a)+';'+m+']', stack:true, lines:[['σ = '+sh19(a),'a shuffle'],['N(σ) = '+N,'count the pairs out of order'],['σ is a string of '+m+' swaps','claimed']], ask:'Can line 3 be true?', right:opts[ok?0:1], opts, lead:'',
+      why:'Parity technique: N(σ) = '+N+' is '+(N%2?'odd':'even')+', so every string of swaps for σ is '+(N%2?'odd':'even')+' in length. '+(ok?m+' is '+(m%2?'odd':'even')+' too. Swaps-build-every-shuffle gives a string of at most '+(n-1)+', and a swap done twice lengthens it by 2 at a time.':m+' is '+(m%2?'odd':'even')+', so no string of '+m+' swaps gives σ.')}; }});
+
+/* ---------- 19f Symmetries by Hand ---------- */
+const F19=[
+  ['What is a symmetry of a polygon, on this step?','a shuffle of its corners that sends neighbours to neighbours',['any shuffle of its corners','a turn of it on the table','a shuffle of its corners that keeps one corner in place'],'Corners that share a side must still share a side afterwards.'],
+  ['How many of the 24 shuffles of a square’s corners are symmetries?','8',['4','16','24'],'Place-then-count: 4 places for corner 1, then 2 for its neighbour, and the rest is forced. 2 · 4 = 8.'],
+  ['Are all of a square’s symmetries turns on the table?','no: four of the eight need the card turned over',['yes','no: only the half turn is','no: none of them is'],'The quarter turn, the half turn, three quarters and doing nothing stay on the table. The other four lift the card.'],
+  ['A rectangle is not a square. How many symmetries has it?','4',['8','2','1'],'Corner 1 can go to any of 4 corners, but its neighbour along the long side must stay along a long side: 4 · 1.'],
+  ['Do the symmetries of the square turn about?','no: qf = [3 2 1 4] and fq = [1 4 3 2]',['yes','yes: every group of 8 members does','no: no two of them do'],'With q = [2 3 4 1] and f = [2 1 4 3]. Some pairs do turn about: q and q² do.']];
+const sym19=p=>{ const n=p.length; return p.every((v,i)=>{ const d=Math.abs(v-p[(i+1)%n]); return d===1||d===n-1; }); };
+QP.push({id:'19f.keep',step:'19f',label:'shuffles that keep neighbours',open:()=>measured('19f'),make(){ return writtenQ('19f.keep',F19); }},
+  {id:'19f.count',step:'19f',mode:'work',label:'counting symmetries',open:()=>measured('19f'),make(){
+    const k=rnd(4), n=k===3?4+rnd(4):3+rnd(10), top=[['a regular polygon with '+n+' corners','given']];
+    if(k===0){ const right=String(2*n), wrong=uniq(right,[n,n*n,4*n,n+2,2*n-2,2*n+2].map(String),3);
+      return {index:'q:19f.count[a;'+n+']', lines:top, ask:'How many symmetries has it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Place-then-count: '+n+' places for corner 1, then 2 for its neighbour, and every other corner is forced. 2 · '+n+' = '+right+'.'}; }
+    if(k===1){ const right=String(n), wrong=uniq(right,[2*n,n-1,n+1,n*n,1].map(String),3);
+      return {index:'q:19f.count[t;'+n+']', lines:top, ask:'How many of its symmetries are turns on the table, doing nothing among them?', right, opts:shuffle([right,...wrong]), lead:'', why:'A turn by one '+n+'th of a whole turn, done 1, 2, … up to '+n+' times: '+n+' turns, the last of them doing nothing. The other '+n+' symmetries turn the polygon over.'}; }
+    if(k===2){ const j=2+rnd(n-1), right='2', wrong=uniq(right,['1',String(n),String(2*n),String(n-1),'4'],3);
+      return {index:'q:19f.count[j;'+n+';'+j+']', lines:top, ask:'How many of its symmetries send corner 1 to corner '+j+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Once corner 1 is at '+j+', corner 2 must go to one of the two neighbours of '+j+', and then every other corner is forced. One of the two is a turn on the table, and the other turns the polygon over.'}; }
+    const f=fact16(n), right=String(f-2*n), wrong=uniq(right,[f-n,2*n,f/2,f-2*n-2,f-4*n,f].map(String),3);
+    return {index:'q:19f.count[r;'+n+']', lines:top, ask:'How many of the '+f+' shuffles of its corners are not symmetries?', right, opts:shuffle([right,...wrong]), lead:'', why:'It has 2 · '+n+' = '+(2*n)+' symmetries, and '+f+' − '+(2*n)+' = '+right+'. Every one of those sends some two neighbours to corners that are not neighbours.'}; }},
+  {id:'19f.which',step:'19f',mode:'work',label:'which shuffles are symmetries',open:()=>measured('19f'),make(){
+    const n=4+rnd(3), good=[], bad=[]; for(let i=0;i<300&&(good.length<1||bad.length<3);i++){ const p=perm19(n), s=sh19(p); if(sym19(p)){ if(!good.length) good.push(p); } else if(bad.length<3&&!bad.some(b=>sh19(b)===s)) bad.push(p); } if(good.length<1||bad.length<3) return null;
+    const g=good[0], right=sh19(g), wrong=bad.map(sh19), b=bad[0], i=id19(n).find(t=>{ const d=Math.abs(b[t-1]-b[t%n]); return !(d===1||d===n-1); }), up=g[1]===g[0]%n+1;
+    return {index:'q:19f.which['+[right].concat(wrong).join(';')+']', lines:[['a regular polygon with '+n+' corners, labelled 1 to '+n+' in order round it','given'],['four shuffles of its corners','one of them is a symmetry']], ask:'Which one is a symmetry?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:right+' reads round the polygon in order, '+(up?'the same way round: a turn on the table':'the other way round: the polygon is turned over')+'. So neighbours stay neighbours. In '+wrong[0]+', the neighbours '+i+' and '+(i%n+1)+' go to '+b[i-1]+' and '+b[i%n]+', which are not neighbours.'}; }},
+  {id:'19f.tile',step:'19f',mode:'word',label:'ways to fit',open:()=>measured('19f'),make(){
+    const who=pick(['A paving tile','A lid','A puzzle piece','A hatch cover']), flip=Math.random()<0.5, rect=Math.random()<0.15, n=3+rnd(10), v=rect?(flip?4:2):(flip?2*n:n), right=String(v), wrong=uniq(right,(rect?[2,4,8,1,6]:[n,2*n,4*n,n-1,n+1,2*n-1]).map(String),3);
+    return {index:'q:19f.tile['+[who,rect?'r':n,flip?1:0].join(';')+']', a3:['19f.tile',DASH,DASH], story:who+' has the shape of '+(rect?'a rectangle that is not a square':'a regular polygon with '+n+' corners')+'. '+(flip?'Its two faces are alike, so it may go in either face up.':'It must go in with its marked face up.'), lines:[], ask:'In how many ways does it fit its hole?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:rect?(flip?'A rectangle that is not a square has 4 symmetries: corner 1 can go to any of 4 corners, and then its neighbour along the long side is forced.':'Of the rectangle’s 4 symmetries, 2 are turns on the table: doing nothing, and the half turn. The other 2 turn it over.'):(flip?'Place-then-count: '+n+' places for one corner, then 2 for its neighbour. 2 · '+n+' = '+right+'.':'With one face up, only the turns on the table are left: '+n+' of them, doing nothing among them. The other '+n+' symmetries turn it over.')}; }});
+
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 
