@@ -516,7 +516,7 @@ function deskHTML(){
   const qs=!!document.querySelector('.sayback');
   const hb=!!document.querySelector('section.basement'); /* 0.3.30 (Andrew 11:39): the basement is a Toolbox page */
   d.innerHTML='<div class="dtop"><button type="button" class="dback">← back</button><b class="dttl"></b></div><div class="dtabs"><button data-p="keys">Quick Keys</button>'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph View</button><button data-p="moves">Techs Read</button><button data-p="rand">Laundry</button>'+(document.querySelector('.qid')?'<button type="button" class="dcross">Crosswalk</button>':'')+'<button type="button" class="dstick">Measuring Stick</button><button type="button" class="dstand">Standing Questions</button>'+(hb?'<button data-p="base">Cellar</button>':'')+'<button data-p="rec">Record</button>'+(document.querySelector('.wrap>section.class.step')&&false?'<button type="button" class="dfv">Page View</button>':'')+'<button type="button" class="dheights">Dizzying Heights</button><a class="dshare" href="install.html">Share the Ladder</a><button class="x" aria-label="close">✕</button></div>'
-    +'<div class="dpane" id="dp-keys"><p class="dnote">The marks this footing writes that a keyboard can’t type. Tap a text box first, and the key writes there; or use your own line and paste it.</p><div id="dkeyshost"></div></div>'
+    +'<div class="dpane" id="dp-keys"><div id="dkeyshost"></div></div>'
     +(qs?'<div class="dpane" id="dp-qs"><p class="dnote">The page’s questions, here so you can read them beside the class.</p><div class="dq" id="dq"></div></div>':'')
     +'<div class="dpane" id="dp-graph"><div id="dgfig"></div><div id="dmg"></div><p class="dnote" style="margin-top:10px">Type it as on paper: x^2, 2sin(x), e^x, ln x, √x, |x|, x!. a, b, c and k get sliders.</p></div>'
     +'<div class="dpane" id="dp-moves"><p class="dnote" id="dmnote">The techs this step uses and builds: what each is called, what it does in words, and the line in symbols.</p><div id="dmoves"></div><p><a class="dlink" href="moves.html">every tech you have earned →</a></p></div>'
@@ -1718,9 +1718,9 @@ function footingView0(){
      (semi-axes 1 and 0.55) turning at an even rate lifts its follower by r(φ) = ab/√(b²cos²φ + a²sin²φ) as φ runs from π/2 to 0:
      the lift starts and ends at rest, and the ellipse sets how it gathers and loses speed in between. */
   const CA=1, CB=0.55, lift=t=>{ const ph=Math.PI/2*(1-t), r=CA*CB/Math.sqrt(CB*CB*Math.cos(ph)**2+CA*CA*Math.sin(ph)**2); return (r-CB)/(CA-CB); };
-  const cam=(dir,H,W,outgoing)=>{ const f=[]; for(let i=0;i<=32;i++){ const t=i/32, e=lift(t);
+  const cam=(dir,H,W,outgoing,ax)=>{ const f=[]; for(let i=0;i<=32;i++){ const t=i/32, e=lift(t);
       const y=outgoing?dir*e*H:-dir*(1-e)*H;
-      f.push({transform:'translateY('+y.toFixed(1)+'px)',opacity:outgoing?1-0.35*e*e:0.35+0.65*e}); }
+      f.push({transform:'translate'+(ax||'Y')+'('+y.toFixed(1)+'px)',opacity:outgoing?1-0.35*e*e:0.35+0.65*e}); } /* 2026-11-10 (Andrew 15:59): ax 'X' for a sideways crossing */
     return f; };
   function go(n,opts){ opts=opts||{}; n=Math.max(0,Math.min(N-1,n)); if(n===cur&&!opts.force){ return; } if(busy) return;
     const from=cur, dir=n>from?1:-1; cur=n; window.LadderFV.dir=dir; window.LadderFV.wantEl=opts.el||null; /* Phase G: the swipe row starts at its far end when the climb goes back */
@@ -1736,12 +1736,13 @@ function footingView0(){
     /* 2026-11-10 (Andrew 15:48): the incoming footing's screens exist before it lifts in, so one screen arrives, not the whole footing */
     if(window.LadderFV&&LadderFV.onPaint) try{ const keepEl=LadderFV.wantEl, keepLast=LadderFV.wantLast; LadderFV.onPaint(units[n],n,{on,N,LASTU,ONE}); LadderFV.wantEl=keepEl; LadderFV.wantLast=keepLast; }catch(e){}
     const inc=units[n];
-    const a1=ghost.animate(cam(dir,H,W,true),{duration:560,easing:'linear',fill:'forwards'});
-    const a2=inc.map(el=>el.animate(cam(dir,H,W,false),{duration:560,easing:'linear'}));
+    const hz=!!opts.h, D=hz?-dir:dir, L=hz?W:H, ax=hz?'X':'Y', dur=hz?320:560; /* a horizontal swipe crosses sideways, the way the row slides */
+    const a1=ghost.animate(cam(D,L,W,true,ax),{duration:dur,easing:'linear',fill:'forwards'});
+    const a2=inc.map(el=>el.animate(cam(D,L,W,false,ax),{duration:dur,easing:'linear'}));
     a1.onfinish=()=>{ old.forEach((el,i)=>{ el.classList.remove('fv-on'); marks[i].replaceWith(el); }); ghost.remove(); paint(); busy=false; remember(); if(opts.el) opts.el.scrollIntoView({block:'start'}); };
   }
-  const fwd=()=>{ if(cur>=LASTU){ const h=pageLink(1); if(h) leave(h,1); return; } go(cur+1); };
-  const back=()=>{ if(cur<=0){ const h=pageLink(-1); if(h) leave(h,-1); return; } go(Math.min(cur-1,LASTU)); };
+  const fwd=o=>{ if(cur>=LASTU){ const h=pageLink(1); if(h) leave(h,1); return; } go(cur+1,o&&o.h?{h:true}:undefined); };
+  const back=o=>{ if(cur<=0){ const h=pageLink(-1); if(h) leave(h,-1); return; } go(Math.min(cur-1,LASTU),o&&o.h?{h:true}:undefined); };
   up.onclick=fwd; dn.onclick=back; window.LadderFV.fwd=fwd; window.LadderFV.back=back; /* Phase G: the row's ends climb */
   /* 0.3.40 (Andrew 12:08): on a keyboard, ↑ climbs to the next footing and ↓ goes back, as the ▲ and ▼ buttons do */
   document.addEventListener('keydown',e=>{ if(!on||busy||e.defaultPrevented||e.altKey||e.ctrlKey||e.metaKey||e.shiftKey) return;
@@ -2469,10 +2470,10 @@ function show(i,opts){ opts=opts||{}; if(!screens.length) return; const prev=k; 
   bar.hidden=!on||n<2; if(window.LadderNotices) LadderNotices.tick(); }
 function adv(a){ const cur=screens[k]&&screens[k][0]; const deck=cur&&cur.matches('.slides')&&!cur.classList.contains('sw-stub')?cur:null; const A=a||api(deck);
   if(A&&A.i<deckN(A.container)-1){ A.show(A.i+1); return; }
-  if(k<screens.length-1) show(k+1,{anim:true}); else if(window.LadderFV&&LadderFV.fwd) LadderFV.fwd(); }
+  if(k<screens.length-1) show(k+1,{anim:true}); else if(window.LadderFV&&LadderFV.fwd) LadderFV.fwd({h:true}); }
 function ret(a){ const cur=screens[k]&&screens[k][0]; const deck=cur&&cur.matches('.slides')&&!cur.classList.contains('sw-stub')?cur:null; const A=a||api(deck);
   if(A&&A.i>0){ A.show(A.i-1); return; }
-  if(k>0) show(k-1,{anim:true}); else if(window.LadderFV&&LadderFV.back){ LadderFV.wantLast=true; LadderFV.back(); } }
+  if(k>0) show(k-1,{anim:true}); else if(window.LadderFV&&LadderFV.back){ LadderFV.wantLast=true; LadderFV.back({h:true}); } }
 /* the footing view tells us each time it paints a footing */
 window.LadderFV=window.LadderFV||{};
 LadderFV.onPaint=function(els,cur,info){ ui(); if(!PAGES.test(pg())||!info||!info.on){ on=false; document.body.classList.remove('sw'); clear(); bar.hidden=true; return; }

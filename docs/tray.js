@@ -25,7 +25,8 @@ const css=`
 @media (prefers-color-scheme: dark){#mk-tray{--mk-paper:var(--paper,#1b1b1f);--mk-ink:var(--ink,#ece8df);--mk-muted:var(--muted,#9a9aa3);--mk-grid:var(--grid,#33333a);--mk-sand:var(--sand,#2a2a30);--mk-card:var(--card,#232329);--mk-teal:var(--teal,#4aa3c2);--mk-ember:var(--ember,#e8703a)}}
 #mk-tray .mk-btn{position:fixed;right:max(14px,env(safe-area-inset-right,0px));bottom:max(14px,env(safe-area-inset-bottom,0px));z-index:9000;font-family:var(--mk-mono);font-size:.85rem;background:var(--mk-ink);color:var(--mk-paper);border:0;border-radius:999px;padding:9px 14px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.25)}
 #mk-tray.hasdesk .mk-btn{bottom:calc(max(14px,env(safe-area-inset-bottom,0px)) + 54px)}
-#mk-tray .mk-panel{position:fixed;left:0;right:0;bottom:0;z-index:9001;background:var(--mk-paper);border-top:1px solid var(--mk-grid);box-shadow:0 -4px 18px rgba(0,0,0,.18);max-height:60vh;overflow:auto;padding:10px max(14px,env(safe-area-inset-right,0px)) max(14px,env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));transform:translateY(105%);transition:transform .22s ease;display:grid;gap:8px}
+#mk-tray .mk-panel{position:fixed;left:0;right:0;bottom:0;z-index:9001;background:var(--mk-paper);border-top:1px solid var(--mk-grid);box-shadow:0 -4px 18px rgba(0,0,0,.18);max-height:60vh;overflow:auto;padding:10px max(14px,env(safe-area-inset-right,0px)) max(14px,env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));transform:translateY(105%);transition:transform .22s ease;display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+#mk-tray .mk-panel>*{min-width:0} /* 2026-11-10: the panel never grows past its host (the one-line target label used to set its width) */
 #mk-tray.open .mk-panel{transform:none}
 #mk-tray .mk-panel[hidden]{display:none}
 #mk-tray.mk-docked .mk-btn,#mk-tray.mk-docked .mk-close{display:none}
@@ -33,9 +34,10 @@ const css=`
 #mk-tray .mk-top{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 #mk-tray .mk-target{font-family:var(--mk-mono);font-size:.72rem;color:var(--mk-teal);flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #mk-tray .mk-top button,#mk-tray .mk-line button{font-family:var(--mk-mono);font-size:.8rem;background:var(--mk-sand);color:var(--mk-ink);border:1px solid var(--mk-grid);border-radius:6px;padding:5px 9px;cursor:pointer}
-#mk-tray .mk-line{display:none;grid-template-columns:1fr auto auto;gap:6px}
+#mk-tray .mk-line{display:none;grid-template-columns:minmax(0,1fr) auto auto;gap:6px}
+@media (max-width:480px){#mk-tray .mk-line{grid-template-columns:1fr 1fr} #mk-tray .mk-line textarea{grid-column:1/-1}} /* 2026-11-10 (Andrew 15:59): the own line fits a phone */
 #mk-tray.ownline .mk-line{display:grid}
-#mk-tray textarea{font-family:var(--mk-mono);font-size:1.05rem;padding:7px 10px;border:1px solid var(--mk-grid);border-radius:6px;background:var(--mk-card);color:var(--mk-ink);resize:vertical;min-height:2.4rem;min-width:0}
+#mk-tray textarea{font-family:var(--mk-mono);font-size:1.05rem;padding:7px 10px;border:1px solid var(--mk-grid);border-radius:6px;background:var(--mk-card);color:var(--mk-ink);resize:vertical;min-height:2.4rem;min-width:0;width:100%;box-sizing:border-box}
 #mk-tray .mk-keys{display:flex;flex-wrap:wrap;gap:6px}
 #mk-tray .mk-k{font-family:var(--mk-serif);font-size:1.25rem;min-width:2.7rem;min-height:2.7rem;padding:3px 9px;border-radius:7px;line-height:1.15;cursor:pointer;display:grid;align-content:center;justify-items:center;gap:1px}
 #mk-tray .mk-k.leaf{background:var(--mk-teal);color:#fff;border:1px solid var(--mk-teal)}
