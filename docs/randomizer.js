@@ -5943,6 +5943,474 @@ QP.push({id:'27m.turns',step:'27m',label:'turns and length keepers',open:()=>mea
     const [tag,lines,j,rr,why]=pick(V);
     return {index:'q:27m.line['+[tag,s].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
 
+/* ===== Laundry 5, rung 28 (floor 5 pools, stage AA), part 1: 28a to 28h ===== */
+Object.assign(STEPS,{'28a':['r28a','Two Knobs, Keep One Still'],'28b':['r28b','The Best Flat Map'],'28c':['r28c','The Chain Rule Along Several Roads'],'28d':['r28d','Does the Order of the Knobs Matter?'],'28e':['r28e','Locally Undoable'],'28f':['r28f','When an Equation Fixes a Function'],'28g':['r28g','The Best Point on a Constraint'],'28h':['r28h','Double Integrals'],'28i':['r28i','Changing the Variables'],'28j':['r28j','Flux and Circulation'],'28k':['r28k','Partials and Gradients by Hand'],'28l':['r28l','Polynomials That Hug a Surface, by Hand'],'28m':['r28m','Integrals by Hand'],'28n':['r28n','Along Curves and Across Surfaces'],'28o':['r28o','Gradient Descent'],'28p':['r28p','How Errors Spread']});
+const pt28=()=>[pick([1,2,-1,-2,3]),pick([1,2,-1,-2,3])], PY28=[[3,4,5],[6,8,10],[5,12,13],[8,15,17],[4,3,5],[12,5,13]];
+const line28=(id,V,key)=>{ const [tag,lines,j,rr,why]=pick(V); return {index:'q:'+id+'['+[tag,...key].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; };
+
+/* ---------- 28a Two Knobs, Keep One Still ---------- */
+const WA28=[
+  ['fx and fy exist at w. Is f continuous at w?','not always: the knobs miss the jump',['yes','yes, when fx = fy there','never'],'Knobs-miss-jumps technique: a function can have both partial slopes at a point and still not be continuous there.'],
+  ['f heads to L along every line through w. Does f head to L at w?','not always: a curved road can still find a step',['yes','yes: lines reach every point','never'],'Heading to L means along every road into w, not only the straight ones.'],
+  ['Is ∂/∂x (x²y) = 2xy + x²?','no: y is held still; its slope along x is 0, so the partial slope is 2xy',['yes','no: it is x²','no: it is 2x'],'One-knob technique: treat every other input as a fixed number.'],
+  ['Is fx(w₁, w₂) the slope of y ↦ f(w₁, y)?','no: that is fy; fx turns the x knob',['yes','yes, at y = w₂','no: it is the slope of f along y = x'],'fx is the slope of x ↦ f(x, w₂) at x = w₁.'],
+  ['How is a partial slope found?','treat every other input as a fixed number and use the slope techniques of rung 13',['take the slope along every input and add','set every other input to 0','take the slope along the line y = x'],'One-knob technique.'],
+  ['Which are continuous functions of the point x?','each place xᵢ, and every sum, product and quotient of continuous functions where the bottom is not 0',['only the places xᵢ','every function with partial slopes','every quotient, even where the bottom is 0'],'Each-place technique.']];
+QP.push({id:'28a.knobs',step:'28a',label:'one knob at a time',open:()=>measured('28a'),make(){ return writtenQ('28a.knobs',WA28); }},
+  {id:'28a.work',step:'28a',mode:'work',label:'a partial slope',open:()=>measured('28a'),make(){
+    const a=nz25(3), b=nz25(3), [p,q]=pt28(), k=rnd(3), x=rnd(2);
+    const F=[[tm25([[a,'x²y'],[b,'y²']]),2*a*p*q,a*p*p+2*b*q,'fx = '+cf22(2*a,'xy')+' and fy = '+tm25([[a,'x²'],[2*b,'y']])],[tm25([[a,'xy'],[b,'x³']]),a*q+3*b*p*p,a*p,'fx = '+tm25([[a,'y'],[3*b,'x²']])+' and fy = '+cf22(a,'x')],[tm25([[a,'x²'],[b,'y³']]),2*a*p,3*b*q*q,'fx = '+cf22(2*a,'x')+' and fy = '+cf22(3*b,'y²')]][k];
+    const val=x?F[2]:F[1], oth=x?F[1]:F[2], right=sg(val), wrong=uniq(right,[sg(oth),sg(F[1]+F[2]),sg(-val),sg(val+a),sg(2*val),sg(val-1)],3); if(wrong.length<3) return null;
+    return {index:'q:28a.work['+[k,x,a,b,p,q].join(';')+']', lines:[['f(x, y) = '+F[0],'a function of two knobs']], ask:'What is '+(x?'fy':'fx')+'('+sg(p)+', '+sg(q)+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'One-knob technique: hold the other knob still. '+F[3]+'.'}; }},
+  {id:'28a.line',step:'28a',mode:'proof',label:'hold the other still',open:()=>measured('28a'),make(){
+    const a=nz25(4), b=nz25(4), k=1+rnd(5), n=2+rnd(2), V=[
+      ['a1',[['f(x, y) = '+cf22(a,'x²y'),'given'],['fx = '+cf22(2*a,'xy'),'the one-knob technique: y is held still']],2,0,'With y a fixed number, the slope of x² is 2x.'],
+      ['a2',[['f(x, y) = '+cf22(a,'x²y'),'given'],['fx = '+tm25([[2*a,'xy'],[a,'x²']]),'the product technique']],2,1,'y is held still; its slope along x is 0.'],
+      ['a3',[['fx and fy exist at w','given'],['f is continuous at w','it has slopes there']],2,1,'Knobs-miss-jumps technique: both partial slopes can exist where f is not continuous.'],
+      ['a4',[['f(x, y) = '+tm25([[a,'x²'],[b,'xy']]),'given'],['f is continuous at every point','the each-place technique']],2,0,'Each place is continuous, and so are sums and products of continuous functions.'],
+      ['a5',[['f(x, y) = x/(y − '+k+')','given'],['f is continuous at every point','the each-place technique']],2,1,'The bottom is 0 where y = '+k+'.'],
+      ['a6',[['f heads to L along every line through w','given'],['f heads to L at w','every line agrees']],2,1,'A curved road can still find a step.'],
+      ['a7',[['f(x, y) = '+cf22(a,'xy'+(n===2?'²':'³')),'given'],['fy = '+cf22(a*n,'xy'+(n===2?'':'²')),'the one-knob technique: x is held still']],2,0,'With x a fixed number, the slope of y'+(n===2?'²':'³')+' is '+n+'y'+(n===2?'':'²')+'.']];
+    return line28('28a.line',V,[a,b,k,n]); }});
+
+/* ---------- 28b The Best Flat Map ---------- */
+const WB28=[
+  ['fx and fy exist at w. Has f a best flat map at w?','not always: f may not even be continuous there',['yes','yes: its grid holds fx and fy','never'],'Flat-means-continuous technique: if f has a best flat map at w, f is continuous at w.'],
+  ['The leftover r(h) has |r(h)|/|h| bounded. Is L the best flat map?','not always: the leftover over |h| must head to 0, not just stay small',['yes','yes, when L is straight','never'],'The best flat map leaves a leftover that shrinks faster than |h|.'],
+  ['f has a best flat map at w. Are its partial slopes continuous at w?','not always: smooth knobs give the flat map, not the other way round',['yes','yes, by the slope-grid technique','never'],'Smooth-knobs technique: partial slopes near w, continuous at w, give a best flat map at w.'],
+  ['Is the slope along u equal to L(u), for any arrow u?','only for u of length 1; for 2u the change is twice as fast',['yes','never','only for u = e₁'],'L is straight, so L(2u) = 2L(u).'],
+  ['How many best flat maps can f have at a point?','at most one',['exactly one, always','one for each input','one for each direction'],'One-flat-map technique.'],
+  ['f has a best flat map L at w. What stands in row i, column j of its grid?','∂fᵢ/∂xⱼ at w',['∂fⱼ/∂xᵢ at w','fᵢ(wⱼ)','∂fᵢ/∂xᵢ at w'],'Slope-grid technique.']];
+QP.push({id:'28b.flat',step:'28b',label:'the best flat map',open:()=>measured('28b'),make(){ return writtenQ('28b.flat',WB28); }},
+  {id:'28b.work',step:'28b',mode:'work',label:'grid and slope along',open:()=>measured('28b'),make(){
+    const t=rnd(3), a=nz25(3), b=nz25(3), c=nz25(3), [p,q]=pt28();
+    if(t===0){ const right=g2(a,b,c*q,c*p), wrong=uniq(right,[g2(a,c*q,b,c*p),g2(a,b,c*p,c*q),g2(a,b,c,c),g2(c*q,c*p,a,b)],3); if(wrong.length<3) return null;
+      return {index:'q:28b.work[g;'+[a,b,c,p,q].join(';')+']', lines:[['f(x, y) = ('+tm25([[a,'x'],[b,'y']])+', '+cf22(c,'xy')+')','a function with two outputs']], ask:'Which is the slope grid of f at ('+sg(p)+', '+sg(q)+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'Slope-grid technique: row i, column j holds ∂fᵢ/∂xⱼ. Row 2 is ('+cf22(c,'y')+', '+cf22(c,'x')+') at the point.'}; }
+    if(t===1){ const h=[nz25(3),nz25(3)], val=a*h[0]+b*h[1], right=sg(val), wrong=uniq(right,[sg(a+b),sg(a*h[1]+b*h[0]),sg(a*h[0]*b*h[1]),sg(-val),sg(a*h[0]-b*h[1]),sg(val+1)],3); if(wrong.length<3) return null;
+      return {index:'q:28b.work[l;'+[a,b,h].join(';')+']', lines:[['the best flat map L of f at w has the grid '+v27([a,b]),'fx(w) and fy(w)'],['h = '+v27(h),'an arrow']], ask:'What is L(h)?', right, opts:shuffle([right,...wrong]), lead:'', why:'L(h) = fx(w) h₁ + fy(w) h₂ = '+sg(a)+' · '+par10(h[0])+' + '+par10(b)+' · '+par10(h[1])+'.'}; }
+    const [u,f]=pick([['(3/5, 4/5)',(A,B)=>3*A+4*B],['(4/5, −3/5)',(A,B)=>4*A-3*B],['(−3/5, 4/5)',(A,B)=>-3*A+4*B],['(4/5, 3/5)',(A,B)=>4*A+3*B]]), val=f(a,b), right=sg(val), wrong=uniq(right,[sg(5*a+5*b),sg(5*a),sg(5*val),sg(-val),sg(f(b,a)),sg(val+1)],3); if(wrong.length<3) return null;
+    return {index:'q:28b.work[u;'+[a,b,u].join(';')+']', lines:[['the best flat map L of f at w has the grid '+v27([5*a,5*b]),'fx(w) and fy(w)'],['u = '+u,'an arrow of length 1']], ask:'What is the slope of f at w along u?', right, opts:shuffle([right,...wrong]), lead:'', why:'For u of length 1 the slope along u is L(u): each place of the grid against the same place of u, then add.'}; }},
+  {id:'28b.line',step:'28b',mode:'proof',label:'flat and continuous',open:()=>measured('28b'),make(){
+    const a=nz25(5), b=nz25(5), k=2+rnd(4), V=[
+      ['b1',[['fx and fy exist at w','given'],['f has a best flat map at w','its grid is (fx, fy)']],2,1,'Partial slopes alone do not give it: f may not be continuous at w.'],
+      ['b2',[['every partial slope of f exists near w and is continuous at w','given'],['f has a best flat map at w','the smooth-knobs technique']],2,0,'Smooth knobs give the flat map.'],
+      ['b3',[['f has a best flat map at w','given'],['f is continuous at w','the flat-means-continuous technique']],2,0,'f(w + h) − f(w) = L(h) + r(h), and both parts head to 0.'],
+      ['b4',[['f has a best flat map at w','given'],['the partial slopes of f are continuous at w','the smooth-knobs technique']],2,1,'The technique runs the other way.'],
+      ['b5',[['L and M are best flat maps of f at w','given'],['L = M','the one-flat-map technique']],2,0,'A function has at most one best flat map at a point.'],
+      ['b6',[['f has a best flat map at w, with the grid '+v27([a,b]),'given'],['fx(w) = '+sg(a)+' and fy(w) = '+sg(b),'the slope-grid technique']],2,0,'The grid holds the partial slopes.'],
+      ['b7',[['f has the best flat map L at w, and u = '+v27([k,0]),'given'],['the slope of f at w along u is L(u)','the slope along an arrow']],2,1,'Only for u of length 1. Here u has length '+k+'.']];
+    return line28('28b.line',V,[a,b,k]); }});
+
+/* ---------- 28c The Chain Rule Along Several Roads ---------- */
+const WC28=[
+  ['Is D(f ∘ g)(w) = Dg(w) Df(g(w))?','no: g is done first, so its grid is on the right; AB, not BA',['yes','yes, when the grids are square','no: the grids are added'],'Chain-of-flat-maps technique: the slope grid of f ∘ g is the product of the slope grids.'],
+  ['Is D(f ∘ g)(w) = Df(w) Dg(w)?','no: the flat map of f is taken where g lands, at g(w)',['yes','no: both are taken at g(w)','no: the grids are added'],'Chain-of-flat-maps technique.'],
+  ['Is the slope of f(x(t), y(t)) equal to fx + fy?','no: each road is weighted by how fast its input moves; it is fx · x′(t) + fy · y′(t)',['yes','no: it is fx · fy','no: it is x′(t) + y′(t)'],'Roads-add technique.'],
+  ['The partial slopes of f exist. Do the roads add?','not always: the technique needs the best flat map of f',['yes','yes, when x(t) and y(t) have slopes','never'],'Roads-add technique: f has a best flat map at (x(t), y(t)).'],
+  ['Which number c has |Ah| ≤ c|h| for every h?','the square root of the sum of the squares of the entries of A',['1','det A','the largest entry of A'],'Stretch-bound technique.'],
+  ['g has best flat map B at w, and f has best flat map A at g(w). What is the best flat map of f ∘ g at w?','AB',['BA','A + B','A'],'Chain-of-flat-maps technique.']];
+QP.push({id:'28c.roads',step:'28c',label:'roads add',open:()=>measured('28c'),make(){ return writtenQ('28c.roads',WC28); }},
+  {id:'28c.work',step:'28c',mode:'work',label:'along several roads',open:()=>measured('28c'),make(){
+    const t=rnd(3), a=nz25(4), b=nz25(4), c=nz25(4), d=nz25(4);
+    if(t===0){ const val=a*c+b*d, right=sg(val), wrong=uniq(right,[sg(a+b),sg(a*d+b*c),sg((a+b)*(c+d)),sg(a*c-b*d),sg(c+d),sg(val+1)],3); if(wrong.length<3) return null;
+      return {index:'q:28c.work[r;'+[a,b,c,d].join(';')+']', lines:[['at the point, fx = '+sg(a)+' and fy = '+sg(b),'f has a best flat map there'],['x′(t) = '+sg(c)+' and y′(t) = '+sg(d),'the two roads']], ask:'What is the slope of f(x(t), y(t))?', right, opts:shuffle([right,...wrong]), lead:'', why:'Roads-add technique: fx · x′(t) + fy · y′(t) = '+sg(a)+' · '+par10(c)+' + '+par10(b)+' · '+par10(d)+'.'}; }
+    if(t===1){ const p=pick([1,2,-1,3]), val=a*(3*p*p+b), right=sg(val), wrong=uniq(right,[sg(a*(p*p+b)+a*p),sg(a*(p*p+b)),sg(2*a*p),sg(a*(p*p+b)*2*p),sg(-val),sg(val+a)],3); if(wrong.length<3) return null;
+      return {index:'q:28c.work[t;'+[a,b,p].join(';')+']', lines:[['f(x, y) = xy','given'],['x(t) = '+cf22(a,'t')+' and y(t) = t²'+pm(b),'the two roads']], ask:'What is the slope of f(x(t), y(t)) at t = '+sg(p)+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Roads-add technique: fx · x′ + fy · y′ = y · '+par10(a)+' + x · 2t. At t = '+sg(p)+' that is '+sg(p*p+b)+' · '+par10(a)+' + '+par10(a*p)+' · '+par10(2*p)+'.'}; }
+    const A=[a,rnd(3)-1,rnd(3)-1,b], B=[c,rnd(3)-1,rnd(3)-1,d], f=X=>g2(...X), right=f(mul27(A,B)), wrong=uniq(right,[f(mul27(B,A)),f(A.map((x,i)=>x+B[i])),f(A.map((x,i)=>x*B[i])),f(A)],3); if(wrong.length<3) return null;
+    return {index:'q:28c.work[g;'+[A,B].join(';')+']', lines:[['Df(g(w)) has '+f(A),'the slope grid of f, where g lands'],['Dg(w) has '+f(B),'the slope grid of g']], ask:'Which is the slope grid of f ∘ g at w?', right, opts:shuffle([right,...wrong]), lead:'', why:'Chain-of-flat-maps technique: the product, with the grid of g on the right. The first place is '+sg(A[0])+' · '+par10(B[0])+' + '+par10(A[1])+' · '+par10(B[2])+'.'}; }},
+  {id:'28c.line',step:'28c',mode:'proof',label:'which grid goes first',open:()=>measured('28c'),make(){
+    const a=nz25(4), b=nz25(4), c=nz25(4), d=nz25(4), [E,cc,sq]=pick([['rows (3, 0), (0, 4)',5,'9 + 16'],['rows (1, 2), (2, 0)',3,'1 + 4 + 4'],['rows (2, 2), (1, 4)',5,'4 + 4 + 1 + 16'],['rows (1, 1), (1, 1)',2,'1 + 1 + 1 + 1'],['rows (5, 0), (12, 0)',13,'25 + 144']]); if(a*c+b*d===a+b) return null;
+    const V=[
+      ['c1',[['g has best flat map B at w, and f has best flat map A at g(w)','given'],['f ∘ g has best flat map AB at w','the chain-of-flat-maps technique']],2,0,'Its slope grid is the product of the slope grids.'],
+      ['c2',[['g has best flat map B at w, and f has best flat map A at g(w)','given'],['f ∘ g has best flat map BA at w','the chain-of-flat-maps technique']],2,1,'g is done first, so its grid is on the right: AB.'],
+      ['c3',[['g has best flat map B at w, and f has best flat map A at w','given'],['f ∘ g has best flat map AB at w','the chain-of-flat-maps technique']],2,1,'The flat map of f is taken where g lands, at g(w).'],
+      ['c4',[['fx = '+sg(a)+' and fy = '+sg(b)+' at the point, where f has a best flat map; x′(t) = '+sg(c)+' and y′(t) = '+sg(d),'given'],['the slope of f(x(t), y(t)) is '+sg(a*c+b*d),'the roads-add technique']],2,0,sg(a)+' · '+par10(c)+' + '+par10(b)+' · '+par10(d)+' = '+sg(a*c+b*d)+'.'],
+      ['c5',[['fx = '+sg(a)+' and fy = '+sg(b)+' at the point, where f has a best flat map; x′(t) = '+sg(c)+' and y′(t) = '+sg(d),'given'],['the slope of f(x(t), y(t)) is '+sg(a+b),'the roads add']],2,1,'Each road is weighted by how fast its input moves: '+sg(a)+' · '+par10(c)+' + '+par10(b)+' · '+par10(d)+' = '+sg(a*c+b*d)+'.'],
+      ['c6',[['A has '+E,'given'],['|Ah| ≤ '+cc+'|h| for every h','the stretch-bound technique']],2,0,'√('+sq+') = '+cc+'.'],
+      ['c7',[['the partial slopes of f exist at the point, and x(t), y(t) have slopes','given'],['the slope of f(x(t), y(t)) is fx · x′(t) + fy · y′(t)','the roads-add technique']],2,1,'The technique needs the best flat map of f, not only its partial slopes.']];
+    return line28('28c.line',V,[a,b,c,d,cc]); }});
+
+/* ---------- 28d Does the Order of the Knobs Matter? ---------- */
+const WD28=[
+  ['Is fxy = fyx always?','no: not without continuity of the mixed slopes',['yes','yes, when fx and fy exist','never'],'Order-matters technique: there is a function whose mixed second slopes at a point exist and differ.'],
+  ['Δ is the difference of the differences of f round a small rectangle with sides h and k at (a, b). Is Δ = fxy(a, b) hk exactly?','no: the average-slope technique gives some in-between point, not (a, b)',['yes','yes, for small h and k','no: Δ = fx(a, b) h + fy(a, b) k'],'Continuity of fxy at (a, b) then closes the gap.'],
+  ['Does fxy mean take y first?','no: here fxy means x first, then y; write the order out when it matters',['yes','yes: read it right to left','neither: both knobs turn at once'],'fxy is the slope of fx along y.'],
+  ['Is fxx = (fx)²?','no: fxx is the slope of fx, not its square',['yes','yes, when f is a polynomial','no: fxx = 2fx'],'For f = x², fx = 2x and fxx = 2.'],
+  ['When does the swap-knobs technique give fxy(a, b) = fyx(a, b)?','when fx, fy, fxy and fyx exist near (a, b), and fxy and fyx are continuous at (a, b)',['whenever fxy and fyx exist at (a, b)','only when f is a polynomial','only when both are 0'],'Swap-knobs technique.'],
+  ['Can the mixed second slopes at a point exist and differ?','yes: there is such a function',['no','no: they agree wherever they exist','yes, but only where f is not continuous'],'Order-matters technique.']];
+QP.push({id:'28d.order',step:'28d',label:'order of the knobs',open:()=>measured('28d'),make(){ return writtenQ('28d.order',WD28); }},
+  {id:'28d.work',step:'28d',mode:'work',label:'second slopes',open:()=>measured('28d'),make(){
+    const a=nz25(2), b=nz25(4), p=pick([1,2,-1]), q=pick([1,2,-1]), S={fxy:6*a*p*p*q+b,fyx:6*a*p*p*q+b,fxx:6*a*p*q*q,fyy:2*a*p*p*p}, w=pick(['fxy','fyx','fxx','fyy']), fx=3*a*p*p*q*q+b*q, fy=2*a*p*p*p*q+b*p;
+    const right=sg(S[w]), wrong=uniq(right,[sg(S.fxy),sg(S.fxx),sg(S.fyy),sg(fx*fx),sg(fx),sg(fy),sg(S[w]-b),sg(-S[w])],3); if(wrong.length<3) return null;
+    return {index:'q:28d.work['+[w,a,b,p,q].join(';')+']', lines:[['f(x, y) = '+tm25([[a,'x³y²'],[b,'xy']]),'a polynomial in two knobs']], ask:'What is '+w+'('+sg(p)+', '+sg(q)+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'fx = '+tm25([[3*a,'x²y²'],[b,'y']])+' and fy = '+tm25([[2*a,'x³y'],[b,'x']])+'. Then '+({fxy:'fxy is the slope of fx along y: '+tm25([[6*a,'x²y']])+pm(b),fyx:'fyx is the slope of fy along x: '+tm25([[6*a,'x²y']])+pm(b),fxx:'fxx is the slope of fx along x: '+cf22(6*a,'xy²'),fyy:'fyy is the slope of fy along y: '+cf22(2*a,'x³')})[w]+'.'}; }},
+  {id:'28d.line',step:'28d',mode:'proof',label:'swap the knobs',open:()=>measured('28d'),make(){
+    const a=nz25(4), V=[
+      ['d1',[['f is a polynomial in x and y','given'],['fxy = fyx at every point','the swap-knobs technique']],2,0,'Its mixed second slopes are polynomials, so they are continuous.'],
+      ['d2',[['fxy and fyx exist at (a, b)','given'],['fxy(a, b) = fyx(a, b)','the swap-knobs technique']],2,1,'The technique needs fxy and fyx continuous at (a, b). The order-matters technique has a function where they differ.'],
+      ['d3',[['f(x, y) = '+cf22(a,'x²'),'given'],['fxx = '+sg(2*a),'the slope of fx = '+cf22(2*a,'x')]],2,0,'fxx is the slope of fx along x.'],
+      ['d4',[['f(x, y) = '+cf22(a,'x²'),'given'],['fxx = '+cf22(4*a*a,'x²'),'fx, squared']],2,1,'fxx is the slope of fx, not its square: it is '+sg(2*a)+'.'],
+      ['d5',[['f(x, y) = '+cf22(a,'x²y³'),'given'],['fxy = '+cf22(6*a,'xy²'),'x first, then y: '+cf22(2*a,'xy³')+', then its slope along y']],2,0,'The slope of y³ along y is 3y².'],
+      ['d6',[['f(x, y) = '+cf22(a,'x²y³'),'given'],['fyx = '+cf22(6*a,'xy²'),'y first, then x: '+cf22(3*a,'x²y²')+', then its slope along x']],2,0,'The slope of x² along x is 2x. It agrees with fxy, as the swap-knobs technique says.']];
+    return line28('28d.line',V,[a]); }});
+
+/* ---------- 28e Locally Undoable ---------- */
+const WE28=[
+  ['det Df(w) ≠ 0. Is f one-to-one everywhere?','no: only near w; the polar map repeats every 2π',['yes','yes, by the local-undo technique','no: f is one-to-one nowhere'],'Local-undo technique: f can be undone near w.'],
+  ['det Df(w) = 0. Is f not one-to-one near w?','not always: x ↦ x³ is one-to-one with slope 0 at 0; only its undoing loses its slope there',['yes','yes: f folds at w','never'],'The technique is silent where det Df(w) = 0.'],
+  ['g undoes f. Is Dg(y) = Df(y)⁻¹?','no: the grid of f is taken at the point g(y), not at y',['yes','no: Dg(y) = −Df(y)','no: Dg(y) = Df(g(y))'],'Undo-slope technique: Dg(y) = Df(g(y))⁻¹.'],
+  ['det Df ≠ 0 everywhere. Is f one-to-one?','not always: (x, y) ↦ (eˣ cos y, eˣ sin y) has det e²ˣ ≠ 0 and repeats every 2π in y',['yes','yes, in the plane','never'],'Local-undo technique: undoable near each point is not undoable as a whole.'],
+  ['g undoes f near w. What is Dg(y)?','Df(g(y))⁻¹',['Df(y)⁻¹','−Df(g(y))','Df(g(y))ᵀ'],'Undo-slope technique.'],
+  ['Every entry of the slope grid of φ has size at most ε on a ball. What follows, for x and x′ in the ball?','|φ(x) − φ(x′)| ≤ nε |x − x′|',['φ(x) = φ(x′)','|φ(x)| ≤ ε','φ(x) ≠ φ(x′) when x ≠ x′'],'Segment-bound technique.']];
+const UN28=[[2,1,1,1],[1,2,0,1],[3,1,2,1],[2,3,1,2],[1,0,3,1],[3,2,1,1],[2,1,3,2],[5,2,2,1]];
+QP.push({id:'28e.undo',step:'28e',label:'undoable near a point',open:()=>measured('28e'),make(){ return writtenQ('28e.undo',WE28); }},
+  {id:'28e.work',step:'28e',mode:'work',label:'the slope of the undoing',open:()=>measured('28e'),make(){
+    const t=rnd(3), a=nz25(3), b=nz25(3), [p,q]=pt28();
+    if(t===0){ const val=a*b*q-a*p, right=sg(val), wrong=uniq(right,[sg(a*b*q+a*p),sg(a*q+b),sg(-val),sg(a*b*p-a*q),sg(a*q*b),sg(val+1)],3); if(wrong.length<3) return null;
+      return {index:'q:28e.work[d;'+[a,b,p,q].join(';')+']', lines:[['f(x, y) = ('+cf22(a,'xy')+', '+tm25([[1,'x'],[b,'y']])+')','a smoothly sloped map of the plane']], ask:'What is det Df at ('+sg(p)+', '+sg(q)+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'Df has rows ('+cf22(a,'y')+', '+cf22(a,'x')+'), (1, '+sg(b)+'). At the point that is '+g2(a*q,a*p,1,b)+', with det '+right+'.'+(val?' It is not 0, so f can be undone near the point.':' The local-undo technique is silent here.')}; }
+    if(t===1){ const [A,B,C,D]=pick(UN28), right=g2(D,-B,-C,A), wrong=uniq(right,[g2(A,B,C,D),g2(-D,B,C,-A),g2(A,C,B,D),g2(D,B,C,A)],3); if(wrong.length<3) return null;
+      return {index:'q:28e.work[g;'+[A,B,C,D].join(';')+']', lines:[['Df(w) has '+g2(A,B,C,D),'det Df(w) = 1'],['g undoes f near w, and y = f(w)','the local-undo technique']], ask:'Which grid is Dg(y)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Undo-slope technique: Dg(y) = Df(g(y))⁻¹ = Df(w)⁻¹. Check: the product of the two grids is I.'}; }
+    const c=1+rnd(4), r=pick([1,2,-1,-2]), v=r*r*r+c*r, right='1/'+(3*r*r+c), wrong=uniq(right,[String(3*r*r+c),'1/'+(3*v*v+c),'1/'+(3*r*r),'1/'+(r*r+c),sg(v)],3); if(wrong.length<3) return null;
+    return {index:'q:28e.work[o;'+[c,r].join(';')+']', lines:[['f(x) = '+tm25([[1,'x³'],[c,'x']])+', and f('+sg(r)+') = '+sg(v),'given'],['g undoes f','f rises everywhere']], ask:'What is g′('+sg(v)+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'Undo-slope technique: the slope of f is taken at g('+sg(v)+') = '+sg(r)+', not at '+sg(v)+'. f′('+sg(r)+') = 3 · '+r*r+' + '+c+' = '+(3*r*r+c)+'.'}; }},
+  {id:'28e.line',step:'28e',mode:'proof',label:'near, not everywhere',open:()=>measured('28e'),make(){
+    const c=1+rnd(4), r=pick([1,2,-1,-2]), v=r*r*r+c*r, V=[
+      ['e1',[['f is smoothly sloped, and det Df(w) ≠ 0','given'],['f can be undone near w','the local-undo technique']],2,0,'And the undoing is smoothly sloped.'],
+      ['e2',[['f is smoothly sloped, and det Df(w) ≠ 0','given'],['f is one-to-one everywhere','the local-undo technique']],2,1,'Only near w. The polar map repeats every 2π.'],
+      ['e3',[['det Df(w) = 0','given'],['f is not one-to-one near w','the local-undo technique']],2,1,'The technique is silent there. x ↦ x³ is one-to-one with slope 0 at 0.'],
+      ['e4',[['g undoes f near w, and y = f(w)','given'],['Dg(y) = Df(w)⁻¹','the undo-slope technique']],2,0,'Dg(y) = Df(g(y))⁻¹, and g(y) = w.'],
+      ['e5',[['g undoes f near w, and y = f(w)','given'],['Dg(y) = Df(y)⁻¹','the undo-slope technique']],2,1,'The grid of f is taken at g(y) = w, not at y.'],
+      ['e6',[['f(x) = '+tm25([[1,'x³'],[c,'x']])+', f('+sg(r)+') = '+sg(v)+', and g undoes f','given'],['g′('+sg(v)+') = 1/'+(3*r*r+c),'the undo-slope technique: f′('+sg(r)+') = '+(3*r*r+c)]],2,0,'The slope of f is taken at g('+sg(v)+') = '+sg(r)+'.'],
+      ['e7',[['det Df ≠ 0 at every point','given'],['f is one-to-one','it can be undone near every point']],2,1,'(x, y) ↦ (eˣ cos y, eˣ sin y) has det e²ˣ ≠ 0 and repeats every 2π in y.']];
+    return line28('28e.line',V,[c,r]); }});
+
+/* ---------- 28f When an Equation Fixes a Function ---------- */
+const WF28=[
+  ['F(w, b) = 0. Is y a function of x near w?','not always: the technique needs Fy(w, b) ≠ 0; at (5, 0) on the circle x² + y² = 25 there is none',['yes','yes, when Fx(w, b) ≠ 0','never'],'Fixed-by-an-equation technique.'],
+  ['Fy(w, b) = 0. Is there no function g near w?','not always: y³ = x has Fy = 0 at (0, 0), and g(x) = ∛x still works, without a slope',['yes','yes: the curve turns back there','no: g always exists'],'The technique is silent where Fy = 0.'],
+  ['Is g′(x) = −Fy/Fx?','no: the slope along x goes on top; g′(x) = −Fx/Fy',['yes','no: g′(x) = Fx/Fy','no: g′(x) = Fx · Fy'],'Implicit-slope technique.'],
+  ['Does one g serve for the whole curve?','not always: the technique fixes g near one point; the circle needs two halves',['yes','yes, when Fy ≠ 0 somewhere','never'],'Fixed-by-an-equation technique: an interval I around w and an interval J around b.'],
+  ['What does the fixed-by-an-equation technique give near (w, b)?','intervals I around w and J around b: for each x in I, exactly one y in J has F(x, y) = 0',['one y for every x on the line','a formula for y','two functions, an upper and a lower'],'Calling it g(x), g is smoothly sloped on I.'],
+  ['What is the slope of the circle x² + y² = 25 at (3, 4)?','−3/4',['3/4','−4/3','4/3'],'Implicit-slope technique: g′ = −Fx/Fy = −2x/(2y).']];
+const OF28=['yes: Fy ≠ 0 there','no: Fy = 0 there, and no g fits near the point','no: Fy = 0 there, though a g still fits, without a slope','no: the point is not on the curve'];
+QP.push({id:'28f.fixes',step:'28f',label:'an equation fixes y',open:()=>measured('28f'),make(){ return writtenQ('28f.fixes',WF28); }},
+  {id:'28f.work',step:'28f',mode:'work',label:'slope without solving',open:()=>measured('28f'),make(){
+    const t=rnd(3), k=1+rnd(3);
+    if(t===0){ const [a,b,c]=pick(PY28), x=a*s25(), y=b*s25(), right=fshow(fr(-x,y)), wrong=uniq(right,[fshow(fr(x,y)),fshow(fr(-y,x)),fshow(fr(y,x))],3); if(wrong.length<3) return null;
+      return {index:'q:28f.work[c;'+[x,y].join(';')+']', lines:[['x² + y² = '+c*c,'a circle'],['('+sg(x)+', '+sg(y)+') is on it','a point']], ask:'What is the slope of the circle at that point?', right, opts:shuffle([right,...wrong]), lead:'', why:'Implicit-slope technique: F = x² + y² − '+c*c+', and g′ = −Fx/Fy = −2x/(2y) = −'+par10(x)+'/'+par10(y)+'.'}; }
+    if(t===1){ const a=nz25(3), [p,q]=pt28(), Fx=2*p+a*q, Fy=a*p+3*q*q, K=p*p+a*p*q+q*q*q; if(!Fy) return null;
+      const right=fshow(fr(-Fx,Fy)), wrong=uniq(right,[fshow(fr(Fx,Fy)),Fx?fshow(fr(-Fy,Fx)):'1',fshow(fr(-Fx*Fy,1)),fshow(fr(Fy,1)),fshow(fr(-Fx,1))],3); if(wrong.length<3) return null;
+      return {index:'q:28f.work[i;'+[a,p,q].join(';')+']', lines:[['F(x, y) = '+tm25([[1,'x²'],[a,'xy'],[1,'y³']])+(K?pm(-K):''),'a smoothly sloped function'],['F('+sg(p)+', '+sg(q)+') = 0','a point of the curve F = 0']], ask:'What is the slope of the curve at that point?', right, opts:shuffle([right,...wrong]), lead:'', why:'Implicit-slope technique: Fx = '+tm25([[2,'x'],[a,'y']])+' = '+sg(Fx)+' and Fy = '+tm25([[a,'x'],[3,'y²']])+' = '+sg(Fy)+' there, and g′ = −Fx/Fy.'}; }
+    const [cv,pt,i,why]=pick([['x² + y² = '+25*k*k,[5*k,0],1,'Fy = 2y = 0. Just left of the point there are two values of y, and just right of it none.'],['x² + y² = '+25*k*k,[3*k,4*k],0,'Fy = 2y = '+8*k+'.'],['x² + y² = '+25*k*k,[0,-5*k],0,'Fy = 2y = −'+10*k+'.'],['y³ = x',[0,0],2,'Fy = 3y² = 0, and g(x) = ∛x has no slope at 0.'],['y² = x',[0,0],1,'Fy = 2y = 0. Right of 0 there are two values of y, and left of it none.'],['y² = x',[k*k,k],0,'Fy = 2y = '+2*k+'.'],['x² + y² = '+25*k*k,[3*k,3*k],3,9*k*k+' + '+9*k*k+' is not '+25*k*k+'.'],['y² = x',[k+1,(k+1)*(k+1)],3,'There y² is '+(k+1)**4+', not '+(k+1)+'.']]);
+    return {index:'q:28f.work[a;'+[cv,pt].join(';')+']', lines:[[cv,'a curve F(x, y) = 0'],['the point '+v27(pt),'given']], ask:'Does the fixed-by-an-equation technique give y as a function of x near the point?', right:OF28[i], opts:OF28, lead:'', why}; }},
+  {id:'28f.line',step:'28f',mode:'proof',label:'where Fy is not 0',open:()=>measured('28f'),make(){
+    const k=1+rnd(4), V=[
+      ['f1',[['F(x, y) = x² + y² − '+25*k*k+', at ('+3*k+', '+4*k+')','given'],['near x = '+3*k+', exactly one y near '+4*k+' has F(x, y) = 0','the fixed-by-an-equation technique: Fy = '+8*k+' ≠ 0']],2,0,'Fy = 2y is not 0 at the point.'],
+      ['f2',[['F(x, y) = x² + y² − '+25*k*k+', at ('+5*k+', 0)','given'],['near x = '+5*k+', exactly one y near 0 has F(x, y) = 0','the fixed-by-an-equation technique']],2,1,'Fy('+5*k+', 0) = 0. Just under '+5*k+' there are two such y, and past it none.'],
+      ['f3',[['F(x, g(x)) = 0 and Fy ≠ 0','given'],['g′(x) = −Fy/Fx','the implicit-slope technique']],2,1,'The slope along x goes on top: g′(x) = −Fx/Fy.'],
+      ['f4',[['F(x, g(x)) = 0 and Fy ≠ 0','given'],['g′(x) = −Fx/Fy, at (x, g(x))','the implicit-slope technique']],2,0,'The roads-add technique on F(x, g(x)) = 0 gives Fx + Fy · g′ = 0.'],
+      ['f5',[['Fy(w, b) = 0','given'],['no function g fits near w','the fixed-by-an-equation technique']],2,1,'The technique is silent there. y³ = x has g(x) = ∛x.'],
+      ['f6',[['x² + y² = '+25*k*k+', at ('+3*k+', '+4*k+')','given'],['the slope of the circle there is −3/4','the implicit-slope technique: −2x/(2y)']],2,0,'−'+3*k+'/'+4*k+' = −3/4.'],
+      ['f7',[['x² + y² = '+25*k*k+', at ('+3*k+', '+4*k+')','given'],['the slope of the circle there is −4/3','the implicit-slope technique: −2y/(2x)']],2,1,'The slope along x goes on top: −Fx/Fy = −'+3*k+'/'+4*k+' = −3/4.']];
+    return line28('28f.line',V,[k]); }});
+
+/* ---------- 28g The Best Point on a Constraint ---------- */
+const WG28=[
+  ['f is best among the points of g = 0 at w. Is ∇f(w) = 0?','not always: only the slope along the curve is 0; ∇f may point off the curve',['yes','yes, at a top','never'],'Lines-up technique: ∇f(w) = λ∇g(w) for some number λ.'],
+  ['∇f = λ∇g at w. Is w a top?','not always: the arrows also line up at bottoms and at flat-but-neither points; check them',['yes','yes, when λ > 0','never'],'The lines-up technique finds the candidates, not the verdict.'],
+  ['Does the lines-up technique allow ∇g(w) = 0?','no: then the curve may have a corner or a cusp, and the technique is silent; test those points by hand',['yes','yes: then λ = 0','no: then f has no top'],'Lines-up technique: it needs ∇g(w) ≠ 0.'],
+  ['Is the steepest slope at w equal to fx + fy?','no: it is |∇f| = √(fx² + fy²), along ∇f',['yes','no: it is the larger of fx and fy','no: it is fx · fy'],'Uphill technique.'],
+  ['Along a level curve of f, how does the direction of travel stand to ∇f?','at right angles',['along it','against it','at half a right angle'],'Uphill technique.'],
+  ['f has a top among the points of g = 0 at w, and ∇g(w) ≠ 0. What follows?','∇f(w) = λ∇g(w) for some number λ',['∇f(w) = 0','∇f(w) = λ∇g(w) for every number λ','∇f(w) · ∇g(w) = 0'],'Lines-up technique.']];
+QP.push({id:'28g.best',step:'28g',label:'uphill and lined up',open:()=>measured('28g'),make(){ return writtenQ('28g.best',WG28); }},
+  {id:'28g.work',step:'28g',mode:'work',label:'steepest and best',open:()=>measured('28g'),make(){
+    const t=rnd(5), [A,B,C]=pick(PY28), a=A*s25(), b=B*s25();
+    if(t===0){ const right=String(C), wrong=uniq(right,[sg(a+b),String(A+B),String(Math.max(A,B)),String(C*C),String(A*B)],3); if(wrong.length<3) return null;
+      return {index:'q:28g.work[s;'+[a,b].join(';')+']', lines:[['∇f(w) = '+v27([a,b]),'given']], ask:'What is the greatest slope of f at w?', right, opts:shuffle([right,...wrong]), lead:'', why:'Uphill technique: the greatest slope is |∇f(w)| = √('+A*A+' + '+B*B+') = '+C+', along ∇f(w).'}; }
+    if(t===1){ const c=nz25(3), d=nz25(3), [p,q]=pt28(), right=v27([2*c*p,2*d*q]), wrong=uniq(right,[v27([c*p,d*q]),v27([2*d*q,2*c*p]),v27([2*c,2*d]),v27([c*p*p,d*q*q]),v27([2*c*p,-2*d*q])],3); if(wrong.length<3) return null;
+      return {index:'q:28g.work[g;'+[c,d,p,q].join(';')+']', lines:[['f(x, y) = '+tm25([[c,'x²'],[d,'y²']]),'given']], ask:'Which is ∇f('+sg(p)+', '+sg(q)+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'∇f = (fx, fy) = ('+cf22(2*c,'x')+', '+cf22(2*d,'y')+').'}; }
+    if(t===2){ const S=2*(1+rnd(6)), right=String(S*S/4), wrong=uniq(right,[String(S*S/2),String(S),String(S*S),String(S*S/4-1),String(S/2)],3); if(wrong.length<3) return null;
+      return {index:'q:28g.work[p;'+S+']', lines:[['f(x, y) = xy','to be made greatest'],['x + y = '+S,'the constraint']], ask:'What is the top value of f among the points of the constraint?', right, opts:shuffle([right,...wrong]), lead:'', why:'Lines-up technique: ∇f = (y, x) and ∇g = (1, 1) line up when x = y, so x = y = '+S/2+'. Other points of the line give less, such as ('+(S/2+1)+', '+(S/2-1)+').'}; }
+    if(t===3){ const r=1+rnd(5), right=String(C*r), wrong=uniq(right,[String((A+B)*r),String(r),String(C*r*r),String(C*C*r),String(A*r)],3); if(wrong.length<3) return null;
+      return {index:'q:28g.work[c;'+[A,B,r].join(';')+']', lines:[['f(x, y) = '+A+'x + '+B+'y','to be made greatest'],['x² + y² = '+r*r,'the constraint']], ask:'What is the top value of f among the points of the constraint?', right, opts:shuffle([right,...wrong]), lead:'', why:'Lines-up technique: ('+A+', '+B+') = λ(2x, 2y), so (x, y) lies along ('+A+', '+B+'). On the circle that is ('+A+', '+B+') · '+r+'/'+C+', where f = '+C*C+' · '+r+'/'+C+'.'}; }
+    const right=v27([-b,a]), wrong=[v27([a,b]),v27([b,a]),v27([a,-b])];
+    return {index:'q:28g.work[l;'+[a,b].join(';')+']', lines:[['∇f(w) = '+v27([a,b]),'given']], ask:'Which arrow points along the level curve of f through w?', right, opts:shuffle([right,...wrong]), lead:'', why:'Uphill technique: along a level curve the direction of travel is at right angles to ∇f. '+sg(a)+' · '+par10(-b)+' + '+par10(b)+' · '+par10(a)+' = 0.'}; }},
+  {id:'28g.hill',step:'28g',mode:'word',label:'the steepest way up',open:()=>measured('28g'),make(){
+    const [A,B,C]=pick(PY28), [e,n]=pick([['east','north'],['west','south'],['east','south'],['west','north']]), what=pick(['A hillside','A sand dune','A snow slope','A grassy bank']);
+    const right=C+' cm', wrong=uniq(right,[(A+B)+' cm',Math.max(A,B)+' cm',(A*B)+' cm',(C+1)+' cm',Math.abs(A-B)+' cm'],3); if(wrong.length<3) return null;
+    return {index:'q:28g.hill['+[what,A,B,e,n].join(';')+']', a3:['28g.hill',DASH,DASH], story:what+' is flat enough to treat as a plane. It rises '+A+' cm for each metre walked '+e+', and '+B+' cm for each metre walked '+n+'.', lines:[], ask:'How much does it rise for each metre walked the steepest way up?', right, opts:shuffle([right,...wrong]), lead:'', why:'Uphill technique: ∇h = ('+A+', '+B+'), and the greatest slope is |∇h| = √('+A*A+' + '+B*B+') = '+C+'.'}; }},
+  {id:'28g.line',step:'28g',mode:'proof',label:'arrows that line up',open:()=>measured('28g'),make(){
+    const [A,B,C]=pick(PY28), a=A*s25(), b=B*s25(), V=[
+      ['g1',[['f has a top among the points of g = 0 at w, and ∇g(w) ≠ 0','given'],['∇f(w) = λ∇g(w) for some number λ','the lines-up technique']],2,0,'f and g are smoothly sloped, and ∇g(w) is not 0.'],
+      ['g2',[['f has a top among the points of g = 0 at w, and ∇g(w) ≠ 0','given'],['∇f(w) = 0','a top has slope 0']],2,1,'Only the slope along the curve is 0. ∇f may point off the curve.'],
+      ['g3',[['∇f(w) = λ∇g(w), and g(w) = 0','given'],['f has a top among the points of g = 0 at w','the lines-up technique']],2,1,'The arrows also line up at bottoms and at flat-but-neither points.'],
+      ['g4',[['∇f(w) = '+v27([a,b]),'given'],['the greatest slope of f at w is '+C,'the uphill technique: √('+A*A+' + '+B*B+')']],2,0,'The greatest slope is |∇f(w)|.'],
+      ['g5',[['∇f(w) = '+v27([A,B]),'given'],['the greatest slope of f at w is '+(A+B),'fx + fy']],2,1,'It is |∇f(w)| = √('+A*A+' + '+B*B+') = '+C+'.'],
+      ['g6',[['∇f(w) = '+v27([a,b]),'given'],['the slope of f at w along '+v27([-b,a])+' is 0','the uphill technique: at right angles to ∇f']],2,0,sg(a)+' · '+par10(-b)+' + '+par10(b)+' · '+par10(a)+' = 0.'],
+      ['g7',[['f has a top among the points of g = 0 at w, and ∇g(w) = 0','given'],['∇f(w) = λ∇g(w) for some number λ','the lines-up technique']],2,1,'The technique needs ∇g(w) ≠ 0. Such points are tested by hand.']];
+    return line28('28g.line',V,[a,b]); }});
+
+/* ---------- 28h Double Integrals ---------- */
+const WH28=[
+  ['The inner total runs along y, from c to d, and the outer along x, from a to b. The order of the totals is swapped. What else must swap?','the order of the limits: the inner total then runs along x, from a to b',['nothing','the sign of the total','f(x, y) becomes f(y, x)'],'Either-order technique.'],
+  ['Is ∬ fg = (∬ f)(∬ g) over R?','no: totals add, they do not multiply; only f(x)g(y) splits this way',['yes','yes, when f and g are continuous','no: ∬ fg = ∬ f + ∬ g'],'∬ (f + g) = ∬ f + ∬ g.'],
+  ['Do the two orders of totals agree for every bounded f?','no: the technique needs continuity; for wild f the two inner totals can fail to exist',['yes','yes, on a rectangle','no: they agree only for polynomials'],'Either-order technique: f continuous on R.'],
+  ['R has sides from a to b and from c to d. Is ∬ 1 over R equal to b − a?','no: the total of 1 over R is its area, (b − a)(d − c)',['yes','no: it is 1','no: it is (b − a) + (d − c)'],'The inner total gives d − c, and the outer total gives (b − a)(d − c).'],
+  ['f is continuous on the rectangle R. What follows?','f is integrable on R, and the total may be taken in either order',['f is integrable on R, but only with x first','nothing: continuity is not enough','the total of f over R is the area of R'],'Rectangle-total technique and either-order technique.'],
+  ['What is ∬ f(x)g(y) over R, for continuous f and g?','the total of f along x times the total of g along y',['the total of f along x plus the total of g along y','the total of f along x','0'],'Either-order technique: the inner total takes f(x) out in front.']];
+QP.push({id:'28h.totals',step:'28h',label:'totals over a rectangle',open:()=>measured('28h'),make(){ return writtenQ('28h.totals',WH28); }},
+  {id:'28h.work',step:'28h',mode:'work',label:'one strip, then the next',open:()=>measured('28h'),make(){
+    const t=rnd(3), a=nz25(3), b=nz25(3), p=2*(1+rnd(2)), q=2*(1+rnd(2));
+    if(t===0){ const k=2+rnd(4), x0=rnd(3), y0=rnd(3), w=1+rnd(4), h=1+rnd(4), right=String(k*w*h), wrong=uniq(right,[String(k*w),String(k*(w+h)),String(w*h),String(k*(x0+w)*(y0+h)),String(k*w*h+k)],3); if(wrong.length<3) return null;
+      return {index:'q:28h.work[k;'+[k,x0,y0,w,h].join(';')+']', lines:[['R has x from '+x0+' to '+(x0+w)+' and y from '+y0+' to '+(y0+h),'a rectangle']], ask:'What is ∬ '+k+' over R?', right, opts:shuffle([right,...wrong]), lead:'', why:'The total of a constant over R is the constant times the area: '+k+' · '+w+' · '+h+'.'}; }
+    if(t===1){ const val=a*p*p*q/2+b*p*q*q/2, right=sg(val), wrong=uniq(right,[sg(a*p*p/2+b*q*q/2),sg(a*p*q+b*p*q),sg(2*val),sg(a*p*p*q+b*p*q*q),sg(val+p*q),sg(-val)],3); if(wrong.length<3) return null;
+      return {index:'q:28h.work[l;'+[a,b,p,q].join(';')+']', lines:[['f(x, y) = '+tm25([[a,'x'],[b,'y']]),'continuous'],['R has x from 0 to '+p+' and y from 0 to '+q,'a rectangle']], ask:'What is ∬ f over R?', right, opts:shuffle([right,...wrong]), lead:'', why:'Either-order technique. The inner total along y, from 0 to '+q+', is '+cf22(a*q,'x')+pm(b*q*q/2)+'. The outer total along x, from 0 to '+p+', is '+sg(a*q*p*p/2)+pm(b*q*q*p/2)+'.'}; }
+    const right=cf22(a*q,'x')+pm(b*q*q/2), wrong=uniq(right,[cf22(a*q,'x')+pm(b*q),cf22(a,'x')+pm(b*q*q/2),cf22(a*q*q/2,'x')+pm(b*q),cf22(a*q,'x')+pm(b*q*q)],3); if(wrong.length<3) return null;
+    return {index:'q:28h.work[i;'+[a,b,q].join(';')+']', lines:[['f(x, y) = '+tm25([[a,'x'],[b,'y']]),'continuous'],['the inner total runs along y, from 0 to '+q,'x is held still']], ask:'What is the inner total?', right, opts:shuffle([right,...wrong]), lead:'', why:'With x held still, '+cf22(a,'x')+' totals to '+cf22(a,'x')+' · '+q+', and '+cf22(b,'y')+' totals to '+par10(b)+' · '+q+'²/2.'}; }},
+  {id:'28h.line',step:'28h',mode:'proof',label:'either order',open:()=>measured('28h'),make(){
+    const x0=rnd(3), y0=rnd(3), w=2+rnd(4), h=2+rnd(4), R='R has x from '+x0+' to '+(x0+w)+' and y from '+y0+' to '+(y0+h), V=[
+      ['h1',[['f is continuous on the rectangle R','given'],['f is integrable on R','the rectangle-total technique']],2,0,'Continuity on R is enough.'],
+      ['h2',[['f is bounded on the rectangle R','given'],['the two orders of totals agree','the either-order technique']],2,1,'The technique needs continuity. For wild f the inner totals can fail to exist.'],
+      ['h3',[[R,'given'],['∬ 1 over R = '+w,'the length of R along x']],2,1,'The total of 1 over R is its area, '+w+' · '+h+' = '+w*h+'.'],
+      ['h4',[[R,'given'],['∬ 1 over R = '+w*h,'the either-order technique: '+h+', then '+w+' · '+h]],2,0,'The total of 1 over R is its area.'],
+      ['h5',[['f and g are continuous on R','given'],['∬ fg = (∬ f)(∬ g)','totals multiply']],2,1,'Totals add, they do not multiply. Only f(x)g(y) splits this way.'],
+      ['h6',[['f(x, y) = p(x)q(y), with p and q continuous','given'],['∬ f over R is the total of p along x times the total of q along y','the either-order technique']],2,0,'The inner total along y takes p(x) out in front.'],
+      ['h7',[['f is continuous on the rectangle R','given'],['the total with y inside and x outside equals the total with x inside and y outside','the either-order technique']],2,0,'Both equal ∬ f over R.']];
+    return line28('28h.line',V,[x0,y0,w,h]); }});
+
+/* ===== Laundry 5, rung 28 (floor 5 pools, stage AA), part 2: 28i to 28p ===== */
+
+/* ---------- 28i Changing the Variables ---------- */
+const WI28=[
+  ['Is ∬ f dx dy = ∬ f(r cos θ, r sin θ) dr dθ?','no: the area scale r is missing',['yes','no: the area scale r² is missing','no: the area scale sin θ is missing'],'Change-of-variables technique: the total picks up |det DT|, which is r here.'],
+  ['Is the total of f over T(Q) the total over Q of f(T) · det DT?','no: the size of det, not det itself; a flip does not make area negative',['yes','no: det DT is divided out','no: no scale is needed'],'Change-of-variables technique: f(T(u)) · |det DT(u)|.'],
+  ['May the change of variables use a T that is not one-to-one?','no: pieces are counted twice; θ from 0 to 4π covers the disc twice',['yes','yes, when det DT ≠ 0','no: then the total is 0'],'Change-of-variables technique: T is smoothly sloped and one-to-one.'],
+  ['Is the area of A(Q) the middle sum of A times the area of Q?','no: the area scale is |det A|; the sum down the middle is something else',['yes','no: it is det A times the area, with its sign','no: it is the area of Q'],'Area-scale technique.'],
+  ['What does a straight map of space with grid A do to volumes?','it multiplies each by |det A|',['it multiplies each by det A, with its sign','it keeps them','it multiplies each by the middle sum of A'],'Volume-scale technique.'],
+  ['What is the area scale of the polar map (r, θ) ↦ (r cos θ, r sin θ)?','r',['r²','1','sin θ'],'det DT = r cos² θ + r sin² θ = r.']];
+QP.push({id:'28i.scale',step:'28i',label:'the area scale',open:()=>measured('28i'),make(){ return writtenQ('28i.scale',WI28); }},
+  {id:'28i.work',step:'28i',mode:'work',label:'scale by det',open:()=>measured('28i'),make(){
+    const t=rnd(4), a=nz25(3), b=nz25(3), c=nz25(3), d=nz25(3), D=a*d-b*c;
+    if(t===0){ const w=1+rnd(4), h=1+rnd(4); if(!D) return null; const right=String(Math.abs(D)*w*h), wrong=uniq(right,[sg(D*w*h),String(w*h),String(Math.abs(a+d)*w*h),String(Math.abs(a*d+b*c)*w*h),String(Math.abs(D)*(w+h)),String(Math.abs(D)*w*h+1)],3); if(wrong.length<3) return null;
+      return {index:'q:28i.work[a;'+[a,b,c,d,w,h].join(';')+']', lines:[['A has '+g2(a,b,c,d),'a straight map of the plane'],['Q is a rectangle with sides '+w+' and '+h,'given']], ask:'What is the area of A(Q)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Area-scale technique: |det A| · |Q| = |'+sg(D)+'| · '+w*h+'.'}; }
+    if(t===1){ if(!D) return null; const right=String(Math.abs(D)), wrong=uniq(right,[sg(D),String(Math.abs(a+d)),String(Math.abs(a*d+b*c)),String(Math.abs(a*d)),String(Math.abs(D)+1),'1'],3); if(wrong.length<3) return null;
+      return {index:'q:28i.work[d;'+[a,b,c,d].join(';')+']', lines:[['x = '+tm25([[a,'u'],[b,'v']])+' and y = '+tm25([[c,'u'],[d,'v']]),'a change of variables']], ask:'By what is du dv multiplied, to stand for dx dy?', right, opts:shuffle([right,...wrong]), lead:'', why:'Change-of-variables technique: |det DT| = |'+sg(a)+' · '+par10(d)+' − '+par10(b)+' · '+par10(c)+'| = '+right+'.'}; }
+    if(t===2){ const R=1+rnd(3), k=rnd(2), right=k?pi21(2*R*R*R,3):pi21(R*R*R*R,2), wrong=uniq(right,[pi21(R*R*R*R,2),pi21(2*R*R*R,3),pi21(R*R,1),pi21(R*R*R*R,1),pi21(2*R*R*R,1),pi21(R*R*R,3),pi21(R*R,2)],3); if(wrong.length<3) return null;
+      return {index:'q:28i.work[p;'+[R,k].join(';')+']', lines:[['f(x, y) = '+(k?'√(x² + y²)':'x² + y²'),'continuous'],['D is the disc x² + y² ≤ '+R*R,'r from 0 to '+R+', θ from 0 to 2π']], ask:'What is ∬ f over D?', right, opts:shuffle([right,...wrong]), lead:'', why:'Change-of-variables technique: f is '+(k?'r':'r²')+', and the area scale is r. The total of '+(k?'r²':'r³')+' dr from 0 to '+R+' is '+(k?fshow(fr(R*R*R,3)):fshow(fr(R*R*R*R,4)))+', and θ gives 2π.'}; }
+    const V=1+rnd(5), right=String(Math.abs(a*b*c)*V), wrong=uniq(right,[sg(a*b*c*V),String(V),String(Math.abs(a+b+c)*V),String(Math.abs(a*b*c)+V),String(Math.abs(a*b)*V),String(Math.abs(a*b*c)*V+1)],3); if(wrong.length<3) return null;
+    return {index:'q:28i.work[v;'+[a,b,c,V].join(';')+']', lines:[['A has '+v27([a,b,c])+' down its middle and 0 elsewhere','a straight map of space'],['a solid has volume '+V,'given']], ask:'What is the volume of its image under A?', right, opts:shuffle([right,...wrong]), lead:'', why:'Volume-scale technique: |det A| = |'+sg(a*b*c)+'|, and the volume is multiplied by it.'}; }},
+  {id:'28i.line',step:'28i',mode:'proof',label:'the size of det',open:()=>measured('28i'),make(){
+    const a=1+rnd(3), b=1+rnd(3), c=a*b+1+rnd(3), q=1+rnd(5), D=a-b*c, d=nz25(4), v=1+rnd(5), V=[
+      ['i1',[['A has '+g2(a,b,c,1)+', and Q is a rectangle of area '+q,'given'],['A(Q) has area '+Math.abs(D)*q,'the area-scale technique: |det A| = '+Math.abs(D)]],2,0,'det A = '+sg(D)+', and the scale is its size.'],
+      ['i2',[['A has '+g2(a,b,c,1)+', and Q is a rectangle of area '+q,'given'],['A(Q) has area '+sg(D*q),'the area-scale technique: det A = '+sg(D)]],2,1,'A flip does not make area negative. The scale is |det A| = '+Math.abs(D)+'.'],
+      ['i3',[['x = r cos θ and y = r sin θ','given'],['dx dy becomes r dr dθ','the change-of-variables technique: |det DT| = r']],2,0,'det DT = r cos² θ + r sin² θ = r.'],
+      ['i4',[['x = r cos θ and y = r sin θ','given'],['dx dy becomes dr dθ','the variables are renamed']],2,1,'The area scale r is missing.'],
+      ['i5',[['T is smoothly sloped with det DT ≠ 0, but not one-to-one','given'],['the total of f over T(Q) is the total over Q of f(T(u)) · |det DT(u)|','the change-of-variables technique']],2,1,'T must be one-to-one, or pieces are counted twice.'],
+      ['i6',[['A is a straight map of space with det A = '+sg(d)+', and a solid has volume '+v,'given'],['its image has volume '+Math.abs(d)*v,'the volume-scale technique']],2,0,'The volume is multiplied by |det A| = '+Math.abs(d)+'.']];
+    return line28('28i.line',V,[a,b,c,q,d,v]); }});
+
+/* ---------- 28j Flux and Circulation ---------- */
+const WJ28=[
+  ['Is the circulation 0 round every loop, for every field?','no: only for uphill fields; (−y, x) circulates 2π round the unit circle',['yes','yes, for smoothly sloped fields','no: it is never 0'],'Uphill-total technique: for F = ∇φ, the circulation is φ at the end minus φ at the start.'],
+  ['The loop is travelled clockwise. What happens in the swirl technique?','the sign flips: the inside must be on the left',['nothing','the total doubles','the total becomes 0'],'Swirl technique: travelled with R on the left.'],
+  ['Does the swirl technique hold round a loop enclosing a point where F blows up?','no: (−y, x)/(x² + y²) has swirl 0 off the origin but circulation 2π round it',['yes','yes, when the swirl is 0','no: the circulation is then 0'],'Swirl technique: P and Q are smoothly sloped on all of R.'],
+  ['Is the spread Py + Qx?','no: the spread is Px + Qy; each part along its own direction',['yes','no: it is Qx − Py','no: it is Px − Qy'],'Spread technique.'],
+  ['F = ∇φ. What is the circulation of F along a path?','φ at the end minus φ at the start',['0, for every path','φ at the start minus φ at the end','the length of the path times φ'],'Uphill-total technique.'],
+  ['What does the circulation of F = (P, Q) round the edge of R equal, with R on the left?','the total of Qx − Py over R',['the total of Px + Qy over R','the total of Py − Qx over R','the total of Px − Qy over R'],'Swirl technique.']];
+QP.push({id:'28j.fields',step:'28j',label:'swirl and spread',open:()=>measured('28j'),make(){ return writtenQ('28j.fields',WJ28); }},
+  {id:'28j.work',step:'28j',mode:'work',label:'round and out',open:()=>measured('28j'),make(){
+    const t=rnd(5), a=nz25(3), b=nz25(3), c=nz25(3), d=nz25(3), w=1+rnd(3), h=1+rnd(3), F='F = ('+tm25([[a,'x'],[b,'y']])+', '+tm25([[c,'x'],[d,'y']])+')';
+    if(t<4){ const sw=c-b, sp=a+d, [ask,val,why]=[['What is the swirl Qx − Py of F?',sw,'Qx = '+sg(c)+' and Py = '+sg(b)+'.'],['What is the spread Px + Qy of F?',sp,'Px = '+sg(a)+' and Qy = '+sg(d)+'.'],['What is the circulation of F round the edge of R, travelled with R on the left?',sw*w*h,'Swirl technique: the total of Qx − Py = '+sg(sw)+' over R, of area '+w*h+'.'],['What is the flux of F out of R?',sp*w*h,'Spread technique: the total of Px + Qy = '+sg(sp)+' over R, of area '+w*h+'.']][t];
+      const right=sg(val), wrong=uniq(right,[sg(t%2?sw*(t>1?w*h:1):sp*(t>1?w*h:1)),sg(-val),sg((c+b)*(t>1?w*h:1)),sg((a-d)*(t>1?w*h:1)),sg(t>1?val/(w*h):val*2),sg(val+1)],3); if(wrong.length<3) return null;
+      return {index:'q:28j.work['+[t,a,b,c,d,w,h].join(';')+']', lines:t>1?[[F,'a smoothly sloped field'],['R is a rectangle with sides '+w+' and '+h,'given']]:[[F,'a smoothly sloped field']], ask, right, opts:shuffle([right,...wrong]), lead:'', why}; }
+    const [p0,q0]=pt28(), [p1,q1]=pt28(), f=(x,y)=>a*x*x+b*y, val=f(p1,q1)-f(p0,q0), right=sg(val), wrong=uniq(right,[sg(-val),sg(f(p1,q1)),sg(f(p1,q1)+f(p0,q0)),sg(f(p0,q0)),sg(val+1),sg(val-1)],3); if(wrong.length<3||(p0===p1&&q0===q1)) return null;
+    return {index:'q:28j.work[u;'+[a,b,p0,q0,p1,q1].join(';')+']', lines:[['F = ∇φ, with φ(x, y) = '+tm25([[a,'x²'],[b,'y']]),'an uphill field'],['a path runs from '+v27([p0,q0])+' to '+v27([p1,q1]),'given']], ask:'What is the circulation of F along the path?', right, opts:shuffle([right,...wrong]), lead:'', why:'Uphill-total technique: φ at the end minus φ at the start, '+sg(f(p1,q1))+' − '+par10(f(p0,q0))+'.'}; }},
+  {id:'28j.line',step:'28j',mode:'proof',label:'inside on the left',open:()=>measured('28j'),make(){
+    const a=nz25(3), b=nz25(3), c=nz25(3), d=nz25(3), w=1+rnd(3), h=1+rnd(3), F='F = ('+tm25([[a,'x'],[b,'y']])+', '+tm25([[c,'x'],[d,'y']])+'), and R is a rectangle with sides '+w+' and '+h; if(c===b) return null;
+    const V=[
+      ['j1',[['F = ∇φ, and a path starts and ends at one point','given'],['the circulation of F along it is 0','the uphill-total technique']],2,0,'φ at the end minus φ at the start is 0.'],
+      ['j2',[['F is a smoothly sloped field, and C is a loop','given'],['the circulation of F round C is 0','the loop closes']],2,1,'Only for uphill fields. (−y, x) circulates 2π round the unit circle.'],
+      ['j3',[[F,'given'],['the circulation of F round the edge of R, with R on the left, is '+sg((c-b)*w*h),'the swirl technique: Qx − Py = '+sg(c-b)]],2,0,sg(c-b)+' over an area of '+w*h+'.'],
+      ['j4',[[F,'given'],['the circulation of F round the edge of R, travelled clockwise, is '+sg((c-b)*w*h),'the swirl technique']],2,1,'Clockwise the sign flips: the inside must be on the left. It is '+sg(-(c-b)*w*h)+'.'],
+      ['j5',[[F,'given'],['the flux of F out of R is '+sg((a+d)*w*h),'the spread technique: Px + Qy = '+sg(a+d)]],2,0,sg(a+d)+' over an area of '+w*h+'.'],
+      ['j6',[['F = (P, Q) is smoothly sloped on R','given'],['the flux of F out of R is the total of Py + Qx over R','the spread technique']],2,1,'The spread is Px + Qy: each part along its own direction.']];
+    return line28('28j.line',V,[a,b,c,d,w,h]); }});
+
+/* ---------- 28k Partials and Gradients by Hand ---------- */
+const WK28=[
+  ['The surface z = f(x, y) is the level set of F = f − z. Is its tangent plane fx(x − w) + fy(y − b) + (z − f(w, b)) = 0?','no: ∇F = (fx, fy, −1); the last term is −(z − f(w, b))',['yes','no: the last term is absent','no: the first two terms change sign'],'Level-plane technique: ∇F(p) · (x − p) = 0.'],
+  ['Does ∇h point at the top of the hill?','not always: on 1000 − 0.001x² − 0.004y² at (200, 100) it points along (−1, −2); the top lies along (−2, −1)',['yes','yes, on a smooth hill','no: it points at the bottom'],'∇h points the steepest way up from where you stand.'],
+  ['Do the slopes along any two directions fix ∇f?','no: u and −u give one fact twice; the arrows must not lie along one line',['yes','no: three are needed','yes, when neither slope is 0'],'Two-directions technique.'],
+  ['Every slope along every direction exists at a point. Is each one ∇f · u?','not always: x²y/(x⁴ + y²) has slopes along every direction at 0, and they are no dot with one arrow',['yes','yes, at every point','never'],'Two-directions technique: f is smoothly sloped near the point.'],
+  ['Which plane touches z = f(x, y) at (w, b)?','z = f(w, b) + fx(w, b)(x − w) + fy(w, b)(y − b)',['z = fx(w, b)x + fy(w, b)y','z = f(w, b) + fx(w, b) + fy(w, b)','z = f(w, b)(x − w)(y − b)'],'Tangent-plane technique.'],
+  ['∇F(p) ≠ 0. Which line or plane touches the level set of F through p?','∇F(p) · (x − p) = 0',['∇F(p) · x = 0','∇F(p) × (x − p) = 0','F(p) · (x − p) = 0'],'Level-plane technique.']];
+QP.push({id:'28k.planes',step:'28k',label:'planes that touch',open:()=>measured('28k'),make(){ return writtenQ('28k.planes',WK28); }},
+  {id:'28k.work',step:'28k',mode:'work',label:'gradients by hand',open:()=>measured('28k'),make(){
+    const t=rnd(3), a=nz25(3), b=nz25(3);
+    if(t===0){ const c=nz25(5), [p,q]=pt28(), h=[nz25(2),nz25(2)], val=c+a*h[0]+b*h[1], right=sg(val), wrong=uniq(right,[sg(c+a+b),sg(c+a*(p+h[0])+b*(q+h[1])),sg(a*h[0]+b*h[1]),sg(c),sg(c-a*h[0]-b*h[1]),sg(val+1)],3); if(wrong.length<3) return null;
+      return {index:'q:28k.work[p;'+[a,b,c,p,q,h].join(';')+']', lines:[['f('+sg(p)+', '+sg(q)+') = '+sg(c),'given'],['fx = '+sg(a)+' and fy = '+sg(b)+' there','f is smoothly sloped']], ask:'What height does the tangent plane give at ('+sg(p+h[0])+', '+sg(q+h[1])+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'Tangent-plane technique: z = f(w, b) + fx · (x − w) + fy · (y − b) = '+sg(c)+' + '+par10(a)+' · '+par10(h[0])+' + '+par10(b)+' · '+par10(h[1])+'.'}; }
+    if(t===1){ const s=5*a, tt=3*a+4*b, right=v27([5*a,5*b]), wrong=uniq(right,[v27([s,tt]),v27([tt,s]),v27([s,5*tt]),v27([s,tt-s]),v27([5*b,5*a])],3); if(wrong.length<3) return null;
+      return {index:'q:28k.work[t;'+[a,b].join(';')+']', lines:[['the slope of f along (1, 0) is '+sg(s),'given'],['the slope of f along (3/5, 4/5) is '+sg(tt),'f is smoothly sloped']], ask:'Which is ∇f?', right, opts:shuffle([right,...wrong]), lead:'', why:'Two-directions technique: ∇f = (g₁, g₂) with g₁ = '+sg(s)+' and (3/5)g₁ + (4/5)g₂ = '+sg(tt)+', so g₂ = '+sg(5*b)+'.'}; }
+    const [A,B,C]=pick(PY28), x=A*s25(), y=B*s25(), right=tm25([[x,'x'],[y,'y']])+' = '+C*C, wrong=uniq(right,[tm25([[y,'x'],[-x,'y']])+' = 0',tm25([[x,'x'],[y,'y']])+' = 0',tm25([[y,'x'],[x,'y']])+' = '+C*C,tm25([[x,'x'],[y,'y']])+' = '+C],3); if(wrong.length<3) return null;
+    return {index:'q:28k.work[l;'+[x,y].join(';')+']', lines:[['F(x, y) = x² + y²','smoothly sloped'],['p = '+v27([x,y]),'a point of the level curve F = '+C*C]], ask:'Which line touches the level curve at p?', right, opts:shuffle([right,...wrong]), lead:'', why:'Level-plane technique: ∇F(p) · (x − p) = 0, with ∇F(p) = '+v27([2*x,2*y])+'. Halve it, and move p across: '+A*A+' + '+B*B+' = '+C*C+'.'}; }},
+  {id:'28k.line',step:'28k',mode:'proof',label:'two directions',open:()=>measured('28k'),make(){
+    const a=nz25(4), b=nz25(4), c=nz25(5), [p,q]=pt28(), s=nz25(5), [A,B,C]=pick(PY28), tp=(k,v,w)=>(k<0?' − ':' + ')+(Math.abs(k)===1?'':Math.abs(k))+'('+v+pm(-w)+')', V=[
+      ['k1',[['f is smoothly sloped near ('+sg(p)+', '+sg(q)+'), with f = '+sg(c)+', fx = '+sg(a)+' and fy = '+sg(b)+' there','given'],['the tangent plane is z = '+sg(c)+tp(a,'x',p)+tp(b,'y',q),'the tangent-plane technique']],2,0,'z = f(w, b) + fx(w, b)(x − w) + fy(w, b)(y − b).'],
+      ['k2',[['the slopes of f along u and along −u are '+sg(s)+' and '+sg(-s),'given'],['they fix ∇f','the two-directions technique']],2,1,'u and −u lie along one line, and give one fact twice.'],
+      ['k3',[['f is smoothly sloped, with slopes '+sg(a)+' along (1, 0) and '+sg(b)+' along (0, 1)','given'],['∇f = '+v27([a,b]),'the two-directions technique']],2,0,'The two arrows have length 1 and are not along one line.'],
+      ['k4',[['F(x, y) = x² + y², and p = '+v27([A,B]),'given'],['the line touching the level curve through p is '+A+'x + '+B+'y = '+C*C,'the level-plane technique: ∇F(p) = '+v27([2*A,2*B])]],2,0,'∇F(p) · (x − p) = 0, halved.'],
+      ['k5',[['f has a slope along every direction at p','given'],['the slope along u is ∇f(p) · u','the two-directions technique']],2,1,'The technique needs f smoothly sloped near p. x²y/(x⁴ + y²) breaks it at 0.'],
+      ['k6',[['the surface z = f(x, y) is the level set of F = f − z','given'],['∇F = (fx, fy, 1)','the level-plane technique']],2,1,'The slope of −z along z is −1: ∇F = (fx, fy, −1).']];
+    return line28('28k.line',V,[a,b,c,p,q,s,A]); }});
+
+/* ---------- 28l Polynomials That Hug a Surface, by Hand ---------- */
+const WL28=[
+  ['∇f(p) = 0. Is p a top or a bottom?','not always: x² − y² is flat at 0, and has a saddle there',['yes','yes, when f is a polynomial','never'],'Grid-test technique: if D < 0, a saddle.'],
+  ['fxx > 0 and fyy > 0 at a flat point. Is it a bottom?','not always: x² + 3xy + y² has A = C = 2, B = 3, D = −5 < 0, a saddle',['yes','yes, when fxy ≠ 0','never'],'Grid-test technique: D = AC − B².'],
+  ['D = 0 at a flat point. Is it neither a top nor a bottom?','not always: x⁴ + y⁴ has D = 0 at 0, and a bottom there',['yes','yes: it is a saddle','no: it is always a bottom'],'Grid-test technique: if D = 0, the test cannot tell.'],
+  ['f has a bottom at p along every line through p. Has f a bottom at p?','not always: (y − x²)(y − 3x²) has a bottom at 0 along every line, and is −x⁴ along y = 2x²',['yes','yes, when ∇f(p) = 0','never'],'A curved road can still go down.'],
+  ['D > 0 and A < 0 at a flat point. What is it?','a top',['a bottom','a saddle','the test cannot tell'],'Grid-test technique.'],
+  ['What does the surface-match technique add to f(p) + ∇f(p) · h?','½ hᵀH(p)h',['hᵀH(p)h','½ H(p)h','∇f(p) · ∇f(p)'],'The leftover E(h) has E(h)/|h|² heading to 0.']];
+const OL28=['a bottom','a top','a saddle','the test cannot tell'];
+QP.push({id:'28l.test',step:'28l',label:'top, bottom or saddle',open:()=>measured('28l'),make(){ return writtenQ('28l.test',WL28); }},
+  {id:'28l.work',step:'28l',mode:'work',label:'the grid test',open:()=>measured('28l'),make(){
+    const t=rnd(3), a=nz25(3), c=nz25(3), b=rnd(9)-4, D=4*a*c-b*b;
+    if(t===0){ const i=D>0?(a>0?0:1):D<0?2:3;
+      return {index:'q:28l.work[c;'+[a,b,c].join(';')+']', lines:[['f(x, y) = '+tm25([[a,'x²'],[b,'xy'],[c,'y²']]),'flat at (0, 0)']], ask:'What does the grid test say of (0, 0)?', right:OL28[i], opts:OL28, lead:'', why:'Grid-test technique: A = '+sg(2*a)+', B = '+sg(b)+', C = '+sg(2*c)+', and D = AC − B² = '+sg(D)+'.'}; }
+    if(t===1){ const right=sg(D), wrong=uniq(right,[sg(4*a*c+b*b),sg(a*c-b*b),sg(4*a*c-b),sg(4*a*c),sg(-D),sg(D+1)],3); if(wrong.length<3) return null;
+      return {index:'q:28l.work[d;'+[a,b,c].join(';')+']', lines:[['f(x, y) = '+tm25([[a,'x²'],[b,'xy'],[c,'y²']]),'flat at (0, 0)']], ask:'What is D = AC − B² there?', right, opts:shuffle([right,...wrong]), lead:'', why:'A = fxx = '+sg(2*a)+', B = fxy = '+sg(b)+', C = fyy = '+sg(2*c)+'. So D = '+sg(4*a*c)+' − '+b*b+'.'}; }
+    const K=2*(1+rnd(3)), h1=1+rnd(3), h2=1+rnd(3), s=h1+h2, f=n=>String(n/100), right=f(K*s*s/2), wrong=uniq(right,[f(K*s*s),f(K*s*5),f(K*s*s/4),f(K*(h1*h1+h2*h2)/2),f(K*s*s/2+1)],3); if(wrong.length<3) return null;
+    return {index:'q:28l.work[h;'+[K,h1,h2].join(';')+']', lines:[['every second partial slope of f has size at most '+K+' on the disc','given'],['h = (0.'+h1+', 0.'+h2+')','a step from p']], ask:'What ceiling does the hug-ceiling technique give for the error of the tangent sheet at p + h?', right, opts:shuffle([right,...wrong]), lead:'', why:'Hug-ceiling technique: ½K(|h₁| + |h₂|)² = ½ · '+K+' · '+f(s*10)+'² = '+right+'.'}; }},
+  {id:'28l.line',step:'28l',mode:'proof',label:'what D decides',open:()=>measured('28l'),make(){
+    const A=1+rnd(4), C=1+rnd(4), B=rnd(3), Bb=Math.ceil(Math.sqrt(A*C))+1+rnd(2), K=2+rnd(5); if(A*C-B*B<=0) return null;
+    const V=[
+      ['l1',[['∇f(p) = 0, with A = '+A+', B = '+B+' and C = '+C+' at p','given'],['f has a bottom at p','the grid-test technique: D = '+(A*C-B*B)+' > 0 and A > 0']],2,0,'D = AC − B² = '+A*C+' − '+B*B+'.'],
+      ['l2',[['∇f(p) = 0, with fxx = '+A+', fxy = '+Bb+' and fyy = '+C+' at p','given'],['f has a bottom at p','both second slopes are positive']],2,1,'D = AC − B² = '+A*C+' − '+Bb*Bb+' = '+sg(A*C-Bb*Bb)+' < 0: a saddle.'],
+      ['l3',[['∇f(p) = 0','given'],['p is a top or a bottom','p is a flat point']],2,1,'x² − y² is flat at 0, and has a saddle there.'],
+      ['l4',[['∇f(p) = 0, and D = 0 at p','given'],['p is neither a top nor a bottom','the grid-test technique']],2,1,'If D = 0 the test cannot tell. x⁴ + y⁴ has a bottom at 0.'],
+      ['l5',[['∇f(p) = 0, with A = '+A+', B = '+Bb+' and C = '+C+' at p','given'],['f has a saddle at p','the grid-test technique: D = '+sg(A*C-Bb*Bb)+' < 0']],2,0,'D = AC − B² = '+A*C+' − '+Bb*Bb+'.'],
+      ['l6',[['∇f(p) = 0, with A = −'+A+', B = '+B+' and C = −'+C+' at p','given'],['f has a top at p','the grid-test technique: D = '+(A*C-B*B)+' > 0 and A < 0']],2,0,'D = AC − B² = '+A*C+' − '+B*B+'.'],
+      ['l7',[['every second partial slope of f has size at most '+K+' on a disc holding p and p + h','given'],['the error of the tangent sheet at p + h is at most ½ · '+K+' · (|h₁| + |h₂|)²','the hug-ceiling technique']],2,0,'½K(|h₁| + |h₂|)², with K = '+K+'.']];
+    return line28('28l.line',V,[A,B,C,Bb,K]); }});
+
+/* ---------- 28m Integrals by Hand ---------- */
+const WM28=[
+  ['A total runs over 0 ≤ x ≤ 1 with y from x to 1. Swapped, does it run over 0 ≤ y ≤ 1 with x from y to 1?','no: the region 0 ≤ x ≤ y ≤ 1 read across is 0 ≤ x ≤ y, not y ≤ x ≤ 1',['yes','yes, when f is continuous','no: x then runs from 0 to 1'],'Order-swap technique: the same region, read in strips the other way.'],
+  ['Is the total of 1 over the disc x² + y² ≤ 1 the total with x and y each from −1 to 1?','no: those ends trace the square around the disc; 4, not π',['yes','no: those ends give 2','no: those ends give π/4'],'The inner ends must follow the edge of the region.'],
+  ['Is the disc (x − 1)² + y² ≤ 1 given by 0 ≤ r ≤ 1, 0 ≤ θ ≤ 2π?','no: that is the disc about 0; this one is 0 ≤ r ≤ 2 cos θ, −π/2 ≤ θ ≤ π/2',['yes','no: it is 1 ≤ r ≤ 2','no: it is 0 ≤ r ≤ cos θ, 0 ≤ θ ≤ π'],'Round-slab technique: r runs from r₁(θ) to r₂(θ).'],
+  ['Is the volume scale ρ² sin φ when φ is measured up from the equator?','no: from the equator the scale is ρ² cos φ; sin φ is for the angle down from the top',['yes','no: it is ρ sin φ','no: it is ρ²'],'Round-space technique.'],
+  ['What is the volume scale in cylinder measures?','r',['r²','1','r sin θ'],'Round-space technique.'],
+  ['D is slanted in θ, with r from r₁(θ) to r₂(θ). What is its area?','the total from α to β of ½(r₂² − r₁²) dθ',['the total from α to β of (r₂ − r₁) dθ','the total from α to β of ½(r₂ − r₁)² dθ','(β − α)(r₂ − r₁)'],'Round-slab technique, with f = 1.']];
+QP.push({id:'28m.strips',step:'28m',label:'strips and slabs',open:()=>measured('28m'),make(){ return writtenQ('28m.strips',WM28); }},
+  {id:'28m.work',step:'28m',mode:'work',label:'totals by hand',open:()=>measured('28m'),make(){
+    const t=rnd(4), a=2*(1+rnd(3)), k=1+rnd(4);
+    if(t===0){ const x=rnd(2), A=x?pick([3,6]):a, val=x?A*A*A/3:k*A*A/2, right=String(val), wrong=uniq(right,[String(x?A*A*A:k*A*A),String(x?A*A/2:k*A),String(x?A*A*A/6:k*A*A/4),String(val+A),String(2*val)],3); if(wrong.length<3) return null;
+      return {index:'q:28m.work[t;'+[x,A,k].join(';')+']', lines:[['D has x from 0 to '+A+' and y from 0 to x','a triangle, slanted in x'],['f(x, y) = '+(x?'x':k),'continuous']], ask:'What is ∬ f over D?', right, opts:shuffle([right,...wrong]), lead:'', why:'The inner total along y, from 0 to x, is '+(x?'x²':cf22(k,'x'))+'. The outer total along x, from 0 to '+A+', is '+(x?A+'³/3':k+' · '+A+'²/2')+'.'}; }
+    if(t===1){ const r1=rnd(3), r2=r1+1+rnd(3), [sp,n,d]=pick([['0 to π/2',1,4],['0 to π',1,2],['0 to 2π',1,1],['π/2 to π',1,4]]), g=r2*r2-r1*r1, right=pi21(n*g,d), wrong=uniq(right,[pi21(n*(r2-r1)*2,d),pi21(n*(r2-r1)*(r2-r1),d),pi21(2*n*g,d),pi21(n*g,2*d),pi21(n*r2*r2,d),pi21(n*g+1,d)],3); if(wrong.length<3) return null;
+      return {index:'q:28m.work[r;'+[r1,r2,sp].join(';')+']', lines:[['D has r from '+r1+' to '+r2+' and θ from '+sp,'a region slanted in θ']], ask:'What is the area of D?', right, opts:shuffle([right,...wrong]), lead:'', why:'Round-slab technique: the total of ½(r₂² − r₁²) dθ = ½ · '+g+' times the spread of θ.'}; }
+    if(t===2){ const R=1+rnd(3), H=1+rnd(4), right=pi21(R*R*H,1), wrong=uniq(right,[pi21(2*R*H,1),pi21(2*R*R*H,1),pi21(R*H,1),pi21(R*R*H,2),pi21(R*R,1),pi21(R*R*H+1,1)],3); if(wrong.length<3) return null;
+      return {index:'q:28m.work[c;'+[R,H].join(';')+']', lines:[['a solid has r from 0 to '+R+', θ from 0 to 2π, and z from 0 to '+H,'cylinder measures']], ask:'What is its volume?', right, opts:shuffle([right,...wrong]), lead:'', why:'Round-space technique: the volume scale is r. The total of r dr is '+fshow(fr(R*R,2))+', θ gives 2π, and z gives '+H+'.'}; }
+    const O=['y from 0 to '+a+', and x from 0 to y','y from 0 to '+a+', and x from y to '+a,'y from x to '+a+', and x from 0 to '+a,'y from 0 to '+a+', and x from 0 to '+a];
+    return {index:'q:28m.work[s;'+a+']', lines:[['a total has x from 0 to '+a+', and inside it y from x to '+a,'f is continuous on the region']], ask:'Which ends give the same total with y outside and x inside?', right:O[0], opts:shuffle(O), lead:'', why:'Order-swap technique: the region is 0 ≤ x ≤ y ≤ '+a+'. Read across, x runs from 0 to y.'}; }},
+  {id:'28m.line',step:'28m',mode:'proof',label:'the same region',open:()=>measured('28m'),make(){
+    const a=1+rnd(6), R=1+rnd(5), V=[
+      ['m1',[['D has x from 0 to '+a+' and y from x to '+a+', and f is continuous on D','given'],['the total is also taken with y from 0 to '+a+' and x from 0 to y','the order-swap technique']],2,0,'D is 0 ≤ x ≤ y ≤ '+a+', slanted in x and in y.'],
+      ['m2',[['D has x from 0 to '+a+' and y from x to '+a+', and f is continuous on D','given'],['the total is also taken with y from 0 to '+a+' and x from y to '+a,'the order-swap technique']],2,1,'Read across, D is 0 ≤ x ≤ y, not y ≤ x ≤ '+a+'.'],
+      ['m3',[['D is the disc x² + y² ≤ '+R*R,'given'],['∬ 1 over D is the total with x and y each from −'+R+' to '+R,'the ends of D']],2,1,'Those ends trace the square around the disc: '+4*R*R+', not '+pi21(R*R,1)+'.'],
+      ['m4',[['D is the disc x² + y² ≤ '+R*R,'given'],['its area is the total from 0 to 2π of ½ · '+R*R+' dθ = '+pi21(R*R,1),'the round-slab technique']],2,0,'r runs from 0 to '+R+', so ½(r₂² − r₁²) = '+fshow(fr(R*R,2))+'.'],
+      ['m5',[['a solid is given in ball measures, with φ the angle down from the top','given'],['the volume scale is ρ² sin φ','the round-space technique']],2,0,'In ball measures the volume scale is ρ² sin φ.'],
+      ['m6',[['a solid is given in cylinder measures','given'],['its volume is the total of dr dθ dz','the measures are renamed']],2,1,'The volume scale r is missing.']];
+    return line28('28m.line',V,[a,R]); }});
+
+/* ---------- 28n Along Curves and Across Surfaces ---------- */
+const WN28=[
+  ['Does ∫ f ds over C turn sign when C is walked backwards?','no: |r′| is never negative; only the work total turns sign',['yes','yes, when f > 0','no: neither total turns sign'],'Retrace technique.'],
+  ['Py = Qx. Is φ = ∫ P dx, with nothing more?','not yet: the constant of that total may hold y; ∫ (2xy + 3) dx = x²y + 3x can miss a part in y alone',['yes','no: φ = ∫ Q dx','no: no φ exists'],'Fix the part in y alone from φy = Q.'],
+  ['Is the work ∫ F(r) · r′/|r′| dt?','no: that drops the speed; dt is time, not distance',['yes','yes, when the speed changes','no: the work is ∫ |F(r)| dt'],'The work is ∫ F(r) · r′ dt.'],
+  ['Is the area of a patch ∬ |ru| |rv|?','no: a small piece is a parallelogram, not a rectangle; |ru × rv| = |ru| |rv| sin θ',['yes','no: it is ∬ ru · rv','no: it is ∬ (|ru| + |rv|)'],'The area is ∬ |ru × rv|.'],
+  ['When is F = (P, Q) uphill from some φ on a rectangle?','exactly when Py = Qx on the rectangle',['exactly when Px = Qy on the rectangle','exactly when Px + Qy = 0 on the rectangle','always'],'Cross-slopes technique.'],
+  ['A curve is traced again backwards. What happens to the work total?','it turns its sign',['it stays the same','it doubles','it becomes 0'],'Retrace technique: ∫ f ds is kept, and the work total turns sign.']];
+QP.push({id:'28n.paths',step:'28n',label:'along and across',open:()=>measured('28n'),make(){ return writtenQ('28n.paths',WN28); }},
+  {id:'28n.work',step:'28n',mode:'work',label:'work and area',open:()=>measured('28n'),make(){
+    const t=rnd(4), a=nz25(3), b=nz25(3), c=nz25(3);
+    if(t===0){ const right=tm25([[a,'x²'],[b,'x'],[c,'y']]), wrong=uniq(right,[tm25([[2*a,'x²'],[b,'x'],[c,'y']]),tm25([[a,'y²'],[b,'y'],[c,'x']]),tm25([[2*a,'x'],[b,'']]),tm25([[a,'x²'],[c,'y']])],3); if(wrong.length<3) return null;
+      return {index:'q:28n.work[q;'+[a,b,c].join(';')+']', lines:[['P(x, y) = '+tm25([[2*a,'xy'],[b,'y']]),'the first part of F = (P, Q)']], ask:'Which Q makes F uphill from some φ on the plane?', right, opts:shuffle([right,...wrong]), lead:'', why:'Cross-slopes technique: Py = Qx. Here Py = '+tm25([[2*a,'x'],[b,'']])+', and that is the slope along x of '+right+'.'}; }
+    if(t===1){ const [p0,q0]=pt28(), [p1,q1]=pt28(), bk=rnd(2), val=(bk?-1:1)*(a*(p1-p0)+b*(q1-q0)); if(p0===p1&&q0===q1) return null;
+      const right=sg(val), wrong=uniq(right,[sg(-val),sg(a+b),sg(a*(p1-p0)-b*(q1-q0)),sg(a*p1+b*q1),sg(val+1),sg(val-1)],3); if(wrong.length<3) return null;
+      return {index:'q:28n.work[w;'+[a,b,p0,q0,p1,q1,bk].join(';')+']', lines:[['F = '+v27([a,b])+' at every point','a constant field'],['a straight path runs from '+v27(bk?[p1,q1]:[p0,q0])+' to '+v27(bk?[p0,q0]:[p1,q1]),'given']], ask:'What is the work total of F along the path?', right, opts:shuffle([right,...wrong]), lead:'', why:'The work is F against the whole step: '+sg(a)+' · '+par10((bk?-1:1)*(p1-p0))+' + '+par10(b)+' · '+par10((bk?-1:1)*(q1-q0))+'.'}; }
+    if(t===2){ const [A,B,C]=pick(PY28), k=2+rnd(4), right=String(k*C), wrong=uniq(right,[String(k*(A+B)),String(k),String(k*C*C),String(k*A),String(C)],3); if(wrong.length<3) return null;
+      return {index:'q:28n.work[s;'+[A,B,k].join(';')+']', lines:[['C is the straight path from (0, 0) to '+v27([A,B]),'given'],['f = '+k+' at every point','a constant']], ask:'What is ∫ f ds over C?', right, opts:shuffle([right,...wrong]), lead:'', why:'ds measures distance along the path. Its length is √('+A*A+' + '+B*B+') = '+C+'.'}; }
+    const m=1+rnd(4), right=String(4*m), wrong=uniq(right,[String(5*m),String(3*m),String(12*m),String(7*m),String(m)],3); if(wrong.length<3) return null;
+    return {index:'q:28n.work[p;'+m+']', lines:[['r(u, v) = u·'+v27([m,0,0])+' + v·(3, 4, 0), with u and v from 0 to 1','a flat patch']], ask:'What is the area of the patch?', right, opts:shuffle([right,...wrong]), lead:'', why:'The area is the total of |ru × rv|. Here ru × rv = '+v27([0,0,4*m])+', not |ru| |rv| = '+5*m+'.'}; }},
+  {id:'28n.line',step:'28n',mode:'proof',label:'forwards and backwards',open:()=>measured('28n'),make(){
+    const a=nz25(4), b=nz25(4), c=b+pick([1,2,-1,-2]), d=nz25(4), V=[
+      ['n1',[['C is traced again backwards','given'],['∫ f ds over C turns its sign','the retrace technique']],2,1,'|r′| is never negative. ∫ f ds is kept.'],
+      ['n2',[['C is traced again backwards','given'],['the work total along C turns its sign','the retrace technique']],2,0,'It keeps the work total when u runs forwards, and turns its sign when u runs backwards.'],
+      ['n3',[['F = ('+tm25([[a,'x'],[b,'y']])+', '+tm25([[b,'x'],[d,'y']])+') on a rectangle','given'],['F is uphill from some φ','the cross-slopes technique: Py = '+sg(b)+' = Qx']],2,0,'F is uphill from some φ exactly when Py = Qx.'],
+      ['n4',[['F = ('+tm25([[a,'x'],[b,'y']])+', '+tm25([[c,'x'],[d,'y']])+') on a rectangle','given'],['F is uphill from some φ','the cross-slopes technique']],2,1,'Py = '+sg(b)+' and Qx = '+sg(c)+'.'],
+      ['n5',[['a patch is traced again by T, with det DT < 0','given'],['its area is kept','the patch technique']],2,0,'qs × qt = det DT · (ru × rv), and the area uses the size.'],
+      ['n6',[['a patch is traced again by T, with det DT < 0','given'],['its flux is kept','the patch technique']],2,1,'The flux turns sign when det DT < 0.']];
+    return line28('28n.line',V,[a,b,c,d]); }});
+
+/* ---------- 28o Gradient Descent ---------- */
+const WO28=[
+  ['Does a bigger step get down faster?','not always: on x² + 4y² from (2, 1), η = 0.3 lands at f = 8.48, above the 8 at the start',['yes','yes, on a bowl','never'],'Downhill-step technique: f goes down for 0 < η < η₀.'],
+  ['The walk has stopped. Is it at the lowest point?','not always: on x⁴ − 2x² + x it stops near 0.838 from x = 1; the lowest point is near −1.107',['yes','yes, when f is a polynomial','never'],'The walk stops wherever ∇f = 0.'],
+  ['f bends up along both axes. Does it bend up along every line?','not always: x² + 3xy + y² bends up along each axis and down along y = −x',['yes','yes, when fxy ≠ 0','never'],'One-bottom technique: fxx > 0 and D > 0 at every point.'],
+  ['Is the walk down xₖ₊₁ = xₖ + η∇f(xₖ)?','no: ∇f points uphill, so this walk climbs; the walk down takes η∇f(xₖ) away',['yes','yes, when η is small','no: the walk down has no η'],'Downhill-step technique: f(p − η∇f(p)) < f(p).'],
+  ['On a bowl, for which steps η does the walk head to the bottom from every start?','exactly when 0 < η < 2/λₙ',['for every η > 0','exactly when 0 < η < 1/λ₁','only when η = 2/(λ₁ + λₙ)'],'Step-size technique.'],
+  ['Which step makes the shrink factor least?','η = 2/(λ₁ + λₙ), where the factor is (λₙ − λ₁)/(λₙ + λ₁)',['η = 2/λₙ, where the factor is 0','η = 1/λ₁, where the factor is 0','the largest step allowed'],'Step-size technique.']];
+const OO28=['yes: fxx > 0 and D > 0 at every point','no: D < 0','no: D = 0','no: fxx < 0, though D > 0'];
+QP.push({id:'28o.walk',step:'28o',label:'the walk down',open:()=>measured('28o'),make(){ return writtenQ('28o.walk',WO28); }},
+  {id:'28o.work',step:'28o',mode:'work',label:'step by step',open:()=>measured('28o'),make(){
+    const t=rnd(3);
+    if(t===0){ const a=1+rnd(3), b=1+rnd(3), [p,q]=pt28(), right=v27([p*(1-a),q*(1-b)]), wrong=uniq(right,[v27([p*(1+a),q*(1+b)]),v27([p-a,q-b]),v27([p-2*a*p,q-2*b*q]),v27([a*p,b*q]),v27([p,q])],3); if(wrong.length<3) return null;
+      return {index:'q:28o.work[s;'+[a,b,p,q].join(';')+']', lines:[['f(x, y) = '+tm25([[a,'x²'],[b,'y²']]),'a bowl'],['the walk stands at '+v27([p,q])+', with step η = 1/2','given']], ask:'Where does one step of the walk down land?', right, opts:shuffle([right,...wrong]), lead:'', why:'∇f = ('+cf22(2*a,'x')+', '+cf22(2*b,'y')+') = '+v27([2*a*p,2*b*q])+' there. Take half of it away from '+v27([p,q])+'.'}; }
+    if(t===1){ const l1=1+rnd(3), ln=l1+1+rnd(4), k=rnd(3), [ask,F]=[['Below which step η does the walk head to the bottom from every start?',fr(2,ln)],['Which step η makes the shrink factor least?',fr(2,l1+ln)],['What is the least shrink factor?',fr(ln-l1,ln+l1)]][k], right=fshow(F), wrong=uniq(right,[fshow(fr(2,ln)),fshow(fr(2,l1+ln)),fshow(fr(ln-l1,ln+l1)),fshow(fr(2,l1)),fshow(fr(1,ln)),fshow(fr(l1,ln)),fshow(fr(1,l1+ln))],3); if(wrong.length<3) return null;
+      return {index:'q:28o.work[e;'+[l1,ln,k].join(';')+']', lines:[['f is a bowl with λ₁ = '+l1+' and λₙ = '+ln,'the least and the greatest stretch']], ask, right, opts:shuffle([right,...wrong]), lead:'', why:'Step-size technique: the walk heads to the bottom exactly when 0 < η < 2/λₙ. The factor is least at η = 2/(λ₁ + λₙ), where it is (λₙ − λ₁)/(λₙ + λ₁).'}; }
+    const a=nz25(3), c=Math.abs(nz25(3))*(a<0?-1:1), b=rnd(7), D=4*a*c-b*b; if(a<0&&D<=0) return null;
+    const i=a<0?3:D>0?0:D<0?1:2;
+    return {index:'q:28o.work[b;'+[a,b,c].join(';')+']', lines:[['f(x, y) = '+tm25([[a,'x²'],[b,'xy'],[c,'y²']]),'given']], ask:'Does the one-bottom technique apply to f?', right:OO28[i], opts:OO28, lead:'', why:'fxx = '+sg(2*a)+', fxy = '+b+' and fyy = '+sg(2*c)+', so D = fxx fyy − fxy² = '+sg(D)+'.'}; }},
+  {id:'28o.line',step:'28o',mode:'proof',label:'how big a step',open:()=>measured('28o'),make(){
+    const l1=1+rnd(3), ln=l1+1+rnd(5), V=[
+      ['o1',[['f is smoothly sloped near p, and ∇f(p) ≠ 0','given'],['some step η > 0 has f(p − η∇f(p)) < f(p)','the downhill-step technique']],2,0,'Every η with 0 < η < η₀ does.'],
+      ['o2',[['f is smoothly sloped near p, and ∇f(p) ≠ 0','given'],['every step η > 0 has f(p − η∇f(p)) < f(p)','the downhill-step technique']],2,1,'Only for 0 < η < η₀. A big step can land higher.'],
+      ['o3',[['f is a bowl with λ₁ = '+l1+' and λₙ = '+ln+', and η = 1/'+ln,'given'],['the walk heads to the bottom from every start','the step-size technique: η < 2/'+ln]],2,0,'It does exactly when 0 < η < 2/λₙ.'],
+      ['o4',[['f is a bowl with λ₁ = '+l1+' and λₙ = '+ln+', and η = 3/'+ln,'given'],['the walk heads to the bottom from every start','the step-size technique']],2,1,'3/'+ln+' is not below 2/λₙ = 2/'+ln+'.'],
+      ['o5',[['the walk has stopped at p','given'],['p is the lowest point of f','∇f(p) = 0']],2,1,'It stops wherever ∇f = 0. On x⁴ − 2x² + x it can stop at a bottom that is not the lowest.'],
+      ['o6',[['fxx > 0 and fxx fyy − fxy² > 0 at every point, and ∇f(p) = 0','given'],['p is the lowest point of all','the one-bottom technique']],2,0,'f(q) > f(p) for every q ≠ p.'],
+      ['o7',[['f bends up along both axes','given'],['f bends up along every line','the one-bottom technique']],2,1,'The technique needs D > 0 too. x² + 3xy + y² bends down along y = −x.']];
+    return line28('28o.line',V,[l1,ln]); }});
+
+/* ---------- 28p How Errors Spread ---------- */
+const WP28=[
+  ['Do relative errors add for a difference too?','no: 10.0 ± 0.1 minus 9.8 ± 0.1 is 0.2 ± 0.2, a share of 100%, not 2%',['yes','yes, to first order','no: they subtract'],'Relative-errors-add technique: it is for products of powers.'],
+  ['Is the relative error of √x twice that of x?','no: through a power the share is multiplied by the power, ½',['yes','no: it is the same','no: it is the square root of it'],'Relative-errors-add technique: |k₁|e₁ + ⋯ + |kₙ|eₙ.'],
+  ['Is ΔV = Δr + Δh for V = πr²h?','no: each doubt goes by its own road, weighted by its partial slope; and cm³ are not cm',['yes','yes, to first order','no: ΔV = Δr · Δh'],'Error-bound technique: M₁Δ₁ + ⋯ + MₙΔₙ.'],
+  ['Is the flat estimate |∇f(p) · h| a ceiling for the error?','no: f = x² at x = 0 ± 0.1 has estimate 0, and a true error up to 0.01',['yes','yes, for smoothly sloped f','no: it is always too large'],'Error-bound technique: the ceiling uses the largest slopes on the whole box.'],
+  ['|∂f/∂xᵢ| ≤ Mᵢ on the box, and xᵢ is known to within Δᵢ. What bounds |f(p + h) − f(p)|?','M₁Δ₁ + ⋯ + MₙΔₙ',['M₁ + ⋯ + Mₙ','Δ₁ + ⋯ + Δₙ','the largest MᵢΔᵢ'],'Error-bound technique.'],
+  ['x is found by undoing F from a measured y. When do small doubts in y make large doubts in x?','when det J is near 0',['when det J is large','when det J = 1','never'],'Undo-error technique: every entry of J⁻¹ is a stand-in of J divided by det J.']];
+const PW28={1:'',2:'²',3:'³','-1':'⁻¹','-2':'⁻²'};
+QP.push({id:'28p.doubt',step:'28p',label:'how doubt spreads',open:()=>measured('28p'),make(){ return writtenQ('28p.doubt',WP28); }},
+  {id:'28p.work',step:'28p',mode:'work',label:'shares and ceilings',open:()=>measured('28p'),make(){
+    const t=rnd(3), e1=1+rnd(4), e2=1+rnd(4);
+    if(t===0){ const k1=pick([1,2,3,-1,-2]), k2=pick([1,2,-1]), val=Math.abs(k1)*e1+Math.abs(k2)*e2, right=val+'%', wrong=uniq(right,[(e1+e2)+'%',Math.abs(k1*e1+k2*e2)+'%',(e1*e2)+'%',(Math.abs(k1*k2)*(e1+e2))+'%',(val+1)+'%',Math.max(e1,e2)+'%'],3); if(wrong.length<3) return null;
+      return {index:'q:28p.work[r;'+[k1,k2,e1,e2].join(';')+']', lines:[['f = x'+PW28[k1]+'y'+PW28[k2]+', with x > 0 and y > 0','given'],['x is measured to within '+e1+'%, and y to within '+e2+'%','relative errors']], ask:'To first order, within what share is f known?', right, opts:shuffle([right,...wrong]), lead:'', why:'Relative-errors-add technique: |k₁|e₁ + |k₂|e₂ = '+Math.abs(k1)+' · '+e1+' + '+Math.abs(k2)+' · '+e2+'.'}; }
+    if(t===1){ const M1=1+rnd(5), M2=1+rnd(5), val=M1*e1+M2*e2, right=String(val), wrong=uniq(right,[String(M1+M2),String(e1+e2),String(Math.max(M1*e1,M2*e2)),String(M1*e2+M2*e1),String((M1+M2)*(e1+e2)),String(val+1)],3); if(wrong.length<3) return null;
+      return {index:'q:28p.work[b;'+[M1,M2,e1,e2].join(';')+']', lines:[['|fx| ≤ '+M1+' and |fy| ≤ '+M2+' at every point of the box','f is smoothly sloped'],['x is known to within '+e1+', and y to within '+e2,'given']], ask:'What ceiling does the error-bound technique give for the error in f?', right, opts:shuffle([right,...wrong]), lead:'', why:'Error-bound technique: M₁Δ₁ + M₂Δ₂ = '+M1+' · '+e1+' + '+M2+' · '+e2+'.'}; }
+    const e=2*(1+rnd(4)), [nm,k]=pick([['√x',fr(1,2)],['x²',fr(2,1)],['x³',fr(3,1)],['1/x',fr(1,1)],['1/x²',fr(2,1)]]), val=e*k.p/k.q, right=val+'%', wrong=uniq(right,[e+'%',(2*e)+'%',(e/2)+'%',(e*e)+'%',(3*e)+'%',(val+1)+'%'],3); if(wrong.length<3) return null;
+    return {index:'q:28p.work[p;'+[nm,e].join(';')+']', lines:[['x > 0 is measured to within '+e+'%','a relative error']], ask:'To first order, within what share is '+nm+' known?', right, opts:shuffle([right,...wrong]), lead:'', why:'Relative-errors-add technique: through a power the share is multiplied by the size of the power, here '+fshow(k)+'.'}; }},
+  {id:'28p.tank',step:'28p',mode:'word',label:'a measured tank',open:()=>measured('28p'),make(){
+    const what=pick(['A round tank','A grain silo','A tin can','A straight pipe']), e1=1+rnd(4), e2=1+rnd(5), val=2*e1+e2, right=val+'%', wrong=uniq(right,[(e1+e2)+'%',(e1+2*e2)+'%',(e1*e2)+'%',(2*e1*e2)+'%',(val+1)+'%',(2*(e1+e2))+'%'],3); if(wrong.length<3) return null;
+    return {index:'q:28p.tank['+[what,e1,e2].join(';')+']', a3:['28p.tank',DASH,DASH], story:what+' is a cylinder, of volume V = πr²h. Its radius r is measured to within '+e1+'%, and its height h to within '+e2+'%.', lines:[], ask:'To first order, within what share is the volume known?', right, opts:shuffle([right,...wrong]), lead:'', why:'Relative-errors-add technique: the shares add, each multiplied by its power. 2 · '+e1+' + 1 · '+e2+' = '+val+'.'}; }},
+  {id:'28p.line',step:'28p',mode:'proof',label:'shares that add',open:()=>measured('28p'),make(){
+    const a=2*(1+rnd(3)), b=1+rnd(4), M1=1+rnd(4), M2=1+rnd(4), d1=1+rnd(3), d2=1+rnd(3), V=[
+      ['p1',[['f = x²y, with x known to within '+a+'% and y to within '+b+'%','given'],['to first order, f is known to within '+(2*a+b)+'%','the relative-errors-add technique']],2,0,'2 · '+a+' + 1 · '+b+' = '+(2*a+b)+'.'],
+      ['p2',[['f = x − y, with x and y each known to within '+a+'%','given'],['to first order, f is known to within '+2*a+'%','the relative-errors-add technique']],2,1,'The technique is for products of powers. A difference of near numbers can have a far larger share.'],
+      ['p3',[['|fx| ≤ '+M1+' and |fy| ≤ '+M2+' on the box, with x known to within '+d1+' and y to within '+d2,'given'],['the error in f is at most '+(M1*d1+M2*d2),'the error-bound technique']],2,0,M1+' · '+d1+' + '+M2+' · '+d2+' = '+(M1*d1+M2*d2)+'.'],
+      ['p4',[['f = √x, with x known to within '+a+'%','given'],['to first order, f is known to within '+2*a+'%','the power is doubled']],2,1,'The share is multiplied by the power ½: '+a/2+'%.'],
+      ['p5',[['x is found by undoing F from a measured y, and det J is near 0','given'],['small doubts in y make small doubts in x','the undo-error technique']],2,1,'Every entry of J⁻¹ is divided by det J: the doubts in x are large.'],
+      ['p6',[['f is smoothly sloped on the box','given'],['the error in f is at most |∇f(p) · h|','the error-bound technique']],2,1,'The technique uses the largest slopes on the whole box, not the slopes at p. f = x² at x = 0 ± 0.1 has estimate 0.']];
+    return line28('28p.line',V,[a,b,M1,M2,d1,d2]); }});
+
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 
