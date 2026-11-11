@@ -131,6 +131,13 @@ addEventListener('storage',e=>{ if(e.key===RK){ raw=null; } });
 /* Phase J step 5 (2026-11-11): ∞1-∞26 now stand in front of ∞27-∞78 in sky.js. A supplied count n kept before this release
    counted from ∞27 (first: 27, or no first at all under 0.3.154-0.3.159), so it moves up by 26 once, under ladder:mvInf1:
    what a learner already had stays, and ∞1-∞26 arrive with it, under the button. */
+/* 2026-11-11: the arrow newsflashes 47·comp2 and 47·crypt (0.3.174-0.3.177) left rung 47 for the infinity series as ∞·comp and
+   ∞·crypt (infcomp, infcrypt). Their page records follow once, under ladder:mvArrow1; the old page ids are retired. */
+(function(){ const F='ladder:mvArrow1'; try{ if(LS.getItem(F)!=null) return; const M={r47comp2:'infcomp',r47crypt:'infcrypt'};
+  ['pages:done'].forEach(k=>{ const v=JSON.parse(LS.getItem(k)||'null'); if(!v||typeof v!=='object') return; let ch=false;
+    Object.keys(M).forEach(o=>{ ['','open:'].forEach(pre=>{ if(v[pre+o]!=null){ if(v[pre+M[o]]==null) v[pre+M[o]]=v[pre+o]; delete v[pre+o]; ch=true; } }); }); if(ch) LS.setItem(k,JSON.stringify(v)); });
+  Object.keys(M).forEach(o=>{ ['cert:','steps:','note:'].forEach(pre=>{ const v=LS.getItem(pre+o); if(v!=null){ if(LS.getItem(pre+M[o])==null) LS.setItem(pre+M[o],v); LS.removeItem(pre+o); } }); });
+  LS.setItem(F,String(Date.now())); }catch(e){} })();
 (function(){ const F='ladder:mvInf1'; try{ if(LS.getItem(F)!=null) return;
   const sy=JSON.parse(LS.getItem('ladder:sky')||'null'); if(sy&&sy.n>0&&sy.first!==1){ sy.n+=26; sy.first=1; LS.setItem('ladder:sky',JSON.stringify(sy)); }
   LS.setItem(F,String(Date.now())); }catch(e){} })();
@@ -1564,7 +1571,7 @@ function info(){
   const t=document.querySelector('header.top .tags .tag'); if(!t||!document.querySelector('.qid')) return null;
   const txt=t.textContent.trim(), i=txt.indexOf(' · '); const tag=(i<0?txt:txt.slice(0,i)).trim();
   const cls=[...t.classList].find(c=>c!=='tag')||'';
-  const rung=parseInt(tag,10); if(isNaN(rung)) return /^∞\d+$/.test(tag)?{tag,rung:null,annex:null,deck:'sky'}:null;
+  const rung=parseInt(tag,10); if(isNaN(rung)) return /^∞(\d+|·[a-z]+)$/.test(tag)?{tag,rung:null,annex:null,deck:'sky'}:null;
   const annex=ANNEX.includes(cls)?cls:null;
   return {tag,rung,annex,deck:annex?'a-'+annex:'r'+String(rung).padStart(2,'0')};
 }
@@ -1867,8 +1874,14 @@ ready(()=>{ /* 0.2.1: rung and floor pages carry no tags */ if(/^(r\d+|floor\d+)
 const KEY='ladder:sky';
 const got=()=>{ try{ return (JSON.parse(LS.getItem(KEY)||'null')||{n:0}); }catch(e){ return {n:0}; } };
 let list=null;
-function load(){ if(window.LADDER_SKY) return Promise.resolve(window.LADDER_SKY); if(list) return list;
-  list=new Promise(res=>{ const s=document.createElement('script'); s.src='sky.js'; s.onload=()=>res(window.LADDER_SKY||[]); s.onerror=()=>res([]); document.head.appendChild(s); }); return list; }
+/* Arrow newsflashes (Andrew 2026-11-11 16:39Z): each stands in sky.js just before the first step of its subject, with a label
+   in place of a number (n "·phys"). They arrive over several releases, so each is counted in once, by page, under
+   ladder:skyIns: a learner who already had the step after it gets the newsflash with it; otherwise it is the next supplied. */
+function skyIns(L){ try{ let done=JSON.parse(LS.getItem('ladder:skyIns')||'[]'); if(!Array.isArray(done)) done=[]; const st=got(); let ch=false, add=false;
+    L.forEach((x,p)=>{ if(typeof x.n==='number'||done.includes(x.page)) return; if(st.n>p){ st.n++; ch=true; } done.push(x.page); add=true; });
+    if(ch) LS.setItem(KEY,JSON.stringify(st)); if(add) LS.setItem('ladder:skyIns',JSON.stringify(done)); }catch(e){} return L; }
+function load(){ if(list) return list;
+  list=(window.LADDER_SKY?Promise.resolve(window.LADDER_SKY):new Promise(res=>{ const s=document.createElement('script'); s.src='sky.js'; s.onload=()=>res(window.LADDER_SKY||[]); s.onerror=()=>res([]); document.head.appendChild(s); })).then(skyIns); return list; }
 function note(m){ let t=document.getElementById('patoast'); if(!t){ t=document.createElement('div'); t.id='patoast'; t.setAttribute('role','status'); document.body.appendChild(t); } t.textContent=m; t.classList.add('on'); clearTimeout(note.h); note.h=setTimeout(()=>t.classList.remove('on'),3200); }
 function supply(){ load().then(L=>{ const st=got(); if(!L.length){ note('The blue sky could not load.'); return; }
     if(st.n>=L.length){ note('The blue sky is caught up: every step from the front is under the button. New ones come with new versions of the ladder.'); return; }
