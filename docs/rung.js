@@ -154,7 +154,7 @@ function col(n){ return CS().getPropertyValue(n.startsWith('--')?n:'--'+n).trim(
 function buildLines(root){
   root.querySelectorAll('pre.lines').forEach(pre=>{
     const label=pre.dataset.label||'';
-    /* a wrong proof (illegal moves, a move that fails) is always red, never the colour of a valid move */
+    /* a wrong proof (moves to watch out for, a move that fails) is always red, never the colour of a valid move */
     const k=(pre.dataset.wrong!==undefined||/not allowed|illegal/i.test(label))?'wrong':(pre.dataset.k||'teal');
     const brk=document.createElement('div'); brk.className='brk brk-'+k; if(label) brk.dataset.label=label;
     const rows=document.createElement('div'); rows.className='rows'; brk.appendChild(rows);
@@ -2519,7 +2519,7 @@ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded'
 (function(){
 'use strict';
 if(window.LADDER_DESK) return;
-const PAGES=window.LADDER_SWIPE_PAGES||/^(r0[0-9]|r1[01]|floor[12])/; /* Phase G floor 2: rungs 8-11 */
+const PAGES=window.LADDER_SWIPE_PAGES||/^(r[0-0]\d|r1[0-6]|floor[1-3])/; /* Phase G floor 3: rungs 0-16 */
 const ADVANCE_ON_SWIPE_LEFT=true; /* finger moves left = the row moves on, as pages turn; flip for the other reading */
 const pg=()=>window.ladderPage?ladderPage():'';
 const ATTACH=/(^|\s)(eqline|eqline-words|brkkey|eyebrow|lbl|cap|lp|lv|first|dividend|tablewrap-cap)(\s|$)/;
