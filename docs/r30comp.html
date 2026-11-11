@@ -65,6 +65,7 @@ H(X, Y) = H(X) + H(Y) @@ the average-adds technique (30g)
 H(X) - \log_2 n = \textstyle\sum_x p(x)\log_2\tfrac{1/n}{p(x)} \le \tfrac{1}{\ln 2}\sum_x p(x)\big(\tfrac{1/n}{p(x)} - 1\big) \le 0 @@ n values; the log-bounds technique (17a), ln y ≤ y − 1; change of base (17h)
 \htmlClass{new}{0 \le H(X) \le \log_2 n,\ \text{ with } \log_2 n \text{ only for equal chances}} \quad \blacksquare @@ equality in ln y ≤ y − 1 only at y = 1
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;X, Y \text{ independent} \Rightarrow\\ &amp;\qquad H(X, Y) = H(X) + H(Y)\\ &amp;H(X) \le \log_2 n\end{aligned}"></div>
   <p data-pid="6fc574">Surprise-average technique: <b>the average surprise H(X) adds over independent parts, and is largest, log₂ n bits, when all n outcomes are equally likely.</b> Its accepted name is the <i>entropy</i> of X, the same word as 22·comp’s, and for two outcomes with chances p and 1 − p it is 22·comp’s h(p). 30·phys found the shares of energy as the most H under fixed totals. Here H is read the other way: as what a message holds.</p>
   <p data-pid="4a77c4">Seattle has measurable rain on about 150 days of the year. The surprise of tomorrow’s yes or no is h(150/365) = 0.977 bits a day: nearly as much as a coin. Snow falls on about 5 days a year, and the yes or no of snow holds h(5/365) = 0.104 bits a day. A year of snow records holds about 38 bits, though it takes 365 yeses and noes to write it plainly.</p>
   <section class="slides" id="sl1"><div class="eyebrow">The slides · surprise · ← → keys work</div></section>
@@ -91,6 +92,7 @@ H - L = \textstyle\sum_x p(x)\log_2\tfrac{2^{-\ell_x}}{p(x)} \le \tfrac{1}{\ln 2
 L \lt \textstyle\sum_x p(x)\big(\log_2\tfrac{1}{p(x)} + 1\big) = H + 1 @@ each length is less than its surprise plus 1
 \htmlClass{new}{H \le L \lt H + 1;\ \text{ for blocks of } n:\ H \le \tfrac{L_n}{n} \lt H + \tfrac1n} \quad \blacksquare @@ a block of n independent outcomes has H(Xⁿ) = nH (the surprise-average technique)
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;H \le \text{average bits an outcome} \le H + \tfrac1n\end{aligned}"></div>
   <p data-pid="379b37">Source coding technique: <b>no code without commas averages fewer than H bits an outcome, and coding blocks of n outcomes at a time gets within 1/n of H.</b> So H is exactly how far a source can be squeezed. 22·comp found the same for a file with a share p of ones, by counting. For Seattle’s snow, one day at a time needs 1 bit a day, since no codeword can be shorter. Blocks of 10 days need less than 0.204 bits a day, and blocks of 100 less than 0.114.</p>
   <section class="slides" id="sl2"><div class="eyebrow">The slides · codes · ← → keys work</div></section>
   <section class="sayback">
@@ -118,6 +120,7 @@ I(X; Y) = H(Y) - h(\varepsilon) \le 1 - h(\varepsilon) @@ the shared-information
 P(X = 0) = \tfrac12 \Rightarrow P(Y = 0) = \tfrac12(1 - \varepsilon) + \tfrac12\varepsilon = \tfrac12 @@ the whole-chance technique (30f)
 \htmlClass{new}{C = \max I(X; Y) = 1 - h(\varepsilon)} \quad \blacksquare @@ equally likely inputs reach the bound
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{bits told per bit sent} \le 1 - h(\varepsilon)\end{aligned}"></div>
   <p data-pid="e8af98">Flip-line technique: <b>a line that flips each bit with chance ε tells at most 1 − h(ε) bits for each bit sent, and equally likely inputs reach it.</b> Its accepted name is the line’s <i>capacity</i>. At ε = 0.01 it is 0.919 bits a bit. At ε = 0.1 it is 0.531. At ε = ½ it is 0: the output is a coin whatever goes in.</p>
   <section class="slides" id="sl3"><div class="eyebrow">The slides · shared · ← → keys work</div></section>
   <section class="sayback">
@@ -145,6 +148,7 @@ P(\text{error}) \le \tfrac{\varepsilon(1 - \varepsilon)}{n\delta^2} + 2^{-n(1 - 
 R \lt 1 - h(\varepsilon) \Rightarrow \text{pick } \delta \text{ with } R \lt 1 - h(\varepsilon + \delta) @@ h has no gaps (12): it moves a little for a small δ
 \htmlClass{new}{\text{the average error, over random codes, heads to } 0 \text{ as } n \text{ grows}} \quad \blacksquare @@ both terms do; the same holds for every codeword sent, and an average over codes (30g) is not above all its values
   </pre>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\forall \text{rate} &lt; 1 - h(\varepsilon)\ \forall \eta &gt; 0\ \exists \text{ a code}\\ &amp;\qquad \big(P(\text{error}) &lt; \eta\big)\end{aligned}"></div>
   <p data-pid="ce4e01">Noisy channel technique: <b>a line that flips each bit with chance ε can carry any rate below its capacity 1 − h(ε) with errors as rare as you like, by coding long enough blocks.</b> The proof shows that some code works, since random codes work on average, without building one. That rates above the capacity cannot be carried with rare errors is also true. Its proof is held in trust: it waits much higher up the ladder.</p>
   <p data-pid="3f1370">At ε = 0.01, saying each bit three times and taking the vote runs at rate ⅓ and still errs 3ε² − 2ε³ ≈ 0.0003 of the time. The technique promises rate 0.9, with errors as rare as wanted, for long enough blocks. Codes found since come within a hair of it, and every phone and fibre link now uses them. For a line with hiss, of width B in hertz and signal-to-noise ratio S/N, the same reasoning with the bell gives capacity B log₂(1 + S/N) bits a second, held in trust here. An old phone line passes about 3100 Hz at a ratio near 3000, so about 36 000 bits a second. The last dial-up modems ran at 33 600.</p>
   <aside class="nature">
