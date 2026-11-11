@@ -5499,6 +5499,450 @@ QP.push({id:'26l.gamma',step:'26l',label:'the factorial between',open:()=>measur
     const [tag,lines,j,rr,why]=pick(V);
     return {index:'q:26l.line['+[tag,n,fshow(S),m].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
 
+/* ===== Laundry 5, rung 27 (floor 5 pools, stage Z), part 1: 27a to 27g ===== */
+Object.assign(STEPS,{'27a':['r27a','What Adds and Stretches Like Arrows'],'27b':['r27b','Dimension'],'27c':['r27c','Maps That Keep Adding and Stretching'],'27d':['r27d','Matrices as Maps'],'27e':['r27e','The Determinant'],'27f':['r27f','The Arrows a Map Only Stretches'],'27g':['r27g','A Matrix Obeys Its Own Polynomial'],'27h':['r27h','Measuring Sticks for Arrows'],'27i':['r27i','Vectors by Hand'],'27j':['r27j','Solving Systems by Elimination'],'27k':['r27k','Determinants by Hand'],'27l':['r27l','Eigenvectors by Hand'],'27m':['r27m','Turns of Space']});
+const v27=x=>'('+x.map(c=>typeof c==='number'?sg(c):c).join(', ')+')', G27=(...r)=>'rows '+r.map(v27).join(', '), g2=(a,b,c,d)=>G27([a,b],[c,d]);
+const mul27=(A,B)=>[A[0]*B[0]+A[1]*B[2],A[0]*B[1]+A[1]*B[3],A[2]*B[0]+A[3]*B[2],A[2]*B[1]+A[3]*B[3]], lin27=ts=>tm25(ts)||'0';
+
+/* ---------- 27a What Adds and Stretches Like Arrows ---------- */
+const WA27=[
+  ['Is u · v defined in every space of arrows?','no: the rules give adding and stretching only; arrows are not multiplied by arrows here',['yes','yes, when the arrows are lists','no: only u × v is'],'A space of arrows is a set with a way to add two members and a way to stretch a member by a real number.'],
+  ['Is {(x, y) : x + y = 1} a space of arrows?','no: it does not hold 0, and (1, 0) + (0, 1) leaves it',['yes','yes: it is a line','no: its members are not arrows'],'Inside-space technique: a part W must hold 0, and u + v and t·v whenever it holds u and v.'],
+  ['t·v = 0. Is v = 0?','not when t = 0; it holds when t ≠ 0, by stretching by 1/t',['yes, always','never','only when t = 1'],'Zero-stretch technique: 0·v = 0 for every v.'],
+  ['Do the solutions of y″ = −y + 1 form a space of arrows?','no: 0 is not one of them, and two solutions add to a solution of y″ = −y + 2',['yes','yes: solutions can be added','no: the rule has no solutions'],'The solutions of y″ = −y do form one.'],
+  ['What must a part W of a space of arrows hold, to be a space itself?','0, and u + v and t·v whenever it holds u and v',['u + v whenever it holds u and v, and nothing more','every arrow of length 1','at least two arrows'],'Inside-space technique.'],
+  ['What is (−1)·v?','−v, the opposite of v',['0','v','it is not defined'],'Zero-stretch technique: 0·v = 0, t·0 = 0, and (−1)·v = −v.']];
+const OS27=['none fails: W is a space of arrows','it does not hold 0','it holds 0, but a sum leaves it','it holds 0 and sums, but a stretch leaves it'];
+QP.push({id:'27a.rules',step:'27a',label:'the rules of arrows',open:()=>measured('27a'),make(){ return writtenQ('27a.rules',WA27); }},
+  {id:'27a.work',step:'27a',mode:'work',label:'a space, or not',open:()=>measured('27a'),make(){
+    const t=rnd(3), a=1+rnd(4), b=nz25(4), c=nz25(5), n=2+rnd(4);
+    if(t===0){ const s=nz25(3), k=nz25(3), u=[nz25(4),nz25(4)], w=[nz25(4),nz25(4)], right=v27([s*u[0]+k*w[0],s*u[1]+k*w[1]]), wrong=uniq(right,[v27([s*u[0]-k*w[0],s*u[1]-k*w[1]]),v27([u[0]+w[0],u[1]+w[1]]),v27([s*u[0]+k*w[1],s*u[1]+k*w[0]]),v27([s*u[0]*k*w[0],s*u[1]*k*w[1]]),v27([s*(u[0]+w[0]),k*(u[1]+w[1])])],3); if(wrong.length<3) return null;
+      return {index:'q:27a.work[m;'+[s,k,u,w].join(';')+']', lines:[['u = '+v27(u)+' and v = '+v27(w),'two arrows of the plane']], ask:'What is '+cf22(s,'u')+(k<0?' − ':' + ')+cf22(Math.abs(k),'v')+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Stretch each arrow place by place, then add place by place: '+v27([s*u[0],s*u[1]])+' + '+v27([k*w[0],k*w[1]])+'.'}; }
+    const C=[['{(x, y) : '+lin27([[a,'x'],[b,'y']])+' = '+sg(c)+'}',1,'Put x = y = 0: the left side is 0, not '+sg(c)+'.'],['{(x, y) : '+lin27([[a,'x'],[b,'y']])+' = 0}',0,'It holds (0, 0), and the left side of a sum or a stretch is again 0.'],['{(x, y) : y = x²}',2,'(1, 1) and (2, 4) are in it, and their sum (3, 5) is not.'],['{(x, y) : x ≥ 0}',3,'(1, 0) is in it, and (−1)·(1, 0) is not.'],['{(x, y) : xy = 0}',2,'(1, 0) and (0, 1) are in it, and their sum (1, 1) is not.'],['{(x, y, z) : z = 0}',0,'It holds 0, and sums and stretches keep z = 0.'],['the polynomials of degree exactly '+n,1,'The zero polynomial has no degree '+n+'.'],['the polynomials of degree at most '+n,0,'It holds 0, and sums and stretches do not raise the degree.'],['the solutions of y″ = −y + '+a,1,'y = 0 gives 0 on the left and '+a+' on the right.'],['the solutions of y″ = −'+(a===1?'':a)+'y',0,'0 is a solution, and sums and stretches of solutions are solutions.'],['{(x, y) : x and y are whole numbers}',3,'(1, 0) is in it, and ½·(1, 0) is not.']];
+    const [W,i,why]=pick(C);
+    return {index:'q:27a.work[s;'+W+']', lines:[['W is '+W,'a part of a space of arrows']], ask:'Which of the three fails first: holding 0, holding sums, holding stretches?', right:OS27[i], opts:OS27, lead:'', why:'Inside-space technique. '+why}; }},
+  {id:'27a.line',step:'27a',mode:'proof',label:'only adding and stretching',open:()=>measured('27a'),make(){
+    const a=1+rnd(4), b=nz25(4), c=nz25(5), k=2+rnd(7), L=lin27([[a,'x'],[b,'y']]), V=[
+      ['a1',[['v is in a space of arrows','given'],['0·v = 0','the zero-stretch technique']],2,0,'(0 + 0)·v = 0·v + 0·v, so 0·v is the zero arrow.'],
+      ['a2',[['t·v = 0','given'],['v = 0','divide by t']],2,1,'t may be 0, and 0·v = 0 for every v.'],
+      ['a3',[[k+'·v = 0','given'],['v = 0','stretch both sides by 1/'+k]],2,0,'(1/'+k+')·('+k+'·v) = 1·v = v, and (1/'+k+')·0 = 0.'],
+      ['a4',[['W = {(x, y) : '+L+' = '+sg(c)+'}','given'],['W is a space of arrows','the inside-space technique']],2,1,'W does not hold (0, 0).'],
+      ['a5',[['W = {(x, y) : '+L+' = 0}','given'],['W is a space of arrows','the inside-space technique: it holds 0, sums and stretches']],2,0,'The left side of a sum is the sum of the left sides, 0 + 0.'],
+      ['a6',[['u and v are in a space of arrows','given'],['u · v is a number','arrows multiply']],2,1,'The rules give adding and stretching only.'],
+      ['a7',[['v is in a space of arrows','given'],['(−'+k+')·v = −('+k+'·v)','the zero-stretch technique, with s·(t·v) = (st)·v']],2,0,'(−1)·('+k+'·v) is the opposite of '+k+'·v, and it is (−'+k+')·v.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:27a.line['+[tag,a,b,c,k].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 27b Dimension ---------- */
+const WB27=[
+  ['Can three arrows in the plane be free?','no: the plane has dimension 2, so at most two arrows are free',['yes, if no two are parallel','yes, if none is 0','no: no list in the plane is free'],'Exchange technique: a free list is no longer than a list that builds.'],
+  ['v₁ and v₂ are not parallel in space. Do they build space?','no: two arrows build at most a plane through 0; space has dimension 3',['yes','yes, if neither is 0','no: they build only a line'],'Same-size technique: every basis of space has 3 arrows.'],
+  ['Each pair of a list is free. Is the list free?','not always: (1, 0), (0, 1), (1, 1): every pair is free, the three are not',['yes','yes, in the plane','never'],'Free means that the only mix equal to 0 has every tᵢ = 0.'],
+  ['Has every space of arrows a dimension?','only those with a finite list that builds them; all polynomials together have none',['yes','no: only lists of numbers have','yes: it is the number of its arrows'],'Same-size technique: if a space has a basis of n arrows, every basis of it has n arrows.'],
+  ['What is a basis of V?','a list that builds V and is free',['a list that builds V','a free list in V','the longest list in V'],'It builds, and it wastes nothing.'],
+  ['w₁, …, wₘ build V, and u₁, …, uₖ in V are free. What follows?','k ≤ m',['k = m','k ≥ m','nothing ties k to m'],'Exchange technique: swap the free arrows in, one at a time, and each time a builder goes out.']];
+QP.push({id:'27b.dim',step:'27b',label:'build and waste nothing',open:()=>measured('27b'),make(){ return writtenQ('27b.dim',WB27); }},
+  {id:'27b.work',step:'27b',mode:'work',label:'counting directions',open:()=>measured('27b'),make(){
+    const t=rnd(3), a=nz25(3), b=nz25(3), k=pick([2,3,-2,-1]), n=2+rnd(5);
+    if(t===0){ const C=[[[[a,b],[k*a,k*b]],'1','The second is '+sg(k)+' times the first, so they build a line.'],[[[a,b],[-b,a]],'2','Neither is a stretch of the other, so they are free and build the plane.'],[[[1,0],[0,1],[a,b]],'2','The plane has dimension 2: the third arrow is a mix of the first two.'],[[[1,0,0],[0,1,0],[a,b,0]],'2','The third is a mix of the first two, and those two are free.'],[[[1,0,0],[0,1,0],[a,b,1]],'3','No arrow is a mix of the others: the third leaves the plane of the first two.'],[[[a,b,1],[2*a,2*b,2],[-a,-b,-1]],'1','Each is a stretch of the first.']];
+      const [L,right,why]=pick(C), O=['0','1','2','3'];
+      return {index:'q:27b.work[d;'+L.join('|')+']', lines:[[L.map(v27).join(', '),'a list of arrows']], ask:'What is the dimension of what they build?', right, opts:O, lead:'', why}; }
+    if(t===1){ const C=[['the lists of '+n+' numbers',String(n),'e₁, …, e'+sub15(n)+' are a basis.'],['the polynomials of degree at most '+n,String(n+1),'1, x, …, x'+sup15(n)+' are a basis: '+(n+1)+' arrows.'],['{(x, y, z) : x + y + z = 0}','2','(1, −1, 0) and (0, 1, −1) are a basis.'],['the solutions of y″ = −y','2','cos x and sin x are a basis.'],['all polynomials together','it has none','No finite list builds it: a list of polynomials reaches only up to its highest degree.'],['{(x, y, z) : x = y = z}','1','(1, 1, 1) is a basis.']];
+      const [V,right,why]=pick(C), wrong=uniq(right,shuffle([String(n),String(n+1),String(n-1),'2','1','3','it has none']),3);
+      return {index:'q:27b.work[s;'+V+']', lines:[['V is '+V,'a space of arrows']], ask:'What is its dimension?', right, opts:shuffle([right,...wrong]), lead:'', why}; }
+    const m=1+rnd(n-1), right=String(n-m), wrong=uniq(right,[String(n),String(m),String(n+m),'0',String(n-m+1)],3);
+    return {index:'q:27b.work[g;'+[n,m].join(';')+']', lines:[['V has dimension '+n,'given'],[m+(m===1?' arrow of V is':' arrows of V are')+' free','given']], ask:'How many more arrows grow the list into a basis?', right, opts:shuffle([right,...wrong]), lead:'', why:'Grow-to-basis technique: every free list can be grown into a basis, and every basis of V has '+n+' arrows.'}; }},
+  {id:'27b.line',step:'27b',mode:'proof',label:'free, building, both',open:()=>measured('27b'),make(){
+    const n=2+rnd(6), m=1+rnd(n-1), V=[
+      ['b1',[[(n+1)+' arrows lie in a space of dimension '+n,'given'],['they are not free','the exchange technique: a free list there has at most '+n+' arrows']],2,0,'A basis of '+n+' arrows builds the space, so no free list is longer.'],
+      ['b2',[['each pair of v₁, v₂, v₃ is free','given'],['v₁, v₂, v₃ are free','every pair is']],2,1,'(1, 0), (0, 1), (1, 1): every pair is free, the three are not.'],
+      ['b3',[['a space has a basis of '+n+' arrows','given'],['every basis of it has '+n+' arrows','the same-size technique']],2,0,'The exchange technique, used both ways round.'],
+      ['b4',[[n+' free arrows lie in a space of dimension '+n,'given'],['they are a basis','the grow-to-basis technique']],2,0,'Growing would make a free list of more than '+n+' arrows, so nothing is left to add.'],
+      ['b5',[[m+(m===1?' free arrow lies':' free arrows lie')+' in a space of dimension '+n,'given'],['the list builds the space','it is free']],2,1,'A list that builds has at least '+n+' arrows. Free and building are two different things.'],
+      ['b6',[['V is a space of arrows','given'],['V has a dimension','every space has a basis']],2,1,'Only spaces built by a finite list. All polynomials together have none.'],
+      ['b7',[[(n+m)+' arrows build a space of dimension '+n,'given'],['some '+n+' of them are a basis','the spare-arrow technique: drop spare arrows until the list is free']],2,0,'Dropping a spare arrow leaves every mix the list can make.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:27b.line['+[tag,n,m].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 27c Maps That Keep Adding and Stretching ---------- */
+const WC27=[
+  ['Is L(x) = 2x + 1 straight?','no: it sends 0 to 1; a straight map sends 0 to 0',['yes: its graph is a line','yes, on the line','no: it does not keep stretches, though it sends 0 to 0'],'A straight map keeps adding and stretching.'],
+  ['L(u) = L(v). Is u = v, for every straight map L?','only when L loses nothing but 0',['yes, always','never','only when L is onto'],'Nothing-sent technique: L is one-to-one exactly when it loses only 0.'],
+  ['Is dim(lost) + dim(reached) = dim W, for a straight map from V to W?','no: the sum is the dimension of the space you start from, V',['yes','no: the sum is dim V + dim W','no: the sum is 0'],'Lost-plus-reached technique.'],
+  ['L is onto. Is L one-to-one, between any two spaces?','only when the two dimensions are equal',['yes','never','only when L loses a line'],'If V has the larger dimension, an onto map must lose something.'],
+  ['When is a straight map one-to-one?','exactly when it loses only 0',['exactly when it is onto','always','exactly when it reaches 0'],'Nothing-sent technique: if L(u) = L(v), then L(u − v) = 0.'],
+  ['V has dimension n, and L is straight from V. What adds to n?','the dimension of what L loses plus the dimension of what it reaches',['the dimension of what L reaches plus the dimension of W','the dimensions of V and W','the number of arrows L sends to 0'],'Lost-plus-reached technique.']];
+const ST27=[['L(x) = 2x + 1',1,'L(0) = 1.'],['L(x) = 5x',0,'L(u + v) = L(u) + L(v) and L(tv) = tL(v).'],['L(x, y) = (x + y, 2x)',0,'Each place is a mix of x and y with no constant.'],['L(x, y) = xy',2,'L(1, 0) + L(0, 1) = 0, and L(1, 1) = 1.'],['L(x) = x²',2,'L(1) + L(1) = 2, and L(2) = 4.'],['L(f) = f′, on polynomials',0,'The slope of a sum is the sum of the slopes, and constants come out in front.'],['L(x, y) = (x + 1, y)',1,'L(0, 0) = (1, 0).'],['L(x, y, z) = (z, x)',0,'Each place is a mix of x, y and z with no constant.']];
+const LR27=[['L(x, y, z) = (x, y)',3,1,2],['L(x, y, z) = x',3,2,1],['L(x, y) = (x, y, 0)',2,0,2],['L(x, y, z) = x + y + z',3,2,1],['L(x, y) = (x + y, x + y)',2,1,1],['L(x, y, z) = (0, 0)',3,3,0],['L(x, y) = (y, x)',2,0,2]];
+QP.push({id:'27c.maps',step:'27c',label:'straight maps',open:()=>measured('27c'),make(){ return writtenQ('27c.maps',WC27); }},
+  {id:'27c.work',step:'27c',mode:'work',label:'lost and reached',open:()=>measured('27c'),make(){
+    const t=rnd(4), n=3+rnd(5), k=1+rnd(n-1);
+    if(t===0){ const lost=Math.random()<0.5, right=String(n-k), wrong=uniq(right,[String(n),String(k),String(n+k),'0',String(n-k+1)],3);
+      return {index:'q:27c.work[n;'+[n,k,lost].join(';')+']', lines:[['L is straight from a space of dimension '+n,'given'],[lost?'L loses a space of dimension '+k:'L reaches a space of dimension '+k,'given']], ask:'What is the dimension of what L '+(lost?'reaches':'loses')+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Lost-plus-reached technique: the two dimensions add to '+n+'.'}; }
+    if(t===1){ const [L,i,why]=pick(ST27), O=['yes: it keeps adding and stretching','no: it does not send 0 to 0','no: it sends 0 to 0, but it does not keep sums','yes, but only on the whole numbers'];
+      return {index:'q:27c.work[s;'+L+']', lines:[[L,'a map']], ask:'Is L straight?', right:O[i], opts:shuffle(O.slice()), lead:'', why}; }
+    if(t===2){ const [L,d,lo,re]=pick(LR27), lost=Math.random()<0.5, right=String(lost?lo:re), O=['0','1','2','3'];
+      return {index:'q:27c.work[l;'+[L,lost].join(';')+']', lines:[[L,'a straight map']], ask:'What is the dimension of what L '+(lost?'loses':'reaches')+'?', right, opts:O, lead:'', why:'It starts from dimension '+d+', loses dimension '+lo+' and reaches dimension '+re+': '+lo+' + '+re+' = '+d+'.'}; }
+    const m=1+rnd(n-1), right='at least '+(n-m), wrong=['exactly 0','at most '+(n-m),'at least '+n];
+    return {index:'q:27c.work[p;'+[n,m].join(';')+']', lines:[['L is straight from a space of dimension '+n+' to a space of dimension '+m,'given']], ask:'What is the dimension of what L loses?', right, opts:shuffle([right,...wrong]), lead:'', why:'L reaches at most dimension '+m+'. Lost-plus-reached technique: lost = '+n+' − reached ≥ '+n+' − '+m+'. So L is not one-to-one.'}; }},
+  {id:'27c.line',step:'27c',mode:'proof',label:'what a map loses',open:()=>measured('27c'),make(){
+    const a=2+rnd(5), b=1+rnd(6), n=3+rnd(5), k=1+rnd(n-1), m=n+1+rnd(3), V=[
+      ['c1',[['L(x) = '+a+'x + '+b,'given'],['L is straight','its graph is a line']],2,1,'L(0) = '+b+'. A straight map sends 0 to 0.'],
+      ['c2',[['L is straight, and L(u) = L(v)','given'],['u = v','L keeps adding']],2,1,'L(u − v) = 0 says only that L loses u − v.'],
+      ['c3',[['L is straight and loses only 0, and L(u) = L(v)','given'],['u = v','L(u − v) = 0, so u − v = 0: the nothing-sent technique']],2,0,'L is one-to-one exactly when it loses only 0.'],
+      ['c4',[['L is straight from a space of dimension '+n+', and loses a space of dimension '+k,'given'],['L reaches a space of dimension '+(n-k),'the lost-plus-reached technique']],2,0,k+' + '+(n-k)+' = '+n+'.'],
+      ['c5',[['L is straight from V, of dimension '+n+', to W, of dimension '+m,'given'],['dim(lost) + dim(reached) = '+m,'the lost-plus-reached technique']],2,1,'The sum is the dimension of the space you start from, '+n+'.'],
+      ['c6',[['L is straight from a space of dimension '+n+', and reaches a space of dimension '+n,'given'],['L is one-to-one','it loses dimension 0: the lost-plus-reached and nothing-sent techniques']],2,0,n+' − '+n+' = 0, so L loses only 0.'],
+      ['c7',[['L is straight from a space of dimension '+m+' onto a space of dimension '+n,'given'],['L is one-to-one','L is onto']],2,1,'L loses dimension '+m+' − '+n+' = '+(m-n)+'.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:27c.line['+[tag,a,b,n,k,m].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 27d Matrices as Maps ---------- */
+const WD27=[
+  ['Is AB = BA?','not in general: a quarter turn and a flip disagree, both ways round',['yes, always','never','yes, for square grids'],'AB is doing B and then A.'],
+  ['Is (AB)⁻¹ = A⁻¹B⁻¹?','no: undo the last first; (AB)⁻¹ = B⁻¹A⁻¹',['yes','no: (AB)⁻¹ = −AB','no: (AB)⁻¹ = A⁻¹ + B⁻¹'],'AB does B first, so its undoing undoes A first.'],
+  ['Is (AB)ᵢⱼ = aᵢⱼbᵢⱼ?','no: place by place is not doing one after another; it is row i of A against column j of B',['yes','yes, for square grids','no: it is aᵢⱼ + bᵢⱼ'],'Product-is-doing technique: (AB)ᵢⱼ = aᵢ₁b₁ⱼ + ⋯ + aᵢₖbₖⱼ.'],
+  ['AB = 0. Is A = 0 or B = 0?','no: the grid with rows (0, 1), (0, 0) times itself is 0',['yes','yes, for square grids','no: AB is never 0'],'Grids are not a field: a grid other than 0 can lose arrows other than 0.'],
+  ['What is column j of the grid of a straight map L?','L(eⱼ)',['eⱼ','row j of L','L(e₁) + ⋯ + L(eⱼ)'],'Columns technique.'],
+  ['Doing B and then A is which grid?','AB',['BA','A + B','B, then A, written BA'],'Product-is-doing technique: column j of AB is A times column j of B.']];
+const U27=[[2,1,1,1],[3,2,1,1],[2,3,1,2],[1,2,0,1],[3,1,2,1],[5,2,2,1],[1,0,3,1],[2,1,3,2],[4,3,1,1],[3,5,1,2]];
+QP.push({id:'27d.grid',step:'27d',label:'grids are maps',open:()=>measured('27d'),make(){ return writtenQ('27d.grid',WD27); }},
+  {id:'27d.work',step:'27d',mode:'work',label:'grids by hand',open:()=>measured('27d'),make(){
+    const t=rnd(4), A=[nz25(3),rnd(4)-1,rnd(4)-2,nz25(3)], B=[rnd(4)-1,nz25(3),nz25(2),rnd(3)], f=M=>g2(...M);
+    if(t===0){ const right=f(mul27(A,B)), wrong=uniq(right,[f(mul27(B,A)),f(A.map((x,i)=>x*B[i])),f(A.map((x,i)=>x+B[i])),f(mul27(A,[B[0],B[2],B[1],B[3]]))],3); if(wrong.length<3) return null;
+      return {index:'q:27d.work[p;'+[A,B].join(';')+']', lines:[['A has '+f(A),'a grid'],['B has '+f(B),'a grid']], ask:'Which grid is AB?', right, opts:shuffle([right,...wrong]), lead:'', why:'Product-is-doing technique: place i, j is row i of A against column j of B. The first place is '+sg(A[0])+' · '+par10(B[0])+' + '+par10(A[1])+' · '+par10(B[2])+' = '+sg(mul27(A,B)[0])+'.'}; }
+    if(t===1){ const x=nz25(4), y=nz25(4), right=v27([A[0]*x+A[1]*y,A[2]*x+A[3]*y]), wrong=uniq(right,[v27([A[0]*x+A[2]*y,A[1]*x+A[3]*y]),v27([A[0]*x,A[3]*y]),v27([A[0]+x,A[3]+y]),v27([A[2]*x+A[3]*y,A[0]*x+A[1]*y])],3); if(wrong.length<3) return null;
+      return {index:'q:27d.work[v;'+[A,x,y].join(';')+']', lines:[['A has '+f(A),'a grid'],['x = '+v27([x,y]),'a list of 2 numbers']], ask:'What is Ax?', right, opts:shuffle([right,...wrong]), lead:'', why:'Ax is '+sg(x)+' times column 1 plus '+par10(y)+' times column 2, or each row of A against x.'}; }
+    if(t===2){ const [a,b,c,d]=pick(U27), right=g2(d,-b,-c,a), wrong=uniq(right,[g2(a,-b,-c,d),g2(d,b,c,a),g2(-d,b,c,-a),g2(d,-c,-b,a)],3); if(wrong.length<3) return null;
+      return {index:'q:27d.work[u;'+[a,b,c,d].join(';')+']', lines:[['A has '+g2(a,b,c,d),'a grid with ad − bc = 1']], ask:'Which grid undoes A?', right, opts:shuffle([right,...wrong]), lead:'', why:'Check by the product: A times '+right.replace('rows','the grid with rows')+' is I. The first place is '+a+' · '+d+' + '+b+' · '+par10(-c)+' = 1.'}; }
+    const a=nz25(4), b=nz25(4), c=nz25(4), d=nz25(4), right=g2(a,b,c,d), wrong=uniq(right,[g2(a,c,b,d),g2(b,a,d,c),g2(c,d,a,b)],3); if(wrong.length<3) return null;
+    return {index:'q:27d.work[c;'+[a,b,c,d].join(';')+']', lines:[['L is straight, with L(e₁) = '+v27([a,c])+' and L(e₂) = '+v27([b,d]),'given']], ask:'Which grid A has L(x) = Ax?', right, opts:shuffle([right,...wrong]), lead:'', why:'Columns technique: column j of A is L(eⱼ). The arrows stand upright in the grid, as columns.'}; }},
+  {id:'27d.line',step:'27d',mode:'proof',label:'order matters',open:()=>measured('27d'),make(){
+    const n=2+rnd(4), a=nz25(4), b=nz25(4), c=nz25(4), d=nz25(4), X=pick(['A','P','M']), Y=pick(['B','Q','N']), V=[
+      ['d1',[[X+' and '+Y+' are grids with '+n+' rows and '+n+' columns','given'],[X+Y+' = '+Y+X,'turn-about for times']],2,1,'Turn-about fails for grids: a quarter turn and a flip disagree, both ways round.'],
+      ['d2',[[X+' and '+Y+' are undoable','given'],['('+X+Y+')⁻¹ = '+X+'⁻¹'+Y+'⁻¹','undo each']],2,1,'Undo the last first: ('+X+Y+')⁻¹ = '+Y+'⁻¹'+X+'⁻¹.'],
+      ['d3',[[X+' and '+Y+' are undoable','given'],['('+X+Y+')⁻¹ = '+Y+'⁻¹'+X+'⁻¹','('+X+Y+')('+Y+'⁻¹'+X+'⁻¹) = '+X+'I'+X+'⁻¹ = I']],2,0,'Grouping-free holds for grids, since doing maps one after another is grouping-free.'],
+      ['d4',[[X+Y+' = 0','given'],[X+' = 0 or '+Y+' = 0','a product is 0 only if a factor is']],2,1,'That is a rule of fields. The grid with rows (0, 1), (0, 0) times itself is 0.'],
+      ['d5',[[X+' is a square grid that loses only 0','given'],[X+' is undoable','the undoable-group technique']],2,0,'It is one-to-one, and by lost-plus-reached it reaches everything.'],
+      ['d6',[['L is straight, with L(e₁) = '+v27([a,c])+' and L(e₂) = '+v27([b,d]),'given'],['L(x) = Ax, where A has '+g2(a,b,c,d),'the columns technique']],2,0,'Column j of A is L(eⱼ).'],
+      ['d7',[[X+' has '+g2(a,b,c,d)+', and '+Y+' has '+g2(1,0,0,1),'given'],[X+Y+' = '+Y+X,'I does nothing, before or after']],2,0,'I is the unit of the product: AI = IA = A.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:27d.line['+[tag,n,a,b,c,d,X,Y].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 27e The Determinant ---------- */
+const WE27=[
+  ['Is det(A + B) = det A + det B?','no: det is straight in each column alone, not in the whole grid; det(I + I) = 2ⁿ',['yes','yes, for 2 × 2 grids','no: det(A + B) = det A · det B'],'What multiplies is the product: det(AB) = det A · det B.'],
+  ['Is det(tA) = t det A?','no: each of the n columns is stretched, so det(tA) = tⁿ det A',['yes','no: det(tA) = det A','no: det(tA) = nt det A'],'D is straight in each column.'],
+  ['Does swapping two rows leave det alone?','no: a row swap also changes the sign',['yes','yes: only column swaps change it','no: it makes det 0'],'27g proves det A equals the det of A turned on its side, so every column rule is a row rule.'],
+  ['det A = 0. Is a column of A all zeros?','no: a column need only be a mix of the others',['yes','yes, or a row','no: then A = 0'],'Rows (1, 2), (2, 4) have det 0.'],
+  ['When can a square grid be undone?','exactly when its determinant is not 0',['exactly when its determinant is 1','always','exactly when no entry is 0'],'Nonzero-det technique.'],
+  ['What is det(AB), for n × n grids?','det A · det B',['det A + det B','det A · det B, but only when AB = BA','n · det A · det B'],'Det-product technique.']];
+QP.push({id:'27e.det',step:'27e',label:'what det keeps',open:()=>measured('27e'),make(){ return writtenQ('27e.det',WE27); }},
+  {id:'27e.work',step:'27e',mode:'work',label:'determinants of 2 by 2',open:()=>measured('27e'),make(){
+    const t=rnd(4), a=nz25(5), b=nz25(5), c=nz25(5), d=nz25(5), p=pick([2,3,-2,5,-3,4]), q=pick([2,-1,3,-4,6]), n=2+rnd(3);
+    if(t===0){ const right=sg(a*d-b*c), wrong=uniq(right,[sg(a*d+b*c),sg(a*b-c*d),sg(b*c-a*d),sg(a*d),sg(a+d)],3); if(wrong.length<3) return null;
+      return {index:'q:27e.work[d;'+[a,b,c,d].join(';')+']', lines:[['A has '+g2(a,b,c,d),'a grid']], ask:'What is det A?', right, opts:shuffle([right,...wrong]), lead:'', why:'For a 2 × 2 grid the two shuffles give ad − bc = '+sg(a)+' · '+par10(d)+' − '+par10(b)+' · '+par10(c)+' = '+right+'.'}; }
+    if(t===1){ const tt=pick([2,3,-1,-2]), right=sg(tt**n*p), wrong=uniq(right,[sg(tt*p),sg(n*tt*p),sg(p),sg(tt**n),sg(-(tt**n)*p)],3); if(wrong.length<3) return null;
+      return {index:'q:27e.work[s;'+[n,tt,p].join(';')+']', lines:[['A is a grid with '+n+' rows and '+n+' columns, and det A = '+sg(p),'given']], ask:'What is det('+cf22(tt,'A')+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each of the '+n+' columns is stretched by '+sg(tt)+', and det is straight in each: '+par10(tt)+sup15(n)+' · '+par10(p)+' = '+right+'.'}; }
+    if(t===2){ const k=rnd(4), [what,R,why]=[['det(AB)',fint(p*q),'Det-product technique: '+sg(p)+' · '+par10(q)+'.'],['det(A⁻¹)',fr(1,p),'A A⁻¹ = I, so det A · det(A⁻¹) = 1.'],['det(A²B)',fint(p*p*q),'Det-product technique: '+par10(p)+'² · '+par10(q)+'.'],['det(A⁻¹B)',fr(q,p),'Det-product technique: (1/'+par10(p)+') · '+par10(q)+'.']][k];
+      const right=fshow(R), wrong=frs16(right,[fint(p+q),fint(p*q),fr(1,p),fr(q,p),fint(p*p*q),fint(-p),fr(p,q),fint(2*p*q)]); if(wrong.length<3) return null;
+      return {index:'q:27e.work[m;'+[k,p,q].join(';')+']', lines:[['det A = '+sg(p)+' and det B = '+sg(q),'two grids of the same size']], ask:'What is '+what+'?', right, opts:shuffle([right,...wrong]), lead:'', why}; }
+    const M=[['swap columns 1 and 2',-1,'a swap changes the sign'],['add '+(2+rnd(4))+' times column 1 to column 2',1,'adding a stretch of one column to another changes nothing'],['stretch column 1 by '+q,q,'det is straight in that column'],['swap rows 1 and 2',-1,'a row swap changes the sign too']], [m1,m2]=take(M,2), v=p*m1[1]*m2[1];
+    const right=sg(v), wrong=uniq(right,[sg(-v),sg(p),sg(-p),'0',sg(p*q),sg(-p*q),sg(2*v)],3);
+    return {index:'q:27e.work[c;'+[p,m1[0],m2[0]].join(';')+']', lines:[['det A = '+sg(p),'given'],[m1[0]+', then '+m2[0],'two moves on A']], ask:'What is the det of the new grid?', right, opts:shuffle([right,...wrong]), lead:'', why:'Column-slide technique: '+m1[2]+', and '+m2[2]+'. So '+sg(p)+' becomes '+right+'.'}; }},
+  {id:'27e.line',step:'27e',mode:'proof',label:'straight in each column',open:()=>measured('27e'),make(){
+    const p=pick([2,3,-2,5,-3,4,7]), q=pick([2,-1,3,-4,6]), n=3+rnd(3), k=2+rnd(5), V=[
+      ['e1',[['det A = '+sg(p)+' and det B = '+sg(q),'given'],['det(A + B) = '+sg(p+q),'det is straight']],2,1,'det is straight in each column alone, not in the whole grid.'],
+      ['e2',[['det A = '+sg(p)+' and det B = '+sg(q),'given'],['det(AB) = '+sg(p*q),'the det-product technique']],2,0,'det(AB) = det A · det B.'],
+      ['e3',[['A has '+n+' rows and '+n+' columns, and det A = '+sg(p),'given'],['det(2A) = '+sg(2*p),'det is straight']],2,1,'Each of the '+n+' columns is doubled: det(2A) = 2'+sup15(n)+' · '+par10(p)+'.'],
+      ['e4',[['det A = 0','given'],['a column of A is all zeros','the column-slide technique']],2,1,'The technique runs the other way: a column of zeros gives 0. A column need only be a mix of the others.'],
+      ['e5',[['det A = '+sg(p),'given'],['A can be undone','the nonzero-det technique']],2,0,sg(p)+' is not 0.'],
+      ['e6',[['B is A with two columns swapped, and det A = '+sg(p),'given'],['det B = '+sg(-p),'the column-slide technique']],2,0,'A swap of two columns changes the sign.'],
+      ['e7',[['B is A with '+k+' times column 1 added to column 2, and det A = '+sg(p),'given'],['det B = '+sg(p),'the column-slide technique']],2,0,'Adding a stretch of one column to another leaves det unchanged.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:27e.line['+[tag,p,q,n,k].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 27f The Arrows a Map Only Stretches ---------- */
+const WF27=[
+  ['Av = λv with v = 0. Does that make λ a stretch of A?','no: every λ does that with v = 0; the arrow must not be 0',['yes','yes, when λ ≠ 0','no: then λ = 0'],'λ is a stretch of A when Av = λv for some arrow v other than 0.'],
+  ['Are the stretches of A its middle entries?','only for a grid with 0 on one side of the middle; rows (0, 1), (1, 0) has middle 0, 0 and stretches 1, −1',['yes, always','never','yes, for 2 × 2 grids'],'Stretch-test technique: λ is a stretch exactly when det(A − λI) = 0.'],
+  ['Are the stretches of AB products of stretches of A and of B?','not in general: each arrow is only stretched by its own grid',['yes','yes, for square grids','no: they are sums'],'A and B need not share the arrows they only stretch.'],
+  ['Has every real grid a real stretch?','no: the quarter turn has stretches i and −i only',['yes','yes, if it is square','no: no real grid has'],'A turn of the plane by a quarter moves every arrow off its own line.'],
+  ['When is λ a stretch of A?','exactly when det(A − λI) = 0',['exactly when det A = λ','exactly when λ is a middle entry','exactly when Aλ = 0'],'Stretch-test technique: A − λI then loses an arrow other than 0.'],
+  ['A, n × n, has n free arrows that it only stretches. What follows?','A = PDP⁻¹, with those arrows as the columns of P and their stretches down the middle of D',['A = D','A = P + D','A has n different stretches'],'Straighten-out technique.']];
+QP.push({id:'27f.stretch',step:'27f',label:'only stretched',open:()=>measured('27f'),make(){ return writtenQ('27f.stretch',WF27); }},
+  {id:'27f.work',step:'27f',mode:'work',label:'finding the stretches',open:()=>measured('27f'),make(){
+    const t=rnd(4), a=nz25(4), b=1+rnd(4), d=nz25(4), k=2+rnd(3), two=(x,y)=>x===y?sg(x)+' only':sg(Math.min(x,y))+' and '+sg(Math.max(x,y));
+    if(t===0){ if(a===d) return null; const right=two(a,d), wrong=uniq(right,[two(a,b),two(a+d,a*d),two(-a,-d),two(b,d),two(a+b,d)],3); if(wrong.length<3) return null;
+      return {index:'q:27f.work[t;'+[a,b,d].join(';')+']', lines:[['A has '+g2(a,b,0,d),'a grid with 0 below the middle']], ask:'Which are the stretches of A?', right, opts:shuffle([right,...wrong]), lead:'', why:'Stretch-test technique: det(A − λI) = ('+sg(a)+' − λ)('+sg(d)+' − λ), which is 0 at λ = '+sg(a)+' and at λ = '+sg(d)+'.'}; }
+    if(t===1){ if(Math.random()<0.3){ const right=cx25(0,-b)+' and '+cx25(0,b), wrong=[two(-b,b),'0 only',two(0,b)];
+        return {index:'q:27f.work[q;'+b+']', lines:[['A has '+g2(0,-b,b,0),'a quarter turn, stretched by '+b]], ask:'Which are the stretches of A?', right, opts:shuffle([right,...wrong]), lead:'', why:'det(A − λI) = λ² + '+b*b+', which has no real root. Its roots in ℂ are ±'+cx25(0,b)+'.'}; }
+      const right=two(a+b,a-b), wrong=uniq(right,[two(a,b),two(a,a),two(-a-b,b-a),two(a*a,b*b),two(a+b,a+b)],3); if(wrong.length<3) return null;
+      return {index:'q:27f.work[y;'+[a,b].join(';')+']', lines:[['A has '+g2(a,b,b,a),'a grid']], ask:'Which are the stretches of A?', right, opts:shuffle([right,...wrong]), lead:'', why:'A(1, 1) = '+v27([a+b,a+b])+' = '+sg(a+b)+'·(1, 1), and A(1, −1) = '+v27([a-b,b-a])+' = '+par10(a-b)+'·(1, −1).'}; }
+    if(t===2){ const [vv,i]=pick([[[1,1],0],[[1,-1],1],[[1,0],3],[[0,1],3],[[2,2],0]]), O=['yes, by '+sg(a+b),'yes, by '+sg(a-b),'yes, by '+sg(a),'no: Av is not a stretch of v']; if(new Set(O).size<4) return null;
+      return {index:'q:27f.work[v;'+[a,b,vv].join(';')+']', lines:[['A has '+g2(a,b,b,a),'a grid'],['v = '+v27(vv),'an arrow']], ask:'Does A only stretch v?', right:O[i], opts:shuffle(O.slice()), lead:'', why:'Av = '+v27([a*vv[0]+b*vv[1],b*vv[0]+a*vv[1]])+'. '+(i===3?'That is not a number times v.':'That is '+(i===0?sg(a+b):par10(a-b))+' times v.')}; }
+    const l=pick([2,3,-1,-2]), m=pick([1,-3,4,5].filter(x=>x!==l)), right=v27([l**k,m**k]), wrong=uniq(right,[v27([l*k,m*k]),v27([l,m]),v27([l**k,m]),v27([(l*m)**k,1]),v27([l**(k+1),m**(k+1)])],3); if(wrong.length<3) return null;
+    return {index:'q:27f.work[k;'+[l,m,k].join(';')+']', lines:[['A = PDP⁻¹, and D has '+v27([l,m])+' down its middle and 0 elsewhere','A is straightened out']], ask:'A'+sup15(k)+' = PEP⁻¹. What stands down the middle of E?', right, opts:shuffle([right,...wrong]), lead:'', why:'Straighten-out technique: Aᵏ = PDᵏP⁻¹, and Dᵏ has the kth powers down its middle: '+par10(l)+sup15(k)+' and '+par10(m)+sup15(k)+'.'}; }},
+  {id:'27f.line',step:'27f',mode:'proof',label:'a stretch needs an arrow',open:()=>measured('27f'),make(){
+    const a=nz25(5), b=nz25(4), d=nz25(5), l=2+rnd(4), m=l+1+rnd(3), k=2+rnd(4), V=[
+      ['f1',[['Av = '+l+'v, with v = 0','given'],[l+' is a stretch of A','A stretches v by '+l]],2,1,'Every λ has A·0 = λ·0. The arrow must not be 0.'],
+      ['f2',[['A has '+g2(a,b,0,d),'given'],['the stretches of A are '+sg(a)+' and '+sg(d),'det(A − λI) = ('+sg(a)+' − λ)('+sg(d)+' − λ)']],2,0,'Stretch-test technique: λ is a stretch exactly when det(A − λI) = 0.'],
+      ['f3',[['A has '+g2(0,l,l,0),'given'],['the only stretch of A is 0','its middle entries are 0 and 0']],2,1,'The middle entries are the stretches only with 0 on one side of the middle. Here det(A − λI) = λ² − '+l*l+', and the stretches are '+l+' and −'+l+'.'],
+      ['f4',[['A only stretches v₁ by '+l+' and v₂ by '+m,'given, with v₁ and v₂ not 0'],['v₁ and v₂ are free','the different-stretches technique']],2,0,'Arrows only stretched by A, with stretches all different, are free.'],
+      ['f5',[['A = PDP⁻¹','given'],['A'+sup15(k)+' = P'+sup15(k)+'D'+sup15(k)+'P⁻'+sup15(k),'the power of a product']],2,1,'The P⁻¹P in the middle cancel: A'+sup15(k)+' = PD'+sup15(k)+'P⁻¹.'],
+      ['f6',[['A is a grid of real numbers','given'],['A has a real stretch','every polynomial has a root']],2,1,'The root technique promises roots in ℂ only. The quarter turn has stretches i and −i.'],
+      ['f7',[['A = PDP⁻¹','given'],['A'+sup15(k)+' = PD'+sup15(k)+'P⁻¹','the straighten-out technique']],2,0,'(PDP⁻¹)(PDP⁻¹)⋯: each P⁻¹P in the middle is I.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:27f.line['+[tag,a,b,d,l,m,k].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 27g A Matrix Obeys Its Own Polynomial ---------- */
+const WG27=[
+  ['Is p(A) = det(A − A·I) = 0 a proof that A obeys its stretch polynomial?','no: a grid is not put in for a number inside a determinant; the stand-in proof is needed',['yes','yes, for 2 × 2 grids','no: A does not obey it'],'Own-polynomial technique: p(A) = c₀I + c₁A + ⋯ + cₙAⁿ is the zero grid.'],
+  ['p(A) = 0. Is p the least-obeyed polynomial?','not always: I obeys λ − 1, of degree 1, while its stretch polynomial is (1 − λ)ⁿ',['yes','yes, up to sign','never'],'Least-obeyed technique: every polynomial that A obeys is a multiple of the least one.'],
+  ['Is the stand-in Cᵢⱼ the det of A with row i and column j struck?','no: the sign (−1)^(i + j) is part of it',['yes','no: it is the entry aᵢⱼ','no: strike row j and column i'],'Cᵢⱼ is (−1)^(i + j) times that det.'],
+  ['Is SA = I, for the stand-in grid S?','no: SA = (det A) I; divide by det A, and only when it is not 0',['yes','no: SA = A','no: SA = 0'],'Stand-in technique: when det A ≠ 0, A⁻¹ = S / det A.'],
+  ['What is det Aᵀ?','det A',['−det A','1/det A','(det A)²'],'Side-turn technique. So every rule for columns holds for rows.'],
+  ['q(A) = 0. What ties q to the least-obeyed polynomial m?','q is a multiple of m',['q = m','m is a multiple of q','nothing'],'Least-obeyed technique. And every stretch of A is a root of m.']];
+QP.push({id:'27g.own',step:'27g',label:'its own polynomial',open:()=>measured('27g'),make(){ return writtenQ('27g.own',WG27); }},
+  {id:'27g.work',step:'27g',mode:'work',label:'stand-ins and powers',open:()=>measured('27g'),make(){
+    const t=rnd(4), a=nz25(4), b=nz25(4), c=nz25(4), d=nz25(4), D=a*d-b*c, T=a+d;
+    if(t===0){ if(D===0||D===1) return null; const right=g2(D,0,0,D), wrong=uniq(right,[g2(1,0,0,1),g2(D,D,D,D),g2(d,-b,-c,a),g2(T,0,0,T)],3); if(wrong.length<3) return null;
+      return {index:'q:27g.work[s;'+[a,b,c,d].join(';')+']', lines:[['A has '+g2(a,b,c,d),'a grid'],['S has '+g2(d,-b,-c,a),'its stand-in grid']], ask:'Which grid is SA?', right, opts:shuffle([right,...wrong]), lead:'', why:'Stand-in technique: SA = (det A) I, and det A = '+sg(a)+' · '+par10(d)+' − '+par10(b)+' · '+par10(c)+' = '+sg(D)+'.'}; }
+    if(t===1){ if(D===0||T===0) return null; const f=(x,y)=>cf22(x,'A')+(y<0?' + ':' − ')+Math.abs(y)+'I', right=f(T,D), wrong=uniq(right,[f(T,-D),f(D,T),f(-T,D),f(T,2*D)],3); if(wrong.length<3) return null;
+      return {index:'q:27g.work[c;'+[a,b,c,d].join(';')+']', lines:[['A has '+g2(a,b,c,d),'a grid'],['det(A − λI) = λ² '+(T<0?'+ ':'− ')+Math.abs(T)+'λ '+(D<0?'− ':'+ ')+Math.abs(D),'its stretch polynomial']], ask:'Which is A²?', right, opts:shuffle([right,...wrong]), lead:'', why:'Own-polynomial technique: A² '+(T<0?'+ ':'− ')+Math.abs(T)+'A '+(D<0?'− ':'+ ')+Math.abs(D)+'I is the zero grid. Move the last two terms across.'}; }
+    if(t===2){ const e=nz25(3), f=nz25(3), g=nz25(3), h=nz25(3), [i,j]=pick([[1,2],[2,1],[1,1],[2,3]]), R=[[a,b,e],[c,d,f],[g,h,1]], rr=[0,1,2].filter(x=>x!==i-1), cc=[0,1,2].filter(x=>x!==j-1), mn=R[rr[0]][cc[0]]*R[rr[1]][cc[1]]-R[rr[0]][cc[1]]*R[rr[1]][cc[0]], sgn=(i+j)%2?-1:1;
+      if(mn===0) return null; const right=sg(sgn*mn), wrong=uniq(right,[sg(-sgn*mn),sg(R[i-1][j-1]),sg(R[rr[0]][cc[0]]*R[rr[1]][cc[1]]+R[rr[0]][cc[1]]*R[rr[1]][cc[0]]),sg(sgn*mn+1),'0'],3);
+      return {index:'q:27g.work[m;'+[R,i,j].join(';')+']', lines:[['A has '+G27(...R),'a grid']], ask:'What is the stand-in C'+sub15(i)+sub15(j)+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Strike row '+i+' and column '+j+': what is left has '+g2(R[rr[0]][cc[0]],R[rr[0]][cc[1]],R[rr[1]][cc[0]],R[rr[1]][cc[1]])+', with det '+sg(mn)+'. The sign is (−1)^('+i+' + '+j+') = '+sg(sgn)+'.'}; }
+    const x=1+rnd(4), y=x+1+rnd(3), z=y+1+rnd(2), [M,right,why]=pick([[[x,x,x],'1','It is '+(x===1?'':x)+'I, which obeys λ − '+x+'.'],[[x,x,y],'2','It obeys (λ − '+x+')(λ − '+y+'), and no polynomial of degree 1, since every stretch must be a root.'],[[x,y,y],'2','It obeys (λ − '+x+')(λ − '+y+'), and no polynomial of degree 1, since every stretch must be a root.'],[[x,y,z],'3','Every stretch is a root of it, and there are three different stretches.']]);
+    return {index:'q:27g.work[l;'+M.join(';')+']', lines:[['A has '+v27(M)+' down its middle and 0 elsewhere','a grid with 3 rows and 3 columns']], ask:'What is the degree of its least-obeyed polynomial?', right, opts:['0','1','2','3'], lead:'', why:'Least-obeyed technique. '+why}; }},
+  {id:'27g.line',step:'27g',mode:'proof',label:'a grid for a number',open:()=>measured('27g'),make(){
+    const D=pick([2,3,-2,5,-4,6]), n=2+rnd(4), l=1+rnd(6), V=[
+      ['g1',[['p(λ) = det(A − λI)','the stretch polynomial'],['p(A) = det(A − A·I) = det 0 = 0','put A in for λ']],2,1,'A grid is not put in for a number inside a determinant. p(A) is a grid, and that line ends in a number.'],
+      ['g2',[['p(λ) = det(A − λI)','the stretch polynomial'],['p(A) is the zero grid','the own-polynomial technique']],2,0,'The stand-in proof gives it.'],
+      ['g3',[['S is the stand-in grid of A','given'],['SA = I','the stand-in technique']],2,1,'SA = (det A) I.'],
+      ['g4',[['S is the stand-in grid of A, and det A = '+sg(D),'given'],['A⁻¹ = S/'+par10(D),'the stand-in technique']],2,0,'SA = '+sg(D)+'I, and '+sg(D)+' is not 0.'],
+      ['g5',[['p is the stretch polynomial of A, so p(A) = 0','the own-polynomial technique'],['p is the least-obeyed polynomial of A','A obeys it']],2,1,'I obeys λ − 1, of degree 1, while its stretch polynomial has degree '+n+' for '+n+' rows.'],
+      ['g6',[['det A = '+sg(D),'given'],['det Aᵀ = '+sg(D),'the side-turn technique']],2,0,'det Aᵀ = det A.'],
+      ['g7',[[l+' is a stretch of A, and m is the least-obeyed polynomial of A','given'],['m('+l+') = 0','the least-obeyed technique']],2,0,'Every stretch of A is a root of m.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:27g.line['+[tag,D,n,l].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ===== Laundry 5, rung 27 (floor 5 pools, stage Z), part 2: 27h to 27m ===== */
+const pr27=(a,b)=>sg(Math.min(a,b))+' and '+sg(Math.max(a,b)), i27=()=>rnd(7)-3;
+const q27=(t,d)=>'λ²'+(t?(t>0?' − ':' + ')+(Math.abs(t)===1?'':Math.abs(t))+'λ':'')+(d?(d<0?' − ':' + ')+Math.abs(d):'');
+
+/* ---------- 27h Measuring Sticks for Arrows ---------- */
+const WH27=[
+  ['Is f(x) = x₁ + 1 a reading?','no: it sends 0 to 1; a reading is straight',['yes','yes: it gives a number','no: a reading gives an arrow'],'A reading sends 0 to 0, as every straight map does.'],
+  ['Is B(x, y) = x₁y₁ straight in the pair (x, y)?','no: doubling both x and y multiplies it by 4; it is straight in each slot, not in the pair',['yes','yes: it is straight in each slot','no: it is straight in neither slot'],'Two-slot technique: straight in u when v is held, and straight in v when u is held.'],
+  ['Does f₁ depend only on v₁?','no: fᵢ(vⱼ) = 0 for every j ≠ i ties it to the whole basis; change v₂ and f₁ changes',['yes','yes: f₁(v₁) = 1','no: f₁ depends only on v₂'],'Reading-basis technique: fᵢ(vⱼ) = 1 when i = j and 0 otherwise.'],
+  ['B(x, x) = 0. Is x = 0, for every two-slot reading B?','no: with G having rows (1, 0), (0, −1), B((1, 1), (1, 1)) = 0',['yes','yes, when G = Gᵀ','no: B(x, x) is never 0'],'B(x, y) = xᵀGy, and G need not measure a length.'],
+  ['V has dimension n. What is the dimension of its readings V*?','n',['n²','1','2n'],'Reading-basis technique: the readings f₁, …, fₙ are a basis of V*.'],
+  ['When is B(x, y) = B(y, x) for all x and y?','exactly when G = Gᵀ',['always','exactly when G = I','exactly when det G ≠ 0'],'Two-slot technique: Gᵢⱼ = B(eᵢ, eⱼ).']];
+QP.push({id:'27h.read',step:'27h',label:'readings',open:()=>measured('27h'),make(){ return writtenQ('27h.read',WH27); }},
+  {id:'27h.work',step:'27h',mode:'work',label:'read an arrow',open:()=>measured('27h'),make(){
+    const t=rnd(3), a=nz25(3), b=i27(), c=i27(), d=nz25(3);
+    if(t===0){ const x=[nz25(3),nz25(3)], y=[nz25(3),nz25(3)], B=(p,q)=>p[0]*a*q[0]+p[0]*b*q[1]+p[1]*c*q[0]+p[1]*d*q[1], val=B(x,y), right=sg(val), wrong=uniq(right,[sg(B(y,x)),sg(x[0]*y[0]+x[1]*y[1]),sg(-val),sg(B(x,x)),sg(val+b+1)],3); if(wrong.length<3) return null;
+      return {index:'q:27h.work[v;'+[a,b,c,d,x,y].join(';')+']', lines:[['B(x, y) = xᵀGy, and G has '+g2(a,b,c,d),'a two-slot reading'],['x = '+v27(x)+' and y = '+v27(y),'two lists']], ask:'What is B(x, y)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Two-slot technique: Gy = '+v27([a*y[0]+b*y[1],c*y[0]+d*y[1]])+', and x against it gives '+right+'.'}; }
+    if(t===1){ const k=nz25(3), p=nz25(4), q=nz25(4), right=sg(p-k*q), wrong=uniq(right,[sg(p),sg(p+k*q),sg(q),sg(p-q),sg(k*p-q)],3); if(wrong.length<3) return null;
+      return {index:'q:27h.work[f;'+[k,p,q].join(';')+']', lines:[['v₁ = (1, 0) and v₂ = '+v27([k,1]),'a basis of the plane'],['f₁(v₁) = 1 and f₁(v₂) = 0','a reading']], ask:'What is f₁(x), for x = '+v27([p,q])+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'x = '+par10(p-k*q)+'·v₁ + '+par10(q)+'·v₂, and f₁ reads off the first number. Reading-basis technique.'}; }
+    const right=g2(a,b,c,d), wrong=uniq(right,[g2(a,c,b,d),g2(d,b,c,a),g2(b,a,d,c),g2(d,c,b,a)],3); if(wrong.length<3) return null;
+    return {index:'q:27h.work[g;'+[a,b,c,d].join(';')+']', lines:[['B(e₁, e₁) = '+sg(a)+' and B(e₁, e₂) = '+sg(b),'a two-slot reading'],['B(e₂, e₁) = '+sg(c)+' and B(e₂, e₂) = '+sg(d),'the same reading']], ask:'Which grid G has B(x, y) = xᵀGy?', right, opts:shuffle([right,...wrong]), lead:'', why:'Two-slot technique: Gᵢⱼ = B(eᵢ, eⱼ). Row i holds the readings with eᵢ in the first slot.'}; }},
+  {id:'27h.line',step:'27h',mode:'proof',label:'straight in each slot',open:()=>measured('27h'),make(){
+    const a=nz25(4), b=nz25(4), c=1+rnd(5), k=2+rnd(3), n=2+rnd(5), d=i27(), e=b+1+rnd(2), V=[
+      ['h1',[['f(x) = '+lin27([[a,'x₁'],[b,'x₂']]),'given'],['f is a reading','sums and stretches pass through f']],2,0,'f is straight, and it gives a number.'],
+      ['h2',[['f(x) = '+lin27([[a,'x₁']])+' + '+c,'given'],['f is a reading','it gives a number']],2,1,'f(0) = '+c+'. A reading is straight, so it sends 0 to 0.'],
+      ['h3',[['B is a two-slot reading','given'],['B('+k+'x, '+k+'y) = '+k+' B(x, y)','B is straight']],2,1,'It is straight in each slot, not in the pair: B('+k+'x, '+k+'y) = '+k*k+' B(x, y).'],
+      ['h4',[['B is a two-slot reading','given'],['B('+k+'x, y) = '+k+' B(x, y)','B is straight in its first slot']],2,0,'y is held, and the stretch comes out of the first slot.'],
+      ['h5',[['B(x, y) = xᵀGy, and G has '+g2(a,b,b,d),'given'],['B(x, y) = B(y, x) for all x and y','the two-slot technique: G = Gᵀ']],2,0,'B(e₁, e₂) and B(e₂, e₁) are both '+sg(b)+'.'],
+      ['h6',[['B(x, y) = xᵀGy, and G has '+g2(a,b,e,d),'given'],['B(x, y) = B(y, x) for all x and y','the two-slot technique']],2,1,'G is not Gᵀ: B(e₁, e₂) = '+sg(b)+' and B(e₂, e₁) = '+sg(e)+'.'],
+      ['h7',[['V has dimension '+n,'given'],['V* has dimension '+n,'the reading-basis technique']],2,0,'A basis of '+n+' arrows gives a basis of '+n+' readings.'],
+      ['h8',[['B is a two-slot reading, and B(x, x) = 0','given'],['x = 0','only 0 measures 0']],2,1,'With G having rows (1, 0), (0, −1), B((1, 1), (1, 1)) = 0.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:27h.line['+[tag,a,b,c,k,n,d,e].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 27i Vectors by Hand ---------- */
+const WI27=[
+  ['Is (u × v) × w = u × (v × w)?','no: the cross is not grouping-free; (e₁ × e₁) × e₂ = 0, and e₁ × (e₁ × e₂) = −e₂',['yes','yes, up to sign','no: the left side is always 0'],'Cross technique: u × v = 0 exactly when u and v are not free, so e₁ × e₁ = 0.'],
+  ['u · v = 0. Is u = 0 or v = 0?','no: a dot of 0 means at right angles; (1, 0) · (0, 1) = 0',['yes','yes, in the plane','no: then u = v'],'Angle-between technique: cos θ = u · v/(|u| |v|).'],
+  ['Is |r(t)|′ = |r′(t)|?','no: round a circle |r| is fixed, so its slope is 0, while the speed |r′| is not 0',['yes','yes, when r moves in a plane','no: |r(t)|′ is always 0'],'Moving-dot technique: an arrow of fixed length moves at right angles to itself.'],
+  ['Is u × v = v × u?','no: a swap of columns changes the sign of det; v × u = −(u × v)',['yes','yes, when u · v = 0','no: v × u = 0'],'Cross technique.'],
+  ['When is u × v = 0?','exactly when u and v are not free',['exactly when u · v = 0','only when u = 0 or v = 0','never'],'Cross technique: |u × v| = |u| |v| sin θ.'],
+  ['|r(t)| is the same for every t. What follows?','r(t) · r′(t) = 0: the arrow moves at right angles to itself',['r′(t) = 0','r(t) × r′(t) = 0','|r′(t)| is the same for every t'],'Moving-dot technique: (r · r)′ = 2 r · r′.']];
+const AN27=[[[1,0],[1,1],'π/4','√2/2'],[[1,0],[0,1],'π/2','0'],[[1,1],[-1,1],'π/2','0'],[[1,0],[-1,1],'3π/4','−√2/2'],[[1,0],[-1,0],'π','−1'],[[1,1],[-1,-1],'π','−1'],[[1,1],[0,1],'π/4','√2/2'],[[0,1],[1,-1],'3π/4','−√2/2']], AO27=['π/4','π/3','π/2','2π/3','3π/4','π'];
+QP.push({id:'27i.dots',step:'27i',label:'dot and cross',open:()=>measured('27i'),make(){ return writtenQ('27i.dots',WI27); }},
+  {id:'27i.work',step:'27i',mode:'work',label:'arrows by hand',open:()=>measured('27i'),make(){
+    const t=rnd(5), u=[i27(),i27(),i27()], w=[i27(),i27(),i27()];
+    if(t===0){ const val=u[0]*w[0]+u[1]*w[1]+u[2]*w[2], right=sg(val), wrong=uniq(right,[sg(-val),sg((u[0]+u[1]+u[2])*(w[0]+w[1]+w[2])),sg(val-2*u[2]*w[2]),sg(val+1),sg(u[0]*w[0])],3); if(wrong.length<3) return null;
+      return {index:'q:27i.work[d;'+[u,w].join(';')+']', lines:[['u = '+v27(u)+' and v = '+v27(w),'two arrows of space']], ask:'What is u · v?', right, opts:shuffle([right,...wrong]), lead:'', why:'Multiply place by place and add: '+u.map((x,i)=>par10(x)+' · '+par10(w[i])).join(' + ')+' = '+right+'.'}; }
+    if(t===1){ const c=[u[1]*w[2]-u[2]*w[1],u[2]*w[0]-u[0]*w[2],u[0]*w[1]-u[1]*w[0]]; if(!c[0]&&!c[1]&&!c[2]) return null;
+      const right=v27(c), wrong=uniq(right,[v27(c.map(x=>-x)),v27([c[0],-c[1],c[2]]),v27(u.map((x,i)=>x*w[i])),v27([c[1],c[2],c[0]])],3); if(wrong.length<3) return null;
+      return {index:'q:27i.work[x;'+[u,w].join(';')+']', lines:[['u = '+v27(u)+' and v = '+v27(w),'two arrows of space']], ask:'What is u × v?', right, opts:shuffle([right,...wrong]), lead:'', why:'Cross technique: u × v = (u₂v₃ − u₃v₂, u₃v₁ − u₁v₃, u₁v₂ − u₂v₁). The first place is '+par10(u[1])+' · '+par10(w[2])+' − '+par10(u[2])+' · '+par10(w[1])+' = '+sg(c[0])+'.'}; }
+    if(t===2){ const [p,q,right,cs]=pick(AN27), k=1+rnd(3), m=1+rnd(3), P=p.map(x=>k*x), Q=q.map(x=>m*x);
+      return {index:'q:27i.work[a;'+[P,Q].join(';')+']', lines:[['u = '+v27(P)+' and v = '+v27(Q),'two arrows of the plane']], ask:'Which angle θ, between 0 and π, lies between u and v?', right, opts:shuffle([right,...take(AO27.filter(x=>x!==right),3)]), lead:'', why:'Angle-between technique: u · v = '+sg(P[0]*Q[0]+P[1]*Q[1])+', and cos θ = u · v/(|u| |v|) = '+cs+'.'}; }
+    if(t===3){ const a=nz25(3), b=nz25(3), right=sg(3*a+4*b), wrong=uniq(right,[sg(-4*a+3*b),sg(5*a),sg(15*a+20*b),sg(3*a-4*b),sg(4*a+3*b)],3); if(wrong.length<3) return null;
+      return {index:'q:27i.work[r;'+[a,b].join(';')+']', lines:[['d₁ = (3/5, 4/5) and d₂ = (−4/5, 3/5)','two arrows of length 1, at right angles'],['u = '+v27([5*a,5*b]),'an arrow of the plane']], ask:'u = s d₁ + t d₂. What is s?', right, opts:shuffle([right,...wrong]), lead:'', why:'Read-off technique: s = u · d₁ = '+par10(5*a)+' · 3/5 + '+par10(5*b)+' · 4/5 = '+right+'.'}; }
+    const [a,b,c,d]=[nz25(4),i27(),i27(),nz25(4)], A=Math.abs(a*d-b*c); if(!A) return null;
+    const right=String(A), wrong=uniq(right,[String(Math.abs(a*d+b*c)),String(Math.abs(a*c+b*d)),String(2*A),String(Math.abs(a*d)),String(A+1)],3); if(wrong.length<3) return null;
+    return {index:'q:27i.work[p;'+[a,b,c,d].join(';')+']', lines:[['u = '+v27([a,b,0])+' and v = '+v27([c,d,0]),'two arrows of space']], ask:'What is the area of the parallelogram on u and v?', right, opts:shuffle([right,...wrong]), lead:'', why:'Cross technique: u × v = '+v27([0,0,a*d-b*c])+', and its length is the area.'}; }},
+  {id:'27i.line',step:'27i',mode:'proof',label:'at right angles',open:()=>measured('27i'),make(){
+    const a=nz25(4), b=nz25(4), k=2+rnd(4), V=[
+      ['i1',[['u · v = 0','given'],['u = 0 or v = 0','a product is 0 only if a factor is']],2,1,'(1, 0) · (0, 1) = 0. A dot of 0 means at right angles.'],
+      ['i2',[['u = '+v27([a,b])+' and v = '+v27([-b,a]),'given'],['u and v stand at right angles','u · v = 0']],2,0,sg(a)+' · '+par10(-b)+' + '+par10(b)+' · '+par10(a)+' = 0.'],
+      ['i3',[['u and v are arrows of space','given'],['v × u = u × v','turn-about']],2,1,'A swap of columns changes the sign of det: v × u = −(u × v).'],
+      ['i4',[['u and v are arrows of space','given'],['(u × v) · u = 0','the cross technique']],2,0,'u × v is at right angles to u and to v.'],
+      ['i5',[['|r(t)| = '+k+' for every t','given'],['r(t) · r′(t) = 0','the moving-dot technique']],2,0,'(r · r)′ = 2 r · r′, and r · r = '+k*k+' does not change.'],
+      ['i6',[['|r(t)| = '+k+' for every t','given'],['r′(t) = 0','a fixed length has slope 0']],2,1,'Round a circle the length is fixed while the arrow moves.'],
+      ['i7',[['d₁ = (3/5, 4/5) and d₂ = (−4/5, 3/5)','given'],['u = (u · d₁)d₁ + (u · d₂)d₂ for every u of the plane','the read-off technique']],2,0,'Each has length 1, and d₁ · d₂ = 0.'],
+      ['i8',[['d₁ = (1, 0) and d₂ = (1, 1)','given'],['u = (u · d₁)d₁ + (u · d₂)d₂ for every u of the plane','the read-off technique']],2,1,'d₂ has length √2, and d₁ · d₂ = 1. The technique needs length 1 and right angles.'],
+      ['i9',[['v = '+k+'u, in space','given'],['u × v = 0','the cross technique: u and v are not free']],2,0,'u × v = 0 exactly when u and v are not free.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:27i.line['+[tag,a,b,k].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 27j Solving Systems by Elimination ---------- */
+const WJ27=[
+  ['May a row be stretched by 0?','no: it cannot be undone; x + y = 2, x − y = 0 becomes x + y = 2, 0 = 0, with new answers',['yes','yes: it keeps the answers','no: it leaves no answers'],'Row-move technique: each row move is undone by another row move.'],
+  ['May a stretch of one column be added to another?','no: columns hold the unknowns; mixing them changes what the unknowns are, and the answers',['yes','yes: det is unchanged, so the answers are','no: it changes b'],'Row-move technique: a row move on [A | b] keeps exactly the same answers x.'],
+  ['Have n samenesses in n unknowns exactly one answer?','only when A can be undone: x + y = 1, 2x + 2y = 2 has a whole line of answers',['yes','yes, when no entry is 0','never'],'Undo-by-rows technique: A can be undone exactly when row moves bring it to I.'],
+  ['A system has more unknowns than samenesses. Has it many answers?','not always: there may be none; x + y + z = 1, x + y + z = 2',['yes','no: it has exactly one','yes: a whole line of them'],'The lowest terms show a row 0 = 1 when there is no answer.'],
+  ['What does a row move on [A | b] keep?','exactly the same answers x',['the determinant of A','the stretches of A','the entries of b'],'Row-move technique.'],
+  ['What does doubling n do to the work of elimination?','it multiplies it by about 8',['it multiplies it by about 2','it multiplies it by about 4','it squares it'],'Elimination-cost technique: the work is ~ n³/3.']];
+const OJ27=['exactly one answer','no answer','a whole line of answers','exactly two answers'], eq27=(a,b,e)=>lin27([[a,'x'],[b,'y']])+' = '+sg(e);
+QP.push({id:'27j.rows',step:'27j',label:'row moves',open:()=>measured('27j'),make(){ return writtenQ('27j.rows',WJ27); }},
+  {id:'27j.work',step:'27j',mode:'work',label:'clear and solve',open:()=>measured('27j'),make(){
+    const t=rnd(4), a=nz25(3), b=nz25(3), c=nz25(3), d=nz25(3), x=i27(), y=i27();
+    if(t===0){ if(a*d-b*c===0) return null; const e=a*x+b*y, f=c*x+d*y, right=v27([x,y]), wrong=uniq(right,[v27([y,x]),v27([-x,-y]),v27([x+1,y]),v27([x,y-1]),v27([e,f])],3); if(wrong.length<3) return null;
+      return {index:'q:27j.work[s;'+[a,b,c,d,x,y].join(';')+']', lines:[[eq27(a,b,e),'given'],[eq27(c,d,f),'given']], ask:'Which pair (x, y) answers both?', right, opts:shuffle([right,...wrong]), lead:'', why:'Row moves keep exactly the same answers. Check: '+sg(a)+' · '+par10(x)+' + '+par10(b)+' · '+par10(y)+' = '+sg(e)+', and '+sg(c)+' · '+par10(x)+' + '+par10(d)+' · '+par10(y)+' = '+sg(f)+'.'}; }
+    if(t===1){ const k=pick([2,3,-1,-2]), e=nz25(4), v=rnd(3), f=v===1?k*e+nz25(2):k*e;
+      if(v===0){ if(a*d-b*c===0) return null; return {index:'q:27j.work[c0;'+[a,b,c,d,e].join(';')+']', lines:[[eq27(a,b,e),'given'],[eq27(c,d,x),'given']], ask:'How many answers are there?', right:OJ27[0], opts:OJ27, lead:'', why:'ad − bc = '+sg(a*d-b*c)+' is not 0, so A can be undone, and x = A⁻¹b is the one answer.'}; }
+      return {index:'q:27j.work[c;'+[a,b,k,e,f].join(';')+']', lines:[[eq27(a,b,e),'given'],[eq27(k*a,k*b,f),'given']], ask:'How many answers are there?', right:OJ27[v], opts:OJ27, lead:'', why:'Take '+par10(k)+' times row 1 from row 2: the new row 2 is 0 = '+sg(f-k*e)+'. '+(v===1?'No x and y make that so.':'That row says nothing, and row 1 alone leaves a line.')}; }
+    if(t===2){ const n=2+rnd(5), N=(n*n*n+3*n*n-n)/3, right=String(N), wrong=uniq(right,[String(n*n*n),String(n*n),String(N+n),String(N-1),String(n*n*n+n*n-n)],3); if(wrong.length<3) return null;
+      return {index:'q:27j.work[n;'+n+']', lines:[[n+' samenesses in '+n+' unknowns, and no lead is 0 on the way','given']], ask:'How many multiplications and divisions does elimination take?', right, opts:shuffle([right,...wrong]), lead:'', why:'Elimination-cost technique: n³/3 + n² − n/3 = ('+n+'³ + 3 · '+n+'² − '+n+')/3 = '+right+'.'}; }
+    const m=pick([2,3,-2,-3]), e=i27(), f=i27(), R=(p,q,r)=>'['+sg(p)+', '+sg(q)+' | '+sg(r)+']', right=R(0,d-m*b,f-m*e), wrong=uniq(right,[R(2*m*a,d+m*b,f+m*e),R(0,d-m*b,f),R(0,d-b,f-e),R(0,d+m*b,f+m*e)],3); if(wrong.length<3) return null;
+    return {index:'q:27j.work[m;'+[a,b,d,m,e,f].join(';')+']', lines:[['row 1 is '+R(a,b,e)+' and row 2 is '+R(m*a,d,f),'the grid [A | b]'],['take '+par10(m)+' times row 1 from row 2','a row move']], ask:'What is the new row 2?', right, opts:shuffle([right,...wrong]), lead:'', why:'Row-move technique. Place by place: '+sg(m*a)+' − '+par10(m)+' · '+par10(a)+' = 0, '+sg(d)+' − '+par10(m)+' · '+par10(b)+' = '+sg(d-m*b)+', and '+sg(f)+' − '+par10(m)+' · '+par10(e)+' = '+sg(f-m*e)+'.'}; }},
+  {id:'27j.stall',step:'27j',mode:'word',label:'two purchases',open:()=>measured('27j'),make(){
+    const [X,Y,one]=pick([['apples','pears','one apple'],['pens','pads','one pen'],['nails','hooks','one nail'],['buns','rolls','one bun'],['bulbs','seeds','one bulb']]), p=1+rnd(6), q=1+rnd(6), a=2+rnd(4), b=2+rnd(4), c=2+rnd(4), d=2+rnd(4); if(a*d===b*c) return null;
+    const right=p+(p===1?' coin':' coins'), f=n=>n+(n===1?' coin':' coins'), wrong=uniq(right,[f(q),f(p+1),f(p+q),f(p+2),f(Math.max(1,p-1))],3); if(wrong.length<3) return null;
+    return {index:'q:27j.stall['+[X,p,q,a,b,c,d].join(';')+']', a3:['27j.stall',DASH,DASH], story:'At a stall, '+a+' '+X+' and '+b+' '+Y+' cost '+(a*p+b*q)+' coins. At the same prices, '+c+' '+X+' and '+d+' '+Y+' cost '+(c*p+d*q)+' coins.', lines:[], ask:'What does '+one+' cost?', right, opts:shuffle([right,...wrong]), lead:'', why:'Write '+a+'x + '+b+'y = '+(a*p+b*q)+' and '+c+'x + '+d+'y = '+(c*p+d*q)+'. Row moves keep the answers and clear one unknown: x = '+p+' and y = '+q+'.'}; }},
+  {id:'27j.line',step:'27j',mode:'proof',label:'moves that can be undone',open:()=>measured('27j'),make(){
+    const k=2+rnd(4), n=2+rnd(4), V=[
+      ['j1',[['[A | b] is a system','given'],['swapping two rows keeps the answers','the row-move technique']],2,0,'A swap is undone by the same swap.'],
+      ['j2',[['[A | b] is a system','given'],['stretching a row by 0 keeps the answers','the row-move technique']],2,1,'A stretch by 0 cannot be undone. A row move is multiplying by an undoable grid.'],
+      ['j3',[['[A | b] is a system','given'],['adding '+k+' times row 1 to row 2 keeps the answers','the row-move technique']],2,0,'It is undone by taking '+k+' times row 1 from row 2.'],
+      ['j4',[['A has '+n+' rows and '+n+' columns','given'],['Ax = b has exactly one answer',n+' samenesses in '+n+' unknowns']],2,1,'Only when A can be undone. x + y = 1, 2x + 2y = 2 has a whole line of answers.'],
+      ['j5',[['row moves bring A to I','given'],['A can be undone','the undo-by-rows technique']],2,0,'And the same row moves, done to I, give A⁻¹.'],
+      ['j6',[['a system has '+(n+1)+' unknowns and '+n+' samenesses','given'],['it has many answers','more unknowns than samenesses']],2,1,'It may have none: x + y + z = 1, x + y + z = 2.'],
+      ['j7',[['two chains of row moves bring A to grids R and S in lowest terms','given'],['R = S','the grid-lowest-terms technique']],2,0,'Row moves bring every grid to a grid in lowest terms, and to only one.'],
+      ['j8',[['elimination runs on n unknowns, and then on 2n','given'],['the work about doubles','twice the unknowns']],2,1,'Elimination-cost technique: the work is ~ n³/3, so doubling n multiplies it by about 8.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:27j.line['+[tag,k,n].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 27k Determinants by Hand ---------- */
+const WK27=[
+  ['Does stretching a row by c leave det alone?','no: det is straight in that row; it is multiplied by c',['yes','no: it is multiplied by cⁿ','no: it changes sign'],'Only adding a stretch of one row to another leaves det alone.'],
+  ['Does the six-term rule, copied to four rows, give det?','no: its diagonals find 8 terms; a grid of four rows has 4! = 24',['yes','yes, with the signs swapped','no: it finds 24 terms where 16 are needed'],'Use the stair-det technique or the expansion technique.'],
+  ['Is det A = Σⱼ a₁ⱼ det(strike row 1, column j)?','no: the stand-ins carry the signs (−1)^(1 + j)',['yes','yes, for every row','no: strike column 1 and row j'],'Expansion technique: det A = aᵢ₁Cᵢ₁ + ⋯ + aᵢₙCᵢₙ.'],
+  ['Is xⱼ = det Aⱼ/det A when det A = 0?','no: there is no ratio; the system has no answer or many',['yes','yes: then xⱼ = 0','no: then xⱼ = det Aⱼ'],'Det-ratio technique: it needs det A ≠ 0.'],
+  ['Every entry below the middle of a square grid is 0. What is its det?','the product of the entries down the middle',['the sum of the entries down the middle','0','the product of all the entries that are not 0'],'Stair-det technique.'],
+  ['Row moves with s swaps, and otherwise only adding stretches of rows, bring A to a staircase. What is det A?','(−1)ˢ times the product down the middle of the staircase',['the product down the middle of the staircase','s times the product down the middle of the staircase','(−1)ˢ times the sum down the middle of the staircase'],'Stair-det technique.']];
+const d3=M=>M[0]*(M[4]*M[8]-M[5]*M[7])-M[1]*(M[3]*M[8]-M[5]*M[6])+M[2]*(M[3]*M[7]-M[4]*M[6]);
+QP.push({id:'27k.signs',step:'27k',label:'det by hand',open:()=>measured('27k'),make(){ return writtenQ('27k.signs',WK27); }},
+  {id:'27k.work',step:'27k',mode:'work',label:'stairs and stand-ins',open:()=>measured('27k'),make(){
+    const t=rnd(4), p=nz25(3), q=nz25(3), r=nz25(3), s=rnd(3);
+    if(t===0){ const R=(s===1?-1:1)*p*q*r, right=sg(R), wrong=uniq(right,[sg(-R),sg(p+q+r),sg(R+p),sg(p*q),sg(s*p*q*r)],3); if(wrong.length<3) return null;
+      return {index:'q:27k.work[s;'+[p,q,r,s].join(';')+']', lines:[['row moves bring A to '+G27([p,i27(),i27()],[0,q,i27()],[0,0,r]),'a staircase'],[(s===0?'no swaps':s===1?'1 swap':'2 swaps')+', and otherwise only adding stretches of rows','the moves']], ask:'What is det A?', right, opts:shuffle([right,...wrong]), lead:'', why:'Stair-det technique: the product down the middle is '+sg(p*q*r)+', and the sign is (−1)'+['⁰','¹','²'][s]+'.'}; }
+    if(t===1){ const M=[p,i27(),i27(),i27(),q,i27(),i27(),i27(),r], D=d3(M), m=[M[4]*M[8]-M[5]*M[7],M[3]*M[8]-M[5]*M[6],M[3]*M[7]-M[4]*M[6]], right=sg(D), wrong=uniq(right,[sg(-D),sg(M[0]*m[0]+M[1]*m[1]+M[2]*m[2]),sg(p*q*r),sg(D+1),sg(D-M[0])],3); if(wrong.length<3) return null;
+      return {index:'q:27k.work[e;'+M.join(',')+']', lines:[['A has '+G27(M.slice(0,3),M.slice(3,6),M.slice(6)),'a grid']], ask:'What is det A?', right, opts:shuffle([right,...wrong]), lead:'', why:'Expansion technique, along row 1: '+sg(M[0])+' · '+par10(m[0])+' − '+par10(M[1])+' · '+par10(m[1])+' + '+par10(M[2])+' · '+par10(m[2])+' = '+right+'.'}; }
+    if(t===2){ const a=p, b=i27(), c=i27(), d=q, D=a*d-b*c, e=nz25(4), f=nz25(4); if(!D) return null;
+      const n1=e*d-b*f, n2=a*f-e*c, right=fshow(fr(n1,D)), wrong=uniq(right,[fshow(fr(n2,D)),fshow(fr(-n1,D)),n1?fshow(fr(D,n1)):'1',sg(n1),sg(D)],3); if(wrong.length<3) return null;
+      return {index:'q:27k.work[r;'+[a,b,c,d,e,f].join(';')+']', lines:[['A has '+g2(a,b,c,d)+', and b = '+v27([e,f]),'the system Ax = b'],['det A = '+sg(D),'ad − bc']], ask:'What is x₁?', right, opts:shuffle([right,...wrong]), lead:'', why:'Det-ratio technique: A₁ is A with column 1 replaced by b, with '+g2(e,b,f,d)+' and det '+sg(n1)+'. So x₁ = '+sg(n1)+'/'+par10(D)+'.'}; }
+    const D=nz25(5), c=pick([2,3,-2,-3]), sw=rnd(2), R=(sw?-1:1)*c*D, right=sg(R), wrong=uniq(right,[sg(-R),sg(D),sg(c*c*D),sg(D+c),sg(-D)],3); if(wrong.length<3) return null;
+    return {index:'q:27k.work[m;'+[D,c,sw].join(';')+']', lines:[['det A = '+sg(D),'given'],['stretch row 1 by '+sg(c)+(sw?', then swap rows 1 and 2':', then add row 1 to row 2'),'two moves on A']], ask:'What is the det of the new grid?', right, opts:shuffle([right,...wrong]), lead:'', why:'det is straight in that row, so the stretch multiplies it by '+sg(c)+'. '+(sw?'The swap changes the sign.':'Adding one row to another changes nothing.')}; }},
+  {id:'27k.line',step:'27k',mode:'proof',label:'signs and ratios',open:()=>measured('27k'),make(){
+    const D=nz25(5), c=2+rnd(3), p=1+rnd(3), q=1+rnd(3), r=1+rnd(3), s=1+rnd(2), V=[
+      ['k1',[['det A = '+sg(D)+', and B is A with row 2 stretched by '+c,'given'],['det B = '+sg(D),'a row move']],2,1,'det is straight in that row: det B = '+sg(c*D)+'.'],
+      ['k2',[['det A = '+sg(D)+', and B is A with row 2 stretched by '+c,'given'],['det B = '+sg(c*D),'det is straight in each row']],2,0,'The stretch comes out of that one row.'],
+      ['k3',[['row moves with '+(s===1?'1 swap':'2 swaps')+', and otherwise only adding stretches of rows, bring A to a staircase with '+v27([p,q,r])+' down its middle','given'],['det A = '+p*q*r,'the stair-det technique']],2,s===1?1:0,s===1?'One swap gives the sign (−1)¹: det A = −'+p*q*r+'.':'Two swaps give the sign (−1)² = 1.'],
+      ['k4',[['det A = 0','given'],['x₁ = det A₁/det A','the det-ratio technique']],2,1,'The technique needs det A ≠ 0. There is no ratio.'],
+      ['k5',[['det A = '+sg(D),'given'],['Ax = b has exactly one answer','the det-ratio technique']],2,0,sg(D)+' is not 0.'],
+      ['k6',[['A has 4 rows and 4 columns','given'],['det A is the sum of its 8 diagonal products, with signs','the six-term rule']],2,1,'A grid of four rows has 4! = 24 terms.'],
+      ['k7',[['A has 3 rows and 3 columns','given'],['det A = a₁₁C₁₁ + a₁₂C₁₂ + a₁₃C₁₃','the expansion technique, along row 1']],2,0,'Cᵢⱼ is the stand-in for place i, j.'],
+      ['k8',[['A has 3 rows and 3 columns, and Mᵢⱼ is the det of A with row i and column j struck','given'],['det A = a₁₁M₁₁ + a₁₂M₁₂ + a₁₃M₁₃','the expansion technique']],2,1,'The stand-ins carry the signs (−1)^(i + j): the middle term is −a₁₂M₁₂.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:27k.line['+[tag,D,c,p,q,r,s].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 27l Eigenvectors by Hand ---------- */
+const WL27=[
+  ['Are the stretches of A + B sums of stretches of A and of B?','no: rows (0, 1), (0, 0) and rows (0, 0), (1, 0) each have only 0; their sum has 1 and −1',['yes','yes, for 2 × 2 grids','no: they are products'],'A and B need not share the arrows they only stretch.'],
+  ['A = PDP⁻¹. Is Aᵏ = PᵏDᵏP⁻ᵏ?','no: the P⁻¹P in the middle cancel; Aᵏ = PDᵏP⁻¹',['yes','yes, when P is undoable','no: Aᵏ = PᵏDP⁻ᵏ'],'(PDP⁻¹)(PDP⁻¹) = PD²P⁻¹.'],
+  ['Does a repeated stretch mean the grid cannot be straightened out?','no: I has the stretch 1 twice, and is already straight; what stops a grid is too few arrows',['yes','yes, for 2 × 2 grids','no: every grid can be straightened out'],'A grid is straightened out by n free arrows that it only stretches.'],
+  ['Do row moves keep the stretches?','no: they keep the answers of Ax = b, not the stretches',['yes','yes, apart from swaps','no: they keep them only up to sign'],'Rows (4, 1), (2, 3) have 5 and 2. After half of row 1 is taken from row 2, the stretches are 4 and 5/2.'],
+  ['What do the stretches of a grid add to, and multiply to?','they add to the middle sum and multiply to det A',['they add to det A and multiply to the middle sum','they add to 0 and multiply to det A','they add to the middle sum and multiply to 1'],'Middle-sum technique.'],
+  ['uₙ₊₁ = p uₙ + q uₙ₋₁. Which are the stretches of the step grid?','the roots of λ² = pλ + q',['p and q','the roots of λ² = qλ + p','p + q and p − q'],'Step-grid technique: M has rows (p, q), (1, 0).']];
+QP.push({id:'27l.sums',step:'27l',label:'stretches by hand',open:()=>measured('27l'),make(){ return writtenQ('27l.sums',WL27); }},
+  {id:'27l.work',step:'27l',mode:'work',label:'find the stretches',open:()=>measured('27l'),make(){
+    const t=rnd(5), l=nz25(4), m=nz25(4); if(l===m) return null;
+    const tr=l+m, d=l*m, right=pr27(l,m);
+    if(t<2){ const A=[2*l-m,m-l,2*l-2*m,2*m-l], wrong=uniq(right,[pr27(A[0],A[3]),pr27(-l,-m),pr27(tr,d),pr27(Math.min(l,m),Math.max(l,m)+1),pr27(Math.min(l,m)-1,Math.max(l,m))],3); if(wrong.length<3) return null;
+      return {index:'q:27l.work[g'+t+';'+[l,m].join(';')+']', lines:t===0?[['A has '+g2(...A),'a grid']]:[['A is a 2 × 2 grid with middle sum '+sg(tr)+' and det '+sg(d),'given']], ask:'Which are the stretches of A?', right, opts:shuffle([right,...wrong]), lead:'', why:'Middle-sum technique: the middle sum is '+sg(tr)+' and det A is '+sg(d)+', so the stretches are the roots of '+q27(tr,d)+'. They add to '+sg(tr)+' and multiply to '+sg(d)+'.'}; }
+    if(t===2){ if(!tr) return null; const wrong=uniq(right,[pr27(tr,-d),pr27(-l,-m),pr27(Math.min(l,m),Math.max(l,m)+1),pr27(tr,d),pr27(Math.min(l,m)-1,Math.max(l,m))],3); if(wrong.length<3) return null;
+      return {index:'q:27l.work[u;'+[l,m].join(';')+']', lines:[['uₙ₊₁ = '+lin27([[tr,'uₙ'],[-d,'uₙ₋₁']])+', for every n ≥ 1','a step rule']], ask:'Which are the stretches of its step grid?', right, opts:shuffle([right,...wrong]), lead:'', why:'Step-grid technique: they are the roots of λ² = '+lin27([[tr,'λ']])+(d>0?' − ':' + ')+Math.abs(d)+', which are '+right+'.'}; }
+    const a=pick([3,4,5,-3,-4]), b=pick([1,2,-1,-2]), c1=nz25(4), c2=nz25(4);
+    if(t===3){ const right=cf22(c1,'v₁'), wrong=uniq(right,[cf22(c2,'v₂'),'x','0',cf22(a,'v₁'),lin27([[c1,'v₁'],[c2,'v₂']])],3); if(wrong.length<3) return null;
+      return {index:'q:27l.work[k;'+[a,b,c1,c2].join(';')+']', lines:[['A only stretches v₁ by '+sg(a)+' and v₂ by '+sg(b),'v₁ and v₂ are free'],['x = '+lin27([[c1,'v₁'],[c2,'v₂']]),'an arrow']], ask:'As k grows, Aᵏx/'+par10(a)+'ᵏ heads to which arrow?', right, opts:shuffle([right,...wrong]), lead:'', why:'Leading-stretch technique: Aᵏx = c₁λ₁ᵏv₁ + c₂λ₂ᵏv₂, and ('+sg(b)+'/'+par10(a)+')ᵏ heads to 0.'}; }
+    const right4=lin27([[c1*a*a,'v₁'],[c2*b*b,'v₂']]), wrong=uniq(right4,[lin27([[c1*a*2,'v₁'],[c2*b*2,'v₂']]),lin27([[c1*a,'v₁'],[c2*b,'v₂']]),lin27([[a*a,'v₁'],[b*b,'v₂']]),lin27([[c1*c1*a,'v₁'],[c2*c2*b,'v₂']])],3); if(wrong.length<3) return null;
+    return {index:'q:27l.work[p;'+[a,b,c1,c2].join(';')+']', lines:[['A only stretches v₁ by '+sg(a)+' and v₂ by '+sg(b),'v₁ and v₂ are free'],['x = '+lin27([[c1,'v₁'],[c2,'v₂']]),'an arrow']], ask:'What is A²x?', right:right4, opts:shuffle([right4,...wrong]), lead:'', why:'Leading-stretch technique: Aᵏx = c₁λ₁ᵏv₁ + c₂λ₂ᵏv₂. Here the squares are '+a*a+' and '+b*b+'.'}; }},
+  {id:'27l.line',step:'27l',mode:'proof',label:'sum and product',open:()=>measured('27l'),make(){
+    const l=nz25(4), m=nz25(4), a=pick([3,4,5]), b=pick([1,2,-1,-2]), c1=nz25(4), c2=nz25(4); if(l===m||l+m===l*m||!(l+m)) return null;
+    const A=g2(2*l-m,m-l,2*l-2*m,2*m-l), tr=l+m, d=l*m, V=[
+      ['l1',[['A has '+A,'given'],['the stretches of A add to '+sg(tr),'the middle-sum technique']],2,0,'The middle sum is '+sg(2*l-m)+' + '+par10(2*m-l)+' = '+sg(tr)+'.'],
+      ['l2',[['A has '+A,'given'],['the stretches of A multiply to '+sg(tr),'the middle-sum technique']],2,1,'They add to the middle sum '+sg(tr)+', and multiply to det A = '+sg(d)+'.'],
+      ['l3',[['A is a 2 × 2 grid with the stretch '+a+' twice','given'],['A cannot be straightened out','a repeated stretch']],2,1,a+'I has the stretch '+a+' twice, and is already straight.'],
+      ['l4',[['B comes from A by a row move','given'],['B has the stretches of A','row moves keep them']],2,1,'Row moves keep the answers of Ax = b, not the stretches.'],
+      ['l5',[['B = P⁻¹AP, with P undoable','given'],['B has the stretch polynomial of A','the middle-sum technique']],2,0,'P⁻¹AP has the same stretch polynomial as A, for every undoable P.'],
+      ['l6',[['uₙ₊₁ = '+lin27([[tr,'uₙ'],[-d,'uₙ₋₁']])+', for every n ≥ 1','given'],['the stretches of the step grid are '+pr27(l,m),'the step-grid technique']],2,0,'They are the roots of λ² = '+lin27([[tr,'λ']])+(d>0?' − ':' + ')+Math.abs(d)+'.'],
+      ['l7',[['A only stretches v₁ by '+a+' and v₂ by '+sg(b)+', and x = '+cf22(c2,'v₂'),'given'],['Aᵏx/'+a+'ᵏ heads to v₁ as k grows','the leading-stretch technique']],2,1,'The technique needs c₁ ≠ 0. Here Aᵏx/'+a+'ᵏ heads to 0.'],
+      ['l8',[['A only stretches v₁ by '+a+' and v₂ by '+sg(b)+', and x = '+lin27([[c1,'v₁'],[c2,'v₂']]),'given'],['Aᵏx/'+a+'ᵏ heads to '+cf22(c1,'v₁')+' as k grows','the leading-stretch technique']],2,0,'('+sg(b)+'/'+a+')ᵏ heads to 0.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:27l.line['+[tag,l,m,a,b,c1,c2].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
+/* ---------- 27m Turns of Space ---------- */
+const WM27=[
+  ['det Q = 1. Does Q keep lengths?','not always: rows (2, 0, 0), (0, ½, 0), (0, 0, 1) have det 1 and double e₁',['yes','yes, in space','no: a length keeper has det −1'],'Length-keeper technique: Q keeps every length exactly when QᵀQ = I.'],
+  ['Does every turn of the plane keep an arrow other than 0 in place?','no: the axis needs an odd number of directions; a quarter turn of the plane keeps only 0',['yes','yes: its axis','yes: the arrow e₁'],'Axis technique: every turn of space keeps some arrow u ≠ 0 in place.'],
+  ['Q and R are turns of space. Is QR = RQ?','not in general: turns of space do not commute',['yes','yes: turns of the plane do','never'],'Turn-about fails for grids.'],
+  ['Is −I a turn of space, with an axis?','no: it keeps lengths, but det(−I) = (−1)³ = −1; it moves every arrow but 0',['yes','yes: every arrow is its axis','no: it does not keep lengths'],'Length-keeper technique: det Q is 1 or −1.'],
+  ['Q keeps every length. What is Q⁻¹?','Qᵀ',['Q','−Q','I'],'Length-keeper technique: QᵀQ = I.'],
+  ['A turn of space turns by θ about its axis. What is its middle sum?','1 + 2 cos θ',['2 cos θ','1 + 2 sin θ','3 cos θ'],'Axis technique.']];
+const OM27=['a turn: it keeps lengths, and its det is 1','it keeps lengths, but its det is −1','it does not keep lengths','it keeps lengths, and its det is 0'];
+const CM27=[[g2(0,-1,1,0),0,'Its columns have length 1 and stand at right angles, and det is 0 · 0 − (−1) · 1 = 1.'],[g2(0,1,1,0),1,'Its columns have length 1 and stand at right angles, and det is 0 · 0 − 1 · 1 = −1.'],[g2(1,1,0,1),2,'The column (1, 1) has length √2.'],[g2(2,0,0,'½'),2,'It doubles e₁, though its det is 1.'],[g2('3/5','−4/5','4/5','3/5'),0,'Its columns have length 1 and stand at right angles, and det is 9/25 + 16/25 = 1.'],[g2('3/5','4/5','4/5','−3/5'),1,'Its columns have length 1 and stand at right angles, and det is −9/25 − 16/25 = −1.'],[G27([0,0,1],[1,0,0],[0,1,0]),0,'It shuffles e₁, e₂, e₃ round, an even shuffle, so det is 1.'],[G27([-1,0,0],[0,-1,0],[0,0,-1]),1,'It is −I, and det(−I) = (−1)³ = −1.'],[G27([1,0,0],[0,0,-1],[0,1,0]),0,'Its columns have length 1 and stand at right angles, and det is 1.'],[G27([1,0,0],[0,1,0],[0,0,-1]),1,'It flips e₃, and det is −1.']];
+const XM27=[[G27([0,-1,0],[1,0,0],[0,0,1]),'(0, 0, 1)'],[G27([1,0,0],[0,0,-1],[0,1,0]),'(1, 0, 0)'],[G27([0,0,1],[0,1,0],[-1,0,0]),'(0, 1, 0)'],[G27([0,0,1],[1,0,0],[0,1,0]),'(1, 1, 1)']];
+const IM27=[[g2(0,-1,1,0),g2(0,1,-1,0),[g2(1,0,0,1),g2(0,1,1,0)]],[g2('3/5','−4/5','4/5','3/5'),g2('3/5','4/5','−4/5','3/5'),[g2('5/3','−5/4','5/4','5/3'),g2('−3/5','4/5','−4/5','−3/5')]],[g2('4/5','3/5','−3/5','4/5'),g2('4/5','−3/5','3/5','4/5'),[g2('5/4','5/3','−5/3','5/4'),g2('−4/5','−3/5','3/5','−4/5')]]];
+const TM27=[[2,'π/3','1/2'],[1,'π/2','0'],[0,'2π/3','−1/2'],[-1,'π','−1']];
+QP.push({id:'27m.turns',step:'27m',label:'turns and length keepers',open:()=>measured('27m'),make(){ return writtenQ('27m.turns',WM27); }},
+  {id:'27m.work',step:'27m',mode:'work',label:'axis and angle',open:()=>measured('27m'),make(){
+    const t=rnd(4);
+    if(t===0){ const [s,right,cs]=pick(TM27);
+      return {index:'q:27m.work[a;'+s+']', lines:[['Q is a turn of space with middle sum '+sg(s),'given']], ask:'By which angle θ, between 0 and π, does Q turn?', right, opts:shuffle([right,...take(['π/6','π/4','π/3','π/2','2π/3','π'].filter(x=>x!==right),3)]), lead:'', why:'Axis technique: 1 + 2 cos θ = '+sg(s)+', so cos θ = '+cs+'.'}; }
+    if(t===1){ const [Q,i,why]=pick(CM27);
+      return {index:'q:27m.work[c;'+Q+']', lines:[['Q has '+Q,'a grid']], ask:'Which is Q?', right:OM27[i], opts:OM27, lead:'', why:'Length-keeper technique. '+why}; }
+    if(t===2){ const [Q,right]=pick(XM27), opts=shuffle(XM27.map(x=>x[1]));
+      return {index:'q:27m.work[x;'+Q+']', lines:[['Q has '+Q,'a turn of space']], ask:'Which arrow does Q keep in place?', right, opts, lead:'', why:'Axis technique: Qu = u. Put '+right+' against each row of Q, and it comes back unchanged.'}; }
+    const [Q,right,w]=pick(IM27);
+    return {index:'q:27m.work[i;'+Q+']', lines:[['Q has '+Q,'a grid that keeps every length']], ask:'Which grid undoes Q?', right, opts:shuffle([right,Q,...w]), lead:'', why:'Length-keeper technique: QᵀQ = I, so Q⁻¹ = Qᵀ. Turn Q on its side.'}; }},
+  {id:'27m.line',step:'27m',mode:'proof',label:'keepers of length',open:()=>measured('27m'),make(){
+    const [s,th,cs]=pick(TM27), V=[
+      ['m1',[['det Q = 1','given'],['Q keeps every length','its det is 1']],2,1,'Rows (2, 0, 0), (0, ½, 0), (0, 0, 1) have det 1 and double e₁.'],
+      ['m2',[['Q keeps every length','given'],['det Q is 1 or −1','the length-keeper technique']],2,0,'QᵀQ = I, so (det Q)² = 1.'],
+      ['m3',[['Q keeps every length','given'],['Q⁻¹ = Qᵀ','the length-keeper technique']],2,0,'QᵀQ = I.'],
+      ['m4',[['Q is a turn of the plane','given'],['Q keeps some arrow other than 0 in place','the axis technique']],2,1,'The technique is for turns of space. A quarter turn of the plane keeps only 0.'],
+      ['m5',[['Q is a turn of space','given'],['Qu = u for some u ≠ 0','the axis technique']],2,0,'Every turn of space keeps some arrow u ≠ 0 in place.'],
+      ['m6',[['Q is a turn of space with middle sum '+sg(s),'given'],['Q turns by θ with cos θ = '+cs,'the axis technique: 1 + 2 cos θ = '+sg(s)]],2,0,'θ = '+th+'.'],
+      ['m7',[['Q = −I, with 3 rows and 3 columns','given'],['Q is a turn of space','it keeps every length']],2,1,'det(−I) = (−1)³ = −1, and −I moves every arrow but 0.'],
+      ['m8',[['Q and R are turns of space','given'],['QR = RQ','turn-about for times']],2,1,'Turns of space do not commute.']];
+    const [tag,lines,j,rr,why]=pick(V);
+    return {index:'q:27m.line['+[tag,s].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; }});
+
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 

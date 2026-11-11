@@ -56,7 +56,7 @@
  {"q":"3 − x on [0, 2]: average value 2, at c = 1. Which technique promises such a c?","a":"average-height","w":["average-slope","level-ends","slope-bound"],"why":"A continuous f takes its average value."},
  {"q":"The step 1, 2 on [0, 2] has average 3/2. Does it take that value?","a":"no: average-height needs continuity","w":["yes: at 1","yes: by average-height","no: it has no average"],"why":"A step skips the values between."},
  {"q":"A function continuous on a closed interval [u, v] is continuous there with one δ for each ε at every point. What is it called?","a":"the evenly-continuous technique","w":["the gap-closes technique","the third law of motion","the spring law"],"why":"The page names it the evenly-continuous technique, and gives the accepted name in brackets: Heine's and Cantor's."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["15g"]=[{"q":"Σᵢ₌₁⁵ (2j − 1). What is it?","a":"25","w":["30","15","10"],"why":"Odd-numbers-make-squares: n²."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["15g"]=[{"q":"Σᵢ₌₁⁵ (2i − 1). What is it?","a":"25","w":["30","15","10"],"why":"Odd-numbers-make-squares: n²."},
  {"q":"Σᵢ₌₁ⁿ (uᵢ − uᵢ₋₁) = uₙ − u₀. What is it called?","a":"collapsing-sum","w":["sums-are-linear","sum-of-none","doubled-sum"],"why":"Its accepted name is a telescoping sum."},
  {"q":"Σᵢ₌₁ⁿ i². What is it?","a":"n(n + 1)(2n + 1)/6","w":["n²(n + 1)²/4","n(n + 1)/2","n³/3"],"why":"Sum-of-squares."},
  {"q":"Σᵢ₌₁ⁿ i³. What is it?","a":"(n(n + 1)/2)²","w":["n(n + 1)(2n + 1)/6","n⁴/4","n(n + 1)/2"],"why":"Sum-of-cubes: the square of doubled-sum’s sum."},
