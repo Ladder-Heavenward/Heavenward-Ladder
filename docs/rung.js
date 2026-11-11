@@ -2706,3 +2706,40 @@ function foldAllButton(){ const box=document.querySelector('.rungs'); if(!box||b
   if(!CFG.manual) arm();
 })();
 /* end idle block */
+
+/* ---- the rung Steps Towards Symbolizing Induction into Action (Andrew 2026-11-11 23:15Z): one rung above the History step,
+   built from his dbt-arrows.md as five series of steps (dbtg, dbtm, dbtie, dbter, dbtdt). Hidden until the climber finishes
+   the History step: the History pages carry no questions, so finishing is reaching the end of hist6 (its last footing or its
+   closing links, seen or pressed), kept as ladder:histdone. Index row #dbtsec. */
+(function(){
+'use strict';
+const KEY='ladder:histdone', PAGES=['dbtg','dbtm','dbtie','dbter','dbtdt'];
+const done=()=>{ try{ return !!LS.getItem(KEY); }catch(e){ return false; } };
+const mark=()=>{ if(done()) return; try{ LS.setItem(KEY,String(Date.now())); }catch(e){} row(); };
+function open(){ return !!(window.LADDER_DESK||done()); }
+function row(){ const r=document.getElementById('dbtsec'); if(r) r.hidden=!open(); }
+function page(){ try{ return ladderPage(); }catch(e){ const m=location.pathname.match(/([^\/]+)\.html$/); return m?m[1]:'index'; } }
+function hist6(){
+  const lab=(a,t)=>{ const l=a.classList.contains('pnb')?a.querySelector('.pl'):null; if(l) l.textContent=t; else a.textContent=t; };
+  const fix=()=>document.querySelectorAll('.pn a.pnb.next, header.top .home a, nav.nextrung a').forEach(a=>{
+    if(a.dataset.dbt) return; const h=a.getAttribute('href')||'';
+    if(/^index\.html/.test(h)&&(a.classList.contains('next')||/→/.test(a.textContent))){ a.dataset.dbt='1'; a.setAttribute('href','dbtg.html');
+      lab(a,a.classList.contains('pnb')?'steps towards symbolizing induction into action':'next: steps towards symbolizing induction into action →'); a.addEventListener('click',mark,true); } });
+  fix(); setTimeout(fix,400); setTimeout(fix,1500);
+  const st=[...document.querySelectorAll('section.step')], last=st[st.length-1], nav=document.querySelector('nav.nextrung');
+  const seen=el=>{ if(!el||!el.offsetHeight) return false; const r=el.getBoundingClientRect(); return r.bottom>0&&r.top<innerHeight&&r.right>0&&r.left<innerWidth; };
+  const check=()=>{ if(seen(last)||seen(nav)) mark(); };
+  ['scroll','click','keyup','touchend','pagehide'].forEach(e=>addEventListener(e,check,{passive:true,capture:true}));
+  const iv=setInterval(()=>{ check(); if(done()) clearInterval(iv); },700); }
+/* a block keeps its columns when it fits at 12.5px or more; otherwise its pieces wrap whole, at 14px */
+function fit(pre){ if(!pre.clientWidth) return; pre.classList.remove('dwrap'); let f=15; pre.style.fontSize=f+'px';
+  while(pre.scrollWidth>pre.clientWidth+1&&f>12.5){ f-=.5; pre.style.fontSize=f+'px'; }
+  if(pre.scrollWidth>pre.clientWidth+1){ pre.classList.add('dwrap'); pre.style.fontSize='14px'; } }
+function fitAll(){ const ps=[...document.querySelectorAll('pre.dbtx')]; if(!ps.length) return;
+  ps.forEach(fit);
+  if('ResizeObserver' in window){ let w=new WeakMap(); const ro=new ResizeObserver(es=>es.forEach(e=>{ const p=e.target, cw=p.clientWidth; if(cw&&w.get(p)!==cw){ w.set(p,cw); fit(p); } })); ps.forEach(p=>ro.observe(p)); }
+  else addEventListener('resize',()=>ps.forEach(fit)); }
+function go(){ const pg=page(); row(); if(pg==='hist6') hist6(); if(PAGES.includes(pg)) fitAll(); }
+window.LadderDbt={open,done,mark};
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
+})();
