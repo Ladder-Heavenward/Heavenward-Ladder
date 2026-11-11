@@ -8,7 +8,7 @@
  {"q":"From u ⊆ v and v ⊆ w, a line reads u ⊆ w. Which technique?","a":"the chain technique for part of","w":["the double-inclusion technique","the chain technique","the self-part technique"],"why":"Subsets chain, as Barbara chained."},
  {"q":"u ⊆ u, for any set u. Which technique?","a":"the self-part technique","w":["the same-members axiom","the self-sameness axiom","the double-inclusion technique"],"why":"Every member of u is in u."},
  {"q":"cat ∈ {{cat}}. Is it so?","a":"no: its only member is {cat}","w":["yes: cat is inside it","yes: {{cat}} = {cat}","no: {{cat}} is empty"],"why":"A box holding a box holding a cat is not a box holding a cat."},
- {"q":"Ann ∈ r. What is Ann called, to r?","a":"a member, or element","w":["a subset","a part","a listing"],"why":"The accepted name for a member is element."},
+ {"q":"Zoe ∈ r. What is Zoe called, to r?","a":"a member, or element","w":["a subset","a part","a listing"],"why":"The accepted name for a member is element."},
  {"q":"u = {Truckee, Merced}; v = {Merced, Truckee, Salinas}. Which holds?","a":"u ⊆ v, and u ≠ v","w":["u = v","v ⊆ u","u ∈ v"],"why":"Salinas is in v and not in u."}];
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["2e"]=[{"q":"{x ∈ {cat, dog, owl} : x can fly}. Which set?","a":"{owl}","w":["{cat, dog}","{cat, dog, owl}","∅"],"why":"Only the owl passes."},
  {"q":"{x ∈ {cat, dog} : x can fly}. Which set?","a":"∅","w":["{owl}","{cat, dog}","not a set: nothing flies"],"why":"Sifting never adds: no flier was there to keep."},

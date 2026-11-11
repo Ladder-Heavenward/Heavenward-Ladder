@@ -225,7 +225,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
     <div class="eyebrow">The picture · the sceptic's game: who picks when</div>
     <div class="panels">
       <div class="panel">
-        <div class="cap">x and y range over Ann, Ben, Cal, Dee and Eve. Their names stand down the left side and again along the top; the cells beside a name on the left are that person's row, and the cells below a name at the top are that person's column. A dot where x's row meets y's column means R(x, y) is true. Pick a statement for R, or tap cells to make your own. Choose a statement; the sceptic picks at each ∀, you pick at each ∃.</div>
+        <div class="cap">x and y range over Zoe, Randy, Jean, Sarah and Claire. Their names stand down the left side and again along the top; the cells beside a name on the left are that person's row, and the cells below a name at the top are that person's column. A dot where x's row meets y's column means R(x, y) is true. Pick a statement for R, or tap cells to make your own. Choose a statement; the sceptic picks at each ∀, you pick at each ∃.</div>
         <div class="chips" role="group" aria-label="statement for R"><span class="m" style="color:var(--muted)">R(x, y):</span><button data-r="eq" class="on">y is x</button><button data-r="wr">x writes to y</button><button data-r="ad">x admires y</button><button data-r="kn">x knows y</button><button data-r="none">clear</button></div>
         <div class="chips" role="group" aria-label="statement" id="qch"></div>
         <svg id="grid" viewBox="0 0 300 300" aria-label="board of people"></svg>
@@ -366,13 +366,13 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <pre class="lines" data-k="check" data-label="this step: moves to check">
 P(\text{Serena}),\;\text{ so } \forall x\, P(x)\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; generalising from a special case: “Serena is grey, so everything is grey.” Serena is a name, not “anything”; Serena is the thing you looked at
 \begin{aligned}&\text{let } n \text{ be any cat; }\\ &\quad  \dots\; n \text{ purrs;}\\ &\text{so } \forall x\,(x \text{ purrs})\,?\end{aligned} @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the every was made of everything, while the case said n is a cat. Make the every of the kind instead: ∀x (x is a cat ⇒ x purrs)
-\exists x\, P(x),\;\text{ so } P(\text{Ann})\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a some's thing gets a fresh name, never one already in use. “Someone took my pen; so Ann took it”
+\exists x\, P(x),\;\text{ so } P(\text{Zoe})\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a some's thing gets a fresh name, never one already in use. “Someone took my pen; so Zoe took it”
 \begin{aligned}&\exists x\, P(x); \text{ call it } b;\; \dots\; Q(b);\\ &\text{so } Q(b) \text{ outside the call}\,?\end{aligned} @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; the line carried out mentions b. Only lines that do not mention the fresh name stand outside; show an example before dropping: ∃x Q(x)
 \forall x\,\exists y\, R(x,y),\;\text{ so } \exists y\,\forall x\, R(x,y)\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the swap in the unlicensed direction: “everyone has a mother, so someone is everyone's mother”
 \neg\,\forall x\, P(x),\;\text{ so } \exists x\,\neg P(x)\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; the gap: no tech on this rung. Rung 7
 \exists x\,(A(x) \Rightarrow B(x)) \text{ for “some } A \text{ is } B\text{”}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; wrong joining word: a some goes with ∧. With ⇒, the shoe shows it, as 1e’s if machine does
   </pre>
-  <p data-pid="a8e00e">The first move to check, generalising, and the gap are the ones that sound most like sense. Generalising from the case in front of you is how everyone reasons in life, and it is not a tech. It is the induction over cases of <a href="r01a.html#ce365d">1a6</a>, and it never earns a line, from one case or from a thousand. And the fresh name for a some is the rule that catches the mistake in “someone took my pen; so Ann took it”. The pen was taken by someone. The someone gets a name of its own, and that name is Ann only if a line says so.</p>
+  <p data-pid="a8e00e">The first move to check, generalising, and the gap are the ones that sound most like sense. Generalising from the case in front of you is how everyone reasons in life, and it is not a tech. It is the induction over cases of <a href="r01a.html#ce365d">1a6</a>, and it never earns a line, from one case or from a thousand. And the fresh name for a some is the rule that catches the mistake in “someone took my pen; so Zoe took it”. The pen was taken by someone. The someone gets a name of its own, and that name is Zoe only if a line says so.</p>
   <section class="slides" id="sl19"><div class="eyebrow">The slides · a refusal · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
@@ -434,7 +434,7 @@ P(\text{Serena}),\;\text{ so } \forall x\, P(x)\,? @@ &lt;span class="vd vd-p"&g
 (function(){
 const {tex,stepper}=Rung;
 const NS='http://www.w3.org/2000/svg';
-const NAMES=['Ann','Ben','Cal','Dee','Eve']; const D=NAMES.map((n,i)=>i);
+const NAMES=['Zoe','Randy','Jean','Sarah','Claire']; const D=NAMES.map((n,i)=>i);
 
 /* ---------- the grid game ---------- */
 const PRE={eq:(x,y)=>y===x, wr:(x,y)=>y===(x+1)%NAMES.length, ad:(x,y)=>y===NAMES.length-1||(x===0&&y===1), kn:(x,y)=>x===0||x===y, none:()=>false};
@@ -466,7 +466,7 @@ function judge(){
   return {v,W};
 }
 function drawGrid(){
-  grid.innerHTML=''; const o=40, s=50, n=NAMES.length;
+  grid.innerHTML=''; const o=56, s=48, n=NAMES.length;
   el('text',{x:o+n*s/2,y:16,'text-anchor':'middle',style:'fill:var(--muted);font:12px var(--mono)'},grid).textContent='y →';
   el('text',{x:7,y:o+n*s/2,'text-anchor':'middle',style:'fill:var(--muted);font:12px var(--mono)',transform:'rotate(-90 10 '+(o+n*s/2)+')'},grid).textContent='x →';
   D.forEach(y=>{ el('text',{x:o+y*s+s/2,y:o-8,'text-anchor':'middle',style:'fill:var(--muted);font:11px var(--mono)'},grid).textContent=NAMES[y]; });
@@ -513,7 +513,7 @@ stepper('#sl17',[
 ],{title:'The slides · the stop · ← → keys work'});
 stepper('#sl19',[
   {k:'ember',kl:'a refusal',t:col2([`${T('We have ')}P(${T('Serena')})`,'given'],[`${N}{${T('So ')}\\forall x\\, P(x)}\\;?`,'generalising from a special case']),n:`Serena is grey; so everything is grey? Refused. Speak-of-everything needs a letter introduced as anything, with nothing assumed about it. Serena is a name, and what we have about her was given, not proved of anything.`},
-  {k:'ember',kl:'a refusal',t:col2([`${T('We have ')}\\exists x\\, P(x)`,'given: someone took my pen'],[`${N}{${T('So ')}P(${T('Ann')})}\\;?`,'a witness with a name in use']),n:`Refused. Use-a-some gives the thing a fresh name and nothing more. Ann is a name already in use, for a particular person, and the some never said it was her.`}
+  {k:'ember',kl:'a refusal',t:col2([`${T('We have ')}\\exists x\\, P(x)`,'given: someone took my pen'],[`${N}{${T('So ')}P(${T('Zoe')})}\\;?`,'a witness with a name in use']),n:`Refused. Use-a-some gives the thing a fresh name and nothing more. Zoe is a name already in use, for a particular person, and the some never said it was her.`}
 ],{title:'The slides · a refusal · ← → keys work'});
 stepper('#sl20',[
   {k:'ember',kl:'backwards',t:col2(['\\text{?}',''],[`${K}{\\forall x\\,(C(x) \\Rightarrow A(x))}`,'wanted: every cat is an animal']),n:`Given: every cat is a mammal, every mammal is an animal. Wanted: an every of a kind. The opening is fixed by the goal: let n be any cat; reach A(n).`},
