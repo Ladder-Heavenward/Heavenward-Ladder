@@ -8011,19 +8011,60 @@ function build(mode){
   return {closed:'The rungs switched on hold no fresh question of this kind. Switch on another rung below, or pick another kind above. Each step you pass adds its pools.'};
 }
 
-/* Pools are switched by rung; inside a rung each pool unlocks with its step. */
+/* ===== Laundry 6 (Andrew 2026-11-11 13:10Z): pools named in words, a tree closed to the floor level, and a score =====
+   Pools are switched by rung, and a floor's switch moves all its rungs; inside a rung each pool unlocks with its step. */
+const FLOORS=[[1,'Logic',0,7],[2,'Analysis',8,11],[3,'Derivation',12,16],[4,'Geometry',17,21],[5,'Statistics',22,30],[6,'Mathematics',31,38],[7,'Advanced',39,47]];
+function floorOf(r){ const L=window.LADMAP; if(L) for(const [f,rs] of L) if(rs.some(x=>x[0]===r)) return f; const F=FLOORS.find(F=>r>=F[2]&&r<=F[3]); return F?F[0]:8; }
+const floorName=f=>{ const F=FLOORS.find(F=>F[0]===f); return F?F[1]:'Endless'; };
+const cap1=s=>{ s=String(s); return s.charAt(0).toUpperCase()+s.slice(1); };
+const poolBy=()=>{ if(!poolBy.m){ poolBy.m={}; [...SEEDS,...LINKS,...QP,...OPS,...BANK,...MOVES].forEach(P=>{ poolBy.m[P.id]=P; }); } return poolBy.m; };
+const idWords=id=>String(id).split('.').slice(1).join(' ')||String(id);
+/* a pool's name in words, without its step */
+function poolName(P){ if(P.kind==='cards') return 'crosswalk'; if(P.kind==='sq') return 'standing questions'; if(P.kind==='tech') return 'techniques';
+  if(BANK.includes(P)) return String(P.id).replace(/\./g,' ');
+  return String(P.label||P.name||idWords(P.id)).replace(/^the /,''); }
+/* one part of an address in words: "4f plus [3,4]"; parts the pools do not know stay as written */
+function sayPart(part){ if(!part||part===DASH) return '';
+  return String(part).split('+').map(one=>{ const m=one.match(/^([^\[?#]+)(.*)$/)||[0,one,''], id=m[1], P=poolBy()[id]; let rest=m[2].replace(/\[[^\]]*\]/g,'').replace(/\?x$/,', solved for x').replace(/^#(\d+)$/,(x,k)=>'card '+(+k+1)); /* the drawn values stay in the raw address (title and report) */
+    if(P) return (BANK.includes(P)?cap1(poolName(P)):P.step+' '+poolName(P))+(rest?' '+rest:'');
+    const c=id.match(/^(cards|tech|sq)\.(.+)$/); if(c) return c[2]+' '+({cards:'crosswalk',tech:'techniques',sq:'standing questions'})[c[1]];
+    if(/^places/.test(id)) return 'Places';
+    if(rest!==m[2]) return id+(rest?' '+rest:'');
+    return one; }).join(' + '); }
+function sayAddr(a3){ const [s,l,b]=(a3||[]).map(sayPart), rows=[]; if(s) rows.push('<b>seed</b> '+esc(s)); if(l) rows.push('<b>'+(/ \+ /.test(l)?'links':'link')+'</b> '+esc(l)); if(b) rows.push('<b>bank</b> '+esc(b));
+  return rows.join('<br>')||esc((a3||[]).join(' . ')); }
+/* the score: 1 for an understanding, 2 for a proof, 3 for an equation, 4 for a word problem, and 1 more for each link on the question;
+   times 1 + bonus/100, where the bonus is the sum, over the steps whose pools are open and switched on, of the step's rung number / 100 */
+const PTS={read:1,proof:2,work:3,word:4};
+function nLinks(q){ const by=poolBy(); const l=(q.a3||[])[1]; if(!l||l===DASH) return 0;
+  return String(l).split('+').filter(x=>{ const P=by[x.replace(/[\[?#].*$/,'')]; return !!P&&(LINKS.includes(P)||OPS.includes(P)); }).length; }
+function bonus(){ const off=get('rand:off',{}), st=new Set(); [...SEEDS,...toggled(),...BANK].forEach(P=>{ const r=rungOf(P.step); if(!off['rung:'+r]&&P.open()) st.add(P.step); });
+  let b=0; st.forEach(s=>{ b+=Math.min(rungOf(s),48)/100; }); return b; } /* steps above rung 47 (the infinity series) count as 48 */
+const mult=()=>Math.round((1+bonus()/100)*100)/100;
+const fmt2=x=>String(Math.round(x*100)/100);
+const treeOpen={};
 function picker(q){
   const off=get('rand:off',{}), by={};
-  const src=P=>P.kind==='cards'?'crosswalk':P.kind==='sq'?'standing questions':P.kind==='tech'?'techniques':OPS.includes(P)?'operations':MOVES.includes(P)?'checks':BANK.includes(P)?'bank':SEEDS.includes(P)?'seeds':LINKS.includes(P)?'links':'questions';
-  [...SEEDS,...toggled(),...BANK].filter(P=>P.open()).forEach(P=>{ const r=rungOf(P.step), b=by[r]=by[r]||{steps:new Set(),src:new Set()}; b.steps.add(P.step); b.src.add(src(P)); });
+  [...SEEDS,...toggled(),...BANK].filter(P=>P.open()).forEach(P=>{ const r=rungOf(P.step), R=by[r]=by[r]||{}; (R[P.step]=R[P.step]||[]).push(poolName(P)); });
   const M=window.LADDER_CARDMAP||{}, stemOf=t=>{ for(const s in M) if(M[s][0]===t) return s; return STEPS[t]?STEPS[t][0]:t; };
-  const rows=Object.keys(by).map(Number).sort((a,b)=>a-b).map(r=>{ const steps=[...by[r].steps].sort((x,y)=>stemOf(x)<stemOf(y)?-1:1);
-    return '<label class="rzp"><input type="checkbox" data-id="rung:'+r+'"'+(off['rung:'+r]?'':' checked')+'> rung '+r+' <span class="rzsrc">'+esc(steps.join(' '))+' · '+[...by[r].src].join(', ')+'</span></label>'; }).join('');
-  return '<details class="rzpick"'+(q.closed?' open':'')+'><summary>pools, one switch to a rung</summary>'+(rows||'<p class="dnote">None open yet.</p>')+'</details>';
+  const rungs=Object.keys(by).map(Number).sort((a,b)=>a-b), fl={}; rungs.forEach(r=>{ const f=floorOf(r); (fl[f]=fl[f]||[]).push(r); });
+  const n=(k,w)=>k+' '+w+(k===1?'':'s'), op=k=>treeOpen[k]?' open':'';
+  const rows=Object.keys(fl).map(Number).sort((a,b)=>a-b).map(f=>{ const rs=fl[f], on=rs.filter(r=>!off['rung:'+r]).length; let pools=0;
+    const inner=rs.map(r=>{ const steps=Object.keys(by[r]).sort((x,y)=>stemOf(x)<stemOf(y)?-1:1); let np=0;
+      const lines=steps.map(s=>{ const names=[...new Set(by[r][s])]; np+=names.length; return '<p class="rzst"><b>'+esc(s)+'</b> '+esc(names.join(' · '))+'</p>'; }).join(''); pools+=np;
+      return '<details class="rzrg" data-k="r'+r+'"'+op('r'+r)+'><summary><input type="checkbox" data-id="rung:'+r+'"'+(off['rung:'+r]?'':' checked')+' aria-label="'+(r===99?'the infinity series':'rung '+r)+'">'+(r===99?'The infinity series':'Rung '+r)+' <span class="rzsrc">'+n(steps.length,'step')+' · '+n(np,'pool')+'</span></summary>'+lines+'</details>'; }).join('');
+    return '<details class="rzfl" data-k="f'+f+'"'+op('f'+f)+'><summary><input type="checkbox" data-fl="'+rs.join(',')+'"'+(on===rs.length?' checked':'')+(on&&on<rs.length?' data-mix="1"':'')+' aria-label="floor '+f+'">Floor '+f+' · '+floorName(f)+' <span class="rzsrc">'+(rs[0]===99?'':(rs.length===1?'rung '+rs[0]:'rungs '+rs[0]+' to '+rs[rs.length-1])+' · ')+n(pools,'pool')+'</span></summary>'+inner+'</details>'; }).join('');
+  return '<details class="rzpick" data-k="top"'+(q.closed||treeOpen.top?' open':'')+'><summary>Pools, by floor and rung · score times '+fmt2(mult())+'</summary>'+(rows||'<p class="dnote">None open yet.</p>')+'</details>';
+}
+function wireTree(box,again){
+  box.querySelectorAll('.rzpick, .rzpick details').forEach(d=>{ d.ontoggle=()=>{ treeOpen[d.dataset.k]=d.open; }; });
+  box.querySelectorAll('.rzpick input').forEach(i=>{ if(i.dataset.mix) i.indeterminate=true;
+    i.onclick=e=>e.stopPropagation();
+    i.onchange=()=>{ const o=get('rand:off',{}); (i.dataset.fl?i.dataset.fl.split(',').map(r=>'rung:'+r):[i.dataset.id]).forEach(id=>{ if(i.checked) delete o[id]; else o[id]=1; }); put('rand:off',o); treeOpen.top=true; again(); }; });
 }
 
 function style(){ if(document.getElementById('rz4css')) return; const s=document.createElement('style'); s.id='rz4css';
-  s.textContent='.rzmodes{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 0 10px}.rzmode{padding:8px 6px;border-radius:8px;border:1px solid var(--line,#ccc);background:transparent;color:inherit;font:inherit;font-size:.92rem;cursor:pointer;min-width:0}.rzmode[aria-pressed="true"]{border-color:currentColor;box-shadow:inset 0 0 0 1px currentColor;font-weight:600}.rzmode:disabled{opacity:.45;cursor:default}.rzmode small{display:block;font-size:.7rem;opacity:.75;font-weight:400}.rzstory{margin:10px 0;line-height:1.55}.rzl.rzs{grid-template-columns:1.6em minmax(0,1fr)}.rzl.rzs .rzw{grid-column:2;font-size:.8em}.rzt{overflow-wrap:anywhere}.rzaddr{font-family:var(--mono,monospace);font-size:.72rem;color:var(--muted,#777);margin-top:14px}.rzaddr .rzseed{overflow-wrap:anywhere;text-align:left}';
+  s.textContent='.rzmodes{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 0 10px}.rzmode{padding:8px 6px;border-radius:8px;border:1px solid var(--line,#ccc);background:transparent;color:inherit;font:inherit;font-size:.92rem;cursor:pointer;min-width:0}.rzmode[aria-pressed="true"]{border-color:currentColor;box-shadow:inset 0 0 0 1px currentColor;font-weight:600}.rzmode:disabled{opacity:.45;cursor:default}.rzmode small{display:block;font-size:.7rem;opacity:.75;font-weight:400}.rzstory{margin:10px 0;line-height:1.55}.rzl.rzs{grid-template-columns:1.6em minmax(0,1fr)}.rzl.rzs .rzw{grid-column:2;font-size:.8em}.rzt{overflow-wrap:anywhere}.rzaddr{font-family:var(--mono,monospace);font-size:.72rem;color:var(--muted,#777);margin-top:14px}.rzaddr .rzseed{overflow-wrap:anywhere;text-align:left;font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;line-height:1.5}.rzaddr .rzseed b{font-weight:500;opacity:.75}.rzpick details{margin:0}.rzpick summary{padding:1px 0}.rzfl>summary{font-weight:600;opacity:1}.rzrg{margin-left:14px!important;font-size:.92em}.rzst{margin:0 0 0 30px;font-size:.84em;line-height:1.3;color:var(--muted,#777);overflow-wrap:anywhere}.rzst b{color:var(--ink,inherit);font-weight:600}.rzpick .rzsrc{font-weight:400;opacity:.7;font-size:.86em}.rzpick input{margin:0 4px 0 2px;vertical-align:-1px}';
   document.head.appendChild(s); }
 
 function render(box){
@@ -8035,16 +8076,16 @@ function render(box){
   if(window.MathKeys){ const off=get('rand:off',{}), K=new Set(); [...SEEDS,...LINKS,...QP].filter(P=>P.open()&&!off['rung:'+rungOf(P.step)]).forEach(P=>(P.keys||[]).forEach(k=>K.add(k))); MathKeys.limit(K,'the laundry’s chosen pools'); }
   if(q.closed&&![...SEEDS,...toggled(),...BANK].some(P=>P.open())){ box.innerHTML='<p class="dnote">'+esc(q.closed)+'</p>'; return; }
   const sw='<div class="rzmodes" role="group" aria-label="kind of question">'+MODES.map(M=>{ const ok=avail(M.id); return '<button type="button" class="rzmode" data-m="'+M.id+'" aria-pressed="'+(M.id===mode)+'"'+(ok?'':' disabled')+'>'+esc(M.label)+(ok?'':'<small>opens at '+OPENS[M.id]+'</small>')+'</button>'; }).join('')+'</div>';
-  const wire=()=>{ box.querySelectorAll('.rzpick input').forEach(i=>i.onchange=()=>{ const o=get('rand:off',{}); if(i.checked) delete o[i.dataset.id]; else o[i.dataset.id]=1; put('rand:off',o); render(box); });
+  const wire=()=>{ wireTree(box,()=>render(box));
     box.querySelectorAll('.rzmode').forEach(b=>b.onclick=()=>{ put('rand:mode',{m:b.dataset.m}); render(box); }); };
   if(q.closed){ box.innerHTML=sw+'<p class="dnote">'+esc(q.closed)+'</p>'+picker(q); wire(); return; }
   const addr=q.a3.join(' . ');
-  box.innerHTML=sw+'<p class="dnote">'+esc(MD.say)+' A question never comes twice. Right answers so far: <b>'+right+'</b>.</p>'
+  box.innerHTML=sw+'<p class="dnote">'+esc(MD.say)+' A question never comes twice. Right answers so far: <b>'+right+'</b>. Score: <b class="rzscore">'+fmt2(get('rand:score',0))+'</b>.</p>'
     +(q.story?'<p class="rzstory">'+esc(q.story)+'</p>':'')
     +(q.lines.length?'<div class="rzlines">'+q.lines.map(([t,w],i)=>'<div class="rzl'+(q.stack?' rzs':'')+'"><span class="rzn">'+(i+1)+'</span><span class="rzt">'+esc(t)+'</span><span class="rzw">'+(w===null?'?':esc(w))+'</span></div>').join('')+'</div>':'')
     +'<p class="rzask">'+esc(q.ask)+'</p><div class="rzopts">'+q.opts.map(o=>'<button type="button" class="rzo'+(q.html?' rzg':'')+'" data-v="'+esc(o).replace(/"/g,'&quot;')+'"'+(q.html?' aria-label="'+esc(o)+'">'+q.html[o]:'>'+esc(o))+'</button>').join('')+'</div>'
     +'<p class="rzwhy" hidden></p><p><button type="button" class="dlink rznext">another question</button></p>'
-    +'<p class="rzaddr">seed . link . bank<br><button type="button" class="rzseed" title="report this question">'+esc(addr)+'</button><br>If this question does not make sense, tap its address to report it.</p>'+picker(q);
+    +'<p class="rzaddr"><button type="button" class="rzseed" title="report this question · '+esc(addr).replace(/"/g,'&quot;')+'">'+sayAddr(q.a3)+'</button><br>If this question does not make sense, tap its address to report it.</p>'+picker(q);
   wire();
   if(/\$[^$]+\$/.test(q.ask)&&window.katex){ const el=box.querySelector('.rzask'); el.innerHTML=''; String(q.ask).split(/(\$[^$]+\$)/).forEach(t=>{ if(/^\$[^$]+\$$/.test(t)){ const sp=document.createElement('span'); try{ katex.render(t.slice(1,-1),sp,{throwOnError:false}); }catch(e){ sp.textContent=t; } el.appendChild(sp); } else el.appendChild(document.createTextNode(t)); }); }
   let chose='';
@@ -8057,9 +8098,10 @@ function render(box){
     const u=get('rand:seen',{}); u[q.index]=Date.now(); put('rand:seen',u);
     if(q.index.startsWith('link:')||q.index.startsWith('q:')) put('rand:last',[q.right].concat(get('rand:last',[])).slice(0,2));
     if(q.stray){ const s=strayDue(); s.served++; put('rand:strays',s); const lg=get('rand:straylog',[]); lg.push({day:s.day,index:q.index}); put('rand:straylog',lg); }
-    if(ok) put('rand:right',get('rand:right',0)+1);
+    let won=''; if(ok){ put('rand:right',get('rand:right',0)+1); const base=PTS[mode]||1, nl=nLinks(q), m=mode==='read'?1:mult(), pts=Math.round((base+nl)*m*100)/100; put('rand:score',Math.round((get('rand:score',0)+pts)*100)/100);
+      const sc=box.querySelector('.rzscore'); if(sc) sc.textContent=fmt2(get('rand:score',0)); won=' Scored '+base+(nl?' + '+nl+' for '+(nl===1?'its link':'its links'):'')+(mode==='read'?'':', times '+fmt2(m)+' for the pools switched on')+': '+fmt2(pts)+'.'; }
     const ax=!ok&&AX.includes(b.dataset.v)?' An axiom stands under every technique above it; the question asks for the technique built over it.':'';
-    why.hidden=false; why.innerHTML=esc((ok?'Right. ':(q.lead||'The line holds by '+q.right+'. '))+q.why+ax)+' Built at '+(q.steps||[q.step]).map(stepLink).join(', ')+'.'; });
+    why.hidden=false; why.innerHTML=esc((ok?'Right. ':(q.lead||'The line holds by '+q.right+'. '))+q.why+ax)+' Built at '+(q.steps||[q.step]).map(stepLink).join(', ')+'.'+esc(won); });
   box.querySelector('.rznext').onclick=()=>render(box);
 }
 
