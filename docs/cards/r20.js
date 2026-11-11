@@ -34,7 +34,7 @@
  {"q": "Lines crossing at angle θ. The two flips make a turn by how much?", "a": "twice θ", "w": ["θ", "half θ", "a quarter turn always"], "why": "Each flip doubles the gap from its line."},
  {"q": "Every turn and every slide is how many flips?", "a": "two", "w": ["one", "three", "four"], "why": "The two-flips technique."},
  {"q": "The same flip done twice. What is it?", "a": "doing nothing", "w": ["the half turn", "a slide", "a flip across a new line"], "why": "A flip undoes itself."},
- {"q": "Flip across the floor, then across y = d. What is it?", "a": "the slide by (0, 2e)", "w": ["the slide by (0, d)", "the turn by 2e", "the flip across y = 2d"], "why": "Parallel lines make a slide by twice the gap."},
+ {"q": "Flip across the floor, then across y = d. What is it?", "a": "the slide by (0, 2d)", "w": ["the slide by (0, d)", "the turn by 2d", "the flip across y = 2d"], "why": "Parallel lines make a slide by twice the gap."},
  {"q": "Flips across the floor and the upright axis. What do they make?", "a": "the half turn about the origin", "w": ["the quarter turn", "the slide by (1, 1)", "the flip across y = x"], "why": "The lines cross at a right angle, so the turn is twice that."}];
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["20f"]=[{"q": "Two isometries agree at three points not on one line. What follows?", "a": "they are the same move", "w": ["they differ by a slide", "they are both flips", "nothing, without a fourth point"], "why": "The three-points-decide technique."},
  {"q": "Every isometry is at most how many flips?", "a": "three", "w": ["two", "four", "one"], "why": "The three-flips technique: place three points, one flip each."},
