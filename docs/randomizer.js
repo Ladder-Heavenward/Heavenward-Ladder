@@ -6411,6 +6411,398 @@ QP.push({id:'28p.doubt',step:'28p',label:'how doubt spreads',open:()=>measured('
       ['p6',[['f is smoothly sloped on the box','given'],['the error in f is at most |∇f(p) · h|','the error-bound technique']],2,1,'The technique uses the largest slopes on the whole box, not the slopes at p. f = x² at x = 0 ± 0.1 has estimate 0.']];
     return line28('28p.line',V,[a,b,M1,M2,d1,d2]); }});
 
+/* ===== Laundry 5, rung 29 (floor 5 pools, stage AB), part 1: 29a to 29g ===== */
+Object.assign(STEPS,{'29a':['r29a','The Fifth Postulate on Trial'],'29b':['r29b','Triangles on a Sphere'],'29c':['r29c','A Plane Where Parallels Are Many'],'29d':['r29d','The Ruler That Changes'],'29e':['r29e','Curvature Lives in the Ruler'],'29f':['r29f','Total Curvature Counts Holes'],'29g':['r29g','Shortest Paths'],'29h':['r29h','Spaces Flat up Close'],'29i':['r29i','Spherical Triangles by Hand'],'29j':['r29j','Hyperbolic Geometry by Hand'],'29k':['r29k','Curvature by Hand'],'29l':['r29l','The Best Path, by Hand'],'29m':['r29m','Perspective']});
+const DR29=[['1/5','ln (3/2)'],['1/3','ln 2'],['1/2','ln 3'],['3/5','ln 4'],['2/3','ln 5'],['3/4','ln 7'],['4/5','ln 9']];
+
+/* ---------- 29a The Fifth Postulate on Trial ---------- */
+const WA29=[
+  ['18c proved the parallel statement. So do the other axioms prove it?','no: 18c used coordinates, which lay down more than the other axioms',['yes','yes: a proof is a proof','no: 18c had a gap'],'The question is what the other axioms prove alone.'],
+  ['May a proof of the parallel statement use that lines which never meet stay the same distance apart?','no: that is the parallel statement again, in other words',['yes','yes: it is one of the other axioms','no: it is false'],'A proof may not use what it sets out to prove.'],
+  ['S ≤ π for every triangle. Is S = π?','not from that: at most is not exactly',['yes','yes, for small triangles','no: S < π'],'No-more-than-straight technique: the angles of every triangle add to at most π.'],
+  ['The sharp case is repugnant. Is it refuted?','no: a refutation needs a false line, not a strange one',['yes','yes: it looks wrong','no: it is proved'],'No-blunt-top technique: the top angles are right or sharp, never blunt.'],
+  ['What do the angles of a triangle add to, by the other axioms alone?','at most π',['exactly π','more than π','less than π'],'No-more-than-straight technique.'],
+  ['What are the top angles of an upright figure, by the other axioms alone?','equal, and right or sharp, never blunt',['right','equal, and right or blunt','equal, and sharp'],'Top-angles technique and no-blunt-top technique.']];
+QP.push({id:'29a.trial',step:'29a',label:'the other axioms alone',open:()=>measured('29a'),make(){ return writtenQ('29a.trial',WA29); }},
+  {id:'29a.work',step:'29a',mode:'work',label:'at most, not exactly',open:()=>measured('29a'),make(){
+    const t=rnd(3), a=2+rnd(4), b=2+rnd(4);
+    if(t===0){ const right='at most '+pi21(12-a-b,12), wrong=uniq(right,['exactly '+pi21(12-a-b,12),'at least '+pi21(12-a-b,12),'at most '+pi21(a+b,12),'more than '+pi21(12-a-b,12)],3); if(wrong.length<3) return null;
+      return {index:'q:29a.work[s;'+[a,b].join(';')+']', lines:[['two angles of a triangle are '+pi21(a,12)+' and '+pi21(b,12),'given'],['the parallel axiom is not used','the other axioms alone']], ask:'What do the axioms say of the third angle?', right, opts:shuffle([right,...wrong]), lead:'', why:'No-more-than-straight technique: the three add to at most π, and '+pi21(a,12)+' + '+pi21(b,12)+' = '+pi21(a+b,12)+'.'}; }
+    if(t===1){ const m=Math.max(a,b), right='it is larger than '+pi21(m,12), wrong=['it is exactly '+pi21(a+b,12),'it is smaller than '+pi21(Math.min(a,b),12),'it is exactly '+pi21(12-m,12)]; if(a===b||a+b===12-m) return null;
+      return {index:'q:29a.work[o;'+[a,b].join(';')+']', lines:[['the two inside angles away from an outside angle are '+pi21(a,12)+' and '+pi21(b,12),'given'],['the parallel axiom is not used','the other axioms alone']], ask:'What do the axioms say of the outside angle?', right, opts:shuffle([right,...wrong]), lead:'', why:'Outside-angle technique: it is larger than each of the two inside angles away from it. That it equals their sum needs the parallel axiom.'}; }
+    const [th,co]=pick([['π/3','2π/3'],['2π/5','3π/5'],['4π/9','5π/9'],['3π/8','5π/8']]);
+    return {index:'q:29a.work[u;'+th+']', lines:[['an upright figure has one top angle '+th,'given']], ask:'What is its other top angle?', right:th, opts:shuffle([th,co,'π/2','it cannot be told']), lead:'', why:'Top-angles technique: the two top angles of an upright figure are equal.'}; }},
+  {id:'29a.line',step:'29a',mode:'proof',label:'what the trial allows',open:()=>measured('29a'),make(){
+    const a=2+rnd(4), b=2+rnd(4), V=[
+      ['a1',[['a triangle has inside angles α, β and γ, and the parallel axiom is not used','given'],['α + β + γ ≤ π','the no-more-than-straight technique']],2,0,'The angles of every triangle add to at most π.'],
+      ['a2',[['a triangle has inside angles α, β and γ, and the parallel axiom is not used','given'],['α + β + γ = π','the angles of a triangle']],2,1,'That needs the parallel axiom. At most is not exactly.'],
+      ['a3',[['two lines stand at right angles to one line','given'],['the two lines never meet','the never-meet technique']],2,0,'Two lines at right angles to the same line never meet.'],
+      ['a4',[['two lines never meet, and the parallel axiom is not used','given'],['they stay the same distance apart','they are parallel']],2,1,'That is the parallel statement again, in other words.'],
+      ['a5',[['an upright figure has top angles θ and φ','given'],['θ = φ','the top-angles technique']],2,0,'The two top angles of an upright figure are equal.'],
+      ['a6',[['an upright figure has top angles θ and φ, and the parallel axiom is not used','given'],['θ and φ are right angles','its base angles are right']],2,1,'Right or sharp: the no-blunt-top technique rules out only the blunt case.'],
+      ['a7',[['two angles of a triangle are '+pi21(a,12)+' and '+pi21(b,12)+', and the parallel axiom is not used','given'],['the third is at most '+pi21(12-a-b,12),'the no-more-than-straight technique']],2,0,pi21(a,12)+' + '+pi21(b,12)+' = '+pi21(a+b,12)+', and the three add to at most π.'],
+      ['a8',[['an outside angle of a triangle is '+pi21(a+b,12)+', and an inside angle away from it is β','given'],['β < '+pi21(a+b,12),'the outside-angle technique']],2,0,'An outside angle is larger than each of the two inside angles away from it.']];
+    return line28('29a.line',V,[a,b]); }});
+
+/* ---------- 29b Triangles on a Sphere ---------- */
+const WB29=[
+  ['Are the circles of latitude 40° and 50° parallel lines on the sphere?','no: they are not great circles, so not lines of the sphere',['yes','yes: they never meet','no: they meet at the poles'],'Lines-always-meet technique: two different great circles meet in exactly two points.'],
+  ['Is the area of a triangle (α + β + γ − 180)R², with angles in degrees?','no: the lune-area technique measures angles as arcs, in radians',['yes','yes, when R = 1','no: the area is (α + β + γ)R²'],'Excess-area technique: (α + β + γ − π)R².'],
+  ['Does the sphere obey the other axioms, with angle sums above π?','no: two opposite points lie on many lines; it breaks the first axiom',['yes','yes: only the parallel axiom fails','no: its angle sums are π'],'Lines-always-meet technique: the two meeting points are opposite each other.'],
+  ['Is a triangle with angles 90°, 90°, 90° impossible?','no: on a sphere it is one eighth of the skin',['yes','yes: the angles add to more than 180°','no: it is half of the skin'],'Excess-area technique: (3π/2 − π)R² = πR²/2, and the skin is 4πR².'],
+  ['In how many points do two different great circles meet?','exactly two, opposite each other',['exactly one','none, when they are parallel','endlessly many'],'Lines-always-meet technique.'],
+  ['Two triangles on one sphere have the same three angles. What follows?','they have the same area',['nothing: one may be larger','both are small','they share a side'],'Same-angles-same-size technique.']];
+QP.push({id:'29b.sphere',step:'29b',label:'lines of the sphere',open:()=>measured('29b'),make(){ return writtenQ('29b.sphere',WB29); }},
+  {id:'29b.work',step:'29b',mode:'work',label:'lune and excess',open:()=>measured('29b'),make(){
+    const t=rnd(3), R=1+rnd(4);
+    if(t===0){ const k=2+rnd(5), right=pi21(2*R*R,k), wrong=uniq(right,[pi21(R*R,k),pi21(4*R*R,k),pi21(2*R,k),pi21(2*R*R,1),pi21(R*R,2*k)],3); if(wrong.length<3) return null;
+      return {index:'q:29b.work[l;'+[k,R].join(';')+']', lines:[['a lune has angle '+pi21(1,k),'on a sphere of radius '+R]], ask:'What is its area?', right, opts:shuffle([right,...wrong]), lead:'', why:'Lune-area technique: 2αR² = 2 · '+pi21(1,k)+' · '+R*R+'.'}; }
+    if(t===1){ const a=4+rnd(4), b=4+rnd(4), c=13-a-b+rnd(4); if(c<2||c>10||a+b+c<=12) return null;
+      const right=pi21((a+b+c-12)*R*R,12), wrong=uniq(right,[pi21((a+b+c)*R*R,12),pi21((a+b+c-12)*R,12),pi21((a+b+c-12)*2*R*R,12),pi21((a+b+c-12),12),pi21((a+b+c-6)*R*R,12)],3); if(wrong.length<3) return null;
+      return {index:'q:29b.work[e;'+[a,b,c,R].join(';')+']', lines:[['a triangle has angles '+pi21(a,12)+', '+pi21(b,12)+' and '+pi21(c,12),'on a sphere of radius '+R]], ask:'What is its area?', right, opts:shuffle([right,...wrong]), lead:'', why:'Excess-area technique: (α + β + γ − π)R². The angles add to '+pi21(a+b+c,12)+', so the excess is '+pi21(a+b+c-12,12)+'.'}; }
+    const k=2+rnd(5), right='1/'+4*k, wrong=uniq(right,['1/'+2*k,'1/'+k,'1/'+8*k,'1/'+(4*k+4),'1/4'],3); if(wrong.length<3) return null;
+    return {index:'q:29b.work[s;'+k+']', lines:[['a triangle has angles π/2, π/2 and '+pi21(1,k),'on a sphere']], ask:'What share of the whole skin does it cover?', right, opts:shuffle([right,...wrong]), lead:'', why:'Excess-area technique: the excess is '+pi21(1,k)+', so the area is '+pi21(1,k)+' · R². The skin is 4πR².'}; }},
+  {id:'29b.stripe',step:'29b',mode:'word',label:'a stripe on a ball',open:()=>measured('29b'),make(){
+    const what=pick(['A beach ball','A globe','A lantern','A float']), R=pick([10,20,30]), k=pick([3,4,5,6,8]), right=pi21(2*R*R,k)+' cm²', wrong=uniq(right,[pi21(R*R,k)+' cm²',pi21(4*R*R,k)+' cm²',pi21(2*R,k)+' cm²',pi21(2*R*R,1)+' cm²'],3); if(wrong.length<3) return null;
+    return {index:'q:29b.stripe['+[what,R,k].join(';')+']', a3:['29b.stripe',DASH,DASH], story:what+' is a sphere of radius '+R+' cm. One stripe is painted from pole to pole, between two half great circles that meet at the angle '+pi21(1,k)+'.', lines:[], ask:'What is the area of the stripe?', right, opts:shuffle([right,...wrong]), lead:'', why:'Lune-area technique: the stripe is a lune, of area 2αR² = 2 · '+pi21(1,k)+' · '+R*R+'.'}; }},
+  {id:'29b.line',step:'29b',mode:'proof',label:'area from angles',open:()=>measured('29b'),make(){
+    const R=1+rnd(4), k=2+rnd(5), V=[
+      ['b1',[['a lune of angle '+pi21(1,k)+' lies on a sphere of radius '+R,'given'],['its area is '+pi21(2*R*R,k),'the lune-area technique']],2,0,'2αR² = 2 · '+pi21(1,k)+' · '+R*R+'.'],
+      ['b2',[['two different great circles lie on a sphere','given'],['they may never meet','parallel lines']],2,1,'Lines-always-meet technique: they meet in exactly two points.'],
+      ['b3',[['a triangle with angles π/2, π/2 and '+pi21(1,k)+' lies on a sphere of radius '+R,'given'],['its area is '+pi21(R*R,k),'the excess-area technique']],2,0,'The excess is '+pi21(1,k)+', and the area is the excess times R².'],
+      ['b4',[['a triangle with angles 90°, 90° and 90° lies on a sphere of radius '+R,'given'],['its area is (270 − 180) · '+R*R+' = '+90*R*R,'the excess-area technique']],2,1,'The angles are measured in radians: (3π/2 − π) · '+R*R+' = '+pi21(R*R,2)+'.'],
+      ['b5',[['two triangles on one sphere have the same three angles','given'],['they have the same area','the same-angles-same-size technique']],2,0,'The area is fixed by the excess.'],
+      ['b6',[['P and Q are two points of a sphere','given'],['exactly one great circle passes through both','two points fix a line']],2,1,'Two opposite points lie on many great circles.']];
+    return line28('29b.line',V,[R,k]); }});
+
+/* ---------- 29c A Plane Where Parallels Are Many ---------- */
+const WC29=[
+  ['The lines of the disc plane look curved. Is it then not a real geometry?','no: straight means obeying the axioms for lines, not looking straight to us',['yes','yes: lines must be straight','no: its lines are straight in the drawing'],'One-line technique: through two points of the disc plane passes exactly one line of the disc plane.'],
+  ['The disc plane looks small. Can lengths be laid off in it without bound?','yes: its distance grows without bound toward the edge',['no: the disc has radius 1','no: no length is more than 2','yes, but only along diameters'],'The distance from 0 to a point at flat distance ρ is ln((1 + ρ)/(1 − ρ)).'],
+  ['Are the edge points points of the disc plane?','no: the edge is not part of it; lines that share only an edge point never meet',['yes','yes: lines end there','no: only 0 is a point'],'The disc plane is the points with |z| < 1.'],
+  ['Is the parallel axiom false?','no: it is independent; true in ℝ², false in the disc plane',['yes','yes: the disc plane refutes it','no: it is proved from the other axioms'],'Parallel-independent technique.'],
+  ['Through a point off a line of the disc plane, how many lines never meet it?','endlessly many',['exactly one','none','exactly two'],'Many-parallels technique.'],
+  ['What do the angles of a triangle in the disc plane add to?','less than π',['exactly π','more than π','at most π, and π for large triangles'],'Below-straight technique.']];
+QP.push({id:'29c.disc',step:'29c',label:'the disc plane',open:()=>measured('29c'),make(){ return writtenQ('29c.disc',WC29); }},
+  {id:'29c.work',step:'29c',mode:'work',label:'distances in the disc',open:()=>measured('29c'),make(){
+    const t=rnd(3), [rho,d]=pick(DR29);
+    if(t===0){ const right=d, wrong=uniq(right,[rho,...shuffle(DR29.map(x=>x[1]))],3);
+      return {index:'q:29c.work[d;'+rho+']', lines:[['a point lies on a diameter, at flat distance '+rho+' from the centre','in the disc plane']], ask:'What is its disc distance from the centre?', right, opts:shuffle([right,...wrong]), lead:'', why:'ln((1 + ρ)/(1 − ρ)), with ρ = '+rho+'.'}; }
+    if(t===1){ const right=rho, wrong=uniq(right,shuffle(DR29.map(x=>x[0])),3);
+      return {index:'q:29c.work[r;'+rho+']', lines:[['a point on a diameter has disc distance '+d+' from the centre','in the disc plane']], ask:'What is its flat distance ρ from the centre?', right, opts:shuffle([right,...wrong]), lead:'', why:'ln((1 + ρ)/(1 − ρ)) = '+d+' at ρ = '+rho+'.'}; }
+    const a=2+rnd(4), b=2+rnd(4), right='less than '+pi21(12-a-b,12), wrong=['exactly '+pi21(12-a-b,12),'more than '+pi21(12-a-b,12),'at least '+pi21(12-a-b,12)];
+    return {index:'q:29c.work[s;'+[a,b].join(';')+']', lines:[['two angles of a triangle of the disc plane are '+pi21(a,12)+' and '+pi21(b,12),'given']], ask:'What can be said of the third angle?', right, opts:shuffle([right,...wrong]), lead:'', why:'Below-straight technique: the three add to less than π, and '+pi21(a,12)+' + '+pi21(b,12)+' = '+pi21(a+b,12)+'.'}; }},
+  {id:'29c.line',step:'29c',mode:'proof',label:'many parallels',open:()=>measured('29c'),make(){
+    const a=2+rnd(4), b=2+rnd(4), [rho,d]=pick(DR29), V=[
+      ['c1',[['p and q are two points of the disc plane','given'],['exactly one line of the disc plane passes through both','the one-line technique']],2,0,'Through two points of the disc plane passes exactly one of its lines.'],
+      ['c2',[['P is a point of the disc plane off the line ℓ','given'],['exactly one line through P never meets ℓ','the parallel axiom']],2,1,'Many-parallels technique: endlessly many do.'],
+      ['c3',[['two angles of a triangle of the disc plane are '+pi21(a,12)+' and '+pi21(b,12),'given'],['the third is less than '+pi21(12-a-b,12),'the below-straight technique']],2,0,'The three add to less than π.'],
+      ['c4',[['the parallel axiom fails in the disc plane, which obeys the other axioms','given'],['the other axioms refute the parallel axiom','it fails']],2,1,'ℝ² obeys the other axioms too, and there it is true. It can be neither proved nor refuted from them.'],
+      ['c5',[['|p| < 1','given'],['fp sends lines of the disc plane to lines of the disc plane','the disc-moves technique']],2,0,'And it sends the disc onto itself and p to 0, keeping angles.'],
+      ['c6',[['two lines of the disc plane share only an edge point','given'],['the two lines meet','they share a point']],2,1,'The edge is not part of the disc plane.'],
+      ['c7',[['a point lies on a diameter at flat distance '+rho+' from the centre','given'],['its disc distance from the centre is '+rho,'the length of the drawing']],2,1,'The disc plane has its own distance: ln((1 + ρ)/(1 − ρ)) = '+d+'.']];
+    return line28('29c.line',V,[a,b,rho]); }});
+
+/* ---------- 29d The Ruler That Changes ---------- */
+const WD29=[
+  ['Is ds² = E du² + F du dv + G dv²?','no: the middle term comes twice; ds² = E du² + 2F du dv + G dv²',['yes','no: there is no middle term','no: the middle term is F² du dv'],'F comes from ru · rv and from rv · ru.'],
+  ['Is the length ∫ (E u′² + 2F u′v′ + G v′²) dt?','no: that totals the speed squared; length totals the speed, its square root',['yes','yes, at speed 1 only','no: length has no F'],'Ruler-length technique.'],
+  ['Is one degree of longitude the same length everywhere on a sphere?','no: G = R² cos² φ; it shrinks toward the poles',['yes','no: it grows toward the poles','yes: the sphere is round'],'The ruler of the sphere in latitude φ and longitude.'],
+  ['Is the area ∬ (EG − F²) du dv?','no: the area of a small piece is |ru × rv|, the square root',['yes','no: the area is ∬ EG du dv','no: the area is ∬ (E + G) du dv'],'Ruler-area technique: ∬ √(EG − F²) du dv.'],
+  ['The knobs change by T, with slope grid J. What is the new ruler grid?','Jᵀ g J',['J g','J⁻¹ g J','g'],'Ruler-change technique: both rulers give the same length to every curve.'],
+  ['What is the disc distance from 0 to a point at flat distance ρ along a diameter?','ln((1 + ρ)/(1 − ρ))',['ρ','2ρ','ln(1 + ρ)'],'Disc-ruler technique.']];
+const RG29=[[4,0,9,6],[2,1,1,1],[5,2,1,1],[5,1,2,3],[4,0,1,2],[10,3,1,1],[9,0,4,6],[8,2,1,2],[13,2,1,3]];
+const RA29=[['1','1/2','1','π/3','1/2'],['1','0','1','π/2','0'],['2','1','1','π/4','√2/2'],['1','−1/2','1','2π/3','−1/2'],['2','−1','1','3π/4','−√2/2'],['4','0','9','π/2','0'],['4','3','9','π/3','1/2']];
+QP.push({id:'29d.ruler',step:'29d',label:'the ruler grid',open:()=>measured('29d'),make(){ return writtenQ('29d.ruler',WD29); }},
+  {id:'29d.work',step:'29d',mode:'work',label:'length, angle, area',open:()=>measured('29d'),make(){
+    const t=rnd(3);
+    if(t===0){ const [a,p]=pick([[1,3],[3,1]]), [b,q]=pick([[1,4],[2,2],[4,1]]), T=1+rnd(4), right=String(5*T), wrong=uniq(right,[String(25*T),String(7*T),String((p+q)*T),String(5),String(a*a*p+b*b*q)],3); if(wrong.length<3) return null;
+      return {index:'q:29d.work[l;'+[a,p,b,q,T].join(';')+']', lines:[['ds² = '+tm25([[a*a,'du²'],[b*b,'dv²']]),'the ruler of a patch'],['a curve has u′ = '+p+' and v′ = '+q+', for 0 ≤ t ≤ '+T,'given']], ask:'What is the length of the curve?', right, opts:shuffle([right,...wrong]), lead:'', why:'Ruler-length technique: the speed is √('+a*a+' · '+p*p+' + '+b*b+' · '+q*q+') = 5, totalled over '+T+'.'}; }
+    if(t===1){ const [E,F,G,r]=pick(RG29), w=1+rnd(3), h=1+rnd(3), right=String(r*w*h), wrong=uniq(right,[String(r*r*w*h),String(w*h),String(E*G*w*h),String((E+G)*w*h),String(r*(w+h)),String(r*w*h+1)],3); if(wrong.length<3) return null;
+      return {index:'q:29d.work[a;'+[E,F,G,w,h].join(';')+']', lines:[['E = '+E+', F = '+F+' and G = '+G+' at every point','the ruler of a patch'],['u runs from 0 to '+w+' and v from 0 to '+h,'given']], ask:'What is the area of the patch?', right, opts:shuffle([right,...wrong]), lead:'', why:'Ruler-area technique: √(EG − F²) = √('+E*G+' − '+F*F+') = '+r+', totalled over '+w+' · '+h+'.'}; }
+    const [E,F,G,right,cs]=pick(RA29);
+    return {index:'q:29d.work[g;'+[E,F,G].join(';')+']', lines:[['E = '+E+', F = '+F+' and G = '+G+' at a point','the ruler of a patch']], ask:'At which angle do the directions (1, 0) and (0, 1) leave that point?', right, opts:shuffle([right,...take(['π/6','π/4','π/3','π/2','2π/3','3π/4'].filter(x=>x!==right),3)]), lead:'', why:'Ruler-angle technique: for these two directions cos θ = F/(√E √G) = '+cs+'.'}; }},
+  {id:'29d.line',step:'29d',mode:'proof',label:'the square root',open:()=>measured('29d'),make(){
+    const [E,F,G,r]=pick(RG29.filter(x=>x[3]>1)), w=1+rnd(3), h=1+rnd(3), [rho,d]=pick(DR29), V=[
+      ['d1',[['E = '+E+', F = '+F+' and G = '+G+' at every point, with u from 0 to '+w+' and v from 0 to '+h,'given'],['the area of the patch is '+r*w*h,'the ruler-area technique: √(EG − F²) = '+r]],2,0,'√('+E*G+' − '+F*F+') = '+r+'.'],
+      ['d2',[['E = '+E+', F = '+F+' and G = '+G+' at every point, with u from 0 to '+w+' and v from 0 to '+h,'given'],['the area of the patch is '+r*r*w*h,'the ruler-area technique: EG − F² = '+r*r]],2,1,'The area of a small piece is the square root, '+r+'.'],
+      ['d3',[['r(u, v) is a patch, with E = ru · ru, F = ru · rv and G = rv · rv','given'],['ds² = E du² + F du dv + G dv²','the ruler grid']],2,1,'The middle term comes twice: 2F du dv.'],
+      ['d4',[['(u, v) = T(s, t), with slope grid J','given'],['the ruler in s and t gives every curve the same length as the ruler in u and v','the ruler-change technique']],2,0,'The new ruler grid is Jᵀ g J.'],
+      ['d5',[['a curve on the patch has speed √(E u′² + 2F u′v′ + G v′²)','given'],['its length is the total of E u′² + 2F u′v′ + G v′²','the ruler-length technique']],2,1,'That totals the speed squared. Length totals the speed.'],
+      ['d6',[['a point lies on a diameter of the disc plane, at flat distance '+rho+' from the centre','given'],['its disc distance from 0 is '+d,'the disc-ruler technique']],2,0,'ln((1 + ρ)/(1 − ρ)) with ρ = '+rho+'.']];
+    return line28('29d.line',V,[E,F,G,w,h,rho]); }});
+
+/* ---------- 29e Curvature Lives in the Ruler ---------- */
+const WE29=[
+  ['A tube is curved. Is its surface bend not 0?','it is 0: one main bend is 0, so their product is 0',['it is not 0','it is 1/r','it is 1/r²'],'Surface-bend technique: the product of the main bends.'],
+  ['Is K = LN − M² in every coordinates?','no: only where the ruler grid is the identity; in general divide by EG − F²',['yes','no: K = LN + M²','no: K = (L + N)/2'],'Surface-bend technique: K = (LN − M²)/(EG − F²).'],
+  ['Is the bend of a curve |γ″(t)| for any tracing?','no: only at speed 1; a faster tracing gives a larger second slope',['yes','yes, for plane curves','no: it is |γ′(t)|'],'Curve-bend technique.'],
+  ['K is found with n. Does it depend on the space around the surface?','no: E, F, G alone fix it',['yes','yes: n points into that space','only for a sphere'],'Remarkable technique.'],
+  ['What is the bend of a circle of radius r?','1/r at every point',['r','0','2πr'],'Curve-bend technique.'],
+  ['For the ruler ds² = du² + g² dv², what is the surface bend?','K = −guu/g',['K = guu/g','K = −gu/g','K = −guu'],'Straight-out technique.']];
+QP.push({id:'29e.bend',step:'29e',label:'bend of a surface',open:()=>measured('29e'),make(){ return writtenQ('29e.bend',WE29); }},
+  {id:'29e.work',step:'29e',mode:'work',label:'find the bend',open:()=>measured('29e'),make(){
+    const t=rnd(4), k=2+rnd(4);
+    if(t===0){ const a=2+rnd(4), b=2+rnd(4), [desc,right,why]=pick([['a sphere of radius '+a+', with main bends 1/'+a+' and 1/'+a,'1/'+a*a,'1/'+a+' · 1/'+a+'.'],['a tube of radius '+a+', with main bends 1/'+a+' and 0','0','1/'+a+' · 0.'],['a saddle point with main bends 1/'+a+' and −1/'+b,'−1/'+a*b,'1/'+a+' · (−1/'+b+').'],['a plane, with main bends 0 and 0','0','0 · 0.']]), wrong=uniq(right,['1/'+a,'1/'+a*a,'0','−1/'+a*b,'2/'+a,'1/'+a*b],3);
+      return {index:'q:29e.work[m;'+[desc].join(';')+']', lines:[[desc,'given']], ask:'What is the surface bend K there?', right, opts:shuffle([right,...wrong]), lead:'', why:'Surface-bend technique: K is the product of the main bends, '+why}; }
+    if(t===1){ const L=nz25(4), N=nz25(4), M=rnd(4), [E,F,G]=pick([[1,0,1],[2,0,1],[2,1,1],[4,0,1],[3,1,1],[2,0,2]]), top=L*N-M*M, bot=E*G-F*F, right=fshow(fr(top,bot)), wrong=uniq(right,[sg(top),fshow(fr(L*N+M*M,bot)),fshow(fr(-top,bot)),top?fshow(fr(bot,top)):'1',fshow(fr(top,E*G)),fshow(fr(L*N,bot))],3); if(wrong.length<3) return null;
+      return {index:'q:29e.work[k;'+[L,M,N,E,F,G].join(';')+']', lines:[['L = '+sg(L)+', M = '+M+' and N = '+sg(N)+' at a point','given'],['E = '+E+', F = '+F+' and G = '+G+' there','the ruler grid']], ask:'What is the surface bend K there?', right, opts:shuffle([right,...wrong]), lead:'', why:'Surface-bend technique: K = (LN − M²)/(EG − F²) = '+sg(top)+'/'+bot+'.'}; }
+    if(t===2){ const [g,right,why]=pick([['sin u','1','guu = −sin u = −g.'],['sin '+k+'u',String(k*k),'guu = −'+k*k+' sin '+k+'u = −'+k*k+'g.'],['u','0','guu = 0.'],['e^u','−1','guu = e^u = g.'],['e^('+k+'u)','−'+k*k,'guu = '+k*k+'e^('+k+'u) = '+k*k+'g.'],['1','0','guu = 0.']]), wrong=uniq(right,['1','0','−1',String(k*k),'−'+k*k,String(k),'−'+k],3);
+      return {index:'q:29e.work[g;'+g+']', lines:[['ds² = du² + g² dv², with g = '+g,'the ruler of a surface']], ask:'What is the surface bend K?', right, opts:shuffle([right,...wrong]), lead:'', why:'Straight-out technique: K = −guu/g. Here '+why}; }
+    const L=nz25(3), M=nz25(2), N=nz25(3), [d,f]=pick([['(1, 0)',()=>L],['(0, 1)',()=>N],['(3/5, 4/5)',()=>null]]), val=f();
+    if(val===null){ const top=9*L+24*M+16*N, right=fshow(fr(top,25)), wrong=uniq(right,[fshow(fr(9*L+12*M+16*N,25)),fshow(fr(3*L+4*N,5)),sg(L+2*M+N),sg(L*N-M*M),fshow(fr(-top,25))],3); if(wrong.length<3) return null;
+      return {index:'q:29e.work[n;'+[L,M,N,d].join(';')+']', lines:[['L = '+sg(L)+', M = '+sg(M)+' and N = '+sg(N)+' at a point','given'],['a curve passes at speed 1 in the direction (3/5, 4/5)','given']], ask:'By how much does it bend toward n?', right, opts:shuffle([right,...wrong]), lead:'', why:'Normal-bend technique: L u′² + 2M u′v′ + N v′² = ('+sg(9*L)+' + '+par10(24*M)+' + '+par10(16*N)+')/25.'}; }
+    const right=sg(val), wrong=uniq(right,[sg(L),sg(N),sg(M),sg(L+2*M+N),sg(L*N-M*M),sg(-val)],3); if(wrong.length<3) return null;
+    return {index:'q:29e.work[n;'+[L,M,N,d].join(';')+']', lines:[['L = '+sg(L)+', M = '+sg(M)+' and N = '+sg(N)+' at a point','given'],['a curve passes at speed 1 in the direction '+d,'given']], ask:'By how much does it bend toward n?', right, opts:shuffle([right,...wrong]), lead:'', why:'Normal-bend technique: L u′² + 2M u′v′ + N v′², and only one of u′, v′ is not 0.'}; }},
+  {id:'29e.line',step:'29e',mode:'proof',label:'the product of main bends',open:()=>measured('29e'),make(){
+    const r=2+rnd(5), k=2+rnd(4), L=1+rnd(4), N=1+rnd(4), V=[
+      ['e1',[['a circle has radius '+r,'given'],['its bend is 1/'+r+' at every point','the curve-bend technique']],2,0,'A circle of radius r has bend 1/r.'],
+      ['e2',[['a tube has radius '+r,'given'],['its surface bend is 1/'+r,'it is curved']],2,1,'One main bend is 0, so the product is 0.'],
+      ['e3',[['L = '+L+', M = 0 and N = '+N+' at a point, where E = 2, F = 0 and G = 1','given'],['K = '+fshow(fr(L*N,2))+' there','the surface-bend technique: (LN − M²)/(EG − F²)']],2,0,L*N+'/2.'],
+      ['e4',[['L = '+L+', M = 0 and N = '+N+' at a point, where E = 2, F = 0 and G = 1','given'],['K = '+L*N+' there','the surface-bend technique: LN − M²']],2,1,'Divide by EG − F² = 2: K = '+fshow(fr(L*N,2))+'.'],
+      ['e5',[['ds² = du² + g² dv², with g = e^('+k+'u)','given'],['K = −'+k*k,'the straight-out technique: guu = '+k*k+'g']],2,0,'K = −guu/g.'],
+      ['e6',[['two surfaces have the same E, F and G at matching points','given'],['they have the same K at matching points','the remarkable technique']],2,0,'K can be computed from E, F, G and their partial slopes alone.'],
+      ['e7',[['γ is traced at speed '+k,'given'],['its bend is |γ″(t)|','the curve-bend technique']],2,1,'Only at speed 1. A faster tracing gives a larger second slope.']];
+    return line28('29e.line',V,[r,k,L,N]); }});
+
+/* ---------- 29f Total Curvature Counts Holes ---------- */
+const WF29=[
+  ['Has a bigger sphere a bigger total bend?','no: K falls as 1/R² while the area grows as R²; the total is 4π',['yes','yes: it has more skin','no: it has a smaller one'],'Sphere-total technique.'],
+  ['A doughnut has total bend 0. Is K = 0 everywhere on it?','no: K > 0 outside and K < 0 round the hole, cancelling',['yes','yes: it is a rolled-up plane','no: K > 0 everywhere'],'Hole-count technique: 4π(1 − g) with g = 1.'],
+  ['Does V − E + F depend on how finely the surface is cut?','no: it equals the total bend over 2π, which does not',['yes','yes: more triangles, larger count','only for a sphere'],'Excess-count technique.'],
+  ['Does squeezing a ball into an egg change its total bend?','no: only the slopes at the two ends matter, and they stay 1 and −1',['yes','yes: the egg is sharper','no: K is the same at every point'],'Spun-total technique: −2π(ρ′(b) − ρ′(a)).'],
+  ['What is V − E + F for a closed surface with g holes?','2 − 2g',['2 + 2g','2g','1 − g'],'Hole-count technique.'],
+  ['What is the total bend of a closed surface with g holes?','4π(1 − g)',['4πg','2π(1 − g)','4π(1 + g)'],'Hole-count technique.']];
+QP.push({id:'29f.total',step:'29f',label:'total bend',open:()=>measured('29f'),make(){ return writtenQ('29f.total',WF29); }},
+  {id:'29f.work',step:'29f',mode:'work',label:'count the holes',open:()=>measured('29f'),make(){
+    const t=rnd(4), g=rnd(4), m=20+2*rnd(6), F=2*m, E=3*m, V=2-2*g+m;
+    if(t===0){ const right=pi21(4*(1-g),1), wrong=uniq(right,[pi21(4*g,1),pi21(2*(1-g),1),pi21(4*(1+g),1),pi21(2-2*g,1),pi21(4,1),'0'],3); if(wrong.length<3) return null;
+      return {index:'q:29f.work[h;'+g+']', lines:[['a closed surface has '+(g===1?'1 hole':g+' holes'),'given']], ask:'What is its total bend?', right, opts:shuffle([right,...wrong]), lead:'', why:'Hole-count technique: 4π(1 − g) = 4π · '+par10(1-g)+'.'}; }
+    if(t===1){ const right=String(g), wrong=uniq(right,['0','1','2','3','4'].filter(x=>x!==right),3);
+      return {index:'q:29f.work[c;'+[g,m].join(';')+']', lines:[['a closed surface is cut into triangles, with '+V+' corners, '+E+' edges and '+F+' faces','given']], ask:'How many holes has it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Hole-count technique: V − E + F = '+V+' − '+E+' + '+F+' = '+sg(2-2*g)+' = 2 − 2g.'}; }
+    if(t===2){ const right=pi21(2*(2-2*g),1), wrong=uniq(right,[pi21(2-2*g,1),pi21(4*(2-2*g),1),pi21(2*(2+2*g),1),pi21(4,1),'0',pi21(2*(1-2*g),1)],3); if(wrong.length<3) return null;
+      return {index:'q:29f.work[e;'+[g,m].join(';')+']', lines:[['a closed surface is cut into triangles, with '+V+' corners, '+E+' edges and '+F+' faces','given']], ask:'What is its total bend?', right, opts:shuffle([right,...wrong]), lead:'', why:'Excess-count technique: 2π(V − E + F) = 2π · '+par10(V-E+F)+'.'}; }
+    const p=pick([1,0,-1]), q=pick([1,0,-1]), right=pi21(-2*(q-p),1), wrong=uniq(right,[pi21(2*(q-p),1),pi21(-2*(q+p),1),pi21(-(q-p),1),pi21(4,1),'0',pi21(-4,1),pi21(2,1)],3); if(wrong.length<3) return null;
+    return {index:'q:29f.work[s;'+[p,q].join(';')+']', lines:[['a spun surface runs from u = a to u = b','given'],['ρ′(a) = '+sg(p)+' and ρ′(b) = '+sg(q),'the slopes of its radius at the two ends']], ask:'What is its total bend?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spun-total technique: −2π(ρ′(b) − ρ′(a)) = −2π · '+par10(q-p)+'.'}; }},
+  {id:'29f.line',step:'29f',mode:'proof',label:'what cutting cannot change',open:()=>measured('29f'),make(){
+    const R=2+rnd(5), g=rnd(4), V=[
+      ['f1',[['a sphere has radius '+R,'given'],['its total bend is 4π','the sphere-total technique']],2,0,'A sphere of any radius has total bend 4π.'],
+      ['f2',[['a sphere has radius '+R,'given'],['its total bend is '+pi21(4*R*R,1),'its area']],2,1,'K = 1/'+R*R+' and the area is '+pi21(4*R*R,1)+': the total is 4π.'],
+      ['f3',[['a closed surface has '+(g===1?'1 hole':g+' holes')+', and is cut into triangles','given'],['V − E + F = '+sg(2-2*g),'the hole-count technique']],2,0,'2 − 2g, for every cutting into triangles.'],
+      ['f4',[['a doughnut has total bend 0','given'],['K = 0 at every point of it','the total is 0']],2,1,'K > 0 outside and K < 0 round the hole, cancelling.'],
+      ['f5',[['one cutting of a closed surface into triangles has V − E + F = '+sg(2-2*g),'given'],['a finer cutting has V − E + F = '+sg(2-2*g)+' too','the hole-count technique']],2,0,'The count does not depend on the cutting.'],
+      ['f6',[['a spun surface has ρ′(a) = 1 and ρ′(b) = −1','given'],['its total bend is 4π','the spun-total technique: −2π(−1 − 1)']],2,0,'Only the slopes at the ends matter.'],
+      ['f7',[['a closed surface has '+(g+2)+' holes','given'],['its total bend is '+pi21(4*(g+2),1),'4π for each hole']],2,1,'Hole-count technique: 4π(1 − g) = '+pi21(4*(1-g-2),1)+'.']];
+    return line28('29f.line',V,[R,g]); }});
+
+/* ---------- 29g Shortest Paths ---------- */
+const WG29=[
+  ['Is every curve that obeys the best-path equation shortest?','no: the equation is asked of best curves; it does not make one best (two arcs of a great circle)',['yes','yes, on a sphere','no: none is'],'Best-path technique: if y makes J least, then it obeys the equation.'],
+  ['May the nudges move the ends?','no: the ends are fixed; η(a) = η(b) = 0 dropped the edge terms of parts',['yes','yes, by small amounts','only the far end'],'The curves compared have the same ends.'],
+  ['Is the circle of latitude 45° N the shortest way between two points on it?','no: it does not obey the path equations; it turns along the surface',['yes','yes: it stays at one latitude','no: it is too short'],'Path-equations technique.'],
+  ['∫ hη = 0 for one nudge η. Is h = 0?','not from that: it must hold for every nudge; the bump is chosen after h',['yes','yes, when η > 0','no: then h = η'],'The bump is put where h is not 0.'],
+  ['y makes J least among curves with the same ends. What does y obey?','d/dx (∂L/∂p) = ∂L/∂y',['∂L/∂p = ∂L/∂y','d/dx (∂L/∂y) = ∂L/∂p','L = 0'],'Best-path technique.'],
+  ['What is the total bend inside a small triangle with straightest sides?','its excess, α + β + γ − π',['its area','π','α + β + γ'],'Triangle-total technique.']];
+QP.push({id:'29g.paths',step:'29g',label:'best paths',open:()=>measured('29g'),make(){ return writtenQ('29g.paths',WG29); }},
+  {id:'29g.work',step:'29g',mode:'work',label:'the best-path equation',open:()=>measured('29g'),make(){
+    const t=rnd(3), k=2+rnd(5);
+    if(t===0){ const [L,right,why]=pick([['½p² + '+k+'y','y″ = '+k,'∂L/∂p = p and ∂L/∂y = '+k+'.'],['½p² − ½ · '+k+'y²','y″ = −'+k+'y','∂L/∂p = p and ∂L/∂y = −'+k+'y.'],['½p² + ½ · '+k+'y²','y″ = '+k+'y','∂L/∂p = p and ∂L/∂y = '+k+'y.'],['½p²','y″ = 0','∂L/∂p = p and ∂L/∂y = 0.']]), wrong=uniq(right,['y″ = '+k,'y″ = −'+k+'y','y″ = '+k+'y','y″ = 0','y′ = '+k,'y″ = −'+k],3);
+      return {index:'q:29g.work[b;'+L+']', lines:[['L(y, p) = '+L+', with p standing for y′','the thing totalled']], ask:'Which equation does a best curve obey?', right, opts:shuffle([right,...wrong]), lead:'', why:'Best-path technique: d/dx (∂L/∂p) = ∂L/∂y. Here '+why}; }
+    if(t===1){ const a=2+rnd(5), b=2+rnd(5), c=2+rnd(5); if(a+b+c===12) return null;
+      const right=pi21(a+b+c-12,12), wrong=uniq(right,[pi21(12-a-b-c,12),pi21(a+b+c,12),pi21(a+b+c-6,12),'0',pi21(1,1)],3); if(wrong.length<3) return null;
+      return {index:'q:29g.work[t;'+[a,b,c].join(';')+']', lines:[['a small triangle with straightest sides has angles '+pi21(a,12)+', '+pi21(b,12)+' and '+pi21(c,12),'on a surface with a ruler']], ask:'What is the total bend inside it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Triangle-total technique: the excess α + β + γ − π = '+pi21(a+b+c,12)+' − π.'}; }
+    const [g,gu]=pick([['u',1],['2u',2],['3u',3],['1',0]]), n=2+rnd(5), right=gu?pi21(-gu,n):'0', wrong=uniq(right,[pi21(gu||1,n),pi21(-1,n),pi21(-2*(gu||1),n),'0',pi21(-(gu||1),2*n),pi21(1,1)],3); if(wrong.length<3) return null;
+    return {index:'q:29g.work[h;'+[g,n].join(';')+']', lines:[['ds² = du² + g² dv², with g = '+g,'the ruler'],['along a straightest path, v grows by '+pi21(1,n),'given']], ask:'By how much does the heading change?', right, opts:shuffle([right,...wrong]), lead:'', why:'Heading technique: dψ = −gu dv, and gu = '+gu+' here.'}; }},
+  {id:'29g.line',step:'29g',mode:'proof',label:'asked of the best',open:()=>measured('29g'),make(){
+    const k=2+rnd(5), a=2+rnd(5), b=2+rnd(5), c=2+rnd(5), V=[
+      ['g1',[['y makes J least among curves with the same ends','given'],['d/dx (∂L/∂p) = ∂L/∂y along y','the best-path technique']],2,0,'The equation is asked of best curves.'],
+      ['g2',[['d/dx (∂L/∂p) = ∂L/∂y along y','given'],['y makes J least among curves with the same ends','the best-path technique']],2,1,'The technique runs the other way. Two arcs of a great circle both obey it.'],
+      ['g3',[['a small triangle with straightest sides has angles '+pi21(a,12)+', '+pi21(b,12)+' and '+pi21(c,12),'given'],['its total bend is '+pi21(a+b+c-12,12),'the triangle-total technique']],2,0,'The excess is '+pi21(a+b+c,12)+' − π.'],
+      ['g4',[['∫ hη = 0 for one nudge η','given'],['h = 0','the total is 0']],2,1,'It must hold for every nudge. The bump is chosen after h.'],
+      ['g5',[['L(y, p) = ½p² + '+k+'y','given'],['a best curve obeys y″ = '+k,'the best-path technique: ∂L/∂p = p and ∂L/∂y = '+k]],2,0,'d/dx (p) = y″.'],
+      ['g6',[['η is a nudge with η(a) ≠ 0','given'],['y + εη is one of the curves compared with y','a nudge']],2,1,'The ends are fixed: η(a) = η(b) = 0.'],
+      ['g7',[['ds² = du² + g² dv², and a straightest path crosses a stretch where gu = 0','given'],['its heading does not change there','the heading technique: dψ = −gu dv']],2,0,'−gu dv = 0.']];
+    return line28('29g.line',V,[k,a,b,c]); }});
+
+/* ===== Laundry 5, rung 29 (floor 5 pools, stage AB), part 2: 29h to 29m ===== */
+
+/* ---------- 29h Spaces Flat up Close ---------- */
+const WH29=[
+  ['Are latitude and longitude one chart of the whole sphere?','no: at the poles every longitude names the same point, and EG − F² = 0',['yes','yes: every point has both','no: they miss the equator'],'Two-charts technique: the unit sphere is covered by two charts.'],
+  ['Does a chart keep lengths?','no: a chart is only one-to-one and smooth; the ruler on the page says what the lengths are',['yes','yes, near its centre','no: it keeps areas instead'],'Page-agree technique: the ruler gives the same length on every page.'],
+  ['Are the page grids of two charts equal on the overlap?','no: they match through Jᵀ g J, not equality',['yes','yes, up to a constant','no: they are unrelated'],'J is the slope grid of the change of page.'],
+  ['Must a surface sit inside space?','no: an atlas and a ruler are enough',['yes','yes: or it has no bend','only when it is closed'],'Page-agree technique: length, angle, area and surface bend come from the pages.'],
+  ['How does the two-charts technique cover the unit sphere?','with two charts, one from each pole, each missing its own pole',['with one chart','with four charts, one for each quarter','with six charts, one for each face'],'Two-charts technique.'],
+  ['What is the change of page for the two charts of the sphere?','(X, Y) ↦ (X, Y)/(X² + Y²)',['(X, Y) ↦ (−X, −Y)','(X, Y) ↦ (X, Y)/(1 − X² − Y²)','(X, Y) ↦ (Y, X)'],'Page-change technique.']];
+const CH29=[['(2/3, 2/3, 1/3)','(1, 1)','(1/2, 1/2)','(2/3, 2/3)'],['(3/5, 0, 4/5)','(3, 0)','(1/3, 0)','(3/5, 0)'],['(3/5, 0, −4/5)','(1/3, 0)','(3, 0)','(3/5, 0)'],['(0, 4/5, 3/5)','(0, 2)','(0, 1/2)','(0, 4/5)'],['(0, 4/5, −3/5)','(0, 1/2)','(0, 2)','(0, 4/5)'],['(2/3, 1/3, 2/3)','(2, 1)','(2/5, 1/5)','(2/3, 1/3)'],['(2/3, −2/3, 1/3)','(1, −1)','(1/2, −1/2)','(2/3, −2/3)']];
+const PC29=[['(1, 1)','(1/2, 1/2)','(1, 1)/2'],['(3, 0)','(1/3, 0)','(3, 0)/9'],['(0, 2)','(0, 1/2)','(0, 2)/4'],['(2, 1)','(2/5, 1/5)','(2, 1)/5'],['(1, −1)','(1/2, −1/2)','(1, −1)/2'],['(3, 4)','(3/25, 4/25)','(3, 4)/25'],['(1, 2)','(1/5, 2/5)','(1, 2)/5']];
+QP.push({id:'29h.charts',step:'29h',label:'charts and pages',open:()=>measured('29h'),make(){ return writtenQ('29h.charts',WH29); }},
+  {id:'29h.work',step:'29h',mode:'work',label:'from page to page',open:()=>measured('29h'),make(){
+    const t=rnd(3);
+    if(t===0){ const [P,N,S,F]=pick(CH29), n=rnd(2), right=n?N:S, wrong=uniq(right,[n?S:N,F,...shuffle(CH29.map(x=>x[1]))],3);
+      return {index:'q:29h.work[c;'+[P,n].join(';')+']', lines:[['P = '+P,'a point of the unit sphere']], ask:'Where does the chart from the '+(n?'north':'south')+' pole put P?', right, opts:shuffle([right,...wrong]), lead:'', why:'Two-charts technique: (x, y, z) ↦ (x, y)/(1 '+(n?'−':'+')+' z).'}; }
+    if(t===1){ const [X,Y,w]=pick(PC29), wrong=uniq(Y,[X,...shuffle(PC29.map(x=>x[1]))],3);
+      return {index:'q:29h.work[p;'+X+']', lines:[['a point stands at '+X+' on the page from the north pole','given']], ask:'Where does it stand on the page from the south pole?', right:Y, opts:shuffle([Y,...wrong]), lead:'', why:'Page-change technique: (X, Y) ↦ (X, Y)/(X² + Y²) = '+w+'.'}; }
+    const right=pick(['the length of a curve','the angle between two curves','the area of a region','the surface bend at a point']);
+    return {index:'q:29h.work[a;'+right+']', lines:[['a surface has an atlas and a ruler','given']], ask:'Which comes out the same on every page that shows it?', right, opts:shuffle([right,'the coordinates of a point','the ruler grid E, F, G','the flat distance between two points of the page']), lead:'', why:'Page-agree technique: length, angle, area and surface bend come out the same on every page. Coordinates and grids change from page to page.'}; }},
+  {id:'29h.line',step:'29h',mode:'proof',label:'what pages agree on',open:()=>measured('29h'),make(){
+    const [X,Y,w]=pick(PC29), V=[
+      ['h1',[['S is the unit sphere','given'],['one chart shows every point of S but the north pole','the two-charts technique']],2,0,'(x, y, z) ↦ (x, y)/(1 − z).'],
+      ['h2',[['S is the unit sphere','given'],['latitude and longitude are a chart of all of S','every point has a latitude and a longitude']],2,1,'At the poles every longitude names the same point.'],
+      ['h3',[['two charts overlap, with ruler grids g and g′ on their pages','given'],['g = g′ on the overlap','the page-agree technique']],2,1,'The grids match through Jᵀ g J. What agrees is length, angle, area and surface bend.'],
+      ['h4',[['a curve lies in the overlap of two pages of a surface with a ruler','given'],['both pages give it the same length','the page-agree technique']],2,0,'The length comes out the same on every page that shows the curve.'],
+      ['h5',[['a point stands at '+X+' on the page from the north pole','given'],['on the page from the south pole it stands at '+Y,'the page-change technique']],2,0,'(X, Y)/(X² + Y²) = '+w+'.'],
+      ['h6',[['M has an atlas and a ruler','given'],['M sits inside space','it is a surface']],2,1,'An atlas and a ruler are enough.']];
+    return line28('29h.line',V,[X]); }});
+
+/* ---------- 29i Spherical Triangles by Hand ---------- */
+const WI29=[
+  ['Do the angles of the triangle with corners at the north pole, P and Q add to π?','no: they add to π plus the excess',['yes','no: they add to less than π','no: they add to 2π'],'Excess-area technique of 29b.'],
+  ['Does the flat cosine-side rule hold on the sphere?','only nearly, for small triangles',['yes','never, even nearly','yes, on a sphere of radius 1'],'Sphere-cosine technique: cos a = cos b cos c + sin b sin c cos A.'],
+  ['Between two places on one latitude, is the circle of latitude the shortest way?','no: off the equator it is not a great circle',['yes','yes: it never turns north or south','no: no way is shortest'],'Great-circle technique.'],
+  ['Is sin A / a = sin B / b, with sides in km?','no: the sphere-sine technique takes the sines of the sides, as angles at O',['yes','yes, on a sphere of radius 1','no: the sides are squared'],'Sphere-sine technique: sin A / sin a = sin B / sin b.'],
+  ['What is cos a, in a triangle on the sphere of radius 1?','cos b cos c + sin b sin c cos A',['cos b cos c − sin b sin c cos A','b² + c² − 2bc cos A','sin b sin c + cos b cos c cos A'],'Sphere-cosine technique.'],
+  ['Where does a great circle route reach its highest latitude?','where cos φₘ = cos φ₁ sin h; there it heads due east or due west',['at its start','at its end','where it heads due north'],'Farthest-north technique.']];
+const SC29=[['π/2','π/2','π/3','π/3','0 · 0 + 1 · 1 · 1/2'],['π/2','π/2','π/2','π/2','0 · 0 + 1 · 1 · 0'],['π/2','π/2','2π/3','2π/3','0 · 0 + 1 · 1 · (−1/2)'],['π/2','π/2','π/4','π/4','0 · 0 + 1 · 1 · √2/2'],['π/2','π/3','π/2','π/2','0 · 1/2 + 1 · √3/2 · 0'],['π/4','π/4','π/2','π/3','1/2 + 1/2 · 0'],['π/4','3π/4','π/2','2π/3','−1/2 + 1/2 · 0']];
+const GC29=[['P is the north pole, and Q has latitude π/6',1,3,'cos δ = sin φ₂ = 1/2'],['P is the north pole, and Q has latitude π/4',1,4,'cos δ = sin φ₂ = √2/2'],['P is the north pole, and Q has latitude π/3',1,6,'cos δ = sin φ₂ = √3/2'],['P and Q are on the equator, with longitudes π/3 apart',1,3,'cos δ = cos Δλ = 1/2'],['P and Q are on the equator, with longitudes π/2 apart',1,2,'cos δ = cos Δλ = 0'],['P and Q are on the equator, with longitudes 2π/3 apart',2,3,'cos δ = cos Δλ = −1/2'],['P is the north pole, and Q is on the equator',1,2,'cos δ = sin φ₂ = 0']];
+const FN29=[['the equator','π/6','π/3','1 · 1/2'],['the equator','π/4','π/4','1 · √2/2'],['the equator','π/3','π/6','1 · √3/2'],['the equator','π/2','0','1 · 1'],['latitude π/3','π/2','π/3','1/2 · 1'],['latitude π/4','π/2','π/4','√2/2 · 1']];
+QP.push({id:'29i.sides',step:'29i',label:'sides as angles',open:()=>measured('29i'),make(){ return writtenQ('29i.sides',WI29); }},
+  {id:'29i.work',step:'29i',mode:'work',label:'great circles by hand',open:()=>measured('29i'),make(){
+    const t=rnd(3), O=['π/6','π/4','π/3','π/2','2π/3','3π/4'];
+    if(t===0){ const [b,c,A,right,w]=pick(SC29);
+      return {index:'q:29i.work[c;'+[b,c,A].join(';')+']', lines:[['b = '+b+', c = '+c+' and A = '+A,'a triangle on the sphere of radius 1']], ask:'What is the side a?', right, opts:shuffle([right,...take(O.filter(x=>x!==right),3)]), lead:'', why:'Sphere-cosine technique: cos a = cos b cos c + sin b sin c cos A = '+w+'.'}; }
+    if(t===1){ const [desc,n,d,w]=pick(GC29), R=1+rnd(6), right=pi21(R*n,d), wrong=uniq(right,[pi21(R*n,2*d),pi21(2*R*n,d),pi21(n,d),pi21(R,1),pi21(R*R*n,d),pi21(R*(d-n),d)],3); if(wrong.length<3) return null;
+      return {index:'q:29i.work[g;'+[desc,R].join(';')+']', lines:[[desc,'on a sphere of radius '+R]], ask:'What is the great circle distance from P to Q?', right, opts:shuffle([right,...wrong]), lead:'', why:'Great-circle technique: the distance is Rδ, and '+w+', so δ = '+pi21(n,d)+'.'}; }
+    const [st,h,right,w]=pick(FN29);
+    return {index:'q:29i.work[n;'+[st,h].join(';')+']', lines:[['a great circle route leaves '+st+' at the heading '+h+' from north','given']], ask:'What is the highest latitude it reaches?', right, opts:shuffle([right,...take(['0','π/6','π/4','π/3','π/2','5π/12'].filter(x=>x!==right),3)]), lead:'', why:'Farthest-north technique: cos φₘ = cos φ₁ sin h = '+w+'.'}; }},
+  {id:'29i.line',step:'29i',mode:'proof',label:'sines of the sides',open:()=>measured('29i'),make(){
+    const k=2+rnd(5), R=1+rnd(6), [st,h,top,w]=pick(FN29), V=[
+      ['i1',[['a triangle on the sphere of radius 1 has b = c = π/2 and A = '+pi21(1,k),'given'],['a = '+pi21(1,k),'the sphere-cosine technique: cos a = 0 · 0 + 1 · 1 · cos A']],2,0,'cos a = cos A, and both lie between 0 and π.'],
+      ['i2',[['a triangle on a sphere has sides a and b, in km','given'],['sin A / a = sin B / b','the sphere-sine technique']],2,1,'The technique takes the sines of the sides, as angles at O.'],
+      ['i3',[['P and Q lie on a sphere of radius '+R+', at the angle '+pi21(1,k)+' apart, seen from the centre','given'],['the great circle distance from P to Q is '+pi21(R,k),'the great-circle technique: Rδ']],2,0,R+' · '+pi21(1,k)+'.'],
+      ['i4',[['a great circle route leaves '+st+' at the heading '+h+' from north','given'],['the highest latitude it reaches is '+top,'the farthest-north technique: cos φₘ = '+w]],2,0,'cos φₘ = cos φ₁ sin h.'],
+      ['i5',[['P and Q lie on one circle of latitude, off the equator','given'],['that circle is the shortest way from P to Q','it keeps one latitude']],2,1,'Off the equator it is not a great circle.'],
+      ['i6',[['a triangle on the sphere has sides a, b, c and the angle A across from a','given'],['a² = b² + c² − 2bc cos A','the cosine-side rule']],2,1,'The flat rule holds only nearly, for small triangles. On the sphere, cos a = cos b cos c + sin b sin c cos A.']];
+    return line28('29i.line',V,[k,R,st,h]); }});
+
+/* ---------- 29j Hyperbolic Geometry by Hand ---------- */
+const WJ29=[
+  ['Is d(z, w) = |z − w| in the disc plane?','no: that is the flat distance of the drawing; d(0.5, −0.5) = ln 9, not 1',['yes','yes, near the centre exactly','no: d(z, w) = |z − w|²'],'Disc-shortest technique: d is the ruler length of the line between the points.'],
+  ['In the half-plane, is the flat segment the shortest way?','no: from −1 + i to 1 + i it has length 2; the half-circle is shorter, about 1.763',['yes','yes, when it is level','no: the upright half-line is'],'Half-plane technique: ds = |dw| / y, so higher paths are shorter.'],
+  ['Has a circle of radius ρ the length 2πρ in the disc plane?','no: its length is π(e^ρ − e^(−ρ)), which is more',['yes','no: it is less','no: it is πρ²'],'Disc-circle technique.'],
+  ['Is the flat centre of a circle of the disc plane its centre?','no: the circle of radius ln 3 about 0.5 meets the floor at 0 and 0.8',['yes','yes, for small circles exactly','no: such a circle has no centre'],'The ruler grows toward the edge, so the centre sits nearer the edge than the flat centre.'],
+  ['What becomes of the disc ruler in the upper half-plane?','ds = |dw| / y',['ds = |dw|','ds = y |dw|','ds = |dw| / y²'],'Half-plane technique.'],
+  ['Which are the lines of the half-plane?','the upright half-lines and the half-circles with centres on the floor',['the flat straight lines','the half-circles only','the level lines'],'Half-plane technique.']];
+QP.push({id:'29j.disc',step:'29j',label:'the ruler by hand',open:()=>measured('29j'),make(){ return writtenQ('29j.disc',WJ29); }},
+  {id:'29j.work',step:'29j',mode:'work',label:'distances and circles',open:()=>measured('29j'),make(){
+    const t=rnd(3), k=2+rnd(4);
+    if(t===0){ const a=1+rnd(3), b=a*k, right='ln '+k, wrong=uniq(right,[String(b-a),'ln '+(b-a),'ln '+(k+1),'ln '+(a+b),'ln '+b,String(k)],3);
+      return {index:'q:29j.work[h;'+[a,k].join(';')+']', lines:[['w₁ = '+cf22(a,'i')+' and w₂ = '+cf22(b,'i'),'two points of the upper half-plane']], ask:'What is d(w₁, w₂)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Half-plane technique: ρ = |w₁ − w₂| / |w₁ − w̄₂| = '+(b-a)+'/'+(a+b)+', and ln((1 + ρ)/(1 − ρ)) = ln ('+b+'/'+a+').'}; }
+    if(t===1){ const m=3+rnd(4), right='at most ln '+k*m, wrong=['exactly ln '+k*m,'at most ln '+(k+m),'at least ln '+k*m];
+      return {index:'q:29j.work[t;'+[k,m].join(';')+']', lines:[['d(p, q) = ln '+k+' and d(q, r) = ln '+m,'three points of the disc plane']], ask:'What can be said of d(p, r)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Disc-shortest technique: d(p, r) ≤ d(p, q) + d(q, r) = ln '+k+' + ln '+m+' = ln '+k*m+'.'}; }
+    const right=pi21(k*k-1,k), wrong=uniq(right,['2π ln '+k,pi21(k*k+1,k),pi21(k-1,1),pi21(2*k,1),pi21(k*k-1,2*k)],3);
+    return {index:'q:29j.work[c;'+k+']', lines:[['a circle of the disc plane has radius ρ = ln '+k,'given']], ask:'What is its length?', right, opts:shuffle([right,...wrong]), lead:'', why:'Disc-circle technique: π(e^ρ − e^(−ρ)) = π('+k+' − 1/'+k+').'}; }},
+  {id:'29j.line',step:'29j',mode:'proof',label:'no shorter way',open:()=>measured('29j'),make(){
+    const k=2+rnd(4), m=2+rnd(4), V=[
+      ['j1',[['d(p, q) = ln '+k+' and d(q, r) = ln '+m+' in the disc plane','given'],['d(p, r) ≤ ln '+k*m,'the disc-shortest technique']],2,0,'ln '+k+' + ln '+m+' = ln '+k*m+'.'],
+      ['j2',[['d(p, q) = ln '+k+' and d(q, r) = ln '+m+' in the disc plane','given'],['d(p, r) = ln '+k*m,'distances add']],2,1,'Only when q lies on the line between p and r. In general d(p, r) ≤ d(p, q) + d(q, r).'],
+      ['j3',[['w₁ = i and w₂ = '+k+'i in the upper half-plane','given'],['d(w₁, w₂) = ln '+k,'the half-plane technique: ρ = '+(k-1)+'/'+(k+1)]],2,0,'(1 + ρ)/(1 − ρ) = '+2*k+'/2.'],
+      ['j4',[['a circle of the disc plane has radius ln '+k,'given'],['its length is 2π ln '+k,'2π times the radius']],2,1,'Disc-circle technique: π(e^ρ − e^(−ρ)) = '+pi21(k*k-1,k)+'.'],
+      ['j5',[['a circle of the disc plane has radius ln '+k,'given'],['its length is '+pi21(k*k-1,k),'the disc-circle technique']],2,0,'π('+k+' − 1/'+k+').'],
+      ['j6',[['two points of the upper half-plane stand at one height','given'],['the flat segment between them is the shortest way','a straight segment']],2,1,'The line through them is a half-circle with its centre on the floor.']];
+    return line28('29j.line',V,[k,m]); }});
+
+/* ---------- 29k Curvature by Hand ---------- */
+const WK29=[
+  ['Does a helix of radius a bend by 1/a, like the circle it winds round?','no: the climb straightens it; a/(a² + b²) < 1/a when b ≠ 0',['yes','no: it bends more','no: it does not bend'],'Any-speed-bend technique: κ = |γ′ × γ″| / |γ′|³.'],
+  ['Has z = xy the surface bend −1 at every point?','no: only at the centre; the tilt divides by (1 + x² + y²)²',['yes','no: it is 0 away from the centre','no: it is +1 at the centre'],'Graph-bend technique.'],
+  ['On a spun surface, is the main bend around the axis 1/ρ?','no: that is the bend of the circle the point travels on; the surface bends by z′/ρ',['yes','no: it is ρ','no: it is 0'],'Spun-bends technique.'],
+  ['Are the main bends of a ring 1/a and 1/R?','no: around the axis it is cos t/(R + a cos t), from 1/(R + a) outside to −1/(R − a) inside',['yes','no: both are 1/a','no: both are 1/R'],'Spun-bends technique: z′/ρ around the axis.'],
+  ['What is the bend of a graph y = f(x)?','|f″| / (1 + f′²)^(3/2)',['|f″|','|f″| / (1 + f′²)','|f′| / (1 + f″²)^(3/2)'],'Any-speed-bend technique.'],
+  ['What is the surface bend of z = f(x, y)?','(fxx fyy − fxy²) / (1 + fx² + fy²)²',['fxx fyy − fxy²','(fxx fyy − fxy²) / (1 + fx² + fy²)','(fxx + fyy) / (1 + fx² + fy²)²'],'Graph-bend technique.']];
+QP.push({id:'29k.bends',step:'29k',label:'bends by hand',open:()=>measured('29k'),make(){ return writtenQ('29k.bends',WK29); }},
+  {id:'29k.work',step:'29k',mode:'work',label:'work out the bend',open:()=>measured('29k'),make(){
+    const t=rnd(5), a=1+rnd(3), b=1+rnd(3);
+    if(t===0){ const right=fshow(fr(a,a*a+b*b)), wrong=uniq(right,[fshow(fr(1,a)),fshow(fr(b,a*a+b*b)),fshow(fr(1,a*a+b*b)),fshow(fr(a,a+b)),fshow(fr(1,b)),String(a)],3); if(wrong.length<3) return null;
+      return {index:'q:29k.work[h;'+[a,b].join(';')+']', lines:[['γ(t) = ('+cf22(a,'cos t')+', '+cf22(a,'sin t')+', '+cf22(b,'t')+')','a helix']], ask:'What is its bend?', right, opts:shuffle([right,...wrong]), lead:'', why:'Any-speed-bend technique: |γ′ × γ″| / |γ′|³ = a/(a² + b²) = '+a+'/('+a*a+' + '+b*b+').'}; }
+    if(t===1){ const c=nz25(3), d=nz25(3), e=rnd(5)-2, K=4*c*d-e*e, right=sg(K), wrong=uniq(right,[sg(c*d-e*e),sg(4*c*d+e*e),sg(4*c*d),sg(-K),sg(2*c+2*d),sg(K+1)],3); if(wrong.length<3) return null;
+      return {index:'q:29k.work[g;'+[c,e,d].join(';')+']', lines:[['z = '+tm25([[c,'x²'],[e,'xy'],[d,'y²']]),'a surface']], ask:'What is its surface bend K at (0, 0)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Graph-bend technique: fx = fy = 0 there, so K = fxx fyy − fxy² = '+sg(2*c)+' · '+par10(2*d)+' − '+e*e+'.'}; }
+    if(t===2){ const [pt,right,s]=pick([['(0, 0)','−1','1 + 0 + 0'],['(1, 0)','−1/4','1 + 1'],['(1, 1)','−1/9','1 + 1 + 1'],['(2, 0)','−1/25','1 + 4'],['(2, 1)','−1/36','1 + 4 + 1'],['(0, 3)','−1/100','1 + 9']]), wrong=uniq(right,['−1','−1/4','−1/9','−1/2','−1/3','−1/5','0'],3);
+      return {index:'q:29k.work[s;'+pt+']', lines:[['z = xy','a surface']], ask:'What is its surface bend K at the point over '+pt+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Graph-bend technique: fxx fyy − fxy² = −1, fx = y and fy = x, so K = −1/('+s+')².'}; }
+    if(t===3){ const r=1+rnd(4), s=nz25(3), right=fshow(fr(-s,r)), wrong=uniq(right,[fshow(fr(s,r)),fshow(fr(-r,s)),sg(-s*r),fshow(fr(1,r)),fshow(fr(-s,r*r)),sg(-s)],3); if(wrong.length<3) return null;
+      return {index:'q:29k.work[p;'+[r,s].join(';')+']', lines:[['at a point of a spun surface, ρ = '+r+' and ρ″ = '+sg(s),'the spun curve is traced at speed 1']], ask:'What is the surface bend K there?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spun-bends technique: the product of the main bends is −ρ″/ρ.'}; }
+    const x2=rnd(5)-2, y2=rnd(5)-2, n=Math.abs(3*y2-4*x2), right=fshow(fr(n,125)), wrong=uniq(right,[fshow(fr(n,25)),fshow(fr(n,5)),String(n),fshow(fr(Math.abs(3*x2+4*y2),125)),fshow(fr(n+1,125))],3); if(wrong.length<3||!n) return null;
+    return {index:'q:29k.work[c;'+[x2,y2].join(';')+']', lines:[['at one moment x′ = 3, y′ = 4, x″ = '+sg(x2)+' and y″ = '+sg(y2),'a curve in the plane']], ask:'What is its bend there?', right, opts:shuffle([right,...wrong]), lead:'', why:'Any-speed-bend technique: |x′y″ − y′x″| / (x′² + y′²)^(3/2) = |3 · '+par10(y2)+' − 4 · '+par10(x2)+'| / 25^(3/2), and 25^(3/2) = 125.'}; }},
+  {id:'29k.line',step:'29k',mode:'proof',label:'tilt and climb',open:()=>measured('29k'),make(){
+    const a=1+rnd(3), b=1+rnd(3), c=1+rnd(3), d=1+rnd(3), r=1+rnd(4), s=nz25(3), V=[
+      ['k1',[['a helix has radius '+a+' and climbs by '+b+' for each unit of t','given'],['its bend is '+fshow(fr(a,a*a+b*b)),'the any-speed-bend technique: a/(a² + b²)']],2,0,a+'/('+a*a+' + '+b*b+').'],
+      ['k2',[['a helix has radius '+a+' and climbs by '+b+' for each unit of t','given'],['its bend is '+fshow(fr(1,a)),'it winds round a circle of radius '+a]],2,1,'The climb straightens it: '+fshow(fr(a,a*a+b*b))+'.'],
+      ['k3',[['z = '+tm25([[c,'x²'],[d,'y²']]),'given'],['K = '+4*c*d+' at (0, 0)','the graph-bend technique: fx = fy = 0 there']],2,0,'fxx fyy − fxy² = '+2*c+' · '+2*d+'.'],
+      ['k4',[['z = xy','given'],['K = −1 at every point','fxx fyy − fxy² = −1']],2,1,'Only at the centre. The tilt divides by (1 + x² + y²)².'],
+      ['k5',[['at a point of a spun surface, ρ = '+r+' and ρ″ = '+sg(s),'given'],['K = '+fshow(fr(-s,r))+' there','the spun-bends technique: −ρ″/ρ']],2,0,'The product of the two main bends.'],
+      ['k6',[['a point of a spun surface travels round the axis on a circle of radius ρ','given'],['the main bend around the axis is 1/ρ','the bend of that circle']],2,1,'The surface bends by z′/ρ around the axis.']];
+    return line28('29k.line',V,[a,b,c,d,r,s]); }});
+
+/* ---------- 29l The Best Path, by Hand ---------- */
+const WL29=[
+  ['Is the straight chute fastest, since it is shortest?','no: a chute that drops steeply at first gains speed early and wins',['yes','yes, when it is steep','no: every chute takes the same time'],'Fastest-slide technique: the curve traced by a point on the rim of a rolling wheel.'],
+  ['Is a curve that obeys the best-path equation least?','not always: two films between the same rings can obey it, and only one has the least area',['yes','yes, for soap films','never'],'The equation is asked of best curves; it does not make one best.'],
+  ['Does L − y′Lp keep one value for every L?','no: the no-x technique needs L free of x; for L = xp² it fails',['yes','yes, along best curves','no: it never does'],'No-x technique.'],
+  ['Is a hanging chain a parabola?','no: close for shallow sags, but the parabola does not obey the equation of the chain',['yes','yes, when it is heavy','no: it is an arc of a circle'],'Lowest-chain technique: y = λ + c C((x − b)/c).'],
+  ['L depends on y and p only. What keeps one value along a best curve?','L − y′Lp',['L','Lp','L + y′Lp'],'No-x technique.'],
+  ['Which curve makes the time of the slide least?','the curve traced by a point on the rim of a rolling wheel',['the straight line','an arc of a circle','a parabola'],'Fastest-slide technique.']];
+QP.push({id:'29l.best',step:'29l',label:'best curves by hand',open:()=>measured('29l'),make(){ return writtenQ('29l.best',WL29); }},
+  {id:'29l.work',step:'29l',mode:'work',label:'slide, film and chain',open:()=>measured('29l'),make(){
+    const t=rnd(3), k=2+rnd(5), r=1+rnd(5);
+    if(t===0){ const [L,right]=pick([['½p² + '+k+'y','−½p² + '+k+'y'],['½p² − ½ · '+k+'y²','−½p² − ½ · '+k+'y²'],['p²y','−p²y'],['y² + p²','y² − p²'],[k+'y − p²',k+'y + p²']]), wrong=uniq(right,[L,'−½p² + '+k+'y','−p²y','y² − p²','p²','½p² + '+k+'y','3p²y'],3);
+      return {index:'q:29l.work[n;'+L+']', lines:[['L(y, p) = '+L+', with p standing for y′','L is free of x']], ask:'Which quantity keeps one value along a best curve?', right, opts:shuffle([right,...wrong]), lead:'', why:'No-x technique: L − y′Lp. Take p times the slope of L along p away from L.'}; }
+    if(t===1){ const [ask,right,why,ws]=pick([['How far below the start is the lowest point of the slide?',String(2*r),'y = r(1 − cos θ) is greatest at θ = π, where it is 2r.',[String(r),pi21(r,1),String(4*r),pi21(2*r,1)]],['How far along is the lowest point of the slide?',pi21(r,1),'x = r(θ − sin θ) at θ = π is πr.',[String(2*r),pi21(2*r,1),String(r),pi21(r,2)]],['How far along does the curve come back up to the level of the start?',pi21(2*r,1),'y = r(1 − cos θ) is 0 again at θ = 2π, where x = 2πr.',[pi21(r,1),String(2*r),pi21(4*r,1),String(4*r)]]]), wrong=uniq(right,ws,3);
+      return {index:'q:29l.work[s;'+[ask,r].join(';')+']', lines:[['x = '+r+'(θ − sin θ) and y = '+r+'(1 − cos θ), with y measured downward','the fastest slide for a wheel of radius '+r]], ask, right, opts:shuffle([right,...wrong]), lead:'', why:'Fastest-slide technique: '+why}; }
+    const c=2+rnd(4), b=nz25(4), lam=nz25(5), right='at x = '+sg(b)+', at height '+sg(lam+c), wrong=uniq(right,['at x = '+sg(b)+', at height '+sg(lam),'at x = '+sg(c)+', at height '+sg(lam+b),'at x = 0, at height '+sg(lam+c),'at x = '+sg(b)+', at height '+sg(c),'at x = '+sg(-b)+', at height '+sg(lam+c)],3); if(wrong.length<3) return null;
+    return {index:'q:29l.work[c;'+[c,b,lam].join(';')+']', lines:[['y = '+sg(lam)+' + '+cf22(c,'C((x'+pm(-b)+')/'+c+')'),'a hanging chain']], ask:'Where is the chain lowest?', right, opts:shuffle([right,...wrong]), lead:'', why:'Lowest-chain technique: C is least at 0, where C(0) = 1. So the lowest point is at x = '+sg(b)+', at height '+sg(lam)+' + '+c+'.'}; }},
+  {id:'29l.line',step:'29l',mode:'proof',label:'free of x',open:()=>measured('29l'),make(){
+    const r=1+rnd(6), c=2+rnd(4), b=nz25(4), lam=nz25(5), k=2+rnd(5), V=[
+      ['l1',[['L depends on y and p only','given'],['L − y′Lp keeps one value along every curve that obeys the best-path equation','the no-x technique']],2,0,'L is free of x.'],
+      ['l2',[['L(x, y, p) = '+cf22(k,'xp²'),'given'],['L − y′Lp keeps one value along a best curve','the no-x technique']],2,1,'The technique needs L free of x.'],
+      ['l3',[['a chain hangs, with y′ not 0 all along','given'],['it hangs as a parabola','it sags']],2,1,'It hangs as y = λ + c C((x − b)/c). A parabola is close only for shallow sags.'],
+      ['l4',[['the fastest slide is traced by a wheel of radius '+r,'given'],['its lowest point is '+2*r+' below the start','y = '+r+'(1 − cos θ) at θ = π']],2,0,'1 − cos π = 2.'],
+      ['l5',[['a chain hangs as y = '+sg(lam)+' + '+cf22(c,'C((x'+pm(-b)+')/'+c+')'),'given'],['its lowest point is at x = '+sg(b)+', at height '+sg(lam+c),'C is least at 0, where C(0) = 1']],2,0,sg(lam)+' + '+c+' = '+sg(lam+c)+'.'],
+      ['l6',[['a film spun about the x-axis obeys the best-path equation','given'],['it has the least area among films on its rings','the soap-film technique']],2,1,'The technique runs the other way: least area gives the curve. Two films can obey the equation.']];
+    return line28('29l.line',V,[r,c,b,lam,k]); }});
+
+/* ---------- 29m Perspective ---------- */
+const WM29=[
+  ['Do lines that run the same way in the world run the same way in the picture?','only when they run square to the line of sight; otherwise they are painted running into one point',['yes','never','only when they are level'],'Vanishing-point technique.'],
+  ['Is the picture of a midpoint the midpoint of the picture?','not in general: along a line that runs away from the eye, the far half is painted shorter',['yes','never','yes, when the line runs away from the eye'],'A painter’s move keeps the four-point ratio, not midpoints.'],
+  ['Is (t₁ − t₂)/(t₂ − t₃) kept by a painter’s move?','no: three points are not enough; four are needed',['yes','yes, when the points are evenly spaced','no: only two points are needed'],'Four-point-ratio technique.'],
+  ['Are [1 : −1 : 0] and [−1 : 1 : 0] two points at infinity, one at each end?','no: they are multiples, so one point',['yes','yes: a line has two ends','no: neither is a point'],'A point of the plane with its points at infinity is a triple up to a multiple.'],
+  ['Where do two different lines [a] and [b] meet?','in exactly one point, [a × b]',['in [a + b]','nowhere, when they are parallel','in [a · b]'],'Meet-by-cross technique.'],
+  ['A line runs along v, with v₃ > 0. Where is its vanishing point?','(v₁/v₃, v₂/v₃)',['(v₁, v₂)','(v₃/v₁, v₃/v₂)','(v₁v₃, v₂v₃)'],'Vanishing-point technique.']];
+const tr29=x=>'['+x.map(sg).join(' : ')+']', par29=(p,q)=>p[0]*q[1]===p[1]*q[0]&&p[0]*q[2]===p[2]*q[0]&&p[1]*q[2]===p[2]*q[1];
+QP.push({id:'29m.picture',step:'29m',label:'the painter’s window',open:()=>measured('29m'),make(){ return writtenQ('29m.picture',WM29); }},
+  {id:'29m.work',step:'29m',mode:'work',label:'vanishing points and meets',open:()=>measured('29m'),make(){
+    const t=rnd(3);
+    if(t===0){ const a=nz25(4), b=rnd(7)-3, c=1+rnd(4), right='('+fshow(fr(a,c))+', '+fshow(fr(b,c))+')', wrong=uniq(right,['('+sg(a)+', '+sg(b)+')','('+fshow(fr(c,a))+', '+(b?fshow(fr(c,b)):'0')+')','('+sg(a*c)+', '+sg(b*c)+')','('+fshow(fr(-a,c))+', '+fshow(fr(-b,c))+')','('+fshow(fr(b,c))+', '+fshow(fr(a,c))+')'],3); if(wrong.length<3) return null;
+      return {index:'q:29m.work[v;'+[a,b,c].join(';')+']', lines:[['a line of the world runs along v = '+v27([a,b,c]),'it misses the eye']], ask:'Where is its vanishing point?', right, opts:shuffle([right,...wrong]), lead:'', why:'Vanishing-point technique: the picture heads to (v₁/v₃, v₂/v₃), which depends on v alone.'}; }
+    if(t===1){ const p=[nz25(3),rnd(5)-2,nz25(2)], q=[rnd(5)-2,nz25(3),nz25(2)], c=[p[1]*q[2]-p[2]*q[1],p[2]*q[0]-p[0]*q[2],p[0]*q[1]-p[1]*q[0]]; if(!c[0]&&!c[1]&&!c[2]) return null;
+      const C=[[c[0],-c[1],c[2]],p.map((x,i)=>x+q[i]),p.map((x,i)=>x*q[i]),[c[1],c[2],c[0]]].filter(x=>!par29(x,c)), wrong=uniq(tr29(c),C.map(tr29),3); if(wrong.length<3) return null;
+      const ln=rnd(2);
+      return {index:'q:29m.work[x;'+[p,q,ln].join(';')+']', lines:[[tr29(p)+' and '+tr29(q),ln?'two different lines':'two different points']], ask:ln?'In which point do they meet?':'Which line passes through both?', right:tr29(c), opts:shuffle([tr29(c),...wrong]), lead:'', why:'Meet-by-cross technique: the cross of the two triples. Its first place is '+sg(p[1])+' · '+par10(q[2])+' − '+par10(p[2])+' · '+par10(q[1])+' = '+sg(c[0])+'.'}; }
+    const T=take([0,1,2,3,4,5,6],4), [a,b,c,d]=T, F=fr((a-c)*(b-d),(b-c)*(a-d)), right=fshow(F), wrong=uniq(right,[fshow(fr((b-c)*(a-d),(a-c)*(b-d))),fshow(fr((a-b)*(c-d),(b-c)*(a-d))),fshow(fr(-(a-c)*(b-d),(b-c)*(a-d))),fshow(fr(a-b,b-c)),fshow(fr(a-c,b-d)),fshow(fr(F.p+F.q,F.q))],3); if(wrong.length<3) return null;
+    return {index:'q:29m.work[r;'+T.join(';')+']', lines:[['t₁ = '+a+', t₂ = '+b+', t₃ = '+c+' and t₄ = '+d,'four points of a line']], ask:'What is their four-point ratio?', right, opts:shuffle([right,...wrong]), lead:'', why:'Four-point-ratio technique: (t₁ − t₃)(t₂ − t₄) / ((t₂ − t₃)(t₁ − t₄)) = '+par10(a-c)+' · '+par10(b-d)+' / ('+par10(b-c)+' · '+par10(a-d)+').'}; }},
+  {id:'29f.frame',step:'29f',mode:'word',label:'a frame of triangles',open:()=>measured('29f'),make(){
+    const what=pick(['A paper lantern','A climbing frame','A wire sculpture','A tent of panels']), g=rnd(4), m=20+2*rnd(6), F=2*m, E=3*m, V=2-2*g+m, right=String(g), wrong=['0','1','2','3','4'].filter(x=>x!==right).slice(0,3);
+    return {index:'q:29f.frame['+[what,g,m].join(';')+']', a3:['29f.frame',DASH,DASH], story:what+' is a closed surface made of triangles. It has '+V+' corners, '+E+' edges and '+F+' triangles.', lines:[], ask:'How many holes run through it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Hole-count technique: V − E + F = '+V+' − '+E+' + '+F+' = '+sg(2-2*g)+', and that is 2 − 2g.'}; }},
+  {id:'29m.line',step:'29m',mode:'proof',label:'kept by the painter',open:()=>measured('29m'),make(){
+    const a=nz25(4), b=nz25(4), c=1+rnd(4), k=pick([2,3,-1,-2]), V=[
+      ['m1',[['a line of the world runs along v = '+v27([a,b,c])+', and misses the eye','given'],['its picture heads to ('+fshow(fr(a,c))+', '+fshow(fr(b,c))+')','the vanishing-point technique']],2,0,'(v₁/v₃, v₂/v₃).'],
+      ['m2',[['[a] and [b] are two different lines of the plane with its points at infinity','given'],['they meet in exactly one point','the meet-by-cross technique']],2,0,'The point [a × b].'],
+      ['m3',[[tr29([a,b,0])+' and '+tr29([k*a,k*b,0]),'given'],['they are two different points at infinity','two triples']],2,1,'They are multiples, so one point.'],
+      ['m4',[['t₁, t₂, t₃ are three points of a line','given'],['(t₁ − t₂)/(t₂ − t₃) is kept by every painter’s move','the four-point-ratio technique']],2,1,'Three points are not enough. The technique keeps a ratio of four.'],
+      ['m5',[['two lines of the world run along the same v, with v₃ > 0','given'],['their pictures run into one point','the vanishing-point technique']],2,0,'The vanishing point depends on v alone.'],
+      ['m6',[['M is the midpoint of AB in the world, and AB runs away from the eye','given'],['the picture of M is the midpoint of the pictures of A and B','pictures keep midpoints']],2,1,'The far half is painted shorter.']];
+    return line28('29m.line',V,[a,b,c,k]); }});
+
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 
