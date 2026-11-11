@@ -398,9 +398,9 @@ function H(t,W){ t=t.trim(); const u=unwrap(t); if(u!==t) return H(u,W);
 function holds(t,W){ try{ return !!H(String(t),W); }catch(e){ return null; } }
 const world=c=>c.kind==='names'?{same:[c.l,c.r,c.m],all:[c.l,c.r,c.m,c.n]}:null;
 
-/* --- The ways a line goes bad: a number off by one or two, a sameness turned to a difference, the sides of an order turned, a wrong name. --- */
-function mutations(t,c){ const out=[]; const re=/\d+/g; let m;
-  while((m=re.exec(t))){ const n=Number(m[0]); [n+1,n-1,n+2].forEach(v=>{ if(v>=0) out.push(t.slice(0,m.index)+v+t.slice(m.index+m[0].length)); }); }
+/* --- The ways a line goes bad: a sameness turned to a difference, the sides of an order turned, a wrong name.
+   Laundry 8 (Andrew 2026-11-11 13:46Z): never a number moved by one or two, which reads as a typo. A planted line is a wrong move. --- */
+function mutations(t,c){ const out=[];
   const R=relParts(t);
   if(R.ops.length===1){ const [a,b]=R.parts, o=R.ops[0];
     if(o==='=') out.push(a+' ≠ '+b); if(o==='≠') out.push(a+' = '+b); if(o==='<'||o==='≤') out.push(b+' '+o+' '+a); }
@@ -431,7 +431,17 @@ function proofQ0(P,used){
       add.forEach(g=>lines.push({t:g,w:'given'})); lines.push({t:text,w:L.name,L}); der.push(lines.length-1); }
     if(der.length<2) continue;
     for(const j of shuffle(der.slice())){ const orig=lines[j].t, L=lines[j].L, others=lines.filter((x,i)=>i!==j).map(x=>x.t);
-      const bad=mutations(orig,c).find(t=>!others.includes(t)&&holds(t,W)!==true&&!LINKS.some(X=>{ try{ return X.lic(others,t); }catch(e){ return false; } }));
+      /* (a) the line stands, and cites a technique that does not license it */
+      const lic=(X,t)=>{ try{ return !!X.lic(others,t); }catch(e){ return true; } };
+      const wrongs=shuffle(P.openL.filter(X=>X.name!==L.name&&!lic(X,orig))), near=wrongs.filter(X=>X.kinds.some(k=>L.kinds.includes(k))), X=near[0]||wrongs[0];
+      if(X&&Math.random()<0.6){ const ids=der.map(i=>lines[i].L.id), index='p:'+s.id+c.ix+'.'+ids.join('+')+'#'+ids.indexOf(L.id)+'@'+X.id;
+        if(!used[index]){ const names=c.kind==='names';
+          return {index, a3:[names?s.id:s.id+c.ix, ids.join('+'), names?'places'+c.ix:DASH], step:L.step, steps:[...new Set(der.map(i=>lines[i].L.step))], stack:true,
+            lines:lines.map((x,i)=>[x.t,i===j?X.name:x.w]), ask:'One line does not follow from what it cites. Which line is the bad line?',
+            right:'line '+(j+1), opts:der.map(i=>'line '+(i+1)), lead:'The bad line is line '+(j+1)+'. ',
+            why:'Line '+(j+1)+' cites '+X.name+'. That technique does not license “'+orig+'”. The line is so, and it follows by '+L.name+'.'}; } }
+      /* (b) the line itself is turned */
+      const bad=mutations(orig,c).find(t=>!others.includes(t)&&holds(t,W)===false&&!LINKS.some(X=>{ try{ return X.lic(others,t); }catch(e){ return false; } }));
       if(!bad) continue;
       const ids=der.map(i=>lines[i].L.id), index='p:'+s.id+c.ix+'.'+ids.join('+')+'#'+ids.indexOf(L.id)+':'+bad;
       if(used[index]) continue;
