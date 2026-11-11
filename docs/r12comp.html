@@ -160,6 +160,7 @@ S \to aSBC,\ S \to aBC,\ CB \to BC,\ aB \to ab,\ bB \to bb,\ bC \to bc,\ cC \to 
 <section class="class step" data-step="12comp6">
   <h2 class="sthead"><span class="stno">12comp6</span>A Count That Never Skips</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;h_0 = 0;\quad h_i = h_{i-1} \pm 1\\ &amp;\text{balanced}\ :\Leftrightarrow\ \forall i\ (h_i \ge 0) \land h_n = 0\end{aligned}"></div>
   <p class="eqline" data-pid="dc5297">From here on, on this page, the depth walk of a string of brackets is the list h₀, h₁, …, hₙ with h₀ = 0, going up 1 at each opening bracket and down 1 at each closing one. The string is balanced when its walk never goes below 0 and ends at 0. The sentences of S → (S)S, S → ε are exactly the balanced strings. 12·comp.10.4 asks for half of the proof.</p>
   <p data-pid="d1991f">A checker must watch for the walk going below 0. Must it watch for −1, −2, −3 and the rest? Rung 12 says no, in counting numbers. A continuous function cannot skip a value, and neither can a walk that moves by one.</p>
   <p data-pid="1fe60c">Step-walk technique (in-between-value for steps of one): <b>a walk that moves by one at each step passes through every whole number between its start and its end.</b> Precisely: let h₀, …, hₙ be integers, each differing from the next by 1 or −1. Then every integer y between h₀ and hₙ, ends included, is some hᵢ.</p>
@@ -182,6 +183,7 @@ h_{n+1} = h_n \pm 1 \Rightarrow \htmlClass{new}{y = h_{n+1}} \quad \blacksquare 
 <section class="class step" data-step="12comp7">
   <h2 class="sthead"><span class="stno">12comp7</span>Bounded and Unbounded</h2>
 
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\forall k\ \exists M \text{ with } k + 2 \text{ states} :\\ &amp;\qquad M \text{ checks } \{s \text{ balanced} : \forall i\ (h_i \le k)\}\end{aligned}"></div>
   <p data-pid="007e73">Bounded-depth technique: <b>for each number k, a machine with no memory with k + 2 states checks the balanced strings whose walk never rises above k.</b> Its states are the depths 0, 1, …, k and one dead state. An opening bracket moves depth d to d + 1, or to dead from k. A closing bracket moves d to d − 1, or to dead from 0. The dead state stays dead. It accepts only depth 0. By step-walk, a walk that goes above k passes through k + 1 on the way, so the dead state catches it there.</p>
   <p data-pid="216f7b">No-memory-wall technique: <b>no machine with no memory checks the strings aⁿbⁿ.</b></p>
   <pre class="lines" data-k="ember" data-label="12·comp: the no-memory-wall technique">
@@ -193,6 +195,7 @@ a^ib^i \in L,\ \ a^jb^i \notin L @@ the machine says yes to both or to neither
 \htmlClass{new}{\bot};\ \text{no such machine} \quad \blacksquare @@ the supposition refuted
   </pre>
   <p data-pid="bc4ca1">Put an opening bracket for a and a closing one for b, and the same lines show that no machine with no memory checks all balanced strings. For each k it can check depth up to k, and no single machine checks every depth. <b>The line between what it can and cannot check is 12b's word: bounded.</b> A machine with a counter crosses it. A counter that can grow without end is a memory, and the second family's stack is one.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\forall k\ \exists M\ (M \text{ checks depth} \le k):\ \text{so}\\ &amp;\exists M\ \forall k\ (M \text{ checks depth} \le k)\,? \quad\text{swapped}\\ &amp;\quad\text{not so: no-memory-wall} \quad\text{(2b13)}\end{aligned}" data-sim="1"></div>
   <section class="pic" id="pic">
     <div class="eyebrow">The picture · left: the remainder machine reading a numeral · right: a depth walk, and the machine that checks depth up to k</div>
     <div class="panels">
