@@ -7509,6 +7509,468 @@ QP.push({id:'30w.axioms',step:'30w',label:'inductive axioms revisited',open:()=>
       ['w6',[['a principle has been met many times, with no exception so far','given'],['the principle is proved','its recurrence']],2,1,'Recurrence is evidence about a crowd of cases. The claim is kept open.']];
     return line28('30w.line',V,[a,v,b,w,k]); }});
 
+/* ===== Laundry 5, rung 31 (floor 6 pools, stage AD), part 1: 31a to 31h ===== */
+Object.assign(STEPS,{'31a':['r31a','Length and Angle From One Product'],'31b':['r31b','The Closest Point'],'31c':['r31c','Straightening a Basis'],'31d':['r31d','Symmetric Maps Have Square Axes'],'31e':['r31e','Quadratic Forms'],'31f':['r31f','Turn, Stretch, Turn'],'31g':['r31g','Sizes of Functions'],'31h':['r31h','A Plane With Endlessly Many Directions']});
+const G31=[[1,1],[1,2],[2,1],[1,3],[3,1],[2,3],[1,-1],[2,-1],[1,-2]];
+
+/* ---------- 31a Length and Angle From One Product ---------- */
+const WA31=[
+  ['Is ⟨f, tg⟩ = t⟨f, g⟩ for a turning number t?','no: the second slot turns t to its conjugate, t̄⟨f, g⟩',['yes','yes, in both slots','no: it is |t|⟨f, g⟩'],'Turned-product technique.'],
+  ['Is ⟨f, g⟩ = ∫ x f(x)g(x) dx over [−1, 1] a product?','no: f = 1 gives ⟨1, 1⟩ = 0; the weight must be above 0',['yes','yes: it is straight in each slot','no: it is not straight in f'],'A product gives ⟨f, f⟩ > 0 for every f but 0.'],
+  ['Is ‖f + g‖ = ‖f‖ + ‖g‖ for every f and g?','no: only when one is a non-negative multiple of the other',['yes','yes, when they are at right angles','no: never'],'Product-triangle technique: ‖f + g‖ ≤ ‖f‖ + ‖g‖.'],
+  ['Does ⟨f, g⟩ = 0 give f = 0 or g = 0?','no: 1 and x on [−1, 1] are at right angles and neither is 0',['yes','yes, for functions','no: it gives f = g'],'⟨f, g⟩ = 0 says at right angles.'],
+  ['f and g are at right angles. What is ‖f + g‖²?','‖f‖² + ‖g‖²',['(‖f‖ + ‖g‖)²','‖f‖² − ‖g‖²','2‖f‖ ‖g‖'],'Square-sum technique.'],
+  ['When is |⟨f, g⟩| = ‖f‖ ‖g‖?','exactly when one of f and g is a multiple of the other',['always','exactly when they are at right angles','never'],'Product-bound technique.']];
+QP.push({id:'31a.product',step:'31a',label:'one product',open:()=>measured('31a'),make(){ return writtenQ('31a.product',WA31); }},
+  {id:'31a.work',step:'31a',mode:'work',label:'sizes from a product',open:()=>measured('31a'),make(){
+    const t=rnd(4), [a,b,c]=pick(PY28);
+    if(t===0) return W30('31a.work[s;'+[a,b].join(';')+']',[['f and g are at right angles','⟨f, g⟩ = 0'],['‖f‖ = '+a+' and ‖g‖ = '+b,'given']],'What is ‖f + g‖?',String(c),[String(a+b),String(c*c),String(Math.abs(a-b)),String(a*b),String(c+1)],'Square-sum technique: ‖f + g‖² = '+a*a+' + '+b*b+' = '+c*c+'.');
+    if(t===1){ const x=2+rnd(6), y=2+rnd(6);
+      return W30('31a.work[b;'+[x,y].join(';')+']',[['‖f‖ = '+x+' and ‖g‖ = '+y,'given']],'What does the product-bound technique say of |⟨f, g⟩|?','at most '+x*y,['exactly '+x*y,'at least '+x*y,'at most '+(x+y),'at most '+x*x*y*y],'Product-bound technique: |⟨f, g⟩| ≤ ‖f‖ ‖g‖.'); }
+    if(t===2){ const u=[nz25(4),nz25(4)], v=[nz25(4),nz25(4)], d=u[0]*v[0]+u[1]*v[1];
+      return W30('31a.work[d;'+[u,v].join(';')+']',[['f = '+v27(u)+' and g = '+v27(v),'arrows of the plane'],['⟨f, g⟩ = f₁g₁ + f₂g₂','the product']],'What is ⟨f, g⟩?',sg(d),[sg(u[0]*v[1]+u[1]*v[0]),sg(u[0]*v[0]-u[1]*v[1]),sg((u[0]+u[1])*(v[0]+v[1])),sg(-d),sg(d+1)],'⟨f, g⟩ = '+sg(u[0])+' · '+par10(v[0])+' + '+par10(u[1])+' · '+par10(v[1])+'.'); }
+    const k=1+rnd(5), m=2+rnd(4);
+    return W30('31a.work[t;'+[k,m].join(';')+']',[['⟨f, g⟩ = '+k,'given']],'What is ⟨f, '+m+'ig⟩?',sg(-m*k)+'i',[m*k+'i',String(m*k),sg(-m*k),k+'i'],'Turned-product technique: the second slot turns '+m+'i to its conjugate, −'+m+'i.'); }},
+  {id:'31a.line',step:'31a',mode:'proof',label:'what a product gives',open:()=>measured('31a'),make(){
+    const [a,b,c]=pick(PY28), x=2+rnd(6), y=2+rnd(6);
+    const V=[
+      ['a1',[['⟨f, g⟩ = 0, ‖f‖ = '+a+' and ‖g‖ = '+b,'given'],['‖f + g‖ = '+c,'the square-sum technique']],2,0,a*a+' + '+b*b+' = '+c*c+'.'],
+      ['a2',[['‖f‖ = '+a+' and ‖g‖ = '+b,'given'],['‖f + g‖ = '+c,'the square-sum technique']],2,1,'The technique needs f and g at right angles.'],
+      ['a3',[['‖f‖ = '+x+' and ‖g‖ = '+y,'given'],['|⟨f, g⟩| ≤ '+x*y,'the product-bound technique']],2,0,'‖f‖ ‖g‖.'],
+      ['a4',[['‖f‖ = '+x+' and ‖g‖ = '+y,'given'],['⟨f, g⟩ = '+x*y,'the product-bound technique']],2,1,'The technique gives at most. Equality needs one to be a multiple of the other.'],
+      ['a5',[['‖f‖ = '+x+' and ‖g‖ = '+y,'given'],['‖f + g‖ ≤ '+(x+y),'the product-triangle technique']],2,0,'‖f‖ + ‖g‖.'],
+      ['a6',[['⟨f, g⟩ = '+x,'given'],['⟨f, ig⟩ = '+x+'i','the turned-product technique']],2,1,'The second slot turns i to its conjugate: −'+x+'i.'],
+      ['a7',[['⟨f, g⟩ = 0','given'],['f = 0 or g = 0','a product of 0']],2,1,'It says at right angles. 1 and x on [−1, 1] are at right angles and neither is 0.']];
+    return line28('31a.line',V,[a,b,x,y]); }});
+
+/* ---------- 31b The Closest Point ---------- */
+const WB31=[
+  ['Is the closest point of the line through g always ⟨f, g⟩g?','no: only when ‖g‖ = 1; in general (⟨f, g⟩/‖g‖²)g',['yes','no: it is ⟨f, g⟩f','no: it is g/‖g‖'],'Closest-point technique: ‖e‖ = 1.'],
+  ['Is Pf = Σ⟨f, vₖ⟩vₖ for any basis vₖ?','no: the shadow-sum needs a right-angled list; otherwise solve Gc = b',['yes','yes, when the vₖ are free','no: no basis gives it'],'Miss-at-right-angles technique.'],
+  ['Is the shadow of eˣ on the lines its tangent line?','no: the tangent line is best at one point; the shadow is best over the interval',['yes','yes, at the middle of the interval','no: the shadow is a curve'],'The shadow is the closest point in size.'],
+  ['Does the best line through the data show that x causes y?','no: a shadow is geometry; it says nothing about why the arrows point where they do',['yes','yes, when the miss is small','no: it shows that y causes x'],'A closest point is a fact about distances.'],
+  ['To what is the miss f − Pf at right angles?','to every arrow of W',['to f','to e₁ only','to nothing'],'Shadow-sum technique.'],
+  ['Is any other point of W as close to f as Pf?','no: Pf is the one closest point',['yes: its mirror point','yes: every point of the line through Pf','it depends on f'],'Shadow-sum technique: no other point of W is as close.']];
+QP.push({id:'31b.closest',step:'31b',label:'the closest point',open:()=>measured('31b'),make(){ return writtenQ('31b.closest',WB31); }},
+  {id:'31b.work',step:'31b',mode:'work',label:'shadow and miss',open:()=>measured('31b'),make(){
+    const t=rnd(3), g=pick(G31), k=pick([-2,-1,1,2,3]), m=pick([-2,-1,1,2]), f=[k*g[0]-m*g[1],k*g[1]+m*g[0]], n2=g[0]*g[0]+g[1]*g[1];
+    if(t===0) return W30('31b.work[c;'+[g,f].join(';')+']',[['f = '+v27(f)+' and g = '+v27(g),'arrows of the plane'],['‖g‖² = '+n2+', and ⟨f, g⟩ = '+sg(k*n2),'worked']],'Which point of the line through g is closest to f?',v27([k*g[0],k*g[1]]),[v27([k*n2*g[0],k*n2*g[1]]),v27(f),v27([-m*g[1],m*g[0]]),v27(g),v27([-k*g[0],-k*g[1]])],'Closest-point technique, with g cut to size 1: (⟨f, g⟩/‖g‖²)g = '+sg(k)+' · '+v27(g)+'.');
+    if(t===1) return W30('31b.work[m;'+[g,f].join(';')+']',[['f = '+v27(f)+' and g = '+v27(g),'arrows of the plane'],['the closest point of the line through g is '+v27([k*g[0],k*g[1]]),'the closest-point technique']],'What is the miss?',v27([-m*g[1],m*g[0]]),[v27([k*g[0],k*g[1]]),v27(f),v27([m*g[1],-m*g[0]]),v27([f[0]+k*g[0],f[1]+k*g[1]]),v27([0,0])],'The miss is f less the closest point. It is at right angles to g.');
+    const [a,b,c]=pick(PY28);
+    return W30('31b.work[s;'+[a,b].join(';')+']',[['‖e‖ = 1, and ‖f‖ = '+c,'given'],['⟨f, e⟩ = '+a,'given']],'What is the size of the miss f − ⟨f, e⟩e?',String(b),[String(c-a),String(a),String(c),String(b*b),String(c+a)],'The miss is at right angles to e, so the square-sum technique (31a) gives '+c*c+' − '+a*a+' = '+b*b+'.'); }},
+  {id:'31b.line',step:'31b',mode:'proof',label:'cut to size 1 first',open:()=>measured('31b'),make(){
+    let g=pick(G31); const k=pick([-2,-1,1,2,3]), m=pick([-2,-1,1,2]), f=[k*g[0]-m*g[1],k*g[1]+m*g[0]], n2=g[0]*g[0]+g[1]*g[1], [a,b,c]=pick(PY28);
+    const V=[
+      ['b1',[['f = '+v27(f)+' and g = '+v27(g)+', so ⟨f, g⟩ = '+sg(k*n2),'given'],['the closest point of the line through g is '+v27([k*n2*g[0],k*n2*g[1]]),'the closest-point technique: ⟨f, g⟩g']],2,1,'That needs ‖g‖ = 1. Here ‖g‖² = '+n2+': the point is '+v27([k*g[0],k*g[1]])+'.'],
+      ['b2',[['f = '+v27(f)+' and g = '+v27(g)+', so ⟨f, g⟩ = '+sg(k*n2)+' and ‖g‖² = '+n2,'given'],['the closest point of the line through g is '+v27([k*g[0],k*g[1]]),'the closest-point technique, with g cut to size 1']],2,0,'(⟨f, g⟩/‖g‖²)g.'],
+      ['b3',[['v₁ and v₂ are free, and not at right angles','given'],['Pf = ⟨f, v₁⟩v₁ + ⟨f, v₂⟩v₂','the shadow-sum technique']],2,1,'The shadow-sum needs a right-angled list. Otherwise solve Gc = b.'],
+      ['b4',[['‖e‖ = 1, ‖f‖ = '+c+' and ⟨f, e⟩ = '+a,'given'],['the miss f − ⟨f, e⟩e has size '+b,'the miss is at right angles to e']],2,0,c*c+' − '+a*a+' = '+b*b+'.'],
+      ['b5',[['Pf is the point of W closest to f','given'],['f − Pf is at right angles to every arrow of W','the shadow-sum technique']],2,0,'The miss is at right angles to W.'],
+      ['b6',[['the best line through the data slopes up','given'],['x causes y','the shadow']],2,1,'A shadow is geometry. It says nothing about why.']];
+    return line28('31b.line',V,[g,f,a,b]); }});
+
+/* ---------- 31c Straightening a Basis ---------- */
+const WC31=[
+  ['Is w₂ = v₂ − ⟨v₂, v₁⟩v₁?','only when ‖v₁‖ = 1; in general take away ⟨v₂, v₁⟩v₁/‖v₁‖²',['yes, always','no: add the shadow','no: take away ⟨v₁, v₁⟩v₂'],'The shadow on v₁ needs v₁ cut to size 1.'],
+  ['Is w₃ = v₃ − ⟨v₃, e₂⟩e₂?','no: the shadows on every earlier e are taken away, not only the last',['yes','yes, when e₁ and e₂ are at right angles','no: only the shadow on e₁'],'Straightening technique.'],
+  ['Is QQᵀ = I for every Q with right-angled columns?','no: only when Q is square; with fewer columns QQᵀ is the shadow map onto what they build',['yes','yes, when Q has more rows than columns','no: and QᵀQ fails too'],'QᵀQ = I always; QQᵀ only for a square Q.'],
+  ['Does straightening in another order give the same list?','no: the first arrow decides the first direction; other orders give other lists',['yes','yes, the same arrows in another order','no: other orders fail'],'Straightening technique.'],
+  ['What do the first k straightened arrows build?','the same space as v₁, …, vₖ',['the whole space','a line','the space of vₖ alone'],'Straightening technique.'],
+  ['In X = QR, what is R?','a staircase with numbers above 0 down its middle',['a length-keeper','a symmetric grid','a grid that is zero off its middle'],'Column-straightening technique.']];
+QP.push({id:'31c.straight',step:'31c',label:'straightening a basis',open:()=>measured('31c'),make(){ return writtenQ('31c.straight',WC31); }},
+  {id:'31c.work',step:'31c',mode:'work',label:'straighten two arrows',open:()=>measured('31c'),make(){
+    const t=rnd(3);
+    if(t===0){ const [a,b,c]=pick(PY28);
+      return W30('31c.work[e;'+[a,b].join(';')+']',[['v₁ = '+v27([a,b]),'the first arrow'],['‖v₁‖ = '+c,'worked']],'What is e₁?','('+F30(a,c)+', '+F30(b,c)+')',[v27([a,b]),'('+F30(b,c)+', '+F30(a,c)+')','('+F30(a,c*c)+', '+F30(b,c*c)+')','('+F30(a,a+b)+', '+F30(b,a+b)+')'],'Cut v₁ to size 1: divide by '+c+'.'); }
+    if(t===1){ const p=2+rnd(4), q=nz25(5), r=nz25(5);
+      return W30('31c.work[w;'+[p,q,r].join(';')+']',[['v₁ = '+v27([p,0])+' and v₂ = '+v27([q,r]),'free arrows'],['e₁ = (1, 0)','v₁ cut to size 1']],'What is w₂, the arrow v₂ less its shadow on e₁?',v27([0,r]),[v27([q,0]),v27([q,r]),v27([q-p,r]),v27([0,-r]),v27([q-p*q,r])],'⟨v₂, e₁⟩ = '+sg(q)+'. Take away '+sg(q)+' · (1, 0).'); }
+    const a=nz25(5), d=2*(1+rnd(3)), b=a-d, h=(a+b)/2;
+    return W30('31c.work[v;'+[a,b].join(';')+']',[['v₁ = (1, 1) and v₂ = '+v27([a,b]),'free arrows'],['‖v₁‖² = 2, and ⟨v₂, v₁⟩ = '+sg(a+b),'worked']],'What is w₂, the arrow v₂ less its shadow on v₁?',v27([a-h,b-h]),[v27([a-(a+b),b-(a+b)]),v27([h,h]),v27([a,b]),v27([b-h,a-h]),v27([a-1,b-1])],'The shadow on v₁ is (⟨v₂, v₁⟩/‖v₁‖²)v₁ = '+sg(h)+' · (1, 1). Take it away.'); }},
+  {id:'31c.line',step:'31c',mode:'proof',label:'every earlier shadow',open:()=>measured('31c'),make(){
+    const [a,b,c]=pick(PY28), p=2+rnd(4), q=nz25(5), r=nz25(5), x=nz25(5), d=2*(1+rnd(3)), y=x-d, h=(x+y)/2;
+    const V=[
+      ['c1',[['v₁ = '+v27([a,b]),'given'],['e₁ = ('+F30(a,c)+', '+F30(b,c)+')','v₁ cut to size 1']],2,0,'‖v₁‖ = '+c+'.'],
+      ['c2',[['v₁ = '+v27([p,0])+' and v₂ = '+v27([q,r]),'given'],['w₂ = '+v27([0,r]),'the straightening technique']],2,0,'e₁ = (1, 0), and ⟨v₂, e₁⟩ = '+sg(q)+'.'],
+      ['c3',[['v₁ = (1, 1) and v₂ = '+v27([x,y]),'given'],['w₂ = v₂ − ⟨v₂, v₁⟩v₁ = '+v27([x-(x+y),y-(x+y)]),'the straightening technique']],2,1,'v₁ has size √2, not 1. Take away (⟨v₂, v₁⟩/2)v₁: '+v27([x-h,y-h])+'.'],
+      ['c4',[['Q has 2 right-angled columns of height 3','given'],['QQᵀ = I','right-angled columns']],2,1,'Only when Q is square. Here QQᵀ is the shadow map onto what the columns build.'],
+      ['c5',[['Q has 2 right-angled columns of height 3','given'],['QᵀQ = I','right-angled columns']],2,0,'Place i, j of QᵀQ is the product of columns i and j.'],
+      ['c6',[['v₁ and v₂ are free','given'],['straightening v₂, v₁ gives the same list as straightening v₁, v₂','the straightening technique']],2,1,'The first arrow decides the first direction.']];
+    return line28('31c.line',V,[a,b,p,q,r,x,y]); }});
+
+/* ---------- 31d Symmetric Maps Have Square Axes ---------- */
+const WD31=[
+  ['A = PDP⁻¹. Are the columns of P at right angles?','only when A is symmetric; rows (1, 1), (0, 2) have stretched arrows at 45°',['yes, always','no: never','yes, when D has no repeats'],'Right-angled-stretches technique: a symmetric map.'],
+  ['Has every real grid a real stretch?','no: the quarter turn has stretches i and −i',['yes','yes, when it is square','no: only symmetric grids have stretches'],'Real-stretches technique: a symmetric map.'],
+  ['Do equal stretches give arrows at right angles?','not by the technique: it needs λ ≠ μ; with a repeated stretch, choose right angles inside its space',['yes','no: they are never at right angles','yes, when the map is a length-keeper'],'Right-angled-stretches technique.'],
+  ['Is QᵀAQ = D for any length-keeper Q?','no: only for the Q whose columns are A’s axes',['yes','yes, when A is symmetric','no: for no Q'],'The columns of Q are the stretched arrows of A.'],
+  ['What kind of number is every stretch of a symmetric map?','a real number',['a whole number','a number above 0','a turning number of size 1'],'Real-stretches technique.'],
+  ['U keeps every product. What size has every stretch of U?','1',['0','above 1','any size'],'Product-keeper technique.']];
+QP.push({id:'31d.axes',step:'31d',label:'square axes',open:()=>measured('31d'),make(){ return writtenQ('31d.axes',WD31); }},
+  {id:'31d.work',step:'31d',mode:'work',label:'stretches of a symmetric grid',open:()=>measured('31d'),make(){
+    const t=rnd(3), a=nz25(5), b=1+rnd(4);
+    if(t===0) return W30('31d.work[s;'+[a,b].join(';')+']',[['A has '+g2(a,b,b,a),'a symmetric grid'],['A stretches (1, 1) and (1, −1)','its axes']],'By what does A stretch (1, 1) and (1, −1)?',sg(a+b)+' and '+sg(a-b),[sg(a)+' and '+sg(b),sg(a-b)+' and '+sg(a+b),sg(a*a-b*b)+' and '+sg(2*a),sg(a+b)+' and '+sg(a+b)],'A(1, 1) = '+v27([a+b,a+b])+' and A(1, −1) = '+v27([a-b,b-a])+'.');
+    if(t===1){ const p=1+rnd(4), q=p+1+rnd(3), l=1+rnd(4), mu=l+1+rnd(4);
+      return W30('31d.work[r;'+[p,q,l,mu].join(';')+']',[['a symmetric map stretches '+v27([p,q])+' by '+l,'given'],['it stretches v by '+mu,'given']],'Which arrow can v be?',v27([q,-p]),[v27([p,q]),v27([q,p]),v27([p,-q]),v27([-p,-q])],'Right-angled-stretches technique: '+l+' ≠ '+mu+', so v is at right angles to '+v27([p,q])+'.'); }
+    const x=nz25(4), y=1+rnd(4);
+    return W30('31d.work[q;'+[x,y].join(';')+']',[['A has '+g2(x,-y,y,x),'a real grid, not symmetric']],'What are the stretches of A?',sg(x)+' + '+cf22(y,'i')+' and '+sg(x)+' − '+cf22(y,'i'),[sg(x+y)+' and '+sg(x-y),sg(x)+' and '+y,y+' + '+cf22(Math.abs(x),'i')+' and '+y+' − '+cf22(Math.abs(x),'i'),sg(x)+' and '+sg(x)],'('+sg(x)+' − λ)² + '+y*y+' = 0 has no real root: λ = '+sg(x)+' ± '+cf22(y,'i')+'. Only a symmetric map is promised real stretches.'); }},
+  {id:'31d.line',step:'31d',mode:'proof',label:'what symmetry gives',open:()=>measured('31d'),make(){
+    const a=nz25(5), b=1+rnd(4), l=1+rnd(6);
+    const V=[
+      ['d1',[['A has '+g2(a,b,b,a),'given'],['A stretches (1, 1) by '+sg(a+b)+' and (1, −1) by '+sg(a-b),'put the arrows in']],2,0,'A(1, 1) = '+v27([a+b,a+b])+' and A(1, −1) = '+v27([a-b,b-a])+'.'],
+      ['d2',[['a symmetric map stretches u by '+l+' and v by '+l,'given'],['u and v are at right angles','the right-angled-stretches technique']],2,1,'The technique needs λ ≠ μ.'],
+      ['d3',[['a symmetric map stretches u by '+l+' and v by '+(l+b),'given'],['u and v are at right angles','the right-angled-stretches technique']],2,0,l+' ≠ '+(l+b)+'.'],
+      ['d4',[['A has rows (1, 1), (0, 2)','given'],['its stretched arrows are at right angles','the right-angled-stretches technique']],2,1,'A is not symmetric. Its stretched arrows are at 45°.'],
+      ['d5',[['U*U = I','given'],['every stretch of U has size 1','the product-keeper technique']],2,0,'U keeps every size.'],
+      ['d6',[['A has rows (0, −1), (1, 0)','given'],['A has a real stretch','the real-stretches technique']],2,1,'The quarter turn is not symmetric. Its stretches are i and −i.'],
+      ['d7',[['A is symmetric','given'],['every stretch of A is a real number','the real-stretches technique']],2,0,'Real-stretches technique.']];
+    return line28('31d.line',V,[a,b,l]); }});
+
+/* ---------- 31e Quadratic Forms ---------- */
+const WE31=[
+  ['det A > 0. Is q positive definite?','no: −x₁² − x₂² has det 1 and is below 0 everywhere but 0',['yes','yes, for n = 2','no: det A must be below 0'],'Form-test technique: p > 0 and pr − s² > 0.'],
+  ['Every number of A is above 0. Is q positive definite?','no: rows (1, 2), (2, 1) give q(1, −1) = −2',['yes','yes, when A is symmetric','no: some number must be 0'],'Form-test technique: every stretch of A above 0.'],
+  ['Written as a sum of squares, are the numbers in front fixed, as well as their signs?','no: only the counts of signs are; 3 and 1 along the axes, 2 and 3/2 by completing the square',['yes','no: the signs change too','yes, up to their order'],'Sign-count technique.'],
+  ['A stretch of H is 0. Is the flat point a saddle?','not always: x² + y⁴ has H with a stretch 0 and a bottom',['yes','no: it is always a bottom','no: it is always a top'],'Hug-axes technique: it speaks only when no stretch is 0.'],
+  ['When is q positive definite?','exactly when every stretch of A is above 0',['when det A > 0','when every number of A is above 0','when some stretch of A is above 0'],'Form-test technique.'],
+  ['H has stretches of both signs at a flat point. What is the point?','a saddle',['a bottom','a top','it cannot be told'],'Hug-axes technique.']];
+QP.push({id:'31e.forms',step:'31e',label:'quadratic forms',open:()=>measured('31e'),make(){ return writtenQ('31e.forms',WE31); }},
+  {id:'31e.work',step:'31e',mode:'work',label:'test a form',open:()=>measured('31e'),make(){
+    const t=rnd(4);
+    if(t===0){ const p=1+rnd(4), r=1+rnd(5), s=rnd(4), d=p*r-s*s, O=['positive definite','not positive definite: pr − s² is below 0','not positive definite: pr − s² is 0','it cannot be told from p, r and s'];
+      return {index:'q:31e.work[f;'+[p,s,r].join(';')+']', lines:[['A has '+g2(p,s,s,r),'the grid of q']], ask:'Is q positive definite?', right:O[d>0?0:d<0?1:2], opts:shuffle(O), lead:'', why:'Form-test technique: p = '+p+' > 0, and pr − s² = '+p*r+' − '+s*s+' = '+sg(d)+'.'}; }
+    if(t===1){ const c=shuffle([1+rnd(5),pick([-3,-2,-1,0,2]),pick([-4,-1,0,0,3])]), pos=c.filter(x=>x>0).length;
+      return W30('31e.work[c;'+c.join(',')+']',[['q = '+c.map((x,i)=>(i?(x<0?' − ':' + '):(x<0?'−':''))+Math.abs(x)+'z'+'₁₂₃'[i]+'²').join(''),'one writing, with z = Tx and T undoable']],'In any other such writing, how many of the three numbers in front are above 0?',String(pos),['0','1','2','3','it depends on T'],'Sign-count technique: the counts above 0, below 0 and equal to 0 are always the same.'); }
+    if(t===2){ const l=pick([-4,-2,-1,0,1,3,5]), m=pick([-3,-1,0,2,4]), O=['a bottom','a top','a saddle','the technique does not say'];
+      return {index:'q:31e.work[h;'+[l,m].join(';')+']', lines:[['a flat point with continuous second slopes','given'],['H has stretches '+sg(l)+' and '+sg(m)+' there','given']], ask:'What is the point?', right:O[l>0&&m>0?0:l<0&&m<0?1:l*m<0?2:3], opts:shuffle(O), lead:'', why:'Hug-axes technique: all above 0 a bottom, all below 0 a top, both signs a saddle. With a stretch 0 it does not say.'}; }
+    const l=nz25(4), m=nz25(4), y=[nz25(3),nz25(3)];
+    return W30('31e.work[a;'+[l,m,y].join(';')+']',[['A has stretches '+sg(l)+' and '+sg(m)+' along its axes','given'],['y = Qᵀx = '+v27(y),'x read along the axes']],'What is q(x)?',sg(l*y[0]*y[0]+m*y[1]*y[1]),[sg(l*y[0]+m*y[1]),sg((l+m)*(y[0]*y[0]+y[1]*y[1])),sg(l*y[1]*y[1]+m*y[0]*y[0]+1),sg(l*m*y[0]*y[1]),sg(l*y[0]*y[0]+m*y[1]*y[1]+1)],'Axes-form technique: λ₁y₁² + λ₂y₂² = '+sg(l)+' · '+y[0]*y[0]+' + '+par10(m)+' · '+y[1]*y[1]+'.'); }},
+  {id:'31e.line',step:'31e',mode:'proof',label:'signs, not numbers',open:()=>measured('31e'),make(){
+    const s=1+rnd(3), p=s+1+rnd(3), r=s+1+rnd(3), a=1+rnd(5), b=1+rnd(5), d=1+rnd(9);
+    const V=[
+      ['e1',[['A has '+g2(p,s,s,r),'given'],['q is positive definite','the form-test technique']],2,0,'p = '+p+' > 0, and pr − s² = '+(p*r-s*s)+' > 0.'],
+      ['e2',[['det A = '+d,'given'],['q is positive definite','det A > 0']],2,1,'−x₁² − x₂² has det 1 and is below 0 everywhere but 0. The test also needs p > 0.'],
+      ['e3',[['at a flat point, H has stretches '+a+' and '+b,'given'],['the point is a bottom','the hug-axes technique']],2,0,'Every stretch is above 0.'],
+      ['e4',[['at a flat point, H has stretches 0 and '+a,'given'],['the point is a saddle','the hug-axes technique']],2,1,'With a stretch 0 the technique does not say. x² + y⁴ has a bottom.'],
+      ['e5',[['q = '+(a+1)+'z₁² + z₂² in one writing','given'],['every other such writing has '+(a+1)+' and 1 in front','the sign-count technique']],2,1,'Only the counts of signs are fixed.'],
+      ['e6',[['q = '+cf22(a,'z₁²')+' − '+cf22(b,'z₂²')+' in one writing','given'],['every other such writing has one number above 0 and one below','the sign-count technique']],2,0,'The counts of signs are always the same.'],
+      ['e7',[['every number of A is above 0','given'],['q is positive definite','the numbers of A']],2,1,'Rows (1, 2), (2, 1): q(1, −1) = −2.']];
+    return line28('31e.line',V,[p,s,r,a,b,d]); }});
+
+/* ---------- 31f Turn, Stretch, Turn ---------- */
+const WF31=[
+  ['Are the stretch sizes of A its stretches?','no: the grid of 31f2 has stretches 3 and 5, and stretch sizes 6.708 and 2.236',['yes','yes, when A is square','no: they are the squares of the stretches'],'The stretch sizes are σₖ = √λₖ, for the stretches λₖ of AᵀA.'],
+  ['Is ‖A‖ the largest number in A?','no: rows (1, 1), (1, 1) have largest number 1 and ‖A‖ = 2',['yes','no: it is the sum of the numbers','yes, when A is symmetric'],'Greatest-stretch technique: ‖A‖ = σ₁.'],
+  ['Is U = V in every turn-stretch-turn?','no: only for symmetric A with stretches ≥ 0',['yes','yes, when A is square','no: never'],'Turn-stretch-turn technique.'],
+  ['Is Aᵣ the grid A with all but r rows set to 0?','no: Aᵣ keeps the r largest pieces σₖuₖvₖᵀ, which spread over every row',['yes','no: all but r columns','yes, when A is square'],'Keep-the-largest technique.'],
+  ['What is the most A lengthens any arrow?','σ₁',['σ₁²','the largest number in A','σ₁ + σ₂ + ⋯'],'Greatest-stretch technique.'],
+  ['How close to A can a grid come that reaches at most r dimensions?','no closer than σᵣ₊₁',['as close as you like','no closer than σᵣ','no closer than σ₁'],'Keep-the-largest technique.']];
+QP.push({id:'31f.tst',step:'31f',label:'turn, stretch, turn',open:()=>measured('31f'),make(){ return writtenQ('31f.tst',WF31); }},
+  {id:'31f.work',step:'31f',mode:'work',label:'stretch sizes',open:()=>measured('31f'),make(){
+    const t=rnd(4);
+    if(t===0){ const a=-(2+rnd(5)), b=1+rnd(-a-1);
+      return W30('31f.work[d;'+[a,b].join(';')+']',[['A has '+g2(a,0,0,b),'given']],'What is σ₁, the largest stretch size of A?',String(-a),[sg(a),String(b),String(a*a),String(-a+b)],'AᵀA has stretches '+a*a+' and '+b*b+'. The stretch sizes are their roots, '+(-a)+' and '+b+', never below 0.'); }
+    if(t===1){ const s=2+rnd(6), m=2+rnd(5);
+      return W30('31f.work[g;'+[s,m].join(';')+']',[['σ₁ = '+s,'the largest stretch size of A'],['|x| = '+m,'given']],'What does the greatest-stretch technique say of |Ax|?','at most '+s*m,['exactly '+s*m,'at least '+s*m,'at most '+(s+m),'at most '+s],'Greatest-stretch technique: |Ax| ≤ σ₁|x|, with equality at x along v₁.'); }
+    if(t===2){ const s3=1+rnd(3), s2=s3+1+rnd(3), s1=s2+1+rnd(4), r=1+rnd(2);
+      return W30('31f.work[k;'+[s1,s2,s3,r].join(';')+']',[['A has stretch sizes '+s1+', '+s2+' and '+s3,'given'],['A'+'₁₂'[r-1]+' keeps the '+(r===1?'largest piece':'two largest pieces'),'given']],'What is ‖A − A'+'₁₂'[r-1]+'‖?',String([s2,s3][r-1]),[String(s1),String([s3,s2][r-1]),String(s1-[s2,s3][r-1]),String(r===1?s2+s3:s3+1),'0'],'Keep-the-largest technique: ‖A − Aᵣ‖ = σᵣ₊₁.'); }
+    const a=2+rnd(5), b=1+rnd(a-1);
+    return W30('31f.work[r;'+[a,b].join(';')+']',[['AᵀA has stretches '+a*a+' and '+b*b,'given']],'What are the stretch sizes of A?',a+' and '+b,[a*a+' and '+b*b,a*a*a*a+' and '+b*b*b*b,(a+b)+' and '+(a-b),F30(a*a,2)+' and '+F30(b*b,2)],'σₖ = √λₖ, for the stretches λₖ of AᵀA.'); }},
+  {id:'31f.line',step:'31f',mode:'proof',label:'the greatest stretch',open:()=>measured('31f'),make(){
+    const s=2+rnd(6), m=2+rnd(5), s3=1+rnd(3), s2=s3+1+rnd(3), s1=s2+1+rnd(4);
+    const V=[
+      ['f1',[['σ₁ = '+s+' and |x| = '+m,'given'],['|Ax| ≤ '+s*m,'the greatest-stretch technique']],2,0,'σ₁|x|.'],
+      ['f2',[['σ₁ = '+s+' and |x| = '+m,'given'],['|Ax| = '+s*m,'the greatest-stretch technique']],2,1,'The technique gives at most. Equality holds for x along v₁.'],
+      ['f3',[['A has stretch sizes '+s1+', '+s2+' and '+s3,'given'],['‖A − A₁‖ = '+s2,'the keep-the-largest technique']],2,0,'σ₂.'],
+      ['f4',[['A has stretch sizes '+s1+', '+s2+' and '+s3,'given'],['‖A − A₁‖ = '+s1,'the keep-the-largest technique']],2,1,'‖A − Aᵣ‖ = σᵣ₊₁: here σ₂ = '+s2+'.'],
+      ['f5',[['A has rows (1, 1), (1, 1)','given'],['‖A‖ = 1','the largest number in A']],2,1,'A(1, 1) = (2, 2): ‖A‖ = 2.'],
+      ['f6',[['A is a real grid','given'],['no stretch of AᵀA is below 0','the never-negative technique']],2,0,'Never-negative technique.'],
+      ['f7',[['A is a square real grid','given'],['U = V in A = UΣVᵀ','the turn-stretch-turn technique']],2,1,'Only for symmetric A with stretches ≥ 0.']];
+    return line28('31f.line',V,[s,m,s1,s2,s3]); }});
+
+/* ---------- 31g Sizes of Functions ---------- */
+const WG31=[
+  ['Does ‖f‖₁ = 0 give f(x) = 0 for every x?','no: only but for size zero; h = 1 at ½ alone has ‖h‖₁ = 0',['yes','yes, in L¹','no: f can be 1 on an interval'],'Size-zero-sameness technique.'],
+  ['In L², is f(½) a number?','no: the box of f holds functions with every value at ½',['yes','yes, when f is sized','no: it is always 0'],'Agreeing but for size zero is the sameness.'],
+  ['Is ‖f‖∞ ≤ ‖f‖₁ on [0, 1]?','no: the tents have height n and total size 1',['yes','yes, by the size-order technique','no: the two are always equal'],'Size-order technique: ‖f‖₁ ≤ ‖f‖₂ ≤ ‖f‖∞ on [0, 1].'],
+  ['Does ‖fₙ − f‖₁ → 0 give fₙ(x) → f(x) at every x?','no: the sweeping blocks settle at 0 in total size and at no point',['yes','yes, on [0, 1]','no: and no sub-list settles at any point'],'Size-complete technique: some sub-list settles at every point but a set of size zero.'],
+  ['On [0, 1], how are the three sizes ordered?','‖f‖₁ ≤ ‖f‖₂ ≤ ‖f‖∞',['‖f‖∞ ≤ ‖f‖₂ ≤ ‖f‖₁','‖f‖₂ ≤ ‖f‖₁ ≤ ‖f‖∞','they are equal'],'Size-order technique.'],
+  ['When are p and q matched?','when 1/p + 1/q = 1',['when p = q','when p + q = 1','when pq = 1'],'Matched-powers technique: ∫|fg| ≤ ‖f‖ₚ ‖g‖_q.']];
+QP.push({id:'31g.sizes',step:'31g',label:'sizes of functions',open:()=>measured('31g'),make(){ return writtenQ('31g.sizes',WG31); }},
+  {id:'31g.work',step:'31g',mode:'work',label:'three sizes',open:()=>measured('31g'),make(){
+    const t=rnd(4);
+    if(t===0){ const c=1+rnd(6), r=2+rnd(3), L=r*r, q=rnd(3);
+      return W30('31g.work[c;'+[c,L,q].join(';')+']',[['f = '+c+' on [0, '+L+']','a constant function']],['What is ‖f‖₁, the total size?','What is ‖f‖₂?','What is ‖f‖∞, the highest height?'][q],String([c*L,c*r,c][q]),[String(c*L),String(c*r),String(c),String(c*c*L),String(L)],'‖f‖₁ = ∫|f| = '+c*L+', ‖f‖₂ = √(∫|f|²) = √'+c*c*L+' = '+c*r+', and ‖f‖∞ = '+c+'.'); }
+    if(t===1){ const k=2*(1+rnd(5)), q=rnd(2);
+      return W30('31g.work[l;'+[k,q].join(';')+']',[['f(x) = '+k+'x on [0, 1]','given']],q?'What is ‖f‖∞, the highest height?':'What is ‖f‖₁, the total size?',String(q?k:k/2),[String(k),String(k/2),String(2*k),'1',String(k*k)],q?'The highest height is at x = 1.':'∫ '+k+'x dx over [0, 1] = '+k/2+'.'); }
+    if(t===2){ const [p,q]=pick([['2','2'],['3','3/2'],['4','4/3'],['3/2','3'],['5','5/4'],['5/4','5']]);
+      return W30('31g.work[m;'+p+']',[['p = '+p,'given']],'Which q is matched with p?',q,['2','3','3/2','4/3','5/4','5','1/2'].filter(x=>x!==q&&x!==p).concat([p]),'p and q are matched when 1/p + 1/q = 1.'); }
+    const r=2+rnd(4), L=r*r, s=1+rnd(6);
+    return W30('31g.work[o;'+[L,s].join(';')+']',[['f is on an interval of length '+L,'given'],['‖f‖₂ = '+s,'given']],'What does the size-order technique say of ‖f‖₁?','at most '+r*s,['at most '+s,'at most '+L*s,'at least '+r*s,'exactly '+r*s],'Size-order technique: ‖f‖₁ ≤ √L ‖f‖₂ = '+r+' · '+s+'.'); }},
+  {id:'31g.line',step:'31g',mode:'proof',label:'but for size zero',open:()=>measured('31g'),make(){
+    const c=1+rnd(6), r=2+rnd(3), L=r*r, s=1+rnd(6);
+    const V=[
+      ['g1',[['f = '+c+' on [0, '+L+']','given'],['‖f‖₁ = '+c*L,'the total size']],2,0,'∫|f| = '+c+' · '+L+'.'],
+      ['g2',[['‖f‖₁ = 0','given'],['f(x) = 0 at every x','the size-zero-sameness technique']],2,1,'Only but for size zero. h = 1 at ½ alone has ‖h‖₁ = 0.'],
+      ['g3',[['on [0, 1], ‖f‖₂ = '+s,'given'],['‖f‖₁ ≤ '+s,'the size-order technique']],2,0,'On [0, 1], ‖f‖₁ ≤ ‖f‖₂.'],
+      ['g4',[['on [0, '+L+'], ‖f‖₂ = '+s,'given'],['‖f‖₁ ≤ '+s,'the size-order technique']],2,1,'On length '+L+' the bound is √L ‖f‖₂ = '+r*s+'.'],
+      ['g5',[['p = 3 and q = 3/2','given'],['∫|fg| ≤ ‖f‖ₚ ‖g‖_q','the matched-powers technique']],2,0,'1/3 + 2/3 = 1.'],
+      ['g6',[['p = 3 and q = 3','given'],['∫|fg| ≤ ‖f‖ₚ ‖g‖_q','the matched-powers technique']],2,1,'1/3 + 1/3 is not 1: p and q are not matched.'],
+      ['g7',[['‖fₙ − f‖₁ → 0','given'],['fₙ(x) → f(x) at every x','the size-complete technique']],2,1,'Only some sub-list settles, and only but for a set of size zero.']];
+    return line28('31g.line',V,[c,L,s]); }});
+
+/* ---------- 31h A Plane With Endlessly Many Directions ---------- */
+const WH31=[
+  ['Is Σ|⟨f, eₖ⟩|² = ‖f‖² for every right-angled list?','no: only for a basis; drop e₁ from a basis and f = e₁ has readings 0',['yes','yes, in a complete product space','no: the sum is always the larger'],'Energy-bound technique: Σ|⟨f, eₖ⟩|² ≤ ‖f‖².'],
+  ['Is every endless right-angled list a basis?','no: the sines for odd k alone are right-angled and miss sin(2πx)',['yes','yes, in a complete product space','no: no endless list is'],'Energy-sum technique.'],
+  ['Does Σ cₖeₖ settle for every list of numbers cₖ?','no: only when Σ|cₖ|² settles; cₖ = 1/√k does not',['yes','yes, when cₖ heads to 0','no: only for finitely many cₖ'],'List-space technique.'],
+  ['Has every space inside a product space closest points?','no: the polynomials inside L² on [0, 1] are not closed; the step at ½ has no closest polynomial',['yes','yes, when the product space is complete','no: only lines have them'],'Complete-closest technique: W closed.'],
+  ['What does the energy-bound technique say?','Σ|⟨f, eₖ⟩|² ≤ ‖f‖²',['Σ|⟨f, eₖ⟩|² = ‖f‖²','Σ|⟨f, eₖ⟩|² ≥ ‖f‖²','Σ|⟨f, eₖ⟩| ≤ ‖f‖'],'The readings of f never hold more energy than f.'],
+  ['W is closed inside a complete product space. How many closest points has f in W?','exactly one',['none','at least one, maybe more','endlessly many'],'Complete-closest technique.']];
+QP.push({id:'31h.endless',step:'31h',label:'endlessly many directions',open:()=>measured('31h'),make(){ return writtenQ('31h.endless',WH31); }},
+  {id:'31h.work',step:'31h',mode:'work',label:'energy in the readings',open:()=>measured('31h'),make(){
+    const t=rnd(4), a=1+rnd(5), b=1+rnd(5), c=1+rnd(4);
+    if(t===0) return W30('31h.work[b;'+[a,b].join(';')+']',[['e₁ and e₂ are in a right-angled list','given'],['⟨f, e₁⟩ = '+a+' and ⟨f, e₂⟩ = '+b,'two readings of f']],'What does the energy-bound technique say of ‖f‖²?','at least '+(a*a+b*b),['exactly '+(a*a+b*b),'at most '+(a*a+b*b),'at least '+(a+b),'at least '+(a+b)*(a+b)],'Energy-bound technique: |⟨f, e₁⟩|² + |⟨f, e₂⟩|² ≤ ‖f‖².');
+    if(t===1) return W30('31h.work[s;'+[a,b,c].join(';')+']',[['e₁, e₂, … is a right-angled basis','given'],['the readings of f are '+a+', '+b+', '+c+', and 0 from there on','given']],'What is ‖f‖²?',String(a*a+b*b+c*c),[String(a+b+c),String((a+b+c)*(a+b+c)),String(a*a+b*b),String(a*b*c),String(a*a+b*b+c*c+1)],'Energy-sum technique: ‖f‖² = Σ|⟨f, eₖ⟩|² for a basis.');
+    if(t===2){ const [ck,ok,why]=pick([['1/k',1,'Σ 1/k² settles.'],['1/√k',0,'Σ 1/k does not settle, though cₖ heads to 0.'],['1',0,'Σ 1 does not settle.'],['1/2ᵏ',1,'Σ 1/4ᵏ settles.'],['1/k²',1,'Σ 1/k⁴ settles.']]), O=['yes: Σ|cₖ|² settles','no: Σ|cₖ|² does not settle','yes: cₖ heads to 0','no: the list is endless'];
+      return {index:'q:31h.work[c;'+ck+']', lines:[['e₁, e₂, … is a right-angled list in a complete product space','given'],['cₖ = '+ck,'given']], ask:'Does Σ cₖeₖ settle?', right:O[ok?0:1], opts:shuffle(O), lead:'', why:'It settles exactly when Σ|cₖ|² settles. '+why}; }
+    const n=a*a+b*b+c*c;
+    return W30('31h.work[m;'+[a,b,c].join(';')+']',[['‖f‖² = '+n,'given'],['the readings of f on a right-angled list have Σ|⟨f, eₖ⟩|² = '+(a*a+b*b),'given']],'What is the square of the size of the miss, f − Σ⟨f, eₖ⟩eₖ?',String(c*c),[String(n),String(a*a+b*b),String(c),'0',String(n+a*a+b*b)],'The miss is at right angles to every eₖ, so the squares add: '+n+' − '+(a*a+b*b)+'.'); }},
+  {id:'31h.line',step:'31h',mode:'proof',label:'a list or a basis',open:()=>measured('31h'),make(){
+    const a=1+rnd(5), b=1+rnd(5);
+    const V=[
+      ['h1',[['e₁, e₂ are in a right-angled list, with ⟨f, e₁⟩ = '+a+' and ⟨f, e₂⟩ = '+b,'given'],['‖f‖² ≥ '+(a*a+b*b),'the energy-bound technique']],2,0,a*a+' + '+b*b+'.'],
+      ['h2',[['e₁, e₂, … is a right-angled list, and the readings of f are '+a+', '+b+', and 0 from there on','given'],['‖f‖² = '+(a*a+b*b),'the energy-sum technique']],2,1,'Equality needs a basis. A list gives only at most.'],
+      ['h3',[['e₁, e₂, … is a right-angled basis, and the readings of f are '+a+', '+b+', and 0 from there on','given'],['‖f‖² = '+(a*a+b*b),'the energy-sum technique']],2,0,'For a basis, ‖f‖² = Σ|⟨f, eₖ⟩|².'],
+      ['h4',[['cₖ = 1/√k','given'],['Σ cₖeₖ settles','cₖ heads to 0']],2,1,'Σ|cₖ|² = Σ 1/k does not settle.'],
+      ['h5',[['cₖ = 1/k, in a complete product space','given'],['Σ cₖeₖ settles','Σ|cₖ|² settles']],2,0,'Σ 1/k² settles.'],
+      ['h6',[['W is the polynomials inside L² on [0, 1]','given'],['every f has a closest point in W','the complete-closest technique']],2,1,'W is not closed. The step at ½ has no closest polynomial.'],
+      ['h7',[['W is a closed space inside a complete product space','given'],['every f has exactly one closest point in W','the complete-closest technique']],2,0,'Complete-closest technique.']];
+    return line28('31h.line',V,[a,b]); }});
+
+/* ===== Laundry 5, rung 31 (floor 6 pools, stage AD), part 2: 31i to 31o ===== */
+Object.assign(STEPS,{'31i':['r31i','Complete Spaces With a Size'],'31j':['r31j','Polynomials Are Everywhere Near'],'31k':['r31k','Projections and Least Squares by Hand'],'31l':['r31l','Correlation and Regression'],'31m':['r31m','Interpolation and Orthogonal Polynomials'],'31n':['r31n','Eigenvalues by Machine'],'31o':['r31o','Principal Components']});
+
+/* ---------- 31i Complete Spaces With a Size ---------- */
+const WI31=[
+  ['Is every straight map between function spaces bounded?','no: the slope is straight and not bounded',['yes','yes, when the space is complete','no: no straight map is bounded'],'Bounded-is-continuous technique.'],
+  ['Are the continuous functions complete under ‖·‖₁?','no: the ramps crowd and settle at a step',['yes','yes, as under ‖·‖∞','no: no list of them crowds'],'Sup-complete technique: sized by ‖f‖∞.'],
+  ['Is f ↦ f(½) a bounded reading on L²?','no: tall thin tents have f(½) = n with ‖f‖₂ as small as you like',['yes','yes: it is straight','no: it is not straight'],'Reading-is-product technique: a bounded reading is ⟨f, g⟩.'],
+  ['Σ gₖ settles. Does Σ‖gₖ‖ settle?','not always: in ℓ², gₖ = eₖ/k settles and Σ 1/k does not',['yes','yes, in a complete space','never'],'Size-sum technique: it runs one way.'],
+  ['When is a straight map between spaces with sizes continuous?','exactly when it is bounded',['always','exactly when it is undoable','never'],'Bounded-is-continuous technique.'],
+  ['In a complete product space, what is every bounded reading φ?','φ(f) = ⟨f, g⟩ for exactly one arrow g',['φ(f) = ‖f‖','φ(f) = f(½)','φ(f) = ⟨f, f⟩'],'Reading-is-product technique.']];
+QP.push({id:'31i.complete',step:'31i',label:'complete spaces with a size',open:()=>measured('31i'),make(){ return writtenQ('31i.complete',WI31); }},
+  {id:'31i.work',step:'31i',mode:'work',label:'bounded maps and readings',open:()=>measured('31i'),make(){
+    const t=rnd(3);
+    if(t===0){ const [a,b,c]=pick(PY28);
+      return W30('31i.work[r;'+[a,b].join(';')+']',[['φ(f) = '+cf22(a,'f₁')+' + '+cf22(b,'f₂')+' on the plane','a bounded reading'],['φ(f) = ⟨f, g⟩ with g = '+v27([a,b]),'the reading-is-product technique']],'What is ‖φ‖?',String(c),[String(a+b),String(c*c),String(Math.max(a,b)),String(a*b)],'Reading-is-product technique: ‖φ‖ = ‖g‖ = √('+a*a+' + '+b*b+').'); }
+    if(t===1){ const [gk,ok,why]=pick([['1/k²',1,'Σ 1/k² settles.'],['1/2ᵏ',1,'Σ 1/2ᵏ settles.'],['1/k',0,'Σ 1/k does not settle. In ℓ², eₖ/k still settles.'],['1/√k',0,'Σ 1/√k does not settle.']]), O=['yes: Σ‖gₖ‖ settles','the size-sum technique does not say: Σ‖gₖ‖ does not settle','no: Σ‖gₖ‖ does not settle','yes: ‖gₖ‖ heads to 0'];
+      return {index:'q:31i.work[s;'+gk+']', lines:[['a complete space with a size','given'],['‖gₖ‖ = '+gk,'given']], ask:'Does g₁ + g₂ + ⋯ settle?', right:O[ok?0:1], opts:shuffle(O), lead:'', why:'Size-sum technique: if Σ‖gₖ‖ settles, the sum settles. '+why}; }
+    const m=2+rnd(6), n=2+rnd(6);
+    return W30('31i.work[b;'+[m,n].join(';')+']',[['T is a straight map with ‖T‖ = '+m,'bounded'],['‖f‖ = '+n,'given']],'What is known of ‖Tf‖?','at most '+m*n,['exactly '+m*n,'at least '+m*n,'at most '+(m+n),'at most '+m],'A bounded map has ‖Tf‖ ≤ ‖T‖ ‖f‖.'); }},
+  {id:'31i.line',step:'31i',mode:'proof',label:'bounded, or only straight',open:()=>measured('31i'),make(){
+    const [a,b,c]=pick(PY28), m=2+rnd(6), n=2+rnd(6);
+    const V=[
+      ['i1',[['φ(f) = ⟨f, g⟩ with g = '+v27([a,b]),'given'],['‖φ‖ = '+c,'the reading-is-product technique']],2,0,'‖φ‖ = ‖g‖.'],
+      ['i2',[['T is a straight map between spaces with sizes','given'],['T is continuous','the bounded-is-continuous technique']],2,1,'The technique needs T bounded. The slope is straight and not bounded.'],
+      ['i3',[['T is a straight map with ‖T‖ = '+m,'given'],['T is continuous','the bounded-is-continuous technique']],2,0,'T is bounded.'],
+      ['i4',[['a complete space with a size, and ‖gₖ‖ = 1/k²','given'],['g₁ + g₂ + ⋯ settles','the size-sum technique']],2,0,'Σ 1/k² settles.'],
+      ['i5',[['g₁ + g₂ + ⋯ settles','given'],['‖g₁‖ + ‖g₂‖ + ⋯ settles','the size-sum technique']],2,1,'The technique runs the other way. In ℓ², gₖ = eₖ/k settles and Σ 1/k does not.'],
+      ['i6',[['the continuous functions on [0, 1], sized by ‖f‖₁','given'],['every crowding list of them settles at a continuous function','the sup-complete technique']],2,1,'The technique is for ‖f‖∞. Under ‖f‖₁ the ramps settle at a step.'],
+      ['i7',[['‖T‖ = '+m+' and ‖f‖ = '+n,'given'],['‖Tf‖ ≤ '+m*n,'T is bounded']],2,0,'‖T‖ ‖f‖.']];
+    return line28('31i.line',V,[a,b,m,n]); }});
+
+/* ---------- 31j Polynomials Are Everywhere Near ---------- */
+const WJ31=[
+  ['‖p − f‖∞ < ε. Is |p′ − f′| small?','no: the slope is not bounded; f may have no slope at all',['yes','yes, when ε is small','no: p has no slope'],'Near in height says nothing of slopes.'],
+  ['Is Bₙf = f for every polynomial f of degree ≤ n?','no: Bₙ keeps lines only; Bₙx² misses by x(1 − x)/n',['yes','yes, for degree ≤ 2','no: it keeps no function'],'Coin-average technique.'],
+  ['Do the coins make the polynomial random?','no: Bₙf(x) is an average, one fixed number for each x; the chance is in the proof, not the result',['yes','yes, for small n','no: no coins are used'],'Coin-average technique.'],
+  ['Is every function on [0, 1] near a polynomial in ‖·‖∞?','no: only continuous ones; a step stays ½ away from every continuous function at its jump',['yes','yes, when it is bounded','no: only polynomials are'],'Average-polynomial technique: f continuous.'],
+  ['What is Bₙx²?','x² + x(1 − x)/n',['x²','x² − x(1 − x)/n','x²/n'],'Coin-average technique.'],
+  ['f is continuous on [0, 1]. What does ‖Bₙf − f‖∞ head to?','0',['1/4','1/(4n), and no lower','it does not settle'],'Average-polynomial technique.']];
+QP.push({id:'31j.near',step:'31j',label:'polynomials are near',open:()=>measured('31j'),make(){ return writtenQ('31j.near',WJ31); }},
+  {id:'31j.work',step:'31j',mode:'work',label:'coin averages',open:()=>measured('31j'),make(){
+    const t=rnd(4), n=2+rnd(9), [p,q]=pick([[1,2],[1,3],[1,4],[2,3],[3,4]]);
+    if(t===0) return W30('31j.work[b;'+[n,p,q].join(';')+']',[['Bₙx² = x² + x(1 − x)/n','the coin-average technique'],['n = '+n+' and x = '+F30(p,q),'given']],'What is Bₙx² there?',F30(p*p*n+p*(q-p),q*q*n),[F30(p*p,q*q),F30(p*p*n-p*(q-p),q*q*n),F30(p*(q-p),q*q*n),F30(p*p,q*q*n),F30(p,q)],'x² = '+F30(p*p,q*q)+', and x(1 − x)/n = '+F30(p*(q-p),q*q*n)+'.');
+    if(t===1) return W30('31j.work[s;'+[n,p,q].join(';')+']',[[n+' tosses of a coin that shows heads with chance x = '+F30(p,q),'given']],'What is the spread of the share of heads?',F30(p*(q-p),q*q*n),[F30(p*(q-p),q*q),F30(1,4*n),F30(p,q*n),F30(p*(q-p)*n,q*q),F30(p*p,q*q*n)],'Coin-average technique: x(1 − x)/n.');
+    if(t===2) return W30('31j.work[m;'+n+']',[['Bₙx² − x² = x(1 − x)/n','the coin-average technique'],['n = '+n,'given']],'What is the largest miss of Bₙx² from x² on [0, 1]?',F30(1,4*n),[F30(1,n),F30(1,2*n),F30(1,n*n),'0',F30(1,4)],'x(1 − x) is largest at x = 1/2, where it is 1/4: the miss is at most 1/(4n).');
+    const a=nz25(5), b=nz25(5);
+    return W30('31j.work[l;'+[a,b,n,p,q].join(';')+']',[['f(x) = '+lin27([[a,'x'],[b,'']]),'a line'],['n = '+n+' and x = '+F30(p,q),'given']],'What is Bₙf(x)?',F30(a*p+b*q,q),[F30(a*p,q),sg(b),F30(a*p+b*q,q*n),F30(a*p*n+b*q,q),sg(a+b)],'Coin-average technique: Bₙ1 = 1 and Bₙx = x, so Bₙ keeps every line. f('+F30(p,q)+') = '+F30(a*p+b*q,q)+'.'); }},
+  {id:'31j.line',step:'31j',mode:'proof',label:'what the averages keep',open:()=>measured('31j'),make(){
+    const n=2+rnd(9), a=nz25(5), b=nz25(5);
+    const V=[
+      ['j1',[['Bₙx² = x² + x(1 − x)/n, with n = '+n,'given'],['at x = 1/2, Bₙx² = '+F30(n+1,4*n),'put x = 1/2 in']],2,0,'1/4 + 1/(4 · '+n+').'],
+      ['j2',[['f(x) = x², and n = '+n,'given'],['Bₙf = f','f has degree ≤ n']],2,1,'Bₙ keeps lines only. Bₙx² misses by x(1 − x)/n.'],
+      ['j3',[['f(x) = '+lin27([[a,'x'],[b,'']]),'given'],['Bₙf = f','the coin-average technique: Bₙ1 = 1 and Bₙx = x']],2,0,'Bₙ keeps every line.'],
+      ['j4',[['f is continuous on [0, 1]','given'],['‖Bₙf − f‖∞ heads to 0','the average-polynomial technique']],2,0,'Average-polynomial technique.'],
+      ['j5',[['f is a step on [0, 1], with a jump of 1','given'],['some polynomial is within 1/10 of f at every input','the average-polynomial technique']],2,1,'The technique needs f continuous. A step stays ½ away from every continuous function at its jump.'],
+      ['j6',[['‖p − f‖∞ < 1/100','given'],['|p′ − f′| < 1/100 at every input','p is near f']],2,1,'The slope is not bounded. f may have no slope at all.']];
+    return line28('31j.line',V,[n,a,b]); }});
+
+/* ---------- 31k Projections and Least Squares by Hand ---------- */
+const WK31=[
+  ['Is the shadow of f on the plane at right angles to n equal to (f · n)n?','no: that is the shadow on the line through n, and only for |n| = 1',['yes','yes, when |n| = 1','no: it is f + (f · n)n'],'Through-the-normal technique: f − ((f · n)/|n|²)n.'],
+  ['Can y ≈ c₀ + c₁x + c₂x² be fitted by three fits of one column each?','no: the columns are not at right angles; fit them together, or straighten them first',['yes','yes, when the points are evenly spaced','no: no best fit exists'],'Power-columns technique: solve XᵀXc = Xᵀy.'],
+  ['Does a line through 0 fit better than a line with a start?','no: it is the shadow on a smaller piece; its misses can only be larger',['yes','yes: it has fewer numbers to find','they always fit equally well'],'A shadow on a smaller piece is no closer.'],
+  ['Is a reading weighted by 1/σ?','no: the weight is one over the spread, 1/σ²',['yes','no: by σ²','no: by σ'],'Weighted-shadow technique.'],
+  ['What is the slope of the best line y ≈ bx through 0?','Σxᵢyᵢ / Σxᵢ²',['Σyᵢ / Σxᵢ','Σxᵢyᵢ / Σyᵢ²','Σxᵢ² / Σxᵢyᵢ'],'Through-zero technique.'],
+  ['What is the distance from f to the plane at right angles to n?','|f · n|/|n|',['|f · n|','|f · n|/|n|²','|f|/|n|'],'Through-the-normal technique.']];
+const N31=[[[1,2,2],3],[[2,3,6],7],[[0,3,4],5],[[2,2,1],3],[[4,0,3],5]];
+QP.push({id:'31k.fit',step:'31k',label:'least squares by hand',open:()=>measured('31k'),make(){ return writtenQ('31k.fit',WK31); }},
+  {id:'31k.work',step:'31k',mode:'work',label:'fit by hand',open:()=>measured('31k'),make(){
+    const t=rnd(3);
+    if(t===0){ const xs=pick([[1,2],[1,3],[1,2,3],[2,1],[1,1,2]]), ys=xs.map(x=>x*(1+rnd(3))+rnd(3)-1), sxy=xs.reduce((a,x,i)=>a+x*ys[i],0), sxx=xs.reduce((a,x)=>a+x*x,0), sx=xs.reduce((a,x)=>a+x,0), sy=ys.reduce((a,y)=>a+y,0);
+      return W30('31k.work[z;'+[xs,ys].join(';')+']',[['the points are '+xs.map((x,i)=>v27([x,ys[i]])).join(', '),'given'],['fit y ≈ bx','a line through 0']],'What is the best b?',F30(sxy,sxx),[F30(sy,sx),F30(sxx,sxy||1),F30(sxy,sx),F30(sy,xs.length),F30(sxy+1,sxx)],'Through-zero technique: Σxᵢyᵢ / Σxᵢ² = '+sxy+'/'+sxx+'.'); }
+    if(t===1){ const [n,len]=pick(N31), f=[nz25(3),nz25(3),nz25(3)], d=f[0]*n[0]+f[1]*n[1]+f[2]*n[2]; if(d===0) return null;
+      return W30('31k.work[d;'+[n,f].join(';')+']',[['n = '+v27(n)+', with |n| = '+len,'the normal of a plane through 0'],['f = '+v27(f)+', and f · n = '+sg(d),'given']],'How far is f from the plane?',F30(Math.abs(d),len),[String(Math.abs(d)),F30(Math.abs(d),len*len),F30(d,len),String(Math.abs(d)*len),F30(Math.abs(d)+1,len)],'Through-the-normal technique: |f · n|/|n| = '+Math.abs(d)+'/'+len+'.'); }
+    const s1=1+rnd(4), s2=1+rnd(4), y1=2+rnd(8), y2=2+rnd(8), q=rnd(2); if(y1===y2||s1===s2) return null;
+    return W30('31k.work[w;'+[y1,s1,y2,s2,q].join(';')+']',[['two readings of one number: '+y1+' with spread '+s1+', and '+y2+' with spread '+s2,'given'],['weights wᵢ = 1/σᵢ²','one over the spread']],q?'What is the spread of the best single number?':'What is the best single number?',q?F30(s1*s2,s1+s2):F30(y1*s2+y2*s1,s1+s2),q?[F30(s1+s2,2),String(s1+s2),F30(s1+s2,s1*s2),String(Math.min(s1,s2))]:[F30(y1+y2,2),F30(y1*s1+y2*s2,s1+s2),String(s1<s2?y1:y2),F30(y1*s2+y2*s1,s1*s2)],'Weighted-shadow technique: Σwᵢyᵢ / Σwᵢ, with spread 1/Σwᵢ. Σwᵢ = '+F30(s1+s2,s1*s2)+'.'); }},
+  {id:'31k.scales',step:'31k',mode:'word',label:'two scales, one stone',open:()=>measured('31k'),make(){
+    const s1=1+rnd(4), s2=1+rnd(4), y1=40+rnd(20), y2=y1+pick([-6,-4,-3,-2,2,3,4,6]); if(s1===s2) return null;
+    const right=F30(y1*s2+y2*s1,s1+s2), wrong=uniq(right,[F30(y1+y2,2),F30(y1*s1+y2*s2,s1+s2),String(s1<s2?y1:y2),String(s1<s2?y2:y1)],3); if(wrong.length<3) return null;
+    return {index:'q:31k.scales['+[y1,s1,y2,s2].join(';')+']', a3:['31k.scales',DASH,DASH], story:'Two scales weigh the same stone. The first reads '+y1+' grams, and its readings have spread '+s1+'. The second reads '+y2+' grams, and its readings have spread '+s2+'.', lines:[], ask:'What is the best single weight, in grams?', right, opts:shuffle([right,...wrong]), lead:'', why:'Weighted-shadow technique: weigh each reading by one over its spread. ('+y1+'/'+s1+' + '+y2+'/'+s2+') over (1/'+s1+' + 1/'+s2+').'}; }},
+  {id:'31k.line',step:'31k',mode:'proof',label:'one over the spread',open:()=>measured('31k'),make(){
+    const y1=1+rnd(5), y2=1+rnd(8), [n,len]=pick(N31), f=[1+rnd(3),1+rnd(3),1+rnd(3)], d=f[0]*n[0]+f[1]*n[1]+f[2]*n[2], s=2+rnd(3), r1=2+rnd(8), r2=r1+2*(1+rnd(3));
+    const V=[
+      ['k1',[['the points are '+v27([1,y1])+' and '+v27([2,y2]),'given'],['the best line through 0 has b = '+F30(y1+2*y2,5),'the through-zero technique']],2,0,'Σxᵢyᵢ = '+(y1+2*y2)+', and Σxᵢ² = 5.'],
+      ['k2',[['n = '+v27(n)+', and f · n = '+d,'given'],['f is '+d+' from the plane at right angles to n','the through-the-normal technique']],2,1,'Divide by |n| = '+len+': '+F30(d,len)+'.'],
+      ['k3',[['n = '+v27(n)+', with |n| = '+len+', and f · n = '+d,'given'],['f is '+F30(d,len)+' from the plane at right angles to n','the through-the-normal technique']],2,0,'|f · n|/|n|.'],
+      ['k4',[['a reading has spread width σ = '+s,'given'],['its weight is '+F30(1,s),'the weighted-shadow technique']],2,1,'The weight is one over the spread: 1/σ² = '+F30(1,s*s)+'.'],
+      ['k5',[['two readings of one number, '+r1+' and '+r2+', with the same spread','given'],['the best single number is '+(r1+r2)/2,'the weighted-shadow technique']],2,0,'Equal weights give the plain average.'],
+      ['k6',[['the columns 1, x and x² are fitted to y one at a time','given'],['the three numbers found are the best c₀, c₁, c₂','three shadows']],2,1,'The columns are not at right angles. Fit them together, or straighten them first.']];
+    return line28('31k.line',V,[y1,y2,n,f,s,r1,r2]); }});
+
+/* ---------- 31l Correlation and Regression ---------- */
+const WL31=[
+  ['Is the line of x on y the line of y on x turned round?','no: their slopes multiply to r², not 1',['yes','yes, when r > 0','no: their slopes add to r'],'Two-lines technique.'],
+  ['r = 0.6. Is 60% of the spread of y accounted for?','no: the share is r² = 36%',['yes','no: 40%','no: 77%'],'Correlation-angle technique.'],
+  ['Students far above average fell back on a second test. Was that test harder for them?','not shown: the pull to the middle is the angle; it runs both ways at once',['yes','yes: every one of them fell back','no: it was easier for them'],'Two-lines technique: the line of y on x predicts r times the units of x.'],
+  ['The correlation of x and y with w taken out is small. Does x not drive y?','not shown: x may drive y through w; taking out a list answers a question about angles, not causes',['yes: x does not drive y','yes, when w is measured well','no: x drives y for certain'],'Take-out technique.'],
+  ['What is r, in arrows?','the cosine of the angle between the deviation arrows u and v',['the angle between u and v','the product u · v','the size of u over the size of v'],'Correlation-angle technique.'],
+  ['In standard units, what does the line of y on x predict?','r times the units of x',['the units of x','r² times the units of x','1/r times the units of x'],'Two-lines technique.']];
+const UV31=[[[3,4],[4,3],24,25],[[1,0],[3,4],3,5],[[0,1],[3,4],4,5],[[3,4],[5,12],63,65],[[3,4],[-4,3],0,1],[[1,0],[-3,4],-3,5],[[4,3],[-3,-4],-24,25],[[0,2],[5,12],12,13]];
+QP.push({id:'31l.corr',step:'31l',label:'correlation and regression',open:()=>measured('31l'),make(){ return writtenQ('31l.corr',WL31); }},
+  {id:'31l.work',step:'31l',mode:'work',label:'r as an angle',open:()=>measured('31l'),make(){
+    const t=rnd(5);
+    if(t===0){ const [u,v,p,q]=pick(UV31);
+      return W30('31l.work[c;'+[u,v].join(';')+']',[['the deviation arrows are u = '+v27(u)+' and v = '+v27(v),'given']],'What is r?',F30(p,q),[sg(u[0]*v[0]+u[1]*v[1]),F30(-p,q),F30(p*p,q*q),'1','0',F30(q-Math.abs(p),q)],'Correlation-angle technique: the cosine of the angle, (u · v)/(|u| |v|).'); }
+    if(t===1){ const a=pick([-9,-8,-7,-6,-5,-4,-3,-2,2,3,4,5,6,7,8,9]);
+      return W30('31l.work[s;'+a+']',[['r = '+(a<0?'−':'')+'0.'+Math.abs(a),'given']],'What share of the spread of y does the best line account for?',a*a+'%',[Math.abs(a)*10+'%',(100-a*a)+'%',(100-Math.abs(a)*10)+'%',Math.abs(a)+'%'],'Correlation-angle technique: the share is r² = 0.'+(a*a<10?'0':'')+a*a+'.'); }
+    if(t===2){ const [p,q]=pick([[1,2],[1,3],[2,3],[3,4],[1,4]]), [c,d]=pick([[1,2],[1,3],[2,1],[3,2],[1,1]]);
+      return W30('31l.work[t;'+[p,q,c,d].join(';')+']',[['r = '+F30(p,q),'given'],['the line of y on x has slope '+F30(c,d),'given']],'What is the slope of the line of x on y?',F30(p*p*d,q*q*c),[F30(d,c),F30(p*d,q*c),F30(p*p*c,q*q*d),F30(c,d)],'Two-lines technique: the two slopes multiply to r² = '+F30(p*p,q*q)+'.'); }
+    if(t===3){ const a=2+rnd(8), k=pick([-3,-2,-1,1,2,3]);
+      return W30('31l.work[u;'+[a,k].join(';')+']',[['r = 0.'+a,'given'],['x is '+Math.abs(k)+' of its spread widths '+(k<0?'below':'above')+' its average','in standard units']],'How many of its spread widths from its average does the line of y on x predict for y?',F30(a*Math.abs(k),10)+(k<0?' below':' above'),[Math.abs(k)+(k<0?' below':' above'),F30(a*Math.abs(k),10)+(k<0?' above':' below'),F30(a*a*Math.abs(k),100)+(k<0?' below':' above'),F30(10*Math.abs(k),a)+(k<0?' below':' above')],'Two-lines technique: r times the units of x. The pull is toward the middle.'); }
+    const n=pick([12,15,18,21]);
+    return W30('31l.work[o;'+n+']',[['r_xw = 3/5 and r_yw = 4/5','given'],['r_xy = '+F30(n,25),'given']],'What is the correlation of x and y with w taken out?',F30(n-12,12),[F30(n,25),F30(n-12,25),F30(12,25),'0',F30(n,12)].filter((x,i)=>true),'Take-out technique: (r_xy − r_xw r_yw)/√((1 − r_xw²)(1 − r_yw²)) = ('+F30(n,25)+' − 12/25)/(12/25).'); }},
+  {id:'31l.quiz',step:'31l',mode:'word',label:'two quizzes',open:()=>measured('31l'),make(){
+    const a=1+rnd(9), k=1+rnd(4), dn=rnd(2);
+    if(rnd(5)===0){ const right=a*a+'%', wrong=uniq(right,[a*10+'%',(100-a*a)+'%',(100-a*10)+'%',a+'%'],3); if(wrong.length<3) return null;
+      return {index:'q:31l.quiz[s;'+a+']', a3:['31l.quiz',DASH,DASH], story:'A class takes two quizzes. The scores on the two have correlation 0.'+a+'.', lines:[], ask:'What share of the spread of the second quiz’s scores does the best line account for?', right, opts:shuffle([right,...wrong]), lead:'', why:'Correlation-angle technique: the share is r² = 0.'+(a*a<10?'0':'')+a*a+'.'}; }
+    const right=F30(a*k,10)+(dn?' below':' above'), wrong=uniq(right,[k+(dn?' below':' above'),F30(a*k,10)+(dn?' above':' below'),F30(a*a*k,100)+(dn?' below':' above'),'0: at the average'],3); if(wrong.length<3) return null;
+    return {index:'q:31l.quiz['+[a,k,dn].join(';')+']', a3:['31l.quiz',DASH,DASH], story:'A class takes two quizzes. The scores on the two have correlation 0.'+a+'. One score on the first quiz is '+k+' spread width'+(k===1?'':'s')+' '+(dn?'below':'above')+' the class average.', lines:[], ask:'How many spread widths from the average does the best line predict for that student on the second quiz?', right, opts:shuffle([right,...wrong]), lead:'', why:'Two-lines technique: in standard units the line predicts r times the units of x, 0.'+a+' · '+k+'. The pull to the middle runs both ways.'}; }},
+  {id:'31l.line',step:'31l',mode:'proof',label:'r, not r squared',open:()=>measured('31l'),make(){
+    const a=2+rnd(8), [u,v,p,q]=pick(UV31), [c,d]=pick([[1,2],[1,3],[2,3],[3,2]]);
+    const V=[
+      ['l1',[['r = 0.'+a,'given'],['the best line accounts for '+a*10+'% of the spread of y','r']],2,1,'The share is r² = '+a*a+'%.'],
+      ['l2',[['r = 0.'+a,'given'],['the best line accounts for '+a*a+'% of the spread of y','the correlation-angle technique']],2,0,'r² = 0.'+(a*a<10?'0':'')+a*a+'.'],
+      ['l3',[['r = 1/2, and the line of y on x has slope '+F30(c,d),'given'],['the line of x on y has slope '+F30(d,4*c),'the two-lines technique']],2,0,'The slopes multiply to r² = 1/4.'],
+      ['l4',[['r = 1/2, and the line of y on x has slope '+F30(c,d),'given'],['the line of x on y has slope '+F30(d,c),'the same line, turned round']],2,1,'The slopes multiply to r², not 1. The lines agree only when r = ±1.'],
+      ['l5',[['the deviation arrows are u = '+v27(u)+' and v = '+v27(v),'given'],['r = '+F30(p,q),'the correlation-angle technique']],2,0,'(u · v)/(|u| |v|).'],
+      ['l6',[['the correlation of x and y with w taken out is 0','given'],['x does not drive y','the take-out technique']],2,1,'x may drive y through w. Taking out a list answers a question about angles, not causes.'],
+      ['l7',[['r_xw = 3/5, r_yw = 4/5 and r_xy = 18/25','given'],['with w taken out, the correlation of x and y is 1/2','the take-out technique']],2,0,'(18/25 − 12/25)/(12/25).']];
+    return line28('31l.line',V,[a,u,v,c,d]); }});
+
+/* ---------- 31m Interpolation and Orthogonal Polynomials ---------- */
+const WM31=[
+  ['Do more evenly spaced points always give a better fit?','no: for the bell the largest miss grows, 0.44, 1.92, 14.4, as the points grow',['yes','yes, for continuous functions','no: the fit never changes'],'Cosine-points technique: where the points sit matters.'],
+  ['Are the polynomials through the points 31j’s near polynomials?','no: 31j used coin averages, which need not pass through any point',['yes','yes, for evenly spaced points','no: 31j used tangent lines'],'Through-the-points technique.'],
+  ['Is every family of straightened polynomials the cosine family?','no: each weight has its own family; weight 1 gives 1, x, x² − 1/3',['yes','yes, on [−1, 1]','no: there is only the family of weight 1'],'Three-term technique: the family of any weight.'],
+  ['Is it safe to interpolate a table far past its last entry?','no: ω grows like a power of the distance outside the points',['yes','yes, with enough points','yes, when the points are evenly spaced'],'Interpolation-miss technique.'],
+  ['How many polynomials of degree at most n pass through n + 1 points with different inputs?','exactly one',['none','n + 1','endlessly many'],'Through-the-points technique.'],
+  ['Which points make the largest size of ω on [−1, 1] least?','the roots of Tₙ₊₁, xₖ = cos((2k + 1)π/(2n + 2))',['evenly spaced points','the ends −1 and 1, repeated','the roots of xⁿ⁺¹'],'Cosine-points technique.']];
+QP.push({id:'31m.interp',step:'31m',label:'through the points',open:()=>measured('31m'),make(){ return writtenQ('31m.interp',WM31); }},
+  {id:'31m.work',step:'31m',mode:'work',label:'pass through the points',open:()=>measured('31m'),make(){
+    const t=rnd(4);
+    if(t===0){ const a=nz25(5), m=nz25(4), x=pick([2,3,-1,4]);
+      return W30('31m.work[l;'+[a,m,x].join(';')+']',[['p has degree at most 1','given'],['p passes through '+v27([0,a])+' and '+v27([1,a+m]),'two points']],'What is p('+sg(x)+')?',sg(a+m*x),[sg(a+m),sg(a*x+m),sg(a+m*x+m),sg(m*x),sg(a-m*x)],'Through-the-points technique: the one line through them climbs '+sg(m)+' for each step of 1.'); }
+    if(t===1){ const j=rnd(3), x=pick([3,4,-1]), nodes=[0,1,2], o=nodes.filter(k=>k!==j), num=(x-o[0])*(x-o[1]), den=(j-o[0])*(j-o[1]);
+      return W30('31m.work[b;'+[j,x].join(';')+']',[['the inputs are x₀ = 0, x₁ = 1 and x₂ = 2','given'],['L'+'₀₁₂'[j]+'(x) is the product over k ≠ '+j+' of (x − xₖ)/(x'+'₀₁₂'[j]+' − xₖ)','the through-the-points technique']],'What is L'+'₀₁₂'[j]+'('+sg(x)+')?',F30(num,den),[F30(num,1),F30(-num,den),F30(den,num),'0','1',F30(num,Math.abs(den)+1)],'('+sg(x)+' − '+o[0]+')('+sg(x)+' − '+o[1]+') over ('+j+' − '+o[0]+')('+j+' − '+o[1]+') = '+sg(num)+'/'+par10(den)+'.'); }
+    if(t===2){ const a=nz25(4), b=nz25(4), c=nz25(4), v=a-3*b+3*c;
+      return W30('31m.work[q;'+[a,b,c].join(';')+']',[['p has degree at most 2','given'],['p passes through '+v27([0,a])+', '+v27([1,b])+' and '+v27([2,c]),'three points'],['L₀(3) = 1, L₁(3) = −3 and L₂(3) = 3','worked']],'What is p(3)?',sg(v),[sg(a+b+c),sg(a+3*b+3*c),sg(2*c-b),sg(v+1),sg(-v)],'Through-the-points technique: p = Σ yⱼLⱼ, so p(3) = '+sg(a)+' · 1 + '+par10(b)+' · (−3) + '+par10(c)+' · 3.'); }
+    const n=1+rnd(6);
+    return W30('31m.work[c;'+n+']',[[(n+1)+' points are chosen in [−1, 1] at the roots of T'+'₂₃₄₅₆₇'[n-1],'the cosine points']],'What is the largest size of ω on [−1, 1]?',F30(1,Math.pow(2,n)),[F30(1,Math.pow(2,n+1)),F30(1,n+1),'1',F30(1,Math.pow(2,n-1)||3),F30(1,n*n+2)],'Cosine-points technique: 2⁻ⁿ with n = '+n+', as small as it can be.'); }},
+  {id:'31m.line',step:'31m',mode:'proof',label:'exactly one polynomial',open:()=>measured('31m'),make(){
+    const a=nz25(5), b=nz25(5), n=1+rnd(5), c=a+1+rnd(3);
+    const V=[
+      ['m1',[['p has degree at most 1 and passes through '+v27([0,a])+' and '+v27([1,b]),'given'],['p(2) = '+sg(2*b-a),'the through-the-points technique']],2,0,'The one line through them climbs '+sg(b-a)+' for each step of 1.'],
+      ['m2',[['three points with different inputs','given'],['exactly one polynomial of degree at most 2 passes through them','the through-the-points technique']],2,0,'n + 1 = 3 points, degree at most 2.'],
+      ['m3',[['three points with different inputs','given'],['exactly one polynomial of degree at most 3 passes through them','the through-the-points technique']],2,1,'Three points fix degree at most 2. Endlessly many of degree 3 pass through.'],
+      ['m4',[['the points '+v27([1,a])+' and '+v27([1,c]),'given'],['exactly one line passes through them as a polynomial','the through-the-points technique']],2,1,'The inputs must differ. No function takes two values at 1.'],
+      ['m5',[[(n+1)+' cosine points in [−1, 1]','given'],['the largest size of ω on [−1, 1] is '+F30(1,Math.pow(2,n)),'the cosine-points technique']],2,0,'2⁻ⁿ with n = '+n+'.'],
+      ['m6',[['p passes through a table of f on [0, 1]','given'],['p(10) is close to f(10)','the interpolation-miss technique']],2,1,'ω grows like a power of the distance outside the points.'],
+      ['m7',[['x pₙ = pₙ₊₁ + βₙpₙ + γₙpₙ₋₁ in the family of a weight','the three-term technique'],['pₙ₊₁ needs only pₙ and pₙ₋₁','read the line']],2,0,'Each new member needs only the last two.']];
+    return line28('31m.line',V,[a,b,n,c]); }});
+
+/* ---------- 31n Eigenvalues by Machine ---------- */
+const WN31=[
+  ['Is it wise to find the stretches of a large grid from the roots of det(A − λI)?','legal, with a cost: the polynomial’s numbers are huge, and small errors in them move roots far',['yes: it is the best way','no: it is not legal','no: large grids have no stretches'],'The methods of this step work on A itself.'],
+  ['Does applying A again and again always find the largest stretch?','no: a start with c₁ = 0 never swings onto it; two stretches of the same size never settle',['yes','yes, for symmetric A','no: it finds the smallest'],'Near-shift technique: one stretch must be nearest.'],
+  ['Is Aₖ₊₁ = QₖRₖ?','no: that is Aₖ again; the step multiplies back in the other order, RₖQₖ',['yes','no: it is QₖQₖ','no: it is RₖRₖ'],'Same-stretches technique.'],
+  ['Is the two-sided reading of any x a stretch?','no: only of an axis; otherwise it lies between λmin and λmax',['yes','yes, for symmetric A','no: it is never a stretch'],'Two-sided-reading technique.'],
+  ['The arrow is off its axis by a small angle ε. How far off is the two-sided reading?','by at most (λmax − λmin) sin²ε: the square of the arrow’s error',['by about ε','by about √ε','by nothing'],'Two-sided-reading technique.'],
+  ['What do every Aₖ and A share?','the same stretches',['the same numbers','the same columns','nothing'],'Same-stretches technique.']];
+QP.push({id:'31n.machine',step:'31n',label:'stretches by machine',open:()=>measured('31n'),make(){ return writtenQ('31n.machine',WN31); }},
+  {id:'31n.work',step:'31n',mode:'work',label:'readings and shifts',open:()=>measured('31n'),make(){
+    const t=rnd(4);
+    if(t===0){ const a=nz25(6), b=nz25(6), x=pick([[1,1],[1,2],[2,1],[1,3],[3,4]]), n=a*x[0]*x[0]+b*x[1]*x[1], d=x[0]*x[0]+x[1]*x[1]; if(a===b) return null;
+      return W30('31n.work[r;'+[a,b,x].join(';')+']',[['A has '+g2(a,0,0,b),'a symmetric grid'],['x = '+v27(x),'given'],['R(x) = (x · Ax)/(x · x)','the two-sided reading']],'What is R(x)?',F30(n,d),[F30(a+b,2),sg(n),F30(a*x[0]+b*x[1],x[0]+x[1]),sg(Math.max(a,b)),F30(n,d*d)].filter((y,i)=>true),'x · Ax = '+sg(a)+' · '+x[0]*x[0]+' + '+par10(b)+' · '+x[1]*x[1]+' = '+sg(n)+', and x · x = '+d+'. It lies between the stretches.'); }
+    if(t===1){ const l=2+rnd(8), d1=1, d2=2+rnd(5), s=l+d1, l2=s+d2;
+      return W30('31n.work[s;'+[l,l2,s].join(';')+']',[['A has stretches '+l+' and '+l2,'given'],['the shift is s = '+s,'given']],'By what factor does the error shrink at each step of (A − sI)⁻¹?',F30(d1,d2),[F30(d2,d1),F30(l,l2),F30(d1,d1+d2),F30(s,l2)],'Near-shift technique: |λ − s| over the next nearest |λ′ − s| = '+d1+'/'+d2+'.'); }
+    if(t===2){ const a=nz25(6), b=nz25(6), k=2+rnd(8); if(a===b) return null;
+      return W30('31n.work[k;'+[a,b,k].join(';')+']',[['A has stretches '+sg(a)+' and '+sg(b),'given'],['A'+'₀₁₂₃₄₅₆₇₈₉'[k]+' comes from A by '+k+' steps of Aₖ₊₁ = RₖQₖ','given']],'What are the stretches of A'+'₀₁₂₃₄₅₆₇₈₉'[k]+'?',sg(a)+' and '+sg(b),[sg(a*k)+' and '+sg(b*k),sg(Math.pow(a,2))+' and '+sg(Math.pow(b,2)),sg(a+k)+' and '+sg(b+k),'0 and 0'],'Same-stretches technique: every Aₖ has the same stretches as A.'); }
+    const k=2+rnd(4);
+    return W30('31n.work[p;'+k+']',[['A = Q₀R₀, and Aⱼ₊₁ = RⱼQⱼ = Qⱼ₊₁Rⱼ₊₁','the steps'],['P = (Q₀⋯Q'+'₀₁₂₃₄₅'[k-1]+')(R'+'₀₁₂₃₄₅'[k-1]+'⋯R₀)','given']],'Which power of A is P?','A'+'⁰¹²³⁴⁵⁶'[k],['A'+'⁰¹²³⁴⁵⁶'[k-1],'A'+'⁰¹²³⁴⁵⁶'[k+1],'A','A'+'⁰¹²³⁴⁵⁶⁷⁸⁹'[Math.min(9,2*k)]].filter((x,i,arr)=>arr.indexOf(x)===i),'Powers-in-QR technique: (Q₀⋯Qₖ₋₁)(Rₖ₋₁⋯R₀) = Aᵏ, with k = '+k+'.'); }},
+  {id:'31n.line',step:'31n',mode:'proof',label:'a reading or a stretch',open:()=>measured('31n'),make(){
+    const a=1+rnd(5), b=a+2*(1+rnd(3)), l=2+rnd(8), d2=2+rnd(5);
+    const V=[
+      ['n1',[['A has '+g2(a,0,0,b)+', and x = (1, 1)','given'],['R(x) = '+(a+b)/2,'the two-sided reading']],2,0,'x · Ax = '+(a+b)+', and x · x = 2.'],
+      ['n2',[['A has '+g2(a,0,0,b)+', and x = (1, 1), with R(x) = '+(a+b)/2,'given'],[(a+b)/2+' is a stretch of A','the two-sided-reading technique']],2,1,'x is not an axis. The reading lies between the stretches '+a+' and '+b+'.'],
+      ['n3',[['A has stretches '+l+' and '+(l+1+d2)+', and the shift is s = '+(l+1),'given'],['each step of (A − sI)⁻¹ shrinks the error by the factor '+F30(1,d2),'the near-shift technique']],2,0,'|λ − s| = 1 over |λ′ − s| = '+d2+'.'],
+      ['n4',[['Aₖ = QₖRₖ','given'],['Aₖ₊₁ = QₖRₖ','the step']],2,1,'That is Aₖ again. The step multiplies back in the other order, RₖQₖ.'],
+      ['n5',[['Aₖ₊₁ = RₖQₖ','given'],['Aₖ₊₁ has the same stretches as A','the same-stretches technique']],2,0,'Same-stretches technique.'],
+      ['n6',[['the start arrow has c₁ = 0','given'],['applying A again and again swings it onto e₁','the largest stretch wins']],2,1,'A start with c₁ = 0 never swings onto it.'],
+      ['n7',[['A = Q₀R₀ and A₁ = R₀Q₀ = Q₁R₁','given'],['(Q₀Q₁)(R₁R₀) = A²','the powers-in-QR technique']],2,0,'Q₀(Q₁R₁)R₀ = Q₀(R₀Q₀)R₀ = A · A.']];
+    return line28('31n.line',V,[a,b,l,d2]); }});
+
+/* ---------- 31o Principal Components ---------- */
+const WO31=[
+  ['Is the first axis the cause of the spread?','not shown: it is a direction of most spread; what it means is a guess about the world',['yes','yes, when λ₁ is large','no: the last axis is'],'Most-spread technique.'],
+  ['Do the axes depend on the units?','yes: changing one number’s units stretches one place of every point, and C changes',['no','no: only the spreads change','only when there are two measurements'],'The axes are those of C.'],
+  ['Is the first axis the best line of y on x?','no: that line makes misses up and down least; the axis makes misses at right angles least',['yes','yes, in standard units','no: the axis makes misses along x least'],'Closest-piece technique.'],
+  ['Do the components left out carry nothing?','no: they carry n(λᵣ₊₁ + ⋯ + λₚ), and sometimes the small spread is the interesting one',['yes','yes, when r ≥ 2','no: they carry λ₁'],'Closest-piece technique.'],
+  ['What is the spread of the points along a direction d of size 1?','dᵀCd',['Cd','dᵀd','the middle sum of C'],'Spread-along technique.'],
+  ['What do the spreads along all the axes add to?','the middle sum of C, the total spread',['λ₁','1','det C'],'Most-spread technique.']];
+QP.push({id:'31o.axes',step:'31o',label:'principal components',open:()=>measured('31o'),make(){ return writtenQ('31o.axes',WO31); }},
+  {id:'31o.work',step:'31o',mode:'work',label:'spread along a direction',open:()=>measured('31o'),make(){
+    const t=rnd(4);
+    if(t===0){ const a=1+rnd(9), b=1+rnd(9), [p,q,r]=pick([[3,4,5],[4,3,5],[5,12,13]]); if(a===b) return null;
+      return W30('31o.work[d;'+[a,b,p,q].join(';')+']',[['C has '+g2(a,0,0,b),'given'],['d = ('+F30(p,r)+', '+F30(q,r)+')','a direction of size 1']],'What is the spread of the points along d?',F30(a*p*p+b*q*q,r*r),[F30(a*p+b*q,r),F30(a+b,2),String(a+b),F30(a*q*q+b*p*p,r*r),F30(a*p*p+b*q*q,r)],'Spread-along technique: dᵀCd = '+a+' · '+F30(p*p,r*r)+' + '+b+' · '+F30(q*q,r*r)+'.'); }
+    if(t===1){ const b=1+rnd(4), a=b+1+rnd(5), q=rnd(2);
+      return W30('31o.work[m;'+[a,b,q].join(';')+']',[['C has '+g2(a,b,b,a),'given'],['C stretches (1, 1) by '+(a+b)+' and (1, −1) by '+(a-b),'its axes']],q?'What is the total spread?':'What is the spread along the direction of most spread?',String(q?2*a:a+b),[String(a-b),String(a),String(2*a),String(a+b),String(a*a-b*b)],q?'Most-spread technique: the spreads along the axes add to the middle sum of C, '+a+' + '+a+'.':'Most-spread technique: the largest stretch of C, along (1, 1).'); }
+    if(t===2){ const l3=1+rnd(3), l2=l3+rnd(4), l1=l2+1+rnd(6), T=l1+l2+l3;
+      return W30('31o.work[s;'+[l1,l2,l3].join(';')+']',[['C has stretches '+l1+', '+l2+' and '+l3,'given']],'What share of the total spread lies along the first axis?',F30(l1,T),[F30(l1,T+l1),F30(l2,T),F30(1,3),F30(l1,l1+l2),F30(l1+l2,T)],'Most-spread technique: λ₁ over the total spread, '+l1+'/'+T+'.'); }
+    const l3=1+rnd(3), l2=l3+rnd(4), l1=l2+1+rnd(6), n=pick([10,20,50,100]);
+    return W30('31o.work[c;'+[l1,l2,l3,n].join(';')+']',[[n+' points with average 0, and C has stretches '+l1+', '+l2+' and '+l3,'given']],'What is the least total squared distance from the points to a line through the average?',String(n*(l2+l3)),[String(n*l1),String(n*l2),String(l2+l3),String(n*(l1+l2+l3)),String(n*l3)],'Closest-piece technique, with r = 1: n(λ₂ + λ₃) = '+n+' · '+(l2+l3)+'.'); }},
+  {id:'31o.line',step:'31o',mode:'proof',label:'most spread, not cause',open:()=>measured('31o'),make(){
+    const a=2+rnd(8), b=1+rnd(a-1), l3=1+rnd(3), l2=l3+1+rnd(3), l1=l2+1+rnd(6), n=pick([10,20,50]);
+    const V=[
+      ['o1',[['C has '+g2(a,0,0,b)+', and d = (1, 0)','given'],['the spread along d is '+a,'the spread-along technique']],2,0,'dᵀCd = '+a+'.'],
+      ['o2',[['C has '+g2(a,b,b,a),'given'],['the most spread is '+(a+b)+', along (1, 1)','the most-spread technique']],2,0,'C stretches (1, 1) by '+(a+b)+' and (1, −1) by '+(a-b)+'.'],
+      ['o3',[['C has stretches '+l1+', '+l2+' and '+l3,'given'],['the total spread is '+(l1+l2+l3),'the most-spread technique']],2,0,'The spreads along the axes add to the total.'],
+      ['o4',[[n+' points with average 0, and C has stretches '+l1+', '+l2+' and '+l3,'given'],['the closest line leaves total squared distance '+n*l2,'the closest-piece technique']],2,1,'Every stretch left out counts: n(λ₂ + λ₃) = '+n*(l2+l3)+'.'],
+      ['o5',[['the first axis carries '+F30(l1,l1+l2+l3)+' of the total spread','given'],['the first axis is the cause of the spread','the most-spread technique']],2,1,'It is a direction of most spread. What it means is a guess about the world.'],
+      ['o6',[['one of the measurements is changed from metres to centimetres','given'],['the axes stay the same','the same points']],2,1,'One place of every point is stretched, C changes, and so do its axes.']];
+    return line28('31o.line',V,[a,b,l1,l2,l3,n]); }});
+
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 
