@@ -31,10 +31,10 @@
  {"q":"The stock kept back is never sold in a steady week. Does it cost nothing?","a":"no: it costs h a unit every day","w":["yes","only once","only when sold"],"why":"It sits on the shelf every day."},
  {"q":"Two stores merge. What happens to the stock they hold?","a":"1/√2 of the sum","w":["the sum","half the sum","twice the sum"],"why":"Pooled, Q_b grows by √2 for twice the sales."},
  {"q":"At Q_b, ordering cost a day and holding cost a day are…","a":"equal","w":["in the ratio 2 to 1","both 0","both least"],"why":"Equal-parts."}];
-(window.LADDER_CARDS=window.LADDER_CARDS||{})["16·logi"]=[{"q": "V(T) = V(0) + ∫₀ᵀ (in − out). Which technique?", "a": "level", "w": ["never-dry", "pump-rate", "area-bound"], "why": "The water now is the start plus the area under in less out."},
+(window.LADDER_CARDS=window.LADDER_CARDS||{})["16·logi"]=[{"q": "V(T) = V(0) + ∫₀ᵀ (in − out). Which technique?", "a": "tank-level", "w": ["never-dry", "pump-rate", "area-bound"], "why": "The water now is the start plus the area under in less out."},
  {"q": "Is ∫₀ᵗ (in − out) the water in the tank?", "a": "no: the change; add V(0)", "w": ["yes", "yes, at midnight", "no: it is the swing"], "why": "An area under a rate is a change."},
  {"q": "The town draws hardest at noon. Is the tank lowest then?", "a": "no: when out falls back to in", "w": ["yes", "no: at midnight", "no: when out is least"], "why": "Until out falls to in, more is going out than coming in."},
- {"q": "V(t) ≥ 0 on [0, T] exactly when V(0) is at least the greatest ∫₀ᵗ (out − in). Which technique?", "a": "never-dry", "w": ["level", "pump-rate", "first-test"], "why": "Start with at least the deepest dip."},
+ {"q": "V(t) ≥ 0 on [0, T] exactly when V(0) is at least the greatest ∫₀ᵗ (out − in). Which technique?", "a": "never-dry", "w": ["tank-level", "pump-rate", "first-test"], "why": "Start with at least the deepest dip."},
  {"q": "The model day: the deepest dip is 110.9 m³ and the day draws 2112 m³. The least start?", "a": "110.9 m³", "w": ["2112 m³", "221.7 m³", "0 m³"], "why": "The dip, not the day's total."},
  {"q": "Crest 110.9 above the start, trough 110.9 below. What must the tank hold?", "a": "the swing, 221.7 m³", "w": ["110.9 m³", "2112 m³", "0 m³"], "why": "From crest to trough."},
  {"q": "Average outflow 88 m³/h, pump 87. What happens over many days?", "a": "it runs dry in the end", "w": ["it holds steady", "it drifts up", "it is safe with a full start"], "why": "Pump-rate: it loses 24 m³ a day."},
