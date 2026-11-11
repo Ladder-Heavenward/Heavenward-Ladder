@@ -9,7 +9,7 @@
  {q:'A line reads u = Σ b_n e^(−κ(nπ/L)²t) sin(nπx/L), with Σ|b_n| settling. Which technique licenses it?', a:'fading-series', w:['cooling-shape','heat-rule','one-future'], why:'A settling sum of cooling shapes solves the rule and matches the start.'},
  {q:'Start u(x, 0) = 3 sin(πx/L). What is b_1?', a:'3', w:['3/π','6/L','0'], why:'The start is already one shape; its sine coefficient is its amount.'},
  {q:'A claim: “every answer of the heat rule is X(x)T(t).” Is it allowed?', a:'no: sums of products are answers too', w:['yes: separation found every answer','yes: the rule is linear','no: X must be a cosine'], why:'Separation finds only the products; the sum of two shapes is not one.'},
- {q:'A solid block obeys u_t = κΔu. What is Δu?', a:'the spread of the uphill arrow of u', w:['the uphill arrow of u','the second slope in time','the swirl of u'], why:'Δu = u_xx + u_yy + u_zz, the spread of ∇u.'}
+ {q:'A solid block obeys u_t = κΔu. What is Δu?', a:'the spread of the uphill vector of u', w:['the uphill vector of u','the second slope in time','the swirl of u'], why:'Δu = u_xx + u_yy + u_zz, the spread of ∇u.'}
 ];
 (window.LADDER_CARDS=window.LADDER_CARDS||{})['33b']=[
  {q:'The rectangle 0 ≤ x ≤ L, 0 ≤ t ≤ T. Which part is the lid?', a:'t = T', w:['t = 0','x = 0','x = L'], why:'The floor is the start; the walls are the ends.'},
@@ -59,7 +59,7 @@
 ];
 (window.LADDER_CARDS=window.LADDER_CARDS||{})['33f']=[
  {q:'y and z are 0 at both ends. A line reads ⟨−y″, z⟩ = ⟨y, −z″⟩. Which technique licenses it?', a:'swap-by-parts', w:['perpendicular-shapes','single-kick','kick-in-shapes'], why:'By parts twice; the end terms vanish.'},
- {q:'−y″ = λy, y(0) = y(1) = 0, y ≠ 0. What is y called?', a:'a shape, with number λ', w:['a kick answer','a still state','a riding path'], why:'A shape of L, as an arrow that L only stretches.'},
+ {q:'−y″ = λy, y(0) = y(1) = 0, y ≠ 0. What is y called?', a:'a shape, with number λ', w:['a kick answer','a still state','a riding path'], why:'A shape of L, as a vector that L only stretches.'},
  {q:'sin(πx) and sin(3πx) on [0, 1]. Why is their total product 0?', a:'they are shapes with different numbers', w:['both are 0 at the ends','they are odd','their tones are whole multiples'], why:'Perpendicular-shapes technique.'},
  {q:'G(x, s) for −y″ = h on [0, 1]. What does it look like?', a:'a tent with its peak at s', w:['a bell centred at s','a sine arch','a step at s'], why:'The string pushed by one kick.'},
  {q:'What is the peak of G(·, s) on [0, 1]?', a:'s(1 − s)', w:['s','1/4','s²'], why:'G(s, s) = s(1 − s).'},

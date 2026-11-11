@@ -30,7 +30,7 @@
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["21·nav"]=[{"q": "Turn one mirror of the two by β. What happens to the seen star?", "a": "it turns by 2β", "w": ["it turns by β", "it turns by β/2", "it does not move"], "why": "The two-mirror technique."},
  {"q": "An arc of 60° on the instrument. Up to what angle can it read?", "a": "120°", "w": ["60°", "30°", "180°"], "why": "Two mirrors measure twice."},
  {"q": "Your latitude by the noon sun. What is it?", "a": "90° less the noon sun’s height, plus the day’s δ", "w": ["the noon sun’s height", "90° plus the sun’s height", "the day’s δ alone"], "why": "The noon technique."},
- {"q": "Heading and speed carried forward. What do they give?", "a": "your place between sightings", "w": ["your exact place forever", "your latitude only", "your speed only"], "why": "Arrows carried forward."},
+ {"q": "Heading and speed carried forward. What do they give?", "a": "your place between sightings", "w": ["your exact place forever", "your latitude only", "your speed only"], "why": "Vectors carried forward."},
  {"q": "Runs carried forward, one after another. What happens to the error?", "a": "it grows with every run", "w": ["it shrinks", "it stays the same", "it vanishes at noon"], "why": "Each run adds its own error."},
  {"q": "A run on heading θ for distance s. How far east?", "a": "s sin θ", "w": ["s cos θ", "s tan θ", "s"], "why": "Headings run from north, so east is the sine."}];
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["13·nav"]=[{"q": "h(18) = 3.830 ft and h(19) = 4.743 ft. What is 0.913 ft an hour?", "a": "The average rate from 18:00 to 19:00", "w": ["The rate at 18:00", "The rate at 19:00", "The greatest rate of the rise"], "why": "A chord’s slope is the average rate over its run."},

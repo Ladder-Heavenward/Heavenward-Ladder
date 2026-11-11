@@ -440,10 +440,12 @@ function placeHere(){
 
 /* marks: click a question number or a ladder row number to toggle ✓; mirrored to the artifact's record by sync.js */
 /* 0.3.28: titles went to title case, so a record kept under the old title (same words, other case) carries over once */
+/* 0.3.153: renamed page titles carry their record over once (new title: old title) */
+const TITLE_WAS={"Finding Your Vectors":"Finding Your Arrows","Vectors Add and Stretch, and Have Dimension":"Arrows Add and Stretch, and Have Dimension","The Vectors a Map Only Stretches":"The Arrows a Map Only Stretches","Measuring Sticks for Vectors":"Measuring Sticks for Arrows","Functions Are Vectors With Lengths and Angles":"Functions Are Arrows With Lengths and Angles"};
 let tkC=null;
 function titledKey(prefix,title){ const k=prefix+title; try{ if(LS.getItem(k)!=null) return k; const lk=k.toLowerCase();
     if(!tkC||tkC.v!==window.__lsVer){ const m={}; for(let i=0;i<LS.length;i++){ const o=LS.key(i); if(o){ const l=o.toLowerCase(); (m[l]=m[l]||[]).push(o); } } tkC={v:window.__lsVer,m}; }
-    const o=(tkC.m[lk]||[]).find(x=>x!==k); if(o){ const v=LS.getItem(o); if(v!=null){ LS.setItem(k,v); } } }catch(e){} return k; }
+    let o=(tkC.m[lk]||[]).find(x=>x!==k); if(!o&&TITLE_WAS[title]){ o=(tkC.m[(prefix+TITLE_WAS[title]).toLowerCase()]||[])[0]; } if(o){ const v=LS.getItem(o); if(v!=null){ LS.setItem(k,v); } } }catch(e){} return k; }
 window.__titledKey=titledKey;
 function holdMenu(el,open){ let t=null, x0=0, y0=0; const clear=()=>{ if(t){ clearTimeout(t); t=null; } };
   el.addEventListener('pointerdown',e=>{ if(e.button>0) return; x0=e.clientX; y0=e.clientY; el.__held=false; clear(); t=setTimeout(()=>{ t=null; el.__held=true; try{ navigator.vibrate&&navigator.vibrate(12); }catch(x){} open(); },480); });

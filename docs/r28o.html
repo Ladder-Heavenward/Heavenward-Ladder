@@ -51,12 +51,12 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <p class="home"><a href="index.html">← the ladder</a><a href="r28n.html">← 28n along curves and across surfaces</a><a href="r28p.html">next: 28p how errors spread →</a></p>
   <div class="tags"><span class="tag tech">28o · technique</span></div>
   <h1>Gradient Descent</h1>
-  <p data-pid="866a1c">To find the bottom of a valley in fog, take a step in the steepest way down, look again, and take another. With a formula in place of a valley, the steepest way down is minus the uphill arrow, and the walk is a few multiplications per step, even with a million inputs where no one could solve for the flat point. This step proves that a small enough step always goes down. Then it asks how big a step can be. Too small and the walk crawls; too big and it bounces from wall to wall and climbs out. In a long narrow valley the walls are steep and the floor is gentle, and the walk is slow however the step is chosen. Last, it finds the valleys where the walk cannot be fooled: those that bend up along every line have one bottom, and any flat point is it.</p>
-  <p class="gesture" data-pid="dc2537">Step against the uphill arrow: a small enough step always goes down. In a bowl, the step must be shorter than two over the steepest bend, and the best step balances the steepest bend against the gentlest. A valley that bends up along every line has exactly one bottom.</p>
+  <p data-pid="866a1c">To find the bottom of a valley in fog, take a step in the steepest way down, look again, and take another. With a formula in place of a valley, the steepest way down is minus the uphill vector, and the walk is a few multiplications per step, even with a million inputs where no one could solve for the flat point. This step proves that a small enough step always goes down. Then it asks how big a step can be. Too small and the walk crawls; too big and it bounces from wall to wall and climbs out. In a long narrow valley the walls are steep and the floor is gentle, and the walk is slow however the step is chosen. Last, it finds the valleys where the walk cannot be fooled: those that bend up along every line have one bottom, and any flat point is it.</p>
+  <p class="gesture" data-pid="dc2537">Step against the uphill vector: a small enough step always goes down. In a bowl, the step must be shorter than two over the steepest bend, and the best step balances the steepest bend against the gentlest. A valley that bends up along every line has exactly one bottom.</p>
 </header>
 
 <section class="class step" data-step="28o1">
-  <h2 class="sthead"><span class="stno">28o1</span>A Step Against the Uphill Arrow</h2>
+  <h2 class="sthead"><span class="stno">28o1</span>A Step Against the Uphill Vector</h2>
   <p data-pid="5e273b">By 28g1, the steepest way down from p is −∇f(p). A <i>downhill step</i> of size η &gt; 0 goes from p to p − η∇f(p). Repeated, it is the walk x<sub>k+1</sub> = x<sub>k</sub> − η∇f(x<sub>k</sub>). Accepted name: <i>gradient descent</i>.</p>
   <p data-pid="989ec3">Downhill-step technique: <b>let f be smoothly sloped near p, with ∇f(p) ≠ 0. Then some η₀ &gt; 0 makes f(p − η∇f(p)) &lt; f(p) for every η with 0 &lt; η &lt; η₀.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the downhill-step technique">
@@ -71,7 +71,7 @@ f = (x - 3)^2 + 2(y + 1)^2,\ \ \nabla f = \big(2(x - 3),\ 4(y + 1)\big),\ \ \eta
 (0.6,\ -0.4):\ \ f = 6.48,\ \ \nabla f = (-4.8,\ 2.4) @@ one step: (0, 0) − 0.1(−6, 4)
 \htmlClass{new}{(1.08,\ -0.64):\ \ f = 3.9456} \quad \blacksquare @@ two steps: down from 11, toward 0 at the bottom
   </pre>
-  <p data-pid="50a4ed">The technique promises some step that goes down, not which one. A walk that uses one fixed η can still go wrong, and the next footing finds when. It also promises nothing at a flat point: there the uphill arrow is 0, the walk stops, and whether it has stopped at a bottom is a question for 28l.</p>
+  <p data-pid="50a4ed">The technique promises some step that goes down, not which one. A walk that uses one fixed η can still go wrong, and the next footing finds when. It also promises nothing at a flat point: there the uphill vector is 0, the walk stops, and whether it has stopped at a bottom is a question for 28l.</p>
   <section class="slides" id="sl1"><div class="eyebrow">The slides · downhill · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
@@ -112,7 +112,7 @@ f = \tfrac12(x^2 + 10y^2):\ \ \lambda_1 = 1,\ \lambda_2 = 10 @@ ten times steepe
 
 <section class="class step" data-step="28o3">
   <h2 class="sthead"><span class="stno">28o3</span>Valleys With One Bottom</h2>
-  <p data-pid="7dda3b">14g said f bends up on an interval when, between any two inputs, f lies below the chord. A function of two inputs <i>bends up along every line</i> when for every p and every arrow h ≠ 0 the curve t ↦ f(p + th) bends up.</p>
+  <p data-pid="7dda3b">14g said f bends up on an interval when, between any two inputs, f lies below the chord. A function of two inputs <i>bends up along every line</i> when for every p and every vector h ≠ 0 the curve t ↦ f(p + th) bends up.</p>
   <p data-pid="5e41f5">One-bottom technique: <b>let f have continuous second partial slopes on the whole plane, with f<sub>xx</sub> &gt; 0 and D = f<sub>xx</sub>f<sub>yy</sub> − f<sub>xy</sub>² &gt; 0 at every point. Then f bends up along every line. And if ∇f(p) = 0, then f(q) &gt; f(p) for every q ≠ p: p is the one bottom, and the lowest point of all.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the one-bottom technique">
 g(t) = f(p + th),\ \ h = q - p \ne 0 @@ f along the line through p and q
@@ -161,7 +161,7 @@ x_{k+1} = x_k + \eta\nabla f(x_k)\,? @@ &lt;span class="vd vd-p"&gt;outside the 
   <div class="chq"><span class="chid">28o.4.1</span><span class="tagq">build</span>Build a bowl ½(ax² + by²), with a ≤ b, on which the walk with η = 0.1 heads to the bottom and the walk with η = 0.25 runs away, and whose factor at η = 0.1 is 0.9. <br>Find every such pair a, b.</div>
   <div class="chq"><span class="chid">28o.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="f = \tfrac12(x^2 + 4y^2),\ \ \eta = 0.5"></span></span>η = 2/λₙ exactly. Walk from (1, 1) for four steps. <br>Find what each place does for ever, and whether the walk heads anywhere.</div>
   <div class="chq"><span class="chid">28o.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f(x) = \tfrac{x^2}{1 + x^2}"></span></span>Turn the one-bottom technique round: if a function of one input has one bottom, and every walk with a small enough step heads to it, must it bend up? Test this f: its bottom, where it bends, and where walks go.</div>
-  <div class="chq"><span class="chid">28o.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="f = x^2 + xy + y^2 - 3x"></span></span>Reroute the hunt for the bottom through 13m’s tangent step on the uphill arrow, x ↦ x − H⁻¹∇f(x), with H the second-slope grid. Prove that from every start it lands on the bottom in one step, why it does so on every polynomial of degree 2 whose H can be undone, and what each step costs that descent does not.</div>
+  <div class="chq"><span class="chid">28o.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="f = x^2 + xy + y^2 - 3x"></span></span>Reroute the hunt for the bottom through 13m’s tangent step on the uphill vector, x ↦ x − H⁻¹∇f(x), with H the second-slope grid. Prove that from every start it lands on the bottom in one step, why it does so on every polynomial of degree 2 whose H can be undone, and what each step costs that descent does not.</div>
 </section>
 <div class="themecert themeend"></div>
 
@@ -169,7 +169,7 @@ x_{k+1} = x_k + \eta\nabla f(x_k)\,? @@ &lt;span class="vd vd-p"&gt;outside the 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The walk is gradient descent (or steepest descent), and η the step size, or in machine learning the learning rate. A bowl is a quadratic function; λₙ/λ₁ is the condition number of its Hessian, and the factor (λₙ − λ₁)/(λₙ + λ₁) is the convergence rate of gradient descent with the best fixed step. A function that bends up along every line is strictly convex; the one-bottom technique says a strictly convex function has at most one minimizer, and any critical point is the global minimum. The tangent step on the uphill arrow is Newton’s method for minimization.</p>
+  <p>The walk is gradient descent (or steepest descent), and η the step size, or in machine learning the learning rate. A bowl is a quadratic function; λₙ/λ₁ is the condition number of its Hessian, and the factor (λₙ − λ₁)/(λₙ + λ₁) is the convergence rate of gradient descent with the best fixed step. A function that bends up along every line is strictly convex; the one-bottom technique says a strictly convex function has at most one minimizer, and any critical point is the global minimum. The tangent step on the uphill vector is Newton’s method for minimization.</p>
   <h3>Who said it first</h3>
   <p>Augustin-Louis Cauchy proposed the method of steepest descent in 1847, to solve the equations of the orbits of stars. Johan Jensen defined convex functions in 1906. Haskell Curry studied the method’s convergence in 1944. Herbert Robbins and Sutton Monro introduced the walk with noisy slopes in 1951, the ancestor of how machines are trained today.</p>
 </section>
@@ -186,7 +186,7 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'the step',t:R`p - \eta\nabla f(p)`,n:`Against the uphill arrow.`},
+  {k:'ember',kl:'the step',t:R`p - \eta\nabla f(p)`,n:`Against the uphill vector.`},
   {k:'ember',kl:'its slope',t:R`g'(0) = -|\nabla f(p)|^2`,n:`Roads add.`},
   {k:'ember',kl:'so',t:R`\htmlClass{new}{f \text{ falls, for } \eta \text{ small}}`,n:`Small enough, not any size.`}
 ],{title:'The slides · downhill · ← → keys work'});

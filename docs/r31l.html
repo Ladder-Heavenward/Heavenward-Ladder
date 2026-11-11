@@ -51,21 +51,21 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <p class="home"><a href="index.html">← the ladder</a><a href="r31k.html">← 31k projections and least squares by hand</a><a href="r31m.html">next: 31m interpolation and orthogonal polynomials →</a></p>
   <div class="tags"><span class="tag tech">31l · technique</span></div>
   <h1>Correlation and Regression</h1>
-  <p data-pid="fb1a4a">Two lists of numbers that rise together, like the July temperature in Sacramento and the sales of ice cream there, give a correlation and a fitted line. Both are easy to compute and easy to misread. Seen with the rung’s geometry they are one angle. Take each list away from its own average, and treat what is left as an arrow with one place for each day. The correlation is the cosine of the angle between the two arrows. The fitted line is a shadow of one on the other, and there are two shadows, one each way, which is why the line that predicts sales from heat is not the line that predicts heat from sales. A third list that both arrows lean towards, such as the number of people at the beach, can make the angle small with no link between the first two at all. Take its shadow out of both, and the angle that is left is the honest one.</p>
+  <p data-pid="fb1a4a">Two lists of numbers that rise together, like the July temperature in Sacramento and the sales of ice cream there, give a correlation and a fitted line. Both are easy to compute and easy to misread. Seen with the rung’s geometry they are one angle. Take each list away from its own average, and treat what is left as a vector with one place for each day. The correlation is the cosine of the angle between the two vectors. The fitted line is a shadow of one on the other, and there are two shadows, one each way, which is why the line that predicts sales from heat is not the line that predicts heat from sales. A third list that both vectors lean towards, such as the number of people at the beach, can make the angle small with no link between the first two at all. Take its shadow out of both, and the angle that is left is the honest one.</p>
   <p class="gesture" data-pid="c908bb">The correlation is the cosine of the angle between the two lists of deviations. Each fitted line is a shadow of one list on the other, and the two slopes multiply to the correlation squared. A third list’s shadow, taken out of both, leaves the angle between what it does not explain.</p>
 </header>
 
 <section class="class step" data-step="31l1">
   <h2 class="sthead"><span class="stno">31l1</span>A Correlation Is a Cosine</h2>
-  <p data-pid="bca406">Take paired data and the deviation lists u = (x₁ − x̄, …, xₙ − x̄) and v = (y₁ − ȳ, …, yₙ − ȳ), arrows of lists of n numbers. 8·stat’s correlation was r = u · v/(|u| |v|), and 8·stat bounded it by the dot bound. 31a4 gives the bound its meaning.</p>
-  <p data-pid="3b750a">Correlation-angle technique: <b>r is the cosine of the angle between the deviation arrows u and v, and r² is the share of the spread of y that the best line accounts for.</b> The first part is 31a4’s angle with the dot. The second is 13·stat’s residuals technique read as 31b4’s square-sum: the shadow of v on u has squared size r²|v|², and the miss carries the rest.</p>
+  <p data-pid="bca406">Take paired data and the deviation lists u = (x₁ − x̄, …, xₙ − x̄) and v = (y₁ − ȳ, …, yₙ − ȳ), vectors of lists of n numbers. 8·stat’s correlation was r = u · v/(|u| |v|), and 8·stat bounded it by the dot bound. 31a4 gives the bound its meaning.</p>
+  <p data-pid="3b750a">Correlation-angle technique: <b>r is the cosine of the angle between the deviation vectors u and v, and r² is the share of the spread of y that the best line accounts for.</b> The first part is 31a4’s angle with the dot. The second is 13·stat’s residuals technique read as 31b4’s square-sum: the shadow of v on u has squared size r²|v|², and the miss carries the rest.</p>
   <pre class="lines" data-k="ember" data-label="this step: 8·stat’s lists, as an angle">
 u = (-1.5, -0.5, 0.5, 1.5),\ \ v = (-0.5, -1.5, 1.5, 0.5) @@ the deviations of 8·stat
 u\cdot v = 3,\ \ |u|^2 = |v|^2 = 5 @@ the dot
 r = \tfrac{3}{5} = 0.6,\ \ \theta = \arccos 0.6 \approx 53.1^\circ @@ the correlation-angle technique
 \htmlClass{new}{r^2 = 0.36} \quad \blacksquare @@ the line takes 36% of the spread of y, and the miss keeps 64%
   </pre>
-  <p data-pid="e528a3">So r = 0 means right angles, and r = ±1 means one arrow lies along the other. A correlation of 0.6 is an angle of 53°, which is far from lying along: most of v is at right angles to u.</p>
+  <p data-pid="e528a3">So r = 0 means right angles, and r = ±1 means one vector lies along the other. A correlation of 0.6 is an angle of 53°, which is far from lying along: most of v is at right angles to u.</p>
   <section class="slides" id="sl1"><div class="eyebrow">The slides · a cosine · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
@@ -91,7 +91,7 @@ r = 0.5 \text{ between a first and a second test score} @@ a model class
 \text{first score } 2 \text{ widths above average} @@ standard units
 \htmlClass{new}{\text{predicted second score: } 0.5 \times 2 = 1 \text{ width above}} \quad \blacksquare @@ the two-lines technique; and a second score 2 widths up predicts a first score 1 width up
   </pre>
-  <p data-pid="74a05b">Each line pulls towards the middle, both ways at once. Nothing has happened to the students. The pull is the angle between two arrows, which is not 0.</p>
+  <p data-pid="74a05b">Each line pulls towards the middle, both ways at once. Nothing has happened to the students. The pull is the angle between two vectors, which is not 0.</p>
   <section class="slides" id="sl2"><div class="eyebrow">The slides · two lines · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
@@ -104,9 +104,9 @@ r = 0.5 \text{ between a first and a second test score} @@ a model class
 <section class="class step" data-step="31l3">
   <h2 class="sthead"><span class="stno">31l3</span>What the Line Does Not Say</h2>
   <p data-pid="4e1cb3">A small angle between u and v can come from a third list w that both lean towards: heat drives ice cream sales and beach crowds, and the crowds drive drownings. To see what is left, take the shadow of w out of both, and measure the angle between the misses.</p>
-  <p data-pid="305b20">Take-out technique: <b>the correlation of x and y with w taken out is the cosine of the angle between the misses of u and v from their shadows on the deviation arrow of w, and it equals (r_xy − r_xw r_yw)/√((1 − r_xw²)(1 − r_yw²)).</b></p>
+  <p data-pid="305b20">Take-out technique: <b>the correlation of x and y with w taken out is the cosine of the angle between the misses of u and v from their shadows on the deviation vector of w, and it equals (r_xy − r_xw r_yw)/√((1 − r_xw²)(1 − r_yw²)).</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the take-out technique">
-|u| = |v| = |w| = 1 \text{ first} @@ stretch each deviation arrow; correlations do not change
+|u| = |v| = |w| = 1 \text{ first} @@ stretch each deviation vector; correlations do not change
 \tilde u = u - r_{xw}w,\ \ \tilde v = v - r_{yw}w @@ the closest-point technique: u · w = r_xw
 \tilde u\cdot\tilde v = r_{xy} - r_{xw}r_{yw} - r_{yw}r_{xw} + r_{xw}r_{yw} = r_{xy} - r_{xw}r_{yw} @@ straight in each slot; w · w = 1
 |\tilde u|^2 = 1 - r_{xw}^2,\ \ |\tilde v|^2 = 1 - r_{yw}^2 @@ the square-sum technique
@@ -179,7 +179,7 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'arrows',t:R`u = x - \bar x\,1,\ \ v = y - \bar y\,1`,n:`Deviations.`},
+  {k:'ember',kl:'vectors',t:R`u = x - \bar x\,1,\ \ v = y - \bar y\,1`,n:`Deviations.`},
   {k:'ember',kl:'cosine',t:R`r = \tfrac{u\cdot v}{|u|\,|v|} = \cos\theta`,n:`31a4.`},
   {k:'ember',kl:'so',t:R`\htmlClass{new}{r^2 = \text{share of spread}}`,n:`Square-sum.`}
 ],{title:'The slides · a cosine · ← → keys work'});
