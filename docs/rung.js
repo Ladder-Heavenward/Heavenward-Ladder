@@ -33,7 +33,7 @@ function load(){
   const b=blank(); for(const k in b) if(!(k in o)) o[k]=b[k];
   raw=r; rec=o; return rec;
 }
-function save(){ if(!store) return; rec.updated=Date.now(); const s=JSON.stringify(rec);
+function save(){ kc=null; window.__lsVer=(window.__lsVer||0)+1; if(!store) return; rec.updated=Date.now(); const s=JSON.stringify(rec);
   try{ store.setItem(RK,s); raw=s; }catch(e){} }
 /* each old storage name is a place in the record */
 function where(k){ let m;
@@ -62,19 +62,20 @@ function migrate(o){ if(!store) return; const old=[];
   old.forEach(k=>{ const [s,u]=where(k), v=parse(store.getItem(k)); if(u===null) o[s]=v; else o[s][u]=v; });
   o.meta.migrated=old.length; rec=o; raw=null;
   try{ store.setItem(RK,JSON.stringify(o)); old.forEach(k=>store.removeItem(k)); }catch(e){} }
-function keys(){ const r=load(), out=[];
+let kc=null;
+function keys(){ const r=load(); if(kc&&kc.r===r&&kc.raw===raw) return kc.out; const out=[];
   if(r.progress.pages&&Object.keys(r.progress.pages).length) out.push('pages:done');
   if(r.stats&&Object.keys(r.stats).length) out.push('ladder:stats');
   if(r.reports&&r.reports.length) out.push('ladder:reports');
   ['sync','steps','marks','certs','games','desk','cards','notes','prefs','other'].forEach(s=>Object.keys(r[s]||{}).forEach(u=>out.push(name(s,u))));
   if(r.meta.reset!==undefined) out.push('ladder:reset');
-  return out; }
+  kc={r,raw,out}; return out; }
 window.LS={
   getItem(k){ const r=load(), [s,u]=where(k); const v=u===null?r[s]:(r[s]||{})[u];
     if(u===null&&((s==='stats'&&!Object.keys(v||{}).length)||(s==='reports'&&!(v||[]).length))) return null;
     return v===undefined?null:show(v); },
-  setItem(k,v){ const r=load(), [s,u]=where(k), p=parse(v); if(u===null) r[s]=p; else r[s][u]=p; save(); },
-  removeItem(k){ const r=load(), [s,u]=where(k); if(u===null) r[s]=blank()[s]; else delete r[s][u]; save(); },
+  setItem(k,v){ const r=load(), [s,u]=where(k), p=parse(v); if(u===null) r[s]=p; else r[s][u]=p; kc=null; save(); },
+  removeItem(k){ const r=load(), [s,u]=where(k); if(u===null) r[s]=blank()[s]; else delete r[s][u]; kc=null; save(); },
   key(i){ return keys()[i]||null; },
   get length(){ return keys().length; }
 };
@@ -439,8 +440,10 @@ function placeHere(){
 
 /* marks: click a question number or a ladder row number to toggle ✓; mirrored to the artifact's record by sync.js */
 /* 0.3.28: titles went to title case, so a record kept under the old title (same words, other case) carries over once */
+let tkC=null;
 function titledKey(prefix,title){ const k=prefix+title; try{ if(LS.getItem(k)!=null) return k; const lk=k.toLowerCase();
-    for(let i=0;i<LS.length;i++){ const o=LS.key(i); if(o&&o!==k&&o.toLowerCase()===lk){ const v=LS.getItem(o); if(v!=null){ LS.setItem(k,v); } break; } } }catch(e){} return k; }
+    if(!tkC||tkC.v!==window.__lsVer){ const m={}; for(let i=0;i<LS.length;i++){ const o=LS.key(i); if(o){ const l=o.toLowerCase(); (m[l]=m[l]||[]).push(o); } } tkC={v:window.__lsVer,m}; }
+    const o=(tkC.m[lk]||[]).find(x=>x!==k); if(o){ const v=LS.getItem(o); if(v!=null){ LS.setItem(k,v); } } }catch(e){} return k; }
 window.__titledKey=titledKey;
 function holdMenu(el,open){ let t=null, x0=0, y0=0; const clear=()=>{ if(t){ clearTimeout(t); t=null; } };
   el.addEventListener('pointerdown',e=>{ if(e.button>0) return; x0=e.clientX; y0=e.clientY; el.__held=false; clear(); t=setTimeout(()=>{ t=null; el.__held=true; try{ navigator.vibrate&&navigator.vibrate(12); }catch(x){} open(); },480); });
@@ -2296,7 +2299,9 @@ function order(){ if(ORD) return ORD; const M=window.LADMAP; if(!M) return null;
   return ORD; }
 function pos(stem){ const O=order(); if(!O||!stem) return -1; stem=String(stem).replace(/\.html$/,''); if(stem in O) return O[stem];
   if(/^sky/.test(stem)) return 1e9; const m=stem.match(/^r(\d\d)/); if(m){ const R='r'+m[1]; if(R+'concl' in O) return O[R+'concl']; } return -1; }
-function furthestPos(){ let best=-1; const f=J('ladder:furthest',null); if(f&&f.page) best=Math.max(best,pos(f.page));
+let fpC=null;
+function furthestPos(){ const hereK=(window.ladderPage&&ladderPage())||''; if(fpC&&fpC.v===window.__lsVer&&fpC.h===hereK) return fpC.b; const b=furthestPos0(); fpC={v:window.__lsVer,h:hereK,b}; return b; }
+function furthestPos0(){ let best=-1; const f=J('ladder:furthest',null); if(f&&f.page) best=Math.max(best,pos(f.page));
   const P=J('pages:done',{}); for(const s in P) if(P[s]&&P[s].v) best=Math.max(best,pos(s));
   /* a step you measured into counts as reached */
   try{ for(let i=0;i<LS.length;i++){ const k=LS.key(i); const m=k&&k.match(/^cert:(.+)$/); if(m) best=Math.max(best,pos(m[1])); } }catch(e){}
@@ -2318,7 +2323,8 @@ let loading=false; function load(){ if(window.LADMAP){ apply(); return; } if(loa
   const s=document.createElement('script'); s.src='ladmap.js'; s.onload=()=>apply(); document.head.appendChild(s); }
 /* 0.3.6 (Andrew 22:16): the non-skid key opens tag by tag as you pass steps that carry them (basement and anexact included);
    the floor and theory tags are gone from it */
-function passed(stem){ const P=J('pages:done',{}); if(P[stem]&&P[stem].v) return true; const p=pos(stem); return p>=0&&p<furthestPos(); }
+let pdC=null;
+function passed(stem){ if(!pdC||pdC.v!==window.__lsVer) pdC={v:window.__lsVer,P:J('pages:done',{})}; const P=pdC.P; if(P[stem]&&P[stem].v) return true; const p=pos(stem); return p>=0&&p<furthestPos(); }
 function skid(){ if(window.LADDER_DESK) return; const key=document.querySelector('.ladderkey'), rungs=document.querySelector('.rungs'); if(!key||!rungs||!order()) return;
   const stemOf=li=>{ const a=li.querySelector(':scope>.t>a'); const m=a&&(a.getAttribute('href')||'').match(/^([^#.]+)\.html/); return m?m[1]:null; };
   const rows=[...rungs.querySelectorAll('.ladder>li')].map(li=>({li,s:stemOf(li)})).filter(r=>r.s&&passed(r.s));
@@ -2408,11 +2414,12 @@ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded'
 (function(){
   if(!document.querySelector('.rungs')) return;
   function fit(){ document.querySelectorAll('.rungs .ladder>li>.tb:not([hidden])').forEach(tb=>{ const li=tb.parentElement, n=li.querySelector(':scope>.n'); if(!n||!li.offsetParent) return;
-    tb.classList.remove('tbdown'); tb.style.maxWidth='';
+    tb.classList.remove('tbdown'); li.classList.remove('tbd'); tb.style.maxWidth='';
     const side=parseFloat(getComputedStyle(li).gridTemplateColumns)||0; if(!side) return;
     const room=Math.floor(side-n.getBoundingClientRect().width-4);
     const widest=Math.max(0,...[...tb.children].map(k=>k.getBoundingClientRect().width));
-    if(widest>room){ tb.classList.add('tbdown'); tb.style.maxWidth=Math.floor(side)+'px'; } else tb.style.maxWidth=room+'px'; }); }
+    const total=[...tb.children].reduce((w,k)=>w+k.getBoundingClientRect().width+4,-4);
+    if(widest>room||total>room){ tb.classList.add('tbdown'); li.classList.add('tbd'); tb.style.maxWidth=Math.floor(side)+'px'; } else tb.style.maxWidth=room+'px'; }); }
   let q=0; const soon=()=>{ cancelAnimationFrame(q); q=requestAnimationFrame(fit); };
   addEventListener('resize',soon); document.addEventListener('toggle',soon,true); document.addEventListener('click',()=>setTimeout(soon,30),true);
   const go=()=>{ fit(); setTimeout(fit,400); setTimeout(fit,1500); setTimeout(fit,3000); };
