@@ -454,7 +454,8 @@ function proofQ0(P,used){
 
 /* --- Operations: the links of an equation that is worked to completion, and of a word problem. --- */
 const OPS=[{id:'4f.plus',step:'4f',label:'adding',word:true},{id:'4g.by',step:'4g',label:'multiplying',word:true},{id:'4g.squared',step:'4g',label:'squaring'},
-  {id:'5b.minus',step:'5b',label:'subtracting',word:true},{id:'5e.negated',step:'5e',label:'the negative of'}];
+  {id:'5b.minus',step:'5b',label:'subtracting',word:true},{id:'5e.negated',step:'5e',label:'the negative of'},
+  {id:'5c.over',step:'5c',label:'dividing',word:true}]; /* Phase W floor 2: dividing, written with 5c11's slash, drawn only where it comes out whole */
 OPS.forEach(O=>{ O.open=()=>measured(O.step); });
 const wrapTo=(E,p)=>E.p<p?'('+E.t+')':E.t;
 function apply(id,E,n){
@@ -462,6 +463,7 @@ function apply(id,E,n){
   if(id==='5b.minus') return {t:E.t+' − '+n, v:E.v-n, p:1};
   if(id==='4g.by') return {t:wrapTo(E,2)+' · '+n, v:E.v*n, p:2};
   if(id==='4g.squared') return {t:wrapTo(E,3)+'²', v:E.v*E.v, p:3};
+  if(id==='5c.over') return {t:wrapTo(E,3)+'/'+n, v:E.v/n, p:1.5};
   return {t:'−('+E.t+')', v:-E.v, p:2}; }
 const startOf=c=>c.kind==='add'?{t:c.a+' + '+c.b,v:c.c,p:1}:c.kind==='times'?{t:c.a+' · '+c.b,v:c.c,p:2}:c.kind==='num'?{t:String(c.a),v:c.a,p:3}:c.kind==='int'?{t:I(c.x),v:c.x,p:3}:null;
 const chain=(E,steps)=>steps.reduce((e,s)=>apply(s.id,e,s.n),E);
@@ -474,6 +476,7 @@ function drawSteps(ops,E0,count,nonneg){ const steps=[]; let E=E0;
     else if(O.id==='5b.minus'){ n=1+rnd(Math.max(2,top())); if(nonneg&&n>E.v) n=E.v; if(n<1) continue; }
     else if(O.id==='4g.by') n=2+rnd(8);
     else if(O.id==='4g.squared'){ if(Math.abs(E.v)>12||steps.some(s=>s.id===O.id)) continue; }
+    else if(O.id==='5c.over'){ const ds=[2,3,4,5,6,7,8,9,10].filter(d=>E.v!==0&&E.v%d===0); if(!ds.length||steps.some(s=>s.id===O.id)||(steps.length&&steps[steps.length-1].id==='5e.negated')) continue; n=pick(ds); }
     else if(steps.length&&steps[steps.length-1].id===O.id) continue;
     const N=apply(O.id,E,n); if(Math.abs(N.v)>999) continue; steps.push({id:O.id,n}); E=N; }
   return {steps,E}; }
@@ -490,9 +493,9 @@ function workQ(P,used,last){
       const D=drawSteps(ops,{t:'x',v:x,p:3},1+rnd(deep),!neg); if(!D.steps.length) continue;
       const index='w:'+s.id+c.ix+'.'+stepAddr(D.steps)+'?x'; if(used[index]) continue;
       const right=S(x), again=chain({t:'',v:D.E.v,p:3},D.steps).v;
-      const wrong=[...new Set([D.E.v,again,x+1,x-1,-x,x+2].filter(v=>v!==x&&(neg||v>=0)).map(S))].slice(0,3); if(wrong.length<3) continue;
-      const undo=[]; let cur=D.E.v; D.steps.slice().reverse().forEach(st=>{ const prev=st.id==='4f.plus'?cur-st.n:st.id==='5b.minus'?cur+st.n:cur/st.n;
-        undo.push(st.id==='4f.plus'?S(cur)+' − '+st.n+' = '+S(prev):st.id==='5b.minus'?S(cur)+' + '+st.n+' = '+S(prev):S(cur)+' = '+S(prev)+' · '+st.n); cur=prev; });
+      const wrong=[...new Set([D.E.v,again,x+1,x-1,-x,x+2].filter(v=>v!==x&&Number.isInteger(v)&&(neg||v>=0)).map(S))].slice(0,3); if(wrong.length<3) continue;
+      const undo=[]; let cur=D.E.v; D.steps.slice().reverse().forEach(st=>{ const prev=st.id==='4f.plus'?cur-st.n:st.id==='5b.minus'?cur+st.n:st.id==='5c.over'?cur*st.n:cur/st.n;
+        undo.push(st.id==='4f.plus'?S(cur)+' − '+st.n+' = '+S(prev):st.id==='5b.minus'?S(cur)+' + '+st.n+' = '+S(prev):st.id==='5c.over'?S(cur)+' · '+st.n+' = '+S(prev):S(cur)+' = '+S(prev)+' · '+st.n); cur=prev; });
       return {index, a3:[s.id+c.ix,stepAddr(D.steps)+'?x',DASH], step:'5g', steps:['5g',...new Set(D.steps.map(t=>t.id.split('.')[0]))], lines:[[D.E.t+' = '+S(D.E.v),'']],
         ask:'What is x?', right, opts:shuffle([right,...wrong]), lead:'x is '+right+'. ',
         why:'Make the same change to both sides, undoing the last change first: '+undo.join('; ')+'. So x = '+right+'.'}; }
@@ -500,13 +503,14 @@ function workQ(P,used,last){
     const D=drawSteps(P.ops,E0,1+rnd(deep),!neg); if(!D.steps.length) continue;
     const index='w:'+s.id+c.ix+'.'+stepAddr(D.steps); if(used[index]) continue;
     const E=D.E, alts=[flat(E.t)];
-    D.steps.forEach((st,i)=>{ const swap=st.id==='4f.plus'?'4g.by':st.id==='4g.by'?'4f.plus':st.id==='5b.minus'?'4f.plus':null;
+    D.steps.forEach((st,i)=>{ const swap=st.id==='4f.plus'?'4g.by':st.id==='4g.by'?'4f.plus':st.id==='5b.minus'?'4f.plus':st.id==='5c.over'?'4g.by':null;
+      if(st.id==='5c.over') alts.push(chain(E0,D.steps.map((x,k)=>k===i?{id:'5b.minus',n:x.n}:x)).v);
       if(swap) alts.push(chain(E0,D.steps.map((x,k)=>k===i?{id:swap,n:x.n}:x)).v);
       if(st.id==='4g.squared'){ const before=chain(E0,D.steps.slice(0,i)); alts.push(chain({t:'',v:before.v*2,p:3},D.steps.slice(i+1)).v); }
       if(st.id==='5e.negated'){ const before=chain(E0,D.steps.slice(0,i)); alts.push(chain({t:'',v:before.v,p:3},D.steps.slice(i+1)).v); }
       if(st.n!=null) alts.push(chain(E0,D.steps.map((x,k)=>k===i?{id:x.id,n:x.n+1}:x)).v); });
     alts.push(E.v+1,E.v-1,E.v+2,E.v+10);
-    const wrong=[...new Set(alts.filter(v=>v!==null&&v!==E.v&&Math.abs(v)<=9999&&(neg||v>=0)).map(S))].slice(0,3); if(wrong.length<3) continue;
+    const wrong=[...new Set(alts.filter(v=>v!==null&&v!==E.v&&Number.isInteger(v)&&Math.abs(v)<=9999&&(neg||v>=0)).map(S))].slice(0,3); if(wrong.length<3) continue;
     const work=[]; let e=E0; if(E0.p<3) work.push(E0.t+' = '+S(E0.v));
     D.steps.forEach(st=>{ const nx=apply(st.id,{t:I(e.v),v:e.v,p:3},st.n); work.push(nx.t+' = '+S(nx.v)); e=nx; });
     return {index, a3:[s.id+c.ix,stepAddr(D.steps),DASH], step:s.step, steps:[...new Set([s.step,...D.steps.map(t=>t.id.split('.')[0])])], lines:[[E.t+' = ▢','']],
@@ -517,14 +521,14 @@ function workQ(P,used,last){
 
 /* --- The bank: terms and units of measure for the word problems. No person is named; the places are the ladder's own. --- */
 const BANK=[
-  {id:'salinas.lettuce',step:'4f',u1:['crate','crates'],u2:['head','heads'],start:'A packing shed in Salinas fills {n} {u1} of lettuce before noon.',plus:'It fills {n} more {u1} after noon.',minus:'It sends {n} {u1} back as too small.',by:'Each crate holds {n} {u2}.',plus2:'It adds {n} loose {u2} from the last row.',minus2:'It sets {n} {u2} aside as bruised.'},
-  {id:'wenatchee.apples',step:'4f',u1:['bin','bins'],u2:['box','boxes'],start:'An orchard near Wenatchee picks {n} {u1} of apples on the first day.',plus:'It picks {n} more {u1} on the second day.',minus:'It holds {n} {u1} back for cider.',by:'Each bin fills {n} {u2}.',plus2:'It adds {n} {u2} of windfalls.',minus2:'It gives {n} {u2} to the pickers.'},
-  {id:'astoria.salmon',step:'4f',u1:['tote','totes'],u2:['can','cans'],start:'A cannery in Astoria takes in {n} {u1} of salmon from the first boat.',plus:'It takes in {n} more {u1} from the second boat.',minus:'It sends {n} {u1} on fresh.',by:'Each tote fills {n} {u2}.',plus2:'It adds {n} {u2} left from the day before.',minus2:'It throws out {n} {u2} that fail the seal check.'},
-  {id:'tillamook.cheese',step:'4f',u1:['rack','racks'],u2:['wheel','wheels'],start:'A creamery in Tillamook sets {n} {u1} of cheese to age.',plus:'It sets {n} more {u1} the next day.',minus:'It sells {n} {u1} young.',by:'Each rack holds {n} {u2}.',plus2:'It adds {n} {u2} from the floor.',minus2:'It cuts {n} {u2} for samples.'},
-  {id:'skagit.bulbs',step:'4f',u1:['row','rows'],u2:['bulb','bulbs'],start:'A farm in the Skagit Valley plants {n} {u1} of tulips in the morning.',plus:'It plants {n} more {u1} in the afternoon.',minus:'It loses {n} {u1} to the rain.',by:'Each row takes {n} {u2}.',plus2:'It plants {n} spare {u2} by the gate.',minus2:'It loses {n} {u2} to voles.'},
-  {id:'hoodriver.pears',step:'4f',u1:['bin','bins'],u2:['gallon','gallons'],start:'A press in Hood River crushes {n} {u1} of pears before noon.',plus:'It crushes {n} more {u1} after noon.',minus:null,by:'Each bin gives {n} {u2} of juice.',plus2:'It adds {n} {u2} left in the tank.',minus2:'It draws off {n} {u2} for tasting.'},
-  {id:'columbia.barge',step:'5j',u1:['hour','hours'],u2:['mile','miles'],start:'A barge on the Columbia runs for {n} {u1} on the first day.',plus:'It runs for {n} more {u1} on the second day.',minus:'It must take off {n} {u1} spent waiting at a lock.',by:'It makes {n} {u2} each hour.',plus2:'It is then towed {n} more {u2}.',minus2:'It then drifts back {n} {u2}.'},
-  {id:'modesto.almonds',step:'5j',u1:['sack','sacks'],u2:['pound','pounds'],start:'A huller near Modesto takes in {n} {u1} of almonds from one orchard.',plus:'It takes in {n} more {u1} from a second orchard.',minus:'It turns away {n} {u1} as wet.',by:'Each sack weighs {n} {u2}.',plus2:'It adds {n} {u2} of floor sweepings.',minus2:'It takes off {n} {u2} of hulls.'}
+  {id:'salinas.lettuce',over:'The crates go out on {n} trucks, the same number on each.',per:['crate per truck','crates per truck'],over2:'The heads are packed into {n} cartons, the same number in each.',per2:['head per carton','heads per carton'],step:'4f',u1:['crate','crates'],u2:['head','heads'],start:'A packing shed in Salinas fills {n} {u1} of lettuce before noon.',plus:'It fills {n} more {u1} after noon.',minus:'It sends {n} {u1} back as too small.',by:'Each crate holds {n} {u2}.',plus2:'It adds {n} loose {u2} from the last row.',minus2:'It sets {n} {u2} aside as bruised.'},
+  {id:'wenatchee.apples',over:'The bins are picked by {n} crews, the same number by each.',per:['bin per crew','bins per crew'],over2:'The boxes go onto {n} pallets, the same number on each.',per2:['box per pallet','boxes per pallet'],step:'4f',u1:['bin','bins'],u2:['box','boxes'],start:'An orchard near Wenatchee picks {n} {u1} of apples on the first day.',plus:'It picks {n} more {u1} on the second day.',minus:'It holds {n} {u1} back for cider.',by:'Each bin fills {n} {u2}.',plus2:'It adds {n} {u2} of windfalls.',minus2:'It gives {n} {u2} to the pickers.'},
+  {id:'astoria.salmon',over:'The totes are split among {n} lines, the same number to each.',per:['tote per line','totes per line'],over2:'The cans are packed into {n} cases, the same number in each.',per2:['can per case','cans per case'],step:'4f',u1:['tote','totes'],u2:['can','cans'],start:'A cannery in Astoria takes in {n} {u1} of salmon from the first boat.',plus:'It takes in {n} more {u1} from the second boat.',minus:'It sends {n} {u1} on fresh.',by:'Each tote fills {n} {u2}.',plus2:'It adds {n} {u2} left from the day before.',minus2:'It throws out {n} {u2} that fail the seal check.'},
+  {id:'tillamook.cheese',over:'The racks are set in {n} rooms, the same number in each.',per:['rack per room','racks per room'],over2:'The wheels are shipped to {n} shops, the same number to each.',per2:['wheel per shop','wheels per shop'],step:'4f',u1:['rack','racks'],u2:['wheel','wheels'],start:'A creamery in Tillamook sets {n} {u1} of cheese to age.',plus:'It sets {n} more {u1} the next day.',minus:'It sells {n} {u1} young.',by:'Each rack holds {n} {u2}.',plus2:'It adds {n} {u2} from the floor.',minus2:'It cuts {n} {u2} for samples.'},
+  {id:'skagit.bulbs',over:'The rows are spread over {n} fields, the same number in each.',per:['row per field','rows per field'],over2:'The bulbs came in {n} sacks, the same number in each.',per2:['bulb per sack','bulbs per sack'],step:'4f',u1:['row','rows'],u2:['bulb','bulbs'],start:'A farm in the Skagit Valley plants {n} {u1} of tulips in the morning.',plus:'It plants {n} more {u1} in the afternoon.',minus:'It loses {n} {u1} to the rain.',by:'Each row takes {n} {u2}.',plus2:'It plants {n} spare {u2} by the gate.',minus2:'It loses {n} {u2} to voles.'},
+  {id:'hoodriver.pears',over:'The bins come from {n} orchards, the same number from each.',per:['bin per orchard','bins per orchard'],over2:'The juice fills {n} barrels, the same amount in each.',per2:['gallon per barrel','gallons per barrel'],step:'4f',u1:['bin','bins'],u2:['gallon','gallons'],start:'A press in Hood River crushes {n} {u1} of pears before noon.',plus:'It crushes {n} more {u1} after noon.',minus:null,by:'Each bin gives {n} {u2} of juice.',plus2:'It adds {n} {u2} left in the tank.',minus2:'It draws off {n} {u2} for tasting.'},
+  {id:'columbia.barge',over:'The hours are split over {n} crews, the same number to each.',per:['hour per crew','hours per crew'],over2:'The miles are marked off in {n} equal legs.',per2:['mile per leg','miles per leg'],step:'5j',u1:['hour','hours'],u2:['mile','miles'],start:'A barge on the Columbia runs for {n} {u1} on the first day.',plus:'It runs for {n} more {u1} on the second day.',minus:'It must take off {n} {u1} spent waiting at a lock.',by:'It makes {n} {u2} each hour.',plus2:'It is then towed {n} more {u2}.',minus2:'It then drifts back {n} {u2}.'},
+  {id:'modesto.almonds',over:'The sacks arrive on {n} trailers, the same number on each.',per:['sack per trailer','sacks per trailer'],over2:'The almonds are poured into {n} bins, the same weight in each.',per2:['pound per bin','pounds per bin'],step:'5j',u1:['sack','sacks'],u2:['pound','pounds'],start:'A huller near Modesto takes in {n} {u1} of almonds from one orchard.',plus:'It takes in {n} more {u1} from a second orchard.',minus:'It turns away {n} {u1} as wet.',by:'Each sack weighs {n} {u2}.',plus2:'It adds {n} {u2} of floor sweepings.',minus2:'It takes off {n} {u2} of hulls.'}
 ];
 BANK.forEach(B=>{ B.open=()=>measured(B.step); });
 const unit=(u,n)=>Math.abs(n)===1?u[0]:u[1];
@@ -534,31 +538,34 @@ function wordQ(P,used,last){ const wq=P.qps.filter(Q=>qmode(Q)==='word'), c=()=>
 function countQ(P,used){
   const seeds=P.seeds.filter(s=>['add','times','num'].includes(SKIND[s.id])), ops=P.ops.filter(O=>O.word), cbank=P.bank.filter(B=>!B.kind); if(!seeds.length||!ops.length||!cbank.length) return null;
   for(let tries=0;tries<160;tries++){
-    const s=pick(seeds), c=s.make(), B=pick(cbank), story=[], steps=[], nums=[c.a], told={}; let two=false, E={t:String(c.a),v:c.a,p:3};
+    const s=pick(seeds), c=s.make(), B=pick(cbank), story=[], steps=[], nums=[c.a], told={}; let two=false, rate=null, E={t:String(c.a),v:c.a,p:3};
     if(c.a<1) continue; story.push(say(B,'start',c.a));
-    const put=(id,n)=>{ const key=(id==='4f.plus'?'plus':id==='5b.minus'?'minus':'by')+(two&&id!=='4g.by'?'2':''); if(!B[key]||told[key]) return false; /* each sentence of the bank is told once in a story */
+    const put=(id,n)=>{ if(rate) return false; /* Phase W floor 2: a sharing sentence is the last of its story */
+      const key=(id==='4f.plus'?'plus':id==='5b.minus'?'minus':id==='5c.over'?'over':'by')+(two&&id!=='4g.by'?'2':''); if(!B[key]||told[key]) return false;
+      if(id==='5c.over'&&(!measured('5j')||n<2||E.v%n!==0||E.v/n<2)) return false; /* 'per' is 5j's word */ /* each sentence of the bank is told once in a story */
       if(id==='4g.by'){ if(two||n<2) return false; } if(id==='5b.minus'&&(n<1||n>=E.v)) return false; if(id==='4f.plus'&&n<1) return false;
-      const N=apply(id,E,n); if(N.v>999) return false; told[key]=1; story.push(say(B,key,n)); steps.push({id,n}); nums.push(n); E=N; if(id==='4g.by') two=true; return true; };
+      const N=apply(id,E,n); if(N.v>999) return false; told[key]=1; story.push(say(B,key,n)); steps.push({id,n}); nums.push(n); E=N; if(id==='4g.by') two=true; if(id==='5c.over') rate=two?B.per2:B.per; return true; };
     const lend=P.isOff(s)||(c.kind==='add'&&!ops.some(O=>O.id==='4f.plus'))||(c.kind==='times'&&!ops.some(O=>O.id==='4g.by'));
     if(!lend&&c.kind==='add'&&!put('4f.plus',c.b)) continue;
     if(!lend&&c.kind==='times'&&!put('4g.by',c.b)) continue;
     const own=steps.length; /* the seed's own change, when it brings one */
     const more=1+rnd(Math.min(2,ops.length)); /* one or two links past the seed, as far as the bank's sentences allow */
-    for(let i=0,g=0;i<more&&g<12;g++){ const O=pick(ops), n=O.id==='4g.by'?2+rnd(8):1+rnd(Math.max(2,Math.min(top(),E.v-1))); if(put(O.id,n)) i++; }
+    for(let i=0,g=0;i<more&&g<12;g++){ const O=pick(ops), n=O.id==='4g.by'?2+rnd(8):O.id==='5c.over'?(pick([2,3,4,5,6,7,8,9,10].filter(d=>E.v%d===0&&E.v/d>=2))||0):1+rnd(Math.max(2,Math.min(top(),E.v-1))); if(put(O.id,n)) i++; }
     if(!steps.length) continue;
-    const U=two?B.u2:B.u1, opt=(t,v,u)=>t+' = '+v+' '+unit(u,v), right=opt(E.t,E.v,U), wrong=[];
-    const start=n=>({t:String(n),v:n,p:3}), take=(X,u)=>{ const o=opt(X.t,X.v,u||U); if(X.v>=0&&X.v<=9999&&(X.v!==E.v||u)&&o!==right&&!wrong.includes(o)) wrong.push(o); };
+    const U=rate||(two?B.u2:B.u1), opt=(t,v,u)=>t+' = '+v+' '+unit(u,v), right=opt(E.t,E.v,U), wrong=[];
+    const start=n=>({t:String(n),v:n,p:3}), take=(X,u)=>{ const o=opt(X.t,X.v,u||U); if(Number.isInteger(X.v)&&X.v>=0&&X.v<=9999&&(X.v!==E.v||u)&&o!==right&&!wrong.includes(o)) wrong.push(o); };
     const f=flat(E.t); if(f!==null&&f!==E.v) take({t:E.t.replace(/[()]/g,''),v:f});
     const known=OPS.filter(O=>O.word&&O.open()).map(O=>O.id); /* a wrong line uses only the changes the learner has met */
     shuffle(steps.map((x,i)=>i)).forEach(i=>shuffle(known.filter(id=>id!==steps[i].id)).forEach(swap=>take(chain(start(c.a),steps.map((x,k)=>k===i?{id:swap,n:x.n}:x)))));
     for(let i=0;i<nums.length;i++) for(let j=i+1;j<nums.length;j++) if(nums[i]!==nums[j]){ const m=nums.slice(); [m[i],m[j]]=[m[j],m[i]]; take(chain(start(m[0]),steps.map((x,k)=>({id:x.id,n:m[k+1]})))); }
     for(let i=0;i<nums.length;i++) for(let j=0;j<nums.length;j++) if(i!==j&&nums[i]!==nums[j]){ const m=nums.slice(); m[j]=m[i]; take(chain(start(m[0]),steps.map((x,k)=>({id:x.id,n:m[k+1]})))); } /* one input attached twice */
     if(two) wrong.splice(Math.min(2,wrong.length),0,opt(E.t,E.v,B.u1));
+    if(rate) wrong.splice(Math.min(1,wrong.length),0,opt(E.t,E.v,two?B.u2:B.u1)); /* the unit from before the sharing */
     const w=[...new Set(wrong)].filter(o=>o!==right).slice(0,3); if(w.length<2) continue;
     const index='d:'+s.id+c.ix+'.'+stepAddr(steps.slice(own))+'.'+B.id; if(used[index]) continue;
     return {index, a3:[s.id+c.ix,stepAddr(steps.slice(own)),B.id], step:s.step, steps:[...new Set([s.step,...steps.map(t=>t.id.split('.')[0]),B.step])], story:story.join(' '), lines:[],
       ask:'Which line attaches the numbers correctly and gives the output?', right, opts:shuffle([right,...w]), lead:'It is '+right+'. ',
-      why:'Each sentence makes one change, in order: '+E.t+' = '+E.v+'.'+(two?' The count starts in '+B.u1[1]+' and is in '+B.u2[1]+' after the sentence that says how many '+B.u2[1]+' each '+B.u1[0]+' stands for.':' The count stays in '+B.u1[1]+'.')}; }
+      why:'Each sentence makes one change, in order: '+E.t+' = '+E.v+'.'+(two?' The count starts in '+B.u1[1]+' and is in '+B.u2[1]+' after the sentence that says how many '+B.u2[1]+' each '+B.u1[0]+' stands for.':rate?'':' The count stays in '+B.u1[1]+'.')+(rate?' The last sentence divides, and dividing by a unit is “per”: the output is in '+rate[1]+'.':'')}; }
   return null; }
 
 /* --- Understanding (was Comprehension until 2026-11-10 19:46Z): the crosswalk cards, the techniques, the standing questions, the sight questions, and which technique licenses a line. --- */
