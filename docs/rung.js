@@ -128,6 +128,13 @@ addEventListener('storage',e=>{ if(e.key===RK){ raw=null; } });
       LS.setItem(F,String(Date.now())); }
   }catch(e){} })();
 
+/* Phase J step 5 (2026-11-11): ∞1-∞26 now stand in front of ∞27-∞78 in sky.js. A supplied count n kept before this release
+   counted from ∞27 (first: 27, or no first at all under 0.3.154-0.3.159), so it moves up by 26 once, under ladder:mvInf1:
+   what a learner already had stays, and ∞1-∞26 arrive with it, under the button. */
+(function(){ const F='ladder:mvInf1'; try{ if(LS.getItem(F)!=null) return;
+  const sy=JSON.parse(LS.getItem('ladder:sky')||'null'); if(sy&&sy.n>0&&sy.first!==1){ sy.n+=26; sy.first=1; LS.setItem('ladder:sky',JSON.stringify(sy)); }
+  LS.setItem(F,String(Date.now())); }catch(e){} })();
+
 (function(){
 'use strict';
 const KO={throwOnError:false,strict:false,trust:true};

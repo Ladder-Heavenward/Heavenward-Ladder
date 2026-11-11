@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Why Does Fourier Work on Clocks, Circles and Lines Alike?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style></style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="inf19.html">← ∞19 is a logic the same thing as a space?</a><a href="index.html">next: the ladder →</a></p>
+  <div class="tags"><span class="tag now">∞20 · research front</span></div>
+  <h1>Why Does Fourier Work on Clocks, Circles and Lines Alike?</h1>
+  <p data-pid="64c015">Why does Fourier work on clocks, circles and lines alike? Rung 32 built three transforms: coefficients for a function that repeats, the transform on the whole line, and the stepped transform on N points. Each broke a signal into turnings, and each was rebuilt from them. They are one transform. A turning of a group is a map from it into the circle of size 1 that turns combining into multiplying. The turnings of a group form a group of their own: for the clock of N it is a clock of N, for the circle it is the whole numbers, for the whole numbers it is the circle, for the line it is the line. And the turnings of the turnings are the group again, with no choice made, as rung 47 found for readings of readings. Rung 41 factored a number by finding a period; that is finding a hidden part-group of a clock by this transform. For groups whose combining does not turn about, the same question is open, and an answer would break the lattice locks of rung 44.</p>
+  <p class="gesture" data-pid="b38566">A turning of a turn-about group G is χ : G → {|z| = 1} with χ(g + h) = χ(g)χ(h); the turnings form a group Ĝ. The clock: χₖ(j) = ω<sup>jk</sup>, so Ĝ ≅ ℤ/N. The whole numbers: n ↦ zⁿ, so the dual is the circle. Products: (G × H)^ ≅ Ĝ × Ĥ. Finite G: Ĝ ≅ G by a choice, G ≅ Ĝ̂ naturally. Σ<sub>g</sub> χ(g) = 0 unless χ = 1, so f(g) = (1/|G|) Σ<sub>χ</sub> f̂(χ) χ(g). The transform of a coset of H lives on the turnings that are 1 on H.</p>
+</header>
+
+<section class="class step" data-step="inf20.1">
+  <h2 class="sthead"><span class="stno">inf20.1</span>Turnings of a Clock</h2>
+  <p data-pid="6b010f">Let G be a group whose combining turns about, written +. A <i>turning</i> of G is a map χ from G to the complex numbers of size 1 with χ(g + h) = χ(g) χ(h). Two turnings multiply value by value, and the product is a turning; so the turnings of G form a group, written Ĝ, with the turning that is always 1 as its do-nothing.</p>
+  <p data-pid="900826">On the clock ℤ/N, let ω = e<sup>2πi/N</sup> as in <a href="r32k.html#6d47e9">32k1</a>. A turning is fixed by its value at 1, since χ(j) = χ(1)<sup>j</sup>, and that value must satisfy χ(1)<sup>N</sup> = χ(N · 1) = χ(0) = 1. So χ(1) is one of the N equal parts of a turn.</p>
+  <p data-pid="8e6070">Clock-turnings technique: <b>the turnings of ℤ/N are χₖ(j) = ω<sup>jk</sup> for k = 0, …, N − 1, and χₖ χₗ = χₖ₊ₗ: the turnings of a clock of N are a clock of N.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the clock-turnings technique">
+\chi(j) = \chi(1)^{j} @@ χ(1 + ⋯ + 1) = χ(1)⋯χ(1)
+\chi(1)^{N} = \chi(0) = 1 \Rightarrow \chi(1) = \omega^{k},\ 0 \le k < N @@ the Nth roots of 1 (21·cb20)
+\chi_k(j) = \omega^{jk} \text{ is a turning} @@ ω^{(i+j)k} = ω^{ik}ω^{jk}, and well defined since ω^{Nk} = 1
+\htmlClass{new}{\chi_k \chi_l = \chi_{k+l},\ \widehat{\mathbb Z/N} \cong \mathbb Z/N} \quad \blacksquare @@ ω^{jk}ω^{jl} = ω^{j(k+l)}
+  </pre>
+  <p data-pid="18c59f">32k1’s stepped transform is X<sub>k</sub> = Σ x<sub>j</sub> ω<sup>−jk</sup>: the list read against each turning χₖ, with the turning’s value taken backwards.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · turnings of a clock · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">∞20.1.1</span><span class="ph understand">understand</span>What does the clock-turnings technique say, and why must χ(1) be an Nth root of 1? <br>Why is the stepped transform of 32k1 a reading against the turnings of ℤ/N?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf20.2">
+  <h2 class="sthead"><span class="stno">inf20.2</span>Whole Numbers, Circle and Line</h2>
+  <p data-pid="26c3b1">On the whole numbers ℤ a turning is again fixed by its value at 1, but now nothing forces that value round to 1: any z of size 1 will do.</p>
+  <p data-pid="801084">Whole-turnings technique: <b>the turnings of ℤ are n ↦ zⁿ, one for each z on the circle, and they multiply as the z do: the dual of the whole numbers is the circle.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the whole-turnings technique">
+\chi(n) = \chi(1)^{n} \text{ for } n \ge 0,\quad \chi(-n) = \chi(1)^{-n} @@ χ(n)χ(−n) = χ(0) = 1
+z^{m+n} = z^{m} z^{n} \text{ for every } |z| = 1 @@ each z gives a turning
+z^{n} w^{n} = (zw)^{n} @@ multiplying turnings multiplies the z
+\htmlClass{new}{\widehat{\mathbb Z} \cong \{|z| = 1\}} \quad \blacksquare @@ one turning for each point of the circle
+  </pre>
+  <p data-pid="3385ea">Turned the other way: the continuous turnings of the circle are <a href="r32a.html#5c8c23">32a1</a>’s eₙ(x) = e<sup>inx</sup>, one for each whole number n, and the continuous turnings of the line are 32e1’s x ↦ e<sup>2πixξ</sup>, one for each real ξ. That continuity leaves no others is told here, not proved. So 32a’s coefficients are a function on the circle read against the turnings of the circle, and they live on ℤ; <a href="r32e.html#15b5cf">32e1</a>’s transform lives on the line again.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · four duals · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞20.2.1</span><span class="ph understand">understand</span>What does the whole-turnings technique say, and why is χ(1) free on ℤ but not on ℤ/N? <br>Why do 32a’s Fourier coefficients live on the whole numbers?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf20.3">
+  <h2 class="sthead"><span class="stno">inf20.3</span>A Product, and a Choice</h2>
+  <p data-pid="1b5401">Product-turnings technique: <b>the turnings of G × H are the products χ(g)ψ(h) of a turning of G and a turning of H: (G × H)^ ≅ Ĝ × Ĥ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the product-turnings technique">
+\theta(g, h) = \theta(g, 0)\,\theta(0, h) @@ (g, h) = (g, 0) + (0, h)
+\chi(g) = \theta(g, 0),\ \psi(h) = \theta(0, h) \text{ are turnings} @@ θ restricted to each factor
+\chi(g)\psi(h) \text{ is a turning of } G \times H \text{ for any } \chi, \psi @@ both factors turn combining into multiplying
+\htmlClass{new}{(G \times H)^{\wedge} \cong \widehat G \times \widehat H} \quad \blacksquare @@ θ ↔ (χ, ψ), both ways
+  </pre>
+  <p data-pid="52f2a1">By <a href="r44i.html#7fafe7">44i4</a>’s clock-list technique a finite turn-about group G is a copy of ℤ/d₁ × ⋯ × ℤ/dₖ. Its turnings are then a copy of the dual clocks side by side, which is a copy of the same clocks. So Ĝ ≅ G, and |Ĝ| = |G|. But the matching took two choices: a way of splitting G into clocks, and in each clock which turning to pair with 1. For ℤ/5, pairing 1 with χ₁ or with χ₂ gives different matchings, and nothing in the group prefers one. That is <a href="r47c.html#ee78df">47c3</a>’s V and V*: matched, and not naturally.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · product · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞20.3.1</span><span class="ph understand">understand</span>What does the product-turnings technique say? <br>Why is the matching of G with Ĝ made by a choice, and what is chosen?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf20.4">
+  <h2 class="sthead"><span class="stno">inf20.4</span>Turnings of the Turnings</h2>
+  <p data-pid="52b84f">Each g in G gives a turning of Ĝ: read every turning at g, ev(g)(χ) = χ(g). This needs no choice. It is <a href="r47c.html#95641d">47c2</a>’s double-reading technique with turnings in place of readings.</p>
+  <p data-pid="b30d83">A map f : G → H gives f̂ : Ĥ → Ĝ, ψ ↦ ψ ∘ f, turning arrows round, and twice turned, f̂̂ : Ĝ̂ → Ĥ̂ points the same way as f.</p>
+  <p data-pid="11da59">Double-turnings technique: <b>ev : G → Ĝ̂ is natural, f̂̂ ∘ ev = ev ∘ f, and for finite G it is a matching.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the double-turnings technique">
+\hat{\hat f}(\mathrm{ev}\,g)(\psi) = \mathrm{ev}\,g\,(\hat f \psi) = \psi(f(g)) = \mathrm{ev}(f g)(\psi) @@ unwind the two turnings round: the square closes
+g \ne 0 \Rightarrow \text{some } \chi \text{ has } \chi(g) \ne 1 @@ g has a coordinate c ≠ 0 in some clock ℤ/d of 44i4; take χ₁ there, ω^{c} ≠ 1
+\mathrm{ev}\,g = \mathrm{ev}\,h \Rightarrow \mathrm{ev}(g - h) = 1 \Rightarrow g = h @@ ev turns combining into multiplying
+|\hat{\hat G}| = |\hat G| = |G| @@ the last footing, twice
+\htmlClass{new}{\mathrm{ev} : G \cong \hat{\hat G}\text{, naturally}} \quad \blacksquare @@ a one-to-one map between finite sets of one size is onto
+  </pre>
+  <p data-pid="ef43e9">The splitting into clocks was used to show ev is one-to-one, but ev itself was defined without it. For the circle and the line the same holds with continuous turnings: the turnings of ℤ are the circle, and the turnings of the circle are ℤ again. Told, not proved.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · twice round · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞20.4.1</span><span class="ph understand">understand</span>What does the double-turnings technique say, and why does ev need no choice? <br>Why is ev one-to-one on a finite turn-about group?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf20.5">
+  <h2 class="sthead"><span class="stno">inf20.5</span>One Transform</h2>
+  <p data-pid="ca7e07">For a function f on a finite turn-about group G, its transform is the function on Ĝ given by f̂(χ) = Σ<sub>g</sub> f(g) χ(g)*, where * is the mirror of a complex number; for size 1, χ(g)* = χ(g)⁻¹.</p>
+  <p data-pid="33669c">Turning-sum technique: <b>Σ<sub>g</sub> χ(g) is |G| when χ is the do-nothing turning and 0 otherwise; so f(g) = (1/|G|) Σ<sub>χ</sub> f̂(χ) χ(g).</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the turning-sum technique">
+\chi(h) \ne 1 \text{ for some } h @@ χ is not the do-nothing turning
+\chi(h)\,\textstyle\sum_g \chi(g) = \sum_g \chi(h + g) = \sum_g \chi(g) @@ g ↦ h + g only reorders G
+(\chi(h) - 1)\textstyle\sum_g \chi(g) = 0 \Rightarrow \sum_g \chi(g) = 0 @@ χ(h) − 1 ≠ 0
+\textstyle\sum_\chi \hat f(\chi)\chi(g) = \sum_{g^{\prime}} f(g^{\prime}) \sum_\chi \chi(g - g^{\prime}) @@ χ(g)χ(g′)* = χ(g − g′)
+\htmlClass{new}{= |G|\, f(g)} \quad \blacksquare @@ by ev, Σ over χ of χ(g − g′) is |G| when g = g′ and 0 otherwise
+  </pre>
+  <p data-pid="2d04fa">For ℤ/N this is 32k1’s rebuilding, x<sub>j</sub> = (1/N) Σ X<sub>k</sub> ω<sup>jk</sup>. For the circle the sum over G becomes a total with weight 1/2π and the sum over the turnings is a sum over ℤ: <a href="r32a.html#c5e476">32a1</a>’s right-angled turnings. For the line both become totals. Three transforms, one shape: a group, its turnings, and the sum of a function read against each.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · one transform · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞20.5.1</span><span class="ph understand">understand</span>What does the turning-sum technique say, and why does multiplying the sum by χ(h) not change it? <br>Why is 32k1’s rebuilding a case of it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf20.6">
+  <h2 class="sthead"><span class="stno">inf20.6</span>Finding a Hidden Part-Group</h2>
+  <p data-pid="f1a6c4">A function on G <i>hides</i> a part-group H when it is the same on each coset x + H and different on different cosets. In <a href="r41phys.html#d8a021">41·phys.6</a>, x ↦ aˣ by N hides the multiples of the period r.</p>
+  <p data-pid="45d0d9">Hidden-part technique: <b>the transform of the even mix over a coset x + H is nonzero exactly at the turnings χ with χ(h) = 1 for every h in H.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the hidden-part technique">
+\textstyle\sum_{h \in H} \chi(x + h)^{*} = \chi(x)^{*} \sum_{h \in H} \chi(h)^{*} @@ χ turns sums into products
+\chi \text{ restricted to } H \text{ is a turning of } H @@ H is a group of its own
+\htmlClass{new}{= |H|\,\chi(x)^{*} \text{ if } \chi = 1 \text{ on } H\text{, else } 0} \quad \blacksquare @@ the turning-sum technique, on H
+  </pre>
+  <p data-pid="2f4af6">Take G = ℤ/12 and r = 4, so H = {0, 4, 8}. χₖ is 1 on H when ω<sup>4k</sup> = 1, so 12 divides 4k: k = 0, 3, 6 or 9, the multiples of 12/r = 3. A reading after the transform gives one of them, whichever coset x was; a few readings give 3, so r = 4. The quantum machine of 41·phys.6 does the transform on all cosets at once. There 2ᵐ is not a multiple of r, and the readings land near the multiples of 2ᵐ/r instead of on them; recovering r from them is held in trust.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · hidden part · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞20.6.1</span><span class="ph understand">understand</span>What does the hidden-part technique say? <br>Why do the readings for G = ℤ/12 and r = 4 not depend on which coset was mixed?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf20.7">
+  <h2 class="sthead"><span class="stno">inf20.7</span>Moves to Check</h2>
+  <pre class="lines" data-k="check" data-label="this page: moves to check">
+\text{any other choice gives the same matching } \mathbb Z/N \cong \widehat{\mathbb Z/N}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; in ℤ/5, pairing 2 with χ₁ sends 1 to χ₃
+G \cong \widehat G \text{ with no choice}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only G ≅ Ĝ̂ needs none
+\chi(1) \text{ is any point of the circle, on } \mathbb Z/N\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; χ(1)^N = χ(0) = 1: an Nth root of 1; any point only on ℤ
+\text{the readings depend on which coset was mixed}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; the coset multiplies each value by χ(x)*, of size 1: the same turnings can be read
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞20.7.1</span><span class="ph understand">understand</span>Why does pairing 2 with χ₁ in ℤ/5 send 1 to χ₃? <br>Why must χ(1) be an Nth root of 1 on ℤ/N?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="openq themeend">
+  <div class="eyebrow">Open questions · nobody has the answer yet</div>
+  <h2>Open questions</h2>
+  <p class="chnote">These are open: the field is still asking them. There is no key; a good attempt is a reason, a guess, or a better question.</p>
+  <div class="oq"><span class="oqid">∞20.oq.1</span>Can a quantum machine find a hidden part-group fast when the group does not turn about? For the symmetries of a polygon, a 2002 paper showed that a fast method of a certain kind would solve the hard problems on grids of points on which the lattice locks of 44·now2 rest; a 2003 method is faster than any known ordinary one, but not fast. For the shuffles of n things, a fast method would decide when two graphs are the same shape, and a 2005 result showed that the plain approach, one transform followed by a reading, cannot. Both questions are open.</div>
+</section>
+<section class="history themeend">
+  <div class="eyebrow">A short history · told from more than one side</div>
+  <h2>How we got here</h2>
+  <p data-pid="1d6944">Turnings of a group whose combining turns about were used for finite groups in the nineteenth century, in counting primes along clocks. In the 1930s the duality was proved for groups with a continuous combining that are compact up close: the turnings of the turnings are the group. The transform on any such group then followed the pattern of rung 32.</p>
+  <p data-pid="08d3c5">In 1994 a quantum method found the period of a remainder, and so factored numbers, by this transform on a clock. Soon after, it was seen that the method, and an earlier one for a related problem, are cases of one question: find a part-group hidden by a function. For every group whose combining turns about, a quantum machine answers it fast.</p>
+  <p data-pid="15e719">For other groups the transform must use the ways a group acts on spaces, the pieces of ∞21, not turnings, and it is harder to read. Since 2000 two groups have been studied most: the symmetries of a polygon, tied to the lattice locks, and the shuffles of n things, tied to the sameness of graphs. Neither is solved.</p>
+</section>
+
+<nav class="nextrung"><a href="inf19.html">← ∞19 · is a logic the same thing as a space?</a><a href="index.html">the ladder →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+<h3>The accepted names</h3><p>A turning is a <i>character</i>, and Ĝ is the <i>dual group</i>, or <i>Pontryagin dual</i>; G ≅ Ĝ̂ is <i>Pontryagin duality</i>. The transform on a finite turn-about group is the <i>discrete Fourier transform</i> on G; the turning-sum technique is the <i>orthogonality of characters</i>; the rebuilding is <i>Fourier inversion</i>. The turnings that are 1 on H form the <i>annihilator</i> H<sup>⊥</sup>. Finding H is the <i>hidden subgroup problem</i>; the symmetries of a polygon are the <i>dihedral group</i>, the shuffles the <i>symmetric group</i>, and the lattice problem the <i>unique shortest vector problem</i>.</p><h3>Who said it first</h3><p>Peter Gustav Lejeune Dirichlet used characters of clocks for primes in progressions (1837). Lev Pontryagin proved the duality (1934), extended by Egbert van Kampen (1935). Peter Shor, factoring (1994); Daniel Simon, the earlier problem (1994); the hidden subgroup frame from Alexei Kitaev (1995) and Richard Jozsa (1997) among others. Oded Regev, “Quantum computation and lattice problems” (FOCS 2002). Greg Kuperberg, a subexponential algorithm for the dihedral group (2003). Cristopher Moore, Alexander Russell and Leonard Schulman, “The symmetric group defies strong Fourier sampling” (2005).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+
+stepper('#sl1',[
+  {k:'ember',kl:'turning',t:R`\chi(g+h) = \chi(g)\,\chi(h)`,n:`Combining to multiplying.`},
+  {k:'ember',kl:'clock',t:R`\chi_k(j) = \omega^{jk}`,n:`Fixed by χ(1).`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\widehat{\mathbb Z/N} \cong \mathbb Z/N}`,n:`A clock again.`}
+],{title:'The slides · turnings of a clock · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'clock',t:R`\widehat{\mathbb Z/N} \cong \mathbb Z/N`,n:`Clock to clock.`},
+  {k:'ember',kl:'whole and circle',t:R`\widehat{\mathbb Z} \cong S^{1},\ \widehat{S^{1}} \cong \mathbb Z`,n:`Swapped.`},
+  {k:'ember',kl:'line',t:R`\htmlClass{new}{\widehat{\mathbb R} \cong \mathbb R}`,n:`Line to line.`}
+],{title:'The slides · four duals · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'split',t:R`\theta(g,h) = \theta(g,0)\,\theta(0,h)`,n:`One turning per factor.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(G \times H)^{\wedge} \cong \widehat G \times \widehat H}`,n:`Side by side.`},
+  {k:'ember',kl:'finite',t:R`\widehat G \cong G`,n:`By a choice.`}
+],{title:'The slides · product · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'read at g',t:R`\mathrm{ev}(g)(\chi) = \chi(g)`,n:`No choice.`},
+  {k:'ember',kl:'square',t:R`\hat{\hat f} \circ \mathrm{ev} = \mathrm{ev} \circ f`,n:`Natural.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{G \cong \hat{\hat G}}`,n:`For finite G.`}
+],{title:'The slides · twice round · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'transform',t:R`\hat f(\chi) = \textstyle\sum_g f(g)\,\chi(g)^{*}`,n:`Read against χ.`},
+  {k:'ember',kl:'sum',t:R`\textstyle\sum_g \chi(g) = 0 \text{ unless } \chi = 1`,n:`Shift and compare.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{f(g) = \tfrac{1}{|G|}\textstyle\sum_\chi \hat f(\chi)\chi(g)}`,n:`Rebuilt.`}
+],{title:'The slides · one transform · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'coset',t:R`\textstyle\sum_{h} \chi(x+h)^{*} = \chi(x)^{*}\sum_h \chi(h)^{*}`,n:`Pull out x.`},
+  {k:'ember',kl:'sum on H',t:R`|H| \text{ or } 0`,n:`Turning-sum.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{only turnings that are 1 on } H}`,n:`x drops out.`}
+],{title:'The slides · hidden part · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How Many Ways Can a Thing Be Bracketed?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style></style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="inf10.html">← ∞10 what is a generating function the shadow of?</a><a href="index.html">next: the ladder →</a></p>
+  <div class="tags"><span class="tag then">∞11 · newsflash</span></div>
+  <h1>How Many Ways Can a Thing Be Bracketed?</h1>
+  <p data-pid="2799d0">How many ways can a thing be bracketed? Rung 4 proved that brackets do not matter when you add: three numbers summed in either grouping give the same number. But the groupings themselves are different things, and they can be counted. Four things can be bracketed in five ways, five things in fourteen, six in forty two, and the count was found in the eighteenth century and settled in 1838. The groupings of four things, joined wherever one regrouping turns one into another, make a pentagon. The groupings of five make a solid with nine faces. When the two groupings are not equal but only matched, as pairs of pairs are, the matchings themselves have to agree, or the brackets start to matter again. In 1963 it was shown that one rule, that the two routes round the pentagon agree, is enough to make every route between every two groupings agree. The same pentagon appeared that year in topology, as the second of an endless row of solids. In 2002 those solids were given corners with whole-number coordinates, and the same year they turned up governing a new kind of algebra. This page counts the groupings, builds the pentagon and the solid, proves that the pentagon is enough for five things, and finds the whole-number corners.</p>
+  <p class="gesture" data-pid="069055">Bracketings of n things: B(n) = Σₖ B(k) B(n − k), giving 1, 1, 2, 5, 14, 42. Single regroupings join them: a pentagon for four things, a solid with 14 corners, 21 edges and 9 faces for five. With a natural matching α : (A × B) × C → A × (B × C), the pentagon’s two routes agree, and for five things the pentagon and naturality close every face. A tree’s corner at (left leaves × right leaves) at each split sums to n(n + 1)/2.</p>
+</header>
+
+<section class="class step" data-step="inf11.1">
+  <h2 class="sthead"><span class="stno">inf11.1</span>Counting Bracketings</h2>
+  <p data-pid="416a9d"><a href="r04f.html#1a0d70">4f9</a>’s regroup technique says (p + b) + c = p + (b + c), and <a href="r09b.html#738b7c">9b3</a> lets a chain of functions drop its brackets. Both say the grouping does not change the answer. Now count the groupings. Write B(n) for the number of ways to bracket n things in a row, each bracket around exactly two pieces. B(1) = 1 and B(2) = 1. Three things: (ab)c and a(bc), so B(3) = 2. Four: ((ab)c)d, (a(bc))d, (ab)(cd), a((bc)d), a(b(cd)), so B(4) = 5.</p>
+  <p data-pid="ab4041">Last-split technique: <b>B(n) = B(1) B(n − 1) + B(2) B(n − 2) + … + B(n − 1) B(1).</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the last-split technique">
+\text{every bracketing has exactly one last operation} @@ the outermost bracket joins two pieces
+\text{it splits the row after the } k\text{th thing},\ 1 \le k \le n - 1 @@ a first piece and a second piece
+\text{the pieces are bracketed apart: } B(k) \text{ and } B(n - k) \text{ ways} @@ any choice of each gives one bracketing
+\htmlClass{new}{B(n) = \textstyle\sum_{k=1}^{n-1} B(k)\,B(n - k)} \quad \blacksquare @@ different k, different last split
+  </pre>
+  <p data-pid="42d760">So B(5) = 1·5 + 1·2 + 2·1 + 5·1 = 14 and B(6) = 14 + 5 + 4 + 5 + 14 = 42. The next are 132, 429, 1430, 4862. There is a closed form: B(n + 1) = (2n)! / (n! (n + 1)!), which gives 14 for n = 4 since 8!/(4! 5!) = 40320/2880 = 14. A script checks it against the last-split technique up to ten things; its proof for every n is held in trust.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · bracketings · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">∞11.1.1</span><span class="ph understand">understand</span>What does the last-split technique say, and why does every bracketing have exactly one last operation? <br>Why is B(5) = 14 and not 5 + 2 + 2 + 5 counted some other way?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf11.2">
+  <h2 class="sthead"><span class="stno">inf11.2</span>One Regrouping at a Time</h2>
+  <p data-pid="fb049b">A <i>single move</i> applies 4f9’s regrouping once, at one place: some (xy)z inside the bracketing becomes x(yz), or back. Draw each bracketing as a corner and each single move as an edge. For four things the five bracketings and five moves make a pentagon: ((ab)c)d to (ab)(cd) to a(b(cd)), and ((ab)c)d to (a(bc))d to a((bc)d) to a(b(cd)).</p>
+  <p data-pid="e425c1">Single-move technique: <b>every bracketing of n things allows exactly n − 2 single moves; so the single moves number B(n)(n − 2)/2.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the single-move technique">
+\text{a bracketing of } n \text{ things has } n - 1 \text{ brackets} @@ each bracket joins two pieces into one; n pieces become 1
+\text{each bracket but the outermost sits directly inside one other} @@ n − 2 such pairs
+\text{each such pair allows one regrouping, and each regrouping comes from one pair} @@ (xy)z ↔ x(yz) where the inner bracket meets its outer one
+\htmlClass{new}{n - 2 \text{ moves at each corner};\ \tfrac12 B(n)(n-2) \text{ edges}} \quad \blacksquare @@ each edge is counted at both its ends
+  </pre>
+  <p data-pid="9814de">Four things: 5 · 2 / 2 = 5 edges, the pentagon. Five things: 14 · 3 / 2 = 21 edges among 14 corners. They bound a solid with 9 faces: 6 pentagons, where two neighbouring things act as one piece or an end thing stays outside, and the other four are regrouped, and 3 squares, where two moves happen at separate places and can be done in either order. The count 14 − 21 + 9 = 2 is the one every solid without holes gives.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · single moves · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞11.2.1</span><span class="ph understand">understand</span>What does the single-move technique say, and where does the n − 2 come from? <br>Why does the solid for five things have 21 edges?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf11.3">
+  <h2 class="sthead"><span class="stno">inf11.3</span>Brackets That Matter Up to a Matching</h2>
+  <p data-pid="46b271">Pairs are bracketed, and the brackets do matter. (A × B) × C holds members ((a, b), c); A × (B × C) holds members (a, (b, c)). These are different sets. But they are matched: α((a, b), c) = (a, (b, c)) is a bijection, and <a href="r47d.html#1277a8">47d1</a> shows both are products of A, B and C, so the matching is the one product-keeping one.</p>
+  <p data-pid="a9e1f1">Regroup-matching technique: <b>for sets A, B, C, α : (A × B) × C → A × (B × C) is a matching, and it is natural: for functions f, g, h, running α after (f × g) × h is running f × (g × h) after α.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the regroup-matching technique">
+\alpha^{-1}(a, (b, c)) = ((a, b), c) @@ the swap back; both ways give the start
+\alpha(((f \times g) \times h)((a, b), c)) = \alpha((f a, g b), h c) @@ f, g, h on each entry
+\phantom{\alpha(((f \times g) \times h)((a, b), c))} = (f a, (g b, h c)) @@ the matching
+\phantom{\alpha(((f \times g) \times h)((a, b), c))} = (f \times (g \times h))(\alpha((a, b), c)) @@ read the other way
+\htmlClass{new}{\alpha \circ ((f \times g) \times h) = (f \times (g \times h)) \circ \alpha} \quad \blacksquare @@ the square of 47c1 closes
+  </pre>
+  <p data-pid="89c790"><a href="r47c.html#a3a18a">47c1</a>’s square closes: the matching does not care what the members are, only where they sit. That is what natural buys: the regrouping is the same move on every three sets.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · matched, not equal · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞11.3.1</span><span class="ph understand">understand</span>What does the regroup-matching technique say? <br>Why are (A × B) × C and A × (B × C) matched but not the same set?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf11.4">
+  <h2 class="sthead"><span class="stno">inf11.4</span>The Pentagon Rule</h2>
+  <p data-pid="a75a89">With four sets there are two routes from ((A × B) × C) × D to A × (B × (C × D)) built from α: along the top of the pentagon in two moves, and along the bottom in three. If the routes gave different matchings, the brackets would matter after all: the answer would depend on the road.</p>
+  <p data-pid="3ea040">Pentagon-route technique: <b>for sets, the two routes round the pentagon give the same matching.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the pentagon-route technique">
+(((a, b), c), d) \mapsto ((a, b), (c, d)) \mapsto (a, (b, (c, d))) @@ top: α twice, with A × B, then C × D, as one slot
+(((a, b), c), d) \mapsto ((a, (b, c)), d) \mapsto (a, ((b, c), d)) @@ bottom: α inside, then α with B × C as one slot
+\phantom{(((a, b), c), d)} \mapsto (a, (b, (c, d))) @@ then α inside the second entry
+\htmlClass{new}{\text{top} = \text{bottom on every member}} \quad \blacksquare @@ the same output, so the same function (9a3)
+  </pre>
+  <p data-pid="4d8ddd">The rule is a demand, not a fact, when the combining is not ×. A combining of things that is regrouped only up to a matching is asked to obey this one rule. The next footing shows what that one rule buys.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the pentagon · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞11.4.1</span><span class="ph understand">understand</span>What does the pentagon-route technique say? <br>Why would the brackets matter after all if the two routes gave different matchings?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf11.5">
+  <h2 class="sthead"><span class="stno">inf11.5</span>The Pentagon Is Enough, for Five Things</h2>
+  <p data-pid="533cdc">Now let α be any natural matching (x y) z → x (y z) for some combining, obeying the pentagon rule. With five things, each face of the solid is a small loop of single moves, and each closes.</p>
+  <p data-pid="21fe85">Faces-fill technique: <b>if α is natural and obeys the pentagon rule, then every face of the solid of five things closes: going round it gives the matching that does nothing.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the faces-fill technique">
+\text{a pentagon face: four pieces regrouped} @@ two neighbours fused into one piece, or the first or last thing kept beside the rest
+\text{two fused: the pentagon rule with that piece as one slot} @@ the rule holds for any four things
+\text{one kept beside: the pentagon rule, combined with it} @@ combining keeps a closed loop closed
+\text{a square face: two moves at separate places} @@ one inside one piece, one inside another, or one around the first
+\text{either order gives the same} @@ naturality (47c1), or the box-drawing technique (47·eng.2) for moves in separate pieces
+\htmlClass{new}{\text{all 9 faces close}} \quad \blacksquare @@ 6 pentagons, 3 squares
+  </pre>
+  <p data-pid="ad8815">Two routes between two corners make a loop on the surface of the solid. The surface of the solid has no holes, so every loop on it can be filled by faces, and each face closes; so the two routes agree. That every loop on this surface can be filled is held in trust here. For n things the solids have more faces, and the general argument, given in 1963, runs every route to the bracketing with all brackets to the right and shows the routes agree on the way.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · enough · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞11.5.1</span><span class="ph understand">understand</span>What does the faces-fill technique say, and what closes the square faces? <br>Why does the pentagon rule hold with one slot holding a piece of two things?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf11.6">
+  <h2 class="sthead"><span class="stno">inf11.6</span>Corners With Whole Numbers</h2>
+  <p data-pid="9d379a">A bracketing is a tree: the things are its leaves, read left to right, and each bracket is a split. Give the tree one number per split, in order from left to right: the number of leaves on the left of the split times the number on its right. For four things: a(b(cd)) gets (3, 2, 1), a((bc)d) gets (3, 1, 2), (ab)(cd) gets (1, 4, 1), (a(bc))d gets (2, 1, 3), ((ab)c)d gets (1, 2, 3).</p>
+  <p data-pid="1ef0ab">Leaf-product technique: <b>for every tree with m leaves, the numbers add to m(m − 1)/2.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the leaf-product technique">
+\text{a split with } \ell \text{ leaves left and } r \text{ right separates } \ell r \text{ pairs of leaves} @@ one from each side
+\text{each pair of leaves is separated at exactly one split} @@ the lowest split above both
+\textstyle\sum \ell r = \text{the number of pairs of leaves} @@ count the pairs both ways
+\htmlClass{new}{\textstyle\sum \ell r = \binom{m}{2} = \tfrac{m(m-1)}{2}} \quad \blacksquare @@ for m = 4: 6
+  </pre>
+  <p data-pid="916467">So the five points all lie in the plane x + y + z = 6, and in that plane they are the corners of a pentagon whose edges are exactly the single moves. For five things the fourteen points lie in a space of three dimensions with coordinates adding to 10, and they are the corners of the solid of nine faces. That this works for every number of things, with the single moves as the edges, was shown in 2002 and is told here, not proved.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · whole numbers · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞11.6.1</span><span class="ph understand">understand</span>What does the leaf-product technique say, and why is each pair of leaves separated at exactly one split? <br>Why do all five corners for four things lie in the plane x + y + z = 6?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf11.7">
+  <h2 class="sthead"><span class="stno">inf11.7</span>Moves to Check</h2>
+  <pre class="lines" data-k="check" data-label="this page: moves to check">
+\text{each bracketing of } n + 1 \text{ things puts the new thing outside a bracketing of } n\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; (ab)(cd) does not: its last split is in the middle
+\text{so } B(n) = 2^{\,n-2}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it forgets the middle splits: B(4) = 5, not 4
+\text{regrouping changes the result, so the pentagon can fail}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; regrouping changes the bracketing, never the result, once α is natural and the pentagon holds
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞11.7.1</span><span class="ph understand">understand</span>Why does (ab)(cd) not arise by putting d outside a bracketing of a, b, c? <br>Which splits does the doubling count forget?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="openq themeend">
+  <div class="eyebrow">Open questions · nobody has the answer yet</div>
+  <h2>Open questions</h2>
+  <p class="chnote">These are open: the field is still asking them. There is no key; a good attempt is a reason, a guess, or a better question.</p>
+  <div class="oq"><span class="oqid">∞11.oq.1</span>The fewest single moves that turn one bracketing into another is called its distance. Checking a proposed short route is easy. Finding the shortest is not known to be possible in a number of steps that grows like a power of n, and not known to be as hard as the hardest problems of 41j. The largest distance between bracketings with n brackets, so n + 1 things, is known exactly for large n: 2n − 6, once n is at least 11. Why is the largest distance known and the general distance not?</div>
+  <div class="oq"><span class="oqid">∞11.oq.2</span>The pentagon closes the routes between bracketings. When the matchings themselves are only matched up to further matchings, the pentagon becomes a solid, and the solid needs its own rule, and so on up. The rules in full generality, and a way of stating them that a beginner can use, are the subject of ∞26.</div>
+</section>
+<section class="history themeend">
+  <div class="eyebrow">A short history · told from more than one side</div>
+  <h2>How we got here</h2>
+  <p data-pid="2a1dc2">The count is older than the question about brackets. In a letter of 1751 the number of ways to cut a many-sided figure into triangles by lines between corners was given, with the same numbers; a recurrence for them was published in 1758. In 1838 a young student asked how many ways a product of n letters can be bracketed when the product does not regroup freely, found the same numbers, and gave the closed form. A colleague showed the same year why the triangles and the brackets agree, by counting two ways.</p>
+  <p data-pid="89b014">For a century the numbers were a curiosity of counting. Then in 1963 the pentagon appeared twice. A paper on combinings that regroup only up to a matching showed that the pentagon rule, with naturality, is enough: every route between every two bracketings gives the same matching. In topology the same year, the pentagon was the second of an endless row of solids that measure how far a product of paths is from regrouping freely. A further rule, for a do-nothing thing, was added to the categories version in 1964.</p>
+  <p data-pid="729a82">The solids took a name from their purpose and another from their discoverer, and in 1972 the word operad was coined for the structure they belong to: operations with many inputs that plug into each other. Whether the solids could be drawn with flat faces in every dimension was settled, more than once, and in 2002 a short construction gave every corner whole-number coordinates.</p>
+  <p data-pid="dc1e8d">Also in 2002, a new algebra appeared, built by a rule of mutation from a starting set of variables. The algebras with finitely many starting sets were classified, and the classification matched the old list of the symmetry groups of Lie theory; the starting sets, joined by single mutations, turned out to be the corners of generalised versions of the same solids. The pentagon of four things was the simplest case.</p>
+  <p data-pid="9edd28">Some questions about the solids have closed since. For bracketings with n brackets, a 1988 paper proved that two are never more than 2n − 6 single moves apart once n is large, and that this many is needed for infinitely many n, using solids in a curved geometry. A 2014 proof by counting alone showed it is needed for every n from 11 on. How hard it is to find the fewest moves between two given bracketings is still not known.</p>
+</section>
+
+<nav class="nextrung"><a href="inf10.html">← ∞10 · what is a generating function the shadow of?</a><a href="index.html">the ladder →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+<h3>The accepted names</h3><p>The numbers B(n + 1) are the <i>Catalan numbers</i> Cₙ; the closed form is Cₙ = (2n)!/(n!(n + 1)!). A single move is a <i>rotation</i> of a binary tree, and the order the moves make is the <i>Tamari lattice</i>. The pentagon and the solid of nine faces are the <i>associahedra</i> K₄ and K₅, also <i>Stasheff polytopes</i>. A combining associative up to a natural matching α (the <i>associator</i>) is a <i>monoidal category</i>; the pentagon rule is the <i>pentagon identity</i>, and the statement that it suffices is <i>Mac Lane’s coherence theorem</i>; the do-nothing rule is the <i>triangle identity</i>. Operations with many inputs that plug together form an <i>operad</i>; the leaf-product coordinates are <i>Loday’s realization</i>; the new algebras are <i>cluster algebras</i>, and their solids <i>generalized associahedra</i>. The fewest moves is the <i>rotation distance</i>.</p><h3>Who said it first</h3><p>Leonhard Euler counted triangulations in a letter to Christian Goldbach (1751); Johann Segner gave the recurrence (1758). Eugène Catalan, “Note sur une équation aux différences finies” (1838), counted the bracketings and gave the closed form; Gabriel Lamé’s letter of the same year gave the two-way count. Saunders Mac Lane, “Natural associativity and commutativity” (1963); Max Kelly (1964), the triangle. Jim Stasheff (1963), the associahedra, earlier studied by Dov Tamari. J. Peter May coined “operad” in <i>The Geometry of Iterated Loop Spaces</i> (1972), after Michael Boardman and Rainer Vogt. Jean-Louis Loday, “Realization of the Stasheff polytope” (preprint 2002). Sergey Fomin and Andrei Zelevinsky, “Cluster algebras II: Finite type classification” (2002); Frédéric Chapoton, Fomin and Zelevinsky realized the generalized associahedra. Daniel Sleator, Robert Tarjan and William Thurston (1988) and Lionel Pournin (2014), the diameter 2n − 6.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+
+stepper('#sl1',[
+  {k:'ember',kl:'last split',t:R`(\cdots)(\cdots)`,n:`One outermost bracket.`},
+  {k:'ember',kl:'count',t:R`B(n) = \textstyle\sum_k B(k)\,B(n-k)`,n:`Each side apart.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{1, 1, 2, 5, 14, 42}`,n:`Things 1 to 6.`}
+],{title:'The slides · bracketings · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'move',t:R`(xy)z \leftrightarrow x(yz)`,n:`Once, at one place.`},
+  {k:'ember',kl:'count',t:R`n - 2 \text{ at each corner}`,n:`One per inner bracket.`},
+  {k:'ember',kl:'five things',t:R`\htmlClass{new}{14 - 21 + 9 = 2}`,n:`Corners, edges, faces.`}
+],{title:'The slides · single moves · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'regroup',t:R`((a,b),c) \mapsto (a,(b,c))`,n:`A bijection.`},
+  {k:'ember',kl:'natural',t:R`\alpha \circ ((f \times g) \times h)`,n:`= (f × (g × h)) ∘ α.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{the square closes}}`,n:`Same move on every three.`}
+],{title:'The slides · matched, not equal · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'top',t:R`(((a,b),c),d) \mapsto ((a,b),(c,d)) \mapsto (a,(b,(c,d)))`,n:`Two moves.`},
+  {k:'ember',kl:'bottom',t:R`\mapsto ((a,(b,c)),d) \mapsto (a,((b,c),d)) \mapsto \cdots`,n:`Three moves.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{top} = \text{bottom}}`,n:`One matching.`}
+],{title:'The slides · the pentagon · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'pentagons',t:R`\text{the rule, one slot a piece}`,n:`Or beside a fifth.`},
+  {k:'ember',kl:'squares',t:R`\text{naturality}`,n:`Moves at separate places.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{every face closes}}`,n:`Routes agree.`}
+],{title:'The slides · enough · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'corner',t:R`(\ell_1 r_1, \ell_2 r_2, \ell_3 r_3)`,n:`Left times right, per split.`},
+  {k:'ember',kl:'pairs',t:R`\textstyle\sum \ell r = \binom{m}{2}`,n:`Each pair split once.`},
+  {k:'ember',kl:'four things',t:R`\htmlClass{new}{x + y + z = 6}`,n:`One plane, five corners.`}
+],{title:'The slides · whole numbers · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

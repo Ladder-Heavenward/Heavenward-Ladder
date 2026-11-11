@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How Does Data Move When the Schema Changes?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style></style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="inf04.html">← ∞4 is learning a kind of composing?</a><a href="index.html">next: the ladder →</a></p>
+  <div class="tags"><span class="tag now">∞5 · research front</span></div>
+  <h1>How Does Data Move When the Schema Changes?</h1>
+  <p data-pid="26dd8c">How does data move when the schema changes? Rung 47 read a database as a map from its schema, the tables and columns, to sets. A company that changes its schema, splitting a table or merging two, must move its data from the old layout to the new. A map of schemas gives three ways to move data along it: backward, by reading through the map; forward, by gluing rows together; and forward, by joining them. The two forward moves are left and right of the backward one, as rung 47 named such pairs, and that fixes them. The same view shows that a query built from ands and somes is a small database of its own, and answering it is finding maps, a fact known since 1977. Migration built on the three moves was set out from 2010 and published in 2012. When a schema adds rules saying that two paths agree, the forward moves can ask questions no machine decides.</p>
+  <p class="gesture" data-pid="3a70f8">Data on a schema S is a map of categories I : S → Set. A map of schemas F : S → T gives Δ<sub>F</sub>(J) = J ∘ F, pulling data on T back to S, and two forward moves Σ<sub>F</sub> ⊣ Δ<sub>F</sub> ⊣ Π<sub>F</sub>. Sending two tables to one: Σ glues, I(A) ⊔ I(B); Π joins, I(A) × I(B). A query with only ands and somes is a small database Q, and its answers in I are the maps from Q into I.</p>
+</header>
+
+<section class="class step" data-step="inf5.1">
+  <h2 class="sthead"><span class="stno">inf5.1</span>Data as a Map From the Schema</h2>
+  <p data-pid="d8837c"><a href="r47comp.html#cb871b">47·comp.6</a> made a schema a category: tables as things, columns that point to another table as arrows, and paths run in a row. The data at one moment is a map of categories I from the schema to sets: each table goes to its set of rows, each column to a function between the sets of rows.</p>
+  <p data-pid="cc1261">A <i>map of schemas</i> F : S → T sends each table of S to a table of T and each column to a path, keeping running in a row. Given data J on the new schema T, read it on the old one by going through F.</p>
+  <p data-pid="fc0765">Pull-data technique: <b>for F : S → T and data J on T, Δ<sub>F</sub>(J) = J ∘ F is data on S, and a map of data on T pulls back to a map of data on S.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the pull-data technique">
+J : T \to \mathbf{Set},\ F : S \to T @@ data on T, a map of schemas
+J \circ F : S \to \mathbf{Set} @@ maps of categories in a row are one (47b1)
+\alpha : J \Rightarrow J^{\prime} \text{ gives } \alpha_{F(s)} \text{ at each table } s @@ read the natural map at the tables F names
+\htmlClass{new}{\Delta_F(J) = J \circ F \text{ is data on } S} \quad \blacksquare @@ each square for an arrow of S is a square for its image in T
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · data on a schema · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">∞5.1.1</span><span class="ph understand">understand</span>What does the pull-data technique say, and why is J ∘ F data on S? <br>Why is pulling back called reading through the map?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf5.2">
+  <h2 class="sthead"><span class="stno">inf5.2</span>Two Tables Into One</h2>
+  <p data-pid="75192d">Start with the smallest case. S has two tables A and B and no columns between them; T has one table C; F sends both A and B to C. Pulling back copies: Δ(J) puts J(C) at A and at B. There are two ways to move data I on S forward to C.</p>
+  <p data-pid="d774ca">Glue-and-join technique: <b>for F sending A and B to C, Σ(I)(C) = I(A) ⊔ I(B), the rows of both tables side by side, is left of Δ; Π(I)(C) = I(A) × I(B), the pairs of rows, is right of Δ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the glue-and-join technique">
+\text{maps } I \Rightarrow \Delta(X) = \text{pairs } (I(A) \to X,\ I(B) \to X) @@ a natural map from I to the copied X is one function per table
+\text{pairs } (I(A) \to X,\ I(B) \to X) \cong \text{functions } I(A) \sqcup I(B) \to X @@ a sum is fixed by its maps out (47e)
+\text{maps } \Delta(X) \Rightarrow I \cong \text{functions } X \to I(A) \times I(B) @@ a product is fixed by its maps in (47d)
+\htmlClass{new}{\Sigma \dashv \Delta \dashv \Pi,\ \Sigma(I)(C) = I(A) \sqcup I(B),\ \Pi(I)(C) = I(A) \times I(B)} \quad \blacksquare @@ 47f1’s left and right
+  </pre>
+  <p data-pid="55efd0">With 3 workers in A and 2 contractors in B, the glued table has 5 rows and the joined table 6. Neither is chosen by taste: <a href="r47f.html#3e00f4">47f1</a> fixes each up to a matching, once Δ is fixed.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · two into one · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞5.2.1</span><span class="ph understand">understand</span>What does the glue-and-join technique say, and which side of Δ is the gluing on? <br>Why do 3 and 2 rows give 5 glued rows and 6 joined rows?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf5.3">
+  <h2 class="sthead"><span class="stno">inf5.3</span>Adding a Table</h2>
+  <p data-pid="9977e5">Now let S have one table Worker, and T have Worker with a column team : Worker → Team. F puts S inside T. Data on S is a list of workers; data on T must also say what the teams are and which team each worker is on. Pulling back forgets the teams.</p>
+  <p data-pid="41320b">New-table technique: <b>moving a table of workers forward into the schema with teams, Σ gives each worker a team of their own, and Π puts every worker on one team.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the new-table technique">
+\text{maps } \Sigma(I) \Rightarrow J \leftrightarrow \text{functions } I(\mathrm{Worker}) \to J(\mathrm{Worker}) @@ Σ ⊣ Δ: a map out of Σ(I) is fixed on the workers
+\Sigma(I)(\mathrm{Team}) = I(\mathrm{Worker}),\ \text{team} = \text{do-nothing} @@ the freest choice: no two workers share a team unless forced
+\text{maps } J \Rightarrow \Pi(I) \leftrightarrow \text{functions } J(\mathrm{Worker}) \to I(\mathrm{Worker}) @@ Δ ⊣ Π: no arrow of T leaves Team, so Team asks nothing
+\htmlClass{new}{\Pi(I)(\mathrm{Team}) = \{\ast\}\text{, one team}} \quad \blacksquare @@ a set of one is the product of nothing
+  </pre>
+  <p data-pid="28f016">For three workers w₁, w₂, w₃, Σ makes three teams of one; Π makes one team of three. A migration tool must say which it means, and these are the only two that the arrows allow.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · adding a table · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞5.3.1</span><span class="ph understand">understand</span>What does the new-table technique say, and why does Σ give each worker a team of their own? <br>Why is Π’s set of teams a set of one?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf5.4">
+  <h2 class="sthead"><span class="stno">inf5.4</span>A Query Is a Small Database</h2>
+  <p data-pid="274b8d">A query with only ands and somes asks for rows linked in a pattern: “pairs of workers on one team” asks for w₁, w₂ and some t with team(w₁) = t and team(w₂) = t. Draw the pattern as data Q on the same schema: two Worker rows, one Team row, both pointing to it.</p>
+  <p data-pid="be9503">Query-is-map technique: <b>the answers to a query with only ands and somes in data I match the maps of data from its pattern Q into I.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the query-is-map technique">
+\alpha : Q \Rightarrow I \text{ picks } \alpha(w_1), \alpha(w_2) \in I(\mathrm{Worker}),\ \alpha(t) \in I(\mathrm{Team}) @@ a map sends each pattern row to a data row
+\text{team}(\alpha(w_i)) = \alpha(\text{team}(w_i)) = \alpha(t) @@ naturality: columns are kept
+\text{each answer } (w_1, w_2, t) \text{ gives one such } \alpha @@ and back
+\htmlClass{new}{\text{answers} \leftrightarrow \text{maps } Q \Rightarrow I} \quad \blacksquare @@ the ands are the squares, the somes are the pattern’s extra rows
+  </pre>
+  <p data-pid="58b816">So 47·comp.6’s join, Worker ← Team → Task read as pairs agreeing in Team, is a query, and its pattern is that picture. Two queries ask the same exactly when their patterns map into each other, which reduces checking two queries to finding maps between two small databases.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · query · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞5.4.1</span><span class="ph understand">understand</span>What does the query-is-map technique say, and where do the ands appear? <br>Why does the pattern for “pairs of workers on one team” have one Team row?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf5.5">
+  <h2 class="sthead"><span class="stno">inf5.5</span>Moves to Check</h2>
+  <pre class="lines" data-k="check" data-label="this page: moves to check">
+\Delta(\Sigma(I)) = I\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; left of is not undoing: for two tables into one, A comes back with B’s rows added
+\text{the glued table of 3 and 2 rows has 6 rows}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; gluing lays the rows side by side, 5; pairing gives 6
+\Pi \text{ gives each worker a team of their own}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; that is Σ; Π puts every worker on one team
+\text{a query’s answers are the rows of its pattern}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; they are the maps from the pattern into the data
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞5.5.1</span><span class="ph understand">understand</span>Why does reading back after gluing forward not return the data? <br>Which forward move gives each worker a team, and which gives one team for all?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="openq themeend">
+  <div class="eyebrow">Open questions · nobody has the answer yet</div>
+  <h2>Open questions</h2>
+  <p class="chnote">These are open: the field is still asking them. There is no key; a good attempt is a reason, a guess, or a better question.</p>
+  <div class="oq"><span class="oqid">∞5.oq.1</span>A schema can carry rules saying that two paths agree, such as “a worker’s team’s manager is the worker’s manager”. With such rules, moving data forward can require deciding whether two paths are equal, and with enough rules that question is the kind 41e showed no machine decides. Which fragments of schemas with rules keep the forward moves decidable and fast is open.</div>
+</section>
+<section class="history themeend">
+  <div class="eyebrow">A short history · told from more than one side</div>
+  <h2>How we got here</h2>
+  <p data-pid="6f6fb8">Relational databases were proposed in 1970, with tables and a short list of operations. In 1977 a paper showed that queries with only ands and somes are small databases of their own, so that answering one is finding maps and checking whether two ask the same is finding maps between their patterns.</p>
+  <p data-pid="12fc71">The left and right moves along a map of categories were named for the topologist who introduced left-and-right pairs in 1958.</p>
+  <p data-pid="5ea1b0">From 2010 the three moves were proposed as the operations of data migration, with a schema read as a category, and software for moving and merging databases was built on them in the years after. Rules that say paths agree made some moves hard to compute.</p>
+</section>
+
+<nav class="nextrung"><a href="inf04.html">← ∞4 · is learning a kind of composing?</a><a href="index.html">the ladder →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+<h3>The accepted names</h3><p>Data on a schema is a <i>copresheaf</i> or <i>instance</i>; Δ<sub>F</sub> is <i>pullback</i> or <i>restriction</i>, Σ<sub>F</sub> the <i>left Kan extension</i> and Π<sub>F</sub> the <i>right Kan extension</i> along F. A query with only ands and somes is a <i>conjunctive query</i>, its pattern the <i>canonical database</i>, and answers as maps is the <i>homomorphism theorem</i>; checking two queries is <i>query containment</i>. Rules that paths agree are <i>path equations</i>, and deciding them is a <i>word problem</i>.</p><h3>Who said it first</h3><p>Edgar Codd, the relational model (1970). Ashok Chandra and Philip Merlin, conjunctive queries and homomorphisms (1977). Daniel Kan, adjoint functors (1958). David Spivak, “Functorial data migration” (2010 preprint; <i>Information and Computation</i>, 2012); Spivak and Ryan Wisnesky, relational foundations and the software that followed (2012-15).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+
+stepper('#sl1',[
+  {k:'ember',kl:'data',t:R`I : S \to \mathbf{Set}`,n:`Tables to rows.`},
+  {k:'ember',kl:'map',t:R`F : S \to T`,n:`Tables to tables.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\Delta_F(J) = J \circ F}`,n:`Read through F.`}
+],{title:'The slides · data on a schema · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'pull',t:R`\Delta(X)(A) = \Delta(X)(B) = X`,n:`Copy.`},
+  {k:'ember',kl:'glue',t:R`\Sigma(I)(C) = I(A) \sqcup I(B)`,n:`Left.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\Pi(I)(C) = I(A) \times I(B)}`,n:`Right.`}
+],{title:'The slides · two into one · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'glue',t:R`\Sigma(I)(\mathrm{Team}) = I(\mathrm{Worker})`,n:`A team each.`},
+  {k:'ember',kl:'join',t:R`\Pi(I)(\mathrm{Team}) = \{\ast\}`,n:`One team.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\Sigma \dashv \Delta \dashv \Pi}`,n:`Fixed by the arrows.`}
+],{title:'The slides · adding a table · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'pattern',t:R`w_1, w_2 \to t`,n:`A small database.`},
+  {k:'ember',kl:'answer',t:R`\alpha : Q \Rightarrow I`,n:`A map.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{answers} \leftrightarrow \text{maps}}`,n:`Ands are squares.`}
+],{title:'The slides · query · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

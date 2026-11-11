@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can a Game Be Built From Smaller Games?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style></style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="inf15.html">← ∞15 can a chemical plant be written as algebra?</a><a href="index.html">next: the ladder →</a></p>
+  <div class="tags"><span class="tag now">∞16 · research front</span></div>
+  <h1>Can a Game Be Built From Smaller Games?</h1>
+  <p data-pid="9c92aa">Can a game be built from smaller games? ∞4’s lens went forward with a value and came back with a correction. Put a choice in the middle and it is a player: a move goes forward, a payoff comes back, and a best reply says which choices hold against that payoff. Two such pieces side by side are a game of rung 42 played at once; two in a row are a game where the second player sees the first move, and the second’s payoff is fed back to the first. The resting places of the whole are computed from the pieces’. This was set out in 2018. Composing pieces gives exactly the rests where no player gains by changing alone, and that includes threats nobody would carry out; what more the pieces must carry to rule those out, and how far rests compose in general, are still being worked out.</p>
+  <p class="gesture" data-pid="ec6281">A piece: a plan σ turns what the player sees, x, into a move σ(x); a payoff k on moves comes back. σ holds in the context (x, k) when k(σ(x)) ≥ k(y) for every move y. Side by side: a pair holds when each holds with the other’s move fixed. In a row: the first holds against the payoff fed back through the second’s plan; the second holds at the state the first produces. Mixing by ∞3’s chance wrapper restores a rest where no pure one exists.</p>
+</header>
+
+<section class="class step" data-step="inf16.1">
+  <h2 class="sthead"><span class="stno">inf16.1</span>A Player as a Lens</h2>
+  <p data-pid="504c7e"><a href="inf04.html#4a601e">∞4.3</a> ran lenses in a row: forward a value, back a correction. Now keep the shape and put a player in the middle. Forward, the player sees x and a plan σ turns it into a move σ(x). Back comes a payoff k, which says what each move would earn once the rest of the game is played out. The pair (x, k) is the player’s context: what they see, and what each move is worth.</p>
+  <p data-pid="70211a">Best-reply technique: <b>in the context (x, k), a plan holds when its move earns at least as much under k as every other move.</b> The plans that hold form a relation between contexts and plans, not a function: there may be several, or, without mixing, none in a whole game.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the best-reply technique, two moves">
+k(u) = 3,\quad k(v) = 5 @@ the payoff fed back, for the moves u and v
+\sigma(x) = v:\ 5 \ge 3 @@ holds
+\sigma(x) = u:\ 3 < 5 @@ fails
+\htmlClass{new}{\text{best replies in } (x, k) = \{\,\sigma : \sigma(x) = v\,\}} \quad \blacksquare @@ if k(u) = k(v), both would hold
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a player · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">∞16.1.1</span><span class="ph understand">understand</span>What does the best-reply technique say, and what goes forward and what comes back? <br>Why is best reply a relation and not a function?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf16.2">
+  <h2 class="sthead"><span class="stno">inf16.2</span>Side by Side</h2>
+  <p data-pid="e43932"><a href="r42h.html#d2ce2b">42h1</a>’s game of gain against loss is two pieces side by side. Each player sees nothing of the other; once both have moved, the grid M sends the payoff Mᵢⱼ back to the row player and −Mᵢⱼ to the column player. Take M with rows (3, 1) and (4, 2).</p>
+  <p data-pid="14a43d">Side-by-side technique: <b>a pair of moves is a rest of two pieces side by side exactly when each move is a best reply with the other’s move held fixed.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the side-by-side technique, every pair">
+(1, 1):\ \text{row gains by row 2, } 4 > 3 @@ fails
+(1, 2):\ \text{row gains by row 2, } 2 > 1 @@ fails
+(2, 1):\ \text{column gains by column 2, it pays } 2 < 4 @@ fails
+\htmlClass{new}{(2, 2):\ 2 \ge 1 \text{ and } 2 \le 4} \quad \blacksquare @@ the only rest; its payment 2 is &lt;a href="r42h.html#5f7f17"&gt;42h2&lt;/a&gt;’s value
+  </pre>
+  <p data-pid="7ab8b9">The context each piece sees is built from the other’s move: the row player’s k is the column of M picked by the column player. That is the whole of side by side: each piece is checked with the other frozen.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · side by side · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞16.2.1</span><span class="ph understand">understand</span>What does the side-by-side technique say, and which context does the row player see? <br>Why is (2, 1) not a rest?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf16.3">
+  <h2 class="sthead"><span class="stno">inf16.3</span>Two Games in a Row</h2>
+  <p data-pid="077288">A newcomer chooses to enter a market or stay out; a firm already there sees the choice and, if the newcomer enters, shares the market or fights a price war. Staying out pays the newcomer 0 and the firm 4. Entering and sharing pays each 2. Entering and fighting costs each 1. The firm’s piece comes after the newcomer’s, and its plan is a rule from what it sees to a move.</p>
+  <p data-pid="b5f855">In-a-row technique: <b>a pair of plans is a rest of two pieces in a row exactly when the first holds against the payoff fed back through the second’s plan, and the second holds at the state the first’s move produces.</b> This is the lens-chain rule of ∞4.3 with payoffs in place of slopes: the put of the first piece receives what the second piece sends back.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the in-a-row technique, the firm shares">
+\text{firm at “enter”: share } 2 > \text{fight } {-1} @@ the second piece holds with “share if entered”
+k_1(\text{enter}) = 2,\ \ k_1(\text{out}) = 0 @@ the payoff fed back to the newcomer through the firm’s plan
+\text{newcomer: enter } 2 \ge 0 @@ the first piece holds
+\htmlClass{new}{(\text{enter, share}) \text{ is a rest}} \quad \blacksquare @@ worked from the back, as the lens-chain rule sends payoffs back
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · in a row · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞16.3.1</span><span class="ph understand">understand</span>What does the in-a-row technique say, and what does the newcomer’s context contain? <br>How is it ∞4.3’s lens-chain rule with payoffs in place of slopes?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf16.4">
+  <h2 class="sthead"><span class="stno">inf16.4</span>The Penalty From Two Pieces</h2>
+  <p data-pid="dee79f"><a href="r42h.html#c25d60">42h3</a>’s penalty is two pieces side by side: the taker and the keeper each pick left or right at once, and the chance of scoring goes back to the taker, its loss to the keeper. Scoring chances: left, left 0.58; left, right 0.95; right, left 0.93; right, right 0.70.</p>
+  <p data-pid="43d1ed">No-rest technique: <b>when the best replies of two pieces side by side chase each other round all four pairs, the whole has no rest in plain moves.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the no-rest technique, the penalty">
+\text{keeper left: taker gains by right, } 0.93 > 0.58 @@ (left, left) fails
+\text{taker right: keeper gains by right, } 0.70 < 0.93 @@ (right, left) fails
+\text{keeper right: taker gains by left, } 0.95 > 0.70 @@ (right, right) fails
+\htmlClass{new}{\text{taker left: keeper gains by left, } 0.58 < 0.95} \quad \blacksquare @@ (left, right) fails: the replies go round
+  </pre>
+  <p data-pid="895abd">Each piece has best replies; the whole has no rest. Wrap each piece in <a href="inf03.html#b988ec">∞3.5</a>’s chance wrapper, so that a move is a mix and the payoff fed back is the average, and the whole gets one: the taker left with chance about 0.383 and the keeper left with chance about 0.417, by 42h3’s indifference technique, with value about 0.796. The pieces are the same; changing what a move is changed what the whole can rest on.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · penalty · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞16.4.1</span><span class="ph understand">understand</span>What does the no-rest technique say, and why does the penalty have no rest in plain moves? <br>What does the chance wrapper change about a move?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf16.5">
+  <h2 class="sthead"><span class="stno">inf16.5</span>Where the Pieces Do Not Make the Whole</h2>
+  <p data-pid="f396d2">Go back to the market. Suppose the firm’s plan is “fight if entered”. The in-a-row technique checks the firm only at the state the newcomer’s move produces. If the newcomer stays out, the firm earns 4 whatever its plan says about entering, so fighting holds there by the best-reply technique: with k tied, every move holds.</p>
+  <p data-pid="ee24bf">Empty-threat technique: <b>(out, fight) is a rest of the two pieces in a row, though the firm would not fight if the newcomer entered.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the empty-threat technique">
+\text{firm at “out”: fight } 4 = \text{share } 4 @@ the second piece holds at the state produced
+k_1(\text{enter}) = -1,\ \ k_1(\text{out}) = 0 @@ fed back through “fight if entered”
+\text{newcomer: out } 0 \ge -1 @@ the first piece holds
+\htmlClass{new}{(\text{out, fight}) \text{ is a rest; at “enter” the firm would share}} \quad \blacksquare @@ a threat that is never tested
+  </pre>
+  <p data-pid="bf287c">So composing the pieces’ rests gives every rest where no player gains by changing alone, and that includes rests held up by threats that would not be carried out. Ruling them out means checking the second piece at every state the first could produce, not only the one it does: a 2017 paper added a new operator to do that. How far such stronger rests compose is part of what is still open.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · empty threat · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞16.5.1</span><span class="ph understand">understand</span>What does the empty-threat technique say, and why does “fight” hold at the state “out”? <br>What check would rule (out, fight) out?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf16.6">
+  <h2 class="sthead"><span class="stno">inf16.6</span>Moves to Check</h2>
+  <pre class="lines" data-k="check" data-label="this page: moves to check">
+\text{every piece has a best reply, so the whole has a rest}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the penalty’s replies go round; a rest needs mixes
+(\text{out, fight}) \text{ is not a rest}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the firm is checked only at the state produced, where fighting ties with sharing
+\text{feed the newcomer the firm’s payoff}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; each piece receives its own payoff; the newcomer’s k₁ is its own earnings
+\text{check the newcomer before the firm’s plan is fixed}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; the newcomer’s payoff is fed back through the firm’s plan, so that plan comes first
+\text{(2, 2) checked against row moves only}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; a rest side by side checks every player’s moves, the column player’s too
+\text{replace plain moves by mixes}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; legal: the chance wrapper changes the moves, and a rest may appear
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞16.6.1</span><span class="ph understand">understand</span>Why can every piece have a best reply while the whole has no rest? <br>Why must the firm’s plan be fixed before the newcomer is checked?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="openq themeend">
+  <div class="eyebrow">Open questions · nobody has the answer yet</div>
+  <h2>Open questions</h2>
+  <p class="chnote">These are open: the field is still asking them. There is no key; a good attempt is a reason, a guess, or a better question.</p>
+  <div class="oq"><span class="oqid">∞16.oq.1</span>How far do resting places compose? The 2018 theory composes the rests where no player gains by changing alone; stronger rests, which rule out threats never tested, need more than the pieces’ own best replies, and how much more is studied case by case. Games whose very shape depends on earlier moves, where what comes next is chosen by what came before, were brought into the frame in work since 2021, and the general account is still open.</div>
+</section>
+<section class="history themeend">
+  <div class="eyebrow">A short history · told from more than one side</div>
+  <h2>How we got here</h2>
+  <p data-pid="7c9274">In 2016 four authors posted a paper making games into the arrows of a category: running in a row for moves one after another, side by side for moves made at once, with the payoff sent back as a lens sends a correction back. It appeared at a logic in computer science meeting in 2018.</p>
+  <p data-pid="128357">In 2017 a paper on repeated games in this frame added a new operator on games to capture rests that rule out untested threats, which composing best replies alone does not do.</p>
+</section>
+
+<nav class="nextrung"><a href="inf15.html">← ∞15 · can a chemical plant be written as algebra?</a><a href="index.html">the ladder →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+<h3>The accepted names</h3><p>A piece is an <i>open game</i>; the payoff sent back is the <i>coutility</i>, and the context is a <i>context</i> made of a <i>history</i> and a <i>continuation</i>. Best reply is the <i>best-response relation</i>; a rest is a <i>Nash equilibrium</i>. Side by side is the <i>monoidal product</i>, in a row is <i>sequential composition</i>. The newcomer and the firm play the <i>entry deterrence game</i>; the empty threat is a <i>non-credible threat</i>, and rests that rule it out are <i>subgame perfect equilibria</i>. The chance wrapper gives <i>mixed strategies</i>.</p><h3>Who said it first</h3><p>Neil Ghani, Jules Hedges, Viktor Winschel and Philipp Zahn, “Compositional game theory” (arXiv 2016; LICS 2018). Neil Ghani, Clemens Kupke, Alasdair Lambert and Fredrik Nordvall Forsberg, “A compositional treatment of iterated open games” (arXiv 2017; MFPS 2018). Matteo Capucci, Neil Ghani, Jérémy Ledent and Fredrik Nordvall Forsberg, “Translating extensive form games to open games with agency” (2021).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+
+stepper('#sl1',[
+  {k:'ember',kl:'forward',t:R`x \mapsto \sigma(x)`,n:`A move.`},
+  {k:'ember',kl:'back',t:R`k : \text{moves} \to \mathbb{R}`,n:`A payoff.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{k(\sigma(x)) \ge k(y) \text{ for all } y}`,n:`Holds.`}
+],{title:'The slides · a player · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'pieces',t:R`\sigma_1 \otimes \sigma_2`,n:`At once.`},
+  {k:'ember',kl:'payoff',t:R`M_{ij},\ -M_{ij}`,n:`Fed back to each.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(2,2) \text{ rests}}`,n:`Each holds.`}
+],{title:'The slides · side by side · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'forward',t:R`\text{enter} \mapsto \text{firm sees it}`,n:`Move passes on.`},
+  {k:'ember',kl:'back',t:R`k_1(\text{enter}) = 2`,n:`Through the firm’s plan.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(\text{enter, share})}`,n:`A rest.`}
+],{title:'The slides · in a row · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'chase',t:R`\text{L,L} \to \text{R,L} \to \text{R,R} \to \text{L,R} \to \text{L,L}`,n:`Replies go round.`},
+  {k:'ember',kl:'mix',t:R`x \approx 0.383,\ q \approx 0.417`,n:`Chance wrapper.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{a rest in mixes}}`,n:`Value ≈ 0.796.`}
+],{title:'The slides · penalty · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'tied',t:R`k(\text{fight}) = k(\text{share}) = 4`,n:`At “out”.`},
+  {k:'ember',kl:'back',t:R`k_1(\text{enter}) = -1`,n:`Through the threat.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(\text{out, fight}) \text{ rests}}`,n:`Never tested.`}
+],{title:'The slides · empty threat · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
