@@ -6803,6 +6803,712 @@ QP.push({id:'29m.picture',step:'29m',label:'the painter’s window',open:()=>mea
       ['m6',[['M is the midpoint of AB in the world, and AB runs away from the eye','given'],['the picture of M is the midpoint of the pictures of A and B','pictures keep midpoints']],2,1,'The far half is painted shorter.']];
     return line28('29m.line',V,[a,b,c,k]); }});
 
+/* ===== Laundry 5, rung 30 (floor 5 pools, stage AC), part 1: 30a to 30h ===== */
+Object.assign(STEPS,{'30a':['r30a','Not Every Set Has a Size'],'30b':['r30b','The Sets That Have Sizes'],'30c':['r30c','Slice the Heights, Not the Inputs'],'30d':['r30d','When Limits Pass Through Integrals'],'30e':['r30e','Either Order'],'30f':['r30f','Chance Is Size'],'30g':['r30g','Averages as Integrals'],'30h':['r30h','Averages Settle'],'30i':['r30i','Chance in One Function'],'30j':['r30j','The Bell Curve'],'30k':['r30k','No System Beats a Fair Game'],'30l':['r30l','Chance by the Rules'],'30m':['r30m','Densities'],'30n':['r30n','Random Walks'],'30o':['r30o','Waiting and Arriving'],'30p':['r30p','Chance That Steps'],'30q':['r30q','Estimating From Samples'],'30r':['r30r','The Most Likely Parameter'],'30s':['r30s','Is the Difference Real?'],'30t':['r30t','The Best Test'],'30u':['r30u','Belief Updated'],'30v':['r30v','How the Numbers Were Got'],'30w':['r30w','Inductive Axioms Revisited']});
+const F30=(p,q)=>fshow(fr(p,q));
+
+/* ---------- 30a Not Every Set Has a Size ---------- */
+const WA30=[
+  ['The fractions are in every interval. Have they size 1 in [0, 1]?','no: they are countably many points; outer-adds-at-most gives 0',['yes','yes: they fill the interval','no: they have size 1/2'],'Each point has outer size 0, and countably many zeros add to at most 0.'],
+  ['Is m*(A ∪ B) = m*(A) + m*(B) whenever A and B are separate?','no: the slid copies of V show outer size cannot always add',['yes','yes, when both are bounded','no: it is always less'],'Outer-adds-at-most technique: at most the sum.'],
+  ['Is the set V written down, with a first member?','no: choice says V exists; it names no member of it',['yes','yes: its first member is 0','no: V does not exist'],'No-size-set technique: if choice is true, some set in [0, 1] has no size.'],
+  ['Is a set with outer size 0 empty?','no: every single point, and every countable set, has outer size 0',['yes','yes, when it is bounded','no: only finite sets have outer size 0'],'Cover a point by an interval as short as you like.'],
+  ['What is the outer size of an interval?','its length',['0','1','twice its length'],'Cover-total technique.'],
+  ['What does sliding a set by t do to its outer size?','nothing: m*(A + t) = m*(A)',['it adds t','it multiplies it by t','it can make it 0'],'Shift-keeps technique.']];
+QP.push({id:'30a.outer',step:'30a',label:'outer size',open:()=>measured('30a'),make(){ return writtenQ('30a.outer',WA30); }},
+  {id:'30a.work',step:'30a',mode:'work',label:'cover and add',open:()=>measured('30a'),make(){
+    const t=rnd(3), a=rnd(4), w=1+rnd(5), c=a+w+1+rnd(3), v=1+rnd(5);
+    if(t===0){ const right='at most '+(w+v), wrong=['at least '+(w+v)+', and maybe more','exactly '+(w*v),'at most '+Math.max(w,v)]; if(w*v===w+v) return null;
+      return {index:'q:30a.work[u;'+[a,w,c,v].join(';')+']', lines:[['A has outer size '+w+', and B has outer size '+v,'two sets of reals']], ask:'What does the outer-adds-at-most technique say of m*(A ∪ B)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Outer-adds-at-most technique: the outer size of a union is at most the sum, '+w+' + '+v+'.'}; }
+    if(t===1){ const s=nz25(6), right=String(w), wrong=uniq(right,[sg(w+s),String(w*Math.abs(s)),'0',sg(w-s),String(w+1)],3); if(wrong.length<3) return null;
+      return {index:'q:30a.work[s;'+[w,s].join(';')+']', lines:[['m*(A) = '+w,'a set of reals'],['B is A slid by '+sg(s),'B = A + t']], ask:'What is m*(B)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Shift-keeps technique: m*(A + t) = m*(A) for every set A and every real t.'}; }
+    const [S,right,why]=pick([['the interval ['+a+', '+(a+w)+']',String(w),'Cover-total technique: the outer size of an interval is its length.'],['the fractions in ['+a+', '+(a+w)+']','0','They are countably many points, each of outer size 0.'],['the whole numbers','0','They are countably many points, each of outer size 0.'],['a set of '+(w+2)+' points','0','Each point has outer size 0.'],['the interval ('+a+', '+(a+w)+')',String(w),'Cover-total technique: the outer size of an interval is its length.']]), wrong=uniq(right,['0',String(w),'1',String(a+w),String(w+2),'∞'],3);
+    return {index:'q:30a.work[c;'+S+']', lines:[['A is '+S,'a set of reals']], ask:'What is m*(A)?', right, opts:shuffle([right,...wrong]), lead:'', why}; }},
+  {id:'30a.line',step:'30a',mode:'proof',label:'at most the sum',open:()=>measured('30a'),make(){
+    const a=rnd(5), w=1+rnd(6), s=nz25(6), V=[
+      ['a1',[['A is a countable set of reals','given'],['m*(A) = 0','the outer-adds-at-most technique: each point has outer size 0']],2,0,'Countably many zeros add to at most 0.'],
+      ['a2',[['A and B are separate sets of reals','given'],['m*(A ∪ B) = m*(A) + m*(B)','the outer-adds-at-most technique']],2,1,'The technique gives at most the sum. The slid copies of V show it cannot always add.'],
+      ['a3',[['m*(A) = '+w,'given'],['m*(A + '+par10(s)+') = '+w,'the shift-keeps technique']],2,0,'Sliding keeps the outer size.'],
+      ['a4',[['m*(A) = 0','given'],['A is empty','it has no size']],2,1,'Every single point, and every countable set, has outer size 0.'],
+      ['a5',[['I = ['+a+', '+(a+w)+']','given'],['m*(I) = '+w,'the cover-total technique']],2,0,'The outer size of an interval is its length.'],
+      ['a6',[['choice is true','given'],['every set in [0, 1] has a size that gives intervals their lengths, is kept by sliding, and adds over countably many separate pieces','every set can be measured']],2,1,'No-size-set technique: some set in [0, 1] has no such size.']];
+    return line28('30a.line',V,[a,w,s]); }});
+
+/* ---------- 30b The Sets That Have Sizes ---------- */
+const WB30=[
+  ['Does every set pass the split test?','no: if choice is true, some set does not; else its slid copies would add',['yes','yes: every bounded set','no: only intervals pass'],'Split-test technique: m*(E ∩ A) + m*(E ∖ A) ≤ m*(E) for every E.'],
+  ['Is m(A ∪ B) = m(A) + m(B) for any two sized sets?','only when they are separate; else the overlap counts twice',['yes','never','only when both are intervals'],'Countable-adding technique: sized and separate.'],
+  ['Is a union of any number of sized sets sized?','no: countably many; every set is a union of its single points',['yes','no: only finitely many','yes, when the sets are separate'],'Sized-family technique: A₁, A₂, … sized gives their union sized.'],
+  ['Are the sized sets the intervals and nothing else?','no: the fractions, the open sets and their leftovers are sized too',['yes','no: every set is sized','yes, and their finite unions'],'Sized-family technique.'],
+  ['When is A sized?','when m*(E ∩ A) + m*(E ∖ A) ≤ m*(E) for every E',['when m*(A) is finite','when A is an interval','when m*(A) > 0'],'Split-test technique.'],
+  ['A₁, A₂, … are sized and separate. What is the size of their union?','m(A₁) + m(A₂) + ⋯',['at most that sum, and often less','the largest of the m(Aₙ)','it has none'],'Countable-adding technique.']];
+QP.push({id:'30b.sized',step:'30b',label:'sized sets',open:()=>measured('30b'),make(){ return writtenQ('30b.sized',WB30); }},
+  {id:'30b.work',step:'30b',mode:'work',label:'add the sizes',open:()=>measured('30b'),make(){
+    const t=rnd(4), a=2+rnd(5), b=2+rnd(5), c=1+rnd(Math.min(a,b)-1);
+    if(t===0){ const right=String(a+b-c), wrong=uniq(right,[String(a+b),String(a+b+c),String(a*b),String(Math.max(a,b)),String(a+b-c+1)],3); if(wrong.length<3) return null;
+      return {index:'q:30b.work[o;'+[a,b,c].join(';')+']', lines:[['m(A) = '+a+' and m(B) = '+b,'two sized sets'],['m(A ∩ B) = '+c,'their overlap']], ask:'What is m(A ∪ B)?', right, opts:shuffle([right,...wrong]), lead:'', why:'A ∪ B is three separate pieces. Adding m(A) and m(B) counts the overlap twice: '+a+' + '+b+' − '+c+'.'}; }
+    if(t===1){ const L=a+b, right=String(L-a), wrong=uniq(right,[String(L),String(a),String(L+a),'0',String(L-a+1)],3); if(wrong.length<3) return null;
+      return {index:'q:30b.work[c;'+[a,L].join(';')+']', lines:[['A is a sized set inside [0, '+L+'], with m(A) = '+a,'given']], ask:'What is the size of the part of [0, '+L+'] outside A?', right, opts:shuffle([right,...wrong]), lead:'', why:'The two parts are sized and separate, and their sizes add to '+L+'.'}; }
+    if(t===2){ const r=2+rnd(3), k=(r-1)*(1+rnd(4)), right=F30(k,r-1), wrong=uniq(right,[F30(k,r),String(k),'∞',F30(k*r,r-1),F30(k,r+1),'0'],3); if(wrong.length<3) return null;
+      return {index:'q:30b.work[g;'+[r,k].join(';')+']', lines:[['A₁, A₂, … are sized and separate','given'],['m(Aₙ) = '+k+'/'+r+'ⁿ, for n = 1, 2, 3, …','their sizes']], ask:'What is the size of their union?', right, opts:shuffle([right,...wrong]), lead:'', why:'Countable-adding technique: the sizes add. '+k+'/'+r+' + '+k+'/'+r*r+' + ⋯ = '+right+'.'}; }
+    const x=rnd(3), ov=rnd(2), I=[x,x+a], J=ov?[x+a-c,x+a-c+b]:[x+a+1,x+a+1+b], val=ov?a+b-c:a+b, right=String(val), wrong=uniq(right,[String(a+b),String(a+b-c),String(J[1]-I[0]),String(a*b),String(val+1),String(Math.max(a,b))],3); if(wrong.length<3) return null;
+    return {index:'q:30b.work[i;'+[I,J].join(';')+']', lines:[['A = ['+I[0]+', '+I[1]+'] ∪ ['+J[0]+', '+J[1]+']','a union of two intervals']], ask:'What is m(A)?', right, opts:shuffle([right,...wrong]), lead:'', why:ov?'The intervals overlap: A is the one interval ['+I[0]+', '+J[1]+'], of length '+val+'.':'Intervals-sized and countable-adding techniques: the intervals are separate, so '+a+' + '+b+'.'}; }},
+  {id:'30b.line',step:'30b',mode:'proof',label:'countably many, separate',open:()=>measured('30b'),make(){
+    const a=2+rnd(5), b=2+rnd(5), c=1+rnd(Math.min(a,b)-1), k=1+rnd(6), V=[
+      ['b1',[['A₁, A₂, … are sized','given'],['their union is sized','the sized-family technique']],2,0,'A countable union of sized sets is sized.'],
+      ['b2',[['A and B are sized, with m(A) = '+a+', m(B) = '+b+' and m(A ∩ B) = '+c,'given'],['m(A ∪ B) = '+(a+b),'the countable-adding technique']],2,1,'The technique needs separate sets. Here the overlap counts twice: '+(a+b-c)+'.'],
+      ['b3',[['S is a set of reals, and every single point is sized','given'],['S is sized','the sized-family technique: S is the union of its points']],2,1,'The technique is for countably many sets. S may have more points than that.'],
+      ['b4',[['A is sized','given'],['the set of reals outside A is sized','the split-test technique']],2,0,'The split test reads the same for A and for the reals outside A.'],
+      ['b5',[['A₁, A₂, … are sized and separate, with m(Aₙ) = '+k+'/2ⁿ','given'],['m(A₁ ∪ A₂ ∪ ⋯) = '+k,'the countable-adding technique']],2,0,k+'/2 + '+k+'/4 + ⋯ = '+k+'.'],
+      ['b6',[['I = ('+a+', '+(a+b)+')','given'],['I is sized, and m(I) = '+b,'the intervals-sized technique']],2,0,'Every interval is sized, and its size is its length.']];
+    return line28('30b.line',V,[a,b,c,k]); }});
+
+/* ---------- 30c Slice the Heights, Not the Inputs ---------- */
+const WC30=[
+  ['f ≥ 0 and ∫ f dm = 0. Is f = 0 at every point?','only except on a size-0 set',['yes','no: f may be 1 on an interval','yes, when f is sized'],'A function that is 1 on the fractions and 0 elsewhere has total 0.'],
+  ['Is the new total a sum over the inputs?','no: it sums over the heights; value times the size of where it is taken',['yes','yes, in equal pieces','no: it sums over the jumps'],'Step-total technique.'],
+  ['Has a function with a jump at every fraction no total?','it can have one: it is sized, and the jumps sit on a size-0 set',['it has none','it has one only by rung 15','its total is ∞'],'The total does not see a size-0 set.'],
+  ['Is ∫ (f − g) = ∫ f − ∫ g when both totals are ∞?','no: ∞ − ∞ has no value; split only when ∫ |f| is finite',['yes','yes: it is 0','no: it is ∞'],'The totals add when they are finite.'],
+  ['f ≥ 0 is continuous on [u, v]. What is its total over [u, v]?','the area ∫ᵤᵛ f(x) dx of rung 15',['less than that area','it has none','f(v) − f(u)'],'Agrees-with-area technique.'],
+  ['How is the total of a sized f ≥ 0 reached?','as the limit of the totals of a rising list of step functions below it',['as the sum of its values','as the total of the largest step function','by cutting the inputs into equal pieces'],'Total-from-below technique.']];
+QP.push({id:'30c.heights',step:'30c',label:'slice the heights',open:()=>measured('30c'),make(){ return writtenQ('30c.heights',WC30); }},
+  {id:'30c.work',step:'30c',mode:'work',label:'value times size',open:()=>measured('30c'),make(){
+    const t=rnd(3), v=[1+rnd(5),1+rnd(5),1+rnd(5)], s=[1+rnd(4),1+rnd(4),1+rnd(4)];
+    if(t===0){ if(v[0]===v[1]||v[1]===v[2]||v[0]===v[2]) return null; const val=v[0]*s[0]+v[1]*s[1]+v[2]*s[2], right=String(val), wrong=uniq(right,[String(v[0]+v[1]+v[2]),String((v[0]+v[1]+v[2])*(s[0]+s[1]+s[2])),String(s[0]+s[1]+s[2]),String(val+v[0]),String(v[0]*s[1]+v[1]*s[2]+v[2]*s[0]),String(val-1)],3); if(wrong.length<3) return null;
+      return {index:'q:30c.work[s;'+[v,s].join(';')+']', lines:[['f takes the value '+v[0]+' on a set of size '+s[0]+', '+v[1]+' on a set of size '+s[1]+', and '+v[2]+' on a set of size '+s[2],'a step function'],['the three sets are separate, and f is 0 elsewhere','given']], ask:'What is ∫ f dm?', right, opts:shuffle([right,...wrong]), lead:'', why:'Step-total technique: value times size, added. '+v[0]+' · '+s[0]+' + '+v[1]+' · '+s[1]+' + '+v[2]+' · '+s[2]+'.'}; }
+    if(t===1){ const a=v[0], b=v[1], L=s[0], right=String(b*L), wrong=uniq(right,[String(a*L),String((a+b)*L),String(a+b),'0',String(b),String(b*L+a)],3); if(wrong.length<3||a===b) return null;
+      return {index:'q:30c.work[q;'+[a,b,L].join(';')+']', lines:[['on [0, '+L+'], f is '+a+' at the fractions and '+b+' at every other point','a sized function']], ask:'What is ∫ f dm over [0, '+L+']?', right, opts:shuffle([right,...wrong]), lead:'', why:'The fractions have size 0, and the rest of [0, '+L+'] has size '+L+'. So '+a+' · 0 + '+b+' · '+L+'.'}; }
+    const k=2*(1+rnd(3)), u=1+rnd(4), right=String(k*u*u/2), wrong=uniq(right,[String(k*u*u),String(k*u),String(k*u/2),String(k*u*u/2+u),String(u*u)],3); if(wrong.length<3) return null;
+    return {index:'q:30c.work[a;'+[k,u].join(';')+']', lines:[['f(x) = '+k+'x on [0, '+u+']','continuous, and f ≥ 0']], ask:'What is ∫ f dm over [0, '+u+']?', right, opts:shuffle([right,...wrong]), lead:'', why:'Agrees-with-area technique: it is the area of rung 15, '+k+' · '+u+'²/2.'}; }},
+  {id:'30c.line',step:'30c',mode:'proof',label:'except on a size-0 set',open:()=>measured('30c'),make(){
+    const a=1+rnd(5), b=1+rnd(5), s=1+rnd(4), r=1+rnd(4), k=2*(1+rnd(3)), u=1+rnd(4), V=[
+      ['c1',[['f is '+a+' on a set of size '+s+', '+b+' on a separate set of size '+r+', and 0 elsewhere','given'],['∫ f dm = '+(a*s+b*r),'the step-total technique']],2,0,a+' · '+s+' + '+b+' · '+r+'.'],
+      ['c2',[['on [0, 1], f is '+a+' at the fractions and '+b+' elsewhere','given'],['∫ f dm = '+b,'the fractions have size 0']],2,0,a+' · 0 + '+b+' · 1.'],
+      ['c3',[['f ≥ 0 is sized, and ∫ f dm = 0','given'],['f = 0 at every point','its total is 0']],2,1,'Only except on a size-0 set.'],
+      ['c4',[['∫ f dm = ∞ and ∫ g dm = ∞','given'],['∫ (f − g) dm = 0','∫ f − ∫ g']],2,1,'∞ − ∞ has no value. Split only when ∫ |f| is finite.'],
+      ['c5',[['f is continuous','given'],['f is sized','the height-slices technique']],2,0,'Continuous functions are sized.'],
+      ['c6',[['f(x) = '+k+'x on [0, '+u+']','given'],['∫ f dm = '+k*u*u/2,'the agrees-with-area technique']],2,0,'The area of rung 15: '+k+' · '+u+'²/2.'],
+      ['c7',[['f is '+a+' on a set of size '+s+' and 0 elsewhere','given'],['∫ f dm = '+a,'the value of f']],2,s===1?0:1,s===1?a+' · 1.':'Value times size: '+a+' · '+s+' = '+a*s+'.']];
+    return line28('30c.line',V,[a,b,s,r,k,u]); }});
+
+/* ---------- 30d When Limits Pass Through Integrals ---------- */
+const WD30=[
+  ['fₙ settles at f at every point. Do the totals settle at ∫ f?','not always: the sliding bump has totals 1 and limit total 0',['yes','yes, when each fₙ is sized','never'],'A fence, or a rising list, is needed.'],
+  ['Is the total of the lower limit always the lower limit of the totals?','no: the lower-limit technique gives only ≤',['yes','no: it gives ≥','yes, for fₙ ≥ 0'],'Lower-limit technique.'],
+  ['|fₙ| ≤ g with ∫ g dm = ∞. Is that fence enough?','no: g = 1 fences the sliding bump, and the limit still fails',['yes','yes, when g is continuous','no: no fence is ever enough'],'Fenced-limit technique: ∫ g dm finite.'],
+  ['Must the list settle everywhere at once, as in 23e?','no: the fence asks only for settling point by point',['yes','yes, on bounded sets','no: it need not settle at all'],'Fenced-limit technique: fₙ(x) settles at f(x) at every x.'],
+  ['0 ≤ f₁ ≤ f₂ ≤ ⋯ are sized and settle at f at every x. What follows?','∫ fₙ dm settles at ∫ f dm',['nothing, without a fence','∫ fₙ dm stays below ∫ f dm, and no more','f is a step function'],'Rising-limit technique.'],
+  ['What does the fenced-limit technique ask of the fence g?','|fₙ| ≤ g for every n, with ∫ g dm finite',['|fₙ| ≤ g for some n','that g be continuous','g ≥ 0, with any total'],'Fenced-limit technique.']];
+const OD30=['yes: the rising-limit technique','yes: the fenced-limit technique','no: every total is 1, and the limit function has total 0','no: the list settles at no point'];
+QP.push({id:'30d.limits',step:'30d',label:'limits through totals',open:()=>measured('30d'),make(){ return writtenQ('30d.limits',WD30); }},
+  {id:'30d.work',step:'30d',mode:'work',label:'fence or rise',open:()=>measured('30d'),make(){
+    const t=rnd(2), k=2+rnd(5);
+    if(t===0){ const [L,i,why]=pick([['fₙ = n on (0, 1/n), and 0 elsewhere',2,'n · 1/n = 1 for every n, and fₙ(x) settles at 0 at every x.'],['fₙ = 1 on [n, n + 1], and 0 elsewhere',2,'The bump slides away: every total is 1, and fₙ(x) settles at 0 at every x.'],['fₙ = 1 on [0, n], and 0 elsewhere',0,'0 ≤ f₁ ≤ f₂ ≤ ⋯, so the totals settle at the total of the limit, here ∞.'],['fₙ = xⁿ on [0, 1], and 0 elsewhere',1,'g = 1 on [0, 1] is a fence with total 1. The totals 1/(n + 1) settle at 0.'],['fₙ = (1 − 1/n) f, with f ≥ 0 sized',0,'0 ≤ f₁ ≤ f₂ ≤ ⋯, and fₙ(x) settles at f(x).'],['fₙ = (sin nx)/n on [0, '+k+'], and 0 elsewhere',1,'g = 1 on [0, '+k+'] is a fence with total '+k+', and fₙ settles at 0.']]);
+      return {index:'q:30d.work[c;'+L+']', lines:[[L,'a list of sized functions']], ask:'Do the totals settle at the total of the limit?', right:OD30[i], opts:OD30, lead:'', why}; }
+    const a=1+rnd(4), b=a+1+rnd(4), right='at most '+a, wrong=['exactly '+a,'at most '+b,'at least '+b];
+    return {index:'q:30d.work[l;'+[a,b].join(';')+']', lines:[['fₙ ≥ 0 are sized','given'],['their totals run '+a+', '+b+', '+a+', '+b+', …','given']], ask:'What does the lower-limit technique say of the total of their lower limit?', right, opts:shuffle([right,...wrong]), lead:'', why:'Lower-limit technique: it is at most the lower limit of the totals, which is '+a+'.'}; }},
+  {id:'30d.line',step:'30d',mode:'proof',label:'a fence with a finite total',open:()=>measured('30d'),make(){
+    const a=1+rnd(4), b=a+1+rnd(4), k=1+rnd(5), L=1+rnd(5), V=[
+      ['d1',[['0 ≤ f₁ ≤ f₂ ≤ ⋯ are sized, and fₙ(x) settles at f(x) at every x','given'],['∫ fₙ dm settles at ∫ f dm','the rising-limit technique']],2,0,'A rising list needs no fence.'],
+      ['d2',[['fₙ are sized, and fₙ(x) settles at f(x) at every x','given'],['∫ fₙ dm settles at ∫ f dm','the fenced-limit technique']],2,1,'No fence is given. The sliding bump has totals 1 and limit total 0.'],
+      ['d3',[['fₙ ≥ 0 are sized, with totals '+a+', '+b+', '+a+', '+b+', …','given'],['the total of their lower limit is at most '+a,'the lower-limit technique']],2,0,'The lower limit of the totals is '+a+'.'],
+      ['d4',[['|fₙ| ≤ 1 on the whole line, and fₙ(x) settles at f(x) at every x','given'],['∫ fₙ dm settles at ∫ f dm','the fenced-limit technique, with g = 1']],2,1,'The fence g = 1 has total ∞ over the whole line.'],
+      ['d5',[['|fₙ| ≤ '+k+' on [0, '+L+'], fₙ = 0 elsewhere, and fₙ(x) settles at f(x) at every x','given'],['∫ fₙ dm settles at ∫ f dm','the fenced-limit technique, with g = '+k+' on [0, '+L+']']],2,0,'The fence has total '+k*L+', which is finite.'],
+      ['d6',[['fₙ ≥ 0 are sized, with totals '+a+', '+b+', '+a+', '+b+', …','given'],['the total of their lower limit is exactly '+a,'the lower-limit technique']],2,1,'The technique gives only at most.']];
+    return line28('30d.line',V,[a,b,k,L]); }});
+
+/* ---------- 30e Either Order ---------- */
+const WE30=[
+  ['Can any f be totalled in either order?','no: the staircase gives 0 one way and 1 the other',['yes','yes, when f is sized','no: only continuous f can'],'Either-order-sized technique: f ≥ 0 sized on the plane.'],
+  ['∫ ( ∫ f dy ) dx is finite. Is ∫∫ |f| finite?','not always: the staircase gives a finite answer each way; check |f|',['yes','yes, when the other order is finite too','never'],'Total |f| in one order first.'],
+  ['Is every slice of a sized set sized?','only except on a size-0 set of x',['yes','no: no slice need be','yes, when the set is bounded'],'Slices technique.'],
+  ['Does the order matter only for functions with jumps?','no: the staircase can be smoothed and still disagree',['yes','yes: continuous f is safe everywhere','no: it never matters'],'What matters is whether ∫∫ |f| is finite.'],
+  ['f ≥ 0 is sized on the plane. What follows?','the total may be taken in either order, and both equal ∫∫ f dm₂',['the two orders may differ','both orders are finite','f is continuous'],'Either-order-sized technique.'],
+  ['How is the size of a sized set E of the plane found from its slices?','m₂(E) = ∫ m(Eₓ) dx',['m₂(E) is the largest m(Eₓ)','m₂(E) = m(Eₓ) for any one x','m₂(E) = ∫ m(Eₓ)² dx'],'Slices technique.']];
+QP.push({id:'30e.order',step:'30e',label:'slices and order',open:()=>measured('30e'),make(){ return writtenQ('30e.order',WE30); }},
+  {id:'30e.work',step:'30e',mode:'work',label:'size by slices',open:()=>measured('30e'),make(){
+    const t=rnd(4), k=1+rnd(4), a=2*(1+rnd(3)), b=2*(1+rnd(2));
+    if(t===0){ const p=1+rnd(a-1), right=String(k*p), wrong=uniq(right,[String(k*a),String(p),String(k*p*p/2|0),String(k+p),String(k*p+1)],3); if(wrong.length<3) return null;
+      return {index:'q:30e.work[s;'+[k,a,p].join(';')+']', lines:[['E is the set of (x, y) with 0 ≤ x ≤ '+a+' and 0 ≤ y ≤ '+cf22(k,'x'),'a sized set of the plane']], ask:'What is the size of its slice at x = '+p+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'The slice Eₓ is the interval from 0 to '+cf22(k,'x')+', of length '+k+' · '+p+'.'}; }
+    if(t===1){ const right=String(k*a*a/2), wrong=uniq(right,[String(k*a*a),String(k*a),String(a*a/2),String(k*a*a/2+a),String(k*a/2)],3); if(wrong.length<3) return null;
+      return {index:'q:30e.work[m;'+[k,a].join(';')+']', lines:[['E is the set of (x, y) with 0 ≤ x ≤ '+a+' and 0 ≤ y ≤ '+cf22(k,'x'),'a sized set of the plane']], ask:'What is m₂(E)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Slices technique: m₂(E) = ∫ m(Eₓ) dx = ∫ '+cf22(k,'x')+' dx from 0 to '+a+' = '+(k===1?'':k+' · ')+a+'²/2.'}; }
+    if(t===2){ const h1=1+rnd(4), h2=1+rnd(4), w1=1+rnd(3), w2=1+rnd(3); if(h1===h2) return null; const right=String(h1*w1+h2*w2), wrong=uniq(right,[String((h1+h2)*(w1+w2)),String(h1+h2),String(h1*w2+h2*w1),String(Math.max(h1,h2)*(w1+w2)),String(h1*w1+h2*w2+1)],3); if(wrong.length<3) return null;
+      return {index:'q:30e.work[p;'+[h1,w1,h2,w2].join(';')+']', lines:[['m(Eₓ) = '+h1+' for 0 ≤ x < '+w1+', and '+h2+' for '+w1+' ≤ x ≤ '+(w1+w2),'the slices of a sized set E'],['m(Eₓ) = 0 for every other x','given']], ask:'What is m₂(E)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Slices technique: m₂(E) = ∫ m(Eₓ) dx = '+h1+' · '+w1+' + '+h2+' · '+w2+'.'}; }
+    const right=String(a*a*b*b/4), wrong=uniq(right,[String(a*b),String(a*a*b*b),String(a*a*b*b/2),String(a*a/2+b*b/2),String(a*b/4)],3); if(wrong.length<3) return null;
+    return {index:'q:30e.work[f;'+[a,b].join(';')+']', lines:[['f(x, y) = xy on 0 ≤ x ≤ '+a+', 0 ≤ y ≤ '+b+', and 0 elsewhere','sized, and f ≥ 0']], ask:'What is ∫∫ f dm₂?', right, opts:shuffle([right,...wrong]), lead:'', why:'Either-order-sized technique: ∫ xy dy from 0 to '+b+' is '+b*b/2+'x, and ∫ '+b*b/2+'x dx from 0 to '+a+' is '+b*b/2+' · '+a*a/2+'.'}; }},
+  {id:'30e.line',step:'30e',mode:'proof',label:'f ≥ 0, or |f| finite',open:()=>measured('30e'),make(){
+    const h1=1+rnd(4), h2=1+rnd(4), w1=1+rnd(3), w2=1+rnd(3), V=[
+      ['e1',[['f ≥ 0 is sized on the plane','given'],['∫ ( ∫ f dy ) dx = ∫ ( ∫ f dx ) dy','the either-order-sized technique']],2,0,'Both equal ∫∫ f dm₂.'],
+      ['e2',[['f is sized on the plane, and takes both signs','given'],['∫ ( ∫ f dy ) dx = ∫ ( ∫ f dx ) dy','the either-order-sized technique']],2,1,'The technique needs f ≥ 0. The staircase gives 0 one way and 1 the other.'],
+      ['e3',[['E is a sized set of the plane','given'],['every slice Eₓ is sized','the slices technique']],2,1,'Only except on a size-0 set of x.'],
+      ['e4',[['E is sized, with m(Eₓ) = '+h1+' for 0 ≤ x < '+w1+', '+h2+' for '+w1+' ≤ x ≤ '+(w1+w2)+', and 0 elsewhere','given'],['m₂(E) = '+(h1*w1+h2*w2),'the slices technique']],2,0,h1+' · '+w1+' + '+h2+' · '+w2+'.'],
+      ['e5',[['∫ ( ∫ f dy ) dx and ∫ ( ∫ f dx ) dy are both finite','given'],['∫∫ |f| dm₂ is finite','both orders are finite']],2,1,'The staircase gives a finite answer each way. Check |f| itself.'],
+      ['e6',[['E is sized, with m(Eₓ) = '+h1+' for 0 ≤ x ≤ '+w1+', and 0 elsewhere','given'],['m₂(E) = '+h1,'the size of a slice']],2,w1===1?0:1,w1===1?h1+' · 1.':'Slices technique: ∫ m(Eₓ) dx = '+h1+' · '+w1+' = '+h1*w1+'.']];
+    return line28('30e.line',V,[h1,h2,w1,w2]); }});
+
+/* ---------- 30f Chance Is Size ---------- */
+const WF30=[
+  ['Is P(A | B) = P(B | A)?','not in general: the turn-around technique carries one to the other',['yes','yes, when A and B are independent','never'],'Turn-around technique: P(B | A) = P(A | B) P(B) / P(A).'],
+  ['Is P(A ∪ B) = P(A) + P(B) always?','only for separate A and B; else take away P(A ∩ B)',['yes','never','only for independent A and B'],'Chance-rules technique.'],
+  ['Are separate events independent?','no: then P(A ∩ B) = 0, which is P(A)P(B) only if one has chance 0',['yes','yes: they share nothing','only when both have chance 1/2'],'Independent means P(A ∩ B) = P(A)P(B).'],
+  ['Does chance 0 mean it cannot happen?','no: the dart lands on some point, and each point has chance 0',['yes','yes, for sized events','no: chance 0 events always happen'],'Chance is size, and a point has size 0.'],
+  ['What is P(B | A), by the turn-around technique?','P(A | B) P(B) / P(A)',['P(A | B)','P(A | B) P(A) / P(B)','P(A) P(B)'],'Turn-around technique.'],
+  ['A and B are independent. Are A and not B independent?','yes',['no','only when P(B) = 1/2','only when A and B are separate'],'Independent technique.']];
+QP.push({id:'30f.chance',step:'30f',label:'rules of chance',open:()=>measured('30f'),make(){ return writtenQ('30f.chance',WF30); }},
+  {id:'30f.work',step:'30f',mode:'work',label:'work a chance',open:()=>measured('30f'),make(){
+    const t=rnd(4), n=pick([10,12,20]), a=2+rnd(4), b=2+rnd(4), c=1+rnd(Math.min(a,b)-1);
+    if(t===0){ const right=F30(a+b-c,n), wrong=uniq(right,[F30(a+b,n),F30(a*b,n*n),F30(a+b+c,n),F30(c,n),F30(n-a-b+c,n)],3); if(wrong.length<3) return null;
+      return {index:'q:30f.work[u;'+[a,b,c,n].join(';')+']', lines:[['P(A) = '+F30(a,n)+' and P(B) = '+F30(b,n),'two events'],['P(A and B) = '+F30(c,n),'given']], ask:'What is P(A or B)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Chance-rules technique: P(A) + P(B) − P(A and B) = ('+a+' + '+b+' − '+c+')/'+n+'.'}; }
+    if(t===1){ const pd=2+rnd(3), qd=2+rnd(3), rd=2+rnd(pd*qd-2), right=F30(rd,pd*qd), wrong=uniq(right,[F30(1,pd),F30(pd*qd,rd*pd*qd*pd),F30(1,pd*qd*rd),F30(qd,pd*rd),F30(1,qd)],3); if(wrong.length<3) return null;
+      return {index:'q:30f.work[t;'+[pd,qd,rd].join(';')+']', lines:[['P(A | B) = 1/'+pd+' and P(B) = 1/'+qd,'given'],['P(A) = 1/'+rd,'given']], ask:'What is P(B | A)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Turn-around technique: P(A | B) P(B) / P(A) = (1/'+pd+')(1/'+qd+') · '+rd+'.'}; }
+    if(t===2){ const d1=2+rnd(4), d2=2+rnd(4), right=F30(d1+d2,2*d1*d2), wrong=uniq(right,[F30(d1+d2,d1*d2),F30(1,d1*d2),F30(2,d1+d2),F30(1,d1+d2),F30(1,2)],3); if(wrong.length<3) return null;
+      return {index:'q:30f.work[w;'+[d1,d2].join(';')+']', lines:[['B₁ and B₂ are separate, fill Ω, and each has chance 1/2','given'],['P(A | B₁) = 1/'+d1+' and P(A | B₂) = 1/'+d2,'given']], ask:'What is P(A)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Whole-chance technique: P(A | B₁) P(B₁) + P(A | B₂) P(B₂) = (1/'+d1+')(1/2) + (1/'+d2+')(1/2).'}; }
+    const right=F30(b-1,a*b), wrong=uniq(right,[F30(1,a*b),F30(b-1,b),F30(a+b-1,a*b),F30(1,a),F30(a-1,a*b)],3); if(wrong.length<3) return null;
+    return {index:'q:30f.work[i;'+[a,b].join(';')+']', lines:[['A and B are independent','given'],['P(A) = 1/'+a+' and P(B) = 1/'+b,'given']], ask:'What is P(A and not B)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Independent technique: A and not B are independent too. (1/'+a+')(1 − 1/'+b+').'}; }},
+  {id:'30f.jars',step:'30f',mode:'word',label:'two jars of beads',open:()=>measured('30f'),make(){
+    const col=pick(['red','blue','green','white']), n1=pick([4,5,6,8,10]), n2=pick([4,5,6,8,10]), r1=1+rnd(n1-1), r2=1+rnd(n2-1), back=rnd(2);
+    const tot=fr(r1*n2+r2*n1,2*n1*n2), right=back?F30(r1*n2,r1*n2+r2*n1):fshow(tot), wrong=uniq(right,[F30(r1+r2,n1+n2),F30(r1,n1),F30(r2,n2),'1/2',F30(r1,r1+r2),fshow(tot),F30(r2*n1,r1*n2+r2*n1)],3); if(wrong.length<3) return null;
+    return {index:'q:30f.jars['+[col,n1,r1,n2,r2,back].join(';')+']', a3:['30f.jars',DASH,DASH], story:'Jar 1 holds '+n1+' beads, '+r1+' of them '+col+'. Jar 2 holds '+n2+' beads, '+r2+' of them '+col+'. A fair coin picks a jar, and one bead is drawn from it, each bead as likely as the next.'+(back?' The bead is '+col+'.':''), lines:[], ask:back?'What is the chance that it came from jar 1?':'What is the chance that the bead is '+col+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Whole-chance technique: P('+col+') = ('+F30(r1,n1)+')(1/2) + ('+F30(r2,n2)+')(1/2) = '+fshow(tot)+'.'+(back?' Turn-around technique: ('+F30(r1,n1)+')(1/2) divided by that.':'')}; }},
+  {id:'30f.line',step:'30f',mode:'proof',label:'separate or independent',open:()=>measured('30f'),make(){
+    const n=pick([10,12,20]), a=2+rnd(4), b=2+rnd(4), c=1+rnd(Math.min(a,b)-1), V=[
+      ['f1',[['A and B are separate, with P(A) = '+F30(a,n)+' and P(B) = '+F30(b,n),'given'],['P(A or B) = '+F30(a+b,n),'the chance-rules technique: P(A and B) = 0']],2,0,'('+a+' + '+b+')/'+n+'.'],
+      ['f2',[['P(A) = '+F30(a,n)+', P(B) = '+F30(b,n)+' and P(A and B) = '+F30(c,n),'given'],['P(A or B) = '+F30(a+b,n),'chances add']],2,1,'Take away P(A and B): ('+a+' + '+b+' − '+c+')/'+n+' = '+F30(a+b-c,n)+'.'],
+      ['f3',[['A and B are separate, each of positive chance','given'],['A and B are independent','they share nothing']],2,1,'P(A and B) = 0, which is not P(A)P(B).'],
+      ['f4',[['P(A) = 0','given'],['A cannot happen','it has no chance']],2,1,'The dart lands on some point, and each point has chance 0.'],
+      ['f5',[['A and B are independent','given'],['A and not B are independent','the independent technique']],2,0,'P(A and not B) = P(A) − P(A)P(B) = P(A)(1 − P(B)).'],
+      ['f6',[['P(A | B) = '+F30(a,n),'given'],['P(B | A) = '+F30(a,n),'the same two events']],2,1,'Turn-around technique: P(B | A) = P(A | B) P(B) / P(A).'],
+      ['f7',[['P(A) = '+F30(a,n),'given'],['P(not A) = '+F30(n-a,n),'the chance-rules technique']],2,0,'1 − P(A).']];
+    return line28('30f.line',V,[n,a,b,c]); }});
+
+/* ---------- 30g Averages as Integrals ---------- */
+const WG30=[
+  ['Do averages add only for independent parts?','no: average-adds needs nothing; E(X + X) = 2E X',['yes','yes, or for separate parts','no: they never add'],'Average-adds technique: E(aX + bY) = a E X + b E Y.'],
+  ['Is Var(X + Y) = Var X + Var Y always?','no: with Y = X, Var(2X) = 4 Var X, not 2 Var X',['yes','yes, when the averages are 0','no: it is always larger'],'Spread-of-a-sum technique: add 2 Cov(X, Y).'],
+  ['Cov(X, Y) = 0. Are X and Y independent?','not always: X = −1, 0, 1 each with chance 1/3 and Y = X² have Cov 0, yet Y is fixed by X',['yes','yes, when both are bounded','never'],'Independent-spreads-add technique runs one way only.'],
+  ['Is the width of a sum the sum of the widths?','no: for independent parts it is √(σ₁² + σ₂²), like the triangle',['yes','no: it is the larger width','no: it is σ₁σ₂'],'The spreads add, not the widths.'],
+  ['What is Var(aX + b)?','a² Var X',['a Var X + b','a² Var X + b²','a Var X'],'Spread-of-a-sum technique.'],
+  ['X and Y are independent with finite averages. What is E(XY)?','E X · E Y',['E X + E Y','0','(E X)² + (E Y)²'],'Independent-averages-multiply technique.']];
+QP.push({id:'30g.averages',step:'30g',label:'average and spread',open:()=>measured('30g'),make(){ return writtenQ('30g.averages',WG30); }},
+  {id:'30g.work',step:'30g',mode:'work',label:'average, spread, width',open:()=>measured('30g'),make(){
+    const t=rnd(5), a=nz25(3), b=nz25(3), mx=nz25(4), my=nz25(4), vx=1+rnd(5), vy=1+rnd(5);
+    if(t===0){ const val=a*mx+b*my, right=sg(val), wrong=uniq(right,[sg(mx+my),sg(a*a*mx+b*b*my),sg(a*my+b*mx),sg((a+b)*(mx+my)),sg(-val),sg(val+1)],3); if(wrong.length<3) return null;
+      return {index:'q:30g.work[e;'+[a,b,mx,my].join(';')+']', lines:[['E X = '+sg(mx)+' and E Y = '+sg(my),'given']], ask:'What is E('+tm25([[a,'X'],[b,'Y']])+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'Average-adds technique: '+sg(a)+' · '+par10(mx)+' + '+par10(b)+' · '+par10(my)+'. It needs no independence.'}; }
+    if(t===1){ const right=String(a*a*vx), wrong=uniq(right,[sg(a*vx),sg(a*vx+b),String(a*a*vx+b*b),String(vx),sg(a*a*vx+b)],3); if(wrong.length<3) return null;
+      return {index:'q:30g.work[v;'+[a,b,vx].join(';')+']', lines:[['Var X = '+vx,'given']], ask:'What is Var('+cf22(a,'X')+pm(b)+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spread-of-a-sum technique: Var(aX + b) = a² Var X = '+a*a+' · '+vx+'. Sliding by '+sg(b)+' changes nothing.'}; }
+    if(t===2){ const cv=nz25(2), right=String(vx+vy+2*cv), wrong=uniq(right,[String(vx+vy),String(vx+vy+cv),String(vx+vy-2*cv),String(vx*vy),String(vx+vy+2*cv+1)],3); if(wrong.length<3||vx+vy+2*cv<0) return null;
+      return {index:'q:30g.work[c;'+[vx,vy,cv].join(';')+']', lines:[['Var X = '+vx+' and Var Y = '+vy,'given'],['Cov(X, Y) = '+sg(cv),'given']], ask:'What is Var(X + Y)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spread-of-a-sum technique: Var X + Var Y + 2 Cov(X, Y) = '+vx+' + '+vy+' + 2 · '+par10(cv)+'.'}; }
+    if(t===3){ const [A,B,C]=pick(PY28), right=String(C), wrong=uniq(right,[String(A+B),String(C*C),String(Math.max(A,B)),String(A*B),String(C+1)],3);
+      return {index:'q:30g.work[w;'+[A,B].join(';')+']', lines:[['X and Y are independent','given'],['X has spread width '+A+', and Y has spread width '+B,'given']], ask:'What is the spread width of X + Y?', right, opts:shuffle([right,...wrong]), lead:'', why:'Independent-spreads-add technique: the spreads add, '+A*A+' + '+B*B+' = '+C*C+', and the width is the square root.'}; }
+    const m=nz25(4), v=1+rnd(6), right=String(v+m*m), wrong=uniq(right,[String(v),String(m*m),sg(v-m*m),sg(v+m),String(v+m*m+1),String(v*v+m*m)],3); if(wrong.length<3) return null;
+    return {index:'q:30g.work[s;'+[m,v].join(';')+']', lines:[['X has average '+sg(m)+' and Var X = '+v,'given']], ask:'What is E X²?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spread-of-a-sum technique: Var X = E X² − μ², so E X² = '+v+' + '+m*m+'.'}; }},
+  {id:'30g.line',step:'30g',mode:'proof',label:'what needs independence',open:()=>measured('30g'),make(){
+    const mx=nz25(4), my=nz25(4), vx=1+rnd(5), vy=1+rnd(5), a=2+rnd(3), V=[
+      ['g1',[['E X = '+sg(mx)+' and E Y = '+sg(my),'given'],['E(X + Y) = '+sg(mx+my),'the average-adds technique']],2,0,'It needs no independence.'],
+      ['g2',[['Var X = '+vx+' and Var Y = '+vy,'given'],['Var(X + Y) = '+(vx+vy),'spreads add']],2,1,'Only when Cov(X, Y) = 0, as for independent X and Y. With Y = X, Var(2X) = 4 Var X.'],
+      ['g3',[['X and Y are independent, with Var X = '+vx+' and Var Y = '+vy,'given'],['Var(X + Y) = '+(vx+vy),'the independent-spreads-add technique']],2,0,'Cov(X, Y) = 0.'],
+      ['g4',[['Cov(X, Y) = 0','given'],['X and Y are independent','the independent-spreads-add technique']],2,1,'The technique runs the other way. X = −1, 0, 1 and Y = X² have Cov 0.'],
+      ['g5',[['Var X = '+vx,'given'],['Var('+a+'X) = '+a*a*vx,'the spread-of-a-sum technique: a² Var X']],2,0,a*a+' · '+vx+'.'],
+      ['g6',[['Var X = '+vx,'given'],['Var('+a+'X) = '+a*vx,'the constant comes out']],2,1,'It comes out squared: '+a*a+' · '+vx+' = '+a*a*vx+'.'],
+      ['g7',[['X and Y are independent, with E X = '+sg(mx)+' and E Y = '+sg(my),'given'],['E(XY) = '+sg(mx*my),'the independent-averages-multiply technique']],2,0,sg(mx)+' · '+par10(my)+'.']];
+    return line28('30g.line',V,[mx,my,vx,vy,a]); }});
+
+/* ---------- 30h Averages Settle ---------- */
+const WH30=[
+  ['After five tails, is a fair coin due a head?','no: the tosses are independent; the next has chance 1/2',['yes','yes: averages settle','no: a tail is now more likely'],'Averages settle by swamping, not by paying back.'],
+  ['Averages settle. Does the count of heads minus n/2 shrink?','no: that count has width √n/2, which grows',['yes','yes, with chance 1','no: it stays the same'],'The average divides by n, and √n/n heads to 0.'],
+  ['Is P(|X − μ| ≥ 2σ) exactly 1/4?','no: 1/4 is a ceiling; most laws stray far less often',['yes','no: it is at least 1/4','yes, for every law'],'Spread-bound technique: at most 1/k².'],
+  ['Σ P(Aₙ) = ∞. Do infinitely many of the Aₙ happen?','not without more: take every Aₙ the same event of chance 1/2',['yes','yes, with chance 1','never'],'Finitely-often technique: it is about a finite sum.'],
+  ['X ≥ 0 and a > 0. What bounds P(X ≥ a)?','E X / a',['a / E X','E X · a','1/a²'],'Stray-bound technique.'],
+  ['Σ P(Aₙ) is finite. What follows?','with chance 1 only finitely many of them happen',['none of them happens','with chance 1 infinitely many happen','exactly one of them happens'],'Finitely-often technique.']];
+QP.push({id:'30h.settle',step:'30h',label:'averages settle',open:()=>measured('30h'),make(){ return writtenQ('30h.settle',WH30); }},
+  {id:'30h.work',step:'30h',mode:'work',label:'ceilings on straying',open:()=>measured('30h'),make(){
+    const t=rnd(4), m=1+rnd(5), a=m+1+rnd(6), k=2+rnd(4);
+    if(t===0){ const right='at most '+F30(m,a), wrong=uniq(right,['exactly '+F30(m,a),'at most '+F30(1,a*a),'at least '+F30(m,a),'at most '+F30(a-m,a),'at most '+F30(1,a)],3); if(wrong.length<3) return null;
+      return {index:'q:30h.work[m;'+[m,a].join(';')+']', lines:[['X ≥ 0, and E X = '+m,'given']], ask:'What does the stray-bound technique say of P(X ≥ '+a+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'Stray-bound technique: P(X ≥ a) ≤ E X / a = '+m+'/'+a+'.'}; }
+    if(t===1){ const mu=nz25(9), sd=1+rnd(4), right='at most 1/'+k*k, wrong=['exactly 1/'+k*k,'at most 1/'+k,'at least 1/'+k*k];
+      return {index:'q:30h.work[c;'+[mu,sd,k].join(';')+']', lines:[['X has average '+sg(mu)+' and spread width '+sd,'given']], ask:'What does the spread-bound technique say of P(|X − '+par10(mu)+'| ≥ '+k*sd+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spread-bound technique: '+k*sd+' is '+k+' widths, and P(|X − μ| ≥ kσ) ≤ 1/k².'}; }
+    if(t===2){ const s=pick([1,2,3,4]), n=pick([25,50,100,200,400]), e=pick([1,2]), right='at most '+F30(s*s,n*e*e), wrong=uniq(right,['at most '+F30(s,n*e),'at most '+F30(s*s,n*e),'at most '+F30(s*s,e*e),'exactly '+F30(s*s,n*e*e),'at most '+F30(s,n*e*e)],3); if(wrong.length<3) return null;
+      return {index:'q:30h.work[n;'+[s,n,e].join(';')+']', lines:[['X̄ₙ is the average of '+n+' independent draws','each with average μ and spread width '+s]], ask:'What does the averages-settle technique say of P(|X̄ₙ − μ| ≥ '+e+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'Averages-settle technique: σ²/(nε²) = '+s*s+'/('+n+' · '+e*e+').'}; }
+    const r=pick([3,4,5,6,8,10,15]), n=4*r*r, right=String(r), wrong=uniq(right,[String(2*r),String(n/2),String(r*r),String(n/4),'1/2'],3);
+    return {index:'q:30h.work[w;'+n+']', lines:[['a fair coin is tossed '+n+' times','independent tosses']], ask:'What is the spread width of the count of heads?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each toss has spread 1/4, and independent spreads add: '+n+'/4 = '+r*r+'. The width is √n/2 = '+r+'.'}; }},
+  {id:'30h.line',step:'30h',mode:'proof',label:'a ceiling, not a value',open:()=>measured('30h'),make(){
+    const m=1+rnd(5), a=m+1+rnd(6), k=2+rnd(4), V=[
+      ['h1',[['X ≥ 0, and E X = '+m,'given'],['P(X ≥ '+a+') ≤ '+F30(m,a),'the stray-bound technique']],2,0,'E X / a.'],
+      ['h2',[['X has average μ and spread width σ','given'],['P(|X − μ| ≥ '+k+'σ) = 1/'+k*k,'the spread-bound technique']],2,1,'1/'+k*k+' is a ceiling: the technique gives at most.'],
+      ['h3',[['X has average μ and spread width σ','given'],['P(|X − μ| ≥ '+k+'σ) ≤ 1/'+k*k,'the spread-bound technique']],2,0,'1/k² with k = '+k+'.'],
+      ['h4',[['A₁, A₂, … are events, and Σ P(Aₙ) = ∞','given'],['with chance 1, infinitely many of them happen','the finitely-often technique']],2,1,'The technique is about a finite sum. Take every Aₙ the same event of chance 1/2.'],
+      ['h5',[['A₁, A₂, … are events, and P(Aₙ) = 1/'+k+'ⁿ','given'],['with chance 1, only finitely many of them happen','the finitely-often technique']],2,0,'The chances add to 1/'+(k-1)+', which is finite.'],
+      ['h6',[['a fair coin has shown '+(m+3)+' tails in a row','given'],['the next toss is more likely a head','averages settle']],2,1,'The tosses are independent: the next has chance 1/2.'],
+      ['h7',[['X is any chance variable with E X = '+m,'given'],['P(X ≥ '+a+') ≤ '+F30(m,a),'the stray-bound technique']],2,1,'The technique needs X ≥ 0.']];
+    return line28('30h.line',V,[m,a,k]); }});
+
+/* ===== Laundry 5, rung 30 (floor 5 pools, stage AC), part 2: 30i to 30p ===== */
+const W30=(ix,lines,ask,right,cands,why)=>{ const wrong=uniq(right,cands,3); if(wrong.length<3) return null; return {index:'q:'+ix, lines, ask, right, opts:shuffle([right,...wrong]), lead:'', why}; };
+const C30=(n,k)=>{ let c=1; for(let i=1;i<=k;i++) c=c*(n-k+i)/i; return Math.round(c); };
+
+/* ---------- 30i Chance in One Function ---------- */
+const WI30=[
+  ['X and Y are independent. Is the chance function of X + Y the sum of their chance functions?','no: sums multiply; two coins give (1 − p + ps)²',['yes','yes, when both are coins','no: put one chance function inside the other'],'Sums-multiply technique.'],
+  ['Is the chance function of X + Y the product of the two chance functions for any X and Y?','no: they must be independent; Y = X gives E s^(2X), not (E s^X)²',['yes','yes, when both take whole numbers','no: only for coins'],'Sums-multiply technique: X and Y independent.'],
+  ['Each member has 1 child on average. Does the line go on for ever?','no: q = 1 when the average is 1, unless every member has exactly one child',['yes','yes, with chance 1/2','no: it ends in the first generation'],'Dying-out technique: q is the least s in [0, 1] with G(s) = s.'],
+  ['Does G(1) give the average?','no: G(1) = 1 always; the average is the slope G′(1)',['yes','no: G(0) gives it','no: G′(0) gives it'],'Average-from-G technique.'],
+  ['How is P(X = k) read from G?','G⁽ᵏ⁾(0)/k!',['G⁽ᵏ⁾(1)/k!','G(k)','G′(k)'],'Chances-from-G technique.'],
+  ['What is the chance that the line dies out?','the least s in [0, 1] with G(s) = s',['the greatest s in [0, 1] with G(s) = s','G′(1)','1 − G(0)'],'Dying-out technique.']];
+QP.push({id:'30i.gen',step:'30i',label:'chance in one function',open:()=>measured('30i'),make(){ return writtenQ('30i.gen',WI30); }},
+  {id:'30i.work',step:'30i',mode:'work',label:'read G',open:()=>measured('30i'),make(){
+    const t=rnd(4), a=1+rnd(3), b=1+rnd(3), c=1+rnd(3), n=a+b+c, Gs='('+a+' + '+cf22(b,'s')+' + '+cf22(c,'s²')+')/'+n;
+    if(t===0) return W30('30i.work[e;'+[a,b,c].join(';')+']',[['G(s) = '+Gs,'the chance function of X']],'What is E X?',F30(b+2*c,n),['1',F30(b+c,n),F30(c,n),F30(b,n),F30(2*c,n)],'Average-from-G technique: G′(s) = ('+b+' + '+2*c+'s)/'+n+', and E X = G′(1).');
+    if(t===1) return W30('30i.work[p;'+[a,b,c].join(';')+']',[['G(s) = '+Gs,'the chance function of X']],'What is P(X = 1)?',F30(b,n),[F30(a,n),F30(c,n),F30(b+2*c,n),'1',F30(b+c,n)],'Chances-from-G technique: P(X = 1) = G′(0)/1!, and G′(0) = '+F30(b,n)+'.');
+    if(t===2){ const m=3+rnd(6), p=1+rnd(m-1), q=2*p<m?F30(p,m-p):'1';
+      return W30('30i.work[d;'+[p,m].join(';')+']',[['each member has 0 children with chance '+F30(p,m),'given'],['and 2 children with chance '+F30(m-p,m),'given']],'With what chance does the line die out?',q,[F30(p,m),F30(m-p,m),'1','0',F30(p,m-p),F30(1,2)],'Dying-out technique: G(s) = s holds at s = 1 and at s = '+F30(p,m-p)+'. Take the least s in [0, 1].'); }
+    const m=2+rnd(4), k=2+rnd(4), x=1+rnd(m-1), y=1+rnd(k-1);
+    return W30('30i.work[s;'+[x,m,y,k].join(';')+']',[['X and Y are independent','given'],['their chance functions are ('+x+' + '+cf22(m-x,'s')+')/'+m+' and ('+y+' + '+cf22(k-y,'s')+')/'+k,'given']],'What is P(X + Y = 0)?',F30(x*y,m*k),[F30(x+y,m+k),F30(x,m),F30(y,k),F30((m-x)*(k-y),m*k),'0'],'Sums-multiply technique: the chance function of X + Y is the product. At s = 0 it is ('+F30(x,m)+')('+F30(y,k)+').'); }},
+  {id:'30i.line',step:'30i',mode:'proof',label:'what G gives',open:()=>measured('30i'),make(){
+    const a=1+rnd(4), b=1+rnd(4), n=a+b, m=5+rnd(5), p=1+rnd(2), G='G(s) = ('+a+' + '+cf22(b,'s')+')/'+n;
+    const V=[
+      ['i1',[[G,'given'],['E X = '+F30(b,n),'the average-from-G technique']],2,0,'G′(1) = '+F30(b,n)+'.'],
+      ['i2',[['X and Y are independent','given'],['the chance function of X + Y is the sum of their chance functions','the sums-multiply technique']],2,1,'Sums multiply: it is the product.'],
+      ['i3',[[G,'given'],['E X = 1','G(1) = 1']],2,1,'G(1) = 1 always. The average is G′(1) = '+F30(b,n)+'.'],
+      ['i4',[['each member has 0 children with chance '+F30(p,m)+', and 2 children with chance '+F30(m-p,m),'given'],['the line dies out with chance '+F30(p,m-p),'the dying-out technique']],2,0,'G(s) = s at s = '+F30(p,m-p)+' and at s = 1. Take the least.'],
+      ['i5',[['each member has 1 child on average, and not always exactly one','given'],['the line goes on for ever with chance above 0','the average holds at 1']],2,1,'q = 1 when the average is 1.'],
+      ['i6',[['Y = X','given'],['the chance function of X + Y is the square of that of X','the sums-multiply technique']],2,1,'The technique needs X and Y independent. E s^(2X) is not (E s^X)².'],
+      ['i7',[[G,'given'],['P(X = 0) = '+F30(a,n),'the chances-from-G technique']],2,0,'G(0) = '+F30(a,n)+'.']];
+    return line28('30i.line',V,[a,b,m,p]); }});
+
+/* ---------- 30j The Bell Curve ---------- */
+const WJ30=[
+  ['Is every chance variable close to a bell?','no: only sums of many independent parts; one die is flat',['yes','yes, when its spread is finite','no: only coin tosses are'],'Central limit technique.'],
+  ['Does the bell describe the sum itself, not rescaled, for large n?','no: the sum spreads like σ√n; only Zₙ heads to the bell',['yes','yes, once n is large','no: the sum heads to 0'],'Central limit technique.'],
+  ['Has ∫ e^(−x²) dx a closed form by undoing a slope?','no: no formula undoes it; the plane gives only the whole-line total',['yes','yes: −e^(−x²)/(2x)','no: and its whole-line total is not known'],'Bell-total technique.'],
+  ['Does the central limit technique hold without independent parts?','no: X₁ = X₂ = ⋯ gives Zₙ = √n Y₁, which never nears the bell',['yes','yes, when the parts have the same spread','yes, for large n'],'The parts must be independent.'],
+  ['What is ∫ e^(−x²) dx over the whole line?','√π',['π','1','√(2π)'],'Bell-total technique.'],
+  ['What does the average-function of Zₙ head to?','e^(t²/2), the bell’s',['e^(−t²/2)','1 + t','e^t'],'Central limit technique.']];
+QP.push({id:'30j.bell',step:'30j',label:'the bell curve',open:()=>measured('30j'),make(){ return writtenQ('30j.bell',WJ30); }},
+  {id:'30j.work',step:'30j',mode:'work',label:'rescale the sum',open:()=>measured('30j'),make(){
+    const t=rnd(4);
+    if(t===0){ const r=2+rnd(4), n=r*r, mu=1+rnd(5), s=1+rnd(3), z=pick([-2,-1,1,2,3]), S=n*mu+z*s*r;
+      return W30('30j.work[z;'+[n,mu,s,z].join(';')+']',[['Sₙ is the sum of '+n+' independent draws','each with average '+mu+' and spread width '+s],['Zₙ = (Sₙ − nμ)/(σ√n)','the sum, rescaled'],['Sₙ comes out at '+S,'given']],'What is Zₙ?',sg(z),[sg(z*r),sg(z*s),sg(z*s*r),sg(-z),sg(z+1)],'Sₙ − nμ = '+sg(z*s*r)+', and σ√n = '+s+' · '+r+'.'); }
+    if(t===1){ const r=2+rnd(5), n=r*r, s=2+rnd(4);
+      return W30('30j.work[w;'+[n,s].join(';')+']',[['Sₙ is the sum of '+n+' independent draws','each with spread width '+s]],'What is the spread width of Sₙ?',String(s*r),[String(s*n),String(s),String(s*s*n),String(s+r)],'Spreads add: Var Sₙ = '+n+' · '+s*s+'. The width is σ√n = '+s+' · '+r+'.'); }
+    if(t===2){ const k=2*(1+rnd(5)), half=rnd(2);
+      return W30('30j.work[b;'+[k,half].join(';')+']',[['∫ e^(−x²) dx over the whole line is √π','the bell-total technique']],half?'What is ∫ '+k+' e^(−x²) dx over x ≥ 0?':'What is ∫ '+k+' e^(−x²) dx over the whole line?',(half?cf22(k/2,'√π'):k+'√π'),[k+'√π',cf22(k/2,'√π'),k+'π',2*k+'√π',String(k),'√π'],half?'e^(−x²) is even: half of the whole-line total, times '+k+'.':'The constant comes out: '+k+' · √π.'); }
+    const a=1+rnd(3), v0=1+rnd(4), v=(a*a+v0)%2?v0+1:v0, c=(a*a+v)/2, q=rnd(2);
+    return W30('30j.work[m;'+[a,v,q].join(';')+']',[['near 0, M(t) = 1 + '+cf22(a,'t')+' + '+cf22(c,'t²')+' + r(t)','the average-function of X'],['r(t)/t² heads to 0','given']],q?'What is Var X?':'What is E X²?',String(q?v:2*c),[String(c),String(2*c),String(v),String(a),String(c-a*a),String(2*c+a*a)],'Average-function technique: the t term is t E X and the t² term is t² E X²/2. So E X = '+a+' and E X² = '+2*c+(q?', and Var X = '+2*c+' − '+a*a+'.':'.')); }},
+  {id:'30j.line',step:'30j',mode:'proof',label:'what the bell describes',open:()=>measured('30j'),make(){
+    const r=2+rnd(4), n=r*r, s=2+rnd(3), a=1+rnd(4), b=2+rnd(4), M='near 0, M(t) = 1 + '+cf22(a,'t')+' + '+cf22(b,'t²')+' + r(t), with r(t)/t² heading to 0';
+    const V=[
+      ['j1',[['Sₙ is the sum of '+n+' independent draws, each with spread width '+s,'given'],['Sₙ has spread width '+s*r,'spreads add']],2,0,'σ√n = '+s+' · '+r+'.'],
+      ['j2',[['Sₙ is the sum of '+n+' independent draws, each with spread width '+s,'given'],['Sₙ has spread width '+s*n,'the widths add']],2,1,'Spreads add, not widths: σ√n = '+s*r+'.'],
+      ['j3',[['X₁ = X₂ = ⋯, one draw copied','given'],['Zₙ heads to the bell','the central limit technique']],2,1,'The technique needs independent parts.'],
+      ['j4',[['∫ e^(−x²) dx over the whole line is √π','the bell-total technique'],['∫ e^(−x²) dx over x ≥ 0 is √π/2','e^(−x²) is even']],2,0,'The two halves are equal.'],
+      ['j5',[[M,'given'],['E X² = '+b,'the average-function technique']],2,1,'The t² term is t² E X²/2: E X² = '+2*b+'.'],
+      ['j6',[[M,'given'],['E X = '+a,'the average-function technique']],2,0,'The t term is t E X.'],
+      ['j7',[['X is one throw of a fair die','given'],['the chances of X are close to a bell','the central limit technique']],2,1,'One die is flat. The technique is about sums of many independent parts.']];
+    return line28('30j.line',V,[n,s,a,b]); }});
+
+/* ---------- 30k No System Beats a Fair Game ---------- */
+const WK30=[
+  ['Does doubling after each loss always win in the end?','only with no ceiling on the stakes and no bound on T; it needs both',['yes, in any fair game','yes, when T is bounded','no: it loses on average'],'No-system technique: a bounded stopping rule has average winnings 0.'],
+  ['Is “stop the round before a loss” a stopping rule?','no: it looks ahead',['yes','yes, when it is bounded','no: it stops too soon'],'A stopping rule uses only what has happened.'],
+  ['Does stopping-keeps hold for any stopping rule?','no: stop the first time you are 1 ahead; the fortune at T is 1 always, yet X₀ = 0',['yes','yes, in a fair game','no: only for rules that look ahead'],'Stopping-keeps technique: T is a bounded stopping rule.'],
+  ['Does a fair game keep each fortune near its start?','no: only the average is kept; the walk spreads like √n',['yes','yes, for large n','no: fortunes drift upward'],'Fair-stays-fair technique: E Xₙ = E X₀.'],
+  ['In a fair game, what is E Xₙ?','E X₀, for every n',['0','n E X₀','E X₀ + n'],'Fair-stays-fair technique.'],
+  ['A fair walk starts at k and stops at 0 or N. What is the chance of reaching N first?','k/N',['1/2','(N − k)/N','k/(N − k)'],'Ruin-chance technique.']];
+QP.push({id:'30k.fair',step:'30k',label:'a fair game',open:()=>measured('30k'),make(){ return writtenQ('30k.fair',WK30); }},
+  {id:'30k.work',step:'30k',mode:'work',label:'the chance of ruin',open:()=>measured('30k'),make(){
+    const t=rnd(4), N=4+rnd(9), k=1+rnd(N-1);
+    if(t===0||t===1){ const up=t===0, right=up?F30(k,N):F30(N-k,N);
+      return W30('30k.work[r;'+[k,N,t].join(';')+']',[['a fair walk starts at '+k,'steps of +1 and −1, each with chance 1/2'],['it stops at 0 or at '+N,'given']],up?'What is the chance that it reaches '+N+' first?':'What is the chance that it reaches 0 first?',right,[up?F30(N-k,N):F30(k,N),'1/2',F30(k,N+1),F30(1,N),F30(k,N+k)],'Ruin-chance technique: the chance of reaching N before 0 is k/N = '+F30(k,N)+'.'+(up?'':' The rest is the chance of 0.')); }
+    if(t===2){ const a=1+rnd(5), b=1+rnd(5);
+      return W30('30k.work[s;'+[a,b].join(';')+']',[['a fair walk starts at 0','steps of +1 and −1, each with chance 1/2'],['it stops at −'+a+' or at +'+b,'given']],'What is the chance that it reaches +'+b+' first?',F30(a,a+b),[F30(b,a+b),'1/2',F30(a,a+b+1),F30(1,a+b),F30(b,a+b+1)],'Ruin-chance technique, with the walk slid up by '+a+': k = '+a+' and N = '+(a+b)+'.'); }
+    const a=2+rnd(8), n=5+rnd(20);
+    return W30('30k.work[f;'+[a,n].join(';')+']',[['a fair game','given'],['X₀ = '+a,'the fortune at the start']],'What is E X at round '+n+'?',String(a),['0',String(a+n),String(a*n),String(n)],'Fair-stays-fair technique: E Xₙ = E X₀ for every n.'); }},
+  {id:'30k.counters',step:'30k',mode:'word',label:'a game of counters',open:()=>measured('30k'),make(){
+    const N=5+rnd(8), k=1+rnd(N-1), lose=rnd(2), right=lose?F30(N-k,N):F30(k,N), wrong=uniq(right,[lose?F30(k,N):F30(N-k,N),'1/2',F30(k,N+k),F30(1,N),F30(1,k+1)],3); if(wrong.length<3) return null;
+    return {index:'q:30k.counters['+[k,N,lose].join(';')+']', a3:['30k.counters',DASH,DASH], story:'Two players share '+N+' counters. The first holds '+k+' of them. Each round a fair coin moves one counter from one player to the other. Play stops when one player holds all '+N+'.', lines:[], ask:lose?'What is the chance that the first player ends with none?':'What is the chance that the first player ends with all '+N+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Ruin-chance technique: the chance of reaching N before 0 is k/N = '+F30(k,N)+'.'+(lose?' The rest is the chance of 0.':'')}; }},
+  {id:'30k.line',step:'30k',mode:'proof',label:'what a fair game keeps',open:()=>measured('30k'),make(){
+    const N=5+2*rnd(4), k=1+rnd(N-1), a=2+rnd(7), n=4+rnd(12);
+    const V=[
+      ['k1',[['a fair walk starts at '+k+' and stops at 0 or '+N,'given'],['it reaches '+N+' first with chance '+F30(k,N),'the ruin-chance technique']],2,0,'k/N.'],
+      ['k2',[['a fair game with X₀ = '+a+', and T a stopping rule bounded by '+n,'given'],['the average fortune at T is '+a,'the stopping-keeps technique']],2,0,'T is a bounded stopping rule.'],
+      ['k3',[['a fair game with X₀ = 0, and T the first time the fortune is 1','given'],['the average fortune at T is 0','the stopping-keeps technique']],2,1,'T has no bound. The fortune at T is 1 always.'],
+      ['k4',[['a fair game with X₀ = '+a,'given'],['the fortune at round '+n+' is within 1 of '+a,'the fair-stays-fair technique']],2,1,'Only the average is kept. The walk spreads like √n.'],
+      ['k5',[['a fair game with X₀ = '+a,'given'],['E X at round '+n+' is '+a,'the fair-stays-fair technique']],2,0,'E Xₙ = E X₀ for every n.'],
+      ['k6',[['a fair walk starts at '+k+' and stops at 0 or '+N,'given'],['it reaches 0 first with chance '+F30(k,N),'the ruin-chance technique']],2,1,'That is the chance of '+N+'. The chance of 0 is '+F30(N-k,N)+'.'],
+      ['k7',[['a fair game, and a system that stops the round before each loss','given'],['its average winnings are 0','the no-system technique']],2,1,'That is not a stopping rule: it looks ahead.']];
+    return line28('30k.line',V,[N,k,a,n]); }});
+
+/* ---------- 30l Chance by the Rules ---------- */
+const WL30=[
+  ['A test finds 9 in 10 who have it. Has a flagged person it with chance 9/10?','no: that is P(E | A); the chance wanted is P(A | E)',['yes','yes, when the test is fair','no: it is 1/10'],'Odds-update technique: the odds of A given E are the odds of A times P(E | A) / P(E | not A).'],
+  ['Is P(at least one six in 4 throws) = 1/6 + 1/6 + 1/6 + 1/6?','no: the throws are not separate events; two sixes are counted twice',['yes','yes: the throws are independent','no: it is (1/6)⁴'],'At-least-one technique: 1 − (5/6)⁴.'],
+  ['Red has come up five times running. Is black due?','no: separate spins are independent; the chance of black is the same as before',['yes','yes: the averages must settle','no: red is now the more likely'],'Independent spins.'],
+  ['Is P(ace, ace) = 4/52 · 4/52 for two cards from one deck?','no: the second draw depends on the first; it is 4/52 · 3/51',['yes','no: it is 4/52 + 3/51','no: it is 4/52 · 4/51'],'Branch-product technique.'],
+  ['Ω has n outcomes of the same chance. What is the chance of an event made of k of them?','k/n',['1/n','k/(n − k)','1/k'],'Equal-cases technique.'],
+  ['How does evidence E change the odds of A?','it multiplies them by P(E | A) / P(E | not A)',['it multiplies them by P(E | A)','it adds P(E | A) to them','it multiplies them by P(E | not A) / P(E | A)'],'Odds-update technique.']];
+QP.push({id:'30l.rules',step:'30l',label:'chance by the rules',open:()=>measured('30l'),make(){ return writtenQ('30l.rules',WL30); }},
+  {id:'30l.work',step:'30l',mode:'work',label:'count, branch, update',open:()=>measured('30l'),make(){
+    const t=rnd(4);
+    if(t===0){ const n=2+rnd(2), d=2+rnd(5), D=Math.pow(d,n), M=Math.pow(d-1,n);
+      return W30('30l.work[a;'+[n,d].join(';')+']',[[n+' independent tries','given'],['each succeeds with chance 1/'+d,'given']],'What is the chance of at least one success?',F30(D-M,D),[F30(n,d),F30(1,D),F30(M,D),F30(1,d),F30(D-M-1,D)],'At-least-one technique: 1 − ('+F30(d-1,d)+')'+(n===2?'²':'³')+' = 1 − '+F30(M,D)+'.'); }
+    if(t===1){ const r=2+rnd(4), b=1+rnd(5), T=r+b;
+      return W30('30l.work[b;'+[r,b].join(';')+']',[['a bag holds '+r+' red beads and '+b+' blue','given'],['two beads are drawn, and the first is not put back','each bead as likely as the next']],'What is the chance that both are red?',F30(r*(r-1),T*(T-1)),[F30(r*r,T*T),F30(r,T),F30(r*(r-1),T*T),F30(r-1,T-1),F30(2*r,T)],'Branch-product technique: '+r+'/'+T+' · '+(r-1)+'/'+(T-1)+'. The second draw depends on the first.'); }
+    if(t===2){ const a=1+rnd(3), b=a+1+rnd(5), q=pick([4,5,10]), x=2+rnd(q-2), y=1+rnd(x-1);
+      return W30('30l.work[o;'+[a,b,x,y,q].join(';')+']',[['the odds of A are '+F30(a,b),'P(A) / P(not A)'],['P(E | A) = '+F30(x,q)+' and P(E | not A) = '+F30(y,q),'given']],'What are the odds of A given E?',F30(a*x,b*y),[F30(a,b),F30(x,y),F30(a*y,b*x),F30(a*x,b*q),F30(a+x,b+y)],'Odds-update technique: the odds of A times the ratio, '+F30(a,b)+' · '+F30(x,y)+'.'); }
+    const s=2+rnd(11), c=6-Math.abs(s-7);
+    return W30('30l.work[d;'+s+']',[['two fair dice are thrown','36 outcomes of the same chance']],'What is the chance that the two faces add to '+s+'?',F30(c,36),[F30(1,11),F30(c+1,36),F30(s,36),F30(1,6),F30(1,36),F30(c+2,36)],'Equal-cases technique: '+c+' of the 36 outcomes add to '+s+'.'); }},
+  {id:'30l.line',step:'30l',mode:'proof',label:'separate or independent',open:()=>measured('30l'),make(){
+    const s=2+rnd(11), c=6-Math.abs(s-7), n=2+rnd(3), r=2+rnd(4), b=1+rnd(5), T=r+b, a=1+rnd(3), d=a+1+rnd(4), x=2+rnd(3), sup='²³⁴'[n-2];
+    const V=[
+      ['l1',[['two fair dice are thrown','given'],['P(the faces add to '+s+') = '+F30(c,36),'the equal-cases technique']],2,0,c+' of the 36 outcomes.'],
+      ['l2',[[n+' independent throws of a fair die','given'],['P(at least one six) = '+F30(n,6),'the chances add']],2,1,'The throws are not separate events. It is 1 − (5/6)'+sup+'.'],
+      ['l3',[[n+' independent throws of a fair die','given'],['P(at least one six) = 1 − (5/6)'+sup,'the at-least-one technique']],2,0,'1 minus the chance of no six.'],
+      ['l4',[['a bag holds '+r+' red beads and '+b+' blue; two are drawn, the first not put back','given'],['P(red, red) = '+r+'/'+T+' · '+(r-1)+'/'+(T-1),'the branch-product technique']],2,0,'After a red, '+(r-1)+' of the '+(T-1)+' left are red.'],
+      ['l5',[['a bag holds '+r+' red beads and '+b+' blue; two are drawn, the first not put back','given'],['P(red, red) = '+r+'/'+T+' · '+r+'/'+T,'the draws are independent']],2,1,'The second draw depends on the first: '+r+'/'+T+' · '+(r-1)+'/'+(T-1)+'.'],
+      ['l6',[['the odds of A are '+F30(a,d)+', and P(E | A) is '+x+' times P(E | not A)','given'],['the odds of A given E are '+F30(a*x,d),'the odds-update technique']],2,0,F30(a,d)+' · '+x+'.'],
+      ['l7',[['P(E | A) = 9/10','given'],['P(A | E) = 9/10','the same two events']],2,1,'The chance of A given E also needs the odds of A and P(E | not A).']];
+    return line28('30l.line',V,[s,n,r,b,a,d,x]); }});
+
+/* ---------- 30m Densities ---------- */
+const WM30=[
+  ['f = 3 on [0, 1/3]. Is the chance of landing at 0.2 equal to 3?','no: a height is not a chance; a single value has chance 0, and chances come from areas',['yes','no: it is 1/3','no: it is 0.6'],'A chance is an area under the density.'],
+  ['Is E X² = (E X)²?','no: for the flat density on [0, 1], E X² = 1/3 and (E X)² = 1/4; the gap is Var X',['yes','yes, when X has a density','no: E X² is the smaller'],'Density-average technique: E g(X) = ∫ g(x) f(x) dx.'],
+  ['Has an exponential wait of rate λ average λ?','no: its average is 1/λ; a high rate means short waits',['yes','no: it is λ²','no: it is e^(−λ)'],'P(X > t) = e^(−λt).'],
+  ['X has density f. Has Y = 2X density 2 f(2y)?','no: the stretched-density technique gives (1/2) f(y/2)',['yes','no: it is f(y/2)','no: it is 2 f(y/2)'],'Stretched-density technique: (1/σ) f((y − μ)/σ).'],
+  ['X has density f. How is E g(X) found?','∫ g(x) f(x) dx',['∫ g(x) dx','g(E X)','∫ g(f(x)) dx'],'Density-average technique.'],
+  ['An exponential wait has lasted s. What are the chances of the rest of the wait?','the same as the whole wait had at the start',['shorter: the wait is nearly over','longer: s is added to it','it ends at once'],'Forgets-the-wait technique.']];
+QP.push({id:'30m.dens',step:'30m',label:'densities',open:()=>measured('30m'),make(){ return writtenQ('30m.dens',WM30); }},
+  {id:'30m.work',step:'30m',mode:'work',label:'areas under a density',open:()=>measured('30m'),make(){
+    const t=rnd(4);
+    if(t===0){ const b=3+rnd(8), c=rnd(b-1), d=c+1+rnd(b-c-1);
+      return W30('30m.work[f;'+[b,c,d].join(';')+']',[['X has the flat density on [0, '+b+']','f = 1/'+b+' there, and 0 elsewhere']],'What is P('+c+' ≤ X ≤ '+d+')?',F30(d-c,b),[F30(d,b),F30(1,b),String(d-c),F30(c,b),F30(d-c+1,b),'0'],'The area under f: ('+d+' − '+c+') · 1/'+b+'.'); }
+    if(t===1){ const b=2+rnd(5), q=rnd(3), right=[F30(b,2),F30(b*b,3),F30(b*b,12)][q];
+      return W30('30m.work[e;'+[b,q].join(';')+']',[['X has the flat density on [0, '+b+']','f = 1/'+b+' there, and 0 elsewhere']],['What is E X?','What is E X²?','What is Var X?'][q],right,[F30(b,2),F30(b*b,3),F30(b*b,12),F30(b*b,4),F30(b*b,2),String(b)],'Density-average technique: E X = ∫ x/'+b+' dx = '+F30(b,2)+', and E X² = ∫ x²/'+b+' dx = '+F30(b*b,3)+(q===2?'. Var X = E X² − (E X)².':'.')); }
+    if(t===2){ const l=1+rnd(3), s=1+rnd(4), u=1+rnd(4);
+      return W30('30m.work[w;'+[l,s,u].join(';')+']',[['P(X > t) = e^(−'+cf22(l,'t')+') for every t ≥ 0','an exponential wait'],['the wait has lasted '+s,'given']],'What is the chance that it lasts '+u+' more?','e^(−'+l*u+')',['e^(−'+l*(s+u)+')','e^(−'+l*s+')','1 − e^(−'+l*u+')','e^(−'+u+')','e^(−'+(l*u+1)+')'],'Forgets-the-wait technique: P(X > s + t | X > s) = P(X > t).'); }
+    const a=1+rnd(4), v=1+rnd(4), mu=1+rnd(5), sd=2+rnd(3), q=rnd(2);
+    return W30('30m.work[s;'+[a,v,mu,sd,q].join(';')+']',[['X has average '+a+' and Var X = '+v,'given'],['Y = '+mu+' + '+sd+'X','X stretched and slid']],q?'What is Var Y?':'What is E Y?',String(q?sd*sd*v:mu+sd*a),[String(sd*v),String(mu+sd*sd*v),String(sd*sd*v),String(mu+sd*a),String(sd*a),String(mu+a)],'Stretched-density technique: Y has average μ + σ E X and spread σ² Var X.'); }},
+  {id:'30m.line',step:'30m',mode:'proof',label:'a height is not a chance',open:()=>measured('30m'),make(){
+    const b=3+rnd(6), c=1+rnd(b-2), d=c+1+rnd(b-c-1), l=2+rnd(3), s=1+rnd(3), u=1+rnd(3), k=2+rnd(3), v=1+rnd(4), mu=1+rnd(5);
+    const V=[
+      ['m1',[['X has the flat density on [0, '+b+']','given'],['P(X = '+c+') = 1/'+b,'the height of f']],2,1,'A height is not a chance. A single value has chance 0.'],
+      ['m2',[['X has the flat density on [0, '+b+']','given'],['P('+c+' ≤ X ≤ '+d+') = '+F30(d-c,b),'the area under f']],2,0,'('+d+' − '+c+') · 1/'+b+'.'],
+      ['m3',[['P(X > t) = e^(−'+l+'t) for every t ≥ 0','given'],['E X = '+l,'the rate']],2,1,'The average is 1/λ = 1/'+l+'.'],
+      ['m4',[['P(X > t) = e^(−'+l+'t) for every t ≥ 0','given'],['P(X > '+(s+u)+' | X > '+s+') = e^(−'+l*u+')','the forgets-the-wait technique']],2,0,'It is P(X > '+u+').'],
+      ['m5',[['X has density f, and Y = '+k+'X','given'],['Y has density '+k+' f('+k+'y)','the stretched-density technique']],2,1,'It is (1/'+k+') f(y/'+k+').'],
+      ['m6',[['Var X = '+v+', and Y = '+mu+' + '+k+'X','given'],['Var Y = '+k*k*v,'the stretched-density technique']],2,0,'σ² Var X = '+k*k+' · '+v+'.'],
+      ['m7',[['X has the flat density on [0, 1]','given'],['E X² = 1/4','E X = 1/2, squared']],2,1,'E X² = ∫ x² dx = 1/3. The gap is Var X.']];
+    return line28('30m.line',V,[b,c,d,l,s,u,k,v,mu]); }});
+
+/* ---------- 30n Random Walks ---------- */
+const WN30=[
+  ['After n steps of width s, is the spread width ns?','no: spreads add, not widths; it is s√n',['yes','no: it is s','no: it is s/√n'],'Root-n technique.'],
+  ['Does twice as far take twice as long?','no: four times as long; t = x²/(2D)',['yes','no: √2 times as long','no: half as long'],'Spread-in-time technique: average square distance 2Dt.'],
+  ['The walk is at +20. Do its next steps lean back toward 0?','no: the steps are independent; the next step averages 0, wherever the walk is',['yes','yes: the average must settle at 0','no: they lean further away'],'Independent steps.'],
+  ['The walk comes back with chance 1. Does it come back soon on average?','no: the average time to come back is endless',['yes','yes: within two steps','yes: within √n steps'],'Comes-back technique.'],
+  ['A fair coin walk starts at k and stops at 0 or N. What is E T?','k(N − k)',['k/N','N²','kN'],'Exit-time technique.'],
+  ['What is the chance that the fair coin walk is back at 0 after 2n steps?','C(2n, n)/4ⁿ',['C(2n, n)/2ⁿ','1/2ⁿ','1/n'],'Back-at-start technique.']];
+QP.push({id:'30n.walk',step:'30n',label:'random walks',open:()=>measured('30n'),make(){ return writtenQ('30n.walk',WN30); }},
+  {id:'30n.work',step:'30n',mode:'work',label:'how far, how long',open:()=>measured('30n'),make(){
+    const t=rnd(4);
+    if(t===0){ const r=2+rnd(5), n=r*r, s=1+rnd(4), q=rnd(2);
+      return W30('30n.work[r;'+[n,s,q].join(';')+']',[['a walk of '+n+' independent steps','each with average 0 and spread width '+s]],q?'What is its average square distance from the start?':'What is the spread width of where it ends?',String(q?n*s*s:s*r),[String(n*s),String(s*r),String(n*s*s),String(s),String(n*n*s*s),String(s+r)],'Root-n technique: average square distance n s² = '+n*s*s+', and spread width s√n = '+s*r+'.'); }
+    if(t===1){ const n=1+rnd(5), c=C30(2*n,n), D=Math.pow(4,n);
+      return W30('30n.work[b;'+n+']',[['a fair coin walk starts at 0','steps of +1 and −1, each with chance 1/2']],'What is the chance that it is at 0 after '+2*n+' steps?',F30(c,D),[F30(c,2*D),F30(1,Math.pow(2,n)),F30(1,2*n),F30(c+1,D),F30(1,D),'1/2','1/3'],'Back-at-start technique: C('+2*n+', '+n+')/4'+'¹²³⁴⁵'[n-1]+' = '+c+'/'+D+'.'); }
+    if(t===2){ const N=4+rnd(9), k=1+rnd(N-1);
+      return W30('30n.work[t;'+[k,N].join(';')+']',[['a fair coin walk starts at '+k,'steps of +1 and −1, each with chance 1/2'],['it stops at 0 or at '+N+', after T steps','given']],'What is E T?',String(k*(N-k)),[String(k*N),String(N-k),String(N*N),String(k*(N-k)+k),String(k*k),String(N)],'Exit-time technique: E T = k(N − k) = '+k+' · '+(N-k)+'.'); }
+    const T=2+rnd(5), m=2+rnd(3);
+    return W30('30n.work[d;'+[T,m].join(';')+']',[['the spread width of a walk reaches w at time t = '+T,'given'],['its average square distance is 2Dt','the spread-in-time technique']],'At what time does its spread width reach '+m+'w?',String(T*m*m),[String(T*m),String(T+m),String(T*m*m*m),String(m*m),String(2*T*m)],'The square of the width grows like t: '+m+' times as far takes '+m*m+' times as long.'); }},
+  {id:'30n.line',step:'30n',mode:'proof',label:'spreads add, not widths',open:()=>measured('30n'),make(){
+    const r=2+rnd(4), n=r*r, s=2+rnd(3), N=4+rnd(8), k=1+rnd(N-1), m=3+rnd(20), h=1+rnd(4), c=C30(2*h,h), D=Math.pow(4,h);
+    const V=[
+      ['n1',[['a walk of '+n+' independent steps, each with average 0 and spread width '+s,'given'],['it ends with spread width '+s*r,'the root-n technique']],2,0,'s√n = '+s+' · '+r+'.'],
+      ['n2',[['a walk of '+n+' independent steps, each with average 0 and spread width '+s,'given'],['it ends with spread width '+s*n,'the widths add']],2,1,'Spreads add, not widths: s√n = '+s*r+'.'],
+      ['n3',[['a fair coin walk starts at '+k+' and stops at 0 or '+N+', after T steps','given'],['E T = '+k*(N-k),'the exit-time technique']],2,0,'k(N − k) = '+k+' · '+(N-k)+'.'],
+      ['n4',[['the fair coin walk is at +'+m,'given'],['its next step is more likely down than up','the walk comes back to 0']],2,1,'The steps are independent: the next step averages 0, wherever the walk is.'],
+      ['n5',[['the fair coin walk starts at 0','given'],['it comes back to 0 with chance 1','the comes-back technique']],2,0,'It comes back with chance 1.'],
+      ['n6',[['the fair coin walk starts at 0','given'],['the average time it takes to come back is finite','it comes back with chance 1']],2,1,'Comes-back technique: the average time to come back is endless.'],
+      ['n7',[['the fair coin walk starts at 0','given'],['it is at 0 after '+2*h+' steps with chance '+F30(c,D),'the back-at-start technique']],2,0,'C('+2*h+', '+h+')/4'+'¹²³⁴'[h-1]+' = '+c+'/'+D+'.']];
+    return line28('30n.line',V,[n,s,N,k,m,h]); }});
+
+/* ---------- 30o Waiting and Arriving ---------- */
+const WO30=[
+  ['Buses come as a rare-arrival stream, one every 10 minutes on average. Does a rider who arrives at random wait 5 minutes on average?','no: the wait from any moment averages 10 minutes',['yes','no: 20 minutes','no: it depends on when the last bus came'],'First-gap technique.'],
+  ['A rare-arrival stream has had no arrival for a long time. Is one overdue?','no: the stream forgets; the chance in the next stretch is the same as ever',['yes','yes: the average must be kept','no: one is now less likely'],'First-gap technique: the wait is independent of the arrivals before.'],
+  ['Arrivals and service both run at 50 an hour. Does the line stay short?','no: with ρ = 1 there are no steady chances; the line wanders off without bound',['yes: they balance','yes: the average line is 1','no: the line is always empty'],'Steady-line technique: λ < μ.'],
+  ['Double the service rate. Does the average line halve?','no: ρ/(1 − ρ) is not a straight line in μ; from ρ = 5/6 to ρ = 5/12 it falls from 5 to 5/7',['yes','no: it doubles','no: it stays the same'],'Steady-line technique: the average number in the system is ρ/(1 − ρ).'],
+  ['In a rare-arrival stream of rate λ, what is the average wait to the next arrival?','1/λ',['λ','1/(2λ)','e^(−λ)'],'First-gap technique.'],
+  ['S and T are independent exponential waits of rates λ and μ. What is the chance that S comes first?','λ/(λ + μ)',['μ/(λ + μ)','1/2','λ/μ'],'First-of-two technique.']];
+QP.push({id:'30o.wait',step:'30o',label:'waiting and arriving',open:()=>measured('30o'),make(){ return writtenQ('30o.wait',WO30); }},
+  {id:'30o.work',step:'30o',mode:'work',label:'rates in, chances out',open:()=>measured('30o'),make(){
+    const t=rnd(4), l=1+rnd(5), m=l+1+rnd(5);
+    if(t===0) return W30('30o.work[q;'+[l,m].join(';')+']',[['arrivals come at rate λ = '+l,'a rare-arrival stream'],['the window serves at rate μ = '+m,'given']],'What is the average number in the system?',F30(l,m-l),[F30(l,m),F30(m-l,m),F30(l,m+l),F30(m,m-l),F30(l+1,m-l)],'Steady-line technique: ρ = '+F30(l,m)+', and ρ/(1 − ρ) = '+F30(l,m-l)+'.');
+    if(t===1){ const q=rnd(2);
+      return W30('30o.work[f;'+[l,m,q].join(';')+']',[['S and T are independent exponential waits','given'],['S has rate '+l+', and T has rate '+m,'given']],q?'What is the rate of the first of them?':'What is the chance that S comes first?',q?String(l+m):F30(l,l+m),q?[String(l*m),String(l),String(m),F30(l+m,2)]:[F30(m,l+m),'1/2',F30(l,m),F30(1,l+m)],'First-of-two technique: the first has rate λ + μ = '+(l+m)+', and S comes first with chance λ/(λ + μ).'); }
+    if(t===2){ const a=1+rnd(5), b=1+rnd(5); if(a===b) return null;
+      return W30('30o.work[c;'+[a,b].join(';')+']',[['a chain with two states leaves the first at rate '+a,'given'],['it leaves the second at rate '+b,'given']],'At what chance of being in the first state does it settle?',F30(b,a+b),[F30(a,a+b),'1/2',F30(b,a),F30(1,a+b),F30(a,b)],'Two-state technique: it settles at β/(α + β) from every start.'); }
+    const n=rnd(3);
+    return W30('30o.work[n;'+[l,m,n].join(';')+']',[['arrivals come at rate λ = '+l,'a rare-arrival stream'],['the window serves at rate μ = '+m,'given']],'What is the steady chance of '+n+' in the system?',F30((m-l)*Math.pow(l,n),Math.pow(m,n+1)),[F30(Math.pow(l,n),Math.pow(m,n)),F30(m-l,m),F30(l,m),F30((m-l)*Math.pow(l,n+1),Math.pow(m,n+2)),F30(1,n+2)],'Steady-line technique: (1 − ρ)ρⁿ with ρ = '+F30(l,m)+'.'); }},
+  {id:'30o.line',step:'30o',mode:'proof',label:'the stream forgets',open:()=>measured('30o'),make(){
+    const k=2*(2+rnd(8)), l=1+rnd(5), m=l+1+rnd(5), a=1+rnd(4), b=a+1+rnd(4);
+    const V=[
+      ['o1',[['arrivals come as a rare-arrival stream, one every '+k+' minutes on average','given'],['from any moment, the wait to the next arrival averages '+k+' minutes','the first-gap technique']],2,0,'The wait from any moment has average 1/λ.'],
+      ['o2',[['arrivals come as a rare-arrival stream, one every '+k+' minutes on average','given'],['from a moment picked at random, the wait to the next arrival averages '+k/2+' minutes','half a gap']],2,1,'First-gap technique: the wait from any moment averages '+k+' minutes.'],
+      ['o3',[['λ = '+l+' and μ = '+m,'given'],['the average number in the system is '+F30(l,m-l),'the steady-line technique']],2,0,'ρ/(1 − ρ) with ρ = '+F30(l,m)+'.'],
+      ['o4',[['λ = '+l+' and μ = '+l,'given'],['the window is busy with steady chance 1','the steady-line technique']],2,1,'The technique needs λ < μ. With ρ = 1 there are no steady chances.'],
+      ['o5',[['S and T are independent exponential waits of rates '+l+' and '+m,'given'],['the first of them is exponential of rate '+(l+m),'the first-of-two technique']],2,0,'The rates add.'],
+      ['o6',[['S and T are independent exponential waits of rates '+l+' and '+m,'given'],['S comes first with chance '+F30(m,l+m),'the first-of-two technique']],2,1,'S comes first with chance λ/(λ + μ) = '+F30(l,l+m)+'.'],
+      ['o7',[['a chain with two states leaves the first at rate '+a+' and the second at rate '+b,'given'],['from every start, it settles in the first state with chance '+F30(b,a+b),'the two-state technique']],2,0,'β/(α + β).']];
+    return line28('30o.line',V,[k,l,m,a,b]); }});
+
+/* ---------- 30p Chance That Steps ---------- */
+const WP30=[
+  ['P(wet tomorrow | wet today) = 0.7. Is P(wet in two days | wet today) = 0.7²?','no: the chain can go through a dry day and come back',['yes','yes: the days are independent','no: it is 0.7'],'Chance-grid technique: the chance list after 2 steps is P²x₀.'],
+  ['The chances have settled. Does tomorrow no longer depend on today?','no: given today, tomorrow’s chances are still a column of P',['yes','yes: every day has the chances π','no: tomorrow is the same as today'],'The settled list is about the long run, not about one step.'],
+  ['π = (4, 3) solves Pπ = π. Is it the settled list?','no: any multiple solves it; the entries must add to 1',['yes','yes: Pπ = π is the whole test','no: no list is settled'],'A chance list adds to 1: (4/7, 3/7).'],
+  ['The grid with rows (0, 1) and (1, 0) has a settled list. Do its chances settle from every start?','no: from (1, 0) they flip for ever; the one-rank technique needs every entry above 0',['yes','yes: every column adds to 1','no: it has no settled list'],'One-rank technique.'],
+  ['What is the chance list after n steps?','Pⁿx₀',['nPx₀','P + nx₀','x₀ⁿ'],'Chance-grid technique.'],
+  ['What do the columns of P add to?','1, each of them',['1, all together','0','the number of states'],'Chance-grid technique.']];
+QP.push({id:'30p.chain',step:'30p',label:'chance that steps',open:()=>measured('30p'),make(){ return writtenQ('30p.chain',WP30); }},
+  {id:'30p.work',step:'30p',mode:'work',label:'two states, step by step',open:()=>measured('30p'),make(){
+    const t=rnd(4), n=pick([4,5,6,8,10]), a=1+rnd(n-2), b=1+rnd(n-2), L=[['a chain leaves state 1 with chance '+F30(a,n)+' at each step','given'],['it leaves state 2 with chance '+F30(b,n)+' at each step','given']];
+    if(t===0){ if(a===b) return null; return W30('30p.work[s;'+[a,b,n].join(';')+']',L,'What is the settled chance of state 1?',F30(b,a+b),[F30(a,a+b),'1/2',F30(n-a,n),F30(b,n),F30(n-a,2*n-a-b)],'Fading-start technique: π = (β, α)/(α + β).'); }
+    if(t===1) return W30('30p.work[2;'+[a,b,n].join(';')+']',[...L,['the chain is in state 1 now','given']],'What is the chance that it is in state 1 two steps from now?',F30((n-a)*(n-a)+a*b,n*n),[F30((n-a)*(n-a),n*n),F30(n-a,n),F30(a*b,n*n),F30((n-a)*(n-a)+a*a,n*n),F30(b,a+b)],'Chance-grid technique: stay and stay, or leave and come back. ('+F30(n-a,n)+')² + ('+F30(a,n)+')('+F30(b,n)+').');
+    if(t===2){ if(a+b>=n) return null; return W30('30p.work[g;'+[a,b,n].join(';')+']',L,'By what factor does the gap between the chance list and π shrink at each step?',F30(n-a-b,n),[F30(a+b,n),F30(n-a,n),F30(b,a+b),F30(n-b,n),F30(a*b,n*n)],'Fading-start technique: xₙ = π + (1 − α − β)ⁿ(x₀ − π).'); }
+    const p=1+rnd(6), q=1+rnd(6); if(p===q||p+q===1) return null;
+    return W30('30p.work[m;'+[p,q].join(';')+']',[['P('+p+', '+q+') = ('+p+', '+q+')','given'],['exactly one settled list','every entry of P is above 0']],'What is the settled list?','('+F30(p,p+q)+', '+F30(q,p+q)+')',['('+p+', '+q+')','('+F30(q,p+q)+', '+F30(p,p+q)+')','(1/2, 1/2)','('+F30(1,p)+', '+F30(1,q)+')'],'Any multiple of ('+p+', '+q+') solves Pπ = π. The entries of a chance list add to 1.'); }},
+  {id:'30p.lamp',step:'30p',mode:'word',label:'a lamp that flickers',open:()=>measured('30p'),make(){
+    const n=pick([4,5,6,8,10]), a=1+rnd(n-2), b=1+rnd(n-2), two=rnd(2); if(!two&&a===b) return null;
+    const right=two?F30((n-a)*(n-a)+a*b,n*n):F30(b,a+b), wrong=uniq(right,two?[F30((n-a)*(n-a),n*n),F30(n-a,n),F30(a*b,n*n),F30(b,a+b),F30((n-a)*(n-a)+a*a,n*n)]:[F30(a,a+b),'1/2',F30(n-a,n),F30(b,n),F30(n-a,2*n-a-b)],3); if(wrong.length<3) return null;
+    return {index:'q:30p.lamp['+[a,b,n,two].join(';')+']', a3:['30p.lamp',DASH,DASH], story:'A lamp is on or off. Each minute a lamp that is on goes off with chance '+F30(a,n)+', and a lamp that is off comes on with chance '+F30(b,n)+'.'+(two?' The lamp is on now.':''), lines:[], ask:two?'What is the chance that it is on two minutes from now?':'Over a long run, what share of the minutes is the lamp on?', right, opts:shuffle([right,...wrong]), lead:'', why:two?'Chance-grid technique: stay on twice, or go off and come back on. ('+F30(n-a,n)+')² + ('+F30(a,n)+')('+F30(b,n)+').':'Fading-start technique: the settled list is (β, α)/(α + β). Share-of-time technique: the share of time heads to it.'}; }},
+  {id:'30p.line',step:'30p',mode:'proof',label:'settled is not independent',open:()=>measured('30p'),make(){
+    const n=10, x=5+rnd(4), y=1+rnd(4), a=1+rnd(4), b=1+rnd(4), p=2+rnd(4), q=1+rnd(5), two=x*x+(n-x)*y;
+    const V=[
+      ['p1',[['a chain leaves state 1 with chance '+F30(a,n)+' and state 2 with chance '+F30(b,n)+' at each step','given'],['its settled list is ('+F30(b,a+b)+', '+F30(a,a+b)+')','the fading-start technique']],2,0,'π = (β, α)/(α + β).'],
+      ['p2',[['P(wet tomorrow | wet today) = '+F30(x,n)+', and P(wet tomorrow | dry today) = '+F30(y,n),'given'],['P(wet in two days | wet today) = '+F30(x*x,n*n),'wet, then wet']],2,1,'The chain can go through a dry day and come back: add ('+F30(n-x,n)+')('+F30(y,n)+').'],
+      ['p3',[['P(wet tomorrow | wet today) = '+F30(x,n)+', and P(wet tomorrow | dry today) = '+F30(y,n),'given'],['P(wet in two days | wet today) = '+F30(two,n*n),'the chance-grid technique: P²']],2,0,'('+F30(x,n)+')² + ('+F30(n-x,n)+')('+F30(y,n)+').'],
+      ['p4',[['Pπ = π, with π = ('+p+', '+q+')','given'],['π is the settled list','it solves Pπ = π']],2,1,'Any multiple solves it. The entries must add to 1: ('+F30(p,p+q)+', '+F30(q,p+q)+').'],
+      ['p5',[['P has rows (0, 1) and (1, 0), and x₀ = (1, 0)','given'],['Pⁿx₀ heads to (1/2, 1/2)','the one-rank technique']],2,1,'The technique needs every entry of P above 0. The chances flip for ever.'],
+      ['p6',[['every entry of P is above 0','given'],['there is exactly one settled list, and every start reaches it','the one-rank technique']],2,0,'One-rank technique.'],
+      ['p7',[['Pⁿx₀ heads to π = ('+F30(b,a+b)+', '+F30(a,a+b)+')','given'],['the share of the first n steps spent in state 1 heads to '+F30(b,a+b),'the share-of-time technique']],2,0,'The share of time in state i heads to the entry i of π.']];
+    return line28('30p.line',V,[x,y,a,b,p,q]); }});
+
+/* ===== Laundry 5, rung 30 (floor 5 pools, stage AC), part 3: 30q to 30w ===== */
+const d30=x=>String(Math.round(x*100)/100);
+const DV30=[[-1,0,1],[-2,0,2],[-2,1,1],[-1,-1,2],[-3,1,2],[-1,-1,0,2],[-2,-1,1,2],[-3,0,1,2],[-1,-1,1,1],[-2,0,0,2]];
+const rd30=()=>{ const d=pick(DV30), m=4+rnd(6), xs=shuffle(d.map(x=>x+m)), ss=d.reduce((a,x)=>a+x*x,0); return {xs,m,ss,n:d.length,show:xs.join(', ')}; };
+
+/* ---------- 30q Estimating From Samples ---------- */
+const WQ30=[
+  ['A 95% interval built from a sample runs from 5.06 to 6.19. Is the chance that μ lies in it 0.95?','no: μ is a fixed number; the 95% belongs to the method, before the sample',['yes','yes, when n is large','no: the chance is 0.05'],'Bell-cover technique: the interval covers μ with a chance that heads to 0.95.'],
+  ['Is the width of the average of 16 readings the width of one reading divided by 16?','no: the width divides by √n, not n; here by 4',['yes','no: it is multiplied by 4','no: it is the same width'],'Sample-average technique: the spread width of X̄ is σ/√n.'],
+  ['Five readings, with S in place of σ. Is the interval x̄ ± 1.96 s/√5?','no: with S for σ and n = 5 the table gives 2.776',['yes','yes, when the readings are bell-shaped','no: the table gives a number below 1.96'],'Small-sample-cover technique: t from the table for n − 1.'],
+  ['Do 95% of the readings lie in the interval for μ?','no: the interval is for the average, not for single readings',['yes','yes, when the readings are bell-shaped','no: all of them do'],'The interval is built on the width of X̄, σ/√n.'],
+  ['What is the spread width of X̄?','σ/√n',['σ/n','σ','σ√n'],'Sample-average technique.'],
+  ['By what does S² divide, so that E S² = σ²?','n − 1',['n','n + 1','√n'],'Sample-spread technique.']];
+QP.push({id:'30q.sample',step:'30q',label:'estimating from samples',open:()=>measured('30q'),make(){ return writtenQ('30q.sample',WQ30); }},
+  {id:'30q.work',step:'30q',mode:'work',label:'the width of an average',open:()=>measured('30q'),make(){
+    const t=rnd(4);
+    if(t===0){ const r=2+rnd(9), n=r*r, s=1+rnd(12);
+      return W30('30q.work[w;'+[n,s].join(';')+']',[['X̄ is the average of '+n+' independent readings','each with spread width '+s]],'What is the spread width of X̄?',F30(s,r),[F30(s,n),String(s),String(s*r),F30(s*s,n),F30(s,r+1)],'Sample-average technique: σ/√n = '+s+'/'+r+'.'); }
+    if(t===1){ const R=rd30();
+      return W30('30q.work[s;'+R.show+']',[['the readings are '+R.show,'a sample'],['their average is '+R.m,'x̄']],'What is S²?',F30(R.ss,R.n-1),[F30(R.ss,R.n),String(R.ss),F30(R.ss,R.n+1),'0',F30(R.ss+1,R.n-1)],'Sample-spread technique: the squared gaps from x̄ add to '+R.ss+', and S² divides by n − 1 = '+(R.n-1)+'.'); }
+    if(t===2){ const r=pick([5,10,20]), n=r*r, c=pick([1,2,5]), sig=r*c, xb=20+rnd(40), h=1.96*c;
+      const iv=w=>'from '+d30(xb-w)+' to '+d30(xb+w);
+      return W30('30q.work[c;'+[n,sig,xb].join(';')+']',[['x̄ = '+xb+', from '+n+' independent readings','given'],['σ = '+sig,'known']],'Which interval does the bell-cover technique give?',iv(h),[iv(c),iv(1.96*sig/n),iv(2*h),iv(1.96),iv(c/2)],'Bell-cover technique: x̄ ± 1.96σ/√n = '+xb+' ± 1.96 · '+c+'.'); }
+    const r=2+rnd(4), n=r*r*(1+rnd(3)), m=2+rnd(3);
+    return W30('30q.work[n;'+[n,m].join(';')+']',[['the average of '+n+' readings has spread width w','given']],'How many readings give an average of spread width w/'+m+'?',String(n*m*m),[String(n*m),String(n+m),String(n*m*m*m),String(n*2*m)],'Sample-average technique: the width divides by √n. '+m+' times as narrow takes '+m*m+' times the readings.'); }},
+  {id:'30q.line',step:'30q',mode:'proof',label:'what the interval promises',open:()=>measured('30q'),make(){
+    const r=2+rnd(6), n=r*r, s=r*(1+rnd(4))+(rnd(2)?0:1), R=rd30(), lo=10+rnd(20), hi=lo+2+rnd(6);
+    const V=[
+      ['q1',[['X̄ is the average of '+n+' independent readings, each with spread width '+s,'given'],['X̄ has spread width '+F30(s,r),'the sample-average technique']],2,0,'σ/√n = '+s+'/'+r+'.'],
+      ['q2',[['X̄ is the average of '+n+' independent readings, each with spread width '+s,'given'],['X̄ has spread width '+F30(s,n),'divide by n']],2,1,'The width divides by √n, not n: '+F30(s,r)+'.'],
+      ['q3',[['a 95% interval built from a sample runs from '+lo+' to '+hi,'given'],['μ lies between '+lo+' and '+hi+' with chance 0.95','the bell-cover technique']],2,1,'μ is a fixed number. The 95% belongs to the method, before the sample.'],
+      ['q4',[['5 bell-shaped readings, with S in place of σ','given'],['x̄ ± 1.96 S/√5 covers μ with chance 0.95','the bell-cover technique']],2,1,'Small-sample-cover technique: for n = 5 the table gives 2.776.'],
+      ['q5',[['the readings are '+R.show+', with average '+R.m,'given'],['S² = '+F30(R.ss,R.n-1),'the sample-spread technique']],2,0,'The squared gaps add to '+R.ss+'. Divide by n − 1.'],
+      ['q6',[['the readings are '+R.show+', with average '+R.m,'given'],['S² = '+F30(R.ss,R.n),'the sample-spread technique']],2,1,'S² divides by n − 1, not n: '+F30(R.ss,R.n-1)+'.'],
+      ['q7',[['a 95% interval for μ runs from '+lo+' to '+hi,'given'],['95% of the readings lie between '+lo+' and '+hi,'the same interval']],2,1,'The interval is for the average, not for single readings.']];
+    return line28('30q.line',V,[n,s,lo,hi,R.show]); }});
+
+/* ---------- 30r The Most Likely Parameter ---------- */
+const WR30=[
+  ['L(0.7) ≈ 0.267. Is the chance that p = 0.7 equal to 0.267?','no: L is the chance of the record given the guess, not of the guess given the record',['yes','yes, when 0.7 is the best guess','no: it is 1 − 0.267'],'L(θ) is the chance of the record at the setting θ.'],
+  ['Is L(λ) = f(x₁; λ) + f(x₂; λ) for two waits?','no: independent readings multiply',['yes','no: it is their average','no: take the larger of the two'],'Independent technique (30f).'],
+  ['Is ℓ′ = 0 at every best guess?','no: a best guess at an end need not have slope 0',['yes','yes: a greatest value has slope 0','no: the slope is 0 only at a least value'],'Log-likelihood technique: L and ℓ are greatest at the same settings.'],
+  ['Is E v̂ = σ²?','no: v̂ has n in the bottom; its average is (n − 1)σ²/n',['yes','no: its average is nσ²/(n − 1)','no: its average is σ²/n'],'Bell-guess technique, beside the sample-spread technique of 30q.'],
+  ['For waits x₁, …, xₙ of rate λ, what is the best guess of λ?','1/x̄',['x̄','n/x̄','x̄/n'],'Gap-guess technique.'],
+  ['g is one-to-one on the settings. What is the best guess of g(θ)?','g(θ̂)',['g′(θ̂)','θ̂','1/g(θ̂)'],'Same-best technique.']];
+QP.push({id:'30r.guess',step:'30r',label:'the best guess',open:()=>measured('30r'),make(){ return writtenQ('30r.guess',WR30); }},
+  {id:'30r.work',step:'30r',mode:'work',label:'best guesses from a record',open:()=>measured('30r'),make(){
+    const t=rnd(4);
+    if(t===0){ const ks=[rnd(5),rnd(5),1+rnd(5),rnd(5)], sum=ks.reduce((a,x)=>a+x,0);
+      return W30('30r.work[k;'+ks.join(',')+']',[['the counts of rare events are '+ks.join(', '),'four independent counts']],'What is the best guess of λ?',F30(sum,4),[String(sum),F30(4,sum),F30(sum,3),String(Math.max(...ks)),F30(sum+1,4)],'Rare-guess technique: the best guess of λ is the average count, '+sum+'/4.'); }
+    if(t===1){ const xs=[1+rnd(5),1+rnd(5),1+rnd(5)], sum=xs.reduce((a,x)=>a+x,0), q=rnd(2); if(sum===3) return null;
+      return W30('30r.work[x;'+xs.join(',')+';'+q+']',[['the waits are '+xs.join(', '),'three independent waits of rate λ']],q?'What is the best guess of the average wait?':'What is the best guess of λ?',q?F30(sum,3):F30(3,sum),[F30(sum,3),F30(3,sum),F30(1,sum),String(sum),F30(sum,2)],'Gap-guess technique: the best guess of λ is 1/x̄ = '+F30(3,sum)+', and of the average wait it is x̄ = '+F30(sum,3)+'.'); }
+    if(t===2){ const n=5+rnd(8), k=1+rnd(n-1); if(2*k===n) return null;
+      return W30('30r.work[o;'+[k,n].join(';')+']',[[k+' successes in '+n+' independent tries','given'],['the best guess of the share p is '+F30(k,n),'k/n']],'What is the best guess of the odds p/(1 − p)?',F30(k,n-k),[F30(k,n),F30(n-k,n),F30(n-k,k),F30(k,n+k)],'Same-best technique: the odds are one-to-one in p, so put the best guess in. ('+F30(k,n)+')/('+F30(n-k,n)+').'); }
+    const R=rd30();
+    return W30('30r.work[v;'+R.show+']',[['the bell-shaped readings are '+R.show,'a sample'],['their average is '+R.m,'x̄']],'What is the best guess of σ²?',F30(R.ss,R.n),[F30(R.ss,R.n-1),String(R.ss),F30(R.ss,R.n+1),String(R.m),F30(R.ss+1,R.n)],'Bell-guess technique: the squared gaps from x̄ add to '+R.ss+', and v̂ divides by n = '+R.n+'.'); }},
+  {id:'30r.line',step:'30r',mode:'proof',label:'the record given the guess',open:()=>measured('30r'),make(){
+    const ks=[rnd(5),rnd(5),1+rnd(5),rnd(5)], ksum=ks.reduce((a,x)=>a+x,0), xs=[1+rnd(5),2+rnd(5),1+rnd(5)], sum=xs.reduce((a,x)=>a+x,0), n=5+rnd(8), k=1+rnd(n-1), R=rd30();
+    const V=[
+      ['r1',[['the counts of rare events are '+ks.join(', '),'given'],['the best guess of λ is '+F30(ksum,4),'the rare-guess technique']],2,0,'The average count.'],
+      ['r2',[['the waits are '+xs.join(', ')+', of rate λ','given'],['the best guess of λ is '+F30(sum,3),'the average wait']],2,1,'Gap-guess technique: the best guess of λ is 1/x̄ = '+F30(3,sum)+'.'],
+      ['r3',[['for the waits, the best guess of λ is '+F30(3,sum),'given'],['the best guess of the average wait 1/λ is '+F30(sum,3),'the same-best technique']],2,0,'1/λ is one-to-one in λ.'],
+      ['r4',[['L(p) is greatest at p = '+F30(k,n),'given'],['the chance that p = '+F30(k,n)+' is L('+F30(k,n)+')','the likelihood']],2,1,'L is the chance of the record given the guess, not of the guess given the record.'],
+      ['r5',[['x₁ and x₂ are independent waits of rate λ','given'],['L(λ) = f(x₁; λ) + f(x₂; λ)','two readings']],2,1,'Independent readings multiply.'],
+      ['r6',[['the bell-shaped readings are '+R.show+', with average '+R.m,'given'],['the best guess of σ² is '+F30(R.ss,R.n),'the bell-guess technique']],2,0,'The squared gaps add to '+R.ss+'. v̂ divides by n.'],
+      ['r7',[['the bell-shaped readings are '+R.show+', with average '+R.m,'given'],['the best guess of σ² is '+F30(R.ss,R.n-1),'the bell-guess technique']],2,1,'v̂ has n in the bottom: '+F30(R.ss,R.n)+'.']];
+    return line28('30r.line',V,[ks.join(','),xs.join(','),k,n,R.show]); }});
+
+/* ---------- 30s Is the Difference Real? ---------- */
+const WS30=[
+  ['The surprise chance is 0.18. Is the chance that the coin is fair 0.18?','no: it is a chance of the record given the claim, not of the claim given the record',['yes','no: it is 0.82','yes, when the test has power'],'The surprise chance is found with the claim taken as true.'],
+  ['0.18 > 0.05. Is the coin fair?','not proved: not rejecting is not proving; the test may have little power',['yes','yes, with chance 0.95','no: the claim is rejected'],'Test-power technique.'],
+  ['Can X² be built from the shares in place of the counts?','no: X² is built on counts; shares divide it by n',['yes','yes, when n is large','no: shares multiply it by n'],'X² is built on counts.'],
+  ['Twenty traits are tested, and one has surprise chance 0.03. Is that one real?','not shown: among twenty true claims, one surprise below 0.05 is more likely than not',['yes','yes, with chance 0.97','no: it is luck for certain'],'Each true claim is rejected with chance 0.05.'],
+  ['How often does the rule “reject when |Z| ≥ 1.96” reject a true claim?','with a chance that heads to 0.05',['never','with chance 0.95','with chance 1.96'],'Bell-test technique.'],
+  ['What is the spread of X̄₁ − X̄₂ for independent samples?','σ₁²/n₁ + σ₂²/n₂',['σ₁²/n₁ − σ₂²/n₂','(σ₁² + σ₂²)/(n₁ + n₂)','σ₁/n₁ + σ₂/n₂'],'Two-sample technique.']];
+QP.push({id:'30s.test',step:'30s',label:'is the difference real?',open:()=>measured('30s'),make(){ return writtenQ('30s.test',WS30); }},
+  {id:'30s.work',step:'30s',mode:'work',label:'the test number',open:()=>measured('30s'),make(){
+    const t=rnd(4);
+    if(t===0){ const r=pick([4,6,8,10,12]), n=r*r, z=pick([-3,-2,-1,1,2,3]), k=n/2+z*r/2;
+      return W30('30s.work[z;'+[n,k].join(';')+']',[[n+' tosses show '+k+' heads','the record'],['the claim is p = 1/2','given'],['Z = (k − np₀)/√(np₀(1 − p₀))','the bell test number']],'What is Z?',sg(z),[sg(z*r/2),sg(2*z),sg(-z),sg(z+1),sg(z*r)],'k − np₀ = '+sg(k-n/2)+', and √(np₀(1 − p₀)) = √'+n+'/2 = '+r/2+'.'); }
+    if(t===1){ const z=pick(['0.8','1.2','1.5','1.9','−0.6','−1.7','2.1','2.5','3.2','−2.3','−2.8']), rej=Math.abs(parseFloat(z.replace('−','-')))>=1.96;
+      return {index:'q:30s.work[r;'+z+']', lines:[['Z = '+z,'the bell test number of the record'],['reject the claim when |Z| ≥ 1.96','the rule']], ask:'What does the rule say?', right:rej?'reject the claim':'do not reject the claim', opts:shuffle(['reject the claim','do not reject the claim','the claim is proved true','the claim is proved false']), lead:'', why:rej?'Bell-test technique: |Z| ≥ 1.96. A true claim is rejected with a chance that heads to 0.05, so this is not proof.':'|Z| < 1.96. Not rejecting is not proving: the test may have little power.'}; }
+    if(t===2){ const v1=1+rnd(9), v2=1+rnd(9), n1=2+rnd(8), n2=2+rnd(8);
+      return W30('30s.work[t;'+[v1,n1,v2,n2].join(';')+']',[['independent samples of sizes '+n1+' and '+n2,'given'],['with spreads σ₁² = '+v1+' and σ₂² = '+v2,'given']],'What is the spread of X̄₁ − X̄₂?',F30(v1*n2+v2*n1,n1*n2),[F30(Math.abs(v1*n2-v2*n1),n1*n2),F30(v1+v2,n1+n2),String(v1+v2),F30(v1,n1),F30(v1+v2,n1*n2)],'Two-sample technique: σ₁²/n₁ + σ₂²/n₂ = '+F30(v1,n1)+' + '+F30(v2,n2)+'.'); }
+    const z=pick([-4,-3,-2,2,3,4]);
+    return W30('30s.work[x;'+z+']',[['two cells, of chances p₀ and 1 − p₀','given'],['the bell test number is Z = '+sg(z),'given']],'What is X²?',String(z*z),[sg(z),String(2*Math.abs(z)),sg(-z*z),String(z*z+1),String(Math.abs(z))],'Two-cell technique: X² = Z².'); }},
+  {id:'30s.line',step:'30s',mode:'proof',label:'not rejecting is not proving',open:()=>measured('30s'),make(){
+    const r=pick([4,6,8,10]), n=r*r, z=pick([-3,-2,-1,1,2,3]), k=n/2+z*r/2, zb=pick(['2.1','2.5','3.2']), zs=pick(['0.7','1.2','1.6']), sc=pick(['0.01','0.02','0.03','0.04']), v1=1+rnd(9), v2=1+rnd(9), n1=2+rnd(8), n2=2+rnd(8), y=2+rnd(3);
+    const V=[
+      ['s1',[[n+' tosses show '+k+' heads, and the claim is p = 1/2','given'],['Z = '+sg(z),'the bell test number']],2,0,sg(k-n/2)+' over √'+n+'/2 = '+r/2+'.'],
+      ['s2',[['Z = '+zb,'given'],['reject the claim','the bell-test technique: |Z| ≥ 1.96']],2,0,zb+' ≥ 1.96.'],
+      ['s3',[['Z = '+zs,'given'],['the claim is true','|Z| < 1.96']],2,1,'Not rejecting is not proving. The test may have little power.'],
+      ['s4',[['the surprise chance of the record is '+sc,'given'],['the chance that the claim is true is '+sc,'the surprise chance']],2,1,'It is a chance of the record given the claim, not of the claim given the record.'],
+      ['s5',[['independent samples of sizes '+n1+' and '+n2+', with spreads '+v1+' and '+v2,'given'],['X̄₁ − X̄₂ has spread '+F30(v1*n2+v2*n1,n1*n2),'the two-sample technique']],2,0,F30(v1,n1)+' + '+F30(v2,n2)+'.'],
+      ['s6',[['independent samples of sizes '+n1+' and '+n2+', with spreads '+v1+' and '+v2,'given'],['X̄₁ − X̄₂ has spread '+F30(v1,n1)+' − '+F30(v2,n2),'a difference of averages']],2,1,'Spreads add, for a difference too: '+F30(v1,n1)+' + '+F30(v2,n2)+'.'],
+      ['s7',[['two cells, and the bell test number is Z = '+sg(-y),'given'],['X² = '+y*y,'the two-cell technique']],2,0,'X² = Z².']];
+    return line28('30s.line',V,[n,k,zb,zs,sc,v1,n1,v2,n2,y]); }});
+
+/* ---------- 30t The Best Test ---------- */
+const WT30=[
+  ['Λ = 20. Is P(H₁ true) = 20/21?','no: the ratio multiplies odds held before the data, and needs them',['yes','yes, when H₀ and H₁ are single settings','no: it is 1/20'],'Odds-update technique (30l).'],
+  ['Rejecting for large x̄ is best against a μ₁ above μ₀. Is it best against a μ₁ below μ₀ too?','no: for μ₁ < μ₀, log Λ falls as x̄ climbs; the best test rejects for small x̄',['yes','yes: the best test does not depend on μ₁','no: no test is best there'],'Best-test technique: reject when Λ is large.'],
+  ['Is x̄ a full summary for readings landing evenly in [0, θ]?','no: the chances depend on the data through the largest reading, not the average',['yes','yes: x̄ is always a full summary','no: through the least reading'],'Summary-factor technique.'],
+  ['13 of 20 are of one kind. Is Λ = (0.7/0.5)¹³?','no: the other seven carry a ratio too, (0.3/0.5)⁷',['yes','no: it is (0.7/0.5)²⁰','no: it is 13/20'],'Λ is the ratio of the chances of the whole record.'],
+  ['H₀ is true. How likely is it that the likelihood ratio reaches k?','at most 1/k',['exactly 1/k','at least 1/k','at most 1/k²'],'Ratio-bound technique.'],
+  ['When is T a full summary?','when f(x; θ) = g(T(x), θ) · h(x), with h free of θ',['when T is the average','when f(x; θ) = g(T(x)) + h(θ)','when T does not depend on the data'],'Summary-factor technique.']];
+QP.push({id:'30t.best',step:'30t',label:'the best test',open:()=>measured('30t'),make(){ return writtenQ('30t.best',WT30); }},
+  {id:'30t.work',step:'30t',mode:'work',label:'the likelihood ratio',open:()=>measured('30t'),make(){
+    const t=rnd(4);
+    if(t===0){ const k=2+rnd(19);
+      return W30('30t.work[b;'+k+']',[['H₀ is true','given']],'What does the ratio-bound technique say of P(Λ ≥ '+k+')?','at most 1/'+k,['exactly 1/'+k,'at least 1/'+k,'at most 1/'+k*k,'at most '+F30(k-1,k)],'Ratio-bound technique: at most 1/k, for every k > 0.'); }
+    if(t===1){ const [a,d]=pick([[3,4],[2,3]]), n=2+rnd(2), k=rnd(n+1), num=Math.pow(2*a,k)*Math.pow(2*(d-a),n-k), den=Math.pow(d,n);
+      return W30('30t.work[l;'+[a,d,n,k].join(';')+']',[['H₀: p = 1/2, and H₁: p = '+a+'/'+d,'the chance of a head'],[n+' tosses show '+k+(k===1?' head':' heads'),'the record']],'What is Λ, the chance of the record under H₁ over its chance under H₀?',F30(num,den),[F30(Math.pow(2*a,k),Math.pow(d,k)),F30(den,num),F30(Math.pow(a,k)*Math.pow(d-a,n-k),den),'1',F30(Math.pow(2*a,n),den),F30(k,n)],'Each head carries ('+a+'/'+d+')/(1/2) = '+F30(2*a,d)+', and each tail carries '+F30(2*(d-a),d)+'. Multiply over the whole record.'); }
+    if(t===2){ const a=1+rnd(3), b=a+1+rnd(6), L=2+rnd(9);
+      return W30('30t.work[o;'+[a,b,L].join(';')+']',[['the odds of H₁ before the data are '+F30(a,b),'given'],['Λ = '+L,'from the record']],'What are the odds of H₁ after the data?',F30(L*a,b),[String(L),F30(L,L+1),F30(a,b),F30(L*a,L*a+b),F30(a,L*b)],'Odds-update technique (30l): the ratio multiplies the odds held before, '+L+' · '+F30(a,b)+'.'); }
+    const a=10+rnd(40), up=rnd(2), b=up?a+2+rnd(9):a-2-rnd(8);
+    return {index:'q:30t.work[d;'+[a,b].join(';')+']', lines:[['bell-shaped readings of known spread','given'],['H₀: μ = '+a+', and H₁: μ = '+b,'given']], ask:'For which x̄ does the best test reject H₀?', right:up?'large x̄':'small x̄', opts:shuffle(['large x̄','small x̄','x̄ near '+a,'x̄ far from '+b]), lead:'', why:'Best-test technique: reject when Λ is large. '+(up?'For μ₁ > μ₀, log Λ climbs as x̄ climbs.':'For μ₁ < μ₀, log Λ falls as x̄ climbs.')}; }},
+  {id:'30t.line',step:'30t',mode:'proof',label:'what the ratio tells',open:()=>measured('30t'),make(){
+    const k=2+rnd(18), L=2+rnd(18), a=1+rnd(3), b=a+1+rnd(6), m=20+rnd(30), g=2+rnd(8), n=3+rnd(4), h=1+rnd(n-1);
+    const V=[
+      ['t1',[['H₀ is true','given'],['P(Λ ≥ '+k+') ≤ 1/'+k,'the ratio-bound technique']],2,0,'At most 1/k.'],
+      ['t2',[['H₀ is true','given'],['P(Λ ≥ '+k+') = 1/'+k,'the ratio-bound technique']],2,1,'The technique gives only at most.'],
+      ['t3',[['Λ = '+L,'given'],['P(H₁ is true) = '+F30(L,L+1),'the ratio']],2,1,'The ratio multiplies odds held before the data, and needs them.'],
+      ['t4',[['the odds of H₁ before the data are '+F30(a,b)+', and Λ = '+L,'given'],['the odds of H₁ after the data are '+F30(L*a,b),'the odds-update technique (30l)']],2,0,L+' · '+F30(a,b)+'.'],
+      ['t5',[['bell-shaped readings, H₀: μ = '+m+', and H₁: μ = '+(m-g),'given'],['the best test rejects H₀ for large x̄','the best-test technique']],2,1,'For μ₁ < μ₀, log Λ falls as x̄ climbs. The best test rejects for small x̄.'],
+      ['t6',[['f(x; θ) = g(T(x), θ) · h(x), with h free of θ','given'],['T is a full summary','the summary-factor technique']],2,0,'The chances depend on the data only through T.'],
+      ['t7',[[n+' tosses show '+h+(h===1?' head':' heads')+', H₀: p = 1/2, and H₁: p = 3/4','given'],['Λ = (3/2)'+'¹²³⁴⁵⁶'[h-1],'the heads']],2,1,'The '+(n-h)+(n-h===1?' tail carries':' tails carry')+' a ratio too: 1/2 each.']];
+    return line28('30t.line',V,[k,L,a,b,m,g,n,h]); }});
+
+/* ---------- 30u Belief Updated ---------- */
+const WU30=[
+  ['A 95% interval has been built from a sample. Is P(μ in it) = 0.95?','no: once built, the interval covers μ or not; 0.95 was a promise about the method',['yes','yes, by the bell-cover technique','no: it is 0.05'],'A belief about μ needs a belief before.'],
+  ['Is the belief after the likelihood plus the belief before, scaled?','no: the turn-around technique multiplies',['yes','yes, when the belief before is flat','no: it is the likelihood divided by the belief before'],'Belief-update technique: f(x | θ) π(θ), scaled to total 1.'],
+  ['Is a belief flat on θ also flat on θ²?','no: P(θ² ≤ ¼) = P(θ ≤ ½) = ½, not ¼',['yes','yes: flat is flat','no: P(θ² ≤ ¼) = 1/16'],'A flat belief is flat only in one way of measuring.'],
+  ['The belief before gives 0.5 no chance. Can enough data bring 0.5 back?','no: zero times any likelihood is zero',['yes','yes, when the data fit 0.5 best','yes, after scaling to total 1'],'Belief-update technique.'],
+  ['A beta(α, β) belief meets k successes in n tries. What is the belief after?','beta(α + k, β + n − k)',['beta(α + n, β + k)','beta(αk, β(n − k))','beta(k, n − k)'],'Shape-keeping technique.'],
+  ['As τ grows without bound, what does the bell belief after head to?','the bell with average x̄ and spread σ²/n',['the belief before','the bell with average m and spread τ²','a flat belief'],'Bell-update technique.']];
+QP.push({id:'30u.belief',step:'30u',label:'belief updated',open:()=>measured('30u'),make(){ return writtenQ('30u.belief',WU30); }},
+  {id:'30u.work',step:'30u',mode:'work',label:'before, record, after',open:()=>measured('30u'),make(){
+    const t=rnd(4), a=1+rnd(4), b=1+rnd(4), n=3+rnd(8), k=rnd(n+1);
+    if(t===0) return W30('30u.work[a;'+[a,b,k,n].join(';')+']',[['the belief before about a share θ is beta('+a+', '+b+')','given'],[k+(k===1?' success':' successes')+' in '+n+' independent tries','the record']],'What is the average of the belief after?',F30(a+k,a+b+n),[F30(k,n),F30(a,a+b),F30(a+k,b+n-k),F30(a+k,a+b+k),F30(k,a+b+n)],'Shape-keeping technique: the belief after is beta('+(a+k)+', '+(b+n-k)+'), with average (α + k)/(α + β + n).');
+    if(t===1) return W30('30u.work[b;'+[a,b,k,n].join(';')+']',[['the belief before about a share θ is beta('+a+', '+b+')','given'],[k+(k===1?' success':' successes')+' in '+n+' independent tries','the record']],'What is the belief after?','beta('+(a+k)+', '+(b+n-k)+')',['beta('+(a+n)+', '+(b+k)+')','beta('+(a+k)+', '+(b+n)+')','beta('+k+', '+(n-k)+')','beta('+(a+n-k)+', '+(b+k)+')','beta('+(a+k)+', '+(b+k)+')'],'Shape-keeping technique: beta(α + k, β + n − k).');
+    if(t===2){ const w=2+rnd(4), u=1+rnd(w-1), q=pick([4,5,10]), x=1+rnd(q-1), y=1+rnd(q-1); if(x===y) return null;
+      return W30('30u.work[d;'+[u,w,x,y,q].join(';')+']',[['θ is one of two settings, θ₁ and θ₂','given'],['the beliefs before are '+F30(u,w)+' and '+F30(w-u,w),'given'],['the record has chance '+F30(x,q)+' at θ₁ and '+F30(y,q)+' at θ₂','the likelihoods']],'What is the belief after in θ₁?',F30(x*u,x*u+y*(w-u)),[F30(u,w),F30(x,x+y),F30(x*u,q*w),F30(y*(w-u),x*u+y*(w-u)),F30(x,q)],'Belief-update technique: before times likelihood, scaled to total 1. ('+F30(x,q)+')('+F30(u,w)+') over ('+F30(x,q)+')('+F30(u,w)+') + ('+F30(y,q)+')('+F30(w-u,w)+').'); }
+    const tt=1+rnd(4), s=1+rnd(6), m=1+rnd(5);
+    return W30('30u.work[s;'+[tt,s,m].join(';')+']',[['a bell belief before, of spread τ² = '+tt,'given'],[m+(m===1?' bell reading':' bell readings')+' of known spread σ² = '+s,'the record']],'What is the spread S² of the belief after?',F30(tt*s,s+m*tt),[F30(s,m),String(tt),F30(tt*s,s+tt),F30(s+m*tt,tt*s),F30(tt+s,m+1)],'Bell-update technique: 1/S² = 1/τ² + n/σ² = '+F30(1,tt)+' + '+F30(m,s)+' = '+F30(s+m*tt,tt*s)+'.'); }},
+  {id:'30u.coins',step:'30u',mode:'word',label:'two kinds of coin',open:()=>measured('30u'),make(){
+    const [a,d]=pick([[3,4],[2,3],[9,10],[4,5]]), n=1+rnd(3), w=2+rnd(3), u=1+rnd(w-1), A=Math.pow(2*a,n)*u, B=Math.pow(d,n)*(w-u), right=F30(A,A+B), wrong=uniq(right,[F30(u,w),F30(Math.pow(a,n),Math.pow(d,n)),F30(B,A+B),F30(Math.pow(2*a,n),Math.pow(2*a,n)+Math.pow(d,n)),F30(a,d),'1/2'],3); if(wrong.length<3) return null;
+    return {index:'q:30u.coins['+[a,d,n,u,w].join(';')+']', a3:['30u.coins',DASH,DASH], story:'A drawer holds '+w+' coins. '+(u===1?'One of them is':u+' of them are')+' weighted, and '+(u===1?'shows':'show')+' heads with chance '+a+'/'+d+'. '+(w-u===1?'The other is fair':'The rest are fair')+'. One coin is taken, each as likely as the next, and tossed '+(n===1?'once':n===2?'twice':'three times')+'. It shows heads'+(n===1?'':' every time')+'.', lines:[], ask:'What is the belief after that the coin is weighted?', right, opts:shuffle([right,...wrong]), lead:'', why:'Belief-update technique: before times likelihood, scaled to total 1. Weighted: ('+F30(u,w)+')('+F30(Math.pow(a,n),Math.pow(d,n))+'). Fair: ('+F30(w-u,w)+')('+F30(1,Math.pow(2,n))+').'}; }},
+  {id:'30u.line',step:'30u',mode:'proof',label:'before times likelihood',open:()=>measured('30u'),make(){
+    const a=1+rnd(4), b=1+rnd(4), n=3+rnd(8), k=rnd(n+1), same=(a+k)*n===k*(a+b+n), q=pick([4,5,10]), x=2+rnd(q-2), y=1+rnd(x-1), tt=1+rnd(4), s=1+rnd(6), m=1+rnd(5);
+    const V=[
+      ['u1',[['the belief before is beta('+a+', '+b+'), and the record is '+k+(k===1?' success':' successes')+' in '+n+' tries','given'],['the belief after is beta('+(a+k)+', '+(b+n-k)+')','the shape-keeping technique']],2,0,'beta(α + k, β + n − k).'],
+      ['u2',[['the belief before is beta('+a+', '+b+'), and the record is '+k+(k===1?' success':' successes')+' in '+n+' tries','given'],['the belief after has average '+F30(k,n),'the share seen']],2,same?0:1,same?'(α + k)/(α + β + n) = '+F30(a+k,a+b+n)+', which here is the share seen.':'Shape-keeping technique: (α + k)/(α + β + n) = '+F30(a+k,a+b+n)+'.'],
+      ['u3',[['the belief before gives θ = 1/2 chance 0','given'],['with enough data, the belief after gives θ = 1/2 a chance above 0','the data']],2,1,'Zero times any likelihood is zero.'],
+      ['u4',[['two settings with beliefs before 1/2 and 1/2; the record has chance '+F30(x,q)+' at θ₁ and '+F30(y,q)+' at θ₂','given'],['the belief after in θ₁ is '+F30(x,x+y),'the belief-update technique']],2,0,'Before times likelihood, scaled to total 1.'],
+      ['u5',[['the belief before is flat on θ in [0, 1]','given'],['the belief before is flat on θ²','flat is flat']],2,1,'P(θ² ≤ ¼) = P(θ ≤ ½) = ½, not ¼.'],
+      ['u6',[['a bell belief before of spread '+tt+', and '+m+(m===1?' bell reading':' bell readings')+' of known spread '+s,'given'],['the belief after has spread '+F30(tt*s,s+m*tt),'the bell-update technique']],2,0,'1/S² = '+F30(1,tt)+' + '+F30(m,s)+'.'],
+      ['u7',[['the belief before is π(θ), and the record has likelihood f(x | θ)','given'],['the belief after is f(x | θ) + π(θ), scaled to total 1','the belief-update technique']],2,1,'The technique multiplies.']];
+    return line28('30u.line',V,[a,b,n,k,x,y,q,tt,s,m]); }});
+
+/* ---------- 30v How the Numbers Were Got ---------- */
+const WV30=[
+  ['One group has the lower rate overall. Has it the lower rate in each part?','not always: the overall rate mixes the parts by shares that differ',['yes','yes, when the parts are separate','never'],'Mixed-rate technique.'],
+  ['A sample of millions leans toward the values that are easier to pick. Can it be far off?','yes: a leaning sample settles on E X + Cov(X, π)/E π, however large',['no: millions of answers cannot be far off','no: the averages settle at E X','only when the sample is small'],'Picked-lean technique.'],
+  ['Families chose whether to take a treatment. Does comparing takers with refusers measure the treatment?','no: who refuses is not drawn by a coin; the families differ',['yes','yes, when the groups are large','yes, when the difference is large'],'Fair-split technique: a fair draw of the treated group.'],
+  ['Do 1000 runs give p to within 0.001?','no: the spread width of p̂ is √(p(1 − p)/R); it shrinks like 1/√R, not 1/R',['yes','yes: 1/1000','no: they give it to within 0.000001'],'Run-count technique.'],
+  ['Under a fair draw of the treated group, by how much do the two groups’ averages of an unmeasured trait differ, on average?','by 0',['by τ','by the co-spread of the trait with the draw','it cannot be known'],'Fair-split technique.'],
+  ['What is the greatest spread of p̂ over R independent runs?','1/(4R)',['1/R','1/(2R)','1/R²'],'Run-count technique: p(1 − p)/R, at most 1/(4R).']];
+QP.push({id:'30v.got',step:'30v',label:'how the numbers were got',open:()=>measured('30v'),make(){ return writtenQ('30v.got',WV30); }},
+  {id:'30v.work',step:'30v',mode:'work',label:'mixes, leans and runs',open:()=>measured('30v'),make(){
+    const t=rnd(4);
+    if(t===0){ const a=1+rnd(9), b=1+rnd(9), c=1+rnd(9); if(a===b) return null;
+      return W30('30v.work[m;'+[a,b,c].join(';')+']',[['a group has rate '+F30(a,10)+' in part 1 and '+F30(b,10)+' in part 2','given'],[F30(c,10)+' of the group is in part 1, and the rest in part 2','its shares']],'What is the group’s overall rate?',F30(a*c+b*(10-c),100),[F30(a+b,20),F30(a*(10-c)+b*c,100),F30(a,10),F30(b,10),F30(a*c,100)],'Mixed-rate technique: the rates weighted by the shares, ('+F30(a,10)+')('+F30(c,10)+') + ('+F30(b,10)+')('+F30(10-c,10)+').'); }
+    if(t===1){ const R=pick([100,400,2500]), q=pick([4,5,10]); if(q*q>=4*R) return null;
+      return W30('30v.work[r;'+[R,q].join(';')+']',[['p̂ is the share of hits in '+R+' independent runs','given']],'What does the run-count technique say of P(|p̂ − p| ≥ 1/'+q+')?','at most '+F30(q*q,4*R),['exactly '+F30(q*q,4*R),'at most '+F30(q,4*R),'at most '+F30(q*q,R),'at least '+F30(q*q,4*R),'at most '+F30(1,4*R)],'Run-count technique: 1/(4Re²) = '+q*q+'/(4 · '+R+').'); }
+    if(t===2){ const a=1+rnd(9), R=pick([10,25,100]);
+      return W30('30v.work[s;'+[a,R].join(';')+']',[['each run is a hit with chance p = '+F30(a,10),'given'],['p̂ is the share of hits in '+R+' independent runs','given']],'What is the spread of p̂?',F30(a*(10-a),100*R),[F30(a*(10-a),100),F30(a,10*R),F30(1,4*R),F30(a*a,100*R),F30(a*(10-a),10*R)],'Run-count technique: p(1 − p)/R = ('+F30(a,10)+')('+F30(10-a,10)+')/'+R+'.'); }
+    const m=2+rnd(8), v=2+rnd(8), u=1+rnd(v-1);
+    return W30('30v.work[l;'+[m,u,v].join(';')+']',[['E X = '+m,'the whole population'],['Cov(X, π(X)) = '+F30(u,10)+', and E π(X) = '+F30(v,10),'π is the chance of being picked']],'What does the average of the picked values head to?',F30(m*v+u,v),[String(m),F30(u,v),F30(m*v-u,v),F30(m*10+u,10),F30(m*u+v,u)],'Picked-lean technique: E X + Cov(X, π(X))/E π(X) = '+m+' + '+F30(u,v)+'.'); }},
+  {id:'30v.line',step:'30v',mode:'proof',label:'drawn by a coin, or not',open:()=>measured('30v'),make(){
+    const a=1+rnd(9), b=1+rnd(9), c=1+rnd(9), R=pick([100,400,2500]), q=pick([4,5]);
+    const V=[
+      ['v1',[['a group has rate '+F30(a,10)+' in part 1 and '+F30(b,10)+' in part 2, with '+F30(c,10)+' of the group in part 1','given'],['its overall rate is '+F30(a*c+b*(10-c),100),'the mixed-rate technique']],2,0,'('+F30(a,10)+')('+F30(c,10)+') + ('+F30(b,10)+')('+F30(10-c,10)+').'],
+      ['v2',[['group A has the higher rate in every part','given'],['group A has the higher rate overall','every part']],2,1,'Mixed-rate technique: two groups spread differently over the parts can compare the other way overall.'],
+      ['v3',[['Cov(X, π(X)) > 0, and the sample is very large','given'],['the average of the picked values heads to E X','a large sample']],2,1,'Picked-lean technique: it heads to E X + Cov(X, π(X))/E π(X).'],
+      ['v4',[['the treated group is drawn by a fair coin','given'],['the two groups’ averages of any trait, measured or not, differ by 0 on average','the fair-split technique']],2,0,'A fair draw.'],
+      ['v5',[['each subject chose whether to be treated','given'],['the difference of the two group averages has average τ','the fair-split technique']],2,1,'The technique needs a fair draw of the treated group.'],
+      ['v6',[['p̂ is the share of hits in '+R+' independent runs','given'],['P(|p̂ − p| ≥ 1/'+q+') ≤ '+F30(q*q,4*R),'the run-count technique']],2,0,'1/(4Re²).'],
+      ['v7',[['p̂ is the share of hits in '+R+' independent runs','given'],['the spread width of p̂ is at most '+F30(1,4*R),'the run-count technique']],2,1,'That is the spread. The width is its root, at most '+F30(1,2*Math.sqrt(R))+'.']];
+    return line28('30v.line',V,[a,b,c,R,q]); }});
+
+/* ---------- 30w Inductive Axioms Revisited ---------- */
+const WW30=[
+  ['From rung 14 on, the swap axiom is not named. Is it no longer used?','no: every line that writes one name where an equal one stood stands on it',['yes','yes: the techniques replace it','no: it is named on every line'],'The axiom stands under every technique, so it tells nothing about which line you are on.'],
+  ['Are lines of the form x = x idle?','no: a = a is the measure of success and failure of every check',['yes','yes: they prove nothing','no: they are checked by measuring'],'Self-sameness is the ruler every check is laid against.'],
+  ['A check arrives at a = b for two numbers that differ. How does it end?','in failure: self-sameness and the order of the numbers refuse it',['in success','it is left open','in a new axiom'],'Every check ends at a = a or at its refusal.'],
+  ['What grows when a move iterates itself?','what it is applied to; the move does not grow',['the move','the move and what it is applied to','nothing'],'Each recurrence is the same move, unchanged, applied to new things.'],
+  ['What supports the eight anexact, yet rigorous principles?','their recurrence: each has been met again and again, with no exception so far',['a proof on rung 30','an axiom','nothing supports them'],'Evidence about a crowd of cases, with its count and its exception rate.'],
+  ['What is the accepted name of induction under the large case?','statistics',['science','deduction','abduction'],'Induction under the case with unpredictable variation.']];
+QP.push({id:'30w.axioms',step:'30w',label:'inductive axioms revisited',open:()=>measured('30w'),make(){ return writtenQ('30w.axioms',WW30); }},
+  {id:'30w.work',step:'30w',mode:'work',label:'how a check ends',open:()=>measured('30w'),make(){
+    const a=2+rnd(5), v=1+rnd(6), b=1+rnd(9), c=a*v+b, ok=rnd(2), w=ok?v:v+pick([-1,1,2]), L=a*w+b, D=ok?c+a:L;
+    return {index:'q:30w.work['+[a,b,c,w].join(';')+']', lines:[[cf22(a,'x')+' + '+b+' = '+c,'an equation'],['x = '+w,'the answer to check']], ask:'Put the answer back and work the left side. How does the check end?', right:ok?'at '+c+' = '+c+': success':'at '+L+' = '+c+': failure', opts:shuffle(['at '+c+' = '+c+': success','at '+D+' = '+c+': failure','at '+c+' = '+c+': failure','at '+D+' = '+c+': success']), lead:'', why:ok?a+' · '+w+' + '+b+' = '+c+'. The check arrives at a = a: success.':a+' · '+w+' + '+b+' = '+L+'. '+L+' = '+c+' is refused by self-sameness and the order of the numbers: failure.'}; }},
+  {id:'30w.line',step:'30w',mode:'proof',label:'swap, self-sameness, chain',open:()=>measured('30w'),make(){
+    const a=2+rnd(5), v=1+rnd(6), b=1+rnd(9), c=a*v+b, w=v+pick([-1,1,2]), L=a*w+b, k=2+rnd(8);
+    const V=[
+      ['w1',[['the check of x = '+v+' in '+cf22(a,'x')+' + '+b+' = '+c+' arrives at '+c+' = '+c,'given'],['the check succeeds','self-sameness: a = a']],2,0,'a = a is the measure of success.'],
+      ['w2',[['the check of x = '+w+' in '+cf22(a,'x')+' + '+b+' = '+c+' arrives at '+L+' = '+c,'given'],['the check succeeds','it arrives at an equation']],2,1,L+' and '+c+' differ. Self-sameness and the order of the numbers refuse it: failure.'],
+      ['w3',[['x = y and y = '+k,'given'],['x = '+k,'the chain technique']],2,0,'a = b and b = c give a = c.'],
+      ['w4',[['x = y and z = '+k,'given'],['x = '+k,'the chain technique']],2,1,'The chain needs a shared middle. Nothing joins y to z.'],
+      ['w5',[['x = '+k+', and x + '+b+' = '+(k+b),'given'],[k+' + '+b+' = '+(k+b),'the swap axiom']],2,0,'One name written where an equal one stood.'],
+      ['w6',[['a principle has been met many times, with no exception so far','given'],['the principle is proved','its recurrence']],2,1,'Recurrence is evidence about a crowd of cases. The claim is kept open.']];
+    return line28('30w.line',V,[a,v,b,w,k]); }});
+
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 
