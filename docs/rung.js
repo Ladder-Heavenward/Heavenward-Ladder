@@ -1933,7 +1933,7 @@ async function sit(scope,key,opts){ opts=opts||{}; close();
       oe.appendChild(b); });
     box.querySelector('.sk-next').onclick=()=>{ i++; if(i<qs.length) show(); else end(); }; };
   const end=()=>{ const pass=right>=need, k=certKey(scope,key);
-    if(pass&&k){ const old=read(k); const via=opts.via||'stick'; if(!old||(old.via==='measure'&&via==='stick')) put('cert:'+k,{by:'self',via,scope,t:Date.now(),score:right+'/'+qs.length}); if(via==='measure') unlock.apply(null,opts.into||[scope,key]);
+    if(pass&&k){ const old=read(k); const via=opts.via||'stick'; if(!old||(old.via==='measure'&&via==='stick')) put('cert:'+k,{by:'self',via,scope,t:Date.now(),score:right+'/'+qs.length,into:opts.into?opts.into.join(' '):null}); if(via==='measure') unlock.apply(null,opts.into||[scope,key]);
       if(opts.into){ const [isc,ik]=opts.into, rs=isc==='rung'?[ik]:((floorOf(ik)||{}).rungs||[]); rs.forEach(r=>put('cert:in:r'+String(r).padStart(2,'0'),{by:'self',via:'testin',t:Date.now(),from:scope+' '+key})); } }
     box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-q">'+right+' of '+qs.length+' right. '+(pass?(opts.via==='measure'?'It measures up: '+esc(opts.into?label(opts.into[0],opts.into[1]):label(scope,key))+' is unlocked. Its gold star waits until every floor below it is done.':'It measures up: a gold star.'):'Not yet: '+need+' were needed. Sit it again whenever you like; the questions are drawn fresh.')+'</p><p><button type="button" class="sk-again">'+(pass?'close':'sit it again')+'</button></p></div>'; wire();
     box.querySelector('.sk-again').onclick=()=>{ if(pass) close(); else sit(scope,key,opts); };
@@ -1977,10 +1977,11 @@ function testIn(li){ const s=S(); if(!s) return; const M=window.LADMAP||[];
   const order=[]; M.forEach(([fl,rungs])=>rungs.forEach(r=>order.push(r[0]))); const k=order.indexOf(n); if(k<1) return;
   s.sit('rung',order[k-1],{via:'measure',into:['rung',n],done:ok=>{ if(ok) setTimeout(()=>location.reload(),1600); }}); } /* a locked rung: the previous rung's test; a locked floor: the previous floor's */
 /* the toolbox list: every finished section, with its measure */
-function finished(){ const M=window.LADMAP||[], P=pages(), v=s=>!!(P[s]&&P[s].v), out=[];
+function finished(){ const M=window.LADMAP||[], P=pages(), FV=window.LadderFV, f=FV&&FV.furthest&&FV.furthest(), at=f&&f.ord!=null?Math.floor(f.ord/1000):-1e9,
+    pl=s=>{ const x=FV&&FV.placeOf?FV.placeOf(s):null; return x==null?1e9:x; }, done=s=>!!(P[s]&&P[s].v), v=s=>done(s)||at>=pl(s), past=s=>done(s)||at>pl(s), out=[];
   M.forEach(([fl,rungs])=>{ const F={fl,rows:[]}; let all=rungs.length>0;
     rungs.forEach(([r,core,annex])=>{ const steps=core.concat(annex).map(x=>x[0]).filter(v); steps.forEach(s=>F.rows.push(['step',s]));
-      const rd=core.every(x=>v(x[0])); if(rd) F.rows.push(['rung',r]); all=all&&rd; });
+      const rd=core.every(x=>past(x[0])); if(rd) F.rows.push(['rung',r]); all=all&&rd; });
     if(all) F.rows.push(['floor',fl]); if(F.rows.length) out.push(F); });
   return out; }
 function list(){ const s=S(); if(!s) return;
@@ -1988,10 +1989,10 @@ function list(){ const s=S(); if(!s) return;
     const F=finished(), lab=(sc,k)=>sc==='step'?((window.LADDER_CARDMAP||{})[k]||[k])[0]:sc+' '+k;
     const st=(sc,k)=>{ const c=cert(s.certKey(sc,k)); return c?(c.via==='measure'?'measured ahead':'★ measured '+(c.score||'')):'not yet measured'; };
     box.innerHTML='<div class="sk-card"><div class="sk-top"><span>the measuring stick</span><button type="button" class="sk-x" aria-label="close">×</button></div>'
-      +(F.length?'<p class="sk-n">The sections you have finished. Each measure draws fresh questions from its own pool; 80% passes and gives the gold star.</p>'
+      +(F.length?'<p class="sk-n">The sections you have reached. Each measure draws fresh questions from its own pool; 80% passes and gives the gold star.</p>'
         +F.map(f=>'<details class="sk-fl"'+(f===F[F.length-1]?' open':'')+'><summary>floor '+f.fl+' · '+f.rows.length+'</summary><ul class="sk-list">'
           +f.rows.map(([sc,k])=>'<li><button type="button" class="sk-sit" data-s="'+sc+'" data-k="'+k+'">'+lab(sc,k)+'</button> <span class="sk-st">'+st(sc,k)+'</span></li>').join('')+'</ul></details>').join('')
-        :'<p class="sk-q">Nothing is finished yet. A step is finished when every footing question on it is cleared; then its measuring stick is here. To test into a section you have not reached, use the small ruler beside it on the ladder.</p>')+'</div>';
+        :'<p class="sk-q">Nothing is reached yet. Each step’s measuring stick is here as soon as you reach it. To test into a section you have not reached, use the small ruler beside it on the ladder.</p>')+'</div>';
     box.querySelector('.sk-x').onclick=()=>{ box.remove(); document.body.classList.remove('stickopen'); };
     box.querySelectorAll('.sk-sit').forEach(b=>b.onclick=()=>{ const sc=b.dataset.s, k=sc==='step'?b.dataset.k:+b.dataset.k; box.remove(); s.sit(sc,k,{via:'stick'}); });
   }); }

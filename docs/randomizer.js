@@ -13,14 +13,21 @@ const get=(k,d)=>{ try{ return JSON.parse(LS.getItem(k)||'')||d; }catch(e){ retu
 const put=(k,v)=>{ try{ LS.setItem(k,JSON.stringify(v)); }catch(e){} };
 const seen=()=>get('cards:seen',{});
 const DESK=!!window.LADDER_DESK; /* 0.3.15: the desk opens every pool, so its words can be read and edited */
-const has=tag=>DESK||!!seen()[tag];
+const has=tag=>DESK||!!seen()[tag]||climbPast(tag,true);
+/* the climb record (rung.js LadderFV): true when the furthest footing is past the step's page (or on it, with reach) */
+function climbPast(tag,reach){ try{ const F=window.LadderFV; if(!F||!F.furthest||!F.placeOf) return false; const s=tagStem(tag), f=F.furthest(); if(!s||!f||f.ord==null) return false;
+  const pl=F.placeOf(s); if(pl==null) return false; const at=Math.floor(f.ord/1000); return reach?at>=pl:at>pl; }catch(e){ return false; } }
 /* 0.3.1 (Andrew 20:25): seed pools open by the measuring stick; link pools by regular progress (has).
    A step counts as measured when its own stick is passed, or its rung's, or its floor's. */
-const cert=k=>{ try{ return JSON.parse(LS.getItem('cert:'+k)||'null'); }catch(e){ return null; } };
+const cert=k=>{ try{ const c=JSON.parse(LS.getItem('cert:'+k)||'null'); return c&&!c.into?c:null; }catch(e){ return null; } }; /* a test-in certificate opens nothing it skipped */
+/* the undergird: the steps each kind opens with; they open quietly once a test-in has carried the learner past their rung */
+const UNDER=['0a','0b','1d','1f'];
+function jumpedPast(tag){ const m=String(tag).match(/^(\d+)/); if(!m) return false; const r=+m[1]; try{ for(let i=0;i<LS.length;i++){ const k=LS.key(i)||''; const j=k.match(/^cert:in:r(\d+)$/); if(j&&+j[1]>r) return true; } }catch(e){} return false; }
 function tagStem(t){ const M=window.LADDER_CARDMAP||{}; for(const s in M) if(M[s][0]===t) return s; return (typeof STEPS!=='undefined'&&STEPS[t])?STEPS[t][0]:null; }
-function measured(tag){ if(DESK) return true; const s=tagStem(tag); if(!s) return false; if(cert(s)) return true;
+function measured(tag){ if(DESK) return true; const s=tagStem(tag); if(!s) return false; if(cert(s)) return true; if(UNDER.includes(tag)&&jumpedPast(tag)) return true;
   const W=window.LadderStick&&LadderStick.where(s); if(!W) return false; if(cert('floor'+W.fl+'concl')) return true;
-  const c=cert(W.core[W.core.length-1]); return !!(c&&c.scope==='rung'&&W.core.includes(s)); }
+  const c=cert(W.core[W.core.length-1]); if(c&&c.scope==='rung'&&W.core.includes(s)) return true;
+  const i=W.core.indexOf(s); return i>=0&&W.core.slice(i+1).some(k=>!!cert(k)); }
 const rnd=n=>Math.floor(Math.random()*n);
 const pick=a=>a[rnd(a.length)];
 const shuffle=a=>{ for(let i=a.length-1;i>0;i--){ const j=rnd(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; };
