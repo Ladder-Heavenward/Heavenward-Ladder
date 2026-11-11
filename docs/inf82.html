@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How Fast Can Two Grids Be Multiplied?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style></style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="inf81.html">← ∞81 when should you buy instead of rent?</a><a href="inf83.html">next: ∞83 why does walking downhill find the bottom? →</a></p>
+  <div class="tags"><span class="tag now">∞82 · research front</span></div>
+  <h1>How Fast Can Two Grids Be Multiplied?</h1>
+  <p data-pid="9abce8">How fast can two grids be multiplied? The school rule for the product of two n by n grids uses n³ products of numbers. In 1969 it was found that two by two grids can be multiplied with seven products in place of eight, and that the saving compounds when the entries are themselves grids: the count falls from n³ to about n^2.807. No rule can use fewer than n² products, since the answer has n² entries that may be anything. Between 2 and 2.807 lies a number ω, the true exponent, and nobody knows it. The hunt for it is a hunt in arrow math: the product is one map out of a tensor product, a rule is that map written as a sum of simple terms, and the fewest terms is a rank for three spaces where rung 47 had two. The record stood at 2.371339 from 2024, and in August 2026 it fell to 2.371177.</p>
+  <p class="gesture" data-pid="f32055">An r-product rule: AB = Σₛ αₛ(A)·βₛ(B)·Cₛ, with readings αₛ, βₛ and fixed grids Cₛ. Two by two: r = 7. Stacking: r products for m by m give rᵏ for mᵏ by mᵏ, about n^(log_m r) steps; ω ≤ log₂ 7 ≈ 2.807. Floor: the Cₛ build all n by n grids, so r ≥ n²; ω ≥ 2. Three spaces: t = a⊗a⊗b + a⊗b⊗a + b⊗a⊗a is a limit of two-term members and needs three terms.</p>
+</header>
+
+<section class="class step" data-step="inf82.1">
+  <h2 class="sthead"><span class="stno">inf82.1</span>Seven Products for Two by Two</h2>
+  <p data-pid="7c8346">The product C = AB of two n by n grids has entries c<sub>ik</sub> = Σ<sub>j</sub> a<sub>ij</sub>b<sub>jk</sub>, as in <a href="r27d.html#5cf4bb">27d</a>. The school rule makes n³ products of numbers and nearly as many additions. For n = 2 that is 8 products. Adding two grids is cheap beside multiplying them, so the products are what a better rule must save.</p>
+  <p data-pid="d63501">Seven-products technique: <b>the four entries of the product of two 2 by 2 grids are sums and differences of seven products, each a sum of a’s times a sum of b’s, with the a’s on the left.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the seven-products technique">
+M_1 = (a_{11} + a_{22})(b_{11} + b_{22}) @@ a sum of a’s times a sum of b’s
+M_2 = (a_{21} + a_{22})\,b_{11},\quad M_3 = a_{11}(b_{12} - b_{22}) @@ the a’s on the left
+M_4 = a_{22}(b_{21} - b_{11}),\quad M_5 = (a_{11} + a_{12})\,b_{22} @@ the same
+M_6 = (a_{21} - a_{11})(b_{11} + b_{12}) @@ the same
+M_7 = (a_{12} - a_{22})(b_{21} + b_{22}) @@ seven products in all
+c_{11} = M_1 + M_4 - M_5 + M_7 @@ multiply out: twelve terms, ten cancel in pairs, a₁₁b₁₁ + a₁₂b₂₁ is left
+c_{12} = M_3 + M_5,\quad c_{21} = M_2 + M_4 @@ multiply out
+\htmlClass{new}{c_{22} = M_1 - M_2 + M_3 + M_6} \quad \blacksquare @@ multiply out; no line moved an a past a b
+  </pre>
+  <p data-pid="2f92d3">That is 7 products and 18 additions, against 8 products and 4 additions. For two grids of four numbers it is no gain at all. The last reason in the proof is where the gain lies.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · seven products · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">∞82.1.1</span><span class="ph understand">understand</span>What does the seven-products technique say, and how many terms cancel in the line for c₁₁? <br>Why is the rule no gain for two grids of four numbers?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf82.2">
+  <h2 class="sthead"><span class="stno">inf82.2</span>Stacking a Rule on Itself</h2>
+  <p data-pid="298233">Call it an r-product rule for m by m grids when there are r products, each one reading of A times one reading of B in that order, and every entry of AB is a fixed mix of the products. A reading of A is a fixed mix of its entries. Multiplied out with each a left of each b, the two sides of such a rule are the same sum of terms a<sub>ij</sub>b<sub>kl</sub>. So the rule holds as well when the entries are square grids of one size: grids add and spread as numbers do, and the one thing they do not do, swap in a product, is never asked of them.</p>
+  <p data-pid="b3aa8b">Stacking technique: <b>an r-product rule for m by m grids, with r &gt; m², gives an rᵏ-product rule for mᵏ by mᵏ grids, and multiplies n by n grids in about C·n<sup>log_m r</sup> steps, along the powers of m.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the stacking technique">
+\text{cut an } m^k \text{ by } m^k \text{ grid into } m^2 \text{ blocks of size } m^{k-1} @@ blocks multiply by the same rule, order kept (27d)
+\text{the rule: } r \text{ products of blocks, and a fixed number of sums of blocks} @@ it holds for entries that are grids
+P(k) = r\,P(k - 1),\ P(0) = 1 \Rightarrow P(k) = r^k @@ each product of blocks by the same rule again; induction (4c)
+T(n) = r\,T(n/m) + c\,n^2 @@ a sum of blocks costs at most n² additions
+\htmlClass{new}{T(n) \sim C\,n^{\log_m r}} \quad \blacksquare @@ the master technique (22l2): r/m² &gt; 1, the bottom wins
+  </pre>
+  <p data-pid="12c081">With m = 2 and r = 7 this is the n<sup>2.807</sup> that <a href="r39m.html">39m</a> took on trust, since log₂ 7 ≈ 2.8074. Call an exponent e reachable when some rule multiplies n by n grids in at most C·nᵉ steps, and write ω for the greatest lower bound of the reachable exponents. Every r-product rule for m by m grids gives ω ≤ log_m r. A rule with 21 products for three by three grids would beat seven for two by two, since log₃ 21 ≈ 2.771; one with 22 would not.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · stacking · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞82.2.1</span><span class="ph understand">understand</span>What does the stacking technique say, and why may the entries of a rule be grids? <br>Why would 21 products for three by three grids beat seven for two by two?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf82.3">
+  <h2 class="sthead"><span class="stno">inf82.3</span>The Floor Is n Squared</h2>
+  <p data-pid="ef269b">Write a rule out in full. Each product is αₛ(A)·βₛ(B), a reading of A times a reading of B, and it is handed to the entries of the answer in fixed shares, which make a fixed grid Cₛ. So an r-product rule says AB = Σₛ αₛ(A)·βₛ(B)·Cₛ, for s from 1 to r.</p>
+  <p data-pid="921088">Square-floor technique: <b>every r-product rule for n by n grids has r ≥ n²; so ω ≥ 2.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the square-floor technique">
+AB = \textstyle\sum_{s=1}^{r} \alpha_s(A)\,\beta_s(B)\,C_s @@ the rule, for all A and B
+B = I:\quad A = \textstyle\sum_s \alpha_s(A)\,\beta_s(I)\,C_s @@ AI = A
+C_1, \dots, C_r \text{ build every } n \text{ by } n \text{ grid} @@ A is a mix of them, with counts αₛ(A)βₛ(I)
+r \ge n^2 @@ the exchange technique (27b): n² free grids, one for each entry
+\htmlClass{new}{n^2 \le \text{products},\quad 2 \le \omega} \quad \blacksquare @@ a rule with fewer than n² steps cannot even write the answer
+  </pre>
+  <p data-pid="27877b">So the fewest products for two by two grids is between 4 and 7, and ω is between 2 and 2.807. Read it with the arrows of <a href="r47h.html">47h</a>. The map (A, B) ↦ AB is straight in each slot, so it is exactly one linear map μ out of G ⊗ G, where G is the space of n by n grids. A term αₛ(A)·βₛ(B)·Cₛ is the simplest such map there is: one reading of each slot, and one grid. A rule is μ written as a sum of r of them, and the order of the products, and how the sums are arranged, has gone out of sight. For two spaces the fewest terms was the rank of a grid, found by the methods of rung 27. Here three spaces are in play, two of readings and one of grids, and no such method is known.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the floor · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞82.3.1</span><span class="ph understand">understand</span>What does the square-floor technique say, and what does setting B = I show about the grids Cₛ? <br>In the arrow reading, what is a rule, and what makes its fewest terms harder to find than the rank of a grid?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf82.4">
+  <h2 class="sthead"><span class="stno">inf82.4</span>Fewer Terms in the Limit</h2>
+  <p data-pid="80cd42">With three spaces something happens that two never allow. Let a and b be free vectors of a space V, and build V ⊗ V ⊗ V as (V ⊗ V) ⊗ V, by 47h1 used twice. Its simplest members are the single terms u ⊗ v ⊗ w. Take t = a ⊗ a ⊗ b + a ⊗ b ⊗ a + b ⊗ a ⊗ a.</p>
+  <p data-pid="f2a761">Limit-of-two technique: <b>t is the limit, as ε heads to 0, of members with two terms; and t itself cannot be written with two.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the limit-of-two technique">
+(a + \varepsilon b) \otimes (a + \varepsilon b) \otimes (a + \varepsilon b) = a \otimes a \otimes a + \varepsilon\,t + \varepsilon^2 u + \varepsilon^3\, b \otimes b \otimes b @@ straight in each slot; u holds the three terms with two b’s
+\tfrac{1}{\varepsilon}\big[(a + \varepsilon b)^{\otimes 3} - a^{\otimes 3}\big] = t + \varepsilon\,u + \varepsilon^2\, b \otimes b \otimes b \to t @@ two terms on the left, for every ε ≠ 0
+t = a \otimes S_a + b \otimes S_b,\quad S_a = a \otimes b + b \otimes a,\ \ S_b = a \otimes a @@ collect the first slot
+t = u_1 \otimes x_1 + u_2 \otimes x_2 \Rightarrow S_a, S_b \text{ are mixes of } x_1, x_2 @@ suppose two terms, each xᵢ a single v ⊗ w; read the count of a, then of b, in the first slot
+S_a, S_b \text{ free} \Rightarrow x_1, x_2 \text{ are free mixes of } S_a, S_b @@ two free members of what two members build (27b)
+p\,S_a + q\,S_b \text{ has grid } \begin{pmatrix} q & p \\ p & 0 \end{pmatrix},\ \det = -p^2 @@ counts on a ⊗ a, a ⊗ b, b ⊗ a, b ⊗ b
+\text{rank } 1 \text{ only when } p = 0:\ \text{the multiples of } S_b @@ a single v ⊗ w has rank 1 (47h2), so its determinant is 0 (27e)
+\htmlClass{new}{x_1, x_2 \text{ both multiples of } S_b:\ \text{not free}} \quad \blacksquare @@ so no two terms give t
+  </pre>
+  <p data-pid="b8929c">So “at most two terms” is not kept by limits when there are three slots. In 1979 this was put to use. A rule for the grid product may be allowed to hold only in the limit, with ε left in it, and it still gives a bound on ω when it is stacked. The records since count terms in this looser way.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · in the limit · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞82.4.1</span><span class="ph understand">understand</span>What does the limit-of-two technique say, and which two terms give t in the limit? <br>In the second half of the proof, why can x₁ and x₂ not both be single terms?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf82.5">
+  <h2 class="sthead"><span class="stno">inf82.5</span>The Exponent Since 1969</h2>
+  <p data-pid="236455">Each entry is a bound proved on ω, with its year.</p>
+  <ul>
+    <li data-pid="2c9718">1969: 2.8074, the seven products.</li>
+    <li data-pid="07b919">1978 to 1981: 2.796, then 2.780 with a rule that holds in the limit, then 2.522.</li>
+    <li data-pid="eb09ed">1990: 2.3755. One three-way member, far from the grid product itself, is raised to high powers by stacking, and grid products are found inside the powers.</li>
+    <li data-pid="75bb64">2010 to 2024: 2.3737, 2.3729, 2.3728639, 2.3728596, 2.371866, 2.371552, 2.371339, each a finer study of the powers of that same member.</li>
+    <li data-pid="0c7e55">August 2026: 2.371177. The search at the heart of the method was set up afresh and run with tools from machine learning, and the numbers found were rounded to fractions and checked again exactly.</li>
+    <li data-pid="0b2539">Small sizes are open too. Three by three grids have had a rule of 23 products since 1976, and at least 19 are needed. For four by four, stacking seven on itself gives 49; a machine search of 2022 found 47 where 1 + 1 = 0, and one of 2025 found 48 for complex numbers.</li>
+  </ul>
+  <p data-pid="abcf24">It has also been proved that the member used since 1990 cannot bring the bound down to 2, whatever power is taken. If ω is 2, as many who work on it expect, the proof needs a new starting point. And none of the rules after 1969 is run on a machine: their gain shows only for grids far larger than any that can be stored.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞82.5.1</span><span class="ph understand">understand</span>What changed in the method in 1979, and what in 1990? <br>What is known about the fewest products for three by three grids?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf82.6">
+  <h2 class="sthead"><span class="stno">inf82.6</span>Moves to Check</h2>
+  <pre class="lines" data-k="check" data-label="this page: moves to check">
+\text{write } M_2 = b_{11}(a_{21} + a_{22}) \text{ and stack the rule}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; the entries become grids, and grids do not swap in a product: the a’s stay on the left
+\text{the 47 products found where } 1 + 1 = 0 \text{ give } \omega \le \log_4 47\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the rule holds for that arithmetic only; for the real numbers no bound follows from it
+\text{a limit of two-term members has at most two terms}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; true with two slots, false with three: t is such a limit and needs three
+\text{multiply two 2 by 2 grids of numbers by the seven products}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; legal: 7 products and 18 additions against 8 and 4; the gain starts only when the entries are large grids
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞82.6.1</span><span class="ph understand">understand</span>Why must the a’s stay on the left when the rule is stacked? <br>Why does the 47-product rule not bound ω for the real numbers?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="openq themeend">
+  <div class="eyebrow">Open questions · nobody has the answer yet</div>
+  <h2>Open questions</h2>
+  <p class="chnote">These are open: the field is still asking them. There is no key; a good attempt is a reason, a guess, or a better question.</p>
+  <div class="oq"><span class="oqid">∞82.oq.1</span>Is ω = 2? The floor is 2 and the best bound of August 2026 is 2.371177. No rule is known that reaches 2, and no proof that none does; the member studied since 1990 is proved unable to settle it.</div>
+  <div class="oq"><span class="oqid">∞82.oq.2</span>What is the fewest number of products for three by three grids? It is at least 19 and at most 23, and the 23 has stood since 1976.</div>
+</section>
+<section class="history themeend">
+  <div class="eyebrow">A short history · told from more than one side</div>
+  <h2>How we got here</h2>
+  <p data-pid="85b8ad">The seven products of 1969 showed that the n³ of the school rule is not the cost of the product, and opened the question of ω.</p>
+  <p data-pid="a8dd74">From 1978 the bound fell by new ideas every few years: rules that hold in the limit, and in 1990 the method of powers that every record since has refined.</p>
+  <p data-pid="008a07">From 2010 the gains have been in the third decimal place and beyond. In 2022 and 2025 machine searches found new rules for small sizes, and in 2026 a machine search took part in a record for ω itself.</p>
+</section>
+
+<nav class="nextrung"><a href="inf81.html">← ∞81 · when should you buy instead of rent?</a><a href="inf83.html">∞83 · why does walking downhill find the bottom? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+<h3>The accepted names</h3><p>A grid is a <i>matrix</i>, and ω is the <i>exponent of matrix multiplication</i>. An r-product rule is a <i>bilinear algorithm</i>, and the fewest products is the <i>rank</i> of the <i>matrix multiplication tensor</i> ⟨n, n, n⟩, a member of a <i>tensor product</i> of three spaces. The seven products are <i>Strassen’s algorithm</i>; stacking is the <i>recursive</i>, or <i>tensor power</i>, <i>construction</i>. The fewest terms in the limit is the <i>border rank</i>, and a rule that holds in the limit is an <i>approximate bilinear algorithm</i>; the member t is the <i>W tensor</i>, of rank 3 and border rank 2. The member used since 1990 is the <i>Coppersmith–Winograd tensor</i> and the method of powers is the <i>laser method</i>. Rules too large ever to run are called <i>galactic algorithms</i>. Arithmetic where 1 + 1 = 0 is the <i>field of two elements</i>.</p><h3>Who said it first</h3><p>Volker Strassen, “Gaussian elimination is not optimal” (1969), and the laser method (1986). Victor Pan (1978). Dario Bini, Milvio Capovani, Grazia Lotti and Francesco Romani, on approximate rules (1979). Arnold Schönhage (1981). Don Coppersmith and Shmuel Winograd (1990). Andrew Stothers (2010), Virginia Vassilevska Williams (2012), François Le Gall (2014), Josh Alman and Virginia Vassilevska Williams (2020), Ran Duan, Hongxun Wu and Renfei Zhou (2022), and the papers of 2024 by Vassilevska Williams, Yinzhan Xu, Zixuan Xu and Zhou, and by Alman, Duan, Vassilevska Williams, Xu, Xu and Zhou. The record of August 2026: Emilien Dupont, Marvin Eisenberger, Borislav Kozlovskii, Abbas Mehrabian, Francisco Ruiz, Abigail See, Renfei Zhou, Josh Alman, Virginia Vassilevska Williams and Matej Balog. Julian Laderman gave the 23 products in 1976. The search of 2022 is AlphaTensor and that of 2025 AlphaEvolve, both of Google DeepMind. Andris Ambainis, Yuval Filmus and François Le Gall proved limits of the method of powers.</p><h3>Sources</h3><p>The table of bounds by year: the encyclopedia article on the complexity of matrix multiplication, and, for the bounds from 1969 to 2022, the introduction of a 2023 paper on rectangular products (arXiv 2307.06535). The record of August 2026: the paper itself (arXiv 2608.16884), which gives both 2.371177 and the 2.371339 it replaced, and a news report of 18 August 2026 that describes the exact check. That the member used since 1990 cannot give ω = 2: the encyclopedia article and the same 2023 introduction. The 23 products of 1976: the encyclopedia article and a 2025 paper on a rule with 60 additions (arXiv 2508.03857); the floor of 19 is from the encyclopedia article alone, not yet revisited. The 47 products where 1 + 1 = 0: a magazine report of 23 November 2022 and the note of a 2025 summary; the 48 for complex numbers: that summary and a programmers’ forum thread of 14 May 2025. That seven is the fewest for two by two (1971) is not used on the page and not yet revisited. That the rule of 1979 was the first to hold only in the limit, that the records since count terms so, that many expect ω = 2, and that no rule after 1969 is run on a machine rest on the encyclopedia article alone, not yet revisited. The seven products, the count of 18 additions, and the member t are checked by machine in the number checks for this page.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+
+stepper('#sl1',[
+  {k:'ember',kl:'school',t:R`c_{ik} = \textstyle\sum_j a_{ij} b_{jk}`,n:`Eight products.`},
+  {k:'ember',kl:'one of seven',t:R`M_1 = (a_{11} + a_{22})(b_{11} + b_{22})`,n:`A sum times a sum.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{c_{22} = M_1 - M_2 + M_3 + M_6}`,n:`Seven serve.`}
+],{title:'The slides · seven products · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'blocks',t:R`m^k = m \cdot m^{k-1}`,n:`Entries are grids.`},
+  {k:'ember',kl:'count',t:R`P(k) = r\,P(k-1) = r^k`,n:`The rule, again.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{T(n) \sim C\,n^{\log_m r}}`,n:`The bottom wins.`}
+],{title:'The slides · stacking · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'rule',t:R`AB = \textstyle\sum_s \alpha_s(A)\,\beta_s(B)\,C_s`,n:`Written out.`},
+  {k:'ember',kl:'set',t:R`B = I:\ A = \textstyle\sum_s \alpha_s(A)\beta_s(I)\,C_s`,n:`The Cₛ build all.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{r \ge n^2,\ \ \omega \ge 2}`,n:`Dimension n².`}
+],{title:'The slides · the floor · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'expand',t:R`(a + \varepsilon b)^{\otimes 3} = a^{\otimes 3} + \varepsilon\,t + \cdots`,n:`Straight in each slot.`},
+  {k:'ember',kl:'divide',t:R`\tfrac1\varepsilon\big[(a + \varepsilon b)^{\otimes 3} - a^{\otimes 3}\big] \to t`,n:`Two terms.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{t \text{ needs three}}`,n:`A limit can need more.`}
+],{title:'The slides · in the limit · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

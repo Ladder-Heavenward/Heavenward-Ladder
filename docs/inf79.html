@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Why Can’t Sorting Beat n log n?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style></style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="inf78.html">← ∞78 how wide should a claim be when many are made?</a><a href="inf80.html">next: ∞80 how can you count distinct visitors with almost no memory? →</a></p>
+  <div class="tags"><span class="tag now">∞79 · research front</span></div>
+  <h1>Why Can’t Sorting Beat n log n?</h1>
+  <p data-pid="a846d2">Why can’t sorting beat n log n? Rung 22 proved the floor: a sort that learns only by comparing needs at least log₂ n! comparisons on some list. This step reads that proof as one arrow, from the n! orders into the rows of answers, and an arrow that is one-to-one can only lead to a set at least as large. Counting is a map where arrows lead between ascending sizes. Then it asks what the proof leaves open. The floor in whole numbers is met for five items, by a sort of seven comparisons. For twelve items it is not met: the floor says 29 and the truth is 30, found by a machine search in the 1960s. The least number is now known up to 22 items, the last three values settled in 2023, and it is open from 23 on. A sort that learns in another way is outside the floor’s plan, and how fast whole numbers can be sorted is open too.</p>
+  <p class="gesture" data-pid="756885">A comparing sort of at most k questions gives a one-to-one arrow, orders → rows of k answers, so n! ≤ 2ᵏ. S(n) is the least k that works: S(n) ≥ ⌈log₂ n!⌉. S(5) = 7 = ⌈log₂ 120⌉. S(12) = 30 > 29. With j questions left, each answer must leave at most 2ʲ orders. Looks with b outcomes: n! ≤ bᵏ.</p>
+</header>
+
+<section class="class step" data-step="inf79.1">
+  <h2 class="sthead"><span class="stno">inf79.1</span>The Floor, as One Arrow</h2>
+  <p data-pid="aae3cc"><a href="r22l.html#57779c">22l</a>’s answer-count technique says that a sort which learns only by comparing makes at least log₂ n! comparisons on some list of n different items. Read its proof as an arrow. A comparing sort asks a question, “is this item less than that one?”, and chooses its next question from the answers so far. Suppose it never asks more than k. Run it on an order σ of the n items and write down its answers, yes or no, filled out to a row of length k. Call the row a(σ).</p>
+  <p data-pid="1c2096">Orders-into-rows technique: <b>the arrow a, from the n! orders to the 2ᵏ rows of k answers, is one-to-one; so n! ≤ 2ᵏ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the orders-into-rows technique">
+a(\sigma) = a(\tau) \Rightarrow \text{the sort asks the same questions on } \sigma \text{ and on } \tau @@ each question is chosen from the answers so far
+\text{same questions, same answers} \Rightarrow \text{the same rearrangement } \rho \text{ is applied to both} @@ the sort moves items only by what it has learned
+\rho(\sigma) = \text{sorted} = \rho(\tau) \Rightarrow \sigma = \tau @@ a rearrangement is undoable (19a): apply ρ⁻¹ to the sorted list
+a \text{ is one-to-one} \Rightarrow \htmlClass{new}{n! \le 2^k} \quad \blacksquare @@ n! orders in 2ᵏ boxes, no box with two (42i1)
+  </pre>
+  <p data-pid="463651">The proof never looks inside the sort. It names one arrow and asks where it can lead: a one-to-one arrow leads only to a set at least as large. The arrangement of the questions and their sequence are hidden in a; the count is all that shows.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · one arrow · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">∞79.1.1</span><span class="ph understand">understand</span>What does the orders-into-rows technique say, and what are the two ends of the arrow a? <br>Why must two orders with the same row of answers be the same order?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf79.2">
+  <h2 class="sthead"><span class="stno">inf79.2</span>The Floor in Whole Numbers</h2>
+  <p data-pid="6c1505">Let S(n) be the least k for which some comparing sort of n different items never asks more than k questions. A number of questions is whole, so the technique above gives S(n) ≥ ⌈log₂ n!⌉, the least whole k with 2ᵏ ≥ n!. For n = 2, 3, 4, 5 the orders number 2, 6, 24, 120 and the floors are 1, 3, 5, 7. A floor says what cannot be done. Whether it can be met is another question, answered only by showing a sort.</p>
+  <p data-pid="e7bc29">Five-in-seven technique: <b>five different items can be sorted with 7 comparisons; so S(5) = 7.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the five-in-seven technique">
+\text{compare two pairs; name them so that } a < b,\ c < d @@ 2 comparisons; e waits
+\text{compare } b \text{ with } d\text{; name them so that } b < d @@ 3 so far: a &lt; b &lt; d and c &lt; d
+\text{place } e \text{ in the chain } a < b < d\text{: against } b\text{, then against } a \text{ or } d @@ 5 so far: a chain of four
+c < d\text{: place } c \text{ among the chain’s items below } d @@ at most three of them
+\text{at most three items: against the middle one, then one more} @@ 7 in all
+2^6 = 64 < 120 \le 128 = 2^7 \Rightarrow \htmlClass{new}{S(5) = 7} \quad \blacksquare @@ the floor is 7, and this sort meets it
+  </pre>
+  <p data-pid="4ffd1e">Merge sort on five items can take 8: one for a pair, three for a triple, four to merge. The sort above pairs first and inserts after, each insertion into a chain of three, the longest that two questions can search. No question is spent where its two answers are far from evenly likely.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · five in seven · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞79.2.1</span><span class="ph understand">understand</span>What does the five-in-seven technique say, and where does the floor of 7 come from? <br>Why is c placed last, and among at most three items?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf79.3">
+  <h2 class="sthead"><span class="stno">inf79.3</span>When the Floor Is out of Reach</h2>
+  <p data-pid="0f2ad3">To meet the floor a sort has no question to spare. Suppose it may ask k questions, and after one of them j are left.</p>
+  <p data-pid="237da3">Tight-split technique: <b>with j questions left, the orders still possible on each answer number at most 2ʲ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the tight-split technique">
+Y = \text{the orders still possible after the answer yes} @@ and N after no
+\text{the rest of the sort tells the orders of } Y \text{ apart in at most } j \text{ questions} @@ it must sort every one of them
+a|_Y : Y \to \{\text{yes}, \text{no}\}^j \text{ is one-to-one} @@ the orders-into-rows technique, on the rest
+\htmlClass{new}{|Y| \le 2^j \text{ and } |N| \le 2^j} \quad \blacksquare @@ the same for N
+  </pre>
+  <p data-pid="7e27a0">Four items have 24 orders and a floor of 5. After a &lt; b there are 12 left and 4 questions. Ask c against d and each answer leaves 6. Ask b against c and the answer c &lt; b leaves 8, which is 2³ exactly: legal, with nothing to spare from then on.</p>
+  <p data-pid="ac3cb5">For twelve items, 12! = 479,001,600 lies between 2²⁸ and 2²⁹, so the floor is 29. Every way of asking that keeps to the tight split at every question was tried by machine in 1964, and each one ran out: S(12) = 30. The one-to-one arrow into 2²⁹ rows exists as a map of sets. No sort is that arrow.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · tight split · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞79.3.1</span><span class="ph understand">understand</span>What does the tight-split technique say, and which technique does its proof use on the rest of the sort? <br>Why does the floor of 29 for twelve items not show that 29 comparisons are enough?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf79.4">
+  <h2 class="sthead"><span class="stno">inf79.4</span>The Search by Machine</h2>
+  <p data-pid="bcec34">The sort of ∞79.2, pairing first and then inserting into chains whose lengths are one less than a power of 2, was given for any n in 1959. For n up to 11 it meets the floor. Past that, each value of S(n) has taken a machine search to settle, and each time so far the 1959 sort has turned out to be the best there is.</p>
+  <ul>
+    <li data-pid="7c564a">S(12) = 30, one above the floor (searched 1964, published 1965).</li>
+    <li data-pid="953af9">S(13) = 34 (1994, and again by another search in 2002); S(14) = 38 and S(22) = 71 (2004); S(15) = 42 and S(19) = 58 (2007).</li>
+    <li data-pid="c9c87f">S(16) = 46, S(17) = 50 and S(18) = 54 (preprint 2022, dated 2023 in its own table). The floor for 16 is 45, and 45 had been conjectured.</li>
+    <li data-pid="5b1e24">From 23 on S(n) is open: S(23) is 75 or 76. The 1959 sort is known not to be best at n = 47 (1981).</li>
+  </ul>
+  <p data-pid="214e49">On 7 June 2023 a learning system was reported to have found shorter machine routines for sorting a handful of items, by playing a game whose moves add one instruction at a time. The routines went into a standard library. They save instructions, not comparisons: the cost counted is another one, and the floor of this page does not speak of it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞79.4.1</span><span class="ph understand">understand</span>For which numbers of items is the least number of comparisons known, and where is it open? <br>Why does a routine with fewer instructions not contradict the floor?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf79.5">
+  <h2 class="sthead"><span class="stno">inf79.5</span>Outside the Plan</h2>
+  <p data-pid="ce9bf4">The floor is a statement about a plan: learn only by comparing. <a href="r39l.html#baae9c">39l</a>’s counting sort is outside it. It looks at an item and reads which of m values it has, an answer with m outcomes, not 2. The arrow of the first footing still exists; it leads somewhere larger.</p>
+  <p data-pid="0016d1">Many-outcomes technique: <b>a sort that learns by k looks, each with at most b outcomes, has n! ≤ bᵏ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the many-outcomes technique">
+a(\sigma) = \text{the row of the } k \text{ outcomes} \in \{1, \dots, b\}^k @@ filled out to length k as before
+a \text{ is one-to-one} @@ the same three lines as the orders-into-rows technique
+\htmlClass{new}{n! \le b^k} \quad \blacksquare @@ n! orders in bᵏ boxes
+  </pre>
+  <p data-pid="764385">With b = 2 this is the floor. With n looks of m ≥ n outcomes each, mⁿ ≥ nⁿ ≥ n!, so nothing forbids sorting in n looks, and counting sort does it. For whole numbers that each fit one machine word, sorts are known that take about n · log log n steps (2004), and about n · √(log log n) on average with random choices (2002). Whether n steps are enough is open.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · outside the plan · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞79.5.1</span><span class="ph understand">understand</span>What does the many-outcomes technique say, and what is b for a comparison? <br>Why is counting sort outside the plan the floor speaks of?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf79.6">
+  <h2 class="sthead"><span class="stno">inf79.6</span>Moves to Check</h2>
+  <pre class="lines" data-k="check" data-label="this page: moves to check">
+\text{five items sorted in } 6 \text{ comparisons}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; orders → rows: 120 orders do not go one-to-one into 2⁶ = 64 rows
+\lceil \log_2 12! \rceil = 29 \text{, so twelve items sort in } 29\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the floor is an arrow of sets, not a sort: every tight split runs out, S(12) = 30
+\text{counting sort takes about } 2n + m \text{ turns, so the floor is false}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the floor’s plan is comparing only; a look with m outcomes is outside it
+\text{after } a < b \text{ among four items, compare } b \text{ with } c\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; legal: the answer c &lt; b leaves 8 = 2³ orders, so no later question can be spared
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞79.6.1</span><span class="ph understand">understand</span>Why can five items not be sorted in 6 comparisons? <br>Why is comparing b with c, after a &lt; b, legal but costly?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="openq themeend">
+  <div class="eyebrow">Open questions · nobody has the answer yet</div>
+  <h2>Open questions</h2>
+  <p class="chnote">These are open: the field is still asking them. There is no key; a good attempt is a reason, a guess, or a better question.</p>
+  <div class="oq"><span class="oqid">∞79.oq.1</span>What is S(23), 75 or 76? And is there a way to find S(n) that does not try every tight split by machine? The floor is one arrow; what second arrow, if any, explains the extra comparison from 12 to 19 items and at 22?</div>
+  <div class="oq"><span class="oqid">∞79.oq.2</span>Can n whole numbers, each fitting one machine word, be sorted in about n steps? The best known sorts are within a factor of log log n, and no floor above n has been proved.</div>
+</section>
+<section class="history themeend">
+  <div class="eyebrow">A short history · told from more than one side</div>
+  <h2>How we got here</h2>
+  <p data-pid="a62406">The sort that pairs and then inserts was published in 1959. For up to 11 items it meets the floor of counted orders.</p>
+  <p data-pid="130312">In 1964 a machine search showed that twelve items need 30 comparisons, one above the floor. The 1959 sort uses 30, so it stayed best there. In 1981 it was shown not to be best for 47 items.</p>
+  <p data-pid="0af09b">Searches in 1994, 2002, 2004 and 2007 settled 13, 14, 15, 19 and 22 items. A preprint of 2022 settled 16, 17 and 18, and put the first open case at 23.</p>
+  <p data-pid="d034ec">For whole numbers in machine words the comparison floor was first passed in the 1990s; the sorts of 2002 and 2004 are the best known, and the question of n steps stays open.</p>
+</section>
+
+<nav class="nextrung"><a href="inf78.html">← ∞78 · how wide should a claim be when many are made?</a><a href="inf80.html">∞80 · how can you count distinct visitors with almost no memory? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+<h3>The accepted names</h3><p>The floor is the <i>information-theoretic lower bound</i> for <i>comparison sorting</i>; the questions and answers drawn as a branching figure are a <i>decision tree</i>, and a row of answers is a path to a <i>leaf</i>. S(n) is the <i>minimum number of comparisons</i>, the subject of <i>minimum-comparison sorting</i>. The sort that pairs and inserts is <i>merge insertion</i>, or the <i>Ford-Johnson algorithm</i>. The crowded box is the <i>pigeonhole principle</i>. Sorting whole numbers that fit a word is <i>integer sorting</i> on the <i>word RAM</i>. The learning system of 2023 is <i>AlphaDev</i>, and the library is LLVM’s libc++.</p><h3>Who said it first</h3><p>Lester Ford Jr. and Selmer Johnson, “A tournament problem” (1959). Mark Wells, S(12) = 30 (computed 1964, published 1965). Takumi Kasai, Shusaku Sawato and Shigeki Iwata (1994) and Marcin Peczarski (2002), S(13) = 34; Peczarski (2004), S(14) and S(22); Weiyi Cheng, Xiaoguang Liu, Gang Wang and Jing Liu (2007), S(15) and S(19). Florian Stober and Armin Weiß, “Lower Bounds for Sorting 16, 17, and 18 Elements” (2022). Jürgen Schulte Mönting (1981), n = 47. Yijie Han (2004), n log log n; Yijie Han and Mikkel Thorup (2002), n √(log log n) expected. Daniel Mankowitz and others, “Faster sorting algorithms discovered using deep reinforcement learning” (2023).</p><h3>Sources</h3><p>The values of S(n) and their dates: Stober and Weiß, arXiv 2206.05597, and the On-Line Encyclopedia of Integer Sequences, A036604. Whole-number sorting and the open question: the MIT course notes 6.851 (2010, lecture 12) and sortingsearching.com, “How fast can we sort?” (2015). The 2023 routines: the laboratory’s own report of 7 June 2023 and The Decoder of the same day. That the routines are for three to five items stands on the first of these only, not yet revisited.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+
+stepper('#sl1',[
+  {k:'ember',kl:'row',t:R`a : \text{orders} \to \{\text{yes}, \text{no}\}^k`,n:`The answers, written down.`},
+  {k:'ember',kl:'undo',t:R`\rho(\sigma) = \rho(\tau) \Rightarrow \sigma = \tau`,n:`A rearrangement is undoable.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{n! \le 2^k}`,n:`One-to-one, so no smaller.`}
+],{title:'The slides · one arrow · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'pairs',t:R`a < b < d,\quad c < d`,n:`Three comparisons.`},
+  {k:'ember',kl:'insert',t:R`e \text{ into three, then } c \text{ into three}`,n:`Two each.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{S(5) = 7 = \lceil \log_2 120 \rceil}`,n:`The floor is met.`}
+],{title:'The slides · five in seven · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'left',t:R`j \text{ questions left}`,n:`After this one.`},
+  {k:'ember',kl:'rest',t:R`a|_Y : Y \to \{\text{yes}, \text{no}\}^j`,n:`One-to-one again.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|Y|, |N| \le 2^j}`,n:`No answer may leave too many.`}
+],{title:'The slides · tight split · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'look',t:R`b \text{ outcomes per look}`,n:`Not only yes or no.`},
+  {k:'ember',kl:'arrow',t:R`a : \text{orders} \to \{1, \dots, b\}^k`,n:`Still one-to-one.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{n! \le b^k}`,n:`A lower floor.`}
+],{title:'The slides · outside the plan · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

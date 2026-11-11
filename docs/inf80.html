@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How Can You Count Distinct Visitors With Almost No Memory?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style></style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="inf79.html">← ∞79 why can’t sorting beat n log n?</a><a href="inf81.html">next: ∞81 when should you buy instead of rent? →</a></p>
+  <div class="tags"><span class="tag now">∞80 · research front</span></div>
+  <h1>How Can You Count Distinct Visitors With Almost No Memory?</h1>
+  <p data-pid="de8603">How can you count distinct visitors with almost no memory? A site sees a billion visits in a day and wants to know how many different visitors made them. Keeping every name to check for repeats takes room for every name. A sketch keeps far less: give each name a stamp, a number between 0 and 1 fixed by the name, and remember only the smallest stamp seen. Repeats cannot change it. The smallest of n scattered stamps sits near 1/(n + 1), so it tells roughly how many names there were, and the average of many such smallest stamps tells it well. The part that makes sketches useful at scale is an arrow fact: the sketch of a joined set is the merge of the sketches. Since 2007 the stamps have been cut to a few bits each, and in 2010 the least room any such count can use was reached.</p>
+  <p class="gesture" data-pid="b958c4">Stamp h(name) in [0, 1); keep m = the least stamp. For n different names with scattered stamps, P(m > t) = (1 − t)ⁿ and E m = 1/(n + 1). k stamps apart, averaged: width under 1/√k of the mean. s(A ∪ B) = min(s(A), s(B)): s keeps the operation. No function gives s(A ∩ B).</p>
+</header>
+
+<section class="class step" data-step="inf80.1">
+  <h2 class="sthead"><span class="stno">inf80.1</span>A Stamp for Every Name</h2>
+  <p data-pid="c6e9d3">A stream is a list of names, one for each visit, with repeats. The question is n, the number of different names. Take a fingerprint, as in <a href="r22crypt.html#47d718">22crypt</a>, and read its output as a number h(x) in [0, 1): the stamp of the name x. A name gets the same stamp each time it comes. For the count below, the stamps of different names are treated as n separate draws, each equally likely to land anywhere in [0, 1); a good fingerprint is built to behave so. The sketch is one number, m, the least stamp seen so far.</p>
+  <p data-pid="733df1">Repeat-blind technique: <b>the least stamp of a stream is the least stamp of its set of names; repeats and the order of arrival do not change it.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the repeat-blind technique">
+m = \min\,(h(x_1), h(x_2), \dots, h(x_N)) @@ the sketch after N visits
+x_i = x_j \Rightarrow h(x_i) = h(x_j) @@ h is a function: one name, one stamp
+\min \text{ of a list} = \min \text{ of the set of its members} @@ a least member is least however often, and wherever, it is listed
+\htmlClass{new}{m = \min\,\{h(x) : x \in A\}} \quad \blacksquare @@ A the set of different names
+  </pre>
+  <p data-pid="a245b8">A plain counter cannot do this: it adds 1 for a repeat. The sketch forgets exactly what the question does not ask about.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a stamp · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">∞80.1.1</span><span class="ph understand">understand</span>What does the repeat-blind technique say, and which property of h does it lean on? <br>Why can a plain counter not count different names?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf80.2">
+  <h2 class="sthead"><span class="stno">inf80.2</span>The Smallest of n Draws</h2>
+  <p data-pid="23462c">What does m say about n? Many names crowd [0, 1), and the least stamp is pushed towards 0.</p>
+  <p data-pid="ae5fa9">Smallest-draw technique: <b>for n separate draws from [0, 1), each equally likely anywhere, the least one, m, has P(m &gt; t) = (1 − t)ⁿ and average 1/(n + 1).</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the smallest-draw technique">
+P(m > t) = P(\text{every draw} > t) = (1 - t)^n @@ independent chances multiply (30l2); each is 1 − t
+\text{density of } m:\ n(1 - t)^{n-1} \text{ on } [0, 1] @@ minus the slope of (1 − t)ⁿ (30m)
+E\,m = \int_0^1 t \cdot n(1 - t)^{n-1}\,dt = n\int_0^1 (1 - u)\,u^{n-1}\,du @@ substitute u = 1 − t
+n\left(\tfrac{1}{n} - \tfrac{1}{n+1}\right) = \htmlClass{new}{\tfrac{1}{n+1}} \quad \blacksquare @@ the power rule, run backwards
+  </pre>
+  <p data-pid="46c530">So 1/m − 1 is a guess at n. It is a poor one alone. The same integral with (1 − u)² gives E m² = 2/((n + 1)(n + 2)), so the spread of m is n/((n + 1)²(n + 2)), a little under 1/(n + 1)²: the width of m is nearly as large as its average.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · smallest draw · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞80.2.1</span><span class="ph understand">understand</span>What does the smallest-draw technique say, and why is P(m &gt; t) a product? <br>Why is one least stamp a poor guide to n?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf80.3">
+  <h2 class="sthead"><span class="stno">inf80.3</span>Many Stamps, Averaged</h2>
+  <p data-pid="303f86">Use k fingerprints h₁, …, h_k, built apart, and keep the least stamp under each: m₁, …, m_k. The sketch is now k numbers, however long the stream. Let M be their average.</p>
+  <p data-pid="2795bb">Averaged-stamps technique: <b>M has average μ = 1/(n + 1) and width under μ/√k; so for any c &gt; 0, the chance that M misses μ by c·μ/√k or more is at most 1/c².</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the averaged-stamps technique">
+E\,M = \mu,\quad \operatorname{Var} M = \tfrac{\operatorname{Var} m}{k} @@ the sample-average technique (30q1): k separate copies of m
+\operatorname{Var} m = \tfrac{n}{(n+1)^2(n+2)} < \mu^2 @@ the last footing
+\text{width of } M < \tfrac{\mu}{\sqrt{k}} @@ root of the spread
+\htmlClass{new}{P\!\left(|M - \mu| \ge \tfrac{c\,\mu}{\sqrt{k}}\right) \le \tfrac{1}{c^2}} \quad \blacksquare @@ the spread-bound technique (30h1)
+  </pre>
+  <p data-pid="08a0fa">With k = 1024 the width is under μ/32, about 3 parts in 100, and it does not depend on n: a thousand numbers serve for a thousand names or a billion. The guess is 1/M − 1. Halving the error costs four times the room, as with every average.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · averaged · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞80.3.1</span><span class="ph understand">understand</span>What does the averaged-stamps technique say, and where does the √k come from? <br>Why does the room needed not grow with n?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf80.4">
+  <h2 class="sthead"><span class="stno">inf80.4</span>Merging Sketches Is Joining Sets</h2>
+  <p data-pid="56b81e">Write s(A) for the sketch of a set of names A: the row (m₁, …, m_k) of its least stamps, with s(∅) = (1, …, 1). Two servers see sets A and B, and each keeps its own sketch.</p>
+  <p data-pid="b42f0b">Sketch-merge technique: <b>s(A ∪ B) = min(s(A), s(B)), taken place by place, and s(∅) is the do-nothing of min; so s is an arrow from sets under joining to rows under min that keeps the operation.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the sketch-merge technique">
+\min h_i(A \cup B) = \min\,(\min h_i(A),\ \min h_i(B)) @@ the least of a joined set is the lesser of the two leasts
+s(A \cup B) = \min(s(A), s(B)) @@ in each of the k places
+\min(x, 1) = x \text{ for } x \in [0, 1] @@ s(∅) = (1, …, 1) does nothing
+\htmlClass{new}{s : (\text{sets}, \cup, \emptyset) \to ([0,1]^k, \min, \mathbf{1}) \text{ keeps the operation}} \quad \blacksquare @@ join then sketch = sketch then merge
+  </pre>
+  <p data-pid="8a7d24">Everything useful about the sketch is in that square closing. Joining does not care about brackets or order, and A ∪ A = A; min is the same, so sketches may be merged in any grouping, in any order, and twice over. The repeat-blind technique was this fact for sets of one name. A day’s sketches from a thousand servers merge into the sketch of the day, and no server sends a name.</p>
+  <p data-pid="760cec">No-meet technique: <b>no function gives s(A ∩ B) from s(A) and s(B).</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the no-meet technique">
+k = 1,\quad h(x) < h(y) @@ two names and one fingerprint are enough
+A = \{x, y\},\ B = \{y\}:\quad s(A) = h(x),\ s(B) = h(y),\ s(A \cap B) = h(y) @@ the names in both: y
+A' = \{x\},\ B' = \{y\}:\quad s(A') = h(x),\ s(B') = h(y),\ s(A' \cap B') = 1 @@ no name in both
+\htmlClass{new}{\text{same sketches, different } s(A \cap B)} \quad \blacksquare @@ a function gives one output for one input
+  </pre>
+  <p data-pid="d488b9">The count of names in both can still be guessed, as |A| + |B| − |A ∪ B| by <a href="r42i.html">42i</a>, from three sketches. The errors of three guesses add, and when few names are shared they swamp the answer.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · merge · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞80.4.1</span><span class="ph understand">understand</span>What does the sketch-merge technique say, and which three properties do joining and min share? <br>What does the no-meet technique say, and which two pairs of sets show it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf80.5">
+  <h2 class="sthead"><span class="stno">inf80.5</span>Fewer Bits Still</h2>
+  <p data-pid="3060b8">A stamp kept in full is some tens of bits. Most of them are wasted: what matters about a least stamp is how small it is, and that is told by how many 0s its binary digits begin with. A stamp that begins with j zeros has chance about 2<sup>−j</sup> of turning up, so a largest run of j zeros points to about 2ʲ names, and j is a number of size log₂ n, written in about log₂ log₂ n bits. The merge is now a largest, not a least; the square closes in the same way.</p>
+  <ul>
+    <li data-pid="f0a6ca">In 1983 (in print 1985) the first counting of this kind was given, keeping which first-1 positions had been seen.</li>
+    <li data-pid="2b0d1f">In 2007 a sketch of k registers of 5 bits each was analysed: each register keeps the largest first-1 position among the stamps sent to it, one fingerprint serves all registers, and the typical error is about 1.04/√k. With 2048 registers, about 1.5 kilobytes, it counts past a billion to about 2 parts in 100.</li>
+    <li data-pid="d24a60">In 2010 a sketch was given that counts to within a factor 1 ± ε, with chance 2/3, in about 1/ε² + log n bits, and that much had already been shown necessary.</li>
+  </ul>
+  <p data-pid="1d9150">The 1/ε² is the 1/√k of the averaged-stamps technique, turned round: an error of ε needs about 1/ε² registers, whatever is kept in them.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞80.5.1</span><span class="ph understand">understand</span>Why can a register keep a count of leading zeros in place of the whole stamp? <br>How does the room 1/ε² of 2010 relate to the 1/√k of the averaged-stamps technique?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf80.6">
+  <h2 class="sthead"><span class="stno">inf80.6</span>Moves to Check</h2>
+  <pre class="lines" data-k="check" data-label="this page: moves to check">
+\text{names on two days} = \text{guess for day 1} + \text{guess for day 2}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a name seen on both days is counted twice: merge the two sketches, then guess once
+\text{get } s(A \cap B) \text{ by some merge of } s(A) \text{ and } s(B)\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; no arrow s(A), s(B) → s(A ∩ B): same sketches, different meets
+\text{each server uses its own fingerprints, then the sketches are merged}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the merge closes only for one s: a shared name must get the same stamps on both servers
+\text{keep one stamp, } k = 1 \text{, and report } 1/m - 1\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; legal: m averages 1/(n + 1), but its width is about its own size
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞80.6.1</span><span class="ph understand">understand</span>Why is adding two days’ guesses outside the plan, and what is done in its place? <br>Why must every server use the same fingerprints?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="openq themeend">
+  <div class="eyebrow">Open questions · nobody has the answer yet</div>
+  <h2>Open questions</h2>
+  <p class="chnote">These are open: the field is still asking them. There is no key; a good attempt is a reason, a guess, or a better question.</p>
+  <div class="oq"><span class="oqid">∞80.oq.1</span>What is the least room for a sketch that can be merged? A preprint of 2020 gave a sketch using about 1.98 bits for each unit of accuracy, showed that no sketch of one wide family does better, and gave evidence, not proof, that none at all does. Is 1.98 the floor for every mergeable sketch?</div>
+  <div class="oq"><span class="oqid">∞80.oq.2</span>Joining has a sketch that keeps it and meeting has none. Which questions about sets, beyond the count, have a small sketch that keeps joining, and is there a way to tell from the question alone?</div>
+</section>
+<section class="history themeend">
+  <div class="eyebrow">A short history · told from more than one side</div>
+  <h2>How we got here</h2>
+  <p data-pid="745148">Counting different items by the patterns of their stamps began in 1983, printed in 1985, for the query planners of databases, which need to know how many different values a column holds.</p>
+  <p data-pid="95e5ea">Through the 2000s the registers shrank from whole stamps to a few bits; the sketch analysed in 2007 is the one now built into many databases.</p>
+  <p data-pid="cacd81">In 2010 the room and the time were both brought down to the least possible, up to a constant factor. A preprint of 2020 asked for the constant itself.</p>
+</section>
+
+<nav class="nextrung"><a href="inf79.html">← ∞79 · why can’t sorting beat n log n?</a><a href="inf81.html">∞81 · when should you buy instead of rent? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+<h3>The accepted names</h3><p>The question is the <i>count-distinct problem</i> or <i>cardinality estimation</i>; the list of visits is a <i>data stream</i>. A stamp is a <i>hash value</i>, and treating different names’ stamps as separate even draws is the <i>random oracle</i> or <i>ideal hash</i> assumption. The least of n even draws is the <i>first order statistic</i>. A summary that can be combined is a <i>mergeable sketch</i>; “keeps the operation” is a <i>homomorphism of monoids</i>, here of <i>semilattices</i>, and A ∪ A = A is <i>idempotence</i>. The 1983 method is <i>probabilistic counting</i>; the 2007 sketch is <i>HyperLogLog</i>; sending each name to one register by its first bits is <i>stochastic averaging</i>. The 2020 sketch is <i>Fishmonger</i>, and its family is the <i>linearizable</i> sketches.</p><h3>Who said it first</h3><p>Philippe Flajolet and G. Nigel Martin, “Probabilistic counting algorithms for data base applications” (conference 1983, journal 1985). Philippe Flajolet, Éric Fusy, Olivier Gandouet and Frédéric Meunier, “HyperLogLog: the analysis of a near-optimal cardinality estimation algorithm” (2007). Daniel Kane, Jelani Nelson and David Woodruff, “An optimal algorithm for the distinct elements problem” (2010). Seth Pettie and Dingyu Wang, “Information theoretic limits of cardinality estimation: Fisher meets Shannon” (2020).</p><h3>Sources</h3><p>The 2007 figures: the paper itself (DMTCS proceedings, AofA 2007) and a reader’s summary of it. The 2010 bound: the Harvard record of the paper, and the introduction of a 2018 paper on the same problem (arXiv 1804.01642), which also dates the first work to 1983. The 2020 preprint, arXiv 2007.08051, is the only source for the last open question, not yet revisited. That the 2007 sketch is built into many databases is not yet revisited.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+
+stepper('#sl1',[
+  {k:'ember',kl:'stamp',t:R`h : \text{names} \to [0, 1)`,n:`One name, one stamp.`},
+  {k:'ember',kl:'keep',t:R`m = \min h(x_i)`,n:`One number.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{m = \min\,\{h(x) : x \in A\}}`,n:`Repeats do nothing.`}
+],{title:'The slides · a stamp · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'all above',t:R`P(m > t) = (1 - t)^n`,n:`Every draw clears t.`},
+  {k:'ember',kl:'average',t:R`n\int_0^1 (1 - u)\,u^{n-1}\,du`,n:`Substitute.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{E\,m = \tfrac{1}{n+1}}`,n:`Crowded towards 0.`}
+],{title:'The slides · smallest draw · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'copies',t:R`m_1, \dots, m_k`,n:`k fingerprints.`},
+  {k:'ember',kl:'width',t:R`\tfrac{\mu}{\sqrt{k}}`,n:`The average of a sample.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P(\text{miss by } c\mu/\sqrt{k}) \le 1/c^2}`,n:`Room k, any n.`}
+],{title:'The slides · averaged · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'least',t:R`\min h(A \cup B) = \min(\min h(A), \min h(B))`,n:`Lesser of the leasts.`},
+  {k:'ember',kl:'square',t:R`s(A \cup B) = \min(s(A), s(B))`,n:`Join, sketch; or sketch, merge.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{s \text{ keeps the operation}}`,n:`Arrangement and order hide.`}
+],{title:'The slides · merge · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
