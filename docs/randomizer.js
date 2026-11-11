@@ -6628,7 +6628,7 @@ const WG29=[
   ['Is the circle of latitude 45° N the shortest way between two points on it?','no: it does not obey the path equations; it turns along the surface',['yes','yes: it stays at one latitude','no: it is too short'],'Path-equations technique.'],
   ['∫ hη = 0 for one nudge η. Is h = 0?','not from that: it must hold for every nudge; the bump is chosen after h',['yes','yes, when η > 0','no: then h = η'],'The bump is put where h is not 0.'],
   ['y makes J least among curves with the same ends. What does y obey?','d/dx (∂L/∂p) = ∂L/∂y',['∂L/∂p = ∂L/∂y','d/dx (∂L/∂y) = ∂L/∂p','L = 0'],'Best-path technique.'],
-  ['What is the total bend inside a small triangle with straightest sides?','its excess, α + β + γ − π',['its area','π','α + β + γ'],'Triangle-total technique.']];
+  ['What is the total bend inside a small triangle with straightest sides?','its excess, α + β + γ − π',['its area','π','α + β + γ'],'Triangle-bend technique.']];
 QP.push({id:'29g.paths',step:'29g',label:'best paths',open:()=>measured('29g'),make(){ return writtenQ('29g.paths',WG29); }},
   {id:'29g.work',step:'29g',mode:'work',label:'the best-path equation',open:()=>measured('29g'),make(){
     const t=rnd(3), k=2+rnd(5);
@@ -6636,14 +6636,14 @@ QP.push({id:'29g.paths',step:'29g',label:'best paths',open:()=>measured('29g'),m
       return {index:'q:29g.work[b;'+L+']', lines:[['L(y, p) = '+L+', with p standing for y′','the thing totalled']], ask:'Which equation does a best curve obey?', right, opts:shuffle([right,...wrong]), lead:'', why:'Best-path technique: d/dx (∂L/∂p) = ∂L/∂y. Here '+why}; }
     if(t===1){ const a=2+rnd(5), b=2+rnd(5), c=2+rnd(5); if(a+b+c===12) return null;
       const right=pi21(a+b+c-12,12), wrong=uniq(right,[pi21(12-a-b-c,12),pi21(a+b+c,12),pi21(a+b+c-6,12),'0',pi21(1,1)],3); if(wrong.length<3) return null;
-      return {index:'q:29g.work[t;'+[a,b,c].join(';')+']', lines:[['a small triangle with straightest sides has angles '+pi21(a,12)+', '+pi21(b,12)+' and '+pi21(c,12),'on a surface with a ruler']], ask:'What is the total bend inside it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Triangle-total technique: the excess α + β + γ − π = '+pi21(a+b+c,12)+' − π.'}; }
+      return {index:'q:29g.work[t;'+[a,b,c].join(';')+']', lines:[['a small triangle with straightest sides has angles '+pi21(a,12)+', '+pi21(b,12)+' and '+pi21(c,12),'on a surface with a ruler']], ask:'What is the total bend inside it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Triangle-bend technique: the excess α + β + γ − π = '+pi21(a+b+c,12)+' − π.'}; }
     const [g,gu]=pick([['u',1],['2u',2],['3u',3],['1',0]]), n=2+rnd(5), right=gu?pi21(-gu,n):'0', wrong=uniq(right,[pi21(gu||1,n),pi21(-1,n),pi21(-2*(gu||1),n),'0',pi21(-(gu||1),2*n),pi21(1,1)],3); if(wrong.length<3) return null;
     return {index:'q:29g.work[h;'+[g,n].join(';')+']', lines:[['ds² = du² + g² dv², with g = '+g,'the ruler'],['along a straightest path, v grows by '+pi21(1,n),'given']], ask:'By how much does the heading change?', right, opts:shuffle([right,...wrong]), lead:'', why:'Heading technique: dψ = −gu dv, and gu = '+gu+' here.'}; }},
   {id:'29g.line',step:'29g',mode:'proof',label:'asked of the best',open:()=>measured('29g'),make(){
     const k=2+rnd(5), a=2+rnd(5), b=2+rnd(5), c=2+rnd(5), V=[
       ['g1',[['y makes J least among curves with the same ends','given'],['d/dx (∂L/∂p) = ∂L/∂y along y','the best-path technique']],2,0,'The equation is asked of best curves.'],
       ['g2',[['d/dx (∂L/∂p) = ∂L/∂y along y','given'],['y makes J least among curves with the same ends','the best-path technique']],2,1,'The technique runs the other way. Two arcs of a great circle both obey it.'],
-      ['g3',[['a small triangle with straightest sides has angles '+pi21(a,12)+', '+pi21(b,12)+' and '+pi21(c,12),'given'],['its total bend is '+pi21(a+b+c-12,12),'the triangle-total technique']],2,0,'The excess is '+pi21(a+b+c,12)+' − π.'],
+      ['g3',[['a small triangle with straightest sides has angles '+pi21(a,12)+', '+pi21(b,12)+' and '+pi21(c,12),'given'],['its total bend is '+pi21(a+b+c-12,12),'the triangle-bend technique']],2,0,'The excess is '+pi21(a+b+c,12)+' − π.'],
       ['g4',[['∫ hη = 0 for one nudge η','given'],['h = 0','the total is 0']],2,1,'It must hold for every nudge. The bump is chosen after h.'],
       ['g5',[['L(y, p) = ½p² + '+k+'y','given'],['a best curve obeys y″ = '+k,'the best-path technique: ∂L/∂p = p and ∂L/∂y = '+k]],2,0,'d/dx (p) = y″.'],
       ['g6',[['η is a nudge with η(a) ≠ 0','given'],['y + εη is one of the curves compared with y','a nudge']],2,1,'The ends are fixed: η(a) = η(b) = 0.'],

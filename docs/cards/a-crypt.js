@@ -78,7 +78,7 @@
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["22·crypt"]=[{"q": "A 256-bit fingerprint on files of 1 kB. Collisions?", "a": "there must be some", "w": ["there can be none", "only if the files are random", "only for files over 1 MB"], "why": "2⁸¹⁹² files, 2²⁵⁶ codes: the pigeonhole technique."},
  {"q": "Chance that n codes from N are all different?", "a": "(1 − 1/N)(1 − 2/N)⋯(1 − (n−1)/N)", "w": ["(1 − 1/N)ⁿ", "n/N", "1 − n(n − 1)/N"], "why": "Arrangements over counted-functions: the no-match technique."},
  {"q": "λ = n(n − 1)/(2N). What is it?", "a": "pairs of draws per code", "w": ["draws per code", "the chance of no match", "the bits of the fingerprint"], "why": "n(n − 1)/2 pairs, shared over N codes."},
- {"q": "1 − e^(−λ) ≤ chance of a match ≤ λ. Which technique?", "a": "the pair technique", "w": ["the no-match technique", "the matching-pair technique", "the collision technique"], "why": "Fences from 1 − x ≤ e^(−x) and from induction."},
+ {"q": "1 − e^(−λ) ≤ chance of a match ≤ λ. Which technique?", "a": "the pairs-per-code technique", "w": ["the no-match technique", "the matching-pair technique", "the collision technique"], "why": "Fences from 1 − x ≤ e^(−x) and from induction."},
  {"q": "23 people, 365 birthdays. Chance two share one?", "a": "about 0.507", "w": ["about 0.063", "about 0.25", "about 0.9"], "why": "q₂₃ ≈ 0.493: a little more likely than not."},
  {"q": "For an even chance of a match, n is about?", "a": "1.18 √N", "w": ["N/2", "ln N", "1.18 N"], "why": "λ = ln 2 gives n(n − 1) = 2N ln 2: the matching-pair technique."},
  {"q": "A b-bit fingerprint against a search for any colliding pair holds out about?", "a": "2^(b/2) tries", "w": ["2ᵇ tries", "b² tries", "b/2 tries"], "why": "√N = 2^(b/2)."},
