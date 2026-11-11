@@ -2220,6 +2220,7 @@ QP.push({id:'10a.answer',step:'10a',mode:'proof',label:'does the reach answer',o
 Object.assign(STEPS,{'12a':['r12a','The Intermediate Value Technique'],'12b':['r12b','Bounded on a Closed Interval'],'12c':['r12c','The Highest-and-Lowest Technique'],'12d':['r12d','Why Having No Holes Matters'],'12e':['r12e','Bisection by Hand'],'12f':['r12f','Square Root by Hand']});
 const btw12=(a,b)=>'between '+sg(a)+' and '+sg(b);
 
+/* Phase W floor 3: no decoy is the right number moved by one or two (Laundry 8) */
 /* ---------- 12a The Intermediate Value Technique ---------- */
 const A12=[
   ['f(x) = 1/x has f(−1) < 0 < f(1), and no zero between −1 and 1. Why does the in-between-value technique not apply?','f is not continuous on [−1, 1]: it is not even defined at 0',['the interval is not closed','the end values have the same sign','it does apply, and the zero is 0'],'The technique asks for continuity on the whole closed interval, ends included. One missing input is enough to let a function skip 0.'],
@@ -2245,7 +2246,7 @@ QP.push({id:'12a.trap',step:'12a',mode:'work',label:'a zero in between',open:()=
 /* ---------- 12b Bounded on a Closed Interval ---------- */
 QP.push({id:'12b.bound',step:'12b',mode:'work',label:'a bound for a polynomial',open:()=>measured('12b'),make(){
     const cs=[pick([1,2,-1,-2]),rnd(9)-4,rnd(9)-4], v=rnd(5)-4, w=v+1+rnd(4), R=Math.max(Math.abs(v),Math.abs(w)), B=Math.abs(cs[0])*R*R+Math.abs(cs[1])*R+Math.abs(cs[2]), right=String(B);
-    const wrong=uniq(right,[Math.abs(ev9(cs,R)),Math.abs(cs[0])+Math.abs(cs[1])+Math.abs(cs[2]),B+R,Math.abs(ev9(cs,w)),B-1,R*R].map(String),3); if(wrong.length<3||R===1) return null;
+    const wrong=uniq(right,[Math.abs(ev9(cs,R)),Math.abs(cs[0])+Math.abs(cs[1])+Math.abs(cs[2]),(Math.abs(cs[0])+Math.abs(cs[1])+Math.abs(cs[2]))*R,Math.abs(ev9(cs,w)),Math.abs(cs[0])*R+Math.abs(cs[1])*R+Math.abs(cs[2]),R*R].map(String),3); if(wrong.length<3||R===1) return null;
     return {index:'q:12b.bound['+poly9(cs)+';'+v+';'+w+']', lines:[['p(x) = '+poly9(cs),'on ['+sg(v)+', '+sg(w)+']']], ask:'Which bound does the polynomial-bound technique give for |p(x)| there?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'With R = max(|'+sg(v)+'|, |'+sg(w)+'|) = '+R+', |p(x)| ≤ Σ |u_k| R^k = '+Math.abs(cs[0])+' · '+(R*R)+' + '+Math.abs(cs[1])+' · '+R+' + '+Math.abs(cs[2])+' = '+right+'. Sizes are taken term by term, so signs cannot help by cancelling. It is a bound, not the greatest value.'}; }});
 
@@ -2257,7 +2258,7 @@ const C12=[
   ['When does f reach its greatest value on A at c?','when c ∈ A and f(c) is the least upper bound of the values of f on A',['when f(c) is an upper bound of the values','when f(c) > 0','when c is an end of A'],'Greatest-is-reached: the sup of the values exists and is itself a value.']];
 QP.push({id:'12c.extremes',step:'12c',mode:'work',label:'highest and lowest on a closed interval',open:()=>measured('12c'),make(){
     const h=rnd(9)-4, k=rnd(9)-4, v=rnd(9)-6, w=v+1+rnd(5), f=x=>(x-h)*(x-h)+k, least=Math.random()<0.5, inside=v<=h&&h<=w, lo=inside?k:Math.min(f(v),f(w)), hi=Math.max(f(v),f(w)), val=least?lo:hi, right=sg(val);
-    const wrong=uniq(right,[sg(least?hi:lo),sg(k),sg(f(v)),sg(f(w)),sg(val+1),sg(h)],3); if(wrong.length<3) return null;
+    const wrong=uniq(right,[sg(least?hi:lo),sg(k),sg(f(v)),sg(f(w)),sg(least?v:w),sg(h)],3); if(wrong.length<3) return null;
     return {index:'q:12c.extremes['+h+';'+k+';'+v+';'+w+';'+(least?'l':'g')+']', lines:[['f(x) = (x'+(h===0?'':pm(-h))+')²'+(k===0?'':pm(k)),'on ['+sg(v)+', '+sg(w)+']']], ask:least?'What is the least value of f there?':'What is the greatest value of f there?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'A square is never negative, so f is least where x = '+sg(h)+(inside?', which is in the interval: the least value is '+sg(k)+'.':', which is outside the interval: the least value is at the nearer end, '+sg(lo)+'.')+' The greatest value is at the end further from '+sg(h)+': f('+sg(v)+') = '+sg(f(v))+', f('+sg(w)+') = '+sg(f(w))+'.'}; }},
   {id:'12c.closed',step:'12c',label:'why the interval is closed',open:()=>measured('12c'),make(){ return writtenQ('12c.closed',C12); }});
@@ -2307,7 +2308,7 @@ QP.push({id:'13a.slope',step:'13a',mode:'work',label:'first slopes',open:()=>mea
     const right=fshow(v), wrong=uniq(right,alts.map(fshow),3); if(wrong.length<3) return null;
     return {index:'q:13a.slope['+ex+';'+w+']', lines:[['f(x) = '+ex,'at the input '+sg(w)]], ask:'What is the slope of f there?', right, opts:shuffle([right,...wrong]), lead:'', why:why+' At '+sg(w)+' that is '+right+'.'}; }},
   {id:'13a.chord',step:'13a',mode:'work',label:'chord slopes',open:()=>measured('13a'),make(){
-    const w=rnd(7)-3, h=pick([1,2,-1,3]), a=rnd(7)-3, f=x=>x*x+a*x, v=(f(w+h)-f(w))/h, right=sg(v), wrong=num13(right,[2*w+a,f(w+h)-f(w),v+h,2*w,v-1,f(w+h)]); if(wrong.length<3) return null;
+    const w=rnd(7)-3, h=pick([1,2,-1,3]), a=rnd(7)-3, f=x=>x*x+a*x, v=(f(w+h)-f(w))/h, right=sg(v), wrong=num13(right,[2*w+a,f(w+h)-f(w),v+h,2*w,(f(w+h)-f(w))*h,f(w+h)]); if(wrong.length<3) return null;
     return {index:'q:13a.chord['+w+';'+h+';'+a+']', lines:[['f(x) = '+poly13([1,a,0]),'from the input '+sg(w)+' to the input '+sg(w+h)]], ask:'What is the chord slope?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'(f('+sg(w+h)+') − f('+sg(w)+'))/'+par10(h)+' = ('+sg(f(w+h))+' − '+par10(f(w))+')/'+par10(h)+' = '+right+'. As a polynomial in h the chord slope is '+poly13([1,2*w+a]).replace(/x/g,'h')+', and the slope at '+sg(w)+' is what is left when h heads to 0: '+sg(2*w+a)+'.'}; }},
   {id:'13g.square',step:'13g',mode:'work',label:'the growing square',open:()=>measured('13g'),make(){
@@ -2371,7 +2372,7 @@ QP.push({id:'13d.poly',step:'13d',mode:'work',label:'a polynomial, term by term'
 
 /* ---------- 13k The Tangent Line and the Nearby Line ---------- */
 QP.push({id:'13k.tangent',step:'13k',mode:'work',label:'the tangent line',open:()=>measured('13k'),make(){
-    if(Math.random()<0.55){ const cube=Math.random()<0.4, x0=pick([-3,-2,-1,1,2,3]), f=cube?x0**3:x0*x0, m=cube?3*x0*x0:2*x0, b=f-m*x0, right='y = '+lin9(m,b), wrong=uniq(right,['y = '+lin9(m,f),'y = '+lin9(m,-b),'y = '+lin9(f,m),'y = '+lin9(m,0),'y = '+lin9(m,b+1)],3); if(wrong.length<3) return null;
+    if(Math.random()<0.55){ const cube=Math.random()<0.4, x0=pick([-3,-2,-1,1,2,3]), f=cube?x0**3:x0*x0, m=cube?3*x0*x0:2*x0, b=f-m*x0, right='y = '+lin9(m,b), wrong=uniq(right,['y = '+lin9(m,f),'y = '+lin9(m,-b),'y = '+lin9(f,m),'y = '+lin9(m,0),'y = '+lin9(m,f+m*x0)],3); if(wrong.length<3) return null;
       return {index:'q:13k.tangent[l;'+(cube?3:2)+';'+x0+']', lines:[['f(x) = '+(cube?'x³':'x²'),'at the input '+sg(x0)]], ask:'Which is the tangent line there?', right, opts:shuffle([right,...wrong]), lead:'',
         why:'The tangent line goes through ('+sg(x0)+', '+sg(f)+') with the slope f′('+sg(x0)+') = '+sg(m)+': y = '+sg(f)+' + '+par10(m)+'(x'+pm(-x0)+') = '+lin9(m,b)+'. Its error shrinks faster than the step, and it is the only line through the point that does so.'}; }
     const r=2+rnd(8), h=pick([1,2,-1,3]), est=fadd(fint(r),fr(h,2*r)), right=fshow(est), wrong=uniq(right,[fshow(fadd(fint(r),fr(h,r))),fshow(fadd(fint(r),fr(h,2))),fshow(fint(r)),fshow(fadd(fint(r),fr(1,2*r*h))),fshow(fadd(est,fint(1)))],3); if(wrong.length<3) return null;
@@ -2416,7 +2417,7 @@ const A14=[
 QP.push({id:'14a.flat',step:'14a',label:'flat at a top',open:()=>measured('14a'),make(){ return writtenQ('14a.flat',A14); }},
   {id:'14a.candidates',step:'14a',mode:'work',label:'the candidates',open:()=>measured('14a'),make(){
     const c=pick([1,1,2]), k=rnd(9)-4, lo=-c-rnd(3), hi=lo+2+rnd(5), top=Math.random()<0.5, cs=[1,0,-3*c*c,k], f=x=>ev9(cs,x), cand=[lo,hi]; if(-c>lo&&-c<hi) cand.push(-c); if(c>lo&&c<hi) cand.push(c);
-    const vals=cand.map(f), best=top?Math.max(...vals):Math.min(...vals), other=top?Math.min(...vals):Math.max(...vals), right=sg(best), wrong=num13(right,vals.concat([other,k,f(0)+1,best+(top?2:-2),-best,best+(top?c:-c)])); if(wrong.length<3) return null;
+    const vals=cand.map(f), best=top?Math.max(...vals):Math.min(...vals), other=top?Math.min(...vals):Math.max(...vals), right=sg(best), wrong=num13(right,vals.concat([other,k,top?hi:lo,top?f(-c):f(c),-best,top?-c:c])); if(wrong.length<3) return null;
     return {index:'q:14a.candidates['+[c,k,lo,hi,top?'t':'b'].join(';')+']', lines:[['f(x) = '+poly13(cs),'on ['+sg(lo)+', '+sg(hi)+']']], ask:'What is the '+(top?'greatest':'least')+' value of f there?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'f′(x) = '+poly13(dp13(cs))+' is 0 at '+sg(-c)+' and at '+c+'. The candidates are the two ends and the critical points inside: '+cand.map(x=>'f('+sg(x)+') = '+sg(f(x))).join(', ')+'. The '+(top?'greatest':'least')+' of these is '+right+'.'}; }});
 
@@ -2429,9 +2430,9 @@ const B14=[
 QP.push({id:'14b.needs',step:'14b',label:'each hypothesis is needed',open:()=>measured('14b'),make(){ return writtenQ('14b.needs',B14); }},
   {id:'14b.zeros',step:'14b',mode:'work',label:'counting zeros by slopes',open:()=>measured('14b'),make(){
     const k=rnd(3);
-    if(k===0){ const n=2+rnd(6), right=String(n-1), wrong=uniq(right,[String(n),String(n+1),String(n-2),String(2*n)],3);
+    if(k===0){ const n=2+rnd(6), right=String(n-1), wrong=uniq(right,[String(n),String(2*n),String(n*(n-1)/2),String(2*(n-1)),String(n*n),String(n+1)],3); /* the zeros counted, two for each gap, every pair of zeros */
       return {index:'q:14b.zeros[f;'+n+']', lines:[['a polynomial p has '+n+' different zeros','given']], ask:'At least how many zeros has p′?', right, opts:shuffle([right,...wrong]), lead:'', why:'Zeros-of-slopes: level-ends puts a zero of p′ strictly between each neighbouring pair of zeros of p. '+n+' zeros have '+(n-1)+' gaps between neighbours.'}; }
-    if(k===1){ const n=rnd(6), right=String(n+1), wrong=uniq(right,[String(n),String(n+2),String(2*n+2),String(n+3)],3);
+    if(k===1){ const n=rnd(6), right=String(n+1), wrong=uniq(right,[String(n),String(2*n+2),String(2*n),String((n+1)*(n+1)),String(n+2)],3);
       return {index:'q:14b.zeros[b;'+n+']', lines:[['the slope p′ of a polynomial p has '+(n===0?'no zeros':'at most '+n+' zero'+(n===1?'':'s')),'given']], ask:'At most how many zeros has p?', right, opts:shuffle([right,...wrong]), lead:'', why:'Zeros-of-slopes, turned about: '+(n+2)+' zeros of p would force '+(n+1)+' zeros of p′, one between each neighbouring pair.'}; }
     const a=1+rnd(6), b=rnd(13)-6, cs=[1,0,a,b], right='exactly one', opts=['none','exactly one','exactly two','exactly three'];
     return {index:'q:14b.zeros[c;'+a+';'+b+']', lines:[['p(x) = '+poly13(cs),'a polynomial of odd degree']], ask:'How many zeros has p?', right, opts, lead:'', why:'p′(x) = '+poly13(dp13(cs))+' is at least '+a+', so it has no zeros, and p has at most one. A polynomial of odd degree has at least one (12a). So exactly one.'}; }},
@@ -2479,7 +2480,7 @@ const E14=[
 QP.push({id:'14e.same',step:'14e',label:'the family + C',open:()=>measured('14e'),make(){ return writtenQ('14e.same',E14); }},
   {id:'14e.anti',step:'14e',mode:'work',label:'the antiderivative through a point',open:()=>measured('14e'),make(){
     const cube=Math.random()<0.4, C=pick([-5,-4,-3,-2,-1,1,2,3,4,5]), F=cube?[pick([1,1,2,-1]),rnd(5)-2,rnd(7)-3,C]:[pick([1,2,3,-1,-2]),rnd(9)-4,C], x0=pick([-2,-1,0,1,2]), v=ev9(F,x0), f=dp13(F), withC=c=>poly13(F.slice(0,-1).concat([c]));
-    const right=withC(C), wrong=uniq(right,[withC(0),withC(v),withC(-C),withC(C+x0),poly13(dp13(f)),withC(C+1)],3); if(wrong.length<3) return null;
+    const right=withC(C), wrong=uniq(right,[withC(0),withC(v),withC(-C),withC(C+x0),poly13(dp13(f)),withC(x0)],3); if(wrong.length<3) return null;
     return {index:'q:14e.anti['+right+';'+x0+']', lines:[['F′(x) = '+poly13(f),'at every real'],['F('+sg(x0)+') = '+sg(v),'given']], ask:'Which is F(x)?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'Run the slope rules backwards term by term: F(x) = '+withC(0).replace(/^0$/,'')+' + C. All-antiderivatives: every antiderivative has that shape. F('+sg(x0)+') = '+sg(v)+' gives C = '+sg(C)+'.'}; }});
 
@@ -2505,11 +2506,11 @@ QP.push({id:'14g.bend',step:'14g',mode:'work',label:'where the bend turns',open:
 
 /* ---------- 14h Optimising ---------- */
 QP.push({id:'14h.equal',step:'14h',mode:'work',label:'two parts that pull apart',open:()=>measured('14h'),make(){
-    const m=1+rnd(6), t=2+rnd(9), k=m*t*t, where=Math.random()<0.5, right=String(where?t:2*m*t), wrong=uniq(right,(where?[t*t,2*t,m*t,k,t+1,2*m*t]:[m*t,k+m,2*m*t*t,4*m*t,t,k]).map(String),3); if(wrong.length<3) return null;
+    const m=1+rnd(6), t=2+rnd(9), k=m*t*t, where=Math.random()<0.5, right=String(where?t:2*m*t), wrong=uniq(right,(where?[t*t,2*t,m*t,k,m,2*m*t]:[m*t,2*t,2*m*t*t,4*m*t,t,k]).map(String),3); if(wrong.length<3) return null;
     return {index:'q:14h.equal['+[k,m,where?'w':'v'].join(';')+']', lines:[['C(x) = '+k+'/x + '+(m===1?'':m)+'x','for x > 0']], ask:where?'At which x is C least?':'What is the least value of C?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'Equal-parts: k/x + mx is least at x = √(k/m) = √'+(t*t)+' = '+t+', where the two parts are equal: '+k+'/'+t+' = '+(m*t)+' and '+(m===1?'':m+' · ')+t+' = '+(m*t)+'. The least value is 2√(km) = '+(2*m*t)+'.'}; }},
   {id:'14h.fare',step:'14h',mode:'word',label:'the price that brings in most',open:()=>measured('14h'),make(){
-    const [who,things,word]=pick([['A ferry sells','tickets','fare'],['A stall sells','loaves','price'],['A hall sells','seats','price'],['A press sells','pamphlets','price']]), B=pick([10,20,25,40,50]), p=3+rnd(18), A=2*B*p, right=p+' coins', wrong=uniq(right,[(2*p)+' coins',B+' coins',(p+1)+' coins',Math.round(p/2)+' coins',(p*B)+' coins'],3); if(wrong.length<3) return null;
+    const [who,things,word]=pick([['A ferry sells','tickets','fare'],['A stall sells','loaves','price'],['A hall sells','seats','price'],['A press sells','pamphlets','price']]), B=pick([10,20,25,40,50]), p=3+rnd(18), A=2*B*p, right=p+' coins', wrong=uniq(right,[(2*p)+' coins',B+' coins',(2*B)+' coins',Math.round(p/2)+' coins',(p*B)+' coins'],3); if(wrong.length<3) return null;
     return {index:'q:14h.fare['+[things,A,B].join(';')+']', a3:['14h.fare',DASH,DASH], story:who+' '+A+' − '+B+'p '+things+' a day at a '+word+' of p coins, for p from 0 to '+(2*p)+'.', lines:[], ask:'Which '+word+' brings in the most money?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'The goal is the money in, p('+A+' − '+B+'p) = '+A+'p − '+B+'p². Its slope '+A+' − '+(2*B)+'p is 0 at p = '+p+'. The ends bring in 0 and the critical point brings in '+(p*(A-B*p))+', so by candidates it is the greatest.'}; }});
 
@@ -2602,7 +2603,7 @@ const E15=[
 QP.push({id:'15e.signed',step:'15e',label:'what the rules count',open:()=>measured('15e'),make(){ return writtenQ('15e.signed',E15); }},
   {id:'15e.rules',step:'15e',mode:'work',label:'no new sums',open:()=>measured('15e'),make(){
     const u=rnd(5)-2, d1=1+rnd(3), c=u+d1, d2=1+rnd(3), v=c+d2, A=rnd(13)-6, B=rnd(13)-6, k=rnd(4);
-    if(k===0){ const whole=Math.random()<0.5, right=sg(whole?A+B:B), wrong=num13(right,whole?[A-B,A*B,B-A,A+B+1,A,B]:[A+B+A,A-B,-B,A,B+1,A+B]); if(wrong.length<3) return null;
+    if(k===0){ const whole=Math.random()<0.5, right=sg(whole?A+B:B), wrong=num13(right,whole?[A-B,A*B,B-A,-(A+B),A,B]:[A+B+A,A-B,-B,A,B-A,A+B]); if(wrong.length<3) return null;
       return {index:'q:15e.rules[s;'+[u,c,v,A,B,whole?'w':'p'].join(';')+']', lines:[[int15(u,c,'f')+' = '+sg(A),'given'],[whole?int15(c,v,'f')+' = '+sg(B):int15(u,v,'f')+' = '+sg(A+B),'given']], ask:'What is '+(whole?int15(u,v,'f'):int15(c,v,'f'))+'?', right, opts:shuffle([right,...wrong]), lead:'',
         why:'Interval-cut-in-two: '+int15(u,v,'f')+' = '+int15(u,c,'f')+' + '+int15(c,v,'f')+'. '+(whole?sg(A)+' + '+par10(B):sg(A+B)+' − '+par10(A))+' = '+right+'.'}; }
     if(k===1){ const m=pick([2,3,4,5]), s=pick([1,-1]), val=m*A+s*B, right=sg(val), wrong=num13(right,[A+s*B,m*(A+s*B),m*A-s*B,m*A*B,m+A+B,val+m]); if(wrong.length<3) return null;
@@ -2633,23 +2634,23 @@ QP.push({id:'15f.enough',step:'15f',label:'continuity is enough, not needed',ope
 
 /* ---------- 15g Sums and Σ by Hand ---------- */
 const sum15=()=>{ const n=3+rnd(6), k=rnd(6), T=n*(n+1)/2, c=2+rnd(8), a=2+rnd(4), b=1+rnd(6), to=', for i from 1 to '+n;
-  return k===0?{t:'Σ (2i − 1)'+to,v:n*n,alts:[n*(n+1),2*n-1,n*n-1,(n+1)*(n+1),T],why:'Odd-numbers-make-squares: the first n odd numbers add to n².',cite:'odd-numbers-make-squares'}
-    :k===1?{t:'Σ i²'+to,v:n*(n+1)*(2*n+1)/6,alts:[T*T,n*n,T,n*n*n,n*(n+1)*(2*n+1)/6+n],why:'Sum-of-squares: n(n + 1)(2n + 1)/6.',cite:'sum-of-squares'}
-    :k===2?{t:'Σ i³'+to,v:T*T,alts:[n*(n+1)*(2*n+1)/6,n*n*n,T,T*T-n,T*n],why:'Sum-of-cubes: (n(n + 1)/2)², the square of the sum 1 + 2 + ⋯ + n.',cite:'sum-of-cubes'}
-    :k===3?{t:'Σ '+c+to,v:n*c,alts:[c,n+c,c*T,(n+1)*c,(n-1)*c],why:'Sums-are-linear: n copies of c add to nc.',cite:'sums-are-linear'}
+  return k===0?{t:'Σ (2i − 1)'+to,v:n*n,alts:[n*(n+1),2*n-1,T,(n+1)*(n+1),n*(2*n-1)],why:'Odd-numbers-make-squares: the first n odd numbers add to n².',cite:'odd-numbers-make-squares'}
+    :k===1?{t:'Σ i²'+to,v:n*(n+1)*(2*n+1)/6,alts:[T*T,n*n,T,n*n*n,T*n],why:'Sum-of-squares: n(n + 1)(2n + 1)/6.',cite:'sum-of-squares'}
+    :k===2?{t:'Σ i³'+to,v:T*T,alts:[n*(n+1)*(2*n+1)/6,n*n*n,T,2*T*T,T*n],why:'Sum-of-cubes: (n(n + 1)/2)², the square of the sum 1 + 2 + ⋯ + n.',cite:'sum-of-cubes'}
+    :k===3?{t:'Σ '+c+to,v:n*c,alts:[c,n+c,c*T,T,T+c],why:'Sums-are-linear: n copies of c add to nc.',cite:'sums-are-linear'}
     :k===4?{t:'Σ ('+a+'i + '+b+')'+to,v:a*T+b*n,alts:[a*T+b,a*n+b,a*n+b*n,a*T,(a+b)*T],why:'Sums-are-linear: '+a+' · (1 + 2 + ⋯ + n) + n · '+b+', with 1 + 2 + ⋯ + n = n(n + 1)/2 = '+T+'.',cite:'sums-are-linear and the doubled sum'}
-    :{t:'Σ ((i + 1)² − i²)'+to,v:(n+1)*(n+1)-1,alts:[(n+1)*(n+1),n*n,2*n+1,n*n-1,(n+1)*(n+1)+1],why:'Collapsing-sum: every middle term is added once and taken away once. What is left is (n + 1)² − 1².',cite:'collapsing-sum'}; };
+    :{t:'Σ ((i + 1)² − i²)'+to,v:(n+1)*(n+1)-1,alts:[n*n,2*n+1,n*n-1,n*(n+1),T],why:'Collapsing-sum: every middle term is added once and taken away once. What is left is (n + 1)² − 1².',cite:'collapsing-sum'}; };
 QP.push({id:'15g.sum',step:'15g',mode:'work',label:'sums by hand',open:()=>measured('15g'),make(){
-    const s=sum15(), right=String(s.v), wrong=uniq(right,s.alts.map(String),3); if(wrong.length<3) return null;
+    const s=sum15(), right=String(s.v), wrong=uniq(right,s.alts.filter(x=>Math.abs(x-s.v)>2).map(String),3); if(wrong.length<3) return null;
     return {index:'q:15g.sum['+s.t+']', lines:[[s.t,'a sum']], ask:'What is the sum?', right, opts:shuffle([right,...wrong]), lead:'', why:s.why+' Here that is '+right+'.'}; }},
   {id:'15g.check',step:'15g',mode:'proof',label:'is the sum right',open:()=>measured('15g'),make(){
-    const s=sum15(), bad=Math.random()<0.5, alts=uniq(String(s.v),s.alts.map(String),5), shown=bad?pick(alts.slice(0,3)):String(s.v), opts=['it is the sum of line 1','it is not the sum of line 1'];
-    return {index:'q:15g.check['+s.t+';'+shown+']', stack:true, lines:[[s.t,'given'],['= '+shown,s.cite+', on line 1']], ask:'Is line 2 right?', right:opts[bad?1:0], opts, lead:'', why:s.why+' Here that is '+s.v+(bad?', not '+shown:'')+'.'}; }});
+    const s=sum15(), bad=Math.random()<0.5, alts=uniq(String(s.v),s.alts.filter(x=>Math.abs(x-s.v)>2).map(String),5), shown=(bad&&alts.length)?pick(alts.slice(0,3)):String(s.v), opts=['it is the sum of line 1','it is not the sum of line 1'];
+    return {index:'q:15g.check['+s.t+';'+shown+']', stack:true, lines:[[s.t,'given'],['= '+shown,s.cite+', on line 1']], ask:'Is line 2 right?', right:opts[shown!==String(s.v)?1:0], opts, lead:'', why:s.why+' Here that is '+s.v+(shown!==String(s.v)?', not '+shown:'')+'.'}; }});
 
 /* ---------- 15h Sums of Thin Strips by Hand ---------- */
 QP.push({id:'15h.strip',step:'15h',mode:'work',label:'left, right and midpoint sums',open:()=>measured('15h'),make(){
     const u=rnd(3), n=2+rnd(3), sq=Math.random()<0.5, c=rnd(5), m=pick([-2,-1,1,2,3]), f=x=>sq?x*x+c:m*x+c, ex=sq?poly13([1,0,c]):lin9(m,c), kind=rnd(3), tags=k=>Array.from({length:n},(_,i)=>u+2*i+k), S=k=>2*tags(k).reduce((s,x)=>s+f(x),0);
-    const right=sg(S(kind)), wrong=num13(right,[S((kind+1)%3),S((kind+2)%3),S(kind)/2,S(kind)+2,2*tags(0).concat([u+2*n]).reduce((s,x)=>s+f(x),0),S(kind)-2]); if(wrong.length<3) return null;
+    const right=sg(S(kind)), wrong=num13(right,[S((kind+1)%3),S((kind+2)%3),S(kind)/2,S(kind)*2,2*tags(0).concat([u+2*n]).reduce((s,x)=>s+f(x),0),2*(f(u)+f(u+2*n))]); if(wrong.length<3) return null;
     return {index:'q:15h.strip['+[ex,u,n,kind].join(';')+']', lines:[['f(x) = '+ex,'on ['+u+', '+(u+2*n)+'], in '+n+' equal pieces'],['the tags','at the '+['left ends','middles','right ends'][kind]+' of the pieces']], ask:'What is the strip sum?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'Each piece has the width 2. The tags are '+tags(kind).join(', ')+', with the heights '+tags(kind).map(x=>sg(f(x))).join(', ')+'. The width times their sum is '+right+'.'}; }},
   {id:'15h.exact',step:'15h',mode:'work',label:'exact areas under powers',open:()=>measured('15h'),make(){
@@ -2675,13 +2676,13 @@ const I15=[
 QP.push({id:'15i.endless',step:'15i',label:'endless sums',open:()=>measured('15i'),make(){ return writtenQ('15i.endless',I15); }},
   {id:'15i.ratio',step:'15i',mode:'work',label:'sums by a ratio',open:()=>measured('15i'),make(){
     const k=rnd(5), NO='no sum: the series diverges';
-    if(k===0){ const r=pick([2,2,3]), n=5+rnd(r===2?4:2), v=(r**n-1)/(r-1), right=String(v), wrong=uniq(right,[r**n,r**n+1,r**(n-1),v+r,v-1,2*r**(n-1)].map(String),3); if(wrong.length<3) return null;
+    if(k===0){ const r=pick([2,2,3]), n=5+rnd(r===2?4:2), v=(r**n-1)/(r-1), right=String(v), wrong=uniq(right,[r**n,r**(n-1),(r**(n+1)-1)/(r-1),n*r,2*r**(n-1),r**n-1,n*r**(n-1)].filter(x=>Math.abs(x-v)>2).map(String),3); if(wrong.length<3) return null;
       return {index:'q:15i.ratio[f;'+r+';'+n+']', lines:[['1 + '+r+' + '+(r*r)+' + ⋯ + '+(r**(n-1)),n+' terms, each '+r+' times the one before']], ask:'What is the sum?', right, opts:shuffle([right,...wrong]), lead:'', why:'Finite-ratio-sum: (1 − rⁿ)/(1 − r) = ('+(r**n)+' − 1)/('+r+' − 1) = '+right+'.'}; }
     if(k===1||k===2){ const c=1+rnd(5), conv=k===1, r=conv?pick([fr(1,2),fr(1,3),fr(2,3),fr(1,4),fr(3,4),fr(-1,2),fr(1,5),fr(-1,3)]):pick([fint(2),fint(3),fint(-1),fint(1),fr(3,2),fint(-2)]), t=[fint(c),fmul(fint(c),r),fmul(fint(c),fmul(r,r))], one=fint(1), form=fsame(r,one)?null:fmul(fint(c),fr(fsub(one,r).q,fsub(one,r).p));
       const right=conv?fshow(form):NO, wrong=uniq(right,(conv?[NO,fshow(fmul(fint(c),fr(fadd(one,r).q,fadd(one,r).p))),fshow(fmul(form,r)),fshow(fint(2*c)),fshow(fsum15(t))]:[form?fshow(form):'0',fshow(fint(c)),'0',fshow(fsum15(t)),fshow(fint(-c))]),3); if(wrong.length<3) return null;
       return {index:'q:15i.ratio[e;'+c+';'+fshow(r)+']', lines:[[plus15(t)+' + ⋯','each term '+fshow(r)+' times the one before, without end']], ask:'What is the endless sum?', right, opts:shuffle([right,...wrong]), lead:'',
         why:conv?'Endless-ratio-sum: |r| < 1, so the sum is c/(1 − r) = '+c+'/('+fshow(fsub(one,r))+') = '+right+'.':'Here |r| ≥ 1, so the terms do not head to 0 and the partial sums head to no number. The formula c/(1 − r) needs |r| < 1.'}; }
-    if(k===3){ const ab=10+rnd(89); if(ab%11===0||ab%10===0) return null; const R=fr(ab,99), right=fshow(R), wrong=uniq(right,[fshow(fr(ab,100)),fshow(fr(ab,90)),fshow(fr(ab,999)),fshow(fr(ab+1,99)),fshow(fr(ab,9*11*10))],3); if(wrong.length<3) return null;
+    if(k===3){ const ab=10+rnd(89); if(ab%11===0||ab%10===0) return null; const R=fr(ab,99), right=fshow(R), wrong=uniq(right,[fshow(fr(ab,100)),fshow(fr(ab,90)),fshow(fr(ab,999)),fshow(fr(ab,9)),fshow(fr(ab,9*11*10))],3); if(wrong.length<3) return null;
       return {index:'q:15i.ratio[d;'+ab+']', lines:[['0.'+ab+ab+ab+'…','the block '+ab+' repeats without end']], ask:'Which fraction is it?', right, opts:shuffle([right,...wrong]), lead:'', why:'It is '+ab+'/100 · (1 + 1/100 + 1/100² + ⋯) = '+ab+'/100 · 1/(1 − 1/100) = '+ab+'/99'+(fshow(R)===ab+'/99'?'':' = '+right)+', by endless-ratio-sum with r = 1/100.'}; }
     const p=2+rnd(4), b=1+rnd(3), R=fr(b**(p+1),p+1), right=fshow(R), wrong=uniq(right,[fshow(fr(b**p,p)),fshow(fint(b**(p+1))),fshow(fint(p*b**(p-1))),fshow(fr(b**(p+1),p)),fshow(fr(b**p,p+1)),fshow(fint(b**p)),fshow(fr(1,p))],3); if(wrong.length<3) return null;
     return {index:'q:15i.ratio[p;'+p+';'+b+']', lines:[['f(x) = x'+sup15(p),'on [0, '+b+']']], ask:'What is '+int15(0,b,'x'+sup15(p)+' dx')+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Area-under-a-power, by the shrinking cut: bᵏ⁺¹/(k + 1) = '+(b**(p+1))+'/'+(p+1)+(fshow(R)===(b**(p+1))+'/'+(p+1)?'':' = '+right)+'.'}; }});
@@ -2725,7 +2726,7 @@ QP.push({id:'16b.first',step:'16b',label:'the first fundamental technique',open:
 
 /* ---------- 16c Evaluating by Antiderivatives ---------- */
 QP.push({id:'16c.change',step:'16c',mode:'work',label:'an area is a change',open:()=>measured('16c'),make(){
-    if(Math.random()<0.65){ const a=pick([1,1,2,-1]), b=rnd(5)-2, c=rnd(7)-3, f=[3*a,2*b,c], G=[a,b,c,0], p=rnd(4)-2, q=p+1+rnd(3), v=ev9(G,q)-ev9(G,p), right=sg(v), wrong=num13(right,[ev9(G,q)+ev9(G,p),ev9(f,q)-ev9(f,p),ev9(G,q),-v,(q-p)*ev9(f,q),v+1,v-c]); if(wrong.length<3) return null;
+    if(Math.random()<0.65){ const a=pick([1,1,2,-1]), b=rnd(5)-2, c=rnd(7)-3, f=[3*a,2*b,c], G=[a,b,c,0], p=rnd(4)-2, q=p+1+rnd(3), v=ev9(G,q)-ev9(G,p), right=sg(v), wrong=num13(right,[ev9(G,q)+ev9(G,p),ev9(f,q)-ev9(f,p),ev9(G,q),-v,(q-p)*ev9(f,q),(q-p)*ev9(f,p),v-c*(q-p)]); if(wrong.length<3) return null;
       return {index:'q:16c.change[p;'+[poly13(f),p,q].join(';')+']', lines:[['f(x) = '+poly13(f),'on ['+sg(p)+', '+sg(q)+']']], ask:'What is '+int15(p,q,'f(x) dx')+'?', right, opts:shuffle([right,...wrong]), lead:'',
         why:'G(x) = '+poly13(G)+' has G′ = f. Area-is-a-change: G('+sg(q)+') − G('+sg(p)+') = '+sg(ev9(G,q))+' − '+par10(ev9(G,p))+' = '+right+'.'}; }
     const p=1+rnd(4), q=p+1+rnd(4), R=fsub(fr(1,p),fr(1,q)), right=fshow(R), wrong=frs16(right,[fneg(R),fsub(fr(1,p*p),fr(1,q*q)),fint(q-p),fr(1,q-p),fadd(fr(1,p),fr(1,q)),fr(1,p*q*q)]); if(wrong.length<3) return null;
@@ -2765,7 +2766,7 @@ QP.push({id:'16e.choose',step:'16e',label:'the product rule, backwards',open:()=
     if(Math.random()<0.5){ const m=rnd(5), n=1+rnd(4), R=fr(fact16(m)*fact16(n),fact16(m+n+1)), right=fshow(R), wrong=frs16(right,[fr(1,(m+1)*(n+1)),fr(fact16(m)*fact16(n),fact16(m+n)),fr(1,m+n+1),fr(fact16(m)*fact16(n),fact16(m+n+2)),fr(1,fact16(m+n+1)),fr(1,(m+1)*(n+2))]); if(wrong.length<3) return null;
       return {index:'q:16e.parts[b;'+m+';'+n+']', lines:[[int15(0,1,(m===0?'':pw16('x',m))+pw16('(1 − x)',n)+' dx'),'one of a family of areas']], ask:'What is it?', right, opts:shuffle([right,...wrong]), lead:'',
         why:'Areas-under-xᵐ(1 − x)ⁿ: m! n!/(m + n + 1)! = '+fact16(m)+' · '+fact16(n)+'/'+fact16(m+n+1)+' = '+right+', with no expanding. Each use of parts moves one power from (1 − x) to x.'}; }
-    const p=rnd(3), q=p+1+rnd(3), fp=rnd(7)-3, fq=rnd(7)-3, gp=rnd(7)-3, gq=rnd(7)-3, K=rnd(11)-5, bar=fq*gq-fp*gp, v=bar-K, right=sg(v), wrong=num13(right,[bar+K,fq*gq-K,-K,bar,fq*gq+fp*gp-K,K-bar,v+1]); if(wrong.length<3) return null;
+    const p=rnd(3), q=p+1+rnd(3), fp=rnd(7)-3, fq=rnd(7)-3, gp=rnd(7)-3, gq=rnd(7)-3, K=rnd(11)-5, bar=fq*gq-fp*gp, v=bar-K, right=sg(v), wrong=num13(right,[bar+K,fq*gq-K,-K,bar,fq*gq+fp*gp-K,K-bar,fp*gp-fq*gq-K]); if(wrong.length<3) return null;
     return {index:'q:16e.parts[t;'+[p,q,fp,fq,gp,gq,K].join(';')+']', lines:[['f('+p+') = '+sg(fp)+', f('+q+') = '+sg(fq),'given'],['g('+p+') = '+sg(gp)+', g('+q+') = '+sg(gq),'given'],[int15(p,q,'f′g')+' = '+sg(K),'given']], ask:'What is '+int15(p,q,'fg′')+'?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'Parts for areas: fg between the ends, less the other integral. ('+par10(fq)+' · '+par10(gq)+' − '+par10(fp)+' · '+par10(gp)+') − '+par10(K)+' = '+right+'.'}; }});
 
@@ -2782,7 +2783,7 @@ QP.push({id:'16f.missing',step:'16f',label:'the constant and the missing entry',
       return {index:'q:16f.table[p;'+n+']', lines:[['∫ x'+sup15(n)+' dx','from the table']], ask:'Which is it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Power for slopes, backwards: raise the exponent by one and divide by the new exponent. Check: (x'+sup15(n+1)+'/'+(n+1)+')′ = x'+sup15(n)+'.'}; }
     if(k===1){ const right='−1/('+(n-1===1?'':n-1)+pw16('x',n-1)+') + C', wrong=['1/('+(n-1===1?'':n-1)+pw16('x',n-1)+') + C','−1/('+(n+1)+'x'+sup15(n+1)+') + C','−'+n+'/x'+sup15(n+1)+' + C'];
       return {index:'q:16f.table[n;'+n+']', lines:[['∫ dx/x'+sup15(n),'for x > 0']], ask:'Which is it?', right:right.replace('(x)','x'), opts:shuffle([right,...wrong]).map(o=>o.replace('(x)','x')), lead:'', why:'x⁻ⁿ has the antiderivative x¹⁻ⁿ/(1 − n): the exponent rises by one, to '+sg(1-n)+', and the new exponent divides. Check by the slope.'}; }
-    const a=pick([1,1,2,-1]), b=rnd(5)-2, c=rnd(7)-3, C=pick([-4,-3,-2,-1,1,2,3,4]), f=[3*a,2*b,c], G=[a,b,c,C], G0=[a,b,c,0], x0=pick([0,1,-1]), x1=pick([2,-2,3].filter(x=>x!==x0)), y0=ev9(G,x0), v=ev9(G,x1), right=sg(v), wrong=num13(right,[ev9(G0,x1),ev9(G0,x1)+y0,y0+ev9(f,x1),ev9(f,x1),v-2*C,v+1]); if(wrong.length<3) return null;
+    const a=pick([1,1,2,-1]), b=rnd(5)-2, c=rnd(7)-3, C=pick([-4,-3,-2,-1,1,2,3,4]), f=[3*a,2*b,c], G=[a,b,c,C], G0=[a,b,c,0], x0=pick([0,1,-1]), x1=pick([2,-2,3].filter(x=>x!==x0)), y0=ev9(G,x0), v=ev9(G,x1), right=sg(v), wrong=num13(right,[ev9(G0,x1),ev9(G0,x1)+y0,y0+ev9(f,x1),ev9(f,x1),v-2*C,y0]); if(wrong.length<3) return null;
     return {index:'q:16f.table[i;'+[poly13(f),x0,y0,x1].join(';')+']', lines:[['G′(x) = '+poly13(f),'the demand'],['G('+sg(x0)+') = '+sg(y0),'the condition']], ask:'What is G('+sg(x1)+')?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'The table gives G(x) = '+poly13(G0)+' + C. The condition gives C = '+sg(C)+'. Then G('+sg(x1)+') = '+right+'.'}; }});
 
