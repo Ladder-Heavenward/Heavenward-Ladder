@@ -1505,7 +1505,7 @@ function pids(){ document.querySelectorAll('[data-pid]').forEach(p=>{ const id=p
   const per={}; const ps=[...document.querySelectorAll('header.top > p[data-pid], section.class p[data-pid]')].filter(p=>!(p.hasAttribute('data-collapsed')||!p.textContent.replace(/\s+/g,'')));
   for(const p of ps){ const top=!!p.closest('header.top'), st=p.closest('section.step'), k=top?info.label+'.top':(st?st.dataset.step:info.label); per[k]=(per[k]||0)+1; const ad=top?k+'.'+per[k]:k+'.0.'+per[k]; if(ad===h){ history.replaceState(null,'','#'+p.dataset.pid); break; } } }
 function toPid(){ const h=location.hash.slice(1); const t=h&&document.getElementById(h); if(t&&t.dataset&&t.dataset.pid) setTimeout(()=>t.scrollIntoView({block:'center'}),60); }
-ready(()=>{ document.documentElement.classList.add(window.LADDER_DESK?'isdesk':'isapp'); if(window.LADDER_DESK) document.documentElement.classList.add('lk-paint'); /* 2026-11-10 (Andrew 15:10): in the app the page stays hidden until the footing view's first paint (footingView), so it never shows the whole step first */ pids(); steps(); const info=tagInfo(); if(info){ titles(info); addresses(info); edInit(); } txInit(); if(window.LADDER_DESK) setTimeout(()=>document.querySelectorAll('.rungs details.stidx').forEach(d=>d.open=true),0); toPid(); reportQuestions(); pn(); nonskid(); greek(); curly();
+ready(()=>{ document.documentElement.classList.add(window.LADDER_DESK?'isdesk':'isapp'); if(window.LADDER_DESK) document.documentElement.classList.add('lk-paint'); /* 2026-11-10 (Andrew 15:10): in the app the page stays hidden until the footing view's first paint (footingView), so it never shows the whole step first */ pids(); steps(); const info=tagInfo(); if(info){ titles(info); addresses(info); edInit(); } txInit(); if(window.LADDER_DESK&&!foldPref()) setTimeout(()=>document.querySelectorAll('.rungs details.stidx').forEach(d=>d.open=true),0); setTimeout(foldAllButton,0); toPid(); reportQuestions(); pn(); nonskid(); greek(); curly();
   const fit=()=>{ stackTables(); liftLong(); }; window.__fit=fit;
   setTimeout(fit,400); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>setTimeout(fit,100)); });
 })();
@@ -2606,3 +2606,15 @@ window.LadderNotices={tick(){ shown=false; scan(); },queue,next};
 const go=()=>setTimeout(()=>scan(),1400);
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
 })();
+
+/* 2026-11-11 (Andrew 14:09Z): a button in the index that collapses all the footings, on the desk and in the app.
+   It closes every footing list; when none is open it opens them all. The desk remembers a collapse (ladder:idxfold),
+   so the lists stay shut on the next load until they are opened again with the button. */
+function foldPref(){ try{ return localStorage.getItem('ladder:idxfold')==='1'; }catch(e){ return false; } }
+function foldAllButton(){ const box=document.querySelector('.rungs'); if(!box||box.querySelector(':scope>.foldall')) return;
+  const all=()=>[...box.querySelectorAll('details.stidx')]; if(!all().length) return;
+  const p=document.createElement('p'); p.className='foldall'; const bt=document.createElement('button'); bt.type='button'; p.appendChild(bt); box.insertBefore(p,box.firstChild);
+  const label=()=>{ bt.textContent=all().some(d=>d.open)?'collapse all footings':'open all footings'; };
+  bt.addEventListener('click',()=>{ const shut=all().some(d=>d.open); all().forEach(d=>{ d.open=!shut; });
+    try{ if(shut) localStorage.setItem('ladder:idxfold','1'); else localStorage.removeItem('ladder:idxfold'); }catch(e){} label(); if(window.__fit) window.__fit(); });
+  box.addEventListener('toggle',label,true); label(); }
