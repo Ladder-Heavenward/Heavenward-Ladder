@@ -59,8 +59,8 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <p class="home"><a href="index.html">← the ladder</a><a href="inf34.html">← ∞34 can you prove you know a secret without telling it?</a><a href="index.html">next: the ladder →</a></p>
   <div class="tags"><span class="tag then">∞·comp · arrow newsflash</span></div>
   <h1>What Do a Program’s Arrows Hide?</h1>
-  <p data-pid="ce43b5">What do a program’s arrows hide? Five computing annexes, from rung 2 to rung 17, each reached a result by looking inside a machine: at the order in which it reads, at its loops, its gates, its states, its comparisons. This page reads the five again with rung forty-seven’s arrows. Each time, the result turns out to rest on a plan that arrows carry, and the insides can hide. An if that stops early is a row of arrows that can fail. The checker that cannot exist is one fixed-point argument. An adder is boxes in a row and side by side. The fewest states a pattern needs is the size of an image. And every way of sorting is one and the same map, read through different brackets.</p>
-  <p class="gesture" data-pid="fb9b56">A check is an arrow that passes or fails, and reading “P and Q” left first is the row q ⋆ p; the row exists one way round only when q can be read only where p passed. No checker of stopping: the fixed-point technique with B = {stops, runs on}. Circuits are arrows between numbers of wires; the adder for n bits is (FA ⊕ 1) ∘ (1 ⊕ Rₙ₋₁). A machine with no memory has at least as many states as its language has leftovers. Sorting is the one map s with s([a]) = [a] and s(x ++ y) = merge(s(x), s(y)); the bracketing changes only the cost.</p>
+  <p data-pid="ce43b5">What do a program’s arrows hide? Six computing annexes, from rung 2 to rung 19, each reached a result by looking inside a machine: at the order in which it reads, at its loops, its gates, its states, its comparisons. This page reads the five again with rung forty-seven’s arrows. Each time, the result turns out to rest on a plan that arrows carry, and the insides can hide. An if that stops early is a row of arrows that can fail. The checker that cannot exist is one fixed-point argument. An adder is boxes in a row and side by side. The fewest states a pattern needs is the size of an image. And every way of sorting is one and the same map, read through different brackets. Last, a cube’s scrambles are a map that neither a climber nor a machine reads, and what every twist keeps is read in its place.</p>
+  <p class="gesture" data-pid="fb9b56">A check is an arrow that passes or fails, and reading “P and Q” left first is the row q ⋆ p; the row exists one way round only when q can be read only where p passed. No checker of stopping: the fixed-point technique with B = {stops, runs on}. Circuits are arrows between numbers of wires; the adder for n bits is (FA ⊕ 1) ∘ (1 ⊕ Rₙ₋₁). A machine with no memory has at least as many states as its language has leftovers. Sorting is the one map s with s([a]) = [a] and s(x ++ y) = merge(s(x), s(y)); the bracketing changes only the cost. q(end) = q(start) for every arrow: at least as many pieces as q has values.</p>
 </header>
 
 <section class="class step" data-step="infcomp.1">
@@ -184,19 +184,49 @@ a(b(c(\cdots))):\quad \textstyle\sum_{j=2}^{n} (1 + (j - 1) - 1) = \tfrac{n(n-1)
 </section>
 
 <section class="class step" data-step="infcomp.6">
-  <h2 class="sthead"><span class="stno">infcomp.6</span>Moves to Check</h2>
+  <h2 class="sthead"><span class="stno">infcomp.6</span>The Scrambles No One Lists</h2>
+  <p data-pid="2ff704">19·comp2 counted the ways to put a puzzle cube back together: about 5.2 × 10²⁰. Draw each as a thing and each row of twists as an arrow. Twists compose, and each has an undo. What twisting reaches from one cube is a piece. 19·comp3 found three things no twist changes.</p>
+  <p data-pid="40590c">Kept-value technique: <b>if q(end) = q(start) for every arrow, each piece lies inside one value of q. So there are at least as many pieces as q has values, and no search of rows is needed to tell two of them apart.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the kept-value technique">
+q(\text{end}) = q(\text{start}) \text{ for each twist},\ \text{so for every row of twists} @@ induction on the length of the row (4c)
+x \to y \ \Rightarrow\ q(x) = q(y) @@ so a piece lies inside one value
+\htmlClass{new}{\text{pieces} \ge \text{values of } q} \quad \blacksquare @@ two things with different values are in different pieces
+  </pre>
+  <pre class="lines" data-k="ember" data-label="the cube">
+q = (\text{parities agree or not},\ \text{total corner twist},\ \text{total edge turn}) @@ the three of 19·comp3
+2 \cdot 3 \cdot 2 = 12 \text{ values},\ \text{each on one twelfth of the ways} @@ swap two edges, twist one corner, turn one edge over: each changes one entry only
+\htmlClass{new}{\tfrac{519\,024\,039\,293\,878\,272\,000}{12} = 43\,252\,003\,274\,489\,856\,000} @@ at most this many reached from solved; exactly this many is held in trust (19·comp3)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="three sizes of map">
+\text{a climber reads}:\quad q,\ \text{with its } 12 \text{ values} @@ a table of twelve
+\text{a machine reads}:\quad \text{the corners alone, a cube of } 2 \times 2 \times 2:\ \ 7! \cdot 3^6 = 3\,674\,160 @@ one corner held still; it lists them all
+\htmlClass{new}{\text{neither reads}:\quad 4.3 \times 10^{19} \text{ scrambles}} @@ at a billion a second, about 1370 years
+  </pre>
+  <p data-pid="1ed11b">So a machine that searches rows of twists can answer “none found” and never “none”. The climber reads q and answers “none”: a cube with one corner twisted in place has total twist one third, and the solved cube has zero. What hides is the sequence, the order of the twists, and the arrangement, the stickers.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · never listed · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞·comp.6.1</span><span class="ph understand">understand</span>What does the kept-value technique say, and why does it need no search? <br>Which of the three maps does a climber read, which a machine, and what is still known about the third?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="infcomp.7">
+  <h2 class="sthead"><span class="stno">infcomp.7</span>Moves to Check</h2>
   <pre class="lines" data-k="check" data-label="this page: moves to check">
 U \xrightarrow{\ l\ }\ ?\quad \text{the level check first, then the ferry check}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; l takes U_F and is handed U: the ends do not meet, so there is no row f ⋆ l
 F \land L \text{ and } L \land F \text{ have one column, so the two programs are one}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; the column belongs to the things, the parts of U; a program is a row, and ⋆ has no turn-about
 \text{settle each loop of a program, and so build the checker}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the fixed-point lines use no fact about loops: a checker would give “opposite” a fixed point, and it has none
 3 \xrightarrow{\ FA\ } 2 \xrightarrow{\ FA\ }\ ?\quad \text{two full adders in a row}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; FA takes 3 wires and is handed 2: the row needs FA ⊕ 1 after 1₂ ⊕ FA, on 5 wires
 \text{a machine with no memory for } a^nb^n \text{ with } n \text{ up to } 98\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; that language has 198 leftovers, so 198 states do it and no fewer; each larger bound needs a larger machine, and aⁿbⁿ itself has none
+\text{a machine tried a billion rows of twists and none twisted one corner alone, so try more}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; every twist keeps the total corner twist, and the two cubes differ in it: no row of any length
 \text{merge sort and insertion sort give different lists on some input}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; both are the one map s: the bracketing changes the count of comparisons, never the list
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">∞·comp.6.1</span><span class="ph understand">understand</span>Why is there no row with the level check before the ferry check? <br>Why can two full adders not be run in a row as they stand, and what row does work?</li>
+      <li><span class="qid">∞·comp.7.1</span><span class="ph understand">understand</span>Why is there no row with the level check before the ferry check? <br>Why can two full adders not be run in a row as they stand, and what row does work?</li>
     </ol>
   </section>
 </section>
@@ -205,17 +235,17 @@ F \land L \text{ and } L \land F \text{ have one column, so the two programs are
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">∞·comp.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="G \lor B"></span></span>Build the arrows for an or that stops early. Let a check pass a situation on when it fails and stop with “yes” when it holds, and show that reading G ∨ B left first is again a row in a maybe wrapper, with pass and stop exchanged.  <br>Then give B its state, as at the toll gate of 2·comp4, and write the two rows b then g and g then b. On which situations do they differ?</div>
-  <div class="chq"><span class="chid">∞·comp.7.2</span><span class="tagq">edge</span>Take the leftover-count technique to its edges. Which languages have exactly one leftover, and what are their machines?  <br>Find a language with exactly two leftovers over the letters a and b, and one whose leftovers are endlessly many though every string in it has the same number of a’s as b’s.</div>
-  <div class="chq"><span class="chid">∞·comp.7.3</span><span class="tagq">converse</span>The one-sort technique says that a function s with s([a]) = [a] and s(x ++ y) = merge(s(x), s(y)) is sort. Turn it round: replace merge by another way m of combining two sorted lists into a sorted list. Which properties must m have for some s to exist, and is s then unique? Try m(u, v) = u.</div>
-  <div class="chq"><span class="chid">∞·comp.7.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="n = 4"></span></span>Reach the four-bit adder a second way: as (R₂ ⊕ 1₂) ∘ (1₄ ⊕ R₂), two two-bit adders in a row. Show that it is the same arrow as R₄, first by the tables and then from ∘ and ⊕ alone, using 47·eng’s box-drawing technique.</div>
+  <div class="chq"><span class="chid">∞·comp.8.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="G \lor B"></span></span>Build the arrows for an or that stops early. Let a check pass a situation on when it fails and stop with “yes” when it holds, and show that reading G ∨ B left first is again a row in a maybe wrapper, with pass and stop exchanged.  <br>Then give B its state, as at the toll gate of 2·comp4, and write the two rows b then g and g then b. On which situations do they differ?</div>
+  <div class="chq"><span class="chid">∞·comp.8.2</span><span class="tagq">edge</span>Take the leftover-count technique to its edges. Which languages have exactly one leftover, and what are their machines?  <br>Find a language with exactly two leftovers over the letters a and b, and one whose leftovers are endlessly many though every string in it has the same number of a’s as b’s.</div>
+  <div class="chq"><span class="chid">∞·comp.8.3</span><span class="tagq">converse</span>The one-sort technique says that a function s with s([a]) = [a] and s(x ++ y) = merge(s(x), s(y)) is sort. Turn it round: replace merge by another way m of combining two sorted lists into a sorted list. Which properties must m have for some s to exist, and is s then unique? Try m(u, v) = u.</div>
+  <div class="chq"><span class="chid">∞·comp.8.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="n = 4"></span></span>Reach the four-bit adder a second way: as (R₂ ⊕ 1₂) ∘ (1₄ ⊕ R₂), two two-bit adders in a row. Show that it is the same arrow as R₄, first by the tables and then from ∘ and ⊕ alone, using 47·eng’s box-drawing technique.</div>
 </section>
 <div class="themecert themeend"></div>
 
 <nav class="nextrung"><a href="inf34.html">← ∞34 · can you prove you know a secret without telling it?</a><a href="index.html">the ladder →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
-<h3>The accepted names</h3><p>The arrows A → T(B) of a wrapper, with ⋆, are the <i>Kleisli category</i> of the <i>monad</i> T; the maybe wrapper is the <i>option</i> or <i>maybe monad</i>, and stopping early is <i>short-circuit evaluation</i>. A check as an arrow that passes its input or fails is a <i>guard</i>, and an arrow not defined everywhere is a <i>partial function</i>. The argument of the second footing is the <i>halting problem</i> read through <i>Lawvere’s fixed-point theorem</i>. The category of the third footing, with numbers of wires as things, ∘ and ⊕, is a <i>PROP</i>, a kind of <i>strict monoidal category</i>; the fork is <i>copying</i>, or <i>fan-out</i>, and a set of boxes from which every table can be made is <i>functionally complete</i>. A leftover is a <i>left quotient</i>, or <i>Brzozowski derivative</i>, or <i>residual language</i>; the leftover-count technique is the <i>Myhill–Nerode theorem</i>, and the smallest machine is the <i>minimal deterministic finite automaton</i>. Lists with ++ are the <i>free monoid</i>, or with no empty list the <i>free semigroup</i>; sorted lists with merge are a <i>commutative monoid</i>, the <i>multisets</i>; and the one-sort technique says that sort is the unique <i>homomorphism</i> that extends the map on single items, the <i>universal property</i> of the free semigroup.</p><h3>What the arrows let hide</h3><p>In the ladder’s four words for a move that fails: the first footing hides sequence, and the other four hide arrangement. In each the plan is what is left, and it is one arrow or one row: q ⋆ p; φ : A × A → B; Rₙ; the map into the last machine; the map out of the lists. No dated claim is made on this page.</p>
+<h3>The accepted names</h3><p>The arrows A → T(B) of a wrapper, with ⋆, are the <i>Kleisli category</i> of the <i>monad</i> T; the maybe wrapper is the <i>option</i> or <i>maybe monad</i>, and stopping early is <i>short-circuit evaluation</i>. A check as an arrow that passes its input or fails is a <i>guard</i>, and an arrow not defined everywhere is a <i>partial function</i>. The argument of the second footing is the <i>halting problem</i> read through <i>Lawvere’s fixed-point theorem</i>. The category of the third footing, with numbers of wires as things, ∘ and ⊕, is a <i>PROP</i>, a kind of <i>strict monoidal category</i>; the fork is <i>copying</i>, or <i>fan-out</i>, and a set of boxes from which every table can be made is <i>functionally complete</i>. A leftover is a <i>left quotient</i>, or <i>Brzozowski derivative</i>, or <i>residual language</i>; the leftover-count technique is the <i>Myhill–Nerode theorem</i>, and the smallest machine is the <i>minimal deterministic finite automaton</i>. Lists with ++ are the <i>free monoid</i>, or with no empty list the <i>free semigroup</i>; sorted lists with merge are a <i>commutative monoid</i>, the <i>multisets</i>; and the one-sort technique says that sort is the unique <i>homomorphism</i> that extends the map on single items, the <i>universal property</i> of the free semigroup. A q that every arrow keeps is an <i>invariant</i>; the pieces are the <i>orbits</i> of the <i>cube group</i>, which has <i>index</i> 12 among the ways of putting the cube back. A search that can answer “none found” and never “none” is <i>incomplete</i>; an invariant gives a <i>proof of unreachability</i>.</p><h3>What the arrows let hide</h3><p>In the ladder’s four words for a move that fails: the first footing hides sequence, and the other four hide arrangement. In each the plan is what is left, and it is one arrow or one row: q ⋆ p; φ : A × A → B; Rₙ; the map into the last machine; the map out of the lists. In the sixth the map itself hides, by its size. A climber reads a map of dozens of arrows, and a machine one of thousands or millions. Past that, what every arrow keeps is still read, and it is the climber’s to ask for. No dated claim is made on this page.</p>
 </section>
 
 </div>
@@ -255,6 +285,11 @@ stepper('#sl5',[
   {k:'ember',kl:'so',t:R`s = \mathrm{sort}`,n:`By induction on the length.`},
   {k:'ember',kl:'the tree',t:R`\htmlClass{new}{\text{cost} \le \textstyle\sum (\ell + r - 1)}`,n:`Brackets change the cost only.`}
 ],{title:'The slides · one map · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'every twist keeps q',t:R`x \to y \Rightarrow q(x) = q(y)`,n:`Along rows of any length.`},
+  {k:'ember',kl:'so',t:R`\text{pieces} \ge \text{values of } q`,n:`Twelve for the cube.`},
+  {k:'ember',kl:'unread',t:R`\htmlClass{new}{4.3 \times 10^{19}}`,n:`One in twelve, known with no list.`}
+],{title:'The slides · never listed · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>
