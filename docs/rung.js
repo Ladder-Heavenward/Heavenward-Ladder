@@ -141,6 +141,16 @@ addEventListener('storage',e=>{ if(e.key===RK){ raw=null; } });
 (function(){ const F='ladder:mvInf1'; try{ if(LS.getItem(F)!=null) return;
   const sy=JSON.parse(LS.getItem('ladder:sky')||'null'); if(sy&&sy.n>0&&sy.first!==1){ sy.n+=26; sy.first=1; LS.setItem('ladder:sky',JSON.stringify(sy)); }
   LS.setItem(F,String(Date.now())); }catch(e){} })();
+/* 2026-11-11 (Andrew 20:05Z): the infinity series is numbered by a fixed shuffle of letters, digits and date kanji
+   (work/infshuffle/order.json), so ∞1-∞86 became ∞ + a symbol. Records keyed by the ∞ label (ticks, crosswalk cards seen,
+   pool repeats, standing questions) follow once, under ladder:mvInfSym, in one pass, before any record under a new label exists.
+   Page ids (infNN) did not change. */
+(function(){ const F='ladder:mvInfSym', S=["Ψ", "ל‎", "1", "Υ", "Φ", "r", "Τ", "x", "Η", "v", "Ε", "א‎", "ג‎", "ψ", "τ", "水", "Ξ", "p", "a", "J", "γ", "八", "M", "ר‎", "ד‎", "2", "8", "土", "6", "η", "F", "四", "Δ", "n", "ח‎", "九", "B", "h", "W", "G", "ט‎", "θ", "ο", "Π", "λ", "י‎", "j", "Ω", "H", "一", "ב‎", "ω", "ק‎", "木", "ζ", "4", "ו‎", "פ‎", "Ο", "千", "l", "7", "δ", "A", "ι", "Κ", "六", "f", "C", "日", "σ", "υ", "α", "s", "金", "χ", "Μ", "b", "三", "q", "I", "w", "9", "D", "十", "P"]; try{ if(LS.getItem(F)!=null) return;
+  const tg=s=>String(s).replace(/∞(\d+)/g,(x,n)=>(+n>=1&&+n<=S.length)?'∞'+S[+n-1]:x);
+  const ks=[]; for(let i=0;i<LS.length;i++){ const k=LS.key(i); if(k) ks.push(k); }
+  const mv=[]; ks.forEach(k=>{ if(!/^(marks:|cards:|rand:|sq:)/.test(k)) return; const v=LS.getItem(k); if(v==null) return; mv.push([k,tg(k),tg(v)]); });
+  mv.forEach(x=>{ if(x[1]!==x[0]) LS.removeItem(x[0]); }); mv.forEach(x=>{ LS.setItem(x[1],x[2]); });
+  LS.setItem(F,String(Date.now())); }catch(e){} })();
 
 (function(){
 'use strict';
@@ -1430,7 +1440,7 @@ function greek(){
   const main=[...document.querySelectorAll('header.top,section.class,section.pic,section.slides,section.sayback,section.qs,section.questions,section.star')];
   let txt=main.map(e=>e.textContent).join(' ');
   document.querySelectorAll('[data-tex],[data-tex-inline]').forEach(e=>{ txt+=' '+(e.getAttribute('data-tex')||'')+' '+(e.getAttribute('data-tex-inline')||''); });
-  txt=txt.replace(/\\([A-Za-z]+)/g,(m,w)=>T[w]?' '+T[w]+' ':m).replace(/ϕ/g,'φ').replace(/ϵ/g,'ε');
+  txt=txt.replace(/∞[^\s·.,;:()]\u200e?/g,' ').replace(/\\([A-Za-z]+)/g,(m,w)=>T[w]?' '+T[w]+' ':m).replace(/ϕ/g,'φ').replace(/ϵ/g,'ε');
   const seen=[];
   for(const ch of txt){ const lo=ch.toLowerCase(); if(N[lo]&&!seen.includes(ch)) seen.push(ch); }
   if(!seen.length) return;
@@ -1577,7 +1587,7 @@ function info(){
   const t=document.querySelector('header.top .tags .tag'); if(!t||!document.querySelector('.qid')) return null;
   const txt=t.textContent.trim(), i=txt.indexOf(' · '); const tag=(i<0?txt:txt.slice(0,i)).trim();
   const cls=[...t.classList].find(c=>c!=='tag')||'';
-  const rung=parseInt(tag,10); if(isNaN(rung)) return /^∞(\d+|·[a-z]+)$/.test(tag)?{tag,rung:null,annex:null,deck:'sky'}:null;
+  const rung=parseInt(tag,10); if(isNaN(rung)) return /^∞([^·.\s]\u200e?|·[a-z]+)$/.test(tag)?{tag,rung:null,annex:null,deck:'sky'}:null;
   const annex=ANNEX.includes(cls)?cls:null;
   return {tag,rung,annex,deck:annex?'a-'+annex:'r'+String(rung).padStart(2,'0')};
 }
@@ -1901,7 +1911,7 @@ function index(){ const sec=document.getElementById('skysec'), top=document.getE
     const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
     let fresh=null; try{ fresh=sessionStorage.getItem('sky:new'); sessionStorage.removeItem('sky:new'); }catch(e){} window.__skyFresh=fresh;
     if(!n){ sec.hidden=true; return; }
-    ol.innerHTML=L.slice(0,n).map(x=>/* 2026-11-08: the list is shown bottom-up (column-reverse), so ∞1 sits lowest and the newest on top */'<li class="k-sky built"><span class="n">∞'+x.n+'</span><span class="t"><a href="'+x.page+'.html">'+esc(x.title)+'</a><span class="kind">'+esc(x.kw)+'</span></span></li>').join('');
+    ol.innerHTML=L.slice(0,n).map(x=>/* 2026-11-08: the list is shown bottom-up (column-reverse), so ∞1 sits lowest and the newest on top */'<li class="k-sky built"><span class="n">∞'+(x.s||x.n)+'</span><span class="t"><a href="'+x.page+'.html">'+esc(x.title)+'</a><span class="kind">'+esc(x.kw)+'</span></span></li>').join('');
     sec.hidden=false;
     if(fresh){ const fa=ol.querySelector('a[href="'+fresh+'.html"]'); if(fa){ const li=fa.closest('li'); li.classList.add('fvhere'); setTimeout(()=>li.scrollIntoView({block:'center'}),80); setTimeout(()=>li.scrollIntoView({block:'center'}),700); } } }); }
 /* 0.3.5 (Andrew 21:57): the Endless floor shows once rung 30 is finished: its core steps passed, its floor certified, or a footing above it climbed */
@@ -1928,7 +1938,7 @@ function histLinks(){ const pg=ladderPage(); if(!/^(inf\d+|hist0)$/.test(pg)) re
   const lab=(a,t)=>{ const l=a.classList.contains('pnb')?a.querySelector('.pl'):null; if(l) l.textContent=t; else a.textContent=t; };
   if(pg===last.page){ if(!histOpen(L)) return;
     document.querySelectorAll('.pn a.pnb.next, header.top .home a, nav.nextrung a').forEach(a=>{ if(/^index\.html/.test(a.getAttribute('href')||'')&&(a.classList.contains('next')||/→/.test(a.textContent))){ a.setAttribute('href','hist0.html'); lab(a,a.classList.contains('pnb')?'the top · the history of mathematics':'next: the top · the history of mathematics →'); } }); }
-  else if(pg==='hist0'){ const t=String(last.title||''), tt='∞'+last.n+' · '+t.toLowerCase();
+  else if(pg==='hist0'){ const t=String(last.title||''), tt='∞'+(last.s||last.n)+' · '+t.toLowerCase();
     document.querySelectorAll('.pn a.pnb.prev, header.top .home a, nav.nextrung a').forEach(a=>{ if(/^inf\d+\.html/.test(a.getAttribute('href')||'')){ a.setAttribute('href',last.page+'.html'); lab(a,a.classList.contains('pnb')?tt:'← '+tt); } }); } }); }
 window.LadderSky={supply,load,open,endless,count:()=>got().n,histOpen,histLinks};
 const go=()=>{ index(); histLinks(); };

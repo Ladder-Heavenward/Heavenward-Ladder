@@ -56,16 +56,16 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="inf84.html">← ∞84 how many examples does learning need?</a><a href="inf86.html">next: ∞86 can a count reveal no one? →</a></p>
-  <div class="tags"><span class="tag now">∞85 · research front</span></div>
+  <p class="home"><a href="index.html">← the ladder</a><a href="inf84.html">← ∞D how many examples does learning need?</a><a href="inf86.html">next: ∞P can a count reveal no one? →</a></p>
+  <div class="tags"><span class="tag now">∞十 · research front</span></div>
   <h1>How Does a Machine Choose What to Attend To?</h1>
-  <p data-pid="1de935">How does a machine choose what to attend to? ∞35 met the attention step as a soft lookup: each token of a passage asks a question, every token offers an answer, and the asker takes a weighted average of the answers, weighted by how well each fits the question. This step is the working part of the machines that write text, and it is three grid products and one soft weighing. Written so, its properties can be proved. It is blind to the order of the tokens, so order has to be put in by hand. Its scores depend on its two score grids only through their product, so its knobs have many settings for one step. Its cost grows as the square of the passage, and in 2023 that was shown to be hard to avoid. And with the soft weighing left out, one attention step can carry out one step of the walk downhill on the examples in its own passage.</p>
+  <p data-pid="1de935">How does a machine choose what to attend to? ∞ח‎ met the attention step as a soft lookup: each token of a passage asks a question, every token offers an answer, and the asker takes a weighted average of the answers, weighted by how well each fits the question. This step is the working part of the machines that write text, and it is three grid products and one soft weighing. Written so, its properties can be proved. It is blind to the order of the tokens, so order has to be put in by hand. Its scores depend on its two score grids only through their product, so its knobs have many settings for one step. Its cost grows as the square of the passage, and in 2023 that was shown to be hard to avoid. And with the soft weighing left out, one attention step can carry out one step of the walk downhill on the examples in its own passage.</p>
   <p class="gesture" data-pid="e7b269">Tokens: the rows of X. Scores S = (XA)(XB)ᵀ = X(ABᵀ)Xᵀ. Weights W: each row of S through e^s, divided by the row’s total. Output WXC. Rows of W are positive and add to 1. Att(PX) = P·Att(X) for a shuffle P. ABᵀ has rank at most k, and (AG, B(G⁻¹)ᵀ) give the same step. One step of the walk from 0 on ½Σ(w·xᵢ − yᵢ)² predicts η Σ (xᵢ·x) yᵢ.</p>
 </header>
 
 <section class="class step" data-step="inf85.1">
   <h2 class="sthead"><span class="stno">inf85.1</span>The Step as Three Grid Products</h2>
-  <p data-pid="00ab2a">A passage is T tokens, and each token is a list of d numbers: the rows x₁, …, x_T of a grid X. The step has three grids of knobs: A and B, each d by k, and C, d by d. Row i of XA is the question token i asks, row j of XB is what token j can be found by, and row j of XC is the answer token j offers. The score of j for i is the dot of question i with finder j, so the grid of scores is S = (XA)(XB)ᵀ. Each row of S is weighed softly as in <a href="inf35.html">∞35</a>: w<sub>ij</sub> is e<sup>s<sub>ij</sub></sup> divided by the total of e<sup>s<sub>il</sub></sup> over the row. The output is Y = W·XC, written Att(X).</p>
+  <p data-pid="00ab2a">A passage is T tokens, and each token is a list of d numbers: the rows x₁, …, x_T of a grid X. The step has three grids of knobs: A and B, each d by k, and C, d by d. Row i of XA is the question token i asks, row j of XB is what token j can be found by, and row j of XC is the answer token j offers. The score of j for i is the dot of question i with finder j, so the grid of scores is S = (XA)(XB)ᵀ. Each row of S is weighed softly as in <a href="inf35.html">∞ח‎</a>: w<sub>ij</sub> is e<sup>s<sub>ij</sub></sup> divided by the total of e<sup>s<sub>il</sub></sup> over the row. The output is Y = W·XC, written Att(X).</p>
   <p data-pid="425dbb">Row-average technique: <b>every row of W is positive and adds to 1; adding one number to every score of a row leaves that row of W unchanged; and each place of an output row lies between the least and the greatest of the answers in that place.</b></p>
   <pre class="lines" data-k="ember" data-label="this page: the row-average technique">
 w_{ij} = e^{s_{ij}} \big/ \textstyle\sum_l e^{s_{il}} > 0,\quad \textstyle\sum_j w_{ij} = 1 @@ shares of a total
@@ -73,12 +73,12 @@ s_{ij} \to s_{ij} + c_i:\quad e^{c_i} \text{ cancels, top and bottom} @@ e^(a + 
 y_i = \textstyle\sum_j w_{ij}\,v_j,\quad v_j \text{ row } j \text{ of } XC @@ row i of W times the grid of answers
 \htmlClass{new}{\min_j v_{jp} \le y_{ip} \le \max_j v_{jp}} \quad \blacksquare @@ an average with positive weights that add to 1
   </pre>
-  <p data-pid="9ee336">So the step invents nothing: each token leaves with a blend of what the tokens offered, and only differences of scores within a row matter. The work is in the two T by T grids. S takes about T²k multiplications by the school rule and W·XC about T²d, so a passage twice as long costs four times as much. The fast rules of <a href="inf82.html">∞82</a> do not help at these sizes.</p>
+  <p data-pid="9ee336">So the step invents nothing: each token leaves with a blend of what the tokens offered, and only differences of scores within a row matter. The work is in the two T by T grids. S takes about T²k multiplications by the school rule and W·XC about T²d, so a passage twice as long costs four times as much. The fast rules of <a href="inf82.html">∞w</a> do not help at these sizes.</p>
   <section class="slides" id="sl1"><div class="eyebrow">The slides · the step · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3><div class="phkey"></div>
     <ol class="stql">
-      <li><span class="qid">∞85.1.1</span><span class="ph understand">understand</span>What are the three grids of knobs for, and what does the row-average technique say? <br>Why does a passage twice as long cost four times the work?</li>
+      <li><span class="qid">∞十.1.1</span><span class="ph understand">understand</span>What are the three grids of knobs for, and what does the row-average technique say? <br>Why does a passage twice as long cost four times the work?</li>
     </ol>
   </section>
 </section>
@@ -99,7 +99,7 @@ P W P^{\mathsf T} \cdot PXC = P\,W\,XC @@ PᵀP = I (27m)
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">∞85.2.1</span><span class="ph understand">understand</span>What does the order-blind technique say, and why is the grid of scores of PX equal to PSPᵀ? <br>Why must a text machine mark each token with its place before the step and not after?</li>
+      <li><span class="qid">∞十.2.1</span><span class="ph understand">understand</span>What does the order-blind technique say, and why is the grid of scores of PX equal to PSPᵀ? <br>Why must a text machine mark each token with its place before the step and not after?</li>
     </ol>
   </section>
 </section>
@@ -114,22 +114,22 @@ s_{ij} = x_i^{\mathsf T} M\,x_j @@ entry (i, j): straight in xᵢ with xⱼ held
 M = \textstyle\sum_{s=1}^{k} a_s\,b_s^{\mathsf T} @@ a_s and b_s the columns of A and B: k terms, so rank at most k (47h2)
 \htmlClass{new}{(AG)\big(B(G^{-1})^{\mathsf T}\big)^{\mathsf T} = A\,G\,G^{-1}B^{\mathsf T} = AB^{\mathsf T}} \quad \blacksquare @@ G undone by G⁻¹
   </pre>
-  <p data-pid="44cf3a">Two things follow. With k smaller than d, a step compares tokens in k directions only: it can ask one narrow kind of question, and a machine runs many such steps side by side, each with its own A, B and C. And the knobs have a whole family of settings for each step, one for every G. This is ∞83’s two learners in a row again, where u and v counted only through uv: the lowest points of the error are sheets, not points, and the walk downhill picks among them.</p>
+  <p data-pid="44cf3a">Two things follow. With k smaller than d, a step compares tokens in k directions only: it can ask one narrow kind of question, and a machine runs many such steps side by side, each with its own A, B and C. And the knobs have a whole family of settings for each step, one for every G. This is ∞9’s two learners in a row again, where u and v counted only through uv: the lowest points of the error are sheets, not points, and the walk downhill picks among them.</p>
   <section class="slides" id="sl3"><div class="eyebrow">The slides · one form · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">∞85.3.1</span><span class="ph understand">understand</span>What does the score-form technique say, and why is the rank of M at most k? <br>How is the freedom to change A and B by G like the two learners in a row of ∞83?</li>
+      <li><span class="qid">∞十.3.1</span><span class="ph understand">understand</span>What does the score-form technique say, and why is the rank of M at most k? <br>How is the freedom to change A and B by G like the two learners in a row of ∞9?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="inf85.4">
   <h2 class="sthead"><span class="stno">inf85.4</span>A Step of the Walk Inside the Step</h2>
-  <p data-pid="42fbc3">Let a passage hold m worked examples, each a list xᵢ with its answer yᵢ, and then a new list x with no answer. A reader who knew ∞83 would fit a straight rule w·x to the examples by the walk downhill on f(w) = ½Σ(w·xᵢ − yᵢ)², and answer w·x.</p>
+  <p data-pid="42fbc3">Let a passage hold m worked examples, each a list xᵢ with its answer yᵢ, and then a new list x with no answer. A reader who knew ∞9 would fit a straight rule w·x to the examples by the walk downhill on f(w) = ½Σ(w·xᵢ − yᵢ)², and answer w·x.</p>
   <p data-pid="12faaa">One-step technique: <b>one step of size η of the walk from w = 0 gives the answer η·Σᵢ (xᵢ·x)·yᵢ: an attention step with scores xᵢ·x and answers yᵢ, summed with no soft weighing.</b></p>
   <pre class="lines" data-k="ember" data-label="this page: the one-step technique">
-\nabla f(0) = -\textstyle\sum_i y_i\,x_i @@ the wide-grid technique (∞83): Xᵀ(X·0 − y)
+\nabla f(0) = -\textstyle\sum_i y_i\,x_i @@ the wide-grid technique (∞9): Xᵀ(X·0 − y)
 w_1 = 0 - \eta\,\nabla f(0) = \eta \textstyle\sum_i y_i\,x_i @@ one step downhill
 \htmlClass{new}{w_1 \cdot x = \eta \textstyle\sum_i (x_i \cdot x)\,y_i} \quad \blacksquare @@ the dot spreads over a sum
   </pre>
@@ -138,7 +138,7 @@ w_1 = 0 - \eta\,\nabla f(0) = \eta \textstyle\sum_i y_i\,x_i @@ one step downhil
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">∞85.4.1</span><span class="ph understand">understand</span>What does the one-step technique say, and what plays the part of scores and of answers? <br>What is learned in training, and what is learned from the passage, by a machine that works this way?</li>
+      <li><span class="qid">∞十.4.1</span><span class="ph understand">understand</span>What does the one-step technique say, and what plays the part of scores and of answers? <br>What is learned in training, and what is learned from the passage, by a machine that works this way?</li>
     </ol>
   </section>
 </section>
@@ -155,7 +155,7 @@ w_1 = 0 - \eta\,\nabla f(0) = \eta \textstyle\sum_i y_i\,x_i @@ one step downhil
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">∞85.5.1</span><span class="ph understand">understand</span>What was proved in 2023 about the cost of the step, and on what does the proof depend? <br>What was proved about training a single step without the soft weighing?</li>
+      <li><span class="qid">∞十.5.1</span><span class="ph understand">understand</span>What was proved in 2023 about the cost of the step, and on what does the proof depend? <br>What was proved about training a single step without the soft weighing?</li>
     </ol>
   </section>
 </section>
@@ -171,7 +171,7 @@ w_1 = 0 - \eta\,\nabla f(0) = \eta \textstyle\sum_i y_i\,x_i @@ one step downhil
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">∞85.6.1</span><span class="ph understand">understand</span>Why can the grid A not be read alone? <br>Why can no output place be larger than every answer in that place?</li>
+      <li><span class="qid">∞十.6.1</span><span class="ph understand">understand</span>Why can the grid A not be read alone? <br>Why can no output place be larger than every answer in that place?</li>
     </ol>
   </section>
 </section>
@@ -180,21 +180,21 @@ w_1 = 0 - \eta\,\nabla f(0) = \eta \textstyle\sum_i y_i\,x_i @@ one step downhil
   <div class="eyebrow">Open questions · nobody has the answer yet</div>
   <h2>Open questions</h2>
   <p class="chnote">These are open: the field is still asking them. There is no key; a good attempt is a reason, a guess, or a better question.</p>
-  <div class="oq"><span class="oqid">∞85.oq.1</span>Is the square in the cost needed? The proof of 2023 rests on a conjecture, and it speaks of the worst passages. Is there a proof without the conjecture, and can the passages that arise in use be attended to faster with nothing lost?</div>
-  <div class="oq"><span class="oqid">∞85.oq.2</span>What do the attention steps of a large trained text machine compute? Do they run a walk downhill on the examples in a passage, as the small machines of 2023 do, or something else?</div>
+  <div class="oq"><span class="oqid">∞十.oq.1</span>Is the square in the cost needed? The proof of 2023 rests on a conjecture, and it speaks of the worst passages. Is there a proof without the conjecture, and can the passages that arise in use be attended to faster with nothing lost?</div>
+  <div class="oq"><span class="oqid">∞十.oq.2</span>What do the attention steps of a large trained text machine compute? Do they run a walk downhill on the examples in a passage, as the small machines of 2023 do, or something else?</div>
 </section>
 <section class="history themeend">
   <div class="eyebrow">A short history · told from more than one side</div>
   <h2>How we got here</h2>
   <p data-pid="987fb6">Soft weighing over the tokens of a passage was first used in 2014, to help a machine that translated. In 2017 a machine was built from the attention step with almost nothing else.</p>
-  <p data-pid="5ee36b">In 2020 the step was read as a memory lookup, as in ∞35.</p>
+  <p data-pid="5ee36b">In 2020 the step was read as a memory lookup, as in ∞ח‎.</p>
   <p data-pid="8bb513">In 2023 two threads met on this page: proofs that the square in the cost is hard to avoid, and the finding that a step can carry out the walk downhill on the examples it is shown.</p>
 </section>
 
-<nav class="nextrung"><a href="inf84.html">← ∞84 · how many examples does learning need?</a><a href="inf86.html">∞86 · can a count reveal no one? →</a></nav>
+<nav class="nextrung"><a href="inf84.html">← ∞D · how many examples does learning need?</a><a href="inf86.html">∞P · can a count reveal no one? →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
-<h3>The accepted names</h3><p>The step is <i>self-attention</i>, in full <i>scaled dot-product attention</i>; the questions, finders and answers are <i>queries</i>, <i>keys</i> and <i>values</i>, and A, B, C are the <i>query, key and value matrices</i>. The soft weighing is the <i>softmax</i>, and W the <i>attention matrix</i>. Steps side by side are <i>heads</i>, and the whole is <i>multi-head attention</i>, the core of the <i>transformer</i>. Order-blind is <i>permutation equivariance</i>; a shuffle grid is a <i>permutation matrix</i>; the marks of place are <i>positional encodings</i>. The form xᵀMy is a <i>bilinear form</i> and ABᵀ a <i>low-rank factorization</i>; the freedom G is a <i>gauge</i>, or <i>reparameterization</i>, <i>symmetry</i>. Attention with no soft weighing is <i>linear attention</i>. Learning from the examples in a passage is <i>in-context learning</i>, and a trained machine that runs a learner inside is a <i>mesa-optimizer</i>. The conjecture is the <i>strong exponential time hypothesis</i>. Reading a trained machine’s grids is <i>mechanistic interpretability</i>.</p><h3>Who said it first</h3><p>Dzmitry Bahdanau, Kyunghyun Cho and Yoshua Bengio (2014). Ashish Vaswani, Noam Shazeer, Niki Parmar and five others, “Attention is all you need” (2017). Josh Alman and Zhao Song, “Fast attention requires bounded entries” (2023); Feyza Duman Keles, Pruthuvi Wijewardena and Chinmay Hegde, “On the computational complexity of self-attention” (2023). Johannes von Oswald, Eyvind Niklasson, Ettore Randazzo, João Sacramento, Alexander Mordvintsev, Andrey Zhmoginov and Max Vladymyrov, “Transformers learn in-context by gradient descent” (2023). Ruiqi Zhang, Spencer Frei and Peter Bartlett, “Trained transformers learn linear models in-context” (2023). Shivam Garg and co-authors began the study of what such machines learn from a passage (2022).</p><h3>Sources</h3><p>The cost: the conference record of the 2023 paper, and the introduction of a 2024 paper by the same authors on a wider step, which also cites the second 2023 paper and dates the step to 2017. The one-step construction and the trained machines: the conference record of the paper (PMLR 202), and the introduction of the paper on trained steps (arXiv 2306.09927), which is also the source for its own result. That the marks of place date from the same 2017 paper, the date 2014, the reading of 2020 beyond what ∞35 gives, and the last paragraph of the fifth footing are not yet revisited. The four techniques are checked on random grids in the number checks for this page.</p>
+<h3>The accepted names</h3><p>The step is <i>self-attention</i>, in full <i>scaled dot-product attention</i>; the questions, finders and answers are <i>queries</i>, <i>keys</i> and <i>values</i>, and A, B, C are the <i>query, key and value matrices</i>. The soft weighing is the <i>softmax</i>, and W the <i>attention matrix</i>. Steps side by side are <i>heads</i>, and the whole is <i>multi-head attention</i>, the core of the <i>transformer</i>. Order-blind is <i>permutation equivariance</i>; a shuffle grid is a <i>permutation matrix</i>; the marks of place are <i>positional encodings</i>. The form xᵀMy is a <i>bilinear form</i> and ABᵀ a <i>low-rank factorization</i>; the freedom G is a <i>gauge</i>, or <i>reparameterization</i>, <i>symmetry</i>. Attention with no soft weighing is <i>linear attention</i>. Learning from the examples in a passage is <i>in-context learning</i>, and a trained machine that runs a learner inside is a <i>mesa-optimizer</i>. The conjecture is the <i>strong exponential time hypothesis</i>. Reading a trained machine’s grids is <i>mechanistic interpretability</i>.</p><h3>Who said it first</h3><p>Dzmitry Bahdanau, Kyunghyun Cho and Yoshua Bengio (2014). Ashish Vaswani, Noam Shazeer, Niki Parmar and five others, “Attention is all you need” (2017). Josh Alman and Zhao Song, “Fast attention requires bounded entries” (2023); Feyza Duman Keles, Pruthuvi Wijewardena and Chinmay Hegde, “On the computational complexity of self-attention” (2023). Johannes von Oswald, Eyvind Niklasson, Ettore Randazzo, João Sacramento, Alexander Mordvintsev, Andrey Zhmoginov and Max Vladymyrov, “Transformers learn in-context by gradient descent” (2023). Ruiqi Zhang, Spencer Frei and Peter Bartlett, “Trained transformers learn linear models in-context” (2023). Shivam Garg and co-authors began the study of what such machines learn from a passage (2022).</p><h3>Sources</h3><p>The cost: the conference record of the 2023 paper, and the introduction of a 2024 paper by the same authors on a wider step, which also cites the second 2023 paper and dates the step to 2017. The one-step construction and the trained machines: the conference record of the paper (PMLR 202), and the introduction of the paper on trained steps (arXiv 2306.09927), which is also the source for its own result. That the marks of place date from the same 2017 paper, the date 2014, the reading of 2020 beyond what ∞ח‎ gives, and the last paragraph of the fifth footing are not yet revisited. The four techniques are checked on random grids in the number checks for this page.</p>
 </section>
 
 </div>
