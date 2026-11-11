@@ -2519,7 +2519,7 @@ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded'
 (function(){
 'use strict';
 if(window.LADDER_DESK) return;
-const PAGES=window.LADDER_SWIPE_PAGES||/^(r0[0-7]|floor1)/;
+const PAGES=window.LADDER_SWIPE_PAGES||/^(r0[0-9]|r1[01]|floor[12])/; /* Phase G floor 2: rungs 8-11 */
 const ADVANCE_ON_SWIPE_LEFT=true; /* finger moves left = the row moves on, as pages turn; flip for the other reading */
 const pg=()=>window.ladderPage?ladderPage():'';
 const ATTACH=/(^|\s)(eqline|eqline-words|brkkey|eyebrow|lbl|cap|lp|lv|first|dividend|tablewrap-cap)(\s|$)/;
