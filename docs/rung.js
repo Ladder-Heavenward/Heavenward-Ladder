@@ -553,7 +553,7 @@ function deskHTML(){
   const d=document.createElement('div'); d.id='desk'; d.setAttribute('role','dialog'); d.setAttribute('aria-label','desk');
   const qs=!!document.querySelector('.sayback');
   const hb=!!document.querySelector('section.basement'); /* 0.3.30 (Andrew 11:39): the basement is a Toolbox page */
-  d.innerHTML='<div class="dtop"><button type="button" class="dback">← back</button><b class="dttl"></b></div><div class="dtabs"><button data-p="keys">Quick Keys</button>'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph View</button><button data-p="moves">Techs Read</button><button data-p="rand">Laundry</button>'+(document.querySelector('.qid')?'<button type="button" class="dcross">Crosswalk</button>':'')+'<button type="button" class="dstick">Measuring Stick</button><button type="button" class="dstand">Standing Questions</button>'+(hb?'<button data-p="base">Cellar</button>':'')+'<button data-p="rec">Record</button>'+(document.querySelector('.wrap>section.class.step')&&false?'<button type="button" class="dfv">Page View</button>':'')+'<button type="button" class="dheights">Dizzying Heights</button><a class="dshare" href="install.html">Share the Ladder</a><button class="x" aria-label="close">✕</button></div>'
+  d.innerHTML='<div class="dtop"><button type="button" class="dback">← back</button><b class="dttl"></b><span class="dacct">'+(window.LadderAccount?LadderAccount.name:'')+'</span></div><div class="dtabs"><button data-p="keys">Quick Keys</button>'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph View</button><button data-p="moves">Techs Read</button><button data-p="rand">Laundry</button>'+(document.querySelector('.qid')?'<button type="button" class="dcross">Crosswalk</button>':'')+'<button type="button" class="dstick">Measuring Stick</button><button type="button" class="dstand">Standing Questions</button>'+(hb?'<button data-p="base">Cellar</button>':'')+'<button data-p="rec">Record</button>'+(document.querySelector('.wrap>section.class.step')&&false?'<button type="button" class="dfv">Page View</button>':'')+'<button type="button" class="dheights">Dizzying Heights</button><a class="dshare" href="install.html">Share the Ladder</a><button class="x" aria-label="close">✕</button></div>'
     +'<div class="dpane" id="dp-keys"><div id="dkeyshost"></div></div>'
     +(qs?'<div class="dpane" id="dp-qs"><p class="dnote">The page’s questions, here so you can read them beside the class.</p><div class="dq" id="dq"></div></div>':'')
     +'<div class="dpane" id="dp-graph"><div id="dgfig"></div><div id="dmg"></div><p class="dnote" style="margin-top:10px">Type it as on paper: x^2, 2sin(x), e^x, ln x, √x, |x|, x!. a, b, c and k get sliders.</p></div>'
@@ -1074,6 +1074,33 @@ function noteEdit(p){ const old=noteBox(p); if(old) old.remove(); const n=noteAl
 
 /* Reports (Andrew, 2026-10-31): a report opens an email to the author, titled "LADDER REPORT (subject)",
    with where it was sent from (page, paragraph or question) above the learner's words. A copy stays on this device. */
+/* ===== The account name (Andrew 2026-11-11 13:22Z): "a once randomized name consisting of an animal native to pnw or the north
+   pacific/salish sea, a location from my approved location pool (towns, geologic features, hydrologic features) and 2 digit number
+   with a randomized 12 digit hex hash hiding in the code". Drawn once on this device and kept outside the progress record, so
+   Delete Progress does not change who the learner is. The name is shown; the hash is not: it rides in reports and in the record. */
+(function(){
+  const ANIMALS=('Orca Otter Salmon Heron Osprey Marmot Elk Cougar Raven Puffin Murre Sculpin Lingcod Halibut Geoduck Limpet Chiton Urchin Anemone Nudibranch '
+    +'Octopus Porpoise Seal Humpback Minke Beaver Marten Fisher Pika Wolverine Lynx Bobcat Coyote Wolf Bear Deer Newt Salamander Treefrog Kingfisher '
+    +'Dipper Eagle Murrelet Auklet Oystercatcher Loon Grebe Scoter Goldeneye Bufflehead Harlequin Steelhead Sturgeon Lamprey Smelt Herring Rockfish Greenling '
+    +'Dogfish Skate Ratfish Crab Shrimp Barnacle Mussel Oyster Clam Cockle Sandpiper Dunlin Turnstone Jay Chickadee Wren Nuthatch Flicker Owl Grouse '
+    +'Ptarmigan Swift Swallow Thrush Junco Towhee Hummingbird Bat Vole Shrew Mole Squirrel Chipmunk Porcupine Raccoon Mink Weasel Ermine Muskrat Seastar '
+    +'Gull Cormorant Guillemot Albatross Shearwater Fulmar Kittiwake').split(' ');
+  const PLACES=[ /* towns */ 'Salinas','Monterey','Astoria','Tillamook','Wenatchee','Modesto','Merced','Truckee','Auburn','Placerville','Bend','Yakima','Ellensburg','Tofino','Anacortes',
+    'Bellingham','Olympia','Tacoma','Eugene','Ashland','Eureka','Arcata','Mendocino','Sonora','Mariposa','Newport','Coos Bay','Port Townsend','Sequim','Nanaimo','Victoria','Squamish',
+    'Hood River','The Dalles','Leavenworth','Winthrop','Sisters','Redding','Chico','Petaluma','Santa Cruz',
+    /* geologic features */ 'Rainier','Mount Hood','Shasta','Mount Baker','Mount Adams','Saint Helens','Lassen','Olympus','Half Dome','El Capitan','Cape Flattery','Cape Disappointment',
+    'Point Reyes','Big Sur','Glacier Peak','Three Sisters','Smith Rock','Beacon Rock','Haystack Rock','Tamalpais','Garibaldi','Mount Lyell','Desolation Peak',
+    /* hydrologic features */ 'Columbia','Willamette','Skagit','Klamath','Rogue','Umpqua','Fraser','Tuolumne','Stanislaus','Sacramento','Deschutes','Puget Sound','Hood Canal','Juan de Fuca',
+    'Deception Pass','Chelan','Tahoe','Crater Lake','Willapa Bay','Grays Harbor','Tomales Bay','Humboldt Bay','Desolation Sound','Haro Strait','Rosario Strait','Elwha','Hoh','Quinault',
+    'Nisqually','Snoqualmie','Skykomish','Nooksack','Yuba','Multnomah Falls','Yosemite Falls','Spirit Lake'];
+  const KEY='__ladder_account';
+  const rnd=n=>{ try{ const a=new Uint32Array(1); crypto.getRandomValues(a); return a[0]%n; }catch(e){ return Math.floor(Math.random()*n); } };
+  const hex12=()=>{ let s=''; for(let i=0;i<12;i++) s+='0123456789abcdef'[rnd(16)]; return s; };
+  let a=null, st=null; try{ st=window.localStorage; a=JSON.parse(st.getItem(KEY)||'null'); }catch(e){}
+  if(!a||!a.id||!a.name){ a={name:ANIMALS[rnd(ANIMALS.length)]+' '+PLACES[rnd(PLACES.length)]+' '+(10+rnd(90)), id:hex12(), t:Date.now()}; try{ st.setItem(KEY,JSON.stringify(a)); }catch(e){} }
+  window.LadderAccount={name:a.name, id:a.id, since:a.t};
+  try{ document.documentElement.setAttribute('data-acct',a.id); }catch(e){}
+})();
 const REPORT_TO='ajkowalski89@gmail.com';
 let repBox=null, repMeta=null;
 function report(meta){ repMeta=meta||{kind:'page'};
@@ -1085,7 +1112,7 @@ function report(meta){ repMeta=meta||{kind:'page'};
     repBox.querySelector('.repsend').onclick=()=>{ const m=repMeta, sub=repBox.querySelector('.repsub').value.trim()||'no subject', body=repBox.querySelector('.repbody').value.trim();
       const page=ladderPage()+'.html';
       const tag=(document.querySelector('header.top .tags .tag')||{}).textContent||'';
-      const meta=['page: '+page+(tag?' ('+tag.trim()+')':''),'where: '+(m.kind==='page'?'the page as a whole':m.kind+' '+m.where)+(m.pid?' · pid '+m.pid:''),(m.text?'it reads: '+m.text.slice(0,300)+(m.text.length>300?'…':''):''),'sent: '+new Date().toISOString(),'screen: '+window.innerWidth+'×'+window.innerHeight].filter(Boolean).join('\n');
+      const meta=['page: '+page+(tag?' ('+tag.trim()+')':''),'where: '+(m.kind==='page'?'the page as a whole':m.kind+' '+m.where)+(m.pid?' · pid '+m.pid:''),(m.text?'it reads: '+m.text.slice(0,300)+(m.text.length>300?'…':''):''),(window.LadderAccount?'account: '+LadderAccount.name+' · '+LadderAccount.id:''),'sent: '+new Date().toISOString(),'screen: '+window.innerWidth+'×'+window.innerHeight].filter(Boolean).join('\n');
       const mail='mailto:'+REPORT_TO+'?subject='+encodeURIComponent('LADDER REPORT ('+sub+')')+'&body='+encodeURIComponent(meta+'\n\n---\n'+body+'\n');
       try{ const r=JSON.parse(LS.getItem('ladder:reports')||'[]'); r.push({page,where:m.where||'',pid:m.pid||'',sub,body,t:Date.now()}); LS.setItem('ladder:reports',JSON.stringify(r)); }catch(err){}
       repBox.hidden=true; repBox.querySelector('.repsub').value=''; repBox.querySelector('.repbody').value='';

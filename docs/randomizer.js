@@ -8063,6 +8063,22 @@ function wireTree(box,again){
     i.onchange=()=>{ const o=get('rand:off',{}); (i.dataset.fl?i.dataset.fl.split(',').map(r=>'rung:'+r):[i.dataset.id]).forEach(id=>{ if(i.checked) delete o[id]; else o[id]=1; }); put('rand:off',o); treeOpen.top=true; again(); }; });
 }
 
+/* ===== Laundry 7 (Andrew 2026-11-11 07:34Z: "double check all the seeds and links for typos, and run checks that their connection
+   doesn't cause typos either"): one tidy pass over every question as it leaves the pools, so a seed joined to a link is written the
+   way the pages write it. Display only: the option the pool counts right is tidied with the others, so the answer still matches. */
+const UNIT1={feet:'foot',inches:'inch'};
+function tidyT(t){ if(typeof t!=='string'||!t) return t;
+  return t
+    .replace(/([=(+−·×÷]\s?)-(\d)/g,'$1−$2').replace(/^-(\d)/,'−$1')                                   /* a hyphen for a minus */
+    .replace(/([+−·×÷]) −(\d+(?:\.\d+)?(?:\/\d+)?|[a-zA-Zα-ω](?![a-zA-Z]))/g,'$1 (−$2)')               /* 3 + −7 is written 3 + (−7) */
+    .replace(/(^|[\s(=+−])1([xnztθyI])(?![a-zA-Z’'0-9])/g,'$1$2').replace(/−1e\^/g,'−e^')               /* 1x is written x */
+    .replace(/(^|[a-zA-Z,:;.?] |[“(])1 (metres|seconds|hours|minutes|days|weeks|years|miles|pounds|sacks|units|degrees|coins|crates|boxes|litres|kilograms|grams|feet|inches)\b/g,(m,p,u)=>p+'1 '+(UNIT1[u]||u.slice(0,-1)))
+    .replace(/([^.])\.\.(\s|$)/g,'$1.$2'); }
+function tidyQ(q){ if(!q||q.closed) return q;
+  ['story','ask','why','lead'].forEach(k=>{ if(q[k]) q[k]=tidyT(q[k]); });
+  if(q.lines) q.lines=q.lines.map(l=>[tidyT(l[0]),l[1]===null?null:tidyT(l[1])].concat(l.slice(2)));
+  if(q.opts){ const was=q.opts, now=was.map(tidyT); if(new Set(now).size===now.length){ if(q.html){ const h={}; was.forEach((o,i)=>{ h[now[i]]=q.html[o]; }); q.html=h; } q.right=tidyT(q.right); q.opts=now; } }
+  return q; }
 function style(){ if(document.getElementById('rz4css')) return; const s=document.createElement('style'); s.id='rz4css';
   s.textContent='.rzmodes{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 0 10px}.rzmode{padding:8px 6px;border-radius:8px;border:1px solid var(--line,#ccc);background:transparent;color:inherit;font:inherit;font-size:.92rem;cursor:pointer;min-width:0}.rzmode[aria-pressed="true"]{border-color:currentColor;box-shadow:inset 0 0 0 1px currentColor;font-weight:600}.rzmode:disabled{opacity:.45;cursor:default}.rzmode small{display:block;font-size:.7rem;opacity:.75;font-weight:400}.rzstory{margin:10px 0;line-height:1.55}.rzl.rzs{grid-template-columns:1.6em minmax(0,1fr)}.rzl.rzs .rzw{grid-column:2;font-size:.8em}.rzt{overflow-wrap:anywhere}.rzaddr{font-family:var(--mono,monospace);font-size:.72rem;color:var(--muted,#777);margin-top:14px}.rzaddr .rzseed{overflow-wrap:anywhere;text-align:left;font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;line-height:1.5}.rzaddr .rzseed b{font-weight:500;opacity:.75}.rzpick details{margin:0}.rzpick summary{padding:1px 0}.rzfl>summary{font-weight:600;opacity:1}.rzrg{margin-left:14px!important;font-size:.92em}.rzst{margin:0 0 0 30px;font-size:.84em;line-height:1.3;color:var(--muted,#777);overflow-wrap:anywhere}.rzst b{color:var(--ink,inherit);font-weight:600}.rzpick .rzsrc{font-weight:400;opacity:.7;font-size:.86em}.rzpick input{margin:0 4px 0 2px;vertical-align:-1px}';
   document.head.appendChild(s); }
@@ -8072,26 +8088,29 @@ function render(box){
   if((!window.LADDER_CARDMAP||!window.LADDER_SQHAS)&&S&&!render.maps){ render.maps=1; box.innerHTML='<p class="dnote">Gathering the pools…</p>'; Promise.all([S.maps(),load('sq/has.js')]).then(()=>Promise.all((window.LADDER_SQHAS||[]).map(st=>load('sq/'+st+'.js')))).then(()=>render(box)); return; }
   cardPools(); const wantD=CARDP.filter(P=>P.open()&&!P.ready()&&!deckOnce[P.file]);
   if(wantD.length){ box.innerHTML='<p class="dnote">Gathering the pools…</p>'; needDecks().then(()=>render(box)); return; }
-  const mode=modeNow(), q=build(mode), right=get('rand:right',0), MD=MODES.find(M=>M.id===mode);
+  const mode=modeNow(), kept=render.fresh?null:get('rand:cur',null), q=(kept&&kept.mode===mode&&kept.a3&&avail(mode))?kept:tidyQ(build(mode)), right=get('rand:right',0), MD=MODES.find(M=>M.id===mode);
+  render.fresh=false; put('rand:cur',q.closed?null:q); /* the question stays through a reload (Andrew 2026-11-11 07:36Z) */
   if(window.MathKeys){ const off=get('rand:off',{}), K=new Set(); [...SEEDS,...LINKS,...QP].filter(P=>P.open()&&!off['rung:'+rungOf(P.step)]).forEach(P=>(P.keys||[]).forEach(k=>K.add(k))); MathKeys.limit(K,'the laundry’s chosen pools'); }
   if(q.closed&&![...SEEDS,...toggled(),...BANK].some(P=>P.open())){ box.innerHTML='<p class="dnote">'+esc(q.closed)+'</p>'; return; }
   const sw='<div class="rzmodes" role="group" aria-label="kind of question">'+MODES.map(M=>{ const ok=avail(M.id); return '<button type="button" class="rzmode" data-m="'+M.id+'" aria-pressed="'+(M.id===mode)+'"'+(ok?'':' disabled')+'>'+esc(M.label)+(ok?'':'<small>opens at '+OPENS[M.id]+'</small>')+'</button>'; }).join('')+'</div>';
-  const wire=()=>{ wireTree(box,()=>render(box));
-    box.querySelectorAll('.rzmode').forEach(b=>b.onclick=()=>{ put('rand:mode',{m:b.dataset.m}); render(box); }); };
+  const wire=()=>{ wireTree(box,()=>{ render.fresh=true; render(box); });
+    box.querySelectorAll('.rzmode').forEach(b=>b.onclick=()=>{ put('rand:mode',{m:b.dataset.m}); render.fresh=true; render(box); }); };
   if(q.closed){ box.innerHTML=sw+'<p class="dnote">'+esc(q.closed)+'</p>'+picker(q); wire(); return; }
   const addr=q.a3.join(' . ');
-  box.innerHTML=sw+'<p class="dnote">'+esc(MD.say)+' A question never comes twice. Right answers so far: <b>'+right+'</b>. Score: <b class="rzscore">'+fmt2(get('rand:score',0))+'</b>.</p>'
+  box.innerHTML=sw+'<p class="dnote">'+(window.LadderAccount?'<b>'+esc(LadderAccount.name)+'</b>. ':'')+esc(MD.say)+' A question never comes twice. Right answers so far: <b>'+right+'</b>. Score: <b class="rzscore">'+fmt2(get('rand:score',0))+'</b>.</p>'
     +(q.story?'<p class="rzstory">'+esc(q.story)+'</p>':'')
     +(q.lines.length?'<div class="rzlines">'+q.lines.map(([t,w],i)=>'<div class="rzl'+(q.stack?' rzs':'')+'"><span class="rzn">'+(i+1)+'</span><span class="rzt">'+esc(t)+'</span><span class="rzw">'+(w===null?'?':esc(w))+'</span></div>').join('')+'</div>':'')
     +'<p class="rzask">'+esc(q.ask)+'</p><div class="rzopts">'+q.opts.map(o=>'<button type="button" class="rzo'+(q.html?' rzg':'')+'" data-v="'+esc(o).replace(/"/g,'&quot;')+'"'+(q.html?' aria-label="'+esc(o)+'">'+q.html[o]:'>'+esc(o))+'</button>').join('')+'</div>'
     +'<p class="rzwhy" hidden></p><p><button type="button" class="dlink rznext">another question</button></p>'
-    +'<p class="rzaddr"><button type="button" class="rzseed" title="report this question · '+esc(addr).replace(/"/g,'&quot;')+'">'+sayAddr(q.a3)+'</button><br>If this question does not make sense, tap its address to report it.</p>'+picker(q);
+    +'<p class="rzaddr"><button type="button" class="rzseed" title="report this question · '+esc(addr).replace(/"/g,'&quot;')+'">'+sayAddr(q.a3)+'</button><br>If this question does not make sense, tap its address to report it. <button type="button" class="dlink rzcopy">copy address</button></p>'+picker(q);
   wire();
   if(/\$[^$]+\$/.test(q.ask)&&window.katex){ const el=box.querySelector('.rzask'); el.innerHTML=''; String(q.ask).split(/(\$[^$]+\$)/).forEach(t=>{ if(/^\$[^$]+\$$/.test(t)){ const sp=document.createElement('span'); try{ katex.render(t.slice(1,-1),sp,{throwOnError:false}); }catch(e){ sp.textContent=t; } el.appendChild(sp); } else el.appendChild(document.createTextNode(t)); }); }
   let chose='';
+  const cp=box.querySelector('.rzcopy'); if(cp) cp.onclick=()=>{ const s='laundry '+addr+' ('+MD.label+') index: '+q.index; const done=()=>{ cp.textContent='copied'; };
+    try{ navigator.clipboard.writeText(s).then(done,()=>{ window.prompt('Copy this address',s); }); }catch(e){ window.prompt('Copy this address',s); } };
   box.querySelector('.rzseed').onclick=()=>{ if(window.__report) window.__report({kind:'laundry',where:'seed.link.bank '+addr+' ('+MD.label+')\ncounted right: '+q.right+'\nlearner chose: '+(chose||'(not answered yet)')+'\nwhy given: '+String(q.why||'').replace(/<[^>]*>/g,'')+'\nindex: '+q.index,text:(q.story?q.story+' | ':'')+q.lines.map(l=>l[0]).join(' / ')+' | '+q.ask+' | offered: '+q.opts.join(' ; ')}); };
   const why=box.querySelector('.rzwhy'); let done=false;
-  box.querySelectorAll('.rzo').forEach(b=>b.onclick=()=>{ if(done) return; done=true; chose=b.dataset.v;
+  box.querySelectorAll('.rzo').forEach(b=>b.onclick=()=>{ if(done) return; done=true; chose=b.dataset.v; put('rand:cur',null);
     const ok=b.dataset.v===q.right;
     box.querySelectorAll('.rzo').forEach(x=>{ x.disabled=true; if(x.dataset.v===q.right) x.classList.add('ok'); });
     if(!ok) b.classList.add('no');
@@ -8101,8 +8120,8 @@ function render(box){
     let won=''; if(ok){ put('rand:right',get('rand:right',0)+1); const base=PTS[mode]||1, nl=nLinks(q), m=mode==='read'?1:mult(), pts=Math.round((base+nl)*m*100)/100; put('rand:score',Math.round((get('rand:score',0)+pts)*100)/100);
       const sc=box.querySelector('.rzscore'); if(sc) sc.textContent=fmt2(get('rand:score',0)); won=' Scored '+base+(nl?' + '+nl+' for '+(nl===1?'its link':'its links'):'')+(mode==='read'?'':', times '+fmt2(m)+' for the pools switched on')+': '+fmt2(pts)+'.'; }
     const ax=!ok&&AX.includes(b.dataset.v)?' An axiom stands under every technique above it; the question asks for the technique built over it.':'';
-    why.hidden=false; why.innerHTML=esc((ok?'Right. ':(q.lead||'The line holds by '+q.right+'. '))+q.why+ax)+' Built at '+(q.steps||[q.step]).map(stepLink).join(', ')+'.'+esc(won); });
-  box.querySelector('.rznext').onclick=()=>render(box);
+    why.hidden=false; why.innerHTML=esc(tidyT((ok?'Right. ':(q.lead||'The line holds by '+q.right+'. '))+q.why+ax))+' Built at '+(q.steps||[q.step]).map(stepLink).join(', ')+'.'+esc(won); });
+  box.querySelector('.rznext').onclick=()=>{ render.fresh=true; render(box); };
 }
 
 /* 0.3.3 (Andrew 21:07): the laundry draws from three sets only, each folded into the step it came from:
@@ -8135,6 +8154,6 @@ function sqQ(P){ const S=window.LADDER_SQ||{}, ids=Object.keys(S).filter(id=>id.
   const id=pick(ids), tr=S[id], ns=Object.keys(tr.n).filter(k=>(tr.n[k].c||[]).length>1); if(!ns.length) return null; const k=pick(ns), N=tr.n[k];
   const r=N.c.find(c=>c.go||c.win); if(!r) return null;
   return {index:'s:'+id+'#'+k, addr:id+'#'+k, stray:false, step:P.step, lines:[], ask:N.t, right:r.t, opts:shuffle(N.c.map(c=>c.t)).slice(0,4), why:r.why||'', lead:'The path goes by: '+r.t+'. '}; }
-window.LadderRandomizer={render, build, parseNames, licensers, LINKS, SEEDS, QP, measured, cardPools, CARDP, MODES, OPS, BANK, MOVES, holds, mutations, avail, MAKE, T:{tparse,tshow,trew,tequiv,tslips,tval,trows}};
+window.LadderRandomizer={render, build, parseNames, licensers, LINKS, SEEDS, QP, measured, cardPools, CARDP, MODES, OPS, BANK, MOVES, holds, mutations, avail, MAKE, tidyQ, tidyT, T:{tparse,tshow,trew,tequiv,tslips,tval,trows}};
 const pane=document.getElementById('dp-rand'); if(pane){ let box=pane.querySelector('.rzbox'); if(!box){ box=document.createElement('div'); box.className='rzbox'; pane.innerHTML=''; pane.appendChild(box); } render(box); }
 })();
