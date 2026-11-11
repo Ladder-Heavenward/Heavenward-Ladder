@@ -1571,7 +1571,7 @@ QP.push({id:'6f.does',step:'6f',mode:'word',label:'three things choice does',ope
     return {index:'q:6f.does['+k+';'+j+';'+opts.map(o=>o.length).join('.')+']', a3:['6f.does['+k+'.'+j+']',DASH,DASH], story:stories[j], lines:[], ask:'Which of the three things is the choice doing here?', right, opts, lead:'', why}; }});
 
 /* ===== Laundry 5, rung 7 (floor 1 pools, stage G): 7a 7b 7c 7d 7e 7f 7g ===== */
-Object.assign(STEPS,{'7a':['r07a','Deduction Revisited'],'7b':['r07b','The Either-Way Principle'],'7c':['r07c','Finite Cases Need No Either-Way'],'7d':['r07d','Choosing Forces Either-Way'],'7e':['r07e','The Payoff: Double Negation and the Withheld Licences'],'7f':['r07f','Proof by Contradiction'],'7g':['r07g','Yes or No Is Data']});
+Object.assign(STEPS,{'7a':['r07a','Results Revisited'],'7b':['r07b','The Either-Way Principle'],'7c':['r07c','Finite Cases Need No Either-Way'],'7d':['r07d','Choosing Forces Either-Way'],'7e':['r07e','The Payoff: Double Negation and the Withheld Licences'],'7f':['r07f','Proof by Contradiction'],'7g':['r07g','Yes or No Is Data']});
 const written7=(id,L,lines)=>{ const q=writtenQ(id,L); if(lines) q.lines=lines; return q; };
 const let7=(s,m)=>s.replace(/[PQ]/g,c=>m[c]);
 
@@ -1598,7 +1598,7 @@ function why7(t,s,W){ const at=STG[W.kind].at, aft=W.after[s], T=x=>sval(x,s,W)?
 const ST7=['P ∨ ¬P','¬¬P ⇒ P','¬¬P','¬P','¬P ∨ ¬¬P','P ⇒ Q','(P ⇒ Q) ∨ (Q ⇒ P)','¬(P ∧ Q) ⇒ (¬P ∨ ¬Q)','¬(P ∧ Q)','(P ⇒ Q) ⇒ (¬P ∨ Q)','¬P ∨ Q','(¬Q ⇒ ¬P) ⇒ (P ⇒ Q)','¬(P ⇒ Q) ⇒ (P ∧ ¬Q)','P ⇒ ¬¬P','¬¬(P ∨ ¬P)','¬(P ⇒ Q)','¬P ∨ ¬Q','¬Q ⇒ ¬P'];
 const stage7=(kinds)=>{ const want=Math.random()<0.5; let best=null; for(let i=0;i<30;i++){ const s=pick(ST7), t=tparse(s), ls=tatoms(t).sort(), W=world7(pick(kinds),ls); best={s,t,ls,W,now:sval(t,'now',W)}; if(best.now===want) break; } return best; };
 
-/* ---------- 7a Deduction Revisited ---------- */
+/* ---------- 7a Results Revisited ---------- */
 const A7=[
   ['What three parts make an operator?','a mark, the condition that says when a line with it holds, and the moves that keep that condition',['a mark, a name and a number','a definition, an axiom and a proof','a mark, its inputs and its output'],'5a read each operator this way: = holds when its two sides name one number, and its moves are the ones that keep them naming one number.'],
   ['A mark has been defined, and no proofs about it have been written yet. What has it got?','its condition, and no moves: it means something but does nothing',['its moves, and no condition','both its condition and its moves','neither: a mark with no proofs means nothing'],'The definition gives the mark its condition. The proofs give it its moves.'],
