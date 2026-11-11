@@ -2647,3 +2647,62 @@ function foldAllButton(){ const box=document.querySelector('.rungs'); if(!box||b
   bt.addEventListener('click',()=>{ const shut=all().some(d=>d.open); all().forEach(d=>{ d.open=!shut; });
     try{ if(shut) localStorage.setItem('ladder:idxfold','1'); else localStorage.removeItem('ladder:idxfold'); }catch(e){} label(); if(window.__fit) window.__fit(); });
   box.addEventListener('toggle',label,true); label(); }
+/* idle block */
+/* idle animation (Andrew 2026-11-11 20:40Z, 20:44Z): when a slide sits untouched for a while, something quiet happens
+   behind its text. Two kinds: 'cat' (an outline of a grey cat that curls up to sleep) and 'rain' (a gentle rain of math
+   symbols; the pool grows with the rung of the page). Any touch, key, scroll or pointer move ends it at once.
+   Off for anyone whose device asks for reduced motion. Nothing here reads or writes the learner's record. */
+(function(){
+  if(window.LadderIdle) return;
+  /* kind 'turns' (the default): the cat and the rain take turns, the cat first (Andrew 21:11Z: "Cat is good"; the rain a little
+     diagonal with a faster fall). The turn is kept for the browser session only. Never over an open panel or dialog. */
+  var CFG=Object.assign({kind:'turns', wait:25000, only:function(){return document.body.classList.contains('fv')&&![].some.call(document.querySelectorAll('#agreebox,#cards,#stick,.repbox,#desk.toolpage,.pamenu'),function(e){return e.getClientRects().length>0;});}}, window.LADDER_IDLE||{});
+  function turn(){ if(CFG.kind!=='turns') return CFG.kind; var k='cat'; try{ k=sessionStorage.getItem('ladder:idle')==='cat'?'rain':'cat'; sessionStorage.setItem('ladder:idle',k); }catch(e){} return k; }
+  var calm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* the pool: [first rung, symbols]. A page of rung n rains every row with first rung <= n. */
+  var POOL=[[0,'= ( ) a b'],[1,'¬ ∧ ∨ ⇒ ⇔ ⊥ ⊤'],[2,'∀ ∃ ∈ ∉ ≠'],[3,'∅ ⊆ ∪ ∩ □ ◇'],[4,'+ · 0 1 Σ'],[5,'− < ≤ ½ ⅓'],[7,'∎ ≈'],
+    [8,'ℝ √ | sup inf'],[9,'∘ ↦ f⁻¹'],[10,'ε δ lim → ∞'],[13,'Δ f′ dy/dx'],[15,'∫ dx'],[17,'∠ △ ∥ ⊥'],[19,'π ° r²'],
+    [22,'sin cos e ln'],[26,'∂ ∇ ×'],[31,'ℂ i ≅ ⊕'],[38,'⊗ ℵ ⊢ ⊨'],[44,'λ ⟶ ⟹']];
+  function rung(){ if(CFG.rung!=null) return +CFG.rung; var m=/(?:^|\/)(?:r(\d\d)|floor(\d)|(inf|sky))/.exec(location.pathname); if(!m) return 0;
+    if(m[3]) return 99; if(m[2]) return [0,7,11,16,21,30,37,47][+m[2]]||0; return +m[1]; }
+  function pool(){ var n=rung(), out=[]; POOL.forEach(function(r){ if(r[0]<=n) out=out.concat(r[1].split(' ')); }); return out; }
+  var css='#idle-layer{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;opacity:0;transition:opacity .9s ease}'
+   +'#idle-layer.on{opacity:1}#idle-layer.off{transition:opacity .25s ease;opacity:0}'
+   +'#idle-layer svg.cat{position:absolute;right:4vw;bottom:calc(92px + env(safe-area-inset-bottom,0px));width:min(62vw,300px);height:auto;overflow:visible}'
+   +'#idle-layer .cat path{fill:none;stroke:#8d929b;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;opacity:.42}'
+   +'#idle-layer .cat .dr{stroke-dasharray:var(--l);stroke-dashoffset:var(--l);animation:idle-draw var(--t,2.4s) ease-in-out var(--d,0s) forwards}'
+   +'#idle-layer .cat .eyes-open{animation:idle-out .6s ease 7.2s forwards}#idle-layer .cat .eyes-shut{opacity:0;animation:idle-in .8s ease 7.4s forwards}'
+   +'#idle-layer .cat .body{transform-origin:105px 104px;animation:idle-breathe 4.6s ease-in-out 8s infinite}'
+   +'#idle-layer .cat .z{opacity:0;animation:idle-z 4.6s ease-in 9s infinite}#idle-layer .cat .z2{animation-delay:10.5s}#idle-layer .cat .z3{animation-delay:12s}'
+   +'#idle-layer .drop{position:absolute;top:-2em;color:#8d929b;font-family:Georgia,"Times New Roman",serif;opacity:0;animation:idle-fall var(--t) linear var(--d) infinite;will-change:transform}'
+   +'@keyframes idle-draw{to{stroke-dashoffset:0}}@keyframes idle-out{to{opacity:0}}@keyframes idle-in{to{opacity:.42}}'
+   +'@keyframes idle-breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.012,1.035)}}'
+   +'@keyframes idle-z{0%{opacity:0;transform:translate(0,0)}25%{opacity:.4}100%{opacity:0;transform:translate(10px,-22px)}}'
+   +'@keyframes idle-fall{0%{opacity:0;transform:translate(0,0)}6%{opacity:var(--o)}54%{opacity:var(--o)}62%{opacity:0;transform:translate(16vw,108vh)}100%{opacity:0;transform:translate(16vw,108vh)}}';
+  var CAT='<svg class="cat" viewBox="0 0 210 130" aria-hidden="true">'
+   /* the body curls round first, then the head settles, the ears, the tail wraps the paws; then the eyes close */
+   +'<g class="body"><path class="dr" style="--l:420;--t:3s" d="M52 104 C30 96 28 62 54 44 C82 25 134 24 162 44 C186 61 188 92 170 104 C150 116 82 116 52 104"/>'
+   +'<path class="dr" style="--l:120;--t:1.4s;--d:2.4s" d="M150 52 C136 58 124 72 122 90"/>'
+   +'<path class="dr" style="--l:150;--t:1.6s;--d:3.2s" d="M38 96 C34 80 44 66 60 64 C78 62 90 74 90 90 C90 104 78 112 62 112 C50 112 40 106 38 96"/>'
+   +'<path class="dr" style="--l:40;--t:.6s;--d:4.4s" d="M44 74 L41 57 L55 66"/><path class="dr" style="--l:40;--t:.6s;--d:4.7s" d="M72 64 L82 52 L86 70"/></g>'
+   +'<path class="dr" style="--l:260;--t:2.2s;--d:5s" d="M172 100 C184 118 150 126 112 124 C88 123 70 120 64 113"/>'
+   +'<path class="dr eyes-open" style="--l:14;--t:.3s;--d:5.2s" d="M51 88 a2.4 2.4 0 1 0 .1 0 M71 88 a2.4 2.4 0 1 0 .1 0"/>'
+   +'<path class="eyes-shut" d="M47 90 q4.5 3.5 9 0 M67 90 q4.5 3.5 9 0 M60 97 l2 2 l2 -2"/>'
+   +'<path class="z" d="M96 46 h7 l-7 8 h7"/><path class="z z2" d="M108 32 h6 l-6 7 h6"/><path class="z z3" d="M118 20 h5 l-5 6 h5"/></svg>';
+  var layer=null, timer=null;
+  function build(){ if(!document.getElementById('idle-style')){ var s=document.createElement('style'); s.id='idle-style'; s.textContent=css; document.head.appendChild(s); }
+    layer=document.createElement('div'); layer.id='idle-layer'; layer.setAttribute('aria-hidden','true');
+    if(turn()==='rain'){ var P=pool(), w=window.innerWidth, n=Math.max(10,Math.min(26,Math.round(w/22))), h='';
+      for(var i=0;i<n;i++){ var t=14+Math.random()*14, sz=14+Math.random()*16;
+        h+='<span class="drop" style="left:'+(-12+Math.random()*106).toFixed(1)+'%;font-size:'+sz.toFixed(0)+'px;--t:'+t.toFixed(1)+'s;--d:'+(Math.random()*t).toFixed(1)+'s;--o:'+(0.26+Math.random()*0.22).toFixed(2)+'">'+P[Math.floor(Math.random()*P.length)]+'</span>'; }
+      layer.innerHTML=h; }
+    else layer.innerHTML=CAT;
+    document.body.appendChild(layer); requestAnimationFrame(function(){ requestAnimationFrame(function(){ if(layer) layer.classList.add('on'); }); }); }
+  function stop(){ if(layer){ var l=layer; layer=null; l.classList.add('off'); setTimeout(function(){ l.remove(); },300); } if(!CFG.manual) arm(); }
+  function arm(){ clearTimeout(timer); if(calm) return; timer=setTimeout(function(){ if(!layer&&!document.hidden&&CFG.only()) build(); else if(!layer) arm(); },CFG.wait); }
+  if(!CFG.manual){ ['pointerdown','pointermove','touchstart','keydown','wheel','scroll'].forEach(function(e){ window.addEventListener(e,stop,{passive:true,capture:true}); });
+  document.addEventListener('visibilitychange',stop); }
+  window.LadderIdle={start:function(kind){ if(kind) CFG.kind=kind; if(layer){ layer.remove(); layer=null; } clearTimeout(timer); build(); },stop:stop,cfg:CFG,pool:pool};
+  if(!CFG.manual) arm();
+})();
+/* end idle block */
