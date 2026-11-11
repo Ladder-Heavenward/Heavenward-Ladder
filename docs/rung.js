@@ -566,7 +566,7 @@ function deskHTML(){
     +'<div class="dpane" id="dp-graph"><div id="dgfig"></div><div id="dmg"></div><p class="dnote" style="margin-top:10px">Type it as on paper: x^2, 2sin(x), e^x, ln x, √x, |x|, x!. a, b, c and k get sliders.</p></div>'
     +'<div class="dpane" id="dp-moves"><p class="dnote" id="dmnote">The techs this step uses and builds: what each is called, what it does in words, and the line in symbols.</p><div id="dmoves"></div><p><a class="dlink" href="moves.html">every tech you have earned →</a></p></div>'
     +'<div class="dpane" id="dp-rand"><p class="dnote">Practice drawn from the pools your steps have opened, with no repeats.</p></div>'
-    +(hb?'<div class="dpane" id="dp-base"><div id="dbase"></div></div>':'')+'<div class="dpane" id="dp-rec"><p class="dnote">Everything the ladder remembers about your climb is one record, kept on this device. Save it as a file to keep a copy or to carry it to another device, and open that file there.</p><p><button type="button" class="dlink recx">save my record as a file</button></p><p><label class="dlink">open a record file <input type="file" accept=".json,application/json" class="reci" hidden></label></p><p><button type="button" class="dlink recdel">delete my progress</button></p><p class="dnote" id="recnote"></p></div>';
+    +(hb?'<div class="dpane" id="dp-base"><div id="dbase"></div></div>':'')+'<div class="dpane" id="dp-rec"><p class="recname"><span class="dnote">Your name on this device:</span> <b class="dname-n">'+(window.LadderAccount?LadderAccount.name:'')+'</b> <button type="button" class="dlink recroll">New Name</button></p><p class="dnote">Everything the ladder remembers about your climb is one record, kept on this device. Save it as a file to keep a copy or to carry it to another device, and open that file there.</p><p><button type="button" class="dlink recx">save my record as a file</button></p><p><label class="dlink">open a record file <input type="file" accept=".json,application/json" class="reci" hidden></label></p><p><button type="button" class="dlink recdel">delete my progress</button></p><p class="dnote" id="recnote"></p></div>';
   document.body.append(b,d);
 }
 
@@ -957,6 +957,7 @@ window.__deskInit=function(){
   const dh=desk.querySelector('.dheights'); if(dh) dh.onclick=()=>{ open(false); if(window.LadderFV) LadderFV.heights(); else location.href='index.html'; };
   const rx=desk.querySelector('.recx'), ri=desk.querySelector('.reci'), rn=desk.querySelector('#recnote');
   if(rx) rx.onclick=()=>LadderRecord.export();
+  const rr=desk.querySelector('.recroll'); if(rr) rr.onclick=()=>{ if(window.LadderAccount&&LadderAccount.reroll){ const n=LadderAccount.reroll(); if(rn) rn.textContent='Your name is now '+n+'.'; } };
   const rd=desk.querySelector('.recdel'); if(rd) rd.onclick=()=>{ if(!confirm('Delete your progress? You will lose all your progress: every footing, star, measure, standing question and note on this device. Save your record as a file first if you may want it back.')) return;
     LadderRecord.erase(); try{ sessionStorage.clear(); }catch(x){} rn.textContent='Progress deleted. Reloading…'; setTimeout(()=>location.href='index.html',400); };
   if(ri) ri.onchange=()=>{ const f=ri.files[0]; if(!f) return; f.text().then(t=>{ const o=JSON.parse(t);
@@ -1104,8 +1105,12 @@ function noteEdit(p){ const old=noteBox(p); if(old) old.remove(); const n=noteAl
   const rnd=n=>{ try{ const a=new Uint32Array(1); crypto.getRandomValues(a); return a[0]%n; }catch(e){ return Math.floor(Math.random()*n); } };
   const hex12=()=>{ let s=''; for(let i=0;i<12;i++) s+='0123456789abcdef'[rnd(16)]; return s; };
   let a=null, st=null; try{ st=window.localStorage; a=JSON.parse(st.getItem(KEY)||'null'); }catch(e){}
-  if(!a||!a.id||!a.name){ a={name:ANIMALS[rnd(ANIMALS.length)]+' '+PLACES[rnd(PLACES.length)]+' '+(10+rnd(90)), id:hex12(), t:Date.now()}; try{ st.setItem(KEY,JSON.stringify(a)); }catch(e){} }
-  window.LadderAccount={name:a.name, id:a.id, since:a.t};
+  const draw=()=>ANIMALS[rnd(ANIMALS.length)]+' '+PLACES[rnd(PLACES.length)]+' '+(10+rnd(90));
+  if(!a||!a.id||!a.name){ a={name:draw(), id:hex12(), t:Date.now()}; try{ st.setItem(KEY,JSON.stringify(a)); }catch(e){} }
+  window.LadderAccount={name:a.name, id:a.id, since:a.t,
+    /* Andrew 2026-11-11 18:33Z: a new name on request; the id and the start date stay */
+    reroll(){ let n=draw(), k=0; while(n===a.name&&k++<5) n=draw(); a.name=n; try{ st.setItem(KEY,JSON.stringify(a)); }catch(e){} this.name=n;
+      try{ document.querySelectorAll('.dname-n,.dacct').forEach(e=>{ e.textContent=n; }); }catch(e){} return n; } };
   try{ document.querySelectorAll('.dname-n,.dacct').forEach(e=>{ e.textContent=a.name; }); }catch(e){} /* the toolbox may be built before the name is drawn */
   try{ document.documentElement.setAttribute('data-acct',a.id); }catch(e){}
 })();
