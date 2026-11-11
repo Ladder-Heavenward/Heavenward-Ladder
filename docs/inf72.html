@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Who Wins an Auction, and What Should It Cost?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style></style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="inf71.html">← ∞71 why does one controller work on everything?</a><a href="index.html">next: the ladder →</a></p>
+  <div class="tags"><span class="tag then">∞72 · newsflash</span></div>
+  <h1>Who Wins an Auction, and What Should It Cost?</h1>
+  <p data-pid="304b1d">Who wins an auction, and what should it cost? A painting, a field of oil, the right to broadcast on a band of the airwaves: each is sold to whoever will pay most, and each bidder knows what the thing is worth to them and nobody else does. If the winner pays their own bid, every bidder is tempted to bid below their worth, and how far below depends on guesses about the others. In 1961 an economist found a rule that ends the guessing: sell to the highest bid, but charge the second highest. Then telling the truth is the best bid, whatever the others do. In 1981 several people showed something stranger. Under fair conditions, every way of selling that gives the thing to the bidder who values it most raises the same money on average, and the seller gains more only by sometimes refusing to sell. When the airwaves of the United States went up for sale in 1994, the theory had to carry many licences at once, where a bidder who wants two together can be caught holding one, and the rules that were built for it have raised more than a hundred billion dollars since. This page finds the bid that is best when the winner pays their own bid, proves that the truth is best when the winner pays the second bid, proves that the money is the same, finds the best price below which the seller keeps the thing, and finds the trap of buying several things at once. In 2020 the prize in economics went to auction design.</p>
+  <p class="gesture" data-pid="440497">Two bidders with values spread evenly on [0, 1], the winner paying their own bid: bidding v/2 is the best reply to a rival who does the same. The winner paying the second bid: bidding v is never worse than any other bid. If the highest value always wins and the lowest pays nothing, a bidder of value v pays on average vQ(v) − ∫₀ᵛQ, where Q is the chance of winning, so both rules raise 1/3. A price r below which nothing is sold raises 1/3 + r² − 4r³/3, at most 5/12 at r = 1/2. A bidder who wants two goods only together can, in two separate sales, win one at a loss.</p>
+</header>
+
+<section class="class step" data-step="inf72.1">
+  <h2 class="sthead"><span class="stno">inf72.1</span>Bidding Below Your Value</h2>
+  <p data-pid="3e1785">Two bidders want one painting. Each knows what it is worth to them, their value, and only that. Each writes a bid in a sealed envelope; the higher bid wins and pays its own bid. Bidding your value gains nothing even when you win, so everyone bids lower. How much lower is the game of <a href="r42h.html#d927bc">42h4</a>, with a grid of gains for every value a bidder might have.</p>
+  <p data-pid="0c83a5">Let each value be spread evenly over [0, 1], independently, as a density (<a href="r30m.html#c9caaf">30m1</a>). Suppose the rival bids half their value. Then the rival’s bid is spread evenly over [0, ½], and a bid b ≤ ½ wins with chance 2b.</p>
+  <p data-pid="e071fb">Half-bid technique: <b>in a sealed auction where the winner pays their own bid, with two bidders whose values are spread evenly and independently on [0, 1], bidding half your value is a best reply to a rival who bids half theirs.</b> So both bidding half is an equilibrium of 42h4.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the half-bid technique">
+\text{gain of bid } b \le \tfrac12:\ \ (v - b)\cdot 2b @@ win with chance 2b, keep v − b
+(v - b)\,2b = \tfrac{v^2}{2} - 2\left(b - \tfrac v2\right)^2 @@ complete the square
+\text{largest at } b = \tfrac v2,\ \text{gain } \tfrac{v^2}{2} @@ a square is never below 0
+b > \tfrac12:\ \text{gain } v - b < v - \tfrac12 \le \tfrac{v^2}{2} @@ since v² − 2v + 1 = (v − 1)² ≥ 0
+\htmlClass{new}{\text{bid } v/2} \quad \blacksquare @@ the best reply to half
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: a value of 0.8">
+b = 0.3:\ (0.5)(0.6) = 0.30;\ \ b = 0.5:\ (0.3)(1) = 0.30 @@ too low, too high
+b = 0.4:\ (0.4)(0.8) = 0.32 @@ the best, v²/2
+\htmlClass{new}{b = 0.8:\ \text{gain } 0} \quad \blacksquare @@ the truth earns nothing
+  </pre>
+  <p data-pid="aa53e7">With n bidders the same reasoning gives the bid (n − 1)v/n: the more rivals, the less you shade. The catch is that the best bid rests on a guess about how everyone else is spread and how they bid. Change the guess and the bid changes, and a bidder who guesses wrong either overpays or loses a sale they could have had.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · shading · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞72.1.1</span><span class="ph understand">understand</span>What does the half-bid technique say, and why does bidding your value earn nothing when the winner pays their own bid? <br>Why does the best bid depend on how the rival’s values are spread?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf72.2">
+  <h2 class="sthead"><span class="stno">inf72.2</span>Charge the Second Bid</h2>
+  <p data-pid="d32cef">Change one rule. The highest bid still wins, but the winner pays the second highest bid. Your bid now decides only whether you win, never what you pay. Let h be the highest of the other bids.</p>
+  <p data-pid="6c2ded">Truth-wins technique: <b>in a sealed auction where the highest bid wins and pays the second highest bid, bidding your value v gives a gain at least as large as any other bid, whatever the others bid.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the truth-wins technique, by cases">
+h < v:\ \text{bid } v \text{ wins, gain } v - h > 0 @@ a higher bid also wins and pays h; a bid below h loses and gains 0
+h > v:\ \text{bid } v \text{ loses, gain } 0 @@ a bid above h wins and pays h &gt; v: a loss
+h = v:\ \text{gain } 0 \text{ win or lose} @@ any bid gains 0 or less
+\htmlClass{new}{\text{no bid beats } v,\ \text{whatever } h \text{ is}} \quad \blacksquare @@ nothing was assumed about the others
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: a value of 7">
+h = 5:\ \text{bid } 7 \to +2;\ \ \text{bid } 9 \to +2;\ \ \text{bid } 4 \to 0 @@ shading can only lose the sale
+\htmlClass{new}{h = 8:\ \text{bid } 7 \to 0;\ \ \text{bid } 9 \to -1} \quad \blacksquare @@ overbidding can only win at a loss
+  </pre>
+  <p data-pid="7a30c1">No guess about the rivals entered the proof, and that is the point: the half-bid technique needed a guess; this needs none. The open cry auction of the salesroom, the price rising until one bidder is left, works the same way, since the last rival drops out at their value and the winner pays about that. In both, the winner is the bidder with the highest value.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · truth · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞72.2.1</span><span class="ph understand">understand</span>What does the truth-wins technique say, and in which case does bidding above your value lose money? <br>Why did the proof need no guess about the other bidders?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf72.3">
+  <h2 class="sthead"><span class="stno">inf72.3</span>The Same Money on Average</h2>
+  <p data-pid="d4aee0">Which rule raises more for the seller? With two bidders spread evenly on [0, 1], the second-bid rule collects the lower value, on average ⅓. The own-bid rule collects half the higher value, and the higher of two even values averages ⅔, so it also collects ⅓. The winner pays less under one rule and bids less under the other, and the two exactly cancel. That is no accident.</p>
+  <p data-pid="9d8dd2">Take any rule, and suppose the bidders have settled into an equilibrium where each bidder’s value is spread the same way and independently, and each cares only about their average gain. Write Q(v) for the chance that a bidder of value v wins, P(v) for what they pay on average, and U(v) = vQ(v) − P(v) for their average gain. A bidder of value v could act as if their value were w; in equilibrium that is no better.</p>
+  <p data-pid="d5744f">Same-money technique: <b>in such an equilibrium, U(v) = U(0) + ∫₀ᵛ Q(t) dt, so P(v) = vQ(v) − U(0) − ∫₀ᵛ Q(t) dt. Two rules with the same chances of winning and the same gain at value 0 collect the same money on average.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the same-money technique">
+U(v) \ge vQ(w) - P(w) = U(w) + (v - w)Q(w) @@ acting as w is no better
+U(w) \ge U(v) + (w - v)Q(v) @@ the same, with v and w swapped
+(v - w)\,Q(w) \le U(v) - U(w) \le (v - w)\,Q(v) @@ together, for w &lt; v; so Q rises with v
+\textstyle\sum (t_{k+1} - t_k)Q(t_k) \le U(v) - U(0) \le \sum (t_{k+1} - t_k)Q(t_{k+1}) @@ add over a cut 0 = t₀ &lt; ⋯ &lt; t_m = v
+\htmlClass{new}{U(v) - U(0) = \textstyle\int_0^v Q} \quad \blacksquare @@ both sums of a rising Q close on the integral (16c)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: n bidders, the highest value wins">
+Q(v) = v^{n-1},\ \ U(0) = 0 @@ every other value below v
+P(v) = v^n - \tfrac{v^n}{n} = \tfrac{n - 1}{n}\,v^n @@ the same-money technique
+n\textstyle\int_0^1 \tfrac{n-1}{n}v^n\,dv = \tfrac{n-1}{n+1} @@ n bidders, the average-adds technique (30g1)
+\htmlClass{new}{n = 2:\ \tfrac13;\ \ n = 10:\ \tfrac{9}{11}} \quad \blacksquare @@ any rule where the highest value wins
+  </pre>
+  <p data-pid="b3e192">So the own-bid rule, the second-bid rule, the open cry auction and the falling-price auction of a flower market all raise (n − 1)/(n + 1) here. The conditions carry the weight. Bidders who fear losing more than they like winning bid higher under the own-bid rule; values that are not independent, as when every bidder for an oil field guesses at the same oil, break it too. Those cases are where the rules differ, and where most of the later theory lives.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · same money · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞72.3.1</span><span class="ph understand">understand</span>What does the same-money technique say, and where in its proof is the equilibrium used? <br>Why do the own-bid and second-bid rules raise the same ⅓ with two bidders, though the winner pays differently?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf72.4">
+  <h2 class="sthead"><span class="stno">inf72.4</span>Sometimes Refuse to Sell</h2>
+  <p data-pid="def394">The same-money technique says that to raise more, the seller must change who wins. One way is a reserve: a price r below which the seller keeps the painting. Take the second-bid rule with two bidders spread evenly on [0, 1] and a reserve r. Truth is still best, by the truth-wins technique with the seller as a bidder at r. A bidder of value v ≥ r wins with chance v, and below r never.</p>
+  <p data-pid="8f49a4">Best-reserve technique: <b>with two bidders spread evenly on [0, 1], the second-bid rule with reserve r raises ⅓ + r² − 4r³/3 on average, and the best reserve is r = ½, raising 5/12.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the best-reserve technique">
+U(v) = \textstyle\int_r^v t\,dt = \tfrac{v^2 - r^2}{2} @@ the same-money technique, Q(t) = t above r
+P(v) = v \cdot v - U(v) = \tfrac{v^2 + r^2}{2} @@ for v ≥ r
+2\textstyle\int_r^1 \tfrac{v^2 + r^2}{2}\,dv = \tfrac13 + r^2 - \tfrac43 r^3 @@ two bidders
+\tfrac5{12} - \left(\tfrac13 + r^2 - \tfrac43 r^3\right) = \tfrac{(2r - 1)^2(4r + 1)}{12} \ge 0 @@ multiply out to check
+\htmlClass{new}{r = \tfrac12:\ \tfrac5{12}} \quad \blacksquare @@ a quarter more than ⅓
+  </pre>
+  <p data-pid="015cf3">The price is real. With chance ¼ both values are below ½ and the painting is not sold, though both bidders value it above the seller’s 0. A seller who cares only for money accepts that loss; a government selling the airwaves, which wants them used, may not. For values spread in other ways the best reserve solves r = (1 − F(r))/f(r), where F is the spread and f its density, and for the even spread it is ½ whatever the number of bidders: held in trust, from the 1981 work in the cellar.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · reserve · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞72.4.1</span><span class="ph understand">understand</span>What does the best-reserve technique say, and how does P(v) follow from the same-money technique? <br>Why does the reserve that raises most also sometimes leave the painting unsold?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf72.5">
+  <h2 class="sthead"><span class="stno">inf72.5</span>Many Goods at Once</h2>
+  <p data-pid="00a3fd">A band of the airwaves in one city is worth more to a phone company that also holds the next city. Sell the licences one at a time and such a bidder is in trouble. Take two licences, A and B. Bidder N values them together at 10 and either alone at 0. Bidder L values A alone, bidder M values B alone.</p>
+  <p data-pid="d25029">Exposure technique: <b>if A and B are sold in separate second-bid auctions, every pair of bids by which N can win both can also, for some values of L and M, win exactly one at a loss.</b> To win both, N must bid x > 0 on A and y > 0 on B. If L values A at x/2 and M values B above y, N wins A alone and pays x/2 for a thing worth 0 to them.</p>
+  <pre class="lines" data-k="ember" data-label="this page: three cases, N bids 5 on each">
+L = 6,\ M = 6:\ \ N \text{ wins nothing} @@ right: 6 + 6 = 12 &gt; 10, the licences are worth more apart
+L = 4,\ M = 4:\ \ N \text{ wins both, pays } 8,\ \text{gain } 2 @@ right: 10 &gt; 8
+\htmlClass{new}{L = 6,\ M = 3:\ \ N \text{ wins B alone, pays } 3,\ \text{gain } -3} \quad \blacksquare @@ the exposure
+  </pre>
+  <p data-pid="929e83">A bidder who has been caught once bids timidly, and timid bids leave the licences with the wrong owners. The 1994 design sold all the licences at once, in rounds, every price visible, and no licence closed until bidding had stopped on all of them, so that a bidder could watch both prices rise and drop out of both together. The first such sale, in July 1994, sold ten licences across the country in 47 rounds over five days, for about 617 million dollars. Bids on packages, “A and B or nothing”, remove the exposure, but then deciding which bids win is a packing problem, and with many licences it is NP-complete (<a href="r41h.html#bb11da">41h3</a>).</p>
+  <p data-pid="efadab">The 2016 to 2017 sale ran two auctions in one. Television stations were offered falling prices to give up their channels, and the stations that stayed had to be packed into fewer channels so that no two nearby stations shared one: a colouring of a map, as in <a href="r41k.html">41k</a>, checked by a solver after every offer. Phone companies then bought the freed band. Buyers paid about 19.8 billion dollars for 70 MHz of licences, and stations were paid about 10.05 billion to give up or move their channels.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · exposure · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞72.5.1</span><span class="ph understand">understand</span>What does the exposure technique say, and in the third case why does N lose 3? <br>How did selling all the licences at once in rounds reduce the exposure, and what problem do package bids bring instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf72.6">
+  <h2 class="sthead"><span class="stno">inf72.6</span>Moves to Check</h2>
+  <pre class="lines" data-k="check" data-label="this page: moves to check">
+\text{charging the second bid loses the seller money}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the bids rise to the values, and with two even bidders both rules raise ⅓
+\text{the truth is the best bid when the winner pays their own bid}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it earns 0; the truth-wins technique is about the second bid
+\text{every auction raises the same money}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only those where the highest value wins, under the stated conditions; a reserve raises 5/12
+\text{the best reserve sells to someone every time}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; with r = ½ nothing is sold a quarter of the time
+\text{selling licences one at a time is as good as selling them together}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a bidder who wants a pair can be caught holding one
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞72.6.1</span><span class="ph understand">understand</span>Why is the same-money technique not a claim about every auction, and what does a reserve change? <br>Why is the truth best under one sealed rule and not the other?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="openq themeend">
+  <div class="eyebrow">Open questions · nobody has the answer yet</div>
+  <h2>Open questions</h2>
+  <p class="chnote">These are open: the field is still asking them. There is no key; a good attempt is a reason, a guess, or a better question.</p>
+  <div class="oq"><span class="oqid">∞72.oq.1</span>What is the best way to sell two goods to one buyer? For one good the best is a single take-it-or-leave-it price, and the best-reserve technique finds it. For two goods, even with the buyer’s two values independent, the best seller may offer lotteries, a chance at a good for a price, and the best menu can have endlessly many items. Bundling both together for one price is best in some cases and not in others. There is no formula, and the shape of the best menu for several goods and several buyers is not known.</div>
+  <div class="oq"><span class="oqid">∞72.oq.2</span>Do bidders behave as the model says? In laboratory second-bid auctions, where the truth is the best bid by the truth-wins technique, many people bid above their value, and keep doing so after practice. Is it a misreading of the rule, a pleasure in winning, or something else, and should auction rules be designed for the bidders the proofs assume or for the ones who turn up?</div>
+  <div class="oq"><span class="oqid">∞72.oq.3</span>Which sealed rule should sell an advert on a web page? Advertising exchanges long used the second-bid rule, and between 2017 and 2019 the large ones moved to the own-bid rule, partly over doubts about how the second bid was set. Now the bidders are programs that learn to shade from past sales. Whether the same-money technique survives when both sides learn and adjust thousands of times a second, and which rule then raises more, is argued.</div>
+</section>
+<section class="history themeend">
+  <div class="eyebrow">A short history · told from more than one side</div>
+  <h2>How we got here</h2>
+  <p data-pid="bb7923">For most of history an auction was a room and a rising price. The question of what a bidder should do was first put mathematically in a paper of 1961, which compared the own-bid sealed auction, the second-bid sealed auction and the open cry and falling-price auctions, found that the truth was best under the second bid, and found that with evenly spread values all four raised the same price on average. The paper was little read for years. Its author shared the prize in economics in 1996, and died three days after it was announced.</p>
+  <p data-pid="1cb839">In 1981 the same-money result was proved in general by several people at once, and one of them went further: among all ways of selling, which raises most? The answer, a reserve chosen by the formula of inf72.4, made the reserve price respectable as theory. Others studied the sale of things whose worth is the same for everyone and unknown, like the oil under a field offered for drilling. The bidder with the highest guess wins, and the highest of many guesses is too high: the winner’s curse. A careful bidder bids below even their own estimate.</p>
+  <p data-pid="ec66d4">In 1994 the United States stopped handing out the airwaves by hearings and began to sell them, and economists who had studied auctions helped shape the rules of the sale. The rule they built, many licences sold at once in rounds, was first used that July, raised about 617 million dollars for ten licences, and was copied around the world. By 2014 the country had raised almost 121 billion dollars in 101 such sales.</p>
+  <p data-pid="b5c329">In April 2000 the United Kingdom sold licences for the third generation of mobile phones for about 22.5 billion pounds, far more than forecast. Then the telecoms bubble burst, and the winners did not for years earn back what they had paid. Some blamed the auctions for draining the companies; others, auction designers among them, argued that the prices were the bidders’ own forecasts and that the crash had other causes, among them the heavy borrowing of the whole industry. Whether a government should take all it can from such a sale, or less in return for faster building, is still argued.</p>
+  <p data-pid="85077f">The incentive auction of 2016 to 2017 was the hardest yet: it had to buy channels from television stations and sell them to phone companies in one design, and checking whether the remaining stations could be packed into fewer channels was itself a hard problem, solved fast enough only by programs tuned for it. It paid stations about 10.05 billion dollars and sold licences for about 19.8 billion. In 2020 the prize in economics went to two of the people who had built the theory and the 1994 rules.</p>
+  <p data-pid="1fc7b5">What is argued now is less the mathematics than the bidders. Adverts on web pages are sold by auction all day long, and the large exchanges moved from the second-bid to the own-bid rule by 2019, after doubts about how the second bid was set. Laboratory bidders do not bid the truth even when it is best. And the design of auctions has become a business: the people who build the rules are often paid by one side, and whether an auction raises the most money, serves the public or simply looks fair is decided case by case.</p>
+</section>
+
+<nav class="nextrung"><a href="inf71.html">← ∞71 · why does one controller work on everything?</a><a href="index.html">the ladder →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The own-bid sealed auction is the first-price sealed-bid auction, and the second-bid one the Vickrey auction or second-price sealed-bid auction; the open cry auction is the English auction and the falling-price one the Dutch auction. The half-bid technique gives the symmetric Bayes–Nash equilibrium bid (n − 1)v/n for uniform values. The truth-wins technique says that truthful bidding is a weakly dominant strategy. The same-money technique is the revenue equivalence theorem, and its proof is the envelope argument, with U the interim utility and Q the interim allocation; Myerson’s lemma is its form for mechanisms. The best-reserve formula uses the virtual value v − (1 − F(v))/f(v) of Myerson’s optimal auction. The exposure technique is the exposure problem for complements; the 1994 rule is the simultaneous multiple-round auction (SMRA), package bidding is the combinatorial auction, and the general second-bid rule for packages is the Vickrey–Clarke–Groves (VCG) mechanism. The 2016 to 2017 sale is the FCC broadcast incentive auction, with a descending clock reverse auction and repacking checked by a SAT solver. Values that are the same for all are common values, and the winner’s curse is the bias they bring.</p>
+  <h3>Who said it first</h3>
+  <p>William Vickrey, of Columbia University, published “Counterspeculation, Auctions, and Competitive Sealed Tenders” in the Journal of Finance in 1961; he shared the 1996 prize with James Mirrlees and died on 11 October 1996. Revenue equivalence in general is due to Roger Myerson (“Optimal Auction Design”, 1981) and, the same year, John Riley and William Samuelson (“Optimal Auctions”), among others; Myerson shared the 2007 prize with Leonid Hurwicz and Eric Maskin for mechanism design. Robert Wilson studied common-value auctions and the winner’s curse; Paul Milgrom, his former graduate student, built the general theory with him, and with Preston McAfee they shaped the FCC’s 1994 design. The incentive auction rests on the deferred-acceptance clock auctions of Milgrom and Ilya Segal. Milgrom and Wilson received the 2020 prize “for improvements to auction theory and inventions of new auction formats”. Constantinos Daskalakis, Alan Deckelbaum and Christos Tzamos (2017) showed how strange the best menu for several goods can be.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The winner pays less under the second-bid rule than under the own-bid rule, so the seller gets less.” Not allowed: it compares the payments at fixed bids, but the bids change with the rule. Under the own-bid rule everyone shades, and the same-money technique shows that the shading exactly uses up the difference.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+
+stepper('#sl1',[
+  {k:'ember',kl:'gain',t:R`(v - b)\,2b`,n:`Win with chance 2b.`},
+  {k:'ember',kl:'square',t:R`\tfrac{v^2}{2} - 2(b - \tfrac v2)^2`,n:`Largest at v/2.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{b = v/2}`,n:`Value 0.8, bid 0.4.`}
+],{title:'The slides · shading · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'rule',t:R`\text{pay } h`,n:`The second bid.`},
+  {k:'ember',kl:'cases',t:R`h < v,\ h > v,\ h = v`,n:`Bid v wins each.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{bid } v}`,n:`No guess needed.`}
+],{title:'The slides · truth · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'squeeze',t:R`(v - w)Q(w) \le U(v) - U(w)`,n:`Acting as w.`},
+  {k:'ember',kl:'sum',t:R`U(v) - U(0) = \textstyle\int_0^v Q`,n:`Rising Q.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\tfrac{n-1}{n+1}}`,n:`Any such rule.`}
+],{title:'The slides · same money · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'gain',t:R`U(v) = \tfrac{v^2 - r^2}{2}`,n:`Above r.`},
+  {k:'ember',kl:'money',t:R`\tfrac13 + r^2 - \tfrac43 r^3`,n:`Two bidders.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{r = \tfrac12,\ \tfrac5{12}}`,n:`Unsold with chance ¼.`}
+],{title:'The slides · reserve · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'want',t:R`N:\ 10 \text{ for both},\ 0 \text{ for one}`,n:`Complements.`},
+  {k:'ember',kl:'bids',t:R`5 \text{ and } 5`,n:`Separate sales.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{L = 6,\ M = 3:\ -3}`,n:`One, at a loss.`}
+],{title:'The slides · exposure · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

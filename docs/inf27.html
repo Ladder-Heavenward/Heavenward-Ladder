@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can a Quantum Computer Factor a Number?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="floor7concl.html">← F7·∎ what the advanced floor shows</a><a href="index.html">next: the ladder →</a></p>
+  <div class="tags"><span class="tag now">∞27 · research front</span></div>
+  <h1>Can a Quantum Computer Factor a Number?</h1>
+  <p data-pid="eac473">Can a quantum computer factor a number? The physics annex of rung thirty nine built a qubit, a pair of qubits that share one state, and a recipe that splits a number into two factors once the period of its powers on a clock is known. It left the hard part as a promise: a quantum circuit finds the period fast. This page keeps that promise. It builds how the parts of a state add before they are squared, so that two roads to one answer can cancel; how many qubits make one space whose size doubles with each qubit added; and how a transform of turnings, run on qubits and never written out as a list, makes the readings that betray the period likely and every other reading rare. Then it runs the whole method on small numbers by hand, counts its steps against the best ordinary method, and sets that count beside the machines that exist. The method was found in 1994. Every number it has factored on a real machine, 15 and 21, was factored with a circuit chosen from the known answer.</p>
+  <p class="gesture" data-pid="d0a90d">The parts of a state add before they are squared, so roads can cancel: H, a turn by φ, and H read 1 with chance sin²(φ/2). m qubits make a space of dimension 2ᵐ. The turning transform on a register spread over x₀ + jr reads only multiples of Q/r; when r does not divide Q, the reading k still gives c/r as a convergent of k/Q once Q ≥ N². One run costs about n³ gates for an n-digit N, against more than every power of n for the best ordinary method. The machines built so far hold hundreds of noisy qubits; a 2048-digit run is estimated to need hundreds of thousands to a million.</p>
+</header>
+
+<section class="class step" data-step="inf27.1">
+  <h2 class="sthead"><span class="stno">inf27.1</span>A Turning of Length 1, and Roads That Cancel</h2>
+  <p data-pid="8c7a1b">41·phys.1 made a qubit a vector ψ = u|0⟩ + v|1⟩ of size one, with u and v complex. Write each part as its size times a turning (26a): u = |u|e^(iα), v = |v|e^(iβ). Turning the whole vector, e^(iγ)ψ, changes no chance, since sizes multiply (25c) and |e^(iγ)| = 1. The turning between the parts, e^(i(β − α)), is not seen by a reading along |0⟩, |1⟩ either. A gate can make it seen.</p>
+  <p data-pid="1f23bf">Two-roads technique: <b>if T_φ leaves |0⟩ and sends |1⟩ to e^(iφ)|1⟩, then the run H, T_φ, H sends |0⟩ to ½(1 + e^(iφ))|0⟩ + ½(1 − e^(iφ))|1⟩, and reads 1 with chance sin²(φ/2).</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the two-roads technique">
+H|0\rangle = \tfrac{1}{\sqrt2}(|0\rangle + |1\rangle) @@ 41·phys.5
+T_\varphi:\ \ \tfrac{1}{\sqrt2}(|0\rangle + e^{i\varphi}|1\rangle) @@ only the turning between the parts moves
+H:\ \ \tfrac12(|0\rangle + |1\rangle) + \tfrac{e^{i\varphi}}{2}(|0\rangle - |1\rangle) @@ H is straight (27c), applied to each part
+= \tfrac12(1 + e^{i\varphi})|0\rangle + \tfrac12(1 - e^{i\varphi})|1\rangle @@ two roads to each reading, added
+\tfrac14|1 - e^{i\varphi}|^2 = \tfrac14(2 - 2\cos\varphi) @@ |z|² = z times its mirror (25c)
+\htmlClass{new}{\sin^2(\varphi/2)} \quad \blacksquare @@ the half-angle identity (21k)
+  </pre>
+  <p data-pid="c9a0ad">At φ = 0 the two roads to |1⟩ carry +½ and −½, and the chance is 0: H run twice never reads 1. A coin tossed twice would give 1 half the time. At φ = π/3 the chance is ¼, and at φ = π it is 1. Parts add before they are squared, chances never do; that is interference. A factoring circuit is a way of arranging the roads so that the wrong answers cancel.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · two roads · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞27.1.1</span><span class="ph understand">understand</span>What does the two-roads technique say? <br>Why does H run twice never read 1, when a coin tossed twice gives 1 half the time?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf27.2">
+  <h2 class="sthead"><span class="stno">inf27.2</span>Many Qubits, One Product of Spaces</h2>
+  <p data-pid="625a5e">41·phys.2 gave two qubits four dimensions, and 47h1’s grid-space technique says why: the joint space is ℂ² ⊗ ℂ². 47h2 found that the states 41·phys called entangled are the members of rank above 1. The difference here is the count for many qubits, and what one gate does to the whole.</p>
+  <p data-pid="1478b7">Register-size technique: <b>m qubits have the joint space ℂ² ⊗ ⋯ ⊗ ℂ², of dimension 2ᵐ, with basis |x⟩ for x from 0 to 2ᵐ − 1 written in twos; a gate G on one qubit acts on the whole as G ⊗ I ⊗ ⋯ ⊗ I, and H on each of the m qubits sends |0⋯0⟩ to the even spread 2^(−m/2) Σₓ |x⟩.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the register-size technique">
+\dim\,(\mathbb C^2)^{\otimes m} = 2 \cdot 2 \cdots 2 = 2^m @@ the grid-space technique, m − 1 times
+(G \otimes I)(v \otimes w) = Gv \otimes w @@ straight in each slot, fixed on the basis (47h1)
+H|0\rangle \otimes \cdots \otimes H|0\rangle = \textstyle\prod_{j=1}^{m} \tfrac{1}{\sqrt2}(|0\rangle + |1\rangle) @@ m gates, one on each qubit
+= 2^{-m/2} \textstyle\sum_{x_1, \ldots, x_m \in \{0, 1\}} |x_1 x_2 \cdots x_m\rangle @@ multiply out: one part chosen from each factor
+\htmlClass{new}{2^{-m/2} \textstyle\sum_{x=0}^{2^m - 1} |x\rangle} \quad \blacksquare @@ x₁x₂⋯xₘ read as a number in twos
+  </pre>
+  <p data-pid="035a55">m gates made a state with 2ᵐ parts. An ordinary machine that keeps such a state as a list stores 2ᵐ complex numbers: at 16 bytes each, about 17 billion bytes for m = 30, and about 18 million billion for m = 50. The quantum machine holds m qubits and no list. It cannot read the list out either: a reading gives one x, each with chance 2^(−m). The spread is a start, not an answer.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · a register · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞27.2.1</span><span class="ph understand">understand</span>What does the register-size technique say, and why does a gate on one qubit act as G ⊗ I ⊗ ⋯ ⊗ I? <br>Why does the even spread of 50 qubits not give 2⁵⁰ answers at once?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf27.3">
+  <h2 class="sthead"><span class="stno">inf27.3</span>The Turning Transform Finds a Period</h2>
+  <p data-pid="2d6d06">Use two registers: m qubits for x, with Q = 2ᵐ, and enough for a remainder on the clock of N. Spread the first (inf27.2). A run of gates built from 43h1’s square-and-multiply, worked by the qubits of x, puts the remainder of bˣ by N in the second. Reading the second register gives one remainder and leaves in the first only the x with that remainder, spaced by the period r.</p>
+  <p data-pid="81fd7c">The turning transform is F|x⟩ = Q^(−1/2) Σₖ ωˣᵏ|k⟩ with ω = e^(2πi/Q): 32k1’s stepped transform, read in the undo direction and scaled by Q^(−1/2). The sampled-turnings technique makes its columns right-angled and of size one, so it keeps every product (31d4) and is a gate.</p>
+  <p data-pid="7ff2c6">Period-peak technique: <b>if r divides Q and the first register holds the even spread of x₀, x₀ + r, …, x₀ + Q − r, the turning transform leaves it reading k with chance 1/r when k is a whole multiple of Q/r, and with chance 0 otherwise.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the period-peak technique">
+F\big(\tfrac{1}{\sqrt M}\textstyle\sum_{j \lt M} |x_0 + jr\rangle\big) = \tfrac{1}{\sqrt{QM}}\textstyle\sum_k \omega^{x_0 k}\sum_{j \lt M} (\omega^{rk})^j\,|k\rangle @@ M = Q/r terms; the transform is straight
+\textstyle\sum_{j \lt M} (\omega^{rk})^j = M \text{ if } \omega^{rk} = 1,\ \ 0 \text{ otherwise} @@ the geometric sum (15i); (ω^(rk))^M = ω^(Qk) = 1
+\omega^{rk} = 1 \iff Q \mid rk \iff \tfrac{Q}{r} \mid k @@ ω has order Q
+\big|\tfrac{M}{\sqrt{QM}}\big|^2 = \tfrac{M}{Q} = \tfrac1r @@ |ω^(x₀k)| = 1: the start changes no chance
+\htmlClass{new}{k = 0, \tfrac{Q}{r}, \tfrac{2Q}{r}, \ldots, \text{ each with chance } \tfrac1r} \quad \blacksquare @@ r peaks hold all of it
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: 7 on the clock of 15, with Q = 16">
+7^x:\ 1, 7, 4, 13, 1, \ldots,\ \ r = 4 @@ 49 = 3 · 15 + 4, 28 = 15 + 13, 91 = 6 · 15 + 1
+\text{second register reads } 4:\ \ x \in \{2, 6, 10, 14\} @@ x₀ = 2, M = 4
+k \in \{0, 4, 8, 12\},\ \ \tfrac{k}{16} = 0, \tfrac14, \tfrac12, \tfrac34 @@ each with chance ¼
+\htmlClass{new}{\tfrac14, \tfrac34 \text{ give } r = 4;\ \ \tfrac12 \text{ gives } 2, \text{ and } 7^2 = 4 \ne 1} \quad \blacksquare @@ half the runs give r at once
+  </pre>
+  <p data-pid="6ab198">The start x₀ was random and is gone from every chance: the transform turned a shift into a turning, which a reading cannot see (inf27.1). Every road to a k off the peaks cancels.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · a period · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞27.3.1</span><span class="ph understand">understand</span>What does the period-peak technique say, and which sum makes every reading off the peaks have chance 0? <br>Why does the random start x₀ not matter, and what does the run for 7 on the clock of 15 read?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf27.4">
+  <h2 class="sthead"><span class="stno">inf27.4</span>The Transform, One Qubit at a Time</h2>
+  <p data-pid="29fa6d">As a grid the transform has Q² entries, and 32k2’s halving costs about Q log₂ Q steps on a list of Q numbers. For m = 4096 qubits the list has 2⁴⁰⁹⁶ entries, more than any machine holds. A quantum circuit never forms the list. It works on the m qubits, because the transform of one |x⟩ is a product.</p>
+  <p data-pid="a37c0a">Qubit-by-qubit technique: <b>with k = k₁2^(m−1) + ⋯ + kₘ written in twos, F|x⟩ is the product over l from 1 to m of (|0⟩ + e^(2πi x/2^l)|1⟩)/√2, the lth factor on the qubit kₗ; that factor depends only on the last l digits of x, and is made by one H and l − 1 turnings, each worked by one other qubit; so the transform takes m(m + 1)/2 gates.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the qubit-by-qubit technique">
+\omega^{xk} = e^{2\pi i\, x \sum_l k_l 2^{m-l}/2^m} @@ k in twos, ω = e^(2πi/2ᵐ)
+= \textstyle\prod_{l=1}^{m} e^{2\pi i\, x k_l/2^l} @@ the growth function turns adding into multiplying (26b)
+\tfrac{1}{\sqrt Q}\textstyle\sum_{k}\prod_l e^{2\pi i x k_l/2^l}|k_1 \cdots k_m\rangle = \prod_l \tfrac{1}{\sqrt2}\big(|0\rangle + e^{2\pi i x/2^l}|1\rangle\big) @@ each kₗ is 0 or 1, chosen freely: inf27.2 multiplied out, run backwards
+e^{2\pi i x/2^l} \text{ depends only on } x \bmod 2^l @@ e^(2πi) = 1 removes the higher digits
+\htmlClass{new}{m + \tfrac{m(m-1)}{2} = \tfrac{m(m+1)}{2} \text{ gates}} \quad \blacksquare @@ one H and l − 1 worked turnings for the lth factor
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: m = 2, x = 1">
+l = 1:\ \tfrac{1}{\sqrt2}(|0\rangle + e^{i\pi}|1\rangle) = \tfrac{1}{\sqrt2}(|0\rangle - |1\rangle) @@ on k₁, the digit worth 2
+l = 2:\ \tfrac{1}{\sqrt2}(|0\rangle + e^{i\pi/2}|1\rangle) = \tfrac{1}{\sqrt2}(|0\rangle + i|1\rangle) @@ on k₂, the digit worth 1
+\tfrac12(|00\rangle + i|01\rangle - |10\rangle - i|11\rangle) @@ multiplied out
+\htmlClass{new}{= \tfrac12\textstyle\sum_{k=0}^{3} i^k|k\rangle = F|1\rangle} \quad \blacksquare @@ ω = i for Q = 4
+  </pre>
+  <p data-pid="cfca70">For m = 4096 the count is 8 390 656 gates. Most of the worked turnings are by angles like 2π/2⁴⁰⁰⁰, far below the error of any real gate; dropping every turning below a small angle chosen with m changes each chance very little, held in trust, and leaves about m log₂ m gates.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · one qubit at a time · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞27.4.1</span><span class="ph understand">understand</span>What does the qubit-by-qubit technique say, and why does the lth factor depend only on the last l digits of x? <br>How many gates does the transform take on 4 qubits, and why can an ordinary machine not run the same count on the list?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf27.5">
+  <h2 class="sthead"><span class="stno">inf27.5</span>When the Period Does Not Divide</h2>
+  <p data-pid="f13a35">For a real N the period r is unknown and is almost never a power of 2, so the peaks cQ/r fall between whole numbers. Take N = 21 and b = 2: the remainders are 2, 4, 8, 16, 11, 1, so r = 6 (44·now2.1). Pick Q = 2ᵐ with N² ≤ Q &lt; 2N²: Q = 512, since 441 ≤ 512 &lt; 882.</p>
+  <p data-pid="83532c">Nearest-peak technique: <b>if Q ≥ N² and k is the whole number nearest cQ/r, then c/r in lowest terms is a convergent of the staircase of k/Q; and a run reads such a k, for some c, with chance at least about 4/π², near 0.4.</b> The chance is held in trust: it comes from the size of the geometric sum of inf27.3 when ω^(rk) is near 1 but not equal.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the nearest-peak technique">
+\big|\tfrac{k}{Q} - \tfrac{c}{r}\big| \le \tfrac{1}{2Q} @@ k is the whole number nearest cQ/r
+\le \tfrac{1}{2N^2} \lt \tfrac{1}{2r^2} @@ Q ≥ N², and r &lt; N
+\htmlClass{new}{c/r \text{ is a convergent of } k/Q} \quad \blacksquare @@ held in trust at 43k3: a fraction within 1/(2q²) is a convergent
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: 2 on the clock of 21, with Q = 512">
+k = 85:\ \ \tfrac{85}{512} = [0; 6, 42, 2] @@ 512 = 6 · 85 + 2, 85 = 42 · 2 + 1, 2 = 2 · 1
+\text{convergents } 0,\ \tfrac16,\ \tfrac{42}{253},\ \tfrac{85}{512} @@ the neighbour technique (43k1)
+2^6 = 64 = 3 \cdot 21 + 1 @@ the first bottom below 21 with 2^q = 1
+\htmlClass{new}{r = 6,\ \ \gcd(2^3 - 1, 21) = 7,\ \ \gcd(2^3 + 1, 21) = 3} \quad \blacksquare @@ the period-factor technique (41·phys.6)
+  </pre>
+  <p data-pid="9d7e7d">Worked out exactly by machine from the sums of inf27.3, the run reads 85 with chance 0.114, and reads 0 or 256 with chance 1/6 each, which give bottoms 1 and 2 and no use. The readings whose staircase gives 6 at once, 74 to 93 and 419 to 438, have chance 0.328 in all: about one run in three. A reading near 171 gives 1/3, and 2³ = 8 ≠ 1 fails; trying small multiples of a failed bottom finds 6 there too.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · blurred peaks · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞27.5.1</span><span class="ph understand">understand</span>What does the nearest-peak technique say, and where is Q ≥ N² spent? <br>Which convergent of 85/512 gives the period of 2 on the clock of 21, and why does the reading 171 give only 1/3?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf27.6">
+  <h2 class="sthead"><span class="stno">inf27.6</span>The Whole of It, Counted</h2>
+  <p data-pid="ac9dcf">The whole method, for N of n digits in twos:</p>
+  <ul>
+    <li data-pid="e82634">If N is even, a prime by 43j’s tests, or a power of one number, ordinary means finish it.</li>
+    <li data-pid="6a152c">Pick b below N at random. If gcd(b, N) is above 1, that is already a factor.</li>
+    <li data-pid="4c34be">With 2n qubits for x and n for the remainder: spread, compute bˣ on the clock of N, transform, read k.</li>
+    <li data-pid="72858e">Take the staircase of k/Q, and check its bottoms q by bᵠ = 1 (43h).</li>
+    <li data-pid="1b07bd">Run the period-factor technique of 41·phys.6. If r is odd or b^(r/2) = −1, pick another b.</li>
+  </ul>
+  <p data-pid="e11fde">Whole-run technique: <b>if N is odd and has at least two different prime factors, a unit b of N picked at random has even period r with b^(r/2) ≠ −1 with chance at least ½; so a few runs factor N, and each run costs about n³ gates, most of them spent computing bˣ.</b> The chance is held in trust and named in the cellar. The count: bˣ takes 2n products on the clock of N, one for each qubit of x (43h2’s power-cost technique), each about n² gates by the school method; the transform about 2n² (inf27.4); the staircase and gcd about n² ordinary steps (43h3).</p>
+  <pre class="lines" data-k="ember" data-label="this page: every base of 15">
+\text{units of } 15:\ 1, 2, 4, 7, 8, 11, 13, 14 @@ gcd with 15 is 1
+r = 1, 4, 2, 4, 4, 2, 4, 2 @@ their periods
+b = 1:\ r \text{ odd};\ \ b = 14:\ 14^1 = -1 @@ the two that fail
+\htmlClass{new}{6 \text{ of } 8 \text{ work}, \text{ at least } \tfrac12} \quad \blacksquare @@ the whole-run technique, checked
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: a number of 2048 digits in twos">
+2n^3 = 2 \cdot 2048^3 \approx 1.7 \times 10^{10} @@ the gates of one run, before any error correction
+e^{1.92\,(\ln N)^{1/3}(\ln\ln N)^{2/3}} \approx 1.5 \times 10^{35} \approx 2^{117} @@ the best known ordinary method; ln N = 2048 ln 2, slowly varying parts dropped
+\htmlClass{new}{\text{a power of } n \text{, against more than every power of } n} \quad \blacksquare @@ 41h: fast, against not known to be fast
+  </pre>
+  <p data-pid="ca0798">In 2020 a public challenge number of 829 digits in twos was factored by the ordinary method in about 2700 core-years. The same formula grows by about 2.3 × 10¹¹ from 829 digits to 2048, so that road to 2048 digits is some 10¹⁴ core-years or more. A run of 10¹⁰ quantum gates is small beside it, if the gates work.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · the whole run · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞27.6.1</span><span class="ph understand">understand</span>What does the whole-run technique say, and which part of one run costs the most gates? <br>Why does b = 14 fail on the clock of 15, and how many of its 8 units work?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf27.7">
+  <h2 class="sthead"><span class="stno">inf27.7</span>What Has Been Built, and What Has Not</h2>
+  <p data-pid="2d40da">The count of 10¹⁰ gates is for gates that never fail. Real gates fail about once in a thousand, and 41·phys.5 found that a qubit keeps its state for a few thousand gates. A run of 10¹⁰ must be held together by codes that spend many noisy qubits on each reliable one: the next blue sky step builds them. Estimates for a 2048-digit number, all assuming one error in a thousand per gate:</p>
+  <pre class="lines" data-k="ember" data-label="this page: the estimates against the machines">
+2019:\ 2 \times 10^7 \text{ noisy qubits, about 8 hours} @@ one round of checks a microsecond
+2025:\ \text{under } 10^6 \text{ noisy qubits, under a week} @@ fewer qubits, more time
+2026:\ \text{under } 10^5,\ \text{on a different family of codes} @@ checked by simulation, not on a machine
+\text{built: about } 10^2 \text{ to } 10^3 \text{ noisy qubits on one chip} @@ 105 in a chip of 2024; over 1000 in 2023
+\htmlClass{new}{\text{a gap of } 10^2 \text{ to } 10^4 \text{ in count, with every qubit as good as assumed}} \quad \blacksquare @@ count is not quality
+  </pre>
+  <p data-pid="c83d81">Factored by the quantum method: 15, in 2001, with 7 qubits held in molecules of a liquid and read by magnetic resonance; and 21, in 2012, with photons. Both runs were shrunk by using the known answer to choose the circuit, so neither was the full method. In 2013 it was shown that this shortcut, taken far enough, factors any number with two qubits and a coin. As far as is known in 2026, no number at all has been factored by the full method; larger numbers claimed on quantum machines did most of the work by ordinary means.</p>
+  <section class="slides" id="sl7"><div class="eyebrow">The slides · built so far · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞27.7.1</span><span class="ph understand">understand</span>Why does a run of 10¹⁰ gates need far more qubits than the 3n of its circuit? <br>Why did the factoring of 15 and 21 not show that the method works at size?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf27.8">
+  <h2 class="sthead"><span class="stno">inf27.8</span>Moves to Check</h2>
+  <pre class="lines" data-k="check" data-label="this page: moves to check">
+\text{the even spread tries every } x \text{ and reads off } r\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a reading gives one k; only the transform’s cancelling makes the peaks likely (inf27.3)
+\text{the period-peak technique needs } r \mid Q, \text{ so no real run works}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the nearest-peak technique: blurred peaks, and the staircase still finds c/r
+m \text{ qubits can be read out as } 2^m \text{ numbers}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a reading of m qubits gives m bits; held in trust, a bound of 1973
+\text{factoring is proved slow for ordinary machines}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; no fast way is known and none is proved impossible (41·now2)
+\text{the turning transform on } m \text{ qubits needs } Q\log_2 Q \text{ gates}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; that is 32k on a list; on qubits m(m + 1)/2
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞27.8.1</span><span class="ph understand">understand</span>Why does the even spread of x not by itself give the period? <br>Why is factoring not known to be slow for ordinary machines, and what would a fast ordinary method do to the case for building the quantum one?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="openq themeend">
+  <div class="eyebrow">Open questions · nobody has the answer yet</div>
+  <h2>Open questions</h2>
+  <p class="chnote">These are open: the field is still asking them. There is no key; a good attempt is a reason, a guess, or a better question.</p>
+  <div class="oq"><span class="oqid">∞27.oq.1</span>Is there a fast ordinary method for factoring? None is known after centuries of trying, and no proof rules one out. A proof would have to defeat every possible method at once, a question of the kind 41·now2 left open; and a fast method would come with no warning, as the quantum one did in 1994.</div>
+  <div class="oq"><span class="oqid">∞27.oq.2</span>Does the class of questions a quantum circuit answers fast, BQP of 41·phys.6, hold anything outside BPP of 41i? Factoring is the best evidence that it does. If factoring turned out fast on ordinary machines, the evidence would shrink to questions such as the energies of molecules, where the advantage is argued case by case.</div>
+  <div class="oq"><span class="oqid">∞27.oq.3</span>How few qubits and gates suffice to factor a number of 2048 digits in twos? The estimates fell from tens of millions in 2019 to under a million in 2025 and, by one 2026 design, under a hundred thousand. No lower bound is known. The savings come from the arithmetic, the codes and the layout together, so nobody can see where they stop.</div>
+  <div class="oq"><span class="oqid">∞27.oq.4</span>Is there a fast quantum method for learning with errors, the belief under the 2024 standards of 44·now2? A claimed method appeared in April 2024 and was withdrawn within about ten days, when a flaw was found. If one exists, the new standards fall as the old ones would.</div>
+  <div class="oq"><span class="oqid">∞27.oq.5</span>Which hidden periods can the transform find? It finds them in groups whose moves can be done in either order. For the shuffles of 19a, which would decide whether two networks of dots and links are the same up to labels, no fast quantum method is known, and nobody knows whether one exists.</div>
+</section>
+<section class="history themeend">
+  <div class="eyebrow">A short history · told from more than one side</div>
+  <h2>How we got here</h2>
+  <p data-pid="83d1fe">In 1981, at a meeting on the physics of computing held near Boston, it was argued that a machine following ordinary rules could never keep up with nature’s quantum rules, and that a machine built from quantum parts might. In 1985 a physicist at Oxford described a universal quantum machine, as 41c had a universal ordinary one. For nearly a decade nobody had a problem for it that mattered outside physics. Then in 1994, at Bell Labs in New Jersey, the period method appeared, and with it the end of every code built on the hidden count of a clock or a curve.</p>
+  <p data-pid="a9c095">The doubt came at once and from physicists. A state of thousands of qubits is a list of numbers longer than the universe could write down, and every stray field nudges it. Papers in 1995 argued that such a machine would drift into noise long before it finished, since a quantum state cannot be copied and checked the way bits are. Within two years codes were found that correct quantum errors without reading the state, and a threshold technique showed that, below some error rate per gate, a long run can be held together. The next blue sky step tells that part. The objection did not vanish: a small school of critics still holds that real noise, correlated across a chip, will defeat every code.</p>
+  <p data-pid="01b4ef">The first factoring, of 15 at an IBM laboratory in California in 2001, used molecules in a liquid at room temperature, and it was disputed whether such a mixture held any entanglement at all, and so whether the run was quantum in the sense that matters. The factoring of 21 in 2012 used a circuit chosen with the answer known. A short paper of 2013 showed how far that shortcut goes, and since then the community has asked of every factoring claim whether the circuit could have been written without the answer. Claims of larger numbers, among them a 2022 claim that 372 qubits could break a 2048-digit key, leaned on ordinary methods that do not grow well, and were widely rejected.</p>
+  <p data-pid="2aaa33">Money changed the pace. Governments passed national programmes, the United States its quantum act of 2018 with about 1.2 billion dollars, and China, Europe, the United Kingdom and others similar sums. Companies built chips of superconducting circuits, trapped ions and atoms held by light. In 2019 one company claimed a 53-qubit chip had done in 200 seconds a sampling task that would take an ordinary machine 10 000 years; a rival replied that 2.5 days would do, and by 2022 ordinary methods had caught up with that task. A larger claim followed in 2024, and is argued the same way. None of these tasks was factoring, and critics asked whether the claims served science or share prices.</p>
+  <p data-pid="943f73">Code makers did not wait. From 2016 the US standards office ran an open contest for codes that the period method does not touch; in 2022 one candidate in the contest’s fourth round was broken on a single core of an ordinary computer in about an hour, a reminder that a code can fall to plain cleverness, and in August 2024 three standards were published (44·now2). Someone who records encrypted traffic today can read it on the day the machine exists, so the move has to finish before that day. A Google team in March 2026 published an estimate that a machine of under half a million noisy qubits could find the hidden count of the curve used by Bitcoin in minutes, and released a zero-knowledge proof of its estimate (41l) in place of the circuit itself, arguing that the circuit was too dangerous to print. Others answered that unchecked secrecy is its own danger.</p>
+  <p data-pid="a2b590">What is argued now is mostly when. Forecasts for a machine that can factor 2048 digits run from the early 2030s to never. Those who expect it soon point to the estimates falling twentyfold from 2019 to 2025, and further in one 2026 design, and to logical qubits that now beat their parts (∞28). Those who expect it later point to the gap between a hundred good qubits and a million, and to the fact that no number has yet been factored by the full method. Both sides agree on what to do: move to the new codes now, because the date cannot be known, and a machine built in secret would not be announced.</p>
+</section>
+
+<nav class="nextrung"><a href="floor7concl.html">← F7·∎ · what the advanced floor shows</a><a href="index.html">the ladder →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The run H, T_φ, H is a Mach–Zehnder interferometer in circuit form, and T_φ a phase gate. The register-size technique is the tensor product of qubit spaces, with H on every qubit the Walsh–Hadamard transform. The turning transform is the quantum Fourier transform, the period-peak and nearest-peak techniques are its use in order finding, and the qubit-by-qubit technique is its product formula; dropping the small turnings gives the approximate quantum Fourier transform. The staircase step is the continued fraction algorithm, resting on Legendre’s theorem. The whole run is Shor’s algorithm; the whole-run technique’s chance is the bound 1 − 2^(1−k) for N with k distinct odd prime factors. The best ordinary method is the general number field sieve, with running time L_N[1/3, (64/9)^(1/3)]. The bound on reading out qubits is Holevo’s bound (1973). The question of oq.5 is the hidden subgroup problem, and graph isomorphism is its case for the shuffles.</p>
+  <h3>Who said it first</h3>
+  <p>Richard Feynman argued for quantum simulation at the 1981 MIT conference on the physics of computation (published 1982); Yuri Manin had made a similar suggestion in 1980. David Deutsch described the universal quantum computer in 1985. Ethan Bernstein and Umesh Vazirani defined BQP in 1993, and Daniel Simon found the first exponential separation with an oracle in 1994. Peter Shor gave the algorithm in 1994; Don Coppersmith gave the fast circuit for the transform, and its approximate form, the same year; Alexei Kitaev recast it as phase estimation in 1995. Lieven Vandersypen and colleagues at IBM Almaden and Stanford factored 15 by NMR in 2001; Enrique Martín-López and colleagues at Bristol factored 21 in 2012; John Smolin, Graeme Smith and Alexander Vargo wrote “Oversimplifying quantum factoring” in 2013. Craig Gidney and Martin Ekerå gave the 2019 estimate, Gidney the 2025 one. Fabrice Boudot, Pierrick Gaudry, Aurore Guillevic, Nadia Heninger, Emmanuel Thomé and Paul Zimmermann factored RSA-250 in 2020. Oded Regev gave a quantum factoring method with fewer gates per run in 2023. Wouter Castryck and Thomas Decru broke SIKE in 2022. Yilei Chen posted and withdrew the lattice claim in April 2024.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“A register of m qubits holds 2ᵐ values at once, so the machine computes bˣ for every x at once, and reads off the period.” Not allowed: the computing is real, but a reading returns one x and one remainder. What makes the method work is not the many values but the transform, which arranges the roads so that every reading but the peaks cancels.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'spread',t:R`H|0\rangle = \tfrac{1}{\sqrt2}(|0\rangle + |1\rangle)`,n:`Two equal parts.`},
+  {k:'ember',kl:'turn',t:R`T_\varphi`,n:`Only the turning between them.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\sin^2(\varphi/2)}`,n:`Parts add before squaring.`}
+],{title:'The slides · two roads · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'size',t:R`2^m`,n:`Dimensions multiply.`},
+  {k:'ember',kl:'one gate',t:R`G \otimes I \otimes \cdots \otimes I`,n:`Straight in each slot.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2^{-m/2}\textstyle\sum_x |x\rangle}`,n:`Every x, none readable.`}
+],{title:'The slides · a register · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'spread',t:R`\textstyle\sum_j |x_0 + jr\rangle`,n:`Spaced by r.`},
+  {k:'ember',kl:'cancel',t:R`\textstyle\sum_j (\omega^{rk})^j = 0`,n:`Off the peaks.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{k \in \tfrac{Q}{r}\mathbb Z}`,n:`Each with chance 1/r.`}
+],{title:'The slides · a period · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'split',t:R`\omega^{xk} = \textstyle\prod_l e^{2\pi i x k_l/2^l}`,n:`Adding becomes multiplying.`},
+  {k:'ember',kl:'factor',t:R`|0\rangle + e^{2\pi i x/2^l}|1\rangle`,n:`Last l digits only.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\tfrac{m(m+1)}{2}}`,n:`Gates, not Q log Q.`}
+],{title:'The slides · one qubit at a time · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'near',t:R`|k/Q - c/r| \le 1/(2Q)`,n:`The nearest whole k.`},
+  {k:'ember',kl:'staircase',t:R`85/512 = [0; 6, 42, 2]`,n:`Convergent 1/6.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{r = 6,\ 21 = 3 \cdot 7}`,n:`One run in three.`}
+],{title:'The slides · blurred peaks · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'pick',t:R`b,\ \gcd(b, N)`,n:`Often already lucky.`},
+  {k:'ember',kl:'quantum',t:R`k \to c/r`,n:`Spread, power, transform, read.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\sim n^3 \text{ against } 2^{117}}`,n:`At 2048 digits.`}
+],{title:'The slides · the whole run · ← → keys work'});
+stepper('#sl7',[
+  {k:'ember',kl:'needed',t:R`10^5 \text{ to } 10^6`,n:`Noisy qubits, estimated.`},
+  {k:'ember',kl:'built',t:R`10^2 \text{ to } 10^3`,n:`On one chip.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{15 \text{ and } 21}`,n:`With shortcuts.`}
+],{title:'The slides · built so far · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

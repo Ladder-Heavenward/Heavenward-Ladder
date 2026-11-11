@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can a Polynomial Tell Knots Apart?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style></style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="inf63.html">← ∞63 can a sparse graph be well connected everywhere?</a><a href="index.html">next: the ladder →</a></p>
+  <div class="tags"><span class="tag now">∞64 · research front</span></div>
+  <h1>Can a Polynomial Tell Knots Apart?</h1>
+  <p data-pid="ebd9f8">Can a polynomial tell knots apart? Rung 34 opened every crossing of a knot drawing in two ways, weighted the openings, and got a count that no twist, poke or slide changes; corrected for the twisting of the drawing, it told the overhand knot from its mirror image. This page takes that count further. Written in a new letter it becomes the polynomial found in 1984, and it obeys one rule linking any crossing, the same crossing switched, and the crossing taken away; from that rule alone the polynomials of linked rings and of the overhand knot come out by hand. Two knots tied one after the other multiply their polynomials, which tells the sailor’s square knot from the granny. But some different knots share a polynomial: cut a disc holding four ends out of a drawing, turn it half a turn and sew it back, and the polynomial cannot notice, because every tangle in such a disc opens into a mixture of only two plain pieces. A famous knot with eleven crossings and its turned partner are different and share every number of this kind. In 2000 the openings were laid out at the corners of a cube, with arrows along its edges, and holes of the kind counted on ∞41 were taken; the signed count of those holes gives the polynomial back, and the holes see more. In 2011 they were proved to see the unknot exactly. Whether the polynomial alone sees the unknot is still open, checked for every drawing with up to 24 crossings; and computing it exactly is believed to be hopelessly slow for large drawings, though no one can prove that either.</p>
+  <p class="gesture" data-pid="431f2f">X(D) = (−s³)^(−w)⟨D⟩, and V(t) = X at s = t^(−1/4): the overhand knot −t⁻⁴ + t⁻³ + t⁻¹, its mirror with t and t⁻¹ swapped. From ⟨crossing⟩ = s⟨one opening⟩ + s⁻¹⟨the other⟩, t⁻¹V(L₊) − tV(L₋) = (t^(1/2) − t^(−1/2))V(L₀). A sum of knots multiplies V; a tangle in a disc with four ends is f⟨≍⟩ + g⟨)(⟩, so a half turn of the disc keeps V, and a knot with eleven crossings shares V with its turned partner. ⟨D⟩ = s^c Σ over the 2^c corners of a cube of (−q)^r (q + q⁻¹)^(loops − 1), with s² = −q⁻¹: arrows along the edges, ∂∂ = 0, holes, and the signed count of the holes is V again (2000); the holes see the unknot (2011). Whether V does is open.</p>
+</header>
+
+<section class="class step" data-step="inf64.1">
+  <h2 class="sthead"><span class="stno">inf64.1</span>From the Bracket to a Polynomial</h2>
+  <p data-pid="19919e"><a href="r34m.html#274a85">34m3’s mirror-count technique</a> proved that X(D) = (−s³)^(−w(D)) ⟨D⟩ does not change under the three moves, and that the mirror image swaps s and s⁻¹. Every power of s in X turns out to be a multiple of 4 for a knot, and of 2 for a pair of rings. So write t for s⁻⁴ and call V(t) the value of X at s = t^(−1/4). Nothing is proved by the change of letter; it is the form in which the count was first found, in 1984, by another road.</p>
+  <pre class="lines" data-k="ember" data-label="this page: X into V">
+\text{left-handed overhand knot: } X = -s^{16} + s^{12} + s^4 @@ 34m3
+V = -t^{-4} + t^{-3} + t^{-1} @@ s⁴ = t⁻¹
+\text{right-handed: } V = -t^{4} + t^{3} + t @@ the mirror swaps t and t⁻¹
+\text{figure-eight: } V = t^2 - t + 1 - t^{-1} + t^{-2} @@ unchanged by the swap, as 34m3 found
+  </pre>
+  <p data-pid="2c43a4">Two rings lying apart, no crossings: one opening, two loops, so ⟨D⟩ = d = −s² − s⁻², w = 0, and V = −t^(1/2) − t^(−1/2). Two rings linked once, drawn with two crossings: opening both the same way leaves two loops, opening them differently leaves one.</p>
+  <p data-pid="d881eb">Linked-rings technique: <b>two rings linked once with both crossings of sign −1 have V = −t^(−1/2) − t^(−5/2), and with both of sign +1, V = −t^(1/2) − t^(5/2); neither is the V of two rings apart, so no moves pull them apart.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the linked-rings technique">
+\langle D \rangle = s^2 d + s^0 + s^0 + s^{-2} d @@ four openings: ss, ss⁻¹, s⁻¹s, s⁻¹s⁻¹
+= -s^4 - 1 + 2 - 1 - s^{-4} = -s^4 - s^{-4} @@ d = −s² − s⁻²
+w = -2:\ \ X = s^6(-s^4 - s^{-4}) = -s^{10} - s^2 @@ (−s³)² = s⁶
+\htmlClass{new}{V = -t^{-5/2} - t^{-1/2} \ne -t^{1/2} - t^{-1/2}} \quad \blacksquare @@ s² = t^(−1/2); the other sign is the mirror
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · to t · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞64.1.1</span><span class="ph understand">understand</span>How is V(t) made from 34m3’s X, and what happens to V under the mirror? <br>What does the linked-rings technique say, and why do the four openings of the linked rings give ⟨D⟩ = −s⁴ − s⁻⁴?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf64.2">
+  <h2 class="sthead"><span class="stno">inf64.2</span>One Rule for Every Crossing</h2>
+  <p data-pid="f424d6">Give the knot a direction. At a chosen crossing, three drawings differ only there: L₊ with the crossing of sign +1, L₋ with it switched to sign −1, and L₀ with it taken away by joining the strands along their directions. The rest of the drawing is the same in all three.</p>
+  <p data-pid="1c5488">Skein technique: <b>t⁻¹ V(L₊) − t V(L₋) = (t^(1/2) − t^(−1/2)) V(L₀).</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the skein technique">
+\langle L_+ \rangle = s\langle L_0 \rangle + s^{-1}\langle L_\infty \rangle,\ \ \langle L_- \rangle = s^{-1}\langle L_0 \rangle + s\langle L_\infty \rangle @@ switching a crossing swaps its two openings; L∞ is the opening against the directions
+s\langle L_+ \rangle - s^{-1}\langle L_- \rangle = (s^2 - s^{-2})\langle L_0 \rangle @@ L∞ cancels
+w(L_\pm) = w(L_0) \pm 1 @@ L₀ has the other crossings, with the same signs
+-s^4 X(L_+) + s^{-4} X(L_-) = (s^2 - s^{-2}) X(L_0) @@ divide by (−s³)^(w(L₀)); s · (−s³) = −s⁴, s⁻¹ · (−s³)⁻¹ = −s⁻⁴
+\htmlClass{new}{t^{-1}V(L_+) - tV(L_-) = (t^{1/2} - t^{-1/2})V(L_0)} \quad \blacksquare @@ s = t^(−1/4); multiply by −1
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: the overhand knot from nothing">
+L_- = \text{linked rings (sign } -1\text{)},\ L_+ = \text{rings apart},\ L_0 = \text{one ring} @@ switch one crossing: they come apart; take it away: one loop
+V(\text{linked}) = t^{-2}(-t^{1/2} - t^{-1/2}) - t^{-1}(t^{1/2} - t^{-1/2}) = -t^{-1/2} - t^{-5/2} @@ as inf64.1 found by openings
+L_- = \text{left overhand},\ L_+ = \text{unknot},\ L_0 = \text{linked rings} @@ one switch unties it (34m4)
+\htmlClass{new}{V = t^{-2} - t^{-1}(t^{1/2} - t^{-1/2})(-t^{-1/2} - t^{-5/2}) = -t^{-4} + t^{-3} + t^{-1}} \quad \blacksquare @@ 34m3’s answer, with no openings counted
+  </pre>
+  <p data-pid="c85361">So V can be computed by switching crossings until the drawing is untied, keeping the pieces taken away for later. The rule was the first description of the 1984 polynomial that anyone could compute by hand; 34m3’s openings, found in 1987, explained why it does not change under the moves.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · skein · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞64.2.1</span><span class="ph understand">understand</span>What are L₊, L₋ and L₀ at a crossing, and what does the skein technique say? <br>How does the overhand knot’s V come out of the rule by one switch and one crossing taken away?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf64.3">
+  <h2 class="sthead"><span class="stno">inf64.3</span>Knots Tied One After Another</h2>
+  <p data-pid="cee495">Cut each of two knots K and L at a point on the outside of its drawing and join the four ends in two bands, so that one loop runs through both: the <i>sum</i> K # L. A rope tied with two overhand knots in a row, its ends then spliced, is the sum of two overhand knots, the kind of rope work of <a href="r42eng.html#42·eng.1">42·eng</a>.</p>
+  <p data-pid="9d4761">Sum-multiplies technique: <b>V(K # L) = V(K) V(L).</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the sum-multiplies technique">
+\text{an opening of } K \# L = \text{an opening of } K \text{ with an opening of } L @@ the crossings are those of K and those of L
+\text{loops} = \text{loops}_K + \text{loops}_L - 1 @@ the two loops through the bands become one
+s^{\#s - \#s^{-1}} d^{\text{loops} - 1} = \big(s^{\cdots} d^{\text{loops}_K - 1}\big)\big(s^{\cdots} d^{\text{loops}_L - 1}\big) @@ powers add
+\langle K \# L \rangle = \langle K \rangle \langle L \rangle,\ \ w(K \# L) = w(K) + w(L) @@ sum over every pair of openings
+\htmlClass{new}{V(K \# L) = V(K)\,V(L)} \quad \blacksquare @@ the corrections multiply too
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: the granny and the square knot">
+\text{granny} = \text{left} \# \text{left}: (-t^{-4} + t^{-3} + t^{-1})^2 @@ two overhand knots of one hand
+= t^{-2} + 2t^{-4} - 2t^{-5} + t^{-6} - 2t^{-7} + t^{-8} @@ multiplied out
+\text{square} = \text{left} \# \text{right}: -t^3 + t^2 - t + 3 - t^{-1} + t^{-2} - t^{-3} @@ one of each hand
+\htmlClass{new}{\text{granny} \ne \text{square}} \quad \blacksquare @@ the two knots a sailor ties are different knots
+  </pre>
+  <p data-pid="b3af4b">The square knot’s V is unchanged when t and t⁻¹ are swapped, so V cannot tell the square knot from its mirror image.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · sums · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞64.3.1</span><span class="ph understand">understand</span>What does the sum-multiplies technique say, and why do the loops of an opening of K # L number loops_K + loops_L − 1? <br>How does V tell the granny from the square knot, and what can it not tell about the square knot?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf64.4">
+  <h2 class="sthead"><span class="stno">inf64.4</span>A Turn the Polynomial Cannot See</h2>
+  <p data-pid="283aa6">Draw a circle that the knot drawing crosses at exactly four points, NW, NE, SW and SE. What lies inside is a <i>tangle</i>. Opening every crossing inside leaves some closed loops and two arcs joining the four ends in pairs. The arcs cannot cross, so there are only two plain pieces: ≍, joining NW to NE and SW to SE, and )(, joining NW to SW and NE to SE.</p>
+  <p data-pid="37e17c">Two-tangle technique: <b>for any tangle T, there are f and g, built from T alone, with ⟨D⟩ = f ⟨D≍⟩ + g ⟨D)(⟩, where D≍ and D)( are D with T replaced by the plain pieces.</b> Group the openings of D by the openings inside: each inside opening gives a power of s, a power of d for its closed loops, and one plain piece. The outside openings then count exactly as for D with that piece in place.</p>
+  <p data-pid="a072f3">Turned-tangle technique: <b>cut out a tangle, turn it half a turn about any of the three axes that carry the four ends to themselves as a set, and sew it back: V of the knot does not change.</b> A half turn sends ≍ to ≍ and )( to )(. It sends each inside opening to an opening of the turned tangle with the same power of s, since turning the disc over swaps over with under and anticlockwise with clockwise at once, and the same loops. So f and g are kept, and ⟨D⟩ with them. For a knot the half turn keeps the directions of both inside strands or reverses both, and a crossing whose two strands are both reversed keeps its sign, so w is kept.</p>
+  <pre class="lines" data-k="ember" data-label="this page: why f and g survive the turn">
+\text{inside opening } \sigma \mapsto \text{turned opening } \sigma\prime @@ the same crossings, moved
+s^{\#s - \#s^{-1}}(\sigma\prime) = s^{\#s - \#s^{-1}}(\sigma) @@ the opening rule is kept by turning, and by turning over
+\text{plain piece of } \sigma\prime = \text{plain piece of } \sigma @@ ≍ and )( are each kept by a half turn
+\htmlClass{new}{f\prime = f,\ g\prime = g,\ \langle D\prime\rangle = \langle D \rangle,\ w\prime = w} \quad \blacksquare @@ so V is kept
+  </pre>
+  <p data-pid="fe59b0">A knot with eleven crossings, named in the cellar, and a partner knot differ by exactly such a turn, so they share V; they are different knots, told apart by finer means. In 2020 the first of them was proved not to bound a smooth disc in four dimensions, which its partner does: the turn changes what lies above the drawing. <a href="r41now3.html#a1c826">41·now3</a> also met a pair sharing V with no turn between them: the star with five crossings and a knot with ten.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · tangles · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞64.4.1</span><span class="ph understand">understand</span>What does the two-tangle technique say, and why can opening a tangle leave only two plain pieces? <br>What does the turned-tangle technique say, and why does a half turn keep f and g?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf64.5">
+  <h2 class="sthead"><span class="stno">inf64.5</span>The Cube of Openings</h2>
+  <p data-pid="8dcdbc">A drawing with c crossings has 2^c ways to open them all. Label each way by a list of c digits, 0 for an s-opening and 1 for an s⁻¹-opening: the corners of a cube of dimension c. Write r for the number of 1s, the corner’s height, and ℓ for its number of loops. Moving along an edge of the cube changes one opening, which either joins two loops into one or splits one into two.</p>
+  <p data-pid="c435b7">Cube-count technique: <b>with s² = −q⁻¹, ⟨D⟩ = s^c Σ over the corners of (−q)^r (q + q⁻¹)^(ℓ − 1).</b> The weight of a corner is s^(c − 2r) d^(ℓ − 1); s^(−2r) = (−q)^r, and d = −s² − s⁻² = q⁻¹ + q.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the left overhand knot on its cube">
+r = 0, 1, 2, 3:\ \ \ell = 3;\ 2, 2, 2;\ 1, 1, 1;\ 2 @@ eight corners, opened by hand
+(q + q^{-1})^2 - 3q(q + q^{-1}) + 3q^2 - q^3(q + q^{-1}) @@ the signed count, height by height
+= -q^4 - 1 + q^{-2} @@ the q² terms cancel: 1 − 3 + 3 − 1
+s^{-3}(s^7 - s^3 - s^{-5}) = s^4 - 1 - s^{-8} @@ 34m3’s bracket over s³
+\htmlClass{new}{= q^{-2} - 1 - q^4} \quad \blacksquare @@ s⁴ = q⁻², s⁻⁸ = q⁴
+  </pre>
+  <p data-pid="2fbcc2">Now the step taken in 2000, stated. Replace each number (q + q⁻¹)^ℓ by a group whose size, counted with a weight q or q⁻¹ for each of two kinds of member per loop, is (q + q⁻¹)^ℓ. Stack the corners in columns by height, as chains of dimension r. Along each edge of the cube put an arrow, in the sense of <a href="r47a.html#47a1">47a</a>, from the group at the lower corner to the group at the upper one: one rule for joining two loops, one for splitting. With signs on the edges, the sum of the arrows out of each column is an edge map with ∂∂ = 0, the identity of <a href="inf41.html#inf41.1">inf41.1</a>. Take its holes, as in <a href="inf41.html#inf41.2">inf41.2</a>. The holes do not change under the three moves.</p>
+  <p data-pid="164bda">Then <a href="inf41.html#inf41.5">inf41.5’s signed-count technique</a>, applied to each weight of q separately, says that the holes counted with signs and weights equal the cube count, which is the bracket, which is V. The polynomial is the signed shadow of the holes. The holes keep what the signs cancel: the q² terms above cancelled in the count, and the groups behind them need not.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · cube · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞64.5.1</span><span class="ph understand">understand</span>What are the corners, heights and edges of the cube of openings, and what does the cube-count technique say? <br>How does inf41.5’s signed-count technique bring the holes of 2000 back to V?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf64.6">
+  <h2 class="sthead"><span class="stno">inf64.6</span>The Unknot Seen, and the Cost of Counting</h2>
+  <p data-pid="0c5139"><a href="r41now3.html#76ab34">41·now3</a> told that a finer count built from the openings was proved in 2011 to see the unknot exactly. That count is the holes of inf64.5: a knot whose holes are those of the ring is the ring. The proof is not a count. It goes through four-dimensional shapes and a theory of the 1990s from physics, and nothing like it can be done by hand.</p>
+  <p data-pid="016a21">Whether V alone sees the unknot is open: no knot other than the ring is known with V = 1. Computers have checked every knot drawn with up to 24 crossings. For links of two or more rings the answer is no: there are linked rings with the V of rings lying apart.</p>
+  <p data-pid="afe57c">Cost. The cube has 2^c corners: 1024 for 10 crossings, over a million for 20, over a billion for 30. The skein rule does no better in general. In 1990 computing V exactly was shown to be at least as hard as every counting problem whose answers can be checked fast, a counting cousin of <a href="r41h.html#e26eb1">41h’s</a> hardest problems; so no fast method is expected, and none is ruled out. In 2005 a method for a quantum computer was given that estimates V at certain turning numbers t, to within an error, in a number of steps growing like a power of c.</p>
+  <pre class="lines" data-k="ember" data-label="this page: what each count sees, on the knots of this page">
+\text{three colours: overhand } 9,\ \text{figure-eight } 3,\ \text{ring } 3 @@ 34m2: misses the figure-eight
+X\text{ or }V\text{: overhand} \ne \text{mirror},\ \text{figure-eight} = \text{its mirror} @@ 34m3, inf64.1
+V\text{: granny} \ne \text{square};\ \text{turned partners equal} @@ inf64.3, inf64.4
+\htmlClass{new}{\text{holes: see the ring exactly (2011)}} \quad \blacksquare @@ held in trust
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞64.6.1</span><span class="ph understand">understand</span>What was proved in 2011, and what is still open about V and the unknot? <br>Why is the cube count slow for a drawing with 30 crossings, and what was shown in 1990 about computing V exactly?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf64.7">
+  <h2 class="sthead"><span class="stno">inf64.7</span>Moves to Check</h2>
+  <pre class="lines" data-k="check" data-label="this page: moves to check">
+V(K) = V(L) \Rightarrow K = L\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the turned partners of inf64.4 share V and are different knots
+\langle D \rangle \text{ obeys the skein rule as it stands}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only after the writhe correction; ⟨D⟩ changes under a twist
+V(K) = V(\text{mirror}) \Rightarrow K \text{ is its own mirror}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; V cannot see it either way; the square knot’s V is symmetric, and that proves nothing
+\text{the holes are just } V \text{ written out}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; V is their signed count; the signs cancel what the groups keep
+\text{checked to 24 crossings, so } V \text{ sees the unknot}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a finite check; a counterexample could need more crossings
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞64.7.1</span><span class="ph understand">understand</span>Why does sharing V not make two knots the same? <br>Why does a symmetric V not prove that a knot is its own mirror image?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="openq themeend">
+  <div class="eyebrow">Open questions · nobody has the answer yet</div>
+  <h2>Open questions</h2>
+  <p class="chnote">These are open: the field is still asking them. There is no key; a good attempt is a reason, a guess, or a better question.</p>
+  <div class="oq"><span class="oqid">∞64.oq.1</span>Does V see the unknot? Is there a knot other than the ring with V(t) = 1? Every drawing with up to 24 crossings has been checked. The holes of inf64.5 see the ring, but V is only their signed count, and a knotted drawing whose holes cancelled perfectly in the count would have V = 1. Nobody can rule that out or build one.</div>
+  <div class="oq"><span class="oqid">∞64.oq.2</span>Can V be computed fast? Exact computation is at least as hard as a whole class of counting problems (1990), which is why nobody expects a method fast on every drawing. But knots of special kinds, and estimates at special values of t, are fast. Where exactly the line runs between fast and hopeless is open.</div>
+  <div class="oq"><span class="oqid">∞64.oq.3</span>What do the coefficients of V measure? 34m’s colour counts mean something about the knot: maps of its loop group onto shuffles of three things. The coefficients of V have no such reading in general. A guess of the late 1990s links a family of finer versions of V, taken at turning numbers, to the volume of the space around the knot; it is proved only for a few knots.</div>
+  <div class="oq"><span class="oqid">∞64.oq.4</span>Which knots do the holes see? The holes of 2000 see the ring, and later work showed they see the two overhand knots. Whether they see every knot, telling it from all others, is open; turned partners can have the same holes.</div>
+</section>
+<section class="history themeend">
+  <div class="eyebrow">A short history · told from more than one side</div>
+  <h2>How we got here</h2>
+  <p data-pid="23b5c3">The polynomial of this page arrived in 1984 from outside knot theory, in work on algebras of operators, where a relation like the skein rule appeared and was recognised as a statement about braids. The new polynomial told some knots from their mirrors, and within months several groups had found a common generalisation of it and an older polynomial. The discoverer received the medal given every four years to mathematicians under forty in 1990.</p>
+  <p data-pid="250aa4">Many doubted at first that operator algebras had anything to say about knots. The bracket of 1987, the openings of 34m3, answered that by giving a definition anyone could check by hand, with no algebra at all. A physical reading followed in 1989, through quantum field theory, and made the polynomial look like a measurement rather than a trick; it was a reading, not a proof, and mathematicians spent years turning it into definitions.</p>
+  <p data-pid="dda05a">The limits came quickly too. Knots differing by a turned tangle share the polynomial, and the eleven-crossing pair of inf64.4 became the standard example. Computing the polynomial was shown in 1990 to be as hard as a large class of counting problems. Whether it sees the unknot is still unanswered; computer searches have pushed the check to 24 crossings.</p>
+  <p data-pid="88d898">In 2000 the openings were turned into groups with arrows, and the polynomial became the signed count of their holes. The new holes were stronger. In 2011 they were proved to see the unknot, by a route through four-dimensional shapes. In 2020 a graduate student settled whether the eleven-crossing knot bounds a smooth disc in four dimensions, a question open for about fifty years.</p>
+  <p data-pid="387d1a">What is argued now is what the coefficients mean, why the holes are so strong, and whether the polynomial alone is enough for the unknot. Some expect a counterexample to turn up in a search beyond 24 crossings; others expect a proof through the holes. Neither side has a plan that works.</p>
+</section>
+
+<nav class="nextrung"><a href="inf63.html">← ∞63 · can a sparse graph be well connected everywhere?</a><a href="index.html">the ladder →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>V is the Jones polynomial; ⟨D⟩ is the Kauffman bracket, and the writhe correction its normalisation. The rule of inf64.2 is the skein relation, L₀ the oriented resolution. The sum is the connected sum; the granny and square knots are the sums of two trefoils of equal and of opposite handedness. A tangle with four ends is a Conway tangle, and the half turn a mutation; the two-tangle technique is the reason the Jones polynomial is invariant under mutation. The eleven-crossing pair is the Conway knot and the Kinoshita–Terasaka knot; bounding a smooth disc in four dimensions is being smoothly slice. The cube of openings is Bar-Natan’s cube of resolutions; the holes are Khovanov homology, and the signed count is its graded Euler characteristic. The 1990 hardness is #P-hardness. The guess about volume is the volume conjecture. The older polynomial is the Alexander polynomial; the operator algebras are von Neumann algebras, the field theory Chern–Simons theory.</p>
+  <h3>Who said it first</h3>
+  <p>Vaughan Jones found the polynomial in 1984 (published in the Bulletin of the American Mathematical Society, 1985) and received the Fields Medal in 1990. Louis Kauffman’s bracket appeared in Topology in 1987 (“State models and the Jones polynomial”). John Conway listed the eleven-crossing knot; its partner is named after Shin’ichi Kinoshita and Hidetaka Terasaka. Lisa Piccirillo proved that the Conway knot is not slice (Annals of Mathematics, 2020). François Jaeger, Dirk Vertigan and Dominic Welsh proved the hardness (1990). Mikhail Khovanov categorified the polynomial (arXiv 1999, Duke Mathematical Journal 2000), and Dror Bar-Natan explained it with the cube. Edward Witten gave the field theory reading (Communications in Mathematical Physics, 1989). The common generalisation of 1985 is the HOMFLY polynomial, named from the initials of its finders. Peter Kronheimer and Tomasz Mrowka proved that Khovanov homology detects the unknot (Publications Mathématiques de l’IHÉS, 2011). Dorit Aharonov, Vaughan Jones and Zeph Landau gave the quantum method (2005). The Jones unknot question has been checked to 24 crossings (2020). John Baldwin and Steven Sivek proved that Khovanov homology detects the trefoils (2018). Shalom Eliahou, Louis Kauffman and Morwen Thistlethwaite built links with trivial Jones polynomial. The volume conjecture is Rinat Kashaev’s, in the form of Hitoshi and Jun Murakami.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+
+stepper('#sl1',[
+  {k:'ember',kl:'rename',t:R`t = s^{-4}`,n:`X becomes V.`},
+  {k:'ember',kl:'rings',t:R`\langle D \rangle = s^2d + 2 + s^{-2}d`,n:`Four openings.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{V = -t^{-5/2} - t^{-1/2}}`,n:`Linked, not apart.`}
+],{title:'The slides · to t · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'openings',t:R`s\langle L_+\rangle - s^{-1}\langle L_-\rangle = (s^2 - s^{-2})\langle L_0\rangle`,n:`L∞ cancels.`},
+  {k:'ember',kl:'writhe',t:R`w(L_\pm) = w(L_0) \pm 1`,n:`Correct for the sign.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{t^{-1}V_+ - tV_- = (t^{1/2} - t^{-1/2})V_0}`,n:`One rule.`}
+],{title:'The slides · skein · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'openings',t:R`\text{opening of } K \# L = (\text{of } K, \text{of } L)`,n:`Pairs.`},
+  {k:'ember',kl:'loops',t:R`\ell = \ell_K + \ell_L - 1`,n:`Two loops merge.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{V(K \# L) = V(K)V(L)}`,n:`Granny ≠ square.`}
+],{title:'The slides · sums · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'open',t:R`\langle D \rangle = f\langle D_{\asymp}\rangle + g\langle D_{)(}\rangle`,n:`Two plain pieces.`},
+  {k:'ember',kl:'turn',t:R`\asymp\ \mapsto\ \asymp,\ \ )(\ \mapsto\ )(`,n:`Half turns keep them.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{V(D\prime) = V(D)}`,n:`Different knots, one V.`}
+],{title:'The slides · tangles · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'corner',t:R`s^{c - 2r} d^{\ell - 1} = s^c(-q)^r(q + q^{-1})^{\ell - 1}`,n:`s² = −q⁻¹.`},
+  {k:'ember',kl:'trefoil',t:R`-q^4 - 1 + q^{-2}`,n:`Eight corners.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\langle D \rangle = s^c\textstyle\sum (-q)^r(q + q^{-1})^{\ell - 1}}`,n:`A signed count.`}
+],{title:'The slides · cube · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

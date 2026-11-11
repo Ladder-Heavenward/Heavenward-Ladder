@@ -102,6 +102,32 @@ addEventListener('storage',e=>{ if(e.key===RK){ raw=null; } });
   drop.forEach(k=>LS.removeItem(k)); LS.setItem('ladder:reset',RESET);
 }catch(e){} })();
 
+/* Phase J step 4 (Andrew 2026-11-11): the 52 infinity series steps moved up by 26, ∞1-∞52 -> ∞27-∞78, and their files from
+   skyNN to inf(NN+26), so an old page id is never reused (the new ∞1-∞26 are inf01-inf26). Page-keyed records (pages:done,
+   cert:, steps:, note:, the climb's furthest and last footing) move whenever an old sky id turns up, which is safe because
+   sky ids are retired. Records keyed by the ∞ label (ticks q:∞N..., crosswalk cards seen and record, pool repeats, standing
+   questions) move once, under the flag ladder:mvInf26, before any new ∞1-∞26 exists. */
+(function(){ const SH=26, F='ladder:mvInf26';
+  const ids=s=>String(s).replace(/\bsky(\d+)(?=\.\d)/g,(x,n)=>'inf'+(+n+SH)).replace(/\bsky(\d\d)\b/g,(x,n)=>'inf'+(+n+SH));
+  const tg=s=>String(s).replace(/∞(\d+)/g,(x,n)=>(+n>=1&&+n<=52)?'∞'+(+n+SH):x);
+  const J=(k,d)=>{ try{ const v=LS.getItem(k); return v==null?d:JSON.parse(v); }catch(e){ return d; } };
+  try{
+    const pd=J('pages:done',null); if(pd&&typeof pd==='object'){ let ch=false;
+      Object.keys(pd).forEach(k=>{ const m=/^(open:)?sky(\d\d)$/.exec(k); if(!m) return; const nk=(m[1]||'')+'inf'+(+m[2]+SH);
+        if(!pd[nk]||((pd[k]&&pd[k].t)||0)>((pd[nk]&&pd[nk].t)||0)) pd[nk]=pd[k]; delete pd[k]; ch=true; });
+      if(ch) LS.setItem('pages:done',JSON.stringify(pd)); }
+    const ks=[]; for(let i=0;i<LS.length;i++){ const k=LS.key(i); if(k) ks.push(k); }
+    ks.forEach(k=>{ const m=/^(cert|steps|note):sky(\d\d)$/.exec(k); if(!m) return; const nk=m[1]+':inf'+(+m[2]+SH);
+      if(LS.getItem(nk)==null) LS.setItem(nk,LS.getItem(k)); LS.removeItem(k); });
+    ['ladder:furthest','ladder:lastFooting'].forEach(k=>{ const v=LS.getItem(k); if(v&&/\bsky\d/.test(v)) LS.setItem(k,ids(v)); });
+    if(LS.getItem(F)==null){
+      ks.forEach(k=>{ if(!/^(marks:|cards:|rand:|sq:)/.test(k)) return; const v=LS.getItem(k); if(v==null) return;
+        const nk=tg(ids(k)), nv=/^marks:/.test(k)||/^cards:|^rand:/.test(k)||/^sq:/.test(k)?tg(ids(v)):v;
+        if(nk!==k){ if(LS.getItem(nk)==null) LS.setItem(nk,nv); LS.removeItem(k); } else if(nv!==v) LS.setItem(k,nv); });
+      const sy=J('ladder:sky',null); if(sy&&sy.n&&!sy.first){ sy.first=27; LS.setItem('ladder:sky',JSON.stringify(sy)); } /* the count n began at ∞27 */
+      LS.setItem(F,String(Date.now())); }
+  }catch(e){} })();
+
 (function(){
 'use strict';
 const KO={throwOnError:false,strict:false,trust:true};
@@ -1845,12 +1871,12 @@ function open(){ const M=window.LADMAP; if(!M||!M.length) return false; const F=
 function histOpen(L){ if(!L||!L.length) return false; if(got().n<L.length) return false; let P={}; try{ P=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
   const last=L[L.length-1].page; return !!(P[last]&&P[last].v); }
 function histRow(L){ const hs=document.getElementById('histsec'); if(!hs) return; hs.hidden=!(window.LADDER_DESK||histOpen(L)); }
-function histLinks(){ const pg=ladderPage(); if(!/^(sky\d+|hist0)$/.test(pg)) return; load().then(L=>{ if(!L.length) return; const last=L[L.length-1];
+function histLinks(){ const pg=ladderPage(); if(!/^(inf\d+|hist0)$/.test(pg)) return; load().then(L=>{ if(!L.length) return; const last=L[L.length-1];
   const lab=(a,t)=>{ const l=a.classList.contains('pnb')?a.querySelector('.pl'):null; if(l) l.textContent=t; else a.textContent=t; };
   if(pg===last.page){ if(!histOpen(L)) return;
     document.querySelectorAll('.pn a.pnb.next, header.top .home a, nav.nextrung a').forEach(a=>{ if(/^index\.html/.test(a.getAttribute('href')||'')&&(a.classList.contains('next')||/→/.test(a.textContent))){ a.setAttribute('href','hist0.html'); lab(a,a.classList.contains('pnb')?'the top · the history of mathematics':'next: the top · the history of mathematics →'); } }); }
   else if(pg==='hist0'){ const t=String(last.title||''), tt='∞'+last.n+' · '+t.toLowerCase();
-    document.querySelectorAll('.pn a.pnb.prev, header.top .home a, nav.nextrung a').forEach(a=>{ if(/^sky\d+\.html/.test(a.getAttribute('href')||'')){ a.setAttribute('href',last.page+'.html'); lab(a,a.classList.contains('pnb')?tt:'← '+tt); } }); } }); }
+    document.querySelectorAll('.pn a.pnb.prev, header.top .home a, nav.nextrung a').forEach(a=>{ if(/^inf\d+\.html/.test(a.getAttribute('href')||'')){ a.setAttribute('href',last.page+'.html'); lab(a,a.classList.contains('pnb')?tt:'← '+tt); } }); } }); }
 window.LadderSky={supply,load,open,endless,count:()=>got().n,histOpen,histLinks};
 const go=()=>{ index(); histLinks(); };
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
@@ -2300,7 +2326,7 @@ function order(){ if(ORD) return ORD; const M=window.LADMAP; if(!M) return null;
     core.forEach(([s])=>{ ORD[s]=i++; }); ORD[R+'concl']=i++; annex.forEach(([s])=>{ if(!(s in ORD)) ORD[s]=i++; }); }); ORD['floor'+fl+'concl']=i++; });
   return ORD; }
 function pos(stem){ const O=order(); if(!O||!stem) return -1; stem=String(stem).replace(/\.html$/,''); if(stem in O) return O[stem];
-  if(/^sky/.test(stem)) return 1e9; const m=stem.match(/^r(\d\d)/); if(m){ const R='r'+m[1]; if(R+'concl' in O) return O[R+'concl']; } return -1; }
+  if(/^inf\d/.test(stem)) return 1e9; const m=stem.match(/^r(\d\d)/); if(m){ const R='r'+m[1]; if(R+'concl' in O) return O[R+'concl']; } return -1; }
 let fpC=null;
 function furthestPos(){ const hereK=(window.ladderPage&&ladderPage())||''; if(fpC&&fpC.v===window.__lsVer&&fpC.h===hereK) return fpC.b; const b=furthestPos0(); fpC={v:window.__lsVer,h:hereK,b}; return b; }
 function furthestPos0(){ let best=-1; const f=J('ladder:furthest',null); if(f&&f.page) best=Math.max(best,pos(f.page));

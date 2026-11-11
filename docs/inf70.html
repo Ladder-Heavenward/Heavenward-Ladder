@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How Does a Filter Know Where You Are?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style></style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="inf69.html">← ∞69 why did the bridge sway?</a><a href="index.html">next: the ladder →</a></p>
+  <div class="tags"><span class="tag now">∞70 · research front</span></div>
+  <h1>How Does a Filter Know Where You Are?</h1>
+  <p data-pid="735f59">How does a filter know where you are? A phone, a ship or a spacecraft never sees its own position. It sees readings, each a little wrong, and it knows roughly how it moves between them. 30·nav weighed two fixes by how much each deserved to be trusted, and carried a position forward between fixes while its doubt grew. Do that at every tick, with a rule for how the thing moves, and two steps repeat for ever: predict where it should be now and how unsure that is, then correct the prediction by the new reading, trusting each in proportion. A paper of 1960 set this out for any number of quantities at once, and within a few years an engineering group at a government research centre in California had bent it to steer the Apollo craft to the moon on a computer with very little memory. The same two steps run today in phones, cars and aircraft. When the errors are shaped like the bell, the filter is not merely good, it is the best any rule can do. When they are not, and when the thing being tracked is the whole weather of the earth, the bell is dropped and a crowd of guesses does the work, and how large a crowd is enough is an open question.</p>
+  <p class="gesture" data-pid="6cac55">Predict: m⁻ = m + vΔt, P⁻ = P + Q. Correct: K = P⁻/(P⁻ + R), m = m⁻ + K(z − m⁻), P = (1 − K)P⁻: 30·nav’s weigh-by-trust, every tick. With no motion noise the gain falls as 1/k and the filter becomes a running average that cannot follow a change. In many quantities the same steps run with grids, and a reading of position corrects the speed through the tie the prediction made. A bell times a bell is a bell, so with bell-shaped errors the filter’s answer is the exact one. Without the bell, a crowd of guesses is reweighed by the chance of each reading.</p>
+</header>
+
+<section class="class step" data-step="inf70.1">
+  <h2 class="sthead"><span class="stno">inf70.1</span>Predict, Then Correct</h2>
+  <p data-pid="6a1097"><a href="r30nav.html#c9fedb">30·nav.3</a> carried a boat’s position between fixes and found the saw tooth of its doubt. Now give the thing a rule of motion. A train runs on a straight track at a speed v that its own log reports, and every Δt seconds a trackside reading z of its position arrives, with an error of spread R. Between readings the true position moves by vΔt plus a small unknown change of spread Q: wheel slip, a gust, the log’s own error. The filter keeps two numbers, a best guess m and its spread P.</p>
+  <p data-pid="809ec0">Nudge-by-gain technique: <b>if the guess m⁻ has spread P⁻ and a reading z, independent of it, has spread R, then the weigh-by-trust combination is m = m⁻ + K(z − m⁻) with gain K = P⁻/(P⁻ + R), and its spread is P = (1 − K)P⁻.</b> Before the reading, the prediction step gives m⁻ = m + vΔt and P⁻ = P + Q, by <a href="r30g.html#176db8">30g</a>’s independent-spreads-add technique.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the nudge-by-gain technique">
+m = w\,m^- + (1 - w)\,z,\ \ w = \tfrac{1/P^-}{1/P^- + 1/R} = \tfrac{R}{P^- + R} @@ the weigh-by-trust technique (30·nav.1)
+1 - w = \tfrac{P^-}{P^- + R} = K @@ the weight on the reading
+m = m^- + (1 - w)(z - m^-) = m^- + K(z - m^-) @@ regroup: start from the prediction, move a share K of the surprise
+P = \tfrac{P^-R}{P^- + R} = \big(1 - \tfrac{P^-}{P^- + R}\big)P^- @@ the spread from 30·nav.1
+\htmlClass{new}{m = m^- + K(z - m^-),\ \ P = (1 - K)P^-} \quad \blacksquare @@ the gain says how far to believe the surprise
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: three ticks of the train">
+m = 0,\ P = 100;\ \ v\Delta t = 10,\ Q = 4,\ R = 25 @@ metres and square metres; a poor first guess
+z = 12:\ \ P^- = 104,\ K = 0.806,\ m = 11.61,\ P = 20.2 @@ the first reading is believed almost wholly
+z = 19:\ \ m^- = 21.61,\ P^- = 24.2,\ K = 0.491,\ m = 20.33,\ P = 12.3 @@ now prediction and reading are trusted about equally
+z = 33:\ \ m^- = 30.33,\ P^- = 16.3,\ K = 0.394,\ m = 31.38,\ P = 9.86 @@ the gain keeps falling
+\htmlClass{new}{P \to 8.20,\ \ K \to 0.328} \quad \blacksquare @@ P² + QP − QR = 0, 30·nav.3’s saw tooth
+  </pre>
+  <p data-pid="95d14f">The surprise z − m⁻ is the only thing the reading adds; everything else was known. The gain is a dial between two kinds of trust, and the filter turns it itself, from P⁻ and R, at every tick. After a few ticks it settles where the doubt added by motion, Q, is just balanced by the doubt each reading removes.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · two steps · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞70.1.1</span><span class="ph understand">understand</span>What does the nudge-by-gain technique say, and why is it 30·nav’s weigh-by-trust written another way? <br>Why does the gain fall from 0.81 to 0.39 over three ticks, and where does it stop?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf70.2">
+  <h2 class="sthead"><span class="stno">inf70.2</span>Too Sure of Itself</h2>
+  <p data-pid="3db60c">What if the model says the thing does not move at all, Q = 0, and the filter starts with no idea, P as large as you like? Then the filter should simply be averaging. It is.</p>
+  <p data-pid="de27aa">Running-average technique: <b>with Q = 0, the first reading taken as it is, and every later reading of spread R, the filter’s gain at the kth reading is 1/k, its guess is the plain average of the k readings, and its spread is R/k.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the running-average technique">
+k = 1:\ \ m_1 = z_1,\ \ P_1 = R @@ the first reading taken as it is
+\text{suppose } m_{k-1} = \tfrac{z_1 + \cdots + z_{k-1}}{k - 1},\ \ P_{k-1} = \tfrac{R}{k - 1} @@ induction (4c)
+K_k = \tfrac{R/(k - 1)}{R/(k - 1) + R} = \tfrac1k,\ \ P_k = \big(1 - \tfrac1k\big)\tfrac{R}{k - 1} = \tfrac Rk @@ Q = 0, so P⁻ = P
+m_k = m_{k-1} + \tfrac1k(z_k - m_{k-1}) = \tfrac{(k - 1)m_{k-1} + z_k}{k} @@ the nudge-by-gain technique
+\htmlClass{new}{m_k = \tfrac{z_1 + \cdots + z_k}{k},\ \ P_k = \tfrac Rk} \quad \blacksquare @@ the sample-average technique (30q), one reading at a time
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: a train that stopped">
+\text{readings } 3,\ -1,\ 4,\ 2:\ \ m = 3,\ 1,\ 2,\ 2,\ \ K = 1,\ \tfrac12,\ \tfrac13,\ \tfrac14 @@ R = 25: P = 25, 12.5, 8.3, 6.25
+\text{after } 100 \text{ readings the train moves } 50 \text{ m and stays} @@ the model said it never moves
+\text{the next reading moves the guess by } \tfrac{1}{101}\text{ of } 50 @@ half a metre
+\htmlClass{new}{\text{after } 100 \text{ more, the guess has moved only half way}} \quad \blacksquare @@ the average of 100 old and 100 new readings
+  </pre>
+  <p data-pid="e22e52">A filter whose model allows no surprises grows certain, its gain falls towards 0, and it stops listening. The cure is to admit that the model is not exact: a Q above 0 keeps P⁻ ≥ Q, so the gain never falls below Q/(Q + R). Choosing Q is where much of the craft of filtering lives. Too small, and the filter goes deaf; too large, and it believes every reading and smooths nothing.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · deaf · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞70.2.1</span><span class="ph understand">understand</span>What does the running-average technique say, and why does the gain at the kth reading come out as 1/k? <br>Why does a filter with Q = 0 fail to follow a train that moves after a long stop, and how does Q above 0 cure it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf70.3">
+  <h2 class="sthead"><span class="stno">inf70.3</span>Position and Speed at Once</h2>
+  <p data-pid="3728d7">Now let the filter also track the speed, which no reading shows. Keep a list x = (p, v) and a grid of spreads P: the spreads of p and v on the diagonal and their co-spread off it. One tick of Δt = 1 moves p to p + v, which is the grid F = (1 1; 0 1) acting as a map, as <a href="r27d.html#5cf4bb">27d</a> made grids act. The prediction step is P⁻ = FPFᵀ + Q, the many-quantity form of P + Q, by 30g2’s spread-of-a-sum technique applied to each pair. The correction is stated here and held in trust in general: with H = (1 0) picking out the position, K = P⁻Hᵀ/(HP⁻Hᵀ + R), x = x⁻ + K(z − Hx⁻), P = (I − KH)P⁻. Its second entry can be proved by hand, and it is the surprising one.</p>
+  <p data-pid="0f819b">Unseen-part technique: <b>if a reading y = z − p⁻ has average 0, the best straight guess of the speed’s error from it, the c that makes the spread of (v − v⁻) − cy least, is c = Cov(v, y)/Var y = P⁻₂₁/(P⁻₁₁ + R).</b> So a reading of position alone corrects the speed, in proportion to how the prediction tied the two together.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the unseen-part technique">
+\operatorname{Var}(u - cy) = \operatorname{Var}u - 2c\operatorname{Cov}(u, y) + c^2\operatorname{Var}y @@ u = v − v⁻; the spread-of-a-sum technique (30g2)
+\tfrac{d}{dc}:\ \ -2\operatorname{Cov}(u, y) + 2c\operatorname{Var}y = 0 @@ slope 0 (13); the slope rises, so a bottom
+c = \tfrac{\operatorname{Cov}(u, y)}{\operatorname{Var}y},\ \ \operatorname{Var}y = P^-_{11} + R @@ the reading’s error is independent of the prediction
+\htmlClass{new}{c = \tfrac{P^-_{21}}{P^-_{11} + R}} \quad \blacksquare @@ y = (p − p⁻) + e, and e has no co-spread with v
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: one tick, by hand">
+P = \begin{pmatrix} 4 & 0 \\ 0 & 1\end{pmatrix},\ \ Q = \begin{pmatrix} 0 & 0 \\ 0 & 0.25\end{pmatrix},\ \ R = 5 @@ position and speed not yet tied
+FPF^{\mathsf T} + Q = \begin{pmatrix} 4 + 1 & 1 \\ 1 & 1 + 0.25\end{pmatrix} = \begin{pmatrix} 5 & 1 \\ 1 & 1.25\end{pmatrix} @@ Cov(p + v, v) = Var v = 1: the prediction ties them
+K = \tfrac{1}{5 + 5}\begin{pmatrix} 5 \\ 1\end{pmatrix} = \begin{pmatrix} 0.5 \\ 0.1\end{pmatrix} @@ the second entry is the unseen-part technique
+z - p^- = 4 \Rightarrow p \mathrel{+}= 2,\ \ v \mathrel{+}= 0.4 @@ the train was further on than predicted, so probably faster too
+\htmlClass{new}{P = \begin{pmatrix} 2.5 & 0.5 \\ 0.5 & 1.15\end{pmatrix}} \quad \blacksquare @@ (I − KH)P⁻: the speed’s spread fell from 1.25 to 1.15
+  </pre>
+  <p data-pid="96036a">Every step is grid arithmetic, which is why the method fitted on the small computers of the 1960s. The one number the filter cannot compute for itself is Q, the honest doubt about its own rule of motion, and in many quantities choosing it is harder still.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · two at once · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞70.3.1</span><span class="ph understand">understand</span>What does the unseen-part technique say, and why does it need the prediction step to have tied position and speed? <br>Why does a reading 4 m ahead of the prediction raise the speed by 0.4?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf70.4">
+  <h2 class="sthead"><span class="stno">inf70.4</span>Best When the Errors Are a Bell</h2>
+  <p data-pid="b74eab">So far the filter is the best straight rule: built from weights, it never asked about the shape of the errors, only their spreads. A rule that is not straight, one that, say, ignores a reading far from the prediction, might do better. When every error is shaped like <a href="r30j.html#df320a">30j</a>’s bell, none can.</p>
+  <p data-pid="f4b53c">Bell-product technique: <b>if before the reading the thing’s position has the bell of middle m⁻ and spread P⁻, and a reading z has a bell error of spread R, then after the reading, by the turn-around technique, the position has the bell of middle m⁻ + K(z − m⁻) and spread (1 − K)P⁻, K = P⁻/(P⁻ + R).</b> The filter’s two numbers are then the whole answer, not a summary of it.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the bell-product technique">
+\text{density after} \propto e^{-(x - m^-)^2/(2P^-)}\cdot e^{-(z - x)^2/(2R)} @@ the turn-around technique (30f3) for densities: before times the chance of the reading
+\tfrac{(x - m^-)^2}{P^-} + \tfrac{(x - z)^2}{R} = \big(\tfrac{1}{P^-} + \tfrac1R\big)x^2 - 2\big(\tfrac{m^-}{P^-} + \tfrac zR\big)x + \text{const} @@ multiply out; the constant does not depend on x
+= \tfrac{(x - m)^2}{P} + \text{const},\ \ \tfrac1P = \tfrac{1}{P^-} + \tfrac1R,\ \ m = P\big(\tfrac{m^-}{P^-} + \tfrac zR\big) @@ complete the square (8i)
+\htmlClass{new}{\text{the bell of middle } m = m^- + K(z - m^-),\ \text{spread } P = (1 - K)P^-} \quad \blacksquare @@ the weigh-by-trust and nudge-by-gain techniques
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: why nothing beats it">
+E(X - g)^2 = \operatorname{Var}X + (EX - g)^2 @@ the spread-of-a-sum technique (30g2), for any fixed guess g
+\text{least at } g = EX @@ the middle of what is believed is the best single guess
+m^- = 10,\ P^- = 4,\ z = 13,\ R = 1:\ \ m = 12.4,\ P = 0.8 @@ checked by adding up the product numerically
+\htmlClass{new}{\text{a reading of } 30:\ m = 26} \quad \blacksquare @@ with bells, trusting the wild reading is right: a bell error of 20 widths is not impossible, only rare
+  </pre>
+  <p data-pid="abc740">That last line is where the bell bites. If readings are sometimes simply wrong, a glitch, a reflection, a satellite signal off a building, then the true errors have heavy tails, and a filter that moves 80% of the way to every wild reading is poor. Real filters add rules to throw such readings out, and with them they are no longer straight, and no longer provably best.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the bell · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞70.4.1</span><span class="ph understand">understand</span>What does the bell-product technique say, and why is completing the square enough to prove it? <br>Why does the filter move to 26 on a reading of 30, and when is that right?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf70.5">
+  <h2 class="sthead"><span class="stno">inf70.5</span>A Crowd of Guesses</h2>
+  <p data-pid="fde4b6"><a href="r24now.html#f30eb0">24·now</a> found that the weather model parts nearby starts at a fixed rate, so a forecast must be fed fresh readings every few hours. But the weather’s rules are not straight, its state is millions of numbers, and nobody can write its P. Since 2000 two answers have run. The first carries a crowd of guesses, each a full run of the model, and reads P off their spread: an ensemble filter, which then corrects each member by the nudge-by-gain technique. The second drops the bell altogether: it carries guesses, called particles, each with a weight, and reweighs them by the chance of each reading.</p>
+  <p data-pid="552a88">Reweigh technique: <b>if guesses x₁, …, xₙ carry weights w₁, …, wₙ adding to 1, and a reading z has chance density L(z | x) given each, then after the reading the weights are wⱼL(z | xⱼ) divided by their sum.</b> This is <a href="r30l.html#d53552">30l3</a>’s turning round, for many causes at once: counting cases, as an imagined crowd.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the reweigh technique">
+P(x_j \mid z) = \tfrac{P(z \mid x_j)\,P(x_j)}{P(z)} @@ the turn-around technique (30f3), with the guesses as the cases
+P(z) = \textstyle\sum_i P(z \mid x_i)\,P(x_i) @@ the whole-chance technique: the cases cover everything
+\htmlClass{new}{w_j^{\text{new}} = \tfrac{w_j\,L(z \mid x_j)}{\sum_i w_i\,L(z \mid x_i)}} \quad \blacksquare @@ the same with densities: P(z | x) becomes L(z | x)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: five particles and one reading">
+x = 0,\ 5,\ 10,\ 15,\ 20,\ \ w_j = \tfrac15;\ \ z = 12,\ R = 16 @@ a bell reading error, width 4
+L \propto e^{-(12 - x)^2/32} = 0.011,\ 0.216,\ 0.883,\ 0.755,\ 0.135 @@ the chance of 12 from each guess
+\text{sum } 2.000,\ \ w = 0.006,\ 0.108,\ 0.441,\ 0.377,\ 0.068 @@ the reweigh technique
+\htmlClass{new}{\text{middle } 11.97,\ \ \text{spread } 15.6} \quad \blacksquare @@ no bell assumed before; the cloud keeps whatever shape the readings give it
+  </pre>
+  <p data-pid="948075">Then the particles are copied in proportion to their weights, the light ones dropped, and each is moved on by the model, with its own random change. Nothing in this needs the bell or a straight model. The cost is the crowd. Here one particle of five already carries 44% of the weight. In a state of many numbers each reading pushes the weight further onto fewer particles, and studies of 2008 found that to stop one particle taking everything the crowd must grow exponentially with how much the readings say. So for the weather the ensemble filters, which keep the bell for the correction and use the crowd only to estimate spreads, have been the working choice.</p>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · particles · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞70.5.1</span><span class="ph understand">understand</span>What does the reweigh technique say, and which technique of 30l is it? <br>Why does one particle of five carry 44% of the weight after one reading, and why is that a danger in a state of many numbers?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf70.6">
+  <h2 class="sthead"><span class="stno">inf70.6</span>Moves to Check</h2>
+  <pre class="lines" data-k="check" data-label="this page: moves to check">
+\text{the filter weighs prediction and reading equally}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; by trust: K = P⁻/(P⁻ + R), which changes every tick
+\text{set } Q = 0 \text{, since the model is right}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the gain falls as 1/k and the filter stops listening
+\text{a reading of position cannot change the speed}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it does through the co-spread the prediction made: here by 0.4
+\text{the filter is the best rule whatever the errors}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the best straight rule; best of all only when the errors are bells
+\text{more particles always fix a particle filter}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the crowd needed grows exponentially with what the readings say
+\text{the filter needs every reading kept}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it keeps two numbers, or a list and a grid; the past is in them
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞70.6.1</span><span class="ph understand">understand</span>Why is the filter best among straight rules for any errors, but best among all rules only with bells? <br>Why does setting Q = 0 make the filter deaf?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="openq themeend">
+  <div class="eyebrow">Open questions · nobody has the answer yet</div>
+  <h2>Open questions</h2>
+  <p class="chnote">These are open: the field is still asking them. There is no key; a good attempt is a reason, a guess, or a better question.</p>
+  <div class="oq"><span class="oqid">∞70.oq.1</span>What is the best filter when the errors are not a bell or the rule of motion is not straight? The exact answer is always known in words: the density of where the thing may be, given every reading, updated by the reweigh technique for endlessly many cases. Writing it down takes a whole function, not two numbers, and it can be carried exactly in only a few special families of models. Every working method is an approximation, and for most it is not known how far from the best it is.</div>
+  <div class="oq"><span class="oqid">∞70.oq.2</span>How many particles are enough? The 2008 studies showed that a plain particle filter needs a crowd that grows exponentially with how much the readings say, which for the weather is hopeless. Methods since then move particles towards the readings before reweighing, or share weights between nearby places, and some have run on weather models in tests. Whether any particle method can beat ensemble filters for the full weather, at a cost a weather centre can pay, is open.</div>
+  <div class="oq"><span class="oqid">∞70.oq.3</span>How should a crowd of a hundred runs estimate a grid of spreads for a state of millions of numbers? With so few runs, two places whose errors are truly unrelated show a tie by chance, of size about 1/√100 = 0.1 in units of their spreads, and there are millions of such pairs. Cutting ties off by distance, and widening the spreads to make up for the crowd’s smallness, are the obvious repairs. Choosing how far to cut and how much to widen from the data alone, with a guarantee, is an open problem.</div>
+  <div class="oq"><span class="oqid">∞70.oq.4</span>Can a filter learn its own Q and R? Section inf70.2 showed that a wrong Q makes a filter deaf or jumpy. Methods that estimate Q and R from the run of surprises z − m⁻ exist, and learned models now replace parts of the rule of motion itself. When the rule is learned from the same data the filter then corrects, what can still be proved about how good the filter is, is not settled.</div>
+</section>
+<section class="history themeend">
+  <div class="eyebrow">A short history · told from more than one side</div>
+  <h2>How we got here</h2>
+  <p data-pid="bad965">Combining readings by trust is older than the filter, and so is filtering a signal: the earlier filters worked in the frequency language of 32 and needed the whole past of the signal at once. What the 1960 paper changed was to write the thing as a state that moves by a rule, with two steps per tick, for any number of quantities at once, with grids. It appeared in March 1960 in a journal of the American society of mechanical engineers. Similar recursions had been published earlier, in Denmark in the nineteenth century, in the United States in 1958 and in the Soviet Union.</p>
+  <p data-pid="8c03ec">The quick adoption came from the space programme. An engineering group at the Ames research centre of the new space agency was working on navigation for a flight round the moon, saw that the method could be applied, and extended it to rules that are not straight by straightening them about the current guess at every tick. That extended filter guided the Apollo flights. On the small computers of spacecraft and aircraft, rounding errors from their short numbers made the filter unstable, and a reformulation carrying a square root of the grid of spreads was found to keep it stable.</p>
+  <p data-pid="279adb">Two claims about the filter are often confused, and the confusion has been argued over. One is that it is best when the errors are bells, as inf70.4 proved. The other is that, whatever the shape of the errors, it is the best straight rule, built from weights, as 30·nav and inf70.3 proved. Critics point out that real errors are rarely bells, and that the best straight rule can be poor when readings sometimes fail outright; defenders answer that the filter’s structure is what matters, and that every practical filter adds rules to catch outliers. Both are right about different things.</p>
+  <p data-pid="6c999f">Weather forecasting took another road for decades, fitting the whole of a day’s readings at once with a model run, and it still does at some centres. Ensemble filters, proposed in 1994 with an ocean model, use a crowd of model runs to estimate the grid of spreads that nobody could write down for millions of numbers. Particle filters, proposed in 1993, drop the bell entirely and suit tracking problems where the state is a handful of numbers. For the weather, the Canadian weather service brought an ensemble filter into operation in 2005.</p>
+  <p data-pid="817532">Today the same two steps run in phones that find their place, in drones, in cars that steer themselves and in craft that dock with stations in orbit. The success has its critics. A filter is only as good as its Q and R, and these are often tuned until the results look right, which makes the claim that it is best partly circular. As learned models enter the rule of motion, some expect filtering to be absorbed into learning; others hold that the two-step structure, with an honest account of doubt, is what learned systems lack.</p>
+</section>
+
+<nav class="nextrung"><a href="inf69.html">← ∞69 · why did the bridge sway?</a><a href="index.html">the ladder →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The filter is the Kalman filter, and the nudge-by-gain technique its measurement update, with K the Kalman gain and z − m⁻ the innovation; the prediction step is the time update. The running-average technique shows the filter reducing to recursive least squares for a constant. The grid form with F, H, Q and R is the discrete-time Kalman filter, and P⁻ = FPFᵀ + Q its covariance propagation; the straightened version is the extended Kalman filter, and the stable reformulation the square-root filter. The unseen-part technique is the linear minimum mean square error estimate of an unobserved state. The bell-product technique is the Gaussian conjugate update, which makes the filter the conditional mean. Ensemble filters are the ensemble Kalman filter, EnKF, with localization and inflation; the reweigh technique is the weight update of a particle filter (sequential Monte Carlo), and the copying step is resampling; one particle taking all the weight is weight collapse or degeneracy.</p>
+  <h3>Who said it first</h3>
+  <p>Rudolf Kálmán published the 1960 paper, and with Richard Bucy the continuous-time form in 1961. Thorvald Thiele, Peter Swerling (1958) and Ruslan Stratonovich had related recursions earlier. Stanley Schmidt and colleagues at NASA Ames developed the extended filter for Apollo, and the square-root filter followed from James Potter’s work. Norbert Wiener and Andrey Kolmogorov wrote the wartime filters. Geir Evensen proposed the ensemble filter in 1994; Neil Gordon, David Salmond and Adrian Smith the bootstrap particle filter in 1993; Peter Houtekamer and Herschel Mitchell led the Canadian ensemble filter. Chris Snyder, Thomas Bengtsson, Peter Bickel and Jeff Anderson published the 2008 study of particle collapse.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+
+stepper('#sl1',[
+  {k:'ember',kl:'predict',t:R`P^- = P + Q`,n:`Doubt grows.`},
+  {k:'ember',kl:'gain',t:R`K = \tfrac{P^-}{P^- + R}`,n:`Trust shared.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{m = m^- + K(z - m^-)}`,n:`Move a share of the surprise.`}
+],{title:'The slides · two steps · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'gain',t:R`K_k = 1/k`,n:`Q = 0.`},
+  {k:'ember',kl:'guess',t:R`m_k = \bar z_k`,n:`The plain average.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{K \ge Q/(Q + R)}`,n:`Q keeps it listening.`}
+],{title:'The slides · deaf · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'predict',t:R`FPF^{\mathsf T} + Q`,n:`Ties p and v.`},
+  {k:'ember',kl:'gain',t:R`K = (0.5,\ 0.1)`,n:`The speed’s share.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{v \mathrel{+}= 0.4}`,n:`Never seen, still corrected.`}
+],{title:'The slides · two at once · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'product',t:R`e^{-(x - m^-)^2/2P^-}e^{-(z - x)^2/2R}`,n:`A bell again.`},
+  {k:'ember',kl:'middle',t:R`m^- + K(z - m^-)`,n:`The filter’s own.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{exact, with bells}}`,n:`Best of all rules.`}
+],{title:'The slides · the bell · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'before',t:R`w_j = \tfrac15`,n:`Five guesses.`},
+  {k:'ember',kl:'reweigh',t:R`w_jL(z \mid x_j)/\textstyle\sum`,n:`Turn the chance round.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{0.44 \text{ on one}}`,n:`The crowd thins.`}
+],{title:'The slides · particles · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
