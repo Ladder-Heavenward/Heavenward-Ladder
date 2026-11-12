@@ -55,7 +55,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r09cb4.html">← 9·cb4 recursion revisited: sequences</a><a href="r09chem.html">next: 9·chem does every gas follow the same rule? →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r09cb4.html">← 9·cb4 recursion revisited: sequences</a><a href="r09chem.html">next: 9·chem does every gas follow the same law? →</a></p>
   <div class="tags"><span class="tag crypt">9·crypt · cryptography</span></div>
   <h1>Can a Code Be Truly Unbreakable?</h1>
   <p data-pid="395ec5">Can a code be truly unbreakable? People have hidden messages for as long as they have written them. For as long, other people have read what was hidden. Many ciphers were called unbreakable, and nearly all of them were broken, usually by a patient reader with tallies and a good guess. So the question sounds like a boast. It is hard because "unbreakable" has to mean something exact. It cannot mean "nobody has broken it yet". It has to mean that the secret text, on its own, tells a reader nothing about the message. This page builds a cipher that meets that demand, from 4·comp's exclusive or. It proves that a key used once hides everything but the length. Then it shows how a key used twice gives both messages away, as it did to real spies in the 1940s.</p>
@@ -66,7 +66,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <section class="class step" data-step="9crypt1">
   <h2 class="sthead"><span class="stno">9crypt1</span>Ciphers, Keys and Secret Text</h2>
 
-  <p data-pid="7a53af">A <b>cipher</b> is a pair of rules. One turns a message into secret text with the help of a <b>key</b>; the other turns the secret text back into the message, with the same key. The message is called the <b>plain text</b>, and the secret text the <b>cipher text</b>. Turning plain text into cipher text is <b>encrypting</b>; turning it back is <b>decrypting</b>. 4·crypt's shift was a cipher: its key was how far to count on, and there were only 25 keys worth trying. An attacker tried them all.</p>
+  <p data-pid="7a53af">A <b>cipher</b> is a pair of techniques. One turns a message into secret text with the help of a <b>key</b>; the other turns the secret text back into the message, with the same key. The message is called the <b>plain text</b>, and the secret text the <b>cipher text</b>. Turning plain text into cipher text is <b>encrypting</b>; turning it back is <b>decrypting</b>. 4·crypt's shift was a cipher: its key was how far to count on, and there were only 25 keys worth trying. An attacker tried them all.</p>
   <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{A} = 00000,\ \text{B} = 00001,\ \ldots,\ \text{Z} = 11001\end{aligned}"></div>
   <p class="eqline" data-pid="2b20aa">From here on, on this page, m names a message, k a key and c a cipher text, each a list of bits. A letter is written as its place in the alphabet, counting from A = 0 to Z = 25, in five bits (4i's numerals in twos): A is 00000, B is 00001, L is 01011, Z is 11001.</p>
   <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{a list of } n \text{ bits} : n \to 2;\quad 2^n \text{ of them}\\ &amp;2^{20} = 1\,048\,576\end{aligned}"></div>
@@ -138,7 +138,7 @@ m \oplus k = c \Rightarrow m \oplus (m \oplus k) = m \oplus c @@ only one key: �
 \Rightarrow \htmlClass{new}{k = m \oplus c} \quad \blacksquare @@ the left side is k, by the first line's techs
   </pre>
   <div class="eqline c6" data-tex="\begin{aligned}&amp;k \mapsto k \oplus c = E_c:\\ &amp;\qquad\text{a bijection, keys} \to \text{messages}\end{aligned}"></div>
-  <p data-pid="a35f03">Read it as a function. Fix the cipher text c. The rule k ↦ k ⊕ c sends each key to the message it decrypts c into. It is E_c, so it undoes itself, so it is a bijection from the keys onto the messages of length n. Trying every key lists every message of that length, each exactly once. For LODI's cipher text, the key 10011 01001 10000 10111 gives OAKS, and 10001 01001 10110 00101 gives MAMA. Nothing in the list points at LODI.</p>
+  <p data-pid="a35f03">Read it as a function. Fix the cipher text c. The function k ↦ k ⊕ c sends each key to the message it decrypts c into. It is E_c, so it undoes itself, so it is a bijection from the keys onto the messages of length n. Trying every key lists every message of that length, each exactly once. For LODI's cipher text, the key 10011 01001 10000 10111 gives OAKS, and 10001 01001 10110 00101 gives MAMA. Nothing in the list points at LODI.</p>
   <p data-pid="268db8">That is the exact sense of "hides everything". It needs the key to have been picked with no pattern an attacker could guess: coin tosses, not a phrase from a book. Then the attacker has no reason to prefer one key, and so none to prefer one message. The cipher text says how long the message is, and nothing else.</p>
   <section class="sayback">
     <h3>Question</h3>
@@ -152,7 +152,7 @@ m \oplus k = c \Rightarrow m \oplus (m \oplus k) = m \oplus c @@ only one key: �
   <h2 class="sthead"><span class="stno">9crypt5</span>Why the Key Must Be as Long as the Message</h2>
 
   <div class="eqline c6" data-tex="\begin{aligned}&amp;r &lt; n \Rightarrow 2^r &lt; 2^n:\ \text{some message ruled out}\end{aligned}"></div>
-  <p data-pid="9e1076">Short-key technique: <b>if the keys are fewer than the messages, some cipher text rules some message out.</b> Suppose the keys have r bits, with r &lt; n, and each is stretched to n bits by a fixed rule, say by repeating it. Fix a cipher text c. The messages that fit c are the outputs of k ↦ (k stretched) ⊕ c, one for each key. So there are at most 2ʳ of them (each fitting message is counted by at least one key). There are 2ⁿ messages, and 2ʳ &lt; 2ⁿ. So some message of length n fits no key at all. ∎ The attacker learns something: that message was not sent. With a short repeated key she learns far more than that, as later cryptography pages show.</p>
+  <p data-pid="9e1076">Short-key technique: <b>if the keys are fewer than the messages, some cipher text rules some message out.</b> Suppose the keys have r bits, with r &lt; n, and each is stretched to n bits by a fixed technique, say by repeating it. Fix a cipher text c. The messages that fit c are the outputs of k ↦ (k stretched) ⊕ c, one for each key. So there are at most 2ʳ of them (each fitting message is counted by at least one key). There are 2ⁿ messages, and 2ʳ &lt; 2ⁿ. So some message of length n fits no key at all. ∎ The attacker learns something: that message was not sent. With a short repeated key she learns far more than that, as later cryptography pages show.</p>
   <p data-pid="c97af1">So the price of the pad is its key. Every bit ever sent costs a bit of key, made in advance, carried to the other side, and burned after one use.</p>
 
   <aside class="nature">
@@ -258,7 +258,7 @@ m \text{ AND } k \text{ as a cipher}\,? @@ &lt;span class="vd vd-p"&gt;outside t
   <div class="chq"><span class="chid">9·crypt.9.4</span><span class="tagq">seam</span>Before the pad can be used, the two sides must share a key as long as everything they will say. It goes by courier, in a locked case. Has the pad hidden the message, or only moved the secret into the case?</div>
 </section>
 <div class="themecert themeend"></div>
-<nav class="nextrung"><a href="r09bio.html">← 9·bio · is a cow just a big mouse?</a><a href="r09chem.html">9·chem · does every gas follow the same rule? →</a></nav>
+<nav class="nextrung"><a href="r09bio.html">← 9·bio · is a cow just a big mouse?</a><a href="r09chem.html">9·chem · does every gas follow the same law? →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>

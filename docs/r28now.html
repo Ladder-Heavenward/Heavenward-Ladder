@@ -52,7 +52,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <div class="tags"><span class="tag now">28·now · research front</span></div>
   <h1>How Does a Machine Learn From Its Mistakes?</h1>
   <p data-pid="f60dc6">How does a machine learn from its mistakes? A program that reads handwritten digits, or turns speech into text, is not written line by line by anyone. It starts as a machine with millions of knobs set at random, and it is shown examples with their right answers. Each time it is wrong, every knob is turned a little, in the direction that would have made it less wrong. After enough examples it is right most of the time. People have tried to build such machines since the 1950s. The first could learn only what a single straight line can separate, and in 1969 a short proof showed how little that is. What makes the question hard is the knobs. To know which way to turn each of millions of them, you need the slope of the error in each of millions of directions, and finding each slope by trying the knob costs a whole run of the machine. In 1986 a paper showed that every one of those slopes comes out of one run backwards through the machine, by the chain technique of rung twenty-eight. Training is then a walk downhill in a space with millions of directions. This page proves the first machine’s mistake count, why one unit cannot learn either-but-not-both, how the backward run gets every slope at once, and what a walk downhill is sure to find. It ends with what is proved, and with what is still open: why the huge machines of today work as well as they do.</p>
-  <p class="gesture" data-pid="b03c48">The first machine adds up its inputs with weights and answers yes when the total is above 0. When it is wrong, it adds the example to its weights, or takes it away. If some weights would get every example right with room to spare, the machine stops making mistakes after a number of them fixed by that room. But one such unit cannot answer either-but-not-both, and units stacked in layers cannot be trained by that rule. Replace the sharp yes or no by a smooth switch whose slope is easy to find. Then the error of the whole machine is a chain of flat maps, and its slopes multiply as grids do. Multiply them starting from the error and going back toward the inputs, and each step is a row times a grid: the backward run costs about as much as the forward run, however many knobs there are. With every slope in hand, step downhill. If the error does not bend too sharply, each step lowers it, and after many steps some step was taken where the ground was nearly flat. Nearly flat is not the bottom: it can be a saddle, or a poor hollow. Why walking downhill on the error of a huge machine finds answers that also work on examples it never saw is the open question.</p>
+  <p class="gesture" data-pid="b03c48">The first machine adds up its inputs with weights and answers yes when the total is above 0. When it is wrong, it adds the example to its weights, or takes it away. If some weights would get every example right with room to spare, the machine stops making mistakes after a number of them fixed by that room. But one such unit cannot answer either-but-not-both, and units stacked in layers cannot be trained by that technique. Replace the sharp yes or no by a smooth switch whose slope is easy to find. Then the error of the whole machine is a chain of flat maps, and its slopes multiply as grids do. Multiply them starting from the error and going back toward the inputs, and each step is a row times a grid: the backward run costs about as much as the forward run, however many knobs there are. With every slope in hand, step downhill. If the error does not bend too sharply, each step lowers it, and after many steps some step was taken where the ground was nearly flat. Nearly flat is not the bottom: it can be a saddle, or a poor hollow. Why walking downhill on the error of a huge machine finds answers that also work on examples it never saw is the open question.</p>
 </header>
 
 <section class="class step" data-step="28now1">
@@ -85,7 +85,7 @@ p + q + 2r \gt 0 @@ add the middle two
 p + q + r \gt -r \gt 0 @@ take r away; r &lt; 0
 \htmlClass{new}{\text{no weights are right on all four}} \quad \blacksquare @@ against the last need
   </pre>
-  <p data-pid="4aed58">Either-not-both technique: <b>no single unit that answers by the sign of w · x can answer either-but-not-both.</b> Two layers can: one unit for either-or, one for both-and, and an output for the first but not the second. But the mistake rule says nothing about how to set the weights of a unit hidden inside, whose right answer no example gives.</p>
+  <p data-pid="4aed58">Either-not-both technique: <b>no single unit that answers by the sign of w · x can answer either-but-not-both.</b> Two layers can: one unit for either-or, one for both-and, and an output for the first but not the second. But the mistake technique says nothing about how to set the weights of a unit hidden inside, whose right answer no example gives.</p>
   <p data-pid="c6fcc2">The way through is slope. A sharp yes or no has slope 0 wherever it has one, so it never says which way to turn a knob. Replace it by a smooth switch, as a nerve cell’s rate of firing rises smoothly with its input (26·then).</p>
   <pre class="lines" data-k="ember" data-label="this page: the smooth-switch technique">
 \sigma(z) = \tfrac{1}{1 + e^{-z}},\ \ 0 \lt \sigma \lt 1,\ \ \sigma(0) = \tfrac12 @@ near 0 for z far below 0, near 1 far above
@@ -138,7 +138,7 @@ g_{k-1} = g_k\,\Sigma_k\,W_k @@ the chain-of-flat-maps technique (28c): slope gr
   <p data-pid="d8cd1f">On the four examples of either-but-not-both, from the knobs above, the total error starts at 0.337. With step size 0.5 it is 0.166 after 100 steps and 0.009 after 1000. With step size 2 it is 0.030 after 100. With step size 8 it first jumps up, to 0.67 after 10 steps, and then falls fast, to 0.003 after 100. With step size 20 it sits near 0.50 for hundreds of steps, a flat place that is not the bottom, before it finds its way down.</p>
   <aside class="nature">
     <div class="eyebrow">Anexact, yet rigorous · laws with an exception rate</div>
-    <p data-pid="caf23b">A trained machine is a law guessed from cases: from the examples it was shown, to a rule it gives for every input. Like any law, it has a range, and exceptions. The error on its own examples says almost nothing about them. A machine with enough knobs can be right on every example it was shown, and wrong on most new ones.</p>
+    <p data-pid="caf23b">A trained machine is a law guessed from cases: from the examples it was shown, to a function it gives for every input. Like any law, it has a range, and exceptions. The error on its own examples says almost nothing about them. A machine with enough knobs can be right on every example it was shown, and wrong on most new ones.</p>
     <p data-pid="247153"><b>Report a trained machine’s rate of mistakes on examples it was never trained on, and say where those examples came from.</b></p>
     <p data-pid="87152b">So the examples are split before training. Some are kept back, never shown. The rate of mistakes on those, and the kind of cases they were drawn from, is the measure of the law. Rung 30 gives the tools to say how far that rate can be trusted.</p>
     <p class="bait" data-pid="b605ea">A machine trained on photographs of skin from hospitals in Seattle is right 95 times in 100 on photographs kept back from the same hospitals. What does that say about photographs taken with a phone in Truckee?</p>
@@ -162,7 +162,7 @@ g_{k-1} = g_k\,\Sigma_k\,W_k @@ the chain-of-flat-maps technique (28c): slope gr
 
 <section class="class step" data-step="28now5">
   <h2 class="sthead"><span class="stno">28now5</span>What Is Proved, and What Is Open</h2>
-  <p data-pid="78771a"><b>How to get every slope at once, and what a walk downhill is sure to reach, are proved; why walking downhill on a huge machine finds rules that work on new cases is open.</b></p>
+  <p data-pid="78771a"><b>How to get every slope at once, and what a walk downhill is sure to reach, are proved; why walking downhill on a huge machine finds functions that work on new cases is open.</b></p>
   <ul>
     <li data-pid="22580d">Proposed, 1943 and 1958. A unit that fires when a weighted sum passes a threshold, and then a machine that learns its weights from mistakes.</li>
     <li data-pid="5f40fd">Proved, 1962. The mistake-bound technique of 28·now.1.</li>
@@ -186,7 +186,7 @@ g_{k-1} = g_k\,\Sigma_k\,W_k @@ the chain-of-flat-maps technique (28c): slope gr
 <section class="class step" data-step="28now6">
   <h2 class="sthead"><span class="stno">28now6</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
-\text{the mistake rule always stops}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only when some weights get every example right with room γ &gt; 0
+\text{the mistake technique always stops}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only when some weights get every example right with room γ &gt; 0
 \text{a sharp yes or no can be trained by slopes}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; its slope is 0 wherever it has one
 \text{start every knob at the same value}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the two hidden units then get the same slopes, and stay twins for ever
 \text{a larger step size reaches the bottom sooner}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; past 2/L the steps can grow, or stall on a flat stretch
@@ -209,7 +209,7 @@ g_{k-1} = g_k\,\Sigma_k\,W_k @@ the chain-of-flat-maps technique (28c): slope gr
   <div class="chq"><span class="chid">28·now.7.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">the mistake-bound technique</span></span>Find what happens to the bound as the room γ shrinks to 0, and an order of examples that makes the machine use many mistakes.</div>
   <div class="chq"><span class="chid">28·now.7.3</span><span class="tagq">converse</span>If every step of size 1/L goes down, from every start, must the error never bend more sharply than L? Test ℓ(w) = 2w² with L = 3.</div>
   <div class="chq"><span class="chid">28·now.7.4</span><span class="tagq">reroute</span><span class="givens"><span class="gtx">28·now.3’s machine, x = (1, 0), t = 1</span></span>Find the slope of ℓ in the knob (W₁)₁₁ a second way, by the roads-add technique through every road from that knob to ℓ.</div>
-  <div class="chq"><span class="chid">28·now.7.5</span><span class="tagq">seam</span>One side holds that a machine that predicts well has learned the rule of what it predicts, whatever is inside it. The other holds that it has learned only the shape of its examples, and will fail where the world is not like them, unless its inside can be read and checked. <br>Can a law guessed from cases be trusted without an account of why it holds?</div>
+  <div class="chq"><span class="chid">28·now.7.5</span><span class="tagq">seam</span>One side holds that a machine that predicts well has learned the law of what it predicts, whatever is inside it. The other holds that it has learned only the shape of its examples, and will fail where the world is not like them, unless its inside can be read and checked. <br>Can a law guessed from cases be trusted without an account of why it holds?</div>
 </section>
 <div class="themecert themeend"></div>
 
@@ -277,7 +277,7 @@ $('ke').oninput=draw; $('kk').oninput=draw; draw();
 window.__pic={set:(e,k)=>{ $('ke').value=e; $('kk').value=k; draw(); return $('vd').textContent; }};
 
 stepper('#sl1',[
-  {k:'ember',kl:'rule',t:R`w \mapsto w + yx`,n:`On a mistake.`},
+  {k:'ember',kl:'technique',t:R`w \mapsto w + yx`,n:`On a mistake.`},
   {k:'ember',kl:'grow',t:R`k\gamma \le |w_k| \le \sqrt k\,R`,n:`Two ways.`},
   {k:'ember',kl:'bound',t:R`\htmlClass{new}{k \le (R/\gamma)^2}`,n:`Then no more.`}
 ],{title:'The slides · mistakes · ← → keys work'});
