@@ -29,7 +29,7 @@
  {"q":"x ∈ d ∪ b ⇔ x ∈ d ∨ x ∈ b. Which technique?","a":"the merge-membership technique","w":["the gather axiom","the sift-is-part technique","the double-inclusion technique"],"why":"The membership line of ∪ is an or."},
  {"q":"“For any p and q there is a set {p, q}.” Which axiom?","a":"the gather axiom","w":["the merge axiom","the sift axiom","the same-members axiom"],"why":"Gathering makes the listed sets exist."},
  {"q":"d ∩ b is built with which tool?","a":"a sift: the members of d that are in b","w":["a merge of {d, b}","a gathering of d and b","a new axiom"],"why":"No new tool: a sift."},
- {"q":"d ∩ (b ∪ c) = (d ∩ b) ∪ (d ∩ c). Which technique of the rulebook does it wear?","a":"spread and over or","w":["spread or over and","regroup","absorb"],"why":"∩ is ∧ and ∪ is ∨, member by member."},
+ {"q":"d ∩ (b ∪ c) = (d ∩ b) ∪ (d ∩ c). Which technique of the list does it wear?","a":"spread and over or","w":["spread or over and","regroup","absorb"],"why":"∩ is ∧ and ∪ is ∨, member by member."},
  {"q":"Rain and wind are sets of the days in t. Which set holds the days with both?","a":"rain ∩ wind","w":["rain ∪ wind","rain ∖ wind","⋃{rain, wind}"],"why":"Both: the members of one that are in the other."},
  {"q":"Which set holds the days in t without rain?","a":"t ∖ rain","w":["∅ ∖ rain","rain ∖ t","everything not in rain"],"why":"There is no set of everything; the days are sifted from t."},
  {"q":"x ∈ c ∖ (d ∩ b), so x ∈ (c ∖ d) ∪ (c ∖ b). Licensed for any sets now?","a":"no: it waits, or needs settled membership","w":["yes: not-through for ∪","yes: both ways, any sets","no: it is never so"],"why":"It is not-through for and, read the withheld way."},
