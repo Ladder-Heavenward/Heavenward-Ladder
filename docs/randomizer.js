@@ -7998,6 +7998,89 @@ QP.push({id:'31o.axes',step:'31o',label:'principal components',open:()=>measured
       ['o6',[['one of the measurements is changed from metres to centimetres','given'],['the axes stay the same','the same points']],2,1,'One place of every point is stretched, C changes, and so do its axes.']];
     return line28('31o.line',V,[a,b,l1,l2,l3,n]); }});
 
+/* ===== Phase W floor 7 (Phase K step 6c, Andrew 2026-11-11 05:38Z): rung 47 arrow pools. Check Proofs and Word Problems in arrows:
+   a seed is an arrow of a story, a link is an arrow run after it ("after weigh"), and the links spell the plan. No Work Equations pool. ===== */
+const AR47=[
+  {id:'Hood River pears',at:'At a Hood River packing shed',T:['Acres','Bins','Pounds','Dollars'],A:[['fill','the bins that a count of acres fills'],['weigh','the pounds that a count of bins holds'],['pay','the dollars that a weight of pears brings']]},
+  {id:'Astoria salmon',at:'On the dock at Astoria',T:['Trips','Fish','Pounds','Dollars'],A:[['land','the fish that a count of trips lands'],['weigh','the pounds that a count of fish comes to'],['sell','the dollars that a weight of salmon sells for']]},
+  {id:'Tillamook cheese',at:'At a Tillamook creamery',T:['Cows','Gallons','Pounds','Blocks'],A:[['milk','the gallons that a count of cows gives in a day'],['press','the pounds of cheese that a volume of milk makes'],['cut','the blocks that a weight of cheese is cut into']]},
+  {id:'Columbia barge',at:'On a Columbia barge',T:['Hours','Miles','Gallons','Dollars'],A:[['run','the miles covered in a time'],['burn','the gallons of fuel that a distance takes'],['bill','the dollars that a volume of fuel costs']]},
+  {id:'Skagit tulips',at:'On a Skagit tulip farm',T:['Rows','Bulbs','Stems','Bunches'],A:[['plant','the bulbs that a count of rows takes'],['bloom','the stems that a count of bulbs sends up'],['tie','the bunches that a count of stems makes']]},
+  {id:'Wenatchee apples',at:'At a Wenatchee cider press',T:['Trees','Apples','Litres','Bottles'],A:[['pick','the apples that a count of trees gives'],['crush','the litres of juice that a count of apples gives'],['fill','the bottles that a volume of juice fills']]}];
+const ar47=(S,k)=>S.A[k][0]+' : '+S.T[k]+' → '+S.T[k+1];
+const comp47=(S,ks)=>ks.slice().reverse().map(k=>S.A[k][0]).join(' ∘ ');
+const tell47=(S,ks)=>S.at+', '+(ks.length===3?'three':'these')+' arrows are known. '+ks.map(k=>ar47(S,k)+' gives '+S.A[k][1]+'.').join(' ');
+const PAIR47=[
+  {id:'Hood River pears',at:'At a Hood River packing shed',X:'Bins',A:'Pounds',B:'Grades',f:['weigh','the weight of a bin'],g:['grade','the grade of a bin']},
+  {id:'Astoria salmon',at:'On the dock at Astoria',X:'Fish',A:'Pounds',B:'Kinds',f:['weigh','the weight of a fish'],g:['name','the kind of a fish']},
+  {id:'Tillamook cheese',at:'At a Tillamook creamery',X:'Blocks',A:'Ounces',B:'Ages',f:['weigh','the weight of a block'],g:['age','the months a block has aged']},
+  {id:'Skagit tulips',at:'On a Skagit tulip farm',X:'Stems',A:'Inches',B:'Colours',f:['measure','the length of a stem'],g:['shade','the colour of a stem']}];
+const SUM47=[
+  {id:'Wenatchee apples',at:'At a Wenatchee cider press',A:'Bins',B:'Boxes',X:'Dollars',f:['binfee','the charge for pressing a bin'],g:['boxfee','the charge for pressing a box'],one:'a bin or a box'},
+  {id:'Columbia barge',at:'On a Columbia barge',A:'Cars',B:'Trucks',X:'Dollars',f:['carfare','the fare for a car'],g:['truckfare','the fare for a truck'],one:'a car or a truck'},
+  {id:'Astoria salmon',at:'On the dock at Astoria',A:'Boats',B:'Trailers',X:'Feet',f:['hull','the length of a boat'],g:['bed','the length of a trailer'],one:'a boat or a trailer'}];
+QP.push({id:'47a.plan',step:'47a',mode:'word',label:'a plan in arrows',open:()=>measured('47a'),make(){
+    const si=rnd(AR47.length), S=AR47[si], n=2+rnd(2), i=n===3?0:rnd(2), ks=[...Array(n).keys()].map(k=>i+k), from=S.T[i], to=S.T[i+n], nm=k=>S.A[k][0];
+    const right=comp47(S,ks)+' : '+from+' → '+to;
+    const cands=shuffle(n===3?[ks.map(nm).join(' ∘ ')+' : '+from+' → '+to, comp47(S,ks)+' : '+to+' → '+from, nm(2)+' ∘ '+nm(0)+' : '+from+' → '+to, nm(1)+' ∘ '+nm(2)+' ∘ '+nm(0)+' : '+from+' → '+to]
+      :[ks.map(nm).join(' ∘ ')+' : '+from+' → '+to, comp47(S,ks)+' : '+to+' → '+from, nm(2)+' ∘ '+nm(0)+' : '+S.T[0]+' → '+S.T[3], nm(ks[0])+' : '+from+' → '+to]);
+    const wrong=uniq(right,cands,3); if(wrong.length<3) return null;
+    return {index:'q:47a.plan['+[si,i,n].join(';')+']', a3:['47a.plan['+[si,i,n].join(';')+']',ks.slice(1).map(k=>'after '+nm(k)).join('+'),S.id], story:tell47(S,n===3?ks:[0,1,2]), lines:[], ask:'Which arrow takes '+from+' to '+to+'?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'g ∘ f is read “g after f”, and an arrow runs in a row only from where the last one ended (47a1): '+ks.slice(0,-1).map(k=>nm(k)+' ends at '+S.T[k+1]+', where '+nm(k+1)+' starts').join('; ')+'.'}; }},
+  {id:'47a.line',step:'47a',mode:'proof',label:'arrows in a row',open:()=>measured('47a'),make(){
+    const si=rnd(AR47.length), S=AR47[si], T=S.T, f=S.A[0][0], g=S.A[1][0], h=S.A[2][0], F=[ar47(S,0),'given'], G=[ar47(S,1),'given'], H=[ar47(S,2),'given'], row='they run in a row (47a1)';
+    const V=[
+      ['r1',[F,G,[g+' ∘ '+f+' : '+T[0]+' → '+T[2],row]],3,0,f+' ends at '+T[1]+', where '+g+' starts.'],
+      ['r2',[F,G,[f+' ∘ '+g+' : '+T[0]+' → '+T[2],row]],3,1,f+' ∘ '+g+' is “'+f+' after '+g+'”: '+g+' ends at '+T[2]+' and '+f+' starts at '+T[0]+'. The ends do not meet.'],
+      ['r3',[F,H,[h+' ∘ '+f+' : '+T[0]+' → '+T[3],row]],3,1,f+' ends at '+T[1]+' and '+h+' starts at '+T[2]+': an arrow runs in a row only from where the last one ended.'],
+      ['r4',[G,H,[h+' ∘ '+g+' : '+T[1]+' → '+T[3],row]],3,0,g+' ends at '+T[2]+', where '+h+' starts.'],
+      ['r5',[F,G,H,[h+' ∘ ('+g+' ∘ '+f+') = ('+h+' ∘ '+g+') ∘ '+f,'the brackets rule (47a1)']],4,0,'The three arrows meet end to start, so the brackets are free.'],
+      ['r6',[F,['(the do-nothing arrow of '+T[1]+') ∘ '+f+' = '+f,'the do-nothing rule (47a1)']],2,0,f+' ends at '+T[1]+', and the do-nothing arrow of '+T[1]+' runs after it and changes nothing.'],
+      ['r7',[F,['(the do-nothing arrow of '+T[0]+') ∘ '+f+' = '+f,'the do-nothing rule (47a1)']],2,1,f+' ends at '+T[1]+', and the do-nothing arrow of '+T[0]+' starts at '+T[0]+': they do not run in a row. The rule has the do-nothing arrow of '+T[0]+' before '+f+' and that of '+T[1]+' after it.'],
+      ['r8',[F,['back : '+T[1]+' → '+T[0]+', and back ∘ '+f+' is the do-nothing arrow of '+T[0],'given'],[f+' is undoable','back undoes it (47a3)']],3,1,'An undoing works on both sides: '+f+' ∘ back must be the do-nothing arrow of '+T[1]+' as well.'],
+      ['r9',[F,['back : '+T[1]+' → '+T[0]+', back ∘ '+f+' is the do-nothing arrow of '+T[0]+', and '+f+' ∘ back that of '+T[1],'given'],[T[0]+' ≅ '+T[1],f+' is undoable (47a3)']],3,0,'back undoes '+f+' on both sides, so the two things are matched.']];
+    return line28('47a.line',V,[si]); }});
+QP.push({id:'47b.line',step:'47b',mode:'proof',label:'what a map of categories keeps',open:()=>measured('47b'),make(){
+    const [A,B,D]=pick([['A','B','D'],['S','T','W'],['X','Y','Z']]), M=['F is a map of categories, f : '+A+' → '+B+' and g : '+B+' → '+D,'given'];
+    const V=[
+      ['m1',[M,['F(g ∘ f) = F(g) ∘ F(f)','a map of categories keeps running in a row (47b1)']],2,0,'F(f) ends at F('+B+'), where F(g) starts.'],
+      ['m2',[M,['F(g ∘ f) = F(f) ∘ F(g)','a map of categories keeps running in a row (47b1)']],2,1,'F(f) ∘ F(g) is “F(f) after F(g)”: F(g) ends at F('+D+') and F(f) starts at F('+A+'). The ends do not meet.'],
+      ['m3',[['f : V → W and g : W → U are linear, with readings f*, g*','given'],['(g ∘ f)* = f* ∘ g*','the turned-round technique']],2,0,'Readings turn arrows round: g* : U* → W* runs first, then f* : W* → V*.'],
+      ['m4',[['f : V → W and g : W → U are linear, with readings f*, g*','given'],['(g ∘ f)* = g* ∘ f*','the turned-round technique']],2,1,'g* starts at U* and f* ends at V*: they do not meet end to start. The technique gives f* ∘ g*.'],
+      ['m5',[['F is a map of categories and '+A+' ≅ '+B,'given'],['F('+A+') ≅ F('+B+')','the matched-to-matched technique']],2,0,'F carries an undoable arrow to an undoable arrow.'],
+      ['m6',[['F is a map of categories and F('+A+') ≅ F('+B+')','given'],[A+' ≅ '+B,'the matched-to-matched technique']],2,1,'The technique runs one way: S₃ and ℤ/6 forget to sets of six members and are not matched.'],
+      ['m7',[['F is a map of categories and F('+A+') is not matched with F('+B+')','given'],[A+' is not matched with '+B,'the matched-to-matched technique, read as its contrapositive']],2,0,'If '+A+' and '+B+' were matched, F('+A+') and F('+B+') would be.'],
+      ['m8',[['F is a map of categories','given'],['F carries the do-nothing arrow of '+A+' to the do-nothing arrow of F('+A+')','a map of categories keeps doing nothing (47b1)']],2,0,'It is the second of the two rules.']];
+    return line28('47b.line',V,[A]); }});
+QP.push({id:'47d.plan',step:'47d',mode:'word',label:'a plan through a product or a sum',open:()=>measured('47d'),make(){
+    const t=rnd(3);
+    if(t<2){ const si=rnd(PAIR47.length), S=PAIR47[si], f=S.f[0], g=S.g[0], P=S.A+' × '+S.B, u='⟨'+f+', '+g+'⟩';
+      const story=S.at+', '+f+' : '+S.X+' → '+S.A+' gives '+S.f[1]+', and '+g+' : '+S.X+' → '+S.B+' gives '+S.g[1]+'. The pairs '+P+' have the arrows p₁ : '+P+' → '+S.A+' and p₂ : '+P+' → '+S.B+' to the first and the second entry.';
+      if(t===0){ const right=u+' : '+S.X+' → '+P, wrong=uniq(right,shuffle([g+' ∘ '+f+' : '+S.X+' → '+P, '['+f+', '+g+'] : '+S.X+' → '+P, u+' : '+P+' → '+S.X, 'p₁ ∘ '+f+' : '+S.X+' → '+P]),3); if(wrong.length<3) return null;
+        return {index:'q:47d.plan[p;'+si+']', a3:['47d.plan[p;'+si+']','pair '+f+'+pair '+g,S.id], story, lines:[], ask:'Which one arrow carries both readings, so that p₁ after it is '+f+' and p₂ after it is '+g+'?', right, opts:shuffle([right,...wrong]), lead:'',
+          why:'The product’s property (47d1): exactly one u : '+S.X+' → '+P+' has p₁ ∘ u = '+f+' and p₂ ∘ u = '+g+', and it is written '+u+'. In Set it sends each member to the pair of its two readings (the pair-map technique).'}; }
+      const k=rnd(2), right=k?g:f, wrong=uniq(right,shuffle([k?f:g,u,k?'p₂':'p₁','the do-nothing arrow of '+S.X]),3); if(wrong.length<3) return null;
+      return {index:'q:47d.plan[b;'+si+';'+k+']', a3:['47d.plan[b;'+si+';'+k+']','pair '+f+'+pair '+g+'+after '+(k?'p₂':'p₁'),S.id], story, lines:[], ask:'Which arrow is '+(k?'p₂':'p₁')+' ∘ '+u+'?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'The product’s property (47d1): '+u+' is the one arrow with p₁ ∘ '+u+' = '+f+' and p₂ ∘ '+u+' = '+g+'.'}; }
+    const si=rnd(SUM47.length), S=SUM47[si], f=S.f[0], g=S.g[0], U=S.A+' ⊔ '+S.B, u='['+f+', '+g+']';
+    const right=u+' : '+U+' → '+S.X, wrong=uniq(right,shuffle(['⟨'+f+', '+g+'⟩ : '+U+' → '+S.X, u+' : '+S.X+' → '+U, g+' ∘ '+f+' : '+U+' → '+S.X, u+' : '+S.A+' × '+S.B+' → '+S.X]),3); if(wrong.length<3) return null;
+    return {index:'q:47d.plan[s;'+si+']', a3:['47d.plan[s;'+si+']','case '+f+'+case '+g,S.id],
+      story:S.at+', '+f+' : '+S.A+' → '+S.X+' gives '+S.f[1]+', and '+g+' : '+S.B+' → '+S.X+' gives '+S.g[1]+'. What arrives is '+S.one+': a member of the two copies side by side, '+U+', with i₁ : '+S.A+' → '+U+' and i₂ : '+S.B+' → '+U+'.',
+      lines:[], ask:'Which one arrow out of '+U+' is '+f+' after i₁ and '+g+' after i₂?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The sum’s property (47d3): exactly one u : '+U+' → '+S.X+' has u ∘ i₁ = '+f+' and u ∘ i₂ = '+g+', and it is written '+u+'. In Set it is taken case by case (the cases-map technique).'}; }},
+  {id:'47d.line',step:'47d',mode:'proof',label:'what a product’s arrows give',open:()=>measured('47d'),make(){
+    const [A,B]=pick([['A','B'],['G','H'],['V','W']]), PR=['P, with p₁ : P → '+A+' and p₂ : P → '+B+', is a product of '+A+' and '+B,'given'], TWO=['P and P′ are both products of '+A+' and '+B,'given'];
+    const V=[
+      ['p1',[PR,['f : X → '+A+' and g : X → '+B,'given'],['exactly one u : X → P has p₁ ∘ u = f and p₂ ∘ u = g','the product’s property (47d1)']],3,0,'Every rival runs through the product in exactly one way.'],
+      ['p2',[PR,['f : X → '+A+' and g : X → '+B,'given'],['p₁ ∘ ⟨f, g⟩ = g','the product’s property (47d1)']],3,1,'p₁ ends at '+A+' and g ends at '+B+': the property gives p₁ ∘ ⟨f, g⟩ = f and p₂ ∘ ⟨f, g⟩ = g.'],
+      ['p3',[TWO,['P = P′','the one-matching technique']],2,1,'Matched, in exactly one way that agrees. Equal is rung 0’s sameness, and the property cannot give it.'],
+      ['p4',[TWO,['exactly one arrow P′ → P agrees with the arrows out, and it is a matching','the one-matching technique']],2,0,'Run each product’s arrows through the other.'],
+      ['p5',[['for every f : X → '+A+' and g : X → '+B+', some u : X → P has p₁ ∘ u = f and p₂ ∘ u = g','given'],['P is a product of '+A+' and '+B,'the product’s property (47d1)']],2,1,'Some u is half. The property needs exactly one.'],
+      ['p6',[[A+' and '+B+' are sets','given'],[A+' ∪ '+B+', with each member sent to itself, is a sum of '+A+' and '+B,'the cases-map technique']],2,1,'The technique takes two copies side by side, '+A+' ⊔ '+B+'. When '+A+' and '+B+' share a member, f and g may disagree on it, and no u exists.'],
+      ['p7',[[A+' and '+B+' are sets','given'],[A+' × '+B+', with the maps to the first and the second entry, is a product of '+A+' and '+B,'the pair-map technique']],2,0,'Each pair f, g gives exactly one u, u(z) = (f(z), g(z)).'],
+      ['p8',[['S, with i₁ : '+A+' → S and i₂ : '+B+' → S, is a sum of '+A+' and '+B+'; f : '+A+' → X and g : '+B+' → X','given'],['exactly one u : S → X has u ∘ i₁ = f and u ∘ i₂ = g','the sum’s property (47d3)']],2,0,'A sum is a product with the arrows turned round.']];
+    return line28('47d.line',V,[A]); }});
+
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 
