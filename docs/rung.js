@@ -2211,20 +2211,29 @@ function pageHooks(){ const ids=[...document.querySelectorAll('section.challenge
       const b=document.createElement('button'); b.type='button'; b.className='sqgo'; b.textContent=tr.kind==='debate'?'walk the debate':'walk the path';
       b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); walk(id,{stem}); }; q.appendChild(b);
       /* walked to its end from the toolbox: tick it here */
-      if(get('sq:'+id,{}).done&&!el.classList.contains('done')&&el.__tick) el.__tick(); }); });
+      if(get('sq:'+id,{}).done&&!el.classList.contains('done')&&el.__tick) el.__tick(); });
+      /* 2026-11-12 (Andrew 2026-11-11 18:26Z): with a tree for every question, the block is one button into Answering Open Questions */
+      if(!window.LADDER_DESK) new Set(ids.map(el=>el.closest('section.challenge'))).forEach(sec=>{ if(!sec||sec.querySelector('.sq-all')) return; const qs=[...sec.querySelectorAll('.chq')];
+        if(!qs.length||!qs.every(q=>{ const c=q.querySelector('.chid'); return c&&T[c.textContent.trim()]; })) return;
+        sec.classList.add('sq-reduced'); const p=document.createElement('p'); p.className='sq-allp'; p.innerHTML='<button type="button" class="sq-all">Standing Questions</button>';
+        p.querySelector('.sq-all').onclick=e=>{ e.preventDefault(); e.stopPropagation(); list(stem); }; sec.appendChild(p); }); });
   (window.LadderStick?LadderStick.maps():Promise.resolve()).then(go); }
 /* the toolbox list */
-function list(){ close(); const body=frame('','');
+function list(here){ here=typeof here==='string'?here:null; close(); const body=frame('','');
   box.querySelector('.sk-top span').textContent='answering open questions'; body.innerHTML='<p class="sk-q">Gathering them…</p>';
   Promise.all([window.LadderStick?LadderStick.maps():null,script('sq/index.js',()=>window.LADDER_SQINDEX)]).then(()=>{
     const P=get('pages:done',{}), I=window.LADDER_SQINDEX||{}, M=window.LADMAP||[]; const out=[];
     M.forEach(([fl,rungs])=>rungs.forEach(([r,core,annex])=>core.concat(annex).forEach(([s])=>{ if(P[s]&&P[s].v&&I[s]) out.push([fl,s,I[s]]); })));
-    if(!out.length){ body.innerHTML='<p class="sk-q">None yet. A step’s standing questions come here once you have passed its footings; each one walks a branching path, a path to its answer or a debate to the bottom of one line of inquiry.</p>'; return; }
+    const hq=here&&I[here]&&I[here].length?I[here]:null;
+    if(!out.length&&!hq){ body.innerHTML='<p class="sk-q">None yet. A step’s standing questions come here once you have passed its footings; each one walks a branching path, a path to its answer or a debate to the bottom of one line of inquiry.</p>'; return; }
     const st=id=>{ const r=get('sq:'+id,{}); return r.done?'✓':(r.until&&r.until>Date.now()?'resting '+left(r.until-Date.now()):''); };
     const byF={}; out.forEach(x=>(byF[x[0]]=byF[x[0]]||[]).push(x)); const fls=Object.keys(byF);
     body.innerHTML='<p class="sk-n">The standing questions of the steps you have passed. Each walks a branching path. A wrong path on a question with one answer rests it: 6 minutes, then an hour, then 10 hours, each rest ten times the last.</p>'
       +fls.map(f=>'<details class="sk-fl"'+(f===fls[fls.length-1]?' open':'')+'><summary>floor '+f+'</summary><ul class="sk-list">'
         +byF[f].map(([,s,qs])=>qs.map(([id,kind,txt,has])=>'<li>'+(has?'<button type="button" class="sk-sit" data-stem="'+s+'" data-id="'+esc(id)+'">'+esc(id)+'</button>':'<a href="'+s+'.html#'+esc(id)+'">'+esc(id)+'</a>')+' <span class="sk-st" data-txt="'+esc(txt).replace(/"/g,'&quot;')+'" data-pre="'+(kind==='debate'?'debate · ':'')+'" data-post="'+st(id)+'"></span></li>').join('')).join('')+'</ul></details>').join('');
+    if(hq){ const d=document.createElement('details'); d.className='sk-fl sk-here'; d.open=true;
+      d.innerHTML='<summary>this step</summary><ul class="sk-list">'+hq.map(([id,kind,txt,has])=>'<li>'+(has?'<button type="button" class="sk-sit" data-stem="'+here+'" data-id="'+esc(id)+'">'+esc(id)+'</button>':'<a href="'+here+'.html#'+esc(id)+'">'+esc(id)+'</a>')+' <span class="sk-st" data-txt="'+esc(txt).replace(/"/g,'&quot;')+'" data-pre="'+(kind==='debate'?'debate · ':'')+'" data-post="'+st(id)+'"></span></li>').join('')+'</ul>';
+      body.querySelectorAll('details.sk-fl').forEach(x=>{ x.open=false; }); body.querySelector('.sk-n').after(d); }
     body.querySelectorAll('.sk-st[data-txt]').forEach(e=>{ rich(e,e.dataset.pre+e.dataset.txt+' '+e.dataset.post); });
     body.querySelectorAll('.sk-sit').forEach(b=>b.onclick=()=>walk(b.dataset.id,{stem:b.dataset.stem})); }); }
 window.LadderStanding={walk,list,lockFor,stemOf};
