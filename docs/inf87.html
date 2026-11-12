@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can a Lock Be Proved Safe?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style></style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="inf86.html">← ∞P can a count reveal no one?</a><a href="index.html">next: the ladder →</a></p>
+  <div class="tags"><span class="tag now">∞年 · research front</span></div>
+  <h1>Can a Lock Be Proved Safe?</h1>
+  <p data-pid="0a91ae">Can a lock be proved safe? 9·crypt’s pad hides everything, and its key must be as long as the message. Every lock in daily use has a short key, so it cannot hide everything from an attacker with unlimited time. What can be asked is less: that no attacker who runs a limited number of steps can tell the locked message from chance by more than a sliver. Proofs of that kind exist, and each has one shape. It turns any attacker on the lock into an attacker on a simpler thing. So a proof of safety is an arrow, arrows in a row compose, and what they carry is counted: steps added, and a factor lost. What no arrow gives is a place to start. Not one map has been proved hard to tell from chance, and a proof for any would settle the open question of 41·now2.</p>
+  <p class="gesture" data-pid="46b5a9">Edge of a tester D between sources X and Y: |P(D says yes on X) − P(D says yes on Y)|. A detour never wins: edge(X, Z) ≤ edge(X, Y) + edge(Y, Z). A map g goes first: the edge of D on g(X), g(Y) is the edge of D∘g on X, Y. A stretcher run m times loses at most mε; the lock m ⊕ G(k) loses at most 2ε. An arrow with (t₁, c₁) after one with (t₂, c₂) has (t₁ + t₂, c₁c₂).</p>
+</header>
+
+<section class="class step" data-step="inf87.1">
+  <h2 class="sthead"><span class="stno">inf87.1</span>A Game Says What Safe Means</h2>
+  <p data-pid="fab825">9·crypt4’s one-key-each technique let the attacker run for ever and still learn nothing, and 9·crypt5’s short-key technique showed the price: a key as long as the message. Ask for less, and say it as a game. A source hands out lists of bits by chance. A tester is any method that reads one list and says yes or no; it may toss coins. Give a tester D a list from source X or from source Y, without saying which. Its edge between the two is the gap between its chances of saying yes:</p>
+  <p class="eqline" data-pid="3cad0a">edge<sub>D</sub>(X, Y) = |P(D says yes on X) − P(D says yes on Y)|.</p>
+  <p data-pid="cae325">A tester that cannot tell the sources apart at all has edge 0. From here on, on this page, X and Y are (T, ε)-alike when every tester that runs at most T steps has edge at most ε between them. A source is even when every list of its length is equally likely.</p>
+  <p data-pid="63f930">Edge-detour technique: <b>for one tester and three sources, edge(X, Z) ≤ edge(X, Y) + edge(Y, Z).</b> Map-first technique: <b>for a map g on lists, the edge of D between g(X) and g(Y) is the edge of “g, then D” between X and Y; so if X and Y are (T, ε)-alike and g takes t steps, then g(X) and g(Y) are (T − t, ε)-alike.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the edge-detour and map-first techniques">
+p_X = P(D \text{ says yes on } X),\quad \text{edge}_D(X, Y) = |p_X - p_Y| @@ the definition
+|p_X - p_Z| = |(p_X - p_Y) + (p_Y - p_Z)| \le |p_X - p_Y| + |p_Y - p_Z| @@ the triangle technique (8h3): the detour
+P(D \text{ says yes on } g(X)) = P(D \circ g \text{ says yes on } X) @@ g, then D, is one tester
+\text{edge}_D(g(X), g(Y)) = \text{edge}_{D \circ g}(X, Y) @@ the same for Y
+\htmlClass{new}{D \text{ runs } T - t \text{ steps} \Rightarrow D \circ g \text{ runs } T \text{ steps} \Rightarrow \text{edge}_D(g(X), g(Y)) \le \varepsilon} \quad \blacksquare @@ X and Y are (T, ε)-alike
+  </pre>
+  <p data-pid="d6e34d">So for each tester the edge behaves as a distance between sources (34a1), except that two different sources may be at edge 0. And a map on lists never stretches it, which is what <a href="inf09.html">∞Η</a> asked of a map between spaces with a distance. Why the limit on steps? Take the map G(s₁s₂) = s₁ s₂ (s₁ ⊕ s₂), from two bits to three. The tester “is the third bit the ⊕ of the first two?” says yes on every G(s), and on an even list of three bits with chance ½. Its edge is ½. Against testers with no limit, nothing with a short seed is like chance.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the game · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3><div class="phkey"></div>
+    <ol class="stql">
+      <li><span class="qid">∞年.1.1</span><span class="ph understand">understand</span>What is the edge of a tester between two sources, and when are two sources (T, ε)-alike? <br>What do the edge-detour and map-first techniques say, and where does the t in T − t come from?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf87.2">
+  <h2 class="sthead"><span class="stno">inf87.2</span>One More Bit, Then Many</h2>
+  <p data-pid="9418b3">From here on, a stretcher is a fast map G from lists of n bits to lists of n + 1 bits. It is (T, ε)-safe when G of an even seed and an even list of n + 1 bits are (T, ε)-alike. One more bit is little. Run it again and again: from the seed s₀, let G(s₀) be s₁ followed by one bit b₁, let G(s₁) be s₂ followed by b₂, and so on m times. Put out b₁ b₂ … b_m and then s_m: n + m bits from n. Call this map G_m.</p>
+  <p data-pid="d31bb7">Stretch-again technique: <b>if G is (T, ε)-safe and takes t steps, then G_m and an even list of n + m bits are (T − mt, mε)-alike.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the stretch-again technique">
+H_i:\ i \text{ even bits, then } b_{i+1} \dots b_m s_m \text{ run from an even seed } s_i,\quad i = 0, \dots, m @@ m + 1 sources; H₀ is G_m of an even seed, H_m is even
+g_i(z):\ i - 1 \text{ even bits, then the last bit of } z\text{, then the run from the first } n \text{ bits of } z @@ a map on lists of n + 1 bits; at most mt steps
+H_{i-1} = g_i(G(s)),\qquad H_i = g_i(U) @@ s an even seed, U an even list of n + 1 bits
+\text{edge}_D(H_{i-1}, H_i) \le \varepsilon \text{ for } D \text{ of } T - mt \text{ steps} @@ map-first; G is (T, ε)-safe
+\htmlClass{new}{\text{edge}_D(H_0, H_m) \le \textstyle\sum_{i=1}^{m} \text{edge}_D(H_{i-1}, H_i) \le m\varepsilon} \quad \blacksquare @@ edge-detour, m − 1 times
+  </pre>
+  <p data-pid="d0ab2d">Each neighbour pair differs in one use of G, and that use is where the safety of G is spent. With ε = 2⁻⁸⁰ and m = 1000, the loss is at most 1000 · 2⁻⁸⁰, below 2⁻⁷⁰. The m + 1 sources in the middle are never built by anyone. They stand in the proof only, between the two that matter.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · m more bits · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞年.2.1</span><span class="ph understand">understand</span>What does the stretch-again technique say, and what are the sources H₀ and H_m? <br>Where in the proof is the safety of G used, and how many times?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf87.3">
+  <h2 class="sthead"><span class="stno">inf87.3</span>A Lock With a Short Key</h2>
+  <p data-pid="a3907e">Take a key k of n bits and a message m of L bits, with L far above n. Stretch the key to L bits, G_L(k) for short, and use that as 9·crypt3’s pad: the locked message is c = m ⊕ G_L(k). Whoever holds k stretches it the same way and takes the pad off.</p>
+  <p data-pid="3b86eb">Stretched-pad technique: <b>if G_L of an even key and an even list of L bits are (T, ε)-alike, then for any two messages m₀ and m₁ of L bits, the locked m₀ and the locked m₁ are (T − L, 2ε)-alike.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the stretched-pad technique">
+m_0 \oplus U \text{ is even, and so is } m_1 \oplus U:\ \text{edge } 0 @@ U an even pad: the one-key-each technique (9·crypt4)
+\text{edge}_D(m_0 \oplus G_L(k),\ m_0 \oplus U) \le \varepsilon @@ map-first with g = “⊕ m₀”, which takes L steps
+\text{edge}_D(m_1 \oplus U,\ m_1 \oplus G_L(k)) \le \varepsilon @@ the same with m₁
+\htmlClass{new}{\text{edge}_D(m_0 \oplus G_L(k),\ m_1 \oplus G_L(k)) \le \varepsilon + 0 + \varepsilon = 2\varepsilon} \quad \blacksquare @@ edge-detour, twice
+  </pre>
+  <p data-pid="d5c1dc">So a key of 128 bits locks a message of a million bits, and a tester of limited steps can hardly tell which of two messages was locked. With G itself (T, 2⁻⁸⁰)-safe, the stretch-again technique gives ε ≤ 10⁶ · 2⁻⁸⁰ for the pad, and the lock loses at most 2 · 10⁶ · 2⁻⁸⁰, below 2⁻⁵⁹. The short-key technique of 9·crypt5 is not broken. An attacker with 2¹²⁸ runs of G to spend tries every key, and the limit T is what keeps her out. And one key still locks one message (9·crypt6).</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · short key · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞年.3.1</span><span class="ph understand">understand</span>What does the stretched-pad technique say, and which line of its proof has edge 0? <br>Why does the lock not break 9·crypt5’s short-key technique?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf87.4">
+  <h2 class="sthead"><span class="stno">inf87.4</span>Read It With Arrows</h2>
+  <p data-pid="a63297">Both proofs did one thing. They took a tester against the larger thing and made from it a tester against the smaller. From here on, on this page, a (t, c)-arrow from a pair of sources (X, Y) to a pair (X′, Y′) is a way to turn any tester D into a tester D′ that runs at most t steps more, with edge<sub>D′</sub>(X′, Y′) ≥ edge<sub>D</sub>(X, Y)/c. The stretched-pad proof is an (L, 2)-arrow from the two locked messages to the pad and chance. The stretch-again proof is an (mt, m)-arrow from the pad and chance to G and chance.</p>
+  <p data-pid="0e2484">Arrow-row technique: <b>a (t₁, c₁)-arrow followed by a (t₂, c₂)-arrow is a (t₁ + t₂, c₁c₂)-arrow; and safety runs back along an arrow: if (X′, Y′) are (T, ε)-alike, then (X, Y) are (T − t, cε)-alike.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the arrow-row technique">
+D \mapsto D' \mapsto D'':\ \text{steps } T,\ T + t_1,\ T + t_1 + t_2 @@ the two ways, one after the other
+\text{edge}_{D''} \ge \text{edge}_{D'}/c_2 \ge \text{edge}_D/(c_1 c_2) @@ each arrow’s condition
+D \text{ runs } T - t \text{ steps} \Rightarrow D' \text{ runs } T \text{ steps} \Rightarrow \text{edge}_{D'}(X', Y') \le \varepsilon @@ (X′, Y′) are (T, ε)-alike
+\htmlClass{new}{\text{edge}_D(X, Y) \le c \cdot \text{edge}_{D'}(X', Y') \le c\varepsilon} \quad \blacksquare @@ the arrow’s condition, turned round
+  </pre>
+  <p data-pid="ac07da">So the lock rests on G by one arrow, (L + mt, 2m), read off its two pieces: steps add and factors multiply, as <a href="inf86.html">∞P</a>’s losses added along a row. See what the arrows let hide. The tester is never opened: an arrow uses it whole, so what an attack is made of is out of sight, and the proof covers attacks nobody has thought of. The chain H₀, …, H_m is out of sight as well, with the order of its rows. What is left is the plan: the lock is safe if G is. 41k4’s map between questions was an arrow of this kind with no numbers on it. Here the numbers are the point, since a factor c of 2⁴⁰ turns a safety of 2⁻⁸⁰ into 2⁻⁴⁰.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · arrows · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞年.4.1</span><span class="ph understand">understand</span>What is a (t, c)-arrow, and what does the arrow-row technique say? <br>What do the arrows let hide, and which way does safety run along an arrow?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf87.5">
+  <h2 class="sthead"><span class="stno">inf87.5</span>Where No Arrow Starts</h2>
+  <p data-pid="8f7234">Every arrow ends at something taken as safe. Is anything proved safe outright? Take any map G from n bits to n + 1 bits and one tester: given a list y, it asks whether some seed s has G(s) = y.</p>
+  <p data-pid="6d3511">Seed-search technique: <b>the tester “is there a seed s with G(s) = y?” has edge at least ½ between G of an even seed and an even list of n + 1 bits.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the seed-search technique">
+P(\text{yes on } G(s)) = 1 @@ s itself is such a seed
+G \text{ reaches at most } 2^n \text{ of the } 2^{n+1} \text{ lists} @@ one list for each seed
+P(\text{yes on an even list}) \le 2^n / 2^{n+1} = \tfrac12 @@ each list equally likely
+\htmlClass{new}{\text{edge} \ge 1 - \tfrac12 = \tfrac12} \quad \blacksquare @@ the definition
+  </pre>
+  <p data-pid="72a893">Trying every seed takes 2ⁿ runs of G, far over any limit T in use. But the tester’s question has a short certificate, the seed, checked by one run of G, so it is one of 41h2’s questions. If every such question could be answered fast, this tester would be fast and no stretcher would be safe. So a proof that some stretcher is safe would be a proof that P ≠ NP, which is open (41·now2). Every lock with a short key rests on a condition that is posited and has not been proved.</p>
+  <ul>
+    <li data-pid="3052d3">By 1984 safety had been defined by a game of telling apart, and a lock was proved to meet it if a problem about numbers on a clock is hard. A stretcher was built in the same years whose bits cannot be guessed if another clock problem is hard.</li>
+    <li data-pid="1b5dcf">In 1999 it was proved that a stretcher can be built from any function that is fast to run and hard to undo, so that the one exists exactly when the other does.</li>
+    <li data-pid="d43327">In 2020 it was proved that such functions exist exactly when one question is hard for a fair share of lists: how short a program prints a given list within a time limit.</li>
+    <li data-pid="f9827c">In 2000 a gap was found in the proof, given in 1994, for a padding in wide use, and the lock built on it was then proved safe by another road, with a factor that is not small. A paper posted in 2004 and printed in 2007 argued that proofs of this kind are often of limited use for the locks in practice, and can mislead.</li>
+  </ul>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞年.5.1</span><span class="ph understand">understand</span>What does the seed-search technique say, and why is its tester not a break of the lock? <br>Why would a proof that some stretcher is safe settle 41·now2’s question?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="inf87.6">
+  <h2 class="sthead"><span class="stno">inf87.6</span>Moves to Check</h2>
+  <pre class="lines" data-k="check" data-label="this page: moves to check">
+\text{the lock is } (T, \varepsilon)\text{-safe, so no attacker can tell two locked messages apart}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the stretched-pad technique speaks of testers of T − L steps; with 2ⁿ runs of G every key is tried (9·crypt5)
+\text{lock two messages with one key, since } G_L(k) \text{ is like chance}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; the proof sets one pad against one message; with two, c₁ ⊕ c₂ = m₁ ⊕ m₂ (9·crypt6)
+\text{the lock built on } G \text{ has stood for years, so } G \text{ is safe}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; the arrow turns testers of the lock into testers of G; safety runs back along it, from G to the lock, and not on from the lock to G
+\text{stretch } 2^{40} \text{ times with } \varepsilon = 2^{-80} \text{ and claim } 2^{-40}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; legal: mε = 2⁴⁰ · 2⁻⁸⁰, and the steps allowed fall by 2⁴⁰ runs of G
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">∞年.6.1</span><span class="ph understand">understand</span>Why does safety not run on from the lock to G? <br>What is lost, and what is kept, when a stretcher is run 2⁴⁰ times?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="openq themeend">
+  <div class="eyebrow">Open questions · nobody has the answer yet</div>
+  <h2>Open questions</h2>
+  <p class="chnote">These are open: the field is still asking them. There is no key; a good attempt is a reason, a guess, or a better question.</p>
+  <div class="oq"><span class="oqid">∞年.oq.1</span>Is any stretcher safe? No map has been proved to be one, and a proof would settle whether P = NP. What is known is which other hard things would give one.</div>
+  <div class="oq"><span class="oqid">∞年.oq.2</span>How much must a proof lose? For which locks is a large factor forced on every arrow of this kind, and what does a proof with a factor of 2⁴⁰ say about a key of the size in use?</div>
+</section>
+<section class="history themeend">
+  <div class="eyebrow">A short history · told from more than one side</div>
+  <h2>How we got here</h2>
+  <p data-pid="fbe229">9·crypt told how the pad was proved to hide everything, and that its key must be as long as the message. A lock with a short key cannot be proved safe in that way.</p>
+  <p data-pid="93ef11">By 1984 safety had a definition, a game of telling apart, and proofs took the shape of this page: an attacker on the lock is turned into a solver of a problem believed hard. In 1999 the stretcher was tied to functions that are hard to undo, each giving the other.</p>
+  <p data-pid="8eb4c8">Since 2000 the proofs themselves have been checked and disputed, their gaps and their factors counted, and in 2020 the existence of functions that are hard to undo was shown to be the same question as the hardness of finding short programs.</p>
+</section>
+
+<nav class="nextrung"><a href="inf86.html">← ∞P · can a count reveal no one?</a><a href="index.html">the ladder →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+<h3>The accepted names</h3><p>A tester is a <i>distinguisher</i>, and its edge is its <i>advantage</i>. Sources that are (T, ε)-alike are <i>computationally indistinguishable</i>; even is <i>uniform</i>. A stretcher is a <i>pseudorandom generator</i>, its input the <i>seed</i>. The chain H₀, …, H_m is a <i>hybrid argument</i>. The lock m ⊕ G(k) is a <i>stream cipher</i>, and its safety here is <i>indistinguishability of encryptions</i>, which matches <i>semantic security</i>. An arrow is a <i>security reduction</i>, a proof by arrows is <i>provable security</i>, and the factor c is the <i>tightness</i> of the reduction: a small c is a <i>tight</i> reduction. A function that is fast to run and hard to undo is a <i>one-way function</i>. The shortest program that prints a list within a time limit is its <i>time-bounded Kolmogorov complexity</i>. The padding of 1994 is <i>optimal asymmetric encryption padding</i>, OAEP, and its proofs are in the <i>random oracle model</i>, where one part of the lock is taken as an ideal chance function.</p><h3>Who said it first</h3><p>Shafi Goldwasser and Silvio Micali, “Probabilistic encryption”, Journal of Computer and System Sciences 28 (1984). Manuel Blum and Silvio Micali, “How to generate cryptographically strong sequences of pseudorandom bits”, SIAM Journal on Computing 13 (1984). Andrew Yao, on tests that guess the next bit (1982). Johan Håstad, Russell Impagliazzo, Leonid Levin and Michael Luby, “A pseudorandom generator from any one-way function”, SIAM Journal on Computing 28 (1999). Mihir Bellare and Phillip Rogaway, the padding (1994). Victor Shoup, “OAEP reconsidered” (2000). Eiichiro Fujisaki, Tatsuaki Okamoto, David Pointcheval and Jacques Stern, “RSA-OAEP is secure under the RSA assumption”. Neal Koblitz and Alfred Menezes, “Another look at ‘provable security’”, Journal of Cryptology 20 (2007). Yanyi Liu and Rafael Pass, “On one-way functions and Kolmogorov complexity” (2020).</p><h3>Sources</h3><p>1984, the definition and the lock proved safe: a reference page for the 1984 paper and the encyclopedia article on its lock, which dates the work to 1982; that earlier date rests on the article alone. The stretcher of those years: a reference page for its 1984 paper and a university’s lecture notes, which also give the next-bit test with the year 1982 and the chain of sources; 1982 rests on the notes alone, not yet revisited. 1999: a reference page and a bibliography entry for the paper, which agree on the journal, the year and the claim. 2020: the paper’s two archive pages (arXiv 2009.11514; Cryptology ePrint 2020/423), which agree on the statement. The gap of 2000 and the later proof with a factor that is not small: the archive page of the 2000 paper (ePrint 2000/060) and the paper that repaired the proof for the lock in use; the year of that repair was not found on the page and is left out. The critique: its authors’ page and its archive page (ePrint 2004/152), which agree on 2004 and on Journal of Cryptology 20 (2007). The proof about the pad and its key rests on 9·crypt and is not revisited here. The toy stretcher’s edge of ½, the bounds mε and 2ε on small maps, the seed-search count and the powers of two are in the number checks for this page.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+
+stepper('#sl1',[
+  {k:'ember',kl:'edge',t:R`|p_X - p_Y|`,n:`The gap in saying yes.`},
+  {k:'ember',kl:'detour',t:R`\text{edge}(X, Z) \le \text{edge}(X, Y) + \text{edge}(Y, Z)`,n:`One tester, three sources.`},
+  {k:'ember',kl:'map',t:R`\htmlClass{new}{\text{edge}_D(g(X), g(Y)) = \text{edge}_{D \circ g}(X, Y)}`,n:`The map goes first.`}
+],{title:'The slides · the game · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'chain',t:R`H_0, H_1, \dots, H_m`,n:`From G_m to even.`},
+  {k:'ember',kl:'one step',t:R`\text{edge}(H_{i-1}, H_i) \le \varepsilon`,n:`One use of G apart.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{edge}(H_0, H_m) \le m\varepsilon}`,n:`Losses add.`}
+],{title:'The slides · m more bits · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'lock',t:R`c = m \oplus G_L(k)`,n:`A stretched pad.`},
+  {k:'ember',kl:'middle',t:R`m_0 \oplus U = \text{even} = m_1 \oplus U`,n:`The true pad: edge 0.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{edge} \le \varepsilon + 0 + \varepsilon}`,n:`Two detours.`}
+],{title:'The slides · short key · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'an arrow',t:R`D \mapsto D',\ \ \text{edge}' \ge \text{edge}/c`,n:`Any tester, used whole.`},
+  {k:'ember',kl:'a row',t:R`(t_1 + t_2,\ c_1 c_2)`,n:`Steps add, factors multiply.`},
+  {k:'ember',kl:'back',t:R`\htmlClass{new}{(T, \varepsilon) \Rightarrow (T - t,\ c\varepsilon)}`,n:`Safety runs back.`}
+],{title:'The slides · arrows · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
