@@ -5188,7 +5188,7 @@ QP.push({id:'26b.adds',step:'26b',label:'adding into multiplying',open:()=>measu
 /* ---------- 26c The Logarithm of −1 ---------- */
 const WC26=[
   ['Is Log(zw) = Log z + Log w, always?','only up to a whole turn: Log(−1) + Log(−1) = 2πi, and Log 1 = 0',['yes, always','never','yes, whenever z and w are off the floor'],'Main-log technique: it holds only when the turns of z and w add to an angle in (−π, π].'],
-  ['1 = √1 = √((−1)(−1)) = √−1 √−1 = i² = −1. Which step fails?','√((−1)(−1)) = √−1 √−1: square roots are two-valued in ℂ, and the product law for roots fails',['i² = −1','√1 = 1','(−1)(−1) = 1'],'Many-powers technique: z^(1/2) has exactly 2 values.'],
+  ['1 = √1 = √((−1)(−1)) = √−1 √−1 = i² = −1. Which step fails?','√((−1)(−1)) = √−1 √−1: square roots are two-valued in ℂ, and the product technique for roots fails',['i² = −1','√1 = 1','(−1)(−1) = 1'],'Many-powers technique: z^(1/2) has exactly 2 values.'],
   ['Is log 0 = −∞?','no: e^w is never 0, so 0 has no logarithm',['yes','no: log 0 = 0','no: log 0 = πi'],'Plane-log technique: z = 0 has no logarithm.'],
   ['e^(Log z) = z. Is Log(e^w) = w, then?','only when the upright part of w lies in (−π, π]: Log(e^(2πi)) = 0',['yes, always','never','only when w is on the floor'],'Log picks the one logarithm with its turn in (−π, π].'],
   ['How many logarithms has z ≠ 0?','endlessly many: ln r + i(θ + 2πk), one for each whole number k',['one','two','none, unless z is positive'],'Plane-log technique, for z = r e^(iθ).'],
@@ -7043,7 +7043,7 @@ QP.push({id:'30g.averages',step:'30g',label:'average and spread',open:()=>measur
 const WH30=[
   ['After five tails, is a fair coin due a head?','no: the tosses are independent; the next has chance 1/2',['yes','yes: averages settle','no: a tail is now more likely'],'Averages settle by swamping, not by paying back.'],
   ['Averages settle. Does the count of heads minus n/2 shrink?','no: that count has width √n/2, which grows',['yes','yes, with chance 1','no: it stays the same'],'The average divides by n, and √n/n heads to 0.'],
-  ['Is P(|X − μ| ≥ 2σ) exactly 1/4?','no: 1/4 is a ceiling; most laws stray far less often',['yes','no: it is at least 1/4','yes, for every law'],'Spread-bound technique: at most 1/k².'],
+  ['Is P(|X − μ| ≥ 2σ) exactly 1/4?','no: 1/4 is a ceiling; most laws stray far less often',['yes','no: it is at least 1/4','yes, for every chance pattern'],'Spread-bound technique: at most 1/k².'],
   ['Σ P(Aₙ) = ∞. Do infinitely many of the Aₙ happen?','not without more: take every Aₙ the same event of chance 1/2',['yes','yes, with chance 1','never'],'Finitely-often technique: it is about a finite sum.'],
   ['X ≥ 0 and a > 0. What bounds P(X ≥ a)?','E X / a',['a / E X','E X · a','1/a²'],'Stray-bound technique.'],
   ['Σ P(Aₙ) is finite. What follows?','with chance 1 only finitely many of them happen',['none of them happens','with chance 1 infinitely many happen','exactly one of them happens'],'Finitely-often technique.']];
