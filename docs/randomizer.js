@@ -8081,6 +8081,254 @@ QP.push({id:'47d.plan',step:'47d',mode:'word',label:'a plan through a product or
       ['p8',[['S, with i₁ : '+A+' → S and i₂ : '+B+' → S, is a sum of '+A+' and '+B+'; f : '+A+' → X and g : '+B+' → X','given'],['exactly one u : S → X has u ∘ i₁ = f and u ∘ i₂ = g','the sum’s property (47d3)']],2,0,'A sum is a product with the arrows turned round.']];
     return line28('47d.line',V,[A]); }});
 
+/* ===== Phase W, the Endless floor (Phase K step 6c, Andrew 2026-11-11 05:38Z): arrow pools for the ten arrow newsflashes.
+   Check Proofs and Word Problems in arrows, seeded from each page's Moves to Watch Out For lines: a seed is an arrow of the
+   page's story, a link is an arrow run after it, and the links spell the plan. No Work Equations pool. ===== */
+const subI=n=>String(n).split('').map(c=>'₀₁₂₃₄₅₆₇₈₉'[+c]).join('');
+const gcdI=(a,b)=>b?gcdI(b,a%b):Math.abs(a);
+const frI=(n,d)=>{ const g=gcdI(n,d); n/=g; d/=g; return d===1?String(n):n+'/'+d; };
+const negI=n=>n<0?'−'+(-n):String(n);
+const ptI=(x,y)=>'('+negI(x)+', '+negI(y)+')';
+const decI=x=>String(Math.round(x*1000)/1000);
+const pINF=(id,step,mode,label,make)=>QP.push({id,step,mode,label,open:()=>measured(step),make});
+
+/* ---------- ∞·econ: a chain of rates is a composite, and its rate is the product ---------- */
+const MONEY_I=[['USD','CAD','MXN',1.39,13.2],['EUR','USD','JPY',1.1,150],['GBP','EUR','SEK',1.2,11],['USD','CAD','JPY',1.4,110],['EUR','GBP','INR',0.8,105],['CAD','USD','MXN',0.7,18]];
+pINF('∞·econ.plan','∞·econ','word','a chain of rates',function(){
+  const t=rnd(3);
+  if(t<2){ const si=rnd(MONEY_I.length), [X,Y,Z,a,b]=MONEY_I[si], P=decI(a*b);
+    const story='At an exchange desk a rate is an arrow: r('+X+' → '+Y+') = '+a+' says that one '+X+' buys '+a+' '+Y+'. Also r('+Y+' → '+Z+') = '+b+'.';
+    const right=X+' → '+Y+', then '+Y+' → '+Z+': one '+X+' buys '+P+' '+Z;
+    const wrong=uniq(right,shuffle([Y+' → '+Z+', then '+X+' → '+Y+': one '+X+' buys '+P+' '+Z, X+' → '+Y+', then '+Y+' → '+Z+': one '+X+' buys '+decI(a+b)+' '+Z, X+' → '+Y+', then '+Y+' → '+Z+': one '+X+' buys '+decI(b/a)+' '+Z, X+' → '+Y+', then '+Y+' → '+Z+': one '+Z+' buys '+P+' '+X]),3); if(wrong.length<3) return null;
+    return {index:'q:∞·econ.plan[c;'+si+']', a3:['∞·econ.plan[c;'+si+']','after '+Y+' → '+Z,X+' to '+Z], story, lines:[], ask:'Which chain takes '+X+' to '+Z+', and what does it give?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'A chain is a composite, and its rate is the product: '+a+' · '+b+' = '+P+'. The first arrow ends in '+Y+', where the second starts; written the other way round, the ends do not meet.'}; }
+  const si=rnd(MONEY_I.length), [X,Y]=MONEY_I[si], a=pick([1.36,1.2,1.5,1.25]), b=pick([a,decI(a+0.06),decI(a+0.1)].map(Number)), L=decI(a/b), fits=a===b;
+  const story='A booth buys '+X+' at r('+X+' → '+Y+') = '+a+' and sells them back at r('+Y+' → '+X+') = 1/'+b+'.';
+  const right=fits?'1: values fit these two rates, and the booth takes no fee':L+': not 1, so no list of values fits, and the gap is the fee';
+  const wrong=uniq(right,(fits?[]:['1: values fit these two rates, and the booth takes no fee']).concat([decI(a*b)+': the two rates multiply', decI(a+1/b)+': the two rates add', '0: there and back cancels']),3);
+  return {index:'q:∞·econ.plan[l;'+si+';'+a+';'+b+']', a3:['∞·econ.plan[l;'+si+']','after '+Y+' → '+X,X+' round trip'], story, lines:[], ask:'What does the loop '+X+' → '+Y+' → '+X+' compose to, and what follows?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'The loop’s rate is the product '+a+' · 1/'+b+(fits?' = 1':' ≈ '+L)+'. Loop-free technique: every loop composes to 1 exactly when values v with r(X → Y) = v(X)/v(Y) exist.'}; });
+pINF('∞·econ.line','∞·econ','proof','what a chain of rates gives',function(){
+  const si=rnd(MONEY_I.length), [X,Y,Z,a,b]=MONEY_I[si], P=decI(a*b), R1=['r('+X+' → '+Y+') = '+a,'given'], R2=['r('+Y+' → '+Z+') = '+b,'given'], ls=pick([0.4,0.8,1.5]), lb=pick([2.4,3]);
+  const V=[
+    ['e1',[R1,R2,['r('+X+' → '+Z+') = '+a+' · '+b+' = '+P,'a chain is a composite, and its rate is the product']],3,0,'The first arrow ends in '+Y+', where the second starts.'],
+    ['e2',[R2,R1,['the chain '+Y+' → '+Z+', then '+X+' → '+Y+', has the rate '+b+' · '+a,'a chain is a composite']],3,1,'The first arrow ends in '+Z+' and the second starts from '+X+': the ends do not meet. The chain runs the other way round.'],
+    ['e3',[['a booth has r('+X+' → '+Y+') = 1.36 and r('+Y+' → '+X+') = 1/1.42','given'],['the booth’s loop is 1.36 · 1/1.42 = 1','a loop of rates']],2,1,'It is about 0.958: the two rates are not each other’s reciprocals, and the gap is the fee.'],
+    ['e4',[['every loop of rates composes to 1','given'],['any two chains from '+X+' to '+Z+' give the same amount','the loop-free technique']],2,0,'The first chain, then the second run backwards, is a loop, so their rates are equal.'],
+    ['e5',[['T(p) = p − λE(p), and a matching price p* with E(p*) = 0 exists','given'],['the row p, T(p), T(T(p)), … reaches p*','T keeps p*']],2,1,'The kept price is a fact about T; the row is another. The kept-price technique has the row close in only when 0 < λs < 2.'],
+    ['e6',[['E(p) = s(p − p*) with λs = '+ls,'given'],['the row p, T(p), T(T(p)), … closes in on p*','the kept-price technique: 0 < λs < 2']],2,0,'Each step multiplies the gap by 1 − λs = '+negI(decI(1-ls))+', of size below 1.'],
+    ['e7',[['E(p) = s(p − p*) with λs = '+lb,'given'],['the row p, T(p), T(T(p)), … closes in on p*','the kept-price technique']],2,1,'Each step multiplies the gap by 1 − λs = '+negI(decI(1-lb))+', of size above 1: the row overshoots, further each time. T still keeps p*.']];
+  return line28('∞·econ.line',V,[si]); });
+
+/* ---------- ∞·crypt: two locks are one lock ---------- */
+pINF('∞·crypt.plan','∞·crypt','word','locks in a row',function(){
+  const t=rnd(3);
+  if(t<2){ const n=2+t, ks=[]; while(ks.length<n){ const k=2+rnd(22); if(!ks.includes(k)) ks.push(k); } const sum=ks.reduce((x,y)=>x+y,0), s=sum%26; if(s===0) return null;
+    const row=ks.slice().reverse().map(k=>'E'+subI(k)).join(' ∘ '), right='E'+subI(s)+': one key, so the enemy still has 25 keys to try';
+    const far=v=>Math.abs(v-s)>2, one=v=>'E'+subI(v)+': one key, so the enemy still has 25 keys to try', pr=ks.reduce((x,y)=>x*y,1)%26;
+    const wrong=uniq(right,[sum>=26?one(sum):one(26-s), pr&&far(pr)?one(pr):one((s+13)%26||13), 'no one key: the enemy must try 25'+(n===2?'²':'³')+' rows of keys', 'E'+subI(s)+', and the enemy must still try 25'+(n===2?'²':'³')+' rows of keys'],3); if(wrong.length<3) return null;
+    return {index:'q:∞·crypt.plan[s;'+ks.join(';')+']', a3:['∞·crypt.plan[s]',ks.slice(1).map(k=>'after E'+subI(k)).join('+'),'the clock of 26'], story:'A message is shifted by '+ks.join(', then by ')+'. Write Eₖ for the arrow that shifts the alphabet by k.', lines:[], ask:'Which arrow is the row '+row+', and what does that leave the enemy?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Shifts-add technique: Eₘ ∘ Eₖ is the shift by (k + m) on the clock of 26, and '+ks.join(' + ')+' = '+sum+(sum>=26?', which is '+s+' on that clock':'')+'. The keys are closed, so rows of keys add no tries.'}; }
+  const k=pick([3,5,7,9,11,17,19,21]), right='E'+subI(26-k), wrong=uniq(right,['E'+subI(k),'E₁₃','E₀','E'+subI(26+k)],3);
+  return {index:'q:∞·crypt.plan[u;'+k+']', a3:['∞·crypt.plan[u]','after E'+subI(26-k),'the clock of 26'], story:'A message was shifted by '+k+'. Write Eₖ for the arrow that shifts the alphabet by k.', lines:[], ask:'Which arrow, run after E'+subI(k)+', gives the do-nothing arrow E₀?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'Key-back technique: the undoing of Eₖ is the shift by 26 − k, one more shift: '+k+' + '+(26-k)+' = 26, which is 0 on the clock.'}; });
+pINF('∞·crypt.line','∞·crypt','proof','what every key keeps',function(){
+  const a=2+rnd(10), b=3+rnd(12), c=11+rnd(8), s=(a+b)%26, s3=(a+b+c)%26, bad=((a*b)%26===s||(a*b)%26===0)?(s+13)%26||13:(a*b)%26, S=['Eₘ ∘ Eₖ is the shift by (k + m) on the clock of 26','the shifts-add technique'];
+  const V=[
+    ['c1',[S,['E'+subI(b)+' ∘ E'+subI(a)+' = E'+subI(s),'the line above']],2,0,a+' + '+b+' = '+(a+b)+(a+b>=26?', which is '+s+' on the clock of 26.':'.')],
+    ['c2',[S,['E'+subI(b)+' ∘ E'+subI(a)+' = E'+subI(bad),'the line above']],2,1,'Shifts add: '+a+' + '+b+' = '+(a+b)+(a+b>=26?', which is '+s+' on the clock of 26.':'.')],
+    ['c3',[['a message is shifted by '+a+', then '+b+', then '+c,'given'],['the enemy has 25³ rows of keys to try','three locks']],2,1,'The row E'+subI(c)+' ∘ E'+subI(b)+' ∘ E'+subI(a)+' is the one arrow E'+subI(s3)+': the keys are closed, and 25 tries cover it.'],
+    ['c4',[['tally sends a text to its table, and a key g sends a text to a text','given'],['run g after tally, to encrypt the table','they run in a row']],2,1,'g takes a text and is handed a table: the ends do not meet. A key moves a table t by t ∘ g⁻¹.'],
+    ['c5',[['tally(g · m) = tally(m) ∘ g⁻¹','tallies-travel'],['the secret text holds g(x) exactly as often as the message holds x','read the square at g(x)']],2,0,'(tally(m) ∘ g⁻¹)(g(x)) is the tally of x in the message.'],
+    ['c6',[['tally(g · m) = tally(m) ∘ g⁻¹','tallies-travel'],['the secret text’s tally is the message’s tally run after g','the square']],2,1,'The square gives the message’s tally after g⁻¹, not after g: the tally of g(x) in the secret text is the tally of x in the message.'],
+    ['c7',[['the undoing of Eₖ is the shift by 26 − k','the key-back technique'],['E'+subI(26-a)+' ∘ E'+subI(a)+' = E₀, the do-nothing arrow','the line above']],2,0,a+' + '+(26-a)+' = 26, which is 0 on the clock.']];
+  return line28('∞·crypt.line',V,[a,b,c]); });
+
+/* ---------- ∞·phys: a train of machines is a machine; a row of observers adds the turns ---------- */
+const MACH_I=[['a crowbar',12],['a crowbar',6],['a pulley block',4],['a pulley block',3],['a gear pair',5],['a gear pair',2],['a winch',8]];
+const SPD_I=[[2,'3/5'],[3,'4/5'],[4,'15/17'],[5,'12/13']];
+pINF('∞·phys.plan','∞·phys','word','a train of machines',function(){
+  if(rnd(3)<2){ const i=rnd(MACH_I.length); let j=rnd(MACH_I.length); if(MACH_I[j][0]===MACH_I[i][0]) j=(j+2)%MACH_I.length; if(MACH_I[j][0]===MACH_I[i][0]) return null;
+    const [A,m1]=MACH_I[i], [B,m2]=MACH_I[j], M=m1*m2, right=M+', and the distance by 1/'+M;
+    const wrong=uniq(right,[(m1+m2)+', and the distance by 1/'+(m1+m2), M+', and the distance by '+M, (m1+m2)+', and the distance by 1/'+M, M+', and the distance by 1/'+(m1+m2)],3);
+    return {index:'q:∞·phys.plan[m;'+i+';'+j+']', a3:['∞·phys.plan[m]','after '+B.replace(/^a /,''),A.replace(/^a /,'')+' of '+m1], story:'A machine is an arrow from its effort end to its load end, with two numbers (m, d): it multiplies the force by m and the distance moved by d. '+A.replace(/^a/,'A')+' with ('+m1+', 1/'+m1+') drives '+B+' with ('+m2+', 1/'+m2+').', lines:[], ask:'By what does the row multiply the force, and the distance?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Train-ratio technique: ('+m2+', 1/'+m2+') ∘ ('+m1+', 1/'+m1+') = ('+M+', 1/'+M+'). The second multiplies what the first hands it, so a row composes by multiplying, not by adding.'}; }
+  const i=rnd(SPD_I.length), j=rnd(SPD_I.length), [k1,v1]=SPD_I[i], [k2,v2]=SPD_I[j], K=k1*k2, right=frI(K*K-1,K*K+1)+' c';
+  const n1=v1.split('/').map(Number), n2=v2.split('/').map(Number), sum=frI(n1[0]*n2[1]+n2[0]*n1[1],n1[1]*n2[1]), prod=frI(n1[0]*n2[0],n1[1]*n2[1]), avg=frI(n1[0]*n2[1]+n2[0]*n1[1],2*n1[1]*n2[1]);
+  const wrong=uniq(right,[sum+' c',prod+' c',avg+' c',v1+' c'],3); if(wrong.length<3) return null;
+  return {index:'q:∞·phys.plan[v;'+i+';'+j+']', a3:['∞·phys.plan[v]','after J at '+v2+' c','J at '+v1+' c'], story:'A change of observer is an arrow Jᵤ, with tanh u = v/c. One observer passes the ground at '+v1+' c, where u = ln '+k1+'. A second passes the first at '+v2+' c, where u = ln '+k2+'.', lines:[], ask:'How fast does the second observer pass the ground?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'Observer-row technique: J_w ∘ Jᵤ = J at u + w. The row adds the turns, not the speeds: ln '+k1+' + ln '+k2+' = ln '+K+', and tanh(ln '+K+') = ('+K+' − 1/'+K+')/('+K+' + 1/'+K+') = '+frI(K*K-1,K*K+1)+'.'}; });
+pINF('∞·phys.line','∞·phys','proof','which rows of physics compose',function(){
+  const i=rnd(MACH_I.length); let j=(i+1+rnd(MACH_I.length-1))%MACH_I.length; const [A,m1]=MACH_I[i], [B,m2]=MACH_I[j], M=m1*m2, T=['(m₂, d₂) ∘ (m₁, d₁) = (m₂m₁, d₂d₁)','the train-ratio technique'];
+  const V=[
+    ['p1',[T,[A+' of '+m1+' driving '+B+' of '+m2+' multiplies the force by '+M,'the line above']],2,0,'A row composes, and composing multiplies: '+m2+' · '+m1+' = '+M+'.'],
+    ['p2',[T,[A+' of '+m1+' driving '+B+' of '+m2+' multiplies the force by '+(m1+m2),'the line above']],2,1,'A row composes, and composing multiplies: ('+m2+', 1/'+m2+') ∘ ('+m1+', 1/'+m1+') = ('+M+', 1/'+M+').'],
+    ['p3',[T,['each machine of the row is ideal: md = 1','given'],['the row is ideal','(m₂m₁)(d₂d₁) = (m₂d₂)(m₁d₁) = 1']],3,0,'So no train of ideal machines gives a big force and a long distance together.'],
+    ['p4',[['a filter reads one number off the light by r and sends it out along its line by i; r₁ and r₂ are the readings of two filters','given'],['run r₂ after r₁, to read the light’s number with the next filter','they run in a row']],2,1,'r₂ takes a shaking of the plane and is handed a number: the ends do not meet. i₁ must come between: P₂ ∘ P₁ = i₂ ∘ (r₂ ∘ i₁) ∘ r₁.'],
+    ['p5',[['J_w ∘ Jᵤ = J at u + w, with tanh u = v/c','the observer-row technique'],['0.6c after 0.6c is 1.2c','add the speeds']],2,1,'The row adds the turns, not the speeds: 0.6 is tanh(ln 2), and tanh(2 ln 2) = 15/17, about 0.882c.'],
+    ['p6',[['J_w ∘ Jᵤ = J at u + w, with tanh u = v/c','the observer-row technique'],['0.6c three times in a row is tanh(ln 8) c = 63/65 c','add the turns: ln 2 + ln 2 + ln 2 = ln 8']],2,0,'(8 − 1/8)/(8 + 1/8) = 63/65, still below c.'],
+    ['p7',[['Q = ½v² + ½ω²x² is the energy of the spring, and T is one tick of the stepped spring','given'],['Q is kept along the stepped spring','it is the energy']],2,1,'Kept along the row needs Q ∘ T = Q first, and one tick does not keep this Q.'],
+    ['p8',[['Q ∘ T = Q for one tick T','given'],['Q ∘ Tᵏ = Q for every count k of ticks','induction on k']],2,0,'Kept at one tick, kept at all: Q ∘ Tᵏ⁺¹ = (Q ∘ T) ∘ Tᵏ = Q ∘ Tᵏ.']];
+  return line28('∞·phys.line',V,[i,j]); });
+
+/* ---------- ∞·nav: the facing of a row needs only the facings; the place needs every order, in order ---------- */
+const runI=(orders)=>{ let th=0,x=0,y=0; orders.forEach(([w,n])=>{ if(w==='starboard') th+=n; else if(w==='port') th-=n; else { const r=th*Math.PI/180, s=(w==='ahead'?1:-1)*n; x+=Math.round(Math.sin(r))*s; y+=Math.round(Math.cos(r))*s; } }); return [x,y,((th%360)+360)%360]; };
+const logI=orders=>orders.map(([w,n])=>w+' '+n).join(', ');
+pINF('∞·nav.plan','∞·nav','word','a row of orders',function(){
+  if(rnd(2)){ const tn=()=>[pick(['starboard','port']),90], rn=()=>[pick(['ahead','astern']),1+rnd(3)], O=[tn(),rn(),tn(),rn()], [x,y]=runI(O);
+    const flip=O.map(([w,n])=>[w==='starboard'?'port':w==='port'?'starboard':w,n]), [fx,fy]=runI(flip), [sx,sy]=runI(O.filter(o=>o[0]==='ahead'||o[0]==='astern'));
+    const right=ptI(x,y), wrong=uniq(right,[ptI(sx,sy),ptI(fx,fy),ptI(y,x),ptI(-x,-y),ptI(x+1,y),ptI(0,0)],3); if(wrong.length<3) return null;
+    return {index:'q:∞·nav.plan[p;'+O.map(o=>o[0][0]+o[0][1]+o[1]).join(';')+']', a3:['∞·nav.plan[p]',O.slice(1).map(o=>'after '+o[0]+' '+o[1]).join('+'),O[0][0]+' '+O[0][1]], story:'A ship’s log reads, in order: '+logI(O)+'. Places are written (across to starboard, ahead), counted from the start along the first heading.', lines:[], ask:'Where does the row of orders leave the ship?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The place of a row is not worked out from the places of its parts: each run is turned by the facing at that moment, so the place needs every order, in order. The runs added with no turn give '+ptI(sx,sy)+'.'}; }
+  const O=[0,1,2].map(()=>[pick(['starboard','port']),pick([45,90,135])]), th=runI(O)[2], abs=O.reduce((s,o)=>s+o[1],0)%360, f=d=>d===0?'the first heading again':d+'° to starboard of the first heading';
+  const right=f(th), wrong=uniq(right,['it cannot be known: the runs are lost',f(abs),f((360-th)%360),f((th+90)%360),f((th+180)%360)],3); if(wrong.length<3) return null;
+  return {index:'q:∞·nav.plan[f;'+O.map(o=>o[0][0]+o[1]).join(';')+']', a3:['∞·nav.plan[f]',O.slice(1).map(o=>'after '+o[0]+' '+o[1]).join('+'),O[0][0]+' '+O[0][1]], story:'A ship’s log keeps its turns, in order: '+logI(O)+'. The runs between the turns are lost.', lines:[], ask:'What is the facing at the end?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'Facing-arrow technique: the facing of a row is worked out from the facings of its parts alone, and the runs are not read. Starboard adds and port takes away: the turns come to '+th+'°.'}; });
+pINF('∞·nav.line','∞·nav','proof','what a log can leave out',function(){
+  const O=[0,1,2].map(()=>[pick(['starboard','port']),pick([45,90,135])]), th=runI(O)[2], G=['a log keeps the turns '+logI(O)+', and has lost the runs','given'], c=pick([2,3,4]);
+  const V=[
+    ['n1',[G,['the facing at the end is '+(th===0?'the first heading again':th+'° to starboard of the first heading'),'the facing-arrow technique']],2,0,'The facing of a row is worked out from the facings alone: the runs are not read.'],
+    ['n2',[G,['the heading at the end is lost','the runs are lost']],2,1,'The facing of a row is worked out from the facings alone: the runs are not read.'],
+    ['n3',[['“do nothing” and “starboard 90” both leave the ship in its place','given'],['after “ahead 2” the two places agree','equal places before']],2,1,'The place of a row is not worked out from the places: (0, 2) and (2, 0).'],
+    ['n4',[['the turns of a voyage cancel','given'],['the ship is home','the turns cancel']],2,1,'The voyage is a slide, and not always by nothing: starboard 90, ahead 1, port 90, astern 1 ends at (1, −1).'],
+    ['n5',[['the turns of a voyage cancel','given'],['the voyage is a slide','a pose is a turn and then a slide']],2,0,'With the turn do-nothing, every point goes to itself plus the one slide.'],
+    ['n6',[['a map keeps sizes','given'],['stretched '+c+' across and '+c+' up, it still keeps sizes','the same stretch both ways']],2,1,'Areas go by '+c+' · '+c+' = '+(c*c)+': the squeeze must be c across and 1/c up.'],
+    ['n7',[['a map keeps sizes','given'],['stretched '+c+' across and 1/'+c+' up, it still keeps sizes','areas go by '+c+' · 1/'+c+' = 1']],2,0,'Areas go by the product of the two stretches.'],
+    ['n8',[['Seattle to the pole is a shortest route, and the pole to Tokyo is a shortest route','given'],['Seattle to the pole to Tokyo is a shortest route','it is made of shortest routes']],2,1,'The detour rule is “at most”: 10 763 km against 7656, and the pole is not on the shortest route.']];
+  return line28('∞·nav.line',V,[O.map(o=>o[0][0]+o[1]).join('')]); });
+
+/* ---------- ∞·stat: an arrow turned round needs its start ---------- */
+const START_I=[[1,50],[1,10],[1,5],[1,20],[1,4]];
+const turnI=(pn,pd,qn,qd)=>{ /* catch 9/10, false flag qn/qd, start pn/pd */ const num=9*pn*qd, den=9*pn*qd+10*qn*(pd-pn); return frI(num,den); };
+pINF('∞·stat.plan','∞·stat','word','an arrow turned round',function(){
+  const si=rnd(START_I.length), [pn,pd]=START_I[si], [qn,qd]=pick([[1,20],[1,10]]), right=turnI(pn,pd,qn,qd);
+  const wrong=uniq(right,['9/10',frI(pn,pd),frI(9*pn,10*pd),turnI(1,2,qn,qd),frI(qn,qd)],3); if(wrong.length<3) return null;
+  return {index:'q:∞·stat.plan['+[pn,pd,qn,qd].join(';')+']', a3:['∞·stat.plan','after the start '+frI(pn,pd),'flags 9 in 10'], story:'A test is a chance arrow f from a tree’s state to the result: it flags 9 infected trees in 10 and '+qn+' healthy tree in '+qd+'. In this stand '+pn+' tree in '+pd+' is infected.', lines:[], ask:'What is the chance that a flagged tree is infected?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'Start-matters technique: the turned arrow is fixed by f and the start together. Here it is (9/10 · '+frI(pn,pd)+') / (9/10 · '+frI(pn,pd)+' + '+frI(qn,qd)+' · '+frI(pd-pn,pd)+') = '+right+'. Reading 9/10 runs f from the result, where it does not start.'}; });
+pINF('∞·stat.line','∞·stat','proof','what a summary forgets',function(){
+  const si=rnd(START_I.length), [pn,pd]=START_I[si], g=turnI(pn,pd,1,20), F=['a test is a chance arrow f from state to result: it flags 9 infected trees in 10 and 1 healthy tree in 20','given'], ST=['in this stand '+pn+' tree in '+pd+' is infected','given'];
+  const [p,L]=pick([['0.3','0.3² · 0.7 = 0.063'],['0.4','0.4² · 0.6 = 0.096'],['0.2','0.2² · 0.8 = 0.032']]);
+  const V=[
+    ['s1',[F,['a flagged tree is infected with chance 9/10','read f at “flagged”']],2,1,'f runs from state to result and is handed a result: the ends do not meet. The turned arrow needs the start as well.'],
+    ['s2',[F,ST,['a flagged tree is infected with chance '+g,'the start-matters technique']],3,0,'(9/10 · '+frI(pn,pd)+') / (9/10 · '+frI(pn,pd)+' + 1/20 · '+frI(pd-pn,pd)+') = '+g+'.'],
+    ['s3',[F,ST,['a flagged tree is infected with chance '+g,'the start-matters technique'],['the same test gives '+g+' in every stand','it is one test']],4,1,'The turned arrow is made of f and the start: in a stand half infected it is 18/19.'],
+    ['s4',[['the chance of heads is '+p+' at every toss','given'],['HHT and THH have different likelihoods','the tosses come in different orders']],2,1,'The order is not in the chance: both are '+L+'.'],
+    ['s5',[['the chance of heads is '+p+' at every toss','given'],['HHT and THH have the same likelihood, '+L,'two heads and one tail each']],2,0,'The likelihood reads only the counts of heads and tails.'],
+    ['s6',[['one record has 7 heads in 10 tosses and another 9 in 30: shares 0.7 and 0.3','given'],['the best guess from both records is 0.5','average the shares']],2,1,'Counts add, shares do not: (10, 7) + (30, 9) = (40, 16), and the best guess is 0.4.'],
+    ['s7',[['one record has 7 heads in 10 tosses and another 9 in 30','given'],['the best guess from both records is 16/40 = 0.4','add the counts']],2,0,'(10, 7) + (30, 9) = (40, 16).'],
+    ['s8',[['the or-answer of each pair on the roster is known','given'],['some arrow g, run after the or-answer, gives the and-answer','work it out from the summary']],2,1,'No arrow g fits: the or-answer agrees on (T, F) and (T, T), and the and-answer does not.']];
+  return line28('∞·stat.line',V,[si,p]); });
+
+/* ---------- ∞·eng: a row of right passes is right ---------- */
+pINF('∞·eng.plan','∞·eng','word','a row of passes',function(){
+  const n=2+rnd(2), i=n===3?0:rnd(2), a=i, z=i+n, c=k=>'c'+subI(k), L=k=>'L'+subI(k), m=k=>'m'+subI(k), row=[...Array(n).keys()].map(k=>c(z-k)).join(' ∘ ');
+  const story='A compiler is built in passes: '+[1,2,3].map(k=>c(k)+' : '+L(k-1)+' → '+L(k)).join(', ')+'. For a program of '+L(0)+', '+L(1)+', '+L(2)+' or '+L(3)+', '+m(0)+', '+m(1)+', '+m(2)+' or '+m(3)+' is what it does when run.';
+  if(rnd(2)){ const right=row+' : '+L(a)+' → '+L(z), wrong=uniq(right,[[...Array(n).keys()].map(k=>c(a+1+k)).join(' ∘ ')+' : '+L(a)+' → '+L(z), row+' : '+L(z)+' → '+L(a), (n===3?c(z)+' ∘ '+c(a+1)+' : '+L(a)+' → '+L(z)+', with no middle pass':c(a+1)+' : '+L(a)+' → '+L(z)), c(z)+' : '+L(a)+' → '+L(z)],3); if(wrong.length<3) return null;
+    return {index:'q:∞·eng.plan[r;'+a+';'+n+']', a3:['∞·eng.plan[r]',[...Array(n-1).keys()].map(k=>'after '+c(a+2+k)).join('+'),c(a+1)], story, lines:[], ask:'Which row of passes compiles '+L(a)+' to '+L(z)+'?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'g ∘ f is “g after f”, and a pass runs after another only from where that one ended: '+c(a+1)+' ends at '+L(a+1)+', where '+c(a+2)+' starts.'}; }
+  const right=m(z)+' ∘ ('+row+') = '+m(a), wrong=uniq(right,[m(a)+' ∘ ('+row+') = '+m(z), m(z)+' ∘ '+c(z)+' = '+m(a), m(z-1)+' ∘ ('+row+') = '+m(a), '('+row+') ∘ '+m(z)+' = '+m(a)],3); if(wrong.length<3) return null;
+  return {index:'q:∞·eng.plan[d;'+a+';'+n+']', a3:['∞·eng.plan[d]','after '+m(z),row], story, lines:[], ask:'Which line says that the row '+row+' keeps the runs?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'Two paths, one result: compile from '+L(a)+' to '+L(z)+' and run there with '+m(z)+', or run the source with '+m(a)+'. Pass-row technique: if each pass keeps the runs, so does the row.'}; });
+pINF('∞·eng.line','∞·eng','proof','what can be known before it is built',function(){
+  const [ga,gb,loops]=pick([[12,36,12],[12,18,6],[10,15,5],[8,12,4]]), [ca,cb]=pick([[12,35],[9,20],[8,15]]), lcm=ga*gb/loops;
+  const V=[
+    ['g1',[['m₁ ∘ c₁ = m₀','given'],['m₂ ∘ c₂ = m₁','given'],['m₂ ∘ (c₂ ∘ c₁) = m₀','the pass-row technique']],3,0,'m₂ ∘ (c₂ ∘ c₁) = (m₂ ∘ c₂) ∘ c₁ = m₁ ∘ c₁ = m₀: the brackets move, then the two demands.'],
+    ['g2',[['c₁ : L₀ → L₁ and c₂ : L₁ → L₂ each keep the runs','given'],['c₁ ∘ c₂ keeps the runs too','the passes may be run in any order']],2,1,'c₁ ∘ c₂ needs the end of c₂ to be the start of c₁: the ends do not meet.'],
+    ['g3',[['two compilers c and c′ agree on ten thousand programs made at random','given'],['both are right','they agree']],2,1,'Agreement does not hold m₀, and ten thousand programs are ten thousand things, not the arrow.'],
+    ['g4',[['m₁(c(p)) ≠ m₁(c′(p)) for one program p','given'],['c and c′ are not both right','the second-opinion technique']],2,0,'Both cannot equal m₀(p): one of them fails at p.'],
+    ['g5',[['gears of '+ga+' and '+gb+' teeth mesh','given'],['turned long enough, every tooth meets every tooth','they keep turning']],2,1,'The pairs of teeth lie in '+loops+' loops of '+lcm+', and one tooth passing never leaves a loop.'],
+    ['g6',[['gears of '+ca+' and '+cb+' teeth mesh, and '+ca+' and '+cb+' share no factor','given'],['turned long enough, every tooth meets every tooth','one loop of '+(ca*cb)]],2,0,'With no shared factor the '+(ca*cb)+' pairs lie in one loop.'],
+    ['g7',[['a proportional heater pushes u(e) on the gap e, with u(0) = 0, and it is colder outside than the set point','given'],['with the gain G turned up far enough it rests on the set point','a stronger push']],2,1,'No-memory technique: at e = 0 the push is 0, and a room left alone with no push rests at the outside temperature, not the set point. No rest at e = 0 for any G.'],
+    ['g8',[['two switches are joined by two links','given'],['each switch learns one port for each address','the learning table']],2,1,'Two paths, two ports: the table is no arrow, and the links in use must first be cut to a tree.']];
+  return line28('∞·eng.line',V,[ga,gb,ca]); });
+
+/* ---------- ∞·comp: boxes in a row, and a row that can stop ---------- */
+const BOX_I=[['FA',3,2,'OR',2,1],['HA',2,2,'OR',2,1],['fork',1,2,'NAND',2,1],['fork',1,2,'HA',2,2],['FA',3,2,'HA',2,2],['FA',3,2,'NAND',2,1],['HA',2,2,'NAND',2,1]];
+pINF('∞·comp.plan','∞·comp','word','boxes in a row',function(){
+  const si=rnd(BOX_I.length), [f,a,b,g,b2,c]=BOX_I[si], right=g+' ∘ '+f+' : '+a+' → '+c;
+  const wrong=uniq(right,shuffle([f+' ∘ '+g+' : '+a+' → '+c, g+' ∘ '+f+' : '+c+' → '+a, g+' ⊕ '+f+' : '+a+' → '+c, g+' ∘ '+f+' : '+(a+b2)+' → '+(b+c)]),3); if(wrong.length<3) return null;
+  return {index:'q:∞·comp.plan['+si+']', a3:['∞·comp.plan['+si+']','after '+g,f], story:'Take the numbers of wires as things, and as arrows from m to n the tables that give n bits out for each m bits in. '+f+' : '+a+' → '+b+' and '+g+' : '+b2+' → '+c+'. Running one circuit into the next is ∘, and setting two side by side is ⊕.', lines:[], ask:'Which arrow feeds every output of '+f+' into '+g+', and between which numbers of wires?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:f+' ends at '+b+' wires, where '+g+' starts, so the row '+g+' ∘ '+f+' is made, from '+a+' wires to '+c+'. Side by side, '+g+' ⊕ '+f+' would take '+(a+b2)+' wires to '+(b+c)+'.'+(f==='fork'&&g==='NAND'?' This row is NOT.':'')}; });
+pINF('∞·comp.line','∞·comp','proof','what a program’s arrows hide',function(){
+  const P=['a check p can be read everywhere in U and passes a situation on to the part U_P where P holds; a check q can be read only in U_P','given'];
+  const V=[
+    ['k1',[P,['the row “p, then q” is made','the ends meet at U_P']],2,0,'Guard-row technique: it passes a situation exactly when P and Q both hold there, and never reads Q where P fails.'],
+    ['k2',[P,['the row “q, then p” is made','P ∧ Q and Q ∧ P have one column']],2,1,'q takes U_P and is handed U: the ends do not meet, so there is no such row. The column belongs to the things, not to the row.'],
+    ['k3',[['F ∧ L and L ∧ F have one column','the turn-about technique'],['the program that reads F first and the program that reads L first are one program','one column']],2,1,'The column belongs to the things, the parts of U; a program is a row, and a row that can stop has no turn-about.'],
+    ['k4',[['FA : 3 → 2','the full adder'],['two full adders run in a row, FA ∘ FA','they run in a row']],2,1,'FA takes 3 wires and is handed 2: the ends do not meet. The row needs FA ⊕ 1₁ after 1₂ ⊕ FA, on 5 wires.'],
+    ['k5',[['FA : 3 → 2','the full adder'],['(FA ⊕ 1₁) ∘ (1₂ ⊕ FA) : 5 → 3','1₂ ⊕ FA ends at 4 wires, where FA ⊕ 1₁ starts']],2,0,'1₂ ⊕ FA takes 2 + 3 wires to 2 + 2, and FA ⊕ 1₁ takes 3 + 1 to 2 + 1: the ripple row for two bits.'],
+    ['k6',[['NAND : 2 → 1, and a wire that forks is fork : 1 → 2','given'],['NAND ∘ fork : 1 → 1','fork ends at 2 wires, where NAND starts']],2,0,'One wire fed to both inputs of NAND: this row is NOT.'],
+    ['k7',[['merge sort and insertion sort both sort every list','given'],['on some input they give different lists','they compare in different orders']],2,1,'Both are the one map: the bracketing changes the count of comparisons, never the list.'],
+    ['k8',[['every twist of the cube keeps the total corner twist, and two cubes differ in it','given'],['some long enough row of twists carries one cube to the other','try more rows']],2,1,'Every twist keeps the total, so every row of twists does: no row of any length.']];
+  return line28('∞·comp.line',V,[]); });
+
+/* ---------- ∞·chem: what passes through the atoms is kept ---------- */
+const REACT_I=[['44 g of propane','160 g of oxygen',44,160,'C₃H₈ + 5 O₂ → 3 CO₂ + 4 H₂O',6,7],['16 g of methane','64 g of oxygen',16,64,'CH₄ + 2 O₂ → CO₂ + 2 H₂O',3,3],['4 g of hydrogen','32 g of oxygen',4,32,'2 H₂ + O₂ → 2 H₂O',3,2],['56 g of carbon monoxide','32 g of oxygen',56,32,'2 CO + O₂ → 2 CO₂',3,2],['28 g of nitrogen','6 g of hydrogen',28,6,'N₂ + 3 H₂ → 2 NH₃',4,2]];
+pINF('∞·chem.plan','∞·chem','word','what passes through the atoms',function(){
+  const si=rnd(REACT_I.length), [A,B,a,b,eq,nin,nout]=REACT_I[si];
+  if(rnd(2)){ const right=(a+b)+' g', wrong=uniq(right,[(a+b+6)+' g',b+' g',a+' g',(2*(a+b))+' g'],3);
+    return {index:'q:∞·chem.plan[m;'+si+']', a3:['∞·chem.plan[m]','after the atoms',eq], story:A+' react with '+B+', and nothing is left over: '+eq+'.', lines:[], ask:'What is the mass of what is made?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Mass passes through the atoms, and the atoms are kept: '+a+' + '+b+' = '+(a+b)+' g.'}; }
+  const kept=nin===nout, right=kept?nin+' in, '+nout+' out: equal here, though a reaction need not keep the count':nin+' in, '+nout+' out: the count is not kept';
+  const wrong=uniq(right,kept?[nin+' in, '+nin+' out: kept in every reaction, since the atoms are kept', (nin+1)+' in, '+nin+' out: the count is not kept', nin+' in, '+nin+' out: kept, since the mass is kept']:[nin+' in, '+nin+' out: kept, since the atoms are kept', nout+' in, '+nout+' out: kept, since the atoms are kept', nin+' in, '+nout+' out: kept all the same, since the mass is kept'],3); if(wrong.length<3) return null;
+  return {index:'q:∞·chem.plan[c;'+si+']', a3:['∞·chem.plan[c]','after the atoms',eq], story:'A reaction: '+eq+'.', lines:[], ask:'How many molecules go in and come out, and is the count of molecules kept?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'The count of molecules is not worked out from the atoms: 2 H₂ + O₂ and 2 H₂O have the same atoms, and 3 and 2 molecules. Only what passes through the atoms, such as mass, is kept by every reaction.'}; });
+pINF('∞·chem.line','∞·chem','proof','what a reaction keeps',function(){
+  const si=rnd(REACT_I.length), [A,B,a,b,eq]=REACT_I[si], [sp,rw]=pick([[5,3],[4,3],[6,3],[4,2]]), dim=sp-rw;
+  const V=[
+    ['h1',[[A+' react with '+B+', and nothing is left over','given'],['what is made has a mass of '+(a+b)+' g','mass passes through the atoms']],2,0,'The atoms are kept, and the mass is worked out from the atoms.'],
+    ['h2',[[A+' react with '+B+', and nothing is left over','given'],['what is made has a mass of '+(a+b+6)+' g','a weighing']],2,1,'Mass passes through the atoms, and the atoms are kept: '+(a+b)+' g.'],
+    ['h3',[['molecules are made of atoms, and a reaction keeps the atoms','given'],['a reaction keeps the count of molecules','they are made of atoms']],2,1,'The count of molecules is not worked out from the atoms: 2 H₂ + O₂ and 2 H₂O have the same atoms, and 3 and 2 molecules.'],
+    ['h4',[[sp+' species, and '+rw+' free rows of atom counts','given'],['the balances have dimension '+dim,'the species less the free rows']],2,0,sp+' − '+rw+' = '+dim+(dim===1?': one balance up to stretching.':'.')],
+    ['h5',[[sp+' species, and '+rw+' free rows of atom counts','given'],['there is '+(dim===1?'a plane of balances, of dimension 2':'one balance up to stretching'),'count the rows']],2,1,'The balances have dimension '+sp+' − '+rw+' = '+dim+'.'],
+    ['h6',[['on the benzene ring, the classes of {1, 2} and of {1, 3} both hold 6 placements','given'],['{1, 2} and {1, 3} are one compound','equal counts']],2,1,'Equal counts are not an arrow: no move carries a neighbouring pair to a pair with one place between.'],
+    ['h7',[['the mirror matches each atom of one hand with an atom of its kind in the other','given'],['the two hands are one molecule','a matching of atoms']],2,1,'The mirror is not an arrow of the kind allowed: every turn keeps the sign that the two hands differ in.'],
+    ['h8',[['20 carbons can be renamed in 20! ways','given'],['there are about 2.4 × 10¹⁸ kinds','one kind for each renaming']],2,1,'A renaming is an arrow, and a kind is a piece: 366 319 kinds, each with at most 20! drawings.']];
+  return line28('∞·chem.line',V,[si,sp,rw]); });
+
+/* ---------- ∞·bio: the looks multiply; once round the ring ---------- */
+pINF('∞·bio.plan','∞·bio','word','a grid that need not be drawn',function(){
+  if(rnd(2)){ const k=2+rnd(4), cells=Math.pow(4,k), dom=Math.pow(3,k), right=dom+' of '+cells;
+    const wrong=uniq(right,[(3*k)+' of '+cells, Math.pow(2,k)+' of '+cells, '1 of '+cells, dom+' of '+(4*k), (cells-dom)+' of '+cells],3);
+    return {index:'q:∞·bio.plan[g;'+k+']', a3:['∞·bio.plan[g]',[...Array(k-1).keys()].map(()=>'beside one gene').join('+'),'3 of 4'], story:k+' genes are handed on separately. For each one alone, 3 cells of its grid of 4 show the dominant look.', lines:[], ask:'How many cells of the whole grid show the dominant look for every one of the '+k+' genes?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Looks-multiply technique: a cell of the whole grid is a row of cells, one from each grid, and its look is the row of their looks, so the counts multiply: 3'+(k===2?'²':k===3?'³':k===4?'⁴':'⁵')+' = '+dom+' of 4'+(k===2?'²':k===3?'³':k===4?'⁴':'⁵')+' = '+cells+'. No cell need be drawn.'}; }
+  const n=2+rnd(6), even=n%2===0, right=even?'two states hold: a switch':'no state holds: the parts take turns';
+  const wrong=uniq(right,[even?'no state holds: the parts take turns':'two states hold: a switch', n+' states hold, one for each part', 'one state holds, with every part on', 'every state holds'],3);
+  return {index:'q:∞·bio.plan[r;'+n+']', a3:['∞·bio.plan[r]',[...Array(n-1).keys()].map(()=>'after ¬').join('+'),'¬'], story:n+' genes stand in a ring, each stopping the next. Read each as on or off, and each as the opposite of the one before it.', lines:[], ask:'How many states of the ring hold?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'Ring-rest technique: once round the ring is a row of '+n+' opposites, and ¬ ∘ ¬ is do-nothing. For '+n+', the row is '+(even?'do-nothing: x₁ = x₁, either value, and the rest follow.':'¬: x₁ = ¬x₁, and no value fits.')}; });
+pINF('∞·bio.line','∞·bio','proof','what is handed on',function(){
+  const k=3+rnd(3), cells=Math.pow(4,k), dom=Math.pow(3,k), ne=pick([4,6]), no=pick([3,5]);
+  const V=[
+    ['b1',[[k+' genes are handed on separately, and for each one 3 cells in 4 show the dominant look','given'],[dom+' of the '+cells+' cells show all '+k+' dominant looks','the looks-multiply technique']],2,0,'The counts of the '+k+' grids multiply, and no cell need be drawn.'],
+    ['b2',[[k+' genes are handed on separately, and for each one 3 cells in 4 show the dominant look','given'],['the '+cells+' cells must be drawn to count those with all '+k+' dominant looks','count the cells']],2,1,'The looks multiply: '+dom+' of '+cells+', from the sides alone.'],
+    ['b3',[['two genes lie close together on one chromosome','given'],['their looks come in the shares 9 : 3 : 3 : 1','the looks-multiply technique']],2,1,'The grid is not a product with equal chances: the two are handed on together more often than not, so the counts do not multiply.'],
+    ['b4',[[ne+' genes stand in a ring, each stopping the next','given'],['the ring is a clock: no state holds','a ring of opposites']],2,1,'An even ring: the row of '+ne+' opposites is do-nothing, and two states hold: a switch.'],
+    ['b5',[[no+' genes stand in a ring, each stopping the next','given'],['no state of the ring holds','the ring-rest technique']],2,0,'An odd ring: the row of '+no+' opposites is ¬, and x₁ = ¬x₁ has no value.'],
+    ['b6',[['the swimmers with fins and the mammals share the orca','given'],['both are whole branches of the tree','each is a group of living things']],2,1,'Two whole branches with a shared member are nested, and neither of these holds the other: the bat is a mammal with no fins, and the salmon a swimmer with fins that is no mammal.'],
+    ['b7',[['twenty kinds are to be put on a tree','given'],['try every tree and keep the one that fits best','search them all']],2,1,'There are about 2.2 × 10²⁰ trees: build by threes from the table, and test the 4845 fours.']];
+  return line28('∞·bio.line',V,[k,ne,no]); });
+
+/* ---------- ∞·logi: a bound that is met ---------- */
+pINF('∞·logi.plan','∞·logi','word','a bound that is met',function(){
+  const p=pick([700,540,1200,360,880]), gap=pick([0,0,100,60]), b=p+gap;
+  const story='Every allowed plan earns at most what any set of covering worths totals. One plan in hand earns '+p+'. One set of worths in hand totals '+b+'.';
+  const right=gap?'the best plan earns at least '+p+' and at most '+b+': the bound is not met':'the plan in hand is best, and the worths in hand are the least: the bound is met';
+  const wrong=uniq(right,gap?['the best plan earns '+b, 'the plan in hand is best, since a bound exists', 'the best plan earns '+(p+gap/2)+', half way between']:['the best plan earns more than '+p+': a bound is never met', 'nothing yet: every corner must still be priced', 'the plan is best only if a second set of worths also totals '+b],3);
+  return {index:'q:∞·logi.plan['+p+';'+gap+']', a3:['∞·logi.plan','after the worths','a plan of '+p], story, lines:[], ask:'What is proved?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'Met-bound technique: if every a is at most every b, and some a₀ equals some b₀, then a₀ is the largest a and b₀ the least b. '+(gap?'Here '+p+' is below '+b+': a bound that no plan in hand meets says only “at most”.':'Here the plan meets the bound, so each proves the other, and no corner is walked.')}; });
+pINF('∞·logi.line','∞·logi','proof','how a best plan is checked',function(){
+  const V=[
+    ['l1',[['the worths 1 and 1 bound every plan of the bakery by 700','given'],['the plan (100, 200) earns 700','given'],['(100, 200) is the bakery’s best day','the met-bound technique']],3,0,'One plan meets the bound, so no plan earns more. No corner was walked.'],
+    ['l2',[['the worths 1 and 1 bound every plan of the bakery by 700','given'],['the plan (100, 200) earns 700','given'],['all five corners must still be priced to know that (100, 200) is best','walk the corners']],3,1,'The worths bound every plan by 700, and (100, 200) earns 700: the bound is met.'],
+    ['l3',[['3x + 2y ≤ 2(2x + y) ≤ 800 for every allowed plan','given'],['the best day earns 800','the bound']],2,1,'A bound that no plan meets says “at most”: the best is 700.'],
+    ['l4',[['a machine returns a shipping plan that costs 212 000, and no prices','given'],['the plan is the cheapest','the machine found it']],2,1,'A plan is one side only: ask for prices that cover every route and meet it.'],
+    ['l5',[['a machine returns a shipping plan that costs 212 000, with prices that cover every route and total 212 000','given'],['the plan is the cheapest','the met-bound technique']],2,0,'The two totals meet, so the plan is the cheapest and the prices the dearest.'],
+    ['l6',[['the prices in hand run above the cost on one unused route','given'],['they still prove the plan cheapest','their total meets the plan']],2,1,'They are no bound: a plan using that route may cost less than their total.'],
+    ['l7',[['three jobs share two drivers, and two other jobs share one more','given'],['at least two jobs wait','five jobs, three drivers']],2,0,'The five jobs together have three drivers: short by 2.'],
+    ['l8',[['three jobs share two drivers, and two other jobs share one more','given'],['one job waits','the first group is short by one']],2,1,'The five jobs together have three drivers: short by 2, so at least two wait.'],
+    ['l9',[['picking drivers in turn left one job waiting','given'],['some group of jobs is short of drivers','a job waits']],2,1,'The order of picking is not a bound: another order of picking may serve every job.']];
+  return line28('∞·logi.line',V,[]); });
+
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 
