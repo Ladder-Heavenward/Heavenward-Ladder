@@ -2170,19 +2170,21 @@ function finish(chid){ const r=get('sq:'+chid,{}); r.done=true; r.t=Date.now(); 
   const el=[...document.querySelectorAll('section.challenge .chid')].find(e=>e.textContent.trim()===chid);
   if(el&&!el.classList.contains('done')&&el.__tick) el.__tick();
   if(window.__barStats) window.__barStats(); }
+/* 2026-11-12 (Andrew 21:26Z): every end of a tree offers the way back to the Answering Open Questions list */
+function backBtn(to){ const p=document.createElement('p'); p.innerHTML='<button type="button" class="sq-back">Answering Open Questions</button>'; p.querySelector('.sq-back').onclick=()=>list(); to.appendChild(p); }
 function walk(chid,opts){ opts=opts||{}; const stem=opts.stem||stemOf(chid);
   const body=frame(chid); body.innerHTML='<p class="sk-q">Gathering the path…</p>';
   trees(stem).then(T=>{ const tr=T[chid]; if(!tr){ body.innerHTML='<p class="sk-q">This standing question has no branching path yet. You can still work it on paper and tick it on its page.</p>'; return; }
     const top=box.querySelector('.sk-top span'); top.textContent='standing question '+chid+' · '+(tr.kind==='debate'?'a debate':'a path to the answer');
     const rec=get('sq:'+chid,{fails:0});
-    if(tr.kind!=='debate'&&rec.until&&rec.until>Date.now()&&!rec.done){ body.innerHTML='<p class="sk-q">This one is resting. It opens again in '+left(rec.until-Date.now())+'. Each wrong path rests it ten times longer than the last; the time is for thinking it through away from the screen.</p>'; return; }
+    if(tr.kind!=='debate'&&rec.until&&rec.until>Date.now()&&!rec.done){ body.innerHTML='<p class="sk-q">This one is resting. It opens again in '+left(rec.until-Date.now())+'. Each wrong path rests it ten times longer than the last; the time is for thinking it through away from the screen.</p>'; backBtn(body); return; }
     const trail=[]; let node=tr.start;
     const show=()=>{ const N=tr.n[node]; body.innerHTML='';
       if(tr.kind==='debate'&&tr.areas&&N.area!=null){ const a=document.createElement('p'); a.className='sk-n'; a.textContent='area of inquiry '+(N.area+1)+' of '+tr.areas.length+': '+tr.areas[N.area]; body.appendChild(a); }
       if(trail.length){ const tl=document.createElement('p'); tl.className='sq-trail'; tl.textContent=trail.map(x=>'› '+x).join(' '); body.appendChild(tl); }
       const q=document.createElement('div'); q.className='sk-q'; rich(q,N.t); body.appendChild(q);
       if(N.end){ const e=document.createElement('p'); e.className='sq-end'; e.textContent=opts.review?'This is the bottom of the debate along this line.':'You have reached the bottom of the debate along this line. The standing question is answered for you: '+(rec.done?'it was already ticked.':'it is ticked on its step.'); body.appendChild(e);
-        if(!opts.review) finish(chid); const again=document.createElement('p'); again.innerHTML='<button type="button" class="sk-again">walk another line</button> <button type="button" class="sq-close">close</button>'; body.appendChild(again);
+        if(!opts.review) finish(chid); const again=document.createElement('p'); again.innerHTML='<button type="button" class="sk-again">walk another line</button> <button type="button" class="sq-close">close</button> <button type="button" class="sq-back">Answering Open Questions</button>'; body.appendChild(again); again.querySelector('.sq-back').onclick=()=>list();
         again.querySelector('.sk-again').onclick=()=>{ trail.length=0; node=tr.start; show(); }; again.querySelector('.sq-close').onclick=close; return; }
       const oe=document.createElement('div'); oe.className='sk-opts'; body.appendChild(oe);
       const fb=document.createElement('div'); fb.className='sq-fb'; fb.hidden=true; body.appendChild(fb);
@@ -2195,10 +2197,10 @@ function walk(chid,opts){ opts=opts||{}; const stem=opts.stem||stemOf(chid);
             nx.hidden=false; nx.querySelector('.sk-next').onclick=()=>{ trail.push(c.t.replace(/\$/g,'').slice(0,40)); node=c.go; show(); }; return; }
           const w=document.createElement('p'); rich(w,(c.fail?'Not this path. ':'Right. ')+(c.why||'')); fb.appendChild(w);
           if(c.fail){ b.classList.add('no'); if(!opts.review&&!rec.done){ rec.fails=(rec.fails||0)+1; rec.until=Date.now()+lockFor(rec.fails); put('sq:'+chid,rec);
-              const l=document.createElement('p'); l.className='sq-end'; l.textContent='The question rests for '+left(lockFor(rec.fails))+'. Next time it opens at the start.'; fb.appendChild(l); }
+              const l=document.createElement('p'); l.className='sq-end'; l.textContent='The question rests for '+left(lockFor(rec.fails))+'. Next time it opens at the start.'; fb.appendChild(l); backBtn(fb); }
             else { nx.hidden=false; nx.querySelector('.sk-next').textContent='back one'; nx.querySelector('.sk-next').onclick=()=>show(); } return; }
           b.classList.add('ok');
-          if(c.win){ const l=document.createElement('p'); l.className='sq-end'; l.textContent=opts.review?'That is the answer.':'That is the answer. The standing question is ticked on its step.'; fb.appendChild(l); if(!opts.review) finish(chid); return; }
+          if(c.win){ const l=document.createElement('p'); l.className='sq-end'; l.textContent=opts.review?'That is the answer.':'That is the answer. The standing question is ticked on its step.'; fb.appendChild(l); if(!opts.review) finish(chid); backBtn(fb); return; }
           nx.hidden=false; nx.querySelector('.sk-next').onclick=()=>{ trail.push(c.t.replace(/\$/g,'').slice(0,40)); node=c.go; show(); }; };
         oe.appendChild(b); }); };
     show(); }); }
