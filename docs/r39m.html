@@ -51,16 +51,16 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <p class="home"><a href="index.html">← the ladder</a><a href="r39l.html">← 39l sorting and searching</a><a href="r39n.html">next: 39n structures that hold data →</a></p>
   <div class="tags"><span class="tag proof">39m · proof</span></div>
   <h1>Divide and Conquer</h1>
-  <p data-pid="109d7d">A program that cuts its job into smaller copies of itself has a count given by its own smaller counts. The rung on endless sums solved the commonest shape, where a job of size n becomes several jobs of size n over some fixed number, plus a cost like a power of n for the cutting and joining: the top level wins, every level ties, or the bottom wins. Real programs do not always cut so neatly. Some shrink the job by one item, not by a share, and pay for it with a square. Some cut into pieces of different sizes. One famous program finds the middle item of a list without sorting it, by cutting into a fifth and seven tenths, and the shares add to less than one, which turns out to be all that matters. And some pay a log for each cut as well as a power. This step solves each of those shapes, then gives the one method that handles any shape at all, at the cost of having to guess the answer first: guess, and check by induction that the rule keeps the guess.</p>
+  <p data-pid="109d7d">A program that cuts its job into smaller copies of itself has a count given by its own smaller counts. The rung on endless sums solved the commonest shape, where a job of size n becomes several jobs of size n over some fixed number, plus a cost like a power of n for the cutting and joining: the top level wins, every level ties, or the bottom wins. Real programs do not always cut so neatly. Some shrink the job by one item, not by a share, and pay for it with a square. Some cut into pieces of different sizes. One famous program finds the middle item of a list without sorting it, by cutting into a fifth and seven tenths, and the shares add to less than one, which turns out to be all that matters. And some pay a log for each cut as well as a power. This step solves each of those shapes, then gives the one method that handles any shape at all, at the cost of having to guess the answer first: guess, and check by induction that the technique keeps the guess.</p>
   <p class="gesture" data-pid="5718aa">Shrinking by one item adds up the costs, often to a square. Cutting into shares that add to less than one costs only in proportion to the size. A log on each cut adds a log to the answer. Any shape can be solved by guessing and checking the guess by induction.</p>
 </header>
 
 <section class="class step" data-step="39m1">
   <h2 class="sthead"><span class="stno">39m1</span>Shrinking by One</h2>
-  <p data-pid="a9e153">22l1 unrolled a rule that halves the job. Some programs take one item off and do the rest the same way: find the smallest, set it first, sort the rest. Their rule is T(n) = T(n − 1) + f(n).</p>
+  <p data-pid="a9e153">22l1 unrolled a technique that halves the job. Some programs take one item off and do the rest the same way: find the smallest, set it first, sort the rest. Their technique is T(n) = T(n − 1) + f(n).</p>
   <p data-pid="006e08">Shrink-by-one technique: <b>if T(1) = c and T(n) = T(n − 1) + f(n) for n ≥ 2, then T(n) = c + f(2) + f(3) + ⋯ + f(n).</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the shrink-by-one technique">
-T(n) = T(n - 1) + f(n) = T(n - 2) + f(n - 1) + f(n) @@ the rule, used twice
+T(n) = T(n - 1) + f(n) = T(n - 2) + f(n - 1) + f(n) @@ the technique, used twice
 T(n) = T(1) + f(2) + \cdots + f(n) @@ induction on n (4c)
 f(n) = n - 1:\ \ T(n) = 0 + 1 + 2 + \cdots + (n - 1) = \tfrac{n(n-1)}{2} @@ selection sort, 17·comp’s count, with c = 0
 f(n) = 1:\ \ T(n) = c + n - 1 @@ a step per item
@@ -87,7 +87,7 @@ T(n) \le K\alpha n + K\beta n + cn @@ the rule, with the claim at αn and βn
 = n\big(K(\alpha + \beta) + c\big) = n\big(K - K(1 - \alpha - \beta) + c\big) = Kn @@ K(1 − α − β) = c
 \htmlClass{new}{\alpha = \tfrac15,\ \beta = \tfrac{7}{10}:\ \ T(n) \le 10cn} \quad \blacksquare @@ 1 − 9/10 = 1/10
   </pre>
-  <p data-pid="af7691">So the middle of a million items can be found in a count in proportion to a million, without the log a sort would cost. Run with c = 1 by machine, the rule gives about 8.6n at a million, under the bound of 10n. The shares tell the story: if the pieces add to less than the whole, each level does less work than the one above, and the top level wins, as in 22l2’s first case.</p>
+  <p data-pid="af7691">So the middle of a million items can be found in a count in proportion to a million, without the log a sort would cost. Run with c = 1 by machine, the technique gives about 8.6n at a million, under the bound of 10n. The shares tell the story: if the pieces add to less than the whole, each level does less work than the one above, and the top level wins, as in 22l2’s first case.</p>
   <section class="slides" id="sl2"><div class="eyebrow">The slides · uneven · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
@@ -99,12 +99,12 @@ T(n) \le K\alpha n + K\beta n + cn @@ the rule, with the claim at αn and βn
 
 <section class="class step" data-step="39m3">
   <h2 class="sthead"><span class="stno">39m3</span>Guess, Then Check</h2>
-  <p data-pid="80e042">The master technique of 22l2 needs the cost of cutting to be a power nᵈ. 22l5 marked T(n) = 2T(n/2) + n log₂ n as outside it. Any rule can be solved by guessing the answer and then proving by induction that the rule keeps the guess: the method of the last footing, made general.</p>
-  <p data-pid="bbacb1">Guess-and-check technique: <b>if g meets the rule at the smallest sizes, and the rule applied to g at the smaller sizes gives at most g at n, then T ≤ g at every size.</b></p>
+  <p data-pid="80e042">The master technique of 22l2 needs the cost of cutting to be a power nᵈ. 22l5 marked T(n) = 2T(n/2) + n log₂ n as outside it. Any technique can be solved by guessing the answer and then proving by induction that the technique keeps the guess: the method of the last footing, made general.</p>
+  <p data-pid="bbacb1">Guess-and-check technique: <b>if g meets the technique at the smallest sizes, and the technique applied to g at the smaller sizes gives at most g at n, then T ≤ g at every size.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the guess-and-check technique, on a cut that costs n log n">
-T(1) = c,\ \ T(n) = 2T(n/2) + n\log_2 n,\ \ n = 2^k @@ the rule
+T(1) = c,\ \ T(n) = 2T(n/2) + n\log_2 n,\ \ n = 2^k @@ the technique
 \text{guess } g(2^k) = 2^k\big(c + \tfrac{k(k + 1)}{2}\big) @@ divide by 2ᵏ, as 22l1 did: the cost per item rises by k at size 2ᵏ
-2g(2^{k-1}) + 2^k k = 2^k\big(c + \tfrac{(k - 1)k}{2} + k\big) = 2^k\big(c + \tfrac{k(k + 1)}{2}\big) @@ the rule applied to the guess
+2g(2^{k-1}) + 2^k k = 2^k\big(c + \tfrac{(k - 1)k}{2} + k\big) = 2^k\big(c + \tfrac{k(k + 1)}{2}\big) @@ the technique applied to the guess
 g(1) = c @@ the smallest size
 \htmlClass{new}{T(n) = n\big(c + \tfrac12\log_2 n\,(\log_2 n + 1)\big) \sim \tfrac12 n\log_2^2 n} \quad \blacksquare @@ induction on k (4c); checked by machine at n = 1024: 57 344 with c = 1
   </pre>
@@ -138,7 +138,7 @@ T(n) = 2T(n/2) + n\log_2 n \text{ is } n\log_2 n\,? @@ &lt;span class="vd vd-p"&
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">39m.5.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">groups of three, not five</span></span>Build the rule for the middle-finding program with groups of three. What shares do you get, and does the shares-below-one technique still apply? <br>Try groups of seven.</div>
+  <div class="chq"><span class="chid">39m.5.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">groups of three, not five</span></span>Build the technique for the middle-finding program with groups of three. What shares do you get, and does the shares-below-one technique still apply? <br>Try groups of seven.</div>
   <div class="chq"><span class="chid">39m.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="T(n) = T(n/3) + T(2n/3) + n"></span></span>The shares add to exactly 1. Guess the answer from the levels and check it. <br>Why is the deepest branch the one that sets the number of levels?</div>
   <div class="chq"><span class="chid">39m.5.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="T(n) \le Kn"></span></span>The shares-below-one technique gives a count in proportion to n. Turn it round: if a program cuts into shares adding to less than 1 and its count is in proportion to n, must the cost of cutting be in proportion to n? Build a counterexample or a proof. <br>What if the cutting cost is n²?</div>
   <div class="chq"><span class="chid">39m.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="T(n) = 2T(n/2) + n\log_2 n"></span></span>Reroute the count by levels, as 22l2 does: what does level j cost, and how many levels are there? <br>Add them and compare with the guess-and-check answer.</div>
@@ -149,7 +149,7 @@ T(n) = 2T(n/2) + n\log_2 n \text{ is } n\log_2 n\,? @@ &lt;span class="vd vd-p"&
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>Cutting a job into smaller copies is divide and conquer, and its rules are recurrences. Guess-and-check is the substitution method; laying out the levels is the recursion-tree method; the master technique is the master theorem, and its extension to uneven pieces is the Akra–Bazzi method. The middle-finding program is median-of-medians selection, or BFPRT. The split of a grid product into seven is Strassen’s algorithm. The crosswalk items here are the recurrences, divide and conquer and selection of MIT 6.006 and Stanford CS 161.</p>
+  <p>Cutting a job into smaller copies is divide and conquer, and its techniques are recurrences. Guess-and-check is the substitution method; laying out the levels is the recursion-tree method; the master technique is the master theorem, and its extension to uneven pieces is the Akra–Bazzi method. The middle-finding program is median-of-medians selection, or BFPRT. The split of a grid product into seven is Strassen’s algorithm. The crosswalk items here are the recurrences, divide and conquer and selection of MIT 6.006 and Stanford CS 161.</p>
   <h3>Who said it first</h3>
   <p>Manuel Blum, Robert Floyd, Vaughan Pratt, Ronald Rivest and Robert Tarjan found linear-time selection in 1973. Volker Strassen gave his seven-product split in 1969; the best known exponent for grid products has since fallen below 2.372. Mohamad Akra and Louay Bazzi solved uneven recurrences in general in 1998. Jon Bentley, Dorothea Haken and James Saxe set out the master technique’s general form in 1980.</p>
   <h3>A proof that is not allowed</h3>
@@ -168,19 +168,19 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'rule',t:R`T(n) = T(n-1) + f(n)`,n:`One item off.`},
+  {k:'ember',kl:'technique',t:R`T(n) = T(n-1) + f(n)`,n:`One item off.`},
   {k:'ember',kl:'unroll',t:R`T(1) + f(2) + \cdots + f(n)`,n:`Add the costs.`},
   {k:'ember',kl:'so',t:R`\htmlClass{new}{f = n - 1 \Rightarrow n(n-1)/2}`,n:`The square.`}
 ],{title:'The slides · by one · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'rule',t:R`T(n) \le T(\alpha n) + T(\beta n) + cn`,n:`Two sizes.`},
+  {k:'ember',kl:'technique',t:R`T(n) \le T(\alpha n) + T(\beta n) + cn`,n:`Two sizes.`},
   {k:'ember',kl:'guess',t:R`K = c/(1 - \alpha - \beta)`,n:`The constant.`},
   {k:'ember',kl:'so',t:R`\htmlClass{new}{T(n) \le 10cn}`,n:`The middle, in linear time.`}
 ],{title:'The slides · uneven · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'rule',t:R`2T(n/2) + n\log_2 n`,n:`Not a power.`},
+  {k:'ember',kl:'technique',t:R`2T(n/2) + n\log_2 n`,n:`Not a power.`},
   {k:'ember',kl:'guess',t:R`n(c + \tfrac{k(k+1)}{2})`,n:`From the levels.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\sim \tfrac12 n\log_2^2 n}`,n:`The rule keeps it.`}
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\sim \tfrac12 n\log_2^2 n}`,n:`The technique keeps it.`}
 ],{title:'The slides · guess and check · ← → keys work'});
 })();
 </script>
