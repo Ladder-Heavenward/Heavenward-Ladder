@@ -21,6 +21,12 @@
 .sd th:last-child,.sd td:last-child{text-align:right}
 .sd td{padding:8px;border-bottom:1px solid var(--grid)}
 .sd .empty{font-style:italic;color:var(--muted)}
+/* 2026-11-12 (Andrew 21:35Z): the ellipsis of 'Connecting to server...' breathes, one dot after another */
+.sd .conn .dots i{font-style:inherit;animation:sdconn 1.8s ease-in-out infinite}
+.sd .conn .dots i:nth-child(2){animation-delay:.3s}
+.sd .conn .dots i:nth-child(3){animation-delay:.6s}
+@keyframes sdconn{0%,100%{opacity:.25}40%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.sd .conn .dots i{animation:none}}
 </style>
 
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
@@ -61,11 +67,11 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   </div>
   <section id="p-week" role="tabpanel" aria-labelledby="t-week">
     <table><thead><tr><th>Place</th><th>Climber</th><th>Score</th></tr></thead><tbody></tbody></table>
-    <p class="empty">No standing for this week yet.</p>
+    <p class="empty conn" role="status">Connecting to server<span class="dots" aria-hidden="true"><i>.</i><i>.</i><i>.</i></span></p>
   </section>
   <section id="p-all" role="tabpanel" aria-labelledby="t-all" hidden>
     <table><thead><tr><th>Place</th><th>Climber</th><th>Score</th></tr></thead><tbody></tbody></table>
-    <p class="empty">No standing yet.</p>
+    <p class="empty conn" role="status">Connecting to server<span class="dots" aria-hidden="true"><i>.</i><i>.</i><i>.</i></span></p>
   </section>
 </div>
 <script src="rung.js"></script>
@@ -78,7 +84,7 @@ function pick(k){ tabs.forEach(([t,p],i)=>{ document.getElementById(t).setAttrib
   try{ sessionStorage.setItem('standing:tab',String(k)); }catch(e){} }
 tabs.forEach(([t],i)=>{ document.getElementById(t).onclick=()=>pick(i); });
 let k=0; try{ k=+sessionStorage.getItem('standing:tab')||0; }catch(e){} pick(k===1?1:0);
-/* window.LADDER_STANDING={week:[[name,score],...],all:[...]} fills the tables when there is one; until then they stay empty. */
+/* window.LADDER_STANDING={week:[[name,score],...],all:[...]} fills the tables when there is one; until then each says it is connecting to the server. */
 const S=window.LADDER_STANDING; if(S){ [['week','p-week'],['all','p-all']].forEach(([key,p])=>{ const rows=S[key]||[]; if(!rows.length) return;
   const sec=document.getElementById(p), tb=sec.querySelector('tbody'); sec.querySelector('.empty').hidden=true;
   rows.forEach((r,i)=>{ const tr=document.createElement('tr'); [i+1,r[0],r[1]].forEach(v=>{ const td=document.createElement('td'); td.textContent=v; tr.appendChild(td); }); tb.appendChild(tr); }); }); }
