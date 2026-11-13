@@ -10033,6 +10033,619 @@ QP.push({id:'37j.keys',step:'37j',label:'where sound keys in',open:()=>measured(
     return line28('37j.line',[
       ['j1',[['part of a signal is lost','given'],['what is left can be analysed for part of what was sent','the partly-told technique']],2,0,'That is the technique.'],
       ['j2',[['part of a signal is lost','given'],['all of what was sent can be told from what is left','the partly-told technique']],2,1,'Partial loss gives partial induction only.']],[]); }});
+/* ----- rung 38: logic about logic, 38a to 38n ----- */
+Object.assign(STEPS,{'38a':['r38a','A Language for Mathematics'],'38b':['r38b','Proofs as Objects'],'38c':['r38c','What Is Provable Is True'],'38d':['r38d','What Is True Everywhere Is Provable'],'38e':['r38e','A Countable Line'],'38f':['r38f','Numbers Past Every Numeral'],'38g':['r38g','Formulas as Numbers'],'38h':['r38h','A Sentence About Itself'],'38i':['r38i','True and Unprovable'],'38j':['r38j','Consistency From Within'],'38k':['r38k','Truth Cannot Be Defined Inside'],'38l':['r38l','Quantifying Over Sets'],'38m':['r38m','Numbering Formulas by Hand'],'38n':['r38n','Natural Deduction by Hand']});
+/* small worlds: members 1..n with one relation R */
+const REL38={'<':(x,y)=>x<y,'≤':(x,y)=>x<=y,'divides':(x,y)=>y%x===0,'=':(x,y)=>x===y,'≠':(x,y)=>x!==y};
+const ST38=[
+  ['∀x R(x, x)',(M,R)=>M.every(x=>R(x,x))],
+  ['∀x ∃y R(x, y)',(M,R)=>M.every(x=>M.some(y=>R(x,y)))],
+  ['∃y ∀x R(x, y)',(M,R)=>M.some(y=>M.every(x=>R(x,y)))],
+  ['∃x ∀y R(x, y)',(M,R)=>M.some(x=>M.every(y=>R(x,y)))],
+  ['∀x ∀y (R(x, y) ⇒ R(y, x))',(M,R)=>M.every(x=>M.every(y=>!R(x,y)||R(y,x)))],
+  ['∀x ∀y (R(x, y) ∨ R(y, x))',(M,R)=>M.every(x=>M.every(y=>R(x,y)||R(y,x)))],
+  ['∃x ¬R(x, x)',(M,R)=>M.some(x=>!R(x,x))],
+  ['∀x ∃y R(y, x)',(M,R)=>M.every(x=>M.some(y=>R(y,x)))],
+  ['∃x ∃y (R(x, y) ∧ ¬(x = y))',(M,R)=>M.some(x=>M.some(y=>R(x,y)&&x!==y))]];
+const W38=()=>{ const n=2+rnd(3), r=pick(Object.keys(REL38)); return {n, r, M:[...Array(n)].map((_,i)=>i+1), R:REL38[r], name:'{'+[...Array(n)].map((_,i)=>i+1).join(', ')+'} with R(x, y) when '+(r==='divides'?'x divides y':'x '+r+' y')}; };
+const MK38={'0':1,'S':2,'+':3,'·':4,'=':5}, PR38=[2,3,5,7], CODE38=a=>a.reduce((p,m,i)=>p*Math.pow(PR38[i],MK38[m]),1);
+
+/* 38a A Language for Mathematics */
+const WA38=[
+  ['When is ∃x₀ φ true in M?','when φ holds of some member of M, named or not',['when φ holds for some name','when φ holds of every member','when φ can be reached'],'A world may have members no name reaches.'],
+  ['∀x₀ (x₀ = 0) is false in N. Is it false in every world?','no: it is true in a world with one member; truth belongs to a world',['yes','yes, since 1 ≠ 0','no: it is true in every world'],'Truth in a world is defined by recursion, world by world.'],
+  ['Is x₀ + 0 = x₀ a statement true in N?','no: it is a formula with a free placeholder; ∀x₀ (x₀ + 0 = x₀) is the statement',['yes','yes, for every x₀','no: it is false in N'],'Free-places technique.'],
+  ['Is (φ ∧ ψ ∨ χ) a formula?','no: without inner brackets it has two readings',['yes','yes, read left to right','yes, read with ∧ first'],'One-reading technique.'],
+  ['On what does the truth of a formula in a world under an assignment depend?','only on what the assignment gives its free placeholders',['on every placeholder','on the names alone','on nothing: it is fixed'],'Free-places technique.'],
+  ['A matching carries every mark of M to M′. What follows?','every statement true in M is true in M′, and every one false in M is false in M′',['M = M′','only the statements without ∀ carry over','nothing'],'Matching-worlds technique.']];
+QP.push({id:'38a.language',step:'38a',label:'a language for mathematics',open:()=>measured('38a'),make(){ return writtenQ('38a.language',WA38); }},
+  {id:'38a.work',step:'38a',mode:'work',label:'truth in a small world',open:()=>measured('38a'),make(){
+    const w=W38(), T=ST38.filter(s=>s[1](w.M,w.R)), F=ST38.filter(s=>!s[1](w.M,w.R)); if(!T.length||F.length<3) return null; const t=pick(T);
+    return W30('38a.work[t;'+[w.n,w.r,t[0]].join(';')+']',[['M = '+w.name,'a world']],'Which of these statements is true in M?',t[0],shuffle(F.map(s=>s[0])),'Each statement is checked in M by the recursion of truth, member by member.'); }},
+  {id:'38a.line',step:'38a',mode:'proof',label:'what truth in a world licenses',open:()=>measured('38a'),make(){
+    const w=W38(), s=pick(ST38), v=s[1](w.M,w.R);
+    return line28('38a.line',[
+      ['a1',[['a matching carries every mark of M to M′, and φ is true in M','given'],['φ is true in M′','the matching-worlds technique']],2,0,'That is the technique.'],
+      ['a2',[['∀x₀ (x₀ = 0) is false in N','given'],['∀x₀ (x₀ = 0) is false in every world','the matching-worlds technique']],2,1,'It is true in a world with one member, and that world is not matched with N.'],
+      ['a3',[['two assignments agree on the free placeholders of φ','given'],['φ is true under one exactly when it is true under the other','the free-places technique']],2,0,'That is the technique.'],
+      ['a4',[['M = '+w.name,'a world'],[s[0]+' is '+(v?'true':'false')+' in M','checked member by member']],2,0,'Checked in M.'],
+      ['a5',[['M = '+w.name,'a world'],[s[0]+' is '+(v?'false':'true')+' in M','checked member by member']],2,1,'Checked in M, it is '+(v?'true':'false')+'.']],[w.n,w.r,ST38.indexOf(s)]); }});
+
+/* 38b Proofs as Objects */
+const WB38=[
+  ['From x₀ = 0, may speak of everything give ∀x₀ (x₀ = 0)?','no: x₀ is free in the supposition, so the condition fails',['yes','yes, as x₀ is any member','no: speak of everything never gives ∀'],'Speak of everything needs a placeholder free in no supposition.'],
+  ['Does G ⊢ φ mean that φ is true?','no: ⊢ is about lists of lines; truth is about worlds',['yes','yes, in N','no: it means φ is false'],'Proof-check technique: ⊢ is a matter of lines.'],
+  ['May a line lean on a line below it?','no: a move leans only on lines numbered before it',['yes','yes, if nothing goes round','yes, at the end of a proof'],'A proof is a list in order.'],
+  ['Can it always be settled whether a finite list of lines is a proof from a finite G?','yes: by a recipe that always stops',['no','only for short lists','only when the foot is true'],'Proof-check technique.'],
+  ['G can be listed. What else can be listed?','the proofs from G, and the statements they reach',['nothing more','every statement true in N','the worlds of G'],'Proof-listing technique.'],
+  ['A derived move is used as one line. Is the proof still a proof in the calculus?','yes: it can be rewritten as a proof that does not use it',['no','only if the move is short','no: derived moves are new axioms'],'Derived-move technique.']];
+QP.push({id:'38b.proofs',step:'38b',label:'proofs as objects',open:()=>measured('38b'),make(){ return writtenQ('38b.proofs',WB38); }},
+  {id:'38b.line',step:'38b',mode:'proof',label:'what the calculus licenses',open:()=>measured('38b'),make(){
+    return line28('38b.line',[
+      ['b1',[['∃x₀ P(x₀)','given'],['assume P(x₁)','supposed, for use a some'],['∀x₀ P(x₀)','speak of everything']],3,1,'x₁ is free in the supposition. The condition of speak of everything fails.'],
+      ['b2',[['∀x₀ P(x₀)','given'],['P(x₁)','use an every']],2,0,'Use an every on the term x₁.'],
+      ['b3',[['∀x₀ ∃x₁ ¬(x₀ = x₁)','given'],['∃x₁ ¬(x₁ = x₁)','use an every']],2,1,'The term x₁ is caught by the some. Rename the bound placeholder first.'],
+      ['b4',[['G can be listed','given'],['the statements G reaches can be listed','the proof-listing technique']],2,0,'That is the technique.'],
+      ['b5',[['a list of lines and a finite G','given'],['a recipe that always stops settles whether the list is a proof from G','the proof-check technique']],2,0,'That is the technique.']],[]); }});
+
+/* 38c What Is Provable Is True */
+const WC38=[
+  ['φ is true in N. Do the axioms of arithmetic reach φ?','not by this technique: true does not give reached',['yes','yes, by the true-everywhere technique','no: never'],'True-everywhere technique runs from reached to true.'],
+  ['No world of G has turned up. Does G reach ⊥?','not by that: not finding a world is not a proof',['yes','yes, after a long search','no: G has a world'],'World-means-clash-free technique runs from a world to clash-free.'],
+  ['Does speak of everything keep truth whatever y is?','no: only when y is free in no supposition',['yes','yes, in N','no: it never keeps truth'],'Move-keeps technique spends the condition.'],
+  ['G ⊢ φ. Is φ true in every world?','in every world of G; elsewhere φ may be false',['yes, in every world','only in N','in no world'],'True-everywhere technique.'],
+  ['A world makes G true and φ false. What follows?','G does not reach φ',['G reaches φ','G clashes','φ is false in every world'],'True-everywhere technique.'],
+  ['A collection of statements has a world. What follows?','it is clash-free',['it is full','it is true in N','it reaches every statement'],'World-means-clash-free technique.']];
+QP.push({id:'38c.sound',step:'38c',label:'what is provable is true',open:()=>measured('38c'),make(){ return writtenQ('38c.sound',WC38); }},
+  {id:'38c.work',step:'38c',mode:'work',label:'a world that shows not reached',open:()=>measured('38c'),make(){
+    const [g,p]=pick([[1,2],[2,3],[2,4],[1,5],[6,3],[2,8],[0,4],[8,3]]), Gs=ST38[g], Ps=ST38[p], ok=[], bad=[];
+    Object.keys(REL38).forEach(r=>[2,3,4].forEach(n=>{ const M=[...Array(n)].map((_,i)=>i+1), R=REL38[r], nm='{'+M.join(', ')+'} with R(x, y) when '+(r==='divides'?'x divides y':'x '+r+' y'); (Gs[1](M,R)&&!Ps[1](M,R)?ok:bad).push(nm); }));
+    if(!ok.length) return null; const right=pick(ok);
+    return W30('38c.work[c;'+[g,p,right].join(';')+']',[['G = { '+Gs[0]+' }','given'],['φ = '+Ps[0],'given']],'Which world shows that G does not reach φ?',right,shuffle(bad),'True-everywhere technique: a world where G is true and φ is false shows G does not reach φ.'); }},
+  {id:'38c.line',step:'38c',mode:'proof',label:'what soundness licenses',open:()=>measured('38c'),make(){
+    return line28('38c.line',[
+      ['c1',[['G ⊢ φ, and M is a world of G','given'],['φ is true in M','the true-everywhere technique']],2,0,'That is the technique.'],
+      ['c2',[['φ is true in N','given'],['the axioms of arithmetic reach φ','the true-everywhere technique']],2,1,'That runs the technique backwards: true does not give reached.'],
+      ['c3',[['G has a world','given'],['G is clash-free','the world-means-clash-free technique']],2,0,'That is the technique.'],
+      ['c4',[['G ⊢ φ','given'],['φ is true in every world','the true-everywhere technique']],2,1,'In every world of G only.'],
+      ['c5',[['M makes G true and φ false','given'],['G does not reach φ','the true-everywhere technique']],2,0,'If G reached φ, φ would be true in M.']],[]); }});
+
+/* 38d What Is True Everywhere Is Provable */
+const WD38=[
+  ['G does not reach φ. Does G reach ¬φ?','not always: G may reach neither; only the grown G* holds one of them',['yes','yes, by the full-growth technique','no: never'],'Full-growth technique is about G*, not G.'],
+  ['Every finite part of G is true in N. Is G true in N?','not by the finite-parts technique: it gives some world, not that one',['yes','yes, by the finite-parts technique','no: G is false in N'],'Finite-parts technique.'],
+  ['The growth picks at every round. Does it spend choice?','no: the listing and a settled condition fix each round; it is recursion',['yes','yes, once a round','yes, at the last round'],'Full-growth technique in a listed language.'],
+  ['The world of names is made of strings. Are its members the numbers?','no: its members are classes of terms, and which classes depends on G*',['yes','yes, the codes of the strings','no: its members are the statements'],'Term-world technique.'],
+  ['In a listed language, φ is true in every world of G. What follows?','G reaches φ',['G reaches ¬φ','φ is true in N','nothing'],'Reached-if-true-everywhere technique.'],
+  ['Every finite part of a collection has a world. What follows?','the whole collection has a world',['the collection is finite','the collection is true in N','nothing'],'Finite-parts technique.']];
+QP.push({id:'38d.complete',step:'38d',label:'what is true everywhere is provable',open:()=>measured('38d'),make(){ return writtenQ('38d.complete',WD38); }},
+  {id:'38d.line',step:'38d',mode:'proof',label:'what completeness licenses',open:()=>measured('38d'),make(){
+    return line28('38d.line',[
+      ['d1',[['the language is listed, and φ is true in every world of G','given'],['G reaches φ','the reached-if-true-everywhere technique']],2,0,'That is the technique.'],
+      ['d2',[['G does not reach φ','given'],['G reaches ¬φ','the full-growth technique']],2,1,'G may reach neither. Only G* holds one of them.'],
+      ['d3',[['every finite part of G has a world','given'],['G has a world','the finite-parts technique']],2,0,'That is the technique.'],
+      ['d4',[['every finite part of G is true in N','given'],['G is true in N','the finite-parts technique']],2,1,'The technique gives some world, not N.'],
+      ['d5',[['G is clash-free, in a listed language','given'],['G grows into a clash-free G* holding each statement or its denial','the full-growth technique']],2,0,'That is the technique.']],[]); }});
+
+/* 38e A Countable Line */
+const WE38=[
+  ['The true statements of the line have a world that can be listed. Can the line be listed?','no: that world is another world, with holes; the line itself cannot be listed',['yes','yes, by the countable-world technique','no: the line has no world'],'Listed-line technique.'],
+  ['In the countable world of sets, can 𝒫(ω) be listed?','from outside, yes; inside the world no member matches it with ω',['yes, inside the world','no, from inside or outside','yes, and the world says so'],'Seen-from-outside technique.'],
+  ['Have the statements true in N only worlds that can be listed?','no: they have worlds of every endless size',['yes','yes, all matched with N','no: they have no other world'],'Bigger-world technique.'],
+  ['Does the bigger-world technique spend no axiom?','it spends choice, to line up the statements of a language that cannot be listed',['right: it spends none','it spends the axiom of infinity alone','it spends a new axiom of size'],'Bigger-world technique.'],
+  ['A collection in a listed language has a world. What else has it?','a world whose members can be listed',['a finite world','a world matched with the line','no other world'],'Countable-world technique.'],
+  ['A collection has an endless world. For any set X, what else has it?','a world with at least as many members as X',['a world matched with X exactly','a finite world','no other world'],'Bigger-world technique.']];
+QP.push({id:'38e.countable',step:'38e',label:'a countable line',open:()=>measured('38e'),make(){ return writtenQ('38e.countable',WE38); }},
+  {id:'38e.line',step:'38e',mode:'proof',label:'what world sizes license',open:()=>measured('38e'),make(){
+    return line28('38e.line',[
+      ['e1',[['G, in a listed language, has an endless world','given'],['G has an endless world whose members can be listed','the countable-world technique']],2,0,'That is the technique.'],
+      ['e2',[['the true statements of the line have a world C that can be listed','the countable-world technique'],['the line can be listed','the listed-line technique']],2,1,'C is another world. The line itself cannot be listed.'],
+      ['e3',[['G has an endless world, and X is a set','given'],['G has a world with at least as many members as X','the bigger-world technique']],2,0,'That is the technique.'],
+      ['e4',[['the statements true in N','given'],['every world of them can be listed','the countable-world technique']],2,1,'The bigger-world technique gives worlds of every endless size.']],[]); }});
+
+/* 38f Numbers Past Every Numeral */
+const WF38=[
+  ['M makes every statement of T true. Is M the numbers N?','not necessarily: M may hold a member past every numeral',['yes','yes, up to a matching','no: M has fewer members'],'Past-every-numeral technique.'],
+  ['Induction holds in M. Is every member of M a numeral’s value?','no: induction is for formulas, and no formula picks out the numerals',['yes','yes, by induction on the numerals','no: no member is'],'Numerals-unpicked technique.'],
+  ['Is ε the smallest positive member of *R?','no: ε/2 is positive and smaller',['yes','yes, by definition','no: 0 is'],'“Every positive member has a smaller one” is true in R, and so in *R.'],
+  ['Is ((x + ε)² − x²)/ε equal to 2x?','no: it is 2x + ε; its nearest real is 2x',['yes','yes, as ε is small','no: it is 2x + 2ε'],'Shadow-slope technique.'],
+  ['How many reals is a finite member of *R infinitely close to?','exactly one',['none','two','endlessly many'],'Nearest-real technique.'],
+  ['Below a block past the numerals, is there another?','yes, and above it too',['no','only above','only below'],'Block technique.']];
+QP.push({id:'38f.past',step:'38f',label:'numbers past every numeral',open:()=>measured('38f'),make(){ return writtenQ('38f.past',WF38); }},
+  {id:'38f.work',step:'38f',mode:'work',label:'shadows of slopes',open:()=>measured('38f'),make(){
+    const a=1+rnd(5), c=rnd(2);
+    if(c) return W30('38f.work[c;'+a+']',[['f(x) = x³ and x = '+a,'given'],['ε is infinitely small','given']],'Which real is (f('+a+' + ε) − f('+a+'))/ε infinitely close to?',String(3*a*a),[String(a*a*a),String(3*a),String(a*a),String(3*a*a*a)],'It is '+(3*a*a)+' + '+(3*a)+'ε + ε², and the nearest real is '+(3*a*a)+'.');
+    return W30('38f.work[s;'+a+']',[['f(x) = x² and x = '+a,'given'],['ε is infinitely small','given']],'What is (f('+a+' + ε) − f('+a+'))/ε exactly?',(2*a)+' + ε',[String(2*a),(2*a)+' + 2ε',a+' + ε',(a*a)+' + ε'],'(('+a+' + ε)² − '+(a*a)+')/ε = ('+(2*a)+'ε + ε²)/ε. Its nearest real is '+(2*a)+'.'); }},
+  {id:'38f.line',step:'38f',mode:'proof',label:'what *R licenses',open:()=>measured('38f'),make(){
+    const a=1+rnd(5);
+    return line28('38f.line',[
+      ['f1',[['f(x) = x² has slope '+(2*a)+' at '+a+', and ε is infinitely small','given'],['('+'f('+a+' + ε) − f('+a+'))/ε is infinitely close to '+(2*a),'the shadow-slope technique']],2,0,'That is the technique.'],
+      ['f2',[['f(x) = x², and ε is infinitely small','given'],['(f('+a+' + ε) − f('+a+'))/ε = '+(2*a),'the shadow-slope technique']],2,1,'It is '+(2*a)+' + ε. Only its nearest real is '+(2*a)+'.'],
+      ['f3',[['M makes every statement of T true','given'],['some formula is true in M of exactly the values of the numerals','the numerals-unpicked technique']],2,1,'No formula of arithmetic picks out the numerals.'],
+      ['f4',[['h is a finite member of *R','given'],['h is infinitely close to exactly one real','the nearest-real technique']],2,0,'That is the technique.']],[a]); }});
+
+/* 38g Formulas as Numbers */
+const WG38=[
+  ['⌜0 = 0⌝ = 2430. Is 0 = 0 a statement about 2430?','no: the statement is about 0; its code is a number that stands for it',['yes','yes, and about 0','no: it is about 5'],'Prime-code technique: a code names a string.'],
+  ['Arithmetic has no power mark. Can it say y = 2ˣ?','yes: the list-in-one-number technique says it with + and · alone',['no','only for small x','no: it needs a new mark'],'List-in-one-number technique.'],
+  ['True searches are reached by PA. Is every true statement of arithmetic?','no: only search statements; an every in front is another matter',['yes','yes, by the search-reached technique','no: no true statement is'],'Search-reached technique.'],
+  ['Induction is a given line in PA. Is it no longer a technique?','it is a given of PA; on the ladder it was proved from sets, and PA is a collection the ladder studies',['right: it is only a given now','it is neither','it is an axiom of the ladder'],'Both stand.'],
+  ['Can two different strings get one code?','no: different strings get different codes, and a string can be read back from its code',['yes','yes, if they are long','yes, if they share marks'],'Prime-code technique.'],
+  ['Which statements of arithmetic does the search-reached technique cover?','the true search statements: a some in front of a bounded condition',['every true statement','every statement with an every in front','the false ones'],'Search-reached technique.']];
+QP.push({id:'38g.codes',step:'38g',label:'formulas as numbers',open:()=>measured('38g'),make(){ return writtenQ('38g.codes',WG38); }},
+  {id:'38g.work',step:'38g',mode:'work',label:'a list in one number',open:()=>measured('38g'),make(){
+    const v=pick([2,3,4,5,6]), u=10+rnd(90), i=rnd(3), d=1+(i+1)*v;
+    return W30('38g.work[b;'+[u,v,i].join(';')+']',[['u = '+u+' and v = '+v,'given']],'What is the entry in place '+i+' of the list u and v hold?',String(u%d),[String(u%(1+i*v)),String(u%v),String(Math.floor(u/d)),String(u%(1+(i+2)*v))],'List-in-one-number technique: the remainder of '+u+' on division by 1 + ('+i+' + 1) · '+v+' = '+d+'.'); }},
+  {id:'38g.line',step:'38g',mode:'proof',label:'what codes license',open:()=>measured('38g'),make(){
+    return line28('38g.line',[
+      ['g1',[['φ is a search statement true in N','given'],['PA reaches φ','the search-reached technique']],2,0,'That is the technique.'],
+      ['g2',[['φ is true in N','given'],['PA reaches φ','the search-reached technique']],2,1,'Only search statements are covered.'],
+      ['g3',[['two strings are different','given'],['their codes are different','the prime-code technique']],2,0,'That is the technique.'],
+      ['g4',[['⌜0 = 0⌝ = 2430','the prime-code technique'],['0 = 0 says something about 2430','the prime-code technique']],2,1,'The statement is about 0. Its code stands for it.']],[]); }});
+
+/* 38h A Sentence About Itself */
+const WH38=[
+  ['Does δ hold the numeral of its own code?','no: that numeral has more marks than δ has; δ holds the numeral of another code',['yes','yes, at its end','no: it holds no numeral'],'Self-statement technique.'],
+  ['Is Prov(x) a bounded formula?','no: its some is kept below no term; it is a search formula',['yes','yes, bounded by x','no: it has no some'],'Provable-mark technique.'],
+  ['Does the self-statement technique need a word for “this statement”?','no: it needs only Sub, a formula about putting numerals into formulas',['yes','yes, a new mark','no: it needs a truth formula'],'Self-statement technique.'],
+  ['For any collection T, does T ⊢ Prov_T(⌜φ⌝) give T ⊢ φ?','not for every T: that needs T to reach only truths about N',['yes','no: never','yes, for every T that holds PA'],'Provable-mark technique runs the other way.'],
+  ['PA reaches φ. What follows?','PA reaches Prov(⌜φ⌝)',['φ is false','PA reaches ¬Prov(⌜φ⌝)','nothing'],'Provable-mark technique.'],
+  ['For a formula ψ(x₀) with one free placeholder, what does the self-statement technique give?','a statement δ with PA reaching δ ⇔ ψ(⌜δ⌝)',['a statement true in every world','a formula with two free placeholders','a proof of ψ'],'Self-statement technique.']];
+QP.push({id:'38h.self',step:'38h',label:'a sentence about itself',open:()=>measured('38h'),make(){ return writtenQ('38h.self',WH38); }},
+  {id:'38h.line',step:'38h',mode:'proof',label:'what self-reference licenses',open:()=>measured('38h'),make(){
+    return line28('38h.line',[
+      ['h1',[['PA reaches φ','given'],['PA reaches Prov(⌜φ⌝)','the provable-mark technique']],2,0,'That is the technique.'],
+      ['h2',[['PA reaches Prov(⌜φ⌝)','given'],['PA reaches φ','the provable-mark technique']],2,1,'The technique runs from φ to Prov(⌜φ⌝), not back.'],
+      ['h3',[['ψ(x₀) has one free placeholder','given'],['some δ has PA reaching δ ⇔ ψ(⌜δ⌝)','the self-statement technique']],2,0,'That is the technique.']],[]); }});
+
+/* 38i True and Unprovable */
+const WI38=[
+  ['PA does not reach U. Is U false?','no: U is true in N; not reached is not false',['yes','yes, in N','no: U is neither'],'Unreached-truth technique.'],
+  ['Can U be proved?','not by PA; PA + U reaches it in one line, and the step itself proves it from more than PA',['no, by anything','yes, by PA','no: U is false'],'Unreached-truth technique.'],
+  ['Does PA + U reach every truth of arithmetic?','no: it has its own unreached statement',['yes','yes, as U was the only one','no: it reaches nothing new'],'Every-list technique.'],
+  ['Does U say “I am false”?','no: U says it is not reached',['yes','yes, in arithmetic','no: it says “I am true”'],'Truth is tried in 38k.'],
+  ['What does PA reach of U and its denial?','neither',['U','¬U','both'],'Unreached-truth technique.'],
+  ['T holds PA, a recipe settles membership in T, and every member is true in N. What follows?','some statement true in N is not reached by T',['T reaches every truth','T clashes','T is not true in N'],'Every-list technique.']];
+QP.push({id:'38i.unreached',step:'38i',label:'true and unprovable',open:()=>measured('38i'),make(){ return writtenQ('38i.unreached',WI38); }},
+  {id:'38i.line',step:'38i',mode:'proof',label:'what incompleteness licenses',open:()=>measured('38i'),make(){
+    return line28('38i.line',[
+      ['i1',[['PA ⊬ U','the unreached-truth technique'],['U is false in N','not reached']],2,1,'U is true in N. Not reached is not false.'],
+      ['i2',[['PA ⊬ U','the unreached-truth technique'],['PA ⊢ ¬Prov(⌜U⌝)','not reached']],2,1,'That no proof exists is true in N, not reached by PA: it has an every in front.'],
+      ['i3',[['T holds PA, a recipe settles membership in T, and every member of T is true in N','given'],['some statement true in N is not reached by T','the every-list technique']],2,0,'That is the technique.'],
+      ['i4',[['T = PA + U','given'],['T reaches every truth of arithmetic','the every-list technique']],2,1,'T has its own unreached statement.']],[]); }});
+
+/* 38j Consistency From Within */
+const WJ38=[
+  ['PA does not reach Con. May PA clash?','no: PA is clash-free, since N is a world of it; PA cannot show it, which is another matter',['yes','yes, we cannot know','no: PA reaches Con'],'No-self-certificate technique.'],
+  ['¬Con is false in N. Does PA ∪ {¬Con} clash?','no: ¬Con is true in another world of PA, so it is clash-free',['yes','yes, since ¬Con is false','no: it has no world'],'World-means-clash-free technique.'],
+  ['A stronger system proves Con. Does that prove nothing?','it is a proof; it moves the trust to the stronger system',['right: nothing','it proves PA clashes','it proves Con false'],'A proof from more is still a proof.'],
+  ['Is Con the English sentence “PA is clash-free”?','no: it is a statement about numbers, true exactly when no number codes a proof of ⊥',['yes','yes, coded','no: it is a set'],'Con is a statement of arithmetic.'],
+  ['PA is clash-free. Does PA reach Con?','no',['yes','yes, in one line','only with induction'],'No-self-certificate technique.']];
+QP.push({id:'38j.con',step:'38j',label:'consistency from within',open:()=>measured('38j'),make(){ return writtenQ('38j.con',WJ38); }},
+  {id:'38j.line',step:'38j',mode:'proof',label:'what Con licenses',open:()=>measured('38j'),make(){
+    return line28('38j.line',[
+      ['j1',[['PA is clash-free','given'],['PA ⊬ Con','the no-self-certificate technique']],2,0,'That is the technique.'],
+      ['j2',[['PA ⊬ Con','given'],['PA clashes','the no-self-certificate technique']],2,1,'N is a world of PA, so PA is clash-free. It cannot show it.'],
+      ['j3',[['¬Con is false in N','given'],['PA ∪ {¬Con} clashes','the world-means-clash-free technique']],2,1,'¬Con is true in another world of PA. A world makes it clash-free.']],[]); }});
+
+/* 38k Truth Cannot Be Defined Inside */
+const WK38=[
+  ['Truth cannot be defined in arithmetic. Does “true in N” mean nothing?','no: it is defined in sets; it is not defined in arithmetic',['yes','yes, outside sets too','no: it is defined in arithmetic'],'Undefinable-truth technique.'],
+  ['Is Prov(x) a truth formula?','no: it misses U, which is true and not reached',['yes','yes, for search statements','no: it is false of every code'],'Undefinable-truth technique.'],
+  ['Does λ say “I am not reached”?','no: that is U; λ would say “I am not true”, and there is no truth formula to build it from',['yes','yes, it is U','no: it says “I am reached”'],'Undefinable-truth technique.'],
+  ['Does no formula define truth even for bounded statements?','no: bounded statements are settled by a search, and a search formula defines their truth',['right: none does','only for short ones','only Prov does'],'Undefinable-truth technique is about all of arithmetic.'],
+  ['Is there a formula of arithmetic true of exactly the codes of the true statements?','no',['yes, Prov','yes, Con','yes, Sub'],'Undefinable-truth technique.']];
+QP.push({id:'38k.truth',step:'38k',label:'truth cannot be defined inside',open:()=>measured('38k'),make(){ return writtenQ('38k.truth',WK38); }},
+  {id:'38k.line',step:'38k',mode:'proof',label:'what undefinability licenses',open:()=>measured('38k'),make(){
+    return line28('38k.line',[
+      ['k1',[['τ(x) is a formula of arithmetic','given'],['τ is not true of exactly the codes of the true statements','the undefinable-truth technique']],2,0,'That is the technique.'],
+      ['k2',[['Prov(x) is a formula of arithmetic','given'],['Prov is a truth formula','the provable-mark technique']],2,1,'Prov misses U, which is true and not reached.'],
+      ['k3',[['truth cannot be defined in arithmetic','the undefinable-truth technique'],['“true in N” is not defined anywhere','the undefinable-truth technique']],2,1,'It is defined in sets.']],[]); }});
+
+/* 38l Quantifying Over Sets */
+const WL38=[
+  ['PA₂ has only N as a world. Does it reach every truth of arithmetic?','no: one world, yet no calculus reaches all its truths',['yes','yes, by the only-the-numbers technique','no: it reaches none'],'No-full-calculus technique.'],
+  ['Is first-order induction for every formula the same as second-order induction?','no: formulas pick out countably many parts',['yes','yes, in N','no: first-order is stronger'],'Second-order induction speaks of every part.'],
+  ['Does ∀X run over the parts a formula picks out?','no: over every part, in the set of all subsets',['yes','yes, the listed parts','no: over the numbers'],'The meaning of “every set” comes from the theory of sets.'],
+  ['Does the finite-parts technique hold for every logic?','no: it rests on the first-order calculus; second order breaks it',['yes','yes, for PA₂','no: it holds for none'],'No-full-calculus technique.'],
+  ['How are any two worlds of PA₂ related?','by a matching that carries 0 and next',['they are different','only their finite parts match','by no matching'],'Only-the-numbers technique.'],
+  ['Can a recipe list the second-order statements true in every world?','no',['yes','yes, slowly','only the short ones'],'No-full-calculus technique.']];
+QP.push({id:'38l.second',step:'38l',label:'quantifying over sets',open:()=>measured('38l'),make(){ return writtenQ('38l.second',WL38); }},
+  {id:'38l.line',step:'38l',mode:'proof',label:'what second order licenses',open:()=>measured('38l'),make(){
+    return line28('38l.line',[
+      ['l1',[['M and M′ are worlds of PA₂','given'],['a matching carries M to M′, 0 to 0 and next to next','the only-the-numbers technique']],2,0,'That is the technique.'],
+      ['l2',[['PA₂ has only N as a world, up to matching','the only-the-numbers technique'],['a recipe lists every truth of arithmetic','the only-the-numbers technique']],2,1,'One world, yet no recipe lists its truths.'],
+      ['l3',[['every finite part of a second-order collection has a world','given'],['the collection has a world','the finite-parts technique']],2,1,'The finite-parts technique rests on the first-order calculus.']],[]); }});
+
+/* 38m Numbering Formulas by Hand */
+const WM38=[
+  ['Is ⌜0 = 0⌝ = 1 · 5 · 1 = 5?','no: the marks’ numbers are powers of the primes, not factors: 2¹ · 3⁵ · 5¹ = 2430',['yes','no: it is 1 + 5 + 1','no: it is 2 · 3 · 5'],'Code-by-primes technique.'],
+  ['Does 10 code the string 0 0?','no: 3 is skipped; 0 0 would be 2¹ · 3¹ = 6',['yes','yes, as 2 · 5','no: 10 codes S'],'Code-test technique.'],
+  ['Is every number above 1 the code of some formula?','no: 12 codes the term S0, and 10 codes nothing',['yes','yes, if it is even','no: only the primes are'],'Code-test technique.'],
+  ['Is ⟨3, 5⟩ = ⟨5, 3⟩?','no: 41 against 39; order matters',['yes','yes, as both sum to 8','no: they differ by 2 in the first place'],'Pair-code technique.'],
+  ['How is a code read back?','divide by 2 as often as it goes, then by 3, then by 5, in order',['divide by the largest prime first','add its digits','take its square root'],'Code-reading technique.'],
+  ['Where does the string read back from a code end?','at the first prime that does not divide',['at the largest prime','at the last digit','never'],'Code-reading technique.']];
+QP.push({id:'38m.byhand',step:'38m',label:'numbering formulas by hand',open:()=>measured('38m'),make(){ return writtenQ('38m.byhand',WM38); }},
+  {id:'38m.work',step:'38m',mode:'work',label:'codes by hand',open:()=>measured('38m'),make(){
+    const t=rnd(3);
+    if(t===2){ let m=1+rnd(5), n=1+rnd(5); if(m===n) n=m+1; const s=m+n, k=s*(s+1)/2;
+      return W30('38m.work[p;'+[m,n].join(';')+']',[['⟨x, y⟩ = (x + y)(x + y + 1)/2 + y','the pair-code technique']],'What is ⟨'+m+', '+n+'⟩?',String(k+n),[String(k+m),String(k),String(2*k+n),String(m*n)],'(x + y)(x + y + 1)/2 = '+k+', and + '+n+'.'); }
+    const S=pick([['S','0'],['0','=','0'],['S','S','0'],['0','+','0'],['S','0','=']]), c=CODE38(S), str=S.join(' ');
+    if(t===0) return W30('38m.work[c;'+S.join('')+']',[['the table: 0 is 1, S is 2, + is 3, · is 4, = is 5','38g1']],'What is the code of '+str+'?',String(c),[String(S.reduce((p,m)=>p*MK38[m],1)),String(S.reduce((p,m,i)=>p*PR38[i]*MK38[m],1)),String(CODE38(S.slice().reverse())),String(S.reduce((p,m)=>p+MK38[m],0))],'Code-by-primes technique: '+S.map((m,i)=>PR38[i]+'^'+MK38[m]).join(' · ')+'.');
+    const D=[['S','0'],['0','=','0'],['S','S','0'],['0','+','0'],['0','S'],['=','0','0'],['0','0'],['S','0','=']].filter(x=>x.join('')!==S.join(''));
+    return W30('38m.work[r;'+S.join('')+']',[['the table: 0 is 1, S is 2, + is 3, · is 4, = is 5','38g1'],['n = '+c,'given']],'Which string has code n?',str,shuffle(D.map(x=>x.join(' '))),'Code-reading technique: divide out 2, then 3, then 5; the counts '+S.map(m=>MK38[m]).join(', ')+' are the marks.'); }},
+  {id:'38m.line',step:'38m',mode:'proof',label:'what codes by hand license',open:()=>measured('38m'),make(){
+    const S=pick([['S','0'],['0','=','0'],['S','S','0']]), c=CODE38(S);
+    return line28('38m.line',[
+      ['m1',[['the marks of '+S.join(' ')+' are '+S.map(m=>MK38[m]).join(', '),'the table'],['⌜'+S.join('')+'⌝ = '+c,'the code-by-primes technique']],2,0,S.map((m,i)=>PR38[i]+'^'+MK38[m]).join(' · ')+'.'],
+      ['m2',[['the marks of '+S.join(' ')+' are '+S.map(m=>MK38[m]).join(', '),'the table'],['⌜'+S.join('')+'⌝ = '+S.reduce((p,m)=>p*MK38[m],1),'the code-by-primes technique']],2,c===S.reduce((p,m)=>p*MK38[m],1)?0:1,'The marks’ numbers are powers of the primes, not factors.'],
+      ['m3',[['10 = 2 · 5','factored'],['10 is the code of a formula','the code-test technique']],2,1,'3 is skipped.'],
+      ['m4',[['⟨3, 5⟩ = 41','the pair-code technique'],['⟨5, 3⟩ = 41','the pair-code technique']],2,1,'⟨5, 3⟩ = 36 + 3 = 39. Order matters.']],[S.join('')]); }});
+
+/* 38n Natural Deduction by Hand */
+const WN38=[
+  ['May a leaf [P]¹ stay open after the bar marked 1?','no: the bar drops every leaf with its number',['yes','yes, if P is true','yes, until the foot'],'Tree-column technique.'],
+  ['Does cutting a detour change the foot?','no: the cut keeps the foot and the givens; only the inside changes',['yes','yes, it shortens it','sometimes'],'Detour-cut technique.'],
+  ['Can a tree with no ⊥ reach an unrelated foot?','yes: add an option, then the remaining option, do it',['no','no: the foot must be related','only with ⊥'],'The if of the tables and its critics part here.'],
+  ['Something stands in R to everything. What follows?','everything has something standing in R to it',['everything stands in R to everything','something stands in R to itself','nothing'],'Swapped-order technique.'],
+  ['Everything has something standing in R to it. Does something stand in R to everything?','not always: the order of every and some cannot be swapped this way',['yes','yes, by the swapped-order technique','no: never'],'Swapped-order technique runs one way.'],
+  ['Can every column of the calculus be drawn as a tree?','yes, with the same foot and givens',['no','only short ones','only those with no suppositions'],'Tree-column technique.']];
+QP.push({id:'38n.trees',step:'38n',label:'natural deduction by hand',open:()=>measured('38n'),make(){ return writtenQ('38n.trees',WN38); }},
+  {id:'38n.work',step:'38n',mode:'work',label:'swapped order in a small world',open:()=>measured('38n'),make(){
+    const ok=[], bad=[];
+    Object.keys(REL38).forEach(r=>[2,3,4].forEach(n=>{ const M=[...Array(n)].map((_,i)=>i+1), R=REL38[r], nm='{'+M.join(', ')+'} with R(x, y) when '+(r==='divides'?'x divides y':'x '+r+' y'); (ST38[7][1](M,R)&&!ST38[3][1](M,R)?ok:bad).push(nm); }));
+    const right=pick(ok);
+    return W30('38n.work[w;'+right+']',[['A = ∀y ∃x R(x, y)','everything has something standing in R to it'],['B = ∃x ∀y R(x, y)','something stands in R to everything']],'In which world is A true and B false?',right,shuffle(bad),'The swapped-order technique runs from B to A only; a world with A true and B false shows the other way fails.'); }},
+  {id:'38n.line',step:'38n',mode:'proof',label:'what trees license',open:()=>measured('38n'),make(){
+    return line28('38n.line',[
+      ['n1',[['∃x ∀y R(x, y)','given'],['∀y ∃x R(x, y)','the swapped-order technique']],2,0,'That is the technique.'],
+      ['n2',[['∀y ∃x R(x, y)','given'],['∃x ∀y R(x, y)','the swapped-order technique']],2,1,'The technique runs the other way.'],
+      ['n3',[['a tree reaches φ from G through a detour','given'],['the tree with the detour cut reaches φ from G','the detour-cut technique']],2,0,'The cut keeps the foot and the givens.'],
+      ['n4',[['∃x R(x, v), with [R(v, v)] still open above','a tree'],['∀y ∃x R(x, y)','speak of everything']],2,1,'v is free in an open leaf: the fresh-name condition fails.']],[]); }});
+/* ----- rung 39: a machine made of switches, 39a to 39q ----- */
+Object.assign(STEPS,{'39a':['r39a','True and False as 1 and 0'],'39b':['r39b','The Wave That Is Only 1 or 0'],'39c':['r39c','A Wave Can Carry Power, or a Message'],'39d':['r39d','A One-Way Valve'],'39e':['r39e','A Switch Worked by a Switch'],'39f':['r39f','Every Table From One Gate'],'39g':['r39g','The Liar Box'],'39h':['r39h','Memory'],'39i':['r39i','Adding With Gates'],'39j':['r39j','A Machine That Follows a List'],'39k':['r39k','How Long a Program Takes'],'39l':['r39l','Sorting and Searching'],'39m':['r39m','Divide and Conquer'],'39n':['r39n','Structures That Hold Data'],'39o':['r39o','Remembering Answers'],'39p':['r39p','Wiring a Table by Hand'],'39q':['r39q','Counting Steps by Hand']});
+const T39=n=>{ const s=(Math.round(n*100)/100).toFixed(2).replace(/0+$/,'').replace(/\.$/,''); return s.replace('-','−'); }, LG39=n=>Math.floor(Math.log2(n)+1e-9);
+
+/* 39a True and False as 1 and 0 */
+const WA39=[
+  ['Is x ∨ y = x + y, for marks 0 and 1?','no: on the row 1 1 the sum is 2, which is no mark; take off the overlap xy',['yes','yes, on every row','no: it is xy'],'Or-as-greater technique.'],
+  ['Is ¬x = −x?','no: −1 is no mark; not is 1 − x',['yes','yes, for x = 0','no: it is 1 + x'],'Or-as-greater technique.'],
+  ['x² = x. So x = 1?','no: x = 0 meets it too; dividing by x needs x ≠ 0',['yes','yes, for marks','no: x = ½'],'Both marks meet x² = x.'],
+  ['Is ½ ∧ ½ = ¼ a row of the and table?','no: ½ is not a mark; these techniques are about {0, 1} only',['yes','yes, by the and-as-product technique','no: it is ½'],'And-as-product technique, on marks.'],
+  ['For marks x and y, what is the mark of “both”?','the product xy',['the sum x + y','the greater of x and y','1 − xy'],'And-as-product technique.'],
+  ['For marks x and y, what is the mark of “exactly one”?','the remainder of x + y on division by 2',['x + y','xy','the greater of x and y'],'Remainder-by-two technique.']];
+const OP39={'both':(x,y)=>x*y,'at least one':(x,y)=>Math.max(x,y),'exactly one':(x,y)=>(x+y)%2,'not x':(x)=>1-x};
+QP.push({id:'39a.marks',step:'39a',label:'true and false as 1 and 0',open:()=>measured('39a'),make(){ return writtenQ('39a.marks',WA39); }},
+  {id:'39a.work',step:'39a',mode:'work',label:'marks by arithmetic',open:()=>measured('39a'),make(){
+    const x=rnd(2), y=rnd(2), o=pick(['both','at least one','exactly one']), f={'both':['xy',x*y],'at least one':['x + y − xy',x+y-x*y],'exactly one':['x + y − 2xy',x+y-2*x*y]}[o];
+    return W30('39a.work['+[o,x,y].join(';')+']',[['x = '+x+' and y = '+y,'marks']],'What is '+f[0]+' here, the mark of “'+o+'”?',String(f[1]),['0','1','2','−1'],'Checked on the row '+x+' '+y+'.'); }},
+  {id:'39a.line',step:'39a',mode:'proof',label:'what marks as numbers license',open:()=>measured('39a'),make(){
+    return line28('39a.line',[
+      ['a1',[['x = 1 and y = 1','marks'],['x ∨ y = x + y = 2','the or-as-greater technique']],2,1,'2 is no mark. x ∨ y = x + y − xy = 1.'],
+      ['a2',[['x = 1 and y = 0','marks'],['x ∧ y = xy = 0','the and-as-product technique']],2,0,'The product.'],
+      ['a3',[['x is a mark','given'],['¬x = 1 − x','the or-as-greater technique']],2,0,'Not is one take away.'],
+      ['a4',[['x² = x','given'],['x = 1','dividing by x']],2,1,'x = 0 meets it too; dividing by x needs x ≠ 0.']],[]); }});
+
+/* 39b The Wave That Is Only 1 or 0 */
+const WB39=[
+  ['Is u = ½ + (2/π) cos θ a square wave?','no: it is a smooth turning; only its reading against ½ is the square wave’s',['yes','yes, near θ = 0','no: it is a sine'],'First-turning technique.'],
+  ['Does the threshold make the reading exact?','no: it makes the error rate known, not zero',['yes','yes, without noise and with it','no: it makes it worse'],'Threshold-reading technique.'],
+  ['Is P(Z > 12) = 2 P(Z > 6)?','no: the tail falls far faster than in proportion',['yes','yes, roughly','no: it is half'],'The bell tail.'],
+  ['Read against ½, what does the first turning of the sign wave give back?','every 1 and every 0 of the wave',['only the 1s','nothing','every other bit'],'First-turning technique.'],
+  ['A level has margin d under bell noise of spread σ. When is it misread?','with the chance that the bell lies more than d/σ spreads to one side',['always','never','with chance d/σ'],'Threshold-reading technique.'],
+  ['Which speeds does the sign wave’s recipe hold, past the constant ½?','the odd speeds alone, each over its speed, with signs taking turns',['every speed','the even speeds alone','the first speed alone'],'Sign-wave technique.']];
+QP.push({id:'39b.square',step:'39b',label:'the wave that is only 1 or 0',open:()=>measured('39b'),make(){ return writtenQ('39b.square',WB39); }},
+  {id:'39b.work',step:'39b',mode:'work',label:'sign-wave recipe and margins',open:()=>measured('39b'),make(){
+    if(rnd(2)){ const k=pick([1,3,5,7,9]), sg=((k-1)/2)%2?'−':'';
+      return W30('39b.work[k;'+k+']',[['s(θ) = ½ + (2/π)(cos θ − cos 3θ/3 + cos 5θ/5 − ⋯)','the sign-wave technique']],'What multiplies cos '+(k===1?'':k)+'θ?',sg+(k===1?'2/π':'2/('+k+'π)'),[(sg?'':'−')+(k===1?'2/π':'2/('+k+'π)'),k===1?'4/π':'4/('+k+'π)',k===1?'2/π²':'2/('+k*k+'π)',k===1?'1/2':'1/'+k],'The odd speeds alone, each over its speed, with signs taking turns from +.'); }
+    const s=pick([1,2,5]), m=pick([2,3,4,6]);
+    return W30('39b.work[m;'+[s,m].join(';')+']',[['a level with margin '+(s*m)+' mV','given'],['bell noise of spread '+s+' mV','given']],'More than how many spreads must the bell lie to one side for a misread?',String(m),[String(s*m),String(s),String(m*m),String(2*m)],'Threshold-reading technique: d/σ = '+(s*m)+'/'+s+'.'); }},
+  {id:'39b.line',step:'39b',mode:'proof',label:'what thresholds license',open:()=>measured('39b'),make(){
+    return line28('39b.line',[
+      ['b1',[['u = ½ + (2/π) cos θ','the first turning'],['u read against ½ gives back every bit of the sign wave','the first-turning technique']],2,0,'That is the technique.'],
+      ['b2',[['u = ½ + (2/π) cos θ','the first turning'],['u is the square wave','the first-turning technique']],2,1,'u is a smooth turning. Only its reading against ½ is the square wave’s.'],
+      ['b3',[['a level is read against a threshold, under bell noise','given'],['it is never misread','the threshold-reading technique']],2,1,'The error rate is known, not zero.']],[]); }});
+
+/* 39c A Wave Can Carry Power, or a Message */
+const WC39=[
+  ['More power, more message?','no: a message is about the patterns that could have come; a socket gives kilowatts and 0 bits',['yes','yes, in proportion','no: less power, more message'],'Known-wave technique.'],
+  ['Is the average of v² the square of the average of v?','no: the swinging turnings carry power the average misses',['yes','yes, for a sign wave','no: it is always smaller'],'Power-by-frequency technique.'],
+  ['A wire passes frequencies up to B. How many free values can it carry a second?','at most 2B',['at most B','at most B²','as many as it likes'],'Changes-per-second technique.'],
+  ['Does doubling the signal power double the bits?','no: the bits go as the log, about half a bit more each change',['yes','yes, at any noise','no: it halves them'],'Changes-per-second technique with noise.'],
+  ['A wave is fixed by numbers the reader already has. How much does it tell?','0 bits, whatever its power',['as many bits as its power','one bit','2B bits a second'],'Known-wave technique.'],
+  ['How is a wave’s average power shared out?','frequency by frequency: the sum of what each turning would deliver alone',['all at the lowest frequency','by its peak alone','evenly at every frequency'],'Power-by-frequency technique.']];
+QP.push({id:'39c.message',step:'39c',label:'power or message',open:()=>measured('39c'),make(){ return writtenQ('39c.message',WC39); }},
+  {id:'39c.work',step:'39c',mode:'work',label:'bits a second',open:()=>measured('39c'),make(){
+    const B=pick([1000,2000,3000,4000]), M=pick([2,4,8,16]), b=Math.log2(M);
+    return W30('39c.work[b;'+[B,M].join(';')+']',[['a wire passes frequencies up to '+B+' Hz','given'],[M+' levels to choose from at each change','given']],'At most how many bits a second can it carry?',String(2*B*b),[String(B*b),String(2*B*M),String(2*B),String(B*M),String(4*B*b),String(B*M*M)],'Changes-per-second technique: 2B log₂ M = 2 · '+B+' · '+b+'.'); }},
+  {id:'39c.line',step:'39c',mode:'proof',label:'what bandwidth licenses',open:()=>measured('39c'),make(){
+    const B=pick([1000,2000]);
+    return line28('39c.line',[
+      ['c1',[['a wire passes frequencies up to '+B+' Hz','given'],['it carries at most '+(2*B)+' free values a second','the changes-per-second technique']],2,0,'2B.'],
+      ['c2',[['a wire passes frequencies up to '+B+' Hz','given'],['it carries at most '+B+' free values a second','the changes-per-second technique']],2,1,'It is 2B: samples at spacing 1/(2B) are free.'],
+      ['c3',[['a wave is fixed by numbers the reader already has','given'],['it tells the reader 0 bits','the known-wave technique']],2,0,'That is the technique.'],
+      ['c4',[['the socket delivers kilowatts','given'],['the socket carries a large message','the power-by-frequency technique']],2,1,'Power is not message. A wave fixed in advance tells nothing.']],[B]); }});
+
+/* 39d A One-Way Valve */
+const WD39=[
+  ['Is a diode a resistor of about 0.6/I ohms?','no: its current is exponential in V, not in proportion',['yes','yes, forwards','no: it is 0.6 I ohms'],'A diode passes current one way, exponentially.'],
+  ['Does a diode pushed backwards pass nothing?','almost nothing, never nothing: less than Iₛ',['yes','yes, below a push','no: it passes the same'],'Reverse-leak technique.'],
+  ['Can a cleverer network of diodes make a not?','no: raising an input never lowers a node, in any such network',['yes','yes, with enough diodes','no: but resistors alone can'],'Rising-network technique.'],
+  ['A diode chain loses 0.6 V a stage. Can a resistor add it back?','no: a resistor alone moves no node further than an input; adding back needs a supply steered by the signal',['yes','yes, a large one','no: nothing can'],'No-gain technique.'],
+  ['Where does the diode either gate’s output sit?','one diode drop below the higher input',['one drop above the higher input','at the lower input','at the sum of the inputs'],'Diode-gate technique.'],
+  ['Where does the diode both gate’s output sit?','one diode drop above the lower input',['one drop below the lower input','at the higher input','halfway between the inputs'],'Diode-gate technique.']];
+QP.push({id:'39d.diodes',step:'39d',label:'a one-way valve',open:()=>measured('39d'),make(){ return writtenQ('39d.diodes',WD39); }},
+  {id:'39d.work',step:'39d',mode:'work',label:'diode gates',open:()=>measured('39d'),make(){
+    const a=rnd(10), b=20+rnd(30), g=rnd(2), r=g?b-6:a+6;
+    return W30('39d.work['+[g,a,b].join(';')+']',[['inputs at '+T39(a/10)+' V and '+T39(b/10)+' V','given'],['a diode drop is 0.6 V','given']],'Where does the diode '+(g?'either':'both')+' gate’s output sit?',T39(r/10)+' V',[T39((g?b+6:a-6)/10)+' V',T39((g?a+6:b-6)/10)+' V',T39((g?b:a)/10)+' V',T39((a+b)/20)+' V'],'Diode-gate technique: the '+(g?'either gate sits one drop below the higher input':'both gate sits one drop above the lower input')+'.'); }},
+  {id:'39d.line',step:'39d',mode:'proof',label:'what diodes license',open:()=>measured('39d'),make(){
+    return line28('39d.line',[
+      ['d1',[['a network of diodes and resistors; inputs rise and none falls','given'],['no node falls','the rising-network technique']],2,0,'That is the technique.'],
+      ['d2',[['a network of diodes and resistors','given'],['it can be wired to make a not','the rising-network technique']],2,1,'A not falls when its input rises, and no node of such a network falls.'],
+      ['d3',[['no input rises by more than 0.2 V, in a network of diodes and resistors','given'],['no node rises by more than 0.2 V','the no-gain technique']],2,0,'That is the technique.'],
+      ['d4',[['a diode is pushed backwards hard','given'],['it passes less than Iₛ','the reverse-leak technique']],2,0,'That is the technique.']],[]); }});
+
+/* 39e A Switch Worked by a Switch */
+const WE39=[
+  ['Does the gate draw the load’s current?','no: the glass passes none; the gate draws only the charge that fills it, at each change',['yes','yes, at each change','no: it draws the supply’s current'],'Steering technique.'],
+  ['|g′(m)| > 1. Does every rest of two nots in a row push?','no: the end rests have slope near 0 and hold; only the middle pushes',['yes','yes, the end rests most','no: none pushes'],'Middle-gain technique.'],
+  ['Does the noise-floor ceiling grow with the chain?','no: η/(1 − k) does not depend on the length, for k below 1',['yes','yes, slowly','yes, in proportion'],'Noise-floor technique.'],
+  ['Does a large power gain make energy?','no: the power comes from the supply; the gate only steers it',['yes','yes, at the gate','no: it destroys energy'],'Steering technique.'],
+  ['When does the middle rest of two not gates in a row hold?','when the slope of g there is less than 1 in size',['when the slope is more than 1','always','never'],'Middle-gain technique.'],
+  ['What makes a not from two switches?','one closing on high from the output to ground, one closing on low from the supply to the output, gates joined',['two switches closing on high','one switch alone','two diodes'],'Pair-inverter technique.']];
+QP.push({id:'39e.switch',step:'39e',label:'a switch worked by a switch',open:()=>measured('39e'),make(){ return writtenQ('39e.switch',WE39); }},
+  {id:'39e.work',step:'39e',mode:'work',label:'noise floors',open:()=>measured('39e'),make(){
+    const a=pick([1,2,5]), m=pick([2,4,5,10]), kk=fr(m-1,m);
+    return W30('39e.work[n;'+[a,m].join(';')+']',[['each pair of stages adds noise at most '+T39(a/100)+' V','given'],['near a rail the pair’s slope is at most '+fshow(kk),'given']],'How far from the rail can the level ever get?',T39(a*m/100)+' V',[T39(a/100)+' V',T39(a*(m-1)/100)+' V','no bound: it grows with the chain',T39(a*m*m/100)+' V'],'Noise-floor technique: η/(1 − k) = '+T39(a/100)+' · '+m+'.'); }},
+  {id:'39e.line',step:'39e',mode:'proof',label:'what restoring licenses',open:()=>measured('39e'),make(){
+    return line28('39e.line',[
+      ['e1',[['the middle rest of two nots in a row has slope 3 in size','given'],['the middle rest does not hold','the middle-gain technique']],2,0,'More than 1 pushes nearby voltages away.'],
+      ['e2',[['each pair adds noise at most η, and near a rail the slope is at most k < 1','given'],['the distance from the rail grows with the length of the chain','the noise-floor technique']],2,1,'It never passes η/(1 − k), however long the chain.'],
+      ['e3',[['a switch on high to ground and a switch on low from the supply, gates joined','given'],['on {0, 1} the output is 1 − x','the pair-inverter technique']],2,0,'That is the technique.']],[]); }});
+
+/* 39f Every Table From One Gate */
+const WF39=[
+  ['Do both and either alone build every table?','no: they only rise, so no falling table such as not is reached',['yes','yes, with enough gates','no: they build none'],'Rising-network technique.'],
+  ['Does not alone build every table?','no: one input in, one out; no table of two inputs',['yes','yes, in a ring','no: not builds nothing'],'Nand-alone technique uses not-and.'],
+  ['Does the split-on-one count show some table needs that many gates?','no: it is an upper count for one recipe',['yes','yes, the hardest table','no: it is a lower count'],'Split-on-one technique.'],
+  ['Does the most-tables-hard technique name a hard table?','no: it shows one exists by counting, and points at none',['yes','yes, the not table','yes, exactly one'],'Most-tables-hard technique.'],
+  ['How is not x made from not-and?','the not-and of x with itself',['the not-and of x and 0','x alone','the not-and of x and ¬x'],'Nand-alone technique.'],
+  ['How is x or y made from not-and?','the not-and of their nots',['the not of their not-and','their not-and','the not-and of x and y, twice'],'Nand-alone technique.']];
+QP.push({id:'39f.nand',step:'39f',label:'every table from one gate',open:()=>measured('39f'),make(){ return writtenQ('39f.nand',WF39); }},
+  {id:'39f.work',step:'39f',mode:'work',label:'gate counts',open:()=>measured('39f'),make(){
+    const n=2+rnd(5), c=5*Math.pow(2,n-1)-4;
+    return W30('39f.work[s;'+n+']',[['a table of '+n+' inputs, built by splitting on one input','the split-on-one technique']],'At most how many not-ands does it take?',String(c),[String(5*Math.pow(2,n)-4),String(5*Math.pow(2,n-1)),String(Math.pow(2,n)),String(Math.pow(2,Math.pow(2,n)))],'Split-on-one technique: 5 · 2ⁿ⁻¹ − 4 with n = '+n+'.'); }},
+  {id:'39f.line',step:'39f',mode:'proof',label:'what one gate licenses',open:()=>measured('39f'),make(){
+    return line28('39f.line',[
+      ['f1',[['x is an input','given'],['not x is the not-and of x with x','the nand-alone technique']],2,0,'That is the technique.'],
+      ['f2',[['x and y are inputs','given'],['x and y is the not-and of their nots','the nand-alone technique']],2,1,'That is x or y. And is the not of their not-and.'],
+      ['f3',[['every table of n inputs is (x ∧ f₁) ∨ (¬x ∧ f₀)','the split-on-one technique'],['every table of n inputs needs 5 · 2ⁿ⁻¹ − 4 gates','the split-on-one technique']],2,1,'The count is an upper count for one recipe, not a need.']],[]); }});
+
+/* 39g The Liar Box */
+const WG39=[
+  ['Has x = 1 − x no answer?','it has one, ½; it has no mark, which is the liar’s point',['right: no answer','it has two','it has 0'],'Delay-loop technique.'],
+  ['Is the liar box stuck at ½?','no: ½ is its one rest and does not hold; it runs',['yes','yes, after a while','no: it is stuck at 1'],'Odd-ring technique.'],
+  ['Has a ring of n not gates period nτ?','no: 2nτ for n odd; the change goes round twice',['yes','no: n²τ','no: 2τ'],'Ring-period technique.'],
+  ['Does an even ring run like an odd one?','no: an even count of nots cancels; it may rest',['yes','yes, twice as fast','no: it never runs'],'Ring-period technique.'],
+  ['A not feeds its own input, with delay τ. What does its output do?','it is 1 and 0 in turn, each for τ, with period 2τ',['it rests at ½','it rests at 1','it is 1 forever'],'Delay-loop technique.'],
+  ['How many rests has a ring of an odd number of not gates?','exactly one, the middle voltage',['none','two','one for each gate'],'Odd-ring technique.']];
+QP.push({id:'39g.liar',step:'39g',label:'the liar box',open:()=>measured('39g'),make(){ return writtenQ('39g.liar',WG39); }},
+  {id:'39g.work',step:'39g',mode:'work',label:'ring periods',open:()=>measured('39g'),make(){
+    const n=pick([3,5,7,9,11]), t=pick([10,20,25,50]);
+    return W30('39g.work[r;'+[n,t].join(';')+']',[['a ring of '+n+' not gates','given'],['each has delay '+t+' ps','given']],'What is its period?',(2*n*t)+' ps',[(n*t)+' ps',(2*t)+' ps',(n*n*t)+' ps',(4*n*t)+' ps'],'Ring-period technique: 2nτ = 2 · '+n+' · '+t+'.'); }},
+  {id:'39g.line',step:'39g',mode:'proof',label:'what the liar box licenses',open:()=>measured('39g'),make(){
+    const n=pick([3,5,7]);
+    return line28('39g.line',[
+      ['g1',[['a ring of '+n+' not gates, each with delay τ','given'],['it runs with period '+(2*n)+'τ','the ring-period technique']],2,0,'2nτ.'],
+      ['g2',[['a ring of '+n+' not gates, each with delay τ','given'],['it runs with period '+n+'τ','the ring-period technique']],2,1,'The change goes round twice: 2nτ.'],
+      ['g3',[['a not feeds its own input','given'],['its output rests at ½','the delay-loop technique']],2,1,'No mark rests. ½ is a rest that does not hold, and the box runs.']],[n]); }});
+
+/* 39h Memory */
+const WH39=[
+  ['Does an even ring rest only at the ends?','no: it rests at the middle too, and the middle does not hold',['yes','yes, at one end','no: it never rests'],'Even-ring technique.'],
+  ['Does x = x pick the bit?','no: both marks meet it; the history picks',['yes','yes, it picks 1','no: neither mark meets it'],'Even-ring technique.'],
+  ['s = r = 0. Does the latch clear and set at once?','no: it gives Q = P = 1, no bit; on release the ring races',['yes','it sets','it clears'],'Hold-row technique: both at 0 is not used.'],
+  ['Does a gated latch catch d at one instant?','no: it follows d for the whole time e is 1; two in a row catch an instant',['yes','yes, at e’s fall','no: it never catches d'],'Edge-catch technique.'],
+  ['With both doors at 1, what does the latch do?','keeps its bit',['sets Q to 1','clears Q to 0','runs'],'Hold-row technique.'],
+  ['How many patterns can a row of n edge-catches hold?','2ⁿ',['n','2n','n²'],'Register-count technique.']];
+QP.push({id:'39h.memory',step:'39h',label:'memory',open:()=>measured('39h'),make(){ return writtenQ('39h.memory',WH39); }},
+  {id:'39h.work',step:'39h',mode:'work',label:'latches and registers',open:()=>measured('39h'),make(){
+    if(rnd(2)){ const n=2+rnd(7); return W30('39h.work[r;'+n+']',[['a row of '+n+' edge-catches on one clock','given']],'How many patterns can it hold?',String(Math.pow(2,n)),[String(n),String(2*n),String(n*n),String(Math.pow(2,n)-1)],'Register-count technique: 2'+'⁰¹²³⁴⁵⁶⁷⁸'[n]+'.'); }
+    const q=rnd(2), [s,r]=pick([[0,1],[1,0],[1,1]]), Q=s===0?1:r===0?0:q;
+    return W30('39h.work[l;'+[q,s,r].join(';')+']',[['the latch holds Q = '+q,'before'],['s = '+s+' and r = '+r,'the doors now']],'What is Q now?',String(Q)+(s===1&&r===1?': it keeps its bit':s===0?': s = 0 sets it':': r = 0 clears it'),['1: s = 0 sets it','0: r = 0 clears it',String(q)+': it keeps its bit',String(1-q)+': it keeps its bit','no bit: the ring races'],'Hold-row technique: s = 0 sets, r = 0 clears, both at 1 keeps.'); }},
+  {id:'39h.line',step:'39h',mode:'proof',label:'what latches license',open:()=>measured('39h'),make(){
+    return line28('39h.line',[
+      ['h1',[['the latch holds Q = 1, and s = r = 1','given'],['Q stays 1','the hold-row technique']],2,0,'Both doors at 1 keep the bit.'],
+      ['h2',[['s = 0 and r = 0','given'],['the latch is set and cleared at once','the hold-row technique']],2,1,'Both at 0 gives Q = P = 1, no bit; it is not used.'],
+      ['h3',[['two gated latches in a row, opened by not c and by c','given'],['they take d at the moment c rises, and hold it to the next rise','the edge-catch technique']],2,0,'That is the technique.'],
+      ['h4',[['a gated latch with e = 1','given'],['it takes d at one instant and holds it','the edge-catch technique']],2,1,'It follows d while e is 1. Two in a row catch an instant.']],[]); }});
+
+/* 39i Adding With Gates */
+const WI39=[
+  ['Is the carry out x ∨ y ∨ c?','no: that is “at least one”; the carry is “at least two”',['yes','yes, for two inputs','no: it is x ∧ y ∧ c'],'Three-bit-sum technique.'],
+  ['Is a wider chained adder no slower?','no: in a chain the last carry may wait 2nτ',['yes','yes, if it is all gates','no: it is twice as slow at any width'],'Carry-delay technique.'],
+  ['In 8 places, is −9 = 11110110?','no: that is every bit turned over, 246; add 1: 247 = 11110111',['yes','no: it is 00001001','no: it is 10001001'],'Twos-complement technique.'],
+  ['In 8 places, is 127 + 1 = 128?','no: 128 is out of the range −128 to 127; the row wraps to −128',['yes','no: it is 0','no: it is 127'],'Twos-complement technique.'],
+  ['What are the sum bit and carry of three bits?','their exactly-one (x ⊕ y ⊕ c) and at-least-two',['their both and their either','their sum and nothing','their either and their both'],'Three-bit-sum technique.'],
+  ['About how many levels of combining does the carry tree take for n places?','about log₂ n',['n','n²','2n'],'Carry-tree technique.']];
+QP.push({id:'39i.adder',step:'39i',label:'adding with gates',open:()=>measured('39i'),make(){ return writtenQ('39i.adder',WI39); }},
+  {id:'39i.work',step:'39i',mode:'work',label:'complements and carries',open:()=>measured('39i'),make(){
+    const t=rnd(3);
+    if(t===0){ const x=1+rnd(100); return W30('39i.work[c;'+x+']',[['a row of 8 places','given']],'Which number is written for −'+x+'?',String(256-x),[String(255-x),String(x),String(256+x),String(128-x)],'Twos-complement technique: 2⁸ − '+x+', every bit turned over plus 1.'); }
+    if(t===1){ const k=1+rnd(20), a=100+rnd(28); return W30('39i.work[w;'+[a,k].join(';')+']',[['a row of 8 places, holding −128 to 127','given']],'What is '+a+' + '+k+' there?',String(a+k>127?a+k-256:a+k).replace('-','−'),[String(a+k),'127','−128',String(a+k-128)].map(s=>s.replace('-','−')),'Twos-complement technique: a sum past 127 wraps round by 256.'); }
+    const x=rnd(2), y=rnd(2), c=rnd(2), s=x+y+c;
+    return W30('39i.work[s;'+[x,y,c].join('')+']',[['x = '+x+', y = '+y+', c = '+c,'three bits']],'What are the carry and the sum bit?','carry '+(s>=2?1:0)+', sum '+(s%2),['carry 0, sum 0','carry 0, sum 1','carry 1, sum 0','carry 1, sum 1'],'Three-bit-sum technique: '+x+' + '+y+' + '+c+' = '+s+' = 2 · '+(s>=2?1:0)+' + '+(s%2)+'.'); }},
+  {id:'39i.line',step:'39i',mode:'proof',label:'what adders license',open:()=>measured('39i'),make(){
+    const x=1+rnd(50);
+    return line28('39i.line',[
+      ['i1',[['a row of 8 places','given'],['−'+x+' is written as '+(256-x),'the twos-complement technique']],2,0,'2⁸ − '+x+'.'],
+      ['i2',[['a row of 8 places','given'],['−'+x+' is written as '+(255-x),'the twos-complement technique']],2,1,'That is every bit turned over. Add 1: '+(256-x)+'.'],
+      ['i3',[['x, y and c are bits','given'],['the carry of x + y + c is “at least one of x, y, c”','the three-bit-sum technique']],2,1,'The carry is “at least two”.'],
+      ['i4',[['a chain of n places, every place passing and none making','given'],['the last carry waits 2nτ','the carry-delay technique']],2,0,'That is the technique.']],[x]); }});
+
+/* 39j A Machine That Follows a List */
+const WJ39=[
+  ['Is 290 an instruction wherever it sits?','no: only where the counter points; elsewhere it is data',['yes','yes, in any cell','no: it is never one'],'Stored-list technique.'],
+  ['Does the counter move on after running?','no: it moves on before; a jump then overwrites it',['yes','yes, unless it stops','no: it never moves'],'Fetch-run technique.'],
+  ['Is a processor cleverer than a table?','no: each turn is a function of the bits held, a table applied again',['yes','yes, it learns','no: it is weaker'],'Fetch-run technique.'],
+  ['What fixes a run of the machine?','its first state',['its last state','its program alone','its speed'],'Fetch-run technique.'],
+  ['Can a program change the instructions it will run next?','yes: instructions are numbers in the cells data is stored in',['no','only with a second machine','no: programs are fixed'],'Stored-list technique.'],
+  ['How is a three-digit instruction number read?','first digit: what to do; last two: which cell',['first two: which cell; last: what to do','every digit is a cell','as one cell number'],'Instruction-number technique.']];
+QP.push({id:'39j.machine',step:'39j',label:'a machine that follows a list',open:()=>measured('39j'),make(){ return writtenQ('39j.machine',WJ39); }},
+  {id:'39j.work',step:'39j',mode:'work',label:'reading instructions',open:()=>measured('39j'),make(){
+    const d=1+rnd(8), n=10+rnd(89), I=100*d+n, cell=rnd(2);
+    return W30('39j.work[i;'+[I,cell].join(';')+']',[['the counter points at the instruction '+I,'given']],cell?'Which cell does it name?':'Which digit says what to do?',String(cell?n:d),[String(cell?d:n),String(cell?Math.floor(I/10):I%10),String(I),String(cell?I%10:Math.floor(I/10))],'Instruction-number technique: first digit '+d+', last two digits '+n+'.'); }},
+  {id:'39j.line',step:'39j',mode:'proof',label:'what the machine licenses',open:()=>measured('39j'),make(){
+    return line28('39j.line',[
+      ['j1',[['two runs start from the same state','given'],['they run alike, turn by turn','the fetch-run technique']],2,0,'A run is fixed by its first state.'],
+      ['j2',[['cell 90 holds 290, and the counter never points at 90','given'],['290 in cell 90 is run as an instruction','the instruction-number technique']],2,1,'It is an instruction only where the counter points.'],
+      ['j3',[['a program is placed in memory','given'],['the machine can run it','the stored-list technique']],2,0,'One machine runs any program placed in its memory.']],[]); }});
+
+/* 39k How Long a Program Takes */
+const WK39=[
+  ['The search takes 1 turn when the match is first. Is it O(1)?','no: the count is over the worst input of size n',['yes','yes, on average','no: it is O(n²)'],'Counts are over the worst input.'],
+  ['Is 100n always slower than n²?','no: only below n = 100; past it n² loses for ever',['yes','no: never slower','only for even n'],'Largest term rules past a size.'],
+  ['A thousand times faster: does it solve 2ⁿ problems a thousand times bigger?','no: about log₂ 1000, ten items bigger',['yes','about a hundred times','about √1000 times'],'Faster-machine technique.'],
+  ['Does a copied file lose a little each time?','no: each bit is read against a threshold; the copy is exact but for a known misread rate',['yes','yes, like any copy','no: it gains a little'],'Storage-count technique and thresholds.'],
+  ['A count is O(f(n)) on one machine. What is it on another that does each turn in at most c turns?','O(f(n))',['O(c f(n)), a new family','O(f(n)²)','unknown'],'Machine-change technique.'],
+  ['How many bits do n items each one of 2ᵇ patterns take?','nb',['n + b','2ᵇ n','b'],'Storage-count technique.']];
+QP.push({id:'39k.counts',step:'39k',label:'how long a program takes',open:()=>measured('39k'),make(){ return writtenQ('39k.counts',WK39); }},
+  {id:'39k.work',step:'39k',mode:'work',label:'counting turns',open:()=>measured('39k'),make(){
+    if(rnd(2)){ const b=2+rnd(6), r=5+rnd(20), s=1+rnd(5);
+      return W30('39k.work[l;'+[b,r,s].join(';')+']',[['a loop body of '+b+' turns runs '+r+' times','given'],[s+' turns outside it','given']],'How many turns in all?',String(b*r+s),[String(b*r),String(b+r+s),String((b+s)*r),String(b*(r+s))],'Loop-count technique: br + s.'); }
+    const sp=pick([4,16,64,256,1024]), f=pick(['n','n²','2ⁿ']), R={'n':sp+' times as large','n²':Math.sqrt(sp)+' times as large','2ⁿ':Math.log2(sp)+' items larger'};
+    return W30('39k.work[f;'+[sp,f].join(';')+']',[['a machine '+sp+' times faster','given'],['a count of '+f,'given']],'In the same time, how much larger a problem fits?',R[f],[sp+' times as large',Math.sqrt(sp)+' times as large',Math.log2(sp)+' items larger',(sp*sp)+' times as large'],'Faster-machine technique.'); }},
+  {id:'39k.line',step:'39k',mode:'proof',label:'what counts license',open:()=>measured('39k'),make(){
+    return line28('39k.line',[
+      ['k1',[['a count of 2ⁿ, on a machine 1024 times faster','given'],['in the same time a problem 10 items larger fits','the faster-machine technique']],2,0,'log₂ 1024 = 10.'],
+      ['k2',[['a count of 2ⁿ, on a machine 1024 times faster','given'],['in the same time a problem 1024 times as large fits','the faster-machine technique']],2,1,'Only log₂ 1024 = 10 items larger.'],
+      ['k3',[['a count is O(n²) on machine A, and each turn of A takes at most 7 turns of B','given'],['the count is O(n²) on B','the machine-change technique']],2,0,'A fixed factor keeps the family.']],[]); }});
+
+/* 39l Sorting and Searching */
+const WL39=[
+  ['Does a search for one of n need log₂ n questions?','log₂(n + 1): the answer “nowhere” counts too',['yes','it needs n','it needs n/2'],'Search-floor technique.'],
+  ['Does the random-pivot sort take 2n ln n on every list?','no: on average; its worst is n(n − 1)/2',['yes','yes, up to a constant','no: it takes n'],'Pivot-chance technique.'],
+  ['Counting sort beats log₂ n!. Is the floor wrong?','no: the floor is for sorts that learn only by comparing',['yes','yes, for small n','no: counting sort compares too'],'Counting-sort technique makes no comparisons.'],
+  ['Is counting sort always best?','no: it needs k cells; with many possible key values k swamps n',['yes','yes, for whole numbers','no: it is never best'],'Counting-sort technique.'],
+  ['At most how many looks does halving take among n items?','⌊log₂ n⌋ + 1',['n','n/2','log₂ n²'],'Search-floor technique.'],
+  ['About how many turns does counting sort take for n items below k?','about 2n + k',['n log₂ n','n²','k²'],'Counting-sort technique.']];
+QP.push({id:'39l.sort',step:'39l',label:'sorting and searching',open:()=>measured('39l'),make(){ return writtenQ('39l.sort',WL39); }},
+  {id:'39l.work',step:'39l',mode:'work',label:'looks and turns',open:()=>measured('39l'),make(){
+    if(rnd(2)){ const n=pick([7,15,20,31,50,63,100,127,200,1000]);
+      return W30('39l.work[h;'+n+']',[['a halving search among '+n+' items in order','given']],'At most how many looks does it take?',String(LG39(n)+1),[String(LG39(n)),String(n),String(Math.ceil(n/2)),String(LG39(n)+2)],'Search-floor technique: ⌊log₂ '+n+'⌋ + 1.'); }
+    const n=10*(1+rnd(9)), k=pick([5,10,16,100]);
+    return W30('39l.work[c;'+[n,k].join(';')+']',[[n+' items, each a whole number below '+k,'given']],'About how many turns does counting sort take?',String(2*n+k),[String(n*k),String(n+k),String(n*n),String(2*n*k)],'Counting-sort technique: about 2n + k.'); }},
+  {id:'39l.line',step:'39l',mode:'proof',label:'what search floors license',open:()=>measured('39l'),make(){
+    return line28('39l.line',[
+      ['l1',[['a search among 7 items learns only by yes or no','given'],['on some input it needs at least 3 questions','the search-floor technique']],2,0,'log₂(7 + 1) = 3.'],
+      ['l2',[['counting sort sorts n keys in about 2n + k turns','the counting-sort technique'],['the search floor for comparing sorts is wrong','the search-floor technique']],2,1,'The floor is for sorts that learn only by comparing.'],
+      ['l3',[['the random-pivot sort, on one list of n items','given'],['it makes about 2n ln n comparisons on that list','the pivot-chance technique']],2,1,'That is an average. Its worst is n(n − 1)/2.']],[]); }});
+
+/* 39m Divide and Conquer */
+const WM39=[
+  ['Is T(n) = T(n − 1) + n about n log n?','no: it shrinks by one, n levels, n(n + 1)/2 − 1 + c',['yes','yes, like merge sort','no: it is n'],'Shrink-by-one technique.'],
+  ['Is T(n) ≤ T(n/2) + T(n/2) + cn linear by shares-below-one?','no: ½ + ½ = 1; the shares must add to less than 1',['yes','yes, with a large c','no: it is n²'],'Shares-below-one technique.'],
+  ['Guess T ≤ Kn; the step gives Kn + cn. So T = O(n)?','no: the check must give at most Kn itself',['yes','yes, with K + c','no: T = O(n²)'],'Guess-and-check technique.'],
+  ['Is T(n) = 2T(n/2) + n log₂ n just n log₂ n?','no: the extra log at each level adds up, to about ½ n log₂² n',['yes','yes, like merge sort','no: it is n²'],'A log on each cut adds a log.'],
+  ['T(1) = c and T(n) = T(n − 1) + f(n). What is T(n)?','c + f(2) + f(3) + ⋯ + f(n)',['n f(n)','c f(n)','f(n)'],'Shrink-by-one technique.'],
+  ['T(n) ≤ T(αn) + T(βn) + cn with α + β < 1. How does T grow?','in proportion to n',['like n log n','like n²','like 2ⁿ'],'Shares-below-one technique.']];
+QP.push({id:'39m.divide',step:'39m',label:'divide and conquer',open:()=>measured('39m'),make(){ return writtenQ('39m.divide',WM39); }},
+  {id:'39m.work',step:'39m',mode:'work',label:'solving recurrences',open:()=>measured('39m'),make(){
+    if(rnd(2)){ const c=1+rnd(5), n=4+rnd(7);
+      return W30('39m.work[s;'+[c,n].join(';')+']',[['T(1) = '+c+' and T(n) = T(n − 1) + n','given']],'What is T('+n+')?',String(c+n*(n+1)/2-1),[String(c+n*(n+1)/2),String(n*(n+1)/2),String(c*n),String(c+n*n)],'Shrink-by-one technique: '+c+' + 2 + 3 + ⋯ + '+n+'.'); }
+    const [a,b]=pick([[[1,5],[1,2]],[[1,4],[1,4]],[[1,3],[1,3]],[[1,5],[2,5]],[[1,10],[1,2]]]), rest=fr(b[1]*a[1]-a[0]*b[1]-b[0]*a[1],a[1]*b[1]), K=fr(rest.q,rest.p);
+    return W30('39m.work[a;'+[a.join('/'),b.join('/')].join(';')+']',[['T(n) ≤ T('+(a[0]===1?'':a[0])+'n/'+a[1]+') + T('+(b[0]===1?'':b[0])+'n/'+b[1]+') + cn','given']],'T(n) is at most how many times cn?',fshow(K),[fshow(rest),fshow(fr(a[0]*b[1]+b[0]*a[1],a[1]*b[1])),'it grows like n log n','2'],'Shares-below-one technique: 1/(1 − α − β), and 1 − α − β = '+fshow(rest)+'.'); }},
+  {id:'39m.line',step:'39m',mode:'proof',label:'what recurrences license',open:()=>measured('39m'),make(){
+    return line28('39m.line',[
+      ['m1',[['T(n) ≤ T(n/5) + T(n/2) + cn','given'],['T(n) ≤ 10cn/3','the shares-below-one technique']],2,0,'1 − 1/5 − 1/2 = 3/10.'],
+      ['m2',[['T(n) ≤ T(n/2) + T(n/2) + cn','given'],['T(n) grows only in proportion to n','the shares-below-one technique']],2,1,'½ + ½ = 1, not less than 1. It is n log n.'],
+      ['m3',[['guess T ≤ Kn, and the step gives T(n) ≤ Kn + cn','given'],['T(n) ≤ Kn at every size','the guess-and-check technique']],2,1,'The check must give at most Kn itself.'],
+      ['m4',[['T(1) = c and T(n) = T(n − 1) + f(n)','given'],['T(n) = c + f(2) + ⋯ + f(n)','the shrink-by-one technique']],2,0,'That is the technique.']],[]); }});
+
+/* 39n Structures That Hold Data */
+const WN39=[
+  ['Is every put into the doubling list quick?','no: a put that triggers a copy costs as many moves as the list holds; the average is under 3',['yes','yes, after the first','no: every put is slow'],'Doubling-array technique.'],
+  ['Is a heap sorted?','no: only each cell against those below it; the bottom row is in no order',['yes','yes, top to bottom','no: it is in no order at all'],'A heap keeps the largest on top.'],
+  ['Has a search tree always depth log₂ n?','no: sorted order gives depth n; random order about 2 ln n on average',['yes','yes, if it is full','no: always n'],'Tree-depth technique.'],
+  ['A table has more slots than keys. Do no two keys share a slot?','not always: 23 keys in 365 slots share one with chance about one half',['right: none share','none, if the keys differ','they always share'],'Load-share technique.'],
+  ['What is the height of a heap of n items?','⌊log₂ n⌋',['n','n/2','√n'],'Heap-height technique.'],
+  ['About how many keys does a look check, n keys in m slots?','at most 1 + (n − 1)/m on average',['n','m','n·m'],'Load-share technique.']];
+QP.push({id:'39n.structures',step:'39n',label:'structures that hold data',open:()=>measured('39n'),make(){ return writtenQ('39n.structures',WN39); }},
+  {id:'39n.work',step:'39n',mode:'work',label:'heights and loads',open:()=>measured('39n'),make(){
+    if(rnd(2)){ const n=pick([7,10,15,16,31,40,63,64,100,1000]);
+      return W30('39n.work[h;'+n+']',[['a heap of '+n+' items','given']],'What is its height?',String(LG39(n)),[String(LG39(n)+1),String(n),String(Math.ceil(n/2)),String(2*LG39(n))],'Heap-height technique: ⌊log₂ '+n+'⌋.'); }
+    const m=pick([5,10,20,50]), n=1+m*(1+rnd(3));
+    return W30('39n.work[l;'+[n,m].join(';')+']',[[n+' keys in '+m+' slots','given']],'At most how many keys does a look for a key that is there check, on average?',String(1+(n-1)/m),[String(n/m),String((n-1)/m),String(n),String(m)],'Load-share technique: 1 + ('+n+' − 1)/'+m+'.'); }},
+  {id:'39n.line',step:'39n',mode:'proof',label:'what structures license',open:()=>measured('39n'),make(){
+    return line28('39n.line',[
+      ['n1',[['n items are put one at a time into a doubling list','given'],['they cost fewer than 3n moves in all','the doubling-array technique']],2,0,'That is the technique.'],
+      ['n2',[['n items are put one at a time into a doubling list','given'],['every put costs fewer than 3 moves','the doubling-array technique']],2,1,'Only the average is under 3. A put that triggers a copy costs as many moves as the list holds.'],
+      ['n3',[['a heap holds 100 items','given'],['adding one costs at most 6 swaps','the heap-height technique']],2,0,'⌊log₂ 100⌋ = 6.'],
+      ['n4',[['n items added to a search tree in sorted order','given'],['the tree has depth about 2 ln n','the tree-depth technique']],2,1,'The technique is for random order. Sorted order gives depth n.']],[]); }});
+
+/* 39o Remembering Answers */
+const WO39=[
+  ['Does keeping answers make every recursion fast?','no: only as fast as its number of different calls',['yes','yes, always linear','no: it makes them slower'],'Remembered-answers technique.'],
+  ['Is the distance of two strings the count of places where they differ?','no: ACGT and AGT differ in three places from the left, and their distance is 1',['yes','yes, lined up from the left','no: it is their length'],'Alignment-table technique.'],
+  ['Does taking the shortest meeting first fit the most?','no: a short meeting across two others blocks both; earliest end is proved',['yes','yes, for one room','no: the longest first'],'Earliest-finish technique.'],
+  ['Is greedy best for any coins?','no: with coins 1, 3, 4 and the amount 6, greedy takes 3 coins and 2 suffice',['yes','yes, for whole coins','no: it is never best'],'Coin-table technique.'],
+  ['How many cells does the alignment table of strings of lengths n and m have?','(n + 1)(m + 1)',['nm','n + m','2ⁿ⁺ᵐ'],'Alignment-table technique.'],
+  ['Which meeting does the earliest-finish technique take first?','the one that ends first among those that fit',['the shortest','the one that starts first','the longest'],'Earliest-finish technique.']];
+const ED39=(a,b)=>{ const D=[...Array(a.length+1)].map((_,i)=>[...Array(b.length+1)].map((_,j)=>i?(j?0:i):j)); for(let i=1;i<=a.length;i++) for(let j=1;j<=b.length;j++) D[i][j]=Math.min(D[i-1][j]+1,D[i][j-1]+1,D[i-1][j-1]+(a[i-1]===b[j-1]?0:1)); return D[a.length][b.length]; };
+const CN39=(C,v)=>{ const F=[0]; for(let x=1;x<=v;x++){ F[x]=1e9; C.forEach(c=>{ if(c<=x) F[x]=Math.min(F[x],F[x-c]+1); }); } return F[v]; }, GR39=(C,v)=>{ let k=0; C.slice().sort((a,b)=>b-a).forEach(c=>{ while(v>=c){ v-=c; k++; } }); return k; };
+QP.push({id:'39o.remember',step:'39o',label:'remembering answers',open:()=>measured('39o'),make(){ return writtenQ('39o.remember',WO39); }},
+  {id:'39o.work',step:'39o',mode:'work',label:'distances and coins',open:()=>measured('39o'),make(){
+    if(rnd(2)){ const a=[...Array(3+rnd(2))].map(()=>pick('ACGT'.split(''))).join(''); let b=a.split(''); const i=rnd(b.length); if(rnd(2)) b.splice(i,1); else b[i]=pick('ACGT'.split('').filter(c=>c!==b[i])); if(rnd(2)) b.push(pick('ACGT'.split(''))); b=b.join('');
+      const d=ED39(a,b), naive=[...Array(Math.max(a.length,b.length))].filter((_,k)=>a[k]!==b[k]).length;
+      return W30('39o.work[e;'+[a,b].join(';')+']',[['the strings '+a+' and '+b,'given']],'What is their distance, the fewest changes?',String(d),[String(naive),String(Math.abs(a.length-b.length)),String(d+1),String(d+2),String(a.length+b.length)],'Alignment-table technique: fill the table of '+(a.length+1)+' × '+(b.length+1)+' cells.'); }
+    const [C,v]=pick([[[1,3,4],6],[[1,5,6],10],[[1,4,5],8],[[1,6,9],12],[[1,7,10],14],[[1,3,4],10]]), best=CN39(C,v), g=GR39(C,v);
+    return W30('39o.work[c;'+[C.join(','),v].join(';')+']',[['coins '+C.join(', '),'given']],'What is the fewest coins for '+v+'?',String(best),[String(g),String(v),String(best+1),String(Math.ceil(v/Math.max(...C)))],'Coin-table technique: fill the table from 0 to '+v+'. Taking the biggest coin first gives '+g+'.'); }},
+  {id:'39o.line',step:'39o',mode:'proof',label:'what kept answers license',open:()=>measured('39o'),make(){
+    return line28('39o.line',[
+      ['o1',[['coins 1, 3, 4 and the amount 6','given'],['the fewest coins is 2: 3 and 3','the coin-table technique']],2,0,'The table gives 2.'],
+      ['o2',[['coins 1, 3, 4 and the amount 6','given'],['the fewest coins is 3: 4, 1 and 1','taking the biggest coin first']],2,1,'Greedy is not best for these coins: 3 and 3.'],
+      ['o3',[['ACGT and AGT','given'],['their distance is 3','the alignment-table technique']],2,1,'Take out the C: their distance is 1.'],
+      ['o4',[['meetings for one room','given'],['taking the earliest end each time fits as many as any schedule','the earliest-finish technique']],2,0,'That is the technique.']],[]); }});
+
+/* 39p Wiring a Table by Hand */
+const WP39=[
+  ['Do d ¬r m ∨ d r ¬m merge to d?','no: the two rows differ in two inputs; only rows differing in one merge',['yes','yes, on d','no: they merge to r'],'Neighbour-merge technique.'],
+  ['Do the columns 00, 01, 10, 11 show every merge?','no: 01 and 10 sit side by side and differ in two inputs; use 00, 01, 11, 10',['yes','yes, for two inputs','no: no order shows merges'],'Neighbour-merge technique.'],
+  ['Does a block of 3 rows merge?','no: blocks have 2ᵏ rows; three rows are a block of 2 and one more',['yes','yes, if they are neighbours','no: only single rows'],'Neighbour-merge technique.'],
+  ['Is a circuit with a loop checked row by row?','no: a loop may keep a bit, and its output depends on its history',['yes','yes, twice','no: it cannot be checked'],'Circuit-to-table technique is for circuits with no loop.'],
+  ['How does the one-row-each wiring make a table?','the either of one both for each row where it gives 1',['the both of one either for each row','one either per row','a not for each 0 row'],'One-row-each technique.'],
+  ['When do two loop-free circuits do the same job?','exactly when they give the same column',['when they have the same gates','when they have as many gates','when their first rows agree'],'Circuit-to-table technique.']];
+QP.push({id:'39p.wiring',step:'39p',label:'wiring a table by hand',open:()=>measured('39p'),make(){ return writtenQ('39p.wiring',WP39); }},
+  {id:'39p.work',step:'39p',mode:'work',label:'boths per table',open:()=>measured('39p'),make(){
+    const col=[...Array(8)].map(()=>rnd(2)), k=col.reduce((a,b)=>a+b,0); if(k===0||k===8) return null;
+    return W30('39p.work[o;'+col.join('')+']',[['a table of 3 inputs with column '+col.join(' '),'rows 000 to 111']],'How many boths does the one-row-each wiring use?',String(k),[String(8-k),'8','3',String(k+1)],'One-row-each technique: one both for each row that gives 1.'); }},
+  {id:'39p.line',step:'39p',mode:'proof',label:'what merges license',open:()=>measured('39p'),make(){
+    return line28('39p.line',[
+      ['p1',[['a b ¬c and a b c both give 1','rows of a table'],['they merge to a b','the neighbour-merge technique']],2,0,'They differ in one input, c.'],
+      ['p2',[['a ¬b c and a b ¬c both give 1','rows of a table'],['they merge to a','the neighbour-merge technique']],2,1,'They differ in two inputs.'],
+      ['p3',[['circuits A and B have no loop and give the same column','checked row by row'],['A and B do the same job','the circuit-to-table technique']],2,0,'That is the technique.']],[]); }});
+
+/* 39q Counting Steps by Hand */
+const WQ39=[
+  ['Are two nested loops always n²?','no: i from 1 to n, j doubling up to i, is about n log₂ n',['yes','yes, up to a constant','no: always n'],'Count the inner rounds.'],
+  ['Does doubling i from 1 to n run log₂ n times?','⌊log₂ n⌋ + 1: ten rounds for 1000',['yes','it runs n times','it runs n/2 times'],'Halving-loop technique.'],
+  ['Is T(n) = 3T(n/2) + n about n log n, like merge sort?','no: three calls give about n^1.585',['yes','yes, up to a constant','no: it is n³'],'Call-tree technique.'],
+  ['Is 3n² + 10⁶ quicker than n³ for every n?','no: only from n = 102 on',['yes','no: never','only for odd n'],'Largest-term technique says from which size on.'],
+  ['i from 1 to n, j from 1 to i: how many times does the inner body run?','n(n + 1)/2',['n²','n','2n'],'Nested-loop technique.'],
+  ['Halving k to its whole part while k > 1: how many rounds?','⌊log₂ k⌋',['k/2','k','⌊log₂ k⌋ + 2'],'Halving-loop technique.']];
+QP.push({id:'39q.counting',step:'39q',label:'counting steps by hand',open:()=>measured('39q'),make(){ return writtenQ('39q.counting',WQ39); }},
+  {id:'39q.work',step:'39q',mode:'work',label:'loops by hand',open:()=>measured('39q'),make(){
+    const t=rnd(3);
+    if(t===0){ const n=3+rnd(10); return W30('39q.work[n;'+n+']',[['for i from 1 to '+n+': for j from 1 to i: body','given']],'How many times does the body run?',String(n*(n+1)/2),[String(n*n),String(n*(n-1)/2),String(2*n),String(n*(n+1))],'Nested-loop technique: n(n + 1)/2.'); }
+    if(t===1){ const n=3+rnd(6); return W30('39q.work[t;'+n+']',[['for i from 1 to '+n+': for j from 1 to i: for l from 1 to j: body','given']],'How many times does the body run?',String(n*(n+1)*(n+2)/6),[String(n*n*n),String(n*(n+1)/2),String(n*(n+1)*(n+2)/2),String(n*(n+1)*(n+2)/3)],'Nested-loop technique: n(n + 1)(n + 2)/6.'); }
+    const n=pick([10,100,500,1000,1024,2000,4096]);
+    return W30('39q.work[d;'+n+']',[['i = 1; while i ≤ '+n+': body; i = 2i','given']],'How many rounds does it run?',String(LG39(n)+1),[String(LG39(n)),String(n),String(Math.ceil(n/2)),String(LG39(n)+2)],'Halving-loop technique: ⌊log₂ '+n+'⌋ + 1.'); }},
+  {id:'39q.line',step:'39q',mode:'proof',label:'what hand counts license',open:()=>measured('39q'),make(){
+    return line28('39q.line',[
+      ['q1',[['i doubles from 1 while i ≤ 1000','given'],['the loop runs 10 rounds','the halving-loop technique']],2,0,'⌊log₂ 1000⌋ + 1 = 10.'],
+      ['q2',[['i doubles from 1 while i ≤ 1000','given'],['the loop runs 9.97 rounds','the halving-loop technique']],2,1,'Rounds are whole: ⌊log₂ 1000⌋ + 1 = 10.'],
+      ['q3',[['a count of 3n² + 10⁶','given'],['it is in the family of n²','the largest-term technique']],2,0,'The term of highest rank.'],
+      ['q4',[['T(n) = 3T(n/2) + n','given'],['T is n log n, like merge sort','the call-tree technique']],2,1,'Three calls: about n^1.585.']],[]); }});
 /* ===== Rung pools end ===== */
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
