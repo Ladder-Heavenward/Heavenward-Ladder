@@ -2841,7 +2841,7 @@ function foldAllButton(){ const box=document.querySelector('.rungs'); if(!box||b
   /* kind 'turns' (the default): the cat and the rain take turns, the cat first (Andrew 21:11Z: "Cat is good"; the rain a little
      diagonal with a faster fall). The turn is kept for the browser session only. Never over an open panel or dialog. */
   var CFG=Object.assign({kind:'turns', wait:25000, only:function(){return document.body.classList.contains('fv')&&![].some.call(document.querySelectorAll('#agreebox,#cards,#stick,.repbox,#desk.toolpage,.pamenu'),function(e){return e.getClientRects().length>0;});}}, window.LADDER_IDLE||{});
-  function turn(){ if(CFG.kind!=='turns') return CFG.kind; var k='cat'; try{ k=sessionStorage.getItem('ladder:idle')==='cat'?'rain':'cat'; sessionStorage.setItem('ladder:idle',k); }catch(e){} return k; }
+  function turn(){ if(CFG.kind!=='turns') return CFG.kind; var k='cat'; /* idlepup */ try{ k={cat:'rain',rain:'pup'}[sessionStorage.getItem('ladder:idle')]||'cat'; sessionStorage.setItem('ladder:idle',k); }catch(e){} return k; }
   var calm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   /* the pool: [first rung, symbols]. A page of rung n rains every row with first rung <= n. */
   var POOL=[[0,'= ( ) a b'],[1,'¬ ∧ ∨ ⇒ ⇔ ⊥ ⊤'],[2,'∀ ∃ ∈ ∉ ≠'],[3,'∅ ⊆ ∪ ∩ □ ◇'],[4,'+ · 0 1 Σ'],[5,'− < ≤ ½ ⅓'],[7,'∎ ≈'],
@@ -2859,6 +2859,16 @@ function foldAllButton(){ const box=document.querySelector('.rungs'); if(!box||b
    +'#idle-layer .cat .body{transform-origin:105px 104px;animation:idle-breathe 4.6s ease-in-out 8s infinite}'
    +'#idle-layer .cat .z{opacity:0;animation:idle-z 4.6s ease-in 9s infinite}#idle-layer .cat .z2{animation-delay:10.5s}#idle-layer .cat .z3{animation-delay:12s}'
    +'#idle-layer .drop{position:absolute;top:-2em;color:#8d929b;font-family:Georgia,"Times New Roman",serif;opacity:0;animation:idle-fall var(--t) linear var(--d) infinite;will-change:transform}'
+   +'#idle-layer svg.pup{right:auto;left:5vw;width:min(50vw,250px);bottom:calc(92px + min(34vw,170px) + env(safe-area-inset-bottom,0px))}'
+   +'#idle-layer .idle-more{opacity:0;animation:idle-more 1.2s ease forwards}@keyframes idle-more{to{opacity:1}}'
+   +'#idle-layer .pup path.spot{fill:#5d626b;stroke:none;opacity:0;animation:idle-in .9s ease 6.8s forwards}'
+   +'#idle-layer .pup .eyes-open{animation:idle-out .6s ease 8.6s forwards}#idle-layer .pup .eyes-shut{animation:idle-in .8s ease 8.8s forwards}'
+   +'#idle-layer .pup .body{transform-origin:128px 110px;animation:idle-breathe 4.6s ease-in-out 9.4s infinite}'
+   +'#idle-layer .pup .tail{transform-origin:178px 86px;animation:idle-wag 7s ease-in-out 11s infinite}'
+   +'#idle-layer .pup .foot{transform-origin:150px 110px;animation:idle-kick 9s ease-in-out 14s infinite}'
+   +'#idle-layer .pup .z{animation-delay:10.4s}#idle-layer .pup .z2{animation-delay:11.9s}#idle-layer .pup .z3{animation-delay:13.4s}'
+   +'@keyframes idle-wag{0%,84%,100%{transform:rotate(0)}88%{transform:rotate(9deg)}92%{transform:rotate(-5deg)}96%{transform:rotate(6deg)}}'
+   +'@keyframes idle-kick{0%,90%,100%{transform:rotate(0)}93%{transform:rotate(-3deg)}96%{transform:rotate(1.5deg)}}'
    +'@keyframes idle-draw{to{stroke-dashoffset:0}}@keyframes idle-out{to{opacity:0}}@keyframes idle-in{to{opacity:.42}}'
    +'@keyframes idle-breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.012,1.035)}}'
    +'@keyframes idle-z{0%{opacity:0;transform:translate(0,0)}25%{opacity:.4}100%{opacity:0;transform:translate(10px,-22px)}}'
@@ -2873,16 +2883,43 @@ function foldAllButton(){ const box=document.querySelector('.rungs'); if(!box||b
    +'<path class="dr eyes-open" style="--l:14;--t:.3s;--d:5.2s" d="M51 88 a2.4 2.4 0 1 0 .1 0 M71 88 a2.4 2.4 0 1 0 .1 0"/>'
    +'<path class="eyes-shut" d="M47 90 q4.5 3.5 9 0 M67 90 q4.5 3.5 9 0 M60 97 l2 2 l2 -2"/>'
    +'<path class="z" d="M96 46 h7 l-7 8 h7"/><path class="z z2" d="M108 32 h6 l-6 7 h6"/><path class="z z3" d="M118 20 h5 l-5 6 h5"/></svg>';
+  var PUP='<svg class="cat pup" viewBox="0 0 230 130" aria-hidden="true">'
+   /* the back and belly first, then the two hind legs stretched out behind (the sploot), the tail, the head on the floor, the ears, a front paw; the spots come in, the eyes close */
+   +'<g class="body"><path class="dr" style="--l:330;--t:2.6s" d="M74 84 C92 70 132 68 158 74 C174 78 184 88 184 98 C184 104 180 108 172 109 L70 110"/>'
+   +'<path class="spot" d="M100 76 C108 71 122 72 126 79 C128 86 118 90 108 88 C100 87 96 81 100 76 Z"/><path class="spot" d="M146 80 C154 78 164 82 164 89 C163 95 152 96 146 92 C141 88 141 82 146 80 Z"/><path class="spot" d="M124 98 C129 95 137 97 137 102 C136 106 127 107 123 104 C121 102 121 99 124 98 Z"/></g>'
+   +'<path class="dr" style="--l:150;--t:1.5s;--d:2.2s" d="M180 94 C194 92 212 97 220 104 C225 109 219 113 210 112 C198 111 184 110 172 109"/>'
+   +'<g class="foot"><path class="dr" style="--l:120;--t:1.2s;--d:2.9s" d="M150 109 C166 112 190 114 204 118 C211 121 206 125 198 124 C182 122 160 118 142 111"/></g>'
+   +'<path class="dr" style="--l:30;--t:.5s;--d:3.6s" d="M213 105 l4 3 M209 107 l4 3"/>'
+   +'<g class="tail"><path class="dr" style="--l:50;--t:.7s;--d:3.8s" d="M178 86 C184 76 190 68 197 63"/></g>'
+   +'<path class="dr" style="--l:240;--t:2s;--d:4.2s" d="M50 68 C67 64 82 74 84 90 C85 102 76 110 62 111 C50 113 38 113 28 113 C18 113 12 110 13 105 C14 99 20 96 30 91 C33 80 40 71 50 68"/>'
+   +'<path class="spot" d="M12 103 C15 99 21 100 21 104 C20 108 15 109 13 107 Z"/><path class="dr" style="--l:20;--t:.4s;--d:5.9s" d="M21 109 C25 111 30 111 34 109"/>'
+   +'<path class="dr" style="--l:70;--t:.7s;--d:5.9s" d="M47 69 C40 63 31 66 29 76 C35 79 43 77 49 72"/>'
+   +'<path class="dr" style="--l:60;--t:.7s;--d:6.2s" d="M68 68 C78 70 86 78 88 90 C80 88 72 82 66 72"/><path class="spot" d="M68 68 C78 70 86 78 88 90 C80 88 72 82 66 72 Z"/>'
+   +'<path class="spot" d="M56 84 C62 80 71 83 71 90 C70 96 61 98 56 94 C53 91 53 86 56 84 Z"/>'
+   +'<path class="dr eyes-open" style="--l:14;--t:.3s;--d:6.6s" d="M45 89 a2.2 2.2 0 1 0 .1 0 M63 88 a2.2 2.2 0 1 0 .1 0"/>'
+   +'<path class="eyes-shut" d="M41 90 q4.5 3.5 9 0 M59 89 q4.5 3.5 9 0"/>'
+   +'<path class="dr" style="--l:110;--t:1.1s;--d:6.4s" d="M52 113 C38 115 22 116 16 119 C12 123 20 126 30 124 C46 122 62 117 72 110"/>'
+   +'<path class="z" d="M92 52 h7 l-7 8 h7"/><path class="z z2" d="M104 38 h6 l-6 7 h6"/><path class="z z3" d="M114 26 h5 l-5 6 h5"/></svg>';
+  /* the animations add up (Andrew 13:00Z): while the slide stays untouched, the next kind joins every CFG.step ms,
+     so by a minute and a half there are two sleeping animals and a gentle rain. Any touch clears them all. */
+  var ORDER=['cat','rain','pup'], more=null;
+  function piece(K){ if(K!=='rain') return K==='pup'?PUP:CAT; var P=pool(), w=window.innerWidth, n=Math.max(10,Math.min(26,Math.round(w/22))), h='';
+    for(var i=0;i<n;i++){ var t=14+Math.random()*14, sz=14+Math.random()*16;
+      h+='<span class="drop" style="left:'+(-12+Math.random()*106).toFixed(1)+'%;font-size:'+sz.toFixed(0)+'px;--t:'+t.toFixed(1)+'s;--d:'+(Math.random()*t).toFixed(1)+'s;--o:'+(0.26+Math.random()*0.22).toFixed(2)+'">'+P[Math.floor(Math.random()*P.length)]+'</span>'; }
+    return h; }
+  function stack(K,n){ clearTimeout(more); if(n>=3||CFG.kind!=='turns') return;
+    more=setTimeout(function(){ if(!layer) return; var N=ORDER[(ORDER.indexOf(K)+1)%3], d=document.createElement('div'); d.className='idle-more'; d.innerHTML=piece(N); layer.appendChild(d); stack(N,n+1); }, CFG.step||32500); }
   var layer=null, timer=null;
   function build(){ if(!document.getElementById('idle-style')){ var s=document.createElement('style'); s.id='idle-style'; s.textContent=css; document.head.appendChild(s); }
     layer=document.createElement('div'); layer.id='idle-layer'; layer.setAttribute('aria-hidden','true');
-    if(turn()==='rain'){ var P=pool(), w=window.innerWidth, n=Math.max(10,Math.min(26,Math.round(w/22))), h='';
+    var K=turn(); if(K==='rain'){ var P=pool(), w=window.innerWidth, n=Math.max(10,Math.min(26,Math.round(w/22))), h='';
       for(var i=0;i<n;i++){ var t=14+Math.random()*14, sz=14+Math.random()*16;
         h+='<span class="drop" style="left:'+(-12+Math.random()*106).toFixed(1)+'%;font-size:'+sz.toFixed(0)+'px;--t:'+t.toFixed(1)+'s;--d:'+(Math.random()*t).toFixed(1)+'s;--o:'+(0.26+Math.random()*0.22).toFixed(2)+'">'+P[Math.floor(Math.random()*P.length)]+'</span>'; }
       layer.innerHTML=h; }
-    else layer.innerHTML=CAT;
+    else layer.innerHTML=(K==='pup'?PUP:CAT);
+    stack(K,1);
     document.body.appendChild(layer); requestAnimationFrame(function(){ requestAnimationFrame(function(){ if(layer) layer.classList.add('on'); }); }); }
-  function stop(){ if(layer){ var l=layer; layer=null; l.classList.add('off'); setTimeout(function(){ l.remove(); },300); } if(!CFG.manual) arm(); }
+  function stop(){ clearTimeout(more); if(layer){ var l=layer; layer=null; l.classList.add('off'); setTimeout(function(){ l.remove(); },300); } if(!CFG.manual) arm(); }
   function arm(){ clearTimeout(timer); if(calm) return; timer=setTimeout(function(){ if(!layer&&!document.hidden&&CFG.only()) build(); else if(!layer) arm(); },CFG.wait); }
   if(!CFG.manual){ ['pointerdown','pointermove','touchstart','keydown','wheel','scroll'].forEach(function(e){ window.addEventListener(e,stop,{passive:true,capture:true}); });
   document.addEventListener('visibilitychange',stop); }
