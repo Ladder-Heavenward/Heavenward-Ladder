@@ -2642,7 +2642,8 @@ const QK='ladder:notices', SEEN='ladder:noticed', SNAP='ladder:unlocksnap';
 let shown=false, box=null, base=false;
 function queue(key,msg,mark,num){ const seen=J(SEEN,{}); if(seen[key]) return; seen[key]=Date.now(); put(SEEN,seen); if(base) return; const q=J(QK,[]); const n={k:key,m:msg,t:Date.now()}; if(mark){ n.a=mark; n.s=num; let i=0; while(i<q.length&&q[i].a) i++; q.splice(i,0,n); /* marks play first, in the order earned */ } else q.push(n); put(QK,q); }
 const STAR_P='M12 2.4l2.95 6.35 6.95.82-5.13 4.75 1.36 6.86L12 17.75 5.87 21.18l1.36-6.86L2.1 9.57l6.95-.82z';
-const MARKS={blue:'<svg viewBox="0 0 24 24" aria-hidden="true"><path class="sp-line" d="'+STAR_P+'"/><path class="sp-fill" d="'+STAR_P+'"/></svg>',
+/* starpop 2 */ const WAVE_P='M-24 0q3-1.7 6 0t6 0 6 0 6 0 6 0 6 0 6 0 6 0V30H-24z';
+const MARKS={blue:'<svg viewBox="0 0 24 24" aria-hidden="true"><defs><clipPath id="spclip"><path d="'+STAR_P+'"/></clipPath></defs><g clip-path="url(#spclip)"><g class="sp-rise"><path class="sp-wave sp-wave2" d="'+WAVE_P+'"/><path class="sp-wave" d="'+WAVE_P+'"/></g></g><path class="sp-line" d="'+STAR_P+'"/></svg>',
   gold:'<svg viewBox="0 0 24 24" aria-hidden="true"><path class="sp-fill" d="'+STAR_P+'"/></svg>',
   wings:'<span class="sp-corona" aria-hidden="true"></span><svg viewBox="0 0 28 14" aria-hidden="true"><path d="M13.4 9.2C11 3.6 6.4.9.8.8c1 3 2.4 5 4.4 6.2-1 .5-1.7 1.1-2.2 1.9 1.9.9 3.8 1 5.2.7-.6 1-.8 2-.5 3.2 1.4.4 3.4-.2 5.7-3.6z"/><path transform="matrix(-1 0 0 1 28 0)" d="M13.4 9.2C11 3.6 6.4.9.8.8c1 3 2.4 5 4.4 6.2-1 .5-1.7 1.1-2.2 1.9 1.9.9 3.8 1 5.2.7-.6 1-.8 2-.5 3.2 1.4.4 3.4-.2 5.7-3.6z"/></svg>'};
 const MARKNAME={blue:'blue star',gold:'gold star',wings:'angel wings'};
