@@ -577,7 +577,7 @@ function deskHTML(){
     +'<div class="dpane" id="dp-keys"><div id="dkeyshost"></div></div>'
     +(qs?'<div class="dpane" id="dp-qs"><p class="dnote">The page’s questions, here so you can read them beside the class.</p><div class="dq" id="dq"></div></div>':'')
     +'<div class="dpane" id="dp-graph"><div id="dgfig"></div><div id="dmg"></div><p class="dnote" style="margin-top:10px">Type it as on paper: x^2, 2sin(x), e^x, ln x, √x, |x|, x!. a, b, c and k get sliders.</p></div>'
-    +'<div class="dpane" id="dp-moves"><p class="dnote" id="dmnote">The techs this step uses and builds: what each is called, what it does in words, and the line in symbols.</p><div id="dmoves"></div><p><a class="dlink" href="moves.html">every tech you have earned →</a></p></div>'
+    +'<div class="dpane" id="dp-moves">'+/* techhead */'<p class="dtdeck"><a class="dtdeck-b" href="moves.html">Tech Deck</a></p><p class="dnote" id="dmnote">The techs this step uses and builds: what each is called, what it does in words, and the line in symbols.</p><div id="dmoves"></div></div>'
     +'<div class="dpane" id="dp-rand">'+/* hangdry */'<p class="jogtxt" role="status" aria-label="the laundry is loading">'+'Hang Drying'.split('').map((c,i)=>c===' '?'<s>&nbsp;</s>':'<s aria-hidden="true" style="animation-delay:'+(i*70)+'ms">'+c+'</s>').join('')+'</p></div>'
     +(hb?'<div class="dpane" id="dp-base"><div id="dbase"></div></div>':'')+'<div class="dpane" id="dp-rec"><p class="dtheme"><span class="dnote">Display:</span> <button type="button" data-th="light">Light</button> <button type="button" data-th="dark">Dark</button></p><p class="dcomp"><label><input type="checkbox" class="reccomp"> Opt into competition</label><span class="dnote dcomp-n">Gives you a climber name and opens the Standing.</span></p><h4 class="drech">Record</h4><p class="recname"><span class="dnote">Your climber name:</span> <b class="dname-n">'+(window.LadderAccount?LadderAccount.name:'')+'</b> </p><p class="recrolls"><button type="button" class="dlink recroll">New Name</button> <button type="button" class="dlink recroll-a">New Animal</button> <button type="button" class="dlink recroll-p">New Place</button></p><p class="dnote">Everything the ladder remembers about your climb is one record, kept on this device. Save it as a file to keep a copy or to carry it to another device, and open that file there.</p><p><button type="button" class="dlink recx">save my record as a file</button></p><p><label class="dlink">open a record file <input type="file" accept=".json,application/json" class="reci" hidden></label></p><p><label class="dnote recai-l"><input type="checkbox" class="recai"> An AI assistant is connected</label></p><p><button type="button" class="dlink recdel">delete my progress</button></p><p class="dnote" id="recnote"></p></div>';
   document.body.append(b,d);
@@ -2939,5 +2939,57 @@ try{ if(document.fonts&&document.fonts.load){ window.addEventListener('load',fun
     f.onclick=()=>{ if(window.LadderAnnexes) LadderAnnexes.catalogue(); }; document.body.appendChild(f);
     const sync=()=>{ const a=document.querySelector('#desk .dannex'); f.hidden=!(a&&!a.classList.contains('lk-hide')); };
     sync(); let n=0; const t=setInterval(()=>{ sync(); if(++n>60) clearInterval(t); },250); document.addEventListener('click',()=>setTimeout(sync,60)); };
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(boot,0)); else boot();
+})();
+/* cellarnav */
+(function(){ 'use strict'; if(window.LADDER_DESK) return;
+  const NONE=new Set(["r09d","r09f"]);
+  const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const pages=()=>{ try{ return JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){ return {}; } };
+  const here=()=>(location.pathname.split('/').pop()||'').replace(/\.html$/,'');
+  const lab=s=>((window.LADDER_CARDMAP||{})[s]||[s.replace(/^r0*(\d+)/,'$1')])[0];
+  const maps=()=>(window.LadderStick&&LadderStick.maps?LadderStick.maps():Promise.resolve()).catch(()=>{});
+  /* unlocked: every step of a rung you have opened, any step you have passed, and the step you have climbed to */
+  function unlocked(){ const P=pages(); let h=-1; for(const k in P){ const m=k.match(/^open:r(\d+)$/); if(m&&P[k]&&P[k].v) h=Math.max(h,+m[1]); }
+    let far=''; try{ far=(JSON.parse(LS.getItem('ladder:furthest')||'null')||{}).page||''; }catch(e){}
+    const out=[]; (window.LADMAP||[]).forEach(([fl,rungs])=>rungs.forEach(([r,core,annex])=>core.concat(annex).forEach(([s])=>{ if(!NONE.has(s)&&(r<=h||(P[s]&&P[s].v)||s===here()||s===far)) out.push(s); }))); return out; }
+  const cache=new Map();
+  function load(s){ if(cache.has(s)) return Promise.resolve(cache.get(s));
+    const take=(sec,title)=>{ const c=sec.cloneNode(true); c.classList.remove('shut'); c.hidden=false; c.removeAttribute('style'); c.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id')); c.querySelectorAll('.blip,script,button.pa').forEach(e=>e.remove());
+      const v={html:c.innerHTML,title:title||''}; cache.set(s,v); return v; };
+    return fetch(s+'.html').then(r=>{ if(!r.ok) throw 0; return r.text(); }).then(t=>{ const d=new DOMParser().parseFromString(t,'text/html'), sec=d.querySelector('section.basement'); if(!sec) throw 0;
+      const h=d.querySelector('header.top h1, h1'); return take(sec,h?h.textContent.trim():''); }); }
+  function typeset(el){ if(!window.katex) return; el.querySelectorAll('[data-tex],[data-tex-inline]').forEach(n=>{ if(n.querySelector('.katex')) return; const inl=n.hasAttribute('data-tex-inline'), t=n.getAttribute(inl?'data-tex-inline':'data-tex');
+      try{ katex.render(t,n,{throwOnError:false,strict:false,trust:true,displayMode:!inl}); }catch(e){ n.textContent=t; } }); }
+  let box=null, list=[], at=0;
+  function close(){ if(box){ box.remove(); box=null; document.body.classList.remove('stickopen'); } }
+  function show(dir){ const s=list[at], body=box.querySelector('.cl-body'), nav=box.querySelector('.cl-nav');
+    nav.querySelector('.cl-prev').disabled=at<=0; nav.querySelector('.cl-next').disabled=at>=list.length-1;
+    nav.querySelector('.cl-at').innerHTML='<b>'+esc(lab(s))+'</b> <span>'+(at+1)+' of '+list.length+'</span>';
+    load(s).then(v=>{ if(!box||list[at]!==s) return; body.className='cl-body'; void body.offsetWidth; body.innerHTML=(v.title?'<p class="cl-title"><a href="'+s+'.html">'+esc(v.title)+'</a></p>':'')+v.html; typeset(body); if(dir) body.classList.add(dir>0?'cl-from-r':'cl-from-l'); box.scrollTop=0; })
+      .catch(()=>{ if(!box||list[at]!==s) return; body.innerHTML='<p class="sk-n">This cellar could not be opened just now.</p>'; }); }
+  function go(d){ const n=at+d; if(!box||n<0||n>=list.length) return; at=n; show(d); }
+  function open(stem){ maps().then(()=>{ document.querySelectorAll('#stick').forEach(e=>e.remove()); close();
+    list=unlocked(); const want=stem||here(); at=list.indexOf(want); if(at<0) at=list.length-1;
+    box=document.createElement('div'); box.id='stick'; box.className='cellar'; box.setAttribute('role','dialog'); box.setAttribute('aria-label','the cellar');
+    box.innerHTML='<div class="sk-card"><div class="sk-top" data-slug="there if you want it"><span>the cellar</span><button type="button" class="sk-x" aria-label="back to the ladder">×</button></div>'
+      +(list.length?'<div class="cl-nav"><button type="button" class="cl-prev" aria-label="the cellar before">‹</button><span class="cl-at"></span><button type="button" class="cl-next" aria-label="the cellar after">›</button></div><div class="cl-body"></div>'
+        :'<p class="sk-n">No cellar is unlocked yet. Each step’s cellar comes here once its rung is open.</p>')+'</div>';
+    document.body.appendChild(box); document.body.classList.add('stickopen'); box.querySelector('.sk-x').onclick=close;
+    if(!list.length) return;
+    box.querySelector('.cl-prev').onclick=()=>go(-1); box.querySelector('.cl-next').onclick=()=>go(1);
+    let x0=null,y0=0; box.addEventListener('touchstart',e=>{ const t=e.touches[0]; x0=t.clientX; y0=t.clientY; },{passive:true});
+    box.addEventListener('touchend',e=>{ if(x0==null) return; const t=e.changedTouches[0], dx=t.clientX-x0, dy=t.clientY-y0; x0=null; if(Math.abs(dx)>55&&Math.abs(dx)>2*Math.abs(dy)) go(dx<0?1:-1); },{passive:true});
+    show(0); }); }
+  document.addEventListener('keydown',e=>{ if(!box||!document.body.contains(box)) return; if(e.key==='ArrowLeft'){ e.preventDefault(); go(-1); } else if(e.key==='ArrowRight'){ e.preventDefault(); go(1); } else if(e.key==='Escape') close(); },true);
+  window.LadderCellar={open,close,unlocked};
+  /* the toolbox's Cellar button opens the same screen */
+  document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('#desk .dtabs [data-p="base"]'); if(!b) return; e.preventDefault(); e.stopPropagation();
+    const d=document.getElementById('desk'), k=document.getElementById('deskbtn'); if(d&&d.classList.contains('open')&&k) k.click(); open(here()); },true);
+  /* on the index: a Cellar button right above the Annexes button */
+  const boot=()=>{ if(!document.querySelector('.rungs')) return;
+    const f=document.createElement('button'); f.type='button'; f.id='cellarfab'; f.textContent='Cellar'; f.hidden=true; f.onclick=()=>open(null); document.body.appendChild(f);
+    const sync=()=>{ const a=document.getElementById('annexfab'); f.classList.toggle('low',!a||a.hidden); f.hidden=!(window.LADMAP&&unlocked().length); };
+    maps().then(()=>{ sync(); let n=0; const t=setInterval(()=>{ sync(); if(++n>60) clearInterval(t); },250); document.addEventListener('click',()=>setTimeout(sync,60)); }); };
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(boot,0)); else boot();
 })();
