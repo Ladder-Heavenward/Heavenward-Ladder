@@ -656,6 +656,24 @@ function starCounts(){
     if(fB) blue++; if(fG) gold++; if(fB&&fG&&fC) wings++; below=below&&fB; });
   return {blue,gold,wings};
 }
+/* starpop */ /* 2026-11-13 (Andrew 08:29Z): which step, rung or floor holds each mark, by its number, so the pop-up can name it */
+function starLabel(s){ let m=String(s).match(/^r0*(\d+)([a-z])$/); if(m) return m[1]+m[2]; m=String(s).match(/^r0*(\d+)([a-z]{2,}\d*|cb\d+)$/); return m?m[1]+'·'+m[2]:String(s); }
+function starUnits(){
+  const M=window.LADMAP; if(!M) return null;
+  let pages={}; try{ pages=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
+  let below=true; const cert=k=>{ const c=certRead(k); return !!c&&(c.via!=='measure'||below); }, P=s=>pages[s]||{};
+  const blueStep=s=>!!P(s).v, starStep=s=>!!(P(s).v&&P(s).o!==false), cleared=([s,n])=>!n||(+P(s).cd||0)>=n;
+  const blue=[],gold=[],wings=[];
+  M.forEach(([fl,rungs])=>{ let fB=rungs.length>0,fC=true; const fG=cert('floor'+fl+'concl');
+    rungs.forEach(([r,core,annex],i)=>{
+      core.concat(annex).forEach(([s])=>{ if(blueStep(s)) blue.push(starLabel(s)); if(cert(s)) gold.push(starLabel(s)); });
+      const rB=core.every(([s])=>starStep(s)), rG=i===rungs.length-1?fG:cert(core[core.length-1][0]), rC=core.every(cleared);
+      if(rB) blue.push('rung '+r); if(rG) gold.push('rung '+r); if(rB&&rG&&rC) wings.push('rung '+r);
+      fB=fB&&rB; fC=fC&&rC; });
+    if(fB) blue.push('floor '+fl); if(fG) gold.push('floor '+fl); if(fB&&fG&&fC) wings.push('floor '+fl); below=below&&fB; });
+  return {blue,gold,wings};
+}
+window.__starUnits=starUnits;
 const ICON_L='<svg class="lb-L" viewBox="104 92 308 328" aria-hidden="true"><path d="M222,132 L384,358" stroke="#5fd13a" stroke-width="16" stroke-linecap="round"/><path fill="currentColor" d="M112,100 L262,100 L262,108 C238,108 225,112 223,136 L222,360 L360,360 C384,359 397,342 398,294 L405,294 L400,412 L112,412 L112,404 C134,404 149,399 150,378 L150,136 C149,112 136,108 112,108 Z"/><path d="M222,318 L264,318 L264,360" fill="none" stroke="#e8703a" stroke-width="16"/></svg>';
 const ICON_X='<svg class="lb-X" viewBox="20 20 280 300" aria-hidden="true"><path d="M262,64 C220,118 130,226 66,292" fill="none" stroke="#5fd13a" stroke-width="18" stroke-linecap="round"/><path fill="currentColor" d="M38,92 C52,52 98,44 124,86 L216,262 C228,284 246,290 270,276 L276,286 C246,318 196,316 176,280 L88,112 C76,90 58,88 46,100 Z"/></svg>'; /* 0.3.23 (Andrew 10:54): Toolbox in the ladder's lettering, its x a large teal chi */
 window.ICON_L_HTML='<span class="lb-l">'+ICON_L+'<span class="lb-w">adder</span></span>';
@@ -2622,8 +2640,19 @@ const J=(k,d)=>{ try{ const v=JSON.parse(LS.getItem(k)||'null'); return v==null?
 const put=(k,v)=>{ try{ LS.setItem(k,JSON.stringify(v)); }catch(e){} };
 const QK='ladder:notices', SEEN='ladder:noticed', SNAP='ladder:unlocksnap';
 let shown=false, box=null, base=false;
-function queue(key,msg){ const seen=J(SEEN,{}); if(seen[key]) return; seen[key]=Date.now(); put(SEEN,seen); if(base) return; const q=J(QK,[]); q.push({k:key,m:msg,t:Date.now()}); put(QK,q); }
-function render(n){ if(box) box.remove(); box=document.createElement('div'); box.className='unlocknote'; box.setAttribute('role','status');
+function queue(key,msg,mark,num){ const seen=J(SEEN,{}); if(seen[key]) return; seen[key]=Date.now(); put(SEEN,seen); if(base) return; const q=J(QK,[]); const n={k:key,m:msg,t:Date.now()}; if(mark){ n.a=mark; n.s=num; let i=0; while(i<q.length&&q[i].a) i++; q.splice(i,0,n); /* marks play first, in the order earned */ } else q.push(n); put(QK,q); }
+const STAR_P='M12 2.4l2.95 6.35 6.95.82-5.13 4.75 1.36 6.86L12 17.75 5.87 21.18l1.36-6.86L2.1 9.57l6.95-.82z';
+const MARKS={blue:'<svg viewBox="0 0 24 24" aria-hidden="true"><path class="sp-line" d="'+STAR_P+'"/><path class="sp-fill" d="'+STAR_P+'"/></svg>',
+  gold:'<svg viewBox="0 0 24 24" aria-hidden="true"><path class="sp-fill" d="'+STAR_P+'"/></svg>',
+  wings:'<span class="sp-corona" aria-hidden="true"></span><svg viewBox="0 0 28 14" aria-hidden="true"><path d="M13.4 9.2C11 3.6 6.4.9.8.8c1 3 2.4 5 4.4 6.2-1 .5-1.7 1.1-2.2 1.9 1.9.9 3.8 1 5.2.7-.6 1-.8 2-.5 3.2 1.4.4 3.4-.2 5.7-3.6z"/><path transform="matrix(-1 0 0 1 28 0)" d="M13.4 9.2C11 3.6 6.4.9.8.8c1 3 2.4 5 4.4 6.2-1 .5-1.7 1.1-2.2 1.9 1.9.9 3.8 1 5.2.7-.6 1-.8 2-.5 3.2 1.4.4 3.4-.2 5.7-3.6z"/></svg>'};
+const MARKNAME={blue:'blue star',gold:'gold star',wings:'angel wings'};
+function renderMark(n){ if(box) box.remove(); box=document.createElement('div'); box.className='unlocknote un-ach un-'+n.a; box.setAttribute('role','status');
+  box.setAttribute('aria-label',MARKNAME[n.a]+': '+n.s);
+  box.innerHTML='<span class="sp-ic">'+MARKS[n.a]+'</span><span class="sp-n"></span>'; box.querySelector('.sp-n').textContent=n.s;
+  const mine=box, shut=()=>{ if(box!==mine) return; mine.classList.remove('on'); setTimeout(()=>{ mine.remove(); if(box===mine){ box=null; shown=false; next(); } },300); };
+  box.onclick=shut; document.body.appendChild(box); requestAnimationFrame(()=>box.classList.add('on'));
+  clearTimeout(render.h); render.h=setTimeout(shut,n.a==='wings'?4200:3200); }
+function render(n){ if(n.a&&MARKS[n.a]) return renderMark(n); if(box) box.remove(); box=document.createElement('div'); box.className='unlocknote'; box.setAttribute('role','status');
   box.innerHTML='<span class="un-k">new</span><span class="un-m"></span><button type="button" class="un-x" aria-label="close">×</button>';
   box.querySelector('.un-m').textContent=n.m; box.querySelector('.un-x').onclick=()=>{ box.classList.remove('on'); setTimeout(()=>box&&box.remove(),250); };
   document.body.appendChild(box); requestAnimationFrame(()=>box.classList.add('on'));
@@ -2642,7 +2671,8 @@ async function scan(){ const U=window.LadderUnlock; if(!U) return;
   const D=window.LADDER_ANNEXES; if(D){ const h=high(); D.order.forEach(k=>(D.subj[k]||[]).forEach(a=>{ if(a[3]<=h) queue('annex:'+a[0],'A new annex is open in the toolbox: '+a[1]+' ('+D.names[k]+').'); })); }
   const CM=window.LADDER_CARDMAP||{}; Object.keys(CM).forEach(s=>{ const t=CM[s]&&CM[s][0]; if(t&&/^r\d\d[a-z]$/.test(s)&&U.reached(s)&&U.passed&&U.passed(s)) queue('pool:'+s,'The laundry has new questions: '+t+'’s pool.'); });
   const b=document.querySelector('.lb-counts'); if(b){ const v={blue:+(b.querySelector('.lc-blue b')||{}).textContent||0,gold:+(b.querySelector('.lc-gold b')||{}).textContent||0,wings:+(b.querySelector('.lc-wing b')||{}).textContent||0}, old=J(SNAP,null)||{};
-    if(!base){ if(v.blue>(old.blue||0)) queue('blue:'+v.blue,'A blue star: a step with every footing question cleared.'); if(v.gold>(old.gold||0)) queue('gold:'+v.gold,'A gold star: a section measured.'); if(v.wings>(old.wings||0)) queue('wings:'+v.wings,'Angel wings: a rung with its blue star, its gold star and every standing question cleared.'); }
+    const UN='ladder:starunits', now=window.__starUnits?window.__starUnits():null, was=J(UN,null); /* the first look only records what is held, so nobody gets a flood of old marks */
+    if(now){ if(!base&&was) ['blue','gold','wings'].forEach(k=>{ const had=new Set(was[k]||[]); now[k].forEach(s=>{ if(!had.has(s)) queue('mark:'+k+':'+s,'',k,s); }); }); put(UN,now); }
     put(SNAP,Object.assign({t:Date.now()},v)); } else if(base) put(SNAP,{t:Date.now()});
   base=false; next(); }
 window.LadderNotices={tick(){ shown=false; scan(); },queue,next};
