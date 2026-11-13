@@ -498,12 +498,12 @@ function drawP(){
     const filled= place<splits; const newest= place===splits-1; const di= k-1-place; const val= di>=0? D[di] : null;
     const rolled= incNote && incNote.rolled.includes(place);
     rbox(c,x,y,bw,bh,6); c.fillStyle= newest? col('--ember') : (rolled? col('--teal') : (filled? col('--sand') : col('--card'))); c.fill(); c.strokeStyle=col('--grid'); c.lineWidth=1.2; c.stroke();
-    if(filled && val!==null){ c.fillStyle= (newest||rolled)? '#fff' : col('--ink'); c.font=Math.round(bh*.5)+'px IBM Plex Mono, monospace'; c.fillText(String(val),x+bw/2,y+bh/2+1); }
-    c.fillStyle=col('--muted'); c.font=(W<480?'9.5px':'11px')+' IBM Plex Mono, monospace';
+    if(filled && val!==null){ c.fillStyle= (newest||rolled)? '#fff' : col('--ink'); c.font=Math.round(bh*.5)+'px Nunito,system-ui,sans-serif'; c.fillText(String(val),x+bw/2,y+bh/2+1); }
+    c.fillStyle=col('--muted'); c.font=(W<480?'9.5px':'11px')+' Nunito,system-ui,sans-serif';
     const worth= base===10? (place===0?'×1':'×10'+(place>1?sup(place):'')) : '×'+(2**place);
     c.fillText(worth,x+bw/2,y+bh+14);
   }
-  c.fillStyle=col('--muted'); c.font=(W<480?'10px':'12px')+' IBM Plex Mono, monospace';
+  c.fillStyle=col('--muted'); c.font=(W<480?'10px':'12px')+' Nunito,system-ui,sans-serif';
   c.fillText(done? 'q reached 0: the boxes hold the numeral' : (splits? 'split again: the next place is to the left' : 'press split once'),W/2,H-12);
   let t=[];
   if(incNote) t.push(incNote.tex);
@@ -547,15 +547,15 @@ function drawC(){
   c.textAlign='center'; c.textBaseline='middle';
   const xOf=i=>xR-cw*i;
   const ad=digitsOf(A,10).reverse(), bd= op==='add'? digitsOf(Bv,10).reverse() : [Bv];
-  c.font=fs+'px IBM Plex Mono, monospace'; c.fillStyle=col('--ink');
+  c.font=fs+'px Nunito,system-ui,sans-serif'; c.fillStyle=col('--ink');
   ad.forEach((d,i)=>c.fillText(String(d),xOf(i),yA));
   bd.forEach((d,i)=>c.fillText(String(d),xOf(i),yB));
   c.fillText(op==='add'?'+':'·',xOf(Math.max(ad.length,bd.length,P.length)),yB);
   c.strokeStyle=col('--ink'); c.lineWidth=1.4; c.beginPath(); c.moveTo(xOf(P.length)-cw*.5,yL); c.lineTo(xR+cw*.5,yL); c.stroke();
   for(let j=0;j<done;j++){ const p=P[j]; const nw=j===done-1;
     if(nw){ c.fillStyle=col('--ember'); c.globalAlpha=.16; c.fillRect(xOf(p.i)-cw*.48,yC-cw*.4,cw*.96,yS-yC+cw*.8); c.globalAlpha=1; }
-    c.font=fs+'px IBM Plex Mono, monospace'; c.fillStyle= nw? col('--ember') : col('--ink'); c.fillText(String(p.d),xOf(p.i),yS);
-    if(p.cout){ c.font=Math.round(fs*.62)+'px IBM Plex Mono, monospace'; c.fillStyle=col('--teal'); c.fillText(String(p.cout),xOf(p.i+1),yC); } }
+    c.font=fs+'px Nunito,system-ui,sans-serif'; c.fillStyle= nw? col('--ember') : col('--ink'); c.fillText(String(p.d),xOf(p.i),yS);
+    if(p.cout){ c.font=Math.round(fs*.62)+'px Nunito,system-ui,sans-serif'; c.fillStyle=col('--teal'); c.fillText(String(p.cout),xOf(p.i+1),yC); } }
   const names=['ones','tens','hundreds','thousands'];
   let t=[];
   if(!done) t.push(op==='add'? `${A} + ${Bv}\\text{: press one place}` : `${A} \\cdot ${Bv}\\text{: press one place}`);

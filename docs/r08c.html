@@ -287,7 +287,7 @@ function drawS(){
   const sx=X(S.sup); c.strokeStyle=col('--gold'); c.lineWidth=2; c.setLineDash([4,3]); c.beginPath(); c.moveTo(sx,y-36); c.lineTo(sx,y+18); c.stroke(); c.setLineDash([]);
   S.m.forEach(f=>{ const x=X(fval(f)); c.beginPath(); c.arc(x,y,4.5,0,7); c.fillStyle=col('--teal'); c.fill(); });
   const bx=X(fval(bf)); c.fillStyle=ub?col('--ember'):col('--muted'); c.beginPath(); c.moveTo(bx,y-8); c.lineTo(bx-8,y-24); c.lineTo(bx+8,y-24); c.closePath(); c.fill(); c.strokeStyle=c.fillStyle; c.lineWidth=2; c.beginPath(); c.moveTo(bx,y-8); c.lineTo(bx,y+10); c.stroke();
-  c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='center';
+  c.font='11px Nunito,system-ui,sans-serif'; c.fillStyle=col('--muted'); c.textAlign='center';
   const ticks=S.hi-S.lo>2?[0,1,2,3]:(S.hi-S.lo>1?[-1,0,1]:[]); ticks.filter(v=>v>=S.lo&&v<=S.hi).forEach(v=>c.fillText(v,X(v),H-8));
   c.fillStyle=col('--gold'); c.fillText('sup',sx,y-40);
   const L=[`S = \\{${S.m.slice(0,4).map(star).join(', ')}${S.m.length>4?', \\ldots':''}\\}`, `b = ${ftex(bf)}`];
@@ -319,7 +319,7 @@ const cvU=document.getElementById('cvU');
 function drawU(){
   const S=USETS[ui], W0=cvU.clientWidth||300, rows=S.m.length+1, H=rows*30+24; const {c}=size(cvU,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
   const lo=-1, hi=3, X=v=>30+(W0-40)*(v-lo)/(hi-lo); const fs=farey(lo,hi,W0<420?6:10);
-  c.font='11px IBM Plex Mono, monospace';
+  c.font='11px Nunito,system-ui,sans-serif';
   for(let i=0;i<rows;i++){ const y=26+i*30, last=i===rows-1; c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(28,y); c.lineTo(W0-6,y); c.stroke();
     c.fillStyle=col('--muted'); c.textAlign='left'; c.fillText(last?'⋃S':(S.m[i].h?'H':(S.m[i].f[1]===1?S.m[i].f[0]+'*':S.m[i].f[0]+'/'+S.m[i].f[1]+'*')),2,y-4);
     fs.forEach(f=>{ const inn=last?(S.bound?S.m.some(k=>um(k,f)):true):um(S.m[i],f); if(!inn) return; const x=X(fval(f)), h=4+14/Math.sqrt(f[1]); c.strokeStyle=last?col('--teal'):col('--ember'); c.lineWidth=f[1]<=2?1.8:1; c.beginPath(); c.moveTo(x,y); c.lineTo(x,y-h); c.stroke(); }); }

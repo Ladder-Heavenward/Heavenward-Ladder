@@ -230,7 +230,7 @@ function svgArrow(id,c){ return '<marker id="'+id+'" viewBox="0 0 10 10" refX="9
 function arrowsSVG(a,b,tag){ const X=[34,150,266],Y=[26,66,106]; let s='<svg viewBox="0 0 300 132" style="width:100%;max-width:340px;display:block"><defs>'+svgArrow('m1'+tag,'--ember')+svgArrow('m2'+tag,'--teal')+'</defs>';
   for(let i=0;i<3;i++) s+='<line x1="'+(X[0]+8)+'" y1="'+Y[i]+'" x2="'+(X[1]-10)+'" y2="'+Y[b[i]-1]+'" style="stroke:'+V('--ember')+';stroke-width:2" marker-end="url(#m1'+tag+')"/>';
   for(let i=0;i<3;i++) s+='<line x1="'+(X[1]+8)+'" y1="'+Y[i]+'" x2="'+(X[2]-10)+'" y2="'+Y[a[i]-1]+'" style="stroke:'+V('--teal')+';stroke-width:2" marker-end="url(#m2'+tag+')"/>';
-  for(let c=0;c<3;c++) for(let i=0;i<3;i++) s+='<circle cx="'+X[c]+'" cy="'+Y[i]+'" r="4" style="fill:'+V('--ink')+'"/><text x="'+(X[c]+(c==2?10:c==0?-10:0))+'" y="'+(Y[i]+(c==1?-9:4))+'" text-anchor="'+(c==2?'start':c==0?'end':'middle')+'" style="fill:'+V('--muted')+';font:12px IBM Plex Mono,monospace">'+(i+1)+'</text>';
+  for(let c=0;c<3;c++) for(let i=0;i<3;i++) s+='<circle cx="'+X[c]+'" cy="'+Y[i]+'" r="4" style="fill:'+V('--ink')+'"/><text x="'+(X[c]+(c==2?10:c==0?-10:0))+'" y="'+(Y[i]+(c==1?-9:4))+'" text-anchor="'+(c==2?'start':c==0?'end':'middle')+'" style="fill:'+V('--muted')+';font:12px Nunito,system-ui,sans-serif">'+(i+1)+'</text>';
   return s+'</svg>'; }
 function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
 /* a table of a group: names, combine(i,j) -> index */
@@ -243,7 +243,7 @@ let hk='{0, 4, 8}';
 function draw(){ const st=HS[hk]===12?1:HS[hk]; const H=[]; for(let x=0;x<12;x+=st) H.push(x); const k=12/H.length;
   let s='<svg viewBox="0 0 260 260" style="width:100%;max-width:300px;display:block;margin:auto"><circle cx="130" cy="130" r="100" style="fill:none;stroke:'+V('--grid')+';stroke-width:1.5"/>';
   for(let j=0;j<12;j++){ const c=j%st, t=-Math.PI/2+j*Math.PI/6, x=130+100*Math.cos(t), y=130+100*Math.sin(t);
-    s+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="13" style="fill:'+V(PAL[c])+';opacity:.85"/><text x="'+x.toFixed(1)+'" y="'+(y+4.5).toFixed(1)+'" text-anchor="middle" style="fill:'+V('--paper')+';font:600 13px IBM Plex Mono,monospace">'+j+'</text>'; }
+    s+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="13" style="fill:'+V(PAL[c])+';opacity:.85"/><text x="'+x.toFixed(1)+'" y="'+(y+4.5).toFixed(1)+'" text-anchor="middle" style="fill:'+V('--paper')+';font:600 13px Nunito,system-ui,sans-serif">'+j+'</text>'; }
   for(let c=0;c<st;c++){ const pts=H.map(h=>(h+c)%12).map(j=>{ const t=-Math.PI/2+j*Math.PI/6; return (130+70*Math.cos(t)).toFixed(1)+','+(130+70*Math.sin(t)).toFixed(1); });
     if(pts.length>1) s+='<polygon points="'+pts.join(' ')+'" style="fill:none;stroke:'+V(PAL[c])+';stroke-width:1.6;opacity:.7"/>'; }
   $('dial').innerHTML=s+'</svg>';

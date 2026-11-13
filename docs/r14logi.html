@@ -255,7 +255,7 @@ function grid(P,gx,gy){ const c=P.ctx; c.strokeStyle=col('--grid'); c.lineWidth=
   for(let y=0;y<=P.o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(P.o.x[0]),P.Y(y)); c.lineTo(P.X(P.o.x[1]),P.Y(y)); } c.stroke();
   P.line(P.o.x[0],0,P.o.x[1],0,'--muted',1.3); P.line(0,P.o.y[0],0,P.o.y[1],'--muted',1.3); }
 let last=null;
-function labels(P,gx,gy,fx,fy){ const c=P.ctx; c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center';
+function labels(P,gx,gy,fx,fy){ const c=P.ctx; c.fillStyle=col('--muted'); c.font='11px Nunito,system-ui,sans-serif'; c.textAlign='center';
   for(let x=P.o.x[0]+gx;x<P.o.x[1]-gx*0.05;x+=gx) c.fillText(fx(x),P.X(x),P.Y(P.o.y[0])+14);
   c.textAlign='left'; for(let y=Math.ceil(P.o.y[0]/gy)*gy;y<=P.o.y[1]+1e-9;y+=gy){ if(Math.abs(y-P.o.y[0])<1e-9||y>P.o.y[1]-(P.o.y[1]-P.o.y[0])*0.05) continue; c.fillText(fy(y),P.X(P.o.x[0])+3,P.Y(y)-3); } }
 function drawF(P){ P.o.y=[0,Math.max(300,Q()*1.15)]; grid(P,30,100); labels(P,30,200,x=>x,y=>y); const S=last||run();

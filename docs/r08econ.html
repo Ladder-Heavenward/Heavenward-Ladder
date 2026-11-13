@@ -242,14 +242,14 @@ $('back').onclick=()=>{ const u=+ku.value/100; kd.value=Math.round(100*u/(1+u));
 function draw1(){ const u=+ku.value, d=+kd.value; $('ou').textContent=u+'%'; $('od').textContent=d+'%';
   const a=100, b=a*(1+u/100), c2=b*(1-d/100); const cv=$('cv1'), H=170, {c,W}=size(cv,H), top=220, Y=v=>H-20-(H-34)*v/top, bw=(W-40)/3;
   c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
-  [[a,'--ink','start'],[b,'--ember','after up'],[c2,'--teal','after down']].forEach(([v,k,l],i)=>{ const x=20+i*bw+bw*0.15; c.fillStyle=col(k); c.fillRect(x,Y(v),bw*0.7,Y(0)-Y(v)); c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText('$'+v.toFixed(2),x+bw*0.35,Y(v)-4); c.fillText(l,x+bw*0.35,H-6); });
+  [[a,'--ink','start'],[b,'--ember','after up'],[c2,'--teal','after down']].forEach(([v,k,l],i)=>{ const x=20+i*bw+bw*0.15; c.fillStyle=col(k); c.fillRect(x,Y(v),bw*0.7,Y(0)-Y(v)); c.fillStyle=col('--muted'); c.font='11px Nunito,system-ui,sans-serif'; c.textAlign='center'; c.fillText('$'+v.toFixed(2),x+bw*0.35,Y(v)-4); c.fillText(l,x+bw*0.35,H-6); });
   c.strokeStyle=col('--muted'); c.setLineDash([5,4]); c.beginPath(); c.moveTo(10,Y(100)); c.lineTo(W-10,Y(100)); c.stroke(); c.setLineDash([]);
   const f=(1+u/100)*(1-d/100);
   tex($('eq1'),R`(1 + ${(u/100).toFixed(2)})(1 - ${(d/100).toFixed(2)}) = ${Nw}{${f.toFixed(4)}}`+(u===d&&u>0?R`= 1 - ${(u/100).toFixed(2)}^2`:''),true); }
 [ku,kd].forEach(e=>e.addEventListener('input',draw1));
 const CPI=[255.657,258.811,270.970,292.655,304.702,313.689], G=CPI[5]/CPI[0], g=Math.pow(G,1/5);
 function draw2(){ const cv=$('cv2'), H=190, {c,W}=size(cv,H), lo=240, hi=320, Y=v=>H-24-(H-40)*(v-lo)/(hi-lo), bw=(W-30)/6;
-  c.fillStyle=col('--card'); c.fillRect(0,0,W,H); c.font='11px IBM Plex Mono, monospace';
+  c.fillStyle=col('--card'); c.fillRect(0,0,W,H); c.font='11px Nunito,system-ui,sans-serif';
   CPI.forEach((v,i)=>{ const x=20+i*bw+bw*0.18; c.fillStyle=col('--ink'); c.globalAlpha=0.75; c.fillRect(x,Y(v),bw*0.64,Y(lo)-Y(v)); c.globalAlpha=1; c.fillStyle=col('--muted'); c.textAlign='center'; c.fillText(String(2019+i),x+bw*0.32,H-8); });
   c.strokeStyle=col('--plum'); c.lineWidth=2.4; c.beginPath(); CPI.forEach((v,i)=>{ const x=20+i*bw+bw*0.5, y=Y(CPI[0]*Math.pow(g,i)); i?c.lineTo(x,y):c.moveTo(x,y); }); c.stroke();
   CPI.forEach((v,i)=>{ c.fillStyle=col('--plum'); c.beginPath(); c.arc(20+i*bw+bw*0.5,Y(CPI[0]*Math.pow(g,i)),3.5,0,7); c.fill(); });

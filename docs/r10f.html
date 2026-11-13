@@ -326,7 +326,7 @@ function axes2(P){ const c=P.ctx,o=P.o,gx=nice(o.x[1]-o.x[0]),gy=nice(o.y[1]-o.y
   c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
   for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1];x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
   for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1];y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); }
-  c.stroke(); c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted');
+  c.stroke(); c.font='11px Nunito,system-ui,sans-serif'; c.fillStyle=col('--muted');
   c.textAlign='center'; let k=0; for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1];x+=gx,k++){ if(P.W<500&&k%2) continue; c.fillText(lab(x,gx),P.X(x),P.H-4); }
   c.textAlign='left'; for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1];y+=gy){ c.fillText(lab(y,gy),4,P.Y(y)-3); } }
 const hOf=()=>Math.pow(10,-(+ks.value));
@@ -338,7 +338,7 @@ function draw(P){ const c=P.ctx, h=hOf(); axes2(P);
   Ls.forEach(L=>{ P.line(P.o.x[0],L,P.o.x[1],L,'--gold',1.4,[6,4]); c.fillStyle=col('--card'); c.strokeStyle=col('--ink'); c.lineWidth=2; c.beginPath(); c.arc(P.X(a),P.Y(L),5.5,0,7); c.fill(); c.stroke(); });
   const pts=E.inf?[[h,'--ember']]:[[a-h,'--teal'],[a+h,'--ember']];
   pts.forEach(([x,cl])=>{ const y=g(x); if(isFinite(y)){ P.line(x,P.o.y[0],x,y,cl,1.2,[3,3]); P.dot(x,y,cl,6); } });
-  c.font='12px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='right'; c.fillText(E.inf?'drawn against t = 1/x':'a = '+fmt(a),P.W-6,14); }
+  c.font='12px Nunito,system-ui,sans-serif'; c.fillStyle=col('--muted'); c.textAlign='right'; c.fillText(E.inf?'drawn against t = 1/x':'a = '+fmt(a),P.W-6,14); }
 function frame(){ const h=hOf(), z=Math.max(h,0.002), a=E.inf?0:E.a; let x0,x1; if(E.inf){ x0=-0.15*2.5*z; x1=2.5*z; } else { x0=a-2.5*z; x1=a+2.5*z; }
   const g=E.inf?(t=>E.f(1/t)):E.f; let lo=Infinity,hi=-Infinity;
   for(let i=0;i<=200;i++){ const x=x0+(x1-x0)*i/200; if(E.inf&&x<=0) continue; const y=g(x); if(isFinite(y)&&Math.abs(y)<1e6){ lo=Math.min(lo,y); hi=Math.max(hi,y); } }
@@ -378,7 +378,7 @@ function drawN(P){ const c=P.ctx, e=Math.pow(10,+se.value), L=S.L;
   if(skey==='alt') Nn=e>1?0:null;
   for(let n=0;n<25;n++){ const v=S.a(n); P.dot(n,v,(Nn!==null&&n>=Nn)?'--teal':'--ember',4.2); }
   if(Nn!==null&&Nn<25) P.line(Nn-0.5,P.o.y[0],Nn-0.5,P.o.y[1],'--ink',1.2,[4,3]);
-  c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='center'; [0,5,10,15,20,24].forEach(n=>c.fillText(String(n),P.X(n),P.H-3));
+  c.font='11px Nunito,system-ui,sans-serif'; c.fillStyle=col('--muted'); c.textAlign='center'; [0,5,10,15,20,24].forEach(n=>c.fillText(String(n),P.X(n),P.H-3));
   nInfo={e,Nn}; }
 function readN(){ const {e,Nn}=nInfo; $('ose').textContent=e.toPrecision(3);
   const ls=[S.tex, S.why+R`,\ \ \varepsilon = ${e.toPrecision(3)}`];

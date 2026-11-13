@@ -304,7 +304,7 @@ function drawJ(P){ const c=P.ctx, s=st(); P.axes(); const v=fJ(0,s); DJ=bigJ(s);
   P.line(-2,s.h1-2*s.m1,0,s.h1,'--teal',3); P.line(0,s.h2,2,s.h2+2*s.m2,'--gold',3);
   [[s.h1,'--teal'],[s.h2,'--gold']].forEach(([h,cl])=>{ if(Math.abs(h-v)>1e-9){ c.fillStyle=col('--card'); c.strokeStyle=col(cl); c.lineWidth=2.2; c.beginPath(); c.arc(P.X(0),P.Y(h),5.5,0,7); c.fill(); c.stroke(); } });
   P.dot(0,v,'--ink',5.5);
-  c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--teal'); c.textAlign='left'; c.fillText('rate '+fm(s.m1),P.X(-1.95),P.Y(s.h1-1.6*s.m1)-8); c.fillStyle=col('--gold'); c.textAlign='right'; c.fillText('rate '+fm(s.m2),P.X(1.95),P.Y(s.h2+1.6*s.m2)-8); }
+  c.font='11px Nunito,system-ui,sans-serif'; c.fillStyle=col('--teal'); c.textAlign='left'; c.fillText('rate '+fm(s.m1),P.X(-1.95),P.Y(s.h1-1.6*s.m1)-8); c.fillStyle=col('--gold'); c.textAlign='right'; c.fillText('rate '+fm(s.m2),P.X(1.95),P.Y(s.h2+1.6*s.m2)-8); }
 function readJ(){ const s=st(); ['m1','m2','h1','h2'].forEach(k=>$('o'+k).textContent=fm(s[k])); $('oej').textContent=fm(s.e);
   const vd=$('vdJ'); const v=fJ(0,s);
   if(Math.abs(s.h1-s.h2)<1e-9){ vd.className='verdict win'; vd.textContent='Both pieces arrive at '+fm(s.h1)+', and the value is '+fm(v)+': 0 is a joint (glued-functions), so continuous at 0, with rates '+fm(s.m1)+' on the left and '+fm(s.m2)+' on the right'+(s.m1===s.m2?' (the same rate: the formula does not really change)':'')+'. Largest winning δ: '+(DJ>=2?'≥ 2':fm(DJ))+'.'; }
@@ -343,7 +343,7 @@ function seqInfo(){ const F=FS[fk], Sq=SQ[sk]; const v=F.f(F.a,'f'); const ys=[]
   let N=null; if(heads){ N=0; for(let n=0;n<24;n++) if(!(Math.abs(ys[n]-v)<EPS)) N=n+1; } return {v,ys,heads,N}; }
 function drawS(P){ const c=P.ctx; SR=seqInfo(); const lo=Math.min(-0.3,...SR.ys,SR.v)-0.2, hi=Math.max(1.2,...SR.ys,SR.v)+0.2; P.o.y=[lo,hi];
   c.fillStyle=col('--gold'); c.globalAlpha=.18; c.fillRect(P.X(-1),P.Y(SR.v+EPS),P.X(24)-P.X(-1),P.Y(SR.v-EPS)-P.Y(SR.v+EPS)); c.globalAlpha=1; P.line(-1,SR.v,24,SR.v,'--gold',1.5,[6,4]);
-  P.line(-1,0,24,0,'--muted',1); c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='left'; c.fillText('f(w) = '+fm(SR.v),P.X(-0.8),P.Y(SR.v)-6); c.textAlign='right'; c.fillText('n →',P.X(23.8),P.Y(lo)-4);
+  P.line(-1,0,24,0,'--muted',1); c.font='11px Nunito,system-ui,sans-serif'; c.fillStyle=col('--muted'); c.textAlign='left'; c.fillText('f(w) = '+fm(SR.v),P.X(-0.8),P.Y(SR.v)-6); c.textAlign='right'; c.fillText('n →',P.X(23.8),P.Y(lo)-4);
   SR.ys.forEach((y,n)=>{ const inn=SR.heads&&n>=SR.N; P.dot(n,y,inn?'--teal':(Math.abs(y-SR.v)<EPS?'--muted':'--ember'),4); }); }
 function readS(){ const F=FS[fk], r=SR; const vd=$('vdS');
   if(r.heads){ vd.className='verdict win'; vd.textContent='These outputs head to f(w) = '+fm(r.v)+' (all within '+EPS+' from n = '+r.N+' on). '+(F.cont?'As sequences-go-through promises for a continuous function.':'But one sequence that passes proves nothing: try another.'); }

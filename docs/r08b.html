@@ -246,7 +246,7 @@ function drawL(){
   const A=CUTS[ai], B=CUTS[bi], ya=50, yb=112;
   const sub=fs.every(f=>!cmem(A,f)||cmem(B,f));
   let r=null; if(!sub){ r=fs.filter(f=>cmem(A,f)&&!cmem(B,f)).sort((a,b)=>a[1]-b[1]||fval(a)-fval(b))[0]; }
-  c.font='12px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='left'; c.fillText('α',4,ya-30); c.fillText('β',4,yb-30);
+  c.font='12px Nunito,system-ui,sans-serif'; c.fillStyle=col('--muted'); c.textAlign='left'; c.fillText('α',4,ya-30); c.fillText('β',4,yb-30);
   [[A,ya,'--ember'],[B,yb,'--teal']].forEach(([K,y,cl])=>{ c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(6,y); c.lineTo(W0-6,y); c.stroke();
     fs.forEach(f=>{ if(!cmem(K,f)) return; const x=X(fval(f)), h=4+22/Math.sqrt(f[1]); c.strokeStyle=col(cl); c.lineWidth=f[1]<=2?2:1.1; c.beginPath(); c.moveTo(x,y); c.lineTo(x,y-h); c.stroke(); }); });
   if(r){ const x=X(fval(r)); c.strokeStyle=col('--gold'); c.lineWidth=2; c.setLineDash([4,3]); c.beginPath(); c.moveTo(x,ya-30); c.lineTo(x,yb+6); c.stroke(); c.setLineDash([]); c.beginPath(); c.arc(x,ya-14,6,0,7); c.stroke(); }
@@ -268,7 +268,7 @@ const cvP=document.getElementById('cvP');
 function drawP(){
   const W0=cvP.clientWidth||300, H=150; const {c}=size(cvP,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
   const lo=-1, hi=2, X=v=>12+(W0-24)*(v-lo)/(hi-lo); const fs=farey(lo,hi,W0<420?8:12); const ya=50, yb=112;
-  c.font='12px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='left'; c.fillText('α_P',4,ya-30); c.fillText('½*',4,yb-30);
+  c.font='12px Nunito,system-ui,sans-serif'; c.fillStyle=col('--muted'); c.textAlign='left'; c.fillText('α_P',4,ya-30); c.fillText('½*',4,yb-30);
   [ya,yb].forEach(y=>{ c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(6,y); c.lineTo(W0-6,y); c.stroke(); });
   fs.forEach(f=>{ const v=fval(f), x=X(v), h=4+22/Math.sqrt(f[1]);
     if(v<0){ c.strokeStyle=col('--teal'); c.lineWidth=f[1]<=2?2:1.1; c.beginPath(); c.moveTo(x,ya); c.lineTo(x,ya-h); c.stroke(); }

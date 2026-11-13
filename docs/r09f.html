@@ -341,12 +341,12 @@ function drawV(){
   c.lineWidth=8; c.strokeStyle=col('--grid'); c.beginPath(); c.moveTo(X(lo),y); c.lineTo(X(hi),y); c.stroke();
   c.strokeStyle=col('--teal'); P.forEach(p=>{ const a=Math.max(lo,p.a), b=Math.min(hi,p.b); c.beginPath(); c.moveTo(X(a),y); c.lineTo(X(b)+(p.a===p.b?0.1:0),y); c.stroke(); });
   c.lineWidth=1; I.z.forEach(r=>{ const inside=P.some(p=>(p.a<r&&r<p.b)||(p.a===r&&p.ia)||(p.b===r&&p.ib)); c.beginPath(); c.arc(X(r),y,6,0,7); if(inside){ c.fillStyle=col('--teal'); c.fill(); } else { c.fillStyle=col('--card'); c.fill(); c.strokeStyle=col('--ember'); c.lineWidth=2; c.stroke(); } });
-  c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='center'; for(let v=lo;v<=hi;v++) c.fillText(v,X(v),y+22);
+  c.font='11px Nunito,system-ui,sans-serif'; c.fillStyle=col('--muted'); c.textAlign='center'; for(let v=lo;v<=hi;v++) c.fillText(v,X(v),y+22);
   // sign row
-  const z=I.z.slice().sort((a,b)=>a-b), pts=[lo,...z,hi]; c.font='13px IBM Plex Mono, monospace';
+  const z=I.z.slice().sort((a,b)=>a-b), pts=[lo,...z,hi]; c.font='13px Nunito,system-ui,sans-serif';
   for(let k=0;k<pts.length-1;k++){ const m=(pts[k]+pts[k+1])/2; const s=I.f(m)>0?'+':'−'; c.fillStyle=s==='+'?col('--teal'):col('--ember'); c.fillText(s,X(m),y+64); }
   z.forEach(r=>{ c.fillStyle=col('--ink'); c.fillText('0',X(r),y+64); });
-  c.textAlign='left'; c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.fillText('sign of r on each stretch:',4,y+44);
+  c.textAlign='left'; c.fillStyle=col('--muted'); c.font='11px Nunito,system-ui,sans-serif'; c.fillText('sign of r on each stretch:',4,y+44);
   const dom=P.length?P.map(itex).join(' \\cup '):'\\varnothing';
   const L=[`g(f(x)) = ${O.t(I.t)}`, `\\text{needs } ${I.t} ${O.cond}`, `\\htmlClass{keep}{\\text{domain: } ${dom}}`];
   tex(document.getElementById('eqV'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);

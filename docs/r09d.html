@@ -239,7 +239,7 @@ function drawS(){
   const W0=cvS.clientWidth||300, H=200; const {c}=size(cvS,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
   const xa=Math.min(80,W0*.22), xb=W0-Math.min(80,W0*.22), y=i=>28+i*44; gs={xa,xb,y};
   const cnt=Array(4).fill(0); F.forEach(v=>cnt[v]++);
-  c.font='13px IBM Plex Mono, monospace';
+  c.font='13px Nunito,system-ui,sans-serif';
   F.forEach((v,i)=>{ c.strokeStyle=sw?col('--grid'):col('--ink'); c.lineWidth=sw?1.2:2; c.beginPath(); c.moveTo(xa+8,y(i)); c.bezierCurveTo((xa+xb)/2,y(i),(xa+xb)/2,y(v),xb-8,y(v)); c.stroke();
     if(sw){ c.strokeStyle=col('--teal'); c.lineWidth=2.2; c.setLineDash([6,4]); c.beginPath(); c.moveTo(xb-8,y(v)+3); c.bezierCurveTo((xa+xb)/2,y(v)+3,(xa+xb)/2,y(i)+3,xa+8,y(i)+3); c.stroke(); c.setLineDash([]);
       c.fillStyle=col('--teal'); c.beginPath(); c.moveTo(xa+9,y(i)+3); c.lineTo(xa+19,y(i)-2); c.lineTo(xa+19,y(i)+8); c.closePath(); c.fill(); } });
@@ -277,7 +277,7 @@ function drawR(){
   const F=RF[ri], W0=cvR.clientWidth||300, H=170; const {c}=size(cvR,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
   const X1=v=>16+(W0-32)*(v-F.lo)/(F.hi-F.lo), X2=v=>16+(W0-32)*(v-F.olo)/(F.ohi-F.olo), y1=40, y2=130;
   const kept=x=>keep==='A'||(keep==='R'?x>=F.cut:x<=F.cut);
-  c.font='11px IBM Plex Mono, monospace';
+  c.font='11px Nunito,system-ui,sans-serif';
   // rows
   [[y1,X1,F.lo,F.hi],[y2,X2,F.olo,F.ohi]].forEach(([y,X,lo,hi])=>{ c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(8,y); c.lineTo(W0-8,y); c.stroke(); c.fillStyle=col('--muted'); c.textAlign='center'; const st=(hi-lo)>10?2:1; for(let v=Math.ceil(lo);v<=hi;v+=st){ c.fillText(v,X(v),y+16); } });
   c.globalAlpha=.35; c.fillStyle=col('--teal'); const kl=keep==='R'?F.cut:F.lo, kh=keep==='L'?F.cut:F.hi; c.fillRect(X1(kl),y1-5,X1(kh)-X1(kl),10); c.globalAlpha=1;

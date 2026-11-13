@@ -331,13 +331,13 @@ function drawBal(){
   const cv=document.getElementById('cv1'); const W0=cv.clientWidth||300; const mid=W0/2; const rr=W0<420?3.2:4; const per=Math.max(4,Math.floor((mid-46)/(2*rr+2)));
   const maxc=Math.max(1,...els.map(e=>Math.max(L[e]||0,Rr[e]||0))); const lines=Math.ceil(maxc/per); const rowH=Math.max(30,lines*(2*rr+2)+16);
   const H=els.length*rowH+28; const {c}=sizeH(cv,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
-  c.font='12px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='center'; c.fillText('in',mid-30,14); c.fillText('out',mid+30,14);
+  c.font='12px Nunito,system-ui,sans-serif'; c.fillStyle=col('--muted'); c.textAlign='center'; c.fillText('in',mid-30,14); c.fillText('out',mid+30,14);
   c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(mid,20); c.lineTo(mid,H-4); c.stroke();
   const Ls=[]; let allok=true;
   els.forEach((e,k)=>{ const y=28+k*rowH; const a=L[e]||0, b=Rr[e]||0; const ok=a===b; if(!ok) allok=false; const colr=ok?col('--teal'):col('--ember');
     beads(c,mid-4,y+6,a,-1,rr,per,colr); beads(c,mid+4,y+6,b,1,rr,per,colr);
-    c.font='600 13px IBM Plex Mono, monospace'; c.fillStyle=colr; c.textAlign='left'; c.fillText(e,4,y+10);
-    c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--ink'); c.fillText(String(a),4,y+24); c.textAlign='right'; c.fillText(String(b),W0-4,y+24); });
+    c.font='600 13px Nunito,system-ui,sans-serif'; c.fillStyle=colr; c.textAlign='left'; c.fillText(e,4,y+10);
+    c.font='11px Nunito,system-ui,sans-serif'; c.fillStyle=col('--ink'); c.fillText(String(a),4,y+24); c.textAlign='right'; c.fillText(String(b),W0-4,y+24); });
   c.textAlign='left';
   const lhs=r.L.map((s,i)=>(co[i]>1?co[i]+'\\,':'')+ftex(s)).join(' + '), rhs=r.R.map((s,j)=>{ const i=r.L.length+j; return (co[i]>1?co[i]+'\\,':'')+ftex(s); }).join(' + ');
   Ls.push(`${lhs} \\to ${rhs}`);
@@ -353,7 +353,7 @@ function drawMix(){
   const qb=v=>Math.round(v*4); const rowsOf=n=>Math.max(1,Math.ceil(n/per));
   const all=[...r.L.map((s,i)=>qb(amt[i])),...r.R.map((s,j)=>qb(made[j]))]; const hs=all.map(n=>rowsOf(n)*(2*rr+2)+14);
   const H=hs.reduce((a,b)=>a+b,0)+20; const {c}=sizeH(cv,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
-  let y=8; c.font='12px IBM Plex Mono, monospace';
+  let y=8; c.font='12px Nunito,system-ui,sans-serif';
   r.L.forEach((s,i)=>{ c.fillStyle=col('--ink'); c.textAlign='left'; c.fillText(funi(s),4,y+10); const nu=qb(used[i]), nt=qb(amt[i]);
     for(let t=0;t<nt;t++){ const row=Math.floor(t/per), k=t%per; c.fillStyle=t<nu?(i===lim&&runs>0?col('--gold'):col('--ember')):col('--grid'); c.beginPath(); c.arc(x0+k*(2*rr+2)+rr,y+6+row*(2*rr+2),rr,0,7); c.fill(); }
     y+=hs[i]; });

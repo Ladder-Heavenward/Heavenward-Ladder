@@ -300,12 +300,12 @@ const cv1=document.getElementById('cv1');
 function draw(){
   const {M,F,C}=cells(); const n=M.length; const W0=cv1.clientWidth||300; const head=34; const cs=Math.min((W0-head-8)/n,100); const H=head+cs*n+8;
   const {c}=size(cv1,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H); const ox=head, oy=head; geo={ox,oy,cs,n};
-  c.font='600 13px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillStyle=col('--teal'); F.forEach((g,j)=>c.fillText(g,ox+j*cs+cs/2,oy-10));
+  c.font='600 13px Nunito,system-ui,sans-serif'; c.textAlign='center'; c.fillStyle=col('--teal'); F.forEach((g,j)=>c.fillText(g,ox+j*cs+cs/2,oy-10));
   c.fillStyle=col('--ember'); M.forEach((g,i)=>c.fillText(g,ox/2,oy+i*cs+cs/2+4));
   C.forEach(({i,j,g})=>{ const x=ox+j*cs, y=oy+i*cs; const on=sel&&lookKey(g)===sel;
     c.fillStyle=on?col('--sand'):col('--card'); c.fillRect(x,y,cs,cs); c.strokeStyle=col('--grid'); c.lineWidth=1; c.strokeRect(x,y,cs,cs);
     if(on){ c.strokeStyle=col('--ember'); c.lineWidth=2.5; c.strokeRect(x+2,y+2,cs-4,cs-4); }
-    pea(c,x+cs/2,y+cs*0.4,cs*0.2,look(g)); c.fillStyle=col('--ink'); c.font=(cs>60?12:10)+'px IBM Plex Mono, monospace'; c.fillText(g,x+cs/2,y+cs*0.86); });
+    pea(c,x+cs/2,y+cs*0.4,cs*0.2,look(g)); c.fillStyle=col('--ink'); c.font=(cs>60?12:10)+'px Nunito,system-ui,sans-serif'; c.fillText(g,x+cs/2,y+cs*0.86); });
   c.textAlign='left';
   const tot=C.length; const cnt={}; C.forEach(({g})=>{ const k=lookKey(g); cnt[k]=(cnt[k]||0)+1; }); const gc={}; C.forEach(({g})=>gc[g]=(gc[g]||0)+1);
   const fr=(a,b)=>{ const d=gcd(a,b); return `\\tfrac{${a/d}}{${b/d}}`; };
@@ -332,8 +332,8 @@ function drawField(){
   const W0=cv2.clientWidth||300; const rr=W0<420?6:7, per=Math.max(5,Math.floor((W0-8)/(2*rr+3)));
   const n=last&&last.seq.length?last.seq.length:0; const H=n?Math.ceil(n/per)*(2*rr+3)+10:36;
   const {c}=size(cv2,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
-  if(!last){ c.fillStyle=col('--muted'); c.font='12px IBM Plex Mono, monospace'; c.fillText('press “sow a field”',8,22); }
-  else if(!n){ c.fillStyle=col('--muted'); c.font='12px IBM Plex Mono, monospace'; c.fillText(`${last.N} seeds: too many for a bead each; see the table`,8,22); }
+  if(!last){ c.fillStyle=col('--muted'); c.font='12px Nunito,system-ui,sans-serif'; c.fillText('press “sow a field”',8,22); }
+  else if(!n){ c.fillStyle=col('--muted'); c.font='12px Nunito,system-ui,sans-serif'; c.fillText(`${last.N} seeds: too many for a bead each; see the table`,8,22); }
   else last.seq.forEach((k,t)=>{ const x=4+(t%per)*(2*rr+3)+rr, y=4+Math.floor(t/per)*(2*rr+3)+rr; pea(c,x,y,rr,{smooth:k.startsWith('smooth'),yellow:ng===1||k.endsWith('yellow')}); });
   const keys=KEYS().filter(k=>exp[k]);
   const tb=document.getElementById('hist'); tb.innerHTML='';

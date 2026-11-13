@@ -400,7 +400,7 @@ const fr=(n,d)=>(n<0?`-\\frac{${-n}}{${d}}`:`\\frac{${n}}{${d}}`);
 const frb=(n,d)=>n<0?`\\left(${fr(n,d)}\\right)`:fr(n,d);
 function size(cv,H){ const dp=window.devicePixelRatio||1, W=cv.clientWidth||300; cv.width=W*dp; cv.height=H*dp; cv.style.height=H+'px'; const c=cv.getContext('2d'); c.setTransform(dp,0,0,dp,0,0); return {c,W,H}; }
 function tile(c,x,y,s,lab,stroke,fill,struck){ c.fillStyle=fill||col('--card'); c.fillRect(x,y,s,s); c.strokeStyle=stroke; c.lineWidth=2; c.strokeRect(x+1,y+1,s-2,s-2);
-  c.fillStyle=col('--ink'); c.font=`${Math.round(s*0.48)}px IBM Plex Mono, monospace`; c.textAlign='center'; c.textBaseline='middle'; c.fillText(lab,x+s/2,y+s/2+1);
+  c.fillStyle=col('--ink'); c.font=`${Math.round(s*0.48)}px Nunito,system-ui,sans-serif`; c.textAlign='center'; c.textBaseline='middle'; c.fillText(lab,x+s/2,y+s/2+1);
   if(struck){ c.strokeStyle=col('--muted'); c.lineWidth=2; c.beginPath(); c.moveTo(x+3,y+s-3); c.lineTo(x+s-3,y+3); c.stroke(); } c.textBaseline='alphabetic'; }
 
 /* ---------- left ---------- */
@@ -408,7 +408,7 @@ const K=['ka','kb','kc','kd'].map(i=>document.getElementById(i)); let op='add';
 document.querySelectorAll('[data-op]').forEach(b=>b.onclick=()=>{ op=b.dataset.op; document.querySelectorAll('[data-op]').forEach(x=>x.classList.toggle('on',x===b)); drawL(); });
 K.forEach(k=>k.oninput=drawL);
 const cvL=document.getElementById('cvL');
-function rowTiles(c,x0,y,s,list,lab,styleFn){ c.fillStyle=col('--muted'); c.font='12px IBM Plex Mono, monospace'; c.textAlign='left'; c.fillText(lab,4,y+s*0.65);
+function rowTiles(c,x0,y,s,list,lab,styleFn){ c.fillStyle=col('--muted'); c.font='12px Nunito,system-ui,sans-serif'; c.textAlign='left'; c.fillText(lab,4,y+s*0.65);
   if(!list.length){ c.fillText('(no primes: 1)',x0,y+s*0.65); return; }
   list.forEach((p,i)=>{ const st=styleFn(p,i); tile(c,x0+i*(s+4),y,s,String(p),st.stroke,st.fill,st.struck); }); }
 function drawL(){
@@ -431,7 +431,7 @@ function drawL(){
     L.push(`= ${fr(a*fb,m)} ${op==='add'?'+':'-'} ${fr(cc*fd,m)} = ${fr(top,m)}`+((rn!==top||rd!==m)?` = ${ft(top,m)}\\ \\ (\\gcd ${gcd(top,m)})`:''));
     L.push(`\\text{over } bd = ${b*d}\\text{ instead: } ${fr(a*d+sg*cc*b,b*d)}`);
   } else {
-    let tp=[a,cc], bt=[b,d]; if(op==='div'){ if(cc===0){ const {c}=size(cvL,60); c.fillStyle=col('--card'); c.fillRect(0,0,W0,60); c.fillStyle=E; c.font='13px IBM Plex Mono, monospace'; c.textAlign='left'; c.fillText('c/d = 0 has no reciprocal (5e): nothing to divide by.',8,34); tex(document.getElementById('eqL'),`\\frac{${a}}{${b}} \\big/ \\frac{0}{${d}}\\ \\text{ names nothing}`,true); return; } tp=[a,d]; bt=[b,cc]; }
+    let tp=[a,cc], bt=[b,d]; if(op==='div'){ if(cc===0){ const {c}=size(cvL,60); c.fillStyle=col('--card'); c.fillRect(0,0,W0,60); c.fillStyle=E; c.font='13px Nunito,system-ui,sans-serif'; c.textAlign='left'; c.fillText('c/d = 0 has no reciprocal (5e): nothing to divide by.',8,34); tex(document.getElementById('eqL'),`\\frac{${a}}{${b}} \\big/ \\frac{0}{${d}}\\ \\text{ names nothing}`,true); return; } tp=[a,d]; bt=[b,cc]; }
     const sign=(tp[0]<0)!==(tp[1]<0)!==(bt[1]<0); const T1=plist(tp[0]).concat(plist(tp[1])), B1=plist(bt[0]).concat(plist(bt[1]));
     const zero=tp[0]===0||tp[1]===0;
     // cancel pairs

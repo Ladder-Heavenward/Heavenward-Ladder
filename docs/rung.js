@@ -2869,3 +2869,5 @@ window.LadderDbt={open,done,mark};
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
 })();
 /* nunito */
+/* nunito figures */
+try{ if(document.fonts&&document.fonts.load){ window.addEventListener('load',function(){ if(!document.querySelector('canvas')) return; document.fonts.load('600 12px Nunito').then(function(){ try{ window.dispatchEvent(new Event('resize')); }catch(e){} }); }); } }catch(e){}

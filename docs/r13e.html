@@ -322,12 +322,12 @@ function draw(){ const st=state(); const {c,W,H}=size(); c.fillStyle=col('--card
   c.setLineDash([]);
   lines.forEach(Ln=>{ c.strokeStyle=col('--muted'); c.lineWidth=1.2; c.beginPath(); c.moveTo(L,Ln.y); c.lineTo(Rr,Ln.y); c.stroke();
     c.fillStyle=col('--muted'); c.textAlign='left'; c.font='italic 15px "Source Serif 4", serif'; c.fillText(Ln.lab,10,Ln.y+5);
-    if(!isFinite(Ln.v0)){ c.font='11px IBM Plex Mono, monospace'; c.fillText('no value: the outside cannot take r₀',L+6,Ln.y-8); return; }
-    c.font='10px IBM Plex Mono, monospace'; const lo=Ln.v0-(mid-L)/sc-(Ln.v1-Ln.v0)/2, hi=lo+(Rr-L)/sc; const g=nice((hi-lo)*Math.max(1,360/(Rr-L)));
+    if(!isFinite(Ln.v0)){ c.font='11px Nunito,system-ui,sans-serif'; c.fillText('no value: the outside cannot take r₀',L+6,Ln.y-8); return; }
+    c.font='10px Nunito,system-ui,sans-serif'; const lo=Ln.v0-(mid-L)/sc-(Ln.v1-Ln.v0)/2, hi=lo+(Rr-L)/sc; const g=nice((hi-lo)*Math.max(1,360/(Rr-L)));
     c.textAlign='center'; for(let i=Math.ceil(lo/g);i*g<=hi;i++){ const t=i*g, X=px(Ln,t); if(X<L+8) continue; c.beginPath(); c.moveTo(X,Ln.y-4); c.lineTo(X,Ln.y+4); c.stroke(); c.fillText(tl(t,g),X,Ln.y+16); }
     const a=px(Ln,Ln.v0),b=px(Ln,Ln.v1); c.strokeStyle=col(Ln.cl); c.lineWidth=7; c.lineCap='round'; c.beginPath(); c.moveTo(a,Ln.y); c.lineTo(Math.abs(b-a)<0.5?a+0.5:b,Ln.y); c.stroke(); c.lineCap='butt';
     c.fillStyle=col('--ink'); c.beginPath(); c.arc(a,Ln.y,4.5,0,7); c.fill();
-    c.fillStyle=col(Ln.cl); c.font='12px IBM Plex Mono, monospace'; c.fillText(Ln.nm+' = '+fm(Ln.v1-Ln.v0),Math.min(Rr-50,Math.max(L+50,(a+b)/2)),Ln.y-12); }); }
+    c.fillStyle=col(Ln.cl); c.font='12px Nunito,system-ui,sans-serif'; c.fillText(Ln.nm+' = '+fm(Ln.v1-Ln.v0),Math.min(Rr-50,Math.max(L+50,(a+b)/2)),Ln.y-12); }); }
 function read(){ const st=state(); $('oa').textContent=fm(st.a,1); $('oh').textContent=fm(Math.abs(st.h)); ka.disabled=!!st.G.only0;
   const vd=$('vd'), G=st.G, Fo=st.Fo;
   if(!Fo.ok(st.r0)){ vd.className='verdict lose'; vd.textContent='The outside has no slope at r₀ = '+fm(st.r0)+' (it is not even '+(fo==='sqrt'?'defined near it':'defined there')+'): chain for slopes\'s hypothesis on f fails, and the technique says nothing. Choose another p or another pair.'; tex($('eq'),R`r_0 = g(${fm(st.a,1)}) = ${fm(st.r0)}`,true); return; }

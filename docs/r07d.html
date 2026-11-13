@@ -258,21 +258,21 @@ const cvC=document.getElementById('cvC');
 function drawC(){
   const W0=cvC.clientWidth||300, H=170; const {c}=size(cvC,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H); geo=[];
   const boxes=[{nm:'U',sure:0,x:W0*.27},{nm:'V',sure:1,x:W0*.73}], bw=Math.min(190,W0*.42);
-  if(st==='t'){ c.fillStyle=col('--teal'); c.font='12px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText('U = V = {0, 1}: one set, so one pick',W0/2,16); }
+  if(st==='t'){ c.fillStyle=col('--teal'); c.font='12px Nunito,system-ui,sans-serif'; c.textAlign='center'; c.fillText('U = V = {0, 1}: one set, so one pick',W0/2,16); }
   boxes.forEach(B=>{ const x0=B.x-bw/2, y0=26, h=110;
     c.beginPath(); if(c.roundRect) c.roundRect(x0,y0,bw,h,8); else c.rect(x0,y0,bw,h); c.fillStyle=col('--sand'); c.fill(); c.strokeStyle=col('--grid'); c.lineWidth=1.4; c.stroke();
-    c.fillStyle=col('--ink'); c.font='600 14px IBM Plex Mono, monospace'; c.textAlign='left'; c.fillText(B.nm,x0+8,y0+18);
-    c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.fillText(B.nm==='U'?'x = 0 ∨ P':'x = 1 ∨ P',x0+26,y0+18);
+    c.fillStyle=col('--ink'); c.font='600 14px Nunito,system-ui,sans-serif'; c.textAlign='left'; c.fillText(B.nm,x0+8,y0+18);
+    c.fillStyle=col('--muted'); c.font='11px Nunito,system-ui,sans-serif'; c.fillText(B.nm==='U'?'x = 0 ∨ P':'x = 1 ∨ P',x0+26,y0+18);
     [0,1].forEach((m,j)=>{ const cx=x0+bw*(j?0.7:0.3), cy=y0+66, r=Math.min(24,bw*.14); const sure=m===B.sure, gone=!sure&&st==='f';
       const pick=(B.nm==='U'?u:v)===m;
       c.beginPath(); c.arc(cx,cy,r,0,7); c.fillStyle=pick?col('--ember'):col('--card'); c.fill();
       c.setLineDash(sure||st==='t'?[]:[4,3]); c.strokeStyle=gone?col('--grid'):col('--ink'); c.lineWidth=1.8; c.stroke(); c.setLineDash([]);
-      c.fillStyle=pick?'#fff':(gone?col('--grid'):col('--ink')); c.font='600 18px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText(m,cx,cy+6);
+      c.fillStyle=pick?'#fff':(gone?col('--grid'):col('--ink')); c.font='600 18px Nunito,system-ui,sans-serif'; c.textAlign='center'; c.fillText(m,cx,cy+6);
       if(gone){ c.strokeStyle=col('--ember'); c.lineWidth=2; c.beginPath(); c.moveTo(cx-r,cy-r); c.lineTo(cx+r,cy+r); c.stroke(); }
-      c.fillStyle=col('--muted'); c.font='10px IBM Plex Mono, monospace'; c.fillText(sure?'certain':'only if P',cx,cy+r+14);
+      c.fillStyle=col('--muted'); c.font='10px Nunito,system-ui,sans-serif'; c.fillText(sure?'certain':'only if P',cx,cy+r+14);
       if(!gone) geo.push({x:cx,y:cy,r:r+6,b:B.nm,m}); });
   });
-  c.fillStyle=col('--muted'); c.font='12px IBM Plex Mono, monospace'; c.textAlign='center';
+  c.fillStyle=col('--muted'); c.font='12px Nunito,system-ui,sans-serif'; c.textAlign='center';
   c.fillText(`u = c(U) = ${u===null?'?':u}     v = c(V) = ${v===null?'?':v}`,W0/2,H-10); c.textAlign='left';
   const L=[];
   if(u===null||v===null){ L.push(`\\text{tap a member of each set to pick}`); L.push(`c(U) \\in U,\\ \\ c(V) \\in V`); }

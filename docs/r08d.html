@@ -417,7 +417,7 @@ function chipset(id,get,set,redraw,noh){ const el=document.getElementById(id); O
 function nearMember(a,lo,hi){ // a fraction r in a with lo < r (float), smallest bottom
   for(let q=1;q<=4000;q++){ const p=Math.floor((qval(a)-1e-12)*q); for(let k=p;k>=p-2;k--){ const r=[k,q]; if(fval(r)>lo&&fval(r)<hi&&qmem(a,r)) return fr(k,q); } } return null; }
 function rowDraw(c,W0,y,lab,pred,cl,lo,hi,Q,mark){ const X=v=>34+(W0-42)*(v-lo)/(hi-lo); c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(32,y); c.lineTo(W0-6,y); c.stroke();
-  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='left'; c.fillText(lab,2,y-4);
+  c.fillStyle=col('--muted'); c.font='11px Nunito,system-ui,sans-serif'; c.textAlign='left'; c.fillText(lab,2,y-4);
   farey(lo,hi,Q).forEach(f=>{ if(!pred(f)) return; const x=X(fval(f)), h=4+16/Math.sqrt(f[1]); c.strokeStyle=col(cl); c.lineWidth=f[1]<=2?1.8:1; c.beginPath(); c.moveTo(x,y); c.lineTo(x,y-h); c.stroke(); });
   if(mark){ const x=X(fval(mark)); c.beginPath(); c.arc(x,y-24,5,0,7); c.strokeStyle=col('--gold'); c.lineWidth=2; c.stroke(); } return X; }
 const lo=-3, hi=3;
@@ -436,7 +436,7 @@ function drawP(){
   const gm=op==='bad'?(Fz(A.y)?Fn(A.x):null):null;
   XL=rowDraw(c,W0,y,op==='sum'?'α+β':(op==='neg'?'−α':'bad'),Rr.pred,'--teal',lo,hi,Q,gm);
   if(pk){ const x=XL(fval(pk)); c.fillStyle=col('--ember'); c.beginPath(); c.arc(x,y+6,4,0,7); c.fill(); }
-  c.fillStyle=col('--muted'); c.textAlign='center'; c.font='11px IBM Plex Mono, monospace'; [-3,-2,-1,0,1,2,3].forEach(v=>c.fillText(v,XL(v),H-4));
+  c.fillStyle=col('--muted'); c.textAlign='center'; c.font='11px Nunito,system-ui,sans-serif'; [-3,-2,-1,0,1,2,3].forEach(v=>c.fillText(v,XL(v),H-4));
   const L=[];
   if(op==='sum'){ L.push(`\\alpha + \\beta = ${rname(A)} + ${rname(B)}`);
     if(pk){ if(!Rr.pred(pk)) L.push(`${ftex(pk)} \\notin \\alpha + \\beta`); else { const d=(qval(qadd(A,B))-fval(pk))/2; const r=nearMember(A,qval(A)-d,qval(A)); const s=Fs(pk,r); L.push(`${ftex(pk)} = \\htmlClass{keep}{${ftex(r)}} + ${ftex(s)},\\ \\ ${ftex(r)} \\in \\alpha,\\ ${ftex(s)} \\in \\beta${qmem(B,s)?'':'\\,?'}`); } }
@@ -471,7 +471,7 @@ function drawM(){
     else { res=qinv(A); L.push(sgn(A)>0?R`\alpha \text{ positive: } \alpha^{-1} = \alpha' \text{ (positive-reciprocal)}`:R`\alpha \text{ negative: } \alpha^{-1} = -((-\alpha)')`); L.push(`\\big(${rname(A)}\\big)^{-1} = ${rname(res)}`); } }
   if(res){ XM=rowDraw(c,W0,y,mop==='mul'?'αβ':'α⁻¹',f=>qmem(res,f),'--teal',lo,hi,Q); if(mk){ const x=XM(fval(mk)); c.fillStyle=col('--ember'); c.beginPath(); c.arc(x,y+6,4,0,7); c.fill(); } }
   else { XM=null; c.strokeStyle=col('--grid'); c.beginPath(); c.moveTo(32,y); c.lineTo(W0-6,y); c.stroke(); }
-  c.fillStyle=col('--muted'); c.textAlign='center'; c.font='11px IBM Plex Mono, monospace'; const X=v=>34+(W0-42)*(v-lo)/(hi-lo); [-3,-2,-1,0,1,2,3].forEach(v=>c.fillText(v,X(v),H-4));
+  c.fillStyle=col('--muted'); c.textAlign='center'; c.font='11px Nunito,system-ui,sans-serif'; const X=v=>34+(W0-42)*(v-lo)/(hi-lo); [-3,-2,-1,0,1,2,3].forEach(v=>c.fillText(v,X(v),H-4));
   if(mk&&res){ if(!qmem(res,mk)) L.push(`${ftex(mk)} \\text{ is not in it}`);
     else if(mk[0]<=0) L.push(`${ftex(mk)} \\le 0:\\ \\text{let in by the clause } p \\le 0`);
     else if(mop==='mul'&&sgn(A)>0&&sgn(B)>0){ const va=qval(A), vb=qval(B); const r=nearMember(A,Math.max(fval(mk)/vb,0),va); const s=Fm(mk,Fi(r)); L.push(`${ftex(mk)} = \\htmlClass{keep}{${ftex(r)}} \\cdot ${ftex(s)},\\ \\ ${ftex(r)} \\in \\alpha,\\ ${ftex(s)} \\in \\beta${qmem(B,s)?'':'\\,?'}`); }

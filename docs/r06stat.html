@@ -270,7 +270,7 @@ function draw1(){ $('ok').textContent=k;
   const n=exp.length, bw=(W-16)/n; const mx=Math.max(...exp.map(v=>v/tot), ...(tally?tally.map(v=>v/1000):[0]));
   exp.forEach((v,j)=>{ const h=(H-30)*(v/tot)/mx; c.fillStyle=col('--teal'); c.globalAlpha=.35; c.fillRect(8+j*bw+2,H-16-h,bw-4,h); c.globalAlpha=1;
     if(tally){ const h2=(H-30)*(tally[j]/1000)/mx; c.fillStyle=col('--ember'); c.fillRect(8+j*bw+bw*0.3,H-16-h2,bw*0.4,h2); }
-    c.fillStyle=col('--muted'); c.font='10px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText(String(j),8+j*bw+bw/2,H-4); });
+    c.fillStyle=col('--muted'); c.font='10px Nunito,system-ui,sans-serif'; c.textAlign='center'; c.fillText(String(j),8+j*bw+bw/2,H-4); });
   c.textAlign='left'; c.fillText('coastal counties in a sample: pale, the exact share; ember, 1000 draws',6,11);
   const got=pick.filter(i=>COAST.has(CO[i])).length;
   const L=[R`\binom{36}{${k}} = ${g(tot)} \text{ samples}`,R`P(\text{a county is in}) = \tfrac{${k}}{36}`,R`\text{expected coastal: } ${k} \cdot \tfrac{7}{36} \approx ${(k*7/36).toFixed(2)}`,
@@ -286,7 +286,7 @@ const km=$('km'),kp=$('kp'),kq=$('kq'); [km,kp,kq].forEach(e=>e.addEventListener
 function draw2(){ const m=+km.value*100, p=+kp.value/100, q=+kq.value/100; $('om').textContent=km.value+'%'; $('op').textContent=kp.value+'%'; $('oq').textContent=kq.value+'%';
   const a=m*p, b=(10000-m)*q, share=a+b>0?a/(a+b):0;
   const cv=$('cv2'), H=110; const {c,W}=sizeH(cv,H); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
-  const bar=(y,f,lab)=>{ c.fillStyle=col('--grid'); c.fillRect(6,y,W-12,26); c.fillStyle=col('--ember'); c.fillRect(6,y,(W-12)*f,26); c.fillStyle=col('--muted'); c.font='10px IBM Plex Mono, monospace'; c.textAlign='left'; c.fillText(lab,6,y-4); };
+  const bar=(y,f,lab)=>{ c.fillStyle=col('--grid'); c.fillRect(6,y,W-12,26); c.fillStyle=col('--ember'); c.fillRect(6,y,(W-12)*f,26); c.fillStyle=col('--muted'); c.font='10px Nunito,system-ui,sans-serif'; c.textAlign='left'; c.fillText(lab,6,y-4); };
   bar(18,m/10000,'the town: '+(m/100).toFixed(0)+'% in favour'); bar(72,share,'the poll: '+(100*share).toFixed(0)+'% in favour');
   const vd=$('vd2'); vd.textContent=Math.abs(p-q)<1e-9?'The two sides answer with the same chance, so the poll leans nowhere on average: its share is the town\'s.':(share>m/10000?'Those in favour answer more readily, so the poll leans toward them.':'Those against answer more readily, so the poll leans toward them.');
   const L=[R`${g(m)} \cdot ${p.toFixed(2)} = ${g(Math.round(a))} \text{ in favour answer}`,R`${g(10000-m)} \cdot ${q.toFixed(2)} = ${g(Math.round(b))} \text{ against answer}`,R`\text{poll share} \approx ${Nw}{${(100*share).toFixed(1)}\%},\ \text{town share } ${(m/100).toFixed(0)}\%`];

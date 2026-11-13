@@ -436,13 +436,13 @@ function badge(c,x,y,r){ c.beginPath(); c.roundRect?c.roundRect(x-r,y-r,2*r,2*r,
 function draw1(){
   const {c,W,H}=size(cv1,1.5); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
   const f=CONDS[phi.value]; const pass=t=>from==='t'&&f(t);
-  if(from==='t'){ c.strokeStyle=col('--muted'); c.lineWidth=1.2; c.setLineDash([4,4]); c.strokeRect(8,8,W-16,H-16); c.setLineDash([]); c.fillStyle=col('--muted'); c.font='12px IBM Plex Mono, monospace'; c.fillText('t',16,24); }
-  else { c.fillStyle=col('--muted'); c.font='12px IBM Plex Mono, monospace'; c.fillText('no set: nothing to sift',16,24); }
+  if(from==='t'){ c.strokeStyle=col('--muted'); c.lineWidth=1.2; c.setLineDash([4,4]); c.strokeRect(8,8,W-16,H-16); c.setLineDash([]); c.fillStyle=col('--muted'); c.font='12px Nunito,system-ui,sans-serif'; c.fillText('t',16,24); }
+  else { c.fillStyle=col('--muted'); c.font='12px Nunito,system-ui,sans-serif'; c.fillText('no set: nothing to sift',16,24); }
   const ins=TOK.filter(pass), outs=TOK.filter(t=>!pass(t));
   const r=Math.max(10,Math.min(17,W/30));
   // passing letters inside an ember region on the left; failing on the right
   const cx=W*.3, cy=H*.52, rx=W*.22, ry=H*.36;
-  if(from==='t'){ c.strokeStyle=col('--ember'); c.lineWidth=2.4; c.beginPath(); c.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); c.stroke(); c.fillStyle=col('--ember'); c.font='12px IBM Plex Mono, monospace'; c.fillText('φ',cx-rx*.9,cy-ry*.95); }
+  if(from==='t'){ c.strokeStyle=col('--ember'); c.lineWidth=2.4; c.beginPath(); c.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); c.stroke(); c.fillStyle=col('--ember'); c.font='12px Nunito,system-ui,sans-serif'; c.fillText('φ',cx-rx*.9,cy-ry*.95); }
   const grid=(L,x0,y0,w,h)=>{ const cols=Math.max(1,Math.min(L.length,Math.floor(w/(r*2.6)))); const rows=Math.ceil(L.length/cols)||1; L.forEach((t,j)=>{ const ro=Math.floor(j/cols), co=j%cols; const x=x0+(co-(cols-1)/2)*r*2.6, y=y0+(ro-(rows-1)/2)*r*2.6; const on=pass(t);
     badge(c,x,y,r); c.fillStyle=col('--'+t.c); c.globalAlpha=from==='t'?(on?1:.22):.22; c.fill(); c.globalAlpha=1;
     c.fillStyle=on?'#fff':col('--muted'); c.font='600 '+Math.round(r*1.2)+'px Source Serif 4, serif'; c.textAlign='center'; c.textBaseline='middle'; c.fillText(t.id,x,y+1); c.textAlign='left'; c.textBaseline='alphabetic'; }); };

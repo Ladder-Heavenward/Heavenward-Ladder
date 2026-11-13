@@ -370,11 +370,11 @@ function drawW(){
   const least=choice.find(x=>T.has(x));
   for(let k=0;k<X.length;k++){ const rest=X.filter(x=>!choice.slice(0,k).includes(x)); const y=6+k*rh;
     // order so far (left)
-    c.font='12px IBM Plex Mono, monospace'; c.textAlign='left'; c.fillStyle=col('--teal'); c.fillText(choice.slice(0,k+1).join(W0<460?' ':' ≼ '),4,y+18);
+    c.font='12px Nunito,system-ui,sans-serif'; c.textAlign='left'; c.fillStyle=col('--teal'); c.fillText(choice.slice(0,k+1).join(W0<460?' ':' ≼ '),4,y+18);
     rest.forEach((x,j)=>{ const cx=lw+j*tw+tw/2, cy=y+rh/2; const pick=x===choice[k];
       c.beginPath(); c.fillStyle=pick?col('--ember'):col('--sand'); c.strokeStyle=(pick&&x===least)?col('--gold'):col('--grid'); c.lineWidth=(pick&&x===least)?3:1;
       if(c.roundRect) c.roundRect(cx-tw/2+2,cy-11,tw-4,22,4); else c.rect(cx-tw/2+2,cy-11,tw-4,22); c.fill(); c.stroke();
-      c.fillStyle=pick?'#fff':col('--ink'); c.textAlign='center'; c.font=(T.has(x)?'600 ':'')+'13px IBM Plex Mono, monospace'; c.fillText(x,cx,cy+4); geoW.push({x:cx,y:cy,w:tw,k,l:x}); });
+      c.fillStyle=pick?'#fff':col('--ink'); c.textAlign='center'; c.font=(T.has(x)?'600 ':'')+'13px Nunito,system-ui,sans-serif'; c.fillText(x,cx,cy+4); geoW.push({x:cx,y:cy,w:tw,k,l:x}); });
   }
   c.textAlign='left';
   const Ts=[...T].sort();
@@ -404,7 +404,7 @@ function drawZ(){
   const pos={}; rows.forEach((r,L)=>{ r.forEach((i,j)=>{ pos[i]=[W0*(j+.5)/r.length, H-rh*(L+.5)]; }); });
   // links
   c.lineWidth=1; F.forEach((p,i)=>F.forEach((q,j)=>{ if(lev(q)===lev(p)+1&&sub(p,q)){ const on=Csel.includes(i)&&Csel.includes(j); c.strokeStyle=on?col('--ember'):col('--grid'); c.lineWidth=on?2:1; c.beginPath(); c.moveTo(pos[i][0],pos[i][1]-10); c.lineTo(pos[j][0],pos[j][1]+10); c.stroke(); } }));
-  const bw=Math.min(52,W0/8.6); geoZ=[]; c.font=(W0<420?'10':'11')+'px IBM Plex Mono, monospace'; c.textAlign='center';
+  const bw=Math.min(52,W0/8.6); geoZ=[]; c.font=(W0<420?'10':'11')+'px Nunito,system-ui,sans-serif'; c.textAlign='center';
   F.forEach((p,i)=>{ const [x,y]=pos[i]; const inC=Csel.includes(i), mx=lev(p)===3;
     c.beginPath(); if(c.roundRect) c.roundRect(x-bw/2,y-10,bw,20,4); else c.rect(x-bw/2,y-10,bw,20);
     c.fillStyle=inC?col('--ember'):col('--sand'); c.fill(); c.strokeStyle=mx?col('--gold'):col('--grid'); c.lineWidth=mx?2.5:1; c.stroke();

@@ -276,12 +276,12 @@ function drawL(){
   const W0=cvL.clientWidth||300, span=W0<420?6:10, H=150; const {c}=size(cvL,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
   const lo=center-span/2, hi=center+span/2, X=v=>14+(W0-28)*(v-lo)/(hi-lo), y=96;
   c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(8,y); c.lineTo(W0-8,y); c.stroke();
-  c.font='10px IBM Plex Mono, monospace'; c.textAlign='center';
+  c.font='10px Nunito,system-ui,sans-serif'; c.textAlign='center';
   for(let n=Math.ceil(lo);n<=hi;n++){ const x=X(n); c.strokeStyle=col('--muted'); c.beginPath(); c.moveTo(x,y); c.lineTo(x,y+6); c.stroke(); c.fillStyle=col('--muted'); c.fillText('10'+(n<0?'⁻':'')+String(Math.abs(n)).split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join(''),x,y+18); }
   hit=[]; let lane=0; let lastx=-99;
   T.forEach((t,i)=>{ const p=pos(t); if(p<lo-0.2||p>hi+0.2) return; const x=X(p); if(x-lastx<46) lane=(lane+1)%3; else lane=0; lastx=x; const yy=y-14-lane*22;
     const sel=i===pa?'--teal':(i===pb?'--ember':'--ink'); c.beginPath(); c.arc(x,y,4,0,7); c.fillStyle=col(sel); c.fill(); c.strokeStyle=col('--grid'); c.beginPath(); c.moveTo(x,y-4); c.lineTo(x,yy+3); c.stroke();
-    c.fillStyle=col(sel); c.font=(i===pa||i===pb?'600 ':'')+'10px IBM Plex Mono, monospace'; c.fillText(t[0],x,yy); hit.push({x,y:yy,i}); });
+    c.fillStyle=col(sel); c.font=(i===pa||i===pb?'600 ':'')+'10px Nunito,system-ui,sans-serif'; c.fillText(t[0],x,yy); hit.push({x,y:yy,i}); });
   const L=[];
   if(pa===null) L.push(R`\text{tap one thing, then another}`);
   else { const A=T[pa]; L.push(`\\text{${A[0]}}:\\ ${sci(A[1],A[2])}\\ \\text{m}`);

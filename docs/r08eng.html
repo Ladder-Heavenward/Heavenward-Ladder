@@ -233,7 +233,7 @@ Object.keys(SH).forEach(k=>{ const b=document.createElement('button'); b.textCon
 function draw1(){ const cv=$('cv1'), H=150, {c,W}=size(cv,H), lo=19.97, hi=20.045, X=v=>12+(W-24)*(v-lo)/(hi-lo);
   c.fillStyle=col('--card'); c.fillRect(0,0,W,H); c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath();
   for(let v=19.97;v<=hi+1e-9;v+=0.01){ c.moveTo(X(v),16); c.lineTo(X(v),H-22); } c.stroke();
-  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; [19.98,20.00,20.02,20.04].forEach(v=>c.fillText(v.toFixed(2),X(v),H-6));
+  c.fillStyle=col('--muted'); c.font='11px Nunito,system-ui,sans-serif'; c.textAlign='center'; [19.98,20.00,20.02,20.04].forEach(v=>c.fillText(v.toFixed(2),X(v),H-6));
   const band=(a,b,y,colr,lab)=>{ c.fillStyle=col(colr); c.globalAlpha=0.3; c.fillRect(X(a),y,X(b)-X(a),26); c.globalAlpha=1; c.strokeStyle=col(colr); c.lineWidth=2; c.strokeRect(X(a),y,X(b)-X(a),26); c.fillStyle=col(colr); c.textAlign='left'; c.fillText(lab,Math.min(X(b)+4,W-48),y+17); };
   const S=SH[fk].s; band(HOLE[0],HOLE[1],24,'--teal','hole'); band(S[0],S[1],70,'--ember','shaft');
   const cmin=HOLE[0]-S[1], cmax=HOLE[1]-S[0]; const vd=$('vd1');
@@ -254,7 +254,7 @@ function draw2(){ const n=+kn.value, d=+kd.value; $('on').textContent=n; $('od')
   c.fillStyle=col('--plum'); for(let b=0;b<NB;b++){ const x0=W/2+(W/2-14)*(-span+2*span*b/NB)/span, x1=W/2+(W/2-14)*(-span+2*span*(b+1)/NB)/span, h=(H-50)*bins[b]/top; c.fillRect(x0+0.5,H-26-h,x1-x0-1,h); }
   c.strokeStyle=col('--ember'); c.lineWidth=2.4; c.beginPath(); c.moveTo(X(-wc),12); c.lineTo(X(-wc),H-26); c.moveTo(X(wc),12); c.lineTo(X(wc),H-26); c.stroke();
   c.strokeStyle=col('--muted'); c.lineWidth=1; c.beginPath(); c.moveTo(8,H-26); c.lineTo(W-8,H-26); c.stroke();
-  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText('−'+wc.toFixed(2),X(-wc),H-10); c.fillText('+'+wc.toFixed(2),X(wc),H-10); c.fillText('0',X(0),H-10);
+  c.fillStyle=col('--muted'); c.font='11px Nunito,system-ui,sans-serif'; c.textAlign='center'; c.fillText('−'+wc.toFixed(2),X(-wc),H-10); c.fillText('+'+wc.toFixed(2),X(wc),H-10); c.fillText('0',X(0),H-10);
   $('vd2').textContent='Worst case ± '+wc.toFixed(2)+' mm. Of these 1000 stacks the farthest from nominal was '+mx.toFixed(3)+' mm off, and '+inner+' landed within half the worst case.'; }
 kn.addEventListener('input',draw2); kd.addEventListener('input',draw2); $('rr').onclick=()=>{ seed=(seed*48271+11)%2147483647||7; draw2(); };
 new ResizeObserver(()=>{ draw1(); draw2(); }).observe($('cv1'));

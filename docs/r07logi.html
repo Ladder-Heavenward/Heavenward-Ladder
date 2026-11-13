@@ -257,7 +257,7 @@ function monday(){ return BASE.map(([n,s,e])=>({n,s:(day===1&&n==='D')?780:s,e:(
 const kt=$('kt'); kt.oninput=draw1;
 function bars(cv,M,t0,t1,now,H){ const {c,W}=sizeH(cv,H); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
   const S=M.slice().sort((a,b)=>a.s-b.s); const rh=Math.min(18,(H-26)/S.length), x=t=>34+(W-44)*(t-t0)/(t1-t0);
-  c.font='10px IBM Plex Mono, monospace';
+  c.font='10px Nunito,system-ui,sans-serif';
   for(let h=Math.ceil(t0/60)*60;h<=t1;h+=60){ c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(x(h),4); c.lineTo(x(h),H-14); c.stroke(); c.fillStyle=col('--muted'); c.textAlign='center'; c.fillText(String(h/60),x(h),H-3); }
   S.forEach((m,i)=>{ const y=6+i*rh; const go=now!=null&&m.s<=now&&now<m.e;
     c.fillStyle=go?col('--ember'):col(TINT[(m.room-1)%TINT.length]); c.globalAlpha=go?1:0.35; c.fillRect(x(m.s),y,Math.max(2,x(m.e)-x(m.s)),rh-3); c.globalAlpha=1;
@@ -282,7 +282,7 @@ kn.oninput=()=>{ fresh(); draw2(); };
 [['new day',()=>fresh()]].forEach(([lab,f])=>{ const b=document.createElement('button'); b.textContent=lab; b.onclick=()=>{ f(); draw2(); }; $('nch').appendChild(b); });
 function draw2(){ $('on').textContent=kn.value; const rooms=first(mine), b=busiest(mine);
   const H=Math.max(150,mine.length*12+30); const {c,x,rh,S}=bars($('cv2'),mine,480,1080,null,H);
-  S.forEach((m,i)=>{ const k=on(mine,m.s).length; const y=6+i*rh; c.fillStyle=col('--ink'); c.font='9px IBM Plex Mono, monospace'; c.textAlign='right'; c.fillText(String(k),x(m.s)-2,y+rh-6);
+  S.forEach((m,i)=>{ const k=on(mine,m.s).length; const y=6+i*rh; c.fillStyle=col('--ink'); c.font='9px Nunito,system-ui,sans-serif'; c.textAlign='right'; c.fillText(String(k),x(m.s)-2,y+rh-6);
     if(k===b.best&&m.s===b.at){ c.strokeStyle=col('--ink'); c.lineWidth=1.5; c.strokeRect(x(m.s)-10,y-1,10,rh-1); } });
   const L=[R`\text{most at once: } ${Nw}{${b.best}}`,R`\text{first-free-room: } ${rooms} \text{ rooms}`,
     R`\text{a search of every way into } ${b.best} \text{ rooms: } ${b.best}^{${mine.length}} \approx ${Math.pow(b.best,mine.length).toExponential(2).replace(/e\+?(\d+)/,'\\cdot 10^{$1}')}`];

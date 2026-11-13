@@ -233,7 +233,7 @@ const XC=v=>16+((cvC.clientWidth||300)-32)*(v-lo)/(hi-lo);
 function inDom(F,v){ return !F.dom||F.dom(v); }
 function drawC(){
   const W0=cvC.clientWidth||300, H=200; const {c}=size(cvC,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
-  const ys=[40,105,170]; c.font='11px IBM Plex Mono, monospace';
+  const ys=[40,105,170]; c.font='11px Nunito,system-ui,sans-serif';
   ys.forEach((y,k)=>{ c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(8,y); c.lineTo(W0-8,y); c.stroke();
     c.fillStyle=col('--muted'); c.textAlign='center'; for(let v=lo;v<=hi;v+=2){ c.beginPath(); c.moveTo(XC(v),y-3); c.lineTo(XC(v),y+3); c.stroke(); c.fillText(v,XC(v),y+15); }
     c.textAlign='left'; c.fillText(['x','f(x)','g(f(x))'][k],6,y-10); });
@@ -269,11 +269,11 @@ function drawA(){
   const lx=Math.min(120,W0*0.36), cw=Math.min(46,(W0-lx-10)/4), rh=28, y0=24; ga={lx,cw,rh,y0};
   const gf=comp(gv,fv), hgf=comp(hv,gf), hg=comp(hv,gv), hgf2=comp(hg,fv), fg=comp(fv,gv);
   const rows=[['a',N4,'--muted',false],['f(a)',fv,'--ink',true],['g(a)',gv,'--ink',true],['h(a)',hv,'--ink',true],['(g∘f)(a)',gf,'--teal',false],['(h∘(g∘f))(a)',hgf,'--ember',false],['(h∘g)(a)',hg,'--teal',false],['((h∘g)∘f)(a)',hgf2,'--ember',false],['(f∘g)(a)',fg,'--gold',false]];
-  c.font='12px IBM Plex Mono, monospace';
+  c.font='12px Nunito,system-ui,sans-serif';
   rows.forEach(([lab,v,cl,ed],i)=>{ const y=y0+i*rh+(i>=4?8:0)+(i>=8?6:0);
     c.textAlign='right'; c.fillStyle=col(cl==='--ink'?'--ink':cl); c.fillText(lab,lx-8,y+rh/2+4);
     v.forEach((val,j)=>{ const xx=lx+j*cw; c.strokeStyle=col('--grid'); c.lineWidth=1; c.strokeRect(xx,y,cw,rh); if(ed){ c.fillStyle=col('--sand'); c.fillRect(xx+1,y+1,cw-2,rh-2); }
-      c.fillStyle=col(cl); c.textAlign='center'; c.font=(i===5||i===7?'600 ':'')+'13px IBM Plex Mono, monospace'; c.fillText(val,xx+cw/2,y+rh/2+5); c.font='12px IBM Plex Mono, monospace'; }); });
+      c.fillStyle=col(cl); c.textAlign='center'; c.font=(i===5||i===7?'600 ':'')+'13px Nunito,system-ui,sans-serif'; c.fillText(val,xx+cw/2,y+rh/2+5); c.font='12px Nunito,system-ui,sans-serif'; }); });
   const same=hgf.every((v,j)=>v===hgf2[j]), comm=fg.every((v,j)=>v===gf[j]);
   const L=[`h \\circ (g \\circ f) = (h \\circ g) \\circ f`, `${same?R`\htmlClass{keep}{\text{same values at } 1, 2, 3, 4}`:'\\text{differ}'}\\ \\text{(regroup for composing)}`,
     `g \\circ f ${comm?'=':'\\ne'} f \\circ g${comm?R`\ \ \text{(these two commute)}`:R`\ \ \text{(composing-order-matters)}`}`];

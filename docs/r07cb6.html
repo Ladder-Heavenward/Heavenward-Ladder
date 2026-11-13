@@ -283,7 +283,7 @@ function drawZ(){
   const rh=58, H=4*rh+6; const {c}=size(cvZ,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
   const pos={}; rows.forEach((r,L)=>{ r.forEach((i,j)=>{ pos[i]=[W0*(j+.5)/r.length, H-rh*(L+.5)]; }); });
   F.forEach((p,i)=>F.forEach((q,j)=>{ if(lev(q)===lev(p)+1&&sub(p,q)){ const on=sub(q,F[cur])||sub(p,F[cur])&&j===cur; c.strokeStyle=(sub(q,F[cur]))?col('--ember'):col('--grid'); c.lineWidth=sub(q,F[cur])?2:1; c.beginPath(); c.moveTo(pos[i][0],pos[i][1]-10); c.lineTo(pos[j][0],pos[j][1]+10); c.stroke(); } }));
-  const bw=Math.min(52,W0/8.6); geoZ=[]; c.font=(W0<420?'10':'11')+'px IBM Plex Mono, monospace'; c.textAlign='center';
+  const bw=Math.min(52,W0/8.6); geoZ=[]; c.font=(W0<420?'10':'11')+'px Nunito,system-ui,sans-serif'; c.textAlign='center';
   F.forEach((p,i)=>{ const [x,y]=pos[i]; const on=sub(p,F[cur]), mx=lev(p)===3;
     c.beginPath(); if(c.roundRect) c.roundRect(x-bw/2,y-10,bw,20,4); else c.rect(x-bw/2,y-10,bw,20);
     c.fillStyle=i===cur?col('--ember'):(on?col('--sand'):col('--card')); c.fill(); c.strokeStyle=mx?col('--gold'):col('--grid'); c.lineWidth=mx?2.5:1; c.stroke();
@@ -318,7 +318,7 @@ function drawR(){
   PS.forEach(n=>{ const [x,y]=pos[n]; const inR=run.includes(n), opt=S.includes(n), r=15;
     if(opt){ c.beginPath(); c.arc(x,y,r+5,0,7); c.strokeStyle=col('--gold'); c.lineWidth=2.4; c.setLineDash([4,3]); c.stroke(); c.setLineDash([]); }
     c.beginPath(); c.arc(x,y,r,0,7); c.fillStyle=inR?col('--ember'):col('--sand'); c.fill(); c.strokeStyle=col('--ink'); c.lineWidth=1.2; c.stroke();
-    c.fillStyle=inR?'#fff':col('--ink'); c.font='600 12px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText(n,x,y+4); geoR.push({x,y,r:r+6,n}); });
+    c.fillStyle=inR?'#fff':col('--ink'); c.font='600 12px Nunito,system-ui,sans-serif'; c.textAlign='center'; c.fillText(n,x,y+4); geoR.push({x,y,r:r+6,n}); });
   c.textAlign='left';
   const set=a=>a.length?`\\{${a.join(', ')}\\}`:'\\varnothing';
   const L=[`\\text{run: } ${run.length?run.join(',\\ '):'\\varnothing'}`];

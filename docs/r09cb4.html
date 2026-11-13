@@ -259,17 +259,17 @@ function drawR(){
   const P=PRE[pi], W0=cvR.clientWidth||300, H=170; const {c}=size(cvR,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
   const N=10, cw=(W0-20)/N, y1=34, y2=110; gr={cw};
   const T=terms(P,N+1);
-  c.font='12px IBM Plex Mono, monospace'; c.textAlign='center';
+  c.font='12px Nunito,system-ui,sans-serif'; c.textAlign='center';
   for(let n=0;n<N;n++){ const x=10+n*cw+cw/2; c.fillStyle=col('--muted'); c.fillText(n,x,y1);
     c.strokeStyle=col('--grid'); c.lineWidth=1; c.strokeRect(10+n*cw+2,y2-16,cw-4,28);
-    c.fillStyle=n===sel?col('--ember'):col('--ink'); c.font=(n===sel?'600 ':'')+'12px IBM Plex Mono, monospace'; c.fillText(fmt(T[n]),x,y2+3); c.font='12px IBM Plex Mono, monospace'; }
+    c.fillStyle=n===sel?col('--ember'):col('--ink'); c.font=(n===sel?'600 ':'')+'12px Nunito,system-ui,sans-serif'; c.fillText(fmt(T[n]),x,y2+3); c.font='12px Nunito,system-ui,sans-serif'; }
   c.textAlign='left'; c.fillStyle=col('--muted'); c.fillText('n',2,y1-14); c.fillText('f(n)',2,y2-22);
   if(sel<N-1){ const x0=10+sel*cw+cw/2, x1=10+(sel+1)*cw+cw/2;
     // teal: up first (n -> S(n)) then across by f
     c.strokeStyle=col('--teal'); c.lineWidth=2.2; c.beginPath(); c.moveTo(x0,y1+6); c.quadraticCurveTo((x0+x1)/2,y1-10,x1,y1+6); c.stroke(); c.beginPath(); c.moveTo(x1,y1+10); c.lineTo(x1,y2-18); c.stroke();
     // gold: across first then g
     c.strokeStyle=col('--gold'); c.beginPath(); c.moveTo(x0,y1+10); c.lineTo(x0,y2-18); c.stroke(); c.beginPath(); c.moveTo(x0+4,y2+14); c.quadraticCurveTo((x0+x1)/2,y2+40,x1-4,y2+14); c.stroke();
-    c.fillStyle=col('--teal'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText('s',(x0+x1)/2,y1-6); c.fillStyle=col('--gold'); c.fillText(P.gt,(x0+x1)/2,y2+42); }
+    c.fillStyle=col('--teal'); c.font='11px Nunito,system-ui,sans-serif'; c.textAlign='center'; c.fillText('s',(x0+x1)/2,y1-6); c.fillStyle=col('--gold'); c.fillText(P.gt,(x0+x1)/2,y2+42); }
   const L=[`f(${sel}) = ${P.it(sel)} = ${typeof T[sel]==='string'?`\\text{${T[sel]}}`:fmt(T[sel])}`];
   if(sel<N-1){ const v=T[sel+1]; const vs=typeof v==='string'?`\\text{${v}}`:fmt(v); L.push(`(f \\circ s)(${sel}) = f(${sel+1}) = ${vs}`); L.push(`(${P.gt.replace('t_4','t_4').replace('m_2','m_2')} \\circ f)(${sel}) = ${P.gt}(${typeof T[sel]==='string'?`\\text{${T[sel]}}`:fmt(T[sel])}) = \\htmlClass{keep}{${vs}}`); }
   tex(document.getElementById('eqR'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
@@ -286,7 +286,7 @@ function drawD(){
   const W0=cvD.clientWidth||300, H=220; const {c}=size(cvD,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
   const N=12, cw=(W0-20)/N, base=H-34, dh=Math.min(16,(H-60)/10); gd={cw};
   const m=Math.min(...D), Nst=D.indexOf(m);
-  c.font='11px IBM Plex Mono, monospace'; c.textAlign='center';
+  c.font='11px Nunito,system-ui,sans-serif'; c.textAlign='center';
   for(let n=0;n<N;n++){ const x=10+n*cw+cw/2; c.fillStyle=col('--muted'); c.fillText(n,x,H-14);
     if(n>=D.length){ c.fillStyle=col('--ember'); c.fillText('–',x,base-6); continue; }
     for(let k=0;k<D[n];k++){ c.beginPath(); c.arc(x,base-6-k*dh,Math.min(5,dh/2-1),0,7); c.fillStyle=(n>=Nst&&!strict)?col('--teal'):col('--ink'); c.fill(); }

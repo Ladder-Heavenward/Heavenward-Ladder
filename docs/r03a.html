@@ -548,7 +548,7 @@ function draw(){
   const onLoop=(x,y)=>A.loop&&A.loop.some((v,i)=>i<A.loop.length-1&&v===x&&A.loop[i+1]===y);
   // arrows x -> y for x ∈ y
   S.forEach(x=>S.forEach(y=>{ if(!has(x,y)) return; const [x1,y1]=pos[x], [x2,y2]=pos[y]; c.strokeStyle=onLoop(x,y)?col('--ember'):col('--muted'); c.lineWidth=onLoop(x,y)?2.6:1.4; c.fillStyle=c.strokeStyle;
-    if(x===y){ const sx=x1<W/2?-1:1; c.beginPath(); c.arc(x1+sx*28,y1,12,0,Math.PI*2); c.stroke(); c.font='11px IBM Plex Mono, monospace'; c.textAlign=sx<0?'right':'left'; c.fillText(x+' ∈ '+x,x1+sx*44,y1+4); c.textAlign='left'; return; }
+    if(x===y){ const sx=x1<W/2?-1:1; c.beginPath(); c.arc(x1+sx*28,y1,12,0,Math.PI*2); c.stroke(); c.font='11px Nunito,system-ui,sans-serif'; c.textAlign=sx<0?'right':'left'; c.fillText(x+' ∈ '+x,x1+sx*44,y1+4); c.textAlign='left'; return; }
     const dx=x2-x1, dy=y2-y1, L=Math.hypot(dx,dy), ux=dx/L, uy=dy/L; const ax=x1+ux*22, ay=y1+uy*22, bx=x2-ux*24, by=y2-uy*24;
     const off=(has(y,x)?8:0); const ox=-uy*off, oy=ux*off;
     c.beginPath(); c.moveTo(ax+ox,ay+oy); c.lineTo(bx+ox,by+oy); c.stroke();
@@ -557,7 +557,7 @@ function draw(){
   S.forEach(x=>{ const [px,py]=pos[x]; const isB=A.bottoms.includes(x)&&!A.gloop; c.beginPath(); c.arc(px,py,18,0,Math.PI*2); c.fillStyle=inc.has(x)?(isB?col('--teal'):col('--sand')):col('--card'); c.fill(); c.strokeStyle=inc.has(x)?col('--ink'):col('--grid'); c.lineWidth=inc.has(x)?1.8:1; c.setLineDash(inc.has(x)?[]:[3,3]); c.stroke(); c.setLineDash([]);
     if(A.left.includes(x)){ c.beginPath(); c.arc(px,py,23,0,Math.PI*2); c.strokeStyle=col('--ember'); c.lineWidth=1.6; c.setLineDash([4,3]); c.stroke(); c.setLineDash([]); }
     c.fillStyle=isB?'#fff':(inc.has(x)?col('--ink'):col('--muted')); c.font='600 15px Source Serif 4, serif'; c.textAlign='center'; c.textBaseline='middle'; c.fillText(x,px,py+1); c.textAlign='left'; c.textBaseline='alphabetic'; });
-  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.fillText('an arrow from x to y means x ∈ y',10,H-8);
+  c.fillStyle=col('--muted'); c.font='11px Nunito,system-ui,sans-serif'; c.fillText('an arrow from x to y means x ∈ y',10,H-8);
   const v=document.getElementById('vd1'); const gl='{'+A.g.join(', ')+'}';
   const lst=a=>a.length>1?a.slice(0,-1).join(', ')+' and '+a[a.length-1]:a[0];
   let h;

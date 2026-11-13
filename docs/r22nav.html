@@ -236,11 +236,11 @@ function draw(){ const W=360,H=300,P=60,base=H-14, L=10, Rr=170;
   let s='<svg viewBox="0 0 '+W+' '+H+'" style="background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
   [[L,'keeps headings',f=>Y(f)],[L+Rr,'keeps sizes',f=>Math.sin(f)]].forEach(([x0,lab,h])=>{
     for(let g=0;g<=4;g++){ const x=x0+g*P*Math.PI/6; s+='<line x1="'+x+'" y1="'+(base-3.4*P)+'" x2="'+x+'" y2="'+base+'" style="stroke:'+V('--grid')+';stroke-width:0.7"/>'; }
-    for(let f=0;f<=80;f+=10){ const y=base-h(f*D)*P; s+='<line x1="'+x0+'" y1="'+y+'" x2="'+(x0+4*P*Math.PI/6)+'" y2="'+y+'" style="stroke:'+V('--grid')+';stroke-width:'+(f===0?1.6:0.7)+'"/>'; if(f%20===0&&(lab==='keeps headings'||f<=40)) s+='<text x="'+(x0+2)+'" y="'+(y-2)+'" style="fill:'+V('--ink')+';font:9px IBM Plex Mono,monospace">'+f+'°</text>'; }
+    for(let f=0;f<=80;f+=10){ const y=base-h(f*D)*P; s+='<line x1="'+x0+'" y1="'+y+'" x2="'+(x0+4*P*Math.PI/6)+'" y2="'+y+'" style="stroke:'+V('--grid')+';stroke-width:'+(f===0?1.6:0.7)+'"/>'; if(f%20===0&&(lab==='keeps headings'||f<=40)) s+='<text x="'+(x0+2)+'" y="'+(y-2)+'" style="fill:'+V('--ink')+';font:9px Nunito,system-ui,sans-serif">'+f+'°</text>'; }
     const y=base-h(phi*D)*P, cx=x0+2*P*Math.PI/6, r=5*D*P, k=(lab==='keeps sizes')?Math.cos(phi*D):sec(phi*D);
     s+='<line x1="'+x0+'" y1="'+y+'" x2="'+(x0+4*P*Math.PI/6)+'" y2="'+y+'" style="stroke:'+V('--teal')+';stroke-width:1.6"/>';
     s+='<ellipse cx="'+cx+'" cy="'+y+'" rx="'+(r*sec(phi*D))+'" ry="'+(r*k)+'" style="fill:'+V('--ember')+';fill-opacity:0.35;stroke:'+V('--ember')+'"/>';
-    s+='<text x="'+x0+'" y="12" style="fill:'+V('--ink')+';font:600 10px IBM Plex Mono,monospace">'+lab+'</text>'; });
+    s+='<text x="'+x0+'" y="12" style="fill:'+V('--ink')+';font:600 10px Nunito,system-ui,sans-serif">'+lab+'</text>'; });
   const h=phi*D/n; let lo=0, hi=0;
   for(let k=0;k<n;k++){ lo+=h*sec(k*h); hi+=h*sec((k+1)*h); const yt=base-hi*P, w=6; s+='<rect x="'+(L+4*P*Math.PI/6+3)+'" y="'+yt+'" width="'+w+'" height="'+(h*sec((k+1)*h)*P)+'" style="fill:none;stroke:'+V('--ink')+';stroke-width:0.6"/>'; }
   $('mp').innerHTML=s+'</svg>'; $('of').textContent=phi+'°'; $('on').textContent=n;

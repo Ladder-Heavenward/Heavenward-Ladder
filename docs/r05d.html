@@ -414,19 +414,19 @@ function drawR(){
   const Rl=RULES[rule]; const out=Rl.f();
   const L=[`w = ${P(A)},\\ \\ b = ${P(B)},\\ \\ c = ${P(C)}`];
   if(!out){ L.push(`\\htmlClass{new}{w = 0:\\ \\text{reciprocal on ℚ speaks only of } w \\ne 0}`,`\\text{0 has no reciprocal (5e)}`); tex(document.getElementById('eqR'),'\\begin{gathered}'+L.join('\\\\ ')+'\\end{gathered}',true);
-    c.fillStyle=col('--muted'); c.font='12px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText('no pair: w has no reciprocal',W/2,H/2); return; }
+    c.fillStyle=col('--muted'); c.font='12px Nunito,system-ui,sans-serif'; c.textAlign='center'; c.fillText('no pair: w has no reciprocal',W/2,H/2); return; }
   const [l,r]=out; const dr=p=>p[1]<0?[-p[0],-p[1]]:p; const l2=dr(l), r2=dr(r), lo=low(l);
   const qmax=Math.max(l2[1],r2[1],lo[1])*1.15+0.5, pabs=Math.max(Math.abs(l2[0]),Math.abs(r2[0]),Math.abs(lo[0]),1)*1.15+0.5;
   const X=q=>28+(W-40)*q/qmax, Y=p=>H/2-(H/2-16)*p/pabs;
   c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(X(0),12); c.lineTo(X(0),H-12); c.moveTo(X(0),Y(0)); c.lineTo(W-8,Y(0)); c.stroke();
-  c.font='10.5px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='left'; c.fillText('top ↑',X(0)+4,16); c.textAlign='right'; c.fillText('bottom →',W-8,Y(0)-6);
+  c.font='10.5px Nunito,system-ui,sans-serif'; c.fillStyle=col('--muted'); c.textAlign='left'; c.fillText('top ↑',X(0)+4,16); c.textAlign='right'; c.fillText('bottom →',W-8,Y(0)-6);
   const same=l[0]*r[1]===l[1]*r[0];
   if(same){ const far=Math.max(l2[1],r2[1]); c.strokeStyle=col('--gold'); c.lineWidth=2; c.setLineDash([6,4]); c.beginPath(); c.moveTo(X(0),Y(0)); c.lineTo(X(far*1.06),Y(lo[0]*far*1.06/lo[1])); c.stroke(); c.setLineDash([]);
     c.strokeStyle=col('--gold'); c.lineWidth=2.5; c.beginPath(); c.arc(X(lo[1]),Y(lo[0]),9,0,7); c.stroke(); }
   c.strokeStyle=col('--ember'); c.lineWidth=1.5; c.beginPath(); c.arc(X(0),Y(0),4,0,7); c.stroke();
   const dot=(p,cl,rad)=>{ c.fillStyle=col(cl); c.beginPath(); c.arc(X(p[1]),Y(p[0]),rad,0,7); c.fill(); };
   dot(l2,'--ember',6.5); dot(r2,'--teal',4.5);
-  c.fillStyle=col('--ink'); c.textAlign='left'; c.font='11px IBM Plex Mono, monospace';
+  c.fillStyle=col('--ink'); c.textAlign='left'; c.font='11px Nunito,system-ui,sans-serif';
   L.push(`\\text{left: } ${Rl.L} = \\htmlClass{new}{${P(l)}}`); L.push(`\\text{right: } ${Rl.R} = \\htmlClass{keep}{${P(r)}}`);
   L.push(l[0]===r[0]&&l[1]===r[1]?`\\text{the very same pair}`:`\\text{different pairs:}\\ \\ ${l[0]}\\cdot ${r[1]} ${same?'=':'\\ne'} ${l[1]}\\cdot ${r[0]}`);
   L.push(same?`\\text{one fraction: } ${fr(l)}\\ \\ (\\text{${rule}})`:`\\htmlClass{new}{\\text{different fractions}}`);
@@ -441,13 +441,13 @@ function drawS(){
   const {c,W,H}=size(cvS,1.0); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
   const pad=22, s=(Math.min(W,H)-2*pad)/(2*M); const X=q=>W/2+q*s, Y=p=>H/2-p*s; sgeo={X,Y,s};
   c.save(); c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); for(let y=Y(M)-s*.4;y<Y(-M)+s*.4;y+=7){ c.moveTo(X(0)-s*.35,y); c.lineTo(X(0)+s*.35,y+7); } c.stroke(); c.restore();
-  c.font='10.5px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='center';
+  c.font='10.5px Nunito,system-ui,sans-serif'; c.fillStyle=col('--muted'); c.textAlign='center';
   for(let q=-M;q<=M;q+=2) if(q) c.fillText(String(q),X(q),H-6); c.textAlign='right'; for(let p=-M;p<=M;p+=2) c.fillText(String(p),pad-6,Y(p)+4);
   const inC=(pt,p,q)=>pt[0]*q===pt[1]*p;
   for(let q=-M;q<=M;q++){ if(!q) continue; for(let p=-M;p<=M;p++){ const sg=sgn(p*q); c.fillStyle=sg>0?col('--teal'):(sg<0?col('--ember'):col('--gold')); c.globalAlpha=.55; c.beginPath(); c.arc(X(q),Y(p),2.8,0,7); c.fill(); c.globalAlpha=1;
     if(inC(SA,p,q)){ c.strokeStyle=col('--ink'); c.lineWidth=1.6; c.beginPath(); c.arc(X(q),Y(p),6,0,7); c.stroke(); }
     if(inC(SB,p,q)){ c.strokeStyle=col('--ink'); c.lineWidth=1.2; c.setLineDash([2,2]); c.beginPath(); c.arc(X(q),Y(p),8.5,0,7); c.stroke(); c.setLineDash([]); } } }
-  const big=(pt,lab)=>{ c.fillStyle=col('--ink'); c.beginPath(); c.arc(X(pt[1]),Y(pt[0]),4.5,0,7); c.fill(); c.font='bold 12px IBM Plex Mono, monospace'; c.textAlign='left'; c.fillText(lab,X(pt[1])+7,Y(pt[0])-7); };
+  const big=(pt,lab)=>{ c.fillStyle=col('--ink'); c.beginPath(); c.arc(X(pt[1]),Y(pt[0]),4.5,0,7); c.fill(); c.font='bold 12px Nunito,system-ui,sans-serif'; c.textAlign='left'; c.fillText(lab,X(pt[1])+7,Y(pt[0])-7); };
   big(SA,'w'); big(SB,'b');
   const kind=pt=>{ const s=sgn(pt[0]*pt[1]); return s>0?'\\text{positive}':(s<0?'\\text{the negative of a positive}':'0'); };
   const d=add(SB,neg(SA)); const ds=sgn(d[0]*d[1]);

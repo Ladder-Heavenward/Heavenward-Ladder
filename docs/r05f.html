@@ -327,14 +327,14 @@ const cvB=document.getElementById('cvB');
 function drawB(){
   const narrow=(cvB.clientWidth||300)<480; const {c,W,H}=size(cvB,narrow?2.4:2.8); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
   const ok=lt(A,B);
-  if(!ok){ c.fillStyle=col('--muted'); c.font='12px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText('choose w less than b',W/2,H/2);
+  if(!ok){ c.fillStyle=col('--muted'); c.font='12px Nunito,system-ui,sans-serif'; c.textAlign='center'; c.fillText('choose w less than b',W/2,H/2);
     tex(document.getElementById('eqB'),`\\begin{gathered}${fr(A)} \\lt ${fr(B)}\\ \\text{fails (compare-by-cross-multiplying)}\\\\ \\text{another-between needs } a \\lt b\\end{gathered}`,true); document.getElementById('bgo').disabled=true; return; }
   document.getElementById('bgo').disabled=rounds>=4;
   const n=L.length, x0=18, x1=W-18, X=i=>n===1?W/2:x0+(x1-x0)*i/(n-1), y=H*.55;
   c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(x0,y); c.lineTo(x1,y); c.stroke();
   fresh.forEach(i=>{ c.strokeStyle=col('--gold'); c.lineWidth=1.2; c.beginPath(); c.moveTo(X(i-1),y); c.quadraticCurveTo(X(i),y-H*.28,X(i+1),y); c.stroke(); });
   const showLab=n<=9||!narrow&&n<=17;
-  c.font=(n>9?'10px':'11.5px')+' IBM Plex Mono, monospace'; c.textAlign='center';
+  c.font=(n>9?'10px':'11.5px')+' Nunito,system-ui,sans-serif'; c.textAlign='center';
   L.forEach((f,i)=>{ const isN=fresh.has(i); c.fillStyle=isN?col('--ember'):col('--ink'); c.beginPath(); c.arc(X(i),y,isN?5:4,0,7); c.fill();
     if(showLab||i===0||i===n-1){ c.fillStyle=isN?col('--ember'):col('--ink'); c.fillText(ft(f),X(i),i%2?y+22:y+(n>9?36:22)); } });
   const newL=[...fresh].map(i=>L[i]);
@@ -355,7 +355,7 @@ function drawH(){
   const {c,W,H}=size(cvH,(cvH.clientWidth||300)<480?0.82:0.95); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
   const padL=26,padB=22,padT=8,padR=8, sx=(W-padL-padR)/(QM+0.5), sy=(H-padT-padB)/(PM+0.5);
   const X=k=>padL+k*sx, Y=p=>H-padB-p*sy;
-  c.font='10.5px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='center'; for(let k=2;k<=QM;k+=2) c.fillText(String(k),X(k),H-6);
+  c.font='10.5px Nunito,system-ui,sans-serif'; c.fillStyle=col('--muted'); c.textAlign='center'; for(let k=2;k<=QM;k+=2) c.fillText(String(k),X(k),H-6);
   c.textAlign='right'; for(let p=0;p<=PM;p+=4) c.fillText(String(p),padL-6,Y(p)+4);
   for(let k=1;k<=QM;k++) for(let p=1;p<=PM;p++){ const d=p*p-2*k*k; c.fillStyle=d<0?col('--teal'):col('--ember'); c.globalAlpha=.6; c.beginPath(); c.arc(X(k),Y(p),2.7,0,7); c.fill(); c.globalAlpha=1;
     if(Math.abs(d)===1){ c.strokeStyle=col('--gold'); c.lineWidth=1.6; c.beginPath(); c.arc(X(k),Y(p),6,0,7); c.stroke(); } }

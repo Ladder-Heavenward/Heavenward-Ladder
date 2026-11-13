@@ -176,7 +176,7 @@ function svgPlane(o){ const lo=o.lo==null?-6:o.lo, hi=o.hi==null?6:o.hi, S=300, 
   (o.lines||[]).forEach(l=>{ const L=40; s+='<line x1="'+X(l.p[0]-L*l.d[0])+'" y1="'+Y(l.p[1]-L*l.d[1])+'" x2="'+X(l.p[0]+L*l.d[0])+'" y2="'+Y(l.p[1]+L*l.d[1])+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.6;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; });
   (o.shapes||[]).forEach(z=>{ const pts=z.pts.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
     s+='<'+(z.open?'polyline':'polygon')+' points="'+pts+'" style="fill:'+(z.fill?V(z.c):'none')+';fill-opacity:'+(z.fill?0.28:0)+';stroke:'+V(z.c)+';stroke-width:'+(z.w||2)+(z.dash?';stroke-dasharray:'+z.dash:'')+'"/>'; });
-  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px IBM Plex Mono,monospace">'+d.t+'</text>':''); });
+  (o.dots||[]).forEach(d=>{ s+='<circle cx="'+X(d.p[0])+'" cy="'+Y(d.p[1])+'" r="4" style="fill:'+V(d.c||'--ink')+'"/>'+(d.t?'<text x="'+(X(d.p[0])+7)+'" y="'+(Y(d.p[1])-6)+'" style="fill:'+V(d.c||'--ink')+';font:12px Nunito,system-ui,sans-serif">'+d.t+'</text>':''); });
   return s+'</svg>'; }
 function knob(id,lab,min,max,step,val){ return '<div class="kn"><span class="m">'+lab+'</span><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"><output id="o'+id+'"></output></div>'; }
 function chipRow(el,keys,get,set,after){ el.innerHTML=''; keys.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.textContent=k; if(k===get()) b.className='on'; b.onclick=()=>{ set(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }

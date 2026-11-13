@@ -529,14 +529,14 @@ function drawP(){
   cellsP=[]; c.textAlign='center'; c.textBaseline='middle';
   const fs=Math.max(9,Math.min(14,cw*.36));
   for(let n=0;n<=Rn;n++){ const y=8+rowH*(n+.5);
-    c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.fillText(String(n),lab/2,y+1);
+    c.fillStyle=col('--muted'); c.font='11px Nunito,system-ui,sans-serif'; c.fillText(String(n),lab/2,y+1);
     for(let k=0;k<=n;k++){ const x=lab+cw*(k+.5); const v=C(n,k);
       let fill=col('--sand'), ink=col('--ink');
       if(view==='odd'){ if(v%2){ fill=col('--ember'); ink='#fff'; } }
       else if(view==='rule'&&sel){ const [sn,sk]=sel; if(n===sn&&k===sk){ fill=col('--ember'); ink='#fff'; } else if(n===sn-1&&(k===sk-1||k===sk)){ fill=col('--gold'); ink='#fff'; } else if(n===sn&&k===sn-sk){ fill=col('--teal'); ink='#fff'; } }
       c.fillStyle=fill; c.beginPath(); if(c.roundRect) c.roundRect(x-cw*.46,y-rowH*.4,cw*.92,rowH*.8,4); else c.rect(x-cw*.46,y-rowH*.4,cw*.92,rowH*.8); c.fill();
-      c.fillStyle=ink; c.font=(v>=100?fs*.82:fs)+'px IBM Plex Mono, monospace'; c.fillText(v,x,y+1); cellsP.push({n,k,x,y,w:cw*.46,h:rowH*.4}); }
-    if(view==='sum'){ c.fillStyle=col('--teal'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='left'; c.fillText('= '+Math.pow(2,n),lab+cw*(n+1)+4,y+1); c.textAlign='center'; } }
+      c.fillStyle=ink; c.font=(v>=100?fs*.82:fs)+'px Nunito,system-ui,sans-serif'; c.fillText(v,x,y+1); cellsP.push({n,k,x,y,w:cw*.46,h:rowH*.4}); }
+    if(view==='sum'){ c.fillStyle=col('--teal'); c.font='11px Nunito,system-ui,sans-serif'; c.textAlign='left'; c.fillText('= '+Math.pow(2,n),lab+cw*(n+1)+4,y+1); c.textAlign='center'; } }
   c.textBaseline='alphabetic';
   let t='';
   if(view==='rule'&&sel){ const [n,k]=sel, j=n-k;
@@ -566,7 +566,7 @@ function drawZ(){
   const rowsN=Math.max(1,Math.ceil(withZ.length/perRow))+Math.max(1,Math.ceil(without.length/perRow));
   const Hh=60+lh*rowsN+28;
   const {c,W,H}=size(cvZ,W0/Hh); c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
-  c.font=(small?'11px':'12px')+' IBM Plex Mono, monospace'; c.textBaseline='middle';
+  c.font=(small?'11px':'12px')+' Nunito,system-ui,sans-serif'; c.textBaseline='middle';
   partsHit=[];
   const cellW=(W-16)/perRow;
   const block=(arr,y0,label,colr)=>{ c.fillStyle=colr; c.textAlign='left'; c.fillText(label,8,y0); let y=y0+lh*.9;

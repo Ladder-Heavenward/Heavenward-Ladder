@@ -311,7 +311,7 @@ function draw2(){
   levels.forEach((Lv,k)=>{ const y=n?bot-(bot-top)*k/n:H/2; Lv.forEach((m,j)=>{ const x=W*(j+1)/(Lv.length+1); boxes.push({m,x,y}); }); });
   const isSub=(p,q)=>(p&q)===p;
   c.lineWidth=1; boxes.forEach(p=>boxes.forEach(q=>{ if(p.m!==q.m && isSub(p.m,q.m)){ let d=q.m^p.m; if(d&&!(d&(d-1))){ c.strokeStyle=col('--grid'); if(sel!==null && isSub(sel,p.m)) c.strokeStyle=col('--ember'); if(sel!==null && isSub(q.m,sel)) c.strokeStyle=col('--teal'); c.beginPath(); c.moveTo(p.x,p.y); c.lineTo(q.x,q.y); c.stroke(); } } }));
-  c.font=(n>=4?11:13)+'px IBM Plex Mono, monospace'; c.textAlign='center';
+  c.font=(n>=4?11:13)+'px Nunito,system-ui,sans-serif'; c.textAlign='center';
   boxes.forEach(b=>{ const s=setName(b.m,n); const w=c.measureText(s).width+12; let fill=col('--sand'), ink=col('--ink');
     if(sel!==null){ if(b.m===sel){ fill=col('--ink'); ink=col('--paper'); } else if(isSub(b.m,sel)){ fill=col('--teal'); ink='#fff'; } else if(isSub(sel,b.m)){ fill=col('--ember'); ink='#fff'; } }
     c.fillStyle=fill; c.beginPath(); c.roundRect?c.roundRect(b.x-w/2,b.y-11,w,22,5):c.rect(b.x-w/2,b.y-11,w,22); c.fill(); c.fillStyle=ink; c.fillText(s,b.x,b.y+4); b.w=w; });

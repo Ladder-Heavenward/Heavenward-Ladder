@@ -503,7 +503,7 @@ function drawB(){
   nodes=[]; const top=22, bot=H-24; const nl=lines.length;
   lines.forEach((L,li)=>{ const y= nl===1? (top+bot)/2 : bot-(bot-top)*li/(nl-1); L.forEach((cd,j)=>{ const x=16+usableW*(j+0.5)/L.length; nodes.push({cd,x,y}); }); });
   const pos={}; nodes.forEach(nd=>pos[nd.cd]=nd);
-  c.fillStyle=col('--sand'); c.fillRect(outX,0,W-outX,H); c.save(); c.translate(W-9,H/2); c.rotate(-Math.PI/2); c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText('outside V'+String.fromCharCode(0x2080+k),0,0); c.restore();
+  c.fillStyle=col('--sand'); c.fillRect(outX,0,W-outX,H); c.save(); c.translate(W-9,H/2); c.rotate(-Math.PI/2); c.fillStyle=col('--muted'); c.font='11px Nunito,system-ui,sans-serif'; c.textAlign='center'; c.fillText('outside V'+String.fromCharCode(0x2080+k),0,0); c.restore();
   const arrow=(x1,y1,x2,y2,colr,dash)=>{ c.strokeStyle=colr; c.fillStyle=colr; c.lineWidth=1.8; c.setLineDash(dash||[]); c.beginPath(); c.moveTo(x1,y1); const mx=(x1+x2)/2, my=(y1+y2)/2-(Math.abs(x2-x1)<4?0:18); c.quadraticCurveTo(mx,my,x2,y2); c.stroke(); c.setLineDash([]);
     const a=Math.atan2(y2-my,x2-mx); c.beginPath(); c.moveTo(x2,y2); c.lineTo(x2-8*Math.cos(a-.4),y2-8*Math.sin(a-.4)); c.lineTo(x2-8*Math.cos(a+.4),y2-8*Math.sin(a+.4)); c.closePath(); c.fill(); };
   [...chosen].forEach(cd=>{ const p=pos[cd]; if(!p) return; const s=succ(cd);
@@ -513,7 +513,7 @@ function drawB(){
   nodes.forEach(nd=>{ const isNum=NUMC.includes(nd.cd); const on=chosen.has(nd.cd);
     c.beginPath(); c.arc(nd.x,nd.y,9,0,7); c.fillStyle=isNum?col('--gold'):col('--muted'); c.globalAlpha=isNum?.9:.55; c.fill(); c.globalAlpha=1;
     if(on){ c.lineWidth=3; c.strokeStyle=col('--ember'); c.beginPath(); c.arc(nd.x,nd.y,13,0,7); c.stroke(); }
-    c.fillStyle=col('--ink'); c.font=fs+'px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText(label(nd.cd),nd.x,nd.y+24); });
+    c.fillStyle=col('--ink'); c.font=fs+'px Nunito,system-ui,sans-serif'; c.textAlign='center'; c.fillText(label(nd.cd),nd.x,nd.y+24); });
   c.textAlign='left';
   const I=[...chosen].sort((a,b)=>a-b);
   let t='\\begin{gathered}I = '+(I.length?'\\{'+I.map(texLabel).join(',\\,')+'\\}':'\\varnothing')+'\\\\ ';

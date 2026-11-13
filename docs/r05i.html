@@ -332,12 +332,12 @@ function drawG(){
   const {c}=size(cvG,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H);
   const ox=head, oy=30; const E=col('--ember'), T=col('--teal'), G=col('--gold'), ink=col('--ink');
   const rows=[[m,'x'],[p,'']], cols=[[n,'x'],[q,'']]; const colr=[[E,T],[T,G]];
-  c.font='600 14px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillStyle=col('--muted');
+  c.font='600 14px Nunito,system-ui,sans-serif'; c.textAlign='center'; c.fillStyle=col('--muted');
   cols.forEach(([v,u],j)=>c.fillText(term(v,u),ox+j*cw+cw/2,oy-10)); c.textAlign='right'; rows.forEach(([v,u],i)=>c.fillText(term(v,u),ox-8,oy+i*ch+ch/2+5));
   for(let i=0;i<2;i++) for(let j=0;j<2;j++){ const x=ox+j*cw, y=oy+i*ch; const v=rows[i][0]*cols[j][0]; const u=(rows[i][1]+cols[j][1]).replace('xx','x²');
     if(v>0){ c.fillStyle=colr[i][j]+'33'; c.fillRect(x,y,cw,ch); } else if(v<0){ c.fillStyle=colr[i][j]+'14'; c.fillRect(x,y,cw,ch); hatch(c,x,y,cw,ch,colr[i][j]+'99'); }
     c.strokeStyle=colr[i][j]; c.lineWidth=2; c.strokeRect(x+2,y+2,cw-4,ch-4);
-    c.fillStyle=ink; c.textAlign='center'; c.font='600 16px IBM Plex Mono, monospace'; c.fillText(v===0?'0':term(v,u),x+cw/2,y+ch/2+6); }
+    c.fillStyle=ink; c.textAlign='center'; c.font='600 16px Nunito,system-ui,sans-serif'; c.fillText(v===0?'0':term(v,u),x+cw/2,y+ch/2+6); }
   c.textAlign='left';
   const A=m*n, B=m*q+p*n, C=p*q; const L=[];
   const fac=`${lin(m,p)}${lin(n,q)}`;
@@ -365,11 +365,11 @@ function drawP(){
   const p=+sp.value, q=+sq.value; document.getElementById('osp').textContent=p; document.getElementById('osq').textContent=q;
   const W0=cvP.clientWidth||300; const prs=pairs(q); const tw=W0<420?66:76, th=54, gap=8; const per=Math.max(1,Math.floor((W0-8)/(tw+gap))); const nrow=Math.max(1,Math.ceil(prs.length/per)); const H=nrow*(th+gap)+10;
   const {c}=size(cvP,H); c.fillStyle=col('--card'); c.fillRect(0,0,W0,H); tiles=[];
-  if(q===0){ c.fillStyle=col('--muted'); c.font='13px IBM Plex Mono, monospace'; c.textAlign='left'; c.fillText('product 0: one number is 0; x² + px = x(x + p)',8,30); }
+  if(q===0){ c.fillStyle=col('--muted'); c.font='13px Nunito,system-ui,sans-serif'; c.textAlign='left'; c.fillText('product 0: one number is 0; x² + px = x(x + p)',8,30); }
   prs.forEach(([m,n],i)=>{ const x=4+(i%per)*(tw+gap), y=4+Math.floor(i/per)*(th+gap); const hit=m+n===p; const on=pick&&pick[0]===m&&pick[1]===n;
     c.fillStyle=hit?col('--gold')+'55':col('--sand'); c.fillRect(x,y,tw,th); c.strokeStyle=on?col('--ember'):hit?col('--gold'):col('--grid'); c.lineWidth=on?3:2; c.strokeRect(x+1,y+1,tw-2,th-2);
-    c.fillStyle=col('--ink'); c.textAlign='center'; c.font='600 14px IBM Plex Mono, monospace'; c.fillText(`${m}, ${n}`,x+tw/2,y+22);
-    c.fillStyle=hit?col('--ink'):col('--muted'); c.font='12px IBM Plex Mono, monospace'; c.fillText(`sum ${m+n}`,x+tw/2,y+42); tiles.push({x,y,w:tw,h:th,m,n}); });
+    c.fillStyle=col('--ink'); c.textAlign='center'; c.font='600 14px Nunito,system-ui,sans-serif'; c.fillText(`${m}, ${n}`,x+tw/2,y+22);
+    c.fillStyle=hit?col('--ink'):col('--muted'); c.font='12px Nunito,system-ui,sans-serif'; c.fillText(`sum ${m+n}`,x+tw/2,y+42); tiles.push({x,y,w:tw,h:th,m,n}); });
   c.textAlign='left';
   const L=[`${ptex([1,p,q])}:\\ \\ \\text{product } ${q},\\ \\text{sum } ${p}`];
   const hit=prs.find(([m,n])=>m+n===p);

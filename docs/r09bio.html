@@ -261,7 +261,7 @@ function drawK(){
   const lo=0.4, hi=1.8, Y=v=>18+(H-60)*(1-(v-lo)/(hi-lo));
   const bw=(W0-40)/AN.length;
   c.strokeStyle=col('--muted'); c.lineWidth=1.4; c.beginPath(); c.moveTo(20,Y(1)); c.lineTo(W0-10,Y(1)); c.stroke();
-  c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='left'; [0.5,1,1.5].forEach(v=>{ c.fillText(v,2,Y(v)+4); c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(20,Y(v)); c.lineTo(W0-10,Y(v)); c.stroke(); });
+  c.font='11px Nunito,system-ui,sans-serif'; c.fillStyle=col('--muted'); c.textAlign='left'; [0.5,1,1.5].forEach(v=>{ c.fillText(v,2,Y(v)+4); c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(20,Y(v)); c.lineTo(W0-10,Y(v)); c.stroke(); });
   AN.forEach(([n],i)=>{ const x=24+i*bw, v=Math.max(lo,Math.min(hi,r[i])); c.fillStyle=Math.abs(r[i]-1)<0.08?col('--teal'):col('--ember'); const y0=Y(1), y1=Y(v); c.fillRect(x+bw*0.15,Math.min(y0,y1),bw*0.7,Math.max(2,Math.abs(y1-y0)));
     c.save(); c.translate(x+bw/2,H-36); c.rotate(-Math.PI/4); c.fillStyle=col('--ink'); c.textAlign='right'; c.fillText(n,0,4); c.restore(); });
   const worst=Math.max(...r.map(v=>Math.max(v,1/v)));
@@ -286,7 +286,7 @@ function drawE(){
   const lowB=Math.max(...res.filter(r=>r.below).map(r=>r.v),lo), hiB=Math.min(...res.filter(r=>!r.below).map(r=>r.v),hi);
   c.fillStyle=col('--gold'); c.globalAlpha=.3; c.fillRect(X(lowB),y-10,X(hiB)-X(lowB),20); c.globalAlpha=1;
   c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); c.moveTo(8,y); c.lineTo(W0-8,y); c.stroke();
-  c.font='11px IBM Plex Mono, monospace'; c.textAlign='center';
+  c.font='11px Nunito,system-ui,sans-serif'; c.textAlign='center';
   res.forEach(r=>{ c.beginPath(); c.arc(X(r.v),y,5,0,7); c.fillStyle=r.below?col('--teal'):col('--ember'); c.fill(); });
   [[1,2],[2,3],[3,4],[4,5],[1,1]].forEach(([p,q])=>{ c.fillStyle=col('--muted'); c.fillText(q===1?'1':`${p}/${q}`,X(p/q),y+22); });
   c.fillStyle=col('--muted'); c.textAlign='left'; c.fillText('b',6,y-14);

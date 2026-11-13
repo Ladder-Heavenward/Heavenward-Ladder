@@ -258,7 +258,7 @@ function drawS(Q){ const c=Q.ctx, L=ENS[let1]/100, e=+ke.value/100, a=shares(let
   Q.line(0,0,n,0,'--muted',1.3); Q.line(0,L,n,L,'--gold',1.6,[7,4]);
   c.strokeStyle=col('--ink'); c.lineWidth=1.8; c.beginPath(); a.forEach((v,i)=>{ const X=Q.X(i+1),Y=Q.Y(v); i?c.lineTo(X,Y):c.moveTo(X,Y); }); c.stroke();
   if(N){ c.strokeStyle=col('--teal'); c.lineWidth=2.6; c.beginPath(); for(let i=N-1;i<n;i++){ const X=Q.X(i+1),Y=Q.Y(a[i]); i>N-1?c.lineTo(X,Y):c.moveTo(X,Y); } c.stroke(); Q.line(N,0,N,a[N-1],'--teal',1.2,[3,3]); Q.text('N = '+N,N,top*0.92,'--teal',N>n*0.7?'right':'left',12); }
-  c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='center'; for(let x=100;x<=n;x+=100) c.fillText(x,Q.X(x),Q.H-4);
+  c.font='11px Nunito,system-ui,sans-serif'; c.fillStyle=col('--muted'); c.textAlign='center'; for(let x=100;x<=n;x+=100) c.fillText(x,Q.X(x),Q.H-4);
   c.textAlign='left'; c.fillText(let1+' '+(L*100).toFixed(1)+'%',Q.X(4),Q.Y(L)-5);
   const vd=$('vdS'); vd.className='verdict '+(N?'win':'lose');
   vd.textContent='Share of '+let1+' after all '+n+' letters: '+(a[n-1]*100).toFixed(1)+'%; English: '+(L*100).toFixed(1)+'%. '+(N?'Within ε = '+ke.value+' points from n = '+N+' to the end of the passage. The passage ends there; the law guesses about every n.':'Not within ε = '+ke.value+' points at the end of the passage: no threshold N inside it. A finite text cannot win or lose the game for every n.');
@@ -276,7 +276,7 @@ const PT=plane($('cvT'),{x:[0,26],y:[0,1],grid:0,labels:false,aspect:0.55,draw:Q
 function truth(ch){ return AB[key.indexOf(ch)]; }
 function drawT(Q){ const c=Q.ctx, f=tallies(C), ord=AB.split('').sort((x,y)=>f[y]-f[x]||(x<y?-1:1)), mx=f[ord[0]]||1; Q.o.y=[-0.32,1.12];
   ord.forEach((ch,i)=>{ const h=f[ch]/mx; const ok=guess[ch]===truth(ch); c.fillStyle=col(f[ch]?(ok?'--teal':'--ember'):'--grid'); c.globalAlpha=.75; c.fillRect(Q.X(i+0.15),Q.Y(h),Q.X(i+0.85)-Q.X(i+0.15),Q.Y(0)-Q.Y(h)); c.globalAlpha=1;
-    c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillStyle=col('--ink'); c.fillText(ch,Q.X(i+0.5),Q.Y(-0.1)); c.fillStyle=col(ok?'--teal':'--ember'); c.fillText(guess[ch]||'',Q.X(i+0.5),Q.Y(-0.24));
+    c.font='11px Nunito,system-ui,sans-serif'; c.textAlign='center'; c.fillStyle=col('--ink'); c.fillText(ch,Q.X(i+0.5),Q.Y(-0.1)); c.fillStyle=col(ok?'--teal':'--ember'); c.fillText(guess[ch]||'',Q.X(i+0.5),Q.Y(-0.24));
     if(i<8&&f[ch]){ c.fillStyle=col('--muted'); c.fillText(f[ch],Q.X(i+0.5),Q.Y(h)-3); } }); }
 function drawText(){ const W=40; let h=''; let right=0; for(let i=0;i<n;i+=W){ const seg=C.slice(i,i+W); h+='<span class="c">'+seg+'</span>\n'; let line=''; for(let j=0;j<seg.length;j++){ const g=guess[seg[j]]||'?'; const ok=g===P[i+j]; if(ok) right++; line+='<span class="'+(ok?'ok':'no')+'">'+g+'</span>'; } h+=line+'\n'; }
   $('ct').innerHTML=h; return right; }

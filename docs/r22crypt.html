@@ -210,7 +210,7 @@ let b=12, t=100;
 function draw(){ const N=Math.pow(2,b), r=Math.sqrt(N), n=Math.max(1,Math.round(t/100*r)), W=360,H=220,X=x=>10+x/4*(W-20),Y=y=>H-12-y*(H-24);
   let l=0; for(let k=1;k<n;k++) l+=Math.log1p(-k/N); const m=1-Math.exp(l), lam=n*(n-1)/(2*N);
   let s='<svg viewBox="0 0 '+W+' '+H+'" style="background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
-  for(let g=0;g<=4;g++) s+='<line x1="'+X(g)+'" y1="'+Y(0)+'" x2="'+X(g)+'" y2="'+Y(1)+'" style="stroke:'+V('--grid')+';stroke-width:0.7"/><text x="'+(X(g)+(g<4?2:-26))+'" y="'+(Y(0)-2)+'" style="fill:'+V('--ink')+';font:9px IBM Plex Mono,monospace">'+g+'√N</text>';
+  for(let g=0;g<=4;g++) s+='<line x1="'+X(g)+'" y1="'+Y(0)+'" x2="'+X(g)+'" y2="'+Y(1)+'" style="stroke:'+V('--grid')+';stroke-width:0.7"/><text x="'+(X(g)+(g<4?2:-26))+'" y="'+(Y(0)-2)+'" style="fill:'+V('--ink')+';font:9px Nunito,system-ui,sans-serif">'+g+'√N</text>';
   [0,0.5,1].forEach(y=>{ s+='<line x1="'+X(0)+'" y1="'+Y(y)+'" x2="'+X(4)+'" y2="'+Y(y)+'" style="stroke:'+V('--grid')+';stroke-width:0.7"/>'; });
   const lo=[],hi=[]; for(let i=0;i<=200;i++){ const x=i/50, L=x*x/2; lo.push(X(x).toFixed(1)+','+Y(1-Math.exp(-L)).toFixed(1)); if(L<=1) hi.push(X(x).toFixed(1)+','+Y(L).toFixed(1)); }
   s+='<polyline points="'+lo.join(' ')+'" style="fill:none;stroke:'+V('--teal')+';stroke-width:2"/><polyline points="'+hi.join(' ')+'" style="fill:none;stroke:'+V('--ink')+';stroke-width:1.2;stroke-dasharray:4 3"/>';

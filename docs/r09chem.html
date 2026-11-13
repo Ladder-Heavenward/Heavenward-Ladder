@@ -312,7 +312,7 @@ const kv=$('kv');
 const PP=plane($('cvP'),{x:[0,62],y:[0,700],grid:0,labels:false,aspect:0.7,draw:Q=>drawP(Q)});
 function drawP(Q){ const c=Q.ctx; Q.o.x=[0,62]; Q.o.y=[0,700];
   c.strokeStyle=col('--grid'); c.lineWidth=1; c.beginPath(); for(let x=10;x<=60;x+=10){ c.moveTo(Q.X(x),Q.Y(0)); c.lineTo(Q.X(x),Q.Y(700)); } for(let y=100;y<=700;y+=100){ c.moveTo(Q.X(0),Q.Y(y)); c.lineTo(Q.X(62),Q.Y(y)); } c.stroke();
-  c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted'); c.textAlign='center'; for(let x=10;x<=60;x+=10) c.fillText(x+' L',Q.X(x),Q.H-3); c.textAlign='left'; for(let y=200;y<=600;y+=200) c.fillText(y+' kPa',Q.X(0.6),Q.Y(y)-3);
+  c.font='11px Nunito,system-ui,sans-serif'; c.fillStyle=col('--muted'); c.textAlign='center'; for(let x=10;x<=60;x+=10) c.fillText(x+' L',Q.X(x),Q.H-3); c.textAlign='left'; for(let y=200;y<=600;y+=200) c.fillText(y+' kPa',Q.X(0.6),Q.Y(y)-3);
   TS.forEach(([l,t],i)=>{ const k=RG*(t+273.15); if(i!==ti) Q.fn(V=>V>0.5?k/V:NaN,'--grid',1.6); });
   const T=TS[ti][1]+273.15, k=RG*T; Q.fn(V=>V>0.5?k/V:NaN,'--ember',2.4);
   const V=+kv.value, P=k/V; Q.dot(V,Math.min(P,700),'--ember',5.5);
@@ -327,7 +327,7 @@ const PJ=plane($('cvJ'),{x:[0,6],y:[0,1.15],grid:0,labels:false,aspect:0.62,draw
 function drawJ(Q){ const c=Q.ctx, P=+kp.value, t=+kt.value, V=+kj.value, T=t+273.15, n=P*V/(RG*T), N=n*6.02214076e23;
   const maxM=Math.max(...G.map(g=>g[2]));
   G.forEach((g,i)=>{ const x0=i+0.12, w=0.34; c.fillStyle=col('--teal'); c.globalAlpha=.75; c.fillRect(Q.X(x0),Q.Y(1),Q.X(x0+w)-Q.X(x0),Q.Y(0)-Q.Y(1)); c.fillStyle=col('--ember'); const h=g[2]/maxM; c.fillRect(Q.X(x0+w+0.04),Q.Y(h),Q.X(x0+2*w+0.04)-Q.X(x0+w+0.04),Q.Y(0)-Q.Y(h)); c.globalAlpha=1;
-    c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText(g[1],Q.X(i+0.5),Q.Y(1.08)); });
+    c.fillStyle=col('--muted'); c.font='11px Nunito,system-ui,sans-serif'; c.textAlign='center'; c.fillText(g[1],Q.X(i+0.5),Q.Y(1.08)); });
   $('op').textContent=P+' kPa'; $('ot').textContent=t+' °C'; $('oj').textContent=fm(V,1)+' L';
   const vd=$('vdJ'); vd.className='verdict win';
   const e=Math.floor(Math.log10(N)), m=N/Math.pow(10,e);

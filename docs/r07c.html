@@ -308,9 +308,9 @@ function drawF(){
   S.m.forEach((x,i)=>{ const cx=5+w*i+w/2, cy=34; const done=i<k, pass=C.f(x);
     c.beginPath(); if(c.roundRect) c.roundRect(cx-w/2+2,cy-16,w-4,32,5); else c.rect(cx-w/2+2,cy-16,w-4,32);
     c.fillStyle=done?(pass?col('--ember'):col('--grid')):col('--sand'); c.fill(); c.strokeStyle=i===k-1?col('--ink'):col('--grid'); c.lineWidth=i===k-1?2:1; c.stroke();
-    c.fillStyle=done&&pass?'#fff':col('--ink'); c.font='600 '+(w<34?11:13)+'px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText(x,cx,cy+5); });
+    c.fillStyle=done&&pass?'#fff':col('--ink'); c.font='600 '+(w<34?11:13)+'px Nunito,system-ui,sans-serif'; c.textAlign='center'; c.fillText(x,cx,cy+5); });
   c.fillStyle=col('--teal'); c.fillRect(5,60,w*k,5); c.strokeStyle=col('--grid'); c.strokeRect(5,60,w*n,5);
-  c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='left'; c.fillText(`looked at ${k} of ${n}`,5,80);
+  c.fillStyle=col('--muted'); c.font='11px Nunito,system-ui,sans-serif'; c.textAlign='left'; c.fillText(`looked at ${k} of ${n}`,5,80);
   const L=[]; L.push(`a = ${S.t}`); L.push(`\\varphi(x):\\ ${C.t}`);
   if(k>0){ const x=S.m[k-1]; L.push(`\\text{step ${k}: } ${C.why(x)}\\ \\Rightarrow\\ ${C.f(x)?'\\varphi('+x+')':'\\neg\\varphi('+x+')'}`); }
   const seen=S.m.slice(0,k), hit=seen.find(C.f);
@@ -336,7 +336,7 @@ function drawG(){
     const a=p<=3?.12:p<=7?.3:p<=13?.5:p<=23?.72:.95; c.globalAlpha=1; c.fillStyle=col('--sand'); c.fillRect(x+1,y+1,cw-2,ch-2);
     c.globalAlpha=a; c.fillStyle=p>40?col('--ember'):col('--teal'); c.fillRect(x+1,y+1,cw-2,ch-2); c.globalAlpha=1;
     if(n===sel){ c.strokeStyle=col('--ink'); c.lineWidth=2; c.strokeRect(x+1,y+1,cw-2,ch-2); }
-    if(ch>=16&&cw>=26){ c.fillStyle=a>.6?'#fff':col('--ink'); c.font=(cw<40?9:11)+'px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillText(n,x+cw/2,y+ch/2+4); }
+    if(ch>=16&&cw>=26){ c.fillStyle=a>.6?'#fff':col('--ink'); c.font=(cw<40?9:11)+'px Nunito,system-ui,sans-serif'; c.textAlign='center'; c.fillText(n,x+cw/2,y+ch/2+4); }
     geoG.push({x,y,w:cw,h:ch,n}); });
   c.textAlign='left';
   const L=[`\\text{every even } n \\text{ from 4 to } ${N}`,`\\text{is a sum of two primes:}`, `\\htmlClass{keep}{\\text{decidable, and true: finite-search, each case by bounded-some}}`, `\\text{largest least } p \\text{ so far: } ${mx}\\ \\text{(at } ${mxn}\\text{)}`];

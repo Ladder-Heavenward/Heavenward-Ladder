@@ -271,7 +271,7 @@ function drawT(P){ const c=P.ctx, L=S.L, M=S.M, e=+kk.value*Math.abs(L-M), a=F.a
   (F.hollow||[]).forEach(([hx,hy])=>{ c.fillStyle=col('--card'); c.strokeStyle=col('--ink'); c.lineWidth=2; c.beginPath(); c.arc(P.X(hx),P.Y(hy),5.5,0,7); c.fill(); c.stroke(); });
   (F.dots||[]).forEach(([hx,hy])=>P.dot(hx,hy,'--ink',5));
   const dx=d>0?d:Math.max(dL,dM), x=a+dx/2, fx=F.f(x); if(dx>0) P.dot(x,fx,'--ember',6);
-  c.font='12px IBM Plex Mono, monospace'; c.textAlign='left'; c.fillStyle=col('--gold'); c.fillText('L',xl+4,P.Y(L)-4); c.fillStyle=col('--teal'); c.fillText('M',xl+18,P.Y(M)-4);
+  c.font='12px Nunito,system-ui,sans-serif'; c.textAlign='left'; c.fillStyle=col('--gold'); c.fillText('L',xl+4,P.Y(L)-4); c.fillStyle=col('--teal'); c.fillText('M',xl+18,P.Y(M)-4);
   info={L,M,e,dL,dM,d,x,fx};
 }
 function readT(){ const {L,M,e,dL,dM,d,x,fx}=info;
@@ -292,7 +292,7 @@ function drawL(P){ const c=P.ctx, L=S.L, M=S.M, e=+kk.value*Math.abs(L-M);
   P.line(lo,0,hi,0,'--muted',1.3);
   const seg=(v,cl,yy)=>{ c.fillStyle=col(cl); c.globalAlpha=.22; c.fillRect(P.X(v-e),P.Y(yy+0.13),P.X(v+e)-P.X(v-e),P.Y(yy-0.13)-P.Y(yy+0.13)); c.globalAlpha=1; [v-e,v+e].forEach(t=>{ c.strokeStyle=col(cl); c.lineWidth=2; c.beginPath(); c.arc(P.X(t),P.Y(yy),4.5,0,7); c.fillStyle=col('--card'); c.fill(); c.stroke(); }); P.dot(v,yy,cl,4.5); };
   seg(L,'--gold',0.3); seg(M,'--teal',-0.3);
-  c.font='12px IBM Plex Mono, monospace'; c.textAlign='center'; c.fillStyle=col('--gold'); c.fillText('L = '+fm(L),P.X(L),P.Y(0.62)); c.fillStyle=col('--teal'); c.fillText('M = '+fm(M),P.X(M),P.Y(-0.75));
+  c.font='12px Nunito,system-ui,sans-serif'; c.textAlign='center'; c.fillStyle=col('--gold'); c.fillText('L = '+fm(L),P.X(L),P.Y(0.62)); c.fillStyle=col('--teal'); c.fillText('M = '+fm(M),P.X(M),P.Y(-0.75));
   P.line(yv,-0.5,yv,0.5,'--ember',1.5,[3,3]); P.dot(yv,0,'--ember',6);
   const inL=Math.abs(yv-L)<e, inM=Math.abs(yv-M)<e;
   const ls=[R`y = ${fm(yv)},\ \ \varepsilon = ${fm(e)}`, R`|y - L| = ${fm(Math.abs(yv-L))}\ ${inL?R`\lt`:R`\ge`}\ \varepsilon,\ \ |y - M| = ${fm(Math.abs(yv-M))}\ ${inM?R`\lt`:R`\ge`}\ \varepsilon`];

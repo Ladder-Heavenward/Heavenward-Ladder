@@ -358,7 +358,7 @@ function drawD(){
   const rowT=4; THMS.forEach((t,i)=>{ const row=Math.floor(i/rowT), k=i%rowT; pos[t]=[W*(k+.5)/rowT, H*(.62+row*.22)]; });
   // links
   THMS.forEach(t=>USES[t].forEach(u=>{ const [x1,y1]=pos[u],[x2,y2]=pos[t]; const dead=off.has(u)||F.has(u); c.strokeStyle=dead?col('--ember'):(t===sel?col('--teal'):col('--grid')); c.globalAlpha=t===sel?1:.8; c.lineWidth=t===sel?2:1; c.setLineDash(dead?[4,3]:[]); c.beginPath(); c.moveTo(x1,y1+11); c.lineTo(x2,y2-11); c.stroke(); c.setLineDash([]); c.globalAlpha=1; }));
-  const fs=narrow?10.5:12; c.font=fs+'px IBM Plex Mono, monospace'; c.textAlign='center'; c.textBaseline='middle';
+  const fs=narrow?10.5:12; c.font=fs+'px Nunito,system-ui,sans-serif'; c.textAlign='center'; c.textBaseline='middle';
   const box=(lab,x,y,kind)=>{ const w=c.measureText(lab).width+14, h=22; const isOff=off.has(lab), isF=F.has(lab);
     c.beginPath(); if(c.roundRect) c.roundRect(x-w/2,y-h/2,w,h,5); else c.rect(x-w/2,y-h/2,w,h);
     if(kind==='r'){ c.fillStyle=isOff?col('--card'):col('--sand'); c.fill(); c.strokeStyle=isOff?col('--ember'):col('--grid'); c.lineWidth=isOff?2:1; c.setLineDash(isOff?[3,2]:[]); c.stroke(); c.setLineDash([]); }
