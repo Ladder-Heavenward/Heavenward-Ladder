@@ -8589,6 +8589,51 @@ QP.push({id:'1e.same',step:'1e',mode:'work',label:'the same column or not',open:
   const k=rnd(BK1eS.length), L=shuffle(['P','Q','R','S']), G=BK1eS[k].map(s=>BK_DEAL(L,s)), tg=G.map(tparse), R=trows(tg).rows, ok=R.find(env=>tg.every(t=>tval(t,env))), r=ok?0:1;
   return {index:'q:1e.together['+k+','+L.join('')+']', a3:['1e.lists['+k+','+L.join('')+']','1e.table',DASH], lines:G.map(s=>[s,'a statement']), ask:'Fill in the table. Is there a row where they are all T?', right:BK_TOG[r], opts:BK_TOG, lead:'',
     why:ok?'The row '+BK_ROW(ok)+' makes every line T.':'In every row at least one line is F.'}; }});
+/* --- proofs in boxes (1d and 7f): the argument is the seed, the moves are the links, the letters are dealt afresh; one planted wrong move per seed --- */
+const BXg='given', BXs='suppose', BXc='carry an if through', BXp='prove an if', BXj='join', BXk='keep either part', BXo='add an option', BXr='reason by cases', BXf='refute', BXx='clash';
+const BKbox=[ /* [tag, step, claim, rows (depth, statement, reason), planted row, the wrong row, why it is wrong, links] */
+  ['ifboth','1d','A ⇒ B and A ⇒ C give A ⇒ (B ∧ C).',[[0,'A ⇒ B',BXg],[0,'A ⇒ C',BXg],[1,'A',BXs],[1,'B',BXc+', rows 1 and 3'],[1,'C',BXc+', rows 2 and 3'],[1,'B ∧ C',BXj+', rows 4 and 5'],[0,'A ⇒ (B ∧ C)',BXp+', rows 3 to 6']],
+    6,[1,'B ∨ C',BXj+', rows 4 and 5'],'Join writes and: B ∧ C.','prove an if+join'],
+  ['export','1d','(A ∧ B) ⇒ C gives A ⇒ (B ⇒ C).',[[0,'(A ∧ B) ⇒ C',BXg],[1,'A',BXs],[2,'B',BXs],[2,'A ∧ B',BXj+', rows 2 and 3'],[2,'C',BXc+', rows 1 and 4'],[1,'B ⇒ C',BXp+', rows 3 to 5'],[0,'A ⇒ (B ⇒ C)',BXp+', rows 2 to 6']],
+    5,[2,'C',BXc+', rows 1 and 3'],'Row 1 needs A ∧ B in hand. Row 3 holds only B.','prove an if+carry an if through'],
+  ['spread','1d','A ⇒ (B ⇒ C) gives (A ⇒ B) ⇒ (A ⇒ C).',[[0,'A ⇒ (B ⇒ C)',BXg],[1,'A ⇒ B',BXs],[2,'A',BXs],[2,'B',BXc+', rows 2 and 3'],[2,'B ⇒ C',BXc+', rows 1 and 3'],[2,'C',BXc+', rows 5 and 4'],[1,'A ⇒ C',BXp+', rows 3 to 6'],[0,'(A ⇒ B) ⇒ (A ⇒ C)',BXp+', rows 2 to 7']],
+    7,[1,'C ⇒ A',BXp+', rows 3 to 6'],'The box supposed A and reached C, so its report is A ⇒ C.','prove an if+carry an if through'],
+  ['orover','1d','A ∨ (B ∧ C) gives (A ∨ B) ∧ (A ∨ C).',[[0,'A ∨ (B ∧ C)',BXg],[1,'A',BXs],[1,'A ∨ B',BXo+', row 2'],[1,'A ∨ C',BXo+', row 2'],[1,'(A ∨ B) ∧ (A ∨ C)',BXj+', rows 3 and 4'],[1,'B ∧ C',BXs],[1,'B',BXk+', row 6'],[1,'C',BXk+', row 6'],[1,'A ∨ B',BXo+', row 7'],[1,'A ∨ C',BXo+', row 8'],[1,'(A ∨ B) ∧ (A ∨ C)',BXj+', rows 9 and 10'],[0,'(A ∨ B) ∧ (A ∨ C)',BXr+', rows 1, 2 to 5 and 6 to 11']],
+    8,[1,'A',BXk+', row 6'],'Row 6 is B ∧ C. Keeping either part gives B or C, never A.','reason by cases+keep either part'],
+  ['dilemma','1d','A ∨ B, A ⇒ C and B ⇒ D give C ∨ D.',[[0,'A ∨ B',BXg],[0,'A ⇒ C',BXg],[0,'B ⇒ D',BXg],[1,'A',BXs],[1,'C',BXc+', rows 2 and 4'],[1,'C ∨ D',BXo+', row 5'],[1,'B',BXs],[1,'D',BXc+', rows 3 and 7'],[1,'C ∨ D',BXo+', row 8'],[0,'C ∨ D',BXr+', rows 1, 4 to 6 and 7 to 9']],
+    8,[1,'D',BXc+', rows 3 and 4'],'Row 3 needs B in hand. Row 4 is the supposition A, from the other case.','reason by cases+carry an if through'],
+  ['notboth','1d','¬A ∨ ¬B gives ¬(A ∧ B).',[[0,'¬A ∨ ¬B',BXg],[1,'A ∧ B',BXs],[1,'A',BXk+', row 2'],[1,'B',BXk+', row 2'],[2,'¬A',BXs],[2,'⊥',BXx+', rows 3 and 5'],[2,'¬B',BXs],[2,'⊥',BXx+', rows 4 and 7'],[1,'⊥',BXr+', rows 1, 5 to 6 and 7 to 8'],[0,'¬(A ∧ B)',BXf+', rows 2 to 9']],
+    10,[0,'A ∧ B',BXf+', rows 2 to 9'],'Refute writes the denial of what the box supposed: ¬(A ∧ B).','refute+reason by cases'],
+  ['notif','1d','A ∧ ¬B gives ¬(A ⇒ B).',[[0,'A ∧ ¬B',BXg],[0,'A',BXk+', row 1'],[0,'¬B',BXk+', row 1'],[1,'A ⇒ B',BXs],[1,'B',BXc+', rows 4 and 2'],[1,'⊥',BXx+', rows 5 and 3'],[0,'¬(A ⇒ B)',BXf+', rows 4 to 6']],
+    6,[1,'⊥',BXx+', rows 2 and 3'],'Clash needs a statement and its denial. A and ¬B are not such a pair.','refute+clash'],
+  ['ifbottom','1d','With nothing given: ¬A ⇒ (A ⇒ ⊥).',[[1,'¬A',BXs],[2,'A',BXs],[2,'⊥',BXx+', rows 2 and 1'],[1,'A ⇒ ⊥',BXp+', rows 2 to 3'],[0,'¬A ⇒ (A ⇒ ⊥)',BXp+', rows 1 to 4']],
+    5,[0,'¬A ⇒ ⊥',BXp+', rows 1 to 4'],'The box supposed ¬A and reached A ⇒ ⊥ at row 4, so that is what the if reports.','prove an if+clash'],
+  ['noclash','1d','With nothing given: ¬(A ∧ ¬A).',[[1,'A ∧ ¬A',BXs],[1,'A',BXk+', row 1'],[1,'¬A',BXk+', row 1'],[1,'⊥',BXx+', rows 2 and 3'],[0,'¬(A ∧ ¬A)',BXf+', rows 1 to 4']],
+    4,[1,'⊥',BXx+', rows 1 and 2'],'Clash needs a statement and its denial. Row 1 is A ∧ ¬A, not ¬A.','refute+clash'],
+  ['cases','1d','With nothing given: ((A ⇒ C) ∧ (B ⇒ C)) ⇒ ((A ∨ B) ⇒ C).',[[1,'(A ⇒ C) ∧ (B ⇒ C)',BXs],[1,'A ⇒ C',BXk+', row 1'],[1,'B ⇒ C',BXk+', row 1'],[2,'A ∨ B',BXs],[3,'A',BXs],[3,'C',BXc+', rows 2 and 5'],[3,'B',BXs],[3,'C',BXc+', rows 3 and 7'],[2,'C',BXr+', rows 4, 5 to 6 and 7 to 8'],[1,'(A ∨ B) ⇒ C',BXp+', rows 4 to 9'],[0,'((A ⇒ C) ∧ (B ⇒ C)) ⇒ ((A ∨ B) ⇒ C)',BXp+', rows 1 to 10']],
+    9,[2,'C',BXr+', rows 4 and 5 to 6'],'Reasoning by cases needs both cases to reach C. The case B, rows 7 to 8, is left out.','reason by cases+prove an if'],
+  ['orif','1d','With nothing given: (¬A ∨ B) ⇒ (A ⇒ B).',[[1,'¬A ∨ B',BXs],[2,'A',BXs],[3,'¬A',BXs],[3,'⊥',BXx+', rows 2 and 3'],[3,'B','when nothing is true, everything is permitted, row 4'],[3,'B',BXs],[2,'B',BXr+', rows 1, 3 to 5 and 6'],[1,'A ⇒ B',BXp+', rows 2 to 7'],[0,'(¬A ∨ B) ⇒ (A ⇒ B)',BXp+', rows 1 to 8']],
+    5,[3,'B','when nothing is true, everything is permitted, row 3'],'That move needs ⊥ in hand. Row 4 holds it; row 3 is only the supposition ¬A.','reason by cases+when nothing is true, everything is permitted'],
+  ['remain','1d','A ∨ B, B ∨ C and ¬B give A ∧ C.',[[0,'A ∨ B',BXg],[0,'B ∨ C',BXg],[0,'¬B',BXg],[0,'A','the remaining-option technique, rows 1 and 3'],[0,'C ∨ B','the turn-about technique for Or, row 2'],[0,'C','the remaining-option technique, rows 5 and 3'],[0,'A ∧ C',BXj+', rows 4 and 6']],
+    4,[0,'B','the remaining-option technique, rows 1 and 3'],'¬B rules B out. The remaining option is A.','the remaining-option technique+join'],
+  ['deny','1d','(A ∨ B) ∧ (C ∨ D), B ⇒ D and ¬D give A ∧ C.',[[0,'(A ∨ B) ∧ (C ∨ D)',BXg],[0,'B ⇒ D',BXg],[0,'¬D',BXg],[0,'A ∨ B',BXk+', row 1'],[0,'C ∨ D',BXk+', row 1'],[0,'¬D ⇒ ¬B','the turn-and-deny technique for If, row 2'],[0,'¬B',BXc+', rows 6 and 3'],[0,'A','the remaining-option technique, rows 4 and 7'],[0,'D ∨ C','the turn-about technique for Or, row 5'],[0,'C','the remaining-option technique, rows 9 and 3'],[0,'A ∧ C',BXj+', rows 8 and 10']],
+    6,[0,'¬B ⇒ ¬D','the turn-and-deny technique for If, row 2'],'Turn and deny takes B ⇒ D to ¬D ⇒ ¬B: the denial of the far end first.','the turn-and-deny technique for If+the remaining-option technique'],
+  ['either','7f','A ⇒ (B ∧ C) and ¬A ⇒ C give C.',[[0,'A ⇒ (B ∧ C)',BXg],[0,'¬A ⇒ C',BXg],[1,'¬C','suppose, for contradiction'],[2,'A',BXs],[2,'B ∧ C',BXc+', rows 1 and 4'],[2,'C',BXk+', row 5'],[2,'⊥',BXx+', rows 6 and 3'],[1,'¬A',BXf+', rows 4 to 7'],[1,'C',BXc+', rows 2 and 8'],[1,'⊥',BXx+', rows 9 and 3'],[0,'¬¬C',BXf+', rows 3 to 10'],[0,'C','the not-not-out technique, row 11']],
+    8,[1,'A',BXf+', rows 4 to 7'],'Refute writes the denial of what the box supposed: ¬A.','proof by contradiction+reason by cases'],
+  ['contra','7f','¬A ⇒ ¬B gives B ⇒ A.',[[0,'¬A ⇒ ¬B',BXg],[1,'B',BXs],[2,'¬A','suppose, for contradiction'],[2,'¬B',BXc+', rows 1 and 3'],[2,'⊥',BXx+', rows 2 and 4'],[1,'¬¬A',BXf+', rows 3 to 5'],[1,'A','the not-not-out technique, row 6'],[0,'B ⇒ A',BXp+', rows 2 to 7']],
+    7,[1,'A','the not-not-in technique, row 6'],'Not-not-in puts two nots on. Taking them off is the not-not-out technique.','proof by contradiction+prove an if'],
+  ['dneg','7f','With nothing given: ¬¬A ⇒ A.',[[1,'¬¬A',BXs],[1,'A','the not-not-out technique, row 1'],[0,'¬¬A ⇒ A',BXp+', rows 1 to 2']],
+    3,[0,'A ⇒ ¬¬A',BXp+', rows 1 to 2'],'The box supposed ¬¬A and reached A, so its report runs from ¬¬A to A.','the not-not-out technique+prove an if']];
+const BX_ROW=(d,s)=>'│ '.repeat(d)+s, BX_UP=r=>r.replace(/\b[Rr]ows? [\d, toand]+/g,m=>m.replace(/\d+/g,n=>+n+1));
+['1d','7f'].forEach(st=>{
+  const K=BKbox.map((b,i)=>i).filter(i=>BKbox[i][1]===st);
+  QP.push({id:st+'.boxes',step:st,mode:'proof',label:'proofs in boxes',open:()=>measured(st),make(){
+    const k=pick(K), [tag,,claim,good,j,bad,whyBad,links]=BKbox[k], planted=Math.random()<0.5, L=shuffle(['P','Q','R','S']), re=s=>s.replace(/\b[ABCD]\b/g,l=>L['ABCD'.indexOf(l)]);
+    const rows=good.map((r,i)=>planted&&i===j-1?bad:r), ask=planted?j:1+rnd(good.length);
+    return {index:'q:'+st+'.boxes['+tag+';'+L.join('')+';'+(planted?'x':'ok')+';'+ask+']', a3:[st+'.arguments['+tag+','+L.join('')+']',links,DASH], stack:true,
+      lines:[['To prove: '+re(claim),'the claim']].concat(rows.map(r=>[BX_ROW(r[0],re(r[1])),BX_UP(r[2])])), ask:'Is row '+(ask+1)+' licensed?', right:YN22[planted?1:0], opts:YN22, lead:'',
+      why:planted?BX_UP(re(whyBad)):'Every line of this proof is licensed by the reason beside it.'}; }});
+});
 
 /* ===== Rung pools, rungs 32 on (Andrew 2026-11-13) ===== */
 /* ----- rung 32: waves and frequencies, 32a to 32l ----- */
