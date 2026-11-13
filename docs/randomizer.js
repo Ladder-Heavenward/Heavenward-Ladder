@@ -8740,6 +8740,36 @@ QP.push({id:'4k.rowstep',step:'4k',mode:'work',label:'the next row of the choosi
     return {index:'q:4k.twoterm['+n+';'+k+';'+V.join('')+']', a3:['4k.powers['+n+']','4k.twoTerm',DASH], lines:[['('+V[0]+' + '+V[1]+')'+BH_SUP(n),'spread out in full']], ask:'How many times does the term '+term+' come up?', right:String(right), opts:shuffle([String(right),...wrong]), lead:'',
       why:'The two-term-power technique: the count is entry '+k+' of row '+n+' of the choosing table, the number of ways to choose '+(k===1?'which one of the '+n+' brackets gives ':'which '+k+' of the '+n+' brackets give ')+V[1]+', which is '+right+'.'}; }
   return null; }});
+/* --- natural domains of sums and composites (9f): five families are the seeds, the numbers are dealt afresh; each wrong option is a wrong move --- */
+const BI_FAM=['a root of a gap','two roots that face each other','two reciprocals','two roots in a row','a root of a root'];
+const BI_xa=a=>a===0?'x':'x'+pm(-a), BI_ax=a=>a===0?'−x':sg(a)+' − x', BI_but=L=>'every real x but '+L.map(sg).join(' and ');
+const BI_MAKE=[
+  ()=>{ const r=1+rnd(5); return {key:[r], line:'√('+(r*r)+' − x²)', right:'−'+r+' ≤ x ≤ '+r, wrong:['x ≤ '+r,'−'+r+' < x < '+r,'x ≤ −'+r+' or '+r+' ≤ x'], link:'9e.domain',
+    why:'A root takes only what is not negative: '+(r*r)+' − x² ≥ 0, that is x² ≤ '+(r*r)+', so −'+r+' ≤ x ≤ '+r+'. Stopping at x ≤ '+r+' forgets the negative x whose square is too big.'}; },
+  ()=>{ const r=1+rnd(5); return {key:[r], line:'√('+(r*r)+' − x²) + √(x² − '+(r*r)+')', right:'x = −'+r+' or x = '+r, wrong:['−'+r+' ≤ x ≤ '+r,'x ≤ −'+r+' or '+r+' ≤ x',BI_NONE()], link:'9e.domain',
+    why:'A sum is named only where both terms are. The first root needs x² ≤ '+(r*r)+', the second x² ≥ '+(r*r)+'; both hold only where x² = '+(r*r)+', at −'+r+' and '+r+'.'}; },
+  ()=>{ const a=rnd(11)-5, b=rnd(11)-5; if(a===b||a===-b) return null; const [m,M]=[Math.min(a,b),Math.max(a,b)];
+    return {key:[a,b], line:'1/('+BI_xa(a)+') + 1/('+BI_xa(b)+')', right:BI_but([m,M]), wrong:[BI_but([Math.min(-a,-b),Math.max(-a,-b)]),BI_but([a]),sg(m)+' < x < '+sg(M)], link:'9e.domain',
+      why:'A reciprocal takes everything but 0, and a sum is named only where both terms are: '+BI_xa(a)+' ≠ 0 and '+BI_xa(b)+' ≠ 0. Leaving out '+sg(-a)+' and '+sg(-b)+' reads the signs inside the brackets at face value.'}; },
+  ()=>{ const a=rnd(11)-5, b=rnd(11)-5; if(a===b) return null; const ok=b<a;
+    return {key:[a,b], line:'√('+BI_ax(a)+') + √('+BI_xa(b)+')', right:ok?sg(b)+' ≤ x ≤ '+sg(a):BI_NONE(), wrong:ok?['x ≤ '+sg(b)+' or '+sg(a)+' ≤ x','x ≤ '+sg(a),BI_NONE()]:[sg(a)+' ≤ x ≤ '+sg(b),'x ≤ '+sg(a)+' or '+sg(b)+' ≤ x','x ≥ '+sg(b)], link:'9e.domain',
+      why:'Both roots must be named at once: '+BI_ax(a)+' ≥ 0 gives x ≤ '+sg(a)+', and '+BI_xa(b)+' ≥ 0 gives x ≥ '+sg(b)+'. '+(ok?'Both: '+sg(b)+' ≤ x ≤ '+sg(a)+'. Joining them with or names x where one root is not.':'No real x is at least '+sg(b)+' and at most '+sg(a)+'.')}; },
+  ()=>{ const [r,c,s]=pick([[5,4,3],[5,3,4],[13,12,5],[13,5,12],[10,8,6],[10,6,8],[5,5,0],[5,7,0],[13,13,0]]);
+    const line='√('+c+' − √('+(r*r)+' − x²))', right=s===0?'−'+r+' ≤ x ≤ '+r:'−'+r+' ≤ x ≤ −'+s+' or '+s+' ≤ x ≤ '+r;
+    return {key:[r,c], line, right, wrong:s===0?['x ≤ −'+r+' or '+r+' ≤ x','−'+c+' ≤ x ≤ '+c,'x ≤ '+r]:['−'+r+' ≤ x ≤ '+r,'−'+s+' ≤ x ≤ '+s,'x ≤ −'+s+' or '+s+' ≤ x'], link:'9f.compositeDomain',
+      why:'The composite-domain technique: x must be in the inside domain, '+(r*r)+' − x² ≥ 0, so −'+r+' ≤ x ≤ '+r+'; and the inside value must be in the outside domain, √('+(r*r)+' − x²) ≤ '+c+'. '+(s===0?'The inside root is at most '+r+', which is never past '+c+', so the second asks nothing more.':'Squaring, '+(r*r)+' − x² ≤ '+(c*c)+', that is x² ≥ '+(s*s)+'. Both: '+right+'.')}; }];
+function BI_NONE(){ return 'no real x'; }
+QP.push({id:'9f.domains',step:'9f',mode:'work',label:'the domain of a sum or a composite',open:()=>measured('9f'),make(){
+  for(let tries=0;tries<40;tries++){ const k=rnd(BI_MAKE.length), q=BI_MAKE[k](); if(!q) continue; const wrong=uniq(q.right,q.wrong,3); if(wrong.length<3) continue;
+    return {index:'q:9f.domains['+k+';'+q.key.join(',')+']', a3:['9f.formulas['+BI_FAM[k]+']',q.link,DASH], lines:[['x ↦ '+q.line,'a formula with no domain stated']], ask:'What is its natural domain?', right:q.right, opts:shuffle([q.right,...wrong]), lead:'', why:q.why}; }
+  return null; }});
+/* --- a function after itself (9b): the function is the seed, g after f is the link; the wrong options are wrong moves --- */
+QP.push({id:'9b.twice',step:'9b',mode:'work',label:'a function after itself',open:()=>measured('9b'),make(){
+  for(let tries=0;tries<20;tries++){ const a=1+rnd(4), t=rnd(6), f=fr(1,a+t), right=fshow(fr(a+t,a*(a+t)+1));
+    const wrong=uniq(right,[fshow(fmul(f,f)),fshow(f),fshow(fr(1,2*a+t)),fshow(fr(2,a+t))],3); if(wrong.length<3) continue;
+    return {index:'q:9b.twice['+a+';'+t+']', a3:['9b.functions[1/('+a+' + x)]','9b.after',DASH], lines:[['f(x) = 1/('+a+' + x)','for x ≠ −'+a]], ask:'What is (f ∘ f)('+t+')?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'(f ∘ f)('+t+') = f(f('+t+')): the inside goes first. f('+t+') = '+fshow(f)+', and f('+fshow(f)+') = 1/('+a+' + '+fshow(f)+') = '+right+'. Squaring f('+t+') multiplies, which is not doing f again.'}; }
+  return null; }});
 
 /* ===== Rung pools, rungs 32 on (Andrew 2026-11-13) ===== */
 /* ----- rung 32: waves and frequencies, 32a to 32l ----- */
