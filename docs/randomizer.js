@@ -8844,6 +8844,241 @@ QP.push({id:'32l.level',step:'32l',label:'where oscillating totals live',open:()
       ['l3',[['λ = '+k+'π','given'],['the total of e^(iλx²) over the line has size 1/'+r,'the turning-bell technique']],2,0,'√(π/λ) = √(1/'+k+').'],
       ['l4',[['λ = '+k+'π','given'],['the total of e^(iλx²) over the line has size 1/'+k,'the turning-bell technique']],2,1,'The size is √(π/λ) = 1/'+r+', not π/λ.'],
       ['l5',[['φ″(x₀) < 0 at the one level point x₀','given'],['the total carries the turn e^(iπ/4)','the level-point technique']],2,1,'The sign is + only when φ″(x₀) > 0. Here the turn is e^(−iπ/4).']],[k]); }});
+/* ----- rung 33: heat, waves and still states, 33a to 33j ----- */
+Object.assign(STEPS,{'33a':['r33a','The Heat Equation'],'33b':['r33b','Heat Smooths and Forgets'],'33c':['r33c','The Wave Equation'],'33d':['r33d','When Every Point Is the Average of Its Neighbours'],'33e':['r33e','Characteristics and Shocks'],'33f':['r33f','Boundary Value Problems'],'33g':['r33g','Round Drums'],'33h':['r33h','Separation of Variables by Hand'],'33i':['r33i','Solving on a Grid by Hand'],'33j':['r33j','Potentials by Hand']});
+
+/* 33a The Heat Equation */
+const WA33=[
+  ['Is the heat statement u_t = κ u_x?','no: the books take the difference of two flows, so it needs the second rate, u_t = κ u_xx',['yes','no: it is u_tt = κ u_xx','no: it is u_t = κ u'],'Heat-statement technique.'],
+  ['In separating, T′/(κT) = X″/X. Are both sides then 0?','no: both are one number, not 0; with 0 only X = 0 meets the ends',['yes','no: each is any function of x','yes, when the ends are cold'],'Cooling-shape technique.'],
+  ['Separation found every answer of the form X(x)T(t). Is every answer of that form?','no: most answers are sums of many such shapes, and are of no such form',['yes','yes, when the ends are at 0','no: no answer is'],'Fading-series technique.'],
+  ['Does u = sin(πx/L) + 3 solve the heat statement at t = 0 with both ends at 0?','no: at x = 0 it is 3; adding a constant spoils the ends',['yes','yes, since a constant has no slope','no: a constant does not solve the statement'],'The statement is kept and the ends are lost.'],
+  ['Which shapes only fade, on a rod held at 0 at both ends?','the sine curves sin(nπx/L), each fading at its own pace',['the cosine curves','every polynomial','the bells'],'Cooling-shape technique.']];
+QP.push({id:'33a.heat',step:'33a',label:'the heat statement',open:()=>measured('33a'),make(){ return writtenQ('33a.heat',WA33); }},
+  {id:'33a.work',step:'33a',mode:'work',label:'paces of fading',open:()=>measured('33a'),make(){
+    if(rnd(2)){ const n=2+rnd(5);
+      return W30('33a.work[f;'+n+']',[['e^(−κ(nπ/L)²t) sin(nπx/L)','the cooling shape with n arches']],'How many times as fast as the first shape does the shape with '+n+' arches fade?',String(n*n),[String(n),String(2*n),String(n*n*n),'1'],'Cooling-shape technique: the pace is κ(nπ/L)², which carries n squared.'); }
+    const rc=pick([2,4,5]), k=pick([2,3,6,7]), K=rc*k;
+    return W30('33a.work[k;'+[K,rc].join(';')+']',[['K = '+K,'how readily heat runs down the slope'],['ρc = '+rc,'the heat a unit of rod holds for each degree']],'What is κ in u_t = κ u_xx?',String(k),[String(K*rc),String(K-rc),fshow(fr(rc,K)),String(K+rc)],'Heat-statement technique: κ = K/(ρc) = '+K+'/'+rc+'.'); }},
+  {id:'33a.line',step:'33a',mode:'proof',label:'what the heat statement licenses',open:()=>measured('33a'),make(){
+    const n=2+rnd(4), b=2+rnd(5);
+    return line28('33a.line',[
+      ['a1',[['u = '+b+' e^(−κ('+n+'π/L)²t) sin('+n+'πx/L)','given'],['u solves u_t = κ u_xx and is 0 at both ends','the cooling-shape technique']],2,0,'A multiple of a cooling shape.'],
+      ['a2',[['u = '+b+' e^(−κ('+n+'π/L)²t) cos('+n+'πx/L)','given'],['u is 0 at both ends','the cooling-shape technique']],2,1,'The shapes that meet cold ends are sines. This cosine is '+b+' e^(…) at x = 0.'],
+      ['a3',[['u solves the heat statement with both ends at 0','given'],['u = X(x)T(t) for some X and T','the cooling-shape technique']],2,1,'The technique finds the answers of that form. Most answers are sums of them.'],
+      ['a4',[['Σ|bₙ| settles','given'],['Σ bₙ e^(−κ(nπ/L)²t) sin(nπx/L) solves the heat statement for t > 0','the fading-series technique']],2,0,'That is the technique.'],
+      ['a5',[['u solves the heat statement and is 0 at both ends','given'],['u + '+b+' solves it and is 0 at both ends','a constant has no slope']],2,1,'u + '+b+' still solves the statement, but it is '+b+' at the ends.']],[n,b]); }});
+
+const E33=k=>'e^(−'+(k===1?'':k)+'κπ²t/L²)';
+/* 33b Heat Smooths and Forgets */
+const WB33=[
+  ['Is the hottest point of R always at the start, t = 0?','no: a wall held hot can be hotter than the whole start',['yes','yes, when the ends are held fixed','no: it is always on the lid'],'Hottest-at-the-edge technique allows the floor or the walls.'],
+  ['The technique puts the hottest point on the floor or the walls. Which side does it rule out?','the lid, the latest time, unless u is the same there as on an edge',['the floor','the walls','none'],'Hottest-at-the-edge technique.'],
+  ['The spreading bell is above 0 at every distance at once. Did heat cross 100 km in a second?','the statement is a crowd law; at that distance its heat is far below anything real',['yes: heat has no speed limit','no: the bell is 0 beyond √(2κt)','yes, but only along the walls'],'Spreading-bell technique, read with its limits.'],
+  ['Can the fading series be run with t below 0, back into the past?','no: its factors grow so fast that the sum need not settle at all',['yes','yes, for a short time always','no: the factors become 0'],'Forgetting technique: the past is lost.'],
+  ['What does the spreading bell total along the line, at each time?','1',['0','2κt','it grows with t'],'Spreading-bell technique.'],
+  ['Two answers have the same start and the same ends. What follows?','they are the same answer',['they agree only at t = 0','they differ by a constant','they agree only at the ends'],'One-future technique.']];
+QP.push({id:'33b.smooths',step:'33b',label:'heat smooths and forgets',open:()=>measured('33b'),make(){ return writtenQ('33b.smooths',WB33); }},
+  {id:'33b.work',step:'33b',mode:'work',label:'spreads and nearness',open:()=>measured('33b'),make(){
+    const t=rnd(3);
+    if(t===0){ const k=1+rnd(4), s=2+rnd(6); return W30('33b.work[s;'+[k,s].join(';')+']',[['κ = '+k+' and t = '+s,'given']],'What is the spread of the spreading bell?',String(2*k*s),[String(k*s),String(4*k*s),String(2*k*s*s),String(2*k+s)],'Spreading-bell technique: the bell has spread 2κt = 2 · '+k+' · '+s+'.'); }
+    if(t===1){ const d=pick(['0.1','0.2','0.5','0.01','0.05']); return W30('33b.work[n;'+d+']',[['two answers on R have starts and ends that differ by at most '+d,'given']],'By how much can the answers differ inside R?','at most '+d+' everywhere',['at most '+d+' at t = 0 only','at most twice '+d,'there is no bound','exactly '+d+' everywhere'],'One-future technique: nearby starts and ends stay near, with the same bound.'); }
+    const n=2+rnd(4);
+    return W30('33b.work[a;'+n+']',[['a rod with both ends at 0','given']],'By what factor does the shape with '+n+' arches shrink against the first shape?',E33(n*n-1),[E33(n*n),E33(n),E33(n-1),E33(n*n+1)],'Forgetting technique: the paces are n² and 1 times κπ²/L², so against the first the shape shrinks by the difference, '+n*n+' − 1.'); }},
+  {id:'33b.line',step:'33b',mode:'proof',label:'what smoothing licenses',open:()=>measured('33b'),make(){
+    const k=1+rnd(4), s=2+rnd(6), d=pick(['0.1','0.2','0.5']);
+    return line28('33b.line',[
+      ['b1',[['u solves the heat statement on R','given'],['the greatest value of u on R is taken on the floor or the walls','the hottest-at-the-edge technique']],2,0,'That is the technique.'],
+      ['b2',[['u solves the heat statement on R','given'],['the greatest value of u on R is taken at t = 0','the hottest-at-the-edge technique']],2,1,'The technique allows the walls too: a wall held hot can beat the whole start.'],
+      ['b3',[['two answers on R have starts and ends within '+d+' of each other','given'],['the answers are within '+d+' of each other everywhere in R','the one-future technique']],2,0,'Nearby starts stay near.'],
+      ['b4',[['κ = '+k+' and t = '+s,'given'],['the spreading bell has spread '+k*s,'the spreading-bell technique']],2,1,'The spread is 2κt = '+2*k*s+'.'],
+      ['b5',[['Σ|bₙ| settles, on a rod with both ends at 0','given'],['the series solves the heat statement for every t < 0 too','the forgetting technique']],2,1,'Backwards the factors grow, and the sum need not settle.']],[k,s,d]); }});
+
+/* 33c The Wave Equation */
+const WC33=[
+  ['Is the string’s statement y_t = c² y_xx?','no: the pull changes the acceleration, so it is y_tt = c² y_xx',['yes','no: it is y_t = c y_x','no: it is y_tt = c² y_x'],'String-statement technique.'],
+  ['A long string is plucked at one end. Is the pluck felt at once at the other, a little?','no: the height at x uses the start only within ct of x',['yes, a little','yes, in full','no: it is never felt there'],'Two-waves technique.'],
+  ['Are a drum’s tones, like a string’s, whole multiples of the lowest?','no: that is for a string tied at two points; a drum is another shape',['yes','yes, for a round drum','no: a drum has one tone'],'String-tones technique is about the string (33g for drums).'],
+  ['Is the energy of motion alone, ½∫ρ y_t², kept?','no: only the total with the stretch is kept; the two trade back and forth',['yes','no: the stretch alone is kept','no: neither is kept, nor their total'],'Kept-energy technique.'],
+  ['What is every answer of the string’s statement on the whole line?','a shape running right plus a shape running left, at speed c',['one shape running right','a shape that fades in place','a sum of bells'],'Two-waves technique.']];
+QP.push({id:'33c.wave',step:'33c',label:'the string’s statement',open:()=>measured('33c'),make(){ return writtenQ('33c.wave',WC33); }},
+  {id:'33c.work',step:'33c',mode:'work',label:'speeds and tones',open:()=>measured('33c'),make(){
+    const t=rnd(3);
+    if(t===0){ const c=2+rnd(8), rho=pick([1,2,3,4]), T=c*c*rho; return W30('33c.work[c;'+[T,rho].join(';')+']',[['tension T = '+T,'given'],['ρ = '+rho,'the string’s weight for each unit of length']],'What is the wave speed c?',String(c),[String(c*c),String(T*rho),fshow(fr(rho,T)),String(T)],'String-statement technique: c = √(T/ρ) = √'+c*c+'.'); }
+    if(t===1){ const n=1+rnd(5), c=pick([100,200,300,400]), L=pick([1,2,4,5]), f=fr(n*c,2*L);
+      return W30('33c.work[t;'+[n,c,L].join(';')+']',[['a string of length '+L+', tied at both ends, with wave speed '+c,'given']],'What is the frequency of its tone number '+n+'?',fshow(f),[fshow(fr(n*c,L)),fshow(fr(c,2*L)),fshow(fr(n*c,4*L)),fshow(fr(n*2*L,c)),fshow(fr(n*n*c,2*L))],'String-tones technique: the frequency is nc/(2L) = '+n+' · '+c+'/'+2*L+'.'); }
+    const c=2+rnd(4), s=1+rnd(5), x=20+rnd(20);
+    return W30('33c.work[r;'+[c,s,x].join(';')+']',[['wave speed c = '+c,'a long string'],['the height is asked at x = '+x+' and t = '+s,'given']],'Which part of the start can the height there depend on?','from '+(x-c*s)+' to '+(x+c*s),['from '+(x-c)+' to '+(x+c),'from 0 to '+(x+c*s),'the whole string','x = '+x+' alone'],'Two-waves technique: only the start within ct = '+c*s+' of x.'); }},
+  {id:'33c.line',step:'33c',mode:'proof',label:'what the string licenses',open:()=>measured('33c'),make(){
+    const c=2+rnd(6), rho=pick([1,2,3]), T=c*c*rho, n=2+rnd(4);
+    return line28('33c.line',[
+      ['c1',[['tension '+T+' and ρ = '+rho,'given'],['the wave speed is '+c,'the string-statement technique']],2,0,'√('+T+'/'+rho+').'],
+      ['c2',[['tension '+T+' and ρ = '+rho,'given'],['the wave speed is '+c*c,'the string-statement technique']],2,1,'c = √(T/ρ), and '+c*c+' is T/ρ before the root.'],
+      ['c3',[['a string tied at both ends has lowest tone f₁','given'],['its tone number '+n+' is '+n+'f₁','the string-tones technique']],2,0,'Every tone is a whole multiple of the lowest.'],
+      ['c4',[['a round drum has lowest tone f₁','given'],['its next tone is 2f₁','the string-tones technique']],2,1,'The technique is for a string tied at two points.'],
+      ['c5',[['a string is tied at both ends','given'],['½∫ρ y_t² stays the same at every time','the kept-energy technique']],2,1,'Only the total of motion and stretch is kept.']],[c,rho,n]); }});
+
+/* 33d When Every Point Is the Average of Its Neighbours */
+const WD33=[
+  ['ln √(x² + y²) is balanced away from 0. Is its value at 0 the average round the unit circle?','no: it is not balanced at 0, so that disc is not inside where it is balanced',['yes: the average is 0','yes, by the circle-average technique','no: the average is 1'],'Circle-average technique needs the circle and its inside.'],
+  ['x² + y² has u_xx = u_yy. Is it balanced?','no: balanced asks for the sum to be 0, and here it is 4',['yes','yes, on the unit disc','no: the sum is 2'],'Balanced means u_xx + u_yy = 0.'],
+  ['Can a still plate’s hottest point be in the middle, if the middle was heated first?','no: a still plate keeps no memory of what was heated first; the hottest is on the edge',['yes','yes, for a round plate','no: it has no hottest point'],'Edge-rules-inside technique.'],
+  ['The real part of z̄ = x − iy is x, which is balanced. Has z̄ a complex slope?','no: the technique runs one way; z̄ has no complex slope',['yes','yes, away from 0','no: and x is not balanced either'],'Real-part technique (26d).'],
+  ['Two balanced functions on D agree on the edge. What follows inside?','they are equal throughout D',['they differ by a constant','they agree at the centre only','nothing'],'One-still-state technique.']];
+QP.push({id:'33d.balanced',step:'33d',label:'balanced functions',open:()=>measured('33d'),make(){ return writtenQ('33d.balanced',WD33); }},
+  {id:'33d.work',step:'33d',mode:'work',label:'averages and rims',open:()=>measured('33d'),make(){
+    const t=rnd(3);
+    if(t===0){ const a=1+rnd(5), b=1+rnd(5), v=2*a-2*b; return W30('33d.work[l;'+[a,b].join(';')+']',[['u = '+(a===1?'':a)+'x² − '+(b===1?'':b)+'y²','given']],'What is u_xx + u_yy?',sg(v),[sg(2*a+2*b),sg(a-b),sg(4*a-4*b),sg(-v)].concat(v===0?['2']:['0']),v===0?'2 · '+a+' − 2 · '+b+' = 0, so this u is balanced.':'2 · '+a+' − 2 · '+b+' = '+sg(v)+', not 0, so this u is not balanced.'); }
+    if(t===1){ const A=rnd(15)-5, r=1+rnd(4); return W30('33d.work[a;'+[A,r].join(';')+']',[['u is balanced on a disc of radius '+(r+1)+' about p','given'],['the average of u round the circle of radius '+r+' about p is '+sg(A),'given']],'What is u(p)?',sg(A),[sg(A*r),fshow(fr(A,r)),'0','it cannot be told'],'Circle-average technique: the value at the centre is the average round the circle.'); }
+    const n=1+rnd(3), a=pick([2,3,4,6,8]), v=fr(a,Math.pow(2,n));
+    return W30('33d.work[d;'+[n,a].join(';')+']',[['on the rim of the unit disc, g = '+a+' cos '+(n===1?'':n)+'θ','given']],'What is the balanced function inside, at r = 1/2 and θ = 0?',fshow(v),[String(a),fshow(fr(a,2)),fshow(fr(a,2*n)),fshow(fr(a,Math.pow(2,n+1))),'0'],'Disc-series technique: u = rⁿ · '+a+' cos nθ, and (1/2)'+(n===1?'':'^'+n)+' · '+a+' = '+fshow(v)+'.'); }},
+  {id:'33d.line',step:'33d',mode:'proof',label:'what balance licenses',open:()=>measured('33d'),make(){
+    const A=1+rnd(9), m=rnd(4), M=m+2+rnd(5);
+    return line28('33d.line',[
+      ['d1',[['u is balanced on a disc about p, and its average round a circle about p in the disc is '+A,'given'],['u(p) = '+A,'the circle-average technique']],2,0,'The centre takes the average.'],
+      ['d2',[['u is balanced in D, and on the edge of D its values lie from '+m+' to '+M,'given'],['inside D its values lie from '+m+' to '+M,'the edge-rules-inside technique']],2,0,'The greatest and least values are on the edge.'],
+      ['d3',[['u is balanced in D, and on the edge of D its values lie from '+m+' to '+M,'given'],['somewhere inside D, u = '+(M+1),'the edge-rules-inside technique']],2,1,'No inside value passes the edge’s greatest, '+M+'.'],
+      ['d4',[['u = x² + y²','given'],['u is balanced','u_xx = u_yy']],2,1,'Balanced asks u_xx + u_yy = 0. Here it is 4.'],
+      ['d5',[['x is balanced, and x is the real part of z̄','given'],['z̄ has a complex slope','the real-part technique']],2,1,'The technique runs from a complex slope to balance, not back.']],[A,m,M]); }});
+
+/* 33e Characteristics and Shocks */
+const WE33=[
+  ['Does u_t + u u_x = 0 carry every start unchanged, as u_t + c u_x = 0 does?','no: the speed is u itself; high parts ride faster and the shape changes',['yes','yes, until t = 1','no: it fades the start away'],'Riding-path technique: the riding speed depends on the answer.'],
+  ['After the breaking time, does the answer take both values where paths cross?','no: a function has one value at each point; the books choose a jump instead',['yes','yes, for a short while','no: it takes their average'],'Breaking-time technique, then the jump-speed technique.'],
+  ['Does a shock move at the speed of the cars in it?','no: its speed is the change of flow over the change of u, which can be negative while every car goes forward',['yes','yes, at the faster cars’ speed','no: a shock never moves'],'Jump-speed technique.'],
+  ['Do jumps in u_t + (u²/2)_x = 0 and in (u²)_t + (⅔u³)_x = 0 move at one speed?','no: the statements agree where u has a slope, but they keep different books',['yes','yes, for small jumps','no: the second has no jumps'],'Jump-speed technique: the speed comes from the books.'],
+  ['What are the answers of u_t + c u_x = 0 with a continuous slope?','exactly u = f(x − ct), the start carried at the speed c',['u = f(x + ct)','u = f(x) e^(−ct)','u = f(x) − ct'],'Carried-along technique.']];
+QP.push({id:'33e.riding',step:'33e',label:'riding paths and shocks',open:()=>measured('33e'),make(){ return writtenQ('33e.riding',WE33); }},
+  {id:'33e.work',step:'33e',mode:'work',label:'carried starts, breaking times, jump speeds',open:()=>measured('33e'),make(){
+    const t=rnd(3);
+    if(t===0){ const c=1+rnd(4), s=1+rnd(4), x=c*s+rnd(9)+1; return W30('33e.work[c;'+[c,s,x].join(';')+']',[['u_t + '+(c===1?'':c)+'u_x = 0, with start f','given']],'What is u at x = '+x+' and t = '+s+'?','f('+(x-c*s)+')',['f('+(x+c*s)+')','f('+x+')','f('+(x-c)+')','f('+(x-s)+')'],'Carried-along technique: u = f(x − ct) = f('+x+' − '+c+' · '+s+').'); }
+    if(t===1){ const m=pick([2,3,4,5,8,10]); return W30('33e.work[b;'+m+']',[['u_t + u u_x = 0, with start f','given'],['the greatest value of −f′ is '+m,'the steepest fall of the start']],'Until what time has the answer a continuous slope?','until t = 1/'+m,['until t = '+m,'until t = 1/'+m*m,'until t = '+fshow(fr(2,m)),'at every time'],'Breaking-time technique: 1/m.'); }
+    const L=2+rnd(6); let R=rnd(L); const s=fr(L+R,2);
+    return W30('33e.work[j;'+[L,R].join(';')+']',[['u_t + (u²/2)_x = 0','the flow is q(u) = u²/2'],['a jump from u = '+L+' on the left to u = '+R+' on the right','given']],'At what speed does the jump move?',fshow(s),[String(L),String(R),fshow(fr(L-R,2)),String(L-R),String(L+R)],'Jump-speed technique: (q('+L+') − q('+R+'))/('+L+' − '+R+') = ('+L*L+'/2 − '+R*R+'/2)/'+(L-R)+' = '+fshow(s)+'.'); }},
+  {id:'33e.line',step:'33e',mode:'proof',label:'what riding paths license',open:()=>measured('33e'),make(){
+    const c=1+rnd(4), s=1+rnd(3), x=c*s+1+rnd(6), m=pick([2,4,5]), L=3+rnd(5), R=rnd(3), sp=fshow(fr(L+R,2));
+    return line28('33e.line',[
+      ['e1',[['u_t + '+(c===1?'':c)+'u_x = 0 with start f','given'],['u('+x+', '+s+') = f('+(x-c*s)+')','the carried-along technique']],2,0,'f(x − ct).'],
+      ['e2',[['u_t + '+(c===1?'':c)+'u_x = 0 with start f','given'],['u('+x+', '+s+') = f('+(x+c*s)+')','the carried-along technique']],2,1,'The start is carried forwards: f(x − ct) = f('+(x-c*s)+').'],
+      ['e3',[['u_t + u u_x = 0, and the greatest value of −f′ is '+m,'given'],['the answer has a continuous slope for 0 ≤ t < 1/'+m,'the breaking-time technique']],2,0,'1/m.'],
+      ['e4',[['u_t + u u_x = 0, and the greatest value of −f′ is '+m,'given'],['the answer has a continuous slope for 0 ≤ t < '+m,'the breaking-time technique']],2,1,'It breaks at 1/'+m+', not at '+m+'.'],
+      ['e5',[['the flow is q(u) = u²/2, with a jump from '+L+' to '+R,'given'],['the jump moves at the speed '+sp,'the jump-speed technique']],2,0,'(q('+L+') − q('+R+'))/('+L+' − '+R+').']],[c,s,x,m,L,R]); }});
+
+/* 33f Boundary Value Problems */
+const WF33=[
+  ['Is ⟨Ly, z⟩ = ⟨y, Lz⟩ for every y and z, whatever their ends?','no: the end terms must vanish; with y = x², z = 1 and Ly = −y″ on [0, 1] the two sides are −2 and 0',['yes','yes, for polynomials','no: it holds for no y and z'],'Swap-by-parts technique asks y and z to be 0 at both ends.'],
+  ['Are two shapes with the same number perpendicular, by the technique?','the technique says nothing: its proof divides by the difference of the numbers',['yes','no: they are the same shape','yes, when q ≥ 0'],'Perpendicular-shapes technique is about different numbers.'],
+  ['Has the single-kick answer G(x, s) a second slope at x = s?','no: the tent has a corner there; its slope drops by 1, which is the kick',['yes','yes, and it is 0','no: G has a gap there'],'Single-kick technique.'],
+  ['With q ≥ 0, can a shape’s number be negative, so that some cooling shapes grow?','no: with q ≥ 0 every number is positive',['yes','yes, for the first shape','no: every number is 0'],'Perpendicular-shapes technique.'],
+  ['How is the single-kick answer written in shapes?','each shape, times its value at the kick, divided by its number',['each shape times its number','the sum of the shapes','each shape divided by its value at the kick'],'Kick-in-shapes technique.']];
+QP.push({id:'33f.ends',step:'33f',label:'statements with their ends',open:()=>measured('33f'),make(){ return writtenQ('33f.ends',WF33); }},
+  {id:'33f.work',step:'33f',mode:'work',label:'shapes and their numbers',open:()=>measured('33f'),make(){
+    const n=1+rnd(5), N=n===1?'':String(n), sq=n===1?'π²':n*n+'π²';
+    if(rnd(2)) return W30('33f.work[n;'+n+']',[['Ly = −y″ on [0, 1], with y(0) = y(1) = 0','given'],['the shape sin('+N+'πx)','given']],'What is the number of this shape?',sq,[n===1?'π':n+'π','−'+sq,n===1?'1':String(n*n),n===1?'2π²':n*n+'π'],'−(sin(nπx))″ = n²π² sin(nπx), so the number is '+sq+'.');
+    const a=2+rnd(7);
+    return W30('33f.work[l;'+[n,a].join(';')+']',[['−y″ = '+a+' sin('+N+'πx), with y(0) = y(1) = 0','the load is a multiple of one shape']],'What is y?',a+' sin('+N+'πx)/('+sq+')',[a+' sin('+N+'πx) · '+sq,a+' sin('+N+'πx)/('+(n===1?'π':n+'π')+')','−'+a+' sin('+N+'πx)/('+sq+')',a+' sin('+N+'πx)'],'Kick-in-shapes technique: a load on one shape is answered by that shape divided by its number, '+sq+'.'); }},
+  {id:'33f.line',step:'33f',mode:'proof',label:'what the ends license',open:()=>measured('33f'),make(){
+    const n=1+rnd(4), m=n+1+rnd(3), sq=n===1?'π²':n*n+'π²';
+    return line28('33f.line',[
+      ['f1',[['y and z are 0 at both ends','given'],['⟨Ly, z⟩ = ⟨y, Lz⟩','the swap-by-parts technique']],2,0,'That is the technique.'],
+      ['f2',[['y = x² and z = 1 on [0, 1], with Ly = −y″','given'],['⟨Ly, z⟩ = ⟨y, Lz⟩','the swap-by-parts technique']],2,1,'Neither is 0 at both ends. The sides are −2 and 0.'],
+      ['f3',[['sin('+(n===1?'':n)+'πx) and sin('+m+'πx) are shapes of −y″ on [0, 1] with different numbers','given'],['they are perpendicular','the perpendicular-shapes technique']],2,0,'Different numbers.'],
+      ['f4',[['two shapes of L have the same number','given'],['they are perpendicular','the perpendicular-shapes technique']],2,1,'The technique needs different numbers.'],
+      ['f5',[['the shape sin('+(n===1?'':n)+'πx) of −y″ on [0, 1]','given'],['its number is '+sq,'take the second slope']],2,0,'−(sin(nπx))″ = n²π² sin(nπx).']],[n,m]); }});
+
+/* 33g Round Drums */
+const WG33=[
+  ['In reach and turn, is Δu = u_rr + u_θθ?','no: the turn is an angle, so it needs 1/r², and the reach leaves the term u_r/r',['yes','no: it is u_rr + u_θθ/r','no: it is u_rr/r + u_θθ'],'Round-rate technique.'],
+  ['Can a drum shape have m = ½, winding half a time?','no: it would not come back to itself after one turn, so the drum would tear along a line',['yes','yes, for small drums','no: m must be even'],'Drum-shape technique asks for a whole m.'],
+  ['A printed 5.520/2.405 = 2.295 is not a whole number. Is the ratio then proved not whole?','no: a printed number is a rounding; bounds on both sides make it a proof',['yes','yes, to three places','no: the ratio is whole'],'Unharmonic-drum technique: between 2.28 and 2.31.'],
+  ['Does a ball that depends only on distance cool like a rod of length R?','rU does, and only with rU = 0 at the centre as well as at the skin',['yes, u does','no: nothing about it is like a rod','yes, with the centre sealed'],'Round-ball technique.'],
+  ['Is the second round tone of a drum a whole multiple of the first?','no: their ratio lies between 2.28 and 2.31',['yes: twice','yes: three times','no: the ratio is exactly 2.5'],'Unharmonic-drum technique.']];
+QP.push({id:'33g.drums',step:'33g',label:'round drums',open:()=>measured('33g'),make(){ return writtenQ('33g.drums',WG33); }},
+  {id:'33g.work',step:'33g',mode:'work',label:'the round rate',open:()=>measured('33g'),make(){
+    const k=2+rnd(4), pw=e=>e===0?'':e===1?'r':'r^'+e, T=(c,e)=>e===0?String(c):c+pw(e);
+    return W30('33g.work['+k+']',[['u = r^'+k+' in the plane, with no turn in it','given'],['Δu = u_rr + u_r/r + u_θθ/r²','the round-rate technique']],'What is Δu?',T(k*k,k-2),[T(k*(k-1),k-2),T(k,k-1),T(k*k,k-1),T(k*(k+1),k-2)],'u_rr = '+T(k*(k-1),k-2)+' and u_r/r = '+T(k,k-2)+', which add to '+T(k*k,k-2)+'. Leaving out u_r/r gives '+T(k*(k-1),k-2)+'.'); }},
+  {id:'33g.line',step:'33g',mode:'proof',label:'what a round drum licenses',open:()=>measured('33g'),make(){
+    const k=2+rnd(3), pw=e=>e===0?'':e===1?'r':'r^'+e, T=(c,e)=>e===0?String(c):c+pw(e);
+    return line28('33g.line',[
+      ['g1',[['u = r^'+k+', with no turn in it','given'],['Δu = '+T(k*k,k-2),'the round-rate technique']],2,0,'u_rr + u_r/r.'],
+      ['g2',[['u = r^'+k+', with no turn in it','given'],['Δu = '+T(k*(k-1),k-2),'the round-rate technique']],2,1,'That is u_rr alone. The reach leaves the term u_r/r as well.'],
+      ['g3',[['a round drum has first round tone f','given'],['its second round tone is 2f','the unharmonic-drum technique']],2,1,'The ratio lies between 2.28 and 2.31.'],
+      ['g4',[['u depends only on the distance r from the centre','given'],['Δu = (1/r)(rU)″ for r > 0','the round-ball technique']],2,0,'That is the technique.'],
+      ['g5',[['a drum shape has cos(mθ − θ₀) in it','given'],['m may be ½','the drum-shape technique']],2,1,'m is a whole number, or the shape does not come back to itself.']],[k]); }});
+
+/* 33h Separation of Variables by Hand */
+const WH33=[
+  ['A rod has its ends held at 100 and 0. Can u be separated directly into sines?','no: sines are 0 at the ends; take away the straight line between the ends first',['yes','yes, with cosines added','no: no series works'],'Shift-to-the-line technique.'],
+  ['Does a rod with both ends sealed cool to 0?','no: no heat leaves; it settles at its average',['yes','no: it keeps its start for ever','no: it warms without bound'],'Sealed-rod technique: a₀/2 never changes.'],
+  ['For the plate warm on one edge, is Y = sin(nπy/W)?','no: Y″ = +(nπ/W)²Y; the still state grows toward the warm edge, it does not swing',['yes','yes, for even n','no: Y is a constant'],'Warm-edge technique: sinh, not sin.'],
+  ['A square plate has one edge at 100 and three at 0. Is its centre at 50?','no: three edges are cold and one warm; the quarter turns give 25',['yes','no: it is at 33⅓','no: it is at 0'],'Four such plates, each turned a quarter, add to a plate at 100 all round.'],
+  ['Which shapes fit a rod with both ends sealed?','cosines',['sines','both, mixed','straight lines'],'Sealed-rod technique.']];
+QP.push({id:'33h.separate',step:'33h',label:'separating by hand',open:()=>measured('33h'),make(){ return writtenQ('33h.separate',WH33); }},
+  {id:'33h.work',step:'33h',mode:'work',label:'averages, lines and plates',open:()=>measured('33h'),make(){
+    const t=rnd(3);
+    if(t===0){ const a=10*(1+rnd(9)); let b=10*rnd(10); if(b===a) b=a+20; const v=(a+b)/2;
+      return W30('33h.work[s;'+[a,b].join(';')+']',[['a rod with both ends sealed','given'],['it starts at '+a+' on its left half and '+b+' on its right half','given']],'At what temperature does it settle?',String(v),['0',String(a),String(b),String(a+b)],'Sealed-rod technique: no heat leaves, so it settles at its average, ('+a+' + '+b+')/2.'); }
+    if(t===1){ const A=20*(1+rnd(5)), B=20*rnd(4)+ (rnd(2)?0:200), q=pick([[1,2],[1,4],[3,4]]), v=A+(B-A)*q[0]/q[1];
+      return W30('33h.work[l;'+[A,B,q].join(';')+']',[['a rod of length L with its ends held at '+A+' and '+B,'given'],['s is the straight line between the ends','to be taken away first']],'What is s at x = '+(q[0]===1?'':q[0])+'L/'+q[1]+'?',String(v),[String(A+(B-A)*(q[1]-q[0])/q[1]),String((B-A)*q[0]/q[1]),String(A),String(B),String((A+B)*q[0]/q[1])].filter(x=>x!==String(v)),'Shift-to-the-line technique: s = '+A+' + ('+B+' − '+A+')x/L, and at that x it is '+v+'.'); }
+    const T=pick([40,60,80,100,200]), k=1+rnd(3);
+    return W30('33h.work[p;'+[T,k].join(';')+']',[['a square plate, still','given'],[k===1?'one edge is held at '+T+' and the other three at 0':k===2?'two edges are held at '+T+' and the other two at 0':'three edges are held at '+T+' and the fourth at 0','given']],'What is the temperature at the centre?',String(k*T/4),[String(T/2),String(T),'0',String(k*T/2),String(T/4),String(3*T/4)].filter(x=>x!==String(k*T/4)),'One warm edge gives T/4 at the centre, since four quarter turns add to a plate at T all round. '+(k===1?'':'Still states add, so '+k+' warm edges give '+k+' · '+T/4+'.')); }},
+  {id:'33h.line',step:'33h',mode:'proof',label:'what separating licenses',open:()=>measured('33h'),make(){
+    const a=10*(1+rnd(9)), T=pick([40,80,100,200]);
+    return line28('33h.line',[
+      ['h1',[['a rod with both ends sealed has average temperature '+a+' at the start','given'],['its average temperature is '+a+' at every later time','the sealed-rod technique']],2,0,'a₀/2 never changes.'],
+      ['h2',[['a rod with both ends sealed has average temperature '+a+' at the start','given'],['it cools to 0','the sealed-rod technique']],2,1,'No heat leaves. It settles at '+a+'.'],
+      ['h3',[['a rod has its ends held at '+T+' and 0, and s is the straight line between them','given'],['u − s has both ends at 0','the shift-to-the-line technique']],2,0,'That is what the line is taken away for.'],
+      ['h4',[['a rod has its ends held at '+T+' and 0','given'],['u is a sum of fading sines','the fading-series technique']],2,1,'Sines are 0 at the ends. The line must be taken away first.'],
+      ['h5',[['a still square plate has one edge at '+T+' and three at 0','given'],['its centre is at '+T/2,'halfway']],2,1,'The quarter turns give '+T/4+'.']],[a,T]); }});
+
+/* 33i Solving on a Grid by Hand */
+const WI33=[
+  ['Halve the gap and keep the tick. Does the heat grid get better?','no: r = κk/h² quadruples, and past ½ the zigzag grows',['yes','yes, twice as good','no: r halves and the grid stalls'],'Grid-average technique needs r ≤ ½.'],
+  ['The zigzag starts at 10⁻¹². Can it be ignored?','no: it grows by a factor each tick and passes any size in a few dozen ticks',['yes','yes, on a fine grid','no: but only after a million ticks'],'Rounding alone starts it.'],
+  ['Is a finer grid for the string always safer?','only if the tick shrinks with it: σ = ck/h must stay at most 1',['yes','no: a finer grid is never safer','yes, when c < 1'],'Grid-reach technique.'],
+  ['The grid prints 37.5000. Is the plate at 37.5000?','no: the grid’s own width is far coarser than the printed figures',['yes','yes, to four places','no: the grid is always exact to two places'],'The second-quotient technique bounds the error by the gap squared.'],
+  ['How does the error of the second quotient shrink with the gap h?','like h²',['like h','like h⁴','it does not shrink'],'Second-quotient technique: at most Mh²/12.']];
+QP.push({id:'33i.grid',step:'33i',label:'solving on a grid',open:()=>measured('33i'),make(){ return writtenQ('33i.grid',WI33); }},
+  {id:'33i.work',step:'33i',mode:'work',label:'safe ticks and grid averages',open:()=>measured('33i'),make(){
+    const t=rnd(3);
+    if(t===0){ const n=pick([2,4,5,10]), k=pick([1,2]);
+      return W30('33i.work[t;'+[n,k].join(';')+']',[['κ = '+k+' and the gap is h = 1/'+n,'the heat grid, with r = κk/h²']],'What is the largest safe tick k?','1/'+2*n*n*k,['1/'+n*n*k,'1/'+2*n*k,'1/'+4*n*n*k,'1/'+n],'Grid-average technique: r ≤ ½ means k ≤ h²/(2κ) = 1/('+2*k+' · '+n*n+').'); }
+    if(t===1){ const q=pick([3,5,8,10,16,20]), r4=fr(4,q), safe=4/q<=0.5;
+      return W30('33i.work[h;'+q+']',[['a heat grid runs with r = 1/'+q,'given'],['the gap is halved and the tick is kept','given']],'What is r now, and is the grid still safe?',fshow(r4)+': '+(safe?'safe':'not safe'),[fshow(r4)+': '+(safe?'not safe':'safe'),fshow(fr(2,q))+': safe',fshow(fr(1,2*q))+': safe',fshow(fr(1,4*q))+': safe'],'r = κk/h² quadruples when h is halved: 4/'+q+' = '+fshow(r4)+', which is '+(safe?'at most':'above')+' ½.'); }
+    const a=rnd(10), b=rnd(10), c=rnd(10), d=(4-((a+b+c)%4))%4+4*rnd(2), v=(a+b+c+d)/4;
+    return W30('33i.work[f;'+[a,b,c,d].join(';')+']',[['on a still plate’s grid, the four neighbours of a point read '+[a,b,c,d].join(', '),'given']],'What does the point read?',String(v),[String(a+b+c+d),String((a+b+c+d)/2),String(Math.max(a,b,c,d)),String(Math.min(a,b,c,d))],'Four-neighbour technique: the average of the four, '+(a+b+c+d)+'/4.'); }},
+  {id:'33i.line',step:'33i',mode:'proof',label:'what a grid licenses',open:()=>measured('33i'),make(){
+    const q=pick([3,4,5,8]), a=1+rnd(6), b=a+4;
+    return line28('33i.line',[
+      ['i1',[['a heat grid runs with r = 1/'+q,'given'],['its greatest value never grows','the grid-average technique']],2,0,'1/'+q+' ≤ ½.'],
+      ['i2',[['a heat grid runs with r = '+(q-1)+'/'+q,'given'],['its greatest value never grows','the grid-average technique']],2,1,(q-1)+'/'+q+' is above ½, so the new value is not an average.'],
+      ['i3',[['a string’s grid has σ = ck/h above 1','given'],['a finer grid with the same σ heads to the string’s answer','the grid-reach technique']],2,1,'With σ > 1 the grid cannot reach as far as the wave, however fine.'],
+      ['i4',[['the four neighbours of a still grid point read '+a+', '+a+', '+b+', '+b,'given'],['the point reads '+(a+2),'the four-neighbour technique']],2,0,'The average of the four.'],
+      ['i5',[['|y⁗| ≤ M near x','given'],['the second quotient differs from y″(x) by at most Mh/12','the second-quotient technique']],2,1,'The bound is Mh²/12: the square of the gap.']],[q,a]); }});
+
+/* 33j Potentials by Hand */
+const WJ33=[
+  ['Does a cube pull outside as if its mass were at its centre?','no: the technique needs the pull to look the same after every turn, and a cube does not',['yes','yes, far away exactly','no: a cube does not pull'],'Shell-flux technique is for a density that depends only on distance.'],
+  ['Inside an even ball, is the pull GM/r², stronger nearer the centre?','no: only the mass within r pulls; the pull falls to 0 at the centre',['yes','no: it is the same throughout','no: it is greatest at the centre and 0 at the skin'],'Inside-pull technique.'],
+  ['−1/(4πr) is balanced away from 0. Has it then no source?','no: at 0 it passes every bound, and its flux out of every sphere about 0 is 1',['yes','yes, in space','no: its flux out of every sphere is 0'],'Point-source technique.'],
+  ['A pipe’s radius is halved. Is the flow halved?','no: the flow goes as the fourth power of the radius: a sixteenth',['yes','no: a quarter','no: an eighth'],'Pipe-flow technique.'],
+  ['What shape has the speed across a pipe?','a parabola, greatest at the middle and 0 at the wall',['flat across','a straight line from wall to wall','a bell'],'Pipe-flow technique.']];
+QP.push({id:'33j.potentials',step:'33j',label:'potentials',open:()=>measured('33j'),make(){ return writtenQ('33j.potentials',WJ33); }},
+  {id:'33j.work',step:'33j',mode:'work',label:'pulls and pipes',open:()=>measured('33j'),make(){
+    const t=rnd(3), q=pick([2,3,4]);
+    if(t===0){ const up=rnd(2), f=up?String(q):'1/'+q, P=e=>up?String(Math.pow(q,e)):'1/'+Math.pow(q,e);
+      return W30('33j.work[p;'+[q,up].join(';')+']',[['a pipe’s radius is multiplied by '+f,'the push along it kept']],'By what is the flow each second multiplied?',P(4),[P(1),P(2),P(3)],'Pipe-flow technique: Q = πGR⁴/(8μ) goes as the fourth power of the radius.'); }
+    const g=q*q*(1+rnd(4))*(q===4?1:2);
+    if(t===1) return W30('33j.work[i;'+[q,g].join(';')+']',[['a ball of even density has pull '+g+' at its surface','given']],'What is the pull inside, at 1/'+q+' of the way from the centre to the surface?',String(g/q),[String(g*q*q),String(g),String(g/(q*q)),'0'],'Inside-pull technique: g_R r/R = '+g+'/'+q+'. Only the mass within r pulls.');
+    return W30('33j.work[o;'+[q,g].join(';')+']',[['a round body has pull '+g+' at its surface, at distance R from its centre','its density depends only on distance']],'What is its pull at distance '+q+'R from the centre?',String(g/(q*q)),[String(g/q),String(g),String(g*q*q),'0'],'Shell-flux technique: outside, GM/r², as if all the mass were at the centre: '+g+'/'+q*q+'.'); }},
+  {id:'33j.line',step:'33j',mode:'proof',label:'what a potential licenses',open:()=>measured('33j'),make(){
+    const q=pick([2,3]), g=q*q*2*(1+rnd(3));
+    return line28('33j.line',[
+      ['j1',[['a round body, density by distance alone, has pull '+g+' at distance R','given'],['its pull at '+q+'R is '+g/(q*q),'the shell-flux technique']],2,0,'GM/r².'],
+      ['j2',[['an even ball has pull '+g+' at its surface','given'],['its pull at R/'+q+' from the centre is '+g*q*q,'the shell-flux technique']],2,1,'Inside, only the mass within r pulls: the pull is '+g/q+'.'],
+      ['j3',[['an even ball has pull '+g+' at its surface','given'],['its pull at R/'+q+' from the centre is '+g/q,'the inside-pull technique']],2,0,'g_R r/R.'],
+      ['j4',[['a pipe’s radius is multiplied by 1/'+q,'given'],['its flow is multiplied by 1/'+q,'the pipe-flow technique']],2,1,'The flow goes as R⁴: 1/'+Math.pow(q,4)+'.'],
+      ['j5',[['a cube of even density','given'],['outside, it pulls as if its mass were at its centre','the shell-flux technique']],2,1,'The technique needs a density that depends only on distance from the centre.']],[q,g]); }});
 /* ===== Rung pools end ===== */
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
