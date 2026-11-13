@@ -2993,3 +2993,10 @@ try{ if(document.fonts&&document.fonts.load){ window.addEventListener('load',fun
     maps().then(()=>{ sync(); let n=0; const t=setInterval(()=>{ sync(); if(++n>60) clearInterval(t); },250); document.addEventListener('click',()=>setTimeout(sync,60)); }); };
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(boot,0)); else boot();
 })();
+/* sharerow */
+(function(){ 'use strict';
+  const wrap=()=>{ const t=document.querySelector('#desk .dtabs'); if(!t||t.querySelector('.dend')) return; const s=t.querySelector('.dshare'), g=t.querySelector('.dgear'), x=t.querySelector('.x'); if(!s||!g||!x) return;
+    const w=document.createElement('span'); w.className='dend'; t.appendChild(w); w.append(s,g,x); };
+  const boot=()=>{ wrap(); [0,300,1500].forEach(ms=>setTimeout(wrap,ms)); };
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
+})();
