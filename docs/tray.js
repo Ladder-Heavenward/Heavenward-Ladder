@@ -57,8 +57,8 @@ const root=document.createElement('div'); root.id='mk-tray';
 root.innerHTML=`<style>${css}</style>
 <button class="mk-btn" type="button" aria-expanded="false" aria-controls="mk-panel">⌨ quick keys</button>
 <div class="mk-panel" id="mk-panel" role="region" aria-label="quick keys" hidden>
-  <div class="mk-top"><span class="mk-target"></span><button type="button" class="mk-own">use my line</button><button type="button" class="mk-close">close</button></div>
-  <div class="mk-line"><textarea aria-label="composing line" placeholder="dy/dx = ½·x⁻½"></textarea><button type="button" class="mk-copy">copy again</button><button type="button" class="mk-clear">clear</button></div>
+  <div class="mk-top"><span class="mk-target"></span><button type="button" class="mk-own">Quick Keys</button><button type="button" class="mk-close">close</button></div>
+  <div class="mk-line"><textarea aria-label="composing line" placeholder="dy/dx = ½·x⁻½"></textarea><button type="button" class="mk-copy">copy</button><button type="button" class="mk-clear">clear</button></div>
   <div class="mk-keys"></div>
   <div class="mk-toast"></div>
 </div>`;
@@ -74,9 +74,9 @@ let tt; const say=t=>{ toast.textContent=t; clearTimeout(tt); tt=setTimeout(()=>
 // --- the target: the last text box touched on the page ---------------------------------
 let target=null;
 /* the chat's prompt box lives outside this page, where a page is not allowed to type; so the line copies itself on every key, ready to paste */
-function autoCopy(){ try{ if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(line.value).then(()=>{ const n=Date.now(); if(!autoCopy.t||n-autoCopy.t>4000){ autoCopy.t=n; say('copied: paste it into the chat'); } },()=>{}); }catch(e){} }
+function autoCopy(){ /* keysname */ return; try{ if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(line.value).then(()=>{ const n=Date.now(); if(!autoCopy.t||n-autoCopy.t>4000){ autoCopy.t=n; say('copied: paste it into the chat'); } },()=>{}); }catch(e){} }
 const editable=el=>el && !root.contains(el) && ((el.tagName==='TEXTAREA')||(el.tagName==='INPUT'&&/^(text|search|url|tel|email|number|)$/.test(el.type||''))||el.isContentEditable);
-function label(el){ if(!el) return 'your line: it copies itself as you type; paste it into the chat'; const a=el.getAttribute('aria-label')||el.placeholder||(el.id?'#'+el.id:'')||el.tagName.toLowerCase(); return 'writing into: '+a; }
+function label(el){ if(!el) return ''; const a=el.getAttribute('aria-label')||el.placeholder||(el.id?'#'+el.id:'')||el.tagName.toLowerCase(); return 'writing into: '+a; }
 function setTarget(el){ target=el; root.classList.toggle('ownline',!el); tgt.textContent=label(el); }
 document.addEventListener('focusin',e=>{ if(editable(e.target)) setTarget(e.target); });
 document.addEventListener('pointerdown',e=>{ const el=e.target.closest&&e.target.closest('textarea,input,[contenteditable]'); if(editable(el)) setTarget(el); },true);
