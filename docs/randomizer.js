@@ -11109,6 +11109,544 @@ QP.push({id:'41l.convince',step:'41l',label:'convincing without telling',open:()
       ['l2',[['the map has no three-colouring','supposed'],['k · l rounds fool the checker with chance at most e⁻ᵏ','the locked-colours technique']],2,0,'That is the technique.'],
       ['l3',[['the checker saw a link and two colours, each round','the record'],['it could have made that record alone','the self-made-record technique']],2,0,'It learns nothing it could not make up.'],
       ['l4',[['the same renaming is kept every round','given'],['the checker learns nothing','the self-made-record technique']],2,1,'Then the rounds together show the whole colouring.']],[]); }});
+/* ----- rung 42: dots and links, flows, programs and games, 42a to 42n ----- */
+Object.assign(STEPS,{'42a':['r42a','Dots and Links'],'42b':['r42b','Trees'],'42c':['r42c','Walking Every Link Once'],'42d':['r42d','Flat Drawings'],'42e':['r42e','Matchings'],'42f':['r42f','Flows and Cuts'],'42g':['r42g','The Best Corner'],'42h':['r42h','Games'],'42i':['r42i','The Unavoidable'],'42j':['r42j','Disorder Is Impossible'],'42k':['r42k','Shortest Paths and Greedy Choices'],'42l':['r42l','Best From Best Pieces'],'42m':['r42m','Keeping Things Findable'],'42n':['r42n','The Simplex Method by Hand']});
+/* a random graph in one piece on n dots: a random tree, then extra links */
+const GR42=(n,extra)=>{ const E=[], has=(u,w)=>E.some(e=>(e[0]===u&&e[1]===w)||(e[0]===w&&e[1]===u)); for(let i=1;i<n;i++) E.push([rnd(i),i]); let t=0; while(t<extra){ const u=rnd(n), w=rnd(n); if(u!==w&&!has(u,w)){ E.push([u,w]); } t++; } return E; };
+const DG42=(n,E)=>{ const d=Array(n).fill(0); E.forEach(e=>{ d[e[0]]++; d[e[1]]++; }); return d; };
+const FAC42=n=>n<2?1:n*FAC42(n-1);
+
+/* 42a Dots and Links */
+const WA42=[
+  ['Adding the links at every dot counts each link how many times?','exactly twice',['once','three times','once or twice'],'Ends-count technique.'],
+  ['Can link counts 3, 3, 2, 1 belong to a graph?','no: they add to 9, which is odd',['yes','yes, with 9 links','yes, with 4 links'],'Ends-count technique.'],
+  ['Is a walk from u to w a path?','not necessarily: it may meet a dot twice; a least walk is a path',['yes','yes, if it is long','no: never'],'Walk-to-path technique.'],
+  ['Are two drawings that look different different graphs?','not necessarily: a graph is its links; the drawing is not part of it',['yes','yes, if the links cross','no: every drawing is one graph'],'A graph is dots and links.'],
+  ['The graph has no cycle of length 3. Is it two-sided?','not necessarily: a cycle of 5 links is odd and has no triangle',['yes','yes, by the odd-cycle technique','no: never'],'Odd-cycle technique.'],
+  ['When is a graph two-sided?','exactly when it has no cycle of odd length',['when it has no triangle','when every count is even','when it is a tree only'],'Odd-cycle technique.']];
+QP.push({id:'42a.graphs',step:'42a',label:'dots and links',open:()=>measured('42a'),make(){ return writtenQ('42a.graphs',WA42); }},
+  {id:'42a.work',step:'42a',mode:'work',label:'counting links from ends',open:()=>measured('42a'),make(){
+    const n=4+rnd(4), E=GR42(n,1+rnd(5)), d=DG42(n,E), s=d.reduce((a,b)=>a+b,0);
+    return W30('42a.work[e;'+d.join(',')+']',[['a graph whose dots have link counts '+d.join(', '),'given']],'How many links has it?',String(s/2),[String(s),String(s/2+1),String(n),String(s-1),String(s/2-1)],'Ends-count technique: '+d.join(' + ')+' = '+s+', and each link is counted twice.'); }},
+  {id:'42a.line',step:'42a',mode:'proof',label:'what counting ends licenses',open:()=>measured('42a'),make(){
+    return line28('42a.line',[
+      ['a1',[['link counts 3, 3, 2, 1','given'],['no graph has them','the ends-count technique']],2,0,'They add to 9, and the total must be even.'],
+      ['a2',[['a walk joins u to w','given'],['a path joins u to w','the walk-to-path technique']],2,0,'That is the technique.'],
+      ['a3',[['a walk joins u to w','given'],['that walk is a path','the walk-to-path technique']],2,1,'It may meet a dot twice. The technique gives some path, not this walk.'],
+      ['a4',[['the graph has no triangle','checked'],['the graph is two-sided','the odd-cycle technique']],2,1,'A cycle of 5 links is odd and has no triangle.']],[]); }});
+
+/* 42b Trees */
+const WB42=[
+  ['How many links has a tree with n dots?','n − 1',['n','n + 1','n − 2'],'Links-of-a-tree technique.'],
+  ['Does every tree have exactly two ends?','no: at least two; a star with k links has k ends',['yes','yes, if it has two dots','no: it has one'],'Tree-ends technique.'],
+  ['A graph has n dots and n − 1 links. Is it a tree?','not necessarily: it must also be in one piece, or have no cycle',['yes','yes, by the links-of-a-tree technique','no: never'],'Any-two-of-three technique.'],
+  ['What does nⁿ⁻² count?','the trees on n named dots',['the shapes of tree on n dots','the links of a tree','the ends of a tree'],'Leaf-code technique.'],
+  ['Does every graph in one piece hold a tree through all its dots?','yes',['no','only if it has no cycle','only if it has n − 1 links'],'Spanning-tree technique.'],
+  ['The code (4, 4, 4, 5) is given. How many links has dot 4?','four: it appears three times',['three','one: it is an end','none'],'Leaf-code technique.']];
+QP.push({id:'42b.trees',step:'42b',label:'trees',open:()=>measured('42b'),make(){ return writtenQ('42b.trees',WB42); }},
+  {id:'42b.work',step:'42b',mode:'work',label:'counting named trees',open:()=>measured('42b'),make(){
+    const n=3+rnd(5), c=Math.pow(n,n-2);
+    if(rnd(2)) return W30('42b.work[l;'+n+']',[['a tree on '+n+' dots','given']],'How many links has it?',String(n-1),[String(n),String(n+1),String(n-2),String(2*n)],'Links-of-a-tree technique: n − 1.');
+    return W30('42b.work[c;'+n+']',[['the dots are named 1 to '+n,'given']],'How many trees are there on them?',String(c),[String(Math.pow(n,n-1)),String(FAC42(n)),String(Math.pow(2,n)),String(Math.pow(n-1,n-2)+1)],'Leaf-code technique: '+n+' to the '+(n-2)+'.'); }},
+  {id:'42b.line',step:'42b',mode:'proof',label:'what trees license',open:()=>measured('42b'),make(){
+    return line28('42b.line',[
+      ['b1',[['a graph with n dots is in one piece and has no cycle','given'],['it has n − 1 links','the any-two-of-three technique']],2,0,'Two of the three give the third.'],
+      ['b2',[['a graph with n dots has n − 1 links','given'],['it is a tree','the any-two-of-three technique']],2,1,'One of the three is not enough. A triangle and a lone dot have 4 dots and 3 links.'],
+      ['b3',[['a tree has 6 dots','given'],['it has at least two ends','the tree-ends technique']],2,0,'That is the technique.'],
+      ['b4',[['there are 16 trees on four named dots','the leaf-code technique'],['there are 16 shapes of tree on four dots','the leaf-code technique']],2,1,'There are 2 shapes. The count is of trees on named dots.']],[]); }});
+
+/* 42c Walking Every Link Once */
+const WC42=[
+  ['When has a graph in one piece a closed tour of the links?','exactly when every dot has an even count of links',['when every count is odd','when two counts are odd','when it has no cycle'],'Even-tour technique.'],
+  ['Every count is even. Is there a closed tour?','only in one piece: two separate triangles have even counts and no tour',['yes','yes, always','no: never'],'Even-tour technique.'],
+  ['Where does an open tour of the links run?','from one dot with an odd count to the other',['from any dot to any dot','between two even dots','round to where it began'],'Open-tour technique.'],
+  ['Does a closed tour of the links pass through every dot once?','not necessarily: it may pass a dot many times; it is the links that are used once',['yes','yes, and every link twice','no: it misses a dot'],'A tour uses links once.'],
+  ['Do the counts settle whether a round of the dots exists?','no: the half-the-dots technique gives yes for some graphs and silence for the rest',['yes','yes, even counts give a round','no: no graph has a round'],'Half-the-dots technique.'],
+  ['A graph has a round of the dots. Is every count at least n/2?','not necessarily: a ring of five dots has a round, and every count is 2',['yes','yes, by the half-the-dots technique','no: every count is 1'],'The technique runs one way.']];
+QP.push({id:'42c.tours',step:'42c',label:'walking every link once',open:()=>measured('42c'),make(){ return writtenQ('42c.tours',WC42); }},
+  {id:'42c.work',step:'42c',mode:'work',label:'tours from the counts',open:()=>measured('42c'),make(){
+    const n=4+rnd(4), E=GR42(n,1+rnd(6)), d=DG42(n,E), o=d.filter(x=>x%2).length;
+    const C='a closed tour of the links', O='an open tour, from one odd dot to the other', N='no tour of the links', R='a round of the dots';
+    const right=o===0?C:o===2?O:N;
+    return W30('42c.work[t;'+d.join(',')+']',[['a graph in one piece whose dots have link counts '+d.join(', '),'given']],'What do the counts give?',right,[C,O,N,R].filter(x=>x!==right),o===0?'Every count is even: the even-tour technique.':o===2?'Exactly two counts are odd: the open-tour technique.':OD42(o)+' counts are odd: neither technique gives a tour.'); }},
+  {id:'42c.line',step:'42c',mode:'proof',label:'what tours license',open:()=>measured('42c'),make(){
+    return line28('42c.line',[
+      ['c1',[['a graph in one piece, every count even','given'],['it has a closed tour of the links','the even-tour technique']],2,0,'That is the technique.'],
+      ['c2',[['every count is even','given'],['the graph has a closed tour of the links','the even-tour technique']],2,1,'Only in one piece. Two separate triangles have even counts and no tour.'],
+      ['c3',[['a graph with 6 dots, each with links to at least 3 dots','given'],['it has a round of the dots','the half-the-dots technique']],2,0,'3 is half of 6.'],
+      ['c4',[['a graph has a round of the dots','given'],['every count is at least n/2','the half-the-dots technique']],2,1,'The technique run backwards. A ring of five dots has a round, and every count is 2.']],[]); }});
+const OD42=o=>({1:'One',3:'Three',4:'Four',5:'Five',6:'Six',7:'Seven'})[o]||String(o);
+
+/* 42d Flat Drawings */
+const WD42=[
+  ['What does the flat-count technique say?','V − E + F = 2, counting the outside face',['V + E + F = 2','V − E + F = 0','V − E = F'],'Flat-count technique.'],
+  ['E ≤ 3V − 6. Is the graph flat?','not necessarily: K₃,₃ has 9 ≤ 12 links and is not flat',['yes','yes, by the flat-ceiling technique','no: never'],'The ceiling is needed, not enough.'],
+  ['Each face is rimmed by at least 3 links. What follows?','3F ≤ 2E: each link rims two faces',['3F = E','F = 3E','3F ≥ 2E'],'Flat-ceiling technique.'],
+  ['Does every flat graph need five colours?','no: five suffice; many need fewer',['yes','yes, exactly five','no: two always suffice'],'Five-colour technique.'],
+  ['A flat graph has a dot with at most five links. Has every dot at most five?','no: a wheel with 20 spokes has a hub with 20',['yes','yes, by the five-or-fewer technique','no: none has'],'Five-or-fewer technique.'],
+  ['With no triangle, how many links can a flat graph with V dots have?','at most 2V − 4',['at most 3V − 6 only','at most V − 1','at most V²/4'],'Flat-ceiling technique.']];
+QP.push({id:'42d.flat',step:'42d',label:'flat drawings',open:()=>measured('42d'),make(){ return writtenQ('42d.flat',WD42); }},
+  {id:'42d.work',step:'42d',mode:'work',label:'faces and ceilings',open:()=>measured('42d'),make(){
+    const V=4+rnd(9);
+    if(rnd(2)){ const E=V-1+rnd(2*V-5), F=2-V+E;
+      return W30('42d.work[f;'+[V,E].join(';')+']',[['a flat drawing of a graph in one piece with '+V+' dots and '+E+' links','given']],'How many faces has it, counting the outside one?',String(F),[String(F+1),String(E-V),String(F+2),String(V+E-2)],'Flat-count technique: F = 2 − '+V+' + '+E+'.'); }
+    const t=rnd(2);
+    return W30('42d.work[c;'+[V,t].join(';')+']',[['a flat graph with '+V+' dots'+(t?' and no triangle':''),'given']],'At most how many links has it?',String(t?2*V-4:3*V-6),[String(t?3*V-6:2*V-4),String(V-1),String(3*V),String(2*V)],t?'Flat-ceiling technique, no triangle: 2V − 4.':'Flat-ceiling technique: 3V − 6.'); }},
+  {id:'42d.line',step:'42d',mode:'proof',label:'what flat drawings license',open:()=>measured('42d'),make(){
+    return line28('42d.line',[
+      ['d1',[['K₅ has 5 dots and 10 links','given'],['10 > 3 · 5 − 6 = 9','arithmetic'],['K₅ is not flat','the flat-ceiling technique']],3,0,'It has more links than the ceiling allows.'],
+      ['d2',[['a graph has 9 links and 6 dots, and 9 ≤ 12','given'],['it is flat','the flat-ceiling technique']],2,1,'The ceiling is needed, not enough. K₃,₃ is such a graph.'],
+      ['d3',[['G is flat','given'],['G has a dot with at most five links','the five-or-fewer technique']],2,0,'That is the technique.'],
+      ['d4',[['each face is rimmed by at least 3 links','given'],['3F = E','counting rims']],2,1,'Each link rims two faces: 3F ≤ 2E.']],[]); }});
+
+/* 42e Matchings */
+const WE42=[
+  ['When does some matching cover X on a two-sided graph?','exactly when every part S of X has at least |S| neighbours',['when every dot of X has a neighbour','when X and Y are the same size','when the graph has no cycle'],'Marriage technique.'],
+  ['Every dot of X has a neighbour. Is X covered?','not necessarily: two dots with only one neighbour between them',['yes','yes, by the marriage technique','no: never'],'The condition is on every part S.'],
+  ['No link can be added to M. Is M largest?','not necessarily: on the path of three links the middle link alone blocks both others',['yes','yes, by the growing-path technique','no: never'],'Growing-path technique.'],
+  ['When is a matching as large as any?','exactly when there is no growing path for it',['when no link can be added','when it has one link at every dot','when it covers Y'],'Growing-path technique.'],
+  ['Does the largest matching equal the smallest cover in every graph?','no: only on two-sided graphs; the triangle has 1 against 2',['yes','yes, in trees only','no: never'],'Cover-equals-matching technique.'],
+  ['What is a matching?','a set of links with no dot in two of them',['a set of dots with no link','a path through every dot','a set of links in one piece'],'Matchings.']];
+QP.push({id:'42e.match',step:'42e',label:'matchings',open:()=>measured('42e'),make(){ return writtenQ('42e.match',WE42); }},
+  {id:'42e.line',step:'42e',mode:'proof',label:'what matchings license',open:()=>measured('42e'),make(){
+    return line28('42e.line',[
+      ['e1',[['a two-sided graph, every part S of X with |N(S)| ≥ |S|','given'],['some matching covers X','the marriage technique']],2,0,'That is the technique.'],
+      ['e2',[['every single dot of X has a neighbour','checked'],['some matching covers X','the marriage technique']],2,1,'The condition is on every part S, not only single dots.'],
+      ['e3',[['there is no growing path for M','given'],['M is as large as any matching','the growing-path technique']],2,0,'That is the technique.'],
+      ['e4',[['the triangle has a largest matching of 1 link','checked'],['its smallest cover has 1 dot','the cover-equals-matching technique']],2,1,'The triangle is not two-sided. Its smallest cover has 2 dots.']],[]); }});
+
+/* 42f Flows and Cuts */
+const WF42=[
+  ['How does the value of a flow compare with the capacity of a cut?','it is at most the capacity of any cut',['it is at least every cut','it equals every cut','it is unrelated'],'Flow-under-cut technique.'],
+  ['No path from s to t has room forward. Is the flow largest?','not necessarily: a route may need a step back against a used link',['yes','yes, by the bottleneck technique','no: never'],'Room back counts.'],
+  ['The cut of capacity 14 is smallest. Is it the only smallest cut?','not necessarily: two cuts may share the least capacity',['yes','yes, by the bottleneck technique','no: there are always two'],'Bottleneck technique.'],
+  ['The capacities are whole. Is every largest flow whole?','no: some largest flow is whole; halves on two routes can also be largest',['yes','yes, by the whole-flow technique','no: none is whole'],'Whole-flow technique.'],
+  ['Which links does a cut’s capacity count?','only those from S to the rest',['links both ways across','every link of the graph','links inside S'],'Cuts.'],
+  ['What does pushing r along a route with least room r give?','a flow of value |f| + r',['a flow of value r','a flow of value |f| − r','a cut of value r'],'Push-along technique.']];
+QP.push({id:'42f.flows',step:'42f',label:'flows and cuts',open:()=>measured('42f'),make(){ return writtenQ('42f.flows',WF42); }},
+  {id:'42f.work',step:'42f',mode:'work',label:'pushing along a route',open:()=>measured('42f'),make(){
+    const k=3+rnd(3), R=Array.from({length:k},()=>1+rnd(9)), f=2+rnd(15), m=Math.min(...R), M=Math.max(...R);
+    return W30('42f.work[p;'+[f,R.join(',')].join(';')+']',[['a flow of value '+f,'given'],['a route from s to t with room '+R.join(', ')+' on its steps','given']],'What value has the flow after the push?',String(f+m),[String(f+M),String(m),String(f),String(f+R.reduce((a,b)=>a+b,0)),String(f+m+1)],'Push-along technique: the least room is '+m+', and '+f+' + '+m+' = '+(f+m)+'.'); }},
+  {id:'42f.line',step:'42f',mode:'proof',label:'what flows license',open:()=>measured('42f'),make(){
+    const c=10+rnd(20);
+    return line28('42f.line',[
+      ['f1',[['a cut has capacity '+c,'given'],['every flow has value at most '+c,'the flow-under-cut technique']],2,0,'That is the technique.'],
+      ['f2',[['no route has room, forward or back','given'],['the flow is largest','the bottleneck technique']],2,0,'The reachable dots give a cut the flow fills.'],
+      ['f3',[['no path from s to t has room forward','given'],['the flow is largest','the bottleneck technique']],2,1,'A route may step back against a used link. Room back counts.'],
+      ['f4',[['every capacity is whole','given'],['every largest flow is whole','the whole-flow technique']],2,1,'Some largest flow is whole. Halves on two routes can also be largest.']],[c]); }});
+
+/* 42g The Best Corner */
+const WG42=[
+  ['Is the best plan always a corner?','some corner is best; a whole edge between two best corners may be best too',['yes, exactly one corner','no: never a corner','only on a triangle'],'Tight-corner technique.'],
+  ['The value is bounded. Are the allowed plans bounded?','not necessarily: the region can run off along a direction where c · d ≤ 0',['yes','yes, by the tight-corner technique','no: never'],'A bounded value, not a bounded region.'],
+  ['Covering prices total 40. Does some plan earn 40?','not necessarily: prices bound plans from above; only the least total is earned',['yes','yes, by the price-bound technique','no: no plan earns anything'],'Price-bound technique.'],
+  ['A plan obeys Ax ≤ b. Is it allowed?','only if also x ≥ 0',['yes','yes, if b ≥ 0','no: never'],'Allowed plans.'],
+  ['When has Ax ≤ b no answer?','exactly when some y ≥ 0 has yᵀA = 0 and y · b < 0',['when b < 0','when A has a 0 row','when some y has y · b > 0'],'No-answer technique.'],
+  ['What does the equal-prices technique say?','the best plan earns exactly the least price total',['every plan earns the least total','prices and plans are unrelated','the best plan earns twice the least total'],'Equal-prices technique.']];
+QP.push({id:'42g.corner',step:'42g',label:'the best corner',open:()=>measured('42g'),make(){ return writtenQ('42g.corner',WG42); }},
+  {id:'42g.work',step:'42g',mode:'work',label:'the best corner',open:()=>measured('42g'),make(){
+    const a=2+rnd(6), b=2+rnd(6), p=1+rnd(a-1), q=1+rnd(b-1), c1=1+rnd(6), c2=1+rnd(6);
+    const K=[[0,0],[a,0],[p,q],[0,b]], V=K.map(k=>c1*k[0]+c2*k[1]), best=Math.max(...V);
+    if(V.filter(v=>v===best).length>1) return null;
+    const P=k=>'('+k[0]+', '+k[1]+')';
+    return W30('42g.work[g;'+[a,b,p,q,c1,c2].join(',')+']',[['the allowed plans have corners '+K.map(P).join(', '),'given'],['earn '+c1+'x + '+c2+'y','the value']],'Which corner earns the most?',P(K[V.indexOf(best)]),K.filter((k,i)=>V[i]!==best).map(P).concat([P([p+1,q])]),'Tight-corner technique: the values at the corners are '+V.join(', ')+'.'); }},
+  {id:'42g.line',step:'42g',mode:'proof',label:'what corners and prices license',open:()=>measured('42g'),make(){
+    const z=20+rnd(30);
+    return line28('42g.line',[
+      ['g1',[['x is an allowed plan, and y covering prices with b · y = '+z,'given'],['c · x ≤ '+z,'the price-bound technique']],2,0,'That is the technique.'],
+      ['g2',[['covering prices total '+z,'given'],['some plan earns '+z,'the price-bound technique']],2,1,'Prices bound plans from above. Only the least total is earned.'],
+      ['g3',[['some y ≥ 0 has yᵀA = 0 and y · b < 0','given'],['Ax ≤ b has no answer','the no-answer technique']],2,0,'That is the technique.'],
+      ['g4',[['c · x is bounded above on the allowed plans','given'],['the allowed plans are bounded','the tight-corner technique']],2,1,'The region can run off for ever where c · d ≤ 0.']],[z]); }});
+
+/* 42h Games */
+const WH42=[
+  ['How does what the row player can guarantee compare with what the column player can hold it to?','it is at most that, and with mixes the two are equal',['it is always larger','it is unrelated','it is equal for fixed choices too'],'Guarantee-order and minimax techniques.'],
+  ['Does a best mix give every choice the same chance?','no: it gives the other player’s choices the same earnings',['yes','yes, one half each','no: it picks one choice'],'Indifference technique.'],
+  ['Is an equilibrium best for both players?','no: it is a pair no one changes alone; it can be worse for both',['yes','yes, always','no: it is worst for both'],'Equilibria.'],
+  ['Does largest-of-least equal least-of-largest for fixed choices?','no: in stone, paper, scissors fixed rows guarantee −1 and fixed columns hold to 1',['yes','yes, always','only for two-by-two games'],'Mixes are needed.'],
+  ['What is the value of a game of gain against loss?','the common number of the minimax technique',['the largest entry','the average entry','the least entry'],'Minimax technique.'],
+  ['Why are the two players’ questions equal?','they are twin programs',['the game is fair','the entries add to 0','the players are alike'],'Minimax by equal prices.']];
+QP.push({id:'42h.games',step:'42h',label:'games',open:()=>measured('42h'),make(){ return writtenQ('42h.games',WH42); }},
+  {id:'42h.work',step:'42h',mode:'work',label:'the mix that makes indifferent',open:()=>measured('42h'),make(){
+    const a=3+rnd(7), d=3+rnd(7), b=rnd(3), c=rnd(3), D=a-b-c+d, p=fr(d-c,D);
+    return W30('42h.work[m;'+[a,b,c,d].join(',')+']',[['the row player earns '+a+' or '+b+' on row 1, and '+c+' or '+d+' on row 2, by column','the game'],['no choice is safe','checked']],'With what chance does the best mix play row 1?',fshow(p),[fshow(fr(a-b,D)),'1/2',fshow(fr(d-b,D+1)),fshow(fr(a,a+d))],'Indifference technique: p · '+a+' + (1 − p) · '+c+' = p · '+b+' + (1 − p) · '+d+', so p = '+(d-c)+'/'+D+'.'); }},
+  {id:'42h.line',step:'42h',mode:'proof',label:'what games license',open:()=>measured('42h'),make(){
+    return line28('42h.line',[
+      ['h1',[['a game of gain against loss','given'],['the largest over x of the least over y of xᵀMy equals the least over y of the largest over x','the minimax technique']],2,0,'That is the technique.'],
+      ['h2',[['in stone, paper, scissors, fixed rows guarantee −1','checked'],['fixed columns hold the row player to −1','the minimax technique']],2,1,'They hold to 1. The equality needs mixes.'],
+      ['h3',[['both confess is a pair neither player changes alone','given'],['both confess is best for both','an equilibrium']],2,1,'It is an equilibrium and worse for both.'],
+      ['h4',[['a two-by-two game with no safe choice','given'],['the row player’s best mix makes the column player’s two choices earn the same','the indifference technique']],2,0,'That is the technique.']],[]); }});
+
+/* 42i The Unavoidable */
+const WI42=[
+  ['More than n · k things go into n boxes. What follows?','some box gets more than k',['every box gets k','some box is empty','each box gets more than k'],'Crowded-box technique.'],
+  ['737 015 people, 150 001 boxes: does some box have exactly 5?','not necessarily: at least 5; the technique gives a floor, not a count',['yes','yes, every box','no: at most 5'],'Crowded-box technique.'],
+  ['Does the rise-or-fall technique hold for n² numbers?','no: 3, 2, 1, 6, 5, 4, 9, 8, 7 has no rise or fall of 4',['yes','yes, for n ≥ 3','only for n = 2'],'Rise-or-fall needs n² + 1.'],
+  ['To count what lies in none of several sets, what follows taking away the sizes?','add back the overlaps of two, take away those of three, and on',['stop','take away the overlaps of two','add back the sizes'],'Over-and-under technique.'],
+  ['Does Dₙ/n! fall toward 0 as n grows?','no: it settles near 1/e',['yes','yes, like 1/n','no: it grows to 1'],'Wrong-coats technique.'],
+  ['Which whole number is Dₙ, for n ≥ 1?','the nearest to n!/e',['n! − 1','the nearest to n/e','n!/2'],'Wrong-coats technique.']];
+QP.push({id:'42i.unavoid',step:'42i',label:'the unavoidable',open:()=>measured('42i'),make(){ return writtenQ('42i.unavoid',WI42); }},
+  {id:'42i.work',step:'42i',mode:'work',label:'boxes and wrong coats',open:()=>measured('42i'),make(){
+    const v=rnd(3);
+    if(v===0){ const n=3+rnd(10), k=1+rnd(8), T=n*k+1+rnd(n-1);
+      return W30('42i.work[b;'+[T,n].join(';')+']',[[T+' things go into '+n+' boxes','given']],'At least how many must some box get?',String(Math.ceil(T/n)),[String(Math.floor(T/n)),String(Math.ceil(T/n)+1),String(T-n),String(n)],'Crowded-box technique: '+T+' > '+n+' · '+k+', so some box gets more than '+k+'.'); }
+    if(v===1){ const n=4+rnd(4), D=[1,0,1,2,9,44,265,1854,14833][n];
+      return W30('42i.work[d;'+n+']',[[n+' guests take '+n+' coats back at random','given']],'In how many ways does every guest get a wrong coat?',String(D),[String(FAC42(n)-1),String(FAC42(n-1)),String(D+1),String(FAC42(n)/2)],'Wrong-coats technique: the whole number nearest '+n+'!/e.'); }
+    const N=pick([30,60,90,120]), c=N-N/2-N/3+N/6;
+    return W30('42i.work[o;'+N+']',[['the numbers 1 to '+N,'given']],'How many have neither factor 2 nor factor 3?',String(c),[String(N/6),String(N/2),String(2*N/3),String(N-N/6)],'Over-and-under technique: '+N+' − '+(N/2)+' − '+(N/3)+' + '+(N/6)+'.'); }},
+  {id:'42i.line',step:'42i',mode:'proof',label:'what the unavoidable licenses',open:()=>measured('42i'),make(){
+    const n=3+rnd(3), T=n*n+1;
+    return line28('42i.line',[
+      ['i1',[['a row of '+T+' different numbers','given'],['it holds '+(n+1)+' that rise or '+(n+1)+' that fall, in their order','the rise-or-fall technique']],2,0,T+' = '+n+'² + 1.'],
+      ['i2',[['a row of '+(n*n)+' different numbers','given'],['it holds '+(n+1)+' that rise or '+(n+1)+' that fall','the rise-or-fall technique']],2,1,'The technique needs '+n+'² + 1 numbers.'],
+      ['i3',[['737 015 people go into 150 001 boxes','given'],['some box has exactly 5','the crowded-box technique']],2,1,'At least 5. The technique gives a floor, not a count.'],
+      ['i4',[['100 − (50 + 33 + 20)','counting'],['it counts the numbers to 100 with no factor 2, 3 or 5','the over-and-under technique']],2,1,'The overlaps were struck twice. Add them back, and so on.']],[n]); }});
+
+/* 42j Disorder Is Impossible */
+const WJ42=[
+  ['The links of K₆ are coloured red and blue. What must there be?','a triangle with its three links one colour',['a red triangle','a blue triangle','four dots all one colour'],'Six-guests technique.'],
+  ['Must every red and blue colouring of K₅ have a one-colour triangle?','no: some colouring of K₅ has none',['yes','yes, a red one','only with more red'],'Six-guests technique.'],
+  ['The average is 0.3. Do most colourings have no one-colour group?','not shown: an average below one gives some colouring with none',['yes','yes, 70 per cent','no: every one has one'],'Average-below-one technique.'],
+  ['The average is above 1. Does every colouring have a one-colour group?','not necessarily: a few colourings may have many',['yes','yes, at least one','no: none has'],'An average is not every case.'],
+  ['R(s, t) ≤ R(s − 1, t) + R(s, t − 1). Is it equal?','not necessarily: R(3, 4) = 9, and the sum is 10',['yes','yes, always','no: it is always less by one'],'Party-number technique.'],
+  ['At most how many links has a graph on n dots with no triangle?','n²/4',['n²/2','n − 1','3n − 6'],'No-triangle technique.']];
+QP.push({id:'42j.ramsey',step:'42j',label:'disorder is impossible',open:()=>measured('42j'),make(){ return writtenQ('42j.ramsey',WJ42); }},
+  {id:'42j.work',step:'42j',mode:'work',label:'links with no triangle',open:()=>measured('42j'),make(){
+    const n=4+rnd(13), m=Math.floor(n*n/4);
+    return W30('42j.work[t;'+n+']',[['a graph on '+n+' dots with no triangle','given']],'At most how many links has it?',String(m),[String(Math.floor(n*n/2)),String(m+1),String(n-1),String(n*(n-1)/2)],'No-triangle technique: '+n+'²/4'+(n%2?', down to a whole number':'')+' = '+m+'.'); }},
+  {id:'42j.line',step:'42j',mode:'proof',label:'what order in disorder licenses',open:()=>measured('42j'),make(){
+    return line28('42j.line',[
+      ['j1',[['the links of K₆ are coloured red and blue','given'],['some triangle has its three links one colour','the six-guests technique']],2,0,'That is the technique.'],
+      ['j2',[['the average number of one-colour k-groups in a random colouring of Kₙ is 0.3','computed'],['some colouring of Kₙ has none','the average-below-one technique']],2,0,'An average below one leaves room for a colouring with none.'],
+      ['j3',[['R(s, t) ≤ R(s − 1, t) + R(s, t − 1)','the party-number technique'],['R(3, 4) = R(2, 4) + R(3, 3)','the party-number technique']],2,1,'At most. R(3, 4) = 9, and the sum is 10.'],
+      ['j4',[['a graph on n dots has more than n²/4 links','given'],['it has a triangle','the no-triangle technique']],2,0,'With no triangle it would have at most n²/4.']],[]); }});
+
+/* 42k Shortest Paths and Greedy Choices */
+const WK42=[
+  ['Does the nearest-first technique work with any lengths?','no: only with every length at least 0',['yes','yes, if one is negative','no: only with equal lengths'],'Nearest-first technique.'],
+  ['Is the cheapest link at each dot in every cheapest tree?','not necessarily: in some cheapest tree; with ties others may lack it',['yes','yes, by the cheapest-across technique','no: in none'],'Cheapest-across technique.'],
+  ['One merge can relabel n/2 dots. Do n merges cost n²/2?','no: a dot is relabelled at most log₂ n times, so at most n log₂ n',['yes','yes, at least','no: they cost n'],'Doubling-piece technique.'],
+  ['Greed builds the cheapest tree. Does it build the cheapest tour?','no: a tour has no exchange step; greed can be far from best',['yes','yes, the same way','only on flat maps'],'Greed is not always best.'],
+  ['How often does the layer-by-layer walk look at each link?','at most twice',['once','n times','log₂ n times'],'Layer-by-layer technique.'],
+  ['With lengths at least 0, when is a dot’s tentative distance final?','when it is settled as the nearest unsettled dot',['when it is first reached','at the end only','when it has two neighbours'],'Nearest-first technique.']];
+QP.push({id:'42k.paths',step:'42k',label:'shortest paths and greedy choices',open:()=>measured('42k'),make(){ return writtenQ('42k.paths',WK42); }},
+  {id:'42k.work',step:'42k',mode:'work',label:'a nearest-first distance',open:()=>measured('42k'),make(){
+    const L={rA:1+rnd(9),rB:1+rnd(9),AB:1+rnd(9),Aw:1+rnd(9),Bw:1+rnd(9)};
+    const P=[L.rA+L.Aw,L.rB+L.Bw,L.rA+L.AB+L.Bw,L.rB+L.AB+L.Aw], m=Math.min(...P);
+    const others=[...new Set(P.filter(x=>x!==m))].sort((x,y)=>x-y);
+    return W30('42k.work[n;'+Object.values(L).join(',')+']',[['r–a '+L.rA+', r–b '+L.rB+', a–b '+L.AB+', a–w '+L.Aw+', b–w '+L.Bw,'the links and their lengths']],'What is the distance from r to w?',String(m),others.map(String).concat([String(m+1),String(Math.min(L.rA,L.rB)+Math.min(L.Aw,L.Bw)+1),String(m-1)]).filter(x=>x!==String(m)&&+x>0),'Nearest-first technique: the four paths give '+P.join(', ')+'; the least is '+m+'.'); }},
+  {id:'42k.line',step:'42k',mode:'proof',label:'what greed licenses',open:()=>measured('42k'),make(){
+    return line28('42k.line',[
+      ['k1',[['every length is at least 0, and x is settled at 7','given'],['the distance from r to x is 7','the nearest-first technique']],2,0,'That is the technique.'],
+      ['k2',[['one length is −2, and x is settled at 2','given'],['the distance from r to x is 2','the nearest-first technique']],2,1,'The technique needs every length at least 0.'],
+      ['k3',[['e is a cheapest link across a split','given'],['e is in some cheapest spanning tree','the cheapest-across technique']],2,0,'That is the technique.'],
+      ['k4',[['e is a cheapest link across a split','given'],['e is in every cheapest spanning tree','the cheapest-across technique']],2,1,'In some. With ties others may lack it.']],[]); }});
+
+/* 42l Best From Best Pieces */
+const WL42=[
+  ['A path from r to w is shortest. What are its pieces?','shortest paths between their ends',['longest paths','any paths','not paths at all'],'Best-pieces technique.'],
+  ['Are the pieces of a longest path longest, in any graph?','no: only with no cycle',['yes','yes, always','no: never'],'Best-pieces technique.'],
+  ['After n − 1 rounds, is every distance right?','only with no cycle of negative total',['yes','yes, always','no: never'],'Rounds technique.'],
+  ['A further round still lowers some value. What follows?','some cycle has negative total',['the distances are right','a link is missing','nothing'],'Rounds technique.'],
+  ['Does Dₖ(i, j) use at most k links?','no: it uses stops among 1 to k; a path with k stops has k + 1 links',['yes','yes, exactly k','no: at most k − 1'],'Stops-allowed technique.'],
+  ['What is the best alignment of two strings?','a longest route through their grid',['a shortest path in a tree','a matching','a cut'],'Alignment-route technique.']];
+QP.push({id:'42l.pieces',step:'42l',label:'best from best pieces',open:()=>measured('42l'),make(){ return writtenQ('42l.pieces',WL42); }},
+  {id:'42l.work',step:'42l',mode:'work',label:'allowing one more stop',open:()=>measured('42l'),make(){
+    const a=3+rnd(20), b=1+rnd(12), c=1+rnd(12); if(a===b+c) return null; const r=Math.min(a,b+c);
+    return W30('42l.work[s;'+[a,b,c].join(',')+']',[['Dₖ₋₁(i, j) = '+a+', Dₖ₋₁(i, k) = '+b+', Dₖ₋₁(k, j) = '+c,'given']],'What is Dₖ(i, j)?',String(r),[String(Math.max(a,b+c)),String(Math.min(b,c)),String(b+c+a),String(Math.max(b,c))],'Stops-allowed technique: the least of '+a+' and '+b+' + '+c+'.'); }},
+  {id:'42l.line',step:'42l',mode:'proof',label:'what best pieces license',open:()=>measured('42l'),make(){
+    return line28('42l.line',[
+      ['l1',[['r, u, x, w is a shortest path from r to w','given'],['u, x is a shortest path from u to x','the best-pieces technique']],2,0,'That is the technique.'],
+      ['l2',[['n − 1 rounds have run','given'],['every distance is right','the rounds technique']],2,1,'Only with no cycle of negative total.'],
+      ['l3',[['n − 1 rounds have run, and round n lowers a value','given'],['some cycle has negative total','the rounds technique']],2,0,'That is the technique.'],
+      ['l4',[['every length is raised by 3','given'],['the nearest first still finds the same best path','the best-pieces technique']],2,1,'A path with more links gains more. The best path can change.']],[]); }});
+
+/* 42m Keeping Things Findable */
+const WM42=[
+  ['How many entries do the neighbour lists take?','n + 2|E|',['n²','|E|','2n'],'Two-stores technique.'],
+  ['Is the heap always the best store for the nearest first?','no: on a crowded graph a plain list costs n², below the heap’s',['yes','yes, on every graph','no: never'],'Heap-run technique.'],
+  ['Does no recipe find shortest paths faster than sorting?','not shown: only for recipes that learn by comparing',['yes, none does','yes, by the heap-run technique','no: every recipe is faster'],'Sorting-inside technique.'],
+  ['Does a scrambled table answer every look in one step?','no: on average a few; one look can take many',['yes','yes, always one','no: never fewer than n'],'Seen-set technique.'],
+  ['Pushing a fresh entry in place of lowering an old one costs how much?','within a factor of two',['n times as much','nothing more','twice n²'],'Heap-run technique.'],
+  ['How many looks does the grid take to give the links at u?','n',['d(u)','one','n²'],'Two-stores technique.']];
+QP.push({id:'42m.stores',step:'42m',label:'keeping things findable',open:()=>measured('42m'),make(){ return writtenQ('42m.stores',WM42); }},
+  {id:'42m.work',step:'42m',mode:'work',label:'grid or lists',open:()=>measured('42m'),make(){
+    const n=5+rnd(40), E=n+rnd(2*n), g=rnd(2);
+    return W30('42m.work['+(g?'g':'l')+';'+[n,E].join(';')+']',[['a graph with '+n+' dots and '+E+' links','given']],g?'How many entries does the grid take?':'How many entries do the neighbour lists take?',String(g?n*n:n+2*E),g?[String(n+2*E),String(E),String(2*n),String(n*(n-1)/2)]:[String(n*n),String(n+E),String(2*E),String(n*E)],g?'Two-stores technique: n² = '+(n*n)+'.':'Two-stores technique: n + 2|E| = '+n+' + '+(2*E)+'.'); }},
+  {id:'42m.line',step:'42m',mode:'proof',label:'what stores license',open:()=>measured('42m'),make(){
+    return line28('42m.line',[
+      ['m1',[['the graph is thin','given'],['neighbour lists take fewer entries than the grid','the two-stores technique']],2,0,'n + 2|E| is far below n².'],
+      ['m2',[['a recipe learns only by comparing sums of lengths','given'],['it makes at least log₂((n − 1)!) comparisons on some graph','the sorting-inside technique']],2,0,'That is the technique.'],
+      ['m3',[['no recipe that compares beats sorting','the sorting-inside technique'],['no recipe at all beats sorting','the sorting-inside technique']],2,1,'Arithmetic on whole-number lengths can do better.'],
+      ['m4',[['the graph is crowded','given'],['the heap is the best store for the nearest first','the heap-run technique']],2,1,'A plain list costs n², below the heap’s n² log₂ n.']],[]); }});
+
+/* 42n The Simplex Method by Hand */
+const WN42=[
+  ['Which kept unknown leaves when x enters?','the one with the least ratio',['the one with the largest ratio','the first one listed','the one with the largest constant'],'Ratio test.'],
+  ['A coefficient of z is negative. Stop?','not yet: stop only when none is positive',['yes','yes, the corner is best','no: start again'],'Pivot technique.'],
+  ['No ratio exists for the entering unknown. Has the program no allowed plan?','no: no slack falls as it rises; the value is unbounded',['yes','yes, by the first-phase technique','no: the corner is best'],'Unbounded value.'],
+  ['When the walk stops, where are the prices?','the coefficients of the slacks in the last row',['the coefficients of x and y','the constants','the first row'],'Last-row technique.'],
+  ['A constant is negative at x = 0. What is done first?','the first phase: add x₀ and maximise −x₀',['enter x at once','stop: no plan','drop the limit'],'First-phase technique.'],
+  ['Does a pivot ever make z fall?','no: z has not fallen after a step',['yes','yes, sometimes','only in the first phase'],'Pivot technique.']];
+QP.push({id:'42n.simplex',step:'42n',label:'the simplex method by hand',open:()=>measured('42n'),make(){ return writtenQ('42n.simplex',WN42); }},
+  {id:'42n.work',step:'42n',mode:'work',label:'the ratio test',open:()=>measured('42n'),make(){
+    const r=shuffle([1,2,3,4,5,6,7,8,9]).slice(0,3);
+    const a=[1+rnd(3),1+rnd(3),1+rnd(3)], b=r.map((x,i)=>x*a[i]), m=Math.min(...r), M=Math.max(...r);
+    const rows=b.map((x,i)=>'s'+['₁','₂','₃'][i]+' = '+x+' − '+(a[i]===1?'':a[i])+'x').join(', ');
+    return W30('42n.work[r;'+[b.join(','),a.join(',')].join(';')+']',[[rows,'the dictionary'],['x enters','z has a positive coefficient on x']],'How far can x rise?',String(m),[String(M),String(Math.min(...b)),String(r.find(x=>x!==m&&x!==M)),String(m+1),String(2*m),String(r[0]+r[1]+r[2])],'Ratio test: the ratios are '+b.map((x,i)=>a[i]===1?String(x):x+'/'+a[i]).join(', ')+'; the least is '+m+'.'); }},
+  {id:'42n.line',step:'42n',mode:'proof',label:'what pivots license',open:()=>measured('42n'),make(){
+    return line28('42n.line',[
+      ['n1',[['no coefficient of z is positive','the last row'],['the corner is best','the last-row technique']],2,0,'The slack coefficients are covering prices with b · y = z*.'],
+      ['n2',[['one coefficient of z is negative','the last row'],['the corner is best','the last-row technique']],2,1,'Stop only when none is positive.'],
+      ['n3',[['s₂ = 0 at y = 6, s₃ = 0 at y = 9','ratios'],['s₃ leaves','the pivot technique']],2,1,'The least ratio leaves: s₂.'],
+      ['n4',[['no slack falls as x rises','given'],['the value is unbounded','the pivot technique']],2,0,'x can rise for ever and z with it.']],[]); }});
+/* ----- rung 43: clock arithmetic, 43a to 43l ----- */
+Object.assign(STEPS,{'43a':['r43a','Clock Arithmetic'],'43b':['r43b','Undoing on a Clock'],'43c':['r43c','Several Clocks at Once'],'43d':['r43d','Powers Cycle'],'43e':['r43e','A Clock Hand That Reaches Every Hour'],'43f':['r43f','Squares on a Clock'],'43g':['r43g','Primes Are Endless and Thin'],'43h':['r43h','Clock Arithmetic by Hand'],'43i':['r43i','Clock Powers and Secret Keys'],'43j':['r43j','Is It Prime?'],'43k':['r43k','Continued Fractions'],'43l':['r43l','Discrete Logarithms']});
+const MD43=(a,n)=>((a%n)+n)%n, G43=(a,b)=>b?G43(b,a%b):Math.abs(a);
+const PW43=(a,k,n)=>{ let r=1%n, b=MD43(a,n); while(k>0){ if(k&1) r=r*b%n; b=b*b%n; k>>=1; } return r; };
+const INV43=(a,n)=>{ for(let x=1;x<n;x++) if(a*x%n===1) return x; return 0; };
+const PHI43=n=>{ let c=0; for(let x=1;x<=n;x++) if(G43(x,n)===1) c++; return c; };
+const PR43=n=>{ if(n<2) return false; for(let d=2;d*d<=n;d++) if(n%d===0) return false; return true; };
+const SUP43=k=>String(k).split('').map(c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[+c]).join('');
+
+/* 43a Clock Arithmetic */
+const WA43=[
+  ['When are two integers alike on the clock of n?','when n divides their difference',['when they are both below n','when their sum is n','when n divides their product'],'Difference-test technique.'],
+  ['How many members has ℤ/n?','exactly n: [0], [1], …, [n − 1]',['n − 1','n + 1','endlessly many'],'Clock-hours technique.'],
+  ['1 ≡ 6 (mod 5). Is 2¹ ≡ 2⁶ (mod 5)?','no: 2 against 64 ≡ 4; the exponent is a count and does not carry',['yes','yes, by the carry-to-the-clock technique','no: 2⁶ ≡ 0'],'Carry-to-the-clock is for plus and times.'],
+  ['2x ≡ 2y (mod 6). Is x ≡ y (mod 6)?','not necessarily: x = 1, y = 4; gcd(2, 6) = 2',['yes','yes, halve both sides','no: never'],'Clock-cancel technique.'],
+  ['Is [11] < [12] on the clock of 12?','no: [12] = [0], and no order on the hours keeps adding honest',['yes','yes, by one hour','no: [11] > [12]'],'Order does not come along.'],
+  ['Is ℤ/n the integers divided by n?','no: it is the set of classes of ≡ (mod n); nothing is divided',['yes','yes, the fractions with bottom n','no: it is the multiples of n'],'The clock of n.']];
+QP.push({id:'43a.clock',step:'43a',label:'clock arithmetic',open:()=>measured('43a'),make(){ return writtenQ('43a.clock',WA43); }},
+  {id:'43a.work',step:'43a',mode:'work',label:'working on the clock',open:()=>measured('43a'),make(){
+    const n=5+rnd(20), m=n+1+rnd(80), b=n+1+rnd(80), r=MD43(m*b,n);
+    return W30('43a.work[t;'+[n,m,b].join(';')+']',[['the clock of '+n,'given'],[m+' · '+b,'the product']],'Which hour is it, from 0 to '+(n-1)+'?',String(r),[String(MD43(m+b,n)),String(MD43(m,n)+MD43(b,n)),String(MD43(r+1,n)),String(MD43(m,n)*MD43(b,n)),String(MD43(r-1,n)),String(m*b)],'Carry-to-the-clock technique: '+m+' ≡ '+MD43(m,n)+' and '+b+' ≡ '+MD43(b,n)+', and '+MD43(m,n)+' · '+MD43(b,n)+' ≡ '+r+'.'); }},
+  {id:'43a.line',step:'43a',mode:'proof',label:'what the clock licenses',open:()=>measured('43a'),make(){
+    return line28('43a.line',[
+      ['a1',[['m ≡ m′ and b ≡ b′ (mod n)','given'],['mb ≡ m′b′ (mod n)','the carry-to-the-clock technique']],2,0,'That is the technique.'],
+      ['a2',[['14 ≡ 2 (mod 12)','given'],['7 ≡ 1 (mod 12)','the clock-cancel technique']],2,1,'gcd(2, 12) = 2. Halving both sides halves the clock: 7 ≡ 1 (mod 6).'],
+      ['a3',[['3x ≡ 3y (mod 10)','given'],['x ≡ y (mod 10)','the clock-cancel technique']],2,0,'gcd(3, 10) = 1.'],
+      ['a4',[['1 ≡ 6 (mod 5)','given'],['2¹ ≡ 2⁶ (mod 5)','the carry-to-the-clock technique']],2,1,'The exponent is a count and does not carry: 2 against 4.']],[]); }});
+
+/* 43b Undoing on a Clock */
+const WB43=[
+  ['When can an hour be undone on the clock of n?','exactly when it shares nothing with n',['always','when it is below n/2','when n is even'],'Gcd-as-a-sum technique.'],
+  ['What is [6]⁻¹ on the clock of 9?','none: gcd(6, 9) = 3, and [6][3] = [0]',['[3]','[6]','[1/6]'],'Undo needs a gcd of 1.'],
+  ['Is [17]⁻¹ = [1/17]?','no: 1/17 is no integer and names no hour',['yes','yes, on every clock','no: it is [−17]'],'Undo is an hour.'],
+  ['Are the units of the clock of 12 the hours but [0]?','no: that holds only on a prime clock; the clock of 12 has four units',['yes','yes, eleven of them','no: it has none'],'Units-group technique.'],
+  ['When is the clock of n a field?','exactly when n is prime',['when n is odd','always','when n is a square'],'Prime-clock-field technique.'],
+  ['How many answers has 2x ≡ 1 (mod 6)?','none: 2x is even and 6k + 1 is odd',['one','two','six'],'An answer for each b needs gcd(a, n) = 1.']];
+QP.push({id:'43b.undo',step:'43b',label:'undoing on a clock',open:()=>measured('43b'),make(){ return writtenQ('43b.undo',WB43); }},
+  {id:'43b.work',step:'43b',mode:'work',label:'finding an undo',open:()=>measured('43b'),make(){
+    const n=5+rnd(20), a=2+rnd(n-2), v=INV43(a,n), NO='none: they share a divisor', H=x=>'['+x+']';
+    if(!v) return W30('43b.work[u;'+[a,n].join(';')+']',[['['+a+'] on the clock of '+n,'given']],'What is ['+a+']⁻¹?',NO,[H(n-a),H(MD43(a+1,n)),H(a),H(1)],'gcd('+a+', '+n+') = '+G43(a,n)+': no undo.');
+    return W30('43b.work[u;'+[a,n].join(';')+']',[['['+a+'] on the clock of '+n,'given']],'What is ['+a+']⁻¹?',H(v),[H(n-v),H(MD43(v+1,n)),H(n-a),NO,H(a===v?MD43(v+2,n):a)],'['+a+'] · ['+v+'] = ['+(a*v)+'] = [1].'); }},
+  {id:'43b.line',step:'43b',mode:'proof',label:'what undoing licenses',open:()=>measured('43b'),make(){
+    return line28('43b.line',[
+      ['b1',[['3 · 5 − 2 · 7 = 1','the gcd algorithm run backwards'],['[3]⁻¹ = [5] on the clock of 7','the gcd-as-a-sum technique']],2,0,'3 · 5 ≡ 1 (mod 7).'],
+      ['b2',[['13 is prime','given'],['every hour but [0] of the clock of 13 has an undo','the prime-clock-field technique']],2,0,'That is the technique.'],
+      ['b3',[['gcd(6, 9) = 3','computed'],['[6] has an undo on the clock of 9','the gcd-as-a-sum technique']],2,1,'[6][3] = [0]: [6] has no undo.'],
+      ['b4',[['12 is not prime','given'],['no hour of the clock of 12 has an undo','the prime-clock-field technique']],2,1,'Some do: [1], [5], [7] and [11] are units.']],[]); }});
+
+/* 43c Several Clocks at Once */
+const WC43=[
+  ['m and n share nothing. What is an hour of the clock of mn the same as?','a pair of hours, one on each clock',['one hour of the clock of m','the sum of two hours','nothing'],'Remainder technique.'],
+  ['Does ℤ/4 match ℤ/2 × ℤ/2, keeping plus?','no: 4 and 2 share 2; [1] + [1] ≠ [0] on the clock of 4',['yes','yes, by the remainder technique','no: they have different sizes'],'The remainder technique needs clocks that share nothing.'],
+  ['x ≡ 1 (mod 4) and x ≡ 1 (mod 6). Is x ≡ 1 (mod 24)?','no: the clocks share 2; the answers are one hour on the clock of 12',['yes','yes, by the remainder technique','no: there is no answer'],'Shared-divisor technique.'],
+  ['When do x ≡ a (mod m) and x ≡ b (mod n) have an answer?','exactly when a ≡ b (mod gcd(m, n))',['always','when a = b','when m and n are prime'],'Shared-divisor technique.'],
+  ['An hour of the clock of mn reads as units on both. What is it?','a unit',['zero','not a unit','a square'],'Two-clock technique.'],
+  ['One answer is found on the clock of the product. Is it the only integer that answers?','no: every integer in that hour answers too',['yes','yes, if it is least','no: no integer answers'],'One hour, many integers.']];
+QP.push({id:'43c.clocks',step:'43c',label:'several clocks at once',open:()=>measured('43c'),make(){ return writtenQ('43c.clocks',WC43); }},
+  {id:'43c.work',step:'43c',mode:'work',label:'two clocks read together',open:()=>measured('43c'),make(){
+    const P=[[3,4],[3,5],[4,5],[5,6],[3,7],[5,7],[4,7],[2,9],[5,8]][rnd(9)], m=P[0], n=P[1], a=rnd(m), b=rnd(n);
+    let x=0; while(x%m!==a||x%n!==b) x++;
+    return W30('43c.work[c;'+[a,m,b,n].join(',')+']',[['x ≡ '+a+' (mod '+m+') and x ≡ '+b+' (mod '+n+')','given']],'Which x from 0 to '+(m*n-1)+' answers both?',String(x),[String(a+b),String(MD43(x+m,m*n)),String(MD43(x+n,m*n)),String(a*b),String(MD43(x+1,m*n))],x+' leaves '+a+' on the clock of '+m+' and '+b+' on the clock of '+n+'.'); }},
+  {id:'43c.line',step:'43c',mode:'proof',label:'what several clocks license',open:()=>measured('43c'),make(){
+    return line28('43c.line',[
+      ['c1',[['3 and 5 share no divisor above 1','given'],['x ≡ 2 (mod 3) and x ≡ 4 (mod 5) have one answer on the clock of 15','the remainder technique']],2,0,'That is the technique: 14.'],
+      ['c2',[['x ≡ 1 (mod 4) and x ≡ 1 (mod 6)','given'],['x ≡ 1 (mod 24)','the remainder technique']],2,1,'The clocks share 2. The answers are one hour on the clock of 12: 13 works.'],
+      ['c3',[['x ≡ 1 (mod 4) and x ≡ 2 (mod 6)','given'],['there is no answer','the shared-divisor technique']],2,0,'1 and 2 differ on the clock of gcd(4, 6) = 2.'],
+      ['c4',[['ℤ/2 × ℤ/2 has 4 members','counting'],['it matches ℤ/4, keeping plus','the remainder technique']],2,1,'4 and 2 share 2. The technique needs clocks that share nothing.']],[]); }});
+
+/* 43d Powers Cycle */
+const WD43=[
+  ['Is a^(p − 1) ≡ 1 (mod p) for every a?','no: not when p divides a; 7⁶ ≡ 0 on the clock of 7',['yes','yes, for p prime','no: never'],'Little technique.'],
+  ['2^(n − 1) ≡ 1 (mod n). Is n prime?','not necessarily: 341 = 11 · 31 passes; the little technique runs one way',['yes','yes, by the little technique','no: never'],'Little technique.'],
+  ['On which clock does the exponent go, for powers on the clock of 10?','the clock of 4, the count of units',['the clock of 10','the clock of 9','the clock of 5'],'Exponent-clock technique.'],
+  ['Is the order of [a] the count of units?','not necessarily: it divides the count',['yes','yes, always','no: it is larger'],'[2] has order 3 on the clock of 7, which has 6 units.'],
+  ['How many units has the clock of n, for n = p₁^(k₁)⋯pᵣ^(kᵣ)?','n(1 − 1/p₁)⋯(1 − 1/pᵣ)',['n − 1','n/2','p₁ ⋯ pᵣ'],'Unit-count technique.'],
+  ['How long is the repeating block of 1/q, for q sharing nothing with 10?','the least k with 10ᵏ ≡ 1 (mod q)',['q','q − 1 always','the number of digits of q'],'Decimal-block technique.']];
+QP.push({id:'43d.powers',step:'43d',label:'powers cycle',open:()=>measured('43d'),make(){ return writtenQ('43d.powers',WD43); }},
+  {id:'43d.work',step:'43d',mode:'work',label:'counting units, cutting exponents',open:()=>measured('43d'),make(){
+    if(rnd(2)){ const n=pick([8,9,10,12,14,15,16,18,20,21,24,25,27,28,30,36]), c=PHI43(n);
+      return W30('43d.work[c;'+n+']',[['the clock of '+n,'given']],'How many units has it?',String(c),[String(n-1),String(n/2),String(c+1),String(c-1),String(c*2)].filter(x=>+x>0),'Unit-count technique: the hours from 1 to '+n+' that share nothing with '+n+'.'); }
+    const p=pick([5,7,11,13]), a=2+rnd(p-2), k=p+rnd(60), r=PW43(a,k,p);
+    return W30('43d.work[e;'+[a,k,p].join(';')+']',[[a+SUP43(k)+' on the clock of '+p,'given']],'Which hour is it?',String(r),[String(PW43(a,k%p,p)),String(MD43(a*k,p)),String(MD43(r+1,p)),String(PW43(a,MD43(k+1,p-1),p)),String(a)],'Exponent-clock technique: '+k+' ≡ '+(k%(p-1))+' (mod '+(p-1)+'), and '+a+SUP43(k%(p-1))+' ≡ '+r+'.'); }},
+  {id:'43d.line',step:'43d',mode:'proof',label:'what cycling powers license',open:()=>measured('43d'),make(){
+    return line28('43d.line',[
+      ['d1',[['7 is prime and 7 ∤ 3','given'],['3⁶ ≡ 1 (mod 7)','the little technique']],2,0,'p − 1 = 6.'],
+      ['d2',[['2³⁴⁰ ≡ 1 (mod 341)','computed'],['341 is prime','the little technique']],2,1,'341 = 11 · 31. The little technique runs one way.'],
+      ['d3',[['7²¹⁴ on the clock of 10','given'],['7²¹⁴ ≡ 7⁴ (mod 10), since 214 ≡ 4 (mod 10)','the exponent-clock technique']],2,1,'The exponent goes on the clock of 4, the count of units: 214 ≡ 2, so 7²¹⁴ ≡ 9, not 1.'],
+      ['d4',[['gcd(3, 10) = 1, and the clock of 10 has 4 units','given'],['3⁴ ≡ 1 (mod 10)','the exponent-clock technique']],2,0,'81 ≡ 1.']],[]); }});
+
+/* 43e A Clock Hand That Reaches Every Hour */
+const WE43=[
+  ['[a] has order m. What order has [a]ᵏ?','m/gcd(m, k)',['m/k','mk','m − k'],'Power-order technique.'],
+  ['Does every clock have a full hand?','no: the clocks of 8 and 12 have none',['yes','yes, every prime power','no: only the clock of 2'],'Full-hand technique is for prime clocks.'],
+  ['2¹² ≡ 1 (mod 13). Is [2] a full hand?','not shown: every unit has [a]¹² = [1]; the test is 2⁶ and 2⁴',['yes','yes, by the little technique','no: never'],'Test the smaller powers.'],
+  ['[a] is a full hand. Is [a]² a full hand?','no: for odd p it has order (p − 1)/2',['yes','yes, of order p − 1','only when p = 3'],'Power-order technique.'],
+  ['Has x² − 1 two roots on every clock?','no: it has four on the clock of 8; the few-roots technique needs a prime clock',['yes','yes, ±1','no: it has none'],'Few-roots technique.'],
+  ['How many full hands has the clock of p?','c(p − 1), the count of units of the clock of p − 1',['p − 1','one','(p − 1)/2'],'Full-hand technique.']];
+QP.push({id:'43e.hand',step:'43e',label:'a clock hand that reaches every hour',open:()=>measured('43e'),make(){ return writtenQ('43e.hand',WE43); }},
+  {id:'43e.work',step:'43e',mode:'work',label:'orders of powers',open:()=>measured('43e'),make(){
+    const m=pick([6,8,10,12,16,18,20,22,28,30]), k=2+rnd(m-3), o=m/G43(m,k);
+    return W30('43e.work[o;'+[m,k].join(';')+']',[['[a] has order '+m,'given']],'What order has [a]'+SUP43(k)+'?',String(o),[String(m),String(G43(m,k)),String(Math.abs(m-k)),String(m*k),String(o*2)].filter(x=>+x>0),'Power-order technique: '+m+'/gcd('+m+', '+k+') = '+m+'/'+G43(m,k)+'.'); }},
+  {id:'43e.line',step:'43e',mode:'proof',label:'what full hands license',open:()=>measured('43e'),make(){
+    return line28('43e.line',[
+      ['e1',[['[a] has order 12, and gcd(12, 5) = 1','given'],['[a]⁵ has order 12','the power-order technique']],2,0,'12/1.'],
+      ['e2',[['2¹² ≡ 1 (mod 13)','computed'],['[2] is a full hand on the clock of 13','the little technique']],2,1,'Every unit has [a]¹² = [1]. The test is 2⁶ and 2⁴.'],
+      ['e3',[['13 is prime','given'],['x³ − 1 has at most 3 roots on the clock of 13','the few-roots technique']],2,0,'That is the technique.'],
+      ['e4',[['[a] is a full hand on the clock of 11','given'],['[a]² is a full hand','the power-order technique']],2,1,'[a]² has order 10/gcd(10, 2) = 5.']],[]); }});
+
+/* 43f Squares on a Clock */
+const WF43=[
+  ['How many units are squares on the clock of an odd prime p?','exactly (p − 1)/2',['all p − 1','(p + 1)/2','one'],'Half-squares technique.'],
+  ['What does a^((p − 1)/2) give on the clock of p, for p ∤ a?','the square mark (a ∕ p): 1 for a square, −1 otherwise',['always 1','always −1','a itself'],'Square-test technique.'],
+  ['Is (3 ∕ 7) = (7 ∕ 3)?','no: 3 and 7 are both 3 more than a multiple of 4, so the marks differ',['yes','yes, by the square-swap technique','no: both are 0'],'Square-swap technique.'],
+  ['Is (a ∕ p) the fraction a/p?','no: the mark is 1, −1 or 0',['yes','yes, for small a','no: it is p/a'],'The square mark.'],
+  ['Is −1 a square on every prime clock?','no: only when p ≡ 1 (mod 4)',['yes','yes, on odd clocks','no: on none'],'Square test with a = −1.'],
+  ['May the square-swap technique be used on (15 ∕ 7) at once?','no: 15 = 3 · 5; split first',['yes','yes, with a sign','no: 15 is not a unit'],'Square-swap is for two odd primes.']];
+QP.push({id:'43f.squares',step:'43f',label:'squares on a clock',open:()=>measured('43f'),make(){ return writtenQ('43f.squares',WF43); }},
+  {id:'43f.work',step:'43f',mode:'work',label:'the squares of a clock',open:()=>measured('43f'),make(){
+    const p=pick([7,11,13,17,19]), U=Array.from({length:p-1},(_,i)=>i+1), S=[...new Set(U.map(x=>x*x%p))].sort((x,y)=>x-y), N=U.filter(x=>!S.includes(x));
+    const L=a=>a.join(', ');
+    return W30('43f.work[q;'+p+']',[['the clock of '+p,'given']],'Which units are squares?',L(S),[L(N),L(U.slice(0,(p-1)/2)),L(U.filter(x=>x%2===1)),L(U.filter(x=>x%2===0))],'Square each of 1 to '+((p-1)/2)+': half-squares technique, '+((p-1)/2)+' of them.'); }},
+  {id:'43f.line',step:'43f',mode:'proof',label:'what square marks license',open:()=>measured('43f'),make(){
+    return line28('43f.line',[
+      ['f1',[['3³ ≡ 6 ≡ −1 (mod 7)','computed'],['3 is not a square on the clock of 7','the square-test technique']],2,0,'(7 − 1)/2 = 3, and the mark is −1.'],
+      ['f2',[['3 and 7 are odd primes','given'],['(3 ∕ 7) = (7 ∕ 3)','the square-swap technique']],2,1,'Both are 3 more than a multiple of 4. The marks differ.'],
+      ['f3',[['13 ≡ 1 (mod 4) and 13 is prime','given'],['−1 is a square on the clock of 13','the square-test technique']],2,0,'(−1)⁶ = 1: 5² = 25 ≡ −1.'],
+      ['f4',[['15 and 7 are odd','given'],['(15 ∕ 7)(7 ∕ 15) = ±1 by the swap','the square-swap technique']],2,1,'15 is not prime. Split it first.']],[]); }});
+
+/* 43g Primes Are Endless and Thin */
+const WG43=[
+  ['The primes are endless. Does Σ 1/p pass every bound for that reason?','no: the squares are endless too, and their sum settles',['yes','yes, by the prime-product technique','no: Σ 1/p settles'],'Thin-but-endless technique.'],
+  ['Does π(x) ≈ x/ln x mean π(x) − x/ln x → 0?','no: the ratio settles on 1; the gap grows without bound',['yes','yes, slowly','no: the gap is 0'],'Thin primes.'],
+  ['n² + n + 41 is prime for n = 0 to 39. Is it always?','no: at n = 40 it is 41²',['yes','yes, for every n','no: at n = 41 only'],'Cases are not every case.'],
+  ['Does every hour of a clock hold endlessly many primes?','no: only the units; [2] of the clock of 4 holds only 2',['yes','yes, on prime clocks','no: none does'],'Each unit hour gets its fair share.'],
+  ['Near x, about how many numbers in each run is one prime?','about one in ln x',['about one in x','about half','about one in √x'],'Thin primes.'],
+  ['What is ζ(s), for s > 1, as a product?','the endless product over primes of 1/(1 − p^(−s))',['the sum of the primes','the product of the primes','1/(1 − s)'],'Prime-product technique.']];
+QP.push({id:'43g.primes',step:'43g',label:'primes are endless and thin',open:()=>measured('43g'),make(){ return writtenQ('43g.primes',WG43); }},
+  {id:'43g.work',step:'43g',mode:'work',label:'counting primes',open:()=>measured('43g'),make(){
+    const x=10+rnd(51); let c=0; for(let i=2;i<=x;i++) if(PR43(i)) c++;
+    return W30('43g.work[p;'+x+']',[['the numbers 1 to '+x,'given']],'How many of them are prime?',String(c),[String(c+1),String(c-1),String(Math.floor(x/2)),String(Math.round(x/Math.log(x))===c?c+2:Math.round(x/Math.log(x)))],'π('+x+') = '+c+'; x/ln x is about '+Math.round(x/Math.log(x))+'.'); }},
+  {id:'43g.line',step:'43g',mode:'proof',label:'what thin primes license',open:()=>measured('43g'),make(){
+    return line28('43g.line',[
+      ['g1',[['the squares are endless','given'],['Σ 1/n² passes every bound','endlessness']],2,1,'It settles. Endless is not enough.'],
+      ['g2',[['x ≥ 3','given'],['Σ 1/p over p ≤ x is at least ln ln x − 1','the thin-but-endless technique']],2,0,'That is the technique.'],
+      ['g3',[['n² + n + 41 is prime for n = 0 to 39','checked'],['n² + n + 41 is prime for every n','induction']],2,1,'At n = 40 it is 41². Cases are not every case.'],
+      ['g4',[['[3] is a unit of the clock of 4','given'],['[3] holds endlessly many primes','the four-clock technique']],2,0,'That is the technique.']],[]); }});
+
+/* 43h Clock Arithmetic by Hand */
+const WH43=[
+  ['How is aᵏ found on a clock by hand?','square again and again, and multiply the powers whose places in k in twos hold 1',['multiply a by itself k times','add a, k times','divide k by a'],'Square-and-multiply technique.'],
+  ['At most how many products does square-and-multiply take?','2⌊log₂ k⌋',['k','k²','log₂ k exactly'],'Power-cost technique.'],
+  ['Is 2⁴⁰² ≡ 2² (mod 1000), since c(1000) = 400?','no: 2 is no unit of the clock of 1000; 2⁴⁰² ≡ 504',['yes','yes, by the exponent-clock technique','no: it is 0'],'The exponent-clock technique needs a unit.'],
+  ['Square first and reduce at the end?','legal, and slow: reduce after every product, so no number passes n²',['best','needed','wrong: the answer changes'],'Reduce as you go.'],
+  ['How many rounds does the gcd algorithm take on a and b, b ≤ a?','at most about 2 log₂ b',['about b','about a/b','exactly log₂ a'],'Halving-remainders technique.'],
+  ['How does the remainder fall in the gcd algorithm?','each is less than half of the one two rounds before',['by one each round','by half each round','not at all'],'Halving-remainders technique.']];
+QP.push({id:'43h.byhand',step:'43h',label:'clock arithmetic by hand',open:()=>measured('43h'),make(){ return writtenQ('43h.byhand',WH43); }},
+  {id:'43h.work',step:'43h',mode:'work',label:'which squares are multiplied',open:()=>measured('43h'),make(){
+    let k=5+rnd(27); if((k&(k-1))===0) k++;
+    const pl=[]; for(let i=0;(1<<i)<=k;i++) pl.push(i);
+    const F=sel=>sel.map(i=>i===0?'a':'a'+SUP43(1<<i)).join(' · ');
+    const on=pl.filter(i=>k>>i&1), off=pl.filter(i=>!(k>>i&1));
+    if(rnd(2)) return W30('43h.work[c;'+k+']',[['a'+SUP43(k)+' on a clock','given']],'At most how many products does square-and-multiply take?',String(2*Math.floor(Math.log2(k))),[String(k-1),String(k),String(Math.floor(Math.log2(k))),String(2*Math.floor(Math.log2(k))+2)],'Power-cost technique: ⌊log₂ '+k+'⌋ = '+Math.floor(Math.log2(k))+', times 2.');
+    return W30('43h.work[s;'+k+']',[['a'+SUP43(k)+' on a clock','given'],[k+' in twos is '+k.toString(2),'given']],'Which squares are multiplied together?',F(on),[off.length?F(off):F(pl.slice(1)),F(pl),F(on.slice(1).length?on.slice(1):pl.slice(0,2)),F(on.map(i=>i+1))],'Square-and-multiply technique: the places of '+k.toString(2)+' that hold 1.'); }},
+  {id:'43h.line',step:'43h',mode:'proof',label:'what working by hand licenses',open:()=>measured('43h'),make(){
+    return line28('43h.line',[
+      ['h1',[['13 in twos is 1101','given'],['a¹³ = a⁸ · a⁴ · a','the square-and-multiply technique']],2,0,'8 + 4 + 1 = 13.'],
+      ['h2',[['c(1000) = 400','the unit-count technique'],['2⁴⁰² ≡ 2² (mod 1000)','the exponent-clock technique']],2,1,'2 is no unit of the clock of 1000.'],
+      ['h3',[['k = 200','given'],['a²⁰⁰ on a clock takes at most 14 products','the power-cost technique']],2,0,'⌊log₂ 200⌋ = 7, and 2 · 7 = 14.'],
+      ['h4',[['the gcd algorithm on a and b, b ≤ a','given'],['it takes about b rounds','the halving-remainders technique']],2,1,'At most about 2 log₂ b.']],[]); }});
+
+/* 43i Clock Powers and Secret Keys */
+const WI43=[
+  ['On which clock is d the undo of e?','the clock of c, the count of units of the clock of n',['the clock of n','the clock of e','the clock of p + q'],'Two-key technique.'],
+  ['Does the same message lock to a fresh hour each time?','no: mᵉ is one hour; real systems pad m with chance first',['yes','yes, by the two-key technique','no: it locks to 0'],'Locking is a power.'],
+  ['e = 3 and m³ < n. Is m³ safe?','no: the lock never went round the clock; a cube root unlocks it',['yes','yes, if n is large','no: it cannot be unlocked'],'The clock must turn.'],
+  ['Are p and q close together fine?','no: √n is near both, and trying near √n finds them',['yes','yes, if both are large','no: they must be equal'],'Choosing the primes.'],
+  ['What does knowing the count c give?','the primes: they are the roots of x² − (n − c + 1)x + n = 0',['nothing','the message','only e'],'Count-gives-factors technique.'],
+  ['How is a signature on m checked?','anyone holding (n, e) accepts s exactly when sᵉ ≡ m',['by factoring n','by finding d','by sending m again'],'Turned-key technique.']];
+QP.push({id:'43i.keys',step:'43i',label:'clock powers and secret keys',open:()=>measured('43i'),make(){ return writtenQ('43i.keys',WI43); }},
+  {id:'43i.work',step:'43i',mode:'work',label:'making a key pair',open:()=>measured('43i'),make(){
+    const P=[3,5,7,11,13,17], i=rnd(6); let j=rnd(6); if(i===j) j=(j+1)%6; const p=P[i], q=P[j], n=p*q, c=(p-1)*(q-1);
+    if(rnd(2)) return W30('43i.work[c;'+[p,q].join(',')+']',[['n = '+p+' · '+q+' = '+n,'given']],'What is c, the count of units of the clock of n?',String(c),[String(n-1),String(p*q-p-q),String((p+1)*(q+1)),String(c+2)],'c = (p − 1)(q − 1) = '+(p-1)+' · '+(q-1)+'.');
+    const E=[3,5,7,11,13].filter(e=>G43(e,c)===1); if(!E.length) return null; const e=pick(E), d=INV43(e,c), dn=INV43(e,n);
+    return W30('43i.work[d;'+[p,q,e].join(',')+']',[['n = '+n+', c = '+c,'given'],['e = '+e,'the locking power']],'What is d, the unlocking power?',String(d),[dn?String(dn):String(c-d),String(c-d),String(MD43(d+1,c)),String(e)],'Two-key technique: '+e+' · '+d+' = '+(e*d)+' ≡ 1 on the clock of '+c+'.'); }},
+  {id:'43i.line',step:'43i',mode:'proof',label:'what keys license',open:()=>measured('43i'),make(){
+    return line28('43i.line',[
+      ['i1',[['n = 33, c = 20, e = 3','given'],['d = 7, since 3 · 7 ≡ 1 on the clock of 20','the two-key technique']],2,0,'21 ≡ 1 (mod 20).'],
+      ['i2',[['n = 33, e = 3','given'],['d = 11, since 3 · 11 = 33 ≡ 0 on the clock of 33','the two-key technique']],2,1,'d is the undo of e on the clock of c, not of n.'],
+      ['i3',[['sᵉ ≡ m (mod n)','checked with (n, e)'],['s is a signature on m','the turned-key technique']],2,0,'That is the technique.'],
+      ['i4',[['e = 3 and m³ < n','given'],['m³ hides m','the two-key technique']],2,1,'The lock never went round the clock. An ordinary cube root unlocks it.']],[]); }});
+
+/* 43j Is It Prime? */
+const WJ43=[
+  ['A number above 1 is not prime. How small is its least prime factor?','at most √n',['at most n/2 only','at most log n','at most 10'],'Root-bound technique.'],
+  ['2^(n − 1) ≡ 1 (mod n). Is n prime?','not necessarily: 341 and 561 pass; the little test proves only “composite”',['yes','yes, by the little technique','no: never'],'Some composites fool every base.'],
+  ['50 strong rounds passed. Is n prime?','not proved: the chance of error is below 4⁻⁵⁰, which is not certainty',['yes, certainly','no: it is composite','yes, by the root-bound technique'],'Strong-test technique.'],
+  ['Does a strong witness always give a factor?','no: only when an odd square root of 1 appears',['yes','yes, always two','no: never'],'Strong-test technique.'],
+  ['Is trial division to n/2 needed?','legal, and slow: √n is enough',['yes','yes, to n','no: to log n'],'Root-bound technique.'],
+  ['On a prime clock, what are the square roots of 1?','only 1 and −1',['1 only','every unit','1, −1 and 0'],'Strong-test technique.']];
+QP.push({id:'43j.prime',step:'43j',label:'is it prime?',open:()=>measured('43j'),make(){ return writtenQ('43j.prime',WJ43); }},
+  {id:'43j.work',step:'43j',mode:'work',label:'how far to divide',open:()=>measured('43j'),make(){
+    const n=30+rnd(470), r=Math.floor(Math.sqrt(n)); let lp=r; while(!PR43(lp)) lp--;
+    return W30('43j.work[r;'+n+']',[['trial division of '+n,'given']],'Up to which prime must the division go?',String(lp),[String(Math.floor(n/2)),String(lp===2?3:(()=>{let x=lp+1;while(!PR43(x))x++;return x;})()),String(n-1),String((()=>{let x=lp-1;while(x>1&&!PR43(x))x--;return x>1?x:Math.floor(n/3);})())],'Root-bound technique: √'+n+' is about '+Math.sqrt(n).toFixed(1)+', and the largest prime up to it is '+lp+'.'); }},
+  {id:'43j.line',step:'43j',mode:'proof',label:'what tests license',open:()=>measured('43j'),make(){
+    return line28('43j.line',[
+      ['j1',[['no prime up to 11 divides 127','checked'],['127 is prime','the root-bound technique']],2,0,'√127 < 12.'],
+      ['j2',[['2³⁴⁰ ≡ 1 (mod 341)','computed'],['341 is prime','the little technique']],2,1,'341 = 11 · 31. The test proves only “composite”.'],
+      ['j3',[['n passed 50 strong rounds','given'],['n is prime with certainty','the strong-test technique']],2,1,'Below 4⁻⁵⁰ is not certainty.'],
+      ['j4',[['2⁹⁰ ≢ 1 (mod 91)','computed'],['91 is not prime','the little technique']],2,0,'A prime would give 1. 91 = 7 · 13.']],[]); }});
+
+/* 43k Continued Fractions */
+const WK43=[
+  ['Is [1; 2, 2] = 1 + 1/2 + 1/2?','no: the steps nest; 1 + 1/(2 + 1/2) = 7/5',['yes','yes, it is 2','no: it is 5/7'],'Continued fractions nest.'],
+  ['Is 22/7 = π?','no: it is a convergent, a little too large',['yes','yes, to every place','no: it is too small'],'Convergent-bound technique.'],
+  ['Is every fraction near √2 a convergent?','no: 10/7 is near and is not one',['yes','yes, if its bottom is small','no: none is'],'Only those within 1/(2q²) must be.'],
+  ['y = 1 to 1000 fail for x² − 61y² = 1. Has it no answer?','not shown: the least answer has y = 226 153 980; a search is not a proof',['yes','yes, by the unit-climb technique','no: y = 1001 works'],'A search is not a proof.'],
+  ['How close is each convergent p_j/q_j to x?','within 1/q_j²',['within 1/q_j','exactly equal','within 1/2'],'Convergent-bound technique.'],
+  ['Do the convergents of a number that is no fraction stay on one side?','no: they alternate below and above',['yes, below','yes, above','no: they are random'],'Convergent-bound technique.']];
+QP.push({id:'43k.cf',step:'43k',label:'continued fractions',open:()=>measured('43k'),make(){ return writtenQ('43k.cf',WK43); }},
+  {id:'43k.work',step:'43k',mode:'work',label:'a staircase of fractions',open:()=>measured('43k'),make(){
+    const a0=rnd(4), a1=1+rnd(5), a2=2+rnd(5), R=fr(a0*(a1*a2+1)+a2,a1*a2+1);
+    return W30('43k.work[f;'+[a0,a1,a2].join(',')+']',[['['+a0+'; '+a1+', '+a2+']','given']],'Which fraction is it?',fshow(R),[fshow(fr(a0*a1*a2+a2+a1,a1*a2)),fshow(fr(a0*a1+1,a1)),fshow(fr(a1*a2+1,a0*(a1*a2+1)+a2)),fshow(fr(a0*(a1*a2+1)+a1,a1*a2+1))],a0+' + 1/('+a1+' + 1/'+a2+') = '+fshow(R)+'.'); }},
+  {id:'43k.line',step:'43k',mode:'proof',label:'what staircases license',open:()=>measured('43k'),make(){
+    return line28('43k.line',[
+      ['k1',[['[1; 2, 2]','given'],['1 + 1/2 + 1/2 = 2','reading the staircase']],2,1,'The steps nest: 1 + 1/(2 + 1/2) = 7/5.'],
+      ['k2',[['3/1 and 22/7 are neighbouring convergents of π','given'],['22 · 1 − 3 · 7 = 1','the neighbour technique']],2,0,'Neighbours cross-multiply to differ by one.'],
+      ['k3',[['y = 1 to 1000 fail for x² − 61y² = 1','checked'],['it has no answer','the unit-climb technique']],2,1,'A search is not a proof. The least answer has y = 226 153 980.'],
+      ['k4',[['3² − 2 · 2² = 1','checked'],['17² − 2 · 12² = 1','the unit-climb technique']],2,0,'(3 + 2√2)² = 17 + 12√2.']],[]); }});
+
+/* 43l Discrete Logarithms */
+const WL43=[
+  ['What does a clock log turn products into?','sums, on the clock of p − 1',['products','sums on the clock of p','powers'],'Clock-log technique.'],
+  ['log₂ 15 = 4 + 9 = 13 on the clock of 13?','no: logs add on the clock of 12, so 13 ≡ 1',['yes','yes, 13','no: 4 · 9'],'Clock-log technique.'],
+  ['Is A · B = g^(a + b) the shared secret?','no: anyone can multiply A and B; the secret is g^(ab)',['yes','yes, on the clock of p','no: it is a + b'],'Shared-secret technique.'],
+  ['Will any unit do for g?','no: a unit of small order leaves few hours to search',['yes','yes, if it is odd','no: g must be 2'],'Choosing g.'],
+  ['Does the exchange alone stop a listener who changes messages?','no: she stands in the middle; each side must sign',['yes','yes, if p is large','no: nothing can'],'Signing is needed.'],
+  ['About how many products does step-and-stride take?','about the root of p',['about p','about log p','about p²'],'Step-and-stride technique.']];
+QP.push({id:'43l.logs',step:'43l',label:'discrete logarithms',open:()=>measured('43l'),make(){ return writtenQ('43l.logs',WL43); }},
+  {id:'43l.work',step:'43l',mode:'work',label:'finding a clock log',open:()=>measured('43l'),make(){
+    const C=[[5,2],[7,3],[11,2],[13,2],[17,3],[19,2]][rnd(6)], p=C[0], g=C[1], k=1+rnd(p-2), a=PW43(g,k,p);
+    return W30('43l.work[l;'+[p,g,k].join(',')+']',[['the clock of '+p+', full hand '+g,'given']],'What is log'+'₀₁₂₃₄₅₆₇₈₉'[g]+' '+a+'?',String(k),[String(MD43(k+1,p-1)),String(a),String(MD43(k-1,p-1)||p-1),String(p-1-k||p-1),String(k+p-1)].filter(x=>x!==String(k)&&x!=='0'),g+SUP43(k)+' ≡ '+a+' on the clock of '+p+'.'); }},
+  {id:'43l.line',step:'43l',mode:'proof',label:'what clock logs license',open:()=>measured('43l'),make(){
+    return line28('43l.line',[
+      ['l1',[['log₂ 3 = 4 and log₂ 5 = 9 on the clock of 13','given'],['log₂ 15 = 13','the clock-log technique']],2,1,'Logs add on the clock of 12: 13 ≡ 1.'],
+      ['l2',[['A = gᵃ and B = gᵇ on the clock of p','sent'],['Bᵃ ≡ Aᵇ (mod p)','the shared-secret technique']],2,0,'Both are g^(ab).'],
+      ['l3',[['A and B are heard by a listener','given'],['the listener has g^(ab) as A · B','the shared-secret technique']],2,1,'A · B = g^(a + b), not g^(ab).'],
+      ['l4',[['log_g a = 5 on the clock of p','given'],['log_g(a³) ≡ 15 (mod p − 1)','the clock-log technique']],2,0,'Logs turn powers into multiples.']],[]); }});
 /* ===== Rung pools end ===== */
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
