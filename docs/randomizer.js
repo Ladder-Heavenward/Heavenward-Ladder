@@ -9079,6 +9079,524 @@ QP.push({id:'33j.potentials',step:'33j',label:'potentials',open:()=>measured('33
       ['j3',[['an even ball has pull '+g+' at its surface','given'],['its pull at R/'+q+' from the centre is '+g/q,'the inside-pull technique']],2,0,'g_R r/R.'],
       ['j4',[['a pipe’s radius is multiplied by 1/'+q,'given'],['its flow is multiplied by 1/'+q,'the pipe-flow technique']],2,1,'The flow goes as R⁴: 1/'+Math.pow(q,4)+'.'],
       ['j5',[['a cube of even density','given'],['outside, it pulls as if its mass were at its centre','the shell-flux technique']],2,1,'The technique needs a density that depends only on distance from the centre.']],[q,g]); }});
+/* ----- rung 34: shape and space, 34a to 34m ----- */
+Object.assign(STEPS,{'34a':['r34a','Spaces With a Distance'],'34b':['r34b','Open Sets Alone'],'34c':['r34c','In One Piece'],'34d':['r34d','Finitely Many Suffice'],'34e':['r34e','The Same Shape'],'34f':['r34f','Surfaces Classified'],'34g':['r34g','Loops Count Holes'],'34h':['r34h','Something Stays Put'],'34i':['r34i','Gluing Loops'],'34j':['r34j','Open Sets and Continuity by Hand'],'34k':['r34k','Surfaces From a Square'],'34l':['r34l','Winding Numbers by Hand'],'34m':['r34m','Knots by Hand']});
+const TM34=n=>N34(n)+(Math.abs(n)===1?' time':' times'), N34=n=>(n<0?'−':'')+Math.abs(n), SUP34=n=>N34(n).replace(/\d/g,d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).replace('−','⁻');
+
+/* 34a Spaces With a Distance */
+const WA34=[
+  ['Each (−1/n, 1/n) is open. Is the overlap of all of them open?','no: the overlap is {0}; only finitely many overlaps are promised',['yes, since each one is','yes, since each one is a ball','no: no overlap of open sets is open'],'Open-family technique: the overlap of two, and so of finitely many.'],
+  ['[0, 1) is not open. Is it closed?','no: it is neither, since 1 − 1/n lies in it and settles at 1, outside it',['yes, since it is not open','yes, since it holds 0','no: it is open after all'],'Keeps-limits technique.'],
+  ['A list crowds. Does it settle?','only in a complete space: in the fractions, the decimals of √2 crowd and settle nowhere',['yes, in every space with a distance','no: a crowding list never settles','yes, at its first member'],'A space is complete when every crowding list settles.'],
+  ['f is continuous and U is open. Is f(U) open?','not always: x ↦ x² sends (−1, 1) to [0, 1)',['yes','yes, when f is onto','no: never'],'Pull-back technique: continuity pulls open sets back, it does not push them forward.'],
+  ['Which parts of a complete space are complete, with the same distance?','the closed parts',['the open parts','every part','the balls alone'],'Closed-part technique.'],
+  ['What does the back-triangle technique bound?','how much the distances from two points to a third can differ, by the distance between the two',['the sum of the distances from two points to a third','the distance from a point to itself','how far a list can wander'],'Back-triangle technique.']];
+QP.push({id:'34a.distance',step:'34a',label:'spaces with a distance',open:()=>measured('34a'),make(){ return writtenQ('34a.distance',WA34); }},
+  {id:'34a.work',step:'34a',mode:'work',label:'distances and balls',open:()=>measured('34a'),make(){
+    if(rnd(2)){ let a=2+rnd(8), b=2+rnd(8); if(a===b) b=a+3;
+      return W30('34a.work[t;'+[a,b].join(';')+']',[['d(x, z) = '+a,'given'],['d(y, z) = '+b,'given']],'What is the least that d(x, y) can be?',String(Math.abs(a-b)),[String(a+b),String(Math.min(a,b)),String(a*b),'0'],'Back-triangle technique: d(x, y) is at least |'+a+' − '+b+'|. A detour bounds it from above by '+(a+b)+'.'); }
+    const p=rnd(9)-4, r=1+rnd(4);
+    return W30('34a.work[b;'+[p,r].join(';')+']',[['the line, with d(x, y) = |x − y|','given']],'Which set is the ball of reach '+r+' about '+N34(p)+'?','('+N34(p-r)+', '+N34(p+r)+')',['['+N34(p-r)+', '+N34(p+r)+']','('+N34(p)+', '+N34(p+r)+')','('+N34(p-2*r)+', '+N34(p+2*r)+')'],'The ball holds the points nearer than '+r+', so its ends are left out. Ball-open technique: it is open.'); }},
+  {id:'34a.line',step:'34a',mode:'proof',label:'what distances license',open:()=>measured('34a'),make(){
+    let a=2+rnd(8), b=2+rnd(8); if(a===b) b=a+3;
+    return line28('34a.line',[
+      ['a1',[['d(x, z) = '+a+' and d(y, z) = '+b,'given'],['d(x, y) ≥ '+Math.abs(a-b),'the back-triangle technique']],2,0,'The distances to z differ by at most d(x, y).'],
+      ['a2',[['d(x, z) = '+a+' and d(y, z) = '+b,'given'],['d(x, y) ≤ '+Math.abs(a-b),'the back-triangle technique']],2,1,'The technique bounds d(x, y) from below. From above the detour gives only '+(a+b)+'.'],
+      ['a3',[['U and V are open','given'],['U ∩ V is open','the open-family technique']],2,0,'The overlap of two open sets is open.'],
+      ['a4',[['each (−1/n, 1/n) is open','the ball-open technique'],['the overlap of all the (−1/n, 1/n) is open','the open-family technique']],2,1,'Only finitely many overlaps are promised. This one is {0}.'],
+      ['a5',[['f is continuous and U is open','given'],['f(U) is open','the pull-back technique']],2,1,'The technique pulls open sets back. It says nothing of images.'],
+      ['a6',[['A is a closed part of a complete space X','given'],['A is complete with the same distance','the closed-part technique']],2,0,'That is the technique.']],[a,b]); }});
+
+/* 34b Open Sets Alone */
+const WB34=[
+  ['Does every family of open sets come from some distance?','no: the finite-leftover family on an endless set keeps no points apart, and every distance does',['yes','yes, from the all-or-nothing distance','no: none does'],'A distance always keeps points apart.'],
+  ['In any space, does a list settle at one point at most?','no: in the lumped family every list settles at every point',['yes','yes, when the space is finite','no: a list never settles'],'One-limit-apart technique needs points kept apart.'],
+  ['[0, ½) is not open in the line. Is it open in the part [0, 1]?','yes: it is (−1, ½) ∩ [0, 1]',['no','no: a part keeps only the open sets of the line inside it','yes: every set in [0, 1] is open in it'],'A part takes the overlaps of its open sets.'],
+  ['f is continuous. Does f send closed sets to closed sets?','not always: the left entry sends the closed set xy = 1 to the line with 0 taken out',['yes','yes, when f is onto','no: never'],'Continuity pulls closed sets back; it does not push them forward.'],
+  ['g maps into X × Y. When is g continuous?','exactly when both its parts are continuous',['when its left part is','when either part is','always'],'Two-parts technique.'],
+  ['Do the straight distance and the street distance on the plane make different open sets?','no: they make the same family of open sets',['yes','yes: the street balls are diamonds','no: neither makes open sets'],'Same-opens technique: each ball of one holds a ball of the other about the same point.']];
+QP.push({id:'34b.opens',step:'34b',label:'open sets alone',open:()=>measured('34b'),make(){ return writtenQ('34b.opens',WB34); }},
+  {id:'34b.work',step:'34b',mode:'work',label:'two distances on the plane',open:()=>measured('34b'),make(){
+    const [u,v,c]=pick([[3,4,5],[6,8,10],[5,12,13],[8,15,17]]), sw=rnd(2), dx=sw?v:u, dy=sw?u:v, x=rnd(7)-3, y=rnd(7)-3, sx=pick([1,-1]), sy=pick([1,-1]);
+    const P='('+N34(x)+', '+N34(y)+')', Q='('+N34(x+sx*dx)+', '+N34(y+sy*dy)+')', st=rnd(2);
+    if(st) return W30('34b.work[s;'+[x,y,dx,dy,sx,sy].join(';')+']',[['p = '+P+' and q = '+Q,'given']],'What is the street distance from p to q?',String(dx+dy),[String(c),String(Math.abs(dx-dy)),String(dx*dy),String(Math.max(dx,dy))],'The street distance adds the two gaps: '+dx+' + '+dy+'.');
+    return W30('34b.work[d;'+[x,y,dx,dy,sx,sy].join(';')+']',[['p = '+P+' and q = '+Q,'given']],'What is the straight distance from p to q?',String(c),[String(dx+dy),String(Math.abs(dx-dy)),String(dx*dx+dy*dy),String(Math.max(dx,dy))],'The straight distance is √('+dx+'² + '+dy+'²) = '+c+'.'); }},
+  {id:'34b.line',step:'34b',mode:'proof',label:'what open sets license',open:()=>measured('34b'),make(){
+    return line28('34b.line',[
+      ['b1',[['f from X to Y and g from Y to Z are continuous','given'],['g ∘ f is continuous','the pull-back-chain technique']],2,0,'Continuous maps chain.'],
+      ['b2',[['the left entry of g is continuous','given'],['g into X × Y is continuous','the two-parts technique']],2,1,'Both parts must be continuous.'],
+      ['b3',[['X keeps points apart, and a list settles at p and at q','given'],['p = q','the one-limit-apart technique']],2,0,'That is the technique.'],
+      ['b4',[['a list in X settles at p and at q','given'],['p = q','the one-limit-apart technique']],2,1,'X must keep points apart. In the lumped family a list settles everywhere.'],
+      ['b5',[['g ∘ q is continuous on X','given'],['g is continuous on X/∼','the glued-map technique']],2,0,'That is the technique.'],
+      ['b6',[['f is continuous and A is closed','given'],['f(A) is closed','the pull-back technique']],2,1,'Closed sets pull back to closed sets. Images need not be closed.']],[]); }});
+
+/* 34c In One Piece */
+const WC34=[
+  ['T is in one piece. Does a path join any two of its points?','not always: the sine-curve T is in one piece and not joined by paths',['yes','yes, when T is closed','no: never'],'Sine-curve technique.'],
+  ['Two parts are each in one piece. Is their union in one piece?','not always: [0, 1] and [2, 3]; it is when they share a point',['yes','no: never','yes, when both are closed'],'A union needs a shared point.'],
+  ['A continuous f takes the values 0 and 2. Must it take 1?','only if its domain is in one piece: on [0, 1] ∪ [2, 3] it can skip',['yes','no: never','yes, when f is onto'],'Image-one-piece technique.'],
+  ['Are the fractions in one piece?','no: the fractions below √2 and those above split them',['yes, since no gap between them is open','yes, since they are dense','no: each fraction is its own piece and nothing more'],'One-piece-is-a-stretch technique.'],
+  ['Which parts of the line are in one piece?','exactly the stretches',['the closed parts','the bounded parts','the open parts'],'One-piece-is-a-stretch technique.'],
+  ['A is in one piece and A ⊆ B ⊆ the closure of A. Is B in one piece?','yes',['no','only when B = A','only when B is closed'],'Closure-one-piece technique.']];
+QP.push({id:'34c.piece',step:'34c',label:'in one piece',open:()=>measured('34c'),make(){ return writtenQ('34c.piece',WC34); }},
+  {id:'34c.work',step:'34c',mode:'work',label:'values between and stretches',open:()=>measured('34c'),make(){
+    const a=rnd(5)-2, b=a+2+rnd(4);
+    if(rnd(2)){ const p=rnd(5)-3, q=p+3+rnd(4), m=p+1+rnd(q-p-1);
+      return W30('34c.work[v;'+[a,b,p,q,m].join(';')+']',[['f is continuous on ['+N34(a)+', '+N34(b)+']','given'],['f('+N34(a)+') = '+N34(p)+' and f('+N34(b)+') = '+N34(q),'given']],'Which value must f take?',N34(m),[N34(q+1+rnd(3)),N34(p-1-rnd(3)),N34(b+q),N34(-q)].filter(s=>{ const n=+s.replace('−','-'); return n<p||n>q; }),'Image-one-piece technique: f(['+N34(a)+', '+N34(b)+']) is a stretch holding '+N34(p)+' and '+N34(q)+', so everything between.'); }
+    const m=a+1+rnd(b-a-1);
+    return W30('34c.work[s;'+[a,b,m].join(';')+']',[['parts of the line','given']],'Which of these is in one piece?','['+N34(a)+', '+N34(b)+')',['['+N34(a)+', '+N34(m)+') ∪ ('+N34(m)+', '+N34(b)+']','{'+N34(a)+', '+N34(b)+'}','the fractions in ['+N34(a)+', '+N34(b)+']','['+N34(a-3)+', '+N34(a-1)+'] ∪ ['+N34(a)+', '+N34(b)+']'],'One-piece-is-a-stretch technique: a stretch holds everything between any two of its points.'); }},
+  {id:'34c.line',step:'34c',mode:'proof',label:'what one piece licenses',open:()=>measured('34c'),make(){
+    const p=rnd(5)-3, q=p+3+rnd(4), m=p+1+rnd(q-p-1);
+    return line28('34c.line',[
+      ['c1',[['X is joined by paths','given'],['X is in one piece','the path-one-piece technique']],2,0,'That is the technique.'],
+      ['c2',[['X is in one piece','given'],['X is joined by paths','the path-one-piece technique']],2,1,'The technique runs the other way. The sine curve is in one piece and not joined by paths.'],
+      ['c3',[['f is continuous on [0, 1], f(0) = '+N34(p)+', f(1) = '+N34(q),'given'],['f([0, 1]) is in one piece','the image-one-piece technique'],['f takes the value '+N34(m),'the one-piece-is-a-stretch technique']],3,0,'A part of the line in one piece holds everything between two of its points.'],
+      ['c4',[['f is continuous on [0, 1] ∪ [2, 3], f(0) = '+N34(p)+', f(3) = '+N34(q),'given'],['f takes the value '+N34(m),'the one-piece-is-a-stretch technique']],2,1,'The domain is not in one piece, so its image need not be a stretch.'],
+      ['c5',[['[0, 1] and [2, 3] are in one piece','the stretch-one-piece technique'],['[0, 1] ∪ [2, 3] is in one piece','the closure-one-piece technique']],2,1,'[2, 3] is not inside the closure of [0, 1]. The union is in two pieces.']],[p,q,m]); }});
+
+/* 34d Finitely Many Suffice */
+const WD34=[
+  ['A part is closed and bounded, in some space with a distance. Is it finitely covered?','not always: the counting numbers with the all-or-nothing distance are closed and bounded, and the balls of reach ½ have no finite part that covers',['yes','yes, when the space is complete','no: never'],'Closed-and-bounded technique is about the line.'],
+  ['The sets (1/n, 1) cover (0, 1). Do finitely many of them cover it?','no: finitely many reach down only to the least of their 1/n',['yes','yes, the first two','no: they do not cover it at all'],'(0, 1) is not finitely covered.'],
+  ['Is a finitely covered part always closed?','only where points are kept apart: in a two-point lumped space, one point is finitely covered and not closed',['yes','no: never','only on the line'],'Covered-is-closed technique.'],
+  ['Which parts of the line are finitely covered?','the closed and bounded ones',['the closed ones','the bounded ones','the stretches'],'Closed-and-bounded technique.'],
+  ['f is continuous to the line, on a finitely covered space. What follows?','f reaches a highest value',['f is constant','f is a same-shape map','f takes every value'],'Image-covered technique: f(X) is closed and bounded.'],
+  ['X and Y are finitely covered. What of X × Y?','it is finitely covered',['it is not','only when X = Y','only when both are stretches'],'Box-covered technique.']];
+QP.push({id:'34d.covered',step:'34d',label:'finitely many suffice',open:()=>measured('34d'),make(){ return writtenQ('34d.covered',WD34); }},
+  {id:'34d.work',step:'34d',mode:'work',label:'covers and highest values',open:()=>measured('34d'),make(){
+    if(rnd(2)){ const a=rnd(5)-3, b=a+2+rnd(4);
+      return W30('34d.work[c;'+[a,b].join(';')+']',[['parts of the line','given']],'Which of these is finitely covered?','['+N34(a)+', '+N34(b)+']',['['+N34(a)+', '+N34(b)+')','('+N34(a)+', '+N34(b)+')','['+N34(a)+', ∞)','the fractions in ['+N34(a)+', '+N34(b)+']'],'Closed-and-bounded technique.'); }
+    const a=rnd(4)-3, b=a+3+rnd(3), m=a+1+rnd(b-a-1), k=rnd(9)-2, f=x=>k-(x-m)*(x-m);
+    return W30('34d.work[h;'+[a,b,m,k].join(';')+']',[['f(x) = '+N34(k)+' − (x '+(m<0?'+ '+(-m):'− '+m)+')²','on ['+N34(a)+', '+N34(b)+']']],'What is the highest value of f?',N34(k),[N34(f(a)),N34(f(b)),N34(m),N34(-k)],'Image-covered technique: a highest value exists; it is at x = '+N34(m)+', where the square is 0. The ends give only '+N34(f(a))+' and '+N34(f(b))+'.'); }},
+  {id:'34d.line',step:'34d',mode:'proof',label:'what finite covers license',open:()=>measured('34d'),make(){
+    const a=rnd(5)-3, b=a+2+rnd(4), A='['+N34(a)+', '+N34(b)+']';
+    return line28('34d.line',[
+      ['d1',[[A+' is finitely covered','the closed-stretch-covered technique'],['C is a closed part of '+A,'given'],['C is finitely covered','the closed-part-covered technique']],3,0,'A closed part of a finitely covered space.'],
+      ['d2',[['C is finitely covered, in a space X','given'],['C is closed','the covered-is-closed technique']],2,1,'X must keep points apart.'],
+      ['d3',[['('+N34(a)+', '+N34(b)+') is bounded','given'],['('+N34(a)+', '+N34(b)+') is finitely covered','the closed-and-bounded technique']],2,1,'It must be closed as well.'],
+      ['d4',[['X is finitely covered and f is continuous to the line','given'],['f(X) is finitely covered','the image-covered technique'],['f(X) is closed and bounded','the closed-and-bounded technique']],3,0,'A finitely covered part of the line.'],
+      ['d5',[['X and Y are finitely covered','given'],['X × Y is finitely covered','the box-covered technique']],2,0,'That is the technique.']],[a,b]); }});
+
+/* 34e The Same Shape */
+const WE34=[
+  ['Is a continuous bijection a same-shape map?','not always: wrapping [0, 1) round the circle is one, and its backwards map tears at (1, 0)',['yes','yes, onto a space that keeps points apart','no: never'],'Covered-matching technique asks for a finitely covered start.'],
+  ['(−1, 1) is not complete and the line is. Are they of different shapes?','no: t ↦ t/(1 − |t|) matches them; completeness is not a shape-property',['yes','yes, since one is bounded','no: they are the same set'],'Kept-by-shape technique lists what is kept, and completeness is not on it.'],
+  ['A square has corners and a disc has none. Are they of different shapes?','no: the push along rays matches them; open sets do not see corners',['yes','yes, since their rims differ','no: only their insides match'],'Same shape is read off open sets alone.'],
+  ['A continuous bijection runs from a finitely covered space onto a space that keeps points apart. What is it?','a same-shape map',['nothing more than a continuous bijection','a distance-keeping map','a map whose backwards map tears'],'Covered-matching technique.'],
+  ['The line with a point out is in two pieces; the circle with a point out is in one. What follows?','the line and the circle are not the same shape',['they are the same shape','nothing','the circle is the line with a point added'],'Point-out technique.'],
+  ['X is the same shape as Y, and Y as Z. What of X and Z?','they are the same shape',['nothing follows','only when X = Z','they are not'],'Same-shape technique.']];
+QP.push({id:'34e.shape',step:'34e',label:'the same shape',open:()=>measured('34e'),make(){ return writtenQ('34e.shape',WE34); }},
+  {id:'34e.work',step:'34e',mode:'work',label:'pieces after a point is out',open:()=>measured('34e'),make(){
+    const a=rnd(4)-2, b=a+2+rnd(4), m=a+1+rnd(b-a-1), k=3+rnd(4);
+    const T=pick([['the line','the point '+N34(m),2],['the circle','the point (1, 0)',1],['['+N34(a)+', '+N34(b)+']','the point '+N34(m),2],['['+N34(a)+', '+N34(b)+']','the end '+N34(a),1],['the plane','the point (0, 0)',1],['a star of '+k+' arms joined at one centre','the centre',k],['the figure eight','the crossing point',2]]);
+    return W30('34e.work['+[T[0],T[1]].join(';')+']',[['X = '+T[0],'given']],'How many pieces are left when '+T[1]+' is taken out of X?',String(T[2]),['0','1','2','3',String(k),String(k+1)],'Point-out technique: the count of pieces left is kept by same-shape maps, so it tells shapes apart.'); }},
+  {id:'34e.line',step:'34e',mode:'proof',label:'what same shape licenses',open:()=>measured('34e'),make(){
+    return line28('34e.line',[
+      ['e1',[['f is a continuous bijection from X onto Y','given'],['f is a same-shape map','the covered-matching technique']],2,1,'X must be finitely covered and Y must keep points apart.'],
+      ['e2',[['X is finitely covered and Y keeps points apart','given'],['f from X onto Y is a continuous bijection','given'],['f is a same-shape map','the covered-matching technique']],3,0,'That is the technique.'],
+      ['e3',[['X and Y are the same shape, and X is in one piece','given'],['Y is in one piece','the kept-by-shape technique']],2,0,'Being in one piece is kept.'],
+      ['e4',[['X is the same shape as Y, and Y as Z','given'],['X is the same shape as Z','the same-shape technique']],2,0,'Two same-shape maps in a row make one.'],
+      ['e5',[['the line with a point out has 2 pieces; the circle with a point out has 1','given'],['the line and the circle are the same shape','the point-out technique']],2,1,'The technique gives the opposite: they are not the same shape.'],
+      ['e6',[['(−1, 1) is not complete and the line is','given'],['(−1, 1) and the line are not the same shape','the kept-by-shape technique']],2,1,'Completeness is not on the list of kept properties, and t ↦ t/(1 − |t|) matches them.']],[]); }});
+
+/* 34f Surfaces Classified */
+const WF34=[
+  ['Does every solid with flat faces have V − E + F = 2?','no: a picture frame has 16 − 32 + 16 = 0; its surface is a torus',['yes','yes, when every face is a square','no: only the cube does'],'Sphere-drawing technique is about drawings on the sphere.'],
+  ['Does χ alone tell every closed surface apart?','no: the torus and the bottle both have 0; one side or two is needed too',['yes','yes, for surfaces with two sides and one side alike','no: χ tells nothing apart'],'Surface-list technique.'],
+  ['An edge is cut in two. What happens to V − E + F?','nothing: one more corner and one more edge',['it grows by 1','it falls by 1','it doubles'],'Finer-cut technique.'],
+  ['What is χ for g tori summed?','2 − 2g',['2 − g','2g','2 + 2g'],'Surface-list technique.'],
+  ['Which closed surface has χ = 2?','the sphere',['the torus','the cross-cap','the bottle'],'Surface-list technique.'],
+  ['A polygon with 2n edges is sewn in n pairs, and its corners fall into V classes. What is χ?','V − n + 1',['V − 2n + 1','V − n','2 − 2n'],'Word-count technique: one face, n edges, V corners.']];
+QP.push({id:'34f.surfaces',step:'34f',label:'surfaces classified',open:()=>measured('34f'),make(){ return writtenQ('34f.surfaces',WF34); }},
+  {id:'34f.work',step:'34f',mode:'work',label:'counts of surfaces',open:()=>measured('34f'),make(){
+    const t=rnd(4);
+    if(t===0){ const g=1+rnd(5); return W30('34f.work[g;'+g+']',[['the surface is '+g+(g===1?' torus':' tori summed'),'given']],'What is χ?',N34(2-2*g),[N34(2-g),N34(2*g),N34(-2*g),N34(2+2*g)],'Surface-list technique: χ = 2 − 2g = 2 − '+2*g+'.'); }
+    if(t===1){ const k=1+rnd(6); return W30('34f.work[k;'+k+']',[['the surface is '+k+(k===1?' cross-cap':' cross-caps summed'),'given']],'What is χ?',N34(2-k),[N34(2-2*k),N34(k-2),N34(2+k),N34(k)],'Surface-list technique: χ = 2 − k = 2 − '+k+'.'); }
+    if(t===2){ const k=3+rnd(6); return W30('34f.work[p;'+k+']',[['a prism on a '+k+'-sided floor','given'],['V = '+2*k+' and F = '+(k+2),'counted']],'How many edges has it?',String(3*k),[String(4*k+2),String(2*k),String(4*k),String(k+2)],'Sphere-drawing technique: E = V + F − 2 = '+2*k+' + '+(k+2)+' − 2.'); }
+    const two=rnd(2), n=two?(2+rnd(4)):(1+rnd(6)), c=two?2-2*n:2-n;
+    return W30('34f.work[s;'+[two,n].join(';')+']',[['a closed surface in one piece with '+(two?'two sides':'one side'),'given'],['χ = '+N34(c),'given']],'Which surface is it?',two?n+' tori summed':n+(n===1?' cross-cap':' cross-caps summed'),two?[n+' cross-caps summed',2*n+' cross-caps summed',(2*n)+' tori summed','the sphere']:[(n%2?'the sphere':(n/2)+' tori summed'),2*n+' cross-caps summed',(n+1)+' cross-caps summed','the torus'],'Surface-list technique: the sides and the count together pick the surface.'); }},
+  {id:'34f.line',step:'34f',mode:'proof',label:'what the count licenses',open:()=>measured('34f'),make(){
+    const k=3+rnd(6), g=1+rnd(4);
+    return line28('34f.line',[
+      ['f1',[['a drawing on the sphere in one piece has V = '+2*k+' and E = '+3*k,'given'],['F = '+(k+2),'the sphere-drawing technique']],2,0,'F = 2 − V + E.'],
+      ['f2',[['a picture frame has V = 16, E = 32, F = 16','counted'],['V − E + F = 2','the sphere-drawing technique']],2,1,'The frame is not drawn on a sphere. Its surface is a torus, with count 0.'],
+      ['f3',[['the square sewn by x y x⁻¹ y⁻¹ has its corners in one class','given'],['χ = 1 − 2 + 1 = 0','the word-count technique']],2,0,'V − n + 1 with V = 1 and n = 2.'],
+      ['f4',[['a closed surface has χ = 0','given'],['the surface is the torus','the surface-list technique']],2,1,'The bottle has 0 too. The sides are needed.'],
+      ['f5',[['a closed surface has two sides and χ = '+N34(2-2*g),'given'],['it is '+g+(g===1?' torus':' tori summed'),'the surface-list technique']],2,0,'Two sides and χ = 2 − 2g.'],
+      ['f6',[['a closed surface has two sides and χ = '+N34(2-2*g),'given'],['it is '+(2*g)+' cross-caps summed','the surface-list technique']],2,1,'Cross-caps make one-sided surfaces.']],[k,g]); }});
+
+/* 34g Loops Count Holes */
+const WG34=[
+  ['Does the loop p(2t) slide to p(t), on the circle?','no: their winding numbers are 2 and 1, and slides keep winding numbers',['yes','yes, since both start at (1, 0)','no: p(2t) is not a loop'],'Circle-loops technique.'],
+  ['Does every loop in the plane with a point taken out slide to the loop that stays at x₀?','no: a loop round the hole has winding number 1',['yes','yes, by the straight slide','no: no loop there slides'],'Straight-slide technique needs the straight segments, and they run through the hole.'],
+  ['Has the circle of radius 2 a bigger loop group than the circle of radius 1?','no: they are the same shape, and loop groups see shape only',['yes','yes, twice as big','no: it has a smaller one'],'Loop-group technique with same-shape maps.'],
+  ['What is the loop group of the circle?','the whole numbers, with loops run in a row adding their windings',['the do-nothing group','the circle itself','the fractions'],'Circle-loops technique.'],
+  ['In a space of vectors, what does every loop at x₀ slide to?','the loop that stays at x₀',['a loop round the circle','its own undoing','nothing: no loop slides'],'Straight-slide technique.'],
+  ['How many lifts to the line has a path on the circle, from one chosen start?','exactly one',['none','two','one for each whole number'],'Path-lift technique.']];
+QP.push({id:'34g.loops',step:'34g',label:'loops count holes',open:()=>measured('34g'),make(){ return writtenQ('34g.loops',WG34); }},
+  {id:'34g.work',step:'34g',mode:'work',label:'winding numbers',open:()=>measured('34g'),make(){
+    const t=rnd(3), a=pick([1,2,3,4,-1,-2,-3]); let b=pick([1,2,3,5,-1,-2,-4]); if(b===a||b===-a) b=a+5;
+    if(t===0) return W30('34g.work[p;'+[a,b].join(';')+']',[['γ winds '+TM34(a)+' and δ winds '+TM34(b)+' round the circle','given']],'How many times does γ then δ wind?',N34(a+b),[N34(a*b),N34(a-b),N34(Math.max(a,b)),N34(b-a)],'Circle-loops technique: running loops in a row adds their windings.');
+    if(t===1) return W30('34g.work[u;'+a+']',[['γ winds '+TM34(a),'given']],'How many times does γ⁻¹, run backwards, wind?',N34(-a),[N34(a),'0',N34(2*a),N34(-2*a)],'Loop-group technique: [γ] is undone by [γ⁻¹], so the windings sum to 0.');
+    const t0=1+rnd(5);
+    return W30('34g.work[l;'+[a,t0].join(';')+']',[['γ is a loop on the circle winding '+TM34(a),'given'],['γ̃ lifts γ to the line from t₀ = '+t0,'the path-lift technique']],'Where does γ̃ end?',N34(t0+a),[N34(t0),N34(a),N34(t0-a),N34(t0*a)],'The lift climbs the winding number: '+t0+(a<0?' − '+(-a):' + '+a)+'.'); }},
+  {id:'34g.line',step:'34g',mode:'proof',label:'what loops license',open:()=>measured('34g'),make(){
+    const a=1+rnd(4), b=a+1+rnd(3);
+    return line28('34g.line',[
+      ['g1',[['γ winds '+TM34(a)+' and δ winds '+TM34(b),'given'],['γ · δ winds '+TM34(a+b),'the circle-loops technique']],2,0,'The product of loops goes to the sum of windings.'],
+      ['g2',[['γ winds '+TM34(a)+' and δ winds '+TM34(b),'given'],['γ slides to δ','the circle-loops technique']],2,1,'Slides keep winding numbers, and '+a+' is not '+b+'.'],
+      ['g3',[['X is a space of vectors','given'],['every loop at x₀ slides to the loop that stays at x₀','the straight-slide technique']],2,0,'That is the technique.'],
+      ['g4',[['X is the plane with 0 taken out','given'],['every loop at x₀ slides to the loop that stays at x₀','the straight-slide technique']],2,1,'The straight segments run through the hole. A loop round it winds once.'],
+      ['g5',[['γ̃ and γ̂ both lift γ to the line from t₀','given'],['γ̃ = γ̂','the path-lift technique']],2,0,'Exactly one lift from each start.']],[a,b]); }});
+
+/* 34h Something Stays Put */
+const WH34=[
+  ['Does every continuous map of the open disc into itself keep a point?','no: x ↦ (x + (1, 0))/2 keeps only (1, 0), which the open disc leaves out',['yes','yes, the centre','no: none does'],'Kept-point technique is about the closed disc.'],
+  ['Does every continuous map of the circle into itself keep a point?','no: a quarter turn moves every point',['yes','yes, the point (1, 0)','no: none does'],'The circle is the rim, not the disc.'],
+  ['Does the kept-point technique find the kept point?','no: the proof supposes there is none and reaches a false line; it builds nothing',['yes','yes, as the limit of a list','yes, at the centre'],'It shows there is one, not where.'],
+  ['Does every continuous map of the plane into itself keep a point?','no: x ↦ x + (1, 0) moves every point',['yes','yes, the point 0','no: none does'],'The plane is not finitely covered.'],
+  ['Can a continuous map of the disc onto its rim keep every rim point where it is?','no: the loop round the rim would then slide to a point',['yes','yes, the push along rays','only when the disc is small'],'No-press technique.'],
+  ['What would a vector field on the sphere that never vanishes give?','a slide of the do-nothing map into x ↦ −x, which no slide can give',['a kept point','a press of the sphere onto a circle','nothing'],'Field-slide technique.']];
+QP.push({id:'34h.kept',step:'34h',label:'something stays put',open:()=>measured('34h'),make(){ return writtenQ('34h.kept',WH34); }},
+  {id:'34h.work',step:'34h',mode:'work',label:'kept points',open:()=>measured('34h'),make(){
+    if(rnd(3)===0) return W30('34h.work[r]',[['f turns the disc by a quarter turn about its centre','given']],'Which points does f keep?','the centre alone',['no point','every point of the rim','every point'],'Every other point moves round the centre.');
+    const k=2+rnd(3); let p1=rnd(5)-2, p2=rnd(5)-2; if(!p1&&!p2) p1=1; const q1=(k-1)*p1, q2=(k-1)*p2;
+    return W30('34h.work[f;'+[k,p1,p2].join(';')+']',[['f(x) = (x + ('+N34(q1)+', '+N34(q2)+'))/'+k,'on the disc of radius 5 about 0']],'Which point does f keep?','('+N34(p1)+', '+N34(p2)+')',['('+N34(q1)+', '+N34(q2)+')','(0, 0)','('+N34(-p1)+', '+N34(-p2)+')','('+fshow(fr(q1,k))+', '+fshow(fr(q2,k))+')'],'Solve x = (x + q)/'+k+': '+k+'x = x + q, so x = '+(k===2?'q':'q/'+(k-1))+'. The kept-point technique promises one; solving finds it.'); }},
+  {id:'34h.line',step:'34h',mode:'proof',label:'what kept points license',open:()=>measured('34h'),make(){
+    const k=2+rnd(3), p=1+rnd(2);
+    return line28('34h.line',[
+      ['h1',[['f is a continuous map of the disc D into D','given'],['f(x) = x for some x in D','the kept-point technique']],2,0,'That is the technique.'],
+      ['h2',[['f is a continuous map of the open disc into itself','given'],['f(x) = x for some x','the kept-point technique']],2,1,'The technique is about the closed disc. x ↦ (x + (1, 0))/2 keeps no point of the open disc.'],
+      ['h3',[['f is a continuous map of the circle into itself','given'],['f(x) = x for some x','the kept-point technique']],2,1,'The circle is not the disc. A quarter turn keeps nothing.'],
+      ['h4',[['v is a vector field on the sphere that never vanishes','supposed'],['the do-nothing map slides to x ↦ −x','the field-slide technique']],2,0,'That is the technique.'],
+      ['h5',[['f(x) = (x + ('+(k-1)*p+', 0))/'+k+' on the disc of radius 5','given'],['f keeps ('+p+', 0) and no other point','the kept-point technique']],2,1,'The technique promises some kept point, not which. Solving x = f(x) finds ('+p+', 0).']],[k,p]); }});
+
+/* 34i Gluing Loops */
+const WI34=[
+  ['In the figure eight’s loop group, does x y = y x?','no: x y and y x are different reduced words',['yes','yes, since both loops pass the crossing','no: x y is not a word'],'Free-group technique.'],
+  ['Has ⟨x | x²⟩ endlessly many members, one for each power?','no: x² is nothing, so every power is e or x',['yes','yes, one for each even power','no: it has one member'],'Presented-map technique.'],
+  ['What is ⟨x, y | y⟩?','the group ⟨x⟩, the whole numbers',['the free group on x and y','the do-nothing group','the group with two members'],'Setting y to nothing leaves x alone.'],
+  ['What is the loop group of the figure eight?','the free group on two letters',['the whole numbers','pairs of whole numbers','the do-nothing group'],'Gluing two circles at a point.'],
+  ['With the letters allowed to change places, what does the loop group of g tori summed become?','lists of 2g whole numbers',['lists of g whole numbers','lists of 2g − 1 whole numbers','the whole numbers'],'Turn-about-count technique.'],
+  ['Is a relation used only where it stands in the word?','no: it may be put in anywhere first, then cancelled',['yes','yes, at the start of the word','no: relations are never used'],'Presented-map technique.']];
+const RD34=w=>{ const o=[]; for(const c of w){ if(o.length&&o[o.length-1]===(c===c.toUpperCase()?c.toLowerCase():c.toUpperCase())) o.pop(); else o.push(c); } return o; },
+  SH34=w=>w.length?w.map(c=>c===c.toUpperCase()?c.toLowerCase()+'⁻¹':c).join(' '):'e',
+  AB34=w=>{ let a=0,b=0; for(const c of w){ if(c==='x') a++; if(c==='X') a--; if(c==='y') b++; if(c==='Y') b--; } return [a,b]; },
+  W34=()=>{ for(let i=0;i<50;i++){ const w=[]; for(let j=0;j<6;j++) w.push(pick(['x','X','y','Y'])); const r=RD34(w); if(r.length>=2&&r.length<w.length) return w; } return ['x','y','Y','x','y','x']; };
+QP.push({id:'34i.words',step:'34i',label:'gluing loops',open:()=>measured('34i'),make(){ return writtenQ('34i.words',WI34); }},
+  {id:'34i.work',step:'34i',mode:'work',label:'reducing words',open:()=>measured('34i'),make(){
+    const t=rnd(3);
+    if(t===0){ const w=W34(), r=RD34(w), [a,b]=AB34(w), ab=[...Array(Math.abs(a)).fill(a<0?'X':'x'),...Array(Math.abs(b)).fill(b<0?'Y':'y')];
+      return W30('34i.work[r;'+w.join('')+']',[['w = '+SH34(w),'a word in the free group on x and y']],'What is w as a reduced word?',SH34(r),[SH34(w),SH34(ab),SH34(r.slice().reverse()),SH34(RD34(w.slice().reverse())),SH34(RD34(w.map(c=>c===c.toUpperCase()?c.toLowerCase():c.toUpperCase()))),SH34(w.filter(c=>c===c.toLowerCase()))],'Free-group technique: cancel only a letter beside its own undoing; the letters do not change places.'); }
+    if(t===1){ const w=W34(), [a,b]=AB34(w);
+      return W30('34i.work[a;'+w.join('')+']',[['w = '+SH34(w),'a loop in the figure eight']],'With the letters allowed to change places, which pair of whole numbers is w?','('+N34(a)+', '+N34(b)+')',['('+N34(b)+', '+N34(a)+')','('+N34(-a)+', '+N34(-b)+')','('+w.filter(c=>c.toLowerCase()==='x').length+', '+w.filter(c=>c.toLowerCase()==='y').length+')','(0, 0)'],'Count each x as +1 and each x⁻¹ as −1, and the same for y.'); }
+    const n=2+rnd(6);
+    return W30('34i.work[n;'+n+']',[['G = ⟨x | x'+SUP34(n)+'⟩','given']],'How many members has G?',String(n),[String(n-1),'endlessly many',String(2*n),'1'],'Every power of x is one of e, x, …, x'+SUP34(n-1)+'.'); }},
+  {id:'34i.line',step:'34i',mode:'proof',label:'what words license',open:()=>measured('34i'),make(){
+    const w=W34(), r=RD34(w), g=1+rnd(4);
+    return line28('34i.line',[
+      ['i1',[['w = '+SH34(w),'given'],['w = '+SH34(r),'the free-group technique']],2,0,'Each cancelled letter stood beside its own undoing.'],
+      ['i2',[['w = x y','given'],['w = y x','the free-group technique']],2,1,'In the free group the letters do not change places.'],
+      ['i3',[['g² does nothing in G','given'],['exactly one product-keeping map from ⟨x | x²⟩ to G sends x to g','the presented-map technique']],2,0,'That is the technique.'],
+      ['i4',[['g is a member of G','given'],['a product-keeping map from ⟨x | x²⟩ to G sends x to g','the presented-map technique']],2,1,'g² must do nothing in G.'],
+      ['i5',[['X is '+g+(g===1?' torus':' tori summed'),'given'],['with letters changing places, its loop group is lists of '+g+' whole numbers','the turn-about-count technique']],2,1,'It is lists of '+2*g+' whole numbers.']],[w.join(''),g]); }});
+
+/* 34j Open Sets and Continuity by Hand */
+const WJ34=[
+  ['g is continuous to the line. Is {g ≤ c} open?','no: it is closed; {x² ≤ 1} = [−1, 1] is not open',['yes','yes, when c > 0','no: it is neither'],'Strict-test technique.'],
+  ['Does the edge of A lie in A?','not always: the edge of (0, 1) is {0, 1}, outside it',['yes','yes, when A is open','no: never'],'Edge technique.'],
+  ['One open pull-back is found. Is f continuous?','no: every member of a base must pull back open',['yes','yes, if the pull-back is a stretch','no: open pull-backs show a break'],'Base-check technique.'],
+  ['What is the inside of the fractions, on the line?','∅: no open stretch lies in the fractions',['the fractions','the line','the whole numbers'],'Edge technique: every open stretch meets the fractions and their leftover.'],
+  ['g is continuous to the line. What kind of set is {g > c}?','open',['closed','neither','both, always'],'Strict-test technique.'],
+  ['When is p on the edge of A?','when every open set about p meets both A and the leftover of A',['when p is in A','when some open set about p meets A','when p is not in A'],'Edge technique.']];
+QP.push({id:'34j.opens',step:'34j',label:'open sets by hand',open:()=>measured('34j'),make(){ return writtenQ('34j.opens',WJ34); }},
+  {id:'34j.work',step:'34j',mode:'work',label:'level sets and edges',open:()=>measured('34j'),make(){
+    if(rnd(2)){ const k=1+rnd(5), K=k*k, S={'<':'('+N34(-k)+', '+k+')','≤':'['+N34(-k)+', '+k+']','>':'(−∞, '+N34(-k)+') ∪ ('+k+', ∞)','≥':'(−∞, '+N34(-k)+'] ∪ ['+k+', ∞)'}, o=pick(Object.keys(S));
+      return W30('34j.work[g;'+[k,o].join(';')+']',[['g(x) = x²','continuous on the line']],'Which set is {g '+o+' '+K+'}?',S[o],Object.keys(S).map(z=>S[z]).concat(['('+k+', ∞)']),'Strict-test technique: '+(o==='<'||o==='>'?'a strict test makes an open set.':'a test with “or equal” makes a closed set.')); }
+    const a=rnd(5)-3, b=a+2+rnd(4), A=pick(['('+N34(a)+', '+N34(b)+']','['+N34(a)+', '+N34(b)+')','('+N34(a)+', '+N34(b)+')','['+N34(a)+', '+N34(b)+']']);
+    return W30('34j.work[e;'+A+']',[['A = '+A,'a part of the line']],'What is the edge of A?','{'+N34(a)+', '+N34(b)+'}',['{'+N34(a)+'}','{'+N34(b)+'}','('+N34(a)+', '+N34(b)+')','∅'],'Edge technique: every open set about either end meets A and its leftover, whether or not the end is in A.'); }},
+  {id:'34j.line',step:'34j',mode:'proof',label:'what pull-backs license',open:()=>measured('34j'),make(){
+    const c=rnd(9)-4;
+    return line28('34j.line',[
+      ['j1',[['g is continuous to the line','given'],['{g > '+N34(c)+'} is open','the strict-test technique']],2,0,'A strict test makes an open set.'],
+      ['j2',[['g is continuous to the line','given'],['{g ≤ '+N34(c)+'} is open','the strict-test technique']],2,1,'A test with “or equal” makes a closed set.'],
+      ['j3',[['every open set about p meets A and the leftover of A','given'],['p is on the edge of A','the edge technique']],2,0,'That is the technique.'],
+      ['j4',[['the pull-back of ('+N34(c)+', '+N34(c+1)+') under f is open','given'],['f is continuous','the base-check technique']],2,1,'Every member of the base must pull back open, not one.'],
+      ['j5',[['the pull-back of every open stretch under f is open','given'],['f from the line to the line is continuous','the base-check technique']],2,0,'The open stretches are a base.']],[c]); }});
+
+/* 34k Surfaces From a Square */
+const WK34=[
+  ['The square is sewn by x y x y. Is it the torus, since every pair is sewn?','no: the pairs are twisted; it is the cross-cap, one side, count 1',['yes','yes, with one side','no: it is the sphere'],'Square-cap technique.'],
+  ['The bottle has count 0. Is it the torus?','no: the bottle has one side; the count and the sides together pick the surface',['yes','yes, since both come from a square','no: the bottle has count 2'],'Surface-list technique.'],
+  ['Does a line of slope √2 on the torus close after many crossings?','no: closing would make √2 a fraction',['yes','yes, after 2 crossings','yes, after 14 crossings'],'Slope-loop technique.'],
+  ['What is the bottle sewn from a square?','two cross-caps summed',['the torus','one cross-cap','the sphere'],'Bottle-sum technique.'],
+  ['What is a torus summed with a cross-cap?','three cross-caps summed',['two tori summed','a torus','two cross-caps summed'],'Handle-cap technique.'],
+  ['What is the square sewn by x y x y?','the cross-cap, one side, count 1',['the torus','the bottle','the sphere'],'Square-cap technique.']];
+QP.push({id:'34k.square',step:'34k',label:'surfaces from a square',open:()=>measured('34k'),make(){ return writtenQ('34k.square',WK34); }},
+  {id:'34k.work',step:'34k',mode:'work',label:'slopes and sums',open:()=>measured('34k'),make(){
+    if(rnd(2)){ let m=2+rnd(5), n=1+rnd(6); if(n===m) n=m+1; const d=pick([1,2,2,3]), M=m*d, N=n*d, g=fgcd(M,N), lr=rnd(2);
+      return W30('34k.work[s;'+[M,N,lr].join(';')+']',[['a line from a corner of the square torus with slope '+N+'/'+M,'given']],'How many times does it cross the '+(lr?'left and right sides':'top and bottom')+' before it first closes?',String(lr?M/g:N/g),[String(lr?M:N),String(lr?N/g:M/g),String((M+N)/g),String(lr?N:M),String(M+N)],'Slope-loop technique: in lowest terms the slope is '+(N/g)+'/'+(M/g)+'.'); }
+    const g=1+rnd(3), k=1+rnd(3);
+    return W30('34k.work[c;'+[g,k].join(';')+']',[['the surface is '+g+(g===1?' torus':' tori')+' summed with '+k+(k===1?' cross-cap':' cross-caps'),'given']],'How many cross-caps summed is it?',String(2*g+k),[String(g+k),String(2*(g+k)),String(2*g),String(k)],'Handle-cap technique: beside a cross-cap each torus becomes two cross-caps.'); }},
+  {id:'34k.line',step:'34k',mode:'proof',label:'what sewing licenses',open:()=>measured('34k'),make(){
+    let m=2+rnd(5), n=1+rnd(6); if(fgcd(m,n)!==1) n=1; const d=2+rnd(2);
+    return line28('34k.line',[
+      ['k1',[['the square is sewn by x y x y','given'],['it is the torus','the word-count technique']],2,1,'The pairs are twisted. It is the cross-cap.'],
+      ['k2',[['a line from a corner has slope '+n+'/'+m+', in lowest terms','given'],['it first closes after crossing the left and right sides '+m+' times','the slope-loop technique']],2,0,'That is the technique.'],
+      ['k3',[['a line from a corner has slope '+n*d+'/'+m*d,'given'],['it first closes after crossing the left and right sides '+m*d+' times','the slope-loop technique']],2,1,'The technique asks for lowest terms: '+n+'/'+m+', so '+m+' crossings.'],
+      ['k4',[['X is a torus summed with a cross-cap','given'],['X is three cross-caps summed','the handle-cap technique']],2,0,'That is the technique.'],
+      ['k5',[['a line from a corner has slope √2','given'],['it never closes','the slope-loop technique']],2,0,'√2 is not a fraction.']],[m,n,d]); }});
+
+/* 34l Winding Numbers by Hand */
+const WL34=[
+  ['Is every crossing of the ray counted +1?','no: a clockwise crossing counts −1; a loop out and back crosses twice and winds 0',['yes','yes, if the crossings are clean','no: every crossing counts 0'],'Ray-count technique.'],
+  ['Does the ray-count work when the loop only touches the ray?','no: a touch is not a crossing; turn the ray a little so that every meeting is clean',['yes','yes, a touch counts ½','yes, a touch counts +1'],'Ray-count technique asks for clean crossings.'],
+  ['|δ(t) − γ(t)| ≤ |γ(t) − w| for every t. Does the leash hold?','no: the leash needs strictly less; with equality δ could reach w',['yes','yes, when the loops are round','no: the leash never holds'],'Leash technique.'],
+  ['Has a loop through w a winding number round w?','no: the direction from w is not defined where the loop meets w',['yes, 0','yes, 1','yes, ½'],'Winding numbers are for loops that miss w.'],
+  ['p has no root on the circle C. What counts its roots inside C?','the winding number of p(C) round 0',['the degree of p','the number of crossings of C','the size of p on C'],'Image-winding technique.'],
+  ['What is the winding number of γ round w, by a total?','(1/2πi) ∮ dz/(z − w) round γ',['∮ dz/(z − w) round γ','(1/2π) ∮ dz round γ','(1/2πi) ∮ (z − w) dz round γ'],'Winding-total technique.']];
+QP.push({id:'34l.winding',step:'34l',label:'winding numbers by hand',open:()=>measured('34l'),make(){ return writtenQ('34l.winding',WL34); }},
+  {id:'34l.work',step:'34l',mode:'work',label:'crossings and roots',open:()=>measured('34l'),make(){
+    if(rnd(2)){ const a=1+rnd(5); let b=1+rnd(4); if(b===a) b=a+1;
+      return W30('34l.work[r;'+[a,b].join(';')+']',[['γ crosses a ray from w cleanly, '+TM34(a)+' anticlockwise and '+TM34(b)+' clockwise','counted']],'What is w(γ, w)?',N34(a-b),[N34(a+b),N34(b-a),String(a),String(b),String(Math.max(a,b)+1)],'Ray-count technique: anticlockwise minus clockwise.'); }
+    const n=2+rnd(4), R=1+rnd(2); let c=pick([2,3,5,10,20,40]); if(c===Math.pow(R,n)) c+=1;
+    return W30('34l.work[p;'+[n,R,c].join(';')+']',[['p(z) = z'+SUP34(n)+' + '+c,'given'],['C is the circle |z| = '+R,'given']],'How many roots has p inside C, counted with repeats?',String(c<Math.pow(R,n)?n:0),[String(n),'0','1',String(c),String(n-1)],'Leash technique: on C, |z'+SUP34(n)+'| = '+Math.pow(R,n)+' and the constant is '+c+'; the larger term sets the winding of p(C) round 0, '+(c<Math.pow(R,n)?n:0)+'.'); }},
+  {id:'34l.line',step:'34l',mode:'proof',label:'what winding licenses',open:()=>measured('34l'),make(){
+    const a=1+rnd(5); let b=rnd(4); if(b===a) b=a+1; const k=1+rnd(4);
+    return line28('34l.line',[
+      ['l1',[['γ crosses a ray from w cleanly, '+TM34(a)+' anticlockwise and '+TM34(b)+' clockwise','counted'],['w(γ, w) = '+N34(a-b),'the ray-count technique']],2,0,'Anticlockwise minus clockwise.'],
+      ['l2',[['γ crosses a ray from w cleanly, '+TM34(a)+' anticlockwise and '+TM34(b)+' clockwise','counted'],['w(γ, w) = '+(a+b),'the ray-count technique']],2,1,'Clockwise crossings count −1.'],
+      ['l3',[['|δ(t) − γ(t)| < |γ(t) − w| for every t','given'],['w(δ, w) = w(γ, w)','the leash technique']],2,0,'That is the technique.'],
+      ['l4',[['|δ(t) − γ(t)| ≤ |γ(t) − w| for every t','given'],['w(δ, w) = w(γ, w)','the leash technique']],2,1,'The leash needs strictly less.'],
+      ['l5',[['p has no root on C, and p(C) winds '+TM34(k)+' round 0','given'],['p has '+k+(k===1?' root':' roots')+' inside C, counted with repeats','the image-winding technique']],2,0,'That is the technique.'],
+      ['l6',[['γ passes through w','given'],['w(γ, w) = (1/2πi) ∮ dz/(z − w)','the winding-total technique']],2,1,'The technique asks that γ miss w.']],[a,b,k]); }});
+
+/* 34m Knots by Hand */
+const WM34=[
+  ['A drawing has 3 three-colourings. Is its knot the plain ring?','not always: the figure-eight knot has 3 and is knotted; the count can only tell knots apart',['yes','yes, if it has few crossings','no: the plain ring has 9'],'Three-colour technique.'],
+  ['Is the bracket ⟨D⟩ alone a number of the knot?','no: a twist multiplies it by −s^(±3); only X, corrected by the signed crossings, is unchanged',['yes','yes, up to its sign','no: neither ⟨D⟩ nor X is'],'Mirror-count technique.'],
+  ['Does every knot differ from its mirror image?','no: the figure-eight knot can be moved into its own mirror image',['yes','yes, if it has crossings','no: no knot does'],'Mirror-count technique tells some apart, not all.'],
+  ['Does switching one crossing never change the knot?','no: switch one crossing of the overhand knot and it falls open into the ring',['yes','yes, if the drawing has three crossings','no: it always changes it'],'A switch is not one of the three moves.'],
+  ['How many three-colourings has the overhand knot?','9',['3','6','27'],'Three-colour technique.'],
+  ['Which changes of a drawing never change the knot?','the twist, the poke and the slide',['switching a crossing','cutting a strand','any change that keeps the crossing count'],'Three-colour technique.']];
+QP.push({id:'34m.knots',step:'34m',label:'knots by hand',open:()=>measured('34m'),make(){ return writtenQ('34m.knots',WM34); }},
+  {id:'34m.work',step:'34m',mode:'work',label:'colourings and signed crossings',open:()=>measured('34m'),make(){
+    if(rnd(2)){ const k=2+rnd(3);
+      return W30('34m.work[c;'+k+']',[['a drawing of '+k+' plain rings, apart and with no crossings','given']],'How many three-colourings has it?',String(Math.pow(3,k)),[String(3*k),'3',String(Math.pow(k,3)),String(Math.pow(3,k-1)),String(Math.pow(3,k+1))],'Each ring takes any of 3 colours on its own: 3'+SUP34(k)+'.'); }
+    const p=1+rnd(5); let q=1+rnd(4); if(p===q) q=p+1;
+    return W30('34m.work[w;'+[p,q].join(';')+']',[['a drawing D has '+p+(p===1?' crossing':' crossings')+' signed + and '+q+' signed −','counted']],'What is the writhe w(D)?',N34(p-q),[String(p+q),N34(q-p),String(p),String(q),'0'],'The writhe adds the signs: '+p+' − '+q+'.'); }},
+  {id:'34m.line',step:'34m',mode:'proof',label:'what knot numbers license',open:()=>measured('34m'),make(){
+    return line28('34m.line',[
+      ['m1',[['the drawing D has c(D) = 3','counted'],['D is a drawing of the plain ring','the three-colour technique']],2,1,'The count can only tell knots apart. The figure-eight knot has 3 too.'],
+      ['m2',[['D has c(D) = 9 and E has c(E) = 3','counted'],['D and E are drawings of different knots','the three-colour technique']],2,0,'The count is the same for every drawing of one knot.'],
+      ['m3',[['D′ comes from D by a twist','given'],['⟨D′⟩ = ⟨D⟩','the mirror-count technique']],2,1,'A twist multiplies the bracket by −s^(±3). Only X is unchanged.'],
+      ['m4',[['D′ comes from D by a twist','given'],['X(D′) = X(D)','the mirror-count technique']],2,0,'X is the same for every drawing.'],
+      ['m5',[['X of K is unchanged when s and s⁻¹ are swapped','given'],['K is the same knot as its mirror image','the mirror-count technique']],2,1,'The technique tells a knot from its mirror only when X changes. An unchanged X licenses nothing.']],[]); }});
+/* ----- rung 35: sizes of the endless, 35a to 35i ----- */
+Object.assign(STEPS,{'35a':['r35a','Countable'],'35b':['r35b','The Line Cannot Be Listed'],'35c':['r35c','More Parts Than Members'],'35d':['r35d','Two One-Way Matchings Make a Matching'],'35e':['r35e','Arithmetic of Sizes'],'35f':['r35f','Is There a Size in Between?'],'35g':['r35g','Countable or Not, by Hand'],'35h':['r35h','Dust With No Length, and Dimensions Between Whole Numbers'],'35i':['r35i','A Line Onto a Square']});
+const PL35=(m,n)=>(m+n)*(m+n+1)/2+n, ST35=a=>a.length?'{'+a.join(', ')+'}':'∅', U35=n=>String(n).replace(/\d/g,d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]);
+
+/* 35a Countable */
+const WA35=[
+  ['ℕ ⊆ ℤ leaves out −1. Is ℤ bigger?','no: ℤ is matched with ℕ; for endless sets a part can have the size of the whole',['yes','yes, twice as big','no: ℕ is bigger'],'A matching, not leaving things out, decides size.'],
+  ['The fractions are dense. Can a list hold them?','yes: density is about order, and a listing ignores order',['no','no: between any two there is another','only the fractions in [0, 1]'],'Algebraic-list technique, or listing by height.'],
+  ['Does (0, 0), (0, 1), (0, 2), … list ℕ × ℕ?','no: the first row never ends, so (1, 0) gets no place',['yes','yes, row by row','no: ℕ × ℕ has no list'],'Pair-listing technique walks the diagonals.'],
+  ['Is every endless set countable?','not shown here: the line turns out to have no list',['yes','yes, by the thinning technique','no: no endless set is'],'Thinning technique is about sets that have a list.'],
+  ['Each Aₘ is countable. Is their union countable, with no picking?','only if a list for each Aₘ is given; picking the lists spends choice',['yes','no: never','yes, since each Aₘ has a member'],'Countable-union technique takes the lists Lₘ as given.'],
+  ['A set has a list. What is it?','finite, or matched with ℕ',['matched with ℕ','finite','the size of the line'],'Thinning technique.']];
+QP.push({id:'35a.countable',step:'35a',label:'countable',open:()=>measured('35a'),make(){ return writtenQ('35a.countable',WA35); }},
+  {id:'35a.work',step:'35a',mode:'work',label:'places of pairs',open:()=>measured('35a'),make(){
+    if(rnd(2)){ let m=1+rnd(5), n=1+rnd(5); if(m===n) n=m+1; const s=m+n, t=s*(s+1)/2;
+      return W30('35a.work[p;'+[m,n].join(';')+']',[['p(m, n) = (m + n)(m + n + 1)/2 + n','the pair-listing technique']],'What place does ('+m+', '+n+') get?',String(t+n),[String(t+m),String(t),String(2*t+n),String(m*n+n)],'(m + n)(m + n + 1)/2 = '+t+', and + n = '+(t+n)+'.'); }
+    let k=3+rnd(25), s=0; while([3,5,6,9,10,14,15,20,21,27,28].includes(k)) k++; while((s+1)*(s+2)/2<=k) s++; const n=k-s*(s+1)/2, m=s-n;
+    return W30('35a.work[k;'+k+']',[['p(m, n) = (m + n)(m + n + 1)/2 + n','the pair-listing technique']],'Which pair gets place '+k+'?','('+m+', '+n+')',['('+n+', '+m+')','('+s+', '+n+')','('+n+', '+s+')','('+m+', '+s+')'],'The diagonal m + n = '+s+' starts at place '+s*(s+1)/2+', so n = '+n+' and m = '+m+'.'); }},
+  {id:'35a.line',step:'35a',mode:'proof',label:'what lists license',open:()=>measured('35a'),make(){
+    let m=rnd(5), n=rnd(5); if(m===n) n=m+1; const t=(m+n)*(m+n+1)/2;
+    return line28('35a.line',[
+      ['a1',[['A has a list','given'],['A is finite or matched with ℕ','the thinning technique']],2,0,'That is the technique.'],
+      ['a2',[['p(m, n) = (m + n)(m + n + 1)/2 + n','the pair-listing technique'],['p('+m+', '+n+') = '+(t+n),'worked']],2,0,t+' + '+n+'.'],
+      ['a3',[['p(m, n) = (m + n)(m + n + 1)/2 + n','the pair-listing technique'],['p('+m+', '+n+') = '+(t+m),'worked']],2,1,'The formula adds n, not m: '+t+' + '+n+'.'],
+      ['a4',[['A goes one-to-one into ℕ','given'],['A is countable','the into-ℕ technique']],2,0,'That is the technique.'],
+      ['a5',[['ℕ goes one-to-one into A','given'],['A is countable','the into-ℕ technique']],2,1,'The map runs the wrong way. ℕ goes into ℝ too.'],
+      ['a6',[['each Aₘ has a member and is countable','given'],['the union of the Aₘ has a list','the countable-union technique']],2,1,'The technique asks for a list Lₘ given for each Aₘ. Picking them spends choice.']],[m,n]); }});
+
+/* 35b The Line Cannot Be Listed */
+const WB35=[
+  ['The diagonal real y is put on the list. Is the list then complete?','no: the new list has its own diagonal; every list misses some real',['yes','yes, once the nines are kept away','no: only y is missed'],'Unlisted-real technique.'],
+  ['May the nth digit be changed to 9 or to 0?','no: 0.0999… and 0.1000… are one real, so such a diagonal may land on a listed real',['yes','yes, if it is changed','no: the digit must be kept'],'Keep away from nines.'],
+  ['Does the diagonal show that e is transcendental?','no: it shows that some real is; e stays held in trust',['yes','yes, with a list of the fractions','no: it shows that no real is'],'Transcendentals-exist technique.'],
+  ['The fractions have length 0. So they cannot be listed?','no: it runs the other way; every countable set has length 0, and the fractions can be listed',['yes','yes, since they are dense','no: they have length 1'],'Length and listing are different measures.'],
+  ['A cannot be listed and C is countable. What of the part of A outside C?','it cannot be listed',['it can be listed','it is empty','it is countable when C is endless'],'Countable-removed technique.'],
+  ['The diagonal is taken of a list of the algebraic reals in [0, 1). What is it?','a transcendental real',['an algebraic real','a fraction','the last real on the list'],'Transcendentals-exist technique.']];
+QP.push({id:'35b.diagonal',step:'35b',label:'the line cannot be listed',open:()=>measured('35b'),make(){ return writtenQ('35b.diagonal',WB35); }},
+  {id:'35b.work',step:'35b',mode:'work',label:'a diagonal by hand',open:()=>measured('35b'),make(){
+    const X=[0,1,2,3].map(()=>[0,1,2,3].map(()=>rnd(10))), f=d=>d<8?d+1:1, D=X.map((r,i)=>r[i]), A=X.map((r,i)=>r[3-i]);
+    return W30('35b.work[d;'+X.map(r=>r.join('')).join(';')+']',X.map((r,i)=>['x'+'₀₁₂₃'[i]+' = 0.'+r.join('')+'…','listed']).concat([['add 1 to each digit below 8, and make 8 and 9 into 1','the rule']]),'What are the first four digits of the diagonal real?','0.'+D.map(f).join(''),['0.'+D.join(''),'0.'+X[0].map(f).join(''),'0.'+A.map(f).join(''),'0.'+X.map(r=>f(r[0])).join('')],'Unlisted-real technique: change the nth digit of the nth entry, so the real differs from each xₙ at place n.'); }},
+  {id:'35b.line',step:'35b',mode:'proof',label:'what the diagonal licenses',open:()=>measured('35b'),make(){
+    return line28('35b.line',[
+      ['b1',[['x₀, x₁, x₂, … is a list of reals in [0, 1)','given'],['some real in [0, 1) is none of them','the unlisted-real technique']],2,0,'That is the technique.'],
+      ['b2',[['y is the diagonal real of the list','the unlisted-real technique'],['the list with y put first holds every real in [0, 1)','the unlisted-real technique']],2,1,'The new list has its own diagonal.'],
+      ['b3',[['ℝ cannot be listed, and the algebraic reals are countable','given'],['the transcendental reals cannot be listed','the countable-removed technique']],2,0,'Take the countable part out of a set that cannot be listed.'],
+      ['b4',[['some real is transcendental','the transcendentals-exist technique'],['e is transcendental','the transcendentals-exist technique']],2,1,'The diagonal names none of the famous reals.'],
+      ['b5',[['the fractions have length 0','given'],['the fractions cannot be listed','the unlisted-real technique']],2,1,'The technique is about the reals in [0, 1), and the fractions can be listed.']],[]); }});
+
+/* 35c More Parts Than Members */
+const WC35=[
+  ['ℕ is endless. Is |𝒫(ℕ)| = |ℕ|?','no: the parts outrun the members for every set, endless or not',['yes','yes, as ℕ × ℕ is','no: 𝒫(ℕ) is finite'],'Smaller-than-its-parts technique.'],
+  ['The part D is added to the values of f. Is f then onto?','no: the new function has its own D',['yes','yes, after one more step','no: D cannot be a value'],'Parts-outrun technique, for every f.'],
+  ['The parts of ∅ are none. So 𝒫(∅) fits ∅?','no: 𝒫(∅) = {∅} has one member, and ∅ has none',['yes','yes, both are empty','no: 𝒫(∅) has two members'],'Smaller-than-its-parts technique, at the smallest set.'],
+  ['Is there a largest size?','no: for every set there is a larger one',['yes, the size of everything','yes, the size of the line','no: there are no sizes past ℵ₀'],'No-largest-size technique.'],
+  ['f hands each member of A a part. Which part is handed to no member?','the members that are not in their own part',['the members that are in their own part','A itself','∅'],'Parts-outrun technique.'],
+  ['How does |A| stand against |𝒫(A)|?','|A| < |𝒫(A)|',['|A| = |𝒫(A)|','|A| > |𝒫(A)|','it depends on A'],'Smaller-than-its-parts technique.']];
+const FD35=n=>{ const A=[...Array(n)].map((_,i)=>i+1), f={}; A.forEach(x=>{ f[x]=A.filter(()=>rnd(2)); }); return [A,f,A.filter(x=>!f[x].includes(x)),A.filter(x=>f[x].includes(x))]; };
+QP.push({id:'35c.parts',step:'35c',label:'more parts than members',open:()=>measured('35c'),make(){ return writtenQ('35c.parts',WC35); }},
+  {id:'35c.work',step:'35c',mode:'work',label:'parts by hand',open:()=>measured('35c'),make(){
+    if(rnd(2)){ const n=2+rnd(5);
+      return W30('35c.work[n;'+n+']',[['A has '+n+' members','given']],'How many parts has A?',String(Math.pow(2,n)),[String(n*n),String(2*n),String(Math.pow(2,n)-1),String(n+1)],'Each member is in a part or out of it: 2'+U35(n)+', counting ∅ and A.'); }
+    const [A,f,D,In]=FD35(3+rnd(2));
+    return W30('35c.work[f;'+A.map(x=>f[x].join('')).join(';')+']',A.map(x=>['f('+x+') = '+ST35(f[x]),'given']),'Which part is f(x) for no x?',ST35(D),[ST35(In),ST35(f[1]),ST35(f[2]),ST35(A.filter(x=>!D.includes(x))),ST35(A),ST35([])],'Parts-outrun technique: D holds each x not in f(x), so D differs from each f(x) at x.'); }},
+  {id:'35c.line',step:'35c',mode:'proof',label:'what parts license',open:()=>measured('35c'),make(){
+    const [A,f,D]=FD35(3);
+    return line28('35c.line',[
+      ['c1',[['f maps A into 𝒫(A)','given'],['some part of A is f(x) for no x in A','the parts-outrun technique']],2,0,'That is the technique.'],
+      ['c2',[['f maps A into 𝒫(A), and D = {x : x ∉ f(x)}','given'],['D = f(a) for some a in A','the parts-outrun technique']],2,1,'If D = f(a), then a ∈ D exactly when a ∉ D.'],
+      ['c3',[['A is a set','given'],['|A| < |𝒫(A)|','the smaller-than-its-parts technique']],2,0,'That is the technique.'],
+      ['c4',[['A is endless','given'],['|𝒫(A)| = |A|','the smaller-than-its-parts technique']],2,1,'The parts outrun the members for endless sets too.'],
+      ['c5',[['A is a set','given'],['some set is larger than A','the no-largest-size technique']],2,0,'𝒫(A) is one.'],
+      ['c6',[[A.map(x=>'f('+x+') = '+ST35(f[x])).join(', '),'given'],['D = '+ST35(D),'the members not in their own part'],['D is f(x) for no x in {1, 2, 3}','the parts-outrun technique']],3,0,'D differs from each f(x) at x.']],[A.map(x=>f[x].join('')).join('')]); }});
+
+/* 35d Two One-Way Matchings Make a Matching */
+const WD35=[
+  ['f from A to B and g from B to A are one-to-one. Is f onto?','not always: f may miss much of B; the matching is h, built from both',['yes','yes, since g is one-to-one','no: never'],'Two-one-way technique.'],
+  ['Is the matching h equal to f everywhere?','no: off the chase, h runs g backwards',['yes','yes, on A','no: h is g everywhere'],'Two-one-way technique.'],
+  ['There are onto maps each way. Is there a matching, with no picking?','not by this technique: running an onto map back one-to-one picks one input for each output, which is choice',['yes','yes, by the two-one-way technique','no: onto maps never give a matching'],'Two-one-way technique asks for one-to-one maps.'],
+  ['Do any two sets compare, in every world?','only with choice: the any-two-sizes technique spends it',['yes','no: never','only finite sets'],'Any-two-sizes technique.'],
+  ['A goes one-to-one into B, and B into A. What follows?','A and B are matched',['A = B','A is a part of B','nothing'],'Two-one-way technique.'],
+  ['|A| ≤ |B| and |A| ≠ |B|. Has B a member outside A?','not necessarily: smaller is about maps, not parts; A need not be a part of B',['yes','yes, at least one','no: never'],'Sizes compare maps, not members.']];
+QP.push({id:'35d.matching',step:'35d',label:'two one-way matchings',open:()=>measured('35d'),make(){ return writtenQ('35d.matching',WD35); }},
+  {id:'35d.work',step:'35d',mode:'work',label:'a chase by hand',open:()=>measured('35d'),make(){
+    const k=1+rnd(3), j=k===3?1+rnd(2):k+1, s=k+j, x=3+rnd(10), inC=x%s<j, h=inC?x+k:x-j;
+    return W30('35d.work[c;'+[k,j,x].join(';')+']',[['f(n) = n + '+k+', one-to-one from A = ℕ into B = ℕ','given'],['g(n) = n + '+j+', one-to-one from B into A','given'],['the chase starts at the members of A that g misses, 0 to '+(j-1),'given']],'What does the matching h send '+x+' to?',String(h),[String(x+k),String(x-j),String(x+j),String(x-k),String(x+s),String(x+2*k)].filter(v=>+v>=0),'The chase runs n, n + '+s+', n + '+(2*s)+', … from each n below '+j+'. '+x+(inC?' is caught, so h runs f: '+x+' + '+k+'.':' is not caught, so h runs g backwards: '+x+' − '+j+'.')); }},
+  {id:'35d.line',step:'35d',mode:'proof',label:'what one-way maps license',open:()=>measured('35d'),make(){
+    return line28('35d.line',[
+      ['d1',[['A goes one-to-one into B, and B into A','given'],['A and B are matched','the two-one-way technique']],2,0,'That is the technique.'],
+      ['d2',[['f from A to B and g from B to A are one-to-one','given'],['f is onto','the two-one-way technique']],2,1,'The matching is h, built from both. f itself may miss much of B.'],
+      ['d3',[['A goes onto B, and B goes onto A','given'],['A and B are matched, with nothing picked','the two-one-way technique']],2,1,'The technique asks for one-to-one maps. Running an onto map back picks inputs.'],
+      ['d4',[['choice holds','given'],['A goes one-to-one into B, or B into A','the any-two-sizes technique']],2,0,'That is the technique.'],
+      ['d5',[['A and B are sets','given'],['A goes one-to-one into B, or B into A','the any-two-sizes technique']],2,1,'The technique spends choice, and choice is not on the lines.']],[]); }});
+
+/* 35e Arithmetic of Sizes */
+const WE35=[
+  ['Is ℵ₀ − ℵ₀ = 0?','no: ℵ₀ + x = ℵ₀ for every number x and for x = ℵ₀, so there is no one answer to take away',['yes','no: it is ℵ₀','no: it is 1'],'Aleph-sums technique.'],
+  ['Is ℵ₀ + 1 larger than ℵ₀?','no: n + ℵ₀ = ℵ₀; one more member makes no bigger size',['yes','yes, by one','no: it is smaller'],'Aleph-sums technique.'],
+  ['ω + 1 ≠ ω. Have they different sizes?','no: different points, one size; size forgets order',['yes','yes, ω + 1 is larger by one','no: ω + 1 = ω'],'Countable-points technique.'],
+  ['Is 2^ℵ₀ = 2 · ℵ₀?','no: 2 · ℵ₀ = ℵ₀, and 2^ℵ₀ is the size of the line, which is larger',['yes','yes, as 2² = 2 · 2','no: 2 · ℵ₀ is larger'],'Line-size technique.'],
+  ['ℵ₀ · ℵ₀ = ℵ₀. So is ℵ₀^ℵ₀ = ℵ₀?','no: the functions from ℕ to ℕ cannot be listed; powers past the finite are not repeated products',['yes','yes, by the aleph-sums technique','no: it is 2 · ℵ₀'],'Aleph-sums technique covers sums and products only.'],
+  ['What size has the plane?','the size of the line, 2^ℵ₀',['ℵ₀','2^ℵ₀ · 2^ℵ₀, which is larger than the line','ℵ₀ · ℵ₀'],'Plane-as-line technique.']];
+QP.push({id:'35e.sizes',step:'35e',label:'arithmetic of sizes',open:()=>measured('35e'),make(){ return writtenQ('35e.sizes',WE35); }},
+  {id:'35e.work',step:'35e',mode:'work',label:'sums, products and powers of sizes',open:()=>measured('35e'),make(){
+    const n=2+rnd(6), A='ℵ₀', C='2^ℵ₀', T=pick([[n+' + ℵ₀',A],[n+' · ℵ₀',A],['ℵ₀ · ℵ₀',A],['ℵ₀'+U35(n),A],[n+'^ℵ₀',C],['2^ℵ₀ · 2^ℵ₀',C],['2^ℵ₀ + ℵ₀',C],['2'+U35(n),String(Math.pow(2,n))]]);
+    return W30('35e.work[s;'+T[0]+']',[[T[0],'a size worked out']],'What is '+T[0]+'?',T[1],[A,C,String(n),String(Math.pow(2,n)),'larger than 2^ℵ₀'],'Aleph-sums, line-size and plane-as-line techniques: ℵ₀ absorbs finite sums, products and powers; a finite base past 1 raised to ℵ₀ gives the line’s size, and the line’s size absorbs ℵ₀ and itself.'); }},
+  {id:'35e.line',step:'35e',mode:'proof',label:'what size sums license',open:()=>measured('35e'),make(){
+    const n=1+rnd(9);
+    return line28('35e.line',[
+      ['e1',[['A has ℵ₀ members and B has '+n+', and they share none','given'],['A ∪ B has ℵ₀ members','the aleph-sums technique']],2,0,n+' + ℵ₀ = ℵ₀.'],
+      ['e2',[['A has ℵ₀ members and B has '+n+', and they share none','given'],['A ∪ B is larger than A','the aleph-sums technique']],2,1,n+' + ℵ₀ = ℵ₀: no bigger size.'],
+      ['e3',[['|ℝ| = 2^ℵ₀','the line-size technique'],['|ℝ × ℝ| = 2^ℵ₀','the plane-as-line technique']],2,0,'The plane has the size of the line.'],
+      ['e4',[['ω + '+n+' ≠ ω','given'],['|ω + '+n+'| ≠ |ω|','the countable-points technique']],2,1,'Different points, one size.'],
+      ['e5',[['ℵ₀ · ℵ₀ = ℵ₀','the aleph-sums technique'],['ℵ₀^ℵ₀ = ℵ₀','the aleph-sums technique']],2,1,'The technique covers sums and products. The functions from ℕ to ℕ cannot be listed.']],[n]); }});
+
+/* 35f Is There a Size in Between? */
+const WF35=[
+  ['No one has found a set in between. Is there none?','not by that: a search that finds nothing is no proof, and the axioms do not decide it',['yes','yes, after a long search','no: one has been found'],'Next-aleph technique places ℵ₁ but does not settle it.'],
+  ['The axioms cannot decide it. Is it false?','no: it is true in one world of the axioms and false in another',['yes','no: so it is true','yes, until it is proved'],'Undecided is not false.'],
+  ['Must a set in between hold an interval?','no: the opposite; a set holding an interval has the size of the line',['yes','yes, a short one','only if it is closed'],'Interval-size technique.'],
+  ['Is ℵ₁ = 2^ℵ₀ by definition?','no: ℵ₁ is the size of ω₁; whether it is the line’s size is the question',['yes','no: ℵ₁ is larger by definition','no: ℵ₁ is ℵ₀ + 1'],'Next-aleph technique.'],
+  ['A set of reals holds an interval with two different ends. What size has it?','the size of the line',['ℵ₀','the length of the interval','ℵ₁, which may be smaller'],'Interval-size technique.'],
+  ['With choice, where does ℵ₁ sit?','ℵ₀ < ℵ₁ ≤ 2^ℵ₀',['ℵ₁ = 2^ℵ₀','ℵ₁ < ℵ₀','ℵ₁ > 2^ℵ₀'],'Next-aleph technique.']];
+QP.push({id:'35f.between',step:'35f',label:'a size in between',open:()=>measured('35f'),make(){ return writtenQ('35f.between',WF35); }},
+  {id:'35f.work',step:'35f',mode:'work',label:'line-sized or countable',open:()=>measured('35f'),make(){
+    const a=rnd(5)-2, b=a+1+rnd(4), M=x=>String(x).replace('-','−'), I='['+M(a)+', '+M(b)+']', J='('+M(a)+', '+M(b)+')', sq=rnd(2);
+    const L=[I,J+' ∪ {'+M(b+3)+'}','the reals in '+I+' with a 7 among their digits'], K=['the fractions in '+I,'{'+M(a)+', '+M(b)+'}','the whole numbers in '+I,'the algebraic reals in '+I];
+    return sq?W30('35f.work[l;'+[a,b].join(';')+']',[['sets of reals','given']],'Which has the size of the line?',pick(L.slice(0,2)),K,'Interval-size technique: a set holding an interval with two different ends.')
+      :W30('35f.work[c;'+[a,b].join(';')+']',[['sets of reals','given']],'Which is countable?',pick([K[0],K[3]]),L,'The fractions and the algebraic reals can be listed; a set holding an interval cannot.'); }},
+  {id:'35f.line',step:'35f',mode:'proof',label:'what intervals license',open:()=>measured('35f'),make(){
+    const a=rnd(5)-2, b=a+1+rnd(4), A=x=>String(x).replace('-','−');
+    return line28('35f.line',[
+      ['f1',[['A is a set of reals that holds ('+A(a)+', '+A(b)+')','given'],['A has the size of the line','the interval-size technique']],2,0,'An interval with two different ends.'],
+      ['f2',[['A is a set of reals that holds no interval','given'],['A is countable','the interval-size technique']],2,1,'The technique runs one way. The dust holds no interval and has the size of the line.'],
+      ['f3',[['choice holds','given'],['ℵ₀ < ℵ₁ ≤ 2^ℵ₀','the next-aleph technique']],2,0,'That is the technique.'],
+      ['f4',[['choice holds','given'],['ℵ₁ = 2^ℵ₀','the next-aleph technique']],2,1,'The technique gives ≤ only. Equality is undecided by the axioms.'],
+      ['f5',[['A is a set of reals that holds ['+A(a)+', '+A(a)+']','given'],['A has the size of the line','the interval-size technique']],2,1,'['+A(a)+', '+A(a)+'] is one point. The ends must differ.']],[a,b]); }});
+
+/* 35g Countable or Not, by Hand */
+const WG35=[
+  ['For the reals in [0, 1), may the height be the first digit?','no: each height then holds endlessly many reals; a height must leave finitely many',['yes','yes, with ten heights','no: a height must be a fraction'],'Height-listing technique.'],
+  ['Must a copy of the bits reach every member of A?','no: it must be one-to-one, not onto',['yes','yes, or A could be larger','no: it need reach none'],'Copy-of-the-bits technique.'],
+  ['Each finite part of ℕ is countable. Is 𝒫(ℕ) countable?','no: the members being countable says nothing of how many there are',['yes','yes, by the countable-union technique','no: no part of ℕ is countable'],'Smaller-than-its-parts technique.'],
+  ['A cannot be listed. Has it the size of the line?','not shown: that needs a way into the line and a copy of the bits',['yes','yes, by the copy-of-the-bits technique','no: never'],'Line-sized-by-hand technique.'],
+  ['What must a height leave at each height?','finitely many members',['one member','no members','countably many members'],'Height-listing technique.'],
+  ['A goes one-to-one into ℝ, and 2^ℕ goes one-to-one into A. What size has A?','the size of the line',['ℵ₀','ℵ₁','not decided'],'Line-sized-by-hand technique.']];
+const PHI35=h=>{ let c=0; for(let q=1;q<=h;q++) if(fgcd(h,q)===1) c++; return c; };
+QP.push({id:'35g.byhand',step:'35g',label:'countable or not',open:()=>measured('35g'),make(){ return writtenQ('35g.byhand',WG35); }},
+  {id:'35g.work',step:'35g',mode:'work',label:'heights of fractions',open:()=>measured('35g'),make(){
+    const h=3+rnd(8), c=2*PHI35(h);
+    return W30('35g.work[h;'+h+']',[['the height of p/q, in lowest terms with q > 0, is |p| + q','given']],'How many fractions have height '+h+'?',String(c),[String(c/2),String(h),String(2*h),String(2*(h-1))],'For each q from 1 to '+(h-1)+' with no common factor with '+h+', p is '+'±(h − q): '+(c/2)+' values of q, two signs each.'); }},
+  {id:'35g.line',step:'35g',mode:'proof',label:'what heights license',open:()=>measured('35g'),make(){
+    return line28('35g.line',[
+      ['g1',[['each member of A has a height in ℕ, with finitely many at each height','given'],['A is countable','the height-listing technique']],2,0,'That is the technique.'],
+      ['g2',[['each member of A has a height in ℕ','given'],['A is countable','the height-listing technique']],2,1,'Each height must hold finitely many members.'],
+      ['g3',[['2^ℕ goes one-to-one into A','given'],['A cannot be listed','the copy-of-the-bits technique']],2,0,'That is the technique.'],
+      ['g4',[['A cannot be listed','given'],['A has the size of the line','the line-sized-by-hand technique']],2,1,'The technique needs a way into the line and a copy of the bits.'],
+      ['g5',[['A goes one-to-one into ℝ, and 2^ℕ into A','given'],['A has the size of the line','the line-sized-by-hand technique']],2,0,'That is the technique.']],[]); }});
+
+/* 35h Dust With No Length, and Dimensions Between Whole Numbers */
+const WH35=[
+  ['The dust has length 0. Is it countable?','no: countable gives length 0, but length 0 does not give countable; the dust has the size of the line',['yes','yes, since it holds no interval','no: it has length 1'],'Dust technique.'],
+  ['Are only the ends of the pieces left in the dust?','no: the ends are countable and the dust is not; 1/4 is no end',['yes','yes, with 0 and 1','no: nothing is left'],'Dust technique.'],
+  ['The dust holds no interval. Has it dimension 0?','no: its count gives log 2 / log 3',['yes','no: it has dimension 1','no: it has dimension ½'],'Box-count technique.'],
+  ['The bump curve is a curve. Has it dimension 1?','no: its length passes every bound, and its count gives log 4 / log 3',['yes','yes, since it has a length','no: it has dimension 2'],'Scaled-copies technique.'],
+  ['A set is N copies of itself, each scaled by 1/s. What is its dimension?','log N / log s',['log s / log N','N / s','N · s'],'Scaled-copies technique.'],
+  ['What length and size has the dust?','length 0 and the size of the line',['length 0 and size ℵ₀','length 1 and the size of the line','length ⅓ and size ℵ₀'],'Dust technique.']];
+const DIM35=[[2,3],[4,3],[8,3],[3,2],[5,3],[2,4],[3,4],[5,4],[6,4],[7,3],[3,5],[9,4]];
+QP.push({id:'35h.dust',step:'35h',label:'dust and dimension',open:()=>measured('35h'),make(){ return writtenQ('35h.dust',WH35); }},
+  {id:'35h.work',step:'35h',mode:'work',label:'pieces, lengths and dimensions',open:()=>measured('35h'),make(){
+    if(rnd(2)){ const [N,s]=pick(DIM35);
+      return W30('35h.work[d;'+[N,s].join(';')+']',[['A is made of '+N+' copies of itself, each scaled by 1/'+s+', meeting in finitely many points','given']],'What is the dimension of A?','log '+N+' / log '+s,['log '+s+' / log '+N,N+' / '+s,'log '+N+' / '+s,'log '+(N*s)],'Scaled-copies technique: N = '+N+' and s = '+s+'.'); }
+    const n=1+rnd(4), t=Math.pow(3,n), p=Math.pow(2,n);
+    return W30('35h.work[l;'+n+']',[['the middle third of each piece is thrown out, '+n+(n===1?' time':' times'),'starting from [0, 1]']],'What length is left?',fshow(fr(p,t)),[fshow(fr(1,t)),fshow(fr(t-p,t)),fshow(fr(2,3*n)),fshow(fr(n,t))],p+' pieces of length 1/'+t+' are left.'); }},
+  {id:'35h.line',step:'35h',mode:'proof',label:'what the dust licenses',open:()=>measured('35h'),make(){
+    const [N,s]=pick(DIM35);
+    return line28('35h.line',[
+      ['h1',[['the dust has length 0','the dust technique'],['the dust is countable','the dust technique']],2,1,'Length 0 does not give countable. The dust has the size of the line.'],
+      ['h2',[['A is made of '+N+' copies of itself, each scaled by 1/'+s+', meeting in finitely many points','given'],['A has dimension log '+N+' / log '+s,'the scaled-copies technique']],2,0,'log N / log s.'],
+      ['h3',[['A is made of '+N+' copies of itself, each scaled by 1/'+s+', meeting in finitely many points','given'],['A has dimension log '+s+' / log '+N,'the scaled-copies technique']],2,1,'The count of copies goes on top: log '+N+' / log '+s+'.'],
+      ['h4',[['the dust holds no interval','given'],['the dust has dimension 0','the box-count technique']],2,1,'The count gives log 2 / log 3, about 0.631.'],
+      ['h5',[['the dust has length 0','the dust technique'],['the dust has the size of the line','the dust technique']],2,0,'The technique gives both.']],[N,s]); }});
+
+/* 35i A Line Onto a Square */
+const WI35=[
+  ['A path through the centres of the 4ⁿ squares is about 2ⁿ long. Has H a length?','no: those lengths pass every bound, so H has no length',['yes','yes, the limit of 2ⁿ','yes, 2√5'],'Half-power technique bounds H only by a square root.'],
+  ['Is there a continuous matching of [0, 1] with the square?','no: every continuous map onto the square sends two inputs to one point',['yes, the filling curve H','yes, the matching of digits','yes, once H is made one-to-one'],'Filling-twice technique.'],
+  ['Does H pass every point of the square exactly once?','no: every filling curve passes some point twice',['yes','yes, except the corners','no: it misses some points'],'Filling-twice technique.'],
+  ['Can a continuous map raise dimension?','yes: H raises it from 1 to 2',['no','no: only a matching can','only to a dimension below 2'],'Square-filling technique.'],
+  ['What does the half-power technique bound?','|H(s) − H(t)| by 2√5 · |s − t|^(1/2)',['|H(s) − H(t)| by 2√5 · |s − t|','the length of H','|s − t| by |H(s) − H(t)|'],'Half-power technique.'],
+  ['|F(s) − F(t)| ≤ C|s − t|^α with α > 1/2. Can F fill the square?','no',['yes','yes, if C is large','only if α < 1'],'Fill-rate technique.']];
+QP.push({id:'35i.filling',step:'35i',label:'a line onto a square',open:()=>measured('35i'),make(){ return writtenQ('35i.filling',WI35); }},
+  {id:'35i.work',step:'35i',mode:'work',label:'pieces of time and of square',open:()=>measured('35i'),make(){
+    const n=2+rnd(3), F=Math.pow(4,n), T=Math.pow(2,n), t=rnd(3);
+    if(t===0) return W30('35i.work[t;'+n+']',[['step '+n+' of the filling curve','given']],'How long is each piece of time?','1/'+F,['1/'+T,'1/'+4*n,'1/'+n,'1/'+2*F],'Each step cuts every piece of time into four: 1/4'+U35(n)+'.');
+    if(t===1) return W30('35i.work[s;'+n+']',[['step '+n+' of the filling curve','given']],'What side has each small square?','1/'+T,['1/'+F,'1/'+2*n,'1/'+n,'1/'+2*T],'Each step cuts every square into four, halving its side: 1/2'+U35(n)+'.');
+    return W30('35i.work[h;'+n+']',[['|s − t| = 1/'+F,'given']],'What bound does the half-power technique give for |H(s) − H(t)|?','2√5/'+T,['2√5/'+F,'√5/'+T,'2√5/'+(T/2>1?T/2:2*F),'2√5/'+n],'|s − t|^(1/2) = 1/'+T+'.'); }},
+  {id:'35i.line',step:'35i',mode:'proof',label:'what filling licenses',open:()=>measured('35i'),make(){
+    const n=1+rnd(4), F=Math.pow(4,n), T=Math.pow(2,n);
+    return line28('35i.line',[
+      ['i1',[['H is continuous from [0, 1] onto the square','the square-filling technique'],['H(s) = H(t) for some s ≠ t','the filling-twice technique']],2,0,'Every filling curve passes some point twice.'],
+      ['i2',[['H is continuous from [0, 1] onto the square','the square-filling technique'],['H is one-to-one','the square-filling technique']],2,1,'The technique promises onto, and the filling-twice technique rules out one-to-one.'],
+      ['i3',[['|s − t| = 1/'+F,'given'],['|H(s) − H(t)| ≤ 2√5/'+T,'the half-power technique']],2,0,'The square root of 1/'+F+' is 1/'+T+'.'],
+      ['i4',[['|s − t| = 1/'+F,'given'],['|H(s) − H(t)| ≤ 2√5/'+F,'the half-power technique']],2,1,'The bound takes the square root: 2√5/'+T+'.'],
+      ['i5',[['|F(s) − F(t)| ≤ C|s − t| for all s and t','given'],['F does not fill the square','the fill-rate technique']],2,0,'Here α = 1, more than 1/2.'],
+      ['i6',[['|F(s) − F(t)| ≤ C|s − t|^(1/2) for all s and t','given'],['F does not fill the square','the fill-rate technique']],2,1,'The technique needs α more than 1/2. H itself meets this bound.']],[n]); }});
 /* ===== Rung pools end ===== */
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
