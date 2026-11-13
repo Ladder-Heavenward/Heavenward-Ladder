@@ -8387,6 +8387,9 @@ function sayAddr(a3){ const [s,l,b]=(a3||[]).map(sayPart), rows=[]; if(s) rows.p
 /* the score: 1 for an understanding, 2 for a proof, 3 for an equation, 4 for a word problem, and 1 more for each link on the question;
    times 1 + bonus/100, where the bonus is the sum, over the steps whose pools are open and switched on, of the step's rung number / 100 */
 const PTS={read:1,proof:2,work:3,word:4};
+/* laundryscore */ /* the score shows only to a climber who opted into the competition; everyone sees questions correct, counted by kind */
+const competing=()=>{ try{ return localStorage.getItem('ladder:compete')==='1'; }catch(e){ return false; } };
+const countsLine=()=>{ const k=get('rand:rightk',{}), t=get('rand:right',0); return 'Questions correct: <b>'+t+'</b> <span class="rzkinds">(understanding '+(k.read||0)+', proofs '+(k.proof||0)+', equations '+(k.work||0)+', word problems '+(k.word||0)+')</span>.'; };
 function nLinks(q){ const by=poolBy(); const l=(q.a3||[])[1]; if(!l||l===DASH) return 0;
   return String(l).split('+').filter(x=>{ const P=by[x.replace(/[\[?#].*$/,'')]; return !!P&&(LINKS.includes(P)||OPS.includes(P)); }).length; }
 function bonus(){ const off=get('rand:off',{}), st=new Set(); [...SEEDS,...toggled(),...BANK].forEach(P=>{ const r=rungOf(P.step); if(!off['rung:'+r]&&P.open()) st.add(P.step); });
@@ -8405,7 +8408,7 @@ function picker(q){
       const lines=steps.map(s=>{ const names=[...new Set(by[r][s])]; np+=names.length; return '<p class="rzst"><b>'+esc(s)+'</b> '+esc(names.join(' · '))+'</p>'; }).join(''); pools+=np;
       return '<details class="rzrg" data-k="r'+r+'"'+op('r'+r)+'><summary><input type="checkbox" data-id="rung:'+r+'"'+(off['rung:'+r]?'':' checked')+' aria-label="'+(r===99?'the infinity series':'rung '+r)+'">'+(r===99?'The infinity series':'Rung '+r)+' <span class="rzsrc">'+n(steps.length,'step')+' · '+n(np,'pool')+'</span></summary>'+lines+'</details>'; }).join('');
     return '<details class="rzfl" data-k="f'+f+'"'+op('f'+f)+'><summary><input type="checkbox" data-fl="'+rs.join(',')+'"'+(on===rs.length?' checked':'')+(on&&on<rs.length?' data-mix="1"':'')+' aria-label="floor '+f+'">Floor '+f+' · '+floorName(f)+' <span class="rzsrc">'+(rs[0]===99?'':(rs.length===1?'rung '+rs[0]:'rungs '+rs[0]+' to '+rs[rs.length-1])+' · ')+n(pools,'pool')+'</span></summary>'+inner+'</details>'; }).join('');
-  return '<details class="rzpick" data-k="top"'+(q.closed||treeOpen.top?' open':'')+'><summary>Pools, by floor and rung · score times '+fmt2(mult())+'</summary>'+(rows||'<p class="dnote">None open yet.</p>')+'</details>';
+  return '<details class="rzpick" data-k="top"'+(q.closed||treeOpen.top?' open':'')+'><summary>Pools, by floor and rung'+(competing()?' · score times '+fmt2(mult()):'')+'</summary>'+(rows||'<p class="dnote">None open yet.</p>')+'</details>';
 }
 function wireTree(box,again){
   box.querySelectorAll('.rzpick, .rzpick details').forEach(d=>{ d.ontoggle=()=>{ treeOpen[d.dataset.k]=d.open; }; });
@@ -8448,7 +8451,7 @@ function render(box){
     box.querySelectorAll('.rzmode').forEach(b=>b.onclick=()=>{ put('rand:mode',{m:b.dataset.m}); render.fresh=true; render(box); }); };
   if(q.closed){ box.innerHTML=sw+'<p class="dnote">'+esc(q.closed)+'</p>'+picker(q); wire(); return; }
   const addr=q.a3.join(' . ');
-  box.innerHTML=sw+'<p class="dnote">'+(window.LadderAccount?'<b>'+esc(LadderAccount.name)+'</b>. ':'')+esc(MD.say)+' A question never comes twice. Right answers so far: <b>'+right+'</b>. Score: <b class="rzscore">'+fmt2(get('rand:score',0))+'</b>.</p>'
+  box.innerHTML=sw+'<p class="dnote">'+(window.LadderAccount&&competing()?'<b>'+esc(LadderAccount.name)+'</b>. ':'')+esc(MD.say)+' A question never comes twice. <span class="rzcounts">'+countsLine()+'</span>'+(competing()?' Score: <b class="rzscore">'+Math.ceil(get('rand:score',0)-1e-9)+'</b>.':'')+'</p>'
     +(q.story?'<p class="rzstory">'+esc(q.story)+'</p>':'')
     +(q.lines.length?'<div class="rzlines">'+q.lines.map(([t,w],i)=>'<div class="rzl'+(q.stack?' rzs':'')+'"><span class="rzn">'+(i+1)+'</span><span class="rzt">'+esc(t)+'</span><span class="rzw">'+(w===null?'?':esc(w))+'</span></div>').join('')+'</div>':'')
     +'<p class="rzask">'+esc(q.ask)+'</p><div class="rzopts">'+q.opts.map(o=>'<button type="button" class="rzo'+(q.html?' rzg':'')+'" data-v="'+esc(o).replace(/"/g,'&quot;')+'"'+(q.html?' aria-label="'+esc(o)+'">'+q.html[o]:'>'+esc(o))+'</button>').join('')+'</div>'
@@ -8468,8 +8471,8 @@ function render(box){
     const u=get('rand:seen',{}); u[q.index]=Date.now(); put('rand:seen',u);
     if(q.index.startsWith('link:')||q.index.startsWith('q:')) put('rand:last',[q.right].concat(get('rand:last',[])).slice(0,2));
     if(q.stray){ const s=strayDue(); s.served++; put('rand:strays',s); const lg=get('rand:straylog',[]); lg.push({day:s.day,index:q.index}); put('rand:straylog',lg); }
-    let won=''; if(ok){ put('rand:right',get('rand:right',0)+1); const base=PTS[mode]||1, nl=nLinks(q), m=mode==='read'?1:mult(), pts=Math.round((base+nl)*m*100)/100; put('rand:score',Math.round((get('rand:score',0)+pts)*100)/100); /* standbots */ try{ const d=new Date(), dk=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'), days=get('rand:days',{}); days[dk]=Math.round(((days[dk]||0)+pts)*100)/100; const ks=Object.keys(days).sort(); while(ks.length>400) delete days[ks.shift()]; put('rand:days',days); }catch(e){}
-      const sc=box.querySelector('.rzscore'); if(sc) sc.textContent=fmt2(get('rand:score',0)); won=' Scored '+base+(nl?' + '+nl+' for '+(nl===1?'its link':'its links'):'')+(mode==='read'?'':', times '+fmt2(m)+' for the pools switched on')+': '+fmt2(pts)+'.'; }
+    let won=''; if(ok){ put('rand:right',get('rand:right',0)+1); const base=PTS[mode]||1, nl=nLinks(q), m=mode==='read'?1:mult(), pts=Math.ceil((base+nl)*m-1e-9); put('rand:score',Math.ceil(get('rand:score',0)-1e-9)+pts); { const rk=get('rand:rightk',{}); rk[mode]=(rk[mode]||0)+1; put('rand:rightk',rk); } /* standbots */ try{ const d=new Date(), dk=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'), days=get('rand:days',{}); days[dk]=Math.ceil((days[dk]||0)-1e-9)+pts; const ks=Object.keys(days).sort(); while(ks.length>400) delete days[ks.shift()]; put('rand:days',days); }catch(e){}
+      const sc=box.querySelector('.rzscore'); if(sc) sc.textContent=get('rand:score',0); const cl=box.querySelector('.rzcounts'); if(cl) cl.innerHTML=countsLine(); won=competing()?' Scored '+base+(nl?' + '+nl+' for '+(nl===1?'its link':'its links'):'')+(mode==='read'?'':', times '+fmt2(m)+' for the pools switched on')+', rounded up: '+pts+'.':''; }
     const ax=!ok&&AX.includes(b.dataset.v)?' An axiom stands under every technique above it; the question asks for the technique built over it.':'';
     why.hidden=false; why.innerHTML=esc(tidyT((ok?'Right. ':(q.lead||'The line holds by '+q.right+'. '))+q.why+ax))+' Built at '+(q.steps||[q.step]).map(stepLink).join(', ')+'.'+esc(won); });
   box.querySelector('.rznext').onclick=()=>{ render.fresh=true; render(box); };

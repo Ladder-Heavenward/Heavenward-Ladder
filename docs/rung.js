@@ -573,7 +573,7 @@ function deskHTML(){
   const d=document.createElement('div'); d.id='desk'; d.setAttribute('role','dialog'); d.setAttribute('aria-label','desk');
   const qs=!!document.querySelector('.sayback');
   const hb=!!document.querySelector('section.basement'); /* 0.3.30 (Andrew 11:39): the basement is a Toolbox page */
-  d.innerHTML='<div class="dtop"><button type="button" class="dback">← back</button><b class="dttl"></b><span class="dacct">'+(window.LadderAccount?LadderAccount.name:'')+'</span></div><div class="dname"><span class="dname-n" title="your name on this device">'+(window.LadderAccount?LadderAccount.name:'')+'</span><a class="dname-s" href="standing.html">Standing</a></div><div class="dtabs"><button data-p="keys">Quick Keys</button>'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph View</button><button data-p="moves">Techs Read</button><button data-p="rand">Laundry</button>'+(document.querySelector('.qid')?'<button type="button" class="dcross">Crosswalk</button>':'')+'<button type="button" class="dstick">Measuring Stick</button><button type="button" class="dstand">Answering Open Questions</button>'+(hb?'<button data-p="base">Cellar</button>':'')+'<button data-p="rec" class="dgear" aria-label="settings and record" title="settings and record">⚙</button>'+(document.querySelector('.wrap>section.class.step')&&false?'<button type="button" class="dfv">Page View</button>':'')+'<button type="button" class="dheights">Dizzying Heights</button><a class="dshare" href="install.html">Share the Ladder</a><button class="x" aria-label="close">✕</button></div>'
+  d.innerHTML='<div class="dtop"><button type="button" class="dback">← back</button><b class="dttl"></b><span class="dacct">'+(window.LadderAccount?LadderAccount.name:'')+'</span></div><div class="dname"><span class="dname-n" title="your name on this device">'+(window.LadderAccount?LadderAccount.name:'')+'</span><a class="dname-s" href="standing.html">Standing</a></div><div class="dtabs"><button data-p="keys">Quick Keys</button>'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph View</button><button data-p="moves">Techs Read</button><button data-p="rand">Laundry</button>'+(document.querySelector('.qid')?'<button type="button" class="dcross">Crosswalk</button>':'')+'<button type="button" class="dstick">Measuring Stick</button><button type="button" class="dstand">Answering Questions</button>'+(hb?'<button data-p="base">Cellar</button>':'')+'<button data-p="rec" class="dgear" aria-label="settings and record" title="settings and record">⚙</button>'+(document.querySelector('.wrap>section.class.step')&&false?'<button type="button" class="dfv">Page View</button>':'')+'<button type="button" class="dheights">Index</button><a class="dshare" href="install.html">Share the Ladder</a><button class="x" aria-label="close">✕</button></div>'
     +'<div class="dpane" id="dp-keys"><div id="dkeyshost"></div></div>'
     +(qs?'<div class="dpane" id="dp-qs"><p class="dnote">The page’s questions, here so you can read them beside the class.</p><div class="dq" id="dq"></div></div>':'')
     +'<div class="dpane" id="dp-graph"><div id="dgfig"></div><div id="dmg"></div><p class="dnote" style="margin-top:10px">Type it as on paper: x^2, 2sin(x), e^x, ln x, √x, |x|, x!. a, b, c and k get sliders.</p></div>'
@@ -739,7 +739,7 @@ function climbTo(smooth){
    you came from; the lines above it keep loading off screen. It starts at most a screen and a half below that footing (or at the foot). */
 function heightsHold(on){ let d=document.getElementById('hg-hold');
   if(on===false){ if(d){ d.classList.add('hg-out'); setTimeout(()=>d.remove(),260); } return; }
-  if(d||!document.body) return; d=document.createElement('div'); d.id='hg-hold'; d.setAttribute('aria-hidden','true'); d.innerHTML='<i></i><i></i><i></i>'; d.__t=Date.now(); document.body.appendChild(d);
+  if(d||!document.body) return; d=document.createElement('div'); d.id='hg-hold'; d.setAttribute('aria-hidden','true'); d.innerHTML='<b class="hg-name" aria-hidden="true">'+'Dizzying Heights'.split('').map((c,i)=>c===' '?'<s>&nbsp;</s>':'<s style="animation-delay:'+(i*70)+'ms">'+c+'</s>').join('')+'</b>'; d.__t=Date.now(); document.body.appendChild(d);
   setTimeout(()=>{ if(d.isConnected&&!climbTo.gliding) heightsHold(false); },6000); }
 window.__hgHold=heightsHold;
 /* ready when the page has loaded and its fonts are in (at most 3 s), and the dots have shown for at least .45 s */
@@ -996,7 +996,7 @@ window.__deskInit=function(){
     if(v){ if(t.parentNode!==host) host.appendChild(t); t.classList.add('mk-docked'); if(window.MathKeys&&MathKeys.open) MathKeys.open(true); }
     else if(t.parentNode===host){ if(window.MathKeys&&MathKeys.open) MathKeys.open(false); t.classList.remove('mk-docked'); document.body.appendChild(t); } }
   function toolPage(p){ const on=!!TOOLS[p]; desk.classList.toggle('toolpage',on); document.body.classList.toggle('toolpage',on);
-    if(on){ const h=hereOf(); desk.querySelector('.dttl').textContent=TOOLS[p]; desk.querySelector('.dback').textContent='← back to '+h.say;
+    if(on){ const h=hereOf(); desk.querySelector('.dttl').textContent=TOOLS[p]; desk.dataset.tool=p; desk.querySelector('.dback').textContent='← back to '+h.say;
       if(!(history.state&&history.state.tool)) try{ history.pushState({tool:p},''); }catch(e){} else try{ history.replaceState({tool:p},''); }catch(e){}
       desk.querySelector('.dpane.on')&&(desk.querySelector('.dpane.on').scrollTop=0); } }
   function show(p){ desk.querySelectorAll('.dtabs [data-p]').forEach(b=>b.classList.toggle('on',b.dataset.p===p)); desk.querySelectorAll('.dpane').forEach(d=>d.classList.toggle('on',d.id==='dp-'+p)); dock(p==='keys'); toolPage(p); if(p==='book') renderBook(); if(p==='qs') fillQs(); if(p==='base') fillBase(); if(p==='moves') fillMoves(); if(p==='graph') initGraph(); if(p==='rand') loadRand(); else if(window.MathKeys) MathKeys.limit(null); st.tab=p; save(); }
@@ -2179,7 +2179,16 @@ function list(){ const s=S(); if(!s) return;
     box.querySelector('.sk-x').onclick=()=>{ box.remove(); document.body.classList.remove('stickopen'); };
     box.querySelectorAll('.sk-sit').forEach(b=>b.onclick=()=>{ const sc=b.dataset.s, k=sc==='step'?b.dataset.k:+b.dataset.k; box.remove(); s.sit(sc,k,{via:'stick'}); });
   }); }
-window.LadderMeasure={list,finished,indexIcons,testIn}; /* 0.3.23: LadderLock draws the icons once the rows are settled */
+/* toolscreens */ /* the same list, written into a given element (the Answering Questions screen) */
+function fill(el,before){ const s=S(); if(!s||!el) return; s.maps().then(()=>{
+    const F=finished(), lab=(sc,k)=>sc==='step'?((window.LADDER_CARDMAP||{})[k]||[k])[0]:sc+' '+k;
+    const st=(sc,k)=>{ const c=cert(s.certKey(sc,k)); return c?(c.via==='measure'?'measured ahead':'★ measured '+(c.score||'')):'not yet measured'; };
+    el.innerHTML=F.length?'<p class="sk-n">The sections you have reached. Each measure draws fresh questions from its own pool; 80% passes and gives the gold star.</p>'
+        +F.map(f=>'<details class="sk-fl"'+(f===F[F.length-1]?' open':'')+'><summary>floor '+f.fl+' · '+f.rows.length+'</summary><ul class="sk-list">'
+          +f.rows.map(([sc,k])=>'<li><button type="button" class="sk-msit" data-s="'+sc+'" data-k="'+k+'">'+lab(sc,k)+'</button> <span class="sk-st">'+st(sc,k)+'</span></li>').join('')+'</ul></details>').join('')
+      :'<p class="sk-n">Nothing is reached yet. Each step’s measuring stick is here as soon as you reach it. To test into a section you have not reached, use the small ruler beside it on the ladder.</p>';
+    el.querySelectorAll('.sk-msit').forEach(b=>b.onclick=()=>{ const sc=b.dataset.s, k=sc==='step'?b.dataset.k:+b.dataset.k; if(before) before(); s.sit(sc,k,{via:'stick'}); }); }); }
+window.LadderMeasure={list,fill,finished,indexIcons,testIn}; /* 0.3.23: LadderLock draws the icons once the rows are settled */
 })();
 
 /* ---- 0.3.25 (Andrew 11:08) index rows: the title sits on the row's centre whatever comes with it. The ruler or gold star
@@ -2257,7 +2266,7 @@ function finish(chid){ const r=get('sq:'+chid,{}); r.done=true; r.t=Date.now(); 
   if(el&&!el.classList.contains('done')&&el.__tick) el.__tick();
   if(window.__barStats) window.__barStats(); }
 /* 2026-11-12 (Andrew 21:26Z): every end of a tree offers the way back to the Answering Open Questions list */
-function backBtn(to){ const p=document.createElement('p'); p.innerHTML='<button type="button" class="sq-back">Answering Open Questions</button>'; p.querySelector('.sq-back').onclick=()=>list(); to.appendChild(p); }
+function backBtn(to){ const p=document.createElement('p'); p.innerHTML='<button type="button" class="sq-back">Answering Questions</button>'; p.querySelector('.sq-back').onclick=()=>list(); to.appendChild(p); }
 function walk(chid,opts){ opts=opts||{}; const stem=opts.stem||stemOf(chid);
   const body=frame(chid); body.innerHTML='<p class="sk-q">Gathering the path…</p>';
   trees(stem).then(T=>{ const tr=T[chid]; if(!tr){ body.innerHTML='<p class="sk-q">This standing question has no branching path yet. You can still work it on paper and tick it on its page.</p>'; return; }
@@ -2308,10 +2317,13 @@ function pageHooks(){ const ids=[...document.querySelectorAll('section.challenge
 function tools(body){ const p=document.createElement('p'); p.className='sk-tools'; p.innerHTML='<button type="button" class="sk-cross">Crosswalk</button> <button type="button" class="sk-qs">Questions</button>';
   p.querySelector('.sk-cross').onclick=()=>{ close(); if(window.LadderCards) LadderCards.open(); };
   p.querySelector('.sk-qs').onclick=()=>{ close(); const d=document.getElementById('desk'), b=document.getElementById('deskbtn'); if(b&&!(d&&d.classList.contains('open'))) b.click(); const q=document.querySelector('#desk .dtabs [data-p="qs"]'); if(q) q.click(); };
-  body.prepend(p); }
+  body.prepend(p);
+  /* toolscreens */ /* gold stars and wings are earned on one screen: the Measuring Stick, then the standing questions */
+  const ms=document.createElement('section'); ms.className='sk-ms'; ms.innerHTML='<h4 class="sk-h sk-h-ms">Measuring Stick <span>gold stars</span></h4><div class="sk-msb"></div><h4 class="sk-h sk-h-sq">Standing Questions <span>wings</span></h4>';
+  p.after(ms); if(window.LadderMeasure&&LadderMeasure.fill) LadderMeasure.fill(ms.querySelector('.sk-msb'),close); }
 /* the toolbox list */
 function list(here){ here=typeof here==='string'?here:null; close(); const body=frame('','');
-  box.querySelector('.sk-top span').textContent='answering open questions'; body.innerHTML='<p class="sk-q">Gathering them…</p>';
+  box.querySelector('.sk-top span').textContent='answering questions'; box.querySelector('.sk-top').dataset.slug='earn stars'; body.innerHTML='<p class="sk-q">Gathering them…</p>';
   Promise.all([window.LadderStick?LadderStick.maps():null,script('sq/index.js',()=>window.LADDER_SQINDEX),/* sqlist */script('sq/titles.js',()=>window.LADDER_SQTITLES).catch(()=>{})]).then(()=>{
     const P=get('pages:done',{}), I=window.LADDER_SQINDEX||{}, M=window.LADMAP||[]; const out=[];
     M.forEach(([fl,rungs])=>rungs.forEach(([r,core,annex])=>core.concat(annex).forEach(([s])=>{ if(P[s]&&P[s].v&&I[s]) out.push([fl,s,I[s],r]); })));
@@ -2399,8 +2411,8 @@ function catalogue(want){ data().then(D=>{ if(!D) return;
     return '<details class="sk-fl k-'+esc(k)+'"'+(show?' open':'')+'><summary>'+esc(sum)+'</summary><ul class="sk-list">'
       +open.map(a=>'<li><a href="'+a[0]+'.html">'+esc(a[1])+'</a> <span class="sk-st">'+esc(a[2])+(P[a[0]]&&P[a[0]].v?' ✓':'')+'</span></li>').join('')
       +(nx?'<li class="sk-st">'+esc(open.length?nx:nx.replace('next annex','first annex'))+'</li>':'')+'</ul></details>'; };
-  box.innerHTML='<div class="sk-card"><div class="sk-top"><span>the annexes</span><button type="button" class="sk-x" aria-label="close">×</button></div>'
-    +'<p class="sk-n">The annexes by subject, in the order you meet them. The climb runs through the steps, statistics, the newsflash and the research front; every other annex is here, or on the ladder itself under dizzying heights. An annex opens when you open its rung.</p>'
+  box.innerHTML='<div class="sk-card"><div class="sk-top" data-slug="By Subject"><span>the annexes</span><button type="button" class="sk-x" aria-label="close">×</button></div>'
+    +'<p class="sk-n sk-n0" hidden></p>'
     +D.order.map(sec).join('')+'</div>';
   { const ba=document.querySelector('#desk .dtabs [data-p="base"]'); /* toolbox gear: the Cellar is reached from here */
     if(ba&&!ba.classList.contains('lk-hide')){ const p=document.createElement('p'); p.className='sk-tools'; p.innerHTML='<button type="button" class="sk-cellar">Cellar</button>';
@@ -2886,3 +2898,14 @@ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded'
 /* nunito */
 /* nunito figures */
 try{ if(document.fonts&&document.fonts.load){ window.addEventListener('load',function(){ if(!document.querySelector('canvas')) return; document.fonts.load('600 12px Nunito').then(function(){ try{ window.dispatchEvent(new Event('resize')); }catch(e){} }); }); } }catch(e){}
+/* toolscreens */
+(function(){ 'use strict'; if(window.LADDER_DESK) return;
+  const closeStick=()=>{ const s=document.getElementById('stick'); if(s){ s.remove(); document.body.classList.remove('stickopen'); } };
+  document.addEventListener('click',e=>{ if(e.target.closest&&e.target.closest('#lbar')&&document.getElementById('stick')) closeStick(); },true);
+  const boot=()=>{ if(!document.querySelector('.rungs')) return;
+    const f=document.createElement('button'); f.type='button'; f.id='annexfab'; f.textContent='Annexes'; f.hidden=true;
+    f.onclick=()=>{ if(window.LadderAnnexes) LadderAnnexes.catalogue(); }; document.body.appendChild(f);
+    const sync=()=>{ const a=document.querySelector('#desk .dannex'); f.hidden=!(a&&!a.classList.contains('lk-hide')); };
+    sync(); let n=0; const t=setInterval(()=>{ sync(); if(++n>60) clearInterval(t); },250); document.addEventListener('click',()=>setTimeout(sync,60)); };
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(boot,0)); else boot();
+})();
