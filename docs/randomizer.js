@@ -8770,6 +8770,35 @@ QP.push({id:'9b.twice',step:'9b',mode:'work',label:'a function after itself',ope
     return {index:'q:9b.twice['+a+';'+t+']', a3:['9b.functions[1/('+a+' + x)]','9b.after',DASH], lines:[['f(x) = 1/('+a+' + x)','for x ≠ −'+a]], ask:'What is (f ∘ f)('+t+')?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'(f ∘ f)('+t+') = f(f('+t+')): the inside goes first. f('+t+') = '+fshow(f)+', and f('+fshow(f)+') = 1/('+a+' + '+fshow(f)+') = '+right+'. Squaring f('+t+') multiplies, which is not doing f again.'}; }
   return null; }});
+/* --- sets named by bars, as intervals (8h): four families are the seeds, the numbers are dealt afresh; each wrong option is a wrong move --- */
+const BJ_FAM=['near a point','far from a point','a square near a number','one over one plus a square'];
+const BJ_o=(m,M)=>'('+sg(m)+', '+sg(M)+')', BJ_c=(m,M)=>'['+sg(m)+', '+sg(M)+']', BJ_xc=c=>c===0?'x':'x'+pm(-c);
+const BJ_MAKE=[
+  ()=>{ const c=rnd(11)-5, d=1+rnd(4), le=Math.random()<0.4, I=le?BJ_c:BJ_o; if(c===0) return null;
+    return {key:[c,d,le?1:0], line:'|'+BJ_xc(c)+'| '+(le?'≤':'<')+' '+d, right:I(c-d,c+d), wrong:[I(-c-d,-c+d),(le?BJ_o:BJ_c)(c-d,c+d),'(−∞, '+sg(c+d)+(le?']':')')], link:'8h.unpack',
+      why:'The unpack-the-bars technique: |'+BJ_xc(c)+'| '+(le?'≤':'<')+' '+d+' exactly when −'+d+' '+(le?'≤':'<')+' '+BJ_xc(c)+' '+(le?'≤':'<')+' '+d+', so '+sg(c-d)+' '+(le?'≤':'<')+' x '+(le?'≤':'<')+' '+sg(c+d)+': the reals within '+d+' of '+sg(c)+(le?', ends let in.':', ends left out.')}; },
+  ()=>{ const c=rnd(11)-5, d=1+rnd(4); if(c===0) return null;
+    return {key:[c,d], line:'|'+BJ_xc(c)+'| > '+d, right:'(−∞, '+sg(c-d)+') ∪ ('+sg(c+d)+', ∞)', wrong:[BJ_o(c-d,c+d),'('+sg(c+d)+', ∞)','(−∞, '+sg(-c-d)+') ∪ ('+sg(-c+d)+', ∞)'], link:'8h.distance',
+      why:'|'+BJ_xc(c)+'| is the distance from x to '+sg(c)+'. More than '+d+' away is below '+sg(c-d)+' or above '+sg(c+d)+'. Keeping only the right-hand stretch drops the case '+BJ_xc(c)+' < 0.'}; },
+  ()=>{ const [p,q]=pick([[1,3],[0,2],[1,5],[2,4],[3,5],[2,6],[1,7]]), m=(p*p+q*q)/2, d=(q*q-p*p)/2;
+    const right=p===0?'('+sg(-q)+', 0) ∪ (0, '+q+')':BJ_o(-q,-p)+' ∪ '+BJ_o(p,q);
+    return {key:[p,q], line:'|x² − '+m+'| < '+d, right, wrong:[BJ_o(-q,q),BJ_o(p,q),p===0?'['+sg(-q)+', 0) ∪ (0, '+q+']':BJ_c(-q,-p)+' ∪ '+BJ_c(p,q)], link:'8h.unpack',
+      why:'Unpack the bars: '+(m-d)+' < x² < '+(m+d)+'. The squares above '+(m-d)+' and below '+(m+d)+' come from x between '+p+' and '+q+', and from x between '+sg(-q)+' and '+sg(-p)+'. '+(p===0?'At 0 the square is 0, which is not above 0.':'Leaving out the negatives forgets that (−x)² = x².')}; },
+  ()=>{ const r=1+rnd(4), k=r*r+1, ge=Math.random()<0.6;
+    return {key:[r,ge?1:0], line:'1/(1 + x²) '+(ge?'≥':'≤')+' 1/'+k, right:ge?BJ_c(-r,r):'(−∞, '+sg(-r)+'] ∪ ['+r+', ∞)', wrong:ge?[BJ_o(-r,r),'(−∞, '+sg(-r)+'] ∪ ['+r+', ∞)','[0, '+r+']']:[BJ_c(-r,r),'(−∞, '+sg(-r)+') ∪ ('+r+', ∞)','['+r+', ∞)'], link:'8d.reciprocal',
+      why:'Both sides are positive, and for positives a larger number has a smaller reciprocal: the line holds exactly when 1 + x² '+(ge?'≤':'≥')+' '+k+', that is x² '+(ge?'≤':'≥')+' '+(r*r)+'. '+(ge?'So −'+r+' ≤ x ≤ '+r+', ends let in.':'So x ≤ −'+r+' or '+r+' ≤ x, ends let in.')}; }];
+QP.push({id:'8h.sets',step:'8h',mode:'work',label:'sets named by bars, as intervals',open:()=>measured('8h'),make(){
+  for(let tries=0;tries<40;tries++){ const k=rnd(BJ_MAKE.length), q=BJ_MAKE[k](); if(!q) continue; const wrong=uniq(q.right,q.wrong,3); if(wrong.length<3) continue;
+    return {index:'q:8h.sets['+k+';'+q.key.join(',')+']', a3:['8h.bars['+BJ_FAM[k]+']',q.link,DASH], lines:[[q.line,'the condition']], ask:'Which interval, or union of intervals, is the set of x that meet it?', right:q.right, opts:shuffle([q.right,...wrong]), lead:'', why:q.why}; }
+  return null; }});
+/* --- points between two ends (8h): (1 − t)a + tb walks from a to b; the ends and the share are dealt afresh --- */
+QP.push({id:'8h.between',step:'8h',mode:'work',label:'the point a share of the way along',open:()=>measured('8h'),make(){
+  for(let tries=0;tries<30;tries++){ const [tp,tq]=pick([[1,2],[1,3],[2,3],[1,4],[3,4],[1,5],[2,5]]), a=rnd(13)-6, b=a+tq*(1+rnd(3)), t=fr(tp,tq), s=fr(tq-tp,tq);
+    const at=(x,y)=>fadd(fmul(s,fint(x)),fmul(t,fint(y))), right=fshow(at(a,b)), name=tp===1&&tq===2?'halfway':fshow(t)+' of the way';
+    const wrong=uniq(right,[fshow(at(b,a)),fshow(fmul(t,fint(b-a))),fshow(fadd(fint(a),fmul(t,fint(b)))),fshow(fmul(t,fint(b)))],3); if(wrong.length<3) continue;
+    return {index:'q:8h.between['+a+';'+b+';'+tp+'/'+tq+']', a3:['8h.ends['+a+','+b+']','8h.distance',DASH], lines:[['['+sg(a)+', '+sg(b)+']','an interval'],['x = (1 − t)a + tb, with a = '+sg(a)+' and b = '+sg(b),'a point of it, for 0 ≤ t ≤ 1']], ask:'Which point is '+name+' from '+sg(a)+' to '+sg(b)+'?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'(1 − t)a + tb = a + t(b − a): start at a and go the share t of the distance b − a = '+(b-a)+'. With t = '+fshow(t)+' that is '+sg(a)+' + '+fshow(fmul(t,fint(b-a)))+' = '+right+'.'+(tq===2?'':' Starting from b instead walks the other way.')+' t(b − a) alone forgets to start at a.'}; }
+  return null; }});
 
 /* ===== Rung pools, rungs 32 on (Andrew 2026-11-13) ===== */
 /* ----- rung 32: waves and frequencies, 32a to 32l ----- */
