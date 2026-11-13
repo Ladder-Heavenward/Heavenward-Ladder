@@ -8329,6 +8329,522 @@ pINF('∞·logi.line','∞·logi','proof','how a best plan is checked',function(
     ['l9',[['picking drivers in turn left one job waiting','given'],['some group of jobs is short of drivers','a job waits']],2,1,'The order of picking is not a bound: another order of picking may serve every job.']];
   return line28('∞·logi.line',V,[]); });
 
+/* ===== Books (Andrew 2026-11-13): exercises as seeds, links and bank. A seed is a function, a law, a statement or a claim;
+   a link is a technique laid on it; the bank lends the story and the units. Every address at the foot reads seed.link.bank. ===== */
+/* --- a small reader of the laundry's own marks, so a planted line can be told from the right one by its values --- */
+const bkEval=(s,env)=>{ const T=s.match(/\d+(?:\.\d+)?|[a-zA-Zθ]|√\(|∛\(|[·\/+−^()]/g)||[]; let i=0;
+  const expr=()=>{ let v=term(); while(T[i]==='+'||T[i]==='−'){ const o=T[i++], w=term(); v=o==='+'?v+w:v-w; } return v; };
+  const term=()=>{ let v=un(); while(T[i]==='·'||T[i]==='/'){ const o=T[i++], w=un(); v=o==='·'?v*w:v/w; } return v; };
+  const un=()=>T[i]==='−'?(i++,-un()):pw();
+  const pw=()=>{ const b=atom(); if(T[i]==='^'){ i++; return Math.pow(b,T[i]==='−'?(i++,-atom()):atom()); } return b; };
+  const atom=()=>{ const t=T[i++]; if(t==='('){ const v=expr(); i++; return v; } if(t==='√('){ const v=expr(); i++; return Math.sqrt(v); } if(t==='∛('){ const v=expr(); i++; return Math.cbrt(v); }
+    return /^\d/.test(t)?+t:env[t]; };
+  const v=expr(); return i===T.length?v:NaN; };
+const BK_ENV={a:1.3,b:0.7,c:2.1,d:1.9,n:3,m:2,q:4,g:9.8,k:1.7}, BK_PTS=[0.35,0.6,0.85,1.1,1.45,1.8,2.2,2.6];
+const bkVals=(s,iv)=>BK_PTS.map(x=>bkEval(s,Object.assign({},BK_ENV,{[iv]:x})));
+const bkSame=(s,t,iv)=>{ const A=bkVals(s,iv), B=bkVals(t,iv); let seen=0; for(let j=0;j<A.length;j++){ if(!isFinite(A[j])||!isFinite(B[j])) continue; seen++; if(Math.abs(A[j]-B[j])>1e-7*Math.max(1,Math.abs(A[j]))) return false; } return seen>0; };
+/* --- the seeds: functions with their slopes, each at the step where its technique is built: [the line, what is asked, right, three wrong moves] --- */
+const BK13d=[
+  ['y = x^13','dy/dx','13·x^12',['13·x^13','x^12','13·x^14']],
+  ['y = a·x^3 + 6','dy/dx','3·a·x^2',['3·a·x^2 + 6','a·x^2','3·a·x^3']],
+  ['y = 1.18·t^2 + 22.4','dy/dt','2.36·t',['2.36·t + 22.4','1.18·t','2.36·t^2']],
+  ['u = (a·z^n − 1)/c','du/dz','(a·n/c)·z^(n − 1)',['(a·n/c)·z^(n − 1) − 1/c','a·n·z^(n − 1)','(a/c)·z^(n − 1)']],
+  ['y = a·x^2 + b·x + c','dy/dx','2·a·x + b',['2·a·x + b + c','a·x + b','2·a·x + b·x']],
+  ['y = (x + a)^2','dy/dx','2·x + 2·a',['2·x','2·x + a','x + a']],
+  ['y = (x + a)^3','dy/dx','3·x^2 + 6·a·x + 3·a^2',['3·x^2','3·x^2 + 3·a^2','3·(x + a)^3']],
+  ['w = a·t − (1/2)·b·t^2','dw/dt','a − b·t',['a − (1/2)·b·t','a·t − b·t','a − b·t^2']],
+  ['C = a + b·t + c·t^2','dC/dt','b + 2·c·t',['a + b + 2·c·t','b + c·t','b·t + 2·c·t']]];
+const BK13h=[
+  ['y = x^(−3/2)','dy/dx','−(3/2)·x^(−5/2)',['−(3/2)·x^(−1/2)','(3/2)·x^(−5/2)','−(3/2)·x^(−3/2)']],
+  ['y = x^(2·a)','dy/dx','2·a·x^(2·a − 1)',['2·a·x^(2·a)','x^(2·a − 1)','2·x^(2·a − 1)']],
+  ['u = t^2.4','du/dt','2.4·t^1.4',['2.4·t^2.4','t^1.4','2.4·t^3.4']],
+  ['z = ∛(u)','dz/du','(1/3)·u^(−2/3)',['(1/3)·u^(1/3)','(1/3)·u^(2/3)','3·u^(−2/3)']],
+  ['y = ∛(x^(−5))','dy/dx','−(5/3)·x^(−8/3)',['−(5/3)·x^(−2/3)','(5/3)·x^(−8/3)','−(5/3)·x^(−5/3)']],
+  ['u = (1/x^8)^(1/5)','du/dx','−(8/5)·x^(−13/5)',['−(8/5)·x^(−3/5)','(8/5)·x^(−13/5)','−(8/5)·x^(−8/5)']],
+  ['y = 2·x^a','dy/dx','2·a·x^(a − 1)',['2·a·x^a','a·x^(a − 1)','2·x^(a − 1)']],
+  ['y = (x^3)^(1/q)','dy/dx','(3/q)·x^(3/q − 1)',['(3/q)·x^(3/q)','(q/3)·x^(3/q − 1)','3·x^(3/q − 1)']],
+  ['y = (1/x^m)^(1/n)','dy/dx','−(m/n)·x^(−m/n − 1)',['(m/n)·x^(−m/n − 1)','−(m/n)·x^(−m/n)','−(m/n)·x^(−m/n + 1)']],
+  ['y = 13·x^(3/2) − c','dy/dx','(39/2)·x^(1/2)',['(39/2)·x^(1/2) − c','13·x^(1/2)','(39/2)·x^(3/2)']],
+  ['y = 12·x^(1/2) + c^(1/2)','dy/dx','6·x^(−1/2)',['6·x^(−1/2) + (1/2)·c^(−1/2)','12·x^(−1/2)','6·x^(1/2)']],
+  ['y = c^(1/2)·x^(1/2)','dy/dx','(1/2)·c^(1/2)·x^(−1/2)',['(1/4)·c^(−1/2)·x^(−1/2)','c^(1/2)·x^(−1/2)','(1/2)·c^(1/2)·x^(1/2)']]];
+const BK13c=[
+  ['x = (y + 3)·(y + 5)','dx/dy','2·y + 8',['1','y + 5','2·y + 15']],
+  ['y = (197·x − 34·x^2)·(7 + 22·x − 83·x^3)','dy/dx','(197 − 68·x)·(7 + 22·x − 83·x^3) + (197·x − 34·x^2)·(22 − 249·x^2)',['(197 − 68·x)·(22 − 249·x^2)','(197 − 68·x)·(7 + 22·x − 83·x^3) − (197·x − 34·x^2)·(22 − 249·x^2)','(197 − 68·x)·(7 + 22·x − 83·x^3)']],
+  ['y = 1.3709·x·(112.6 + 45.202·x^2)','dy/dx','1.3709·(112.6 + 45.202·x^2) + 1.3709·x·(90.404·x)',['1.3709·(90.404·x)','1.3709·(112.6 + 45.202·x^2) − 1.3709·x·(90.404·x)','1.3709·(112.6 + 45.202·x^2)']]];
+const BK13i=[
+  ['y = (2·x + 3)/(3·x + 2)','dy/dx','−5/(3·x + 2)^2',['5/(3·x + 2)^2','2/3','−5/(3·x + 2)']],
+  ['y = (a·x + b)/(c·x + d)','dy/dx','(a·d − b·c)/(c·x + d)^2',['(b·c − a·d)/(c·x + d)^2','a/c','(a·d + b·c)/(c·x + d)^2']],
+  ['y = (1 + x + 2·x^2 + 3·x^3)/(1 + x + 2·x^2)','dy/dx','(6·x^4 + 6·x^3 + 9·x^2)/(1 + x + 2·x^2)^2',['−(6·x^4 + 6·x^3 + 9·x^2)/(1 + x + 2·x^2)^2','(1 + 4·x + 9·x^2)/(1 + 4·x)','(6·x^4 + 6·x^3 + 9·x^2)/(1 + x + 2·x^2)']],
+  ['y = (x^n + a)/(x^(−n) + b)','dy/dx','(a·n·x^(−n − 1) + b·n·x^(n − 1) + 2·n·x^(−1))/(x^(−n) + b)^2',['(n·x^(n − 1))/(−n·x^(−n − 1))','(b·n·x^(n − 1) − a·n·x^(−n − 1))/(x^(−n) + b)^2','(a·n·x^(−n − 1) + b·n·x^(n − 1) + 2·n·x^(−1))/(x^(−n) + b)']]];
+const BK13e=[ /* [the line, what is asked, right, three wrong moves] */
+  ['y = √(x^2 + 1)','dy/dx','x/√(x^2 + 1)',['1/(2·√(x^2 + 1))','2·x/√(x^2 + 1)','x·√(x^2 + 1)']],
+  ['y = √(x^2 + a^2)','dy/dx','x/√(x^2 + a^2)',['1/(2·√(x^2 + a^2))','(x + a)/√(x^2 + a^2)','2·x/√(x^2 + a^2)']],
+  ['y = 1/√(a + x)','dy/dx','−1/(2·√((a + x)^3))',['1/(2·√((a + x)^3))','−1/(2·√(a + x))','−1/√((a + x)^3)']],
+  ['y = a/√(a − x^2)','dy/dx','a·x/√((a − x^2)^3)',['−a·x/√((a − x^2)^3)','−a/(2·√((a − x^2)^3))','2·a·x/√((a − x^2)^3)']],
+  ['y = √(x^2 − a^2)/x^2','dy/dx','(2·a^2 − x^2)/(x^3·√(x^2 − a^2))',['1/(2·√(x^2 − a^2))','(x^2 − 2·a^2)/(x^3·√(x^2 − a^2))','(3·x^2 − 2·a^2)/(x^3·√(x^2 − a^2))']],
+  ['y = (a^2 + x^2)/(a + x)^2','dy/dx','2·a·(x − a)/(x + a)^3',['2·a·(a − x)/(x + a)^3','x/(a + x)','2·a·(x − a)/(x + a)^4']],
+  ['y = √(1 − θ^2)/(1 − θ)','dy/dθ','1/((1 − θ)·√(1 − θ^2))',['−1/((1 − θ)·√(1 − θ^2))','θ/√(1 − θ^2)','1/((1 − θ)^2·√(1 − θ^2))']]];
+const BK13d2=[ /* [the line, what is asked, right, three wrong moves] */
+  ['y = 17·x + 12·x^2','d²y/dx²','24',['17 + 24·x','0','12']],
+  ['y = (x^2 + a)/(x + a)','d²y/dx²','2·a·(a + 1)/(x + a)^3',['(x^2 + 2·a·x − a)/(x + a)^2','−2·a·(a + 1)/(x + a)^3','2·a·(a + 1)/(x + a)^2']],
+  ['y = 1 + x + x^2/2 + x^3/6 + x^4/24','d²y/dx²','1 + x + x^2/2',['1 + x + x^2/2 + x^3/6','1 + x','x^2/2 + x^3/6']],
+  ['y = a·x^2 + b·x + c','d²y/dx²','2·a',['2·a·x + b','0','a']],
+  ['y = (x + a)^3','d²y/dx²','6·x + 6·a',['3·x^2 + 6·a·x + 3·a^2','6','6·x']],
+  ['w = a·t − (1/2)·b·t^2','d²w/dt²','−b',['a − b·t','0','b']],
+  ['y = a + b·t^2 + c·t^4','d²y/dt²','2·b + 12·c·t^2',['2·b·t + 4·c·t^3','2·b + 4·c·t^2','12·c·t^2']],
+  ['x = a·t − (1/2)·g·t^2','d²x/dt²','−g',['a − g·t','g','−g·t']]];
+const BK_SEEDS=[['13d',BK13d],['13h',BK13h],['13c',BK13c],['13i',BK13i],['13e',BK13e]].flatMap(([step,L])=>L.map((r,k)=>({step,k,addr:step+'.functions['+k+']',f:r[0].split(' = ')[1],iv:r[1].split('/d')[1],d:r[2],w:r[3]})));
+const bkP=s=>/^(\d+(\.\d+)?|[a-zA-Zθ])$/.test(s)?s:'('+s+')';
+/* a seed asked bare: no link */
+const bkRun=(id,L,why,tag)=>{ const k=rnd(L.length), [f,ask,right,wrong]=L[k], ws=shuffle(wrong.slice());
+  return {index:'q:'+id+'['+k+';'+ws.map(w=>w.length).join('.')+']', a3:[id.split('.')[0]+'.functions['+k+']',DASH,DASH], lines:[[f,tag||'to be differentiated']], ask:'What is '+ask+'?', right, opts:shuffle([right,...ws]), lead:'It is '+right+'. ', why}; };
+QP.push({id:'13d.run',step:'13d',mode:'work',label:'slopes to run',open:()=>measured('13d'),make(){
+  return bkRun('13d.run',BK13d,'Term by term: slopes add, a constant factor stays in front, a constant on its own has slope 0, and the power technique brings each power down in front and lowers it by 1.'); }});
+QP.push({id:'13h.run',step:'13h',mode:'work',label:'fraction powers to run',open:()=>measured('13h'),make(){
+  return bkRun('13h.run',BK13h,'Write the function as one power of the input first. Then the fraction-power technique for slopes: the power comes down in front as a multiplier, and the power itself drops by 1. A letter that is not the input is a constant.'); }});
+QP.push({id:'13c.run',step:'13c',mode:'work',label:'products to run',open:()=>measured('13c'),make(){
+  return bkRun('13c.run',BK13c,'The product technique for slopes: the slope of the first times the second, plus the first times the slope of the second. It is not the product of the two slopes.'); }});
+QP.push({id:'13i.run',step:'13i',mode:'work',label:'quotients to run',open:()=>measured('13i'),make(){
+  return bkRun('13i.run',BK13i,'For a quotient: the slope of the top times the bottom, minus the top times the slope of the bottom, all over the bottom squared. It is not the slope of the top over the slope of the bottom.'); }});
+QP.push({id:'13e.run',step:'13e',mode:'work',label:'chains to run',open:()=>measured('13e'),make(){
+  return bkRun('13e.run',BK13e,'The chain technique for slopes: take the slope of the outside with the inside left alone, then multiply by the slope of the inside. Leaving out the slope of the inside, or its sign, is the usual slip.'); }});
+QP.push({id:'13d.twice',step:'13d',mode:'work',label:'the slope of the slope to run',open:()=>measured('13d'),make(){
+  const q=bkRun('13d.twice',BK13d2,'The slope of the slope: take the slope, then take the slope of what you got. Stopping after one pass gives the slope, not the slope of the slope.','to be differentiated twice'); q.a3=[q.a3[0].replace('functions','twice'),'13d.twice',DASH]; return q; }});
+/* --- the links: a technique laid on one seed or two. The right line is built from the seeds' own slopes; each wrong line is the link misapplied. --- */
+const BK_LINKS=[
+  {id:'13d.factor',step:'13d',two:false,label:'a constant factor on a seed',
+    make:(F,G,p)=>({f:p+'·'+bkP(F.f), right:p+'·'+bkP(F.d), wrong:[F.d, p+' + '+bkP(F.d), p+'·'+bkP(F.w[0]), p+'·'+bkP(F.w[1])],
+      why:'A constant factor stays in front: the slope of '+p+'·f is '+p+'·f′. Here f′ = '+F.d+'.'}), par:()=>pick(['2','3','5','7','k'])},
+  {id:'13d.sum',step:'13d',two:true,label:'two seeds added',
+    make:(F,G)=>({f:bkP(F.f)+' + '+bkP(G.f), right:bkP(F.d)+' + '+bkP(G.d), wrong:[bkP(F.d)+'·'+bkP(G.d), F.d, bkP(F.d)+' + '+bkP(G.f), bkP(F.w[0])+' + '+bkP(G.d)],
+      why:'Slopes add: the slope of a sum is the sum of the slopes. The two slopes are '+F.d+' and '+G.d+'.'})},
+  {id:'13c.times',step:'13c',two:true,label:'two seeds multiplied',
+    make:(F,G)=>({f:bkP(F.f)+'·'+bkP(G.f), right:bkP(F.d)+'·'+bkP(G.f)+' + '+bkP(F.f)+'·'+bkP(G.d), wrong:[bkP(F.d)+'·'+bkP(G.d), bkP(F.d)+'·'+bkP(G.f)+' − '+bkP(F.f)+'·'+bkP(G.d), bkP(F.d)+'·'+bkP(G.d)+' + '+bkP(F.f)+'·'+bkP(G.f), bkP(F.d)+'·'+bkP(G.f)],
+      why:'The product technique for slopes: the slope of the first times the second, plus the first times the slope of the second. The two slopes are '+F.d+' and '+G.d+'. It is not the product of the two slopes.'})},
+  {id:'13i.over',step:'13i',two:true,label:'one seed over another',
+    make:(F,G)=>{ const t=bkP(F.d)+'·'+bkP(G.f), u=bkP(F.f)+'·'+bkP(G.d), sq=bkP(G.f)+'^2'; return {f:bkP(F.f)+'/'+bkP(G.f), right:'('+t+' − '+u+')/'+sq, wrong:[bkP(F.d)+'/'+bkP(G.d), '('+t+' + '+u+')/'+sq, '('+u+' − '+t+')/'+sq, '('+t+' − '+u+')/'+bkP(G.f)],
+      why:'For a quotient: the slope of the top times the bottom, minus the top times the slope of the bottom, all over the bottom squared. The two slopes are '+F.d+' and '+G.d+'.'}; }},
+  {id:'13e.power',step:'13e',two:false,label:'a seed raised to a power',
+    make:(F,G,p)=>{ const n=+p, low=n===2?bkP(F.f):bkP(F.f)+'^'+(n-1); return {f:bkP(F.f)+'^'+n, right:n+'·'+low+'·'+bkP(F.d), wrong:[n+'·'+low, n+'·'+(n===2?bkP(F.d):bkP(F.d)+'^'+(n-1)), n+'·'+bkP(F.f)+'^'+n+'·'+bkP(F.d), low+'·'+bkP(F.d)],
+      why:'The chain technique for slopes: the outside is a power, so its slope is '+n+'·'+low+' with the inside left alone; then multiply by the slope of the inside, '+F.d+'.'}; }, par:()=>pick(['2','3','4','5'])},
+  {id:'13h.root',step:'13h',two:false,label:'the root of a seed',
+    make:(F)=>({f:'√('+F.f+')', right:bkP(F.d)+'/(2·√('+F.f+'))', wrong:['1/(2·√('+F.f+'))', bkP(F.d)+'/√('+F.f+')', '√('+F.d+')', bkP(F.d)+'·(2·√('+F.f+'))'],
+      why:'A root is the power 1/2, so the fraction-power technique gives 1/(2·√(inside)) for the outside; the chain technique then multiplies by the slope of the inside, '+F.d+'.'})}];
+const BK_ORDER=['13c','13d','13e','13h','13i'];
+BK_LINKS.forEach(L=>QP.push({id:L.id,step:L.step,mode:'work',label:L.label,open:()=>measured(L.step),make(){
+  const S=BK_SEEDS.filter(s=>measured(s.step)); for(let tries=0;tries<40;tries++){
+    const F=pick(S.filter(s=>s.f.length<=(L.two?16:24))), G=L.two?pick(S.filter(s=>s!==F&&s.iv===F.iv&&s.f.length<=16)):null; if(!F||(L.two&&!G)) continue;
+    const p=L.par?L.par():'', c=L.make(F,G,p); if(p===F.iv||(p==='k'&&/k/.test(F.f))) continue; if(c.right.length>64) continue;
+    if(!BK_PTS.some(x=>isFinite(bkEval(c.right,Object.assign({},BK_ENV,{[F.iv]:x}))))) continue;
+    const ws=shuffle([...new Set(c.wrong)].filter(w=>w!==c.right&&w.length<=70&&!bkSame(w,c.right,F.iv))); if(ws.length<3) continue;
+    const pickd=[]; for(const w of ws){ if(pickd.length<3&&!pickd.some(v=>bkSame(v,w,F.iv))) pickd.push(w); } if(pickd.length<3) continue;
+    const steps=[...new Set([L.step,F.step].concat(G?[G.step]:[]))].sort((x,y)=>BK_ORDER.indexOf(x)-BK_ORDER.indexOf(y));
+    return {index:'q:'+L.id+'['+F.addr+(G?'+'+G.addr:'')+';'+p+';'+pickd.map(w=>w.length).join('.')+']', a3:[F.addr+(G?'+'+G.addr:''),L.id+(p?'['+p+']':''),DASH], steps,
+      lines:[['y = '+c.f,'to be differentiated']], ask:'What is dy/d'+F.iv+'?', right:c.right, opts:shuffle([c.right,...pickd]), lead:'It is '+c.right+'. ', why:c.why}; }
+  return null; }}));
+/* a chain of links, each given: [the links, what is asked, right, three wrong moves, why] */
+const BK13el=[ /* [the links, what is asked, right, three wrong moves, why] */
+  ['u = (1/2)·x^3;  v = 3·(u + u^2);  w = 1/v^2','dw/dx','(−2/v^3) · (3 + 6·u) · ((3/2)·x^2)',['(−2/v^3) + (3 + 6·u) + ((3/2)·x^2)','(−2/v^3) · ((3/2)·x^2)','(−2/v) · (3 + 6·u) · ((3/2)·x^2)'],'One slope for each link, multiplied: dw/dv = −2/v^3, dv/du = 3 + 6·u, du/dx = (3/2)·x^2. Slopes along a chain multiply, they do not add, and no link may be skipped.'],
+  ['y = 3·x^2 + √(2);  z = √(1 + y);  v = 1/(√(3) + 4·z)','dv/dx','(−4/(√(3) + 4·z)^2) · (1/(2·√(1 + y))) · (6·x)',['(−4/(√(3) + 4·z)^2) · (6·x)','(−1/(√(3) + 4·z)^2) · (1/(2·√(1 + y))) · (6·x)','(−4/(√(3) + 4·z)^2) · (1/(2·√(1 + y))) · (6·x + √(2))'],'One slope for each link, multiplied: dv/dz = −4/(√(3) + 4·z)^2, dz/dy = 1/(2·√(1 + y)), dy/dx = 6·x. The 4 inside the first link is the slope of its own inside; √(2) is a constant and its slope is 0.'],
+  ['y = x^3/√(3);  z = (1 + y)^2;  u = 1/√(1 + z)','du/dx','(−1/(2·√((1 + z)^3))) · (2·(1 + y)) · (√(3)·x^2)',['(−1/(2·√((1 + z)^3))) · (√(3)·x^2)','(−1/(2·√(1 + z))) · (2·(1 + y)) · (√(3)·x^2)','(−1/(2·√((1 + z)^3))) · (2·(1 + y)) · (x^2/√(3))'],'One slope for each link, multiplied: du/dz = −1/(2·√((1 + z)^3)), dz/dy = 2·(1 + y), dy/dx = 3·x^2/√(3) = √(3)·x^2.'],
+  ['w = y^5;  z = y^2','dw/dz','(5/2)·y^3',['10·y^5','5·y^4','(5/2)·y^4'],'Both lean on y, so dw/dz = (dw/dy)/(dz/dy) = 5·y^4/(2·y) = (5/2)·y^3. Multiplying the two slopes gives 10·y^5; 5·y^4 is the slope against y, not against z.']];
+QP.push({id:'13e.links',step:'13e',mode:'work',label:'a chain of links',open:()=>measured('13e'),make(){
+  const k=rnd(BK13el.length), [links,ask,right,wrong,why]=BK13el[k], ws=shuffle(wrong.slice());
+  return {index:'q:13e.links['+k+';'+ws.map(w=>w.length).join('.')+']', a3:['13e.chains['+k+']','13e.links',DASH], lines:[[links,'the links as given']], ask:'Which line is '+ask+'?', right, opts:shuffle([right,...ws]), lead:'It is '+right+'. ', why}; }});
+/* --- motion (13d): the law is the seed, speed and gain are the links, the bank lends the mover and its unit --- */
+const BK_LAWS=[[0,0,16],[12,-4.5,6.2],[2.1,-3.2,4.8],[0,-10.8,0,6.8],[5,3,0.5],[0,2.4,0,1.5]];
+const BK_MOVERS=[['cart','A cart is s feet along its track t seconds after it starts','s','feet','moving'],['wheel','A wheel has turned through θ radians t seconds after it starts','θ','radians','turning'],
+  ['slider','A slider is s inches from its stop t seconds after it starts','s','inches','moving'],['bead','A bead is s centimetres along its wire t seconds after it starts','s','centimetres','moving']];
+const bkN=v=>String(+v.toFixed(4)).replace('-','−');
+const bkPoly=c=>{ const out=[]; c.forEach((a,k)=>{ if(!a) return; const m=bkN(Math.abs(a)), body=k===0?m:(m==='1'?'':m+'·')+'t'+(k>1?'^'+k:''); out.push([a<0,body]); });
+  return out.length?out.map(([neg,b],j)=>j===0?(neg?'−':'')+b:(neg?' − ':' + ')+b).join(''):'0'; };
+const bkD=c=>c.slice(1).map((a,k)=>a*(k+1)), bkAt=(c,t)=>c.reduce((s,a,k)=>s+a*Math.pow(t,k),0);
+[['13d.speed','speed read off a law',1],['13d.gain','the gain of speed read off a law',2]].forEach(([id,label,ord])=>QP.push({id,step:'13d',mode:'word',label,open:()=>measured('13d'),make(){
+  for(let tries=0;tries<40;tries++){ const k=rnd(BK_LAWS.length), c=BK_LAWS[k], b=rnd(BK_MOVERS.length), [bid,story,out,unit,verb]=BK_MOVERS[b], t=pick([0.5,1,1.5,2,3,4]);
+    const d1=bkD(c), d2=bkD(d1), flat=ord===2&&d2.length===1, U=unit+' per second'+(ord===2?', each second':''), val=v=>bkN(v)+' '+U;
+    const right=bkAt(ord===1?d1:d2,t), halfd=c.slice(1), cand=ord===1?[bkAt(c,t),bkAt(halfd,t),bkAt(d2,t),bkAt(d1.slice(1).map((a,j)=>a*Math.pow(t,j+1)),1),right*t]:[bkAt(d1,t),bkAt(d1.slice(1),t),bkAt(c,t),0,right/2];
+    const ws=[]; for(const v of cand){ if(Math.abs(v-right)>1e-9&&!ws.some(w=>Math.abs(w-v)<1e-9)) ws.push(v); } if(ws.length<3) continue; const w3=shuffle(ws).slice(0,3);
+    return {index:'q:'+id+'['+k+';'+bid+';'+t+';'+w3.map(bkN).join(',')+']', a3:['13d.laws['+k+']',id+(flat?'':'['+t+']'),'13d.movers['+bid+']'], story:story+', by the law '+out+' = '+bkPoly(c)+'.', lines:[],
+      ask:ord===1?'How fast is it '+verb+' at t = '+bkN(t)+'?':'How fast is its speed gaining'+(flat?'?':' at t = '+bkN(t)+'?'), right:val(right), opts:shuffle([right,...w3]).map(val), lead:'It is '+val(right)+'. ',
+      why:ord===1?'The speed is the slope of the law: d'+out+'/dt = '+bkPoly(d1)+', and at t = '+bkN(t)+' that is '+bkN(right)+'. The value of the law itself says where it is, not how fast.'
+        :'The gain of speed is the slope of the slope: d'+out+'/dt = '+bkPoly(d1)+', and the slope of that is '+bkPoly(d2)+(flat?' at every time.':', which at t = '+bkN(t)+' is '+bkN(right)+'.')}; }
+  return null; }}));
+/* --- proofs with bars (8h): the claim is the seed, the techniques are the links, the letters are dealt afresh --- */
+const BK8h=[ /* [tag, the claim, lines, the planted line number, the wrong line, why it is wrong, the links] */
+  ['unpack','If |a| ≤ b, then −b ≤ a ≤ b.',[['|a| ≤ b','given'],['−|a| ≤ a ≤ |a|','the sandwich technique'],['a ≤ b','lines 2 and 1, one order after another'],['−b ≤ −|a|','line 1 times −1, the negative-reverses-order technique'],['−b ≤ a','lines 4 and 2, one order after another'],['−b ≤ a ≤ b','lines 5 and 3 together']],
+    4,['−|a| ≤ −b','line 1 times −1, the negative-reverses-order technique'],'Multiplying by −1 turns the order about. The planted line kept the order as it was.'],
+  ['minus','|x − y| ≤ |x| + |y|.',[['x − y = x + (−y)','taking away is adding the negative'],['|x + (−y)| ≤ |x| + |−y|','the triangle technique'],['|−y| = |y|','the size-of-a-negative technique'],['|x − y| ≤ |x| + |y|','lines 1, 2 and 3']],
+    3,['|−y| = −|y|','the size-of-a-negative technique'],'The size-of-a-negative technique: a negative has the same size, not the negative of the size.'],
+  ['gap','|x| − |y| ≤ |x − y|.',[['x = (x − y) + y','add y and take it away'],['|x| ≤ |x − y| + |y|','the triangle technique on line 1'],['|x| − |y| ≤ |x − y|','line 2, with |y| taken from both sides']],
+    2,['|x| = |x − y| + |y|','the triangle technique on line 1'],'The triangle technique gives ≤, not =. The planted line claims more than the technique licenses.'],
+  ['three','|x + y + z| ≤ |x| + |y| + |z|.',[['x + y + z = (x + y) + z','brackets'],['|(x + y) + z| ≤ |x + y| + |z|','the triangle technique'],['|x + y| ≤ |x| + |y|','the triangle technique'],['|x + y + z| ≤ |x| + |y| + |z|','lines 1, 2 and 3']],
+    2,['|(x + y) + z| ≤ |x + y| · |z|','the triangle technique'],'The triangle technique is about a sum of sizes. The size-of-a-product technique is the one with a product, and it starts from a product.']];
+const BK8h_LINKS={unpack:'8h.sandwich+8g.negative',minus:'8h.triangle+8h.negative',gap:'8h.triangle',three:'8h.triangle'};
+const BK_LETTERS=[[['a','b'],['p','q'],['c','d'],['m','n']],[['x','y','z'],['u','v','w'],['p','q','r'],['a','b','c']]];
+QP.push({id:'8h.proofs',step:'8h',mode:'proof',label:'proofs with bars',open:()=>measured('8h'),make(){
+  const k=rnd(BK8h.length), [tag,claim,good,j,bad,whyBad]=BK8h[k], planted=Math.random()<0.5, from=tag==='unpack'?['a','b']:['x','y','z'], to=pick(BK_LETTERS[tag==='unpack'?0:1]);
+  const re=s=>s.replace(/(^|[^a-zA-Z])([abxyz])(?![a-zA-Z])/g,(m,pre,l)=>pre+(to[from.indexOf(l)]||l)), up=r=>r.replace(/\blines? [\d, and]+/g,m=>m.replace(/\d+/g,d=>+d+1));
+  const lines=good.map((l,i)=>planted&&i===j-1?bad:l).map(l=>[re(l[0]),re(up(l[1]))]), ask=planted?j:1+rnd(good.length);
+  return {index:'q:8h.proofs['+tag+';'+to.join('')+';'+(planted?'x':'ok')+';'+ask+']', a3:['8h.claims['+tag+','+to.join('')+']',BK8h_LINKS[tag],DASH], stack:true, lines:[['To prove: '+re(claim),'the claim']].concat(lines), ask:'Is line '+(ask+1)+' licensed?', right:YN22[planted?1:0], opts:YN22, lead:'',
+    why:planted?whyBad:'Every line of this proof is licensed by the reason beside it.'}; }});
+/* --- statements (1e): each is a seed; the table is the link, worked here and never typed in; the letters are dealt afresh --- */
+const BK1e=['A ⇒ ¬A','A ⇒ (A ∧ (A ∨ B))','(A ⇒ B) ⇔ (B ⇒ A)','A ⇒ ¬(A ∧ (A ∨ B))','¬B ⇒ ((¬A ∧ A) ∨ B)','¬(A ∨ B) ⇔ (¬A ∧ ¬B)','((A ∧ B) ∧ C) ⇒ B','¬((C ∨ A) ∨ B)','((A ∧ B) ∧ ¬(A ∧ B)) ∧ C','(A ∧ B) ⇒ ((A ∧ C) ∨ (B ∧ D))',
+  '¬(A ∨ A)','(A ⇒ B) ∨ (B ⇒ A)','((A ⇒ B) ⇒ A) ⇒ A','¬((A ⇒ B) ∨ (B ⇒ A))','(A ∧ B) ∨ (A ∨ B)','¬(A ∧ B) ⇔ A','A ⇒ (B ∨ C)','(A ∧ ¬A) ⇒ (B ∨ C)','(B ∧ D) ⇔ (A ⇔ (A ∨ C))','¬((A ⇒ B) ∨ (C ⇒ D))'];
+const BK_KIND=['a tautology: T in every row','a contradiction: F in every row','neither: T in some rows, F in others'];
+QP.push({id:'1e.kind',step:'1e',mode:'work',label:'tautology, contradiction, or neither',open:()=>measured('1e'),make(){
+  const k=rnd(BK1e.length), L=shuffle(['P','Q','R','S']), s=BK1e[k].replace(/[ABCD]/g,l=>L['ABCD'.indexOf(l)]), t=tparse(s), R=trows([t]).rows, n=R.filter(env=>tval(t,env)).length, kind=n===R.length?0:n===0?1:2;
+  const bad=R.find(env=>!tval(t,env)), good=R.find(env=>tval(t,env)), row=env=>Object.keys(env).sort().map(l=>l+' '+(env[l]?'T':'F')).join(', ');
+  return {index:'q:1e.kind['+k+','+L.join('')+']', a3:['1e.statements['+k+','+L.join('')+']','1e.table',DASH], lines:[[s,'a statement']], ask:'Fill in its table. Which is it?', right:BK_KIND[kind], opts:BK_KIND, lead:'It is '+BK_KIND[kind].split(':')[0]+'. ',
+    why:kind===0?'No row makes it F. Hunt for the bad row and none turns up.':kind===1?'No row makes it T.':'It is T in the row '+row(good)+', and F in the row '+row(bad)+'.'}; }});
+/* the statements with three letters or fewer also join the seeds that the rewrite links chain from (1f on) */
+BK1e.filter(s=>!/D/.test(s)).forEach(s=>{ const p=s.replace(/[ABC]/g,l=>'PQR'['ABC'.indexOf(l)]); if(!PROP_SEEDS.includes(p)) PROP_SEEDS.push(p); });
+/* ===== Seeds, part B: curves with numbers (13d). The curve is the seed; the slope at a point and the tangent line there are the links. ===== */
+const BK_CURVES=[[-5,0,0.75],[-2,0,0,0.12],[0,3,0,1],[5,-2,0,0.5],[2,0,3.5],[9.5,-5,1],[2,0,3]];
+const bkPolyX=c=>bkPoly(c).replace(/t/g,'x');
+const bkLine=(m,n)=>'y = '+(m===0?bkN(n):(m===1?'':m===-1?'−':bkN(m)+'·')+'x'+(n===0?'':(n<0?' − ':' + ')+bkN(Math.abs(n))));
+QP.push({id:'13d.at',step:'13d',mode:'work',label:'the slope of a curve at a point',open:()=>measured('13d'),make(){
+  for(let tries=0;tries<40;tries++){ const k=rnd(BK_CURVES.length), c=BK_CURVES[k], x=pick([-1,0.5,1,2,3]), d1=bkD(c), right=bkAt(d1,x);
+    const cand=[bkAt(c,x),right*x,bkAt(c.slice(1),x),bkAt(bkD(d1),x),-right], ws=[]; for(const v of cand){ if(Math.abs(v-right)>1e-9&&!ws.some(w=>Math.abs(w-v)<1e-9)) ws.push(v); } if(ws.length<3) continue; const w3=shuffle(ws).slice(0,3);
+    return {index:'q:13d.at['+k+';'+x+';'+w3.map(bkN).join(',')+']', a3:['13d.curves['+k+']','13d.at['+bkN(x)+']',DASH], lines:[['y = '+bkPolyX(c),'a curve']], ask:'What is its slope at x = '+bkN(x)+'?', right:bkN(right), opts:shuffle([right,...w3]).map(bkN), lead:'It is '+bkN(right)+'. ',
+      why:'The slope at a point is the value of dy/dx there: dy/dx = '+bkPolyX(d1)+', and at x = '+bkN(x)+' that is '+bkN(right)+'. The value of y there is the height of the curve, not its slope.'}; }
+  return null; }});
+QP.push({id:'13d.tangent',step:'13d',mode:'work',label:'the tangent line at a point',open:()=>measured('13d'),make(){
+  for(let tries=0;tries<40;tries++){ const k=rnd(BK_CURVES.length), c=BK_CURVES[k], x=pick([-1,1,2,3]), d1=bkD(c), m=bkAt(d1,x), h=bkAt(c,x), n=h-m*x; if(m===0) continue;
+    const right=bkLine(m,n), cand=[bkLine(m,h),bkLine(m,h+m*x),bkLine(h,n),bkLine(m,c[0]),bkLine(-m,n)], ws=[...new Set(cand)].filter(w=>w!==right); if(ws.length<3) continue; const w3=shuffle(ws).slice(0,3);
+    return {index:'q:13d.tangent['+k+';'+x+';'+w3.map(w=>w.length).join('.')+']', a3:['13d.curves['+k+']','13d.tangent['+bkN(x)+']',DASH], lines:[['y = '+bkPolyX(c),'a curve']], ask:'Which is its tangent line at x = '+bkN(x)+'?', right, opts:shuffle([right,...w3]), lead:'It is '+right+'. ',
+      why:'The tangent line has the curve’s slope there and passes through the curve’s point there. dy/dx = '+bkPolyX(d1)+', which at x = '+bkN(x)+' is '+bkN(m)+'. The curve’s height there is '+bkN(h)+', so the line is y = '+bkN(h)+' + '+(m<0?'('+bkN(m)+')':bkN(m))+'·(x − '+(x<0?'('+bkN(x)+')':bkN(x))+'), which is '+right+'.'}; }
+  return null; }});
+/* ===== Seeds, part C: curves with level points (rung 14). The curve is the seed; "where is it level" (14a) and the second test (14f) are the links. ===== */
+const BK_LEVEL=[ /* [the curve, its slope, the level points as marks, the right answer, three wrong moves] */
+  ['x^5 − 5·x','5·x^4 − 5',['−1','1'],'x = −1 and x = 1',['x = 1 only','x = 0 only','x = 0 and x = 1']],
+  ['x^2/(x + 1)','(x^2 + 2·x)/(x + 1)^2',['0','−2'],'x = 0 and x = −2',['x = 0 only','x = −1 only','x = 0 and x = 2']],
+  ['10/x + 10/(8 − x)','−10/x^2 + 10/(8 − x)^2',['4'],'x = 4 only',['x = 0 and x = 8','x = 8 only','no x at all']],
+  ['3/(x^2 + x + 1)','−3·(2·x + 1)/(x^2 + x + 1)^2',['−1/2'],'x = −1/2 only',['x = 1/2 only','x = 0 only','no x at all']],
+  ['5·x/(2 + x^2)','5·(2 − x^2)/(2 + x^2)^2',['√(2)','−√(2)'],'x = √(2) and x = −√(2)',['x = 0 only','x = √(2) only','x = 2 and x = −2']],
+  ['(x − a)·(x − b)','2·x − a − b',['(a + b)/2'],'x = (a + b)/2 only',['x = a and x = b','x = a + b only','x = (a − b)/2 only']]];
+QP.push({id:'14a.level',step:'14a',mode:'work',label:'where a curve is level',open:()=>measured('14a'),make(){
+  const k=rnd(BK_LEVEL.length), [f,d,cs,right,wrong]=BK_LEVEL[k], ws=shuffle(wrong.slice());
+  return {index:'q:14a.level['+k+';'+ws.map(w=>w.length).join('.')+']', a3:['14a.curves['+k+']','14a.level',DASH], lines:[['y = '+f,'a curve']], ask:'At which x is its slope 0?', right, opts:shuffle([right,...ws]), lead:'It is '+right+'. ',
+    why:'The flat-top technique sends the search to where the slope is 0. Here dy/dx = '+d+', and that is 0 at '+right.replace(' only','')+' and nowhere else. Where y itself is 0, or where a bottom of a fraction is 0, is a different question.'}; }});
+const BK_TEST=['a top: the slope of the slope is negative there','a bottom: the slope of the slope is positive there','a top: the slope of the slope is positive there','a bottom: the slope of the slope is negative there'];
+QP.push({id:'14f.second',step:'14f',mode:'work',label:'top or bottom, by the second test',open:()=>measured('14f'),make(){
+  const k=rnd(BK_LEVEL.length), [f,d,cs]=BK_LEVEL[k], c=pick(cs), env=x=>Object.assign({},BK_ENV,{x}), x0=bkEval(c,BK_ENV), h=1e-4;
+  const dd=(bkEval(d,env(x0+h))-bkEval(d,env(x0-h)))/(2*h); if(!isFinite(dd)||Math.abs(dd)<1e-3) return null; const right=BK_TEST[dd<0?0:1];
+  return {index:'q:14f.second['+k+';'+c+']', a3:['14a.curves['+k+']','14f.second['+c+']',DASH], lines:[['y = '+f,'a curve'],['dy/dx = '+d,'its slope, which is 0 at x = '+c]], ask:'What has the curve at x = '+c+'?', right, opts:BK_TEST.slice(), lead:'It has '+right.split(':')[0]+'. ',
+    why:'The second-test technique: where the slope is 0, a negative slope of the slope makes a top and a positive one makes a bottom. Take the slope of dy/dx and put in x = '+c+': it comes out '+(dd<0?'negative':'positive')+(k===5?'':', about '+bkN(+dd.toPrecision(3)))+'.'}; }});
+/* ===== Seeds, part D: the table run backwards (16f) and totals between two ends (16c). An integrand is the seed; add-and-scale are the links. ===== */
+const BK_INT=[ /* [the integrand, right (without + C), three wrong moves] */
+  ['3/x^4','−1/x^3',['−12/x^5','−3/(5·x^5)','−3/x^3']],
+  ['x^3/a','x^4/(4·a)',['3·x^2/a','x^4/a','x^4/(3·a)']],
+  ['x^2 + a','x^3/3 + a·x',['2·x','x^3/3 + a','x^3/3 + a^2/2']],
+  ['5·x^(−7/2)','−2·x^(−5/2)',['−(35/2)·x^(−9/2)','−(10/9)·x^(−9/2)','5·x^(−5/2)']],
+  ['4·x^3 + 3·x^2 + 2·x + 1','x^4 + x^3 + x^2 + x',['12·x^2 + 6·x + 2','x^4 + x^3 + x^2 + 1','4·x^4 + 3·x^3 + 2·x^2 + x']],
+  ['a·x/2 + b·x^2/3 + c·x^3/4','a·x^2/4 + b·x^3/9 + c·x^4/16',['a/2 + 2·b·x/3 + 3·c·x^2/4','a·x^2/2 + b·x^3/3 + c·x^4/4','a·x^2/3 + b·x^3/4 + c·x^4/5']],
+  ['(x + 3)^3','(x + 3)^4/4',['3·(x + 3)^2','(x + 3)^4','(x + 3)^4/3']],
+  ['(x + 2)·(x − a)','x^3/3 + (2 − a)·x^2/2 − 2·a·x',['(x^2/2 + 2·x)·(x^2/2 − a·x)','2·x + 2 − a','x^3/3 + (2 − a)·x^2 − 2·a·x']],
+  ['2·√(a)·x^(1/2)','(4/3)·√(a)·x^(3/2)',['√(a)·x^(−1/2)','2·√(a)·x^(3/2)','3·√(a)·x^(3/2)']],
+  ['3·a^2·(√(x) + ∛(x))','a^2·(2·x^(3/2) + (9/4)·x^(4/3))',['3·a^2·(x^(3/2) + x^(4/3))','a^2·((3/2)·x^(−1/2) + x^(−2/3))','a^2·((9/2)·x^(3/2) + 4·x^(4/3))']]];
+const BK_BACKWHY='Run the table backwards: each power goes up by 1 and is divided by its new power, and a constant c comes back as c·x. Check by taking the slope of the answer: it must give the integrand back.';
+QP.push({id:'16f.back',step:'16f',mode:'work',label:'the table run backwards',open:()=>measured('16f'),make(){
+  const k=rnd(BK_INT.length), [f,right,wrong]=BK_INT[k], ws=shuffle(wrong.slice()), C=s=>s+' + C';
+  return {index:'q:16f.back['+k+';'+ws.map(w=>w.length).join('.')+']', a3:['16f.integrands['+k+']',DASH,DASH], lines:[['∫ ('+f+') dx','to be found']], ask:'Which line is it?', right:C(right), opts:shuffle([right,...ws]).map(C), lead:'It is '+C(right)+'. ', why:BK_BACKWHY}; }});
+[['16f.scale','an integrand with a constant factor',false],['16f.add','two integrands added',true]].forEach(([id,label,two])=>QP.push({id,step:'16f',mode:'work',label,open:()=>measured('16f'),make(){
+  for(let tries=0;tries<40;tries++){ const S=BK_INT.map((r,k)=>({k,f:r[0],F:r[1],w:r[2]})).filter(s=>s.f.length<=24), A=pick(S), B=two?pick(S.filter(s=>s!==A)):null, p=two?'':pick(['2','3','5','k']), C=s=>s+' + C';
+    const f=two?bkP(A.f)+' + '+bkP(B.f):p+'·'+bkP(A.f), right=two?bkP(A.F)+' + '+bkP(B.F):p+'·'+bkP(A.F);
+    const cand=two?[bkP(A.F)+'·'+bkP(B.F),bkP(A.F)+' + '+bkP(B.f),bkP(A.w[1])+' + '+bkP(B.F),bkP(A.w[0])+' + '+bkP(B.w[0])]:[A.F,p+'·'+bkP(A.w[1]),p+'·'+bkP(A.w[0]),p+'·x·'+bkP(A.F)];
+    if(right.length>60) continue; const ws=[]; for(const w of shuffle(cand)){ if(ws.length<3&&w.length<=66&&!bkSame(w,right,'x')&&!ws.some(v=>bkSame(v,w,'x'))) ws.push(w); } if(ws.length<3) continue;
+    return {index:'q:'+id+'['+A.k+(B?'+'+B.k:'')+';'+p+';'+ws.map(w=>w.length).join('.')+']', a3:['16f.integrands['+A.k+']'+(B?'+16f.integrands['+B.k+']':''),id+(p?'['+p+']':''),DASH], lines:[['∫ ('+f+') dx','to be found']], ask:'Which line is it?', right:C(right), opts:shuffle([right,...ws]).map(C), lead:'It is '+C(right)+'. ',
+      why:'The antiderivatives-add-and-scale technique: '+(two?'an antiderivative of a sum is the sum of antiderivatives, one for each part.':'a constant factor stays in front of the antiderivative.')+' '+BK_BACKWHY}; }
+  return null; }}));
+/* a total between two ends: the curve is the seed (13d.curves), the ends are the link's own */
+BK_CURVES.push([-5,1,1]);
+const bkQ=v=>{ if(Math.abs(v*1e4-Math.round(v*1e4))<1e-9) return bkN(v); for(const q of [3,6,12]){ const n=v*q; if(Math.abs(n-Math.round(n))<1e-9) return '('+bkN(Math.round(n))+'/'+q+')'; } return null; };
+const bkPolyQ=c=>{ const out=[]; for(let k=0;k<c.length;k++){ const a=c[k]; if(!a) continue; const m=bkQ(Math.abs(a)); if(m===null) return null; out.push([a<0,k===0?m:(m==='1'?'':m+'·')+'x'+(k>1?'^'+k:'')]); }
+  return out.map(([neg,b],j)=>j===0?(neg?'−':'')+b:(neg?' − ':' + ')+b).join(''); };
+QP.push({id:'16c.ends',step:'16c',mode:'work',label:'a total between two ends',open:()=>measured('16c'),make(){
+  for(let tries=0;tries<60;tries++){ const k=rnd(BK_CURVES.length), c=BK_CURVES[k], G=[0].concat(c.map((a,j)=>a/(j+1))), gs=bkPolyQ(G); if(!gs) continue;
+    const p=pick([0,1,2]), q=p+pick([1,2,3,4,6]), right=bkAt(G,q)-bkAt(G,p), cand=[bkAt(c,q)-bkAt(c,p),bkAt(G,q)+bkAt(G,p),bkAt(G,q),(q-p)*bkAt(c,q),bkAt(bkD(c),q)-bkAt(bkD(c),p)];
+    const term=v=>Math.abs(v*1e4-Math.round(v*1e4))<1e-7; if(!term(right)) continue; const ws=[]; for(const v of cand){ if(term(v)&&Math.abs(v-right)>1e-9&&!ws.some(w=>Math.abs(w-v)<1e-9)) ws.push(v); } if(ws.length<3) continue; const w3=shuffle(ws).slice(0,3);
+    return {index:'q:16c.ends['+k+';'+p+','+q+';'+w3.map(bkN).join(',')+']', a3:['13d.curves['+k+']','16c.ends['+p+','+q+']',DASH], lines:[['∫ from '+p+' to '+q+' of ('+bkPolyX(c)+') dx','to be found']], ask:'What is it?', right:bkN(right), opts:shuffle([right,...w3]).map(bkN), lead:'It is '+bkN(right)+'. ',
+      why:'The change-for-any-integrable technique: find G with G′ equal to the integrand, then take G at the far end minus G at the near end. Here G(x) = '+gs+', with G('+q+') = '+bkN(+bkAt(G,q).toFixed(4))+' and G('+p+') = '+bkN(+bkAt(G,p).toFixed(4))+'. The change of the curve itself between the ends is a different number.'}; }
+  return null; }});
+
+/* ===== Rung pools, rungs 32 on (Andrew 2026-11-13) ===== */
+/* ----- rung 32: waves and frequencies, 32a to 32l ----- */
+Object.assign(STEPS,{'32a':['r32a','Coefficients as Projections'],'32b':['r32b','Energy Is Kept'],'32c':['r32c','When the Series Returns the Function'],'32d':['r32d','Convolution'],'32e':['r32e','Breaking a Signal Into Frequencies'],'32f':['r32f','Short in Time, Wide in Frequency'],'32g':['r32g','Samples Suffice'],'32h':['r32h','Wave Recipes by Hand'],'32i':['r32i','Convolution and Filters by Hand'],'32j':['r32j','Turning Rate Statements Into Algebra'],'32k':['r32k','Breaking a Signal Into Frequencies, Fast'],'32l':['r32l','Where Oscillating Integrals Live']});
+const PY32=[[3,4,5],[6,8,10],[5,12,13],[8,15,17]], SUB32=n=>String(n).replace('-','₋').replace(/\d/g,d=>'₀₁₂₃₄₅₆₇₈₉'[d]), two32=()=>{ const m=1+rnd(4); let n=1+rnd(5); if(n===m) n=m+2; return [m,n]; };
+
+/* 32a Coefficients as Projections */
+const WA32=[
+  ['cos x and sin x cross at π/4. Are they at right angles?','yes: right angles are a total of the product, and ⟨cos, sin⟩ = 0',['no: they cross, so they lean together','no: only cos x and cos 2x are','yes: because they cross at π/4'],'Right angles are read off the product, not off where two graphs cross.'],
+  ['Are e^(inx) and e^(−inx) the same turning, for n ≠ 0?','no: they turn opposite ways, and they are at right angles',['yes','no: one is the other times −1','yes, for a real function'],'Right-angled-turnings technique: any two different turnings are at right angles.'],
+  ['More turnings are added to a closest sum. What happens to the shadows already found?','nothing: a shadow, once found, is fixed',['each shrinks a little','each must be worked again','only the shadow on the constant stays'],'Turning-shadow technique: the turnings are at right angles, so each shadow stands on its own.'],
+  ['A real function is even. Which waves does its closest sum need?','cosines alone',['sines alone','cosines and sines both','the constant alone'],'Cosine-and-sine technique.'],
+  ['A real function is odd. Which waves does its closest sum need?','sines alone',['cosines alone','cosines and sines both','the constant alone'],'Cosine-and-sine technique.'],
+  ['Is f equal to the sum of all its shadows on the turnings, at every x, for every f?','not by this step: only the closest sums are proved here',['yes','yes, for every real f','no: never'],'32b and 32c ask when the sums return f.']];
+QP.push({id:'32a.turnings',step:'32a',label:'shadows on turnings',open:()=>measured('32a'),make(){ return writtenQ('32a.turnings',WA32); }},
+  {id:'32a.work',step:'32a',mode:'work',label:'shadows and sizes',open:()=>measured('32a'),make(){
+    const t=rnd(3), [m,n]=two32(), a=2+rnd(7), b=2+rnd(7), em='e'+SUB32(m), en='e'+SUB32(n);
+    if(t===0){ if(a===b) return null; return W30('32a.work[s;'+[m,n,a,b].join(';')+']',[['f = '+a+em+' + '+b+en,'a sum of two turnings']],'What is the shadow amount ⟨f, '+em+'⟩?',String(a),[String(b),String(a+b),'0',String(a*b)],'The turnings are at right angles and each has size 1, so ⟨f, '+em+'⟩ picks out the amount on '+em+'.'); }
+    if(t===1){ const [p,q,r]=pick(PY32); return W30('32a.work[z;'+[m,n,p,q].join(';')+']',[['f = '+p+em+' + '+q+en,'a sum of two turnings']],'What is ‖f‖?',String(r),[String(p+q),String(r*r),String(p*q),String(q-p)],'The two turnings are at right angles with size 1, so ‖f‖² = '+p*p+' + '+q*q+' = '+r*r+'.'); }
+    return W30('32a.work[c;'+[m,a].join(';')+']',[['c'+SUB32(m)+' = c'+SUB32(-m)+' = '+a,'and every other coefficient is 0']],'Which wave is f?',2*a+' cos '+(m===1?'':m)+'x',[a+' cos '+(m===1?'':m)+'x',2*a+' sin '+(m===1?'':m)+'x',a+' cos '+(m===1?'':m)+'x + '+a+' sin '+(m===1?'':m)+'x',2*a+' cos '+2*m+'x'],'Cosine-and-sine technique: the turnings '+m+' and −'+m+' pair up, and e^(i'+m+'x) + e^(−i'+m+'x) = 2 cos '+(m===1?'':m)+'x.'); }},
+  {id:'32a.line',step:'32a',mode:'proof',label:'what the turnings license',open:()=>measured('32a'),make(){
+    const [m,n]=two32(), a=2+rnd(7), b=2+rnd(7), em='e'+SUB32(m), en='e'+SUB32(n);
+    return line28('32a.line',[
+      ['a1',[['m = '+m+' and n = '+n,'given'],['⟨'+em+', '+en+'⟩ = 0','the right-angled-turnings technique']],2,0,'Two different turnings are at right angles.'],
+      ['a2',[['f is real and even','given'],['the closest sum to f needs sines alone','the cosine-and-sine technique']],2,1,'An even function needs cosines alone.'],
+      ['a3',[['the closest sum of the turnings from −'+n+' to '+n+' is found','given'],['adding the next turning changes the amount on '+em,'the turning-shadow technique']],2,1,'A shadow, once found, does not change when more turnings are added.'],
+      ['a4',[['f = '+a+em+' + '+b+en,'given'],['⟨f, '+en+'⟩ = '+b,'the right-angled-turnings technique']],2,0,'The product with '+en+' drops the other turning and keeps '+b+'.'],
+      ['a5',[['f = '+a+em+' + '+b+en,'given'],['‖f‖ = '+(a+b),'the right-angled-turnings technique']],2,1,'At right angles the squares add: ‖f‖² = '+(a*a+b*b)+'.']],[m,n,a,b]); }});
+
+/* 32b Energy Is Kept */
+const WB32=[
+  ['The coefficients of f fade to 0. Does its sum of turnings then settle at every x?','no: fading terms do not make a settling sum',['yes','yes, when f is real','no: the coefficients never fade'],'Fading terms are needed for settling and are not enough (22d).'],
+  ['S_N f heads to f in size. Does S_N f(x) head to f(x) at every x?','no: nearness in size is an average, and allows misses at points',['yes','yes: size 0 means equal at every x','no: it heads to half of f(x)'],'Energy-kept technique speaks of size, not of single points.'],
+  ['The sawtooth has a jump. Is its energy still the sum of the energies of its turnings?','yes: the energy-kept technique asks only for finite energy',['no: a jump loses energy','no: that holds for continuous waves alone','yes, but 9 per cent goes missing'],'Energy-kept technique.'],
+  ['What does 1 + 1/4 + 1/9 + 1/16 + ⋯ come to?','π²/6',['π²/3','π/6','it does not settle'],'The energy of one wave with a jump, counted two ways. π²/3 counts n and −n both.'],
+  ['Before anything else is known of f, how do the energies of its turnings compare with its own energy?','they add up to at most the energy of f',['they add up to at least the energy of f','they add up to twice the energy of f','they need not add up at all'],'Fading-coefficients technique.'],
+  ['f has finite energy and a jump. Is some finite sum of turnings within ε of f at every x at once?','not by the technique: it asks for a continuous f',['yes, for every ε','yes, for ε above 9 per cent','no: no sum is near f even in size'],'Turnings-near-everything technique is about continuous repeating functions.']];
+QP.push({id:'32b.energy',step:'32b',label:'energy and fading',open:()=>measured('32b'),make(){ return writtenQ('32b.energy',WB32); }},
+  {id:'32b.work',step:'32b',mode:'work',label:'energy by turnings',open:()=>measured('32b'),make(){
+    const t=rnd(2), [m,n]=two32(), a=2+rnd(6), b=2+rnd(6);
+    if(t===0) return W30('32b.work[e;'+[m,n,a,b].join(';')+']',[['c'+SUB32(m)+' = '+a+' and c'+SUB32(n)+' = '+b,'and every other coefficient of f is 0']],'What is the energy ‖f‖² of f?',String(a*a+b*b),[String((a+b)*(a+b)),String(a+b),String(2*a*b),String(a*a*b*b),String(Math.abs(a*a-b*b))],'Energy-kept technique: the energy of f is the sum of the energies of its turnings, '+a*a+' + '+b*b+'.');
+    const E=20+rnd(60), P=5+rnd(E-10);
+    return W30('32b.work[r;'+[E,P,n].join(';')+']',[['the energy of f is '+E,'given'],['its turnings from −'+n+' to '+n+' carry '+P,'given']],'How much energy do all the other turnings carry together?',String(E-P),[String(E+P),String(P),String(E),'0'],'Energy-kept technique: all the turnings together carry exactly '+E+', so the rest carry '+E+' − '+P+'.'); }},
+  {id:'32b.line',step:'32b',mode:'proof',label:'what kept energy licenses',open:()=>measured('32b'),make(){
+    const a=2+rnd(6), b=2+rnd(6), [m,n]=two32();
+    return line28('32b.line',[
+      ['b1',[['the coefficients of f head to 0','given'],['the sum of its turnings settles at every x','the fading-coefficients technique']],2,1,'The technique says the coefficients fade. It does not say the sum settles.'],
+      ['b2',[['f repeats every 2π and has finite energy','given'],['S_N f heads to f in size','the energy-kept technique']],2,0,'That is the technique, word for word.'],
+      ['b3',[['f repeats every 2π and is continuous','given'],['some finite sum of turnings is within 1/100 of f at every x','the turnings-near-everything technique']],2,0,'The technique gives such a sum for every ε above 0.'],
+      ['b4',[['f repeats every 2π and has finite energy','given'],['S_N f(x) heads to f(x) at every x','the energy-kept technique']],2,1,'The technique gives nearness in size, which allows misses at points.'],
+      ['b5',[['the only coefficients of f that are not 0 are c'+SUB32(m)+' = '+a+' and c'+SUB32(n)+' = '+b,'given'],['‖f‖² = '+(a*a+b*b),'the energy-kept technique']],2,0,a*a+' + '+b*b+'.']],[m,n,a,b]); }});
+
+/* 32c When the Series Returns the Function */
+const WC32=[
+  ['f is continuous at x. Is that enough for the partial sums to settle at f(x)?','no: the proof needs a slope there; continuity is not enough',['yes','yes, when f is bounded','no: f must be a finite sum of turnings'],'Slope-returns technique asks for a slope at x.'],
+  ['At a jump with a slope on each side, where do the partial sums settle?','at the halfway point of the jump',['at the value f has at the jump','at the upper side of the jump','nowhere'],'Halfway technique, whatever value f has at the jump itself.'],
+  ['Do more turnings make the overshoot beside a jump lower?','no: narrower and closer to the jump, never lower',['yes: it fades to 0','yes: it halves with each doubling','no: it grows without bound'],'Lasting-overshoot technique.'],
+  ['The partial sums settle at f(x) at every x. Do they come near f everywhere at once?','no: settling at each point is not settling everywhere at once',['yes','yes, when f has a jump','no: they settle at no point'],'23d: the two kinds of settling differ, and the overshoot shows it.'],
+  ['What is the average of the weight D_N over one repeat?','1',['0','N','2N + 1'],'Turning-kernel technique.'],
+  ['Beside each jump of the square wave, to what peak do the partial sums rise?','about 1.179',['about 1.09','exactly 1','about 2'],'Lasting-overshoot technique: about nine per cent of the jump of 2, above the top at 1.']];
+QP.push({id:'32c.returns',step:'32c',label:'when the sums return f',open:()=>measured('32c'),make(){ return writtenQ('32c.returns',WC32); }},
+  {id:'32c.work',step:'32c',mode:'work',label:'halfway, and the overshoot',open:()=>measured('32c'),make(){
+    if(rnd(3)<2){ const L=rnd(9)-4; let R=rnd(9)-4; if(R===L) R=L+3; const v=pick([L,R,L+R+1]), h=fshow(fr(L+R,2));
+      return W30('32c.work[h;'+[L,R,v].join(';')+']',[['f arrives at '+sg(L)+' from the left and at '+sg(R)+' from the right','a jump at x, with a slope on each side'],['f(x) = '+sg(v),'the value at the jump itself']],'Where do the partial sums settle at x?',h,[sg(v),sg(L),sg(R),sg(R-L),sg(L+R)],'Halfway technique: the halfway point of '+sg(L)+' and '+sg(R)+', whatever f(x) is.'); }
+    const h=pick([1,2,3,5,10]), S=v=>'about '+String(+v.toFixed(3));
+    return W30('32c.work[o;'+h+']',[['a square wave steps between −'+h+' and '+h,'a jump of '+2*h]],'To what peak do its partial sums rise beside the jump?',S(1.179*h),[S(1.09*h),S(h),S(2.358*h),S(0.179*h)],'Lasting-overshoot technique: the sums pass the top by about nine per cent of the jump, '+String(+(0.179*h).toFixed(3))+' here, at every number of turnings.'); }},
+  {id:'32c.line',step:'32c',mode:'proof',label:'what returns the function',open:()=>measured('32c'),make(){
+    const L=rnd(7)-3; let R=rnd(7)-3; if(R===L) R=L+2; const h=fshow(fr(L+R,2));
+    return line28('32c.line',[
+      ['c1',[['f repeats every 2π, is sized and bounded, and has a slope at x','given'],['S_N f(x) settles at f(x)','the slope-returns technique']],2,0,'That is the technique.'],
+      ['c2',[['f repeats every 2π, is sized and bounded, and is continuous at x','given'],['S_N f(x) settles at f(x)','the slope-returns technique']],2,1,'The technique asks for a slope at x. Continuity is not enough.'],
+      ['c3',[['f jumps from '+sg(L)+' to '+sg(R)+' at x, with a slope on each side','given'],['S_N f(x) settles at '+h,'the halfway technique']],2,0,'The halfway point of '+sg(L)+' and '+sg(R)+'.'],
+      ['c4',[['f jumps from '+sg(L)+' to '+sg(R)+' at x, with a slope on each side, and f(x) = '+sg(R),'given'],['S_N f(x) settles at '+sg(R),'the halfway technique']],2,1,'The sums settle halfway, at '+h+', whatever f(x) is.'],
+      ['c5',[['S_N f(x) settles at f(x) at every x','given'],['S_N f comes near f everywhere at once','settling at each point']],2,1,'Settling at each point is not settling everywhere at once (23d).']],[L,R]); }});
+
+/* 32d Convolution */
+const WD32=[
+  ['Is cₙ(f * g) = cₙ(f) + cₙ(g)?','no: blending multiplies the coefficients',['yes','no: it is cₙ(f) − cₙ(g)','yes, when g is a weight'],'Blend-coefficients technique.'],
+  ['Is cₙ(fg) = cₙ(f) cₙ(g), for the plain product fg?','no: the product of two functions is not their blend',['yes','yes, for real f and g','no: it is cₙ(f) + cₙ(g)'],'Blend-coefficients technique is about f * g.'],
+  ['f is rough and g has a continuous slope. How smooth is f * g?','it has a slope: the blend takes on the smoothness of the smoother',['as rough as f','rougher than both','it need not even be continuous'],'Blend-smooths technique.'],
+  ['g has a continuous slope. What is (f * g)′?','f * g′',['f′ * g′','f′ * g + f * g′','f′g′'],'Blend-smooths technique: the slope falls on the smooth one.'],
+  ['The averages σ_N f come near f everywhere at once. Do the partial sums S_N f then do so too?','no: the averages can settle where the sums do not',['yes','yes, for continuous f','no: neither comes near f'],'Averaged-sums technique is about the averages.'],
+  ['Why do the averages of the partial sums behave better than the sums?','their weight is never negative and gathers at 0',['their weight has average 0','they use fewer turnings','their weight is the square wave'],'Averaged-sums technique.']];
+QP.push({id:'32d.blend',step:'32d',label:'blending',open:()=>measured('32d'),make(){ return writtenQ('32d.blend',WD32); }},
+  {id:'32d.work',step:'32d',mode:'work',label:'coefficients of a blend',open:()=>measured('32d'),make(){
+    const n=1+rnd(6), a=pick([-5,-4,-3,-2,2,3,4,5,6]), b=rnd(4)===0?0:pick([-4,-3,-2,2,3,4,5]);
+    return W30('32d.work['+[n,a,b].join(';')+']',[['c'+SUB32(n)+'(f) = '+sg(a)+' and c'+SUB32(n)+'(g) = '+sg(b),'given']],'What is c'+SUB32(n)+'(f * g)?',sg(a*b),b===0?[sg(a),sg(-a),'1',sg(2*a)]:[sg(a+b),sg(a-b),sg(a),sg(-a*b),sg(b)],'Blend-coefficients technique: cₙ(f * g) = cₙ(f) cₙ(g)'+(b===0?', so a speed that g lacks is wiped out of the blend.':'.')); }},
+  {id:'32d.line',step:'32d',mode:'proof',label:'what a blend licenses',open:()=>measured('32d'),make(){
+    const n=1+rnd(6), a=2+rnd(5), b=2+rnd(5);
+    return line28('32d.line',[
+      ['d1',[['c'+SUB32(n)+'(f) = '+a+' and c'+SUB32(n)+'(g) = '+b,'given'],['c'+SUB32(n)+'(f * g) = '+a*b,'the blend-coefficients technique']],2,0,'The coefficients multiply.'],
+      ['d2',[['c'+SUB32(n)+'(f) = '+a+' and c'+SUB32(n)+'(g) = '+b,'given'],['c'+SUB32(n)+'(fg) = '+a*b,'the blend-coefficients technique']],2,1,'The technique is about the blend f * g, not the product fg.'],
+      ['d3',[['g has a continuous slope, and f is sized and bounded','given'],['(f * g)′ = f * g′','the blend-smooths technique']],2,0,'That is the technique.'],
+      ['d4',[['f is continuous and repeats every 2π','given'],['S_N f comes near f everywhere at once','the averaged-sums technique']],2,1,'The technique gives it for the averages σ_N f, not for the sums S_N f.'],
+      ['d5',[['f is continuous and repeats every 2π','given'],['σ_N f comes near f everywhere at once','the averaged-sums technique']],2,0,'That is the technique.']],[n,a,b]); }});
+
+/* 32e Breaking a Signal Into Frequencies */
+const WE32=[
+  ['f has a finite total size. Has its transform one too?','not always: the box has, and its transform sin(πξ)/(πξ) has not',['yes, always','no, never','yes, when f is real'],'Transform-bound technique gives bounded and continuous, no more.'],
+  ['For a signal that does not repeat, is the transform a sum over whole speeds?','no: there are no whole speeds; every frequency carries a share',['yes','yes, over the even speeds','no: it has no transform'],'The transform is a total over the line, not a sum.'],
+  ['Is the transform of the product fg the product of the transforms?','no: it is the transform of the blend that is the product',['yes','yes, for bells','no: it is their sum'],'As with coefficients in 32d.'],
+  ['A bell is made narrower. What happens to its transform?','it gets wider: squeezing one stretches the other',['it gets narrower too','it keeps its width','it stops being a bell'],'Own-transform technique, with a stretch.'],
+  ['What is the transform of the bell e^(−πx²)?','e^(−πξ²): the bell itself',['e^(πξ²)','1/(1 + ξ²)','sin(πξ)/(πξ)'],'Own-transform technique.'],
+  ['Where does the undo-transform technique return f(x)?','at every x where f is continuous, when f and its transform both have finite total sizes',['at every x, for every f','only at x = 0','only where f has a jump'],'Undo-transform technique.']];
+QP.push({id:'32e.transform',step:'32e',label:'the transform',open:()=>measured('32e'),make(){ return writtenQ('32e.transform',WE32); }},
+  {id:'32e.work',step:'32e',mode:'work',label:'bounds and energy of a transform',open:()=>measured('32e'),make(){
+    const A=2+rnd(18);
+    if(rnd(2)) return W30('32e.work[b;'+A+']',[['the total size of f over the line is '+A,'given']],'What does the transform-bound technique say of |f̂(ξ)|?','at most '+A+' at every ξ',['exactly '+A+' at every ξ','at least '+A+' at every ξ','at most '+A*A+' at every ξ','at most '+A+' on average only'],'Transform-bound technique: the transform is bounded by the total size of f.');
+    return W30('32e.work[e;'+A+']',[['f has a finite total size','given'],['the total of |f|² over the line is '+A,'given']],'What is the total of |f̂|² over the line?',String(A),[String(A*A),String(2*A),'at most '+A+', perhaps less','it need not be finite'],'Transform-energy technique: the transform keeps the energy exactly.'); }},
+  {id:'32e.line',step:'32e',mode:'proof',label:'what a transform licenses',open:()=>measured('32e'),make(){
+    const A=2+rnd(18);
+    return line28('32e.line',[
+      ['e1',[['the total size of f is '+A,'given'],['|f̂(ξ)| ≤ '+A+' at every ξ','the transform-bound technique']],2,0,'That is the technique.'],
+      ['e2',[['the total size of f is '+A,'given'],['the total size of f̂ is at most '+A,'the transform-bound technique']],2,1,'The technique bounds f̂ at each ξ. Its total size may be endless, as for the box.'],
+      ['e3',[['f has a finite total size, and the total of |f|² is '+A,'given'],['the total of |f̂|² is '+A,'the transform-energy technique']],2,0,'The energy is kept.'],
+      ['e4',[['g(x) = e^(−πx²)','given'],['ĝ(ξ) = e^(−πξ²)','the own-transform technique']],2,0,'The bell is its own transform.'],
+      ['e5',[['f has a finite total size','given'],['f(x) = ∫ f̂(ξ) e^(2πixξ) dξ at every x','the undo-transform technique']],2,1,'The technique also asks that f̂ have a finite total size, and returns f only where f is continuous.']],[A]); }});
+
+/* 32f Short in Time, Wide in Frequency */
+const WF32=[
+  ['Can a better instrument beat the floor 1/(4π) on width in time times width in frequency?','no: the bound is about the signal, not the instrument',['yes','yes, with enough samples','no: but a longer signal can'],'Spread-product technique.'],
+  ['What is the floor on the width in time times the width in frequency?','1/(4π), with the frequency in turns per unit',['1','1/2','4π'],'Spread-product technique.'],
+  ['Is a box the tightest signal?','no: its transform fades like 1/ξ, and its width in frequency is endless',['yes','yes, among real signals','no: the square wave is'],'Tightest-bell technique: only the bells reach the floor.'],
+  ['Is the transform of f′ the slope of the transform of f?','no: a slope in time is a multiplication by 2πiξ in frequency',['yes','no: it is a division by 2πiξ','yes, for bells'],'Slope-to-frequency technique.'],
+  ['Which signals have width in time times width in frequency exactly 1/(4π)?','the bells alone, the multiples of e^(−cx²) with c > 0',['the boxes alone','every signal of energy 1','none'],'Tightest-bell technique.']];
+QP.push({id:'32f.spread',step:'32f',label:'widths in time and frequency',open:()=>measured('32f'),make(){ return writtenQ('32f.spread',WF32); }},
+  {id:'32f.work',step:'32f',mode:'work',label:'slopes and widths',open:()=>measured('32f'),make(){
+    if(rnd(2)){ const k=1+rnd(5), v=pick([-4,-3,-2,2,3,4,5]);
+      return W30('32f.work[s;'+[k,v].join(';')+']',[['f̂('+k+') = '+sg(v),'given'],['f and f′ have finite total sizes','given']],'What is the transform of f′ at ξ = '+k+'?',sg(2*k*v)+'πi',[sg(k*v)+'πi',sg(2*k*v)+'π',sg(2*k*v)+'i',sg(v)+'/('+2*k+'πi)'],'Slope-to-frequency technique: multiply by 2πiξ, here 2πi · '+k+'.'); }
+    const k=2+rnd(8);
+    return W30('32f.work[w;'+k+']',[['a signal of energy 1 has width in time 1/'+k,'given']],'What does the spread-product technique say of its width in frequency?','at least '+k+'/(4π)',['at most '+k+'/(4π)','at least 1/('+4*k+'π)','exactly '+k+'/(4π)','at least '+k],'Spread-product technique: the two widths multiply to at least 1/(4π), so the width in frequency is at least '+k+' times 1/(4π).'); }},
+  {id:'32f.line',step:'32f',mode:'proof',label:'what the spread product licenses',open:()=>measured('32f'),make(){
+    const k=2+rnd(8), v=2+rnd(5);
+    return line28('32f.line',[
+      ['f1',[['f̂('+k+') = '+v+', and f and f′ have finite total sizes','given'],['the transform of f′ at '+k+' is '+2*k*v+'πi','the slope-to-frequency technique']],2,0,'2πi · '+k+' · '+v+'.'],
+      ['f2',[['a signal of energy 1 has width in time 1/'+k,'given'],['its width in frequency is at least '+k+'/(4π)','the spread-product technique']],2,0,'The product of the widths is at least 1/(4π).'],
+      ['f3',[['a signal of energy 1 has width in time 1/'+k,'given'],['its width in frequency is exactly '+k+'/(4π)','the spread-product technique']],2,1,'The technique gives at least. Exactly holds for the bells alone.'],
+      ['f4',[['f is a box of energy 1','given'],['its widths multiply to exactly 1/(4π)','the tightest-bell technique']],2,1,'Only the bells reach the floor. The box has an endless width in frequency.'],
+      ['f5',[['f̂('+k+') = '+v+', and f and f′ have finite total sizes','given'],['the transform of f′ at '+k+' is '+v+'/('+2*k+'πi)','the slope-to-frequency technique']],2,1,'A slope multiplies by 2πiξ. It does not divide.']],[k,v]); }});
+
+/* 32g Samples Suffice */
+const WG32=[
+  ['Is every signal fixed by its samples?','no: only one with no frequency above half the sampling rate',['yes','yes, if it is continuous','no: no signal is'],'Samples-are-coefficients technique.'],
+  ['A signal has no frequency above B. Is sampling B times per unit enough?','no: the spacing must be 1/(2B), twice the top frequency',['yes','yes, for real signals','no: it must be 4B times per unit'],'Samples-are-coefficients technique.'],
+  ['Between two samples, what is the rebuilt wave?','the sum of fading waves, one for each sample',['a straight line from one sample to the next','a flat step at the nearer sample','a single sine through the two samples'],'Sample-rebuild technique: each sample scales one shifted sinc.'],
+  ['A tone above half the sampling rate is sampled. What becomes of it?','it is read as a tone between minus half the rate and half the rate',['it is lost','it is read at its true frequency','it is read at exactly half the rate'],'Same-samples technique.'],
+  ['Sampled at the rate r, which other turning gives the same samples as the turning of frequency ξ?','the one of frequency ξ + r',['the one of frequency 2ξ','the one of frequency ξ + r/2','none'],'Same-samples technique.']];
+QP.push({id:'32g.samples',step:'32g',label:'when samples suffice',open:()=>measured('32g'),make(){ return writtenQ('32g.samples',WG32); }},
+  {id:'32g.work',step:'32g',mode:'work',label:'spacings and misread tones',open:()=>measured('32g'),make(){
+    if(rnd(2)){ const B=pick([50,100,250,400,1000,4000,5000]);
+      return W30('32g.work[s;'+B+']',[['a signal has no frequency above '+B+' turns per second','given']],'What spacing of samples does the samples-are-coefficients technique use?','1/'+2*B+' of a second',['1/'+B+' of a second','1/'+4*B+' of a second','1/'+B/2+' of a second',2*B+' seconds'],'Samples-are-coefficients technique: the spacing is 1/(2B), which is 1/'+2*B+' here.'); }
+    const r=pick([8,10,20,40,48]), d=1+rnd(r/2-2), x=r/2+d;
+    return W30('32g.work[a;'+[r,x].join(';')+']',[['a tone of '+x+' thousand turns per second','given'],['it is sampled '+r+' thousand times per second','given']],'As what tone is it read?',(r-x)+' thousand turns per second',[x+' thousand turns per second',(x-r/2)+' thousand turns per second',r/2+' thousand turns per second','it is lost'],'Same-samples technique: '+x+' and '+x+' − '+r+' = −'+(r-x)+' give the same samples, and −'+(r-x)+' lies within half the rate. It is read as '+(r-x)+'.'); }},
+  {id:'32g.line',step:'32g',mode:'proof',label:'what samples license',open:()=>measured('32g'),make(){
+    const B=pick([50,100,250,400,1000]), r=pick([8,10,20,40]), x=r/2+1+rnd(r/2-2);
+    return line28('32g.line',[
+      ['g1',[['f has no frequency above '+B,'given'],['its samples at the spacing 1/'+2*B+' fix f','the samples-are-coefficients technique']],2,0,'The spacing 1/(2B).'],
+      ['g2',[['f has no frequency above '+B,'given'],['its samples at the spacing 1/'+B+' fix f','the samples-are-coefficients technique']],2,1,'The spacing must be 1/(2B), which is 1/'+2*B+'.'],
+      ['g3',[['a tone of frequency '+x+' is sampled at the rate '+r,'given'],['its samples are those of a tone of frequency '+(x-r),'the same-samples technique']],2,0,'Frequencies a whole rate apart give the same samples.'],
+      ['g4',[['a tone of frequency '+x+' is sampled at the rate '+r,'given'],['the tone leaves no trace in the samples','the same-samples technique']],2,1,'It is not lost. It is read as a tone of frequency '+(r-x)+'.'],
+      ['g5',[['f is continuous','given'],['its samples at some spacing fix f','the samples-are-coefficients technique']],2,1,'The technique asks for no frequency above some B. Continuity does not give that.']],[B,r,x]); }});
+
+/* 32h Wave Recipes by Hand */
+const WH32=[
+  ['Is the square wave (4/π) times the sum of sin nx / n over every n?','no: only the odd speeds; over every n that sum is a sawtooth',['yes','no: only the even speeds','no: it uses cosines'],'Square-recipe technique.'],
+  ['A wave is slid along. Do the sizes of its coefficients change?','no: a slide multiplies each by a turn, of size 1',['yes: each shrinks','yes: each grows with the slide','only c₀ changes'],'Slide-and-stretch technique.'],
+  ['Is cₙ(w′) = cₙ(w)/(in)?','no: a slope multiplies by in',['yes','no: it multiplies by n²','no: it leaves cₙ alone'],'Corner-and-jump technique.'],
+  ['What does the square wave’s recipe give at the jump itself, x = 0?','0, the halfway point',['1','−1','it does not settle'],'32c’s halfway technique, seen in the recipe: every sine is 0 there.'],
+  ['A wave has a jump. How fast do its amounts fall?','like 1/n',['like 1/n²','like 1/n³','they do not fall'],'Corner-and-jump technique.'],
+  ['A wave has corners and no jump. How fast do its amounts fall?','like 1/n²',['like 1/n','like 1/n³','they do not fall'],'Corner-and-jump technique.'],
+  ['A constant is added to a wave. Which coefficients change?','c₀ alone',['all of them','none','the odd ones'],'Slide-and-stretch technique.']];
+QP.push({id:'32h.recipes',step:'32h',label:'wave recipes',open:()=>measured('32h'),make(){ return writtenQ('32h.recipes',WH32); }},
+  {id:'32h.work',step:'32h',mode:'work',label:'amounts in a recipe',open:()=>measured('32h'),make(){
+    if(rnd(2)){ const n=1+rnd(9), odd=n%2===1, A=odd?(n===1?'4/π':'4/('+n+'π)'):'0';
+      return W30('32h.work[q;'+n+']',[['the square wave that steps between −1 and 1','given']],'What is the amount of sin '+(n===1?'':n)+'x in its recipe?',A,n===1?['0','2/π','4','1/π']:odd?['0','4/('+n*n+'π)','1/'+n,'4/('+(n+1)+'π)','4/π']:['4/('+n+'π)','2/('+n+'π)','1/'+n,'4/π'],'Square-recipe technique: the odd speeds alone, each (4/π) over its speed.'+(odd?'':' An even speed has amount 0.')); }
+    const k=2+rnd(5), v=pick([-4,-3,-2,2,3,4,5]);
+    return W30('32h.work[d;'+[k,v].join(';')+']',[['c'+SUB32(k)+'(f) = '+sg(v),'f continuous, repeating, with a sized bounded slope']],'What is c'+SUB32(k)+'(f′)?',sg(k*v)+'i',[sg(v)+'/('+k+'i)',sg(k*v),sg(-k*k*v),sg(v)+'i'],'Corner-and-jump technique: cₙ(f′) = in cₙ(f), here i · '+k+' · '+(v<0?'('+sg(v)+')':v)+'.'); }},
+  {id:'32h.line',step:'32h',mode:'proof',label:'what a recipe licenses',open:()=>measured('32h'),make(){
+    const k=2+rnd(5), v=2+rnd(5), n=2*(1+rnd(4)), o=n+1;
+    return line28('32h.line',[
+      ['h1',[['q is the square wave between −1 and 1','given'],['the amount of sin '+o+'x in q is 4/('+o+'π)','the square-recipe technique']],2,0,'An odd speed: (4/π) over the speed.'],
+      ['h2',[['q is the square wave between −1 and 1','given'],['the amount of sin '+n+'x in q is 4/('+n+'π)','the square-recipe technique']],2,1,'An even speed has amount 0.'],
+      ['h3',[['c'+SUB32(k)+'(f) = '+v+', f continuous with a sized bounded slope','given'],['c'+SUB32(k)+'(f′) = '+k*v+'i','the corner-and-jump technique']],2,0,'in cₙ(f).'],
+      ['h4',[['g is f slid along by s','given'],['|cₙ(g)| = |cₙ(f)| for every n','the slide-and-stretch technique']],2,0,'A slide multiplies each coefficient by a turn, of size 1.'],
+      ['h5',[['a wave is continuous, with corners','given'],['its amounts fall like 1/n','the corner-and-jump technique']],2,1,'Corners and no jump: the amounts fall like 1/n².']],[k,v,n]); }});
+
+/* 32i Convolution and Filters by Hand */
+const WI32=[
+  ['X and Y are independent counts. Is P(X + Y = k) = P(X = k) P(Y = k)?','no: every pairing j and k − j counts, and they are added',['yes','no: it is P(X = k) + P(Y = k)','yes, when X and Y have the same chances'],'List-blend technique.'],
+  ['Does a blending filter change a turning into one of another speed?','no: it sends each turning to a multiple of itself',['yes','yes, to twice the speed','only the fast ones'],'Gain-per-turning technique.'],
+  ['An average over a window keeps every speed, only a little smaller. Is that so?','no: it wipes out the speeds whose waves fit the window exactly',['yes','no: it wipes out every speed','yes, and the slow ones grow'],'Gain-per-turning technique: the gain is 0 at those speeds.'],
+  ['Does the running filter forget an old reading after a while?','no: every old reading keeps a share β(1 − β)ʲ, never 0',['yes, after 1/β readings','yes, after one reading','no: old readings gain weight'],'Stepped-filter technique.'],
+  ['A filter multiplies a turning by H(n). What do the size and the turn of H(n) say?','the size is the gain at that speed, the turn is the shift',['the size is the shift, the turn is the gain','the size is the speed','both give the gain'],'Gain-per-turning technique.']];
+QP.push({id:'32i.filters',step:'32i',label:'blends and filters',open:()=>measured('32i'),make(){ return writtenQ('32i.filters',WI32); }},
+  {id:'32i.work',step:'32i',mode:'work',label:'blends of lists',open:()=>measured('32i'),make(){
+    if(rnd(2)){ const a=1+rnd(5), b=1+rnd(5), c=1+rnd(5), d=1+rnd(5), v=a*d+b*c; if(v===b*d||v===a*c) return null;
+      return W30('32i.work[p;'+[a,b,c,d].join(';')+']',[['('+a+' + '+b+'x)('+c+' + '+d+'x)','a product of polynomials'],['the lists are ('+a+', '+b+') and ('+c+', '+d+')','their coefficients']],'What is the coefficient of x in the product?',String(v),[String(b*d),String(a*c),String(a*d*b*c),String(a+b+c+d),String(b*c)],'List-blend technique: every pairing of places that add to 1 counts, '+a+' · '+d+' + '+b+' · '+c+'.'); }
+    const q=pick([2,4,5]), j=1+rnd(3), sh=fr(Math.pow(q-1,j),Math.pow(q,j+1));
+    return W30('32i.work[f;'+[q,j].join(';')+']',[['yₖ = (1 − β)yₖ₋₁ + βxₖ with β = 1/'+q,'the running filter']],'What share of the reading taken '+j+' step'+(j>1?'s':'')+' ago is in the output now?',fshow(sh),['0',fshow(fr(1,q)),fshow(fr(Math.pow(q-1,j),Math.pow(q,j))),fshow(fr(1,Math.pow(q,j))),fshow(fr(Math.pow(q-1,j+1),Math.pow(q,j+1)))],'Stepped-filter technique: an old reading keeps the share β(1 − β)ʲ, here (1/'+q+') · ('+(q-1)+'/'+q+')'+(j>1?'^'+j:'')+'.'); }},
+  {id:'32i.line',step:'32i',mode:'proof',label:'what a filter licenses',open:()=>measured('32i'),make(){
+    const a=1+rnd(5), b=1+rnd(5), c=1+rnd(5), d=1+rnd(5), q=pick([2,4,5]);
+    return line28('32i.line',[
+      ['i1',[['the lists are ('+a+', '+b+') and ('+c+', '+d+')','given'],['the coefficient of x in the product is '+(a*d+b*c),'the list-blend technique']],2,0,a+' · '+d+' + '+b+' · '+c+'.'],
+      ['i2',[['the lists are ('+a+', '+b+') and ('+c+', '+d+')','given'],['the coefficient of x² in the product is '+(b*d),'the list-blend technique']],2,0,'Only one pairing of places adds to 2.'],
+      ['i3',[['X and Y are independent counts','given'],['P(X + Y = 3) = P(X = 3) P(Y = 3)','the list-blend technique']],2,1,'Every pairing j and 3 − j counts, and they are added.'],
+      ['i4',[['a blend is laid on the turning of speed n','given'],['out comes a turning of speed 2n','the gain-per-turning technique']],2,1,'A blend sends each turning to a multiple of itself, at the same speed.'],
+      ['i5',[['the running filter has β = 1/'+q,'given'],['the reading taken one step ago keeps the share '+fshow(fr(q-1,q*q)),'the stepped-filter technique']],2,0,'β(1 − β).']],[a,b,c,d,q]); }});
+
+/* 32j Turning Rate Statements Into Algebra */
+const WJ32=[
+  ['Is cₙ(y″) = n² cₙ(y)?','no: (in)² = −n², so cₙ(y″) = −n² cₙ(y)',['yes','no: it is in cₙ(y)','no: it is cₙ(y)/n²'],'Rate-to-algebra technique: each slope multiplies by in.'],
+  ['A repeating push has many speeds. At which does a braked spring swing most?','at the speed nearest its own, where the dividing number is smallest',['at the push’s largest speed','at the push’s slowest speed','at all speeds alike'],'Driven-response technique.'],
+  ['Does every solution of y″ + 2βy′ + ω₀²y = f repeat, for a repeating f?','no: only one does; the others add a decaying turn',['yes','no: none does','yes, when β = 0'],'Rate-to-algebra technique gives exactly one repeating solution.'],
+  ['Does the transfer function work for y′ = y + f?','no: there k = −1 < 0, and a y with finite total need not exist',['yes','yes, with k = 1','no: the statement has no solutions'],'Transfer technique asks for k > 0.'],
+  ['When has y″ + by′ + cy = f exactly one repeating solution?','when no c − n² + ibn is 0',['always','when b = 0','never'],'Rate-to-algebra technique: each speed is one division.']];
+QP.push({id:'32j.algebra',step:'32j',label:'rate statements as algebra',open:()=>measured('32j'),make(){ return writtenQ('32j.algebra',WJ32); }},
+  {id:'32j.work',step:'32j',mode:'work',label:'one division for each speed',open:()=>measured('32j'),make(){
+    const t=rnd(3), n=1+rnd(4);
+    if(t===0){ const c=pick([2,3,5,6,7,8,10,12].filter(v=>v!==n*n&&v!==n)), cf=pick([2,3,4,6,12]), R=fr(cf,c-n*n);
+      return W30('32j.work[d;'+[n,c,cf].join(';')+']',[['y″ + '+c+'y = f','y and f repeat every 2π'],['c'+SUB32(n)+'(f) = '+cf,'given']],'What is c'+SUB32(n)+'(y)?',fshow(R),[fshow(fr(cf,c+n*n)),fshow(fr(cf*(c-n*n),1)),fshow(fr(cf,c)),fshow(fr(cf,c-n)),fshow(fr(-R.p,R.q))],'Rate-to-algebra technique with b = 0: cₙ(y) = cₙ(f)/(c − n²) = '+cf+'/('+c+' − '+n*n+').'); }
+    if(t===1){ const v=pick([-4,-3,-2,2,3,4,5]);
+      return W30('32j.work[s;'+[n,v].join(';')+']',[['c'+SUB32(n)+'(y) = '+sg(v),'y repeats every 2π, with two continuous slopes']],'What is c'+SUB32(n)+'(y″)?',sg(-n*n*v),[sg(n*n*v),sg(n*v)+'i',sg(-n*v),sg(2*n*v)],'Each slope multiplies by in, and (in)² = −n² = −'+n*n+'.'); }
+    const k=2+rnd(5), m=k*(1+rnd(5));
+    return W30('32j.work[t;'+[k,m].join(';')+']',[['y′ + '+k+'y = f','y, y′ and f have finite total sizes'],['f̂(0) = '+m,'given']],'What is ŷ(0)?',String(m/k),[String(m*k),String(m),String(m-k),String(m+k)],'Transfer technique: ŷ(ξ) = f̂(ξ)/(k + 2πiξ), and at ξ = 0 that is '+m+'/'+k+'.'); }},
+  {id:'32j.line',step:'32j',mode:'proof',label:'what the algebra licenses',open:()=>measured('32j'),make(){
+    const n=1+rnd(3), v=2+rnd(4), k=2+rnd(4), m=k*(1+rnd(4));
+    return line28('32j.line',[
+      ['j1',[['c'+SUB32(n)+'(y) = '+v,'given'],['c'+SUB32(n)+'(y″) = '+sg(-n*n*v),'each slope multiplies by in']],2,0,'(in)² = −'+n*n+'.'],
+      ['j2',[['c'+SUB32(n)+'(y) = '+v,'given'],['c'+SUB32(n)+'(y″) = '+n*n*v,'each slope multiplies by in']],2,1,'(in)² = −n². The sign is lost.'],
+      ['j3',[['y′ + '+k+'y = f, with finite total sizes, and f̂(0) = '+m,'given'],['ŷ(0) = '+m/k,'the transfer technique']],2,0,m+'/'+k+'.'],
+      ['j4',[['y′ − '+k+'y = f, and f̂(0) = '+m,'given'],['ŷ(0) = −'+m/k,'the transfer technique']],2,1,'The technique asks for k > 0. Here k = −'+k+'.'],
+      ['j5',[['y″ + '+n*n+'y = f, and c'+SUB32(n)+'(f) = '+v,'given'],['there is exactly one repeating solution','the rate-to-algebra technique']],2,1,'At the speed '+n+' the dividing number '+n*n+' − '+n*n+' is 0, so the technique does not apply.']],[n,v,k,m]); }});
+
+/* 32k Breaking a Signal Into Frequencies, Fast */
+const WK32=[
+  ['Does the second half of a halved transform need new transforms of the even and odd places?','no: E and O repeat every M, so they are used again',['yes','yes, for the odd places','no: the second half is all 0'],'Halving-transform technique.'],
+  ['Does the halving way give a different answer from the plain way?','no: the same sums, grouped; only the cost changes',['yes: it is rounder','yes: it drops the fast speeds','no: but it works for real lists alone'],'Halving-transform technique.'],
+  ['Is x_j = Σ X_k ω^(jk) the rebuilding of a list from its stepped transform?','no: the rebuilding has a factor 1/N',['yes','no: the factor is 1/2','no: the factor is N'],'Sampled-turnings technique.'],
+  ['On N equally spaced points, how many stepped turnings are at right angles?','N',['2N','N/2','endlessly many'],'Sampled-turnings technique.'],
+  ['What does the halving way cost on N = 2ᵖ points?','about N log₂ N steps',['about N² steps','about N steps','about 2ᴺ steps'],'Halving-transform technique.']];
+QP.push({id:'32k.fast',step:'32k',label:'the fast transform',open:()=>measured('32k'),make(){ return writtenQ('32k.fast',WK32); }},
+  {id:'32k.work',step:'32k',mode:'work',label:'halves and costs',open:()=>measured('32k'),make(){
+    if(rnd(2)){ const p=3+rnd(8), N=Math.pow(2,p);
+      return W30('32k.work[c;'+p+']',[['a list of N = '+N+' samples','N = 2 to the power '+p]],'About how many steps does the halving way take?',String(N*p),[String(N*N),String(N+p),String(2*N),String(N*p*p)],'Halving-transform technique: about N log₂ N = '+N+' · '+p+', against N² = '+N*N+' the plain way.'); }
+    const E=rnd(9)-4; let O=pick([-4,-3,-2,-1,1,2,3,4]); const M=pick([2,4,8]), top=rnd(2);
+    return W30('32k.work[h;'+[E,O,M,top].join(';')+']',[['E₀ = '+sg(E)+' and O₀ = '+sg(O),'the transforms of the even and the odd places, at k = 0'],['the list has '+2*M+' places','so M = '+M]],'What is X'+SUB32(top?M:0)+'?',sg(top?E-O:E+O),[sg(top?E+O:E-O),sg(E),sg(O),sg(E*O),sg(2*E)],'Halving-transform technique at k = 0, where the turn is 1: X₀ = E₀ + O₀ and X'+SUB32(M)+' = E₀ − O₀.'); }},
+  {id:'32k.line',step:'32k',mode:'proof',label:'what halving licenses',open:()=>measured('32k'),make(){
+    const E=1+rnd(5), O=1+rnd(5), M=pick([2,4,8]), p=3+rnd(6), N=Math.pow(2,p);
+    return line28('32k.line',[
+      ['k1',[['E₀ = '+E+' and O₀ = '+O+', with M = '+M,'given'],['X₀ = '+(E+O),'the halving-transform technique']],2,0,'E₀ + O₀.'],
+      ['k2',[['E₀ = '+E+' and O₀ = '+O+', with M = '+M,'given'],['X'+SUB32(M)+' = '+sg(E-O),'the halving-transform technique']],2,0,'E₀ − O₀.'],
+      ['k3',[['E₀ = '+E+' and O₀ = '+O+', with M = '+M,'given'],['X'+SUB32(M)+' = '+(E+O),'the halving-transform technique']],2,1,'The second half takes the minus sign: E₀ − O₀.'],
+      ['k4',[['a list has N = '+N+' places','given'],['its stepped transform costs about '+N*p+' steps','the halving-transform technique']],2,0,'N log₂ N.'],
+      ['k5',[['X is the stepped transform of a list x of N places','given'],['x_j = Σ X_k ω^(jk)','the sampled-turnings technique']],2,1,'The rebuilding has the factor 1/N.']],[E,O,M,p]); }});
+
+/* 32l Where Oscillating Integrals Live */
+const WL32=[
+  ['Does the total of e^(ix²) from 0 on settle absolutely?','no: every term has size 1; it settles by cancelling alone',['yes','no: it does not settle at all','yes, since x² grows'],'Turning-bell technique.'],
+  ['For a large speed λ, does the whole interval give equal shares of an oscillating total?','no: away from level points the share is of the order 1/λ',['yes','no: only the ends count','no: only the middle counts'],'No-level-point technique.'],
+  ['How large is the share of a level point, for a large speed λ?','of the order 1/√λ, larger than the rest',['of the order 1/λ','of the order 1/λ²','it does not shrink'],'Level-point technique.'],
+  ['Can the turn e^(±iπ/4) be dropped from the level-point total?','no: it shifts the drum’s ring by an eighth of a turn, as measured',['yes: it has size 1','yes, for large λ','no: without it the total is 0'],'Level-point technique.'],
+  ['Which sign has the turn e^(±iπ/4) at a level point x₀?','+ when φ″(x₀) > 0',['+ always','− when φ″(x₀) > 0','+ when φ(x₀) > 0'],'Level-point technique.']];
+QP.push({id:'32l.level',step:'32l',label:'where oscillating totals live',open:()=>measured('32l'),make(){ return writtenQ('32l.level',WL32); }},
+  {id:'32l.work',step:'32l',mode:'work',label:'sizes of oscillating totals',open:()=>measured('32l'),make(){
+    if(rnd(2)){ const k=pick([4,9,16,25]), r=Math.sqrt(k), big=rnd(2), lam=big?k+'π':'π/'+k, sz=big?'1/'+r:String(r);
+      return W30('32l.work[b;'+lam+']',[['λ = '+lam,'given']],'What is the size of the total of e^(iλx²) over the whole line?',sz,[big?'1/'+k:String(k),big?String(r):'1/'+r,'1',big?String(k):'1/'+k],'Turning-bell technique: the total settles at √(π/λ) e^(iπ/4). The turn has size 1, and √(π/λ) = '+sz+' here; π/λ itself is '+(big?'1/'+k:k)+'.'); }
+    const k=pick([4,9,16,25,100]), r=Math.sqrt(k), lev=rnd(2);
+    return W30('32l.work[s;'+[k,lev].join(';')+']',[['the speed λ is made '+k+' times as large','λ already large'],[lev?'the phase has one level point inside, where φ″ ≠ 0':'the phase has no level point','given']],lev?'By about what is the total scaled?':'By what is the bound C/λ scaled?',lev?'1/'+r:'1/'+k,[lev?'1/'+k:'1/'+r,String(r),'1/'+k*k,'1'],lev?'Level-point technique: the total goes like 1/√λ, and √'+k+' = '+r+'.':'No-level-point technique: the bound goes like 1/λ.'); }},
+  {id:'32l.line',step:'32l',mode:'proof',label:'what a level point licenses',open:()=>measured('32l'),make(){
+    const k=pick([4,9,16,25]), r=Math.sqrt(k);
+    return line28('32l.line',[
+      ['l1',[['the phase has no level point on [u, v]','given'],['|I(λ)| ≤ C/λ','the no-level-point technique']],2,0,'That is the technique.'],
+      ['l2',[['the phase has one level point inside [u, v], with φ″ ≠ 0 there','given'],['|I(λ)| ≤ C/λ','the no-level-point technique']],2,1,'With a level point the total is of the order 1/√λ, which is larger.'],
+      ['l3',[['λ = '+k+'π','given'],['the total of e^(iλx²) over the line has size 1/'+r,'the turning-bell technique']],2,0,'√(π/λ) = √(1/'+k+').'],
+      ['l4',[['λ = '+k+'π','given'],['the total of e^(iλx²) over the line has size 1/'+k,'the turning-bell technique']],2,1,'The size is √(π/λ) = 1/'+r+', not π/λ.'],
+      ['l5',[['φ″(x₀) < 0 at the one level point x₀','given'],['the total carries the turn e^(iπ/4)','the level-point technique']],2,1,'The sign is + only when φ″(x₀) > 0. Here the turn is e^(−iπ/4).']],[k]); }});
+/* ===== Rung pools end ===== */
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 
