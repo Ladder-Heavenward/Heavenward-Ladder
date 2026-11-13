@@ -21,7 +21,7 @@ const TREE=[ /* 0.3.23 (Andrew 2026-11-05 10:54): no stray keys; each mark sits 
 ];
 const css=`
 #mk-tray{--mk-paper:var(--paper,#fbf9f4);--mk-ink:var(--ink,#26262b);--mk-muted:var(--muted,#8a8a93);--mk-grid:var(--grid,#e3dfd5);--mk-sand:var(--sand,#ece7dd);--mk-card:var(--card,#fff);--mk-teal:var(--teal,#1f6f8b);--mk-ember:var(--ember,#c8501e);
-  --mk-mono:"IBM Plex Mono",Menlo,Consolas,monospace;--mk-serif:"Source Serif 4",Georgia,serif;font-family:var(--mk-serif);color:var(--mk-ink)}
+  --mk-mono:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;--mk-serif:"Source Serif 4",Georgia,serif;font-family:var(--mk-serif);color:var(--mk-ink)}
 @media (prefers-color-scheme: dark){#mk-tray{--mk-paper:var(--paper,#1b1b1f);--mk-ink:var(--ink,#ece8df);--mk-muted:var(--muted,#9a9aa3);--mk-grid:var(--grid,#33333a);--mk-sand:var(--sand,#2a2a30);--mk-card:var(--card,#232329);--mk-teal:var(--teal,#4aa3c2);--mk-ember:var(--ember,#e8703a)}}
 #mk-tray .mk-btn{position:fixed;right:max(14px,env(safe-area-inset-right,0px));bottom:max(14px,env(safe-area-inset-bottom,0px));z-index:9000;font-family:var(--mk-mono);font-size:.85rem;background:var(--mk-ink);color:var(--mk-paper);border:0;border-radius:999px;padding:9px 14px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.25)}
 #mk-tray.hasdesk .mk-btn{bottom:calc(max(14px,env(safe-area-inset-bottom,0px)) + 54px)}

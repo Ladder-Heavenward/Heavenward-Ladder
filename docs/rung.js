@@ -1,3 +1,4 @@
+/* toolbox gear */ (function(){ try{ const th=localStorage.getItem('ladder:theme'); if(th==='light'||th==='dark') document.documentElement.setAttribute('data-theme',th); }catch(e){} })();
 /* a link's page stem; on the desk links read view.html#p=<stem> */
 function hstem(h){ h=h||''; const m=h.match(/^view\.html#(?:.*&)?p=([^&]+)/); if(m) return decodeURIComponent(m[1]); return h.replace(/#.*$/,'').replace(/\.html?$/,''); }
 /* rung.js: the shared machinery of the new ladder's pages.
@@ -238,7 +239,7 @@ function plane(cv,o){
     c.stroke(); c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath();
     if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); }
     if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
-    if(o.labels&&g){ c.fillStyle=col('--muted'); c.font='11px IBM Plex Mono, monospace'; c.textAlign='center'; const ly=Math.min(H-6,Math.max(12,P.Y(0)+14));
+    if(o.labels&&g){ c.fillStyle=col('--muted'); c.font='11px Nunito, system-ui, sans-serif'; c.textAlign='center'; const ly=Math.min(H-6,Math.max(12,P.Y(0)+14));
       const step=g*Math.max(1,Math.round((o.x[1]-o.x[0])/g/10));
       for(let x=Math.ceil(o.x[0]/step)*step;x<=o.x[1]+1e-9;x+=step){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
       c.textAlign='right'; const lx=Math.max(20,Math.min(W-4,P.X(0)-5)); const stepy=g*Math.max(1,Math.round((o.y[1]-o.y[0])/g/10));
@@ -252,7 +253,7 @@ function plane(cv,o){
   P.poly=(pts,color,fill,w,close)=>{ c.beginPath(); pts.forEach(([x,y],i)=>i?c.lineTo(P.X(x),P.Y(y)):c.moveTo(P.X(x),P.Y(y))); if(close!==false) c.closePath(); if(fill){ c.fillStyle=fill.startsWith('--')?col(fill):fill; c.fill(); } if(color){ c.strokeStyle=col(color); c.lineWidth=w||1.8; c.stroke(); } };
   P.dot=(x,y,color,r)=>{ c.fillStyle=col(color||'--ember'); c.beginPath(); c.arc(P.X(x),P.Y(y),r||4.5,0,7); c.fill(); };
   P.circle=(x,y,rad,color,w,fill)=>{ c.beginPath(); c.ellipse(P.X(x),P.Y(y),Math.abs(P.X(x+rad)-P.X(x)),Math.abs(P.Y(y+rad)-P.Y(y)),0,0,7); if(fill){ c.fillStyle=fill.startsWith('--')?col(fill):fill; c.fill(); } if(color){ c.strokeStyle=col(color); c.lineWidth=w||1.8; c.stroke(); } };
-  P.text=(s,x,y,color,align,size)=>{ c.fillStyle=col(color||'--ink'); c.font=(size||13)+'px IBM Plex Mono, monospace'; c.textAlign=align||'left'; c.fillText(s,P.X(x),P.Y(y)); };
+  P.text=(s,x,y,color,align,size)=>{ c.fillStyle=col(color||'--ink'); c.font=(size||13)+'px Nunito, system-ui, sans-serif'; c.textAlign=align||'left'; c.fillText(s,P.X(x),P.Y(y)); };
   P.redraw=()=>{ if(!W) size(); P.clear(); if(o.draw) o.draw(P); };
   P.point=e=>{ const r=cv.getBoundingClientRect(); return {x:P.IX(e.clientX-r.left),y:P.IY(e.clientY-r.top),px:e.clientX-r.left,py:e.clientY-r.top}; };
   new ResizeObserver(()=>{ size(); P.redraw(); }).observe(cv);
@@ -570,13 +571,13 @@ function deskHTML(){
   const d=document.createElement('div'); d.id='desk'; d.setAttribute('role','dialog'); d.setAttribute('aria-label','desk');
   const qs=!!document.querySelector('.sayback');
   const hb=!!document.querySelector('section.basement'); /* 0.3.30 (Andrew 11:39): the basement is a Toolbox page */
-  d.innerHTML='<div class="dtop"><button type="button" class="dback">← back</button><b class="dttl"></b><span class="dacct">'+(window.LadderAccount?LadderAccount.name:'')+'</span></div><div class="dname"><span class="dname-n" title="your name on this device">'+(window.LadderAccount?LadderAccount.name:'')+'</span><a class="dname-s" href="standing.html">Standing</a></div><div class="dtabs"><button data-p="keys">Quick Keys</button>'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph View</button><button data-p="moves">Techs Read</button><button data-p="rand">Laundry</button>'+(document.querySelector('.qid')?'<button type="button" class="dcross">Crosswalk</button>':'')+'<button type="button" class="dstick">Measuring Stick</button><button type="button" class="dstand">Answering Open Questions</button>'+(hb?'<button data-p="base">Cellar</button>':'')+'<button data-p="rec">Record</button>'+(document.querySelector('.wrap>section.class.step')&&false?'<button type="button" class="dfv">Page View</button>':'')+'<button type="button" class="dheights">Dizzying Heights</button><a class="dshare" href="install.html">Share the Ladder</a><button class="x" aria-label="close">✕</button></div>'
+  d.innerHTML='<div class="dtop"><button type="button" class="dback">← back</button><b class="dttl"></b><span class="dacct">'+(window.LadderAccount?LadderAccount.name:'')+'</span></div><div class="dname"><span class="dname-n" title="your name on this device">'+(window.LadderAccount?LadderAccount.name:'')+'</span><a class="dname-s" href="standing.html">Standing</a></div><div class="dtabs"><button data-p="keys">Quick Keys</button>'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph View</button><button data-p="moves">Techs Read</button><button data-p="rand">Laundry</button>'+(document.querySelector('.qid')?'<button type="button" class="dcross">Crosswalk</button>':'')+'<button type="button" class="dstick">Measuring Stick</button><button type="button" class="dstand">Answering Open Questions</button>'+(hb?'<button data-p="base">Cellar</button>':'')+'<button data-p="rec" class="dgear" aria-label="settings and record" title="settings and record">⚙</button>'+(document.querySelector('.wrap>section.class.step')&&false?'<button type="button" class="dfv">Page View</button>':'')+'<button type="button" class="dheights">Dizzying Heights</button><a class="dshare" href="install.html">Share the Ladder</a><button class="x" aria-label="close">✕</button></div>'
     +'<div class="dpane" id="dp-keys"><div id="dkeyshost"></div></div>'
     +(qs?'<div class="dpane" id="dp-qs"><p class="dnote">The page’s questions, here so you can read them beside the class.</p><div class="dq" id="dq"></div></div>':'')
     +'<div class="dpane" id="dp-graph"><div id="dgfig"></div><div id="dmg"></div><p class="dnote" style="margin-top:10px">Type it as on paper: x^2, 2sin(x), e^x, ln x, √x, |x|, x!. a, b, c and k get sliders.</p></div>'
     +'<div class="dpane" id="dp-moves"><p class="dnote" id="dmnote">The techs this step uses and builds: what each is called, what it does in words, and the line in symbols.</p><div id="dmoves"></div><p><a class="dlink" href="moves.html">every tech you have earned →</a></p></div>'
     +'<div class="dpane" id="dp-rand"><p class="dnote">Practice drawn from the pools your steps have opened, with no repeats.</p></div>'
-    +(hb?'<div class="dpane" id="dp-base"><div id="dbase"></div></div>':'')+'<div class="dpane" id="dp-rec"><p class="recname"><span class="dnote">Your name on this device:</span> <b class="dname-n">'+(window.LadderAccount?LadderAccount.name:'')+'</b> <button type="button" class="dlink recroll">New Name</button></p><p class="dnote">Everything the ladder remembers about your climb is one record, kept on this device. Save it as a file to keep a copy or to carry it to another device, and open that file there.</p><p><button type="button" class="dlink recx">save my record as a file</button></p><p><label class="dlink">open a record file <input type="file" accept=".json,application/json" class="reci" hidden></label></p><p><label class="dnote recai-l"><input type="checkbox" class="recai"> An AI assistant is connected</label></p><p><button type="button" class="dlink recdel">delete my progress</button></p><p class="dnote" id="recnote"></p></div>';
+    +(hb?'<div class="dpane" id="dp-base"><div id="dbase"></div></div>':'')+'<div class="dpane" id="dp-rec"><p class="dtheme"><span class="dnote">Display:</span> <button type="button" data-th="light">Light</button> <button type="button" data-th="dark">Dark</button></p><h4 class="drech">Record</h4><p class="recname"><span class="dnote">Your name on this device:</span> <b class="dname-n">'+(window.LadderAccount?LadderAccount.name:'')+'</b> <button type="button" class="dlink recroll">New Name</button></p><p class="dnote">Everything the ladder remembers about your climb is one record, kept on this device. Save it as a file to keep a copy or to carry it to another device, and open that file there.</p><p><button type="button" class="dlink recx">save my record as a file</button></p><p><label class="dlink">open a record file <input type="file" accept=".json,application/json" class="reci" hidden></label></p><p><label class="dnote recai-l"><input type="checkbox" class="recai"> An AI assistant is connected</label></p><p><button type="button" class="dlink recdel">delete my progress</button></p><p class="dnote" id="recnote"></p></div>';
   document.body.append(b,d);
 }
 
@@ -907,7 +908,7 @@ function MathGraph(host,opts){
   function draw(){
     if(!W) size(); const c=cv.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0); c.clearRect(0,0,W,H);
     c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
-    const step=niceStep(); c.lineWidth=1; c.font='11px IBM Plex Mono, monospace'; c.fillStyle=col('--muted');
+    const step=niceStep(); c.lineWidth=1; c.font='11px Nunito, system-ui, sans-serif'; c.fillStyle=col('--muted');
     c.strokeStyle=col('--grid'); c.beginPath();
     for(let gx=Math.ceil(IX(0)/step)*step; gx<=IX(W); gx+=step){ c.moveTo(X(gx),0); c.lineTo(X(gx),H); }
     for(let gy=Math.ceil(IY(H)/step)*step; gy<=IY(0); gy+=step){ c.moveTo(0,Y(gy)); c.lineTo(W,Y(gy)); }
@@ -982,7 +983,7 @@ window.__deskInit=function(){
   function fillQs(){ const q=document.getElementById('dq'); if(q.dataset.done){ syncQs(); return; } const stq=[...document.querySelectorAll('section.step:not([hidden]) .sayback ol')]; const src=stq.length?null:document.querySelector('.sayback ol, #qs ol, section.sayback'); if(stq.length){ stq.forEach(o=>{ const c=o.cloneNode(true); c.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id')); q.appendChild(c); }); } if(src){ const c=src.cloneNode(true); c.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id')); q.appendChild(c);
     q.querySelectorAll('.qid,.id').forEach(el=>{ el.style.cursor='pointer'; el.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation(); const o=origQ(el.textContent.trim()); if(o&&o.__tick){ o.__tick(); el.classList.toggle('done',o.classList.contains('done')); } }); }); }
     q.dataset.done=1; syncQs(); }
-  const TOOLS={qs:'Questions',graph:'Graph View',moves:'Techs Read',rand:'Laundry',base:'Cellar',rec:'Record'};
+  const TOOLS={qs:'Questions',graph:'Graph View',moves:'Techs Read',rand:'Laundry',base:'Cellar',rec:'Settings'};
   /* the page's basement, copied in once; ← back returns to the footing you were on */
   function fillBase(){ const h=document.getElementById('dbase'); if(!h||h.dataset.done) return; const b=document.querySelector('.wrap section.basement, section.basement'); if(!b) return;
     const c=b.cloneNode(true); c.classList.remove('shut'); c.removeAttribute('id'); c.querySelectorAll('[id]').forEach(e=>e.id='db-'+e.id); c.querySelectorAll('.blip').forEach(e=>e.remove()); c.hidden=false; c.style.display='';
@@ -1029,6 +1030,15 @@ window.__deskInit=function(){
   desk.querySelector('.x').onclick=()=>open(false);
   desk.querySelector('.dback').onclick=()=>open(false);
   desk.querySelectorAll('.dtabs [data-p]').forEach(b=>b.onclick=()=>show(b.dataset.p));
+  /* toolbox gear */ (function(){ const R=document.documentElement, eff=()=>R.getAttribute('data-theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+    const mark=()=>desk.querySelectorAll('.dtheme [data-th]').forEach(b=>{ const on=b.dataset.th===eff(); b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false'); });
+    desk.querySelectorAll('.dtheme [data-th]').forEach(b=>b.onclick=()=>{ R.setAttribute('data-theme',b.dataset.th); try{ localStorage.setItem('ladder:theme',b.dataset.th); }catch(e){} mark(); }); mark();
+    const mv=document.getElementById('dp-moves'), gb=desk.querySelector('.dtabs [data-p="graph"]');
+    if(mv&&gb){ const p=document.createElement('p'); p.className='dinner'; p.innerHTML='<button type="button" class="dgraphin">Graph View</button>'; p.firstChild.onclick=()=>gb.click(); mv.prepend(p); }
+    const sync=()=>{ const i=desk.querySelector('.dgraphin'); if(i&&gb) i.parentNode.hidden=gb.classList.contains('lk-hide');
+      const m=desk.querySelector('.dtabs [data-p="moves"]'), gp=document.getElementById('dp-graph'); if(m&&gp&&gp.classList.contains('on')) m.classList.add('on');
+      const an=desk.querySelector('.dannex'), ba=desk.querySelector('.dtabs [data-p="base"]'); if(ba) ba.classList.toggle('tb-in',!!(an&&!an.classList.contains('lk-hide'))); };
+    document.addEventListener('click',()=>setTimeout(sync,0)); [300,1200,3000,7000].forEach(ms=>setTimeout(sync,ms)); })();
   const dfv=desk.querySelector('.dfv'); if(dfv) dfv.onclick=()=>{ open(false); if(window.LadderFV&&LadderFV.toggle) LadderFV.toggle(); };
   const dx=desk.querySelector('.dcross'); if(dx) dx.onclick=()=>{ open(false); if(window.LadderCards) LadderCards.open(); else if(typeof toast==='function') toast('the crosswalk is loading'); };
   const dsk=desk.querySelector('.dstick'); if(dsk) dsk.onclick=()=>{ open(false); if(window.LadderMeasure) LadderMeasure.list(); };
@@ -2287,24 +2297,39 @@ function pageHooks(){ const ids=[...document.querySelectorAll('section.challenge
         sec.classList.add('sq-reduced'); const p=document.createElement('p'); p.className='sq-allp'; p.innerHTML='<button type="button" class="sq-all">Standing Questions</button>';
         p.querySelector('.sq-all').onclick=e=>{ e.preventDefault(); e.stopPropagation(); list(stem); }; sec.appendChild(p); }); });
   (window.LadderStick?LadderStick.maps():Promise.resolve()).then(go); }
+/* toolbox colours */ /* 2026-11-13 (Andrew 09:18Z): Crosswalk and Questions are reached from here, not from the toolbox's own row */
+function tools(body){ const p=document.createElement('p'); p.className='sk-tools'; p.innerHTML='<button type="button" class="sk-cross">Crosswalk</button> <button type="button" class="sk-qs">Questions</button>';
+  p.querySelector('.sk-cross').onclick=()=>{ close(); if(window.LadderCards) LadderCards.open(); };
+  p.querySelector('.sk-qs').onclick=()=>{ close(); const d=document.getElementById('desk'), b=document.getElementById('deskbtn'); if(b&&!(d&&d.classList.contains('open'))) b.click(); const q=document.querySelector('#desk .dtabs [data-p="qs"]'); if(q) q.click(); };
+  body.prepend(p); }
 /* the toolbox list */
 function list(here){ here=typeof here==='string'?here:null; close(); const body=frame('','');
   box.querySelector('.sk-top span').textContent='answering open questions'; body.innerHTML='<p class="sk-q">Gathering them…</p>';
-  Promise.all([window.LadderStick?LadderStick.maps():null,script('sq/index.js',()=>window.LADDER_SQINDEX)]).then(()=>{
+  Promise.all([window.LadderStick?LadderStick.maps():null,script('sq/index.js',()=>window.LADDER_SQINDEX),/* sqlist */script('sq/titles.js',()=>window.LADDER_SQTITLES).catch(()=>{})]).then(()=>{
     const P=get('pages:done',{}), I=window.LADDER_SQINDEX||{}, M=window.LADMAP||[]; const out=[];
-    M.forEach(([fl,rungs])=>rungs.forEach(([r,core,annex])=>core.concat(annex).forEach(([s])=>{ if(P[s]&&P[s].v&&I[s]) out.push([fl,s,I[s]]); })));
+    M.forEach(([fl,rungs])=>rungs.forEach(([r,core,annex])=>core.concat(annex).forEach(([s])=>{ if(P[s]&&P[s].v&&I[s]) out.push([fl,s,I[s],r]); })));
     const hq=here&&I[here]&&I[here].length?I[here]:null;
-    if(!out.length&&!hq){ body.innerHTML='<p class="sk-q">None yet. A step’s standing questions come here once you have passed its footings; each one walks a branching path, a path to its answer or a debate to the bottom of one line of inquiry.</p>'; return; }
+    if(!out.length&&!hq){ body.innerHTML='<p class="sk-q">None yet. A step’s standing questions come here once you have passed its footings; each one walks a branching path, a path to its answer or a debate to the bottom of one line of inquiry.</p>'; tools(body); return; }
+    const TT=window.LADDER_SQTITLES||{}, U=window.__starUnits?window.__starUnits():null, WG=new Set(U?U.wings:[]);
+    const WINGSVG='<svg viewBox="0 0 28 14" width="26" height="13" aria-hidden="true"><path fill="currentColor" d="M13.4 9.2C11 3.6 6.4.9.8.8c1 3 2.4 5 4.4 6.2-1 .5-1.7 1.1-2.2 1.9 1.9.9 3.8 1 5.2.7-.6 1-.8 2-.5 3.2 1.4.4 3.4-.2 5.7-3.6z"/><path fill="currentColor" transform="matrix(-1 0 0 1 28 0)" d="M13.4 9.2C11 3.6 6.4.9.8.8c1 3 2.4 5 4.4 6.2-1 .5-1.7 1.1-2.2 1.9 1.9.9 3.8 1 5.2.7-.6 1-.8 2-.5 3.2 1.4.4 3.4-.2 5.7-3.6z"/></svg>';
+    const dn=id=>!!get('sq:'+id,{}).done, qa=x=>esc(x).replace(/"/g,'&quot;');
     const st=id=>{ const r=get('sq:'+id,{}); return r.done?'✓':(r.until&&r.until>Date.now()?'resting '+left(r.until-Date.now()):''); };
+    /* a row: the question's number, its two-word title, and the question's opening words folded under the title (tap the title) */
+    const row=stem=>([id,kind,txt,has])=>'<li'+(dn(id)?' class="sk-done"':'')+'>'+(has?'<button type="button" class="sk-sit" data-stem="'+stem+'" data-id="'+esc(id)+'">'+esc(id)+'</button>':'<a href="'+stem+'.html#'+esc(id)+'">'+esc(id)+'</a>')
+      +(TT[id]?' <button type="button" class="sk-st sk-tt" aria-expanded="false" data-txt="'+qa(TT[id])+'" data-pre="" data-post="'+st(id)+'"></button><span class="sk-st sk-sum" hidden data-txt="'+qa(txt)+'" data-pre="'+(kind==='debate'?'debate · ':'')+'" data-post=""></span>'
+        :' <span class="sk-st" data-txt="'+qa(txt)+'" data-pre="'+(kind==='debate'?'debate · ':'')+'" data-post="'+st(id)+'"></span>')+'</li>';
     const byF={}; out.forEach(x=>(byF[x[0]]=byF[x[0]]||[]).push(x)); const fls=Object.keys(byF);
+    /* a rung with its wings folds its questions into a wing icon */
+    const rungsOf=list=>{ const g=[]; list.forEach(x=>{ const l=g[g.length-1], h=x[2].map(row(x[1])).join(''); if(l&&l.r===x[3]) l.rows+=h; else g.push({r:x[3],rows:h}); });
+      return g.map(o=>WG.has('rung '+o.r)?'<li class="sk-wingli"><details class="sk-wing"><summary aria-label="rung '+o.r+', wings earned: its questions"><span class="sk-wi">'+WINGSVG+'</span> rung '+o.r+'</summary><ul class="sk-list">'+o.rows+'</ul></details></li>':o.rows).join(''); };
     body.innerHTML='<p class="sk-n">The standing questions of the steps you have passed. Each walks a branching path. A wrong path on a question with one answer rests it: 6 minutes, then an hour, then 10 hours, each rest ten times the last.</p>'
-      +fls.map(f=>'<details class="sk-fl"'+(f===fls[fls.length-1]?' open':'')+'><summary>floor '+f+'</summary><ul class="sk-list">'
-        +byF[f].map(([,s,qs])=>qs.map(([id,kind,txt,has])=>'<li>'+(has?'<button type="button" class="sk-sit" data-stem="'+s+'" data-id="'+esc(id)+'">'+esc(id)+'</button>':'<a href="'+s+'.html#'+esc(id)+'">'+esc(id)+'</a>')+' <span class="sk-st" data-txt="'+esc(txt).replace(/"/g,'&quot;')+'" data-pre="'+(kind==='debate'?'debate · ':'')+'" data-post="'+st(id)+'"></span></li>').join('')).join('')+'</ul></details>').join('');
+      +fls.map(f=>'<details class="sk-fl"'+(f===fls[fls.length-1]?' open':'')+'><summary>floor '+f+'</summary><ul class="sk-list">'+rungsOf(byF[f])+'</ul></details>').join('');
     if(hq){ const d=document.createElement('details'); d.className='sk-fl sk-here'; d.open=true;
-      d.innerHTML='<summary>this step</summary><ul class="sk-list">'+hq.map(([id,kind,txt,has])=>'<li>'+(has?'<button type="button" class="sk-sit" data-stem="'+here+'" data-id="'+esc(id)+'">'+esc(id)+'</button>':'<a href="'+here+'.html#'+esc(id)+'">'+esc(id)+'</a>')+' <span class="sk-st" data-txt="'+esc(txt).replace(/"/g,'&quot;')+'" data-pre="'+(kind==='debate'?'debate · ':'')+'" data-post="'+st(id)+'"></span></li>').join('')+'</ul>';
+      d.innerHTML='<summary>this step</summary><ul class="sk-list">'+hq.map(row(here)).join('')+'</ul>';
       body.querySelectorAll('details.sk-fl').forEach(x=>{ x.open=false; }); body.querySelector('.sk-n').after(d); }
-    body.querySelectorAll('.sk-st[data-txt]').forEach(e=>{ rich(e,e.dataset.pre+e.dataset.txt+' '+e.dataset.post); });
-    body.querySelectorAll('.sk-sit').forEach(b=>b.onclick=()=>walk(b.dataset.id,{stem:b.dataset.stem})); }); }
+    body.querySelectorAll('.sk-st[data-txt]').forEach(e=>{ rich(e,(e.dataset.pre+e.dataset.txt+' '+e.dataset.post).trim()); });
+    body.querySelectorAll('.sk-tt').forEach(b=>b.onclick=()=>{ const s=b.nextElementSibling; if(!s) return; s.hidden=!s.hidden; b.setAttribute('aria-expanded',String(!s.hidden)); });
+    body.querySelectorAll('.sk-sit').forEach(b=>b.onclick=()=>walk(b.dataset.id,{stem:b.dataset.stem})); tools(body); }); }
 window.LadderStanding={walk,list,lockFor,stemOf};
 const boot=()=>setTimeout(pageHooks,300);
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
@@ -2370,6 +2395,10 @@ function catalogue(want){ data().then(D=>{ if(!D) return;
   box.innerHTML='<div class="sk-card"><div class="sk-top"><span>the annexes</span><button type="button" class="sk-x" aria-label="close">×</button></div>'
     +'<p class="sk-n">The annexes by subject, in the order you meet them. The climb runs through the steps, statistics, the newsflash and the research front; every other annex is here, or on the ladder itself under dizzying heights. An annex opens when you open its rung.</p>'
     +D.order.map(sec).join('')+'</div>';
+  { const ba=document.querySelector('#desk .dtabs [data-p="base"]'); /* toolbox gear: the Cellar is reached from here */
+    if(ba&&!ba.classList.contains('lk-hide')){ const p=document.createElement('p'); p.className='sk-tools'; p.innerHTML='<button type="button" class="sk-cellar">Cellar</button>';
+      p.firstChild.onclick=()=>{ box.remove(); document.body.classList.remove('stickopen'); const d=document.getElementById('desk'), b=document.getElementById('deskbtn'); if(b&&!(d&&d.classList.contains('open'))) b.click(); ba.click(); };
+      const n=box.querySelector('.sk-n'); if(n) n.parentNode.insertBefore(p,n); } }
   box.querySelector('.sk-x').onclick=()=>{ box.remove(); document.body.classList.remove('stickopen'); };
   box.addEventListener('click',e=>{ if(e.target===box){ box.remove(); document.body.classList.remove('stickopen'); } });
 }); }
@@ -2839,3 +2868,4 @@ function go(){ const pg=page(); row(); if(pg==='hist6') hist6(); if(PAGES.includ
 window.LadderDbt={open,done,mark};
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
 })();
+/* nunito */

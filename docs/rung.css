@@ -1,3 +1,5 @@
+/* nunito */ @font-face{font-family:"Nunito";font-style:normal;font-weight:200 1000;font-display:swap;src:url(fonts/nunito-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Nunito";font-style:normal;font-weight:200 1000;font-display:swap;src:url(fonts/nunito-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 /* small phi in running text is drawn with the same glyph as in the lines (KaTeX's curly φ), so the two never look like different letters */
 @font-face{font-family:"Ladder Phi";src:url(katex/fonts/KaTeX_Math-Italic.woff2) format("woff2");unicode-range:U+03C6;font-display:swap}
 /* rung.css: the shared look of the new ladder's pages (rungs, techniques, applied rungs).
@@ -6,7 +8,8 @@
   --paper:#fbf9f4; --ink:#26262b; --muted:#8a8a93; --grid:#e3dfd5; --sand:#ece7dd;
   --ember:#c8501e; --teal:#1f6f8b; --gold:#b08a3e; --card:#ffffff; --plum:#7a4a8c; --moss:#4f7a3a;
   --serif:"Ladder Phi","Source Serif 4",Georgia,"Times New Roman",serif;
-  --mono:"Ladder Phi","IBM Plex Mono","SFMono-Regular",Menlo,Consolas,monospace;
+  --mono:"Ladder Phi","Nunito",system-ui,-apple-system,"Segoe UI",sans-serif; /* nunito */
+  --code:"Ladder Phi","IBM Plex Mono","SFMono-Regular",Menlo,Consolas,monospace; /* true fixed width, only where columns must line up */
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#1b1b1f;--ink:#ece8df;--muted:#9a9aa3;--grid:#33333a;--sand:#2a2a30;--ember:#e8703a;--teal:#4aa3c2;--gold:#d2a85a;--card:#232329;--plum:#b98bcc;--moss:#8fbf72;color-scheme:dark}}
 :root[data-theme="dark"]{--paper:#1b1b1f;--ink:#ece8df;--muted:#9a9aa3;--grid:#33333a;--sand:#2a2a30;--ember:#e8703a;--teal:#4aa3c2;--gold:#d2a85a;--card:#232329;--plum:#b98bcc;--moss:#8fbf72;color-scheme:dark}
@@ -529,7 +532,7 @@ button.qrep:hover{opacity:1;color:var(--ember)}
 
 /* learner notes (0.0.498) */
 .lnote{margin:-2px 0 14px;padding:8px 12px;border-left:3px solid var(--ember);background:var(--card);border-radius:4px;max-width:66ch}
-.lnote .lk{display:block;font:500 11px/1.4 'IBM Plex Mono',monospace;letter-spacing:.04em;text-transform:uppercase;opacity:.7;margin-bottom:4px}
+.lnote .lk{display:block;font:600 11px/1.4 Nunito,system-ui,sans-serif;letter-spacing:.04em;text-transform:uppercase;opacity:.7;margin-bottom:4px}
 .lnote .lt{white-space:pre-wrap}
 .lnote textarea{width:100%;box-sizing:border-box;font:inherit;padding:6px 8px;border-radius:4px;border:1px solid currentColor;background:transparent;color:inherit}
 .lnote button{font:inherit;font-size:.85em;margin:6px 6px 0 0;padding:2px 10px;border-radius:5px;border:1px solid currentColor;background:transparent;color:inherit;cursor:pointer}
@@ -864,7 +867,7 @@ html.isdesk p[data-collapsed]{max-height:1.6em;overflow:hidden;opacity:.5}
 .dbtsig{font-family:var(--mono);margin-left:.6em;color:var(--muted)}
 ol.dbtser{list-style:none;display:flex;flex-wrap:wrap;gap:6px 14px;padding:0;margin:10px 0 0;font-size:.92rem}
 ol.dbtser li.here a{color:var(--ink);font-weight:600;text-decoration:none}
-pre.dbtx{align-self:start;font-family:var(--mono);font-size:15px;line-height:1.55;white-space:pre;overflow:hidden;max-width:100%;margin:10px 0;padding:10px 12px;background:var(--card);border:1px solid var(--grid);border-radius:8px;tab-size:4}
+pre.dbtx{align-self:start;font-family:var(--code);font-size:15px;line-height:1.55;white-space:pre;overflow:hidden;max-width:100%;margin:10px 0;padding:10px 12px;background:var(--card);border:1px solid var(--grid);border-radius:8px;tab-size:4}
 pre.dbtx.dwrap{white-space:normal}
 pre.dbtx.dwrap .dbl{display:flex;flex-wrap:wrap;column-gap:1.6em;row-gap:2px;margin-bottom:6px}
 pre.dbtx.dwrap .dbs{white-space:pre-wrap;overflow-wrap:anywhere}
@@ -964,3 +967,63 @@ html.hg-wait .rungs .hg-in{animation-play-state:paused}
 #hg-hold i:nth-child(2){animation-delay:.2s}#hg-hold i:nth-child(3){animation-delay:.4s}
 @keyframes hgDot{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-5px)}}
 html.hg-on,html.hg-on body,html.hg-on .wrap{overflow-anchor:none} /* the browser must not re-anchor the scroll to the displaced page while it settles */
+/* sqlist */ /* 2026-11-13 (Andrew 09:00Z): a two-word title on each row; finished questions in the purple of the wings */
+#stick .sk-st.sk-tt{font-family:var(--serif);font-size:1rem;color:var(--ink);background:none;border:0;padding:4px 2px;margin:0;cursor:pointer;text-align:left}
+#stick .sk-st.sk-tt::after{content:" \25B8";font-size:.75em;color:var(--muted)}
+#stick .sk-st.sk-tt[aria-expanded="true"]::after{content:" \25BE"}
+#stick .sk-st.sk-sum{display:block;margin:.1em 0 .6em}
+#stick .sk-st.sk-sum[hidden]{display:none}
+#stick .sk-list li.sk-done .sk-st.sk-tt{color:var(--plum)}
+#stick .sk-list li.sk-wingli{margin:.5em 0}
+#stick details.sk-wing>summary{font-family:var(--mono);font-size:.85rem;color:var(--plum);cursor:pointer;display:inline-flex;align-items:center;gap:8px;list-style:none;border:1px solid var(--plum);border-radius:999px;padding:5px 12px}
+#stick details.sk-wing>summary::-webkit-details-marker{display:none}
+#stick details.sk-wing .sk-wi{display:inline-flex;color:var(--plum)}
+#stick details.sk-wing>.sk-list{margin-left:10px;padding-left:10px;border-left:2px solid var(--plum)}
+#stick .sk-list li.sk-done,#stick .sk-list li.sk-done .sk-st,#stick .sk-list li.sk-done a,#stick .sk-list li.sk-done .sk-sit{color:var(--plum)}
+#stick .sk-list li.sk-done .sk-sit{border-color:var(--plum)}
+/* the toolbox button is the wings' purple too: this is where wings are earned (Andrew 09:10Z) */
+#desk .dtabs button.dstand,#desk .dstand{background:var(--plum);color:#fff;border-color:var(--plum)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #desk .dtabs button.dstand,:root:not([data-theme="light"]) #desk .dstand{color:#1b1b1f}}
+:root[data-theme="dark"] #desk .dtabs button.dstand,:root[data-theme="dark"] #desk .dstand{color:#1b1b1f}
+/* toolbox colours */ /* 2026-11-13 (Andrew 09:18Z): each toolbox button wears the colour of what it leads to.
+   Dizzying Heights orange; Quick Keys statistics beige; Measuring Stick the gold star's gold; Techs Read the blue star's
+   blue; Laundry and Standing dark blue; Share the Ladder the green of the anexact box; (sqlist) Answering Open Questions
+   the wings' purple; Record stays red. Crosswalk and Questions live inside Answering Open Questions. */
+#desk .dtabs button.dheights,#desk .dheights{background:var(--ember);color:#fff;border-color:var(--ember)}
+#desk .dtabs button[data-p="keys"]{background:#f3ead9;color:#6f5d42;border-color:#cdbb9c}
+#desk .dtabs button.dstick{background:var(--gold);color:#1b1b1f;border-color:var(--gold)}
+#desk .dtabs button[data-p="moves"]{background:#2f6fd6;color:#fff;border-color:#2f6fd6}
+#desk .dtabs button[data-p="rand"],#desk .dname-s{background:#1d3461;color:#fff;border-color:#1d3461}
+#desk .dtabs .dshare{background:var(--moss);color:#fff}
+#desk .dtabs button[data-p="qs"],#desk .dtabs button.dcross{display:none}
+/* the open tool is marked by a ring, so it keeps its own colour */
+#desk .dtabs button.on{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--ink)}
+#desk .dtabs button[data-p="keys"].on{background:#f3ead9;color:#6f5d42;border-color:#cdbb9c}
+#desk .dtabs button[data-p="moves"].on{background:#2f6fd6;border-color:#2f6fd6}
+#desk .dtabs button[data-p="rand"].on{background:#1d3461;border-color:#1d3461}
+#desk .dtabs button[data-p="graph"].on{background:var(--sand);color:var(--ink);border-color:var(--grid)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #desk .dtabs button[data-p="keys"],:root:not([data-theme="light"]) #desk .dtabs button[data-p="keys"].on{background:#3a3326;color:#cdbb9c;border-color:#6b5d45}
+  :root:not([data-theme="light"]) #desk .dtabs button[data-p="moves"],:root:not([data-theme="light"]) #desk .dtabs button[data-p="moves"].on{background:#6fa8ff;color:#1b1b1f;border-color:#6fa8ff}
+  :root:not([data-theme="light"]) #desk .dtabs button[data-p="rand"],:root:not([data-theme="light"]) #desk .dtabs button[data-p="rand"].on,:root:not([data-theme="light"]) #desk .dname-s{background:#2b4a8c;border-color:#2b4a8c}
+  :root:not([data-theme="light"]) #desk .dtabs .dshare,:root:not([data-theme="light"]) #desk .dtabs button.dheights{color:#1b1b1f}}
+:root[data-theme="dark"] #desk .dtabs button[data-p="keys"],:root[data-theme="dark"] #desk .dtabs button[data-p="keys"].on{background:#3a3326;color:#cdbb9c;border-color:#6b5d45}
+:root[data-theme="dark"] #desk .dtabs button[data-p="moves"],:root[data-theme="dark"] #desk .dtabs button[data-p="moves"].on{background:#6fa8ff;color:#1b1b1f;border-color:#6fa8ff}
+:root[data-theme="dark"] #desk .dtabs button[data-p="rand"],:root[data-theme="dark"] #desk .dtabs button[data-p="rand"].on,:root[data-theme="dark"] #desk .dname-s{background:#2b4a8c;border-color:#2b4a8c}
+:root[data-theme="dark"] #desk .dtabs .dshare,:root[data-theme="dark"] #desk .dtabs button.dheights{color:#1b1b1f}
+#stick .sk-tools{margin:.2em 0 .6em;display:flex;gap:8px;flex-wrap:wrap}
+#stick .sk-tools button{font-family:var(--mono);font-size:.82rem;padding:6px 12px;background:var(--sand);color:var(--ink);border:1px solid var(--plum);border-radius:16px;cursor:pointer}
+/* toolbox gear */ /* 2026-11-13 (Andrew 09:45Z): Graph View inside Techs Read, Cellar inside Annexes, Annexes yellow, a gear
+   for the light/dark choice and the Record, and the close button in Record's red. */
+#desk .dtabs button[data-p="graph"],#desk .dtabs button[data-p="base"].tb-in{display:none}
+#desk .dtabs button.dannex,#desk .dannex{background:#f2c935;color:#1b1b1f;border-color:#d9ae1f}
+/* 09:52Z: the gear is yellow, a little wider, and sits beside the close button; the Cellar wears the Annexes' yellow */
+#desk .dtabs button[data-p="rec"],#desk .dtabs button[data-p="rec"].on{background:#f2c935;color:#1b1b1f;border-color:#d9ae1f;font-family:var(--sans,system-ui,sans-serif);font-size:1.05rem;line-height:1;padding:5px 20px;order:8;margin-left:auto}
+#desk .dtabs .x{background:#b3261e;color:#fff;border-color:#b3261e;order:9;margin-left:0}
+#desk .dtabs button[data-p="base"],#desk .dtabs button[data-p="base"].on,#stick .sk-tools button.sk-cellar{background:#f2c935;color:#1b1b1f;border-color:#d9ae1f}
+#desk .dinner{margin:0 0 .7em}
+#desk .dinner button,#desk .dtheme button{font-family:var(--mono);font-size:.82rem;padding:6px 12px;background:var(--sand);color:var(--ink);border:1px solid var(--grid);border-radius:16px;cursor:pointer}
+#desk .dinner button{border-color:#2f6fd6}
+#desk .dtheme{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 1em}
+#desk .dtheme button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+#desk .drech{font-family:var(--mono);font-size:.85rem;font-weight:600;margin:0 0 .5em;padding-top:.8em;border-top:1px solid var(--grid)}
+:root[data-theme="dark"] .tag.stat{background:#3a3326;color:#cdbb9c;border-color:#6b5d45} /* the one dark line that had no chosen-dark twin */
