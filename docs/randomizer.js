@@ -11647,6 +11647,532 @@ QP.push({id:'43l.logs',step:'43l',label:'discrete logarithms',open:()=>measured(
       ['l2',[['A = gᵃ and B = gᵇ on the clock of p','sent'],['Bᵃ ≡ Aᵇ (mod p)','the shared-secret technique']],2,0,'Both are g^(ab).'],
       ['l3',[['A and B are heard by a listener','given'],['the listener has g^(ab) as A · B','the shared-secret technique']],2,1,'A · B = g^(a + b), not g^(ab).'],
       ['l4',[['log_g a = 5 on the clock of p','given'],['log_g(a³) ≡ 15 (mod p − 1)','the clock-log technique']],2,0,'Logs turn powers into multiples.']],[]); }});
+/* ----- rung 44: rings, fields and modules, 44a to 44l ----- */
+Object.assign(STEPS,{'44a':['r44a','Plus and Times Alone'],'44b':['r44b','Ideals and Quotients'],'44c':['r44c','Division With Remainder for Polynomials'],'44d':['r44d','Unique Factoring'],'44e':['r44e','Where Factoring Fails'],'44f':['r44f','Field Extensions'],'44g':['r44g','Finite Fields'],'44h':['r44h','Only One Complete Ordered Field'],'44i':['r44i','Modules Over a Principal Ring'],'44j':['r44j','Polynomial Division by Hand'],'44k':['r44k','Field Extensions by Hand'],'44l':['r44l','Boolean Algebra Standing on Its Own']});
+const G44=(a,b)=>b?G44(b,a%b):Math.abs(a), N44=n=>n<0?'− '+(-n):String(n), SG44=n=>n<0?' − '+(-n):' + '+n;
+const PQ44=(a,b,c)=>{ const t=[]; if(a) t.push((a===1?'':a===-1?'−':N44(a).replace(' ',''))+'x²'); if(b) t.push((t.length?(b<0?' − ':' + '):(b<0?'−':''))+(Math.abs(b)===1?'':Math.abs(b))+'x'); if(c||!t.length) t.push((t.length?(c<0?' − ':' + '):(c<0?'−':''))+Math.abs(c)); return t.join(''); };
+
+/* 44a Plus and Times Alone */
+const WA44=[
+  ['If 1 = 0 in a ring, how many members has it?','one',['two','none','endlessly many'],'One-member technique.'],
+  ['x² = 1. Is x = 1 or x = −1 in every ring?','no: it needs no zero products; on ℤ/8, 3² = 1',['yes','yes, in every ring with 1','no: x = 0 too'],'Cancel-exactly-when technique.'],
+  ['AB = 0 for grids. Is A = 0 or B = 0?','not necessarily: the grid with one 1 above the diagonal squares to 0',['yes','yes, as for numbers','no: never'],'Grids have zero products.'],
+  ['Is (w + b)² = w² + 2wb + b² in every ring?','no: it is w² + wb + bw + b², and needs times to turn about',['yes','yes, if 1 + 1 ≠ 0','no: it is w² + b²'],'Rings need not turn about.'],
+  ['ℤ is cancelling. Is it a field?','no: the finite-cancelling technique needs finitely many members',['yes','yes, by the finite-cancelling technique','no: ℤ is not cancelling'],'Finite-cancelling technique.'],
+  ['When does cancelling work in a ring that turns about?','exactly when no two members other than 0 multiply to 0',['always','when the ring is finite','when 1 + 1 ≠ 0'],'Cancel-exactly-when technique.']];
+QP.push({id:'44a.rings',step:'44a',label:'plus and times alone',open:()=>measured('44a'),make(){ return writtenQ('44a.rings',WA44); }},
+  {id:'44a.work',step:'44a',mode:'work',label:'square roots of 1 on a clock',open:()=>measured('44a'),make(){
+    const n=pick([8,12,15,16,20,21,24]), R=[]; for(let x=1;x<n;x++) if(x*x%n===1) R.push(x);
+    const U=[]; for(let x=1;x<n;x++) if(G44(x,n)===1) U.push(x);
+    const L=a=>a.join(', ');
+    return W30('44a.work[r;'+n+']',[['ℤ/'+n,'the ring'],['x² = 1','the equation']],'Which x from 1 to '+(n-1)+' answer it?',L(R),[L([1,n-1]),'1',L(U),L(R.concat([R[R.length-1]+1<n?R[R.length-1]+1:2]).sort((p,q)=>p-q))].filter(x=>x!==L(R)),'ℤ/'+n+' has zero products, so x² = 1 has '+R.length+' answers.'); }},
+  {id:'44a.line',step:'44a',mode:'proof',label:'what rings license',open:()=>measured('44a'),make(){
+    return line28('44a.line',[
+      ['a1',[['R is cancelling and has finitely many members','given'],['R is a field','the finite-cancelling technique']],2,0,'That is the technique.'],
+      ['a2',[['ℤ is cancelling','given'],['ℤ is a field','the finite-cancelling technique']],2,1,'ℤ has endlessly many members.'],
+      ['a3',[['x² = 1 in ℤ/8','given'],['x = 1 or x = 7','the cancel-exactly-when technique']],2,1,'ℤ/8 has zero products: 3² = 1 too.'],
+      ['a4',[['1 = 0 in R','given'],['R has only one member','the one-member technique']],2,0,'w = w · 1 = w · 0 = 0.']],[]); }});
+
+/* 44b Ideals and Quotients */
+const WB44=[
+  ['An ideal holds an undoable member. What is it?','the whole ring',['{0}','a field','a prime ideal'],'Undoable-fills technique.'],
+  ['Are the even numbers an ideal of ℚ?','no: they hold sums and not multiples; ½ · 2 = 1 is not even',['yes','yes, the multiples of 2','no: they are not closed under sums'],'An ideal holds every multiple.'],
+  ['Is (2) a largest ideal of ℤ[x]?','no: (2) ⊊ (2, x) ⊊ ℤ[x]',['yes','yes, since 2 is prime','no: it is the whole ring'],'Largest-ideal technique.'],
+  ['Is every prime ideal largest?','no: (x) in ℤ[x] is prime and sits inside (2, x)',['yes','yes, in every ring','no: none is'],'Largest-ideal technique.'],
+  ['Is 6ℤ prime?','no: 2 · 3 = 6 is in it, and neither 2 nor 3 is',['yes','yes, since 6 is a product','no: it is the whole ring'],'Prime ideals.'],
+  ['What is R/M when M is a largest ideal?','a field',['a ring with zero products','the zero ring','R again'],'Largest-ideal technique.']];
+QP.push({id:'44b.ideals',step:'44b',label:'ideals and quotients',open:()=>measured('44b'),make(){ return writtenQ('44b.ideals',WB44); }},
+  {id:'44b.work',step:'44b',mode:'work',label:'which kind of ideal',open:()=>measured('44b'),make(){
+    const n=2+rnd(29), p=PR43(n);
+    const A='largest: ℤ/('+n+') is a field', B='neither prime nor largest: ℤ/('+n+') has zero products', C='prime and not largest', D='largest and not prime';
+    return W30('44b.work[i;'+n+']',[['the ideal ('+n+') of ℤ','given']],'Which is it?',p?A:B,(p?[B,C,D]:[A,C,D]),p?n+' is prime, so ℤ/('+n+') is a prime clock.':n+' = '+(()=>{ let d=2; while(n%d) d++; return d+' · '+(n/d); })()+', and both factors are outside ('+n+').'); }},
+  {id:'44b.line',step:'44b',mode:'proof',label:'what ideals license',open:()=>measured('44b'),make(){
+    return line28('44b.line',[
+      ['b1',[['I is an ideal holding 1','given'],['I is the whole ring','the undoable-fills technique']],2,0,'w = w · 1 is in I.'],
+      ['b2',[['(x) is a prime ideal of ℤ[x]','given'],['(x) is largest','the largest-ideal technique']],2,1,'(x) sits inside (2, x).'],
+      ['b3',[['f is a ring map from ℤ to ℤ/5 that loses 5ℤ','given'],['ℤ/5ℤ matches what f reaches','the lost-ideal technique']],2,0,'That is the technique.'],
+      ['b4',[['2 · 3 = 6 is in 6ℤ','given'],['6ℤ is prime','prime ideals']],2,1,'Neither 2 nor 3 is in 6ℤ.']],[]); }});
+
+/* 44c Division With Remainder for Polynomials */
+const WC44=[
+  ['What is the remainder of p on division by x − r?','the constant p(r)',['p(−r)','p(0)','the top coefficient of p'],'Remainder-is-value technique.'],
+  ['Is deg pq = deg p + deg q on ℤ/6?','no: (2x)(3x) = 6x² = 0',['yes','yes, on every ring','no: it is the product'],'Degree-adds needs a cancelling ring.'],
+  ['Has x² − 1 at most two zeros on ℤ/8?','no: 1, 3, 5 and 7; ℤ/8 has zero products',['yes','yes, 1 and 7','no: it has none'],'At most n zeros needs no zero products.'],
+  ['p(r) = 0 for every r in F. Is p = 0?','not necessarily: on ℤ/2, x² + x is 0 at 0 and 1',['yes','yes, on every field','no: never'],'A function and a polynomial differ.'],
+  ['Can x² be divided by 2x with a remainder of smaller degree in ℤ[x]?','no: the top of 2x · q is even; it needs ½',['yes','yes, with q = x/2','no: x² is unsplittable'],'Top-undoable technique.'],
+  ['What makes every ideal of F[x] other than {0}?','any member of least degree',['x','1','the largest member'],'One-maker technique.']];
+QP.push({id:'44c.divide',step:'44c',label:'division for polynomials',open:()=>measured('44c'),make(){ return writtenQ('44c.divide',WC44); }},
+  {id:'44c.work',step:'44c',mode:'work',label:'the remainder is the value',open:()=>measured('44c'),make(){
+    const a=1+rnd(4), b=rnd(11)-5, c=rnd(11)-5, r=rnd(7)-3; if(r===0) return null; const v=x=>a*x*x+b*x+c;
+    return W30('44c.work[v;'+[a,b,c,r].join(',')+']',[['p = '+PQ44(a,b,c),'given'],['divide by x'+SG44(-r),'given']],'What is the remainder?',N44(v(r)).replace(' ',''),[N44(v(-r)).replace(' ',''),N44(c).replace(' ',''),N44(a+b+c).replace(' ',''),N44(v(r)+1).replace(' ',''),N44(v(r)-r).replace(' ',''),N44(v(r)-1).replace(' ','')],'Remainder-is-value technique: p('+N44(r).replace(' ','')+') = '+N44(v(r)).replace(' ','')+'.'); }},
+  {id:'44c.line',step:'44c',mode:'proof',label:'what division licenses',open:()=>measured('44c'),make(){
+    return line28('44c.line',[
+      ['c1',[['p(3) = 0','given'],['x − 3 divides p','the remainder-is-value technique']],2,0,'The remainder is p(3) = 0.'],
+      ['c2',[['x² − 1 has degree 2 on ℤ/8','given'],['it has at most two zeros on ℤ/8','degree']],2,1,'ℤ/8 has zero products: 1, 3, 5 and 7.'],
+      ['c3',[['x² + x is 0 at 0 and 1 on ℤ/2','checked'],['x² + x is the zero polynomial','the remainder-is-value technique']],2,1,'It has coefficients 1 and 1. A function can vanish where a polynomial does not.'],
+      ['c4',[['F is a field and d ≠ 0','given'],['every p is dq + r with r = 0 or of degree less than d’s','the top-undoable technique']],2,0,'Over a field every d ≠ 0 has an undoable top.']],[]); }});
+
+/* 44d Unique Factoring */
+const WD44=[
+  ['x² + 1 cannot be split over ℚ. Can it be split over any field?','yes: over ℂ it is (x − i)(x + i); on ℤ/2 it is (x + 1)²',['no','no, over no field','only over ℝ'],'Splitting depends on the field.'],
+  ['x⁴ + 1 fails the prime-wedge test. Can it be split over ℚ?','not shown: the test only says no; x⁴ + 1 cannot be split over ℚ',['yes','yes, by the prime-wedge technique','no: never over any field'],'The test runs one way.'],
+  ['Is 2x + 2 unsplittable in ℤ[x]?','no: 2x + 2 = 2(x + 1), and 2 is not undoable in ℤ[x]',['yes','yes, it has degree 1','no: it is undoable'],'Unsplittables.'],
+  ['Is an unsplittable member prime in every cancelling ring?','no: it needs one maker for each ideal',['yes','yes, by definition','no: never'],'Unsplittable-is-prime technique.'],
+  ['What is the content of a product of whole-number polynomials?','the product of their contents',['the sum of their contents','1','the larger content'],'Content-multiplies technique.'],
+  ['In a principal ring, how do two factorings into unsplittables compare?','same length, paired off into partners',['one is longer','they share one factor','they may differ'],'One-factoring technique.']];
+QP.push({id:'44d.factor',step:'44d',label:'unique factoring',open:()=>measured('44d'),make(){ return writtenQ('44d.factor',WD44); }},
+  {id:'44d.work',step:'44d',mode:'work',label:'finding the wedge prime',open:()=>measured('44d'),make(){
+    const l=pick([2,3,5,7]), n=2+rnd(3), lo=Array.from({length:n},()=>l*(rnd(4)));
+    let u0=1+rnd(6); if(u0%l===0) u0++; lo[0]=l*u0;
+    const works=q=>lo.every(x=>x%q===0)&&lo[0]%(q*q)!==0, C=[2,3,5,7,11], W=C.filter(works); if(W.length!==1) return null;
+    const terms=['x'+SUP43(n)]; for(let i=n-1;i>=1;i--) if(lo[i]) terms.push(lo[i]+(i===1?'x':'x'+SUP43(i))); terms.push(String(lo[0]));
+    return W30('44d.work[w;'+lo.join(',')+']',[['f = '+terms.join(' + '),'given']],'Which prime shows by the prime-wedge test that f cannot be split?',String(l),C.filter(q=>q!==l).map(String),l+' divides every coefficient but the top, and '+(l*l)+' does not divide '+lo[0]+'.'); }},
+  {id:'44d.line',step:'44d',mode:'proof',label:'what factoring licenses',open:()=>measured('44d'),make(){
+    return line28('44d.line',[
+      ['d1',[['f = x³ + 6x + 3; 3 divides 6 and 3, not 1; 9 does not divide 3','checked'],['f cannot be split over ℚ','the prime-wedge technique']],2,0,'That is the technique.'],
+      ['d2',[['no prime passes the wedge test for x⁴ + 1','checked'],['x⁴ + 1 can be split over ℚ','the prime-wedge technique']],2,1,'The test only says no.'],
+      ['d3',[['x² + 1 cannot be split over ℚ','given'],['x² + 1 cannot be split over any field','the prime-wedge technique']],2,1,'Over ℂ it is (x − i)(x + i).'],
+      ['d4',[['in a principal ring, u is unsplittable and divides ab','given'],['u divides a or u divides b','the unsplittable-is-prime technique']],2,0,'Unsplittable is prime there.']],[]); }});
+
+/* 44e Where Factoring Fails */
+const WE44=[
+  ['How many ways does 6 split into unsplittables in ℤ[ω], ω² = −5?','two that are not partners: 2 · 3 and (1 + ω)(1 − ω)',['one','three','none'],'Two-factorings technique.'],
+  ['2 divides (1 + ω)(1 − ω). Does 2 divide one of them?','no: 2 is unsplittable and not prime here',['yes','yes, 1 + ω','yes, by the unsplittable-is-prime technique'],'Unsplittable is not prime here.'],
+  ['Are 1 + ω and 2 partners, both having even size?','no: partners have equal sizes, 6 against 4',['yes','yes, by the whole-size technique','no: 2 is undoable'],'Whole-size technique.'],
+  ['Is P = (2, 1 + ω) the whole ring?','no: every member has a + b even, so 1 is missing',['yes','yes, they share no factor','no: P = (2)'],'P is a prime ideal.'],
+  ['Is every ideal of ℤ[ω] made by one member?','no: P has no one maker; P² = (2) does',['yes','yes, since ideals multiply','no: none is'],'Ideal-product technique.'],
+  ['Which members of ℤ[ω] are undoable?','1 and −1',['every member of size 2','ω and −ω','none'],'Whole-size technique.']];
+QP.push({id:'44e.fails',step:'44e',label:'where factoring fails',open:()=>measured('44e'),make(){ return writtenQ('44e.fails',WE44); }},
+  {id:'44e.work',step:'44e',mode:'work',label:'the whole size',open:()=>measured('44e'),make(){
+    const a=rnd(9)-4, b=1+rnd(3), s=rnd(2)?1:-1, N=a*a+5*b*b, B=s*b;
+    const w=(a?String(a).replace('-','−'):'')+(a?(B<0?' − ':' + '):(B<0?'−':''))+(b===1?'':b)+'ω';
+    return W30('44e.work[n;'+[a,B].join(',')+']',[['w = '+w+' in ℤ[ω], with ω² = −5','given']],'What is N(w)?',String(N),[String(a*a-5*b*b).replace('-','−'),String(a*a+b*b),String(Math.abs(a)+5*b),String(N+5)],'N(a + bω) = a² + 5b² = '+(a*a)+' + '+(5*b*b)+'.'); }},
+  {id:'44e.line',step:'44e',mode:'proof',label:'what failed factoring licenses',open:()=>measured('44e'),make(){
+    return line28('44e.line',[
+      ['e1',[['N(2) = 4 and no member has size 2','computed'],['2 is unsplittable in ℤ[ω]','the whole-size technique']],2,0,'A split would need two factors of size 2.'],
+      ['e2',[['2 is unsplittable in ℤ[ω]','given'],['2 is prime in ℤ[ω]','the unsplittable-is-prime technique']],2,1,'ℤ[ω] is not principal. 2 divides (1 + ω)(1 − ω) and neither factor.'],
+      ['e3',[['P = (2, 1 + ω)','given'],['P² = (2)','the ideal-product technique']],2,0,'That is the technique.'],
+      ['e4',[['N(1 + ω) = 6 and N(2) = 4','computed'],['1 + ω and 2 are partners','the whole-size technique']],2,1,'Partners have equal sizes.']],[]); }});
+
+/* 44f Field Extensions */
+const WF44=[
+  ['What is [ℚ(√2, √3) : ℚ]?','4: degrees multiply along a tower, 2 · 2',['2 + 2, by adding','2','6'],'Tower technique.'],
+  ['√2 is a zero of x⁴ − 4. Is [ℚ(√2) : ℚ] = 4?','no: the least polynomial is x² − 2; x⁴ − 4 can be split',['yes','yes, by the root-field technique','no: it is 1'],'Root-field technique.'],
+  ['Is [ℚ(∛2) : ℚ] = 3 because ∛2 is no fraction?','no: that gives a degree above 1; degree 3 needs x³ − 2 unsplittable',['yes','yes, by the tower technique','no: it is 2'],'Root-field technique.'],
+  ['ℚ(√2) and ℚ(√3) both have degree 2. Are they the same field?','no: √3 is not in ℚ(√2)',['yes','yes, by the tower technique','no: they differ in degree'],'Same degree, different fields.'],
+  ['What basis has K(α) over K, when α’s least polynomial has degree d?','1, α, …, α^(d − 1)',['1, α only','α, α², …, αᵈ','the zeros of the polynomial'],'Root-field technique.'],
+  ['α lies in a field L of finite degree over K. What divides [L : K]?','the degree of α’s least polynomial',['α itself','the size of L','nothing'],'Degree-divides technique.']];
+QP.push({id:'44f.ext',step:'44f',label:'field extensions',open:()=>measured('44f'),make(){ return writtenQ('44f.ext',WF44); }},
+  {id:'44f.work',step:'44f',mode:'work',label:'degrees along a tower',open:()=>measured('44f'),make(){
+    const m=2+rnd(4), n=2+rnd(4);
+    return W30('44f.work[t;'+[m,n].join(';')+']',[['K ⊆ L ⊆ M, with [M : L] = '+m+' and [L : K] = '+n,'given']],'What is [M : K]?',String(m*n),[String(m+n),String(Math.max(m,n)),String(Math.pow(m,n)),String(m*n+1)].filter(x=>x!==String(m*n)),'Tower technique: '+m+' · '+n+'.'); }},
+  {id:'44f.line',step:'44f',mode:'proof',label:'what extensions license',open:()=>measured('44f'),make(){
+    return line28('44f.line',[
+      ['f1',[['[ℚ(√2) : ℚ] = 2 and [ℚ(√2, √3) : ℚ(√2)] = 2','given'],['[ℚ(√2, √3) : ℚ] = 4','the tower technique']],2,0,'2 · 2.'],
+      ['f2',[['√2 is a zero of x⁴ − 4','checked'],['[ℚ(√2) : ℚ] = 4','the root-field technique']],2,1,'The least polynomial is x² − 2.'],
+      ['f3',[['α lies in a field of degree 6 over ℚ','given'],['α has degree 4 over ℚ','the degree-divides technique']],2,1,'4 does not divide 6.'],
+      ['f4',[['x³ − 2 cannot be split over ℚ','the prime-wedge technique, with 2'],['[ℚ(∛2) : ℚ] = 3','the root-field technique']],2,0,'Its least polynomial has degree 3.']],[]); }});
+
+/* 44g Finite Fields */
+const WG44=[
+  ['Is F₄ = ℤ/4?','no: on ℤ/4, 2 · 2 = 0; F₄ has no zero products',['yes','yes, both have 4 members','no: F₄ has 5 members'],'Finite fields are not clocks of prime powers.'],
+  ['Is (w + b)² = w² + b² in every field?','no: only when 1 + 1 = 0',['yes','yes, in finite fields','no: never'],'Power-keeps-plus technique.'],
+  ['x⁴ + x² + 1 has no zero on ℤ/2. Does it give a field of 16?','no: it is (x² + x + 1)² there',['yes','yes, by the unsplittable-builds technique','no: it gives 8'],'No zero rules out straight factors only.'],
+  ['Does a field of 9 hold the clock of 9?','no: it holds ℤ/3; its bottom prime is 3',['yes','yes, as a ring','no: it holds ℤ/9 only as a group'],'Prime-power-size technique.'],
+  ['How many members can a finite field have?','a power of a prime',['any number','an even number','a prime only'],'Prime-power-size technique.'],
+  ['What are the members other than 0 of a finite field?','the powers of one of them',['the squares','the primes','the sums of 1'],'Whole-hand technique.']];
+QP.push({id:'44g.finite',step:'44g',label:'finite fields',open:()=>measured('44g'),make(){ return writtenQ('44g.finite',WG44); }},
+  {id:'44g.work',step:'44g',mode:'work',label:'the size of a built field',open:()=>measured('44g'),make(){
+    const p=pick([2,3,5,7]), n=2+rnd(p===2?4:2), q=Math.pow(p,n);
+    return W30('44g.work[f;'+[p,n].join(';')+']',[['m has degree '+n+' and cannot be split over ℤ/'+p,'given']],'How many members has (ℤ/'+p+')[x]/(m)?',String(q),[String(p*n),String(Math.pow(n,p)),String(q-1),String(p+n)].filter(x=>x!==String(q)),'Unsplittable-builds technique: '+p+SUP43(n)+' = '+q+'.'); }},
+  {id:'44g.line',step:'44g',mode:'proof',label:'what finite fields license',open:()=>measured('44g'),make(){
+    return line28('44g.line',[
+      ['g1',[['x² + x + 1 has degree 2 and cannot be split over ℤ/2','checked'],['(ℤ/2)[x]/(x² + x + 1) is a field of 4','the unsplittable-builds technique']],2,0,'2² = 4.'],
+      ['g2',[['x⁴ + x² + 1 has no zero on ℤ/2','checked'],['(ℤ/2)[x]/(x⁴ + x² + 1) is a field of 16','the unsplittable-builds technique']],2,1,'It is (x² + x + 1)² there. No zero rules out straight factors only.'],
+      ['g3',[['3 · 1 = 0 in the ring','given'],['(w + b)³ = w³ + b³','the power-keeps-plus technique']],2,0,'The middle terms carry a factor 3.'],
+      ['g4',[['a field has 6 members','supposed'],['its size is a power of its bottom prime','the prime-power-size technique'],['no field has 6 members','the totally false']],3,0,'6 is no power of a prime.']],[]); }});
+
+/* 44h Only One Complete Ordered Field */
+const WH44=[
+  ['Is the ring of crowding lists a field?','no: 1, 0, 0, … is not 0 and has no reciprocal; only the classes form a field',['yes','yes, every list has a reciprocal','no: it is not a ring'],'Crowding-quotient technique.'],
+  ['Are any two regular number systems matched?','no: ℚ and ℝ are both regular, and one has holes',['yes','yes, by the only-line technique','no: none are'],'Only-line technique needs no holes.'],
+  ['Does a + b√2 ↦ a − b√2 keep order on ℚ(√2)?','no: it sends √2 − 1 > 0 to −√2 − 1 < 0',['yes','yes, it keeps sums','no: it keeps nothing'],'Keeping sums and products is not keeping order.'],
+  ['Are the cuts and the crowding classes two different lines?','no: the only-line technique matches them',['yes','yes, one is larger','no: both are ℚ'],'Only-line technique.'],
+  ['Which map of ℝ to itself keeps sums and products and sends 1 to 1?','only doing nothing',['every stretch','x ↦ −x','x ↦ x²'],'Rigid-line technique.'],
+  ['What lies between any two members of a regular system with no holes?','a fraction',['nothing','a whole number','a hole'],'Fractions-sit-inside technique.']];
+QP.push({id:'44h.oneline',step:'44h',label:'only one complete ordered field',open:()=>measured('44h'),make(){ return writtenQ('44h.oneline',WH44); }},
+  {id:'44h.line',step:'44h',mode:'proof',label:'what the one line licenses',open:()=>measured('44h'),make(){
+    return line28('44h.line',[
+      ['h1',[['L and L′ are regular number systems with no holes','given'],['exactly one map matches them, keeping sums, products and order','the only-line technique']],2,0,'That is the technique.'],
+      ['h2',[['ℚ and ℝ are regular number systems','given'],['some map matches ℚ with ℝ, keeping order','the only-line technique']],2,1,'ℚ has holes.'],
+      ['h3',[['f from ℝ to ℝ keeps sums and products and f(1) = 1','given'],['f(x) = x for every x','the rigid-line technique']],2,0,'That is the technique.'],
+      ['h4',[['1, 0, 0, … is a crowding list that is not 0','given'],['it has a reciprocal list','the crowding-quotient technique']],2,1,'Only the classes form a field. Its class is 0.']],[]); }});
+
+/* 44i Modules Over a Principal Ring */
+const WI44=[
+  ['Is ℤ/2 × ℤ/2 = ℤ/4?','no: every member of ℤ/2 × ℤ/2 doubled is 0; 1 in ℤ/4 is not',['yes','yes, both have 4 members','no: they differ in size'],'Clock-list technique.'],
+  ['May a row be stretched by 2 in the diagonal-grid technique over ℤ?','no: 2 is not undoable in ℤ; the move changes the quotient',['yes','yes, any row','only the first row'],'Moves must be undoable.'],
+  ['Is ℚ over ℤ finitely made?','no: finitely many fractions have a common bottom b, and 1/(2b) is no mix of them',['yes','yes, by 1','yes, by 1/2 and 1/3'],'Finitely made modules.'],
+  ['ℤ/6 = ℤ/2 × ℤ/3. Is ℤ/4 = ℤ/2 × ℤ/2?','no: the clocks must share nothing; 2 and 2 share 2',['yes','yes, by the same technique','no: ℤ/4 is not a group'],'The remainder technique needs sizes that share nothing.'],
+  ['How is every finite group that turns about written?','as one list ℤ/d₁ × ⋯ × ℤ/dₖ with each dᵢ dividing the next',['as one clock','as ℤ/2 × ⋯ × ℤ/2','in many lists'],'Clock-list technique.'],
+  ['What is a group that turns about, over ℤ?','a module, with n · g the sum of n copies of g',['a field','a ring with 1','a grid'],'Group-is-module technique.']];
+QP.push({id:'44i.modules',step:'44i',label:'modules over a principal ring',open:()=>measured('44i'),make(){ return writtenQ('44i.modules',WI44); }},
+  {id:'44i.work',step:'44i',mode:'work',label:'one list of clocks',open:()=>measured('44i'),make(){
+    const g=pick([2,3,4,6]), P=shuffle([[2,3],[2,5],[3,4],[3,5],[2,7],[4,5],[3,7]][rnd(7)].slice()), a=g*P[0], b=g*P[1]; const l=a*b/g, Z=n=>'ℤ/'+n;
+    return W30('44i.work[c;'+[a,b].join(',')+']',[[Z(a)+' × '+Z(b),'given']],'Which list of clocks, each size dividing the next, is it?',Z(g)+' × '+Z(l),[Z(a*b),Z(a)+' × '+Z(b),Z(l),Z(g)+' × '+Z(a*b)],'Clock-list technique: gcd = '+g+' and lcm = '+l+'; '+g+' · '+l+' = '+(a*b)+'.'); }},
+  {id:'44i.line',step:'44i',mode:'proof',label:'what modules license',open:()=>measured('44i'),make(){
+    return line28('44i.line',[
+      ['i1',[['G is a finite group that turns about, of size 8','given'],['G is ℤ/8, ℤ/2 × ℤ/4 or ℤ/2 × ℤ/2 × ℤ/2','the clock-list technique']],2,0,'The lists with product 8, each dividing the next.'],
+      ['i2',[['ℤ/2 × ℤ/2 has 4 members','counting'],['ℤ/2 × ℤ/2 is ℤ/4','the clock-list technique']],2,1,'Every member of ℤ/2 × ℤ/2 doubled is 0.'],
+      ['i3',[['the grid has a row over ℤ','given'],['stretch the row by 2, as a diagonal-grid move','the diagonal-grid technique']],2,1,'2 is not undoable in ℤ.'],
+      ['i4',[['gcd(4, 6) = 2 and lcm(4, 6) = 12','computed'],['ℤ/4 × ℤ/6 is ℤ/2 × ℤ/12','the clock-list technique']],2,0,'2 divides 12, and 2 · 12 = 24.']],[]); }});
+
+/* 44j Polynomial Division by Hand */
+const WJ44=[
+  ['How is the greatest common factor of f and g found?','divide, then divide by the remainder, until a remainder is 0; the last other one is it',['multiply f and g','add f and g','divide f by g once'],'Remainder-chain technique.'],
+  ['Is the last remainder the greatest common factor exactly?','up to a constant: (3/4)(x − 1) and x − 1 are partners',['yes, exactly','no: it is the first remainder','no: it is always 1'],'Remainder-chain technique.'],
+  ['When is Res(f, g) = 0?','exactly when f and g share a factor of degree at least 1',['when f = g','when both have degree 0','never'],'Shared-factor-test technique.'],
+  ['x² + y² = 1 and x² + y² = 4: do they meet 4 times?','no: the technique says at most 4; here 0',['yes','yes, by the meeting-count technique','no: 2 times'],'Meeting-count technique gives a ceiling.'],
+  ['(x − y)(x + y) = 0 and x − y = 0: do they meet at most 2 times?','no: they share the piece x − y and meet along a line',['yes','yes, 2 · 1','no: 1 time'],'Meeting-count needs no shared piece.'],
+  ['What does Res_y eliminate?','the letter y',['the letter x','every letter','the constants'],'Eliminate-a-letter technique.']];
+QP.push({id:'44j.byhand',step:'44j',label:'polynomial division by hand',open:()=>measured('44j'),make(){ return writtenQ('44j.byhand',WJ44); }},
+  {id:'44j.work',step:'44j',mode:'work',label:'how often curves meet',open:()=>measured('44j'),make(){
+    const m=1+rnd(5), n=2+rnd(5);
+    return W30('44j.work[m;'+[m,n].join(';')+']',[['two curves of degrees '+m+' and '+n+' with no shared piece','given']],'At most how many points do they meet in?',String(m*n),[String(m+n),String(Math.max(m,n)),String(m*n+1),String(Math.pow(Math.max(m,n),2))].filter(x=>x!==String(m*n)),'Meeting-count technique: '+m+' · '+n+'.'); }},
+  {id:'44j.line',step:'44j',mode:'proof',label:'what division by hand licenses',open:()=>measured('44j'),make(){
+    return line28('44j.line',[
+      ['j1',[['the last remainder other than 0 is 3x − 3','the remainder chain'],['x − 1 is a greatest common factor','the remainder-chain technique']],2,0,'Up to a constant.'],
+      ['j2',[['x² + y² = 1 and x² + y² = 4 have degree 2','given'],['they meet in exactly 4 points','the meeting-count technique']],2,1,'At most 4. Here none.'],
+      ['j3',[['Res(f, g) = 0','computed'],['f and g share a factor of degree at least 1','the shared-factor-test technique']],2,0,'That is the technique.'],
+      ['j4',[['(x − y)(x + y) = 0 and x − y = 0','given'],['they meet in at most 2 points','the meeting-count technique']],2,1,'They share the piece x − y.']],[]); }});
+
+/* 44k Field Extensions by Hand */
+const WK44=[
+  ['Is 1/(1 + ∛2) = (1 − ∛2)/(1 − ∛4)?','no: that only moves ∛2 to the bottom; solve the grid',['yes','yes, by the flip-undo technique','no: it is 1 − ∛2'],'Times-grid technique.'],
+  ['Is 1/(√2 + √3) = 1/√2 + 1/√3?','no: reciprocals do not spread over sums; it is √3 − √2',['yes','yes, by the flip-undo technique','no: it is √2 + √3'],'Reciprocals of sums.'],
+  ['Has √2 + √3 degree 4 because 2 + 2 = 4?','no: it has degree 4 by the first mix; √2 + √8 has degree 2',['yes','yes, always','no: it has degree 2'],'First-mix technique.'],
+  ['Is [ℚ(√2, √3) : ℚ] = 4 by the coprime-degrees technique?','no: 2 and 2 share a factor; the check that √3 ∉ ℚ(√2) is needed',['yes','yes, 2 · 2','no: it is 2'],'Coprime-degrees technique.'],
+  ['What is the reciprocal of a + b√2, not 0?','(a − b√2)/(a² − 2b²)',['(a + b√2)/(a² + 2b²)','1/a + 1/(b√2)','a − b√2'],'Flip-undo technique.'],
+  ['How is the least polynomial of β found?','write 1, β, β², … in a basis until one is a mix of those before',['square β','take the grid’s trace','guess and check'],'First-mix technique.']];
+QP.push({id:'44k.byhand',step:'44k',label:'field extensions by hand',open:()=>measured('44k'),make(){ return writtenQ('44k.byhand',WK44); }},
+  {id:'44k.work',step:'44k',mode:'work',label:'flipping to undo',open:()=>measured('44k'),make(){
+    const b=1+rnd(4), a=2*b+rnd(6), D=a*a-2*b*b, S=b===1?'√2':b+'√2';
+    return W30('44k.work[u;'+[a,b].join(',')+']',[[''+a+' + '+S+' in ℚ(√2)','given']],'What is its reciprocal?','('+a+' − '+S+')/'+D,['('+a+' + '+S+')/'+D,'('+a+' − '+S+')/'+(a*a+2*b*b),'('+a+' − '+S+')/'+(a*a-b*b),'('+a+' + '+S+')/'+(a*a+2*b*b)],'Flip-undo technique: '+a+'² − 2 · '+b+'² = '+D+'.'); }},
+  {id:'44k.line',step:'44k',mode:'proof',label:'what working by hand licenses',open:()=>measured('44k'),make(){
+    return line28('44k.line',[
+      ['k1',[['β = 3 + √2','given'],['1/β = (3 − √2)/7','the flip-undo technique']],2,0,'9 − 2 = 7.'],
+      ['k2',[['√2 and √3 have degree 2','given'],['[ℚ(√2, √3) : ℚ] = 4','the coprime-degrees technique']],2,1,'2 and 2 share a factor. The check that √3 ∉ ℚ(√2) is needed.'],
+      ['k3',[['∛2 has degree 3 and √3 has degree 2 over ℚ','given'],['[ℚ(∛2, √3) : ℚ] = 6','the coprime-degrees technique']],2,0,'3 and 2 share no factor.'],
+      ['k4',[['β = √2 + √3','given'],['1/β = 1/√2 + 1/√3','the flip-undo technique']],2,1,'Reciprocals do not spread over sums.']],[]); }});
+
+/* 44l Boolean Algebra Standing on Its Own */
+const WL44=[
+  ['Is x ∨ y = x + y in the ring?','no: at x = y = 1, x + y = 0; x ∨ y = x + y + xy',['yes','yes, always','no: x ∨ y = xy'],'One-polynomial technique.'],
+  ['Does the mirror of a true statement say the same thing?','no: x ∧ 0 = 0 and x ∨ 1 = 1 are twins and different',['yes','yes, always','no: the mirror is false'],'Mirror technique.'],
+  ['Is x + x = 2x ≠ 0 in a Boolean ring?','no: 1 + 1 = 0',['yes','yes, unless x = 0','no: x + x = x'],'Own-square technique.'],
+  ['Has every Boolean algebra 2ᵏ members?','no: only the finite ones; the finite-or-cofinite parts of ℕ are endless',['yes','yes, k the atoms','no: never'],'Atoms technique.'],
+  ['In a ring where every member is its own square, what is 1 + 1?','0',['2','1','x'],'Own-square technique.'],
+  ['How many polynomials over ℤ/2 give one table of n inputs?','exactly one sum of products of distinct inputs',['many','none','two'],'One-polynomial technique.']];
+QP.push({id:'44l.boole',step:'44l',label:'Boolean algebra on its own',open:()=>measured('44l'),make(){ return writtenQ('44l.boole',WL44); }},
+  {id:'44l.work',step:'44l',mode:'work',label:'atoms and members',open:()=>measured('44l'),make(){
+    const k=1+rnd(7), m=Math.pow(2,k);
+    if(rnd(2)) return W30('44l.work[a;'+k+']',[['a finite Boolean algebra with '+k+' atoms','given']],'How many members has it?',String(m),[String(2*k),String(k*k),String(m-1),String(k+1)].filter(x=>x!==String(m)),'Atoms technique: 2'+SUP43(k)+' = '+m+'.');
+    return W30('44l.work[m;'+k+']',[['a finite Boolean algebra with '+m+' members','given']],'How many atoms has it?',String(k),[String(m/2),String(m),String(k+1),String(m-1)].filter(x=>x!==String(k)),'Atoms technique: '+m+' = 2'+SUP43(k)+'.'); }},
+  {id:'44l.line',step:'44l',mode:'proof',label:'what Boolean algebra licenses',open:()=>measured('44l'),make(){
+    return line28('44l.line',[
+      ['l1',[['x ∧ 0 = 0 follows from the ten lines','given'],['x ∨ 1 = 1 follows from the ten lines','the mirror technique']],2,0,'That is its mirror.'],
+      ['l2',[['x ∧ 0 = 0','given'],['x ∧ 0 = 0 and x ∨ 1 = 1 say the same thing','the mirror technique']],2,1,'They are twins, and different.'],
+      ['l3',[['every member of the ring is its own square','given'],['1 + 1 = 0','the own-square technique']],2,0,'That is the technique.'],
+      ['l4',[['a Boolean algebra is endless','given'],['it has 2ᵏ members for some k','the atoms technique']],2,1,'The technique is for finite ones.']],[]); }});
+/* ----- rung 45: many machines, one answer, 45a to 45o ----- */
+Object.assign(STEPS,{'45a':['r45a','Numbers for Every Machine'],'45b':['r45b','Machines That Only Talk'],'45c':['r45c','The Two Generals'],'45d':['r45d','Handshakes'],'45e':['r45e','Order Without a Clock'],'45f':['r45f','Commit Together or Not at All'],'45g':['r45g','Agreement Despite Crashes'],'45h':['r45h','Agreement Despite Liars'],'45i':['r45i','Agreement by Lottery'],'45j':['r45j','News Without a Leader'],'45k':['r45k','Who Holds Which Key'],'45l':['r45l','Merging Edits Made Apart'],'45m':['r45m','Splitting a Big Job'],'45n':['r45n','Quorums by Hand'],'45o':['r45o','Vector Clocks by Hand']});
+const V45=v=>'('+v.join(', ')+')';
+const CMP45=(a,b)=>{ const le=a.every((x,i)=>x<=b[i]), ge=a.every((x,i)=>x>=b[i]); return le&&ge?'same':le?'before':ge?'after':'neither'; };
+
+/* 45a Numbers for Every Machine */
+const WA45=[
+  ['Which line does a router follow?','the longest prefix the destination matches',['the first line in the table','the shortest prefix it matches','the line with the most hops'],'Longest-prefix technique.'],
+  ['A shorter prefix and a longer one both match. Which wins?','the longer, more specific one',['the shorter','the first written','neither: the packet is dropped'],'Longest-prefix technique.'],
+  ['What does a router promise about a packet?','only to pass it one hop on toward its next hop',['to deliver it','to deliver it in order','to deliver it once'],'Nothing else is promised.'],
+  ['When can a written number of fixed width be read back with parts left out?','when what is left out can be counted from the width',['always','never','only when it is short'],'Fixed-width technique.'],
+  ['What does every machine carry?','a number of fixed width',['a name of any length','a clock','a list of every other machine'],'Numbers for every machine.'],
+  ['How far does one router pass a packet?','one hop',['to the destination','two hops','to every neighbour'],'Longest-prefix technique.']];
+QP.push({id:'45a.address',step:'45a',label:'numbers for every machine',open:()=>measured('45a'),make(){ return writtenQ('45a.address',WA45); }},
+  {id:'45a.work',step:'45a',mode:'work',label:'the longest prefix',open:()=>measured('45a'),make(){
+    const d=Array.from({length:8},()=>rnd(2)).join(''), k=2+rnd(3), H=['A','B','C','D'];
+    const P=[d.slice(0,1),d.slice(0,k),d.slice(0,k+2),(d[0]==='0'?'1':'0')+d.slice(1,3)];
+    const ok=P.map(p=>d.startsWith(p)), best=P.reduce((b,p,i)=>ok[i]&&(b<0||p.length>P[b].length)?i:b,-1);
+    const T=shuffle(P.map((p,i)=>[p,H[i]])).map(x=>x[0]+'* → '+x[1]).join(', ');
+    return W30('45a.work[p;'+d+';'+k+']',[[T,'the table'],[d,'the destination']],'Which next hop does the router send toward?',H[best],H.filter((_,i)=>i!==best),'Longest-prefix technique: '+P[best]+'* is the longest that '+d+' matches.'); }},
+  {id:'45a.line',step:'45a',mode:'proof',label:'what prefixes license',open:()=>measured('45a'),make(){
+    return line28('45a.line',[
+      ['a1',[['the destination 10110010 matches 1* and 1011*','checked'],['send toward the hop of 1011*','the longest-prefix technique']],2,0,'The longer prefix wins.'],
+      ['a2',[['the destination 10110010 matches 1* and 1011*','checked'],['send toward the hop of 1*','the longest-prefix technique']],2,1,'The longer, more specific one wins.'],
+      ['a3',[['the router passed the packet one hop on','given'],['the packet will arrive','the longest-prefix technique']],2,1,'Nothing else is promised.'],
+      ['a4',[['the width is 8 groups, and 3 are written','given'],['the 5 left out can be counted and read back as 0','the fixed-width technique']],2,0,'What is left out is counted from the width.']],[]); }});
+
+/* 45b Machines That Only Talk */
+const WB45=[
+  ['What does a machine know?','its own state and the messages it has received',['the state of every machine','the time','which machines have crashed'],'Machines that only talk.'],
+  ['Two runs give a machine the same view. What does it do?','the same move in both',['different moves','nothing','whatever is safest'],'Same-view technique.'],
+  ['No answer has come for a long time. Has the other machine crashed?','not shown: with no bound on delay, a slow machine looks the same',['yes','yes, after a timeout','no: it is slow'],'Same-view technique.'],
+  ['Do messages arrive in the order they were sent?','not necessarily: the model allows any order',['yes','yes, on one link','no: always reversed'],'Machines that only talk.'],
+  ['Can every machine read a shared time?','no: there is no shared clock',['yes','yes, roughly','only the leader'],'Order without a clock comes in 45e.'],
+  ['What tells two runs apart, for one machine?','only a difference in what it has received or its own state',['the wall clock','the other machines’ states','nothing ever'],'Same-view technique.']];
+QP.push({id:'45b.talk',step:'45b',label:'machines that only talk',open:()=>measured('45b'),make(){ return writtenQ('45b.talk',WB45); }},
+  {id:'45b.line',step:'45b',mode:'proof',label:'what views license',open:()=>measured('45b'),make(){
+    return line28('45b.line',[
+      ['b1',[['in runs R and R′ machine M has the same state and the same messages','given'],['M makes the same move in R and R′','the same-view technique']],2,0,'That is the technique.'],
+      ['b2',[['no answer from M for a minute','given'],['M has crashed','the same-view technique']],2,1,'A slow M gives the same view.'],
+      ['b3',[['m₁ was sent before m₂','given'],['m₁ arrives before m₂','the model']],2,1,'The model allows any order.'],
+      ['b4',[['a crashed M and a slow M give N the same view','given'],['N makes the same move in both runs','the same-view technique']],2,0,'N cannot tell them apart.']],[]); }});
+
+/* 45c The Two Generals */
+const WC45=[
+  ['Can the sender of the last message know it arrived?','no: so the last message was not needed',['yes','yes, after an acknowledgment','only if it is short'],'Last-message technique.'],
+  ['Does acknowledging the acknowledgments until sure work?','no: the last acknowledgment can always be lost',['yes','yes, after three','only with a fast link'],'Last-message technique.'],
+  ['Do the generals fail because one lies?','no: nobody lies; messages are lost',['yes','yes, the second one','no: they fail from slowness only'],'Liars come in 45h.'],
+  ['A run ends with both attacking. What of the same run with its last delivered message lost?','it also ends with both attacking',['it ends with neither','it ends with one attacking','it has no end'],'Last-message technique.'],
+  ['Removing the last message, then the next, down to none, shows what?','a plan that meets the demands needs no messages, which cannot be',['the plan is safe','every message arrives','one message is enough'],'Last-message technique.'],
+  ['What breaks the two generals’ plan?','messages that can be lost',['a liar','a slow general','a broken clock'],'The two generals.']];
+QP.push({id:'45c.generals',step:'45c',label:'the two generals',open:()=>measured('45c'),make(){ return writtenQ('45c.generals',WC45); }},
+  {id:'45c.line',step:'45c',mode:'proof',label:'what the last message licenses',open:()=>measured('45c'),make(){
+    return line28('45c.line',[
+      ['c1',[['a run ends with both attacking','given'],['the same run with its last delivered message lost ends with both attacking','the last-message technique']],2,0,'That is the technique.'],
+      ['c2',[['the general sent a third acknowledgment','given'],['both generals are now sure','acknowledging']],2,1,'The last acknowledgment can always be lost.'],
+      ['c3',[['the plan fails','given'],['one general lied','the last-message technique']],2,1,'Nobody lies here. Messages are lost.'],
+      ['c4',[['every message can be removed, last first, without changing the end','the last-message technique'],['the plan attacks with no messages at all','induction on messages']],2,0,'Down to none.']],[]); }});
+
+/* 45d Handshakes */
+const WD45=[
+  ['How does a handshake make every message arrive?','number it, resend until acknowledged, and throw away repeats',['send it once loudly','send it to everyone','wait for a clock'],'Resend technique.'],
+  ['After the handshake, are both machines certain?','no: each knows what it has received; the last message can still be lost',['yes','yes, after three messages','no: neither knows anything'],'45c still holds.'],
+  ['Is 5 older than 2³² − 3?','no: on the clock, 5 is newer; the count wrapped',['yes','yes, it is smaller','they are the same'],'Read the numbers on a clock.'],
+  ['Each try gets through with chance p > 0, independently. What follows?','every message is acknowledged with chance 1',['some messages never arrive','every message arrives on the first try','nothing'],'Resend technique.'],
+  ['How many messages open a handshake?','three',['one','two','four'],'Handshakes.'],
+  ['Why are repeats thrown away?','resending can deliver a message twice',['they are always wrong','they are older','they are forged'],'Number every message.']];
+QP.push({id:'45d.hands',step:'45d',label:'handshakes',open:()=>measured('45d'),make(){ return writtenQ('45d.hands',WD45); }},
+  {id:'45d.work',step:'45d',mode:'work',label:'newer on the clock',open:()=>measured('45d'),make(){
+    const C=pick([16,32,64]), a=rnd(C), g=1+rnd(C/2-1), b=(a+g)%C, sw=rnd(2), x=sw?b:a, y=sw?a:b;
+    return W30('45d.work[s;'+[C,x,y].join(';')+']',[['numbers on a clock of '+C+'; the newer is less than half the clock ahead','given'],['messages numbered '+x+' and '+y,'given']],'Which is newer?',String(b),[String(a),'the same','cannot be told'],b+' is '+g+' ahead of '+a+' on the clock'+(b<a?': the count wrapped.':'.')); }},
+  {id:'45d.line',step:'45d',mode:'proof',label:'what handshakes license',open:()=>measured('45d'),make(){
+    return line28('45d.line',[
+      ['d1',[['each try is acknowledged with chance at least 0.1, independently','given'],['the message is acknowledged with chance 1','the resend technique']],2,0,'That is the technique.'],
+      ['d2',[['the handshake finished','given'],['both machines are certain the last message arrived','the resend technique']],2,1,'Each knows only what it has received.'],
+      ['d3',[['on the clock of 2³², 5 follows 2³² − 3 by 8','counting'],['5 is newer','reading the clock']],2,0,'The count wrapped.'],
+      ['d4',[['5 < 2³² − 3','arithmetic'],['5 is older','reading the clock']],2,1,'On the clock 5 is newer. The count wrapped.']],[]); }});
+
+/* 45e Order Without a Clock */
+const WE45=[
+  ['When does e come before f?','when a chain of steps and messages leads from e to f',['when e happened earlier by the clock','when e has the smaller name','never'],'Order without a clock.'],
+  ['e → f. What follows for the counters?','L(e) < L(f)',['L(e) > L(f)','L(e) = L(f)','nothing'],'Counter technique.'],
+  ['L(e) < L(f). Does e come before f?','not necessarily: counters respect the order but do not capture it',['yes','yes, by the counter technique','no: never'],'Counter technique runs one way.'],
+  ['When is e → f, by list stamps?','exactly when V(e) ≤ V(f) in every entry and V(e) ≠ V(f)',['when the sum of V(e) is smaller','when the first entry is smaller','when V(e) = V(f)'],'List-stamp technique.'],
+  ['Does concurrent mean at the same moment?','no: it means neither could affect the other',['yes','yes, roughly','no: it means one after the other'],'Concurrent events.'],
+  ['What does a list of counters do that one counter cannot?','capture the order, both ways',['run faster','need no messages','read the time'],'List-stamp technique.']];
+QP.push({id:'45e.order',step:'45e',label:'order without a clock',open:()=>measured('45e'),make(){ return writtenQ('45e.order',WE45); }},
+  {id:'45e.work',step:'45e',mode:'work',label:'comparing list stamps',open:()=>measured('45e'),make(){
+    const a=[rnd(5),rnd(5),rnd(5)], k=rnd(3); let b;
+    if(k===0) b=a.map(x=>x+rnd(3)); else if(k===1) b=a.map(x=>Math.max(0,x-rnd(3))); else { b=a.slice(); b[0]+=1+rnd(2); b[1]=Math.max(0,b[1]-1-rnd(2)); if(a[1]===0) return null; }
+    const c=CMP45(a,b), M={before:'e → f',after:'f → e',neither:'concurrent: neither came first',same:'the same event'};
+    return W30('45e.work[v;'+a.join(',')+';'+b.join(',')+']',[['V(e) = '+V45(a)+', V(f) = '+V45(b),'given']],'How do e and f stand?',M[c],Object.keys(M).filter(x=>x!==c).map(x=>M[x]),c==='neither'?'Some entry is larger in each.':c==='same'?'Every entry is equal.':'Every entry of one is at most the other’s, and they differ.'); }},
+  {id:'45e.line',step:'45e',mode:'proof',label:'what stamps license',open:()=>measured('45e'),make(){
+    return line28('45e.line',[
+      ['e1',[['e → f','given'],['L(e) < L(f)','the counter technique']],2,0,'That is the technique.'],
+      ['e2',[['L(e) = 3 and L(f) = 7','given'],['e → f','the counter technique']],2,1,'Counters respect the order but do not capture it.'],
+      ['e3',[['V(e) = (1, 2, 0) and V(f) = (2, 2, 1)','given'],['e → f','the list-stamp technique']],2,0,'Every entry is at most, and they differ.'],
+      ['e4',[['V(e) = (2, 0, 0) and V(f) = (0, 1, 0)','given'],['f → e, since 1 < 2','the list-stamp technique']],2,1,'Compare entry by entry: neither is at most the other. They are concurrent.']],[]); }});
+
+/* 45f Commit Together or Not at All */
+const WF45=[
+  ['When is the change committed in two-phase commit?','only if every machine voted yes',['if most voted yes','if the coordinator wants','if one voted yes'],'Two-phase technique.'],
+  ['May a yes voter commit on a timeout?','no: another machine may have voted no',['yes','yes, after a long wait','yes, if it voted first'],'A machine that promised must wait.'],
+  ['Does two-phase commit survive a coordinator crash?','it stays safe but may wait for ever',['yes, and finishes','no: it commits wrongly','no: it loses votes'],'Two-phase technique.'],
+  ['Can two machines finish differently?','no',['yes, if one crashes','yes, on a timeout','only the coordinator'],'Two-phase technique.'],
+  ['What must a machine that has promised do?','wait to be told',['commit at once','undo at once','ask another voter'],'Commit together or not at all.'],
+  ['What is the first phase?','ask everyone to promise',['commit','tell everyone the outcome','elect a leader'],'Two-phase commit.']];
+QP.push({id:'45f.commit',step:'45f',label:'commit together or not at all',open:()=>measured('45f'),make(){ return writtenQ('45f.commit',WF45); }},
+  {id:'45f.line',step:'45f',mode:'proof',label:'what two phases license',open:()=>measured('45f'),make(){
+    return line28('45f.line',[
+      ['f1',[['every machine voted yes','given'],['the coordinator may commit','the two-phase technique']],2,0,'That is the technique.'],
+      ['f2',[['M voted yes and has heard nothing for an hour','given'],['M commits','the two-phase technique']],2,1,'Another machine may have voted no. M must wait.'],
+      ['f3',[['one machine voted no','given'],['the change is not committed','the two-phase technique']],2,0,'Commit needs every yes.'],
+      ['f4',[['the coordinator crashed after the votes','given'],['the voters finish on their own','the two-phase technique']],2,1,'It stays safe but may wait for ever.']],[]); }});
+
+/* 45g Agreement Despite Crashes */
+const WG45=[
+  ['Why do any two majorities share a machine?','each holds more than n/2, so together they hold more than n',['they are the same set','machines vote twice','the leader is in both'],'Majority-overlap technique.'],
+  ['Is a majority of 4 equal to 2?','no: more than half is 3; two sets of 2 may not meet',['yes','yes, half','no: it is 4'],'Majority-overlap technique.'],
+  ['Does the technique say agreement is impossible?','no: it says no fixed method finishes in every run',['yes','yes, with one crash','no: it says agreement is fast'],'Agreement happens every day.'],
+  ['Can there be two leaders in one term?','no: each needs a majority, one vote per machine per term',['yes','yes, if votes are slow','only after a crash'],'Majority-overlap technique.'],
+  ['With no bound on delay, is any fixed method sure to finish?','no',['yes','yes, with a majority','only with a leader'],'No fixed method is sure to finish.'],
+  ['What does the next majority hear?','what the last majority accepted, from the machine they share',['nothing','only the leader','every message ever sent'],'Majority-overlap technique.']];
+QP.push({id:'45g.crash',step:'45g',label:'agreement despite crashes',open:()=>measured('45g'),make(){ return writtenQ('45g.crash',WG45); }},
+  {id:'45g.work',step:'45g',mode:'work',label:'the size of a majority',open:()=>measured('45g'),make(){
+    const n=3+rnd(14), m=Math.floor(n/2)+1;
+    if(rnd(2)) return W30('45g.work[m;'+n+']',[[n+' machines','given']],'How many make a majority?',String(m),[String(n/2===Math.floor(n/2)?n/2:m+1),String(m+1),String(n),String(m-1)].filter(x=>x!==String(m)),'More than half of '+n+' is '+m+'.');
+    return W30('45g.work[f;'+n+']',[[n+' machines, and a majority must stay up','given']],'How many may crash?',String(n-m),[String(n-m+1),String(m),String(Math.floor(n/3)===n-m?n-m-1:Math.floor(n/3)),String(n)].filter(x=>x!==String(n-m)&&+x>=0),n+' − '+m+' = '+(n-m)+'.'); }},
+  {id:'45g.line',step:'45g',mode:'proof',label:'what majorities license',open:()=>measured('45g'),make(){
+    return line28('45g.line',[
+      ['g1',[['A and B each hold 4 of 7 machines','given'],['A and B share at least one machine','the majority-overlap technique']],2,0,'4 + 4 > 7.'],
+      ['g2',[['A and B each hold 2 of 4 machines','given'],['A and B share a machine','the majority-overlap technique']],2,1,'2 is not more than half of 4.'],
+      ['g3',[['no fixed method finishes in every run','given'],['the machines can never agree','the technique']],2,1,'It says some runs do not finish. Agreement happens every day.'],
+      ['g4',[['a leader needs votes from a majority, one per machine per term','given'],['two leaders in one term would share a voter','the majority-overlap technique']],2,0,'That voter would have voted twice.']],[]); }});
+
+/* 45h Agreement Despite Liars */
+const WH45=[
+  ['With one liar among three, can an honest machine tell who lied?','no',['yes','yes, by majority','only the leader can'],'Third-bound technique.'],
+  ['How many machines does agreement despite f liars need, with forgeable messages?','more than 3f',['more than 2f','f + 1','2f'],'Third-bound technique.'],
+  ['Is an honest majority enough?','no: with forgeable messages more than two thirds are needed',['yes','yes, by the majority-overlap technique','no: all must be honest'],'Third-bound technique.'],
+  ['Does the bound come from slow messages?','no: from lying; it holds when every message is on time',['yes','yes, partly','no: from crashes'],'Third-bound technique.'],
+  ['What do quorums of two thirds always share, with more than 3f machines?','an honest machine',['a liar','the leader','nothing'],'Agreement despite liars.'],
+  ['What makes liars harder than crashes?','a liar can send different stories to different machines',['a liar is slower','a liar sends nothing','nothing'],'Agreement despite liars.']];
+QP.push({id:'45h.liars',step:'45h',label:'agreement despite liars',open:()=>measured('45h'),make(){ return writtenQ('45h.liars',WH45); }},
+  {id:'45h.work',step:'45h',mode:'work',label:'how many liars',open:()=>measured('45h'),make(){
+    if(rnd(2)){ const f=1+rnd(6);
+      return W30('45h.work[n;'+f+']',[['up to '+f+' liars, with forgeable messages','given']],'At least how many machines are needed?',String(3*f+1),[String(2*f+1),String(3*f),String(f+1),String(2*f)],'Third-bound technique: more than 3 · '+f+'.'); }
+    const n=4+rnd(20), f=Math.floor((n-1)/3);
+    return W30('45h.work[f;'+n+']',[[n+' machines, with forgeable messages','given']],'At most how many liars can they agree despite?',String(f),[String(Math.floor((n-1)/2)),String(Math.floor(n/3)===f?f+1:Math.floor(n/3)),String(f-1<0?f+2:f-1),String(n-f)].filter(x=>x!==String(f)),'More than 3f machines: 3 · '+f+' < '+n+' ≤ 3 · '+(f+1)+'.'); }},
+  {id:'45h.line',step:'45h',mode:'proof',label:'what the third bound licenses',open:()=>measured('45h'),make(){
+    return line28('45h.line',[
+      ['h1',[['3 machines, one of them a liar, with forgeable messages','given'],['the honest two cannot be sure to agree','the third-bound technique']],2,0,'3 is not more than 3 · 1.'],
+      ['h2',[['7 machines, 3 of them liars','given'],['they can agree, since the honest are a majority','the majority-overlap technique']],2,1,'With liars more than 3f machines are needed: 7 < 10.'],
+      ['h3',[['every message is on time','given'],['the third bound no longer holds','the third-bound technique']],2,1,'It comes from lying, not slowness.'],
+      ['h4',[['10 machines, at most 3 liars','given'],['agreement is possible','the third-bound technique']],2,0,'10 > 9.']],[]); }});
+
+/* 45i Agreement by Lottery */
+const WI45=[
+  ['Which chain do machines follow?','the chain with the most work',['the longest list of names','the first chain heard','the chain with the most machines'],'Agreement by lottery.'],
+  ['Is a block final when it is added?','no: it can still be overtaken; it grows safer with each block after it',['yes','yes, at once','no: never'],'Catch-up technique.'],
+  ['Do more machines mean more votes?','no: only work counts, however it is split',['yes','yes, one each','only honest ones'],'Agreement by lottery.'],
+  ['An attacker is z blocks behind. With what chance does it ever draw level?','(q/p)ᶻ',['q/p','zq','1/z'],'Catch-up technique.'],
+  ['How is the right to write won?','by finding a rare number',['by vote','by being first to ask','by being oldest'],'Agreement by lottery.'],
+  ['What happens to (q/p)ᶻ as z grows, for q < p?','it falls toward 0',['it grows','it stays the same','it reaches 1'],'Catch-up technique.']];
+QP.push({id:'45i.lottery',step:'45i',label:'agreement by lottery',open:()=>measured('45i'),make(){ return writtenQ('45i.lottery',WI45); }},
+  {id:'45i.work',step:'45i',mode:'work',label:'the chance to catch up',open:()=>measured('45i'),make(){
+    const C=[[1,3],[1,4],[1,2],[1,9],[2,3]][rnd(5)], z=1+rnd(4), R=fr(Math.pow(C[0],z),Math.pow(C[1],z));
+    return W30('45i.work[c;'+C.join('/')+';'+z+']',[['the attacker has q/p = '+C[0]+'/'+C[1],'given'],['it is '+ST41(z,'block')+' behind','given']],'With what chance does it ever draw level?',fshow(R),[fshow(fr(C[0]*z,C[1])),fshow(fr(Math.pow(C[0],z+1),Math.pow(C[1],z+1))),fshow(fr(C[0],C[1]*z)),fshow(fr(Math.pow(C[0],z),Math.pow(C[1],z)+1))],'Catch-up technique: ('+C[0]+'/'+C[1]+')'+SUP43(z)+'.'); }},
+  {id:'45i.line',step:'45i',mode:'proof',label:'what the lottery licenses',open:()=>measured('45i'),make(){
+    return line28('45i.line',[
+      ['i1',[['q/p = 1/3, and the attacker is 4 blocks behind','given'],['it draws level with chance 1/81','the catch-up technique']],2,0,'(1/3)⁴ = 1/81.'],
+      ['i2',[['the block was just added','given'],['the block is final','the catch-up technique']],2,1,'It can still be overtaken. It grows safer with each block after it.'],
+      ['i3',[['the attacker runs ten times as many machines, with the same total work','given'],['the attacker has more say','the lottery']],2,1,'Only work counts, however it is split.'],
+      ['i4',[['q < p','given'],['the chance to catch up falls as z grows','the catch-up technique']],2,0,'q/p < 1.']],[]); }});
+
+/* 45j News Without a Leader */
+const WJ45=[
+  ['While few know, what happens to the count each round?','it about doubles',['it grows by one','it squares','it halves'],'News without a leader.'],
+  ['A fraction u does not know, and each asks one at random. What is expected next?','u²',['u/2','2u','u − 1'],'Squaring-pull technique.'],
+  ['Does gossip take n rounds?','no: about log₂ n, plus a few',['yes','yes, one per machine','no: one round'],'News without a leader.'],
+  ['Does pushing finish as fast as pulling?','no: once most know, pushes land on knowers; pulling squares the fraction',['yes','yes, exactly','no: pushing is faster'],'Squaring-pull technique.'],
+  ['Who tells whom in each round?','each machine tells a random other',['the leader tells everyone','each tells its neighbour','nobody'],'News without a leader.'],
+  ['Once most know, how does the unknowing fraction fall, by pulling?','it squares each round',['it halves each round','it falls by one','it stays'],'Squaring-pull technique.']];
+QP.push({id:'45j.gossip',step:'45j',label:'news without a leader',open:()=>measured('45j'),make(){ return writtenQ('45j.gossip',WJ45); }},
+  {id:'45j.work',step:'45j',mode:'work',label:'squaring the unknowing',open:()=>measured('45j'),make(){
+    const d=pick([2,3,4,5,10]), k=1+rnd(2), e=Math.pow(2,k), R=fr(1,Math.pow(d,e));
+    return W30('45j.work[g;'+[d,k].join(';')+']',[['1/'+d+' of the machines do not know','given'],['each pulls once a round, for '+ST41(k,'round'),'given']],'What fraction is expected still not to know?',fshow(R),[fshow(fr(1,Math.pow(d,e/2))),fshow(fr(1,Math.pow(d,2*e))),fshow(fr(1,2*Math.pow(d,e))),fshow(fr(1,d*e)),fshow(fr(1,Math.pow(d,k+1)))],'Squaring-pull technique: square '+ST41(k,'time')+': (1/'+d+') to the '+e+'.'); }},
+  {id:'45j.line',step:'45j',mode:'proof',label:'what gossip licenses',open:()=>measured('45j'),make(){
+    return line28('45j.line',[
+      ['j1',[['1/10 do not know, and each pulls once','given'],['about 1/100 are expected not to know','the squaring-pull technique']],2,0,'(1/10)² = 1/100.'],
+      ['j2',[['1/10 do not know, and each knower pushes once','given'],['about 1/100 are expected not to know','the squaring-pull technique']],2,1,'The technique is for pulling. Pushes land mostly on knowers.'],
+      ['j3',[['1000 machines','given'],['gossip takes about 1000 rounds','news without a leader']],2,1,'About log₂ 1000, about 10, plus a few.'],
+      ['j4',[['few know, and each knower tells one random other','given'],['the count about doubles each round','news without a leader']],2,0,'Few tellings land on knowers.']],[]); }});
+
+/* 45k Who Holds Which Key */
+const WK45=[
+  ['Where does a key live on the ring?','with the next machine round',['with the nearest machine','with the machine before it','with every machine'],'Who holds which key.'],
+  ['A new machine joins. Which keys move?','only the keys between it and the machine before it',['every key','none','half the keys'],'Ring-move technique.'],
+  ['Does exactly-one distance break the triangle condition?','no: it keeps it; exactly-one never carries',['yes','yes, sometimes','no: it is not a distance'],'Distances on the ring.'],
+  ['How far does each hop jump?','half the remaining way',['one machine','to the end','a random distance'],'Who holds which key.'],
+  ['A machine leaves. Which keys change hands?','only the keys it held, which go to the next machine',['every key','none','the keys of its neighbours'],'Ring-move technique.'],
+  ['About how many hops find a key among n machines?','about log₂ n',['n','n/2','one'],'Halving the remaining way.']];
+QP.push({id:'45k.ring',step:'45k',label:'who holds which key',open:()=>measured('45k'),make(){ return writtenQ('45k.ring',WK45); }},
+  {id:'45k.work',step:'45k',mode:'work',label:'the next machine round',open:()=>measured('45k'),make(){
+    const M=shuffle(Array.from({length:100},(_,i)=>i)).slice(0,5).sort((a,b)=>a-b), key=rnd(100);
+    const nx=M.find(m=>m>=key)??M[0], i=M.indexOf(nx), pv=M[(i+4)%5], near=M.reduce((b,m)=>Math.min(Math.abs(m-key),100-Math.abs(m-key))<Math.min(Math.abs(b-key),100-Math.abs(b-key))?m:b,M[0]);
+    return W30('45k.work[k;'+M.join(',')+';'+key+']',[['machines at '+M.join(', ')+' on a clock of 100','given'],['key '+key,'given']],'Which machine holds the key?',String(nx),[String(pv),String(near),String(M[(i+1)%5]),String(M[(i+2)%5])],'The next machine round from '+key+' is '+nx+(nx<key?': the ring wraps.':'.')); }},
+  {id:'45k.line',step:'45k',mode:'proof',label:'what the ring licenses',open:()=>measured('45k'),make(){
+    return line28('45k.line',[
+      ['k1',[['machines at 10, 40 and 70; a machine joins at 55','given'],['only keys 41 to 55 move, from 70 to 55','the ring-move technique']],2,0,'They lie between the new machine and the one before it.'],
+      ['k2',[['a machine joins the ring','given'],['every key moves','the ring-move technique']],2,1,'Only the keys just before it move.'],
+      ['k3',[['machines at 10, 40 and 70','given'],['key 85 lives with 70','the ring']],2,1,'It lives with the next machine round: 10, as the ring wraps.'],
+      ['k4',[['machines at 10, 40 and 70','given'],['key 25 lives with 40','the ring']],2,0,'40 is the next machine round from 25.']],[]); }});
+
+/* 45l Merging Edits Made Apart */
+const WL45=[
+  ['What three things must merging be?','grouping-free, order-free and repeat-free',['fast, short and safe','first, last and largest','one-way, timed and signed'],'Converge technique.'],
+  ['Two copies merged the same set of updates in different orders, with repeats. What follows?','they hold the same state',['they differ','the later one wins','nothing'],'Converge technique.'],
+  ['Does merging counts by adding work?','no: adding is not repeat-free; a repeated update counts twice',['yes','yes, always','only for small counts'],'Converge technique.'],
+  ['Is “the latest clock time wins” safe?','no: clocks drift; the latest by clock may not be the latest by cause',['yes','yes, with good clocks','no: the earliest wins'],'45e on drifting clocks.'],
+  ['What is a copy, when merging is grouping-, order- and repeat-free?','the merge of the set of edits it has seen',['its first edit','its last edit','the sum of its edits'],'Converge technique.'],
+  ['Which of these merges is repeat-free: max, plus or minus?','max',['plus','minus','none of them'],'Idempotent merges.']];
+QP.push({id:'45l.merge',step:'45l',label:'merging edits made apart',open:()=>measured('45l'),make(){ return writtenQ('45l.merge',WL45); }},
+  {id:'45l.work',step:'45l',mode:'work',label:'merging two copies',open:()=>measured('45l'),make(){
+    const a=[rnd(9),rnd(9),rnd(9)], b=[rnd(9),rnd(9),rnd(9)]; if(a.every((x,i)=>x>=b[i])||b.every((x,i)=>x>=a[i])) return null;
+    const mx=a.map((x,i)=>Math.max(x,b[i]));
+    return W30('45l.work[m;'+a.join(',')+';'+b.join(',')+']',[['copy 1 counts '+V45(a)+', copy 2 counts '+V45(b),'given'],['merge takes the larger, place by place','the merge']],'What does the merged copy hold?',V45(mx),[V45(a.map((x,i)=>x+b[i])),V45(a.map((x,i)=>Math.min(x,b[i]))),V45(a),V45(b)],'Max is repeat-free, order-free and grouping-free.'); }},
+  {id:'45l.line',step:'45l',mode:'proof',label:'what merging licenses',open:()=>measured('45l'),make(){
+    return line28('45l.line',[
+      ['l1',[['merge is max, and both copies saw the same updates, in different orders','given'],['both copies hold the same state','the converge technique']],2,0,'Max is associative, commutative and idempotent.'],
+      ['l2',[['merge is adding, and copy 2 saw one update twice','given'],['both copies hold the same state','the converge technique']],2,1,'Adding is not idempotent. The repeat counts twice.'],
+      ['l3',[['edit A has a later clock time than edit B','given'],['A came after B','the clocks']],2,1,'Clocks drift. The latest by clock may not be the latest by cause.'],
+      ['l4',[['merge is set union','given'],['repeats change nothing','union is idempotent']],2,0,'S ∪ S = S.']],[]); }});
+
+/* 45m Splitting a Big Job */
+const WM45=[
+  ['If combining ignores grouping, what follows for splitting?','any split among machines gives the same answer',['only one split works','each split gives a different answer','splitting is not allowed'],'Split-combine technique.'],
+  ['Is (a − b) − c = a − (b − c)?','no: subtracting is not associative, so it cannot be split freely',['yes','yes, for whole numbers','no: they are both 0'],'Split-combine technique.'],
+  ['Do n machines make a job n times faster?','not necessarily: only if nothing must run in a row and nothing is spent on talk',['yes','yes, always','no: never faster'],'The part in a row sets the limit.'],
+  ['What extra does commutative combining give?','every order of the pieces gives the same answer too',['every grouping','a faster run','nothing'],'Split-combine technique.'],
+  ['What sets the limit on speed-up?','the part that must run in a row',['the number of machines','the size of the data','the first machine'],'Splitting a big job.'],
+  ['Which of these combines can be split freely: plus, minus or divide?','plus',['minus','divide','none of them'],'Associative combining.']];
+QP.push({id:'45m.split',step:'45m',label:'splitting a big job',open:()=>measured('45m'),make(){ return writtenQ('45m.split',WM45); }},
+  {id:'45m.line',step:'45m',mode:'proof',label:'what splitting licenses',open:()=>measured('45m'),make(){
+    return line28('45m.line',[
+      ['m1',[['⊕ is max, which is associative and commutative','given'],['any grouping and order among machines gives the same answer','the split-combine technique']],2,0,'That is the technique.'],
+      ['m2',[['⊕ is subtracting','given'],['any grouping among machines gives the same answer','the split-combine technique']],2,1,'Subtracting is not associative.'],
+      ['m3',[['the job runs on 8 machines','given'],['it runs 8 times faster','splitting']],2,1,'Only if nothing must run in a row and nothing is spent on talk.'],
+      ['m4',[['⊕ is plus','given'],['(a ⊕ b) ⊕ (c ⊕ d) = a ⊕ (b ⊕ (c ⊕ d))','the split-combine technique']],2,0,'Plus is associative.']],[]); }});
+
+/* 45n Quorums by Hand */
+const WN45=[
+  ['What is the least two quorums share?','the sum of their sizes take away n',['the smaller size','n','nothing'],'Quorums by hand.'],
+  ['Are quorums of 2 among 4 safe?','no: 2 + 2 − 4 = 0; two of them can miss each other',['yes','yes, half each','no: 2 is too many'],'Quorums by hand.'],
+  ['How many machines may fail with a quorum of q among n still alive?','n − q',['q','n/2','q − 1'],'Quorums by hand.'],
+  ['Read quorum r and write quorum w among n: when does every read meet every write?','when r + w > n',['when r = w','when r + w = n','always'],'Quorums by hand.'],
+  ['Why must two quorums share a machine?','so the later one hears what the earlier accepted',['to save messages','to elect a leader','to keep clocks'],'Majority-overlap technique.'],
+  ['Larger quorums: what is gained and what is lost?','more overlap is gained; fewer failures can be borne',['nothing changes','more failures can be borne','speed is gained'],'Quorums by hand.']];
+QP.push({id:'45n.quorums',step:'45n',label:'quorums by hand',open:()=>measured('45n'),make(){ return writtenQ('45n.quorums',WN45); }},
+  {id:'45n.work',step:'45n',mode:'work',label:'how much quorums share',open:()=>measured('45n'),make(){
+    const n=4+rnd(10), r=1+rnd(n), w=1+rnd(n), s=Math.max(0,r+w-n);
+    if(rnd(2)) return W30('45n.work[s;'+[n,r,w].join(',')+']',[[n+' machines; quorums of '+r+' and of '+w,'given']],'At least how many machines must they share?',String(s),[String(s+1),String(Math.min(r,w)),String(r+w),String(s===0?2:s-1)].filter(x=>x!==String(s)),r+' + '+w+' − '+n+' = '+String(r+w-n).replace('-','−')+(r+w-n<0?', and a count is at least 0.':'.'));
+    return W30('45n.work[f;'+[n,r].join(',')+']',[[n+' machines; a quorum of '+r+' must stay up','given']],'How many may fail?',String(n-r),[String(r),String(n-r+1),String(Math.floor(n/2)===n-r?n-r+2:Math.floor(n/2)),String(n)].filter(x=>x!==String(n-r)),n+' − '+r+' = '+(n-r)+'.'); }},
+  {id:'45n.line',step:'45n',mode:'proof',label:'what quorums license',open:()=>measured('45n'),make(){
+    return line28('45n.line',[
+      ['n1',[['5 machines; quorums of 3','given'],['any two quorums share at least 1 machine','3 + 3 − 5']],2,0,'3 + 3 − 5 = 1.'],
+      ['n2',[['4 machines; quorums of 2','given'],['any two quorums share a machine','2 + 2 − 4']],2,1,'2 + 2 − 4 = 0. Two of them can miss each other.'],
+      ['n3',[['7 machines; quorums of 5','given'],['3 may fail with a quorum still alive','7 − 5']],2,1,'7 − 5 = 2.'],
+      ['n4',[['6 machines; reads of 2 and writes of 5','given'],['every read meets every write','2 + 5 − 6']],2,0,'2 + 5 − 6 = 1.']],[]); }});
+
+/* 45o Vector Clocks by Hand */
+const WO45=[
+  ['What does a machine do to its stamp at each step of its own?','ticks its own entry',['ticks every entry','sets its stamp to 0','copies a neighbour’s stamp'],'Vector clocks by hand.'],
+  ['What does a machine do on receipt?','takes the larger place by place, then ticks its own entry',['adds the two stamps','keeps its own stamp','takes the sender’s stamp'],'Vector clocks by hand.'],
+  ['Are stamps compared by their sums?','no: compare place by place',['yes','yes, the larger sum is later','no: by the first entry'],'List-stamp technique.'],
+  ['(1, 0, 0) against (0, 1, 0): which is earlier?','neither: they are concurrent',['(1, 0, 0)','(0, 1, 0)','they are the same'],'List-stamp technique.'],
+  ['Whose entry ticks when a machine receives?','its own',['the sender’s','both','none'],'Vector clocks by hand.'],
+  ['V(e) ≤ V(f) in every place, and they differ. What follows?','e → f',['f → e','they are concurrent','nothing'],'List-stamp technique.']];
+QP.push({id:'45o.vector',step:'45o',label:'vector clocks by hand',open:()=>measured('45o'),make(){ return writtenQ('45o.vector',WO45); }},
+  {id:'45o.work',step:'45o',mode:'work',label:'a stamp on receipt',open:()=>measured('45o'),make(){
+    const me=rnd(3), a=[rnd(5),rnd(5),rnd(5)], m=[rnd(6),rnd(6),rnd(6)], r=a.map((x,i)=>Math.max(x,m[i])); r[me]++;
+    const t1=a.map((x,i)=>x+m[i]); t1[me]++; const t2=a.map((x,i)=>Math.max(x,m[i])); const t3=m.slice(); t3[me]++; const t4=a.map((x,i)=>Math.max(x,m[i])); t4[(me+1)%3]++;
+    return W30('45o.work[r;'+[me,a.join(','),m.join(',')].join(';')+']',[['machine '+(me+1)+' has stamp '+V45(a),'given'],['it receives a message stamped '+V45(m),'given']],'What is its stamp after the receipt?',V45(r),[V45(t1),V45(t2),V45(t3),V45(t4)],'The larger place by place, then tick entry '+(me+1)+'.'); }},
+  {id:'45o.line',step:'45o',mode:'proof',label:'what vector clocks license',open:()=>measured('45o'),make(){
+    return line28('45o.line',[
+      ['o1',[['machine 2 has (1, 2, 0) and receives (3, 0, 1)','given'],['its stamp becomes (3, 3, 1)','the larger place by place, then tick']],2,0,'(3, 2, 1), then tick entry 2.'],
+      ['o2',[['machine 2 has (1, 2, 0) and receives (3, 0, 1)','given'],['its stamp becomes (4, 2, 1)','the larger place by place, then tick']],2,1,'It ticks its own entry, the second: (3, 3, 1).'],
+      ['o3',[['V(e) = (1, 0, 0) and V(f) = (0, 1, 0)','given'],['e → f, since the sums are equal and e is first','the list-stamp technique']],2,1,'Compare place by place. They are concurrent.'],
+      ['o4',[['V(e) = (2, 1, 0) and V(f) = (2, 3, 1)','given'],['e → f','the list-stamp technique']],2,0,'Every place is at most, and they differ.']],[]); }});
 /* ===== Rung pools end ===== */
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
