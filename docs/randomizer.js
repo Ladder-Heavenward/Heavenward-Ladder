@@ -8568,6 +8568,27 @@ QP.push({id:'16c.ends',step:'16c',mode:'work',label:'a total between two ends',o
     return {index:'q:16c.ends['+k+';'+p+','+q+';'+w3.map(bkN).join(',')+']', a3:['13d.curves['+k+']','16c.ends['+p+','+q+']',DASH], lines:[['∫ from '+p+' to '+q+' of ('+bkPolyX(c)+') dx','to be found']], ask:'What is it?', right:bkN(right), opts:shuffle([right,...w3]).map(bkN), lead:'It is '+bkN(right)+'. ',
       why:'The change-for-any-integrable technique: find G with G′ equal to the integrand, then take G at the far end minus G at the near end. Here G(x) = '+gs+', with G('+q+') = '+bkN(+bkAt(G,q).toFixed(4))+' and G('+p+') = '+bkN(+bkAt(G,p).toFixed(4))+'. The change of the curve itself between the ends is a different number.'}; }
   return null; }});
+/* --- pairs, arguments and lists of statements (1e): each is a seed; the table is the link, worked here and never typed in; the letters are dealt afresh --- */
+const BK1eP=[['((A ∧ B) ∧ C)','(A ∧ (B ∧ C))'],['((A ∨ B) ∨ C)','(A ∨ (B ∨ C))'],['((A ∨ B) ∧ C)','(A ∨ (B ∧ C))'],['((A ⇒ B) ⇒ C)','(A ⇒ (B ⇒ C))'],['((A ⇔ B) ⇔ C)','(A ⇔ (B ⇔ C))'],
+  ['A','¬A'],['(A ∧ ¬A)','(¬B ⇔ B)'],['(A ∨ (B ∧ C))','((A ∨ B) ∧ (A ∨ C))'],['((A ∧ (A ∨ B)) ⇒ B)','(A ⇒ B)'],['(A ⇒ A)','(A ⇔ A)'],['¬(A ⇒ B)','(¬A ⇒ ¬B)'],['(A ∨ B)','(¬A ⇒ B)'],['(A ⇔ (B ⇔ C))','(A ∧ (B ∧ C))']];
+const BK1eA=[[['(A ⇒ A)'],'A'],[['(A ⇒ (A ∧ ¬A))'],'¬A'],[['(A ∨ (B ⇒ A))'],'(¬A ⇒ ¬B)'],[['(A ∨ B)','(B ∨ C)','¬A'],'(B ∧ C)'],[['((B ∧ A) ⇒ C)','((C ∧ A) ⇒ B)'],'((C ∧ B) ⇒ A)'],
+  [['(A ⇒ B)','B'],'A'],[['(A ⇔ B)','(B ⇔ C)'],'(A ⇔ C)'],[['(A ⇒ B)','(A ⇒ C)'],'(B ⇒ C)'],[['(A ⇒ B)','(B ⇒ A)'],'(A ⇔ B)'],[['(A ∨ B)','(B ∨ C)','¬B'],'(A ∧ C)'],[['(A ⇒ B)','¬A'],'¬B'],[['A','B'],'¬(A ⇒ ¬B)'],[['¬(A ∧ B)','(A ∨ B)','(A ⇔ B)'],'C']];
+const BK1eS=[[['(A ⇒ A)','(¬A ⇒ ¬A)','(A ∧ A)','(A ∨ A)']],[['(A ∨ B)','(A ⇒ C)','(B ⇒ C)']],[['(B ∧ (C ∨ A))','(A ⇒ B)','¬(B ∨ C)']],[['(A ⇔ (B ∨ C))','(C ⇒ ¬A)','(A ⇒ ¬B)']],[['(A ∧ ¬B)','¬(A ⇒ B)','(B ⇒ A)']],[['(A ∨ B)','(A ⇒ ¬A)','(B ⇒ ¬B)']],
+  [['¬(¬A ∨ B)','(A ⇒ ¬C)','(A ⇒ (B ⇒ C))']],[['(A ⇒ B)','(A ∧ ¬B)']],[['(A ⇒ (B ⇒ C))','((A ⇒ B) ⇒ C)','(A ⇒ C)']],[['¬B','(A ⇒ B)','A']],[['¬(A ∨ B)','(A ⇔ B)','(B ⇒ A)']],[['(A ∨ B)','¬B','(¬B ⇒ ¬A)']],[['(A ⇔ B)','(¬B ∨ ¬A)','(A ⇒ B)']],[['((A ∨ B) ∨ C)','(¬A ∨ ¬B)','(¬C ∨ ¬B)']]].map(x=>x[0]);
+const BK_DEAL=(L,s)=>tshow(tparse(s.replace(/[ABCD]/g,l=>L['ABCD'.indexOf(l)]))), BK_ROW=env=>Object.keys(env).sort().map(l=>l+' '+(env[l]?'T':'F')).join(', ');
+const BK_SAME=['the same column: equivalent','not the same column: not equivalent'], BK_VALID=['valid: no row has every given line T and the foot F','not valid: some row has every given line T and the foot F'], BK_TOG=['some row makes every line T','no row makes every line T'];
+QP.push({id:'1e.same',step:'1e',mode:'work',label:'the same column or not',open:()=>measured('1e'),make(){
+  const k=rnd(BK1eP.length), L=shuffle(['P','Q','R','S']), sw=rnd(2), pr=BK1eP[k].map(s=>BK_DEAL(L,s)), [a,b]=sw?[pr[1],pr[0]]:pr, ta=tparse(a), tb=tparse(b), R=trows([ta,tb]).rows, d=R.find(env=>tval(ta,env)!==tval(tb,env)), r=d?1:0;
+  return {index:'q:1e.same['+k+','+L.join('')+','+sw+']', a3:['1e.pairs['+k+','+L.join('')+']','1e.table',DASH], lines:[[a,'a statement'],[b,'a statement']], ask:'Fill in both columns. Which is it?', right:BK_SAME[r], opts:BK_SAME, lead:'',
+    why:d?'In the row '+BK_ROW(d)+', one gives '+(tval(ta,d)?'T':'F')+' and the other '+(tval(tb,d)?'T':'F')+'.':'Every row gives both the same value.'}; }},
+  {id:'1e.valid',step:'1e',mode:'work',label:'valid or not, by the table',open:()=>measured('1e'),make(){
+  const k=rnd(BK1eA.length), L=shuffle(['P','Q','R','S']), G=BK1eA[k][0].map(s=>BK_DEAL(L,s)), F=BK_DEAL(L,BK1eA[k][1]), tg=G.map(tparse), tf=tparse(F), R=trows(tg.concat([tf])).rows, bad=R.find(env=>tg.every(t=>tval(t,env))&&!tval(tf,env)), r=bad?1:0;
+  return {index:'q:1e.valid['+k+','+L.join('')+']', a3:['1e.arguments['+k+','+L.join('')+']','1e.table',DASH], lines:G.map(s=>[s,'given']).concat([[F,'the foot']]), ask:'Fill in the table. Is the argument valid?', right:BK_VALID[r], opts:BK_VALID, lead:'',
+    why:bad?'The row '+BK_ROW(bad)+' makes every given line T and the foot F.':'Hunt for a row with every given line T and the foot F: none turns up.'}; }},
+  {id:'1e.together',step:'1e',mode:'work',label:'true together in some row',open:()=>measured('1e'),make(){
+  const k=rnd(BK1eS.length), L=shuffle(['P','Q','R','S']), G=BK1eS[k].map(s=>BK_DEAL(L,s)), tg=G.map(tparse), R=trows(tg).rows, ok=R.find(env=>tg.every(t=>tval(t,env))), r=ok?0:1;
+  return {index:'q:1e.together['+k+','+L.join('')+']', a3:['1e.lists['+k+','+L.join('')+']','1e.table',DASH], lines:G.map(s=>[s,'a statement']), ask:'Fill in the table. Is there a row where they are all T?', right:BK_TOG[r], opts:BK_TOG, lead:'',
+    why:ok?'The row '+BK_ROW(ok)+' makes every line T.':'In every row at least one line is F.'}; }});
 
 /* ===== Rung pools, rungs 32 on (Andrew 2026-11-13) ===== */
 /* ----- rung 32: waves and frequencies, 32a to 32l ----- */
