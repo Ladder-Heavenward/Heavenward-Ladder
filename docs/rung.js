@@ -707,6 +707,7 @@ function ladderBar(){
 /* On the ladder, rung 0 is at the foot and the page opens where you are standing. */
 function climbTo(smooth){
   if(window.LADDER_DESK) return deskScroll();
+  let glide=null; try{ glide=sessionStorage.getItem('fv:glide'); sessionStorage.removeItem('fv:glide'); }catch(e){} if(climbTo.gliding&&!smooth) return; /* heights glide */
   try{ if(sessionStorage.getItem('sky:new')||window.__skyFresh) return; }catch(e){}
   /* 0.3.5 (Andrew 22:09): the index opens on your furthest footing; its step's footing list opens to show it */
   let h=null; const f=window.LadderFV&&LadderFV.furthest&&LadderFV.furthest();
@@ -716,8 +717,58 @@ function climbTo(smooth){
     if(h){ document.querySelectorAll('.fvhere,.fvrow').forEach(x=>x.classList.remove('fvhere','fvrow')); h.classList.add('fvhere'); const row=h.parentElement&&h.parentElement.closest('.ladder>li'); (row||h).classList.add('fvrow'); } } /* 0.3.36: the row carries the orange dot */
   if(!h) h=document.querySelector('.rungs .here')||document.querySelector('.rungs section.rung');
   while(h&&!h.offsetParent&&h.parentElement&&h.parentElement!==document.body) h=h.parentElement; /* 0.3.23: a hidden footing climbs to the row that shows it */
+  if(glide&&!smooth&&h&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){
+    /* the glide stops on the footing you opened the index from (the last one read); the orange dot stays on the furthest */
+    let g=null; const l=window.LadderFV&&LadderFV.last&&LadderFV.last();
+    if(l&&l.page){ const pg=String(l.page).replace(/\.html$/,''); const fa=l.id&&l.id!=='top'&&l.id!=='end'?document.querySelector('.ladder a[href="'+pg+'.html#'+l.id+'"]'):null;
+      if(fa){ const d=fa.closest('details'); if(d) d.open=true; g=fa.closest('li')||fa; } else { const ra=document.querySelector('.ladder a[href="'+pg+'.html"]'); if(ra) g=ra.closest('li')||ra; }
+      while(g&&!g.offsetParent&&g.parentElement&&g.parentElement!==document.body) g=g.parentElement;
+      if(g&&!(g.closest&&g.closest('.rungs'))) g=null; }
+    /* 09:39Z: three dots hold the screen until the page has finished loading and the glide is laid out, so the first frames are not shared with the page's own start-up work */
+    climbTo.gliding=true; heightsHold(); const tgt=g||h;
+    heightsReady(()=>{ let go=null; try{ go=heightsGlide(tgt); }catch(e){ heightsUndo(); tgt.scrollIntoView({block:'center'}); return; }
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{ const run=()=>{ try{ go(); }catch(e){ heightsUndo(); } heightsHold(false); }; if(window.requestIdleCallback) requestIdleCallback(run,{timeout:300}); else setTimeout(run,40); })); });
+    return; }
+  if(glide) heightsHold(false);
   if(h) h.scrollIntoView({block:'center',behavior:smooth?'smooth':'auto'});
 }
+/* heights glide */ /* 2026-11-13 (Andrew 08:51Z): the index loads in line by line while the view glides up the ladder to the footing
+   you came from; the lines above it keep loading off screen. It starts at most a screen and a half below that footing (or at the foot). */
+function heightsHold(on){ let d=document.getElementById('hg-hold');
+  if(on===false){ if(d){ d.classList.add('hg-out'); setTimeout(()=>d.remove(),260); } return; }
+  if(d||!document.body) return; d=document.createElement('div'); d.id='hg-hold'; d.setAttribute('aria-hidden','true'); d.innerHTML='<i></i><i></i><i></i>'; d.__t=Date.now(); document.body.appendChild(d);
+  setTimeout(()=>{ if(d.isConnected&&!climbTo.gliding) heightsHold(false); },6000); }
+window.__hgHold=heightsHold;
+/* ready when the page has loaded and its fonts are in (at most 3 s), and the dots have shown for at least .45 s */
+function heightsReady(cb){ let done=false; const d=document.getElementById('hg-hold'), t0=d&&d.__t||Date.now();
+  const fire=()=>{ if(done) return; done=true; setTimeout(cb,Math.max(0,450-(Date.now()-t0))); };
+  const fonts=()=>{ try{ if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(fire,fire); return; } }catch(e){} fire(); };
+  if(document.readyState==='complete') fonts(); else addEventListener('load',fonts,{once:true});
+  setTimeout(fire,3000); }
+function heightsUndo(){ climbTo.gliding=false; heightsHold(false); document.documentElement.classList.remove('hg-on','hg-wait'); document.querySelectorAll('.hg-in').forEach(e=>{ e.classList.remove('hg-in'); e.style.animationDelay=''; }); }
+/* 09:25Z rebuild: nothing is steered frame by frame. The page is put where it will rest; the whole ladder is then slid there by one
+   transform animation the browser runs off the main thread, and each line is given its own start time up front. Only the lines within
+   reach (the glide's path and two and a half screens above the footing) take part, so a tall ladder costs no more than a short one. */
+function heightsGlide(h){
+  const wrap=document.querySelector('.wrap'); if(!wrap||!wrap.animate) throw 0;
+  document.documentElement.classList.add('hg-on','hg-wait'); /* first, so a newly opened rung's own unfolding is settled before anything is measured */
+  const vh=window.innerHeight, se=document.scrollingElement||document.documentElement, max=Math.max(0,se.scrollHeight-vh);
+  let r=h.getBoundingClientRect(); const s1=Math.min(max,Math.max(0,r.top+window.scrollY+r.height/2-vh/2)); window.scrollTo(0,s1);
+  const D=Math.min(max-window.scrollY,1.5*vh), T=D<2?0:1400+1600*D/vh, T1=Math.max(T,1000), sm=p=>p*p*p*(10-15*p+6*p*p); /* least-jerk ease: starts and stops at rest */
+  const off=t=>T?D*(1-sm(Math.min(1,t/T))):0, front=t=>off(t)+vh*(1-.62*sm(Math.min(1,t/1000))); /* in screen px at rest: how far the ladder is displaced, and where the loading front stands */
+  const els=[...document.querySelectorAll('.rungs .ladder>li')].filter(e=>e.offsetParent).map(e=>({e,b:e.getBoundingClientRect().bottom}))
+    .filter(x=>x.b<D+vh+40&&x.b>-2.5*vh).sort((a,b)=>b.b-a.b);
+  const rungs=document.querySelector('.rungs'); if(rungs&&!rungs.__hg){ rungs.__hg=1; rungs.addEventListener('animationend',e=>{ if(e.animationName==='hgIn'){ e.target.classList.remove('hg-in'); e.target.style.animationDelay=''; } }); }
+  let t=0, tl=0; els.forEach(x=>{ while(t<T1&&front(t)>x.b-18) t+=16; let at=t; if(t>=T1){ tl=Math.max(tl+70,T1); at=tl; } else tl=t; x.e.style.animationDelay=Math.round(at)+'ms'; x.e.classList.add('hg-in'); });
+  const end=()=>{ climbTo.gliding=false; document.documentElement.classList.remove('hg-on'); EV.forEach(k=>removeEventListener(k,quit)); };
+  let an=null; const EV=['wheel','touchstart','keydown','mousedown'];
+  const quit=()=>{ if(!an) return; let y=0; try{ y=new DOMMatrixReadOnly(getComputedStyle(wrap).transform).m42; }catch(e){} const a=an; an=null; a.cancel(); if(y) window.scrollBy(0,-y); end(); }; /* a touch takes over where the glide is */
+  if(T){ const N=48, kf=[]; for(let k=0;k<=N;k++) kf.push({transform:'translate3d(0,'+(-off(T*k/N)).toFixed(2)+'px,0)'});
+    an=wrap.animate(kf,{duration:T,easing:'linear',fill:'backwards'}); an.pause(); an.onfinish=()=>{ an=null; end(); }; an.oncancel=()=>{ if(an){ an=null; end(); } }; }
+  /* everything above is laid out and held still (html.hg-wait pauses the lines); the caller starts it once the frame is quiet */
+  return ()=>{ document.documentElement.classList.remove('hg-wait'); if(an){ an.play(); EV.forEach(k=>addEventListener(k,quit,{passive:true})); } else setTimeout(end,T1); };
+}
+try{ if(sessionStorage.getItem('fv:glide')&&document.querySelector('.rungs')&&!window.LADDER_DESK) heightsHold(); }catch(e){}
 /* the desk: never jumps; it keeps where you were on the index between visits */
 function deskScroll(){ if(deskScroll.done) return; deskScroll.done=1;
   let y=null; try{ y=JSON.parse(localStorage.getItem('desk:iscroll')||'null'); }catch(e){}
@@ -1751,7 +1802,7 @@ window.LadderFV={
     ss.set('fv:want','fv');
     if(window.LADDER_PAGE&&window.__deskGo){ window.__deskGo(h); return true; }
     location.href=h; return true; },
-  heights(){ ss.set('fv:heights','1'); try{ sessionStorage.setItem('desk:page','index'); sessionStorage.removeItem('desk:scroll'); }catch(e){} location.href='index.html'; } /* 0.3.20: the desk's index would otherwise reopen the last page */
+  heights(){ ss.set('fv:heights','1'); ss.set('fv:glide','1'); try{ sessionStorage.setItem('desk:page','index'); sessionStorage.removeItem('desk:scroll'); }catch(e){} location.href='index.html'; } /* 0.3.20: the desk's index would otherwise reopen the last page */
 };
 /* the ladder itself: the app opens on the last footing, unless you came here by "dizzying heights" */
 function onIndex(){

@@ -953,3 +953,14 @@ section.challenge.sq-reduced .chq{display:none}
 :root[data-theme="dark"] .un-blue .sp-ic{color:#6fa8ff}
 @media (prefers-reduced-motion:reduce){
   .un-blue .sp-rise,.un-blue.on .sp-rise{animation:none;transform:translateY(-3px)}.un-blue.on .sp-wave,.un-blue.on .sp-wave2{animation:none}.un-blue.on .sp-drops circle{animation:none}.un-gold.on .sp-fill{animation:none;transform:none}.un-wings.on .sp-corona{animation:none;opacity:.7}}
+/* heights glide */ /* 2026-11-13 (Andrew 08:51Z): the index's lines load in one by one, each rising into place */
+.rungs .hg-in{animation:hgIn .8s cubic-bezier(.33,0,.2,1) backwards}
+@keyframes hgIn{from{opacity:0;transform:translateY(7px)}}
+html.hg-on .rungs li.unfold,html.hg-on .rungs li.popped{animation:none}
+html.hg-wait .rungs .hg-in{animation-play-state:paused}
+#hg-hold{position:fixed;inset:0;z-index:9000;background:var(--paper);display:flex;align-items:center;justify-content:center;gap:9px;transition:opacity .24s ease}
+#hg-hold.hg-out{opacity:0;pointer-events:none}
+#hg-hold i{width:9px;height:9px;border-radius:50%;background:var(--ember);opacity:.25;animation:hgDot 1.2s ease-in-out infinite}
+#hg-hold i:nth-child(2){animation-delay:.2s}#hg-hold i:nth-child(3){animation-delay:.4s}
+@keyframes hgDot{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-5px)}}
+html.hg-on,html.hg-on body,html.hg-on .wrap{overflow-anchor:none} /* the browser must not re-anchor the scroll to the displaced page while it settles */
