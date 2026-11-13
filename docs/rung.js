@@ -1,3 +1,5 @@
+/* compete */
+try{ if(localStorage.getItem('ladder:compete')==='1') document.documentElement.setAttribute('data-compete','1'); }catch(e){}
 /* toolbox gear */ (function(){ try{ const th=localStorage.getItem('ladder:theme'); if(th==='light'||th==='dark') document.documentElement.setAttribute('data-theme',th); }catch(e){} })();
 /* a link's page stem; on the desk links read view.html#p=<stem> */
 function hstem(h){ h=h||''; const m=h.match(/^view\.html#(?:.*&)?p=([^&]+)/); if(m) return decodeURIComponent(m[1]); return h.replace(/#.*$/,'').replace(/\.html?$/,''); }
@@ -577,7 +579,7 @@ function deskHTML(){
     +'<div class="dpane" id="dp-graph"><div id="dgfig"></div><div id="dmg"></div><p class="dnote" style="margin-top:10px">Type it as on paper: x^2, 2sin(x), e^x, ln x, √x, |x|, x!. a, b, c and k get sliders.</p></div>'
     +'<div class="dpane" id="dp-moves"><p class="dnote" id="dmnote">The techs this step uses and builds: what each is called, what it does in words, and the line in symbols.</p><div id="dmoves"></div><p><a class="dlink" href="moves.html">every tech you have earned →</a></p></div>'
     +'<div class="dpane" id="dp-rand"><p class="dnote">Practice drawn from the pools your steps have opened, with no repeats.</p></div>'
-    +(hb?'<div class="dpane" id="dp-base"><div id="dbase"></div></div>':'')+'<div class="dpane" id="dp-rec"><p class="dtheme"><span class="dnote">Display:</span> <button type="button" data-th="light">Light</button> <button type="button" data-th="dark">Dark</button></p><h4 class="drech">Record</h4><p class="recname"><span class="dnote">Your name on this device:</span> <b class="dname-n">'+(window.LadderAccount?LadderAccount.name:'')+'</b> <button type="button" class="dlink recroll">New Name</button></p><p class="dnote">Everything the ladder remembers about your climb is one record, kept on this device. Save it as a file to keep a copy or to carry it to another device, and open that file there.</p><p><button type="button" class="dlink recx">save my record as a file</button></p><p><label class="dlink">open a record file <input type="file" accept=".json,application/json" class="reci" hidden></label></p><p><label class="dnote recai-l"><input type="checkbox" class="recai"> An AI assistant is connected</label></p><p><button type="button" class="dlink recdel">delete my progress</button></p><p class="dnote" id="recnote"></p></div>';
+    +(hb?'<div class="dpane" id="dp-base"><div id="dbase"></div></div>':'')+'<div class="dpane" id="dp-rec"><p class="dtheme"><span class="dnote">Display:</span> <button type="button" data-th="light">Light</button> <button type="button" data-th="dark">Dark</button></p><p class="dcomp"><label><input type="checkbox" class="reccomp"> Opt into competition</label><span class="dnote dcomp-n">Gives you a climber name and opens the Standing.</span></p><h4 class="drech">Record</h4><p class="recname"><span class="dnote">Your climber name:</span> <b class="dname-n">'+(window.LadderAccount?LadderAccount.name:'')+'</b> </p><p class="recrolls"><button type="button" class="dlink recroll">New Name</button> <button type="button" class="dlink recroll-a">New Animal</button> <button type="button" class="dlink recroll-p">New Place</button></p><p class="dnote">Everything the ladder remembers about your climb is one record, kept on this device. Save it as a file to keep a copy or to carry it to another device, and open that file there.</p><p><button type="button" class="dlink recx">save my record as a file</button></p><p><label class="dlink">open a record file <input type="file" accept=".json,application/json" class="reci" hidden></label></p><p><label class="dnote recai-l"><input type="checkbox" class="recai"> An AI assistant is connected</label></p><p><button type="button" class="dlink recdel">delete my progress</button></p><p class="dnote" id="recnote"></p></div>';
   document.body.append(b,d);
 }
 
@@ -1047,7 +1049,10 @@ window.__deskInit=function(){
   const rx=desk.querySelector('.recx'), ri=desk.querySelector('.reci'), rn=desk.querySelector('#recnote');
   if(rx) rx.onclick=()=>LadderRecord.export();
   const ra=desk.querySelector('.recai'); if(ra){ try{ ra.checked=localStorage.getItem('ladder:assistant')==='1'; }catch(_){} ra.onchange=()=>{ try{ if(ra.checked) localStorage.setItem('ladder:assistant','1'); else localStorage.removeItem('ladder:assistant'); }catch(_){} toast(ra.checked?'paragraph addresses now offer prompt from':'prompt from is hidden in paragraph addresses'); }; }
-  const rr=desk.querySelector('.recroll'); if(rr) rr.onclick=()=>{ if(window.LadderAccount&&LadderAccount.reroll){ const n=LadderAccount.reroll(); if(rn) rn.textContent='Your name is now '+n+'.'; } };
+  [['.recroll',''],['.recroll-a','animal'],['.recroll-p','place']].forEach(x=>{ const b=desk.querySelector(x[0]); if(b) b.onclick=()=>{ if(window.LadderAccount&&LadderAccount.reroll){ const n=LadderAccount.reroll(x[1]); if(rn) rn.textContent='Your name is now '+n+'.'; } }; });
+  const rc=desk.querySelector('.reccomp'); if(rc){ try{ rc.checked=localStorage.getItem('ladder:compete')==='1'; }catch(_){}
+    rc.onchange=()=>{ try{ if(rc.checked){ localStorage.setItem('ladder:compete','1'); document.documentElement.setAttribute('data-compete','1'); } else { localStorage.removeItem('ladder:compete'); document.documentElement.removeAttribute('data-compete'); } }catch(_){}
+      if(rn) rn.textContent=rc.checked?'You are in. Your climber name is '+(window.LadderAccount?LadderAccount.name:'')+'. The Standing is at the top of the toolbox.':'You are out of the competition. Your name is kept if you come back.'; }; }
   const rd=desk.querySelector('.recdel'); if(rd) rd.onclick=()=>{ if(!confirm('Delete your progress? You will lose all your progress: every footing, star, measure, standing question and note on this device. Save your record as a file first if you may want it back.')) return;
     LadderRecord.erase(); try{ sessionStorage.clear(); }catch(x){} rn.textContent='Progress deleted. Reloading…'; setTimeout(()=>location.href='index.html',400); };
   if(ri) ri.onchange=()=>{ const f=ri.files[0]; if(!f) return; f.text().then(t=>{ const o=JSON.parse(t);
@@ -1199,7 +1204,9 @@ function noteEdit(p){ const old=noteBox(p); if(old) old.remove(); const n=noteAl
   if(!a||!a.id||!a.name){ a={name:draw(), id:hex12(), t:Date.now()}; try{ st.setItem(KEY,JSON.stringify(a)); }catch(e){} }
   window.LadderAccount={name:a.name, id:a.id, since:a.t,
     /* Andrew 2026-11-11 18:33Z: a new name on request; the id and the start date stay */
-    reroll(){ let n=draw(), k=0; while(n===a.name&&k++<5) n=draw(); a.name=n; try{ st.setItem(KEY,JSON.stringify(a)); }catch(e){} this.name=n;
+    reroll(part){ const t=String(a.name).split(' '), cur=[t[0],t.slice(1,-1).join(' '),t[t.length-1]];
+      const mk=()=>part==='animal'?ANIMALS[rnd(ANIMALS.length)]+' '+cur[1]+' '+cur[2]:part==='place'?cur[0]+' '+PLACES[rnd(PLACES.length)]+' '+cur[2]:draw();
+      let n=mk(), k=0; while(n===a.name&&k++<5) n=mk(); a.name=n; try{ st.setItem(KEY,JSON.stringify(a)); }catch(e){} this.name=n;
       try{ document.querySelectorAll('.dname-n,.dacct').forEach(e=>{ e.textContent=n; }); }catch(e){} return n; } };
   try{ document.querySelectorAll('.dname-n,.dacct').forEach(e=>{ e.textContent=a.name; }); }catch(e){} /* the toolbox may be built before the name is drawn */
   try{ document.documentElement.setAttribute('data-acct',a.id); }catch(e){}
@@ -2649,7 +2656,15 @@ const texbox=el=>!!(el&&el.matches&&(el.matches('pre,.eqline,.eqline-words,.line
 let screens=[], k=0, on=false, bar=null, L=null, R=null, posEl=null, dots=null, step=null;
 const folded=el=>el.hasAttribute('data-collapsed')||(el.matches('p[data-pid]')&&!el.textContent.replace(/\s+/g,'').replace(/^[\d\w.·]+$/,'').length);
 function clear(){ document.querySelectorAll('.brk.sw-rows').forEach(b=>{ if(!b.closest('.fvghost')) b.classList.remove('sw-rows','sw-has'); }); document.querySelectorAll('[data-sw]').forEach(x=>{ if(x.closest('.fvghost')) return; /* the outgoing footing keeps its screen while it leaves */ x.removeAttribute('data-sw'); x.classList.remove('sw-on','sw-open','sw-stub'); }); screens=[]; }
-function build(els){ clear(); step=els.find(e=>e.matches&&e.matches('section.step')); if(!step) return;
+/* slidex */ /* Andrew 2026-11-13 11:01Z: a deck's slides become screens of the footing: no second set of buttons, no deck heading */
+function expand(root){ [...root.querySelectorAll(':scope>.slides:not([data-sx]):not([data-collapsed])')].forEach(deck=>{ try{
+    const A=(window.__steppers||[]).find(a=>a.container===deck); if(!A) return; const n=deck.querySelectorAll('.dots i').length; if(!n) return;
+    const live=deck.querySelector(':scope>.slide'); if(!live) return; const at=A.i; let ref=deck; const made=[];
+    for(let j=0;j<n;j++){ A.show(j); const w=document.createElement('section'); w.className='slides sx'; w.setAttribute('data-sx',deck.id||'');
+      const c=live.cloneNode(true); c.querySelectorAll('.new').forEach(x=>x.classList.remove('new')); c.querySelectorAll('[id]').forEach(x=>x.removeAttribute('id')); w.appendChild(c); made.push(w); }
+    A.show(at); made.forEach(w=>{ ref.parentNode.insertBefore(w,ref.nextSibling); ref=w; }); deck.setAttribute('data-sx','src'); deck.hidden=true;
+  }catch(_){} }); }
+function build(els){ clear(); step=els.find(e=>e.matches&&e.matches('section.step')); if(!step) return; expand(step);
   [...step.children].forEach(ch=>{ if(ch.matches('h2,.sthead,.stnext,script,style,template')||ch.hidden) return; if(ch.matches('p[data-pid]')&&folded(ch)) return;
     if(ch.matches('.brk.brk-check')){ const rows=[...ch.querySelectorAll(':scope>.rows>.row')]; if(rows.length>1){ ch.classList.add('sw-rows'); rows.forEach(r=>screens.push([r])); return; } } /* 2026-11-10 (Andrew 15:51): one move to a screen */ /* 2026-11-10 (Andrew 12:08): an emptied or collapsed paragraph is no screen; the chain closes up */
     if(ATTACH.test(ch.className||'')&&screens.length&&!(texbox(ch)&&screens[screens.length-1].some(texbox))){ screens[screens.length-1].push(ch); return; } screens.push([ch]); }); /* 2026-11-10 (Andrew 15:44): one TeX box to a screen */
