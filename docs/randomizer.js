@@ -9597,6 +9597,442 @@ QP.push({id:'35i.filling',step:'35i',label:'a line onto a square',open:()=>measu
       ['i4',[['|s − t| = 1/'+F,'given'],['|H(s) − H(t)| ≤ 2√5/'+F,'the half-power technique']],2,1,'The bound takes the square root: 2√5/'+T+'.'],
       ['i5',[['|F(s) − F(t)| ≤ C|s − t| for all s and t','given'],['F does not fill the square','the fill-rate technique']],2,0,'Here α = 1, more than 1/2.'],
       ['i6',[['|F(s) − F(t)| ≤ C|s − t|^(1/2) for all s and t','given'],['F does not fill the square','the fill-rate technique']],2,1,'The technique needs α more than 1/2. H itself meets this bound.']],[n]); }});
+/* ----- rung 36: colour, 36a to 36j ----- */
+Object.assign(STEPS,{'36a':['r36a','The Shape of a Spectrum'],'36b':['r36b','The Band, and the Window in It'],'36c':['r36c','The Purple That Is Not in the Band'],'36d':['r36d','The Circle of Hue'],'36e':['r36e','The Cylinder'],'36f':['r36f','Colour Spaces Compared'],'36g':['r36g','A Colour Can Be a Name'],'36h':['r36h','Functions of Colour’s Own'],'36i':['r36i','Side by Side Is Not Mixed'],'36j':['r36j','Where It Keys In']});
+const T36=a=>'('+a.join(', ')+')', TR36=()=>[rnd(6),rnd(6),rnd(6)], ADD36=(a,b)=>a.map((x,i)=>x+b[i]), K36=(k,a)=>a.map(x=>k*x),
+  D36=n=>{ const s=String(Math.round(n)); return n<=0?'0':n>=100?'1':'0.'+(s.length<2?'0'+s:s).replace(/0$/,''); };
+
+/* 36a The Shape of a Spectrum */
+const WA36=[
+  ['Is a spectrum a colour?','no: a spectrum is a function from wavelength to amount; a colour is three numbers',['yes','yes, when it is a spike','no: a colour is one number'],'From 36b on, a colour is a triple.'],
+  ['Is the peak of a spectrum its colour?','no: a spread with a peak at 580 and a spike at 580 are different functions, and they may look alike or not',['yes','yes, for a spread','no: the peak is the energy'],'Spectrum-peak technique gives a peak, not a colour.'],
+  ['Is multiplying two spectra mixing two lights?','no: that is one material through another; lights mix by adding',['yes','yes, at each wavelength','no: lights mix by averaging'],'Sum-of-spectra technique.'],
+  ['Can a spectrum have a negative value?','no: an amount of light is never negative',['yes','yes, between two spikes','yes, outside the window'],'A spectrum is never negative.'],
+  ['A spectrum is continuous on W. What follows?','it has a greatest value, and so a peak',['it is a spike','it is a spread','it has no peak'],'Spectrum-peak technique.'],
+  ['What is the amount of S + T at a wavelength?','the amount of S there plus the amount of T there',['the greater of the two','their product','their average'],'Sum-of-spectra technique.']];
+QP.push({id:'36a.spectrum',step:'36a',label:'the shape of a spectrum',open:()=>measured('36a'),make(){ return writtenQ('36a.spectrum',WA36); }},
+  {id:'36a.work',step:'36a',mode:'work',label:'adding spectra',open:()=>measured('36a'),make(){
+    const L=pick([450,500,550,600,650]);
+    if(rnd(2)){ const a=1+rnd(6), b=1+rnd(6), k=2+rnd(3);
+      return W30('36a.work[s;'+[L,a,b,k].join(';')+']',[['S('+L+') = '+a+' and T('+L+') = '+b,'given']],'What is ('+k+'S + T)('+L+')?',String(k*a+b),[String(k*(a+b)),String(a+b),String(k*a),String(a+k*b),String(k*a*b)],'Sum-of-spectra technique: amounts add and scale at each wavelength, '+k+' · '+a+' + '+b+'.'); }
+    const W=[400,450,500,550,600,650,700], v=shuffle([1,2,3,4,5,6,7]), i=v.indexOf(7), j=v.indexOf(1);
+    return W30('36a.work[p;'+v.join('')+']',[['S at '+W.join(', ')+' is '+v.join(', '),'measured; S is continuous between']],'At which of these wavelengths is S greatest?',String(W[i]),[String(W[j]),String(W[3]),String(W[0]),String(W[6]),String(W[(i+1)%7])],'Spectrum-peak technique: the greatest listed amount is 7, at '+W[i]+'.'); }},
+  {id:'36a.line',step:'36a',mode:'proof',label:'what spectra license',open:()=>measured('36a'),make(){
+    const k=2+rnd(4);
+    return line28('36a.line',[
+      ['a1',[['S and T are spectra','given'],['S + T = T + S','the sum-of-spectra technique']],2,0,'That is the technique.'],
+      ['a2',[['S and T are spectra','given'],[k+'(S + T) = '+k+'S + '+k+'T','the sum-of-spectra technique']],2,0,'That is the technique.'],
+      ['a3',[['S is continuous on W','given'],['S has a peak','the spectrum-peak technique']],2,0,'A greatest value, and so a peak.'],
+      ['a4',[['S has its peak at 580','given'],['S is the colour of the spike at 580','the spectrum-peak technique']],2,1,'The technique gives a peak, not a colour. A spread and a spike may look different.'],
+      ['a5',[['S and T are lights','given'],['the mix of S and T is S · T','the sum-of-spectra technique']],2,1,'Lights mix by adding. A product is one material through another.']],[k]); }});
+
+/* 36b The Band, and the Window in It */
+const WB36=[
+  ['Can a spectrum’s energy be read off its three numbers?','no: col throws the energy weighting away',['yes','yes, as their sum','yes, as the first number'],'Two-weightings technique.'],
+  ['Can the three numbers be read off the energy?','no: one number cannot give three',['yes','yes, by dividing by three','yes, for a spike'],'Three-numbers technique.'],
+  ['Is col defined at a wavelength outside the window W?','no: col is defined on W; outside it the three curves are 0',['yes','yes, as the nearest wavelength in W','yes, as (1, 1, 1)'],'The window is where the eye sees.'],
+  ['S has more energy than T. Is S brighter?','not always: energy and brightness are two different weightings of one spectrum',['yes','no: never','yes, inside the window'],'Two-weightings technique.'],
+  ['What is col(S + T)?','col(S) + col(T)',['col(S) · col(T)','the greater of col(S) and col(T)','col(S) − col(T)'],'Three-numbers technique.'],
+  ['How does a photon’s energy depend on its wavelength λ?','in proportion to 1/λ',['in proportion to λ','in proportion to λ²','not at all'],'A photon at λ carries energy proportional to 1/λ.']];
+QP.push({id:'36b.band',step:'36b',label:'the band and the window',open:()=>measured('36b'),make(){ return writtenQ('36b.band',WB36); }},
+  {id:'36b.work',step:'36b',mode:'work',label:'three numbers and photon energy',open:()=>measured('36b'),make(){
+    if(rnd(2)){ const a=TR36(), b=TR36(), k=2+rnd(3);
+      return W30('36b.work[c;'+[a.join(''),b.join(''),k].join(';')+']',[['col(S) = '+T36(a),'given'],['col(T) = '+T36(b),'given']],'What is col('+k+'S + T)?',T36(ADD36(K36(k,a),b)),[T36(K36(k,ADD36(a,b))),T36(ADD36(a,b)),T36(ADD36(a,K36(k,b))),T36(K36(k,a))],'Three-numbers technique: col('+k+'S + T) = '+k+' col(S) + col(T).'); }
+    let [p,q]=shuffle([400,450,500,600,700]);
+    return W30('36b.work[e;'+[p,q].join(';')+']',[['one photon at '+p+' and one at '+q,'wavelengths in the window']],'The energy of the first is how many times the energy of the second?',fshow(fr(q,p)),[fshow(fr(p,q)),'1',fshow(fr(q*q,p*p))],'Energy goes as 1/λ, so the ratio is (1/'+p+')/(1/'+q+') = '+q+'/'+p+'.'); }},
+  {id:'36b.line',step:'36b',mode:'proof',label:'what col licenses',open:()=>measured('36b'),make(){
+    const a=TR36(), b=TR36();
+    return line28('36b.line',[
+      ['b1',[['col(S) = '+T36(a)+' and col(T) = '+T36(b),'given'],['col(S + T) = '+T36(ADD36(a,b)),'the three-numbers technique']],2,0,'col adds.'],
+      ['b2',[['S and T are spectra','given'],['the energy of S + T is the energy of S plus the energy of T','the energy-weighting technique']],2,0,'That is the technique.'],
+      ['b3',[['energy(S) > energy(T)','given'],['brightness(S) > brightness(T)','the energy-weighting technique']],2,1,'Energy and brightness are two weightings. The two-weightings technique finds S and T where they disagree.'],
+      ['b4',[['col(S) = '+T36(a),'given'],['the energy of S is '+(a[0]+a[1]+a[2]),'the three-numbers technique']],2,1,'col throws the energy weighting away. It cannot be read off the triple.']],[a.join(''),b.join('')]); }});
+
+/* 36c The Purple That Is Not in the Band */
+const WC36=[
+  ['Is purple between red and violet in the rainbow?','no: the rainbow is the open curve of single wavelengths; purple is on the straight edge joining its ends',['yes','yes, past violet','no: purple is between green and blue'],'Purple technique.'],
+  ['Mixing two lights: is the result the average of their triples?','no: a mix is a sum; the average is half the mix, a dimmer light',['yes','yes, for equal lights','no: it is the product'],'Mix technique.'],
+  ['Do pigments mix by adding triples?','no: pigments mix by multiplying; lights add',['yes','yes, as lights do','no: they mix by averaging'],'Two mixings, 36h.'],
+  ['A colour is the colour of some spectrum. Of how many?','endlessly many',['exactly one','two','three, one for each number'],'Metamer technique.'],
+  ['Is any purple the colour of a spike?','no: no purple is the colour of any spike',['yes, the spike at 700','yes, the spike at 400','yes, the spike at 580'],'Purple technique.'],
+  ['When are two spectra metamers?','when col sends them to one triple',['when their peaks agree','when they are equal','when their energies agree'],'Metamers are spectra with one colour.']];
+QP.push({id:'36c.purple',step:'36c',label:'metamers and purples',open:()=>measured('36c'),make(){ return writtenQ('36c.purple',WC36); }},
+  {id:'36c.work',step:'36c',mode:'work',label:'mixing triples',open:()=>measured('36c'),make(){
+    const a=TR36().map(x=>2*x), b=TR36().map(x=>2*x);
+    return W30('36c.work[m;'+[a.join(','),b.join(',')].join(';')+']',[['one light has triple '+T36(a),'given'],['another has '+T36(b),'given']],'What is the triple of their mix?',T36(ADD36(a,b)),[T36(ADD36(a,b).map(x=>x/2)),T36(a.map((x,i)=>x*b[i])),T36(a.map((x,i)=>Math.max(x,b[i]))),T36(a.map((x,i)=>Math.abs(x-b[i])))],'Mix technique: mixing lights adds their triples.'); }},
+  {id:'36c.line',step:'36c',mode:'proof',label:'what mixing licenses',open:()=>measured('36c'),make(){
+    const a=TR36(), b=TR36();
+    return line28('36c.line',[
+      ['c1',[['col(S) is a colour','given'],['endlessly many spectra have col(S) as their colour','the metamer technique']],2,0,'That is the technique.'],
+      ['c2',[['col(S) = col(T)','given'],['S = T','the metamer technique']],2,1,'One colour, endlessly many spectra. S and T may be metamers.'],
+      ['c3',[['two lights have triples '+T36(a)+' and '+T36(b),'given'],['their mix has triple '+T36(ADD36(a,b)),'the mix technique']],2,0,'Mixing adds triples.'],
+      ['c4',[['c is a purple','given'],['c is the colour of some spike','the purple technique']],2,1,'No purple is the colour of any spike.']],[a.join(''),b.join('')]); }});
+
+/* 36d The Circle of Hue */
+const WD36=[
+  ['Is hue 0 red, because red comes first?','no: where hue 0 sits is a choice of the bend; here it is purple',['yes','yes, by the band','no: hue 0 is white'],'Hue-bend technique: the bend is a choice.'],
+  ['Two different hues are mixed at equal strength. Is the mix a hue on the circle?','no: it is the midpoint of their chord, inside the circle',['yes','yes, the hue between them','no: it is black'],'Hue-chord technique.'],
+  ['Is shifting hues done by adding to the triples?','no: a shift is a turn on the circle; adding triples is mixing',['yes','yes, to the first number','no: by multiplying the triples'],'Hue-shift technique.'],
+  ['Is opp(θ) the opposite colour?','no: it is the opposite hue; black is not a hue and has no opposite here',['yes','yes, and white’s is black','no: it is the same hue'],'Opposite technique.'],
+  ['What is opp(opp(θ))?','θ',['opp(θ)','θ + 360°','−θ'],'Opposite technique.'],
+  ['When is the equal mix of hues θ and φ at the centre?','exactly when φ = opp(θ)',['when φ = θ','never','when φ is a quarter turn from θ'],'Hue-chord technique.']];
+const CH36={0:'1',60:'√3/2',90:'√2/2',120:'1/2',180:'0'};
+QP.push({id:'36d.hue',step:'36d',label:'the circle of hue',open:()=>measured('36d'),make(){ return writtenQ('36d.hue',WD36); }},
+  {id:'36d.work',step:'36d',mode:'work',label:'turns, opposites and chords',open:()=>measured('36d'),make(){
+    const t=rnd(3), th=30*rnd(12);
+    if(t===0){ const a=30*(1+rnd(11)), b=30*(1+rnd(11)), r=(th+a+b)%360;
+      return W30('36d.work[t;'+[th,a,b].join(';')+']',[['a hue at '+th+'°','given']],'Where is it after turn by '+a+'° and then turn by '+b+'°?',r+'°',[(th+a+b)+'°',((th+a-b+720)%360)+'°',((th+a)%360)+'°',((a+b)%360)+'°',((th+180)%360)+'°'].filter(x=>x!==((th+a+b)>=360?(th+a+b)+'°':'')),'Hue-shift technique: turn_'+a+' after turn_'+b+' is turn_'+(a+b)+', and hues wrap at 360°.'); }
+    if(t===1) return W30('36d.work[o;'+th+']',[['a hue at '+th+'°','given']],'What is its opposite hue?',((th+180)%360)+'°',[((360-th)%360)+'°',((th+90)%360)+'°',th+'°',((th+270)%360)+'°'],'Opposite technique: a half turn, '+th+'° + 180°.');
+    const d=pick([0,60,90,120,180]), ph=(th+d)%360;
+    return W30('36d.work[c;'+[th,d].join(';')+']',[['hues at '+th+'° and '+ph+'°, mixed at equal strength','given']],'How far is the mix from the centre?',CH36[d],Object.values(CH36),'Hue-chord technique: |cos(('+ph+'° − '+th+'°)/2)|, with the gap '+d+'°.'); }},
+  {id:'36d.line',step:'36d',mode:'proof',label:'what hue licenses',open:()=>measured('36d'),make(){
+    const th=30*rnd(12), a=30*(1+rnd(5));
+    return line28('36d.line',[
+      ['d1',[['a hue at '+th+'°','given'],['h('+th+'° + 360°) = h('+th+'°)','the hue-wraps technique']],2,0,'Hues wrap after a whole turn.'],
+      ['d2',[['turn_'+a+' after turn_'+a,'given'],['turn_'+(2*a),'the hue-shift technique']],2,0,'Turns add.'],
+      ['d3',[['hues θ and opp(θ), mixed at equal strength','given'],['the mix is at the centre','the hue-chord technique']],2,0,'The distance is 0 exactly when φ = opp(θ).'],
+      ['d4',[['hues θ and φ, θ ≠ φ, mixed at equal strength','given'],['the mix is a hue on the circle','the hue-chord technique']],2,1,'Its distance from the centre is less than 1.'],
+      ['d5',[['a hue at '+th+'° is turned by '+a+'°','given'],['its triple has '+a+' added to it','the hue-shift technique']],2,1,'A shift is a turn on the circle, not an addition of triples.']],[th,a]); }});
+
+/* 36e The Cylinder */
+const WE36=[
+  ['Has a grey a hue?','no: on the axis r = 0, and every angle names the same grey',['yes','yes, its own angle','yes, purple'],'Grey-axis technique.'],
+  ['Is the top ring many colours?','no: every colour with z = 1 is white',['yes','yes, one for each angle','no: it is black'],'Ends technique.'],
+  ['Is alpha transparency on this rung?','no: on this rung alpha is brightness, the height',['yes','yes, and brightness too','no: it is the angle'],'The cylinder’s height is alpha.'],
+  ['Which points of ℝ³ are the colours in the cylinder?','those with x² + y² ≤ 1 and 0 ≤ z ≤ 1',['those with x² + y² + z² ≤ 1','those with x² + y² = 1','those with 0 ≤ x, y, z ≤ 1'],'Cylinder technique.'],
+  ['When are (r, θ, z) and (r′, θ′, z′) the same colour?','when r and z agree and, if r > 0, θ and θ′ differ by whole turns',['when all three agree','when θ = θ′','when r = r′'],'Grey-axis technique.'],
+  ['Is a statement true in one chart and false in the other?','no: it is true in one chart exactly when it is true in the other',['yes, near the axis','yes, at the ends','it depends on the statement'],'Chart technique.']];
+QP.push({id:'36e.cylinder',step:'36e',label:'the cylinder',open:()=>measured('36e'),make(){ return writtenQ('36e.cylinder',WE36); }},
+  {id:'36e.work',step:'36e',mode:'work',label:'same colour or not',open:()=>measured('36e'),make(){
+    const th=30*rnd(12), ph=(th+30*(1+rnd(10)))%360, r=pick(['0.2','0.5','0.8']), r2=pick(['0.3','0.6','0.9']), z=pick(['0.2','0.4','0.7']);
+    const O={g:'yes: both are the grey at that height',b:'yes: both are black',w:'yes: both are white',t:'yes: the angles differ by a whole turn',n:'no'};
+    const C=pick([[['0',th,z],['0',ph,z],'g'],[[r,th,'0'],[r2,ph,'0'],'b'],[[r,th,'1'],[r2,ph,'1'],'w'],[[r,th,z],[r,th+360,z],'t'],[[r,th,z],[r,ph,z],'n'],[[r,th,z],[r2,th,z],'n']]);
+    const S=c=>'('+c[0]+', '+c[1]+'°, '+c[2]+')';
+    return W30('36e.work['+C[2]+';'+[th,ph].join(';')+']',[['c = '+S(C[0])+' and d = '+S(C[1]),'(r, θ, z)']],'Are c and d the same colour?',O[C[2]],Object.values(O),'Grey-axis and ends techniques: r and z must agree, and θ counts only when r > 0; at z = 0 and z = 1 every colour is black or white.'); }},
+  {id:'36e.line',step:'36e',mode:'proof',label:'what the cylinder licenses',open:()=>measured('36e'),make(){
+    const th=30*rnd(12), ph=(th+30*(1+rnd(10)))%360;
+    return line28('36e.line',[
+      ['e1',[['c = (0, '+th+'°, 0.5) and d = (0, '+ph+'°, 0.5)','given'],['c = d','the grey-axis technique']],2,0,'On the axis the angle does not count.'],
+      ['e2',[['c = (0.5, '+th+'°, 0.5) and d = (0.5, '+ph+'°, 0.5)','given'],['c = d','the grey-axis technique']],2,1,'With r > 0 the angles must differ by whole turns, and these do not.'],
+      ['e3',[['c has z = 1','given'],['c is white','the ends technique']],2,0,'That is the technique.'],
+      ['e4',[['c = (0, '+th+'°, 0.5)','given'],['c has hue '+th+'°','the polar technique']],2,1,'For r = 0 the point is the centre whatever θ is. A grey has no hue.']],[th,ph]); }});
+
+/* 36f Colour Spaces Compared */
+const WF36=[
+  ['Does a screen show every colour?','no: its gamut is a triangle inside the eye’s region, and does not fill it',['yes','yes, with three primaries','no: it shows none'],'Gamut technique.'],
+  ['May the three primaries lie on one line?','no: then there is no triangle and no gamut',['yes','yes, if they are far apart','yes, if one is white'],'A gamut needs a triangle.'],
+  ['Is the eye’s region convex?','yes',['no','only inside the triangle','only along the purples'],'Convexity technique.'],
+  ['Where does the edge of the eye’s region meet a straight segment in more than two points?','only along the purples',['nowhere','everywhere','along the single wavelengths'],'Straight-edge technique.'],
+  ['Where does the gamut triangle lie?','inside the eye’s region',['around the eye’s region','outside it','across its edge'],'Gamut technique.'],
+  ['A colour lies outside the triangle. How is it written?','as the nearest colour inside, with an error in a known direction',['exactly','as black','as the nearest primary'],'Gamut technique.']];
+QP.push({id:'36f.gamut',step:'36f',label:'colour spaces compared',open:()=>measured('36f'),make(){ return writtenQ('36f.gamut',WF36); }},
+  {id:'36f.work',step:'36f',mode:'work',label:'mixes of primaries',open:()=>measured('36f'),make(){
+    const P=[[1+rnd(4),0,0],[0,1+rnd(4),0],[0,0,1+rnd(4)]], w=[rnd(4),rnd(4),rnd(4)]; if(!w[0]&&!w[1]&&!w[2]) w[0]=2;
+    const m=[0,1,2].map(i=>w[i]*P[i][i]);
+    return W30('36f.work[p;'+[P.map(p=>p.join('')).join(','),w.join('')].join(';')+']',[['primaries '+P.map(T36).join(', '),'given'],['weights '+w.join(', '),'given']],'What is the triple of the mix?',T36(m),[T36([P[0][0],P[1][1],P[2][2]]),T36(w),T36([0,1,2].map(i=>w[i]+P[i][i])),T36([0,1,2].map(i=>w[(i+1)%3]*P[i][i]))],'A mix of primaries adds each primary times its weight.'); }},
+  {id:'36f.line',step:'36f',mode:'proof',label:'what the gamut licenses',open:()=>measured('36f'),make(){
+    return line28('36f.line',[
+      ['f1',[['c and d are in the eye’s region G','given'],['every mix of c and d is in G','the convexity technique']],2,0,'G is convex.'],
+      ['f2',[['c is in the eye’s region G','given'],['c is in the gamut triangle','the gamut technique']],2,1,'The triangle lies inside G, not the other way.'],
+      ['f3',[['c is in the gamut triangle','given'],['c is in the eye’s region G','the gamut technique']],2,0,'The triangle lies inside G.'],
+      ['f4',[['a straight segment meets the edge of G in three points','given'],['the three points lie along the purples','the straight-edge technique']],2,0,'That is the technique.']],[]); }});
+
+/* 36g A Colour Can Be a Name */
+const WG36=[
+  ['Is a fact by cases unproved?','no: it is a column that ends in a rate',['yes','yes, until it is checked again','no: it is a technique'],'Cases technique.'],
+  ['May the rate be dropped from a fact by cases?','no: the conclusion carries the rate forward',['yes','yes, at the end of the column','yes, when the rate is high'],'Cases technique.'],
+  ['Is the mix of two colours their union?','no: the mix c + d is not the union c ∪ d',['yes','yes, as sets of spectra','no: it is their overlap'],'Set technique.'],
+  ['May colour names be swapped inside a mention?','no: the moves withheld from mentions are withheld here too',['yes','yes, when the triples agree','yes, always'],'Name technique.'],
+  ['When are two colour names the same, on the matter of light?','exactly when their triples are',['when their words are','when their peaks are','when their energies are'],'Name technique.'],
+  ['How is “for all colours c, P(c)” proved, when P is built from the coordinates by arithmetic?','by proving it for each coordinate and joining with and',['by checking one colour','by cases with a rate','by mixing'],'Component technique.']];
+QP.push({id:'36g.name',step:'36g',label:'a colour can be a name',open:()=>measured('36g'),make(){ return writtenQ('36g.name',WG36); }},
+  {id:'36g.work',step:'36g',mode:'work',label:'names and triples',open:()=>measured('36g'),make(){
+    let a=TR36(); if(a[0]===a[1]) a[1]=(a[0]+2)%6;
+    const N=shuffle(['c','d','e','f']), sw=[a[1],a[0],a[2]], rv=[a[2],a[1],a[0]], dbl=K36(2,a), pl=a.map(x=>x+1);
+    return W30('36g.work[n;'+a.join('')+']',[[N[0]+' = '+T36(a),'given'],[N[1]+' = '+T36(sw)+', '+N[2]+' = '+T36(a)+', '+N[3]+' = '+T36(dbl),'given']],'Which name is the same colour as '+N[0]+'?',N[2],[N[1],N[3],'none of them','all of them'],'Name technique: names are the same exactly when their triples are, number by number, in order.'); }},
+  {id:'36g.line',step:'36g',mode:'proof',label:'what names license',open:()=>measured('36g'),make(){
+    const a=TR36(), b=TR36();
+    return line28('36g.line',[
+      ['g1',[['c = '+T36(a)+' and d = '+T36(a),'given'],['c = d','the set technique']],2,0,'Equal triples, one colour.'],
+      ['g2',[['c and d are colours','given'],['c + d = c ∪ d','the set technique']],2,1,'The mix is not the union.'],
+      ['g3',[['a colour fact holds by cases, at a rate','given'],['the column’s conclusion holds, at that rate','the cases technique']],2,0,'The rate is carried forward.'],
+      ['g4',[['a colour fact holds by cases, at a rate','given'],['the column’s conclusion holds','the cases technique']],2,1,'The rate must be carried forward.'],
+      ['g5',[['P holds for each coordinate of every c','given'],['for all colours c, P(c)','the component technique']],2,0,'Join the coordinates with and.']],[a.join(''),b.join('')]); }});
+
+/* 36h Functions of Colour’s Own */
+const WH36=[
+  ['Does dodge undo burn?','no: both hit walls; they are related through inv, not as inverses',['yes','yes, below the walls','no: dodge is burn'],'Dodge–burn technique.'],
+  ['Do pigments mix by adding?','no: pigment mix multiplies; light mix adds',['yes','yes, then clamps','no: they mix by averaging'],'Two-mixings technique.'],
+  ['Is difference a distance?','no: it is a colour; a distance is a number',['yes','yes, in each coordinate','yes, at the corners'],'Colour-difference technique.'],
+  ['The laws hold at the corners 0 and 1. Do they hold everywhere?','no: at the corners the functions are 1e’s tables, and between the corners they need not keep those tables’ laws',['yes','yes, by the corners technique','no: no law holds between'],'Corners technique is about the corners.'],
+  ['Which is never lighter than either input, coordinate by coordinate?','the light mix, c + d clamped',['the pigment mix','darken','burn'],'Two-mixings technique.'],
+  ['What is screen(c, d)?','inv(inv(c) · inv(d))',['c · d','inv(c · d)','inv(c) · inv(d)'],'Screen technique.']];
+const OP36={light:(a,b)=>Math.min(100,a+b),pigment:(a,b)=>a*b/100,burn:(a,b)=>Math.max(0,a+b-100),screen:(a,b)=>100-(100-a)*(100-b)/100,darken:Math.min,lighten:Math.max,difference:(a,b)=>Math.abs(a-b)};
+QP.push({id:'36h.functions',step:'36h',label:'functions of colour',open:()=>measured('36h'),make(){ return writtenQ('36h.functions',WH36); }},
+  {id:'36h.work',step:'36h',mode:'work',label:'one coordinate by hand',open:()=>measured('36h'),make(){
+    const a=10*(1+rnd(9)); let b=10*(1+rnd(9)); if(b===a) b=a===90?40:a+10; const k=pick(Object.keys(OP36));
+    return W30('36h.work['+[k,a,b].join(';')+']',[['one coordinate of c is '+D36(a)+' and of d is '+D36(b),'given']],'What is that coordinate of the '+k+(k==='light'||k==='pigment'?' mix':'')+' of c and d?',D36(OP36[k](a,b)),Object.keys(OP36).map(o=>D36(OP36[o](a,b))),'Light mix adds and clamps; pigment mix multiplies; burn is c + d − 1 clamped at 0; screen is 1 − (1 − c)(1 − d); darken and lighten take the least and greatest; difference is the gap.'); }},
+  {id:'36h.line',step:'36h',mode:'proof',label:'what colour functions license',open:()=>measured('36h'),make(){
+    const a=10*(1+rnd(9)), b=10*(1+rnd(9));
+    return line28('36h.line',[
+      ['h1',[['c and d are in [0, 1]³','given'],['c · d ≤ min(c, d), coordinate by coordinate','the two-mixings technique']],2,0,'Pigment mix is never lighter.'],
+      ['h2',[['c and d are in [0, 1]³','given'],['c · d ≥ max(c, d), coordinate by coordinate','the two-mixings technique']],2,1,'The order runs the other way: c · d ≤ min ≤ max.'],
+      ['h3',[['difference(c, d) = (0, 0, 0)','given'],['c = d','the colour-difference technique']],2,0,'That is the technique.'],
+      ['h4',[['one coordinate of c is '+D36(a)+' and of d is '+D36(b),'given'],['that coordinate of screen(c, d) is '+D36(OP36.screen(a,b)),'the screen technique']],2,0,'1 − (1 − c)(1 − d).'],
+      ['h5',[['one coordinate of c is '+D36(a)+' and of d is '+D36(b),'given'],['that coordinate of screen(c, d) is '+D36(100-OP36.pigment(a,b)),'the screen technique']],2,OP36.screen(a,b)===100-OP36.pigment(a,b)?0:1,'Screen is inv(inv(c) · inv(d)), not inv(c · d).'],
+      ['h6',[['darken and lighten are on the corners','given'],['darken is and, and lighten is or','the corners technique']],2,0,'At the corners they are 1e’s tables.']],[a,b]); }});
+
+/* 36i Side by Side Is Not Mixed */
+const WI36=[
+  ['Can the pair be read off the mix?','no: the mix function is not one-to-one',['yes','yes, by halving','yes, when the colours differ'],'Mix-forgetting technique.'],
+  ['Is resolution a technique?','no: where the eye starts to mix is a fact by cases, with a rate',['yes','yes, the pair technique','no: it is an axiom'],'Cases technique.'],
+  ['Does (c, d) name the mix of c and d?','no: (c, d) is an ordered pair; the mix is c + d',['yes','yes, when c = d','no: it names their union'],'Pair technique.'],
+  ['When are the pictures of (c, d) and (d, c) the same function?','exactly when c = d',['always','never','when c + d is grey'],'Pair technique.'],
+  ['Which keeps every pair: the picture or the mix?','the picture',['the mix','both','neither'],'Mix-forgetting technique: the pair function is one-to-one.'],
+  ['Is the mix function one-to-one?','no',['yes','yes, for lights','yes, for pigments'],'Mix-forgetting technique.']];
+QP.push({id:'36i.pairs',step:'36i',label:'side by side is not mixed',open:()=>measured('36i'),make(){ return writtenQ('36i.pairs',WI36); }},
+  {id:'36i.work',step:'36i',mode:'work',label:'pairs and mixes',open:()=>measured('36i'),make(){
+    let c=TR36(), d=TR36(); if(T36(c)===T36(d)) d=ADD36(d,[1,0,2]);
+    if(rnd(2)) return W30('36i.work[m;'+[c.join(''),d.join('')].join(';')+']',[['the pair ('+T36(c)+', '+T36(d)+'), side by side','given']],'What does the eye see where it cannot tell the two apart?',T36(ADD36(c,d)),[T36(c),T36(d),T36(c.map((x,i)=>x*d[i])),'('+T36(c)+', '+T36(d)+')'],'Mix technique: a mix adds the triples, and it forgets which was which.');
+    return W30('36i.work[p;'+[c.join(''),d.join('')].join(';')+']',[['c = '+T36(c)+' and d = '+T36(d),'given']],'Which pair is different from (c, d) and has the same mix?','(d, c)',['(c, c)','(d, d)','(c, d) itself','(c + d, c + d)'],'The mix forgets order; the pair keeps it.'); }},
+  {id:'36i.line',step:'36i',mode:'proof',label:'what pairs license',open:()=>measured('36i'),make(){
+    const c=TR36(); let d=TR36(); if(T36(c)===T36(d)) d=ADD36(d,[1,1,0]);
+    return line28('36i.line',[
+      ['i1',[['c = '+T36(c)+' and d = '+T36(d),'given'],['the pictures of (c, d) and (d, c) are different','the pair technique']],2,0,'c ≠ d.'],
+      ['i2',[['the mix of the pair is '+T36(ADD36(c,d)),'given'],['the pair is ('+T36(c)+', '+T36(d)+')','the mix-forgetting technique']],2,1,'The mix is not one-to-one. (d, c), and others, give the same mix.'],
+      ['i3',[['the eye mixes what it cannot resolve','a fact by cases, at a rate'],['the eye mixes these two dots','the pair technique']],2,1,'Where the eye starts to mix is a fact by cases, with a rate; the pair technique says nothing of it.']],[c.join(''),d.join('')]); }});
+
+/* 36j Where It Keys In */
+const WJ36=[
+  ['S + T = U as spectra. What of their colours?','col(S) + col(T) = col(U)',['col(S) · col(T) = col(U)','col(S) = col(U)','nothing follows'],'Reduction technique.'],
+  ['col(S) = col(T). Is S = T?','not always: S and T may be metamers',['yes','yes, by the reduction technique','no: never'],'Reduction runs from spectra to colours, not back.'],
+  ['What does the reduction technique carry from spectra to colours?','every statement about a spectrum that was true before col was applied',['every statement about a colour','the energy of each spectrum','the peak of each spectrum'],'Reduction technique.'],
+  ['Does a statement true of the triples tell which spectrum made them?','no: many spectra share one triple',['yes','yes, the brightest','yes, the spike'],'Metamer technique.']];
+QP.push({id:'36j.keys',step:'36j',label:'where colour keys in',open:()=>measured('36j'),make(){ return writtenQ('36j.keys',WJ36); }},
+  {id:'36j.work',step:'36j',mode:'work',label:'statements carried to colours',open:()=>measured('36j'),make(){
+    const a=TR36(), b=TR36(), k=2+rnd(3);
+    return W30('36j.work[r;'+[a.join(''),b.join(''),k].join(';')+']',[['U = S + '+k+'T as spectra','given'],['col(S) = '+T36(a)+' and col(T) = '+T36(b),'given']],'What is col(U)?',T36(ADD36(a,K36(k,b))),[T36(K36(k,ADD36(a,b))),T36(ADD36(a,b)),T36(ADD36(K36(k,a),b)),T36(K36(k,b))],'Reduction technique: U = S + '+k+'T stays true after col, so col(U) = col(S) + '+k+' col(T).'); }},
+  {id:'36j.line',step:'36j',mode:'proof',label:'what reduction licenses',open:()=>measured('36j'),make(){
+    const k=2+rnd(3);
+    return line28('36j.line',[
+      ['j1',[['U = S + '+k+'T as spectra','given'],['col(U) = col(S) + '+k+' col(T)','the reduction technique']],2,0,'The statement is carried to colours.'],
+      ['j2',[['col(S) = col(T)','given'],['S = T','the reduction technique']],2,1,'Reduction runs from spectra to colours. Metamers share a colour.'],
+      ['j3',[['col(S) + col(T) = col(U)','given'],['S + T = U','the reduction technique']],2,1,'A statement about colours does not carry back to spectra.']],[k]); }});
+/* ----- rung 37: sound, 37a to 37j ----- */
+Object.assign(STEPS,{'37a':['r37a','The Push That Travels'],'37b':['r37b','How High: Pitch'],'37c':['r37c','How Loud: Intensity'],'37d':['r37d','Same Note, Another Sound'],'37e':['r37e','Fading, Bouncing, Passing Through'],'37f':['r37f','The Spectral View'],'37g':['r37g','A Sound Can Be a Name'],'37h':['r37h','Functions of Sound’s Own'],'37i':['r37i','Rhythm, and Falling Into Step'],'37j':['r37j','Where It Keys In']});
+
+/* 37a The Push That Travels */
+const WA37=[
+  ['Does the air carry the sound from the clap to the ear?','no: the air swings in place; only the squeeze travels',['yes','yes, at the speed of the clap','no: the sound carries the air'],'A sound is a change in pressure that travels.'],
+  ['Does a louder or higher sound run faster?','no: every sound in one still medium runs at that medium’s one speed',['yes','only a higher one','only a louder one'],'Medium-speed technique.'],
+  ['Is a sound pressure the whole pressure of the air?','no: it is the pressure minus that of still air',['yes','yes, at the ear','no: it is the air’s speed'],'Sound-pressure technique.'],
+  ['When are two sounds at a place the same?','exactly when their pressures agree at every moment',['when their loudest moments agree','when they start together','when their pitches agree'],'Sound-pressure technique.'],
+  ['What links frequency and wavelength in a medium of speed c?','f λ = c',['f = c λ','λ = c f','f + λ = c'],'Wavelength technique.'],
+  ['What is c for small pushes in a pipe of stiffness K and density ρ?','√(K/ρ)',['K/ρ','√(ρ/K)','Kρ'],'Air-wave technique.']];
+QP.push({id:'37a.push',step:'37a',label:'the push that travels',open:()=>measured('37a'),make(){ return writtenQ('37a.push',WA37); }},
+  {id:'37a.work',step:'37a',mode:'work',label:'speed, frequency, wavelength',open:()=>measured('37a'),make(){
+    if(rnd(2)){ const c=pick([300,320,340,360,400]), f=pick([20,40,50,80,100,200,400]), l=c/f;
+      return W30('37a.work[w;'+[c,f].join(';')+']',[['a medium of speed '+c+' m/s','given'],['a steady note of '+f+' Hz','given']],'What is the wavelength, in metres?',String(l),[String(c*f),String(f/c),String(c-f),String(l*2)].filter(x=>!/e/.test(x)&&x.length<9),'Wavelength technique: λ = c/f = '+c+'/'+f+'.'); }
+    const c=pick([2,3,4,5,6,7]), r=pick([1,2,4]), K=c*c*r;
+    return W30('37a.work[c;'+[K,r].join(';')+']',[['K = '+K+' and ρ = '+r,'a pipe’s stiffness and density']],'What is c?',String(c),[String(K/r),String(K*r),fshow(fr(r,K)),String(c*c)],'Air-wave technique: c = √(K/ρ) = √('+(K/r)+').'); }},
+  {id:'37a.line',step:'37a',mode:'proof',label:'what the push licenses',open:()=>measured('37a'),make(){
+    const c=pick([300,340,400]), f=pick([50,100,200]);
+    return line28('37a.line',[
+      ['a1',[['a note of '+f+' Hz in a medium of speed '+c+' m/s','given'],['its wavelength is '+(c/f)+' m','the wavelength technique']],2,0,'λ = c/f.'],
+      ['a2',[['a note of '+f+' Hz in a medium of speed '+c+' m/s','given'],['its wavelength is '+(c*f)+' m','the wavelength technique']],2,1,'f λ = c, so λ = c/f = '+(c/f)+'.'],
+      ['a3',[['sound A is louder than sound B, in one still medium','given'],['A runs faster than B','the medium-speed technique']],2,1,'One speed for every sound in a medium.'],
+      ['a4',[['two sounds have the same pressure at a place at every moment','given'],['they are the same sound there','the sound-pressure technique']],2,0,'That is the technique.']],[c,f]); }});
+
+/* 37b How High: Pitch */
+const WB37=[
+  ['Is the pitch the loudest turning?','no: pitch is 1/T, the repeat, which need not be the loudest or even present',['yes','yes, for a steady note','no: it is the softest turning'],'Repeat-rate technique.'],
+  ['Is a turning at 25 000 Hz a high note?','no: outside the hearing window it is no note to a person',['yes','yes, a very high one','no: it is a low note'],'The hearing window ends near twenty thousand.'],
+  ['Is 200 to 400 Hz a bigger step than 100 to 200 Hz?','no: both are one octave',['yes, twice as big','yes, by 100 Hz','no: it is smaller'],'Pitch-line technique.'],
+  ['Has every sound a pitch?','no: only a sound that repeats; a hiss has none',['yes','yes, its loudest turning','no: none has'],'Repeat-rate technique.'],
+  ['A sound repeats every T. Which turnings can it hold?','only those at whole multiples of 1/T',['any turnings','only 1/T','those at whole fractions of 1/T'],'Repeat-rate technique.'],
+  ['About how many octaves does the hearing window hold?','just under ten',['about three','about twenty','about a thousand'],'Ten-octave technique.']];
+QP.push({id:'37b.pitch',step:'37b',label:'pitch',open:()=>measured('37b'),make(){ return writtenQ('37b.pitch',WB37); }},
+  {id:'37b.work',step:'37b',mode:'work',label:'octaves and harmonics',open:()=>measured('37b'),make(){
+    if(rnd(2)){ const f=pick([25,50,55,100,110]), k=1+rnd(5), g=f*Math.pow(2,k);
+      return W30('37b.work[o;'+[f,k].join(';')+']',[['two notes at '+f+' Hz and '+g+' Hz','given']],'How many octaves apart are they?',String(k),[String(Math.pow(2,k)),String(g-f),String(2*k),String(g/f/2)],'Pitch-line technique: the ratio is '+Math.pow(2,k)+' = 2'+'⁰¹²³⁴⁵⁶'[k]+', so '+k+' octaves.'); }
+    const f=pick([100,110,150,200,250]), m=2+rnd(4);
+    return W30('37b.work[h;'+[f,m].join(';')+']',[['a sound repeats '+f+' times a second','given']],'Which of these turnings can it hold?',String(f*m)+' Hz',[String(f*m+f/2)+' Hz',String(f/2)+' Hz',String(Math.round(f*1.5))+' Hz',String(f*m-f/2)+' Hz'],'Repeat-rate technique: only whole multiples of '+f+' Hz; '+(f*m)+' = '+m+' · '+f+'.'); }},
+  {id:'37b.line',step:'37b',mode:'proof',label:'what pitch licenses',open:()=>measured('37b'),make(){
+    const f=pick([100,110,200]), k=1+rnd(3);
+    return line28('37b.line',[
+      ['b1',[['notes at '+f+', '+2*f+' and '+4*f+' Hz','given'],['from '+f+' to '+2*f+' is as far as from '+2*f+' to '+4*f,'the pitch-line technique']],2,0,'Equal ratios, equal distances.'],
+      ['b2',[['notes at '+f+', '+2*f+' and '+4*f+' Hz','given'],['from '+2*f+' to '+4*f+' is twice as far as from '+f+' to '+2*f,'the pitch-line technique']],2,1,'The distance depends on the ratio only. Both are one octave.'],
+      ['b3',[['a sound repeats every 1/'+f+' s','given'],['every turning it holds is at a whole multiple of '+f+' Hz','the repeat-rate technique']],2,0,'That is the technique.'],
+      ['b5',[['a sound repeats every 1/'+f+' s','given'],['it holds a turning at '+(f*k+f/2)+' Hz','the repeat-rate technique']],2,1,(f*k+f/2)+' Hz is no whole multiple of '+f+' Hz.'],
+      ['b4',[['a sound’s loudest turning is at '+(f*2)+' Hz','given'],['its pitch is '+(f*2)+' Hz','the repeat-rate technique']],2,1,'Pitch is the repeat, which need not be the loudest turning.']],[f,k]); }});
+
+/* 37c How Loud: Intensity */
+const WC37=[
+  ['Two 60 dB sounds at different frequencies come together. Is that 120 dB?','no: decibels are logs; two equal powers make about 63 dB',['yes','no: it is 60 dB','no: it is 66 dB'],'Adding-power technique.'],
+  ['Do intensities always add?','no: only when the cross term averages to 0; at one frequency in step, the pressures add',['yes','yes, in open air','no: they never add'],'Adding-power technique is for different frequencies.'],
+  ['The distance doubles. Does the level in dB halve?','no: it drops by 6 dB',['yes','no: it drops by 3 dB','no: it drops by a quarter'],'Spreading technique.'],
+  ['Do equal levels in dB sound equally loud?','no: loudness is not intensity; the ear weighs by frequency',['yes','yes, inside the window','no: the louder in dB always sounds softer'],'The ear does not hear power as such.'],
+  ['What is a sound’s pressure level in decibels?','20 log₁₀(p_rms / p_ref)',['10 log₁₀(p_rms / p_ref)','20 (p_rms / p_ref)','p_rms / p_ref'],'Pressure-level technique.'],
+  ['What happens to intensities of sounds at different frequencies that arrive together?','they add',['they multiply','the louder wins','they average'],'Adding-power technique.']];
+QP.push({id:'37c.loud',step:'37c',label:'intensity',open:()=>measured('37c'),make(){ return writtenQ('37c.loud',WC37); }},
+  {id:'37c.work',step:'37c',mode:'work',label:'decibels',open:()=>measured('37c'),make(){
+    const t=rnd(3), L=pick([40,50,60,70,80]);
+    if(t===0){ const n=1+rnd(4);
+      return W30('37c.work[s;'+[L,n].join(';')+']',[['a small source gives '+L+' dB at 1 m','open air']],'What level is it at '+Math.pow(2,n)+' m?',(L-6*n)+' dB',[(L/Math.pow(2,n))+' dB',(L-3*n)+' dB',(L-6*Math.pow(2,n))+' dB',(L-12*n)+' dB'],'Spreading technique: '+n+(n===1?' doubling':' doublings')+', 6 dB each.'); }
+    if(t===1) return W30('37c.work[a;'+L+']',[['two sounds of '+L+' dB each, at different frequencies','arriving together']],'About what level do they make together?',(L+3)+' dB',[(2*L)+' dB',L+' dB',(L+6)+' dB',(L+10)+' dB'],'Adding-power technique: twice the intensity, and 10 log₁₀ 2 is about 3 dB.');
+    const k=1+rnd(4);
+    return W30('37c.work[p;'+k+']',[['p_rms is '+Math.pow(10,k)+' times p_ref','given']],'What is the level?',(20*k)+' dB',[(10*k)+' dB',Math.pow(10,k)+' dB',(20*Math.pow(10,k))+' dB',k+' dB'],'Pressure-level technique: 20 log₁₀ '+Math.pow(10,k)+' = 20 · '+k+'.'); }},
+  {id:'37c.line',step:'37c',mode:'proof',label:'what levels license',open:()=>measured('37c'),make(){
+    const L=pick([50,60,70]);
+    return line28('37c.line',[
+      ['c1',[['a small source gives '+L+' dB at 2 m, in open air','given'],['it gives '+(L-6)+' dB at 4 m','the spreading technique']],2,0,'One doubling, 6 dB.'],
+      ['c2',[['a small source gives '+L+' dB at 2 m, in open air','given'],['it gives '+(L/2)+' dB at 4 m','the spreading technique']],2,1,'6 dB less, not half the number.'],
+      ['c3',[['two sounds at different frequencies arrive together','given'],['their intensities add','the adding-power technique']],2,0,'That is the technique.'],
+      ['c4',[['two sounds at one frequency arrive in step','given'],['their intensities add','the adding-power technique']],2,1,'At one frequency in step the pressures add, and the intensity is four times one.']],[L]); }});
+
+/* 37d Same Note, Another Sound */
+const WD37=[
+  ['Two notes have different-looking waves. Do they sound different?','not always: their shapes may differ only in turns, which the ear drops',['yes','yes, if the waves differ anywhere','no: never'],'Turn-free technique.'],
+  ['Two notes have the same pitch and level. Are they the same sound?','not always: their recipes may differ',['yes','yes, if they repeat together','no: never'],'Recipe technique.'],
+  ['Where two speakers meet, is the sound always twice as loud?','no: anything from twice the pressure to nothing',['yes','yes, in the middle','no: always quieter'],'Crest-meeting technique.'],
+  ['Are beats a third note at the difference?','no: they are a swell in loudness, not a turning at |f₁ − f₂|',['yes','yes, a low one','no: a note at the sum'],'Two close notes swell and fade at their difference.'],
+  ['When are two notes that repeat every T the same sound?','exactly when their recipes agree',['when their peaks agree','when their turns agree','when their levels agree'],'Recipe technique.'],
+  ['Where do two equal turnings in step add to nothing?','where the paths differ by a whole number and a half of wavelengths',['where the paths are equal','where the paths differ by a whole number of wavelengths','nowhere'],'Crest-meeting technique.']];
+QP.push({id:'37d.recipe',step:'37d',label:'same note, another sound',open:()=>measured('37d'),make(){ return writtenQ('37d.recipe',WD37); }},
+  {id:'37d.work',step:'37d',mode:'work',label:'paths and beats',open:()=>measured('37d'),make(){
+    if(rnd(2)){ const l=pick([1,2,4]), h=rnd(2), n=1+rnd(4), d=h?(n+0.5)*l:n*l;
+      return W30('37d.work[p;'+[l,h,n].join(';')+']',[['two equal turnings in step, of wavelength '+l+' m','given'],['the paths to a place differ by '+d+' m','given']],'What is heard there?',h?'nothing: the turnings cancel':'the most: twice the pressure',['the most: twice the pressure','nothing: the turnings cancel','one turning only','a beat at '+d+' Hz'],'Crest-meeting technique: '+d+' m is '+(d/l)+' wavelengths.'); }
+    const f=pick([200,300,440,500]), b=1+rnd(6);
+    return W30('37d.work[b;'+[f,b].join(';')+']',[['two notes at '+f+' Hz and '+(f+b)+' Hz','sounding together']],'How many times a second does the loudness swell?',String(b),[String(2*f+b),String(f+b/2),String(b/2),String(2*b)],'They swell and fade at their difference, '+(f+b)+' − '+f+'.'); }},
+  {id:'37d.line',step:'37d',mode:'proof',label:'what recipes license',open:()=>measured('37d'),make(){
+    const l=pick([1,2]), n=1+rnd(3);
+    return line28('37d.line',[
+      ['d1',[['two notes repeat every T, and their recipes agree','given'],['they are the same sound','the recipe technique']],2,0,'That is the technique.'],
+      ['d2',[['two notes have the same pitch and level','given'],['they are the same sound','the recipe technique']],2,1,'Their recipes may differ.'],
+      ['d3',[['the turns of a note’s turnings are changed','given'],['its pitch and intensity are unchanged','the turn-free technique']],2,0,'That is the technique.'],
+      ['d4',[['equal turnings in step, wavelength '+l+' m; paths differ by '+(n*l)+' m','given'],['they add to nothing there','the crest-meeting technique']],2,1,'A whole number of wavelengths: they add to the most.']],[l,n]); }});
+
+/* 37e Fading, Bouncing, Passing Through */
+const WE37=[
+  ['A medium takes a fixed share per metre. Does it take the same watts each metre?','no: the same share, so fewer watts as the sound weakens; the same dB each metre',['yes','yes, at first','no: more watts each metre'],'Fading technique.'],
+  ['Is a far sound the near one, only quieter?','no: its top is cut away too',['yes','yes, in still air','no: its bottom is cut away'],'Far-is-low technique.'],
+  ['Does more sound go into water because water carries sound better?','no: unlike sides bounce almost all of it back',['yes','yes, at a slant','no: none at all goes in'],'Bounce technique.'],
+  ['Is every bounce heard as an echo?','no: a wall closer than about 8.6 m is heard as part of the sound',['yes','yes, from a hard wall','no: no bounce is'],'Echo technique.'],
+  ['What share of intensity bounces back at a boundary met head on?','((Z₂ − Z₁)/(Z₂ + Z₁))²',['(Z₂ − Z₁)/(Z₂ + Z₁)','Z₁/Z₂','((Z₂ + Z₁)/(Z₂ − Z₁))²'],'Bounce technique.'],
+  ['Which notes does the air take most of?','the high ones',['the low ones','the loud ones','none: it takes all alike'],'Far-is-low technique.']];
+QP.push({id:'37e.fading',step:'37e',label:'fading and bouncing',open:()=>measured('37e'),make(){ return writtenQ('37e.fading',WE37); }},
+  {id:'37e.work',step:'37e',mode:'work',label:'fades, bounces and echoes',open:()=>measured('37e'),make(){
+    const t=rnd(3);
+    if(t===0){ const a=pick([2,3,4,5]), m=pick([3,4,5,10]);
+      return W30('37e.work[f;'+[a,m].join(';')+']',[['a medium fades a sound by '+a+' dB each metre','given']],'How many dB does it lose over '+m+' metres?',String(a*m),[String(Math.pow(a,m)),String(a+m),String(a),String(a*m*2)],'Fading technique: the same dB every metre, '+a+' · '+m+'.'); }
+    if(t===1){ const [z1,z2]=pick([[1,2],[1,3],[1,4],[1,9],[2,3],[3,5]]);
+      return W30('37e.work[b;'+[z1,z2].join(';')+']',[['Z₁ = '+z1+' and Z₂ = '+z2,'the two sides of a boundary met head on']],'What share of the intensity bounces back?',fshow(fr((z2-z1)*(z2-z1),(z2+z1)*(z2+z1))),[fshow(fr(z2-z1,z2+z1)),fshow(fr(z1,z2)),fshow(fr((z2+z1)*(z2+z1)-(z2-z1)*(z2-z1),(z2+z1)*(z2+z1))),fshow(fr(z1*z1,z2*z2))],'Bounce technique: ((Z₂ − Z₁)/(Z₂ + Z₁))² = ('+(z2-z1)+'/'+(z2+z1)+')².'); }
+    const d=pick([3,5,8,12,20,30]);
+    return W30('37e.work[e;'+d+']',[['a single wall '+d+' m away','given']],'Is it heard as an echo?',d>8.6?'yes: it is more than about 8.6 m away':'no: it is closer than about 8.6 m',['yes: it is more than about 8.6 m away','no: it is closer than about 8.6 m','yes: every bounce is an echo','no: no wall gives an echo'],'Echo technique.'); }},
+  {id:'37e.line',step:'37e',mode:'proof',label:'what boundaries license',open:()=>measured('37e'),make(){
+    const a=pick([2,3,4]), m=pick([3,5]);
+    return line28('37e.line',[
+      ['e1',[['a medium takes a fixed share of a sound each metre','given'],['the sound fades by the same dB each metre','the fading technique']],2,0,'That is the technique.'],
+      ['e2',[['a medium fades a sound by '+a+' dB each metre','given'],['over '+m+' metres it loses '+(a*m)+' dB','the fading technique']],2,0,a+' · '+m+'.'],
+      ['e3',[['Z₁ = 1 and Z₂ = 3, met head on','given'],['half the intensity bounces back','the bounce technique']],2,1,'(2/4)² = 1/4 bounces back.'],
+      ['e4',[['a sound is heard from far off','given'],['it is the near sound, only quieter','the far-is-low technique']],2,1,'Its top is cut away too.']],[a,m]); }});
+
+/* 37f The Spectral View */
+const WF37=[
+  ['To see everything sharp, should the stretches be very short?','no: short in time is wide in frequency',['yes','yes, as short as can be','no: they should be one second'],'Window-trade technique.'],
+  ['Are the formants the voice’s pitch?','no: pitch comes from the buzz, formants from the tube',['yes','yes, the lowest one','no: the pitch is the loudest formant'],'Source-filter technique.'],
+  ['Is a hiss a very high note?','no: a hiss has no period, so no pitch; it is a band',['yes','yes, above the window','no: a very low note'],'Hiss-band technique.'],
+  ['Two notes have the same recipe. Are they the same instrument?','not always: the attack and decay can differ',['yes','yes, once they are steady','no: never'],'Quality is the recipe and the way it moves.'],
+  ['In a buzz through a filter, what sets which frequencies are present?','the buzz',['the filter','the tube’s length alone','the ear'],'Source-filter technique.'],
+  ['How is one hiss told from another?','by where its band lies',['by its pitch','by its loudest note','by its period'],'Hiss-band technique.']];
+QP.push({id:'37f.spectral',step:'37f',label:'the spectral view',open:()=>measured('37f'),make(){ return writtenQ('37f.spectral',WF37); }},
+  {id:'37f.work',step:'37f',mode:'work',label:'tubes and windows',open:()=>measured('37f'),make(){
+    if(rnd(2)){ const c=pick([320,340,360,400]), L=pick([0.5,1,2]), b=c/(4*L), k=1+rnd(4);
+      return W30('37f.work[t;'+[c,L,k].join(';')+']',[['a tube '+L+' m long, closed at one end and open at the other','given'],['the speed of sound in it is '+c+' m/s','given']],'What is the favoured frequency number '+k+'?',((2*k-1)*b)+' Hz',[(k*b)+' Hz',(2*k*b)+' Hz',((2*k-1)*c/(2*L))+' Hz',((2*k+1)*b)+' Hz'],'Tube technique: (2k − 1)c/(4L), the odd multiples of '+b+' Hz.'); }
+    const T=pick([0.01,0.02,0.05,0.1,0.25]), r=Math.round(1/T);
+    return W30('37f.work[w;'+T+']',[['stretches of length '+T+' s','given']],'Two turnings closer than about how many Hz blur into one?',String(r),[String(T),String(2*r),String(r*r),String(Math.round(r/2))],'Window-trade technique: about one over T, which is '+r+' Hz for '+T+' s.'); }},
+  {id:'37f.line',step:'37f',mode:'proof',label:'what the spectral view licenses',open:()=>measured('37f'),make(){
+    return line28('37f.line',[
+      ['f1',[['a buzz passes through a filter','given'],['each harmonic has the buzz’s amount times the filter’s gain there','the source-filter technique']],2,0,'That is the technique.'],
+      ['f2',[['a voice’s formants move up','given'],['its pitch moves up','the source-filter technique']],2,1,'Pitch comes from the buzz; formants come from the tube.'],
+      ['f3',[['two turnings 5 Hz apart, seen in stretches of 0.05 s','given'],['they blur into one','the window-trade technique']],2,0,'1/T = 20 Hz, and 5 Hz is closer than that.'],
+      ['f4',[['a hiss sounds higher than another','given'],['it has a higher pitch','the hiss-band technique']],2,1,'A hiss has no pitch. Its band lies higher.']],[]); }});
+
+/* 37g A Sound Can Be a Name */
+const WG37=[
+  ['The letter and the note are spelled alike. Are they one name?','no: the matter at hand decides which thing a name names',['yes','yes, in music','no: they are never spelled alike'],'Sound-name technique.'],
+  ['Is a recording of “ah” the vowel “ah”?','no: it is a member of the set, not the set',['yes','yes, if it is clear','no: it is no member of it'],'Vowel-set technique.'],
+  ['Are 880 Hz and 440 Hz different notes?','no: they are two members of one note, A',['yes','yes, an octave apart','no: they are the same frequency'],'A note is a frequency with all its doublings and halvings.'],
+  ['Are two voicings of one chord the same sound?','not always: one chord, different recipes',['yes','yes, if they use the same notes','no: they are different chords'],'Voicing technique.'],
+  ['How is a property proved of every frequency in the note A?','prove it for 440, and prove that doubling and halving keep it',['check 440 alone','check every frequency by hand','prove it for 880'],'Octave-induction technique.'],
+  ['Has a vowel more members than the counting numbers?','yes',['no','no: it has one member','no: it has as many'],'Vowel-set technique.']];
+QP.push({id:'37g.name',step:'37g',label:'a sound can be a name',open:()=>measured('37g'),make(){ return writtenQ('37g.name',WG37); }},
+  {id:'37g.work',step:'37g',mode:'work',label:'members of a note',open:()=>measured('37g'),make(){
+    const f=pick([440,400,300,330,350]), k=pick([-2,-1,1,2,3]), m=f*Math.pow(2,k);
+    return W30('37g.work[n;'+[f,k].join(';')+']',[['the note N holds '+f+' Hz','and all its doublings and halvings']],'Which of these is in N?',m+' Hz',[(f*3/2)+' Hz',(f*3)+' Hz',(f+100)+' Hz',(f*3/4)+' Hz',(f*5/4)+' Hz'],'Octave-induction technique: N is '+f+' Hz with its doublings and halvings, and '+m+' = '+f+' · 2'+(k<0?'⁻':'')+'¹²³'[Math.abs(k)-1]+'.'); }},
+  {id:'37g.line',step:'37g',mode:'proof',label:'what sound names license',open:()=>measured('37g'),make(){
+    return line28('37g.line',[
+      ['g1',[['P holds at 440 Hz, and doubling and halving keep P','given'],['P holds at every frequency of the note A','the octave-induction technique']],2,0,'That is the technique.'],
+      ['g2',[['P holds at 440 Hz and at 880 Hz','given'],['P holds at every frequency of the note A','the octave-induction technique']],2,1,'Two members are not the step: doubling and halving must keep P.'],
+      ['g3',[['two voicings use the same notes','given'],['they are the same chord','the voicing technique']],2,0,'That is the technique.'],
+      ['g4',[['two voicings use the same notes','given'],['they are the same sound','the voicing technique']],2,1,'One chord, and the recipes may differ.']],[]); }});
+
+/* 37h Functions of Sound’s Own */
+const WH37=[
+  ['A filter weakens the top. Has it lost the top?','no: weakened can be undone; only a gain of 0 loses',['yes','yes, above the corner','no: it adds a top'],'Undo-filter technique.'],
+  ['Does a canceller take away every sound?','no: only what its past readings predict',['yes','yes, if it is fast','no: it takes none'],'Best-guess technique.'],
+  ['Can a limited recording be expanded back?','no: a limiter sends many levels to one',['yes','yes, with the same threshold','yes, by a compressor'],'Level-squeeze technique.'],
+  ['Two filters in a chain: do their gains add?','no: they multiply, turning by turning',['yes','yes, in decibels and in gains alike','no: the larger wins'],'Filters multiply each frequency.'],
+  ['When can a filter be undone exactly?','when its gain is nowhere 0',['always','never','when its gain is 1 somewhere'],'Undo-filter technique.'],
+  ['What undoes a compressor with a finite ratio?','the expander with the same threshold and ratio',['a limiter','a second compressor','nothing'],'Level-squeeze technique.']];
+QP.push({id:'37h.functions',step:'37h',label:'functions of sound',open:()=>measured('37h'),make(){ return writtenQ('37h.functions',WH37); }},
+  {id:'37h.work',step:'37h',mode:'work',label:'gains, corners and squeezes',open:()=>measured('37h'),make(){
+    const t=rnd(3);
+    if(t===0){ const a=pick([2,3,4,5]), b=pick([2,3,6]);
+      return W30('37h.work[g;'+[a,b].join(';')+']',[['filter F has gain '+fshow(fr(1,a))+' at 1000 Hz','given'],['filter G has gain '+fshow(fr(1,b))+' there','given']],'What gain has F then G at 1000 Hz?',fshow(fr(1,a*b)),[fshow(fr(1,a+b)),fshow(fr(2,a+b)),fshow(fr(1,Math.max(a,b))),String(a*b)],'Filters in a chain multiply their gains, turning by turning.'); }
+    if(t===1){ const k=1+rnd(3), fc=pick([100,200,500]);
+      return W30('37h.work[c;'+[k,fc].join(';')+']',[['a plainest low-pass filter with its corner at '+fc+' Hz','given']],'About how many dB does it take at '+fc*Math.pow(2,k)+' Hz?',String(3+6*k),[String(6*k),String(3*k),String(3+12*k),String(3)],'Filter-corner technique: about 3 dB at the corner, and about 6 dB more for each octave above: '+k+(k===1?' octave':' octaves')+' here.'); }
+    const r=pick([2,3,4]), x=r*(1+rnd(5)), th=pick([-20,-30]);
+    return W30('37h.work[q;'+[r,x].join(';')+']',[['a compressor with threshold −'+(-th)+' dB and ratio '+r+' : 1','given'],['the input is '+x+' dB above the threshold','given']],'How far above the threshold is the output?',(x/r)+' dB',[(x*r)+' dB',x+' dB',(x-r)+' dB','0 dB'],'Level-squeeze technique: above the threshold the level is divided by the ratio.'); }},
+  {id:'37h.line',step:'37h',mode:'proof',label:'what sound functions license',open:()=>measured('37h'),make(){
+    return line28('37h.line',[
+      ['h1',[['a filter H has gain nowhere 0','given'],['the filter with gain 1/H(f) undoes it','the undo-filter technique']],2,0,'That is the technique.'],
+      ['h2',[['a filter weakens everything above 4000 Hz','given'],['nothing above 4000 Hz can be got back','the undo-filter technique']],2,1,'Weakened is undoable. Only a gain of 0 loses.'],
+      ['h3',[['a recording has passed a limiter','given'],['the expander with the same threshold undoes it','the level-squeeze technique']],2,1,'A limiter cannot be undone: it sends many levels to one.'],
+      ['h4',[['a chain of gains and mixes','given'],['it does the same thing to each turning separately','the mixer technique']],2,0,'That is the technique.']],[]); }});
+
+/* 37i Rhythm, and Falling Into Step */
+const WI37=[
+  ['Does four against six meet once a bar?','no: 4 and 6 share 2; it is two against three twice, meeting twice',['yes','no: it never meets','yes, at the bar line only'],'Meet-once technique needs no shared divisor.'],
+  ['Have a rhythm and a chord nothing to do with each other?','no: one ratio at two speeds',['yes','yes, one is time and one is pitch','no: they are the same sound'],'Rhythm-is-pitch technique.'],
+  ['Do any two timekeepers that nudge each other lock?','no: only when |Δω| ≤ K',['yes','yes, given time','no: never'],'Lock-in technique.'],
+  ['Does locked mean in line, with no gap?','no: the gap is fixed, with sin φ* = Δω/K',['yes','yes, after a while','no: the gap grows'],'Lock-in technique.'],
+  ['When do three against two meet?','only at the start of the bar',['every beat','twice a bar','never'],'Meet-once technique.'],
+  ['A rhythm repeats every bar of length B. What is its rate?','1/B',['B','2/B','B²'],'Bar-rate technique.']];
+QP.push({id:'37i.rhythm',step:'37i',label:'rhythm and falling into step',open:()=>measured('37i'),make(){ return writtenQ('37i.rhythm',WI37); }},
+  {id:'37i.work',step:'37i',mode:'work',label:'onsets and meetings',open:()=>measured('37i'),make(){
+    if(rnd(2)){ const [p,q]=pick([[3,2],[4,3],[5,2],[5,3],[5,4],[7,2],[7,3],[7,4]]);
+      return W30('37i.work[o;'+[p,q].join(';')+']',[[p+' against '+q,'p and q share no divisor but 1']],'How many onsets does the bar hold?',String(p+q-1),[String(p+q),String(p*q),String(Math.max(p,q)),String(p+q-2)],'Meet-once technique: they share only the first onset, so '+p+' + '+q+' − 1.'); }
+    const g=pick([2,3]), [p,q]=pick([[3,2],[4,3],[3,1],[5,2]]);
+    return W30('37i.work[m;'+[g,p,q].join(';')+']',[[g*p+' against '+g*q,'in one bar']],'How many times a bar do the two parts meet?',String(g),['1',String(g*p),String(g*q),String(g*p*g*q)],'They share '+g+': it is '+p+' against '+q+', '+g+' times.'); }},
+  {id:'37i.line',step:'37i',mode:'proof',label:'what rhythm licenses',open:()=>measured('37i'),make(){
+    const K=pick([2,3,5]);
+    return line28('37i.line',[
+      ['i1',[['3 against 2','given'],['the two parts meet only at the start of the bar','the meet-once technique']],2,0,'3 and 2 share no divisor but 1.'],
+      ['i2',[['4 against 6','given'],['the two parts meet only at the start of the bar','the meet-once technique']],2,1,'4 and 6 share 2. They meet twice.'],
+      ['i3',[['two timekeepers nudge with strength '+K+', and |Δω| = '+(K-1),'given'],['they lock and keep one time','the lock-in technique']],2,0,'|Δω| ≤ K.'],
+      ['i4',[['two timekeepers nudge with strength '+K+', and |Δω| = '+(K+1),'given'],['they lock and keep one time','the lock-in technique']],2,1,'|Δω| is more than K. They do not lock.']],[K]); }});
+
+/* 37j Where It Keys In */
+const WJ37=[
+  ['Part of a signal is lost. Is the rest worthless?','no: partial loss of signal can still be analysed for partial induction of what was sent',['yes','yes, unless the loss is small','no: the whole can always be got back'],'Partly-told technique.'],
+  ['Part of a signal is lost. Can the whole always be got back?','no: only part can be told',['yes','yes, by filtering','yes, by a canceller'],'Partly-told technique: partial, not whole.'],
+  ['What does the partly-told technique license from a signal partly lost?','a partial induction of what was first sent',['the whole of what was sent','nothing','the lost part exactly'],'Partly-told technique.']];
+QP.push({id:'37j.keys',step:'37j',label:'where sound keys in',open:()=>measured('37j'),make(){ return writtenQ('37j.keys',WJ37); }},
+  {id:'37j.line',step:'37j',mode:'proof',label:'what a partial signal licenses',open:()=>measured('37j'),make(){
+    return line28('37j.line',[
+      ['j1',[['part of a signal is lost','given'],['what is left can be analysed for part of what was sent','the partly-told technique']],2,0,'That is the technique.'],
+      ['j2',[['part of a signal is lost','given'],['all of what was sent can be told from what is left','the partly-told technique']],2,1,'Partial loss gives partial induction only.']],[]); }});
 /* ===== Rung pools end ===== */
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
