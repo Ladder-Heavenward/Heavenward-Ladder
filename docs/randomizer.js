@@ -10646,6 +10646,469 @@ QP.push({id:'39q.counting',step:'39q',label:'counting steps by hand',open:()=>me
       ['q2',[['i doubles from 1 while i ≤ 1000','given'],['the loop runs 9.97 rounds','the halving-loop technique']],2,1,'Rounds are whole: ⌊log₂ 1000⌋ + 1 = 10.'],
       ['q3',[['a count of 3n² + 10⁶','given'],['it is in the family of n²','the largest-term technique']],2,0,'The term of highest rank.'],
       ['q4',[['T(n) = 3T(n/2) + n','given'],['T is n log n, like merge sort','the call-tree technique']],2,1,'Three calls: about n^1.585.']],[]); }});
+/* ----- rung 40: writing for the machine, 40a to 40l ----- */
+Object.assign(STEPS,{'40a':['r40a','Names for Numbers'],'40b':['r40b','Jumps Make Branches and Loops'],'40c':['r40c','A Name That Holds a Value'],'40d':['r40d','Calls and the Stack'],'40e':['r40e','Recursion Is Induction'],'40f':['r40f','A Program’s Promise'],'40g':['r40g','Loop Invariants'],'40h':['r40h','Types Catch Mistakes Before Running'],'40i':['r40i','Data Defined by Repeating'],'40j':['r40j','One Language Runs Another'],'40k':['r40k','Proving a Loop by Hand'],'40l':['r40l','Compiling by Hand']});
+const WD40=['STOP','LOAD','ADD','STORE','SUB','JZ','JMP'], N40=n=>String(n).replace('-','−'), GCD40=(a,b)=>b?GCD40(b,a%b):a;
+
+/* 40a Names for Numbers */
+const WA40=[
+  ['Does LOAD x load the letter x?','no: x is a name for a cell; the line loads the number held there',['yes','yes, as a number','no: it loads the cell’s address'],'Names stand for cells.'],
+  ['Does a label take a cell?','no: a label marks a place; it is not a line and gets no number',['yes','yes, the cell before its line','yes, the last cell'],'A label names the address of the line it stands before.'],
+  ['Does assembling change what the program does?','no: each line becomes the one number it names',['yes','yes, it speeds it up','only the jumps change'],'Two-pass technique.'],
+  ['What does the first pass of the assembler fix?','one address for each label',['the number of each line','the run of the program','the names of the cells'],'Two-pass technique.'],
+  ['Which number does the line “word n” name?','100d + n, where d is the word’s digit',['d + n','10d + n','n'],'Word-for-number technique.'],
+  ['How many first digits can one word stand for?','exactly one',['any','two','none'],'Word-for-number technique.']];
+QP.push({id:'40a.assembly',step:'40a',label:'names for numbers',open:()=>measured('40a'),make(){ return writtenQ('40a.assembly',WA40); }},
+  {id:'40a.work',step:'40a',mode:'work',label:'lines into numbers',open:()=>measured('40a'),make(){
+    const d=1+rnd(6), n=10+rnd(90), w=WD40[d];
+    return W30('40a.work[w;'+[d,n].join(';')+']',[['STOP 0, LOAD 1, ADD 2, STORE 3, SUB 4, JZ 5, JMP 6','the words'],['the line “'+w+' '+n+'”','given']],'Which instruction number does it name?',String(100*d+n),[String(100*((d%6)+1)+n),String(n),String(10*d+n),String(d+n)],'Word-for-number technique: 100 · '+d+' + '+n+'.'); }},
+  {id:'40a.line',step:'40a',mode:'proof',label:'what assembly licenses',open:()=>measured('40a'),make(){
+    const n=10+rnd(90);
+    return line28('40a.line',[
+      ['a1',[['LOAD stands for 1','the words'],['“LOAD '+n+'” is '+(100+n),'the word-for-number technique']],2,0,'100 · 1 + '+n+'.'],
+      ['a2',[['STORE stands for 3','the words'],['“STORE '+n+'” is '+(30+n),'the word-for-number technique']],2,1,'It is 100 · 3 + '+n+' = '+(300+n)+'.'],
+      ['a3',[['“top:” stands before cell 0','a label'],['top takes cell 0, and the next line takes cell 1','the two-pass technique']],2,1,'A label takes no cell. The line after it is cell 0.'],
+      ['a4',[['a program is assembled','the two-pass technique'],['it runs as the numbers its lines name','the two-pass technique']],2,0,'Assembling changes nothing the program does.']],[n]); }});
+
+/* 40b Jumps Make Branches and Loops */
+const WB40=[
+  ['Does JZ end jump when A ≠ 0?','no: it jumps when A is 0',['yes','yes, and when A is 0','no: it never jumps'],'JZ is jump if zero.'],
+  ['Does a while run its body at least once?','no: the test is at the top; the body may run no times',['yes','yes, before the test','no: it runs it twice'],'A while tests at the top.'],
+  ['Does rewriting every flow chart into the three shapes need no new cell?','no: the proof keeps the box number in an extra cell',['right: none','it needs one cell per box','it needs no cells at all'],'The rewrite keeps a box number.'],
+  ['In the if shape, how many of P and Q run?','exactly one, and then the program goes on at end',['both','neither','one or both'],'Branch technique.'],
+  ['How is a while built from jumps?','a test at the top, and a jump back at the bottom',['a jump at the top only','two tests at the bottom','one jump that skips'],'Jumps make loops.'],
+  ['How is an if built from jumps?','one jump that skips',['a jump back at the bottom','a call and a return','no jump at all'],'Jumps make branches.']];
+QP.push({id:'40b.jumps',step:'40b',label:'jumps make branches and loops',open:()=>measured('40b'),make(){ return writtenQ('40b.jumps',WB40); }},
+  {id:'40b.work',step:'40b',mode:'work',label:'how often a while runs',open:()=>measured('40b'),make(){
+    const k=2+rnd(3), q=rnd(6), N=k*q, z=q===0;
+    return W30('40b.work[w;'+[N,k].join(';')+']',[['n ← '+N+'; while n ≠ 0: n ← n − '+k,'given']],'How many times does the body run?',String(q),[String(q+1),String(z?k:N),String(q>1?q-1:q+2),String(q+3)],z?'The test is at the top and fails at once: no times.':'Each turn takes '+k+' off, and the test fails after '+q+(q===1?' turn.':' turns.')); }},
+  {id:'40b.line',step:'40b',mode:'proof',label:'what jumps license',open:()=>measured('40b'),make(){
+    return line28('40b.line',[
+      ['b1',[['if B then P else Q, built with one skipping jump','given'],['exactly one of P and Q runs, then end','the branch technique']],2,0,'That is the technique.'],
+      ['b2',[['while B do c, and B is false at the start','given'],['c runs once','the while shape']],2,1,'The test is at the top. The body runs no times.'],
+      ['b3',[['A holds 7 and the line is JZ end','given'],['the run jumps to end','JZ']],2,1,'JZ jumps when A is 0.']],[]); }});
+
+/* 40c A Name That Holds a Value */
+const WC40=[
+  ['Does x ← x + 1 say x = x + 1?','no: the step changes x; the sameness is totally false',['yes','yes, after the step','no: it says x = 1'],'Assignment technique.'],
+  ['Does x ← y; y ← x swap x and y?','no: after the first step the old x is gone; a third box is needed',['yes','yes, in one turn','no: it sets both to 0'],'Assignment technique.'],
+  ['Can two steps be run in either order?','not in general: each step reads the state the one before left',['yes','yes, if they are short','no: never'],'The state changes step by step.'],
+  ['What does the step x ← e change?','x, and nothing else',['every name in e','x and e','nothing'],'Assignment technique.'],
+  ['What is the new value of x after x ← e?','the value e had before the step',['the value e has after the step','the old value of x','0'],'Assignment technique.'],
+  ['What is a program’s state?','what its names hold now',['its text','its first line','its last answer'],'Each step changes the state.']];
+QP.push({id:'40c.assign',step:'40c',label:'a name that holds a value',open:()=>measured('40c'),make(){ return writtenQ('40c.assign',WC40); }},
+  {id:'40c.work',step:'40c',mode:'work',label:'running assignments',open:()=>measured('40c'),make(){
+    const a=1+rnd(9), b=1+rnd(9), k=rnd(3), P=[['x ← x + y','y ← x − y','x ← x − y'],['x ← y','y ← x','x ← x + 1'],['x ← x + y','y ← x + y','x ← y − x']][k];
+    let s={x:a,y:b}; const run=(st,stp)=>{ const [v,e]=stp.split(' ← '); const r=Function('x','y','return '+e.replace('−','-'))(st.x,st.y); return Object.assign({},st,{[v]:r}); };
+    P.forEach(p=>{ s=run(s,p); }); let o={x:a,y:b}; P.forEach(p=>{ const t=run({x:a,y:b},p); const v=p[0]; o[v]=t[v]; });
+    const S=t=>'x = '+N40(t.x)+', y = '+N40(t.y);
+    return W30('40c.work[r;'+[a,b,k].join(';')+']',[['x = '+a+' and y = '+b,'the state'],[P.join('; '),'the steps, in order']],'What do x and y hold after the three steps?',S(s),[S(o),S({x:a,y:b}),S({x:s.y,y:s.x}),S({x:s.x+1,y:s.y})],'Assignment technique: each step reads the state the one before left.'); }},
+  {id:'40c.line',step:'40c',mode:'proof',label:'what assignment licenses',open:()=>measured('40c'),make(){
+    const a=1+rnd(9), b=a+1+rnd(5);
+    return line28('40c.line',[
+      ['c1',[['x = '+a+' and y = '+b,'the state'],['after x ← y, x = '+b+' and y = '+b,'the assignment technique']],2,0,'x takes the value y had, and y is unchanged.'],
+      ['c2',[['x = '+a+' and y = '+b,'the state'],['after x ← y; y ← x, x = '+b+' and y = '+a,'the assignment technique']],2,1,'After the first step the old x is gone: y ← x gives y = '+b+'.'],
+      ['c3',[['x = '+a,'the state'],['after x ← x + 1, x = '+(a+1),'the assignment technique']],2,0,'The new x is the value x + 1 had before.']],[a,b]); }});
+
+/* 40d Calls and the Stack */
+const WDD40=[
+  ['Does RET go to the start of the caller?','no: it goes to the line after the call, the address on top of the pile',['yes','yes, to its first line','no: to the start of the program'],'A return pops the way back.'],
+  ['Does a function that calls itself never stop?','not always: fact stops when it reaches its start case, 0',['yes','yes, it runs forever','no: it never calls itself'],'Defining by repeating has a start.'],
+  ['Does every call of fact share one n?','no: each call keeps its own n on the pile',['yes','yes, in one cell','no: none has an n'],'Own-names technique.'],
+  ['What does a call push?','where to come back',['the answer','the program','nothing'],'A call pushes the way back.'],
+  ['In what order do returns come?','in reverse order of the calls: last in, first out',['in the order of the calls','at random','all at once'],'The pile.'],
+  ['Can a call change a name of a call that is waiting for it?','no',['yes','yes, the n of the caller','only the last call'],'Own-names technique.']];
+QP.push({id:'40d.stack',step:'40d',label:'calls and the stack',open:()=>measured('40d'),make(){ return writtenQ('40d.stack',WDD40); }},
+  {id:'40d.work',step:'40d',mode:'work',label:'how deep the pile gets',open:()=>measured('40d'),make(){
+    const n=2+rnd(6), F=[1,1,2,6,24,120,720,5040][n];
+    if(rnd(2)) return W30('40d.work[d;'+n+']',[['fact(n): if n = 0, give 1; otherwise give n · fact(n − 1)','given']],'How many ways back are on the pile at once, at the deepest, for fact('+n+')?',String(n+1),[String(n),String(n-1),String(F),String(2*n)],'fact('+n+') calls down to fact(0): '+(n+1)+' calls wait at once.');
+    return W30('40d.work[v;'+n+']',[['fact(n): if n = 0, give 1; otherwise give n · fact(n − 1)','given']],'What is fact('+n+')?',String(F),[String(n*(n+1)/2),String(n*n),String(F/n),String(F*(n+1))],'Each return multiplies: '+[...Array(n)].map((_,i)=>n-i).join(' · ')+'.'); }},
+  {id:'40d.line',step:'40d',mode:'proof',label:'what calls license',open:()=>measured('40d'),make(){
+    return line28('40d.line',[
+      ['d1',[['fact(3) calls fact(2), which is running','given'],['fact(3)’s n is still 3','the own-names technique']],2,0,'Each call keeps its own n on the pile.'],
+      ['d2',[['fact(3) calls fact(2)','given'],['fact(3)’s n is now 2','the own-names technique']],2,1,'Each call keeps its own n. fact(2) changes nothing of fact(3)’s.'],
+      ['d3',[['f calls g at line 12','given'],['g’s RET goes to line 13','the pile']],2,0,'The line after the call.']],[]); }});
+
+/* 40e Recursion Is Induction */
+const WE40=[
+  ['To prove fact(n) right, may fact(n) be assumed right?','no: that is circular; assume it only on smaller inputs',['yes','yes, for every n','yes, at the start case'],'Recursion is induction.'],
+  ['Must the input itself fall at every call?','no: any whole-number measure will do, as b does for gcd',['yes','yes, the first input','no: nothing must fall'],'Falling-measure technique.'],
+  ['Does a falling run of fractions stop?','no: 1, 1/2, 1/4, … falls for ever; the measure must be a whole number',['yes','yes, at 0','yes, after ten calls'],'Falling-measure technique.'],
+  ['What is the measure for gcd(a, b)?','b, which falls because a remainder is less than its divisor',['a','a + b','the number of calls'],'Falling-measure technique.'],
+  ['Is the falling-measure technique a test to run on any program?','no: it is a tool to use; for some functions no measure is known',['yes','yes, it always finds one','no: it never works'],'Falling-measure technique.'],
+  ['To prove a function that calls itself right, what is assumed?','that it is right on smaller inputs',['that it is right on every input','that it stops','nothing'],'Recursion is induction.']];
+QP.push({id:'40e.induction',step:'40e',label:'recursion is induction',open:()=>measured('40e'),make(){ return writtenQ('40e.induction',WE40); }},
+  {id:'40e.work',step:'40e',mode:'work',label:'the measure for gcd',open:()=>measured('40e'),make(){
+    let a=10+rnd(80), b=2+rnd(30); if(a<b) [a,b]=[b,a]; const M=[]; let x=a, y=b; while(y){ M.push(y); [x,y]=[y,x%y]; } M.push(0);
+    return W30('40e.work[g;'+[a,b].join(';')+']',[['gcd(a, b): if b = 0, give a; otherwise give gcd(b, r), r the remainder of a by b','given']],'Which run of measures b does gcd('+a+', '+b+') pass through?',M.join(', '),[[a,...M].join(', '),M.slice(0,-1).join(', '),M.map(v=>v+1).join(', '),[b,a%b,0].join(', ')].filter(x=>x!==M.join(', ')),'Falling-measure technique: b falls at each call, '+M.join(', ')+'; gcd = '+x+'.'); }},
+  {id:'40e.line',step:'40e',mode:'proof',label:'what falling measures license',open:()=>measured('40e'),make(){
+    return line28('40e.line',[
+      ['e1',[['each call of gcd(a, b) is on (b, r), with r < b','given'],['every run of gcd stops','the falling-measure technique']],2,0,'b is a whole number that falls at every call.'],
+      ['e2',[['the measure at each call is half the last, starting at 1','given'],['every run stops','the falling-measure technique']],2,1,'The measure must be a whole number. 1, 1/2, 1/4, … falls for ever.'],
+      ['e3',[['fact(n − 1) is right','supposed, a smaller input'],['fact(n) = n · fact(n − 1) is right','recursion is induction']],2,0,'Assume it on smaller inputs only.']],[]); }});
+
+/* 40f A Program’s Promise */
+const WF40=[
+  ['Does {P} x ← e {P[e/x]} hold?','no: that runs the technique forwards; from x = 0, x ← 5 would promise 5 = 0 after',['yes','yes, for whole numbers','no: it is {P} x ← e {P}'],'Backwards-assignment technique.'],
+  ['Does {P} c {Q} say that c stops?','no: it promises Q only if c stops; stopping is proved apart',['yes','yes, and that Q holds','no: it says c never stops'],'A promise is about runs that end.'],
+  ['From {P} c {Q}, may {Q} c {P} be written?','no: a program does not run backwards',['yes','yes, if c is short','yes, if P = Q'],'Promises run one way.'],
+  ['What must hold before x ← e for Q to hold after?','Q with e put in place of x',['Q itself','Q with x put in place of e','nothing'],'Backwards-assignment technique.'],
+  ['From {P} c₁ {R} and {R} c₂ {Q}, what is written?','{P} c₁; c₂ {Q}',['{R} c₁; c₂ {R}','{Q} c₂; c₁ {P}','{P} c₂ {Q}'],'Sequence technique.'],
+  ['P′ ⇒ P, {P} c {Q} and Q ⇒ Q′. What is written?','{P′} c {Q′}',['{P} c {Q′} only','{Q′} c {P′}','{P′} c {Q} only'],'Consequence technique.']];
+QP.push({id:'40f.promise',step:'40f',label:'a program’s promise',open:()=>measured('40f'),make(){ return writtenQ('40f.promise',WF40); }},
+  {id:'40f.work',step:'40f',mode:'work',label:'reading assignment backwards',open:()=>measured('40f'),make(){
+    const k=1+rnd(6), c=k+rnd(10), op=pick(['>','<','=']), m=rnd(2);
+    if(m) return W30('40f.work[p;'+[k,c,op].join(';')+']',[['{P} x ← x + '+k+' {x '+op+' '+c+'}','given']],'Which P does the backwards-assignment technique give?','x + '+k+' '+op+' '+c,['x '+op+' '+(c+k),'x '+op+' '+c,'x − '+k+' '+op+' '+c,'x + '+k+' '+op+' '+(c+k)],'Put x + '+k+' in every gap marked x: x + '+k+' '+op+' '+c+', that is x '+op+' '+(c-k)+'.');
+    return W30('40f.work[d;'+[k,c,op].join(';')+']',[['{P} x ← 2x {x '+op+' '+(2*c)+'}','given']],'Which P does the backwards-assignment technique give?','2x '+op+' '+(2*c),['x '+op+' '+(4*c),'x '+op+' '+(2*c),'x/2 '+op+' '+(2*c),'2x '+op+' '+c],'Put 2x in every gap marked x.'); }},
+  {id:'40f.line',step:'40f',mode:'proof',label:'what promises license',open:()=>measured('40f'),make(){
+    const k=1+rnd(6), c=k+rnd(10);
+    return line28('40f.line',[
+      ['f1',[['the goal after x ← x + '+k+' is x > '+c,'given'],['{x + '+k+' > '+c+'} x ← x + '+k+' {x > '+c+'}','the backwards-assignment technique']],2,0,'Q with x + '+k+' in x’s place.'],
+      ['f2',[['x = 0 before','given'],['{x = 0} x ← 5 {5 = 0}','the backwards-assignment technique']],2,1,'That runs the technique forwards. The technique reads backwards from the goal.'],
+      ['f3',[['{P} c₁ {R} and {R} c₂ {Q}','given'],['{P} c₁; c₂ {Q}','the sequence technique']],2,0,'That is the technique.'],
+      ['f4',[['{P} c {Q}','given'],['c stops from every state where P holds','the consequence technique']],2,1,'A promise says nothing of stopping. Stopping is proved apart.']],[k,c]); }});
+
+/* 40g Loop Invariants */
+const WG40=[
+  ['Does the invariant hold in the middle of the body?','not necessarily: only at the top of each turn; between two steps it may fail',['yes','yes, at every step','no: never'],'While technique.'],
+  ['Does an invariant prove the loop stops?','no: stopping needs a falling whole number',['yes','yes, with ¬B','no: nothing proves it'],'Invariants promise, measures stop.'],
+  ['Is x = x a fine invariant?','no: it is kept, but with ¬B it gives nothing; the invariant must give the goal at the end',['yes','yes, it always holds','no: it is not kept'],'While technique.'],
+  ['From {I ∧ B} c {I}, what is written?','{I} while B do c {I ∧ ¬B}',['{I} while B do c {I ∧ B}','{I} c {¬B}','{B} while B do c {I}'],'While technique.'],
+  ['What three duties does an invariant have?','it holds at the start, survives every turn, and with the failed test gives the goal',['it holds at the end only','it falls each turn','it is true before the program'],'Loop invariants.'],
+  ['What makes a loop stop?','a whole number that falls each turn',['an invariant','a test at the top','a jump back'],'A falling measure.']];
+QP.push({id:'40g.invariant',step:'40g',label:'loop invariants',open:()=>measured('40g'),make(){ return writtenQ('40g.invariant',WG40); }},
+  {id:'40g.work',step:'40g',mode:'work',label:'invariants at the end',open:()=>measured('40g'),make(){
+    const n=3+rnd(10), k=rnd(2);
+    if(k) return W30('40g.work[s;'+n+']',[['s ← 0; i ← 0; while i < '+n+': i ← i + 1; s ← s + i','given'],['invariant: s = i(i + 1)/2','kept each turn']],'What does s hold when the loop ends?',String(n*(n+1)/2),[String(n*n),String((n-1)*n/2),String(n),String(n*(n+1))],'With ¬B, i = '+n+', so s = '+n+' · '+(n+1)+'/2.');
+    const b=2+rnd(3);
+    return W30('40g.work[p;'+[n,b].join(';')+']',[['p ← 1; i ← 0; while i < '+n+': p ← p · '+b+'; i ← i + 1','given'],['invariant: p = '+b+'^i','kept each turn']],'What does p hold when the loop ends?',b+'^'+n,[b+'^'+(n-1),b+'^'+(n+1),String(b*n),n+'^'+b],'With ¬B, i = '+n+', so p = '+b+'^'+n+'.'); }},
+  {id:'40g.line',step:'40g',mode:'proof',label:'what invariants license',open:()=>measured('40g'),make(){
+    return line28('40g.line',[
+      ['g1',[['{I ∧ B} c {I}','given'],['{I} while B do c {I ∧ ¬B}','the while technique']],2,0,'That is the technique.'],
+      ['g2',[['{I ∧ B} c {I}','given'],['while B do c stops','the while technique']],2,1,'An invariant does not prove stopping. A falling whole number does.'],
+      ['g3',[['{I ∧ B} c {I}','given'],['{I} while B do c {I ∧ B}','the while technique']],2,1,'At the end the test has failed: I ∧ ¬B.']],[]); }});
+
+/* 40h Types Catch Mistakes Before Running */
+const WH40=[
+  ['A program passes the type check. Is it correct?','not necessarily: the check rules out values of the wrong kind, not wrong answers',['yes','yes, for every input','no: it is wrong'],'Type-check technique.'],
+  ['Does the type check run the program?','no: it reads each line once; nothing is run',['yes','yes, once','yes, on every input'],'Types are checked by reading.'],
+  ['Is x ← x + true fine, since true is 1?','no: a typed program keeps the kinds apart',['yes','yes, x becomes x + 1','no: true is 0'],'Type-check technique.'],
+  ['What is a type?','the set a name may hold',['a name’s value','a line of the program','a kind of loop'],'Types.'],
+  ['A program passes the check and every name starts with a value of its type. What follows?','no run hands an operation a value outside the types it takes',['every run gives the right answer','every run stops','nothing'],'Type-check technique.'],
+  ['When are type mistakes caught?','before running, by reading',['during the run','after the run','never'],'Types catch mistakes before running.']];
+const TY40=[['x + y','a whole number'],['x < y','true or false'],['b and c','true or false'],['x + b','rejected by the check'],['not x','rejected by the check'],['x · y + 1','a whole number'],['(x < y) and b','true or false'],['b + 1','rejected by the check'],['x = y','true or false'],['not b','true or false']];
+QP.push({id:'40h.types',step:'40h',label:'types catch mistakes',open:()=>measured('40h'),make(){ return writtenQ('40h.types',WH40); }},
+  {id:'40h.work',step:'40h',mode:'work',label:'checking types by reading',open:()=>measured('40h'),make(){
+    const [e,t]=pick(TY40);
+    return W30('40h.work[t;'+e+']',[['x and y hold whole numbers; b and c hold true or false','the types']],'What type has '+e+'?',t,['a whole number','true or false','rejected by the check','a list'],'Type-check technique: +, < and not each take their own kinds.'); }},
+  {id:'40h.line',step:'40h',mode:'proof',label:'what types license',open:()=>measured('40h'),make(){
+    return line28('40h.line',[
+      ['h1',[['a program passes the check, and every name starts with a value of its type','given'],['no run hands + a value of true or false','the type-check technique']],2,0,'That is the technique.'],
+      ['h2',[['a program passes the check','given'],['every run gives the right answer','the type-check technique']],2,1,'The check rules out wrong kinds, not wrong answers.'],
+      ['h3',[['x holds a whole number','its type'],['x ← x + true passes the check','true is 1 on the wire']],2,1,'A typed program keeps the kinds apart.']],[]); }});
+
+/* 40i Data Defined by Repeating */
+const WI40=[
+  ['A claim holds for lists of length 1, 2 and 3. Does it hold for all?','not by that: three cases are not a proof; the step must hold for every t',['yes','yes, by shape induction','no: it fails at 4'],'Shape-induction technique.'],
+  ['Can a list hold itself?','no: every list is built in finitely many steps, so none is its own part',['yes','yes, if it is long','only the empty list'],'Lists are built by repeating.'],
+  ['In the step, may the claim be assumed for h in front of t?','no: that is the goal; assume it only for t',['yes','yes, and for t','no: assume nothing'],'Shape-induction technique.'],
+  ['What is a list?','empty, or a number in front of a list',['a row of cells','a number','a pair of lists'],'Data defined by repeating.'],
+  ['What two things does shape induction prove?','the claim for the empty list, and for h in front of t whenever it holds for t',['the claim for length 1 and length 2','the claim for the longest list','the claim for every number h'],'Shape-induction technique.'],
+  ['How is a function on lists written?','one line for empty, one for a number in front',['one line for each length','one line in all','a loop over cells'],'Write the function as the data is built.']];
+QP.push({id:'40i.lists',step:'40i',label:'data defined by repeating',open:()=>measured('40i'),make(){ return writtenQ('40i.lists',WI40); }},
+  {id:'40i.work',step:'40i',mode:'work',label:'functions by shape',open:()=>measured('40i'),make(){
+    const L=[...Array(2+rnd(4))].map(()=>1+rnd(9)), f=pick(['len','sum','double']), S='['+L.join(', ')+']';
+    const D={len:['len([]) = 0; len(h : t) = 1 + len(t)',String(L.length),[String(L.reduce((a,b)=>a+b,0)),String(L.length+1),String(L.length-1),String(L[0])]],sum:['sum([]) = 0; sum(h : t) = h + sum(t)',String(L.reduce((a,b)=>a+b,0)),[String(L.length),String(L[0]),String(L.reduce((a,b)=>a+b,0)-L[0]),String(L.reduce((a,b)=>a*b,1))]],double:['dbl([]) = []; dbl(h : t) = 2h : dbl(t)','['+L.map(x=>2*x).join(', ')+']',['['+L.map(x=>2*x).slice(1).join(', ')+']','['+L.join(', ')+', '+L.join(', ')+']','['+[2*L[0],...L.slice(1)].join(', ')+']',S]]}[f];
+    return W30('40i.work['+[f,L.join(',')].join(';')+']',[[D[0],'defined by shape']],'What does '+(f==='double'?'dbl':f)+'('+S+') give?',D[1],D[2],'One line for empty, one for a number in front, run down the list.'); }},
+  {id:'40i.line',step:'40i',mode:'proof',label:'what shape induction licenses',open:()=>measured('40i'),make(){
+    return line28('40i.line',[
+      ['i1',[['len(dbl(l)) = len(l) for l = []','checked'],['len(dbl(h : t)) = len(h : t) whenever len(dbl(t)) = len(t)','checked'],['len(dbl(l)) = len(l) for every list l','the shape-induction technique']],3,0,'Empty, and the step for every t.'],
+      ['i2',[['the claim holds for lists of length 1, 2 and 3','checked'],['the claim holds for every list','the shape-induction technique']],2,1,'Three cases are not a proof. The step must hold for every t.'],
+      ['i3',[['the claim for h in front of t','supposed'],['the claim for h in front of t','the shape-induction step']],2,1,'That is the goal. Assume the claim only for t.']],[]); }});
+
+/* 40j One Language Runs Another */
+const WJ40=[
+  ['Does an interpreter first turn the program into numbers?','no: it runs from the program held as data; translating first is compiling',['yes','yes, line by line','no: it runs nothing'],'Interpreters and compilers.'],
+  ['Does a right compiler give the numbers a person would?','not necessarily: it must keep the runs, not match anyone’s numbers',['yes','yes, exactly','no: it gives none'],'Compiling-keeps-runs technique.'],
+  ['Did the first compiler compile itself?','no: nothing ran it yet; it was written below, in a language that already ran',['yes','yes, twice','no: it was never compiled'],'A language runs on one that already runs.'],
+  ['When is a translation right?','when every run of the result is a run of the source',['when it is short','when it matches a person’s numbers','when it is fast'],'Compiling-keeps-runs technique.'],
+  ['If each shape, compiled from compiled parts, runs as the shape does, what follows?','every compiled program runs as its source does',['the compiler is fast','the source is right','nothing'],'Compiling-keeps-runs technique.'],
+  ['What does a compiler do?','translates a program',['runs a program held as data','checks types only','stores data'],'One language runs another.']];
+QP.push({id:'40j.compile',step:'40j',label:'one language runs another',open:()=>measured('40j'),make(){ return writtenQ('40j.compile',WJ40); }},
+  {id:'40j.line',step:'40j',mode:'proof',label:'what compiling licenses',open:()=>measured('40j'),make(){
+    return line28('40j.line',[
+      ['j1',[['each shape, compiled from compiled parts, runs as the shape does','checked'],['every compiled program runs as its source does','the compiling-keeps-runs technique']],2,0,'That is the technique.'],
+      ['j2',[['a compiler’s numbers differ from a person’s','given'],['the compiler is wrong','the compiling-keeps-runs technique']],2,1,'It must keep the runs, not match anyone’s numbers.']],[]); }});
+
+/* 40k Proving a Loop by Hand */
+const WK40=[
+  ['May the invariant be checked once, at the start?','no: all three duties are needed: start, keep and finish',['yes','yes, and at the end','no: only at the end'],'Proving a loop by hand.'],
+  ['May the falling number be n + i, with i rising?','no: it rises; the measure must fall each turn',['yes','yes, if n is fixed','no: it must be i'],'A falling measure.'],
+  ['A guess fails one duty. What next?','mend the guess and check again',['drop the loop','check it once more unchanged','assume it'],'Loosen, check, mend.'],
+  ['What is named last?','the number that falls',['the invariant','the goal','the test'],'Proving a loop by hand.']];
+const MS40=[['i ← 0; while i < n: i ← i + 1','n − i'],['j ← n; while j > 0: j ← j − 1','j'],['while b ≠ 0: (a, b) ← (b, a mod b)','b'],['k ← 1; while k < n: k ← 2k','n − k']];
+QP.push({id:'40k.byhand',step:'40k',label:'proving a loop by hand',open:()=>measured('40k'),make(){ return writtenQ('40k.byhand',WK40); }},
+  {id:'40k.work',step:'40k',mode:'work',label:'naming the number that falls',open:()=>measured('40k'),make(){
+    const [L,m]=pick(MS40);
+    return W30('40k.work[m;'+m+']',[[L,'a loop']],'Which whole number falls each turn?',m,['n − i','j','b','n − k','n + i','i','n'],'It is a whole number, it falls each turn, and the loop stops when it can fall no more.'); }},
+  {id:'40k.line',step:'40k',mode:'proof',label:'what hand proofs license',open:()=>measured('40k'),make(){
+    return line28('40k.line',[
+      ['k1',[['the guess holds at the start and is kept by each turn','checked'],['with the failed test it gives the goal','checked'],['the loop meets its promise, if it stops','the while technique']],3,0,'All three duties.'],
+      ['k2',[['the guess holds at the start','checked'],['the loop meets its promise','the while technique']],2,1,'All three duties are needed: start, keep and finish.'],
+      ['k3',[['i rises by 1 each turn while i < n','given'],['n + i falls each turn','a falling measure']],2,1,'n + i rises. n − i falls.']],[]); }});
+
+/* 40l Compiling by Hand */
+const WL40=[
+  ['Compiling while n ≠ 0, should the test jump to top?','no: the test leaves the loop when n is 0; it must jump to done',['yes','yes, then to done','no: to the body'],'Compiling by hand.'],
+  ['May JMP top be left out?','no: then the body runs once and falls through to done',['yes','yes, if the body is short','no: it must be JZ top'],'The while shape needs the jump back.'],
+  ['What does each name get?','a cell',['a label','a word','a jump'],'A cell for each name.'],
+  ['How is the compiled program checked?','by running both and comparing',['by reading it once','by counting its lines','by its first number'],'Compiling by hand.']];
+QP.push({id:'40l.byhand',step:'40l',label:'compiling by hand',open:()=>measured('40l'),make(){ return writtenQ('40l.byhand',WL40); }},
+  {id:'40l.line',step:'40l',mode:'proof',label:'what hand compiling licenses',open:()=>measured('40l'),make(){
+    return line28('40l.line',[
+      ['l1',[['top: LOAD n','the test'],['JZ done','leave the loop when n is 0']],2,0,'The test jumps out to done.'],
+      ['l2',[['top: LOAD n','the test'],['JZ top','leave the loop when n is 0']],2,1,'It must jump to done.'],
+      ['l3',[['the body of the while, compiled','given'],['done: STOP','straight after the body, with no JMP top']],2,1,'Without JMP top the body runs once and falls through to done.']],[]); }});
+/* ----- rung 41: what machines can and cannot do, 41a to 41l ----- */
+Object.assign(STEPS,{'41a':['r41a','Machines With a Tape'],'41b':['r41b','Other Machines, the Same Reach'],'41c':['r41c','One Machine Runs Them All'],'41d':['r41d','No Machine Decides Stopping'],'41e':['r41e','Undecidable Everywhere'],'41f':['r41f','Programs That Print Themselves'],'41g':['r41g','Smaller Machines'],'41h':['r41h','How Long and How Much Room'],'41i':['r41i','Chance in Computing'],'41j':['r41j','Machines That Read a Tape, by Hand'],'41k':['r41k','Reductions by Hand'],'41l':['r41l','Convincing Without Telling']});
+const ST41=(n,w)=>n+' '+w+(n===1?'':'s');
+/* a configuration: the stretch of tape that is not blank, with the state just before the head's cell */
+const CF41=(tp,h,st)=>{ let lo=h, hi=h; tp.forEach((m,i)=>{ if(m){ lo=Math.min(lo,i); hi=Math.max(hi,i); } }); const o=[]; for(let i=lo;i<=hi;i++){ if(i===h) o.push(st); o.push(String(tp[i])); } return o.join(' '); };
+
+/* 41a Machines With a Tape */
+const WA41=[
+  ['How many next configurations has a configuration whose state is not a stop state?','exactly one, found by looking at one cell',['two, one for each mark','one for each state','none until the run ends'],'One-next technique.'],
+  ['When is a set decided by a machine?','exactly when the set and the strings outside it are both listed',['when the set is listed','when the strings outside it are listed','when a machine has run a long time on each string'],'Both-sides technique.'],
+  ['Does a machine with two tapes compute more than one with one tape?','no: one tape computes the same functions, more slowly',['yes','yes, twice as much','no: it computes fewer'],'Tracks technique.'],
+  ['Is the thesis that tape machines compute whatever a recipe computes proved?','no: it is about the loose word “recipe”, which no proof touches',['yes, by the tracks technique','yes, by the one-next technique','no: it is known to be false'],'The thesis is not a technique.'],
+  ['A machine lists A and has run a long time on w without listing it. Is w outside A?','not necessarily: w may still be listed later',['yes','yes, after a thousand steps','no: w is in A'],'A lister never says no.'],
+  ['What does one step of a tape machine do?','reads one cell, writes one mark, steps one cell and changes state by a finite table',['reads the whole tape','writes a whole line','changes every cell it has read'],'Machines with a tape.']];
+QP.push({id:'41a.tape',step:'41a',label:'machines with a tape',open:()=>measured('41a'),make(){ return writtenQ('41a.tape',WA41); }},
+  {id:'41a.work',step:'41a',mode:'work',label:'the cost of one tape',open:()=>measured('41a'),make(){
+    const t=2+rnd(9), n=2+rnd(9);
+    return W30('41a.work[t;'+[t,n].join(';')+']',[['a machine with three tapes takes '+t+' steps on an input of '+n+' letters','given']],'At most about how many steps does the one-tape machine take?',String(t*(n+t)),[String(t*n),String(t+n),String((n+t)*(n+t)),String(t*t),String(3*t)],'Tracks technique: t(n + t) = '+t+' · '+(n+t)+'.'); }},
+  {id:'41a.line',step:'41a',mode:'proof',label:'what tape machines license',open:()=>measured('41a'),make(){
+    return line28('41a.line',[
+      ['a1',[['a machine lists A, and a machine lists the strings outside A','given'],['a machine decides A','the both-sides technique']],2,0,'Run the two listers side by side until w turns up in one.'],
+      ['a2',[['a machine lists A, and has run long on w without listing it','given'],['w is not in A','the both-sides technique']],2,1,'A lister alone never says no. The technique needs a lister for the outside too.'],
+      ['a3',[['a machine with two tapes computes f','given'],['a machine with one tape computes f','the tracks technique']],2,0,'That is the technique.'],
+      ['a4',[['the machine is in state B, which is not a stop state','given'],['B has two next configurations, one for each mark it might write','the one-next technique']],2,1,'One cell is read, so one row of the table applies: exactly one next.']],[]); }});
+
+/* 41b Other Machines, the Same Reach */
+const WB41=[
+  ['Does the least y with f(x, y) = 0 always have a value?','no: there may be no such y; then the search runs for ever',['yes','yes, y = 0','yes, the largest such y'],'Search can fail to stop.'],
+  ['A function is built with three searches. How many does it need?','one: one search is always enough',['three','at least two','none'],'One-search technique.'],
+  ['Which functions are built from zero, next and picking, by putting inside, recursion and search?','exactly those tape machines compute',['fewer than tape machines compute','more than tape machines compute','only those that stop fast'],'Built-runs and one-search techniques.'],
+  ['What does feeding λn.λf.λx. f(n f x) the numeral of n give?','the numeral of n + 1',['the numeral of n','the numeral of 2n','the numeral of n − 1'],'Numeral-iterator technique.'],
+  ['Which functions does feeding reach?','exactly those a tape machine computes',['only those built without search','more than tape machines compute','only the numerals'],'Equal-reach technique.'],
+  ['May (λx.λy. x) y be fed straight to λy. y?','no: y is caught; rename first and get λz. y',['yes','yes, it is λy. y','no: it cannot be fed at all'],'Rename before feeding.']];
+QP.push({id:'41b.reach',step:'41b',label:'other machines, the same reach',open:()=>measured('41b'),make(){ return writtenQ('41b.reach',WB41); }},
+  {id:'41b.work',step:'41b',mode:'work',label:'running a search',open:()=>measured('41b'),make(){
+    const NV='no value: the search runs for ever';
+    if(rnd(2)){ const x=2+rnd(40); let y=0; while(y*y<x) y++;
+      return W30('41b.work[s;'+x+']',[['h(x) = the least y with y · y ≥ x','built by search']],'What is h('+x+')?',String(y),[String(y-1),String(y+1),String(x),NV],'Try y = 0, 1, 2, …: the first with y · y ≥ '+x+' is '+y+'.'); }
+    const x=1+rnd(19), ev=x%2===0;
+    return W30('41b.work[e;'+x+']',[['h(x) = the least y with y + y = x','built by search']],'What is h('+x+')?',ev?String(x/2):NV,ev?[String(x),String(x/2+1),NV,String(2*x)]:[String((x-1)/2),String((x+1)/2),String(x),String(x+1)],ev?'Try y = 0, 1, 2, …: y = '+(x/2)+' gives '+x+'.':'Every y + y is even, and '+x+' is odd: no y is found.'); }},
+  {id:'41b.line',step:'41b',mode:'proof',label:'what equal reach licenses',open:()=>measured('41b'),make(){
+    return line28('41b.line',[
+      ['b1',[['f is built from zero, next and picking, by putting inside, recursion and search','given'],['a tape machine computes f','the built-runs technique']],2,0,'That is the technique.'],
+      ['b2',[['h(x) is the least y with f(x, y) = 0','built by search'],['h has a value at every x','search']],2,1,'There may be no such y. Then the search runs for ever.'],
+      ['b3',[['a tape machine computes f','given'],['“f(x) = z” is a search formula F(x, z)','the search-graph technique']],2,0,'That is the technique.'],
+      ['b4',[['f is built with three searches','given'],['every machine for f has three loops that search','the one-search technique']],2,1,'One search is always enough.']],[]); }});
+
+/* 41c One Machine Runs Them All */
+const WC41=[
+  ['What does U do on ⟨M⟩ # w?','stops exactly when M on w stops, in the same stop state and with the same output',['stops on every input','runs M on every input','prints the code of M'],'Universal technique.'],
+  ['Does U have more states than any machine it runs?','no: U’s table is fixed; it runs machines with any number of states',['yes','yes, one more','yes, twice as many'],'Universal technique.'],
+  ['U on ⟨M⟩ # w stops. Does M stop on every input?','not necessarily: only on w; U knows nothing about other inputs',['yes','yes, on every shorter input','no: M stops on no input'],'Universal technique.'],
+  ['Is it decided whether a string is the code of some machine?','yes',['no','only for short strings','only by U'],'Table-code technique.'],
+  ['Why is some yes-or-no question about numbers answered by no machine?','machines can be listed, and the yes-or-no functions on numbers cannot',['every question is too hard','U cannot run itself','codes can be repeated'],'Few-machines technique.'],
+  ['Do two different tables have the same code?','no: different tables have different codes',['yes, sometimes','yes, if they compute the same function','only if they have the same states'],'Table-code technique.']];
+QP.push({id:'41c.universal',step:'41c',label:'one machine runs them all',open:()=>measured('41c'),make(){ return writtenQ('41c.universal',WC41); }},
+  {id:'41c.work',step:'41c',mode:'work',label:'counting codes',open:()=>measured('41c'),make(){
+    const n=3+rnd(8), p=Math.pow(2,n);
+    return W30('41c.work[c;'+n+']',[['a code is a string of 0s and 1s','the table-code technique']],'How many strings of 0s and 1s have exactly '+n+' letters?',String(p),[String(2*n),String(n*n),String(p/2),String(2*p),String(n)],'Each letter is 0 or 1: 2 · 2 · … , '+n+' times, is '+p+'.'); }},
+  {id:'41c.line',step:'41c',mode:'proof',label:'what the universal machine licenses',open:()=>measured('41c'),make(){
+    return line28('41c.line',[
+      ['c1',[['U on ⟨M⟩ # w stops','given'],['M stops on w','the universal technique']],2,0,'U stops exactly when M on w stops.'],
+      ['c2',[['U on ⟨M⟩ # w stops','given'],['M stops on every input','the universal technique']],2,1,'Only on w.'],
+      ['c3',[['some yes-or-no question has no machine','the few-machines technique'],['the stopping question has no machine','the few-machines technique']],2,1,'The count shows some question has none. It does not name which.'],
+      ['c4',[['machines are listed by their codes','the table-code technique'],['the yes-or-no functions on numbers are not listed','the diagonal'],['some such function is computed by no machine','the few-machines technique']],3,0,'A list cannot hold what cannot be listed.']],[]); }});
+
+/* 41d No Machine Decides Stopping */
+const WD41=[
+  ['Is the stopping set listed?','yes: run each machine on its input, and list it when it stops',['no','only for short inputs','only by U run backwards'],'Stopping-listed technique.'],
+  ['Does any tape machine decide the stopping set?','no',['yes, U does','yes, a fast enough one','only for machines with few states'],'No-stop-decider technique.'],
+  ['Could a faster machine decide stopping?','no: speed is not the issue; the would-be decider is refuted whatever its step count',['yes','yes, with more tapes','yes, with coins'],'No-stop-decider technique.'],
+  ['Does E on ⟨E⟩ flip between stopping and not?','no: a run is one run; what fails is the supposition that the decider exists',['yes','yes, on alternate runs','it stops half the time'],'The diagonal refutes the decider.'],
+  ['Is every set that is not decided also not listed?','no: the stopping set is listed and not decided',['yes','yes, by the both-sides technique','only if it is endless'],'Stopping-listed and no-stop-decider techniques.'],
+  ['Are the pairs ⟨M⟩ # w with M never stopping on w listed?','no: then both sides would be listed, and stopping would be decided',['yes','yes, by U','only for short w'],'Not-stopping technique.']];
+QP.push({id:'41d.stopping',step:'41d',label:'no machine decides stopping',open:()=>measured('41d'),make(){ return writtenQ('41d.stopping',WD41); }},
+  {id:'41d.line',step:'41d',mode:'proof',label:'what the stopping proof licenses',open:()=>measured('41d'),make(){
+    return line28('41d.line',[
+      ['d1',[['a machine lists the stopping set','the stopping-listed technique'],['no machine decides the stopping set','the no-stop-decider technique'],['no machine lists the pairs that never stop','the both-sides technique']],3,0,'If both sides were listed, stopping would be decided.'],
+      ['d2',[['no machine decides the stopping set','the no-stop-decider technique'],['for some M and w, nobody can know whether M stops on w','the no-stop-decider technique']],2,1,'The technique says no one machine sorts them all. A particular run can still be sorted.'],
+      ['d3',[['D decides stopping','supposed'],['E on ⟨E⟩ does the opposite of what D predicts about E on ⟨E⟩','E is built from D'],['D does not decide stopping','the totally false']],3,0,'The supposition is refuted.'],
+      ['d4',[['the stopping set is not decided','the no-stop-decider technique'],['the stopping set is not listed','the both-sides technique']],2,1,'It is listed. Only one side is.']],[]); }});
+
+/* 41e Undecidable Everywhere */
+const WE41=[
+  ['A reduces to B, and A is decided. Is B decided?','not necessarily: the decider is carried from B to A, never the other way',['yes','yes, by the same machine','no: never'],'Reduction-carries technique.'],
+  ['A reduces to B, and A is not decided. What follows?','B is not decided',['A is listed','B is decided','nothing'],'Reduction-carries technique.'],
+  ['Is it decided whether a table has five rows?','yes: that reads the table, not what the machine does',['no, by the behaviour technique','no, by the stopping proof','only for small tables'],'The behaviour technique is about what machines do.'],
+  ['Which properties of what machines do are decided?','only the trivial ones',['all of them','the short ones','none at all'],'Behaviour technique.'],
+  ['Does PA reach σ whenever σ is true?','no: only true search statements; some truths are not reached',['yes','yes, for every σ','no: PA reaches nothing true'],'38i’s unreached truth.'],
+  ['Are the equations with a whole-number solution listed?','yes: search every whole-number assignment in turn',['no','only those of degree 2','only those with one letter'],'Equation-search technique.']];
+QP.push({id:'41e.reduce',step:'41e',label:'undecidable everywhere',open:()=>measured('41e'),make(){ return writtenQ('41e.reduce',WE41); }},
+  {id:'41e.work',step:'41e',mode:'work',label:'searching for a solution',open:()=>measured('41e'),make(){
+    const a=rnd(6), b=a+rnd(6), n=a*a+b*b; if(n===0) return null;
+    let F=null; for(let x=0;!F&&x*x<=n;x++) for(let y=x;y*y<=n;y++) if(x*x+y*y===n){ F=[x,y]; break; }
+    const P=(x,y)=>'x = '+x+', y = '+y;
+    return W30('41e.work[q;'+n+']',[['x² + y² = '+n,'the equation'],['try x = 0, 1, 2, …, and for each x every y ≥ x','the search']],'Which pair does the search find first?',P(F[0],F[1]),[P(F[0],F[1]+1),P(F[0]+1,F[1]),P(F[1],F[0]),'none: the search runs for ever'],F[0]+'² + '+F[1]+'² = '+n+', and no smaller x works.'); }},
+  {id:'41e.line',step:'41e',mode:'proof',label:'what reductions license',open:()=>measured('41e'),make(){
+    return line28('41e.line',[
+      ['e1',[['A reduces to B by a fast recipe f','given'],['A is decided','given'],['B is decided','the reduction-carries technique']],3,1,'Backwards. f carries a decider of B to one of A.'],
+      ['e2',[['stopping reduces to B','given'],['B is not decided','the reduction-carries technique']],2,0,'Stopping is not decided, so B is not.'],
+      ['e3',[['“M stops on the empty tape” is about what M does, and is not trivial','given'],['no machine decides which codes have it','the behaviour technique']],2,0,'That is the technique.'],
+      ['e4',[['x² + y² = 3 has no whole-number solution','checked'],['no machine decides any equation’s question','the equation-search technique']],2,1,'Many are decided. No single machine decides them all.']],[]); }});
+
+/* 41f Programs That Print Themselves */
+const WF41=[
+  ['Does SELF hold a copy of its own code inside it?','no: A holds B’s code only; B makes A’s code from it',['yes','yes, twice','yes, in its last row'],'Self-print technique.'],
+  ['Does the self-print technique need a mark for “this machine”?','no: it needs only q, which turns a string into the code of a machine that writes it',['yes','yes, one new mark','yes, a new state'],'Self-print technique.'],
+  ['May R be built with ⟨R⟩ written inside its table?','no: ⟨R⟩ is longer than any table holding it; build R as A B T',['yes','yes, at the end','yes, if R is short'],'Own-code technique.'],
+  ['What does the own-code technique give, for T reading a code and a string?','R such that R on any w does what T does on ⟨R⟩ # w',['T on its own code','a machine that never stops','a copy of T'],'Own-code technique.'],
+  ['Do shortest machines exist?','yes, endlessly many; no machine lists endlessly many of them',['no','only one','yes, and a machine lists them'],'Shortest-unlisted technique.'],
+  ['What does access to its own code turn diagonal arguments into?','short programs',['long proofs','tables with no rows','machines that never stop'],'Own-code technique.']];
+QP.push({id:'41f.self',step:'41f',label:'programs that print themselves',open:()=>measured('41f'),make(){ return writtenQ('41f.self',WF41); }},
+  {id:'41f.line',step:'41f',mode:'proof',label:'what self-reference licenses',open:()=>measured('41f'),make(){
+    return line28('41f.line',[
+      ['f1',[['T reads a code and a string','given'],['some R on any w does what T does on ⟨R⟩ # w','the own-code technique']],2,0,'That is the technique.'],
+      ['f2',[['R is a machine','given'],['R’s table contains ⟨R⟩','the own-code technique']],2,1,'⟨R⟩ is longer than any table holding it. R is built as A B T.'],
+      ['f3',[['no machine lists endlessly many shortest machines','the shortest-unlisted technique'],['no shortest machine exists','the shortest-unlisted technique']],2,1,'Endlessly many exist. None of them is listed endlessly.'],
+      ['f4',[['A writes B’s code, and B writes the code of a machine that writes what it reads','given'],['A B, started on a blank tape, stops with its own code','the self-print technique']],2,0,'B writes A’s code in front of B’s.']],[]); }});
+
+/* 41g Smaller Machines */
+const WG41=[
+  ['L can be pumped. Is L a pattern?','not necessarily: the technique runs one way; some sets that are no pattern pump too',['yes','yes, by the pumping technique','no: never'],'Pumping technique.'],
+  ['In w = xyz, who chooses the cut?','the machine: the proof must defeat every cut with xy at most q letters long',['the proof, to suit itself','the reader','nobody: y is the middle letter'],'Pumping technique.'],
+  ['Machines with no memory check A and B. Which can they check?','A and B, A or B, and the strings not in A',['A and B only','A or B only','none of the three'],'Joined-machines technique.'],
+  ['Why is stopping decided for a machine that never uses more than r cells?','it stops within q · r · mʳ steps or never',['it never stops','it stops within r steps','U runs it'],'Bounded-room technique.'],
+  ['Is a stack machine with two stacks still below the tape machine?','no: two stacks act as a tape',['yes','yes, one stack lower','only with one state'],'Two stacks make a tape.'],
+  ['In the two-loop technique, may v and y both be empty?','no: v and y are not both empty',['yes','yes, if w is short','only v'],'Two-loop technique.']];
+QP.push({id:'41g.smaller',step:'41g',label:'smaller machines',open:()=>measured('41g'),make(){ return writtenQ('41g.smaller',WG41); }},
+  {id:'41g.work',step:'41g',mode:'work',label:'the bounded-room count',open:()=>measured('41g'),make(){
+    const q=2+rnd(4), r=2+rnd(3), m=2+rnd(2), mr=Math.pow(m,r);
+    return W30('41g.work[b;'+[q,r,m].join(';')+']',[['a machine with '+q+' states and '+m+' marks never uses more than '+r+' cells','given']],'Within how many steps does it stop, if it stops at all?',String(q*r*mr),[String(q*r*m),String(r*mr),String(q*mr),String(q+r+mr),String(q*r*m*r)],'Bounded-room technique: q · r · mʳ = '+q+' · '+r+' · '+mr+'.'); }},
+  {id:'41g.line',step:'41g',mode:'proof',label:'what pumping licenses',open:()=>measured('41g'),make(){
+    const q=3+rnd(5);
+    return line28('41g.line',[
+      ['g1',[['a machine with no memory, with '+q+' states, checks L','given'],['w is in L and has '+(q+2)+' letters','given'],['w = xyz with y not empty, xy at most '+q+' letters, and xyⁱz in L for every i ≥ 0','the pumping technique']],3,0,'w is at least q letters long.'],
+      ['g2',[['L can be pumped','checked'],['L is checked by a machine with no memory','the pumping technique']],2,1,'The technique runs one way.'],
+      ['g3',[['a machine never uses more than r cells','given'],['whether it stops is decided','the bounded-room technique']],2,0,'It stops within q · r · mʳ steps, or never.'],
+      ['g4',[['machines with no memory check A','given'],['machines with no memory check the strings not in A','the joined-machines technique']],2,0,'That is the technique.']],[q]); }});
+
+/* 41h How Long and How Much Room */
+const WH41=[
+  ['What does fast mean?','within a power of the length of the input, on any machine',['within 2ⁿ steps','within n steps','within one second'],'Power-stays technique.'],
+  ['Does NP mean not fast?','no: NP means a yes has a short certificate checked fast; every fast set is in NP',['yes','yes, never fast','NP means not listed'],'Certificate class.'],
+  ['Is a set in NP listed but not decided?','no: the certificate-search technique decides it, slowly',['yes','yes, like stopping','only if it is endless'],'Certificate-search technique.'],
+  ['One method for satisfiability takes 2ⁿ steps. Is it not fast?','not shown: whether every method is slow is open',['yes','yes, by the tableau technique','no: it takes n steps'],'One method is not every method.'],
+  ['Does the halving-room technique make reaching fast?','no: it saves room; its time grows like N to the power log₂ N',['yes','yes, in N steps','yes, in (log₂ N)² steps'],'Halving-room technique.'],
+  ['What does the more-time technique say?','for each k, some set is decided within a power of n steps and by no machine within nᵏ steps',['every set is fast','more time decides nothing new','NP is fast'],'More-time technique.']];
+QP.push({id:'41h.cost',step:'41h',label:'how long and how much room',open:()=>measured('41h'),make(){ return writtenQ('41h.cost',WH41); }},
+  {id:'41h.work',step:'41h',mode:'work',label:'room by halving',open:()=>measured('41h'),make(){
+    const k=3+rnd(8), N=Math.pow(2,k);
+    return W30('41h.work[h;'+k+']',[['a list of '+N+' states with a fast test of which may follow which','given']],'About how many times the room of one state does the halving-room technique need?',String(k*k),[String(2*k),String(k),String(N),String(N/2),String(2*k*k)],'log₂ '+N+' = '+k+', and '+k+'² = '+(k*k)+'.'); }},
+  {id:'41h.line',step:'41h',mode:'proof',label:'what the cost techniques license',open:()=>measured('41h'),make(){
+    return line28('41h.line',[
+      ['h1',[['B is fast, and A fast-reduces to B','given'],['A is fast','the power-stays technique']],2,0,'A fast machine fed to a fast machine makes a fast machine.'],
+      ['h2',[['one method for satisfiability takes 2ⁿ steps','given'],['satisfiability is not fast','the more-time technique']],2,1,'That is one method. Whether every method is slow is open.'],
+      ['h3',[['A is in NP','given'],['A fast-reduces to the satisfiable statements','the tableau technique']],2,0,'That is the technique.'],
+      ['h4',[['A is in NP','given'],['A is listed and not decided','the certificate-search technique']],2,1,'The technique decides it, slowly.']],[]); }});
+
+/* 41i Chance in Computing */
+const WI41=[
+  ['p was 0 at ten random points. Is p the zero polynomial?','not proved: it is a stated chance of error, small and not 0',['yes','yes, after three points','no: p is never 0'],'Random-point technique.'],
+  ['Does BPP ask for an error of 1/3 on most inputs?','no: on every input',['yes','on half the inputs','on no input'],'Coin machines.'],
+  ['May the random-point technique use a set of s values with s ≤ d?','it says nothing then: d/s is at least 1',['yes, with the same bound','yes, if d is small','only with s = d'],'Random-point technique.'],
+  ['One column r passed: A(Br) = Cr. Is AB = C?','not proved: a wrong C passes one column with chance up to 1/2',['yes','yes, if r has a 1','no: AB ≠ C'],'Random-column technique.'],
+  ['How does repeating a coin machine help?','the majority of k runs is wrong at a rate that falls with k',['each run is right','the first run is kept','nothing changes'],'Majority-vote technique.'],
+  ['Where does every set in BPP lie?','in PSPACE: run the machine on all its coins in small room',['in P','nowhere decided','outside PSPACE'],'All-coins technique.']];
+QP.push({id:'41i.chance',step:'41i',label:'chance in computing',open:()=>measured('41i'),make(){ return writtenQ('41i.chance',WI41); }},
+  {id:'41i.work',step:'41i',mode:'work',label:'bounding the chance of error',open:()=>measured('41i'),make(){
+    if(rnd(2)){ const d=2+rnd(8), s=d+1+rnd(40), R=fshow(fr(d,s));
+      return W30('41i.work[p;'+[d,s].join(';')+']',[['p is not the zero polynomial and has degree '+d,'given'],['each letter takes a value drawn at random from '+s+' numbers','given']],'At most what chance is p 0 at that point?',R,[fshow(fr(1,s)),fshow(fr(s-d,s)),fshow(fr(d,2*s)),fshow(fr(d,s+d))],'Random-point technique: d/s = '+d+'/'+s+(R===d+'/'+s?'':' = '+R)+'.'); }
+    const k=pick([16,24,32,40,80,160,800]), R=fshow(fr(8,k));
+    return W30('41i.work[m;'+k+']',[['each run is wrong with chance at most 1/3','given'],[k+' independent runs, answered by the majority','given']],'At most what chance is the majority wrong, by the majority-vote technique?',R,[fshow(fr(1,k)),fshow(fr(1,3*k)),'1/3',fshow(fr(8,3*k))],'8/k = 8/'+k+' = '+R+'.'); }},
+  {id:'41i.line',step:'41i',mode:'proof',label:'what chance licenses',open:()=>measured('41i'),make(){
+    return line28('41i.line',[
+      ['i1',[['AB ≠ C','supposed'],['r is a column of 0s and 1s at random','given'],['A(Br) = Cr with chance at most 1/2','the random-column technique']],3,0,'That is the technique.'],
+      ['i2',[['p was 0 at ten random points','checked'],['p is the zero polynomial','the random-point technique']],2,1,'That leaves a stated chance of error.'],
+      ['i3',[['each run is wrong with chance at most 1/3','given'],['the majority of 18k runs is wrong with chance below e^(−k)','the fast-fall technique']],2,0,'e^(−18k/18) = e^(−k).'],
+      ['i4',[['A is in BPP','given'],['A is in PSPACE','the all-coins technique']],2,0,'Run every run of coins, one at a time, in small room.']],[]); }});
+
+/* 41j Machines That Read a Tape, by Hand */
+const WJ41=[
+  ['What does one line of a trace hold?','one configuration: the tape that is not blank, with the state before the head’s cell',['one row of the table','the whole run','the state alone'],'Trace-line technique.'],
+  ['A configuration is seen twice. What follows?','the machine never stops',['it stops next step','it stops after two more','nothing'],'Back-again with the one-next technique.'],
+  ['The run passed 1000 steps without a repeated configuration. Does it never stop?','not shown: it may still stop, or march for ever',['yes','yes, after 1000 steps','no: it stops at 1001'],'No count of steps proves never stopping.'],
+  ['A machine with q states never steps left. When is it sorted?','by running it n + q steps: it stops by then or never',['never','after q steps','after 2ⁿ steps'],'One-way technique.'],
+  ['Does the table of four machines show E is no machine?','no: it shows E is none of those four',['yes','yes, every machine','no: E is one of them'],'Flip-diagonal technique.'],
+  ['What does the trace-line technique change from one line to the next?','one cell, the state’s place by one, and the state’s name',['every cell','the table','nothing but the state'],'Trace-line technique.']];
+QP.push({id:'41j.trace',step:'41j',label:'tape machines by hand',open:()=>measured('41j'),make(){ return writtenQ('41j.trace',WJ41); }},
+  {id:'41j.work',step:'41j',mode:'work',label:'one line of a trace',open:()=>measured('41j'),make(){
+    const S=['A','B'], T={}; S.forEach(s=>[0,1].forEach(m=>{ T[s+m]=[rnd(2),rnd(2)?'R':'L',S[rnd(2)]]; }));
+    const tp=[0,0,0,rnd(2),rnd(2),rnd(2),0,0,0], h=4, st=S[rnd(2)], m=tp[h], [w,d,nx]=T[st+m];
+    const go=(wr,dir,ns)=>{ const t=tp.slice(); t[h]=wr; return CF41(t,h+(dir==='R'?1:-1),ns); };
+    const rows=['A0','A1','B0','B1'].map(k=>k+' → '+T[k][0]+T[k][1]+T[k][2]).join(', ');
+    return W30('41j.work[t;'+[tp.join(''),st,JSON.stringify(T)].join(';')+']',[[rows,'the table'],[CF41(tp,h,st),'the configuration']],'What is the next line of the trace?',go(w,d,nx),[go(w,d==='R'?'L':'R',nx),go(m,d,nx),go(w,d,st),go(1-w,d,nx),go(1-w,d==='R'?'L':'R',st)],'Row '+st+m+': write '+w+', step '+(d==='R'?'right':'left')+', and go to '+nx+'.'); }},
+  {id:'41j.line',step:'41j',mode:'proof',label:'what tracing licenses',open:()=>measured('41j'),make(){
+    return line28('41j.line',[
+      ['j1',[['the configuration 1 B 0 appears at step 1 and again at step 3','the trace'],['the machine never stops','back-again, with the one-next technique']],2,0,'Each configuration has one next, so the loop comes round for ever.'],
+      ['j2',[['the run passed 1000 steps without a repeated configuration','the trace'],['the machine never stops','back-again']],2,1,'No repeat was seen. It may still stop, or march for ever.'],
+      ['j3',[['A on a blank cell with only blanks to its right, at cell 0 and again at cell 2, never left of cell 0','the trace'],['the machine never stops','the blank-march technique']],2,0,'That is the technique.'],
+      ['j4',[['the table of four machines','given'],['E differs from each of them at its own column','the flip-diagonal technique'],['E is no machine at all','the flip-diagonal technique']],3,1,'It shows E is none of those four.']],[]); }});
+
+/* 41k Reductions by Hand */
+const WK41=[
+  ['Does a clause piece with an input true force o true?','no: it allows o true; other finishings may colour o otherwise',['yes','yes, and both inputs true','no: o is forced false'],'Or-piece technique.'],
+  ['What does the reduction from satisfiability show about colouring?','that colouring is at least as hard',['that colouring is harder','that colouring is fast','that satisfiability is fast'],'Map-from-clauses technique.'],
+  ['How is a ∨ b ∨ c ∨ d split?','(a ∨ b ∨ z) ∧ (¬z ∨ c ∨ d), with a new letter z',['(a ∨ b ∨ z) ∧ (z ∨ c ∨ d)','(a ∨ b) ∧ (c ∨ d)','(a ∨ b ∨ c) ∧ d'],'Clause-split technique.'],
+  ['A map with 27 dots has 3²⁷ colourings. Is the reduction slow?','no: the reduction builds the map fast; it never tries the colourings',['yes','yes, 3²⁷ steps','only for large maps'],'Map-from-clauses technique.'],
+  ['In the palette, which colours do x and x̄ take?','the colours of T and F, one each',['both T','both B','any three'],'Palette technique.'],
+  ['If a and b are both coloured false, what is o?','false',['true','B','either'],'Or-piece technique.']];
+QP.push({id:'41k.reduce',step:'41k',label:'reductions by hand',open:()=>measured('41k'),make(){ return writtenQ('41k.reduce',WK41); }},
+  {id:'41k.work',step:'41k',mode:'work',label:'counting the map',open:()=>measured('41k'),make(){
+    const n=2+rnd(8), m=1+rnd(9), D=3+2*n+6*m, L=3+3*n+12*m, dots=rnd(2);
+    return W30('41k.work['+(dots?'d':'l')+';'+[n,m].join(';')+']',[['a statement with '+ST41(n,'letter')+' and '+ST41(m,'clause')+' of three','given']],dots?'How many dots has its map?':'How many links has its map?',String(dots?D:L),dots?[String(L),String(3+2*n+3*m),String(2*n+6*m),String(3+n+6*m)]:[String(D),String(3+3*n+6*m),String(3*n+12*m),String(3+2*n+12*m)],dots?'3 + 2n + 6m: the triangle, two dots a letter, six a clause.':'3 + 3n + 12m: the triangle, three links a letter, twelve a clause.'); }},
+  {id:'41k.line',step:'41k',mode:'proof',label:'what the map licenses',open:()=>measured('41k'),make(){
+    return line28('41k.line',[
+      ['k1',[['a ∨ b ∨ c ∨ d','a clause'],['(a ∨ b ∨ z) ∧ (z ∨ c ∨ d) has a true row exactly when it does','the clause-split technique']],2,1,'The second needs ¬z. With z true both hold whatever a, b, c, d are.'],
+      ['k2',[['a and b are both coloured false','given'],['o is coloured false','the or-piece technique']],2,0,'That is the technique.'],
+      ['k3',[['a is coloured true','given'],['o is coloured true in every finishing','the or-piece technique']],2,1,'The colouring can be finished with o true. Other finishings may colour o otherwise.'],
+      ['k4',[['satisfiability fast-reduces to three-colouring','the map-from-clauses technique'],['three-colouring is at least as hard as satisfiability','the reduction-carries technique']],2,0,'A fast decider for colouring would give one for satisfiability.']],[]); }});
+
+/* 41l Convincing Without Telling */
+const WL41=[
+  ['The prover passed one round. Has the map a three-colouring?','not shown: a liar passes a round at a known rate; rounds multiply',['yes','yes, if the link was long','no'],'Locked-colours technique.'],
+  ['May the prover pick the colours after seeing the link?','no: then every link passes; the colours are locked first',['yes','yes, if it is honest','only in the last round'],'Locked-colours technique.'],
+  ['Should the renaming of colours be kept the same every round?','no: then the rounds together show the whole colouring, link by link',['yes','yes, for speed','only for small maps'],'Shuffled colours each round.'],
+  ['What does the checker learn from a round?','nothing it could not have made up alone',['one colour of the colouring','the whole colouring','the prover’s coins'],'Self-made-record technique.'],
+  ['The maps are the same shape. With what chance does any prover name the shuffled one?','exactly one half',['one','none','one third'],'Which-one technique.'],
+  ['Which sets have a proof of this kind?','every set in NP, through colouring',['only colourings','only fast sets','none'],'Through-colouring technique.']];
+QP.push({id:'41l.convince',step:'41l',label:'convincing without telling',open:()=>measured('41l'),make(){ return writtenQ('41l.convince',WL41); }},
+  {id:'41l.work',step:'41l',mode:'work',label:'rounds and chances',open:()=>measured('41l'),make(){
+    if(rnd(2)){ const k=2+rnd(8), p=Math.pow(2,k);
+      return W30('41l.work[w;'+k+']',[['the two maps are the same shape','given'],[k+' rounds of which-one','given']],'At most what chance do the rounds fool the checker?','1/'+p,['1/'+(2*k),'1/'+k,'1/2','1/'+(p*2),'1/'+(p/2)],'Which-one technique: 2⁻ᵏ = 1/'+p+'.'); }
+    const l=3+rnd(20), k=2+rnd(6);
+    return W30('41l.work[l;'+[l,k].join(';')+']',[['a map with '+l+' links and no three-colouring','given'],['the fooling chance is to be at most e^(−'+k+')','the goal']],'How many rounds does the locked-colours technique ask for?',String(k*l),[String(k+l),String(l),String(k),String(2*k*l),String(l*l)],'k · l = '+k+' · '+l+'.'); }},
+  {id:'41l.line',step:'41l',mode:'proof',label:'what convincing licenses',open:()=>measured('41l'),make(){
+    return line28('41l.line',[
+      ['l1',[['the prover passed one round','the checker'],['the map has a three-colouring','the locked-colours technique']],2,1,'A liar is caught in a round only with chance at least 1/l.'],
+      ['l2',[['the map has no three-colouring','supposed'],['k · l rounds fool the checker with chance at most e⁻ᵏ','the locked-colours technique']],2,0,'That is the technique.'],
+      ['l3',[['the checker saw a link and two colours, each round','the record'],['it could have made that record alone','the self-made-record technique']],2,0,'It learns nothing it could not make up.'],
+      ['l4',[['the same renaming is kept every round','given'],['the checker learns nothing','the self-made-record technique']],2,1,'Then the rounds together show the whole colouring.']],[]); }});
 /* ===== Rung pools end ===== */
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
