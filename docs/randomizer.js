@@ -12173,6 +12173,243 @@ QP.push({id:'45o.vector',step:'45o',label:'vector clocks by hand',open:()=>measu
       ['o2',[['machine 2 has (1, 2, 0) and receives (3, 0, 1)','given'],['its stamp becomes (4, 2, 1)','the larger place by place, then tick']],2,1,'It ticks its own entry, the second: (3, 3, 1).'],
       ['o3',[['V(e) = (1, 0, 0) and V(f) = (0, 1, 0)','given'],['e → f, since the sums are equal and e is first','the list-stamp technique']],2,1,'Compare place by place. They are concurrent.'],
       ['o4',[['V(e) = (2, 1, 0) and V(f) = (2, 3, 1)','given'],['e → f','the list-stamp technique']],2,0,'Every place is at most, and they differ.']],[]); }});
+/* ----- rung 46: roots, symmetries and what cannot be built, 46a to 46l ----- */
+Object.assign(STEPS,{'46a':['r46a','Cubics and Quartics'],'46b':['r46b','Symmetric in the Roots'],'46c':['r46c','The Symmetries of the Roots'],'46d':['r46d','Subgroups and Middle Fields'],'46e':['r46e','Groups Taken Apart'],'46f':['r46f','A₅ Is Simple'],'46g':['r46g','No Formula'],'46h':['r46h','Subgroups of Every Prime-Power Size'],'46i':['r46i','What Compass and Straightedge Can Build'],'46j':['r46j','Solving Cubics and Quartics by Hand'],'46k':['r46k','Symmetry Groups of Equations, by Hand'],'46l':['r46l','What Can’t Be Built, by Hand']});
+const M46=n=>String(n).replace('-','−'), FAC46=n=>n<2?1:n*FAC46(n-1), G46=(a,b)=>b?G46(b,a%b):Math.abs(a);
+const CU46=(p,q)=>'y³'+(p?(p<0?' − ':' + ')+(Math.abs(p)===1?'':Math.abs(p))+'y':'')+(q?(q<0?' − ':' + ')+Math.abs(q):'');
+const PHI46=n=>{ let c=0; for(let x=1;x<=n;x++) if(G46(x,n)===1) c++; return c; };
+
+/* 46a Cubics and Quartics */
+const WA46=[
+  ['What does x = y − b/3 do to x³ + bx² + cx + d?','takes out the square term',['takes out the cube term','takes out the constant','doubles the roots'],'Shift-out technique.'],
+  ['u³ and v³ are found. Do all nine pairs of cube roots give answers?','no: only the three pairs with uv = −p/3',['yes','yes, nine answers','no: only one pair'],'Cube-formula technique.'],
+  ['When has y³ + py + q three different real roots?','exactly when D = q²/4 + p³/27 is below 0',['when D > 0','when D = 0','when p > 0'],'Three-real-roots technique.'],
+  ['∛(2 + 11i) is met for y³ − 15y − 4. Does the formula fail?','no: (2 + i)³ = 2 + 11i, and (2 + i) + (2 − i) = 4 is an answer',['yes','yes, there is no real answer','no: the answer is 2 + 11i'],'The square root of a negative number is used.'],
+  ['Is √−3 · √−3 = √9 = 3?','no: (i√3)² = −3',['yes','yes, by the root technique','no: it is 9'],'Root choice for negatives.'],
+  ['How is a quartic solved?','by one cubic and two quadratics',['by two cubics','by one quadratic','by no formula'],'Quartic-to-cubic technique.']];
+QP.push({id:'46a.cubics',step:'46a',label:'cubics and quartics',open:()=>measured('46a'),make(){ return writtenQ('46a.cubics',WA46); }},
+  {id:'46a.work',step:'46a',mode:'work',label:'how many real roots',open:()=>measured('46a'),make(){
+    const p=rnd(13)-8, q=rnd(13)-6, D=27*q*q+4*p*p*p; if(D===0) return null;
+    const three='three different real roots', one='one real root and a flipped pair';
+    return W30('46a.work[d;'+[p,q].join(',')+']',[[CU46(p,q),'the cubic'],['D = q²/4 + p³/27','the test']],'What roots has it?',D<0?three:one,[D<0?one:three,'two real roots','no real root'],'D = '+(q*q)+'/4'+(p<0?' − '+(-p*p*p):' + '+(p*p*p))+'/27 is '+(D<0?'below':'above')+' 0.'); }},
+  {id:'46a.line',step:'46a',mode:'proof',label:'what the cubic formula licenses',open:()=>measured('46a'),make(){
+    return line28('46a.line',[
+      ['a1',[['y³ − 3y − 1: D = 1/4 − 1 < 0','computed'],['it has three different real roots','the three-real-roots technique']],2,0,'D below 0.'],
+      ['a2',[['y³ − 3y − 1: D < 0','computed'],['it has one real root','the three-real-roots technique']],2,1,'The other way round: D below 0 gives three.'],
+      ['a3',[['x³ + 6x² + x + 1','given'],['x = y − 2 gives a cubic in y with no square term','the shift-out technique']],2,0,'b/3 = 2.'],
+      ['a4',[['u³ and v³ are the two answers of t² + qt − p³/27 = 0','given'],['every pair of cube roots u, v gives an answer u + v','the cube-formula technique']],2,1,'Only the pairs with uv = −p/3.']],[]); }});
+
+/* 46b Symmetric in the Roots */
+const WB46=[
+  ['What are the coefficients of (x − r₁)⋯(x − rₙ)?','the elementary symmetric sums of the roots, with signs',['the roots','the squares of the roots','the differences of the roots'],'Roots-to-coefficients technique.'],
+  ['Is x₁²x₂ + x₂²x₃ + x₃²x₁ symmetric?','no: the swap of x₁ and x₂ changes it; only the turns of three keep it',['yes','yes, by the symmetric-is-coefficients technique','no: no turn keeps it'],'Symmetric means every shuffle.'],
+  ['Is (r₁ − r₂)(r₁ − r₃)(r₂ − r₃) symmetric, and so rational?','no: a swap changes its sign; only its square is symmetric',['yes','yes, it is Δ','no: it is 0'],'The discriminant is the square.'],
+  ['What is e₃ for x³ − 2?','2: the constant is (−1)³e₃',['−2','0','3'],'Roots-to-coefficients technique.'],
+  ['f has rational coefficients and top 1. What is a symmetric expression in its roots?','a rational number',['a root of f','irrational','0'],'Symmetric-is-rational technique.'],
+  ['What is Δ for y³ + py + q?','−4p³ − 27q²',['4p³ + 27q²','p² − 4q','q²/4 + p³/27'],'Cubic-discriminant technique.']];
+QP.push({id:'46b.symmetric',step:'46b',label:'symmetric in the roots',open:()=>measured('46b'),make(){ return writtenQ('46b.symmetric',WB46); }},
+  {id:'46b.work',step:'46b',mode:'work',label:'coefficients and discriminants',open:()=>measured('46b'),make(){
+    if(rnd(2)){ const r=[rnd(7)-3,rnd(7)-3,rnd(7)-3], e1=r[0]+r[1]+r[2], e2=r[0]*r[1]+r[0]*r[2]+r[1]*r[2], e3=r[0]*r[1]*r[2];
+      const k=rnd(3), ask=['the coefficient of x²','the coefficient of x','the constant'][k], R=[-e1,e2,-e3][k], A=[e1,-e2,e3][k];
+      return W30('46b.work[e;'+r.join(',')+';'+k+']',[['the roots are '+r.map(M46).join(', '),'given'],['(x − r₁)(x − r₂)(x − r₃)','the cubic']],'What is '+ask+'?',M46(R),[M46(A),M46([e1,e2,e3][(k+1)%3]),M46(R+1),M46(R-1),M46(2*R+3)],'Roots-to-coefficients technique: e₁ = '+M46(e1)+', e₂ = '+M46(e2)+', e₃ = '+M46(e3)+', with signs −, +, −.'); }
+    const p=rnd(9)-5, q=rnd(9)-4, P=p*p*p, Q=q*q, d=-4*P-27*Q;
+    return W30('46b.work[d;'+[p,q].join(',')+']',[[CU46(p,q),'the cubic']],'What is Δ?',M46(d),[M46(4*P-27*Q),M46(-4*P+27*Q),M46(4*P+27*Q),M46(-4*p-27*q),M46(d+1)],'Cubic-discriminant technique: −4 · '+M46(P).replace(/^−(.*)$/,'(−$1)')+' − 27 · '+Q+'.'); }},
+  {id:'46b.line',step:'46b',mode:'proof',label:'what symmetry licenses',open:()=>measured('46b'),make(){
+    return line28('46b.line',[
+      ['b1',[['f = x³ − 2, with roots r₁, r₂, r₃','given'],['r₁r₂r₃ = 2','the roots-to-coefficients technique']],2,0,'The constant is −e₃ = −2.'],
+      ['b2',[['f has rational coefficients and top 1','given'],['(r₁ − r₂)(r₁ − r₃)(r₂ − r₃) is rational','the symmetric-is-rational technique']],2,1,'It is not symmetric: a swap changes its sign. Its square is.'],
+      ['b3',[['f has rational coefficients and top 1','given'],['r₁² + r₂² + r₃² is rational','the symmetric-is-rational technique']],2,0,'It is symmetric: e₁² − 2e₂.'],
+      ['b4',[['x₁²x₂ + x₂²x₃ + x₃²x₁ is kept by the turns of three','checked'],['it is a polynomial in e₁, e₂, e₃','the symmetric-is-coefficients technique']],2,1,'The swap of x₁ and x₂ changes it. It is not symmetric.']],[]); }});
+
+/* 46c The Symmetries of the Roots */
+const WC46=[
+  ['Where does a symmetry of the field of roots send a root?','to a root',['to any member','to itself always','to 0'],'Roots-to-roots technique.'],
+  ['Is there a symmetry of ℚ(√2) with σ(√2) = 2?','no: then σ(2) = 4, but σ fixes 2',['yes','yes, a stretch','no: there are none at all'],'Roots-to-roots technique.'],
+  ['Has Aut(ℚ(∛2)/ℚ) 3 members?','no: the other roots are not real and not in ℚ(∛2); only the identity',['yes','yes, the turns','no: it has 6'],'ℚ(∛2) is not a splitting field.'],
+  ['Is the group of a polynomial of degree n always Sₙ?','no: x⁴ − 5x² + 6 has a group of 4',['yes','yes, if n is prime','no: it is always a clock'],'Groups of polynomials.'],
+  ['How many symmetries has the splitting field K of a polynomial over F?','exactly [K : F]',['the degree of the polynomial','n!','2'],'Count-the-symmetries technique.'],
+  ['f cannot be factored over F. Which roots can a symmetry carry α to?','any root of f',['only α','only real roots','none'],'Every-root technique.']];
+QP.push({id:'46c.syms',step:'46c',label:'the symmetries of the roots',open:()=>measured('46c'),make(){ return writtenQ('46c.syms',WC46); }},
+  {id:'46c.work',step:'46c',mode:'work',label:'counting symmetries',open:()=>measured('46c'),make(){
+    const a=pick([2,3,5,6,7]); let b, same=rnd(3)===0;
+    if(same) b=a*pick([4,9]); else { b=pick([2,3,5,6,7,10].filter(x=>x!==a)); }
+    const n=same?2:4;
+    return W30('46c.work[s;'+[a,b].join(',')+']',[['f = (x² − '+a+')(x² − '+b+')','given']],'How many symmetries has its field of roots over ℚ?',String(n),['1','8','24',same?'4':'2'].filter(x=>x!==String(n)),same?'√'+b+' is a whole multiple of √'+a+': the field is ℚ(√'+a+'), of degree 2.':'ℚ(√'+a+', √'+b+') has degree 2 · 2 = 4.'); }},
+  {id:'46c.line',step:'46c',mode:'proof',label:'what symmetries license',open:()=>measured('46c'),make(){
+    return line28('46c.line',[
+      ['c1',[['σ is a symmetry of ℚ(√2, √3)','given'],['σ(√2) is √2 or −√2','the roots-to-roots technique']],2,0,'√2 is a root of x² − 2.'],
+      ['c2',[['σ swaps √2 and √3','supposed'],['σ is a symmetry of ℚ(√2, √3)','the roots-to-roots technique']],2,1,'It would send 2 = (√2)² to 3.'],
+      ['c3',[['K is the splitting field of f over F and [K : F] = 6','given'],['Aut(K/F) has 6 members','the count-the-symmetries technique']],2,0,'That is the technique.'],
+      ['c4',[['x³ − 2 has three roots','given'],['Aut(ℚ(∛2)/ℚ) has 3 members','the count-the-symmetries technique']],2,1,'ℚ(∛2) is not a splitting field. Its only symmetry is the identity.']],[]); }});
+
+/* 46d Subgroups and Middle Fields */
+const WD46=[
+  ['Does a bigger part-group have a bigger fixed field?','no: more symmetries leave fewer members alone',['yes','yes, always','no: the same field'],'Middle-field technique.'],
+  ['What is [K : K^H]?','|H|',['|G|','|G|/|H|','1'],'Fixed-size technique.'],
+  ['What is [K^H : F]?','|G|/|H|',['|H|','|G|','|G| · |H|'],'Middle-field technique.'],
+  ['When is a middle field a splitting field over F?','exactly when its part-group is normal',['always','never','when it has degree 2'],'Normal-middle technique.'],
+  ['Does every field between ℚ and ℂ appear in the matching?','no: only the middle fields of one splitting field, between F and K',['yes','yes, all of them','no: none'],'Middle-field technique.'],
+  ['H is normal in G. What is Aut(K^H/F)?','the quotient G/H',['H','G','the identity alone'],'Normal-middle technique.']];
+QP.push({id:'46d.middle',step:'46d',label:'subgroups and middle fields',open:()=>measured('46d'),make(){ return writtenQ('46d.middle',WD46); }},
+  {id:'46d.work',step:'46d',mode:'work',label:'degrees from sizes',open:()=>measured('46d'),make(){
+    const C=[[6,2],[6,3],[8,2],[8,4],[12,3],[12,4],[24,4],[24,8],[24,6],[60,12],[20,4],[20,5]][rnd(12)], g=C[0], h=C[1], up=rnd(2);
+    return W30('46d.work['+(up?'u':'d')+';'+[g,h].join(',')+']',[['|G| = '+g+' and H is a part-group of size '+h,'given']],up?'What is [K : K^H]?':'What is [K^H : F]?',String(up?h:g/h),[String(up?g/h:h),String(g),String(g*h),String(g-h)].filter(x=>x!==String(up?h:g/h)),up?'Fixed-size technique: |H|.':'Middle-field technique: |G|/|H| = '+g+'/'+h+'.'); }},
+  {id:'46d.line',step:'46d',mode:'proof',label:'what the matching licenses',open:()=>measured('46d'),make(){
+    return line28('46d.line',[
+      ['d1',[['|G| = 6 and |H| = 2','given'],['[K^H : F] = 3','the middle-field technique']],2,0,'6/2.'],
+      ['d2',[['|G| = 6 and |H| = 2','given'],['[K^H : F] = 2','the middle-field technique']],2,1,'That is the climb from K^H to K. The degree over F is 6/2 = 3.'],
+      ['d3',[['H ⊆ H′ are part-groups of G','given'],['K^H′ ⊆ K^H','the middle-field technique']],2,0,'Bigger part-groups go to smaller fields.'],
+      ['d4',[['H is not normal in G','given'],['K^H is a splitting field over F','the normal-middle technique']],2,1,'Exactly when H is normal.']],[]); }});
+
+/* 46e Groups Taken Apart */
+const WE46=[
+  ['When is a group solvable?','when a chain of normal steps takes it to the identity with every step turn-about',['when it is turn-about','when it is simple','when it has prime size'],'Groups taken apart.'],
+  ['A part-group of a solvable group: is it solvable?','yes',['no','only if normal','only if of prime size'],'Solvable-parts technique.'],
+  ['Is normal in normal always normal?','no: {e, (1 2)(3 4)} ◁ V ◁ S₄, and it is not normal in S₄',['yes','yes, in finite groups','no: never'],'Normal is not passed along.'],
+  ['Every step is turn-about. Is G turn-about?','not necessarily: S₃’s steps are turn-about and S₃ is not',['yes','yes, by the solvable-parts technique','no: never'],'Solvable is not turn-about.'],
+  ['Do the pieces fix the group?','no: ℤ/4 and V both have pieces 2, 2',['yes','yes, by the same-pieces technique','no: they differ in every group'],'Same-pieces technique runs one way.'],
+  ['When is a finite group solvable, by its pieces?','exactly when its pieces are all clocks of prime size',['when it has one piece','when its pieces are equal','when it has no pieces'],'Pieces technique.']];
+QP.push({id:'46e.apart',step:'46e',label:'groups taken apart',open:()=>measured('46e'),make(){ return writtenQ('46e.apart',WE46); }},
+  {id:'46e.line',step:'46e',mode:'proof',label:'what solvability licenses',open:()=>measured('46e'),make(){
+    return line28('46e.line',[
+      ['e1',[['N ◁ G, with N and G/N solvable','given'],['G is solvable','the solvable-parts technique']],2,0,'That is the technique.'],
+      ['e2',[['{e, (1 2)(3 4)} ◁ V and V ◁ S₄','given'],['{e, (1 2)(3 4)} ◁ S₄','normal in normal']],2,1,'Conjugating by (1 3) gives (3 2)(1 4), outside it.'],
+      ['e3',[['ℤ/6 and S₃ both have pieces 2 and 3','computed'],['ℤ/6 and S₃ are the same group','the same-pieces technique']],2,1,'The pieces do not fix the group. ℤ/6 turns about and S₃ does not.'],
+      ['e4',[['the pieces of G are clocks of size 2, 2 and 3','given'],['G is solvable','the pieces technique']],2,0,'All pieces are clocks of prime size.']],[]); }});
+
+/* 46f A₅ Is Simple */
+const WF46=[
+  ['What does conjugating a shuffle do to its loops?','relabels them, so the loop shape stays',['reverses them','joins them','breaks them'],'Relabel technique.'],
+  ['Do the 24 five-loops make one family in A₅?','no: in A₅ they make two families of 12',['yes','yes, of 24','no: five families'],'Families-of-A₅ technique.'],
+  ['Could the twelve five-loops of one family be a normal part-group of A₅?','no: it has no identity, and 12 + 1 = 13 does not divide 60',['yes','yes, of size 12','only with the identity'],'Simple-sixty technique.'],
+  ['A₅ is simple. Is S₅ simple?','no: A₅ ◁ S₅, with half the members',['yes','yes, by the same count','no: S₅ is turn-about'],'Simple-sixty technique.'],
+  ['Is every simple group Aₙ or a clock?','no: there are others',['yes','yes, for finite groups','no: none is a clock'],'There are other simple groups.'],
+  ['For which n is Sₙ not solvable?','every n ≥ 5',['every n ≥ 3','only n = 5','no n'],'Not-solvable technique.']];
+QP.push({id:'46f.a5',step:'46f',label:'A₅ is simple',open:()=>measured('46f'),make(){ return writtenQ('46f.a5',WF46); }},
+  {id:'46f.work',step:'46f',mode:'work',label:'counting loops of a shape',open:()=>measured('46f'),make(){
+    const n=4+rnd(3), k=2+rnd(n-2), c=FAC46(n)/(FAC46(n-k)*k);
+    return W30('46f.work[l;'+[n,k].join(';')+']',[['the shuffles of '+n+' things','Sₙ']],'How many are one loop of '+k+', the rest left alone?',String(c),[String(FAC46(n)/FAC46(n-k)),String(c/2===Math.floor(c/2)?c/2:c+1),String(FAC46(k)),String(n*k)].filter(x=>x!==String(c)),'Choose the '+k+' in order, '+(FAC46(n)/FAC46(n-k))+' ways, and each loop is written '+k+' ways.'); }},
+  {id:'46f.line',step:'46f',mode:'proof',label:'what A₅ licenses',open:()=>measured('46f'),make(){
+    return line28('46f.line',[
+      ['f1',[['g = (1 3) and s = (1 2 4)','given'],['g s g⁻¹ = (3 2 4)','the relabel technique']],2,0,'Relabel each entry by g.'],
+      ['f2',[['N is normal in A₅, so a union of families with the 1','given'],['|N| is 1 or 60','the families of sizes 1, 15, 20, 12, 12'],['A₅ is simple','the simple-sixty technique']],3,0,'Only those sums divide 60.'],
+      ['f3',[['A₅ is simple','the simple-sixty technique'],['S₅ is simple','the simple-sixty technique']],2,1,'A₅ ◁ S₅.'],
+      ['f4',[['the 24 five-loops are one family in S₅','the relabel technique'],['they are one family in A₅','the relabel technique']],2,1,'In A₅ they split into two families of 12.']],[]); }});
+
+/* 46g No Formula */
+const WG46=[
+  ['f has a formula by roots over F. What is G_f?','solvable',['simple','Sₙ','a clock always'],'Formula-means-solvable technique.'],
+  ['No formula exists for x⁵ − 4x + 2. Can its roots not be found?','they can: to any number of places; only a formula by roots is ruled out',['they cannot','only one can','they are not numbers'],'No formula is not no roots.'],
+  ['Has no quintic a formula by roots?','no: x⁵ − 2 has one; its group of 20 is solvable',['right: none','only x⁵','no: every quintic has one'],'Formula-means-solvable technique.'],
+  ['Does a five-loop alone make G_f = S₅?','no: the loop makes a clock of 5; a swap is needed too',['yes','yes, with the identity','no: it makes A₅'],'Five-loop and swap.'],
+  ['G_f is solvable. What follows?','f has a formula by roots',['f has no formula','f has degree below 5','f can be factored'],'Solvable-means-formula technique.'],
+  ['A prime p divides |G|. What follows?','some member of G has order p',['every member has order p','G is a clock','G is simple'],'Prime-member technique.']];
+QP.push({id:'46g.noformula',step:'46g',label:'no formula',open:()=>measured('46g'),make(){ return writtenQ('46g.noformula',WG46); }},
+  {id:'46g.line',step:'46g',mode:'proof',label:'what no formula licenses',open:()=>measured('46g'),make(){
+    return line28('46g.line',[
+      ['g1',[['G_f = S₅','given'],['S₅ is not solvable','the not-solvable technique'],['f has no formula by roots','the formula-means-solvable technique']],3,0,'A formula would make G_f solvable.'],
+      ['g2',[['x⁵ − 4x + 2 has no formula by roots','given'],['its roots cannot be found','no formula']],2,1,'They exist and are found to any number of places.'],
+      ['g3',[['f has degree 5','given'],['f has no formula by roots','the not-solvable technique']],2,1,'x⁵ − 2 has one. Its group is solvable.'],
+      ['g4',[['5 divides |G_f|','given'],['some member of G_f has order 5','the prime-member technique']],2,0,'That is the technique.']],[]); }});
+
+/* 46h Subgroups of Every Prime-Power Size */
+const WH46=[
+  ['A group has size pᵏ, k ≥ 1. Is its centre trivial?','no: it has more than one member',['yes','yes, always','only for p = 2'],'Centre technique.'],
+  ['6 divides 12. Has A₄ a part-group of size 6?','no: 6 is not a prime power, and A₄ has none',['yes','yes, by the largest-part technique','no: 6 does not divide 12'],'Prime-power sizes only.'],
+  ['n_p ≡ 1 on the clock of p. Is n_p = 1?','not necessarily: in A₅, n₅ = 6',['yes','yes, always','no: it is p'],'Count-of-parts technique.'],
+  ['Is the largest 2-part of S₃ normal?','no: n₂ = 3, conjugate and not normal',['yes','yes, it has size 2','no: S₃ has none'],'Count-of-parts technique.'],
+  ['Is a group of prime-power size turn-about?','not necessarily: the square’s group of 8 is not',['yes','yes, by the centre technique','no: never'],'Prime-power groups are solvable, not turn-about.'],
+  ['Are any two largest p-parts conjugate?','yes',['no','only if normal','only for p = 2'],'Count-of-parts technique.']];
+QP.push({id:'46h.sylow',step:'46h',label:'subgroups of every prime-power size',open:()=>measured('46h'),make(){ return writtenQ('46h.sylow',WH46); }},
+  {id:'46h.work',step:'46h',mode:'work',label:'possible counts of largest parts',open:()=>measured('46h'),make(){
+    const C=[[12,3],[12,2],[20,5],[24,3],[30,5],[30,3],[60,5],[60,3],[18,3],[56,7],[28,7],[40,5]][rnd(12)], N=C[0], p=C[1];
+    let m=N; while(m%p===0) m/=p; const D=[]; for(let d=1;d<=m;d++) if(m%d===0) D.push(d); const R=D.filter(d=>d%p===1), L=a=>a.join(', ');
+    return W30('46h.work[s;'+[N,p].join(',')+']',[['|G| = '+N+' = '+(N/m)+' · '+m,'given'],['p = '+p,'given']],'Which numbers can n_'+p+' be?',L(R),[L(D),'1',L(D.filter(d=>d%p!==1)),L(R.concat([p]).sort((a,b)=>a-b))].filter(x=>x!==L(R)),'n_p divides '+m+' and leaves 1 on the clock of '+p+'.'); }},
+  {id:'46h.line',step:'46h',mode:'proof',label:'what largest parts license',open:()=>measured('46h'),make(){
+    return line28('46h.line',[
+      ['h1',[['|G| = 15 = 3 · 5','given'],['n₅ divides 3 and leaves 1 on the clock of 5, so n₅ = 1','the count-of-parts technique']],2,0,'Only 1 works.'],
+      ['h2',[['n₅ leaves 1 on the clock of 5 in A₅','given'],['n₅ = 1','the count-of-parts technique']],2,1,'n₅ = 6 there.'],
+      ['h3',[['|G| = 8','given'],['the centre of G has more than one member','the centre technique']],2,0,'8 = 2³.'],
+      ['h4',[['6 divides |A₄| = 12','given'],['A₄ has a part-group of size 6','the largest-part technique']],2,1,'The technique gives prime-power sizes. 6 is not one.']],[]); }});
+
+/* 46i What Compass and Straightedge Can Build */
+const WI46=[
+  ['What degree over ℚ has a constructible number?','a power of 2',['any degree','an odd degree','3'],'Power-of-two technique.'],
+  ['[ℚ(α) : ℚ] = 4. Is α constructible?','not necessarily: a power of 2 is needed, not enough',['yes','yes, by the power-of-two technique','no: never'],'Power-of-two technique runs one way.'],
+  ['Can no angle be cut in three?','some can: 90° can, as cos 30° = √3/2',['right: none can','all can','only 60° can'],'Third-of-angle technique.'],
+  ['Is a root of an irreducible cubic over ℚ constructible?','no',['yes','yes, if real','only for x³ − 2'],'Degree-three technique.'],
+  ['Is the circle not squared because π has degree 3?','no: π is a root of no polynomial over ℚ at all',['yes','yes, by the degree-three technique','no: π has degree 2'],'Another proof.'],
+  ['How is the 17-sided figure built?','three square-root steps after ℚ(√17)',['by a cube root','it cannot be','by marking the straightedge'],'Seventeen-arcs technique.']];
+QP.push({id:'46i.build',step:'46i',label:'what compass and straightedge can build',open:()=>measured('46i'),make(){ return writtenQ('46i.build',WI46); }},
+  {id:'46i.line',step:'46i',mode:'proof',label:'what building licenses',open:()=>measured('46i'),make(){
+    return line28('46i.line',[
+      ['i1',[['∛2 is a root of x³ − 2, irreducible over ℚ','given'],['∛2 is not constructible','the degree-three technique']],2,0,'The doubled cube cannot be built.'],
+      ['i2',[['α has degree 4 over ℚ','given'],['α is constructible','the power-of-two technique']],2,1,'A power of 2 is needed, not enough.'],
+      ['i3',[['Aut(K/ℚ) has 16 members','given'],['every member of K is reached by square roots','the two-group technique']],2,0,'16 = 2⁴.'],
+      ['i4',[['cos 20° is a root of 8x³ − 6x − 1, irreducible','given'],['60° cannot be cut in three','the degree-three technique']],2,0,'Its third has degree 3.']],[]); }});
+
+/* 46j Solving Cubics and Quartics by Hand */
+const WJ46=[
+  ['Which rational numbers can be answers of a cubic with whole coefficients and top 1?','whole numbers dividing the last coefficient',['any fraction','only 0','only ±1'],'Whole-answer technique.'],
+  ['Might ½ be a root of x³ − 7x + 6?','no: with top 1, only whole divisors of 6',['yes','yes, it divides 6','only if 6 is even'],'Whole-answer technique.'],
+  ['May the third-angle technique be used with D > 0?','no: then |cos θ| > 1 and no real θ exists',['yes','yes, with complex cosines','only for p > 0'],'Third-angle technique needs D < 0.'],
+  ['Does the third-angle technique give one answer?','no: three, at θ/3, θ/3 − 120° and θ/3 − 240°',['yes','yes, k cos(θ/3)','no: two'],'Third-angle technique.'],
+  ['By how much is a quartic shifted?','b/4',['b/3','b/2','b'],'Quartic-by-hand technique.'],
+  ['D > 0. How many real answers has y³ + py + q?','one',['three','two','none'],'One-real technique.']];
+QP.push({id:'46j.byhand',step:'46j',label:'solving cubics by hand',open:()=>measured('46j'),make(){ return writtenQ('46j.byhand',WJ46); }},
+  {id:'46j.work',step:'46j',mode:'work',label:'a whole answer first',open:()=>measured('46j'),make(){
+    const r=[rnd(9)-4,rnd(9)-4,rnd(9)-4]; if(r.includes(0)) return null;
+    const e1=r[0]+r[1]+r[2], e2=r[0]*r[1]+r[0]*r[2]+r[1]*r[2], e3=r[0]*r[1]*r[2], d=-e3;
+    const T=(c,s)=>c===0?'':(c<0?' − ':' + ')+(Math.abs(c)===1&&s?'':Math.abs(c))+s, f='x³'+T(-e1,'x²')+T(e2,'x')+T(d,'');
+    const D=[]; for(let k=1;k<=Math.abs(d);k++) if(d%k===0){ D.push(k); D.push(-k); }
+    const right=pick(r), W=shuffle(D.filter(k=>!r.includes(k)));
+    return W30('46j.work[w;'+r.join(',')+']',[['f = '+f,'given']],'Which of these is an answer?',M46(right),W.map(M46).concat([M46(d===1?2:d+1),'½']),'Whole-answer technique: try the divisors of '+M46(d)+'; f('+M46(right)+') = 0.'); }},
+  {id:'46j.line',step:'46j',mode:'proof',label:'what hand solving licenses',open:()=>measured('46j'),make(){
+    return line28('46j.line',[
+      ['j1',[['x³ − 7x + 6 has top 1 and whole coefficients','given'],['its rational answers are among ±1, ±2, ±3, ±6','the whole-answer technique']],2,0,'The divisors of 6.'],
+      ['j2',[['x³ − 7x + 6','given'],['½ might be an answer','the whole-answer technique']],2,1,'With top 1, only whole divisors of 6.'],
+      ['j3',[['y³ − 3y − 1 has D < 0','computed'],['its answers are k cos(θ/3), k cos(θ/3 − 120°), k cos(θ/3 − 240°)','the third-angle technique']],2,0,'That is the technique.'],
+      ['j4',[['x⁴ + 8x³ + x + 1','given'],['x = y − 8/3 takes out the cube term','the quartic-by-hand technique']],2,1,'A quartic needs b/4: x = y − 2.']],[]); }});
+
+/* 46k Symmetry Groups of Equations, by Hand */
+const WK46=[
+  ['Is the group of x⁴ − 2 S₄, since the roots can be shuffled?','no: symmetries keep sums, so opposite corners stay opposite; it has 8',['yes','yes, 24','no: it has 4'],'Group-by-hand technique.'],
+  ['Is i ↦ 2i a symmetry of ℚ(i)?','no: i² = −1 must go to (2i)² = −4',['yes','yes, a stretch','no: there are none'],'Roots-to-roots technique.'],
+  ['Are ℚ(α) and ℚ(iα) the same field, for α = ⁴√2?','no: both have degree 4, and ℚ(α) is real while iα is not',['yes','yes, they have the same degree','no: they differ in degree'],'Fixed-by-hand technique.'],
+  ['When is the group of an irreducible cubic A₃?','when Δ is the square of a rational number',['when Δ < 0','when Δ is odd','always'],'Square-discriminant technique.'],
+  ['Δ < 0 for an irreducible cubic. What roots has it?','one real root and a flipped pair',['three real roots','no real root','a double root'],'Δ and real roots.'],
+  ['How are symmetries named by hand?','by where they send the generators, counted against [K : F]',['by guessing','by the degree alone','by the coefficients'],'Group-by-hand technique.']];
+QP.push({id:'46k.byhand',step:'46k',label:'symmetry groups by hand',open:()=>measured('46k'),make(){ return writtenQ('46k.byhand',WK46); }},
+  {id:'46k.work',step:'46k',mode:'work',label:'A₃ or S₃',open:()=>measured('46k'),make(){
+    const C=[[-3,1],[-3,-1],[-7,7],[0,-2],[-1,-1],[-4,1],[1,1],[-2,-2],[3,-1]][rnd(9)], p=C[0], q=C[1], d=-4*p*p*p-27*q*q, r=Math.round(Math.sqrt(Math.abs(d))), sq=d>0&&r*r===d;
+    const A='A₃, the turns of the three roots', S='S₃, all six shuffles';
+    return W30('46k.work[g;'+[p,q].join(',')+']',[['x³'+(p?(p<0?' − ':' + ')+(Math.abs(p)===1?'':Math.abs(p))+'x':'')+(q<0?' − ':' + ')+Math.abs(q),'irreducible over ℚ']],'What is its group?',sq?A:S,[sq?S:A,'a clock of 2','the identity alone'],'Δ = −4p³ − 27q² = '+M46(d)+(sq?' = '+r+'², a square.':', not a square.')); }},
+  {id:'46k.line',step:'46k',mode:'proof',label:'what groups by hand license',open:()=>measured('46k'),make(){
+    return line28('46k.line',[
+      ['k1',[['x³ − 3x + 1 is irreducible, and Δ = 81 = 9²','computed'],['its group is A₃','the square-discriminant technique']],2,0,'Δ is a rational square.'],
+      ['k2',[['x³ − 2 is irreducible, and Δ = −108','computed'],['its group is A₃','the square-discriminant technique']],2,1,'−108 is no square. The group is S₃.'],
+      ['k3',[['the roots of x⁴ − 2 are ±α, ±iα','given'],['some symmetry sends α to iα and −α to α','the group-by-hand technique']],2,1,'Symmetries keep sums: since α goes to iα, −α must go to −iα.'],
+      ['k4',[['[K : ℚ] = 8 for x⁴ − 2, and 8 symmetries are named','counted'],['they are all the symmetries','the count-the-symmetries technique']],2,0,'The count reaches [K : F].']],[]); }});
+
+/* 46l What Can’t Be Built, by Hand */
+const WL46=[
+  ['How is a number shown not buildable?','find its polynomial, prove it irreducible, and check its degree is not a power of 2',['draw it and fail','compute it to many places','show it is irrational'],'Unbuildable-test technique.'],
+  ['x⁴ − x − 1 has degree 4. Can its roots be built?','no: its group has 24 members, not a power of 2',['yes','yes, degree 4 is a power of 2','no: it has no roots'],'Power of 2 is needed, not enough.'],
+  ['Can the 9-gon be built because 3 can?','no: φ(9) = 6',['yes','yes, 9 = 3²','no: φ(9) = 9'],'Regular-figure technique.'],
+  ['Has 8x³ − 6x − 1 the root ½?','no: 1 − 3 − 1 = −3; and no u/v with u ∣ 1, v ∣ 8 works',['yes','yes, ½ divides 1','no: it has root 1'],'Whole-answer technique, top 8.'],
+  ['2³² + 1 is prime, so the (2³² + 1)-gon can be built?','no: 641 divides 2³² + 1',['yes','yes, by the regular-figure technique','no: it is too large to draw'],'Check before using.'],
+  ['When can the regular n-gon be built?','exactly when φ(n) is a power of 2',['when n is prime','when n is odd','always'],'Regular-figure technique.']];
+QP.push({id:'46l.unbuild',step:'46l',label:'what can’t be built, by hand',open:()=>measured('46l'),make(){ return writtenQ('46l.unbuild',WL46); }},
+  {id:'46l.work',step:'46l',mode:'work',label:'which figures can be built',open:()=>measured('46l'),make(){
+    const n=5+rnd(28), f=PHI46(n), two=(f&(f-1))===0;
+    const R=(two?'yes':'no')+': φ('+n+') = '+f, X=(two?'no':'yes')+': φ('+n+') = '+f;
+    return W30('46l.work[n;'+n+']',[['the regular '+n+'-gon','given']],'Can it be built?',R,[X,(two?'no':'yes')+': φ('+n+') = '+(n-1),(two?'yes':'no')+': φ('+n+') = '+(f===n-1?n-2:n-1),'no: '+n+' is not prime'].filter(x=>x!==R),'Regular-figure technique: φ('+n+') = '+f+(two?', a power of 2.':', not a power of 2.')); }},
+  {id:'46l.line',step:'46l',mode:'proof',label:'what the test licenses',open:()=>measured('46l'),make(){
+    return line28('46l.line',[
+      ['l1',[['φ(17) = 16 = 2⁴','computed'],['the 17-gon can be built','the regular-figure technique']],2,0,'That is the technique.'],
+      ['l2',[['φ(9) = 6','computed'],['the 9-gon can be built','the regular-figure technique']],2,1,'6 is not a power of 2.'],
+      ['l3',[['x⁴ − x − 1 has degree 4','given'],['its roots can be built','the unbuildable-test technique']],2,1,'Its group has 24 members.'],
+      ['l4',[['8x³ − 6x − 1 is irreducible over ℚ','checked'],['cos 20° cannot be built','the unbuildable-test technique']],2,0,'Degree 3 is not a power of 2.']],[]); }});
 /* ===== Rung pools end ===== */
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
