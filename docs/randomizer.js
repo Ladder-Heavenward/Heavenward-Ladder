@@ -8634,6 +8634,72 @@ const BX_ROW=(d,s)=>'│ '.repeat(d)+s, BX_UP=r=>r.replace(/\b[Rr]ows? [\d, toan
       lines:[['To prove: '+re(claim),'the claim']].concat(rows.map(r=>[BX_ROW(r[0],re(r[1])),BX_UP(r[2])])), ask:'Is row '+(ask+1)+' licensed?', right:YN22[planted?1:0], opts:YN22, lead:'',
       why:planted?BX_UP(re(whyBad)):'Every line of this proof is licensed by the reason beside it.'}; }});
 });
+/* --- inequalities to solve (8g): eight families are the seeds, the numbers are dealt afresh; each wrong option is a wrong move --- */
+const BG_fac=n=>n===0?'x':'(x'+pm(-n)+')', BG_x=(c,v)=>c===1?v:c===-1?'−'+v:sg(c)+v;
+const BG_poly=(b,c)=>'x²'+(b===0?'':(b<0?' − ':' + ')+(Math.abs(b)===1?'':Math.abs(b))+'x')+(c===0?'':pm(c));
+const BG_out=(m,M)=>'x < '+sg(m)+' or '+sg(M)+' < x', BG_in=(m,M)=>sg(m)+' < x < '+sg(M), BG_ALL='every real x', BG_NONE='no real x';
+const BG_FAM=['both sides','a square','no zeros','move and factor','three factors','over x','a quotient','two quotients'];
+const BG_MAKE=[
+  ()=>{ const m=1+rnd(4), n=1+rnd(4), t=rnd(11)-5, p=pick([-6,-5,-4,-3,-2,-1,1,2,3,4,5,6]), q=p+(n-m)*t; if(m===n||t===0||q===0) return null;
+    const lhs=sg(p)+' − '+BG_x(m,'x'), rhs=sg(q)+' − '+BG_x(n,'x'), up=n-m>0, right=up?'x < '+sg(t):'x > '+sg(t);
+    return {key:[m,n,t,p], line:lhs+' < '+rhs, right, wrong:[up?'x > '+sg(t):'x < '+sg(t), (up?'x < ':'x > ')+sg(-t), (up?'x > ':'x < ')+sg(-t)], link:'8g.linear',
+      why:'Add '+BG_x(n,'x')+' and '+sg(-p)+' to both sides: '+BG_x(n-m,'x')+' < '+sg(q-p)+', order kept. '+(up?(n-m===1?'That is the answer.':'Multiply by the positive 1/'+(n-m)+': order kept, x < '+sg(t)+'.'):'Multiply by the negative '+(n-m===-1?'−1':'1/('+sg(n-m)+')')+': the order turns about, x > '+sg(t)+'.')}; },
+  ()=>{ const neg=Math.random()<0.35, r=1+rnd(5), e=neg?-(1+rnd(7)):r*r, d=pick([-8,-5,-3,-2,2,3,5,8]), c=d+e; if(c===0) return null;
+    const line=sg(c)+' − x² < '+sg(d);
+    if(neg) return {key:[c,d], line, right:BG_ALL, wrong:[BG_NONE,'x < 0','0 < x'], link:'8f.square',
+      why:'Add x² and '+sg(-d)+' to both sides: '+sg(e)+' < x², order kept. A square is never negative, so every real x passes. Reading it as x² < '+sg(e)+' kept the wrong side.'};
+    return {key:[c,d], line, right:BG_out(-r,r), wrong:[BG_in(-r,r),'x > '+r,'x < '+(-r===0?'0':sg(-r))], link:'8g.chart',
+      why:'Add x² and '+sg(-d)+' to both sides: '+e+' < x², that is (x + '+r+')(x − '+r+') > 0. Both factors share a sign below '+sg(-r)+' and above '+r+'. Taking only x > '+r+' drops the negative stretch.'}; },
+  ()=>{ const b=pick([-4,-3,-2,-1,1,2,3,4]), lo=Math.floor(b*b/4)+1, c=lo+rnd(4), gt=Math.random()<0.6, h=b/2, k=c-b*b/4, hs=Number.isInteger(h)?sg(Math.abs(h)):Math.abs(b)+'/2';
+    const right=gt?BG_ALL:BG_NONE, line=BG_poly(b,c)+(gt?' > 0':' < 0');
+    return {key:[b,c,gt?1:0], line, right, wrong:[gt?BG_NONE:BG_ALL, 'x > '+(b>0?'−':'')+hs, 'x < '+(b>0?'−':'')+hs], link:'8f.square',
+      why:'Complete the square: '+BG_poly(b,c)+' = (x '+(b<0?'−':'+')+' '+hs+')² + '+(Number.isInteger(k)?k:(4*c-b*b)+'/4')+'. A square is never negative, so the left side is always positive: '+(gt?'every real x passes.':'no real x passes.')}; },
+  ()=>{ const r=rnd(9)-5, s=r+1+rnd(5), d=pick([-6,-3,-2,2,3,6]), b=-(r+s), c=r*s+d, gt=Math.random()<0.5;
+    const line=BG_poly(b,c)+(gt?' > ':' < ')+sg(d), right=gt?BG_out(r,s):BG_in(r,s);
+    return {key:[r,s,d,gt?1:0], line, right, wrong:[gt?BG_in(r,s):BG_out(r,s), gt?BG_out(-s,-r):BG_in(-s,-r), gt?'x > '+sg(s):'x < '+sg(s)].filter(w=>w!==right), link:'8g.chart',
+      why:'Take '+sg(d)+' from both sides: '+BG_poly(b,r*s)+(gt?' > ':' < ')+'0, that is '+(BG_fac(r)+BG_fac(s))+(gt?' > ':' < ')+'0. The factors are 0 at '+sg(r)+' and '+sg(s)+'; the product is '+(gt?'positive outside them':'negative between them')+'. Reading the zeros as '+sg(-s)+' and '+sg(-r)+' takes the signs inside the brackets at face value.'}; },
+  ()=>{ const z=shuffle([-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6]).slice(0,3), [a,b,c]=z.slice().sort((p,q)=>p-q), gt=Math.random()<0.5;
+    const line=z.map(BG_fac).join('')+(gt?' > 0':' < 0'), right=gt?BG_in(a,b)+' or '+sg(c)+' < x':'x < '+sg(a)+' or '+BG_in(b,c);
+    return {key:z.concat([gt?1:0]), line, right, wrong:[gt?'x < '+sg(a)+' or '+BG_in(b,c):BG_in(a,b)+' or '+sg(c)+' < x', gt?sg(c)+' < x':'x < '+sg(a), gt?BG_out(a,c):BG_in(a,c)], link:'8g.chart',
+      why:'The zeros are '+sg(a)+', '+sg(b)+' and '+sg(c)+'. Above '+sg(c)+' no factor is negative, so the product is positive; each zero passed going down changes one sign: negative between '+sg(b)+' and '+sg(c)+', positive between '+sg(a)+' and '+sg(b)+', negative below '+sg(a)+'.'}; },
+  ()=>{ const r=1+rnd(4), s=r+1+rnd(4), lt=Math.random()<0.6, line='x + '+(r*s)+'/x '+(lt?'<':'>')+' '+(r+s);
+    const right=lt?'x < 0 or '+BG_in(r,s):'0 < x < '+r+' or '+s+' < x';
+    return {key:[r,s,lt?1:0], line, right, wrong:lt?[BG_in(r,s),BG_out(r,s),'0 < x < '+r+' or '+s+' < x']:[BG_out(r,s),BG_in(r,s),'x < 0 or '+BG_in(r,s)], link:'8g.negative',
+      why:'Multiplying by x keeps the order only for a positive x. For x > 0: x² − '+(r+s)+'x + '+(r*s)+(lt?' < 0':' > 0')+', so '+(lt?BG_in(r,s):'0 < x < '+r+' or '+s+' < x')+'. For x < 0 the order turns about: x² − '+(r+s)+'x + '+(r*s)+(lt?' > 0, true for every negative x.':' < 0, true for no negative x.')+' Multiplying by x with no cases treats x as positive.'}; },
+  ()=>{ const a=rnd(11)-5, b=rnd(11)-5, gt=Math.random()<0.5; if(a===b) return null; const m=Math.min(a,b), M=Math.max(a,b);
+    const inn=n=>n===0?'x':'x'+pm(-n), line='('+inn(a)+') / ('+inn(b)+')'+(gt?' > 0':' < 0');
+    const right=gt?BG_out(m,M):BG_in(m,M), naive=(gt?sg(a)+' < x':'x < '+sg(a));
+    return {key:[a,b,gt?1:0], line, right, wrong:[gt?BG_in(m,M):BG_out(m,M), naive, gt?'x ≤ '+sg(m)+' or '+sg(M)+' ≤ x':sg(m)+' ≤ x ≤ '+sg(M)].filter(w=>w!==right).slice(0,3), link:'8g.product',
+      why:'A quotient has the sign a product would: '+(gt?'positive':'negative')+' exactly when '+BG_fac(a)+BG_fac(b)+(gt?' > 0':' < 0')+', with x ≠ '+sg(b)+'. That gives '+right+'. Multiplying through by '+inn(b)+' as if it were positive gives '+naive+', which loses a stretch.'}; },
+  ()=>{ const a=rnd(9)-5, b=a+1+rnd(5); if(b<=0) return null; const bx=sg(b)+' − x';
+    return {key:[a,b], line:'1/'+BG_fac(a)+' + 1/('+bx+') > 0', right:BG_in(a,b), wrong:[BG_out(a,b),sg(a)+' < x',BG_ALL+' but '+sg(a)+' and '+sg(b)], link:'8g.product',
+      why:'Over one bottom: ('+bx+' + x'+pm(-a)+') / ('+BG_fac(a)+'('+bx+')) = '+(b-a)+' / ('+BG_fac(a)+'('+bx+')). The top is positive, so the bottom must be: both factors positive, '+BG_in(a,b)+', or both negative, which would need x < '+sg(a)+' and x > '+sg(b)+' at once.'}; }];
+QP.push({id:'8g.findall',step:'8g',mode:'work',label:'every x for which it holds',open:()=>measured('8g'),make(){
+  for(let tries=0;tries<40;tries++){ const k=rnd(BG_MAKE.length), q=BG_MAKE[k](); if(!q) continue; const wrong=uniq(q.right,q.wrong,3); if(wrong.length<3) continue;
+    return {index:'q:8g.findall['+k+';'+q.key.join(',')+']', a3:['8g.inequalities['+BG_FAM[k]+']',q.link,DASH], lines:[[q.line,'the question']], ask:'For which x does it hold?', right:q.right, opts:shuffle([q.right,...wrong]), lead:'', why:q.why}; }
+  return null; }});
+/* --- order proofs (8g): the claim is the seed, the techniques are the links, the letters are dealt afresh; {a} marks a letter inside a reason --- */
+const BG8=[ /* [tag, claim, lines [statement, reason], planted line, the wrong line, why it is wrong] */
+  ['flip','If a < b, then −b < −a.',[['a < b','given'],['a + (−a − b) < b + (−a − b)','line 1, adding the same real keeps order'],['−b < −a','line 2, tidied']],
+    2,['a + (−a − b) > b + (−a − b)','line 1, adding −{a} − {b} and turning the order about'],'Adding the same real never turns the order about: the difference of the two sides is unchanged.'],
+  ['minus','If a < b and d < c, then a − c < b − d.',[['a < b','given'],['d < c','given'],['−c < −d','line 2 times −1, the negative-reverses-order technique'],['a + (−c) < b + (−d)','lines 1 and 3, the same-direction-add technique'],['a − c < b − d','line 4, read with α − β as α + (−β)']],
+    3,['−d < −c','line 2 times −1, the negative-reverses-order technique'],'Multiplying by −1 turns the order about. The planted line kept it as it was.'],
+  ['above','If 1 < a, then a < a².',[['1 < a','given'],['0 < a','0 < 1 and line 1, the chain technique'],['1 · a < a · a','line 1 times the positive {a}, order kept'],['a < a²','line 3, tidied']],
+    3,['a · a < 1 · a','line 1 times {a}, the negative-reverses-order technique'],'Line 2 says {a} is positive. The negative-reverses-order technique needs a negative, and a positive keeps the order.'],
+  ['below','If 0 < a and a < 1, then a² < a.',[['0 < a','given'],['a < 1','given'],['a · a < 1 · a','line 2 times the positive {a}, order kept'],['a² < a','line 3, tidied']],
+    3,['a · a < 1','line 2 times the positive {a}, order kept'],'Only one side was multiplied. Both sides must be multiplied by {a}, which gives {a} · {a} < 1 · {a}.'],
+  ['products','If 0 ≤ a < b and 0 ≤ c < d, then ac < bd.',[['0 ≤ a < b','given'],['0 ≤ c < d','given'],['0 < b','line 1, the chain technique'],['bc < bd','line 2 times the positive {b}, order kept'],['ac ≤ bc','line 1 times {c}, which is not negative: order kept, or both sides 0'],['ac < bd','lines 5 and 4, one order after another']],
+    5,['ac < bc','line 1 times {c}, which is not negative, order kept'],'{c} may be 0, and then {a}{c} = {b}{c} = 0. Only a positive keeps strict order; times 0 the most that holds is ≤.'],
+  ['squares','If 0 ≤ a and a < b, then a² < b².',[['0 ≤ a','given'],['a < b','given'],['0 < b','lines 1 and 2, the chain technique'],['a · a ≤ a · b','line 2 times {a}, which is not negative: order kept, or both sides 0'],['a · b < b · b','line 2 times the positive {b}, order kept'],['a² < b²','lines 4 and 5, one order after another']],
+    5,['b · b < a · b','line 2 times {b}, the negative-reverses-order technique'],'Line 3 says {b} is positive. Multiplying by a positive keeps the order; only a negative turns it about.']];
+const BG8_LINKS={flip:'8d.order',minus:'8g.negative+8g.sameadd',above:'8d.order+8a.chain',below:'8d.order',products:'8d.order+8a.chain',squares:'8d.order+8a.chain'};
+const BG8_LET=[['a','b','c','d'],['p','q','r','s'],['m','n','u','v'],['h','k','u','v']];
+QP.push({id:'8g.orders',step:'8g',mode:'proof',label:'order proofs',open:()=>measured('8g'),make(){
+  const k=rnd(BG8.length), [tag,claim,good,j,bad,whyBad]=BG8[k], planted=Math.random()<0.5, to=pick(BG8_LET), L=['a','b','c','d'];
+  const re=s=>s.replace(/(^|[^a-zA-Z])([abcd]+)(?![a-zA-Z])/g,(m,pre,w)=>pre+w.split('').map(l=>to[L.indexOf(l)]).join('')), rr=s=>s.replace(/\{([abcd])\}/g,(m,l)=>to[L.indexOf(l)]), up=r=>r.replace(/\blines? [\d, and]+/g,m=>m.replace(/\d+/g,d=>+d+1));
+  const lines=good.map((l,i)=>planted&&i===j-1?bad:l).map(l=>[re(l[0]),rr(up(l[1]))]), ask=planted?j:1+rnd(good.length);
+  return {index:'q:8g.orders['+tag+';'+to.join('')+';'+(planted?'x':'ok')+';'+ask+']', a3:['8g.claims['+tag+','+to.join('')+']',BG8_LINKS[tag],DASH], stack:true, lines:[['To prove: '+re(claim),'the claim']].concat(lines), ask:'Is line '+(ask+1)+' licensed?', right:YN22[planted?1:0], opts:YN22, lead:'',
+    why:planted?rr(whyBad):'Every line of this proof is licensed by the reason beside it.'}; }});
 
 /* ===== Rung pools, rungs 32 on (Andrew 2026-11-13) ===== */
 /* ----- rung 32: waves and frequencies, 32a to 32l ----- */
