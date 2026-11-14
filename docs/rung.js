@@ -514,11 +514,7 @@ function placeHere(){
   const dn=el=>el.classList.contains('done');
   const first=qs.findIndex(el=>!dn(el));
   if(first<0){ const box=document.querySelector('.sayback'); if(box){ const d=document.createElement('p'); d.className='pagedone'; d.textContent='Every question on this page is ticked, and its row on the ladder has ticked itself.'; const h2=box.querySelector('h2'); (h2||box).insertAdjacentElement('afterend',d); } return; }
-  qs.forEach((q,i)=>{
-    if(dn(q)) return;
-    if(i===first) q.insertAdjacentElement('afterend',tag('you are here'));
-    else if(dn(qs[i-1])) q.insertAdjacentElement('afterend',tag('you are also here','also'));
-  });
+  /* qslide (Andrew 2026-11-14 17:40Z): no "you are here" tag beside a page's question any more */
 }
 
 /* marks: click a question number or a ladder row number to toggle ✓; mirrored to the artifact's record by sync.js */
@@ -688,6 +684,7 @@ function starCounts(){
       if(rB) blue++; if(rG) gold++; if(rB&&rG&&rC) wings++;
       fB=fB&&rB; fC=fC&&rC; });
     if(fB) blue++; if(fG) gold++; if(fB&&fG&&fC) wings++; below=below&&fB; });
+  Object.keys(pages).forEach(s=>{ if(/^inf/.test(s)&&pages[s]&&pages[s].v) blue++; }); /* skystar */
   return {blue,gold,wings};
 }
 /* starpop */ /* 2026-11-13 (Andrew 08:29Z): which step, rung or floor holds each mark, by its number, so the pop-up can name it */
@@ -705,6 +702,7 @@ function starUnits(){
       if(rB) blue.push('rung '+r); if(rG) gold.push('rung '+r); if(rB&&rG&&rC) wings.push('rung '+r);
       fB=fB&&rB; fC=fC&&rC; });
     if(fB) blue.push('floor '+fl); if(fG) gold.push('floor '+fl); if(fB&&fG&&fC) wings.push('floor '+fl); below=below&&fB; });
+  Object.keys(pages).forEach(s=>{ if(/^inf/.test(s)&&pages[s]&&pages[s].v) blue.push(((window.LADDER_CARDMAP||{})[s]||[])[0]||s); }); /* skystar */
   return {blue,gold,wings};
 }
 window.__starUnits=starUnits;
@@ -2082,7 +2080,7 @@ function index(){ const sec=document.getElementById('skysec'), top=document.getE
     if(!n){ sec.hidden=true; return; }
     const PD=(()=>{ try{ return JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){ return {}; } })(); /* skypass (Andrew 2026-11-13 23:28Z): a passed step's number turns blue */
     ol.innerHTML=L.slice(0,n).map(x=>/* 2026-11-08: the list is shown bottom-up (column-reverse), so ∞1 sits lowest and the newest on top */'<li class="k-sky built'+(PD[x.page]&&PD[x.page].v?' skypass':'')+'"><span class="n">∞'+(x.s||x.n)+'</span><span class="t"><a href="'+x.page+'.html">'+esc(x.title)+'</a><span class="kind">'+esc(x.kw)+'</span></span></li>').join('');
-    sec.hidden=false;
+    sec.hidden=false; if(window.LadderSkyFeet) LadderSkyFeet.dress(ol); /* skystar */
     if(fresh){ const fa=ol.querySelector('a[href="'+fresh+'.html"]'); if(fa){ const li=fa.closest('li'); li.classList.add('fvhere'); setTimeout(()=>li.scrollIntoView({block:'center'}),80); setTimeout(()=>li.scrollIntoView({block:'center'}),700); } } }); }
 /* 0.3.5 (Andrew 21:57): the Endless floor shows once rung 30 is finished: its core steps passed, its floor certified, or a footing above it climbed */
 function endless(){ const M=window.LADMAP||[]; let P={}; try{ P=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
@@ -2457,7 +2455,7 @@ function understand(el){ const P=get('pages:done',{}), M=window.LADMAP||[], U=wi
   h.innerHTML=fls.length?'<p class="sk-n">The understanding questions of every step you have reached. Clear every question on a step for its blue star.</p>'
       +fls.map(([fl,rs],i)=>'<details class="sk-fl"'+(i===fls.length-1&&!one.length?' open':'')+'><summary>floor '+fl+'</summary>'+'<ul class="sk-list">'+rs.map(rung).join('')+'</ul></details>').join('')
     :'<p class="sk-n">Nothing is reached yet. Each step’s understanding questions come here as soon as you reach it.</p>';
-  while(h.firstChild) el.appendChild(h.firstChild); }
+  while(h.firstChild) el.appendChild(h.firstChild); if(window.LadderSkyAQ) LadderSkyAQ.add(el); /* aqsky */ }
 function tools(body,here){ const KEY='ladder:aq', LBL={un:'Understanding',cw:'Crosswalk',ms:'Measuring Stick',sq:'Standing Questions'}, K=['un','cw','ms','sq'];
   let on=[]; try{ on=JSON.parse(localStorage.getItem(KEY)||'[]')||[]; }catch(e){} if(!Array.isArray(on)) on=[]; if(here&&!on.includes('sq')) on.push('sq');
   const pane={}; K.forEach(k=>{ const d=document.createElement('div'); d.className='aq-pane aq-p-'+k; d.hidden=true; pane[k]=d; });
@@ -3440,4 +3438,42 @@ function bind(pane){
 /* a tick made on the step page reaches every open copy of the step at once (the observer above); on a return to the pane after
    another page, the pane is drawn again from the saved marks */
 window.LadderUnwrap={bind,load,tick,paint};
+})();
+/* qslide */ /* 2026-11-14 (Andrew 17:40Z): on the question's screen the address and its kind sit on a line of their own above the centred question */
+(function(){ const mark=()=>{ document.querySelectorAll('.sayback ol>li>.ph').forEach(ph=>{ if(ph.closest('#desk,#stick')) return; const n=ph.nextSibling; if(n&&n.nodeType===1&&n.classList.contains('qbr')) return; const b=document.createElement('i'); b.className='qbr'; b.setAttribute('aria-hidden','true'); ph.after(b); }); };
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',mark); else mark(); })();
+/* aqsky */ /* 2026-11-14 (Andrew 17:40Z, item 4): the infinity series steps the blue sky has supplied come into the Understanding pane
+   as an "Endless floor" group, one row per step, with the same unwrap and two-way ticks as every other step (aqunwrap). */
+(function(){
+'use strict';
+const STAR='<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M12 2l2.9 6.6 7.1.7-5.4 4.8 1.6 7L12 17.4 5.8 21.1l1.6-7L2 9.3l7.1-.7z"/></svg>';
+const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const J=(k,d)=>{ try{ const v=LS.getItem(k); return v==null?d:JSON.parse(v); }catch(e){ return d; } };
+function add(el){ const S=window.LadderSky; if(!S||!S.load) return;
+  S.load().then(L=>{ if(!el.isConnected||el.querySelector('.aq-skyl')) return;
+    const n=window.LADDER_DESK?L.length:Math.min(S.count?S.count():0,L.length); if(!n) return;
+    const P=J('pages:done',{})||{}, C=window.LADDER_CARDMAP||{};
+    const rows=L.slice(0,n).reverse(); /* newest on top, as under the blue sky button */
+    const lab=x=>(C[x.page]||[])[0]||('∞'+(x.s||String(x.n).replace(/^·/,'')));
+    const li=x=>'<li><a class="aq-step" href="'+x.page+'.html">'+esc(lab(x))+' · '+esc(x.title)+'</a> <span class="sk-st">'+(P[x.page]&&P[x.page].v?'<span class="aq-star">'+STAR+'</span> every question cleared':'questions open')+'</span></li>';
+    const d=document.createElement('details'); d.className='sk-fl aq-sky';
+    d.innerHTML='<summary>Endless floor · infinity series</summary><ul class="sk-list aq-skyl">'+rows.map(li).join('')+'</ul>';
+    const none=el.querySelector(':scope>p.sk-n'); if(none&&/Nothing is reached yet/.test(none.textContent)) none.textContent='The understanding questions of every step you have reached. Clear every question on a step for its blue star.';
+    el.appendChild(d); if(window.LadderUnwrap) LadderUnwrap.bind(d); }).catch(()=>{}); }
+window.LadderSkyAQ={add};
+})();
+/* skystar */ /* 2026-11-14 (Andrew 17:47Z): an infinity series row on the index gets the footing list and blue star of every other step:
+   x/n footings understood, the star filled once every understanding question is ticked (the step's pages:done v). */
+(function(){
+'use strict';
+let feet=null;
+function load(){ return feet||(feet=window.LADDER_SKYFEET?Promise.resolve(window.LADDER_SKYFEET):new Promise(res=>{ const s=document.createElement('script'); s.src='skyfeet.js'; s.onload=()=>res(window.LADDER_SKYFEET||{}); s.onerror=()=>res({}); document.head.appendChild(s); })); }
+const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+function dress(ol){ load().then(F=>{ ol.querySelectorAll(':scope>li.k-sky').forEach(li=>{ if(li.querySelector(':scope>details.flist')) return;
+    const a=li.querySelector(':scope>.t>a'), stem=a&&(a.getAttribute('href')||'').replace(/\.html.*$/,''), ft=stem&&F[stem]; if(!ft||!ft.length) return;
+    const d=document.createElement('details'); d.className='stidx flist';
+    d.innerHTML='<summary></summary><ol>'+ft.map(([id,t])=>'<li><a href="'+stem+'.html#'+esc(id)+'"><span class="fn">'+esc(id)+'</span> '+esc(t)+'</a></li>').join('')+'</ol>';
+    li.appendChild(d); });
+  if(window.__footCount){ if(window.LADDER_UND) __footCount(); else setTimeout(()=>{ if(window.__footCount) __footCount(); },1500); } }); }
+window.LadderSkyFeet={dress,load};
 })();
