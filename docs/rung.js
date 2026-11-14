@@ -1927,7 +1927,10 @@ function footingView0(){
   units.forEach((u,n)=>u.forEach(el=>el.setAttribute('data-fvu',n)));
   const N=units.length, P=page(), LASTU=tail.length?N-2:N-1;
   /* the pages before and after on the climb: nav.nextrung as built, or the .pn rows pn() made of it (annex links relinked) */
-  const pageLink=dir=>{ const a=document.querySelector(dir>0?'.pn .pnb.next[href], nav.nextrung a.pnb.next[href]':'.pn .pnb.prev[href], nav.nextrung a.pnb.prev[href]')
+  const pageLink=dir=>{ /* floor 8 into the infinity series (Andrew 2026-11-14 17:40Z): once a step is supplied, the floor 8 summary
+      climbs on to the first infinity step, and that step's previous is the floor 8 summary */
+    if(window.LadderSky&&LadderSky.firstPage){ const fp=LadderSky.firstPage(); if(fp){ if(dir>0&&P==='floor8') return fp+'.html'; if(dir<0&&P===fp) return 'floor8.html'; } }
+    const a=document.querySelector(dir>0?'.pn .pnb.next[href], nav.nextrung a.pnb.next[href]':'.pn .pnb.prev[href], nav.nextrung a.pnb.prev[href]')
       ||[...document.querySelectorAll('nav.nextrung a')].find(x=>dir>0?/→/.test(x.textContent):(/←/.test(x.textContent)&&!/index\.html$/.test(x.getAttribute('href')||'')));
     const h=a&&a.getAttribute('href'); if(h&&(dir>0||!/^index\.html/.test(h))) return h;
     /* a floor page's links go back to the ladder only: its previous on the climb is the floor below's conclusion */
@@ -1948,7 +1951,12 @@ function footingView0(){
   sky.onclick=()=>{ if(window.LadderSky) LadderSky.supply(); };
   document.body.append(up,dn); if(!window.LADDER_DESK) document.body.append(sky); /* 0.3.57: no blue sky on the desk */
   const label=()=>{ const atEnd=cur>=LASTU, nextPage=atEnd?pageLink(1):null, prevPage=cur<=0?pageLink(-1):null;
-    up.hidden=!on||(atEnd&&!nextPage); dn.hidden=!on||(cur<=0&&!prevPage); sky.hidden=!on||!atEnd||!!nextPage||!skyOpen();
+    /* the blue sky button (Andrew 2026-11-14 17:40Z): on the floor 7 conclusion, the floor 8 summary and the last supplied infinity
+       step, beside "next" where there is one; gone once every step has been supplied */
+    const spot=P==='floor7concl'||P==='floor8'||!!(window.LadderSky&&LadderSky.lastPage&&LadderSky.lastPage()===P);
+    up.hidden=!on||(atEnd&&!nextPage); dn.hidden=!on||(cur<=0&&!prevPage);
+    sky.hidden=!on||!atEnd||!(spot||!nextPage)||!skyOpen()||!!(window.LadderSky&&LadderSky.caughtUp&&LadderSky.caughtUp());
+    const pair=!sky.hidden&&!up.hidden; up.classList.toggle('fvpair',pair); sky.classList.toggle('fvpair',pair);
     up.setAttribute('aria-label','next: '+(atEnd?(nextPage||''):idOf(cur+1))); dn.setAttribute('aria-label','previous: '+(cur>0?idOf(cur-1):(prevPage||'')));
     pos.textContent=!ONE&&cur>0&&cur<=steps.length?' · '+cur+' of '+steps.length:''; };
   /* 0.3.13 (Andrew 00:51): the page view's reveal ("next footing") hides the footings past the furthest opened; in the footing
@@ -2028,7 +2036,9 @@ function footingView0(){
   setMode(ss.get('fv:off')==='1'?false:want?want==='fv':(pref&&window.LADDER_DESK?pref==='fv':true)); /* fv:off = page view for checks */
   if(on){ if(!toHash()) go(0,{instant:true,force:true}); }
   /* what needs ladmap.js runs when it arrives: the climb record of this footing and its repair */
-  window.LadderFV.mapReady=()=>{ try{ if(repairFurthest()) toast('the climb record was set back to your furthest footing'); }catch(e){} try{ if(on) remember(); }catch(e){} };
+  window.LadderFV.mapReady=()=>{ try{ if(repairFurthest()) toast('the climb record was set back to your furthest footing'); }catch(e){} try{ if(on) remember(); }catch(e){} label(); };
+  window.LadderFV.relabel=label; /* the blue sky's list and the map arrive after the first paint */
+  if(window.LadderSky&&/^(floor7concl|floor8|inf\d+)$/.test(P)) LadderSky.load().then(()=>{ if(LadderSky.links) LadderSky.links(); label(); });
   if(window.LADMAP) window.LadderFV.mapReady();
   window.LadderFV.toggle=()=>{ const el=units[cur]&&units[cur][0]; setMode(!on); if(!on&&el&&cur>0) el.scrollIntoView({block:'start'}); else if(on) go(cur,{instant:true,force:true}); };
   window.LadderFV.go=n=>go(n);
@@ -2048,7 +2058,7 @@ ready(()=>{ /* 0.2.1: rung and floor pages carry no tags */ if(/^(r\d+|floor\d+)
 'use strict';
 const KEY='ladder:sky';
 const got=()=>{ try{ return (JSON.parse(LS.getItem(KEY)||'null')||{n:0}); }catch(e){ return {n:0}; } };
-let list=null;
+let list=null, ready=null; /* ready: the list once loaded */
 /* Arrow newsflashes (Andrew 2026-11-11 16:39Z): each stands in sky.js just before the first step of its subject, with a label
    in place of a number (n "·phys"). They arrive over several releases, so each is counted in once, by page, under
    ladder:skyIns: a learner who already had the step after it gets the newsflash with it; otherwise it is the next supplied. */
@@ -2056,7 +2066,7 @@ function skyIns(L){ try{ let done=JSON.parse(LS.getItem('ladder:skyIns')||'[]');
     L.forEach((x,p)=>{ if(typeof x.n==='number'||done.includes(x.page)) return; if(st.n>p){ st.n++; ch=true; } done.push(x.page); add=true; });
     if(ch) LS.setItem(KEY,JSON.stringify(st)); if(add) LS.setItem('ladder:skyIns',JSON.stringify(done)); }catch(e){} return L; }
 function load(){ if(list) return list;
-  list=(window.LADDER_SKY?Promise.resolve(window.LADDER_SKY):new Promise(res=>{ const s=document.createElement('script'); s.src='sky.js'; s.onload=()=>res(window.LADDER_SKY||[]); s.onerror=()=>res([]); document.head.appendChild(s); })).then(skyIns); return list; }
+  list=(window.LADDER_SKY?Promise.resolve(window.LADDER_SKY):new Promise(res=>{ const s=document.createElement('script'); s.src='sky.js'; s.onload=()=>res(window.LADDER_SKY||[]); s.onerror=()=>res([]); document.head.appendChild(s); })).then(skyIns).then(L=>{ ready=L; return L; }); return list; }
 function note(m){ let t=document.getElementById('patoast'); if(!t){ t=document.createElement('div'); t.id='patoast'; t.setAttribute('role','status'); document.body.appendChild(t); } t.textContent=m; t.classList.add('on'); clearTimeout(note.h); note.h=setTimeout(()=>t.classList.remove('on'),3200); }
 function supply(){ load().then(L=>{ const st=got(); if(!L.length){ note('The blue sky could not load.'); return; }
     if(st.n>=L.length){ note('The blue sky is caught up: every step from the front is under the button. New ones come with new versions of the ladder.'); return; }
@@ -2100,7 +2110,19 @@ function histLinks(){ const pg=ladderPage(); if(!/^(inf\d+|hist0)$/.test(pg)) re
     document.querySelectorAll('.pn a.pnb.next, header.top .home a, nav.nextrung a').forEach(a=>{ if(/^index\.html/.test(a.getAttribute('href')||'')&&(a.classList.contains('next')||/→/.test(a.textContent))){ a.setAttribute('href','hist0.html'); lab(a,a.classList.contains('pnb')?'the top · the history of mathematics':'next: the top · the history of mathematics →'); } }); }
   else if(pg==='hist0'){ const t=String(last.title||''), tt='∞'+(last.s||last.n)+' · '+t.toLowerCase();
     document.querySelectorAll('.pn a.pnb.prev, header.top .home a, nav.nextrung a').forEach(a=>{ if(/^inf\d+\.html/.test(a.getAttribute('href')||'')){ a.setAttribute('href',last.page+'.html'); lab(a,a.classList.contains('pnb')?tt:'← '+tt); } }); } }); }
-window.LadderSky={supply,load,open,endless,count:()=>got().n,histOpen,histLinks};
+/* floor 8 into the infinity series (Andrew 2026-11-14 17:40Z): once the list has loaded, the first and last supplied steps; the
+   floor 8 summary's links gain "next" to the first step, and that step's previous goes back to the floor 8 summary */
+const supplied=()=>ready?Math.min(got().n,ready.length):0;
+const firstPage=()=>supplied()>0?ready[0].page:null;
+const lastPage=()=>supplied()>0?ready[supplied()-1].page:null;
+const caughtUp=()=>!!ready&&ready.length>0&&got().n>=ready.length;
+function links(){ const pg=ladderPage(), fp=firstPage(); if(!fp||!ready) return; const x=ready[0], tt='∞'+(x.s||x.n)+' · '+String(x.title||'').toLowerCase();
+  if(pg==='floor8'){ document.querySelectorAll('.pn').forEach(r=>{ const s=r.querySelector('.pnb.next'); if(!s||s.tagName==='A') return;
+      const a=document.createElement('a'); a.className='pnb next'; a.href=fp+'.html'; a.innerHTML='<span class="pk">next →</span><span class="pl"></span>'; a.querySelector('.pl').textContent=tt; s.replaceWith(a); });
+    const nv=document.querySelector('nav.nextrung'); if(nv&&!nv.querySelector('a[href="'+fp+'.html"]')){ const a=document.createElement('a'); a.href=fp+'.html'; a.textContent=tt+' →'; nv.appendChild(a); } }
+  else if(pg===fp){ document.querySelectorAll('.pn a.pnb.prev, header.top .home a, nav.nextrung a').forEach(a=>{ if(a.getAttribute('href')!=='floor7concl.html') return;
+      a.setAttribute('href','floor8.html'); const l=a.classList.contains('pnb')?a.querySelector('.pl'):null; if(l) l.textContent='F8 · endless floor'; else a.textContent='← F8 · endless floor'; }); } }
+window.LadderSky={supply,load,open,endless,count:()=>got().n,histOpen,histLinks,firstPage,lastPage,caughtUp,links};
 const go=()=>{ index(); histLinks(); };
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
 })();
@@ -2832,7 +2854,7 @@ const pg=()=>window.ladderPage?ladderPage():'';
 const ATTACH=/(^|\s)(eqline|eqline-words|brkkey|eyebrow|lbl|cap|lp|lv|first|dividend|tablewrap-cap)(\s|$)/;
 const texbox=el=>!!(el&&el.matches&&(el.matches('pre,.eqline,.eqline-words,.lines,.texline,.katex-display')||el.querySelector('.katex-display,pre')));
 let screens=[], k=0, on=false, bar=null, L=null, R=null, posEl=null, dots=null, step=null;
-const folded=el=>el.hasAttribute('data-collapsed')||(el.matches('p[data-pid]')&&!el.textContent.replace(/\s+/g,'').replace(/^[\d\w.·]+$/,'').length);
+const folded=el=>el.hasAttribute('data-collapsed')||(el.matches('p[data-pid]')&&!el.textContent.replace(/\s+/g,'').replace(/^[\d\w.·]{1,16}$/,'').length); /* 2026-11-14: only an address alone is empty; a sentence with no comma (5.0.9) was being read as one */
 function clear(){ document.querySelectorAll('.brk.sw-rows').forEach(b=>{ if(!b.closest('.fvghost')) b.classList.remove('sw-rows','sw-has'); }); document.querySelectorAll('[data-sw]').forEach(x=>{ if(x.closest('.fvghost')) return; /* the outgoing footing keeps its screen while it leaves */ x.removeAttribute('data-sw'); x.classList.remove('sw-on','sw-open','sw-stub'); }); screens=[]; }
 /* slidex */ /* Andrew 2026-11-13 11:01Z: a deck's slides become screens of the footing: no second set of buttons, no deck heading */
 function expand(root){ [...root.querySelectorAll(':scope>.slides:not([data-sx]):not([data-collapsed])')].forEach(deck=>{ try{
@@ -2842,7 +2864,59 @@ function expand(root){ [...root.querySelectorAll(':scope>.slides:not([data-sx]):
       const c=live.cloneNode(true); c.querySelectorAll('.new').forEach(x=>x.classList.remove('new')); c.querySelectorAll('[id]').forEach(x=>x.removeAttribute('id')); w.appendChild(c); made.push(w); }
     A.show(at); made.forEach(w=>{ ref.parentNode.insertBefore(w,ref.nextSibling); ref=w; }); deck.setAttribute('data-sx','src'); deck.hidden=true;
   }catch(_){} }); }
-function build(els){ clear(); step=els.find(e=>e.matches&&e.matches('section.step')); if(!step) return; expand(step);
+/* ---- smaller chunks (Andrew 2026-11-14 17:40Z: "clear up the summaries and conclusions so they're broken into smaller more readable
+   chunks"). On a rung's or a floor's summary and conclusion the whole page is one footing, and its header (title and summary) used to
+   stand above every screen. Now the header's paragraphs are screens too, the title riding with the first; a conclusion's body gives
+   one screen to each block; a heading rides with the screen after it. A long paragraph is shown a few sentences at a time, and a long
+   list a few items at a time. The wording, the paragraph and its address never change: the paragraph is only shown in parts. */
+const CHUNKPAGE=/^(r\d\d|floor\d)(concl)?$/;
+const CW=60, CMAX=75; /* words: a paragraph over CMAX is shown in parts of about CW */
+const words=t=>(String(t).match(/\S+/g)||[]).length;
+const SENT=/[.!?][”’")\]]?\s+(?=[A-Z0-9“‘"(¬∀∃])/g;
+function sentences(p){ /* the paragraph's child nodes cut into sentences; a cut falls only in plain text at the paragraph's own level */
+  const out=[[]]; [...p.childNodes].forEach(n=>{
+    if(n.nodeType!==3){ out[out.length-1].push(n); return; }
+    let t=n; SENT.lastIndex=0; let m, from=0; const s=n.nodeValue; const cuts=[];
+    while((m=SENT.exec(s))) cuts.push(m.index+m[0].length);
+    let off=0; cuts.forEach(c=>{ const r=t.splitText(c-off); out[out.length-1].push(t); out.push([]); t=r; off=c; });
+    out[out.length-1].push(t); });
+  return out.filter(a=>a.some(n=>n.nodeType!==3||n.nodeValue.trim())); }
+function groups(units,size,max){ /* consecutive units into about-equal parts, none much over size */
+  const w=units.map(size), all=w.reduce((a,b)=>a+b,0); if(all<=max||units.length<2) return null;
+  const n=Math.min(units.length,Math.ceil(all/CW)), per=all/n, out=[[]]; let acc=0;
+  units.forEach((u,i)=>{ if(out[out.length-1].length&&out.length<n&&acc+w[i]/2>per*out.length) out.push([]); out[out.length-1].push(u); acc+=w[i]; });
+  return out.length>1?out:null; }
+function chunkP(p){ if(p.dataset.swc) return p.dataset.swc==='1'?[...p.querySelectorAll(':scope>.swc')]:null;
+  p.dataset.swc='0'; if(words(p.textContent)<=CMAX||p.querySelector('.katex-display,pre,.eqline')) return null;
+  const g=groups(sentences(p),s=>words(s.map(n=>n.textContent).join('')),CMAX); if(!g) return null;
+  const spans=g.map(ss=>{ const sp=document.createElement('span'); sp.className='swc'; const nodes=ss.flat(); nodes[0].parentNode.insertBefore(sp,nodes[0]); nodes.forEach(n=>sp.appendChild(n)); return sp; });
+  /* the space that closed a sentence stays inside its part; the address and the paragraph's buttons ride with the last part */
+  p.dataset.swc='1'; p.classList.add('sw-split'); return spans; }
+const LISTS=new WeakMap();
+function chunkList(ul){ if(ul.dataset.swc) return ul.dataset.swc==='1'?LISTS.get(ul)||null:null; ul.dataset.swc='0';
+  const lis=[...ul.children].filter(x=>x.matches('li')); if(lis.length<4) return null;
+  const g=groups(lis,li=>words(li.textContent)+8,CMAX); if(!g) return null;
+  /* a part is the items themselves, marked by their first: data-sw goes on each item of a part */
+  ul.dataset.swc='1'; ul.classList.add('sw-split'); LISTS.set(ul,g); return g; }
+function buildChunks(els){
+  const hdr=els.find(e=>e.matches&&e.matches('header.top')); const items=[], lead=[];
+  const add=el=>{ if(el.hidden||el.matches('script,style,template,nav,.pn,.home,.stnext')) return;
+    if(el.matches('p[data-pid]')&&folded(el)){ return; }
+    if(el.matches('h1,.tags,h2,h3,h4,.eyebrow,.fr,.sthead')){ lead.push(el); return; } /* a heading rides with the screen after it */
+    if(el.matches('.cl-body')){ if(getComputedStyle(el).display==='none') return; [...el.children].forEach(add); return; }
+    if(el.matches('.cl-lock')&&getComputedStyle(el).display==='none') return;
+    if(el.matches('.brk.brk-check')){ const rows=[...el.querySelectorAll(':scope>.rows>.row')]; if(rows.length>1){ el.classList.add('sw-rows'); rows.forEach(r=>{ items.push(lead.splice(0).concat([r])); }); return; } }
+    if(ATTACH.test(el.className||'')&&items.length&&!(texbox(el)&&items[items.length-1].some(texbox))&&!lead.length){ items[items.length-1].push(el); return; }
+    const parts=el.matches('p')?chunkP(el):el.matches('ul')?chunkList(el):null;
+    if(parts){ parts.forEach((x,i)=>items.push((i?[]:lead.splice(0)).concat(Array.isArray(x)?x:[x]))); return; }
+    items.push(lead.splice(0).concat([el])); };
+  if(hdr){ hdr.classList.add('sw-hdr'); [...hdr.children].forEach(add); }
+  expand(step); [...step.children].forEach(add);
+  if(lead.length){ if(items.length) items[items.length-1].push(...lead); else items.push(lead.splice(0)); }
+  els.forEach(e=>{ if(e!==step&&e!==hdr&&e.matches&&e.matches('section,figure,.slides,.pic')&&!e.matches('nav,.pn')) items.push([e]); });
+  screens=items;
+  screens.forEach((s,i)=>s.forEach(x=>{ x.setAttribute('data-sw',i); if(folded(x)){ x.classList.add('sw-stub'); if(!x.dataset.addr) x.dataset.addr=x.matches('.slides')?'slides':x.matches('.pic')?'picture':x.matches('pre')?'lines':x.matches('.sayback')?'question':'·'; } })); }
+function build(els){ clear(); step=els.find(e=>e.matches&&e.matches('section.step')); if(!step) return; if(CHUNKPAGE.test(pg())&&els.length&&els[0]&&els.some(e=>e.matches&&e.matches('header.top'))){ buildChunks(els); return; } expand(step);
   [...step.children].forEach(ch=>{ if(ch.matches('h2,.sthead,.stnext,script,style,template')||ch.hidden) return; if(ch.matches('p[data-pid]')&&folded(ch)) return;
     if(ch.matches('.brk.brk-check')){ const rows=[...ch.querySelectorAll(':scope>.rows>.row')]; if(rows.length>1){ ch.classList.add('sw-rows'); rows.forEach(r=>screens.push([r])); return; } } /* 2026-11-10 (Andrew 15:51): one move to a screen */ /* 2026-11-10 (Andrew 12:08): an emptied or collapsed paragraph is no screen; the chain closes up */
     if(ATTACH.test(ch.className||'')&&screens.length&&!(texbox(ch)&&screens[screens.length-1].some(texbox))){ screens[screens.length-1].push(ch); return; } screens.push([ch]); }); /* 2026-11-10 (Andrew 15:44): one TeX box to a screen */
@@ -2880,7 +2954,10 @@ function ret(a){ const cur=screens[k]&&screens[k][0]; const deck=cur&&cur.matche
   if(k>0) show(k-1,{anim:true}); else if(window.LadderFV&&LadderFV.back){ LadderFV.wantLast=true; LadderFV.back({h:true}); } }
 /* the footing view tells us each time it paints a footing */
 window.LadderFV=window.LadderFV||{};
-LadderFV.onPaint=function(els,cur,info){ ui(); if(!PAGES.test(pg())||!info||!info.on){ on=false; document.body.classList.remove('sw'); clear(); bar.hidden=true; return; }
+let lastPaint=null, wasLocked=document.body&&document.body.classList.contains('cl-locked');
+/* a conclusion opened with "open it anyway" (or by its last tick) rebuilds its screens, so the body gets its own */
+try{ new MutationObserver(()=>{ const l=document.body.classList.contains('cl-locked'); if(l===wasLocked) return; wasLocked=l; if(lastPaint&&CHUNKPAGE.test(pg())){ if(!l){ const f=document.querySelector('.cl-body>*'); if(f) LadderFV.wantEl=f; } LadderFV.onPaint.apply(null,lastPaint); } }).observe(document.body,{attributes:true,attributeFilter:['class']}); }catch(_){}
+LadderFV.onPaint=function(els,cur,info){ lastPaint=[els,cur,info]; ui(); if(!PAGES.test(pg())||!info||!info.on){ on=false; document.body.classList.remove('sw'); clear(); bar.hidden=true; return; }
   build(els); on=screens.length>0; document.body.classList.toggle('sw',on); if(!on){ bar.hidden=true; return; }
   let want=0; const el=LadderFV.wantEl; LadderFV.wantEl=null;
   if(el){ const i=screens.findIndex(s=>s.some(x=>x===el||x.contains(el))); if(i>=0) want=i; }
