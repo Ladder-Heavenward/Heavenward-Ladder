@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pharmacy Logic: Stocking for Chronic and Acute Conditions</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r32chem.html">← 32·chem how do X-rays see inside a crystal?</a><a href="r32comp.html">next: 32·comp how does a photo shrink to a small file? →</a></p>
+  <div class="tags"><span class="tag bio">32·bio · biology</span></div>
+  <h1>Pharmacy Logic: Stocking for Chronic and Acute Conditions</h1>
+  <p data-pid="24473a">A pharmacist asks two different questions about a condition.</p>
+  <p data-pid="2a3b9a"><b>What is it like?</b> That is a description, and it is made of every and some.</p>
+  <ul>
+    <li data-pid="5a8323">A condition is <b>chronic</b> in a person when, from some day on, they need the medicine every day.</li>
+    <li data-pid="76f6c2">A condition is <b>acute</b> in a person when they need the medicine on some days, and after that never.</li>
+    <li data-pid="07e5b4">A condition is <b>recurring</b> in a person when both are true at once: they have the condition every day, and its attacks come on some days, which are the exceptions, and the exceptions never run out. It is a chronic condition whose symptoms are acute.</li>
+  </ul>
+  <p data-pid="6679bb">Now change what the every and the some range over, from one person's days to the town's people. Each acute case is one person's some. But in a town there are many people, each with a small chance on any day. So for the town, on every day, some person is having theirs. What is a one-off for the person is a steady stream for the shelf.</p>
+  <p data-pid="76a69f"><b>How much do I stock?</b> That is a response, chosen before the week is known. No finite shelf covers every way a week can go, so the pharmacist does not ask for never running short. They pick a chance of running short that they will accept, here 2 weeks in 100, and stock the least amount that keeps the chance at or below it.</p>
+  <p data-pid="c91cd4">From here on, the <b>shelf</b> for a medicine is that least amount, and the <b>short-chance</b> is the chance that the week's need is more than the shelf.</p>
+  <h3>The Town</h3>
+  <p data-pid="0afaa5">A town of 20,000 people has one pharmacy. The supplier's van comes once a week, so each shelf has to last seven days.</p>
+  <div class="tblwrap"><table class="tt"><tr><th>Condition</th><th>Kind</th><th>Who</th><th>Medicine</th></tr><tr><td class="l">High blood pressure</td><td>chronic, common</td><td>3,000 people</td><td>one tablet a day, sold in packs of 30</td></tr><tr><td class="l">A rare blood disorder</td><td>chronic, rare</td><td>2 people</td><td>one vial a week each</td></tr><tr><td class="l">A broken bone</td><td>acute, an injury</td><td>anyone: chance 1 in 10,000 a day</td><td>one short course of pain medicine</td></tr><tr><td class="l">Influenza</td><td>acute, an illness that spreads</td><td>anyone, in waves</td><td>one course of tablets</td></tr><tr><td class="l">Asthma</td><td>recurring</td><td>1,600 people</td><td>a daily inhaler that prevents attacks, and a second inhaler that relieves one</td></tr></table></div>
+  <p data-pid="eae0af">The two people with the rare disorder are known to the pharmacy by number, not by name.</p>
+  <p data-pid="b4234f">The town and all its numbers are invented for the lesson; they are not stocking guidance for a real pharmacy.</p>
+</header>
+
+<section class="class step" data-step="32bio1">
+  <h2 class="sthead"><span class="stno">32bio1</span>Many People, Every Day</h2>
+  <p data-pid="9f3424">Each of the 3,000 people takes one tablet every day. So the town swallows 3,000 tablets a day, 21,000 a week, and that number does not wobble at all. What wobbles is when people come in. A pack lasts 30 days, so in any week a person comes for a new pack with chance 7/30.</p>
+  <p data-pid="3b0864">Large-count technique: <b>if n people each come in with chance p, independently, the number who come has average np and spread np(1 − p); for large n it is close to bell-shaped, so a shelf of the average plus two spread widths has a short-chance of about 2 in 100.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the large-count technique">
+X = \text{the number of packs asked for in a week} @@ from here on
+X = X_1 + \dots + X_{3000},\ \text{each }X_i\text{ is 1 with chance }7/30 @@ one for each person
+\operatorname{E}X = 3000 \cdot 7/30 = 700 @@ the average-adds technique (30g1)
+\operatorname{Var}X = 3000 \cdot (7/30)(23/30) = 536.7 @@ the independent-spreads-add technique (30g3)
+\text{spread width} = \sqrt{536.7} = 23.2 @@ take the root
+X\text{ is close to bell-shaped} @@ the central limit technique (30j3)
+\text{shelf} = 700 + 2 \cdot 23.2 = 746\text{ packs} @@ the bell's area past two widths is about 0.023 (30m3)
+  </pre>
+  <p data-pid="51b5b6">The shelf is 746 packs for an average need of 700. The extra, 46 packs, is under 7 parts in 100 of the average. A common chronic condition is the easy shelf: the every in its description makes the need nearly certain, and the large count makes the wobble small beside it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·bio.1.1</span><span class="ph understand">understand</span>What does the large-count technique say? <br>Why is the extra stock for the daily tablet small beside its average?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32bio2">
+  <h2 class="sthead"><span class="stno">32bio2</span>Two People, Every Week</h2>
+  <p data-pid="0b9686">The rare disorder is found in about 1 person in 10,000. For a town of 20,000 picked at random, that is an average of 2 people, and the rare-events technique (22j2) gives the chances:</p>
+  <pre class="lines" data-k="ember" data-label="this page: a town picked at random">
+\text{chance of exactly }k\text{ people} = e^{-2}\,2^k/k! @@ the rare-events technique (22j2), with average 2
+k = 0{:}\ 0.135 \quad k = 1{:}\ 0.271 \quad k = 2{:}\ 0.271 @@ put in
+k = 3{:}\ 0.180 \quad k \ge 4{:}\ 0.143 @@ put in; the five add to 1
+  </pre>
+  <p data-pid="310d33">So about one such town in seven has nobody with the disorder, and about one in seven has four or more. None of that is any use to this pharmacy. This town was not picked at random; it is the town the pharmacy is in, and the pharmacy can count.</p>
+  <p data-pid="df7456">Count-first technique: <b>when the people who need a medicine can be listed, the need is read off the list, and no chance enters.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the count-first technique">
+\text{the list has 2 people} @@ collected: the pharmacy's own record
+\text{each needs 1 vial every week} @@ chronic: an every over weeks
+\text{need} = 2\text{ vials, every week} @@ multiply; nothing here is a chance
+\text{shelf} = 2\text{ vials, and 1 spare} @@ the spare is for a broken vial, not for a third person
+  </pre>
+  <p data-pid="115c70">The every that makes the condition chronic makes the need exact. Rarity changes one thing: there are too few people for an average to mean anything, so the pharmacist counts instead of estimating. The cost sits elsewhere. A vial is dear and does not keep, so each spare that passes its date is money lost; and a third person moving to town is a new line on the list, which the pharmacy learns by being told, not by arithmetic.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·bio.2.1</span><span class="ph understand">understand</span>What does the count-first technique say? <br>Why is the average of 2 people over towns of no use to this pharmacy?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32bio3">
+  <h2 class="sthead"><span class="stno">32bio3</span>Anyone, Some Day</h2>
+  <p data-pid="00b866">A broken bone is acute: for the person it is one day, a short course of pain medicine, and then it is over. Nobody can be listed in advance. But each of 20,000 people has a chance of 1 in 10,000 on any day, and one person's break does not make another's more likely.</p>
+  <pre class="lines" data-k="ember" data-label="this page: breaks in a week">
+\text{average breaks in a day} = 20000 \cdot 1/10000 = 2 @@ many tries, each with a tiny chance
+\text{average breaks in a week} = 14 @@ seven days
+\text{chance of exactly }k\text{ in a week} = e^{-14}\,14^k/k! @@ the rare-events technique (22j2)
+  </pre>
+  <p data-pid="b3f3f8">Shelf technique for rare arrivals: <b>for a need that is a rare count with average m, the shelf is the least s for which the chances of s + 1, s + 2, … add to no more than the short-chance you accept.</b></p>
+  <div class="tblwrap"><table class="tt"><tr><th>Courses on the shelf</th><th>14</th><th>18</th><th>20</th><th>21</th><th>22</th><th>24</th></tr><tr><td class="l">Short-chance</td><td>0.430</td><td>0.117</td><td>0.048</td><td>0.029</td><td>0.017</td><td>0.005</td></tr></table></div>
+  <pre class="lines" data-k="ember" data-label="this page: the shelf for broken bones">
+\text{shelf} = 22\text{ courses} @@ the first column at or below 0.02
+  </pre>
+  <p data-pid="27b014">Stocking the average, 14, runs short in 43 weeks out of 100. The shelf is 22, which is 8 above the average: 57 parts in 100 more. Compare the tablets, where the extra was 7 parts in 100. The spread width of a rare count is the root of its average, so a small average has a wide wobble beside it. A small stream needs a deep shelf for its size.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·bio.3.1</span><span class="ph understand">understand</span>What does the shelf technique for rare arrivals say? <br>Why does a small stream need a deep shelf for its size?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32bio4">
+  <h2 class="sthead"><span class="stno">32bio4</span>Cases That Bring Cases</h2>
+  <p data-pid="f539ac">Influenza is acute too: a week or so for the person, and then over. But it is caught from someone. One case makes the next more likely, so the cases are not independent, and the rare-events technique does not apply to the week as a whole.</p>
+  <p data-pid="3112e0">Treat the weeks as two kinds. In a <b>quiet</b> week, 9 weeks in 10, cases arrive singly from outside: a rare count with average 7. In a <b>wave</b> week, 1 week in 10, each case passes it on, and the count is a rare count with average 70.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the average over two kinds">
+\text{average need} = 0.9 \cdot 7 + 0.1 \cdot 70 = 13.3 @@ the whole-chance technique (30f3), on averages
+  </pre>
+  <p data-pid="d85b0a">That is almost the same average as the broken bones. Give it the same shelf, 22, and see what happens:</p>
+  <pre class="lines" data-k="ember" data-label="this page: the same shelf for influenza">
+\text{quiet week: chance of more than 22 is below 0.0001} @@ a rare count with average 7 (22j2)
+\text{wave week: chance of more than 22 is above 0.9999} @@ a rare count with average 70 (22j2)
+\text{short-chance} = 0.9 \cdot 0.0000 + 0.1 \cdot 1.0000 = 0.100 @@ the whole-chance technique (30f3)
+  </pre>
+  <p data-pid="478a5e">The shelf that ran short in 2 weeks out of 100 for broken bones runs short in 10 out of 100 for influenza: in every wave week.</p>
+  <p data-pid="f65d3d">Two-kinds technique: <b>when the weeks are of two kinds, the short-chance is the share of each kind times the short-chance within it, added; and the spread is the average of the spreads within the kinds plus the spread of the kinds' averages.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the two-kinds technique">
+\text{spread} = 13.3 + \big(0.9\,(7 - 13.3)^2 + 0.1\,(70 - 13.3)^2\big) @@ the spread-of-a-sum technique (30g2), split by kind
+\phantom{\text{spread}} = 13.3 + 35.7 + 321.5 = 370.5 @@ put in
+\text{spread width} = 19.2 @@ against 3.7 for the broken bones
+\text{shelf for a short-chance of 0.02: 77 courses} @@ 0.1 · (chance a wave week needs more than 77) = 0.018
+  </pre>
+  <p data-pid="71feef">The same average, and a shelf of 77 against 22. To be short in only 2 weeks out of 100, the pharmacy has to cover most wave weeks, and so it holds 77 courses through the 9 weeks in 10 when it sells 7.</p>
+  <p data-pid="c73f16">That is a costly way to answer a wave. The description offers another. A wave does not arrive all at once: it grows, each case bringing more than one new case (30i4's family line that does not die out). So a second response is a trigger: hold a shelf fit for quiet weeks, watch the daily count, and order at once when it climbs. The first response is held at every time; the second is set off by a some. Which is better depends on how fast the van can come, which is a fact about the supplier, not about the illness.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·bio.4.1</span><span class="ph understand">understand</span>What does the two-kinds technique say? <br>Why do influenza and broken bones, with nearly the same average, need shelves of 77 and 22?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32bio5">
+  <h2 class="sthead"><span class="stno">32bio5</span>Every Day, and Some Days</h2>
+  <p data-pid="87be33">Asthma is recurring. A person with asthma has it every day, and has an attack on some days. So one condition makes two needs, and each takes after a footing above.</p>
+  <p data-pid="eddeb1"><b>The inhaler that prevents.</b> Of the 1,600 people, 1,000 use a daily inhaler, one a month. This is the first footing again, with smaller numbers.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the inhaler that prevents">
+X = \text{the number of preventing inhalers asked for in a week} @@ from here on
+\operatorname{E}X = 1000 \cdot 7/30 = 233.3 @@ the average-adds technique (30g1)
+\text{spread width} = \sqrt{1000 \cdot (7/30)(23/30)} = 13.4 @@ the independent-spreads-add technique (30g3)
+\text{shelf} = 261 @@ the least s with short-chance at most 0.02, counted exactly
+  </pre>
+  <p data-pid="2c687f"><b>The inhaler that relieves.</b> All 1,600 carry one and replace it when attacks have used it up. In an ordinary week a person needs a new one with chance 1/12.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the inhaler that relieves, ordinary weeks">
+\text{ordinary week: average }1600 \cdot 1/12 = 133.3,\ \text{spread width 11.1} @@ 30g1, 30g3
+\text{shelf for ordinary weeks alone} = 156 @@ short-chance 0.020, counted exactly
+  </pre>
+  <p data-pid="327779">The attacks are not caught from anyone, so one person's attack does not cause another's. But they are not independent either. Smoke, pollen or a cold snap reaches the whole town at once, and in such a week everyone's chance rises together. Call it a <b>bad-air</b> week, 1 week in 10, with the chance 1/4 in place of 1/12.</p>
+  <p data-pid="220c82">Shared-cause technique: <b>tries that share a cause are independent within a week of one kind and not across kinds; so find the short-chance within each kind and add by shares, as for the two kinds of 4.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the shared-cause technique">
+\text{bad-air week: average }1600 \cdot 1/4 = 400,\ \text{spread width 17.3} @@ 30g1, 30g3
+\text{shelf 156 in a bad-air week: short, with chance above 0.9999} @@ 156 is fourteen widths below 400
+\text{short-chance with shelf 156} = 0.9 \cdot 0.020 + 0.1 \cdot 1 = 0.118 @@ the whole-chance technique (30f3)
+\text{shelf for a short-chance of 0.02: 415} @@ 0.1 · (chance a bad-air week needs more than 415) = 0.019
+\text{average need} = 0.9 \cdot 133.3 + 0.1 \cdot 400 = 160 @@ the whole-chance technique, on averages
+  </pre>
+  <p data-pid="c604df">So the relieving inhaler behaves like the influenza tablets: an average of 160 and a shelf of 415. Two things make asthma the easier of the two.</p>
+  <p data-pid="4fd7a2">The people can be listed. The pharmacy knows the 1,600, so it knows the most it could ever be asked for in a week, which no one can say for influenza.</p>
+  <p data-pid="c6b8a5">The cause can be seen coming. A wave of influenza is noticed only by its cases. Bad air is forecast: a pollen count, a smoke warning, a cold front. So the trigger can be pulled before the first attack, and the standing shelf can stay near 156 with an order placed on the warning.</p>
+  <p data-pid="70c375">This is the two layers of the description answered one each. The every (the condition) gets a standing shelf, exact for the preventing inhaler. The some (the attacks) gets a shelf sized by chance and a trigger set by the cause.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·bio.5.1</span><span class="ph understand">understand</span>What does the shared-cause technique say? <br>Why do the attacks of asthma fail to be independent, when no one catches them from anyone?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32bio6">
+  <h2 class="sthead"><span class="stno">32bio6</span>Five Conditions, Six Shelves, Side by Side</h2>
+  <div class="tblwrap"><table class="tt"><tr><th></th><th>High blood pressure</th><th>Rare blood disorder</th><th>Broken bone</th><th>Influenza</th><th>Asthma, preventing</th><th>Asthma, relieving</th></tr><tr><td class="l">For the person</td><td>every day</td><td>every week</td><td>some day, then over</td><td>some days, then over</td><td>every day</td><td>some days, again and again</td></tr><tr><td class="l">For the town</td><td>every day, 3,000 people</td><td>every week, 2 people</td><td>every day, some person</td><td>some weeks, many people</td><td>every day, 1,000 people</td><td>every week some; some weeks many</td></tr><tr><td class="l">Can the people be listed?</td><td>yes</td><td>yes</td><td>no</td><td>no</td><td>yes</td><td>yes</td></tr><tr><td class="l">Are the cases independent?</td><td>yes</td><td>does not arise</td><td>yes</td><td>no: cases bring cases</td><td>yes</td><td>no: a shared cause</td></tr><tr><td class="l">Average need in a week</td><td>700 packs</td><td>2 vials</td><td>14 courses</td><td>13.3 courses</td><td>233 inhalers</td><td>160 inhalers</td></tr><tr><td class="l">Spread width</td><td>23.2</td><td>0</td><td>3.7</td><td>19.2</td><td>13.4</td><td>80.9</td></tr><tr><td class="l">Shelf, for a short-chance of 0.02</td><td>746</td><td>2, and a spare</td><td>22</td><td>77</td><td>261</td><td>415</td></tr><tr><td class="l">Shelf over average</td><td>1.07</td><td>1</td><td>1.57</td><td>5.8</td><td>1.12</td><td>2.6</td></tr><tr><td class="l">What the shelf costs</td><td>little</td><td>expiry of the spare</td><td>a deep shelf for a small stream</td><td>idle stock in quiet weeks</td><td>little</td><td>idle stock, unless the forecast is used</td></tr></table></div>
+  <p data-pid="c8cd69">Read along the bottom rows. The last row but one is the price of not knowing: nothing for the listed two, a little for the large counts, more for the independent stream, and most where the cases are not independent, whether they bring one another or share a cause.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·bio.6.1</span><span class="ph understand">understand</span>Which two answers in the table set the price of not knowing? <br>Why is the shelf over average largest for influenza?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32bio7">
+  <h2 class="sthead"><span class="stno">32bio7</span>Moves to Watch Out For</h2>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{stock the average need}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; for broken bones that is 14 courses, short in 43 weeks of 100
+\text{stock so the shelf never runs short}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; no finite shelf does it; pick a short-chance and pay for it
+\text{two towns of 20,000 have 2 rare patients each}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; 2 is an average over towns; this town's number is on its list
+\text{use the rare-events technique for influenza}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; its condition is independent tries, and cases that bring cases are not
+\text{attacks are not catching, so they are independent}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a shared cause ties them together without any case causing another
+\text{twice the town, twice the extra stock}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the average doubles, the spread width grows by root 2
+\text{the same average need, so the same shelf}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; broken bones and influenza both average near 14; the shelves are 22 and 77
+\text{influenza is acute, so no standing stock is needed}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; acute for the person; for the town, some weeks are certain to come
+\text{asthma is one condition, so one shelf}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; its every and its some are two needs, and each has its own medicine
+\text{a chronic condition, so the chance work can be skipped}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; legal for the listed two; for the three thousand the timing of refills still wobbles
+\text{the pharmacy's sales last year show the town's need}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; a week the shelf ran short records the shelf, not the need
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·bio.7.1</span><span class="ph understand">understand</span>Why is “the same average need, so the same shelf” a move to watch out for?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">32·bio.8.1</span><span class="tagq">understand</span>Say what makes a condition chronic and what makes it acute, using every and some over one person's days. Then say why a broken bone, acute for each person, is a steady need for the town, and what makes asthma recurring.</div>
+  <div class="chq"><span class="chid">32·bio.8.2</span><span class="tagq">understand</span>What is the short-chance, and why does the pharmacist choose it instead of asking for a shelf that never runs short?</div>
+  <div class="chq"><span class="chid">32·bio.8.3</span><span class="tagq">do</span>A second town has 80,000 people and 12,000 on the daily tablet. Find the average number of packs in a week, the spread width, and the shelf. By what factor did the extra stock grow when the town grew by 4?</div>
+  <div class="chq"><span class="chid">32·bio.8.4</span><span class="tagq">do</span>In the first town the supplier's van starts coming every day. Using the day's average of 2 broken bones, find the least shelf with a short-chance of at most 0.02. The chances of more than s in a day are 0.323, 0.143, 0.053, 0.017, 0.005 for s = 2, 3, 4, 5, 6.</div>
+  <div class="chq"><span class="chid">32·bio.8.5</span><span class="tagq">do</span>For influenza, suppose wave weeks come 1 week in 20 instead of 1 in 10. Find the new average need. With a shelf of 22, what is the new short-chance? Is a shelf of 22 now within a short-chance of 0.05?</div>
+  <div class="chq"><span class="chid">32·bio.8.6</span><span class="tagq">converse</span>A medicine has an average need of 14 a week and its shelf, for a short-chance of 0.02, is 60. What can you say about whether its cases are independent?</div>
+  <div class="chq"><span class="chid">32·bio.8.6b</span><span class="tagq">do</span>A smoke warning now reaches the pharmacy two days before every bad-air week, and the van can come in one. What standing shelf of relieving inhalers does the pharmacy need, and what does it order on a warning?</div>
+  <div class="chq"><span class="chid">32·bio.8.7</span><span class="tagq">make</span>Pick a fifth condition and say which of the four it is most like. Give the two answers that decide it: can the people be listed, and does one case make the next more likely?</div>
+  <div class="chq"><span class="chid">32·bio.8.8</span><span class="tagq">open</span>The pharmacy holds 77 courses through quiet weeks, or it holds 14 and orders when the daily count climbs. What would you need to know about the supplier to choose? Who bears the cost of each choice when it goes wrong?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r32chem.html">← 32·chem · how do X-rays see inside a crystal?</a><a href="r32comp.html">32·comp · how does a photo shrink to a small file? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The shelf is what stock-keepers call the order-up-to level, and one minus the short-chance is the cycle service level; the stock held above the average is safety stock. The rare count is the Poisson distribution. The two-kinds technique is the law of total variance, and a count whose spread is larger than its average, as for influenza, is called overdispersed. The trigger is a reorder point.</p>
+  <h3>What is invented</h3>
+  <p>The town, every rate, the weekly van, the one-in-ten wave weeks and bad-air weeks, and the averages in each. The chance of a broken bone, 1 in 10,000 a day, is on the high side of real figures and was chosen to make the day's average 2. The two-kinds model of influenza is the simplest one that shows cases are not independent; a real wave runs over several weeks, and the model treats each week alone.</p>
+  <h3>What was computed</h3>
+  <p>The chances in the tables (0.430 down to 0.005; 0.135 to 0.143; the shelf of 77) were computed by adding the rare-events chances exactly. The shelf of 746 uses the bell, not the exact count, so its short-chance is about 0.023, slightly over the 0.02 the others meet.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
