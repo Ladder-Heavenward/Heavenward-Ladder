@@ -24,7 +24,8 @@ const cert=k=>{ try{ const c=JSON.parse(LS.getItem('cert:'+k)||'null'); return c
 const UNDER=['0a','0b','1d','1f'];
 function jumpedPast(tag){ const m=String(tag).match(/^(\d+)/); if(!m) return false; const r=+m[1]; try{ for(let i=0;i<LS.length;i++){ const k=LS.key(i)||''; const j=k.match(/^cert:in:r(\d+)$/); if(j&&+j[1]>r) return true; } }catch(e){} return false; }
 function tagStem(t){ const M=window.LADDER_CARDMAP||{}; for(const s in M) if(M[s][0]===t) return s; return (typeof STEPS!=='undefined'&&STEPS[t])?STEPS[t][0]:null; }
-function measured(tag){ if(DESK) return true; const s=tagStem(tag); if(!s) return false; if(cert(s)) return true; if(UNDER.includes(tag)&&jumpedPast(tag)) return true;
+const reachC={}; function reached(tag){ const v=window.__lsVer||0; if(reachC.v!==v){ for(const k in reachC) delete reachC[k]; reachC.v=v; } if(!(tag in reachC)) reachC[tag]=has(tag); return reachC[tag]; }
+function measured(tag){ if(DESK||reached(tag)) return true; /* laundryreach: every pool opens by reach (Andrew 14:51Z) */ const s=tagStem(tag); if(!s) return false; if(cert(s)) return true; if(UNDER.includes(tag)&&jumpedPast(tag)) return true;
   const W=window.LadderStick&&LadderStick.where(s); if(!W) return false; if(cert('floor'+W.fl+'concl')) return true;
   const c=cert(W.core[W.core.length-1]); if(c&&c.scope==='rung'&&W.core.includes(s)) return true;
   const i=W.core.indexOf(s); return i>=0&&W.core.slice(i+1).some(k=>!!cert(k)); }
@@ -1102,7 +1103,7 @@ G.K({id:'whichop',step:'1e',title:'which joining word makes the column',make(){
 })();
 
 /* Read Graph: a drawn card from a kind whose steps are all passed, on a rung switched on (or a stray from one switched off) */
-const rgOpen=k=>(k.steps||[k.step]).every(s=>measured(s));
+const rgOpen=k=>(k.steps||[k.step]).every(s=>has(s)); /* laundryreach: Read Graph opens by reach */
 function readQ(P,used,last){ const RGX=window.LadderReadGraph; if(!RGX) return null;
   const q=RGX.deal(k=>rgOpen(k)&&P.use({step:k.step,open:()=>true}),used); if(!q) return null;
   return Object.assign({lead:'It is '+q.right+'. '},q); }
@@ -25847,10 +25848,11 @@ function modeNow(){ const m=(get('rand:mode',null)||{}).m||'proof'; /* kept as a
 function build(mode){
   mode=mode||modeNow();
   const off=get('rand:off',{}), isOff=P=>!!off['rung:'+rungOf(P.step)];
-  if(![...SEEDS,...toggled(),...BANK].some(P=>P.open())) return {closed:'The laundry opens with the crosswalk of the first step you reach, and its technique pools open as you pass measuring sticks.'};
-  if(!avail(mode)) return {closed:MODES.find(M=>M.id===mode).label+' opens when you pass the measuring stick of '+OPENS[mode]+'.'};
+  if(![...SEEDS,...toggled(),...BANK].some(P=>P.open())&&!avail('read')) return {closed:'The Laundry opens when you reach your first step with questions in it.'};
+  if(!avail(mode)) return {closed:MODES.find(M=>M.id===mode).label+' opens when you reach '+OPENS[mode]+'.'};
   const used=get('rand:seen',{}), last=get('rand:last',[]), st=strayDue();
-  const anyOn=toggled().some(P=>P.open()&&!isOff(P)), anyOff=toggled().some(P=>P.open()&&isOff(P));
+  const rgK=(mode==='read'&&window.LadderReadGraph)?window.LadderReadGraph.KINDS.filter(rgOpen):[]; /* laundryreach: Read Graph kinds count as open pools */
+  const anyOn=toggled().some(P=>P.open()&&!isOff(P))||rgK.some(k=>!isOff(k)), anyOff=toggled().some(P=>P.open()&&isOff(P))||rgK.some(k=>isOff(k));
   if(!anyOn) return {closed:'Every rung is switched off under the gear. Switch one on.'};
   const passes=(st.due>st.served&&anyOff)?[true,false]:[false];
   for(const stray of passes){
