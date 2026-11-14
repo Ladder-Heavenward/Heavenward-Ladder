@@ -2442,7 +2442,7 @@ function tools(body,here){ const KEY='ladder:aq', LBL={un:'Understanding',cw:'Cr
   while(body.firstChild) pane.sq.appendChild(body.firstChild);
   const bar=document.createElement('p'); bar.className='sk-tools aq-bar'; bar.innerHTML=K.map(k=>'<button type="button" class="aq-b aq-b-'+k+'" data-k="'+k+'" aria-pressed="false">'+LBL[k]+'</button>').join('');
   body.appendChild(bar); K.forEach(k=>body.appendChild(pane[k])); if(window.LadderCrosswalk) K.forEach(k=>LadderCrosswalk.floors(pane[k],k)); /* aqreorg */
-  const fill={ un:()=>understand(pane.un), cw:()=>{ if(window.LadderCrosswalk) LadderCrosswalk.fill(pane.cw); else if(window.LadderCards) LadderCards.open(pane.cw); }, ms:()=>{ if(window.LadderMeasure&&LadderMeasure.fill) LadderMeasure.fill(pane.ms,close); }, sq:()=>{} }, made={sq:true};
+  const fill={ un:()=>{ understand(pane.un); if(window.LadderUnwrap) LadderUnwrap.bind(pane.un); }, /* aqunwrap */ cw:()=>{ if(window.LadderCrosswalk) LadderCrosswalk.fill(pane.cw); else if(window.LadderCards) LadderCards.open(pane.cw); }, ms:()=>{ if(window.LadderMeasure&&LadderMeasure.fill) LadderMeasure.fill(pane.ms,close); }, sq:()=>{} }, made={sq:true};
   const set=(k,v)=>{ pane[k].hidden=!v; const b=bar.querySelector('[data-k="'+k+'"]'); b.setAttribute('aria-pressed',String(v)); b.classList.toggle('on',v); if(v&&!made[k]){ made[k]=true; fill[k](); } };
   K.forEach(k=>set(k,on.includes(k)));
   bar.querySelectorAll('.aq-b').forEach(b=>b.onclick=()=>{ const k=b.dataset.k, v=pane[k].hidden; set(k,v); on=K.filter(x=>!pane[x].hidden); try{ localStorage.setItem(KEY,JSON.stringify(on)); }catch(e){} }); }
@@ -3284,4 +3284,83 @@ function badgeX(){ const U=units(); document.querySelectorAll('section.rung.rfin
     else if(!got&&x) x.remove(); }); }
 if(window.LadderMeasure&&LadderMeasure.indexIcons){ const o=LadderMeasure.indexIcons; LadderMeasure.indexIcons=function(){ return Promise.resolve(o.apply(this,arguments)).then(v=>{ try{ indexX(); badgeX(); }catch(e){} return v; }); }; }
 window.LadderCrosswalk={fill,deal,units,floors,indexX,badgeX};
+})();
+/* aqunwrap */ /* 2026-11-14 (Andrew 17:21Z): the Understanding pane on Answering Questions unwraps each step's understanding questions
+   into the pane. Tap a step's name and its questions open under it, read from the step's own page. Ticking a question in either place
+   ticks it in both: in the pane it is saved under the step's own marks (marks:<its title>, with a fresh time so sync keeps it), and the
+   step's blue star is reported as the step page reports it; on the step page a tick shows at once in the pane while it is open. */
+(function(){
+'use strict';
+const VAR=/^(?:[^.\s]+\.\d+\.\d+|\d+[a-z]+\d+\.\d+)$/;
+const STAR='<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M12 2l2.9 6.6 7.1.7-5.4 4.8 1.6 7L12 17.4 5.8 21.1l1.6-7L2 9.3l7.1-.7z"/></svg>';
+const J=(k,d)=>{ try{ const v=LS.getItem(k); return v==null?d:JSON.parse(v); }catch(e){ return d; } };
+const put=(k,v)=>{ try{ LS.setItem(k,JSON.stringify(v)); }catch(e){} };
+const here=()=>window.ladderPage?ladderPage():(location.pathname.split('/').pop()||'').replace(/\.html$/,'');
+const live=()=>[...document.querySelectorAll('.qid')].filter(o=>!o.closest('#desk,#stick'));
+const origin=id=>live().find(o=>o.textContent.trim()===id);
+/* a step's page, read once: its title (the key its marks live under) and its question lists */
+const got={};
+function load(stem){ return got[stem]||(got[stem]=fetch(stem+'.html').then(r=>r.ok?r.text():Promise.reject(new Error(r.status))).then(t=>{
+    const d=new DOMParser().parseFromString(t,'text/html'), ols=[...d.querySelectorAll('.sayback ol')].filter(o=>!o.closest('#desk,#stick'));
+    const title=(d.title||'').trim()||new URL(stem+'.html',location.href).pathname;
+    return {title,ols,chs:[...d.querySelectorAll('.chq .chid')].filter(e=>!e.closest('#desk')).map(e=>e.textContent.trim())}; })
+  .catch(e=>{ delete got[stem]; throw e; })); }
+const keyOf=info=>window.__titledKey?__titledKey('marks:',info.title):'marks:'+info.title;
+/* which ids are ticked: on this page, as its own question labels show; on another step, from its saved marks */
+function doneSet(stem,info){ const S=new Set();
+  if(stem===here()&&live().length){ live().forEach(o=>{ if(o.classList.contains('done')) S.add(o.textContent.trim()); }); return S; }
+  const st=J(keyOf(info),{})||{}; Object.keys(st).forEach(k=>{ if(st[k]&&k.startsWith('q:')) S.add(k.slice(2)); }); return S; }
+/* another step's report, worked out as that page's progress() works it out */
+function report(stem,info){ const st=J(keyOf(info),{})||{}, req=[], opt=[];
+  info.ols.forEach(o=>o.querySelectorAll('.qid').forEach(q=>{ const id=q.textContent.trim(); if(!VAR.test(id)) return; (q.closest('li.opt')?opt:req).push(!!st['q:'+id]); }));
+  if(!req.length&&!opt.length) return;
+  const all=req.length>0&&req.every(Boolean), any=req.concat(opt).some(Boolean), optAll=opt.every(Boolean), CH={n:info.chs.length,d:info.chs.filter(c=>st['c:'+c]).length};
+  if(window.MarksSync&&MarksSync.reportPage) MarksSync.reportPage(stem,all,any,optAll,opt.length>0,CH);
+  else { const m=J('pages:done',{})||{}; m[stem]={v:all,a:any,o:optAll,h:opt.length>0,cn:CH.n,cd:CH.d,t:Date.now()}; put('pages:done',m); }
+  if(window.__barStats) window.__barStats(); }
+function tick(stem,info,id){
+  if(stem===here()){ const o=origin(id); if(o&&o.__tick){ o.__tick(); return; } }
+  const KEY=keyOf(info), st=J(KEY,{})||{}, k='q:'+id; st[k]=!st[k]; put(KEY,st);
+  const T=J(KEY+':t',{})||{}; T[k]=Date.now(); put(KEY+':t',T); /* the step page's sync keeps the newer time */
+  report(stem,info); paint(stem); }
+/* every open copy of a step's questions, kept alike */
+const boxes={};
+function paint(stem){ const B=(boxes[stem]||[]).filter(b=>b.el.isConnected); boxes[stem]=B; if(!B.length) return;
+  const D=doneSet(stem,B[0].info);
+  B.forEach(b=>{ b.el.querySelectorAll('.qid').forEach(q=>{ const id=q.textContent.trim();
+      if(VAR.test(id)) q.classList.toggle('done',D.has(id));
+      else { const mine=[...b.el.querySelectorAll('.qid')].map(x=>x.textContent.trim()).filter(x=>x.startsWith(id+'.')&&VAR.test(x)); q.classList.toggle('done',mine.length>0&&mine.every(x=>D.has(x))); } });
+    if(b.st){ const v=!!((J('pages:done',{})||{})[stem]||{}).v; b.st.innerHTML=v?'<span class="aq-star">'+STAR+'</span> every question cleared':'questions open'; } }); }
+function render(el){ el.querySelectorAll('[data-tex-inline]').forEach(e=>{ if(window.Rung&&Rung.tex) Rung.tex(e,e.getAttribute('data-tex-inline'),false); });
+  el.querySelectorAll('[data-tex]').forEach(e=>{ if(window.Rung&&Rung.tex) Rung.tex(e,e.getAttribute('data-tex'),true); }); }
+function open(stem,q,st){ q.innerHTML='<p class="sk-n">Unwrapping…</p>';
+  load(stem).then(info=>{ q.innerHTML='';
+    if(!info.ols.length){ q.innerHTML='<p class="sk-n">This step has no understanding questions; it ticks itself once it is read.</p>'; return; }
+    const ol=document.createElement('ol'); ol.className='stql'; q.appendChild(ol); /* one list for the whole step; each question keeps its own label */
+    info.ols.forEach(o=>[...o.children].forEach(li=>{ const c=document.importNode(li,true); c.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id')); ol.appendChild(c); }));
+    render(q);
+    q.querySelectorAll('.qid').forEach(e=>{ const id=e.textContent.trim();
+      if(!VAR.test(id)){ e.classList.add('auto'); e.title='ticks itself when every question in this group is ticked'; return; }
+      e.style.cursor='pointer'; e.setAttribute('role','button'); e.tabIndex=0;
+      const go=ev=>{ ev.preventDefault(); ev.stopPropagation(); tick(stem,info,id); };
+      e.addEventListener('click',go); e.addEventListener('keydown',ev=>{ if(ev.key==='Enter'||ev.key===' ') go(ev); }); });
+    (boxes[stem]=boxes[stem]||[]).push({el:q,info,st}); paint(stem); })
+  .catch(()=>{ q.innerHTML='<p class="sk-n">This step’s questions could not be read just now. <a href="'+stem+'.html">Open the step</a>.</p>'; }); }
+/* the pane, as understand() drew it: each step's name now unwraps its questions; the step's own link stays beside it */
+function bind(pane){
+  pane.querySelectorAll('a.aq-step').forEach(a=>{ const stem=(a.getAttribute('href')||'').replace(/\.html.*$/,''), li=a.closest('li'); if(!stem||!li) return;
+    const b=document.createElement('button'); b.type='button'; b.className='aq-unw'; b.setAttribute('aria-expanded','false'); b.dataset.stem=stem;
+    b.innerHTML='<span class="aq-unwv" aria-hidden="true">▸</span>'+a.innerHTML;
+    const go=document.createElement('a'); go.className='aq-go'; go.href=a.getAttribute('href'); go.textContent='step page'; go.setAttribute('aria-label','open step '+a.textContent.trim());
+    const st=li.querySelector('.sk-st'); a.replaceWith(b); if(st) st.after(document.createTextNode(' '),go); else b.after(document.createTextNode(' '),go);
+    const q=document.createElement('div'); q.className='aq-qs dq aq-unwq'; q.hidden=true; li.appendChild(q);
+    b.onclick=()=>{ const v=q.hidden; q.hidden=!v; b.setAttribute('aria-expanded',String(v)); b.querySelector('.aq-unwv').textContent=v?'▾':'▸'; if(v&&!q.dataset.made){ q.dataset.made='1'; open(stem,q,st); } }; });
+  /* this step: understand() cloned the page's questions; a tick made on the page now shows here too */
+  const me=here(), mine=pane.querySelector('.aq-qs:not(.aq-unwq)');
+  if(mine&&live().length){ (boxes[me]=boxes[me]||[]).push({el:mine,info:{title:document.title,ols:[],chs:[]},st:null});
+    if(!window.__aqUnwObs){ window.__aqUnwObs=new MutationObserver(()=>{ Object.keys(boxes).forEach(s=>{ if(s===here()) paint(s); }); });
+      live().forEach(o=>window.__aqUnwObs.observe(o,{attributes:true,attributeFilter:['class']})); } } }
+/* a tick made on the step page reaches every open copy of the step at once (the observer above); on a return to the pane after
+   another page, the pane is drawn again from the saved marks */
+window.LadderUnwrap={bind,load,tick,paint};
 })();
