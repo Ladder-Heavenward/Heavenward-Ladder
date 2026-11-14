@@ -8798,6 +8798,732 @@ QP.push({id:'8h.between',step:'8h',mode:'work',label:'the point a share of the w
     return {index:'q:8h.between['+a+';'+b+';'+tp+'/'+tq+']', a3:['8h.ends['+a+','+b+']','8h.distance',DASH], lines:[['['+sg(a)+', '+sg(b)+']','an interval'],['x = (1 − t)a + tb, with a = '+sg(a)+' and b = '+sg(b),'a point of it, for 0 ≤ t ≤ 1']], ask:'Which point is '+name+' from '+sg(a)+' to '+sg(b)+'?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'(1 − t)a + tb = a + t(b − a): start at a and go the share t of the distance b − a = '+(b-a)+'. With t = '+fshow(t)+' that is '+sg(a)+' + '+fshow(fmul(t,fint(b-a)))+' = '+right+'.'+(tq===2?'':' Starting from b instead walks the other way.')+' t(b − a) alone forgets to start at a.'}; }
   return null; }});
+/* --- grids and systems (27d, 27f, 27j), clocks (43b), fields grown by a root (44f): seeds whose numbers are dealt afresh; each wrong option is a wrong move --- */
+const BK_V=['x','y','z','w'], BK_lin=(c,vs)=>{ let s=''; c.forEach((a,i)=>{ if(a===0) return; const v=(vs||BK_V)[i], m=Math.abs(a)===1?v:Math.abs(a)+v; s+=s===''?(a<0?'−'+m:m):(a<0?' − ':' + ')+m; }); return s||'0'; };
+const BK_G=M=>'rows '+M.map(r=>'('+r.map(sg).join(', ')+')').join(', '), BK_L=x=>'('+x.map(sg).join(', ')+')';
+const BK_mul=(A,B)=>A.map(r=>B[0].map((_,j)=>r.reduce((s,a,k)=>s+a*B[k][j],0))), BK_mv=(A,x)=>A.map(r=>r.reduce((s,a,k)=>s+a*x[k],0));
+const BK_det=A=>A.length===1?A[0][0]:A.length===2?A[0][0]*A[1][1]-A[0][1]*A[1][0]:A[0].reduce((s,a,j)=>s+(j%2?-1:1)*a*BK_det(A.slice(1).map(r=>r.filter((_,k)=>k!==j))),0);
+const BK_eq=(a,b)=>JSON.stringify(a)===JSON.stringify(b), BK_small=n=>Array.from({length:n},()=>rnd(7)-3), BK_T=A=>A[0].map((_,j)=>A.map(r=>r[j])), BK_cI=c=>(Math.abs(c)===1?(c<0?'−':''):sg(c))+'I', BK_AmI=c=>c===0?'A':'A'+(c<0?' + ':' − ')+(Math.abs(c)===1?'':Math.abs(c))+'I';
+/* an undoable whole grid with determinant ±1, by row moves from I */
+const BK_unimod=n=>{ let A=Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>i===j?1:0)); for(let t=0;t<n+2;t++){ const i=rnd(n), j=(i+1+rnd(n-1))%n, k=pick([-2,-1,1,2]); A[i]=A[i].map((a,c)=>a+k*A[j][c]); } if(Math.random()<0.5) A=[A[1],A[0]].concat(A.slice(2)); return A; };
+const BK_inv=A=>{ const n=A.length, d=BK_det(A); if(Math.abs(d)!==1) return null; if(n===2) return [[A[1][1]*d,-A[0][1]*d],[-A[1][0]*d,A[0][0]*d]];
+  return A.map((_,i)=>A.map((_,j)=>{ const m=A.filter((_,r)=>r!==j).map(r=>r.filter((_,c)=>c!==i)); return ((i+j)%2?-1:1)*BK_det(m)*d; })); };
+QP.push({id:'27j.pair',step:'27j',mode:'work',label:'two systems, the same answers or not',open:()=>measured('27j'),make(){
+  for(let t=0;t<30;t++){ const A=[BK_small(3),BK_small(3)], nv=[A[0][1]*A[1][2]-A[0][2]*A[1][1],A[0][2]*A[1][0]-A[0][0]*A[1][2],A[0][0]*A[1][1]-A[0][1]*A[1][0]]; if(nv.every(v=>v===0)||nv.some(v=>Math.abs(v)>12)) continue;
+    const same=Math.random()<0.5; let B;
+    if(same){ const M=BK_unimod(2); B=BK_mul(M,A); if(BK_eq(B,A)) continue; }
+    else { const r=BK_small(3); if(BK_mv([r],nv)[0]===0) continue; B=Math.random()<0.5?[A[0],r]:[r,A[1]]; }
+    if(B.some(r=>r.every(v=>v===0))||B.flat().some(v=>Math.abs(v)>15)) continue;
+    const opts=['the same answers','not the same answers'], bad=same?null:B.findIndex(r=>BK_mv([r],nv)[0]!==0);
+    return {index:'q:27j.pair['+A.flat().join(',')+';'+B.flat().join(',')+']', a3:['27j.pairs','27j.rowMove',DASH], lines:A.map(r=>[BK_lin(r)+' = 0','first system']).concat(B.map(r=>[BK_lin(r)+' = 0','second system'])), ask:'Do the two systems have the same answers?', right:opts[same?0:1], opts, lead:'',
+      why:same?'Each row of the second is a mix of the rows of the first, made by row moves, and row moves keep exactly the same answers.':'x, y, z = '+nv.map(sg).join(', ')+' answers the first system, but the second row of the second gives '+sg(BK_mv([B[bad]],nv)[0])+', not 0. Row '+(bad+1)+' of the second is not a mix of the rows of the first.'}; }
+  return null; }},
+  {id:'27j.solve',step:'27j',mode:'work',label:'three unknowns: an answer, or none',open:()=>measured('27j'),make(){
+  for(let t=0;t<40;t++){ const kind=rnd(3), x=BK_small(3); let A;
+    if(kind===0){ A=[BK_small(3),BK_small(3),BK_small(3)]; if(BK_det(A)===0) continue; }
+    else { const r1=BK_small(3), r2=BK_small(3), a=pick([-1,1,2]), b=pick([-1,1]); A=[r1,r2,r1.map((v,i)=>a*v+b*r2[i])]; if(A.some(r=>r.every(v=>v===0))||A[2].some(v=>Math.abs(v)>6)) continue; }
+    const b=BK_mv(A,x); if(kind===2) b[2]+=pick([-2,-1,1,2]);
+    const fails=c=>!BK_eq(BK_mv(A,c),b), NO='it has no answer', right=kind===2?NO:BK_L(x);
+    const cands=[[x[1],x[0],x[2]],[x[0],x[2],x[1]],[-x[0],x[1],x[2]],[x[0],-x[1],x[2]],[x[0],x[1],x[2]+1],[x[2],x[1],x[0]]].filter(fails).map(BK_L), wrong=uniq(right,(kind===2?[]:[NO]).concat(cands),3); if(wrong.length<3) continue;
+    return {index:'q:27j.solve['+kind+';'+A.flat().join(',')+';'+b.join(',')+']', a3:['27j.systems['+['one answer','a line of answers','no answer'][kind]+']','27j.rowMove+27j.lowestTerms',DASH], lines:A.map((r,i)=>[BK_lin(r)+' = '+sg(b[i]),'sameness '+(i+1)]), ask:'Which is an answer, if any?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:kind===2?'Row 3 is '+(A[2]===A[2]?'a mix of rows 1 and 2 on the left':'')+', but its right side is not the same mix of theirs: row moves reach 0 = '+sg(b[2]-BK_mv([A[2]],x)[0])+', so no list answers it.':'Put '+BK_L(x)+' in: every sameness checks. '+(kind===1?'Row 3 is a mix of rows 1 and 2, so there is a whole line of answers; this is one of them.':'The determinant is '+sg(BK_det(A))+', not 0, so this is the only answer.')+' Each wrong list fails one sameness.'}; }
+  return null; }},
+  {id:'27j.reach',step:'27j',mode:'work',label:'which right sides can be reached',open:()=>measured('27j'),make(){
+  for(let t=0;t<30;t++){ const r1=BK_small(2), r2=BK_small(2), a=pick([-2,-1,1,2,3]), b=pick([-2,-1,1,2,3]); if(r1[0]*r2[1]-r1[1]*r2[0]===0) continue; const r3=r1.map((v,i)=>a*v+b*r2[i]);
+    const Y=(p,q)=>'y₃ = '+BK_lin([p,q],['y₁','y₂']), right=Y(a,b), wrong=uniq(right,[Y(b,a),Y(-a,-b),Y(a,-b),Y(1,1)],3); if(wrong.length<3) continue;
+    return {index:'q:27j.reach['+r1.join(',')+';'+r2.join(',')+';'+a+','+b+']', a3:['27j.letterSides','27j.rowMove',DASH], lines:[[BK_lin(r1)+' = y₁','sameness 1'],[BK_lin(r2)+' = y₂','sameness 2'],[BK_lin(r3)+' = y₃','sameness 3']], ask:'For which right sides does the system have an answer?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The third row is '+sg(a)+' times row 1 plus '+sg(b)+' times row 2 on the left. Take that mix away from row 3: the left side clears to 0, and the right side becomes y₃ − ('+BK_lin([a,b],['y₁','y₂'])+'). An answer exists exactly when that is 0.'}; }
+  return null; }},
+  {id:'27j.lowest',step:'27j',mode:'work',label:'in lowest terms or not',open:()=>measured('27j'),make(){
+  const a=rnd(7)-3, b=rnd(7)-3, c=1+rnd(3), k=rnd(5), opts=['in lowest terms','not in lowest terms'];
+  const C=[[[[1,0,a],[0,1,b]],0,'Both leads are 1, the second is right of the first, and each lead is alone in its column.'],[[[1,a,0],[0,0,1]],0,'Both leads are 1 and alone in their columns; a column with no lead may hold anything.'],
+    [[[c+1,0,a],[0,1,b]],1,'The first lead is '+(c+1)+', not 1: a stretch of row 1 is still to do.'],[[[0,1,b],[1,0,a]],1,'The lead of row 2 is left of the lead of row 1: a swap is still to do.'],[[[1,c,a],[0,1,b]],1,'The entry '+c+' sits above the lead of row 2: clearing it is still owed.']][k];
+  return {index:'q:27j.lowest['+k+';'+a+','+b+','+c+']', a3:['27j.grids['+k+']','27j.lowestTerms',DASH], lines:[[BK_G(C[0]),'a grid']], ask:'Is this grid in lowest terms?', right:opts[C[1]], opts, lead:'', why:C[2]}; }},
+  {id:'27d.chain',step:'27d',mode:'work',label:'grids of chained sizes multiplied',open:()=>measured('27d'),make(){
+  for(let t=0;t<20;t++){ const [m,n,p]=pick([[2,3,1],[3,2,2],[2,3,2],[1,3,2],[3,1,2],[2,2,3]]), A=Array.from({length:m},()=>BK_small(n)), B=Array.from({length:n},()=>BK_small(p)), P=BK_mul(A,B), right=BK_G(P);
+    const c=[BK_G(P.map(r=>r.map(v=>-v))), p===m?BK_G(BK_T(P)):BK_G(P.map(r=>r.slice().reverse())), BK_G(P.map((r,i)=>r.map((v,j)=>i===0&&j===0?v+A[0][0]:v))), m===p&&n===n?BK_G(BK_mul(B,A).length===m?BK_mul(B,A):P):''].filter(Boolean), wrong=uniq(right,c,3); if(wrong.length<3) continue;
+    return {index:'q:27d.chain['+A.flat().join(',')+';'+B.flat().join(',')+']', a3:['27d.grids['+m+'x'+n+','+n+'x'+p+']','27d.productIsDoing',DASH], lines:[['A has '+BK_G(A),m+' by '+n],['B has '+BK_G(B),n+' by '+p]], ask:'Which grid is AB?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'AB is '+m+' by '+p+': place i, j is row i of A against column j of B. The first place is '+A[0].map((a,k)=>par10(a)+' · '+par10(B[k][0])).join(' + ')+' = '+sg(P[0][0])+'.'}; }
+  return null; }},
+  {id:'27d.zero',step:'27d',mode:'work',label:'a grid that squares to 0',open:()=>measured('27d'),make(){
+  for(let t=0;t<20;t++){ const u=[nz25(3),nz25(3)], v=[u[1],-u[0]].map(x=>x*pick([1,-1,2])), N=[[u[0]*v[0],u[0]*v[1]],[u[1]*v[0],u[1]*v[1]]]; if(N.flat().some(x=>Math.abs(x)>9)) continue;
+    const right=BK_G([[0,0],[0,0]]), wrong=uniq(right,[BK_G(N),BK_G(N.map(r=>r.map(x=>x*x))),BK_G(N.map(r=>r.map(x=>2*x)))],3); if(wrong.length<3) continue;
+    return {index:'q:27d.zero['+N.flat().join(',')+']', a3:['27d.columnTimesRow['+u.join(',')+';'+v.join(',')+']','27d.productIsDoing',DASH], lines:[['N has '+BK_G(N),'a grid, not 0']], ask:'What is NN?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'N is the column '+BK_L(u)+' times the row '+BK_L(v)+', and the row against the column is '+sg(v[0]*u[0]+v[1]*u[1])+'. So NN is the column times 0 times the row: every place is 0. A product of grids can be 0 when neither grid is; squaring each place is not multiplying grids.'}; }
+  return null; }},
+  {id:'27j.undo',step:'27j',mode:'work',label:'the undo of a grid, or none',open:()=>measured('27j'),make(){
+  for(let t=0;t<30;t++){ const n=pick([2,2,3]), none=Math.random()<0.25, NO='it has no undo';
+    if(none){ const r1=BK_small(n), r2=BK_small(n), k=pick([-2,-1,1,2]), A=n===2?[r1,r1.map(v=>k*v)]:[r1,r2,r1.map((v,i)=>v+k*r2[i])]; if(A.some(r=>r.every(v=>v===0))) continue; const I=BK_unimod(n);
+      return {index:'q:27j.undo[x;'+A.flat().join(',')+']', a3:['27j.grids[no undo]','27j.undoByRows',DASH], lines:[['A has '+BK_G(A),'a square grid']], ask:'Which grid is A⁻¹, if any?', right:NO, opts:shuffle([NO,BK_G(BK_T(A)),BK_G(I),BK_G(A.map(r=>r.map(v=>-v)))]), lead:'',
+        why:'The last row is a mix of the others, so row moves reach a row of 0s and never I. The determinant is 0: there is no undo.'}; }
+    const A=BK_unimod(n), V=BK_inv(A); if(!V||A.flat().some(v=>Math.abs(v)>9)||V.flat().some(v=>Math.abs(v)>12)||BK_eq(A,V)) continue; const right=BK_G(V);
+    const c=[BK_G(BK_T(V)),BK_G(V.map(r=>r.map(v=>-v))),n===2?BK_G([[A[1][1],A[0][1]],[A[1][0],A[0][0]]]):BK_G(BK_T(A)),NO], wrong=uniq(right,c,3); if(wrong.length<3) continue;
+    return {index:'q:27j.undo['+A.flat().join(',')+']', a3:['27j.grids[undoable]','27j.undoByRows',DASH], lines:[['A has '+BK_G(A),'a square grid']], ask:'Which grid is A⁻¹, if any?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Row moves on [A | I] reach [I | A⁻¹]. Check: A times '+right.replace('rows ','the grid with rows ')+' is I. '+(n===2?'For two rows, swap the middle, change the signs off it, and divide by the determinant '+sg(BK_det(A))+'; swapping without the signs is not the undo.':'The side-turn of A is not its undo unless A keeps lengths.')}; }
+  return null; }},
+  {id:'27d.thin',step:'27d',mode:'work',label:'a product through a narrow middle',open:()=>measured('27d'),make(){
+  for(let t=0;t<30;t++){ const A=[BK_small(2),BK_small(2),BK_small(2)], B=[BK_small(3),BK_small(3)], P=BK_mul(A,B), Q=BK_mul(B,A), dq=BK_det(Q); if(dq===0||P.flat().some(v=>Math.abs(v)>20)) continue;
+    const right='0', wrong=uniq(right,[sg(dq),sg(BK_det(A.slice(0,2))*BK_det(B.map(r=>r.slice(0,2)))),sg(P[0][0]*P[1][1]*P[2][2])],3); if(wrong.length<3) continue;
+    return {index:'q:27d.thin['+A.flat().join(',')+';'+B.flat().join(',')+']', a3:['27d.grids[3x2,2x3]','27c.lostPlusReached',DASH], lines:[['A has '+BK_G(A),'3 by 2'],['B has '+BK_G(B),'2 by 3']], ask:'What is the determinant of AB?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'AB sends lists of 3 through lists of 2: it reaches at most 2 directions, so by lost-plus-reached it loses at least one, and a grid that loses more than 0 has determinant 0. BA is 2 by 2 and its determinant is '+sg(dq)+'; the order matters.'}; }
+  return null; }},
+  {id:'27f.which',step:'27f',mode:'work',label:'which list is only stretched',open:()=>measured('27f'),make(){
+  for(let t=0;t<30;t++){ const P=BK_unimod(2), c1=rnd(7)-3, c2=rnd(7)-3; if(c1===c2) continue; const D=[[c1,0],[0,c2]], A=BK_mul(BK_mul(P,D),BK_inv(P)); if(A.flat().some(v=>Math.abs(v)>12)) continue;
+    const X=[P[0][0],P[1][0]], Y=[P[0][1],P[1][1]], isS=v=>BK_eq(BK_mv(A,v),v.map(q=>c1*q)), right=BK_L(X);
+    const wrong=uniq(right,[Y,[X[1],X[0]],[X[0],-X[1]],[X[0]+Y[0],X[1]+Y[1]]].filter(v=>!isS(v)&&!(v[0]===0&&v[1]===0)).map(BK_L),3); if(wrong.length<3) continue;
+    return {index:'q:27f.which['+A.flat().join(',')+';'+c1+']', a3:['27f.grids[stretch '+c1+']','27f.stretchTest',DASH], lines:[['A has '+BK_G(A),'a grid'],['the stretch is '+sg(c1),'det('+BK_AmI(c1)+') = 0']], ask:'Which list X has AX = '+(c1===1?'':c1===-1?'−':sg(c1))+'X'+(c1===0?' (that is, AX = 0)':'')+'?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'A times '+right+' is '+BK_L(BK_mv(A,X))+', which is '+sg(c1)+' times '+right+'. '+BK_L(Y)+' is only stretched too, but by '+sg(c2)+'; a sum of lists stretched by different amounts is not only stretched.'}; }
+  return null; }},
+  {id:'43b.noundo',step:'43b',mode:'work',label:'an hour with no undo',open:()=>measured('43b'),make(){
+  const n=pick([4,6,8,9,10,12,14,15]), g=(a,b)=>b?g(b,a%b):a, hs=Array.from({length:n-1},(_,i)=>i+1), bad=hs.filter(h=>g(h,n)>1), good=hs.filter(h=>g(h,n)===1); const h=pick(bad), d=g(h,n), w=take(good,3);
+  return {index:'q:43b.noundo['+n+';'+h+';'+w.join(',')+']', a3:['43b.clocks['+n+']','43b.undoExactlyWhen',DASH], lines:[['the clock of '+n+' hours','hours 0 to '+(n-1)]], ask:'Which hour has no undo?', right:String(h), opts:shuffle([String(h),...w.map(String)]), lead:'',
+    why:h+' and '+n+' share the divisor '+d+', so every multiple of '+h+' on the clock is a multiple of '+d+', and 1 is not. '+w.join(', ')+' share no divisor above 1 with '+n+', so each has an undo. A clock that is not prime is not a field.'}; }},
+  {id:'44f.recip',step:'44f',mode:'work',label:'the reciprocal of a + b√d',open:()=>measured('44f'),make(){
+  for(let t=0;t<30;t++){ const d=pick([2,3,5,7]), a=nz25(4), b=nz25(3), N=a*a-d*b*b; if(N===0) continue; const s=N<0?-1:1, A=s*a, B=-s*b, M=Math.abs(N), rt='√'+d;
+    const show=(p,q,m)=>{ const top=sg(p)+(q<0?' − ':' + ')+(Math.abs(q)===1?'':Math.abs(q))+rt; return m===1?top:'('+top+')/'+m; }, right=show(A,B,M);
+    const wrong=uniq(right,[show(-A,-B,M),show(s*a,s*b,M),show(A,B,a*a+d*b*b),'1/'+sg(a)+' + 1/('+sg(b)+rt+')'],3); if(wrong.length<3) continue;
+    return {index:'q:44f.recip['+a+','+b+','+d+']', a3:['44f.roots['+d+']','44f.rootField+8i.conjugate',DASH], lines:[['('+show(a,b,1)+')⁻¹','in the fractions with '+rt+' put in']], ask:'Which number is it, written as p + q'+rt+'?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Multiply top and bottom by the turned sign '+show(a,-b,1)+': the bottom becomes '+(a*a)+' − '+(d*b*b)+' = '+sg(N)+', a fraction. So the reciprocal is again a fraction plus a fraction times '+rt+'. Taking the reciprocal of each part is not a move: 1/(p + q) is not 1/p + 1/q.'}; }
+  return null; }});
+/* --- spaces inside, free lists, readings in a basis (27a, 27b), straight maps and what they lose and reach (27c), maps in a row and in another basis (27d), readings (27g, 27h): numbers dealt afresh; each wrong option is a wrong move --- */
+const BL_rule=M=>'(x, y) ↦ ('+M.map(r=>BK_lin(r,['x','y'])).join(', ')+')', BL_nz=n=>{ for(;;){ const v=BK_small(n); if(v.some(a=>a!==0)) return v; } };
+const BL_YN=(y,n)=>[y,n];
+QP.push({id:'27a.part',step:'27a',mode:'work',label:'a part of the plane: a space inside, or not',open:()=>measured('27a'),make(){
+  const a=1+rnd(3), b=pick([-3,-2,-1,1,2,3]), c=1+rnd(4), k=rnd(6), L=BK_lin([a,b],['x','y']), opts=BL_YN('a space inside','not a space inside');
+  const C=[[L+' = 0',0,'It holds (0, 0); adding two answers gives an answer, since the left sides add to 0 + 0; and a stretch of an answer is an answer, since the left side is stretched to c · 0. All three demands of the inside-space technique hold.'],
+    [L+' = '+c,1,'(0, 0) is not in it: the left side is 0 there, not '+c+'. Adding two members gives '+(2*c)+' on the right, not '+c+'.'],
+    [L+' ≥ 0',1,'It holds (0, 0) and is closed under adding. But stretching by −1 takes a member with '+L+' > 0 out of it.'],
+    ['xy = 0',1,'(1, 0) and (0, 1) are in it, and their sum (1, 1) is not: the two axes together are not closed under adding.'],
+    ['y = x²',1,'(1, 1) is in it, and its stretch by 2, (2, 2), is not: 2 is not 2².'],
+    ['y = '+(b===1?'':b===-1?'−':sg(b))+'x',0,'It is the line through (0, 0) of all stretches of (1, '+sg(b)+'): sums and stretches of stretches of one vector are stretches of it.']][k];
+  return {index:'q:27a.part['+k+';'+a+','+b+','+c+']', a3:['27a.parts['+['a sameness with 0','a sameness with a number','an inequality','a product','a square','a line'][k]+']','27a.inside',DASH], lines:[['W = the lists (x, y) with '+C[0],'a part of the plane']], ask:'Is W a space inside the plane?', right:opts[C[1]], opts, lead:'', why:C[2]}; }},
+  {id:'27b.free',step:'27b',mode:'work',label:'three lists: free or not',open:()=>measured('27b'),make(){
+  for(let t=0;t<40;t++){ const u=BL_nz(3), v=BL_nz(3), free=Math.random()<0.5, a=pick([-2,-1,1,2]), b=pick([-2,-1,1,2,3]); if(u[0]*v[1]-u[1]*v[0]===0&&u[0]*v[2]-u[2]*v[0]===0&&u[1]*v[2]-u[2]*v[1]===0) continue;
+    const w=free?BL_nz(3):u.map((x,i)=>a*x+b*v[i]), d=BK_det([u,v,w]); if(free&&d===0) continue; if(w.some(x=>Math.abs(x)>9)) continue;
+    const opts=BL_YN('free','not free');
+    return {index:'q:27b.free['+[u,v,w].flat().join(',')+']', a3:['27b.lists['+(free?'free':'a planted mix')+']','27b.free+27e.nonzeroDet',DASH], lines:[[BK_L(u),'u'],[BK_L(v),'v'],[BK_L(w),'w']], ask:'Is the list u, v, w free?', right:opts[free?0:1], opts, lead:'',
+      why:free?'The grid with these rows has determinant '+sg(d)+', not 0, so it loses only 0: no mix of the three is 0 except the mix with every coefficient 0.':'w = '+BK_lin([a,b],['u','v'])+', entry by entry. So '+BK_lin([a,b,-1],['u','v','w'])+' = 0 is a mix with coefficients not all 0, and the determinant of the grid is 0.'}; }
+  return null; }},
+  {id:'27b.mix',step:'27b',mode:'work',label:'which mix of two lists',open:()=>measured('27b'),make(){
+  for(let t=0;t<40;t++){ const u=BL_nz(3), v=BL_nz(3), a=pick([-3,-2,-1,1,2,3]), b=pick([-3,-2,-1,1,2,3]); if(u[0]*v[1]-u[1]*v[0]===0) continue; const w=u.map((x,i)=>a*x+b*v[i]); if(w.some(x=>Math.abs(x)>12)||a===b) continue;
+    const S=(p,q)=>'w = '+BK_lin([p,q],['u','v']), right=S(a,b), wrong=uniq(right,[S(b,a),S(-a,b),S(a,-b),S(a+1,b),S(a,b-1)],3); if(wrong.length<3) continue;
+    return {index:'q:27b.mix['+[u,v].flat().join(',')+';'+a+','+b+']', a3:['27b.lists[a planted mix]','27b.mix',DASH], lines:[[BK_L(u),'u'],[BK_L(v),'v'],[BK_L(w),'w']], ask:'How is w a mix of u and v?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Check each entry: '+[0,1,2].map(i=>'('+sg(a)+')('+sg(u[i])+') + ('+sg(b)+')('+sg(v[i])+') = '+sg(w[i])).join(', ')+'. The first two entries already fix the coefficients, since u and v are free there; the third confirms them.'}; }
+  return null; }},
+  {id:'27b.neighbours',step:'27b',mode:'work',label:'a new list from a free one',open:()=>measured('27b'),make(){
+  const s=[pick([-1,1]),pick([-1,1]),pick([-1,1])], d=1+s[0]*s[1]*s[2], T=(p,c,q)=>p+(c<0?' − ':' + ')+q, opts=BL_YN('free','not free'), free=d!==0;
+  const mix=s[0]*s[1]*s[2]===-1?'('+T('u',s[0],'v')+') '+(-s[0]<0?'− ':'+ ').replace(/^\+ $/,'+ ')+'('+T('v',s[1],'w')+')':'';
+  return {index:'q:27b.neighbours['+s.join(',')+']', a3:['27b.lists[free]','27b.free',DASH], lines:[['u, v, w','a free list'],[T('u',s[0],'v')+',  '+T('v',s[1],'w')+',  '+T('w',s[2],'u'),'a new list']], ask:'Is the new list free?', right:opts[free?0:1], opts, lead:'',
+    why:free?'Let a, b, c mix the new list to 0. Collect u, v, w: since they are free, each of their three coefficients is 0. Those three samenesses force a = b = c = 0; the grid of the coefficients has determinant 2.':'Collect u, v, w in a mix a, b, c of the new list. The grid of coefficients has determinant 1 + ('+s.map(sg).join(')(')+') = 0, so some mix other than 0, 0, 0 clears all three: the new vectors only look different.'}; }},
+  {id:'27b.coords',step:'27b',mode:'work',label:'the readings of a vector in a basis',open:()=>measured('27b'),make(){
+  for(let t=0;t<40;t++){ const P=BK_T(BK_unimod(2)), c=[pick([-3,-2,-1,1,2,3]),pick([-3,-2,-1,1,2,3])], w=BK_mv(P,c), v1=[P[0][0],P[1][0]], v2=[P[0][1],P[1][1]]; if(c[0]===c[1]||BK_eq(P,[[1,0],[0,1]])||P.flat().some(x=>Math.abs(x)>6)) continue;
+    const right=BK_L(c), wrong=uniq(right,[BK_L(w),BK_L([c[1],c[0]]),BK_L(BK_mv(BK_T(P),w)),BK_L(BK_mv(P,w)),BK_L([-c[0],c[1]])],3); if(wrong.length<3) continue;
+    return {index:'q:27b.coords['+P.flat().join(',')+';'+c.join(',')+']', a3:['27b.bases['+BK_L(v1)+', '+BK_L(v2)+']','27b.readings',DASH], lines:[[BK_L(v1)+', '+BK_L(v2),'a basis v₁, v₂ of the plane'],[BK_L(w),'a vector w']], ask:'Which pair (c₁, c₂) has w = c₁v₁ + c₂v₂?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'('+sg(c[0])+')'+BK_L(v1)+' + ('+sg(c[1])+')'+BK_L(v2)+' = '+BK_L(w)+'. A basis gives each vector exactly one such pair. The entries of w itself are its readings in the basis (1, 0), (0, 1), not in this one.'}; }
+  return null; }},
+  {id:'27b.share',step:'27b',mode:'work',label:'two planes in space: what they share',open:()=>measured('27b'),make(){
+  for(let t=0;t<40;t++){ const u1=BL_nz(3), u2=BL_nz(3), k=rnd(3); const cr=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]], n1=cr(u1,u2); if(n1.every(x=>x===0)) continue;
+    let v1,v2; if(k===0){ v1=u1.map((x,i)=>x+u2[i]); v2=u1.map((x,i)=>x-2*u2[i]); } else { v1=k===1?u1.map((x,i)=>2*x-u2[i]):BL_nz(3); v2=BL_nz(3); }
+    const n2=cr(v1,v2); if(n2.every(x=>x===0)||[v1,v2].flat().some(x=>Math.abs(x)>9)) continue; const same=cr(n1,n2).every(x=>x===0); if((k===0)!==same) continue;
+    const R=(s,b)=>'they share a space of dimension '+s+' and together build one of dimension '+b, right=same?R(2,2):R(1,3), wrong=uniq(right,[R(2,2),R(1,3),R(0,4),R(0,3),R(2,3)],3);
+    return {index:'q:27b.share['+[u1,u2,v1,v2].flat().join(',')+']', a3:['27b.planes['+(same?'one plane twice':'two planes')+']','27b.sumAndShare',DASH], lines:[[BK_L(u1)+', '+BK_L(u2),'a free pair: they build W₁'],[BK_L(v1)+', '+BK_L(v2),'a free pair: they build W₂']], ask:'What do W₁ and W₂ share, and what do they build together, inside the lists of 3 numbers?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:same?'Both vectors of the second pair are mixes of the first pair, so W₂ = W₁: they share all of it, dimension 2, and build nothing more.':'The four vectors build all of space: three of them have a grid with determinant not 0. The dimensions of what two spaces share and what they build add to the sum of their dimensions: 2 + 2 = 3 + 1. Two different planes through 0 share a line.'}; }
+  return null; }},
+  {id:'27c.rule',step:'27c',mode:'work',label:'a map of the plane: straight or not',open:()=>measured('27c'),make(){
+  const a=pick([-3,-2,2,3]), b=pick([-2,-1,1,2]), c=1+rnd(4), k=rnd(6), opts=BL_YN('straight','not straight');
+  const C=[['('+BK_lin([a,b],['x','y'])+', '+BK_lin([b,-a],['x','y'])+')',0,'Each entry is a mix of x and y with fixed coefficients, so sums go to sums and stretches to stretches. Its grid has rows ('+sg(a)+', '+sg(b)+') and ('+sg(b)+', '+sg(-a)+').'],
+    ['(x'+pm(c)+', y)',1,'A straight map sends (0, 0) to (0, 0), and this one sends it to ('+c+', 0).'],
+    ['(y, x)',0,'Swapping the entries keeps sums and stretches. Its grid has rows (0, 1) and (1, 0).'],
+    ['(x², y)',1,'L(1, 0) = (1, 0), and L(2, 0) = (4, 0), which is not twice (1, 0): stretching is not kept.'],
+    ['('+BK_lin([1,-1],['x','y'])+', 0)',0,'A difference and a 0 are both mixes of the entries with fixed coefficients. It is straight, though it loses a whole line.'],
+    ['(|x|, y)',1,'L(1, 0) + L(−1, 0) = (2, 0), and L of the sum (0, 0) is (0, 0): sums are not kept.']][k];
+  return {index:'q:27c.rule['+k+';'+a+','+b+','+c+']', a3:['27c.maps['+['a mix','a mix plus a constant','a swap','a square','a difference and a 0','a size'][k]+']','27c.nothingSent',DASH], lines:[['L(x, y) = '+C[0],'a map of the plane']], ask:'Is L a straight map?', right:opts[C[1]], opts, lead:'', why:C[2]}; }},
+  {id:'27c.fit',step:'27c',mode:'work',label:'targets for a list: is there a straight map',open:()=>measured('27c'),make(){
+  for(let t=0;t<40;t++){ const v1=BL_nz(2), v2=BL_nz(2), a=pick([-2,-1,1,2]), b=pick([-1,1,2]), t1=BL_nz(2), t2=BL_nz(2), ok=Math.random()<0.5; if(v1[0]*v2[1]-v1[1]*v2[0]===0) continue;
+    const v3=v1.map((x,i)=>a*x+b*v2[i]), good=t1.map((x,i)=>a*x+b*t2[i]), t3=ok?good:[good[0]+pick([-1,1]),good[1]]; if([v3,t3].flat().some(x=>Math.abs(x)>9)) continue;
+    const opts=BL_YN('yes, exactly one','no');
+    return {index:'q:27c.fit['+[v1,v2,v3,t1,t2,t3].flat().join(',')+']', a3:['27c.targets['+(ok?'the mix is kept':'the mix is broken')+']','27c.straight',DASH], lines:[[BK_L(v1)+' ↦ '+BK_L(t1),'v₁ and its target'],[BK_L(v2)+' ↦ '+BK_L(t2),'v₂ and its target'],[BK_L(v3)+' ↦ '+BK_L(t3),'v₃ and its target']], ask:'Is there a straight map of the plane that sends each vector to its target?', right:opts[ok?0:1], opts, lead:'',
+      why:'v₃ = '+BK_lin([a,b],['v₁','v₂'])+'. A straight map must send it to the same mix of the targets, '+BK_L(good)+'. '+(ok?'It does. And v₁, v₂ are a basis, so their targets fix the map: exactly one.':'The third target is '+BK_L(t3)+', so no straight map fits.')}; }
+  return null; }},
+  {id:'27c.lostreached',step:'27c',mode:'work',label:'what a grid loses and what it reaches',open:()=>measured('27c'),make(){
+  for(let t=0;t<40;t++){ const k=rnd(3), r1=BL_nz(3), r2=BL_nz(3); let A;
+    if(k===0){ A=[r1,r1.map(x=>2*x),r1.map(x=>-x)]; } else if(k===1){ if(r1[0]*r2[1]-r1[1]*r2[0]===0&&r1[0]*r2[2]-r1[2]*r2[0]===0&&r1[1]*r2[2]-r1[2]*r2[1]===0) continue; A=[r1,r2,r1.map((x,i)=>x+r2[i])]; } else { A=[r1,r2,BL_nz(3)]; if(BK_det(A)===0) continue; }
+    if(A.flat().some(x=>Math.abs(x)>6)) continue; const R=(l,r)=>'it loses a space of dimension '+l+' and reaches one of dimension '+r, right=R(2-k,k+1), wrong=uniq(right,[R(k+1,2-k),R(0,3),R(1,2),R(2,1),R(3-k,k+1),R(1,3)],3);
+    return {index:'q:27c.lostreached['+A.flat().join(',')+']', a3:['27c.grids['+['one free row','two free rows','three free rows'][k]+']','27c.lostPlusReached',DASH], lines:[[BK_G(A),'a grid A, acting on lists of 3 numbers']], ask:'What are the dimensions of what A loses and of what A reaches?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:['Rows 2 and 3 are stretches of row 1, so every column is a stretch of one column: A reaches a line. The lost-plus-reached technique gives 3 − 1 = 2 for what it loses.','Row 3 is row 1 plus row 2, and rows 1 and 2 are free: A reaches a plane, and loses 3 − 2 = 1 dimension, a line.','The determinant is '+sg(BK_det(A))+', not 0: A loses only 0 and reaches everything. 0 + 3 = 3.'][k]+' The two dimensions always add to 3, the dimension of where A starts.'}; }
+  return null; }},
+  {id:'27d.after',step:'27d',mode:'work',label:'one map after another, as a formula',open:()=>measured('27d'),make(){
+  const M=[['the flip',[[1,0],[0,-1]]],['the quarter turn',[[0,-1],[1,0]]],['the shear',[[1,1],[0,1]]],['the flattening',[[1,0],[0,0]]],['the swap',[[0,1],[1,0]]]];
+  for(let t=0;t<40;t++){ const i=rnd(5), j=rnd(5); if(i===j) continue; const F=M[i], G=M[j], FG=BK_mul(F[1],G[1]), GF=BK_mul(G[1],F[1]); if(BK_eq(FG,GF)) continue;
+    const right=BL_rule(FG), wrong=uniq(right,[BL_rule(GF),BL_rule(F[1].map((r,a)=>r.map((x,b)=>x*G[1][a][b]))),BL_rule(F[1].map((r,a)=>r.map((x,b)=>x+G[1][a][b]))),BL_rule(F[1]),BL_rule(G[1])],3); if(wrong.length<3) continue;
+    return {index:'q:27d.after['+i+';'+j+']', a3:['27d.forms['+F[0]+', '+G[0]+']','27d.productIsDoing',DASH], lines:[['F'+BL_rule(F[1]).replace(' ↦ ',' = '),F[0]],['G'+BL_rule(G[1]).replace(' ↦ ',' = '),G[0]]], ask:'What is the formula of F after G: first G, then F?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Do G first, then feed its two entries to F. That is the grid of F times the grid of G, in that order. The other order gives '+BL_rule(GF)+': these two maps do not swap.'}; }
+  return null; }},
+  {id:'27d.otherbasis',step:'27d',mode:'work',label:'the grid of a map in another basis',open:()=>measured('27d'),make(){
+  for(let t=0;t<40;t++){ const A=[BK_small(2),BK_small(2)], P=BK_T(BK_unimod(2)), Pi=BK_inv(P); if(!Pi||BK_eq(P,[[1,0],[0,1]])||P.flat().some(x=>Math.abs(x)>6)) continue; const B=BK_mul(Pi,BK_mul(A,P)), W=[BK_mul(P,BK_mul(A,Pi)),BK_mul(A,P),BK_mul(Pi,A),BK_T(A),A];
+    if(B.flat().some(x=>Math.abs(x)>20)) continue; const right=BK_G(B), wrong=uniq(right,W.map(BK_G),3); if(wrong.length<3) continue;
+    return {index:'q:27d.otherbasis['+A.flat().join(',')+';'+P.flat().join(',')+']', a3:['27d.grids['+BK_G(A)+']','27d.changeOfBasis',DASH], lines:[[BK_G(A),'the grid A of a map, in the basis (1, 0), (0, 1)'],[BK_L([P[0][0],P[1][0]])+', '+BK_L([P[0][1],P[1][1]]),'a new basis: the columns of P']], ask:'What is the grid of the same map in the new basis?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'P turns new readings into old ones, A acts, and the undo of P turns back: the grid is P⁻¹AP, with P⁻¹ = '+BK_G(Pi)+'. Its middle sum is '+sg(B[0][0]+B[1][1])+' and its determinant '+sg(BK_det(B))+', the same as for A. PAP⁻¹ changes basis the wrong way round.'}; }
+  return null; }},
+  {id:'27g.own2',step:'27g',mode:'work',label:'the sameness a 2 by 2 grid obeys',open:()=>measured('27g'),make(){
+  for(let t=0;t<40;t++){ const A=[BK_small(2),BK_small(2)], tr=A[0][0]+A[1][1], d=BK_det(A); if(Math.abs(tr)<2||d===0||tr===d) continue;
+    const E=(p,q)=>'A² '+(p<0?'+ ':'− ')+(Math.abs(p)===1?'':Math.abs(p))+'A '+(q<0?'− ':'+ ')+(Math.abs(q)===1?'':Math.abs(q))+'I = 0', right=E(tr,d), wrong=uniq(right,[E(d,tr),E(-tr,d),E(tr,-d),E(tr,A[0][0]*A[1][1]),E(A[0][0],d)],3); if(wrong.length<3) continue;
+    return {index:'q:27g.own2['+A.flat().join(',')+']', a3:['27d.grids['+BK_G(A)+']','27g.ownPolynomial',DASH], lines:[[BK_G(A),'a grid A']], ask:'Which sameness does A obey?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The middle sum is '+sg(tr)+' and the determinant is '+sg(d)+'. det(A − λI) = λ² '+(tr<0?'+ '+(-tr):'− '+tr)+'λ '+(d<0?'− '+(-d):'+ '+d)+', and the own-polynomial technique puts A in for λ.'}; }
+  return null; }},
+  {id:'27h.readbasis',step:'27h',mode:'work',label:'the reading basis of a basis',open:()=>measured('27h'),make(){
+  for(let t=0;t<40;t++){ const P=BK_T(BK_unimod(2)), Pi=BK_inv(P); if(!Pi||BK_eq(P,[[1,0],[0,1]])||P.flat().some(x=>Math.abs(x)>6)) continue; const v1=[P[0][0],P[1][0]], v2=[P[0][1],P[1][1]], F=r=>'f₁(x, y) = '+BK_lin(r,['x','y']);
+    const right=F(Pi[0]), wrong=uniq(right,[F(Pi[1]),F(v1),F([Pi[0][0],Pi[1][0]]),F(v2),F(Pi[0].map(x=>-x))],3); if(wrong.length<3) continue;
+    return {index:'q:27h.readbasis['+P.flat().join(',')+']', a3:['27b.bases['+BK_L(v1)+', '+BK_L(v2)+']','27h.readingBasis',DASH], lines:[[BK_L(v1)+', '+BK_L(v2),'a basis v₁, v₂ of the plane']], ask:'Which reading f₁ is 1 on v₁ and 0 on v₂?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Check: on v₁ it gives '+sg(BK_mv([Pi[0]],v1)[0])+', on v₂ it gives '+sg(BK_mv([Pi[0]],v2)[0])+'. The reading basis is the rows of the undo of the grid whose columns are v₁ and v₂. The reading with the entries of v₁ as coefficients gives '+sg(BK_mv([v1],v1)[0])+' on v₁'+(BK_mv([v1],v2)[0]!==0?' and '+sg(BK_mv([v1],v2)[0])+' on v₂.':'.')}; }
+  return null; }},
+  {id:'27g.pullback',step:'27g',mode:'work',label:'a reading done after a map',open:()=>measured('27h'),make(){
+  for(let t=0;t<40;t++){ const A=[BK_small(2),BK_small(2)], f=BL_nz(2), g=BK_mv(BK_T(A),f), F=r=>'(x, y) ↦ '+BK_lin(r,['x','y']); if(BK_eq(A,BK_T(A))||g.every(x=>x===0)) continue;
+    const right=F(g), wrong=uniq(right,[F(BK_mv(A,f)),F(f),F([g[1],g[0]]),F(f.map((x,i)=>x*A[i][i]))],3); if(wrong.length<3) continue;
+    return {index:'q:27g.pullback['+A.flat().join(',')+';'+f.join(',')+']', a3:['27d.grids['+BK_G(A)+']','27g.sideTurn+27h.turnRound',DASH], lines:[[BK_G(A),'the grid A of a map'],['f(x, y) = '+BK_lin(f,['x','y']),'a reading']], ask:'Which reading is f done after the map: v ↦ f(Av)?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Av has entries '+BK_lin(A[0],['x','y'])+' and '+BK_lin(A[1],['x','y'])+'. Feed them to f and collect x and y. The new coefficients are the row ('+f.map(sg).join(', ')+') times A, which is the side-turn of A acting on the coefficients. A times the column of coefficients mixes the wrong way.'}; }
+  return null; }});
+/* --- polynomials (27g, 27b, 44c, 44j) and determinants (19e, 27e, 27g, 27k): numbers dealt afresh; each wrong option is a wrong move. A polynomial is its list of coefficients, lowest first. --- */
+const BM_SUP=['','','²','³','⁴','⁵','⁶','⁷'], BM_p=(c,v)=>{ v=v||'x'; let s=''; for(let k=c.length-1;k>=0;k--){ const a=c[k]; if(!a) continue; const m=Math.abs(a), body=k===0?''+m:(m===1?'':m)+v+BM_SUP[k]; s+=s===''?(a<0?'−':'')+body:(a<0?' − ':' + ')+body; } return s||'0'; };
+const BM_mul=(a,b)=>{ const o=Array(a.length+b.length-1).fill(0); a.forEach((x,i)=>b.forEach((y,j)=>{ o[i+j]+=x*y; })); return o; }, BM_at=(c,x)=>c.reduceRight((s,a)=>s*x+a,0), BM_d=c=>c.slice(1).map((a,i)=>a*(i+1));
+const BM_I2=[[1,0],[0,1]], BM_addg=(A,B,k)=>A.map((r,i)=>r.map((x,j)=>x+(k===undefined?1:k)*B[i][j])), BM_sc=(A,k)=>A.map(r=>r.map(x=>k*x));
+QP.push({id:'27g.polyin',step:'27g',mode:'work',label:'a grid put into a polynomial',open:()=>measured('27g'),make(){
+  for(let t=0;t<40;t++){ const A=[BK_small(2),BK_small(2)], p=pick([-3,-2,-1,1,2,3]), q=pick([-4,-3,-2,-1,1,2,3,4]), A2=BK_mul(A,A), R=BM_addg(BM_addg(A2,A,p),BM_I2,q); if(A[0][1]===0&&A[1][0]===0) continue;
+    const W=[A.map(r=>r.map(x=>x*x+p*x+q)),BM_addg(A2,A,p).map(r=>r.map(x=>x+q)),BM_addg(A2,A,p),BM_addg(BM_addg(A.map(r=>r.map(x=>x*x)),A,p),BM_I2,q)];
+    const right=BK_G(R), wrong=uniq(right,W.map(BK_G),3); if(wrong.length<3||R.flat().some(x=>Math.abs(x)>40)) continue;
+    return {index:'q:27g.polyin['+A.flat().join(',')+';'+p+','+q+']', a3:['27d.grids['+BK_G(A)+']','27g.polynomialOfAGrid',DASH], lines:[[BK_G(A),'a grid A'],['f = '+BM_p([q,p,1]),'a polynomial']], ask:'Which grid is f(A)?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'A² = '+BK_G(A2)+', by the grid product, not entry by entry. Then f(A) = A² '+(p<0?'− ':'+ ')+(Math.abs(p)===1?'':Math.abs(p))+'A '+(q<0?'− ':'+ ')+(Math.abs(q)===1?'':Math.abs(q))+'I: the constant goes in as '+sg(q)+' times I, so it lands on the middle only.'}; }
+  return null; }},
+  {id:'27b.shifted',step:'27b',mode:'work',label:'a polynomial read in shifted powers',open:()=>measured('27b'),make(){
+  for(let t=0;t<40;t++){ const s=pick([-3,-2,-1,1,2,3]), c=[BK_small(1)[0],pick([-3,-2,-1,1,2,3]),pick([-2,-1,1,2,3])], r=[c[0]-c[1]*s+c[2]*s*s,c[1]-2*c[2]*s,c[2]];
+    const right=BK_L(r), wrong=uniq(right,[BK_L(c),BK_L([c[0]+c[1]*s+c[2]*s*s,c[1]+2*c[2]*s,c[2]]),BK_L([c[0]-c[1]*s+c[2]*s*s,c[1]-c[2]*s,c[2]]),BK_L([r[2],r[1],r[0]]),BK_L([c[0]-c[1]*s,c[1]-2*c[2]*s,c[2]])],3); if(wrong.length<3) continue;
+    const y='(x'+pm(s)+')';
+    return {index:'q:27b.shifted['+s+';'+c.join(',')+']', a3:['27b.bases[1, '+y+', '+y+'²]','27b.readings',DASH], lines:[['1,  x'+pm(s)+',  '+y+'²','a basis of the polynomials of degree at most 2'],[BM_p(c),'a polynomial']], ask:'Which list (c₀, c₁, c₂) has the polynomial equal to c₀ + c₁'+y+' + c₂'+y+'²?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Start from the top: only '+y+'² holds x², so c₂ = '+sg(c[2])+'. Take '+sg(c[2])+y+'² away and match x: c₁ = '+sg(c[1])+' − 2('+sg(c[2])+')('+sg(s)+') = '+sg(r[1])+'. The constant that is left is c₀ = '+sg(r[0])+'. Multiply out to check.'}; }
+  return null; }},
+  {id:'44c.through',step:'44c',mode:'work',label:'a polynomial through three points',open:()=>measured('44c'),make(){
+  for(let t=0;t<40;t++){ const c=[BK_small(1)[0],BK_small(1)[0],pick([-2,-1,1,2])], xs=pick([[-1,0,1],[-1,0,2],[0,1,2],[-2,0,1],[-1,1,2]]), ys=xs.map(x=>BM_at(c,x)); if(ys.some(y=>Math.abs(y)>20)) continue;
+    const fits=d=>xs.every((x,i)=>BM_at(d,x)===ys[i]), C=[[c[0],c[1],-c[2]],[c[0],-c[1],c[2]],[c[0]+1,c[1],c[2]],[c[0],c[1]+1,c[2]],[c[0],c[1]+c[2],0],[c[0],c[1],c[2]+1]].filter(d=>!fits(d));
+    const right=BM_p(c), wrong=uniq(right,C.map(d=>BM_p(d)),3); if(wrong.length<3) continue;
+    return {index:'q:44c.through['+xs.join(',')+';'+ys.join(',')+']', a3:['44c.points['+xs.map((x,i)=>'('+sg(x)+', '+sg(ys[i])+')').join(', ')+']','44c.atMostNZeros',DASH], lines:xs.map((x,i)=>['('+sg(x)+', '+sg(ys[i])+')','point '+(i+1)]), ask:'Which polynomial of degree at most 2 goes through all three points?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Put each input in: '+xs.map((x,i)=>'at '+sg(x)+' it gives '+sg(ys[i])).join(', ')+'. There is only one such polynomial: two of them would differ by a polynomial of degree at most 2 with three zeros, which is 0. Each wrong one misses a point.'}; }
+  return null; }},
+  {id:'44c.remainder',step:'44c',mode:'work',label:'the remainder on dividing by x − r',open:()=>measured('44c'),make(){
+  for(let t=0;t<40;t++){ const c=[BK_small(1)[0],BK_small(1)[0],BK_small(1)[0],pick([-2,-1,1,2])], r=pick([-3,-2,-1,1,2,3]), v=BM_at(c,r);
+    const right=''+sg(v), wrong=uniq(right,[sg(BM_at(c,-r)),sg(c[0]),sg(BM_at(BM_d(c),r)),sg(-v),sg(v+r)],3); if(wrong.length<3) continue;
+    return {index:'q:44c.remainder['+c.join(',')+';'+r+']', a3:['44c.polynomials['+BM_p(c)+']','44c.remainderIsValue',DASH], lines:[[BM_p(c),'a polynomial p'],['x'+pm(-r),'the divisor']], ask:'What is the remainder of p on division by x'+pm(-r)+'?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The remainder-is-value technique: the remainder on division by x − r is p(r). Here r = '+sg(r)+', and p('+sg(r)+') = '+sg(v)+'. Putting in '+sg(-r)+' takes the sign of the divisor at face value.'}; }
+  return null; }},
+  {id:'44c.samefunction',step:'44c',mode:'work',label:'two polynomials on a clock: one function or two',open:()=>measured('44c'),make(){
+  for(let t=0;t<60;t++){ const p=pick([2,3,5]), deg=p+1, a=Array.from({length:deg+1},()=>rnd(p)), same=Math.random()<0.5, b=a.slice(); if(a[deg]===0&&a[p]===0) continue;
+    if(same){ const k=1+rnd(p-1)||1; b[p]=(b[p]+k)%p; b[1]=(b[1]+p-k)%p; } else { const i=rnd(p), k=1+rnd(p-1)||1; b[i]=(b[i]+k)%p; }
+    const tr=c=>{ const d=c.slice(); while(d.length>1&&d[d.length-1]===0) d.pop(); return d; }, A=tr(a), B=tr(b); if(BK_eq(A,B)||A.length<2||B.length<2) continue;
+    const va=[...Array(p).keys()].map(x=>BM_at(A,x)%p), vb=[...Array(p).keys()].map(x=>BM_at(B,x)%p), eq=BK_eq(va,vb); if(eq!==same) continue; const opts=['one function','two functions'], at=va.findIndex((v,i)=>v!==vb[i]);
+    return {index:'q:44c.samefunction['+p+';'+A.join(',')+';'+B.join(',')+']', a3:['43b.clocks['+p+']','44c.sameFunction',DASH], lines:[[BM_p(A),'a polynomial on the clock of '+p],[BM_p(B),'another, with other coefficients']], ask:'Do the two polynomials give one function on the clock of '+p+', or two?', right:opts[eq?0:1], opts, lead:'',
+      why:eq?'Their difference is a multiple of x'+BM_SUP[p]+' − x, which is 0 at every hour of the clock of '+p+'. Both give the values '+va.join(', ')+' at 0, …, '+(p-1)+'. Different lists of coefficients, one function.':'At the hour '+at+' the first gives '+va[at]+' and the second gives '+vb[at]+'. Their difference has degree below '+p+', so x'+BM_SUP[p]+' − x cannot divide it.'}; }
+  return null; }},
+  {id:'44j.common',step:'44j',mode:'work',label:'the greatest common factor of two polynomials',open:()=>measured('44j'),make(){
+  for(let t=0;t<40;t++){ const rs=shuffle([-4,-3,-2,-1,1,2,3,4]).slice(0,3), F=r=>[-r,1], f=BM_mul(F(rs[0]),F(rs[1])), g=BM_mul(F(rs[0]),F(rs[2]));
+    const right=BM_p(F(rs[0])), wrong=uniq(right,[BM_p(F(rs[1])),BM_p(F(rs[2])),'1',BM_p(F(-rs[0])),BM_p(BM_mul(f,F(rs[2])))],3); if(wrong.length<3) continue;
+    return {index:'q:44j.common['+rs.join(',')+']', a3:['44c.polynomials['+BM_p(f)+', '+BM_p(g)+']','44j.remainderChain',DASH], lines:[[BM_p(f),'f'],[BM_p(g),'g']], ask:'What is the greatest common factor of f and g, with top coefficient 1?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'f − g = '+BM_p(f.map((x,i)=>x-g[i]))+', the first remainder of the chain, and it is a constant times '+right+'. That divides both: f = ('+right+')('+BM_p(F(rs[1]))+') and g = ('+right+')('+BM_p(F(rs[2]))+'). The other factors are not shared.'}; }
+  return null; }},
+  {id:'44j.repeated',step:'44j',mode:'work',label:'a repeated root, found from the slope',open:()=>measured('44j'),make(){
+  for(let t=0;t<40;t++){ const rs=shuffle([-3,-2,-1,1,2,3]).slice(0,3), rep=Math.random()<0.6, roots=rep?[rs[0],rs[0],rs[1]]:rs, f=roots.reduce((s,r)=>BM_mul(s,[-r,1]),[1]), d=BM_d(f);
+    const NO='it has none', right=rep?''+sg(rs[0]):NO, wrong=uniq(right,(rep?[NO]:[]).concat([sg(rs[1]),sg(rs[2]),sg(-rs[0]),sg(rs[0])]),3); if(wrong.length<3) continue;
+    return {index:'q:44j.repeated['+roots.join(',')+']', a3:['44c.polynomials['+BM_p(f)+']','44j.repeatedRoot',DASH], lines:[[BM_p(f),'f'],[BM_p(d),'its slope f′']], ask:'Which number is a repeated root of f, if any?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:rep?'f('+sg(rs[0])+') = 0 and f′('+sg(rs[0])+') = 0, so (x'+pm(-rs[0])+')² divides f, by the repeated-root technique. '+sg(rs[1])+' is a root of f, and f′('+sg(rs[1])+') = '+sg(BM_at(d,rs[1]))+', so it is a root once.':'The roots of f are '+rs.slice().sort((a,b)=>a-b).map(sg).join(', ')+', and f′ is '+rs.slice().sort((a,b)=>a-b).map(r=>sg(BM_at(d,r))).join(', ')+' at them: no root is shared with the slope, so none is repeated.'}; }
+  return null; }},
+  {id:'27e.onefromeach',step:'27e',mode:'work',label:'a product of entries: straight in each column or not',open:()=>measured('27e'),make(){
+  const ok=Math.random()<0.5, rows=shuffle([1,2,3]), cols=ok?shuffle([1,2,3]):pick([[1,1,3],[1,2,2],[2,3,3],[1,3,3],[2,2,1]]), sub=n=>'₀₁₂₃'[n], E=rows.map((r,i)=>'a'+sub(r)+sub(cols[i])), opts=['straight in each column','not straight in each column'], twice=[1,2,3].find(c=>cols.filter(x=>x===c).length===2), none=[1,2,3].find(c=>!cols.includes(c));
+  return {index:'q:27e.onefromeach['+rows.join('')+';'+cols.join('')+']', a3:['27e.products['+(ok?'one from each column':'a column used twice')+']','27e.straightInEachColumn',DASH], lines:[['D(A) = '+E.join(' · '),'a number made from a 3 by 3 grid; aᵢⱼ sits in row i, column j']], ask:'Is D straight in each column?', right:opts[ok?0:1], opts, lead:'',
+    why:ok?'The product takes exactly one entry from each column. Stretch one column by c and exactly one factor is stretched, so D is stretched by c; the same for sums.':'Column '+twice+' is used twice and column '+none+' not at all. Stretching column '+twice+' by c stretches D by c², and stretching column '+none+' does nothing. A product of entries is straight in each column exactly when it takes one from each.'}; }},
+  {id:'19e.sign',step:'19e',mode:'work',label:'a shuffle of four: even or odd',open:()=>measured('19e'),make(){
+  for(let t=0;t<40;t++){ const s=shuffle([1,2,3,4]); let inv=0; for(let i=0;i<4;i++) for(let j=i+1;j<4;j++) if(s[i]>s[j]) inv++; if(inv===0) continue; const opts=['even','odd'];
+    const seen=[0,0,0,0], cyc=[]; for(let i=0;i<4;i++){ if(seen[i]) continue; let n=0, j=i; while(!seen[j]){ seen[j]=1; j=s[j]-1; n++; } cyc.push(n); } const sw=cyc.reduce((a,n)=>a+n-1,0);
+    return {index:'q:19e.sign['+s.join('')+']', a3:['19e.shuffles['+s.join('')+']','19e.signOfAShuffle',DASH], lines:[['1 → '+s[0]+',  2 → '+s[1]+',  3 → '+s[2]+',  4 → '+s[3],'a shuffle of 1, 2, 3, 4']], ask:'Is the shuffle even or odd?', right:opts[sw%2], opts, lead:'',
+      why:'Follow each number round: the loops have lengths '+cyc.join(', ')+'. A loop of length k is k − 1 swaps, so the shuffle is '+sw+' swap'+(sw===1?'':'s')+' in all, an '+(sw%2?'odd':'even')+' count. Counting the pairs that end out of order gives '+inv+', with the same evenness.'}; }
+  return null; }},
+  {id:'27k.byrows',step:'27k',mode:'work',label:'a determinant of three rows',open:()=>measured('27k'),make(){
+  for(let t=0;t<40;t++){ const A=[BK_small(3),BK_small(3),BK_small(3)], d=BK_det(A), dg=A[0][0]*A[1][1]*A[2][2]; if(d===0||Math.abs(d)>40) continue;
+    const perm=A[0][0]*A[1][1]*A[2][2]+A[0][1]*A[1][2]*A[2][0]+A[0][2]*A[1][0]*A[2][1]+A[0][2]*A[1][1]*A[2][0]+A[0][1]*A[1][0]*A[2][2]+A[0][0]*A[1][2]*A[2][1];
+    const right=''+sg(d), wrong=uniq(right,[sg(-d),sg(perm),sg(dg),'0',sg(d+A[0][1])],3); if(wrong.length<3) continue;
+    const m=j=>BK_det(A.slice(1).map(r=>r.filter((_,k)=>k!==j)));
+    return {index:'q:27k.byrows['+A.flat().join(',')+']', a3:['27d.grids['+BK_G(A)+']','27k.expand',DASH], lines:[[BK_G(A),'a grid A']], ask:'What is det A?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Along the first row: ('+sg(A[0][0])+')('+sg(m(0))+') − ('+sg(A[0][1])+')('+sg(m(1))+') + ('+sg(A[0][2])+')('+sg(m(2))+') = '+sg(d)+'. The middle term carries a minus sign; with every sign plus the sum is '+sg(perm)+'. The product down the middle alone, '+sg(dg)+', is the determinant only for a staircase.'}; }
+  return null; }},
+  {id:'27k.powers',step:'27k',mode:'work',label:'the grid of powers',open:()=>measured('27k'),make(){
+  for(let t=0;t<40;t++){ const [a,b,c]=shuffle([-3,-2,-1,0,1,2,3,4]).slice(0,3), A=[[1,a,a*a],[1,b,b*b],[1,c,c*c]], d=BK_det(A);
+    const right=''+sg(d), wrong=uniq(right,[sg(-d),sg((a-b)*(a-c)*(b-c)+a),sg(a*b*c),sg((b-a)*(c-a)),sg(a*a*b*b*c*c),'0'],3); if(wrong.length<3) continue;
+    return {index:'q:27k.powers['+[a,b,c].join(',')+']', a3:['27d.grids['+BK_G(A)+']','27k.rowMoves+27k.stairDet',DASH], lines:[[BK_G(A),'the rows 1, t, t² for t = '+sg(a)+', '+sg(b)+', '+sg(c)]], ask:'What is its determinant?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Take row 1 from rows 2 and 3, then factor: the determinant is (b − a)(c − a)(c − b) = ('+sg(b-a)+')('+sg(c-a)+')('+sg(c-b)+') = '+sg(d)+'. It is not 0 because the three numbers differ, which is why three points fix a polynomial of degree at most 2.'}; }
+  return null; }},
+  {id:'27k.opposite',step:'27k',mode:'work',label:'a grid that is the opposite of its side-turn',open:()=>measured('27k'),make(){
+  const n=pick([2,3,3]), a=pick([-3,-2,-1,1,2,3]), b=pick([-3,-2,-1,1,2,3]), c=pick([-3,-2,-1,1,2,3]), A=n===2?[[0,a],[-a,0]]:[[0,a,b],[-a,0,c],[-b,-c,0]], d=BK_det(A);
+  const right=''+sg(d), wrong=uniq(right,n===2?['0',sg(-a*a),sg(2*a),sg(a)]:[sg(2*a*b*c),sg(-2*a*b*c),sg(a*a+b*b+c*c),sg(a*b*c)],3); if(wrong.length<3) return null;
+  return {index:'q:27k.opposite['+A.flat().join(',')+']', a3:['27d.grids['+BK_G(A)+']','27g.sideTurn',DASH], lines:[[BK_G(A),'a grid A with Aᵀ = −A']], ask:'What is det A?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:n===3?'det A = det Aᵀ = det(−A) = (−1)³ det A, since each of the three rows gives up a factor −1. So det A = −det A, and det A = 0. With an even number of rows the argument gives nothing.':'Here det A = 0 · 0 − ('+sg(a)+')('+sg(-a)+') = '+sg(a*a)+'. The side-turn argument gives det A = (−1)² det A, which says nothing: with 2 rows the determinant is a square, and with 3 rows it is 0.'}; }},
+  {id:'27k.ratio',step:'27k',mode:'work',label:'an unknown as a ratio of determinants',open:()=>measured('27k'),make(){
+  for(let t=0;t<40;t++){ const A=[BL_nz(2),BL_nz(2)], x=[pick([-3,-2,-1,1,2,3]),pick([-3,-2,-1,1,2,3])], b=BK_mv(A,x), d=BK_det(A); if(d===0||Math.abs(d)===1) continue;
+    const nx=b[0]*A[1][1]-A[0][1]*b[1], ny=A[0][0]*b[1]-b[0]*A[1][0], R=(n,m)=>'x = '+fraw(n,m).replace(/^−(\d+)\/−?/,'−$1/'), S=(n,m)=>'x = '+sg(n)+'/'+sg(m);
+    const right=S(nx,d), wrong=uniq(right,[S(ny,d),S(-nx,d),S(d,nx),S(b[0]*A[1][1]+A[0][1]*b[1],d),S(nx,A[0][0]*A[1][1])].filter(o=>!/\/0$/.test(o)),3); if(wrong.length<3||nx===0) continue;
+    return {index:'q:27k.ratio['+A.flat().join(',')+';'+b.join(',')+']', a3:['27j.systems[one answer]','27k.ratios',DASH], lines:A.map((r,i)=>[BK_lin(r,['x','y'])+' = '+sg(b[i]),'sameness '+(i+1)]), ask:'Which ratio of determinants is x?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Below: the determinant of the grid, '+sg(d)+'. Above: the same grid with its first column replaced by the right sides, rows ('+sg(b[0])+', '+sg(A[0][1])+') and ('+sg(b[1])+', '+sg(A[1][1])+'), with determinant '+sg(nx)+'. So x = '+sg(x[0])+'. Replacing the second column instead gives y.'}; }
+  return null; }},
+  {id:'27g.standin',step:'27g',mode:'work',label:'the stand-in grid of a 2 by 2 grid',open:()=>measured('27g'),make(){
+  for(let t=0;t<40;t++){ const A=[BL_nz(2),BL_nz(2)], [[a,b],[c,d]]=A, D=BK_det(A); if(D===0||b===c||a===d||b===0||c===0) continue;
+    const Sg=[[d,-b],[-c,a]], right=BK_G(Sg), wrong=uniq(right,[BK_G([[d,-c],[-b,a]]),BK_G([[a,-b],[-c,d]]),BK_G([[d,b],[c,a]]),BK_G([[-d,b],[c,-a]]),BK_G([[d,c],[b,a]])],3); if(wrong.length<3) continue;
+    return {index:'q:27g.standin['+A.flat().join(',')+']', a3:['27d.grids['+BK_G(A)+']','27g.standIn',DASH], lines:[[BK_G(A),'a grid A']], ask:'Which grid S has SA = (det A) I?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Swap the two middle entries and flip the sign of the other two. Then SA has '+sg(D)+' down the middle and 0 elsewhere, and det A = '+sg(D)+'. So A⁻¹ is S divided by '+sg(D)+', by the stand-in technique.'}; }
+  return null; }},
+  {id:'27e.plusI',step:'27e',mode:'work',label:'the determinant of I + A',open:()=>measured('27e'),make(){
+  for(let t=0;t<40;t++){ const A=[BK_small(2),BK_small(2)], tr=A[0][0]+A[1][1], d=BK_det(A), v=1+tr+d; if(tr===0||d===0) continue;
+    const right=''+sg(v), wrong=uniq(right,[sg(1+d),sg(tr+d),sg(1+tr),sg(2+d),sg(-v)],3); if(wrong.length<3) continue;
+    return {index:'q:27e.plusI['+A.flat().join(',')+']', a3:['27d.grids['+BK_G(A)+']','27e.determinant',DASH], lines:[[BK_G(A),'a grid A']], ask:'What is det(I + A)?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'I + A has rows ('+sg(1+A[0][0])+', '+sg(A[0][1])+') and ('+sg(A[1][0])+', '+sg(1+A[1][1])+'). Multiply out: 1 + (middle sum) + det A = 1 + ('+sg(tr)+') + ('+sg(d)+') = '+sg(v)+'. The determinant does not add: det(I + A) is 1 + det A only when the middle sum of A is 0.'}; }
+  return null; }});
+/* --- stretches and straightening out (27f), the least polynomial (27g), killers, blocks, the two parts and square roots (44·cb27): numbers dealt afresh; each wrong option is a wrong move --- */
+const BN_fac=(r,k)=>{ const b=r===0?'x':'(x'+pm(-r)+')'; return k===1?b:b+BM_SUP[k]; }, BN_prod=L=>L.map(([r,k])=>BN_fac(r,k)).join('').replace(/^\((x[^()]*)\)$/,'$1');
+const BN_conj=(P,D)=>{ const Pi=BK_inv(P); return Pi?BK_mul(P,BK_mul(D,Pi)):null; }, BN_two=()=>shuffle([-3,-2,-1,1,2,3,4]).slice(0,2), BN_part=n=>[1,1,2,3,5,7,11][n];
+QP.push({id:'27f.stretches',step:'27f',mode:'work',label:'the stretches of a grid',open:()=>measured('27f'),make(){
+  for(let t=0;t<60;t++){ const [a,b]=BN_two(), P=BK_T(BK_unimod(2)), A=BN_conj(P,[[a,0],[0,b]]); if(!A||A[0][1]===0||A[1][0]===0||A.flat().some(x=>Math.abs(x)>15)) continue;
+    const S=(p,q)=>[p,q].sort((x,y)=>x-y).map(sg).join(' and '), right=S(a,b), wrong=uniq(right,[S(A[0][0],A[1][1]),S(-a,-b),S(a+b,a*b),S(a,-b),S(A[0][1],A[1][0])],3); if(wrong.length<3) continue;
+    return {index:'q:27f.stretches['+A.flat().join(',')+']', a3:['27d.grids['+BK_G(A)+']','27f.stretchTest',DASH], lines:[[BK_G(A),'a grid A']], ask:'What are the stretches of A?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'det(A − λI) = λ² '+(a+b<0?'+ '+(-(a+b)):'− '+(a+b))+'λ '+(a*b<0?'− '+(-a*b):'+ '+a*b)+' = (λ'+pm(-a)+')(λ'+pm(-b)+'). The stretches add to the middle sum '+sg(a+b)+' and multiply to the determinant '+sg(a*b)+'. The middle entries are the stretches only for a staircase.'}; }
+  return null; }},
+  {id:'27f.straightens',step:'27f',mode:'work',label:'does it straighten out over the reals',open:()=>measured('27f'),make(){
+  for(let t=0;t<60;t++){ const k=rnd(4), P=BK_T(BK_unimod(2)), [a,b]=BN_two(); let A;
+    if(k===0) A=BN_conj(P,[[a,0],[0,b]]); else if(k===1) A=[[a,0],[0,a]]; else if(k===2) A=BN_conj(P,[[a,1],[0,a]]); else A=BN_conj(P,[[a,-b],[b,a]]);
+    if(!A||(k!==1&&(A[0][1]===0||A[1][0]===0))||A.flat().some(x=>Math.abs(x)>15)) continue; const tr=A[0][0]+A[1][1], d=BK_det(A), disc=tr*tr-4*d;
+    const opts=['yes: it has two different real stretches','yes: it is already c times I','no: one stretch, and only a line of vectors it only stretches','no: it has no real stretch'];
+    return {index:'q:27f.straightens['+A.flat().join(',')+']', a3:['27d.grids['+BK_G(A)+']','27f.straightenOut',DASH], lines:[[BK_G(A),'a real grid A']], ask:'Is A diagonal in some real basis?', right:opts[k], opts, lead:'',
+      why:'The stretch polynomial is λ² '+(tr<0?'+ '+(-tr):'− '+tr)+'λ '+(d<0?'− '+(-d):'+ '+d)+', and (middle sum)² − 4 det = '+sg(disc)+'. '+['Above 0: two different real stretches, '+[a,b].sort((x,y)=>x-y).map(sg).join(' and ')+', and vectors with different stretches are free, so they are a basis.','It is 0, and A − ('+sg(a)+')I is the zero grid: every vector is only stretched, by '+sg(a)+'.','It is 0: one stretch, '+sg(a)+', twice. But A − ('+sg(a)+')I is not the zero grid, so it loses only a line. One line is not a basis of the plane.','Below 0: no real number is a stretch. Over the numbers a + bi it has two, and straightens out there.'][k]}; }
+  return null; }},
+  {id:'27f.stairstretch',step:'27f',mode:'work',label:'the stretches of a staircase',open:()=>measured('27f'),make(){
+  for(let t=0;t<40;t++){ const d=shuffle([-3,-2,-1,1,2,3,4,5]).slice(0,3), u=[pick([-3,-2,-1,1,2,3]),pick([-3,-2,-1,1,2,3]),pick([-3,-2,-1,1,2,3])], A=[[d[0],u[0],u[1]],[0,d[1],u[2]],[0,0,d[2]]];
+    const S=L=>L.slice().sort((x,y)=>x-y).map(sg).join(', '), right=S(d), wrong=uniq(right,[S(u),S(A.map(r=>r[0]+r[1]+r[2])),S([d[0]*d[1]*d[2],d[0]+d[1]+d[2],0]),S(d.map(x=>-x))],3); if(wrong.length<3) continue;
+    return {index:'q:27f.stairstretch['+A.flat().join(',')+']', a3:['27d.grids['+BK_G(A)+']','27f.stretchTest+27k.stairDet',DASH], lines:[[BK_G(A),'a staircase A']], ask:'What are the stretches of A?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'A − λI is a staircase too, so its determinant is the product down its middle, ('+sg(d[0])+' − λ)('+sg(d[1])+' − λ)('+sg(d[2])+' − λ). That is 0 exactly at the middle entries. The entries above the middle change the stretched vectors, not the stretches.'}; }
+  return null; }},
+  {id:'27f.polystretch',step:'27f',mode:'work',label:'the stretches of a polynomial of a grid',open:()=>measured('27g'),make(){
+  for(let t=0;t<60;t++){ const [a,b]=BN_two(), P=BK_T(BK_unimod(2)), A=BN_conj(P,[[a,0],[0,b]]), p=pick([-2,-1,1,2]), q=pick([-3,-2,-1,1,2,3]), f=x=>x*x+p*x+q; if(!A||A[0][1]===0||A[1][0]===0||A.flat().some(x=>Math.abs(x)>12)||f(a)===f(b)) continue;
+    const S=(u,v)=>[u,v].sort((x,y)=>x-y).map(sg).join(' and '), right=S(f(a),f(b)), wrong=uniq(right,[S(a,b),S(f(A[0][0]),f(A[1][1])),S(a*a,b*b),S(f(a)-q,f(b)-q),S(f(-a),f(-b))],3); if(wrong.length<3) continue;
+    return {index:'q:27f.polystretch['+A.flat().join(',')+';'+p+','+q+']', a3:['27d.grids['+BK_G(A)+']','27f.stretchTest+27g.polynomialOfAGrid',DASH], lines:[[BK_G(A),'a grid A with stretches '+S(a,b)],['f = '+BM_p([q,p,1]),'a polynomial']], ask:'What are the stretches of f(A)?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'If Av = λv, then A²v = λ²v, and f(A)v = f(λ)v: the same vector, stretched by f(λ). So the stretches are f('+sg(a)+') = '+sg(f(a))+' and f('+sg(b)+') = '+sg(f(b))+'. f of the middle entries is not f of the stretches.'}; }
+  return null; }},
+  {id:'27f.swapspace',step:'27f',mode:'work',label:'how many grids swap with a middle-only grid',open:()=>measured('27f'),make(){
+  const ms=pick([[1,1,1],[2,1],[3],[2,2],[2,1,1],[3,1],[1,1,1,1]]), vals=shuffle([-2,-1,1,2,3,4]).slice(0,ms.length), d=[]; ms.forEach((m,i)=>{ for(let j=0;j<m;j++) d.push(vals[i]); });
+  const n=d.length, v=ms.reduce((s,m)=>s+m*m,0), right=''+v, wrong=uniq(right,[''+n,''+n*n,''+ms.length,''+(v+1),''+ms.reduce((s,m)=>s+m,0)*2,''+(n*n-n)],3); if(wrong.length<3) return null;
+  return {index:'q:27f.swapspace['+d.join(',')+']', a3:['27d.grids[middle-only]','27d.productIsDoing',DASH], lines:[['D = the grid with '+d.map(sg).join(', ')+' down its middle and 0 elsewhere','a middle-only grid']], ask:'What is the dimension of the space of grids B with BD = DB?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'Entry (i, j) of BD − DB is bᵢⱼ(dⱼ − dᵢ). So bᵢⱼ is free where the two middle entries agree and must be 0 where they differ. The stretches come '+ms.join(', ')+' times, which leaves '+ms.map(m=>m+'²').join(' + ')+' = '+v+' free entries.'}; }},
+  {id:'27g.least',step:'27g',mode:'work',label:'the least polynomial of a grid',open:()=>measured('27g'),make(){
+  const [a,b]=BN_two(), c=pick([5,6]), k=rnd(6);
+  const C=[[[[a,0,0],[0,a,0],[0,0,b]],[[a,1],[b,1]],'A − ('+sg(a)+')I and A − ('+sg(b)+')I multiply to the zero grid, and neither alone is 0.'],
+    [[[a,1,0],[0,a,0],[0,0,b]],[[a,2],[b,1]],'(A − ('+sg(a)+')I)(A − ('+sg(b)+')I) is not 0: the 1 above the middle survives. The square of the first factor is needed.'],
+    [[[a,1,0],[0,a,0],[0,0,a]],[[a,2]],'A − ('+sg(a)+')I is not 0, and its square is: it slides once and then off the end.'],
+    [[[a,0,0],[0,a,0],[0,0,a]],[[a,1]],'A − ('+sg(a)+')I is already the zero grid.'],
+    [[[a,1,0],[0,a,1],[0,0,a]],[[a,3]],'A − ('+sg(a)+')I slides twice before it slides off: its square is not 0 and its cube is.'],
+    [[[a,0,0],[0,b,0],[0,0,c]],[[a,1],[b,1],[c,1]],'Three different stretches: each must be a root, and the product of the three factors is the own polynomial.']][k];
+  const right=BN_prod(C[1]), all=[[[a,1],[b,1]],[[a,2],[b,1]],[[a,2]],[[a,1]],[[a,3]],[[a,1],[b,2]],[[a,3],[b,1]],[[a,1],[b,1],[c,1]]].map(BN_prod), wrong=uniq(right,shuffle(all),3);
+  return {index:'q:27g.least['+k+';'+a+','+b+']', a3:['27d.grids['+BK_G(C[0])+']','27g.leastObeyed',DASH], lines:[[BK_G(C[0]),'a grid A']], ask:'What is the least polynomial of A?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:C[2]+' The least polynomial divides the own polynomial and has every stretch as a root, by the least-obeyed technique; the size of the largest block of each stretch gives its power.'}; }},
+  {id:'44cb27.killer',step:'44·cb27',mode:'work',label:'the killer of a vector',open:()=>measured('44·cb27'),make(){
+  const [a,b]=BN_two(), A=[[a,1,0],[0,a,0],[0,0,b]], k=rnd(5), V=[[[1,0,0],[[a,1]]],[[0,1,0],[[a,2]]],[[0,0,1],[[b,1]]],[[0,1,1],[[a,2],[b,1]]],[[1,0,1],[[a,1],[b,1]]]][k];
+  const right=BN_prod(V[1]), wrong=uniq(right,shuffle([[[a,1]],[[a,2]],[[b,1]],[[a,2],[b,1]],[[a,1],[b,1]],[[b,2]]].map(BN_prod)),3);
+  return {index:'q:44cb27.killer['+a+','+b+';'+k+']', a3:['27d.grids['+BK_G(A)+']','44cb27.killer',DASH], lines:[[BK_G(A),'a grid A'],[BK_L(V[0]),'a vector v']], ask:'Which polynomial k of least degree, with top coefficient 1, has k(A)v = 0?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:['Av = '+sg(a)+'v: v is only stretched, so x'+pm(-a)+' kills it.','(A − ('+sg(a)+')I)v = (1, 0, 0), not 0, and one more step kills it. Nothing of degree 1 does.','Av = '+sg(b)+'v: v is only stretched, so x'+pm(-b)+' kills it.','The part (0, 1, 0) needs '+BN_fac(a,2)+' and the part (0, 0, 1) needs x'+pm(-b)+'. They share no factor, so the sum needs the product, which is the whole least polynomial of A: v makes the whole space.','Each part is only stretched, by '+sg(a)+' and by '+sg(b)+'. The killer needs both factors once.'][k]+' Every killer divides the least polynomial '+BN_prod([[a,2],[b,1]])+'.'}; }},
+  {id:'44cb27.maker',step:'44·cb27',mode:'work',label:'does one vector make the whole plane',open:()=>measured('44·cb27'),make(){
+  for(let t=0;t<60;t++){ const A=[BK_small(2),BK_small(2)], yes=Math.random()<0.5; let v=BL_nz(2); const Av0=BK_mv(A,v); if(A[0][1]===0&&A[1][0]===0) continue;
+    if(!yes){ const tr=A[0][0]+A[1][1], d=BK_det(A), disc=tr*tr-4*d, s=Math.round(Math.sqrt(Math.max(disc,0))); if(disc<0||s*s!==disc||(tr+s)%2) continue; const l=(tr+s)/2; v=A[0][1]!==0?[A[0][1],l-A[0][0]]:[l-A[1][1],A[1][0]]; if(v.every(x=>x===0)||v.some(x=>Math.abs(x)>6)) continue; }
+    const Av=BK_mv(A,v), det=v[0]*Av[1]-v[1]*Av[0]; if((det!==0)!==yes) continue; const opts=['yes','no'];
+    return {index:'q:44cb27.maker['+A.flat().join(',')+';'+v.join(',')+']', a3:['27d.grids['+BK_G(A)+']','44cb27.killer',DASH], lines:[[BK_G(A),'a grid A'],[BK_L(v),'a vector v']], ask:'Do v and Av build the whole plane?', right:opts[yes?0:1], opts, lead:'',
+      why:'Av = '+BK_L(Av)+'. '+(yes?'The grid with columns v and Av has determinant '+sg(det)+', not 0, so they are a basis: the killer of v has degree 2, and v makes the plane.':'That is '+sg(v[0]!==0?Av[0]/v[0]:Av[1]/v[1])+' times v: v is only stretched, its killer has degree 1, and it makes a line. Any vector A does not only stretch makes the whole plane.')}; }
+  return null; }},
+  {id:'44cb27.howmany',step:'44·cb27',mode:'work',label:'how many nearly diagonal forms',open:()=>measured('44·cb27'),make(){
+  const ds=pick([[2],[3],[4],[2,1],[2,2],[3,1],[3,2],[4,1],[5],[2,2,1]]), rs=shuffle([-2,-1,0,1,2,3]).slice(0,ds.length), n=ds.reduce((s,d)=>s*BN_part(d),1), tot=ds.reduce((s,d)=>s+d,0);
+  const right=''+n, wrong=uniq(right,[''+tot,''+ds.length,''+ds.reduce((s,d)=>s*d,1),''+ds.reduce((s,d)=>s+BN_part(d),0),''+(n+1),''+(n-1),'1',''+(n+2),''+2*n].filter(x=>x!=='0'),3); if(wrong.length<3) return null;
+  return {index:'q:44cb27.howmany['+ds.join(',')+']', a3:['44cb27.ownPolynomials['+BN_prod(rs.map((r,i)=>[r,ds[i]]))+']','44cb27.blockCount',DASH], lines:[[BN_prod(rs.map((r,i)=>[r,ds[i]])),'the own polynomial of a grid over ℂ, up to sign']], ask:'How many nearly diagonal forms have this own polynomial, not counting the order of the blocks?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'For each stretch, the block sizes add to its power, in any way: '+ds.map(d=>d+' can be broken up in '+BN_part(d)+' way'+(BN_part(d)===1?'':'s')).join('; ')+'. The choices for different stretches multiply: '+n+'.'}; }},
+  {id:'44cb27.blocks',step:'44·cb27',mode:'work',label:'the blocks, counted from what the powers lose',open:()=>measured('44·cb27'),make(){
+  const parts=[[2],[1,1],[3],[2,1],[1,1,1],[4],[3,1],[2,2],[2,1,1],[3,2],[3,1,1],[2,2,1],[3,3],[4,2],[3,2,1],[2,2,2]], B=pick(parts), tot=B.reduce((s,m)=>s+m,0), c=pick([-2,-1,0,1,2,3]);
+  const nj=j=>B.reduce((s,m)=>s+Math.min(j,m),0), top=B[0], S=P=>P.join(', '), right=S(B), same=parts.filter(P=>P.reduce((s,m)=>s+m,0)===tot&&S(P)!==right).map(S), wrong=uniq(right,shuffle(same).concat([S(B.concat([1])),S([tot+1])]),3); if(wrong.length<3) return null;
+  const N=Array.from({length:top},(_,i)=>nj(i+1));
+  return {index:'q:44cb27.blocks['+B.join(',')+']', a3:['44cb27.stretches['+sg(c)+']','44cb27.blockCount',DASH], lines:[['own polynomial '+BN_fac(c,tot),'a grid A over ℂ with one stretch, '+sg(c)],[N.map((v,i)=>'n'+'₀₁₂₃₄'[i+1]+' = '+v).join(',  '),'nⱼ = the dimension of what ('+BK_AmI(c)+')ʲ loses']], ask:'What are the sizes of the blocks of A?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'The block-count technique: the number of blocks of size at least j is nⱼ − nⱼ₋₁. Here that gives '+N.map((v,i)=>(v-(i?N[i-1]:0))+' of size at least '+(i+1)).join(', ')+'. So the sizes are '+right+', and they add to '+tot+'.'}; }},
+  {id:'44cb27.parts',step:'44·cb27',mode:'work',label:'the two parts of a staircase',open:()=>measured('44·cb27'),make(){
+  const same=Math.random()<0.5, [a,b0]=BN_two(), b=same?a:b0, u=pick([1,2,3,-1,-2]), A=[[a,u],[0,b]];
+  const right=same?BK_G([[a,0],[0,a]]):BK_G(A), wrong=uniq(right,[BK_G([[a,0],[0,b]]),BK_G(A),BK_G([[0,u],[0,0]]),BK_G([[a,u],[0,0]]),BK_G([[b,0],[0,a]])],3); if(wrong.length<3) return null;
+  return {index:'q:44cb27.parts['+A.flat().join(',')+']', a3:['27d.grids['+BK_G(A)+']','44cb27.twoParts',DASH], lines:[[BK_G(A),'a grid A'],['A = D + N,  DN = ND','D diagonal in some basis, some power of N equal to 0']], ask:'Which grid is D?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:same?'The one stretch is '+sg(a)+', twice, and A is not '+BK_cI(a)+'. So D = '+BK_cI(a)+', which swaps with everything, and N = A − D has the single entry '+sg(u)+' and N² = 0.':'The stretches '+sg(a)+' and '+sg(b)+' differ, so A is diagonal in some basis already: D = A and N = 0. The middle of A and the rest of A do not swap, so they are not the two parts.'}; }},
+  {id:'44cb27.root',step:'44·cb27',mode:'work',label:'a square root of a grid',open:()=>measured('44·cb27'),make(){
+  const c=pick([0,1,2,3,-1,-2]), u=pick([1,2,3,4,6]), A=[[c*c,u],[0,c*c]], NO='it has none', F=(p,q)=>fshow(fr(p,q)), G=(x,y)=>'rows ('+x+', '+y+'), (0, '+x+')';
+  const right=c===0?NO:G(sg(c),F(u,2*c)), wrong=uniq(right,(c===0?[G('0',F(u,2)),G('0',F(u,4)),G('1',''+u)]:[NO,G(sg(c),F(u,c*c)),G(sg(c),F(u,c)),G(sg(c),''+u),G(sg(c*c),F(u,2))]),3); if(wrong.length<3) return null;
+  return {index:'q:44cb27.root['+c+';'+u+']', a3:['27d.grids['+BK_G(A)+']','44cb27.gridRoot',DASH], lines:[[BK_G(A),'a grid A']], ask:'Which grid B has B² = A, if any?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:c===0?'If B² = A then B⁴ = A² = 0, so the only stretch of B is 0, its own polynomial is x², and B² = 0 by the own-polynomial technique. But A is not 0. The grid-root technique needs an undoable grid.':'A = '+(c*c)+'(I + N) with N² = 0, and (I + N/2)² = I + N. So B = '+sg(c)+'(I + N/2): its square has '+(c*c)+' down the middle and 2('+sg(c)+')('+F(u,2*c)+') = '+u+' above it. Roots are not taken entry by entry.'}; }});
+/* --- products, right angles and shadows (31a, 31b, 31c), maps moved across and product-keepers (31d), two-slot readings and forms (27h, 31e): numbers dealt afresh; each wrong option is a wrong move --- */
+const BO_c=(a,b)=>b===0?sg(a):a===0?(Math.abs(b)===1?(b<0?'−i':'i'):sg(b)+'i'):sg(a)+(b<0?' − ':' + ')+(Math.abs(b)===1?'':Math.abs(b))+'i', BO_CG=M=>'rows '+M.map(r=>'('+r.map(z=>BO_c(z[0],z[1])).join(', ')+')').join(', ');
+const BO_dot=(u,v)=>u.reduce((s,a,i)=>s+a*v[i],0), BO_xy=(g)=>{ const T=[[g[0][0],'x₁y₁'],[g[0][1],'x₁y₂'],[g[1][0],'x₂y₁'],[g[1][1],'x₂y₂']]; let s=''; T.forEach(([a,v])=>{ if(!a) return; const m=(Math.abs(a)===1?'':Math.abs(a))+v; s+=s===''?(a<0?'−':'')+m:(a<0?' − ':' + ')+m; }); return s||'0'; };
+const BO_FG=(M,q)=>'rows '+M.map(r=>'('+r.map(x=>fshow(fr(x,q))).join(', ')+')').join(', ');
+QP.push({id:'31a.candidate',step:'31a',mode:'work',label:'a two-slot formula on pairs: a product or not',open:()=>measured('31a'),make(){
+  const a=2+rnd(3), b=1+rnd(3), k=rnd(6), opts=['a product','not a product'];
+  const C=[[[[a,0],[0,b]],0,'It is straight in each slot, the same both ways round, and ⟨x, x⟩ = '+a+'x₁² + '+(b===1?'':b)+'x₂² is above 0 unless x = 0. Positive weights are allowed.'],
+    [[[a,0],[0,0]],1,'⟨x, x⟩ = '+a+'x₁², which is 0 for x = (0, 1). A vector other than 0 must have a size above 0.'],
+    [[[a,0],[0,-b]],1,'⟨x, x⟩ = '+a+'x₁² − '+(b===1?'':b)+'x₂², which is below 0 for x = (0, 1).'],
+    [[[1,a],[0,1]],1,'It is not the same both ways round: ⟨(1, 0), (0, 1)⟩ = '+a+' and ⟨(0, 1), (1, 0)⟩ = 0.'],
+    [[[a,1],[1,a]],0,'It is straight in each slot and the same both ways round. ⟨x, x⟩ = '+a+'x₁² + 2x₁x₂ + '+a+'x₂² = (x₁ + x₂)² + '+(a-1)+'(x₁² + x₂²), above 0 unless x = 0.'],
+    [[[1,a],[a,1]],1,'⟨x, x⟩ = x₁² + '+(2*a)+'x₁x₂ + x₂², which is '+(2-2*a)+' for x = (1, −1): below 0.']][k];
+  return {index:'q:31a.candidate['+k+';'+a+','+b+']', a3:['31a.forms['+['positive weights','a weight 0','a weight below 0','not the same both ways','a small cross term','a large cross term'][k]+']','31a.product',DASH], lines:[['⟨x, y⟩ = '+BO_xy(C[0]),'a formula on pairs of real pairs']], ask:'Is this formula a product?', right:opts[C[1]], opts, lead:'', why:C[2]}; }},
+  {id:'31a.fourcorners',step:'31a',mode:'work',label:'the sizes of a sum and a difference',open:()=>measured('31a'),make(){
+  for(let t=0;t<40;t++){ const f=BL_nz(2), g=BL_nz(2), F=BO_dot(f,f), G=BO_dot(g,g), s=f.map((x,i)=>x+g[i]), d=f.map((x,i)=>x-g[i]), Sq=BO_dot(s,s), D=BO_dot(d,d); if(D===Sq||D===0||Sq===0) continue;
+    const right=''+D, wrong=uniq(right,[''+(F+G-Sq),''+Sq,''+(F+G),''+(2*F+2*G),''+Math.abs(F-G),''+(D+1)].filter(x=>!/^-/.test(x)),3); if(wrong.length<3) continue;
+    return {index:'q:31a.fourcorners['+[F,G,Sq].join(',')+']', a3:['31a.sizes','31a.squareSum',DASH], lines:[['‖f‖² = '+F+',  ‖g‖² = '+G,'two vectors, in any product'],['‖f + g‖² = '+Sq,'their sum']], ask:'What is ‖f − g‖²?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Multiply out both: ‖f + g‖² = ‖f‖² + 2⟨f, g⟩ + ‖g‖² and ‖f − g‖² = ‖f‖² − 2⟨f, g⟩ + ‖g‖² (real case). They add to 2‖f‖² + 2‖g‖² = '+(2*F+2*G)+', so ‖f − g‖² = '+(2*F+2*G)+' − '+Sq+' = '+D+'. Here ⟨f, g⟩ = '+sg((Sq-D)/4)+', a quarter of the difference of the two.'}; }
+  return null; }},
+  {id:'31a.fromsizes',step:'31a',mode:'work',label:'a product found from sizes alone',open:()=>measured('31a'),make(){
+  for(let t=0;t<40;t++){ const f=BL_nz(2), g=BL_nz(2), s=f.map((x,i)=>x+g[i]), d=f.map((x,i)=>x-g[i]), Sq=BO_dot(s,s), D=BO_dot(d,d), p=BO_dot(f,g); if(p===0||Sq===0||D===0) continue;
+    const right=''+sg(p), wrong=uniq(right,[sg(-p),sg(2*p),sg(4*p),sg(Sq-D),sg(Sq+D),'0'],3); if(wrong.length<3) continue;
+    return {index:'q:31a.fromsizes['+Sq+','+D+']', a3:['31a.sizes','31a.floorProduct',DASH], lines:[['‖f + g‖² = '+Sq,'a sum, in a real product'],['‖f − g‖² = '+D,'the difference']], ask:'What is ⟨f, g⟩?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'‖f + g‖² − ‖f − g‖² = 4⟨f, g⟩: the squares of the sizes cancel and the cross terms double. So ⟨f, g⟩ = ('+Sq+' − '+D+')/4 = '+sg(p)+'. The sizes of a product fix the product.'}; }
+  return null; }},
+  {id:'31b.shadow',step:'31b',mode:'work',label:'the closest point of a line',open:()=>measured('31b'),make(){
+  for(let t=0;t<40;t++){ const u=BL_nz(2), k=pick([-3,-2,-1,2,3]), m=pick([-2,-1,1,2]), w=[-m*u[1],m*u[0]], f=u.map((x,i)=>k*x+w[i]); if(u.some(x=>x===0)||f.some(x=>Math.abs(x)>14)) continue;
+    const right=BK_L(u.map(x=>k*x)), wrong=uniq(right,[BK_L(w),BK_L(f),BK_L(u.map(x=>BO_dot(f,u)*x)),BK_L(u.map(x=>-k*x)),BK_L(u)],3); if(wrong.length<3) continue;
+    return {index:'q:31b.shadow['+u.join(',')+';'+f.join(',')+']', a3:['31b.lines['+BK_L(u)+']','31b.closestPoint',DASH], lines:[[BK_L(u),'u: the line of its stretches'],[BK_L(f),'f']], ask:'Which point of the line is closest to f, with the dot?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'⟨f, u⟩ = '+sg(BO_dot(f,u))+' and ⟨u, u⟩ = '+BO_dot(u,u)+', so the closest point is ('+sg(BO_dot(f,u))+'/'+BO_dot(u,u)+')u = '+sg(k)+'u. The miss f − ('+sg(k)+')u = '+BK_L(w)+' is at right angles to u. Leaving out the division by ⟨u, u⟩ works only when u has length 1.'}; }
+  return null; }},
+  {id:'31c.straighten',step:'31c',mode:'work',label:'straightening the second vector',open:()=>measured('31c'),make(){
+  for(let t=0;t<40;t++){ const p=pick([1,2,3,-1,-2]), q=pick([1,2,-1,-2,3]), r=pick([1,2,-1,-2]), k=pick([-2,-1,1,2,3]), v1=[p,q,0], w=[-q,p,r], v2=v1.map((x,i)=>k*x+w[i]); if(v2.some(x=>Math.abs(x)>12)) continue;
+    const right=BK_L(w), wrong=uniq(right,[BK_L(v2),BK_L(v2.map((x,i)=>x-v1[i]*(k+1))),BK_L(v2.map((x,i)=>x+k*v1[i])),BK_L(v2.map((x,i)=>x-BO_dot(v2,v1)*v1[i])),BK_L(v1.map(x=>k*x))],3); if(wrong.length<3) continue;
+    return {index:'q:31c.straighten['+v1.join(',')+';'+v2.join(',')+']', a3:['27b.lists[free]','31c.straightening',DASH], lines:[[BK_L(v1),'v₁'],[BK_L(v2),'v₂']], ask:'Which vector is v₂ with its shadow on v₁ taken away?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'⟨v₂, v₁⟩ = '+sg(BO_dot(v2,v1))+' and ⟨v₁, v₁⟩ = '+BO_dot(v1,v1)+', so the shadow is '+sg(k)+'v₁ and what is left is v₂ − ('+sg(k)+')v₁ = '+BK_L(w)+'. Check: its dot with v₁ is 0. Scaled to length 1, v₁ and this are the right-angled list.'}; }
+  return null; }},
+  {id:'31b.rightpartner',step:'31b',mode:'work',label:'everything at right angles to a vector',open:()=>measured('31b'),make(){
+  for(let t=0;t<40;t++){ const n=[pick([1,2,3,-1,-2]),pick([1,2,3,-1,-2]),pick([1,2,-1,-3])], [a,b,c]=n, g1=[b,-a,0], g2=[c,0,-a], g3=[0,c,-b], P=(x,y)=>BK_L(x)+', '+BK_L(y);
+    const right=pick([P(g1,g2),P(g1,g3),P(g2,g3)]), wrong=uniq(right,[P(g1,[a,b,c]),P([b,a,0],g2),P(g1,g1.map(x=>-2*x)),P([a,-b,0],[0,c,b]),P(g2,[c,0,a])],3); if(wrong.length<3) continue;
+    return {index:'q:31b.rightpartner['+n.join(',')+']', a3:['31b.lines['+BK_L(n)+']','27i.perp',DASH], lines:[[BK_L(n),'a vector n in lists of 3 numbers']], ask:'Which pair is a basis of the vectors at right angles to n?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Each vector of the pair has dot 0 with n, and neither is a stretch of the other. The vectors at right angles to one vector other than 0 form a plane, dimension 3 − 1 = 2, so two free ones are a basis. A pair with a vector and its own stretch builds only a line.'}; }
+  return null; }},
+  {id:'31d.across',step:'31d',mode:'work',label:'a grid moved across the product',open:()=>measured('31d'),make(){
+  for(let t=0;t<40;t++){ const z=()=>[rnd(7)-3,rnd(5)-2], A=[[z(),z()],[z(),z()]]; if(A.flat().every(w=>w[1]===0)||(A[0][1][0]===A[1][0][0]&&A[0][1][1]===A[1][0][1])||A.flat().some(w=>w[0]===0&&w[1]===0)) continue;
+    const cj=w=>[w[0],-w[1]], T=[[A[0][0],A[1][0]],[A[0][1],A[1][1]]], S=T.map(r=>r.map(cj)), C=A.map(r=>r.map(cj)), N=A.map(r=>r.map(w=>[-w[0],-w[1]]));
+    const right=BO_CG(S), wrong=uniq(right,[BO_CG(T),BO_CG(C),BO_CG(A),BO_CG(N)],3); if(wrong.length<3) continue;
+    return {index:'q:31d.across['+A.flat().flat().join(',')+']', a3:['27d.grids[turning numbers]','31d.movedAcross',DASH], lines:[[BO_CG(A),'a grid A of turning numbers']], ask:'Which grid A* has ⟨Ax, y⟩ = ⟨x, A*y⟩ for all lists x and y?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Turn A on its side and flip every entry: entry (j, k) of A* is the flip of entry (k, j) of A. The side-turn alone forgets that the second slot of the product is turned back; the flip alone forgets the side-turn.'}; }
+  return null; }},
+  {id:'31d.keepers',step:'31d',mode:'work',label:'which grid keeps the dot',open:()=>measured('31d'),make(){
+  const [p,q,h]=pick([[3,4,5],[5,12,13],[8,15,17],[4,3,5],[12,5,13]]), s=pick([1,-1]), flip=Math.random()<0.5, Q=flip?[[p,s*q],[s*q,-p]]:[[p,-s*q],[s*q,p]];
+  const right=BO_FG(Q,h), wrong=uniq(right,[BO_FG([[p,q],[q,p]],h),BO_FG([[p,-s*q],[s*q,p]],p),BO_FG([[h,0],[0,1]],h),BO_FG([[p,p],[q,q]],h),BO_FG([[p,s*q],[0,h]],h)],3); if(wrong.length<3) return null;
+  return {index:'q:31d.keepers['+Q.flat().join(',')+';'+h+']', a3:['27d.grids[fractions]','31d.productKeeper',DASH], lines:[['⟨Ux, Uy⟩ = ⟨x, y⟩ for all x, y','what a product-keeper does']], ask:'Which grid keeps the dot?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'Its columns have length 1, since '+p+'² + '+q+'² = '+h+'², and dot 0 with each other: UᵀU = I. '+(flip?'Its determinant is −1: a flip followed by a turn.':'Its determinant is 1: a turn.')+' Each other grid has a column that is not of length 1, or two columns that are not at right angles.'}; }},
+  {id:'31d.threekinds',step:'31d',mode:'work',label:'read the kind of map from its stretches',open:()=>measured('31d'),make(){
+  const k=rnd(4), S=[pick(['2 and −3','0 and 5','−1 and 4','3 and 3']),pick(['i and −i','i and 1','(3 + 4i)/5 and 1','−i and −1']),pick(['1 and −1','1 and 1','−1 and −1']),pick(['2i and 1','1 + i and 1 − i','3 and i','2 and 2i'])][k];
+  const opts=['symmetric, and not a product-keeper','a product-keeper, and not symmetric','both symmetric and a product-keeper','neither'];
+  return {index:'q:31d.threekinds['+S+']', a3:['31d.stretches['+S+']','31d.swapsWithMovedAcross',DASH], lines:[['AA* = A*A','a 2 by 2 grid of turning numbers that swaps with its moved-across grid'],[S,'its stretches']], ask:'What kind of map is A?', right:opts[k], opts, lead:'',
+    why:'Such a grid is diagonal in a right-angled basis, so its stretches tell everything: it is symmetric exactly when every stretch is real, and a product-keeper exactly when every stretch has size 1. '+['Both stretches are real, and they are not both of size 1.','Both have size 1, and they are not both real.','Both are real and of size 1: the only such stretches are 1 and −1.','One stretch is not real, and one is not of size 1.'][k]}; }},
+  {id:'31d.symprod',step:'31d',mode:'work',label:'a product of two symmetric grids',open:()=>measured('31d'),make(){
+  for(let t=0;t<60;t++){ const yes=Math.random()<0.5, sym=()=>{ const a=rnd(5)-2, b=pick([-2,-1,1,2]), c=rnd(5)-2; return [[a,b],[b,c]]; }, A=sym(); let B=sym(); if(yes){ const u=pick([-2,-1,1,2]), v=rnd(5)-2; B=BM_addg(BM_sc(A,u),BM_I2,v); }
+    const AB=BK_mul(A,B), BA=BK_mul(B,A), s=AB[0][1]===AB[1][0]; if(s!==yes||BK_eq(A,B)||A[0][0]===A[1][1]) continue; const opts=['symmetric','not symmetric'];
+    return {index:'q:31d.symprod['+A.flat().join(',')+';'+B.flat().join(',')+']', a3:['27d.grids[symmetric]','31d.symmetric',DASH], lines:[[BK_G(A),'a symmetric grid A'],[BK_G(B),'a symmetric grid B']], ask:'Is AB symmetric?', right:opts[yes?0:1], opts, lead:'',
+      why:'AB = '+BK_G(AB)+' and BA = '+BK_G(BA)+'. The side-turn of AB is BᵀAᵀ = BA, so AB is symmetric exactly when A and B swap. '+(yes?'Here they do.':'Here they do not: the entries off the middle of AB differ.')}; }
+  return null; }},
+  {id:'27h.formgrid',step:'27h',mode:'work',label:'the grid of a two-slot reading',open:()=>measured('27h'),make(){
+  for(let t=0;t<40;t++){ const G=[BL_nz(2),BL_nz(2)]; if(G[0][1]===G[1][0]||G.flat().some(x=>x===0)||G[0][0]===G[1][1]) continue; const T=BK_T(G);
+    const right=BK_G(G), wrong=uniq(right,[BK_G(T),BK_G([[G[1][1],G[0][1]],[G[1][0],G[0][0]]]),BK_G([[G[0][0],G[1][1]],[G[0][1],G[1][0]]]),BK_G([[G[0][1],G[0][0]],[G[1][1],G[1][0]]])],3); if(wrong.length<3) continue;
+    return {index:'q:27h.formgrid['+G.flat().join(',')+']', a3:['27h.twoSlotReadings','27h.twoSlot',DASH], lines:[['B(x, y) = '+BO_xy(G),'a reading with two slots, on pairs']], ask:'Which grid G has B(x, y) = xᵀGy?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Entry (i, j) of G is B(eᵢ, eⱼ), the coefficient of xᵢyⱼ: the first slot picks the row and the second the column. The side-turn of G is the grid of B with its slots swapped; they differ because B is not the same both ways round.'}; }
+  return null; }},
+  {id:'31e.corners',step:'31e',mode:'work',label:'corner determinants: positive definite or not',open:()=>measured('31e'),make(){
+  for(let t=0;t<80;t++){ const sym=()=>{ const d=[1+rnd(4),1+rnd(4),1+rnd(4)], o=[rnd(5)-2,rnd(5)-2,rnd(5)-2]; return [[d[0],o[0],o[1]],[o[0],d[1],o[2]],[o[1],o[2],d[2]]]; }, A=sym(), D=[A[0][0],A[0][0]*A[1][1]-A[0][1]*A[1][0],BK_det(A)], yes=D.every(x=>x>0); if(D.some(x=>x===0)||(Math.random()<0.5)!==yes||A[0][1]===0&&A[0][2]===0&&A[1][2]===0) continue;
+    const opts=['positive definite','not positive definite'], bad=D.findIndex(x=>x<0);
+    return {index:'q:31e.corners['+A.flat().join(',')+']', a3:['27d.grids[symmetric]','31e.corner',DASH], lines:[[BK_G(A),'a real symmetric grid A'],['q(x) = xᵀAx','its form']], ask:'Is q positive definite?', right:opts[yes?0:1], opts, lead:'',
+      why:'The top-left corner determinants are D₁ = '+sg(D[0])+', D₂ = '+sg(D[1])+', D₃ = '+sg(D[2])+'. '+(yes?'All three are above 0, so by the corner technique every stretch of A is above 0.':'D'+'₁₂₃'[bad]+' is below 0, so q is not positive definite, though every middle entry is above 0. Positive middle entries are needed and are not enough.')}; }
+  return null; }},
+  {id:'31e.signs',step:'31e',mode:'work',label:'the sign count of a form on pairs',open:()=>measured('31e'),make(){
+  for(let t=0;t<60;t++){ const a=pick([-3,-2,-1,1,2,3]), p=rnd(7)-3, c=rnd(9)-4, disc=p*p-a*c, k=disc>0?1:disc===0?3:a>0?0:2; if(Math.random()<0.5&&k===1) continue;
+    const opts=['two squares above 0','one square above 0 and one below','two squares below 0','one square only'], F=BM_p([0,0,a]).replace('x','x')+(p?(p<0?' − ':' + ')+(2*Math.abs(p))+'xy':'')+(c?(c<0?' − ':' + ')+(Math.abs(c)===1?'':Math.abs(c))+'y²':''), rest=fr(a*c-p*p,a), PF=f=>f.q===1?(f.p===1?'':''+f.p):'('+fshow(f)+')';
+    return {index:'q:31e.signs['+a+','+p+','+c+']', a3:['31e.forms['+F+']','31e.signCount',DASH], lines:[['q(x, y) = '+F,'a form on pairs']], ask:'Written as a mix of squares, what does q have?', right:opts[k], opts, lead:'',
+      why:'Complete the square: q = '+(Math.abs(a)===1?(a<0?'−':''):sg(a))+(p?'(x '+(p*a<0?'− ':'+ ')+PF(fr(Math.abs(p),Math.abs(a)))+'y)² ':'x² ')+(rest.p<0?'− ':'+ ')+PF(fr(Math.abs(rest.p),rest.q))+'y². The coefficients are '+sg(a)+' and '+fshow(rest)+'. By the sign-count technique the numbers of coefficients above 0, below 0 and equal to 0 are the same however the squares are found.'}; }
+  return null; }});
+/* --- sequences and sums (22a to 22h, 23c), distances and sets of points (34a, 34d, 35h), jumps and even continuity (11e, 15f), square roots of turning numbers (25d): numbers dealt afresh; each wrong option is a wrong move --- */
+const BP_F=(p,q)=>fshow(fr(p,q)), BP_YN=['yes','no'];
+QP.push({id:'22a.rootgap',step:'22a',mode:'work',label:'a root less its whole part',open:()=>measured('22a'),make(){
+  const a=pick([1,2,3,4,5,6,7,8,10]), right=BP_F(a,2), wrong=uniq(right,[''+a,'0','it passes every ceiling',BP_F(a,4),'√'+a].filter(x=>x!=='√1'&&x!=='√4'),3);
+  return {index:'q:22a.rootgap['+a+']', a3:['22a.sequences[a root less n]','8i.conjugate+22h.farOut',DASH], lines:[['sₙ = √(n² + '+(a===1?'':a)+'n) − n','a sequence']], ask:'Where does it settle, if it does?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'Multiply and divide by √(n² + '+(a===1?'':a)+'n) + n: sₙ = '+(a===1?'':a)+'n/(√(n² + '+(a===1?'':a)+'n) + n) = '+a+'/(√(1 + '+a+'/n) + 1), which heads to '+right+'. Each of the two parts passes every ceiling, and their difference still settles: ∞ − ∞ decides nothing by itself.'}; }},
+  {id:'22a.fedback',step:'22a',mode:'work',label:'a sequence fed its own answers',open:()=>measured('22a'),make(){
+  const k=2+rnd(5), c=k*(k-1), s0=pick([0,1]), right=''+k, wrong=uniq(right,[''+(k-1),''+c,'it passes every ceiling','√'+c,''+(k+1)],3);
+  return {index:'q:22a.fedback['+k+';'+s0+']', a3:['22a.sequences[fed back]','22a.climb+22a.fixedPoint',DASH], lines:[['s₁ = '+s0+',   sₙ₊₁ = √('+c+' + sₙ)','a sequence']], ask:'Where does it settle, if it does?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'It climbs, and '+k+' is a ceiling: if sₙ ≤ '+k+' then sₙ₊₁ ≤ √('+c+' + '+k+') = '+k+'. So it settles, by the climb technique, at an L with L = √('+c+' + L), by the fixed-point technique: L² − L − '+c+' = 0, (L − '+k+')(L + '+(k-1)+') = 0, and L is not below 0.'}; }},
+  {id:'22b.twothreads',step:'22b',mode:'work',label:'the gathering points of a sequence',open:()=>measured('22b'),make(){
+  const a=pick([1,2,3,4]), b=pick([-3,-2,-1,0,1,2,3]), P=(x,y)=>sg(Math.min(x,y))+' and '+sg(Math.max(x,y)), right=P(b+a,b-a), wrong=uniq(right,[P(a,-a),P(b,b+a),P(b+a+1,b-a),'only '+sg(b),P(b,a)],3);
+  return {index:'q:22b.twothreads['+a+','+b+']', a3:['22b.sequences[two threads]','22b.gathering',DASH], lines:[['sₙ = '+(b?sg(b)+' + ':'')+(a===1?'':a)+'(−1)ⁿ + 1/n','a sequence']], ask:'What are its gathering points?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'The even steps are '+sg(b+a)+' + 1/n and settle at '+sg(b+a)+'; the odd steps are '+sg(b-a)+' + 1/n and settle at '+sg(b-a)+'. Every thread that settles shares endlessly many steps with one of these two. Two gathering points, so the sequence itself wanders, by the gathering technique.'}; }},
+  {id:'22g.averages',step:'22g',mode:'work',label:'the averages of a sequence that wanders',open:()=>measured('22g'),make(){
+  const a=pick([1,2,3,4,5]), b=pick([-3,-2,-1,1,2,3,4]), right='at '+sg(b), wrong=uniq(right,['at '+sg(b+a),'at '+sg(b-a),'they wander, as the sequence does','at 0','at '+BP_F(2*b+a,2)],3);
+  return {index:'q:22g.averages['+a+','+b+']', a3:['22b.sequences[two threads]','22g.averages',DASH], lines:[['sₙ = '+sg(b)+' + '+(a===1?'':a)+'(−1)ⁿ','a sequence that wanders'],['σₙ = (s₁ + ⋯ + sₙ)/n','its averages']], ask:'Where do the averages settle, if they do?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'The parts '+(a===1?'':a)+'(−1)ⁿ cancel in pairs, so their sum is 0 or −'+a+', and over n that heads to 0. The averages settle at '+sg(b)+', halfway between the two gathering points '+sg(b-a)+' and '+sg(b+a)+'. Averages can settle where the sequence does not; when the sequence settles, they settle at the same place.'}; }},
+  {id:'22e.whichway',step:'22e',mode:'work',label:'a sum: settles in size, by turns, or wanders',open:()=>measured('22g'),make(){
+  const k=rnd(7), p=pick([2,3]), q=pick([2,3,4]), c=pick([2,3,5]), opts=['it settles in size','it settles, but not in size','it wanders'];
+  const C=[['1/n'+BM_SUP[p],0,'The p-sum technique with p = '+p+' > 1. The pieces are positive, so settling is settling in size.'],
+    ['1/√n',2,'The p-sum technique with p = 1/2, not above 1: the running totals pass every ceiling.'],
+    ['(−1)ⁿ/n',1,'The pieces 1/n fall to 0, so by the bracket technique the sum settles. The sizes add to 1 + ½ + ⅓ + ⋯, which passes every ceiling.'],
+    ['(−1)ⁿ/n'+BM_SUP[p],0,'The sizes are 1/n'+BM_SUP[p]+', a p-sum with p > 1, so it settles in size, and then it settles, by the settles-in-size technique.'],
+    ['n/('+c+'n + 1)',2,'The pieces head to 1/'+c+', not to 0. By the shrink technique the sum cannot settle.'],
+    ['1/'+c+'ⁿ',0,'A geometric sum with ratio 1/'+c+', of size below 1: it settles at '+(c===2?'1':'1/'+(c-1))+'.'],
+    ['(−1)ⁿ/√n',1,'The pieces 1/√n fall to 0, so the bracket technique gives a total. The sizes are a p-sum with p = 1/2, which wanders.']][k];
+  return {index:'q:22e.whichway['+k+';'+p+','+c+']', a3:['22d.sums['+C[0]+']','22e.comparison+22f.pSum+22g.bracket',DASH], lines:[['Σ '+C[0]+',  n = 1, 2, 3, …','an endless sum']], ask:'What does the sum do?', right:opts[C[1]], opts, lead:'', why:C[2]}; }},
+  {id:'23c.ratio',step:'23c',mode:'work',label:'the reach of a power sum',open:()=>measured('23c'),make(){
+  const c=pick([2,3,4,5]), k=pick([1,2,3]), m=rnd(5), ALL='it reaches everywhere';
+  const C=[['n'+BM_SUP[k]+' xⁿ','1','The ratio of neighbours, ((n + 1)/n)'+BM_SUP[k]+', heads to 1.'],[c+'ⁿ xⁿ/n!',ALL,'The ratio of neighbours is '+c+'/(n + 1), which heads to 0.'],[c+'ⁿ xⁿ/n'+BM_SUP[k],'1/'+c,'The ratio of neighbours heads to '+c+'.'],['n'+BM_SUP[k]+' xⁿ/'+c+'ⁿ',''+c,'The ratio of neighbours heads to 1/'+c+'.'],['n! xⁿ','0','The ratio of neighbours is n + 1, which passes every ceiling: the sum settles only at x = 0.']][m];
+  const right=C[1], wrong=uniq(right,['1',''+c,'1/'+c,ALL,'0',''+k],3);
+  return {index:'q:23c.ratio['+m+';'+c+','+k+']', a3:['23c.powerSums['+C[0]+']','23c.reachByRatio',DASH], lines:[['Σ '+C[0],'a power sum about 0']], ask:'What is its reach?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:C[2]+' By the reach-by-ratio technique the reach is 1 over that limit'+(m===1?', with no ceiling at all here.':m===4?', which is 0 here.':'.')+' A power of n in the coefficients never changes the reach.'}; }},
+  {id:'22h.rootstep',step:'22h',mode:'work',label:'one step toward a square root',open:()=>measured('22h'),make(){
+  for(let t=0;t<40;t++){ const a=pick([2,3,5,6,7,10]), x=pick([1,2,3,4]); if(x*x===a) continue; const N=fr(x*x+a,2*x), right=fshow(N), wrong=uniq(right,[BP_F(x+a,2),BP_F(a,x),BP_F(x*x+a,x),BP_F(x*x-a,2*x),BP_F(2*x,x*x+a)],3); if(wrong.length<3) continue;
+    return {index:'q:22h.rootstep['+a+';'+x+']', a3:['22h.forms[half of x + a/x]','22h.pullTogether',DASH], lines:[['g(x) = ½(x + '+a+'/x)','a function fed its own answers'],['x₀ = '+x,'the start']], ask:'What is x₁ = g(x₀)?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'½('+x+' + '+a+'/'+x+') = '+right+'. If x is too large for √'+a+', then '+a+'/x is too small, and the average of the two is closer than either. The only point g leaves alone above 0 has x = '+a+'/x, that is x² = '+a+'.'}; }
+  return null; }},
+  {id:'22h.pulls',step:'22h',mode:'work',label:'a straight function fed its own answers',open:()=>measured('22h'),make(){
+  const [p,q]=pick([[1,2],[1,3],[2,3],[-1,2],[3,2],[2,1],[-1,3],[3,4]]), b=pick([-4,-2,-1,1,2,3,6]), pull=Math.abs(p)<q, fix=fr(b*q,q-p), NO='it settles nowhere, unless it starts at the point g leaves alone';
+  const right=pull?fshow(fix):NO, wrong=uniq(right,[fshow(fix),NO,''+sg(b),'0',BP_F(b*q,q+p),BP_F(b,q)],3), m=fshow(fr(p,q));
+  return {index:'q:22h.pulls['+p+'/'+q+';'+b+']', a3:['22h.forms[straight]','22h.pullTogether',DASH], lines:[['g(x) = '+(m==='1'?'':m==='−1'?'−':'('+m+')')+'x'+pm(b),'a function fed its own answers'],['sₙ₊₁ = g(sₙ)','from any start']], ask:'Where does the sequence settle?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'|g(x) − g(y)| = ('+fshow(fr(Math.abs(p),q))+')|x − y|. '+(pull?'The factor is below 1, so by the pull-together technique every start settles at the one point with g(x) = x, which is '+fshow(fix)+'.':'The factor is above 1: each step multiplies the distance from the point g leaves alone, '+fshow(fix)+', by '+fshow(fr(Math.abs(p),q))+'. The fixed-point technique says where it would settle, not that it does.')}; }},
+  {id:'34a.isdistance',step:'34a',mode:'work',label:'a formula on the line: a distance or not',open:()=>measured('34a'),make(){
+  const k=rnd(7), c=pick([2,3]), opts=['a distance','not a distance'];
+  const C=[['(x − y)²',1,'The triangle demand fails: d(0, 2) = 4, and d(0, 1) + d(1, 2) = 2.'],['√|x − y|',0,'It is 0 only for x = y, the same both ways, and √(a + b) ≤ √a + √b gives the triangle demand.'],
+    ['|x² − y²|',1,'d(1, −1) = 0 for two different points.'],['|x − '+c+'y|',1,'d(1, 1) = '+(c-1)+', not 0; and d(x, y) is not d(y, x).'],
+    ['|x − y|/(1 + |x − y|)',0,'It is 0 only for x = y and the same both ways; t/(1 + t) climbs and bends down, which gives the triangle demand. Every distance it gives is below 1.'],
+    ['|x³ − y³|',0,'x ↦ x³ is one-to-one, so it is 0 only for x = y; the rest is the usual distance between the cubes.'],['|x| + |y|',1,'d(1, 1) = 2, not 0.']][k];
+  return {index:'q:34a.isdistance['+k+';'+c+']', a3:['34a.forms['+C[0]+']','34a.distance',DASH], lines:[['d(x, y) = '+C[0],'a formula on pairs of reals']], ask:'Is d a distance on the line?', right:opts[C[1]], opts, lead:'', why:C[2]}; }},
+  {id:'34a.gathering',step:'34a',mode:'work',label:'the gathering points of a set',open:()=>measured('34a'),make(){
+  const [a,b,c]=shuffle([-3,-2,-1,0,1,2,3,4,5]).slice(0,3), S=L=>L.length?L.slice().sort((x,y)=>x-y).map(sg).join(' and '):'none', right=S([a,b]), wrong=uniq(right,[S([a,b,c]),S([a]),S([c]),S([a+1,b-1]),'none'],3);
+  return {index:'q:34a.gathering['+[a,b,c].join(',')+']', a3:['34a.sets[points and lists]','34a.keepsLimits',DASH], lines:[['E = { '+sg(a)+' + 1/n } ∪ { '+sg(b)+' − 1/n } ∪ { '+sg(c)+' },  n = 2, 3, 4, …','a set of reals']], ask:'What are the gathering points of E?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'Every ball about '+sg(a)+' holds points '+sg(a)+' + 1/n, and every ball about '+sg(b)+' holds points '+sg(b)+' − 1/n. The point '+sg(c)+' is a member with a ball that holds no other member: lonely, not a gathering point. Neither gathering point is a member, so E is not closed.'}; }},
+  {id:'34d.finitecover',step:'34d',mode:'work',label:'finitely covered or not',open:()=>measured('34d'),make(){
+  const a=rnd(5)-2, b=a+1+rnd(4), k=rnd(7), opts=['finitely covered','not finitely covered'];
+  const C=[['['+sg(a)+', '+sg(b)+']',0,'Closed and bounded, so finitely covered, by the closed-and-bounded technique.'],['('+sg(a)+', '+sg(b)+')',1,'Bounded and not closed: the stretches ('+sg(a)+' + 1/n, '+sg(b)+') cover it, and no finite number of them do.'],
+    ['['+sg(a)+', ∞)',1,'Closed and not bounded: the stretches ('+sg(a-1)+', n) cover it, and no finite number of them do.'],['{0} ∪ {1/n : n = 1, 2, 3, …}',0,'Any open set that holds 0 holds all but finitely many of the 1/n; add one set for each of the rest.'],
+    ['{1/n : n = 1, 2, 3, …}',1,'Bounded and not closed: 0 is a gathering point left out. A small ball about each 1/n holding no other member is a cover with no finite part.'],
+    ['the whole numbers',1,'Closed and not bounded: a ball of reach ½ about each is a cover with no finite part.'],['{'+sg(a)+', '+sg(b)+', '+sg(b+2)+'}',0,'A finite set: pick one set of the cover for each point.']][k];
+  return {index:'q:34d.finitecover['+k+';'+a+','+b+']', a3:['34a.sets['+C[0]+']','34d.closedAndBounded',DASH], lines:[[C[0],'a part of the line']], ask:'Is it finitely covered?', right:opts[C[1]], opts, lead:'', why:C[2]}; }},
+  {id:'35h.indust',step:'35h',mode:'work',label:'in the middle-thirds dust or not',open:()=>measured('35h'),make(){
+  for(let t=0;t<40;t++){ const [p,q]=pick([[1,4],[3,4],[1,2],[1,3],[2,3],[1,9],[2,9],[4,9],[5,9],[7,9],[1,10],[3,10],[7,10],[9,10],[1,13],[3,13],[4,13],[1,5],[2,5],[1,12],[11,12],[1,6],[5,6]]);
+    let x=fr(p,q), dig=[], inn=true; const seen={}; for(let i=0;i<14;i++){ const key=x.p+'/'+x.q; if(seen[key]) break; seen[key]=1; const y=fmul(x,fint(3)); let d=Math.floor(y.p/y.q); if(y.p===y.q*d&&d>0){ d-=1; } dig.push(d); if(d===1){ inn=false; break; } x=fsub(y,fint(d)); if(x.p===x.q){ dig.push(2); break; } if(x.p===0) break; }
+    const opts=['in the dust','not in the dust'];
+    return {index:'q:35h.indust['+p+'/'+q+']', a3:['35h.dust','35h.thirds',DASH], lines:[[p+'/'+q,'a number between 0 and 1']], ask:'Is it in the middle-thirds dust?', right:opts[inn?0:1], opts, lead:'',
+      why:'Write it in thirds: 0.'+dig.join('')+'… in base 3'+(inn?', with the digits repeating from there. Some way of writing it uses only 0 and 2, so no stage removes it.':'. The digit 1 cannot be avoided at that place, so the number lies in an open middle third that was removed at that stage.')}; }
+  return null; }},
+  {id:'11e.jumps',step:'11e',mode:'work',label:'the jump of a staircase function',open:()=>measured('11e'),make(){
+  const c=pick([-3,-2,-1,1,2,3]), d=pick([-2,-1,1,2,3]), j=c-d; const right=j===0?'it does not jump':'by '+sg(j), wrong=uniq(right,['by '+sg(c),'by '+sg(c+d),'by '+sg(-j),'it does not jump','by '+sg(d)].filter(x=>x!=='by 0'),3);
+  return {index:'q:11e.jumps['+c+','+d+']', a3:['11e.functions[staircases]','11e.glued',DASH], lines:[['⌊x⌋ = the greatest whole number at most x','the floor of x'],['f(x) = '+(c===1?'':c===-1?'−':sg(c))+'⌊x⌋ '+(d<0?'− ':'+ ')+(Math.abs(d)===1?'':Math.abs(d))+'(x − ⌊x⌋)','a function']], ask:'By how much does f jump at each whole number n, from the left limit to the value?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'Just left of n: ⌊x⌋ = n − 1 and x − ⌊x⌋ is nearly 1, so f is nearly '+sg(c)+'(n − 1) '+(d<0?'− ':'+ ')+Math.abs(d)+'. At n: f(n) = '+sg(c)+'n. The difference is '+sg(c)+' − ('+sg(d)+') = '+sg(j)+'.'+(j===0?' The two pieces arrive at the same height: every whole number is a joint.':' Between whole numbers f is straight, so these are its only breaks.')}; }},
+  {id:'15f.even',step:'15f',mode:'work',label:'uniformly continuous on the set or not',open:()=>measured('15f'),make(){
+  const b=2+rnd(4), k=rnd(7), opts=['uniformly continuous there','not uniformly continuous there'];
+  const C=[['x²','[0, '+b+']',0,'Continuous on a closed stretch, so uniformly continuous, by the evenly-continuous technique.'],['x²','the whole line',1,'(n + 1/n)² − n² is above 2 however small 1/n is: no one δ serves ε = 2.'],
+    ['1/x','(0, 1)',1,'1/n and 1/(2n) are as close as you like, and their values n and 2n are at least 1 apart.'],['1/x','[1, ∞)',0,'|1/s − 1/t| = |s − t|/(st) ≤ |s − t|: δ = ε serves every pair.'],
+    ['√x','[0, ∞)',0,'|√s − √t| ≤ √|s − t|: δ = ε² serves every pair, though the slope has no ceiling near 0.'],['sin(1/x)','(0, 1)',1,'Near 0 there are points as close as you like with values 1 and −1.'],
+    [b+'x + 1','the whole line',0,'|f(s) − f(t)| = '+b+'|s − t|: δ = ε/'+b+' serves every pair.']][k];
+  return {index:'q:15f.even['+k+';'+b+']', a3:['15f.functions['+C[0]+' on '+C[1]+']','15f.evenlyContinuous',DASH], lines:[['f(x) = '+C[0],'a function'],[C[1],'the set']], ask:'Is f uniformly continuous on the set?', right:opts[C[2]], opts, lead:'', why:C[3]}; }},
+  {id:'25d.roots',step:'25d',mode:'work',label:'the square roots of a turning number',open:()=>measured('25d'),make(){
+  for(let t=0;t<40;t++){ const a=pick([1,2,3,4]), b=pick([-3,-2,-1,1,2,3]), u=a*a-b*b, v=2*a*b; if(u===0) continue; const P=(x,y)=>BO_c(x,y)+' and '+BO_c(-x,-y);
+    const right=P(a,b), wrong=uniq(right,[P(a,-b),P(b,a),P(a*a,b*b),P(u,v),P(a,2*b)],3); if(wrong.length<3) continue;
+    return {index:'q:25d.roots['+u+','+v+']', a3:['25a.numbers['+BO_c(u,v)+']','25d.root',DASH], lines:[[BO_c(u,v),'a turning number w']], ask:'Which two numbers square to w?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'('+BO_c(a,b)+')² = '+(a*a)+' − '+(b*b)+' + 2('+a+')('+sg(b)+')i = '+BO_c(u,v)+', and the opposite squares to the same. The size of w is '+(a*a+b*b)+', and a root has size √'+(a*a+b*b)+': a root halves the angle and takes the root of the size. Every number but 0 has exactly two.'}; }
+  return null; }});
+/* --- slopes and limits (13m, 14i, 17e, 23b), totals (15c, 16e, 18i, 31g), lists of functions (23d, 23e, 30d), several variables (28d, 28e, 28i, 28m) and forms (29·cb28): numbers dealt afresh; each wrong option is a wrong move --- */
+const BQ_pi=(p,q)=>{ const f=fr(p,q); return f.p===0?'0':(Math.abs(f.p)===1?(f.p<0?'−':''):fshow(fint(f.p)))+'π'+(f.q===1?'':'/'+f.q); }, BQ_e=f=>f.p===0?'1':f.q===1&&f.p===1?'e':f.q===1&&f.p>1&&f.p<8?'e'+BM_SUP[f.p]:'e^('+fshow(f)+')';
+QP.push({id:'14i.bothzero',step:'14i',mode:'work',label:'a ratio whose top and bottom both vanish',open:()=>measured('14i'),make(){
+  for(let t=0;t<40;t++){ const [r,s,u]=shuffle([-3,-2,-1,1,2,3,4]).slice(0,3), f=BM_mul([-r,1],[-s,1]), g=BM_mul([-r,1],[-u,1]), L=fr(r-s,r-u);
+    const right=fshow(L), wrong=uniq(right,[BP_F(s,u),'1','0','it has no limit',BP_F(r-u,r-s),BP_F(-(r-s),r-u)],3); if(wrong.length<3) continue;
+    return {index:'q:14i.bothzero['+[r,s,u].join(',')+']', a3:['14i.ratios['+BM_p(f)+' over '+BM_p(g)+']','14i.slopeRatio',DASH], lines:[['('+BM_p(f)+') / ('+BM_p(g)+')','a ratio'],['x → '+sg(r),'where top and bottom both head to 0']], ask:'Where does the ratio head?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The slopes of top and bottom at '+sg(r)+' are '+sg(BM_at(BM_d(f),r))+' and '+sg(BM_at(BM_d(g),r))+', and the bottom slope is not 0: by the slope-ratio technique the ratio heads to their ratio, '+right+'. Or cancel the shared factor x'+pm(-r)+'. The form 0/0 by itself names no number.'}; }
+  return null; }},
+  {id:'14i.fourmore',step:'14i',mode:'work',label:'four ratios of the form 0/0',open:()=>measured('17f'),make(){
+  const a=pick([1,2,3,4,5]), b=pick([1,2,3,4,5]), k=rnd(5), ab=fr(a,b), sq=fr(a*a,2);
+  const ax=a===1?'x':a+'x', bx=b===1?'x':b+'x', ea=a===1?'eˣ':'e^('+ax+')', C=[['('+ea+' − 1) / '+(b===1?'x':'('+bx+')'),ab],['ln(1 + '+ax+') / '+(b===1?'x':'('+bx+')'),ab],['sin('+ax+') / tan('+bx+')',ab],['(1 − cos('+ax+')) / x²',sq],['('+ea+' − 1 − '+ax+') / x²',sq]][k];
+  const right=fshow(C[1]), wrong=uniq(right,[fshow(ab),fshow(sq),BP_F(b,a),''+a*a,'0','1',''+a],3);
+  return {index:'q:14i.fourmore['+k+';'+a+','+b+']', a3:['14i.ratios['+C[0]+']','14i.slopeRatio',DASH], lines:[[C[0],'a ratio'],['x → 0','where top and bottom both head to 0']], ask:'Where does the ratio head?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:k<3?'Take the slopes of top and bottom at 0: '+a+' above and '+b+' below. By the slope-ratio technique the ratio heads to '+right+'.':'The slopes of top and bottom both head to 0 as well, so use the slope-ratio technique twice: the second slopes at 0 are '+(a*a)+' above and 2 below, and the ratio heads to '+right+'.'}; }},
+  {id:'17e.compound',step:'17e',mode:'work',label:'a limit that builds a power of e',open:()=>measured('17f'),make(){
+  const c=pick([1,1,2]), a=c===2?pick([1,3,-1]):pick([1,2,3,-1,-2]), b=pick([1,2,3]), E=fr(a*b,c), right=BQ_e(E), wrong=uniq(right,[BQ_e(fr(a,1)),BQ_e(fr(a+b,1)),'1',BQ_e(fr(b,1)),BQ_e(fr(a*b*c,1)),'it passes every ceiling','e'].filter(x=>x!==right),3);
+  return {index:'q:17e.compound['+a+','+b+','+c+']', a3:['22h.sequences[powers]','17e.eAsALimit',DASH], lines:[['sₙ = (1 '+(a<0?'− ':'+ ')+(Math.abs(a)===1?'1':Math.abs(a))+'/'+(c===1?'n':'('+c+'n)')+')^('+(b===1?'':b)+'n)','a sequence']], ask:'Where does it settle?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'Take the log: '+(b===1?'':b)+'n · ln(1 + ('+fshow(fr(a,c))+')/n). Since ln(1 + h)/h heads to 1 as h heads to 0, this heads to '+(b===1?'':b+' · ')+'('+fshow(fr(a,c))+') = '+fshow(E)+'. So sₙ heads to '+right+'. The base heads to 1 and the power passes every ceiling: 1 to an endless power decides nothing by itself.'}; }},
+  {id:'13m.tangentstep',step:'13m',mode:'work',label:'one tangent step toward a root',open:()=>measured('13m'),make(){
+  for(let t=0;t<40;t++){ const a=pick([2,3,5,7,9,10]), x=pick([1,2,3]), fx=x*x*x-a, d=3*x*x, N=fr(x*d-fx,d); if(fx===0) continue;
+    const right=fshow(N), wrong=uniq(right,[fshow(fr(x*d+fx,d)),fshow(fr(x*x*x+a,2*x*x)),fshow(fr(fx,d)),fshow(fr(x*fx-d,fx)),''+x],3); if(wrong.length<3) continue;
+    return {index:'q:13m.tangentstep['+a+';'+x+']', a3:['13d.functions[x³ − '+a+']','13m.tangentStep',DASH], lines:[['f(x) = x³ − '+a,'a function'],['x₀ = '+x,'a first guess at its root']], ask:'What is the next guess, by one tangent step?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'N(x) = x − f(x)/f′(x). Here f('+x+') = '+sg(fx)+' and f′('+x+') = '+d+', so the next guess is '+x+' − ('+sg(fx)+')/'+d+' = '+right+'. The tangent line at the guess is followed down to the axis; adding f/f′ instead walks away from the root.'}; }
+  return null; }},
+  {id:'23b.seconddiff',step:'23b',mode:'work',label:'the second difference',open:()=>measured('23b'),make(){
+  for(let t=0;t<40;t++){ const c=[BK_small(1)[0],BK_small(1)[0],pick([-2,-1,1,2]),pick([-1,1,2])], x=pick([-2,-1,1,2]), d1=BM_d(c), d2=BM_d(d1), v=BM_at(d2,x); if(v===0) continue;
+    const right=''+sg(v), wrong=uniq(right,[sg(BM_at(d1,x)),sg(2*v),sg(BM_at(c,x)),'0',sg(-v),sg(v/2|0)],3); if(wrong.length<3) continue;
+    return {index:'q:23b.seconddiff['+c.join(',')+';'+x+']', a3:['13d.functions['+BM_p(c)+']','23b.matchError',DASH], lines:[['f(x) = '+BM_p(c),'a function'],['(f('+sg(x)+' + h) + f('+sg(x)+' − h) − 2f('+sg(x)+')) / h²','its second difference at '+sg(x)]], ask:'Where does the second difference head as h heads to 0?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Match f at '+sg(x)+' to second order: f('+sg(x)+' ± h) = f ± f′h + ½f″h² + (smaller). Adding the two cancels the f′ terms and doubles the rest, so the second difference heads to f″('+sg(x)+'). Here f″(x) = '+BM_p(d2)+', which is '+sg(v)+' at '+sg(x)+'.'}; }
+  return null; }},
+  {id:'15c.whichones',step:'15c',mode:'work',label:'integrable on [0, 1] or not',open:()=>measured('15c'),make(){
+  const c=pick([2,3,5]), k=rnd(6), opts=['integrable','not integrable'];
+  const C=[['f is '+c+' at x = 1/2 and 0 elsewhere',0,'Fence the one point in a stretch of width below ε/'+c+': the upper sum is below ε and the lower sum is 0. The gap closes, and the integral is 0.'],
+    ['f is 1 at every fraction and 0 at every other number',1,'Every stretch of every partition holds a fraction and a number that is not one: each upper sum is 1 and each lower sum is 0. The gap never closes.'],
+    ['f is 0 on [0, 1/2) and '+c+' on [1/2, 1]',0,'It only climbs, so it is integrable; the one jump can be fenced in a stretch as thin as you like. The integral is '+BP_F(c,2)+'.'],
+    ['f(x) = 1/x for x > 0, and f(0) = 0',1,'It is not bounded on [0, 1], and integrable asks for a bounded function first: every upper sum has no ceiling.'],
+    ['f is 1 at each 1/n, n = 1, 2, 3, …, and 0 elsewhere',0,'Fence 0 in [0, δ], which holds all but finitely many of the points; fence each of the rest in a thin stretch. The upper sum is as small as you like, and the integral is 0.'],
+    ['f(x) = sin(1/x) for x > 0, and f(0) = 0',0,'It is bounded, and continuous except at 0. Fence 0 in [0, δ]: there the gap is at most 2δ, and on [δ, 1] it is continuous, so integrable.']][k];
+  return {index:'q:15c.whichones['+k+';'+c+']', a3:['15c.functions['+['one point','the fractions','one jump','no ceiling','a list of points','a wobble'][k]+']','15c.gapCloses',DASH], lines:[[C[0],'a function on [0, 1]']], ask:'Is f integrable on [0, 1]?', right:opts[C[1]], opts, lead:'', why:C[2]}; }},
+  {id:'16e.weight',step:'16e',mode:'work',label:'a total against a weight at one point',open:()=>measured('16e'),make(){
+  for(let t=0;t<40;t++){ const c=[BK_small(1)[0],pick([-2,-1,1,2,3]),pick([-1,1,2])], w=pick([2,3,4,5]), [p,q]=pick([[1,2],[1,3],[2,3],[1,4],[3,4]]), at=fr(p,q), v=fadd(fadd(fint(c[0]),fmul(fint(c[1]),at)),fmul(fint(c[2]),fmul(at,at))), R=fmul(fint(w),v); if(v.p===0) continue;
+    const area=fadd(fadd(fint(c[0]),fr(c[1],2)),fr(c[2],3)), right=fshow(R), wrong=uniq(right,[fshow(v),fshow(fmul(fint(w),area)),fshow(area),''+w,'0',fshow(fmul(R,fint(2)))],3); if(wrong.length<3) continue;
+    return {index:'q:16e.weight['+c.join(',')+';'+w+';'+p+'/'+q+']', a3:['13d.functions['+BM_p(c)+']','16e.weightAtAPoint',DASH], lines:[['f(x) = '+BM_p(c),'a continuous function on [0, 1]'],['α is 0 before x = '+p+'/'+q+' and '+w+' from there on','an increasing function with one jump']], ask:'What is the total of f against α on [0, 1]?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'α changes only at '+p+'/'+q+', by '+w+'. Every sum Σ f(tᵢ)(α(xᵢ) − α(xᵢ₋₁)) has one term that is not 0, '+w+' times a value of f near '+p+'/'+q+', and f is continuous there. The total is '+w+' · f('+p+'/'+q+') = '+w+' · ('+fshow(v)+') = '+right+'. The area under f plays no part.'}; }
+  return null; }},
+  {id:'18i.rounds',step:'18i',mode:'work',label:'the length of a path round a circle',open:()=>measured('18i'),make(){
+  const k=pick([1,2,3,4]), r=pick([1,2,3]), right=BQ_pi(2*k*r,1), wrong=uniq(right,[BQ_pi(2*r,1),BQ_pi(2*k,1),BQ_pi(k*r*r,1),BQ_pi(k*r,1),BQ_pi(2*k*k*r,1),BQ_pi(4*k*r,1)],3);
+  return {index:'q:18i.rounds['+k+','+r+']', a3:['18i.paths[round a circle]','18i.distanceTravelled',DASH], lines:[['P(t) = ('+(r===1?'':r)+'cos '+(k===1?'':k)+'t, '+(r===1?'':r)+'sin '+(k===1?'':k)+'t),  0 ≤ t ≤ 2π','a path']], ask:'What is the length of the path?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'The speed is √(x′² + y′²) = '+(k*r)+' at every time, so the length is '+(k*r)+' · 2π = '+right+', by the distance-travelled technique. '+(k>1?'The trace is the circle of radius '+r+', of length '+BQ_pi(2*r,1)+'; the path goes round it '+k+' times. A path is more than its trace.':'Here the path goes round once, so its length is the length of its trace.')}; }},
+  {id:'31g.matched',step:'31g',mode:'work',label:'the matched power',open:()=>measured('31g'),make(){
+  const [a,b]=pick([[2,1],[3,1],[3,2],[4,1],[4,3],[5,2],[5,4],[5,3],[6,1]]), p=fr(a,b), q=fr(a,a-b), right=fshow(q), wrong=uniq(right,[fshow(fr(b,a)),fshow(fr(a-b,b)),fshow(fr(a+b,b)),fshow(p),fshow(fr(a-b,a)),'2'],3);
+  return {index:'q:31g.matched['+a+'/'+b+']', a3:['31g.sizes[p = '+fshow(p)+']','31g.matchedPowers',DASH], lines:[['∫|fg| ≤ ‖f‖ₚ ‖g‖_q','the matched-powers technique'],['p = '+fshow(p),'the first power']], ask:'Which q is matched with p?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'Matched means 1/p + 1/q = 1. Here 1/p = '+fshow(fr(b,a))+', so 1/q = '+fshow(fr(a-b,a))+' and q = '+right+'. The pair 2 and 2 is the product bound; as p falls to 1, its partner passes every ceiling.'}; }},
+  {id:'23d.slopelost',step:'23d',mode:'work',label:'slopes of a list that settles everywhere at once',open:()=>measured('23e'),make(){
+  const c=pick([1,2,3,4,5]), right=sg(c)+', though the limit function has slope 0 there', wrong=uniq(right,['0, the slope of the limit function','they pass every ceiling',sg(c)+', the slope of the limit function there','1/'+(c+1)+', though the limit function has slope 0 there'],3);
+  return {index:'q:23d.slopelost['+c+']', a3:['23d.lists[x/(1 + nx²)]','23e.slopesTermByTerm',DASH], lines:[['fₙ(x) = '+(c===1?'':c)+'x / (1 + nx²)','a list of functions'],['|fₙ(x)| ≤ '+(c===1?'1':c)+'/(2√n) for every x','so the list settles everywhere at once, at 0']], ask:'Where do the slopes fₙ′(0) head?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'fₙ′(x) = '+(c===1?'':c)+'(1 − nx²)/(1 + nx²)², so fₙ′(0) = '+c+' for every n, while at each x ≠ 0 the slopes head to 0. The limit function is 0, with slope 0. Settling everywhere at once passes continuity and areas to the limit; for slopes, the slopes themselves must settle everywhere at once.'}; }},
+  {id:'23e.doublesum',step:'23e',mode:'work',label:'a grid of numbers summed two ways',open:()=>measured('23e'),make(){
+  const c=pick([1,2,3,4,5]), ask=rnd(2), right=ask?sg(c):'0', wrong=uniq(right,['0',sg(c),sg(-c),sg(2*c),'neither sum settles'],3);
+  return {index:'q:23e.doublesum['+c+';'+ask+']', a3:['22d.sums[a grid of pieces]','22e.settlesInSize',DASH], lines:[['aᵢⱼ = '+c+' when j = i,  −'+c+' when j = i + 1,  0 otherwise','a grid of numbers, i and j from 1'],[ask?'sum each column, then add the column totals':'sum each row, then add the row totals','the order']], ask:'What is the total, in that order?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'Each row holds '+c+' and −'+c+', so every row total is 0. The first column holds only '+c+', and every later column holds '+c+' and −'+c+': the column totals are '+c+', 0, 0, …. So rows first gives 0 and columns first gives '+c+'. The swap is safe when the sizes |aᵢⱼ| have a finite total; here they do not.'}; }},
+  {id:'30d.nofence',step:'30d',mode:'work',label:'totals that do not pass to the limit',open:()=>measured('30d'),make(){
+  const c=pick([1,2,3,4,6]), k=rnd(2), F=k?['fₙ = '+c+'n on (0, 1/n), and 0 elsewhere','tall thin boxes']:['fₙ = '+c+'/n on [0, n], and 0 elsewhere','low wide boxes'];
+  const right='every total is '+c+', and the limit function has total 0', wrong=uniq(right,['every total is '+c+', and so is the total of the limit','the totals head to 0, and the limit function has total 0','the totals pass every ceiling','every total is '+c+', and the list has no limit at any point'],3);
+  return {index:'q:30d.nofence['+c+';'+k+']', a3:['30d.lists['+F[1]+']','30d.fencedLimit',DASH], lines:[[F[0],F[1]]], ask:'What do the totals ∫fₙ do, and what is the total of the limit function?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:(k?'Each box has height '+c+'n and width 1/n: total '+c+'. At each x the functions are 0 from some n on, so the limit function is 0.':'Each box has height '+c+'/n and width n: total '+c+'. The heights fall to 0, so the limit function is 0, and the list even settles everywhere at once.')+' No one function g with a finite total sits above every fₙ, so the fenced-limit technique does not apply. The lower-limit technique still holds: 0 ≤ '+c+'.'}; }},
+  {id:'28d.mixed',step:'28d',mode:'work',label:'a mixed second slope',open:()=>measured('28d'),make(){
+  for(let t=0;t<40;t++){ const a=pick([-2,-1,1,2,3]), b=pick([-3,-2,-1,1,2,3]), m=pick([2,3]), n=pick([2,3]), x=pick([-1,1,2]), y=pick([-1,1,2]), v=a*m*n*Math.pow(x,m-1)*Math.pow(y,n-1)+b;
+    const right=''+sg(v), wrong=uniq(right,[sg(a*m*Math.pow(x,m-1)*Math.pow(y,n)+b*y),sg(a*m*n*Math.pow(x,m-1)*Math.pow(y,n-1)),sg(a*Math.pow(x,m)*Math.pow(y,n)+b*x*y),sg(v+b),sg(-v)],3); if(wrong.length<3) continue;
+    return {index:'q:28d.mixed['+[a,b,m,n,x,y].join(',')+']', a3:['28a.functions[two knobs]','28d.swapKnobs',DASH], lines:[['f(x, y) = '+(a===1?'':a===-1?'−':a)+'x'+BM_SUP[m]+'y'+BM_SUP[n]+' '+(b<0?'− ':'+ ')+(Math.abs(b)===1?'':Math.abs(b))+'xy','a function of two knobs'],['('+sg(x)+', '+sg(y)+')','a point']], ask:'What is the mixed second slope f_xy at the point?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'First by x: f_x = '+(a*m)+'x'+BM_SUP[m-1]+'y'+BM_SUP[n]+' '+(b<0?'− ':'+ ')+(Math.abs(b)===1?'':Math.abs(b))+'y. Then by y: f_xy = '+(a*m*n)+'x'+BM_SUP[m-1]+'y'+BM_SUP[n-1]+' '+(b<0?'− ':'+ ')+Math.abs(b)+', which is '+sg(v)+' at the point. Taking y first and then x gives the same, by the swap-knobs technique: both mixed slopes are continuous.'}; }
+  return null; }},
+  {id:'28e.slopegrid',step:'28e',mode:'work',label:'the determinant of a slope grid',open:()=>measured('28e'),make(){
+  for(let t=0;t<40;t++){ const x=pick([-2,-1,0,1,2]), y=pick([-2,-1,0,1,2]), k=rnd(3);
+    const C=[['(x² − y², 2xy)',[[2*x,-2*y],[2*y,2*x]],'rows (2x, −2y) and (2y, 2x)'],['(x + y², xy)',[[1,2*y],[y,x]],'rows (1, 2y) and (y, x)'],['(xy, x² + y²)',[[y,x],[2*x,2*y]],'rows (y, x) and (2x, 2y)']][k], d=BK_det(C[1]);
+    const right=''+sg(d), wrong=uniq(right,[sg(C[1][0][0]+C[1][1][1]),sg(-d),sg(C[1][0][0]*C[1][1][1]),sg(d+2),sg(C[1][0][0]*C[1][1][1]+C[1][0][1]*C[1][1][0]),'0'],3); if(wrong.length<3) continue;
+    return {index:'q:28e.slopegrid['+k+';'+x+','+y+']', a3:['28b.maps['+C[0]+']','28e.localUndo',DASH], lines:[['F(x, y) = '+C[0],'a map of the plane'],['('+sg(x)+', '+sg(y)+')','a point']], ask:'What is the determinant of the slope grid of F at the point?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The slope grid has '+C[2]+'; at the point that is '+BK_G(C[1])+', with determinant '+sg(d)+'. '+(d===0?'It is 0, so the local-undo technique promises nothing at this point.':'It is not 0, so F can be undone near this point, by the local-undo technique. That is a promise near the point only'+(k===0?': F sends (x, y) and (−x, −y) to the same place.':'.'))}; }
+  return null; }},
+  {id:'28i.parallelogram',step:'28i',mode:'work',label:'the area scale of a straight map',open:()=>measured('28i'),make(){
+  for(let t=0;t<40;t++){ const u=BL_nz(2), v=BL_nz(2), d=u[0]*v[1]-u[1]*v[0]; if(d===0||Math.abs(d)===1) continue; const R=1+rnd(3), right=''+Math.abs(d)*R;
+    const wrong=uniq(right,[''+Math.abs(u[0]*v[1]+u[1]*v[0])*R,''+Math.abs(u[0]*v[0]+u[1]*v[1])*R,''+R,''+(Math.abs(d)+R),''+Math.abs(u[0]*v[1])*R,''+Math.abs(d)].filter(x=>x!=='0'),3); if(wrong.length<3) continue;
+    return {index:'q:28i.parallelogram['+u.join(',')+';'+v.join(',')+';'+R+']', a3:['27d.grids[columns '+BK_L(u)+', '+BK_L(v)+']','28i.areaScale',DASH], lines:[['T(s, t) = s'+BK_L(u)+' + t'+BK_L(v),'a straight map of the plane'],['a region of area '+R,'what T is fed']], ask:'What is the area of the image of the region?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'The grid of T has columns '+BK_L(u)+' and '+BK_L(v)+', with determinant '+sg(d)+'. By the area-scale technique every area is multiplied by |det| = '+Math.abs(d)+', so the image has area '+right+'. '+(d<0?'The sign says T turns the plane over; areas do not carry it.':'A total over the image is the total over the region of f(T(s, t)) times '+Math.abs(d)+'.')}; }
+  return null; }},
+  {id:'28m.round',step:'28m',mode:'work',label:'a total over a disc, in round measures',open:()=>measured('28m'),make(){
+  const k=pick([0,1,2,3,4]), R=pick([1,2,3]), val=[2*Math.pow(R,k+2),k+2], right=BQ_pi(val[0],val[1]), F=k===0?'1':k===1?'√(x² + y²)':k===2?'x² + y²':k===3?'(x² + y²)√(x² + y²)':'(x² + y²)²';
+  const wrong=uniq(right,[BQ_pi(2*Math.pow(R,k+1),k+1),BQ_pi(Math.pow(R,k+2),k+2),BQ_pi(2*Math.pow(R,k+2),1),BQ_pi(Math.pow(R,k+2),1),BQ_pi(2*Math.pow(R,k+1),1)],3); if(wrong.length<3) return null;
+  return {index:'q:28m.round['+k+','+R+']', a3:['28h.regions[a disc]','28m.roundSlab',DASH], lines:[['f(x, y) = '+F,'a function'],['x² + y² ≤ '+R*R,'the disc of radius '+R]], ask:'What is the total of f over the disc?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'In round measures f is '+(k===0?'1':'r'+BM_SUP[k])+' and the area scale is r, so the total is ∫ from 0 to 2π of ∫ from 0 to '+R+' of r'+BM_SUP[k+1]+' dr dθ = 2π · '+R+BM_SUP[k+2]+'/'+(k+2)+' = '+right+'. Leaving out the area scale r totals over the rectangle of (r, θ), not over the disc.'}; }},
+  {id:'29cb28.swapsign',step:'29·cb28',mode:'work',label:'two forms multiplied the other way round',open:()=>measured('29·cb28'),make(){
+  const k=1+rnd(3), m=1+rnd(3), odd=(k*m)%2===1, opts=['ω η = η ω','ω η = −η ω'];
+  return {index:'q:29cb28.swapsign['+k+','+m+']', a3:['29cb28.forms[degrees '+k+' and '+m+']','29cb28.formsAnyDegree',DASH], lines:[['ω','a form of degree '+k],['η','a form of degree '+m]], ask:'How do the two products compare?', right:opts[odd?1:0], opts, lead:'',
+    why:'To carry the '+m+' d-marks of η past the '+k+' d-marks of ω takes '+k+' · '+m+' = '+(k*m)+' swaps of neighbours, and each swap changes the sign once. '+(odd?'An odd count: the sign changes. So a form of odd degree times itself is 0.':'An even count: the sign is kept.')}; }},
+  {id:'29cb28.dform',step:'29·cb28',mode:'work',label:'the d of a form of degree 1',open:()=>measured('29·cb28'),make(){
+  for(let t=0;t<40;t++){ const a=pick([-3,-2,-1,1,2,3,4]), b=pick([-3,-2,-1,1,2,3,4]), k=rnd(3), co=k===0?b-a:k===1?2*b-a:b-2*a, tail=k===0?'':k===1?'x':'y'; if(co===0&&Math.random()<0.7) continue;
+    const W=[['y','x'],['xy','x²'],['y²','xy']][k], C=n=>(n===0?'0':(Math.abs(n)===1&&tail?(n<0?'−':''):sg(n))+tail+' dx dy'), cf=(n,s)=>(n===1?'':n===-1?'−':sg(n))+s;
+    const right=C(co), wrong=uniq(right,[C(-co),C(k===0?a+b:k===1?2*b+a:b+2*a),C(k===0?a-b+1:b-a),C(b),'0',C(a)],3); if(wrong.length<3) continue;
+    return {index:'q:29cb28.dform['+k+';'+a+','+b+']', a3:['29cb28.forms[degree 1]','29cb28.curvedSwirl',DASH], lines:[['ω = '+cf(a,W[0])+' dx '+(b<0?'− ':'+ ')+cf(Math.abs(b),W[1])+' dy','a form of degree 1 on the plane']], ask:'What is dω?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'For ω = P dx + Q dy, dω = (Q_x − P_y) dx dy: only the y-slope of P and the x-slope of Q survive, since dx dx = 0 and dy dx = −dx dy. Here Q_x − P_y gives '+(co===0?'0: the form is the d of a function, and its total round every loop is 0.':right+'.')}; }
+  return null; }},
+  {id:'29cb28.angleform',step:'29·cb28',mode:'work',label:'the angle form round a circle',open:()=>measured('29·cb28'),make(){
+  for(let t=0;t<40;t++){ const c=pick([-4,-3,-2,-1,0,1,2,3,4]), r=pick([1,2,3]); if(Math.abs(c)===r) continue; const inside=Math.abs(c)<r, right=inside?'2π':'0', wrong=uniq(right,['2π','0','π',BQ_pi(2*r,1),'−2π',BQ_pi(r*r,1)],3);
+    return {index:'q:29cb28.angleform['+c+','+r+']', a3:['29cb28.forms[the angle form]','29cb28.boundary',DASH], lines:[['ω = (x dy − y dx)/(x² + y²)','a form on the plane less (0, 0), with dω = 0'],['the circle of radius '+r+' about ('+sg(c)+', 0), once, anticlockwise','a loop']], ask:'What is the total of ω round the loop?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:inside?'(0, 0) lies inside the loop, where ω is not defined, so the boundary technique does not make the total 0. ω is the change of angle seen from (0, 0), and the loop goes once round it: 2π, whatever the radius and the centre.':'(0, 0) lies outside the loop. ω is smooth on the whole disc inside it and dω = 0 there, so by the boundary technique the total is 0: the angle seen from (0, 0) swings out and comes back.'}; }
+  return null; }});
+/* --- parts, lists and relations (2g, 2h), classes (5·cb2), functions as tables (9d), listable sets and the diagonal (35a, 35b), worlds and formulas (38a), a tape machine run by hand (41j): dealt afresh; each wrong option is a wrong move --- */
+const BR_NAMES=['a','b','c','d','e'], BR_set=L=>L.length?'{'+L.join(', ')+'}':'∅', BR_C=(n,k)=>{ let r=1; for(let i=0;i<k;i++) r=r*(n-i)/(i+1); return Math.round(r); };
+QP.push({id:'2g.howmany',step:'2g',mode:'work',label:'how many parts a set has',open:()=>measured('2g'),make(){
+  const n=3+rnd(3), k=rnd(3), S=BR_NAMES.slice(0,n), kk=k===2?2:0, v=k===0?Math.pow(2,n):k===1?Math.pow(2,n)-1:BR_C(n,2);
+  const right=''+v, wrong=uniq(right,[''+2*n,''+n*n,''+Math.pow(2,n),''+(Math.pow(2,n)-1),''+(Math.pow(2,n)-2),''+n,''+BR_C(n,2),''+n*(n-1)],3);
+  return {index:'q:2g.howmany['+n+';'+k+']', a3:['2d.sets['+BR_set(S)+']','2g.allParts',DASH], lines:[[BR_set(S),'a set of '+n+' members']], ask:['How many parts does it have?','How many parts does it have, not counting the empty set?','How many of its parts have exactly 2 members?'][k], right, opts:shuffle([right,...wrong]), lead:'',
+    why:k<2?'Each member is in a part or out of it: 2 choices, made '+n+' times, so 2'+['','','²','³','⁴','⁵'][n]+' = '+Math.pow(2,n)+' parts. That count includes the empty set and the whole set'+(k===1?'; leaving out the empty set gives '+v+'.':'.'):'Choose the first member in '+n+' ways and the second in '+(n-1)+', then halve, since the order does not matter in a set: '+n+' · '+(n-1)+'/2 = '+v+'.'}; }},
+  {id:'2h.lists',step:'2h',mode:'work',label:'how many pairs and lists',open:()=>measured('2h'),make(){
+  const n=2+rnd(3), m=2+rnd(3), k=rnd(2), kk=2+rnd(2), v=k===0?n*m:Math.pow(n,kk), right=''+v, wrong=uniq(right,[''+(n+m),''+n*m,''+Math.pow(n,kk),''+n*kk,''+Math.pow(kk,n),''+Math.pow(2,n),''+(v+1)],3);
+  return {index:'q:2h.lists['+[n,m,k,kk].join(',')+']', a3:['2d.sets[finite]','2h.products',DASH], lines:k===0?[['A has '+n+' members','a set'],['B has '+m+' members','a set']]:[['A has '+n+' members','a set']], ask:k===0?'How many pairs (x, y) are there with x in A and y in B?':'How many lists of '+kk+' members of A are there, repeats allowed?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:k===0?'Each of the '+n+' choices for the left entry goes with each of the '+m+' for the right: '+n+' · '+m+' = '+v+'. Adding the sizes counts the members of A and B, not the pairs.':'Each of the '+kk+' places is filled in '+n+' ways, whatever the others hold: '+Array(kk).fill(n).join(' · ')+' = '+v+'. A list keeps its order and may repeat, so (a, b) and (b, a) are two lists.'}; }},
+  {id:'2h.whichhave',step:'2h',mode:'work',label:'what a small relation has',open:()=>measured('2h'),make(){
+  for(let t=0;t<60;t++){ const M=[0,1,2].map(()=>[0,1,2].map(()=>Math.random()<0.45?1:0)), prs=[]; M.forEach((r,i)=>r.forEach((x,j)=>{ if(x) prs.push('('+(i+1)+', '+(j+1)+')'); })); if(prs.length<3||prs.length>6) continue;
+    const k=rnd(3); let ok=true, wit='';
+    if(k===0){ const i=[0,1,2].find(i=>!M[i][i]); if(i!==undefined){ ok=false; wit='('+(i+1)+', '+(i+1)+') is missing.'; } else wit='(1, 1), (2, 2) and (3, 3) are all there.'; }
+    if(k===1){ for(let i=0;i<3&&ok;i++) for(let j=0;j<3&&ok;j++) if(M[i][j]&&!M[j][i]){ ok=false; wit='('+(i+1)+', '+(j+1)+') is there and ('+(j+1)+', '+(i+1)+') is not.'; } if(ok) wit='Every pair that is there has its swapped pair there too.'; }
+    if(k===2){ for(let i=0;i<3&&ok;i++) for(let j=0;j<3&&ok;j++) for(let l=0;l<3&&ok;l++) if(M[i][j]&&M[j][l]&&!M[i][l]){ ok=false; wit='('+(i+1)+', '+(j+1)+') and ('+(j+1)+', '+(l+1)+') are there and ('+(i+1)+', '+(l+1)+') is not.'; } if(ok) wit='Whenever (x, y) and (y, z) are there, so is (x, z): check each chain.'; }
+    if((Math.random()<0.5)!==ok) continue;
+    return {index:'q:2h.whichhave['+M.flat().join('')+';'+k+']', a3:['2h.relations[on {1, 2, 3}]','2h.'+['turnsBack','bothWays','carriesAcross'][k],DASH], lines:[['R = { '+prs.join(', ')+' }','a relation on {1, 2, 3}']], ask:['Does R turn back on itself: is every member related to itself?','Does R read the same both ways?','Does R carry across?'][k], right:BP_YN[ok?0:1], opts:BP_YN, lead:'', why:wit+(k===2&&!ok?' One broken chain is enough.':'')}; }
+  return null; }},
+  {id:'5cb2.class',step:'5·cb2',mode:'work',label:'the class of a number on a clock',open:()=>measured('5·cb2'),make(){
+  const n=pick([3,4,5,6]), a=rnd(n), top=n*3+1, cls=[]; for(let x=0;x<=top;x++) if(x%n===a) cls.push(x); const other=b=>{ const L=[]; for(let x=0;x<=top;x++) if(x%n===b) L.push(x); return BR_set(L); };
+  const mult=[]; for(let x=1;x<=4;x++) mult.push(a?a*x:n*x); const right=BR_set(cls), wrong=uniq(right,[other((a+1)%n),BR_set(mult),BR_set(cls.map(x=>x+n-1)),other((a+n-1)%n),BR_set(cls.slice(0,2))],3);
+  return {index:'q:5cb2.class['+n+';'+a+']', a3:['5cb2.sameness[same remainder on division by '+n+']','5cb2.classes',DASH], lines:[['x ∼ y when x and y leave the same remainder on division by '+n,'a sameness on the counting numbers 0, …, '+top]], ask:'Which set is the class of '+(a+n)+'?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:(a+n)+' leaves remainder '+a+', so its class is every number that does: start at '+a+' and step by '+n+'. There are exactly '+n+' classes, one for each remainder, they share no member, and together they hold every number.'}; }},
+  {id:'9d.table',step:'9d',mode:'work',label:'a function as a table: one-to-one, onto',open:()=>measured('9d'),make(){
+  for(let t=0;t<60;t++){ const k=rnd(4), dom=[1,2,3].concat(k===1||k===3?[4]:[]), cod=['a','b','c'].concat(k===2||k===3?['d']:[]); let f;
+    if(k===0) f=shuffle(cod.slice()); else if(k===1){ f=shuffle(cod.slice()); f.push(pick(cod)); f=shuffle(f); } else if(k===2) f=shuffle(cod.slice()).slice(0,3); else { f=[pick(cod),pick(cod),pick(cod),pick(cod)]; }
+    const inj=new Set(f).size===f.length, sur=cod.every(y=>f.includes(y)), kind=inj&&sur?0:sur?1:inj?2:3; if(kind!==k) continue;
+    const opts=['one-to-one and onto','onto and not one-to-one','one-to-one and not onto','neither'], twice=f.find((y,i)=>f.indexOf(y)!==i), miss=cod.find(y=>!f.includes(y));
+    return {index:'q:9d.table['+f.join('')+';'+cod.length+']', a3:['9a.functions[a table]','9d.swappedPairs',DASH], lines:[[dom.map((x,i)=>x+' ↦ '+f[i]).join(',  '),'a function f from '+BR_set(dom)+' to '+BR_set(cod)]], ask:'Which is f?', right:opts[kind], opts, lead:'',
+      why:(inj?'No output is used twice, so f is one-to-one.':'The output '+twice+' is used twice, so f is not one-to-one.')+' '+(sur?'Every member of '+BR_set(cod)+' is an output, so f is onto.':miss+' is never an output, so f is not onto.')+' '+(kind===0?'So its swapped pairs are a function too, and that function undoes f.':'So its swapped pairs are not a function from '+BR_set(cod)+'.')}; }
+  return null; }},
+  {id:'35a.listable',step:'35a',mode:'work',label:'can the set be listed',open:()=>measured('35c'),make(){
+  const C=[['the squares 0, 1, 4, 9, …',0,'List them in order: the n-th is n².'],['all fractions',0,'List the pairs (top, bottom) by the sum of their sizes, and drop the repeats.'],['the finite strings of 0s and 1s',0,'List them by length, and within a length in dictionary order.'],
+    ['the pairs of counting numbers',0,'List them by the sum of the two entries: finitely many pairs have each sum.'],['the finite parts of ℕ',0,'Each finite part is a finite string of 0s and 1s that says which numbers are in; strings can be listed.'],
+    ['the polynomials with whole coefficients',0,'Each is a finite list of whole numbers, and finite lists can be listed by length and size.'],['all parts of ℕ',1,'Given any list of parts, the set of n that are not in the n-th part differs from every part on the list.'],
+    ['the endless lists of 0s and 1s',1,'Given any list of them, flip the n-th digit of the n-th: the new list differs from every one on the list.'],['the real numbers between 0 and 1',1,'Given any list of them, build a number whose n-th digit differs from the n-th digit of the n-th.'],
+    ['the functions from ℕ to ℕ',1,'Given any list f₀, f₁, …, the function n ↦ fₙ(n) + 1 differs from each fₙ at n.']], c=pick(C), opts=['yes: some list reaches every member','no: every list misses a member'];
+  return {index:'q:35a.listable['+C.indexOf(c)+']', a3:['35a.sets['+c[0]+']',c[1]?'35b.diagonal':'35a.countable',DASH], lines:[[c[0],'a set']], ask:'Can the set be listed: first, second, third, …, with every member reached?', right:opts[c[1]], opts, lead:'', why:c[2]+(c[1]?' So no list holds them all.':' Every member turns up after finitely many steps.')}; }},
+  {id:'35a.pairing',step:'35a',mode:'work',label:'the place of a pair in the list of pairs',open:()=>measured('35a'),make(){
+  const i=rnd(5), j=rnd(5), s=i+j, v=s*(s+1)/2+i; if(s<2) return null; const right=''+v, wrong=uniq(right,[''+(s*(s+1)/2+j),''+(s*(s+1)/2),''+(i*5+j),''+(v+1),''+((s+1)*(s+2)/2+i),''+(i+j)].filter(x=>x!==right),3); if(wrong.length<3) return null;
+  return {index:'q:35a.pairing['+i+','+j+']', a3:['35a.sets[pairs of counting numbers]','35a.countable',DASH], lines:[['(0, 0);  (0, 1), (1, 0);  (0, 2), (1, 1), (2, 0);  …','the pairs listed by their sum, and within a sum by the left entry'],['(0, 0) has place 0','places are counted from 0']], ask:'What is the place of ('+i+', '+j+')?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:'The sums 0, 1, …, '+(s-1)+' use 1 + 2 + ⋯ + '+s+' = '+(s*(s+1)/2)+' places. Among the pairs with sum '+s+', ('+i+', '+j+') comes after '+i+' others. So its place is '+(s*(s+1)/2)+' + '+i+' = '+v+'. Every pair gets exactly one place, which is why the pairs can be listed.'}; }},
+  {id:'35b.diagonalrow',step:'35b',mode:'work',label:'the list the diagonal builds',open:()=>measured('35b'),make(){
+  for(let t=0;t<40;t++){ const R=[0,1,2,3].map(()=>[0,1,2,3].map(()=>rnd(2))), fl=L=>L.map(x=>1-x), dg=R.map((r,i)=>r[i]), S=L=>L.join(' ')+' …';
+    const right=S(fl(dg)), wrong=uniq(right,[S(dg),S(fl(R[0])),S(fl(R.map(r=>r[0]))),S(fl(R.map((r,i)=>r[3-i]))),S(R[3])],3); if(wrong.length<3) continue;
+    return {index:'q:35b.diagonalrow['+R.flat().join('')+']', a3:['35a.sets[endless lists of 0s and 1s]','35b.diagonal',DASH], lines:R.map((r,i)=>[S(r),'list '+(i+1)]), ask:'How does the endless list begin that differs from list n at place n, for every n?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Read down the diagonal: place 1 of list 1, place 2 of list 2, and so on: '+dg.join(' ')+'. Flip each: '+fl(dg).join(' ')+'. The new list differs from list n at place n, so it is none of them, however the four are continued and however many more follow.'}; }
+  return null; }},
+  {id:'38a.evaluate',step:'38a',mode:'work',label:'a statement in a small world',open:()=>measured('38a'),make(){
+  for(let t=0;t<60;t++){ const M=[0,1,2].map(()=>[0,1,2].map(()=>Math.random()<0.4?1:0)), prs=[]; M.forEach((r,i)=>r.forEach((x,j)=>{ if(x) prs.push('('+i+', '+j+')'); })); if(prs.length<2||prs.length>6) continue;
+    const k=rnd(5), D=[0,1,2]; let v, why;
+    if(k===0){ const bad=D.find(x=>!D.some(y=>M[x][y])); v=bad===undefined; why=v?'Each member has a partner: '+D.map(x=>x+' with '+D.find(y=>M[x][y])).join(', ')+'.':bad+' has no partner: no pair starts with '+bad+'.'; }
+    if(k===1){ const y=D.find(y=>D.every(x=>M[x][y])); v=y!==undefined; why=v?'The one member '+y+' serves every x: '+D.map(x=>'('+x+', '+y+')').join(', ')+' are all there.':'No single member serves every x: '+D.map(y=>'('+D.find(x=>!M[x][y])+', '+y+') is missing').join(', ')+'.'; }
+    if(k===2){ const bad=D.find(x=>!M[x][x]); v=bad===undefined; why=v?'(0, 0), (1, 1) and (2, 2) are all there.':'('+bad+', '+bad+') is missing.'; }
+    if(k===3){ const x=D.find(x=>M[x][x]); v=x!==undefined; why=v?'('+x+', '+x+') is there.':'None of (0, 0), (1, 1), (2, 2) is there.'; }
+    if(k===4){ let bad=null; D.forEach(x=>D.forEach(y=>{ if(M[x][y]&&!M[y][x]&&!bad) bad=[x,y]; })); v=!bad; why=v?'Every pair that is there has its swapped pair there.':'('+bad[0]+', '+bad[1]+') is there and ('+bad[1]+', '+bad[0]+') is not.'; }
+    if((Math.random()<0.5)!==v) continue; const F=['∀x ∃y R(x, y)','∃y ∀x R(x, y)','∀x R(x, x)','∃x R(x, x)','∀x ∀y (R(x, y) ⇒ R(y, x))'][k], opts=['true in this world','false in this world'];
+    return {index:'q:38a.evaluate['+M.flat().join('')+';'+k+']', a3:['38a.worlds[three members, one relation]','38a.trueInAWorld',DASH], lines:[['members 0, 1, 2;  R = { '+prs.join(', ')+' }','a world'],[F,'a statement']], ask:'Is the statement true in this world?', right:opts[v?0:1], opts, lead:'',
+      why:why+(k===1&&!v?' The order of every and some matters: each x may have a partner without one partner serving all.':'')}; }
+  return null; }},
+  {id:'38a.define',step:'38a',mode:'work',label:'a formula that defines a set of numbers',open:()=>measured('38a'),make(){
+  const T=[['the even numbers','∃x₁ (x₁ + x₁ = x₀)','x₀ is some number added to itself.'],['the numbers other than 0','∃x₁ (S(x₁) = x₀)','x₀ is the next after some number, which every number but 0 is.'],
+    ['the squares','∃x₁ (x₁ · x₁ = x₀)','x₀ is some number times itself.'],['the number 2 alone','x₀ = S(S(0))','Each number is defined by its own term.'],
+    ['the multiples of 3','∃x₁ (x₁ + (x₁ + x₁) = x₀)','x₀ is three copies of some number.'],['the odd numbers','∃x₁ (S(x₁ + x₁) = x₀)','x₀ is the next after an even number.']], k=rnd(T.length);
+  const right=T[k][1], wrong=uniq(right,shuffle(T.filter((_,i)=>i!==k).map(x=>x[1]).concat(['∀x₁ (x₁ + x₁ = x₀)','∃x₁ (x₀ + x₀ = x₁)'])),3);
+  return {index:'q:38a.define['+k+']', a3:['38a.worlds[N with 0, S, + and ·]','38a.definedSet',DASH], lines:[['N, with the marks 0, S, + and ·','a world'],[T[k][0],'a set of its members']], ask:'Which formula, with x₀ free, defines the set in N?', right, opts:shuffle([right,...wrong]), lead:'',
+    why:T[k][2]+' A formula with x₀ free defines the set of members that make it true when x₀ is given them. ∃x₁ (x₀ + x₀ = x₁) is true of every number, and ∀x₁ (x₁ + x₁ = x₀) of none.'}; }},
+  {id:'38a.chooser',step:'38a',mode:'work',label:'a function mark in place of some',open:()=>measured('38a'),make(){
+  const NONE='none: the statement is false in N', T=[['x₀ < x₁','f(x) = S(x)','x < S(x) for every x. x + x fails at 0, and x · x fails at 0 and 1. Many other choosers work as well, such as x + 7.'],['x₁ = x₀ + x₀','f(x) = x + x','Here the partner is forced: the only x₁ is x₀ + x₀.'],
+    ['x₁ = x₀ · x₀','f(x) = x · x','Here the partner is forced: the only x₁ is x₀ · x₀.'],['x₁ + x₁ = x₀',NONE,'At x₀ = 1 no number added to itself gives 1. A chooser exists exactly when the statement is true.'],
+    ['x₁ < x₀',NONE,'At x₀ = 0 nothing is below 0. A chooser exists exactly when the statement is true.'],['S(x₁) = S(S(x₀))','f(x) = S(x)','S is one-to-one, so S(x₁) = S(S(x₀)) forces x₁ = S(x₀).']], k=rnd(T.length);
+  const right=T[k][1], wrong=uniq(right,['f(x) = S(x)','f(x) = x + x','f(x) = x · x',NONE],3);
+  return {index:'q:38a.chooser['+k+']', a3:['38a.worlds[N with 0, S, + and ·]','38a.chooser',DASH], lines:[['∀x₀ ∃x₁ ('+T[k][0]+')','a statement, read in N'],['∀x₀ φ(x₀, f(x₀))','the same, with a new function mark f in place of the some']], ask:'Which meaning of f makes the second statement true in N?', right, opts:shuffle([right,...wrong]), lead:'', why:T[k][2]}; }},
+  {id:'38a.named',step:'38a',mode:'work',label:'is every member named',open:()=>measured('38a'),make(){
+  const C=[['the counting numbers, with the marks 0 and S',0,'0, S(0), S(S(0)), … name every one.'],['the real numbers, with the marks 0, 1, + and ·',1,'The terms name only 0, 1, 2, 3, …: no term names −1 or √2, and no language could name every real, since terms can be listed.'],
+    ['the whole numbers, with the marks 0 and S',1,'The terms name 0, 1, 2, …, and no term names −1.'],['the whole numbers, with the marks 0, S and −',0,'0 − S(0) names −1, and so on down; S names the way up.'],
+    ['the fractions, with the marks 0, 1, +, − and ·',1,'Sums, differences and products of whole numbers are whole: no term names 1/2.'],['the clock of 5, with the marks 0 and S',0,'0, S(0), …, S(S(S(S(0)))) name all five hours.']], c=pick(C), opts=['yes: every member is the value of a term','no: some member has no name'];
+  return {index:'q:38a.named['+C.indexOf(c)+']', a3:['38a.worlds['+c[0]+']','38a.namedEvery',DASH], lines:[[c[0],'a world']], ask:'Is every member named by a term with no placeholders?', right:opts[c[1]], opts, lead:'', why:c[2]+(c[1]?' So here "every named" is a weaker claim than "every".':' So here "every" may be read as "every named".')}; }},
+  {id:'41j.run',step:'41j',mode:'work',label:'a two-state machine run by hand',open:()=>measured('41j'),make(){
+  for(let t=0;t<200;t++){ const rows={}, show=[]; ['A','B'].forEach(q=>[0,1].forEach(m=>{ const stop=Math.random()<0.25, r={w:rnd(2),d:pick(['L','R']),n:stop?'stop':pick(['A','B'])}; rows[q+m]=r; show.push(q+m+' → '+r.w+r.d+(stop?' stop':r.n)); }));
+    const tape={}, seen={}; let q='A', h=0, steps=0, res=null; for(;steps<40;){ const key=q+'|'+h+'|'+Object.keys(tape).filter(k=>tape[k]).sort().join(','); if(seen[key]){ res='never'; break; } seen[key]=1; const r=rows[q+(tape[h]||0)]; tape[h]=r.w; h+=r.d==='R'?1:-1; steps++; if(r.n==='stop'){ res='stop'; break; } q=r.n; }
+    if(!res||(res==='stop'&&(steps<3||steps>9))||(res==='never'&&Math.random()<0.6)) continue; const ones=Object.values(tape).filter(x=>x).length, NEV='it never stops';
+    const R=(s,o)=>'it stops after '+s+' steps, with '+o+' '+(o===1?'1':'1s')+' on the tape', right=res==='stop'?R(steps,ones):NEV, wrong=uniq(right,[NEV,R(steps+1,ones),R(steps,ones+1),R(Math.max(steps-1,1),Math.max(ones-1,0)),R(steps+2,ones),R(steps,Math.max(ones-1,0))],3); if(wrong.length<3) continue;
+    return {index:'q:41j.run['+show.join(';')+']', a3:['41a.machines[two states]','41j.traceLine',DASH], lines:[[show.slice(0,2).join(',   '),'the rows for state A: mark read, then write, step, next'],[show.slice(2).join(',   '),'the rows for state B'],['a blank tape, all 0s, in state A','the start']], ask:'What does the machine do?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:res==='stop'?'Run it a line at a time, by the trace-line technique: find the row for the state and the mark under the head, write, step, rename. The row with stop is used at step '+steps+', and that step is counted. The tape then holds '+ones+' '+(ones===1?'1':'1s')+'.':'Run it a line at a time. A configuration comes back: the same state, the same cell, the same tape. From there the run repeats for ever, by the back-again technique, and the row with stop is never reached.'}; }
+  return null; }});
 
 /* ===== Rung pools, rungs 32 on (Andrew 2026-11-13) ===== */
 /* ----- rung 32: waves and frequencies, 32a to 32l ----- */

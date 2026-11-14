@@ -158,6 +158,16 @@ addEventListener('storage',e=>{ if(e.key===RK||e.key===null){ raw=null; stale=tr
   const mv=[]; ks.forEach(k=>{ if(!/^(marks:|cards:|rand:|sq:)/.test(k)) return; const v=LS.getItem(k); if(v==null) return; mv.push([k,tg(k),tg(v)]); });
   mv.forEach(x=>{ if(x[1]!==x[0]) LS.removeItem(x[0]); }); mv.forEach(x=>{ LS.setItem(x[1],x[2]); });
   LS.setItem(F,String(Date.now())); }catch(e){} })();
+/* 0.4.41 newfeet tick move (to-do thread 2026-11-14 00:10Z): 0.4.40 put 120 new footings before each step's Moves to Watch Out For,
+   so 65 old footings moved up (27a3 -> 27a4, 44·cb27.6.k -> 44·cb27.13.k, ...). Ticks, pool repeats and standing questions kept under
+   an old number follow it once, under ladder:mvFeet1, all in one pass (old to new at the same time, so a chain like .6 -> .7 -> .8 holds). */
+(function(){ const F='ladder:mvFeet1'; try{ if(LS.getItem(F)!=null) return; const M={"2b21":"2b22","2b22":"2b23","2h18":"2h19","2h19":"2h20","3b7":"3b9","3b8":"3b10","9d5":"9d6","9d6":"9d7","14b4":"14b5","14b5":"14b6","14g5":"14g7","14g6":"14g8","15f5":"15f6","16e5":"16e8","18i6":"18i7","22e5":"22e7","22f5":"22f6","22g4":"22g6","23b4":"23b5","23c5":"23c6","23g4":"23g5","24c4":"24c8","25b4":"25b5","26l5":"26l7","27a3":"27a4","27b4":"27b7","27c3":"27c4","27d4":"27d7","27e5":"27e7","27f4":"27f9","27g5":"27g7","27h3":"27h8","27j4":"27j7","27k4":"27k8","27l4":"27l7","27·cb24.6":"27·cb24.7","27·cb24.7":"27·cb24.8","19e6":"19e7","28e4":"28e6","28h3":"28h5","28l4":"28l5","29·cb28.7":"29·cb28.16","29·cb28.8":"29·cb28.17","30a5":"30a6","30c5":"30c7","31a5":"31a7","31d5":"31d9","31e5":"31e10","31j4":"31j5","31m5":"31m6","32b5":"32b6","32c5":"32c6","34a6":"34a9","34j4":"34j5","34d6":"34d7","35a5":"35a6","35h4":"35h5","38a5":"38a8","41e5":"41e6","43b5":"43b6","44c5":"44c7","44g5":"44g6","44j5":"44j7","44·cb27.5":"44·cb27.12","44·cb27.6":"44·cb27.13"};
+  const K=Object.keys(M).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.]/g,'\\.'));
+  const RE=new RegExp('(?<![A-Za-z0-9_·.])('+K.join('|')+')(?![A-Za-z0-9_·])','g'), tg=v=>String(v).replace(RE,(x,k)=>M[k]);
+  const ks=[]; for(let i=0;i<LS.length;i++){ const k=LS.key(i); if(k) ks.push(k); }
+  const mv=[]; ks.forEach(k=>{ if(!/^(marks:|rand:|sq:)/.test(k)&&k!=='ladder:lastFooting'&&k!=='ladder:furthest') return; const v=LS.getItem(k); if(v==null) return; const nk=/^sq:/.test(k)?tg(k):k, nv=tg(v); if(nk!==k||nv!==v) mv.push([k,nk,nv]); });
+  mv.forEach(x=>{ if(x[1]!==x[0]) LS.removeItem(x[0]); }); mv.forEach(x=>{ LS.setItem(x[1],x[2]); });
+  LS.setItem(F,String(Date.now())); }catch(e){} })();
 
 (function(){
 'use strict';
