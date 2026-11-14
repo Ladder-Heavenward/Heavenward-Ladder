@@ -137,17 +137,40 @@ L|x - w| > 1 \Rightarrow \text{the pieces grow: wanders} @@ the shrink test (22d
 </section>
 
 <section class="class step" data-step="23c5">
-  <h2 class="sthead"><span class="stno">23c5</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">23c5</span>A Power Sum at the End of Its Reach</h2>
+  <p data-pid="7cea63">Anything can happen at the edge (23c4). When the sum does settle there, is its total at the edge the value that the function inside is heading for? Take the centre 0 and the reach 1; any power sum can be moved and stretched to that.</p>
+  <p data-pid="1141c4">From-inside technique: <b>if Σ uₖ settles, at s, and f(x) = Σ uₖxᵏ for |x| < 1, then f(x) heads to s as x heads to 1 from the left.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the from-inside technique">
+f(x) = (1 - x)\textstyle\sum s_nx^n \text{ for } |x| \lt 1 @@ sₙ = u₀ + ⋯ + uₙ; put uₙ = sₙ − sₙ₋₁ and gather, as in summing by parts (22g5)
+1 = (1 - x)\textstyle\sum x^n @@ the geometric sum
+f(x) - s = (1 - x)\textstyle\sum (s_n - s)\,x^n @@ take s times the second from the first
+|s_n - s| \lt \varepsilon \text{ for } n \gt N @@ Σ uₖ settles at s
+|f(x) - s| \le (1 - x)\textstyle\sum_{n \le N}|s_n - s| + \varepsilon @@ for 0 ≤ x < 1: the far part is at most ε(1 − x)Σ xⁿ = ε
+\htmlClass{new}{|f(x) - s| \lt 2\varepsilon \text{ for } x \text{ near } 1} \quad \blacksquare @@ the first part is a fixed number times 1 − x
+  </pre>
+  <p data-pid="fb55c7">So a power sum that settles at the end of its reach is continuous from inside, right up to that end. For ln(1 + x) = x − x²/2 + x³/3 − ⋯ this gives the total of 1 − ½ + ⅓ − ⋯ a second time: the sum settles at x = 1 (22g1), ln is continuous, so the total is ln 2.</p>
+  <p data-pid="4904c5">The technique runs one way only. 1/(1 + x) = 1 − x + x² − ⋯ heads to ½ as x heads to 1, and 1 − 1 + 1 − ⋯ does not settle. Its averages do, at ½ (22g4).</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23c5.1</span><span class="ph understand">understand</span>What does the from-inside technique say? <br>Why does it not give 1 − 1 + 1 − ⋯ the total ½?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23c6">
+  <h2 class="sthead"><span class="stno">23c6</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 R = 1, \text{ so the sum settles at } x = 1\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the edges are open: anything can happen there
 \text{settles at } x_0 \Rightarrow \text{settles at every } x \text{ with } |x| \le |x_0|\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only nearer than x₀; the other edge, at −x₀, can wander (Σ xᵏ/k at x₀ = −1)
 f \text{ smooth everywhere} \Rightarrow \text{its sum reaches everywhere}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; 1/(1 + x²) has reach 1
 \big|\tfrac{u_{k+1}}{u_k}\big| \text{ has no limit, so there is no reach}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the reach always exists (23c2); the ratio is only one way to find it
+f \text{ heads to a value at the end} \Rightarrow \text{the sum settles there}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; 1 − x + x² − ⋯ is 1/(1 + x), which heads to 1/2 at x = 1, and 1 − 1 + 1 − ⋯ wanders
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">23c5.1</span><span class="ph understand">understand</span>Why is “R = 1, so the sum settles at x = 1” a move to watch out for? <br>Why is “|uₖ₊₁/uₖ| has no limit, so there is no reach” one?</li>
+      <li><span class="qid">23c6.1</span><span class="ph understand">understand</span>Why is “R = 1, so the sum settles at x = 1” a move to watch out for? <br>Why is “|uₖ₊₁/uₖ| has no limit, so there is no reach” one?</li>
     </ol>
   </section>
 </section>
@@ -167,7 +190,7 @@ f \text{ smooth everywhere} \Rightarrow \text{its sum reaches everywhere}\,? @@ 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A power sum is a power series; its reach is the radius of convergence, and the stretch (w − R, w + R) with whichever edges it settles at is the interval of convergence. The reach technique is often called Abel's lemma. The reach also has a formula from roots, R = 1/limsup |uₖ|^(1/k), the Cauchy–Hadamard formula.</p>
+  <p>A power sum is a power series; its reach is the radius of convergence, and the stretch (w − R, w + R) with whichever edges it settles at is the interval of convergence. The reach technique is often called Abel's lemma. The reach also has a formula from roots, R = 1/limsup |uₖ|^(1/k), the Cauchy–Hadamard formula. The from-inside technique is Abel’s, on the continuity of a power series at an end of its interval.</p>
   <h3>Who said it first</h3>
   <p>Niels Henrik Abel proved the reach technique in 1826. Augustin-Louis Cauchy gave the root formula in 1821, and Jacques Hadamard rediscovered and proved it in 1888. Cauchy also explained why 1/(1 + x²) stops at 1, by looking off the line.</p>
 </section>

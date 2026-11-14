@@ -143,17 +143,46 @@ K = e^{0.1} \approx 1.1052 \text{ on } 0 \le x \le 0.1 @@ |cos|, |sin| ≤ 1, an
 </section>
 
 <section class="class step" data-step="28l4">
-  <h2 class="sthead"><span class="stno">28l4</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">28l4</span>The Hug of Any Degree, in Any Number of Inputs</h2>
+  <p data-pid="17e4ae">The hug of degree 2 in two inputs (28l1) came from the road g(t) = f(p + th) and the match of g at t = 1. Nothing in that stops at degree 2, or at two inputs. Let f have n inputs and continuous partial slopes up to order d + 1 near p. Write fᵢ for its slope along input i, fᵢⱼ for the slope of that along input j, and so on.</p>
+  <p data-pid="a55e2e">Any-degree technique: <b>f(p + h) = S₀ + S₁ + S₂/2! + ⋯ + S<sub>d</sub>/d! + E, where Sₖ is the sum of f<sub>i₁⋯iₖ</sub>(p) · h<sub>i₁</sub> ⋯ h<sub>iₖ</sub> over every list i₁, …, iₖ of inputs. If every partial slope of order d + 1 has size at most K between p and p + h, then |E| ≤ K(|h₁| + ⋯ + |hₙ|)<sup>d + 1</sup>/(d + 1)!.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the any-degree technique">
+g(t) = f(p + th):\ \ g'(t) = \textstyle\sum_i f_i(p + th)\,h_i @@ roads-add (28c3), with one term for each input
+g^{(k)}(t) = \textstyle\sum f_{i_1 \cdots i_k}(p + th)\,h_{i_1}\cdots h_{i_k} @@ roads-add again on every term; induction on k (4c); the sum is over all lists i₁, …, iₖ
+g(1) = \textstyle\sum_{k \le d} \tfrac{g^{(k)}(0)}{k!} + \tfrac{g^{(d+1)}(c)}{(d+1)!} @@ match-error (23b1) on [0, 1], with some c between
+|g^{(d+1)}(c)| \le K\big(|h_1| + \cdots + |h_n|\big)^{d+1} @@ the terms are at most K times the terms of that power, multiplied out
+\htmlClass{new}{f(p + h) = \textstyle\sum_{k \le d}\tfrac{1}{k!}S_k + E} \quad \blacksquare @@ g(1) = f(p + h), and g⁽ᵏ⁾(0) = Sₖ
+  </pre>
+  <p data-pid="887435">Sₖ has nᵏ terms, and most of them are repeats. The order of the slopes does not matter (28d2), so a term is known by how many times each input is used.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the any-degree technique · gathering the repeats">
+f_{xy} = f_{yx} \text{, and so for any order} @@ swap-knobs (28d2), two neighbours at a time
+\text{input } i \text{ used } a_i \text{ times},\ \ a_1 + \cdots + a_n = k @@ the term appears once for each list with those counts
+\text{there are } \tfrac{k!}{a_1!\cdots a_n!} \text{ such lists} @@ k! arrangements of the k places (4k); the aᵢ! arrangements of equal entries give the same list
+\htmlClass{new}{\tfrac{1}{k!}S_k = \textstyle\sum \tfrac{\partial^{a}f(p)}{a_1!\cdots a_n!}\,h_1^{a_1}\cdots h_n^{a_n}} \quad \blacksquare @@ over all counts adding to k; ∂ᵃf is f sloped aᵢ times along each input i
+  </pre>
+  <p data-pid="a2f8ac">In two inputs at degree 3, the term in h₁²h₂ comes as f<sub>xxy</sub>, f<sub>xyx</sub> and f<sub>yxx</sub>: 3!/(2! · 1!) = 3 times, so its weight is f<sub>xxy</sub>(p)/2. The whole layer is (f<sub>xxx</sub> h₁³ + 3f<sub>xxy</sub> h₁²h₂ + 3f<sub>xyy</sub> h₁h₂² + f<sub>yyy</sub> h₂³)/6, with the choosing row 1, 3, 3, 1 (4k) in it.</p>
+  <p data-pid="f93100">For eˣ cos y at (0, 0) that layer is (x³ − 3xy²)/6. At (0.1, 0.2) it adds (0.001 − 0.012)/6 to the 1.085 of 28l1, giving 1.08317 against the true 1.08314. The error fell from 0.0019 to 0.00003.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28l4.1</span><span class="ph understand">understand</span>What is Sₖ in the any-degree technique? <br>Why does the h₁²h₂ term of the degree 3 layer have the weight f<sub>xxy</sub>/2?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28l5">
+  <h2 class="sthead"><span class="stno">28l5</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 \nabla f(p) = 0 \Rightarrow p \text{ is a top or a bottom}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; x² − y² is flat at 0, and has a saddle there
 f_{xx} > 0,\ f_{yy} > 0 \Rightarrow \text{a bottom}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; x² + 3xy + y²: A = C = 2, B = 3, D = −5 &lt; 0, a saddle
 D = 0 \Rightarrow \text{neither a top nor a bottom}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; x⁴ + y⁴ has D = 0 at 0, and a bottom there
 \text{a bottom along every line through } p \Rightarrow \text{a bottom}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; (y − x²)(y − 3x²) has a bottom at 0 along every line, and is −x⁴ along y = 2x²
+\text{the } h_1^2h_2 \text{ term has weight } f_{xxy}/3!\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; it comes three times, as f_xxy, f_xyx and f_yxx: the weight is 3/3! = 1/2
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">28l4.1</span><span class="ph understand">understand</span>Why is “fₓₓ > 0 and fᵧᵧ > 0, so a bottom” a move to watch out for?</li>
+      <li><span class="qid">28l5.1</span><span class="ph understand">understand</span>Why is “fₓₓ > 0 and fᵧᵧ > 0, so a bottom” a move to watch out for?</li>
     </ol>
   </section>
 </section>
@@ -173,7 +202,7 @@ D = 0 \Rightarrow \text{neither a top nor a bottom}\,? @@ &lt;span class="vd vd-
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The second-slope grid is the Hessian matrix, and its determinant D the Hessian (determinant). The hug is the second-order Taylor polynomial of f at p, and the surface-match technique is Taylor’s theorem in two variables. The number hᵀHh is a quadratic form; a form positive for every h ≠ 0 is positive definite, and completing the square to show it is the idea behind the Cholesky factorization. The grid-test technique is the second derivative test. A flat point is a critical (or stationary) point, and a saddle a saddle point. Bottoms and tops among neighbours are local minima and maxima.</p>
+  <p>The second-slope grid is the Hessian matrix, and its determinant D the Hessian (determinant). The hug is the second-order Taylor polynomial of f at p, and the surface-match technique is Taylor’s theorem in two variables. The number hᵀHh is a quadratic form; a form positive for every h ≠ 0 is positive definite, and completing the square to show it is the idea behind the Cholesky factorization. The grid-test technique is the second derivative test. A flat point is a critical (or stationary) point, and a saddle a saddle point. Bottoms and tops among neighbours are local minima and maxima. The any-degree technique is Taylor’s, in several variables; a list of counts (a₁, …, aₙ) is a multi-index.</p>
   <h3>Who said it first</h3>
   <p>Joseph-Louis Lagrange gave the conditions for a maximum or minimum of a function of two variables in 1759, by completing the square. Otto Hesse studied the determinant of second derivatives in 1844, and James Joseph Sylvester named it after him in 1851. Giuseppe Peano showed in 1884, in his edition of Angelo Genocchi’s calculus, that a function can have a minimum along every line through a point and still no minimum there; his example was (y − x²)(y − 2x²).</p>
 </section>

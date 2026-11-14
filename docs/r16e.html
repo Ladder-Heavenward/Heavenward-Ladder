@@ -151,18 +151,86 @@ I(m, n) = \tfrac{(1 - x)^n x^{m+1}}{m+1}\Big|_0^1 + \tfrac{n}{m+1}\textstyle\int
 </section>
 
 <section class="class step" data-step="16e5">
-  <h2 class="sthead"><span class="stno">16e5</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">16e5</span>Totals Against an Increasing Function</h2>
+  <p data-pid="c826aa">A strip sum weighs each height by a width, Δxᵢ. Weigh it by something else: let α be increasing on [u, v], and put Δαᵢ = α(xᵢ) − α(xᵢ₋₁) ≥ 0 in place of each Δxᵢ. Lower sums, upper sums and strip sums are made as before (15a, 15h), and so are the lower and upper integrals (15c). When those two agree, f is integrable against α, and the common value is written ∫ᵤᵛ f dα. Every proof of 15b and 15c goes through as it stands, since all it asked of the widths was that none is below 0. With α(x) = x this is the integral of rung 15.</p>
+  <p data-pid="e49173">Weighted-total technique: <b>if f is continuous on [u, v], and α is increasing with α′ continuous on [u, v], then f is integrable against α and ∫ᵤᵛ f dα = ∫ᵤᵛ f(x) α′(x) dx.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the weighted-total technique">
+U_\alpha - L_\alpha \le \varepsilon\,(\alpha(v) - \alpha(u)) @@ pieces narrower than the width for ε: sup less inf is at most ε on each (evenly-continuous, 15f); the Δαᵢ add to α(v) − α(u)
+f \text{ is integrable against } \alpha @@ gap-closes (15c), with Δα for Δx
+\Delta\alpha_i = \alpha'(s_i)\,\Delta x_i @@ average-slope (14c): some sᵢ inside each piece
+\textstyle\sum f(s_i)\,\Delta\alpha_i = \sum f(s_i)\,\alpha'(s_i)\,\Delta x_i @@ the same sum, read two ways: a strip sum against α, and one of fα′
+\text{left: within } \varepsilon\,(\alpha(v) - \alpha(u)) \text{ of } \textstyle\int_u^v f\,d\alpha @@ strip-sum-between (15h), with Δα for Δx
+\text{right: within } \varepsilon \text{ of } \textstyle\int_u^v f\alpha' @@ narrow-strips (15h), for partitions fine enough
+\htmlClass{new}{\textstyle\int_u^v f\,d\alpha = \int_u^v f(x)\,\alpha'(x)\,dx} \quad \blacksquare @@ two numbers within every ε of each other
+  </pre>
+  <p data-pid="eee2b7">So 16d’s bookkeeping dα = α′(x) dx was a sameness of two totals all along. With α(x) = x² on [0, 1], ∫ x dα = ∫ x · 2x dx = 2/3. If α is the mass of a rod from its left end up to x, ∫ x dα is the turning weight of the rod, whether the mass is spread smoothly or not. The next footing takes the case where it is not.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16e5.1</span><span class="ph understand">understand</span>What changes in a strip sum when the total is taken against α? <br>What is ∫ f dα when α′ is continuous?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16e6">
+  <h2 class="sthead"><span class="stno">16e6</span>A Weight at a Point</h2>
+  <p data-pid="77f1b3">Let α jump: α(x) = 0 for x < c and α(x) = 1 for x ≥ c, with u < c ≤ v. It is increasing, and all its change is at one input.</p>
+  <p data-pid="80f68e">Point-weight technique: <b>if f is bounded on [u, v] and continuous at c, then f is integrable against this α and ∫ᵤᵛ f dα = f(c).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the point-weight technique">
+P:\ u \lt c - \delta \lt c \le v @@ a partition with the piece [c − δ, c]; add v as a last point if c < v
+\Delta\alpha = 1 \text{ on } [c - \delta, c] \text{, and } 0 \text{ on the others} @@ α(c − δ) = 0 and α(c) = 1; elsewhere α does not change
+L_\alpha = \inf f \text{ on } [c - \delta, c],\ \ U_\alpha = \sup f \text{ there} @@ the other pieces weigh nothing
+f(c) - \varepsilon \le L_\alpha \le U_\alpha \le f(c) + \varepsilon @@ f is continuous at c: take δ for ε
+\htmlClass{new}{\textstyle\int_u^v f\,d\alpha = f(c)} \quad \blacksquare @@ gap-closes (15c); the integral lies between, for every ε
+  </pre>
+  <p data-pid="cc6305">Stretch the jump to height w and the total is w · f(c). Add several such steps, with jumps w₁, …, wₙ at c₁, …, cₙ, and totals add as the weights do: ∫ f dα = w₁f(c₁) + ⋯ + wₙf(cₙ). So a finite sum is a total against a staircase. The mean of a list, each value times its share (9·stat), and the area under a curve are one kind of thing, told apart only by α.</p>
+  <p data-pid="71dc22">Continuity at c matters. If f also jumps at c, from the left, the piece [c − δ, c] keeps a gap between inf and sup however small δ is, and f is not integrable against α.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16e6.1</span><span class="ph understand">understand</span>What is ∫ f dα when α is a single step at c? <br>Why does only one piece of the partition count?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16e7">
+  <h2 class="sthead"><span class="stno">16e7</span>Parts, With Two Increasing Functions</h2>
+  <p data-pid="07e02e">The parts technique (16e1) needed slopes. Against an increasing function it needs none.</p>
+  <p data-pid="565184">Parts-without-slopes technique: <b>if f and α are increasing on [u, v], and f is integrable against α, then α is integrable against f, and ∫ᵤᵛ f dα + ∫ᵤᵛ α df = f(v)α(v) − f(u)α(u).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the parts-without-slopes technique">
+U(f, P, \alpha) = \textstyle\sum f(x_i)\,\Delta\alpha_i @@ f is increasing: its sup on a piece is at the right end
+L(\alpha, P, f) = \textstyle\sum \alpha(x_{i-1})\,\Delta f_i @@ α is increasing: its inf on a piece is at the left end
+U + L = \textstyle\sum \big(f(x_i)\alpha(x_i) - f(x_{i-1})\alpha(x_{i-1})\big) @@ multiply out: the two middle products cancel
+U(f, P, \alpha) + L(\alpha, P, f) = f\alpha\,\Big|_u^v @@ collapsing-sum (15g), for every partition P
+L(f, P, \alpha) + U(\alpha, P, f) = f\alpha\,\Big|_u^v @@ the same, with the ends exchanged
+\htmlClass{new}{\textstyle\int_u^v \alpha\,df = f\alpha\,\Big|_u^v - \int_u^v f\,d\alpha} \quad \blacksquare @@ the sup of the L(α, P, f) and the inf of the U(α, P, f) are both the right side
+  </pre>
+  <p data-pid="5fa556">Each upper sum of one total is the same number less a lower sum of the other. So one pair of lower and upper integrals agrees exactly when the other does. With slopes on hand, the weighted-total technique turns this back into 16e1.</p>
+  <p data-pid="be8b41">Take f(x) = x and α the step at c of the last footing, on [0, 1] with 0 < c < 1. Then ∫ x dα = c, and fα at the ends gives 1 · 1 − 0 · 0 = 1. So ∫ α dx = 1 − c: the area under the step, a box of width 1 − c and height 1.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16e7.1</span><span class="ph understand">understand</span>What does the parts-without-slopes technique say? <br>Why does every partition give the same number for an upper sum of one total plus a lower sum of the other?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16e8">
+  <h2 class="sthead"><span class="stno">16e8</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 \textstyle\int fg' = fg - \int f'g'\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the leftover is f′g: the product technique's other term
 \textstyle\int_p^q fg' = fg - \int_p^q f'g\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; on a definite integral, fg must be taken between the ends: fg|ₚ^q
 \textstyle\int f(x)g(x)\,dx = \int f \cdot \int g\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; no product technique for areas says that: ∫₀¹ x · x dx = ⅓, but (∫₀¹ x)² = ¼
 \textstyle\int_0^1 x(1 - x)^4 = 0 \text{ since the bar is } 0\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the bar is one of two terms; the leftover integral remains
+\textstyle\int_u^v f\,d\alpha = \int_u^v f(x)\,dx\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; only when α(x) = x: with α(x) = x² on [0, 1], ∫ x dα = 2/3, and ∫ x dx = 1/2
+\text{a point has no width, so it adds } 0\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; against a step at c the point carries the whole weight: the total is f(c)
+\textstyle\int_u^v f\,d\alpha = \int_u^v \alpha\,df\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; they add to f(v)α(v) − f(u)α(u); they are not the same
   </pre>
   <section class="slides" id="sl5"><div class="eyebrow">The slides · a move to watch out for · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">16e5.1</span><span class="ph understand">understand</span>Why is “∫ f(x)g(x) dx = ∫ f · ∫ g” a move to watch out for?</li>
+      <li><span class="qid">16e8.1</span><span class="ph understand">understand</span>Why is “∫ f(x)g(x) dx = ∫ f · ∫ g” a move to watch out for?</li>
     </ol>
   </section>
 </section>
@@ -186,7 +254,7 @@ I(m, n) = \tfrac{(1 - x)^n x^{m+1}}{m+1}\Big|_0^1 + \tfrac{n}{m+1}\textstyle\int
   <aside class="voice para"><p>Euler, looking for a meaning for the factorial of a number that is not whole, found that the integral of xᵉ(1 − x)ⁿ from 0 to 1 gives, for whole e and n, a ratio of factorials, and that the integral still has a value when e is a fraction, where the factorials so far had none.</p><cite>Euler, De progressionibus transcendentibus (written 1729–30, printed 1738); paraphrase</cite></aside>
   <p>In 16e.4.4, the two who asked were Christian Goldbach and Daniel Bernoulli, and the one who answered with an area was Leonhard Euler.</p>
   <h3>Accepted names</h3>
-  <p>The areas ∫₀¹ xᵐ(1 − x)ⁿ dx are values of the beta function; the area that carries the factorials between the whole numbers is the gamma function.</p>
+  <p>The areas ∫₀¹ xᵐ(1 − x)ⁿ dx are values of the beta function; the area that carries the factorials between the whole numbers is the gamma function. A total against an increasing function is a Riemann–Stieltjes integral, and α is its integrator. The step α is the unit step, or Heaviside function; a weight at a point is a point mass.</p>
 </section>
 </div>
 <script src="rung.js"></script>

@@ -113,17 +113,86 @@ n \le k @@ the same, the other way round
 </section>
 
 <section class="class step" data-step="27b4">
-  <h2 class="sthead"><span class="stno">27b4</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">27b4</span>Two Spaces Inside a Space</h2>
+  <p data-pid="113db7">Let U and W be spaces inside a space V. What they <i>share</i> is the set of vectors in both, U ∩ W. What they <i>build together</i> is the set of all sums u + w with u in U and w in W, written U + W. Each holds 0 and is kept by adding and stretching, so each is a space inside V by the inside-space technique (27a2). The union of U and W is usually not: in the plane the two axes hold (1, 0) and (0, 1), and their sum (1, 1) is on neither.</p>
+  <p data-pid="82d442">Two-spaces count technique: <b>if U and W have finite bases, then dim(U + W) + dim(U ∩ W) = dim U + dim W.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-spaces count technique">
+z_1..z_k \text{ a basis of } U \cap W @@ a space inside U, so its dimension is at most dim U (27b2)
+z_1..z_k, u_1..u_p \text{ a basis of } U @@ the grow-to-basis technique (27b3)
+z_1..z_k, w_1..w_q \text{ a basis of } W @@ the same, for W
+\text{the } z\text{’s, } u\text{’s and } w\text{’s build } U + W @@ every u + w is a mix of them
+\textstyle\sum a_iz_i + \sum b_iu_i + \sum c_iw_i = 0 \Rightarrow \sum c_iw_i \in U \cap W @@ it is in W, and it is minus the rest, which is in U
+\Rightarrow \textstyle\sum c_iw_i = \sum d_iz_i \Rightarrow \text{all } c_i = 0 @@ the z’s build U ∩ W; the z’s and w’s are free
+\Rightarrow \text{all } a_i = 0,\ \text{all } b_i = 0 @@ the z’s and u’s are free
+\htmlClass{new}{\dim(U + W) = k + p + q} \quad \blacksquare @@ the three lists together are a basis of U + W; and k + p + q = (k + p) + (k + q) − k
+  </pre>
+  <p data-pid="1a77b1">One-way split technique: <b>every vector of U + W is a sum u + w in exactly one way exactly when U and W share only 0.</b> If u + w = u′ + w′, then u − u′ = w′ − w is in U and in W. When they share only 0 it is 0, so u = u′ and w = w′. When they share some z other than 0, the vector z is z + 0 and also 0 + z, two ways.</p>
+  <p data-pid="bca167">In space, two planes through 0 that are not the same plane build all of space together, so the count reads 3 + dim(shared) = 2 + 2, and they share a line. A plane through 0 and a line through 0 that is not in it share only 0, and every vector of space is a vector of the plane plus a vector of the line in one way.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27b4.1</span><span class="ph understand">understand</span>What do two spaces inside a space build together, and what does the two-spaces count technique say? <br>When is every vector of U + W a sum u + w in exactly one way?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27b5">
+  <h2 class="sthead"><span class="stno">27b5</span>The Numbers of a Vector in a Basis</h2>
+  <p data-pid="b0e07f">A basis lets every vector be written down as a list of numbers.</p>
+  <p data-pid="bce8a6">One-list technique: <b>if v₁, …, vₙ is a basis of V, every vector of V is x₁v₁ + ⋯ + xₙvₙ for exactly one list (x₁, …, xₙ); and the list of a sum is the sum of the lists, and the list of t·v is t times the list of v.</b> The xᵢ are the <i>numbers of v in the basis</i>.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-list technique">
+v = x_1v_1 + \cdots + x_nv_n @@ the vᵢ build V
+v = y_1v_1 + \cdots + y_nv_n \Rightarrow (x_1 - y_1)v_1 + \cdots + (x_n - y_n)v_n = 0 @@ take one line from the other
+\Rightarrow x_i = y_i \text{ for every } i @@ the vᵢ are free
+u + v = \textstyle\sum (x_i + y_i)v_i,\ \ t\cdot v = \sum (t\,x_i)v_i @@ regroup the sums; stretching spreads (27a1)
+\htmlClass{new}{v \mapsto (x_1, \ldots, x_n) \text{ is a matching}} \quad \blacksquare @@ of V with the lists of n numbers: one list for each vector, one vector for each list
+  </pre>
+  <p data-pid="b55b51">Another basis gives the same vector another list. Let w₁, …, wₙ be a second basis, and write each old basis vector in it: vⱼ = p₁ⱼw₁ + ⋯ + pₙⱼwₙ. Then v = x₁v₁ + ⋯ + xₙvₙ is a mix of the w’s, and gathering what stands on each wᵢ gives the new numbers: yᵢ = pᵢ₁x₁ + ⋯ + pᵢₙxₙ. The n·n numbers pᵢⱼ, set out with pᵢⱼ in row i and column j, are the <i>change table</i> from the first basis to the second. Its column j is the list of vⱼ in the new basis.</p>
+  <p data-pid="651d22">In the plane take the basis (1, 0), (0, 1) and the basis (1, 1), (1, −1). Since (1, 0) = ½(1, 1) + ½(1, −1) and (0, 1) = ½(1, 1) − ½(1, −1), the change table has rows (½, ½) and (½, −½). The vector (3, 1) has numbers 3 and 1 in the first basis, and ½·3 + ½·1 = 2 and ½·3 − ½·1 = 1 in the second: (3, 1) = 2(1, 1) + 1(1, −1).</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27b5.1</span><span class="ph understand">understand</span>What does the one-list technique say, and which condition on a basis gives “exactly one list”? <br>How do the numbers of a vector in a second basis come from its numbers in the first?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27b6">
+  <h2 class="sthead"><span class="stno">27b6</span>A Space With No Finite Basis</h2>
+  <p data-pid="7054cd">Every technique of this step so far began from a finite list that builds the space. Some spaces have none. Take all the polynomials together, of every degree. They add and stretch, and they are a space of vectors by 27a2’s reasons.</p>
+  <p data-pid="f063d9">No-finite-list technique: <b>no finite list of polynomials builds all the polynomials.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the no-finite-list technique">
+p_1, \ldots, p_k \text{ any finite list of polynomials} @@ suppose it builds them all
+d = \text{the greatest of their degrees} @@ a finite set of numbers with a member has a greatest member (4k)
+\text{every mix of the list has degree at most } d @@ adding and stretching polynomials never raise the degree
+x^{d+1} \text{ is not a mix of the list} @@ its degree is d + 1
+\htmlClass{new}{\text{the list does not build the polynomials}} \quad \blacksquare @@ the line above breaks the supposition
+  </pre>
+  <p data-pid="da6220">The other half of a basis is still there. The powers 1, x, x², …, xᵐ are free for every m, because a polynomial that is 0 everywhere has every coefficient 0 (9g). So this space holds free lists of every length. By the exchange technique (27b2) a space built by m vectors holds no free list longer than m, which is a second proof that no finite list builds it.</p>
+  <p data-pid="2c8f4d">So the same-size technique and the grow-to-basis technique speak only of spaces that some finite list builds. From here on, “a space of dimension n” means there is such a list. The reals as a space over ℚ (27a3) are another space with no finite basis, but that takes the counting of rung 35 to prove.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27b6.1</span><span class="ph understand">understand</span>Why does no finite list of polynomials build all the polynomials? <br>Which techniques of 27b need a finite list that builds the space?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27b7">
+  <h2 class="sthead"><span class="stno">27b7</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 \text{three vectors in the plane are free}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the plane has dimension 2: at most two free vectors
 v_1, v_2 \text{ not parallel in space} \Rightarrow \text{they build space}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; two vectors build at most a plane through 0; space has dimension 3
 \text{each pair free} \Rightarrow \text{the list is free}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; (1, 0), (0, 1), (1, 1): every pair is free, the three are not
 \text{every space of vectors has a dimension}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only those with a finite list that builds them; all polynomials together have none
+U \cup W \text{ is a space inside } V\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; only when one holds the other: (1, 0) + (0, 1) lies on neither axis. What the two build together is U + W
+\text{the list of } v \text{, with no basis named}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; a list belongs to a vector and a basis: (1, 1) has the list (1, 1) in e₁, e₂ and the list (1, 0) in the basis (1, 1), (0, 1)
+\text{every space has a dimension } n\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; the polynomials hold the free list 1, x, …, xᵐ for every m
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">27b4.1</span><span class="ph understand">understand</span>Why is “each pair of the list is free, so the list is free” a move to watch out for?</li>
+      <li><span class="qid">27b7.1</span><span class="ph understand">understand</span>Why is “each pair of the list is free, so the list is free” a move to watch out for?</li>
     </ol>
   </section>
 </section>
@@ -143,7 +212,7 @@ v_1, v_2 \text{ not parallel in space} \Rightarrow \text{they build space}\,? @@
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A mix is a linear combination; vectors that build V span it, and the vectors a list can make are its span. Free vectors are linearly independent; vectors that are not free are linearly dependent. Measuring directions are a basis, and the size of a basis is the dimension. The exchange technique is the Steinitz exchange lemma. A space with no finite basis is infinite-dimensional.</p>
+  <p>A mix is a linear combination; vectors that build V span it, and the vectors a list can make are its span. Free vectors are linearly independent; vectors that are not free are linearly dependent. Measuring directions are a basis, and the size of a basis is the dimension. The exchange technique is the Steinitz exchange lemma. A space with no finite basis is infinite-dimensional. The numbers of a vector in a basis are its coordinates, and the change table is the change-of-basis matrix. What two spaces build together is their sum, and when they share only 0 it is a direct sum.</p>
   <h3>Who said it first</h3>
   <p>Grassmann used the idea of dimension in 1844. Ernst Steinitz proved the exchange lemma in 1913, in a paper on fields.</p>
 </section>

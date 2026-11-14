@@ -97,17 +97,131 @@ B(x,y) = B(y,x)\ \forall x,y \iff G_{ij} = G_{ji} @@ take x = eᵢ, y = eⱼ; an
 </section>
 
 <section class="class step" data-step="27h3">
-  <h2 class="sthead"><span class="stno">27h3</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">27h3</span>The Readings That Are 0 on a Space</h2>
+  <p data-pid="1b454c">Let W be a space inside V, with dim V = n and dim W = k. Some readings of V are 0 at every vector of W.</p>
+  <p data-pid="396bac">Zero-readings technique: <b>the readings of V that are 0 on W form a space of dimension n − k. And for a straight map f from V to U, f* loses exactly the readings of U that are 0 on what f reaches.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the zero-readings technique">
+w_1..w_k,\ v_{k+1}..v_n \text{ a basis of } V @@ grow a basis of W (27b3)
+f_1, \ldots, f_n \text{ its reading basis} @@ the reading-basis technique (27h1)
+r = r(w_1)f_1 + \cdots + r(v_n)f_n @@ both sides agree at each basis vector
+r = 0 \text{ on } W \iff r(w_1) = \cdots = r(w_k) = 0 @@ a reading keeps mixes
+\iff r \text{ is a mix of } f_{k+1}, \ldots, f_n @@ read the second line
+f^*(r) = r \circ f = 0 \iff r(f(v)) = 0 \text{ for every } v @@ the meaning of f* (27h1)
+\htmlClass{new}{\dim\{r : r = 0 \text{ on } W\} = n - k} \quad \blacksquare @@ lines 4 and 5: the last n − k of the fᵢ are a basis of it; and line 6 says f* loses the readings that are 0 on what f reaches
+  </pre>
+  <p data-pid="5450d9">Put the two halves together. If f reaches a space of dimension r inside U, and dim U = m, then f* loses a space of dimension m − r. By lost-plus-reached (27c2), f* reaches a space of dimension m − (m − r) = r. So a map and its turned-round map reach the same number of directions. For grids, f is A and f* is Aᵀ acting on rows: the columns of a grid and its rows build spaces of the same dimension.</p>
+  <p data-pid="17c241">In space, the readings that are 0 on a plane through 0 form a line of readings: all the stretches of one reading a₁x₁ + a₂x₂ + a₃x₃, whose row (a₁, a₂, a₃) stands at right angles to the plane.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27h3.1</span><span class="ph understand">understand</span>What is the dimension of the space of readings that are 0 on W, and how is a basis of it found? <br>Which readings does f* lose, and what follows for the rows and columns of a grid?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27h4">
+  <h2 class="sthead"><span class="stno">27h4</span>A Reading That Misses None of a Few Vectors</h2>
+  <p data-pid="8ed954">For one vector v ≠ 0 there is a reading that is not 0 at v: grow v to a basis and take the reading that is 1 at v (27h1). For several vectors at once one reading still serves.</p>
+  <p data-pid="a07c15">Misses-none technique: <b>if v₁, …, vₖ are vectors other than 0 in a real space V, some reading r of V has r(vᵢ) ≠ 0 for every i.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the misses-none technique">
+r(v_i) \neq 0 \text{ for } i \lt k @@ suppose a reading serves the first k − 1 vectors: induction on k
+s(v_k) \neq 0 @@ a reading that is not 0 at vₖ (27h1)
+(r + t\cdot s)(v_k) = r(v_k) + t\,s(v_k) @@ this is 0 for at most one t
+(r + t\cdot s)(v_i) = r(v_i) + t\,s(v_i),\ i \lt k @@ 0 for at most one t each: none if s(vᵢ) = 0, since r(vᵢ) ≠ 0
+\htmlClass{new}{r + t\cdot s \text{ serves all } k \text{, for some } t} \quad \blacksquare @@ at most k real numbers t fail, and there are more reals than k
+  </pre>
+  <p data-pid="2361a0">Read the other way round: the readings that are 0 at vᵢ form a space of dimension n − 1 (27h3), and the technique says that finitely many such spaces never fill the whole space of readings. The same proof shows that a real space is never the union of finitely many smaller spaces inside it. The last line counted numbers, so it needs a field with more than k members. Over a field with few members it can fail.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27h4.1</span><span class="ph understand">understand</span>How is a reading that serves k − 1 vectors turned into one that serves k? <br>Where does the proof use that there are more than k numbers?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27h5">
+  <h2 class="sthead"><span class="stno">27h5</span>The Grid of a Two-Slot Reading in a Basis</h2>
+  <p data-pid="4d2b8f">27h2 gave a two-slot reading of lists the grid G with Gᵢⱼ = B(eᵢ, eⱼ). In any space with a basis v₁, …, vₙ, a two-slot reading B has the grid Gᵢⱼ = B(vᵢ, vⱼ), and B(u, v) = xᵀGy for the lists x of u and y of v, by the same proof.</p>
+  <p data-pid="595642">Two-slot grid technique: <b>if Q is the grid whose columns are the lists of a second basis in the first, the grid of B in the second basis is QᵀGQ. The dimension of what G reaches is the same in every basis, and it is n exactly when the only u with B(u, v) = 0 for every v is u = 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-slot grid technique">
+x = Qx',\ \ y = Qy' @@ old lists from new ones: Q undoes the change table (27b5)
+B(u, v) = (Qx')^TG\,(Qy') = x'^T(Q^TGQ)\,y' @@ (AB)ᵀ = BᵀAᵀ, entry by entry
+G' = Q^TGQ @@ the grid of B in a basis is the only one that does this (27h2)
+\dim(G \text{ reaches}) = \dim(Q^TGQ \text{ reaches}) @@ Q and Qᵀ are undoable: they match what is reached (27d5)
+x^TGy = 0 \text{ for all } y \iff x^TG = 0 \iff G^Tx = 0 @@ put y = e₁, …, eₙ
+\htmlClass{new}{\text{only } u = 0 \iff G \text{ undoable}} \quad \blacksquare @@ Gᵀ loses only 0 exactly when it is undoable (27d3), and det Gᵀ = det G (27g1)
+  </pre>
+  <p data-pid="8544da">The dimension of what G reaches is the <i>size</i> of the two-slot reading B. When the size is n, B <i>loses nothing</i>: no vector other than 0 reads 0 against every vector. The dot, with G = I, loses nothing. The reading B(x, y) = x₁y₁ on the plane has size 1, and it reads 0 whenever x = (0, 1).</p>
+  <p data-pid="6b8d9c">A grid changes by PAP⁻¹ when it stands for a map (27d4), and by QᵀGQ when it stands for a two-slot reading. The two agree only when Qᵀ = Q⁻¹. So the determinant of G is not a property of B: det(QᵀGQ) = (det Q)² det G. Whether it is 0 is.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27h5.1</span><span class="ph understand">understand</span>How does the grid of a two-slot reading change with the basis, and how does that differ from the grid of a map? <br>What is the size of a two-slot reading, and when does it lose nothing?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27h6">
+  <h2 class="sthead"><span class="stno">27h6</span>Two-Slot Readings That Change Sign</h2>
+  <p data-pid="cafd1f">A two-slot reading B <i>changes sign</i> when B(u, v) = −B(v, u) for all u and v. Then B(v, v) = 0 for every v, and its grid has G = −Gᵀ: 0 down the middle, and each entry below the middle the negative of the one across from it.</p>
+  <p data-pid="301dd3">Sign-change technique: <b>the two-slot readings of a real space of dimension n that change sign form a space of dimension n(n − 1)/2, and the size of each is even.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the sign-change technique">
+G = -G^T \iff g_{ii} = 0,\ g_{ji} = -g_{ij} @@ read B(vᵢ, vⱼ) = −B(vⱼ, vᵢ)
+\text{free choice of } g_{ij},\ i \lt j:\ n(n-1)/2 \text{ numbers} @@ the places above the middle; the space of such grids (27d6)
+\det G = \det(-G^T) = (-1)^n\det G @@ n columns each change sign (27e1); det Gᵀ = det G (27g1)
+n \text{ odd} \Rightarrow \det G = 0 @@ so B loses nothing only when n is even
+N = \{u : B(u, v) = 0 \text{ for all } v\},\ \ V = N + W \text{ in one way} @@ grow a basis of N; W is built by the added vectors (27b4)
+\htmlClass{new}{\dim W \text{ is even}} \quad \blacksquare @@ B on W loses nothing, so line 4 applies to it; and dim W is the size of B
+  </pre>
+  <p data-pid="d888fb">Why does B on W lose nothing? If w in W reads 0 against all of W, then against any v = u + w′, with u in N, it reads B(w, u) + B(w, w′) = −B(u, w) + 0 = 0. So w is in N as well as W, and w = 0. And in a basis of N followed by a basis of W, the grid of B is 0 outside the corner for W, so its size is that of the corner, dim W.</p>
+  <p data-pid="0957fe">On the plane the readings that change sign are the stretches of one: B(x, y) = x₁y₂ − x₂y₁, the signed area of 15e and the 2 × 2 determinant. In space they form a space of dimension 3, the dimension of space itself, and in no other dimension do the two numbers agree: n(n − 1)/2 = n only for n = 3, apart from 0.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27h6.1</span><span class="ph understand">understand</span>What do the grids of the two-slot readings that change sign look like, and what is the dimension of their space? <br>Why is the size of such a reading even?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27h7">
+  <h2 class="sthead"><span class="stno">27h7</span>Maps That Keep a Reading</h2>
+  <p data-pid="81660c">A straight map T from V to itself <i>carries</i> a two-slot reading B to the reading B′(u, v) = B(Tu, Tv), whose grid is TᵀGT by the proof of 27h5. T <i>keeps</i> B when B′ = B, that is, when B(Tu, Tv) = B(u, v) for all u and v.</p>
+  <p data-pid="14ac01">Keepers technique: <b>T keeps B exactly when TᵀGT = G. If B loses nothing, every map that keeps B is undoable with determinant 1 or −1, and the maps that keep B form a group.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the keepers technique">
+B(Tu, Tv) = (Tx)^TG\,(Ty) = x^T(T^TGT)\,y @@ lists x of u and y of v (27h5)
+T \text{ keeps } B \iff T^TGT = G @@ a two-slot reading has one grid (27h2)
+(\det T)^2\det G = \det G,\ \ \det G \neq 0 @@ det-product (27e3), det Tᵀ = det T (27g1); B loses nothing (27h5)
+\det T = 1 \text{ or } -1 \Rightarrow T \text{ undoable} @@ the nonzero-det technique (27e4)
+B(STu, STv) = B(Tu, Tv) = B(u, v) @@ S and T keep B: so does ST
+\htmlClass{new}{B(T^{-1}u, T^{-1}v) = B(u, v):\ \text{a group}} \quad \blacksquare @@ put T⁻¹u and T⁻¹v into the second line; I keeps B (19a)
+  </pre>
+  <p data-pid="ba9dea">For the dot, G = I, and the condition reads TᵀT = I: the maps that keep lengths and angles, which 27m takes up. For the signed area of the plane, G has rows (0, 1), (−1, 0), and TᵀGT = (det T)·G, so the keepers are exactly the grids of determinant 1. For the reading x₁y₁ − x₂y₂ the keepers include the grids with rows (c, s), (s, c) where c² − s² = 1.</p>
+  <p data-pid="e4cf9d">Two readings B and B′ are <i>carried into each other</i> when B′(u, v) = B(Pu, Pv) for some undoable P. They then have the same size (27h5), and their groups of keepers are matched by T ↦ P⁻¹TP.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27h7.1</span><span class="ph understand">understand</span>What does it mean for a map to keep a two-slot reading, and what is the test on grids? <br>Why is a map that keeps a reading that loses nothing undoable?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27h8">
+  <h2 class="sthead"><span class="stno">27h8</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 f(x) = x_1 + 1 \text{ is a reading}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it sends 0 to 1; a reading is straight
 B(x, y) = x_1y_1 \text{ is straight in the pair } (x, y)\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; doubling both x and y multiplies it by 4: it is straight in each slot, not in the pair
 f_1 \text{ depends only on } v_1\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; fᵢ(vⱼ) = 0 for every j ≠ i ties it to the whole basis; change v₂ and f₁ changes
 B(x, x) = 0 \Rightarrow x = 0 \text{ for every two-slot reading}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; with G having rows (1, 0), (0, −1), B((1, 1), (1, 1)) = 0
+\text{readings } 0 \text{ on } W:\ \dim = k\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; n − k: the larger W is, the fewer readings are 0 on all of it
+\text{one reading is } 0 \text{ only at } 0\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; in dimension 2 or more every reading loses a space of dimension n − 1; only a few vectors can be dodged at once
+\text{new basis: } G \to Q^{-1}GQ\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; that is how the grid of a map changes; the grid of a two-slot reading changes to QᵀGQ
+\text{sign-changing, size 3, loses nothing}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; in odd sizes its grid has determinant 0
+T^{\mathsf T}GT = G \Rightarrow \det T = 1\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; 1 or −1: a mirror keeps every length
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">27h3.1</span><span class="ph understand">understand</span>Why is f(x) = x₁ + 1 not a reading? <br>Why is B(x, y) = x₁y₁ not straight in the pair (x, y)?</li>
+      <li><span class="qid">27h8.1</span><span class="ph understand">understand</span>Why is f(x) = x₁ + 1 not a reading? <br>Why is B(x, y) = x₁y₁ not straight in the pair (x, y)?</li>
     </ol>
   </section>
 </section>
@@ -127,7 +241,7 @@ B(x, x) = 0 \Rightarrow x = 0 \text{ for every two-slot reading}\,? @@ &lt;span 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A reading is a linear functional (or covector), and the readings form the dual space V*; the fᵢ are the dual basis. A two-slot reading is a bilinear form; one with B(x, y) = B(y, x) is symmetric, and G is its Gram matrix. With G = I it is the dot product.</p>
+  <p>A reading is a linear functional (or covector), and the readings form the dual space V*; the fᵢ are the dual basis. A two-slot reading is a bilinear form; one with B(x, y) = B(y, x) is symmetric, and G is its Gram matrix. With G = I it is the dot product. The readings that are 0 on W are the annihilator of W. The dimension of what a grid reaches is its rank; that rows and columns agree is “row rank equals column rank”. A two-slot reading is a bilinear form; its size is its rank; one that loses nothing is non-degenerate; grids tied by G′ = QᵀGQ are congruent. A two-slot reading that changes sign is alternating, or skew-symmetric; its grid is a skew-symmetric matrix. The maps that keep a two-slot reading are its isometries; for the dot they form the orthogonal group, and for a reading that changes sign and loses nothing, the symplectic group.</p>
   <h3>Who said it first</h3>
   <p>Readings were used throughout the nineteenth century without a name for their space. Hermann Weyl and Stefan Banach made the dual space a standard tool in the 1920s.</p>
 </section>

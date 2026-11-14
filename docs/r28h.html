@@ -100,17 +100,62 @@ L(f,P) \le \textstyle\int_a^b F \le U(f,P) @@ 15e again, over the i’s
 </section>
 
 <section class="class step" data-step="28h3">
-  <h2 class="sthead"><span class="stno">28h3</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">28h3</span>The Swing of a Function at a Point</h2>
+  <p data-pid="a0b8f6">A break may be a jump, or endless, or neither (11f). One number measures them all. Let f be bounded near a, a point of the line or of the plane. For δ > 0, let s(δ) be the sup of f less the inf of f, over the points of the domain within δ of a. As δ shrinks, s(δ) cannot grow.</p>
+  <p data-pid="05bacd">From here on, the <b>swing</b> of f at a is the inf of all the s(δ). Zero-swing technique: <b>f is continuous at a exactly when its swing at a is 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the zero-swing technique">
+|f(x) - f(a)| \lt \varepsilon \text{ within } \delta \text{ of } a @@ suppose f is continuous at a
+s(\delta) \le 2\varepsilon @@ any two values within δ of a are within 2ε of each other
+\text{the swing is at most } 2\varepsilon \text{, for every } \varepsilon @@ so it is 0
+s(\delta) \lt \varepsilon \text{ for some } \delta @@ now suppose the swing is 0: an inf of 0 (8c)
+\htmlClass{new}{|f(x) - f(a)| \le s(\delta) \lt \varepsilon \text{ within } \delta} \quad \blacksquare @@ f(a) is one of the values within δ
+  </pre>
+  <p data-pid="b1415f">The step that is 0 below 0 and 1 from 0 on has swing 1 at 0: the size of its jump. Give sin(1/x) the value 0 at 0, and its swing at 0 is 2. It has no jump there, since neither one-sided limit exists, yet its break has a size. The function that is 1 on the fractions and 0 elsewhere has swing 1 at every point.</p>
+  <p data-pid="14916a">So "how badly does f break at a" has an answer in one number, and "f breaks by at least ε" picks out a set of points. Those are the points a total has to be kept away from.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28h3.1</span><span class="ph understand">understand</span>What is the swing of f at a? <br>What is the swing of sin(1/x) at 0, and why is that not a jump?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28h4">
+  <h2 class="sthead"><span class="stno">28h4</span>Breaks Too Thin to Matter</h2>
+  <p data-pid="92da70">The rectangle-total technique (28h1) asked f to be continuous on all of R. A wall of jumps along one curve does no harm. Say a set in the plane <b>has no area</b> when, for every ε > 0, finitely many rectangles cover it with areas that add to less than ε.</p>
+  <p data-pid="eadabf">The graph of a continuous function on [a, b] has no area. One width δ serves ε on the whole interval (15f). Cut [a, b] into pieces shorter than δ, and over each piece one rectangle of height 2ε holds the graph. The areas add to 2ε(b − a).</p>
+  <p data-pid="da8291">Thin-breaks technique: <b>if f is bounded on R, and continuous at every point of R outside a set with no area, then f is integrable on R.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the thin-breaks technique">
+|f| \le K;\ \ Q_1, \ldots, Q_m \text{ cover the breaks} @@ rectangles of total area below ε; widen each a little, so that the breaks are strictly inside them, and still below ε
+\text{cut } R \text{ along every side of every } Q_i @@ each box of the cut lies in some Qᵢ, or holds no break
+\text{boxes in the } Q_i:\ \ \textstyle\sum (M - m)\cdot\text{area} \le 2K\varepsilon @@ M − m ≤ 2K on any box
+\text{each other box: cut it until its } U - L \lt \varepsilon/N @@ f is continuous on it: rectangle-total (28h1); N is the number of such boxes
+\htmlClass{new}{U - L \lt 2K\varepsilon + \varepsilon \text{ for the whole cut}} \quad \blacksquare @@ so exactly one number lies between the lower and the upper sums (28h1)
+  </pre>
+  <p data-pid="3ffe61">Now a total over a disc makes sense. Put the disc in a square and let f be 0 outside the disc. The new breaks lie on the circle, which is two graphs of continuous functions, so it has no area. The same goes for any region fenced by finitely many such graphs.</p>
+  <p data-pid="f7a660">The word finitely is doing work. On the line, the fractions between 0 and 1 are not covered by finitely many intervals with lengths adding to less than 1: finitely many intervals that hold every fraction of [0, 1] leave no gap between them. And the function that is 1 on the fractions and 0 elsewhere has no total. Rung 30 lets the cover be endless, and asks what changes.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28h4.1</span><span class="ph understand">understand</span>When does a set in the plane have no area? <br>Why can a function be 0 outside a disc and still have a total over a square?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28h5">
+  <h2 class="sthead"><span class="stno">28h5</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 \textstyle\int_a^b\!\int_c^d f\,dy\,dx = \int_c^d\!\int_a^b f\,dy\,dx\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; when the order of the totals swaps, so must the order of the limits: the inner total is along y, from c to d
 \iint_R f g = (\iint_R f)(\iint_R g)\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; totals add, they do not multiply; only f(x)g(y) splits this way
 \text{either order, for every bounded } f\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the technique needs continuity; for wild f the two inner totals can fail to exist
 \iint_R 1 = b - a\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the total of 1 over R is its area, (b − a)(d − c)
+\text{the swing at } a \text{ is the size of the jump}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; only at a jump: sin(1/x) has swing 2 at 0 and no one-sided limits to compare
+f \text{ bounded on } R \Rightarrow f \text{ integrable on } R\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; the breaks must have no area: 1 where both places are fractions and 0 elsewhere breaks at every point
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">28h3.1</span><span class="ph understand">understand</span>Why is “∫_a^b ∫_c^d f dy dx = ∫_c^d ∫_a^b f dy dx” a move to watch out for? <br>Why is “∬_R fg = (∬_R f)(∬_R g)” one?</li>
+      <li><span class="qid">28h5.1</span><span class="ph understand">understand</span>Why is “∫_a^b ∫_c^d f dy dx = ∫_c^d ∫_a^b f dy dx” a move to watch out for? <br>Why is “∬_R fg = (∬_R f)(∬_R g)” one?</li>
     </ol>
   </section>
 </section>
@@ -130,7 +175,7 @@ L(f,P) \le \textstyle\int_a^b F \le U(f,P) @@ 15e again, over the i’s
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The total over a rectangle is the double integral, ∬<sub>R</sub> f dA, built here from Darboux sums. A total of totals is an iterated integral. The either-order technique is Fubini’s theorem, in the form for continuous functions.</p>
+  <p>The total over a rectangle is the double integral, ∬<sub>R</sub> f dA, built here from Darboux sums. A total of totals is an iterated integral. The either-order technique is Fubini’s theorem, in the form for continuous functions. The swing of f at a is the oscillation of f at a. A set with no area has content 0. Measure 0 allows a cover by countably many rectangles.</p>
   <h3>Who said it first</h3>
   <p>Euler computed double integrals as iterated integrals in 1769. Cauchy noticed in 1814 that the two orders can give different answers for badly behaved functions. Camille Jordan built the double integral on rectangles carefully in 1892. Guido Fubini proved the general theorem for Lebesgue integrals in 1907, and Leonida Tonelli the companion for positive functions in 1909.</p>
 </section>

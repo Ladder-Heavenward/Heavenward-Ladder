@@ -136,17 +136,129 @@ x = \tfrac{1}{5}\det\begin{pmatrix}5&1\\10&3\end{pmatrix} = \tfrac{15 - 10}{5} =
 </section>
 
 <section class="class step" data-step="27k4">
-  <h2 class="sthead"><span class="stno">27k4</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">27k4</span>Determinants of Blocks</h2>
+  <p data-pid="8fc3b5">Many grids come in blocks: a square grid A in the top left corner, a square grid D in the bottom right, a block B above D, and only zeros below A.</p>
+  <p data-pid="3ff50d">Block-det technique: <b>if M has the square blocks A and D down its middle and only zeros below A, then det M = det A · det D, whatever the block B above D holds.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the block-det technique">
+M = \begin{pmatrix}A & B\\ 0 & D\end{pmatrix} @@ A is r × r and D is s × s; the 0 block is s × r
+\text{rows } 1 \text{ to } r:\ A \to A_1 \text{, a staircase} @@ by p swaps and adding stretches of rows; B becomes some B₁
+\text{rows } r + 1 \text{ to } r + s:\ D \to D_1 @@ a staircase, by q swaps and adding stretches; the 0 block stays 0
+\begin{pmatrix}A_1 & B_1\\ 0 & D_1\end{pmatrix} \text{ is a staircase} @@ every entry below its middle is 0
+\det M = (-1)^{p+q}\,\Pi(A_1)\,\Pi(D_1) @@ the stair-det technique (27k1); Π is the product down the middle
+\htmlClass{new}{\det M = \det A \cdot \det D} \quad \blacksquare @@ the stair-det technique again, for A and for D
+  </pre>
+  <p data-pid="3d6c0d">The grid with rows (1, 2, 5, 6), (3, 4, 7, 8), (0, 0, 2, 1), (0, 0, 1, 1) has determinant (4 − 6)(2 − 1) = −2, and the 5, 6, 7, 8 never enter. By the side-turn technique the same holds with the zeros above D. And with more blocks down the middle, the determinant is the product of all their determinants.</p>
+  <p data-pid="5c3c48">When all four blocks are full, there is still a formula as long as A can be undone.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the four-blocks technique">
+L = \begin{pmatrix}I & 0\\ CA^{-1} & I\end{pmatrix},\ \ \det L = 1 @@ its side-turn is a staircase with 1 down its middle (27g1, 27k1)
+U = \begin{pmatrix}A & B\\ 0 & D - CA^{-1}B\end{pmatrix} @@ four r × r blocks
+LU = \begin{pmatrix}A & B\\ C & D\end{pmatrix} @@ blocks multiply as entries do (27d2): CA⁻¹A = C, and CA⁻¹B + D − CA⁻¹B = D
+\det(LU) = \det A \cdot \det(D - CA^{-1}B) @@ the det-product technique (27e3) and the block-det technique
+\htmlClass{new}{= \det(AD - CB) \text{ when } AC = CA} \quad \blacksquare @@ det-product: A(D − CA⁻¹B) = AD − ACA⁻¹B, and ACA⁻¹ = CAA⁻¹ = C
+  </pre>
+  <p data-pid="48aebb">Four-blocks technique: <b>if A, B, C, D are r × r and A is undoable, the grid with rows of blocks (A, B), (C, D) has determinant det A · det(D − CA⁻¹B); and that is det(AD − CB) when AC = CA.</b></p>
+  <p data-pid="58fd3f">The 2 × 2 formula ad − bc does not carry over to blocks as det A · det D − det B · det C. Put the 2 × 2 grids 0, I, I, 0 in the four places. The grid swaps e₁ with e₃ and e₂ with e₄: two swaps, so its determinant is 1. The copied formula gives 0 − 1 = −1.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27k4.1</span><span class="ph understand">understand</span>What is the determinant of a grid with square blocks A and D down its middle and zeros below A? <br>Why does the block above D not matter?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27k5">
+  <h2 class="sthead"><span class="stno">27k5</span>A Staircase in Some Basis</h2>
+  <p data-pid="ced8a3">Not every grid can be straightened out: the slide with rows (1, 1), (0, 1) cannot (27f3). But the slide is already a staircase. Over ℂ every grid can be brought that far.</p>
+  <p data-pid="906ce2">Staircase-basis technique: <b>for every n × n grid A with entries in ℂ there is an undoable P with P⁻¹AP a staircase. The stretches of A stand down its middle, each as often as its factor appears in det(A − λI).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the staircase-basis technique">
+Av_1 = \lambda_1v_1,\ v_1 \neq 0 @@ det(A − λI) has a root in ℂ (25d); the stretch-test technique (27f1)
+P_1 = (v_1\ v_2\ \cdots\ v_n) \text{, undoable} @@ grow v₁ to a basis (27b3) and write it down as columns
+P_1^{-1}AP_1e_1 = P_1^{-1}\lambda_1v_1 = \lambda_1e_1 @@ P₁e₁ = v₁
+P_1^{-1}AP_1 = \begin{pmatrix}\lambda_1 & *\\ 0 & A_1\end{pmatrix} @@ its first column is λ₁e₁; A₁ is (n − 1) × (n − 1)
+Q^{-1}A_1Q \text{ is a staircase} @@ the induction hypothesis, for size n − 1 (4f); size 1 is the base
+P = P_1\begin{pmatrix}1 & 0\\ 0 & Q\end{pmatrix}:\ P^{-1}AP = \begin{pmatrix}\lambda_1 & *\\ 0 & Q^{-1}A_1Q\end{pmatrix} @@ multiply the blocks (27d2)
+\htmlClass{new}{P^{-1}AP = S \text{, a staircase}} \quad \blacksquare @@ zeros below the middle
+  </pre>
+  <p data-pid="72f7f0">The middle of S holds the stretches. By the det-product technique det(P⁻¹(A − λI)P) = det(A − λI), and P⁻¹(A − λI)P = S − λI is a staircase, so det(A − λI) = (s₁₁ − λ)⋯(sₙₙ − λ) by the stair-det technique. A real grid may have no real staircase: the quarter turn has no real stretch at all.</p>
+  <p data-pid="9672cb">Stretches-of-f technique: <b>if f is a polynomial and the stretches of A are λ₁, …, λₙ, each as often as its factor appears, then the stretches of f(A) are f(λ₁), …, f(λₙ).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the stretches-of-f technique">
+(ST)_{ij} = \textstyle\sum_k s_{ik}t_{kj},\ \ s_{ik} = 0 \text{ for } k \lt i,\ t_{kj} = 0 \text{ for } k \gt j @@ S and T staircases
+i \gt j:\ (ST)_{ij} = 0;\ \ (ST)_{ii} = s_{ii}t_{ii} @@ a term that is not 0 needs i ≤ k ≤ j
+S^k \text{ has } \lambda_i^k \text{ down its middle} @@ induction on k (4f); sums of staircases add their middles
+f(S) \text{ is a staircase, } f(\lambda_i) \text{ down its middle} @@ a polynomial is a sum of stretched powers
+f(A) = Pf(S)P^{-1} @@ Aᵏ = PSᵏP⁻¹: the P⁻¹P in the middle cancel
+\htmlClass{new}{\det(f(A) - \lambda I) = \textstyle\prod_i\big(f(\lambda_i) - \lambda\big)} \quad \blacksquare @@ as for A and S above
+  </pre>
+  <p data-pid="f008f3">The grid with rows (4, 1), (2, 3) stretches (1, 1) by 5 and (1, −2) by 2. So its square has the stretches 25 and 4, with no squaring of the grid. And a grid whose stretches are all 0 has a staircase with zeros down the middle, which fades out (27g5).</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27k5.1</span><span class="ph understand">understand</span>What can be said of every grid over ℂ, even one that cannot be straightened out? <br>What are the stretches of f(A)?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27k6">
+  <h2 class="sthead"><span class="stno">27k6</span>The Size Reached, From Smaller Determinants</h2>
+  <p data-pid="638e37">A square grid reaches everything exactly when its determinant is not 0 (27e4). For a grid of any shape, strike out some rows and some columns until a square k × k grid is left, and take its determinant. Those smaller determinants tell more.</p>
+  <p data-pid="56b247">Small-dets technique: <b>the dimension of what a grid A reaches is the largest k for which some k × k grid left by striking rows and columns of A has a determinant that is not 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the small-dets technique">
+r \text{ columns of } A \text{ are free} @@ r is the dimension reached; drop spare columns (27b1). Call the grid of those columns B
+r \text{ rows of } B \text{ are free} @@ the rows of B build dimension r too (27j5); drop spare rows
+C = \text{those rows of } B:\ \det C \neq 0 @@ r × r with free rows: it reaches everything (27j5), so it is undoable (27c2, 27d3, 27e4)
+\det C' \neq 0,\ C' \text{ a } k \times k \text{ grid inside } A @@ now the other way
+\text{the } k \text{ columns of } C' \text{ are free} @@ the nonzero-det technique (27e4)
+\text{the } k \text{ columns of } A \text{ holding them are free} @@ a mix of the long columns that is 0 is 0 in the kept rows too
+\htmlClass{new}{k \le r \text{, and } k = r \text{ happens}} \quad \blacksquare @@ free vectors in a space of dimension r (27b2)
+  </pre>
+  <p data-pid="cb9f69">The grid with rows (1, 2, 3), (2, 4, 6), (1, 0, 1) has determinant 0, since row 2 is twice row 1. Strike row 2 and column 2: rows (1, 3), (1, 1) are left, with determinant −2. So the grid reaches a plane.</p>
+  <p data-pid="670bbe">For finding r, row moves are far quicker. The worth of the technique is that each small determinant is a polynomial in the entries. Nudge the entries a little and a determinant that was not 0 stays not 0. So a small nudge can raise what a grid reaches, and can never lower it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27k6.1</span><span class="ph understand">understand</span>How do the smaller determinants of a grid give the dimension of what it reaches? <br>Why can a k × k grid inside A with determinant not 0 never have k above that dimension?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27k7">
+  <h2 class="sthead"><span class="stno">27k7</span>Determinants With Letters Inside</h2>
+  <p data-pid="fa2b08">The own-polynomial technique (27g3) took the determinant and the stand-in grid of A − λI, a grid whose entries hold a letter. Every technique for determinants was proved for grids of numbers. Do they hold for such a grid?</p>
+  <p data-pid="5a657c">Letters-inside technique: <b>the shuffle formula, det(AB) = det A · det B, and SA = (det A) I hold for square grids whose entries are polynomials, and for entries of any kind that add and multiply by the nine techniques (5d) with products that swap. Such a grid has an undo of its own kind exactly when its determinant has a reciprocal of that kind.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the letters-inside technique">
+\det A = \textstyle\sum_\sigma \operatorname{sign}\sigma\ a_{\sigma(1)1}\cdots a_{\sigma(n)n} @@ only adding and multiplying: it has a meaning for entries of any such kind
+F = \det(AB) - \det A\cdot\det B @@ a polynomial in the 2n² entries, taken as unknowns, with whole numbers in front
+F = 0 \text{ whenever numbers are put in} @@ the det-product technique (27e3)
+\text{one unknown: } F \text{ is the zero polynomial} @@ a polynomial of degree d ≥ 1 has at most d roots (25d)
+\text{many unknowns: the same} @@ induction on the number of unknowns (4f): hold all but one, and each number in front is 0 at every choice of the rest
+\htmlClass{new}{F = 0 \text{ as a polynomial}} \quad \blacksquare @@ so det(AB) = det A · det B with the entries as unknowns; and the same proof for SA = (det A) I, entry by entry
+  </pre>
+  <p data-pid="1ca19e">A sameness between polynomials with whole numbers in front stays true whatever is put in for the unknowns, as long as what is put in adds and multiplies by the nine techniques and its products swap. Only those techniques are used in multiplying out. So the two formulas hold for entries that are polynomials in λ, which is what 27g3 took on trust.</p>
+  <p data-pid="a06968">For the undo: if AB = I, then det A · det B = 1, so det A has a reciprocal. And if det A has a reciprocal, S times that reciprocal is the undo. Among the whole numbers only 1 and −1 have reciprocals. So a grid of whole numbers has an undo of whole numbers exactly when its determinant is 1 or −1. Rows (2, 1), (5, 3) have determinant 1, and the undo has rows (3, −1), (−5, 2). Rows (2, 0), (0, 1) have determinant 2, and the undo needs ½.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27k7.1</span><span class="ph understand">understand</span>Why do the determinant techniques hold for grids whose entries are polynomials? <br>When does a grid of whole numbers have an undo of whole numbers?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27k8">
+  <h2 class="sthead"><span class="stno">27k8</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 \text{stretching a row by } c \text{ leaves det alone}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; det is straight in that row: it is multiplied by c
 \text{the six-term technique, copied to four rows}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; its diagonals find 8 terms; a grid of four rows has 4! = 24
 \det A = \textstyle\sum_j a_{1j}\det(\text{strike row } 1,\ \text{column } j)\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the stand-ins carry the signs (−1)^(1 + j)
 x_j = \det A_j/\det A \text{ when } \det A = 0\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; there is no ratio; the system has no answer or many (27e4, 27j2)
+\det = \det A\det D - \det B\det C\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; with the blocks 0, I, I, 0 that gives −1, and the determinant is 1
+\text{every real grid has a real staircase}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; the quarter turn has no real stretch: the staircase is over ℂ
+\det A = 0 \Rightarrow A \text{ reaches only } 0\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; it reaches less than everything; the smaller determinants say how much
+\det A \neq 0 \Rightarrow \text{a whole-number undo}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; rows (2, 0), (0, 1): the undo needs ½. The determinant must be 1 or −1
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">27k4.1</span><span class="ph understand">understand</span>Why is “stretching a row by c leaves det alone” a move to watch out for? <br>Why is xⱼ = det Aⱼ <br>det A one when det A = 0?</li>
+      <li><span class="qid">27k8.1</span><span class="ph understand">understand</span>Why is “stretching a row by c leaves det alone” a move to watch out for? <br>Why is xⱼ = det Aⱼ <br>det A one when det A = 0?</li>
     </ol>
   </section>
 </section>
@@ -166,7 +278,7 @@ x_j = \det A_j/\det A \text{ when } \det A = 0\,? @@ &lt;span class="vd vd-a"&gt
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>Finding a determinant down the stairs is computing it by Gaussian elimination, or by LU decomposition; a grid with zeros below its middle is upper triangular. Expanding along a row or column is cofactor expansion, or Laplace expansion, and the six-term rule for 3 × 3 grids is the rule of Sarrus. The det-ratio technique is Cramer’s rule. The determinant in 27k.4.4 is the Vandermonde determinant.</p>
+  <p>Finding a determinant down the stairs is computing it by Gaussian elimination, or by LU decomposition; a grid with zeros below its middle is upper triangular. Expanding along a row or column is cofactor expansion, or Laplace expansion, and the six-term rule for 3 × 3 grids is the rule of Sarrus. The det-ratio technique is Cramer’s rule. The determinant in 27k.4.4 is the Vandermonde determinant. A grid with a block of zeros below its middle blocks is block triangular, and D − CA⁻¹B is the Schur complement of A. Bringing a grid to a staircase in some basis is triangularisation; with a basis of unit vectors square to each other it is the Schur form. The stretches-of-f technique is the spectral mapping property for polynomials. A determinant of a k × k grid inside A is a minor of A, and this count is the determinantal rank. Entries that add and multiply by the nine techniques with products that swap form a commutative ring (rung 44); a member with a reciprocal is a unit, and a whole-number grid with determinant 1 or −1 is unimodular.</p>
   <h3>Who said it first</h3>
   <p>Gabriel Cramer published the ratio rule in 1750, in a book on curves through given points; Colin Maclaurin had used it for two and three unknowns in a treatise printed in 1748. Pierre-Simon Laplace gave the expansion by smaller determinants in 1772. Pierre Frédéric Sarrus taught the six-term rule in the 1830s. Alexandre-Théophile Vandermonde studied determinants as objects in their own right in 1772, though the determinant that bears his name does not appear in his papers.</p>
 </section>

@@ -162,30 +162,80 @@ f''(x) = \tfrac{2x(x^2 - 3)}{(1 + x^2)^3} @@ quotient for slopes and chain for s
 </section>
 
 <section class="class step" data-step="14g5">
-  <h2 class="sthead"><span class="stno">14g5</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">14g5</span>Three Slopes in Order</h2>
+  <p data-pid="718c8b">Bending up was said with a chord (14g1), and proved from a climbing slope. It can be said with chord slopes alone, for functions with no slope at all. Write m(a, b) for the slope of the chord of f through a and b.</p>
+  <p data-pid="a7cccb">Three-slopes technique: <b>f bends up on I exactly when all s < x < t in I have m(s, x) < m(s, t) < m(x, t). And a function that bends up on an open interval is continuous on it.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the three-slopes technique">
+f(x) \lt f(s) + m(s, t)(x - s) @@ f bends up (14g1): below the chord, read from s
+\iff m(s, x) \lt m(s, t) @@ take f(s) from both sides and divide by x − s > 0
+f(x) \lt f(t) - m(s, t)(t - x) @@ the same chord, read from t
+\iff m(s, t) \lt m(x, t) @@ move f(x) and the product across, and divide by t − x > 0
+\htmlClass{new}{m(s, x) \lt m(s, t) \lt m(x, t)} \quad \blacksquare @@ each half is the same statement as bending up
+  </pre>
+  <p data-pid="a1ae59">For continuity at x, take s < x < t in the open interval, and any y with x < y < t. The technique on x < y < t gives m(x, y) < m(x, t), and on s < x < y gives m(s, x) < m(x, y). The same two bounds hold for y on the left of x.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the three-slopes technique · continuity">
+m(s, x) \lt \tfrac{f(y) - f(x)}{y - x} \lt m(x, t) @@ three-slopes, twice; s and t are fixed
+|f(y) - f(x)| \le C\,|y - x| @@ C is the larger of |m(s, x)| and |m(x, t)|
+\htmlClass{new}{f \text{ is continuous at } x} \quad \blacksquare @@ squeezed-by-distance (10d)
+  </pre>
+  <p data-pid="e12179">At a closed end the technique gives nothing, and need not: x² on [0, 1), with the value 2 at 1, bends up on [0, 1] and jumps at 1. And bending up does not give a slope: x² + |x| bends up and has none at 0. What it does give is the order: the chord slopes from a fixed point climb as the other point moves right.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14g5.1</span><span class="ph understand">understand</span>How do three chord slopes say that f bends up? <br>Why is a function that bends up on an open interval continuous?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14g6">
+  <h2 class="sthead"><span class="stno">14g6</span>The Middle Is Enough</h2>
+  <p data-pid="7cbfa1">To check that f bends up, every point of every chord has to be tested. For a continuous function the middle of each chord is enough.</p>
+  <p data-pid="0b7bdf">Middle technique: <b>if f is continuous on an interval I, and f((a + b)/2) < (f(a) + f(b))/2 for all a ≠ b in I, then f bends up on I.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the middle technique">
+\text{suppose } f(x) \ge \text{the chord at } x,\ s \lt x \lt t @@ to refute (7b)
+g = f - \text{the chord from } s \text{ to } t @@ continuous on [s, t]; g(s) = g(t) = 0 and g(x) ≥ 0
+g\big(\tfrac{a + b}{2}\big) \lt \tfrac{g(a) + g(b)}{2} @@ a chord is linear: its middle value is the mean of its end values
+g \text{ reaches a greatest value } M \ge 0 @@ highest-and-lowest (12c); M ≥ g(x) ≥ 0
+g(c) = M \text{ for some } c \text{ with } s \lt c \lt t @@ if M > 0, not at an end, where g = 0; if M = 0, take c = x
+g(c) \lt \tfrac{g(c - h) + g(c + h)}{2} \le M @@ h > 0 so small that c ± h are in [s, t]
+\htmlClass{new}{M \lt M:\ \bot} \quad \blacksquare @@ so f(x) is below the chord, for all s < x < t
+  </pre>
+  <p data-pid="b1d678">For x² the middle test is one line: ((a + b)/2)² < (a² + b²)/2 exactly when 0 < (a − b)²/4. So x² bends up with no slope taken. The proof used continuity once, at highest-and-lowest, and it cannot be done without.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14g6.1</span><span class="ph understand">understand</span>What does the middle technique ask of f, and what does it give? <br>Where does its proof use continuity?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14g7">
+  <h2 class="sthead"><span class="stno">14g7</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 f''(c) = 0, \text{ so an inflection point}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; x⁴ at 0: bends up on both sides
 \text{bends up, so } f'' \gt 0 \text{ everywhere}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; x⁴ bends up on ℝ, and f″(0) = 0
 \text{bends up, so climbs}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; x² bends up and falls on (−∞, 0)
 \begin{aligned}&\text{the plot shows one bottom, so there is one}\,\\ &\quad ?\end{aligned} @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; x⁴ − 0.02x² looks like x⁴ on [−2, 2]; it has bottoms at ±0.1 and a top at 0
 \text{a top of } f' \text{ is a top of } f\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it is an inflection point of f
+f \text{ bends up} \Rightarrow f \text{ has a slope}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; x² + |x| bends up and has no slope at 0
+\text{the middle test, with no continuity}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; the proof reaches a greatest gap by highest-and-lowest, which needs a continuous function
   </pre>
   <section class="slides" id="sl5"><div class="eyebrow">The slides · a move to watch out for · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">14g5.1</span><span class="ph understand">understand</span>Why is “f″(c) = 0, so an inflection point” a move to watch out for?</li>
+      <li><span class="qid">14g7.1</span><span class="ph understand">understand</span>Why is “f″(c) = 0, so an inflection point” a move to watch out for?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="14g6">
-  <h2 class="sthead"><span class="stno">14g6</span>Running It Backwards</h2>
+<section class="class step" data-step="14g8">
+  <h2 class="sthead"><span class="stno">14g8</span>Running It Backwards</h2>
   <p data-pid="654692">Handed a graph and asked for f′, mark where f is level, climbing and falling, and where it bends each way, then draw f′ obeying those marks. Handed f′ and asked for f, do the reverse, and pick the lift from one known value (14e). Handed a claim that a function lies above or below a line, check whether the line is a tangent and read the sign of f″. Handed a plot as evidence, ask what the numbers say between the plotted points. Found upward; written downward.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">14g6.1</span><span class="ph understand">understand</span>Handed a graph of f and asked for f′, how does the work open, and how does it close?</li>
+      <li><span class="qid">14g8.1</span><span class="ph understand">understand</span>Handed a graph of f and asked for f′, how does the work open, and how does it close?</li>
     </ol>
   </section>
 </section>
@@ -208,7 +258,7 @@ f''(c) = 0, \text{ so an inflection point}\,? @@ &lt;span class="vd vd-p"&gt;out
   <h3>Who said it first</h3>
   <aside class="voice para"><p>L'Hôpital's book gave a whole section to the points where a curve changes its bending, and found them where the second difference of the ordinate vanishes or becomes infinite.</p><cite>L'Hôpital, Analyse des infiniment petits (1696), section 4; paraphrase</cite></aside>
   <p>The four colour proof of 1976 is Kenneth Appel’s and Wolfgang Haken’s; its accepted name is the four colour theorem.</p>
-  <p>Accepted names: bending up is concave up and bending down is concave down; which way a function bends is its concavity.</p>
+  <p>Accepted names: bending up is concave up and bending down is concave down; which way a function bends is its concavity. A function that bends up is strictly convex; the three-slopes technique is the three chord lemma. The middle test is midpoint convexity.</p>
 </section>
 </div>
 

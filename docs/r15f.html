@@ -177,19 +177,43 @@ m \le \tfrac{1}{v - u}\textstyle\int_u^v f \le M @@ order-and-arithmetic-agree, 
 </section>
 
 <section class="class step" data-step="15f5">
-  <h2 class="sthead"><span class="stno">15f5</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">15f5</span>From a Dense Part to the Whole Interval</h2>
+  <p data-pid="88af27">A part D of [u, v] is <b>dense</b> in it when every neighbourhood of every real of [u, v] holds a member of D. The fractions of [u, v] are dense in it (8e). Suppose f is given on D only.</p>
+  <p data-pid="655832">Grow-out technique: <b>if D is dense in [u, v] and f is uniformly continuous on D, then exactly one continuous F on [u, v] agrees with f on D; and F is uniformly continuous.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the grow-out technique">
+S_\delta(x) = \{f(q) : q \in D,\ |q - x| \lt \delta\} @@ not empty, for every x in [u, v] and δ > 0: D is dense
+\delta \le \tfrac12\delta_\varepsilon:\ \sup S_\delta(x) - \inf S_\delta(x) \le \varepsilon @@ two such q are within δ of each other, δ being the width uniform continuity gives for ε
+\text{smaller } \delta:\ \inf S_\delta(x) \text{ rises, } \sup S_\delta(x) \text{ falls} @@ smaller-set-tighter-bound (15b)
+F(x) = \sup_\delta \inf S_\delta(x) = \inf_\delta \sup S_\delta(x) @@ every inf is at most every sup, and the gaps pass below every ε
+x \in D \Rightarrow f(x) \in S_\delta(x) \text{ for every } \delta \Rightarrow F(x) = f(x) @@ F(x) is the only real between all the infs and sups
+|x - y| \lt \tfrac12\delta_\varepsilon \Rightarrow |F(x) - F(y)| \le 3\varepsilon @@ take q near x and q′ near y in D, within that width: F(x) is within ε of f(q), f(q) of f(q′), f(q′) of F(y)
+\htmlClass{new}{F \text{ is uniformly continuous on } [u, v]} \quad \blacksquare @@ ε was any number above 0
+  </pre>
+  <p data-pid="c973af">Only one: if G is continuous on [u, v] and agrees with f on D, then G(x) is within any ε of f(q) for the q of D near enough to x. So G(x) too lies between all the infs and sups, and G(x) = F(x).</p>
+  <p data-pid="7b151d">One width for all is what makes it work. 12d’s step is continuous over ℚ at every fraction, −1 below √2 and 1 above. Near √2 its values are 2 apart however small δ is, and no value at √2 can make it continuous. This technique is one way a function known only at the fractions can earn its values at every real.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15f5.1</span><span class="ph understand">understand</span>What does the grow-out technique say? <br>Why can 12d’s step not be grown to √2?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15f6">
+  <h2 class="sthead"><span class="stno">15f6</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 \text{continuous on } (0, 1] \Rightarrow \text{uniformly}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; 1/x: the pairs 1/n, 1/(n + 1)
 \text{continuous on } [0, \infty) \Rightarrow \text{uniformly}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; x²: (n + δ/2)² − n² &gt; nδ, as large as you like
 \text{integrable} \Rightarrow \text{continuous}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the step of 15c; any increasing f with jumps
 \text{walk the width from a to b}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; the widths can shrink and pile up; the proof jumps to σ
 \text{average-height for a step}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the step 1, 2 on [0, 2] has average 3/2, a value it never takes
+\text{continuous on the fractions is enough}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; 12d’s step is continuous over ℚ and no value fits at √2: one width for all is needed
   </pre>
   <section class="slides" id="sl5"><div class="eyebrow">The slides · a move to watch out for · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">15f5.1</span><span class="ph understand">understand</span>Why is “continuous on (0, 1], so uniformly” a move to watch out for? <br>Why is “integrable, so continuous” one?</li>
+      <li><span class="qid">15f6.1</span><span class="ph understand">understand</span>Why is “continuous on (0, 1], so uniformly” a move to watch out for? <br>Why is “integrable, so continuous” one?</li>
     </ol>
   </section>
 </section>
@@ -211,7 +235,7 @@ m \le \tfrac{1}{v - u}\textstyle\int_u^v f \le M @@ order-and-arithmetic-agree, 
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>Who said it first</h3>
   <aside class="voice para"><p>Cauchy argued that if a function stays continuous between two bounds, the sum of its values times the small differences of the input settles on a fixed number as the differences shrink, whatever the way of dividing; and he took that number as the definition of the integral.</p><cite>Cauchy, Résumé des leçons sur le calcul infinitésimal (1823), twenty-first lecture; paraphrase</cite></aside>
-  <p>Accepted names: the evenly-continuous technique is the Heine–Cantor theorem, after Eduard Heine and Georg Cantor. In the closer, the proof of 1823 is Augustin-Louis Cauchy’s, the lectures of 1854 are Peter Gustav Lejeune Dirichlet’s, and the proof of 1872 is Heine’s.</p>
+  <p>Accepted names: the evenly-continuous technique is the Heine–Cantor theorem, after Eduard Heine and Georg Cantor. In the closer, the proof of 1823 is Augustin-Louis Cauchy’s, the lectures of 1854 are Peter Gustav Lejeune Dirichlet’s, and the proof of 1872 is Heine’s. F is the continuous extension of f.</p>
 </section>
 </div>
 <script src="rung.js"></script>

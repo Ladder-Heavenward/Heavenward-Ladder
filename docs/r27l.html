@@ -136,17 +136,84 @@ F_{n+1} = F_n + F_{n-1},\ \ R = \begin{pmatrix}1&1\\1&0\end{pmatrix} @@ p = q = 
 </section>
 
 <section class="class step" data-step="27l4">
-  <h2 class="sthead"><span class="stno">27l4</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">27l4</span>AB and BA Have the Same Middle Sum</h2>
+  <p data-pid="729ab3">Write s(A) for the middle sum of a square grid A. AB and BA are mostly different grids (27d7). Their middle sums never differ.</p>
+  <p data-pid="f67876">Swap-sum technique: <b>s(AB) = s(BA) whenever A is m × n and B is n × m. So s(P⁻¹AP) = s(A) for every undoable P, and AB − BA is never I for n × n grids of numbers.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the swap-sum technique">
+s(AB) = \textstyle\sum_i (AB)_{ii} = \sum_i\sum_j a_{ij}b_{ji} @@ the product-is-doing technique (27d2)
+s(BA) = \textstyle\sum_j (BA)_{jj} = \sum_j\sum_i b_{ji}a_{ij} @@ the same, for BA
+s(AB) = s(BA) @@ the same products, added in another order (5d)
+s(P^{-1}AP) = s\big((AP)P^{-1}\big) = s(A) @@ swap the two factors P⁻¹ and AP
+s(X + Y) = s(X) + s(Y),\ \ s(cX) = c\,s(X) @@ s is a reading on the grids (27h1)
+\htmlClass{new}{s(AB - BA) = 0 \neq n = s(I)} \quad \blacksquare @@ so AB − BA = I cannot be
+  </pre>
+  <p data-pid="33508c">So the middle sum belongs to a map and not to the basis it is read in, as the determinant does (27e5): every grid of the map has the same one. With A = rows (0, 1), (0, 0) and B = rows (0, 0), (1, 0), AB − BA has rows (1, 0), (0, −1): not 0, but its middle sum is 0.</p>
+  <p data-pid="4c8445">On a space with no finite basis the story changes. On the polynomials (27b6), let D take the slope and X multiply by x. Then D(X(p)) − X(D(p)) = (xp)′ − xp′ = p for every p: DX − XD is doing nothing. No grids can copy that, by the technique, and none have to: those maps have no grids.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27l4.1</span><span class="ph understand">understand</span>Why do AB and BA have the same middle sum? <br>Why can AB − BA never be I?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27l5">
+  <h2 class="sthead"><span class="stno">27l5</span>The Only Reading That Lets Products Swap</h2>
+  <p data-pid="69ea4c">The middle sum is a reading on the n × n grids with s(AB) = s(BA) (27l4). Is there any other? Write Eᵢⱼ for the grid with 1 in place i, j and 0 everywhere else. Then EᵢⱼEₖₗ is Eᵢₗ when j = k, and the zero grid otherwise.</p>
+  <p data-pid="5ba768">Only-reading technique: <b>if f is a reading on the n × n grids with f(AB) = f(BA) for all A and B, then f = c · s for one number c.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the only-reading technique">
+i \neq j:\ E_{ij} = E_{ii}E_{ij},\ \ E_{ij}E_{ii} = 0 @@ the products of the Eᵢⱼ
+f(E_{ij}) = f(E_{ii}E_{ij}) = f(E_{ij}E_{ii}) = f(0) = 0 @@ f lets products swap; a reading is 0 at 0
+E_{ii} = E_{ij}E_{ji},\ \ E_{jj} = E_{ji}E_{ij} @@ the products again
+f(E_{ii}) = f(E_{jj}) = c @@ one number c for every place down the middle
+A = \textstyle\sum_{i,j} a_{ij}E_{ij} @@ the Eᵢⱼ are a basis of the grids (27d6)
+\htmlClass{new}{f(A) = \textstyle\sum_{i,j} a_{ij}f(E_{ij}) = c\,s(A)} \quad \blacksquare @@ f is straight; only the places i, i are left
+  </pre>
+  <p data-pid="cd1888">The same products show what the grids AB − BA build. Each Eᵢⱼ off the middle is EᵢᵢEᵢⱼ − EᵢⱼEᵢᵢ, and each Eᵢᵢ − Eⱼⱼ is EᵢⱼEⱼᵢ − EⱼᵢEᵢⱼ. Together those build every grid of middle sum 0, a space of dimension n² − 1 (27c2: s loses it and reaches the numbers).</p>
+  <p data-pid="15ec5a">Every reading on the grids comes from the middle sum too. Put bᵢⱼ = f(Eᵢⱼ). Then f(A) is the sum of all aᵢⱼbᵢⱼ, which is s(BᵀA). And s(AᵀA) is the sum of the squares of the entries of A, so for a real grid it is 0 only when A = 0.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27l5.1</span><span class="ph understand">understand</span>Which readings f on the square grids have f(AB) = f(BA) for all A and B? <br>Why must such an f be 0 at Eᵢⱼ off the middle?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27l6">
+  <h2 class="sthead"><span class="stno">27l6</span>A Small Push Away From I</h2>
+  <p data-pid="5b6168">I scales every volume by 1. Push it a little: I + tA, for a small number t. How fast does the volume scale leave 1?</p>
+  <p data-pid="4ee312">Push-from-I technique: <b>det(I + tA) = 1 + s(A) t + ⋯ + det A · tⁿ, a polynomial in t. It is (1 + tλ₁)⋯(1 + tλₙ), with λ₁, …, λₙ the stretches of A in ℂ.</b> Here s(A) is the middle sum (27l4).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the push-from-I technique">
+\det(A - \lambda I) = (-\lambda)^n + s(A)(-\lambda)^{n-1} + \cdots + \det A @@ the middle-sum technique (27l1)
+\det\big(A + \tfrac1tI\big) = \tfrac{1}{t^n} + \tfrac{s(A)}{t^{n-1}} + \cdots + \det A @@ put λ = −1/t, for t ≠ 0
+\det(I + tA) = t^n\det\big(A + \tfrac1tI\big) @@ det is straight in each of its n columns (27e1)
+\det(I + tA) = 1 + s(A)\,t + \cdots + \det A\ t^n @@ multiply by tⁿ; at t = 0 both sides are 1
+\htmlClass{new}{= (1 + t\lambda_1)\cdots(1 + t\lambda_n)} \quad \blacksquare @@ the same, from det(A − λI) = (λ₁ − λ)⋯(λₙ − λ) (27l1)
+  </pre>
+  <p data-pid="bca51a">For the grid with rows (4, 1), (2, 3): det(I + tA) = (1 + 4t)(1 + 3t) − 2t² = 1 + 7t + 10t², and that is (1 + 5t)(1 + 2t). The slope at t = 0 is s(A). So a small push tA changes volumes by about s(A) t, and the entries off the middle do not count at first. A push with middle sum 0 keeps volumes, as nearly as a first guess can tell.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27l6.1</span><span class="ph understand">understand</span>What is det(I + tA) as a polynomial in t? <br>What does its slope at t = 0 say about the middle sum?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27l7">
+  <h2 class="sthead"><span class="stno">27l7</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 \text{the stretches of } A + B \text{ are sums of stretches of } A \text{ and of } B\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; rows (0, 1), (0, 0) and rows (0, 0), (1, 0) each have only 0; their sum has 1 and −1
 A^k = P^kD^kP^{-k}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the P⁻¹P in the middle cancel: Aᵏ = PDᵏP⁻¹
 \text{a repeated stretch means it cannot be straightened}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; I has the stretch 1 twice, and is already straight; the slide fails for another reason: too few vectors
 \text{row moves keep the stretches}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; they keep the answers of Ax = b, not the stretches: rows (4, 1), (2, 3) have 5 and 2; after −½ row 1 to row 2, 4 and 5/2
+s(ABC) = s(BAC)\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; only turning the product round is safe: s(ABC) = s(BCA) = s(CAB)
+s(AB) = s(A)\,s(B)\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; s(I · I) = n, and s(I) · s(I) = n · n
+\det(I + A) = 1 + \det A\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; A = I in size 2: det(2I) = 4, not 2
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">27l4.1</span><span class="ph understand">understand</span>Why is “the stretches of A + B are sums of stretches of A and of B” a move to watch out for? <br>Why is “row moves keep the stretches” one?</li>
+      <li><span class="qid">27l7.1</span><span class="ph understand">understand</span>Why is “the stretches of A + B are sums of stretches of A and of B” a move to watch out for? <br>Why is “row moves keep the stretches” one?</li>
     </ol>
   </section>
 </section>
@@ -166,7 +233,7 @@ A^k = P^kD^kP^{-k}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&g
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The middle sum is the trace, tr A; the middle-sum technique says the eigenvalues add to the trace and multiply to the determinant. A grid P⁻¹AP is similar to A, and similar matrices share their characteristic polynomial. The leading-stretch technique is the idea behind the power method, and the largest stretch is the dominant eigenvalue. A rule uₙ₊₁ = puₙ + quₙ₋₁ is a linear recurrence, and M is its companion matrix. Fₙ₊₁Fₙ₋₁ − Fₙ² = (−1)ⁿ is Cassini’s identity. A grid of shares moving between places, like the two towns, is a stochastic (or Markov) matrix, and the vector it heads to is its steady state.</p>
+  <p>The middle sum is the trace, tr A; the middle-sum technique says the eigenvalues add to the trace and multiply to the determinant. A grid P⁻¹AP is similar to A, and similar matrices share their characteristic polynomial. The leading-stretch technique is the idea behind the power method, and the largest stretch is the dominant eigenvalue. A rule uₙ₊₁ = puₙ + quₙ₋₁ is a linear recurrence, and M is its companion matrix. Fₙ₊₁Fₙ₋₁ − Fₙ² = (−1)ⁿ is Cassini’s identity. A grid of shares moving between places, like the two towns, is a stochastic (or Markov) matrix, and the vector it heads to is its steady state. AB − BA is the commutator of A and B. The Eᵢⱼ are the matrix units.</p>
   <h3>Who said it first</h3>
   <p>Giovanni Domenico Cassini found his identity in 1680. Abraham de Moivre found the closed form of the rabbit counts in 1730, and Jacques Binet rediscovered it in 1843. Andrey Markov studied chains of shares that move step by step from 1906. Richard von Mises and Hilda Pollaczek-Geiringer described the power method in 1929.</p>
 </section>

@@ -129,17 +129,65 @@ u_n < r^n \text{ for } n \ge N @@ raise both sides to the n-th power: powers kee
 </section>
 
 <section class="class step" data-step="22e5">
-  <h2 class="sthead"><span class="stno">22e5</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">22e5</span>No Slowest Sum</h2>
+  <p data-pid="373b2d">Comparison (22e1) lays a sum beside a known one. Is there one best sum to lay things beside: a wandering sum so slow that every wandering sum is at least as large, or a settling sum so large that it covers every settling sum? There is not. Let every uₙ be above 0.</p>
+  <p data-pid="a3a0b2">No-slowest technique: <b>if Σ uₙ wanders, with running totals sₙ, then Σ uₙ/sₙ wanders too, though its pieces are smaller by the factor 1/sₙ, which heads to 0. If Σ uₙ settles, with tails rₙ = uₙ + uₙ₊₁ + ⋯, then Σ uₙ/√rₙ settles too, though its pieces are larger by the factor 1/√rₙ, which passes every ceiling.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the no-slowest technique · a slower wandering sum">
+\tfrac{u_{N+1}}{s_{N+1}} + \cdots + \tfrac{u_{N+k}}{s_{N+k}} \ge \tfrac{u_{N+1} + \cdots + u_{N+k}}{s_{N+k}} @@ the totals climb, so each bottom is at most the last
+= 1 - \tfrac{s_N}{s_{N+k}} \ge \tfrac12 \text{ for } k \text{ large} @@ the top is s_{N+k} − s_N; and sₙ passes every ceiling, N held
+\htmlClass{new}{\textstyle\sum \tfrac{u_n}{s_n} \text{ wanders}} \quad \blacksquare @@ blocks far out do not shrink: the crowd technique for sums (22d)
+  </pre>
+  <p data-pid="97eeb7">For the settling half, note that uₙ = rₙ − rₙ₊₁, and that (a − b)/√a ≤ 2(√a − √b) when a ≥ b > 0: divide both sides by √a − √b and it reads (√a + √b)/√a ≤ 2.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the no-slowest technique · a larger settling sum">
+\tfrac{u_n}{\sqrt{r_n}} = \tfrac{r_n - r_{n+1}}{\sqrt{r_n}} \le 2\big(\sqrt{r_n} - \sqrt{r_{n+1}}\big) @@ the inequality above, with a = rₙ and b = rₙ₊₁
+\textstyle\sum_{n \le m} \tfrac{u_n}{\sqrt{r_n}} \le 2\big(\sqrt{r_1} - \sqrt{r_{m+1}}\big) \le 2\sqrt{r_1} @@ collapsing-sum (15g)
+\htmlClass{new}{\textstyle\sum \tfrac{u_n}{\sqrt{r_n}} \text{ settles}} \quad \blacksquare @@ the climb technique (22a): positive pieces and a ceiling
+  </pre>
+  <p data-pid="cb647b">Run it on 1 + ½ + ⅓ + ⋯. Its running totals grow like ln n (22f4), so the sum of 1/(n ln n) wanders as well, and the same step again gives a slower one still. There is no last sum to compare with, on either side of the line between settling and wandering. So no one test settles every sum.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22e5.1</span><span class="ph understand">understand</span>What does the no-slowest technique make out of a wandering sum, and out of a settling one? <br>What does that say about tests for sums?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22e6">
+  <h2 class="sthead"><span class="stno">22e6</span>Swapping Two Endless Sums</h2>
+  <p data-pid="2ffe56">Lay numbers aᵢⱼ out in endless rows and columns. Add each row, then add the row totals. Or add each column, then the column totals. For a finite grid the two agree (5d). For an endless one they need not.</p>
+  <p data-pid="547fad">Swap-sums technique: <b>if the sum over i of the row totals of |aᵢⱼ| settles, then both orders settle and Σᵢ Σⱼ aᵢⱼ = Σⱼ Σᵢ aᵢⱼ.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the swap-sums technique">
+p_{ij} \ge 0,\ \ P = \textstyle\sum_i \sum_j p_{ij} \text{ settles} @@ first the case of no negative entries; rows first
+T_{mn} = \textstyle\sum_{i \le m} \sum_{j \le n} p_{ij} \le P @@ a finite corner: part of the first m rows
+\textstyle\sum_{j \le n} \sum_i p_{ij} = \lim_m T_{mn} \le P @@ each column settles (the climb technique, 22a); finitely many limits add (22d)
+Q = \textstyle\sum_j \sum_i p_{ij} \le P @@ the climb technique again: the column totals have the ceiling P
+P \le Q @@ the same with rows and columns exchanged: P = Q
+a_{ij} = a_{ij}^{+} - a_{ij}^{-},\ \ 0 \le a_{ij}^{\pm} \le |a_{ij}| @@ the positive and negative parts (15e)
+\htmlClass{new}{\textstyle\sum_i \sum_j a_{ij} = \sum_j \sum_i a_{ij}} \quad \blacksquare @@ both parts swap, by comparison (22e1) and the case above; subtract (22d)
+  </pre>
+  <p data-pid="144501">Without the sizes it fails. Put 1 in every place i, i down the middle, −1 in every place i, i + 1 just right of it, and 0 elsewhere. Every row adds to 1 − 1 = 0, so rows first gives 0. The first column adds to 1 and every other column to −1 + 1 = 0, so columns first gives 1. The sizes add to 2 in every row, and the sum of those wanders.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">22e6.1</span><span class="ph understand">understand</span>When may two endless sums be swapped? <br>What goes wrong for the grid with 1 down the middle and −1 beside it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="22e7">
+  <h2 class="sthead"><span class="stno">22e7</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 u_n \le v_n,\ \sum v_n \text{ settles} \Rightarrow \sum u_n \text{ settles}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only if uₙ ≥ 0: uₙ = −1 is under every vₙ = 1/n²
 \tfrac{u_{n+1}}{u_n} < 1 \text{ for every } n \Rightarrow \text{settles}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the ratios must head to something below 1: 1/n has every ratio n/(n+1) &lt; 1
 \tfrac{u_{n+1}}{u_n} \to 1 \Rightarrow \text{wanders}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the test is silent at 1: Σ 1/n² settles
 \sum u_n \text{ settles} \Rightarrow \sum |u_n| \text{ settles}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; 1 − ½ + ⅓ − ⋯ (22g)
+\text{some settling sum settles slower than all}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; from any settling sum a slower one is built: none is the slowest
+\textstyle\sum_i \sum_j a_{ij} = \sum_j \sum_i a_{ij} \text{ always}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; with 1 on the diagonal and −1 beside it, one order gives 1 and the other 0: sizes must settle first
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">22e5.1</span><span class="ph understand">understand</span>Why is “uₙ₊₁/uₙ < 1 for every n, so the sum settles” a move to watch out for? <br>Why is “uₙ ≤ vₙ and Σ vₙ settles, so Σ uₙ settles” one too?</li>
+      <li><span class="qid">22e7.1</span><span class="ph understand">understand</span>Why is “uₙ₊₁/uₙ < 1 for every n, so the sum settles” a move to watch out for? <br>Why is “uₙ ≤ vₙ and Σ vₙ settles, so Σ uₙ settles” one too?</li>
     </ol>
   </section>
 </section>
@@ -160,7 +208,7 @@ u_n \le v_n,\ \sum v_n \text{ settles} \Rightarrow \sum u_n \text{ settles}\,? @
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The comparison technique is the comparison test, and the ratio-of-pieces comparison the limit comparison test. The ratio test is d’Alembert’s, the root test Cauchy’s. Settling in size is absolute convergence.</p>
+  <p>The comparison technique is the comparison test, and the ratio-of-pieces comparison the limit comparison test. The ratio test is d’Alembert’s, the root test Cauchy’s. Settling in size is absolute convergence. A sum of sums is a double series, and each order is an iterated sum.</p>
   <h3>Who said it first</h3>
   <p>Jean le Rond d’Alembert used the ratio of successive pieces in 1768 for the binomial series. Augustin-Louis Cauchy proved both tests in his Cours d’analyse (1821) and showed the root test is the stronger: whenever the ratio test decides, the root test decides the same way. In 22e.4.5, the young mathematician is Niels Henrik Abel (1828), answering a test of Louis Olivier; Ulisse Dini (1867) showed that dividing each piece of a wandering sum by its running total gives one that wanders more slowly, and Paul du Bois-Reymond (1873) and Jacques Hadamard (1894) showed that no scale of comparison sums is the last.</p>
 </section>

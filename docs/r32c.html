@@ -148,18 +148,41 @@ S_Nq\big(\tfrac{\pi}{2M}\big) = \tfrac2\pi\textstyle\sum_{j=1}^{M}\tfrac{\pi}{M}
 </section>
 
 <section class="class step" data-step="32c5">
-  <h2 class="sthead"><span class="stno">32c5</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">32c5</span>The Turning Weight Grows Like ln N</h2>
+  <p data-pid="81406c">Step 32c said that the average size of the weight D_N, Λ_N = (1/2π)∫ from −π to π of |D_N|, grows like ln N. Here is the proof. D_N(s) = sin((N + ½)s)/sin(s/2), an even function, so Λ_N = (1/π)∫ from 0 to π of |D_N|. (Λ is a capital lambda.)</p>
+  <p data-pid="8784e0">Weight-growth technique: <b>(4/π²) ln(N + 1) ≤ Λ_N ≤ 1 + ln((N + ½)π).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the weight-growth technique">
+\tfrac{s}{\pi} \le \sin\tfrac{s}{2} \le \tfrac{s}{2} \text{ for } 0 \le s \le \pi @@ the sine-chord technique (26k) at s/2, and sin t ≤ t (21)
+\tfrac{2}{\pi}\textstyle\int_0^{T}\tfrac{|\sin t|}{t}\,dt \le \Lambda_N \le \int_0^{T}\tfrac{|\sin t|}{t}\,dt,\ \ T = (N + \tfrac12)\pi @@ put the two bounds in the bottom, then t = (N + ½)s (16d)
+\textstyle\int_{(k-1)\pi}^{k\pi}\tfrac{|\sin t|}{t}\,dt \ge \tfrac{1}{k\pi}\int_0^{\pi}\sin t\,dt = \tfrac{2}{k\pi} @@ on that arch t ≤ kπ
+\Lambda_N \ge \tfrac{4}{\pi^2}\big(1 + \tfrac12 + \cdots + \tfrac1N\big) \ge \tfrac{4}{\pi^2}\ln(N + 1) @@ add the first N arches; the harmonic sum against ln (22f4)
+\textstyle\int_0^{T}\tfrac{|\sin t|}{t}\,dt \le \int_0^1 1\,dt + \int_1^T \tfrac{dt}{t} = 1 + \ln T @@ |sin t| ≤ t below 1 and |sin t| ≤ 1 above
+\begin{aligned}&\htmlClass{new}{\tfrac{4}{\pi^2}\ln(N + 1) \le \Lambda_N}\\ &\quad \htmlClass{new}{\le 1 + \ln\big((N + \tfrac12)\pi\big)} \quad \blacksquare\end{aligned} @@ the two fences together
+  </pre>
+  <p data-pid="f4b870">At N = 10 the fences are 0.97 and 4.50. At N = 1000 they are 2.80 and 9.05. The growth is slow, and it never stops.</p>
+  <p data-pid="76fb10">Why it matters: the Nth partial sum at 0 is the average of f against D_N (32c1). A continuous f of height at most 1 that follows the sign of D_N closely has a partial sum near Λ_N there. So partial sums of continuous functions of height 1 can be as large as you like at a point, and that room is what lets a continuous function’s series fail at a point. The averaged sums of 32d use a weight that is never below 0. Its average size is 1 for every N, and they never fail.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32c5.1</span><span class="ph understand">understand</span>How fast does the average size of the turning weight grow? <br>Where does the ln come from in the lower fence?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32c6">
+  <h2 class="sthead"><span class="stno">32c6</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 f \text{ is continuous at } x, \text{ so } S_Nf(x) \to f(x)\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the proof needs a slope, or a bound C|s|; continuity is not enough
 \text{at a jump the sum returns } f(x)\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it returns the halfway point, whatever f(x) is
 \text{more turnings make the overshoot smaller}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; narrower and closer, never lower: about 1.179 at every M
 S_Nf(x) \to f(x) \text{ at every } x, \text{ so } S_Nf \text{ comes near } f \text{ everywhere at once}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; settling at each point is not settling everywhere at once (23d)
+\tfrac{1}{2\pi}\textstyle\int D_N = 1 \Rightarrow \tfrac{1}{2\pi}\int |D_N| = 1\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; D_N goes below 0: its arches cancel in the first total and add in the second, to about (4/π²) ln N
   </pre>
   <section class="slides" id="sl5"><div class="eyebrow">The slides · a move to watch out for · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">32c5.1</span><span class="ph understand">understand</span>Why is “more turnings make the overshoot beside a jump smaller” a move to watch out for?</li>
+      <li><span class="qid">32c6.1</span><span class="ph understand">understand</span>Why is “more turnings make the overshoot beside a jump smaller” a move to watch out for?</li>
     </ol>
   </section>
 </section>
@@ -180,7 +203,7 @@ S_Nf(x) \to f(x) \text{ at every } x, \text{ so } S_Nf \text{ comes near } f \te
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>D_N is the Dirichlet kernel. The slope-returns technique is Dirichlet’s test, or the Dini criterion in its stronger form with the bound C|s|. The halfway technique is the Dirichlet–Jordan result for functions with jumps. The lasting overshoot is the Gibbs phenomenon, and (2/π)∫₀^π sin t / t dt the Wilbraham–Gibbs constant, about 1.17898; the total of sin t / t is the sine integral Si(π) ≈ 1.8519. The bound C|s| is a Lipschitz condition.</p>
+  <p>D_N is the Dirichlet kernel. The slope-returns technique is Dirichlet’s test, or the Dini criterion in its stronger form with the bound C|s|. The halfway technique is the Dirichlet–Jordan result for functions with jumps. The lasting overshoot is the Gibbs phenomenon, and (2/π)∫₀^π sin t / t dt the Wilbraham–Gibbs constant, about 1.17898; the total of sin t / t is the sine integral Si(π) ≈ 1.8519. The bound C|s| is a Lipschitz condition. The numbers Λ_N are the Lebesgue constants; D_N is the Dirichlet kernel.</p>
   <h3>Who said it first</h3>
   <p>Peter Gustav Lejeune Dirichlet proved in 1829 that the series returns the function at points of continuity and settles at the middle of each jump, for functions with finitely many jumps and turns. Ulisse Dini sharpened the test in 1880. Paul du Bois-Reymond built a continuous function in 1873 whose series fails to settle at a point. Henry Wilbraham found the overshoot in 1848. Albert Michelson’s machine of 1898, which added eighty turnings with springs, drew it; J. Willard Gibbs explained it in letters to Nature in 1898 and 1899. Lennart Carleson proved in 1966 that the series of every function of finite energy returns it at all points but a set of size zero.</p>
   <h3>A proof that is not allowed</h3>

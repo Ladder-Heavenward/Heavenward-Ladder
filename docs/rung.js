@@ -2036,7 +2036,8 @@ function index(){ const sec=document.getElementById('skysec'), top=document.getE
     const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
     let fresh=null; try{ fresh=sessionStorage.getItem('sky:new'); sessionStorage.removeItem('sky:new'); }catch(e){} window.__skyFresh=fresh;
     if(!n){ sec.hidden=true; return; }
-    ol.innerHTML=L.slice(0,n).map(x=>/* 2026-11-08: the list is shown bottom-up (column-reverse), so ∞1 sits lowest and the newest on top */'<li class="k-sky built"><span class="n">∞'+(x.s||x.n)+'</span><span class="t"><a href="'+x.page+'.html">'+esc(x.title)+'</a><span class="kind">'+esc(x.kw)+'</span></span></li>').join('');
+    const PD=(()=>{ try{ return JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){ return {}; } })(); /* skypass (Andrew 2026-11-13 23:28Z): a passed step's number turns blue */
+    ol.innerHTML=L.slice(0,n).map(x=>/* 2026-11-08: the list is shown bottom-up (column-reverse), so ∞1 sits lowest and the newest on top */'<li class="k-sky built'+(PD[x.page]&&PD[x.page].v?' skypass':'')+'"><span class="n">∞'+(x.s||x.n)+'</span><span class="t"><a href="'+x.page+'.html">'+esc(x.title)+'</a><span class="kind">'+esc(x.kw)+'</span></span></li>').join('');
     sec.hidden=false;
     if(fresh){ const fa=ol.querySelector('a[href="'+fresh+'.html"]'); if(fa){ const li=fa.closest('li'); li.classList.add('fvhere'); setTimeout(()=>li.scrollIntoView({block:'center'}),80); setTimeout(()=>li.scrollIntoView({block:'center'}),700); } } }); }
 /* 0.3.5 (Andrew 21:57): the Endless floor shows once rung 30 is finished: its core steps passed, its floor certified, or a footing above it climbed */
@@ -2996,7 +2997,19 @@ function fitAll(){ const ps=[...document.querySelectorAll('pre.dbtx')]; if(!ps.l
   ps.forEach(fit);
   if('ResizeObserver' in window){ let w=new WeakMap(); const ro=new ResizeObserver(es=>es.forEach(e=>{ const p=e.target, cw=p.clientWidth; if(cw&&w.get(p)!==cw){ w.set(p,cw); fit(p); } })); ps.forEach(p=>ro.observe(p)); }
   else addEventListener('resize',()=>ps.forEach(fit)); }
-function go(){ const pg=page(); row(); if(pg==='hist6') hist6(); if(PAGES.includes(pg)) fitAll(); }
+/* skypass (Andrew 2026-11-13 23:28Z): a crown at the top of the ladder once these steps are passed: the end of dbtdt reached */
+const TOPK='ladder:dbtdone';
+const topDone=()=>{ try{ if(LS.getItem(TOPK)) return true; const P=JSON.parse(LS.getItem('pages:done')||'{}')||{}; return PAGES.every(p=>P[p]&&P[p].v); }catch(e){ return false; } };
+function topCrown(){ const r=document.getElementById('dbtsec'); if(!r||r.hidden) return; const li=r.querySelector('li.k-dbt'); if(!li) return;
+  let c=li.querySelector(':scope>.topcrown'); if(topDone()&&!c){ c=document.createElement('span'); c.className='topcrown'; c.textContent='\u{1F451}'; c.setAttribute('aria-label','crown: the top of the ladder reached'); c.title='the top of the ladder reached'; li.insertBefore(c,li.firstChild); }
+  else if(!topDone()&&c) c.remove(); }
+function topWatch(){ const st=[...document.querySelectorAll('section.step')], last=st[st.length-1], nav=document.querySelector('nav.nextrung');
+  const seen=el=>{ if(!el||!el.offsetHeight) return false; const b=el.getBoundingClientRect(); return b.bottom>0&&b.top<innerHeight&&b.right>0&&b.left<innerWidth; };
+  const set=()=>{ try{ if(!LS.getItem(TOPK)) LS.setItem(TOPK,String(Date.now())); }catch(e){} };
+  const check=()=>{ if(seen(last)||seen(nav)) set(); };
+  ['scroll','click','keyup','touchend','pagehide'].forEach(e=>addEventListener(e,check,{passive:true,capture:true}));
+  const iv=setInterval(()=>{ check(); try{ if(LS.getItem(TOPK)) clearInterval(iv); }catch(e){ clearInterval(iv); } },700); }
+function go(){ const pg=page(); row(); topCrown(); if(pg==='hist6') hist6(); if(pg==='dbtdt') topWatch(); if(PAGES.includes(pg)) fitAll(); }
 window.LadderDbt={open,done,mark};
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
 })();

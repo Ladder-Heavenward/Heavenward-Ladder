@@ -149,17 +149,40 @@ q \text{ starts with } x^{n+1},\ |q| < 2^{-n} \text{ on } [-1, 1] \Rightarrow \o
 </section>
 
 <section class="class step" data-step="31m5">
-  <h2 class="sthead"><span class="stno">31m5</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">31m5</span>A Grid as Its Stretches Times Their Pieces</h2>
+  <p data-pid="8f91d4">The polynomial Lⱼ of 31m1 is 1 at the point xⱼ and 0 at the other points. Feed it a grid in place of x, with the stretches of the grid as the points, and it picks out one stretch.</p>
+  <p data-pid="d0d2e8">Let A be a square grid with a basis of vectors that it only stretches (27f3), and let λ₁, …, λₖ be its different stretches. Put Eⱼ = Lⱼ(A), where Lⱼ is the product over m ≠ j of (x − λₘ)/(λⱼ − λₘ).</p>
+  <p data-pid="791252">Stretch-pieces technique: <b>E₁ + ⋯ + Eₖ = I; EⱼEₘ = 0 for j ≠ m; Eⱼ² = Eⱼ; A = λ₁E₁ + ⋯ + λₖEₖ; and f(A) = f(λ₁)E₁ + ⋯ + f(λₖ)Eₖ for every polynomial f.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the stretch-pieces technique">
+Av = \lambda_m v \Rightarrow p(A)v = p(\lambda_m)v @@ for any polynomial p: Aʲv = λₘʲv, term by term
+E_jv = L_j(\lambda_m)\,v = v \text{ if } m = j,\ \ 0 \text{ if not} @@ Lⱼ is 1 at λⱼ and 0 at the other stretches (31m1)
+E_j \text{ keeps the } \lambda_j \text{ space, kills the rest} @@ the space stretched by λⱼ is kept, and the other stretched spaces go to 0: on the basis of stretched vectors, and so everywhere
+\textstyle\sum_j E_j = I,\ \ E_jE_m = 0,\ \ E_j^2 = E_j @@ check each on a stretched vector
+\htmlClass{new}{f(A) = \textstyle\sum_j f(\lambda_j)\,E_j} \quad \blacksquare @@ both sides send a vector stretched by λₘ to f(λₘ) times itself; f(x) = x gives A itself
+  </pre>
+  <p data-pid="4ec431">Take rows (2, 1) and (1, 2), with stretches 1 and 3. Then E₁ = (A − 3I)/(1 − 3) has rows (½, −½), (−½, ½), and E₂ = (A − I)/(3 − 1) has rows (½, ½), (½, ½). They add to I, their product is 0, and E₁ + 3E₂ = A. A hundredth power costs nothing: A¹⁰⁰ = E₁ + 3¹⁰⁰E₂.</p>
+  <p data-pid="fda0d0">Each Eⱼ flattens space onto one stretched space along the others (27f7). For a symmetric A the stretched spaces are at right angles (31d2), and each Eⱼ is the shadow of 31b2. The pieces need no vectors to be found: they are polynomials of A, so anything that swaps with A swaps with every piece.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31m5.1</span><span class="ph understand">understand</span>What is the piece Eⱼ of a grid A, and what does it do to a vector that A stretches? <br>How do the pieces give A¹⁰⁰?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31m6">
+  <h2 class="sthead"><span class="stno">31m6</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 \text{more evenly spaced points always give a better fit}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the bell: 0.44, 1.92, 14.4 as the points grow
 \text{the polynomials through the points are 31j’s near polynomials}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; 31j used coin averages, which need not pass through any point
 \text{every family of straightened polynomials is the cosine family}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; each weight has its own family; weight 1 gives 1, x, x² − 1/3
 \text{interpolate a table far past its last entry}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; ω grows like a power of the distance outside the points
+\text{every grid is } \textstyle\sum \lambda_jE_j\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; only with a basis of stretched vectors: rows (1, 1), (0, 1) has one stretch, E₁ = I, and is not 1 · I
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">31m5.1</span><span class="ph understand">understand</span>Why do more evenly spaced points not always give a better fit?  <br>Why is reading a table far past its last entry dangerous?</li>
+      <li><span class="qid">31m6.1</span><span class="ph understand">understand</span>Why do more evenly spaced points not always give a better fit?  <br>Why is reading a table far past its last entry dangerous?</li>
     </ol>
   </section>
 </section>
@@ -179,7 +202,7 @@ q \text{ starts with } x^{n+1},\ |q| < 2^{-n} \text{ on } [-1, 1] \Rightarrow \o
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The polynomial through the points is the interpolating polynomial, and the Lⱼ form is Lagrange interpolation. The interpolation-miss technique is the interpolation error formula. The wiggle at the ends is Runge’s phenomenon, and 1/(1 + 25x²) is Runge’s function. A family of straightened polynomials under a weight is a family of orthogonal polynomials, and the three-term technique is the three-term recurrence. The Tₙ are the Chebyshev polynomials, their roots the Chebyshev nodes, and the cosine-points technique the minimax property of Chebyshev polynomials. Weight 1 gives the Legendre polynomials.</p>
+  <p>The polynomial through the points is the interpolating polynomial, and the Lⱼ form is Lagrange interpolation. The interpolation-miss technique is the interpolation error formula. The wiggle at the ends is Runge’s phenomenon, and 1/(1 + 25x²) is Runge’s function. A family of straightened polynomials under a weight is a family of orthogonal polynomials, and the three-term technique is the three-term recurrence. The Tₙ are the Chebyshev polynomials, their roots the Chebyshev nodes, and the cosine-points technique the minimax property of Chebyshev polynomials. Weight 1 gives the Legendre polynomials. A = Σ λⱼEⱼ is the spectral resolution of A; the Eⱼ are its spectral projections, and the Lⱼ are Lagrange’s polynomials.</p>
   <h3>Who said it first</h3>
   <p>Edward Waring published the Lⱼ form in 1779, and Joseph-Louis Lagrange again in 1795; Isaac Newton had a form of interpolation by differences in 1676. Pafnuty Chebyshev found his polynomials in 1854 while designing linkages for steam engines. Carl Runge showed the wiggle at the ends in 1901.</p>
 </section>

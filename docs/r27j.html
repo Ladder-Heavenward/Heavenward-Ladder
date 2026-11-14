@@ -142,17 +142,94 @@ R \text{ has no row of zeros} \Rightarrow n \text{ leads in } n \text{ columns} 
 </section>
 
 <section class="class step" data-step="27j4">
-  <h2 class="sthead"><span class="stno">27j4</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">27j4</span>The Lowest Form From the Answers</h2>
+  <p data-pid="7cc888">One grid has one lowest form (27j2). Now take two grids A and B with the same number of columns, and suppose Ax = 0 and Bx = 0 have exactly the same answers. The grids may even have different numbers of rows.</p>
+  <p data-pid="2894a4">Same-lowest-form technique: <b>Ax = 0 and Bx = 0 have the same answers exactly when A and B have the same lowest form, rows of zeros aside. And then each row of B is a mix of the rows of A, and each row of A is a mix of the rows of B.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the same-lowest-form technique">
+Rx = 0,\ R'x = 0 \text{ have the same answers} @@ R, R′ are the lowest forms of A, B; the row-move technique (27j1), for each
+\text{same lead columns, same mixes} @@ both are read from the answers alone: the proof of 27j2
+R = R' \text{, rows of zeros aside} @@ a lead column is e₁, e₂, …, and every other column is its mix of them
+R = EA,\ \ B = E'^{-1}R' @@ E, E′ are the products of the row-move grids, each undoable (27j1)
+\htmlClass{new}{\text{each row of } B \text{ is a mix of rows of } A} \quad \blacksquare @@ a row of a product is a mix of the rows of its right-hand grid (27j1), twice
+  </pre>
+  <p data-pid="1dbd78">The other way round is the row-move technique itself: grids with one lowest form have the answers of that form. Take A with rows (1, 1, 1), (1, 2, 3) and B with rows (2, 3, 4), (0, 1, 2), (1, 0, −1). Both come down to the rows (1, 0, −1), (0, 1, 2), with a row of zeros left over in B. So both have the answers z · (1, −2, 1), and (2, 3, 4) is 3 times the first row of A less the second.</p>
+  <p data-pid="9f5f97">With right sides that are not 0, an answer x of Ax = b is an answer (x, −1) of the grid [A | b] with right sides 0. So two systems that each have an answer have the same answers exactly when [A | b] and [B | c] have the same lowest form.</p>
+  <p data-pid="e32366">The three row moves are more than are needed. A swap is four of the other two: add row 2 to row 1, take the new row 1 from row 2, add the new row 2 to row 1, and stretch row 2 by −1. The rows (r₁, r₂) become (r₁ + r₂, r₂), then (r₁ + r₂, −r₁), then (r₂, −r₁), then (r₂, r₁).</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27j4.1</span><span class="ph understand">understand</span>When do Ax = 0 and Bx = 0 have the same answers? <br>What does that say about the rows of B?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27j5">
+  <h2 class="sthead"><span class="stno">27j5</span>What the Rows Build, and What Can Be Reached</h2>
+  <p data-pid="9dce4c">The rows of a grid are vectors too, and their mixes are a space. Row moves change the rows. Do they change what the rows build?</p>
+  <p data-pid="c05974">Row-space technique: <b>row moves keep what the rows build, and the rows of the lowest form that are not 0 are a basis of it. So the rows of a grid build a space of the same dimension as its columns do: the number of leads.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the row-space technique">
+\text{row } i \text{ of } EA = \textstyle\sum_l e_{il}\,(\text{row } l \text{ of } A) @@ the second line of 27j1: each new row is a mix of the old rows
+A = E^{-1}(EA) @@ and each old row is a mix of the new: the same space
+c_1(\text{lead row } 1) + \cdots + c_r(\text{lead row } r) = 0 @@ suppose a mix of the lead rows of R is 0
+\text{in the column of lead } i \text{ the mix has } c_i @@ a lead is 1 and the only entry of its column that is not 0
+c_1 = \cdots = c_r = 0 @@ so the lead rows are free
+\htmlClass{new}{\text{the lead rows are a basis; dimension } r} \quad \blacksquare @@ the lead columns of A are a basis of what A reaches (27j2): r again
+  </pre>
+  <p data-pid="0eea78">The readings gave the same count by another road (27h3). Here it comes with a basis in hand, and that answers a question about spaces by row moves: is (1, 4, 7) a mix of (1, 1, 1) and (1, 2, 3)? The lowest form of those two rows is (1, 0, −1), (0, 1, 2), and (1, 4, 7) = (1, 0, −1) + 4 · (0, 1, 2). It is.</p>
+  <p data-pid="15cd63">Zero-rows technique: <b>bring [A | b] to [R | c] by the row moves that bring A to its lowest form R. Then Ax = b has an answer exactly when c is 0 in every row where R is all 0; that is, when [A | b] has no more leads than A.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the zero-rows technique">
+[A \mid b] \to [R \mid c],\ \ c = Eb @@ the same moves done to b; the answers are kept (27j1)
+\text{a row of zeros in } R \text{ with } c_i \neq 0 @@ that row says 0 = cᵢ: no answer
+\text{every such } c_i = 0 @@ give each free unknown 0 and read the lead unknowns from c (27j2): an answer
+\htmlClass{new}{\text{an answer} \iff [A \mid b] \text{ gains no lead}} \quad \blacksquare @@ the first entry not 0 of a row 0 … 0 | cᵢ is cᵢ itself
+  </pre>
+  <p data-pid="1455ed">With letters for the right sides the technique says which right sides can be reached. Take A with rows (1, 1), (1, 2), (2, 3). Take row 1 from row 2, twice row 1 from row 3, then the new row 2 from the new row 3. The last row reads 0 0 | b₃ − b₁ − b₂. So Ax = b has an answer exactly when b₃ = b₁ + b₂, and what A reaches is that plane.</p>
+  <p data-pid="ea046f">The same work cuts a system to fit a space. To find samenesses whose answers are exactly the mixes of (1, 0, 1) and (0, 1, 1), put the two vectors down as rows and solve for what they lose: z · (−1, −1, 1). The one sameness −x − y + z = 0 has both vectors as answers, and its answers have dimension 3 − 1 = 2 (27c2). So its answers are their mixes and nothing else.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27j5.1</span><span class="ph understand">understand</span>Why do row moves keep what the rows build? <br>When does Ax = b have an answer, read from the lowest form?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27j6">
+  <h2 class="sthead"><span class="stno">27j6</span>Row and Column Moves Together</h2>
+  <p data-pid="18184d">A column move changes what the unknowns are (27j7), so it is no help in solving. It still asks a fair question: how simple can a grid be made when both kinds of move are allowed? Write Dᵣ for the grid, of the same shape as A, with 1 in places 1, 1 to r, r and 0 everywhere else.</p>
+  <p data-pid="025406">Row-and-column technique: <b>row and column moves bring every grid A to Dᵣ, where r is the dimension of what A reaches. So PAQ = Dᵣ for an undoable P and an undoable Q. Two grids of one shape come to each other by such moves exactly when they reach the same dimension.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the row-and-column technique">
+\text{column } j \text{ of } AE = A\,(\text{column } j \text{ of } E) @@ the product-is-doing technique (27d2)
+AE = A \text{ with the column move done} @@ E is I with that move done to its columns; undoable, as in 27j1
+A \to R \text{ in lowest terms, } r \text{ leads} @@ row moves (27j2)
+R \to \begin{pmatrix}I & C\\ 0 & 0\end{pmatrix} @@ column swaps bring the r lead columns to the front
+\to \begin{pmatrix}I & 0\\ 0 & 0\end{pmatrix} = D_r @@ take stretches of the first r columns from the later ones: each clears one entry of C
+\htmlClass{new}{PAQ = D_r} \quad \blacksquare @@ P is the product of the row-move grids, Q of the column-move grids
+  </pre>
+  <p data-pid="c0950f">The number r cannot come out two ways. An undoable Q reaches every list, so AQ reaches what A reaches. An undoable P loses nothing, so it matches what AQ reaches with what PAQ reaches, and matched spaces have one dimension (27d5). And Dᵣ reaches a space of dimension r.</p>
+  <p data-pid="022b3e">So if A and B both reach dimension r, then P₁AQ₁ = Dᵣ = P₂BQ₂, and B = P₂⁻¹P₁AQ₁Q₂⁻¹. The grid with rows (1, 2, 3), (2, 4, 6) and the grid with rows (0, 0, 5), (0, 0, 0) each reach a line. Both come to the grid with rows (1, 0, 0), (0, 0, 0). Seen this way a grid has only one number worth keeping. The answers of Ax = b are not kept: the unknowns were changed to x = Qx′ on the way.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27j6.1</span><span class="ph understand">understand</span>What is the simplest grid that row and column moves together can reach from A? <br>Why are the answers of Ax = b not kept on the way?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27j7">
+  <h2 class="sthead"><span class="stno">27j7</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 \text{stretch a row by } 0\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it cannot be undone: x + y = 2, x − y = 0 becomes x + y = 2, 0 = 0, with new answers
 \text{add a stretch of one column to another}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; columns hold the unknowns; mixing them changes what the unknowns are, and the answers
 n \text{ samenesses in } n \text{ unknowns have exactly one answer}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only when A can be undone: x + y = 1, 2x + 2y = 2 has a whole line of answers
 \text{more unknowns than samenesses} \Rightarrow \text{many answers}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; there may be none: x + y + z = 1, x + y + z = 2
+\text{same answers} \Rightarrow \text{same rows}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; the same lowest form, not the same rows: x + y = 0 and 2x + 2y = 0
+\text{row moves keep what the columns reach}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; they keep what the rows build: rows (1, 1), (1, 1) reach the line of (1, 1), and after one move the line of (1, 0)
+PAQ = D_r \text{ keeps the answers}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; Q changes what the unknowns are: x = Qx′
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">27j4.1</span><span class="ph understand">understand</span>Why is stretching a row by 0 a move to watch out for? <br>Why is adding a stretch of one column to another one?</li>
+      <li><span class="qid">27j7.1</span><span class="ph understand">understand</span>Why is stretching a row by 0 a move to watch out for? <br>Why is adding a stretch of one column to another one?</li>
     </ol>
   </section>
 </section>
@@ -172,7 +249,7 @@ n \text{ samenesses in } n \text{ unknowns have exactly one answer}\,? @@ &lt;sp
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>Solving by clearing one unknown at a time is Gaussian elimination; carried to lowest terms it is Gauss–Jordan elimination. Row moves are elementary row operations, and their grids E are elementary matrices. The staircase is row echelon form, and lowest terms is reduced row echelon form, with the leads as pivots. A system with no answer is inconsistent. The number of leads is the rank of A, and the unknowns with no lead are free variables. Swapping the largest entry up to be the lead, as 27j.4.2 suggests, is partial pivoting. Grids that are mostly zeros are sparse.</p>
+  <p>Solving by clearing one unknown at a time is Gaussian elimination; carried to lowest terms it is Gauss–Jordan elimination. Row moves are elementary row operations, and their grids E are elementary matrices. The staircase is row echelon form, and lowest terms is reduced row echelon form, with the leads as pivots. A system with no answer is inconsistent. The number of leads is the rank of A, and the unknowns with no lead are free variables. Swapping the largest entry up to be the lead, as 27j.4.2 suggests, is partial pivoting. Grids that are mostly zeros are sparse. Two systems with the same answers are equivalent systems, and their grids are row-equivalent. What the rows build is the row space, and the number of leads is the rank. A system with an answer is consistent. Grids with B = PAQ for undoable P and Q are equivalent, and Dᵣ is the rank normal form.</p>
   <h3>Who said it first</h3>
   <p>The Nine Chapters on the Mathematical Art, compiled in China by about the first century, solves systems of up to six samenesses by this method, with counting rods on a board, column by column. Carl Friedrich Gauss used it around 1809 to find the orbit of the asteroid Pallas from many observations, and Wilhelm Jordan described the full reduction in 1888 for surveying. John von Neumann and Herman Goldstine, and Alan Turing, studied its rounding errors on the first computers in 1947 and 1948.</p>
 </section>

@@ -101,7 +101,7 @@ F = f - f'' + f^{(4)} - \cdots + (-1)^n f^{(2n)},\ \ F'' + F = f @@ f has degree
 
 <section class="class step" data-step="23g3">
   <h2 class="sthead"><span class="stno">23g3</span>Beyond Fractions</h2>
-  <p data-pid="d52596">A fraction is a statement that names a root of a first-degree equation with whole coefficients, qx − p = 0. √2 is irrational, but it is a root of x² − 2 = 0. Are e and π roots of some polynomial with whole coefficients? They are not: no polynomial with whole coefficients, other than 0, has e or π as a root. That claim is stated here and held in trust. Its proofs reach for tools much higher up the ladder.</p>
+  <p data-pid="d52596">A fraction is a statement that names a root of a first-degree equation with whole coefficients, qx − p = 0. √2 is irrational, but it is a root of x² − 2 = 0. Are e and π roots of some polynomial with whole coefficients? They are not: no polynomial with whole coefficients, other than 0, has e or π as a root. The claim for e is earned at 23g4. The claim for π is stated here and held in trust. Its proof reaches for tools much higher up the ladder.</p>
   <div class="eqline c6" data-tex="\begin{aligned}&amp;x \text{ algebraic} :\Leftrightarrow \exists p \ne 0 \text{ with whole}\\ &amp;\qquad \text{coefficients}\ (p(x) = 0)\\ &amp;x \text{ transcendental} :\Leftrightarrow \lnot(x \text{ algebraic})\end{aligned}"></div>
   <p class="eqline" data-pid="6f5690">From here on, a real is <i>algebraic</i> when it is a root of a polynomial with whole coefficients, not all 0, and <i>transcendental</i> when it is not.</p>
   <p data-pid="6d7376">The second fact settles one of the oldest questions there is. With ruler and compass, played by 18j1’s moves, you can build only lengths that are algebraic. A square with the area of a circle of radius 1 would need a side of √π. So no ruler-and-compass recipe squares the circle.</p>
@@ -114,17 +114,46 @@ F = f - f'' + f^{(4)} - \cdots + (-1)^n f^{(2n)},\ \ F'' + F = f @@ f has degree
 </section>
 
 <section class="class step" data-step="23g4">
-  <h2 class="sthead"><span class="stno">23g4</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">23g4</span>e Is No Root of a Whole Polynomial</h2>
+  <p data-pid="f44b14">23g3 stated two claims. The one about π stays held in trust; the one about e can be earned on this rung. Suppose a₀ + a₁e + ⋯ + aₙeⁿ = 0 with whole numbers aₖ, positive or negative, and a₀ ≠ 0. (If the first few are 0, divide by a power of e.) For a polynomial f, write F for the sum of f and all its slopes, f + f′ + f″ + ⋯, which stops.</p>
+  <p data-pid="2f9d2f">Beyond-algebra technique for e: <b>no polynomial with whole coefficients, not all 0, has e as a root.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the beyond-algebra technique for e · an area for each k">
+I(t) = \textstyle\int_0^t e^{t-x}f(x)\,dx = e^tF(0) - F(t) @@ −eᵗ⁻ˣF(x) has slope eᵗ⁻ˣ(F − F′) = eᵗ⁻ˣf; area-is-a-change (16c)
+J = \textstyle\sum_k a_kI(k) = -\sum_k a_kF(k) @@ the eᵏ parts add to F(0) · Σ aₖeᵏ = 0, by the supposition
+f(x) = x^{p-1}(x - 1)^p\cdots(x - n)^p @@ p a prime above n and above |a₀|: there are always more (4j)
+  </pre>
+  <p data-pid="50030b">Now J is looked at twice. Counted through the slopes of f it is a whole number that is not small. Bounded as an area it is small.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the beyond-algebra technique for e · J twice">
+k = 1, \ldots, n:\ \ p! \text{ divides } f^{(j)}(k) \text{ for every } j @@ f = (x − k)ᵖg with g whole: slopes below the p-th are 0 at k, and the rest carry j!/(j − p)!
+p! \text{ divides } f^{(j)}(0) \text{ for } j \neq p - 1 @@ the same, from the factor xᵖ⁻¹: below p − 1 they are 0
+f^{(p-1)}(0) = (p - 1)!\,(\pm\,n!)^p @@ the rest of f at 0 is (−1)ᵖ(−2)ᵖ⋯(−n)ᵖ
+J = (p - 1)!\,\big(\mp a_0(n!)^p + p \cdot \text{whole}\big) @@ gather; p divides neither a₀ nor n! (4j), so the bracket is not 0
+|J| \ge (p - 1)! @@ a whole number other than 0 is at least 1 in size
+|J| \le A\,C^p,\ \ C = n^{n+1} @@ on [0, n], |f| ≤ Cᵖ; |I(k)| ≤ n eⁿ Cᵖ (16a); A = n eⁿ(|a₀| + ⋯ + |aₙ|)
+\begin{aligned}&\htmlClass{new}{(p - 1)! \le A\,C^p}\\ &\quad \htmlClass{new}{\text{for endless primes } p:\ \bot} \quad \blacksquare\end{aligned} @@ Cᵖ/(p − 1)! heads to 0 (22h)
+  </pre>
+  <p data-pid="457ff6">The plan is 23g1’s, grown up. There a fraction for e made a whole number lie strictly between 0 and 1. Here a polynomial for e makes a whole number at least (p − 1)! in size and at most A · Cᵖ, and factorials outrun powers. The claim about π stays held in trust.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">23g4.1</span><span class="ph understand">understand</span>What would a whole polynomial with root e force on the number J? <br>How is the plan like the proof that e is not a fraction?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="23g5">
+  <h2 class="sthead"><span class="stno">23g5</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 e = 2.718281828 \text{ to nine places, so } e = \tfrac{2718281828}{10^9}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; nine places fence e; they do not name it
 \pi \text{ never repeats in 10 million digits, so it is irrational}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; checking digits proves nothing about the rest; the proof does
 x \text{ is a whole number and } x > 0, \text{ so } x \ge 1\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; allowed: that is the step both proofs turn on
 e \text{ and } \pi \text{ are irrational, so } e + \pi \text{ is}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; √2 and −√2 are irrational; their sum is 0. For e + π nobody knows
+e \text{ is no fraction, so it is no root}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; √2 is no fraction and is a root of x² − 2: this needs its own proof
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">23g4.1</span><span class="ph understand">understand</span>Why is “π never repeats in 10 million digits, so it is irrational” a move to watch out for? <br>Why is “e and π are irrational, so e + π is” one?</li>
+      <li><span class="qid">23g5.1</span><span class="ph understand">understand</span>Why is “π never repeats in 10 million digits, so it is irrational” a move to watch out for? <br>Why is “e and π are irrational, so e + π is” one?</li>
     </ol>
   </section>
 </section>
@@ -144,7 +173,7 @@ e \text{ and } \pi \text{ are irrational, so } e + \pi \text{ is}\,? @@ &lt;span
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The proof for e is Fourier's proof (1815). The proof for π here is Ivan Niven's (1947). That e is transcendental is Hermite's theorem (1873); that π is transcendental is the Lindemann theorem (1882), and with Weierstrass's extension (1885) the Lindemann–Weierstrass theorem. Squaring the circle is the problem of quadrature of the circle.</p>
+  <p>The proof for e is Fourier's proof (1815). The proof for π here is Ivan Niven's (1947). That e is transcendental is Hermite's theorem (1873); that π is transcendental is the Lindemann theorem (1882), and with Weierstrass's extension (1885) the Lindemann–Weierstrass theorem. Squaring the circle is the problem of quadrature of the circle. The proof that e is transcendental is Charles Hermite’s, of 1873.</p>
   <h3>Who said it first</h3>
   <p>Leonhard Euler showed e is irrational in 1737, by its endless fraction; Joseph Fourier's short proof is the one above. Johann Heinrich Lambert showed π is irrational in 1761, by an endless fraction for tan. Charles Hermite proved e transcendental in 1873, and Ferdinand von Lindemann proved π transcendental in 1882, ending the quest to square the circle that began in ancient Greece. Whether e + π is a fraction is still open.</p>
 </section>

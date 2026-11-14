@@ -151,17 +151,68 @@ L(f, P) \le \textstyle\int_{[u,v]} f\,dm \le U(f, P) \text{ for every } P @@ the
 </section>
 
 <section class="class step" data-step="30c5">
-  <h2 class="sthead"><span class="stno">30c5</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">30c5</span>Breaks of Size 0</h2>
+  <p data-pid="b72de6">Rung 15 gave an area to every continuous function, and 28h4 let the breaks fill a thin set. How many breaks can the old area stand? Outer size answers exactly. Here integrable means integrable as in 15c, by lower and upper sums.</p>
+  <p data-pid="b49e29">Breaks technique: <b>a bounded f on [u, v] is integrable exactly when the set of its breaks has outer size 0.</b></p>
+  <p data-pid="6f395b">The proof measures each break by its swing (28h3). Write Bₜ for the set of points of [u, v] where the swing of f is at least t. The breaks are the points of B₁, B<sub>1/2</sub>, B<sub>1/3</sub>, … together.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the breaks technique · integrable, so size 0">
+U(f, P) - L(f, P) \lt \varepsilon t \text{ for some } P @@ gap-closes (15c)
+x \in B_t \text{ inside a piece} \Rightarrow M - m \ge t \text{ there} @@ the piece holds all points near x, and the swing at x is at least t
+\text{such pieces have total length below } \varepsilon @@ each adds at least t times its length to U − L
+m^*(B_t) \le \varepsilon @@ those pieces, a little widened, and tiny intervals round the points of P cover Bₜ
+\htmlClass{new}{m^*(B_t) = 0 \text{, and the breaks have size } 0} \quad \blacksquare @@ ε was any; then outer-adds-at-most (30a2) over t = 1, ½, ⅓, …
+  </pre>
+  <p data-pid="bb662c">Now the other way. Let the breaks have outer size 0, and let |f| ≤ K.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the breaks technique · size 0, so integrable">
+I_1, I_2, \ldots \text{ cover } B_\varepsilon \text{ with total} \lt \varepsilon @@ Bε is part of the breaks, so its outer size is 0 (30a2)
+x \notin B_\varepsilon:\ \ \sup f - \inf f \lt \varepsilon \text{ on some } J_x @@ an open interval round x, ends counted in: the swing at x is below ε (28h3)
+\text{finitely many } I_k \text{ and } J_x \text{ cover } [u, v] @@ the least upper bound argument of 30a1 runs for any family of open intervals
+\text{cut } [u, v] \text{ at all their ends} @@ each piece lies in an Iₖ or in a Jₓ
+\htmlClass{new}{U - L \le 2K\varepsilon + \varepsilon(v - u)} \quad \blacksquare @@ pieces in the Iₖ: length below ε, M − m ≤ 2K; the others: M − m ≤ ε; then gap-closes (15c)
+  </pre>
+  <p data-pid="a8cc8c">Try it. A function with a jump at each of finitely many points: integrable. The function f(x) = 1/q at a fraction p/q in lowest terms, 0 elsewhere: its swing at x is f(x), so it breaks at every fraction, a countable set, of size 0. It is integrable. And 10d’s q breaks at every point of [0, 1], a set of size 1. It is not.</p>
+  <p data-pid="28e370">So the old area sees exactly the bounded functions that are continuous but for a size-0 set. The new total (30c3) asks no continuity at all.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30c5.1</span><span class="ph understand">understand</span>Which bounded functions on [u, v] are integrable by lower and upper sums? <br>Why is 1/q at each fraction p/q, 0 elsewhere, integrable, and 10d’s q not?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30c6">
+  <h2 class="sthead"><span class="stno">30c6</span>The Slope of an Area Function, but for Size 0</h2>
+  <p data-pid="2bb3f7">The area-slope technique (16b) gave F′(c) = f(c) for the area function F of f, at each c where f is continuous. At a break it promised nothing. The breaks technique (30c5) says how few the breaks are.</p>
+  <p data-pid="accbd0">Area-slope-nearly technique: <b>if f is integrable on [u, v], and F(x) = ∫ from u to x of f, then F′(x) = f(x) at every x of [u, v] outside a set of size 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the area-slope-nearly technique">
+f \text{ continuous at } c \Rightarrow F'(c) = f(c) @@ the area-slope technique (16b)
+\text{the breaks of } f \text{ have outer size } 0 @@ the breaks technique (30c5): f is integrable
+\htmlClass{new}{F' = f \text{ outside a set of size } 0} \quad \blacksquare @@ outside the breaks
+  </pre>
+  <p data-pid="7f1b88">Size 0 is not nothing. Let f be 0 below ½ and 1 from ½ on. Then F is 0 up to ½ and x − ½ after: it has a corner at ½, and no slope there. Or let f be 1 at ½ only and 0 elsewhere. Then F = 0 everywhere, so F′(½) = 0, and f(½) = 1. The slope exists and is the wrong number. Both happen on a set of size 0, and neither changes any area.</p>
+  <p data-pid="d1bcfb">This is the shape of claim that 30c3 named: true except on a size-0 set. Undoing a total by a slope gives the function back at nearly every point, and "nearly every" has an exact meaning now.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30c6.1</span><span class="ph understand">understand</span>Where is the slope of an area function equal to the function? <br>What can go wrong at a break?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30c7">
+  <h2 class="sthead"><span class="stno">30c7</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 \textstyle\int f\,dm = 0 \Rightarrow f = 0 \text{ at every point}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only except on a size-0 set: 10d’s q
 \text{the new total is a sum over the inputs}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it sums over the heights: value times the size where it is taken
 \text{a function with a jump at every fraction has no total}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it is sized; the jumps sit on a size-0 set
 \textstyle\int (f - g) = \int f - \int g \text{ when both totals are } \infty\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; ∞ − ∞ has no value; split only when ∫|f| is finite
+\text{endlessly many breaks} \Rightarrow \text{no area}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; 1/q at each fraction p/q breaks at every fraction and is integrable: the breaks have size 0
+F' = f \text{ at every point}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; only off a size-0 set: under a jump F has a corner, and under one raised point F′ = 0 where f = 1
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">30c5.1</span><span class="ph understand">understand</span>Why is “∫ f dm = 0, so f = 0 at every point” a move to watch out for?</li>
+      <li><span class="qid">30c7.1</span><span class="ph understand">understand</span>Why is “∫ f dm = 0, so f = 0 at every point” a move to watch out for?</li>
     </ol>
   </section>
 </section>
@@ -182,7 +233,7 @@ L(f, P) \le \textstyle\int_{[u,v]} f\,dm \le U(f, P) \text{ for every } P @@ the
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A sized function is a Lebesgue measurable function, and a step function is a simple function. The total is the Lebesgue integral, ∫ f dm or ∫ f dλ. “Except on a size-0 set” is “almost everywhere”, written a.e. Functions with ∫|f| finite are integrable, and the family of them is written L¹.</p>
+  <p>A sized function is a Lebesgue measurable function, and a step function is a simple function. The total is the Lebesgue integral, ∫ f dm or ∫ f dλ. “Except on a size-0 set” is “almost everywhere”, written a.e. Functions with ∫|f| finite are integrable, and the family of them is written L¹. The breaks technique is Lebesgue’s test for Riemann integrability. True outside a set of size 0 is true almost everywhere.</p>
   <h3>Who said it first</h3>
   <p>Henri Lebesgue described the idea in 1901 and gave it in full in his thesis of 1902. He later compared it to a shopkeeper who sorts the coins by value before counting them, where the old way counts them in the order they were handed over.</p>
   <h3>A proof that is not allowed</h3>

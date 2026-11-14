@@ -65,7 +65,7 @@ c(A) = 0 \text{ for } c = \det(A - xI) @@ the own-polynomial technique (27g)
 c \cdot v = 0 \text{ for every } v @@ so no member is free, and r = 0 in the structure technique
 \htmlClass{new}{F^n \cong F[x]/(d_1) \times \cdots \times F[x]/(d_k)} \quad \blacksquare @@ the structure technique (44i), over F[x]
   </pre>
-  <p data-pid="e6b5f9">The last dₖ is 27g’s least polynomial: it kills every vector, and nothing smaller does. The product d₁ ⋯ dₖ is the own polynomial, up to sign. <i>Held in trust</i>: that the dᵢ are found by bringing xI − A to a diagonal with 44i’s moves over F[x]; the proof is 44·cb27.6.3.</p>
+  <p data-pid="e6b5f9">The last dₖ is 27g’s least polynomial: it kills every vector, and nothing smaller does. The product d₁ ⋯ dₖ is the own polynomial, up to sign. <i>Held in trust</i>: that the dᵢ are found by bringing xI − A to a diagonal with 44i’s moves over F[x]; the proof is 44·cb27.13.3.</p>
   <section class="slides" id="sl1"><div class="eyebrow">The slides · a module · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
@@ -133,17 +133,177 @@ A - 2I = \begin{pmatrix} 1 & 1 & 0 \\ -1 & -1 & 0 \\ 0 & 0 & 0 \end{pmatrix} \ne
 </section>
 
 <section class="class step" data-step="44·cb27.5">
-  <h2 class="sthead"><span class="stno">44·cb27.5</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">44·cb27.5</span>The Killer of a Vector</h2>
+  <p data-pid="b1bd8e">Fix a grid A with n rows and columns over a field F, and a vector v. The polynomials p with p(A)v = 0 form an ideal of F[x], and the own polynomial is in it (27g). Its maker with top coefficient 1 is the <b>killer</b> of v, written k_v. The space v <b>makes</b> is every p(A)v.</p>
+  <p data-pid="60759f">Killer technique: <b>if k_v has degree d, then v, Av, …, A^(d−1)v is a basis of the space v makes. So that space has dimension d.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the killer technique">
+\{p : p(A)v = 0\} = (k_v) @@ the one-maker technique (44c4)
+c_0v + c_1Av + \cdots + c_{d-1}A^{d-1}v = 0 \Rightarrow \text{every } c_i = 0 @@ the left side is p(A)v with p of degree below d, and k_v divides p
+p = k_vq + r:\ \ p(A)v = r(A)v @@ divide (44c2); k_v(A)v = 0
+\htmlClass{new}{v, Av, \ldots, A^{d-1}v \text{ is a basis}} \quad \blacksquare @@ free by the second line; they build every p(A)v, since r has degree below d
+  </pre>
+  <p data-pid="a36eef">In that basis A is the companion grid of k_v (44·cb27.2): A moves each basis vector to the next, and the last to what k_v dictates. So v makes the whole space exactly when k_v has degree n, and then one vector and one polynomial hold all of A.</p>
+  <p data-pid="43dc7f">For the sliding grid J₂(0), the vector e₂ has Ae₂ = e₁: it makes the plane, with killer x². The vector e₁ has killer x and makes a line. For 2I every vector has killer x − 2, and no vector makes the plane.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">44·cb27.5.1</span><span class="ph understand">understand</span>What is the killer of a vector v, and what does its degree count? <br>When does v make the whole space?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="44·cb27.6">
+  <h2 class="sthead"><span class="stno">44·cb27.6</span>A Vector Killed by Nothing Smaller Than the Least Polynomial</h2>
+  <p data-pid="e495e5">The least polynomial m of A kills every vector, so every killer divides m. Some vectors have a smaller killer. Is there always one that needs all of m?</p>
+  <p data-pid="11ad78">Full-killer technique: <b>for every square grid A over a field there is a vector whose killer is the least polynomial of A.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the full-killer technique">
+F^n \cong F[x]/(d_1) \times \cdots \times F[x]/(d_k),\ \ d_k = m @@ the grid-module technique (44·cb27.1)
+v = (0, \ldots, 0, 1) @@ the class of 1 in the last piece
+p \cdot v = (0, \ldots, 0, p) @@ p · v = p(A)v
+p(A)v = 0 \iff d_k \mid p @@ in F[x]/(dₖ)
+\htmlClass{new}{k_v = m} \quad \blacksquare @@ both have top coefficient 1
+  </pre>
+  <p data-pid="155b02">So the largest space one vector can make has dimension deg m (44·cb27.5). Some vector makes the whole space exactly when m has degree n, which is when m is the own polynomial up to sign, and when the list d₁ ∣ ⋯ ∣ dₖ has one member.</p>
+  <p data-pid="d46ea7">Take the grid A of 44·cb27.4, with m = (x − 2)² and n = 3. No vector makes the space. The vector e₁ has (A − 2I)e₁ = (1, −1, 0) ≠ 0, so its killer is all of m. The vector e₃ has killer x − 2.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">44·cb27.6.1</span><span class="ph understand">understand</span>Why is there a vector whose killer is the least polynomial? <br>When does some vector make the whole space?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="44·cb27.7">
+  <h2 class="sthead"><span class="stno">44·cb27.7</span>Which Kept Spaces Have a Kept Partner</h2>
+  <p data-pid="23bcb2">A space W inside is <b>kept</b> by A when A sends W into W. A <b>partner</b> of W is a space W′ with W and W′ sharing only 0 and together building the whole space. Every W has partners (27b). The question is whether one of them is kept as well: then A works on W and on W′ apart.</p>
+  <p data-pid="dc54a1">Kept-partner technique: <b>for a grid A over ℂ, every kept space has a kept partner exactly when A is diagonal in some basis.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the kept-partner technique">
+A \text{ diagonal in the basis } v_1, \ldots, v_n;\ W \text{ kept} @@ each vᵢ is only stretched
+\text{grow a basis of } W \text{ by some } v_i;\ W' = \text{their mixes} @@ add a vᵢ the list does not build, until none is left (27b)
+W' \text{ is kept, and is a partner of } W @@ its makers are only stretched; the grown list is a basis
+A \text{ not diagonal}:\ Au_1 = \lambda u_1,\ Au_2 = \lambda u_2 + u_1,\ u_1 \ne 0 @@ a block of size at least 2 (44·cb27.3, 44·cb27.4)
+W = \text{the vectors stretched by } \lambda;\ \ u_2 = w + w' @@ W is kept; suppose W′ is a kept partner
+u_1 = (A - \lambda I)u_2 = (A - \lambda I)w' \in W' @@ (A − λI)w = 0, and W′ is kept
+\htmlClass{new}{u_1 \in W,\ u_1 \in W':\ \ u_1 = 0} \quad \blacksquare @@ they share only 0; but u₁ ≠ 0, so W has no kept partner
+  </pre>
+  <p data-pid="d77b29">The sliding grid J₂(0) keeps exactly three spaces: 0, the line of e₁, and the plane. The line of e₁ has no kept partner, because there is no other kept line.</p>
+  <p data-pid="004c75">A symmetric map keeps the perp of every space it keeps (31d3), and the perp is a partner. That fits: a symmetric map is diagonal in a right-angled basis.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">44·cb27.7.1</span><span class="ph understand">understand</span>When does every kept space of a complex grid have a kept partner? <br>Which kept space of the sliding grid has none?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="44·cb27.8">
+  <h2 class="sthead"><span class="stno">44·cb27.8</span>Counting the Blocks</h2>
+  <p data-pid="931c95">The nearly diagonal form came from a basis (44·cb27.3). Its blocks can be counted from A alone. For a stretch λ write nⱼ for the dimension of what (A − λI)ʲ loses, with n₀ = 0.</p>
+  <p data-pid="4edf34">Block-count technique: <b>the number of blocks of λ of size at least j is nⱼ − nⱼ₋₁.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the block-count technique">
+J_m(\lambda) - \lambda I:\ \ b_1 \mapsto 0,\ b_2 \mapsto b_1,\ \ldots,\ b_m \mapsto b_{m-1} @@ the slide, in the block’s basis (44·cb27.3)
+\text{its power } j \text{ loses what } b_1, \ldots, b_{\min(j, m)} \text{ build} @@ j slides push those off the end
+\text{a block of another stretch } \mu \text{ loses nothing} @@ J(μ) − λI has μ − λ ≠ 0 down its diagonal: undoable (27e)
+n_j = \text{the sum of } \min(j, m) \text{ over the blocks of } \lambda @@ the blocks work apart
+\min(j, m) - \min(j - 1, m) = 1 \text{ if } m \ge j,\ \text{else } 0 @@ check the two cases
+\htmlClass{new}{n_j - n_{j-1} = \text{the blocks of size} \ge j} \quad \blacksquare @@ their number: sum the line before over the blocks of λ
+  </pre>
+  <p data-pid="a9ba64">So the list of blocks does not depend on the basis that was chosen, and two complex grids are one map in two bases exactly when their numbers nⱼ agree for every λ and j.</p>
+  <p data-pid="0ff4c7">With own polynomial (x − 2)⁴ there are five forms, one for each way to write 4 as a sum: 4, 3 + 1, 2 + 2, 2 + 1 + 1, 1 + 1 + 1 + 1. The least polynomial gives the largest block, and n₁ gives the number of blocks; here those two settle it. At size 7 they do not: blocks 3, 3, 1 and blocks 3, 2, 2 have the same own polynomial, least polynomial (x − λ)³ and n₁ = 3. But n₂ is 5 for the first and 6 for the second.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">44·cb27.8.1</span><span class="ph understand">understand</span>How is the number of blocks of λ of size at least j found from A? <br>Which two forms of size 7 agree in own polynomial, least polynomial and n₁, and what tells them apart?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="44·cb27.9">
+  <h2 class="sthead"><span class="stno">44·cb27.9</span>A Grid and Its Side-Turn Are One Map in Two Bases</h2>
+  <p data-pid="cb9461">The side-turn Aᵀ has the determinant of A (27g). It has more than that.</p>
+  <p data-pid="20bebc">Side-turn-twin technique: <b>for every square grid A over ℂ there is an undoable P with Aᵀ = P⁻¹AP.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the side-turn-twin technique">
+A = QJQ^{-1},\ J \text{ nearly diagonal} @@ 44·cb27.3
+J_m(\lambda)^{\mathsf T} = R\,J_m(\lambda)\,R,\ \ R = \text{the basis in reverse order} @@ reversing rows and columns moves the ones from above the diagonal to below; R² = I
+J^{\mathsf T} = SJS^{-1},\ \ S = \text{the reversals, block by block} @@ the blocks work apart
+A^{\mathsf T} = (Q^{-1})^{\mathsf T} J^{\mathsf T} Q^{\mathsf T} = (Q^{-1})^{\mathsf T} S\,J\,S^{-1} Q^{\mathsf T} @@ (XY)ᵀ = YᵀXᵀ, entry by entry (27d)
+J = Q^{-1}AQ @@ the first line
+\htmlClass{new}{A^{\mathsf T} = P^{-1}AP,\ \ P = QS^{-1}Q^{\mathsf T}} \quad \blacksquare @@ P⁻¹ = (Q⁻¹)ᵀ S Q⁻¹
+  </pre>
+  <p data-pid="932cc1">So A and Aᵀ have the same own polynomial, least polynomial, stretches and blocks. They do not have the same stretched vectors. The sliding grid stretches e₁ by 0, and its side-turn stretches e₂ by 0 and moves e₁.</p>
+  <p data-pid="74ccf2">Rows and columns of a grid therefore tell one story: whatever a basis cannot change is the same read across as read down.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">44·cb27.9.1</span><span class="ph understand">understand</span>What do a complex grid and its side-turn have in common? <br>What do the sliding grid and its side-turn not share?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="44·cb27.10">
+  <h2 class="sthead"><span class="stno">44·cb27.10</span>Square Roots of Grids</h2>
+  <p data-pid="de9be0">Every complex number has a square root (25d). Does every complex grid? A square root of A is a grid B with B² = A.</p>
+  <p data-pid="1cb986">Grid-root technique: <b>every undoable square grid over ℂ has a square root.</b> It is enough to find one for each block Jₘ(λ) with λ ≠ 0: put them down the diagonal, and carry them back by the basis change.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the grid-root technique">
+J_m(\lambda) = \lambda(I + N),\ \ N^m = 0 @@ N is the slide divided by λ; undoable, so no stretch is 0
+s^2 = 1 + x + cx^k + (\text{higher}),\ \ s(0) = 1 @@ suppose a polynomial s gets this far; s = 1 + x/2 does for k = 2
+(s - \tfrac c2 x^k)^2 = 1 + x + (\text{higher than } k) @@ −c xᵏ s starts with −c xᵏ, since s(0) = 1
+s(x)^2 = 1 + x + x^m\,r(x) @@ for some polynomials s and r: repeat up to k = m − 1 (4c)
+s(N)^2 = I + N @@ putting N in keeps sums and products; Nᵐ = 0
+\htmlClass{new}{B = \sqrt{\lambda}\; s(N):\ \ B^2 = J_m(\lambda)} \quad \blacksquare @@ any square root of λ (25d)
+  </pre>
+  <p data-pid="f83e6c">Try rows (4, 1) and (0, 4). Here λ = 4, N has the one entry 1/4, and s = 1 + x/2. So B = 2(I + N/2) has rows (2, 1/4) and (0, 2), and B² has rows (4, 1) and (0, 4).</p>
+  <p data-pid="71f3c4">The sliding grid J₂(0) has no square root. If B² = J₂(0), then B⁴ = 0, so the only stretch of B is 0, its own polynomial is x², and B² = 0 (27g). Over the reals the count changes with the size: −1 has no real square root, and −I with 2 rows has one, the turn by a right angle.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">44·cb27.10.1</span><span class="ph understand">understand</span>Why has every undoable complex grid a square root? <br>Why has the sliding grid none?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="44·cb27.11">
+  <h2 class="sthead"><span class="stno">44·cb27.11</span>The Two Parts of a Map</h2>
+  <p data-pid="a049ff">In its nearly diagonal basis a grid is a diagonal plus some ones. Call D the diagonal part and N the rest, carried back to the first basis: A = D + N.</p>
+  <p data-pid="8fe3f2">D-plus-N technique: <b>every square grid A over ℂ is D + N with D diagonal in some basis, some power of N equal to 0, and DN = ND; and there is only one such pair.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the D-plus-N technique">
+\text{on each block } D = \lambda I:\ \ DN = ND,\ N^n = 0 @@ λI swaps with everything; N slides (44·cb27.3)
+A = D' + N' \text{ another such pair}:\ D'A = AD',\ N'A = AN' @@ D′ and N′ swap with each other, so with their sum
+W_\lambda = \text{what } (A - \lambda I)^n \text{ loses is kept by } D', N' @@ (A − λI)ⁿD′w = D′(A − λI)ⁿw = 0
+\text{on } W_\lambda:\ \ D' - \lambda I = N - N' @@ W_λ is built by the blocks of λ (44·cb27.8), where D = λI
+(N - N')^{2n} = 0 @@ N and N′ swap, so the binomial technique holds (4k): each term has Nⁿ or N′ⁿ
+D' - \lambda I \text{ on } W_\lambda:\ \text{diagonal, stretches } 0 @@ diagonal in some basis of W_λ: its least polynomial divides that of D′: no repeated zero (27g, 44·cb27.4); a stretch μ has μ²ⁿ = 0
+\begin{aligned}&\htmlClass{new}{D' = \lambda I = D \text{ on every } W_\lambda:}\\ &\quad \htmlClass{new}{D' = D,\ N' = N} \quad \blacksquare\end{aligned} @@ the W_λ together hold a basis
+  </pre>
+  <p data-pid="4abea8">The swap is what makes the pair the only one. Rows (2, 1) and (0, 3) are a diagonal plus a slide, with parts that do not swap, and that is not the pair: the stretches 2 and 3 differ, so the grid is diagonal in some basis, D is the whole grid and N = 0.</p>
+  <p data-pid="c4f916">The swap also pays. Since D and N swap, e^(tA) = e^(tD) e^(tN) (27·cb24), and e^(tN) is a finite sum, because the powers of N stop. So every solution of x′ = Ax is exponentials times polynomials in t.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">44·cb27.11.1</span><span class="ph understand">understand</span>What are the two parts of a complex grid, and what makes them the only such pair? <br>Why are the parts of rows (2, 1), (0, 3) not its diagonal and its slide?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="44·cb27.12">
+  <h2 class="sthead"><span class="stno">44·cb27.12</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 \det(xI - A) = (x - 2)^3 \text{, so } A = 2I \text{ in some basis}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the least polynomial decides; here it is (x − 2)², so one block of size 2
 \text{two grids with the same own polynomial are one map in two bases}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; J₂(2) ⊕ J₁(2) and 2I share (x − 2)³ and differ
 \text{every real grid is nearly diagonal over } \mathbb R\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the turn by a right angle has no real stretch; over ℝ the companion blocks of x² + 1 remain
 J_2(0)^2 = J_2(0)\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; J₂(0)² = 0: sliding twice slides off the end
+k_v = \text{the least polynomial, for every } v\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; for J₂(0), e₁ has killer x and the least polynomial is x²; the killer divides it
+k_v = m \Rightarrow v \text{ makes the whole space}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; only when m has degree n: for 2I every killer is m = x − 2 and each vector makes a line
+\text{every space has a partner} \Rightarrow \text{a kept one}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; the line of e₁ under J₂(0) has many partners and none is kept
+\text{same own and least polynomials} \Rightarrow \text{same blocks}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; blocks 3, 3, 1 and 3, 2, 2 share both and n₁; n₂ is 5 and 6
+A^{\mathsf T} \text{ stretches the vectors } A \text{ stretches}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; the same stretches, other vectors: J₂(0) stretches e₁ by 0 and its side-turn stretches e₂
+\text{every complex grid has a square root}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; the undoable ones do; a root B of J₂(0) would have B⁴ = 0, so B² = 0
+D = \text{the diagonal of } A,\ N = \text{the rest}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; only if they swap: for rows (2, 1), (0, 3) they do not, and the true parts are D = A, N = 0
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">44·cb27.5.1</span><span class="ph understand">understand</span>Why does an own polynomial (x − 2)³ not make A equal to 2I in some basis? <br>Why is the turn by a right angle not nearly diagonal over ℝ?</li>
+      <li><span class="qid">44·cb27.12.1</span><span class="ph understand">understand</span>Why does an own polynomial (x − 2)³ not make A equal to 2I in some basis? <br>Why is the turn by a right angle not nearly diagonal over ℝ?</li>
     </ol>
   </section>
 </section>
@@ -152,10 +312,10 @@ J_2(0)^2 = J_2(0)\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">44·cb27.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 2 &amp; 1 &amp; 1 \\ 0 &amp; 2 &amp; 1 \\ 0 &amp; 0 &amp; 2 \end{pmatrix}"></span></span>Find the least polynomial of A, its blocks, and a basis in which it is nearly diagonal. <br>Then find Aⁿ for every n from the block form, as 27l found powers by diagonalising.</div>
-  <div class="chq"><span class="chid">44·cb27.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="A^2 = A"></span></span>Which grids over ℂ obey A² = A? <br>Find their least polynomials and blocks. Must they be diagonal? Do the same for A² = 0 and for Aᵐ = I.</div>
-  <div class="chq"><span class="chid">44·cb27.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="xI - A"></span></span>Bring xI − A to a diagonal over ℚ[x] by 44i’s undoable moves for the grid of the fourth footing, and read off 1, x − 2, (x − 2)². <br>Turn it round: build a proof that the diagonal of xI − A is the list d₁ ∣ ⋯ ∣ dₖ of the grid-module technique.</div>
-  <div class="chq"><span class="chid">44·cb27.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">24h: y″ = −n²y, and a statement whose two roots coincide</span></span>24h solved statements on rates by trying e^(rx). For y″ − 4y′ + 4y = 0 the two roots coincide, and trying gives only e^(2x). <br>Write the statement as a grid acting on (y, y′). Which blocks has it? Does the 1 above the diagonal point to a second answer, and is x e^(2x) one?</div>
+  <div class="chq"><span class="chid">44·cb27.13.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 2 &amp; 1 &amp; 1 \\ 0 &amp; 2 &amp; 1 \\ 0 &amp; 0 &amp; 2 \end{pmatrix}"></span></span>Find the least polynomial of A, its blocks, and a basis in which it is nearly diagonal. <br>Then find Aⁿ for every n from the block form, as 27l found powers by diagonalising.</div>
+  <div class="chq"><span class="chid">44·cb27.13.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="A^2 = A"></span></span>Which grids over ℂ obey A² = A? <br>Find their least polynomials and blocks. Must they be diagonal? Do the same for A² = 0 and for Aᵐ = I.</div>
+  <div class="chq"><span class="chid">44·cb27.13.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="xI - A"></span></span>Bring xI − A to a diagonal over ℚ[x] by 44i’s undoable moves for the grid of the fourth footing, and read off 1, x − 2, (x − 2)². <br>Turn it round: build a proof that the diagonal of xI − A is the list d₁ ∣ ⋯ ∣ dₖ of the grid-module technique.</div>
+  <div class="chq"><span class="chid">44·cb27.13.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">24h: y″ = −n²y, and a statement whose two roots coincide</span></span>24h solved statements on rates by trying e^(rx). For y″ − 4y′ + 4y = 0 the two roots coincide, and trying gives only e^(2x). <br>Write the statement as a grid acting on (y, y′). Which blocks has it? Does the 1 above the diagonal point to a second answer, and is x e^(2x) one?</div>
 </section>
 <div class="themecert themeend"></div>
 
@@ -163,7 +323,7 @@ J_2(0)^2 = J_2(0)\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The block of the companion technique is the companion matrix, and the row of companion blocks is the rational canonical form, or Frobenius normal form; d₁, …, dₖ are the invariant factors of A. The blocks Jₘ(λ) are Jordan blocks, and the near-diagonal form is the Jordan normal form; the powers (x − λ)ᵐ are the elementary divisors. The plain-diagonal technique is the criterion for diagonalisability by the minimal polynomial.</p>
+  <p>The block of the companion technique is the companion matrix, and the row of companion blocks is the rational canonical form, or Frobenius normal form; d₁, …, dₖ are the invariant factors of A. The blocks Jₘ(λ) are Jordan blocks, and the near-diagonal form is the Jordan normal form; the powers (x − λ)ᵐ are the elementary divisors. The plain-diagonal technique is the criterion for diagonalisability by the minimal polynomial. The killer of v is its annihilator, or its minimal polynomial with respect to A; the space v makes is a cyclic subspace, and a v that makes the whole space is a cyclic vector. A grid whose least polynomial is its own polynomial is non-derogatory; it is exactly a grid with a cyclic vector. A kept space is an invariant subspace, a partner is a complement, and a map every one of whose invariant subspaces has an invariant complement is semisimple. The nearly diagonal form is the Jordan form, fixed up to the order of its blocks; the nⱼ are the dimensions of the kernels of (A − λI)ʲ, and the block sizes for one λ are its Segre characteristic. The side-turn is the transpose; grids that are one map in two bases are similar. Every square matrix over any field is similar to its transpose. The polynomial s is the binomial series for √(1 + x) cut off at degree m − 1; a grid some power of which is 0 is nilpotent. D and N are the semisimple and nilpotent parts, and A = D + N is the Jordan–Chevalley decomposition; W_λ is the generalized eigenspace of λ.</p>
   <h3>Who said it first</h3>
   <p>Camille Jordan published the near-diagonal form in his Traité des substitutions of 1870, for grids over finite fields. Karl Weierstrass had the same lists of polynomials in 1868, for pairs of quadratic forms, and Georg Frobenius gave the rational form in 1879. The reading of a grid as a module over F[x] is from the school of Emmy Noether in the 1920s.</p>
   <h3>A proof that is not allowed</h3>

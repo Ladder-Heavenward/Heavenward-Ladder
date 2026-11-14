@@ -143,17 +143,61 @@ r = 0 @@ a member of I other than 0 has degree at least deg g
 </section>
 
 <section class="class step" data-step="44c5">
-  <h2 class="sthead"><span class="stno">44c5</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">44c5</span>A Polynomial, and the Function It Gives</h2>
+  <p data-pid="6a7c9a">A polynomial is its list of coefficients. The function it gives is another thing: its values, member by member. 44c7 met two polynomials on ℤ/2 with one function. Here is the whole account.</p>
+  <p data-pid="02de36">Same-function technique: <b>over an endless field, two polynomials that give the same function are the same polynomial. Over a field with q members a₁, …, a_q, two polynomials give the same function exactly when g = (x − a₁) ⋯ (x − a_q) divides their difference.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the same-function technique">
+p, r \text{ give one function} \iff (p - r)(a) = 0 \text{ for every } a @@ putting a in keeps differences (44b3)
+p - r \ne 0 \text{ of degree } d \text{ has at most } d \text{ zeros} @@ at-most-n-zeros, in every field (44c3)
+F \text{ endless}:\ p - r = 0 @@ it has more than d zeros, whatever d is
+F \text{ finite}:\ g \mid p - r \Rightarrow \text{every } a_i \text{ is a zero} @@ g is 0 at each aᵢ
+\text{every } a_i \text{ a zero} \Rightarrow p - r = (x - a_1)\,h,\ h(a_2) = 0, \ldots @@ strike one factor at a time (44c3); a field has no zero products
+\htmlClass{new}{p, r \text{ give one function} \iff g \mid p - r} \quad \blacksquare @@ after q strikes, p − r = g · (what is left)
+  </pre>
+  <p data-pid="7463dd">Every member of a field with q members is a zero of x^q − x (44g3). That polynomial has degree q and top coefficient 1, and g divides it, so g = x^q − x. On ℤ/2 it is x² − x = x² + x, the polynomial of 44c7.</p>
+  <p data-pid="424f53">Count on a field with q members. The polynomials of degree below q, with 0, number q^q. No two give the same function, since their difference has degree below q and g does not divide it. The functions from the field to itself also number q^q. So on a finite field every function at all is given by exactly one polynomial of degree below q. Over the reals almost no function is a polynomial.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">44c5.1</span><span class="ph understand">understand</span>When do two polynomials over a finite field give the same function? <br>Why can that not happen for two different polynomials over an endless field?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="44c6">
+  <h2 class="sthead"><span class="stno">44c6</span>A Reading That Keeps Products Is a Value</h2>
+  <p data-pid="672989">A reading of F[x] is a straight map L from the polynomials to F (27h). Putting a member t in, p ↦ p(t), is one. It also keeps products (44b3). Most readings do not.</p>
+  <p data-pid="4a2037">Value technique: <b>a reading L of F[x] with L(pq) = L(p)L(q) for all p and q is either the zero reading or p ↦ p(t), with t = L(x).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the value technique">
+L(1) = L(1 \cdot 1) = L(1)^2,\ \text{so } L(1) = 0 \text{ or } 1 @@ L(1)(L(1) − 1) = 0 in a field
+L(1) = 0:\ L(p) = L(p \cdot 1) = L(p) \cdot 0 = 0 @@ the zero reading
+L(1) = 1,\ t = L(x):\ \ L(x^k) = t^k @@ L(xᵏ) = L(x) L(xᵏ⁻¹), by induction on k (4c)
+\htmlClass{new}{L(c_0 + c_1x + \cdots + c_nx^n) = p(t)} \quad \blacksquare @@ L is straight: c₀ + c₁t + ⋯ + cₙtⁿ
+  </pre>
+  <p data-pid="3292de">Try the reading p ↦ ∫₀¹ p on ℝ[x]. It sends x to 1/2 and x² to 1/3, and 1/3 is not 1/2 · 1/2: products are not kept. The reading p ↦ p′(0) sends x · x to 0 and x to 1. Among all readings, one demand picks out the values.</p>
+  <p data-pid="9479c0">So the members of F and the readings of F[x] that keep products and send 1 to 1 are matched: t with "put t in". What such a reading loses is the ideal (x − t) (44c3). The points of the line can be found again from the ring of polynomials alone.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">44c6.1</span><span class="ph understand">understand</span>Which readings of F[x] keep products? <br>Why does the total from 0 to 1 not keep them?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="44c7">
+  <h2 class="sthead"><span class="stno">44c7</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 x^2 = 2x \cdot q + r \text{ with } q, r \in \mathbb Z[x],\ \deg r < 1\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the top of 2x · q is even; x² has top 1; it needs ½
 \deg pq = \deg p + \deg q \text{ on } \mathbb Z/6\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; (2x)(3x) = 6x² = 0
 x^2 - 1 \text{ has at most two zeros on } \mathbb Z/8\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; 1, 3, 5, 7: ℤ/8 has zero products
 p(r) = 0 \text{ for every } r \text{ in } F \Rightarrow p = 0\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; on ℤ/2, x² + x is 0 at 0 and at 1 and is not the zero polynomial
+\text{every function on } \mathbb R \text{ is a polynomial}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; true on a finite field only, where both number q^q; on ℝ the size |x| is no polynomial
+L \text{ straight} \Rightarrow L(pq) = L(p)L(q)\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; the total from 0 to 1 is straight and sends x to 1/2, x² to 1/3; only the values keep products
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">44c5.1</span><span class="ph understand">understand</span>Why can x² not be divided by 2x in ℤ[x]? <br>Why is x² + x not the zero polynomial on ℤ/2, though both its values are 0?</li>
+      <li><span class="qid">44c7.1</span><span class="ph understand">understand</span>Why can x² not be divided by 2x in ℤ[x]? <br>Why is x² + x not the zero polynomial on ℤ/2, though both its values are 0?</li>
     </ol>
   </section>
 </section>
@@ -173,7 +217,7 @@ p(r) = 0 \text{ for every } r \text{ in } F \Rightarrow p = 0\,? @@ &lt;span cla
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The degree-adds technique says that a polynomial ring over an integral domain is an integral domain, with units the units of R. The top-undoable technique is the division algorithm for monic divisors, and over a field F the statement that F[x] is a Euclidean domain. The remainder-is-value technique is the remainder theorem, and the factor technique is the factor theorem. The one-maker technique says F[x] is a principal ideal domain; ℤ[x] is not one.</p>
+  <p>The degree-adds technique says that a polynomial ring over an integral domain is an integral domain, with units the units of R. The top-undoable technique is the division algorithm for monic divisors, and over a field F the statement that F[x] is a Euclidean domain. The remainder-is-value technique is the remainder theorem, and the factor technique is the factor theorem. The one-maker technique says F[x] is a principal ideal domain; ℤ[x] is not one. A polynomial is a formal object and the function it gives is its polynomial function; over a finite field the map from one to the other is onto and not one-to-one. A reading is a linear functional; one that keeps products and sends 1 to 1 is an algebra homomorphism to F, also called a character, and p ↦ p(t) is evaluation at t.</p>
   <h3>Who said it first</h3>
   <p>Simon Stevin divided polynomials and took their greatest common divisor by repeated division in 1585. Carl Friedrich Gauss worked with polynomials on prime clocks in an unpublished eighth section of his book of 1801. Évariste Galois wrote with them in 1830, and Richard Dedekind made the comparison of polynomials with whole numbers a theme in 1857.</p>
   <h3>A proof that is not allowed</h3>

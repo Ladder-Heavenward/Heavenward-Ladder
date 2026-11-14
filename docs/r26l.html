@@ -152,17 +152,66 @@ s = 0, -1, -2, \ldots:\ \text{one factor of the bottom is } 0 @@ no value there
 </section>
 
 <section class="class step" data-step="26l5">
-  <h2 class="sthead"><span class="stno">26l5</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">26l5</span>Between the Factorials</h2>
+  <p data-pid="cc4b5d">Γ(n + 1) is n!, and Γ(n + 2) is (n + 1)!, larger by the factor n + 1. What does Γ do between? Write the input as n + θ + 1 with 0 ≤ θ ≤ 1. The guess: it has gained the share θ of that factor, counted as a power, about n<sup>θ</sup>.</p>
+  <p data-pid="155fa1">Between-factorials technique: <b>for whole n ≥ 1 and 0 ≤ θ ≤ 1, Γ(n + θ + 1) = n! · n<sup>θ</sup> · c, with 1 − 2/n ≤ c ≤ 1 + 1/n.</b></p>
+  <p data-pid="ba8a5d">The proof needs two fences for powers. For u > 0, the curve u<sup>θ</sup> bends down and u<sup>θ − 1</sup> bends up, so one lies under and one over its tangent line at u = 1 (14g).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the between-factorials technique">
+u^{\theta} \le 1 + \theta(u - 1),\ \ u^{\theta - 1} \ge 1 + (\theta - 1)(u - 1) @@ the two tangent lines at 1 (14g); equal when θ is 0 or 1
+x^{n+\theta} \le n^{\theta}x^{n}\big(1 - \theta + \theta\tfrac{x}{n}\big) @@ the first fence with u = x/n, times n^θ xⁿ
+\Gamma(n + \theta + 1) \le n^{\theta}\big((1 - \theta)\,n! + \theta\tfrac{(n+1)!}{n}\big) @@ times e^(−x), and the areas from 0 to ∞ (15e, 26l2)
+= n!\,n^{\theta}\big(1 + \tfrac{\theta}{n}\big) @@ gather
+x^{n+\theta} \ge n^{\theta-1}x^{n+1}\big(2 - \theta - (1 - \theta)\tfrac{x}{n}\big) @@ the second fence with u = x/n, times n^(θ − 1) xⁿ⁺¹
+\begin{aligned}\Gamma(n + \theta + 1) &\ge n^{\theta-1}(n+1)!\,\big(1 - \tfrac{2(1-\theta)}{n}\big)\\ &= n!\,n^{\theta}\big(1 + \tfrac1n\big)\big(1 - \tfrac{2(1-\theta)}{n}\big)\end{aligned} @@ the areas again: (2 − θ)(n + 1)! − (1 − θ)(n + 2)!/n, gathered
+\htmlClass{new}{1 - \tfrac2n \le \tfrac{\Gamma(n + \theta + 1)}{n!\,n^{\theta}} \le 1 + \tfrac1n} \quad \blacksquare @@ 0 ≤ θ ≤ 1
+  </pre>
+  <p data-pid="b34c67">Try it at a half. Γ(11/2) = (9/2)(7/2)(5/2)(3/2)(1/2)√π ≈ 52.34, and 4! · √4 = 48: the ratio is 1.09, inside the fences ½ and 1¼. At n = 100 the fences are 0.98 and 1.01.</p>
+  <p data-pid="b9d0fe">So far out, Γ between two factorials is the lower one times a power of n, as nearly as you like. Put the size of factorials (23k) in for n!, and s for n + θ. Then (s/e)<sup>s</sup> is (n/e)ⁿ · (1 + θ/n)ⁿ · (s/e)<sup>θ</sup>, and (1 + θ/n)ⁿ lies between e<sup>θ − 1/n</sup> and e<sup>θ</sup> by the log-bounds technique (17a). The e<sup>θ</sup> cancels, and what is left is this: <b>Γ(s + 1) ~ √(2πs) (s/e)<sup>s</sup> for real s, as s grows.</b> The size of factorials holds between the whole numbers too.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26l5.1</span><span class="ph understand">understand</span>What does the between-factorials technique say Γ(n + θ + 1) is close to? <br>Where do its two fences come from?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26l6">
+  <h2 class="sthead"><span class="stno">26l6</span>The Area Under a Narrowing Hill</h2>
+  <p data-pid="6b2fb3">On [−1, 1] the curve (1 − x²)ⁿ is a hill of height 1 at 0. As n grows the hill narrows, and its area heads to 0. How fast? The bell-area proof (26l3) met this hill and fenced it. The between-factorials technique (26l5) measures it.</p>
+  <p data-pid="33d921">Narrowing-hill technique: <b>√n times ∫ from −1 to 1 of (1 − x²)ⁿ dx heads to √π as n grows.</b></p>
+  <p data-pid="3a171b">Write Iₘ for ∫ from 0 to π/2 of sinᵐ, as in 23k4. Then ∫ from 0 to 1 of (1 − x²)ⁿ dx is I₂ₙ₊₁ (26l3).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the narrowing-hill technique">
+I_{2n+1} = \tfrac{2n}{2n+1}\cdot\tfrac{2n-2}{2n-1}\cdots\tfrac{2}{3} @@ Iₘ = ((m − 1)/m) Iₘ₋₂ (23k4), down to I₁ = 1
+= \tfrac{n\,(n-1)\cdots 1}{(n+\frac12)(n-\frac12)\cdots\frac32} @@ halve each of the n factors, top and bottom
+= \tfrac{n!\ \Gamma(\frac32)}{\Gamma(n+\frac32)} @@ the factorial-step technique (26l2), n times: Γ(n + 3/2) = (n + ½)⋯(3/2) Γ(3/2)
+\Gamma(\tfrac32) = \tfrac{\sqrt\pi}{2} @@ half of Γ(1/2) (26l2, 26l3)
+\textstyle\sqrt n\int_{-1}^{1}(1 - x^2)^n\,dx = \sqrt\pi\cdot\tfrac{n!\,\sqrt n}{\Gamma(n+\frac32)} @@ the hill is even: twice I₂ₙ₊₁
+\htmlClass{new}{\textstyle\sqrt n\int_{-1}^{1}(1 - x^2)^n\,dx \to \sqrt\pi} \quad \blacksquare @@ between-factorials (26l5) with θ = ½: the fraction is between 1/(1 + 1/n) and 1/(1 − 2/n)
+  </pre>
+  <p data-pid="0e6e82">So the area of the hill is about √π/√n: a hill of height 1 and width about 1.77/√n. At n = 100 the area is 0.1766, and √π/√100 = 0.1772.</p>
+  <p data-pid="c23f5c">Divide the hill by its own area and you have a curve of area 1 that piles up at 0 as n grows. It is a polynomial, and that is its use: averaging a function against such a hill gives a polynomial close to the function. And it is the bell again: (1 − x²)ⁿ ≤ e<sup>−nx²</sup> (26l3), and √n times the area under e<sup>−nx²</sup> over the whole line is √π exactly.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26l6.1</span><span class="ph understand">understand</span>How fast does the area under (1 − x²)ⁿ on [−1, 1] head to 0? <br>How does Γ come into the proof?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26l7">
+  <h2 class="sthead"><span class="stno">26l7</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 \Gamma(n) = n!\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; Γ(n + 1) = n!: Γ(5) = 4! = 24, not 120 (26l2)
 \Gamma(0) = 0! = 1\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; Γ(1) = 0! = 1; Γ(0) has no value: the area diverges at 0, and the step technique divides by 0
 \Gamma(-\tfrac12) = \int_0^\infty x^{-3/2}e^{-x}\,dx\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; that area diverges at 0 (16i2: p = 3/2 ≥ 1); below 0, Γ is the step-down value, not the area
 \Gamma(s+1) \text{ is the only smooth function equal to } n! \text{ at every whole } n\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; Γ(s + 1) + sin πs agrees with it at every whole number; more must be asked than the whole numbers
+\Gamma(n + \tfrac32) = \tfrac12\big(n! + (n+1)!\big)\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; between factorials the gain is a power, not a share: Γ(n + 3/2) is near n!·√n
+\text{the height stays } 1 \text{, so the area stays}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; the hill narrows like 1/√n: its area is near √π/√n and heads to 0
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">26l5.1</span><span class="ph understand">understand</span>Why is “Γ(n) = n!” a move to watch out for?</li>
+      <li><span class="qid">26l7.1</span><span class="ph understand">understand</span>Why is “Γ(n) = n!” a move to watch out for?</li>
     </ol>
   </section>
 </section>
@@ -183,7 +232,7 @@ s = 0, -1, -2, \ldots:\ \text{one factor of the bottom is } 0 @@ no value there
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>Γ is the gamma function, and the two-ends technique says its defining integral, Euler’s integral of the second kind, converges for s &gt; 0. The factorial-step technique is the functional equation Γ(s + 1) = sΓ(s). The bell-area technique is the Gaussian integral, ∫ e^(−x²) dx = √π over the line; its proof here is a squeeze through Wallis’s integrals. The step-down technique is the continuation of Γ to the negative non-integers, where it has poles at 0, −1, −2, …. Continuing a function past its formula is analytic continuation, and the fact that two functions with complex slopes agreeing near a point agree on a whole disc is the start of the identity theorem. The integral in 26l.4.4 is the beta function, B(m, n) = Γ(m)Γ(n)/Γ(m + n).</p>
+  <p>Γ is the gamma function, and the two-ends technique says its defining integral, Euler’s integral of the second kind, converges for s &gt; 0. The factorial-step technique is the functional equation Γ(s + 1) = sΓ(s). The bell-area technique is the Gaussian integral, ∫ e^(−x²) dx = √π over the line; its proof here is a squeeze through Wallis’s integrals. The step-down technique is the continuation of Γ to the negative non-integers, where it has poles at 0, −1, −2, …. Continuing a function past its formula is analytic continuation, and the fact that two functions with complex slopes agreeing near a point agree on a whole disc is the start of the identity theorem. The integral in 26l.4.4 is the beta function, B(m, n) = Γ(m)Γ(n)/Γ(m + n). Γ(s + 1) ~ √(2πs)(s/e)^s for real s is Stirling’s formula for the gamma function.</p>
   <h3>Who said it first</h3>
   <p>Leonhard Euler, in letters to Christian Goldbach of 1729 and 1730, gave the factorial values between the whole numbers, first as an endless product and then as an integral; Daniel Bernoulli found a product of his own in a letter of 1729. Adrien-Marie Legendre named it Γ in 1811 and shifted it by one. Pierre-Simon Laplace found ∫ e^(−x²) = √π in 1774, in his work on chance. Harald Bohr and Johannes Mollerup proved in 1922 that Γ is the only function with f(1) = 1, f(s + 1) = s f(s), and ln f bending up, which answers 26l.4.3 and 26l.4.5 one way.</p>
 </section>

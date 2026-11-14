@@ -132,17 +132,61 @@ Av = \lambda v \Rightarrow 0 = m(A)v = m(\lambda)v \Rightarrow m(\lambda) = 0 @@
 </section>
 
 <section class="class step" data-step="27g5">
-  <h2 class="sthead"><span class="stno">27g5</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">27g5</span>A Grid Some Power of Which Is 0</h2>
+  <p data-pid="b16d7a">The grid N with rows (0, 1), (0, 0) is not 0, and NN is 0 (27d7). A square grid N <i>fades out</i> when some power of it is the zero grid.</p>
+  <p data-pid="491722">Fades-out technique: <b>if N is n × n and Nᵏ = 0 for some k, then the only stretch of N is 0, already Nⁿ = 0, and I − N is undoable with (I − N)⁻¹ = I + N + ⋯ + Nᵏ⁻¹.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the fades-out technique">
+Nv = \lambda v,\ v \neq 0 \Rightarrow N^kv = \lambda^kv = 0 \Rightarrow \lambda = 0 @@ use N again and again; v ≠ 0
+\det(N - \lambda I) = (-\lambda)^n @@ degree n with (−1)ⁿλⁿ first (27f1), and its only root in ℂ is 0 (25d)
+(-1)^nN^n = 0 @@ the own-polynomial technique (27g3)
+(I - N)(I + N + \cdots + N^{k-1}) = I - N^k @@ multiply out; the middle terms cancel in pairs
+\htmlClass{new}{(I - N)^{-1} = I + N + \cdots + N^{k-1}} \quad \blacksquare @@ since Nᵏ = 0; and Nⁿ = 0 by the third line
+  </pre>
+  <p data-pid="6413b7">So a grid that fades out at all has faded out by its n-th power. A staircase with 0 down its middle fades out: each power pushes its entries one more place up from the middle. Taking the slope is such a map on the polynomials of degree at most 3. In the basis 1, x, x², x³ it sends each power to a number times the one before, and four slopes in a row give 0.</p>
+  <p data-pid="a63947">The undo of I − N is rung 22’s endless sum 1 + x + x² + ⋯ for 1/(1 − x), with the grid in place of x. Here the sum stops by itself.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27g5.1</span><span class="ph understand">understand</span>What does it mean for a grid to fade out, and why is 0 its only stretch? <br>Why is I − N undoable, and what is its undo?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27g6">
+  <h2 class="sthead"><span class="stno">27g6</span>A Real Grid That Squares to −I</h2>
+  <p data-pid="bd013c">The quarter turn of the plane, with rows (0, −1), (1, 0), done twice is the half turn, −I. Which real grids J have JJ = −I?</p>
+  <p data-pid="ece770">Quarter-turn technique: <b>if J is a real n × n grid with JJ = −I, then n is even, and in some basis v₁, Jv₁, …, vₘ, Jvₘ the grid of J is made of quarter turns down its middle and 0 elsewhere.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the quarter-turn technique">
+(\det J)^2 = \det(JJ) = \det(-I) = (-1)^n @@ det-product (27e3); a real square is not negative, so n is even
+Jv = c\,v,\ v \neq 0 \Rightarrow -v = c^2v @@ no real c has c² = −1: v and Jv are free
+W \text{ kept by } J,\ v \notin W,\ av + bJv \in W @@ suppose a mix of v and Jv falls in W
+\Rightarrow aJv - bv \in W @@ apply J: W is kept, and J(Jv) = −v
+\Rightarrow (a^2 + b^2)\,v \in W \Rightarrow a = b = 0 @@ a times the first, less b times the second
+\htmlClass{new}{v_1, Jv_1, \ldots, v_m, Jv_m \text{ a basis}} \quad \blacksquare @@ grow W two vectors at a time, from W = {0}
+  </pre>
+  <p data-pid="9d6017">In that basis J sends vᵢ to Jvᵢ and Jvᵢ to −vᵢ. So its grid has the quarter turn with rows (0, −1), (1, 0) in each 2 × 2 block down the middle. Every real grid that squares to −I is the same map as this one, read in another basis (27d4). Over ℂ the question is different: there i times I squares to −I in every size, odd sizes too. The proof used the reals at two places, and both were the fact that a real square is not negative.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27g6.1</span><span class="ph understand">understand</span>Why must a real grid with JJ = −I have even size? <br>Which basis shows that all such grids are one map?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27g7">
+  <h2 class="sthead"><span class="stno">27g7</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 p(A) = \det(A - A\,I) = 0\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; a grid is not put in for a number inside a determinant; the stand-in proof is needed
 p(A) = 0 \Rightarrow p \text{ is the smallest obeyed polynomial}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; I obeys λ − 1, of degree 1, while its stretch polynomial is (1 − λ)ⁿ
 C_{ij} = \det(\text{strike row } i,\ \text{column } j)\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the sign (−1)^{i+j} is part of it
 SA = I\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; SA = (det A) I; divide by det A, and only when it is not 0
+NN = 0 \Rightarrow N = 0\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; rows (0, 1), (0, 0)
+JJ = -I \text{ for a real } 3 \times 3 \text{ grid}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; (det J)² would be −1: the size must be even
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">27g5.1</span><span class="ph understand">understand</span>Why is “p(A) = 0, so p is the smallest polynomial A obeys” a move to watch out for?</li>
+      <li><span class="qid">27g7.1</span><span class="ph understand">understand</span>Why is “p(A) = 0, so p is the smallest polynomial A obeys” a move to watch out for?</li>
     </ol>
   </section>
 </section>
@@ -163,7 +207,7 @@ SA = I\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; SA = (det
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The grid turned on its side is the transpose. A stand-in Cᵢⱼ is a cofactor, the determinant inside it a minor, and S is the adjugate (or classical adjoint), adj A. Writing det A as Σ aᵢⱼCᵢⱼ is cofactor (or Laplace) expansion. The own-polynomial technique is the Cayley–Hamilton theorem; the smallest obeyed polynomial is the minimal polynomial.</p>
+  <p>The grid turned on its side is the transpose. A stand-in Cᵢⱼ is a cofactor, the determinant inside it a minor, and S is the adjugate (or classical adjoint), adj A. Writing det A as Σ aᵢⱼCᵢⱼ is cofactor (or Laplace) expansion. The own-polynomial technique is the Cayley–Hamilton theorem; the smallest obeyed polynomial is the minimal polynomial. A grid that fades out is nilpotent.</p>
   <h3>Who said it first</h3>
   <p>Pierre-Simon Laplace gave the expansion by smaller determinants in 1772. Arthur Cayley stated the own-polynomial technique in 1858 and checked it for 2 × 2 and 3 × 3 grids; William Rowan Hamilton had a case of it for quaternions. Ferdinand Georg Frobenius proved it in general in 1878, and also introduced the minimal polynomial.</p>
   <p>The words quoted in 27g.4.5 are Cayley’s, from his memoir on the theory of matrices of 1858; the proof of 1878 is Frobenius’s.</p>

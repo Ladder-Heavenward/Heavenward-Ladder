@@ -149,17 +149,130 @@ f(x, y) = x^2 + 3xy + y^2,\ \ H = \begin{pmatrix} 2 & 3 \\ 3 & 2\end{pmatrix} @@
 </section>
 
 <section class="class step" data-step="31e5">
-  <h2 class="sthead"><span class="stno">31e5</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">31e5</span>Corner Determinants, for Any Size</h2>
+  <p data-pid="2f925c">For two inputs the form test read p > 0 and pr − s² > 0 (31e3): two determinants, of the top-left corner of size 1 and of the whole grid. For a symmetric grid A of n rows, write Dₖ for the determinant of its top-left corner of k rows and k columns.</p>
+  <p data-pid="c77fe5">Corner-determinants technique: <b>a real symmetric A is positive definite exactly when D₁ > 0, D₂ > 0, …, Dₙ > 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the corner-determinants technique">
+q \text{ positive definite} \Rightarrow \text{so is } q \text{ on the first } k \text{ places} @@ feed q the lists whose last n − k places are 0: that is the form of the corner
+D_k = \text{the product of the corner's stretches} \gt 0 @@ each is above 0 (31e3); the determinant is their product, by A = QDQᵀ and det-product (31d3, 27e)
+\text{now let every } D_k \gt 0;\ \text{the corner of } n - 1 \text{ rows is positive definite} @@ induction on n (4c)
+D_n \gt 0:\ \text{evenly many stretches are below } 0 @@ the stretches of A: their product is above 0
+\text{if two are: } u, v \text{ at right angles},\ w = au + bv \text{ with last place } 0 @@ one condition on two numbers a, b leaves a w ≠ 0
+q(w) = a^2\lambda + b^2\mu \lt 0,\ \text{yet } q(w) \gt 0 \text{ by the corner} @@ along the axes (31e1); w lives in the first n − 1 places
+\begin{aligned}&\htmlClass{new}{\text{no stretch is below } 0 \text{ or } 0:}\\ &\quad \htmlClass{new}{A \text{ is positive definite}} \quad \blacksquare\end{aligned} @@ Dₙ ≠ 0; then the form test (31e3)
+  </pre>
+  <p data-pid="5d1fbb">Try rows (2, −1, 0), (−1, 2, −1), (0, −1, 2). The corners give 2, 3 and 4: positive definite, and no stretch was found. The test costs one run of row moves, which finds every Dₖ on the way (27k).</p>
+  <p data-pid="eefb4b">Only top-left corners with the sign > count. Rows (0, 0) and (0, −1) have D₁ = 0 and D₂ = 0, and the form is −y²: asking Dₖ ≥ 0 proves nothing.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31e5.1</span><span class="ph understand">understand</span>What does the corner-determinants technique test, and what does it show? <br>Why can a grid with every Dₖ > 0 not have two stretches below 0?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31e6">
+  <h2 class="sthead"><span class="stno">31e6</span>A Positive Grid Is P on Its Side Times P</h2>
+  <p data-pid="3deb92">A positive number is a square, and of a number that is not 0. Positive definite grids are squares in the same way, with one factor laid on its side.</p>
+  <p data-pid="8b13b0">Side-square technique: <b>a real symmetric A is positive definite exactly when A = PᵀP for some square P that can be undone. P can be taken to be a staircase with numbers above 0 down its middle, and there is only one such staircase.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the side-square technique">
+x^{\mathsf T}P^{\mathsf T}Px = |Px|^2 \gt 0 \text{ for } x \ne 0 @@ P can be undone, so Px ≠ 0: PᵀP is positive definite
+A = QDQ^{\mathsf T},\ \ P = \sqrt{D}\,Q^{\mathsf T} @@ the other way: the stretches in D are above 0 (31d3, 31e3), so take their roots
+P^{\mathsf T}P = Q\sqrt{D}\sqrt{D}\,Q^{\mathsf T} = A @@ a diagonal grid is its own flip
+P = WR \Rightarrow A = R^{\mathsf T}W^{\mathsf T}WR = R^{\mathsf T}R @@ column-straightening (31c2): W has right-angled columns, R is a staircase with numbers above 0 down its middle
+\htmlClass{new}{A = P^{\mathsf T}P = R^{\mathsf T}R} \quad \blacksquare @@ and RᵀR = SᵀS makes SR⁻¹ a staircase and a length-keeper at once: the identity
+  </pre>
+  <p data-pid="fe0e31">For rows (4, 2) and (2, 5), the staircase R has rows (2, 1) and (0, 2): RᵀR has rows (4, 2) and (2, 1 + 4). It is found a row at a time, with one square root for each row.</p>
+  <p data-pid="4fb7fb">This is the product-grid technique (31a6) read backwards. A positive definite grid is the grid of a product, and P is a change of basis that makes the product the plain dot: ⟨x, y⟩ = (Py)ᵀ(Px). Every product on lists is the dot, seen through some P.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31e6.1</span><span class="ph understand">understand</span>How is a positive definite grid a square? <br>What does P do to the product whose grid is A?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31e7">
+  <h2 class="sthead"><span class="stno">31e7</span>The One Root of a Positive Map</h2>
+  <p data-pid="5359ea">A number that is not below 0 has exactly one root that is not below 0. Call a symmetric map <b>never-negative</b> when ⟨Af, f⟩ ≥ 0 for every f: all its stretches are at least 0 (31f names AᵀA as one; here they are met on their own).</p>
+  <p data-pid="965c4b">One-square-root technique: <b>a never-negative symmetric map A has exactly one never-negative symmetric S with S² = A.</b> Write it √A.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-square-root technique">
+A = QDQ^{\mathsf T},\ \ S = Q\sqrt{D}\,Q^{\mathsf T}:\ \ S^2 = A @@ QᵀQ = I (31d3); the roots of the stretches are real, since none is below 0
+\text{let } T \text{ be another: } T^2 = A,\ Tv = tv,\ t \ge 0 @@ T has a right-angled basis of such v (31d3)
+Av = T(Tv) = t^2v @@ so v lies in the space that A stretches by λ = t², and t = √λ
+\text{on that space } T \text{ is } \sqrt{\lambda} \text{ times the identity} @@ the stretched vectors of T that lie in it build it; T is √λ on each
+\htmlClass{new}{T = S} \quad \blacksquare @@ S is √λ times the identity on the same space, for every λ
+  </pre>
+  <p data-pid="77ee59">Without "never-negative" there are many roots. The identity of the plane has the roots I and −I, every mirror, and the half turn. With it there is one, as for numbers.</p>
+  <p data-pid="4c1db6">√A swaps with everything A swaps with: it is A’s own axes with new stretches. For rows (2, 1) and (1, 2), the stretches are 1 and 3 along (1, −1) and (1, 1), and √A has rows ½(√3 + 1, √3 − 1) and ½(√3 − 1, √3 + 1).</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31e7.1</span><span class="ph understand">understand</span>How many never-negative symmetric roots has a never-negative symmetric map? <br>Why must any such root agree with Q√D Qᵀ?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31e8">
+  <h2 class="sthead"><span class="stno">31e8</span>A Stretch, Then a Turn</h2>
+  <p data-pid="5c1bdd">Every turning number but 0 is a size times a number of size 1, z = e<sup>iθ</sup> · r, in one way only (26a). Grids split the same way.</p>
+  <p data-pid="1f02dc">Stretch-then-turn technique: <b>every real square grid A that can be undone is A = UP, with P positive definite and symmetric and U a length-keeper, in one way only: P = √(AᵀA) and U = AP⁻¹.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the stretch-then-turn technique">
+A^{\mathsf T}A \text{ is symmetric and positive definite} @@ xᵀAᵀAx = |Ax|² > 0 for x ≠ 0 (31f1 will meet it again)
+P = \sqrt{A^{\mathsf T}A},\ \ U = AP^{-1} @@ the one-square-root technique (31e7); P can be undone, since its stretches are above 0
+U^{\mathsf T}U = P^{-1}A^{\mathsf T}A\,P^{-1} = P^{-1}P^2P^{-1} = I @@ P is symmetric, and so is P⁻¹: U is a length-keeper (27m)
+A = U'P' \Rightarrow A^{\mathsf T}A = P'U'^{\mathsf T}U'P' = P'^2 @@ any other such pair
+\htmlClass{new}{P' = \sqrt{A^{\mathsf T}A} = P,\ \ U' = U} \quad \blacksquare @@ only one root (31e7)
+  </pre>
+  <p data-pid="3910e9">Read A = UP from the right, as maps are. First P stretches space along right-angled axes, by factors above 0. Then U turns it, or mirrors it, with no change of shape. Every undoable straight map is those two moves. A square of clay pushed through A is first squeezed along P’s axes and then carried round.</p>
+  <p data-pid="7063e9">For rows (0, −2) and (1, 0): AᵀA has rows (1, 0) and (0, 4), so P has rows (1, 0) and (0, 2), and U = AP⁻¹ has rows (0, −1) and (1, 0), the quarter turn. Stretch the second place by 2, then turn. The determinant splits as well: det A = det U · det P, a sign times a size.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31e8.1</span><span class="ph understand">understand</span>What are P and U in A = UP? <br>What does each do to space?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31e9">
+  <h2 class="sthead"><span class="stno">31e9</span>An Order on Symmetric Maps</h2>
+  <p data-pid="7026e6">Numbers compare. Do maps? For symmetric maps A and B on one product space, write A ≤ B when B − A is never-negative (31e7): ⟨Af, f⟩ ≤ ⟨Bf, f⟩ for every f.</p>
+  <p data-pid="19fb26">Map-order technique: <b>A ≤ A; A ≤ B and B ≤ C give A ≤ C; A ≤ B and B ≤ A give A = B; A ≤ B gives CᵀAC ≤ CᵀBC for every grid C; and if A is positive definite and A ≤ B, then B⁻¹ ≤ A⁻¹.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the map-order technique">
+\langle (C - A)f, f\rangle = \langle (C - B)f, f\rangle + \langle (B - A)f, f\rangle \ge 0 @@ so ≤ chains
+A \le B \le A \Rightarrow \langle (B - A)f, f\rangle = 0 \text{ for all } f @@ B − A is symmetric with every stretch 0, so it is 0 (31d3)
+x^{\mathsf T}C^{\mathsf T}(B - A)\,Cx = (Cx)^{\mathsf T}(B - A)(Cx) \ge 0 @@ so CᵀAC ≤ CᵀBC
+I \le M \text{ for } M = RBR,\ \ R = (\sqrt{A})^{-1} @@ the line above with C = R, since RAR = I (31e7)
+M^{-1} \le I @@ every stretch of M is at least 1, so every stretch of M⁻¹ is at most 1
+\htmlClass{new}{B^{-1} = R\,M^{-1}R \le R\,I\,R = A^{-1}} \quad \blacksquare @@ the third line again, with C = R
+  </pre>
+  <p data-pid="71bdbd">Two things the order of numbers has, this one lacks. Not every pair compares: the grids with rows (1, 0), (0, 0) and (0, 0), (0, 1) differ by a grid with stretches 1 and −1, so neither is ≤ the other. And squaring does not keep it. Let A have rows (1, 1), (1, 1) and B have rows (2, 1), (1, 1). Then B − A has rows (1, 0), (0, 0), never-negative, so A ≤ B. But B² − A² has rows (3, 1), (1, 0), with determinant −1: one stretch is below 0.</p>
+  <p data-pid="133095">So A ≤ B says B is at least as large along every direction at once, which is more than any one number can say.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31e9.1</span><span class="ph understand">understand</span>When is A ≤ B for symmetric maps? <br>Name one thing the order of numbers has that this order lacks.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31e10">
+  <h2 class="sthead"><span class="stno">31e10</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 \det A > 0 \Rightarrow q \text{ positive definite}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; −x₁² − x₂² has det 1 and is below 0 everywhere but 0
 \text{every number of } A \text{ above } 0 \Rightarrow q \text{ positive definite}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; rows (1, 2), (2, 1): q(1, −1) = −2
 \text{the numbers in front are fixed, as well as their signs}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; 3 and 1 along the axes; 2 and 3/2 by completing the square
 \lambda = 0 \text{ somewhere} \Rightarrow \text{a saddle}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; x² + y⁴ has H with a stretch 0 and a bottom
+\det A \gt 0 \Rightarrow A \text{ positive definite}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; every corner must be above 0: −I in two places has det 1 and D₁ = −1
+A = P^{\mathsf T}P \text{ for one } P \text{ only}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; any length-keeper W gives another, WP; only the staircase with numbers above 0 down its middle is alone
+S^2 = I \Rightarrow S = \pm I\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; every mirror squares to I; one root only among the never-negative symmetric maps
+A = UP = PU\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; the two swap only when A swaps across: in general A = UP = P′U with P′ = √(AAᵀ), another stretch
+A \le B \Rightarrow A^2 \le B^2\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; rows (1, 1), (1, 1) and rows (2, 1), (1, 1): B − A is never-negative, and B² − A² has determinant −1
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">31e5.1</span><span class="ph understand">understand</span>Why does det A &gt; 0 not make q positive definite?  <br>Why can the numbers in front change when their signs cannot?</li>
+      <li><span class="qid">31e10.1</span><span class="ph understand">understand</span>Why does det A &gt; 0 not make q positive definite?  <br>Why can the numbers in front change when their signs cannot?</li>
     </ol>
   </section>
 </section>
@@ -179,7 +292,7 @@ f(x, y) = x^2 + 3xy + y^2,\ \ H = \begin{pmatrix} 2 & 3 \\ 3 & 2\end{pmatrix} @@
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A quadratic form is xᵀAx; the axes-form technique is its diagonalization by the principal axis theorem. The sign-count technique is Sylvester’s law of inertia, here an accepted name for a proved result, not a measured one, and the three counts are its inertia; the positive count minus the negative count is the signature. Positive definite, negative definite, indefinite and semidefinite name the sign patterns. The test with p &gt; 0 and pr − s² &gt; 0, carried to n variables with the corner determinants, is Sylvester’s criterion. H is the Hessian matrix, and the hug-axes technique is the second-derivative test in n variables.</p>
+  <p>A quadratic form is xᵀAx; the axes-form technique is its diagonalization by the principal axis theorem. The sign-count technique is Sylvester’s law of inertia, here an accepted name for a proved result, not a measured one, and the three counts are its inertia; the positive count minus the negative count is the signature. Positive definite, negative definite, indefinite and semidefinite name the sign patterns. The test with p &gt; 0 and pr − s² &gt; 0, carried to n variables with the corner determinants, is Sylvester’s criterion. H is the Hessian matrix, and the hug-axes technique is the second-derivative test in n variables. The corner determinants are the leading principal minors; the corner-determinants technique is Sylvester’s criterion. A = RᵀR with R a staircase is the Cholesky factorization. Never-negative symmetric maps are positive semidefinite; √A is the positive square root. A = UP is the polar decomposition. This is the Loewner order.</p>
   <h3>Who said it first</h3>
   <p>Carl Friedrich Gauss studied forms in two variables with whole-number coefficients in 1801. James Joseph Sylvester stated the law of inertia in 1852, and Carl Jacobi had proved it earlier without publishing; Sylvester also coined the word “matrix” in 1850. Joseph-Louis Lagrange gave the test for a bottom of a function of two variables in the 1760s, and Otto Hesse’s name went on the grid of second slopes in the 1840s.</p>
   <h3>A proof that is not allowed</h3>

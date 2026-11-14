@@ -119,17 +119,64 @@ k = Df(x)^{-1}h - Df(x)^{-1}s(k) @@ h = f(x + k) − f(x); Df(x) is undoable nea
 </section>
 
 <section class="class step" data-step="28e4">
-  <h2 class="sthead"><span class="stno">28e4</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">28e4</span>Maps That Flatten a Ball</h2>
+  <p data-pid="293c32">The local-undo technique (28e2) asks for det Df(w) ≠ 0. A determinant of 0 at one point proves nothing: x³ showed that. What if the determinant is 0 at every point of a ball?</p>
+  <p data-pid="c3d296">Squashed-ball technique: <b>if f is smoothly sloped from a ball B in the plane to the plane, and det Df = 0 at every point of B, then f is not one-to-one on B. Near any point of B where Df is not all 0s, f sends a whole patch onto one curve.</b></p>
+  <p data-pid="39a533">If Df is all 0s on the whole ball, f is constant there, by the segment-bound technique (28e1) with every ε. Otherwise some entry of Df is not 0 at some point p. Name the inputs and outputs so that it is ∂f₁/∂x.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the squashed-ball technique">
+g(x, y) = (f_1(x, y),\ y):\ \ \det Dg = \partial f_1/\partial x @@ the rows of Dg are (∂f₁/∂x, ∂f₁/∂y) and (0, 1)
+g \text{ has a smooth undoing } h \text{ near } g(p) @@ det Dg(p) ≠ 0: local-undo and undo-slope (28e2, 28e3)
+F = f \circ h:\ \ F(u, v) = (u,\ k(u, v)) @@ g(h(u, v)) = (u, v), so f₁(h(u, v)) = u; and k is f₂ ∘ h
+DF = Df \cdot Dh \text{ cannot be undone} @@ chain-of-flat-maps (28c); Df cannot be undone, and then no product with it can (27e)
+\det DF = \partial k/\partial v = 0 @@ the rows of DF are (1, 0) and (∂k/∂u, ∂k/∂v)
+\htmlClass{new}{F(u, v) = (u,\ k(u)):\ \text{no } v \text{ in it}} \quad \blacksquare @@ a slope of 0 along every upright segment of a ball round g(p) (14c)
+  </pre>
+  <p data-pid="826233">So f(h(u, v)) is the same for every v, and h is one-to-one. Near p, f takes each of its values along a whole curve of inputs, and everything it reaches there lies on the one curve of points (u, k(u)). At each point the grid Df reaches only a line of directions, and the map itself reaches only a curve.</p>
+  <p data-pid="7c3806">Put f₂ = 0 and the technique says something plain: no smoothly sloped function from the plane to the line is one-to-one. A plane cannot be laid smoothly along a line without points landing on one another.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28e4.1</span><span class="ph understand">understand</span>What does the squashed-ball technique say about a map whose det Df is 0 on a whole ball? <br>Why is a smoothly sloped function from the plane to the line never one-to-one?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28e5">
+  <h2 class="sthead"><span class="stno">28e5</span>One Entry at a Time</h2>
+  <p data-pid="89d0ed">A map of the plane changes both entries of a point at once. Near a point where it can be undone, it is two simpler maps, one after the other, and each changes one entry only.</p>
+  <p data-pid="9e1e70">One-entry technique: <b>let f be smoothly sloped near w, from the plane to the plane, with det Df(w) ≠ 0 and ∂f₁/∂x (w) ≠ 0. Then near w, f = k ∘ g, where g(x, y) = (f₁(x, y), y) changes only the first entry, and k(u, v) = (u, f₂(g⁻¹(u, v))) changes only the second.</b></p>
+  <p data-pid="a1179f">If ∂f₁/∂x (w) = 0, then ∂f₁/∂y (w) ≠ 0, or the first row of Df(w) would be all 0s. Swap x and y first, and the technique applies.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-entry technique">
+\det Dg(w) = \partial f_1/\partial x\,(w) \ne 0 @@ the rows of Dg are (∂f₁/∂x, ∂f₁/∂y) and (0, 1)
+g \text{ has a smooth undoing } g^{-1} \text{ near } g(w) @@ local-undo and undo-slope (28e2, 28e3)
+k(g(x, y)) = \big(f_1(x, y),\ f_2(g^{-1}(g(x, y)))\big) @@ the first entry of g(x, y) is f₁(x, y), and k keeps it
+\begin{aligned}&\htmlClass{new}{k(g(x, y)) = (f_1(x, y),\ f_2(x, y))}\\ &\quad \htmlClass{new}{= f(x, y)} \quad \blacksquare\end{aligned} @@ g⁻¹ undoes g
+  </pre>
+  <p data-pid="6d93d8">Both pieces are smoothly sloped, and both can be undone: Dk = Df · Dg⁻¹ by the chain (28c), a product of two grids that can be undone.</p>
+  <p data-pid="0e5207">Take the polar map f(r, θ) = (r cos θ, r sin θ). Then g(r, θ) = (r cos θ, θ), so g⁻¹(u, v) = (u/cos v, v), and k(u, v) = (u, u tan v). First the length r is traded for the floor place u, with the angle kept. Then the angle is traded for the height u tan v, with the floor place kept. It works wherever cos θ ≠ 0.</p>
+  <p data-pid="a031f8">The use is this. A claim that is easy for one-entry maps, and that is kept when maps are chained, is then true near a point for every smooth map that can be undone. Changing variables in a total will be such a claim (28i).</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28e5.1</span><span class="ph understand">understand</span>What are the two pieces g and k of the one-entry technique, and what does each leave alone? <br>What are they for the polar map?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28e6">
+  <h2 class="sthead"><span class="stno">28e6</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 \det Df(w) \ne 0 \Rightarrow f \text{ one-to-one everywhere}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only near w: the polar map repeats every 2π
 \det Df(w) = 0 \Rightarrow f \text{ not one-to-one near } w\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; x ↦ x³ is one-to-one with slope 0 at 0; only its undoing loses its slope there
 Dg(y) = Df(y)^{-1}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the grid of f is taken at the point g(y), not at y
 \det Df \ne 0 \text{ everywhere} \Rightarrow f \text{ one-to-one}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; (x, y) ↦ (eˣ cos y, eˣ sin y) has det e²ˣ ≠ 0 and repeats every 2π in y
+\det Df(w) = 0 \Rightarrow f \text{ flattens near } w\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; the determinant must be 0 on a whole ball: (x³, y) has det 0 only on a line, and is one-to-one
+f = k \circ g \text{ on the whole plane}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; only near a point where Df can be undone: for the polar map, k(u, v) = (u, u tan v) fails where cos v = 0
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">28e4.1</span><span class="ph understand">understand</span>Why is “det Df(w) ≠ 0, so f is one-to-one everywhere” a move to watch out for? <br>Why is “Dg(y) = Df(y)⁻¹” one?</li>
+      <li><span class="qid">28e6.1</span><span class="ph understand">understand</span>Why is “det Df(w) ≠ 0, so f is one-to-one everywhere” a move to watch out for? <br>Why is “Dg(y) = Df(y)⁻¹” one?</li>
     </ol>
   </section>
 </section>
@@ -149,7 +196,7 @@ Dg(y) = Df(y)^{-1}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&g
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The local-undo and undo-slope techniques together are the inverse function theorem. A map that is one-to-one, smooth and has a smooth inverse is a diffeomorphism; a local one is a change of coordinates. The correction φ<sub>y</sub> is a simplified Newton iteration, which keeps the first slope grid instead of updating it.</p>
+  <p>The local-undo and undo-slope techniques together are the inverse function theorem. A map that is one-to-one, smooth and has a smooth inverse is a diffeomorphism; a local one is a change of coordinates. The correction φ<sub>y</sub> is a simplified Newton iteration, which keeps the first slope grid instead of updating it. The number of directions a grid reaches is its rank; the squashed-ball technique is the case of constant rank 1 in the plane. Maps that change one entry are primitive mappings.</p>
   <h3>Who said it first</h3>
   <p>Joseph-Louis Lagrange and Augustin-Louis Cauchy used the idea for power series. Ulisse Dini proved the implicit and inverse function theorems for real functions in his lectures at Pisa, published in 1878. The proof by a contraction mapping follows Émile Picard’s method of successive approximation (1890) and Stefan Banach’s fixed point theorem (1922).</p>
 </section>

@@ -117,17 +117,128 @@ Tg = g,\ Tf = f \Rightarrow \|f - g\| \le k\|f - g\| \Rightarrow f = g @@ k &lt;
 </section>
 
 <section class="class step" data-step="24c4">
-  <h2 class="sthead"><span class="stno">24c4</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">24c4</span>One Width for a Whole Family</h2>
+  <p data-pid="b05b65">A continuous function on [u, v] has one width δ for each ε, serving every pair of inputs (15f). From here on, a family of functions on [u, v] <b>shares one width</b> when, for every ε > 0, one δ > 0 serves every pair of inputs and every function of the family: |s − t| < δ gives |f(s) − f(t)| < ε, whichever f.</p>
+  <p data-pid="830ba6">The powers x, x², x³, … on [0, 1] do not share one. Each is continuous, and all lie between 0 and 1. But near 1 they climb more and more steeply: xⁿ falls from 1 to ½ over a stretch that shrinks to nothing as n grows. No δ serves ε = ½ for all of them.</p>
+  <p data-pid="85d5c7">Shared-width technique: <b>if continuous fₙ on [u, v] settle everywhere at once, they share one width.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the shared-width technique">
+\|f_n - f\| \lt \varepsilon \text{ for } n \ge N @@ they settle everywhere at once, to a continuous f (24c1, 23d)
+|s - t| \lt \delta_0 \Rightarrow |f(s) - f(t)| \lt \varepsilon @@ f is uniformly continuous (15f)
+\begin{aligned}|f_n(s) - f_n(t)| &\le |f_n(s) - f(s)|\\ &\quad + |f(s) - f(t)|\\ &\quad + |f(t) - f_n(t)| \lt 3\varepsilon\end{aligned} @@ for n ≥ N and |s − t| < δ₀: the triangle technique, twice
+|s - t| \lt \delta_n \Rightarrow |f_n(s) - f_n(t)| \lt \varepsilon @@ for each n below N, on its own (15f)
+\htmlClass{new}{\delta = \min(\delta_0, \delta_1, \ldots, \delta_{N-1}) \text{ serves all}} \quad \blacksquare @@ finitely many widths have a least one
+  </pre>
+  <p data-pid="3915ea">So the powers of x cannot settle everywhere at once on [0, 1], and now there are two reasons: their limit is not continuous (23d), and they share no width. The next footing runs the technique the other way round, as far as it will go.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24c4.1</span><span class="ph understand">understand</span>When does a family of functions share one width? <br>Why do x, x², x³, … on [0, 1] not share one?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24c5">
+  <h2 class="sthead"><span class="stno">24c5</span>A Settling Thread Out of a Bounded Family</h2>
+  <p data-pid="ca8376">Every sequence of numbers with a floor and a ceiling has a thread that settles (22b). For functions one bound is not enough: every thread of x, x², x³, … on [0, 1] heads to the same broken limit, so none settles everywhere at once. One bound and one shared width are enough.</p>
+  <p data-pid="0f6a48">Thread-of-functions technique: <b>if |fₙ(x)| ≤ M for every n and every x in [u, v], and the fₙ share one width, then some thread of the fₙ settles everywhere at once on [u, v].</b></p>
+  <p data-pid="1b0ce5">First a thread is found that settles at each halving point of [u, v]: the ends, the middle, the quarters, the eighths, and on, laid end to end in one list p₁, p₂, p₃, ….</p>
+  <pre class="lines" data-k="ember" data-label="this step: the thread-of-functions technique · down the diagonal">
+f_n(p_1) \text{ has a thread that settles} @@ the numbers fₙ(p₁) lie between −M and M: the halving technique for sequences (22b)
+\text{a thread of that thread settles at } p_2 @@ the same; and it still settles at p₁ (the thread technique, 22b)
+\text{and so on: thread } j \text{ settles at } p_1, \ldots, p_j @@ each a thread of the one before
+g_k = \text{the } k\text{th function of thread } k @@ go down the diagonal
+\htmlClass{new}{g_k(p_j) \text{ settles, for every } j} \quad \blacksquare @@ from the jth on, the gₖ are a thread of thread j
+  </pre>
+  <p data-pid="fdea60">No one thread of the list was good enough, since each was only good for finitely many points. The diagonal takes a little of every thread and is good for all of them. Now the shared width spreads the settling from the halving points to every point.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the thread-of-functions technique · the diagonal crowds">
+|s - t| \lt \delta \Rightarrow |g_k(s) - g_k(t)| \lt \varepsilon @@ the shared width, for every k
+p_1, \ldots, p_J \text{ come within } \delta \text{ of every } x @@ far enough down the list to hold a whole set of halving points closer than δ
+|g_k(p_j) - g_m(p_j)| \lt \varepsilon \text{ for } k, m \ge K @@ settle-crowd (22c) at each of p₁, …, p_J; K is the largest of the J
+\begin{aligned}|g_k(x) - g_m(x)| &\le |g_k(x) - g_k(p_j)|\\ &\quad + |g_k(p_j) - g_m(p_j)|\\ &\quad + |g_m(p_j) - g_m(x)| \lt 3\varepsilon\end{aligned} @@ with pⱼ within δ of x
+\htmlClass{new}{\|g_k - g_m\| \le 3\varepsilon:\ g_k \text{ settles at once}} \quad \blacksquare @@ the function-crowd technique (24c2)
+  </pre>
+  <p data-pid="9d0fde">With 24c4 this closes a circle. A sequence that settles everywhere at once is bounded and shares one width. A sequence that is bounded and shares one width has a thread that settles everywhere at once. On the line the same circle was: settling sequences are bounded, and bounded sequences have settling threads.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24c5.1</span><span class="ph understand">understand</span>What two things does the thread-of-functions technique ask of the fₙ, and what does it give? <br>Why go down the diagonal?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24c6">
+  <h2 class="sthead"><span class="stno">24c6</span>Climbing Functions Settle at Every Point</h2>
+  <p data-pid="a65103">The powers xⁿ on [0, 1] share no width, yet they do settle at every point. They are increasing functions. For increasing functions the shared width can be dropped, at a price: the thread settles point by point, and not always at once.</p>
+  <p data-pid="635781">Climbing-thread technique: <b>if each fₙ is increasing on [u, v], with values in [0, 1], then some thread of the fₙ settles at every point of [u, v], and its limit is increasing.</b></p>
+  <p data-pid="26ed7b">Take the diagonal thread gₖ of 24c5. It needed only the bound to settle at every halving point pⱼ. Call its limit there cⱼ. An increasing function g <b>jumps</b> at x when its values just left of x and just right of x stay a fixed distance apart; where it does not jump, it is continuous.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the climbing-thread technique · between the halving points">
+p_i \le p_j \Rightarrow c_i \le c_j @@ each gₖ is increasing, and limits keep ≤
+g(x) = \sup\{c_j : p_j \le x\} @@ no-holes (8c); g is increasing, with values in [0, 1], and g(pⱼ) = cⱼ
+p_i \lt x \lt p_j:\ \ g_k(p_i) \le g_k(x) \le g_k(p_j) @@ gₖ is increasing
+c_i - \varepsilon \lt g_k(x) \lt c_j + \varepsilon \text{ for } k \text{ large} @@ the ends settle, at cᵢ and cⱼ
+\htmlClass{new}{g \text{ continuous at } x \Rightarrow g_k(x) \to g(x)} \quad \blacksquare @@ halving points close to x on both sides have cᵢ and cⱼ within ε of g(x)
+  </pre>
+  <p data-pid="7ad59e">That leaves the points where g jumps. There may be endlessly many, but they can be put in one list, and then the diagonal handles them.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the climbing-thread technique · the jumps">
+\text{at most } m \text{ jumps are above } 1/m @@ g climbs from at least 0 to at most 1, so its jumps add to at most 1
+q_1, q_2, q_3, \ldots:\ \text{every jump of } g @@ lay those finite lists end to end, for m = 1, 2, 3, …
+\text{a thread of } g_k \text{ settles at every } q_i @@ down the diagonal again (24c5): the values are bounded
+\htmlClass{new}{\text{it settles at every point of } [u, v]} \quad \blacksquare @@ off the jumps by the first half, since it is a thread of gₖ (22b)
+  </pre>
+  <p data-pid="662f53">The limit is increasing, since limits keep ≤. It need not be continuous: for xⁿ it is 0 below 1 and 1 at 1. So the settling is not always at once (23d). Climbing bought a thread without any shared width, and the price was the largest gap.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24c6.1</span><span class="ph understand">understand</span>What does the climbing-thread technique give for increasing functions with values in [0, 1]? <br>Why can the jumps of g be put in one list?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24c7">
+  <h2 class="sthead"><span class="stno">24c7</span>A Solution When F Is Only Continuous</h2>
+  <p data-pid="e7ea08">The area form (24b) turned y′ = F(x, y) with y(x₀) = y₀ into y(x) = y₀ + ∫ from x₀ to x of F(t, y(t)) dt. Is there always a y that fits? The thread-of-functions technique (24c5) finds one, and it asks little of F.</p>
+  <p data-pid="d158ba">Say F <b>has one width</b> on a rectangle R when, for every ε > 0, some δ > 0 gives |F(x, y) − F(s, t)| < ε for all points of R with |x − s| < δ and |y − t| < δ. Let R be the rectangle |x − x₀| ≤ α, |y − y₀| ≤ b.</p>
+  <p data-pid="7e6538">Broken-line technique: <b>if F has one width on R and |F| ≤ M there, and 0 < h ≤ α with hM ≤ b, then y′ = F(x, y), y(x₀) = y₀ has a solution on [x₀, x₀ + h].</b> The same holds to the left of x₀.</p>
+  <p data-pid="e903c7">Cut [x₀, x₀ + h] into n equal pieces at x₀ < x₁ < ⋯ < xₙ. The broken line fₙ starts at y₀ and, on each piece from xᵢ to xᵢ₊₁, is straight with the slope F(xᵢ, fₙ(xᵢ)): it reads the slope at the start of the piece and keeps it to the end.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the broken-line technique · a thread of broken lines">
+|f_n(s) - f_n(t)| \le M\,|s - t| @@ every piece has a slope of size at most M
+|f_n(x) - y_0| \le Mh \le b @@ so the broken line stays in R, and the next slope can be read
+\text{one bound, and one shared width} @@ |fₙ| ≤ |y₀| + b; and δ = ε/M serves every fₙ
+\htmlClass{new}{\text{a thread of } f_n \text{ settles at once, to } f} \quad \blacksquare @@ the thread-of-functions technique (24c5); f is continuous (23d)
+  </pre>
+  <p data-pid="f40ada">Now see how nearly a broken line fits the area form. On the piece from xᵢ, write Δₙ(t) = F(xᵢ, fₙ(xᵢ)) − F(t, fₙ(t)): the slope the line uses, less the slope the statement asks for at t.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the broken-line technique · the limit fits">
+f_n(x) = y_0 + \textstyle\int_{x_0}^{x} F(t, f_n(t))\,dt + \int_{x_0}^{x} \Delta_n(t)\,dt @@ area-is-a-change (16c), piece by piece
+|\Delta_n(t)| \lt \varepsilon \text{ for } n \text{ large} @@ |t − xᵢ| ≤ h/n and |fₙ(t) − fₙ(xᵢ)| ≤ Mh/n: the one width of F
+|F(t, f_n(t)) - F(t, f(t))| \lt \varepsilon @@ along the thread, for n large: ‖fₙ − f‖ < δ, and the one width of F again
+\text{both areas move by at most } h\varepsilon @@ smaller function, smaller area (15e)
+\htmlClass{new}{f(x) = y_0 + \textstyle\int_{x_0}^{x} F(t, f(t))\,dt} \quad \blacksquare @@ let n grow along the thread; so f is a solution (24b)
+  </pre>
+  <p data-pid="b8fcec">Read the technique closely: a solution, not the solution. The thread was picked, and another thread may head somewhere else. Take y′ = √|y| with y(0) = 0. Here F has one width on every rectangle, since |√|y| − √|t|| ≤ √|y − t|. And y = 0 fits, and so does y = x²/4 for x ≥ 0: its slope is x/2, which is √(x²/4). Continuity of F buys a solution. It does not buy only one.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24c7.1</span><span class="ph understand">understand</span>What is a broken line for y′ = F(x, y), and what does the broken-line technique get from them? <br>What does the technique not promise?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24c8">
+  <h2 class="sthead"><span class="stno">24c8</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 \|Tf - Tg\| < \|f - g\| \text{ for } f \ne g, \text{ so a fixed point exists}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the shrink must be by one fixed k &lt; 1; on [1, ∞), x + 1/x pulls closer and has no fixed point
 f_n \to f \text{ at each point, so } \|f_n - f\| \to 0\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; xⁿ on [0, 1]: the largest gap stays at least ½ (23d2)
 T \text{ shrinks, so it has a fixed point, wherever } D \text{ is}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; D must keep its limits; on (0, 1], x ↦ x/2 shrinks and has none
 \|f + g\| = \|f\| + \|g\|\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only ≤; f = x, g = −x on [0, 1] gives 0 on the left and 2 on the right
+\text{one bound } M \Rightarrow \text{one shared width}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; x, x², x³, … on [0, 1] all lie between 0 and 1, and near 1 no one width serves them all
+\text{so the whole sequence settles}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; only a thread: f, g, f, g, … has the bound and the shared width, and it does not settle
+\text{the climbing thread settles at once}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; xⁿ on [0, 1] climbs and settles at each point, to a limit with a jump at 1: not at once (23d)
+F \text{ has one width} \Rightarrow \text{only one solution}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; y′ = √|y|, y(0) = 0 has y = 0 and y = x²/4: the broken lines give a solution, not the only one
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">24c4.1</span><span class="ph understand">understand</span>Why is “‖Tf − Tg‖ < ‖f − g‖ for f ≠ g, so a fixed point exists” a move to watch out for?</li>
+      <li><span class="qid">24c8.1</span><span class="ph understand">understand</span>Why is “‖Tf − Tg‖ < ‖f − g‖ for f ≠ g, so a fixed point exists” a move to watch out for?</li>
     </ol>
   </section>
 </section>
@@ -147,7 +258,7 @@ T \text{ shrinks, so it has a fixed point, wherever } D \text{ is}\,? @@ &lt;spa
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The largest gap is the supremum (uniform, or infinity) norm, written ‖·‖∞. The function-crowd technique says the space C[u, v] of continuous functions is complete in that norm (a Banach space). The shrinking-map technique is the contraction mapping principle, or the Banach fixed-point theorem.</p>
+  <p>The largest gap is the supremum (uniform, or infinity) norm, written ‖·‖∞. The function-crowd technique says the space C[u, v] of continuous functions is complete in that norm (a Banach space). The shrinking-map technique is the contraction mapping principle, or the Banach fixed-point theorem. A family that shares one width is equicontinuous. The thread-of-functions technique is Arzelà’s and Ascoli’s; going down the diagonal is the diagonal argument. The climbing-thread technique is Helly’s, on selection. The broken-line technique is Peano’s, on existence; the broken lines are Euler’s.</p>
   <h3>Who said it first</h3>
   <p>Stefan Banach proved the principle in general in his 1920 thesis, published in 1922; Picard's and Lindelöf's existence proofs had used the same idea for statements on rates thirty years earlier. Maurice Fréchet, in 1906, first treated functions as points of a space with a distance.</p>
 </section>

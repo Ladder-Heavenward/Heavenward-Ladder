@@ -212,19 +212,235 @@ d\omega = \Big(\tfrac{\partial}{\partial x}\tfrac{x}{x^2 + y^2} + \tfrac{\partia
 </section>
 
 <section class="class step" data-step="29·cb28.7">
-  <h2 class="sthead"><span class="stno">29·cb28.7</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">29·cb28.7</span>Forms of Any Degree, in Any Number of Directions</h2>
+  <p data-pid="921d61">Forms in space have degrees 0 to 3 (29·cb28.1). Nothing ties them to three directions. In lists of n numbers, with places x₁, …, xₙ, write dxᵢ for the form that reads place i of one vector. For places i₁, …, iₖ, the form dxᵢ₁ ⋯ dxᵢₖ reads k vectors: write the vectors as the rows of a grid, keep the columns i₁, …, iₖ, and take the determinant (27e).</p>
+  <p data-pid="a2b73f">A form of degree k is a sum of such forms, each with a function in front. Its slope d is taken as before: d of each function in front, with the marks kept after it. Two forms multiply by multiplying out, with the marks kept in order.</p>
+  <p data-pid="eaadec">Any-degree-forms technique: <b>swapping two marks turns the sign, and a repeated mark gives 0. So the forms with i₁ < ⋯ < iₖ build every form of degree k; there are (n choose k) of them; and above degree n every form is 0. For ω of degree k and η of degree l, ηω = (−1)<sup>kl</sup> ωη, and d(ωη) = (dω)η + (−1)<sup>k</sup> ω(dη).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the any-degree-forms technique">
+dx_j\,dx_i = -dx_i\,dx_j,\ \ dx_i\,dx_i = 0 @@ column-slide (27e): swapped columns turn the sign, and equal columns give 0
+\text{sorted marks: } \tbinom{n}{k} \text{ forms; none above } n @@ one for each choice of k places out of n (4k); above n some mark repeats
+\eta\,\omega = (-1)^{kl}\,\omega\,\eta @@ each of the l marks of η moves past the k marks of ω: kl swaps
+d(f\,dx_I\cdot g\,dx_J) = (g\,df + f\,dg)\,dx_I\,dx_J @@ the product technique for slopes; dx_I is short for a string of k marks
+\htmlClass{new}{d(\omega\eta) = (d\omega)\,\eta + (-1)^k\,\omega\,(d\eta)} \quad \blacksquare @@ dg moves past the k marks of dx_I: k swaps
+  </pre>
+  <p data-pid="07608b">In space the counts are 1, 3, 3, 1: a function, three parts, three parts, a function. That is how three directions could hide forms inside vectors (29·cb28.2). In four directions the counts are 1, 4, 6, 4, 1, and a form of degree 2 has six parts. No vector of four entries holds it. The electric and the magnetic field, taken together in space and time, are such a form.</p>
+  <p data-pid="c18682">The signs do work. Two forms of degree 1 swap with a minus, so ωω = 0 for every form of degree 1. A form of degree 2 swaps with everything, with no sign. And d(dω) = 0 as before, by the swap of the knobs (29·cb28.3), in any number of directions.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·cb28.7.1</span><span class="ph understand">understand</span>How many forms dxᵢ₁ ⋯ dxᵢₖ with rising places are there in n directions, and why? <br>What sign comes from swapping a form of degree k with one of degree l?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29·cb28.8">
+  <h2 class="sthead"><span class="stno">29·cb28.8</span>Pieces and Their Edges</h2>
+  <p data-pid="cc5677">The boundary technique (29·cb28.4) turned each piece of edge outward by hand. For a box of any dimension, a sign does it. Take the unit box of k places, 0 ≤ tᵢ ≤ 1. It has 2k faces: for each place i, the back face tᵢ = 0 and the front face tᵢ = 1, each a unit box of k − 1 places. Give the front face of place i the sign (−1)<sup>i + 1</sup>, and the back face the sign (−1)<sup>i</sup>.</p>
+  <p data-pid="6bf2c6">A <b>piece</b> of dimension k is a smoothly sloped map c of the unit box into lists of n numbers. Its faces are c on the faces of the box. A <b>chain</b> is a sum of pieces with whole numbers in front, and its <b>edge</b> ∂c is the sum of its faces, each with its sign.</p>
+  <p data-pid="67e744">Edge-of-an-edge technique: <b>for every chain c, ∂(∂c) = 0: every face of a face comes twice, with opposite signs.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the edge-of-an-edge technique">
+\text{fix place } i \text{ at end } \alpha \text{ and } j \text{ at end } \beta,\ \ i \lt j @@ a face of a face: a box of k − 2 places; α and β are 0 for back, 1 for front
+\text{route 1: fix } j \text{, then } i @@ place i is still the ith place: the signs are (−1)^(j+β) and (−1)^(i+α)
+\text{route 2: fix } i \text{, then } j @@ place j has moved down to be the (j − 1)th: the signs are (−1)^(i+α) and (−1)^(j−1+β)
+(-1)^{i+\alpha+j+\beta} + (-1)^{i+\alpha+j-1+\beta} = 0 @@ the two products differ by one factor of −1
+\htmlClass{new}{\partial(\partial c) = 0} \quad \blacksquare @@ each face of a face is reached by exactly these two routes
+  </pre>
+  <p data-pid="43c5b4">Check the square. Its edge is the right side, less the left side, less the top, plus the bottom. Walked that way, the inside is on the left, as 28j asked. The edge of that edge is the four corners, each twice, with opposite signs.</p>
+  <p data-pid="60f9d1">With these signs the boundary technique reads the same for a piece of any dimension: the total of ω over ∂c is the total of dω over c. The proof is the box proof of 29·cb28.4, one place at a time, carried along c as in 29·cb28.5. Then two nothings answer each other. The total of ω over ∂(∂c) is the total of dω over ∂c, which is the total of d(dω) over c. The first is 0 because of the region, and the last because of the form.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·cb28.8.1</span><span class="ph understand">understand</span>What signs do the faces of the unit box get? <br>Why is the edge of an edge nothing?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29·cb28.9">
+  <h2 class="sthead"><span class="stno">29·cb28.9</span>A Form With Slope 0 Is a Slope</h2>
+  <p data-pid="816c0c">If ω = dg then dω = 0 (29·cb28.3). The wire form showed that the converse can fail round a hole (29·cb28.6). On a region with no room for a hole, it holds. Call a region <b>star-shaped from 0</b> when, with each of its points x, it holds the whole segment from 0 to x.</p>
+  <p data-pid="e11813">Star technique: <b>on an open region star-shaped from 0, a form ω of degree 1 with dω = 0 is the slope of a function: ω = dg, where g(x) is the total of ω along the segment from 0 to x.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the star technique">
+\text{triangle } 0,\ x,\ x + he_j \text{ lies in the region} @@ for small h: the region is open, and star-shaped from 0; eⱼ is the step along place j
+\textstyle\oint_{\text{triangle}} \omega = \iint d\omega = 0 @@ the triangle is a patch: the curved-swirl proof (29·cb28.5) with dω in place of the swirl
+g(x + he_j) - g(x) = \textstyle\int_0^h \omega_j(x + se_j)\,ds @@ two sides of the triangle are g’s segments; the third reads only the part ωⱼ of ω
+\tfrac{g(x + he_j) - g(x)}{h} \to \omega_j(x) @@ the area-slope technique (16b)
+\htmlClass{new}{\tfrac{\partial g}{\partial x_j} = \omega_j \text{ for every } j:\ \ dg = \omega} \quad \blacksquare @@ the partial slopes are continuous, so g is smoothly sloped (28b)
+  </pre>
+  <p data-pid="a38eec">The plane without the origin is star-shaped from no point: the origin is in the way of some segment. Cut away a half-line from the origin and what is left is star-shaped from a point across from the cut. There the wire form is a slope: of the angle θ. Round the cut, θ cannot be mended.</p>
+  <p data-pid="accbf3">One degree up, 29·cb28.3 said, without proof, that a field with no spread on a region with no holes is the swirl vector of some field. On a box it can now be built. First a tool: for smoothly sloped B, the slope along x of ∫ from 0 to z of B(x, y, s) ds is ∫ from 0 to z of B<sub>x</sub>(x, y, s) ds. Write B as the total of B<sub>x</sub> along x, swap the two totals (28h2), and take the slope along x (16b).</p>
+  <pre class="lines" data-k="ember" data-label="this step: the star technique · degree 2 on a box">
+A_1 = \textstyle\int_0^z B_2(x, y, s)\,ds @@ B = (B₁, B₂, B₃) has no spread on a box round 0
+A_2 = -\textstyle\int_0^z B_1(x, y, s)\,ds + \int_0^x B_3(s, y, 0)\,ds,\ \ A_3 = 0 @@ a guess, to be checked
+-\tfrac{\partial A_2}{\partial z} = B_1,\ \ \tfrac{\partial A_1}{\partial z} = B_2 @@ the area-slope technique (16b): two entries of the swirl vector (29·cb28.2)
+\tfrac{\partial A_2}{\partial x} - \tfrac{\partial A_1}{\partial y} = B_3(x, y, 0) - \textstyle\int_0^z \big(\tfrac{\partial B_1}{\partial x} + \tfrac{\partial B_2}{\partial y}\big)ds @@ the tool above, twice
+= B_3(x, y, 0) + \textstyle\int_0^z \tfrac{\partial B_3}{\partial z}\,ds = B_3(x, y, z) @@ no spread; then area-is-a-change (16c)
+\htmlClass{new}{\text{swirl vector of } A = B} \quad \blacksquare @@ all three entries
+  </pre>
+  <p data-pid="413430">For the earth’s field over a block, B = (0, 0, B₀), this gives A = (0, B₀x, 0). The A of 29·cb28.3 was ½B₀(−y, x, 0). Both have swirl vector B. They differ by the uphill vector of ½B₀xy, which has no swirl: A is fixed only up to a slope, as an antiderivative is fixed only up to a constant.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·cb28.9.1</span><span class="ph understand">understand</span>What is a region star-shaped from 0, and what does the star technique give on it? <br>Why does the technique not apply to the wire form on the plane without the origin?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29·cb28.10">
+  <h2 class="sthead"><span class="stno">29·cb28.10</span>A Surface of Any Dimension</h2>
+  <p data-pid="abf071">A curve is spread by one number, and the surfaces of 28n and 29h by two. In lists of n numbers, a <b>surface of dimension k</b> is a set M in which every point has a patch round it: a smoothly sloped, one-to-one map r from an open region of lists of k numbers onto all of M near that point, whose slope grid Dr has k free columns at every point (27b), and whose undoing is continuous. The undoings are the charts of 29h1, with k in place of 2.</p>
+  <p data-pid="b62fad">The <b>flat space</b> of M at p = r(a) is everything the grid Dr(a) reaches: the space built by its k columns, the edge vectors ∂r/∂u₁, …, ∂r/∂uₖ at a. It has dimension k. It holds the velocity at p of every curve r(u(t)) that stays on M.</p>
+  <p data-pid="fbb561">Flat-space technique: <b>the flat space of M at p is the same from every patch round p.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the flat-space technique">
+r = q \circ T \text{ near } a,\ \ T = q^{-1}\circ r @@ two patches r and q round p; T is the change of page (29h2)
+T \text{ is smoothly sloped, both ways} @@ fill q out to n places with n − k straight directions that Dq does not reach; local-undo and undo-slope (28e2, 28e3) undo that map, and T is its undoing after r
+Dr(a) = Dq(T(a))\cdot DT(a) @@ chain-of-flat-maps (28c)
+\begin{aligned}&\htmlClass{new}{Dr(a) \text{ and } Dq(T(a))}\\ &\quad \htmlClass{new}{\text{reach the same space}} \quad \blacksquare\end{aligned} @@ DT(a) can be undone, so it loses no direction
+  </pre>
+  <p data-pid="da4d80">The sphere x² + y² + z² = 1 is a surface of dimension 2 in lists of three numbers, by the two charts of 29h1, and its flat space at p is the plane of vectors at right angles to p. A smooth curve with speed never 0 that never crosses itself is a surface of dimension 1, and its flat space is the line along its velocity.</p>
+  <p data-pid="11ebb3">One equation makes a surface one dimension down. Where F is smoothly sloped on lists of n numbers and ∇F ≠ 0 at every point of the set F = 0, that set is a surface of dimension n − 1: near each of its points, one place is fixed by the others (28f), and the others are the patch. Its flat space at p is the vectors at right angles to ∇F(p) (28k).</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·cb28.10.1</span><span class="ph understand">understand</span>What is the flat space of a surface at a point? <br>Why does it not depend on the patch?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29·cb28.11">
+  <h2 class="sthead"><span class="stno">29·cb28.11</span>An Edge, and One Way Round All Over</h2>
+  <p data-pid="e489a9">A disc has a rim and a sphere has none. A <b>surface with an edge</b> allows a second kind of patch: one spread from half a region, the lists with uₖ ≥ 0. The points that come from uₖ = 0 are the edge, ∂M. The edge is a surface of dimension k − 1, with no edge of its own: drop the last place from each edge patch.</p>
+  <p data-pid="8fff67">Two patches <b>agree in turn</b> when their change of page T has det DT > 0 wherever both show the surface. That was the test for keeping a flux (28n3). M is <b>turned one way all over</b> when it has an atlas whose patches all agree in turn.</p>
+  <p data-pid="9dc1ff">The sphere is. The change of page between its two charts has determinant −1/(X² + Y²)² (29h2), below 0 everywhere. Swap X and Y on one page, and it is above 0 everywhere.</p>
+  <p data-pid="009402">Turned-all-over technique: <b>the twisted band r(u, v) = ((2 + v cos(u/2)) cos u, (2 + v cos(u/2)) sin u, v sin(u/2)), for −1 < v < 1, cannot be turned one way all over.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the turned-all-over technique">
+r(u + 2\pi, -v) = r(u, v) @@ cos(u/2 + π) = −cos(u/2), and the same for sin: once round, the band comes back turned over
+n(u) = \tfrac{r_u \times r_v}{|r_u \times r_v|} \text{ at } (u, 0) @@ a side of the band along its middle circle, continuous in u
+n(0) = (0, 0, -1),\ \ n(2\pi) = (0, 0, 1) @@ at the one point (2, 0, 0): r_u = (0, 2, 0) both times, and r_v = (1, 0, 0), then (−1, 0, 0)
+\text{a one-way atlas picks a side } m @@ at each point: the cross of a patch’s edge vectors, over its length: the same from every patch of the atlas (28n3), and continuous
+m\cdot n(u) = \pm 1 \text{, so one sign all the way} @@ continuous in u, and it takes no value between (12a)
+\htmlClass{new}{m\cdot n(0) = -\,m\cdot n(2\pi):\ \bot} \quad \blacksquare @@ the same point and the same m, with opposite n
+  </pre>
+  <p data-pid="a9a607">So the band has one side only, and no flux through it can be defined. On a surface turned one way, every form of degree k has a total, patch by patch, with no sign trouble.</p>
+  <p data-pid="bcc669">The turn passes to the edge. An edge patch counts as agreeing when the direction out of M, followed by the edge’s own directions, agrees with M. For a disc in the plane that is the rim walked with the disc on the left (28j). For a solid ball it is the sphere with its outward side.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·cb28.11.1</span><span class="ph understand">understand</span>When is a surface turned one way all over? <br>What happens to the side n of the twisted band along its middle circle?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29·cb28.12">
+  <h2 class="sthead"><span class="stno">29·cb28.12</span>The Size of a Piece of Surface</h2>
+  <p data-pid="2855d9">The area of a patch in space was the total of |r_u × r_v| (28n3), and that is the total of √(EG − F²) (29d): the root of the determinant of the ruler grid. The ruler grid is Drᵀ Dr, the grid of dot products of the edge vectors. Read that way it needs no cross product, so it works in any dimension.</p>
+  <p data-pid="84c568">From here on, the <b>size</b> of the piece r(S) of a surface of dimension k is the total over S of √det(Drᵀ Dr).</p>
+  <p data-pid="3b083b">Piece-size technique: <b>the size of a piece is the same from every patch.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the piece-size technique">
+q = r \circ T:\ \ Dq = Dr\cdot DT @@ a second patch of the same piece, from S′; chain-of-flat-maps (28c)
+Dq^{\mathsf T}Dq = DT^{\mathsf T}\,\big(Dr^{\mathsf T}Dr\big)\,DT @@ the ruler-change technique (29d), in k places
+\sqrt{\det(Dq^{\mathsf T}Dq)} = |\det DT|\,\sqrt{\det(Dr^{\mathsf T}Dr)} @@ det-product (27e); a grid and its flip have one determinant
+\htmlClass{new}{\textstyle\int_{S'}\sqrt{\det(Dq^{\mathsf T}Dq)} = \int_{S}\sqrt{\det(Dr^{\mathsf T}Dr)}} \quad \blacksquare @@ the change-of-variables technique (28i)
+  </pre>
+  <p data-pid="80f3b8">Three checks. For k = 1 the grid is the one number |r′|², and the size is the length of the curve (18i). For k = 2 in space it is the area of 28n3. For k = n the grid Dr is square, det(Drᵀ Dr) = (det Dr)², and the size is the volume that change-of-variables gives.</p>
+  <p data-pid="f9aa20">A graph xₙ = f(x₁, …, xₙ₋₁) has Drᵀ Dr = I + ∇f ∇fᵀ, with determinant 1 + |∇f|². So its size is the total of √(1 + |∇f|²): the size of its shadow, made larger where the graph is steep.</p>
+  <p data-pid="8f4c70">With a size, a function on M has a total: carry it to a page and multiply by √det(Drᵀ Dr). A form of degree k needs no ruler. Its total over a piece is the total over S of ω read on the k edge vectors, kept by a change of page with det DT > 0 and turned in sign by one with det DT < 0, as in 28n3.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·cb28.12.1</span><span class="ph understand">understand</span>What is the size of a piece of a surface of dimension k? <br>What does it come to for a curve, and for a graph?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29·cb28.13">
+  <h2 class="sthead"><span class="stno">29·cb28.13</span>Bumps That Add to 1</h2>
+  <p data-pid="bc82aa">A total over a whole surface has to be put together from totals on patches, and patches overlap. The tool that shares a function out among the patches, with nothing counted twice, is a family of bumps.</p>
+  <p data-pid="85273c">Let F(t) = e<sup>−1/t²</sup> for t > 0 and F(t) = 0 for t ≤ 0. It is smooth, by the flat-point technique (23f2): every slope at 0 is 0 from both sides. On a page, b(u) = F(ρ² − |u − c|²) is then a smooth bump: above 0 inside the ball of radius ρ round c, and 0 outside it.</p>
+  <p data-pid="e680c8">Bumps technique: <b>let M be covered by finitely many patches, each spread from a ball, so that the balls of half the radius already cover M. Then there are smooth functions φ₁, …, φ<sub>m</sub> on M, each at least 0, with φᵢ = 0 outside patch i, and φ₁ + ⋯ + φ<sub>m</sub> = 1 at every point of M.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the bumps technique">
+b_i \gt 0 \text{ on the } \tfrac34 \text{ ball of page } i,\ 0 \text{ beyond it} @@ the bump above with ρ three quarters of the radius; carried to M by patch i, and 0 on the part of M outside the patch
+b = b_1 + \cdots + b_m \gt 0 \text{ on all of } M @@ the half balls cover M, and bᵢ > 0 on half ball i
+\varphi_i = b_i/b @@ smooth: a quotient with a bottom that is never 0
+\begin{aligned}&\htmlClass{new}{\varphi_1 + \cdots + \varphi_m = 1,}\\ &\quad \htmlClass{new}{\varphi_i = 0 \text{ outside patch } i} \quad \blacksquare\end{aligned} @@ the tops add to the bottom
+  </pre>
+  <p data-pid="c59168">Now any function or form on M splits: ω = φ₁ω + ⋯ + φ<sub>m</sub>ω, and each part lives inside one patch, where it can be carried to a page and totalled. The total of ω over M is the sum of those. It does not depend on the bumps. With a second family ψⱼ, the total of φᵢω is the sum over j of the totals of φᵢψⱼω, and adding over i and j in either order gives the same number.</p>
+  <p data-pid="c42c6a">For the sphere, take the two charts of 29h1 on the balls of radius 4, with half balls of radius 2. The page from the north pole shows every point with z ≤ 3/5 inside its half ball, since X² + Y² = (1 + z)/(1 − z), and the other shows every point with z ≥ −3/5.</p>
+  <p data-pid="f9a07a">Which surfaces have such a finite cover is a question for rung 34. The surfaces of this page do: the sphere, the torus, the disc with its rim.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·cb28.13.1</span><span class="ph understand">understand</span>What does a family of bumps that add to 1 do for a form on a surface? <br>Why does the total not depend on which family is used?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29·cb28.14">
+  <h2 class="sthead"><span class="stno">29·cb28.14</span>The Boundary Technique on a Surface</h2>
+  <p data-pid="e99939">The boundary technique (29·cb28.4) was proved for a segment, a rectangle and a box, and carried onto one patch (29·cb28.5). The bumps carry it onto a whole surface.</p>
+  <p data-pid="75982f">Boundary technique, on a surface: <b>let M be a surface of dimension k with an edge, turned one way all over, with a finite cover as in 29·cb28.13, and let ω be a smoothly sloped form of degree k − 1. Then the total of ω over ∂M is the total of dω over M.</b> If M has no edge, the total of dω over M is 0.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the boundary technique, on a surface">
+\omega = \varphi_1\omega + \cdots + \varphi_m\omega @@ the bumps technique (29·cb28.13)
+\text{carry } \varphi_i\omega \text{ to its page, in a box } Q @@ it is 0 near every face of Q, but for the face uₖ = 0 when patch i is an edge patch
+\textstyle\int_Q d(\varphi_i\omega) = \int_{u_k = 0} \varphi_i\omega @@ the boundary technique for a box (29·cb28.4, with the signs of 29·cb28.8); the other faces give 0
+\textstyle\int_M d(\varphi_i\omega) = \int_{\partial M}\varphi_i\omega @@ carrying keeps d and keeps totals (29·cb28.5); for an inside patch both sides are 0
+\textstyle\sum_i d(\varphi_i\omega) = d\omega @@ d(φᵢω) = (dφᵢ)ω + φᵢ dω (29·cb28.7), and the dφᵢ add to d(1) = 0
+\htmlClass{new}{\textstyle\int_{\partial M}\omega = \int_M d\omega} \quad \blacksquare @@ add over i
+  </pre>
+  <p data-pid="087d3c">Every trade of a total for a total one dimension down, on this ladder, is this line. Area-is-a-change (16c) is M a segment. The swirl and spread techniques (28j) are M a rectangle or a box. Curved-swirl (29·cb28.5) is M a patch in space. The proof was never more than 16c along one place, with the bookkeeping done by forms, signs and bumps.</p>
+  <p data-pid="1fdd3a">On a surface with no edge the left side is empty. So the total of a slope dω over a sphere is 0, whatever ω is. Turn that round, as the hole test did: a form whose total over a sphere is not 0 is the slope of nothing there. The next footing has one.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·cb28.14.1</span><span class="ph understand">understand</span>What does the boundary technique say on a surface with an edge, and on one with none? <br>How do the bumps reduce it to a box?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29·cb28.15">
+  <h2 class="sthead"><span class="stno">29·cb28.15</span>The Area a Surface Shows to a Point</h2>
+  <p data-pid="c8a939">Stand at 0 and look at a small piece of surface. How much of your view does it fill? Push each of its points along its ray onto the sphere of radius 1 round you, and take the area of the shadow. That is the area the piece shows to 0. A whole sphere round you shows 4π (21o).</p>
+  <p data-pid="27e9b7">A form measures it. Write ρ for the length of (x, y, z), and σ = (x dy dz + y dz dx + z dx dy)/ρ³: the flux form of the field that points straight out from 0 with size 1/ρ². (σ is a little sigma.)</p>
+  <p data-pid="0cc8e6">Shown-area technique: <b>dσ = 0 away from 0. The total of σ over a closed surface, turned outward, is 4π when 0 is inside it and 0 when 0 is outside.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the shown-area technique">
+\tfrac{\partial}{\partial x}\tfrac{x}{\rho^3} = \tfrac{\rho^2 - 3x^2}{\rho^5} @@ the quotient technique, with ∂ρ/∂x = x/ρ
+d\sigma = \tfrac{3\rho^2 - 3(x^2 + y^2 + z^2)}{\rho^5}\,dx\,dy\,dz = 0 @@ the one-slope technique (29·cb28.2): the spread of the field, away from 0
+\text{sphere of radius } a:\ \ \textstyle\iint\sigma = \tfrac{1}{a^2}\cdot 4\pi a^2 = 4\pi @@ the field is straight out, of size 1/a², and the skin has area 4πa² (21o)
+\textstyle\iint_S \sigma - \iint_{\text{small sphere}}\sigma = \iiint d\sigma = 0 @@ 0 inside S: the boundary technique (29·cb28.14) on the solid between S and a small sphere round 0
+\begin{aligned}&\htmlClass{new}{\textstyle\iint_S \sigma = 4\pi \text{ with } 0 \text{ inside},}\\ &\quad \htmlClass{new}{0 \text{ with } 0 \text{ outside}} \quad \blacksquare\end{aligned} @@ 0 outside S: the boundary technique on the whole solid inside S, where dσ = 0
+  </pre>
+  <p data-pid="c58f83">So a closed surface round you fills your whole view, 4π, whatever its shape and wherever you stand inside it. One you are outside of shows 0 in all: its near side and its far side fill the same patch of view, one with each sign.</p>
+  <p data-pid="9652c3">This is the wire form (29·cb28.6), one degree up. Its slope is 0 away from one point, and its total round that point is not 0. So it is the slope of nothing there, by 29·cb28.14, and it finds the hole. Every field that falls off as the square of the distance is σ times a number. That is why the flux of such a field through a closed surface counts only what is inside.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·cb28.15.1</span><span class="ph understand">understand</span>What does σ total to over a closed surface, with 0 inside and with 0 outside? <br>Why does the shape of the surface not matter?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29·cb28.16">
+  <h2 class="sthead"><span class="stno">29·cb28.16</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
 dx\,dy = dy\,dx\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the swap turns the sign: a determinant with its rows swapped
 d(f\,dx) = f_x\,dx\,dx\ \text{only}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; d f has three parts; f_x dx dx is the one that is 0
 d(d\omega) = 0 \text{ for every form}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only when the second slopes are continuous, so that the knobs swap
 d\omega = 0, \text{ so } \omega = dg\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only on a region with no holes: the wire’s form is d of nothing round the wire
 \textstyle\oint_{\text{edge}} \omega = \iint d\omega \text{ with the edge walked either way}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the edge must be turned outward; walked the other way, the sign turns
+\omega\,\omega = 0 \text{ for every form } \omega\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; only for odd degrees: in four directions ω = dx₁dx₂ + dx₃dx₄ has ωω = 2 dx₁dx₂dx₃dx₄
+\partial(\text{square}) = \text{its four sides, added}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; two of them carry a minus: right − left − top + bottom, or the corners would not cancel
+\text{only one } A \text{ has swirl vector } B\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; add the uphill vector of any function to A and the swirl vector does not change
+z^2 = x^2 + y^2 \text{ is a surface of dimension } 2\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; not at its tip: ∇F = 0 there, and no patch fits round a point where two sheets meet
+\text{every surface in space has two sides}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; the twisted band has one: its side comes back reversed after one trip round
+\text{size} = \textstyle\int |\det Dr|\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; Dr is not square when k < n: take the root of det(DrᵀDr)
+b_1 + \cdots + b_m = 1\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; the bumps add to b, which changes from point to point: divide each by b
+\textstyle\int_{\partial M}\omega = \int_M d\omega \text{ on the twisted band}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; the band is not turned one way all over, so the total of dω over it has no sign to keep
+\text{twice as far, half the area shown}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; for a closed surface round 0, σ falls as 1/ρ² and area grows as ρ²: it shows 4π at any distance
   </pre>
   <section class="slides" id="sl7"><div class="eyebrow">The slides · a move to watch out for · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">29·cb28.7.1</span><span class="ph understand">understand</span>Why is “dω = 0, so ω = dg” a move to watch out for?</li>
+      <li><span class="qid">29·cb28.16.1</span><span class="ph understand">understand</span>Why is “dω = 0, so ω = dg” a move to watch out for?</li>
     </ol>
   </section>
 </section>
@@ -233,11 +449,11 @@ d\omega = 0, \text{ so } \omega = dg\,? @@ &lt;span class="vd vd-p"&gt;outside t
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">29·cb28.8.1</span><span class="tagq">build</span>Build a form ω of degree 1 on space with 0 taken out along the whole z-line, with dω = 0, whose total round a loop going once round the z-line is 6π. Prove both facts.</div>
-  <div class="chq"><span class="chid">29·cb28.8.2</span><span class="tagq">edge</span>Find the total of the wire’s form round the circle of radius ρ about (c, 0) as c passes from 0 to beyond ρ. <br>Which demand of the boundary technique fails when the circle passes through the wire?</div>
-  <div class="chq"><span class="chid">29·cb28.8.3</span><span class="tagq">converse</span>If a form ω of degree 1 has dω = 0 on a box, build g with dg = ω by totalling ω along straight pieces from a corner, as 28n2 did on a rectangle.</div>
-  <div class="chq"><span class="chid">29·cb28.8.4</span><span class="tagq">reroute</span>Find the volume inside the sphere of radius a a second way, by the boundary technique: find a form η of degree 2 with dη = dx dy dz, and total η over the sphere with 28n3’s patch.</div>
-  <div class="chq"><span class="chid">29·cb28.8.5</span><span class="tagq">seam</span>In the 1890s two camps fought over how physics should write its vectors. One held that the four-part numbers of 1843, which multiply vectors with their sign and their turn at once, were the natural language of space, and that the other camp’s dot and cross were a mangled piece of them. The other camp, a professor at Yale and a self-taught engineer in England, answered that physicists needed only the dot, the cross and the slopes of fields, and that the four-part numbers were a burden. A decade later, a third way appeared in France: the forms of this page, which work in any number of directions and on any curved space. <br>Which language is the right one? <br>Can a notation be wrong, or only clumsy?</div>
+  <div class="chq"><span class="chid">29·cb28.17.1</span><span class="tagq">build</span>Build a form ω of degree 1 on space with 0 taken out along the whole z-line, with dω = 0, whose total round a loop going once round the z-line is 6π. Prove both facts.</div>
+  <div class="chq"><span class="chid">29·cb28.17.2</span><span class="tagq">edge</span>Find the total of the wire’s form round the circle of radius ρ about (c, 0) as c passes from 0 to beyond ρ. <br>Which demand of the boundary technique fails when the circle passes through the wire?</div>
+  <div class="chq"><span class="chid">29·cb28.17.3</span><span class="tagq">converse</span>If a form ω of degree 1 has dω = 0 on a box, build g with dg = ω by totalling ω along straight pieces from a corner, as 28n2 did on a rectangle.</div>
+  <div class="chq"><span class="chid">29·cb28.17.4</span><span class="tagq">reroute</span>Find the volume inside the sphere of radius a a second way, by the boundary technique: find a form η of degree 2 with dη = dx dy dz, and total η over the sphere with 28n3’s patch.</div>
+  <div class="chq"><span class="chid">29·cb28.17.5</span><span class="tagq">seam</span>In the 1890s two camps fought over how physics should write its vectors. One held that the four-part numbers of 1843, which multiply vectors with their sign and their turn at once, were the natural language of space, and that the other camp’s dot and cross were a mangled piece of them. The other camp, a professor at Yale and a self-taught engineer in England, answered that physicists needed only the dot, the cross and the slopes of fields, and that the four-part numbers were a burden. A decade later, a third way appeared in France: the forms of this page, which work in any number of directions and on any curved space. <br>Which language is the right one? <br>Can a notation be wrong, or only clumsy?</div>
 </section>
 <div class="themecert themeend"></div>
 
@@ -245,9 +461,9 @@ d\omega = 0, \text{ so } \omega = dg\,? @@ &lt;span class="vd vd-p"&gt;outside t
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A form of degree k is a differential k-form, and dx dy is written dx ∧ dy, the wedge product, so that the forms make an exterior algebra. d is the exterior derivative. The swirl vector is the curl, curl F or ∇ × F; the spread is the divergence, div F or ∇ · F. The twice-nothing technique is d² = 0: curl grad f = 0 and div curl F = 0. The boundary technique, for every region and every form, is the generalized Stokes theorem, ∫_∂M ω = ∫_M dω; carrying a form back along a patch is the pullback, and the curved-swirl technique is the Kelvin–Stokes theorem. A form with dω = 0 is closed, and one that is d of another is exact; that closed forms are exact on a region with no holes is the Poincaré lemma, and the closed forms that are not exact, counted, make the de Rham cohomology of the region. The number of times a loop goes round the wire is its winding number. A field whose swirl vector is B is a vector potential for B, and ∮ B · dr = μ₀I is Ampère’s law.</p>
+  <p>A form of degree k is a differential k-form, and dx dy is written dx ∧ dy, the wedge product, so that the forms make an exterior algebra. d is the exterior derivative. The swirl vector is the curl, curl F or ∇ × F; the spread is the divergence, div F or ∇ · F. The twice-nothing technique is d² = 0: curl grad f = 0 and div curl F = 0. The boundary technique, for every region and every form, is the generalized Stokes theorem, ∫_∂M ω = ∫_M dω; carrying a form back along a patch is the pullback, and the curved-swirl technique is the Kelvin–Stokes theorem. A form with dω = 0 is closed, and one that is d of another is exact; that closed forms are exact on a region with no holes is the Poincaré lemma, and the closed forms that are not exact, counted, make the de Rham cohomology of the region. The number of times a loop goes round the wire is its winding number. A field whose swirl vector is B is a vector potential for B, and ∮ B · dr = μ₀I is Ampère’s law. Forms of degree k are differential k-forms; their product is the wedge product, or exterior product, and d is the exterior derivative. A piece is a singular cube, a sum of pieces is a chain, and ∂ is the boundary operator. A form with dω = 0 is closed, and a form that is a slope is exact; the star technique is Poincaré’s. The freedom in A is gauge freedom. A surface of dimension k is a k-dimensional manifold in ℝⁿ; its flat space at a point is the tangent space; a patch is a parametrization, or coordinate system. Turned one way all over is orientable; the twisted band is the Möbius band; a surface with an edge is a manifold with boundary. √det(Drᵀ Dr) du₁ ⋯ duₖ is the volume element; Drᵀ Dr is the Gram matrix of the edge vectors, or the first fundamental form. Bumps that add to 1 are a partition of unity. The boundary technique on a surface is the general Stokes formula; Green’s, Gauss’s and the fundamental one of calculus are its cases. The area a surface shows to a point is the solid angle it subtends, in steradians; the count of what is inside is Gauss’s law.</p>
   <h3>Who said it first</h3>
-  <p>Hermann Grassmann built the algebra in which dx dy = −dy dx in 1844. Élie Cartan wrote forms with d in 1899, and Henri Poincaré used them in his work on celestial mechanics in the same decade. The curved-swirl technique was sent by William Thomson to George Stokes in a letter of 1850, and Stokes set it as a Cambridge examination question in 1854. Vito Volterra stated a version for any number of directions in 1889, and the form ∫_∂M ω = ∫_M dω was set out by Cartan and others in the early 1900s. Georges de Rham proved in 1931 that forms count holes exactly. In 29·cb28.8.5, the four-part numbers are William Rowan Hamilton’s quaternions (1843), defended by Peter Guthrie Tait; the professor at Yale is Josiah Willard Gibbs and the engineer Oliver Heaviside, whose vector analysis won the textbooks; the third way is Cartan’s.</p>
+  <p>Hermann Grassmann built the algebra in which dx dy = −dy dx in 1844. Élie Cartan wrote forms with d in 1899, and Henri Poincaré used them in his work on celestial mechanics in the same decade. The curved-swirl technique was sent by William Thomson to George Stokes in a letter of 1850, and Stokes set it as a Cambridge examination question in 1854. Vito Volterra stated a version for any number of directions in 1889, and the form ∫_∂M ω = ∫_M dω was set out by Cartan and others in the early 1900s. Georges de Rham proved in 1931 that forms count holes exactly. In 29·cb28.17.5, the four-part numbers are William Rowan Hamilton’s quaternions (1843), defended by Peter Guthrie Tait; the professor at Yale is Josiah Willard Gibbs and the engineer Oliver Heaviside, whose vector analysis won the textbooks; the third way is Cartan’s.</p>
   <h3>Wrong moves, worked</h3>
   <pre class="lines" data-k="check" data-label="29·cb28: a worked “proof”, not allowed">
 \omega = \tfrac{-y\,dx + x\,dy}{x^2 + y^2},\ \ d\omega = 0 \text{ off } 0 @@ fine

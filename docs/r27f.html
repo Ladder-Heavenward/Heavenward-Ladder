@@ -118,17 +118,130 @@ A^k = PDP^{-1}PDP^{-1}\cdots PDP^{-1} = PD^kP^{-1} @@ each P⁻¹P in the middle
 </section>
 
 <section class="class step" data-step="27f4">
-  <h2 class="sthead"><span class="stno">27f4</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">27f4</span>A Space That a Map Keeps</h2>
+  <p data-pid="5d5a77">Let T be a straight map from V to itself. A space W inside V is <i>kept</i> by T when T(w) is in W for every w in W. Then T, used only on the vectors of W, is a straight map from W to itself: the <i>map on W</i>. What T loses is kept, and so is what T reaches. For any number λ, the vectors with Tv = λv, together with 0, form a kept space: the line through a vector that T only stretches is the smallest case.</p>
+  <p data-pid="425fed">Kept-space technique: <b>take a basis of V whose first k vectors are a basis of W. Then W is kept by T exactly when the grid of T in that basis has 0 in every place below row k in its first k columns.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the kept-space technique">
+w_1..w_k,\ v_{k+1}..v_n \text{ a basis of } V @@ a basis of W, grown (27b3)
+\text{column } j = \text{the numbers of } T(w_j),\ j \le k @@ the grid of T in the basis (27d4)
+T(w_j) \in W \iff T(w_j) \text{ is a mix of } w_1..w_k @@ the w’s are a basis of W; a vector has one list (27b5)
+\iff \text{column } j \text{ is } 0 \text{ below row } k @@ read the list
+T(w_j) \in W \text{ for each } j \iff T(w) \in W \text{ for all } w @@ T keeps mixes (27c1)
+\htmlClass{new}{W \text{ kept} \iff \text{the block is } 0} \quad \blacksquare @@ the lines above
+  </pre>
+  <p data-pid="2f9b28">The top left k × k corner of that grid is then the grid of the map on W. So a stretch of the map on W is a stretch of T, with the same vector. In the plane, the slide with rows (1, 1), (0, 1) keeps the floor, the lists (x, 0), and on the floor it changes nothing. It keeps no other line through 0, which is 27f3’s reason that it cannot be straightened out.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27f4.1</span><span class="ph understand">understand</span>What does it mean for T to keep a space W, and what is the map on W? <br>How does the grid of T show that W is kept?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27f5">
+  <h2 class="sthead"><span class="stno">27f5</span>Grids That Swap</h2>
+  <p data-pid="89c7ed">Two square grids A and B <i>swap</i> when AB = BA. Let A, n × n, have n different stretches λ₁, …, λₙ, with vectors v₁, …, vₙ that it only stretches. They are a basis, by the different-stretches technique (27f2).</p>
+  <p data-pid="c33d57">Swap technique: <b>if AB = BA and A has n different stretches, then B only stretches each vᵢ, so one P straightens out both grids; and B is a polynomial in A.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the swap technique">
+Aw = \lambda_1 w,\ w = \textstyle\sum c_iv_i \Rightarrow \sum c_i(\lambda_i - \lambda_1)v_i = 0 @@ put the mix into Aw − λ₁w = 0
+\Rightarrow c_i = 0 \text{ for } i \neq 1 \Rightarrow w = c_1v_1 @@ the vᵢ are free and the stretches differ
+A(Bv_1) = B(Av_1) = \lambda_1(Bv_1) @@ AB = BA
+\Rightarrow Bv_1 = \mu_1v_1 @@ the first two lines, with w = Bv₁; the same for each vᵢ
+L_j(A) = \textstyle\prod_{k \neq j}(A - \lambda_kI)\,/\,(\lambda_j - \lambda_k) @@ a polynomial in A; (A − λₖI)vᵢ = (λᵢ − λₖ)vᵢ
+L_j(A)v_j = v_j,\ \ L_j(A)v_i = 0 \text{ for } i \neq j @@ the factor k = i gives 0
+\htmlClass{new}{B = \mu_1L_1(A) + \cdots + \mu_nL_n(A)} \quad \blacksquare @@ both sides send each vᵢ to μᵢvᵢ, and the vᵢ are a basis
+  </pre>
+  <p data-pid="470dc8">With P the grid whose columns are the vᵢ, both P⁻¹AP and P⁻¹BP have 0 off the middle (27f3). The stretches μᵢ of B need not differ. The technique needs the n different stretches of A. Every grid swaps with I, and I has one stretch only, so there the technique says nothing, as it should: not every grid is a polynomial in I.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27f5.1</span><span class="ph understand">understand</span>What does the swap technique say? <br>Why does B only stretch a vector that A only stretches, when AB = BA and the stretches of A are all different?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27f6">
+  <h2 class="sthead"><span class="stno">27f6</span>AB and BA Have the Same Stretches</h2>
+  <p data-pid="72cdb5">AB and BA are different grids in general (27d7). Their stretches are the same.</p>
+  <p data-pid="cf3e4e">Swapped-product technique: <b>for n × n grids A and B, a number is a stretch of AB exactly when it is a stretch of BA. In particular I − AB is undoable exactly when I − BA is.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the swapped-product technique">
+ABv = \lambda v,\ v \neq 0,\ \lambda \neq 0 @@ a stretch of AB other than 0
+Bv \neq 0 @@ if Bv = 0 then λv = A(Bv) = 0
+BA(Bv) = B(ABv) = \lambda(Bv) @@ grouping-free (27d2): λ is a stretch of BA
+\det(AB) = \det A\cdot\det B = \det(BA) @@ det-product (27e3)
+0 \text{ is a stretch of } AB \iff 0 \text{ is a stretch of } BA @@ the stretch test (27f1) at λ = 0
+\htmlClass{new}{AB \text{ and } BA \text{ have the same stretches}} \quad \blacksquare @@ and the same with A and B changed over
+  </pre>
+  <p data-pid="e918bf">I − AB loses a vector other than 0 exactly when ABv = v for some v ≠ 0, that is, when 1 is a stretch of AB. So I − AB is undoable exactly when 1 is not a stretch of AB, and the technique passes that to BA. The undo can be written down: (I − BA)⁻¹ = I + B(I − AB)⁻¹A. Multiply out (I − BA)(I + B(I − AB)⁻¹A) = I − BA + B(I − AB)(I − AB)⁻¹A = I − BA + BA = I.</p>
+  <p data-pid="8819c7">For grids that are not square the technique still holds for stretches other than 0, by its first three lines. It fails at 0: a column times a row is a square grid that loses vectors, while the row times the column is a single number.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27f6.1</span><span class="ph understand">understand</span>Why is a stretch of AB other than 0 also a stretch of BA, and what settles the stretch 0? <br>How does that show I − AB is undoable exactly when I − BA is?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27f7">
+  <h2 class="sthead"><span class="stno">27f7</span>Flattening Onto One Space Along Another</h2>
+  <p data-pid="5369ea">A straight map E from V to itself is a <i>flattening</i> when doing it twice is doing it once: E(Ev) = Ev for every v.</p>
+  <p data-pid="592e91">Flattening technique: <b>a flattening E leaves alone every vector it reaches, every vector is a reached vector plus a lost vector in exactly one way, and I − E is a flattening that reaches what E loses and loses what E reaches.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the flattening technique">
+w = Ev \Rightarrow Ew = E(Ev) = Ev = w @@ E leaves alone what it reaches
+E(Ev) = 0 \Rightarrow Ev = 0 @@ since E(Ev) = Ev
+\text{lost and reached share only } 0 \text{ and build } V @@ the lost-meets-reached technique (27c3)
+v = Ev + (v - Ev),\ \ E(v - Ev) = 0 @@ the one way to split v (27b4)
+(I - E)(I - E) = I - 2E + EE = I - E @@ so I − E is a flattening
+\htmlClass{new}{E + (I - E) = I,\ \ E(I - E) = 0} \quad \blacksquare @@ I − E sends v to its lost part
+  </pre>
+  <p data-pid="6b69e0">So E flattens V <i>onto</i> what it reaches, <i>along</i> what it loses. The other way round, if U and W are spaces inside V that share only 0 and build V, each v is u + w in one way (27b4), and v ↦ u is a flattening onto U along W. In the plane, E(x, y) = (x + y, 0) flattens onto the floor along the line of the lists (t, −t). It is not the flattening straight down, (x, y) ↦ (x, 0), which goes onto the same floor along the y-axis. A flattening is fixed by both of its spaces.</p>
+  <p data-pid="297439">In a basis made of a basis of what E reaches, then a basis of what E loses, the grid of E has 1s and then 0s down its middle and 0 elsewhere. So a flattening can always be straightened out, and its stretches are 0 and 1 only.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27f7.1</span><span class="ph understand">understand</span>What is a flattening, and what does the flattening technique say about what it reaches and what it loses? <br>Why is a flattening not fixed by the space it flattens onto alone?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27f8">
+  <h2 class="sthead"><span class="stno">27f8</span>A Map That Keeps Every Space</h2>
+  <p data-pid="360673">The map v ↦ c·v, whose grid is c times I in every basis, keeps every space inside V. Nothing else does.</p>
+  <p data-pid="6414d8">Keeps-all technique: <b>a straight map T from V to itself that keeps every line through 0 is v ↦ c·v for one number c.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the keeps-all technique">
+Tv = c_v\,v \text{ for each } v \neq 0 @@ T keeps the line through v
+u, v \text{ free}:\ T(u + v) = c_{u+v}\,(u + v) @@ the line through u + v is kept too
+T(u + v) = Tu + Tv = c_u\,u + c_v\,v @@ T keeps adding
+(c_{u+v} - c_u)\,u + (c_{u+v} - c_v)\,v = 0 \Rightarrow c_u = c_v @@ u and v are free
+v = t\cdot u \Rightarrow Tv = t\cdot Tu = c_u\,v @@ on one line the number is the same
+\htmlClass{new}{T = c\,I} \quad \blacksquare @@ one number c serves every vector
+  </pre>
+  <p data-pid="012a41">A turn of the plane by a right angle keeps the plane and keeps {0}, and no line. A stretch of the plane by 2 along the floor and 3 along the wall keeps both of those lines and no other. The fewer spaces a map keeps, the less like a plain stretch it is. And c·I swaps with every grid, since (cI)B = cB = B(cI).</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27f8.1</span><span class="ph understand">understand</span>Why must a straight map that keeps every line through 0 be c times I? <br>Which line of the proof uses two free vectors, and for what?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27f9">
+  <h2 class="sthead"><span class="stno">27f9</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 Av = \lambda v \text{ with } v = 0 \text{ makes } \lambda \text{ a stretch}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; every λ does that with v = 0; the vector must not be 0
 \text{the stretches of } A \text{ are its middle entries}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only for a grid with 0 on one side of the middle; rows (0, 1), (1, 0) has middle 0, 0 and stretches 1, −1
 \text{the stretches of } AB \text{ are products of stretches of } A \text{ and } B\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; not in general; each vector is only stretched by its own grid
 \text{every real grid has a real stretch}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the quarter turn has stretches i and −i only
+T \text{ keeps } W \Rightarrow T \text{ stretches some } w\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; a quarter turn keeps the whole plane and only stretches no vector of it but 0
+AB = BA \Rightarrow B \text{ is a polynomial in } A\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; only when A has n different stretches: I swaps with every grid
+ABv = \lambda v \Rightarrow BAv = \lambda v\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; the same stretches, other vectors: it is Bv that BA stretches by λ
+EE = E \Rightarrow E = I \text{ or } E = 0\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; rows (1, 0), (0, 0) flatten the plane onto the first axis
+\text{keeps both axes} \Rightarrow v \mapsto c\,v\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; rows (2, 0), (0, 3) keep both axes and not the line of (1, 1): every line is needed
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">27f4.1</span><span class="ph understand">understand</span>Why is “Av = λv with v = 0 makes λ a stretch” a move to watch out for?</li>
+      <li><span class="qid">27f9.1</span><span class="ph understand">understand</span>Why is “Av = λv with v = 0 makes λ a stretch” a move to watch out for?</li>
     </ol>
   </section>
 </section>
@@ -148,7 +261,7 @@ Av = \lambda v \text{ with } v = 0 \text{ makes } \lambda \text{ a stretch}\,? @
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A vector a grid only stretches is an eigenvector, and its stretch is an eigenvalue. det(A − λI), as a polynomial in λ, is the characteristic polynomial (often written det(λI − A), which differs by the sign (−1)ⁿ). To straighten out A is to diagonalise it; D is a diagonal matrix, and A and D are similar. The slide with rows (1, 1), (0, 1) is a shear.</p>
+  <p>A vector a grid only stretches is an eigenvector, and its stretch is an eigenvalue. det(A − λI), as a polynomial in λ, is the characteristic polynomial (often written det(λI − A), which differs by the sign (−1)ⁿ). To straighten out A is to diagonalise it; D is a diagonal matrix, and A and D are similar. The slide with rows (1, 1), (0, 1) is a shear. A space kept by a map is an invariant subspace, and the map on it is the restriction. Grids that swap commute, and grids straightened by one P are simultaneously diagonalizable. A flattening is a projection, onto its range along its null space; the grids E with EE = E are idempotent. The grids c times I are the scalar matrices.</p>
   <h3>Who said it first</h3>
   <p>Euler studied the axes a spinning body turns about in the 1750s, and Joseph-Louis Lagrange found stretches of this kind in the motions of the planets. Augustin-Louis Cauchy proved in 1829 that a symmetric grid has real stretches. The word eigen, German for own, came from David Hilbert in 1904.</p>
 </section>

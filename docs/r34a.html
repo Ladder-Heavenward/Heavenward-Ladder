@@ -178,17 +178,87 @@ d(x, y) \le d(x, x_n) + d(x_n, y) \to 0,\ \text{so } x = y @@ a detour never win
 </section>
 
 <section class="class step" data-step="34a6">
-  <h2 class="sthead"><span class="stno">34a6</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">34a6</span>The Distance to a Set</h2>
+  <p data-pid="bbc5aa">A distance is between two points. A point also has a distance to a set: for a non-empty part A of a space X with a distance, d(x, A) is the greatest lower bound of the distances d(x, a) over all a in A (8c).</p>
+  <p data-pid="fb7443">Set-distance technique: <b>|d(x, A) − d(y, A)| ≤ d(x, y), so x ↦ d(x, A) is continuous; and for a closed A, d(x, A) = 0 exactly when x is in A. So if A and B are closed, non-empty and share no point, then f(x) = d(x, A)/(d(x, A) + d(x, B)) is continuous on X, is 0 exactly on A, is 1 exactly on B, and lies between 0 and 1.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the set-distance technique">
+d(x, A) \le d(x, a) \le d(x, y) + d(y, a) \text{ for each } a \in A @@ the triangle demand on a distance (34a1)
+d(x, A) \le d(x, y) + d(y, A) @@ the right side, less d(x, y), is a lower bound of the d(y, a), so at most the greatest one
+|d(x, A) - d(y, A)| \le d(x, y) @@ the same with x and y swapped: continuous, with δ = ε
+d(x, A) = 0 \iff \text{some list in } A \text{ settles at } x @@ members aₙ with d(x, aₙ) < 1/n
+\iff x \in A \text{, for a closed } A @@ a closed set keeps its limits (34a3)
+\htmlClass{new}{f = \tfrac{d(x, A)}{d(x, A) + d(x, B)} \text{ is } 0 \text{ on } A,\ 1 \text{ on } B} \quad \blacksquare @@ the bottom is never 0: no x is in both A and B; a quotient of continuous functions
+  </pre>
+  <p data-pid="a417e5">So in a space with a distance, two closed sets that share no point can always be told apart by a continuous function, however closely they approach each other. On the plane take A the floor line and B the curve y = 1/x for x > 0. They come as near as you like and never touch, and f is still continuous, 0 on the line and 1 on the curve.</p>
+  <p data-pid="5e65c2">The sets f < ½ and f > ½ are open (the strict test of 34j1 will say why), share no point, and hold A and B. Two closed sets can be wrapped in two open sets that keep clear of each other.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34a6.1</span><span class="ph understand">understand</span>What is the distance from a point to a set, and why is it continuous in the point? <br>What does f = d(x, A)/(d(x, A) + d(x, B)) do for two closed sets that share no point?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34a7">
+  <h2 class="sthead"><span class="stno">34a7</span>A Complete Space Is Not Made of Thin Closed Sets</h2>
+  <p data-pid="dd326c">Call a closed set <b>thin</b> when it holds no ball: every ball of the space has a point outside it. A point of the line is thin. So is a line in the plane.</p>
+  <p data-pid="d2cc93">Thin-sets technique: <b>a complete space with a distance, with at least one point, is not the union of a list A₁, A₂, A₃, … of thin closed sets.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the thin-sets technique">
+\text{a closed ball } K_1 \text{ of radius} \le 1 \text{ that misses } A_1 @@ A₁ is thin, so some point is outside it; A₁ is closed, so a small ball round that point is outside it too (34a2)
+\text{a closed ball } K_2 \subseteq K_1 \text{, radius} \le \tfrac12 \text{, missing } A_2 @@ the same, inside the open ball of K₁: A₂ is thin and closed
+K_1 \supseteq K_2 \supseteq K_3 \supseteq \cdots,\ \ K_n \text{ misses } A_n @@ and so on, with radius at most 1/n
+\text{the centres crowd, so they settle, at } p @@ centres from the nth on lie in Kₙ, within 2/n of each other; the space is complete (34a5)
+p \in K_n \text{ for every } n @@ Kₙ is closed and holds the centres from the nth on (34a3)
+\htmlClass{new}{p \text{ is in no } A_n} \quad \blacksquare @@ Kₙ misses Aₙ: the union is not the whole space
+  </pre>
+  <p data-pid="cbe653">The line is complete, and a single point is thin and closed. So the line is not a list of points: no list holds every real. This is the nested-interval way to that fact, with no digits in it.</p>
+  <p data-pid="b8cde0">The fractions, with the distance of the line, are a list of points, each thin and closed among the fractions. So the fractions are not complete under any distance that gives them the same open sets. And the plane is not a list of lines.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34a7.1</span><span class="ph understand">understand</span>What is a thin closed set, and what can a complete space not be? <br>How does the technique show that no list holds every real?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34a8">
+  <h2 class="sthead"><span class="stno">34a8</span>Filling the Holes of Any Space</h2>
+  <p data-pid="f2ee3e">The fractions had holes, and rung 8 filled them. Any space X with a distance can have its holes filled the same way, with the lists that crowd standing in for the points that are missing.</p>
+  <p data-pid="cbf4ad">Call two crowding lists (xₙ) and (yₙ) of X <b>kin</b> when d(xₙ, yₙ) heads to 0. Kin is a sameness (2d), and X* is the set of its classes. For two classes, put D = the limit of d(xₙ, yₙ).</p>
+  <p data-pid="800aad">Hole-filling technique: <b>D is a distance on X*; sending x to the class of the list x, x, x, … keeps distances, and so puts a copy of X inside X*; every point of X* is a limit of points of that copy; and X* is complete.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the hole-filling technique">
+|d(x_m, y_m) - d(x_n, y_n)| \le d(x_m, x_n) + d(y_m, y_n) @@ the back-triangle technique (34a1), twice: the numbers d(xₙ, yₙ) crowd on the line, so they settle (22c)
+D \text{ is the same for kin lists, and } D = 0 \text{ only for kin} @@ kin lists change d(xₙ, yₙ) by amounts that head to 0; D = 0 is the definition of kin
+D \text{ obeys the triangle demand} @@ d does, term by term, and limits keep ≤
+D\big([x_n], [x_N, x_N, \ldots]\big) = \lim_n d(x_n, x_N) \le \varepsilon @@ for N large: the list crowds. So each class is a limit of points of the copy of X
+z_k \text{ in the copy, within } \tfrac1k \text{ of class } k @@ for a list of classes that crowds: pick such zₖ; then (zₖ) crowds in X
+\htmlClass{new}{X^* \text{ is complete}} \quad \blacksquare @@ the classes settle at the class of (zₖ): the kth class is within 1/k of zₖ, and zₖ heads to the class of (zₖ) by the fourth line
+  </pre>
+  <p data-pid="9ec7eb">From the fractions with |x − y| this builds the line once more, by lists in place of rung 8’s cuts. From the polynomials on [0, 1] with the largest gap it builds every continuous function on [0, 1] (31j2). From the continuous functions with the total size ∫|f − g| it builds L¹ (31g): the new points there are no longer functions with a value at each input, only classes.</p>
+  <p data-pid="969e59">It is the only way to do it. If Y is complete, holds a copy of X, and every point of Y is a limit of points of that copy, then Y matches X* with distances kept: a point of Y is fixed by the kin class of the lists of X that settle at it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34a8.1</span><span class="ph understand">understand</span>What are the points of X*, and what is the distance between two of them? <br>Why is X* complete?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34a9">
+  <h2 class="sthead"><span class="stno">34a9</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 \textstyle\bigcap_n (-\tfrac1n, \tfrac1n) \text{ is open, since each one is}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the overlap is {0}; only finitely many overlaps are promised
 [0, 1) \text{ is not open, so it is closed}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it is neither: 1 − 1/n settles at 1, outside it
 \text{the list crowds, so it settles}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only in a complete space; in the fractions, the decimals of √2 crowd and settle nowhere
 f \text{ continuous, so } f(U) \text{ is open for open } U\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; x ↦ x² sends (−1, 1) to [0, 1); continuity pulls back, it does not push forward
+d(x, A) = 0 \Rightarrow x \in A\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; only for a closed A: 0 is at distance 0 from (0, 1) and is not in it
+\text{no space is a list of thin closed sets}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; a complete one is not: the fractions are a list of points, each thin and closed among the fractions
+\text{one new point for each crowding list}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; kin lists fill the same hole: 1/n and 1/n² both stand for the missing 0 of (0, 1]
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">34a6.1</span><span class="ph understand">understand</span>Why is “each (−1/n, 1/n) is open, so their overlap is open” a move to watch out for?</li>
+      <li><span class="qid">34a9.1</span><span class="ph understand">understand</span>Why is “each (−1/n, 1/n) is open, so their overlap is open” a move to watch out for?</li>
     </ol>
   </section>
 </section>
@@ -209,7 +279,7 @@ f \text{ continuous, so } f(U) \text{ is open for open } U\,? @@ &lt;span class=
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A distance is a metric, and a space with a distance is a metric space. The ball B(x, r) is the open ball. The back-triangle technique is the reverse triangle inequality. The street distance is the taxicab or Manhattan metric, ℓ¹; the largest gap is the sup metric; the all-or-nothing distance is the discrete metric. A pull-back is a preimage or inverse image. A list that crowds is a Cauchy sequence, and a space in which every one settles is a complete metric space.</p>
+  <p>A distance is a metric, and a space with a distance is a metric space. The ball B(x, r) is the open ball. The back-triangle technique is the reverse triangle inequality. The street distance is the taxicab or Manhattan metric, ℓ¹; the largest gap is the sup metric; the all-or-nothing distance is the discrete metric. A pull-back is a preimage or inverse image. A list that crowds is a Cauchy sequence, and a space in which every one settles is a complete metric space. A continuous function that is 0 on one closed set and 1 on another is a Urysohn function; that two closed sets can be wrapped in separate open sets is normality. The thin-sets technique is Baire’s category technique; a thin closed set is nowhere dense, and a union of a list of them is of first category, or meagre. X* is the completion of X; kin lists are equivalent Cauchy sequences; a copy of X whose limits fill the space is dense in it.</p>
   <h3>Who said it first</h3>
   <p>Georg Cantor studied closed sets of the line, and the limits they keep, in the early 1880s. Maurice Fréchet, in his thesis of 1906, gathered the rules of a distance and studied spaces of functions with them. Felix Hausdorff named the metric space in his book of 1914. Stefan Banach made complete spaces of functions the ground of a whole subject in 1922.</p>
   <h3>A proof that is not allowed</h3>

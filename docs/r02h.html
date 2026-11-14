@@ -334,7 +334,25 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 </section>
 
 <section class="class step" data-step="2h18">
-  <h2 class="sthead"><span class="stno">2h18</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">2h18</span>Reached in One or More Steps</h2>
+  <p data-pid="8f692a">“Is a parent of” is not transitive (2h12). “Is an ancestor of” is, and it is made out of parent-of: a parent, or a parent of a parent, and on. How is the second relation made from the first, before there are numbers to count the steps?</p>
+  <p data-pid="a20e0d">Let r be a relation on u. Look at every relation t on u that is transitive and has r as a subset. There is at least one: u × u, which holds every pair. Collect the pairs that are in all of them, a sift:</p>
+  <div class="eqline" data-tex="\begin{aligned}&amp;r^{+} = \{p \in u \times u :\\ &amp;\quad \forall t\,\big((r \subseteq t \land t \text{ is transitive})\\ &amp;\qquad \Rightarrow p \in t\big)\}\end{aligned}"></div>
+  <p data-pid="5a52f7">Least-transitive technique: <b>r is a subset of r⁺; r⁺ is transitive; and r⁺ is a subset of every transitive relation on u that has r as a subset.</b></p>
+  <p data-pid="c81565">Each pair of r is in every such t, so it passes the sift: r ⊆ r⁺. For transitive, rows hold x r⁺ y and y r⁺ z. Let t be any transitive relation on u with r ⊆ t: a fresh case. Both pairs are in t, by the sift. t is transitive, so x t z. Nothing was said of t, so (x, z) is in every such t, and it passes the sift: x r⁺ z. Last, if t is one of those relations, every pair of r⁺ is in t, by the sift once more.</p>
+  <div class="eqline" data-tex="\begin{aligned}&amp;x \mathrel{r^{+}} y,\ \ y \mathrel{r^{+}} z\\ &amp;\qquad \text{let } t \text{ be any such relation}\\ &amp;\qquad x \mathrel{t} y,\ \ y \mathrel{t} z \quad\text{the sift}\\ &amp;\qquad x \mathrel{t} z \quad\text{transitive}\\ &amp;x \mathrel{r^{+}} z \quad\text{nothing said of } t\end{aligned}"></div>
+  <p data-pid="202615">On {Zoe, Randy, Jean}, r is {(Zoe, Randy), (Randy, Jean)}. Any transitive t with r ⊆ t must hold (Zoe, Jean), and r with that one pair added is already transitive. So r⁺ is {(Zoe, Randy), (Randy, Jean), (Zoe, Jean)}: “is an ancestor of”.</p>
+  <p data-pid="5b710c">Read x r⁺ y as “y is reached from x in one or more steps of r”. Counting the steps waits for rung 4. The sift needed no count.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2h18.1</span><span class="ph understand">understand</span>How is r⁺ made from a relation r without counting steps? <br>Why is r⁺ transitive?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="2h19">
+  <h2 class="sthead"><span class="stno">2h19</span>Moves to Watch Out For</h2>
   <div class="brkkey"></div>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 (a,b) = \{a,b\}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a gathering has no order; the pair does. {Zoe, Randy} = {Randy, Zoe}, and (Zoe, Randy) = (Randy, Zoe) cannot stand, as shown above
@@ -343,22 +361,23 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 \begin{aligned}&x \mathrel{r} y,\; y \mathrel{r} x \quad\\ &\quad \text{so } x \mathrel{r} x\text{: hence symmetric}\\ &\quad\text{and transitive give reflexive?}\end{aligned} @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only for an x that is related to some y. A thing related to nothing breaks it: on {Zoe, Randy} the relation {(Zoe, Zoe)} is symmetric and transitive and not reflexive (Randy)
 a \times b = b \times a\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the pairs are turned about. {p} × {x} = {(p, x)} and {x} × {p} = {(x, p)}, different sets when p ≠ x
 [x] = [y] \quad\text{so } x = y\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; classes are the same when their members are equivalent, not identical. [cow] = [cat] and cow ≠ cat
+r^{+} \text{ is reflexive}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; one or more steps, not none: Zoe is not an ancestor of Zoe
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2h18.1</span><span class="ph understand">understand</span>Why would (a, b) = {a, {b}} fail as a definition of the pair?</li>
+      <li><span class="qid">2h19.1</span><span class="ph understand">understand</span>Why would (a, b) = {a, {b}} fail as a definition of the pair?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="2h19">
-  <h2 class="sthead"><span class="stno">2h19</span>Running It Backwards</h2>
+<section class="class step" data-step="2h20">
+  <h2 class="sthead"><span class="stno">2h20</span>Running It Backwards</h2>
   <p data-pid="81184f">Given a set that is a pair, find its entries. The left entry is in every member. If a member has another thing in it, that thing is the right entry; if not, the right entry is the left entry again. A sameness of pairs gives a sameness of left entries and of right entries at once: the equal-pairs technique, cited, not reproved. Given a relation to test, hunt for a missing pair: a thing without its self-pair, a pair without its turned-about pair, or a step and a further step without the shortcut. A missing pair kills the property, by the counterexample technique. Given classes, read the relation back as “in the same class as”. Given a relation, build the classes by sifting u by “∼ x” for each x, then check by the classes-never-overlap technique that they do not partly overlap. Found upward; written downward.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">2h19.1</span><span class="ph understand">understand</span>Given a relation to test, what do you hunt for, and which technique does a missing pair use?</li>
+      <li><span class="qid">2h20.1</span><span class="ph understand">understand</span>Given a relation to test, what do you hunt for, and which technique does a missing pair use?</li>
     </ol>
   </section>
 </section>
@@ -385,7 +404,7 @@ a \times b = b \times a\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/s
   <h3>Who said it first</h3>
   <p>The pair {{t}, {t, b}} is Kazimierz Kuratowski’s (1921), and its accepted name is the Kuratowski ordered pair.</p>
   <h3>Accepted names</h3>
-  <p>A sameness relation is an equivalence relation, and its classes are equivalence classes.</p>
+  <p>A sameness relation is an equivalence relation, and its classes are equivalence classes. r⁺ is the transitive closure of r.</p>
   <p>The product u × b is the Cartesian product.</p>
 </section>
 </div>

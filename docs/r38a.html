@@ -156,17 +156,80 @@ N \models \forall x_0\,(x_0 = 0 \lor \exists x_1\,(x_0 = S(x_1))) @@ every numbe
 </section>
 
 <section class="class step" data-step="38a5">
-  <h2 class="sthead"><span class="stno">38a5</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">38a5</span>Formulas That Define Sets</h2>
+  <p data-pid="cb59dc">A formula with one free placeholder sorts the members of a world: some make it true and the rest do not. From here on, a formula φ with only x₀ free <b>defines</b>, in a world M, the set of members u for which φ is true when x₀ is given u. A formula with two free placeholders defines a relation in the same way.</p>
+  <p data-pid="6c8b78">Practice, in N. Even: ∃x₁ (x₁ + x₁ = x₀). At most, x₀ ≤ x₁: ∃x₂ (x₀ + x₂ = x₁). Divides: ∃x₂ (x₀ · x₂ = x₁). Prime: ¬(x₀ = S(0)) ∧ ∀x₁ (∃x₂ (x₁ · x₂ = x₀) ⇒ (x₁ = S(0) ∨ x₁ = x₀)). Check the last at 0: every number divides 0, so the every fails, and 0 is not prime.</p>
+  <p data-pid="ee2a76">Defined-set technique: <b>a matching of a world with itself that carries every mark sends each defined set onto itself.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the defined-set technique">
+h:\ M \text{ matched with } M,\ \text{marks carried} @@ the matching of 38a4, with M′ = M
+\varphi \text{ true at } u \iff \varphi \text{ true at } h(u) @@ the matching-worlds proof (38a4), for a formula under an assignment s and under h ∘ s
+\htmlClass{new}{u \in D \iff h(u) \in D} \quad \blacksquare @@ D is the set φ defines
+  </pre>
+  <p data-pid="ed0f70">So to show that a set is defined, write the formula. To show that it is not, find a matching that moves it. In the reals with + and ·, "x₀ is at least 0" is defined by ∃x₁ (x₁ · x₁ = x₀). In the reals with + alone it is not defined by any formula: x ↦ −x carries + and sends the numbers above 0 to those below.</p>
+  <p data-pid="f19b82">In N every number is defined, each by its own term: x₀ = S(S(0)) defines 2. So the only matching of N with itself is the one that moves nothing. And still most sets of numbers are defined by no formula at all. Formulas are finite strings from a countable stock of marks, so they fit in one list (35a), and the sets of numbers do not (35c).</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38a5.1</span><span class="ph understand">understand</span>What set does a formula with one free placeholder define in a world? <br>How do you show that a set is not defined by any formula?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38a6">
+  <h2 class="sthead"><span class="stno">38a6</span>A Function Mark in Place of Some</h2>
+  <p data-pid="0f6aec">"For every x₀ there is some x₁" promises a partner for each member and names none. A function mark can do the naming.</p>
+  <p data-pid="24cff2">Chooser technique: <b>∀x₀ ∃x₁ φ is true in a world M exactly when M can be given a meaning for a new function mark f, of one place, that makes ∀x₀ φ(x₀, f(x₀)) true.</b> Here φ(x₀, f(x₀)) is φ with the term f(x₀) put for x₁.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the chooser technique">
+\forall x_0\,\varphi(x_0, f(x_0)) \text{ true} \Rightarrow \forall x_0\,\exists x_1\,\varphi \text{ true} @@ for each u, the member f(u) is a some
+\forall x_0\,\exists x_1\,\varphi \text{ true}:\ P_u = \{v : \varphi \text{ true at } (u, v)\} \ne \emptyset @@ for each member u, by the clauses for every and some (38a3)
+f(u) = \text{a chosen member of } P_u @@ a choice function for the family of the P_u (6c); in N no choice is spent: take the least (6b)
+\htmlClass{new}{\forall x_0\,\varphi(x_0, f(x_0)) \text{ is true with that } f} \quad \blacksquare @@ φ is true at (u, f(u)) for every u
+  </pre>
+  <p data-pid="55fae5">In N take ∀x₀ ∃x₁ (x₀ < x₁). The meaning f = S makes ∀x₀ (x₀ < f(x₀)) true. So does f(x) = x + 7. The old statement said a chooser exists, and the new mark is one chooser among many.</p>
+  <p data-pid="78339e">The order of every and some (2b) is now visible in the places of the mark. In ∀x₀ ∃x₁ the chooser sees x₀: one place. In ∃x₁ ∀x₀ the some comes first and sees nothing: its chooser has no places, which is a name. Done to every some in turn, this brings any statement to one with only everys in front, in a larger language, with a world exactly when the old statement has one.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38a6.1</span><span class="ph understand">understand</span>What does a new function mark do for "for every x₀ some x₁"? <br>Why does the some in ∃x₁ ∀x₀ need only a name?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38a7">
+  <h2 class="sthead"><span class="stno">38a7</span>Every, Read as Every Named</h2>
+  <p data-pid="64e35d">The clause for ∀ in 38a3 runs over every member of the world. There is a cheaper reading: run over the terms. Call a member of M <b>named</b> when it is the value of a term with no placeholders. For such a term t, φ(t) is φ with t put for its free placeholder.</p>
+  <p data-pid="8d90c0">Named-every technique: <b>if every member of M is named, then ∀x φ is true in M exactly when φ(t) is true in M for every term t with no placeholders, and ∃x φ is true exactly when φ(t) is true for some such t.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the named-every technique">
+\varphi(t) \text{ true} \iff \varphi \text{ true with } x \text{ given the value of } t @@ induction on the building of φ (38a1): the value of t goes where x stood
+\forall x\,\varphi \text{ true} \Rightarrow \varphi(t) \text{ true for every } t @@ the value of t is a member
+\varphi(t) \text{ true for every } t \Rightarrow \varphi \text{ true at every named member} @@ the first line
+\htmlClass{new}{= \text{every member: } \forall x\,\varphi \text{ is true}} \quad \blacksquare @@ every member is named; the some clause the same way
+  </pre>
+  <p data-pid="e90ecc">N is such a world: 0, S(0), S(S(0)), … name every number. So in N, ∀x φ says φ(0), φ(S(0)), φ(S(S(0))), …, one statement for each numeral, and nothing more.</p>
+  <p data-pid="0b98ac">Where something has no name, the two readings part. Take the reals with the marks 0, 1, + and ·. The terms with no placeholders name 0, 1, 2, 3, … and nothing else. Let φ be ¬(x · x = 1 + 1). Then φ(t) is true for every such t, and ∀x φ is false, because √2 is a member. No language can mend this for the reals: terms fit in one list (35a) and the reals do not (35b). "Every named" is a weaker claim than "every" whenever the world is larger than its names.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38a7.1</span><span class="ph understand">understand</span>When may "every" be read as "every named"? <br>Give a world and a formula where the two readings part.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38a8">
+  <h2 class="sthead"><span class="stno">38a8</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
 \exists x_0\,\varphi \text{ is true in } M \text{ when } \varphi \text{ holds for some name}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; for some member: a world may have members no name reaches, as the line has (35b)
 \forall x_0\,(x_0 = 0) \text{ is false, so it is false in every world}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; true in a world with one member; truth belongs to a world
 x_0 + 0 = x_0 \text{ is a statement true in } N\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a formula with a free placeholder; ∀x₀ (x₀ + 0 = x₀) is the statement
 (\varphi \land \psi \lor \chi) \text{ is a formula}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; no brackets inside: two readings, and the one-reading technique needs one
+\text{no formula comes to mind} \Rightarrow \text{not defined}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; not defined needs a matching that moves the set: x ↦ −x for the numbers above 0 in the reals with + alone
+\text{the chooser } f \text{ is the only one}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; for ∀x₀ ∃x₁ (x₀ < x₁) in N, both S and x + 7 are choosers; the statement promises one and fixes none
+\varphi(t) \text{ for every } t \Rightarrow \forall x\,\varphi\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; only when every member is named: in the reals ¬(x · x = 1 + 1) holds of every named member and fails at √2
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38a5.1</span><span class="ph understand">understand</span>Why is ∃x₀ φ not true in M merely when φ holds for some name? <br>Why is ∀x₀ (x₀ = 0) not false in every world?</li>
+      <li><span class="qid">38a8.1</span><span class="ph understand">understand</span>Why is ∃x₀ φ not true in M merely when φ holds for some name? <br>Why is ∀x₀ (x₀ = 0) not false in every world?</li>
     </ol>
   </section>
 </section>
@@ -186,7 +249,7 @@ x_0 + 0 = x_0 \text{ is a statement true in } N\,? @@ &lt;span class="vd vd-p"&g
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The language is a signature or vocabulary; its marks are constant, function and relation symbols, each with an arity. The terms and formulas are the well-formed terms and formulas of first-order logic; first-order because every and some range over members only, never over sets of them. The one-reading technique is unique readability. Free and bound placeholders are free and bound variables; a formula with no free variable is a sentence. A world is a structure or interpretation; its set is the domain or universe. The definition of truth is the Tarskian satisfaction relation, M ⊨ φ[s]. The free-places technique is the coincidence lemma; the matching-worlds technique is the isomorphism lemma, and a matching that carries the marks is an isomorphism. G ⊨ φ is logical consequence, and a world of G is a model of G.</p>
+  <p>The language is a signature or vocabulary; its marks are constant, function and relation symbols, each with an arity. The terms and formulas are the well-formed terms and formulas of first-order logic; first-order because every and some range over members only, never over sets of them. The one-reading technique is unique readability. Free and bound placeholders are free and bound variables; a formula with no free variable is a sentence. A world is a structure or interpretation; its set is the domain or universe. The definition of truth is the Tarskian satisfaction relation, M ⊨ φ[s]. The free-places technique is the coincidence lemma; the matching-worlds technique is the isomorphism lemma, and a matching that carries the marks is an isomorphism. G ⊨ φ is logical consequence, and a world of G is a model of G. A set defined by a formula is a definable set; a matching of a world with itself that carries the marks is an automorphism. The new marks are Skolem functions; a statement with only everys in front is in Skolem normal form. Reading every as every named is the substitutional reading of the quantifier; the reading of 38a3 is the objectual one.</p>
   <h3>Who said it first</h3>
   <p>Gottlob Frege wrote the first full language of every and some in his Begriffsschrift (1879). Charles Sanders Peirce and Ernst Schröder wrote quantifiers in algebra in the 1880s. Leopold Löwenheim worked with first-order formulas in 1915, and David Hilbert and Wilhelm Ackermann set first-order logic apart as a system in their book of 1928. Alfred Tarski defined truth in a formal language in a Polish monograph of 1933, translated into German in 1935; his definition by recursion, with one clause for each way of building, is the one on this page.</p>
   <h3>A proof that is not allowed</h3>
