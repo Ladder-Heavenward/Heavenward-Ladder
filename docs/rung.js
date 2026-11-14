@@ -2854,7 +2854,7 @@ const pg=()=>window.ladderPage?ladderPage():'';
 const ATTACH=/(^|\s)(eqline|eqline-words|brkkey|eyebrow|lbl|cap|lp|lv|first|dividend|tablewrap-cap)(\s|$)/;
 const texbox=el=>!!(el&&el.matches&&(el.matches('pre,.eqline,.eqline-words,.lines,.texline,.katex-display')||el.querySelector('.katex-display,pre')));
 let screens=[], k=0, on=false, bar=null, L=null, R=null, posEl=null, dots=null, step=null;
-const folded=el=>el.hasAttribute('data-collapsed')||(el.matches('p[data-pid]')&&!el.textContent.replace(/\s+/g,'').replace(/^[\d\w.·]+$/,'').length);
+const folded=el=>el.hasAttribute('data-collapsed')||(el.matches('p[data-pid]')&&!el.textContent.replace(/\s+/g,'').replace(/^[\d\w.·]{1,16}$/,'').length); /* 2026-11-14: only an address alone is empty; a sentence with no comma (5.0.9) was being read as one */
 function clear(){ document.querySelectorAll('.brk.sw-rows').forEach(b=>{ if(!b.closest('.fvghost')) b.classList.remove('sw-rows','sw-has'); }); document.querySelectorAll('[data-sw]').forEach(x=>{ if(x.closest('.fvghost')) return; /* the outgoing footing keeps its screen while it leaves */ x.removeAttribute('data-sw'); x.classList.remove('sw-on','sw-open','sw-stub'); }); screens=[]; }
 /* slidex */ /* Andrew 2026-11-13 11:01Z: a deck's slides become screens of the footing: no second set of buttons, no deck heading */
 function expand(root){ [...root.querySelectorAll(':scope>.slides:not([data-sx]):not([data-collapsed])')].forEach(deck=>{ try{
@@ -2864,7 +2864,59 @@ function expand(root){ [...root.querySelectorAll(':scope>.slides:not([data-sx]):
       const c=live.cloneNode(true); c.querySelectorAll('.new').forEach(x=>x.classList.remove('new')); c.querySelectorAll('[id]').forEach(x=>x.removeAttribute('id')); w.appendChild(c); made.push(w); }
     A.show(at); made.forEach(w=>{ ref.parentNode.insertBefore(w,ref.nextSibling); ref=w; }); deck.setAttribute('data-sx','src'); deck.hidden=true;
   }catch(_){} }); }
-function build(els){ clear(); step=els.find(e=>e.matches&&e.matches('section.step')); if(!step) return; expand(step);
+/* ---- smaller chunks (Andrew 2026-11-14 17:40Z: "clear up the summaries and conclusions so they're broken into smaller more readable
+   chunks"). On a rung's or a floor's summary and conclusion the whole page is one footing, and its header (title and summary) used to
+   stand above every screen. Now the header's paragraphs are screens too, the title riding with the first; a conclusion's body gives
+   one screen to each block; a heading rides with the screen after it. A long paragraph is shown a few sentences at a time, and a long
+   list a few items at a time. The wording, the paragraph and its address never change: the paragraph is only shown in parts. */
+const CHUNKPAGE=/^(r\d\d|floor\d)(concl)?$/;
+const CW=60, CMAX=75; /* words: a paragraph over CMAX is shown in parts of about CW */
+const words=t=>(String(t).match(/\S+/g)||[]).length;
+const SENT=/[.!?][”’")\]]?\s+(?=[A-Z0-9“‘"(¬∀∃])/g;
+function sentences(p){ /* the paragraph's child nodes cut into sentences; a cut falls only in plain text at the paragraph's own level */
+  const out=[[]]; [...p.childNodes].forEach(n=>{
+    if(n.nodeType!==3){ out[out.length-1].push(n); return; }
+    let t=n; SENT.lastIndex=0; let m, from=0; const s=n.nodeValue; const cuts=[];
+    while((m=SENT.exec(s))) cuts.push(m.index+m[0].length);
+    let off=0; cuts.forEach(c=>{ const r=t.splitText(c-off); out[out.length-1].push(t); out.push([]); t=r; off=c; });
+    out[out.length-1].push(t); });
+  return out.filter(a=>a.some(n=>n.nodeType!==3||n.nodeValue.trim())); }
+function groups(units,size,max){ /* consecutive units into about-equal parts, none much over size */
+  const w=units.map(size), all=w.reduce((a,b)=>a+b,0); if(all<=max||units.length<2) return null;
+  const n=Math.min(units.length,Math.ceil(all/CW)), per=all/n, out=[[]]; let acc=0;
+  units.forEach((u,i)=>{ if(out[out.length-1].length&&out.length<n&&acc+w[i]/2>per*out.length) out.push([]); out[out.length-1].push(u); acc+=w[i]; });
+  return out.length>1?out:null; }
+function chunkP(p){ if(p.dataset.swc) return p.dataset.swc==='1'?[...p.querySelectorAll(':scope>.swc')]:null;
+  p.dataset.swc='0'; if(words(p.textContent)<=CMAX||p.querySelector('.katex-display,pre,.eqline')) return null;
+  const g=groups(sentences(p),s=>words(s.map(n=>n.textContent).join('')),CMAX); if(!g) return null;
+  const spans=g.map(ss=>{ const sp=document.createElement('span'); sp.className='swc'; const nodes=ss.flat(); nodes[0].parentNode.insertBefore(sp,nodes[0]); nodes.forEach(n=>sp.appendChild(n)); return sp; });
+  /* the space that closed a sentence stays inside its part; the address and the paragraph's buttons ride with the last part */
+  p.dataset.swc='1'; p.classList.add('sw-split'); return spans; }
+const LISTS=new WeakMap();
+function chunkList(ul){ if(ul.dataset.swc) return ul.dataset.swc==='1'?LISTS.get(ul)||null:null; ul.dataset.swc='0';
+  const lis=[...ul.children].filter(x=>x.matches('li')); if(lis.length<4) return null;
+  const g=groups(lis,li=>words(li.textContent)+8,CMAX); if(!g) return null;
+  /* a part is the items themselves, marked by their first: data-sw goes on each item of a part */
+  ul.dataset.swc='1'; ul.classList.add('sw-split'); LISTS.set(ul,g); return g; }
+function buildChunks(els){
+  const hdr=els.find(e=>e.matches&&e.matches('header.top')); const items=[], lead=[];
+  const add=el=>{ if(el.hidden||el.matches('script,style,template,nav,.pn,.home,.stnext')) return;
+    if(el.matches('p[data-pid]')&&folded(el)){ return; }
+    if(el.matches('h1,.tags,h2,h3,h4,.eyebrow,.fr,.sthead')){ lead.push(el); return; } /* a heading rides with the screen after it */
+    if(el.matches('.cl-body')){ if(getComputedStyle(el).display==='none') return; [...el.children].forEach(add); return; }
+    if(el.matches('.cl-lock')&&getComputedStyle(el).display==='none') return;
+    if(el.matches('.brk.brk-check')){ const rows=[...el.querySelectorAll(':scope>.rows>.row')]; if(rows.length>1){ el.classList.add('sw-rows'); rows.forEach(r=>{ items.push(lead.splice(0).concat([r])); }); return; } }
+    if(ATTACH.test(el.className||'')&&items.length&&!(texbox(el)&&items[items.length-1].some(texbox))&&!lead.length){ items[items.length-1].push(el); return; }
+    const parts=el.matches('p')?chunkP(el):el.matches('ul')?chunkList(el):null;
+    if(parts){ parts.forEach((x,i)=>items.push((i?[]:lead.splice(0)).concat(Array.isArray(x)?x:[x]))); return; }
+    items.push(lead.splice(0).concat([el])); };
+  if(hdr){ hdr.classList.add('sw-hdr'); [...hdr.children].forEach(add); }
+  expand(step); [...step.children].forEach(add);
+  if(lead.length){ if(items.length) items[items.length-1].push(...lead); else items.push(lead.splice(0)); }
+  els.forEach(e=>{ if(e!==step&&e!==hdr&&e.matches&&e.matches('section,figure,.slides,.pic')&&!e.matches('nav,.pn')) items.push([e]); });
+  screens=items;
+  screens.forEach((s,i)=>s.forEach(x=>{ x.setAttribute('data-sw',i); if(folded(x)){ x.classList.add('sw-stub'); if(!x.dataset.addr) x.dataset.addr=x.matches('.slides')?'slides':x.matches('.pic')?'picture':x.matches('pre')?'lines':x.matches('.sayback')?'question':'·'; } })); }
+function build(els){ clear(); step=els.find(e=>e.matches&&e.matches('section.step')); if(!step) return; if(CHUNKPAGE.test(pg())&&els.length&&els[0]&&els.some(e=>e.matches&&e.matches('header.top'))){ buildChunks(els); return; } expand(step);
   [...step.children].forEach(ch=>{ if(ch.matches('h2,.sthead,.stnext,script,style,template')||ch.hidden) return; if(ch.matches('p[data-pid]')&&folded(ch)) return;
     if(ch.matches('.brk.brk-check')){ const rows=[...ch.querySelectorAll(':scope>.rows>.row')]; if(rows.length>1){ ch.classList.add('sw-rows'); rows.forEach(r=>screens.push([r])); return; } } /* 2026-11-10 (Andrew 15:51): one move to a screen */ /* 2026-11-10 (Andrew 12:08): an emptied or collapsed paragraph is no screen; the chain closes up */
     if(ATTACH.test(ch.className||'')&&screens.length&&!(texbox(ch)&&screens[screens.length-1].some(texbox))){ screens[screens.length-1].push(ch); return; } screens.push([ch]); }); /* 2026-11-10 (Andrew 15:44): one TeX box to a screen */
@@ -2902,7 +2954,10 @@ function ret(a){ const cur=screens[k]&&screens[k][0]; const deck=cur&&cur.matche
   if(k>0) show(k-1,{anim:true}); else if(window.LadderFV&&LadderFV.back){ LadderFV.wantLast=true; LadderFV.back({h:true}); } }
 /* the footing view tells us each time it paints a footing */
 window.LadderFV=window.LadderFV||{};
-LadderFV.onPaint=function(els,cur,info){ ui(); if(!PAGES.test(pg())||!info||!info.on){ on=false; document.body.classList.remove('sw'); clear(); bar.hidden=true; return; }
+let lastPaint=null, wasLocked=document.body&&document.body.classList.contains('cl-locked');
+/* a conclusion opened with "open it anyway" (or by its last tick) rebuilds its screens, so the body gets its own */
+try{ new MutationObserver(()=>{ const l=document.body.classList.contains('cl-locked'); if(l===wasLocked) return; wasLocked=l; if(lastPaint&&CHUNKPAGE.test(pg())){ if(!l){ const f=document.querySelector('.cl-body>*'); if(f) LadderFV.wantEl=f; } LadderFV.onPaint.apply(null,lastPaint); } }).observe(document.body,{attributes:true,attributeFilter:['class']}); }catch(_){}
+LadderFV.onPaint=function(els,cur,info){ lastPaint=[els,cur,info]; ui(); if(!PAGES.test(pg())||!info||!info.on){ on=false; document.body.classList.remove('sw'); clear(); bar.hidden=true; return; }
   build(els); on=screens.length>0; document.body.classList.toggle('sw',on); if(!on){ bar.hidden=true; return; }
   let want=0; const el=LadderFV.wantEl; LadderFV.wantEl=null;
   if(el){ const i=screens.findIndex(s=>s.some(x=>x===el||x.contains(el))); if(i>=0) want=i; }
