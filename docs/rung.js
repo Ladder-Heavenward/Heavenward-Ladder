@@ -2165,6 +2165,13 @@ function unlock(scope,key){ const set=stem=>{ if(window.MarksSync&&MarksSync.rep
   const rr=r=>set('r'+String(r).padStart(2,'0'));
   if(scope==='step'){ const w=where(key); if(w) rr(w.r); } else if(scope==='rung') rr(key); else if(scope==='floor'){ const F=floorOf(key); if(F) F.rungs.forEach(rr); } }
 const label=(scope,key)=>scope==='step'?(CM(key)[0]||key):scope==='rung'?'rung '+key:'floor '+key;
+/* stickdraw: the steps a section holds (core and annex), as the Laundry names them, and the norm its draws are measured against */
+const stickTag=s=>CM(s)[0]||s;
+function stickSection(scope,key){
+  if(scope==='step'){ const w=where(key); return {steps:[stickTag(key)],norm:w?'r'+w.r:null}; }
+  if(scope==='rung'){ const R=rungOf(key); return R?{steps:R.core.concat(R.annex).map(stickTag),norm:'r'+key}:null; }
+  if(scope==='floor'){ const F=floorOf(key); if(!F) return null; const st=[]; F.rungs.forEach(r=>{ const R=rungOf(r); if(R) R.core.concat(R.annex).forEach(s=>st.push(stickTag(s))); }); return {steps:st,norm:'f'+key}; }
+  return null; }
 /* the sitting */
 let box=null;
 function close(){ if(box){ box.remove(); box=null; document.body.classList.remove('stickopen'); } }
@@ -2172,24 +2179,39 @@ async function sit(scope,key,opts){ opts=opts||{}; close();
   box=document.createElement('div'); box.id='stick'; box.setAttribute('role','dialog'); box.setAttribute('aria-label','the measuring stick'); document.body.appendChild(box); document.body.classList.add('stickopen');
   const head=t=>'<div class="sk-top"><span>the measuring stick · '+esc(label(scope,key))+(opts.into?' · testing in to '+esc(label(opts.into[0],opts.into[1])):'')+'</span><button type="button" class="sk-x" aria-label="close">×</button></div>';
   const wire=()=>{ const x=box.querySelector('.sk-x'); if(x) x.onclick=close; };
-  box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-q">Gathering the questions…</p></div>'; wire();
-  await maps(); const qs=await draw(scope,key);
-  if(!qs.length){ box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-q">This section has no question pool yet, so its measuring stick cannot be sat.</p></div>'; wire(); return; }
-  const need=Math.ceil(qs.length*0.8); let i=0, right=0;
-  const show=()=>{ const c=qs[i]; const opts=shuffle([c.a].concat(c.w.slice(0,3)));
-    box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-n">question '+(i+1)+' of '+qs.length+' · '+need+' right to pass</p><div class="sk-q"></div><div class="sk-opts"></div><p class="sk-why" hidden></p><p><button type="button" class="sk-next" hidden>'+(i+1<qs.length?'next':'finish')+'</button></p></div>'; wire();
-    const qe=box.querySelector('.sk-q'); String(c.q).split('\n').forEach((ln,k)=>{ const p=document.createElement('div'); rich(p,ln); if(k) p.style.marginTop='4px'; qe.appendChild(p); });
+  box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-q">Drawing the first question…</p></div>'; wire();
+  /* stickdraw (Andrew 2026-11-14 16:52Z): eight Laundry questions from the section's own steps, two of each kind, at full links and terms,
+     each 2 sd of complexity above the norm; the first is dealt the moment it is drawn, the rest are drawn while the climber works */
+  await maps(); await rand().catch(()=>null); const Rz=window.LadderRandomizer, me=box, sec=stickSection(scope,key);
+  const plan=(Rz&&Rz.stickPlan&&sec)?Rz.stickPlan(sec.steps):[];
+  if(!plan.length){ box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-q">This section has no Laundry pools yet, so its measuring stick cannot be sat.</p></div>'; wire(); return; }
+  try{ Rz.style&&Rz.style(); }catch(e){}
+  const N=plan.length, got=new Array(N), seenIdx=new Set(), KL={}; (Rz.MODES||[]).forEach(M=>{ KL[M.id]=M.label; });
+  let i=0, right=0, asked=0, waiting=false;
+  plan.reduce((ch,m,k)=>ch.then(()=>box===me?Rz.stickDraw(m,sec.steps,sec.norm,seenIdx):null).then(q=>{ got[k]=q||{none:1}; if(box===me&&waiting&&k===i){ waiting=false; show(); } }),Promise.resolve());
+  const total=()=>N-got.filter(g=>g&&g.none).length, need=()=>Math.ceil(total()*0.8);
+  const show=()=>{ if(box!==me) return; while(i<N&&got[i]&&got[i].none) i++; if(i>=N) return end();
+    const c=got[i];
+    if(!c){ waiting=true; box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-n">question '+(i+1)+' of '+total()+'</p><p class="sk-q">'+(i?'Drawing the next question…':'Drawing the first question…')+'</p></div>'; wire(); return; }
+    const L=c.lines||[];
+    box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-n">question '+(i+1)+' of '+total()+' · '+esc(KL[c.mode]||c.mode)+' · '+need()+' right to pass</p>'
+      +(c.story?'<p class="rzstory"></p>':'')+(c.fig?'<div class="rzfig">'+c.fig+'</div>':'')
+      +(L.length?'<div class="rzlines">'+L.map((l,k)=>'<div class="rzl rzs"><span class="rzn">'+(k+1)+'</span><span class="rzt"></span><span class="rzw"></span></div>').join('')+'</div>':'')
+      +'<div class="sk-q rzask"></div><div class="sk-opts"></div><p class="sk-why" hidden></p><p><button type="button" class="sk-next" hidden>'+(i+1<N?'next':'finish')+'</button></p></div>'; wire();
+    if(c.story) rich(box.querySelector('.rzstory'),c.story);
+    box.querySelectorAll('.rzl').forEach((row,k)=>{ rich(row.querySelector('.rzt'),L[k][0]); row.querySelector('.rzw').textContent=L[k][1]===null?'?':(L[k][1]||''); });
+    rich(box.querySelector('.rzask'),c.ask||'');
     const oe=box.querySelector('.sk-opts');
-    opts.forEach(o=>{ const b=document.createElement('button'); b.type='button'; b.className='sk-o'; b.dataset.v=o; if(c.html&&c.html[o]){ b.innerHTML=c.html[o]; b.setAttribute('aria-label',o); b.classList.add('sk-g'); } else rich(b,o);
-      b.onclick=()=>{ if(oe.dataset.done) return; oe.dataset.done='1'; const ok=o===c.a; if(ok) right++;
-        oe.querySelectorAll('.sk-o').forEach(x=>{ x.disabled=true; if(x.dataset.v===c.a) x.classList.add('ok'); }); if(!ok) b.classList.add('no');
-        const w=box.querySelector('.sk-why'); w.hidden=false; rich(w,(ok?'Right. ':'Not this one. ')+(c.why||'')); box.querySelector('.sk-next').hidden=false; };
+    shuffle((c.opts||[]).slice()).forEach(o=>{ const b=document.createElement('button'); b.type='button'; b.className='sk-o'; b.dataset.v=o; if(c.html&&c.html[o]){ b.innerHTML=c.html[o]; b.setAttribute('aria-label',o); b.classList.add('sk-g'); } else rich(b,o);
+      b.onclick=()=>{ if(oe.dataset.done) return; oe.dataset.done='1'; asked++; const ok=o===c.right; if(ok) right++;
+        oe.querySelectorAll('.sk-o').forEach(x=>{ x.disabled=true; if(x.dataset.v===c.right) x.classList.add('ok'); }); if(!ok) b.classList.add('no');
+        const w=box.querySelector('.sk-why'); w.hidden=false; rich(w,(ok?'Right. ':(c.lead||'Not this one. '))+(c.why||'')); box.querySelector('.sk-next').hidden=false; };
       oe.appendChild(b); });
-    box.querySelector('.sk-next').onclick=()=>{ i++; if(i<qs.length) show(); else end(); }; };
-  const end=()=>{ const pass=right>=need, k=certKey(scope,key);
-    if(pass&&k){ const old=read(k); const via=opts.via||'stick'; if(!old||(old.via==='measure'&&via==='stick')) put('cert:'+k,{by:'self',via,scope,t:Date.now(),score:right+'/'+qs.length,into:opts.into?opts.into.join(' '):null}); if(via==='measure') unlock.apply(null,opts.into||[scope,key]);
+    box.querySelector('.sk-next').onclick=()=>{ i++; show(); }; };
+  const end=()=>{ const n=total(), nd=need(), pass=n>0&&right>=nd, k=certKey(scope,key);
+    if(pass&&k){ const old=read(k); const via=opts.via||'stick'; if(!old||(old.via==='measure'&&via==='stick')) put('cert:'+k,{by:'self',via,scope,t:Date.now(),score:right+'/'+n,into:opts.into?opts.into.join(' '):null}); if(via==='measure') unlock.apply(null,opts.into||[scope,key]);
       if(opts.into){ const [isc,ik]=opts.into, rs=isc==='rung'?[ik]:((floorOf(ik)||{}).rungs||[]); rs.forEach(r=>put('cert:in:r'+String(r).padStart(2,'0'),{by:'self',via:'testin',t:Date.now(),from:scope+' '+key})); } }
-    box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-q">'+right+' of '+qs.length+' right. '+(pass?(opts.via==='measure'?'It measures up: '+esc(opts.into?label(opts.into[0],opts.into[1]):label(scope,key))+' is unlocked. Its gold star waits until every floor below it is done.':'It measures up: a gold star.'):'Not yet: '+need+' were needed. Sit it again whenever you like; the questions are drawn fresh.')+'</p><p><button type="button" class="sk-again">'+(pass?'close':'sit it again')+'</button></p></div>'; wire();
+    box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-q">'+right+' of '+n+' right. '+(pass?(opts.via==='measure'?'It measures up: '+esc(opts.into?label(opts.into[0],opts.into[1]):label(scope,key))+' is unlocked. Its gold star waits until every floor below it is done.':'It measures up: a gold star.'):'Not yet: '+nd+' were needed. Sit it again whenever you like; the questions are drawn fresh.')+'</p><p><button type="button" class="sk-again">'+(pass?'close':'sit it again')+'</button></p></div>'; wire();
     box.querySelector('.sk-again').onclick=()=>{ if(pass) close(); else sit(scope,key,opts); };
     if(window.__barStats) window.__barStats(); if(opts.done) opts.done(pass); };
   show(); }
