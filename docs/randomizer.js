@@ -3196,6 +3196,68 @@ K({id:'orbital',step:'38·chem',steps:['38·chem'],title:'the shape of an electr
 K({id:'impltan',step:'18·cb13',steps:['13l','18·cb13'],title:'upright and flat tangents on a curve from an equation',make:implMake});
 })();
 
+/* ===== Read Graph, part P: the three graphs the crosswalk check found missing, now that their footings are built and released
+   (0.67.10): pie charts (9stat5 Shares of a Whole, the wedge technique), stemplots (9stat6 Stems and Leaves, the stem technique)
+   and the margin of a poll against its size (30q5 How Many to Ask, the sample-size technique). Loaded before the turn-around. ===== */
+(function(){
+const G=(typeof window!=='undefined'?window:globalThis).LadderReadGraph, {svg,uniq,frac,dec}=G;
+const R=Math.random, rn=n=>Math.floor(R()*n), pk=a=>a[rn(a.length)], sh=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=rn(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const ri=(a,b)=>a+rn(b-a+1), f1=v=>Math.round(v*10)/10;
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const card=(k,o)=>Object.assign({index:'g:'+k.id+'['+o.ix+']'+(o.links&&o.links.length?'.'+o.links.join('+'):''), a3:['g.'+k.id+'['+o.ix+']',(o.links&&o.links.length?o.links.join('+'):k.step),'–'], step:k.step, steps:k.steps||[k.step], lines:[], kind:'graph'},o);
+const four=(right,c)=>{ const ws=uniq(right,c).slice(0,3); return ws.length<3?null:sh([right,...ws]); };
+const box=(W,H,body,alt)=>'<svg class="rgfig" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(alt)+'" xmlns="http://www.w3.org/2000/svg">'+body+'</svg>';
+const T=(x,y,s,cls,a)=>'<text class="'+(cls||'rg-lab')+'" x="'+f1(x)+'" y="'+f1(y)+'"'+(a?' text-anchor="'+a+'"':'')+'>'+esc(s)+'</text>';
+const Ln=(x1,y1,x2,y2,cls)=>'<line class="'+(cls||'rg-axis')+'" x1="'+f1(x1)+'" y1="'+f1(y1)+'" x2="'+f1(x2)+'" y2="'+f1(y2)+'"/>';
+const K=G.K;
+
+/* ---------- 9stat5: pie charts. Shares in steps of 5%, each at least 10%; the wedge technique ---------- */
+const FRUIT=['apples','pears','plums','figs','grapes'], SPORT=['running','swimming','cycling','rowing','climbing'], BUS=['walk','bus','bike','car','train'];
+function shares(k){ for(let t=0;t<50;t++){ const cut=sh([...Array(17)].map((_,i)=>i+2)).slice(0,k-1).sort((a,b)=>a-b), s=[]; let p=0; cut.concat(20).forEach(c=>{ s.push((c-p)*5); p=c; }); if(s.every(v=>v>=10)&&new Set(s).size>=k-1) return s; } return null; }
+function pieFig(names,s,hide){ const C=160, cy=122, r=84, W=320, H=258; let bd='', a0=-Math.PI/2;
+  s.forEach((v,i)=>{ const a1=a0+v/100*2*Math.PI, big=v>50?1:0, x0=C+r*Math.cos(a0), y0=cy+r*Math.sin(a0), x1=C+r*Math.cos(a1), y1=cy+r*Math.sin(a1), m=(a0+a1)/2, cx=Math.cos(m), sy=Math.sin(m), lr=r+12;
+    bd+='<path class="rg-bar" style="fill-opacity:'+[0.45,1.5,0.85,2.1,1.15][i]+'" d="M'+C+','+cy+' L'+f1(x0)+','+f1(y0)+' A'+r+','+r+' 0 '+big+' 1 '+f1(x1)+','+f1(y1)+' Z"/>';
+    const lx=C+lr*cx, ly=cy+lr*sy+(sy>0.3?10:sy<-0.3?-12:0), an=cx>0.25?'start':cx<-0.25?'end':'middle';
+    bd+=T(lx,ly,names[i],'rg-tag',an)+(i===hide?'':T(lx,ly+13,v+'%','rg-lab',an)); a0=a1; });
+  return box(W,H,bd,'a pie chart cut into '+s.length+' wedges'); }
+K({id:'pie',step:'9·stat',steps:['9·stat'],title:'a pie chart: shares of a whole',make(){ const k=ri(3,5), s=shares(k); if(!s) return null; const set=pk([['fruit',FRUIT,'chose'],['sport',SPORT,'chose'],['way to school',BUS,'come by']]), names=set[1].slice(0,k), what=pk(['count','angle','missing','count','angle']), i=rn(k), N=pk([20,40,60,80,200]), cnt=v=>v*N/100;
+  let ask, right, ws, why, hide=-1, links=['9·stat.wedge'];
+  if(what==='count'){ ask=N+' people were asked their favourite '+set[0]+'. How many '+set[2]+' '+names[i]+'?'; right=String(cnt(s[i])); ws=[String(s[i]),String(cnt(s[(i+1)%k])),String(Math.round(s[i]*360/100)),String(cnt(s[i])*2),String(Math.max(1,cnt(s[i])/2))]; why='A wedge shows a share, not a tally: '+s[i]+'% of '+N+' is '+right+'. The same wedge in a pie of 1,000 people would stand for '+s[i]*10+'.'; links=links.concat(['9·stat.frequency']); }
+  else if(what==='angle'){ ask='How many degrees does the '+names[i]+' wedge turn through at the centre?'; right=s[i]*360/100+'°'; ws=[s[i]+'°',s[i]*360/100*2+'°',(100-s[i])*360/100+'°',Math.round(s[i]*3)+'°',s[i]*360/100+90+'°']; why='The wedges add to one full turn, 360°, so each turns through its share of 360°: '+s[i]+'% of 360° = '+right+'.'; }
+  else { hide=i; ask='One wedge has lost its label. What share is '+names[i]+'?'; right=s[i]+'%'; const rest=100-s[i]; ws=[(s[i]+5)+'%',(s[i]-5)+'%',Math.round(100/k)+'%',rest+'%',(s[i]+10)+'%'].filter(w=>w!=='0%'&&w!=='5%'); why='The wedges add to exactly one whole, 100%: 100% − ('+s.filter((_,j)=>j!==i).join('% + ')+'%) = '+right+'.'; }
+  const o=four(right,ws.filter(w=>w!==right)); if(!o) return null;
+  return card(this,{ix:[s.join('-'),i,what,what==='count'?N:''].join(','),links,fig:pieFig(names,s,hide),ask,right,opts:o,why}); }});
+
+/* ---------- 9stat6: stemplots. Two-digit values, key "6 | 7 means 67"; the stem technique ---------- */
+function stemFig(vals,lo,hi){ const rows=hi-lo+1, W=240, rh=24, H=rows*rh+44; let bd=Ln(54,8,54,rows*rh+12);
+  for(let st=lo;st<=hi;st++){ const y=8+(st-lo+1)*rh-6, lv=vals.filter(v=>Math.floor(v/10)===st).map(v=>v%10).sort((a,b)=>a-b);
+    bd+=T(44,y,String(st),'rg-tag','end')+T(64,y,lv.join('  '),'rg-ttt'); }
+  bd+=T(10,rows*rh+36,'key: '+lo+' | 7 means '+lo+'7','rg-name');
+  return box(W,H,bd,'a stemplot with stems '+lo+' to '+hi); }
+const ORD=['first','second','third'];
+K({id:'stemplot',step:'9·stat',steps:['9·stat'],title:'a stemplot: values read back',make(){ const lo=ri(1,6), hi=lo+ri(2,4), n=pk([9,11,13,15]), vals=[]; for(let t=0;t<n;t++) vals.push(ri(lo*10,hi*10+9)); vals.sort((a,b)=>a-b);
+  if(Math.floor(vals[0]/10)!==lo||Math.floor(vals[n-1]/10)!==hi) return null;
+  const what=pk(['max','median','atleast','count','range']), med=vals[(n-1)/2]; let ask, right, ws, why, links=['9·stat.stem'];
+  if(what==='max'){ ask='What is the largest value in the list?'; right=String(vals[n-1]); const l=vals[n-1]%10; ws=[String(hi*10+9),String(hi+l),String(l*10+hi),String(vals[n-2]),String(hi*10)]; why='The last leaf on the top stem: stem '+hi+', leaf '+l+', so 10·'+hi+' + '+l+' = '+right+'. Each leaf is a value, read back exactly.'; }
+  else if(what==='median'){ ask='The plot holds '+n+' values. What is the median?'; right=String(med); ws=[String(vals[(n-1)/2+1]),String(vals[(n-1)/2-1]),String(Math.round((vals[0]+vals[n-1])/2)),String(Math.floor(med/10)*10+5),String(Math.round(vals.reduce((a,b)=>a+b,0)/n))]; why='The rows hold the list already sorted. Count in '+((n+1)/2)+' leaves from either end: '+right+'.'; links=links.concat(['9·stat.median']); }
+  else if(what==='atleast'){ const c=ri(lo+1,hi), m=vals.filter(v=>v>=c*10).length; ask='How many values are '+c*10+' or more?'; right=String(m); ws=[String(n-m),String(vals.filter(v=>Math.floor(v/10)===c).length),String(m+1),String(Math.max(0,m-1)),String(hi-c+1)]; why='Count the leaves on stems '+c+' and up: '+right+' of the '+n+'.'; if(ws.filter(w=>w!==right).length<3) return null; }
+  else if(what==='count'){ ask='How many values does the plot hold?'; right=String(n); ws=[String(hi-lo+1),String(n+1),String(n-1),String(new Set(vals.map(v=>v%10)).size),String(n*10)]; why='Each leaf is one value, so the rows hold n leaves in all: '+right+'. The stems only name the bins.'; }
+  else { ask='What is the range of the list, largest minus smallest?'; right=String(vals[n-1]-vals[0]); ws=[String(hi-lo),String((hi-lo)*10),String(vals[n-1]%10-vals[0]%10),String(vals[n-1]-vals[1]),String(vals[n-2]-vals[0])]; why='Smallest: the first leaf on stem '+lo+', '+vals[0]+'. Largest: the last leaf on stem '+hi+', '+vals[n-1]+'. '+vals[n-1]+' − '+vals[0]+' = '+right+'.'; }
+  const o=four(right,ws.filter(w=>w!==right)); if(!o) return null;
+  return card(this,{ix:vals.join('.')+','+what,links,fig:stemFig(vals,lo,hi),ask,right,opts:o,why}); }});
+
+/* ---------- 30q5: the widest 95% margin of a share against the sample size, m = 1.96/(2√n); the sample-size technique ---------- */
+const MN={1:9604,2:2401,2.5:1537,3:1068,3.5:784,4:601,5:385,6:267,7:196};
+const marg=n=>98/Math.sqrt(n); /* in percentage points */
+K({id:'margin',step:'30q',steps:['30q'],title:'a poll’s margin against its size',make(){ const what=pk(['size','size','read','four']); let ask, right, ws, why, mark;
+  if(what==='size'){ const m=pk([2,2.5,3,3.5,4,5]); mark=[MN[m],m]; ask='The curve is the widest 95% margin of a poll’s share, in points, against the number asked. How many people must be asked for a margin of at most '+m+' points?'; right=MN[m].toLocaleString('en-US'); ws=[MN[m*2]?MN[m*2].toLocaleString('en-US'):'200',Math.round(MN[m]/2).toLocaleString('en-US'),(MN[m]*2).toLocaleString('en-US'),Math.round(196/m).toLocaleString('en-US'),Math.round(MN[m]/4).toLocaleString('en-US')]; why='n ≥ (1.96/2m)² with m = '+String(m/100)+': (0.98/'+String(m/100)+')² = '+(Math.pow(0.98/(m/100),2)).toFixed(1)+', so '+right+' people. Halving the margin would take four times as many.'; }
+  else if(what==='read'){ const n=pk([100,196,256,400,484,625,784,1600,2500]); mark=[n,marg(n)]; const v=dec(Math.round(marg(n)*10)/10); ask='Read the curve at n = '+n.toLocaleString('en-US')+'. What is the widest 95% margin, in points?'; right=v; ws=[dec(Math.round(marg(n)*20)/10),dec(Math.round(marg(n)*5)/10),dec(Math.round(9800/n*10)/10),dec(Math.round(marg(4*n)*10)/10),dec(Math.round(196/Math.sqrt(n)*10)/10)]; why='1.96/(2√n) = 0.98/√'+n+' = 0.98/'+Math.sqrt(n)+', about '+right+' points.'; }
+  else { const n=pk([100,144,225,400,625,900]); mark=[n,marg(n)]; ask='A poll of '+n.toLocaleString('en-US')+' has the margin marked. How many people would give half that margin?'; right=(4*n).toLocaleString('en-US'); ws=[(2*n).toLocaleString('en-US'),Math.round(n*Math.SQRT2).toLocaleString('en-US'),(8*n).toLocaleString('en-US'),Math.round(n/2).toLocaleString('en-US')]; why='The margin falls as 1/√n, so half the margin needs √n twice as large: n four times as large, '+right+'.'; }
+  const X=4000, top=10.5, fig=svg({x:[0,X],y:[0,top],sx:500,sy:1,lx:1000,ly:2,xl:'number asked, n',yl:'margin, points',parts:[{t:'fn',f:n=>Math.min(top,marg(Math.max(n,1))),from:80,to:X,n:240},{t:'dots',pts:[mark].filter(p=>p[0]<=X)}],alt:'the widest margin of a poll falling as the number asked grows'});
+  const o=four(right,ws.filter(w=>w!==right)); if(!o) return null;
+  return card(this,{ix:what+','+mark[0],links:['30q.sample-size'].concat(what==='read'?['30q.estimate']:[]),fig,ask,right,opts:o,why}); }});
+})();
+
 /* ===== Read Graph, the turn-around link (Andrew 2026-11-14 14:08Z: "For each graph we make we can turn it around: which graph/table/map
    represents the statement provided"). Loaded last. For every kind already registered, a twin kind deals the same question backwards:
    the question and its answer are given, and four pictures of that kind are offered; exactly one has that answer. The twins draw their
@@ -3219,7 +3281,7 @@ function turnMake(k){ return function(){ let c=null; try{ c=k.make.call(k); }cat
     fig:'', html, right, opts:LET.slice(), ask:'Turned around: '+c.ask+' The answer is '+c.right+'. In which picture?',
     why:'In '+right+' the answer is '+c.right+'. '+c.why+' In the other pictures the same question gives '+sib.map(s=>s.right).join(', ')+'.'}; }; }
 /* kinds whose question changes with every picture so that no three siblings share it (t4 sweep, 2026-11-14): no twin */
-const NOTWIN=['residplot','area3','impltan','keepdrop','slopeat·recip','mvt','column','landing','slopepic','wave4','specsum','composed','ivt','taylor','sphere','isfn','overfit','heat','waveeq','huecircle','colourfade'];
+const NOTWIN=['pie','stemplot','margin','residplot','area3','impltan','keepdrop','slopeat·recip','mvt','column','landing','slopepic','wave4','specsum','composed','ivt','taylor','sphere','isfn','overfit','heat','waveeq','huecircle','colourfade'];
 base.forEach(k=>{ if(k.id.indexOf('turn·')===0||NOTWIN.includes(k.id)) return; G.KINDS.push({id:'turn·'+k.id,step:k.step,steps:k.steps,title:k.title+', turned around',turned:true,make:turnMake(k)}); });
 })();
 
