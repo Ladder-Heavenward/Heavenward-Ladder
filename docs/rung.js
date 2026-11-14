@@ -2419,8 +2419,8 @@ function tools(body,here){ const KEY='ladder:aq', LBL={un:'Understanding',cw:'Cr
   const pane={}; K.forEach(k=>{ const d=document.createElement('div'); d.className='aq-pane aq-p-'+k; d.hidden=true; pane[k]=d; });
   while(body.firstChild) pane.sq.appendChild(body.firstChild);
   const bar=document.createElement('p'); bar.className='sk-tools aq-bar'; bar.innerHTML=K.map(k=>'<button type="button" class="aq-b aq-b-'+k+'" data-k="'+k+'" aria-pressed="false">'+LBL[k]+'</button>').join('');
-  body.appendChild(bar); K.forEach(k=>body.appendChild(pane[k]));
-  const fill={ un:()=>understand(pane.un), cw:()=>{ if(window.LadderCards) LadderCards.open(pane.cw); }, ms:()=>{ if(window.LadderMeasure&&LadderMeasure.fill) LadderMeasure.fill(pane.ms,close); }, sq:()=>{} }, made={sq:true};
+  body.appendChild(bar); K.forEach(k=>body.appendChild(pane[k])); if(window.LadderCrosswalk) K.forEach(k=>LadderCrosswalk.floors(pane[k],k)); /* aqreorg */
+  const fill={ un:()=>understand(pane.un), cw:()=>{ if(window.LadderCrosswalk) LadderCrosswalk.fill(pane.cw); else if(window.LadderCards) LadderCards.open(pane.cw); }, ms:()=>{ if(window.LadderMeasure&&LadderMeasure.fill) LadderMeasure.fill(pane.ms,close); }, sq:()=>{} }, made={sq:true};
   const set=(k,v)=>{ pane[k].hidden=!v; const b=bar.querySelector('[data-k="'+k+'"]'); b.setAttribute('aria-pressed',String(v)); b.classList.toggle('on',v); if(v&&!made[k]){ made[k]=true; fill[k](); } };
   K.forEach(k=>set(k,on.includes(k)));
   bar.querySelectorAll('.aq-b').forEach(b=>b.onclick=()=>{ const k=b.dataset.k, v=pane[k].hidden; set(k,v); on=K.filter(x=>!pane[x].hidden); try{ localStorage.setItem(KEY,JSON.stringify(on)); }catch(e){} }); }
@@ -2512,7 +2512,7 @@ function catalogue(want){ data().then(D=>{ if(!D) return;
   const done=a=>!!(P[a[0]]&&P[a[0]].v);
   const subjects=D.order.filter(k=>(D.subj[k]||[]).length);
   const btn=k=>{ const L=D.subj[k], open=L.filter(a=>isOpen(a,h)), nx=nextAt(L,h), crowned=open.length&&open.every(done);
-    const cnt=open.length?open.length+' of '+L.length+' open':(nx?nx.replace('next annex','first at').replace(' much higher up the ladder',' much higher'):'');
+    const cnt=open.length?open.length+' of '+L.length+' open':(nx?'first at '+L.find(a=>!isOpen(a,h))[3]:'') /* annexnum */;
     return '<button type="button" class="ax-b k-'+esc(k)+(crowned?' ax-crowned':'')+(open.length?'':' ax-shut')+'" data-k="'+esc(k)+'" aria-expanded="false">'
       +(crowned?'<span class="ax-crown" aria-label="crown: every unlocked annex finished" title="every unlocked annex finished">\u{1F451}</span>':'')
       +'<span class="ax-name">'+esc(D.names[k])+'</span><span class="ax-cnt">'+esc(cnt)+'</span></button>'; };
@@ -3136,4 +3136,102 @@ try{ if(document.fonts&&document.fonts.load){ window.addEventListener('load',fun
     const w=document.createElement('span'); w.className='dend'; t.appendChild(w); w.append(s,g,x); };
   const boot=()=>{ wrap(); [0,300,1500].forEach(ms=>setTimeout(wrap,ms)); };
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
+})();
+/* aqreorg */ /* 2026-11-14 (Andrew 16:20Z): the Crosswalk pane is laid out by unlock point like the other three; finishing a step's cards earns
+   the crosswalk x (the toolbox's chi), and rungs and floors fold into it as the stars and wings do; on every pane a floor is a button,
+   and a cleared floor's button takes its icon (blue star, gold star, wings, x); a step row on the index shows its x once earned. */
+(function(){ 'use strict';
+const XK='cards:x';
+const CHI='<svg class="aq-chi" viewBox="20 20 280 300" width="15" height="16" aria-hidden="true"><path d="M262,64 C220,118 130,226 66,292" fill="none" stroke="#5fd13a" stroke-width="22" stroke-linecap="round"/><path fill="currentColor" d="M38,92 C52,52 98,44 124,86 L216,262 C228,284 246,290 270,276 L276,286 C246,318 196,316 176,280 L88,112 C76,90 58,88 46,100 Z"/></svg>';
+const STAR='<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M12 2l2.9 6.6 7.1.7-5.4 4.8 1.6 7L12 17.4 5.8 21.1l1.6-7L2 9.3l7.1-.7z"/></svg>';
+const WING='<svg viewBox="0 0 28 14" width="24" height="12" aria-hidden="true"><path fill="currentColor" d="M13.4 9.2C11 3.6 6.4.9.8.8c1 3 2.4 5 4.4 6.2-1 .5-1.7 1.1-2.2 1.9 1.9.9 3.8 1 5.2.7-.6 1-.8 2-.5 3.2 1.4.4 3.4-.2 5.7-3.6z"/><path fill="currentColor" transform="matrix(-1 0 0 1 28 0)" d="M13.4 9.2C11 3.6 6.4.9.8.8c1 3 2.4 5 4.4 6.2-1 .5-1.7 1.1-2.2 1.9 1.9.9 3.8 1 5.2.7-.6 1-.8 2-.5 3.2 1.4.4 3.4-.2 5.7-3.6z"/></svg>';
+const get=(k,d)=>{ try{ return JSON.parse(LS.getItem(k)||'')||d; }catch(e){ return d; } };
+const put=(k,v)=>{ try{ LS.setItem(k,JSON.stringify(v)); }catch(e){} };
+const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const CM=()=>window.LADDER_CARDMAP||{};
+const has=s=>{ const c=CM()[s]; return !!(c&&c[2]>0); };
+const lab=s=>(CM()[s]||[s.replace(/^r0*(\d+)/,'$1')])[0];
+const here=()=>(location.pathname.split('/').pop()||'').replace(/\.html$/,'');
+const xs=()=>get(XK,{});
+/* which steps, rungs and floors hold the x: a rung when every core step with cards holds it, a floor when every rung does */
+function units(){ const X=xs(), M=window.LADMAP||[], out=new Set();
+  M.forEach(([fl,rungs])=>{ let fx=rungs.length>0;
+    rungs.forEach(([r,core,annex])=>{ core.concat(annex).forEach(([s])=>{ if(X[s]) out.add(s); });
+      const w=core.filter(([s])=>has(s)), rx=w.length>0&&w.every(([s])=>X[s]); if(rx) out.add('rung '+r); fx=fx&&rx; });
+    if(fx) out.add('floor '+fl); });
+  return out; }
+function rich(el,t){ el.innerHTML=''; String(t).split(/(\$[^$]+\$)/).forEach(p=>{ if(/^\$[^$]+\$$/.test(p)){ const sp=document.createElement('span'), x=p.slice(1,-1);
+    if(window.katex){ try{ katex.render(x,sp,{throwOnError:false,strict:false}); }catch(e){ sp.textContent=x; } } else sp.textContent=x; el.appendChild(sp); }
+  else el.appendChild(document.createTextNode(p)); }); }
+const shuffle=a=>{ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const decks={};
+function load(deck){ if(decks[deck]) return decks[deck]; window.LADDER_CARDS=window.LADDER_CARDS||{};
+  return decks[deck]=new Promise(res=>{ const s=document.createElement('script'); s.src='cards/'+deck+'.js'; s.onload=()=>res(true); s.onerror=()=>{ delete decks[deck]; res(false); }; document.head.appendChild(s); }); }
+/* one step's cards, dealt into host; every card missed comes back until it is known; the last one known earns the x */
+function deal(host,s,done){ const c=CM()[s]; if(!c){ host.innerHTML='<p class="sk-n">This step has no crosswalk cards.</p>'; return; }
+  host.innerHTML='<p class="sk-n">Dealing…</p>';
+  load(c[1]).then(ok=>{ const all=(window.LADDER_CARDS||{})[c[0]]||[];
+    if(!ok||!all.length){ host.innerHTML='<p class="sk-n">This step’s cards are still being made.</p>'; return; }
+    document.querySelectorAll('#cards').forEach(e=>e.remove());
+    const box=document.createElement('div'); box.id='cards'; box.className='cd-in'; host.innerHTML=''; host.appendChild(box);
+    const rec=get('cards:record',{}); let queue=shuffle(all.map((x,i)=>Object.assign({id:c[0]+'#'+i},x))), n=0, right=0;
+    const show=()=>{ if(!box.isConnected) return;
+      if(!queue.length){ const X=xs(), first=!X[s]; X[s]={t:Date.now(),n,right}; put(XK,X);
+        box.innerHTML='<div class="cd-card"><p class="cd-q aq-cwdone">'+CHI+' <span>'+(first?'Crosswalk x earned. ':'')+right+' of '+n+' at first sight; every card missed came back until it was known.</span></p></div>';
+        setTimeout(()=>done&&done(),first?1400:900); return; }
+      const k=queue.shift(), opts=shuffle([k.a].concat(shuffle((k.w||[]).slice()).slice(0,3)));
+      box.innerHTML='<div class="cd-card"><div class="cd-q"></div><div class="cd-opts"></div><div class="cd-why" hidden></div><div class="cd-foot"><span class="cd-n">'+queue.length+' left</span><button class="cd-next" hidden>next →</button></div></div>';
+      rich(box.querySelector('.cd-q'),k.q); const ob=box.querySelector('.cd-opts'); let ans=false;
+      opts.forEach(o=>{ const b=document.createElement('button'); b.type='button'; b.className='cd-o'; rich(b,o); ob.appendChild(b);
+        b.onclick=()=>{ if(ans) return; ans=true; const good=o===k.a;
+          ob.querySelectorAll('.cd-o').forEach((x,i)=>{ if(opts[i]===k.a) x.classList.add('right'); });
+          if(!good){ b.classList.add('wrong'); queue.splice(Math.min(queue.length,2+Math.floor(Math.random()*3)),0,k); }
+          if(!k._seen){ n++; if(good) right++; k._seen=true; }
+          const r=rec[k.id]||{r:0,w:0}; good?r.r++:r.w++; rec[k.id]=r; put('cards:record',rec);
+          const w=box.querySelector('.cd-why'); if(k.why){ rich(w,k.why); w.hidden=false; }
+          const nx=box.querySelector('.cd-next'); nx.hidden=false; nx.onclick=show; }; }); };
+    show(); }); }
+/* the pane: every step reached that has cards, by floor and rung, as the Understanding pane lists them */
+function fill(el){ const P=get('pages:done',{}), M=window.LADMAP||[], U=units(), X=xs(), me=here();
+  const reach=s=>{ if(P[s]||s===me) return true; try{ const F=window.LadderFV, f=F&&F.furthest&&F.furthest(); if(!f||f.ord==null||!F.placeOf) return false; const pl=F.placeOf(s); return pl!=null&&Math.floor(f.ord/1000)>=pl; }catch(e){ return false; } };
+  const row=s=>'<li class="aq-cwr'+(X[s]?' sk-done':'')+'"><button type="button" class="sk-msit aq-cws" data-stem="'+s+'">'+esc(lab(s))+'</button> <span class="sk-st">'
+    +(X[s]?'<span class="aq-x">'+CHI+'</span> finished':CM()[s][2]+' cards')+'</span><div class="aq-deal" hidden></div></li>';
+  const pill=(label,inner)=>'<details class="sk-wing sk-star sk-star-teal"><summary aria-label="'+label+', crosswalk x earned: its cards">'+CHI+' '+label+'</summary>'+inner+'</details>';
+  const fls=[]; M.forEach(([fl,rungs])=>{ const rs=[]; rungs.forEach(([r,core,annex])=>{ const ss=core.concat(annex).map(x=>x[0]).filter(s=>has(s)&&reach(s)); if(ss.length) rs.push([r,ss]); }); if(rs.length) fls.push([fl,rs]); });
+  const rung=([r,ss])=>U.has('rung '+r)?'<li class="sk-wingli">'+pill('rung '+r,'<ul class="sk-list">'+ss.map(row).join('')+'</ul>')+'</li>':ss.map(row).join('');
+  const mine=has(me)&&reach(me);
+  el.innerHTML=(mine?(X[me]?pill('this step','<ul class="sk-list">'+row(me)+'</ul>'):'<details class="sk-fl" open><summary>this step</summary><ul class="sk-list">'+row(me)+'</ul></details>'):'')
+    +(fls.length?'<p class="sk-n">The crosswalk cards of every step you have reached. Every card missed comes back until it is known; know all of a step’s cards for its crosswalk x.</p>'
+      +fls.map(([fl,rs],i)=>'<details class="sk-fl"'+(i===fls.length-1&&!mine?' open':'')+'><summary>floor '+fl+'</summary><ul class="sk-list">'+rs.map(rung).join('')+'</ul></details>').join('')
+    :'<p class="sk-n">Nothing is reached yet. Each step’s crosswalk cards come here as soon as you reach it.</p>');
+  el.querySelectorAll('.aq-cws').forEach(b=>b.onclick=()=>{ const d=b.parentElement.querySelector('.aq-deal'), open=!d.hidden;
+    el.querySelectorAll('.aq-deal').forEach(x=>{ x.hidden=true; x.innerHTML=''; }); el.querySelectorAll('.aq-cws.on').forEach(x=>x.classList.remove('on'));
+    if(open) return; d.hidden=false; b.classList.add('on'); deal(d,b.dataset.stem,()=>{ const sc=el.closest('#stick'), y=sc?sc.scrollTop:0; fill(el); if(sc) sc.scrollTop=y; }); }); }
+/* every pane: a floor is a button; a cleared floor's button takes its icon */
+const ICON={un:STAR,ms:STAR,sq:WING,cw:CHI}, NAME={un:'blue star',ms:'gold star',sq:'wings',cw:'crosswalk x'};
+function won(k){ if(k==='cw') return units(); const U=window.__starUnits?window.__starUnits():null; return new Set(U?(k==='un'?U.blue:k==='ms'?U.gold:U.wings):[]); }
+const OPEN={};
+function floorify(pane,k){ const ds=[...pane.querySelectorAll(':scope>details.sk-fl')]; if(!ds.length) return; const W=won(k);
+  ds.forEach(d=>{ const sm=d.querySelector(':scope>summary'), txt=sm?sm.textContent.trim():'', m=txt.match(/^floor\s+(\S+)/), got=!!m&&W.has('floor '+m[1]);
+    const w=document.createElement('div'); w.className='aq-fl'+(d.classList.contains('sk-here')?' aq-here':'');
+    const b=document.createElement('button'); b.type='button'; b.className='aq-flb'+(got?' aq-won':''); const key=k+'|'+txt; if(key in OPEN) d.open=OPEN[key]; b.setAttribute('aria-expanded',String(d.open));
+    if(got) b.setAttribute('aria-label',txt+', '+NAME[k]+' earned');
+    b.innerHTML=(got?'<span class="aq-fli">'+ICON[k]+'</span>':'')+'<span class="aq-fll">'+esc(txt)+'</span><span class="aq-flv" aria-hidden="true">▾</span>';
+    const body=document.createElement('div'); body.className='aq-flbody'; body.hidden=!d.open;
+    [...d.childNodes].forEach(n=>{ if(n!==sm) body.appendChild(n); });
+    b.onclick=()=>{ body.hidden=!body.hidden; OPEN[key]=!body.hidden; b.setAttribute('aria-expanded',String(!body.hidden)); };
+    w.appendChild(b); w.appendChild(body); d.replaceWith(w); }); }
+function floors(pane,k){ floorify(pane,k); new MutationObserver(()=>floorify(pane,k)).observe(pane,{childList:true}); }
+/* the index: a step row shows its x beside the ruler or gold star once earned */
+function indexX(){ const X=xs(); document.querySelectorAll('.rungs .cwx').forEach(e=>e.remove());
+  document.querySelectorAll('section.rung li.built').forEach(li=>{ const a=li.querySelector(':scope>.t>a'), m=a&&(a.getAttribute('href')||'').match(/^([^#.]+)\.html/); if(!m||!X[m[1]]) return;
+    let tr=li.querySelector(':scope>.tr'); if(!tr) return; const s=document.createElement('span'); s.className='cwx'; s.title='crosswalk finished'; s.setAttribute('aria-label','crosswalk x earned'); s.innerHTML=CHI;
+    tr.insertBefore(s,tr.firstChild); tr.hidden=false; }); }
+/* a finished rung's badge: the x beside the star once the rung holds it (Andrew 16:34Z asked how it looks at each stage) */
+function badgeX(){ const U=units(); document.querySelectorAll('section.rung.rfin').forEach(sec=>{ const n=((sec.querySelector('li.k-theory>.n')||{}).textContent||'').trim(), line=sec.querySelector('.rfin-line'); if(!line) return;
+    let x=line.querySelector(':scope>.rfin-x'); const got=U.has('rung '+n);
+    if(got&&!x){ x=document.createElement('span'); x.className='rfin-x'; x.title='crosswalk finished'; x.setAttribute('aria-label','crosswalk x earned'); x.innerHTML=CHI; const b=line.querySelector('.rfin-badge'); line.insertBefore(x,b?b.nextSibling:line.firstChild); }
+    else if(!got&&x) x.remove(); }); }
+if(window.LadderMeasure&&LadderMeasure.indexIcons){ const o=LadderMeasure.indexIcons; LadderMeasure.indexIcons=function(){ return Promise.resolve(o.apply(this,arguments)).then(v=>{ try{ indexX(); badgeX(); }catch(e){} return v; }); }; }
+window.LadderCrosswalk={fill,deal,units,floors,indexX,badgeX};
 })();
