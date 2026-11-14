@@ -1023,7 +1023,22 @@ window.__deskInit=function(){
       desk.querySelector('.dpane.on')&&(desk.querySelector('.dpane.on').scrollTop=0); } }
   function show(p){ desk.querySelectorAll('.dtabs [data-p]').forEach(b=>b.classList.toggle('on',b.dataset.p===p)); desk.querySelectorAll('.dpane').forEach(d=>d.classList.toggle('on',d.id==='dp-'+p)); dock(p==='keys'); toolPage(p); if(p==='book') renderBook(); if(p==='qs') fillQs(); if(p==='base') fillBase(); if(p==='moves') fillMoves(); if(p==='deck') fillDeck(); trio(p); if(p==='graph') initGraph(); if(p==='rand') loadRand(); else if(window.MathKeys) MathKeys.limit(null); st.tab=p; save(); }
   window.addEventListener('popstate',()=>{ if(desk.classList.contains('toolpage')) open(false); });
-  function loadRand(){ if(window.LadderRandomizer){ const bx=desk.querySelector('#dp-rand .rzbox'); if(bx) LadderRandomizer.render(bx); return; } const s=document.createElement('script'); s.src='randomizer.js'; document.head.appendChild(s); }
+/* spindry (Andrew 2026-11-14 00:20Z): a tumble dryer's drum over the Laundry while it loads; at least 1.6 s, then until questions are drawn */
+window.LadderDrum=(function(){ const SAY=['Laundry Day']; /* Andrew 00:24Z: 'just that one is fine' */
+  const calm=()=>!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
+  function ring(el,t){ const L=[...t]; const step=Math.min(26,300/L.length);
+    el.innerHTML=L.map((c,i)=>'<s style="--a:'+(((L.length-1)/2-i)*step)+'deg">'+(c===' '?'&nbsp;':c.replace(/&/g,'&amp;').replace(/</g,'&lt;'))+'</s>').join(''); }
+  function show(host,ready){ if(!host) return; let d=host.querySelector(':scope>.drumload'); if(d) d.remove();
+    d=document.createElement('div'); d.className='drumload'+(calm()?' calm':''); d.setAttribute('role','status');
+    d.innerHTML='<div class="drum" aria-hidden="true"><div class="drum-glass"><div class="drum-ring"></div><i class="drum-fin f1"></i><i class="drum-fin f2"></i><i class="drum-fin f3"></i></div></div>';
+    host.appendChild(d); const r=d.querySelector('.drum-ring'); let k=0;
+    const next=()=>{ const t=SAY[k++%SAY.length]; ring(r,t); d.setAttribute('aria-label','the laundry is loading: '+t.toLowerCase()); };
+    next(); const iv=setInterval(next,2400), t0=Date.now();
+    const done=()=>{ clearInterval(iv); clearInterval(w); d.classList.add('out'); setTimeout(()=>d.remove(),420); };
+    const w=setInterval(()=>{ let ok=false; try{ ok=!!ready(); }catch(e){} if((ok&&Date.now()-t0>=1600)||Date.now()-t0>120000) done(); },100); }
+  return {show}; })();
+  function loadRand(){ try{ LadderDrum.show(desk,()=>window.LadderRandomizer&&(b=>b&&!/Gathering the pools/.test(b.textContent))(desk.querySelector('#dp-rand .rzbox'))); }catch(e){}
+    if(window.LadderRandomizer){ const bx=desk.querySelector('#dp-rand .rzbox'); if(bx) LadderRandomizer.render(bx); return; } const s=document.createElement('script'); s.src='randomizer.js'; document.head.appendChild(s); }
   function open(v){ if(!v&&window.MathKeys) MathKeys.limit(null); desk.classList.toggle('open',v); document.body.classList.toggle('deskopen',v); btn.textContent=v?'✕ desk':'☰ desk'; st.open=v; save(); if(v) show('keys'); else { dock(false); const was=desk.classList.contains('toolpage'); toolPage(null); if(was&&history.state&&history.state.tool) try{ history.back(); }catch(e){} } }
   /* techtrio: the three tech screens share one row of buttons; the Tech Deck is a screen of the toolbox */
   function trio(p){ const gb=desk.querySelector('.dtabs [data-p="graph"]'); desk.querySelectorAll('.dtrio [data-go]').forEach(b=>{ const on=b.dataset.go===p; b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false'); if(b.dataset.go==='graph') b.hidden=!!(gb&&gb.classList.contains('lk-hide')); }); }
