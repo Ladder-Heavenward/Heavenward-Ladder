@@ -353,7 +353,7 @@ const rungOf=t=>{ const n=parseInt(t,10); return isNaN(n)?99:n; };
 const MODES=[{id:'proof',label:'Check Proofs',say:'One line in the proof is bad. Find it.'},
   {id:'work',label:'Work Equations',say:'Work the equation to completion.'},
   {id:'word',label:'Word Problems',say:'Attach the inputs to the equation and get the output.'},
-  {id:'read',label:'Understanding',say:'Know it by sight.'}];
+  {id:'read',label:'Read Graph',say:'Read it off the picture.'}]; /* Read Graph took Understanding's place 2026-11-14; the id stays 'read' */
 const WORKQ=['5g.x','5g.xy','27j.xyz'], DASH='–';
 const SKIND={'0a.names':'names','4f.add':'add','4g.times':'times','4h.numbers':'num','5b.integers':'int','5c.fractions':'frac'};
 
@@ -587,12 +587,525 @@ function licQ(P,used,last){ if(!P.seeds.length||!P.links.length) return null;
     const names=c.kind==='names';
     return {index, a3:[names?s.id:s.id+c.ix,L.id,names?'places'+c.ix:DASH], step:L.step, stack:!!(c.t||L.rule), lines:out.lines, ask:'Which technique licenses the line marked ?', right:L.name, opts:shuffle([L.name,...wrong]), why:out.why}; }
   return null; }
-function readQ(P,used,last){
-  const rq=P.qps.filter(Q=>qmode(Q)==='read');
-  const card=()=>{ for(let t=0;t<40&&P.cps.length;t++){ const C=pick(P.cps), x=C.make(); if(!x||used[x.index]) continue; return Object.assign({a3:[x.addr,C.id,DASH]},x); } return null; };
-  const ways=[[card,P.cps.length?4:0],[()=>rq.length?poolQ(rq,used,last):null,rq.length?3:0],[()=>licQ(P,used,last),P.links.length&&P.seeds.length?3:0]].filter(w=>w[1]);
-  while(ways.length){ let r=Math.random()*ways.reduce((a,w)=>a+w[1],0), i=0; while(i<ways.length-1&&r>=ways[i][1]){ r-=ways[i][1]; i++; } const q=ways[i][0](); if(q) return q; ways.splice(i,1); }
-  return null; }
+/* ===== Read Graph (Andrew 2026-11-14 12:22Z: the Laundry's Understanding kind is replaced by a Read Graph kind; its questions
+   now live in the Answering Questions tool's Understanding and Crosswalk panes). A card draws a graph and asks for a reading of it:
+   a value, a zero, a step, an area, a halving time, a median, which equation a moved curve has. The wrong options are the misreadings
+   the steps name (across read for up, a row read for a column, the fullest bin read as the mode, the rise read without the run).
+   Each kind opens where its step is passed. Index g:<kind>[<params>]. Exposes window.LadderReadGraph = {KINDS, deal, svg}. ===== */
+(function(){
+const R=Math.random, rn=n=>Math.floor(R()*n), pk=a=>a[rn(a.length)], sh=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=rn(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const ri=(a,b)=>a+rn(b-a+1);
+const M='−', sg=n=>n<0?M+(-n):String(n);
+const gcd=(a,b)=>{ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a||1; };
+const frac=(p,q)=>{ if(q<0){ p=-p; q=-q; } const g=gcd(p,q); p/=g; q/=g; return q===1?sg(p):(p<0?M:'')+Math.abs(p)+'/'+q; };
+const dec=x=>{ const r=Math.round(x*100)/100; return sg(r).replace(/\.?0+$/,m=>m.indexOf('.')>=0?'':m); };
+const uniq=(right,ws)=>{ const out=[]; ws.forEach(w=>{ if(w!==right&&!out.includes(w)) out.push(w); }); return out; };
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+
+/* ---------- the picture ---------- */
+/* spec: {x:[x0,x1], y:[y0,y1], sx, sy (grid steps), lx, ly (label every), xl, yl (axis names), parts:[...]}
+   parts: {t:'line', pts:[[x,y],..], dash, k:'a'|'b'} · {t:'dots', pts, open} · {t:'bars', bins:[[from,to,h],..]} · {t:'steps', pts:[[x,y],..], x1}
+          {t:'text', at:[x,y], s, dx, dy} · {t:'fn', f, from, to, n, dash, k} */
+function svg(S){
+  const W=320, H=230, ml=34, mr=12, mt=12, mb=30, pw=W-ml-mr, ph=H-mt-mb;
+  const [x0,x1]=S.x, [y0,y1]=S.y, X=x=>ml+(x-x0)/(x1-x0)*pw, Y=y=>mt+(y1-y)/(y1-y0)*ph;
+  const f2=v=>Math.round(v*10)/10, o=[], cid='rgc'+Math.floor(Math.random()*1e9);
+  o.push('<svg class="rgfig" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(S.alt||'a graph')+'" xmlns="http://www.w3.org/2000/svg">');
+  const sx=S.sx||1, sy=S.sy||1, lx=S.lx||sx, ly=S.ly||sy, near=(a,b)=>Math.abs(a-b)<1e-9, isM=(v,s)=>near(v/s,Math.round(v/s));
+  for(let x=Math.ceil(x0/sx)*sx;x<=x1+1e-9;x+=sx) o.push('<line class="rg-grid" x1="'+f2(X(x))+'" y1="'+mt+'" x2="'+f2(X(x))+'" y2="'+(mt+ph)+'"/>');
+  for(let y=Math.ceil(y0/sy)*sy;y<=y1+1e-9;y+=sy) o.push('<line class="rg-grid" x1="'+ml+'" y1="'+f2(Y(y))+'" x2="'+(ml+pw)+'" y2="'+f2(Y(y))+'"/>');
+  const ax=(x0<=0&&x1>=0)?X(0):ml, ay=(y0<=0&&y1>=0)?Y(0):mt+ph;
+  o.push('<line class="rg-axis" x1="'+ml+'" y1="'+f2(ay)+'" x2="'+(ml+pw)+'" y2="'+f2(ay)+'"/><line class="rg-axis" x1="'+f2(ax)+'" y1="'+mt+'" x2="'+f2(ax)+'" y2="'+(mt+ph)+'"/>');
+  for(let x=Math.ceil(x0/lx)*lx;x<=x1+1e-9;x+=lx){ const v=Math.round(x*100)/100; if(near(v,0)&&ax!==ml&&ay!==mt+ph) continue; o.push('<text class="rg-lab" x="'+f2(X(v))+'" y="'+f2(Math.min(ay+13,mt+ph+13))+'" text-anchor="middle">'+sg(v)+'</text>'); }
+  for(let y=Math.ceil(y0/ly)*ly;y<=y1+1e-9;y+=ly){ const v=Math.round(y*100)/100; if(near(v,0)&&ax!==ml&&ay!==mt+ph) continue; o.push('<text class="rg-lab" x="'+f2(Math.max(ax-4,ml-4))+'" y="'+f2(Y(v)+3.5)+'" text-anchor="end">'+sg(v)+'</text>'); }
+  if(ax!==ml&&ay!==mt+ph) o.push('<text class="rg-lab" x="'+f2(ax-4)+'" y="'+f2(ay+12)+'" text-anchor="end">0</text>');
+  if(S.xl) o.push('<text class="rg-name" x="'+(ml+pw)+'" y="'+(H-3)+'" text-anchor="end">'+esc(S.xl)+'</text>');
+  if(S.yl) o.push('<text class="rg-name" x="'+(ml+2)+'" y="'+(mt+9)+'" text-anchor="start">'+esc(S.yl)+'</text>');
+  o.push('<defs><clipPath id="'+cid+'"><rect x="'+(ml-4)+'" y="'+(mt-4)+'" width="'+(pw+8)+'" height="'+(ph+8)+'"/></clipPath></defs><g clip-path="url(#'+cid+')">');
+  (S.parts||[]).forEach(p=>{
+    if(p.t==='bars') p.bins.forEach(([a,b,h])=>o.push('<rect class="rg-bar" x="'+f2(X(a))+'" y="'+f2(Y(h))+'" width="'+f2(X(b)-X(a))+'" height="'+f2(Y(y0)-Y(h))+'"/>'));
+    if(p.t==='line'||p.t==='fn'){ let pts=p.pts; if(p.t==='fn'){ pts=[]; const n=p.n||120; for(let i=0;i<=n;i++){ const x=p.from+(p.to-p.from)*i/n, y=p.f(x); if(isFinite(y)) pts.push([x,y]); } }
+      o.push('<polyline class="rg-cv'+(p.k==='b'?' rg-b':'')+(p.dash?' rg-dash':'')+'" points="'+pts.map(([x,y])=>f2(X(x))+','+f2(Y(Math.max(y0-0.5*(y1-y0),Math.min(y1+0.5*(y1-y0),y))))).join(' ')+'"/>'); }
+    if(p.t==='steps'){ let d=''; p.pts.forEach(([x,y],i)=>{ const nx=i+1<p.pts.length?p.pts[i+1][0]:p.x1; d+='M'+f2(X(x))+' '+f2(Y(y))+'H'+f2(X(nx)); }); o.push('<path class="rg-cv" d="'+d+'"/>');
+      p.pts.forEach(([x,y])=>o.push('<circle class="rg-dot" cx="'+f2(X(x))+'" cy="'+f2(Y(y))+'" r="2.6"/>')); }
+    if(p.t==='dots') p.pts.forEach(([x,y])=>o.push('<circle class="rg-dot'+(p.open?' rg-open':'')+'" cx="'+f2(X(x))+'" cy="'+f2(Y(y))+'" r="'+(p.r||3)+'"/>'));
+    if(p.t==='text') o.push('<text class="rg-tag" x="'+f2(X(p.at[0])+(p.dx||0))+'" y="'+f2(Y(p.at[1])+(p.dy||0))+'">'+esc(p.s)+'</text>');
+  });
+  o.push('</g></svg>'); return o.join(''); }
+
+/* ---------- helpers for curves ---------- */
+/* a broken line through whole-number corners, one corner per whole x from a to b, rising and falling by small steps */
+function zig(a,b,lo,hi){ for(let t=0;t<60;t++){ let y=ri(lo+1,hi-1); const pts=[[a,y]]; for(let x=a+1;x<=b;x++){ y=Math.max(lo,Math.min(hi,y+pk([-2,-1,1,2,0,1,-1]))); pts.push([x,y]); }
+    if(new Set(pts.map(p=>p[1])).size>=4) return pts; } return null; }
+const at=(pts,x)=>{ for(let i=0;i+1<pts.length;i++){ const [a,ya]=pts[i],[b,yb]=pts[i+1]; if(x>=a&&x<=b) return ya+(yb-ya)*(x-a)/(b-a); } return null; };
+
+const KINDS=[];
+const K=k=>KINDS.push(k);
+const card=(k,o)=>Object.assign({index:'g:'+k.id+'['+o.ix+']', a3:['g.'+k.id+'['+o.ix+']',k.step,'–'], step:k.step, steps:k.steps||[k.step], lines:[], kind:'graph'},o);
+
+/* 9e: read a value off the graph */
+K({id:'value',step:'9e',seed:'zig',title:'a value off the graph',make(){
+  const pts=zig(-4,4,-4,4); if(!pts) return null; const c=ri(-3,3), y=at(pts,c);
+  const across=pts.filter(p=>p[1]===c&&p[0]!==c).map(p=>p[0]); /* reading across for up: an input whose output is c */
+  const ws=uniq(sg(y),[across.length?sg(across[0]):sg(-y),sg(at(pts,c+1)),sg(at(pts,c-1)),sg(-y),sg(y+1),sg(y-1),sg(y+2),sg(y-2)]).slice(0,3);
+  return card(this,{ix:pts.map(p=>p[1]).join(',')+';'+c, fig:svg({x:[-4.5,4.5],y:[-4.5,4.5],xl:'x',yl:'y',parts:[{t:'line',pts}],alt:'a broken line, the graph of f'}),
+    ask:'The graph of f is drawn. What is f('+sg(c)+')?', right:sg(y), opts:sh([sg(y),...ws]),
+    why:'The column at '+sg(c)+' meets the graph in exactly one pair, ('+sg(c)+', '+sg(y)+'), by the column-test technique: the input is read across and the output up.'}); }});
+
+/* 9e: the zeros, read where the graph meets the x-axis */
+K({id:'zeros',step:'9e',title:'where the graph meets the x-axis',make(){
+  for(let t=0;t<40;t++){ const pts=zig(-4,4,-3,3); if(!pts) continue; const z=[]; for(let x=-4;x<=4;x++) if(at(pts,x)===0) z.push(x);
+    for(let i=0;i+1<pts.length;i++){ const [a,ya]=pts[i],[b,yb]=pts[i+1]; if(ya*yb<0) { z.length=0; break; } } /* every crossing at a corner, so it can be read */
+    if(!z.length||z.length>3) continue; const yi=at(pts,0); if(yi===0||z.includes(yi)) continue;
+    const L=a=>{ a=[...new Set(a)].sort((x,y)=>x-y); return a.length?a.map(sg).join(' and '):'none'; };
+    const top=pts.reduce((m,p)=>p[1]>m[1]?p:m,pts[0])[0];
+    const ws=uniq(L(z),[L([yi]),z.length>1?L(z.slice(1)):L(z.concat([top]).sort((a,b)=>a-b)),L(z.map(x=>-x).sort((a,b)=>a-b)),L(z.concat([0]).filter((v,i,a)=>a.indexOf(v)===i).sort((a,b)=>a-b))]).slice(0,3);
+    if(ws.length<3) continue;
+    return card(this,{ix:pts.map(p=>p[1]).join(','), fig:svg({x:[-4.5,4.5],y:[-3.5,3.5],xl:'x',yl:'y',parts:[{t:'line',pts}],alt:'a broken line, the graph of f'}),
+      ask:'At which inputs is f(x) = 0?', right:L(z), opts:sh([L(z),...ws]),
+      why:'The zeros are where the graph meets the x-axis, its x-intercepts: '+L(z)+'. The y-intercept, f(0) = '+sg(yi)+', is where it meets the y-axis.'}); }
+  return null; }});
+
+/* 9e: the column test on a drawn curve */
+K({id:'column',step:'9e',title:'the column test',make(){
+  const kind=pk(['circle','sideways','vee','function','upvee']);
+  let parts, isF, c, why, ix=kind;
+  if(kind==='circle'){ const r=pk([2,3]); parts=[{t:'fn',f:x=>Math.sqrt(Math.max(0,r*r-x*x)),from:-r,to:r},{t:'fn',f:x=>-Math.sqrt(Math.max(0,r*r-x*x)),from:-r,to:r}]; isF=false; c=0; why='the column at 0 holds ('+'0, '+r+') and (0, '+M+r+')'; ix+=r; }
+  if(kind==='sideways'){ parts=[{t:'line',pts:[...Array(41)].map((_,i)=>{ const y=-2+i*0.1; return [y*y-1,y]; })}]; isF=false; c=0; why='the column at 0 holds (0, 1) and (0, '+M+'1)'; }
+  if(kind==='vee'){ parts=[{t:'line',pts:[[3,3],[-1,0],[3,-3]]}]; isF=false; c=3; why='the column at 3 holds (3, 3) and (3, '+M+'3)'; }
+  if(kind==='function'){ parts=[{t:'fn',f:x=>x*x/2-2,from:-3,to:3}]; isF=true; c=2; }
+  if(kind==='upvee'){ parts=[{t:'line',pts:[[-3,3],[0,-1],[3,3]]}]; isF=true; c=1; }
+  const dx=ri(-1,1), dy=ri(-1,1); if(dx||dy){ parts=parts.map(q=>q.t==='fn'?Object.assign({},q,{f:(g=>x=>g(x-dx)+dy)(q.f),from:q.from+dx,to:q.to+dx}):Object.assign({},q,{pts:q.pts.map(([x,y])=>[x+dx,y+dy])})); c+=dx; why=why?why.replace(/\((−?\d+), (−?\d+)\)/g,(m,a,b)=>'('+sg(+a.replace(M,'-')+dx)+', '+sg(+b.replace(M,'-')+dy)+')').replace(/column at (−?\d+)/,'column at '+sg(c)):why; ix+=';'+dx+','+dy; }
+  const yesC='yes: every column meets it at most once', noC='no: a column meets it twice', yesR='no: a row meets it twice', noR='yes: no row meets it twice';
+  const right=isF?yesC:noC, ws=isF?[noC,yesR,'no: it bends']:[yesC,noR,'yes: it is one unbroken curve'];
+  return card(this,{ix, fig:svg({x:[-4.5,4.5],y:[-3.5,3.5],xl:'x',yl:'y',parts,alt:'a curve in the plane'}),
+    ask:'Is this curve the graph of a function of x?', right, opts:sh([right,...ws]),
+    why:isF?'Every column meets it at most once, so it is a function on the inputs it covers (column-test). A row can meet it twice: that only says the function is not one-to-one (row-test).':'It fails the column test: '+why+'. A function of x has exactly one pair in each column over its inputs.'}); }});
+
+/* 9d: the swapped pair on f⁻¹ */
+K({id:'swap',step:'9e',steps:['9d','9e'],title:'a pair of the inverse',make(){
+  const m=pk([1,2,3]), b=ri(-2,2), pts=[[-4,0],[4,0]].map(([x])=>[x,m*x+b]);
+  const xs=[-2,-1,1,2].filter(x=>Math.abs(m*x+b)<=4&&m*x+b!==x); if(!xs.length) return null; const p=pk(xs), q=m*p+b;
+  const P=(a,c)=>'('+sg(a)+', '+sg(c)+')', right=P(q,p), ws=uniq(right,[P(p,q),P(-q,-p),P(p,-q),P(-p,q)]).slice(0,3);
+  return card(this,{ix:m+','+b+','+p, fig:svg({x:[-4.5,4.5],y:[-4.5,4.5],xl:'x',yl:'y',parts:[{t:'fn',f:x=>m*x+b,from:-4.5,to:4.5},{t:'dots',pts:[[p,q]]}],alt:'a line with one marked point'}),
+    ask:'The line is the graph of f, and the marked point is on it. Which pair is on the graph of f⁻¹?', right, opts:sh([right,...ws]),
+    why:'The marked point is '+P(p,q)+'. By swapped-pairs, (x, y) ∈ f exactly when (y, x) ∈ f⁻¹, so '+right+' is on f⁻¹.'}); }});
+
+/* 9e: the step of a line from two points read off the grid */
+K({id:'step',step:'9e',title:'the step of a line',make(){
+  for(let t=0;t<40;t++){ const x1=ri(-4,0), x2=ri(1,4), y1=ri(-4,4), y2=ri(-4,4); if(y1===y2) continue; const dx=x2-x1, dy=y2-y1;
+    const m=dy/dx, b=y1-m*x1, right=frac(dy,dx);
+    const ws=uniq(right,[frac(dx,dy),frac(-dy,dx),sg(dy),frac(dy,dx+1)]).slice(0,3); if(ws.length<3) continue;
+    return card(this,{ix:[x1,y1,x2,y2].join(','), fig:svg({x:[-4.5,4.5],y:[-4.5,4.5],xl:'x',yl:'y',parts:[{t:'fn',f:x=>m*x+b,from:-4.5,to:4.5},{t:'dots',pts:[[x1,y1],[x2,y2]]}],alt:'a line through two marked points'}),
+      ask:'The line passes through the two marked points. What is its step m in y = mx + b?', right, opts:sh([right,...ws]),
+      why:'From ('+sg(x1)+', '+sg(y1)+') to ('+sg(x2)+', '+sg(y2)+') the line rises '+sg(dy)+' over a run of '+dx+'. By same-ratio, m = '+sg(dy)+'/'+dx+' = '+right+': the rise over the run, not the run over the rise.'}); }
+  return null; }});
+
+/* 9·stat: a histogram, read by the bins technique */
+K({id:'bins',step:'9·stat',title:'reading a histogram',make(){
+  const w=pk([5,10]), s=pk([10,20,30,40]), nb=ri(5,6), h=[...Array(nb)].map(()=>ri(1,9)); const n=h.reduce((a,c)=>a+c,0);
+  const bins=h.map((c,i)=>[s+i*w,s+(i+1)*w,c]), what=pk(['total','below','tall']), top=Math.max(...h);
+  if(h.filter(c=>c===top).length>1&&what==='tall') return null;
+  const thing=pk([['trout','length in cm'],['waits','minutes waited'],['apples','grams over 100'],['days','rain in mm']]);
+  let ask,right,ws,why; const ix=[w,s,h.join('.'),what].join(';');
+  if(what==='total'){ ask='How many '+thing[0]+' does the histogram count in all?'; right=String(n); ws=uniq(right,[String(nb),String(top),String(n-h[nb-1]),String(n+1)]); why='Every value falls in exactly one bin, so the bin counts add to n (bins technique): '+h.join(' + ')+' = '+n+'. The number of bins, '+nb+', is not the number of values.'; }
+  if(what==='below'){ const k=ri(2,nb-1), cut=s+k*w, c=h.slice(0,k).reduce((a,x)=>a+x,0); ask='How many '+thing[0]+' have a value below '+cut+'?'; right=String(c); ws=uniq(right,[String(c+h[k]),String(h[k-1]),String(n-c),String(k),String(c-h[k-1]),String(c+1),String(c-1)]); why='The bins below '+cut+' are the first '+k+'. Joining neighbouring bins adds their counts (bins technique): '+h.slice(0,k).join(' + ')+' = '+c+'.'; }
+  if(what==='tall'){ const i=h.indexOf(top); ask='The tallest bar stands over ['+(s+i*w)+', '+(s+(i+1)*w)+'). What does that say?'; right='that bin holds the most values; the most common single value may be elsewhere';
+    ws=['the most common value lies in ['+(s+i*w)+', '+(s+(i+1)*w)+')','the median lies in ['+(s+i*w)+', '+(s+(i+1)*w)+')','the mean lies in ['+(s+i*w)+', '+(s+(i+1)*w)+')']; why='It is the fullest bin. Reading the tallest bar as the mode is a move to watch out for: a bin with fewer values can hold one value repeated more often.'; }
+  return card(this,{ix, fig:svg({x:[s,s+nb*w],y:[0,10],sx:w,sy:1,ly:2,xl:thing[1],yl:'count',parts:[{t:'bars',bins}],alt:'a histogram of '+thing[0]}),
+    ask, right, opts:sh([right,...ws.slice(0,3)]), why}); }});
+
+/* 9·stat: the median off the running total */
+K({id:'median',step:'9·stat',title:'the median off the running total',make(){
+  for(let t=0;t<40;t++){ const vals=sh([2,3,4,5,6,7,8,9,10,11,12]).slice(0,ri(4,5)).sort((a,b)=>a-b); const f=vals.map(()=>ri(1,3)), n=f.reduce((a,c)=>a+c,0);
+    let F=0; const pts=vals.map((v,i)=>{ F+=f[i]; return [v,F]; }); const least=k=>pts.find(p=>p[1]>=k)[0];
+    let med; if(n%2) med=least((n+1)/2); else { const a=least(n/2), b=least(n/2+1); med=(a+b)/2; }
+    const mode=vals[f.indexOf(Math.max(...f))], mid=(vals[0]+vals[vals.length-1])/2;
+    const right=dec(med), ws=uniq(right,[dec(vals[vals.length-1]),dec(mid),dec(mode),dec(n/2)]).slice(0,3); if(ws.length<3) continue;
+    return card(this,{ix:vals.join('.')+';'+f.join('.'), fig:svg({x:[0,13],y:[0,n+1],sx:1,sy:1,lx:2,ly:n>8?2:1,xl:'value',yl:'F, values at most',parts:[{t:'line',pts:[[0,0],[vals[0],0]]},{t:'steps',pts,x1:13}],alt:'the running total of a list'}),
+      ask:'The running total F of a list is drawn: F(x) counts the values at most x. What is the median?', right, opts:sh([right,...ws]),
+      why:'F ends at n = '+n+'. '+(n%2?'n is odd, so the median is the least v with F(v) ≥ '+(n+1)/2+': '+right+'.':'n is even, so the median is the mean of the least v with F(v) ≥ '+n/2+' and the least v with F(v) ≥ '+(n/2+1)+': '+right+'.')+' The tallest step up marks the most common value, not the middle (running-total technique).'}); }
+  return null; }});
+
+/* 9·phys: average velocity off a position graph */
+K({id:'velocity',step:'9·phys',title:'average velocity off a position graph',make(){
+  for(let t=0;t<40;t++){ const xs=[0]; for(let i=1;i<=6;i++) xs.push(Math.max(-2,Math.min(10,xs[i-1]+pk([-2,0,2,2,3,4,1])))); const pts=xs.map((x,i)=>[i,x]);
+    const a=ri(0,3), b=ri(a+2,6), d=xs[b]-xs[a]; if(d===0) continue; let trav=0; for(let i=a;i<b;i++) trav+=Math.abs(xs[i+1]-xs[i]);
+    const right=frac(d,b-a)+' m/s', ws=uniq(right,[frac(xs[b],b)+' m/s',frac(b-a,d)+' m/s',frac(trav,b-a)+' m/s',frac(-d,b-a)+' m/s',sg(d)+' m/s']).slice(0,3); if(ws.length<3) continue;
+    return card(this,{ix:xs.join('.')+';'+a+','+b, fig:svg({x:[0,6.3],y:[-2.5,10.5],sx:1,sy:1,ly:2,xl:'t, seconds',yl:'x, metres',parts:[{t:'line',pts}],alt:'position against time'}),
+      ask:'A cart’s position x is drawn against time t. What is its average velocity from t = '+a+' to t = '+b+'?', right, opts:sh([right,...ws]),
+      why:'Average velocity is the displacement over the time taken: (x('+b+') − x('+a+'))/('+b+' − '+a+') = ('+sg(xs[b])+' − '+sg(xs[a])+')/'+(b-a)+' = '+right+'.'+(trav!==Math.abs(d)?' The track walked, '+trav+' m, counts the going back as well, so it is not the displacement.':'')}); }
+  return null; }});
+
+/* 13a: the slope of a curve, read off its drawn tangent line */
+K({id:'tangent',step:'13a',steps:['13a','13k'],title:'a slope off the tangent line',make(){
+  const a=pk([1,-1,0.5,-0.5]), sft=ri(-1,1), lift=a>0?ri(-3,-1):ri(1,3), F=x=>a*(x-sft)*(x-sft)/2+lift; /* slope a(x − sft) */
+  const cs=[-3,-2,-1,1,2,3].map(c=>c+sft).filter(c=>c>=-3&&c<=3&&Math.abs(F(c))<=4&&a*(c-sft)!==0&&Number.isInteger(a*(c-sft))); if(!cs.length) return null;
+  const c=pk(cs), m=a*(c-sft), y0=F(c), tl=x=>m*(x-c)+y0, p2=c+(c<3?1:-1), right=sg(m);
+  const ws=uniq(right,[dec(y0),frac(1,m),sg(-m),sg(2*m),sg(m+1)]).slice(0,3); if(ws.length<3) return null;
+  return card(this,{ix:[a,sft,lift,c].join(','), fig:svg({x:[-4.5,4.5],y:[-4.5,4.5],xl:'x',yl:'y',parts:[{t:'fn',f:F,from:-4.5,to:4.5},{t:'fn',f:tl,from:-4.5,to:4.5,dash:1,k:'b'},{t:'dots',pts:[[c,y0],[p2,tl(p2)]]}],alt:'a curve and its tangent line at one point'}),
+    ask:'The dashed line is the tangent to the curve y = f(x) at x = '+sg(c)+'. What is f′('+sg(c)+')?', right, opts:sh([right,...ws]),
+    why:'The slope at a point is the slope of the tangent line there. The line passes through ('+sg(c)+', '+dec(y0)+') and ('+sg(p2)+', '+dec(tl(p2))+'): a rise of '+dec(tl(p2)-y0)+' over a run of '+sg(p2-c)+', so '+right+'. The height f('+sg(c)+') = '+dec(y0)+' is not the slope.'}); }});
+
+/* 14a: where the slope is 0, at a top or a bottom */
+K({id:'flat',step:'14a',steps:['14a','14f'],title:'where the slope is 0',make(){
+  /* f = (x − p)(x − q)-shaped slope: f(x) = k(x³/3 − (p+q)x²/2 + pq x) + c, with tops and bottoms at p and q */
+  for(let t=0;t<40;t++){ const p=ri(-3,0), q=ri(1,3); if(q-p<2) continue; const k=pk([0.5,-0.5]);
+    const F=x=>k*(x*x*x/3-(p+q)*x*x/2+p*q*x), lo=Math.min(F(p),F(q),F(-4),F(4)), hi=Math.max(F(p),F(q),F(-4),F(4)); const sc=4/Math.max(Math.abs(F(p)),Math.abs(F(q)),1);
+    const f=x=>F(x)*sc-(F(p)+F(q))*sc/2; let z=[]; for(let x=-40;x<40;x++){ const a=f(x/10),b=f((x+1)/10); if(a*b<0) z.push(Math.round((x+0.5)/10)); }
+    const L=a=>a.map(sg).join(' and '), right=L([p,q]), infl=(p+q)/2;
+    const ws=uniq(right,[L(z.filter((v,i,a)=>a.indexOf(v)===i).slice(0,2)),Number.isInteger(infl)?L([infl]):L([p]),L([-4,4]),L([p-1,q+1])]).slice(0,3); if(ws.length<3) continue;
+    return card(this,{ix:[p,q,k].join(','), fig:svg({x:[-4.5,4.5],y:[-4.5,4.5],xl:'x',yl:'y',parts:[{t:'fn',f,from:-4.5,to:4.5}],alt:'a smooth curve with a top and a bottom'}),
+      ask:'The graph of f is drawn on the inputs shown. At which inputs inside is f′(x) = 0?', right, opts:sh([right,...ws]),
+      why:'f has a top and a bottom inside, at '+right+', and has a slope there, so f′ = 0 at each (flat-top). Where the curve crosses the x-axis f is 0, not its slope.'}); }
+  return null; }});
+
+/* 16c and 16·phys: distance as the area under a velocity graph */
+K({id:'area',step:'16·phys',steps:['16c','16·phys'],title:'distance as the area under velocity',make(){
+  for(let t=0;t<40;t++){ const vs=[ri(0,3)]; for(let i=1;i<=5;i++) vs.push(Math.max(0,Math.min(8,vs[i-1]+pk([2,1,0,-1,2,-2])))); const T=ri(3,5);
+    let A2=0; for(let i=0;i<T;i++) A2+=vs[i]+vs[i+1]; /* twice the area */ const right=dec(A2/2)+' m';
+    const ws=uniq(right,[dec(vs[T]*T)+' m',dec(vs.slice(1,T+1).reduce((a,c)=>a+c,0))+' m',dec(vs[T]-vs[0])+' m',dec(Math.max(...vs.slice(0,T+1))*T)+' m']).slice(0,3); if(ws.length<3) continue;
+    return card(this,{ix:vs.join('.')+';'+T, fig:svg({x:[0,5.3],y:[0,8.5],sx:1,sy:1,xl:'t, seconds',yl:'v, m/s',parts:[{t:'line',pts:vs.map((v,i)=>[i,v])}],alt:'velocity against time'}),
+      ask:'A cart’s velocity v is drawn against time t. How far does it go from t = 0 to t = '+T+'?', right, opts:sh([right,...ws]),
+      why:'The change in place is the area under the velocity (area-is-a-change). Each second is a strip with straight top, (v at start + v at end)/2 wide 1: '+[...Array(T)].map((_,i)=>'('+vs[i]+' + '+vs[i+1]+')/2').join(' + ')+' = '+right+'.'}); }
+  return null; }});
+
+/* 17j: a halving time read off a decay curve */
+K({id:'halving',step:'17j',title:'a halving time off a decay curve',make(){
+  const h=pk([2,3,4,5]), y0=pk([48,64,80,96,112,128]), f=t=>y0*Math.pow(2,-t/h), T=3*h;
+  const thing=pk([['a sample’s count','counts'],['the drug in the blood','mg'],['the tea’s heat above the room','°C']]);
+  const right=h+' hours', ws=uniq(right,[(h*2)+' hours',(h/2)+' hours',(T)+' hours',(h+1)+' hours']).slice(0,3);
+  return card(this,{ix:h+','+y0, fig:svg({x:[0,T+0.5],y:[0,y0+8],sx:1,sy:y0/8,lx:h>2?h:2,ly:y0/4,xl:'t, hours',yl:thing[1],parts:[{t:'fn',f,from:0,to:T+0.5},{t:'dots',pts:[[0,y0],[h,y0/2],[2*h,y0/4]]}],alt:'a decay curve'}),
+    ask:'The curve shows '+thing[0]+' falling by equal factors in equal steps. How long does it take to halve?', right, opts:sh([right,...ws]),
+    why:'It falls from '+y0+' to '+(y0/2)+' between t = 0 and t = '+h+', and from '+(y0/2)+' to '+(y0/4)+' between '+h+' and '+(2*h)+'. By doubling-time it halves every '+h+' hours, wherever the clock starts.'}); }});
+
+/* 20i: which equation a slid curve has */
+K({id:'slide',step:'20i',title:'which equation a slid curve has',make(){
+  const h=pk([-3,-2,-1,1,2,3]), k=pk([-2,-1,1,2]); if(Math.abs(h)===Math.abs(k)) return null;
+  const vee=R()<0.5, f=vee?(x=>Math.abs(x)):(x=>x*x/2), g=x=>f(x-h)+k, s=v=>v<0?' + '+(-v):' − '+v, p=v=>v<0?' − '+(-v):' + '+v;
+  const right='y = f(x'+s(h)+')'+p(k), ws=['y = f(x'+s(-h)+')'+p(k),'y = f(x'+s(h)+')'+p(-k),'y = f(x'+s(k)+')'+p(h)];
+  return card(this,{ix:h+','+k+(vee?',v':''), fig:svg({x:[-5.5,5.5],y:[-3.5,5.5],xl:'x',yl:'y',parts:[{t:'fn',f,from:-5.5,to:5.5},{t:'fn',f:g,from:-5.5,to:5.5,dash:1,k:'b'},{t:'dots',pts:[[0,0],[h,k]]}],alt:'a curve and a slid copy'}),
+    ask:'The solid curve is y = f(x), with its lowest point at (0, 0). The dashed curve is the same curve slid. Which equation is the dashed curve?', right, opts:sh([right,...uniq(right,ws)]),
+    why:'The lowest point moved from (0, 0) to ('+sg(h)+', '+sg(k)+'), a slide by ('+sg(h)+', '+sg(k)+'). By graph-slide, y = f(x) slid by (h, k) is y = f(x − h) + k: '+right+'. The sideways part goes inside with the opposite sign.'}); }});
+
+/* 21b: the period and height of a wave */
+K({id:'wave',step:'21g',steps:['21b','21g'],title:'the period of a wave',make(){
+  const P=pk([2,4,6,8,10,12]), A=pk([1,2,3,4]), f=x=>A*Math.sin(2*Math.PI*x/P), what=pk(['period','height']);
+  const right=what==='period'?String(P):String(A), ws=what==='period'?uniq(right,[String(P/2),String(A),String(2*P),String(P+1)]):uniq(right,[String(2*A),String(A+1),String(A+2),String(A+3),String(A===1?3:A-1),String(P)]);
+  return card(this,{ix:P+','+A+','+what, fig:svg({x:[0,2*P],y:[-A-1,A+1],sx:P/4>=1?P/4:1,sy:1,lx:P/2,xl:'x',yl:'y',parts:[{t:'fn',f,from:0,to:2*P,n:200}],alt:'a wave'}),
+    ask:what==='period'?'The wave y = A sin(2πx/P) is drawn. What is its period P?':'The wave y = A sin(2πx/P) is drawn. What is its height A above the axis?', right, opts:sh([right,...ws.slice(0,3)]),
+    why:what==='period'?'The wave repeats every '+P+': from 0 it rises, falls through '+(P/2)+', and is back where it began, heading up, at '+P+' (whole-turns). Zero to zero is only half a period.':'The wave reaches '+A+' above the axis and '+A+' below; A is the height from the axis, not from trough to crest, which is '+(2*A)+'.'}); }});
+
+/* ---------- rung 1: truth tables (1e: inputs T and F, the statement's column 1 and 0) ---------- */
+function tp(s){ let i=0; const ws=()=>{ while(s[i]===' ') i++; };
+  const un=()=>{ ws(); const c=s[i]; if(c==='¬'){ i++; return {o:'¬',a:un()}; } if(c==='('){ i++; const e=ex(); ws(); i++; return e; } i++; return {v:c}; };
+  function ex(){ const a=un(); ws(); const o=s[i]; if(o&&'∧∨⇒⇔∪∩∖'.indexOf(o)>=0){ i++; return {o,a,b:un()}; } return a; }
+  return ex(); }
+function tv(t,e){ if(t.v) return t.v==='⊥'?false:!!e[t.v]; if(t.o==='¬') return !tv(t.a,e); const a=tv(t.a,e), b=tv(t.b,e);
+  return t.o==='∧'||t.o==='∩'?a&&b:t.o==='∨'||t.o==='∪'?a||b:t.o==='⇒'?!a||b:t.o==='⇔'?a===b:a&&!b; }
+const letters=t=>t.v?(t.v==='⊥'?[]:[t.v]):t.o==='¬'?letters(t.a):letters(t.a).concat(letters(t.b));
+const ROWS=L=>{ const r=[]; for(let m=0;m<(1<<L.length);m++){ const e={}; L.forEach((v,i)=>e[v]=!(m&(1<<(L.length-1-i)))); r.push(e); } return r; };
+const col=(t,L)=>ROWS(L).map(e=>tv(t,e)?1:0);
+const TT2=['P ⇒ Q','Q ⇒ P','P ∧ ¬Q','¬P ∨ Q','P ⇔ Q','¬(P ∧ Q)','¬(P ∨ Q)','¬P ∧ Q','P ∨ ¬Q','¬P ⇒ Q','¬(P ⇒ Q)','¬P ⇔ Q','P ∧ Q','P ∨ Q','¬P ∧ ¬Q','¬P ∨ ¬Q'];
+const TT3=['(P ∧ Q) ⇒ R','P ⇒ (Q ∨ R)','(P ∨ Q) ∧ ¬R','P ∧ (Q ⇒ R)','(P ⇒ R) ∧ (Q ⇒ R)','¬P ∨ (Q ∧ R)','(P ⇔ Q) ∧ R','(P ∨ R) ⇒ Q','P ⇒ (Q ⇒ R)','¬(P ∧ Q) ∨ R'];
+function ttsvg(L,head,cells,mark){ const nr=cells.length, nc=L.length+1, cw=[...L.map(()=>34),Math.max(90,head.length*8.2)], W=cw.reduce((a,c)=>a+c,0)+2, rh=22, H=rh*(nr+1)+2;
+  const o=['<svg class="rgfig rgtt" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="a truth table" xmlns="http://www.w3.org/2000/svg">'];
+  let x=1; const xs=cw.map(w=>{ const a=x; x+=w; return a; });
+  o.push('<rect class="rg-tthead" x="1" y="1" width="'+(W-2)+'" height="'+rh+'"/>');
+  [...L,head].forEach((h,j)=>o.push('<text class="rg-ttt" x="'+(xs[j]+cw[j]/2)+'" y="'+(rh-6)+'" text-anchor="middle">'+esc(h)+'</text>'));
+  cells.forEach((r,i)=>{ const y=1+rh*(i+1); if(mark===i) o.push('<rect class="rg-ttmark" x="1" y="'+y+'" width="'+(W-2)+'" height="'+rh+'"/>');
+    r.forEach((c,j)=>o.push('<text class="rg-ttt'+(j===nc-1?' rg-ttout':'')+'" x="'+(xs[j]+cw[j]/2)+'" y="'+(y+rh-6)+'" text-anchor="middle">'+c+'</text>'));
+    o.push('<line class="rg-grid" x1="1" y1="'+y+'" x2="'+(W-1)+'" y2="'+y+'"/>'); });
+  xs.slice(1).forEach(a=>o.push('<line class="rg-grid" x1="'+a+'" y1="1" x2="'+a+'" y2="'+(H-1)+'"/>'));
+  o.push('<rect class="rg-ttbox" x="1" y="1" width="'+(W-2)+'" height="'+(H-2)+'"/></svg>'); return o.join(''); }
+const ord=n=>['first','second','third','fourth','fifth','sixth','seventh','eighth'][n];
+const said=(e,L)=>L.map(v=>v+' is '+(e[v]?'T':'F')).join(', ');
+
+K({id:'badrow',step:'1e',title:'the row with the wrong mark',make(){
+  const three=R()<0.35, src=three?TT3:TT2, k=rn(src.length), t=tp(src[k]), L=three?['P','Q','R']:['P','Q'], c=col(t,L), rows=ROWS(L), n=c.length;
+  const bad=rn(n), shown=c.map((v,i)=>i===bad?1-v:v), cells=rows.map((e,i)=>[...L.map(v=>e[v]?'T':'F'),String(shown[i])]);
+  const right='row '+(bad+1), ws=sh([...Array(n).keys()].filter(i=>i!==bad)).slice(0,3).map(i=>'row '+(i+1));
+  return card(this,{ix:(three?'3.':'2.')+k+';'+bad, fig:ttsvg(L,src[k],cells), ask:'One mark in the column of '+src[k]+' is wrong. Which row holds it?', right, opts:sh([right,...ws]),
+    why:'In row '+(bad+1)+', '+said(rows[bad],L)+', and '+src[k]+' gives '+c[bad]+', not '+shown[bad]+'. Hunt for the bad row: work each row from its parts.'}); }});
+
+K({id:'whichst',step:'1e',title:'which statement gives the column',make(){
+  const k=rn(TT2.length), L=['P','Q'], c=col(tp(TT2[k]),L), key=x=>col(tp(x),L).join('');
+  const others=sh(TT2.filter(x=>key(x)!==c.join(''))); const near=others.filter(x=>{ const d=key(x).split('').filter((v,i)=>+v!==c[i]).length; return d===1; });
+  const ws=[]; [...near,...others].forEach(x=>{ if(ws.length<3&&!ws.some(y=>key(y)===key(x))) ws.push(x); });
+  const cells=ROWS(L).map((e,i)=>[e.P?'T':'F',e.Q?'T':'F',String(c[i])]);
+  return card(this,{ix:String(k), fig:ttsvg(L,'?',cells), ask:'Which statement gives this column?', right:TT2[k], opts:sh([TT2[k],...ws]),
+    why:TT2[k]+' gives '+c.join(', ')+' down the rows TT, TF, FT, FF. Each other choice gives a different mark in at least one row.'}); }});
+
+/* ---------- rung 2: regions of sets, and the keep-or-drop tree ---------- */
+let VID=0;
+function vennsvg(n,inR){ const id='v'+(++VID)+rn(1e6), W=280, H=n===3?220:170;
+  const C=n===2?[['A',105,85],['B',175,85]]:[['A',112,85],['B',168,85],['C',140,135]], r=n===2?58:52;
+  const o=['<svg class="rgfig" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="circles for sets with one region shaded" xmlns="http://www.w3.org/2000/svg"><defs>'];
+  C.forEach(([nm,x,y])=>{ o.push('<clipPath id="'+id+nm+'"><circle cx="'+x+'" cy="'+y+'" r="'+r+'"/></clipPath><mask id="'+id+'m'+nm+'"><rect width="'+W+'" height="'+H+'" fill="#fff"/><circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="#000"/></mask>'); });
+  o.push('</defs><rect class="rg-uni" x="4" y="4" width="'+(W-8)+'" height="'+(H-8)+'" rx="6"/>');
+  for(let m=0;m<(1<<n);m++){ const mem=C.map((c,i)=>!!(m&(1<<i))); if(!inR(mem)) continue;
+    let g='<rect class="rg-shade" x="4" y="4" width="'+(W-8)+'" height="'+(H-8)+'"/>';
+    C.forEach(([nm],i)=>{ g=mem[i]?'<g clip-path="url(#'+id+nm+')">'+g+'</g>':'<g mask="url(#'+id+'m'+nm+')">'+g+'</g>'; }); o.push(g); }
+  C.forEach(([nm,x,y],i)=>{ o.push('<circle class="rg-set" cx="'+x+'" cy="'+y+'" r="'+r+'"/>'); const lx=n===2?(i?x+r-6:x-r+6):(i===2?x:i?x+r-4:x-r+4), ly=n===2?y-r+8:(i===2?y+r-2:y-r+12); o.push('<text class="rg-tag" x="'+lx+'" y="'+ly+'" text-anchor="middle">'+nm+'</text>'); });
+  o.push('</svg>'); return o.join(''); }
+const V2=['A ∩ B','A ∪ B','A ∖ B','B ∖ A','(A ∪ B) ∖ (A ∩ B)'], V3=['A ∩ (B ∪ C)','(A ∩ B) ∪ C','A ∪ (B ∩ C)','(A ∪ B) ∩ C','(A ∩ B) ∖ C','A ∖ (B ∪ C)','(A ∪ B) ∖ C','C ∖ (A ∩ B)','(A ∩ C) ∪ (B ∩ C)','A ∩ B ∩ C'];
+const vt=s=>{ const t=tp(s.replace('A ∩ B ∩ C','(A ∩ B) ∩ C')); return mem=>tv(t,{A:mem[0],B:mem[1],C:mem[2]}); };
+const vkey=(s,n)=>{ const f=vt(s); let k=''; for(let m=0;m<(1<<n);m++) k+=f([0,1,2].map(i=>!!(m&(1<<i))))?1:0; return k; };
+K({id:'venn',step:'2f',title:'which set is shaded',make(){
+  const three=R()<0.5, n=three?3:2, src=three?V3:V2, k=rn(src.length), right=src[k], key=vkey(right,n);
+  const ws=[]; sh(src.concat(three?['A ∩ B','A ∪ C','B ∖ C']:['A','B'])).forEach(x=>{ if(ws.length<3&&x!==right&&vkey(x,n)!==key&&!ws.some(y=>vkey(y,n)===vkey(x,n))) ws.push(x); });
+  if(ws.length<3) return null;
+  return card(this,{ix:n+'.'+k, fig:vennsvg(n,vt(right)), ask:'The shaded region is one set built from '+(three?'A, B and C':'A and B')+'. Which is it?', right, opts:sh([right,...ws]),
+    why:'A thing is in the shaded region exactly when it is '+(()=>{ const f=vt(right), L=[]; for(let m=0;m<(1<<n);m++){ const mem=[0,1,2].slice(0,n).map(i=>!!(m&(1<<i))); if(f(mem)) L.push(mem.map((x,i)=>(x?'in ':'not in ')+'ABC'[i]).join(' and ')); } return L.join('; or ')+'.'; })()+' That is '+right+', by merge-membership: ∪ is or, ∩ is and, ∖ is and not.'}); }});
+
+function treesvg(M,path){ const W=320, H=200, d=M.length, o=['<svg class="rgfig" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="a keep-or-drop tree" xmlns="http://www.w3.org/2000/svg">'];
+  const node=(lv,i)=>[W*(i+0.5)/(1<<lv), 18+lv*(H-50)/d];
+  for(let lv=0;lv<d;lv++) for(let i=0;i<(1<<lv);i++){ const [x,y]=node(lv,i); [0,1].forEach(b=>{ const [x2,y2]=node(lv+1,2*i+b), on=!!path&&(lv===0?0:parseInt(path.slice(0,lv).join(''),2))===i&&path[lv]===b;
+      o.push('<line class="'+(on?'rg-cv':'rg-axis')+'" x1="'+x+'" y1="'+y+'" x2="'+x2+'" y2="'+y2+'"/>'); if(lv===0||d<3) o.push('<text class="rg-lab" x="'+((x+x2)/2+(b?7:-7))+'" y="'+((y+y2)/2)+'" text-anchor="'+(b?'start':'end')+'">'+(b?'drop ':'keep ')+M[lv]+'</text>'); }); }
+  const [rx,ry]=node(0,0); o.push('<circle class="rg-dot" cx="'+rx+'" cy="'+ry+'" r="3"/><text class="rg-lab" x="'+(rx+8)+'" y="'+(ry+3)+'">{'+M.join(', ')+'}</text>');
+  if(d>=3) for(let lv=1;lv<d;lv++) o.push('<text class="rg-lab" x="4" y="'+(18+(lv+0.5)*(H-50)/d)+'">'+M[lv]+'</text>');
+  for(let i=0;i<(1<<d);i++){ const [x,y]=node(d,i), bits=i.toString(2).padStart(d,'0'), mk=path&&bits===path.join('');
+    o.push('<circle class="rg-dot'+(mk?'':' rg-open')+'" cx="'+x+'" cy="'+y+'" r="'+(mk?5:3)+'"/>'); if(mk) o.push('<text class="rg-tag" x="'+x+'" y="'+(y+20)+'" text-anchor="middle">?</text>'); }
+  o.push('</svg>'); return o.join(''); }
+K({id:'keepdrop',step:'2g',title:'a leaf of the keep-or-drop tree',make(){
+  const M=sh(['a','b','c','d']).slice(0,3).sort(), path=[0,1,2].map(()=>rn(2)), S=a=>{ const m=M.filter((_,i)=>!a[i]); return m.length?'{'+m.join(', ')+'}':'∅'; };
+  const right=S(path), flip=S(path.map(b=>1-b)), nb=S([path[0],path[1],1-path[2]]), rev=S(path.slice().reverse());
+  const ws=uniq(right,[flip,nb,rev,S([1-path[0],path[1],path[2]])]).slice(0,3); if(ws.length<3) return null;
+  return card(this,{ix:M.join('')+';'+path.join(''), fig:treesvg(M,path), ask:'The tree lists the subsets of {'+M.join(', ')+'}: left keeps the member named at that level, right drops it. Which subset sits at the leaf marked ?', right, opts:sh([right,...ws]),
+    why:'The path to the leaf '+path.map((b,i)=>(b?'drops ':'keeps ')+M[i]).join(', then ')+'. What is kept is '+right+'. Every way of deciding is a subset (keep or drop), so the 8 leaves are the 8 subsets.'}); }});
+
+function deal(open,used){ const ks=KINDS.filter(k=>open(k)); for(let t=0;t<40&&ks.length;t++){ const k=pk(ks); let c=null; try{ c=k.make(); }catch(e){ c=null; } if(c&&!(used&&used[c.index])&&c.opts.length===4&&new Set(c.opts).size===4&&c.opts.filter(o=>o===c.right).length===1) return c; } return null; }
+(typeof window!=='undefined'?window:globalThis).LadderReadGraph={KINDS,deal,svg,ttsvg,tp,tv,col,ROWS,card,frac,dec,sg,uniq,K};
+})();
+
+/* ===== Read Graph, seed.link (Andrew 2026-11-14 12:35Z: "The geometry, trig, and calculus particularly take to the seed.link formula well";
+   "Truth tables can have a lot of ways to be expressed"). A seed is the thing drawn (a function, a figure, a statement); links act on it
+   (slide, flip, pull; slope; area; turn) and the card asks for a reading of what comes out. The address is seed.link.bank:
+   g:<seed>[params] . <link ids> . –. Loaded after rgraph.js. ===== */
+(function(){
+const G=(typeof window!=='undefined'?window:globalThis).LadderReadGraph, {svg,ttsvg,tp,tv,col,ROWS,frac,dec,sg,uniq}=G;
+const R=Math.random, rn=n=>Math.floor(R()*n), pk=a=>a[rn(a.length)], sh=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=rn(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const ri=(a,b)=>a+rn(b-a+1), M='−';
+const KINDS=G.KINDS; { const i=KINDS.findIndex(k=>k.id==='slide'); if(i>=0) KINDS.splice(i,1); } /* 'moved' takes the slide card's place */
+const card=(k,o)=>Object.assign({index:'g:'+o.seed+'['+o.ix+']'+(o.links&&o.links.length?'.'+o.links.join('+'):''), a3:['g.'+o.seed+'['+o.ix+']',(o.links&&o.links.length?o.links.join('+'):k.step),'–'], step:k.step, steps:k.steps||[k.step], lines:[], kind:'graph'},o);
+const half=v=>v===0.5?'½':v===-0.5?M+'½':sg(v);
+const same=(f,g,from,to)=>{ for(let i=0;i<=40;i++){ const x=from+(to-from)*i/40, a=f(x), b=g(x); if(isFinite(a)!==isFinite(b)) return false; if(isFinite(a)&&Math.abs(a-b)>1e-6) return false; } return true; };
+
+/* ---------- function seeds: each has a key point that the links carry ---------- */
+const SEEDF=[
+ {id:'sq',step:'9e',name:'y = x²',f:x=>x*x,key:[0,0],t:u=>u==='x'?'x²':'('+u+')²',keyname:'its lowest point'},
+ {id:'abs',step:'8h',name:'y = |x|',f:x=>Math.abs(x),key:[0,0],t:u=>'|'+u+'|',keyname:'its corner'},
+ {id:'root',step:'9d',name:'y = √x',f:x=>x>=0?Math.sqrt(x):NaN,key:[0,0],t:u=>u==='x'?'√x':'√('+u+')',keyname:'its starting point'},
+ {id:'cube',step:'9e',name:'y = x³',f:x=>x*x*x,key:[0,0],t:u=>u==='x'?'x³':'('+u+')³',keyname:'the point where it levels'},
+ {id:'two',step:'17f',name:'y = 2ˣ',f:x=>Math.pow(2,x),key:[0,1],t:u=>'2^('+u+')',keyname:'the point (0, 1)'}];
+/* links act on the picture: a point (x, y) goes to (a x + b, c y + d) */
+const LK={
+ slide:{step:'20i',cite:'graph-slide',make:()=>{ const h=pk([-3,-2,-1,1,2,3]), k=pk([-2,-1,0,1,2]); return {id:'slide('+h+','+k+')',h,k,
+   act:T=>({a:T.a,b:T.b+h,c:T.c,d:T.d+k}), say:'slid '+Math.abs(h)+(h>0?' right':' left')+(k?' and '+Math.abs(k)+(k>0?' up':' down'):'')}; }},
+ floor:{step:'20i',cite:'graph-flip',make:()=>({id:'flipx',act:T=>({a:T.a,b:T.b,c:-T.c,d:-T.d}),say:'flipped over the x-axis'})},
+ upright:{step:'20i',cite:'graph-flip',make:()=>({id:'flipy',act:T=>({a:-T.a,b:-T.b,c:T.c,d:T.d}),say:'flipped over the y-axis'})},
+ pullup:{step:'20i',cite:'graph-pull',make:()=>{ const m=pk([2,0.5]); return {id:'pullup('+m+')',act:T=>({a:T.a,b:T.b,c:T.c*m,d:T.d*m}),say:'pulled upright by '+half(m)}; }},
+ pullside:{step:'20i',cite:'graph-pull',make:()=>{ const m=pk([2,0.5]); return {id:'pullside('+m+')',act:T=>({a:T.a*m,b:T.b*m,c:T.c,d:T.d}),say:'pulled sideways by '+half(m)}; }}};
+const ID={a:1,b:0,c:1,d:0};
+const gOf=(S,T)=>x=>T.c*S.f((x-T.b)/T.a)+T.d;
+function inner(T){ const {a,b}=T, bb=v=>v>0?' − '+v:v<0?' + '+(-v):'';
+  if(a===1) return 'x'+bb(b); if(a===-1) return b?sg(b)+' − x':M+'x'; if(a===2) return b?'(x'+bb(b)+')/2':'x/2'; if(a===-2) return b?'('+sg(b)+' − x)/2':M+'x/2';
+  if(a===0.5) return b?'2(x'+bb(b)+')':'2x'; if(a===-0.5) return b?'2('+sg(b)+' − x)':M+'2x'; return '(x − '+b+')/'+a; }
+function formula(S,T){ const u=inner(T), body=S.t(u), c=T.c, d=T.d;
+  const pre=c===1?'':c===-1?M:c===2?'2':c===-2?M+'2':c===0.5?'½':c===-0.5?M+'½':sg(c)+'·';
+  const hv=v=>Number.isInteger(v)?String(v):frac(Math.round(v*2),2).replace('1/2','½');
+  const dd=d>0?' + '+hv(d):d<0?' − '+hv(-d):''; return 'y = '+pre+(/[0-9½]$/.test(pre)&&/^[0-9½]/.test(body)?'·':'')+body+dd; }
+const keyAt=(S,T)=>[T.a*S.key[0]+T.b,T.c*S.key[1]+T.d];
+const P=(p)=>'('+dec(p[0])+', '+dec(p[1])+')';
+function chain(n){ const names=Object.keys(LK), out=[]; let T=ID; for(let i=0;i<n;i++){ const nm=i===0?'slide':pk(names); const L=LK[nm].make(); L.kind=nm; out.push(L); T=L.act(T); } return {L:out,T}; }
+const view=(S,T)=>{ const [kx,ky]=keyAt(S,T); return Math.abs(kx)<=4&&Math.abs(ky)<=4; };
+
+/* the formula of a moved curve: seed drawn solid, the moved curve dashed */
+G.K({id:'moved',step:'20i',title:'the equation of a moved curve',make(){
+  for(let t=0;t<40;t++){ const S=pk(SEEDF), n=ri(1,3), C=chain(n); if(!view(S,C.T)) continue; const T=C.T, g=gOf(S,T), right=formula(S,T);
+    const wrongT=[{a:T.a,b:-T.b,c:T.c,d:T.d},{a:T.a,b:T.b,c:T.c,d:-T.d},{a:1/T.a,b:T.b,c:T.c,d:T.d},{a:T.a,b:T.b,c:1/T.c,d:T.d},{a:-T.a,b:-T.b,c:-T.c,d:T.d},{a:T.a,b:T.d,c:T.c,d:T.b}];
+    const ws=[]; sh(wrongT).forEach(W=>{ if(ws.length>=3) return; const gw=gOf(S,W); if(same(g,gw,-4.5,4.5)||ws.some(x=>same(gOf(S,x),gw,-4.5,4.5))) return; ws.push(W); });
+    if(ws.length<3) continue; const opts=[right,...ws.map(W=>formula(S,W))]; if(new Set(opts).size<4) continue;
+    return card(this,{seed:S.id,ix:S.id,links:C.L.map(l=>l.id), fig:svg({x:[-5.5,5.5],y:[-5.5,5.5],xl:'x',yl:'y',parts:[{t:'fn',f:S.f,from:-5.5,to:5.5,n:160},{t:'fn',f:g,from:-5.5,to:5.5,n:160,dash:1,k:'b'},{t:'dots',pts:[S.key,keyAt(S,T)]}],alt:'a curve and a moved copy'}),
+      ask:'The solid curve is '+S.name+'. The dashed curve is the same curve moved; the dots mark '+S.keyname+' before and after. Which equation is the dashed curve?', right, opts:sh(opts),
+      steps:[...new Set([S.step,'20i'])],
+      why:'Read it in the order the curve was moved: '+C.L.map(l=>l.say).join(', then ')+'. Each move puts its undo inside the equation (undo-in-the-equation): a slide right by h writes x − h, a sideways pull by m writes x/m, and moves up or upright pulls act outside. So the dashed curve is '+right+'.'}); }
+  return null; }});
+
+/* where the key point lands: the seed drawn, the links told in words */
+G.K({id:'landing',step:'20i',title:'where a point lands after the moves',make(){
+  for(let t=0;t<40;t++){ const S=pk(SEEDF), C=chain(ri(2,3)); if(!view(S,C.T)) continue; const k1=keyAt(S,C.T), right=P(k1);
+    let Tr=ID; C.L.slice().reverse().forEach(L=>{ Tr=L.act(Tr); }); const rev=P(keyAt(S,Tr));
+    const ws=uniq(right,[rev,P([k1[1],k1[0]]),P([-k1[0],k1[1]]),P([k1[0],-k1[1]]),P([k1[0]+1,k1[1]])]).slice(0,3); if(ws.length<3) continue;
+    return card(this,{seed:S.id,ix:S.id,links:C.L.map(l=>l.id), fig:svg({x:[-5.5,5.5],y:[-5.5,5.5],xl:'x',yl:'y',parts:[{t:'fn',f:S.f,from:-5.5,to:5.5,n:160},{t:'dots',pts:[S.key]}],alt:'a curve with one marked point'}),
+      ask:'The curve '+S.name+' is '+C.L.map(l=>l.say).join(', then ')+'. Where does the marked point '+P(S.key)+' land?', right, opts:sh([right,...ws]), steps:[...new Set([S.step,'20i'])],
+      why:'Carry the point move by move: '+(()=>{ let T=ID; const st=[]; C.L.forEach(L=>{ T=L.act(T); st.push(P(keyAt(S,T))); }); return P(S.key)+' → '+st.join(' → '); })()+'. The order matters: done the other way round the point lands at '+rev+(rev===right?' as well, here':'')+'.'}); }
+  return null; }});
+
+/* ---------- slope pictures: f drawn, which picture is f′ (13a power technique, 13d) ---------- */
+const POLY=[ /* [coefficients low to high] chosen so f and f′ both fit the window */
+ [0,0,0.5],[1,-1,0.5],[-2,0,0.5],[0,2,-0.5],[0,-1.5,0,1/6],[1,1.5,0,-1/6],[0,0,0,1/6],[0,-2,0,1/6],[0,0,1,-1/6],[2,0,-1,1/6],[0,1,0,0],[0,0,-0.25]];
+const pv=(c,x)=>c.reduce((s,a,i)=>s+a*Math.pow(x,i),0), pd=c=>c.slice(1).map((a,i)=>a*(i+1));
+G.K({id:'slopepic',step:'13d',steps:['13a','13d'],title:'which picture is the slope',make(){
+  const i=rn(POLY.length), c=POLY[i], d=pd(c); if(d.every(x=>x===0)) return null;
+  const f=x=>pv(c,x), fp=x=>pv(d,x), w=[['the slope f′',fp],['f itself',f],['the slope turned over, −f′',x=>-fp(x)],['the slope slid, f′(x − 1)',x=>fp(x-1)]];
+  const ok=w.filter((p,j)=>j===0||!w.slice(0,j).some(q=>same(q[1],p[1],-4,4))); if(ok.length<4) return null;
+  const mini=g=>svg({x:[-4.5,4.5],y:[-4.5,4.5],sx:1,lx:2,ly:2,parts:[{t:'fn',f:g,from:-4.5,to:4.5,n:120}],alt:'a curve'});
+  const html={}; ok.forEach(p=>{ html[p[0]]=mini(p[1]); });
+  return card(this,{seed:'poly',ix:String(i),links:['13d.slope'], fig:svg({x:[-4.5,4.5],y:[-4.5,4.5],xl:'x',yl:'y',parts:[{t:'fn',f,from:-4.5,to:4.5,n:120}],alt:'the graph of f'}),
+    ask:'The graph of f is drawn. Which picture is the graph of its slope f′?', right:'the slope f′', opts:sh(ok.map(p=>p[0])), html,
+    why:'Where f climbs its slope is above the axis, where f falls it is below, and at each top or bottom it is 0. The power technique gives the formula, each xⁿ becoming n xⁿ⁻¹.'}); }});
+
+/* ---------- the first test read off a slope graph (14f) ---------- */
+G.K({id:'toptest',step:'14f',steps:['14a','14f'],title:'a top read off the slope graph',make(){
+  for(let t=0;t<40;t++){ const zs=sh([-3,-2,-1,0,1,2,3]).slice(0,ri(2,3)).sort((a,b)=>a-b); const s=pk([1,-1]), k=s*(zs.length===3?0.25:0.5);
+    const fp=x=>k*zs.reduce((p,z)=>p*(x-z),1); const tops=zs.filter(z=>fp(z-0.1)>0&&fp(z+0.1)<0), bots=zs.filter(z=>fp(z-0.1)<0&&fp(z+0.1)>0); if(tops.length!==1) continue;
+    let mx=-9,mxx=0; for(let x=-4;x<=4;x+=0.5){ if(fp(x)>mx){ mx=fp(x); mxx=x; } } if(mx>4.5) continue;
+    const right='x = '+sg(tops[0]), ws=uniq(right,[...bots.map(z=>'x = '+sg(z)),'x = '+dec(mxx),'x = '+sg(tops[0]+1),'x = '+sg(-tops[0])]).slice(0,3); if(ws.length<3) continue;
+    return card(this,{seed:'poly',ix:zs.join(',')+';'+s,links:['14f.first'], fig:svg({x:[-4.5,4.5],y:[-4.5,4.5],xl:'x',yl:'f′',parts:[{t:'fn',f:fp,from:-4.5,to:4.5,n:140}],alt:'the graph of a slope'}),
+      ask:'This is the graph of the slope f′, not of f. At which input does f have a top?', right, opts:sh([right,...ws]),
+      why:'f has a top where its slope changes from above 0 to below 0 (first-test): at '+sg(tops[0])+'.'+(bots.length?' At '+bots.map(sg).join(' and ')+' the slope goes from below to above, a bottom.':'')+' The top of the f′ curve is where f is steepest, not a top of f.'}); }
+  return null; }});
+
+/* ---------- the area function (16a, 16b), with area below the axis counted as less ---------- */
+G.K({id:'areafn',step:'16a',steps:['16a','16b'],title:'the area function',make(){
+  for(let t=0;t<40;t++){ let y=ri(-2,3); const pts=[[0,y]]; for(let x=1;x<=6;x++){ y=Math.max(-3,Math.min(3,y+pk([-2,-1,0,1,2]))); pts.push([x,y]); }
+    if(!pts.some(p=>p[1]<0)||!pts.some(p=>p[1]>0)) continue; const c=ri(3,6);
+    let A=0,U=0; for(let i=0;i<c;i++){ const a=pts[i][1], b=pts[i+1][1]; A+=(a+b)/2; U+=(a*b>=0)?Math.abs(a+b)/2:(a*a+b*b)/(2*Math.abs(a-b)); }
+    const right=dec(A), ws=uniq(right,[dec(U),sg(pts[c][1]),dec(-A),dec(A+pts[c][1])]).slice(0,3); if(ws.length<3) continue;
+    return card(this,{seed:'zig',ix:pts.map(p=>p[1]).join(','),links:['16a.area'], fig:svg({x:[0,6.4],y:[-3.5,3.5],xl:'x',yl:'y',parts:[{t:'line',pts}],alt:'a broken line, the graph of f'}),
+      ask:'A(x) is the area under f from 0 to x, with area below the x-axis counted as less. What is A('+c+')?', right, opts:sh([right,...ws]),
+      why:'Strip by strip, each one wide with a straight top: '+[...Array(c)].map((_,i)=>'('+sg(pts[i][1])+' + '+sg(pts[i+1][1])+')/2').join(' + ')+' = '+right+'. Counting the part below the axis as more gives '+dec(U)+', and f('+c+') is the height, which is A’s slope there (its-slope-is-the-height).'}); }
+  return null; }});
+
+/* ---------- the unit circle (21b, 21c) ---------- */
+const ANG=[[1,6],[1,4],[1,3],[2,3],[3,4],[5,6],[7,6],[5,4],[4,3],[5,3],[7,4],[11,6]];
+const CS={6:['√3/2','1/2'],4:['√2/2','√2/2'],3:['1/2','√3/2']};
+function circsvg(th){ const W=240,H=240,cx=120,cy=120,r=90, x=cx+r*Math.cos(th), y=cy-r*Math.sin(th);
+  const lg=th>Math.PI?1:0, ax=cx+28*Math.cos(th), ay=cy-28*Math.sin(th);
+  return '<svg class="rgfig rgcirc" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="the circle of radius 1 with one point marked" xmlns="http://www.w3.org/2000/svg">'
+   +'<line class="rg-axis" x1="10" y1="'+cy+'" x2="'+(W-10)+'" y2="'+cy+'"/><line class="rg-axis" x1="'+cx+'" y1="10" x2="'+cx+'" y2="'+(H-10)+'"/>'
+   +'<circle class="rg-set" cx="'+cx+'" cy="'+cy+'" r="'+r+'"/><line class="rg-cv rg-b" x1="'+cx+'" y1="'+cy+'" x2="'+x.toFixed(1)+'" y2="'+y.toFixed(1)+'"/>'
+   +'<path class="rg-cv" d="M'+(cx+28)+' '+cy+' A28 28 0 '+lg+' 0 '+ax.toFixed(1)+' '+ay.toFixed(1)+'"/>'
+   +'<line class="rg-grid" x1="'+x.toFixed(1)+'" y1="'+y.toFixed(1)+'" x2="'+x.toFixed(1)+'" y2="'+cy+'" stroke-dasharray="4 3"/>'
+   +'<circle class="rg-dot" cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="4"/><text class="rg-lab" x="'+(cx+r+4)+'" y="'+(cy-4)+'">1</text><text class="rg-lab" x="'+(cx+4)+'" y="'+(cy-r-4)+'">1</text></svg>'; }
+G.K({id:'circle',step:'21c',steps:['21b','21c'],title:'cos and sin on the circle',make(){
+  const [p,q]=pk(ANG), th=Math.PI*p/q, den=q, [cv,sv]=CS[den], cs=Math.cos(th), sn=Math.sin(th), what=pk(['cos','sin']);
+  const sgn=(v,s)=>(s<0?M:'')+v, cosT=sgn(cv,cs), sinT=sgn(sv,sn), right=what==='cos'?cosT:sinT;
+  const ang=(p===1?'':p)+'π/'+q, other=what==='cos'?sinT:cosT;
+  const ws=uniq(right,[other,sgn(what==='cos'?cv:sv,what==='cos'?-cs:-sn),sgn(what==='cos'?sv:cv,what==='cos'?-sn:-cs),sgn(what==='cos'?sv:cv,1),'1/2','√3/2',M+'1/2']).filter(w=>w!==right).slice(0,3);
+  return card(this,{seed:'turn',ix:p+'/'+q+';'+what,links:['21c.'+what], fig:circsvg(th),
+    ask:'The point on the circle of radius 1 is at the angle θ = '+ang+', measured from (1, 0). What is '+what+' θ?', right, opts:sh([right,...ws]),
+    why:'cos θ is the point’s across and sin θ its up. At '+ang+' the point is ('+cosT+', '+sinT+'). Its quarter fixes the signs (quarters technique), and the size comes from the angle’s reference angle π/'+q+'.'}); }});
+
+/* ---------- a wave with four numbers (21g, 20i): midline, height, period, shift ---------- */
+G.K({id:'wave4',step:'21g',steps:['20i','21g'],title:'the numbers of a moved wave',make(){
+  const Pd=pk([4,6,8]), A=pk([1,2,3]), k=pk([-1,0,1,2]), h=ri(1,Pd/2-1), what=pk(['mid','height','period','shift']);
+  if(Math.abs(k)+A>4) return null; const f=x=>k+A*Math.sin(2*Math.PI*(x-h)/Pd);
+  const val={mid:sg(k),height:sg(A),period:sg(Pd),shift:sg(h)}[what];
+  const ws={mid:[k+A,k-A,A,0],height:[2*A,A+k,k||A+1,A+1],period:[Pd/2,2*Pd,h,Pd+h],shift:[-h,Pd-h,h+Pd/4,Pd/2]}[what].map(sg);
+  const W=uniq(val,ws).slice(0,3); if(W.length<3) return null;
+  const ask={mid:'What is k, the height of its middle line?',height:'What is A, how far it reaches above its middle line?',period:'What is P, its period?',shift:'What is h, the slide to the right? (0 < h < P/2)'}[what];
+  return card(this,{seed:'sine',ix:[Pd,A,k,h,what].join(','),links:['20i.slide','21g.'+what], fig:svg({x:[0,2*Pd],y:[-4.5,4.5],sx:1,lx:Pd/2,ly:1,xl:'x',yl:'y',parts:[{t:'fn',f,from:0,to:2*Pd,n:220}],alt:'a wave'}),
+    ask:'The wave y = k + A sin(2π(x − h)/P) is drawn. '+ask, right:val, opts:sh([val,...W]),
+    why:'Its middle line is y = '+k+', it reaches '+A+' above and below that, it repeats every '+Pd+', and it crosses its middle line heading up at x = '+h+'. The slide sits inside with a minus (graph-slide), and the period is crest to crest, not zero to zero.'}); }});
+
+/* ---------- a triangle on the grid (18g triangle-area) ---------- */
+G.K({id:'triarea',step:'18g',title:'the area of a triangle on the grid',make(){
+  for(let t=0;t<40;t++){ const A=[ri(-4,0),ri(-4,0)], B=[ri(1,4),ri(-4,1)], C=[ri(-3,3),ri(1,4)];
+    const u=[B[0]-A[0],B[1]-A[1]], v=[C[0]-A[0],C[1]-A[1]], cr=u[0]*v[1]-u[1]*v[0]; if(Math.abs(cr)<4) continue;
+    const right=dec(Math.abs(cr)/2), bx=Math.max(A[0],B[0],C[0])-Math.min(A[0],B[0],C[0]), by=Math.max(A[1],B[1],C[1])-Math.min(A[1],B[1],C[1]);
+    const ws=uniq(right,[String(Math.abs(cr)),dec(bx*by/2),String(bx*by),dec(Math.abs(u[0]*v[1]+u[1]*v[0])/2)]).slice(0,3); if(ws.length<3) continue;
+    const Pp=p=>'('+sg(p[0])+', '+sg(p[1])+')';
+    return card(this,{seed:'tri',ix:[A,B,C].map(p=>p.join(',')).join(';'),links:['18g.area'], fig:svg({x:[-4.5,4.5],y:[-4.5,4.5],xl:'x',yl:'y',parts:[{t:'line',pts:[A,B,C,A]},{t:'dots',pts:[A,B,C]}],alt:'a triangle on the grid'}),
+      ask:'What is the area of the triangle?', right, opts:sh([right,...ws]),
+      why:'Corners '+Pp(A)+', '+Pp(B)+', '+Pp(C)+'. With u = B − A = '+Pp(u)+' and v = C − A = '+Pp(v)+', the triangle-area technique gives ½|'+sg(u[0])+'·'+sg(v[1])+' − ('+sg(u[1])+')·'+sg(v[0])+'| = ½·'+Math.abs(cr)+' = '+right+'. The box around it, '+bx+' by '+by+', is not the triangle.'}); }
+  return null; }});
+
+/* ---------- the equation of a line through two grid points (9e two-points-one-line, 18c) ---------- */
+G.K({id:'lineeq',step:'9e',title:'the equation of a line',make(){
+  for(let t=0;t<40;t++){ const x1=ri(-4,-1), x2=ri(1,4), y1=ri(-3,3), y2=ri(-3,3); if(y1===y2) continue; const dx=x2-x1, dy=y2-y1, m=dy/dx, b=y1-m*x1;
+    const bq=y1*dx-dy*x1, F=(p,q)=>{ const ms=frac(p,q); return ms; };
+    const eq=(p,q,bn,bd)=>{ const ms=F(p,q), bs=frac(bn,bd); return 'y = '+(ms==='1'?'':ms===M+'1'?M:ms)+'x'+(bs==='0'?'':bs[0]===M?' − '+bs.slice(1):' + '+bs); };
+    const right=eq(dy,dx,bq,dx), ws=uniq(right,[eq(dx,dy,bq,dx),eq(dy,dx,-bq,dx),eq(-dy,dx,bq,dx),eq(dy,dx,y1,1)]).slice(0,3); if(ws.length<3) continue;
+    return card(this,{seed:'twopoints',ix:[x1,y1,x2,y2].join(','),links:['9e.line'], fig:svg({x:[-4.5,4.5],y:[-4.5,4.5],xl:'x',yl:'y',parts:[{t:'fn',f:x=>m*x+b,from:-4.5,to:4.5},{t:'dots',pts:[[x1,y1],[x2,y2]]}],alt:'a line through two points'}),
+      ask:'Which equation is the line through the two marked points?', right, opts:sh([right,...ws]),
+      why:'Exactly one line holds both points (two-points-one-line). Its step is '+sg(dy)+'/'+dx+' = '+frac(dy,dx)+', and putting in ('+sg(x1)+', '+sg(y1)+') gives b = '+frac(bq,dx)+'.'}); }
+  return null; }});
+
+/* ---------- more ways to show a truth table (1e) ---------- */
+const TT=['P ⇒ Q','Q ⇒ P','P ∧ ¬Q','¬P ∨ Q','P ⇔ Q','¬(P ∧ Q)','¬(P ∨ Q)','P ∨ ¬Q','¬P ⇒ Q','¬(P ⇒ Q)','(P ∧ Q) ⇒ R','P ⇒ (Q ∨ R)','(P ∨ Q) ∧ ¬R','(P ⇔ Q) ∧ R','¬P ∨ (Q ∧ R)'];
+G.K({id:'blanks',step:'1e',title:'two blank cells in a column',make(){
+  const k=rn(TT.length), s=TT[k], L=/R/.test(s)?['P','Q','R']:['P','Q'], c=col(tp(s),L), rows=ROWS(L), n=c.length;
+  const [i,j]=sh([...Array(n).keys()]).slice(0,2).sort((a,b)=>a-b); const cells=rows.map((e,r)=>[...L.map(v=>e[v]?'T':'F'),r===i||r===j?'?':String(c[r])]);
+  const right=c[i]+', '+c[j], all=['1, 1','1, 0','0, 1','0, 0'];
+  return card(this,{seed:'tt',ix:k+';'+i+','+j,links:['1e.rows'], fig:ttsvg(L,s,cells), ask:'What goes in the two blank cells of the column, top to bottom?', right, opts:sh(all),
+    why:'Row '+(i+1)+' gives '+c[i]+' and row '+(j+1)+' gives '+c[j]+': work each row from its parts, the machine of the main joining word last.'}); }});
+G.K({id:'onerow',step:'1e',title:'the rows that give 1',make(){
+  const k=rn(TT.length), s=TT[k], L=/R/.test(s)?['P','Q','R']:['P','Q'], c=col(tp(s),L), rows=ROWS(L);
+  const nm=e=>L.map(v=>e[v]?'T':'F').join(''), ones=rows.filter((e,i)=>c[i]).map(nm), zeros=rows.filter((e,i)=>!c[i]).map(nm);
+  if(!ones.length||ones.length===rows.length||ones.length>4) return null;
+  const say=a=>a.join(', '), right=say(ones), flip=say(zeros);
+  const near=rows.map((e,i)=>{ const cc=c.slice(); cc[i]=1-cc[i]; return say(rows.filter((_,j)=>cc[j]).map(nm)); }).filter(x=>x&&x!==right);
+  const ws=uniq(right,[flip,...sh(near)]).filter(x=>x).slice(0,3); if(ws.length<3) return null;
+  const cells=rows.map(e=>[...L.map(v=>e[v]?'T':'F'),'']);
+  return card(this,{seed:'tt',ix:String(k),links:['1e.ones'], fig:ttsvg(L,s,cells), ask:'Which rows give '+s+' the mark 1? (Rows are named by their marks, '+L.join('')+'.)', right, opts:sh([right,...ws]),
+    why:s+' gives 1 in the rows '+right+' and 0 in '+flip+'. From a column to a statement and back: each row is worked from its parts.'}); }});
+
+/* ---------- switches in a circuit (4·comp): in a row is And, side by side is Or ---------- */
+function circuit(spec){ /* spec: ['s',name] | ['ser',a,b] | ['par',a,b] ; draws left to right */
+  const W=300, H=150, out=[]; let id=0;
+  const size=n=>n[0]==='s'?[60,30]:n[0]==='ser'?(()=>{ const a=size(n[1]),b=size(n[2]); return [a[0]+b[0],Math.max(a[1],b[1])]; })():(()=>{ const a=size(n[1]),b=size(n[2]); return [Math.max(a[0],b[0])+20,a[1]+b[1]+10]; })();
+  function draw(n,x,y,w){ /* y is the wire's line */
+    if(n[0]==='s'){ out.push('<line class="rg-axis" x1="'+x+'" y1="'+y+'" x2="'+(x+15)+'" y2="'+y+'"/><line class="rg-cv" x1="'+(x+15)+'" y1="'+y+'" x2="'+(x+42)+'" y2="'+(y-12)+'"/><circle class="rg-dot" cx="'+(x+15)+'" cy="'+y+'" r="2.5"/><circle class="rg-open" cx="'+(x+45)+'" cy="'+y+'" r="2.5"/><line class="rg-axis" x1="'+(x+45)+'" y1="'+y+'" x2="'+(x+w)+'" y2="'+y+'"/><text class="rg-tag" x="'+(x+30)+'" y="'+(y+18)+'" text-anchor="middle">'+n[1]+'</text>'); return; }
+    if(n[0]==='ser'){ const a=size(n[1]); draw(n[1],x,y,a[0]); draw(n[2],x+a[0],y,w-a[0]); return; }
+    const a=size(n[1]), b=size(n[2]), ya=y-(b[1]+10)/2, yb=y+(a[1]+10)/2;
+    out.push('<line class="rg-axis" x1="'+x+'" y1="'+ya+'" x2="'+x+'" y2="'+yb+'"/><line class="rg-axis" x1="'+(x+w)+'" y1="'+ya+'" x2="'+(x+w)+'" y2="'+yb+'"/>');
+    draw(n[1],x+10,ya,w-20); draw(n[2],x+10,yb,w-20);
+    out.push('<line class="rg-axis" x1="'+x+'" y1="'+ya+'" x2="'+(x+10)+'" y2="'+ya+'"/><line class="rg-axis" x1="'+x+'" y1="'+yb+'" x2="'+(x+10)+'" y2="'+yb+'"/><line class="rg-axis" x1="'+(x+w-10)+'" y1="'+ya+'" x2="'+(x+w)+'" y2="'+ya+'"/><line class="rg-axis" x1="'+(x+w-10)+'" y1="'+yb+'" x2="'+(x+w)+'" y2="'+yb+'"/>'); }
+  const s=size(spec), w=Math.max(s[0],120), x0=(W-w-60)/2+20;
+  out.push('<line class="rg-axis" x1="10" y1="75" x2="'+x0+'" y2="75"/>'); draw(spec,x0,75,w);
+  out.push('<line class="rg-axis" x1="'+(x0+w)+'" y1="75" x2="'+(W-40)+'" y2="75"/><circle class="rg-set" cx="'+(W-28)+'" cy="75" r="12"/><text class="rg-lab" x="'+(W-28)+'" y="99" text-anchor="middle">lamp</text><text class="rg-lab" x="10" y="68">power</text>');
+  return '<svg class="rgfig" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="switches wired to a lamp" xmlns="http://www.w3.org/2000/svg">'+out.join('')+'</svg>'; }
+const ctext=n=>n[0]==='s'?n[1]:'('+ctext(n[1])+(n[0]==='ser'?' ∧ ':' ∨ ')+ctext(n[2])+')';
+const strip=s=>s.replace(/^\((.*)\)$/,'$1');
+G.K({id:'switches',step:'4·comp',title:'which statement a circuit carries',make(){
+  const L=sh(['P','Q','R']), S=n=>['s',n];
+  const shapes=[['ser',S(L[0]),S(L[1])],['par',S(L[0]),S(L[1])],['ser',S(L[0]),['par',S(L[1]),S(L[2])]],['par',S(L[0]),['ser',S(L[1]),S(L[2])]],['ser',['par',S(L[0]),S(L[1])],S(L[2])],['par',['ser',S(L[0]),S(L[1])],S(L[2])]];
+  const k=rn(shapes.length), sp=shapes[k], right=strip(ctext(sp));
+  const swap=n=>n[0]==='s'?n:[n[0]==='ser'?'par':'ser',swap(n[1]),swap(n[2])], half=n=>n[0]==='s'?n:[n[0]==='ser'?'par':'ser',n[1],n[2]], inner=n=>n[0]==='s'?n:[n[0],n[1],swap(n[2])];
+  const Ls=[...new Set(right.match(/[PQR]/g))], key=t=>col(tp(t.replace(/[()]/g,m=>m)),Ls).join('');
+  const cand=[swap(sp),half(sp),inner(sp),['ser',sp[1],sp[2]],['par',sp[1],sp[2]],['ser',sp[2],sp[1]]].map(n=>strip(ctext(n)));
+  const rk=(()=>{ try{ return key(right); }catch(e){ return null; } })(); const ws=[];
+  cand.forEach(c=>{ if(ws.length>=3||c===right||ws.includes(c)) return; try{ if(key(c)===rk||ws.some(w=>key(w)===key(c))) return; }catch(e){ return; } ws.push(c); });
+  if(Ls.length===2) [L[0]+' ⇒ '+L[1],L[0]+' ⇔ '+L[1],'¬('+L[0]+' ∧ '+L[1]+')'].forEach(c=>{ if(ws.length<3&&key(c)!==rk&&!ws.some(w=>key(w)===key(c))) ws.push(c); });
+  if(ws.length<3) return null;
+  return card(this,{seed:'circuit',ix:k+';'+L.join(''),links:['4·comp.wire'], fig:circuit(sp), ask:'Each switch is closed when its statement is so. When does the lamp light?', right, opts:sh([right,...ws]),
+    why:'Switches one after another pass power only when both are closed: an and. Switches side by side pass it when either is: an or. Read from the outside in: '+right+'.'}); }});
+
+/* Andrew 2026-11-14 12:37Z: truth tables also take "one line to disprove" and "which operator makes this true" */
+const ONE0=['P ⇒ Q','Q ⇒ P','P ∨ Q','¬(P ∧ Q)','¬P ∨ Q','P ∨ ¬Q','(P ∧ Q) ⇒ R','P ⇒ (Q ∨ R)','(P ∨ Q) ∨ R','¬(P ∧ Q ∧ R)','(P ⇒ Q) ∨ R','P ∨ (Q ⇒ R)'];
+G.K({id:'disprove',step:'1e',title:'one row to disprove',make(){
+  const k=rn(ONE0.length), s=ONE0[k], t=tp(s.replace('P ∧ Q ∧ R','(P ∧ Q) ∧ R')), L=/R/.test(s)?['P','Q','R']:['P','Q'], c=col(t,L), rows=ROWS(L), bad=c.indexOf(0);
+  if(c.filter(x=>!x).length!==1) return null;
+  const cells=rows.map(e=>[...L.map(v=>e[v]?'T':'F'),'']), right='row '+(bad+1), ws=sh([...Array(rows.length).keys()].filter(i=>i!==bad)).slice(0,3).map(i=>'row '+(i+1));
+  return card(this,{seed:'tt',ix:String(k),links:['1e.disprove'], fig:ttsvg(L,s,cells), ask:'Someone says '+s+' gives 1 in every row. Which one row proves them wrong?', right, opts:sh([right,...ws]),
+    why:'In row '+(bad+1)+', '+L.map(v=>v+' is '+(rows[bad][v]?'T':'F')).join(', ')+', and '+s+' gives 0. One row is enough to disprove an every-row claim; every other row gives 1. Hunt for the bad row: an ⇒ fails only where its left is T and its right is F, an ∨ only where both are F.'}); }});
+const OPS=['∧','∨','⇒','⇔'], OPN={'∧':'and','∨':'or','⇒':'if','⇔':'exactly when'};
+G.K({id:'whichop',step:'1e',title:'which joining word makes the column',make(){
+  for(let t=0;t<30;t++){ const l=pk(['P','¬P']), r=pk(['Q','¬Q']), op=pk(OPS), L=['P','Q'], c=col(tp(l+' '+op+' '+r),L);
+    const others=OPS.filter(o=>o!==op&&col(tp(l+' '+o+' '+r),L).join('')===c.join('')); if(others.length) continue;
+    const cells=ROWS(L).map((e,i)=>[e.P?'T':'F',e.Q?'T':'F',String(c[i])]);
+    return card(this,{seed:'tt',ix:l+op+r,links:['1e.op'], fig:ttsvg(L,l+' □ '+r,cells), ask:'Which joining word in the box makes the column come out as shown?', right:op, opts:sh(OPS.slice()),
+      why:'With '+op+' ('+OPN[op]+') the column is '+c.join(', ')+'. Learn each machine by the row that stands out: ∧ gives 1 only when both sides are T, ∨ gives 0 only when both are F, ⇒ gives 0 only for T then F, ⇔ gives 1 when the two sides match.'}); }
+  return null; }});
+})();
+
+/* Read Graph: a drawn card from a kind whose steps are all passed, on a rung switched on (or a stray from one switched off) */
+const rgOpen=k=>(k.steps||[k.step]).every(s=>measured(s));
+function readQ(P,used,last){ const RGX=window.LadderReadGraph; if(!RGX) return null;
+  const q=RGX.deal(k=>rgOpen(k)&&P.use({step:k.step,open:()=>true}),used); if(!q) return null;
+  return Object.assign({lead:'It is '+q.right+'. '},q); }
 /* ===== Laundry 5 (Andrew 2026-11-10 19:46Z: "Go ahead and do those floor 1 pools"; 19:49Z: "after floor 1 continue filling in pools by floor") =====
    Terms: one reader and writer for statements (¬ ∧ ∨ ⇒ ⇔ ⊤ ⊥) and for sets (∪ ∩ ∖ ∅). A rewrite technique is a pair of patterns;
    a chain is a seed rewritten link by link, each line citing its technique. A line is checked by its column: every way its letters can come out. */
@@ -25319,22 +25832,23 @@ CH.tooBig=tooBig; CH.round5=round5;
   let q=tidyDigits(old(P,used,last)); for(let k=0;k<8&&tooBig(q);k++) q=tidyDigits(old(P,used,last)); return q; }; });
 /* ===== end of chains ===== */
 
-const toggled=()=>[...LINKS,...QP,...CARDP,...OPS,...MOVES];
+for(let i=QP.length-1;i>=0;i--) if(qmode(QP[i])==='read') QP.splice(i,1); /* the Understanding pools now live in the crosswalk (rgraph) */
+const toggled=()=>[...LINKS,...QP,...OPS,...MOVES];
 function avail(mode){ const oS=SEEDS.filter(s=>s.open()), kinds=oS.map(s=>SKIND[s.id]), oO=OPS.filter(o=>o.open());
   const qp=m=>QP.some(Q=>Q.open()&&qmode(Q)===m);
   if(mode==='proof') return (oS.length>0&&LINKS.filter(l=>l.open()).length>=2)||qp('proof');
   const chainable=oS.some(s=>TERMK.includes(SKIND[s.id])&&s.id!=='1d.letters'&&LINKS.filter(l=>l.open()&&l.rule&&l.kinds.includes(SKIND[s.id])).length>=2);
   if(mode==='work') return chainable||(oO.length>0&&kinds.some(k=>['add','times','num','int'].includes(k)))||qp('work');
   if(mode==='word') return (BANK.some(b=>b.open()&&!b.kind)&&oO.some(o=>o.word)&&kinds.some(k=>['add','times','num'].includes(k)))||(BANK.some(b=>b.open()&&b.kind==='prop')&&kinds.includes('say'))||qp('word');
-  return qp('read')||CARDP.some(C=>C.open())||(oS.length>0&&LINKS.some(l=>l.open())); }
-const OPENS={proof:'0b',work:'1f',word:'1d',read:'0a'};
+  return !!(window.LadderReadGraph&&window.LadderReadGraph.KINDS.some(rgOpen)); }
+const OPENS={proof:'0b',work:'1f',word:'1d',read:'1e'};
 function modeNow(){ const m=(get('rand:mode',null)||{}).m||'proof'; /* kept as an object: the record hands a bare word back unquoted */ if(MODES.some(M=>M.id===m)&&avail(m)) return m; const f=MODES.find(M=>avail(M.id)); return f?f.id:m; }
 
 function build(mode){
   mode=mode||modeNow();
   const off=get('rand:off',{}), isOff=P=>!!off['rung:'+rungOf(P.step)];
   if(![...SEEDS,...toggled(),...BANK].some(P=>P.open())) return {closed:'The laundry opens with the crosswalk of the first step you reach, and its technique pools open as you pass measuring sticks.'};
-  if(!avail(mode)) return {closed:mode==='read'?'Understanding opens with the crosswalk of the first step you reach.':MODES.find(M=>M.id===mode).label+' opens when you pass the measuring stick of '+OPENS[mode]+'.'};
+  if(!avail(mode)) return {closed:MODES.find(M=>M.id===mode).label+' opens when you pass the measuring stick of '+OPENS[mode]+'.'};
   const used=get('rand:seen',{}), last=get('rand:last',[]), st=strayDue();
   const anyOn=toggled().some(P=>P.open()&&!isOff(P)), anyOff=toggled().some(P=>P.open()&&isOff(P));
   if(!anyOn) return {closed:'Every rung is switched off under the gear. Switch one on.'};
@@ -25374,7 +25888,7 @@ function sayAddr(a3){ const [s,l,b]=(a3||[]).map(sayPart), rows=[]; if(s) rows.p
 const PTS={read:1,proof:2,work:3,word:4};
 /* laundryscore */ /* the score shows only to a climber who opted into the competition; everyone sees questions correct, counted by kind */
 const competing=()=>{ try{ return localStorage.getItem('ladder:compete')==='1'; }catch(e){ return false; } };
-const countsLine=()=>{ const k=get('rand:rightk',{}), t=get('rand:right',0); return 'Questions correct: <b>'+t+'</b> <span class="rzkinds">(understanding '+(k.read||0)+', proofs '+(k.proof||0)+', equations '+(k.work||0)+', word problems '+(k.word||0)+')</span>.'; };
+const countsLine=()=>{ const k=get('rand:rightk',{}), t=get('rand:right',0); return 'Questions correct: <b>'+t+'</b> <span class="rzkinds">(graphs read '+(k.read||0)+', proofs '+(k.proof||0)+', equations '+(k.work||0)+', word problems '+(k.word||0)+')</span>.'; };
 function nLinks(q){ const by=poolBy(); const l=(q.a3||[])[1]; if(!l||l===DASH) return 0; if(q.chain) return String(l).split('+').length;
   return String(l).split('+').filter(x=>{ const P=by[x.replace(/[\[?#].*$/,'')]; return !!P&&(LINKS.includes(P)||OPS.includes(P)); }).length; }
 function bonus(){ const off=get('rand:off',{}), st=new Set(); [...SEEDS,...toggled(),...BANK].forEach(P=>{ const r=rungOf(P.step); if(!off['rung:'+r]&&P.open()) st.add(P.step); });
@@ -25420,12 +25934,13 @@ function tidyQ(q){ if(!q||q.closed) return q;
   return q; }
 function style(){ if(document.getElementById('rz4css')) return; const s=document.createElement('style'); s.id='rz4css';
   s.textContent='.rzmodes{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 0 10px}.rzmode{padding:8px 6px;border-radius:8px;border:1px solid var(--line,#ccc);background:transparent;color:inherit;font:inherit;font-size:.92rem;cursor:pointer;min-width:0}.rzmode[aria-pressed="true"]{border-color:currentColor;box-shadow:inset 0 0 0 1px currentColor;font-weight:600}.rzmode:disabled{opacity:.45;cursor:default}.rzmode small{display:block;font-size:.7rem;opacity:.75;font-weight:400}.rzstory{margin:10px 0;line-height:1.55}.rzl.rzs{grid-template-columns:1.6em minmax(0,1fr)}.rzl.rzs .rzw{grid-column:2;font-size:.8em}.rzt{overflow-wrap:anywhere}.rzaddr{font-family:var(--mono,monospace);font-size:.72rem;color:var(--muted,#777);margin-top:14px}.rzaddr .rzseed{overflow-wrap:anywhere;text-align:left;font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;line-height:1.5}.rzaddr .rzseed b{font-weight:500;opacity:.75}.rzpick details{margin:0}.rzpick summary{padding:1px 0}.rzfl>summary{font-weight:600;opacity:1}.rzrg{margin-left:14px!important;font-size:.92em}.rzst{margin:0 0 0 30px;font-size:.84em;line-height:1.3;color:var(--muted,#777);overflow-wrap:anywhere}.rzst b{color:var(--ink,inherit);font-weight:600}.rzpick .rzsrc{font-weight:400;opacity:.7;font-size:.86em}.rzpick input{margin:0 4px 0 2px;vertical-align:-1px}';
+  s.textContent+='.rzfig{margin:10px 0;overflow-x:auto}.rzfig svg,.rzo.rzg svg{display:block;width:100%;max-width:420px;height:auto;margin:0 auto}.rzfig .rgtt{max-width:320px}.rzfig .rgcirc{max-width:260px}.rzopts.rzpics{display:grid;grid-template-columns:1fr 1fr;gap:6px}.rzo.rzg{padding:4px}.rg-grid{stroke:var(--grid,#ddd);stroke-width:.6}.rg-axis{stroke:var(--muted,#888);stroke-width:1.1}.rg-lab{fill:var(--muted,#777);font-size:10.5px}.rg-name{fill:var(--muted,#777);font-size:11px;font-style:italic}.rg-tag{fill:currentColor;font-weight:700;font-size:13px}.rg-cv{fill:none;stroke:var(--teal,#1f6f8b);stroke-width:2.2;stroke-linejoin:round}.rg-b{stroke:var(--ember,#c8501e)}.rg-dash{stroke-dasharray:6 4}.rg-dot{fill:var(--teal,#1f6f8b)}.rg-open{fill:var(--card,#fff);stroke:var(--teal,#1f6f8b);stroke-width:1.4}.rg-bar{fill:rgba(31,111,139,.22);stroke:var(--teal,#1f6f8b);stroke-width:1.2}.rg-tthead,.rg-ttmark,.rg-shade{fill:rgba(31,111,139,.22)}.rg-ttt{fill:currentColor;font-weight:600;font-size:13px}.rg-ttout{font-weight:800}.rg-ttbox,.rg-uni{fill:none;stroke:var(--muted,#888)}.rg-set{fill:none;stroke:var(--teal,#1f6f8b);stroke-width:2}';
   document.head.appendChild(s); }
 
 function render(box){
   const S=window.LadderStick; style();
   if((!window.LADDER_CARDMAP||!window.LADDER_SQIDS)&&S&&!render.maps){ render.maps=1; box.innerHTML='<p class="dnote rzwait"></p>'; Promise.all([S.maps(),load('sq/ids.js')]).then(()=>render(box)); return; }
-  cardPools(); const wantD=CARDP.filter(P=>P.open()&&!P.ready()&&!deckOnce[P.file]);
+  cardPools(); const wantD=[]; /* Read Graph draws no crosswalk decks, so the Laundry no longer waits for them */
   if(wantD.length){ box.innerHTML='<p class="dnote rzwait"></p>'; needDecks().then(()=>render(box)); return; }
   const mode=modeNow(), kept=render.fresh?null:get('rand:cur',null), q=(kept&&kept.mode===mode&&kept.a3&&avail(mode))?kept:tidyQ(build(mode)), right=get('rand:right',0), MD=MODES.find(M=>M.id===mode);
   render.fresh=false; put('rand:cur',q.closed?null:q); /* the question stays through a reload (Andrew 2026-11-11 07:36Z) */
@@ -25437,9 +25952,9 @@ function render(box){
   if(q.closed){ box.innerHTML=sw+'<p class="dnote">'+esc(q.closed)+'</p>'+gearBox(q); wire(); return; }
   const addr=q.a3.join(' . ');
   box.innerHTML=sw+'<p class="dnote">'+(window.LadderAccount&&competing()?'<b>'+esc(LadderAccount.name)+'</b>. ':'')+esc(MD.say)+' A question never comes twice. <span class="rzcounts">'+countsLine()+'</span>'+(competing()?' Score: <b class="rzscore">'+Math.ceil(get('rand:score',0)-1e-9)+'</b>.':'')+'</p>'
-    +(q.story?'<p class="rzstory">'+esc(q.story)+'</p>':'')
+    +(q.story?'<p class="rzstory">'+esc(q.story)+'</p>':'')+(q.fig?'<div class="rzfig">'+q.fig+'</div>':'')
     +(q.lines.length?'<div class="rzlines">'+q.lines.map(([t,w],i)=>'<div class="rzl'+(q.stack?' rzs':'')+'"><span class="rzn">'+(i+1)+'</span><span class="rzt">'+esc(t)+'</span><span class="rzw">'+(w===null?'?':esc(w))+'</span></div>').join('')+'</div>':'')
-    +'<p class="rzask">'+esc(q.ask)+'</p><div class="rzopts">'+q.opts.map(o=>'<button type="button" class="rzo'+(q.html?' rzg':'')+'" data-v="'+esc(o).replace(/"/g,'&quot;')+'"'+(q.html?' aria-label="'+esc(o)+'">'+q.html[o]:'>'+esc(o))+'</button>').join('')+'</div>'
+    +'<p class="rzask">'+esc(q.ask)+'</p><div class="rzopts'+(q.html?' rzpics':'')+'">'+q.opts.map(o=>'<button type="button" class="rzo'+(q.html?' rzg':'')+'" data-v="'+esc(o).replace(/"/g,'&quot;')+'"'+(q.html?' aria-label="'+esc(o)+'">'+q.html[o]:'>'+esc(o))+'</button>').join('')+'</div>'
     +'<p class="rzwhy" hidden></p><p><button type="button" class="dlink rznext">another question</button></p>'
     +'<p class="rzaddr"><button type="button" class="rzseed" title="report this question · '+esc(addr).replace(/"/g,'&quot;')+'">'+sayAddr(q.a3)+'</button><br>If this question does not make sense, tap its address to report it. <button type="button" class="dlink rzcopy">copy address</button></p>'+gearBox(q);
   wire();
