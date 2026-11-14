@@ -2471,7 +2471,20 @@ let loading=null;
 const data=()=>window.LADDER_ANNEXES?Promise.resolve(window.LADDER_ANNEXES):(loading=loading||new Promise(res=>{ const s=document.createElement('script'); s.src='annexes.js'; s.onload=()=>res(window.LADDER_ANNEXES||null); s.onerror=()=>res(null); document.head.appendChild(s); }));
 const page=()=>window.ladderPage?ladderPage():(location.pathname.split('/').pop()||'index').replace(/\.html$/,'');
 /* progress: the highest rung opened (at the foot of its page, or measured into) */
-function high(){ const P=get('pages:done',{}); let h=-1; for(const k in P){ const m=k.match(/^open:r(\d+)$/); if(m&&P[k]&&P[k].v) h=Math.max(h,+m[1]); } return h; }
+/* annexunlock (Andrew 2026-11-14 16:59Z): an annex opens once its rung is passed, whether by climbing, by testing in, or by any
+   other way past it. So the highest rung reached is the most any record shows: open:rNN, any page passed or measured (cert:)
+   on rung NN, tested in (cert:in:rNN), a floor measured (cert:floorNconcl: all its rungs), footings read (steps:), and the
+   furthest footing (inside rung NN = NN; on rung NN's own page = NN-1, as openRungButton marks it). */
+function high(){ const P=get('pages:done',{}); let h=-1; const up=n=>{ if(n>h) h=n; }, rn=s=>{ const m=String(s||'').match(/^r(\d\d)/); return m?+m[1]:null; };
+  for(const k in P){ if(!(P[k]&&P[k].v)) continue; const m=k.match(/^open:r(\d+)$/); if(m){ up(+m[1]); continue; } const n=rn(k); if(n!=null) up(n); }
+  const fl={}; (window.LADMAP||[]).forEach(([f,rungs])=>{ fl[f]=Math.max(-1,...rungs.map(x=>+x[0])); });
+  try{ for(let i=0;i<LS.length;i++){ const k=LS.key(i)||''; let m;
+    if((m=k.match(/^cert:in:r(\d\d)/))){ if(get(k,null)) up(+m[1]); }
+    else if((m=k.match(/^cert:floor(\d+)concl$/))){ if(get(k,null)&&fl[m[1]]!=null) up(fl[m[1]]); }
+    else if((m=k.match(/^cert:(.+)$/))){ const n=rn(m[1]); if(n!=null&&get(k,null)) up(n); }
+    else if((m=k.match(/^steps:(.+)$/))){ const n=rn(m[1]); if(n!=null) up(n); } } }catch(e){}
+  try{ const f=JSON.parse(LS.getItem('ladder:furthest')||'null'), m=f&&f.page&&String(f.page).match(/^r(\d\d)(.*)$/); if(m) up(m[2]?+m[1]:+m[1]-1); }catch(e){}
+  return h; }
 /* how far ahead a page may number (Andrew 2026-10-29): r + floor(0.2·(12 + r/6)·6) */
 const limit=r=>{ r=Math.max(0,r); return r+Math.floor(0.2*(12+r/6)*6); };
 const isOpen=(a,h)=>a[3]<=h;
@@ -2512,7 +2525,7 @@ function catalogue(want){ data().then(D=>{ if(!D) return;
   const done=a=>!!(P[a[0]]&&P[a[0]].v);
   const subjects=D.order.filter(k=>(D.subj[k]||[]).length);
   const btn=k=>{ const L=D.subj[k], open=L.filter(a=>isOpen(a,h)), nx=nextAt(L,h), crowned=open.length&&open.every(done);
-    const cnt=open.length?open.length+' of '+L.length+' open':(nx?nx.replace('next annex','first at').replace(' much higher up the ladder',' much higher'):'');
+    const cnt=open.length?open.length+' of '+L.length+' open':(nx?nx.replace('next annex','first annex').replace(' much higher up the ladder',' much higher'):'');
     return '<button type="button" class="ax-b k-'+esc(k)+(crowned?' ax-crowned':'')+(open.length?'':' ax-shut')+'" data-k="'+esc(k)+'" aria-expanded="false">'
       +(crowned?'<span class="ax-crown" aria-label="crown: every unlocked annex finished" title="every unlocked annex finished">\u{1F451}</span>':'')
       +'<span class="ax-name">'+esc(D.names[k])+'</span><span class="ax-cnt">'+esc(cnt)+'</span></button>'; };
@@ -2585,7 +2598,11 @@ function lock(){
   /* the floor each section sits on: floor sections set it, rung sections inherit */
   let curFl=null; const secFl=new Map(); secs.forEach(s=>{ if(s.classList.contains('floor')) curFl=floorNo(s); secFl.set(s,curFl); });
   const reachedFl=new Set(); rows.forEach((r,i)=>{ if(i<=reach) reachedFl.add(secFl.get(r.sec)); });
-  const flOpen=fl=>reachedFl.has(fl)||openFloor.has(fl)||flTouched.has(fl);
+  /* annexunlock (Andrew 2026-11-14 16:59Z): an annex row shows once its rung is passed by any route (the catalogue's reach),
+     and the floor that reach stands on is open */
+  const AH=window.LadderAnnexes&&LadderAnnexes.high?LadderAnnexes.high():-1;
+  const ANX=/(^|\s)k-(phys|chem|bio|comp|stat|now|econ|logi|eng|crypt|nav)(\s|$)/;
+  const flOpen=fl=>reachedFl.has(fl)||openFloor.has(fl)||flTouched.has(fl)||(AH>=0&&M.some(([f,rs])=>f===fl&&rs.some(([r])=>r<=AH)));
   const rOpen=n=>openRung.has(n)||openFloor.has(rungFloor[n]);
   rows.forEach((r,i)=>{ const li=r.li, fl=secFl.get(r.sec), isFloor=r.sec.classList.contains('floor'), n=rungNo(r.stem);
     const isRungRow=li.classList.contains('k-theory')&&r.sec.querySelector(':scope>ol.ladder>li')===li;
@@ -2594,6 +2611,7 @@ function lock(){
     else if(isFloor){ show=true; collapsed=!flOpen(fl); }
     else if(!flOpen(fl)) show=false;
     else if(i<=reach||(n!=null&&rOpen(n))||(r.stem&&(cert(r.stem)||(P[r.stem]&&P[r.stem].v)))) show=true;
+    else if(n!=null&&n<=AH&&ANX.test(li.className)) show=true;
     else if(isRungRow){ show=true; collapsed=true; }
     else show=false;
     li.classList.toggle('lk-hide',!show); li.classList.toggle('lk-shut',show&&collapsed);
@@ -2643,7 +2661,7 @@ function furthestPos(){ const hereK=(window.ladderPage&&ladderPage())||''; if(fp
 function furthestPos0(){ let best=-1; const f=J('ladder:furthest',null); if(f&&f.page) best=Math.max(best,pos(f.page));
   const P=J('pages:done',{}); for(const s in P) if(P[s]&&P[s].v) best=Math.max(best,pos(s));
   /* a step you measured into counts as reached */
-  try{ for(let i=0;i<LS.length;i++){ const k=LS.key(i); const m=k&&k.match(/^cert:(.+)$/); if(m) best=Math.max(best,pos(m[1])); } }catch(e){}
+  try{ for(let i=0;i<LS.length;i++){ const k=LS.key(i); const m=k&&k.match(/^cert:(.+)$/); if(m){ const t=m[1].match(/^in:(r\d\d)$/); best=Math.max(best,pos(t?t[1]:m[1])); } } }catch(e){} /* annexunlock: tested in to rung NN reaches rung NN */
   const here=(window.ladderPage&&ladderPage())||''; best=Math.max(best,pos(here)); return best; }
 function firstAnnex(){ const O=order(); if(!O) return null; let b=null; for(const s in O) if(SUBJ.test(s)&&(b==null||O[s]<O[b])) b=s; return b; }
 function reached(stem){ if(!stem) return true; const p=pos(stem); if(p<0) return true; return furthestPos()>=p; }
@@ -2651,7 +2669,9 @@ const GATES=[['[data-p="graph"]','r09e','reading and drawing graphs (9e)'],['[da
   ['.dstick','r00a','0a'],['.dstand','r00a','0a'],['.dannex',()=>firstAnnex(),'the first annex']];
 function apply(){ if(window.LADDER_DESK) return; if(!order()){ load(); return; }
   const d=document.getElementById('desk');
-  GATES.forEach(([sel,stem,say])=>{ const s=typeof stem==='function'?stem():stem; const ok=reached(s);
+  /* annexunlock (Andrew 2026-11-14 16:59Z): the Annexes button also opens once any annex is open by the catalogue's own reach (tested in, measured, passed) */
+  const annexOpen=()=>{ const D=window.LADDER_ANNEXES, A=window.LadderAnnexes; if(!D||!A||!A.high) return false; const h=A.high(); return D.order.some(k=>(D.subj[k]||[]).some(a=>a[3]<=h)); };
+  GATES.forEach(([sel,stem,say])=>{ const s=typeof stem==='function'?stem():stem; const ok=reached(s)||(sel==='.dannex'&&annexOpen());
     if(d) d.querySelectorAll('.dtabs '+sel).forEach(b=>{ b.classList.toggle('lk-hide',!ok); b.title=ok?'':'opens at '+say; }); });
   /* the index tiles follow the same gates */
   document.querySelectorAll('.tiles a.tile[href="moves.html"]').forEach(a=>a.classList.toggle('lk-hide',!reached('r00b')));
@@ -2887,7 +2907,8 @@ function next(){ if(shown) return; if(document.querySelector('#stick,#agreebox:n
 /* what is open now */
 const once={}; function script(src,test){ if(test&&test()) return Promise.resolve(true); if(once[src]) return once[src];
   return once[src]=new Promise(res=>{ const s=document.createElement('script'); s.src=src; s.onload=()=>res(true); s.onerror=()=>res(false); document.head.appendChild(s); }); }
-function high(){ const P=J('pages:done',{}); let h=-1; for(const k in P){ const m=k.match(/^open:r(\d+)$/); if(m&&P[k]&&P[k].v) h=Math.max(h,+m[1]); } return h; }
+function high(){ if(window.LadderAnnexes&&LadderAnnexes.high) return LadderAnnexes.high(); /* annexunlock: one reach for every annex lock */
+  const P=J('pages:done',{}); let h=-1; for(const k in P){ const m=k.match(/^open:r(\d+)$/); if(m&&P[k]&&P[k].v) h=Math.max(h,+m[1]); } return h; }
 async function scan(){ const U=window.LadderUnlock; if(!U) return;
   await Promise.all([script('ladmap.js',()=>window.LADMAP),script('cardmap.js',()=>window.LADDER_CARDMAP),script('annexes.js',()=>window.LADDER_ANNEXES)]);
   base=!J(SNAP,null);
