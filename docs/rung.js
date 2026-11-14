@@ -168,6 +168,15 @@ addEventListener('storage',e=>{ if(e.key===RK||e.key===null){ raw=null; stale=tr
   const mv=[]; ks.forEach(k=>{ if(!/^(marks:|rand:|sq:)/.test(k)&&k!=='ladder:lastFooting'&&k!=='ladder:furthest') return; const v=LS.getItem(k); if(v==null) return; const nk=/^sq:/.test(k)?tg(k):k, nv=tg(v); if(nk!==k||nv!==v) mv.push([k,nk,nv]); });
   mv.forEach(x=>{ if(x[1]!==x[0]) LS.removeItem(x[0]); }); mv.forEach(x=>{ LS.setItem(x[1],x[2]); });
   LS.setItem(F,String(Date.now())); }catch(e){} })();
+/* 0.67.10 missing-footings tick move (Andrew passed 2026-11-14 15:49Z): new 9stat5, 9stat6 and 30q5 came in before Moves, so
+   9stat5 -> 9stat7 and 30q5 -> 30q6 (questions 9·stat.5.1 -> 9·stat.7.1, standing 9·stat.6.k -> 9·stat.8.k), once, under ladder:mvFeet2. */
+(function(){ const F='ladder:mvFeet2'; try{ if(LS.getItem(F)!=null) return; const M={"9stat5":"9stat7","30q5":"30q6","9·stat.5.1":"9·stat.7.1","9·stat.6.1":"9·stat.8.1","9·stat.6.2":"9·stat.8.2","9·stat.6.3":"9·stat.8.3","9·stat.6.4":"9·stat.8.4"};
+  const K=Object.keys(M).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.]/g,'\\.'));
+  const RE=new RegExp('(?<![A-Za-z0-9_·.])('+K.join('|')+')(?![A-Za-z0-9_·])','g'), tg=v=>String(v).replace(RE,(x,k)=>M[k]);
+  const ks=[]; for(let i=0;i<LS.length;i++){ const k=LS.key(i); if(k) ks.push(k); }
+  const mv=[]; ks.forEach(k=>{ if(!/^(marks:|rand:|sq:)/.test(k)&&k!=='ladder:lastFooting'&&k!=='ladder:furthest') return; const v=LS.getItem(k); if(v==null) return; const nk=/^sq:/.test(k)?tg(k):k, nv=tg(v); if(nk!==k||nv!==v) mv.push([k,nk,nv]); });
+  mv.forEach(x=>{ if(x[1]!==x[0]) LS.removeItem(x[0]); }); mv.forEach(x=>{ LS.setItem(x[1],x[2]); });
+  LS.setItem(F,String(Date.now())); }catch(e){} })();
 
 (function(){
 'use strict';
