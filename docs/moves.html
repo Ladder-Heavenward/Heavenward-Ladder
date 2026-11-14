@@ -81,7 +81,7 @@ let kind='', q='';
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function localPages(){ try{ return JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){ return {}; } }
 let pages=localPages();
-function earned(m){ return ALL||!!(pages[m.file]&&pages[m.file].v); }
+function earned(m){ return ALL||!!(pages[m.file]&&pages[m.file].v)||!!(window.LadderUnlock&&LadderUnlock.ready&&LadderUnlock.ready()&&LadderUnlock.passedStep(m.file)); } /* allunlock: passed by any route */
 const kb=document.getElementById('kinds');
 kb.innerHTML=['all'].concat(KINDS).map(k=>'<button type="button" data-k="'+(k==='all'?'':k)+'"'+(k==='all'?' class="on"':'')+'>'+k+'</button>').join(' ');
 kb.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; kind=b.dataset.k; kb.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b)); draw(); };
@@ -110,6 +110,8 @@ function draw(){
   document.getElementById('ahead').textContent=left>0?left+' more techs wait further up the ladder, and past them the ones nobody has found yet.':'';
 }
 draw();
+/* allunlock: redraw once the ladder map has loaded, so steps passed by testing in or measuring count */
+(function wait(n){ if(window.LadderUnlock&&LadderUnlock.ready){ if(LadderUnlock.ready()){ draw(); return; } if(LadderUnlock.load) LadderUnlock.load(); } if(n<20) setTimeout(()=>wait(n+1),250); })(0);
 let tries=0; (function remote(){ if(window.MarksSync&&MarksSync.pages){ MarksSync.pages().then(p=>{ if(p&&typeof p==='object'){ Object.keys(p).forEach(k=>{ if(!pages[k]||(+p[k].t||0)>(+pages[k].t||0)) pages[k]=p[k]; }); draw(); } }).catch(()=>{}); } else if(++tries<10) setTimeout(remote,500); })();
 })();
 </script>
