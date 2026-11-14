@@ -2507,16 +2507,27 @@ function catalogue(want){ data().then(D=>{ if(!D) return;
   const old=document.getElementById('stick'); if(old) old.remove();
   const box=document.createElement('div'); box.id='stick'; box.setAttribute('role','dialog'); box.setAttribute('aria-label','the annexes'); document.body.appendChild(box); document.body.classList.add('stickopen');
   const h=high(), P=get('pages:done',{}), here=page();
-  const sec=k=>{ const L=D.subj[k]||[]; if(!L.length) return ''; const open=L.filter(a=>isOpen(a,h)), nx=nextAt(L,h);
-    /* 2026-11-09 (Andrew 16:32): one wording for every subject, n of m open; the line takes its subject's tag colour from the index */
-    const sum=D.names[k]+' · '+(open.length?open.length+' of '+L.length+' open':(nx?nx.replace('next annex','first annex'):''));
-    const show=want?k===want:(open.some(a=>a[0]===here));
-    return '<details class="sk-fl k-'+esc(k)+'"'+(show?' open':'')+'><summary>'+esc(sum)+'</summary><ul class="sk-list">'
-      +open.map(a=>'<li><a href="'+a[0]+'.html">'+esc(a[1])+'</a> <span class="sk-st">'+esc(a[2])+(P[a[0]]&&P[a[0]].v?' ✓':'')+'</span></li>').join('')
-      +(nx?'<li class="sk-st">'+esc(open.length?nx:nx.replace('next annex','first annex'))+'</li>':'')+'</ul></details>'; };
+  /* annexlayout (Andrew 2026-11-14 16:32Z): each subject is a button that opens a pane with its list of annexes;
+     a subject's button takes a crown once every annex unlocked in it so far is finished */
+  const done=a=>!!(P[a[0]]&&P[a[0]].v);
+  const subjects=D.order.filter(k=>(D.subj[k]||[]).length);
+  const btn=k=>{ const L=D.subj[k], open=L.filter(a=>isOpen(a,h)), nx=nextAt(L,h), crowned=open.length&&open.every(done);
+    const cnt=open.length?open.length+' of '+L.length+' open':(nx?nx.replace('next annex','first at').replace(' much higher up the ladder',' much higher'):'');
+    return '<button type="button" class="ax-b k-'+esc(k)+(crowned?' ax-crowned':'')+(open.length?'':' ax-shut')+'" data-k="'+esc(k)+'" aria-expanded="false">'
+      +(crowned?'<span class="ax-crown" aria-label="crown: every unlocked annex finished" title="every unlocked annex finished">\u{1F451}</span>':'')
+      +'<span class="ax-name">'+esc(D.names[k])+'</span><span class="ax-cnt">'+esc(cnt)+'</span></button>'; };
+  const pane=k=>{ const L=D.subj[k], open=L.filter(a=>isOpen(a,h)), nx=nextAt(L,h);
+    return '<div class="ax-pane k-'+esc(k)+'" data-k="'+esc(k)+'" hidden><p class="ax-ph">'+esc(D.names[k])+'</p><ul class="ax-list">'
+      +open.map(a=>'<li class="'+(done(a)?'ax-done':'')+(a[0]===here?' ax-here':'')+'"><a href="'+a[0]+'.html"><span class="ax-ad">'+esc(a[1])+'</span><span class="ax-tt">'+esc(a[2])+'</span><span class="ax-tick">'+(done(a)?'✓':'')+'</span></a></li>').join('')
+      +'</ul>'+(nx?'<p class="ax-next">'+esc(open.length?nx:nx.replace('next annex','first annex'))+'</p>':'')+'</div>'; };
   box.innerHTML='<div class="sk-card"><div class="sk-top" data-slug="By Subject"><span>the annexes</span><button type="button" class="sk-x" aria-label="close">×</button></div>'
     +'<p class="sk-n sk-n0" hidden></p>'
-    +D.order.map(sec).join('')+'</div>';
+    +'<div class="ax-grid">'+subjects.map(btn).join('')+'</div>'+subjects.map(pane).join('')+'</div>';
+  { const show=k=>{ box.querySelectorAll('.ax-b').forEach(b=>{ const on=b.dataset.k===k; b.classList.toggle('on',on); b.setAttribute('aria-expanded',on?'true':'false'); });
+      box.querySelectorAll('.ax-pane').forEach(p=>{ p.hidden=p.dataset.k!==k; }); };
+    box.querySelectorAll('.ax-b').forEach(b=>b.onclick=()=>{ const k=b.classList.contains('on')?null:b.dataset.k; show(k);
+      const p=k&&box.querySelector('.ax-pane[data-k="'+k+'"]'); if(p) p.scrollIntoView({behavior:'smooth',block:'start'}); });
+    const first=want||(subjects.find(k=>D.subj[k].some(a=>a[0]===here))); if(first) show(first); }
   { const ba=document.querySelector('#desk .dtabs [data-p="base"]'); /* toolbox gear: the Cellar is reached from here */
     if(ba&&!ba.classList.contains('lk-hide')){ const p=document.createElement('p'); p.className='sk-tools'; p.innerHTML='<button type="button" class="sk-cellar">Cellar</button>';
       p.firstChild.onclick=()=>{ box.remove(); document.body.classList.remove('stickopen'); const d=document.getElementById('desk'), b=document.getElementById('deskbtn'); if(b&&!(d&&d.classList.contains('open'))) b.click(); ba.click(); };
@@ -2529,7 +2540,10 @@ function button(){ const dh=document.querySelector('#desk .dheights'); if(!dh) r
   const b=document.createElement('button'); b.type='button'; b.className='dannex'; b.textContent='Annexes';
   b.onclick=()=>{ const x=document.querySelector('#desk .x'); if(x) x.click(); catalogue(); };
   dh.parentNode.insertBefore(b,dh); return true; }
-window.LadderAnnexes={catalogue,data,high,relink};
+/* annexlayout: every annex unlocked so far is finished (at least one unlocked) */
+function crowned(D){ const h=high(), P=get('pages:done',{}); let any=false;
+  for(const k of D.order){ for(const a of (D.subj[k]||[])){ if(!isOpen(a,h)) continue; any=true; if(!(P[a[0]]&&P[a[0]].v)) return false; } } return any; }
+window.LadderAnnexes={catalogue,data,high,relink,crowned};
 const boot=()=>{ data().then(D=>{ if(D) relink(D); }); let n=0; const t=setInterval(()=>{ if(button()||++n>40) clearInterval(t); },150); };
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(boot,0)); else boot();
 })();
@@ -3057,7 +3071,10 @@ try{ if(document.fonts&&document.fonts.load){ window.addEventListener('load',fun
   const boot=()=>{ if(!document.querySelector('.rungs')) return;
     const f=document.createElement('button'); f.type='button'; f.id='annexfab'; f.textContent='Annexes'; f.hidden=true;
     f.onclick=()=>{ if(window.LadderAnnexes) LadderAnnexes.catalogue(); }; document.body.appendChild(f);
-    const sync=()=>{ const a=document.querySelector('#desk .dannex'); f.hidden=!(a&&!a.classList.contains('lk-hide')); };
+    const sync=()=>{ const a=document.querySelector('#desk .dannex'); f.hidden=!(a&&!a.classList.contains('lk-hide'));
+      /* annexlayout (Andrew 2026-11-14 16:32Z): the index's Annexes button takes a crown once every unlocked annex is finished */
+      if(!f.hidden&&window.LadderAnnexes&&LadderAnnexes.crowned) LadderAnnexes.data().then(D=>{ if(!D) return; const on=LadderAnnexes.crowned(D); f.classList.toggle('ax-crowned',on);
+        let c=f.querySelector('.ax-crown'); if(on&&!c){ c=document.createElement('span'); c.className='ax-crown'; c.textContent='\u{1F451}'; c.setAttribute('aria-label','crown: every unlocked annex finished'); f.appendChild(c); } else if(!on&&c) c.remove(); }); };
     sync(); let n=0; const t=setInterval(()=>{ sync(); if(++n>60) clearInterval(t); },250); document.addEventListener('click',()=>setTimeout(sync,60)); };
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(boot,0)); else boot();
 })();
