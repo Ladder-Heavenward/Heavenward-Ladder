@@ -13,7 +13,10 @@ const get=(k,d)=>{ try{ return JSON.parse(LS.getItem(k)||'')||d; }catch(e){ retu
 const put=(k,v)=>{ try{ LS.setItem(k,JSON.stringify(v)); }catch(e){} };
 const seen=()=>get('cards:seen',{});
 const DESK=!!window.LADDER_DESK; /* 0.3.15: the desk opens every pool, so its words can be read and edited */
-const has=tag=>DESK||!!seen()[tag]||climbPast(tag,true);
+const has=tag=>DESK||!!seen()[tag]||climbPast(tag,true)||anyRoute(tag);
+/* allunlock (Andrew 2026-11-14 17:08Z): a pool also opens once its step is reached by any route: testing in, a stick pass,
+   a passed page, footings read, a rung opened (rung.js LadderUnlock.reachedStep) */
+function anyRoute(tag){ try{ const U=window.LadderUnlock; if(!U||!U.reachedStep||(U.ready&&!U.ready())) return false; const s=tagStem(tag); return !!s&&U.reachedStep(s); }catch(e){ return false; } }
 /* the climb record (rung.js LadderFV): true when the furthest footing is past the step's page (or on it, with reach) */
 function climbPast(tag,reach){ try{ const F=window.LadderFV; if(!F||!F.furthest||!F.placeOf) return false; const s=tagStem(tag), f=F.furthest(); if(!s||!f||f.ord==null) return false;
   const pl=F.placeOf(s); if(pl==null) return false; const at=Math.floor(f.ord/1000); return reach?at>=pl:at>pl; }catch(e){ return false; } }
@@ -24,7 +27,7 @@ const cert=k=>{ try{ const c=JSON.parse(LS.getItem('cert:'+k)||'null'); return c
 const UNDER=['0a','0b','1d','1f'];
 function jumpedPast(tag){ const m=String(tag).match(/^(\d+)/); if(!m) return false; const r=+m[1]; try{ for(let i=0;i<LS.length;i++){ const k=LS.key(i)||''; const j=k.match(/^cert:in:r(\d+)$/); if(j&&+j[1]>r) return true; } }catch(e){} return false; }
 function tagStem(t){ const M=window.LADDER_CARDMAP||{}; for(const s in M) if(M[s][0]===t) return s; return (typeof STEPS!=='undefined'&&STEPS[t])?STEPS[t][0]:null; }
-const reachC={}; function reached(tag){ const v=window.__lsVer||0; if(reachC.v!==v){ for(const k in reachC) delete reachC[k]; reachC.v=v; } if(!(tag in reachC)) reachC[tag]=has(tag); return reachC[tag]; }
+const reachC={}; function reached(tag){ const v=(window.__lsVer||0)+'|'+!!(window.LadderUnlock&&LadderUnlock.ready&&LadderUnlock.ready()); /* allunlock: recount once the ladder map is in */ if(reachC.v!==v){ for(const k in reachC) delete reachC[k]; reachC.v=v; } if(!(tag in reachC)) reachC[tag]=has(tag); return reachC[tag]; }
 function measured(tag){ if(DESK||reached(tag)) return true; /* laundryreach: every pool opens by reach (Andrew 14:51Z) */ const s=tagStem(tag); if(!s) return false; if(cert(s)) return true; if(UNDER.includes(tag)&&jumpedPast(tag)) return true;
   const W=window.LadderStick&&LadderStick.where(s); if(!W) return false; if(cert('floor'+W.fl+'concl')) return true;
   const c=cert(W.core[W.core.length-1]); if(c&&c.scope==='rung'&&W.core.includes(s)) return true;

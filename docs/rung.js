@@ -1056,7 +1056,7 @@ window.LadderDrum=(function(){ const SAY=['Laundry Day']; /* Andrew 00:24Z: 'jus
   function fillDeck(){ if(deckDone) return; deckDone=true; const list=document.getElementById('dklist'), qi=document.getElementById('dkq'); let q='';
     const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
     let pages={}; try{ pages=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
-    const draw=()=>{ const M=window.LADDER_MOVES; if(!M){ list.textContent=''; return; } const have=M.moves.filter(m=>!!(pages[m.file]&&pages[m.file].v));
+    const draw=()=>{ const M=window.LADDER_MOVES; if(!M){ list.textContent=''; return; } const U=window.LadderUnlock, have=M.moves.filter(m=>!!(pages[m.file]&&pages[m.file].v)||!!(U&&U.passedStep&&U.passedStep(m.file))); /* allunlock */
       const shown=have.filter(m=>!q||(m.name+' '+m.words+' '+(m.accepted||'')).toLowerCase().includes(q));
       if(!have.length) list.innerHTML='<p class="dnote">Nothing here yet. Finish the questions on a step and the techs it builds land here.</p>';
       else if(!shown.length) list.innerHTML='<p class="dnote">No earned tech matches.</p>';
@@ -2232,7 +2232,7 @@ function testIn(li){ const s=S(); if(!s) return; const M=window.LADMAP||[];
   s.sit('rung',order[k-1],{via:'measure',into:['rung',n],done:ok=>{ if(ok) setTimeout(()=>location.reload(),1600); }}); } /* a locked rung: the previous rung's test; a locked floor: the previous floor's */
 /* the toolbox list: every finished section, with its measure */
 function finished(){ const M=window.LADMAP||[], P=pages(), FV=window.LadderFV, f=FV&&FV.furthest&&FV.furthest(), at=f&&f.ord!=null?Math.floor(f.ord/1000):-1e9,
-    pl=s=>{ const x=FV&&FV.placeOf?FV.placeOf(s):null; return x==null?1e9:x; }, done=s=>!!(P[s]&&P[s].v), v=s=>done(s)||at>=pl(s), past=s=>done(s)||at>pl(s), out=[];
+    pl=s=>{ const x=FV&&FV.placeOf?FV.placeOf(s):null; return x==null?1e9:x; }, done=s=>!!(P[s]&&P[s].v), U=window.LadderUnlock, v=s=>done(s)||at>=pl(s)||!!(U&&U.reachedStep&&U.reachedStep(s)), past=s=>done(s)||at>pl(s)||!!(U&&U.passedStep&&U.passedStep(s)), out=[]; /* allunlock */
   M.forEach(([fl,rungs])=>{ const F={fl,rows:[]}; let all=rungs.length>0;
     rungs.forEach(([r,core,annex])=>{ const steps=core.concat(annex).map(x=>x[0]).filter(v); steps.forEach(s=>F.rows.push(['step',s]));
       const rd=core.every(x=>past(x[0])); if(rd) F.rows.push(['rung',r]); all=all&&rd; });
@@ -2395,7 +2395,7 @@ const STARSVG='<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true
 const starred=label=>'<details class="sk-wing sk-star sk-star-blue"><summary aria-label="'+label+', blue star earned: its questions">'+STARSVG+' '+label+'</summary>';
 function understand(el){ const P=get('pages:done',{}), M=window.LADMAP||[], U=window.__starUnits?window.__starUnits():null, B=new Set(U?U.blue:[]);
   const stem=(location.pathname.split('/').pop()||'').replace(/\.html$/,''), lab=s=>((window.LADDER_CARDMAP||{})[s]||[s.replace(/^r0*(\d+)/,'$1')])[0];
-  const reach=s=>{ if(P[s]) return true; try{ const F=window.LadderFV, f=F&&F.furthest&&F.furthest(); if(!f||f.ord==null||!F.placeOf) return false; const pl=F.placeOf(s); return pl!=null&&Math.floor(f.ord/1000)>=pl; }catch(e){ return false; } };
+  const reach=s=>{ if(P[s]) return true; if(window.LadderUnlock&&LadderUnlock.reachedStep&&LadderUnlock.reachedStep(s)) return true; /* allunlock */ try{ const F=window.LadderFV, f=F&&F.furthest&&F.furthest(); if(!f||f.ord==null||!F.placeOf) return false; const pl=F.placeOf(s); return pl!=null&&Math.floor(f.ord/1000)>=pl; }catch(e){ return false; } };
   el.innerHTML='';
   /* this step's own questions, tickable here; folded into a star once the step holds its blue star */
   const src=[...document.querySelectorAll('section.step:not([hidden]) .sayback ol')].filter(o=>!o.closest('#desk,#stick')); const one=src.length?src:[document.querySelector('.wrap .sayback ol, .wrap #qs ol')].filter(Boolean);
@@ -2429,7 +2429,7 @@ function list(here){ here=typeof here==='string'?here:null; close(); const body=
   box.querySelector('.sk-top span').textContent='answering questions'; box.querySelector('.sk-top').dataset.slug='earn stars'; body.innerHTML='<p class="sk-q">Gathering them…</p>';
   Promise.all([window.LadderStick?LadderStick.maps():null,script('sq/index.js',()=>window.LADDER_SQINDEX),/* sqlist */script('sq/titles.js',()=>window.LADDER_SQTITLES).catch(()=>{})]).then(()=>{
     const P=get('pages:done',{}), I=window.LADDER_SQINDEX||{}, M=window.LADMAP||[]; const out=[];
-    M.forEach(([fl,rungs])=>rungs.forEach(([r,core,annex])=>core.concat(annex).forEach(([s])=>{ if(P[s]&&P[s].v&&I[s]) out.push([fl,s,I[s],r]); })));
+    M.forEach(([fl,rungs])=>rungs.forEach(([r,core,annex])=>core.concat(annex).forEach(([s])=>{ if(((P[s]&&P[s].v)||(window.LadderUnlock&&LadderUnlock.passedStep&&LadderUnlock.passedStep(s)))&&I[s]) out.push([fl,s,I[s],r]); }))); /* allunlock */
     const hq=here&&I[here]&&I[here].length?I[here]:null;
     if(!out.length&&!hq){ body.innerHTML='<p class="sk-q">None yet. A step’s standing questions come here once you have passed its footings; each one walks a branching path, a path to its answer or a debate to the bottom of one line of inquiry.</p>'; tools(body,here); return; }
     const TT=window.LADDER_SQTITLES||{}, U=window.__starUnits?window.__starUnits():null, WG=new Set(U?U.wings:[]);
@@ -2659,10 +2659,17 @@ function pos(stem){ const O=order(); if(!O||!stem) return -1; stem=String(stem).
 let fpC=null;
 function furthestPos(){ const hereK=(window.ladderPage&&ladderPage())||''; if(fpC&&fpC.v===window.__lsVer&&fpC.h===hereK) return fpC.b; const b=furthestPos0(); fpC={v:window.__lsVer,h:hereK,b}; return b; }
 function furthestPos0(){ let best=-1; const f=J('ladder:furthest',null); if(f&&f.page) best=Math.max(best,pos(f.page));
-  const P=J('pages:done',{}); for(const s in P) if(P[s]&&P[s].v) best=Math.max(best,pos(s));
+  /* allunlock (Andrew 2026-11-14 17:08Z): every unlock reads this one reach, so testing in, a stick pass, a passed page,
+     footings read (steps:) and a rung opened (open:rNN) all count, as well as the furthest footing */
+  const P=J('pages:done',{}); for(const s in P) if(P[s]&&P[s].v){ const o=s.match(/^open:(r\d\d)$/); best=Math.max(best,pos(o?o[1]:s)); }
   /* a step you measured into counts as reached */
-  try{ for(let i=0;i<LS.length;i++){ const k=LS.key(i); const m=k&&k.match(/^cert:(.+)$/); if(m){ const t=m[1].match(/^in:(r\d\d)$/); best=Math.max(best,pos(t?t[1]:m[1])); } } }catch(e){} /* annexunlock: tested in to rung NN reaches rung NN */
+  try{ for(let i=0;i<LS.length;i++){ const k=LS.key(i); let m=k&&k.match(/^cert:(.+)$/); if(m){ const t=m[1].match(/^in:(r\d\d)$/); best=Math.max(best,pos(t?t[1]:m[1])); continue; }
+    m=k&&k.match(/^steps:(.+)$/); if(m) best=Math.max(best,pos(m[1])); } }catch(e){} /* annexunlock: tested in to rung NN reaches rung NN */
   const here=(window.ladderPage&&ladderPage())||''; best=Math.max(best,pos(here)); return best; }
+/* allunlock: a step is reached once the reach is at it, and passed once the reach is beyond it (or it is passed or measured itself) */
+const certOf=s=>{ try{ return !!JSON.parse(LS.getItem('cert:'+s)||'null'); }catch(e){ return false; } };
+function reachedStep(stem){ if(!stem) return false; const P=J('pages:done',{}); if(P[stem]&&P[stem].v) return true; if(certOf(stem)) return true; const p=pos(stem); return p>=0&&furthestPos()>=p; }
+function passedStep(stem){ if(!stem) return false; const P=J('pages:done',{}); if(P[stem]&&P[stem].v) return true; if(certOf(stem)) return true; const p=pos(stem); return p>=0&&furthestPos()>p; }
 function firstAnnex(){ const O=order(); if(!O) return null; let b=null; for(const s in O) if(SUBJ.test(s)&&(b==null||O[s]<O[b])) b=s; return b; }
 function reached(stem){ if(!stem) return true; const p=pos(stem); if(p<0) return true; return furthestPos()>=p; }
 const GATES=[['[data-p="graph"]','r09e','reading and drawing graphs (9e)'],['[data-p="moves"]','r00b','0b'],['[data-p="rand"]','r01e','1e'],
@@ -2698,7 +2705,7 @@ function skid(){ if(window.LADDER_DESK) return; const key=document.querySelector
   const gt=key.querySelector('.gtkey'); if(gt){ const ok=pos('r16a')>=0&&furthestPos()>=pos('r16a'); gt.classList.toggle('lk-hide',!ok); if(ok) gt.hidden=false; }
   key.querySelectorAll('.legend').forEach(l=>{ const vis=[...l.children].some(c=>!c.classList.contains('lk-hide')&&!c.hidden&&getComputedStyle(c).display!=='none'); if(l.querySelector('.tag,.tagbtn,.bmkey,.pzkey,.gtkey')) l.classList.toggle('lk-hide',!vis); });
 }
-window.LadderUnlock={reached,apply,pos,firstAnnex,skid,passed};
+window.LadderUnlock={reached,apply,pos,firstAnnex,skid,passed,reachedStep,passedStep,ready:()=>!!order(),load:()=>{ if(!order()) load(); }};
 const go=()=>{ apply(); const d=document.getElementById('desk'); if(d) new MutationObserver(()=>{ clearTimeout(go.t); go.t=setTimeout(apply,30); }).observe(d.querySelector('.dtabs')||d,{childList:true}); };
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else setTimeout(go,0);
 })();
@@ -3110,7 +3117,7 @@ try{ if(document.fonts&&document.fonts.load){ window.addEventListener('load',fun
   /* unlocked: every step of a rung you have opened, any step you have passed, and the step you have climbed to */
   function unlocked(){ const P=pages(); let h=-1; for(const k in P){ const m=k.match(/^open:r(\d+)$/); if(m&&P[k]&&P[k].v) h=Math.max(h,+m[1]); }
     let far=''; try{ far=(JSON.parse(LS.getItem('ladder:furthest')||'null')||{}).page||''; }catch(e){}
-    const out=[]; (window.LADMAP||[]).forEach(([fl,rungs])=>rungs.forEach(([r,core,annex])=>core.concat(annex).forEach(([s])=>{ if(!NONE.has(s)&&(r<=h||(P[s]&&P[s].v)||s===here()||s===far)) out.push(s); }))); return out; }
+    const out=[]; (window.LADMAP||[]).forEach(([fl,rungs])=>rungs.forEach(([r,core,annex])=>core.concat(annex).forEach(([s])=>{ if(!NONE.has(s)&&(r<=h||(P[s]&&P[s].v)||s===here()||s===far||(window.LadderUnlock&&LadderUnlock.reachedStep&&LadderUnlock.reachedStep(s)))) out.push(s); }))); return out; } /* allunlock */
   const cache=new Map();
   function load(s){ if(cache.has(s)) return Promise.resolve(cache.get(s));
     const take=(sec,title)=>{ const c=sec.cloneNode(true); c.classList.remove('shut'); c.hidden=false; c.removeAttribute('style'); c.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id')); c.querySelectorAll('.blip,script,button.pa').forEach(e=>e.remove());
@@ -3214,7 +3221,7 @@ function deal(host,s,done){ const c=CM()[s]; if(!c){ host.innerHTML='<p class="s
     show(); }); }
 /* the pane: every step reached that has cards, by floor and rung, as the Understanding pane lists them */
 function fill(el){ const P=get('pages:done',{}), M=window.LADMAP||[], U=units(), X=xs(), me=here();
-  const reach=s=>{ if(P[s]||s===me) return true; try{ const F=window.LadderFV, f=F&&F.furthest&&F.furthest(); if(!f||f.ord==null||!F.placeOf) return false; const pl=F.placeOf(s); return pl!=null&&Math.floor(f.ord/1000)>=pl; }catch(e){ return false; } };
+  const reach=s=>{ if(P[s]||s===me) return true; if(window.LadderUnlock&&LadderUnlock.reachedStep&&LadderUnlock.reachedStep(s)) return true; /* allunlock */ try{ const F=window.LadderFV, f=F&&F.furthest&&F.furthest(); if(!f||f.ord==null||!F.placeOf) return false; const pl=F.placeOf(s); return pl!=null&&Math.floor(f.ord/1000)>=pl; }catch(e){ return false; } };
   const row=s=>'<li class="aq-cwr'+(X[s]?' sk-done':'')+'"><button type="button" class="sk-msit aq-cws" data-stem="'+s+'">'+esc(lab(s))+'</button> <span class="sk-st">'
     +(X[s]?'<span class="aq-x">'+CHI+'</span> finished':CM()[s][2]+' cards')+'</span><div class="aq-deal" hidden></div></li>';
   const pill=(label,inner)=>'<details class="sk-wing sk-star sk-star-teal"><summary aria-label="'+label+', crosswalk x earned: its cards">'+CHI+' '+label+'</summary>'+inner+'</details>';
