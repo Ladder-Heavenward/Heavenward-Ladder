@@ -2,6 +2,8 @@
    The record lives in this browser's storage. Nothing here reads, writes or sends it. */
 (function () {
   if (!('serviceWorker' in navigator) || !window.caches) return;
+  /* some pages load this file twice: run once, or two bars stack and one survives every tap */
+  if (window.__ladderApp) return; window.__ladderApp = true;
   const BASE = new URL('./', document.currentScript.src).href, CACHE = 'ladder-pages', KEY = BASE + '__installed.json';
   const A = (() => { try { return JSON.parse(localStorage.getItem('ladder-app') || '{}'); } catch (e) { return {}; } })();
   const saveA = () => { try { localStorage.setItem('ladder-app', JSON.stringify(A)); } catch (e) {} };
@@ -22,9 +24,10 @@
     (buttons || []).forEach(([label, fn]) => { const b = document.createElement('button'); b.textContent = label;
       b.style.cssText = 'font:inherit;padding:4px 12px;border-radius:6px;border:1px solid #f4ecd8;background:transparent;color:inherit;cursor:pointer';
       b.onclick = fn; bar.appendChild(b); });
-    bar.hidden = false;
+    bar.hidden = false; bar.style.display = 'flex';
   }
-  const hide = () => { if (bar) bar.hidden = true; };
+  /* the inline display:flex beats the hidden attribute, so hiding must set display too */
+  const hide = () => { if (bar) { bar.hidden = true; bar.style.display = 'none'; } };
 
   async function fetchInto(c, files, say) {
     let done = 0, failed = 0; const q = files.slice();
