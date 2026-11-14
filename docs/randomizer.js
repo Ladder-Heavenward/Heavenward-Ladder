@@ -9878,7 +9878,7 @@ QP.push({id:'33c.wave',step:'33c',label:'the string’s statement',open:()=>meas
 const WD33=[
   ['ln √(x² + y²) is balanced away from 0. Is its value at 0 the average round the unit circle?','no: it is not balanced at 0, so that disc is not inside where it is balanced',['yes: the average is 0','yes, by the circle-average technique','no: the average is 1'],'Circle-average technique needs the circle and its inside.'],
   ['x² + y² has u_xx = u_yy. Is it balanced?','no: balanced asks for the sum to be 0, and here it is 4',['yes','yes, on the unit disc','no: the sum is 2'],'Balanced means u_xx + u_yy = 0.'],
-  ['Can a still plate’s hottest point be in the middle, if the middle was heated first?','no: a still plate keeps no memory of what was heated first; the hottest is on the edge',['yes','yes, for a round plate','no: it has no hottest point'],'Edge-rules-inside technique.'],
+  ['Can a still plate’s hottest point be in the middle, if the middle was heated first?','no: a still plate keeps no memory of what was heated first; the hottest is on the edge',['yes','yes, for a round plate','no: it has no hottest point'],'Edge-decides-inside technique.'],
   ['The real part of z̄ = x − iy is x, which is balanced. Has z̄ a complex slope?','no: the technique runs one way; z̄ has no complex slope',['yes','yes, away from 0','no: and x is not balanced either'],'Real-part technique (26d).'],
   ['Two balanced functions on D agree on the edge. What follows inside?','they are equal throughout D',['they differ by a constant','they agree at the centre only','nothing'],'One-still-state technique.']];
 QP.push({id:'33d.balanced',step:'33d',label:'balanced functions',open:()=>measured('33d'),make(){ return writtenQ('33d.balanced',WD33); }},
@@ -9892,8 +9892,8 @@ QP.push({id:'33d.balanced',step:'33d',label:'balanced functions',open:()=>measur
     const A=1+rnd(9), m=rnd(4), M=m+2+rnd(5);
     return line28('33d.line',[
       ['d1',[['u is balanced on a disc about p, and its average round a circle about p in the disc is '+A,'given'],['u(p) = '+A,'the circle-average technique']],2,0,'The centre takes the average.'],
-      ['d2',[['u is balanced in D, and on the edge of D its values lie from '+m+' to '+M,'given'],['inside D its values lie from '+m+' to '+M,'the edge-rules-inside technique']],2,0,'The greatest and least values are on the edge.'],
-      ['d3',[['u is balanced in D, and on the edge of D its values lie from '+m+' to '+M,'given'],['somewhere inside D, u = '+(M+1),'the edge-rules-inside technique']],2,1,'No inside value passes the edge’s greatest, '+M+'.'],
+      ['d2',[['u is balanced in D, and on the edge of D its values lie from '+m+' to '+M,'given'],['inside D its values lie from '+m+' to '+M,'the edge-decides-inside technique']],2,0,'The greatest and least values are on the edge.'],
+      ['d3',[['u is balanced in D, and on the edge of D its values lie from '+m+' to '+M,'given'],['somewhere inside D, u = '+(M+1),'the edge-decides-inside technique']],2,1,'No inside value passes the edge’s greatest, '+M+'.'],
       ['d4',[['u = x² + y²','given'],['u is balanced','u_xx = u_yy']],2,1,'Balanced asks u_xx + u_yy = 0. Here it is 4.'],
       ['d5',[['x is balanced, and x is the real part of z̄','given'],['z̄ has a complex slope','the real-part technique']],2,1,'The technique runs from a complex slope to balance, not back.']],[A,m,M]); }});
 

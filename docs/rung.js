@@ -1037,7 +1037,7 @@ window.LadderDrum=(function(){ const SAY=['Laundry Day']; /* Andrew 00:24Z: 'jus
     const done=()=>{ clearInterval(iv); clearInterval(w); d.classList.add('out'); setTimeout(()=>d.remove(),420); };
     const w=setInterval(()=>{ let ok=false; try{ ok=!!ready(); }catch(e){} if((ok&&Date.now()-t0>=1600)||Date.now()-t0>120000) done(); },100); }
   return {show}; })();
-  function loadRand(){ try{ LadderDrum.show(desk,()=>window.LadderRandomizer&&(b=>b&&!/Gathering the pools/.test(b.textContent))(desk.querySelector('#dp-rand .rzbox'))); }catch(e){}
+  function loadRand(){ try{ LadderDrum.show(desk,()=>window.LadderRandomizer&&(b=>b&&!/Gathering the pools/.test(b.textContent)&&!b.querySelector('.rzwait'))(desk.querySelector('#dp-rand .rzbox'))); }catch(e){}
     if(window.LadderRandomizer){ const bx=desk.querySelector('#dp-rand .rzbox'); if(bx) LadderRandomizer.render(bx); return; } const s=document.createElement('script'); s.src='randomizer.js'; document.head.appendChild(s); }
   function open(v){ if(!v&&window.MathKeys) MathKeys.limit(null); desk.classList.toggle('open',v); document.body.classList.toggle('deskopen',v); btn.textContent=v?'✕ desk':'☰ desk'; st.open=v; save(); if(v) show('keys'); else { dock(false); const was=desk.classList.contains('toolpage'); toolPage(null); if(was&&history.state&&history.state.tool) try{ history.back(); }catch(e){} } }
   /* techtrio: the three tech screens share one row of buttons; the Tech Deck is a screen of the toolbox */
