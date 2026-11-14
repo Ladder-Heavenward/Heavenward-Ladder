@@ -18947,6 +18947,5766 @@ CH.p2card=p2card;
 (function(){ const R=new Set(["13d.run", "13h.run", "13c.run", "13i.run", "13e.run", "13d.twice", "13d.factor", "13d.sum", "13c.times", "13i.over", "13e.power", "13h.root", "13e.links", "13d.speed", "13d.gain", "1e.kind", "13d.at", "13d.tangent", "14a.level", "14f.second", "16f.back", "16f.scale", "16f.add", "16c.ends", "1e.same", "1e.valid", "1e.together", "8g.findall", "4k.rowstep", "4k.twoterm", "9f.domains", "9b.twice", "8h.between", "27j.solve", "27j.reach", "27j.lowest", "27d.chain", "27d.zero", "27j.undo", "27d.thin", "27f.which", "43b.noundo", "44f.recip", "27b.free", "27b.mix", "27b.neighbours", "27b.coords", "27b.share", "27c.lostreached", "27d.after", "27d.otherbasis", "27g.own2", "27h.readbasis", "27g.pullback", "27g.polyin", "27b.shifted", "44c.through", "44c.remainder", "44j.common", "44j.repeated", "19e.sign", "27k.byrows", "27k.powers", "27k.opposite", "27k.ratio", "27g.standin", "27e.plusI", "27f.stretches", "27f.straightens", "27f.stairstretch", "27f.polystretch", "27f.swapspace", "27g.least", "44cb27.killer", "44cb27.maker", "44cb27.howmany", "44cb27.blocks", "44cb27.parts", "44cb27.root", "31a.fourcorners", "31a.fromsizes", "31b.shadow", "31c.straighten", "31d.keepers", "31d.symprod", "31e.corners", "31e.signs", "25d.roots", "14i.bothzero", "13m.tangentstep", "23b.seconddiff", "31g.matched", "28d.mixed", "28i.parallelogram", "2g.howmany", "2h.lists", "5cb2.class", "35a.pairing", "35b.diagonalrow"]); let k=0; const G=[];
   for(let i=QP.length-1;i>=0;i--){ if(QP[i]&&R.has(QP[i].id)){ G.push(QP[i].id+"@"+QP[i].step+":"+(QP[i].label||"")); QP.splice(i,1); k++; } }
   try{ window.__chRetired=k; window.__chRetiredIds=G; if(window.LADDER_CHDEBUG) console.log("chains retired",k); }catch(e){} })();
+/* ===== Chains, Word Problems round 2 (Andrew 2026-11-14 02:03Z and 02:17Z): the story is the beginning and the end of the chain.
+   A word card is: the law's story (opening), a first link that reads the law, 0 to 2 middle links that carry the quantity on,
+   and the law's own close, which asks the story's question in the story's terms and units. More laws come from the annexes. ===== */
+(function(){
+const {Q,qa,qm,qn,qi,qz,qs,ev,show,fromPoly,big,ri,openStep,qsqrt}=CH;
+const LAWS=CH.LAWS, WL=CH.WL;
+const qq=x=>typeof x==='number'?Q(x):x;
+const poly=c=>fromPoly(c.map(qq));
+const sp=(c,v)=>show(poly(c)).replace(/x/g,v);
+const WHO=['Zoe','Evita','Sarah','Claire','Randy','Jean','Terry','Mike'], HE=w=>['Randy','Jean','Terry','Mike'].includes(w);
+const PLACES=['Salinas','Monterey','Astoria','Tillamook','Wenatchee','Modesto','Merced','Truckee','Auburn','Placerville','Bend','Yakima','Ellensburg','Tofino','Anacortes',
+  'Bellingham','Olympia','Tacoma','Eugene','Ashland','Eureka','Arcata','Mendocino','Sonora','Mariposa','Newport','Coos Bay','Port Townsend','Sequim','Nanaimo','Victoria','Squamish',
+  'Hood River','The Dalles','Leavenworth','Winthrop','Sisters','Redding','Chico','Petaluma','Santa Cruz'];
+const WATERS=['the Columbia','the Willamette','the Skagit','the Klamath','the Rogue','the Umpqua','the Fraser','the Tuolumne','the Deschutes','Puget Sound','Hood Canal','Haro Strait','Rosario Strait'];
+const BEASTS=['otter','heron','osprey','marmot','elk','raven','puffin','salmon','beaver','pika','lynx','bobcat','newt','kingfisher','dipper','loon','grebe','wren','owl','vole','shrew','chipmunk','gull','cormorant'];
+const who=()=>pick(WHO), at=()=>pick(PLACES), water=()=>pick(WATERS), beast=()=>pick(BEASTS);
+const isQ=v=>v&&typeof v.p==='number'&&typeof v.q==='number'&&Number.isFinite(v.p)&&Number.isFinite(v.q)&&v.q>0;
+const par=v=>v.p<0||v.q!==1?'('+qs(v)+')':qs(v);
+const num=v=>v.p/v.q;
+const mag=v=>{ const a=Math.abs(num(v)); let s=1; while(s*10<=a) s*=10; return s; };
+const above=(q,n)=>{ const s=mag(q); return Q((Math.floor(num(q)/s)+ri(1,n||5))*s); };
+const below=q=>{ const s=mag(q); const f=Math.ceil(num(q)/s)-ri(1,2); return f>0?Q(f*s):null; };
+const SING={boxes:'box',stretches:'stretch',inches:'inch'};
+const PLW=/^(breaks|courses|packs|vials|inhalers|cases|electronvolts|rungs|micrometres|nanometres|milliseconds|microwatts|microjoules|millijoules|kilojoules|millilitres|microcoulombs|cents|ohms|hours|minutes|seconds|days|weeks|years|months|points|places|ticks|units|metres|litres|dollars|newtons|joules|watts|degrees|trucks|orbitals|faces|bonds|ways|members|flips|beats|octaves|steps|levels|moles|grams|kilograms|kilometres|millimetres|centimetres|kilopascals|kilonewtons|picojoules|millivolts|volts|amps|seats|sightings|tours|rounds|messages|copies|senders|lines|mistakes|bits|crates|bags|fish|coins|settings|atoms|electrons|links|samples|readings|decibels|matches|unknowns|comparisons|assignments|seedlings|misprints|tokens|passes|changes|moves|remainders|thousandths|gaps|plates|knots|feet|waits|boxes|stretches|inches|trees|forms|species|nanoseconds|milliseconds|microseconds|attoseconds|tiles|spikes|cells|delays|millimoles|micromoles|wavelengths|rabbits|voles)$/;
+const NOTPL=/^(as|is|its|this|was|has|times|always|less|across|plus|minus|species|fish|series|glass|gas|mass|lens|bus|thus|news|physics|its)$/;
+const one=u=>{ const w=u.split(' '); let i=w.findIndex(x=>PLW.test(x));
+  if(i<0){ i=w.findIndex(x=>/^[a-z]{3,}s$/.test(x)&&!/ss$/.test(x)&&!NOTPL.test(x)); if(i<0) return u; const x=w[i]; w[i]=/(ch|sh|x|ss)es$/.test(x)?x.slice(0,-2):/[^aeiou]ies$/.test(x)?x.slice(0,-3)+'y':x.slice(0,-1); return w.join(' '); } const x=w[i]; w[i]=SING[x]||(x==='feet'?'foot':x==='species'?x:x==='fish'?x:x==='copies'?'copy':x.replace(/s$/,'')); return w.join(' '); };
+const say=q=>qs(q.v)+' '+(q.v.q===1&&Math.abs(q.v.p)===1?one(q.u):q.u);
+
+/* ================= the close: the story's own question, the last step of every word chain ================= */
+const KDEF={
+  gap:{f:(q,k)=>qa(k,qn(q)),ex:(q,k)=>par(k)+' − '+par(q),w:[(q,k)=>[qa(q,qn(k)),'the limit is taken from the amount, the subtraction turned round'],(q,k)=>[qa(k,q),'the amount is added to the limit instead of taken from it']]},
+  over:{f:(q,k)=>qa(q,qn(k)),ex:(q,k)=>par(q)+' − '+par(k),w:[(q,k)=>[qa(k,qn(q)),'the subtraction is turned round'],(q,k)=>[qa(q,k),'the two are added instead of one taken from the other']]},
+  times:{f:(q,k)=>qm(q,k),ex:(q,k)=>par(q)+' · '+par(k),w:[(q,k)=>[qm(q,qi(k)),'the amount is divided by '+qs(k)+' instead of multiplied'],(q,k)=>[qa(q,k),qs(k)+' is added instead of multiplied']]},
+  per:{f:(q,k)=>qm(q,qi(k)),ex:(q,k)=>par(q)+'/'+par(k),w:[(q,k)=>[qm(q,k),'the amount is multiplied by '+qs(k)+' instead of divided'],(q,k)=>[qa(q,qn(k)),qs(k)+' is taken away instead of divided into it']]},
+  into:{f:(q,k)=>qz(q)?null:qm(k,qi(q)),ex:(q,k)=>par(k)+'/'+par(q),w:[(q,k)=>[qm(q,qi(k)),'the division is turned over'],(q,k)=>[qm(q,k),'the two are multiplied instead of divided']]},
+  count:{f:(q,k)=>{ const r=qm(q,qi(k)); return Q(Math.floor(num(r))); },ex:(q,k)=>'whole part of '+par(q)+'/'+par(k),w:[(q,k)=>[Q(Math.ceil(num(qm(q,qi(k))))),'a part-filled one is counted as full'],(q,k)=>[qm(q,qi(k)),'the part left over is kept as a fraction'],(q,k)=>[qm(q,k),'the amount is multiplied by the size instead of divided']]},
+  ceil:{f:(q,k)=>{ const r=qm(q,qi(k)); return Q(Math.ceil(num(r))); },ex:(q,k)=>par(q)+'/'+par(k)+', rounded up',w:[(q,k)=>[Q(Math.floor(num(qm(q,qi(k))))),'the count is rounded down, leaving part of the need uncovered'],(q,k)=>[qm(q,qi(k)),'the count is left as a fraction'],(q,k)=>[qm(q,k),'the amount is multiplied instead of divided']]},
+  frac:{f:(q,k)=>qm(q,k),ex:(q,k)=>par(k)+' · '+par(q),w:[(q,k)=>[qm(q,qa(Q(1),qn(k))),'the other share is given'],(q,k)=>[qm(q,qi(k)),'the amount is divided by the share instead of multiplied']]},
+  plus:{f:(q,k)=>qa(k,q),ex:(q,k)=>par(k)+' + '+par(q),w:[(q,k)=>[qa(k,qn(q)),'the amount is taken away instead of added'],(q,k)=>[q,'the starting amount is left out']]},
+  mod:{f:(q,k)=>q.q!==1?null:Q(((q.p%k.p)+k.p)%k.p),ex:(q,k)=>'remainder of '+par(q)+' by '+qs(k),w:[(q,k)=>[Q(Math.floor(num(q)/k.p)),'the number of whole turns is given instead of what is left'],(q,k)=>{ const r=((q.p%k.p)+k.p)%k.p; return [Q(k.p-r),'what is left is counted back from a full turn']; },(q,k)=>[q,'the remainder is not taken']]}
+};
+/* cl(kind, o): o.u units it takes ('yu','rate','area' or a unit), o.out its unit (left out: it keeps the unit it is given),
+   o.k the story's number (a number, a rational, 'above', 'below', or (S,q,ctx)=>...), o.ask(S,p) the question, o.ln(S,p) the label of the worked line,
+   o.cite and o.steps the technique, o.w whys in the kind's order, o.xs extra wrong moves, o.when(S,last,ctx), o.pos (default: the answer is above 0) */
+function cl(kind,o){ const K=KDEF[kind]||{};
+  const units=S=>[].concat(typeof o.u==='function'?o.u(S):o.u).map(x=>x==='yu'?S.yu:x==='rate'?S.rate:x==='area'?S.area:x).filter(Boolean);
+  const outU=(S,q)=>o.out?(typeof o.out==='function'?o.out(S):o.out):q.u;
+  const C={kind,id:o.id||kind,steps:o.steps||[],cite:()=>o.cite,
+    fits(S,q,last,ctx,P){ if(!units(S).includes(q.u)) return false; if(o.when&&!o.when(S,last,ctx)) return false; return C.steps.every(s=>openStep(s,P)); },
+    make(S,q,ctx){ let k=o.k; if(k==='above') k=above(q.v,o.n); else if(k==='below') k=below(q.v); else if(typeof k==='function') k=k(S,q,ctx); if(k===null||k===undefined) return null; k=qq(k); if(!isQ(k)) return null; return {k,K:qs(k),ctx}; },
+    act(S,p,q){ if(!q||!isQ(q.v)) return null; if(o.inPos&&q.v.p<=0) return null; const v=o.f?o.f(S,p,q):K.f(q.v,p.k); return v&&isQ(v)?{v,u:outU(S,q)}:null; },
+    slips(S,p,q){ const out=[]; (K.w||[]).forEach((g,i)=>{ try{ const r=g(q.v,p.k); if(r&&isQ(r[0])&&(!o.w||o.w[i]!==null)) out.push({why:(o.w&&o.w[i])||r[1],v:r[0],u:outU(S,q)}); }catch(e){} });
+      if(o.xs){ try{ (o.xs(S,p,q)||[]).forEach(s=>{ if(s&&isQ(s.v)) out.push({why:s.why,v:s.v,u:s.u||outU(S,q)}); }); }catch(e){} } return out; },
+    ask:(S,p)=>o.ask(S,p),
+    line:(r,S,p,q)=>o.ln(S,p)+': '+(o.ex?o.ex(S,p,q):K.ex(q.v,p.k))+' = '+qs(r.v)+' '+r.u,
+    pos:o.pos!==false};
+  return C; }
+const G=o=>cl('gap',o), O=o=>cl('over',o), Tm=o=>cl('times',o), Pr=o=>cl('per',o), In=o=>cl('into',o), Ct=o=>cl('count',o), Cc=o=>cl('ceil',o), Fr=o=>cl('frac',o), Pl=o=>cl('plus',o), Md=o=>cl('mod',o), Cu=o=>cl('cust',o);
+const LESS={cite:'the less-is-adding technique',steps:['4h']}, MQ={cite:'multiplying and dividing quantities',steps:['5j']}, DR={cite:'the division-with-remainder technique',steps:['4j']},
+  CU={cite:'changing units is multiplying by one',steps:['5j']}, SC={cite:'the scaling technique',steps:['5c']}, RA={cite:'sharing in a ratio',steps:['5j']};
+const own=(st,cite)=>({cite,steps:[st]});
+const X=(o,b)=>Object.assign({},b,o);
+const read1=(last)=>last==='9a.read'||last==='5g.put'||/\.own$/.test(last||'');
+const hasX=(S,last,ctx)=>ctx&&ctx.x!==undefined&&read1(ctx.first)&&ctx.x>0;
+
+/* ================= closes for the laws already in the bank ================= */
+const CLOSE={
+'13·econ.cost':[
+  Pr(X({u:'yu',out:'dollars a chair',k:(S,q,c)=>c.x,when:hasX,ask:(S,p)=>'what does one chair cost on average, making '+p.K+' that week?',ln:()=>'the average cost of a chair',
+    w:['the total is multiplied by the number of chairs instead of divided','the number of chairs is taken away instead of divided into the total']},own('13·econ','the marginal-against-average technique'))),
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the week’s budget is '+p.K+' dollars: how many dollars of it are left?',ln:()=>'left of the budget'},LESS)),
+  G(X({u:'rate',out:'dollars',k:'above',ask:(S,p)=>'each chair sells for '+p.K+' dollars: what does one more chair add to profit?',ln:()=>'profit on one more chair',
+    w:['the price is taken from the cost, the subtraction turned round','the cost is added to the price']},own('13·econ','the profit-of-one-more technique')))],
+'16·nav.speed':[
+  In(X({u:'yu',out:'hours',k:()=>pick([12,24,30,60]),ask:(S,p)=>'the next buoy is '+p.K+' nautical miles off: at that speed, how many hours to reach it?',ln:()=>'hours to the buoy'},MQ)),
+  G(X({u:'area',k:'above',ask:(S,p)=>'the harbour is '+p.K+' nautical miles from the start: how many miles are still to run?',ln:()=>'miles still to run'},own('16·nav','the dead-reckoning technique'))),
+  Tm(X({u:'rate',out:'knots',k:()=>pick([2,3,4]),ask:(S,p)=>'if it kept gaining at that pace, how many knots faster after '+p.K+' more hours?',ln:()=>'knots gained'},MQ))],
+'16·logi.flow':[
+  Pl(X({u:'area',k:()=>ri(2,9)*50,ask:(S,p)=>'the tank held '+p.K+' litres at noon: how many litres are in it now?',ln:()=>'litres in the tank'},own('16·logi','the tank-level technique'))),
+  Tm(X({u:'yu',out:'litres',k:()=>pick([2,5,10]),ask:(S,p)=>'if in less out held at that for '+p.K+' minutes, how many litres would the tank gain?',ln:()=>'litres gained'},MQ))],
+'16·phys.spring':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the latch holds against '+p.K+' newtons: by how many newtons does it still hold?',ln:()=>'newtons to spare at the latch'},LESS)),
+  G(X({u:'area',k:'above',ask:(S,p)=>'a dart needs '+p.K+' joules to reach the board: how many joules short is the spring?',ln:()=>'joules still needed'},own('16·phys','the work-energy technique')))],
+'13·eng.climb':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the hook can rise '+p.K+' metres in all: how many metres of lift are left?',ln:()=>'metres of lift left'},LESS)),
+  G(X({u:'watts',k:'above',ask:(S,p)=>'the crane’s motor gives '+p.K+' watts: how many watts are to spare?',ln:()=>'watts to spare'},own('13·eng','the climbing-power technique')))],
+'14·econ.profit':[
+  G(X({u:'yu',k:'above',when:(S,l)=>l!=='14a.best',ask:(S,p)=>'the stall saves for a '+p.K+'-dollar cart: after one such day, how many dollars more does it need?',ln:()=>'dollars still needed'},LESS)),
+  Tm(X({u:'rate',out:'dollars',pos:false,k:()=>pick([2,3,5]),ask:(S,p)=>'the stall makes '+p.K+' more jars a day: about how many dollars does its profit change?',ln:()=>'change in profit'},own('14·econ','the technique for the best output'))),
+  Pr(X({u:'yu',k:()=>pick([2,4,5]),when:(S,l)=>l==='14a.best',ask:(S,p)=>'the best day’s profit is shared by '+p.K+' partners: how many dollars does each get?',ln:()=>'each partner’s share'},RA))],
+'16·econ.gain':[
+  O(X({u:'yu',k:'below',ask:(S,p)=>'that crate costs the grower '+p.K+' dollars to bring: how many dollars does the trade gain?',ln:()=>'gain on that crate'},own('16·econ','the total-gain technique'))),
+  O(X({u:'area',k:'below',ask:(S,p)=>'the growers’ crates cost '+p.K+' dollars in all: what is the total gain from the trade?',ln:()=>'total gain'},own('16·econ','the total-gain technique')))],
+'14·bio.spread':[
+  G(X({u:'millimetres',k:'above',ask:(S,p)=>'the cell is '+p.K+' millimetres across: how much farther must the dye spread to cross it?',ln:()=>'millimetres still to spread'},own('14·bio','the spreading law')))],
+'13·phys.bkmovers':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'it is to reach the mark at '+p.K+' '+S.yu+': how much farther must it go?',ln:()=>'still to go to the mark'},LESS)),
+  Tm(X({u:'rate',out:S=>S.yu,pos:false,k:()=>pick([1,2,3]),ask:(S,p)=>'if it kept that speed for '+p.K+' more seconds, about how far would it move?',ln:()=>'distance at that speed'},MQ))],
+'8·stat.misses':[
+  G(X({u:'points',k:'above',ask:(S,p)=>'the class target is '+p.K+' points: how many points short of it is that typical score?',ln:()=>'points short of the target'},LESS)),
+  Pr(X({u:'yu',k:3,ask:()=>'share the squared misses over the 3 scores: what is the average squared miss?',ln:()=>'average squared miss',w:['the sum is multiplied by the 3 scores instead of divided','3 is taken away instead of divided into the sum']},own('8·stat','the squared-misses technique')))],
+'8·econ.wage':[
+  Tm(X({u:'yu',out:'dollars a week',k:()=>pick([20,30,40]),ask:(S,p)=>'the cannery gives '+p.K+' hours of work a week: what does that come to in a week?',ln:()=>'weekly pay'},MQ)),
+  Tm(X({u:'rate',out:'dollars an hour',k:()=>pick([2,3,4]),ask:(S,p)=>'at that raise, how many dollars an hour more after '+p.K+' more years?',ln:()=>'rise in the wage'},MQ))],
+'9·stat.weir':[
+  Cc(X({u:'yu',out:'boxes',k:()=>pick([20,50]),ask:(S,p)=>'every fish counted gets a tag, and tags come '+p.K+' to a box: how many boxes are used?',ln:()=>'boxes of tags'},DR)),
+  G(X({u:'rate',k:'above',ask:(S,p)=>'the fish ladder passes at most '+p.K+' fish a day: how many more a day could it take?',ln:()=>'room left on the ladder'},LESS))],
+'9·phys.roll':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the board is '+p.K+' centimetres long: how far is the ball from its end?',ln:()=>'centimetres to the end'},LESS)),
+  In(X({u:'rate',out:'seconds',k:()=>pick([12,24,36,60]),ask:(S,p)=>'at that speed, how many seconds would it take to cross a '+p.K+'-centimetre mat?',ln:()=>'seconds to cross the mat'},MQ)),
+  Tm(X({u:S=>S.acc,out:'centimetres a second',k:()=>pick([5,6,10]),ask:(S,p)=>'how fast is the ball going '+p.K+' seconds after it starts from rest?',ln:()=>'speed after '+'that time'},own('9·phys','the falling-distance technique')))],
+'11·chem.pan':[
+  G(X({u:'yu',k:100,ask:()=>'water boils here at 100 °C: how many degrees short of boiling is the pan?',ln:()=>'degrees short of boiling'},LESS)),
+  In(X({u:'rate',out:'minutes',k:()=>pick([21,28,35,42]),ask:(S,p)=>'at that pace, how many minutes to warm the water '+p.K+' degrees more?',ln:()=>'minutes to warm'},MQ))],
+'11·econ.market':[
+  Cu(X({u:'dollars a crate',out:'crates',k:1,f:(S,p,q)=>qa(Q(S.market.c),qm(Q(S.market.d),q.v)),ex:(S,p,q)=>S.market.c+' + '+S.market.d+' · '+par(q.v),ask:()=>'how many crates change hands at that price?',ln:()=>'crates that change hands',
+    xs:(S,p,q)=>[{why:'the growers’ start is left out',v:qm(Q(S.market.d),q.v)},{why:'the growers’ slope is left out',v:qa(Q(S.market.c),q.v)},{why:'the buyers’ slope is added instead of taken away',v:qa(Q(S.market.a),qm(Q(S.market.b),q.v))}]},own('11·econ','the meeting technique'))),
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the market’s cold room holds '+p.K+' crates: how many crates of room are left?',ln:()=>'room left'},LESS))],
+'12·econ.market':[
+  Cu(X({u:'dollars a crate',out:'crates',k:1,f:(S,p,q)=>qa(Q(S.market.c),qm(Q(S.market.d),q.v)),ex:(S,p,q)=>S.market.c+' + '+S.market.d+' · '+par(q.v),ask:()=>'how many crates change hands at that one matching price?',ln:()=>'crates that change hands',
+    xs:(S,p,q)=>[{why:'the growers’ start is left out',v:qm(Q(S.market.d),q.v)},{why:'the growers’ slope is left out',v:qa(Q(S.market.c),q.v)},{why:'the buyers’ slope is added instead of taken away',v:qa(Q(S.market.a),qm(Q(S.market.b),q.v))}]},own('12·econ','the one-match technique'))),
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the trucks can carry '+p.K+' crates: how many crates of room are left?',ln:()=>'room left'},LESS))],
+'13·stat.line':[
+  Tm(X({u:'metres a year',out:'metres',k:()=>pick([4,5,6]),ask:(S,p)=>'growing at that slope, how tall would a sapling stand after '+p.K+' years?',ln:()=>'height on the line'},own('13·stat','the best-line technique'))),
+  Pr(X({u:'yu',k:3,ask:()=>'share those squared misses over the 3 saplings: what is the average squared miss?',ln:()=>'average squared miss'},SC))],
+'13·phys.stone':[
+  G(X({u:'yu',k:S=>S.c[0],ask:()=>'how many metres has the stone fallen from the top of the cliff?',ln:()=>'metres fallen',w:['the cliff’s height is taken from the height now, turned round','the height now is added to the cliff’s height']},LESS)),
+  Tm(X({u:'rate',out:'kilometres an hour',k:Q(-18,5),ask:()=>'how fast is it falling, in kilometres an hour, a metre a second being 18/5 of one?',ln:()=>'speed of the fall',w:['the velocity is divided by 18/5',null],
+    xs:(S,p,q)=>[{why:'the minus sign is kept, as if the stone rose',v:qm(q.v,Q(18,5))},{why:'the conversion is turned over, 5/18',v:qm(q.v,Q(-5,18))}]},CU))],
+'13·chem.rxn':[
+  Tm(X({u:'yu',out:'millimoles',k:()=>pick([2,3,5]),ask:(S,p)=>'the flask holds '+p.K+' litres: how many millimoles of N₂O₅ are in it?',ln:()=>'millimoles in the flask'},MQ)),
+  Tm(X({u:'millimoles a litre per minute',out:'millimoles a litre',k:()=>pick([2,3]),when:(S,l)=>l==='13·chem.rate',ask:(S,p)=>'at that rate, about how many millimoles a litre react in the next '+p.K+' minutes?',ln:()=>'reacted at that rate'},MQ))],
+'13·nav.tide':[
+  O(X({u:'yu',k:'below',ask:(S,p)=>'a boat needs '+p.K+' feet on the gauge to cross the bar: how many feet are to spare?',ln:()=>'feet to spare'},LESS)),
+  Fr(X({u:'rate',out:'feet',k:Q(1,2),pos:false,ask:()=>'at that rate, about how many feet does the water rise in the next half hour?',ln:()=>'rise in half an hour'},MQ))],
+'14·stat.coin':[
+  Pr(X({u:'yu',out:'in every 100',k:100,ask:()=>'give that chance as so many in every 100',ln:()=>'the chance in every 100',w:['the count is multiplied by 100 instead of divided','100 is taken away instead of divided']},CU)),
+  G(X({u:'yu',k:2500,ask:()=>'for a fair guess, p = 50, the chance is 2500 in every 10000: how much less likely is that guess?',ln:()=>'less likely than the fair guess'},own('14·stat','the chance-of-a-record technique')))],
+'14·phys.railcar':[
+  In(X({u:'metres a second',out:'seconds',k:()=>pick([12,24,30,60]),when:(S,l)=>l==='14·phys.couple',ask:(S,p)=>'the buffer stop is '+p.K+' metres on: at that shared speed, how many seconds to reach it?',ln:()=>'seconds to the buffer'},MQ)),
+  G(X({u:'yu',k:'above',when:(S,l)=>l!=='14a.best',ask:(S,p)=>'the buffer stands '+p.K+' metres past the post: how far short of it is the car?',ln:()=>'metres short of the buffer'},LESS))],
+'14·chem.bond':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the bond breaks once its energy rises to '+p.K+' energy units: how many more does it take?',ln:()=>'energy still needed'},LESS)),
+  Tm(X({u:'force units',pos:false,k:()=>pick([2,3,4]),ask:(S,p)=>p.K+' such pairs pull side by side on a plate: what force do they put on it together?',ln:()=>'the force of the pairs together',
+    xs:(S,p,q)=>[{why:'the forces of the pairs are added up, as if they pulled side by side',v:qm(q.v,p.k)}].slice(0,0),w:['the force is divided among the pairs','the number of pairs is added to the force']},own('14·chem','the force from the energy curve')))],
+'14·logi.order':[
+  In(X({u:'bags',out:'orders a year',k:S=>S.eoq.d,ask:()=>'the store sells its yearly bags in orders of that size: how many orders a year?',ln:()=>'orders a year'},own('14·logi','the best-order technique')))],
+'15·stat.bus':[
+  Tm(X({u:'area',out:'waits',k:()=>pick([2,3,5]),ask:(S,p)=>'of '+p.K+' hundred more waits, how many would fall in that range?',ln:()=>'waits in that range'},own('15·stat','the range-chance technique')))],
+'15·chem.tank':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the tank is rated to '+p.K+' kilopascals: how many kilopascals of headroom are left?',ln:()=>'headroom'},LESS)),
+  In(X({u:'rate',out:'moles',k:()=>pick([100,200,400]),ask:(S,p)=>'at that pressure per mole, how many moles would bring it to '+p.K+' kilopascals?',ln:()=>'moles for that pressure'},own('15·chem','the ideal gas law')))],
+'15·econ.lease':[
+  Fr(X({u:'yu',k:Q(10,11),when:(S,l)=>l!=='15·econ.forever',ask:()=>'that payment comes a year from now: at 1/10 a year, what is it worth today?',ln:()=>'worth today',
+    w:['the payment is shrunk by 1/11 of itself and then that piece is given','the payment is multiplied by 11/10 instead of divided']},SC)),
+  Pr(X({u:'dollars',k:()=>pick([2,4,5]),when:(S,l)=>l==='15·econ.forever',ask:(S,p)=>'the lease’s worth is left to '+p.K+' heirs equally: how many dollars each?',ln:()=>'each heir’s share'},RA))],
+'15·eng.dam':[
+  Tm(X({u:'area',out:'kilonewtons',k:()=>pick([5,10,20]),ask:(S,p)=>'the dam is '+p.K+' metres wide: what is the whole push of the water?',ln:()=>'the whole push'},own('15·eng','the push-is-an-area technique'))),
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the gate seals to '+p.K+' kilopascals: how many kilopascals to spare?',ln:()=>'kilopascals to spare'},LESS))],
+'15·phys.plate':[
+  Tm(X({u:'area',out:'kilograms',k:()=>pick([20,40,80]),ask:(S,p)=>'the steel weighs '+p.K+' kilograms a square metre: what does that piece weigh?',ln:()=>'mass of the piece'},MQ)),
+  G(X({u:'metres',k:S=>S.plate,when:(S,l)=>l==='15·phys.balance',ask:()=>'how far is the balance point from the narrow end?',ln:()=>'distance from the narrow end'},own('15·phys','the balance-plate technique')))],
+'16·cb12.lake':[
+  O(X({u:'yu',k:100,ask:()=>'the air pushes 100 kilopascals on the surface: how much of that pressure is the water’s?',ln:()=>'the water’s part'},own('16·cb12','the pressure-with-depth technique'))),
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the diver’s suit is rated to '+p.K+' kilopascals: how many kilopascals to spare?',ln:()=>'kilopascals to spare'},LESS))],
+'16·then.inflow':[
+  Pl(X({u:'area',k:()=>ri(2,9)*10,ask:(S,p)=>'the lake held '+p.K+' thousand cubic metres before the storm: how much is in it now?',ln:()=>'water in the lake'},own('16·then','the net-change technique'))),
+  Tm(X({u:'yu',out:'thousand cubic metres',k:()=>pick([2,3]),ask:(S,p)=>'if that rate held for '+p.K+' hours, how much water would come in?',ln:()=>'water at that rate'},MQ))],
+'16·eng.beam':[
+  G(X({u:'area',k:'above',ask:(S,p)=>'the beam cracks at a bending of '+p.K+' kilonewton metres: how much margin is left?',ln:()=>'margin in bending'},own('16·eng','the moment-from-shear technique'))),
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the bolts there hold '+p.K+' kilonewtons of shear: how many kilonewtons to spare?',ln:()=>'shear to spare'},LESS))],
+'16·bio.dose':[
+  Tm(X({u:'area',out:'milligrams',k:()=>pick([2,3,5]),ask:(S,p)=>'Zoe’s body clears '+p.K+' litres an hour: how many milligrams did it take up?',ln:()=>'milligrams taken up'},own('16·bio','the dose-area technique'))),
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the safe ceiling is '+p.K+' milligrams a litre: how far below it is the level?',ln:()=>'below the ceiling'},LESS))],
+'17·then.yeast':[
+  G(X({u:'thousand cells',k:'above',ask:(S,p)=>'the dough is ready at '+p.K+' thousand cells: how many thousand more are needed?',ln:()=>'thousand cells still to grow'},LESS))],
+'17·chem.halflife':[
+  G(X({u:'milligrams',k:S=>S.halve,ask:()=>'how many milligrams of the sample have gone?',ln:()=>'milligrams gone'},LESS))],
+'17·chem.ph':[
+  Tm(X({u:'moles a litre',out:'moles',k:()=>pick([2,4,5,10,Q(1,2)]),ask:(S,p)=>'the beaker holds '+p.K+(p.K==='1/2'?' litre':' litres')+': how many moles of hydrogen ions are in it?',ln:()=>'moles in the beaker'},MQ))],
+'17·bio.growth':[
+  Pr(X({u:'yu',out:'hundred voles a month',k:12,ask:()=>'give that growth per month, a year being 12 months',ln:()=>'growth a month'},CU)),
+  Tm(X({u:'yu',out:'hundred voles',k:()=>pick([Q(1,2),Q(1,4),2]),ask:(S,p)=>'if that growth held for '+p.K+' of a year, how many hundred voles would be added?'.replace(' 2 of a year',' 2 years'),ln:()=>'voles added'},MQ))],
+'17·phys.glow':[
+  Tm(X({u:'yu',out:'watts',k:()=>pick([2,3,5]),ask:(S,p)=>'each plate is '+p.K+' square metres: what glow does that give in all?',ln:()=>'the whole glow'},MQ))],
+'18·chem.absorb':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the meter reads up to '+p.K+' absorbance units: how much room is left on its scale?',ln:()=>'room on the scale'},LESS))],
+'18·eng.bar':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the bar is rated for '+p.K+' newtons: by how many newtons is the frame safe?',ln:()=>'newtons to spare in the bar'},LESS))],
+'18·econ.revenue':[
+  O(X({u:'yu',k:'below',ask:(S,p)=>'the fish cost '+p.K+' dollars: what is left of the takings?',ln:()=>'takings less cost'},LESS))],
+'18·nav.chart':[
+  Pr(X({u:'yu',out:'hours',k:()=>pick([5,10]),ask:(S,p)=>'the boat makes '+p.K+' kilometres an hour: how many hours does that run take?',ln:()=>'hours on the water'},MQ))],
+'18·logi.edge':[
+  O(X({u:'yu',k:'below',ask:(S,p)=>'fuel for the run costs '+p.K+' dollars: what does the truck clear?',ln:()=>'cleared after fuel'},LESS))],
+'18·phys.comet':[
+  Tm(X({u:'yu',out:'million kilometres',k:150,ask:()=>'taking an astronomical unit as 150 million kilometres, how far is that?',ln:()=>'distance in million kilometres'},CU))],
+'19·eng.loop':[
+  Tm(X({u:'yu',out:'watts',k:()=>pick([10,20,50]),ask:(S,p)=>'the engine runs '+p.K+' turns a second: what power does it give?',ln:()=>'power of the engine'},own('19·eng','the cycle-area technique')))],
+'19·comp.places':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'Jean stops once the moves reach '+p.K+' places: how many places of room are left?',ln:()=>'places of room left'},LESS))],
+'19·bio.bank':[
+  O(X({u:'yu',k:'below',ask:(S,p)=>'the cell spends '+p.K+' coins building a protein: how many coins are left?',ln:()=>'coins left'},LESS))],
+'20·crypt.bombe':[
+  G(X({u:'yu',k:17576,ask:()=>'three wheels give 17576 settings in all: how many are still to clear?',ln:()=>'settings still to clear'},LESS))],
+'21·phys.round':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the rail holds the cart with up to '+p.K+' newtons: how many newtons to spare?',ln:()=>'newtons to spare at the rail'},own('21·phys','the round technique')))],
+'21·eng.piston':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the seals are good to '+p.K+' metres a second: how much faster could the pin go?',ln:()=>'speed to spare'},LESS))],
+'22·nav.grid':[
+  Tm(X({u:'yu',k:2,ask:()=>'an east-west street that long on the ground at latitude 60° is drawn sec 60° = 2 times longer: how long?',ln:()=>'drawn length at 60°',
+    w:['the stretch is taken as a shrink','2 millimetres are added instead of a stretch by 2']},own('22·nav','the east-stretch technique')))],
+'22·chem.row':[
+  Tm(X({u:'yu',pos:false,k:()=>pick([2,3,4]),ask:(S,p)=>'the crystal has '+p.K+' such rows, side by side and apart: what energy do they hold in all?',ln:()=>'energy of the rows'},MQ))],
+'22·now.digits':[
+  Pr(X({u:'yu',out:'seconds',k:()=>pick([5,10,50]),ask:(S,p)=>'the program works '+p.K+' remainders a second: how many seconds does it take?',ln:()=>'seconds of work'},MQ))],
+'23·eng.power':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the winch’s motor is rated for '+p.K+' watts: how many watts to spare?',ln:()=>'watts to spare'},LESS))],
+'23·nav.drop':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'a ship that far out has a mast '+p.K+' metres tall: how many metres of it show above the sight line?',ln:()=>'mast showing'},own('23·nav','the sight-line technique')))],
+'24·phys.spring':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the catch lets go at '+p.K+' joules: how many joules more can the spring take?',ln:()=>'joules to spare'},LESS)),
+  G(X({u:'rate',k:'above',ask:(S,p)=>'the clip holds the spring with up to '+p.K+' newtons: how many newtons to spare?',ln:()=>'newtons to spare'},LESS))],
+'24·eng.house':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the thermostat is set to '+p.K+' degrees: how many degrees short does the house settle?',ln:()=>'degrees short'},own('24·eng','the closing-gap technique')))],
+'24·now.boxes':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the run is trusted while the box stays under '+p.K+' thousandths: how much room is left?',ln:()=>'room in the box'},own('24·now','the boxed-step technique')))],
+'25·eng.deck':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the anchors hold '+p.K+' kilonewtons: how many kilonewtons to spare?',ln:()=>'kilonewtons to spare'},own('25·eng','the steady-across technique')))],
+'25·econ.wear':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'saving buys '+p.K+' machines a year: how many more than standing still needs?',ln:()=>'machines a year for growth'},own('25·econ','the resting-point technique')))],
+'26·then.gain':[
+  Tm(X({u:'yu',out:'millivolts',k:()=>pick([2,3,5]),ask:(S,p)=>'a wiggle of '+p.K+' millivolts comes in: how big a wiggle comes out?',ln:()=>'the wiggle out'},own('26·then','the gain technique')))],
+'27·nav.delay':[
+  Pr(X({u:'yu',out:'kilometres',k:1000,ask:()=>'give that distance in kilometres',ln:()=>'distance in kilometres',w:[null,'1000 is taken away instead of divided'],xs:(S,p,q)=>[{why:'a kilometre is taken as 100 metres',v:qm(q.v,Q(1,100))},{why:'the delay is read as the distance',v:Q(num(q.v)/300)}]},CU)),
+  Tm(X({u:'yu',out:'metres',k:Q(1,1000),ask:()=>'the receiver’s clock runs off by 1 part in 1000: how many metres off is that distance?',ln:()=>'error in the distance',w:[null,null],xs:(S,p,q)=>[{why:'each microsecond is taken to carry a whole metre of error',v:Q(num(q.v)/300)},{why:'the error is taken as 1 part in 100',v:qm(q.v,Q(1,100))}]},own('27·nav','the travel-time technique')))],
+'27·phys.spin':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the wheel’s rim holds up to '+p.K+' joules: how many joules to spare?',ln:()=>'joules to spare'},LESS))],
+'28·then.engine':[
+  Tm(X({u:'yu',out:'joules',k:()=>pick([500,1000,2000]),ask:(S,p)=>'it takes in '+p.K+' joules of heat: at most how many joules of work can it give?',ln:()=>'most work'},own('28·then','the best-engine technique')))],
+'28·phys.tube':[
+  Fr(X({u:'yu',k:Q(1,16),ask:()=>'the tube narrows to half that radius: how much does it pass now?',ln:()=>'flow at half the radius',
+    w:['the flow is taken as the leftover share','the flow is multiplied by 16 instead of divided'],xs:(S,p,q)=>[{why:'the flow is halved with the radius',v:qm(q.v,Q(1,2))},{why:'the flow goes as the square of the radius',v:qm(q.v,Q(1,4))}]},own('28·phys','the narrow-tube technique'))),
+  Tm(X({u:'yu',out:'microlitres',k:()=>pick([10,20,30,60]),ask:(S,p)=>'how many microlitres does the tube pass in '+p.K+' seconds?',ln:()=>'sap passed'},MQ))],
+'28·bio.foxes':[
+  Tm(X({u:'yu',out:'hundred rabbits',k:()=>pick([2,3]),ask:(S,p)=>'if that rate held for '+p.K+' years, how many hundred rabbits would be eaten?',ln:()=>'rabbits eaten'},MQ))],
+'29·now.clock':[
+  Tm(X({u:'yu',out:'attoseconds',k:()=>pick([60,100]),ask:(S,p)=>'over '+p.K+' seconds, how many attoseconds does the higher clock gain?',ln:()=>'attoseconds gained'},own('29·now','the height-clock technique')))],
+'29·then.action':[
+  Tm(X({u:'yu',k:()=>pick([2,3,4]),ask:(S,p)=>'the cart runs at that speed for '+p.K+' seconds instead: what is its action?',ln:()=>'action of the longer run'},MQ))],
+'30·then.jiggle':[
+  Tm(X({u:'yu',k:2,ask:()=>'in the plane two such lines add: what is the average squared distance in the plane?',ln:()=>'squared distance in the plane',w:['the two lines are shared, halving','2 is added instead of two lines added']},MQ))],
+'30·bio.odds':[
+  Tm(X({u:'yu',k:(S,q,c)=>qa(Q(1),Q(c.x,100)),when:hasX,ask:()=>'one more generation with the same edge: what are the odds then?',ln:()=>'odds after one more generation'},own('30·bio','the odds-growth technique')))],
+'31·econ.worth':[
+  G(X({u:'points',k:'above',ask:(S,p)=>'Randy hopes for '+p.K+' points of worth: how many points short is he?',ln:()=>'points short'},LESS))],
+'31·stat.miss':[
+  Pr(X({u:'square units',k:(S,q,c)=>c.x,when:hasX,ask:(S,p)=>'share that miss over the '+p.K+' readings: what is it per reading?',ln:()=>'miss per reading'},own('31·stat','the lost-directions technique')))],
+'33·bio.oxygen':[
+  O(X({u:'yu',k:'below',ask:(S,p)=>'the cells need at least '+p.K+' units a litre: by how much does the oxygen clear that?',ln:()=>'oxygen to spare'},own('33·bio','the uptake-curve technique')))],
+'33·eng.sag':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the shelf may sag at most '+p.K+' millimetres: how many millimetres to spare?',ln:()=>'sag to spare'},LESS))],
+'35·phys.box':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the particle escapes the box at '+p.K+' units of energy: how many units short is it?',ln:()=>'energy short of escape'},own('35·phys','the box technique')))],
+'36·phys.lamps':[
+  Tm(X({u:'yu',out:'thousand counts',k:()=>pick([2,5,10]),ask:(S,p)=>'over '+p.K+' seconds at that rate, how many thousand counts reach the screen?',ln:()=>'counts in that time'},own('36·phys','the counts-add technique')))],
+'37·phys.warm':[
+  In(X({u:'metres',out:'wavelengths',k:()=>pick([10,20,35]),ask:(S,p)=>'the tube is '+p.K+' metres long: how many wavelengths fit along it?',ln:()=>'wavelengths in the tube'},own('37a','the wavelength technique'))),
+  In(X({u:'yu',out:'seconds',k:()=>pick([700,1400,3500]),ask:(S,p)=>'how many seconds does the sound take to run '+p.K+' metres?',ln:()=>'seconds to run that far'},MQ))],
+'39·eng.heat':[
+  Tm(X({u:'yu',out:'picojoules',k:()=>pick([4,8,10]),ask:(S,p)=>'the chip fills '+p.K+' such stores at once: what does the supply pay in all?',ln:()=>'paid for all the stores',when:(S,l)=>l!=='39·eng.switch'},own('39·eng','the switch-heat technique'))),
+  Tm(X({u:'yu',out:'picojoules',k:()=>pick([4,8,10]),when:(S,l)=>l==='39·eng.switch',ask:(S,p)=>'the chip has '+p.K+' such switches, each filling its own store: what heat do they give off in all?',ln:()=>'heat of all the switches'},own('39·eng','the switch-heat technique')))],
+'40·comp.cost':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the repair budget is '+p.K+' dollars: how many dollars of it are left?',ln:()=>'budget left'},LESS))],
+'40·now.lines':[
+  Pr(X({u:'yu',out:'seconds',k:()=>pick([2,5]),ask:(S,p)=>'the core reads '+p.K+' lines a second: how many seconds does the check take?',ln:()=>'seconds to check'},MQ))],
+'45·now.messages':[
+  Pr(X({u:'yu',out:'seconds',k:()=>pick([2,3,5]),ask:(S,p)=>'the network carries '+p.K+' messages a second: how many seconds do those messages take?',ln:()=>'seconds for the round'},MQ))],
+'45·econ.reward':[
+  Tm(X({u:'yu',out:'dollars',k:()=>pick([2,3,5]),ask:(S,p)=>'each token sells for '+p.K+' dollars: what is Mike’s gain in dollars?',ln:()=>'gain in dollars'},MQ))],
+'45·comp.addresses':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the block holds '+p.K+' thousand addresses: how many thousand are left to hand out?',ln:()=>'addresses left'},LESS))],
+'45·eng.flood':[
+  G(X({u:'senders',k:S=>S.c[0]/(S.ports-1),ask:()=>'how many senders has the switch learnt?',ln:()=>'senders learnt'},own('45·eng','the learning-switch technique'))),
+  Tm(X({u:'yu',out:'microseconds',k:()=>pick([2,3,5]),ask:(S,p)=>'each copy takes '+p.K+' microseconds on the wire: how long do the copies take?',ln:()=>'time on the wire'},MQ))],
+'47·eng.loading':[
+  Tm(X({u:'yu',out:'watts',k:()=>pick([2,3,4]),ask:(S,p)=>'the load at the end draws '+p.K+' amps: what power does it take?',ln:()=>'power at the load'},MQ))],
+'47·phys.axes':[
+  G(X({u:'yu',k:'above',ask:(S,p)=>'the reading must stay under '+p.K+' square metres: how much room is left?',ln:()=>'room left'},LESS))]
+};
+/* a few readings of old stories tidied for print */
+LAWS.forEach(L=>{ if(CLOSE[L.id]) L.close=CLOSE[L.id]; if(L.id==='33·eng.sag'){ const mk=L.make; L.make=function(){ const S=mk.call(this); if(S) S.story=S.story.replace('= 1x²','= x²'); return S; }; } });
+
+/* ================= new laws from the annexes ================= */
+const NEW=[];
+const law=(id,label,fn,close,o)=>{ const L=Object.assign({id,step:id.split('.')[0],label,close,make(){ let S=null; try{ S=fn(); }catch(e){ S=null; } if(!S) return null; S.lawId=id; if(!S.ix){ const STD=new Set(['c','story','f','x','xu','yu','rate','area','pts','ends','early','lawId','ix','copies','split']); const ex=Object.keys(S).filter(k=>!STD.has(k)).map(k=>{ const v=S[k]; return typeof v==='number'||typeof v==='string'?String(v):Array.isArray(v)?v.join('/'):''; }).filter(Boolean); S.ix=S.c.map(x=>qs(qq(x))).join(',')+(ex.length?';'+ex.join(';'):''); } return S; }},o||{}); LAWS.push(L); NEW.push(L); return L; };
+/* the law's own first link, for annexes below the rung where functions are read: it reads the formula by the annex's technique */
+const OWN=[];
+const ownRead=(lawId,cite,ask,ln)=>OWN.push({lawId,cite,ask,ln});
+
+/* ---------- floor 1 ---------- */
+law('2·stat.either','people in either group',()=>{ const a=ri(20,40), b=ri(15,30); return {c:[a+b,-1],early:1,story:'At a town meeting in '+at()+', '+a+' people say yes to the ferry and '+b+' say yes to the bridge. If x said yes to both, N(x) = '+sp([a+b,-1],'x')+' said yes to at least one.',
+  f:'N',x:'x',xu:'people in both',yu:'people',rate:'people per person in both',area:null,pts:[2,4,5,8,10]}; },
+  [G(X({u:'yu',k:'above',ask:(S,p)=>'the hall seats '+p.K+': how many seats are left once those people come?',ln:()=>'seats left'},LESS))]);
+law('3·comp.loop','a loop that counts up',()=>{ const a=ri(2,5), b=ri(1,9); return {c:[b,a],early:1,story:'A loop starts its counter at '+b+' and adds '+a+' on every pass, so after n passes the counter reads c(n) = '+sp([b,a],'n')+'.',
+  f:'c',x:'n',xu:'passes',yu:'on the counter',rate:'on the counter per pass',area:null,pts:[3,5,8,10]}; },
+  [G(X({u:'yu',k:'above',ask:(S,p)=>'the test stops the loop once the counter passes '+p.K+': how far short of that is it?',ln:()=>'short of the stop'},LESS))]);
+law('4·stat.tally','tallies that add to the count',()=>{ const a=ri(4,9), b=ri(2,8); return {c:[b,a],early:1,story:who()+' tallies birds at a feeder in '+at()+': each hour adds '+a+' sightings to the '+b+' from dawn, T(h) = '+sp([b,a],'h')+' sightings.',
+  f:'T',x:'h',xu:'hours',yu:'sightings',rate:'sightings an hour',area:null,pts:[2,3,4,5]}; },
+  [O(X({u:'yu',k:(S,q)=>{ const n=num(q.v); if(n<6) return null; const j=ri(1,Math.floor(n/3)), f=ri(1,Math.floor(n/3)); return Q(j+f); },ask:(S,p)=>'of those, '+p.K+' were jays and finches together: how many tallies are of the other birds?',ln:()=>'tallies of the other birds'},own('4·stat','the tallies-add-up technique')))]);
+ownRead('4·stat.tally','the tallies-add-up technique',(S,p)=>'add the tallies of the first '+p.x+' hours to the dawn tally',(o,S,p)=>'sightings after '+p.x+' hours: T('+p.x+') = '+qs(o.v)+' '+o.u);
+law('4·comp.ripple','gate delays in a ripple adder',()=>{ const a=2; return {c:[1,a],early:1,story:'In '+who()+'’s ripple adder each place waits for the carry, so adding numerals n places long takes D(n) = 2n + 1 gate delays.',
+  f:'D',x:'n',xu:'places',yu:'gate delays',rate:'gate delays per place',area:null,pts:[4,8,16,32]}; },
+  [Tm(X({u:'yu',out:'nanoseconds',k:()=>pick([2,3,5]),ask:(S,p)=>'each gate delay lasts '+p.K+' nanoseconds: how long does the sum take?',ln:()=>'time for the sum'},own('4·comp','the ripple technique')))]);
+ownRead('4·comp.ripple','the ripple technique',(S,p)=>'count the gate delays for numerals '+p.x+' places long',(o,S,p)=>'gate delays for '+p.x+' places: D('+p.x+') = '+qs(o.v)+' '+o.u);
+law('4·crypt.shift','a shift that grows each day',()=>{ const a=ri(3,9), b=ri(1,9); return {c:[b,a],early:1,story:who()+' shifts a secret note’s alphabet by '+b+' on day 0 and by '+a+' more each day after: on day d the total shift is s(d) = '+sp([b,a],'d')+' places.',
+  f:'s',x:'d',xu:'days',yu:'places',rate:'places a day',area:null,pts:[3,4,5,6,7]}; },
+  [Md(X({u:'yu',k:26,ask:()=>'a shift acts on 26 letters: what shift from 0 to 25 does the same job?',ln:()=>'the shift that does the same job'},own('4·crypt','the shifts-add technique')))]);
+ownRead('4·crypt.shift','the shifts-add technique',(S,p)=>'add up the shifts made by day '+p.x,(o,S,p)=>'the total shift on day '+p.x+': s('+p.x+') = '+qs(o.v)+' '+o.u);
+law('5·chem.burn','hydrogen burnt to water',()=>{ const a=ri(1,5)*2; return {c:[0,a],early:1,story:'Hydrogen runs into a burner at '+at()+' at '+a+' moles a minute: after t minutes n(t) = '+a+'t moles have gone in. It burns by 2H₂ + O₂ → 2H₂O.',
+  f:'n',x:'t',xu:'minutes',yu:'moles of hydrogen',rate:'moles a minute, per minute',area:null,pts:[2,3,5,10]}; },
+  [Pr(X({u:'yu',out:'moles of oxygen',k:2,ask:()=>'how many moles of oxygen does that hydrogen take, by the balanced change?',ln:()=>'oxygen taken',
+    w:['the mole ratio is turned over, 2 of oxygen to each hydrogen','2 is taken away instead of the ratio used']},own('5·chem','mole ratios'))),
+   Tm(X({u:'yu',out:'moles of water',k:1,ask:()=>'how many moles of water does that hydrogen make?',ln:()=>'water made',w:[null,null],xs:(S,p,q)=>[{why:'the 2 of 2H₂O is read as twice the hydrogen',v:qm(q.v,Q(2))},{why:'the water is counted from the oxygen alone',v:qm(q.v,Q(1,2))}]},own('5·chem','mole ratios')))]);
+law('5·chem.propane','propane burnt in oxygen',()=>{ const a=ri(1,4)*5; return {c:[0,a],early:1,story:'A heater at '+at()+' draws oxygen at '+a+' moles an hour: after t hours n(t) = '+a+'t moles of O₂ have gone in. It burns C₃H₈ + 5O₂ → 3CO₂ + 4H₂O.',
+  f:'n',x:'t',xu:'hours',yu:'moles of oxygen',rate:'moles an hour, per hour',area:null,pts:[1,2,3,4]}; },
+  [Pr(X({u:'yu',out:'moles of propane',k:5,ask:()=>'how many moles of propane can that oxygen burn?',ln:()=>'propane burnt'},own('5·chem','mole ratios'))),
+   Tm(X({u:'yu',out:'moles of CO₂',k:Q(3,5),ask:()=>'how many moles of CO₂ come out of it?',ln:()=>'CO₂ made',w:['the ratio 3 to 5 is turned over','3/5 is added instead of the ratio used']},own('5·chem','mole ratios')))]);
+law('5·nav.clock','a clock that runs fast',()=>{ const a=ri(5,12), b=ri(10,50); return {c:[b,a],early:1,story:'The ship’s clock out of '+at()+' was '+b+' seconds fast at sailing and gains '+a+' seconds a day: after d days it is G(d) = '+sp([b,a],'d')+' seconds fast.',
+  f:'G',x:'d',xu:'days',yu:'seconds',rate:'seconds a day',area:null,pts:[10,20,30,40]}; },
+  [Ct(X({u:'yu',out:'whole minutes',k:60,ask:()=>'read that as minutes and seconds: how many whole minutes fast is it?',ln:()=>'whole minutes fast'},own('5·nav','the clock-reading technique')))]);
+law('5·stat.temp','a temperature read in two scales',()=>{ const a=ri(1,3)*5, b=ri(0,4)*5; return {c:[b,a],early:1,story:'A thermometer in '+at()+' reads T(h) = '+sp([b,a],'h')+' °C, h hours after dawn.',
+  f:'T',x:'h',xu:'hours',yu:'°C',rate:'°C an hour',area:null,pts:[1,2,3,4]}; },
+  [Cu(X({u:'yu',out:'°F',k:1,f:(S,p,q)=>qa(qm(Q(9,5),q.v),Q(32)),ex:(S,p,q)=>'9/5 · '+par(q.v)+' + 32',ask:()=>'each reading x becomes 9x/5 + 32 in °F: what is it in °F?',ln:()=>'the reading in °F',
+    xs:(S,p,q)=>[{why:'the shift is made before the stretch',v:qm(Q(9,5),qa(q.v,Q(32)))},{why:'the stretch is turned over',v:qa(qm(Q(5,9),q.v),Q(32))},{why:'the shift of 32 is left out',v:qm(Q(9,5),q.v)}]},own('5·stat','the shift-and-stretch technique')))]);
+law('5·bio.cross','seedlings from a test cross',()=>{ const a=ri(3,8)*2, b=ri(1,5)*2; return {c:[b,a],early:1,story:'From a test cross, '+who()+' raises N(w) = '+sp([b,a],'w')+' pea seedlings by week w, in a plot near '+at()+'.',
+  f:'N',x:'w',xu:'weeks',yu:'seedlings',rate:'seedlings a week',area:null,pts:[2,3,4,5]}; },
+  [Fr(X({u:'yu',k:Q(1,2),ask:()=>'the parent was mixed, so the test cross gives the two looks one to one: how many look recessive?',ln:()=>'recessive seedlings',w:[null,'the count is doubled instead of halved'],
+    xs:(S,p,q)=>[{why:'the 3 to 1 of two mixed parents is used, so a quarter look recessive',v:qm(q.v,Q(1,4))},{why:'the 3 to 1 is read the other way, three quarters',v:qm(q.v,Q(3,4))}]},own('5·bio','the test cross')))]);
+law('5·eng.gears','a driving gear’s speed',()=>{ const a=ri(2,6), b=ri(3,6)*10; return {c:[b,a],early:1,story:who()+' climbs a hill near '+at()+' on a bike whose front gear turns at T(t) = '+sp([b,a],'t')+' turns a minute, t minutes in.',
+  f:'T',x:'t',xu:'minutes',yu:'turns a minute',rate:'turns a minute, per minute',area:null,pts:[2,3,5,10]}; },
+  [Cu(X({u:'yu',k:1,f:(S,p,q)=>qm(q.v,Q(3)),ex:(S,p,q)=>par(q.v)+' · 48/16',ask:()=>'its 48 teeth drive a back gear of 16 teeth: how fast does the back gear turn?',ln:()=>'turns of the back gear',
+    xs:(S,p,q)=>[{why:'the teeth are put the wrong way up, 16/48',v:qm(q.v,Q(1,3))},{why:'the teeth are subtracted instead of divided, 48 − 16 more turns',v:qa(q.v,Q(32))}]},RA))]);
+law('6·phys.fifth','a string and the interval above it',()=>{ const a=ri(1,4)*20, b=ri(2,8)*20; return {c:[b,a],early:1,story:'Terry tunes a string: after n turns of the peg it sounds F(n) = '+sp([b,a],'n')+' hertz.',
+  f:'F',x:'n',xu:'turns',yu:'hertz',rate:'hertz per turn',area:null,pts:[1,2,3,4]}; },
+  [Tm(X({u:'yu',k:Q(3,2),ask:()=>'a second string sounds a fifth, 3/2, above it: what frequency is that?',ln:()=>'a fifth above',w:['the fifth is taken down instead of up','3/2 is added instead of stacked by multiplying']},own('6·phys','stacking intervals')))]);
+law('6·phys.beats','a string against a fork',()=>{ const a=ri(1,3); return {c:[436,a],early:1,story:'Evita tunes a string against a 440 hertz fork: after n turns of the peg it sounds F(n) = '+sp([436,a],'n')+' hertz.',
+  f:'F',x:'n',xu:'turns',yu:'hertz',rate:'hertz per turn',area:null,pts:[5,6,7,8]}; },
+  [O(X({u:'yu',out:'beats a second',k:440,ask:()=>'sounded with the fork, how many beats a second does she hear?',ln:()=>'beats a second'},own('6·phys','beats')))]);
+law('6·chem.plate','copper plated by electrons',()=>{ const a=ri(1,5)*2; return {c:[0,a],early:1,story:'A cell in '+at()+' plates copper from Cu²⁺: after t minutes n(t) = '+a+'t moles of electrons have passed.',
+  f:'n',x:'t',xu:'minutes',yu:'moles of electrons',rate:'moles of electrons a minute, per minute',area:null,pts:[1,2,3,5]}; },
+  [Pr(X({u:'yu',out:'moles of copper',k:2,ask:()=>'each Cu²⁺ takes two electrons: how many moles of copper are laid down?',ln:()=>'copper laid down'},own('6·chem','the electrons-balance technique')))]);
+law('6·logi.assign','assignments of drivers to jobs',()=>({c:[0,0,0,1],early:1,story:'With d drivers able to take each of 3 jobs, and one driver free to take several, the depot at '+at()+' has A(d) = d³ assignments.',
+  f:'A',x:'d',xu:'drivers',yu:'assignments',rate:'assignments per driver',area:null,pts:[2,3,4,5]}),
+  [Tm(X({u:'yu',out:'seconds',k:()=>pick([2,3,5]),ask:(S,p)=>'checking one assignment takes '+p.K+' seconds: how long to check them all?',ln:()=>'time to check them all'},MQ))]);
+law('6·stat.sample','a fair sample of a town',()=>{ const N=pick([200,400,500,1000]), k=pick([20,40,50,100]).valueOf(); return {c:[0,10],early:1,N,k,story:'In a town of '+N+' near '+at()+', a new path is built, and m(w) = 10w people have used it by week w. A fair sample of '+k+' is drawn.',
+  f:'m',x:'w',xu:'weeks',yu:'people',rate:'people a week',area:null,pts:[2,4,5,10]}; },
+  [Tm(X({u:'yu',k:S=>Q(S.k,S.N),ask:(S,p)=>'how many path users does the fair sample of '+S.k+' hold, on average?',ln:()=>'users in the sample',w:['the share is turned over','the share is added instead of multiplied']},SC))]);
+law('7·phys.lamps','lamps in series on a battery',()=>{ const a=ri(2,6), b=ri(1,4); return {c:[b,a],early:1,story:'A string of n lamps in series, each of '+a+' ohms, on '+b+' ohms of wire has R(n) = '+sp([b,a],'n')+' ohms.',
+  f:'R',x:'n',xu:'lamps',yu:'ohms',rate:'ohms per lamp',area:null,pts:[2,3,4,5,6]}; },
+  [In(X({u:'yu',out:'amps',k:()=>pick([12,24,60,120]),ask:(S,p)=>'the battery gives '+p.K+' volts: what current flows?',ln:()=>'current'},own('7·phys','the proportion law')))]);
+law('7·phys.ohm','a wire and its voltage',()=>{ const r=ri(2,9); return {c:[0,r],early:1,story:'For the heating wire in '+who()+'’s kettle, a current of I amps needs V(I) = '+r+'I volts.',
+  f:'V',x:'I',xu:'amps',yu:'volts',rate:'ohms',area:null,pts:[2,3,4,5]}; },
+  [G(X({u:'yu',k:()=>pick([60,120,240]),ask:(S,p)=>'the supply gives '+p.K+' volts round the loop: how many volts drop across the rest of it?',ln:()=>'the drop on the rest'},own('7·phys','the loop law')))]);
+law('7·econ.promise','a promise kept round after round',()=>{ const a=ri(2,5); return {c:[0,a],early:1,story:'Two stall keepers in '+at()+' each earn '+a+' points a round while both keep quiet: over n rounds keeping the promise is worth K(n) = '+a+'n points.',
+  f:'K',x:'n',xu:'rounds',yu:'points',rate:'points a round',area:null,pts:[4,5,8,10]}; },
+  [O(X({u:'yu',k:'below',ask:(S,p)=>'telling on the other now gains '+p.K+' points once: by how many points does keeping it win?',ln:()=>'margin for keeping it'},own('7·econ','a promise that holds')))]);
+law('7·logi.rooms','meetings booked by the day',()=>{ const a=ri(3,7), b=ri(1,6); return {c:[b,a],early:1,story:'An office at '+at()+' books M(d) = '+sp([b,a],'d')+' one-hour meetings by day d.',
+  f:'M',x:'d',xu:'days',yu:'meetings',rate:'meetings a day',area:null,pts:[2,3,4,5]}; },
+  [Cc(X({u:'yu',out:'hours',k:3,ask:()=>'three rooms each hold one meeting an hour: how many hours do those meetings need?',ln:()=>'hours of meetings'},DR))]);
+
+/* ---------- floor 2 ---------- */
+law('8·phys.beats','heartbeats over the hours',()=>{ const a=pick([4200,4800,3600]); return {c:[0,a],story:who()+'’s heart beats B(h) = '+a+'h times in h hours.',f:'B',x:'h',xu:'hours',yu:'beats',rate:'beats an hour',area:null,pts:[1,2,3,5]}; },
+  [Tm(X({u:'yu',out:'litres',k:Q(1,20),ask:()=>'each beat pushes about 1/20 of a litre: how many litres is that?',ln:()=>'litres pushed'},own('8·phys','the chain estimate')))]);
+law('8·eng.stack','tolerance of a stack of plates',()=>{ const d=pick([10,20,50]); return {c:[0,Q(1,d)],story:'Each plate in a stack at '+at()+' is good to 1/'+d+' of a millimetre, so n plates are good to t(n) = n/'+d+' millimetres in the worst case.',
+  f:'t',x:'n',xu:'plates',yu:'millimetres',rate:'millimetres per plate',area:null,pts:[4,5,6,8,10,12,20,25]}; },
+  [G(X({u:'yu',k:()=>pick([1,2,3]),ask:(S,p)=>'the slot leaves '+p.K+' millimetres of slack: how much slack is left in the worst case?',ln:()=>'slack left'},own('8·eng','the worst case of a stack')))]);
+law('8·comp.gaps','errors that add up',()=>{ return {c:[0,Q(1,2)],story:'Each sum on '+who()+'’s machine is off by at most half a gap, so after n sums the error is at most E(n) = n/2 gaps.',
+  f:'E',x:'n',xu:'sums',yu:'gaps',rate:'gaps per sum',area:null,pts:[3,4,5,6,8,10,12,20]}; },
+  [Tm(X({u:'yu',out:'millimetres',k:()=>pick([Q(1,8),Q(1,4),Q(1,10)]),ask:(S,p)=>'a gap here is '+p.K+' of a millimetre: at most how many millimetres off?',ln:()=>'millimetres off at most'},own('8·comp','the adding-gaps technique')))]);
+law('8·stat.far','children far from the mean',()=>{ const a=ri(2,6)*4; return {c:[20,a],story:'A school in '+at()+' measures N(w) = '+sp([20,a],'w')+' children by week w.',f:'N',x:'w',xu:'weeks',yu:'children',rate:'children a week',area:null,pts:[1,2,3,5]}; },
+  [Pr(X({u:'yu',k:4,ask:()=>'fewer than n/4 of them lie more than 2 spreads from the mean: below what count is that?',ln:()=>'the bound on the far ones',w:['the count is multiplied by 4','4 is taken away instead of divided'],xs:(S,p,q)=>[{why:'k is used instead of k², giving n/2',v:qm(q.v,Q(1,2))}]},own('8·stat','the far-from-the-mean bound technique')))]);
+law('8·econ.rent','a rent that rises and falls',()=>{ const a=ri(1,5)*50, b=ri(6,12)*100; return {c:[b,a],story:'Randy’s rent in '+at()+' in year y is R(y) = '+sp([b,a],'y')+' dollars a month.',f:'R',x:'y',xu:'years',yu:'dollars a month',rate:'dollars a month, per year',area:null,pts:[1,2,3,4]}; },
+  [Tm(X({u:'yu',k:Q(99,100),ask:()=>'it rises by 1/10, then falls by 1/10: what is it after both?',ln:()=>'after the rise and the fall',
+    xs:(S,p,q)=>[{why:'the rise and the fall are taken to cancel',v:q.v},{why:'only the rise is made',v:qm(q.v,Q(11,10))},{why:'the fall is taken off the old rent, not the new one',v:qm(q.v,Q(1))}].filter((x,i)=>i<2),w:['the result is divided by 99/100','99/100 is added']},own('8·econ','the up-and-down technique')))]);
+law('9·bio.scale','skin of a scaled animal',()=>{ const k=6; return {c:[0,0,k],story:'A model mouse of side L centimetres has skin area A(L) = 6L² square centimetres.',f:'A',x:'L',xu:'centimetres',yu:'square centimetres',rate:'square centimetres per centimetre',area:null,pts:[1,2,3,4,5]}; },
+  [Tm(X({u:'yu',k:()=>pick([4,9,25,100]),ask:(S,p)=>'a cow-shaped copy is '+qsqrt(Q(p.k.p)).p+' times as long: what is its skin area?',ln:()=>'area of the copy',w:['the area is divided by the factor','the factor is added'],
+    xs:(S,p,q)=>{ const s=qsqrt(p.k); return [{why:'the area is scaled by the length factor, not its square',v:qm(q.v,s)},{why:'the area is scaled by the cube of the length factor',v:qm(q.v,qm(p.k,s))}]; }},own('9·bio','the power-law habit technique')))]);
+law('9·chem.piston','gas squeezed in a piston',()=>{ const V0=pick([20,24,30]), b=pick([2,3]), p0=pick([100,120,150]); return {c:[V0,-b],V0,p0,story:'A piston at '+at()+' holds gas at '+p0+' kilopascals in '+V0+' litres; squeezed slowly, it holds V(t) = '+sp([V0,-b],'t')+' litres after t seconds.',
+  f:'V',x:'t',xu:'seconds',yu:'litres',rate:'litres a second',area:null,pts:[1,2,3,4,5].filter(t=>V0-b*t>V0/3)}; },
+  [In(X({u:'yu',out:'kilopascals',k:S=>S.p0*S.V0,ask:()=>'at the same amount and temperature, what pressure does the gas push with now?',ln:()=>'pressure now',w:['the pressure is taken to grow with the volume','the volume is multiplied in instead of divided'],ex:(S,p,q)=>S.p0+' · '+S.V0+'/'+par(q.v)},own('9·chem','the squeeze-and-push technique')))]);
+law('9·chem.jar','two gases in matching jars',()=>{ const g=pick([['helium',4],['neon',20],['argon',40]]); return {c:[0,Q(1,25)],gas:g,story:'In a lab at '+at()+', a jar of V litres of air at room conditions holds n(V) = V/25 moles.',f:'n',x:'V',xu:'litres',yu:'moles',rate:'moles a litre',area:null,pts:[25,50,75,100,125,150]}; },
+  [Tm(X({u:'yu',out:S=>'grams of '+S.gas[0],k:S=>S.gas[1],ask:S=>'a matching jar of '+S.gas[0]+' at the same pressure and temperature: how many grams, at '+S.gas[1]+' grams a mole?',ln:S=>'grams of '+S.gas[0]},own('9·chem','the equal-counts technique')))]);
+law('9·cb4.ledger','a ledger by recursion',()=>{ const a=ri(3,9), b=ri(2,8)*10; return {c:[b,a],story:'Each month '+who()+' adds '+a+' dollars to a jar that held '+b+': after n months f(n) = '+sp([b,a],'n')+' dollars.',f:'f',x:'n',xu:'months',yu:'dollars',rate:'dollars a month',area:null,pts:[2,3,4,6]}; },
+  [Pl(X({u:'yu',k:(S)=>{ const m=pick([2,3,5]); return Q(m*S.c[1]); },ask:(S,p)=>'how many dollars are in the jar after '+num(p.k)/S.c[1]+' more months of the same?',ln:()=>'after the further months'},own('9·cb4','the iterates-add technique')))]);
+law('10·bio.enzyme','an enzyme at low sugar',()=>{ const V=pick([60,80,100]), K=pick([10,20]); return {c:[0,Q(V,K)],vmax:V,story:'At low sugar s millimoles a litre, an enzyme in '+who()+'’s test tube works at v(s) = '+qs(Q(V,K))+'s micromoles a minute; its ceiling is '+V+'.',
+  f:'v',x:'s',xu:'millimoles a litre',yu:'micromoles a minute',rate:'micromoles a minute per millimole a litre',area:null,pts:[1,2,3,4,5]}; },
+  [G(X({u:'yu',k:S=>S.vmax,ask:S=>'how far below the ceiling of '+S.vmax+' micromoles a minute is that?',ln:()=>'below the ceiling'},own('10·bio','the never-reached technique')))]);
+law('10·logi.trucks','trucks for a route',()=>{ const a=ri(2,6)*2, b=ri(4,10)*2; return {c:[b,a],story:'A depot in '+at()+' runs D(w) = '+sp([b,a],'w')+' trips a day in week w; each trip takes 3 hours and each truck works 8 hours a day.',
+  f:'D',x:'w',xu:'weeks',yu:'trips a day',rate:'trips a day, per week',area:null,pts:[1,2,3,4]}; },
+  [Cu(X({u:'yu',out:'trucks',k:1,f:(S,p,q)=>Q(Math.ceil(num(q.v)*3/8)),ex:(S,p,q)=>par(q.v)+' · 3/8, rounded up',ask:()=>'how many trucks does the route need at least?',ln:()=>'trucks needed',
+    xs:(S,p,q)=>[{why:'the count is rounded down',v:Q(Math.floor(num(q.v)*3/8))},{why:'the hours are put the wrong way up, 8/3',v:Q(Math.ceil(num(q.v)*8/3))},{why:'the hours a trip takes are left out',v:Q(Math.ceil(num(q.v)/8))}]},own('10·logi','the truck-count technique')))]);
+law('10·logi.slow','boxes through the slowest step',()=>{ const m=ri(3,8)*10; return {c:[0,m],story:'The slowest step on a packing line at '+at()+' packs '+m+' boxes an hour, so in n hours the line passes on at most D(n) = '+m+'n boxes.',
+  f:'D',x:'n',xu:'hours',yu:'boxes',rate:'boxes an hour',area:null,pts:[2,3,5,8]}; },
+  [Ct(X({u:'yu',out:'full trucks',k:()=>pick([40,60,90]),ask:(S,p)=>'a truck takes '+p.K+' boxes: how many full trucks can leave?',ln:()=>'full trucks'},DR))]);
+law('10·econ.save','savings left to grow',()=>{ const a=ri(2,5)*10, b=ri(1,5)*100; return {c:[b,a],story:'Jean saves D(w) = '+sp([b,a],'w')+' dollars by week w.',f:'D',x:'w',xu:'weeks',yu:'dollars',rate:'dollars a week',area:null,pts:[2,5,10]}; },
+  [Tm(X({u:'yu',k:Q(121,100),ask:()=>'the savings are left two years at 1/10 a year, added at each year’s end: what do they grow to?',ln:()=>'after two years',
+    xs:(S,p,q)=>[{why:'the interest is added on the start only, 2/10 in all',v:qm(q.v,Q(6,5))},{why:'only one year’s interest is added',v:qm(q.v,Q(11,10))}],w:['the amount is divided by 121/100',null]},own('10·econ','the one-plus-a-power technique')))]);
+law('10·phys.chase','a runner and a tortoise',()=>{ const v=pick([5,10]), r=pick([2,3]); return {c:[0,Q(1,v)],v,r,story:'A runner starts d metres behind a tortoise and runs '+v+' metres a second: the first stage, to where the tortoise was, takes T(d) = d/'+v+' seconds.',
+  f:'T',x:'d',xu:'metres',yu:'seconds',rate:'seconds a metre',area:null,pts:[10,20,30,40,50,60]}; },
+  [Tm(X({u:'yu',k:S=>Q(S.r,S.r-1),ask:S=>'each stage takes 1/'+S.r+' of the one before: how many seconds until he draws level?',ln:()=>'time to draw level',w:['the sum is divided instead of multiplied','the factor is added instead of multiplied'],
+    xs:(S,p,q)=>[{why:'only two stages are counted',v:qm(q.v,Q(S.r+1,S.r))},{why:'the share 1/'+S.r+' is used where 1/(1 − 1/'+S.r+') belongs',v:qm(q.v,Q(1,S.r))}]},own('10·phys','the stage-sum technique')))]);
+/* ---------- floor 3 ---------- */
+law('12·phys.lever','a lever’s effort',()=>{ const k=pick([4,5,8]); return {c:[0,Q(1,k)],story:'On '+who()+'’s lever the load sits '+k+' times nearer the pin than the hand, so W newtons balance with E(W) = W/'+k+' newtons.',
+  f:'E',x:'W',xu:'newtons',yu:'newtons',rate:'newtons per newton of load',area:null,pts:[200,400,600,800]}; },
+  [G(X({u:'yu',k:'above',ask:(S,p)=>'the hand can push '+p.K+' newtons: how many newtons to spare?',ln:()=>'push to spare'},LESS))]);
+law('12·phys.train','a motor through a gear train',()=>{ const a=ri(2,6)*12, b=ri(4,10)*120; return {c:[b,a],story:'A motor at '+at()+' turns at T(v) = '+sp([b,a],'v')+' turns a minute on v volts.',f:'T',x:'v',xu:'volts',yu:'turns a minute',rate:'turns a minute per volt',area:null,pts:[1,2,5,10]}; },
+  [Tm(X({u:'yu',k:Q(1,12),ask:()=>'it drives a train of two meshes, 1/3 and then 1/4: how fast does the last shaft turn?',ln:()=>'turns of the last shaft',
+    xs:(S,p,q)=>[{why:'the ratios are added, not multiplied',v:qm(q.v,Q(7,12))},{why:'the ratios are turned over',v:qm(q.v,Q(12))}],w:[null,null]},own('12·phys','the gear-train technique')))]);
+law('12·eng.share','a shelf load between two supports',()=>{ const a=ri(2,6)*4, b=ri(1,5)*8; return {c:[b,a],story:'A shelf at '+at()+' with n books carries W(n) = '+sp([b,a],'n')+' newtons, all at a point a quarter of the way from the left support.',
+  f:'W',x:'n',xu:'books',yu:'newtons',rate:'newtons per book',area:null,pts:[2,4,5,10]}; },
+  [Fr(X({u:'yu',k:Q(3,4),ask:()=>'how many newtons does the left support carry?',ln:()=>'push of the left support',w:['the shares are swapped, giving the right support’s push','the load is divided by 3/4 instead of multiplied'],
+    xs:(S,p,q)=>[{why:'the load is shared evenly',v:qm(q.v,Q(1,2))}]},own('12·eng','the support-pushes technique')))]);
+law('12·eng.worst','a load at the middle of a span',()=>{ const a=ri(1,5)*20, b=ri(1,5)*40; return {c:[b,a],story:'A plank 2 metres long at '+at()+' carries n paint pots weighing P(n) = '+sp([b,a],'n')+' newtons, all at one point.',
+  f:'P',x:'n',xu:'pots',yu:'newtons',rate:'newtons per pot',area:null,pts:[1,2,3,4]}; },
+  [Fr(X({u:'yu',out:'newton metres',k:Q(1,2),ask:()=>'at the worst place, the middle, what turning effect PL/4 does the load put on the plank?',ln:()=>'turning effect at the middle',w:['PL/4 is taken as P(1 − L/4)','the load is divided by L/4 instead of multiplied'],
+    xs:(S,p,q)=>[{why:'PL/2 is used, as if the plank were held at one end only',v:q.v},{why:'PL/8 is used, as if the load were spread',v:qm(q.v,Q(1,4))}]},own('12·eng','the worst-place technique')))]);
+law('12·comp.rem3','a counter read by remainders',()=>{ const a=ri(4,9), b=ri(1,9); return {c:[b,a],story:'Claire’s counter reads N(t) = '+sp([b,a],'t')+' ticks after t seconds, and a machine with three states reads it in twos.',
+  f:'N',x:'t',xu:'seconds',yu:'ticks',rate:'ticks a second',area:null,pts:[2,3,5,7,10]}; },
+  [Md(X({u:'yu',k:3,ask:()=>'the machine reports the remainder by 3: what does it report?',ln:()=>'the machine’s report'},own('12·comp','the remainder-machine technique')))]);
+law('13·eng.drag','the drag on a cyclist',()=>{ const k=4, F=ri(1,5)*5; return {c:[F,0,Q(1,k)],story:who()+' rides into the wind near '+at()+'; at v metres a second the drag is D(v) = v²/4 + '+F+' newtons.',
+  f:'D',x:'v',xu:'metres a second',yu:'newtons',rate:'newtons per metre a second',area:null,pts:[2,4,6,8]}; },
+  [Tm(X({u:'yu',out:'watts',k:(S,q,c)=>c.x,when:hasX,ask:(S,p)=>'holding '+p.K+' metres a second against it, what power must the rider give?',ln:()=>'power at that speed'},own('13·eng','the force-times-speed technique')))]);
+law('14·logi.reorder','sales and the reorder point',()=>{ const a=ri(1,4)*2, b=ri(5,10)*2; return {c:[b,a],story:'A feed store in '+at()+' sells d(w) = '+sp([b,a],'w')+' bags a day in week w; an order takes 3 days to come, and 15 bags are kept back.',
+  f:'d',x:'w',xu:'weeks',yu:'bags a day',rate:'bags a day, per week',area:null,pts:[1,2,3,4]}; },
+  [Cu(X({u:'yu',out:'bags',k:1,f:(S,p,q)=>qa(qm(q.v,Q(3)),Q(15)),ex:(S,p,q)=>par(q.v)+' · 3 + 15',ask:()=>'at what stock should the store reorder?',ln:()=>'the reorder point',
+    xs:(S,p,q)=>[{why:'the lead time is left out',v:qa(q.v,Q(15))},{why:'the bags kept back are left out',v:qm(q.v,Q(3))},{why:'the bags kept back are counted for each day',v:qm(qa(q.v,Q(15)),Q(3))}]},own('14·logi','the reorder point')))]);
+law('11·chem.melt','heat to melt and warm ice',()=>{ const T=pick([10,20,25]); return {c:[0,334],T,story:'Melting m grams of ice at 0 °C in '+who()+'’s cup takes H(m) = 334m joules; warming water takes about 4 joules a gram for each degree.',f:'H',x:'m',xu:'grams',yu:'joules',rate:'joules a gram',area:null,pts:[2,3,4,5,10,20]}; },
+  [Pl(X({u:'yu',k:(S,q,c)=>Q(4*S.T*c.x),when:hasX,ask:S=>'the melted water is then warmed to '+S.T+' °C: what heat does the whole change take?',ln:()=>'heat for the whole change',w:['the warming is taken away from the melting','the melting is left out']},own('11·chem','the heat-sum law')))]);
+/* ---------- floor 4 ---------- */
+law('17·comp.sort','comparisons in selection sort',()=>({c:[0,Q(-1,2),Q(1,2)],story:'Selection sort on '+who()+'’s list of n names makes C(n) = n(n − 1)/2 comparisons.',f:'C',x:'n',xu:'names',yu:'comparisons',rate:'comparisons per name',area:null,pts:[10,20,40,50,100]}),
+  [Pr(X({u:'yu',out:'milliseconds',k:()=>pick([5,10]),ask:(S,p)=>'the machine makes '+p.K+' comparisons a millisecond: how many milliseconds does the sort take?',ln:()=>'time for the sort'},MQ))]);
+law('17·crypt.bits','bits of a random password',()=>{ const b=pick([4,5,6]); return {c:[0,b],story:'Each symbol of '+who()+'’s password is drawn from '+Math.pow(2,b)+' symbols, so a password of n symbols has B(n) = '+b+'n bits.',f:'B',x:'n',xu:'symbols',yu:'bits',rate:'bits per symbol',area:null,pts:[6,8,10,12,16]}; },
+  [G(X({u:'yu',k:()=>pick([80,100,128]),ask:(S,p)=>'the site asks for '+p.K+' bits: how many bits short is the password?',ln:()=>'bits short'},own('17·crypt','the bits technique')))]);
+law('17·phys.radio','a radio channel’s wavelength',()=>{ const a=pick([100,200,500]); return {c:[500,a],story:'On '+who()+'’s radio, channel n sends at f(n) = '+sp([500,a],'n')+' kilohertz.',f:'f',x:'n',xu:'channels',yu:'kilohertz',rate:'kilohertz per channel',area:null,pts:[1,2,3,4,5,6,8,10]}; },
+  [In(X({u:'yu',out:'kilometres',k:300,ask:()=>'light runs 300 thousand kilometres a second: how long is the wave, in kilometres?',ln:()=>'the wavelength',ex:(S,p,q)=>'300/'+par(q.v),
+    w:['the frequency is divided by the speed of light',null],xs:(S,p,q)=>[{why:'the kilohertz are taken as hertz, so the 1000 is lost',v:qm(Q(300000),qi(q.v))},{why:'the thousand of the kilometres is lost',v:qm(Q(3,10),qi(q.v))},{why:'the speed is multiplied by the frequency',v:qm(q.v,Q(3,10))}]},own('17·phys','waves of light')))]);
+law('19·chem.ring','moves of a ring molecule',()=>({c:[0,2],story:'A flat ring molecule with n atoms in its ring has M(n) = 2n moves that leave it unchanged, turns and flips.',f:'M',x:'n',xu:'atoms',yu:'moves',rate:'moves per atom',area:null,pts:[3,4,5,6,7,8,9,10]}),
+  [Pr(X({u:'yu',out:'atoms',k:2,ask:()=>'each ring atom is kept by 2 of those moves: how many atoms are in its class?',ln:()=>'atoms in the class',w:['the moves are multiplied by the keepers','the keepers are taken away from the moves'],xs:(S,p,q)=>[{why:'the class is taken as all the moves',v:q.v}]},own('19·chem','the class-times-keepers technique')))]);
+law('20·nav.heading','a heading after turns',()=>{ const a=pick([30,45,60]), b=ri(1,8)*10; return {c:[b,a],story:'A ship out of '+at()+' heads '+b+'° and makes n turns of '+a+'° to starboard: its heading is H(n) = '+sp([b,a],'n')+' degrees.',
+  f:'H',x:'n',xu:'turns',yu:'degrees',rate:'degrees per turn',area:null,pts:[5,7,9,11]}; },
+  [Md(X({u:'yu',k:360,ask:()=>'what compass heading, from 0 to 359 degrees, is that?',ln:()=>'the compass heading'},own('20·nav','the heading-sum technique')))]);
+law('21·then.slant','sunlight at a slant',()=>{ const a=ri(2,6)*100; return {c:[0,a],story:'A solar panel at '+at()+' gives P(h) = '+a+'h watt hours in h hours of sun from straight above.',f:'P',x:'h',xu:'hours',yu:'watt hours',rate:'watts',area:null,pts:[1,2,3,4]}; },
+  [Fr(X({u:'yu',k:Q(1,2),ask:()=>'in winter the sun stands 60° from overhead, and cos 60° = 1/2: what does the panel give then?',ln:()=>'given at a slant',w:[null,'the reading is doubled instead of halved'],xs:(S,p,q)=>[{why:'cos² is used, as for a filter',v:qm(q.v,Q(1,4))}]},own('21·then','the slant technique')))]);
+law('21·nav.pole','the pole star’s height',()=>{ const b=ri(30,40); return {c:[b,Q(1,2)],story:'Sailing north from '+at()+', '+who()+' sees the pole star stand p(d) = d/2 + '+b+' degrees above the horizon after d days.',
+  f:'p',x:'d',xu:'days',yu:'degrees',rate:'degrees a day',area:null,pts:[2,4,6,8]}; },
+  [G(X({u:'yu',k:()=>pick([50,55,60]),ask:(S,p)=>'the harbour lies at latitude '+p.K+'° north: how many degrees further north to go?',ln:()=>'degrees still to sail'},own('21·nav','the pole-star technique')))]);
+law('21·eng.stroke','a piston’s stroke',()=>({c:[0,2],story:'The crank of a pump at '+at()+' has a pin r centimetres from the axle, so the piston moves S(r) = 2r centimetres end to end.',f:'S',x:'r',xu:'centimetres',yu:'centimetres',rate:'centimetres per centimetre',area:null,pts:[2,3,4,5,6,8,10]}),
+  [Tm(X({u:'yu',out:'cubic centimetres',k:()=>pick([10,12,20,25,50]),ask:(S,p)=>'the cylinder’s cross section is '+p.K+' square centimetres: what volume does one stroke sweep?',ln:()=>'volume swept'},own('21·eng','the place technique')))]);
+/* ---------- floor 5 ---------- */
+law('22·stat.misprints','misprints in a book',()=>{ const k=pick([4,5,10]); return {c:[0,Q(1,k)],story:'A printer in '+at()+' makes rare slips: on average n pages carry λ(n) = n/'+k+' misprints.',f:'λ',x:'n',xu:'pages',yu:'misprints',rate:'misprints a page',area:null,pts:[20,40,50,100]}; },
+  [Tm(X({u:'yu',out:'dollars',k:()=>pick([2,3,5]),ask:(S,p)=>'each misprint costs '+p.K+' dollars to mend: what is the average bill?',ln:()=>'average bill'},own('22·stat','the mean-and-spread technique')))]);
+law('22·econ.respend','a dollar spent round and round',()=>{ const a=ri(1,5)*4; return {c:[0,a],story:'A new mill near '+at()+' spends S(m) = '+a+'m thousand dollars in town over m months.',f:'S',x:'m',xu:'months',yu:'thousand dollars',rate:'thousand dollars a month',area:null,pts:[1,2,3,6]}; },
+  [Tm(X({u:'yu',k:4,ask:()=>'each round, the town spends 3/4 of what it got: how much spending does that make in all?',ln:()=>'spending in all',w:['the total is divided instead of multiplied','4 is added instead of multiplied'],
+    xs:(S,p,q)=>[{why:'only one round of respending is counted',v:qm(q.v,Q(7,4))},{why:'the share kept, 3/4, is used instead of the share leaked',v:qm(q.v,Q(4,3))}]},own('22·econ','the respending technique')))]);
+law('22·phys.bounce','a ball dropped from a floor',()=>{ const a=pick([2,3,4]), r=pick([2,3]); return {c:[1,a],r,story:who()+' drops a ball from the n-th floor of a tower in '+at()+', from h(n) = '+sp([1,a],'n')+' metres.',f:'h',x:'n',xu:'floors',yu:'metres',rate:'metres per floor',area:null,pts:[1,2,3,4,5,6]}; },
+  [Tm(X({u:'yu',k:S=>Q(S.r+1,S.r-1),ask:S=>'each bounce reaches 1/'+S.r+' of the last height: how far does the ball travel in all?',ln:()=>'distance in all',w:['the height is divided by the factor','the factor is added'],
+    xs:(S,p,q)=>[{why:'only the falls are counted, h/(1 − r)',v:qm(q.v,Q(S.r,S.r-1))},{why:'only the first fall and rise are counted',v:qm(q.v,Q(S.r+1,S.r))}]},own('22·phys','the distance technique')))]);
+law('22·logi.tours','tours a machine can check',()=>{ const a=pick([100,130,150,170,250]); return {c:[0,a],story:'Mike’s machine checks C(h) = '+a+'h tours in h hours.',f:'C',x:'h',xu:'hours',yu:'tours',rate:'tours an hour',area:null,pts:[1,2,3,5]}; },
+  [Ct(X({u:'yu',out:'full rounds',k:60,ask:()=>'a depot and 5 stops make 5!/2 = 60 tours: how many full rounds of every tour does it check?',ln:()=>'full rounds',w:[null,null,'the tours are multiplied by 60'],
+    xs:(S,p,q)=>[{why:'5! is used without halving, as if a tour and its reverse differed',v:Q(Math.floor(num(q.v)/120))},{why:'a part-done round is counted as full',v:Q(Math.ceil(num(q.v)/60))}]},own('22·logi','the tour-count technique')))]);
+law('22·crypt.pairs','pairs of files',()=>({c:[0,Q(-1,2),Q(1,2)],story:'Among n files there are P(n) = n(n − 1)/2 pairs.',f:'P',x:'n',xu:'files',yu:'pairs',rate:'pairs per file',area:null,pts:[16,32,64]}),
+  [Pr(X({u:'yu',out:'matches',k:()=>pick([256,512,1024]),ask:(S,p)=>'a fingerprint has '+p.K+' codes: how many matching pairs, on average?',ln:()=>'matches on average'},own('22·crypt','the pairs-per-code technique')))]);
+law('24·then.lag','a drink that trails the room',()=>{ const b=ri(10,16); return {c:[b,Q(1,2)],story:'A café in '+at()+' warms through the morning: t minutes after opening, the room is R(t) = t/2 + '+b+' degrees.',f:'R',x:'t',xu:'minutes',yu:'degrees',rate:'degrees a minute',area:null,pts:[20,30,40,60]}; },
+  [O(X({u:'yu',k:5,ask:()=>'a jug of water in the room trails it by 10 minutes: what does the jug read?',ln:()=>'the jug’s reading',w:['the lag is taken forward in time','the lag is added'],xs:(S,p,q)=>[{why:'the 10 minutes are taken off as 10 degrees',v:qa(q.v,Q(-10))}]},own('24·then','the lag technique')))]);
+law('24·econ.grow','growth rates that add',()=>{ const a=ri(1,3); return {c:[Q(a,100),Q(1,100)],story:'Output per worker in a valley near '+at()+' grows at g(t) = '+sp([Q(a,100),Q(1,100)],'t')+' a year, t years on.',f:'g',x:'t',xu:'years',yu:'a year',rate:'a year, per year',area:null,pts:[1,2,3]}; },
+  [Pl(X({u:'yu',k:Q(1,50),ask:()=>'the number of workers grows at 1/50 a year: at what rate does total output grow?',ln:()=>'growth of output',w:['the workers’ rate is taken away','the workers’ rate is left out']},own('24·econ','the growth-rates-add technique')))]);
+law('24·bio.steep','signal to switch a gene',()=>{ const a=ri(1,4); return {c:[1,a],story:'A cell near '+at()+' makes S(t) = '+sp([1,a],'t')+' units of signal by hour t; its protein catches 2 copies at once.',f:'S',x:'t',xu:'hours',yu:'units',rate:'units an hour',area:null,pts:[1,2,3,4,5,6]}; },
+  [Tm(X({u:'yu',k:9,ask:()=>'taking that as the signal for 10% caught, what signal gives 90% caught?',ln:()=>'signal for 90%',w:['the signal is divided by 9','9 is added'],xs:(S,p,q)=>[{why:'the 81 of n = 1 is used',v:qm(q.v,Q(81))},{why:'81 is halved instead of rooted',v:qm(q.v,Q(81,2))}]},own('24·bio','the steepness technique')))]);
+law('25·cb7.cells','cells in a row',()=>{ return {c:[0,Q(11,10)],story:'A battery of n zinc and copper cells in a row gives V(n) = 11n/10 volts.',f:'V',x:'n',xu:'cells',yu:'volts',rate:'volts per cell',area:null,pts:[2,3,4,5,10]}; },
+  [Tm(X({u:'yu',out:'joules',k:()=>pick([10,20,50]),ask:(S,p)=>'how many joules does it hand out moving '+p.K+' coulombs?',ln:()=>'energy handed out'},own('25·cb7','the energy technique')))]);
+law('26·phys.coil','a coil’s impedance',()=>{ const L=pick([2,5,10]); return {c:[0,Q(1,L)],story:'A coil in '+who()+'’s radio has impedance Z(ω) = ω/'+L+' ohms at a pace of ω radians a second.',f:'Z',x:'ω',xu:'radians a second',yu:'ohms',rate:'ohms per radian a second',area:null,pts:[100,200,500,1000]}; },
+  [In(X({u:'yu',out:'amps',k:()=>pick([10,20,60]),ask:(S,p)=>'a voltage of '+p.K+' volts turns at that pace: what current passes?',ln:()=>'current through the coil'},own('26·phys','the impedance technique')))]);
+law('27·then.frame','bars of a pinned frame',()=>({c:[-3,2],story:'A frame of j joints at '+at()+', built from triangles, has b(j) = 2j − 3 bars.',f:'b',x:'j',xu:'joints',yu:'bars',rate:'bars per joint',area:null,pts:[4,5,6,7,8,9,10,12]}),
+  [Pl(X({u:'yu',out:'unknowns',k:3,ask:()=>'pinned with 3 support pushes, how many unknowns are there to find?',ln:()=>'unknowns'},own('27·then','the frame-grid technique')))]);
+law('27·econ.round','output to meet a demand',()=>{ const a=ri(1,5)*12; return {c:[0,a],story:'Shoppers in '+at()+' buy D(t) = '+a+'t dollars of dolls over t weeks; every dollar of dolls needs 1/4 dollar of other output in the town.',f:'D',x:'t',xu:'weeks',yu:'dollars',rate:'dollars a week',area:null,pts:[1,2,3,5]}; },
+  [Tm(X({u:'yu',k:Q(4,3),ask:()=>'counting every round of inputs to inputs, what output does that demand need in all?',ln:()=>'output in all',w:['the output is divided by 4/3','4/3 is added'],xs:(S,p,q)=>[{why:'only the first round of inputs is counted',v:qm(q.v,Q(5,4))},{why:'1/4 is used where 1/(1 − 1/4) belongs',v:qm(q.v,Q(1,4))}]},own('27·econ','the every-round technique')))]);
+law('27·crypt.grid','a letter sent by a key',()=>{ const a=pick([3,5,7,9,11]), b=ri(1,9); return {c:[b,a],story:'A key sends the letter in place x to y(x) = '+sp([b,a],'x')+', before the remainder by 26 is taken.',f:'y',x:'x',xu:'places',yu:'places',rate:'places per place',area:null,pts:[4,7,10,15,20]}; },
+  [Md(X({u:'yu',k:26,ask:()=>'keep the remainder by 26: in what place does the letter land?',ln:()=>'the letter’s place'},own('27·crypt','the remainders-pass-through technique')))]);
+law('28·now.mistakes','mistakes a machine can make',()=>{ const g=pick([2,3]); return {c:[0,0,g*g],g,story:'A learning unit with room 1/'+g+' on examples no longer than R makes at most M(R) = '+(g*g)+'R² mistakes.',f:'M',x:'R',xu:'units of length',yu:'mistakes',rate:'mistakes per unit of length',area:null,pts:[2,3,4,5]}; },
+  [Tm(X({u:'yu',out:'seconds',k:()=>pick([2,3,5,10]),ask:(S,p)=>'each mistake costs '+p.K+' seconds to set right: at most how long?',ln:()=>'time at most'},own('28·now','the mistake-bound technique')))]);
+law('29·phys.probe','a probe’s slow clock',()=>{ const v=pick([[3,5,5,4],[4,5,5,3],[12,13,13,5]]); return {c:[0,Q(v[1],v[0])],v,story:'A probe flies at '+v[0]+'/'+v[1]+' of light’s speed: when it has gone d light-years, the ground clock reads T(d) = '+sp([0,Q(v[1],v[0])],'d')+' years.',f:'T',x:'d',xu:'light-years',yu:'years',rate:'years per light-year',area:null,pts:[12,24,36,60]}; },
+  [Fr(X({u:'yu',k:S=>Q(S.v[3],S.v[2]),ask:S=>'the probe’s clock ticks slower by γ = '+S.v[2]+'/'+S.v[3]+': what does it read?',ln:()=>'the probe’s clock',w:['the leftover share is given','the time is multiplied by γ, as if the clock ran fast']},own('29·phys','the light-clock technique')))]);
+law('30·stat.split','squares between and within',()=>{ const a=ri(2,6), b=ri(10,30); return {c:[b,a],story:'In '+who()+'’s trial at '+at()+', n plots give a total squared spread Q(n) = '+sp([b,a],'n')+'.',f:'Q',x:'n',xu:'plots',yu:'square units',rate:'square units per plot',area:null,pts:[6,8,10,12]}; },
+  [O(X({u:'yu',k:'below',ask:(S,p)=>'the part within the groups is '+p.K+': what is the part between them?',ln:()=>'the part between'},own('30·stat','the squares-split technique')))]);
+law('30·phys.parts','energy shared among square parts',()=>({c:[0,Q(1,2)],story:'A molecule whose energy has f square parts holds E(f) = f/2 units of kT on average.',f:'E',x:'f',xu:'square parts',yu:'units of kT',rate:'units of kT per part',area:null,pts:[3,5,6,7,9]}),
+  [Tm(X({u:'yu',k:()=>pick([10,20,50,100,1000]),ask:(S,p)=>'a box holds '+p.K+' such molecules: what energy do they hold in all?',ln:()=>'energy in the box'},own('30·phys','the energy-share technique')))]);
+law('30·comp.line','bits sent down a line',()=>{ const b=pick([2,3,4]); return {c:[0,b],story:'A code for '+Math.pow(2,b)+' equally likely signs uses R(s) = '+b+'s bits for s signs.',f:'R',x:'s',xu:'signs',yu:'bits',rate:'bits per sign',area:null,pts:[100,200,500]}; },
+  [Pr(X({u:'yu',out:'seconds',k:()=>pick([50,100]),ask:(S,p)=>'the line carries '+p.K+' bits a second: how many seconds to send them?',ln:()=>'seconds on the line'},own('30·comp','the surprise-average technique')))]);
+law('30·nav.fix','a fix that loses trust',()=>{ const a=ri(1,3)*2, b=ri(1,3)*2; return {c:[b,a],story:'Since its last fix, '+who()+'’s boat off '+at()+' has a place whose spread grows to S(t) = '+sp([b,a],'t')+' square metres after t minutes.',
+  f:'S',x:'t',xu:'minutes',yu:'square metres',rate:'square metres a minute',area:null,pts:[1,2,3,4]}; },
+  [Cu(X({u:'yu',k:()=>pick([4,6,12]),f:(S,p,q)=>qm(qm(q.v,p.k),qi(qa(q.v,p.k))),ex:(S,p,q)=>'1/(1/'+par(q.v)+' + 1/'+p.K+')',ask:(S,p)=>'a fresh fix with spread '+p.K+' square metres comes in: what is the spread of the best combination?',ln:()=>'spread of the best fix',
+    xs:(S,p,q)=>[{why:'the spreads are added',v:qa(q.v,p.k)},{why:'the spreads are averaged',v:qm(qa(q.v,p.k),Q(1,2))},{why:'the old spread is dropped for the new one',v:p.k}]},own('30·nav','the trusts-add technique')))]);
+law('30·logi.groups','seats and travellers in groups',()=>{ const a=ri(2,6); return {c:[a,Q(1,10)],story:'Single travellers on a route out of '+at()+' leave a spread of W(n) = n/10 + '+a+' seats in the count that show, for n tickets sold.',f:'W',x:'n',xu:'tickets',yu:'seats',rate:'seats per ticket',area:null,pts:[50,100,150,200,250,300]}; },
+  [Tm(X({u:'yu',k:2,ask:()=>'they now travel in groups of 4 that show together: what is the spread?',ln:()=>'spread for groups',w:['the spread is halved','2 is added'],xs:(S,p,q)=>[{why:'the spread is multiplied by 4 instead of √4',v:qm(q.v,Q(4))}]},own('30·logi','the groups-widen technique')))]);
+
+/* ---------- floor 6 ---------- */
+law('31·logi.wait','a queue at one counter',()=>{ const mu=pick([10,12,20]); return {c:[2,Q(1,2)],mu,story:'At a post office in '+at()+', people come at λ(h) = h/2 + 2 a minute, h hours after opening; one counter serves '+mu+' a minute.',f:'λ',x:'h',xu:'hours',yu:'people a minute',rate:'people a minute, per hour',area:null,pts:[2,4,6,8,10]}; },
+  [Cu(X({u:'yu',out:'minutes',k:1,f:(S,p,q)=>num(q.v)>=S.mu?null:qm(q.v,qi(qm(Q(S.mu),qa(Q(S.mu),qn(q.v))))),ex:(S,p,q)=>par(q.v)+'/('+S.mu+' · ('+S.mu+' − '+par(q.v)+'))',ask:()=>'how long does a person wait, on average, before being served?',ln:()=>'average wait',
+    xs:(S,p,q)=>[{why:'the time at the counter is counted too',v:qi(qa(Q(S.mu),qn(q.v)))},{why:'the busy share is given instead of the wait',v:qm(q.v,Q(1,S.mu))}]},own('31·logi','the near-full technique')))]);
+law('31·phys.glare','glare through a filter',()=>{ const a=ri(2,8)*10; return {c:[0,a],story:'Glare off a lake near '+at()+' brings B(w) = '+a+'w lux, for a sun at w on a scale of 1 to 10.',f:'B',x:'w',xu:'on the scale',yu:'lux',rate:'lux per step',area:null,pts:[2,4,5,8]}; },
+  [Fr(X({u:'yu',k:Q(1,2),ask:()=>'taking the light as shaking at every angle alike, how much passes the sunglasses’ filter?',ln:()=>'light through the filter',w:[null,'the light is doubled instead of halved'],xs:(S,p,q)=>[{why:'all of it is taken to pass',v:q.v}]},own('31·phys','the mixed-light technique')))]);
+law('31·now.picture','readings kept of a picture',()=>{ const w=pick([8,16]); return {c:[0,w],story:'A picture of n rows of '+w+' dots, stored by brief waves, has R(n) = '+w+'n readings.',f:'R',x:'n',xu:'rows',yu:'readings',rate:'readings per row',area:null,pts:[8,16,32,64]}; },
+  [Fr(X({u:'yu',k:()=>pick([Q(1,4),Q(1,8),Q(1,16)]),ask:(S,p)=>'only the largest '+p.K+' of the readings is kept: how many readings are stored?',ln:()=>'readings stored'},own('31·now','the largest-readings technique')))]);
+law('32·phys.tune','a violin string against a fork',()=>{ const a=ri(1,3)*2; return {c:[436,a],story:'Claire tightens a violin string at '+at()+': after n turns it sounds f(n) = '+sp([436,a],'n')+' hertz.',f:'f',x:'n',xu:'turns',yu:'hertz',rate:'hertz per turn',area:null,pts:[3,4,5,6,7,8]}; },
+  [O(X({u:'yu',out:'beats a second',k:440,ask:()=>'played with a 440 hertz fork, how many beats a second sound?',ln:()=>'beats a second'},own('32·phys','the beat technique')))]);
+law('32·eng.cancel','noise and its delayed negative',()=>{ const a=pick([50,100,125]); return {c:[0,a],story:'A fan turning r times a second hums at f(r) = '+a+'r hertz in Sarah’s headphones.',f:'f',x:'r',xu:'turns a second',yu:'hertz',rate:'hertz per turn a second',area:null,pts:[2,4,5,10]}; },
+  [In(X({u:'yu',out:'milliseconds',k:500,ask:()=>'the hum is cancelled by a copy slid half a repeat: by how many milliseconds?',ln:()=>'the slide',ex:(S,p,q)=>'1000/(2 · '+par(q.v)+')',w:['the division is turned over','the two are multiplied'],xs:(S,p,q)=>[{why:'a whole repeat is used, not half',v:qm(Q(1000),qi(q.v))}]},own('32·eng','the anti-turning technique')))]);
+law('32·comp.round','rounding a photo’s amounts',()=>{ const a=ri(1,4)*2, b=ri(1,4)*2; return {c:[b,a],story:'A photo coder at '+at()+' rounds the k-th cosine amount to whole steps of q(k) = '+sp([b,a],'k')+'.',f:'q',x:'k',xu:'steps',yu:'units',rate:'units per step',area:null,pts:[1,2,3,5,7]}; },
+  [Fr(X({u:'yu',k:Q(1,2),ask:()=>'rounding to that step moves an amount at most how far?',ln:()=>'the most it moves',w:[null,'the step is doubled'],xs:(S,p,q)=>[{why:'the whole step is used, not half',v:q.v},{why:'a quarter step is used',v:qm(q.v,Q(1,4))}]},own('32·comp','the rounding-error technique')))]);
+law('34·bio.link','a loop of DNA untied',()=>{ return {c:[2,10],story:'A closed loop of DNA from '+beast()+' cells with n hundred base pairs has linking count Lk(n) = 10n + 2.',f:'Lk',x:'n',xu:'hundred base pairs',yu:'links',rate:'links per hundred base pairs',area:null,pts:[2,3,4,5,6,8,10]}; },
+  [O(X({u:'yu',k:()=>pick([2,4,6]),ask:(S,p)=>'an enzyme makes '+qs(Q(p.k.p,2))+' passes of double strand, each lowering Lk by 2: what is Lk then?',ln:()=>'Lk after the passes',w:['the passes are taken off the wrong way round','the passes raise Lk'],
+    xs:(S,p,q)=>[{why:'each pass is taken to lower Lk by 1',v:qa(q.v,qn(Q(p.k.p,2)))}]},own('34·bio','the cut-and-pass technique')))]);
+law('34·cb18.contours','contours on a map',()=>{ const D=pick([5,10,20]), b=pick([20,25,40]); return {c:[b,Q(1,2)],D,story:'On '+who()+'’s map of '+at()+', contours every '+D+' metres lie s(x) = x/2 + '+b+' metres apart, x metres from the summit.',f:'s',x:'x',xu:'metres',yu:'metres',rate:'metres per metre',area:null,pts:[10,20,40,60,80]}; },
+  [In(X({u:'yu',out:'metres of rise per metre',k:S=>S.D,ask:()=>'about how steep is the ground there?',ln:()=>'the slope',w:['the spacing is divided by the rise','the rise and spacing are multiplied']},own('34·cb18','the spacing-slope technique')))]);
+law('35·chem.shake','a shaking bond’s levels',()=>{ const h=pick([2,4,6]); return {c:[h/2,h],h,story:'A bond in a gas shakes with levels E(v) = '+sp([h/2,h],'v')+' energy units, v = 0, 1, 2 and so on.',f:'E',x:'v',xu:'levels',yu:'energy units',rate:'energy units per level',area:null,pts:[1,2,3,4,5]}; },
+  [O(X({u:'yu',k:S=>S.h/2,ask:()=>'the bond falls to its lowest level, v = 0: how much energy does the light it gives off carry?',ln:()=>'energy of the light',w:['the lowest level is taken away the wrong way round','the lowest level is added'],xs:(S,p,q)=>[{why:'the lowest level is taken as 0',v:q.v}]},own('35·chem','the shaking-line technique')))]);
+law('36·comp.bytes','bytes for a screen',()=>({c:[0,3],story:'A screen keeps three bytes for each place: n places take B(n) = 3n bytes.',f:'B',x:'n',xu:'places',yu:'bytes',rate:'bytes per place',area:null,pts:[1024,2048,4096,5120]}),
+  [Pr(X({u:'yu',out:'kilobytes',k:1024,ask:()=>'how many kilobytes of 1024 bytes is that?',ln:()=>'kilobytes',w:[null,'1024 is taken away'],xs:(S,p,q)=>[{why:'a kilobyte is taken as 1000 bytes',v:qm(q.v,Q(1,1000))},{why:'the three bytes a place are counted once more',v:qm(q.v,Q(3,1024))}]},own('36·comp','the three-bytes technique')))]);
+law('36·bio.scatter','red light scattered by air',()=>{ const k=pick([50,100,200]); return {c:[0,Q(1,k)],story:'Air over '+at()+' scatters S(I) = I/'+k+' of red light at 800 nanometres, for a brightness I.',f:'S',x:'I',xu:'units of brightness',yu:'units of brightness',rate:'per unit of brightness',area:null,pts:[100,200,300,400,500]}; },
+  [Tm(X({u:'yu',k:16,ask:()=>'blue light at 400 nanometres of the same brightness: how much of it is scattered?',ln:()=>'blue light scattered',w:['the scatter is divided by 16','16 is added'],xs:(S,p,q)=>[{why:'the ratio of wavelengths is used, not its fourth power',v:qm(q.v,Q(2))},{why:'the ratio is squared, not raised to the fourth',v:qm(q.v,Q(4))}]},own('36·bio','the short-wave-share technique')))]);
+law('36·nav.lowsun','sunlight through more air',()=>{ const a=pick([2,3,4,5]); return {c:[0,a],story:'From overhead, sunlight over '+at()+' crosses A(k) = '+a+'k kilometres of air in k layers.',f:'A',x:'k',xu:'layers',yu:'kilometres',rate:'kilometres a layer',area:null,pts:[2,3,4,5,6]}; },
+  [Tm(X({u:'yu',k:2,ask:()=>'the evening sun stands 30° above the horizon, and sin 30° = 1/2: how much air does its light cross?',ln:()=>'air crossed at sunset',w:['the air is halved','2 kilometres are added'],xs:(S,p,q)=>[{why:'the air is taken to be the same at any height of the sun',v:q.v}]},own('36·nav','the low-sun technique')))]);
+law('37·eng.ring','a room’s ringing time',()=>{ const a=pick([1,2,4]), b=pick([10,15,20]); return {c:[b,a],story:'Sarah hangs n cushions in a hall at '+at()+', giving A(n) = '+sp([b,a],'n')+' square metres of soaking.',f:'A',x:'n',xu:'cushions',yu:'square metres',rate:'square metres per cushion',area:null,pts:[5,10,15,20,25,30]}; },
+  [In(X({u:'yu',out:'seconds',k:()=>Q(pick([1000,2000,4000])*161,1000),ask:(S,p)=>'the hall holds '+Math.round(num(p.k)*1000/161)+' cubic metres: how long does sound take to fall 60 dB?',ln:()=>'the ringing time',
+    ex:(S,p,q)=>'0.161 · '+Math.round(num(p.k)*1000/161)+'/'+par(q.v)},own('37·eng','the ringing technique')))]);
+law('37·comp.bits','headroom above the hiss',()=>({c:[2,6],story:'N bits hold a full turning about D(N) = 6N + 2 decibels above their rounding hiss.',f:'D',x:'N',xu:'bits',yu:'decibels',rate:'decibels per bit',area:null,pts:[8,12,16,20]}),
+  [G(X({u:'yu',k:()=>pick([110,120,130]),ask:(S,p)=>'a concert spans '+p.K+' decibels: how many decibels short is it?',ln:()=>'decibels short'},own('37·comp','the bit-hiss technique')))]);
+law('37·bio.strip','a pitch step along the ear',()=>({c:[0,Q(1,240)],story:'A pitch step of k cents moves the best place on the ear’s strip S(k) = k/240 millimetres.',f:'S',x:'k',xu:'cents',yu:'millimetres',rate:'millimetres per cent',area:null,pts:[600,1200,1800,2400,3600,4800]}),
+  [Pr(X({u:'yu',out:'octaves',k:5,ask:()=>'each octave takes 5 millimetres of the strip: how many octaves is that?',ln:()=>'octaves'},own('37·bio','the place-map technique'))),
+   Fr(X({u:'yu',out:'of the strip',k:Q(1,35),ask:()=>'the strip is 35 millimetres long: what share of it is that?',ln:()=>'share of the strip',w:['the share left over is given','the length is multiplied by 35']},own('37·bio','the place-map technique')))]);
+law('37·crypt.level','a hidden voice level',()=>{ const a=pick([1,2,3]), b=ri(0,3), key=ri(1,5); return {c:[b,a],key,story:'Mike’s phone turns a voice into levels L(t) = '+sp([b,a],'t')+' at tick t, before a key step is added.',f:'L',x:'t',xu:'ticks',yu:'levels',rate:'levels a tick',area:null,pts:[2,3,4,6,8]}; },
+  [Cu(X({u:'yu',k:1,f:(S,p,q)=>q.v.q!==1?null:Q((q.v.p+S.key)%6),ex:(S,p,q)=>'remainder of ('+qs(q.v)+' + '+S.key+') by 6',ask:S=>'add the key step '+S.key+' and keep the remainder by 6: what level is sent?',ln:()=>'level sent',pos:false,
+    xs:(S,p,q)=>[{why:'the key step is added but no remainder is taken',v:qa(q.v,Q(S.key))},{why:'the remainder is taken by 5, the top of the key',v:Q((q.v.p+S.key)%5)},{why:'the key step is taken away',v:Q(((q.v.p-S.key)%6+6)%6)}]},own('37·crypt','the level-key technique')))]);
+law('37·phys.listener','a whistle and a moving listener',()=>{ const a=ri(1,5)*100; return {c:[200,a],story:'A whistle on a dock at '+at()+' sounds f(n) = '+sp([200,a],'n')+' hertz at setting n.',f:'f',x:'n',xu:'settings',yu:'hertz',rate:'hertz per setting',area:null,pts:[1,2,3,4]}; },
+  [Tm(X({u:'yu',k:Q(11,10),ask:()=>'Randy rides toward it at 1/10 of the speed of sound: what does he hear?',ln:()=>'what Randy hears',w:['the factor is turned over','11/10 is added'],xs:(S,p,q)=>[{why:'moving away is taken',v:qm(q.v,Q(9,10))}]},own('37·phys','the moving-listener technique')))]);
+law('38·phys.shell','electrons in a level',()=>({c:[0,0,2],story:'Level n of a hydrogen-like atom holds E(n) = 2n² electrons.',f:'E',x:'n',xu:'levels',yu:'electrons',rate:'electrons per level',area:null,pts:[2,3,4]}),
+  [O(X({u:'yu',k:(S,q)=>{ const n=num(q.v); return n>2?Q(ri(1,n-1)):null; },ask:(S,p)=>p.K+' electrons already sit in that level: how many more fit?',ln:()=>'room in the level'},own('38·phys','the shell-count technique')))]);
+law('38·now.kernel','lines in a small core',()=>{ const a=ri(2,6)*10; return {c:[400,a],story:'Jean’s checker has a core of 400 lines and '+a+' lines for each of its n moves: L(n) = '+sp([400,a],'n')+' lines.',f:'L',x:'n',xu:'moves',yu:'lines',rate:'lines per move',area:null,pts:[5,10,20]}; },
+  [Pr(X({u:'yu',out:'hours',k:()=>pick([50,100]),ask:(S,p)=>'a reviewer reads '+p.K+' lines an hour: how many hours to read them?',ln:()=>'hours to read'},own('38·now','the small-kernel technique')))]);
+
+/* ---------- floor 7 ---------- */
+law('39·bio.fire','a neuron’s firing rate',()=>{ const a=ri(2,6), b=ri(1,4)*5; return {c:[b,a],story:'A neuron in '+aOf(beast())+' fires r(I) = '+sp([b,a],'I')+' spikes a second for an input I.',f:'r',x:'I',xu:'units of input',yu:'spikes a second',rate:'spikes a second per unit',area:null,pts:[2,4,6,8]}; },
+  [G(X({u:'yu',k:100,ask:()=>'its rest of 1/100 second after each spike caps it at 100 a second: how far below the cap is it?',ln:()=>'below the cap'},own('39·bio','the rate-ceiling technique')))]);
+law('42·eng.faces','faces of a knot drawing',()=>{ const a=pick([2,3,4]); return {c:[0,a],story:'A braid drawn with n twists has C(n) = '+a+'n crossings, all in one piece.',f:'C',x:'n',xu:'twists',yu:'crossings',rate:'crossings per twist',area:null,pts:[1,2,3,4,5,6,7,8,10]}; },
+  [Pl(X({u:'yu',out:'faces',k:2,ask:()=>'how many faces does the drawing have?',ln:()=>'faces',w:['2 is taken away instead of added','the 2 is left out']},own('42·eng','the crossing-faces technique')))]);
+law('42·econ.proposals','proposals in a pairing run',()=>({c:[1,-1,1],story:'With n doctors and n hospitals, a pairing run makes at most P(n) = n² − n + 1 proposals.',f:'P',x:'n',xu:'doctors',yu:'proposals',rate:'proposals per doctor',area:null,pts:[3,4,5,6,8]}),
+  [Tm(X({u:'yu',out:'minutes',k:()=>pick([2,3,5]),ask:(S,p)=>'each proposal takes '+p.K+' minutes to answer: at most how long is the run?',ln:()=>'longest run'},own('42·econ','the proposal-count technique')))]);
+law('42·chem.alkane','atoms of a single-bonded chain',()=>({c:[2,3],story:'An alkane with n carbons and 2n + 2 hydrogens has A(n) = 3n + 2 atoms.',f:'A',x:'n',xu:'carbons',yu:'atoms',rate:'atoms per carbon',area:null,pts:[2,3,4,5,6,7,8]}),
+  [O(X({u:'yu',out:'bonds',k:1,ask:()=>'all its bonds single and the molecule a tree: how many bonds does it have?',ln:()=>'bonds',w:['the subtraction is turned round','a bond is added'],xs:(S,p,q)=>[{why:'each atom is given a bond of its own',v:q.v}]},own('42·chem','the alkane-tree technique')))]);
+law('43·crypt.shares','a secret shared on a prime clock',()=>{ const s=ri(2,9), a=ri(1,5), b=ri(1,3); return {c:[s,a,b],story:'Holder i of a split secret gets f(i) = '+sp([s,a,b],'i')+', before the remainder by 11 is taken.',f:'f',x:'i',xu:'holders',yu:'units',rate:'units per holder',area:null,pts:[1,2,3,4,5]}; },
+  [Md(X({u:'yu',k:11,ask:()=>'on the clock of 11, what share does that holder hold?',ln:()=>'the share on the clock'},own('43·crypt','the point-share technique')))]);
+law('43·cb37.fifths','a tune moved by fifths',()=>{ const b=ri(0,11); return {c:[b,7],story:'Starting at hour '+b+' of the pitch clock, a tune moved up k fifths of 7 steps lands on N(k) = 7k + '+b+' before the clock of 12 is read.',f:'N',x:'k',xu:'fifths',yu:'steps',rate:'steps per fifth',area:null,pts:[2,3,4,5,6]}; },
+  [Md(X({u:'yu',k:12,ask:()=>'what hour of the clock of 12 does it land on?',ln:()=>'hour on the clock'},own('43·cb37','the pitch-clock technique')))]);
+law('43·comp.lcg','a generator on a prime clock',()=>{ const a=ri(2,6), c=ri(1,9); return {c:[c,a],story:'A number maker steps x to y(x) = '+sp([c,a],'x')+', then keeps the remainder by 13.',f:'y',x:'x',xu:'steps',yu:'units',rate:'units per unit',area:null,pts:[3,5,7,9,11]}; },
+  [Md(X({u:'yu',k:13,ask:()=>'what does it put out on the clock of 13?',ln:()=>'output on the clock'},DR))]);
+law('44·comp.fix','flips a code can fix',()=>{ const b=pick([1,3,5]); return {c:[b,2],story:'A code with r check groups has least distance d(r) = '+sp([b,2],'r')+'.',f:'d',x:'r',xu:'check groups',yu:'flips',rate:'flips per group',area:null,pts:[1,2,3,4,5,6]}; },
+  [Cu(X({u:'yu',out:'flips fixed',k:1,f:(S,p,q)=>Q(Math.floor((num(q.v)-1)/2)),ex:(S,p,q)=>'whole part of ('+par(q.v)+' − 1)/2',ask:()=>'how many flips can the code fix in any word?',ln:()=>'flips fixed',
+    xs:(S,p,q)=>[{why:'the flips it can find are given instead',v:qa(q.v,Q(-1))},{why:'the distance is halved without taking 1 away',v:Q(Math.floor(num(q.v)/2)+1)},{why:'the whole distance is given',v:q.v}]},own('44·comp','the fix-radius technique')))]);
+law('44·bio.samples','samples and their stretches',()=>{ const a=ri(2,6); return {c:[3,a],story:'A lab at '+at()+' has N(d) = '+sp([3,a],'d')+' samples of '+beast()+' cells by day d.',f:'N',x:'d',xu:'days',yu:'samples',rate:'samples a day',area:null,pts:[2,3,5]}; },
+  [O(X({u:'yu',out:'stretches',k:1,ask:()=>'with their average taken away, at most how many stretches other than 0 can the spread grid have?',ln:()=>'stretches at most',w:['1 is taken the wrong way round','1 is added'],xs:(S,p,q)=>[{why:'the average is not taken away',v:q.v}]},own('44·bio','the few-samples technique')))]);
+law('44·chem.fill','electrons filled from the bottom',()=>({c:[0,2],story:'A chain molecule of n carbons spreads E(n) = 2n electrons over its links.',f:'E',x:'n',xu:'carbons',yu:'electrons',rate:'electrons per carbon',area:null,pts:[2,3,4,5,6,8,10]}),
+  [Pr(X({u:'yu',out:'orbitals',k:2,ask:()=>'filling from the bottom, two to an orbital, how many orbitals are filled?',ln:()=>'orbitals filled'},own('44·chem','the fill-from-bottom technique')))]);
+law('47·comp.types','members of a type',()=>{ const a=pick([2,3]), b=pick([1,2]); return {c:[b,a],story:'A type in '+who()+'’s program has X(n) = '+sp([b,a],'n')+' members, for a setting n.',f:'X',x:'n',xu:'settings',yu:'members',rate:'members per setting',area:null,pts:[1,2,3,4,5]}; },
+  [Tm(X({u:'yu',k:()=>pick([2,3]),ask:(S,p)=>'how many members has the type of pairs of it with a choice of '+p.K+'?',ln:()=>'members of the pair type',w:['the count is divided','the two are added, as for one or the other']},own('47·comp','the type-counts technique')))]);
+law('47·now.ways','ways a type is the same as itself',()=>{ const b=pick([1,2,3]); return {c:[b,1],story:'A finite type in a proof checker has M(k) = k + '+b+' members.',f:'M',x:'k',xu:'steps',yu:'members',rate:'members per step',area:null,pts:[1,2,3,4]}; },
+  [Cu(X({u:'yu',out:'ways',k:1,f:(S,p,q)=>{ const n=num(q.v); if(q.v.q!==1||n<1||n>7) return null; let r=1; for(let i=2;i<=n;i++) r*=i; return Q(r); },ex:(S,p,q)=>qs(q.v)+'!',ask:()=>'with the univalence axiom, in how many ways is it the same as itself?',ln:()=>'ways',
+    xs:(S,p,q)=>{ const n=num(q.v); return [{why:'the members are counted instead of the ways',v:q.v},{why:'the ways are taken as n squared',v:Q(n*n)},{why:'the ways are taken as 2 to the n',v:Q(Math.pow(2,n))}]; }},own('47·now','the way-count technique')))]);
+law('2·comp.cond','tests before the then part',()=>{ const a=ri(2,4), b=ri(1,3); return {c:[b,a],early:1,story:'Before the then part of '+who()+'’s program runs, the computer checks a condition of n comparisons joined by and, in T(n) = '+sp([b,a],'n')+' steps.',
+  f:'T',x:'n',xu:'comparisons',yu:'steps',rate:'steps per comparison',area:null,pts:[2,3,4,5,6]}; },
+  [Tm(X({u:'yu',out:'nanoseconds',k:()=>pick([2,3,5]),ask:(S,p)=>'each step takes '+p.K+' nanoseconds: how long does the check take?',ln:()=>'time for the check'},MQ))]);
+law('7·then.power','a power of 3 past so many digits',()=>({c:[0,3],early:1,story:'By the digits-of-a-power technique, 3 to the power m(k) = 3k has more than k digits.',f:'m',x:'k',xu:'digits',yu:'multiplications',rate:'multiplications per digit',area:null,pts:[10,20,40,60,100]}),
+  [Pr(X({u:'yu',out:'minutes',k:()=>pick([2,3,5]),ask:(S,p)=>'Zoe does '+p.K+' multiplications by 3 a minute, from 1: how many minutes to reach that power?',ln:()=>'minutes of work'},MQ))]);
+law('30·econ.drift','a drift against a wobble',()=>{ const k=pick([2,3,4]); return {c:[0,Q(1,k)],story:'A fund at '+at()+' drifts up D(t) = t/'+k+' dollars over t days, while its wobble over t days is √t dollars.',f:'D',x:'t',xu:'days',yu:'dollars',rate:'dollars a day',area:null,pts:[16,36,64,100,144]}; },
+  [O(X({u:'yu',k:(S,q,c)=>{ const r=qsqrt(Q(c.x)); return r; },when:hasX,ask:(S,p)=>'by how many dollars does the drift stand above the wobble over those days?',ln:()=>'drift above the wobble',w:[null,'the wobble is added to the drift'],
+    xs:(S,p,q)=>[{why:'the wobble is taken to grow like t, not √t',v:qa(q.v,qn(Q(p.ctx.x)))}]},own('30·econ','the drift-and-width technique')))]);
+law('30·now.found','true ideas among the passes',()=>{ const k=pick([5,10,20]); return {c:[0,Q(1,k)],story:'Of n ideas tested in a lab at '+at()+', T(n) = n/'+k+' are true.',f:'T',x:'n',xu:'ideas',yu:'true ideas',rate:'true ideas per idea',area:null,pts:[100,200,400,1000]}; },
+  [Fr(X({u:'yu',out:'passes',k:Q(4,5),ask:()=>'a test passes 4/5 of true ideas: how many true ideas pass?',ln:()=>'true ideas that pass',w:['the power 1 − β is taken as β, 1/5','the count is divided by 4/5'],xs:(S,p,q)=>[{why:'every true idea is taken to pass',v:q.v}]},own('30·now','the found-and-true technique')))]);
+law('39·phys.band','a band filled from the bottom',()=>({c:[0,4],story:'A row of N silicon atoms brings E(N) = 4N electrons to its levels.',f:'E',x:'N',xu:'atoms',yu:'electrons',rate:'electrons per atom',area:null,pts:[10,20,25,30,40,50,60,100]}),
+  [Pr(X({u:'yu',out:'levels',k:2,ask:()=>'each level takes 2 electrons: how many levels are filled?',ln:()=>'levels filled',w:['the electrons are doubled','2 is taken away'],xs:(S,p,q)=>[{why:'each level is given one electron',v:q.v}]},own('39·phys','the full-band technique')))]);
+law('42·bio.trees','trees of descent for named species',()=>{ const b=ri(2,3); return {c:[b,1],story:'Jean adds species to a study at '+at()+': after w weeks she has n(w) = '+sp([b,1],'w')+' named species.',f:'n',x:'w',xu:'weeks',yu:'species',rate:'species a week',area:null,pts:[1,2,3,4]}; },
+  [Cu(X({u:'yu',out:'trees',k:1,f:(S,p,q)=>{ const n=num(q.v); if(q.v.q!==1||n<3||n>8) return null; let r=1; for(let i=1;i<=2*n-5;i+=2) r*=i; return Q(r); },ex:(S,p,q)=>{ const n=num(q.v); const a=[]; for(let i=1;i<=2*n-5;i+=2) a.push(i); return a.join(' · '); },ask:()=>'how many trees of descent have those named ends?',ln:()=>'trees of descent',
+    xs:(S,p,q)=>{ const n=num(q.v); let f=1; for(let i=2;i<=n;i++) f*=i; let r=1; for(let i=1;i<=2*n-3;i+=2) r*=i; return [{why:'every order of the species is counted as a tree',v:Q(f)},{why:'the product runs one odd number too far',v:Q(r)},{why:'only the last odd number is taken',v:Q(2*n-5)}]; }},own('42·bio','the graft technique')))]);
+law('42·cb19.tiles','tiles counted up to turning',()=>({c:[0,Q(1,2),Q(1,4),0,Q(1,4)],story:'Mike paints the 4 corners of a square tile, each in one of k colours; tiles that turn into each other count as one: N(k) = (k⁴ + k² + 2k)/4 tiles.',f:'N',x:'k',xu:'colours',yu:'tiles',rate:'tiles per colour',area:null,pts:[2,3,4,5]}),
+  [Tm(X({u:'yu',out:'dollars',k:()=>pick([2,3,5]),ask:(S,p)=>'setting up each tile design costs '+p.K+' dollars: what do they all cost?',ln:()=>'cost of every design'},MQ))]);
+law('43·phys.ring','levels on a ring of sites',()=>({c:[0,1],story:'An electron hopping on a ring of N sites has L(N) = N levels, one for each hour of the clock of N.',f:'L',x:'N',xu:'sites',yu:'levels',rate:'levels per site',area:null,pts:[4,5,6,8,10,12,16,20]}),
+  [Tm(X({u:'yu',out:'electrons',k:2,ask:()=>'two electrons fit each hour: how many electrons fill the band?',ln:()=>'electrons in a full band',w:['the levels are halved','2 is added'],xs:(S,p,q)=>[{why:'one electron is put on each level',v:q.v}]},own('43·phys','the two-per-hour technique')))]);
+law('20·chem.forms','forms of a sugar chain',()=>{ return {c:[-2,1],story:'A sugar chain of n carbons, as drawn in '+who()+'’s lab, has H(n) = n − 2 handed carbons.',f:'H',x:'n',xu:'carbons',yu:'handed carbons',rate:'handed carbons per carbon',area:null,pts:[3,4,5,6,7,8,9]}; },
+  [Cu(X({u:'yu',out:'forms',k:1,f:(S,p,q)=>{ const n=num(q.v); return q.v.q===1&&n>=1&&n<=8?Q(Math.pow(2,n)):null; },ex:(S,p,q)=>'2 to the power '+qs(q.v),ask:()=>'each handed carbon can be either way round: how many forms can the chain take?',ln:()=>'forms',
+    xs:(S,p,q)=>{ const n=num(q.v); return [{why:'each carbon adds two forms instead of doubling them',v:Q(2*n)},{why:'the count is squared instead of used as a power of 2',v:Q(n*n)},{why:'one carbon is left out of the doubling',v:Q(Math.pow(2,n-1))}]; }},own('20·chem','the handed-carbon technique')))]);
+law('21·bio.spokes','seeds on the spokes of a head',()=>{ const a=ri(1,3), b=ri(2,5); return {c:[8*b,8*a],story:'A sunflower head near '+at()+' has N(t) = '+sp([8*b,8*a],'t')+' seeds after t days, set at a turn of 3/8 each.',f:'N',x:'t',xu:'days',yu:'seeds',rate:'seeds a day',area:null,pts:[2,3,5,8]}; },
+  [Pr(X({u:'yu',out:'seeds a spoke',k:8,ask:()=>'a turn of 3/8 puts every seed on 8 spokes: how many seeds are on each spoke?',ln:()=>'seeds a spoke',w:['the seeds are multiplied by the spokes','8 is taken away'],xs:(S,p,q)=>[{why:'the 3 of the turn is taken as the number of spokes',v:qm(q.v,Q(1,3))}]},own('21·bio','the spoke technique')))]);
+law('25·now.escape','a run that may escape',()=>({c:[0,1,1],story:'Starting from 0 and squaring then adding c, the run reaches z₂(c) = c² + c after two steps.',f:'z₂',x:'c',xu:'units',yu:'units',rate:'units per unit',area:null,pts:[2,3,4,5,6,7,8]}),
+  [O(X({u:'yu',k:2,ask:()=>'one step past 2 proves escape: by how much does z₂ pass 2?',ln:()=>'past 2',w:['2 is taken away the wrong way round','2 is added'],xs:(S,p,q)=>[{why:'the bound is taken as 4, the square of 2',v:qa(q.v,Q(-4))}]},own('25·now','the escape technique')))]);
+/* ---------- asked for at 03:18Z and 03:19Z: gas spreading, heat through walls, light through layers, electricity, and the colour rung ---------- */
+const pw=(f,n)=>{ let r=Q(1); for(let i=0;i<n;i++) r=qm(r,f); return r; };
+/* gas spreading */
+law('14·bio.cell','oxygen spreading to a cell’s centre',()=>{ const a=pick([2,4]), b=pick([2,4,6]); return {c:[b,a],story:'A cell in '+who()+'’s culture grows: after d days its centre sits r(d) = '+sp([b,a],'d')+' micrometres in from its wall.',
+  f:'r',x:'d',xu:'days',yu:'micrometres',rate:'micrometres a day',area:null,pts:[1,2,3,4,5]}; },
+  [Cu(X({u:'yu',out:'milliseconds',k:1,f:(S,p,q)=>qm(qm(q.v,q.v),Q(1,4)),ex:(S,p,q)=>par(q.v)+'²/(2 · 2)',ask:()=>'oxygen spreads in the cell with D = 2 square micrometres a millisecond: about how long to reach the centre?',ln:()=>'time to spread there, x²/(2D)',
+    xs:(S,p,q)=>[{why:'the distance is not squared',v:qm(q.v,Q(1,4))},{why:'the 2 of x² = 2Dt is left out',v:qm(qm(q.v,q.v),Q(1,2))},{why:'the distance is squared and multiplied by 2D',v:qm(qm(q.v,q.v),Q(4))}]},own('14·bio','the spreading law')))]);
+law('14·bio.scent','a scent spreading through still air',()=>{ const a=pick([2,4,6]); return {c:[0,a],story:'Zoe opens a jar of scent on a counter at '+at()+'; the k-th tile along the counter ends L(k) = '+a+'k centimetres from it.',
+  f:'L',x:'k',xu:'tiles',yu:'centimetres',rate:'centimetres a tile',area:null,pts:[1,2,3,4,5]}; },
+  [Cu(X({u:'yu',out:'seconds',k:1,f:(S,p,q)=>qm(qm(q.v,q.v),Q(5,2)),ex:(S,p,q)=>par(q.v)+'²/(2 · 1/5)',ask:()=>'in still air the scent spreads with D = 1/5 square centimetre a second: about how long to get that far?',ln:()=>'time to spread there, x²/(2D)',
+    xs:(S,p,q)=>[{why:'the distance is not squared',v:qm(q.v,Q(5,2))},{why:'the 2 of x² = 2Dt is left out',v:qm(qm(q.v,q.v),Q(5))},{why:'the distance squared is multiplied by 2D instead of divided',v:qm(qm(q.v,q.v),Q(2,5))}]},own('14·bio','the spreading law')))]);
+const GAS={H:['hydrogen',2],He:['helium',4],M:['methane',16],O:['oxygen',32],S:['sulphur dioxide',64]};
+const PAIRS=[['H','O'],['He','M'],['He','S'],['M','S'],['O','H'],['M','He'],['S','M']];
+law('30·phys.leak','two gases through one pinhole',()=>{ const pr=pick(PAIRS), a=GAS[pr[0]], b=GAS[pr[1]], k=pick([4,8,12,16,20]); return {c:[0,k],g1:a[0],m1:a[1],g2:b[0],m2:b[1],
+  story:'A tank of '+a[0]+' at '+at()+' leaks through a pinhole: after t hours L(t) = '+k+'t millilitres have got out. A molecule of '+a[0]+' has mass '+a[1]+'.',
+  f:'L',x:'t',xu:'hours',yu:'millilitres',rate:'millilitres an hour',area:null,pts:[1,2,3,4,5]}; },
+  [Tm(X({u:'yu',k:S=>qsqrt(Q(S.m1,S.m2)),ask:(S)=>'filled with '+S.g2+', mass '+S.m2+' a molecule, at the same heat and push: how much gets out in that time?',ln:(S)=>S.g2+' out, '+S.g1+' times √('+S.m1+'/'+S.m2+')',
+    w:['the square root is turned over','the share is added instead of multiplied'],xs:(S,p,q)=>[{why:'the masses are compared without the square root',v:qm(q.v,Q(S.m1,S.m2))},{why:'the gas is taken to leak at the same pace',v:q.v}]},own('30·phys','the half-kT technique')))]);
+law('30·phys.empty','time for a gas to leak down',()=>{ const pr=pick(PAIRS), a=GAS[pr[0]], b=GAS[pr[1]], k=pick([2,3,4,6]); return {c:[0,k],g1:a[0],m1:a[1],g2:b[0],m2:b[1],
+  story:'Through a pinhole, a tank of '+a[0]+' (mass '+a[1]+' a molecule) at '+at()+' takes T(V) = '+k+'V minutes to lose V litres.',
+  f:'T',x:'V',xu:'litres',yu:'minutes',rate:'minutes a litre',area:null,pts:[2,3,5,10]}; },
+  [Tm(X({u:'yu',k:S=>qsqrt(Q(S.m2,S.m1)),ask:(S)=>'with '+S.g2+' (mass '+S.m2+') in the tank instead, how many minutes for the same loss?',ln:(S)=>'time for '+S.g2+', times √('+S.m2+'/'+S.m1+')',
+    w:['the square root is turned over, as for the pace','the share is added instead of multiplied'],xs:(S,p,q)=>[{why:'the masses are compared without the square root',v:qm(q.v,Q(S.m2,S.m1))},{why:'the time is taken to be the same for any gas',v:q.v}]},own('30·phys','the half-kT technique')))]);
+law('33·then.puff','a puff of smoke drifting and spreading',()=>{ const v=pick([2,4,5]); return {c:[0,Q(1,v)],v,story:'A puff of smoke from a chimney at '+at()+' drifts on a '+v+' metre a second wind: it is x metres downwind after t(x) = x/'+v+' seconds.',
+  f:'t',x:'x',xu:'metres',yu:'seconds',rate:'seconds a metre',area:null,pts:[10,20,40,60]}; },
+  [Tm(X({u:'yu',out:'square metres',k:()=>pick([1,2,3]),ex:(S,p,q)=>'2 · '+qs(p.k)+' · '+par(q.v),f:(S,p,q)=>qm(qm(Q(2),p.k),q.v),ask:(S,p)=>'it spreads as it drifts with D = '+p.K+' square metres a second: what is its spread squared, 2Dt, by then?',ln:()=>'spread squared',w:[null,null],
+    xs:(S,p,q)=>[{why:'the 2 of 2Dt is left out',v:qm(p.k,q.v),u:'square metres'},{why:'the distance downwind is used for the time',v:qm(qm(Q(2),p.k),qm(q.v,Q(S.v))),u:'square metres'},{why:'D is added instead of multiplied',v:qa(q.v,qm(Q(2),p.k)),u:'square metres'}]},own('33·then','the drifting-bell technique')))]);
+/* heat through a wall, a pane, a glowing surface */
+law('11·chem.window','heat through a window pane',()=>{ const d=pick([200,250,500]); return {c:[0,d],th:d,story:'Glass passes 1 watt per metre per degree, so a pane 1/'+d+' metre thick and A square metres across passes H(A) = 1 · A/(1/'+d+') = '+d+'A watts per degree.',
+  f:'H',x:'A',xu:'square metres',yu:'watts per degree',rate:'watts per degree per square metre',area:null,pts:[1,2,3]}; },
+  [Tm(X({u:'yu',out:'watts',k:()=>pick([5,10,15,20]),ask:(S,p)=>'it is '+p.K+' degrees warmer inside than out: how many watts of heat flow out through the pane?',ln:()=>'heat flowing out',w:['the watts per degree are divided by the degrees','the degrees are added'],
+    xs:(S,p,q)=>[{why:'the thickness is multiplied in instead of divided',v:qm(qm(q.v,p.k),Q(1,S.th*S.th))}]},own('11·chem','the heat-sum law')))]);
+law('24·eng.wall','a brick wall’s leak',()=>{ const t=pick([4,5]), k=Q(1,2); return {c:[0,Q(t,2)],t,story:'Brick passes 1/2 watt per metre per degree, so a wall 1/'+t+' metre thick and A square metres in size leaks λ(A) = (1/2)A/(1/'+t+') = '+sp([0,Q(t,2)],'A')+' watts per degree.',
+  f:'λ',x:'A',xu:'square metres',yu:'watts per degree',rate:'watts per degree per square metre',area:null,pts:[20,30,40,50,60]}; },
+  [In(X({u:'yu',out:'degrees',k:()=>pick([600,1200,1800,2400]),ask:(S,p)=>'a heater of '+p.K+' watts runs steadily: how many degrees above the outside does the house settle?',ln:()=>'degrees above outside, P/λ',
+    xs:(S,p,q)=>[{why:'the thickness is left out of the leak',v:qm(p.k,qi(qm(q.v,Q(1,S.t))))}]},own('24·eng','the closing-gap technique')))]);
+law('17·phys.stove','a stove top glowing hotter',()=>{ const a=pick([200,300,400,500]); return {c:[0,a],story:'The iron top of '+who()+'’s stove, glowing at its working heat, gives off P(A) = '+a+'A watts from A square metres.',
+  f:'P',x:'A',xu:'square metres',yu:'watts',rate:'watts per square metre',area:null,pts:[1,2,3]}; },
+  [Tm(X({u:'yu',k:16,ask:()=>'it is pushed to twice its absolute temperature: how many watts does it give off then?',ln:()=>'watts at twice the temperature, 2⁴ times',w:['the power is divided by 16','16 is added'],
+    xs:(S,p,q)=>[{why:'the power is taken to double with the temperature',v:qm(q.v,Q(2))},{why:'the power is squared with the temperature, not raised to the fourth',v:qm(q.v,Q(4))}]},own('17·phys','the fourth-power law of glow')))]);
+/* light through layers */
+law('18·chem.layers','light through centimetres of dye',()=>{ const a=pick([20,40,80]), n=pick([2,3]); return {c:[0,a],n,story:'A lamp at '+at()+' sends B(w) = '+a+'w units of light of one colour into a tube of dye, w the lamp’s watts.',
+  f:'B',x:'w',xu:'watts',yu:'units of light',rate:'units of light a watt',area:null,pts:[1,2,3,5]}; },
+  [Cu(X({u:'yu',k:()=>pick([Q(1,2),Q(3,4),Q(2,3),Q(4,5)]),f:(S,p,q)=>qm(q.v,pw(p.k,S.n)),ex:(S,p,q)=>par(q.v)+' · ('+qs(p.k)+')^'+S.n,
+    ask:(S,p)=>{ return 'each centimetre of the dye keeps '+p.K+' of the light reaching it: how much comes out of '+S.n+' centimetres?'; },ln:()=>'light out',
+    xs:(S,p,q)=>[{why:'only one centimetre is counted',v:qm(q.v,p.k)},{why:'the shares of the centimetres are added',v:qm(q.v,qm(p.k,Q(S.n)))},{why:'the share lost is used in place of the share kept',v:qm(q.v,pw(qa(Q(1),qn(p.k)),S.n))},{why:'one centimetre too many is counted',v:qm(q.v,pw(p.k,S.n+1))}]},own('18·chem','the thin-layer law')))]);
+const PANE=[[Q(1,9),Q(4,5)],[Q(1,5),Q(2,3)],[Q(1,7),Q(3,4)],[Q(1,3),Q(1,2)]];
+law('36·phys.panes','light through a clear pane',()=>{ const a=pick([60,90,120]), ch=ri(0,3); return {c:[0,a],ch,story:'Sunlight falls on Jean’s window at '+at()+' at L(h) = '+a+'h watts a square metre, h hours after dawn.',
+  f:'L',x:'h',xu:'hours',yu:'watts a square metre',rate:'watts a square metre an hour',area:null,pts:[1,2,3,4,5]}; },
+  [Fr(X({u:'yu',k:S=>PANE[S.ch][1],ask:(S)=>'each face of the pane sends back '+qs(PANE[S.ch][0])+' and it takes nothing: how much passes straight through?',ln:()=>'light through, (1 − r)/(1 + r)',
+    w:['the light sent back is given','the light is divided by the share'],xs:(S,p,q)=>{ const r=PANE[S.ch][0]; return [{why:'only one face is counted, keeping 1 − r',v:qm(q.v,qa(Q(1),qn(r)))},{why:'each face keeps 1 − r and the bounces are left out',v:qm(q.v,qm(qa(Q(1),qn(r)),qa(Q(1),qn(r))))}]; }},own('36·phys','the pane technique')))]);
+const FILT=[[Q(1,2),Q(2,3)],[Q(3,4),Q(2,3)],[Q(1,2),Q(4,5)],[Q(2,3),Q(3,5)],[Q(3,4),Q(1,3)]];
+law('36·phys.filters','a lamp through two filters',()=>{ const a=pick([30,60,90]), ch=ri(0,4); return {c:[0,a],ch,story:'A stage lamp at '+at()+' gives S(w) = '+a+'w units of green light, w the dimmer’s setting.',
+  f:'S',x:'w',xu:'on the dimmer',yu:'units of green light',rate:'units per step',area:null,pts:[1,2,3,4]}; },
+  [Fr(X({u:'yu',k:S=>qm(FILT[S.ch][0],FILT[S.ch][1]),ask:(S)=>'it shines through a filter keeping '+qs(FILT[S.ch][0])+' of green, then one keeping '+qs(FILT[S.ch][1])+': how much comes out?',
+    ln:()=>'green light out, t₁t₂S',w:['the light lost is given','the light is divided by the shares'],xs:(S,p,q)=>[{why:'only the last filter is counted',v:qm(q.v,FILT[S.ch][1])},{why:'the two shares are added',v:qm(q.v,qa(FILT[S.ch][0],FILT[S.ch][1]))}]},own('36·phys','the through-filters technique')))]);
+law('36·chem.bounce','light kept bounce after bounce',()=>{ const a=pick([100,200,500]), n=pick([2,3]); return {c:[0,a],n,story:'A laser in '+who()+'’s lab sends P(m) = '+a+'m microwatts into a periscope of mirrors, m the setting.',
+  f:'P',x:'m',xu:'on the setting',yu:'microwatts',rate:'microwatts per step',area:null,pts:[1,2,3,4]}; },
+  [Cu(X({u:'yu',k:()=>pick([Q(9,10),Q(4,5),Q(3,4)]),f:(S,p,q)=>qm(q.v,pw(p.k,S.n)),ex:(S,p,q)=>par(q.v)+' · ('+qs(p.k)+')^'+S.n,
+    ask:(S,p)=>{ return 'the light is sent back '+S.n+' times, each mirror keeping '+p.K+': how many microwatts come out?'; },ln:()=>'light out, rⁿ times',
+    xs:(S,p,q)=>[{why:'only one bounce is counted',v:qm(q.v,p.k)},{why:'the loss of each bounce is taken once for all of them',v:qm(q.v,qa(Q(1),qn(qm(Q(S.n),qa(Q(1),qn(p.k))))))},{why:'one bounce too many is counted',v:qm(q.v,pw(p.k,S.n+1))}]},own('36·chem','the many-bounce technique')))]);
+/* the colour rung */
+const GLOW=[[[290,145],[2,3,8]],[[0,290],[2,4,5,20]]];
+law('36·phys.glow','where a hot coil’s glow peaks',()=>{ const ch=ri(0,1), c=GLOW[ch][0]; return {c,ch,story:'A heater coil at '+at()+' warms to T(t) = '+sp(c,'t')+' kelvin, t seconds after it is switched on.',
+  f:'T',x:'t',xu:'seconds',yu:'kelvin',rate:'kelvin a second',area:null,pts:GLOW[ch][1]}; },
+  [In(X({u:'yu',out:'micrometres',k:2900,ask:()=>'a glow at 2900 kelvin peaks at 1 micrometre, and the peak goes as 1/T: where does the coil’s glow peak?',ln:()=>'the peak, 2900/T',
+    w:['the division is turned over',null],xs:(S,p,q)=>[{why:'the sun’s peak, 1/2 micrometre at 5800 kelvin, is scaled the wrong way',v:qm(q.v,Q(1,11600))},{why:'the peak is taken to be 1 micrometre at any heat',v:Q(1)},{why:'the peak is halved for the higher heat instead of divided by T',v:Q(1,2)}]},own('36·phys','the glow-colour technique')))]);
+const LINES=[[[1,Q(1,2)],[2,3,6]],[[1,1],[1,3,4,7]],[[2,Q(1,2)],[4,6,8]]];
+law('36·phys.lines','a spike from a thin gas',()=>{ const ch=ri(0,2), c=LINES[ch][0]; return {c,ch,story:'In a thin gas lamp at '+at()+', the n-th level of an atom sits E(n) = '+sp(c,'n')+' electronvolts above the lowest.',
+  f:'E',x:'n',xu:'levels',yu:'electronvolts',rate:'electronvolts a level',area:null,pts:LINES[ch][1]}; },
+  [In(X({u:'yu',out:'nanometres',k:1240,ask:()=>'with hc = 1240 electronvolt nanometres, at what wavelength is the spike as it falls to the lowest level?',ln:()=>'the spike, hc/E',
+    w:['the division is turned over',null],xs:(S,p,q)=>{ const e1=ev(poly(S.c),Q(1)); return [{why:'the fall is taken to level 1, '+qs(e1)+' electronvolts up, not to the lowest',v:num(q.v)>num(e1)?qm(Q(1240),qi(qa(q.v,qn(e1)))):null},{why:'the energy is multiplied by hc',v:qm(q.v,Q(1240))}]; }},own('36·phys','the lines technique')))]);
+law('36·chem.photons','moles of photons taken in',()=>{ const a=pick([1,2,3]); return {c:[0,Q(a,10)],story:'A leaf in '+who()+'’s jar at '+at()+' takes in n(t) = '+sp([0,Q(a,10)],'t')+' moles of photons of 400 nanometre light in t minutes.',
+  f:'n',x:'t',xu:'minutes',yu:'moles of photons',rate:'moles of photons a minute',area:null,pts:[5,10,20,30]}; },
+  [Tm(X({u:'yu',out:'kilojoules',k:300,ask:()=>'a mole of 400 nanometre photons carries N_A·hc/λ, about 300 kilojoules: how much energy is taken in?',ln:()=>'energy taken in',w:['the photons are divided by 300','300 is added'],
+    xs:(S,p,q)=>[{why:'a mole of photons is taken to carry 300 joules, not kilojoules',v:qm(q.v,Q(3,10))}]},MQ)),
+   Fr(X({u:'yu',out:'moles of bonds',k:()=>pick([Q(1,2),Q(1,3),Q(1,4)]),ask:(S,p)=>'each photon taken breaks a bond with a yield of '+p.K+': how many moles of bonds break?',ln:()=>'bonds broken',w:['the photons that break no bond are given','the photons are divided by the yield'],
+    xs:(S,p,q)=>[{why:'every photon is taken to break a bond',v:q.v}]},own('36·chem','the bond-breaking technique')))]);
+const RED=[[Q(1,2),500],[Q(3,4),500],[Q(1,2),800],[Q(5,6),500],[Q(2,3),600]];
+law('36·chem.redder','a dye giving light back redder',()=>{ const a=pick([10,20,30]), ch=ri(0,4); return {c:[0,a],ch,story:'A dye in Evita’s glow stick at '+at()+' takes in E(t) = '+a+'t millijoules of 400 nanometre light in t seconds.',
+  f:'E',x:'t',xu:'seconds',yu:'millijoules',rate:'millijoules a second',area:null,pts:[1,2,3,5]}; },
+  [Fr(X({u:'yu',k:S=>qm(RED[S.ch][0],Q(400,RED[S.ch][1])),ask:(S)=>'it gives light back at '+RED[S.ch][1]+' nanometres for a share φ = '+qs(RED[S.ch][0])+' of the photons: how much energy comes back?',
+    ln:(S)=>'energy back, φ · 400/'+RED[S.ch][1],w:['the energy not given back is given','the energy is divided by the share'],xs:(S,p,q)=>[{why:'the redder wavelength is left out, φ alone',v:qm(q.v,RED[S.ch][0])},{why:'the wavelengths are turned over',v:qm(q.v,qm(RED[S.ch][0],Q(RED[S.ch][1],400)))}]},own('36·chem','the redder-return technique')))]);
+/* electricity */
+law('7·phys.side','lamps side by side on a battery',()=>{ const a=pick([1,2,3]), V=pick([6,12]); return {c:[0,a],early:1,V,story:'Zoe wires n lamps side by side across a '+V+' volt battery; each draws '+a+' amps, so the battery gives I(n) = '+a+'n amps.',
+  f:'I',x:'n',xu:'lamps',yu:'amps',rate:'amps per lamp',area:null,pts:[2,3,4,6]}; },
+  [In(X({u:'yu',out:'ohms',k:S=>S.V,ask:(S)=>'what single resistance across the '+S.V+' volt battery would draw that same current?',ln:()=>'resistance of the lamps together',
+    xs:(S,p,q)=>[{why:'the lamps are taken in series, their resistances added',v:qm(q.v,Q(S.V,S.c[1]*S.c[1]))},{why:'one lamp’s resistance is given',v:Q(S.V,S.c[1])}]},own('7·phys','in parallel, reciprocals add')))]);
+law('7·phys.pair','two branches side by side',()=>{ const a=pick([2,3]), b=pick([2,4,6]); return {c:[b,a],early:1,story:'One branch of Randy’s circuit is a lamp of '+b+' ohms and n metres of wire at '+a+' ohms a metre: R(n) = '+sp([b,a],'n')+' ohms.',
+  f:'R',x:'n',xu:'metres',yu:'ohms',rate:'ohms a metre',area:null,pts:[1,2,3,4]}; },
+  [Cu(X({u:'yu',k:()=>pick([6,8,12,24]),f:(S,p,q)=>qm(qm(q.v,p.k),qi(qa(q.v,p.k))),ex:(S,p,q)=>par(q.v)+' · '+qs(p.k)+'/('+par(q.v)+' + '+qs(p.k)+')',ask:(S,p)=>'a second branch of '+p.K+' ohms is wired beside it: what is the resistance of the pair?',ln:()=>'the pair side by side',
+    xs:(S,p,q)=>[{why:'the two are added, as in series',v:qa(q.v,p.k)},{why:'the reciprocals are added but not turned back',v:qa(qi(q.v),qi(p.k)),u:'per ohm'},{why:'the two are averaged',v:qm(qa(q.v,p.k),Q(1,2))}]},own('7·phys','in parallel, reciprocals add')))]);
+law('7·phys.bill','a heater’s running cost',()=>{ const V=pick([120,240]); return {c:[0,V],early:1,V,story:'Mike’s heater runs on '+V+' volts, so a current of I amps gives P(I) = '+V+'I watts.',
+  f:'P',x:'I',xu:'amps',yu:'watts',rate:'watts an amp',area:null,pts:[2,4,5,10]}; },
+  [Cu(X({u:'yu',out:'cents',k:()=>pick([5,10]),f:(S,p,q)=>qm(qm(q.v,p.k),Q(20,1000)),ex:(S,p,q)=>par(q.v)+' · '+qs(p.k)+'/1000 · 20',ask:(S,p)=>'it runs '+p.K+' hours, and power costs 20 cents a kilowatt hour: what does it cost?',ln:()=>'cost, watts · hours/1000 · 20',
+    xs:(S,p,q)=>[{why:'the hours are left out',v:qm(q.v,Q(20,1000))},{why:'a kilowatt is taken as 100 watts',v:qm(qm(q.v,p.k),Q(20,100))},{why:'the hours are added instead of multiplied',v:qm(qa(q.v,p.k),Q(20,1000))}]},own('7·phys','energy is kept')))]);
+law('26·phys.swing','a swinging voltage warming a resistor',()=>{ const a=pick([10,20]), R=pick([5,10,20]); return {c:[0,a],R,story:'A supply in Claire’s lab swings between +V₀ and −V₀, with V₀(n) = '+a+'n volts at setting n, across a '+R+' ohm resistor.',
+  f:'V₀',x:'n',xu:'on the dial',yu:'volts',rate:'volts per step',area:null,pts:[1,2,3,4]}; },
+  [Cu(X({u:'yu',out:'watts',k:1,f:(S,p,q)=>qm(qm(q.v,q.v),Q(1,2*S.R)),ex:(S,p,q)=>par(q.v)+'²/(2 · '+S.R+')',ask:()=>'it warms the resistor as a steady V₀/√2 would: how many watts of heat?',ln:()=>'heat, (V₀/√2)²/R',
+    xs:(S,p,q)=>[{why:'the √2 is left out',v:qm(qm(q.v,q.v),Q(1,S.R))},{why:'V₀/2 is used instead of V₀/√2',v:qm(qm(q.v,q.v),Q(1,4*S.R))},{why:'the current is given instead of the power',v:qm(q.v,Q(1,S.R)),u:'watts'}]},own('26·phys','the steady-stand-in technique')))]);
+law('39·eng.charge','a store filled by a ramp',()=>{ const C=pick([2,4,5]), r=pick([2,4]); return {c:[0,Q(1,r)],C,story:'A supply ramps a store of '+C+' microfarads up: after t microseconds it stands at V(t) = t/'+r+' volts.',
+  f:'V',x:'t',xu:'microseconds',yu:'volts',rate:'volts a microsecond',area:null,pts:[4,8,12,20]}; },
+  [Tm(X({u:'yu',out:'microcoulombs',k:S=>S.C,ask:()=>'how much charge has gone into the store, CV?',ln:()=>'charge, CV',w:['the volts are divided by C','C is added']},MQ)),
+   Cu(X({u:'yu',out:'microjoules',k:1,f:(S,p,q)=>qm(qm(q.v,q.v),Q(S.C,2)),ex:(S,p,q)=>'½ · '+S.C+' · '+par(q.v)+'²',ask:()=>'how much energy does the store keep, ½CV²?',ln:()=>'energy kept, ½CV²',
+    xs:(S,p,q)=>[{why:'the supply’s whole CV² is given, not the half kept',v:qm(qm(q.v,q.v),Q(S.C))},{why:'V is not squared',v:qm(q.v,Q(S.C,2))},{why:'the half is left as the heat in the switch twice over',v:qm(qm(q.v,q.v),Q(S.C,4))}]},own('39·eng','the switch-heat technique')))]);
+law('43·phys.knocks','knocks that slow a wire’s electrons',()=>{ const k=pick([20,25]); return {c:[0,Q(1,k)],story:'In a copper wire, knocks on the shaking atoms give a resistivity ρ(T) = T/'+k+' billionths of an ohm metre at T kelvin.',
+  f:'ρ',x:'T',xu:'kelvin',yu:'billionths of an ohm metre',rate:'billionths of an ohm metre a kelvin',area:null,pts:[100,200,300,400]}; },
+  [Pl(X({u:'yu',k:()=>pick([2,3,4]),ask:(S,p)=>'stray atoms add their own knocks, worth '+p.K+' more billionths by themselves: what is the resistivity now?',ln:()=>'total resistivity',
+    xs:(S,p,q)=>[{why:'the two are combined like resistors side by side',v:qm(qm(q.v,p.k),qi(qa(q.v,p.k)))}]},own('43·phys','the rates-add technique')))]);
+
+function aOf(b){ return (/^[aeiou]/.test(b)?'an ':'a ')+b; }
+
+/* ---------- first links of the early laws ---------- */
+WL.push({id:'5g.put',steps:['5g'],from:'law',px:true,ask:(S,p)=>'put '+S.x+' = '+p.x+' into the formula for '+S.f,act:(S,p)=>S.early&&p.x!==undefined?{v:ev(poly(S.c),Q(p.x)),u:S.yu}:null,
+  slips:(S,p)=>[{why:'the value '+(p.x+1)+' is put in instead',v:ev(poly(S.c),Q(p.x+1)),u:S.yu},{why:'the number standing alone in the formula is left out',v:ev(poly([0,...S.c.slice(1)]),Q(p.x)),u:S.yu}],cite:()=>'substitution',
+  line:(o,S,p)=>'the value of '+S.f+' at '+S.x+' = '+p.x+': '+S.f+'('+p.x+') = '+qs(o.v)+' '+o.u});
+OWN.forEach(o=>{ const st=o.lawId.split('.')[0]; WL.push({id:st+'.own',steps:[st],from:'law',px:true,ask:(S,p)=>o.ask(S,p),act:(S,p)=>S.lawId===o.lawId&&p.x!==undefined?{v:ev(poly(S.c),Q(p.x)),u:S.yu}:null,
+  slips:(S,p)=>[{why:'the count is made for '+(p.x+1)+' instead',v:ev(poly(S.c),Q(p.x+1)),u:S.yu},{why:'the starting amount is left out',v:ev(poly([0,...S.c.slice(1)]),Q(p.x)),u:S.yu}],cite:()=>o.cite,line:(r,S,p)=>o.ln(r,S,p)}); });
+
+/* ---------- copies and splits that a story marks (the generic pads, now only where the story names them) ---------- */
+const PADC={id:'4g.times',steps:['4g'],from:'qty',ask:S=>S.copies.ask,act:(S,p,q)=>({v:qm(q.v,Q(S.copies.k)),u:q.u}),slips:(S,p,q)=>[{why:'the '+S.copies.k+' alike are added on instead of multiplied',v:qa(q.v,Q(S.copies.k)),u:q.u}],
+  cite:()=>'the products-are-numbers technique',line:(o,S,p,q)=>S.copies.ln+': '+S.copies.k+' · '+par(q.v)+' = '+qs(o.v)+' '+o.u};
+const PADS={id:'5j.share',steps:['5j','5c'],from:'qty',ask:S=>S.split.ask,act:(S,p,q)=>({v:qm(q.v,Q(1,S.split.k)),u:q.u}),slips:(S,p,q)=>[{why:'the share is taken by subtracting '+S.split.k,v:qa(q.v,Q(-S.split.k)),u:q.u}],
+  cite:()=>'the scaling technique',line:(o,S,p,q)=>S.split.ln+': '+par(q.v)+'/'+S.split.k+' = '+qs(o.v)+' '+o.u};
+/* stories that name copies or a split, and after which reading they make sense */
+const mark=(id,fn)=>{ const L=LAWS.find(l=>l.id===id); if(!L) return; const mk=L.make; L.make=function(){ const S=mk.apply(this,arguments); if(S) fn(S); return S; }; };
+mark('8·econ.wage',S=>{ const k=pick([2,3]); S.copies={k:k+1,after:['9a.read'],ask:k+' others at the cannery earn the same: give what the '+(k+1)+' of them earn an hour together',ln:'for the '+(k+1)+' together'}; });
+mark('17·phys.glow',S=>{ const k=pick([2,3,4]); S.copies={k,after:['9a.read'],ask:'the stove has '+k+' such plates, all as hot: multiply by '+k+' for all the plates',ln:'for the '+k+' plates'}; });
+mark('6·logi.assign',S=>{ const k=pick([2,3]); S.copies={k,after:['5g.put','9a.read'],ask:'there are '+k+' depots run the same way: multiply by '+k+' for all their assignments',ln:'for the '+k+' depots'}; });
+mark('22·stat.misprints',S=>{ const k=pick([2,3,5]); S.copies={k,after:['9a.read'],ask:'the run is '+k+' copies of that book: multiply the misprints by '+k,ln:'for '+k+' copies'}; });
+mark('45·now.messages',S=>{ const k=pick([2,3]); S.copies={k,after:['9a.read'],ask:'agreement takes '+k+' such rounds: multiply by '+k+' for all the messages',ln:'for '+k+' rounds'}; });
+mark('10·logi.slow',S=>{ const k=pick([2,3]); S.copies={k,after:['9a.read'],ask:'the plant runs '+k+' such lines side by side: multiply by '+k+' for all the boxes',ln:'for '+k+' lines'}; });
+
+const cp=(id,after,mk)=>mark(id,S=>{ const k=pick([2,3,4]); S.copies={k,after,ask:mk(k)[0],ln:mk(k)[1]}; });
+const spl=(id,after,mk)=>mark(id,S=>{ const k=pick([2,4,5]); S.split={k,after,ask:mk(k)[0],ln:mk(k)[1]}; });
+const RD=['9a.read'], RD5=['5g.put','9a.read'];
+cp('16·phys.spring',RD,k=>[k+' such springs push side by side on the latch: multiply by '+k+' for their push together','push of '+k+' springs']);
+cp('19·eng.loop',RD,k=>['the engine has '+k+' cylinders alike: multiply by '+k+' for the work of one turn of all of them','work of '+k+' cylinders']);
+cp('45·econ.reward',RD,k=>['Mike runs '+k+' such miners: multiply by '+k+' for the gain of them all','gain of '+k+' miners']);
+cp('5·chem.burn',RD5.concat(['9a.read']),k=>['the plant runs '+k+' such burners: multiply by '+k+' for the hydrogen of them all','hydrogen of '+k+' burners']);
+cp('5·chem.propane',RD5,k=>['the house has '+k+' such heaters: multiply by '+k+' for the oxygen of them all','oxygen of '+k+' heaters']);
+cp('6·chem.plate',RD5,k=>['the shop runs '+k+' such cells on separate supplies: multiply by '+k+' for all the electrons','electrons of '+k+' cells']);
+cp('8·phys.beats',RD,k=>[k+' people in the room have hearts that beat alike: multiply by '+k+' for all their beats','beats of '+k+' hearts']);
+cp('9·chem.jar',RD,k=>['there are '+k+' such jars: multiply by '+k+' for all the moles','moles in '+k+' jars']);
+cp('17·comp.sort',RD,k=>[k+' lists of that length are sorted: multiply by '+k+' for all the comparisons','comparisons for '+k+' lists']);
+cp('21·then.slant',RD,k=>['the roof holds '+k+' such panels: multiply by '+k+' for all of them','output of '+k+' panels']);
+cp('21·eng.stroke',RD,k=>['the pump has '+k+' cylinders alike: multiply by '+k+' for the stroke of them all','strokes of '+k+' cylinders']);
+cp('28·now.mistakes',RD,k=>[k+' such units learn side by side: multiply by '+k+' for all their mistakes','mistakes of '+k+' units']);
+cp('30·comp.line',RD,k=>['there are '+k+' such messages: multiply by '+k+' for all their bits','bits of '+k+' messages']);
+cp('31·now.picture',RD,k=>['the album holds '+k+' such pictures: multiply by '+k+' for all their readings','readings of '+k+' pictures']);
+cp('36·comp.bytes',RD,k=>['the desk has '+k+' such screens: multiply by '+k+' for all their bytes','bytes of '+k+' screens']);
+cp('42·econ.proposals',RD,k=>[k+' regions run the same pairing: multiply by '+k+' for all their proposals','proposals in '+k+' regions']);
+cp('16·then.inflow',RD,k=>[k+' streams alike feed the lake: multiply by '+k+' for their flow together','flow of '+k+' streams']);
+spl('25·eng.deck',RD,k=>['the pull is shared equally by '+k+' cables: give the pull on one cable','pull on one of '+k+' cables']);
+spl('40·now.lines',RD,k=>['the reading is shared equally by '+k+' machines: give one machine’s lines','lines for one of '+k+' machines']);
+spl('22·now.digits',RD,k=>['the work is shared equally by '+k+' machines: give one machine’s remainders','remainders for one of '+k+' machines']);
+spl('9·stat.weir',RD,k=>['the fish are tagged by '+k+' crews in equal shares: give one crew’s fish','fish for one of '+k+' crews']);
+spl('18·econ.revenue',['9a.read','14a.best'],k=>['the takings are shared by '+k+' stalls of a cooperative, equally: give one stall’s share','one of '+k+' shares']);
+
+cp('18·nav.chart',RD,k=>['the trip has '+k+' legs that long: multiply by '+k+' for the whole trip','the whole trip']);
+cp('20·crypt.bombe',RD,k=>[k+' checkers alike run at once: multiply by '+k+' for the settings they clear','settings of '+k+' checkers']);
+cp('45·comp.addresses',RD,k=>[k+' offices alike draw from the same block: multiply by '+k+' for all their addresses','addresses of '+k+' offices']);
+cp('2·comp.cond',RD5,k=>[k+' such conditions are checked one after another: multiply by '+k+' for all the steps','steps for '+k+' conditions']);
+cp('4·comp.ripple',['4·comp.own','5g.put','9a.read'],k=>[k+' such sums are done one after another: multiply by '+k+' for all the gate delays','delays for '+k+' sums']);
+cp('8·comp.gaps',RD,k=>[k+' such runs are made one after another: multiply by '+k+' for the error of them all','error of '+k+' runs']);
+cp('8·econ.rent',RD,k=>['Randy rents '+k+' flats alike: multiply by '+k+' for all the rent','rent of '+k+' flats']);
+cp('10·logi.trucks',RD,k=>[k+' depots alike share the trucks: multiply by '+k+' for all their trips','trips of '+k+' depots']);
+cp('10·econ.save',RD,k=>['Jean’s '+k+' cousins save alike: multiply by '+k+' for all their savings','savings of '+k+' cousins']);
+cp('22·econ.respend',RD,k=>[k+' such mills open in town: multiply by '+k+' for their spending together','spending of '+k+' mills']);
+cp('22·logi.tours',RD,k=>[k+' machines alike work at once: multiply by '+k+' for all their tours','tours of '+k+' machines']);
+cp('25·cb7.cells',RD,k=>[k+' such batteries are joined in a row: multiply by '+k+' for their volts together','volts of '+k+' batteries']);
+cp('27·econ.round',RD,k=>[k+' towns alike buy the same: multiply by '+k+' for their demand together','demand of '+k+' towns']);
+cp('44·chem.fill',RD,k=>['a flask holds '+k+' such molecules: multiply by '+k+' for all their electrons','electrons of '+k+' molecules']);
+cp('30·now.found',RD,k=>[k+' labs alike test the same way: multiply by '+k+' for all their true ideas','true ideas of '+k+' labs']);
+cp('39·phys.band',RD,k=>['the crystal has '+k+' such rows: multiply by '+k+' for all their electrons','electrons of '+k+' rows']);
+spl('38·now.kernel',RD,k=>['the lines are shared equally by '+k+' reviewers: give one reviewer’s lines','lines for one of '+k+' reviewers']);
+spl('17·comp.sort',RD,k=>['the comparisons are shared equally by '+k+' machines: give one machine’s comparisons','comparisons for one of '+k+' machines']);
+
+cp('43·phys.ring',RD,k=>['the wire holds '+k+' such rings apart: multiply by '+k+' for all their levels','levels of '+k+' rings']);
+
+/* the reading link gets two more wrong moves, so that every story has enough wrong turns to show */
+{ const R9=WL.find(w=>w.id==='9a.read'); if(R9&&!R9.__w2){ const s0=R9.slips; R9.slips=function(S,p){ const out=(s0.apply(this,arguments)||[]).slice(); try{ if(S.c&&p.x!==undefined){
+    if(p.x>1&&p.x<50) out.push({why:'the reading is taken at '+(p.x-1)+' instead',v:ev(poly(S.c),Q(p.x-1)),u:S.yu});
+    if(S.c.length>1&&num(qq(S.c[0]))!==0) out.push({why:'the number standing alone in the law is left out',v:ev(poly([0,...S.c.slice(1)]),Q(p.x)),u:S.yu}); } }catch(e){} return out; }; R9.__w2=1; } }
+
+/* ---------- laws sized by the gear's terms (Andrew 03:40Z): the seed's expression has as many terms as the gear asks, 1 to 5 ----------
+   What terms means: for a law whose formula is a polynomial, terms is the number of nonzero terms in it. The three sized laws below build
+   their formula with exactly that many terms. Other laws have a fixed number of terms (1, 2 or 3, set by their story); the dealer gives
+   those that match the setting, and when none does it gives the laws with the most terms below it. Laws with no polynomial seed (none in
+   this bank at present) would ignore terms. */
+const DEGS={1:[2],2:[2,1],3:[2,1,0],4:[3,2,1,0],5:[4,3,2,1,0]};
+const sizedC=(T,co)=>{ const c=[0,0,0,0,0]; DEGS[T].forEach((d,i)=>{ c[d]=co(d,i); }); while(c.length>1&&c[c.length-1]===0) c.pop(); return c; };
+const wantT=()=>{ const t=(CH.pref&&CH.pref.terms)||0; return t>=1&&t<=5?t:ri(1,3); };
+law('17·comp.loops','steps of a program of nested loops',()=>{ const T=wantT(), c=sizedC(T,(d,i)=>i===0?1:ri(1,4)), top=DEGS[T][0];
+  return {c,T,story:'Randy’s program runs loops inside loops: on a list of n items it takes S(n) = '+sp(c,'n')+' steps.',f:'S',x:'n',xu:'items',yu:'steps',rate:'steps per item',area:null,pts:top>=4?[2,3,4,5]:top===3?[3,4,5,6,8,10]:[5,8,10,12,20]}; },
+  [Tm(X({u:'yu',out:'microseconds',k:()=>pick([2,3,5]),ask:(S,p)=>'each step takes '+p.K+' microseconds: how long does the run take?',ln:()=>'time for the run'},MQ)),
+   G(X({u:'yu',k:'above',ask:(S,p)=>'the run is allowed '+p.K+' steps: how many steps are left to spare?',ln:()=>'steps to spare'},LESS))],{sized:1});
+law('13·econ.curve','a workshop’s fitted cost curve',()=>{ const T=wantT(), c=sizedC(T,(d,i)=>d===0?ri(2,9)*10:ri(1,5)), top=DEGS[T][0];
+  return {c,T,story:'Jean’s workshop at '+at()+' fits its cost of making q chairs a day to C(q) = '+sp(c,'q')+' dollars.',f:'C',x:'q',xu:'chairs',yu:'dollars',rate:'dollars a chair',area:null,pts:top>=4?[2,3,4,5]:top===3?[2,3,4,5,6]:[4,5,6,8,10]}; },
+  [O(X({u:'yu',k:'below',ask:(S,p)=>'the day’s chairs sell for '+p.K+' dollars in all: how far short of the cost do they fall?',ln:()=>'shortfall',w:['the cost is taken from the takings, the subtraction turned round','the takings are added to the cost'],pos:true},LESS)),
+   G(X({u:'yu',k:'above',ask:(S,p)=>'the day’s chairs sell for '+p.K+' dollars in all: what profit does the day make?',ln:()=>'profit for the day'},LESS))],{sized:1});
+law('12·phys.run','a cart’s run fitted to the clock',()=>{ const T=wantT(), c=sizedC(T,(d,i)=>d===0?ri(1,9):ri(1,3)), top=DEGS[T][0];
+  return {c,T,story:'Claire times a cart down a ramp at '+at()+'; its mark reads s(t) = '+sp(c,'t')+' centimetres after t seconds.',f:'s',x:'t',xu:'seconds',yu:'centimetres',rate:'centimetres a second',area:null,pts:top>=4?[1,2,3,4]:top===3?[2,3,4,5]:[2,3,4,5,6]}; },
+  [G(X({u:'yu',k:'above',ask:(S,p)=>'the ramp ends at the '+p.K+' centimetre mark: how far from the end is the cart?',ln:()=>'centimetres to the end'},LESS)),
+   Pr(X({u:'yu',out:'metres',k:100,ask:()=>'how many metres is that mark from the start?',ln:()=>'in metres',w:[null,'100 is taken away instead of divided'],xs:(S,p,q)=>[{why:'a metre is taken as 10 centimetres',v:qm(q.v,Q(1,10))},{why:'a metre is taken as 1000 centimetres',v:qm(q.v,Q(1,1000))}]},CU))],{sized:1});
+
+/* ---------- middle links tied to the story (Andrew 03:40Z): they work on the law's own reading and keep its unit ----------
+   'again' reads the same law at a second input the story allows and takes the difference or the sum; 'raise' scales by a stated factor;
+   'more' adds a stated further amount in the same unit. They sit straight after the first link, before any of the law's own middles. */
+const GMF=new Set(['w2.more','w2.sum','w2.raise','w2.again','w2.per','w2.mean']);
+const EXT=/^(dollars|cents|steps|moles|litres|millilitres|joules|kilojoules|millijoules|microjoules|picojoules|grams|kilograms|people|seeds|comparisons|bytes|bits|messages|tours|meetings|sightings|beats|readings|points|true ideas|trucks|boxes|crates|copies|mistakes|lines|addresses|proposals|seats|coins|fish|settings|assignments|calls|orders|microcoulombs|units of light|tallies|passes|jobs|words|names|cards|tickets|bales|eggs|birds|cells)\b|^moles of /;
+const ext=S=>EXT.test(S.yu||'')&&!/ (a|an|per) /.test(S.yu||''), TIMEX=/^(hours|days|weeks|minutes|seconds|years|months)$/;
+const GM=[
+ {id:'w2.mean',steps:['5j'],from:'gm',fits:(S,ch)=>ch.length===1&&read1(ch[0].W.id)&&ch[0].p.x!==undefined&&S.pts&&S.pts.length>1,
+  make:(S,ch)=>{ const x=ch[0].p.x, xs=shuffle(S.pts.filter(t=>num(qq(t))!==num(qq(x)))); for(const x2 of xs){ const f2=tryf(()=>ev(poly(S.c),qq(x2))); if(f2&&isQ(f2)) return {x,x2,f2,K:'m'+qs(qq(x2))}; } return null; },
+  ask:(S,p)=>'a second reading is taken at '+S.x+' = '+qs(qq(p.x2))+': what is the average of the two readings?',
+  act:(S,p,q)=>({v:qm(qa(q.v,p.f2),Q(1,2)),u:q.u}),
+  slips:(S,p,q)=>{ const o=[]; const g=tryf(()=>ev(poly(S.c),qa(qq(p.x2),Q(1)))); if(g&&isQ(g)) o.push({why:'the second reading is taken at '+qs(qa(qq(p.x2),Q(1)))+' instead',v:qm(qa(q.v,g),Q(1,2)),u:q.u});
+    o.push({why:'the two readings are added but not halved',v:qa(q.v,p.f2),u:q.u}); o.push({why:'only the second reading is halved',v:qa(q.v,qm(p.f2,Q(1,2))),u:q.u}); return o; },
+  cite:()=>'multiplying and dividing quantities',line:(o,S,p,q)=>'average of the readings: ('+S.f+'('+qs(qq(p.x))+') + '+S.f+'('+qs(qq(p.x2))+'))/2 = ('+qs(q.v)+' + '+par(p.f2)+')/2 = '+qs(o.v)+' '+o.u},
+ {id:'w2.per',steps:['5j'],from:'gm',fits:(S,ch,u)=>ch.length===2&&ch[1].W.id==='w2.again'&&!!S.rate&&!!S.xu,
+  make:(S,ch)=>{ const a=ch[1].p, d=qa(qq(a.x2),qn(qq(a.x))), g=d.p<0?qn(d):d; return qz(g)?null:{g,x:a.x,x2:a.x2,K:qs(g)}; },
+  ask:(S,p)=>'that change came over '+qs(p.g)+' '+S.xu+': how much is it per one, on average?',
+  act:(S,p,q)=>({v:qm(q.v,qi(p.g)),u:S.rate}),
+  slips:(S,p,q)=>{ const o=[{why:'the change is multiplied by the '+qs(p.g)+' instead of divided',v:qm(q.v,p.g),u:S.rate}]; const b=qq(p.x2); if(!qz(b)&&num(b)!==num(p.g)) o.push({why:'the change is divided by '+qs(b)+', the second input, not by the gap',v:qm(q.v,qi(b)),u:S.rate}); return o; },
+  cite:()=>'multiplying and dividing quantities',line:(o,S,p,q)=>'average per one: '+par(q.v)+'/'+par(p.g)+' = '+qs(o.v)+' '+o.u},
+ {id:'w2.again',steps:['4h'],from:'gm',fits:(S,ch)=>ch.length===1&&read1(ch[0].W.id)&&ch[0].p.x!==undefined&&S.pts&&S.pts.length>1,
+  make:(S,ch)=>{ const x=ch[0].p.x, xs=shuffle(S.pts.filter(t=>num(qq(t))!==num(qq(x)))); for(const x2 of xs){ const f2=ev(poly(S.c),qq(x2)), f1=ev(poly(S.c),qq(x)); if(!f2||!f1) continue; const up=num(f2)>num(f1); if(num(f2)===num(f1)) continue; return {x,x2,up,f2,K:'x'+qs(qq(x2))}; } return null; },
+  ask:(S,p)=>'read '+S.f+' again at '+S.x+' = '+qs(qq(p.x2))+': by how much does it '+(p.up?'rise':'fall')+' from '+S.x+' = '+qs(qq(p.x))+' to there?',
+  act:(S,p,q)=>({v:p.up?qa(p.f2,qn(q.v)):qa(q.v,qn(p.f2)),u:q.u}),
+  slips:(S,p,q)=>{ const o=[]; const g=tryf(()=>ev(poly(S.c),qa(qq(p.x2),Q(1)))); if(g&&isQ(g)) o.push({why:'the second reading is taken at '+qs(qa(qq(p.x2),Q(1)))+' instead',v:p.up?qa(g,qn(q.v)):qa(q.v,qn(g)),u:q.u});
+    o.push({why:'the difference is taken the wrong way round',v:p.up?qa(q.v,qn(p.f2)):qa(p.f2,qn(q.v)),u:q.u}); o.push({why:'the two readings are added instead of compared',v:qa(q.v,p.f2),u:q.u}); return o; },
+  cite:()=>'the less-is-adding technique',line:(o,S,p,q)=>(p.up?'more':'less')+' than before: '+(p.up?S.f+'('+qs(qq(p.x2))+') − '+S.f+'('+qs(qq(p.x))+') = '+qs(p.f2)+' − '+par(q.v):S.f+'('+qs(qq(p.x))+') − '+S.f+'('+qs(qq(p.x2))+') = '+qs(q.v)+' − '+par(p.f2))+' = '+qs(o.v)+' '+o.u},
+ {id:'w2.sum',steps:['4f'],from:'gm',fits:(S,ch)=>ext(S)&&TIMEX.test(S.xu||'')&&ch.length===1&&read1(ch[0].W.id)&&ch[0].p.x!==undefined&&S.pts&&S.pts.length>1,
+  make:(S,ch)=>{ const x=ch[0].p.x, xs=shuffle(S.pts.filter(t=>num(qq(t))!==num(qq(x)))); for(const x2 of xs){ const f2=tryf(()=>ev(poly(S.c),qq(x2))); if(f2&&isQ(f2)) return {x,x2,f2,K:'+'+qs(qq(x2))}; } return null; },
+  ask:(S,p)=>'a second time, at '+S.x+' = '+qs(qq(p.x2))+', gives another reading: what do the two come to together?',
+  act:(S,p,q)=>({v:qa(q.v,p.f2),u:q.u}),
+  slips:(S,p,q)=>{ const o=[]; const g=tryf(()=>ev(poly(S.c),qa(qq(p.x2),Q(1)))); if(g&&isQ(g)) o.push({why:'the second reading is taken at '+qs(qa(qq(p.x2),Q(1)))+' instead',v:qa(q.v,g),u:q.u});
+    o.push({why:'the first reading is counted twice',v:qm(q.v,Q(2)),u:q.u}); o.push({why:'one reading is taken from the other instead of added',v:qa(p.f2,qn(q.v)),u:q.u}); return o; },
+  cite:()=>'the sums-are-numbers technique',line:(o,S,p,q)=>'both readings: '+S.f+'('+qs(qq(p.x))+') + '+S.f+'('+qs(qq(p.x2))+') = '+par(q.v)+' + '+par(p.f2)+' = '+qs(o.v)+' '+o.u},
+ {id:'w2.raise',steps:['5c'],from:'gm',fits:(S,ch,u)=>u===S.yu,
+  make:(S,ch,q)=>{ const fs=shuffle([Q(1,10),Q(1,5),Q(1,4)]).filter(f=>!(ext(S)&&q.v.q===1)||qm(q.v,qa(Q(1),f)).q===1); if(!fs.length) return null; const f=fs[0]; return {f,K:qs(f)}; },
+  ask:(S,p,q)=>'a check finds the true amount is '+p.K+' more than that: what is the true amount?',
+  act:(S,p,q)=>({v:qm(q.v,qa(Q(1),p.f)),u:q.u}),
+  slips:(S,p,q)=>[{why:'only the increase is kept, not the whole',v:qm(q.v,p.f),u:q.u},{why:'the '+p.K+' is taken off instead of added on',v:qm(q.v,qa(Q(1),qn(p.f))),u:q.u},{why:'the '+p.K+' is added as a plain number',v:qa(q.v,p.f),u:q.u}],
+  cite:()=>'the scaling technique',line:(o,S,p,q)=>'the true amount, '+p.K+' more: '+par(q.v)+' · '+par(qa(Q(1),p.f))+' = '+qs(o.v)+' '+o.u},
+ {id:'w2.more',steps:['4k'],from:'gm',fits:(S,ch,u)=>u===S.yu&&ext(S),
+  make:(S,ch,q)=>{ const m=q&&isQ(q.v)?Math.max(1,mag(q.v)):1; return {k:Q(m*ri(1,3)),K:String(m)}; },
+  ask:(S,p,q)=>'another '+qs(p.k)+' '+S.yu+' come from a second source: what is the total?',
+  act:(S,p,q)=>({v:qa(q.v,p.k),u:q.u}),
+  slips:(S,p,q)=>[{why:'the '+qs(p.k)+' is taken away instead of added',v:qa(q.v,qn(p.k)),u:q.u},{why:'the '+qs(p.k)+' is multiplied in instead of added',v:qm(q.v,p.k),u:q.u}],
+  cite:()=>'the sum-one-more technique',line:(o,S,p,q)=>'with the second source: '+par(q.v)+' + '+qs(p.k)+' = '+qs(o.v)+' '+o.u}];
+/* the 'raise' and 'more' asks need the quantity's unit only through S.yu, which they check; their make sees the incoming quantity */
+const effLast=ch=>{ for(let i=ch.length-1;i>=0;i--) if(!GMF.has(ch[i].W.id)) return ch[i].W.id; return ch[0].W.id; };
+/* why text: a fraction that is divided, or that divides, is bracketed (16/(6/5), not 16/6/5) */
+const FR='−?\\d+/\\d+';
+function bracketDiv(line,inV){ let s=line; if(inV&&isQ(inV)&&inV.q!==1){ const t=qs(inV); s=s.split(t+'/').join('('+t+')/'); }
+  s=s.replace(new RegExp('(\\d|\\))/('+FR+')(?=$|[\\s=,;)])','g'),(m,a,b)=>a+'/('+b+')'); return s; }
+
+/* ---------- multi-step science chains (Andrew 04:01Z): a law's own middle links, each one a step the ladder teaches at or below the law's annex ----------
+   A law may list mids: each takes the quantity in one unit (u) after a given link (after: 'read' for the law's reading, or an earlier mid's id)
+   and hands on another, so a chain can run reading → middle → middle → close in the story's own terms. */
+const MID=o=>Object.assign({from:'mid',steps:[],make:()=>({}),slips:()=>[]},o,{cite:()=>o.cite});
+const midsOf=(id,ms)=>{ const L=LAWS.find(l=>l.id===id); if(L) L.mids=(L.mids||[]).concat(ms); };
+law('36·phys.ladder','a spike read back to the rung it fell from',()=>{ const d=pick([5,10,20,40]), n=pick([2,3,4,5]), w=qm(Q(40,d),Q(1,n)); return {c:[0,31],w:qs(w),wq:w,d,story:'Molecules of a thin gas at '+at()+' shake on an even ladder of rungs '+qs(w)+' electronvolts apart. A spectrometer set at d reads a spike at λ(d) = 31d nanometres.',
+  f:'λ',x:'d',xu:'on the dial',yu:'nanometres',rate:'nanometres per step',area:null,pts:[d]}; },
+  [Pl(X({u:'rungs',out:'for the starting rung',k:1,ask:()=>'the molecule ended on rung v = 1: from which rung did it fall?',ln:()=>'the starting rung',w:['the 1 is taken away instead of added','the jump is taken to start from rung 0']},own('35·phys','the ladder technique')))],
+  {noGM:1,mids:[
+   MID({id:'m:ladder.energy',after:['read'],u:'nanometres',steps:['36·phys'],cite:'the lines technique',ask:()=>'with hc = 1240 electronvolt nanometres, what energy does each photon of the spike carry?',
+     act:(S,p,q)=>qz(q.v)?null:{v:qm(Q(1240),qi(q.v)),u:'electronvolts'},slips:(S,p,q)=>[{why:'hc/λ is turned over',v:qm(q.v,Q(1,1240)),u:'electronvolts'},{why:'hc is taken as 620 electronvolt nanometres',v:qm(Q(620),qi(q.v)),u:'electronvolts'}],
+     line:(o,S,p,q)=>'photon energy, hc/λ: 1240/'+par(q.v)+' = '+qs(o.v)+' '+o.u}),
+   MID({id:'m:ladder.rungs',after:['m:ladder.energy'],u:'electronvolts',steps:['35·phys'],cite:'the ladder technique',ask:(S)=>'the rungs are '+S.w+' electronvolts apart: how many rungs does that photon span?',
+     act:(S,p,q)=>({v:qm(q.v,qi(S.wq)),u:'rungs'}),slips:(S,p,q)=>[{why:'the energy is multiplied by the rung gap instead of divided',v:qm(q.v,S.wq),u:'rungs'},{why:'the rung gap is taken away instead of divided into it',v:qa(q.v,qn(S.wq)),u:'rungs'}],
+     line:(o,S,p,q)=>'rungs spanned: '+par(q.v)+'/'+par(S.wq)+' = '+qs(o.v)+' '+o.u})]});
+law('18·chem.assay','dye in a flask, read by its colour',()=>{ const a=pick([10,20]), e=pick([Q(1,2),Q(1,4)]), V=pick([2,4]), M=pick([100,200,250]); return {c:[0,Q(1,a)],a,ee:qs(e),eq:e,V,M,
+  story:'Dye seeps into a '+V+' litre flask at '+at()+'; a 1 cm cell of it reads A(m) = m/'+a+' absorbance units after m minutes. The dye has εℓ = '+qs(e)+' per millimole a litre and molar mass '+M+' grams.',
+  f:'A',x:'m',xu:'minutes',yu:'absorbance units',rate:'absorbance units a minute',area:null,pts:[2,4,5,10]}; },
+  [Tm(X({u:'millimoles',out:'milligrams',k:S=>S.M,ask:(S)=>'with a molar mass of '+S.M+' grams a mole, how many milligrams of dye is that?',ln:()=>'mass of dye',w:['the moles are divided by the molar mass','the molar mass is added'],xs:(S,p,q)=>[{why:'grams are taken for milligrams',v:qm(q.v,Q(S.M,1000))}]},MQ))],
+  {noGM:1,mids:[
+   MID({id:'m:assay.conc',after:['read'],u:'absorbance units',steps:['18·chem'],cite:'the absorbance technique',ask:()=>'with A = εℓc, what concentration of dye is that?',
+     act:(S,p,q)=>({v:qm(q.v,qi(S.eq)),u:'millimoles a litre'}),slips:(S,p,q)=>[{why:'the absorbance is multiplied by εℓ instead of divided',v:qm(q.v,S.eq),u:'millimoles a litre'},{why:'εℓ is divided by the absorbance',v:qz(q.v)?null:qm(S.eq,qi(q.v)),u:'millimoles a litre'}],
+     line:(o,S,p,q)=>'concentration, A/(εℓ): '+par(q.v)+'/'+par(S.eq)+' = '+qs(o.v)+' '+o.u}),
+   MID({id:'m:assay.moles',after:['m:assay.conc'],u:'millimoles a litre',steps:['5j'],cite:'multiplying and dividing quantities',ask:(S)=>'the flask holds '+S.V+' litres: how many millimoles of dye are in it?',
+     act:(S,p,q)=>({v:qm(q.v,Q(S.V)),u:'millimoles'}),slips:(S,p,q)=>[{why:'the concentration is divided by the volume',v:qm(q.v,Q(1,S.V)),u:'millimoles'},{why:'the volume is added',v:qa(q.v,Q(S.V)),u:'millimoles'}],
+     line:(o,S,p,q)=>'dye in the flask: '+par(q.v)+' · '+S.V+' = '+qs(o.v)+' '+o.u})]});
+const UNK=[[16,'methane',2],[36,'hydrogen chloride',3],[64,'sulphur dioxide',4]];
+law('30·phys.which','an unknown gas named by its leak',()=>{ const g=pick(UNK), a=pick([2,3,4,5]); return {c:[0,a],gm:g[0],r:g[2],he:g[2]*a,
+  story:'An unknown gas leaks through a pinhole at '+at()+': after t hours U(t) = '+a+'t millilitres have got out. Helium, mass 4 a molecule, gets out '+g[2]*a+' millilitres an hour through the same hole.',
+  f:'U',x:'t',xu:'hours',yu:'millilitres',rate:'millilitres an hour',area:null,pts:[1,2,3,4]}; },
+  [Tm(X({u:'times helium’s mass',out:'mass units',k:4,ask:()=>'helium’s mass is 4: what is the unknown’s? (methane is 16, hydrogen chloride 36, sulphur dioxide 64)',ln:()=>'the unknown molecule’s mass',w:['the ratio is divided by 4','4 is added']},own('30·phys','the half-kT technique')))],
+  {noGM:1,mids:[
+   MID({id:'m:which.ratio',after:['read'],u:'millilitres',steps:['30·phys'],cite:'the half-kT technique',make:(S,ch)=>({h:S.he*ch[0].p.x}),ask:(S,p)=>'in those hours helium gets out '+p.h+' millilitres: how many times as fast does helium leak?',
+     act:(S,p,q)=>qz(q.v)?null:{v:qm(Q(p.h),qi(q.v)),u:'times as fast'},slips:(S,p,q)=>[{why:'the ratio is turned over',v:qm(q.v,Q(1,p.h)),u:'times as fast'},{why:'the difference is taken instead of the ratio',v:qa(Q(p.h),qn(q.v)),u:'times as fast'}],
+     line:(o,S,p,q)=>'helium against the unknown: '+p.h+'/'+par(q.v)+' = '+qs(o.v)+' '+o.u}),
+   MID({id:'m:which.mass',after:['m:which.ratio'],u:'times as fast',steps:['30·phys'],cite:'the half-kT technique',ask:()=>'pace goes as one over the root of the mass: how many times helium’s mass is the unknown molecule?',
+     act:(S,p,q)=>({v:qm(q.v,q.v),u:'times helium’s mass'}),slips:(S,p,q)=>[{why:'the ratio is not squared',v:q.v,u:'times helium’s mass'},{why:'the ratio is doubled instead of squared',v:qm(q.v,Q(2)),u:'times helium’s mass'}],
+     line:(o,S,p,q)=>'mass ratio, the pace ratio squared: '+par(q.v)+'² = '+qs(o.v)+' '+o.u})]});
+midsOf('24·eng.wall',[
+   MID({id:'m:wall.watts',after:['read'],u:'watts per degree',steps:['5j'],cite:'multiplying and dividing quantities',make:()=>({dT:pick([10,15,20])}),ask:(S,p)=>'it is '+p.dT+' degrees colder outside than in: how many watts leak through the wall?',
+     act:(S,p,q)=>({v:qm(q.v,Q(p.dT)),u:'watts'}),slips:(S,p,q)=>[{why:'the leak is divided by the degrees',v:qm(q.v,Q(1,p.dT)),u:'watts'},{why:'the degrees are added',v:qa(q.v,Q(p.dT)),u:'watts'}],
+     line:(o,S,p,q)=>'watts leaking: '+par(q.v)+' · '+p.dT+' = '+qs(o.v)+' '+o.u}),
+   MID({id:'m:wall.kwh',after:['m:wall.watts'],u:'watts',steps:['5j'],cite:'changing units is multiplying by one',ask:()=>'over a week of 168 hours, how many kilowatt hours leak away?',
+     act:(S,p,q)=>({v:qm(q.v,Q(168,1000)),u:'kilowatt hours'}),slips:(S,p,q)=>[{why:'one day of 24 hours is used, not the week',v:qm(q.v,Q(24,1000)),u:'kilowatt hours'},{why:'the 7 days are used as hours',v:qm(q.v,Q(7,1000)),u:'kilowatt hours'}],
+     line:(o,S,p,q)=>'kilowatt hours a week: '+par(q.v)+' · 168/1000 = '+qs(o.v)+' '+o.u})]);
+{ const L=LAWS.find(l=>l.id==='24·eng.wall'); if(L) L.close=L.close.concat([Tm(X({u:'kilowatt hours',out:'dollars',k:Q(1,5),ask:()=>'power costs 1/5 dollar a kilowatt hour: what does that leak cost a week?',ln:()=>'cost a week',w:['the kilowatt hours are divided by 1/5','1/5 is added']},MQ))]); }
+
+/* the generic middles' own slips, written as instructions (for the missing-step shape) */
+{ const g=id=>GM.find(W=>W.id===id);
+  g('w2.raise').alts=(S,p,q)=>[{ask:'a check finds the true amount is '+p.K+' less than that: what is the true amount?',v:qm(q.v,qa(Q(1),qn(p.f)))},{ask:'a check finds the true amount is only '+p.K+' of that: what is the true amount?',v:qm(q.v,p.f)}];
+  g('w2.more').alts=(S,p,q)=>[{ask:qs(p.k)+' '+S.yu+' of it go to a second use: what is left?',v:qa(q.v,qn(p.k))},{ask:'it is shared equally among '+qs(p.k)+': what is one share?',v:qm(q.v,qi(p.k))}];
+  g('w2.sum').alts=(S,p,q)=>[{ask:'a second time, at '+S.x+' = '+qs(qq(p.x2))+', gives another reading: by how much do the two differ?',v:num(p.f2)>num(q.v)?qa(p.f2,qn(q.v)):qa(q.v,qn(p.f2))},{ask:'a second reading is taken at '+S.x+' = '+qs(qq(p.x2))+': what is the average of the two readings?',v:qm(qa(q.v,p.f2),Q(1,2))}];
+  g('w2.mean').alts=(S,p,q)=>[{ask:'a second reading is taken at '+S.x+' = '+qs(qq(p.x2))+': what do the two come to together?',v:qa(q.v,p.f2)},{ask:'a second reading is taken at '+S.x+' = '+qs(qq(p.x2))+': use it in place of the first',v:p.f2}];
+  g('w2.again').alts=(S,p,q)=>[{ask:'read '+S.f+' again at '+S.x+' = '+qs(qq(p.x2))+' and add the two readings',v:qa(q.v,p.f2)}];
+  g('w2.per').alts=(S,p,q)=>[{ask:'that change came over '+qs(p.g)+' '+S.xu+': multiply it by '+qs(p.g),v:qm(q.v,p.g),u:S.rate}];
+}
+{ const m=(lid,id)=>{ const L=LAWS.find(l=>l.id===lid); return L&&(L.mids||[]).find(W=>W.id===id); }; const set=(lid,id,f)=>{ const W=m(lid,id); if(W) W.alts=f; };
+  set('36·phys.ladder','m:ladder.energy',(S,p,q)=>[{ask:'with hc = 620 electronvolt nanometres, what energy does each photon of the spike carry?',v:qm(Q(620),qi(q.v))},{ask:'what energy does each photon carry, taking E = λ/hc with hc = 1240?',v:qm(q.v,Q(1,1240))}]);
+  set('36·phys.ladder','m:ladder.rungs',(S,p,q)=>[{ask:'the rungs are '+S.w+' electronvolts apart: take one rung’s gap off the energy',v:qa(q.v,qn(S.wq))},{ask:'the rungs are '+S.w+' electronvolts apart: multiply the energy by the gap',v:qm(q.v,S.wq)}]);
+  set('18·chem.assay','m:assay.conc',(S,p,q)=>[{ask:'with A = εℓc, multiply the absorbance by εℓ for the concentration',v:qm(q.v,S.eq)},{ask:'with A = εℓc, take εℓ away from the absorbance for the concentration',v:qa(q.v,qn(S.eq))}]);
+  set('18·chem.assay','m:assay.moles',(S,p,q)=>[{ask:'the flask holds '+S.V+' litres: divide by '+S.V+' for the millimoles in it',v:qm(q.v,Q(1,S.V))},{ask:'the flask holds '+S.V+' litres: add '+S.V+' for the millimoles in it',v:qa(q.v,Q(S.V))}]);
+  set('30·phys.which','m:which.ratio',(S,p,q)=>[{ask:'in those hours helium gets out '+p.h+' millilitres: how many times as fast is the unknown gas?',v:qm(q.v,Q(1,p.h))},{ask:'in those hours helium gets out '+p.h+' millilitres: how many more millilitres is that?',v:qa(Q(p.h),qn(q.v))}]);
+  set('30·phys.which','m:which.mass',(S,p,q)=>[{ask:'pace goes as one over the root of the mass: the mass ratio is the pace ratio itself',v:q.v},{ask:'pace goes as one over the root of the mass: double the pace ratio for the mass ratio',v:qm(q.v,Q(2))}]);
+  set('24·eng.wall','m:wall.watts',(S,p,q)=>[{ask:'it is '+p.dT+' degrees colder outside than in: divide the leak by '+p.dT,v:qm(q.v,Q(1,p.dT))},{ask:'it is '+p.dT+' degrees colder outside than in: add '+p.dT+' to the leak',v:qa(q.v,Q(p.dT))}]);
+  set('24·eng.wall','m:wall.kwh',(S,p,q)=>[{ask:'over one day of 24 hours, how many kilowatt hours leak away?',v:qm(q.v,Q(24,1000))},{ask:'over a week of 7 days, multiply the watts by 7/1000 for kilowatt hours',v:qm(q.v,Q(7,1000))}]);
+}
+
+/* ---------- 32·bio, Pharmacy Logic (Andrew 04:30Z): stocking for chronic and acute conditions, a weekly van, short-chance 0.02 ----------
+   Each law has its own middle links in the page's terms; the close is the shelf, a short-chance, or an average need. */
+const ptail=(m,s)=>{ if(!(m>0)) return 0; let t=Math.exp(-m), c=t; for(let k=1;k<=s;k++){ t*=m/k; c+=t; } return Math.max(0,1-c); };
+const shelfFor=(m,cut)=>{ let s=0; while(ptail(m,s)>cut&&s<2000) s++; return s; };
+const dec3=x=>(Math.round(x*1000)/1000).toFixed(3);
+const w100=x=>Q(Math.round(100*x));
+const chainV=(ctx,id)=>{ const c=ctx&&ctx.chain&&ctx.chain.find(x=>x.W.id===id); return c?c.o.v:null; };
+const PH=(st,cite)=>({cite,steps:[st]});
+law('32·bio.packs','daily tablets and the shelf of packs',()=>{ return {c:[0,100],story:'A screening drive at '+at()+' puts P(m) = 100m people on a daily tablet after m months. Packs hold 35 days, so in any week each comes for a pack with chance 1/5.',
+  f:'P',x:'m',xu:'months',yu:'people',rate:'people a month',area:null,pts:[4,9,16,25,36]}; },
+  [Cu(X({u:'packs',out:'packs',k:(S,q,ctx)=>chainV(ctx,'m:packs.avg'),f:(S,p,q)=>qa(p.k,qm(Q(2),q.v)),ex:(S,p,q)=>par(p.k)+' + 2 · '+par(q.v),ask:()=>'the shelf is the average plus two spread widths: how many packs go on the shelf?',ln:()=>'the shelf',
+    xs:(S,p,q)=>[{why:'only one spread width is added',v:qa(p.k,q.v)},{why:'the average alone is stocked',v:p.k},{why:'the two widths are stocked without the average',v:qm(Q(2),q.v)}]},PH('32·bio','the large-count technique')))],
+  {noGM:1,mids:[
+   MID({id:'m:packs.avg',after:['read'],u:'people',steps:['30g'],cite:'the average-adds technique',ask:()=>'each comes in with chance 1/5 in a week: how many packs are asked for, on average?',
+     act:(S,p,q)=>({v:qm(q.v,Q(1,5)),u:'packs a week'}),slips:(S,p,q)=>[{why:'the chance of not coming, 4/5, is used',v:qm(q.v,Q(4,5)),u:'packs a week'},{why:'the 30-day pack’s chance 7/30 is used',v:qm(q.v,Q(7,30)),u:'packs a week'}],
+     alts:(S,p,q)=>[{ask:'each comes in with chance 1/5 in a week: take the 4/5 who do not come',v:qm(q.v,Q(4,5)),u:'packs a week'},{ask:'each comes in with chance 1/5 in a week: divide the people by 1/5',v:qm(q.v,Q(5)),u:'packs a week'}],
+     line:(o,S,p,q)=>'average packs a week, np: '+par(q.v)+' · 1/5 = '+qs(o.v)+' '+o.u}),
+   MID({id:'m:packs.spread',after:['m:packs.avg'],u:'packs a week',steps:['30g'],cite:'the independent-spreads-add technique',ask:()=>'what is the spread of that count, np(1 − p)?',
+     act:(S,p,q)=>({v:qm(q.v,Q(4,5)),u:'packs squared'}),slips:(S,p,q)=>[{why:'the spread is taken as the average itself',v:q.v,u:'packs squared'},{why:'p is used in place of 1 − p',v:qm(q.v,Q(1,5)),u:'packs squared'}],
+     alts:(S,p,q)=>[{ask:'what is the spread of that count, taking it as the average np?',v:q.v,u:'packs squared'},{ask:'what is the spread of that count, np times p?',v:qm(q.v,Q(1,5)),u:'packs squared'}],
+     line:(o,S,p,q)=>'spread, np(1 − p): '+par(q.v)+' · 4/5 = '+qs(o.v)+' '+o.u}),
+   MID({id:'m:packs.width',after:['m:packs.spread'],u:'packs squared',steps:['32·bio'],cite:'the large-count technique',ask:()=>'what is one spread width, the root of the spread?',
+     act:(S,p,q)=>{ const r=qsqrt(q.v); return r?{v:r,u:'packs'}:null; },slips:(S,p,q)=>[{why:'the spread is halved instead of rooted',v:qm(q.v,Q(1,2)),u:'packs'}],
+     alts:(S,p,q)=>[{ask:'what is one spread width, half the spread?',v:qm(q.v,Q(1,2)),u:'packs'}],
+     line:(o,S,p,q)=>'one width: √'+par(q.v)+' = '+qs(o.v)+' '+o.u})]});
+law('32·bio.bones','broken bones and a shelf of courses',()=>{ const k=pick([10,20,30]), m=7*k/10, s=shelfFor(m,0.02), s5=shelfFor(m,0.05), cols=[...new Set([s5,s-1,s,s+2])].sort((a,b)=>a-b);
+  return {c:[0,Q(1,10)],k,ss:s,story:'In a town of '+k+' thousand at '+at()+', each person breaks a bone with chance 1 in 10,000 on any day: A(k) = k/10 breaks a day. A week’s short-chance for a shelf of '+cols.map(c=>c+' courses is '+dec3(ptail(m,c))).join(', ')+'.',
+  f:'A',x:'k',xu:'thousand people',yu:'breaks a day',rate:'breaks a day per thousand',area:null,pts:[k]}; },
+  [Cu(X({u:'breaks a week',out:'courses',k:1,f:(S,p,q)=>Q(shelfFor(num(q.v),0.02)),ex:(S,p,q)=>'least s with the chance of more than s at most 0.02, for an average of '+qs(q.v),ask:()=>'each break needs one course: what shelf keeps the short-chance at or below 0.02?',ln:()=>'the shelf',
+    xs:(S,p,q)=>{ const m=num(q.v), s=shelfFor(m,0.02); return [{why:'the average is stocked',v:Q(Math.ceil(m))},{why:'the column before the first at or below 0.02 is taken',v:Q(s-1)},{why:'the first column at or below 0.05 is taken',v:Q(shelfFor(m,0.05))}]; }},PH('32·bio','the shelf technique for rare arrivals')))],
+  {noGM:1,mids:[
+   MID({id:'m:bones.week',after:['read'],u:'breaks a day',steps:['5j'],cite:'multiplying and dividing quantities',ask:()=>'the van comes once a week: how many breaks are there in a week, on average?',
+     act:(S,p,q)=>({v:qm(q.v,Q(7)),u:'breaks a week'}),slips:(S,p,q)=>[{why:'five working days are counted, not seven',v:qm(q.v,Q(5)),u:'breaks a week'},{why:'the seven days are added instead of multiplied',v:qa(q.v,Q(7)),u:'breaks a week'}],
+     alts:(S,p,q)=>[{ask:'the van comes once a week: count the breaks over five working days',v:qm(q.v,Q(5)),u:'breaks a week'},{ask:'the van comes once a week: add 7 to the breaks a day',v:qa(q.v,Q(7)),u:'breaks a week'}],
+     line:(o,S,p,q)=>'breaks a week: '+par(q.v)+' · 7 = '+qs(o.v)+' '+o.u})]});
+law('32·bio.flu','quiet weeks and wave weeks of influenza',()=>{ const c=pick([1,2]), sh=c===1?pick([14,22,30]):pick([22,30,40]); return {c:[0,Q(1,20)],sh,story:'Influenza in a town of '+20*c+' thousand at '+at()+': in a quiet week, 9 in 10, cases come singly at Q(k) = k/20 a day. In a wave week, 1 in 10, each case passes it on and the week averages 10 times as many.',
+  f:'Q',x:'k',xu:'thousand people',yu:'cases a day',rate:'cases a day per thousand',area:null,pts:[20*c]}; },
+  [Cu(X({u:'courses in a wave week',out:'weeks in 100',k:1,f:(S,p,q)=>{ const w=num(q.v); return w100(0.9*ptail(w/10,S.sh)+0.1*ptail(w,S.sh)); },ex:(S,p,q)=>'100 · (0.9 · chance a quiet week needs more than '+S.sh+' + 0.1 · chance a wave week does)',
+    ask:(S)=>'with a shelf of '+S.sh+' courses, in how many weeks out of 100 does it run short?',ln:()=>'weeks short in 100',pos:false,
+    xs:(S,p,q)=>{ const w=num(q.v); return [{why:'the wave weeks are left out',v:w100(ptail(w/10,S.sh))},{why:'the weeks are taken as one rare count with the overall average',v:w100(ptail(0.19*w,S.sh))},{why:'the shares of the two kinds are swapped',v:w100(0.1*ptail(w/10,S.sh)+0.9*ptail(w,S.sh))}]; }},PH('32·bio','the two-kinds technique'))),
+   Cu(X({u:'courses in a wave week',out:'courses a week',k:1,f:(S,p,q)=>qm(q.v,Q(19,100)),ex:(S,p,q)=>'0.9 · '+par(qm(q.v,Q(1,10)))+' + 0.1 · '+par(q.v),ask:()=>'over all weeks, quiet and wave, what is the average need?',ln:()=>'average need',
+    xs:(S,p,q)=>[{why:'the two kinds are averaged as if equally common',v:qm(q.v,Q(11,20))},{why:'only the wave weeks’ share is counted',v:qm(q.v,Q(1,10))},{why:'the shares of the two kinds are swapped',v:qm(q.v,Q(91,100))}]},PH('30f','the whole-chance technique')))],
+  {noGM:1,mids:[
+   MID({id:'m:flu.quiet',after:['read'],u:'cases a day',steps:['5j'],cite:'multiplying and dividing quantities',ask:()=>'each case needs one course: how many courses does a quiet week need, on average?',
+     act:(S,p,q)=>({v:qm(q.v,Q(7)),u:'courses in a quiet week'}),slips:(S,p,q)=>[{why:'five working days are counted, not seven',v:qm(q.v,Q(5)),u:'courses in a quiet week'}],
+     alts:(S,p,q)=>[{ask:'each case needs one course: count a quiet week as five working days',v:qm(q.v,Q(5)),u:'courses in a quiet week'}],
+     line:(o,S,p,q)=>'a quiet week: '+par(q.v)+' · 7 = '+qs(o.v)+' '+o.u}),
+   MID({id:'m:flu.wave',after:['m:flu.quiet'],u:'courses in a quiet week',steps:['32·bio'],cite:'the two-kinds technique',ask:()=>'a wave week averages 10 times as many: how many courses does it need, on average?',
+     act:(S,p,q)=>({v:qm(q.v,Q(10)),u:'courses in a wave week'}),slips:(S,p,q)=>[{why:'10 is added instead of multiplied',v:qa(q.v,Q(10)),u:'courses in a wave week'},{why:'the wave week is taken as the quiet one',v:q.v,u:'courses in a wave week'}],
+     alts:(S,p,q)=>[{ask:'a wave week brings 10 more cases: how many courses does it need?',v:qa(q.v,Q(10)),u:'courses in a wave week'}],
+     line:(o,S,p,q)=>'a wave week: '+par(q.v)+' · 10 = '+qs(o.v)+' '+o.u})]});
+law('32·bio.vials','a listed few and their vials',()=>{ const v=pick([1,2]); return {c:[1,1],v,story:'The pharmacy at '+at()+' keeps a list, by number, not by name, of n(y) = y + 1 people with a rare blood disorder in year y; each needs '+v+' vial'+(v>1?'s':'')+' a week.',
+  f:'n',x:'y',xu:'years',yu:'people',rate:'people a year',area:null,pts:[1,2,3,4]}; },
+  [Pl(X({u:'vials a week',out:'vials',k:1,ask:()=>'the shelf holds the week’s need and 1 spare for a broken vial: how many vials?',ln:()=>'the shelf',w:['the spare is taken away instead of added','the spare is left out'],
+    xs:(S,p,q)=>[{why:'a spare is kept for each person',v:qa(q.v,qm(q.v,Q(1,S.v)))}]},PH('32·bio','the count-first technique')))],
+  {noGM:1,mids:[
+   MID({id:'m:vials.need',after:['read'],u:'people',steps:['32·bio'],cite:'the count-first technique',ask:(S)=>'reading the need off the list, how many vials does a week take?',
+     act:(S,p,q)=>({v:qm(q.v,Q(S.v)),u:'vials a week'}),slips:(S,p,q)=>[{why:'the town average of 2 people is used in place of the list',v:Q(2*S.v),u:'vials a week'},{why:'the vials are added to the people instead of multiplied',v:qa(q.v,Q(S.v)),u:'vials a week'}],
+     alts:(S,p,q)=>[{ask:'taking the town average of 2 people, how many vials does a week take?',v:Q(2*S.v),u:'vials a week'},{ask:'add each person’s weekly vials to the count of people',v:qa(q.v,Q(S.v)),u:'vials a week'}],
+     line:(o,S,p,q)=>'need off the list: '+par(q.v)+' · '+S.v+' = '+qs(o.v)+' '+o.u})]});
+law('32·bio.relief','relieving inhalers and bad-air weeks',()=>({c:[0,400],story:'At '+at()+', R(y) = 400y people with asthma carry a relieving inhaler in year y. In an ordinary week each needs a new one with chance 1/12; in a bad-air week, 1 in 10, the chance is 1/4.',
+  f:'R',x:'y',xu:'years',yu:'people',rate:'people a year',area:null,pts:[2,3,4]}),
+  [Cu(X({u:'inhalers in a bad-air week',out:'inhalers a week',k:1,f:(S,p,q)=>qm(q.v,Q(2,5)),ex:(S,p,q)=>'0.9 · '+par(qm(q.v,Q(1,3)))+' + 0.1 · '+par(q.v),ask:()=>'over all weeks, ordinary and bad-air, what is the average need?',ln:()=>'average need',
+    xs:(S,p,q)=>[{why:'only the ordinary weeks are counted',v:qm(q.v,Q(1,3))},{why:'the two kinds are averaged as if equally common',v:qm(q.v,Q(2,3))},{why:'the shares of the two kinds are swapped',v:qm(q.v,Q(14,15))}]},PH('32·bio','the shared-cause technique')))],
+  {noGM:1,mids:[
+   MID({id:'m:relief.ord',after:['read'],u:'people',steps:['30g'],cite:'the average-adds technique',ask:()=>'how many relieving inhalers does an ordinary week need, on average?',
+     act:(S,p,q)=>({v:qm(q.v,Q(1,12)),u:'inhalers in an ordinary week'}),slips:(S,p,q)=>[{why:'the once-a-month chance 7/30 is used',v:qm(q.v,Q(7,30)),u:'inhalers in an ordinary week'},{why:'the bad-air chance 1/4 is used',v:qm(q.v,Q(1,4)),u:'inhalers in an ordinary week'}],
+     alts:(S,p,q)=>[{ask:'with the once-a-month chance 7/30, how many inhalers does an ordinary week need?',v:qm(q.v,Q(7,30)),u:'inhalers in an ordinary week'},{ask:'with the chance 1/4, how many inhalers does an ordinary week need?',v:qm(q.v,Q(1,4)),u:'inhalers in an ordinary week'}],
+     line:(o,S,p,q)=>'an ordinary week: '+par(q.v)+' · 1/12 = '+qs(o.v)+' '+o.u}),
+   MID({id:'m:relief.bad',after:['m:relief.ord'],u:'inhalers in an ordinary week',steps:['32·bio'],cite:'the shared-cause technique',ask:()=>'bad air lifts everyone’s chance from 1/12 to 1/4 at once: what does a bad-air week need?',
+     act:(S,p,q)=>({v:qm(q.v,Q(3)),u:'inhalers in a bad-air week'}),slips:(S,p,q)=>[{why:'the chance 1/4 is read as 4 times as many',v:qm(q.v,Q(4)),u:'inhalers in a bad-air week'},{why:'the ordinary need is divided by 3',v:qm(q.v,Q(1,3)),u:'inhalers in a bad-air week'}],
+     alts:(S,p,q)=>[{ask:'bad air lifts the chance from 1/12 to 1/4: multiply the ordinary need by 4',v:qm(q.v,Q(4)),u:'inhalers in a bad-air week'},{ask:'bad air lifts the chance from 1/12 to 1/4: divide the ordinary need by 3',v:qm(q.v,Q(1,3)),u:'inhalers in a bad-air week'}],
+     line:(o,S,p,q)=>'a bad-air week: '+par(q.v)+' · 3 = '+qs(o.v)+' '+o.u})]});
+
+/* ================= the dealer ================= */
+/* TAILOR (Andrew 2026-11-14 05:07Z: "the word problems need a tailored middle too... Which gas, how many teeth on the gear, etc etc, that's mutable.
+   How you get from start to finish is a map"): no generic middle links (w2.mean, w2.sum, w2.more, w2.raise, w2.again, w2.per) and no borrowed
+   quantity links; every middle step comes from the law's own map (L.mids, added with midsOf in chains_word2m_*.js). */
+const TAILOR=true;
+const FIRSTX=new Set(['9a.read','13d.rate','5g.put']);
+const fin=q=>q&&isQ(q.v)&&!big(q.v);
+const tryf=(f,...a)=>{ try{ return f(...a); }catch(e){ if(e&&e.over) throw e; return null; } };
+const PADOLD=new Set(['4g.times','5j.share']);
+function firstsFor(S,P){ const out=[];
+  for(const W of WL){ if(W.from!=='law'||!W.steps.every(s=>openStep(s,P))) continue; if(W.area&&!S.area) continue;
+    const p={}; if(FIRSTX.has(W.id)||W.px) p.x=pick(S.pts); if(W.area){ const e=S.ends?pick(S.ends):(()=>{ const a=pick([0,0,1]); return [a,a+ri(1,3)]; })(); p.a=e[0]; p.b=e[1]; }
+    if(W.id==='9a.read'&&S.early&&Math.random()<0.5) continue;
+    const q=tryf(W.act,S,p); if(fin(q)) out.push({W,p,o:q,in:null}); }
+  return out; }
+function midsFor(S,chain,P){ const last=effLast(chain), out=[];
+  for(const W of WL){ if(W.from!=='qty'||PADOLD.has(W.id)||chain.some(c=>c.W.id===W.id)) continue; if(!W.steps.every(s=>openStep(s,P))) continue;
+    let ok=false; try{ ok=W.when(S,last); }catch(e){ ok=false; } if(!ok) continue;
+    if(W.id==='8f.root'&&!(read1(last)&&chain.length===1)) continue;
+    out.push(W); }
+  const pads=chain.some(c=>PADOLD.has(c.W.id)), still=chain.length>1&&read1(chain[0].W.id)&&chain[chain.length-1].o.u===S.yu; /* a later link that keeps the reading's unit keeps the story's copies and splits meaningful */
+  if(!pads&&S.copies&&((S.copies.after||['9a.read']).includes(last)||still)&&PADC.steps.every(s=>openStep(s,P))) out.push(PADC);
+  if(!pads&&S.split&&((S.split.after||['9a.read']).includes(last)||still)&&PADS.steps.every(s=>openStep(s,P))) out.push(PADS);
+  return out; }
+function closeFor(L0,S,chain,P){ const q=chain[chain.length-1].o, last=effLast(chain), gm=chain.some(c=>GMF.has(c.W.id)), ctx=gm?{first:chain[0].W.id,chain}:{x:chain[0].p.x,first:chain[0].W.id,chain};
+  const cs=shuffle((L0.close||[]).filter(c=>tryf(()=>c.fits(S,q,last,ctx,P))));
+  for(const c of cs){ const p=tryf(c.make,S,q,ctx); if(!p) continue; const o=tryf(c.act,S,p,q); if(!fin(o)) continue; if(c.pos&&o.v.p<=0) continue;
+    if(say(o)===say(q)) continue;
+    return {W:{id:'!'+L0.id.split('.')[1]+'.'+c.id,steps:[L0.step,...c.steps],ask:(S2,p2)=>c.ask(S2,p2),act:(S2,p2,q2)=>c.act(S2,p2,q2),slips:(S2,p2,q2)=>c.slips(S2,p2,q2),cite:()=>c.cite(),line:(o2,S2,p2,q2)=>c.line(o2,S2,p2,q2),close:true},p,o,in:q}; }
+  return null; }
+/* grow a chain of exactly `lines` lines (first link, middles, close) by a bounded random search */
+function grow(L0,S,P,lines,st){
+  const ext=(chain,oldUsed)=>{ if(--st.b<0) return null;
+    const lastId=chain[chain.length-1].W.id; if(lastId==='w2.again'&&chain.length===lines-1) return null; /* a change between two readings goes on only to its average rate */
+    if(chain.length===lines-1) { const C=closeFor(L0,S,chain,P); return C?chain.concat([C]):null; }
+    const q=chain[chain.length-1].o;
+    const lm=shuffle((L0.mids||[]).filter(W=>!chain.some(c=>c.W.id===W.id)&&W.after.includes(read1(effLast(chain))&&!chain.slice(1).some(c=>c.W.from==='mid')?'read':effLast(chain))&&q.u===W.u&&W.steps.every(s=>openStep(s,P))));
+    const gms=TAILOR||oldUsed||L0.noGM?[]:shuffle(GM.filter(W=>!chain.some(c=>c.W.id===W.id)&&!(W.id==='w2.sum'&&chain.some(c=>c.W.id==='w2.again'))&&!(W.id==='w2.again'&&chain.some(c=>c.W.id==='w2.sum'))&&W.steps.every(s=>openStep(s,P))&&tryf(()=>W.fits(S,chain,q.u))));
+    const olds=TAILOR?[]:chain.filter(c=>!GMF.has(c.W.id)).length>=3||(chain.some(c=>GMF.has(c.W.id))&&q.u!==S.yu)?[]:shuffle(midsFor(S,chain,P));
+    const two=['w2.again','w2.sum','w2.mean'], cand=lastId==='w2.again'?gms.filter(W=>W.id==='w2.per'):lm.concat(Math.random()<0.5?olds.concat(gms):gms.concat(olds)).filter(W=>!(two.includes(W.id)&&chain.some(c=>two.includes(c.W.id))));
+    for(const W of cand){ const p=GMF.has(W.id)||W.from==='mid'?tryf(W.make,S,chain,q):(W.make?tryf(W.make,S):{}); if(!p) continue; const o=tryf(W.act,S,p,q); if(!fin(o)) continue; if(GMF.has(W.id)&&o.v.p<=0) continue;
+      const r=ext(chain.concat([{W,p,o,in:q}]),oldUsed||!GMF.has(W.id)); if(r) return r; if(st.b<0) return null; }
+    return null; };
+  for(const f of shuffle(firstsFor(S,P)).slice(0,6)){ const r=ext([f],false); if(r) return r; if(st.b<0) break; }
+  return null; }
+const nterms=S=>S&&S.c?S.c.filter(x=>x&&(x.p!==undefined?x.p!==0:+x!==0)).length:null;
+const NTC={};
+const ntSet=L=>{ if(L.sized) return new Set([1,2,3,4,5]); if(!NTC[L.id]){ const s=new Set(); for(let i=0;i<10;i++){ const S=tryf(()=>L.make()); if(S) s.add(nterms(S)); } NTC[L.id]=s; } return NTC[L.id]; };
+function lawsForTerms(laws,TW){ const ex=laws.filter(l=>ntSet(l).has(TW)); if(ex.length>=8) return {laws:ex,t:TW};
+  const below=laws.map(l=>l.sized?0:Math.max(...[...ntSet(l)].filter(n=>n<TW),0)), mb=Math.max(...below,0);
+  const more=laws.filter((l,i)=>below[i]===mb&&mb>0&&!ex.includes(l)); return {laws:ex.concat(more),t:TW,alt:mb}; }
+const LINEW=[[2,0.30],[3,0.26],[4,0.22],[5,0.22]];
+const drawLines=()=>{ let r=Math.random(); for(const [n,w] of LINEW){ if((r-=w)<0) return n; } return 2; };
+const REC=[];
+function wdeal2(P){ let laws=LAWS.filter(l=>l.close&&l.close.length&&openStep(l.step,P)); if(!laws.length) return null;
+  const pref=CH.pref||{}, TW=pref.terms, LW=pref.links>=2&&pref.links<=5?pref.links:0; let TL=null;
+  if(TW){ TL=lawsForTerms(laws,TW); if(TL.laws.length) laws=TL.laws; }
+  for(let t=0;t<40;t++){ const L0=pick(laws); let S=tryf(()=>L0.make());
+    if(TW&&!L0.sized&&t<30){ const goal=ntSet(L0).has(TW)?TW:TL&&TL.alt; for(let j=0;j<12&&nterms(S)!==goal;j++) S=tryf(()=>L0.make()); if(goal&&nterms(S)!==goal) continue; }
+    if(!S||!S.c) continue;
+    const strict=LW&&t<30; let want=LW||drawLines(); if(!LW&&want>=4&&REC.includes(L0.id)) want=3; const st={b:strict?160:120}; /* ungeared: a law that just gave a long chain gives a shorter one, so long chains come from many laws */
+    let full=grow(L0,S,P,want,st);
+    if(!full&&!strict){ for(const n of [want-1,want-2,want-3,want+1,want+2,want+3].filter(n=>n>=2&&n<=5)){ if(full) break; st.b=60; full=grow(L0,S,P,n,st); } }
+    if(full){ if(!LW&&full.length>=4){ REC.push(L0.id); if(REC.length>120) REC.shift(); } return {L0,S,chain:full,out:full[full.length-1].o}; } }
+  return null; }
+function wrongs2(D){ const out=[]; D.chain.forEach((c,i)=>{ (tryf(c.W.slips,D.S,c.p,c.in)||[]).forEach(sl=>{ if(!sl||!isQ(sl.v)) return; let q={v:sl.v,u:sl.u};
+    for(let j=i+1;j<D.chain.length;j++){ const o=tryf(D.chain[j].W.act,D.S,D.chain[j].p,q); if(!o||!isQ(o.v)){ q=null; break; } q=o; }
+    if(q&&!big(q.v)&&say(q)!==say(D.out)) out.push({q,at:i,why:sl.why}); }); }); return out; }
+const pk=c=>c.W.from==='mid'?'['+Object.values(c.p||{}).filter(v=>typeof v!=='object').join(',')+']':GMF.has(c.W.id)?'['+c.p.K+']':c.p.x!==undefined?'['+c.p.x+']':c.p.a!==undefined?'['+c.p.a+','+c.p.b+']':c.p.K!==undefined?'['+c.p.K+']':c.p.k!==undefined&&typeof c.p.k!=='object'?'['+c.p.k+']':c.p.f!==undefined?'['+c.p.f+']':'';
+/* ---------- the missing-step shape (Andrew 04:06Z): the same bookended chain with one middle step blanked; which instruction belongs there? ----------
+   Wrong options are the step's own slips written as instructions (alts) and other middle links that could stand there; each is rerun through the
+   rest of the chain and kept only if it reaches a different answer or cannot be carried on. The opening reading and the close are never blanked. */
+const OPTMAX=90;
+const runFrom=(D,i,o)=>{ let q=o; for(let j=i+1;j<D.chain.length;j++){ const c=D.chain[j]; if(!q||!isQ(q.v)||q.u!==c.in.u) return null; q=tryf(c.W.act,D.S,c.p,q); } return q&&isQ(q.v)?q:null; };
+const instr=t=>String(t||'').replace(/^\d+\.\s*/,'');
+function missingCard(D,P,used,base){ const n=D.chain.length; if(n<3) return null; const right=say(D.out);
+  for(const i of shuffle([...Array(n-2).keys()].map(k=>k+1))){ const c=D.chain[i], S=D.S, q=c.in, tru=instr(c.W.ask(S,c.p)); if(!tru||tru.length>OPTMAX) continue;
+    const opts=[], seen=new Set([tru]); D.chain.forEach(x=>{ const a=tryf(()=>instr(x.W.ask(S,x.p))); if(a) seen.add(a); }); /* no instruction that already stands elsewhere in the chain */
+    const keep=(text,o)=>{ text=instr(text); if(!text||text.length>OPTMAX||seen.has(text)) return; const r=o&&isQ(o.v)&&o.u===c.o.u?runFrom(D,i,o):null; if(r&&!big(r.v)&&say(r)===right) return; seen.add(text); opts.push({text,r}); };
+    (tryf(()=>c.W.alts?c.W.alts(S,c.p,q):[])||[]).forEach(a=>keep(a.ask,{v:a.v,u:a.u||c.o.u}));
+    const pre=D.chain.slice(0,i), subs=[];
+    if(!TAILOR&&!D.L0.noGM) GM.forEach(W=>{ if(W.id!==c.W.id&&!pre.some(x=>x.W.id===W.id)&&W.steps.every(s=>openStep(s,P))&&tryf(()=>W.fits(S,pre,q.u))) subs.push(W); });
+    if(!TAILOR) (tryf(()=>midsFor(S,pre,P))||[]).forEach(W=>{ if(W.id!==c.W.id&&!D.chain.some(x=>x.W.id===W.id)) subs.push(W); });
+    (D.L0.mids||[]).forEach(W=>{ if(W.id!==c.W.id&&q.u===W.u) subs.push(W); });
+    for(const W of shuffle(subs)){ const p=GMF.has(W.id)||W.from==='mid'?tryf(W.make,S,pre,q):(W.make?tryf(W.make,S):{}); if(!p) continue; const o=tryf(W.act,S,p,q); if(!o||!isQ(o.v)) continue; const a=tryf(()=>W.ask(S,p)); if(a) keep(a,o); }
+    if(opts.length<3) continue;
+    const pick3=shuffle(opts.filter(x=>x.r)).concat(shuffle(opts.filter(x=>!x.r))).slice(0,3);
+    const index='cwm:'+base.a3[0]+'.'+base.a3[1]+'#'+(i+1); if(used&&used[index]) continue;
+    const lines=base.lines.map((l,k)=>k===i?[(k+1)+'. ______','the missing step']:l);
+    return Object.assign({},base,{index,lines,ask:'One middle step is blank, and the chain ends at '+right+'. Which instruction belongs in the blank?',right:tru,opts:shuffle([tru,...pick3.map(x=>x.text)]),lead:'Step '+(i+1)+' is: '+tru.replace(/[?.]$/,'')+'. ',
+      why:'Step '+(i+1)+' is: '+tru.replace(/[?.]$/,'')+'. Worked through: '+base.why.split('. ')[0]+'. '+pick3.map(x=>'“'+x.text+'” '+(x.r?'leads to '+say(x.r)+' instead':'cannot be carried on to the close')+'.').join(' '),missing:i+1}); }
+  return null; }
+
+function wordCard2(P,used){ for(let t=0;t<16;t++){ const D=wdeal2(P); if(!D) return null; const W=wrongs2(D), vals=[]; W.forEach(w=>{ if(D.out.v.p>0&&w.q.v.p<0) return; /* no negative count beside a positive answer */ if(!vals.some(v=>say(v.q)===say(w.q))) vals.push(w); }); if(vals.length<3) continue;
+    /* plain wrong options first (Andrew's rule: wrong moves; a negative count or a fraction of a whole-number answer is a real slip but reads oddly, so it is used only when the card is short of others) */
+    const ov=D.out.v, odd=w=>(ov.p>0&&w.q.v.p<0)||(ov.q===1&&w.q.v.q!==1);
+    const pk3=shuffle(vals.filter(w=>!odd(w))).concat(shuffle(vals.filter(odd))).slice(0,3), right=say(D.out), sd=D.L0.id+'['+D.S.ix+']', lk=D.chain.map(c=>c.W.id+pk(c)).join('+'), index='cw:'+sd+'.'+lk; if(used&&used[index]) continue;
+    const lines=D.chain.map((c,i)=>[(i+1)+'. '+c.W.ask(D.S,c.p),c.W.cite()]);
+    if(lines.some(l=>!l[0]||l[0].length>110||!l[1])) continue;
+    const base={index,a3:[sd,lk,DASH],step:D.L0.step,steps:[D.L0.step,...D.chain.flatMap(c=>c.W.steps)],chain:true,story:D.S.story,lines,
+      ask:'Work the steps in order; the last one is the story’s question. What is the answer, with its unit?',right,opts:shuffle([right,...pk3.map(w=>say(w.q))]),lead:'It is '+right+'. ',
+      why:D.chain.map(c=>bracketDiv(c.W.line(c.o,D.S,c.p,c.in),c.in&&c.in.v)).join('; ')+'. '+pk3.map(w=>say(w.q)+' comes from step '+(w.at+1)+', where '+w.why+'.').join(' ')};
+    if(D.chain.length>=3&&Math.random()<MISSP){ const m=missingCard(D,P,used,base); if(m) return m; }
+    return base; }
+  return null; }
+const MISSP=0.48;
+CH.W2={cl,G,O,Tm,Pr,In,Ct,Cc,Fr,Pl,Md,X,own,LESS,MQ,DR,CU,SC,RA,MID,midsOf,par,num,isQ,qq,at,who,water,beast,say,one,pick,ri,HE,WHO,Q,qa,qm,qn,qi,qz,qs,big,LAWS};
+CH.w2depth=(L0,tries)=>{ let best=0, routes=new Set(); for(let k=0;k<(tries||30);k++){ const S=tryf(()=>L0.make()); if(!S||!S.c) continue; for(const n of [5,4,3]){ if(n<=best&&routes.size>3) break; const ch=tryf(()=>grow(L0,S,null,n,{b:400})); if(ch){ best=Math.max(best,ch.length); routes.add(ch.map(c=>c.W.id).join('>')); break; } } } return {best,routes:[...routes]}; };
+/* "an 80 kg load", "an 8-dollar", "an 11" (a/an before a number read aloud) */
+const anN=s=>typeof s==='string'?s.replace(/\b([Aa]) (?=(8[\d,]*|11|18)(\b|[- ]))/g,'$1n '):s;
+const tidyA=q=>{ if(!q) return q; ['story','ask','why','lead','right'].forEach(k=>{ if(q[k]) q[k]=anN(q[k]); }); if(q.opts) q.opts=q.opts.map(anN); if(q.lines) q.lines=q.lines.map(l=>[anN(l[0]),l[1]]); return q; };
+const wordCard2A=(P,used)=>tidyA(wordCard2(P,used));
+CH.wordCard=wordCard2A; CH.wordCard2=wordCard2A; CH.wdeal=wdeal2; CH.wrongsW=wrongs2; CH.wordNew=NEW.map(l=>l.id);
+})();
+/* ===== Word Problems, tailored middles a (Andrew 2026-11-14 05:07Z: "How you get from start to finish is a map") ===== */
+(function(){ if(!CH.W2) return; const {MID,midsOf,par,num,isQ,qq,at,who,say,pick,ri,Q,qa,qm,qn,qi,qz,qs,big,LAWS,G,O,Tm,Pr,In,Ct,Cc,Fr,Pl,Md,X,own,MQ,CU,SC,cl,LESS,DR,RA}=CH.W2;
+const qsqrt=CH.qsqrt;
+/* a mid in a few words: name, after (names in this map, 'read', or a first link's id), unit taken, unit handed on, steps, technique,
+   ask, f(S,p,q) the move, ex(S,p,q) the worked expression, lab the label of the line, wr wrong moves [why, the same move as an instruction, g(S,p,q)], make */
+const one1=t=>typeof t==='string'?t.replace(/(^|[^\d\/.])1 (second|hour|minute|day|week|year|metre|degree)s\b/g,'$11 $2'):t;
+const T=(x,S,p)=>one1(typeof x==='function'?x(S,p):x);
+const ok=v=>v&&isQ(v)&&!big(v)?v:null;
+const P=par, M=(a,b)=>qm(qq(a),qq(b)), Dv=(a,b)=>{ const k=qq(b); return qz(k)?null:qm(qq(a),qi(k)); }, A=(a,b)=>qa(qq(a),qq(b)), Sb=(a,b)=>qa(qq(a),qn(qq(b)));
+const fl=v=>Q(Math.floor(num(v))), ce=v=>Q(Math.ceil(num(v))), whole=v=>v.q===1, pos=v=>v.p>0;
+const mk=pre=>(name,after,u,out,st,cite,ask,f,ex,lab,wr,make)=>MID({id:'m:'+pre+'.'+name,after:after.map(a=>a==='read'||/^\d/.test(a)?a:'m:'+pre+'.'+a),u,steps:[].concat(st),cite,
+  make:make?((S,ch,q)=>make(S,ch,q)):(()=>({})),
+  ask:(S,p)=>T(ask,S,p),
+  act:(S,p,q)=>{ let v=null; try{ v=ok(f(S,p,q)); }catch(e){ v=null; } return v?{v,u:T(out,S,p)}:null; },
+  slips:(S,p,q)=>(wr||[]).map(w=>{ let v=null; try{ v=ok(w[2](S,p,q)); }catch(e){} return v?{why:T(w[0],S,p),v,u:T(w[3]||out,S,p)}:null; }).filter(Boolean),
+  alts:(S,p,q)=>(wr||[]).filter(w=>w[1]).map(w=>{ let v=null; try{ v=ok(w[2](S,p,q)); }catch(e){} return v?{ask:T(w[1],S,p),v,u:T(w[3]||out,S,p)}:null; }).filter(Boolean),
+  line:(o,S,p,q)=>T(lab,S,p)+': '+ex(S,p,q)+' = '+qs(o.v)+' '+o.u});
+const addC=(id,...cs)=>{ const L=LAWS.find(l=>l.id===id); if(L) L.close=(L.close||[]).concat(cs); };
+const X0=ch=>ch[0].p.x, V0=ch=>ch[0].o.v;
+const midV=(ctx,id)=>{ const c=ctx&&ctx.chain&&ctx.chain.find(x=>x.W.id===id); return c||null; };
+
+/* ---------- 13·econ.cost: the workshop's week of chairs ---------- */
+{ const D=mk('cost'), L='13·econ.cost';
+midsOf(L,[
+ D('markup',['read'],'dollars','dollars of takings','5c','the scaling technique','the chairs are priced at cost plus a quarter: what does the week’s batch sell for?',
+   (S,p,q)=>M(q.v,Q(5,4)),(S,p,q)=>P(q.v)+' · 5/4','takings at cost plus a quarter',
+   [['only the quarter is given, not cost plus a quarter','take a quarter of the cost as what the batch sells for',(S,p,q)=>M(q.v,Q(1,4))],
+    ['the quarter is taken off instead of added','price the chairs at cost less a quarter',(S,p,q)=>M(q.v,Q(3,4))]]),
+ D('tax',['markup'],'dollars of takings','dollars at the till','5c','the scaling technique','a sales tax of 1/10 is added at the till: what do buyers pay for the batch?',
+   (S,p,q)=>M(q.v,Q(11,10)),(S,p,q)=>P(q.v)+' · 11/10','paid at the till',
+   [['only the tax is given','give the tax alone, 1/10 of the takings',(S,p,q)=>M(q.v,Q(1,10))],
+    ['the tax is taken off instead of added','take 1/10 off the takings for the till',(S,p,q)=>M(q.v,Q(9,10))]]),
+ D('each',['tax'],'dollars at the till','dollars a chair at the till','5j','multiplying and dividing quantities',(S,p)=>'the '+p.x+' chairs are priced alike: what does a buyer pay for one?',
+   (S,p,q)=>Dv(q.v,p.x),(S,p,q)=>P(q.v)+'/'+p.x,'paid for one chair',
+   [['the total is multiplied by the chairs instead of divided',(S,p)=>'multiply the till total by the '+p.x+' chairs',(S,p,q)=>M(q.v,p.x)],
+    ['the chairs are taken away instead of divided into the total',(S,p)=>'take the '+p.x+' chairs away from the till total',(S,p,q)=>Sb(q.v,p.x)]],(S,ch)=>({x:X0(ch)})),
+ D('profit',['markup'],'dollars of takings','dollars of profit','4h','the less-is-adding technique',(S,p)=>'the week’s cost was '+p.c+' dollars: what profit do the takings leave?',
+   (S,p,q)=>Sb(q.v,p.cq),(S,p,q)=>P(q.v)+' − '+p.c,'the week’s profit',
+   [['the cost is added to the takings','add the week’s cost to the takings',(S,p,q)=>A(q.v,p.cq)],
+    ['the takings are given as the profit, the cost left out','take the takings as the profit',(S,p,q)=>q.v]],(S,ch)=>({c:qs(V0(ch)),cq:V0(ch)}))]);
+addC(L,G(X({u:'dollars a chair at the till',out:'dollars',k:'above',ask:(S,p)=>'a shop in town charges '+p.K+' dollars a chair: how much cheaper is the workshop’s?',ln:()=>'cheaper than the shop'},LESS)),
+  Pr(X({u:'dollars of profit',k:()=>pick([2,4,5]),ask:(S,p)=>'the profit is shared equally by '+p.K+' partners: how many dollars each?',ln:()=>'each partner’s share'},RA)));
+}
+
+/* ---------- 13·eng.climb: the crane's lift ---------- */
+{ const D=mk('climb'), L='13·eng.climb';
+midsOf(L,[
+ D('work',['read'],'metres','joules','13·eng','the climbing-power technique',(S)=>'lifting the '+S.m+' kg load that high against g = 10: how many joules of work?',
+   (S,p,q)=>M(q.v,10*S.m),(S,p,q)=>S.m+' · 10 · '+P(q.v),'work done on the load',
+   [['g is left out, mass times height',(S)=>'multiply the '+S.m+' kg by the height for the work',(S,p,q)=>M(q.v,S.m)],
+    ['the height is divided by the weight instead of multiplied',(S)=>'divide the height by the load’s weight, '+10*S.m+' newtons',(S,p,q)=>Dv(q.v,10*S.m)]]),
+ D('motor',['work'],'joules','joules','5c','the scaling technique','only 4/5 of the motor’s work reaches the load: how many joules must the motor give?',
+   (S,p,q)=>M(q.v,Q(5,4)),(S,p,q)=>P(q.v)+'/(4/5)','work the motor gives',
+   [['the 4/5 is multiplied in instead of divided','take 4/5 of the work as what the motor gives',(S,p,q)=>M(q.v,Q(4,5))],
+    ['only the lost part is given','give the part the motor loses, a quarter of the work',(S,p,q)=>M(q.v,Q(1,4))]]),
+ D('power',['work','motor'],'joules','watts','13·eng','the climbing-power technique',(S,p)=>'the lift takes '+p.x+' seconds: what power is that on average?',
+   (S,p,q)=>Dv(q.v,p.x),(S,p,q)=>P(q.v)+'/'+p.x,'average power',
+   [['the work is multiplied by the seconds instead of divided',(S,p)=>'multiply the joules by the '+p.x+' seconds',(S,p,q)=>M(q.v,p.x)],
+    ['the seconds are taken away instead of divided',(S,p)=>'take the '+p.x+' seconds away from the joules',(S,p,q)=>Sb(q.v,p.x)]],(S,ch)=>({x:X0(ch)}))]);
+}
+
+/* ---------- 14·econ.profit: the jam stall's cart fund ---------- */
+{ const D=mk('profit'), L='14·econ.profit';
+midsOf(L,[
+ D('week',['read'],'dollars','dollars a week','5j','multiplying and dividing quantities','the stall opens 6 days a week, selling the same: what is a week’s profit?',
+   (S,p,q)=>pos(q.v)?M(q.v,6):null,(S,p,q)=>P(q.v)+' · 6','a week’s profit',
+   [['five days are counted, not six','count the week as 5 market days',(S,p,q)=>M(q.v,5)],
+    ['the 6 days are added instead of multiplied','add the 6 market days to the day’s profit',(S,p,q)=>A(q.v,6)]]),
+ D('fee',['week'],'dollars a week','dollars a week','5c','the scaling technique','the market keeps 1/10 of each week’s profit as its fee: what does the stall keep?',
+   (S,p,q)=>pos(q.v)?M(q.v,Q(9,10)):null,(S,p,q)=>P(q.v)+' · 9/10','kept after the fee',
+   [['only the fee is given','give the market’s fee, 1/10 of the profit',(S,p,q)=>M(q.v,Q(1,10))],
+    ['the fee is added on instead of kept back','add 1/10 to the week’s profit',(S,p,q)=>M(q.v,Q(11,10))]]),
+ D('save',['week','fee'],'dollars a week','dollars saved','5j','multiplying and dividing quantities',(S,p)=>'all of it goes into a cart fund for '+p.k+' weeks: how many dollars are saved?',
+   (S,p,q)=>M(q.v,p.k),(S,p,q)=>P(q.v)+' · '+p.k,'the cart fund',
+   [['the week’s amount is divided by the weeks',(S,p)=>'divide the week’s amount by '+p.k,(S,p,q)=>Dv(q.v,p.k)],
+    ['the weeks are added instead of multiplied',(S,p)=>'add '+p.k+' to the week’s amount',(S,p,q)=>A(q.v,p.k)]],()=>({k:pick([4,8,10])}))]);
+addC(L,G(X({u:'dollars saved',out:'dollars',k:'above',ask:(S,p)=>'the cart costs '+p.K+' dollars: how many dollars more does the fund need?',ln:()=>'still needed for the cart'},LESS)));
+}
+
+/* ---------- 14·bio.spread: the drop of dye ---------- */
+{ const D=mk('spread'), L='14·bio.spread';
+midsOf(L,[
+ D('root',['read','later'],'square millimetres','millimetres','14·bio','the spreading law','the typical distance is the root of x²: how many millimetres is that?',
+   (S,p,q)=>qsqrt(q.v),(S,p,q)=>'√'+P(q.v),'the typical distance',
+   [['x² is halved instead of rooted','halve x² for the typical distance',(S,p,q)=>M(q.v,Q(1,2))],
+    ['x² itself is taken as the distance','take x² itself as the distance in millimetres',(S,p,q)=>q.v]]),
+ D('across',['root'],'millimetres','millimetres','14·bio','the spreading law','the dye spreads both ways from the drop: how wide is the stained band?',
+   (S,p,q)=>M(q.v,2),(S,p,q)=>'2 · '+P(q.v),'width of the band',
+   [['one side only is counted','take the band as wide as the distance one way',(S,p,q)=>q.v],
+    ['the distance is halved instead of doubled','halve the distance for the width of the band',(S,p,q)=>M(q.v,Q(1,2))]]),
+ D('coef',['read'],'square millimetres','square millimetres a second','14·bio','the spreading law',(S,p)=>'with x² = 2Dt at t = '+p.x+' seconds, what is the spreading constant D?',
+   (S,p,q)=>Dv(q.v,2*p.x),(S,p,q)=>P(q.v)+'/(2 · '+p.x+')','the spreading constant D',
+   [['the 2 of 2Dt is left out',(S,p)=>'divide x² by the '+p.x+' seconds alone for D',(S,p,q)=>Dv(q.v,p.x)],
+    ['x² is multiplied by 2t instead of divided',(S,p)=>'multiply x² by 2 · '+p.x+' for D',(S,p,q)=>M(q.v,2*p.x)]],(S,ch)=>({x:X0(ch)})),
+ D('later',['coef'],'square millimetres a second','square millimetres','14·bio','the spreading law',(S,p)=>'at that D, how large is x² after '+p.T+' seconds?',
+   (S,p,q)=>M(q.v,2*p.T),(S,p,q)=>'2 · '+P(q.v)+' · '+p.T,'x² at the later time',
+   [['the 2 of 2Dt is left out',(S,p)=>'multiply D by the '+p.T+' seconds alone',(S,p,q)=>M(q.v,p.T)],
+    ['the time is divided instead of multiplied',(S,p)=>'divide 2D by the '+p.T+' seconds',(S,p,q)=>Dv(M(q.v,2),p.T)]],()=>({T:pick([100,400,900])}))]);
+}
+
+/* ---------- 13·phys.bkmovers: a cart, a wheel, a slider or a bead ---------- */
+{ const D=mk('mov'), L='13·phys.bkmovers';
+  const V=[['feet','feet travelled','inches a second',12,'a foot is 12 inches','inches'],['radians','radians turned','centimetres a second',null,'','centimetres'],
+    ['inches','inches travelled','feet a second',Q(1,12),'a foot is 12 inches','feet'],['centimetres','centimetres travelled','metres a second',Q(1,100),'a metre is 100 centimetres','metres']];
+  const ms=[];
+  V.forEach(([u,ut,cu,k,why,du],i)=>{
+   ms.push(D('gone'+i,['read'],u,ut,'4h','the less-is-adding technique',(S)=>'it started at '+qs(qq(S.c[0]))+' '+u+(u==='radians'?': how far has it turned since t = 0?':': how far has it gone since t = 0?'),
+     (S,p,q)=>{ const r=Sb(q.v,S.c[0]); return pos(r)?r:null; },(S,p,q)=>P(q.v)+' − '+P(qq(S.c[0])),u==='radians'?'angle turned since the start':'distance since the start',
+     [['the starting place is added instead of taken away','add the starting place to the reading',(S,p,q)=>A(q.v,S.c[0])],
+      ['the starting place is left in, the reading taken as the distance','take the reading itself as the distance gone',(S,p,q)=>q.v]]));
+   ms.push(D('avg'+i,['gone'+i],ut,u+' per second','5j','multiplying and dividing quantities',(S,p)=>'that took '+p.x+' seconds: what was its average '+(u==='radians'?'turning speed?':'speed?'),
+     (S,p,q)=>Dv(q.v,p.x),(S,p,q)=>P(q.v)+'/'+p.x,u==='radians'?'average turning speed':'average speed',
+     [['the distance is multiplied by the seconds',(S,p)=>'multiply the distance by the '+p.x+' seconds',(S,p,q)=>M(q.v,p.x)],
+      ['the seconds are taken away instead of divided',(S,p)=>'take '+p.x+' away from the distance',(S,p,q)=>Sb(q.v,p.x)]],(S,ch)=>({x:X0(ch)})));
+   if(k) ms.push(D('conv'+i,['avg'+i],u+' per second',cu,'5j','changing units is multiplying by one',(S)=>why+': what is that speed in '+cu+'?',
+     (S,p,q)=>M(q.v,k),(S,p,q)=>P(q.v)+' · '+qs(qq(k)),'the speed in '+du,
+     [['the change of units is turned over','change units with the factor turned over',(S,p,q)=>Dv(q.v,k)],
+      ['the units are changed by adding','add the factor to the speed',(S,p,q)=>A(q.v,k)]]));
+   else ms.push(D('conv'+i,['avg'+i],'radians per second',cu,'5j','multiplying and dividing quantities',(S,p)=>'a spot on the rim sits '+p.r+' centimetres from the axle: how fast does it move?',
+     (S,p,q)=>M(q.v,p.r),(S,p,q)=>P(q.v)+' · '+p.r,'speed of the rim',
+     [['the turning speed is divided by the radius',(S,p)=>'divide the turning speed by '+p.r,(S,p,q)=>Dv(q.v,p.r)],
+      ['the whole width of the wheel is used, not the radius',(S,p)=>'multiply the turning speed by the wheel’s width, '+2*p.r,(S,p,q)=>M(q.v,2*p.r)]],()=>({r:pick([10,20,30])})));
+   addC(L,Tm(X({u:cu,out:du,k:()=>pick([2,3,5]),ask:(S,p)=>'at that speed, how many '+du+' would it go in '+p.K+' more seconds?',ln:()=>du+' at that speed'},MQ)));
+  });
+  midsOf(L,ms);
+}
+
+/* ---------- 8·stat.misses: Mike's guess at a typical score ---------- */
+{ const D=mk('miss'), L='8·stat.misses';
+  const mean=S=>Q(S.misses.reduce((a,b)=>a+b,0),3), least=S=>{ const m=mean(S); return S.misses.reduce((r,x)=>qa(r,qm(qa(Q(x),qn(m)),qa(Q(x),qn(m)))),Q(0)); };
+midsOf(L,[
+ D('least',['read'],'square points','square points over the least','8·stat','the squared-misses technique',(S)=>'at the mean the squared misses are least, '+qs(least(S))+': how far above that is this guess?',
+   (S,p,q)=>Sb(q.v,least(S)),(S,p,q)=>P(q.v)+' − '+P(least(S)),'over the least',
+   [['the least is added instead of taken away','add the least squared misses to this guess’s',(S,p,q)=>A(q.v,least(S))],
+    ['the guess’s squared misses are given as they are','take this guess’s squared misses as the excess',(S,p,q)=>q.v]]),
+ D('per',['least'],'square points over the least','square points from the mean','8·stat','the squared-misses technique','each of the 3 scores adds the same share of the excess: what is one share?',
+   (S,p,q)=>Dv(q.v,3),(S,p,q)=>P(q.v)+'/3','one share of the excess',
+   [['the excess is multiplied by the 3 scores','multiply the excess by the 3 scores',(S,p,q)=>M(q.v,3)],
+    ['3 is taken away instead of divided','take 3 away from the excess',(S,p,q)=>Sb(q.v,3)]]),
+ D('root',['per'],'square points from the mean','points from the mean','8·stat','the squared-misses technique','that share is the guess’s squared distance from the mean: how far off is the guess?',
+   (S,p,q)=>qsqrt(q.v),(S,p,q)=>'√'+P(q.v),'distance from the mean',
+   [['the share is halved instead of rooted','halve the share for the distance',(S,p,q)=>M(q.v,Q(1,2))],
+    ['the share itself is given','take the share itself as the distance in points',(S,p,q)=>q.v]]),
+ D('share',['read'],'square points','square points a score','8·stat','the squared-misses technique','share the squared misses over the 3 scores: what is the average squared miss?',
+   (S,p,q)=>Dv(q.v,3),(S,p,q)=>P(q.v)+'/3','average squared miss',
+   [['the sum is multiplied by the 3 scores','multiply the squared misses by the 3 scores',(S,p,q)=>M(q.v,3)],
+    ['3 is taken away instead of divided','take 3 away from the squared misses',(S,p,q)=>Sb(q.v,3)]])]);
+addC(L,Pl(X({u:'points from the mean',out:'points',k:S=>mean(S),ask:(S)=>'the mean score is '+qs(mean(S))+': which guess above it misses by just as much?',ln:()=>'the guess as far above the mean'},own('8·stat','the squared-misses technique'))),
+  G(X({u:'square points a score',out:'square points',k:'above',ask:(S,p)=>'the teacher calls a guess fair under '+p.K+' square points a score: by how much is it under?',ln:()=>'under the teacher’s mark'},LESS)));
+}
+
+/* ---------- 8·econ.wage: Jean's pay at the cannery ---------- */
+{ const D=mk('wage'), L='8·econ.wage';
+midsOf(L,[
+ D('week',['read'],'dollars an hour','dollars a week','5j','multiplying and dividing quantities',(S,p)=>'the cannery gives '+p.h+' hours of work a week: what is a week’s pay?',
+   (S,p,q)=>M(q.v,p.h),(S,p,q)=>P(q.v)+' · '+p.h,'a week’s pay',
+   [['the wage is divided by the hours',(S,p)=>'divide the wage by the '+p.h+' hours',(S,p,q)=>Dv(q.v,p.h)],
+    ['the hours are added instead of multiplied',(S,p)=>'add the '+p.h+' hours to the wage',(S,p,q)=>A(q.v,p.h)]],()=>({h:pick([20,30,40])})),
+ D('tax',['week'],'dollars a week','dollars a week','5c','the scaling technique','1/5 of each week’s pay is held back for tax: what is taken home?',
+   (S,p,q)=>M(q.v,Q(4,5)),(S,p,q)=>P(q.v)+' · 4/5','taken home a week',
+   [['only the tax is given','give the 1/5 held back for tax',(S,p,q)=>M(q.v,Q(1,5))],
+    ['the tax is added instead of held back','add 1/5 to the week’s pay',(S,p,q)=>M(q.v,Q(6,5))]]),
+ D('year',['week','tax'],'dollars a week','dollars a year','5j','multiplying and dividing quantities','the cannery runs 50 weeks a year: what does that come to in a year?',
+   (S,p,q)=>M(q.v,50),(S,p,q)=>P(q.v)+' · 50','a year’s pay',
+   [['all 52 weeks are counted','count 52 weeks of work in the year',(S,p,q)=>M(q.v,52)],
+    ['the year is taken as 12 weeks, one for each month','multiply by the 12 months of the year',(S,p,q)=>M(q.v,12)]])]);
+addC(L,Pr(X({u:'dollars a year',out:'dollars a month',k:12,ask:()=>'spread over the 12 months, what is that a month?',ln:()=>'a month’s share',w:['the year’s pay is multiplied by 12','12 is taken away instead of divided']},MQ)));
+}
+
+/* ---------- 9·stat.weir: steelhead on the Skagit ---------- */
+{ const D=mk('weir'), L='9·stat.weir';
+midsOf(L,[
+ D('wild',['read'],'fish','fish','5c','the scaling technique',(S,p)=>'1 in '+p.d+' has a clipped fin, a hatchery fish, and is taken out: how many wild fish go on?',
+   (S,p,q)=>M(q.v,Q(p.d-1,p.d)),(S,p,q)=>P(q.v)+' · '+(p.d-1)+'/'+p.d,'wild fish going on',
+   [['the hatchery fish are given instead of the wild ones',(S,p)=>'take 1/'+p.d+' of the count as the wild fish',(S,p,q)=>Dv(q.v,p.d)],
+    [(S,p)=>'the '+p.d+' is taken away instead of 1 in '+p.d,(S,p)=>'take '+p.d+' fish off the count',(S,p,q)=>Sb(q.v,p.d)]],
+   (S,ch,q)=>{ const d=[2,3,4,5,10].filter(d=>whole(q.v)&&q.v.p%d===0); return d.length?{d:pick(d)}:null; }),
+ D('perday',['read','wild'],'fish','fish a day','5j','multiplying and dividing quantities',(S,p)=>'those came over '+p.x+' days: how many is that a day, on average?',
+   (S,p,q)=>Dv(q.v,p.x),(S,p,q)=>P(q.v)+'/'+p.x,'fish a day on average',
+   [['the fish are multiplied by the days',(S,p)=>'multiply the fish by the '+p.x+' days',(S,p,q)=>M(q.v,p.x)],
+    ['the days are taken away instead of divided',(S,p)=>'take '+p.x+' away from the fish',(S,p,q)=>Sb(q.v,p.x)]],(S,ch)=>({x:X0(ch)})),
+ D('hour',['perday'],'fish a day','fish an hour','5j','multiplying and dividing quantities','the counting window is open 12 hours a day: how many fish an hour pass it?',
+   (S,p,q)=>Dv(q.v,12),(S,p,q)=>P(q.v)+'/12','fish an hour at the window',
+   [['the whole 24 hours are used','divide by the 24 hours of the day',(S,p,q)=>Dv(q.v,24)],
+    ['the day’s fish are multiplied by 12','multiply the fish a day by 12',(S,p,q)=>M(q.v,12)]])]);
+addC(L,G(X({u:'fish an hour',k:'above',ask:(S,p)=>'one counter can log '+p.K+' fish an hour: how many more an hour could it log?',ln:()=>'room left for the counter'},LESS)));
+}
+
+/* ---------- 9·phys.roll: Claire's ball on the board ---------- */
+{ const D=mk('roll'), L='9·phys.roll';
+midsOf(L,[
+ D('avg',['read'],'centimetres','centimetres a second','5j','multiplying and dividing quantities',(S,p)=>'that took '+p.x+' seconds from rest: what was its average speed?',
+   (S,p,q)=>Dv(q.v,p.x),(S,p,q)=>P(q.v)+'/'+p.x,'average speed',
+   [['the distance is multiplied by the seconds',(S,p)=>'multiply the distance by the '+p.x+' seconds',(S,p,q)=>M(q.v,p.x)],
+    ['the distance is divided by the seconds squared',(S,p)=>'divide the distance by '+p.x+'²',(S,p,q)=>Dv(q.v,p.x*p.x)]],(S,ch)=>({x:X0(ch)})),
+ D('top',['avg'],'centimetres a second','centimetres a second','9·phys','the falling-distance technique','from rest it speeds up evenly, so its speed now is twice the average: what is it?',
+   (S,p,q)=>M(q.v,2),(S,p,q)=>'2 · '+P(q.v),'speed at that moment',
+   [['the average is taken as the speed now','take the average as the speed at that moment',(S,p,q)=>q.v],
+    ['the average is halved instead of doubled','halve the average for the speed now',(S,p,q)=>M(q.v,Q(1,2))]]),
+ D('acct',['top'],'centimetres a second','centimetres a second per second','9·phys','the falling-distance technique',(S,p)=>'it gained that speed from rest in '+p.x+' seconds: what is its acceleration?',
+   (S,p,q)=>Dv(q.v,p.x),(S,p,q)=>P(q.v)+'/'+p.x,'the acceleration',
+   [['the speed is multiplied by the seconds',(S,p)=>'multiply the speed by the '+p.x+' seconds',(S,p,q)=>M(q.v,p.x)],
+    ['the speed is given as the acceleration','take the speed itself as the acceleration',(S,p,q)=>q.v]],(S,ch)=>({x:X0(ch)})),
+ D('acc',['read'],'centimetres','centimetres a second per second','9·phys','the falling-distance technique',(S,p)=>'from rest, x = at²/2: what acceleration covers that in '+p.x+' seconds?',
+   (S,p,q)=>Dv(M(q.v,2),p.x*p.x),(S,p,q)=>'2 · '+P(q.v)+'/'+p.x+'²','the acceleration',
+   [['the 2 of at²/2 is left out',(S,p)=>'divide the distance by '+p.x+'² for the acceleration',(S,p,q)=>Dv(q.v,p.x*p.x)],
+    ['the time is not squared',(S,p)=>'divide twice the distance by '+p.x,(S,p,q)=>Dv(M(q.v,2),p.x)]],(S,ch)=>({x:X0(ch)}))]);
+}
+
+/* ---------- 11·chem.pan: Jean's pan of water ---------- */
+{ const D=mk('pan'), L='11·chem.pan';
+midsOf(L,[
+ D('rise',['read'],'°C','degrees risen','4h','the less-is-adding technique',(S)=>'the water started at '+S.c[0]+' °C: how many degrees has it risen?',
+   (S,p,q)=>Sb(q.v,S.c[0]),(S,p,q)=>P(q.v)+' − '+S.c[0],'the rise',
+   [['the start is added instead of taken away','add the starting temperature to the reading',(S,p,q)=>A(q.v,S.c[0])],
+    ['the rise is counted up from 0 °C','take the reading itself as the rise',(S,p,q)=>q.v]]),
+ D('pace',['rise'],'degrees risen','°C a minute','5j','multiplying and dividing quantities',(S,p)=>'that rise took '+p.x+' minutes: how many degrees a minute is that?',
+   (S,p,q)=>Dv(q.v,p.x),(S,p,q)=>P(q.v)+'/'+p.x,'degrees a minute',
+   [['the rise is multiplied by the minutes',(S,p)=>'multiply the rise by the '+p.x+' minutes',(S,p,q)=>M(q.v,p.x)],
+    ['the minutes are taken away instead of divided',(S,p)=>'take '+p.x+' away from the rise',(S,p,q)=>Sb(q.v,p.x)]],(S,ch)=>({x:X0(ch)})),
+ D('heat',['rise'],'degrees risen','joules','11·chem','the heat-sum law',(S,p)=>'the pan holds '+p.g+' grams, at 4 joules a gram a degree: how many joules went in?',
+   (S,p,q)=>M(q.v,4*p.g),(S,p,q)=>'4 · '+p.g+' · '+P(q.v),'heat taken up',
+   [['the 4 joules a gram a degree is left out',(S,p)=>'multiply the rise by the '+p.g+' grams',(S,p,q)=>M(q.v,p.g)],
+    ['the grams are divided instead of multiplied',(S,p)=>'multiply the rise by 4 and divide by '+p.g,(S,p,q)=>Dv(M(q.v,4),p.g)]],()=>({g:pick([200,250,500])})),
+ D('power',['heat'],'joules','watts','5j','multiplying and dividing quantities',(S,p)=>'that heat went in over '+p.x+' minutes: how many watts reached the water?',
+   (S,p,q)=>Dv(q.v,60*p.x),(S,p,q)=>P(q.v)+'/(60 · '+p.x+')','watts into the water',
+   [['the minutes are used as seconds',(S,p)=>'divide the joules by the '+p.x+' minutes',(S,p,q)=>Dv(q.v,p.x)],
+    ['an hour of 3600 seconds is used for each minute',(S,p)=>'divide the joules by 3600 · '+p.x,(S,p,q)=>Dv(q.v,3600*p.x)]],(S,ch)=>({x:X0(ch)}))]);
+addC(L,G(X({u:'watts',k:'above',ask:(S,p)=>'the flame gives '+p.K+' watts: how many watts are lost to the air?',ln:()=>'watts lost to the air'},own('11·chem','the heat-sum law'))));
+}
+
+/* ---------- 11·econ.market and 12·econ.market: oranges at the market ---------- */
+['11','12'].forEach(n=>{ const D=mk('mkt'+n), L=n+'·econ.market', st=n+'·econ';
+midsOf(L,[
+ D('short',['read'],'crates','crates short',st,n==='11'?'the meeting technique':'the one-match technique',(S,p)=>'growers bring '+S.market.c+' + '+S.market.d+'p crates: how many more are wanted than brought at p = '+p.x+'?',
+   (S,p,q)=>{ const r=Sb(q.v,S.market.c+S.market.d*p.x); return pos(r)?r:null; },(S,p,q)=>P(q.v)+' − ('+S.market.c+' + '+S.market.d+' · '+p.x+')','crates short',
+   [['the growers’ slope is left out',(S)=>'take the growers’ '+S.market.c+' crates off the crates wanted',(S,p,q)=>Sb(q.v,S.market.c)],
+    ['the crates brought are added instead of taken away','add the crates brought to the crates wanted',(S,p,q)=>A(q.v,S.market.c+S.market.d*p.x)]],(S,ch)=>({x:X0(ch)})),
+ D('spend',['read'],'crates','dollars spent','5j','multiplying and dividing quantities',(S,p)=>'at '+p.x+' dollars a crate, what do the buyers spend on those crates?',
+   (S,p,q)=>M(q.v,p.x),(S,p,q)=>P(q.v)+' · '+p.x,'spent by the buyers',
+   [['the crates are divided by the price',(S,p)=>'divide the crates by '+p.x,(S,p,q)=>Dv(q.v,p.x)],
+    ['the price is added instead of multiplied',(S,p)=>'add '+p.x+' to the crates',(S,p,q)=>A(q.v,p.x)]],(S,ch)=>({x:X0(ch)})),
+ D('fee',['spend'],'dollars spent','dollars to the growers','5c','the scaling technique','the market keeps 1/10 of the takings as its fee: what reaches the growers?',
+   (S,p,q)=>M(q.v,Q(9,10)),(S,p,q)=>P(q.v)+' · 9/10','to the growers after the fee',
+   [['only the fee is given','give the market’s fee, 1/10 of the takings',(S,p,q)=>M(q.v,Q(1,10))],
+    ['the fee is added instead of kept back','add 1/10 to the takings',(S,p,q)=>M(q.v,Q(11,10))]]),
+ D('farm',['fee'],'dollars to the growers','dollars a farm','5j','sharing in a ratio',(S,p)=>'the growers are '+p.k+' farms sharing equally: what does each farm get?',
+   (S,p,q)=>Dv(q.v,p.k),(S,p,q)=>P(q.v)+'/'+p.k,'each farm’s share',
+   [['the takings are multiplied by the farms',(S,p)=>'multiply by the '+p.k+' farms',(S,p,q)=>M(q.v,p.k)],
+    ['the farms are taken away instead of divided',(S,p)=>'take '+p.k+' away from the takings',(S,p,q)=>Sb(q.v,p.k)]],()=>({k:pick([2,3,4])}))]);
+addC(L,Cc(X({u:'crates short',out:'trucks',k:()=>pick([5,10]),ask:(S,p)=>'a truck brings '+p.K+' crates: how many more trucks would cover the shortfall?',ln:()=>'trucks to cover it'},DR)),
+  Pr(X({u:'dollars to the growers',out:'dollars a farm',k:()=>pick([2,4,5]),ask:(S,p)=>'the growers are '+p.K+' farms sharing equally: what does each farm get?',ln:()=>'each farm’s share'},RA)),
+  G(X({u:'dollars a farm',out:'dollars',k:'above',ask:(S,p)=>'each farm hoped for '+p.K+' dollars that day: how far short does it fall?',ln:()=>'short of the hope'},LESS)));
+});
+
+/* ---------- 13·stat.line: Sarah's saplings ---------- */
+{ const D=mk('line'), L='13·stat.line';
+midsOf(L,[
+ D('pred',['13·stat.slope'],'metres a year','metres','13·stat','the best-line technique',(S,p)=>'on that line, how tall should a sapling be at '+p.y+' years?',
+   (S,p,q)=>M(q.v,p.y),(S,p,q)=>P(q.v)+' · '+p.y,'height on the line',
+   [['the slope is divided by the years',(S,p)=>'divide the slope by '+p.y,(S,p,q)=>Dv(q.v,p.y)],
+    ['the years are added to the slope',(S,p)=>'add '+p.y+' to the slope',(S,p,q)=>A(q.v,p.y)]],()=>({y:pick([4,5,6])})),
+ D('stake',['pred'],'metres','metres of pole','4h','the less-is-adding technique','each sapling gets a stake 1/2 metre taller than it: how long a stake?',
+   (S,p,q)=>A(q.v,Q(1,2)),(S,p,q)=>P(q.v)+' + 1/2','length of the stake',
+   [['the 1/2 metre is taken off instead of added','take 1/2 metre off the height',(S,p,q)=>Sb(q.v,Q(1,2))],
+    ['the height is halved instead','take half the height for the stake',(S,p,q)=>M(q.v,Q(1,2))]]),
+ D('cost',['stake'],'metres of pole','dollars a stake','5j','multiplying and dividing quantities',(S,p)=>'stake pole costs '+p.c+' dollars a metre: what does one stake cost?',
+   (S,p,q)=>M(q.v,p.c),(S,p,q)=>P(q.v)+' · '+p.c,'cost of one stake',
+   [['the length is divided by the price',(S,p)=>'divide the length by '+p.c,(S,p,q)=>Dv(q.v,p.c)],
+    ['the price is added to the length',(S,p)=>'add '+p.c+' to the length',(S,p,q)=>A(q.v,p.c)]],()=>({c:pick([2,3,4])}))]);
+addC(L,Tm(X({u:'dollars a stake',out:'dollars',k:()=>pick([10,20,30]),ask:(S,p)=>'the grove has '+p.K+' saplings: what do all their stakes cost?',ln:()=>'cost of all the stakes'},MQ)),
+  Tm(X({u:'metres of pole',k:()=>pick([10,20,30]),ask:(S,p)=>p.K+' saplings each get such a stake: how many metres of pole in all?',ln:()=>'pole for the grove'},MQ)),
+  G(X({u:'metres',k:'above',ask:(S,p)=>'the deer fence is '+p.K+' metres high: how far below its top is that sapling?',ln:()=>'below the top of the fence'},LESS)));
+}
+
+/* ---------- 13·phys.stone: Terry's stone ---------- */
+{ const D=mk('stone'), L='13·phys.stone';
+midsOf(L,[
+ D('fallen',['read'],'metres','metres fallen','4h','the less-is-adding technique',(S)=>'the cliff top is '+S.c[0]+' metres up: how far has the stone fallen?',
+   (S,p,q)=>Sb(S.c[0],q.v),(S,p,q)=>S.c[0]+' − '+P(q.v),'distance fallen',
+   [['the height now is given as the fall','take the height now as the distance fallen',(S,p,q)=>q.v],
+    ['the height now is added to the cliff','add the height now to the cliff’s height',(S,p,q)=>A(q.v,S.c[0])]]),
+ D('avg',['fallen'],'metres fallen','metres a second','5j','multiplying and dividing quantities',(S,p)=>'it fell for '+p.x+' seconds: what was its average speed?',
+   (S,p,q)=>Dv(q.v,p.x),(S,p,q)=>P(q.v)+'/'+p.x,'average speed of the fall',
+   [['the distance is multiplied by the seconds',(S,p)=>'multiply the fall by the '+p.x+' seconds',(S,p,q)=>M(q.v,p.x)],
+    ['the seconds are taken away instead of divided',(S,p)=>'take '+p.x+' away from the fall',(S,p,q)=>Sb(q.v,p.x)]],(S,ch)=>({x:X0(ch)})),
+ D('energy',['fallen'],'metres fallen','joules','9·phys','the falling-distance technique',(S,p)=>'the stone has a mass of '+p.m+' kg: what energy has the fall given it, at g = 10?',
+   (S,p,q)=>M(q.v,M(p.mq,10)),(S,p,q)=>p.m+' · 10 · '+P(q.v),'energy from the fall',
+   [['g is left out',(S,p)=>'multiply the fall by the '+p.m+' kg alone',(S,p,q)=>M(q.v,p.mq)],
+    ['the fall is divided by the weight instead of multiplied',(S,p)=>'divide the fall by the weight, '+qs(M(p.mq,10))+' newtons',(S,p,q)=>Dv(q.v,M(p.mq,10))]],()=>{ const m=pick([Q(1,2),Q(1),Q(2)]); return {m:qs(m),mq:m}; }),
+ D('speed',['energy'],'joules','metres a second','9·phys','the falling-distance technique',(S,p)=>'all that energy is motion, mv²/2, with the mass '+p.m+' kg: how fast is it falling?',
+   (S,p,q)=>qsqrt(Dv(M(q.v,2),p.mq)),(S,p,q)=>'√(2 · '+P(q.v)+'/'+p.m+')','speed of the fall',
+   [['the root is not taken','take 2E/m itself as the speed',(S,p,q)=>Dv(M(q.v,2),p.mq)],
+    ['the 2 of mv²/2 is left out',(S,p)=>'take the root of the energy over '+p.m,(S,p,q)=>qsqrt(Dv(q.v,p.mq))]],(S,ch)=>({m:ch[ch.length-1].p.m,mq:ch[ch.length-1].p.mq}))]);
+addC(L,Tm(X({u:'metres a second',out:'kilometres an hour',k:Q(18,5),ask:()=>'a metre a second is 18/5 of a kilometre an hour: how fast is that in kilometres an hour?',ln:()=>'in kilometres an hour',
+  w:['the speed is divided by 18/5 instead of multiplied','18/5 is added instead of multiplied']},CU)));
+}
+
+/* ---------- 13·chem.rxn: N₂O₅ falling apart in a flask ---------- */
+{ const D=mk('rxn'), L='13·chem.rxn';
+midsOf(L,[
+ D('gone',['read'],'millimoles a litre','millimoles a litre used up','4h','the less-is-adding technique',(S)=>'it started at '+S.c[0]+' millimoles a litre: how much N₂O₅ has broken down?',
+   (S,p,q)=>{ const r=Sb(S.c[0],q.v); return pos(r)?r:null; },(S,p,q)=>S.c[0]+' − '+P(q.v),'N₂O₅ broken down',
+   [['what is left is given as what broke down','take what is left as the amount broken down',(S,p,q)=>q.v],
+    ['what is left is added to the start','add what is left to the starting amount',(S,p,q)=>A(q.v,S.c[0])]]),
+ D('no2',['gone'],'millimoles a litre used up','millimoles a litre of NO₂','5·chem','mole ratios','2N₂O₅ gives 4NO₂: how much NO₂ has formed?',
+   (S,p,q)=>M(q.v,2),(S,p,q)=>P(q.v)+' · 4/2','NO₂ formed',
+   [['the ratio is turned over, 2 to 4','take half the N₂O₅ broken down as the NO₂',(S,p,q)=>M(q.v,Q(1,2))],
+    ['the 4 of 4NO₂ is used without the 2 of 2N₂O₅','multiply the N₂O₅ broken down by 4',(S,p,q)=>M(q.v,4)]]),
+ D('o2',['gone'],'millimoles a litre used up','millimoles a litre of O₂','5·chem','mole ratios','2N₂O₅ gives one O₂: how much oxygen has formed?',
+   (S,p,q)=>M(q.v,Q(1,2)),(S,p,q)=>P(q.v)+'/2','O₂ formed',
+   [['the ratio is turned over, 2 O₂ for each N₂O₅','double the N₂O₅ broken down for the O₂',(S,p,q)=>M(q.v,2)],
+    ['one O₂ is taken for each N₂O₅','take the O₂ as equal to the N₂O₅ broken down',(S,p,q)=>q.v]]),
+ D('mass',['no2'],'millimoles a litre of NO₂','milligrams a litre of NO₂','5j','multiplying and dividing quantities','NO₂ has a molar mass of 46: how many milligrams a litre is that?',
+   (S,p,q)=>M(q.v,46),(S,p,q)=>P(q.v)+' · 46','mass of NO₂ a litre',
+   [['the millimoles are divided by the molar mass','divide the NO₂ by its molar mass, 46',(S,p,q)=>Dv(q.v,46)],
+    ['the molar mass of N₂O₅, 108, is used','multiply by 108, the molar mass of N₂O₅',(S,p,q)=>M(q.v,108)]])]);
+const fl3=()=>pick([2,3,5]);
+addC(L,Tm(X({u:'millimoles a litre of NO₂',out:'millimoles of NO₂',k:fl3,ask:(S,p)=>'the flask holds '+p.K+' litres: how many millimoles of NO₂ are in it?',ln:()=>'NO₂ in the flask'},MQ)),
+  Tm(X({u:'millimoles a litre of O₂',out:'millimoles of O₂',k:fl3,ask:(S,p)=>'the flask holds '+p.K+' litres: how many millimoles of O₂ are in it?',ln:()=>'O₂ in the flask'},MQ)),
+  Tm(X({u:'milligrams a litre of NO₂',out:'milligrams of NO₂',k:fl3,ask:(S,p)=>'the flask holds '+p.K+' litres: how many milligrams of NO₂ are in it?',ln:()=>'NO₂ in the flask'},MQ)));
+}
+
+/* ---------- 13·nav.tide: the bar at the bay ---------- */
+{ const D=mk('tide'), L='13·nav.tide';
+midsOf(L,[
+ D('depth',['read'],'feet','feet of water','4h','the less-is-adding technique',(S,p)=>'the gauge’s zero is '+p.b+' feet above the channel bed: how deep is the water?',
+   (S,p,q)=>A(q.v,p.b),(S,p,q)=>P(q.v)+' + '+p.b,'depth over the bed',
+   [['the gauge’s zero is taken off instead of added',(S,p)=>'take '+p.b+' feet off the gauge reading',(S,p,q)=>Sb(q.v,p.b)],
+    ['the gauge reading is taken as the depth','take the gauge reading as the depth',(S,p,q)=>q.v]],()=>({b:pick([4,6,8])})),
+ D('keel',['depth'],'feet of water','feet under the keel','4h','the less-is-adding technique',(S,p)=>'a boat draws '+p.d+' feet: how much water is under its keel?',
+   (S,p,q)=>{ const r=Sb(q.v,p.d); return pos(r)?r:null; },(S,p,q)=>P(q.v)+' − '+p.d,'water under the keel',
+   [['the draft is added instead of taken away',(S,p)=>'add the '+p.d+' foot draft to the depth',(S,p,q)=>A(q.v,p.d)],
+    ['the depth itself is given','take the depth as the water under the keel',(S,p,q)=>q.v]],()=>({d:pick([3,5,6])})),
+ D('swell',['keel'],'feet under the keel','feet under the keel','4h','the less-is-adding technique','a swell drops the boat 1/2 foot in each trough: what is under the keel then?',
+   (S,p,q)=>{ const r=Sb(q.v,Q(1,2)); return pos(r)?r:null; },(S,p,q)=>P(q.v)+' − 1/2','under the keel in a trough',
+   [['the swell is added instead of taken away','add the 1/2 foot of swell',(S,p,q)=>A(q.v,Q(1,2))],
+    ['the whole swell, up and down, 1 foot, is taken off','take a whole foot off for the swell',(S,p,q)=>Sb(q.v,1)]]),
+ D('risen',['read'],'feet','feet risen','4h','the less-is-adding technique',(S)=>'at low tide the gauge read '+S.c[0]+' feet: how far has the water risen?',
+   (S,p,q)=>Sb(q.v,S.c[0]),(S,p,q)=>P(q.v)+' − '+S.c[0],'the rise since low tide',
+   [['the low-tide reading is added','add the low-tide reading to the gauge',(S,p,q)=>A(q.v,S.c[0])],
+    ['the gauge reading is taken as the rise','take the gauge reading as the rise',(S,p,q)=>q.v]]),
+ D('pace',['risen'],'feet risen','feet an hour','5j','multiplying and dividing quantities',(S,p)=>'that rise took '+p.x+' hours: how many feet an hour, on average?',
+   (S,p,q)=>Dv(q.v,p.x),(S,p,q)=>P(q.v)+'/'+p.x,'average rise an hour',
+   [['the rise is multiplied by the hours',(S,p)=>'multiply the rise by the '+p.x+' hours',(S,p,q)=>M(q.v,p.x)],
+    ['the hours are taken away instead of divided',(S,p)=>'take '+p.x+' away from the rise',(S,p,q)=>Sb(q.v,p.x)]],(S,ch)=>({x:X0(ch)}))]);
+addC(L,O(X({u:'feet under the keel',out:'feet',k:()=>pick([2,3]),ask:(S,p)=>'the harbour wants '+p.K+' feet under a keel: how many feet beyond that are there?',ln:()=>'beyond the harbour’s margin'},LESS)));
+}
+
+/* ---------- 14·stat.coin: the bent coin ---------- */
+{ const D=mk('coin'), L='14·stat.coin';
+midsOf(L,[
+ D('either',['read'],'in every 10000','in every 10000, either order','14·stat','the chance-of-a-record technique','tails then heads is just as likely: what is the chance of one of each, either order?',
+   (S,p,q)=>M(q.v,2),(S,p,q)=>'2 · '+P(q.v),'one of each, either order',
+   [['the other order is left out','take the one order alone',(S,p,q)=>q.v],
+    ['the chance is halved for the two orders','halve the chance for the two orders',(S,p,q)=>M(q.v,Q(1,2))]]),
+ D('hund',['either'],'in every 10000, either order','in every 100, either order','5j','changing units is multiplying by one','give that chance as so many in every 100',
+   (S,p,q)=>Dv(q.v,100),(S,p,q)=>P(q.v)+'/100','in every 100',
+   [['the count is multiplied by 100','multiply by 100 for so many in every 100',(S,p,q)=>M(q.v,100)],
+    ['10 is divided into it instead of 100','divide by 10 for so many in every 100',(S,p,q)=>Dv(q.v,10)]]),
+ D('pairs',['hund'],'in every 100, either order','pairs with one of each','5c','the scaling technique',(S,p)=>'if the guess is right, of '+p.N+' pairs of flips how many give one of each?',
+   (S,p,q)=>M(q.v,Q(p.N,100)),(S,p,q)=>P(q.v)+' · '+p.N+'/100','pairs with one of each',
+   [['the chance is multiplied by the pairs without the 100',(S,p)=>'multiply the chance by the '+p.N+' pairs',(S,p,q)=>M(q.v,p.N)],
+    ['the pairs are divided by the chance',(S,p)=>'divide the '+p.N+' pairs by the chance',(S,p,q)=>qz(q.v)?null:Dv(Q(p.N),q.v)]],()=>({N:pick([200,500])}))]);
+addC(L,G(X({u:'pairs with one of each',out:'pairs',k:(S,q,ctx)=>{ const c=midV(ctx,'m:coin.pairs'); return c?Q(c.p.N/2):null; },ask:(S,p)=>'a fair coin gives '+p.K+' such pairs: how many fewer for this guess?',ln:()=>'fewer than for a fair coin'},own('14·stat','the chance-of-a-record technique'))),
+  G(X({u:'in every 100, either order',out:'in every 100',k:50,ask:()=>'a fair coin gives one of each 50 times in every 100: how many fewer is this?',ln:()=>'fewer than a fair coin'},LESS)));
+}
+
+/* ---------- 14·phys.railcar: the coupling in the yard ---------- */
+{ const D=mk('car'), L='14·phys.railcar';
+midsOf(L,[
+ D('mom',['13d.rate'],'metres a second','tonne metres a second','14·phys','conservation of momentum',(S)=>'what momentum does the '+S.car.m+'-tonne car carry at that speed?',
+   (S,p,q)=>M(q.v,S.car.m),(S,p,q)=>S.car.m+' · '+P(q.v),'momentum of the car',
+   [['the speed is divided by the mass',(S)=>'divide the speed by the '+S.car.m+' tonnes',(S,p,q)=>Dv(q.v,S.car.m)],
+    ['the mass is added to the speed',(S)=>'add the '+S.car.m+' tonnes to the speed',(S,p,q)=>A(q.v,S.car.m)]]),
+ D('shared',['mom'],'tonne metres a second','metres a second together','14·phys','conservation of momentum',(S)=>'it couples with a '+S.car.m2+'-tonne car at rest: what is their shared speed?',
+   (S,p,q)=>Dv(q.v,S.car.m+S.car.m2),(S,p,q)=>P(q.v)+'/('+S.car.m+' + '+S.car.m2+')','shared speed',
+   [['only the resting car’s mass is divided into it',(S)=>'divide the momentum by the '+S.car.m2+' tonnes at rest',(S,p,q)=>Dv(q.v,S.car.m2)],
+    ['only the moving car’s mass is divided into it',(S)=>'divide the momentum by the '+S.car.m+' tonnes moving',(S,p,q)=>Dv(q.v,S.car.m)]]),
+ D('ke',['shared'],'metres a second together','kilojoules','5j','multiplying and dividing quantities',(S)=>'what motion energy do the joined '+(S.car.m+S.car.m2)+' tonnes carry, Mv²/2?',
+   (S,p,q)=>M(qm(q.v,q.v),Q(S.car.m+S.car.m2,2)),(S,p,q)=>(S.car.m+S.car.m2)+' · '+P(q.v)+'²/2','motion energy of the pair',
+   [['the speed is not squared',(S)=>'take '+(S.car.m+S.car.m2)+' times the speed over 2',(S,p,q)=>M(q.v,Q(S.car.m+S.car.m2,2))],
+    ['the 2 of Mv²/2 is left out',(S)=>'take '+(S.car.m+S.car.m2)+' times the speed squared',(S,p,q)=>M(qm(q.v,q.v),S.car.m+S.car.m2)]])]);
+addC(L,In(X({u:'metres a second together',out:'seconds',k:()=>pick([12,24,30,60]),ask:(S,p)=>'the buffer stop is '+p.K+' metres on: at that shared speed, how many seconds to reach it?',ln:()=>'seconds to the buffer'},MQ)),
+  G(X({u:'kilojoules',k:'above',ask:(S,p)=>'the buffer stop soaks up '+p.K+' kilojoules: how many kilojoules to spare?',ln:()=>'kilojoules to spare at the buffer'},LESS)));
+}
+
+/* ---------- 14·chem.bond: two joined atoms ---------- */
+{ const D=mk('bond'), L='14·chem.bond';
+  const k=S=>S.c[2];
+midsOf(L,[
+ D('depth',['read'],'energy units','energy units above the bottom','4h','the less-is-adding technique','the energy at its lowest is −9: how far above the bottom of the well is this?',
+   (S,p,q)=>A(q.v,9),(S,p,q)=>P(q.v)+' + 9','height above the bottom',
+   [['the 9 is taken away instead of added','take 9 away from the energy',(S,p,q)=>Sb(q.v,9)],
+    ['the energy itself is taken as the height','take the energy as the height above the bottom',(S,p,q)=>q.v]]),
+ D('sq',['depth'],'energy units above the bottom','square tenths of a nanometre','14·chem','the force from the energy curve',(S)=>'the well rises as '+k(S)+' times the stretch squared: what is the stretch squared?',
+   (S,p,q)=>pos(q.v)?Dv(q.v,k(S)):null,(S,p,q)=>P(q.v)+'/'+k(S),'the stretch squared',
+   [['the height is multiplied by the stiffness',(S)=>'multiply the height by '+k(S),(S,p,q)=>M(q.v,k(S))],
+    ['the stiffness is taken away instead of divided',(S)=>'take '+k(S)+' away from the height',(S,p,q)=>Sb(q.v,k(S))]]),
+ D('root',['sq'],'square tenths of a nanometre','tenths of a nanometre of stretch','14·chem','the force from the energy curve','how far is the pair from its resting spacing?',
+   (S,p,q)=>qsqrt(q.v),(S,p,q)=>'√'+P(q.v),'distance from rest',
+   [['the square is halved instead of rooted','halve the stretch squared',(S,p,q)=>M(q.v,Q(1,2))],
+    ['the square is given as it is','take the stretch squared as the distance',(S,p,q)=>q.v]])]);
+addC(L,G(X({u:'energy units above the bottom',out:'energy units',k:9,ask:()=>'the bond breaks 9 units above the bottom: how many more units does it take?',ln:()=>'energy still needed'},LESS)),
+  G(X({u:'tenths of a nanometre of stretch',out:'tenths of a nanometre',k:()=>pick([4,5,6]),ask:(S,p)=>'the bond snaps at a stretch of '+p.K+' tenths: how many tenths more can it take?',ln:()=>'stretch to spare'},LESS)));
+}
+
+/* ---------- 14·logi.order: bags on the feed store's shelf ---------- */
+{ const D=mk('order'), L='14·logi.order';
+midsOf(L,[
+ D('shelf',['read'],'dollars a year','bags on the shelf','5j','multiplying and dividing quantities',(S)=>'a bag costs '+S.eoq.h+' dollars a year to hold: how many bags sit on the shelf, on average?',
+   (S,p,q)=>Dv(q.v,S.eoq.h),(S,p,q)=>P(q.v)+'/'+S.eoq.h,'bags on the shelf on average',
+   [['the cost is multiplied by the holding cost',(S)=>'multiply the cost by '+S.eoq.h,(S,p,q)=>M(q.v,S.eoq.h)],
+    ['the order cost is divided in instead of the holding cost',(S)=>'divide the cost by the '+S.eoq.K+' dollar order cost',(S,p,q)=>Dv(q.v,S.eoq.K)]]),
+ D('peak',['shelf'],'bags on the shelf','bags','14·logi','the best-order technique','stock runs evenly from a full delivery down to 0: how many bags come in each delivery?',
+   (S,p,q)=>M(q.v,2),(S,p,q)=>'2 · '+P(q.v),'bags in a delivery',
+   [['the average is taken as a delivery','take the average stock as a delivery',(S,p,q)=>q.v],
+    ['the average is halved instead of doubled','halve the average stock for a delivery',(S,p,q)=>M(q.v,Q(1,2))]]),
+ D('wshelf',['shelf'],'bags on the shelf','kilograms','5j','multiplying and dividing quantities','each bag weighs 25 kg: how many kilograms sit on the shelf, on average?',
+   (S,p,q)=>M(q.v,25),(S,p,q)=>P(q.v)+' · 25','weight on the shelf',
+   [['the bags are divided by 25','divide the bags by 25',(S,p,q)=>Dv(q.v,25)],
+    ['a full delivery is weighed, not the average','weigh twice the average stock',(S,p,q)=>M(q.v,50)]]),
+ D('weight',['peak'],'bags','kilograms','5j','multiplying and dividing quantities','each bag weighs 25 kg: how many kilograms does a delivery put on the floor?',
+   (S,p,q)=>M(q.v,25),(S,p,q)=>P(q.v)+' · 25','weight on the floor',
+   [['the bags are divided by 25','divide the bags by 25',(S,p,q)=>Dv(q.v,25)],
+    ['25 is added instead of multiplied','add 25 to the bags',(S,p,q)=>A(q.v,25)]])]);
+addC(L,G(X({u:'kilograms',k:'above',ask:(S,p)=>'the floor there is rated for '+p.K+' kilograms: how many kilograms to spare?',ln:()=>'kilograms to spare'},LESS)));
+}
+
+/* wrong moves for a multiply and for a divide, in the step's own nouns: n(S,p) names the number, k(S,p) is it */
+const F=x=>typeof x==='function'?x:()=>x;
+const mulW=(n0,k0)=>{ const n=F(n0), k=F(k0); return [[(S,p)=>'the amount is divided by '+n(S,p)+' instead of multiplied',(S,p)=>'divide by '+n(S,p),(S,p,q)=>Dv(q.v,k(S,p))],
+  [(S,p)=>n(S,p)+' is added instead of multiplied',(S,p)=>'add '+n(S,p),(S,p,q)=>A(q.v,k(S,p))]]; };
+const divW=(n0,k0)=>{ const n=F(n0), k=F(k0); return [[(S,p)=>'the amount is multiplied by '+n(S,p)+' instead of divided',(S,p)=>'multiply by '+n(S,p),(S,p,q)=>M(q.v,k(S,p))],
+  [(S,p)=>n(S,p)+' is taken away instead of divided',(S,p)=>'take '+n(S,p)+' away',(S,p,q)=>Sb(q.v,k(S,p))]]; };
+const subW=(n0,k0)=>{ const n=F(n0), k=F(k0); return [[(S,p)=>n(S,p)+' is added instead of taken away',(S,p)=>'add '+n(S,p),(S,p,q)=>A(q.v,k(S,p))],
+  [(S,p)=>n(S,p)+' is left out','leave the amount as it is',(S,p,q)=>q.v]]; };
+const addW=(n0,k0)=>{ const n=F(n0), k=F(k0); return [[(S,p)=>n(S,p)+' is taken away instead of added',(S,p)=>'take '+n(S,p)+' away',(S,p,q)=>Sb(q.v,k(S,p))],
+  [(S,p)=>n(S,p)+' is left out','leave the amount as it is',(S,p,q)=>q.v]]; };
+const xX=(S,ch)=>({x:X0(ch)});
+const cX=fn=>(S,ch,q)=>Object.assign({x:X0(ch)},fn(S,ch,q));
+const story=(S,re)=>{ const m=S.story.match(re); return m?m.slice(1).map(Number):null; };
+
+/* ---------- 2·stat.either: the ferry and the bridge ---------- */
+{ const D=mk('either'), L='2·stat.either', ST='2·stat', TQ='the split-the-question technique';
+  const ab=S=>story(S,/(\d+) people say yes to the ferry and (\d+) say yes/);
+midsOf(L,[
+ D('one',['read'],'people','people with one yes',ST,TQ,(S,p)=>p.x+' said yes to both: how many said yes to just one of the two?',
+   (S,p,q)=>Sb(q.v,p.x),(S,p,q)=>P(q.v)+' − '+p.x,'yes to just one',subW((S,p)=>'the '+p.x+' who said yes to both',(S,p)=>p.x),xX),
+ D('ferry',['one'],'people with one yes','people for the ferry alone',ST,TQ,(S,p)=>p.b+' of them backed the bridge alone: how many backed the ferry alone?',
+   (S,p,q)=>{ const r=Sb(q.v,p.b); return pos(r)?r:null; },(S,p,q)=>P(q.v)+' − '+p.b,'the ferry alone',subW((S,p)=>'the '+p.b+' for the bridge alone',(S,p)=>p.b),
+   (S,ch)=>{ const v=ab(S), x=X0(ch); return v&&v[1]-x>0?{x,b:v[1]-x}:null; }),
+ D('all',['ferry'],'people for the ferry alone','backers of the ferry',ST,TQ,(S,p)=>'add back the '+p.x+' who said yes to both: how many backed the ferry in all?',
+   (S,p,q)=>A(q.v,p.x),(S,p,q)=>P(q.v)+' + '+p.x,'all who backed the ferry',addW((S,p)=>'the '+p.x+' who said yes to both',(S,p)=>p.x),xX),
+ D('none',['read'],'people','people with no yes',ST,TQ,(S,p)=>p.k+' came to the meeting: how many said yes to neither?',
+   (S,p,q)=>{ const r=Sb(Q(p.k),q.v); return pos(r)?r:null; },(S,p,q)=>p.k+' − '+P(q.v),'yes to neither',
+   [['those with a yes are added to the meeting','add those with a yes to the '+'meeting',(S,p,q)=>A(q.v,p.k)],['those with a yes are taken as saying no to both','take those with a yes as the ones with neither',(S,p,q)=>q.v]],
+   (S,ch,q)=>({k:num(q.v)+ri(3,15)}))]);
+addC(L,G(X({u:'people for the ferry alone',out:'leaflets',k:'above',ask:(S,p)=>'the ferry club has '+p.K+' leaflets, one for each: how many are left over?',ln:()=>'leaflets left over'},own(ST,TQ))),
+  G(X({u:'backers of the ferry',out:'backers',k:'above',ask:(S,p)=>'the ferry runs once it has '+p.K+' backers: how many more does it need?',ln:()=>'backers still needed'},own(ST,TQ))),
+  O(X({u:'people with no yes',out:'people',k:(S,q)=>num(q.v)>1?Q(ri(1,num(q.v)-1)):null,ask:(S,p)=>p.K+' of them left before the vote: how many stayed?',ln:()=>'stayed for the vote'},own(ST,TQ))));
+}
+
+/* ---------- 3·comp.loop: the counter ---------- */
+{ const D=mk('loop'), L='3·comp.loop', ST='3·comp', TQ='the back-again technique';
+midsOf(L,[
+ D('added',['read'],'on the counter','added by the passes',ST,TQ,(S)=>'the counter began at '+S.c[0]+': how much have the passes added?',
+   (S,p,q)=>Sb(q.v,S.c[0]),(S,p,q)=>P(q.v)+' − '+S.c[0],'added by the passes',subW(S=>'the start of '+S.c[0],S=>S.c[0])),
+ D('twice',['added'],'added by the passes','added by the passes',ST,TQ,(S)=>'a new version adds '+2*S.c[1]+' a pass, twice as much: what would the passes add?',
+   (S,p,q)=>M(q.v,2),(S,p,q)=>'2 · '+P(q.v),'added by the new version',
+   [['2 is added instead of doubling','add 2 to what the passes added',(S,p,q)=>A(q.v,2)],['it is halved instead of doubled','halve what the passes added',(S,p,q)=>M(q.v,Q(1,2))]]),
+ D('end',['twice'],'added by the passes','on the new counter',ST,TQ,(S)=>'the new version also starts at '+S.c[0]+': what does its counter read?',
+   (S,p,q)=>A(q.v,S.c[0]),(S,p,q)=>P(q.v)+' + '+S.c[0],'the new counter',addW(S=>'the start of '+S.c[0],S=>S.c[0])),
+ D('next',['read'],'on the counter','on the counter one pass on',ST,TQ,'the loop makes one more pass: what does the counter read then?',
+   (S,p,q)=>A(q.v,S.c[1]),(S,p,q)=>P(q.v)+' + '+S.c[1],'one pass on',
+   [[S=>'the start of '+S.c[0]+' is added instead of a pass',S=>'add the start, '+S.c[0],(S,p,q)=>A(q.v,S.c[0])],['the counter is doubled for one more pass','double the counter',(S,p,q)=>M(q.v,2)]])]);
+addC(L,G(X({u:'on the new counter',out:'on the counter',k:'above',ask:(S,p)=>'its test stops it once the counter passes '+p.K+': how far short is it?',ln:()=>'short of the stop'},LESS)),
+  G(X({u:'on the counter one pass on',out:'on the counter',k:'above',ask:(S,p)=>'the test stops the loop once the counter passes '+p.K+': how far short is it then?',ln:()=>'short of the stop'},LESS)));
+}
+
+/* ---------- 4·stat.tally: gates of five in the notebook ---------- */
+{ const D=mk('tally'), L='4·stat.tally', TQ='the tallies-add-up technique';
+midsOf(L,[
+ D('since',['read'],'sightings','sightings since dawn','4h','the less-is-adding technique',(S)=>'the '+S.c[0]+' from dawn were on another page: how many are on this one?',
+   (S,p,q)=>Sb(q.v,S.c[0]),(S,p,q)=>P(q.v)+' − '+S.c[0],'sightings on this page',subW(S=>'the '+S.c[0]+' from dawn',S=>S.c[0])),
+ D('gates',['since'],'sightings since dawn','full gates of five','4j','the division-with-remainder technique','the strokes are drawn in gates of five: how many full gates are there?',
+   (S,p,q)=>fl(Dv(q.v,5)),(S,p,q)=>'whole part of '+P(q.v)+'/5','full gates',
+   [['a part gate is counted as full','count a part gate as full',(S,p,q)=>ce(Dv(q.v,5))],['the strokes are multiplied by 5','multiply the strokes by 5',(S,p,q)=>M(q.v,5)]]),
+ D('loose',['since'],'sightings since dawn','loose strokes','4j','the division-with-remainder technique','the strokes are drawn in gates of five: how many loose strokes are left over?',
+   (S,p,q)=>{ const r=Q(q.v.p%5); return pos(r)?r:null; },(S,p,q)=>'remainder of '+P(q.v)+' by 5','loose strokes',
+   [['the full gates are given instead of what is left','count the full gates of five',(S,p,q)=>fl(Dv(q.v,5))],['what is left is counted back from a full gate','count the strokes still missing from the next gate',(S,p,q)=>Q(5-q.v.p%5)]]),
+ D('lines',['gates'],'full gates of five','full lines','4j','the division-with-remainder technique','a line of the notebook holds 4 gates: how many full lines do they fill?',
+   (S,p,q)=>{ const r=fl(Dv(q.v,4)); return pos(r)?r:null; },(S,p,q)=>'whole part of '+P(q.v)+'/4','full lines',
+   [['a part line is counted as full','count a part line as full',(S,p,q)=>ce(Dv(q.v,4))],['the gates are multiplied by 4','multiply the gates by 4',(S,p,q)=>M(q.v,4)]])]);
+addC(L,G(X({u:'loose strokes',out:'strokes',k:'above',ask:(S,p)=>'the margin has room for '+p.K+' loose strokes: how many more fit there?',ln:()=>'room in the margin'},own('4·stat',TQ))),
+  G(X({u:'full gates of five',out:'gates',k:'above',ask:(S,p)=>'the page has room for '+p.K+' gates: how many more fit?',ln:()=>'gates of room left'},LESS)),
+  G(X({u:'full lines',out:'lines',k:'above',ask:(S,p)=>'the page has '+p.K+' lines: how many are still free?',ln:()=>'lines still free'},LESS)));
+}
+
+/* ---------- 4·comp.ripple: Zoe's ripple adder ---------- */
+{ const D=mk('ripple'), L='4·comp.ripple', TQ='the ripple technique';
+midsOf(L,[
+ D('sums',['read'],'gate delays','gate delays',['4·comp'],TQ,(S,p)=>p.k+' such sums are done one after another: how many gate delays in all?',
+   (S,p,q)=>M(q.v,p.k),(S,p,q)=>p.k+' · '+P(q.v),'delays for the sums',mulW((S,p)=>'the '+p.k+' sums',(S,p)=>p.k),()=>({k:pick([2,3,4])})),
+ D('ns',['read','sums'],'gate delays','nanoseconds',['4·comp'],TQ,(S,p)=>'each gate delay lasts '+p.d+' nanoseconds: how long is that?',
+   (S,p,q)=>M(q.v,p.d),(S,p,q)=>P(q.v)+' · '+p.d,'time for the delays',mulW((S,p)=>'the '+p.d+' nanoseconds',(S,p)=>p.d),()=>({d:pick([2,3,5])})),
+ D('ticks',['ns'],'nanoseconds','clock ticks','4j','the division-with-remainder technique',(S,p)=>'the clock ticks every '+p.t+' nanoseconds: how many ticks must the sum wait?',
+   (S,p,q)=>ce(Dv(q.v,p.t)),(S,p,q)=>P(q.v)+'/'+p.t+', rounded up','clock ticks to wait',
+   [['the ticks are rounded down, cutting the sum short','round the ticks down',(S,p,q)=>fl(Dv(q.v,p.t))],['the time is multiplied by the tick','multiply the time by '+'the tick',(S,p,q)=>M(q.v,p.t)]],()=>({t:pick([4,10,20])}))]);
+addC(L,G(X({u:'clock ticks',out:'ticks',k:'above',ask:(S,p)=>'the chip allows '+p.K+' ticks for the job: how many ticks to spare?',ln:()=>'ticks to spare'},LESS)));
+}
+
+/* ---------- 4·crypt.shift: Mike's secret note ---------- */
+{ const D=mk('shift'), L='4·crypt.shift', TQ='the shifts-add technique';
+midsOf(L,[
+ D('twice',['read'],'places','places',['4·crypt'],TQ,'the note is run through that day’s shift twice: what is the total shift?',
+   (S,p,q)=>M(q.v,2),(S,p,q)=>'2 · '+P(q.v),'the total shift',[['2 is added instead of doubling','add 2 to the shift',(S,p,q)=>A(q.v,2)],['the second pass is taken to undo the first','take the two passes as cancelling',(S,p,q)=>Q(0)]]),
+ D('wheel',['read','twice'],'places','places on the wheel','4j','the division-with-remainder technique','on a wheel of 26 letters, what shift from 0 to 25 does the same job?',
+   (S,p,q)=>{ const r=Q(((q.v.p%26)+26)%26); return whole(q.v)&&pos(r)?r:null; },(S,p,q)=>'remainder of '+P(q.v)+' by 26','shift on the wheel',
+   [['the whole turns are given instead of what is left','count the whole turns of 26',(S,p,q)=>fl(Dv(q.v,26))],['the remainder by 24 is taken','take the remainder by 24',(S,p,q)=>Q(q.v.p%24)]]),
+ D('undo',['wheel'],'places on the wheel','places forward to undo',['4·crypt'],TQ,'to read the note, what forward shift undoes it?',
+   (S,p,q)=>Sb(26,q.v),(S,p,q)=>'26 − '+P(q.v),'the shift that undoes it',
+   [['the same shift is used again','use the same shift again to undo it',(S,p,q)=>q.v],['25 is used for a full turn','take the shift from 25',(S,p,q)=>Sb(25,q.v)]]),
+ D('letter',['undo'],'places forward to undo','letter number',['4·crypt'],TQ,(S,p)=>'a coded letter is number '+p.n+' (A = 0): which number does the undo turn it into?',
+   (S,p,q)=>Q((p.n+q.v.p)%26),(S,p,q)=>'remainder of '+p.n+' + '+P(q.v)+' by 26','the letter decoded',
+   [['the wheel is not wrapped round',(S,p)=>'add the undo shift to '+p.n,(S,p,q)=>A(q.v,p.n)],['the undo is taken away instead of added',(S,p)=>'take the undo shift away from '+p.n,(S,p,q)=>Q(((p.n-q.v.p)%26+26)%26)]],()=>({n:ri(3,22)}))]);
+addC(L,G(X({u:'letter number',out:'letters',k:25,ask:()=>'Z is number 25: how many letters before Z is the decoded letter?',ln:()=>'letters before Z',pos:true},own('4·crypt',TQ))));
+midsOf(L,[D('enc',['wheel'],'places on the wheel','letter number',['4·crypt'],TQ,(S,p)=>'the plain letter is number '+p.n+' (A = 0): which number does the coded letter have?',
+   (S,p,q)=>Q((p.n+q.v.p)%26),(S,p,q)=>'remainder of '+p.n+' + '+P(q.v)+' by 26','the letter coded',
+   [['the wheel is not wrapped round',(S,p)=>'add the shift to '+p.n,(S,p,q)=>A(q.v,p.n)],['the shift is taken away instead of added',(S,p)=>'take the shift away from '+p.n,(S,p,q)=>Q(((p.n-q.v.p)%26+26)%26)]],()=>({n:ri(3,22)}))]);
+}
+
+/* ---------- 5·chem.burn: water from the burner ---------- */
+{ const D=mk('burn'), L='5·chem.burn', CT='mole ratios';
+midsOf(L,[
+ D('water',['read'],'moles of hydrogen','moles of water','5·chem',CT,'2H₂ gives 2H₂O: how many moles of water does that hydrogen make?',
+   (S,p,q)=>q.v,(S,p,q)=>P(q.v)+' · 2/2','water made',[['the 2 of 2H₂O is read as twice the hydrogen','double the hydrogen for the water',(S,p,q)=>M(q.v,2)],['the water is counted from the oxygen','take half the hydrogen as the water',(S,p,q)=>M(q.v,Q(1,2))]]),
+ D('grams',['water'],'moles of water','grams of water','5j','multiplying and dividing quantities','water has a molar mass of 18: how many grams of water is that?',
+   (S,p,q)=>M(q.v,18),(S,p,q)=>P(q.v)+' · 18','mass of water',[['the moles are divided by 18','divide the moles by 18',(S,p,q)=>Dv(q.v,18)],['the mass of H₂, 2, is used','multiply the moles by 2',(S,p,q)=>M(q.v,2)]]),
+ D('ml',['grams'],'grams of water','millilitres of water','5j','changing units is multiplying by one','a gram of water fills a millilitre: how many millilitres drip out?',
+   (S,p,q)=>q.v,(S,p,q)=>P(q.v)+' · 1','water dripped',[['a litre is used for each gram','take a litre for each gram, 1000 millilitres',(S,p,q)=>M(q.v,1000)],['the grams are divided by 18 again','divide the grams by 18',(S,p,q)=>Dv(q.v,18)]]),
+ D('o2',['read'],'moles of hydrogen','moles of oxygen','5·chem',CT,'2H₂ takes one O₂: how many moles of oxygen does it burn with?',
+   (S,p,q)=>M(q.v,Q(1,2)),(S,p,q)=>P(q.v)+'/2','oxygen taken',[['the ratio is turned over, 2 O₂ for each H₂','double the hydrogen for the oxygen',(S,p,q)=>M(q.v,2)],['one O₂ is taken for each H₂','take as much oxygen as hydrogen',(S,p,q)=>q.v]]),
+ D('air',['o2'],'moles of oxygen','moles of air','5c','the scaling technique','air is 1/5 oxygen: how many moles of air does the burner draw?',
+   (S,p,q)=>M(q.v,5),(S,p,q)=>P(q.v)+' · 5','air drawn in',[['the oxygen is multiplied by 1/5','take 1/5 of the oxygen as the air',(S,p,q)=>M(q.v,Q(1,5))],['air is taken as 4/5 oxygen','divide the oxygen by 4/5',(S,p,q)=>M(q.v,Q(5,4))]])]);
+addC(L,G(X({u:'millilitres of water',out:'millilitres',k:'above',ask:(S,p)=>'the drip tray holds '+p.K+' millilitres: how much room is left in it?',ln:()=>'room in the tray'},LESS)),
+  Tm(X({u:'moles of air',out:'litres of air',k:24,ask:()=>'a mole of air fills 24 litres here: how many litres of air is that?',ln:()=>'volume of air'},MQ)),
+  G(X({u:'grams of water',out:'grams',k:'above',ask:(S,p)=>'the catch bottle holds '+p.K+' grams: how many grams of room are left?',ln:()=>'room in the bottle'},LESS)));
+}
+
+/* ---------- 5·chem.propane: the heater at Truckee ---------- */
+{ const D=mk('prop'), L='5·chem.propane', CT='mole ratios';
+midsOf(L,[
+ D('fuel',['read'],'moles of oxygen','moles of propane','5·chem',CT,'5O₂ burns one C₃H₈: how many moles of propane does that oxygen burn?',
+   (S,p,q)=>M(q.v,Q(1,5)),(S,p,q)=>P(q.v)+'/5','propane burnt',[['the ratio is turned over','multiply the oxygen by 5',(S,p,q)=>M(q.v,5)],['the 3 of 3CO₂ is used instead of the 5','divide the oxygen by 3',(S,p,q)=>M(q.v,Q(1,3))]]),
+ D('pg',['fuel'],'moles of propane','grams of propane','5j','multiplying and dividing quantities','propane has a molar mass of 44: how many grams is that?',
+   (S,p,q)=>M(q.v,44),(S,p,q)=>P(q.v)+' · 44','mass of propane',[['the moles are divided by 44','divide the moles by 44',(S,p,q)=>Dv(q.v,44)],['the molar mass of oxygen, 32, is used','multiply the moles by 32',(S,p,q)=>M(q.v,32)]]),
+ D('water',['read'],'moles of oxygen','moles of water','5·chem',CT,'5O₂ gives 4H₂O: how many moles of water come out?',
+   (S,p,q)=>M(q.v,Q(4,5)),(S,p,q)=>P(q.v)+' · 4/5','water made',[['the ratio is turned over, 5/4','multiply the oxygen by 5/4',(S,p,q)=>M(q.v,Q(5,4))],['the 3 of 3CO₂ is used','multiply the oxygen by 3/5',(S,p,q)=>M(q.v,Q(3,5))]]),
+ D('wg',['water'],'moles of water','grams of water','5j','multiplying and dividing quantities','water has a molar mass of 18: how many grams of water is that?',
+   (S,p,q)=>M(q.v,18),(S,p,q)=>P(q.v)+' · 18','mass of water',[['the moles are divided by 18','divide the moles by 18',(S,p,q)=>Dv(q.v,18)],['the molar mass of propane, 44, is used','multiply the moles by 44',(S,p,q)=>M(q.v,44)]]),
+ D('ml',['wg'],'grams of water','millilitres of water','5j','changing units is multiplying by one','a gram of water fills a millilitre: how many millilitres run down the window?',
+   (S,p,q)=>q.v,(S,p,q)=>P(q.v)+' · 1','water on the window',[['a litre is used for each gram','take a litre for each gram, 1000 millilitres',(S,p,q)=>M(q.v,1000)],['the grams are divided by 18 again','divide the grams by 18',(S,p,q)=>Dv(q.v,18)]])]);
+addC(L,G(X({u:'grams of propane',out:'grams',k:'above',ask:(S,p)=>'the canister held '+p.K+' grams: how many grams are left in it?',ln:()=>'propane left'},LESS)),
+  G(X({u:'millilitres of water',out:'millilitres',k:'above',ask:(S,p)=>'the sill’s gutter holds '+p.K+' millilitres: how much room is left?',ln:()=>'room in the gutter'},LESS)));
+}
+
+/* ---------- 5·nav.clock: the ship's clock and the longitude ---------- */
+{ const D=mk('clock'), L='5·nav.clock', TQ='the clock-reading technique';
+midsOf(L,[
+ D('arc',['read'],'seconds','minutes of longitude','5j','multiplying and dividing quantities','each 4 seconds of clock error puts the fix 1 minute of longitude out: how many minutes?',
+   (S,p,q)=>Dv(q.v,4),(S,p,q)=>P(q.v)+'/4','longitude error',divW('4',4)),
+ D('miles',['arc'],'minutes of longitude','nautical miles off','5c','the scaling technique','at 60° north a minute of longitude is 1/2 a nautical mile: how many miles off is the fix?',
+   (S,p,q)=>M(q.v,Q(1,2)),(S,p,q)=>P(q.v)+' · 1/2','miles off',[['the minutes are doubled instead of halved','double the minutes for the miles',(S,p,q)=>M(q.v,2)],['the equator’s mile a minute is used','take a mile for each minute',(S,p,q)=>q.v]]),
+ D('hours',['miles'],'nautical miles off','hours of sailing','5j','multiplying and dividing quantities',(S,p)=>'at '+p.s+' knots, how many hours would the ship sail to make up that error?',
+   (S,p,q)=>Dv(q.v,p.s),(S,p,q)=>P(q.v)+'/'+p.s,'hours to make it up',divW((S,p)=>'the '+p.s+' knots',(S,p)=>p.s),()=>({s:pick([5,8,10])})),
+ D('secs',['read'],'seconds','seconds past the minute','4j','the division-with-remainder technique','read as minutes and seconds, how many seconds past the whole minutes is it fast?',
+   (S,p,q)=>{ const r=Q(q.v.p%60); return whole(q.v)&&pos(r)?r:null; },(S,p,q)=>'remainder of '+P(q.v)+' by 60','seconds past the minutes',
+   [['the whole minutes are given instead','count the whole minutes',(S,p,q)=>fl(Dv(q.v,60))],['100 seconds are taken for a minute','take the remainder by 100',(S,p,q)=>Q(q.v.p%100)]])]);
+addC(L,G(X({u:'seconds past the minute',out:'seconds',k:60,ask:()=>'how many seconds short of the next whole minute fast is that?',ln:()=>'short of the next minute'},own('5·nav',TQ))),
+  G(X({u:'nautical miles off',out:'nautical miles',k:'above',ask:(S,p)=>'the reef lies '+p.K+' miles off the plotted course: how many miles of room are left?',ln:()=>'room from the reef'},LESS)),
+  Tm(X({u:'hours of sailing',out:'minutes',k:60,ask:()=>'how many minutes of sailing is that?',ln:()=>'in minutes'},CU)));
+}
+
+/* ---------- 5·stat.temp: the thermometer at dawn ---------- */
+{ const D=mk('temp'), L='5·stat.temp', TQ='the shift-and-stretch technique';
+midsOf(L,[
+ D('rise',['read'],'°C','degrees risen','4h','the less-is-adding technique',(S)=>'at dawn it read '+S.c[0]+' °C: how many degrees has it risen?',
+   (S,p,q)=>{ const r=Sb(q.v,S.c[0]); return pos(r)?r:null; },(S,p,q)=>P(q.v)+' − '+S.c[0],'the rise since dawn',subW(S=>'the dawn reading of '+S.c[0],S=>S.c[0])),
+ D('frise',['rise'],'degrees risen','Fahrenheit degrees risen','5·stat',TQ,'a rise in °F is the rise in °C stretched by 9/5, with no shift: how many °F is it?',
+   (S,p,q)=>M(q.v,Q(9,5)),(S,p,q)=>P(q.v)+' · 9/5','the rise in °F',[['the 32 is added to a rise','stretch the rise by 9/5 and add 32',(S,p,q)=>A(M(q.v,Q(9,5)),32)],['the stretch is turned over','stretch the rise by 5/9',(S,p,q)=>M(q.v,Q(5,9))]]),
+ D('fpace',['frise'],'Fahrenheit degrees risen','°F an hour','5j','multiplying and dividing quantities',(S,p)=>'that rise took '+p.x+' hours: how many °F an hour is that?',
+   (S,p,q)=>Dv(q.v,p.x),(S,p,q)=>P(q.v)+'/'+p.x,'°F an hour',divW((S,p)=>'the '+p.x+' hours',(S,p)=>p.x),xX),
+ D('pace',['rise'],'degrees risen','°C an hour','5j','multiplying and dividing quantities',(S,p)=>'that rise took '+p.x+' hours: how many degrees an hour is that?',
+   (S,p,q)=>Dv(q.v,p.x),(S,p,q)=>P(q.v)+'/'+p.x,'degrees an hour',divW((S,p)=>'the '+p.x+' hours',(S,p)=>p.x),xX)]);
+addC(L,Tm(X({u:'°F an hour',out:'°F',k:()=>pick([2,3]),ask:(S,p)=>'at that pace, how many °F warmer will it be in '+p.K+' more hours?',ln:()=>'°F warmer'},MQ)),
+  Tm(X({u:'°C an hour',out:'degrees',k:()=>pick([2,3]),ask:(S,p)=>'at that pace, how many degrees warmer will it be in '+p.K+' more hours?',ln:()=>'degrees warmer'},MQ)));
+}
+
+/* ---------- 5·bio.cross: the test cross near Coos Bay ---------- */
+{ const D=mk('cross'), L='5·bio.cross', TQ='the test cross';
+midsOf(L,[
+ D('rec',['read'],'seedlings','recessive seedlings','5·bio',TQ,'the mixed parent gives the two looks one to one: how many seedlings look recessive?',
+   (S,p,q)=>M(q.v,Q(1,2)),(S,p,q)=>P(q.v)+'/2','recessive seedlings',[['the 3 to 1 of two mixed parents is used','take a quarter as recessive',(S,p,q)=>M(q.v,Q(1,4))],['three quarters are taken as recessive','take three quarters as recessive',(S,p,q)=>M(q.v,Q(3,4))]]),
+ D('pods',['rec'],'recessive seedlings','pods',['5j'],'multiplying and dividing quantities',(S,p)=>'each recessive plant bears '+p.k+' pods: how many pods is that?',
+   (S,p,q)=>M(q.v,p.k),(S,p,q)=>P(q.v)+' · '+p.k,'recessive pods',mulW((S,p)=>'the '+p.k+' pods',(S,p)=>p.k),()=>({k:pick([4,5,6])})),
+ D('peas',['pods'],'pods','peas','5j','multiplying and dividing quantities',(S,p)=>'each pod holds '+p.k+' peas: how many recessive peas are there to save?',
+   (S,p,q)=>M(q.v,p.k),(S,p,q)=>P(q.v)+' · '+p.k,'recessive peas',mulW((S,p)=>'the '+p.k+' peas',(S,p)=>p.k),()=>({k:pick([5,6,8])}))]);
+addC(L,G(X({u:'peas',k:'above',ask:(S,p)=>'the seed bank wants '+p.K+' recessive peas: how many more does it need?',ln:()=>'peas still wanted'},LESS)),
+  Ct(X({u:'pods',out:'full trays',k:10,ask:()=>'pods are dried 10 to a tray: how many full trays?',ln:()=>'full trays of pods'},DR)));
+}
+
+/* ---------- 5·eng.gears: Evita's bike on the hill ---------- */
+{ const D=mk('gear'), L='5·eng.gears';
+midsOf(L,[
+ D('back',['read'],'turns a minute','back-gear turns a minute','5j','sharing in a ratio','its 48 teeth drive a back gear of 16: how fast does the back gear turn?',
+   (S,p,q)=>M(q.v,3),(S,p,q)=>P(q.v)+' · 48/16','back-gear turns',[['the teeth are put the wrong way up, 16/48','multiply by 16/48',(S,p,q)=>M(q.v,Q(1,3))],['the teeth are subtracted, 48 − 16 more turns','add 48 − 16 = 32 turns',(S,p,q)=>A(q.v,32)]]),
+ D('teeth',['read'],'turns a minute','teeth a minute','5j','multiplying and dividing quantities','the front gear has 48 teeth: how many teeth pass the chain each minute?',
+   (S,p,q)=>M(q.v,48),(S,p,q)=>P(q.v)+' · 48','teeth a minute',mulW('the 48 teeth',48)),
+ D('back2',['teeth'],'teeth a minute','back-gear turns a minute','5j','multiplying and dividing quantities','the back gear has 16 teeth: how many turns a minute does it make?',
+   (S,p,q)=>Dv(q.v,16),(S,p,q)=>P(q.v)+'/16','back-gear turns',divW('the 16 teeth',16)),
+ D('wheel',['back','back2'],'back-gear turns a minute','metres a minute','5j','multiplying and dividing quantities','the back wheel rolls 2 metres each turn: how many metres a minute does the bike go?',
+   (S,p,q)=>M(q.v,2),(S,p,q)=>P(q.v)+' · 2','metres a minute',[['the turns are halved','halve the turns',(S,p,q)=>M(q.v,Q(1,2))],['the 2 metres are added','add 2 to the turns',(S,p,q)=>A(q.v,2)]]),
+ D('kmh',['wheel'],'metres a minute','kilometres an hour','5j','changing units is multiplying by one','in kilometres an hour, 60 minutes an hour and 1000 metres a kilometre, how fast is that?',
+   (S,p,q)=>M(q.v,Q(60,1000)),(S,p,q)=>P(q.v)+' · 60/1000','in kilometres an hour',[['the 60 is left out','divide the metres a minute by 1000',(S,p,q)=>Dv(q.v,1000)],['the change of units is turned over','multiply by 1000/60',(S,p,q)=>M(q.v,Q(1000,60))]])]);
+addC(L,In(X({u:'metres a minute',out:'minutes',k:()=>pick([600,1200,1800]),ask:(S,p)=>'the hilltop is '+p.K+' metres on: how many minutes to reach it?',ln:()=>'minutes to the top'},MQ)),
+  G(X({u:'kilometres an hour',k:'above',ask:(S,p)=>'the path’s limit is '+p.K+' kilometres an hour: how far under it is she?',ln:()=>'under the limit'},LESS)));
+}
+
+/* ---------- 6·phys.fifth: Terry's string ---------- */
+{ const D=mk('fifth'), L='6·phys.fifth', TQ='stacking intervals';
+midsOf(L,[
+ D('octave',['read'],'hertz','hertz','6·phys',TQ,'an octave above doubles the frequency: what does the string an octave up sound?',
+   (S,p,q)=>M(q.v,2),(S,p,q)=>'2 · '+P(q.v),'an octave up',[['the octave is taken down instead of up','halve the frequency for an octave up',(S,p,q)=>M(q.v,Q(1,2))],['2 hertz are added for the octave','add 2 hertz',(S,p,q)=>A(q.v,2)]]),
+ D('fourth',['read','octave'],'hertz','hertz','6·phys',TQ,'a fourth, 4/3, is stacked on top: what frequency is that?',
+   (S,p,q)=>M(q.v,Q(4,3)),(S,p,q)=>P(q.v)+' · 4/3','a fourth above',[['the fourth is taken down instead of up','multiply by 3/4',(S,p,q)=>M(q.v,Q(3,4))],['4/3 is added instead of stacked by multiplying','add 4/3',(S,p,q)=>A(q.v,Q(4,3))]]),
+ D('wave',['read','octave','fourth'],'hertz','metres of wavelength','5j','multiplying and dividing quantities','sound goes 340 metres a second: what is that note’s wavelength?',
+   (S,p,q)=>Dv(340,q.v),(S,p,q)=>'340/'+P(q.v),'the wavelength',[['the division is turned over','divide the frequency by 340',(S,p,q)=>Dv(q.v,340)],['the speed is multiplied by the frequency','multiply 340 by the frequency',(S,p,q)=>M(q.v,340)]])]);
+addC(L,Fr(X({u:'metres of wavelength',out:'metres',k:Q(1,2),ask:()=>'an open pipe sounding it is half a wavelength long: how long is the pipe?',ln:()=>'length of the pipe',w:['the other half is given','the wavelength is doubled instead of halved']},own('6·phys',TQ))));
+}
+
+/* ---------- 6·phys.beats: Evita's string and the fork ---------- */
+{ const D=mk('beat'), L='6·phys.beats';
+midsOf(L,[
+ D('low',['read'],'hertz','hertz','4h','the less-is-adding technique',(S,p)=>'a second string is tuned '+p.k+' hertz lower: what does it sound?',
+   (S,p,q)=>Sb(q.v,p.k),(S,p,q)=>P(q.v)+' − '+p.k,'the second string',subW((S,p)=>'the '+p.k+' hertz',(S,p)=>p.k),()=>({k:pick([2,3,5])})),
+ D('beat',['read','low'],'hertz','beats a second','6·phys','beats','sounded with the 440 hertz fork, how many beats a second are heard?',
+   (S,p,q)=>{ const r=Sb(q.v,440); return qz(r)?null:(r.p<0?qn(r):r); },(S,p,q)=>'the gap between '+P(q.v)+' and 440','beats a second',
+   [['the two frequencies are added','add the string’s frequency to 440',(S,p,q)=>A(q.v,440)],['the gap is halved','take half the gap from 440',(S,p,q)=>{ const r=Sb(q.v,440); return M(r.p<0?qn(r):r,Q(1,2)); }]]),
+ D('count',['beat'],'beats a second','beats heard','5j','multiplying and dividing quantities',(S,p)=>'she listens for '+p.s+' seconds: how many beats does she count?',
+   (S,p,q)=>M(q.v,p.s),(S,p,q)=>P(q.v)+' · '+p.s,'beats counted',mulW((S,p)=>'the '+p.s+' seconds',(S,p)=>p.s),()=>({s:pick([5,10,20])})),
+ D('back',['beat'],'beats a second','turns of the peg',['5j'],'multiplying and dividing quantities',(S)=>'each turn of the peg moves the pitch '+S.c[1]+' hertz: how many turns would tune it?',
+   (S,p,q)=>Dv(q.v,S.c[1]),(S,p,q)=>P(q.v)+'/'+S.c[1],'turns to tune',divW(S=>'the '+S.c[1]+' hertz a turn',S=>S.c[1]))]);
+addC(L,G(X({u:'beats heard',out:'beats',k:'above',ask:(S,p)=>'a tuner calls it good under '+p.K+' beats in that time: by how many is it under?',ln:()=>'under the tuner’s mark'},LESS)),
+  G(X({u:'turns of the peg',out:'turns',k:'above',ask:(S,p)=>'the peg has '+p.K+' turns of travel: how many turns are left after tuning?',ln:()=>'turns left on the peg'},LESS)));
+}
+
+/* ---------- 6·chem.plate: copper laid down at Petaluma ---------- */
+{ const D=mk('plate'), L='6·chem.plate', TQ='the electrons-balance technique';
+midsOf(L,[
+ D('cu',['read'],'moles of electrons','moles of copper','6·chem',TQ,'each Cu²⁺ takes two electrons: how many moles of copper are laid down?',
+   (S,p,q)=>M(q.v,Q(1,2)),(S,p,q)=>P(q.v)+'/2','copper laid down',[['the electrons are doubled instead of halved','double the electrons for the copper',(S,p,q)=>M(q.v,2)],['one electron is taken for each copper','take as much copper as electrons',(S,p,q)=>q.v]]),
+ D('grams',['cu'],'moles of copper','grams of copper','5j','multiplying and dividing quantities','copper has a molar mass of 64: how many grams is that?',
+   (S,p,q)=>M(q.v,64),(S,p,q)=>P(q.v)+' · 64','mass of copper',mulW('the 64',64)),
+ D('vol',['grams'],'grams of copper','cubic centimetres of copper','5j','multiplying and dividing quantities','copper has 9 grams in each cubic centimetre: how much space does it fill?',
+   (S,p,q)=>Dv(q.v,9),(S,p,q)=>P(q.v)+'/9','volume of copper',divW('the 9 grams a cubic centimetre',9))]);
+addC(L,G(X({u:'grams of copper',out:'grams',k:'above',ask:(S,p)=>'the order is for '+p.K+' grams of copper: how many grams more are needed?',ln:()=>'copper still needed'},LESS)),
+  Pr(X({u:'cubic centimetres of copper',out:'centimetres thick',k:()=>pick([50,100,200]),ask:(S,p)=>'it coats a plate of '+p.K+' square centimetres evenly: how thick is the coat?',ln:()=>'thickness of the coat'},MQ)));
+}
+
+/* ---------- 6·logi.assign: checking the depot's assignments ---------- */
+{ const D=mk('assign'), L='6·logi.assign';
+midsOf(L,[
+ D('depots',['read'],'assignments','assignments','5j','multiplying and dividing quantities',(S,p)=>'there are '+p.k+' depots run the same way: how many assignments in all?',
+   (S,p,q)=>M(q.v,p.k),(S,p,q)=>p.k+' · '+P(q.v),'for all the depots',mulW((S,p)=>'the '+p.k+' depots',(S,p)=>p.k),()=>({k:pick([2,3])})),
+ D('secs',['read','depots'],'assignments','seconds of checking','5j','multiplying and dividing quantities',(S,p)=>'checking one assignment takes '+p.s+' seconds: how long to check them all?',
+   (S,p,q)=>M(q.v,p.s),(S,p,q)=>P(q.v)+' · '+p.s,'time to check',mulW((S,p)=>'the '+p.s+' seconds',(S,p)=>p.s),()=>({s:pick([2,3,5])})),
+ D('mins',['secs'],'seconds of checking','minutes of checking','5j','changing units is multiplying by one','how many minutes of checking is that, at 60 seconds a minute?',
+   (S,p,q)=>Dv(q.v,60),(S,p,q)=>P(q.v)+'/60','in minutes',divW('the 60 seconds',60))]);
+addC(L,G(X({u:'minutes of checking',out:'minutes',k:'above',ask:(S,p)=>'the planner has '+p.K+' minutes before the trucks leave: how many are spare?',ln:()=>'minutes spare'},LESS)),
+  Ct(X({u:'seconds of checking',out:'whole minutes',k:60,ask:()=>'how many whole minutes of checking is that?',ln:()=>'whole minutes'},DR)));
+}
+
+/* ---------- 6·stat.sample: the path survey ---------- */
+{ const D=mk('sample'), L='6·stat.sample';
+midsOf(L,[
+ D('share',['read'],'people','of the town','5c','the scaling technique',(S)=>'the town has '+S.N+' people: what share of it has used the path?',
+   (S,p,q)=>Dv(q.v,S.N),(S,p,q)=>P(q.v)+'/'+S.N,'share of the town',[['the division is turned over',S=>'divide '+S.N+' by the users',(S,p,q)=>Dv(S.N,q.v)],[S=>'the users are taken from the '+S.N,S=>'take the users from '+S.N,(S,p,q)=>Sb(S.N,q.v)]]),
+ D('insample',['share'],'of the town','path users in the sample','5c','the scaling technique',(S)=>'a fair sample of '+S.k+' is drawn: how many path users does it hold, on average?',
+   (S,p,q)=>M(q.v,S.k),(S,p,q)=>P(q.v)+' · '+S.k,'users in the sample',mulW(S=>'the '+S.k+' in the sample',S=>S.k)),
+ D('talk',['insample'],'path users in the sample','minutes of interviews','5j','multiplying and dividing quantities',(S,p)=>'each path user in the sample is asked about it for '+p.m+' minutes: how long in all?',
+   (S,p,q)=>M(q.v,p.m),(S,p,q)=>P(q.v)+' · '+p.m,'interview time',mulW((S,p)=>'the '+p.m+' minutes',(S,p)=>p.m),()=>({m:pick([5,10,15])}))]);
+addC(L,G(X({u:'path users in the sample',out:'people',k:S=>S.k,ask:(S)=>'how many of the sample of '+S.k+' have not used the path?',ln:()=>'not users'},LESS)),
+  G(X({u:'minutes of interviews',out:'minutes',k:'above',ask:(S,p)=>'the survey team has '+p.K+' minutes booked: how many minutes are spare?',ln:()=>'minutes spare'},LESS)));
+}
+
+/* ---------- 7·phys.lamps: lamps in series ---------- */
+{ const D=mk('lamps'), L='7·phys.lamps', TQ='the proportion law';
+midsOf(L,[
+ D('amps',['read'],'ohms','amps','7·phys',TQ,(S,p)=>'the battery gives '+p.V+' volts: what current flows?',
+   (S,p,q)=>Dv(p.V,q.v),(S,p,q)=>p.V+'/'+P(q.v),'current',[['the division is turned over',(S,p)=>'divide the ohms by '+p.V,(S,p,q)=>Dv(q.v,p.V)],['the volts are multiplied by the ohms',(S,p)=>'multiply '+p.V+' by the ohms',(S,p,q)=>M(q.v,p.V)]],()=>({V:pick([12,24,60])})),
+ D('watts',['amps'],'amps','watts','7·phys','energy is kept',(S,p)=>'what power does the battery give at '+p.V+' volts?',
+   (S,p,q)=>M(q.v,p.V),(S,p,q)=>p.V+' · '+P(q.v),'power from the battery',mulW((S,p)=>'the '+p.V+' volts',(S,p)=>p.V),(S,ch)=>({V:ch[ch.length-1].p.V})),
+ D('wh',['watts'],'watts','watt hours','5j','multiplying and dividing quantities',(S,p)=>'the string stays lit for '+p.h+' hours: how many watt hours does it use?',
+   (S,p,q)=>M(q.v,p.h),(S,p,q)=>P(q.v)+' · '+p.h,'energy used',mulW((S,p)=>'the '+p.h+' hours',(S,p)=>p.h),()=>({h:pick([2,3,5])}))]);
+addC(L,G(X({u:'watt hours',k:'above',ask:(S,p)=>'the battery stores '+p.K+' watt hours: how many are left?',ln:()=>'watt hours left'},LESS)),
+  G(X({u:'watts',k:'above',ask:(S,p)=>'the battery can give up to '+p.K+' watts: how many watts to spare?',ln:()=>'watts to spare'},LESS)));
+}
+
+/* ---------- 7·phys.ohm: the kettle's wire ---------- */
+{ const D=mk('ohm'), L='7·phys.ohm';
+midsOf(L,[
+ D('power',['read'],'volts','watts','7·phys','energy is kept',(S,p)=>'the current is '+p.x+' amps: what power does the wire give the water?',
+   (S,p,q)=>M(q.v,p.x),(S,p,q)=>P(q.v)+' · '+p.x,'power in the wire',mulW((S,p)=>'the '+p.x+' amps',(S,p)=>p.x),xX),
+ D('heat',['power'],'watts','joules','5j','multiplying and dividing quantities',(S,p)=>'it runs '+p.s+' seconds: how many joules go into the water?',
+   (S,p,q)=>M(q.v,p.s),(S,p,q)=>P(q.v)+' · '+p.s,'heat given',mulW((S,p)=>'the '+p.s+' seconds',(S,p)=>p.s),()=>({s:pick([60,120,300])})),
+ D('warm',['heat'],'joules','degrees warmed','5j','multiplying and dividing quantities',(S,p)=>'the kettle holds '+p.g+' grams, at 4 joules a gram a degree: how many degrees warmer?',
+   (S,p,q)=>Dv(q.v,4*p.g),(S,p,q)=>P(q.v)+'/(4 · '+p.g+')','degrees warmer',[['the 4 joules is left out',(S,p)=>'divide the joules by the '+p.g+' grams',(S,p,q)=>Dv(q.v,p.g)],['the grams are multiplied in',(S,p)=>'multiply the joules by '+p.g+' and divide by 4',(S,p,q)=>M(q.v,Q(p.g,4))]],()=>({g:pick([250,500,1000])}))]);
+addC(L,G(X({u:'degrees warmed',out:'degrees',k:80,ask:()=>'from 20 °C it must warm 80 degrees to boil: how many degrees more?',ln:()=>'degrees still to boil'},LESS)),
+  G(X({u:'joules',k:'above',ask:(S,p)=>'boiling the water takes '+p.K+' joules: how many joules short is that?',ln:()=>'joules still needed'},LESS)));
+}
+
+/* ---------- 7·econ.promise: the two stall keepers ---------- */
+{ const D=mk('promise'), L='7·econ.promise', TQ='a promise that holds';
+midsOf(L,[
+ D('both',['read'],'points','points for the pair','7·econ',TQ,'both keepers earn that while they keep quiet: how many points for the pair?',
+   (S,p,q)=>M(q.v,2),(S,p,q)=>'2 · '+P(q.v),'for the pair',[['one keeper’s points are taken for the pair','take one keeper’s points for the pair',(S,p,q)=>q.v],['the points are halved between them','halve the points for the pair',(S,p,q)=>M(q.v,Q(1,2))]]),
+ D('week',['both'],'points for the pair','points for the pair a week','5j','multiplying and dividing quantities','those rounds fill a market day, and the market runs 5 days a week: points a week?',
+   (S,p,q)=>M(q.v,5),(S,p,q)=>P(q.v)+' · 5','points a week',mulW('the 5 days',5)),
+ D('dollars',['both','week'],'points for the pair','dollars for the pair','5j','multiplying and dividing quantities','each point is worth a quarter of a dollar in trade: how many dollars is that?',
+   (S,p,q)=>M(q.v,Q(1,4)),(S,p,q)=>P(q.v)+'/4','in dollars',[['the points are multiplied by 4','multiply the points by 4',(S,p,q)=>M(q.v,4)],['a point is taken as a dollar','take a dollar for each point',(S,p,q)=>q.v]])]);
+/* the week hands on its own unit: the dollars take it too */
+midsOf(L,[D('wdollars',['week'],'points for the pair a week','dollars for the pair','5j','multiplying and dividing quantities','each point is worth a quarter of a dollar in trade: how many dollars a week is that?',
+   (S,p,q)=>M(q.v,Q(1,4)),(S,p,q)=>P(q.v)+'/4','dollars a week',[['the points are multiplied by 4','multiply the points by 4',(S,p,q)=>M(q.v,4)],['a point is taken as a dollar','take a dollar for each point',(S,p,q)=>q.v]])]);
+addC(L,G(X({u:'dollars for the pair',out:'dollars',k:'above',ask:(S,p)=>'the pair save for a '+p.K+'-dollar awning: how many dollars more do they need?',ln:()=>'still needed for the awning'},LESS)));
+}
+
+/* ---------- 7·logi.rooms: meetings at Victoria ---------- */
+{ const D=mk('rooms'), L='7·logi.rooms';
+midsOf(L,[
+ D('cancel',['read'],'meetings','meetings','4h','the less-is-adding technique',(S,p)=>p.k+' of those meetings are called off: how many are left to hold?',
+   (S,p,q)=>{ const r=Sb(q.v,p.k); return pos(r)?r:null; },(S,p,q)=>P(q.v)+' − '+p.k,'meetings left',subW((S,p)=>'the '+p.k+' called off',(S,p)=>p.k),()=>({k:pick([2,3,4])})),
+ D('hrs',['read','cancel'],'meetings','hours with every room busy','4j','the division-with-remainder technique','three rooms each hold one meeting an hour: how many hours do the meetings take?',
+   (S,p,q)=>ce(Dv(q.v,3)),(S,p,q)=>P(q.v)+'/3, rounded up','hours of meetings',
+   [['the hours are rounded down, leaving meetings out','round the hours down',(S,p,q)=>fl(Dv(q.v,3))],['the meetings are multiplied by the 3 rooms','multiply the meetings by 3',(S,p,q)=>M(q.v,3)]]),
+ D('days',['hrs'],'hours with every room busy','working days','4j','the division-with-remainder technique','the office books 8 hours a day: how many days does that fill?',
+   (S,p,q)=>ce(Dv(q.v,8)),(S,p,q)=>P(q.v)+'/8, rounded up','days of meetings',
+   [['the days are rounded down, leaving hours out','round the days down',(S,p,q)=>fl(Dv(q.v,8))],['24 hours are used for a day','divide by 24 hours a day',(S,p,q)=>ce(Dv(q.v,24))]])]);
+addC(L,G(X({u:'working days',out:'days',k:'above',ask:(S,p)=>'the rooms are free for '+p.K+' days: how many days are spare?',ln:()=>'days spare'},LESS)),
+  G(X({u:'hours with every room busy',out:'hours',k:'above',ask:(S,p)=>'the rooms are open '+p.K+' hours this week: how many hours are spare?',ln:()=>'hours spare'},LESS)));
+}
+
+/* ---------- 8·phys.beats: Terry's heart ---------- */
+{ const D=mk('heart'), L='8·phys.beats', TQ='the chain estimate';
+midsOf(L,[
+ D('pm',['read'],'beats','beats a minute','5j','multiplying and dividing quantities',(S,p)=>'over those '+p.x+' hours, how many beats a minute is that?',
+   (S,p,q)=>Dv(q.v,60*p.x),(S,p,q)=>P(q.v)+'/(60 · '+p.x+')','beats a minute',[['the hours are not turned into minutes',(S,p)=>'divide the beats by '+p.x,(S,p,q)=>Dv(q.v,p.x)],['3600 is used for the minutes in an hour',(S,p)=>'divide the beats by 3600 · '+p.x,(S,p,q)=>Dv(q.v,3600*p.x)]],xX),
+ D('litres',['read'],'beats','litres pumped','8·phys',TQ,'each beat pushes about 1/20 of a litre: how many litres is that?',
+   (S,p,q)=>M(q.v,Q(1,20)),(S,p,q)=>P(q.v)+'/20','litres pumped',[['the beats are multiplied by 20','multiply the beats by 20',(S,p,q)=>M(q.v,20)],['a litre a beat is used','take a litre for each beat',(S,p,q)=>q.v]]),
+ D('lday',['litres'],'litres pumped','litres a day','8·phys',TQ,(S,p)=>'that took '+p.x+' hours: how many litres in a day of 24 hours?',
+   (S,p,q)=>M(q.v,Q(24,p.x)),(S,p,q)=>P(q.v)+' · 24/'+p.x,'litres a day',[['the 24 hours are used without the hours it took','multiply the litres by 24',(S,p,q)=>M(q.v,24)],['the ratio is turned over',(S,p)=>'multiply by '+p.x+'/24',(S,p,q)=>M(q.v,Q(p.x,24))]],xX),
+ D('week',['lday'],'litres a day','litres a week','5j','multiplying and dividing quantities','how many litres in a week of 7 days?',
+   (S,p,q)=>M(q.v,7),(S,p,q)=>P(q.v)+' · 7','litres a week',mulW('the 7 days',7))]);
+addC(L,G(X({u:'beats a minute',k:100,ask:()=>'a resting heart over 100 beats a minute is fast: how far below that is it?',ln:()=>'below 100'},LESS)),
+  Pr(X({u:'litres a day',out:'cubic metres a day',k:1000,ask:()=>'how many cubic metres is that, at 1000 litres each?',ln:()=>'cubic metres a day'},CU)),
+  Pr(X({u:'litres a week',out:'cubic metres a week',k:1000,ask:()=>'how many cubic metres is that, at 1000 litres each?',ln:()=>'cubic metres a week'},CU)));
+}
+
+/* ---------- 8·eng.stack: the stack in the slot ---------- */
+{ const D=mk('stack'), L='8·eng.stack', TQ='the worst case of a stack';
+midsOf(L,[
+ D('two',['read'],'millimetres','millimetres','8·eng',TQ,'two such stacks stand end to end in the frame: how far off could they be?',
+   (S,p,q)=>M(q.v,2),(S,p,q)=>'2 · '+P(q.v),'two stacks at worst',[['the two stacks are taken to cancel','take the two errors as cancelling',(S,p,q)=>Q(0)],['one stack’s error is used','take one stack’s error for both',(S,p,q)=>q.v]]),
+ D('um',['read','two'],'millimetres','micrometres','5j','changing units is multiplying by one','a millimetre is 1000 micrometres: how many micrometres is that?',
+   (S,p,q)=>M(q.v,1000),(S,p,q)=>P(q.v)+' · 1000','in micrometres',[['the change of units is turned over','divide by 1000',(S,p,q)=>Dv(q.v,1000)],['100 micrometres are taken for a millimetre','multiply by 100',(S,p,q)=>M(q.v,100)]]),
+ D('shims',['um'],'micrometres','shims','4j','the division-with-remainder technique',(S,p)=>'shims come '+p.t+' micrometres thick: how many shims take up that play?',
+   (S,p,q)=>ce(Dv(q.v,p.t)),(S,p,q)=>P(q.v)+'/'+p.t+', rounded up','shims needed',
+   [['the shims are rounded down, leaving play','round the shims down',(S,p,q)=>fl(Dv(q.v,p.t))],['the play is multiplied by the shim','multiply the play by the shim',(S,p,q)=>M(q.v,p.t)]],()=>({t:pick([25,50,100])}))]);
+addC(L,G(X({u:'shims',k:'above',ask:(S,p)=>'the kit holds '+p.K+' shims: how many are left after that?',ln:()=>'shims left'},LESS)));
+}
+
+/* ---------- 8·comp.gaps: Evita's machine ---------- */
+{ const D=mk('gaps'), L='8·comp.gaps', TQ='the adding-gaps technique';
+midsOf(L,[
+ D('runs',['read'],'gaps','gaps','8·comp',TQ,(S,p)=>p.k+' such runs are made one after another: at most how many gaps off?',
+   (S,p,q)=>M(q.v,p.k),(S,p,q)=>p.k+' · '+P(q.v),'error of the runs',mulW((S,p)=>'the '+p.k+' runs',(S,p)=>p.k),()=>({k:pick([2,3,4])})),
+ D('mm',['read','runs'],'gaps','millimetres off','5j','multiplying and dividing quantities',(S,p)=>'a gap here is '+qs(p.g)+' of a millimetre: at most how many millimetres off?',
+   (S,p,q)=>M(q.v,p.g),(S,p,q)=>P(q.v)+' · '+qs(p.g),'millimetres off',mulW((S,p)=>qs(p.g),(S,p)=>p.g),()=>({g:pick([Q(1,8),Q(1,4),Q(1,10)])})),
+ D('um',['mm'],'millimetres off','micrometres off','5j','changing units is multiplying by one','a millimetre is 1000 micrometres: how many micrometres off?',
+   (S,p,q)=>M(q.v,1000),(S,p,q)=>P(q.v)+' · 1000','micrometres off',[['the change of units is turned over','divide by 1000',(S,p,q)=>Dv(q.v,1000)],['100 micrometres are taken for a millimetre','multiply by 100',(S,p,q)=>M(q.v,100)]])]);
+addC(L,G(X({u:'micrometres off',out:'micrometres',k:'above',ask:(S,p)=>'the part must be good to '+p.K+' micrometres: how much margin is left?',ln:()=>'margin left'},LESS)),
+  G(X({u:'millimetres off',out:'millimetres',k:()=>pick([2,5,10]),ask:(S,p)=>'the cut must be good to '+p.K+' millimetres: how much margin is left?',ln:()=>'margin left'},LESS)));
+}
+
+/* ---------- 8·stat.far: children far from the mean ---------- */
+{ const D=mk('far'), L='8·stat.far', TQ='the far-from-the-mean bound technique';
+midsOf(L,[
+ D('grade',['read'],'children','children','5c','the scaling technique',(S,p)=>'the children are spread evenly over '+p.g+' grades: how many in one grade?',
+   (S,p,q)=>{ const r=Dv(q.v,p.g); return whole(r)?r:null; },(S,p,q)=>P(q.v)+'/'+p.g,'children in a grade',divW((S,p)=>'the '+p.g+' grades',(S,p)=>p.g),()=>({g:pick([2,4])})),
+ D('bound',['read','grade'],'children','children far out at most','8·stat',TQ,'fewer than 1/4 lie more than 2 spreads from the mean: below what count is that?',
+   (S,p,q)=>M(q.v,Q(1,4)),(S,p,q)=>P(q.v)+'/4','the bound on the far ones',[['k is used instead of k², giving 1/2','take half the children as the bound',(S,p,q)=>M(q.v,Q(1,2))],['the 3 spreads bound, 1/9, is used','take 1/9 of the children',(S,p,q)=>M(q.v,Q(1,9))]]),
+ D('groups',['bound'],'children far out at most','help groups','4j','the division-with-remainder technique',(S,p)=>'help sessions take '+p.k+' children a group: how many groups cover that many?',
+   (S,p,q)=>ce(Dv(q.v,p.k)),(S,p,q)=>P(q.v)+'/'+p.k+', rounded up','help groups',
+   [['the groups are rounded down, leaving children out','round the groups down',(S,p,q)=>fl(Dv(q.v,p.k))],['the children are multiplied by the group size','multiply by the group size',(S,p,q)=>M(q.v,p.k)]],()=>({k:pick([3,4,5])}))]);
+addC(L,G(X({u:'help groups',out:'tutors',k:'above',ask:(S,p)=>'the school has '+p.K+' tutors, one to a group: how many are spare?',ln:()=>'tutors spare'},LESS)),
+  G(X({u:'children far out at most',out:'places',k:'above',ask:(S,p)=>'the plan was for '+p.K+' children needing extra help: how many places is that above the bound?',ln:()=>'places above the bound'},LESS)));
+}
+
+/* ---------- 8·econ.rent: Randy's rent ---------- */
+{ const D=mk('rent'), L='8·econ.rent';
+midsOf(L,[
+ D('rise',['read'],'dollars a month','dollars a month','5c','the scaling technique','next year the landlord adds 1/10: what is the rent then?',
+   (S,p,q)=>M(q.v,Q(11,10)),(S,p,q)=>P(q.v)+' · 11/10','rent after the rise',[['only the rise is given','give the rise alone, 1/10 of the rent',(S,p,q)=>M(q.v,Q(1,10))],['1/10 is taken off instead of added','take 1/10 off the rent',(S,p,q)=>M(q.v,Q(9,10))]]),
+ D('year',['read','rise'],'dollars a month','dollars a year','5j','multiplying and dividing quantities','what does that rent come to over the 12 months of a year?',
+   (S,p,q)=>M(q.v,12),(S,p,q)=>P(q.v)+' · 12','rent for a year',mulW('the 12 months',12)),
+ D('share',['year'],'dollars a year','dollars a year each','5j','sharing in a ratio',(S,p)=>'Randy shares the flat equally with '+(p.k-1)+' others: what is each one’s share?',
+   (S,p,q)=>Dv(q.v,p.k),(S,p,q)=>P(q.v)+'/'+p.k,'each one’s share',[[(S,p)=>'the rent is split '+(p.k-1)+' ways, leaving Randy out',(S,p)=>'divide the rent by '+(p.k-1),(S,p,q)=>Dv(q.v,p.k-1)],['the rent is multiplied by the sharers','multiply by the number sharing',(S,p,q)=>M(q.v,p.k)]],()=>({k:pick([2,3,4])}))]);
+addC(L,G(X({u:'dollars a year each',out:'dollars',k:'above',ask:(S,p)=>'each sets aside '+p.K+' dollars a year for rent: how much is left over?',ln:()=>'left over'},LESS)),
+  G(X({u:'dollars a year',k:'above',ask:(S,p)=>'Randy budgets '+p.K+' dollars a year for rent: how much of it is left?',ln:()=>'left of the budget'},LESS)));
+}
+
+/* ---------- 9·bio.scale: the model mouse ---------- */
+{ const D=mk('scale'), L='9·bio.scale', TQ='the power-law habit technique';
+midsOf(L,[
+ D('face',['read'],'square centimetres','square centimetres a face','5j','multiplying and dividing quantities','the model is a cube with 6 faces: what is the area of one face?',
+   (S,p,q)=>Dv(q.v,6),(S,p,q)=>P(q.v)+'/6','one face',divW('the 6 faces',6)),
+ D('side',['face'],'square centimetres a face','centimetres a side','9·bio',TQ,'a face is a square: how long is its side?',
+   (S,p,q)=>qsqrt(q.v),(S,p,q)=>'√'+P(q.v),'the side',[['the face is halved instead of rooted','halve the face for the side',(S,p,q)=>M(q.v,Q(1,2))],['the face is divided by 4, as if by its 4 edges','divide the face by 4',(S,p,q)=>M(q.v,Q(1,4))]]),
+ D('vol',['side'],'centimetres a side','cubic centimetres','9·bio',TQ,'what is the volume of the cube?',
+   (S,p,q)=>M(qm(q.v,q.v),q.v),(S,p,q)=>P(q.v)+'³','the volume',[['the side is squared, not cubed','square the side',(S,p,q)=>qm(q.v,q.v)],['the side is multiplied by 3','multiply the side by 3',(S,p,q)=>M(q.v,3)]])]);
+addC(L,cl('cust',X({u:'cubic centimetres',out:'square centimetres of skin a cubic centimetre',k:1,f:(S,p,q)=>Dv(p.ctx.chain[0].o.v,q.v),ex:(S,p,q)=>P(p.ctx.chain[0].o.v)+'/'+P(q.v),
+    ask:()=>'how many square centimetres of skin does it have for each cubic centimetre?',ln:()=>'skin for each cubic centimetre',
+    xs:(S,p,q)=>[{why:'the division is turned over',v:Dv(q.v,p.ctx.chain[0].o.v)},{why:'one face is used for the skin',v:Dv(Dv(p.ctx.chain[0].o.v,6),q.v)}]},own('9·bio',TQ))),
+  G(X({u:'centimetres a side',out:'centimetres',k:'above',ask:(S,p)=>'the cage door is '+p.K+' centimetres wide: how much room to spare?',ln:()=>'room at the door'},LESS)));
+}
+
+/* ---------- 9·chem.piston: the squeezed gas ---------- */
+{ const D=mk('piston'), L='9·chem.piston', TQ='the squeeze-and-push technique';
+midsOf(L,[
+ D('press',['read'],'litres','kilopascals','9·chem',TQ,(S)=>'it started at '+S.p0+' kilopascals in '+S.V0+' litres: what pressure is it at now?',
+   (S,p,q)=>Dv(S.p0*S.V0,q.v),(S,p,q)=>S.p0+' · '+S.V0+'/'+P(q.v),'pressure now',[['the pressure is taken to grow with the volume',S=>'multiply '+S.p0+' by the volume over '+S.V0,(S,p,q)=>M(q.v,Q(S.p0,S.V0))],['the volume is multiplied in instead of divided','multiply the start by the volume now',(S,p,q)=>M(q.v,S.p0*S.V0)]]),
+ D('force',['press'],'kilopascals','newtons','5j','multiplying and dividing quantities','the piston face is 1/100 square metre: what force does the gas push with?',
+   (S,p,q)=>M(q.v,10),(S,p,q)=>P(q.v)+' · 1000 · 1/100','force on the piston',[['kilopascals are used as pascals','multiply the kilopascals by 1/100',(S,p,q)=>M(q.v,Q(1,100))],['the pressure is divided by the area','divide the pressure by 1/100',(S,p,q)=>M(q.v,100)]]),
+ D('kg',['force'],'newtons','kilograms','5j','multiplying and dividing quantities','that push matches the weight of how many kilograms, at g = 10?',
+   (S,p,q)=>Dv(q.v,10),(S,p,q)=>P(q.v)+'/10','kilograms matched',divW('g = 10',10)),
+ D('extra',['press'],'kilopascals','kilopascals more','4h','the less-is-adding technique',(S)=>'how many kilopascals more than the starting '+S.p0+' is that?',
+   (S,p,q)=>Sb(q.v,S.p0),(S,p,q)=>P(q.v)+' − '+S.p0,'rise in pressure',subW(S=>'the starting '+S.p0,S=>S.p0))]);
+addC(L,G(X({u:'newtons',k:'above',ask:(S,p)=>'the latch holds '+p.K+' newtons: how many newtons to spare?',ln:()=>'newtons to spare'},LESS)),
+  G(X({u:'kilograms',k:'above',ask:(S,p)=>'the press is rated for '+p.K+' kilograms: how many to spare?',ln:()=>'kilograms to spare'},LESS)),
+  G(X({u:'kilopascals more',out:'kilopascals',k:'above',ask:(S,p)=>'the gauge’s red line is '+p.K+' kilopascals above the start: how far below it?',ln:()=>'below the red line'},LESS)));
+}
+
+/* ---------- 9·chem.jar: two gases in matching jars ---------- */
+{ const D=mk('jar'), L='9·chem.jar', TQ='the equal-counts technique';
+midsOf(L,[
+ D('jars',['read'],'moles','moles','5j','multiplying and dividing quantities',(S,p)=>'there are '+p.k+' such jars: how many moles in all?',
+   (S,p,q)=>M(q.v,p.k),(S,p,q)=>p.k+' · '+P(q.v),'moles in the jars',mulW((S,p)=>'the '+p.k+' jars',(S,p)=>p.k),()=>({k:pick([2,3,4])})),
+ D('air',['read','jars'],'moles','grams of air','5j','multiplying and dividing quantities','air has a molar mass of about 29: how many grams of air is that?',
+   (S,p,q)=>M(q.v,29),(S,p,q)=>P(q.v)+' · 29','mass of air',mulW('the 29',29)),
+ D('swap',['air'],'grams of air',S=>'grams of '+S.gas[0],'9·chem',TQ,(S)=>'filled instead with '+S.gas[0]+', molar mass '+S.gas[1]+', the count is the same: how many grams?',
+   (S,p,q)=>M(q.v,Q(S.gas[1],29)),(S,p,q)=>P(q.v)+' · '+S.gas[1]+'/29',S=>'mass of '+S.gas[0],[['the ratio of masses is turned over',S=>'multiply by 29/'+S.gas[1],(S,p,q)=>M(q.v,Q(29,S.gas[1]))],['the same mass is taken, not the same count','take the same grams as the air',(S,p,q)=>q.v]])]);
+addC(L,G(X({u:S=>'grams of '+S.gas[0],out:'grams',k:'above',ask:(S,p)=>'the balance reads up to '+p.K+' grams: how much room is left on it?',ln:()=>'room on the balance'},LESS)),
+  G(X({u:'grams of air',out:'grams',k:'above',ask:(S,p)=>'the balance reads up to '+p.K+' grams: how much room is left on it?',ln:()=>'room on the balance'},LESS)));
+}
+
+/* ---------- 9·cb4.ledger: Mike's jar of dollars ---------- */
+{ const D=mk('ledger'), L='9·cb4.ledger';
+midsOf(L,[
+ D('spend',['read'],'dollars','dollars','4h','the less-is-adding technique',(S,p)=>{ const m=S.story.match(/^Each month (\w+) adds/); return (m?m[1]:'the saver')+' takes '+p.k+' dollars out for a gift: how many dollars are left in the jar?'; },
+   (S,p,q)=>{ const r=Sb(q.v,p.k); return pos(r)?r:null; },(S,p,q)=>P(q.v)+' − '+p.k,'left after the gift',subW((S,p)=>'the '+p.k+' dollars',(S,p)=>p.k),()=>({k:pick([5,10,15])})),
+ D('coins',['read','spend'],'dollars','quarters','5j','changing units is multiplying by one','it is all in quarters, 4 to a dollar: how many quarters?',
+   (S,p,q)=>M(q.v,4),(S,p,q)=>P(q.v)+' · 4','quarters in the jar',[['the dollars are divided by 4','divide the dollars by 4',(S,p,q)=>Dv(q.v,4)],['10 quarters are counted to a dollar','multiply the dollars by 10',(S,p,q)=>M(q.v,10)]]),
+ D('rolls',['coins'],'quarters','full rolls of quarters','4j','the division-with-remainder technique','the bank wants rolls of 40 quarters: how many full rolls can he make?',
+   (S,p,q)=>{ const r=fl(Dv(q.v,40)); return pos(r)?r:null; },(S,p,q)=>'whole part of '+P(q.v)+'/40','full rolls',
+   [['a part roll is counted as full','count a part roll as full',(S,p,q)=>ce(Dv(q.v,40))],['the quarters are multiplied by 40','multiply the quarters by 40',(S,p,q)=>M(q.v,40)]])]);
+addC(L,Tm(X({u:'full rolls of quarters',out:'dollars',k:10,ask:()=>'each roll is worth 10 dollars: how many dollars go to the bank?',ln:()=>'dollars in full rolls'},MQ)),
+  G(X({u:'quarters',k:'above',ask:(S,p)=>'the counting tray holds '+p.K+' quarters: how many more fit?',ln:()=>'room in the tray'},LESS)));
+}
+
+/* ---------- 10·bio.enzyme: sugar used in Evita's tube ---------- */
+{ const D=mk('enz'), L='10·bio.enzyme';
+midsOf(L,[
+ D('hour',['read'],'micromoles a minute','micromoles an hour','5j','multiplying and dividing quantities','how many micromoles of sugar does it turn over in an hour?',
+   (S,p,q)=>M(q.v,60),(S,p,q)=>P(q.v)+' · 60','micromoles an hour',mulW('the 60 minutes',60)),
+ D('mg',['hour'],'micromoles an hour','milligrams an hour','5j','multiplying and dividing quantities','the sugar has 180 milligrams a millimole, 1000 micromoles: how many milligrams an hour?',
+   (S,p,q)=>M(q.v,Q(180,1000)),(S,p,q)=>P(q.v)+' · 180/1000','milligrams an hour',[['the micromoles are taken as millimoles','multiply the micromoles by 180',(S,p,q)=>M(q.v,180)],['the molar mass is divided in','divide by 180 and by 1000',(S,p,q)=>Dv(q.v,180000)]]),
+ D('day',['mg'],'milligrams an hour','milligrams a day','5j','multiplying and dividing quantities','how many milligrams in a day of 24 hours?',
+   (S,p,q)=>M(q.v,24),(S,p,q)=>P(q.v)+' · 24','milligrams a day',mulW('the 24 hours',24))]);
+addC(L,In(X({u:'milligrams an hour',out:'hours',k:()=>pick([500,1000,2000]),ask:(S,p)=>'the tube holds '+p.K+' milligrams of sugar: about how many hours will it last?',ln:()=>'hours it lasts'},MQ)),
+  G(X({u:'milligrams a day',out:'milligrams',k:'above',ask:(S,p)=>'the tube held '+p.K+' milligrams of sugar: how many are left after a day?',ln:()=>'sugar left'},LESS)));
+}
+
+/* ---------- 10·logi.trucks: trucks for the route ---------- */
+{ const D=mk('trucks'), L='10·logi.trucks', TQ='the truck-count technique';
+midsOf(L,[
+ D('hours',['read'],'trips a day','truck hours a day','5j','multiplying and dividing quantities','each trip takes 3 hours: how many truck hours a day do the trips need?',
+   (S,p,q)=>M(q.v,3),(S,p,q)=>P(q.v)+' · 3','truck hours a day',mulW('the 3 hours',3)),
+ D('fleet',['hours'],'truck hours a day','trucks','10·logi',TQ,'each truck works 8 hours a day: how many trucks are needed at least?',
+   (S,p,q)=>ce(Dv(q.v,8)),(S,p,q)=>P(q.v)+'/8, rounded up','trucks needed',[['the count is rounded down','round the trucks down',(S,p,q)=>fl(Dv(q.v,8))],['24 hours are used for a truck’s day','divide by 24 hours',(S,p,q)=>ce(Dv(q.v,24))]]),
+ D('spare',['fleet'],'trucks','trucks with spares','5c','the scaling technique','1 truck in 5 is kept spare, so the working ones are 4/5 of all: how many trucks in all?',
+   (S,p,q)=>ce(M(q.v,Q(5,4))),(S,p,q)=>P(q.v)+' · 5/4, rounded up','trucks with spares',[['the working trucks are multiplied by 4/5','take 4/5 of the trucks',(S,p,q)=>ce(M(q.v,Q(4,5)))],['one spare in all is added','add one spare truck',(S,p,q)=>A(q.v,1)]])]);
+addC(L,G(X({u:'trucks',k:'above',ask:(S,p)=>'the depot owns '+p.K+' trucks: how many sit idle?',ln:()=>'trucks idle'},LESS)),
+  G(X({u:'trucks with spares',out:'trucks',k:'above',ask:(S,p)=>'the depot owns '+p.K+' trucks: how many more could it lend out?',ln:()=>'trucks free'},LESS)));
+}
+
+/* ---------- 10·logi.slow: the packing line at Tofino ---------- */
+{ const D=mk('slow'), L='10·logi.slow';
+midsOf(L,[
+ D('lines',['read'],'boxes','boxes','5j','multiplying and dividing quantities',(S,p)=>'the plant runs '+p.k+' such lines side by side: how many boxes in all?',
+   (S,p,q)=>M(q.v,p.k),(S,p,q)=>p.k+' · '+P(q.v),'boxes from the lines',mulW((S,p)=>'the '+p.k+' lines',(S,p)=>p.k),()=>({k:pick([2,3])})),
+ D('pallets',['read','lines'],'boxes','full pallets','4j','the division-with-remainder technique','boxes are stacked 10 to a pallet: how many full pallets?',
+   (S,p,q)=>{ const r=fl(Dv(q.v,10)); return pos(r)?r:null; },(S,p,q)=>'whole part of '+P(q.v)+'/10','full pallets',[['a part pallet is counted as full','count a part pallet as full',(S,p,q)=>ce(Dv(q.v,10))],['the boxes are multiplied by 10','multiply the boxes by 10',(S,p,q)=>M(q.v,10)]]),
+ D('loads',['pallets'],'full pallets','full truckloads','4j','the division-with-remainder technique','a truck takes 8 pallets: how many full truckloads?',
+   (S,p,q)=>{ const r=fl(Dv(q.v,8)); return pos(r)?r:null; },(S,p,q)=>'whole part of '+P(q.v)+'/8','full truckloads',[['a part load is counted as full','count a part load as full',(S,p,q)=>ce(Dv(q.v,8))],['the pallets are multiplied by 8','multiply the pallets by 8',(S,p,q)=>M(q.v,8)]])]);
+addC(L,G(X({u:'full truckloads',out:'trucks',k:'above',ask:(S,p)=>'the yard has '+p.K+' trucks booked: how many will wait for a load?',ln:()=>'trucks waiting'},LESS)),
+  G(X({u:'full pallets',out:'pallets',k:'above',ask:(S,p)=>'the dock has room for '+p.K+' pallets: how many more fit?',ln:()=>'room on the dock'},LESS)));
+}
+
+/* ---------- 10·econ.save: Jean's savings ---------- */
+{ const D=mk('save'), L='10·econ.save', TQ='the one-plus-a-power technique';
+midsOf(L,[
+ D('cousins',['read'],'dollars','dollars','5j','multiplying and dividing quantities',(S,p)=>'Jean’s '+p.k+' cousins save just as much: what do the '+(p.k+1)+' of them have in all?',
+   (S,p,q)=>M(q.v,p.k+1),(S,p,q)=>(p.k+1)+' · '+P(q.v),'savings of all of them',[[(S,p)=>'Jean is left out, only the '+p.k+' cousins counted',(S,p)=>'multiply by the '+p.k+' cousins',(S,p,q)=>M(q.v,p.k)],['the cousins are added as dollars',(S,p)=>'add '+(p.k+1)+' to the savings',(S,p,q)=>A(q.v,p.k+1)]],()=>({k:pick([2,3])})),
+ D('y1',['read','cousins'],'dollars','dollars after a year','10·econ',TQ,'the savings earn 1/10 a year, added at the year’s end: what are they after a year?',
+   (S,p,q)=>M(q.v,Q(11,10)),(S,p,q)=>P(q.v)+' · 11/10','after a year',[['only the interest is given','give the interest alone',(S,p,q)=>M(q.v,Q(1,10))],['1/10 of a dollar is added','add 1/10 of a dollar',(S,p,q)=>A(q.v,Q(1,10))]]),
+ D('y2',['y1'],'dollars after a year','dollars after two years','10·econ',TQ,'a second year at 1/10 is added on the new total: what are they after two years?',
+   (S,p,q)=>M(q.v,Q(11,10)),(S,p,q)=>P(q.v)+' · 11/10','after two years',[['the second year’s interest is figured on the start only','add the first year’s interest again',(S,p,q)=>A(q.v,M(Dv(q.v,Q(11,10)),Q(1,10)))],['only the interest is given','give the interest alone',(S,p,q)=>M(q.v,Q(1,10))]])]);
+addC(L,G(X({u:'dollars after two years',out:'dollars',k:'above',ask:(S,p)=>'a boat costs '+p.K+' dollars: how many more dollars are needed?',ln:()=>'still needed for the boat'},LESS)),
+  G(X({u:'dollars after a year',out:'dollars',k:'above',ask:(S,p)=>'a bike costs '+p.K+' dollars: how many more dollars are needed?',ln:()=>'still needed for the bike'},LESS)));
+}
+
+/* ---------- 10·phys.chase: the runner and the tortoise ---------- */
+{ const D=mk('chase'), L='10·phys.chase', TQ='the stage-sum technique';
+midsOf(L,[
+ D('tort',['read'],'seconds','metres the tortoise crawls','5j','multiplying and dividing quantities',(S)=>'the tortoise goes 1/'+S.r+' as fast, '+qs(Q(S.v,S.r))+' metres a second: how far does it crawl meanwhile?',
+   (S,p,q)=>M(q.v,Q(S.v,S.r)),(S,p,q)=>P(q.v)+' · '+qs(Q(S.v,S.r)),'the tortoise’s crawl',[['the runner’s speed is used',S=>'multiply the time by the runner’s '+S.v,(S,p,q)=>M(q.v,S.v)],['the time is divided by the speed',S=>'divide the time by '+qs(Q(S.v,S.r)),(S,p,q)=>Dv(q.v,Q(S.v,S.r))]]),
+ D('st2',['tort'],'metres the tortoise crawls','seconds for stage two','5j','multiplying and dividing quantities',(S)=>'the runner covers that gap at '+S.v+' metres a second: how long is stage two?',
+   (S,p,q)=>Dv(q.v,S.v),(S,p,q)=>P(q.v)+'/'+S.v,'stage two',divW(S=>'the '+S.v+' metres a second',S=>S.v)),
+ D('two',['st2'],'seconds for stage two','seconds for two stages','4h','the less-is-adding technique',(S,p)=>'add the first stage of '+qs(p.t1)+' seconds: how long do the first two stages take?',
+   (S,p,q)=>A(q.v,p.t1),(S,p,q)=>P(q.v)+' + '+P(p.t1),'two stages',addW((S,p)=>'the first stage',(S,p)=>p.t1),(S,ch)=>({t1:V0(ch)}))]);
+addC(L,Tm(X({u:'seconds for stage two',out:'seconds',k:S=>Q(S.r,S.r-1),ask:(S)=>'from stage two on, each stage takes 1/'+S.r+' of the one before: how long from there to level?',ln:()=>'from stage two to level'},own('10·phys',TQ))),
+  G(X({u:'seconds for two stages',k:(S,q,ctx)=>ctx&&ctx.chain?M(ctx.chain[0].o.v,Q(S.r,S.r-1)):null,ask:(S,p)=>'he draws level after '+p.K+' seconds: how long after the second stage is that?',ln:()=>'after the second stage'},own('10·phys',TQ))));
+}
+
+/* ---------- 12·phys.lever: Randy's lever ---------- */
+{ const D=mk('lever'), L='12·phys.lever', TQ='the balance-formula technique';
+midsOf(L,[
+ D('hands',['read'],'newtons','newtons for each hand','5j','sharing in a ratio','Randy pushes with both hands equally: how many newtons from each hand?',
+   (S,p,q)=>M(q.v,Q(1,2)),(S,p,q)=>P(q.v)+'/2','each hand',[['the push is doubled for two hands','double the push',(S,p,q)=>M(q.v,2)],['each hand is taken to give the whole push','give the whole push to each hand',(S,p,q)=>q.v]]),
+ D('work',['read'],'newtons','joules','5j','multiplying and dividing quantities',(S,p)=>'the hand moves '+qs(p.d)+(num(p.d)>1?' metres':' metre')+' down as it pushes: how many joules of work?',
+   (S,p,q)=>M(q.v,p.d),(S,p,q)=>P(q.v)+' · '+qs(p.d),'work done',mulW((S,p)=>qs(p.d)+(num(p.d)>1?' metres':' metre'),(S,p)=>p.d),()=>({d:pick([Q(1,2),Q(1),Q(2)])})),
+ D('rise',['work'],'joules','metres the load rises','12·phys',TQ,(S,p)=>'the same work lifts the '+p.x+' newton load: how far does the load rise?',
+   (S,p,q)=>Dv(q.v,p.x),(S,p,q)=>P(q.v)+'/'+p.x,'rise of the load',divW((S,p)=>'the '+p.x+' newtons',(S,p)=>p.x),xX),
+ D('cm',['rise'],'metres the load rises','centimetres the load rises','5j','changing units is multiplying by one','how many centimetres is that, at 100 to a metre?',
+   (S,p,q)=>M(q.v,100),(S,p,q)=>P(q.v)+' · 100','in centimetres',[['the metres are divided by 100','divide by 100',(S,p,q)=>Dv(q.v,100)],['10 centimetres are taken for a metre','multiply by 10',(S,p,q)=>M(q.v,10)]])]);
+addC(L,G(X({u:'newtons for each hand',out:'newtons',k:'above',ask:(S,p)=>'each hand can push '+p.K+' newtons: how many newtons to spare?',ln:()=>'to spare in each hand'},LESS)),
+  G(X({u:'centimetres the load rises',out:'centimetres',k:'above',ask:(S,p)=>'the crate must clear a '+p.K+' centimetre step: how far short is it?',ln:()=>'short of the step'},LESS)),
+  Tm(X({u:'metres the load rises',out:'centimetres',k:100,ask:()=>'how many centimetres does the load rise?',ln:()=>'rise in centimetres'},CU)));
+}
+
+/* ---------- 12·phys.train: the motor at Merced ---------- */
+{ const D=mk('train'), L='12·phys.train', TQ='the gear-train technique';
+midsOf(L,[
+ D('m1',['read'],'turns a minute','turns a minute of the middle shaft','12·phys',TQ,'the first mesh turns the middle shaft 1/3 as fast: how fast does it turn?',
+   (S,p,q)=>M(q.v,Q(1,3)),(S,p,q)=>P(q.v)+' · 1/3','middle shaft',[['the ratio is turned over','multiply by 3',(S,p,q)=>M(q.v,3)],['1/3 is taken away','take 1/3 away',(S,p,q)=>Sb(q.v,Q(1,3))]]),
+ D('m2',['m1'],'turns a minute of the middle shaft','turns a minute of the last shaft','12·phys',TQ,'the second mesh turns the last shaft 1/4 as fast: how fast does it turn?',
+   (S,p,q)=>M(q.v,Q(1,4)),(S,p,q)=>P(q.v)+' · 1/4','last shaft',[['the ratio is turned over','multiply by 4',(S,p,q)=>M(q.v,4)],['the 1/3 is added to the 1/4','multiply the motor speed by 1/3 + 1/4',(S,p,q)=>M(q.v,Q(21,12))]]),
+ D('belt',['m2'],'turns a minute of the last shaft','metres of belt a minute','5j','multiplying and dividing quantities','the last shaft’s drum winds 1/2 metre of belt a turn: how many metres a minute?',
+   (S,p,q)=>M(q.v,Q(1,2)),(S,p,q)=>P(q.v)+' · 1/2','belt a minute',[['the turns are doubled','double the turns',(S,p,q)=>M(q.v,2)],['1/2 is added','add 1/2 to the turns',(S,p,q)=>A(q.v,Q(1,2))]])]);
+addC(L,Pr(X({u:'turns a minute of the last shaft',out:'turns a second',k:60,ask:()=>'how many turns a second is that?',ln:()=>'turns a second'},CU)),
+  Pr(X({u:'metres of belt a minute',out:'metres a second',k:60,ask:()=>'how many metres a second does the belt move?',ln:()=>'belt speed'},CU)));
+}
+
+/* ---------- 12·eng.share: the shelf at The Dalles ---------- */
+{ const D=mk('share'), L='12·eng.share', TQ='the support-pushes technique';
+midsOf(L,[
+ D('left',['read'],'newtons','newtons on that support','12·eng',TQ,'the load is a quarter of the way from the left: what does the left support carry?',
+   (S,p,q)=>M(q.v,Q(3,4)),(S,p,q)=>P(q.v)+' · 3/4','left support',[['the shares are swapped, giving the right support','take 1/4 of the load',(S,p,q)=>M(q.v,Q(1,4))],['the load is shared evenly','take half the load',(S,p,q)=>M(q.v,Q(1,2))]]),
+ D('right',['read'],'newtons','newtons on that support','12·eng',TQ,'the load is a quarter of the way from the left: what does the right support carry?',
+   (S,p,q)=>M(q.v,Q(1,4)),(S,p,q)=>P(q.v)+' · 1/4','right support',[['the shares are swapped, giving the left support','take 3/4 of the load',(S,p,q)=>M(q.v,Q(3,4))],['the load is shared evenly','take half the load',(S,p,q)=>M(q.v,Q(1,2))]]),
+ D('screws',['left','right'],'newtons on that support','newtons a screw','5j','sharing in a ratio',(S,p)=>'that support is held by '+p.k+' screws sharing equally: what does each carry?',
+   (S,p,q)=>Dv(q.v,p.k),(S,p,q)=>P(q.v)+'/'+p.k,'each screw',divW((S,p)=>'the '+p.k+' screws',(S,p)=>p.k),()=>({k:pick([2,4])})),
+ D('kg',['screws'],'newtons a screw','kilograms a screw','5j','multiplying and dividing quantities','that is the weight of how many kilograms, at g = 10?',
+   (S,p,q)=>Dv(q.v,10),(S,p,q)=>P(q.v)+'/10','kilograms a screw',divW('g = 10',10))]);
+addC(L,G(X({u:'newtons a screw',out:'newtons',k:'above',ask:(S,p)=>'each screw holds '+p.K+' newtons: how many to spare?',ln:()=>'to spare at each screw'},LESS)),
+  G(X({u:'kilograms a screw',out:'kilograms',k:'above',ask:(S,p)=>'each screw is rated for '+p.K+' kilograms: how many to spare?',ln:()=>'to spare at each screw'},LESS)),
+  G(X({u:'newtons on that support',out:'newtons',k:'above',ask:(S,p)=>'the bracket there holds '+p.K+' newtons: how many to spare?',ln:()=>'to spare at the bracket'},LESS)));
+}
+
+/* ---------- 12·eng.worst: the plank at Astoria ---------- */
+{ const D=mk('worst'), L='12·eng.worst', TQ='the worst-place technique';
+midsOf(L,[
+ D('painter',['read'],'newtons','newtons','4h','the less-is-adding technique',(S,p)=>'a painter weighing '+p.w+' newtons stands with the pots: what is the load now?',
+   (S,p,q)=>A(q.v,p.w),(S,p,q)=>P(q.v)+' + '+p.w,'the load with the painter',addW((S,p)=>'the '+p.w+' newton painter',(S,p)=>p.w),()=>({w:pick([600,700,800])})),
+ D('mom',['read','painter'],'newtons','newton metres','12·eng',TQ,'at the worst place, the middle of the 2 metre plank, what turning effect PL/4 is that?',
+   (S,p,q)=>M(q.v,Q(1,2)),(S,p,q)=>P(q.v)+' · 2/4','turning effect at the middle',[['PL/2 is used, as if held at one end','take PL/2',(S,p,q)=>q.v],['PL/8 is used, as if the load were spread','take PL/8',(S,p,q)=>M(q.v,Q(1,4))]]),
+ D('two',['mom'],'newton metres','newton metres on each plank','5j','sharing in a ratio','two planks side by side share it equally: how much does each carry?',
+   (S,p,q)=>M(q.v,Q(1,2)),(S,p,q)=>P(q.v)+'/2','each plank',[['the two planks are taken to double it','double the turning effect',(S,p,q)=>M(q.v,2)],['one plank takes it all','give it all to one plank',(S,p,q)=>q.v]])]);
+addC(L,G(X({u:'newton metres',k:'above',ask:(S,p)=>'the plank breaks at '+p.K+' newton metres: how much to spare?',ln:()=>'to spare in bending'},LESS)),
+  G(X({u:'newton metres on each plank',out:'newton metres',k:'above',ask:(S,p)=>'each plank breaks at '+p.K+' newton metres: how much to spare?',ln:()=>'to spare in bending'},LESS)));
+}
+
+/* ---------- 12·comp.rem3: Claire's counter and the three-state machine ---------- */
+{ const D=mk('rem3'), L='12·comp.rem3', TQ='the remainder-machine technique';
+midsOf(L,[
+ D('more',['read'],'ticks','ticks','4h','the less-is-adding technique',(S,p)=>p.k+' more ticks come in before the machine reads: what does the counter show?',
+   (S,p,q)=>A(q.v,p.k),(S,p,q)=>P(q.v)+' + '+p.k,'ticks at the reading',addW((S,p)=>'the '+p.k+' ticks',(S,p)=>p.k),()=>({k:pick([2,5,7])})),
+ D('pairs',['read','more'],'ticks','pairs of ticks','4j','the division-with-remainder technique','the machine reads in twos: how many whole pairs of ticks?',
+   (S,p,q)=>fl(Dv(q.v,2)),(S,p,q)=>'whole part of '+P(q.v)+'/2','whole pairs',[['a lone tick is counted as a pair','count a lone tick as a pair',(S,p,q)=>ce(Dv(q.v,2))],['the ticks are doubled','double the ticks',(S,p,q)=>M(q.v,2)]]),
+ D('state',['pairs'],'pairs of ticks','state','12·comp',TQ,'the machine keeps the pairs’ remainder by 3: which state is it in?',
+   (S,p,q)=>Q(q.v.p%3),(S,p,q)=>'remainder of '+P(q.v)+' by 3','the state',[['the whole threes are given','count the whole threes',(S,p,q)=>fl(Dv(q.v,3))],['the remainder by 2 is taken','take the remainder by 2',(S,p,q)=>Q(q.v.p%2)]])]);
+addC(L,Md(X({u:'pairs of ticks',out:'state',k:3,ask:()=>'the machine reports the pairs’ remainder by 3: what does it report?',ln:()=>'the machine’s report'},own('12·comp',TQ))),
+  cl('cust',X({u:'state',out:'state',k:1,pos:false,f:(S,p,q)=>Q((q.v.p+1)%3),ex:(S,p,q)=>'remainder of '+P(q.v)+' + 1 by 3',ask:()=>'one more pair comes in: which state is it in then?',ln:()=>'the next state',
+    xs:(S,p,q)=>[{why:'the state is not wrapped round',v:A(q.v,1)},{why:'the state is moved back instead of on',v:Q((q.v.p+2)%3)},{why:'a single tick is taken to move it',v:q.v}]},own('12·comp',TQ))));
+}
+
+/* ---------- 13·eng.drag: Jean into the wind ---------- */
+{ const D=mk('drag'), L='13·eng.drag', TQ='the force-times-speed technique'; const rider=S=>{ const m=S.story.match(/^(\w+) rides/); return m?m[1]:'the rider'; };
+midsOf(L,[
+ D('power',['read'],'newtons','watts','13·eng',TQ,(S,p)=>'holding '+p.x+' metres a second against it, what power must '+rider(S)+' give?',
+   (S,p,q)=>M(q.v,p.x),(S,p,q)=>P(q.v)+' · '+p.x,'power against the drag',mulW((S,p)=>'the '+p.x+' metres a second',(S,p)=>p.x),xX),
+ D('hour',['power'],'watts','kilojoules an hour','5j','changing units is multiplying by one','over an hour of 3600 seconds, how many kilojoules is that?',
+   (S,p,q)=>M(q.v,Q(3600,1000)),(S,p,q)=>P(q.v)+' · 3600/1000','kilojoules an hour',[['the 1000 is left out','multiply the watts by 3600',(S,p,q)=>M(q.v,3600)],['60 seconds are used for the hour','multiply by 60/1000',(S,p,q)=>M(q.v,Q(60,1000))]]),
+ D('food',['hour'],'kilojoules an hour','kilojoules of food an hour','5c','the scaling technique','muscles turn only 1/4 of food into work: how many kilojoules of food an hour?',
+   (S,p,q)=>M(q.v,4),(S,p,q)=>P(q.v)+' · 4','food an hour',[['the 1/4 is multiplied in instead of divided','take 1/4 of the work',(S,p,q)=>M(q.v,Q(1,4))],['the lost 3/4 alone is given','multiply by 3',(S,p,q)=>M(q.v,3)]])]);
+addC(L,G(X({u:'kilojoules of food an hour',out:'kilojoules',k:'above',ask:(S,p)=>rider(S)+' packed '+p.K+' kilojoules of snacks: how many are left after an hour?',ln:()=>'snacks left'},LESS)),
+  G(X({u:'kilojoules an hour',k:'above',ask:(S,p)=>rider(S)+' can keep up '+p.K+' kilojoules of work an hour: how many to spare?',ln:()=>'to spare'},LESS)));
+}
+
+/* ---------- 14·logi.reorder: the feed store at Redding ---------- */
+{ const D=mk('reord'), L='14·logi.reorder', TQ='the reorder point';
+midsOf(L,[
+ D('lead',['read'],'bags a day','bags sold while the order comes','5j','multiplying and dividing quantities','an order takes 3 days to come: how many bags sell meanwhile?',
+   (S,p,q)=>M(q.v,3),(S,p,q)=>P(q.v)+' · 3','sold during the wait',mulW('the 3 days',3)),
+ D('point',['lead'],'bags sold while the order comes','bags at the reorder point','14·logi',TQ,'15 bags are kept back: at what stock should the store reorder?',
+   (S,p,q)=>A(q.v,15),(S,p,q)=>P(q.v)+' + 15','the reorder point',[['the bags kept back are left out','leave out the 15 kept back',(S,p,q)=>q.v],['the bags kept back are taken off','take the 15 away',(S,p,q)=>Sb(q.v,15)]]),
+ D('kg',['point'],'bags at the reorder point','kilograms','5j','multiplying and dividing quantities','each bag weighs 25 kg: how many kilograms are in the shed then?',
+   (S,p,q)=>M(q.v,25),(S,p,q)=>P(q.v)+' · 25','kilograms at the reorder point',mulW('the 25 kg',25))]);
+addC(L,G(X({u:'bags at the reorder point',out:'bags',k:'above',ask:(S,p)=>'the shelf holds '+p.K+' bags: how many above the reorder point?',ln:()=>'above the reorder point'},LESS)),
+  G(X({u:'kilograms',k:'above',ask:(S,p)=>'the shed floor is rated for '+p.K+' kilograms: how many to spare?',ln:()=>'kilograms to spare'},LESS)));
+}
+
+/* ---------- 11·chem.melt: Sarah's cup of ice ---------- */
+{ const D=mk('melt'), L='11·chem.melt', TQ='the heat-sum law';
+midsOf(L,[
+ D('warm',['read'],'joules','joules for the whole change','11·chem',TQ,(S,p)=>'the melted water is then warmed to '+S.T+' °C: what heat does the whole change take?',
+   (S,p,q)=>A(q.v,4*S.T*p.x),(S,p,q)=>P(q.v)+' + 4 · '+p.x+' · '+S.T,'heat for the whole change',[['the warming is taken away from the melting','take the warming away',(S,p,q)=>Sb(q.v,4*S.T*p.x)],['the grams are left out of the warming','add 4 · '+'the degrees',(S,p,q)=>A(q.v,4*S.T)]],xX),
+ D('time',['warm'],'joules for the whole change','seconds of heating','5j','multiplying and dividing quantities',(S,p)=>'a '+p.w+' watt heater does it: how many seconds?',
+   (S,p,q)=>Dv(q.v,p.w),(S,p,q)=>P(q.v)+'/'+p.w,'seconds of heating',divW((S,p)=>'the '+p.w+' watts',(S,p)=>p.w),()=>({w:pick([50,100,200])})),
+ D('mins',['time'],'seconds of heating','minutes of heating','5j','changing units is multiplying by one','how many minutes is that?',
+   (S,p,q)=>Dv(q.v,60),(S,p,q)=>P(q.v)+'/60','minutes of heating',divW('the 60 seconds',60))]);
+addC(L,G(X({u:'minutes of heating',out:'minutes',k:'above',ask:(S,p)=>'the heater is on a '+p.K+' minute timer: how many minutes are spare?',ln:()=>'minutes spare'},LESS)),
+  G(X({u:'seconds of heating',out:'seconds',k:'above',ask:(S,p)=>'the heater is on a '+p.K+' second timer: how many seconds are spare?',ln:()=>'seconds spare'},LESS)));
+}
+
+/* ---------- 2·comp.cond: the check before the then part ---------- */
+{ const D=mk('cond'), L='2·comp.cond', ST='2·comp', TQ='the stop-early technique';
+midsOf(L,[
+ D('saved',['read'],'steps','steps saved',ST,TQ,(S)=>'if the first comparison is false it stops after '+(S.c[0]+S.c[1])+' steps: how many are saved?',
+   (S,p,q)=>{ const r=Sb(q.v,S.c[0]+S.c[1]); return pos(r)?r:null; },(S,p,q)=>P(q.v)+' − '+(S.c[0]+S.c[1]),'steps saved',subW(S=>'the '+(S.c[0]+S.c[1])+' steps it still takes',S=>S.c[0]+S.c[1])),
+ D('loop',['saved'],'steps saved','steps saved in the loop',ST,TQ,(S,p)=>'the check runs on each of '+p.k+' passes of a loop, failing first each time: steps saved?',
+   (S,p,q)=>M(q.v,p.k),(S,p,q)=>p.k+' · '+P(q.v),'saved over the loop',mulW((S,p)=>'the '+p.k+' passes',(S,p)=>p.k),()=>({k:pick([10,20,50])})),
+ D('ns',['loop'],'steps saved in the loop','nanoseconds saved',ST,TQ,(S,p)=>'each step takes '+p.d+' nanoseconds: how much time is saved?',
+   (S,p,q)=>M(q.v,p.d),(S,p,q)=>P(q.v)+' · '+p.d,'time saved',mulW((S,p)=>'the '+p.d+' nanoseconds',(S,p)=>p.d),()=>({d:pick([2,3,5])}))]);
+addC(L,Tm(X({u:'steps saved',out:'nanoseconds',k:()=>pick([2,3,5]),ask:(S,p)=>'each step takes '+p.K+' nanoseconds: how much time is saved?',ln:()=>'time saved'},own(ST,TQ))),
+  Tm(X({u:'steps saved in the loop',out:'nanoseconds',k:()=>pick([2,3,5]),ask:(S,p)=>'each step takes '+p.K+' nanoseconds: how much time is saved?',ln:()=>'time saved'},own(ST,TQ))),
+  G(X({u:'nanoseconds saved',out:'nanoseconds',k:'above',ask:(S,p)=>'the speed-up target is '+p.K+' nanoseconds: how far short is it?',ln:()=>'short of the target'},own(ST,TQ))));
+}
+
+/* ---------- 7·then.power: a power of 3 by bigger steps ---------- */
+{ const D=mk('pow'), L='7·then.power', TQ='the digits-of-a-power technique';
+midsOf(L,[
+ D('by9',['read'],'multiplications','multiplications by 9','7·then',TQ,'9 is 3 · 3, so each multiplication by 9 does two by 3: how many by 9 reach the same power?',
+   (S,p,q)=>{ const r=Dv(q.v,2); return whole(r)?r:null; },(S,p,q)=>P(q.v)+'/2','multiplications by 9',[['the count is doubled instead of halved','double the count for multiplications by 9',(S,p,q)=>M(q.v,2)],['9 is divided into it','divide the count by 9',(S,p,q)=>Dv(q.v,9)]]),
+ D('by81',['by9'],'multiplications by 9','multiplications by 81','7·then',TQ,'81 is 9 · 9: how many multiplications by 81 reach the same power?',
+   (S,p,q)=>{ const r=Dv(q.v,2); return whole(r)?r:null; },(S,p,q)=>P(q.v)+'/2','multiplications by 81',[['the count is doubled instead of halved','double the count',(S,p,q)=>M(q.v,2)],['9 is divided into it again','divide the count by 9',(S,p,q)=>Dv(q.v,9)]]),
+ D('mins',['by81'],'multiplications by 81','minutes','5j','multiplying and dividing quantities',(S,p)=>'Zoe does '+p.k+' of those multiplications a minute: how many minutes of work?',
+   (S,p,q)=>Dv(q.v,p.k),(S,p,q)=>P(q.v)+'/'+p.k,'minutes of work',divW((S,p)=>'the '+p.k+' a minute',(S,p)=>p.k),()=>({k:pick([2,3,5])}))]);
+addC(L,Pr(X({u:'multiplications by 9',out:'minutes',k:()=>pick([2,3,5]),ask:(S,p)=>'Zoe does '+p.K+' multiplications by 9 a minute: how many minutes of work?',ln:()=>'minutes of work'},MQ)),
+  G(X({u:'minutes',k:'above',ask:(S,p)=>'she has '+p.K+' minutes before class: how many are spare?',ln:()=>'minutes spare'},LESS)));
+}
+
+/* ---------- 14·bio.cell: oxygen to the cell's centre ---------- */
+{ const D=mk('cell'), L='14·bio.cell', TQ='the spreading law';
+midsOf(L,[
+ D('sq',['read'],'micrometres','square micrometres','14·bio',TQ,'spreading goes by x²: what is the distance squared?',
+   (S,p,q)=>qm(q.v,q.v),(S,p,q)=>P(q.v)+'²','distance squared',[['the distance is doubled, not squared','double the distance',(S,p,q)=>M(q.v,2)],['the distance is left as it is','take the distance itself',(S,p,q)=>q.v]]),
+ D('t',['sq'],'square micrometres','milliseconds','14·bio',TQ,'with x² = 2Dt and D = 2 square micrometres a millisecond, how long does oxygen take?',
+   (S,p,q)=>M(q.v,Q(1,4)),(S,p,q)=>P(q.v)+'/(2 · 2)','time to the centre',[['the 2 of 2Dt is left out','divide by D alone',(S,p,q)=>M(q.v,Q(1,2))],['x² is multiplied by 2D','multiply by 2D',(S,p,q)=>M(q.v,4)]]),
+ D('warm',['t'],'milliseconds','milliseconds','14·bio',TQ,'at 37 °C, D is 3/2 as large: how long does it take there?',
+   (S,p,q)=>M(q.v,Q(2,3)),(S,p,q)=>P(q.v)+' · 2/3','time when warm',[['the time is stretched by 3/2 instead of shrunk','multiply the time by 3/2',(S,p,q)=>M(q.v,Q(3,2))],['the time is shrunk by 1/2','halve the time',(S,p,q)=>M(q.v,Q(1,2))]])]);
+addC(L,G(X({u:'milliseconds',k:'above',ask:(S,p)=>'the cell starts to starve after '+p.K+' milliseconds: how much time to spare?',ln:()=>'time to spare'},LESS)));
+}
+
+/* ---------- 14·bio.scent: the jar of scent on the counter ---------- */
+{ const D=mk('scent'), L='14·bio.scent', TQ='the spreading law';
+midsOf(L,[
+ D('sq',['read'],'centimetres','square centimetres','14·bio',TQ,'spreading goes by x²: what is the distance squared?',
+   (S,p,q)=>qm(q.v,q.v),(S,p,q)=>P(q.v)+'²','distance squared',[['the distance is doubled, not squared','double the distance',(S,p,q)=>M(q.v,2)],['the distance is left as it is','take the distance itself',(S,p,q)=>q.v]]),
+ D('t',['sq'],'square centimetres','seconds','14·bio',TQ,'with x² = 2Dt and D = 1/5 square centimetre a second, how long does the scent take?',
+   (S,p,q)=>M(q.v,Q(5,2)),(S,p,q)=>P(q.v)+'/(2 · 1/5)','time to get there',[['the 2 of 2Dt is left out','divide by D alone',(S,p,q)=>M(q.v,5)],['x² is multiplied by 2D','multiply by 2D',(S,p,q)=>M(q.v,Q(2,5))]]),
+ D('mins',['t'],'seconds','minutes','5j','changing units is multiplying by one','how many minutes is that?',
+   (S,p,q)=>Dv(q.v,60),(S,p,q)=>P(q.v)+'/60','in minutes',divW('the 60 seconds',60))]);
+addC(L,G(X({u:'minutes',k:'above',ask:(S,p)=>'Zoe leaves the room after '+p.K+' minutes: how many minutes before that does it arrive?',ln:()=>'minutes before she leaves'},LESS)),
+  G(X({u:'seconds',k:'above',ask:(S,p)=>'a timer rings after '+p.K+' seconds: how many seconds before that does it arrive?',ln:()=>'seconds before the timer'},LESS)));
+}
+
+/* ---------- 11·chem.window: the pane in winter ---------- */
+{ const D=mk('pane'), L='11·chem.window', TQ='the heat-sum law';
+midsOf(L,[
+ D('double',['read'],'watts per degree','watts per degree','11·chem',TQ,'a second pane with an air gap halves the flow: how many watts per degree then?',
+   (S,p,q)=>M(q.v,Q(1,2)),(S,p,q)=>P(q.v)+'/2','with two panes',[['the flow is doubled for two panes','double the flow',(S,p,q)=>M(q.v,2)],['the second pane is taken to stop the flow','take the flow as stopped',(S,p,q)=>Q(0)]]),
+ D('watts',['read','double'],'watts per degree','watts','5j','multiplying and dividing quantities',(S,p)=>'it is '+p.d+' degrees warmer inside than out: how many watts flow out?',
+   (S,p,q)=>M(q.v,p.d),(S,p,q)=>P(q.v)+' · '+p.d,'heat flowing out',mulW((S,p)=>'the '+p.d+' degrees',(S,p)=>p.d),()=>({d:pick([5,10,15,20])})),
+ D('day',['watts'],'watts','kilowatt hours a day','5j','changing units is multiplying by one','over a day of 24 hours, how many kilowatt hours leak away?',
+   (S,p,q)=>M(q.v,Q(24,1000)),(S,p,q)=>P(q.v)+' · 24/1000','kilowatt hours a day',[['the 1000 is left out','multiply the watts by 24',(S,p,q)=>M(q.v,24)],['an hour is used, not a day','divide the watts by 1000',(S,p,q)=>Dv(q.v,1000)]]),
+ D('cost',['day'],'kilowatt hours a day','dollars a day','5j','multiplying and dividing quantities','power costs 1/5 dollar a kilowatt hour: what does the leak cost a day?',
+   (S,p,q)=>M(q.v,Q(1,5)),(S,p,q)=>P(q.v)+' · 1/5','cost a day',[['the kilowatt hours are divided by 1/5','multiply by 5',(S,p,q)=>M(q.v,5)],['1/5 is added','add 1/5',(S,p,q)=>A(q.v,Q(1,5))]])]);
+addC(L,Tm(X({u:'dollars a day',out:'dollars',k:30,ask:()=>'what does it cost over a 30-day month?',ln:()=>'cost a month'},MQ)),
+  Tm(X({u:'kilowatt hours a day',out:'dollars a day',k:Q(1,5),ask:()=>'power costs 1/5 dollar a kilowatt hour: what does the leak cost a day?',ln:()=>'cost a day'},MQ)));
+}
+
+/* ---------- 7·phys.side: Zoe's lamps side by side ---------- */
+{ const D=mk('side'), L='7·phys.side', TQ='energy is kept';
+midsOf(L,[
+ D('out',['read'],'amps','amps','4h','the less-is-adding technique',(S)=>'one lamp burns out, and its '+S.c[1]+' amps stop: what does the battery give now?',
+   (S,p,q)=>{ const r=Sb(q.v,S.c[1]); return pos(r)?r:null; },(S,p,q)=>P(q.v)+' − '+S.c[1],'current now',[['a lamp’s current is added instead of taken away',S=>'add '+S.c[1]+' amps',(S,p,q)=>A(q.v,S.c[1])],['the whole string is taken to go dark, as in series','take the current as 0',(S,p,q)=>Q(0)]]),
+ D('power',['read','out'],'amps','watts','7·phys',TQ,(S)=>'what power does the '+S.V+' volt battery give?',
+   (S,p,q)=>M(q.v,S.V),(S,p,q)=>S.V+' · '+P(q.v),'power from the battery',mulW(S=>'the '+S.V+' volts',S=>S.V)),
+ D('wh',['power'],'watts','watt hours','5j','multiplying and dividing quantities',(S,p)=>'they stay lit '+p.h+' hours: how many watt hours does that use?',
+   (S,p,q)=>M(q.v,p.h),(S,p,q)=>P(q.v)+' · '+p.h,'energy used',mulW((S,p)=>'the '+p.h+' hours',(S,p)=>p.h),()=>({h:pick([2,3,4])}))]);
+addC(L,G(X({u:'watt hours',k:'above',ask:(S,p)=>'the battery stores '+p.K+' watt hours: how many are left?',ln:()=>'watt hours left'},LESS)),
+  G(X({u:'watts',k:'above',ask:(S,p)=>'the battery can give up to '+p.K+' watts: how many watts to spare?',ln:()=>'watts to spare'},LESS)));
+}
+
+/* ---------- 7·phys.pair: Randy's two branches ---------- */
+{ const D=mk('pair'), L='7·phys.pair', TQ='the proportion law';
+midsOf(L,[
+ D('amps',['read'],'ohms','amps through the branch','7·phys',TQ,(S,p)=>'the branch sits across a '+p.V+' volt supply: what current does it take?',
+   (S,p,q)=>Dv(p.V,q.v),(S,p,q)=>p.V+'/'+P(q.v),'current in the branch',[['the division is turned over',(S,p)=>'divide the ohms by '+p.V,(S,p,q)=>Dv(q.v,p.V)],['the volts are multiplied by the ohms',(S,p)=>'multiply '+p.V+' by the ohms',(S,p,q)=>M(q.v,p.V)]],()=>({V:pick([12,24])})),
+ D('total',['amps'],'amps through the branch','amps from the supply','7·phys','in parallel, reciprocals add',(S,p)=>'a second branch of '+p.r+' ohms sits beside it: what current does the supply give?',
+   (S,p,q)=>A(q.v,Q(p.V,p.r)),(S,p,q)=>P(q.v)+' + '+p.V+'/'+p.r,'current from the supply',[['the second branch is left out','leave out the second branch',(S,p,q)=>q.v],['the second branch’s ohms are added as amps',(S,p)=>'add '+p.r+' to the current',(S,p,q)=>A(q.v,p.r)]],(S,ch)=>({V:ch[ch.length-1].p.V,r:pick([6,12])})),
+ D('watts',['total'],'amps from the supply','watts from the supply','7·phys','energy is kept',(S,p)=>'at '+p.V+' volts, what power does the supply give?',
+   (S,p,q)=>M(q.v,p.V),(S,p,q)=>p.V+' · '+P(q.v),'power from the supply',mulW((S,p)=>'the '+p.V+' volts',(S,p)=>p.V),(S,ch)=>({V:ch[ch.length-1].p.V}))]);
+addC(L,G(X({u:'amps from the supply',out:'amps',k:'above',ask:(S,p)=>'the fuse blows at '+p.K+' amps: how much margin is left?',ln:()=>'margin on the fuse'},LESS)),
+  G(X({u:'watts from the supply',out:'watts',k:'above',ask:(S,p)=>'the supply is rated '+p.K+' watts: how many watts to spare?',ln:()=>'watts to spare'},LESS)));
+}
+
+/* ---------- 7·phys.bill: Mike's heater ---------- */
+{ const D=mk('bill'), L='7·phys.bill';
+midsOf(L,[
+ D('kw',['read'],'watts','kilowatts','5j','changing units is multiplying by one','the meter counts kilowatts, 1000 watts each: how many kilowatts does the heater draw?',
+   (S,p,q)=>Dv(q.v,1000),(S,p,q)=>P(q.v)+'/1000','in kilowatts',[['the change of units is turned over','multiply by 1000',(S,p,q)=>M(q.v,1000)],['100 watts are taken for a kilowatt','divide by 100',(S,p,q)=>Dv(q.v,100)]]),
+ D('kwh',['kw'],'kilowatts','kilowatt hours','5j','multiplying and dividing quantities',(S,p)=>'it runs '+p.h+' hours: how many kilowatt hours does it use?',
+   (S,p,q)=>M(q.v,p.h),(S,p,q)=>P(q.v)+' · '+p.h,'energy used',mulW((S,p)=>'the '+p.h+' hours',(S,p)=>p.h),()=>({h:pick([4,5,8,10])})),
+ D('cents',['kwh'],'kilowatt hours','cents','5j','multiplying and dividing quantities','power costs 20 cents a kilowatt hour: what does that cost?',
+   (S,p,q)=>M(q.v,20),(S,p,q)=>P(q.v)+' · 20','cost',mulW('the 20 cents',20))]);
+addC(L,Tm(X({u:'kilowatt hours',out:'cents',k:20,ask:()=>'power costs 20 cents a kilowatt hour: what does that cost?',ln:()=>'cost'},MQ)),
+  G(X({u:'cents',k:'above',ask:(S,p)=>'Mike set aside '+p.K+' cents for heating: how many are left?',ln:()=>'cents left'},LESS)));
+}
+
+/* ---------- 13·econ.curve: Jean's chairs a day ---------- */
+{ const D=mk('curve'), L='13·econ.curve';
+midsOf(L,[
+ D('avg',['read'],'dollars','dollars a chair on average','5j','multiplying and dividing quantities',(S,p)=>'over the '+p.x+' chairs, what does one cost on average?',
+   (S,p,q)=>Dv(q.v,p.x),(S,p,q)=>P(q.v)+'/'+p.x,'average cost of a chair',divW((S,p)=>'the '+p.x+' chairs',(S,p)=>p.x),xX),
+ D('price',['avg'],'dollars a chair on average','dollars a chair to sell at','5c','the scaling technique','each chair is priced at its average cost plus a quarter: what is the price?',
+   (S,p,q)=>M(q.v,Q(5,4)),(S,p,q)=>P(q.v)+' · 5/4','price of a chair',[['only the quarter is given','take a quarter of the cost as the price',(S,p,q)=>M(q.v,Q(1,4))],['a quarter is taken off instead','price at the cost less a quarter',(S,p,q)=>M(q.v,Q(3,4))]]),
+ D('takings',['price'],'dollars a chair to sell at','dollars of takings',['5j'],'multiplying and dividing quantities',(S,p)=>'all '+p.x+' chairs sell at that price: what are the day’s takings?',
+   (S,p,q)=>M(q.v,p.x),(S,p,q)=>P(q.v)+' · '+p.x,'the day’s takings',mulW((S,p)=>'the '+p.x+' chairs',(S,p)=>p.x),xX)]);
+addC(L,G(X({u:'dollars a chair to sell at',out:'dollars',k:'above',ask:(S,p)=>'a store sells such chairs at '+p.K+' dollars: how much cheaper is Jean’s?',ln:()=>'cheaper than the store'},LESS)),
+  O(X({u:'dollars of takings',k:(S,q,ctx)=>ctx&&ctx.chain?ctx.chain[0].o.v:null,ask:(S,p)=>'the day’s cost was '+p.K+' dollars: what profit do the takings leave?',ln:()=>'profit for the day'},LESS)));
+}
+
+/* ---------- 12·phys.run: Claire's cart on the ramp ---------- */
+{ const D=mk('run'), L='12·phys.run';
+midsOf(L,[
+ D('gone',['read'],'centimetres','centimetres travelled','4h','the less-is-adding technique',(S)=>'at t = 0 the mark read '+qs(qq(S.c[0]))+' centimetres: how far has the cart gone since?',
+   (S,p,q)=>{ const r=Sb(q.v,S.c[0]); return pos(r)?r:null; },(S,p,q)=>P(q.v)+' − '+qs(qq(S.c[0])),'distance since the start',subW(S=>'the starting mark',S=>S.c[0])),
+ D('avg',['gone'],'centimetres travelled','centimetres a second','5j','multiplying and dividing quantities',(S,p)=>'that took '+p.x+' seconds: what was its average speed?',
+   (S,p,q)=>Dv(q.v,p.x),(S,p,q)=>P(q.v)+'/'+p.x,'average speed',divW((S,p)=>'the '+p.x+' seconds',(S,p)=>p.x),xX),
+ D('mps',['avg'],'centimetres a second','metres a second','5j','changing units is multiplying by one','in metres a second, 100 centimetres a metre, how fast is that?',
+   (S,p,q)=>Dv(q.v,100),(S,p,q)=>P(q.v)+'/100','in metres a second',[['the change of units is turned over','multiply by 100',(S,p,q)=>M(q.v,100)],['10 centimetres are taken for a metre','divide by 10',(S,p,q)=>Dv(q.v,10)]])]);
+addC(L,In(X({u:'centimetres a second',out:'seconds',k:()=>pick([60,120,240]),ask:(S,p)=>'at that speed, how many seconds to cross a '+p.K+' centimetre bench?',ln:()=>'seconds to cross the bench'},MQ)),
+  Tm(X({u:'metres a second',out:'kilometres an hour',k:Q(18,5),ask:()=>'a metre a second is 18/5 of a kilometre an hour: how fast is that in kilometres an hour?',ln:()=>'in kilometres an hour'},CU)));
+}
+/* ---------- branches: a second way on from an early step, so no map is a single line ---------- */
+{ const D=mk('coin'), L='14·stat.coin';
+midsOf(L,[D('three',['read'],'in every 10000','in every 10000, three flips','14·stat','the chance-of-a-record technique',(S,p)=>'a third flip lands heads: what is the chance of heads, tails, heads, for p = '+p.x+'?',
+   (S,p,q)=>M(q.v,Q(p.x,100)),(S,p,q)=>P(q.v)+' · '+p.x+'/100','heads, tails, heads',[['the chance of tails is used for the third flip',(S,p)=>'multiply by '+(100-p.x)+'/100',(S,p,q)=>M(q.v,Q(100-p.x,100))],['the 100 is left out',(S,p)=>'multiply the chance by '+p.x,(S,p,q)=>M(q.v,p.x)]],xX)]);
+addC(L,G(X({u:'in every 10000, three flips',out:'in every 10000',k:1250,ask:()=>'for a fair guess that record is 1250 in every 10000: how much less likely is it here?',ln:()=>'less likely than for a fair guess'},LESS))); }
+{ const D=mk('car'), L='14·phys.railcar';
+midsOf(L,[D('kmh',['shared'],'metres a second together','kilometres an hour together','5j','changing units is multiplying by one','a metre a second is 18/5 of a kilometre an hour: how fast do they roll in those units?',
+   (S,p,q)=>M(q.v,Q(18,5)),(S,p,q)=>P(q.v)+' · 18/5','in kilometres an hour',[['the change of units is turned over','multiply by 5/18',(S,p,q)=>M(q.v,Q(5,18))],['18/5 is added','add 18/5',(S,p,q)=>A(q.v,Q(18,5))]])]);
+addC(L,G(X({u:'kilometres an hour together',out:'kilometres an hour',k:'above',ask:(S,p)=>'the yard’s limit is '+p.K+' kilometres an hour: how far under it are they?',ln:()=>'under the limit'},LESS))); }
+{ const D=mk('cross'), L='5·bio.cross';
+midsOf(L,[D('pots',['rec'],'recessive seedlings','trays of pots','4j','the division-with-remainder technique',(S,p)=>'each recessive seedling is potted on, '+p.k+' pots to a tray: how many trays are needed?',
+   (S,p,q)=>ce(Dv(q.v,p.k)),(S,p,q)=>P(q.v)+'/'+p.k+', rounded up','trays of pots',[['the trays are rounded down, leaving seedlings out','round the trays down',(S,p,q)=>fl(Dv(q.v,p.k))],['the seedlings are multiplied by the pots a tray','multiply by the pots a tray',(S,p,q)=>M(q.v,p.k)]],()=>({k:pick([4,6])}))]);
+addC(L,G(X({u:'trays of pots',out:'trays',k:'above',ask:(S,p)=>'the greenhouse bench takes '+p.K+' trays: how many more would fit?',ln:()=>'room on the bench'},LESS))); }
+{ const D=mk('plate'), L='6·chem.plate';
+midsOf(L,[D('price',['grams'],'grams of copper','dollars of copper','5j','multiplying and dividing quantities','copper costs 1/100 of a dollar a gram: what is that copper worth?',
+   (S,p,q)=>M(q.v,Q(1,100)),(S,p,q)=>P(q.v)+'/100','worth of the copper',[['the grams are multiplied by 100','multiply the grams by 100',(S,p,q)=>M(q.v,100)],['a dollar a gram is used','take a dollar a gram',(S,p,q)=>q.v]])]);
+addC(L,G(X({u:'dollars of copper',out:'dollars',k:'above',ask:(S,p)=>'the job pays '+p.K+' dollars: how many dollars are left after the copper?',ln:()=>'left after the copper'},LESS))); }
+{ const D=mk('sample'), L='6·stat.sample';
+midsOf(L,[D('pct',['share'],'of the town','in every 100 of the town','5c','the scaling technique','give that share as so many in every 100 people',
+   (S,p,q)=>M(q.v,100),(S,p,q)=>P(q.v)+' · 100','in every 100',[['the share is divided by 100','divide the share by 100',(S,p,q)=>Dv(q.v,100)],['10 is used for 100','multiply the share by 10',(S,p,q)=>M(q.v,10)]])]);
+addC(L,G(X({u:'in every 100 of the town',out:'in every 100',k:100,ask:()=>'how many in every 100 have not used the path?',ln:()=>'not users in every 100'},LESS))); }
+{ const D=mk('lamps'), L='7·phys.lamps';
+midsOf(L,[D('one',['amps'],'amps','volts across a lamp','7·phys','the proportion law',(S)=>'the same current runs through each '+S.c[1]+' ohm lamp: how many volts across one lamp?',
+   (S,p,q)=>M(q.v,S.c[1]),(S,p,q)=>P(q.v)+' · '+S.c[1],'volts across a lamp',[['the current is divided by the lamp’s ohms',S=>'divide the current by '+S.c[1],(S,p,q)=>Dv(q.v,S.c[1])],['the wire’s ohms are used',S=>'multiply the current by '+S.c[0],(S,p,q)=>M(q.v,S.c[0])]])]);
+addC(L,G(X({u:'volts across a lamp',out:'volts',k:'above',ask:(S,p)=>'a lamp is rated for '+p.K+' volts: how many volts to spare?',ln:()=>'volts to spare'},LESS))); }
+{ const D=mk('ohm'), L='7·phys.ohm';
+midsOf(L,[D('wh',['power'],'watts','watt hours','5j','multiplying and dividing quantities',(S,p)=>'it runs '+p.m+' minutes: how many watt hours does it use?',
+   (S,p,q)=>M(q.v,Q(p.m,60)),(S,p,q)=>P(q.v)+' · '+p.m+'/60','watt hours used',[['the minutes are used as hours',(S,p)=>'multiply the watts by '+p.m,(S,p,q)=>M(q.v,p.m)],['the hours are turned over',(S,p)=>'multiply the watts by 60/'+p.m,(S,p,q)=>M(q.v,Q(60,p.m))]],()=>({m:pick([3,6,12])}))]);
+addC(L,G(X({u:'watt hours',k:'above',ask:(S,p)=>'the camp battery stores '+p.K+' watt hours: how many are left?',ln:()=>'watt hours left'},LESS))); }
+{ const D=mk('scale'), L='9·bio.scale';
+midsOf(L,[D('wire',['side'],'centimetres a side','centimetres of wire','5j','multiplying and dividing quantities','a wire frame of the cube runs along all 12 edges: how much wire is that?',
+   (S,p,q)=>M(q.v,12),(S,p,q)=>P(q.v)+' · 12','wire for the frame',[['the 6 faces are counted, not the 12 edges','multiply the side by 6',(S,p,q)=>M(q.v,6)],['the 8 corners are counted','multiply the side by 8',(S,p,q)=>M(q.v,8)]])]);
+addC(L,G(X({u:'centimetres of wire',out:'centimetres',k:'above',ask:(S,p)=>'the coil holds '+p.K+' centimetres of wire: how much is left?',ln:()=>'wire left'},LESS))); }
+{ const D=mk('enz'), L='10·bio.enzyme';
+midsOf(L,[D('tubes',['hour'],'micromoles an hour','micromoles an hour','5j','multiplying and dividing quantities',(S,p)=>'Evita runs '+p.k+' such tubes side by side: how many micromoles an hour in all?',
+   (S,p,q)=>M(q.v,p.k),(S,p,q)=>p.k+' · '+P(q.v),'all the tubes',mulW((S,p)=>'the '+p.k+' tubes',(S,p)=>p.k),()=>({k:pick([2,3,4])}))]);
+{ const W=LAWS.find(l=>l.id===L).mids.find(m=>m.id==='m:enz.mg'); if(W) W.after=W.after.concat(['m:enz.tubes']); } }
+{ const D=mk('trucks'), L='10·logi.trucks';
+midsOf(L,[D('drivers',['hours'],'truck hours a day','driver shifts','4j','the division-with-remainder technique','a driver’s shift is 6 hours at the wheel: how many shifts a day?',
+   (S,p,q)=>ce(Dv(q.v,6)),(S,p,q)=>P(q.v)+'/6, rounded up','driver shifts',[['the shifts are rounded down, leaving trips without a driver','round the shifts down',(S,p,q)=>fl(Dv(q.v,6))],['the truck’s 8 hours are used','divide by 8 hours',(S,p,q)=>ce(Dv(q.v,8))]])]);
+addC(L,G(X({u:'driver shifts',out:'drivers',k:'above',ask:(S,p)=>'the depot has '+p.K+' drivers on the roster: how many are spare?',ln:()=>'drivers spare'},LESS))); }
+{ const D=mk('chase'), L='10·phys.chase';
+midsOf(L,[D('st3',['st2'],'seconds for stage two','seconds for stage three','10·phys','the stage-sum technique',(S)=>'stage three takes 1/'+S.r+' of stage two: how long is it?',
+   (S,p,q)=>Dv(q.v,S.r),(S,p,q)=>P(q.v)+'/'+S.r,'stage three',divW(S=>String(S.r),S=>S.r))]);
+addC(L,Tm(X({u:'seconds for stage three',out:'seconds',k:S=>Q(S.r,S.r-1),ask:(S)=>'from stage three on, each stage takes 1/'+S.r+' of the one before: how long from there?',ln:()=>'from stage three to level'},own('10·phys','the stage-sum technique')))); }
+{ const D=mk('train'), L='12·phys.train';
+midsOf(L,[D('fan',['m1'],'turns a minute of the middle shaft','turns a minute of the fan','12·phys','the gear-train technique','the middle shaft also drives a fan through a 1/2 mesh: how fast does the fan turn?',
+   (S,p,q)=>M(q.v,Q(1,2)),(S,p,q)=>P(q.v)+' · 1/2','the fan',[['the ratio is turned over','multiply by 2',(S,p,q)=>M(q.v,2)],['the motor’s speed is used, not the middle shaft’s','halve the motor’s speed instead',(S,p,q)=>M(q.v,Q(3,2))]])]);
+addC(L,Pr(X({u:'turns a minute of the fan',out:'turns a second',k:60,ask:()=>'how many turns a second does the fan make?',ln:()=>'turns a second'},CU))); }
+{ const D=mk('drag'), L='13·eng.drag'; const rider=S=>{ const m=S.story.match(/^(\w+) rides/); return m?m[1]:'the rider'; };
+midsOf(L,[D('tail',['power'],'watts','watts','5c','the scaling technique',(S)=>'riding close behind a friend cuts that power by 1/3: what power does '+rider(S)+' give then?',
+   (S,p,q)=>M(q.v,Q(2,3)),(S,p,q)=>P(q.v)+' · 2/3','power behind Zoe',[['only the cut is given','give the 1/3 that is saved',(S,p,q)=>M(q.v,Q(1,3))],['the power is cut to 1/3','take 1/3 of the power',(S,p,q)=>M(q.v,Q(1,3))]])]);
+{ const W=LAWS.find(l=>l.id===L).mids.find(m=>m.id==='m:drag.hour'); if(W) W.after=W.after.concat(['m:drag.tail']); } }
+{ const D=mk('reord'), L='14·logi.reorder';
+midsOf(L,[D('week',['read'],'bags a day','bags a week','5j','multiplying and dividing quantities','the store opens 7 days a week: how many bags does it sell in a week?',
+   (S,p,q)=>M(q.v,7),(S,p,q)=>P(q.v)+' · 7','bags a week',mulW('the 7 days',7))]);
+addC(L,Cc(X({u:'bags a week',out:'pallets',k:40,ask:()=>'bags come 40 to a pallet: how many pallets cover a week?',ln:()=>'pallets a week'},DR))); }
+{ const D=mk('melt'), L='11·chem.melt';
+midsOf(L,[D('kj',['warm'],'joules for the whole change','kilojoules','5j','changing units is multiplying by one','how many kilojoules is that, 1000 joules each?',
+   (S,p,q)=>Dv(q.v,1000),(S,p,q)=>P(q.v)+'/1000','in kilojoules',divW('1000',1000))]);
+addC(L,G(X({u:'kilojoules',k:'above',ask:(S,p)=>'a hand warmer gives '+p.K+' kilojoules: how many are to spare?',ln:()=>'kilojoules to spare'},LESS))); }
+{ const D=mk('cell'), L='14·bio.cell';
+midsOf(L,[D('co2',['sq'],'square micrometres','milliseconds','14·bio','the spreading law','carbon dioxide spreads with D = 1 square micrometre a millisecond: how long does it take?',
+   (S,p,q)=>M(q.v,Q(1,2)),(S,p,q)=>P(q.v)+'/(2 · 1)','time for carbon dioxide',[['the 2 of 2Dt is left out','divide by D alone',(S,p,q)=>q.v],['oxygen’s D = 2 is used','divide by 2 · 2',(S,p,q)=>M(q.v,Q(1,4))]])]);
+{ const W=LAWS.find(l=>l.id===L).mids.find(m=>m.id==='m:cell.warm'); if(W) W.after=W.after.concat(['m:cell.co2']); } }
+{ const D=mk('scent'), L='14·bio.scent';
+midsOf(L,[D('cool',['sq'],'square centimetres','seconds','14·bio','the spreading law','in a cold room D drops to 1/10 square centimetre a second: how long does the scent take?',
+   (S,p,q)=>M(q.v,5),(S,p,q)=>P(q.v)+'/(2 · 1/10)','time in the cold room',[['the 2 of 2Dt is left out','divide by D alone',(S,p,q)=>M(q.v,10)],['the warm room’s D is used','divide by 2 · 1/5',(S,p,q)=>M(q.v,Q(5,2))]])]);
+{ const W=LAWS.find(l=>l.id===L).mids.find(m=>m.id==='m:scent.mins'); if(W) W.after=W.after.concat(['m:scent.cool']); } }
+{ const D=mk('pair'), L='7·phys.pair';
+midsOf(L,[D('bw',['amps'],'amps through the branch','watts in the branch','7·phys','energy is kept',(S,p)=>'at '+p.V+' volts, what power does that branch take?',
+   (S,p,q)=>M(q.v,p.V),(S,p,q)=>p.V+' · '+P(q.v),'power in the branch',mulW((S,p)=>'the '+p.V+' volts',(S,p)=>p.V),(S,ch)=>({V:ch[ch.length-1].p.V}))]);
+addC(L,G(X({u:'watts in the branch',out:'watts',k:'above',ask:(S,p)=>'the lamp is rated '+p.K+' watts: how many watts to spare?',ln:()=>'watts to spare'},LESS))); }
+{ const D=mk('bill'), L='7·phys.bill';
+midsOf(L,[D('day',['kw'],'kilowatts','kilowatt hours','5j','multiplying and dividing quantities','it is left on all day, 24 hours: how many kilowatt hours does it use?',
+   (S,p,q)=>M(q.v,24),(S,p,q)=>P(q.v)+' · 24','energy in a day',mulW('the 24 hours',24))]);
+{ const W=LAWS.find(l=>l.id===L).mids.find(m=>m.id==='m:bill.cents'); if(W) W.after=W.after.concat(['m:bill.day']); } }
+{ const D=mk('curve'), L='13·econ.curve';
+midsOf(L,[D('wood',['avg'],'dollars a chair on average','dollars of wood a chair','5c','the scaling technique','2/5 of a chair’s cost goes on wood: how many dollars of wood is in a chair?',
+   (S,p,q)=>M(q.v,Q(2,5)),(S,p,q)=>P(q.v)+' · 2/5','wood in a chair',[['the other 3/5 is given','take 3/5 of the cost',(S,p,q)=>M(q.v,Q(3,5))],['the cost is divided by 2/5','divide the cost by 2/5',(S,p,q)=>M(q.v,Q(5,2))]])]);
+addC(L,Tm(X({u:'dollars of wood a chair',out:'dollars of wood',k:()=>pick([20,30,50]),ask:(S,p)=>'the yard orders wood for '+p.K+' chairs: what does the wood cost?',ln:()=>'wood for the order'},MQ))); }
+{ const D=mk('run'), L='12·phys.run';
+midsOf(L,[D('m',['gone'],'centimetres travelled','metres travelled','5j','changing units is multiplying by one','how many metres is that, 100 centimetres to a metre?',
+   (S,p,q)=>Dv(q.v,100),(S,p,q)=>P(q.v)+'/100','in metres',[['the change of units is turned over','multiply by 100',(S,p,q)=>M(q.v,100)],['10 centimetres are taken for a metre','divide by 10',(S,p,q)=>Dv(q.v,10)]])]);
+addC(L,G(X({u:'metres travelled',out:'metres',k:()=>pick([2,3,5]),ask:(S,p)=>'the ramp is '+p.K+' metres long: how many metres are still ahead?',ln:()=>'metres still ahead'},LESS))); }
+
+/* ---------- a third wrong move where one of the two can run out of range for some stories ---------- */
+const more=(lid,id,wr)=>{ const L0=LAWS.find(l=>l.id===lid); const W=L0&&(L0.mids||[]).find(m=>m.id===id); if(!W) return;
+  const s0=W.slips, a0=W.alts, out=(S,p)=>W.act(S,p,{v:Q(1),u:W.u});
+  const val=(w,S,p,q)=>{ try{ return ok(w[2](S,p,q)); }catch(e){ return null; } };
+  W.slips=(S,p,q)=>{ const r=s0(S,p,q), u=(W.act(S,p,q)||{}).u; wr.forEach(w=>{ const v=val(w,S,p,q); if(v&&u) r.push({why:T(w[0],S,p),v,u}); }); return r; };
+  W.alts=(S,p,q)=>{ const r=a0(S,p,q), u=(W.act(S,p,q)||{}).u; wr.forEach(w=>{ const v=val(w,S,p,q); if(v&&u&&w[1]) r.push({ask:T(w[1],S,p),v,u}); }); return r; }; };
+more('10·bio.enzyme','m:enz.mg',[['the hour is undone, giving milligrams a minute','divide by 60 as well',(S,p,q)=>M(q.v,Q(180,60000))]]);
+more('11·chem.melt','m:melt.kj',[['100 joules are taken for a kilojoule','divide by 100',(S,p,q)=>Dv(q.v,100)]]);
+more('11·chem.melt','m:melt.time',[['the heater is taken as 1000 watts','divide by 1000',(S,p,q)=>Dv(q.v,1000)]]);
+more('11·chem.window','m:pane.day',[['a week of 168 hours is used, not a day','multiply by 168/1000',(S,p,q)=>M(q.v,Q(168,1000))]]);
+more('12·phys.lever','m:lever.rise',[['the load is halved before dividing',(S,p)=>'divide by half of '+p.x,(S,p,q)=>Dv(q.v,p.x/2)]]);
+more('13·econ.cost','m:cost.each',[['the tax is taken off again before sharing','take the tax off, then share it',(S,p,q)=>Dv(M(q.v,Q(10,11)),p.x)]]);
+more('13·eng.climb','m:climb.power',[['the work is divided by the seconds squared',(S,p)=>'divide the joules by '+p.x+'²',(S,p,q)=>Dv(q.v,p.x*p.x)]]);
+more('13·eng.drag','m:drag.hour',[['the watts are divided by 3600 instead of multiplied','multiply by 1000/3600',(S,p,q)=>M(q.v,Q(1000,3600))]]);
+more('13·phys.stone','m:stone.speed',[['the speed is taken as E/m, with no root and no 2',(S,p)=>'divide the energy by '+p.m,(S,p,q)=>Dv(q.v,p.mq)]]);
+more('14·bio.scent','m:scent.mins',[['100 seconds are taken for a minute','divide by 100',(S,p,q)=>Dv(q.v,100)]]);
+more('14·stat.coin','m:coin.hund',[['the count is left in every 10000','leave the count as it is',(S,p,q)=>q.v]]);
+more('14·stat.coin','m:coin.three',[['the chance is halved for the third flip, as for a fair coin','halve the chance',(S,p,q)=>M(q.v,Q(1,2))]]);
+more('5·chem.burn','m:burn.ml',[['the grams are turned into litres, 1000 grams each','divide by 1000',(S,p,q)=>Dv(q.v,1000)]]);
+more('5·chem.propane','m:prop.ml',[['the grams are turned into litres, 1000 grams each','divide by 1000',(S,p,q)=>Dv(q.v,1000)]]);
+more('6·chem.plate','m:plate.price',[['a tenth of a dollar a gram is used','divide the grams by 10',(S,p,q)=>Dv(q.v,10)]]);
+more('6·logi.assign','m:assign.mins',[['100 seconds are taken for a minute','divide by 100',(S,p,q)=>Dv(q.v,100)]]);
+more('6·phys.fifth','m:fifth.wave',[['half the wavelength is given, as for a pipe','divide 170 by the frequency',(S,p,q)=>Dv(170,q.v)]]);
+more('7·phys.bill','m:bill.kw',[['the watts are kept as kilowatts','keep the watts as they are',(S,p,q)=>q.v]]);
+more('7·phys.ohm','m:ohm.warm',[['the grams are left out, and only the 4 divided in','divide the joules by 4',(S,p,q)=>Dv(q.v,4)]]);
+more('8·comp.gaps','m:gaps.um',[['the millimetres are kept as micrometres','keep the millimetres as they are',(S,p,q)=>q.v]]);
+more('8·eng.stack','m:stack.um',[['the millimetres are kept as micrometres','keep the millimetres as they are',(S,p,q)=>q.v]]);
+more('8·econ.rent','m:rent.share',[['a month’s share is given, not a year’s',(S,p)=>'divide by 12 · '+p.k,(S,p,q)=>Dv(q.v,12*p.k)]]);
+more('8·eng.stack','m:stack.shims',[['the shims are taken as 10 micrometres each','divide by 10, rounded up',(S,p,q)=>ce(Dv(q.v,10))]]);
+more('8·phys.beats','m:heart.litres',[['a tenth of a litre a beat is used','divide the beats by 10',(S,p,q)=>Dv(q.v,10)]]);
+more('9·chem.piston','m:piston.force',[['the area is left out, the pressure taken as the force','take the kilopascals as the newtons',(S,p,q)=>q.v]]);
+more('9·chem.piston','m:piston.kg',[['g is taken as 100','divide by 100',(S,p,q)=>Dv(q.v,100)]]);
+more('9·chem.piston','m:piston.press',[['the starting pressure is kept, as if it did not change',S=>'keep the pressure at '+S.p0,(S,p,q)=>Q(S.p0)]]);
+
+})();
+/* ===== Word Problems, tailored middles b (Andrew 2026-11-14 05:07Z: "How you get from start to finish is a map") ===== */
+(function(){ if(!CH.W2) return; const {MID,midsOf,par,num,isQ,qq,at,who,say,pick,ri,Q,qa,qm,qn,qi,qz,qs,big,LAWS,G,O,Tm,Pr,In,Ct,Cc,Fr,Pl,Md,X,own,MQ,CU,SC,cl,LESS,DR,RA,water}=CH.W2;
+/* st(law, name, o): one middle step of a law's map.
+   o.af after (ids; 'read' for the reading), o.u unit taken, o.out unit handed on, o.kd kind (x times k, d divided by k, a plus k, s less k, i k divided by it),
+   o.k(S,p,q) the step's particular (a number or rational), o.mk(S,chain,q) more particulars, o.ask(S,p), o.lab label of the worked line,
+   o.w the kind's two wrong moves as [why, wrong instruction] (null drops one), o.xs(S,p,q) more wrong moves [why, value, wrong instruction],
+   o.f/o.ex a worked step of its own instead of a kind, o.neg lets the result be 0 or less, o.st/o.ci the steps gate and technique. */
+const KD={
+  x:{f:(q,k)=>qm(q,k),ex:(q,k)=>par(q)+' · '+par(k),w:[(q,k)=>qz(k)?null:qm(q,qi(k)),(q,k)=>qa(q,k)]},
+  d:{f:(q,k)=>qz(k)?null:qm(q,qi(k)),ex:(q,k)=>par(q)+'/'+par(k),w:[(q,k)=>qm(q,k),(q,k)=>qz(q)?null:qm(k,qi(q))]},
+  a:{f:(q,k)=>qa(q,k),ex:(q,k)=>par(q)+' + '+par(k),w:[(q,k)=>qa(q,qn(k)),(q,k)=>qm(q,k)]},
+  s:{f:(q,k)=>qa(q,qn(k)),ex:(q,k)=>par(q)+' − '+par(k),w:[(q,k)=>qa(k,qn(q)),(q,k)=>qa(q,k)]},
+  i:{f:(q,k)=>qz(q)?null:qm(k,qi(q)),ex:(q,k)=>par(k)+'/'+par(q),w:[(q,k)=>qz(k)?null:qm(q,qi(k)),(q,k)=>qm(q,k)]}
+};
+const ok=v=>v&&isQ(v)&&!big(v);
+function st(law,name,o,tg){ const K=o.kd?KD[o.kd]:null, tag=tg||law.split('.')[1];
+  const kv=(S,p,q)=>p.k;
+  const val=(S,p,q)=>{ const v=o.f?o.f(S,p,q):K.f(q.v,kv(S,p,q)); return ok(v)?v:null; };
+  const wrongs=(S,p,q)=>{ const out=[];
+    if(K&&o.w) o.w.forEach((w,i)=>{ if(!w) return; let v=null; try{ v=K.w[i](q.v,kv(S,p,q)); }catch(e){} if(ok(v)&&(o.neg||v.p>0)) out.push({why:w[0],v,alt:typeof w[1]==='function'?w[1](S,p,q):w[1]}); });
+    if(o.xs){ let xs=[]; try{ xs=o.xs(S,p,q)||[]; }catch(e){} xs.forEach(x=>{ if(x&&ok(x[1])&&(o.neg||x[1].p>0)) out.push({why:x[0],v:x[1],alt:typeof x[2]==='function'?x[2](S,p,q):x[2]}); }); }
+    return out; };
+  return MID({id:'m:'+tag+'.'+name,after:o.af,u:o.u,steps:o.st||[law.split('.')[0]],cite:o.ci,
+    make:(S,ch,q)=>{ let p={}; if(o.mk){ p=o.mk(S,ch,q); if(!p) return null; } if(o.k!==undefined){ let k=typeof o.k==="function"?o.k(S,p,q):o.k; if(k===null||k===undefined) return null; k=qq(k); if(!isQ(k)) return null; p.k=k; p.K=qs(k); } return p; },
+    ask:(S,p)=>o.ask(S,p),
+    act:(S,p,q)=>{ if(!q||!isQ(q.v)) return null; const v=val(S,p,q); if(!v) return null; if(!o.neg&&v.p<=0) return null; return {v,u:typeof o.out==='function'?o.out(S,p):o.out}; },
+    slips:(S,p,q)=>wrongs(S,p,q).map(w=>({why:w.why,v:w.v,u:typeof o.out==='function'?o.out(S,p):o.out})),
+    alts:(S,p,q)=>wrongs(S,p,q).filter(w=>w.alt).map(w=>({ask:w.alt,v:w.v,u:typeof o.out==='function'?o.out(S,p):o.out})),
+    line:(r,S,p,q)=>o.lab(S,p)+': '+(o.ex?o.ex(S,p,q):K.ex(q.v,kv(S,p,q)))+' = '+qs(r.v)+' '+r.u}); }
+const map=(law,ms,tg)=>midsOf(law,ms.map(m=>st(law,m[0],m[1],tg)));
+const addClose=(law,cs)=>{ const L=LAWS.find(l=>l.id===law); if(L) L.close=(L.close||[]).concat(cs); };
+const lt=(q,ks)=>{ const c=ks.filter(k=>k<num(q.v)); return c.length?pick(c):null; };
+const T=(id,ci)=>({st:[id],ci});
+const QTY={st:['5j'],ci:'multiplying and dividing quantities'}, UNIT={st:['5j'],ci:'changing units is multiplying by one'}, SCL={st:['5c'],ci:'the scaling technique'},
+  LS={st:['4h'],ci:'the less-is-adding technique'}, SHR={st:['5j'],ci:'sharing in a ratio'};
+const Y=(o,b)=>Object.assign({},b,o);
+const pl=(k,w)=>k+' '+(String(k)==='1'?w.replace(/s$/,''):w);
+
+/* ---------- 16·nav.speed: a speed through the water ---------- */
+map('16·nav.speed',[
+ ['tide',Y({af:['read','m:speed.wind'],u:'knots',out:'knots',kd:'s',mk:()=>({w:water()}),k:(S,p,q)=>lt(q,[1,2,3]),
+   ask:(S,p)=>'the ebb in '+p.w+' runs against the boat at '+pl(p.K,'knots')+': what is its speed over the ground?',lab:()=>'speed over the ground',
+   w:[null,['the tide is added, as if it ran with the boat',(S,p)=>'the ebb runs against the boat at '+p.K+' knots: add it to the speed']],
+   xs:(S,p,q)=>[['the tide is taken off twice, once for each way',qa(q.v,qm(Q(-2),p.k)),(S2,p2)=>'the ebb runs against the boat: take '+p2.K+' knots off twice']]},T('16·nav','the dead-reckoning technique'))],
+ ['wind',Y({af:['read','m:speed.tide'],u:'knots',out:'knots',kd:'a',k:()=>pick([1,2]),
+   ask:(S,p)=>'a breeze gets up astern and adds '+pl(p.K,'knots')+': what is the boat’s speed now?',lab:()=>'speed with the breeze',
+   w:[['the breeze is taken as against the boat','the breeze is astern: take '+'its knots off the speed'],['the speed is multiplied by the breeze’s knots',(S,p)=>'the breeze adds '+p.K+' knots: multiply the speed by '+p.K]]},T('16·nav','the dead-reckoning technique'))],
+ ['run',Y({af:['m:speed.tide','m:speed.wind'],u:'knots',out:'nautical miles',kd:'x',k:()=>pick([2,3,4]),
+   ask:(S,p)=>'the boat holds that speed for '+p.K+' hours: how many nautical miles does it run?',lab:()=>'miles run',
+   w:[['the speed is divided by the hours',(S,p)=>'it holds that speed for '+p.K+' hours: divide the speed by '+p.K],['the hours are added to the speed',(S,p)=>'it holds that speed for '+p.K+' hours: add '+p.K+' to the speed']]},QTY)],
+ ['fuel',Y({af:['m:speed.run'],u:'nautical miles',out:'litres of fuel',kd:'x',k:()=>pick([2,3,5]),
+   ask:(S,p)=>'the engine burns '+p.K+' litres of fuel a nautical mile: how many litres does that run burn?',lab:()=>'fuel burnt',
+   w:[['the miles are divided by the litres a mile',(S,p)=>'it burns '+p.K+' litres a mile: divide the miles by '+p.K],['the litres a mile are added to the miles',(S,p)=>'it burns '+p.K+' litres a mile: add '+p.K+' to the miles']]},QTY)]]);
+addClose('16·nav.speed',[Cc(X({u:'litres of fuel',out:'cans',k:()=>pick([10,20]),ask:(S,p)=>'fuel comes in '+p.K+'-litre cans: how many cans must be aboard?',ln:()=>'cans aboard'},DR))]);
+
+/* ---------- 16·logi.flow: water in less water out ---------- */
+map('16·logi.flow',[
+ ['drain',Y({af:['read','m:flow.hose'],u:'litres a minute',out:'litres a minute',kd:'s',k:(S,p,q)=>lt(q,[2,3,5,10]),
+   ask:(S,p)=>'the keeper opens the drain a further '+p.K+' litres a minute: what is in less out now?',lab:()=>'in less out with the drain',
+   w:[['the flow is taken from the drain, turned round','take the flow away from the drain’s litres'],['the drain’s litres are added to the flow',(S,p)=>'the drain lets out '+p.K+' litres a minute more: add '+p.K]]},T('16·logi','the tank-level technique'))],
+ ['hose',Y({af:['read','m:flow.drain'],u:'litres a minute',out:'litres a minute',kd:'a',k:()=>pick([4,5,6]),
+   ask:(S,p)=>'a hose from the well adds '+p.K+' litres a minute: what is in less out now?',lab:()=>'in less out with the hose',
+   w:[['the hose is taken as a drain',(S,p)=>'a hose adds '+p.K+' litres a minute: take '+p.K+' off'],['the flow is multiplied by the hose’s litres',(S,p)=>'a hose adds '+p.K+' litres a minute: multiply by '+p.K]]},T('16·logi','the tank-level technique'))],
+ ['gain',Y({af:['m:flow.drain','m:flow.hose'],u:'litres a minute',out:'litres',kd:'x',k:()=>pick([5,10,15]),
+   ask:(S,p)=>'that holds for '+p.K+' minutes: how many litres does the tank gain?',lab:()=>'litres gained',
+   w:[['the flow is divided by the minutes',(S,p)=>'that holds for '+p.K+' minutes: divide by '+p.K],['the minutes are added to the flow',(S,p)=>'that holds for '+p.K+' minutes: add '+p.K]]},QTY)],
+ ['level',Y({af:['m:flow.gain'],u:'litres',out:'centimetres',mk:()=>({A:pick([2,4,5])}),f:(S,p,q)=>qm(q.v,Q(1,10*p.A)),ex:(S,p,q)=>par(q.v)+'/(10 · '+p.A+')',
+   ask:(S,p)=>'the floor is '+p.A+' m², and 10 litres raise 1 m² by 1 cm: how many cm does the level rise?',lab:()=>'rise of the level',
+   xs:(S,p,q)=>[['the 10 litres to a centimetre are left out',qm(q.v,Q(1,p.A)),'divide the litres by the floor’s square metres alone'],['the floor is left out',qm(q.v,Q(1,10)),'divide the litres by 10, leaving out the floor'],['the litres are multiplied by the floor',qm(q.v,Q(p.A,10)),'multiply the litres by the floor’s square metres, over 10']]},UNIT)]]);
+addClose('16·logi.flow',[G(X({u:'centimetres',k:'above',ask:(S,p)=>'the overflow is '+p.K+' cm above the noon level: how many cm of rise are left before it spills?',ln:()=>'rise left before it spills'},LESS))]);
+
+/* ---------- 16·phys.spring: the push of a spring ---------- */
+map('16·phys.spring',[
+ ['pair',Y({af:['read'],u:'newtons',out:'newtons',f:(S,p,q)=>qm(q.v,Q(1,2)),ex:(S,p,q)=>par(q.v)+'/2',
+   ask:()=>'a second spring like it is set end to end with it, sharing the squeeze: what is the push now?',lab:()=>'push of two end to end',
+   xs:(S,p,q)=>[['the springs are taken as side by side, doubling the push',qm(q.v,Q(2)),'two springs end to end: double the push'],['the push is taken to fall with the square of the squeeze',qm(q.v,Q(1,4)),'two springs end to end: take a quarter of the push']]},SCL)],
+ ['drag',Y({af:['read','m:spring.pair'],u:'newtons',out:'newtons',kd:'s',k:(S,p,q)=>{ const d=Math.round(num(q.v)/5); return d>0&&d<num(q.v)?d:null; },
+   ask:(S,p)=>'the spring pushes a cart whose wheels drag with '+p.K+' newtons: what push is left to speed it?',lab:()=>'push left over the drag',
+   w:[['the push is taken from the drag, turned round','take the spring’s push away from the drag'],['the drag is added to the push',(S,p)=>'the wheels drag with '+p.K+' newtons: add them to the push']]},LS)],
+ ['acc',Y({af:['m:spring.drag'],u:'newtons',out:'metres a second each second',kd:'d',k:()=>pick([10,20,50]),
+   ask:(S,p)=>'the cart has a mass of '+p.K+' kilograms: what acceleration does that push give it?',lab:()=>'acceleration, F/m',
+   w:[['the push is multiplied by the mass',(S,p)=>'the cart is '+p.K+' kilograms: multiply the push by '+p.K],['the mass is divided by the push',(S,p)=>'the cart is '+p.K+' kilograms: divide '+p.K+' by the push']]},QTY)],
+ ['speed',Y({af:['m:spring.acc'],u:'metres a second each second',out:'metres a second',kd:'x',k:()=>pick([1,2]),
+   ask:(S,p)=>'that push lasts '+pl(p.K,'seconds')+' from rest: how fast is the cart going then?',lab:()=>'speed after the push',
+   w:[['the acceleration is divided by the seconds',(S,p)=>'the push lasts '+p.K+' seconds: divide by '+p.K],['the seconds are added to the acceleration',(S,p)=>'the push lasts '+p.K+' seconds: add '+p.K]]},QTY)]]);
+addClose('16·phys.spring',[In(X({u:'metres a second',out:'seconds',k:()=>pick([6,12,30]),ask:(S,p)=>'at that speed, how many seconds does the cart take to cross the '+p.K+'-metre bench?',ln:()=>'seconds to cross the bench'},MQ))]);
+
+/* ---------- 16·econ.gain: buyers' willingness to pay ---------- */
+map('16·econ.gain',[
+ ['fee',Y({af:['read'],u:'dollars a crate',out:'dollars a crate',kd:'s',k:(S,p,q)=>lt(q,[1,2]),
+   ask:(S,p)=>'the market takes a fee of '+pl(p.K,'dollars')+' on each crate: what does the grower see for that crate?',lab:()=>'price less the fee',
+   w:[null,['the fee is added to the price',(S,p)=>'the market takes '+p.K+' dollars a crate: add '+p.K+' to the price']],
+   xs:(S,p,q)=>[['the fee is taken as a share of the price',qm(q.v,qa(Q(1),qn(Q(num(p.k),100)))),(S2,p2)=>'the market takes a fee of '+p2.K+' in every 100 dollars of the price']]},LS)],
+ ['load',Y({af:['read','m:gain.fee'],u:'dollars a crate',out:'dollars',kd:'x',k:()=>pick([10,20,25]),
+   ask:(S,p)=>'a buyer takes '+p.K+' crates at that price: how many dollars change hands?',lab:()=>'takings for the load',
+   w:[['the price is divided by the crates',(S,p)=>'a buyer takes '+p.K+' crates: divide the price by '+p.K],['the crates are added to the price',(S,p)=>'a buyer takes '+p.K+' crates: add '+p.K+' to the price']]},QTY)],
+ ['picker',Y({af:['m:gain.load'],u:'dollars',out:'dollars kept',kd:'x',k:Q(4,5),
+   ask:()=>'the grower pays the pickers 1/5 of the takings: how many dollars does the grower keep?',lab:()=>'kept after the pickers',
+   w:[['the takings are divided by 4/5','the pickers get 1/5: divide the takings by 4/5'],null],
+   xs:(S,p,q)=>[['the pickers’ 1/5 is given as what is kept',qm(q.v,Q(1,5)),'the pickers get 1/5: keep 1/5 of the takings'],['1/5 of a dollar is taken off, not 1/5 of the takings',qa(q.v,Q(-1,5)),'the pickers get 1/5: take 1/5 off the takings']]},SCL)],
+ ['apple',Y({af:['read','m:gain.fee'],u:'dollars a crate',out:'cents an apple',mk:()=>({n:pick([20,25,40,50])}),f:(S,p,q)=>qm(q.v,Q(100,p.n)),ex:(S,p,q)=>par(q.v)+' · 100/'+p.n,
+   ask:(S,p)=>'a crate holds '+p.n+' apples: what is that price in cents an apple?',lab:()=>'cents an apple',
+   xs:(S,p,q)=>[['the dollars are not turned into cents',qm(q.v,Q(1,p.n)),'divide the price by the apples, leaving it in dollars'],['the price is multiplied by the apples',qm(q.v,Q(100*p.n)),'multiply the price by the apples and by 100']]},UNIT)]]);
+addClose('16·econ.gain',[Pr(X({u:'dollars kept',out:'dollars each',k:()=>pick([2,4,5]),ask:(S,p)=>'the orchard has '+p.K+' partners sharing equally: how many dollars each?',ln:()=>'each partner’s share'},RA)),
+  Tm(X({u:'cents an apple',out:'cents',k:()=>pick([6,8,12]),ask:(S,p)=>'a bag holds '+p.K+' apples: what is the bag worth in cents?',ln:()=>'worth of a bag'},MQ))]);
+
+/* ---------- 15·stat.bus: how long a wait lasts ---------- */
+map('15·stat.bus',[
+ ['out',Y({af:['16c.total'],u:'in every hundred waits',out:'in every hundred waits',kd:'i',k:100,mk:(S,ch)=>ch[0]&&ch[0].p&&ch[0].p.b!==undefined?{a:ch[0].p.a,b:ch[0].p.b,h:num(qq(S.c[1]))/2}:null,f:(S,p,q)=>qa(Q(100),qn(q.v)),ex:(S,p,q)=>'100 − '+par(q.v),
+   ask:()=>'how many in every hundred of Evita’s waits fall outside that range?',lab:()=>'outside the range',
+   xs:(S,p,q)=>[['only the waits longer than the range are counted',qa(Q(100),Q(-p.h*p.b*p.b)),'count only the waits longer than '+p.b+' minutes'],['only the waits shorter than the range are counted',Q(p.h*p.a*p.a),'count only the waits shorter than '+p.a+' minutes'],['the count inside is kept',q.v,'the waits outside are the count already found']]},T('15·stat','the range-chance technique'))],
+ ['month',Y({af:['16c.total','m:bus.out'],u:'in every hundred waits',out:'waits a month',kd:'x',k:()=>pick([20,40,60]),f:(S,p,q)=>qm(q.v,Q(num(p.k),100)),ex:(S,p,q)=>par(q.v)+' · '+p.K+'/100',
+   ask:(S,p)=>'Evita rides the bus '+p.K+' times a month: how many of those waits fall there, on average?',lab:()=>'waits a month',
+   xs:(S,p,q)=>[['the count is per hundred, and the 100 is left out',qm(q.v,p.k),(S2,p2)=>'she rides '+p2.K+' times a month: multiply the count by '+p2.K],['the count is divided by the rides',qm(q.v,qi(p.k)),(S2,p2)=>'she rides '+p2.K+' times a month: divide the count by '+p2.K]]},QTY)],
+ ['year',Y({af:['m:bus.month'],u:'waits a month',out:'waits a year',kd:'x',k:12,
+   ask:()=>'she keeps that up for the 12 months of a year: how many such waits in the year?',lab:()=>'waits a year',
+   w:[['the waits a month are divided by 12','divide by the 12 months for the year'],['12 is added instead of multiplied','add the 12 months to the waits']],
+   xs:(S,p,q)=>[['52 weeks are used in place of 12 months',qm(q.v,Q(52)),'multiply the waits a month by the 52 weeks of a year']]},UNIT)],
+ ['share',Y({af:['16c.total','m:bus.out'],u:'in every hundred waits',out:'of all waits',kd:'d',k:100,
+   ask:()=>'write that as a share of all her waits, out of 1',lab:()=>'share of all waits',
+   w:[['the count is multiplied by 100','multiply the count by 100 for the share'],null],xs:(S,p,q)=>[['the count is divided by 10',qm(q.v,Q(1,10)),'divide the count by 10 for the share']]},UNIT)]]);
+addClose('15·stat.bus',[G(X({u:'waits a month',k:'above',ask:(S,p)=>'she complains to the depot once such waits reach '+p.K+' a month: how many short of that is she?',ln:()=>'short of a complaint'},LESS)),
+  Pr(X({u:'waits a year',out:'waits a week',k:52,ask:()=>'spread over the 52 weeks of the year, how many such waits a week?',ln:()=>'waits a week'},CU)),
+  Tm(X({u:'of all waits',out:'waits',k:()=>pick([50,150,250]),ask:(S,p)=>'of her next '+p.K+' waits, how many would fall there?',ln:()=>'waits of the next ones'},MQ))]);
+
+/* ---------- 15·chem.tank: gas in a fixed tank ---------- */
+map('15·chem.tank',[
+ ['half',Y({af:['read'],u:'kilopascals',out:'kilopascals',kd:'x',k:2,
+   ask:()=>'the gas is moved into a tank half the size, at the same temperature: what is its pressure now?',lab:()=>'pressure in half the room',
+   w:[['the pressure is halved with the size','the tank is half the size: halve the pressure'],['2 kilopascals are added','the tank is half the size: add 2 kilopascals']]},T('15·chem','the ideal gas law'))],
+ ['heat',Y({af:['read','m:tank.half'],u:'kilopascals',out:'kilopascals',mk:()=>({T:pick([330,360,400,450])}),f:(S,p,q)=>qm(q.v,Q(p.T,300)),ex:(S,p,q)=>par(q.v)+' · '+p.T+'/300',
+   ask:(S,p)=>'the tank warms from 300 K to '+p.T+' K: what is its pressure now?',lab:()=>'pressure when warm',
+   xs:(S,p,q)=>[['the temperatures are turned over',qm(q.v,Q(300,p.T)),(S2,p2)=>'it warms from 300 K to '+p2.T+' K: multiply by 300/'+p2.T],['the rise in kelvin is added as kilopascals',qa(q.v,Q(p.T-300)),(S2,p2)=>'it warms by '+(p2.T-300)+' K: add that to the pressure']]},T('15·chem','the ideal gas law'))],
+ ['leak',Y({af:['m:tank.heat'],u:'kilopascals',out:'kilopascals',mk:()=>({n:pick([4,5,10])}),f:(S,p,q)=>qm(q.v,Q(p.n-1,p.n)),ex:(S,p,q)=>par(q.v)+' · '+(p.n-1)+'/'+p.n,
+   ask:(S,p)=>'a valve lets 1/'+p.n+' of the moles out, still warm: what is the pressure now?',lab:()=>'pressure after the leak',
+   xs:(S,p,q)=>[['the share let out is given, not the share left',qm(q.v,Q(1,p.n)),(S2,p2)=>'1/'+p2.n+' of the moles go: take 1/'+p2.n+' of the pressure'],['1/'+p.n+' of a kilopascal is taken off',qa(q.v,Q(-1,p.n)),(S2,p2)=>'1/'+p2.n+' of the moles go: take 1/'+p2.n+' off the pressure']]},T('15·chem','the ideal gas law'))],
+ ['gauge',Y({af:['m:tank.leak','m:tank.heat'],u:'kilopascals',out:'kilopascals on the gauge',kd:'s',k:100,
+   ask:()=>'the gauge reads only what is above the 100 kilopascals of the air outside: what does it read?',lab:()=>'gauge reading',
+   w:[null,['the air’s 100 is added','the gauge counts the air too: add 100']],xs:(S,p,q)=>[['the 100 is taken as a share, 1/100',qm(q.v,Q(99,100)),'take 1/100 of the pressure off for the air']]},LS)]]);
+addClose('15·chem.tank',[G(X({u:'kilopascals on the gauge',k:'above',ask:(S,p)=>'the gauge’s dial ends at '+p.K+': how many kilopascals of dial are left?',ln:()=>'dial left'},LESS))]);
+
+/* ---------- 15·econ.lease: a lease that pays each year ---------- */
+map('15·econ.lease',[
+ ['tax',Y({af:['read','m:lease.cpi'],u:'dollars',out:'dollars',kd:'x',k:Q(4,5),
+   ask:()=>'the county takes 1/5 of each payment in tax: what does the owner keep that year?',lab:()=>'kept after tax',
+   w:[['the payment is divided by 4/5','the county takes 1/5: divide the payment by 4/5'],null],
+   xs:(S,p,q)=>[['the tax itself is given',qm(q.v,Q(1,5)),'the county takes 1/5: give 1/5 of the payment']]},SCL)],
+ ['cpi',Y({af:['read'],u:'dollars',out:'dollars',kd:'x',k:Q(20,21),
+   ask:()=>'prices rose 1/20 since the lease began: what is the payment in the first year’s dollars?',lab:()=>'in first-year dollars',
+   w:[['the payment is multiplied by 21/20','prices rose 1/20: multiply the payment by 21/20'],null],
+   xs:(S,p,q)=>[['1/20 of the payment is taken off, not divided out',qm(q.v,Q(19,20)),'prices rose 1/20: take 1/20 of the payment off']]},SCL)],
+ ['acre',Y({af:['m:lease.tax','m:lease.cpi'],u:'dollars',out:'dollars an acre',kd:'d',k:()=>pick([2,4,5]),
+   ask:(S,p)=>'the orchard is '+p.K+' acres: what does each acre bring that year?',lab:()=>'dollars an acre',
+   w:[['the payment is multiplied by the acres',(S,p)=>'the orchard is '+p.K+' acres: multiply by '+p.K],['the acres are divided by the payment',(S,p)=>'the orchard is '+p.K+' acres: divide '+p.K+' by the payment']]},SHR)],
+ ['month',Y({af:['m:lease.acre'],u:'dollars an acre',out:'dollars an acre a month',kd:'d',k:12,
+   ask:()=>'paid in 12 equal monthly parts, what does an acre bring each month?',lab:()=>'an acre a month',
+   w:[['the year’s dollars are multiplied by 12','multiply by the 12 months'],null],xs:(S,p,q)=>[['52 weeks are used in place of 12 months',qm(q.v,Q(1,52)),'divide by the 52 weeks of the year']]},UNIT)]]);
+addClose('15·econ.lease',[G(X({u:'dollars an acre',k:'above',ask:(S,p)=>'land nearby leases for '+p.K+' dollars an acre a year: how many dollars an acre less is this?',ln:()=>'less than nearby'},LESS)),
+  Tm(X({u:'dollars an acre a month',out:'dollars an acre',k:()=>pick([3,4,6]),ask:(S,p)=>'the picking season is '+p.K+' months: what does an acre bring over it?',ln:()=>'an acre over the season'},MQ))]);
+
+/* ---------- 15·eng.dam: water pushing on a dam ---------- */
+map('15·eng.dam',[
+ ['salt',Y({af:['read'],u:'kilopascals',out:'kilopascals',kd:'x',k:Q(41,40),
+   ask:()=>'the water behind the dam is salty, 1/40 heavier than fresh: what pressure is there?',lab:()=>'pressure of salt water',
+   w:[['the pressure is divided by 41/40','salt water is 1/40 heavier: divide by 41/40'],null],xs:(S,p,q)=>[['1/40 of a kilopascal is added',qa(q.v,Q(1,40)),'salt water is 1/40 heavier: add 1/40 kilopascal']]},SCL)],
+ ['gate',Y({af:['read','m:dam.salt'],u:'kilopascals',out:'kilonewtons',kd:'x',k:()=>pick([2,3,4]),
+   ask:(S,p)=>'a sluice gate there is '+p.K+' square metres: what force does the water put on it?',lab:()=>'force on the gate',
+   w:[['the pressure is divided by the area',(S,p)=>'the gate is '+p.K+' square metres: divide by '+p.K],['the area is added to the pressure',(S,p)=>'the gate is '+p.K+' square metres: add '+p.K]]},QTY)],
+ ['bolt',Y({af:['m:dam.gate'],u:'kilonewtons',out:'kilonewtons a bolt',kd:'d',k:()=>pick([4,6,8]),
+   ask:(S,p)=>'the gate is held by '+p.K+' bolts sharing the load: what does each bolt carry?',lab:()=>'load on a bolt',
+   w:[['the force is multiplied by the bolts',(S,p)=>p.K+' bolts share the load: multiply by '+p.K],['the bolts are taken off the force',(S,p)=>p.K+' bolts share the load: take '+p.K+' off']],xs:null},SHR)],
+ ['safe',Y({af:['m:dam.bolt'],u:'kilonewtons a bolt',out:'kilonewtons a bolt to rate for',kd:'x',k:()=>pick([2,3]),
+   ask:(S,p)=>'each bolt must be rated for '+p.K+' times its load: what rating does a bolt need?',lab:()=>'rating of a bolt',
+   w:[['the load is divided by the safety factor',(S,p)=>'rate each for '+p.K+' times its load: divide by '+p.K],['the factor is added to the load',(S,p)=>'rate each for '+p.K+' times its load: add '+p.K]]},SCL)]]);
+addClose('15·eng.dam',[G(X({u:'kilonewtons a bolt',k:'above',ask:(S,p)=>'the bolts on hand hold '+p.K+' kilonewtons each: how many kilonewtons to spare?',ln:()=>'margin on a bolt'},LESS)),
+  G(X({u:'kilonewtons a bolt to rate for',k:'above',ask:(S,p)=>'the strongest bolt in stock is rated '+p.K+' kilonewtons: how much rating to spare?',ln:()=>'rating to spare'},LESS))]);
+
+/* ---------- 15·phys.plate: a plate that narrows ---------- */
+map('15·phys.plate',[
+ ['trim',Y({af:['read'],u:'metres',out:'metres',mk:()=>({c:pick([5,10])}),f:(S,p,q)=>qa(q.v,Q(-2*p.c,100)),ex:(S,p,q)=>par(q.v)+' − 2 · '+p.c+'/100',
+   ask:(S,p)=>'Mike trims '+p.c+' cm off each long edge: how wide is the plate there now, in metres?',lab:()=>'width after trimming',
+   xs:(S,p,q)=>[['only one edge is trimmed',qa(q.v,Q(-p.c,100)),(S2,p2)=>'he trims '+p2.c+' cm off each edge: take '+p2.c+'/100 metre off once'],['the centimetres are taken as metres',qa(q.v,Q(-2*p.c)),(S2,p2)=>'he trims '+p2.c+' cm off each edge: take '+2*p2.c+' metres off']]},UNIT)],
+ ['strip',Y({af:['read','m:plate.trim'],u:'metres',out:'square metres',mk:()=>({c:pick([10,20,50])}),f:(S,p,q)=>qm(q.v,Q(p.c,100)),ex:(S,p,q)=>par(q.v)+' · '+p.c+'/100',
+   ask:(S,p)=>'a strip '+p.c+' cm long is cut straight across there: what is its area, in square metres?',lab:()=>'area of the strip',
+   xs:(S,p,q)=>[['the centimetres are not turned into metres',qm(q.v,Q(p.c)),(S2,p2)=>'the strip is '+p2.c+' cm long: multiply the width by '+p2.c],['the width is divided by the length',qm(q.v,Q(100,p.c)),(S2,p2)=>'the strip is '+p2.c+' cm long: divide the width by '+p2.c+'/100']]},UNIT)],
+ ['vol',Y({af:['m:plate.strip'],u:'square metres',out:'cubic metres',mk:()=>({t:pick([5,10,20])}),f:(S,p,q)=>qm(q.v,Q(p.t,1000)),ex:(S,p,q)=>par(q.v)+' · '+p.t+'/1000',
+   ask:(S,p)=>'the plate is '+p.t+' millimetres thick: what volume of steel is the strip, in cubic metres?',lab:()=>'volume of the strip',
+   xs:(S,p,q)=>[['the millimetres are taken as centimetres',qm(q.v,Q(p.t,100)),(S2,p2)=>'it is '+p2.t+' mm thick: multiply the area by '+p2.t+'/100'],['the area is divided by the thickness',qm(q.v,Q(1000,p.t)),(S2,p2)=>'it is '+p2.t+' mm thick: divide the area by '+p2.t+'/1000']]},UNIT)],
+ ['mass',Y({af:['m:plate.vol'],u:'cubic metres',out:'kilograms',kd:'x',k:8000,
+   ask:()=>'steel is 8000 kilograms a cubic metre: what is the strip’s mass?',lab:()=>'mass of the strip',
+   w:[['the volume is divided by 8000','divide the volume by 8000 for the mass'],null],xs:(S,p,q)=>[['steel is taken as 800 kilograms a cubic metre',qm(q.v,Q(800)),'take steel as 800 kilograms a cubic metre']]},QTY)]]);
+addClose('15·phys.plate',[G(X({u:'kilograms',k:'above',ask:(S,p)=>'the workshop hoist lifts '+p.K+' kilograms: how many kilograms to spare?',ln:()=>'lift to spare'},LESS))]);
+
+/* ---------- 16·cb12.lake: pressure down a lake ---------- */
+map('16·cb12.lake',[
+ ['atm',Y({af:['read'],u:'kilopascals',out:'times the surface pressure',kd:'d',k:100,
+   ask:()=>'the air at the surface pushes 100 kilopascals: how many times that is the pressure there?',lab:()=>'times the surface pressure',
+   w:[['the pressure is multiplied by 100','multiply the pressure by 100'],['100 is divided by the pressure, turned over','divide 100 by the pressure']],xs:(S,p,q)=>[['the air’s 100 is taken off first',qm(qa(q.v,Q(-100)),Q(1,100)),'take the air’s 100 off, then divide by 100']]},UNIT)],
+ ['breath',Y({af:['m:lake.atm'],u:'times the surface pressure',out:'litres of surface air a breath',kd:'x',k:()=>pick([2,3]),
+   ask:(S,p)=>'each breath fills the lungs with '+p.K+' litres at that pressure: how many litres of surface air is that?',lab:()=>'surface air a breath',
+   w:[['the lungful is divided by the pressure ratio',(S,p)=>'each breath is '+p.K+' litres there: divide by the ratio'],['the ratio is added to the lungful',(S,p)=>'each breath is '+p.K+' litres there: add the ratio']]},T('15·chem','the ideal gas law'))],
+ ['breaths',Y({af:['m:lake.breath'],u:'litres of surface air a breath',out:'breaths',mk:()=>({V:pick([1200,1800,2400])}),f:(S,p,q)=>qm(Q(p.V),qi(q.v)),ex:(S,p,q)=>p.V+'/'+par(q.v),
+   ask:(S,p)=>'the tank holds '+p.V+' litres of surface air: how many such breaths does it give?',lab:()=>'breaths in the tank',
+   xs:(S,p,q)=>[['the division is turned over',qm(q.v,Q(1,p.V)),(S2,p2)=>'the tank holds '+p2.V+' litres: divide a breath by '+p2.V],['the tank’s litres are multiplied by a breath',qm(q.v,Q(p.V)),(S2,p2)=>'the tank holds '+p2.V+' litres: multiply by a breath']]},QTY)],
+ ['window',Y({af:['read'],u:'kilopascals',out:'newtons',mk:()=>({W:pick([50,100,200])}),f:(S,p,q)=>qm(q.v,Q(p.W,10)),ex:(S,p,q)=>par(q.v)+' · '+p.W+'/10',
+   ask:(S,p)=>'the mask’s glass is '+p.W+' cm²; 1 kilopascal on 1 cm² is 1/10 newton: what force is on the glass?',lab:()=>'force on the glass',
+   xs:(S,p,q)=>[['the 1/10 is left out',qm(q.v,Q(p.W)),(S2,p2)=>'the glass is '+p2.W+' cm²: multiply the kilopascals by '+p2.W],['the square centimetres are divided in',qm(q.v,Q(10,p.W)),(S2,p2)=>'the glass is '+p2.W+' cm²: divide the kilopascals by '+p2.W+'/10']]},UNIT)],
+ ['ports',Y({af:['m:lake.window'],u:'newtons',out:'newtons on the ports',kd:'x',k:()=>pick([2,3,4]),
+   ask:(S,p)=>'a small sub has '+p.K+' ports like that glass: what force do they take in all?',lab:()=>'force on all the ports',
+   w:[['the force is shared among the ports',(S,p)=>'it has '+p.K+' ports: divide the force by '+p.K],['the ports are added to the force',(S,p)=>'it has '+p.K+' ports: add '+p.K]]},QTY)]]);
+addClose('16·cb12.lake',[Pr(X({u:'breaths',out:'minutes',k:12,ask:()=>'the diver takes 12 breaths a minute: how many minutes does the tank last?',ln:()=>'minutes the tank lasts',w:['the breaths are multiplied by 12','12 is taken off']},MQ)),
+  G(X({u:'newtons',k:'above',ask:(S,p)=>'the glass is rated to '+p.K+' newtons: how many newtons to spare?',ln:()=>'newtons to spare'},LESS)),
+  G(X({u:'newtons on the ports',k:'above',ask:(S,p)=>'the hull round the ports is good for '+p.K+' newtons: how many to spare?',ln:()=>'newtons to spare'},LESS))]);
+
+/* ---------- 16·then.inflow: a river filling a lake ---------- */
+map('16·then.inflow',[
+ ['spill',Y({af:['read','14a.best','m:inflow.creek'],u:'thousand cubic metres an hour',out:'thousand cubic metres an hour',kd:'s',k:(S,p,q)=>lt(q,[2,3,4]),
+   ask:(S,p)=>'the dam’s spillway lets out '+p.K+' thousand cubic metres an hour: at what rate does the lake gain?',lab:()=>'net gain rate',
+   w:[null,['the spillway is added to the river',(S,p)=>'the spillway lets out '+p.K+' an hour: add it to the river']],
+   xs:(S,p,q)=>[['the spillway is counted twice',qa(q.v,qm(Q(-2),p.k)),(S2,p2)=>'the spillway lets out '+p2.K+': take it off twice, once for each gate']]},T('16·then','the net-change technique'))],
+ ['creek',Y({af:['read','14a.best'],u:'thousand cubic metres an hour',out:'thousand cubic metres an hour',kd:'a',k:()=>pick([1,2,3]),
+   ask:(S,p)=>'a creek on the far shore adds '+p.K+' thousand cubic metres an hour: what flows in now?',lab:()=>'inflow with the creek',
+   w:[['the creek is taken as an outflow',(S,p)=>'a creek adds '+p.K+': take '+p.K+' off the river'],['the river is multiplied by the creek',(S,p)=>'a creek adds '+p.K+': multiply the river by '+p.K]]},T('16·then','the net-change technique'))],
+ ['hours',Y({af:['m:inflow.spill','m:inflow.creek'],u:'thousand cubic metres an hour',out:'thousand cubic metres',kd:'x',k:()=>pick([2,3,4]),
+   ask:(S,p)=>'that rate holds for '+p.K+' hours: how much water does the lake gain?',lab:()=>'water gained',
+   w:[['the rate is divided by the hours',(S,p)=>'that holds for '+p.K+' hours: divide by '+p.K],['the hours are added to the rate',(S,p)=>'that holds for '+p.K+' hours: add '+p.K]]},QTY)],
+ ['rise',Y({af:['m:inflow.hours'],u:'thousand cubic metres',out:'millimetres',kd:'d',k:()=>pick([2,4,5]),
+   ask:(S,p)=>'the lake covers '+p.K+' km², and a thousand m³ spread on 1 km² is 1 mm: how many mm does it rise?',lab:()=>'rise of the lake',
+   w:[['the water is multiplied by the lake’s area',(S,p)=>'the lake covers '+p.K+' km²: multiply by '+p.K],['the area is divided by the water',(S,p)=>'the lake covers '+p.K+' km²: divide '+p.K+' by the water']],
+   xs:(S,p,q)=>[['the thousand is lost, giving metres for millimetres',qm(q.v,Q(1,1000*num(p.k))),'divide by the area and by 1000 more']]},UNIT)]]);
+addClose('16·then.inflow',[G(X({u:'millimetres',k:'above',ask:(S,p)=>'the jetty floods once the lake rises '+p.K+' mm: how many mm to spare?',ln:()=>'rise to spare'},LESS))]);
+
+/* ---------- 16·eng.beam: the shear along a beam ---------- */
+map('16·eng.beam',[
+ ['crowd',Y({af:['read'],u:'kilonewtons',out:'kilonewtons',kd:'a',k:(S,p,q)=>num(q.v)>0?pick([2,3,4]):null,
+   ask:(S,p)=>'a crowd at the far end adds '+p.K+' kilonewtons of shear there: what is the shear now?',lab:()=>'shear with the crowd',
+   w:[['the crowd’s load is taken off',(S,p)=>'the crowd adds '+p.K+' kilonewtons: take '+p.K+' off'],['the shear is multiplied by the crowd’s load',(S,p)=>'the crowd adds '+p.K+' kilonewtons: multiply by '+p.K]]},T('16·eng','the moment-from-shear technique'))],
+ ['bolts',Y({af:['read','m:beam.crowd'],u:'kilonewtons',out:'kilonewtons a bolt',kd:'d',k:()=>pick([2,3,4]),
+   ask:(S,p)=>'a splice there passes the shear through '+p.K+' bolts equally: what does each bolt carry?',lab:()=>'shear on a bolt',
+   w:[['the shear is multiplied by the bolts',(S,p)=>p.K+' bolts share it: multiply by '+p.K],['the bolts are divided by the shear',(S,p)=>p.K+' bolts share it: divide '+p.K+' by the shear']]},SHR)],
+ ['stress',Y({af:['m:beam.bolts'],u:'kilonewtons a bolt',out:'megapascals',mk:()=>({A:pick([2,4,5])}),f:(S,p,q)=>qm(q.v,Q(10,p.A)),ex:(S,p,q)=>par(q.v)+' · 10/'+p.A,
+   ask:(S,p)=>'each bolt is '+p.A+' cm² across; 1 kN on 1 cm² is 10 megapascals: what is the stress in a bolt?',lab:()=>'stress in a bolt',
+   xs:(S,p,q)=>[['the 10 is left out',qm(q.v,Q(1,p.A)),(S2,p2)=>'each bolt is '+p2.A+' cm²: divide the load by '+p2.A],['the area is multiplied in',qm(q.v,Q(10*p.A)),(S2,p2)=>'each bolt is '+p2.A+' cm²: multiply the load by '+p2.A+' and by 10']]},UNIT)],
+ ['factor',Y({af:['m:beam.stress'],u:'megapascals',out:'times the stress',mk:()=>({Y:pick([200,250,300])}),f:(S,p,q)=>qm(Q(p.Y),qi(q.v)),ex:(S,p,q)=>p.Y+'/'+par(q.v),
+   ask:(S,p)=>'the bolt steel yields at '+p.Y+' megapascals: how many times the stress is that?',lab:()=>'safety factor',
+   xs:(S,p,q)=>[['the division is turned over',qm(q.v,Q(1,p.Y)),(S2,p2)=>'it yields at '+p2.Y+': divide the stress by '+p2.Y],['the stress is taken from the yield instead of divided into it',qa(Q(p.Y),qn(q.v)),(S2,p2)=>'it yields at '+p2.Y+': take the stress off '+p2.Y]]},QTY)]]);
+addClose('16·eng.beam',[O(X({u:'times the stress',k:2,ask:()=>'the code asks for a factor of at least 2: by how much does the bolt clear it?',ln:()=>'clear of the code'},LESS)),
+  G(X({u:'kilonewtons a bolt',k:'above',ask:(S,p)=>'each bolt is good for '+p.K+' kilonewtons of shear: how many to spare?',ln:()=>'shear to spare on a bolt'},LESS))]);
+
+/* ---------- 16·bio.dose: a drug in the blood ---------- */
+map('16·bio.dose',[
+ ['weak',Y({af:['read','14a.best'],u:'milligrams a litre',out:'milligrams a litre',kd:'x',k:Q(3,2),
+   ask:()=>'Zoe’s kidneys are slow, so her level runs half as high again: what is her level?',lab:()=>'level with slow kidneys',
+   w:[['the level is divided by 3/2','her level runs half as high again: divide by 3/2'],null],xs:(S,p,q)=>[['the level is halved',qm(q.v,Q(1,2)),'her level runs half as high again: halve it'],['half a milligram is added',qa(q.v,Q(1,2)),'her level runs half as high again: add 1/2']]},SCL)],
+ ['blood',Y({af:['read','14a.best','m:dose.weak'],u:'milligrams a litre',out:'milligrams in the blood',kd:'x',k:()=>pick([4,5,6]),
+   ask:(S,p)=>'Zoe has '+p.K+' litres of blood: how many milligrams of the drug are in it?',lab:()=>'drug in the blood',
+   w:[['the level is divided by the litres',(S,p)=>'she has '+p.K+' litres of blood: divide by '+p.K],['the litres are added to the level',(S,p)=>'she has '+p.K+' litres of blood: add '+p.K]]},QTY)],
+ ['free',Y({af:['m:dose.blood'],u:'milligrams in the blood',out:'milligrams free',kd:'x',k:Q(1,4),
+   ask:()=>'3/4 of it is held by the blood’s proteins and idle: how many milligrams are free to work?',lab:()=>'free drug',
+   w:[['the drug is divided by 1/4','3/4 is held: divide by 1/4'],null],xs:(S,p,q)=>[['the held share is given instead of the free',qm(q.v,Q(3,4)),'3/4 is held: take 3/4 of the drug'],['3/4 of a milligram is taken off',qa(q.v,Q(-3,4)),'3/4 is held: take 3/4 off']]},SCL)],
+ ['clear',Y({af:['m:dose.free'],u:'milligrams free',out:'milligrams cleared in an hour',kd:'d',k:()=>pick([2,4,5]),
+   ask:(S,p)=>'the kidneys clear 1/'+p.K+' of the free drug each hour: how many milligrams go in the next hour?',lab:()=>'cleared in an hour',
+   w:[['the share is turned over, multiplying the drug',(S,p)=>'they clear 1/'+p.K+' an hour: multiply by '+p.K],null],xs:(S,p,q)=>[['what stays is given, not what goes',qm(q.v,Q(num(p.k)-1,num(p.k))),(S2,p2)=>'they clear 1/'+p2.K+' an hour: keep '+(num(p2.k)-1)+'/'+p2.K]]},T('16·bio','the dose-area technique'))]]);
+addClose('16·bio.dose',[G(X({u:'milligrams free',k:'above',ask:(S,p)=>'the drug works once '+p.K+' mg are free: how many mg short is she?',ln:()=>'short of working'},LESS)),
+  Pr(X({u:'milligrams cleared in an hour',out:'milligrams a minute',k:60,ask:()=>'about how many milligrams a minute is that?',ln:()=>'cleared a minute'},CU))]);
+
+/* ---------- 17·then.yeast: a count whose log rises in a line ---------- */
+map('17·then.yeast',[
+ ['oven',Y({af:['read'],u:'doublings',out:'doublings',kd:'a',k:()=>pick([1,2]),
+   ask:(S,p)=>'the jar then proves in a warm oven for '+pl(p.K,'more doublings')+': how many doublings is that?',lab:()=>'doublings after proving',
+   w:[['the oven’s doublings are taken off',(S,p)=>'it proves for '+p.K+' more: take '+p.K+' off'],['the doublings are multiplied',(S,p)=>'it proves for '+p.K+' more: multiply by '+p.K]]},LS)],
+ ['count',Y({af:['read','m:yeast.oven'],u:'doublings',out:'thousand cells',f:(S,p,q)=>q.v.q===1&&q.v.p>=0&&q.v.p<=13?Q(Math.pow(2,q.v.p)):null,ex:(S,p,q)=>'2^'+par(q.v),
+   ask:()=>'the log base 2 of the count is that: how many thousand cells are in the jar?',lab:()=>'cells, 2 to that power',
+   xs:(S,p,q)=>[['the log is doubled instead of used as a power',qm(q.v,Q(2)),'double the log for the count'],['the log is squared instead of used as a power of 2',qm(q.v,q.v),'square the log for the count'],['one doubling is lost',Q(Math.pow(2,q.v.p-1)),'take 2 to one less than the log']]},T('17·then','the power-of-two technique'))],
+ ['gram',Y({af:['m:yeast.count'],u:'thousand cells',out:'thousand cells a gram',kd:'d',k:()=>pick([4,8,16]),
+   ask:(S,p)=>'the jar holds '+p.K+' grams of dough: how many thousand cells to a gram?',lab:()=>'cells a gram',
+   w:[['the cells are multiplied by the grams',(S,p)=>'the jar holds '+p.K+' grams: multiply by '+p.K],['the grams are divided by the cells',(S,p)=>'the jar holds '+p.K+' grams: divide '+p.K+' by the cells']]},QTY)],
+ ['spoon',Y({af:['m:yeast.gram'],u:'thousand cells a gram',out:'thousand cells',kd:'x',k:()=>pick([2,3,5]),
+   ask:(S,p)=>'Claire takes '+p.K+' grams to start a new jar: how many thousand cells go in?',lab:()=>'cells in the starter',
+   w:[['the cells a gram are divided by the grams',(S,p)=>'she takes '+p.K+' grams: divide by '+p.K],['the grams are added',(S,p)=>'she takes '+p.K+' grams: add '+p.K]]},QTY)]]);
+
+/* ---------- 17·chem.halflife: half-lives gone by ---------- */
+map('17·chem.halflife',[
+ ['store',Y({af:['read'],u:'half-lives',out:'half-lives',kd:'a',k:2,
+   ask:()=>'the sample then sits one more hour in the store: how many half-lives in all?',lab:()=>'half-lives in all',
+   w:[null,['the half-lives are doubled','it sits one more hour: double the half-lives']],xs:(S,p,q)=>[['the hour is counted as one half-life',qa(q.v,Q(1)),'it sits one more hour: add 1 half-life']]},LS)],
+ ['left',Y({af:['read','m:halflife.store'],u:'half-lives',out:'milligrams',f:(S,p,q)=>q.v.q===1&&q.v.p>=0&&q.v.p<=10?qm(Q(S.halve),Q(1,Math.pow(2,q.v.p))):null,ex:(S,p,q)=>S.halve+'/2^'+par(q.v),
+   ask:(S)=>'it started at '+S.halve+' milligrams: how many milligrams are left?',lab:()=>'milligrams left',
+   xs:(S,p,q)=>[['the sample is halved only once',qm(Q(S.halve),Q(1,2)),'halve the sample once for what is left'],['the half-lives are taken as a share, 1/n',qm(Q(S.halve),qi(q.v)),'divide the sample by the number of half-lives'],['one half-life too many is taken',qm(Q(S.halve),Q(1,Math.pow(2,q.v.p+1))),'halve it once more than the half-lives']]},T('17·chem','the power-of-two technique'))],
+ ['ml',Y({af:['m:halflife.left'],u:'milligrams',out:'milligrams a millilitre',kd:'d',k:()=>pick([10,20,40]),
+   ask:(S,p)=>'what is left is dissolved in '+p.K+' millilitres: how many milligrams a millilitre?',lab:()=>'milligrams a millilitre',
+   w:[['the milligrams are multiplied by the millilitres',(S,p)=>'it is in '+p.K+' millilitres: multiply by '+p.K],['the millilitres are divided by the milligrams',(S,p)=>'it is in '+p.K+' millilitres: divide '+p.K+' by the milligrams']]},QTY)],
+ ['dose',Y({af:['m:halflife.ml'],u:'milligrams a millilitre',out:'milligrams in a dose',kd:'x',k:()=>pick([2,3,5]),
+   ask:(S,p)=>'a scan draws a dose of '+p.K+' millilitres: how many milligrams are in the dose?',lab:()=>'milligrams in a dose',
+   w:[['the strength is divided by the millilitres',(S,p)=>'a dose is '+p.K+' millilitres: divide by '+p.K],['the millilitres are added',(S,p)=>'a dose is '+p.K+' millilitres: add '+p.K]]},QTY)]]);
+addClose('17·chem.halflife',[G(X({u:'milligrams in a dose',k:'above',ask:(S,p)=>'the scan needs '+p.K+' milligrams in the dose: how many milligrams short is it?',ln:()=>'short for the scan'},LESS))]);
+
+/* ---------- 17·chem.ph: the pH of a diluted acid ---------- */
+map('17·chem.ph',[
+ ['strong',Y({af:['read'],u:'on the pH scale',out:'on the pH scale',kd:'s',k:1,
+   ask:()=>'a stronger batch of the acid starts one step lower on the scale: what is its pH after as many dilutions?',lab:()=>'pH of the stronger batch',
+   w:[null,['the stronger batch is taken one step higher','the batch is stronger: add 1 to the pH']],xs:(S,p,q)=>[['stronger is taken as ten times the pH',qm(q.v,Q(1,10)),'the batch is stronger: divide the pH by 10']]},LS)],
+ ['conc',Y({af:['read','m:ph.strong'],u:'on the pH scale',out:'moles a litre',f:(S,p,q)=>q.v.q===1&&q.v.p>=1&&q.v.p<=4?Q(1,Math.pow(10,q.v.p)):null,ex:(S,p,q)=>'1/10^'+par(q.v),
+   ask:()=>'pH n means 1/10ⁿ moles of hydrogen ions a litre: what is the strength?',lab:()=>'hydrogen ions a litre',
+   xs:(S,p,q)=>[['the pH is taken as the moles a litre',q.v,'take the pH itself as the moles a litre'],['10ⁿ is used, not 1/10ⁿ',Q(Math.pow(10,q.v.p)),'take 10 to the pH as the moles a litre'],['1/n is used, not 1/10ⁿ',qi(q.v),'take one over the pH as the moles a litre']]},T('17·chem','the negative-powers technique'))],
+ ['mix',Y({af:['m:ph.conc'],u:'moles a litre',out:'moles a litre',kd:'x',k:Q(1,2),
+   ask:()=>'it is mixed with an equal volume of pure water: what strength now?',lab:()=>'strength after mixing',
+   w:[['the strength is doubled','an equal volume of water: double the strength'],null],xs:(S,p,q)=>[['the strength is taken as unchanged by water',q.v,'an equal volume of water leaves the strength as it is']]},SCL)],
+ ['tenfold',Y({af:['m:ph.conc','m:ph.mix'],u:'moles a litre',out:'moles a litre',kd:'d',k:10,
+   ask:()=>'it is then diluted tenfold once more: what strength now?',lab:()=>'strength after one more dilution',
+   w:[['the strength is multiplied by 10','dilute tenfold: multiply by 10'],null],xs:(S,p,q)=>[['the 1 on the pH scale is taken off the strength',qa(q.v,Q(-1)),'dilute tenfold: take 1 off the strength']]},SCL)]]);
+
+/* ---------- 17·bio.growth: growth that slows near a ceiling ---------- */
+map('17·bio.growth',[
+ ['wet',Y({af:['read','14a.best'],u:'hundred voles a year',out:'hundred voles a year',kd:'x',k:Q(6,5),
+   ask:()=>'a wet spring lifts the growth by 1/5: what is it that year?',lab:()=>'growth in a wet year',
+   w:[['the growth is divided by 6/5','a wet spring lifts it by 1/5: divide by 6/5'],null],xs:(S,p,q)=>[['1/5 of a hundred voles is added',qa(q.v,Q(1,5)),'a wet spring lifts it by 1/5: add 1/5']]},SCL)],
+ ['owls',Y({af:['read','14a.best','m:growth.wet'],u:'hundred voles a year',out:'hundred voles a year',kd:'s',k:(S,p,q)=>lt(q,[5,10,20]),
+   ask:(S,p)=>'owls on the meadow eat '+p.K+' hundred voles a year: what is the growth left?',lab:()=>'growth less the owls',
+   w:[null,['the owls are added to the growth',(S,p)=>'owls eat '+p.K+' hundred a year: add '+p.K]],xs:(S,p,q)=>[['the owls’ hundreds are taken as single voles',qa(q.v,Q(-num(p.k),100)),(S2,p2)=>'owls eat '+p2.K+' hundred: take '+p2.K+'/100 off']]},LS)],
+ ['voles',Y({af:['m:growth.owls'],u:'hundred voles a year',out:'voles a year',kd:'x',k:100,
+   ask:()=>'how many voles a year is that?',lab:()=>'voles a year',
+   w:[['the hundreds are divided by 100','divide the hundreds by 100'],['100 is added','add 100 to the hundreds']]},UNIT)],
+ ['burrow',Y({af:['m:growth.voles'],u:'voles a year',out:'square metres a year',kd:'x',k:()=>pick([2,3,5]),
+   ask:(S,p)=>'each vole digs a burrow of '+p.K+' square metres: how much new burrow a year?',lab:()=>'new burrow a year',
+   w:[['the voles are divided by the square metres',(S,p)=>'each burrow is '+p.K+' square metres: divide by '+p.K],['the square metres are added',(S,p)=>'each burrow is '+p.K+' square metres: add '+p.K]]},QTY)]]);
+addClose('17·bio.growth',[Pr(X({u:'voles a year',out:'voles a month',k:12,ask:()=>'how many voles a month is that, a year being 12 months?',ln:()=>'voles a month'},CU)),
+  G(X({u:'square metres a year',k:'above',ask:(S,p)=>'the meadow has '+p.K+' square metres of open ground: how much is left after a year?',ln:()=>'open ground left'},LESS))]);
+
+/* ---------- 17·phys.glow: the glow of a hot plate ---------- */
+map('17·phys.glow',[
+ ['dull',Y({af:['read'],u:'watts a square metre',out:'watts a square metre',kd:'x',k:Q(4,5),
+   ask:()=>'the iron is dull and gives 4/5 of a perfect glow: what does it give a square metre?',lab:()=>'glow of dull iron',
+   w:[['the glow is divided by 4/5','it gives 4/5 of a perfect glow: divide by 4/5'],null],xs:(S,p,q)=>[['the missing 1/5 is given',qm(q.v,Q(1,5)),'it gives 4/5 of a perfect glow: take 1/5 of it']]},T('17·phys','the fourth-power law of glow'))],
+ ['side',Y({af:['read','m:glow.dull'],u:'watts a square metre',out:'watts a square metre',kd:'x',k:Q(1,2),
+   ask:()=>'a shield covers the plate’s underside, so only its top glows out: what is that glow a square metre?',lab:()=>'outward glow',
+   w:[['the glow is doubled','only one side glows: double the glow'],null],xs:(S,p,q)=>[['the glow is quartered, as if both faces were halved',qm(q.v,Q(1,4)),'only one side glows: take a quarter']]},SCL)],
+ ['plate',Y({af:['read','m:glow.dull','m:glow.side'],u:'watts a square metre',out:'watts',kd:'x',k:()=>pick([2,3,4]),
+   ask:(S,p)=>'the plate is '+p.K+' square metres: how many watts does it give off?',lab:()=>'watts from the plate',
+   w:[['the glow is divided by the area',(S,p)=>'the plate is '+p.K+' square metres: divide by '+p.K],['the area is added',(S,p)=>'the plate is '+p.K+' square metres: add '+p.K]]},QTY)],
+ ['night',Y({af:['m:glow.plate'],u:'watts',out:'watt hours',kd:'x',k:()=>pick([2,5,8]),
+   ask:(S,p)=>'it glows like that for '+p.K+' hours: how many watt hours does it give off?',lab:()=>'watt hours',
+   w:[['the watts are divided by the hours',(S,p)=>'it glows '+p.K+' hours: divide by '+p.K],['the hours are added',(S,p)=>'it glows '+p.K+' hours: add '+p.K]]},QTY)]]);
+addClose('17·phys.glow',[G(X({u:'watts',k:'above',ask:(S,p)=>'the element can feed '+p.K+' watts: how many watts to spare?',ln:()=>'watts to spare'},LESS)),
+  Pr(X({u:'watt hours',out:'kilowatt hours',k:1000,ask:()=>'how many kilowatt hours is that?',ln:()=>'kilowatt hours',w:['the watt hours are multiplied by 1000','1000 is taken off']},CU))]);
+
+/* ---------- 18·chem.absorb: absorbance of a dye ---------- */
+map('18·chem.absorb',[
+ ['tube',Y({af:['read'],u:'absorbance units',out:'absorbance units',kd:'x',k:()=>pick([2,3]),
+   ask:(S,p)=>'the dye is moved to a tube '+p.K+' cm long, the reading being for 1 cm: what does it read now?',lab:()=>'absorbance in the long tube',
+   w:[['the absorbance is divided by the length',(S,p)=>'the tube is '+p.K+' cm: divide by '+p.K],['the centimetres are added',(S,p)=>'the tube is '+p.K+' cm: add '+p.K]]},T('18·chem','the absorbance technique'))],
+ ['second',Y({af:['read','m:absorb.tube'],u:'absorbance units',out:'absorbance units',kd:'a',mk:()=>({a:pick([Q(1,10),Q(1,5),Q(1,4)])}),k:(S,p)=>p.a,
+   ask:(S,p)=>'a second dye in the same tube reads '+p.K+' on its own at that colour: what does the mixture read?',lab:()=>'absorbance of both dyes',
+   w:[['the second dye is taken off',(S,p)=>'a second dye reads '+p.K+': take it off'],['the readings are multiplied',(S,p)=>'a second dye reads '+p.K+': multiply the readings']]},T('18·chem','the absorbance technique'))],
+ ['dilute',Y({af:['m:absorb.tube','m:absorb.second'],u:'absorbance units',out:'absorbance units',kd:'d',k:()=>pick([2,4,5]),
+   ask:(S,p)=>'the mixture is diluted 1 part in '+p.K+' with water: what does it read now?',lab:()=>'absorbance diluted',
+   w:[['the reading is multiplied by the dilution',(S,p)=>'diluted 1 in '+p.K+': multiply by '+p.K],['the dilution is divided by the reading',(S,p)=>'diluted 1 in '+p.K+': divide '+p.K+' by the reading']]},T('18·chem','the absorbance technique'))]]);
+
+/* ---------- 18·eng.bar: the pull in a slanted bar ---------- */
+map('18·eng.bar',[
+ ['gust',Y({af:['read'],u:'newtons',out:'newtons',kd:'a',k:()=>pick([5,10,20]),
+   ask:(S,p)=>'a gust off the water adds '+p.K+' newtons to the bar’s pull: what is the pull now?',lab:()=>'pull in the gust',
+   w:[['the gust is taken off',(S,p)=>'a gust adds '+p.K+' newtons: take '+p.K+' off'],['the pull is multiplied by the gust',(S,p)=>'a gust adds '+p.K+' newtons: multiply by '+p.K]]},LS)],
+ ['twin',Y({af:['read','m:bar.gust'],u:'newtons',out:'newtons',kd:'d',k:2,
+   ask:()=>'the frame is doubled, with a twin bar beside it sharing the pull: what does each bar carry?',lab:()=>'pull in each twin bar',
+   w:[['the pull is doubled','a twin bar shares it: double the pull'],null],xs:(S,p,q)=>[['the twin is taken to carry nothing',q.v,'a twin bar shares it: keep the pull as it is']]},SHR)],
+ ['stress',Y({af:['m:bar.twin','m:bar.gust'],u:'newtons',out:'newtons a square millimetre',kd:'d',k:()=>pick([10,20,50]),
+   ask:(S,p)=>'the bar is '+p.K+' square millimetres across: what is the stress in it?',lab:()=>'stress in the bar',
+   w:[['the pull is multiplied by the area',(S,p)=>'it is '+p.K+' mm² across: multiply by '+p.K],['the area is divided by the pull',(S,p)=>'it is '+p.K+' mm² across: divide '+p.K+' by the pull']]},QTY)],
+ ['factor',Y({af:['m:bar.stress'],u:'newtons a square millimetre',out:'times the stress',mk:()=>({Y:pick([100,200,250])}),f:(S,p,q)=>qm(Q(p.Y),qi(q.v)),ex:(S,p,q)=>p.Y+'/'+par(q.v),
+   ask:(S,p)=>'the steel is safe to '+p.Y+' newtons a square millimetre: how many times the stress is that?',lab:()=>'safety factor',
+   xs:(S,p,q)=>[['the division is turned over',qm(q.v,Q(1,p.Y)),(S2,p2)=>'it is safe to '+p2.Y+': divide the stress by '+p2.Y],['the stress is taken off instead of divided in',qa(Q(p.Y),qn(q.v)),(S2,p2)=>'it is safe to '+p2.Y+': take the stress off '+p2.Y]]},QTY)]]);
+addClose('18·eng.bar',[O(X({u:'times the stress',k:2,ask:()=>'the dock’s code asks for a factor of at least 2: by how much does the bar clear it?',ln:()=>'clear of the code'},LESS)),
+  G(X({u:'newtons a square millimetre',k:'above',ask:(S,p)=>'the paint cracks at '+p.K+' newtons a square millimetre: how much stress to spare?',ln:()=>'stress to spare'},LESS))]);
+
+/* ---------- 18·econ.revenue: revenue on a straight demand line ---------- */
+map('18·econ.revenue',[
+ ['tips',Y({af:['read','14a.best'],u:'dollars',out:'dollars',kd:'a',k:()=>pick([5,10,15]),
+   ask:(S,p)=>'the tip jar adds '+p.K+' dollars to the takings: what is taken in all?',lab:()=>'takings with tips',
+   w:[['the tips are taken off',(S,p)=>'tips add '+p.K+' dollars: take '+p.K+' off'],['the takings are multiplied by the tips',(S,p)=>'tips add '+p.K+' dollars: multiply by '+p.K]]},LS)],
+ ['fee',Y({af:['read','14a.best','m:revenue.tips'],u:'dollars',out:'dollars',kd:'x',k:Q(9,10),
+   ask:()=>'the market keeps 1/10 of the takings as its fee: what does the stall keep?',lab:()=>'kept after the fee',
+   w:[['the takings are divided by 9/10','the market keeps 1/10: divide by 9/10'],null],xs:(S,p,q)=>[['the fee itself is given',qm(q.v,Q(1,10)),'the market keeps 1/10: take 1/10 of the takings']]},SCL)],
+ ['stall',Y({af:['m:revenue.fee'],u:'dollars',out:'dollars a stall',kd:'d',k:()=>pick([2,3]),
+   ask:(S,p)=>'the cooperative’s '+p.K+' stalls share that equally: what does one stall get?',lab:()=>'one stall’s share',
+   w:[['the dollars are multiplied by the stalls',(S,p)=>p.K+' stalls share it: multiply by '+p.K],['the stalls are taken off',null]]},SHR)],
+ ['hour',Y({af:['m:revenue.stall'],u:'dollars a stall',out:'dollars an hour',kd:'d',k:()=>pick([4,5,6]),
+   ask:(S,p)=>'a stall is open '+p.K+' hours on market day: how many dollars an hour does it make?',lab:()=>'dollars an hour',
+   w:[['the share is multiplied by the hours',(S,p)=>'it is open '+p.K+' hours: multiply by '+p.K],['the hours are divided by the share',(S,p)=>'it is open '+p.K+' hours: divide '+p.K+' by the share']]},QTY)]]);
+addClose('18·econ.revenue',[O(X({u:'dollars a stall',k:'below',ask:(S,p)=>'each stall’s salmon cost it '+p.K+' dollars: what does one stall clear?',ln:()=>'a stall clears'},LESS)),
+  G(X({u:'dollars an hour',k:'above',ask:(S,p)=>'the cannery pays '+p.K+' dollars an hour: how much less does a stall make an hour?',ln:()=>'less than the cannery'},LESS))]);
+
+/* ---------- 18·nav.chart: a chart at one scale ---------- */
+map('18·nav.chart',[
+ ['head',Y({af:['read'],u:'kilometres',out:'kilometres',kd:'x',k:Q(6,5),
+   ask:()=>'the course must bend round a headland, adding 1/5 to the straight line: how far is the run?',lab:()=>'run round the headland',
+   w:[['the line is divided by 6/5','the bend adds 1/5: divide by 6/5'],null],xs:(S,p,q)=>[['1/5 of a kilometre is added',qa(q.v,Q(1,5)),'the bend adds 1/5: add 1/5 kilometre']]},SCL)],
+ ['fuel',Y({af:['read','m:chart.head'],u:'kilometres',out:'litres of fuel',kd:'x',k:()=>pick([2,3,4]),
+   ask:(S,p)=>'the boat burns '+p.K+' litres of fuel a kilometre: how many litres for the run?',lab:()=>'fuel for the run',
+   w:[['the kilometres are divided by the litres',(S,p)=>'it burns '+p.K+' a kilometre: divide by '+p.K],['the litres are added',(S,p)=>'it burns '+p.K+' a kilometre: add '+p.K]]},QTY)],
+ ['cost',Y({af:['m:chart.fuel'],u:'litres of fuel',out:'dollars',kd:'x',k:()=>pick([2,3]),
+   ask:(S,p)=>'fuel at the dock costs '+p.K+' dollars a litre: what does the run’s fuel cost?',lab:()=>'cost of the fuel',
+   w:[['the litres are divided by the price',(S,p)=>'fuel is '+p.K+' dollars a litre: divide by '+p.K],['the price is added',(S,p)=>'fuel is '+p.K+' dollars a litre: add '+p.K]]},QTY)],
+ ['nm',Y({af:['read','m:chart.head'],u:'kilometres',out:'nautical miles',mk:()=>({}),f:(S,p,q)=>qm(q.v,Q(1000,1852)),ex:(S,p,q)=>par(q.v)+' · 1000/1852',
+   ask:()=>'a nautical mile is 1852 metres: how many nautical miles is that?',lab:()=>'nautical miles',
+   xs:(S,p,q)=>[['the conversion is turned over',qm(q.v,Q(1852,1000)),'multiply the kilometres by 1852/1000'],['the 1000 metres of a kilometre are left out',qm(q.v,Q(1,1852)),'divide the kilometres by 1852']]},UNIT)]]);
+addClose('18·nav.chart',[Pr(X({u:'dollars',out:'dollars each',k:()=>pick([2,3,4]),ask:(S,p)=>'the '+p.K+' aboard share the fuel bill equally: how many dollars each?',ln:()=>'each one’s share'},RA)),
+  Cc(X({u:'litres of fuel',out:'cans',k:()=>pick([10,20]),ask:(S,p)=>'the fuel is carried in '+p.K+'-litre cans: how many cans?',ln:()=>'cans of fuel'},DR)),
+  Pr(X({u:'nautical miles',out:'hours',k:()=>pick([5,6,8]),ask:(S,p)=>'the boat makes '+p.K+' knots: how many hours does the run take?',ln:()=>'hours at that speed'},MQ))]);
+
+/* ---------- 18·logi.edge: earnings along an edge of the plan ---------- */
+map('18·logi.edge',[
+ ['toll',Y({af:['read'],u:'dollars',out:'dollars',kd:'s',k:()=>pick([5,10,15]),
+   ask:(S,p)=>'the bridge toll on the way takes '+p.K+' dollars: what is left of the earnings?',lab:()=>'earnings less the toll',
+   w:[null,['the toll is added',(S,p)=>'the toll is '+p.K+' dollars: add '+p.K]],xs:(S,p,q)=>[['the toll is paid both ways though the truck comes back empty by the ferry',qa(q.v,qm(Q(-2),p.k)),(S2,p2)=>'the toll is '+p2.K+': take it off twice']]},LS)],
+ ['driver',Y({af:['read','m:edge.toll'],u:'dollars',out:'dollars',kd:'x',k:Q(3,4),
+   ask:()=>'the driver is paid 1/4 of it: what is left for the firm?',lab:()=>'left for the firm',
+   w:[['the earnings are divided by 3/4','the driver gets 1/4: divide by 3/4'],null],xs:(S,p,q)=>[['the driver’s share is given',qm(q.v,Q(1,4)),'the driver gets 1/4: take 1/4 of it']]},SCL)],
+ ['week',Y({af:['m:edge.driver','m:edge.toll'],u:'dollars',out:'dollars a week',kd:'x',k:()=>pick([3,4,5]),
+   ask:(S,p)=>'the truck makes '+p.K+' such runs a week: what does that come to a week?',lab:()=>'a week of runs',
+   w:[['the dollars are divided by the runs',(S,p)=>p.K+' runs a week: divide by '+p.K],['the runs are added',(S,p)=>p.K+' runs a week: add '+p.K]]},QTY)],
+ ['year',Y({af:['m:edge.week'],u:'dollars a week',out:'dollars a year',kd:'x',k:50,
+   ask:()=>'the truck works 50 weeks a year: what does it bring in a year?',lab:()=>'a year of runs',
+   w:[['the week is divided by 50','divide by the 50 weeks'],null],xs:(S,p,q)=>[['52 weeks are used, forgetting the 2 weeks off',qm(q.v,Q(52)),'multiply by the 52 weeks of the year']]},UNIT)]]);
+addClose('18·logi.edge',[O(X({u:'dollars a week',k:'below',ask:(S,p)=>'the depot rent is '+p.K+' dollars a week: what is left?',ln:()=>'left after rent'},LESS)),
+  G(X({u:'dollars a year',k:'above',ask:(S,p)=>'a new truck costs '+p.K+' dollars: how many dollars short after a year?',ln:()=>'short of a new truck'},LESS))]);
+
+/* ---------- 18·phys.comet: a comet's distance from the sun ---------- */
+map('18·phys.comet',[
+ ['earth',Y({af:['read'],u:'astronomical units',out:'astronomical units',kd:'a',k:1,
+   ask:()=>'the Earth is on the far side of the sun from the comet: how far is the comet from the Earth?',lab:()=>'distance from the Earth',
+   w:[['the Earth’s 1 is taken off, as if on the near side','the Earth is on the far side: take 1 off'],null],xs:(S,p,q)=>[['the Earth’s distance is doubled in',qa(q.v,Q(2)),'the Earth is on the far side: add 2']]},LS)],
+ ['light',Y({af:['read','m:comet.earth'],u:'astronomical units',out:'seconds of light',kd:'x',k:500,
+   ask:()=>'light crosses an astronomical unit in about 500 seconds: how long does light take to cross that?',lab:()=>'light time',
+   w:[['the distance is divided by 500','divide the distance by 500'],null],xs:(S,p,q)=>[['the light time of an hour, 3600 seconds, is used',qm(q.v,Q(3600)),'multiply the distance by 3600 seconds']]},QTY)],
+ ['min',Y({af:['m:comet.light'],u:'seconds of light',out:'minutes of light',kd:'d',k:60,
+   ask:()=>'how many minutes is that?',lab:()=>'light time in minutes',w:[['the seconds are multiplied by 60','multiply the seconds by 60'],null],xs:(S,p,q)=>[['100 seconds are taken to a minute',qm(q.v,Q(1,100)),'divide the seconds by 100']]},UNIT)],
+ ['echo',Y({af:['m:comet.min'],u:'minutes of light',out:'minutes for an echo',kd:'x',k:2,
+   ask:()=>'a radar pulse goes out and its echo comes back: how many minutes does the echo take?',lab:()=>'echo time',
+   w:[['the time is halved instead of doubled','out and back: halve the time'],null],xs:(S,p,q)=>[['the trip back is left out',q.v,'out and back: the one-way time']]},QTY)]]);
+addClose('18·phys.comet',[Pr(X({u:'seconds of light',out:'minutes',k:60,ask:()=>'how many minutes does the light take?',ln:()=>'minutes for the light'},CU)),
+  G(X({u:'minutes for an echo',k:'above',ask:(S,p)=>'the dish can listen for '+p.K+' minutes: how many minutes to spare?',ln:()=>'listening to spare'},LESS))]);
+
+/* ---------- 19·eng.loop: work round a square loop ---------- */
+map('19·eng.loop',[
+ ['rub',Y({af:['read','m:loop.cyl'],u:'joules',out:'joules',kd:'x',k:Q(9,10),
+   ask:()=>'the bearings rub away 1/10 of the work of each turn: how much reaches the shaft?',lab:()=>'work at the shaft',
+   w:[['the work is divided by 9/10','1/10 rubs away: divide by 9/10'],null],xs:(S,p,q)=>[['the lost 1/10 is given',qm(q.v,Q(1,10)),'1/10 rubs away: take 1/10 of the work']]},SCL)],
+ ['cyl',Y({af:['read','m:loop.rub'],u:'joules',out:'joules',kd:'x',k:()=>pick([2,3,4]),
+   ask:(S,p)=>'the engine has '+p.K+' cylinders alike, each running that loop: what work in one turn of them all?',lab:()=>'work of all the cylinders',
+   w:[['the work is shared among the cylinders',(S,p)=>p.K+' cylinders: divide the work by '+p.K],['the cylinders are added',(S,p)=>p.K+' cylinders: add '+p.K]]},QTY)],
+ ['power',Y({af:['read','m:loop.rub','m:loop.cyl'],u:'joules',out:'watts',kd:'x',k:()=>pick([5,10,20]),
+   ask:(S,p)=>'the engine makes '+p.K+' turns a second: what power does the shaft carry?',lab:()=>'power at the shaft',
+   w:[['the work is divided by the turns',(S,p)=>p.K+' turns a second: divide by '+p.K],['the turns are added',(S,p)=>p.K+' turns a second: add '+p.K]]},T('19·eng','the cycle-area technique'))],
+ ['pump',Y({af:['m:loop.power'],u:'watts',out:'kilograms of water a second',kd:'d',k:()=>pick([50,100,200]),f:(S,p,q)=>qm(q.v,qi(p.k)),
+   ask:(S,p)=>'the shaft drives a well pump; lifting a kilogram of water takes '+p.K+' joules: how many kilograms a second?',lab:()=>'water a second',
+   w:[['the watts are multiplied by the joules a kilogram',(S,p)=>'a kilogram takes '+p.K+' joules: multiply by '+p.K],['the division is turned over',(S,p)=>'a kilogram takes '+p.K+' joules: divide '+p.K+' by the watts']]},QTY)]]);
+addClose('19·eng.loop',[Tm(X({u:'kilograms of water a second',out:'litres a minute',k:60,ask:()=>'a kilogram of water is a litre: how many litres a minute come up?',ln:()=>'litres a minute'},CU)),
+  G(X({u:'watts',k:'above',ask:(S,p)=>'the dynamo on the shaft can take '+p.K+' watts: how many watts to spare?',ln:()=>'watts to spare'},LESS))]);
+
+/* ---------- 19·comp.places: places a tidy list can move ---------- */
+map('19·comp.places',[
+ ['merge',Y({af:['read'],u:'places',out:'places',kd:'x',k:2,
+   ask:()=>'a second birder makes as many changes on her own copy, then the copies merge: how many places at most?',lab:()=>'places after the merge',
+   w:[['the moves are halved as if shared','two copies are merged: halve the places'],['2 places are added','two copies are merged: add 2']]},SCL)],
+ ['swaps',Y({af:['read','m:places.merge'],u:'places',out:'swaps',kd:'d',k:2,
+   ask:()=>'each swap of neighbours moves two sightings one place each: at most how many swaps?',lab:()=>'swaps at most',
+   w:[['the places are doubled','each swap moves two sightings: double the places'],null],xs:(S,p,q)=>[['each swap is taken to move one sighting',q.v,'each swap moves two sightings: one swap a place']]},QTY)],
+ ['time',Y({af:['m:places.swaps'],u:'swaps',out:'microseconds',kd:'x',k:()=>pick([2,3,5]),
+   ask:(S,p)=>'each swap takes '+p.K+' microseconds: how long do the swaps take?',lab:()=>'time for the swaps',
+   w:[['the swaps are divided by the microseconds',(S,p)=>'each swap takes '+p.K+': divide by '+p.K],['the microseconds are added',(S,p)=>'each swap takes '+p.K+': add '+p.K]]},QTY)],
+ ['day',Y({af:['m:places.time'],u:'microseconds',out:'microseconds a day',kd:'x',k:()=>pick([10,20,50]),
+   ask:(S,p)=>'the list is tidied '+p.K+' times a day: how many microseconds a day go on swaps?',lab:()=>'swap time a day',
+   w:[['the time is divided by the tidies',(S,p)=>p.K+' tidies a day: divide by '+p.K],['the tidies are added',(S,p)=>p.K+' tidies a day: add '+p.K]]},QTY)]]);
+addClose('19·comp.places',[G(X({u:'microseconds',k:'above',ask:(S,p)=>'the screen redraws every '+p.K+' microseconds: how many microseconds to spare?',ln:()=>'time to spare'},LESS)),
+  Pr(X({u:'microseconds a day',out:'milliseconds a day',k:1000,ask:()=>'how many milliseconds a day is that?',ln:()=>'milliseconds a day'},CU))]);
+
+/* ---------- 19·bio.bank: coins banked down a carrier chain ---------- */
+map('19·bio.bank',[
+ ['block',Y({af:['read'],u:'coins',out:'coins',kd:'s',k:(S,p,q)=>num(q.v)>4?4:null,
+   ask:()=>'a poison blocks one step of the chain, which banks 4 coins: how many coins are banked now?',lab:()=>'coins with a step blocked',
+   w:[null,['the blocked step’s coins are added','one step of 4 coins is blocked: add 4']],xs:(S,p,q)=>[['the whole chain is taken as lost after the block',Q(4),'one step is blocked: only one step’s 4 coins are banked']]},LS)],
+ ['pump',Y({af:['read','m:bank.block'],u:'coins',out:'coins',kd:'x',k:Q(3,4),
+   ask:()=>'the muscle’s pumps spend 1/4 of the coins at once: how many are left to bank?',lab:()=>'coins left to bank',
+   w:[['the coins are divided by 3/4','1/4 is spent: divide by 3/4'],null],xs:(S,p,q)=>[['the spent 1/4 is given',qm(q.v,Q(1,4)),'1/4 is spent: take 1/4 of the coins']]},SCL)],
+ ['glucose',Y({af:['m:bank.pump','m:bank.block'],u:'coins',out:'coins a glucose',kd:'x',k:()=>pick([5,10]),
+   ask:(S,p)=>'each glucose feeds the chain '+p.K+' times over: how many coins does one glucose bank?',lab:()=>'coins a glucose',
+   w:[['the coins are divided by the runs',(S,p)=>'it runs '+p.K+' times: divide by '+p.K],['the runs are added',(S,p)=>'it runs '+p.K+' times: add '+p.K]]},QTY)],
+ ['second',Y({af:['m:bank.glucose'],u:'coins a glucose',out:'coins a second',kd:'x',k:()=>pick([2,3,4]),
+   ask:(S,p)=>'in flight the muscle burns '+p.K+' glucose a second: how many coins a second?',lab:()=>'coins a second',
+   w:[['the coins are divided by the glucose',(S,p)=>p.K+' glucose a second: divide by '+p.K],['the glucose is added',(S,p)=>p.K+' glucose a second: add '+p.K]]},QTY)]]);
+addClose('19·bio.bank',[O(X({u:'coins a second',k:'below',ask:(S,p)=>'the wingbeats spend '+p.K+' coins a second: how many coins a second are left over?',ln:()=>'coins left a second'},LESS)),
+  G(X({u:'coins a glucose',k:'above',ask:(S,p)=>'a glucose can bank up to '+p.K+' coins in all: how many short is this?',ln:()=>'short of the most'},LESS))]);
+
+/* ---------- 20·crypt.bombe: settings a checker clears ---------- */
+map('20·crypt.bombe',[
+ ['twin',Y({af:['read','m:bombe.fault'],u:'settings',out:'settings',kd:'x',k:2,
+   ask:()=>'a second checker alike runs at once on the same crib: how many settings do they clear?',lab:()=>'settings of two checkers',
+   w:[['the settings are halved as if shared','two checkers: halve the settings'],['2 is added','two checkers: add 2']]},QTY)],
+ ['fault',Y({af:['read'],u:'settings',out:'settings',kd:'x',k:Q(3,4),
+   ask:()=>'a loose wire stops the checker for 1/4 of the time: how many settings does it clear?',lab:()=>'settings with the fault',
+   w:[['the settings are divided by 3/4','it stops 1/4 of the time: divide by 3/4'],null],xs:(S,p,q)=>[['the lost 1/4 is given',qm(q.v,Q(1,4)),'it stops 1/4 of the time: take 1/4 of the settings']]},SCL)],
+ ['saved',Y({af:['read','m:bombe.twin','m:bombe.fault'],u:'settings',out:'minutes of hand work saved',kd:'x',k:Q(1,2),
+   ask:()=>'each setting cleared saves the clerks half a minute of testing by hand: how many minutes are saved?',lab:()=>'minutes saved',
+   w:[['the settings are divided by 1/2','half a minute each: divide by 1/2'],['half a minute is added','half a minute each: add 1/2']]},QTY)],
+ ['hours',Y({af:['m:bombe.saved'],u:'minutes of hand work saved',out:'hours of hand work saved',kd:'d',k:60,
+   ask:()=>'how many hours of hand work is that?',lab:()=>'hours saved',w:[['the minutes are multiplied by 60','multiply the minutes by 60'],null],xs:(S,p,q)=>[['100 minutes are taken to an hour',qm(q.v,Q(1,100)),'divide the minutes by 100']]},UNIT)]]);
+addClose('20·crypt.bombe',[G(X({u:'minutes of hand work saved',k:'above',ask:(S,p)=>'the clerks had '+p.K+' minutes of hand work planned: how many minutes are still needed?',ln:()=>'hand work still needed'},LESS)),
+  Pr(X({u:'hours of hand work saved',out:'clerk days',k:8,ask:()=>'a clerk works 8 hours a day: how many clerk days is that?',ln:()=>'clerk days saved'},MQ))]);
+
+/* ---------- 21·phys.round: the pull that holds a cart on a curve ---------- */
+map('21·phys.round',[
+ ['rider',Y({af:['read','m:round.tight'],u:'newtons',out:'newtons',kd:'x',k:Q(4,3),
+   ask:()=>'a rider climbs in, adding 1/3 to the cart’s mass: what pull is needed at that speed?',lab:()=>'pull with the rider',
+   w:[['the pull is divided by 4/3','the mass grows by 1/3: divide by 4/3'],null],xs:(S,p,q)=>[['1/3 of a newton is added',qa(q.v,Q(1,3)),'the mass grows by 1/3: add 1/3 newton']]},T('21·phys','the round technique'))],
+ ['tight',Y({af:['read','m:round.rider'],u:'newtons',out:'newtons',kd:'x',k:2,
+   ask:()=>'the track is rebuilt with half the radius, same speed: what pull is needed now?',lab:()=>'pull on the tighter curve',
+   w:[['the pull is halved with the radius','half the radius: halve the pull'],null],xs:(S,p,q)=>[['the radius is taken to go as its square',qm(q.v,Q(4)),'half the radius: multiply the pull by 4']]},T('21·phys','the round technique'))],
+ ['rail',Y({af:['m:round.rider','m:round.tight'],u:'newtons',out:'newtons from the rail',kd:'s',k:(S,p,q)=>{ const f=Math.floor(num(q.v)/4); return f>0?f:null; },
+   ask:(S,p)=>'the wheels’ grip gives '+p.K+' newtons of it: how many newtons must the rail give?',lab:()=>'pull from the rail',
+   w:[null,['the grip is added to the pull',(S,p)=>'the grip gives '+p.K+' newtons: add '+p.K]],xs:(S,p,q)=>[['the grip alone is taken as the rail’s share',p.k,(S2,p2)=>'the grip gives '+p2.K+': the rail gives the same']]},LS)],
+ ['acc',Y({af:['read'],u:'newtons',out:'metres a second each second',kd:'d',k:12,
+   ask:()=>'the cart’s mass is 12 kilograms: what is its acceleration toward the centre?',lab:()=>'acceleration toward the centre',
+   w:[['the pull is multiplied by the mass','the cart is 12 kilograms: multiply by 12'],['the mass is divided by the pull','the cart is 12 kilograms: divide 12 by the pull']]},QTY)]]);
+addClose('21·phys.round',[G(X({u:'newtons from the rail',k:'above',ask:(S,p)=>'the rail’s bolts hold '+p.K+' newtons: how many newtons to spare?',ln:()=>'newtons to spare at the bolts'},LESS)),
+  Pr(X({u:'metres a second each second',out:'times g',k:10,ask:()=>'how many times g is that, taking g as 10?',ln:()=>'times g'},MQ))]);
+
+/* ---------- 21·eng.piston: the piston's top speed ---------- */
+map('21·eng.piston',[
+ ['belt',Y({af:['read'],u:'metres a second',out:'metres a second',kd:'x',k:Q(9,10),
+   ask:()=>'the drive belt slips, so the crank turns 1/10 slower: what is the pin’s speed?',lab:()=>'speed with the slip',
+   w:[['the speed is divided by 9/10','it turns 1/10 slower: divide by 9/10'],null],xs:(S,p,q)=>[['the lost 1/10 is given',qm(q.v,Q(1,10)),'it turns 1/10 slower: take 1/10 of the speed']]},SCL)],
+ ['gear',Y({af:['read','m:piston.belt'],u:'metres a second',out:'metres a second',kd:'x',k:()=>pick([2,3]),
+   ask:(S,p)=>'a gear is fitted so the crank turns '+p.K+' times as fast: what is the pin’s top speed?',lab:()=>'speed geared up',
+   w:[['the speed is divided by the gearing',(S,p)=>'it turns '+p.K+' times as fast: divide by '+p.K],['the gearing is added',(S,p)=>'it turns '+p.K+' times as fast: add '+p.K]]},T('21·eng','the place technique'))],
+ ['cm',Y({af:['read','m:piston.belt','m:piston.gear'],u:'metres a second',out:'centimetres a second',kd:'x',k:100,
+   ask:()=>'how many centimetres a second is that?',lab:()=>'centimetres a second',w:[['the metres are divided by 100','divide the metres by 100'],null],xs:(S,p,q)=>[['10 centimetres are taken to a metre',qm(q.v,Q(10)),'multiply the metres by 10']]},UNIT)],
+ ['flow',Y({af:['m:piston.cm'],u:'centimetres a second',out:'cubic centimetres a second',kd:'x',k:()=>pick([10,20,30]),
+   ask:(S,p)=>'the piston’s face is '+p.K+' cm²: how many cm³ a second does it push at that speed?',lab:()=>'flow at top speed',
+   w:[['the speed is divided by the area',(S,p)=>'the face is '+p.K+' cm²: divide by '+p.K],['the area is added',(S,p)=>'the face is '+p.K+' cm²: add '+p.K]]},QTY)]]);
+addClose('21·eng.piston',[Tm(X({u:'cubic centimetres a second',out:'litres a minute',k:Q(3,50),ask:()=>'how many litres a minute is that, at its top rate?',ln:()=>'litres a minute',ex:(S,p,q)=>par(q.v)+' · 60/1000',w:['the cubic centimetres are divided by 60/1000','60/1000 is added']},CU)),
+  G(X({u:'centimetres a second',k:'above',ask:(S,p)=>'the seals are good to '+p.K+' centimetres a second: how much faster could it go?',ln:()=>'speed to spare'},LESS))]);
+
+/* ---------- 22·nav.grid: a straight-grid map along the equator ---------- */
+map('22·nav.grid',[
+ ['print',Y({af:['read'],u:'millimetres',out:'millimetres',kd:'x',k:Q(1,2),
+   ask:()=>'the map is printed at half size for a pocket book: how long is that stretch on the print?',lab:()=>'length on the print',
+   w:[['the length is doubled','printed at half size: double the length'],null],xs:(S,p,q)=>[['half a millimetre is taken off',qa(q.v,Q(-1,2)),'printed at half size: take 1/2 mm off']]},SCL)],
+ ['wall',Y({af:['read','m:grid.print'],u:'millimetres',out:'millimetres',kd:'x',k:()=>pick([3,4,5]),
+   ask:(S,p)=>'a copy is blown up '+p.K+' times for the wall: how long is that stretch there?',lab:()=>'length on the wall',
+   w:[['the length is divided by the blow-up',(S,p)=>'blown up '+p.K+' times: divide by '+p.K],['the blow-up is added',(S,p)=>'blown up '+p.K+' times: add '+p.K]]},SCL)],
+ ['km',Y({af:['read'],u:'millimetres',out:'kilometres on the ground',kd:'x',mk:S=>({c:qq(S.c[1])}),k:(S,p)=>qm(Q(111),qi(p.c)),
+   ask:(S,p)=>'a degree of the equator is 111 km, and the map draws it '+qs(p.c)+' mm long: how many km is that stretch?',lab:()=>'kilometres on the ground',
+   w:[['the millimetres are divided by the km a millimetre',(S,p)=>'divide the millimetres by 111/'+qs(p.c)],null],xs:(S,p,q)=>[['the mm a degree are left out',qm(q.v,Q(111)),'a degree is 111 km: multiply the millimetres by 111'],['the mm a degree are multiplied in',qm(q.v,qm(Q(111),p.c)),(S2,p2)=>'multiply the millimetres by 111 and by '+qs(p2.c)]]},T('22·nav','the east-stretch technique'))],
+ ['sail',Y({af:['m:grid.km'],u:'kilometres on the ground',out:'hours',kd:'d',k:()=>pick([20,25,30]),
+   ask:(S,p)=>'a ship makes '+p.K+' km an hour along the equator: how many hours to cover it?',lab:()=>'hours at sea',
+   w:[['the kilometres are multiplied by the speed',(S,p)=>p.K+' km an hour: multiply by '+p.K],['the speed is divided by the distance',(S,p)=>p.K+' km an hour: divide '+p.K+' by the distance']]},QTY)],
+ ['days',Y({af:['m:grid.sail'],u:'hours',out:'days at sea',kd:'d',k:12,
+   ask:()=>'it sails only in daylight, 12 hours a day: how many days at sea?',lab:()=>'days at sea',
+   w:[['the hours are multiplied by 12','12 hours a day: multiply by 12'],null],xs:(S,p,q)=>[['24 hours are used for a day of sailing',qm(q.v,Q(1,24)),'divide the hours by 24']]},UNIT)]]);
+addClose('22·nav.grid',[G(X({u:'days at sea',k:'above',ask:(S,p)=>'the ship carries stores for '+p.K+' days: how many days of stores to spare?',ln:()=>'days to spare'},LESS)),
+  Cc(X({u:'hours',out:'watches',k:4,ask:()=>'the crew stands watches of 4 hours: how many watches does the run take?',ln:()=>'watches'},DR))]);
+
+/* ---------- 22·chem.row: the energy of a charged row ---------- */
+map('22·chem.row',[
+ ['press',Y({af:['read'],u:'units of energy',out:'units of energy',kd:'x',k:Q(10,9),neg:true,
+   ask:()=>'the crystal is squeezed so the atoms sit 9/10 as far apart, energy going as 1/distance: what energy now?',lab:()=>'energy squeezed',
+   w:[['the energy is multiplied by 9/10','the atoms sit 9/10 as far apart: multiply by 9/10'],null],xs:(S,p,q)=>[['the energy is taken to go as the square of the closeness',qm(q.v,Q(100,81)),'the atoms sit 9/10 as far apart: multiply by 100/81']]},SCL)],
+ ['break',Y({af:['read','m:row.press'],u:'units of energy',out:'units to break it',f:(S,p,q)=>qn(q.v),ex:(S,p,q)=>'−'+par(q.v),
+   ask:()=>'how much energy must be put in to pull the row apart into free atoms?',lab:()=>'energy to break it',
+   xs:(S,p,q)=>[['the energy is halved, counting each pair once more',qm(qn(q.v),Q(1,2)),'take half the row’s energy, made positive'],['twice the energy is put in',qm(qn(q.v),Q(2)),'take twice the row’s energy, made positive']]},QTY)],
+ ['ev',Y({af:['m:row.break'],u:'units to break it',out:'electronvolts to break it',kd:'x',k:Q(1,10),
+   ask:()=>'each unit is 1/10 of an electronvolt: how many electronvolts does it take?',lab:()=>'electronvolts to break it',
+   w:[['the units are multiplied by 10','a unit is 1/10 eV: multiply by 10'],null],xs:(S,p,q)=>[['a unit is taken as 1/100 eV',qm(q.v,Q(1,100)),'a unit is 1/10 eV: divide by 100']]},UNIT)]]);
+addClose('22·chem.row',[Cc(X({u:'electronvolts to break it',out:'flashes',k:()=>pick([2,3,5]),ask:(S,p)=>'each flash of the lamp hands the row '+p.K+' electronvolts: how many flashes break it?',ln:()=>'flashes needed'},DR)),
+  G(X({u:'units to break it',k:'above',ask:(S,p)=>'the oven puts '+p.K+' units into the crystal: how many units short of breaking the row?',ln:()=>'short of breaking'},LESS))]);
+
+/* ---------- 22·now.digits: work to reach a digit of π ---------- */
+map('22·now.digits',[
+ ['check',Y({af:['read'],u:'remainders',out:'remainders',kd:'x',k:Q(11,10),
+   ask:()=>'the program redoes every tenth remainder as a check: how many remainders in all?',lab:()=>'remainders with checks',
+   w:[['the remainders are divided by 11/10','every tenth is redone: divide by 11/10'],null],xs:(S,p,q)=>[['only the checks are counted',qm(q.v,Q(1,10)),'every tenth is redone: take 1/10 of them']]},SCL)],
+ ['share',Y({af:['read','m:digits.check'],u:'remainders',out:'remainders',kd:'d',k:2,
+   ask:()=>'two machines share the work equally: how many remainders does each work?',lab:()=>'remainders for one machine',
+   w:[['the work is doubled','two machines share it: double it'],null],xs:(S,p,q)=>[['2 is taken away instead of shared',qa(q.v,Q(-2)),'two machines share it: take 2 off']]},SHR)],
+ ['mult',Y({af:['read','m:digits.check','m:digits.share'],u:'remainders',out:'multiplications',kd:'x',k:()=>pick([3,4]),
+   ask:(S,p)=>'each remainder takes '+p.K+' multiplications: how many multiplications is that?',lab:()=>'multiplications',
+   w:[['the remainders are divided by the multiplications',(S,p)=>p.K+' each: divide by '+p.K],['the multiplications are added',(S,p)=>p.K+' each: add '+p.K]]},QTY)],
+ ['secs',Y({af:['m:digits.mult'],u:'multiplications',out:'seconds',kd:'d',k:()=>pick([10,20,50]),
+   ask:(S,p)=>'the machine does '+p.K+' multiplications a second: how many seconds does it take?',lab:()=>'seconds of work',
+   w:[['the multiplications are multiplied by the speed',(S,p)=>p.K+' a second: multiply by '+p.K],['the speed is divided by the work',(S,p)=>p.K+' a second: divide '+p.K+' by the work']]},QTY)]]);
+addClose('22·now.digits',[G(X({u:'seconds',k:'above',ask:(S,p)=>'the run is given '+p.K+' seconds: how many seconds to spare?',ln:()=>'seconds to spare'},LESS))]);
+
+/* ---------- 23·eng.power: an engine's power ---------- */
+map('23·eng.power',[
+ ['box',Y({af:['read'],u:'watts',out:'watts',kd:'d',k:Q(4,5),
+   ask:()=>'the gearbox passes on 4/5 of what the motor gives: what must the motor give?',lab:()=>'power from the motor',
+   w:[['the power is multiplied by 4/5','the gearbox passes 4/5: multiply by 4/5'],null],xs:(S,p,q)=>[['1/5 of the power is added',qm(q.v,Q(6,5)),'the gearbox loses 1/5: add 1/5 of the power']]},SCL)],
+ ['run',Y({af:['read','m:power.box'],u:'watts',out:'joules',kd:'x',k:()=>pick([5,10]),
+   ask:(S,p)=>'the winch pulls like that for '+p.K+' seconds: how many joules does it hand over?',lab:()=>'energy of the pull',
+   w:[['the watts are divided by the seconds',(S,p)=>p.K+' seconds: divide by '+p.K],['the seconds are added',(S,p)=>p.K+' seconds: add '+p.K]]},QTY)],
+ ['lift',Y({af:['m:power.run'],u:'joules',out:'metres of lift',mk:()=>({m:pick([50,100,200])}),f:(S,p,q)=>qm(q.v,Q(1,10*p.m)),ex:(S,p,q)=>par(q.v)+'/(10 · '+p.m+')',
+   ask:(S,p)=>'it lifts a crate of '+p.m+' kg, each metre taking 10 · '+p.m+' joules: how many metres does it rise?',lab:()=>'height lifted',
+   xs:(S,p,q)=>[['the 10 for g is left out',qm(q.v,Q(1,p.m)),(S2,p2)=>'the crate is '+p2.m+' kg: divide the joules by '+p2.m],['the mass is multiplied in',qm(q.v,Q(p.m,10)),(S2,p2)=>'the crate is '+p2.m+' kg: multiply by '+p2.m+' over 10']]},QTY)]]);
+addClose('23·eng.power',[G(X({u:'metres of lift',k:'above',ask:(S,p)=>'the quay wall is '+p.K+' metres high: how many metres short of the top is the crate?',ln:()=>'short of the top'},LESS)),
+  Pr(X({u:'joules',out:'kilojoules',k:1000,ask:()=>'how many kilojoules is that?',ln:()=>'kilojoules'},CU))]);
+
+/* ---------- 23·nav.drop: the sea's drop below a sight line ---------- */
+map('23·nav.drop',[
+ ['twice',Y({af:['read'],u:'metres',out:'metres',kd:'x',k:4,
+   ask:()=>'a second boat is twice as far out: how far below the sight line is the sea there?',lab:()=>'drop at twice the distance',
+   w:[['the drop is divided by 4','twice as far: divide by 4'],null],xs:(S,p,q)=>[['the drop is taken to double with the distance',qm(q.v,Q(2)),'twice as far: double the drop'],['the distance is taken to the fourth power',qm(q.v,Q(16)),'twice as far: multiply by 16']]},T('23·nav','the sight-line technique'))],
+ ['tide',Y({af:['read','m:drop.twice'],u:'metres',out:'metres',kd:'s',k:(S,p,q)=>num(q.v)>1?1:null,
+   ask:()=>'the moon’s tide piles the far water up 1 metre: how far below the sight line is it now?',lab:()=>'drop with the tide',
+   w:[null,['the tide is added to the drop','the far water is 1 metre up: add 1']],xs:(S,p,q)=>[['the tide is counted twice',qa(q.v,Q(-2)),'the far water is 1 metre up: take 2 off']]},LS)],
+ ['storey',Y({af:['read','m:drop.twice','m:drop.tide'],u:'metres',out:'storeys',kd:'d',k:3,
+   ask:()=>'a tower’s storeys are 3 metres each: how many storeys does that drop hide?',lab:()=>'storeys hidden',
+   w:[['the metres are multiplied by 3','3 metres a storey: multiply by 3'],null],xs:(S,p,q)=>[['3 metres are taken off once',qa(q.v,Q(-3)),'3 metres a storey: take 3 off']]},QTY)]]);
+addClose('23·nav.drop',[G(X({u:'storeys',k:'above',ask:(S,p)=>'the lighthouse there has '+p.K+' storeys: how many storeys show above the sight line?',ln:()=>'storeys showing'},LESS))]);
+
+/* ---------- 24·phys.spring: the energy of a squeezed spring ---------- */
+map('24·phys.spring',[
+ ['pair',Y({af:['read'],u:'joules',out:'joules',kd:'x',k:2,
+   ask:()=>'two such springs side by side are squeezed the same: how much energy do they hold?',lab:()=>'energy of the pair',
+   w:[['the energy is halved','two springs side by side: halve it'],['2 joules are added','two springs side by side: add 2']],xs:(S,p,q)=>[['the energy is taken to go as the square of the springs',qm(q.v,Q(4)),'two springs side by side: multiply by 4']]},SCL)],
+ ['loss',Y({af:['read','m:espring.pair'],u:'joules',out:'joules',kd:'x',k:Q(3,4),
+   ask:()=>'the spring launches a puck, but 1/4 of the energy shakes the frame: how much does the puck get?',lab:()=>'energy to the puck',
+   w:[['the energy is divided by 3/4','1/4 is lost: divide by 3/4'],null],xs:(S,p,q)=>[['the lost 1/4 is given',qm(q.v,Q(1,4)),'1/4 is lost: take 1/4 of the energy']]},SCL)],
+ ['slide',Y({af:['read','m:espring.pair','m:espring.loss'],u:'joules',out:'metres of slide',kd:'d',mk:()=>({}),k:()=>pick([Q(1,2),1,2]),
+   ask:(S,p)=>'the puck slides against a drag of '+pl(p.K,'newtons')+': how many metres does it slide?',lab:()=>'slide, energy over drag',
+   w:[['the energy is multiplied by the drag',(S,p)=>'the drag is '+p.K+' newtons: multiply by '+p.K],['the drag is divided by the energy',(S,p)=>'the drag is '+p.K+' newtons: divide '+p.K+' by the energy']]},T('16·phys','the work-energy technique'))]],'espring');
+addClose('24·phys.spring',[G(X({u:'metres of slide',k:'above',ask:(S,p)=>'the table is '+p.K+' metres long: how far short of the end does the puck stop?',ln:()=>'short of the end'},LESS))]);
+
+/* ---------- 24·eng.house: where a heated house settles ---------- */
+map('24·eng.house',[
+ ['second',Y({af:['read'],u:'degrees',out:'degrees',neg:true,mk:()=>({P:pick([200,400,600])}),f:(S,p,q)=>qa(q.v,qm(qq(S.c[1]),Q(p.P))),ex:(S,p,q)=>par(q.v)+' + '+p.P+' × '+qs(qq(S.c[1])),
+   ask:(S,p)=>'a second heater of '+p.P+' watts is switched on: where does the house settle now?',lab:()=>'settling with both heaters',
+   xs:(S,p,q)=>[['the outside temperature is counted a second time',qa(q.v,qa(qm(qq(S.c[1]),Q(p.P)),qq(S.c[0]))),(S2,p2)=>'add '+p2.P+' × '+qs(qq(S2.c[1]))+', plus the outside temperature again'],['the heater’s watts are added as degrees',qa(q.v,Q(p.P)),(S2,p2)=>'add the '+p2.P+' watts to the degrees'],['the second heater is taken off as if it cooled',qa(q.v,qm(qq(S.c[1]),Q(-p.P))),(S2,p2)=>'take '+p2.P+' × '+qs(qq(S2.c[1]))+' off']]},T('24·eng','the closing-gap technique'))],
+ ['above',Y({af:['read','m:house.second'],u:'degrees',out:'degrees above outside',neg:true,f:(S,p,q)=>qa(q.v,qm(qq(S.c[0]),Q(-1))),ex:(S,p,q)=>par(q.v)+' − '+par(qq(S.c[0])),
+   ask:(S)=>'with no heat on the house would sit at the outside air, '+qs(qq(S.c[0]))+' degrees: how far above that is it?',lab:()=>'above the outside air',
+   xs:(S,p,q)=>[['the outside temperature is added, not taken off',qa(q.v,qq(S.c[0])),(S2)=>'add the outside '+qs(qq(S2.c[0]))+' degrees'],['the outside reading is taken as the answer',qq(S.c[0]),(S2)=>'the house sits '+qs(qq(S2.c[0]))+' degrees above outside'],['the house reading is kept as it is',q.v,()=>'the house reading already is the rise above outside']]},T('24·eng','the closing-gap technique'))],
+ ['wrap',Y({af:['m:house.above'],u:'degrees above outside',out:'degrees above outside',kd:'x',k:2,
+   ask:()=>'new insulation halves the leak, so the same heater holds twice the rise: how far above outside now?',lab:()=>'rise with insulation',
+   w:[['the rise is halved with the leak','the leak is halved: halve the rise'],['2 degrees are added','the leak is halved: add 2']]},T('24·eng','the closing-gap technique'))],
+ ['back',Y({af:['m:house.wrap'],u:'degrees above outside',out:'degrees',neg:true,f:(S,p,q)=>qa(q.v,qq(S.c[0])),ex:(S,p,q)=>par(q.v)+' + '+par(qq(S.c[0])),
+   ask:(S)=>'what does the thermometer in the house read then, outside being '+qs(qq(S.c[0]))+' degrees?',lab:()=>'the reading indoors',
+   xs:(S,p,q)=>[['the outside temperature is taken off, not added back',qa(q.v,qm(qq(S.c[0]),Q(-1))),(S2)=>'take the outside '+qs(qq(S2.c[0]))+' degrees off'],['the rise is read as the thermometer reading',q.v,()=>'the rise above outside is what the thermometer shows'],['the outside temperature is added twice',qa(q.v,qm(qq(S.c[0]),Q(2))),(S2)=>'add the outside '+qs(qq(S2.c[0]))+' degrees twice']]},T('24·eng','the closing-gap technique'))]]);
+addClose('24·eng.house',[G(X({u:'degrees above outside',k:'above',ask:(S,p)=>'the guide asks for '+p.K+' degrees above outside: how many degrees short?',ln:()=>'short of the guide'},LESS))]);
+
+/* ---------- 24·now.boxes: the width of a box after steps ---------- */
+map('24·now.boxes',[
+ ['fine',Y({af:['read'],u:'thousandths',out:'thousandths',kd:'x',k:Q(1,10),
+   ask:()=>'the run is redone in ten times finer arithmetic, each step widening 1/10 as much: how wide is the box?',lab:()=>'box in finer arithmetic',
+   w:[['the box is ten times wider','ten times finer: multiply by 10'],null],xs:(S,p,q)=>[['only the widening is shrunk, the start of 1 kept',qa(qm(qa(q.v,Q(-1)),Q(1,10)),Q(1)),'ten times finer: shrink all but the starting 1']]},T('24·now','the boxed-step technique'))],
+ ['half',Y({af:['read','m:boxes.fine'],u:'thousandths',out:'thousandths either side',kd:'d',k:2,
+   ask:()=>'the answer is printed as its middle, give or take half the box: how many thousandths either side?',lab:()=>'give or take',
+   w:[['the width is doubled','half the box either side: double it'],null],xs:(S,p,q)=>[['the whole width is given either side',q.v,'half the box either side: the whole box']]},T('24·now','the boxed-step technique'))],
+ ['mill',Y({af:['m:boxes.half'],u:'thousandths either side',out:'millionths either side',kd:'x',k:1000,
+   ask:()=>'how many millionths either side is that?',lab:()=>'millionths either side',
+   w:[['the thousandths are divided by 1000','divide by 1000 for millionths'],null],xs:(S,p,q)=>[['100 is used for 1000',qm(q.v,Q(100)),'multiply by 100 for millionths']]},UNIT)]]);
+addClose('24·now.boxes',[G(X({u:'millionths either side',k:'above',ask:(S,p)=>'the chart can show '+p.K+' millionths either side: how much room is left?',ln:()=>'room on the chart'},LESS)),
+  G(X({u:'thousandths either side',k:'above',ask:(S,p)=>'the run is trusted to '+p.K+' thousandths either side: how much room is left?',ln:()=>'room either side'},LESS))]);
+
+/* ---------- 25·eng.deck: the across pull of a deck cable ---------- */
+map('25·eng.deck',[
+ ['crowd',Y({af:['read'],u:'kilonewtons',out:'kilonewtons',kd:'x',k:Q(5,4),
+   ask:()=>'a crowd on the deck adds 1/4 to the load, and the pull rises with it: what is the across pull?',lab:()=>'pull with the crowd',
+   w:[['the pull is divided by 5/4','the load grows by 1/4: divide by 5/4'],null],xs:(S,p,q)=>[['the crowd’s 1/4 alone is given',qm(q.v,Q(1,4)),'the load grows by 1/4: take 1/4 of the pull']]},T('25·eng','the steady-across technique'))],
+ ['cable',Y({af:['read','m:deck.crowd'],u:'kilonewtons',out:'kilonewtons a cable',kd:'d',k:()=>pick([2,4]),
+   ask:(S,p)=>'the pull is shared by '+p.K+' cables alike: what is the pull on one?',lab:()=>'pull on one cable',
+   w:[['the pull is multiplied by the cables',(S,p)=>p.K+' cables: multiply by '+p.K],['the cables are taken off',null]]},SHR)],
+ ['strand',Y({af:['m:deck.cable'],u:'kilonewtons a cable',out:'kilonewtons a strand',kd:'d',k:()=>pick([6,12,20]),
+   ask:(S,p)=>'each cable is wound of '+p.K+' strands alike: what does one strand carry?',lab:()=>'pull on a strand',
+   w:[['the pull is multiplied by the strands',(S,p)=>p.K+' strands: multiply by '+p.K],['the strands are divided by the pull',(S,p)=>p.K+' strands: divide '+p.K+' by the pull']]},SHR)],
+ ['stress',Y({af:['m:deck.strand'],u:'kilonewtons a strand',out:'newtons a square millimetre',mk:()=>({A:pick([10,20,25])}),f:(S,p,q)=>qm(q.v,Q(1000,p.A)),ex:(S,p,q)=>par(q.v)+' · 1000/'+p.A,
+   ask:(S,p)=>'a strand is '+p.A+' mm² across: what is its stress in newtons a square millimetre?',lab:()=>'stress in a strand',
+   xs:(S,p,q)=>[['the 1000 newtons of a kilonewton are left out',qm(q.v,Q(1,p.A)),(S2,p2)=>'a strand is '+p2.A+' mm²: divide the kilonewtons by '+p2.A],['the area is multiplied in',qm(q.v,Q(1000*p.A)),(S2,p2)=>'a strand is '+p2.A+' mm²: multiply by 1000 and by '+p2.A]]},UNIT)]]);
+addClose('25·eng.deck',[G(X({u:'newtons a square millimetre',k:'above',ask:(S,p)=>'the wire is safe to '+p.K+' newtons a square millimetre: how much stress to spare?',ln:()=>'stress to spare'},LESS)),
+  G(X({u:'kilonewtons a cable',k:'above',ask:(S,p)=>'each cable’s anchor holds '+p.K+' kilonewtons: how many to spare?',ln:()=>'kilonewtons to spare'},LESS))]);
+
+/* ---------- 25·econ.wear: wear and new workers to cover ---------- */
+map('25·econ.wear',[
+ ['old',Y({af:['read'],u:'machines a year',out:'machines a year',kd:'x',k:Q(5,4),
+   ask:()=>'the machines are old and wear 1/4 faster: how many machines a year now to stand still?',lab:()=>'need with old machines',
+   w:[['the need is divided by 5/4','they wear 1/4 faster: divide by 5/4'],null],xs:(S,p,q)=>[['1/4 machine is added',qa(q.v,Q(1,4)),'they wear 1/4 faster: add 1/4 machine']]},T('25·econ','the resting-point technique'))],
+ ['town',Y({af:['read','m:wear.old'],u:'machines a year',out:'machines a year for the town',kd:'x',k:()=>pick([40,100,200]),
+   ask:(S,p)=>'that is for each worker, and the town has '+p.K+' workers: how many machines a year for the town?',lab:()=>'need for the town',
+   w:[['the need is divided by the workers',(S,p)=>p.K+' workers: divide by '+p.K],['the workers are added',(S,p)=>p.K+' workers: add '+p.K]]},QTY)],
+ ['cost',Y({af:['m:wear.town'],u:'machines a year for the town',out:'thousand dollars a year',kd:'x',k:()=>pick([2,3,5]),
+   ask:(S,p)=>'a machine costs '+p.K+' thousand dollars: what does standing still cost the town a year?',lab:()=>'cost of standing still',
+   w:[['the machines are divided by the price',(S,p)=>p.K+' thousand each: divide by '+p.K],['the price is added',(S,p)=>p.K+' thousand each: add '+p.K]]},QTY)],
+ ['month',Y({af:['m:wear.cost'],u:'thousand dollars a year',out:'thousand dollars a month',kd:'d',k:12,
+   ask:()=>'what is that a month?',lab:()=>'cost a month',w:[['the year is multiplied by 12','multiply by the 12 months'],null],xs:(S,p,q)=>[['52 is used for the months',qm(q.v,Q(1,52)),'divide by 52 for a month']]},UNIT)]]);
+addClose('25·econ.wear',[G(X({u:'thousand dollars a year',k:'above',ask:(S,p)=>'the town saves '+p.K+' thousand dollars a year: how much is left for growth?',ln:()=>'saving left for growth'},own('25·econ','the resting-point technique'))),
+  G(X({u:'thousand dollars a month',k:'above',ask:(S,p)=>'the town saves '+p.K+' thousand dollars a month: how much a month is left for growth?',ln:()=>'left a month for growth'},LESS)),
+  G(X({u:'machines a year for the town',k:'above',ask:(S,p)=>'saving buys '+p.K+' machines a year for the town: how many more than standing still needs?',ln:()=>'machines for growth'},LESS))]);
+
+/* ---------- 26·then.gain: a transistor's gain ---------- */
+map('26·then.gain',[
+ ['stage',Y({af:['read'],u:'times',out:'times',kd:'x',k:()=>pick([5,10]),
+   ask:(S,p)=>'a second stage with a gain of '+p.K+' follows it: what is the gain of the two?',lab:()=>'gain of two stages',
+   w:[['the gains are divided',(S,p)=>'a second stage of '+p.K+': divide by '+p.K],['the gains are added',(S,p)=>'a second stage of '+p.K+': add the gains']]},T('26·then','the gain technique'))],
+ ['load',Y({af:['read','m:tgain.stage'],u:'times',out:'times',kd:'x',k:Q(3,4),
+   ask:()=>'the speaker’s load pulls the gain down to 3/4 of it: what is the gain now?',lab:()=>'gain under load',
+   w:[['the gain is divided by 3/4','down to 3/4: divide by 3/4'],null],xs:(S,p,q)=>[['the lost 1/4 is given',qm(q.v,Q(1,4)),'down to 3/4: take 1/4 of the gain']]},T('26·then','the gain technique'))],
+ ['feed',Y({af:['m:tgain.stage','m:tgain.load'],u:'times',out:'times',kd:'d',k:()=>pick([2,4,5]),
+   ask:(S,p)=>'feedback is added that cuts the gain to 1/'+p.K+' of it, to keep it clean: what gain is left?',lab:()=>'gain with feedback',
+   w:[['the gain is multiplied by the cut',(S,p)=>'cut to 1/'+p.K+': multiply by '+p.K],null],xs:(S,p,q)=>[['the cut is taken off as a number',qa(q.v,qn(p.k)),(S2,p2)=>'cut to 1/'+p2.K+': take '+p2.K+' off']]},T('26·then','the gain technique'))]],'tgain');
+
+/* ---------- 27·nav.delay: a distance from a delay ---------- */
+map('27·nav.delay',[
+ ['wire',Y({af:['read'],u:'metres',out:'metres',kd:'s',k:(S,p,q)=>num(q.v)>600?600:null,
+   ask:()=>'the receiver’s own wiring adds 2 microseconds to the delay: what is the true distance?',lab:()=>'distance less the wiring',
+   w:[null,['the wiring’s 600 metres are added','the wiring adds 2 microseconds: add 600 metres']],xs:(S,p,q)=>[['the 2 microseconds are taken as 2 metres',qa(q.v,Q(-2)),'the wiring adds 2 microseconds: take 2 metres off']]},T('27·nav','the travel-time technique'))],
+ ['km',Y({af:['read','m:delay.wire'],u:'metres',out:'kilometres',kd:'d',k:1000,
+   ask:()=>'how many kilometres is that?',lab:()=>'kilometres',w:[['the metres are multiplied by 1000','multiply the metres by 1000'],null],xs:(S,p,q)=>[['a kilometre is taken as 100 metres',qm(q.v,Q(1,100)),'divide the metres by 100']]},UNIT)],
+ ['walk',Y({af:['m:delay.km'],u:'kilometres',out:'minutes on foot',kd:'x',k:12,
+   ask:()=>'Zoe walks at 5 km an hour, 12 minutes a kilometre: how many minutes to walk it?',lab:()=>'minutes on foot',
+   w:[['the kilometres are divided by 12','12 minutes a kilometre: divide by 12'],null],xs:(S,p,q)=>[['the 5 km an hour is used as minutes a kilometre',qm(q.v,Q(5)),'5 km an hour: multiply the kilometres by 5']]},QTY)]]);
+addClose('27·nav.delay',[G(X({u:'minutes on foot',k:'above',ask:(S,p)=>'the ferry leaves in '+p.K+' minutes: how many minutes to spare?',ln:()=>'minutes to spare'},LESS))]);
+
+/* ---------- 27·phys.spin: the energy of a spinning wheel ---------- */
+map('27·phys.spin',[
+ ['twin',Y({af:['read'],u:'joules',out:'joules',kd:'x',k:2,
+   ask:()=>'a second wheel alike spins on the same shaft: how much energy do the two hold?',lab:()=>'energy of two wheels',
+   w:[['the energy is halved','two wheels: halve it'],['2 joules are added','two wheels: add 2']]},QTY)],
+ ['rub',Y({af:['read','m:spin.twin'],u:'joules',out:'joules',kd:'x',k:Q(4,5),
+   ask:()=>'the shaft’s bearings take 1/5 of it as heat before it reaches the mill: how much reaches it?',lab:()=>'energy reaching the mill',
+   w:[['the energy is divided by 4/5','1/5 is lost: divide by 4/5'],null],xs:(S,p,q)=>[['the lost 1/5 is given',qm(q.v,Q(1,5)),'1/5 is lost: take 1/5 of the energy']]},SCL)],
+ ['lamp',Y({af:['read','m:spin.twin','m:spin.rub'],u:'joules',out:'seconds of light',kd:'d',k:()=>pick([2,5,10]),
+   ask:(S,p)=>'the energy runs a '+p.K+' watt lamp: for how many seconds?',lab:()=>'seconds of light',
+   w:[['the joules are multiplied by the watts',(S,p)=>'a '+p.K+' watt lamp: multiply by '+p.K],['the watts are divided by the joules',(S,p)=>'a '+p.K+' watt lamp: divide '+p.K+' by the joules']]},QTY)]]);
+addClose('27·phys.spin',[G(X({u:'seconds of light',k:'above',ask:(S,p)=>'the dark spell lasts '+p.K+' seconds: how many seconds short does the lamp fall?',ln:()=>'seconds short'},LESS))]);
+
+/* ---------- 17·comp.sort: comparisons in selection sort ---------- */
+map('17·comp.sort',[
+ ['lists',Y({af:['read'],u:'comparisons',out:'comparisons',kd:'x',k:()=>pick([2,3,5]),
+   ask:(S,p)=>p.K+' lists of that length are sorted one after another: how many comparisons in all?',lab:()=>'comparisons for all the lists',
+   w:[['the comparisons are shared among the lists',(S,p)=>p.K+' lists: divide by '+p.K],['the lists are added',(S,p)=>p.K+' lists: add '+p.K]],
+   xs:(S,p,q)=>[['the lists are taken as one long list, squaring the work',qm(q.v,qm(p.k,p.k)),(S2,p2)=>p2.K+' lists: multiply by '+p2.K+' twice']]},QTY)],
+ ['split',Y({af:['read','m:sort.lists'],u:'comparisons',out:'comparisons',kd:'d',k:()=>pick([2,4]),
+   ask:(S,p)=>'the comparisons are shared equally by '+p.K+' machines: how many does one machine make?',lab:()=>'comparisons for one machine',
+   w:[['the work is multiplied by the machines',(S,p)=>p.K+' machines: multiply by '+p.K],['the machines are taken off',null]]},SHR)],
+ ['reads',Y({af:['read','m:sort.lists','m:sort.split'],u:'comparisons',out:'reads',kd:'x',k:2,
+   ask:()=>'each comparison reads two names from memory: how many reads is that?',lab:()=>'reads from memory',
+   w:[['the comparisons are halved','two names each: halve the comparisons'],['2 is added','two names each: add 2']]},QTY)]]);
+addClose('17·comp.sort',[Pr(X({u:'reads',out:'microseconds',k:()=>pick([10,20,50]),ask:(S,p)=>'memory gives '+p.K+' reads a microsecond: how many microseconds do the reads take?',ln:()=>'time for the reads'},MQ))]);
+
+/* ---------- 17·crypt.bits: bits of a random password ---------- */
+map('17·crypt.bits',[
+ ['tag',Y({af:['read'],u:'bits',out:'bits',kd:'a',k:()=>pick([4,8]),
+   ask:(S,p)=>'the site adds a random tag of '+p.K+' bits of its own: how many bits in all?',lab:()=>'bits with the tag',
+   w:[['the tag’s bits are taken off',(S,p)=>'a tag of '+p.K+' bits: take '+p.K+' off'],['the bits are multiplied',(S,p)=>'a tag of '+p.K+' bits: multiply by '+p.K]]},T('17·crypt','the bits technique'))],
+ ['two',Y({af:['read','m:bits.tag'],u:'bits',out:'bits',kd:'x',k:2,
+   ask:()=>'a second password drawn the same way is needed too: how many bits for the pair?',lab:()=>'bits for two passwords',
+   w:[['the bits are halved','two passwords: halve the bits'],['one bit is added for the second password','two passwords: add 2 bits']],xs:(S,p,q)=>[['the bits are squared',qm(q.v,q.v),'two passwords: square the bits']]},T('17·crypt','the bits technique'))],
+ ['bytes',Y({af:['read','m:bits.tag','m:bits.two'],u:'bits',out:'bytes',kd:'d',k:8,
+   ask:()=>'a byte holds 8 bits: how many bytes of randomness is that?',lab:()=>'bytes',
+   w:[['the bits are multiplied by 8','multiply the bits by 8'],null],xs:(S,p,q)=>[['10 bits are taken to a byte',qm(q.v,Q(1,10)),'divide the bits by 10']]},UNIT)]]);
+addClose('17·crypt.bits',[G(X({u:'bytes',k:'above',ask:(S,p)=>'the field holds '+p.K+' bytes: how many bytes of room are left?',ln:()=>'room in the field'},LESS))]);
+
+/* ---------- 17·phys.radio: a radio channel's wavelength ---------- */
+map('17·phys.radio',[
+ ['harm',Y({af:['read'],u:'kilohertz',out:'kilohertz',kd:'x',k:2,
+   ask:()=>'the station also leaks its second harmonic, at twice the frequency: what frequency is that?',lab:()=>'the second harmonic',
+   w:[['the frequency is halved','twice the frequency: halve it'],['2 kilohertz are added','twice the frequency: add 2']]},T('17·phys','waves of light'))],
+ ['mhz',Y({af:['read','m:radio.harm'],u:'kilohertz',out:'megahertz',kd:'d',k:1000,
+   ask:()=>'how many megahertz is that?',lab:()=>'megahertz',w:[['the kilohertz are multiplied by 1000','multiply by 1000'],null],xs:(S,p,q)=>[['100 is used for 1000',qm(q.v,Q(1,100)),'divide by 100']]},UNIT)],
+ ['period',Y({af:['m:radio.mhz'],u:'megahertz',out:'microseconds a wave',kd:'i',k:1,
+   ask:()=>'one wave lasts one over the frequency: in microseconds, how long is a wave?',lab:()=>'time for one wave',
+   w:[['the frequency itself is taken as the time',null],['the frequency is taken as the time',null]],xs:(S,p,q)=>[['the frequency is used as the time',q.v,'take the megahertz as the microseconds a wave'],['the frequency is doubled for a wave up and down',qm(q.v,Q(2)),'take twice the megahertz as the time']]},T('17·phys','waves of light'))]]);
+addClose('17·phys.radio',[Tm(X({u:'microseconds a wave',out:'microseconds',k:()=>pick([100,1000]),ask:(S,p)=>'a burst of '+p.K+' waves is sent: how many microseconds does it last?',ln:()=>'time for the burst'},MQ))]);
+
+/* ---------- 19·chem.ring: moves of a ring molecule ---------- */
+map('19·chem.ring',[
+ ['space',Y({af:['read'],u:'moves',out:'moves in space',kd:'x',k:2,
+   ask:()=>'the ring is flat, so a mirror in its plane gives as many moves again: how many moves in space?',lab:()=>'moves in space',
+   w:[['the moves are halved','a mirror doubles them: halve the moves'],['2 moves are added','a mirror doubles them: add 2']]},T('19·chem','the class-times-keepers technique'))],
+ ['class',Y({af:['m:ring.space'],u:'moves in space',out:'atoms in the class',kd:'d',k:4,
+   ask:()=>'in space each ring atom is kept by 4 of those moves: how many atoms are in its class?',lab:()=>'atoms in the class',
+   w:[['the moves are multiplied by the keepers','4 keep each atom: multiply by 4'],null],xs:(S,p,q)=>[['the plane’s 2 keepers are used',qm(q.v,Q(1,2)),'divide the moves in space by 2']]},T('19·chem','the class-times-keepers technique'))],
+ ['mass',Y({af:['m:ring.class'],u:'atoms in the class',out:'mass units',kd:'x',k:13,
+   ask:()=>'each ring atom is a carbon of 12 with a hydrogen of 1: what is the ring’s mass?',lab:()=>'mass of the ring',
+   w:[['the atoms are divided by 13','13 each: divide by 13'],['13 is added','13 each: add 13']],xs:(S,p,q)=>[['the hydrogens are left out',qm(q.v,Q(12)),'12 each, for the carbons']]},QTY)],
+ ['turns',Y({af:['read'],u:'moves',out:'turns',kd:'d',k:2,
+   ask:()=>'half the moves are turns and half are flips: how many turns are there?',lab:()=>'turns',
+   w:[['the moves are doubled','half are turns: double the moves'],null],xs:(S,p,q)=>[['the turn of 0 is left out',qa(qm(q.v,Q(1,2)),Q(-1)),'half are turns, less the turn of nothing']]},T('19·chem','the class-times-keepers technique'))],
+ ['angle',Y({af:['m:ring.turns'],u:'turns',out:'degrees for the smallest turn',kd:'i',k:360,
+   ask:()=>'the turns are evenly spaced round 360 degrees: what is the smallest turn?',lab:()=>'smallest turn',
+   w:[['the division is turned over',null],['the turns are multiplied by 360','multiply the turns by 360']],xs:(S,p,q)=>[['180 is used for a full turn',qm(Q(180),qi(q.v)),'divide 180 by the turns']]},QTY)]]);
+addClose('19·chem.ring',[Tm(X({u:'mass units',out:'grams',k:()=>pick([2,3,5]),ask:(S,p)=>'a mole of it weighs its mass units in grams: how many grams is '+p.K+' moles?',ln:()=>'grams'},MQ)),
+  Pr(X({u:'moves in space',out:'atoms',k:4,ask:()=>'each ring atom is kept by 4 moves in space: how many atoms are in its class?',ln:()=>'atoms in the class'},own('19·chem','the class-times-keepers technique'))),
+  G(X({u:'degrees for the smallest turn',k:'above',ask:(S,p)=>'a model is turned '+p.K+' degrees: how much short of that is the smallest turn?',ln:()=>'degrees short'},LESS))]);
+
+/* ---------- 20·nav.heading: a heading after turns ---------- */
+map('20·nav.heading',[
+ ['set',Y({af:['read'],u:'degrees',out:'degrees',kd:'s',k:()=>pick([10,15,20]),
+   ask:(S,p)=>'a current sets the ship '+p.K+' degrees to port of its heading: what is its track?',lab:()=>'track over the ground',
+   w:[['the set is taken to starboard',(S,p)=>'set '+p.K+'° to port: add '+p.K],null],xs:(S,p,q)=>[['the set is counted twice',qa(q.v,qm(Q(-2),p.k)),(S2,p2)=>'set '+p2.K+'° to port: take '+p2.K+' off twice']]},T('20·nav','the heading-sum technique'))],
+ ['mag',Y({af:['read','m:heading.set'],u:'degrees',out:'degrees',kd:'a',k:()=>pick([15,20]),
+   ask:(S,p)=>'the compass there reads '+p.K+' degrees more than true: what does the compass show?',lab:()=>'the compass reading',
+   w:[['the variation is taken off',(S,p)=>'it reads '+p.K+'° more: take '+p.K+' off'],null],xs:(S,p,q)=>[['the variation is doubled',qa(q.v,qm(Q(2),p.k)),(S2,p2)=>'it reads '+p2.K+'° more: add '+p2.K+' twice']]},T('20·nav','the heading-sum technique'))],
+ ['about',Y({af:['m:heading.set','m:heading.mag'],u:'degrees',out:'degrees',kd:'a',k:180,
+   ask:()=>'the helmsman then comes about to run straight back: what heading now?',lab:()=>'heading coming back',
+   w:[['the half turn is taken off',null],null],xs:(S,p,q)=>[['a full turn is added, as if back means round',qa(q.v,Q(360)),'add 360 to come back'],['a quarter turn is added',qa(q.v,Q(90)),'add 90 to come back']]},T('20·nav','the heading-sum technique'))]]);
+
+/* ---------- 21·then.slant: sunlight at a slant ---------- */
+map('21·then.slant',[
+ ['roof',Y({af:['read'],u:'watt hours',out:'watt hours',kd:'x',k:()=>pick([2,3,4]),
+   ask:(S,p)=>'the roof holds '+p.K+' such panels: how many watt hours do they give?',lab:()=>'all the panels',
+   w:[['the output is shared among the panels',(S,p)=>p.K+' panels: divide by '+p.K],['the panels are added',(S,p)=>p.K+' panels: add '+p.K]]},QTY)],
+ ['dust',Y({af:['read','m:slant.roof'],u:'watt hours',out:'watt hours',kd:'x',k:Q(9,10),
+   ask:()=>'dust on the glass blocks 1/10 of the light: what do they give now?',lab:()=>'output through dust',
+   w:[['the output is divided by 9/10','1/10 blocked: divide by 9/10'],null],xs:(S,p,q)=>[['the blocked 1/10 is given',qm(q.v,Q(1,10)),'1/10 blocked: take 1/10 of it']]},T('21·then','the slant technique'))],
+ ['kwh',Y({af:['m:slant.dust','m:slant.roof'],u:'watt hours',out:'kilowatt hours',kd:'d',k:1000,
+   ask:()=>'how many kilowatt hours is that?',lab:()=>'kilowatt hours',w:[['the watt hours are multiplied by 1000','multiply by 1000'],null],xs:(S,p,q)=>[['100 is used for 1000',qm(q.v,Q(1,100)),'divide by 100']]},UNIT)]]);
+addClose('21·then.slant',[Tm(X({u:'kilowatt hours',out:'cents',k:()=>pick([10,20,30]),ask:(S,p)=>'the grid buys power at '+p.K+' cents a kilowatt hour: what is it worth?',ln:()=>'worth to the grid'},MQ))]);
+
+/* ---------- 21·nav.pole: the pole star's height ---------- */
+map('21·nav.pole',[
+ ['bend',Y({af:['read'],u:'degrees',out:'degrees',kd:'s',k:Q(1,2),
+   ask:()=>'the air bends starlight, so the sextant reads 1/2 degree high: what is the true height?',lab:()=>'true height',
+   w:[null,['the 1/2 is added','it reads 1/2 high: add 1/2']],xs:(S,p,q)=>[['a whole degree is taken off',qa(q.v,Q(-1)),'it reads 1/2 high: take 1 off']]},T('21·nav','the pole-star technique'))],
+ ['km',Y({af:['read','m:pole.bend'],u:'degrees',out:'kilometres north of the equator',kd:'x',k:111,
+   ask:()=>'the latitude is the pole star’s height, and a degree of it is 111 km: how far north of the equator?',lab:()=>'kilometres north',
+   w:[['the degrees are divided by 111','111 km a degree: divide by 111'],['111 is added','111 km a degree: add 111']],xs:(S,p,q)=>[['60 nautical miles a degree are taken as kilometres',qm(q.v,Q(60)),'multiply the degrees by 60 for kilometres']]},T('21·nav','the pole-star technique'))],
+ ['togo',Y({af:['m:pole.km'],u:'kilometres north of the equator',out:'kilometres to go',kd:'i',k:6660,f:(S,p,q)=>qa(Q(6660),qn(q.v)),ex:(S,p,q)=>'6660 − '+par(q.v),
+   ask:()=>'the harbour at 60° north is 6660 km north of the equator: how many km still to sail?',lab:()=>'kilometres to go',
+   xs:(S,p,q)=>[['the subtraction is turned round',qa(q.v,Q(-6660)),'take 6660 from the distance north'],['the distance north is added',qa(q.v,Q(6660)),'add 6660 to the distance north']]},LS)]]);
+addClose('21·nav.pole',[Pr(X({u:'kilometres to go',out:'days',k:()=>pick([150,200,250]),ask:(S,p)=>'the ship makes '+p.K+' km a day northward: how many days to the harbour?',ln:()=>'days to the harbour'},MQ))]);
+
+/* ---------- 21·eng.stroke: a piston's stroke ---------- */
+map('21·eng.stroke',[
+ ['crank',Y({af:['read'],u:'centimetres',out:'centimetres',kd:'a',k:2,
+   ask:()=>'the pin is moved 1 cm further from the axle: how long is the stroke now?',lab:()=>'stroke with the pin moved',
+   w:[null,null],xs:(S,p,q)=>[['the stroke is taken to grow by the 1 cm only',qa(q.v,Q(1)),'the pin moves 1 cm out: add 1'],['the stroke is doubled',qm(q.v,Q(2)),'the pin moves 1 cm out: double the stroke']]},T('21·eng','the place technique'))],
+ ['turn',Y({af:['read','m:stroke.crank'],u:'centimetres',out:'centimetres a turn',kd:'x',k:2,
+   ask:()=>'in one turn of the crank the piston goes out and back: how far does it travel?',lab:()=>'travel in a turn',
+   w:[['the stroke is halved','out and back: halve the stroke'],null],xs:(S,p,q)=>[['the way back is left out',q.v,'out and back: one stroke']]},T('21·eng','the place technique'))],
+ ['minute',Y({af:['m:stroke.turn'],u:'centimetres a turn',out:'centimetres a minute',kd:'x',k:()=>pick([30,60,120]),
+   ask:(S,p)=>'the crank turns '+p.K+' times a minute: how many centimetres a minute does the piston travel?',lab:()=>'travel a minute',
+   w:[['the travel is divided by the turns',(S,p)=>p.K+' turns a minute: divide by '+p.K],['the turns are added',(S,p)=>p.K+' turns a minute: add '+p.K]]},QTY)]]);
+addClose('21·eng.stroke',[Pr(X({u:'centimetres a minute',out:'metres a minute',k:100,ask:()=>'how many metres a minute is that?',ln:()=>'metres a minute'},CU))]);
+
+/* ---------- 22·stat.misprints: misprints in a book ---------- */
+map('22·stat.misprints',[
+ ['copies',Y({af:['read'],u:'misprints',out:'misprints',kd:'x',k:()=>pick([2,5]),
+   ask:(S,p)=>'the run is '+p.K+' copies set separately: how many misprints in all, on average?',lab:()=>'misprints in the run',
+   w:[['the misprints are shared among the copies',(S,p)=>p.K+' copies: divide by '+p.K],['the copies are added',(S,p)=>p.K+' copies: add '+p.K]]},T('22·stat','the mean-and-spread technique'))],
+ ['proof',Y({af:['read','m:misprints.copies'],u:'misprints',out:'misprints',kd:'x',k:Q(1,4),
+   ask:()=>'a proofreader catches 3/4 of the misprints: how many get through, on average?',lab:()=>'misprints that get through',
+   w:[['the misprints are divided by 1/4','3/4 caught: divide by 1/4'],null],xs:(S,p,q)=>[['the caught ones are given',qm(q.v,Q(3,4)),'3/4 caught: take 3/4 of them']]},T('22·stat','the mean-and-spread technique'))],
+ ['mend',Y({af:['m:misprints.proof','m:misprints.copies'],u:'misprints',out:'minutes',kd:'x',k:()=>pick([3,5,10]),
+   ask:(S,p)=>'each misprint takes '+p.K+' minutes to mend by hand: how many minutes, on average?',lab:()=>'minutes mending',
+   w:[['the misprints are divided by the minutes',(S,p)=>p.K+' minutes each: divide by '+p.K],['the minutes are added',(S,p)=>p.K+' minutes each: add '+p.K]]},QTY)]]);
+addClose('22·stat.misprints',[Pr(X({u:'minutes',out:'hours',k:60,ask:()=>'how many hours of mending is that, on average?',ln:()=>'hours of mending'},CU))]);
+
+/* ---------- 22·econ.respend: a dollar spent round and round ---------- */
+map('22·econ.respend',[
+ ['mills',Y({af:['read'],u:'thousand dollars',out:'thousand dollars',kd:'x',k:()=>pick([2,3,4]),
+   ask:(S,p)=>p.K+' such mills open in town: how much do they spend there together?',lab:()=>'spending of all the mills',
+   w:[['the spending is shared among the mills',(S,p)=>p.K+' mills: divide by '+p.K],['the mills are added',(S,p)=>p.K+' mills: add '+p.K]]},QTY)],
+ ['out',Y({af:['read','m:respend.mills'],u:'thousand dollars',out:'thousand dollars',kd:'x',k:Q(3,4),
+   ask:()=>'a quarter of it goes at once to suppliers out of town: how much is spent in town?',lab:()=>'spent in town',
+   w:[['the spending is divided by 3/4','a quarter leaves: divide by 3/4'],null],xs:(S,p,q)=>[['the quarter that leaves is given',qm(q.v,Q(1,4)),'a quarter leaves: take 1/4 of it']]},T('22·econ','the respending technique'))],
+ ['home',Y({af:['m:respend.out','m:respend.mills'],u:'thousand dollars',out:'dollars a household',kd:'d',k:()=>pick([2,4,5]),
+   ask:(S,p)=>'the town has '+p.K+' thousand households: how many dollars is that a household?',lab:()=>'dollars a household',
+   w:[['the spending is multiplied by the households',(S,p)=>p.K+' thousand households: multiply by '+p.K],['the households are divided by the spending',(S,p)=>p.K+' thousand households: divide '+p.K+' by the spending']],
+   xs:(S,p,q)=>[['the thousands do not cancel, giving thousands of dollars',qm(q.v,Q(1,1000*num(p.k))),'divide by the households and by 1000 more']]},QTY)]]);
+addClose('22·econ.respend',[Tm(X({u:'dollars a household',k:4,ask:()=>'each round, households spend 3/4 of what they got: what does it come to a household in all?',ln:()=>'a household in all',w:['divided by 4','4 is added']},own('22·econ','the respending technique')))]);
+
+/* ---------- 22·phys.bounce: a ball dropped from a floor ---------- */
+map('22·phys.bounce',[
+ ['roof',Y({af:['read'],u:'metres',out:'metres',f:(S,p,q)=>qa(q.v,qm(Q(2),qq(S.c[1]))),ex:(S,p,q)=>par(q.v)+' + 2 · '+qs(qq(S.c[1])),
+   ask:(S,p)=>'the ball is taken 2 floors higher to drop it, a floor being '+qs(qq(S.c[1]))+' metres: from what height now?',lab:()=>'height 2 floors up',
+   xs:(S,p,q)=>[['only one floor is added',qa(q.v,qq(S.c[1])),'2 floors higher: add one floor'],['the 2 floors are added as 2 metres',qa(q.v,Q(2)),'2 floors higher: add 2 metres']]},QTY)],
+ ['b1',Y({af:['read','m:bounce.roof'],u:'metres',out:'metres',f:(S,p,q)=>qm(q.v,Q(1,S.r)),ex:(S,p,q)=>par(q.v)+'/'+S.r,
+   ask:(S)=>'each bounce reaches 1/'+S.r+' of the height before: how high is the first bounce?',lab:()=>'first bounce',
+   xs:(S,p,q)=>[['the height is multiplied by '+S.r,qm(q.v,Q(S.r)),'multiply the height by '+S.r],['the share lost is given',qm(q.v,Q(S.r-1,S.r)),'keep '+(S.r-1)+'/'+S.r+' of the height']]},T('22·phys','the distance technique'))],
+ ['b2',Y({af:['m:bounce.b1'],u:'metres',out:'metres',f:(S,p,q)=>qm(q.v,Q(1,S.r)),ex:(S,p,q)=>par(q.v)+'/'+S.r,
+   ask:(S)=>'and the second bounce, 1/'+S.r+' of the first?',lab:()=>'second bounce',
+   xs:(S,p,q)=>[['the first bounce is taken again',q.v,'the second bounce is as high as the first'],['1/'+S.r+' is taken off instead of kept',qa(q.v,Q(-1,S.r)),'take 1/'+S.r+' metre off the first bounce']]},T('22·phys','the distance technique'))]]);
+
+/* ---------- 22·logi.tours: tours a machine can check ---------- */
+map('22·logi.tours',[
+ ['three',Y({af:['read'],u:'tours',out:'tours',kd:'x',k:()=>pick([2,3]),
+   ask:(S,p)=>p.K+' machines alike work at once: how many tours do they check?',lab:()=>'tours of all the machines',
+   w:[['the tours are shared among the machines',(S,p)=>p.K+' machines: divide by '+p.K],['the machines are added',(S,p)=>p.K+' machines: add '+p.K]]},QTY)],
+ ['cut',Y({af:['read','m:tours.three'],u:'tours',out:'tours',kd:'x',k:Q(4,5),
+   ask:()=>'a power cut loses 1/5 of the run: how many tours are checked?',lab:()=>'tours after the cut',
+   w:[['the tours are divided by 4/5','1/5 lost: divide by 4/5'],null],xs:(S,p,q)=>[['the lost 1/5 is given',qm(q.v,Q(1,5)),'1/5 lost: take 1/5 of the tours']]},SCL)],
+ ['power',Y({af:['m:tours.cut','m:tours.three'],u:'tours',out:'cents',kd:'x',k:()=>pick([2,3]),
+   ask:(S,p)=>'each tour checked costs '+p.K+' cents of power: what does the run cost?',lab:()=>'cost of power',
+   w:[['the tours are divided by the cents',(S,p)=>p.K+' cents each: divide by '+p.K],['the cents are added',(S,p)=>p.K+' cents each: add '+p.K]]},QTY)]]);
+addClose('22·logi.tours',[Pr(X({u:'cents',out:'dollars',k:100,ask:()=>'how many dollars is that?',ln:()=>'dollars of power'},CU))]);
+
+/* ---------- 22·crypt.pairs: pairs of files ---------- */
+map('22·crypt.pairs',[
+ ['size',Y({af:['read'],u:'pairs',out:'pairs',kd:'x',k:Q(1,4),
+   ask:()=>'only pairs of files of the same size need checking, about 1/4 of them: how many pairs is that?',lab:()=>'pairs to check',
+   w:[['the pairs are divided by 1/4','1/4 need checking: divide by 1/4'],null],xs:(S,p,q)=>[['the 3/4 left out are given',qm(q.v,Q(3,4)),'1/4 need checking: take 3/4']]},T('22·crypt','the pairs-per-code technique'))],
+ ['time',Y({af:['read','m:pairs.size'],u:'pairs',out:'microseconds',kd:'x',k:()=>pick([2,3,5]),
+   ask:(S,p)=>'comparing a pair takes '+p.K+' microseconds: how long does it take?',lab:()=>'time to compare',
+   w:[['the pairs are divided by the microseconds',(S,p)=>p.K+' each: divide by '+p.K],['the microseconds are added',(S,p)=>p.K+' each: add '+p.K]]},QTY)],
+ ['ms',Y({af:['m:pairs.time'],u:'microseconds',out:'milliseconds',kd:'d',k:1000,
+   ask:()=>'how many milliseconds is that?',lab:()=>'milliseconds',w:[['the microseconds are multiplied by 1000','multiply by 1000'],null],xs:(S,p,q)=>[['100 is used for 1000',qm(q.v,Q(1,100)),'divide by 100']]},UNIT)]]);
+addClose('22·crypt.pairs',[G(X({u:'milliseconds',k:'above',ask:(S,p)=>'the check must finish in '+p.K+' milliseconds: how many to spare?',ln:()=>'milliseconds to spare'},LESS)),
+  G(X({u:'microseconds',k:'above',ask:(S,p)=>'the check must finish in '+p.K+' microseconds: how many to spare?',ln:()=>'microseconds to spare'},LESS))]);
+
+/* ---------- 24·then.lag: a drink that trails the room ---------- */
+map('24·then.lag',[
+ ['door',Y({af:['read'],u:'degrees',out:'degrees',kd:'s',k:2,
+   ask:()=>'the door is propped open and the room drops 2 degrees: what does it read?',lab:()=>'room with the door open',
+   w:[null,['the 2 degrees are added','the room drops 2: add 2']],xs:(S,p,q)=>[['the drop is taken as a share, 1/2',qm(q.v,Q(1,2)),'the room drops 2: halve it']]},LS)],
+ ['urn',Y({af:['read','m:lag.door'],u:'degrees',out:'degrees',kd:'a',k:1,
+   ask:()=>'the corner by the coffee urn runs 1 degree warmer: what does it read there?',lab:()=>'by the urn',
+   w:[['the degree is taken off','1 degree warmer: take 1 off'],null],xs:(S,p,q)=>[['the degree is added twice',qa(q.v,Q(2)),'1 degree warmer: add 2']]},LS)],
+ ['fahr',Y({af:['read','m:lag.door','m:lag.urn'],u:'degrees',out:'degrees Fahrenheit',f:(S,p,q)=>qa(qm(q.v,Q(9,5)),Q(32)),ex:(S,p,q)=>par(q.v)+' · 9/5 + 32',
+   ask:()=>'the visitor from away wants Fahrenheit: 9/5 of the degrees, plus 32. What is that?',lab:()=>'in Fahrenheit',
+   xs:(S,p,q)=>[['the 32 is left out',qm(q.v,Q(9,5)),'take 9/5 of the degrees'],['5/9 is used for 9/5',qa(qm(q.v,Q(5,9)),Q(32)),'take 5/9 of the degrees, plus 32'],['the 32 is added first',qm(qa(q.v,Q(32)),Q(9,5)),'add 32, then take 9/5']]},UNIT)]]);
+addClose('24·then.lag',[G(X({u:'degrees Fahrenheit',k:'above',ask:(S,p)=>'the heat alarm by the oven sounds at '+p.K+' degrees Fahrenheit: how many degrees short of it?',ln:()=>'short of the alarm'},LESS))]);
+
+/* ---------- 24·econ.grow: growth rates that add ---------- */
+map('24·econ.grow',[
+ ['dry',Y({af:['read'],u:'a year',out:'a year',kd:'s',k:Q(1,100),
+   ask:()=>'a dry year takes 1/100 off the growth per worker: what is it that year?',lab:()=>'growth in a dry year',
+   w:[null,['the 1/100 is added','a dry year takes 1/100 off: add it']],xs:(S,p,q)=>[['1/100 of the growth is taken off',qm(q.v,Q(99,100)),'take 1/100 of the growth off']]},T('24·econ','the growth-rates-add technique'))],
+ ['pct',Y({af:['read','m:grow.dry'],u:'a year',out:'in every 100 a year',kd:'x',k:100,
+   ask:()=>'give that growth as so many in every 100 a year',lab:()=>'in every 100 a year',w:[['the rate is divided by 100','divide by 100'],null],xs:(S,p,q)=>[['10 is used for 100',qm(q.v,Q(10)),'multiply by 10']]},UNIT)],
+ ['cash',Y({af:['m:grow.pct'],u:'in every 100 a year',out:'thousand dollars more a worker',kd:'x',k:Q(1,2),
+   ask:()=>'output per worker is 50 thousand dollars: how many thousand more a worker in a year?',lab:()=>'more output a worker',
+   w:[['the rate is divided by 50/100','divide by 1/2'],null],xs:(S,p,q)=>[['the in-every-100 is not divided by 100',qm(q.v,Q(50)),'multiply by 50']]},QTY)]]);
+addClose('24·econ.grow',[Tm(X({u:'thousand dollars more a worker',out:'thousand dollars',k:()=>pick([20,50,100]),ask:(S,p)=>'the valley has '+p.K+' workers: how many thousand dollars more output in all?',ln:()=>'more output in all'},MQ)),
+  G(X({u:'in every 100 a year',k:'above',ask:(S,p)=>'the plan hoped for '+p.K+' in every 100 a year: how far short?',ln:()=>'short of the plan'},LESS))]);
+
+/* ---------- 24·bio.steep: signal to switch a gene ---------- */
+map('24·bio.steep',[
+ ['copy',Y({af:['read'],u:'units',out:'units',kd:'x',k:2,
+   ask:()=>'the cell carries a second copy of the signal gene, making twice the signal: how much signal?',lab:()=>'signal with two copies',
+   w:[['the signal is halved','two copies: halve it'],['2 units are added','two copies: add 2']]},T('24·bio','the steepness technique'))],
+ ['drug',Y({af:['read','m:steep.copy'],u:'units',out:'units',kd:'x',k:Q(2,3),
+   ask:()=>'a drug soaks up 1/3 of the signal: how much is left to act?',lab:()=>'signal left',
+   w:[['the signal is divided by 2/3','1/3 soaked up: divide by 2/3'],null],xs:(S,p,q)=>[['the soaked-up 1/3 is given',qm(q.v,Q(1,3)),'1/3 soaked up: take 1/3']]},SCL)],
+ ['split',Y({af:['m:steep.drug','m:steep.copy'],u:'units',out:'units',kd:'d',k:2,
+   ask:()=>'the cell divides and the signal is shared by the two daughters: how much in each?',lab:()=>'signal in a daughter',
+   w:[['the signal is doubled','shared by two: double it'],null],xs:(S,p,q)=>[['each daughter is taken to keep it all',q.v,'shared by two: each keeps it all']]},SHR)]]);
+
+/* ---------- 25·cb7.cells: cells in a row ---------- */
+map('25·cb7.cells',[
+ ['row',Y({af:['read'],u:'volts',out:'volts',kd:'x',k:()=>pick([2,4]),
+   ask:(S,p)=>p.K+' such batteries are joined in a row: how many volts together?',lab:()=>'volts in a row',
+   w:[['the volts are shared',(S,p)=>p.K+' in a row: divide by '+p.K],['the batteries are added',(S,p)=>p.K+' in a row: add '+p.K]]},T('25·cb7','the energy technique'))],
+ ['wire',Y({af:['read','m:cells.row'],u:'volts',out:'volts',kd:'x',k:Q(9,10),
+   ask:()=>'the long leads lose 1/10 of the volts: how many reach the lamp?',lab:()=>'volts at the lamp',
+   w:[['the volts are divided by 9/10','1/10 lost: divide by 9/10'],null],xs:(S,p,q)=>[['the lost 1/10 is given',qm(q.v,Q(1,10)),'1/10 lost: take 1/10']]},SCL)],
+ ['amps',Y({af:['read','m:cells.row','m:cells.wire'],u:'volts',out:'amps',kd:'d',k:()=>pick([2,5,10]),
+   ask:(S,p)=>'the lamp is '+p.K+' ohms: what current flows?',lab:()=>'current, V/R',
+   w:[['the volts are multiplied by the ohms',(S,p)=>p.K+' ohms: multiply by '+p.K],['the ohms are divided by the volts',(S,p)=>p.K+' ohms: divide '+p.K+' by the volts']]},QTY)]]);
+addClose('25·cb7.cells',[Tm(X({u:'amps',out:'coulombs',k:()=>pick([10,30,60]),ask:(S,p)=>'how many coulombs pass in '+p.K+' seconds?',ln:()=>'charge passed'},MQ))]);
+
+/* ---------- 26·phys.coil: a coil's impedance ---------- */
+map('26·phys.coil',[
+ ['series',Y({af:['read'],u:'ohms',out:'ohms',kd:'x',k:2,
+   ask:()=>'a second coil alike is put in series with it: what is the impedance of the two?',lab:()=>'two coils in series',
+   w:[['the impedance is halved, as in parallel','in series: halve it'],['2 ohms are added','in series: add 2']]},T('26·phys','the impedance technique'))],
+ ['rewind',Y({af:['read','m:coil.series'],u:'ohms',out:'ohms',kd:'x',k:Q(1,4),
+   ask:()=>'it is rewound with half the turns, which leaves 1/4 of the coil’s pull: what impedance now?',lab:()=>'impedance rewound',
+   w:[['the impedance is multiplied by 4','1/4 of it: multiply by 4'],null],xs:(S,p,q)=>[['the impedance is halved with the turns',qm(q.v,Q(1,2)),'half the turns: halve it']]},T('26·phys','the impedance technique'))],
+ ['amps',Y({af:['read','m:coil.series','m:coil.rewind'],u:'ohms',out:'amps',kd:'i',k:()=>pick([10,20,60]),
+   ask:(S,p)=>'a voltage of '+p.K+' volts swings at that pace: what current passes?',lab:()=>'current, V/Z',
+   w:[['the division is turned over',(S,p)=>'divide the ohms by '+p.K],['the volts are multiplied by the ohms',(S,p)=>'multiply '+p.K+' volts by the ohms']]},T('26·phys','the impedance technique'))]]);
+addClose('26·phys.coil',[G(X({u:'amps',k:'above',ask:(S,p)=>'the fuse blows at '+p.K+' amps: how many amps to spare?',ln:()=>'amps to spare'},LESS))]);
+
+/* ---------- 27·then.frame: bars of a pinned frame ---------- */
+map('27·then.frame',[
+ ['join',Y({af:['read'],u:'bars',out:'bars',f:(S,p,q)=>qa(qm(q.v,Q(2)),Q(-1)),ex:(S,p,q)=>'2 · '+par(q.v)+' − 1',
+   ask:()=>'a second frame alike is built on, sharing one bar with the first: how many bars in all?',lab:()=>'bars in the two frames',
+   xs:(S,p,q)=>[['the shared bar is counted twice',qm(q.v,Q(2)),'two frames: double the bars'],['the shared bar is taken off twice',qa(qm(q.v,Q(2)),Q(-2)),'two frames: double, less 2']]},T('27·then','the frame-grid technique'))],
+ ['bolts',Y({af:['read','m:frame.join'],u:'bars',out:'bolts',kd:'x',k:2,
+   ask:()=>'each bar is bolted at both ends: how many bolts are fitted?',lab:()=>'bolts',
+   w:[['the bars are halved','both ends: halve the bars'],['2 is added','both ends: add 2']]},QTY)],
+ ['fit',Y({af:['m:frame.bolts'],u:'bolts',out:'minutes',kd:'x',k:()=>pick([2,3,5]),
+   ask:(S,p)=>'a bolt takes '+p.K+' minutes to fit: how many minutes of work?',lab:()=>'minutes fitting',
+   w:[['the bolts are divided by the minutes',(S,p)=>p.K+' minutes each: divide by '+p.K],['the minutes are added',(S,p)=>p.K+' minutes each: add '+p.K]]},QTY)]]);
+addClose('27·then.frame',[Pr(X({u:'minutes',out:'hours',k:60,ask:()=>'how many hours of fitting is that?',ln:()=>'hours fitting'},CU)),
+  Cc(X({u:'bolts',out:'bags',k:()=>pick([10,25]),ask:(S,p)=>'bolts come '+p.K+' to a bag: how many bags are opened?',ln:()=>'bags of bolts'},DR))]);
+
+/* ---------- 27·econ.round: output to meet a demand ---------- */
+map('27·econ.round',[
+ ['towns',Y({af:['read'],u:'dollars',out:'dollars',kd:'x',k:2,
+   ask:()=>'a second town alike buys the same: what is the demand of the two?',lab:()=>'demand of two towns',
+   w:[['the demand is halved','two towns: halve it'],['2 dollars are added','two towns: add 2']]},QTY)],
+ ['imp',Y({af:['read','m:eround.towns'],u:'dollars',out:'dollars',kd:'x',k:Q(3,4),
+   ask:()=>'a quarter of the dolls are made outside the town: what demand is left for the town?',lab:()=>'demand on the town',
+   w:[['the demand is divided by 3/4','a quarter from outside: divide by 3/4'],null],xs:(S,p,q)=>[['the outside quarter is given',qm(q.v,Q(1,4)),'a quarter from outside: take 1/4']]},T('27·econ','the every-round technique'))],
+ ['hours',Y({af:['m:eround.imp','m:eround.towns'],u:'dollars',out:'hours of work',kd:'x',k:Q(1,20),
+   ask:()=>'each dollar of dolls takes 1/20 of an hour of work: how many hours is that?',lab:()=>'hours of work',
+   w:[['the dollars are multiplied by 20','1/20 hour a dollar: multiply by 20'],null],xs:(S,p,q)=>[['1/20 hour is added',qa(q.v,Q(1,20)),'1/20 hour a dollar: add 1/20']]},QTY)]],'eround');
+addClose('27·econ.round',[Pr(X({u:'hours of work',out:'work weeks',k:40,ask:()=>'a work week is 40 hours: how many work weeks is that?',ln:()=>'work weeks'},CU))]);
+
+/* ---------- 27·crypt.grid: a letter sent by a key ---------- */
+map('27·crypt.grid',[
+ ['twice',Y({af:['read','m:kgrid.shift'],u:'places',out:'places',f:(S,p,q)=>qa(qm(qq(S.c[1]),q.v),qq(S.c[0])),ex:(S,p,q)=>qs(qq(S.c[1]))+' · '+par(q.v)+' + '+qs(qq(S.c[0])),
+   ask:()=>'it is sent through the same key a second time: where does it go before the remainder?',lab:()=>'sent through the key again',
+   xs:(S,p,q)=>[['the shift is left off the second time',qm(qq(S.c[1]),q.v),'multiply by the key’s number again, no shift'],['the place is doubled',qm(q.v,Q(2)),'twice through the key: double the place']]},T('27·crypt','the remainders-pass-through technique'))],
+ ['shift',Y({af:['read'],u:'places',out:'places',kd:'a',k:()=>pick([3,5]),
+   ask:(S,p)=>'a second key then shifts it '+p.K+' places on: where is it before the remainder?',lab:()=>'after the shift',
+   w:[['the shift is taken back',(S,p)=>'shift '+p.K+' on: take '+p.K+' off'],['the place is multiplied by the shift',(S,p)=>'shift '+p.K+' on: multiply by '+p.K]]},T('27·crypt','the remainders-pass-through technique'))],
+ ['rot',Y({af:['m:kgrid.twice','m:kgrid.shift'],u:'places',out:'places',kd:'a',k:13,
+   ask:()=>'last, the letter is moved 13 places on: where is it before the remainder?',lab:()=>'after 13 more',
+   w:[['the 13 is taken off',null],['the place is multiplied by 13','move 13 on: multiply by 13']],xs:(S,p,q)=>[['26 is added, as if 13 each way',qa(q.v,Q(26)),'move 13 on: add 26']]},T('27·crypt','the remainders-pass-through technique'))]],'kgrid');
+
+/* ---------- 20·chem.forms: forms of a sugar chain ---------- */
+map('20·chem.forms',[
+ ['ring',Y({af:['read'],u:'handed carbons',out:'handed carbons',kd:'a',k:1,
+   ask:()=>'the chain closes into a ring, and the closing carbon becomes handed too: how many handed carbons now?',lab:()=>'handed carbons in the ring',
+   w:[['the closing carbon is taken off','the ring adds one: take 1 off'],['the count is doubled','the ring adds one: double it']]},T('20·chem','the handed-carbon technique'))],
+ ['lock',Y({af:['m:forms.ring'],u:'handed carbons',out:'handed carbons',kd:'s',k:1,
+   ask:()=>'an enzyme builds one handed carbon only one way round: how many are left free to go either way?',lab:()=>'handed carbons left free',
+   w:[null,['the locked carbon is added','one is locked: add 1']],xs:(S,p,q)=>[['the count is halved',qm(q.v,Q(1,2)),'one is locked: halve the count']]},T('20·chem','the handed-carbon technique'))],
+ ['forms',Y({af:['read','m:forms.ring'],u:'handed carbons',out:'forms',f:(S,p,q)=>q.v.q===1&&q.v.p>=1&&q.v.p<=8?Q(Math.pow(2,q.v.p)):null,ex:(S,p,q)=>'2^'+par(q.v),
+   ask:()=>'each handed carbon can be either way round: how many forms can the chain take?',lab:()=>'forms, 2 to that power',
+   xs:(S,p,q)=>[['each carbon adds two forms instead of doubling them',qm(q.v,Q(2)),'each carbon gives 2 forms: double the count'],['the count is squared',qm(q.v,q.v),'square the count of handed carbons']]},T('20·chem','the handed-carbon technique'))],
+ ['pairs',Y({af:['m:forms.forms'],u:'forms',out:'mirror pairs',kd:'d',k:2,
+   ask:()=>'each form has its mirror image among the others: how many mirror pairs are there?',lab:()=>'mirror pairs',
+   w:[['the forms are doubled','in pairs: double the forms'],null],xs:(S,p,q)=>[['one form is taken as having no mirror',qm(qa(q.v,Q(-1)),Q(1,2)),'in pairs, leaving one out']]},T('20·chem','the handed-carbon technique'))]]);
+addClose('20·chem.forms',[G(X({u:'mirror pairs',k:'above',ask:(S,p)=>'the lab’s shelf has room for '+p.K+' pairs: how many places are left?',ln:()=>'places left on the shelf'},LESS))]);
+
+/* ---------- 21·bio.spokes: seeds on the spokes of a head ---------- */
+map('21·bio.spokes',[
+ ['birds',Y({af:['read','m:spokes.twin'],u:'seeds',out:'seeds',kd:'x',k:Q(3,4),
+   ask:()=>'finches take 1/4 of the seeds: how many are left on the head?',lab:()=>'seeds left',
+   w:[['the seeds are divided by 3/4','1/4 taken: divide by 3/4'],null],xs:(S,p,q)=>[['the finches’ 1/4 is given',qm(q.v,Q(1,4)),'1/4 taken: take 1/4 of the seeds']]},SCL)],
+ ['twin',Y({af:['read'],u:'seeds',out:'seeds',kd:'x',k:2,
+   ask:()=>'the stalk carries a second head alike: how many seeds on the two?',lab:()=>'seeds on two heads',
+   w:[['the seeds are halved','two heads: halve them'],['2 seeds are added','two heads: add 2']]},QTY)],
+ ['grams',Y({af:['m:spokes.birds','m:spokes.twin'],u:'seeds',out:'grams',kd:'x',k:Q(1,20),
+   ask:()=>'a seed weighs 1/20 of a gram: how many grams of seed?',lab:()=>'grams of seed',
+   w:[['the seeds are multiplied by 20','1/20 gram each: multiply by 20'],null],xs:(S,p,q)=>[['1/20 gram is added',qa(q.v,Q(1,20)),'1/20 gram each: add 1/20']]},QTY)]]);
+addClose('21·bio.spokes',[G(X({u:'grams',k:'above',ask:(S,p)=>'a seed packet holds '+p.K+' grams: how many grams short is the harvest?',ln:()=>'short of a packet'},LESS))]);
+
+/* ---------- 25·now.escape: a run that may escape ---------- */
+map('25·now.escape',[
+ ['z3',Y({af:['read'],u:'units',out:'units',mk:(S,ch)=>ch[0]&&ch[0].p&&ch[0].p.x!==undefined?{c:ch[0].p.x}:null,f:(S,p,q)=>qa(qm(q.v,q.v),Q(p.c)),ex:(S,p,q)=>par(q.v)+'² + '+p.c,
+   ask:(S,p)=>'one more step, squaring and adding c = '+p.c+': where is the run after three steps?',lab:()=>'z₃',
+   xs:(S,p,q)=>[['c is left out',qm(q.v,q.v),'square it, without adding c'],['it is doubled instead of squared',qa(qm(q.v,Q(2)),Q(p.c)),(S2,p2)=>'double it and add '+p2.c]]},T('25·now','the escape technique'))],
+ ['z4',Y({af:['m:escape.z3'],u:'units',out:'units',mk:(S,ch)=>ch[0]&&ch[0].p&&ch[0].p.x!==undefined?{c:ch[0].p.x}:null,f:(S,p,q)=>qa(qm(q.v,q.v),Q(p.c)),ex:(S,p,q)=>par(q.v)+'² + '+p.c,
+   ask:(S,p)=>'and one step more: where is it after four steps?',lab:()=>'z₄',
+   xs:(S,p,q)=>[['c is left out',qm(q.v,q.v),'square it, without adding c'],['it is doubled instead of squared',qa(qm(q.v,Q(2)),Q(p.c)),(S2,p2)=>'double it and add '+p2.c]]},T('25·now','the escape technique'))],
+ ['bound',Y({af:['read','m:escape.z3','m:escape.z4'],u:'units',out:'times the bound',kd:'d',k:2,
+   ask:()=>'escape is proved once the run passes 2: how many times 2 is it?',lab:()=>'times the bound',
+   w:[['the run is doubled','times 2: double it'],null],xs:(S,p,q)=>[['the bound is taken as 4',qm(q.v,Q(1,4)),'divide by 4']]},T('25·now','the escape technique'))]]);
+addClose('25·now.escape',[O(X({u:'times the bound',k:1,ask:()=>'by how many times the bound has the run gone past it?',ln:()=>'times past the bound'},own('25·now','the escape technique')))]);
+
+/* ---------- 24·eng.wall: a brick wall's leak (adds to the two steps above) ---------- */
+midsOf('24·eng.wall',[st('24·eng.wall','foam',Y({af:['read'],u:'watts per degree',out:'watts per degree',kd:'x',k:Q(1,2),
+   ask:()=>'foam board on the inside halves the wall’s leak: how many watts per degree now?',lab:()=>'leak with foam',
+   w:[['the leak is doubled','foam halves it: double it'],null],xs:(S,p,q)=>[['half a watt is taken off',qa(q.v,Q(-1,2)),'foam halves it: take 1/2 off']]},SCL)),
+  st('24·eng.wall','day',Y({af:['m:wall.watts'],u:'watts',out:'kilowatt hours a day',kd:'x',k:Q(24,1000),
+   ask:()=>'over a day of 24 hours, how many kilowatt hours leak away?',lab:()=>'kilowatt hours a day',
+   w:[['the watts are divided by 24/1000','divide by 24/1000'],null],xs:(S,p,q)=>[['the 1000 is left out, giving watt hours',qm(q.v,Q(24)),'multiply the watts by 24'],['a week of 168 hours is used',qm(q.v,Q(168,1000)),'multiply the watts by 168/1000']]},UNIT))]);
+{ const L=LAWS.find(l=>l.id==='24·eng.wall'); if(L){ const w=L.mids.find(m=>m.id==='m:wall.watts'); if(w&&!w.after.includes('m:wall.foam')) w.after=w.after.concat(['m:wall.foam']); } }
+addClose('24·eng.wall',[Tm(X({u:'kilowatt hours a day',out:'dollars a day',k:Q(1,5),ask:()=>'power costs 1/5 dollar a kilowatt hour: what does that leak cost a day?',ln:()=>'cost a day',w:['the kilowatt hours are divided by 1/5','1/5 is added']},MQ))]);
+
+/* ---------- 17·phys.stove: a stove top glowing hotter ---------- */
+map('17·phys.stove',[
+ ['pots',Y({af:['read'],u:'watts',out:'watts',kd:'x',k:Q(1,2),
+   ask:()=>'pots cover half the stove top: how many watts does the open half glow?',lab:()=>'glow of the open half',
+   w:[['the glow is doubled','half covered: double it'],null],xs:(S,p,q)=>[['half a watt is taken off',qa(q.v,Q(-1,2)),'half covered: take 1/2 off']]},SCL)],
+ ['kettle',Y({af:['read','m:stove.pots'],u:'watts',out:'watts',kd:'x',k:Q(1,4),
+   ask:()=>'only 1/4 of that glow falls on the kettle hung above: how many watts reach it?',lab:()=>'watts on the kettle',
+   w:[['the glow is multiplied by 4','1/4 reaches it: multiply by 4'],null],xs:(S,p,q)=>[['the 3/4 that misses is given',qm(q.v,Q(3,4)),'1/4 reaches it: take 3/4']]},SCL)],
+ ['heat',Y({af:['read','m:stove.pots','m:stove.kettle'],u:'watts',out:'joules',mk:()=>({m:pick([1,2])}),f:(S,p,q)=>qm(q.v,Q(60*p.m)),ex:(S,p,q)=>par(q.v)+' · '+(60*p.m),
+   ask:(S,p)=>'that goes on for '+pl(p.m,'minutes')+': how many joules is that?',lab:()=>'joules in that time',
+   xs:(S,p,q)=>[['the minutes are not turned into seconds',qm(q.v,Q(p.m)),(S2,p2)=>'multiply the watts by '+p2.m],['the watts are divided by the seconds',qm(q.v,Q(1,60*p.m)),(S2,p2)=>'divide the watts by '+(60*p2.m)]]},UNIT)]]);
+addClose('17·phys.stove',[Pr(X({u:'joules',out:'degrees',k:4200,ask:()=>'a litre of water warms 1 degree for 4200 joules: how many degrees would that warm a litre?',ln:()=>'warming of a litre'},MQ))]);
+
+/* ---------- 18·chem.layers: light through centimetres of dye ---------- */
+map('18·chem.layers',[
+ ['filter',Y({af:['read','m:layers.lamp2'],u:'units of light',out:'units of light',kd:'x',k:Q(1,2),
+   ask:()=>'a coloured filter in front of the lamp passes 1/2 of its light: how much reaches the tube?',lab:()=>'light through the filter',
+   w:[['the light is doubled','the filter passes 1/2: double it'],null],xs:(S,p,q)=>[['half a unit is taken off',qa(q.v,Q(-1,2)),'the filter passes 1/2: take 1/2 off']]},T('18·chem','the thin-layer law'))],
+ ['lamp2',Y({af:['read','m:layers.filter'],u:'units of light',out:'units of light',kd:'x',k:2,
+   ask:()=>'a second lamp alike shines into the same tube: how much light goes in?',lab:()=>'light of two lamps',
+   w:[['the light is halved','two lamps: halve it'],['2 units are added','two lamps: add 2']]},QTY)],
+ ['glass',Y({af:['m:layers.filter','m:layers.lamp2'],u:'units of light',out:'units of light',kd:'x',k:Q(9,10),
+   ask:()=>'the tube’s glass wall throws back 1/10 of the light at the way in: how much enters the dye?',lab:()=>'light into the dye',
+   w:[['the light is divided by 9/10','1/10 thrown back: divide by 9/10'],null],xs:(S,p,q)=>[['the thrown-back 1/10 is given',qm(q.v,Q(1,10)),'1/10 thrown back: take 1/10']]},T('18·chem','the thin-layer law'))]]);
+
+/* ---------- 26·phys.swing: a swinging voltage warming a resistor ---------- */
+map('26·phys.swing',[
+ ['step',Y({af:['read'],u:'volts',out:'volts',kd:'x',k:Q(1,2),
+   ask:()=>'a transformer steps the swing down to 1/2: what is its peak now?',lab:()=>'peak stepped down',
+   w:[['the peak is doubled','down to 1/2: double it'],null],xs:(S,p,q)=>[['the peak is quartered',qm(q.v,Q(1,4)),'down to 1/2: take 1/4']]},T('26·phys','the steady-stand-in technique'))],
+ ['leads',Y({af:['read','m:swing.step'],u:'volts',out:'volts',kd:'x',k:Q(9,10),
+   ask:()=>'the long leads lose 1/10 of the volts: what peak reaches the resistor?',lab:()=>'peak at the resistor',
+   w:[['the peak is divided by 9/10','1/10 lost: divide by 9/10'],null],xs:(S,p,q)=>[['the lost 1/10 is given',qm(q.v,Q(1,10)),'1/10 lost: take 1/10']]},SCL)],
+ ['pp',Y({af:['read','m:swing.step','m:swing.leads'],u:'volts',out:'volts peak to peak',kd:'x',k:2,
+   ask:()=>'it swings from +V₀ down to −V₀: how many volts is that from peak to peak?',lab:()=>'peak to peak',
+   w:[['the peak is halved','+V₀ to −V₀: halve it'],null],xs:(S,p,q)=>[['the swing is taken as V₀ alone',q.v,'+V₀ to −V₀: just V₀']]},T('26·phys','the steady-stand-in technique'))]]);
+addClose('26·phys.swing',[G(X({u:'volts peak to peak',k:'above',ask:(S,p)=>'the scope’s screen shows '+p.K+' volts peak to peak: how much room is left?',ln:()=>'room on the screen'},LESS))]);
+
+/* ---------- 17·comp.loops: steps of a program of nested loops ---------- */
+map('17·comp.loops',[
+ ['unroll',Y({af:['read'],u:'steps',out:'steps',kd:'x',k:Q(3,4),
+   ask:()=>'Randy unrolls the inner loop, saving 1/4 of the steps: how many steps now?',lab:()=>'steps unrolled',
+   w:[['the steps are divided by 3/4','1/4 saved: divide by 3/4'],null],xs:(S,p,q)=>[['the saved 1/4 is given',qm(q.v,Q(1,4)),'1/4 saved: take 1/4']]},SCL)],
+ ['lists',Y({af:['read','m:loops.unroll'],u:'steps',out:'steps',kd:'x',k:()=>pick([2,3]),
+   ask:(S,p)=>'the program runs on '+p.K+' lists of that length: how many steps in all?',lab:()=>'steps for all the lists',
+   w:[['the steps are shared among the lists',(S,p)=>p.K+' lists: divide by '+p.K],['the lists are added',(S,p)=>p.K+' lists: add '+p.K]]},QTY)],
+ ['time',Y({af:['m:loops.unroll','m:loops.lists'],u:'steps',out:'microseconds',kd:'x',k:()=>pick([2,3,5]),
+   ask:(S,p)=>'each step takes '+p.K+' microseconds: how long is the run?',lab:()=>'time for the run',
+   w:[['the steps are divided by the microseconds',(S,p)=>p.K+' each: divide by '+p.K],['the microseconds are added',(S,p)=>p.K+' each: add '+p.K]]},QTY)]]);
+addClose('17·comp.loops',[Pr(X({u:'microseconds',out:'milliseconds',k:1000,ask:()=>'how many milliseconds is that?',ln:()=>'milliseconds'},CU))]);
+
+/* ---------- 18·chem.assay: dye in a flask (adds to the two steps above) ---------- */
+midsOf('18·chem.assay',[st('18·chem.assay','cell',Y({af:['read'],u:'absorbance units',out:'absorbance units',kd:'s',k:Q(1,100),
+   ask:()=>'a cell of the clear water alone reads 1/100: what is the dye’s own reading?',lab:()=>'reading less the blank',
+   w:[null,['the blank is added','the water reads 1/100: add it']],xs:(S,p,q)=>[['the blank is taken as a share, 1/100 of the reading',qm(q.v,Q(99,100)),'the water reads 1/100: take 1/100 of the reading off']]},T('18·chem','the absorbance technique'))),
+  st('18·chem.assay','vial',Y({af:['m:assay.moles'],u:'millimoles',out:'millimoles a vial',kd:'d',k:()=>pick([4,5,10]),
+   ask:(S,p)=>'the flask is shared out into '+p.K+' vials: how many millimoles in each?',lab:()=>'millimoles a vial',
+   w:[['the millimoles are multiplied by the vials',(S,p)=>p.K+' vials: multiply by '+p.K],['the vials are divided by the millimoles',(S,p)=>p.K+' vials: divide '+p.K+' by it']]},SHR))]);
+{ const L=LAWS.find(l=>l.id==='18·chem.assay'); if(L){ const c=L.mids.find(m=>m.id==='m:assay.conc'); if(c&&!c.after.includes('m:assay.cell')) c.after=c.after.concat(['m:assay.cell']); } }
+addClose('18·chem.assay',[Tm(X({u:'millimoles a vial',out:'milligrams a vial',k:S=>S.M,ask:(S)=>'with a molar mass of '+S.M+' grams a mole, how many milligrams in a vial?',ln:()=>'milligrams a vial',w:['the millimoles are divided by the molar mass','the molar mass is added']},MQ))]);
+
+/* ---------- more wrong moves for steps whose kind's own slips can fall away (a result at or below 0, or out of range) ---------- */
+const more=(law,id,f,neg)=>{ const L=LAWS.find(l=>l.id===law); const M=L&&(L.mids||[]).find(m=>m.id===id); if(!M) return; const s0=M.slips, a0=M.alts||(()=>[]);
+  const ex=(S,p,q)=>{ let r=[]; try{ r=f(S,p,q)||[]; }catch(e){} const u=(M.act(S,p,q)||{}).u; return r.filter(x=>x&&ok(x[1])&&(neg||x[1].p>0)).map(x=>({why:x[0],v:x[1],u,alt:x[2]})); };
+  M.slips=(S,p,q)=>s0(S,p,q).concat(ex(S,p,q).map(x=>({why:x.why,v:x.v,u:x.u})));
+  M.alts=(S,p,q)=>a0(S,p,q).concat(ex(S,p,q).map(x=>({ask:x.alt,v:x.v,u:x.u}))); };
+more('16·nav.speed','m:speed.tide',(S,p,q)=>[['the tide’s own speed is given for the boat’s',p.k,'the ebb runs at '+p.K+' knots: that is the speed over the ground']]);
+more('16·logi.flow','m:flow.drain',(S,p,q)=>[['the drain is counted twice',qa(q.v,qm(Q(-2),p.k)),'the drain lets out '+p.K+' more: take '+p.K+' off twice']]);
+more('16·logi.flow','m:flow.hose',(S,p,q)=>[['the hose is counted twice',qa(q.v,qm(Q(2),p.k)),'a hose adds '+p.K+': add '+p.K+' twice']]);
+more('16·phys.spring','m:spring.drag',(S,p,q)=>[['the drag is taken off twice, once for each wheel pair',qa(q.v,qm(Q(-2),p.k)),'the wheels drag with '+p.K+' newtons: take it off twice']]);
+more('16·econ.gain','m:gain.apple',(S,p,q)=>[['the crate’s price is turned to cents but not shared over the apples',qm(q.v,Q(100)),'multiply the price by 100 for cents an apple']]);
+more('15·phys.plate','m:plate.trim',(S,p,q)=>[['the trim is added instead of cut off',qa(q.v,Q(2*p.c,100)),'he trims '+p.c+' cm off each edge: add 2 · '+p.c+'/100 metre']]);
+more('15·phys.plate','m:plate.mass',(S,p,q)=>[['steel is taken as 8 kilograms a cubic metre, the thousand lost',qm(q.v,Q(8)),'take steel as 8 kilograms a cubic metre']]);
+more('16·then.inflow','m:inflow.spill',(S,p,q)=>[['the spillway’s flow is given for the lake’s gain',p.k,'the lake gains what the spillway lets out']]);
+more('16·eng.beam','m:beam.crowd',(S,p,q)=>[['the crowd’s load is counted at both ends',qa(q.v,qm(Q(2),p.k)),'the crowd adds '+p.K+': add it twice']]);
+more('17·chem.ph','m:ph.tenfold',(S,p,q)=>[['it is diluted a hundredfold, two steps',qm(q.v,Q(1,100)),'dilute tenfold: divide by 100']]);
+more('18·chem.absorb','m:absorb.second',(S,p,q)=>[['the two readings are averaged',qm(qa(q.v,p.k),Q(1,2)),'a second dye reads '+p.K+': average the two readings']]);
+more('18·eng.bar','m:bar.gust',(S,p,q)=>[['the gust is counted twice',qa(q.v,qm(Q(2),p.k)),'a gust adds '+p.K+': add it twice']]);
+more('18·econ.revenue','m:revenue.tips',(S,p,q)=>[['the tips are counted twice',qa(q.v,qm(Q(2),p.k)),'tips add '+p.K+': add them twice']]);
+more('18·econ.revenue','m:revenue.stall',(S,p,q)=>[['the share is taken as the whole less one stall’s part',qm(q.v,Q(num(p.k)-1,num(p.k))),'take all but one stall’s part']]);
+more('18·nav.chart','m:chart.nm',(S,p,q)=>[['a nautical mile is taken as 1000 metres',q.v,'take a nautical mile as a kilometre']]);
+more('18·logi.edge','m:edge.year',(S,p,q)=>[['12 months are used for 50 weeks',qm(q.v,Q(12)),'multiply the week by 12']]);
+more('18·phys.comet','m:comet.light',(S,p,q)=>[['the 500 seconds are added',qa(q.v,Q(500)),'add 500 seconds to the distance']]);
+more('18·phys.comet','m:comet.min',(S,p,q)=>[['the seconds are divided by 3600, giving hours',qm(q.v,Q(1,3600)),'divide the seconds by 3600']]);
+more('19·eng.loop','m:loop.pump',(S,p,q)=>[['the joules a kilogram are taken off the watts',qa(q.v,qn(p.k)),'take '+p.K+' off the watts']]);
+more('22·nav.grid','m:grid.sail',(S,p,q)=>[['the speed is taken off the distance',qa(q.v,qn(p.k)),'take '+p.K+' off the kilometres']]);
+more('22·now.digits','m:digits.secs',(S,p,q)=>[['the speed is taken off the work',qa(q.v,qn(p.k)),'take '+p.K+' off the multiplications'],['the remainders’ count of the read is used, not the multiplications',qm(q.v,Q(1,4*num(p.k))),'divide by '+p.K+' and again by 4']]);
+more('23·eng.power','m:power.lift',(S,p,q)=>[['the 10 is used but the mass left out',qm(q.v,Q(1,10)),'divide the joules by 10']]);
+more('23·nav.drop','m:drop.storey',(S,p,q)=>[['the metres are taken as storeys',q.v,'the drop in metres is the count of storeys']]);
+more('24·eng.house','m:house.above',(S,p,q)=>[['the outside temperature is taken off twice',qa(q.v,qm(qq(S.c[0]),Q(-2))),(S2)=>'take the outside '+qs(qq(S2.c[0]))+' degrees off twice']],true);
+more('24·now.boxes','m:boxes.mill',(S,p,q)=>[['the thousandths are taken as millionths',q.v,'the thousandths are millionths already']]);
+more('25·eng.deck','m:deck.stress',(S,p,q)=>[['the 1000 is used but the area left out',qm(q.v,Q(1000)),'multiply the kilonewtons by 1000']]);
+more('25·eng.deck','m:deck.cable',(S,p,q)=>[['one cable is taken to carry it all',q.v,'one cable carries the whole pull']]);
+more('27·nav.delay','m:delay.km',(S,p,q)=>[['the metres are left as they are',q.v,'the metres are the kilometres']]);
+more('17·comp.sort','m:sort.split',(S,p,q)=>[['one machine is taken to make them all',q.v,'one machine makes all the comparisons']]);
+more('17·phys.radio','m:radio.mhz',(S,p,q)=>[['10 is used for 1000',qm(q.v,Q(1,10)),'divide by 10']]);
+more('20·nav.heading','m:heading.set',(S,p,q)=>[['the set alone is given as the track',p.k,'the track is the '+p.K+' degrees of set']]);
+more('21·then.slant','m:slant.kwh',(S,p,q)=>[['10 is used for 1000',qm(q.v,Q(1,10)),'divide by 10']]);
+more('21·nav.pole','m:pole.togo',(S,p,q)=>[['the distance north is given for the distance to go',q.v,'the distance to go is the distance north']]);
+more('22·crypt.pairs','m:pairs.ms',(S,p,q)=>[['10 is used for 1000',qm(q.v,Q(1,10)),'divide by 10']]);
+more('24·econ.grow','m:grow.pct',(S,p,q)=>[['the rate is left as a share',q.v,'the share is already in every 100']]);
+more('24·econ.grow','m:grow.dry',(S,p,q)=>[['the dry year’s 1/100 is given for the growth',Q(1,100),'the growth is the 1/100 taken off']]);
+more('20·chem.forms','m:forms.ring',(S,p,q)=>[['the closing carbon is not counted',q.v,'the ring leaves the count as it was']]);
+more('18·chem.assay','m:assay.cell',(S,p,q)=>[['the blank is left in',q.v,'the reading is the dye’s own']]);
+more('16·cb12.lake','m:lake.breaths',(S,p,q)=>[['the tank is taken off a breath',qa(Q(p.V),qn(q.v)),'take a breath off the tank’s litres']]);
+more('18·eng.bar','m:bar.factor',(S,p,q)=>[['the stress is doubled for the code first',qm(Q(p.Y),qi(qm(q.v,Q(2)))),'divide '+p.Y+' by twice the stress']]);
+more('18·logi.edge','m:edge.week',(S,p,q)=>[['the runs are taken a day, over 5 days',qm(q.v,qm(p.k,Q(5))),'multiply by the runs and by 5 days']]);
+
+more('16·logi.flow','m:flow.drain',(S,p,q)=>[['the drain’s litres are given for in less out',p.k,'in less out is the drain’s '+p.K+' litres a minute']]);
+more('16·logi.flow','m:flow.hose',(S,p,q)=>[['the hose’s litres alone are given',p.k,'in less out is the hose’s '+p.K+' litres a minute']]);
+more('17·chem.ph','m:ph.tenfold',(S,p,q)=>[['the strength is left as it was',q.v,'dilution leaves the strength as it is']]);
+more('18·econ.revenue','m:revenue.tips',(S,p,q)=>[['the tips alone are given',p.k,'the takings are the '+p.K+' dollars of tips']]);
+more('25·eng.deck','m:deck.stress',(S,p,q)=>[['the kilonewtons are given as the stress',q.v,'the stress is the kilonewtons on the strand']]);
+})();
+/* ===== Word Problems, tailored middles c (Andrew 2026-11-14 05:07Z: "How you get from start to finish is a map") =====
+   Laws on rungs 28 to 47 and their annexes. Each law gets a map of middle steps in its own world: the particulars (how many tubes, which mass,
+   how many cycles) are drawn in make and stated in the ask; the route is the map. A map usually runs
+     read > A > B > C > close,  read > B > C > close,  read > D > close,  read > A > D > close,  read > A > (the law's first close)
+   where A keeps the reading's unit (a change in the story itself), B and C carry it into new units, and D is a shortcut to C's unit.
+   A close is added (Z) where none of the law's closes takes the map's last unit. */
+(function(){ if(!CH.W2) return; const {MID,midsOf,par,num,isQ,qq,at,who,say,pick,ri,Q,qa,qm,qn,qi,qz,qs,big,LAWS,G,O,Tm,Pr,In,Ct,Cc,Fr,Pl,Md,X,own,MQ,CU,SC,cl,LESS,DR}=CH.W2;
+const Cu=o=>cl('cust',o);
+const tv=f=>{ try{ const v=f(); return v&&isQ(v)&&!big(v)?v:null; }catch(e){ return null; } };
+const U=(u,S)=>typeof u==='function'?u(S):u;
+const T=(t,S,p)=>typeof t==='function'?t(S,p):t;
+/* M(law, name, o): a middle step of law. o.after: names of earlier steps ('read' for the law's first link), o.u the unit it takes, o.out the unit it
+   hands on (or S=>unit), o.st its step, o.cite its technique, o.mk(S,chain,q) its particulars, o.ask(S,p), o.f(v,S,p) the move, o.ex(V,S,p) the worked
+   expression (V is the incoming value, bracketed), o.ln its label, o.w the wrong moves [why, the same move as an instruction, g(v,S,p), unit?]. */
+function M(law,name,o){ const id=n=>n==='read'||/^(\d|m:)/.test(n)?n:'m:'+law+'.'+n;
+  return MID({id:id(name),after:[].concat(o.after||'read').map(id),u:o.u,steps:[].concat(o.st),cite:o.cite,
+    make:(S,ch,q)=>{ if(!o.mk) return {}; try{ return o.mk(S,ch,q); }catch(e){ return null; } },
+    ask:(S,p)=>o.ask(S,p),
+    act:(S,p,q)=>{ const v=tv(()=>o.f(q.v,S,p)); return v?{v,u:U(o.out,S)}:null; },
+    slips:(S,p,q)=>(o.w||[]).map(w=>({why:T(w[0],S,p),v:tv(()=>w[2](q.v,S,p)),u:w[3]?U(w[3],S):U(o.out,S)})).filter(s=>s.v),
+    alts:(S,p,q)=>(o.w||[]).filter(w=>w[1]).map(w=>({ask:T(w[1],S,p),v:tv(()=>w[2](q.v,S,p)),u:w[3]?U(w[3],S):U(o.out,S)})).filter(s=>s.v),
+    line:(r,S,p,q)=>T(o.ln,S,p)+': '+o.ex(par(q.v),S,p)+' = '+qs(r.v)+' '+r.u}); }
+const Z=(id,cs)=>{ const L=LAWS.find(l=>l.id===id); if(L&&L.close) [].concat(cs).forEach(c=>L.close.push(c)); };
+const map=(law,ms)=>midsOf(law,ms.map(m=>M(law.split('·')[1],m[0],m[1])));
+const R=(a,b)=>{ const A=typeof a==='number'?Q(a):a; return b===undefined?A:qm(A,qi(typeof b==='number'?Q(b):b)); }, mul=(v,a,b)=>qm(v,R(a,b)), dv=(v,a,b)=>qm(v,qi(R(a,b))), add=(v,a,b)=>qa(v,R(a,b)), sub=(v,a,b)=>qa(v,qn(R(a,b)));
+const x0=ch=>ch&&ch[0]&&ch[0].p?ch[0].p.x:undefined;
+const has=(ch,law,name)=>ch&&ch.find(c=>c.W.id==='m:'+law.split('·')[1]+'.'+name);
+const rd=ch=>ch&&ch[0]&&ch[0].o?ch[0].o.v:null;
+const cq=x=>qq(x);
+
+/* ---------- 28·then.engine: the share of heat an engine can keep; heat in a cycle, cycles a second, minutes of running, a crate lifted ---------- */
+{ const L='28·then.engine', BE='the best-engine technique';
+map(L,[
+ ['colder',{u:'of the heat',out:'of the heat',st:'28·then',cite:BE,mk:(S,ch)=>{ const T0=x0(ch); if(T0===undefined||T0<200) return null; return {d:pick([50,100]),T0,Th:Math.round(-1/num(cq(S.c[1])))}; },
+   ask:(S,p)=>'the cold room is cooled '+p.d+' kelvin more: at most what share of the heat becomes work now?',
+   f:(v,S,p)=>sub(R(1),p.T0-p.d,p.Th),ex:(V,S,p)=>'1 − '+(p.T0-p.d)+'/'+p.Th,ln:'the best share now',
+   w:[['the cooling is taken from the hot room instead','the hot room is warmed '+'by that much: find 1 − T/(hot + that)',(v,S,p)=>sub(R(1),p.T0,p.Th+p.d)],
+      ['the cooling is added as a share, as if each kelvin were a whole','add the kelvin of cooling to the share',(v,S,p)=>add(v,p.d,p.Th)]]}],
+ ['work',{after:['read','colder'],u:'of the heat',out:'joules a cycle',st:'28·then',cite:BE,mk:()=>({h:pick([1200,2400,3600])}),
+   ask:(S,p)=>'each cycle it takes in '+p.h+' joules of heat: at most how many joules of work a cycle?',
+   f:(v,S,p)=>mul(v,p.h),ex:(V,S,p)=>V+' · '+p.h,ln:'work a cycle',
+   w:[['the share left to the cold room, 1 − e, is used',(S,p)=>'each cycle takes in '+p.h+' joules: take the share the cold room gets',(v,S,p)=>mul(sub(R(1),v),p.h)],
+      ['the heat is divided by the share instead of multiplied',(S,p)=>'each cycle takes in '+p.h+' joules: divide them by the share',(v,S,p)=>dv(R(p.h),v)]]}],
+ ['power',{after:['work'],u:'joules a cycle',out:'watts',st:'5j',cite:MQ.cite,mk:()=>({n:pick([2,5,10])}),
+   ask:(S,p)=>'it runs '+p.n+' cycles a second: at most what power does it give, in watts?',
+   f:(v,S,p)=>mul(v,p.n),ex:(V,S,p)=>V+' · '+p.n,ln:'power',
+   w:[['the work is divided by the cycles a second',(S,p)=>'it runs '+p.n+' cycles a second: divide the work by '+p.n,(v,S,p)=>dv(v,p.n)],
+      ['the cycles are added to the work',(S,p)=>'it runs '+p.n+' cycles a second: add '+p.n+' to the work',(v,S,p)=>add(v,p.n)]]}],
+ ['flow',{after:['read','colder'],u:'of the heat',out:'watts',st:'28·then',cite:BE,mk:()=>({h:pick([1200,2400,6000])}),
+   ask:(S,p)=>'heat flows in from the hot room at '+p.h+' watts: at most what power does it give?',
+   f:(v,S,p)=>mul(v,p.h),ex:(V,S,p)=>V+' · '+p.h,ln:'power',
+   w:[['the share the cold room gets, 1 − e, is used',(S,p)=>'heat flows in at '+p.h+' watts: take the share the cold room gets',(v,S,p)=>mul(sub(R(1),v),p.h)],
+      ['the heat flow is divided by the share',(S,p)=>'heat flows in at '+p.h+' watts: divide by the share',(v,S,p)=>dv(R(p.h),v)]]}],
+ ['run',{after:['power','flow'],u:'watts',out:'kilojoules',st:'5j',cite:CU.cite,mk:()=>({m:pick([1,5,10])}),
+   ask:(S,p)=>'it runs for '+p.m+' minute'+(p.m>1?'s':'')+': how many kilojoules of work is that?',
+   f:(v,S,p)=>mul(v,60*p.m,1000),ex:(V,S,p)=>V+' · '+(60*p.m)+'/1000',ln:'work in kilojoules',
+   w:[['the minutes are used as seconds',(S,p)=>'it runs for '+p.m+' minutes: multiply the watts by '+p.m+'/1000',(v,S,p)=>mul(v,p.m,1000)],
+      ['the change from joules to kilojoules is turned over',(S,p)=>'it runs '+p.m+' minutes: multiply by '+(60*p.m)+' and by 1000',(v,S,p)=>mul(v,60*p.m*1000)]]}]]);
+Z(L,Cu(X({u:'kilojoules',out:'metres',k:()=>pick([20,50,100]),f:(S,p,q)=>mul(q.v,100,p.k),ex:(S,p,q)=>par(q.v)+' · 1000/(10 · '+p.K+')',
+  ask:(S,p)=>'the work lifts a '+p.K+' kg crate, g being 10 m/s²: how many metres high does it go?',ln:()=>'height of the crate',
+  xs:(S,p,q)=>[{why:'kilojoules are not changed to joules',v:dv(q.v,10*num(p.k))},{why:'g is left out',v:mul(q.v,1000,p.k)},{why:'the mass multiplies instead of divides',v:mul(q.v,num(p.k),10)}]},own('28·then','the expansion-energy technique'))));
+}
+/* ---------- 28·phys.tube: sap through narrow tubes; a wider tube beside it, an hour, a day of daylight, sugar carried ---------- */
+{ const L='28·phys.tube', NT='the narrow-tube technique';
+map(L,[
+ ['wider',{u:'microlitres a second',out:'microlitres a second',st:'28·phys',cite:NT,mk:(S,ch)=>{ const R0=x0(ch); return R0===undefined?null:{R0,k:num(cq(S.c[4]))}; },
+   ask:(S,p)=>'a second tube, of radius '+(p.R0+1)+' millimetres, runs beside it: what do the two pass together?',
+   f:(v,S,p)=>add(v,p.k*Math.pow(p.R0+1,4)),ex:(V,S,p)=>V+' + '+p.k+' · '+(p.R0+1)+'⁴',ln:'the two tubes together',
+   w:[['the wider tube is taken to pass the same as the first','take the second tube to pass the same: double the flow',v=>mul(v,2)],
+      ['the flow is taken to grow as the radius, not its fourth power',(S,p)=>'scale the flow by the radii, '+(p.R0+1)+'/'+p.R0+', and add it',(v,S,p)=>add(v,mul(v,p.R0+1,p.R0))]]}],
+ ['hour',{after:['read','wider'],u:'microlitres a second',out:'millilitres an hour',st:'5j',cite:CU.cite,
+   ask:()=>'how many millilitres an hour is that, 3600 seconds to the hour?',
+   f:v=>mul(v,3600,1000),ex:V=>V+' · 3600/1000',ln:'millilitres an hour',
+   w:[['60 seconds are taken for an hour','multiply by 60/1000 for millilitres an hour',v=>mul(v,60,1000)],
+      ['the 3600 seconds divide instead of multiply','divide by 3600, then multiply by 1000',v=>mul(v,1000,3600)]]}],
+ ['day',{after:['hour'],u:'millilitres an hour',out:'litres a day',st:'5j',cite:CU.cite,mk:()=>({h:pick([8,10,12])}),
+   ask:(S,p)=>'the sap rises only in '+p.h+' hours of daylight: how many litres a day?',
+   f:(v,S,p)=>mul(v,p.h,1000),ex:(V,S,p)=>V+' · '+p.h+'/1000',ln:'litres a day',
+   w:[['the whole 24 hour day is used','the sap rises all 24 hours: multiply by 24/1000',v=>mul(v,24,1000)],
+      ['millilitres are not changed to litres',(S,p)=>'multiply by the '+p.h+' hours for litres a day',(v,S,p)=>mul(v,p.h)]]}],
+ ['dayone',{after:['read','wider'],u:'microlitres a second',out:'litres a day',st:'5j',cite:CU.cite,mk:()=>({h:pick([8,10,12])}),
+   ask:(S,p)=>'the sap rises only in '+p.h+' hours of daylight: how many litres a day?',
+   f:(v,S,p)=>mul(v,3600*p.h,1000000),ex:(V,S,p)=>V+' · 3600 · '+p.h+'/1000000',ln:'litres a day',
+   w:[['the whole 24 hour day is used','the sap rises all 24 hours of the day',v=>mul(v,3600*24,1000000)],
+      ['microlitres are taken as thousandths of a litre',(S,p)=>'multiply by 3600 · '+p.h+'/1000 for litres a day',(v,S,p)=>mul(v,3600*p.h,1000)]]}]]);
+Z(L,Tm(X({u:'litres a day',out:'grams of sugar',k:()=>pick([10,20,30]),ask:(S,p)=>'each litre of sap carries '+p.K+' grams of sugar: how many grams rise in a day?',ln:()=>'sugar a day'},MQ)));
+}
+/* ---------- 28·bio.foxes: rabbits eaten; a warm spring, one fox's share, a rabbit's mass, a fox's food ---------- */
+{ const L='28·bio.foxes';
+map(L,[
+ ['spring',{u:'hundred a year',out:'hundred a year',st:'28·bio',cite:'the roads-add technique',mk:()=>({d:pick([1,2,3])}),
+   ask:(S,p)=>'a warm spring brings '+p.d+' hundred more rabbits: how many hundred a year are eaten now?',
+   f:(v,S,p)=>add(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'eaten after the spring',
+   w:[['each new rabbit is counted as eaten','add the '+'new hundreds of rabbits to the hundreds eaten',(v,S,p)=>add(v,p.d)],
+      ['only the new rabbits are counted',(S,p)=>'find what the foxes eat of the '+p.d+' hundred new rabbits alone',(v,S,p)=>qm(cq(S.c[1]),R(p.d))]]}],
+ ['fox',{after:['read','spring'],u:'hundred a year',out:'rabbits a fox a year',st:'5j',cite:MQ.cite,
+   ask:()=>'there are 1 hundred foxes: how many rabbits does one fox eat in a year?',
+   f:v=>v,ex:V=>V+' · 100/100',ln:'rabbits a fox',
+   w:[['the hundred rabbits are unpacked but the hundred foxes are not','multiply by 100 for the rabbits and stop there',v=>mul(v,100)],
+      ['the hundred foxes are shared out but the rabbits are left in hundreds','divide by the 100 foxes',v=>dv(v,100)]]}],
+ ['kg',{after:['fox'],u:'rabbits a fox a year',out:'kilograms a fox a year',st:'5j',cite:MQ.cite,mk:()=>({m:pick([2,3])}),
+   ask:(S,p)=>'a rabbit there weighs '+p.m+' kg: how many kilograms of rabbit does a fox eat in a year?',
+   f:(v,S,p)=>mul(v,p.m),ex:(V,S,p)=>V+' · '+p.m,ln:'kilograms a fox',
+   w:[['the rabbits are divided by the mass',(S,p)=>'divide the rabbits by the '+p.m+' kg',(v,S,p)=>dv(v,p.m)],
+      ['the mass is added to the count',(S,p)=>'add '+p.m+' kg to the rabbits eaten',(v,S,p)=>add(v,p.m)]]}],
+ ['kgone',{after:['read','spring'],u:'hundred a year',out:'kilograms a fox a year',st:'5j',cite:MQ.cite,mk:()=>({m:pick([2,3])}),
+   ask:(S,p)=>'with 1 hundred foxes and rabbits of '+p.m+' kg, how many kilograms does a fox eat a year?',
+   f:(v,S,p)=>mul(v,p.m),ex:(V,S,p)=>V+' · 100 · '+p.m+'/100',ln:'kilograms a fox',
+   w:[['the hundred foxes are left out',(S,p)=>'multiply by 100 and by '+p.m+' kg',(v,S,p)=>mul(v,100*p.m)],
+      ['the hundred rabbits are left in hundreds',(S,p)=>'divide by the 100 foxes and multiply by '+p.m,(v,S,p)=>mul(v,p.m,100)]]}]]);
+Z(L,G(X({u:'kilograms a fox a year',k:'above',ask:(S,p)=>'a fox needs '+p.K+' kilograms of food a year: how many must come from voles and birds?',ln:()=>'kilograms from other prey'},LESS)));
+}
+/* ---------- 29·now.clock: a higher clock gains; a clock further down, an hour, a day, many days ---------- */
+{ const L='29·now.clock', HC='the height-clock technique';
+map(L,[
+ ['below',{u:'attoseconds a second',out:'attoseconds a second',st:'29·now',cite:HC,mk:()=>({d:pick([10,20,50])}),
+   ask:(S,p)=>'a clock '+p.d+' metres below the lower one: what does the top clock gain on it each second?',
+   f:(v,S,p)=>add(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'gain on the lowest clock',
+   w:[['the extra metres are added as attoseconds',(S,p)=>'add the '+p.d+' metres to the gain',(v,S,p)=>add(v,p.d)],
+      ['the gain over the extra metres alone is given',(S,p)=>'find the gain over the '+p.d+' metres alone',(v,S,p)=>qm(cq(S.c[1]),R(p.d))]]}],
+ ['hour',{after:['read','below'],u:'attoseconds a second',out:'femtoseconds an hour',st:'5j',cite:CU.cite,
+   ask:()=>'a femtosecond is 1000 attoseconds: how many femtoseconds does it gain in an hour?',
+   f:v=>mul(v,3600,1000),ex:V=>V+' · 3600/1000',ln:'gain in an hour',
+   w:[['an hour is taken as 60 seconds','multiply by 60/1000 for the gain in an hour',v=>mul(v,60,1000)],
+      ['attoseconds are divided by 100, not 1000','multiply by 3600/100 for femtoseconds an hour',v=>mul(v,36)]]}],
+ ['day',{after:['hour'],u:'femtoseconds an hour',out:'picoseconds a day',st:'5j',cite:CU.cite,
+   ask:()=>'a picosecond is 1000 femtoseconds: how many picoseconds does it gain in a day?',
+   f:v=>mul(v,24,1000),ex:V=>V+' · 24/1000',ln:'gain in a day',
+   w:[['a day is taken as 12 hours','multiply by 12/1000 for the gain in a day',v=>mul(v,12,1000)],
+      ['femtoseconds are not changed to picoseconds','multiply by 24 for picoseconds a day',v=>mul(v,24)]]}],
+ ['dayone',{after:['read','below'],u:'attoseconds a second',out:'picoseconds a day',st:'5j',cite:CU.cite,
+   ask:()=>'a picosecond is a million attoseconds: how many picoseconds does it gain in a day?',
+   f:v=>mul(v,86400,1000000),ex:V=>V+' · 86400/1000000',ln:'gain in a day',
+   w:[['an hour is used, not a day','multiply by 3600/1000000 for the gain in a day',v=>mul(v,3600,1000000)],
+      ['a day is taken as 24 · 60 seconds','multiply by 1440/1000000 for the gain in a day',v=>mul(v,1440,1000000)]]}]]);
+Z(L,Tm(X({u:'picoseconds a day',out:'picoseconds',k:()=>pick([10,30,100]),ask:(S,p)=>'after '+p.K+' days, how many picoseconds ahead is the higher clock?',ln:()=>'picoseconds ahead'},own('29·now',HC))));
+}
+/* ---------- 29·then.action: a cart's action; sand loaded on, its energy, the height it can roll up, the ramp ---------- */
+{ const L='29·then.action', AF='the action-to-force technique';
+const mass=S=>2*num(cq(S.c[2]));
+map(L,[
+ ['sand',{u:'joule seconds',out:'joule seconds',st:'5c',cite:SC.cite,mk:S=>({d:pick([2,4,6]),m:mass(S)}),
+   ask:(S,p)=>'Terry adds '+p.d+' kg of sand to the '+p.m+' kg cart at the same speed: what is its action now?',
+   f:(v,S,p)=>mul(v,p.m+p.d,p.m),ex:(V,S,p)=>V+' · '+(p.m+p.d)+'/'+p.m,ln:'action with the sand',
+   w:[['the sand’s mass is added to the action',(S,p)=>'add the '+p.d+' kg of sand to the action',(v,S,p)=>add(v,p.d)],
+      ['only the sand’s share is kept',(S,p)=>'scale the action by '+p.d+'/'+p.m+', the sand against the cart',(v,S,p)=>mul(v,p.d,p.m)]]}],
+ ['energy',{after:['read','sand'],u:'joule seconds',out:'joules',st:'29·then',cite:AF,
+   ask:()=>'the run lasts 1 second and action is energy times time: what is its energy of motion?',
+   f:v=>v,ex:V=>V+'/1',ln:'energy of motion',
+   w:[['the energy is taken as twice the action, as if E were mv²','double the action for the energy',v=>mul(v,2)],
+      ['the action is halved, as if the ½ of mv²/2 belonged here too','halve the action for the energy',v=>mul(v,1,2)]]}],
+ ['climb',{after:['energy'],u:'joules',out:'metres',st:'5j',cite:MQ.cite,mk:(S,ch)=>({m:mass(S)+((has(ch,L,'sand')||{p:{d:0}}).p.d)}),
+   ask:(S,p)=>'the '+p.m+' kg cart rolls up a ramp till it stops, g = 10: how many metres does it rise?',
+   f:(v,S,p)=>dv(v,10*p.m),ex:(V,S,p)=>V+'/(10 · '+p.m+')',ln:'rise up the ramp',
+   w:[['g is left out','divide the energy by the mass alone',(v,S,p)=>dv(v,p.m)],
+      ['the mass is left out','divide the energy by g alone',v=>dv(v,10)]]}],
+ ['climbone',{after:['read','sand'],u:'joule seconds',out:'metres',st:'29·then',cite:AF,mk:(S,ch)=>({m:mass(S)+((has(ch,L,'sand')||{p:{d:0}}).p.d)}),
+   ask:(S,p)=>'its energy rolls the '+p.m+' kg cart up a ramp till it stops, g = 10: how many metres up?',
+   f:(v,S,p)=>dv(v,10*p.m),ex:(V,S,p)=>V+'/(1 · 10 · '+p.m+')',ln:'rise up the ramp',
+   w:[['the action is doubled first, as if E were mv²',(S,p)=>'double the action, then divide by 10 · '+p.m,(v,S,p)=>dv(v,5*p.m)],
+      ['g is left out',(S,p)=>'divide the action by the '+p.m+' kg alone',(v,S,p)=>dv(v,p.m)]]}]]);
+Z(L,Tm(X({u:'metres',out:'metres along the ramp',k:()=>pick([2,4,5]),ask:(S,p)=>'the ramp rises 1 metre for every '+p.K+' along it: how far along does the cart roll?',ln:()=>'distance along the ramp'},MQ)));
+}
+/* ---------- 30·then.jiggle: a pollen grain spreads; more time, all three directions, the spreading constant D, the time to spread ---------- */
+{ const L='30·then.jiggle', JG='the jiggle technique';
+const tt=ch=>{ const t=x0(ch); if(t===undefined) return null; const a=has(ch,L,'later'); return t+(a?a.p.d:0); };
+map(L,[
+ ['later',{u:'square micrometres',out:'square micrometres',st:'30·then',cite:JG,mk:(S,ch)=>{ const t=x0(ch); return t===undefined?null:{t,d:pick([2,5,10])}; },
+   ask:(S,p)=>'it jiggles '+p.d+' seconds more: what is the average squared distance along the line then?',
+   f:(v,S,p)=>add(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'squared distance later',
+   w:[['the seconds are added as square micrometres',(S,p)=>'add the '+p.d+' seconds to the squared distance',(v,S,p)=>add(v,p.d)],
+      ['the squared distance is taken to grow as the square of the time',(S,p)=>'scale by the squared times, ('+(p.t+p.d)+'/'+p.t+')²',(v,S,p)=>mul(v,(p.t+p.d)*(p.t+p.d),p.t*p.t)]]}],
+ ['space',{after:['read','later'],u:'square micrometres',out:'square micrometres in space',st:'30·then',cite:JG,
+   ask:()=>'the grain jiggles along all three directions alike: what is its squared distance in space?',
+   f:v=>mul(v,3),ex:V=>'3 · '+V,ln:'squared distance in space',
+   w:[['only two directions are added','add two such lines for the squared distance in space',v=>mul(v,2)],
+      ['the three lines are shared, as if divided','share the squared distance over the three directions',v=>dv(v,3)]]}],
+ ['D3',{after:['space'],u:'square micrometres in space',out:'square micrometres a second, D',st:'30·then',cite:JG,mk:(S,ch)=>{ const t=tt(ch); return t?{t}:null; },
+   ask:(S,p)=>'in space the squared distance is 6Dt: what is the spreading constant D?',
+   f:(v,S,p)=>dv(v,6*p.t),ex:(V,S,p)=>V+'/(6 · '+p.t+')',ln:'the spreading constant',
+   w:[['the one-line form 2Dt is used in space',(S,p)=>'take the squared distance in space as 2Dt and find D',(v,S,p)=>dv(v,2*p.t)],
+      ['the time is left out',(S,p)=>'divide the squared distance by 6 for D',v=>dv(v,6)]]}],
+ ['D1',{after:['read','later'],u:'square micrometres',out:'square micrometres a second, D',st:'30·then',cite:JG,mk:(S,ch)=>{ const t=tt(ch); return t?{t}:null; },
+   ask:(S,p)=>'along one line the squared distance is 2Dt: what is the spreading constant D?',
+   f:(v,S,p)=>dv(v,2*p.t),ex:(V,S,p)=>V+'/(2 · '+p.t+')',ln:'the spreading constant',
+   w:[['the 2 is left out',(S,p)=>'divide the squared distance by the '+p.t+' seconds for D',(v,S,p)=>dv(v,p.t)],
+      ['the time multiplies instead of divides',(S,p)=>'divide by 2 and multiply by '+p.t+' for D',(v,S,p)=>mul(v,p.t,2)]]}]]);
+Z(L,In(X({u:'square micrometres a second, D',out:'seconds',k:()=>pick([40,80,120]),ask:(S,p)=>'how many seconds until its squared distance along a line, 2Dt, reaches '+p.K+'?',ln:()=>'seconds to spread',
+  ex:(S,p,q)=>p.K+'/(2 · '+par(q.v)+')',f:(S,p,q)=>dv(p.k,qm(R(2),q.v)),w:['the division is turned over','D and the distance are multiplied'],xs:(S,p,q)=>[{why:'the 2 of 2Dt is left out',v:dv(p.k,q.v)}]},own('30·then',JG))));
+}
+/* ---------- 30·bio.odds: odds of a helpful gene form; a wetter year, the growth factor, two generations, the odds after them ---------- */
+{ const L='30·bio.odds', OG='the odds-growth technique';
+map(L,[
+ ['wet',{u:'to one',out:'to one',st:'30·bio',cite:OG,mk:(S,ch)=>{ const s=x0(ch); return s===undefined?null:{s,o:num(cq(S.c[0]))}; },
+   ask:(S,p)=>'a wetter year doubles the edge to '+(2*p.s)+' hundredths: what are the odds after one generation?',
+   f:(v,S,p)=>qm(cq(S.c[0]),R(100+2*p.s,100)),ex:(V,S,p)=>p.o+' · (1 + '+(2*p.s)+'/100)',ln:'odds with the doubled edge',
+   w:[['the odds are doubled with the edge','double the odds for the doubled edge',v=>mul(v,2)],
+      ['the edge is added straight onto the odds',(S,p)=>'add the '+(2*p.s)+' hundredths to the odds',(v,S,p)=>add(v,2*p.s,100)]]}],
+ ['factor',{after:['read','wet'],u:'to one',out:'times a generation',st:'30·bio',cite:OG,
+   ask:(S)=>'the odds started at '+qs(cq(S.c[0]))+' to one: by what factor did one generation multiply them?',
+   f:(v,S)=>qm(v,qi(cq(S.c[0]))),ex:(V,S)=>V+'/'+qs(cq(S.c[0])),ln:'the factor a generation',
+   w:[['the start is taken away instead of divided',(S)=>'take the starting '+qs(cq(S.c[0]))+' from the odds',(v,S)=>qa(v,qn(cq(S.c[0])))],
+      ['the factor is turned over',(S)=>'divide the starting '+qs(cq(S.c[0]))+' by the odds',(v,S)=>qm(cq(S.c[0]),qi(v))]]}],
+ ['two',{after:['factor'],u:'times a generation',out:'times over two generations',st:'30·bio',cite:OG,
+   ask:()=>'the edge holds a second generation: by what factor do two generations multiply the odds?',
+   f:v=>qm(v,v),ex:V=>V+'²',ln:'the factor over two generations',
+   w:[['the factor is doubled instead of squared','double the factor for two generations',v=>mul(v,2)],
+      ['the factor is not squared','keep the one-generation factor for two',v=>v]]}],
+ ['twoone',{after:['read','wet'],u:'to one',out:'times over two generations',st:'30·bio',cite:OG,
+   ask:(S)=>'from the starting '+qs(cq(S.c[0]))+' to one, by what factor do two such generations multiply the odds?',
+   f:(v,S)=>{ const g=qm(v,qi(cq(S.c[0]))); return qm(g,g); },ex:(V,S)=>'('+V+'/'+qs(cq(S.c[0]))+')²',ln:'the factor over two generations',
+   w:[['the one-generation factor is doubled, not squared',(S)=>'divide by '+qs(cq(S.c[0]))+' and double it',(v,S)=>mul(qm(v,qi(cq(S.c[0]))),2)],
+      ['the odds are squared without dividing out the start','square the odds for the factor',v=>qm(v,v)]]}]]);
+Z(L,Tm(X({u:'times over two generations',out:'to one',k:S=>cq(S.c[0]),ask:(S,p)=>'from the starting '+p.K+' to one, what are the odds after those two generations?',ln:()=>'odds after two generations'},own('30·bio',OG))));
+}
+
+/* ---------- 31·econ.worth: a worth that bends down; a gift, a coin flip, what the flip costs, what he would pay ---------- */
+{ const L='31·econ.worth', BD='the bends-down technique';
+const u=(S,W)=>{ const a=cq(S.c[1]); return qa(qm(a,R(W)),R(-W*W)); };
+map(L,[
+ ['gift',{u:'points',out:'points',st:'31·econ',cite:BD,mk:(S,ch)=>{ const W=x0(ch); return W===undefined?null:{W,d:pick([1,2])}; },
+   ask:(S,p)=>'a gift of '+p.d+' hundred dollars comes: what is his worth now, in points?',
+   f:(v,S,p)=>u(S,p.W+p.d),ex:(V,S,p)=>'u('+(p.W+p.d)+')',ln:'worth after the gift',
+   w:[['the gift is added as points',(S,p)=>'add the '+p.d+' hundred dollars to the points',(v,S,p)=>add(v,p.d)],
+      ['the gift’s own worth is counted alone',(S,p)=>'find the worth of the '+p.d+' hundred dollars alone, u('+p.d+')',(v,S,p)=>u(S,p.d)]]}],
+ ['flip',{after:['read','gift'],u:'points',out:'points on average',st:'31·econ',cite:BD,mk:()=>({d:pick([1,2,3])}),
+   ask:(S,p)=>'a fair coin flip would move him '+p.d+' hundred dollars up or down: what is his average worth?',
+   f:(v,S,p)=>sub(v,p.d*p.d),ex:(V,S,p)=>V+' − '+p.d+'²',ln:'average worth with the flip',
+   w:[['the flip is taken to keep the worth, as if the curve did not bend','the gains and losses even out: keep the worth',v=>v],
+      ['the swing is taken away, not its square',(S,p)=>'take the '+p.d+' hundred dollar swing off the worth',(v,S,p)=>sub(v,p.d)]]}],
+ ['cost',{after:['flip'],u:'points on average',out:'points lost to the flip',st:'31·econ',cite:BD,mk:(S,ch)=>{ const c=ch[ch.length-1]; return c&&c.in?{b:c.in.v}:null; },
+   ask:(S,p)=>'against the '+qs(p.b)+' points with no flip, how many points does the flip cost him?',
+   f:(v,S,p)=>qa(p.b,qn(v)),ex:(V,S,p)=>qs(p.b)+' − '+V,ln:'points lost',
+   w:[['the two worths are added','add the average worth to the worth with no flip',(v,S,p)=>qa(p.b,v)],
+      ['only one side of the flip is counted, halving the loss','halve the gap between the two worths',(v,S,p)=>mul(qa(p.b,qn(v)),1,2)]]}],
+ ['costone',{after:['read','gift'],u:'points',out:'points lost to the flip',st:'31·econ',cite:BD,mk:()=>({d:pick([1,2,3])}),
+   ask:(S,p)=>'a fair flip of '+p.d+' hundred dollars either way: how many points of worth does it cost him?',
+   f:(v,S,p)=>R(p.d*p.d),ex:(V,S,p)=>'u = '+V+' falls to '+V+' − '+p.d+'², a loss of '+p.d+'²',ln:'points lost',
+   w:[['the swing is not squared',(S,p)=>'the flip costs the '+p.d+' swing itself',(v,S,p)=>R(p.d)],
+      ['both sides are counted, doubling the loss',(S,p)=>'count both sides of the flip: 2 · '+p.d+'²',(v,S,p)=>R(2*p.d*p.d)]]}]]);
+Z(L,Tm(X({u:'points lost to the flip',out:'dollars',k:()=>pick([5,10,20]),ask:(S,p)=>'near there a point is worth '+p.K+' dollars to him: what would he pay to skip the flip?',ln:()=>'what he would pay'},own('31·econ',BD))));
+}
+/* ---------- 31·stat.miss: the miss left in a fit; one more column, the noise, a fresh reading, a batch of them ---------- */
+{ const L='31·stat.miss', LD='the lost-directions technique';
+const cols=(S,ch)=>S.p+(has(ch,L,'col')?1:0);
+map(L,[
+ ['col',{u:'square units',out:'square units',st:'31·stat',cite:LD,mk:(S,ch)=>x0(ch)===undefined?null:{s:S.s},
+   ask:(S,p)=>'Claire fits one more column to the same readings: what does the miss average now?',
+   f:(v,S,p)=>sub(v,p.s),ex:(V,S,p)=>V+' − '+p.s,ln:'miss with one more column',
+   w:[['the column is taken to add a noise’s worth of miss','add one noise’s worth for the new column',(v,S,p)=>add(v,p.s)],
+      ['one square unit is taken off, not one noise’s worth','take 1 square unit off for the new column',v=>sub(v,1)]]}],
+ ['noise',{after:['read','col'],u:'square units',out:'square units of noise',st:'31·stat',cite:LD,mk:(S,ch)=>{ const n=x0(ch); if(n===undefined) return null; const k=cols(S,ch); return n>k?{n,k}:null; },
+   ask:(S,p)=>'share the miss over the '+p.n+' − '+p.k+' directions the fit leaves: what is the noise estimate?',
+   f:(v,S,p)=>dv(v,p.n-p.k),ex:(V,S,p)=>V+'/('+p.n+' − '+p.k+')',ln:'the noise estimate',
+   w:[['the miss is shared over all the readings',(S,p)=>'share the miss over all '+p.n+' readings',(v,S,p)=>dv(v,p.n)],
+      ['the columns are added to the readings instead of taken away',(S,p)=>'share the miss over '+p.n+' + '+p.k,(v,S,p)=>dv(v,p.n+p.k)]]}],
+ ['fresh',{after:['noise'],u:'square units of noise',out:'square units a fresh reading',st:'31·stat',cite:'the held-out technique',mk:(S,ch)=>{ const n=x0(ch); return n===undefined?null:{n,k:cols(S,ch)}; },
+   ask:(S,p)=>'a fresh reading misses the fit by the noise times 1 + '+p.k+'/'+p.n+': what is its squared miss?',
+   f:(v,S,p)=>mul(v,p.n+p.k,p.n),ex:(V,S,p)=>V+' · (1 + '+p.k+'/'+p.n+')',ln:'squared miss of a fresh reading',
+   w:[['the fit’s own share is left out','take the noise alone for a fresh reading',v=>v],
+      ['the fit’s share is taken off instead of added',(S,p)=>'multiply the noise by 1 − '+p.k+'/'+p.n,(v,S,p)=>mul(v,p.n-p.k,p.n)]]}],
+ ['freshone',{after:['read','col'],u:'square units',out:'square units a fresh reading',st:'31·stat',cite:'the held-out technique',mk:(S,ch)=>{ const n=x0(ch); if(n===undefined) return null; const k=cols(S,ch); return n>k?{n,k}:null; },
+   ask:(S,p)=>'a fresh reading misses by the noise, miss/('+p.n+' − '+p.k+'), times 1 + '+p.k+'/'+p.n+': how much?',
+   f:(v,S,p)=>mul(dv(v,p.n-p.k),p.n+p.k,p.n),ex:(V,S,p)=>V+'/('+p.n+' − '+p.k+') · (1 + '+p.k+'/'+p.n+')',ln:'squared miss of a fresh reading',
+   w:[['the miss is shared over all the readings',(S,p)=>'share the miss over all '+p.n+' readings, times 1 + '+p.k+'/'+p.n,(v,S,p)=>mul(dv(v,p.n),p.n+p.k,p.n)],
+      ['the fit’s share is left out',(S,p)=>'take the miss over '+p.n+' − '+p.k+' alone',(v,S,p)=>dv(v,p.n-p.k)]]}]]);
+Z(L,Tm(X({u:'square units a fresh reading',out:'square units',k:()=>pick([5,10,20]),ask:(S,p)=>p.K+' fresh readings come in: what squared miss do they come to in all?',ln:()=>'squared miss of the fresh readings'},MQ)));
+}
+/* ---------- 33·bio.oxygen: oxygen in tissue; richer blood, a cube of tissue, how long it lasts, the blood's refresh ---------- */
+{ const L='33·bio.oxygen', UC='the uptake-curve technique';
+map(L,[
+ ['rich',{u:'units a litre',out:'units a litre',st:'33·bio',cite:UC,mk:()=>({d:pick([5,10,15])}),
+   ask:(S,p)=>'the blood at both faces rises by '+p.d+' units a litre: what is the oxygen there now?',
+   f:(v,S,p)=>add(v,p.d),ex:(V,S,p)=>V+' + '+p.d,ln:'oxygen with richer blood',
+   w:[['the rise is taken away','take the rise off the oxygen',(v,S,p)=>sub(v,p.d)],
+      ['the rise is counted once for each face','add the rise once for each face',(v,S,p)=>add(v,2*p.d)]]}],
+ ['cube',{after:['read','rich'],u:'units a litre',out:'units of oxygen',st:'5j',cite:MQ.cite,mk:()=>({m:pick([10,20,50])}),
+   ask:(S,p)=>'a cube of tissue there holds '+p.m+' millilitres: how many units of oxygen are in it?',
+   f:(v,S,p)=>mul(v,p.m,1000),ex:(V,S,p)=>V+' · '+p.m+'/1000',ln:'oxygen in the cube',
+   w:[['the millilitres are taken as litres',(S,p)=>'multiply by the '+p.m+' millilitres',(v,S,p)=>mul(v,p.m)],
+      ['the volume divides instead of multiplies',(S,p)=>'divide by '+p.m+'/1000 litres',(v,S,p)=>mul(v,1000,p.m)]]}],
+ ['last',{after:['cube'],u:'units of oxygen',out:'seconds',st:'5j',cite:MQ.cite,mk:(S,ch)=>{ const c=has(ch,L,'cube'); return c?{r:R(c.p.m,pick([100,200,500]))}:null; },
+   ask:(S,p)=>'the cube’s cells use '+qs(p.r)+' units a second: how many seconds would it last with no blood?',
+   f:(v,S,p)=>qm(v,qi(p.r)),ex:(V,S,p)=>V+'/'+par(p.r),ln:'seconds it lasts',
+   w:[['the use multiplies instead of divides','multiply the oxygen by the use a second',(v,S,p)=>qm(v,p.r)],
+      ['the use is taken away instead of divided into it','take the use a second off the oxygen',(v,S,p)=>qa(v,qn(p.r))]]}],
+ ['lastone',{after:['read','rich'],u:'units a litre',out:'seconds',st:'33·bio',cite:UC,mk:()=>({r:pick([2,5,10])}),
+   ask:(S,p)=>'the tissue uses '+p.r+' units a litre a second: how many seconds would that last with no blood?',
+   f:(v,S,p)=>dv(v,p.r),ex:(V,S,p)=>V+'/'+p.r,ln:'seconds it lasts',
+   w:[['the use multiplies instead of divides',(S,p)=>'multiply the oxygen by '+p.r,(v,S,p)=>mul(v,p.r)],
+      ['the division is turned over',(S,p)=>'divide '+p.r+' by the oxygen',(v,S,p)=>dv(R(p.r),v)]]}]]);
+Z(L,O(X({u:'seconds',k:'below',ask:(S,p)=>'fresh blood reaches it every '+p.K+' seconds: how many seconds of oxygen are to spare?',ln:()=>'seconds to spare'},own('33·bio',UC))));
+}
+/* ---------- 33·eng.sag: a shelf's sag; a heavier load, the sag per metre out, the allowance, a stiffer board ---------- */
+{ const L='33·eng.sag', BB='the bent-beam technique';
+map(L,[
+ ['load',{u:'millimetres',out:'millimetres',st:'33·eng',cite:BB,mk:()=>({r:pick([Q(3,2),Q(2),Q(5,4)])}),
+   ask:(S,p)=>'the books on it are made '+qs(p.r)+' times as heavy: what is the sag there now?',
+   f:(v,S,p)=>qm(v,p.r),ex:(V,S,p)=>V+' · '+qs(p.r),ln:'sag under the heavier load',
+   w:[['the sag is taken to grow as the square of the load',(S,p)=>'scale the sag by ('+qs(p.r)+')²',(v,S,p)=>qm(v,qm(p.r,p.r))],
+      ['only the extra sag is kept',(S,p)=>'scale the sag by '+qs(p.r)+' − 1',(v,S,p)=>qm(v,qa(p.r,R(-1)))]]}],
+ ['permetre',{after:['read','load'],u:'millimetres',out:'millimetres a metre out',st:'5j',cite:MQ.cite,mk:(S,ch)=>{ const x=x0(ch); return x?{x}:null; },
+   ask:(S,p)=>'builders compare sag with reach: how many millimetres of sag per metre out, at '+p.x+' m?',
+   f:(v,S,p)=>dv(v,p.x),ex:(V,S,p)=>V+'/'+p.x,ln:'sag per metre out',
+   w:[['the reach multiplies instead of divides',(S,p)=>'multiply the sag by the '+p.x+' metres',(v,S,p)=>mul(v,p.x)],
+      ['the reach is taken away instead of divided into it',(S,p)=>'take the '+p.x+' metres off the sag',(v,S,p)=>sub(v,p.x)]]}],
+ ['allow',{after:['permetre'],u:'millimetres a metre out',out:'times the allowance',st:'33·eng',cite:BB,
+   ask:()=>'the code allows 1/250 of the reach, 4 millimetres a metre: how many times that is it?',
+   f:v=>dv(v,4),ex:V=>V+'/4',ln:'against the allowance',
+   w:[['the allowance multiplies','multiply by the 4 millimetres a metre',v=>mul(v,4)],
+      ['the allowance is taken away','take the 4 millimetres a metre off',v=>sub(v,4)]]}],
+ ['allowone',{after:['read','load'],u:'millimetres',out:'times the allowance',st:'33·eng',cite:BB,mk:(S,ch)=>{ const x=x0(ch); return x?{x}:null; },
+   ask:(S,p)=>'the code allows 1/250 of the reach, here '+p.x+' metres: how many times that is the sag?',
+   f:(v,S,p)=>dv(v,4*p.x),ex:(V,S,p)=>V+'/('+p.x+' · 1000/250)',ln:'against the allowance',
+   w:[['the reach is left in metres, not millimetres',(S,p)=>'divide the sag by '+p.x+'/250',(v,S,p)=>mul(v,250,p.x)],
+      ['the whole shelf’s length is used for the reach',(S,p)=>'divide the sag by the shelf’s full length over 250',(v,S,p)=>dv(v,4*cq(S.c[2]).p/(3*-cq(S.c[3]).p))]]}]]);
+Z(L,Pr(X({u:'times the allowance',k:()=>pick([2,4]),ask:(S,p)=>'a board '+p.K+' times as stiff sags '+p.K+' times less: how many times the allowance then?',ln:()=>'with the stiffer board'},own('33·eng',BB))));
+}
+/* ---------- 35·phys.box: a particle in a box; one level up, the fall to the bottom, electronvolts, escape ---------- */
+{ const L='35·phys.box', BX='the box technique';
+const lev=ch=>{ const n=x0(ch); return n===undefined?null:n+(has(ch,L,'up')?1:0); };
+map(L,[
+ ['up',{u:'units of energy',out:'units of energy',st:'35·phys',cite:BX,mk:(S,ch)=>{ const n=x0(ch); return n===undefined?null:{n,k:S.k}; },
+   ask:(S,p)=>'the particle takes in light and climbs one level, to n = '+(p.n+1)+': what is its energy?',
+   f:(v,S,p)=>R(p.k*(p.n+1)*(p.n+1)),ex:(V,S,p)=>p.k+' · '+(p.n+1)+'²',ln:'energy one level up',
+   w:[[(S,p)=>'one level is taken to add just '+p.k+' units',(S,p)=>'add '+p.k+' units for the one level',(v,S,p)=>add(v,p.k)],
+      ['the energy is taken to double with one level','double the energy for one level up',v=>mul(v,2)]]}],
+ ['fall',{after:['read','up'],u:'units of energy',out:'units of energy in the light',st:'35·phys',cite:BX,mk:(S,ch)=>{ const n=lev(ch); return n&&n>1?{n,k:S.k}:null; },
+   ask:()=>'it falls to the lowest level, n = 1: how much energy does the light it gives off carry?',
+   f:(v,S,p)=>sub(v,p.k),ex:(V,S,p)=>V+' − '+p.k+' · 1²',ln:'energy of the light',
+   w:[['the lowest level is taken as 0','take the lowest level as 0 energy',v=>v],
+      ['only the fall to the level below is counted',(S,p)=>'take the fall to n = '+(p.n-1)+' only',(v,S,p)=>sub(v,p.k*(p.n-1)*(p.n-1))]]}],
+ ['ev',{after:['fall'],u:'units of energy in the light',out:'electronvolts',st:'5j',cite:CU.cite,mk:()=>({f:pick([Q(1,10),Q(1,5),Q(1,2)])}),
+   ask:(S,p)=>'one unit of energy is '+qs(p.f)+' electronvolt: how many electronvolts does the light carry?',
+   f:(v,S,p)=>qm(v,p.f),ex:(V,S,p)=>V+' · '+qs(p.f),ln:'the light in electronvolts',
+   w:[['the change is turned over',(S,p)=>'divide the units by '+qs(p.f),(v,S,p)=>qm(v,qi(p.f))],
+      ['the electronvolt size is added',(S,p)=>'add '+qs(p.f)+' to the units',(v,S,p)=>qa(v,p.f)]]}],
+ ['evone',{after:['read','up'],u:'units of energy',out:'electronvolts',st:'35·phys',cite:BX,mk:(S,ch)=>{ const n=lev(ch); return n&&n>1?{k:S.k,f:pick([Q(1,10),Q(1,5),Q(1,2)])}:null; },
+   ask:(S,p)=>'it falls to n = 1, and a unit is '+qs(p.f)+' electronvolt: how many electronvolts in the light?',
+   f:(v,S,p)=>qm(sub(v,p.k),p.f),ex:(V,S,p)=>'('+V+' − '+p.k+') · '+qs(p.f),ln:'the light in electronvolts',
+   w:[['the lowest level is taken as 0',(S,p)=>'multiply the energy by '+qs(p.f),(v,S,p)=>qm(v,p.f)],
+      ['the change is turned over',(S,p)=>'take off the lowest level and divide by '+qs(p.f),(v,S,p)=>qm(sub(v,p.k),qi(p.f))]]}]]);
+Z(L,In(X({u:'electronvolts',out:'nanometres',k:1240,ask:()=>'with hc = 1240 electronvolt nanometres, what is the wavelength of that light?',ln:()=>'wavelength of the light'},own('35·phys','the ladder technique'))));
+}
+/* ---------- 36·phys.lamps: counts from lamps that add; a third lamp, a pixel's share, the shutter, a full pixel ---------- */
+{ const L='36·phys.lamps', CA='the counts-add technique';
+map(L,[
+ ['third',{u:'thousand counts a second',out:'thousand counts a second',st:'36·phys',cite:CA,mk:()=>({k:pick([5,10,20])}),
+   ask:(S,p)=>'a third lamp, on its own, gives '+p.k+' thousand counts a second: what do all three give?',
+   f:(v,S,p)=>add(v,p.k),ex:(V,S,p)=>V+' + '+p.k,ln:'the three lamps',
+   w:[['the third lamp’s counts multiply',(S,p)=>'multiply the counts by the third lamp’s '+p.k,(v,S,p)=>mul(v,p.k)],
+      ['the third lamp is taken to replace the other two',(S,p)=>'take the third lamp’s '+p.k+' thousand alone',(v,S,p)=>R(p.k)]]}],
+ ['pixel',{after:['read','third'],u:'thousand counts a second',out:'counts a second on a pixel',st:'5j',cite:MQ.cite,mk:()=>({n:pick([2,4,5])}),
+   ask:(S,p)=>'the light falls evenly on '+p.n+' thousand pixels: how many counts a second does each get?',
+   f:(v,S,p)=>dv(v,p.n),ex:(V,S,p)=>V+' · 1000/('+p.n+' · 1000)',ln:'counts a second on a pixel',
+   w:[['the pixels multiply instead of divide',(S,p)=>'multiply the counts by the '+p.n+' thousand pixels',(v,S,p)=>mul(v,p.n)],
+      ['the thousands are dropped from the pixels only',(S,p)=>'divide the counts by '+p.n+' pixels, keeping thousands',(v,S,p)=>mul(v,1000,p.n)]]}],
+ ['shutter',{after:['pixel'],u:'counts a second on a pixel',out:'counts on a pixel',st:'5j',cite:MQ.cite,mk:()=>({s:pick([2,4,10])}),
+   ask:(S,p)=>'the camera’s shutter is open 1/'+p.s+' second: how many counts land on a pixel?',
+   f:(v,S,p)=>dv(v,p.s),ex:(V,S,p)=>V+'/'+p.s,ln:'counts on a pixel',
+   w:[['the shutter time multiplies as a whole number',(S,p)=>'multiply the counts by the '+p.s,(v,S,p)=>mul(v,p.s)],
+      ['the shutter time is taken away',(S,p)=>'take 1/'+p.s+' off the counts a second',(v,S,p)=>sub(v,1,p.s)]]}],
+ ['shutterone',{after:['read','third'],u:'thousand counts a second',out:'counts on a pixel',st:'5j',cite:MQ.cite,mk:()=>({n:pick([2,4,5]),s:pick([2,4,10])}),
+   ask:(S,p)=>'over '+p.n+' thousand pixels, with the shutter open 1/'+p.s+' second, how many counts land on each?',
+   f:(v,S,p)=>dv(v,p.n*p.s),ex:(V,S,p)=>V+'/('+p.n+' · '+p.s+')',ln:'counts on a pixel',
+   w:[['the shutter time multiplies',(S,p)=>'divide by the '+p.n+' thousand pixels and multiply by '+p.s,(v,S,p)=>mul(v,p.s,p.n)],
+      ['the shutter is left out',(S,p)=>'divide the counts by the '+p.n+' thousand pixels alone',(v,S,p)=>dv(v,p.n)]]}]]);
+Z(L,G(X({u:'counts on a pixel',k:'above',ask:(S,p)=>'a pixel fills up at '+p.K+' counts: how many more could it take?',ln:()=>'room left on the pixel'},LESS)));
+}
+/* ---------- 37·phys.warm: sound in warm gas; warmer still, a fork's wavelength, the tube that sounds, its length ---------- */
+{ const L='37·phys.warm', WA='the warm-air technique';
+map(L,[
+ ['warmer',{u:'metres a second',out:'metres a second',st:'37·phys',cite:WA,mk:()=>({d:pick([10,20,40])}),
+   ask:(S,p)=>'the gas is warmed '+p.d+' degrees more: how fast does sound run in it now?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'speed when warmer',
+   w:[['the degrees are added as metres a second',(S,p)=>'add the '+p.d+' degrees to the speed',(v,S,p)=>add(v,p.d)],
+      ['only the change in speed is given',(S,p)=>'find the change for '+p.d+' degrees alone',(v,S,p)=>qm(cq(S.c[1]),R(p.d))]]}],
+ ['wave',{after:['read','warmer'],u:'metres a second',out:'metres',st:'37·phys',cite:WA,mk:()=>({f:pick([200,400,500,800])}),
+   ask:(S,p)=>'a fork of '+p.f+' hertz sounds in the gas: what is the wavelength, in metres?',
+   f:(v,S,p)=>dv(v,p.f),ex:(V,S,p)=>V+'/'+p.f,ln:'wavelength',
+   w:[['the division is turned over',(S,p)=>'divide the '+p.f+' hertz by the speed',(v,S,p)=>dv(R(p.f),v)],
+      ['half a wavelength is taken for the whole',(S,p)=>'divide the speed by twice the '+p.f+' hertz',(v,S,p)=>dv(v,2*p.f)]]}],
+ ['tube',{after:['wave'],u:'metres',out:'metres of tube',st:'37·phys',cite:'the bottle technique',
+   ask:()=>'a tube shut at one end rings when it is a quarter wavelength long: how long is it?',
+   f:v=>dv(v,4),ex:V=>V+'/4',ln:'length of the tube',
+   w:[['the half wavelength of an open tube is used','take half the wavelength for the tube',v=>dv(v,2)],
+      ['the whole wavelength is taken','take the whole wavelength for the tube',v=>v]]}],
+ ['tubeone',{after:['read','warmer'],u:'metres a second',out:'metres of tube',st:'37·phys',cite:'the bottle technique',mk:()=>({f:pick([200,400,500,800])}),
+   ask:(S,p)=>'a tube shut at one end rings at '+p.f+' hertz when a quarter wavelength long: how long is it?',
+   f:(v,S,p)=>dv(v,4*p.f),ex:(V,S,p)=>V+'/(4 · '+p.f+')',ln:'length of the tube',
+   w:[['the open tube’s half wavelength is used',(S,p)=>'divide the speed by 2 · '+p.f,(v,S,p)=>dv(v,2*p.f)],
+      ['the whole wavelength is taken',(S,p)=>'divide the speed by '+p.f,(v,S,p)=>dv(v,p.f)]]}]]);
+Z(L,Tm(X({u:'metres of tube',out:'centimetres',k:100,ask:()=>'how many centimetres long is that tube?',ln:()=>'the tube in centimetres',w:['the metres are divided by 100','100 is added']},CU)));
+}
+/* ---------- 39·eng.heat: filling a store on a chip; a higher supply, the half lost as heat, the clock, a block of stores ---------- */
+{ const L='39·eng.heat', SH='the switch-heat technique';
+map(L,[
+ ['volt',{u:'picojoules',out:'picojoules',st:'39·eng',cite:SH,mk:(S,ch)=>{ const V=x0(ch); return V===undefined?null:{V,a:num(cq(S.c[2]))}; },
+   ask:(S,p)=>'the supply is raised to '+(p.V+1)+' volts: what does filling the store cost now?',
+   f:(v,S,p)=>R(p.a*(p.V+1)*(p.V+1)),ex:(V,S,p)=>p.a+' · '+(p.V+1)+'²',ln:'cost at the higher supply',
+   w:[['the cost is taken to grow as the voltage, not its square',(S,p)=>'scale the cost by '+(p.V+1)+'/'+p.V,(v,S,p)=>p.V?mul(v,p.V+1,p.V):null],
+      ['one volt more is taken to add one step of the law',(S,p)=>'add '+p.a+' picojoules for the volt',(v,S,p)=>add(v,p.a)]]}],
+ ['heat',{after:['read','volt'],u:'picojoules',out:'picojoules of heat',st:'39·eng',cite:SH,
+   ask:()=>'half of what the supply pays is kept in the store, half lost as heat: how much heat?',
+   f:v=>dv(v,2),ex:V=>V+'/2',ln:'heat a fill',
+   w:[['all of it is taken as heat','take all the cost as heat',v=>v],
+      ['a quarter is taken, as if the half were halved again','take a quarter of the cost as heat',v=>dv(v,4)]]}],
+ ['clock',{after:['heat'],u:'picojoules of heat',out:'microwatts',st:'5j',cite:MQ.cite,mk:()=>({f:pick([10,20,50,100])}),
+   ask:(S,p)=>'it is filled and emptied '+p.f+' million times a second: how many microwatts of heat?',
+   f:(v,S,p)=>mul(v,p.f),ex:(V,S,p)=>V+' · '+p.f,ln:'heat power',
+   w:[['the fills a second divide',(S,p)=>'divide the heat by the '+p.f+' million fills',(v,S,p)=>dv(v,p.f)],
+      ['millions are taken as thousands',(S,p)=>'multiply by '+p.f+' thousand fills a second',(v,S,p)=>mul(v,p.f,1000)]]}],
+ ['clockone',{after:['read','volt'],u:'picojoules',out:'microwatts',st:'39·eng',cite:SH,mk:()=>({f:pick([10,20,50,100])}),
+   ask:(S,p)=>'half of each fill is lost as heat, '+p.f+' million fills a second: how many microwatts?',
+   f:(v,S,p)=>mul(v,p.f,2),ex:(V,S,p)=>V+'/2 · '+p.f,ln:'heat power',
+   w:[['all of each fill is taken as heat',(S,p)=>'multiply the cost by the '+p.f+' million fills',(v,S,p)=>mul(v,p.f)],
+      ['the fills a second divide',(S,p)=>'halve the cost and divide by '+p.f,(v,S,p)=>dv(v,2*p.f)]]}]]);
+Z(L,Cu(X({u:'microwatts',out:'milliwatts',k:()=>pick([100,200,500]),f:(S,p,q)=>qm(q.v,qm(p.k,R(1,1000))),ex:(S,p,q)=>par(q.v)+' · '+p.K+'/1000',
+  ask:(S,p)=>'a block of '+p.K+' such stores switches alike: how many milliwatts of heat?',ln:()=>'heat of the block',
+  xs:(S,p,q)=>[{why:'microwatts are not changed to milliwatts',v:qm(q.v,p.k)},{why:'the stores divide instead of multiply',v:qm(q.v,qi(p.k))}]},own('39·eng',SH))));
+}
+/* ---------- 40·comp.cost: the cost of a missing check; more bad requests, a fixer's hours, working days, days booked ---------- */
+{ const L='40·comp.cost';
+map(L,[
+ ['more',{u:'dollars',out:'dollars',st:'5j',cite:MQ.cite,mk:()=>({d:pick([4,6,10])}),
+   ask:(S,p)=>p.d+' more bad requests come in before the fix: what does fixing it cost now?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'cost after more requests',
+   w:[['the requests are added as dollars',(S,p)=>'add the '+p.d+' requests to the cost',(v,S,p)=>add(v,p.d)],
+      ['the fixed part is paid again',(S,p)=>'add '+qs(cq(S.c[0]))+' + '+qs(cq(S.c[1]))+' · '+p.d+' to the cost',(v,S,p)=>qa(v,qa(cq(S.c[0]),qm(cq(S.c[1]),R(p.d))))]]}],
+ ['hours',{after:['read','more'],u:'dollars',out:'hours of work',st:'5j',cite:MQ.cite,mk:()=>({w:pick([25,50,100])}),
+   ask:(S,p)=>'the fixer is paid '+p.w+' dollars an hour: how many hours of work is that?',
+   f:(v,S,p)=>dv(v,p.w),ex:(V,S,p)=>V+'/'+p.w,ln:'hours of work',
+   w:[['the pay multiplies instead of divides',(S,p)=>'multiply the cost by '+p.w+' dollars an hour',(v,S,p)=>mul(v,p.w)],
+      ['the pay is taken away instead of divided into it',(S,p)=>'take '+p.w+' dollars off the cost',(v,S,p)=>sub(v,p.w)]]}],
+ ['days',{after:['hours'],u:'hours of work',out:'working days',st:'5j',cite:CU.cite,
+   ask:()=>'a working day is 8 hours: how many working days is that?',
+   f:v=>dv(v,8),ex:V=>V+'/8',ln:'working days',
+   w:[['a day of 24 hours is used','divide by 24 hours a day',v=>dv(v,24)],
+      ['the 8 hours multiply','multiply by 8 hours a day',v=>mul(v,8)]]}],
+ ['daysone',{after:['read','more'],u:'dollars',out:'working days',st:'5j',cite:MQ.cite,mk:()=>({w:pick([25,50,100])}),
+   ask:(S,p)=>'at '+p.w+' dollars an hour and 8 hours a day, how many working days does the cost pay for?',
+   f:(v,S,p)=>dv(v,8*p.w),ex:(V,S,p)=>V+'/('+p.w+' · 8)',ln:'working days',
+   w:[['a day of 24 hours is used',(S,p)=>'divide the cost by '+p.w+' · 24',(v,S,p)=>dv(v,24*p.w)],
+      ['the hours a day multiply',(S,p)=>'divide by '+p.w+' and multiply by 8',(v,S,p)=>mul(v,8,p.w)]]}]]);
+Z(L,Cu(X({u:'working days',out:'days to book',k:1,f:(S,p,q)=>R(Math.ceil(num(q.v))),ex:(S,p,q)=>par(q.v)+', rounded up',ask:()=>'the fixer is booked by whole days: how many days must be booked?',ln:()=>'days booked',
+  xs:(S,p,q)=>[{why:'the days are rounded down, leaving work undone',v:R(Math.floor(num(q.v)))},{why:'the hours are counted in 24 hour days',v:R(Math.ceil(num(q.v)/3))}]},DR)));
+}
+
+/* ---------- 40·now.lines: lines a checker reads; a longer proof, microseconds a line, milliseconds, a time budget ---------- */
+{ const L='40·now.lines';
+map(L,[
+ ['moves',{u:'lines',out:'lines',st:'5j',cite:MQ.cite,mk:()=>({d:pick([2,5,10])}),
+   ask:(S,p)=>'Jean’s proof gains '+p.d+' more moves: how many lines does the checker read now?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'lines for the longer proof',
+   w:[['the moves are added as lines',(S,p)=>'add the '+p.d+' moves to the lines',(v,S,p)=>add(v,p.d)],
+      ['the core’s fixed lines are read again',(S,p)=>'add L('+p.d+') to the lines',(v,S,p)=>qa(v,qa(cq(S.c[0]),qm(cq(S.c[1]),R(p.d))))]]}],
+ ['micro',{after:['read','moves'],u:'lines',out:'microseconds',st:'5j',cite:MQ.cite,mk:()=>({t:pick([2,5,20])}),
+   ask:(S,p)=>'each line of the core takes '+p.t+' microseconds to read: how many microseconds in all?',
+   f:(v,S,p)=>mul(v,p.t),ex:(V,S,p)=>V+' · '+p.t,ln:'microseconds',
+   w:[['the time a line divides',(S,p)=>'divide the lines by '+p.t,(v,S,p)=>dv(v,p.t)],
+      ['the time a line is added',(S,p)=>'add '+p.t+' to the lines',(v,S,p)=>add(v,p.t)]]}],
+ ['milli',{after:['micro'],u:'microseconds',out:'milliseconds',st:'5j',cite:CU.cite,
+   ask:()=>'how many milliseconds is that, 1000 microseconds to the millisecond?',
+   f:v=>dv(v,1000),ex:V=>V+'/1000',ln:'milliseconds',
+   w:[['the change is turned over','multiply by 1000 for milliseconds',v=>mul(v,1000)],
+      ['a millisecond is taken as 100 microseconds','divide by 100 for milliseconds',v=>dv(v,100)]]}],
+ ['millione',{after:['read','moves'],u:'lines',out:'milliseconds',st:'5j',cite:MQ.cite,mk:()=>({t:pick([2,5,20])}),
+   ask:(S,p)=>'each line takes '+p.t+' microseconds: how many milliseconds does the check take?',
+   f:(v,S,p)=>mul(v,p.t,1000),ex:(V,S,p)=>V+' · '+p.t+'/1000',ln:'milliseconds',
+   w:[['microseconds are not changed to milliseconds',(S,p)=>'multiply the lines by '+p.t,(v,S,p)=>mul(v,p.t)],
+      ['the time a line divides',(S,p)=>'divide the lines by '+p.t+' and by 1000',(v,S,p)=>dv(v,p.t*1000)]]}]]);
+Z(L,G(X({u:'milliseconds',k:'above',ask:(S,p)=>'the check must finish within '+p.K+' milliseconds: how many are to spare?',ln:()=>'milliseconds to spare'},LESS)));
+}
+/* ---------- 45·now.messages: one round of agreement; one more machine, the rounds, the bytes, the link ---------- */
+{ const L='45·now.messages';
+map(L,[
+ ['join',{u:'messages',out:'messages',st:'5j',cite:MQ.cite,mk:(S,ch)=>{ const n=x0(ch); return n===undefined?null:{n}; },
+   ask:(S,p)=>'one more machine joins, making '+(p.n+1)+': how many messages in a round now?',
+   f:(v,S,p)=>R((p.n+1)*p.n),ex:(V,S,p)=>(p.n+1)+'² − '+(p.n+1),ln:'messages with one more machine',
+   w:[['the new machine sends to the others but none send back',(S,p)=>'add the '+p.n+' messages the new machine sends',(v,S,p)=>add(v,p.n)],
+      ['one message is added for the new machine','add 1 message for the new machine',v=>add(v,1)]]}],
+ ['rounds',{after:['read','join'],u:'messages',out:'messages for agreement',st:'5j',cite:MQ.cite,mk:()=>({r:pick([2,3,4])}),
+   ask:(S,p)=>'agreement takes '+p.r+' such rounds: how many messages does it take?',
+   f:(v,S,p)=>mul(v,p.r),ex:(V,S,p)=>V+' · '+p.r,ln:'messages for agreement',
+   w:[['the rounds are added',(S,p)=>'add the '+p.r+' rounds to the messages',(v,S,p)=>add(v,p.r)],
+      ['the messages are shared over the rounds',(S,p)=>'divide the messages by the '+p.r+' rounds',(v,S,p)=>dv(v,p.r)]]}],
+ ['kb',{after:['rounds'],u:'messages for agreement',out:'kilobytes',st:'5j',cite:CU.cite,mk:()=>({b:pick([200,250,500])}),
+   ask:(S,p)=>'each message is '+p.b+' bytes: how many kilobytes of 1000 bytes do they make?',
+   f:(v,S,p)=>mul(v,p.b,1000),ex:(V,S,p)=>V+' · '+p.b+'/1000',ln:'kilobytes',
+   w:[['bytes are not changed to kilobytes',(S,p)=>'multiply the messages by '+p.b,(v,S,p)=>mul(v,p.b)],
+      ['a kilobyte is taken as 100 bytes',(S,p)=>'multiply by '+p.b+'/100',(v,S,p)=>mul(v,p.b,100)]]}],
+ ['kbone',{after:['read','join'],u:'messages',out:'kilobytes',st:'5j',cite:CU.cite,mk:()=>({b:pick([200,250,500])}),
+   ask:(S,p)=>'one round settles it and each message is '+p.b+' bytes: how many kilobytes?',
+   f:(v,S,p)=>mul(v,p.b,1000),ex:(V,S,p)=>V+' · '+p.b+'/1000',ln:'kilobytes',
+   w:[['bytes are not changed to kilobytes',(S,p)=>'multiply the messages by '+p.b,(v,S,p)=>mul(v,p.b)],
+      ['the bytes divide instead of multiply',(S,p)=>'divide the messages by '+p.b+'/1000',(v,S,p)=>mul(v,1000,p.b)]]}]]);
+Z(L,Pr(X({u:'kilobytes',out:'seconds',k:()=>pick([2,4,5]),ask:(S,p)=>'the link carries '+p.K+' kilobytes a second: how many seconds does the agreement take?',ln:()=>'seconds on the link'},MQ)));
+}
+/* ---------- 45·econ.reward: a miner's gain; more hours, the pool's cut, dollars, the power bill ---------- */
+{ const L='45·econ.reward';
+map(L,[
+ ['later',{u:'tokens',out:'tokens',st:'5j',cite:MQ.cite,mk:()=>({d:pick([2,5,10])}),
+   ask:(S,p)=>'Mike lets it run '+p.d+' hours more: what is his gain then?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'gain after more hours',
+   w:[['the hours are added as tokens',(S,p)=>'add the '+p.d+' hours to the gain',(v,S,p)=>add(v,p.d)],
+      ['the starting cost is paid again',(S,p)=>'add G('+p.d+') to the gain',(v,S,p)=>qa(v,qa(cq(S.c[0]),qm(cq(S.c[1]),R(p.d))))]]}],
+ ['pool',{after:['read','later'],u:'tokens',out:'tokens kept',st:'5c',cite:SC.cite,mk:()=>({f:pick([Q(1,10),Q(1,5),Q(1,4)])}),
+   ask:(S,p)=>'his pool keeps '+qs(p.f)+' of every gain: how many tokens does Mike keep?',
+   f:(v,S,p)=>qm(v,qa(R(1),qn(p.f))),ex:(V,S,p)=>V+' · (1 − '+qs(p.f)+')',ln:'tokens kept',
+   w:[['the pool’s cut is given instead of what is left',(S,p)=>'take '+qs(p.f)+' of the gain',(v,S,p)=>qm(v,p.f)],
+      ['the cut is taken off as a whole token',(S,p)=>'take '+qs(p.f)+' of a token off the gain',(v,S,p)=>qa(v,qn(p.f))]]}],
+ ['dollars',{after:['pool'],u:'tokens kept',out:'dollars',st:'5j',cite:MQ.cite,mk:()=>({c:pick([2,5,10])}),
+   ask:(S,p)=>'a token sells for '+p.c+' dollars: how many dollars is that?',
+   f:(v,S,p)=>mul(v,p.c),ex:(V,S,p)=>V+' · '+p.c,ln:'dollars',
+   w:[['the price divides',(S,p)=>'divide the tokens by '+p.c,(v,S,p)=>dv(v,p.c)],
+      ['the price is added',(S,p)=>'add '+p.c+' to the tokens',(v,S,p)=>add(v,p.c)]]}],
+ ['dollarsone',{after:['read','later'],u:'tokens',out:'dollars',st:'5j',cite:MQ.cite,mk:()=>({f:pick([Q(1,10),Q(1,5)]),c:pick([2,5,10])}),
+   ask:(S,p)=>'the pool keeps '+qs(p.f)+' and a token sells for '+p.c+' dollars: how many dollars for Mike?',
+   f:(v,S,p)=>qm(v,qm(qa(R(1),qn(p.f)),R(p.c))),ex:(V,S,p)=>V+' · (1 − '+qs(p.f)+') · '+p.c,ln:'dollars',
+   w:[['the pool’s cut is given instead of what is left',(S,p)=>'take '+qs(p.f)+' of the gain and multiply by '+p.c,(v,S,p)=>qm(v,qm(p.f,R(p.c)))],
+      ['the pool’s cut is left out',(S,p)=>'multiply the gain by '+p.c,(v,S,p)=>mul(v,p.c)]]}]]);
+Z(L,O(X({u:'dollars',k:'below',ask:(S,p)=>'the power bill for the run is '+p.K+' dollars: what does Mike clear?',ln:()=>'cleared after power'},LESS)));
+}
+/* ---------- 45·comp.addresses: addresses handed out; a year on, one office's share, blocks of 256, the router ---------- */
+{ const L='45·comp.addresses';
+const U3=(S,t)=>qa(qa(cq(S.c[0]),qm(cq(S.c[1]),R(t))),qm(cq(S.c[2]),R(t*t)));
+map(L,[
+ ['year',{u:'thousand addresses',out:'thousand addresses',st:'5j',cite:MQ.cite,mk:(S,ch)=>{ const t=x0(ch); return t===undefined?null:{t}; },
+   ask:(S,p)=>'a year on, at t = '+(p.t+1)+': how many thousand addresses are handed out?',
+   f:(v,S,p)=>U3(S,p.t+1),ex:(V,S,p)=>'U('+(p.t+1)+')',ln:'a year on',
+   w:[['the year adds only the starting slope',(S,p)=>'add the '+qs(cq(S.c[1]))+' a year of the law’s first power',(v,S,p)=>qa(v,cq(S.c[1]))],
+      ['the year is added as a thousand addresses','add 1 thousand for the year',v=>add(v,1)]]}],
+ ['office',{after:['read','year'],u:'thousand addresses',out:'addresses an office',st:'5j',cite:MQ.cite,mk:()=>({k:pick([4,5,8,10])}),
+   ask:(S,p)=>'they are shared evenly by '+p.k+' offices: how many addresses does each office have?',
+   f:(v,S,p)=>mul(v,1000,p.k),ex:(V,S,p)=>V+' · 1000/'+p.k,ln:'addresses an office',
+   w:[['the thousands are dropped',(S,p)=>'divide the thousands by '+p.k,(v,S,p)=>dv(v,p.k)],
+      ['the offices multiply',(S,p)=>'multiply by 1000 and by the '+p.k+' offices',(v,S,p)=>mul(v,1000*p.k)]]}],
+ ['blocks',{after:['office'],u:'addresses an office',out:'blocks of 256',st:'4j',cite:DR.cite,
+   ask:()=>'each office takes whole blocks of 256 addresses: how many blocks does an office need?',
+   f:v=>R(Math.ceil(num(v)/256)),ex:V=>V+'/256, rounded up',ln:'blocks an office',
+   w:[['the count is rounded down, leaving addresses out','divide by 256 and round down',v=>R(Math.floor(num(v)/256))],
+      ['the blocks are left as a fraction','divide by 256 and keep the fraction',v=>dv(v,256)]]}],
+ ['blocksone',{after:['read','year'],u:'thousand addresses',out:'blocks of 256',st:'4j',cite:DR.cite,
+   ask:()=>'the network hands them out in whole blocks of 256: how many blocks does it need?',
+   f:v=>R(Math.ceil(num(v)*1000/256)),ex:V=>V+' · 1000/256, rounded up',ln:'blocks',
+   w:[['the count is rounded down','multiply by 1000, divide by 256 and round down',v=>R(Math.floor(num(v)*1000/256))],
+      ['the thousands are dropped','divide by 256 and round up',v=>R(Math.ceil(num(v)/256))]]}]]);
+Z(L,G(X({u:'blocks of 256',k:'above',ask:(S,p)=>'the router holds '+p.K+' blocks: how many more blocks could it hold?',ln:()=>'blocks to spare'},LESS)));
+}
+/* ---------- 45·eng.flood: copies a switch floods; more senders learnt, kilobytes, the uplink, the round's budget ---------- */
+{ const L='45·eng.flood', LS='the learning-switch technique';
+map(L,[
+ ['learn',{u:'copies',out:'copies',st:'45·eng',cite:LS,mk:(S,ch)=>{ const n=x0(ch); return n===undefined?null:{n,d:pick([2,5,10]),k:S.ports-1}; },
+   ask:(S,p)=>'the switch learns '+p.d+' more senders: how many extra copies does a round flood now?',
+   f:(v,S,p)=>sub(v,p.k*p.d),ex:(V,S,p)=>V+' − '+p.k+' · '+p.d,ln:'copies after learning more',
+   w:[['each sender learnt saves one copy, not one a port',(S,p)=>'take '+p.d+' copies off',(v,S,p)=>sub(v,p.d)],
+      ['all the ports are counted, the sender’s own as well',(S,p)=>'take '+S.ports+' · '+p.d+' copies off',(v,S,p)=>sub(v,S.ports*p.d)]]}],
+ ['kb',{after:['read','learn'],u:'copies',out:'kilobytes',st:'5j',cite:CU.cite,mk:()=>({b:pick([100,200,500])}),
+   ask:(S,p)=>'each copy is '+p.b+' bytes: how many kilobytes of 1000 bytes do they make?',
+   f:(v,S,p)=>mul(v,p.b,1000),ex:(V,S,p)=>V+' · '+p.b+'/1000',ln:'kilobytes flooded',
+   w:[['bytes are not changed to kilobytes',(S,p)=>'multiply the copies by '+p.b,(v,S,p)=>mul(v,p.b)],
+      ['a kilobyte is taken as 100 bytes',(S,p)=>'multiply by '+p.b+'/100',(v,S,p)=>mul(v,p.b,100)]]}],
+ ['ms',{after:['kb'],u:'kilobytes',out:'milliseconds',st:'5j',cite:MQ.cite,mk:()=>({r:pick([5,10,20])}),
+   ask:(S,p)=>'the uplink carries '+p.r+' kilobytes a millisecond: how many milliseconds does the flood take?',
+   f:(v,S,p)=>dv(v,p.r),ex:(V,S,p)=>V+'/'+p.r,ln:'milliseconds of flood',
+   w:[['the uplink’s rate multiplies',(S,p)=>'multiply the kilobytes by '+p.r,(v,S,p)=>mul(v,p.r)],
+      ['the rate is taken away',(S,p)=>'take '+p.r+' off the kilobytes',(v,S,p)=>sub(v,p.r)]]}],
+ ['msone',{after:['read','learn'],u:'copies',out:'milliseconds',st:'5j',cite:MQ.cite,mk:()=>({t:pick([2,4,10])}),
+   ask:(S,p)=>'each copy takes '+p.t+' microseconds on the wire: how many milliseconds does the flood take?',
+   f:(v,S,p)=>mul(v,p.t,1000),ex:(V,S,p)=>V+' · '+p.t+'/1000',ln:'milliseconds of flood',
+   w:[['microseconds are not changed to milliseconds',(S,p)=>'multiply the copies by '+p.t,(v,S,p)=>mul(v,p.t)],
+      ['the time a copy divides',(S,p)=>'divide the copies by '+p.t+' and by 1000',(v,S,p)=>dv(v,1000*p.t)]]}]]);
+Z(L,G(X({u:'milliseconds',k:'above',ask:(S,p)=>'a round must finish within '+p.K+' milliseconds: how many are to spare?',ln:()=>'milliseconds to spare'},LESS)));
+}
+/* ---------- 47·eng.loading: a chain of parts; a second stage, the current in the load, its power, the rating ---------- */
+{ const L='47·eng.loading', LT='the loading technique';
+map(L,[
+ ['stage',{u:'volts out',out:'volts out',st:'47·eng',cite:'the chain-grid technique',
+   ask:(S)=>'a second chain, alike, follows the first: what voltage comes out of both?',
+   f:(v,S)=>qm(v,cq(S.c[1])),ex:(V,S)=>V+' · '+qs(cq(S.c[1])),ln:'out of two chains',
+   w:[['the second chain’s share is added',(S)=>'add '+qs(cq(S.c[1]))+' of it to the output',(v,S)=>qa(v,qm(v,cq(S.c[1])))],
+      ['the second chain divides by its share',(S)=>'divide the output by '+qs(cq(S.c[1])),(v,S)=>qm(v,qi(cq(S.c[1])))]]}],
+ ['amps',{after:['read','stage'],u:'volts out',out:'milliamps',st:'5j',cite:MQ.cite,mk:()=>({r:pick([100,200,500])}),
+   ask:(S,p)=>'the output drives a '+p.r+' ohm load: how many milliamps flow through it?',
+   f:(v,S,p)=>mul(v,1000,p.r),ex:(V,S,p)=>V+' · 1000/'+p.r,ln:'current in the load',
+   w:[['the resistance multiplies',(S,p)=>'multiply the volts by '+p.r+' ohms',(v,S,p)=>mul(v,p.r)],
+      ['amps are given as milliamps',(S,p)=>'divide the volts by '+p.r+' ohms',(v,S,p)=>dv(v,p.r)]]}],
+ ['watts',{after:['amps'],u:'milliamps',out:'milliwatts',st:'47·eng',cite:LT,mk:(S,ch)=>{ const a=has(ch,L,'amps'); return a?{r:a.p.r}:null; },
+   ask:(S,p)=>'with I²R, what power does the '+p.r+' ohm load take, in milliwatts?',
+   f:(v,S,p)=>mul(qm(v,v),p.r,1000),ex:(V,S,p)=>V+'² · '+p.r+'/1000',ln:'power in the load',
+   w:[['the current is not squared',(S,p)=>'multiply the milliamps by '+p.r+'/1000',(v,S,p)=>mul(v,p.r,1000)],
+      ['milliamps are taken as amps',(S,p)=>'square the milliamps and multiply by '+p.r,(v,S,p)=>mul(qm(v,v),p.r)]]}],
+ ['wattsone',{after:['read','stage'],u:'volts out',out:'milliwatts',st:'47·eng',cite:LT,mk:()=>({r:pick([100,200,500])}),
+   ask:(S,p)=>'the output drives a '+p.r+' ohm load: with V²/R, what power does it take, in milliwatts?',
+   f:(v,S,p)=>mul(qm(v,v),1000,p.r),ex:(V,S,p)=>V+'² · 1000/'+p.r,ln:'power in the load',
+   w:[['the voltage is not squared',(S,p)=>'multiply the volts by 1000/'+p.r,(v,S,p)=>mul(v,1000,p.r)],
+      ['the resistance multiplies',(S,p)=>'square the volts and multiply by '+p.r,(v,S,p)=>mul(qm(v,v),p.r)]]}]]);
+Z(L,G(X({u:'milliwatts',k:'above',ask:(S,p)=>'the load is rated for '+p.K+' milliwatts: how many are to spare?',ln:()=>'milliwatts to spare'},LESS)));
+}
+/* ---------- 47·phys.axes: a reading that keeps its form; a longer arrow, the part on Zoe's first axis, her second, the limit ---------- */
+{ const L='47·phys.axes', NA='the new-axes technique';
+map(L,[
+ ['longer',{u:'square metres',out:'square metres',st:'47·phys',cite:'the same-on-every-axes technique',mk:(S,ch)=>{ const x=x0(ch); return x===undefined?null:{x,d:pick([1,2])}; },
+   ask:(S,p)=>'Evita makes the arrow '+p.d+' metre'+(p.d>1?'s':'')+' longer: what does she read now?',
+   f:(v,S,p)=>qm(cq(S.c[2]),R((p.x+p.d)*(p.x+p.d))),ex:(V,S,p)=>qs(cq(S.c[2]))+' · '+(p.x+p.d)+'²',ln:'reading of the longer arrow',
+   w:[['only the added piece is squared',(S,p)=>'add '+qs(cq(S.c[2]))+' · '+p.d+'² to the reading',(v,S,p)=>qa(v,qm(cq(S.c[2]),R(p.d*p.d)))],
+      ['the metres are added as square metres',(S,p)=>'add the '+p.d+' metres to the reading',(v,S,p)=>add(v,p.d)]]}],
+ ['first',{after:['read','longer'],u:'square metres',out:'square metres on Zoe’s first axis',st:'47·phys',cite:NA,mk:()=>pick([{a:3,b:4},{a:4,b:3}]),
+   ask:(S,p)=>'on Zoe’s axes the arrow runs '+p.a+'/5 along her first axis: what part of the reading is that?',
+   f:(v,S,p)=>mul(v,p.a*p.a,25),ex:(V,S,p)=>V+' · ('+p.a+'/5)²',ln:'part on the first axis',
+   w:[['the share is not squared',(S,p)=>'take '+p.a+'/5 of the reading',(v,S,p)=>mul(v,p.a,5)],
+      ['the other axis’s share is taken',(S,p)=>'take ('+p.b+'/5)² of the reading',(v,S,p)=>mul(v,p.b*p.b,25)]]}],
+ ['second',{after:['first'],u:'square metres on Zoe’s first axis',out:'square metres on Zoe’s second axis',st:'47·phys',cite:'the same-on-every-axes technique',mk:(S,ch)=>{ const c=ch[ch.length-1]; return c&&c.in?{t:c.in.v}:null; },
+   ask:(S,p)=>'the whole reading, '+qs(p.t)+', is the same on her axes: what part is on her second axis?',
+   f:(v,S,p)=>qa(p.t,qn(v)),ex:(V,S,p)=>qs(p.t)+' − '+V,ln:'part on the second axis',
+   w:[['the parts are added','add the first part to the whole reading',(v,S,p)=>qa(p.t,v)],
+      ['the second part is taken equal to the first','take the second part equal to the first',v=>v]]}],
+ ['secondone',{after:['read','longer'],u:'square metres',out:'square metres on Zoe’s second axis',st:'47·phys',cite:NA,mk:()=>pick([{a:3,b:4},{a:4,b:3}]),
+   ask:(S,p)=>'the arrow runs '+p.a+'/5 along Zoe’s first axis: what part of the reading is on her second?',
+   f:(v,S,p)=>mul(v,p.b*p.b,25),ex:(V,S,p)=>V+' · (1 − ('+p.a+'/5)²)',ln:'part on the second axis',
+   w:[['the first axis’s part is given',(S,p)=>'take ('+p.a+'/5)² of the reading',(v,S,p)=>mul(v,p.a*p.a,25)],
+      ['the shares are not squared',(S,p)=>'take 1 − '+p.a+'/5 of the reading',(v,S,p)=>mul(v,5-p.a,5)]]}]]);
+Z(L,G(X({u:'square metres on Zoe’s second axis',k:'above',ask:(S,p)=>'that part must stay under '+p.K+' square metres: how much room is left?',ln:()=>'room left'},LESS)));
+}
+/* ---------- 28·now.mistakes: a learner's mistake bound; longer examples, weight changes, microseconds, the budget ---------- */
+{ const L='28·now.mistakes', MB='the mistake-bound technique';
+map(L,[
+ ['longer',{u:'mistakes',out:'mistakes',st:'28·now',cite:MB,mk:(S,ch)=>{ const r=x0(ch); return r===undefined?null:{r,a:num(cq(S.c[2]))}; },
+   ask:(S,p)=>'examples may now be as long as '+(p.r+1)+': at most how many mistakes?',
+   f:(v,S,p)=>R(p.a*(p.r+1)*(p.r+1)),ex:(V,S,p)=>p.a+' · '+(p.r+1)+'²',ln:'bound for longer examples',
+   w:[['the bound is taken to grow as the length, not its square',(S,p)=>'scale the bound by '+(p.r+1)+'/'+p.r,(v,S,p)=>mul(v,p.r+1,p.r)],
+      ['one more unit of length adds one step of the law',(S,p)=>'add '+p.a+' mistakes for the extra length',(v,S,p)=>add(v,p.a)]]}],
+ ['weights',{after:['read','longer'],u:'mistakes',out:'weight changes',st:'28·now',cite:MB,mk:()=>({w:pick([4,5,10])}),
+   ask:(S,p)=>'each mistake changes the unit’s '+p.w+' weights: at most how many weight changes?',
+   f:(v,S,p)=>mul(v,p.w),ex:(V,S,p)=>V+' · '+p.w,ln:'weight changes',
+   w:[['the weights are shared among the mistakes',(S,p)=>'divide the mistakes by the '+p.w+' weights',(v,S,p)=>dv(v,p.w)],
+      ['the weights are added to the mistakes',(S,p)=>'add the '+p.w+' weights to the mistakes',(v,S,p)=>add(v,p.w)]]}],
+ ['micro',{after:['weights'],u:'weight changes',out:'microseconds',st:'5j',cite:MQ.cite,mk:()=>({t:pick([2,3,5])}),
+   ask:(S,p)=>'a weight change takes '+p.t+' microseconds: at most how many microseconds of changes?',
+   f:(v,S,p)=>mul(v,p.t),ex:(V,S,p)=>V+' · '+p.t,ln:'microseconds of changes',
+   w:[['the time a change divides',(S,p)=>'divide the changes by '+p.t,(v,S,p)=>dv(v,p.t)],
+      ['the time is added',(S,p)=>'add '+p.t+' to the changes',(v,S,p)=>add(v,p.t)]]}],
+ ['microone',{after:['read','longer'],u:'mistakes',out:'microseconds',st:'28·now',cite:MB,mk:()=>({w:pick([4,5,10]),t:pick([2,3,5])}),
+   ask:(S,p)=>'each mistake changes '+p.w+' weights at '+p.t+' microseconds each: at most how many microseconds?',
+   f:(v,S,p)=>mul(v,p.w*p.t),ex:(V,S,p)=>V+' · '+p.w+' · '+p.t,ln:'microseconds of changes',
+   w:[['the weights are left out',(S,p)=>'multiply the mistakes by '+p.t+' microseconds',(v,S,p)=>mul(v,p.t)],
+      ['the weights and time are added',(S,p)=>'multiply the mistakes by '+p.w+' + '+p.t,(v,S,p)=>mul(v,p.w+p.t)]]}]]);
+Z(L,G(X({u:'microseconds',k:'above',ask:(S,p)=>'training may spend '+p.K+' microseconds on changes: how many are to spare at worst?',ln:()=>'microseconds to spare'},LESS)));
+}
+/* ---------- 29·phys.probe: a probe's slow clock; a longer flight, the probe's own years, a crew member's age, retirement ---------- */
+{ const L='29·phys.probe', LC='the light-clock technique';
+map(L,[
+ ['further',{u:'years',out:'years',st:'29·phys',cite:LC,mk:()=>({d:pick([4,8,12])}),
+   ask:(S,p)=>'the probe flies '+p.d+' light-years further: what does the ground clock read then?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'ground clock after the longer flight',
+   w:[['the light-years are added as years',(S,p)=>'add the '+p.d+' light-years as years',(v,S,p)=>add(v,p.d)],
+      ['only the extra flight is timed',(S,p)=>'time the '+p.d+' light-years alone',(v,S,p)=>qm(cq(S.c[1]),R(p.d))]]}],
+ ['own',{after:['read','further'],u:'years',out:'years on the probe',st:'29·phys',cite:LC,
+   ask:(S)=>'the probe’s clock runs slow by γ = '+S.v[2]+'/'+S.v[3]+': how many years pass on the probe?',
+   f:(v,S)=>mul(v,S.v[3],S.v[2]),ex:(V,S)=>V+' · '+S.v[3]+'/'+S.v[2],ln:'years on the probe',
+   w:[['the clock is taken to run fast, times γ',(S)=>'multiply the ground years by '+S.v[2]+'/'+S.v[3],(v,S)=>mul(v,S.v[2],S.v[3])],
+      ['the speed is used in place of 1/γ',(S)=>'multiply the ground years by the speed, '+S.v[0]+'/'+S.v[1],(v,S)=>mul(v,S.v[0],S.v[1])]]}],
+ ['age',{after:['own'],u:'years on the probe',out:'years of age',st:'29·phys',cite:LC,mk:()=>({a:pick([25,30,35])}),
+   ask:(S,p)=>'Claire left on the probe aged '+p.a+': how old is she by the probe’s clock then?',
+   f:(v,S,p)=>add(v,p.a),ex:(V,S,p)=>p.a+' + '+V,ln:'Claire’s age',
+   w:[['the trip is taken off her age',(S,p)=>'take the trip’s years off '+p.a,(v,S,p)=>qa(R(p.a),qn(v))],
+      ['the trip alone is given','give the years of the trip alone',v=>v]]}],
+ ['ageone',{after:['read','further'],u:'years',out:'years of age',st:'29·phys',cite:LC,mk:()=>({a:pick([25,30,35])}),
+   ask:(S,p)=>'Claire left on the probe aged '+p.a+'; her clock runs slow by γ = '+S.v[2]+'/'+S.v[3]+': how old is she then?',
+   f:(v,S,p)=>add(mul(v,S.v[3],S.v[2]),p.a),ex:(V,S,p)=>p.a+' + '+V+' · '+S.v[3]+'/'+S.v[2],ln:'Claire’s age',
+   w:[['the ground years are used, as if her clock kept pace',(S,p)=>'add the ground years to '+p.a,(v,S,p)=>add(v,p.a)],
+      ['her clock is taken to run fast',(S,p)=>'add the ground years times '+S.v[2]+'/'+S.v[3]+' to '+p.a,(v,S,p)=>add(mul(v,S.v[2],S.v[3]),p.a)]]}]]);
+Z(L,G(X({u:'years of age',out:'years',k:'above',ask:(S,p)=>'the crew retire at '+p.K+': how many years of work are left to her?',ln:()=>'years of work left'},LESS)));
+}
+
+/* ---------- 30·stat.split: squares between and within; more plots, the part within, the spread a plot within, the treatment's ratio ---------- */
+{ const L='30·stat.split', SS='the squares-split technique';
+map(L,[
+ ['plots',{u:'square units',out:'square units',st:'30·stat',cite:SS,mk:()=>({d:pick([2,4])}),
+   ask:(S,p)=>'Evita adds '+p.d+' more plots: what is the total squared spread now?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'total with more plots',
+   w:[['the plots are added as square units',(S,p)=>'add the '+p.d+' plots to the total',(v,S,p)=>add(v,p.d)],
+      ['the fixed part is counted again',(S,p)=>'add Q('+p.d+') to the total',(v,S,p)=>qa(v,qa(cq(S.c[0]),qm(cq(S.c[1]),R(p.d))))]]}],
+ ['within',{after:['read','plots'],u:'square units',out:'square units within',st:'30·stat',cite:SS,mk:(S,ch,q)=>{ const b=Math.floor(num(q.v)*pick([1,2])/4); return b>0?{b}:null; },
+   ask:(S,p)=>'the part between the treatments is '+p.b+': what part lies within them?',
+   f:(v,S,p)=>sub(v,p.b),ex:(V,S,p)=>V+' − '+p.b,ln:'part within',
+   w:[['the subtraction is turned round',(S,p)=>'take the total from the '+p.b+' between',(v,S,p)=>qa(R(p.b),qn(v))],
+      ['the two parts are added',(S,p)=>'add the '+p.b+' between to the total',(v,S,p)=>add(v,p.b)]]}],
+ ['perplot',{after:['within'],u:'square units within',out:'square units a plot within',st:'30·stat',cite:SS,mk:(S,ch)=>{ const n=x0(ch); if(n===undefined) return null; const a=has(ch,L,'plots'); const N=n+(a?a.p.d:0), g=pick([2,3]); return N>g?{N,g}:null; },
+   ask:(S,p)=>'there are '+p.g+' treatments: share the part within over '+p.N+' − '+p.g+' plots: how much a plot?',
+   f:(v,S,p)=>dv(v,p.N-p.g),ex:(V,S,p)=>V+'/('+p.N+' − '+p.g+')',ln:'spread a plot within',
+   w:[['the part within is shared over all the plots',(S,p)=>'share the part within over all '+p.N+' plots',(v,S,p)=>dv(v,p.N)],
+      ['one is taken off the plots, not the treatments',(S,p)=>'share the part within over '+p.N+' − 1',(v,S,p)=>dv(v,p.N-1)]]}],
+ ['perplotone',{after:['read','plots'],u:'square units',out:'square units a plot within',st:'30·stat',cite:SS,mk:(S,ch,q)=>{ const n=x0(ch); if(n===undefined) return null; const a=has(ch,L,'plots'); const N=n+(a?a.p.d:0), g=pick([2,3]), b=Math.floor(num(q.v)/2); return N>g&&b>0?{N,g,b}:null; },
+   ask:(S,p)=>p.b+' lies between '+p.g+' treatments: share the rest over '+p.N+' − '+p.g+' plots: how much a plot?',
+   f:(v,S,p)=>dv(sub(v,p.b),p.N-p.g),ex:(V,S,p)=>'('+V+' − '+p.b+')/('+p.N+' − '+p.g+')',ln:'spread a plot within',
+   w:[['the part between is left in',(S,p)=>'share the whole total over '+p.N+' − '+p.g,(v,S,p)=>dv(v,p.N-p.g)],
+      ['the rest is shared over all the plots',(S,p)=>'take off '+p.b+' and share over all '+p.N+' plots',(v,S,p)=>dv(sub(v,p.b),p.N)]]}]]);
+Z(L,In(X({u:'square units a plot within',out:'times the spread within',k:()=>pick([12,24,36]),ask:(S,p)=>'the part between, shared over its treatments, is '+p.K+' square units: how many times the spread within?',
+  ln:()=>'the treatments against the spread within'},own('30·stat','the two-sample technique'))));
+}
+/* ---------- 30·phys.parts: energy shared among square parts; parts frozen out, zeptojoules, a mole, a flask ---------- */
+{ const L='30·phys.parts', ES='the energy-share technique';
+map(L,[
+ ['freeze',{u:'units of kT',out:'units of kT',st:'30·phys',cite:'the frozen-shake technique',mk:(S,ch)=>{ const f=x0(ch); return f&&f>=7?{f}:null; },
+   ask:()=>'in the cold, its 2 shaking parts freeze out: how many units of kT does it hold now?',
+   f:v=>sub(v,1),ex:V=>V+' − 2/2',ln:'energy with the shaking frozen',
+   w:[['each frozen part is taken to carry a whole kT','take 2 units of kT off',v=>sub(v,2)],
+      ['the energy is halved','halve the energy for the frozen parts',v=>dv(v,2)]]}],
+ ['zj',{after:['read','freeze'],u:'units of kT',out:'zeptojoules',st:'5j',cite:CU.cite,
+   ask:()=>'at room heat kT is about 4 zeptojoules: how many zeptojoules does a molecule hold?',
+   f:v=>mul(v,4),ex:V=>V+' · 4',ln:'energy of a molecule',
+   w:[['the change is turned over','divide the units of kT by 4',v=>dv(v,4)],
+      ['the 4 is added','add 4 to the units of kT',v=>add(v,4)]]}],
+ ['mole',{after:['zj'],u:'zeptojoules',out:'kilojoules a mole',st:'5j',cite:CU.cite,
+   ask:()=>'a mole is 6 · 10²³ molecules and a zeptojoule 10⁻²¹ joule: how many kilojoules a mole?',
+   f:v=>mul(v,3,5),ex:V=>V+' · 600/1000',ln:'energy of a mole',
+   w:[['joules are not changed to kilojoules','multiply by 600 for kilojoules a mole',v=>mul(v,600)],
+      ['the change is turned over','multiply by 1000/600',v=>mul(v,5,3)]]}],
+ ['moleone',{after:['read','freeze'],u:'units of kT',out:'kilojoules a mole',st:'30·phys',cite:ES,
+   ask:()=>'for a mole, kT becomes RT, about 12/5 kilojoules at room heat: how many kilojoules a mole?',
+   f:v=>mul(v,12,5),ex:V=>V+' · 12/5',ln:'energy of a mole',
+   w:[['the change is turned over','multiply by 5/12 for kilojoules a mole',v=>mul(v,5,12)],
+      ['RT is added instead of multiplied','add 12/5 to the units of kT',v=>add(v,12,5)]]}]]);
+Z(L,Tm(X({u:'kilojoules a mole',out:'kilojoules',k:()=>pick([2,5,10]),ask:(S,p)=>'the flask holds '+p.K+' moles of the gas: how many kilojoules do they hold?',ln:()=>'energy in the flask'},MQ)));
+}
+/* ---------- 30·comp.line: bits for a message; a longer message, bytes, packets, time on the line ---------- */
+{ const L='30·comp.line', SA='the surprise-average technique';
+map(L,[
+ ['more',{u:'bits',out:'bits',st:'30·comp',cite:SA,mk:()=>({d:pick([20,50,100])}),
+   ask:(S,p)=>'the message grows by '+p.d+' signs: how many bits does it take now?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'bits for the longer message',
+   w:[['the signs are added as bits',(S,p)=>'add the '+p.d+' signs to the bits',(v,S,p)=>add(v,p.d)],
+      ['the new signs are given alone',(S,p)=>'find the bits for the '+p.d+' new signs alone',(v,S,p)=>qm(cq(S.c[1]),R(p.d))]]}],
+ ['bytes',{after:['read','more'],u:'bits',out:'bytes',st:'5j',cite:CU.cite,
+   ask:()=>'a byte is 8 bits: how many bytes is the message?',
+   f:v=>dv(v,8),ex:V=>V+'/8',ln:'bytes',
+   w:[['the change is turned over','multiply the bits by 8',v=>mul(v,8)],
+      ['a byte is taken as 10 bits','divide the bits by 10',v=>dv(v,10)]]}],
+ ['packets',{after:['bytes'],u:'bytes',out:'packets',st:'4j',cite:DR.cite,mk:()=>({k:pick([20,32,50])}),
+   ask:(S,p)=>'the line sends whole packets of '+p.k+' bytes: how many packets does it take?',
+   f:(v,S,p)=>R(Math.ceil(num(v)/p.k)),ex:(V,S,p)=>V+'/'+p.k+', rounded up',ln:'packets',
+   w:[['the count is rounded down, cutting off the end','divide and round down',(v,S,p)=>R(Math.floor(num(v)/p.k))],
+      ['the packets are left as a fraction','divide and keep the fraction',(v,S,p)=>dv(v,p.k)]]}],
+ ['packetsone',{after:['read','more'],u:'bits',out:'packets',st:'4j',cite:DR.cite,mk:()=>({k:pick([20,32,50])}),
+   ask:(S,p)=>'the line sends whole packets of '+p.k+' bytes of 8 bits: how many packets does it take?',
+   f:(v,S,p)=>R(Math.ceil(num(v)/(8*p.k))),ex:(V,S,p)=>V+'/(8 · '+p.k+'), rounded up',ln:'packets',
+   w:[['bits are taken as bytes',(S,p)=>'divide the bits by '+p.k+' and round up',(v,S,p)=>R(Math.ceil(num(v)/p.k))],
+      ['the count is rounded down','divide by 8 · '+'the packet size and round down',(v,S,p)=>R(Math.floor(num(v)/(8*p.k)))]]}]]);
+Z(L,Tm(X({u:'packets',out:'milliseconds',k:()=>pick([2,3,5]),ask:(S,p)=>'each packet takes '+p.K+' milliseconds on the line: how long does the message take?',ln:()=>'time on the line'},MQ)));
+}
+/* ---------- 30·nav.fix: a fix that loses trust; more drift, trust, the old place's share, the best guess east ---------- */
+{ const L='30·nav.fix', WT='the weigh-by-trust technique';
+map(L,[
+ ['drift',{u:'square metres',out:'square metres',st:'30·nav',cite:'the predict-and-correct technique',mk:()=>({d:pick([2,3,5])}),
+   ask:(S,p)=>'Zoe sails on '+p.d+' minutes without a fix: what is the spread of her place then?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'spread after more drift',
+   w:[['the minutes are added as square metres',(S,p)=>'add the '+p.d+' minutes to the spread',(v,S,p)=>add(v,p.d)],
+      ['the spread at the fix is counted again',(S,p)=>'add S('+p.d+') to the spread',(v,S,p)=>qa(v,qa(cq(S.c[0]),qm(cq(S.c[1]),R(p.d))))]]}],
+ ['trust',{after:['read','drift'],u:'square metres',out:'trust per square metre',st:'30·nav',cite:WT,
+   ask:()=>'a place’s trust is one over its spread: how much is the old place trusted?',
+   f:v=>qi(v),ex:V=>'1/'+V,ln:'trust in the old place',
+   w:[['the spread itself is taken as the trust','take the spread as the trust',v=>v],
+      ['the spread is halved instead of turned over','halve the spread for the trust',v=>dv(v,2)]]}],
+ ['share',{after:['trust'],u:'trust per square metre',out:'of the weight',st:'30·nav',cite:'the trusts-add technique',mk:()=>({k:pick([4,8,12])}),
+   ask:(S,p)=>'a fresh fix has spread '+p.k+', trust 1/'+p.k+': what share of the weight goes to the old place?',
+   f:(v,S,p)=>qm(v,qi(qa(v,R(1,p.k)))),ex:(V,S,p)=>V+'/('+V+' + 1/'+p.k+')',ln:'the old place’s share',
+   w:[['the shares are swapped',(S,p)=>'give the fix’s trust over the total',(v,S,p)=>qm(R(1,p.k),qi(qa(v,R(1,p.k))))],
+      ['the trusts are compared, not added',(S,p)=>'divide the old trust by the fix’s 1/'+p.k,(v,S,p)=>mul(v,p.k)]]}],
+ ['shareone',{after:['read','drift'],u:'square metres',out:'of the weight',st:'30·nav',cite:WT,mk:()=>({k:pick([4,8,12])}),
+   ask:(S,p)=>'a fresh fix has spread '+p.k+': weighing by trust, what share goes to the old place?',
+   f:(v,S,p)=>qm(R(p.k),qi(add(v,p.k))),ex:(V,S,p)=>p.k+'/('+V+' + '+p.k+')',ln:'the old place’s share',
+   w:[['the spreads are used as weights, not the trusts',(S,p)=>'give the old spread over the two spreads',(v,S,p)=>qm(v,qi(add(v,p.k)))],
+      ['the two are weighed equally','give the old place half the weight',v=>R(1,2)]]}]]);
+Z(L,Cu(X({u:'of the weight',out:'metres east',k:()=>pick([10,20,40]),f:(S,p,q)=>qm(qa(R(1),qn(q.v)),p.k),ex:(S,p,q)=>'(1 − '+par(q.v)+') · '+p.K,
+  ask:(S,p)=>'the old place says 0 metres east and the fix says '+p.K+': how far east is the best guess?',ln:()=>'best guess east',
+  xs:(S,p,q)=>[{why:'the old place’s share is put on the fix',v:qm(q.v,p.k)},{why:'the two places are simply averaged',v:qm(p.k,R(1,2))}]},own('30·nav',WT))));
+}
+/* ---------- 30·logi.groups: seats and travellers; more tickets, seats held back, seats to sell, takings ---------- */
+{ const L='30·logi.groups', GW='the groups-widen technique';
+map(L,[
+ ['more',{u:'seats',out:'seats',st:'30·logi',cite:'the one-more-ticket technique',mk:()=>({d:pick([20,50,100])}),
+   ask:(S,p)=>p.d+' more tickets are sold: what is the spread of seats now?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'spread with more tickets',
+   w:[['the tickets are added as seats',(S,p)=>'add the '+p.d+' tickets to the spread',(v,S,p)=>add(v,p.d)],
+      ['the new tickets are taken alone',(S,p)=>'find the spread of the '+p.d+' new tickets alone',(v,S,p)=>qm(cq(S.c[1]),R(p.d))]]}],
+ ['hold',{after:['read','more'],u:'seats',out:'seats held back',st:'30·logi',cite:GW,
+   ask:()=>'the planner holds back two spreads of seats for no-shows that do turn up: how many seats?',
+   f:v=>mul(v,2),ex:V=>'2 · '+V,ln:'seats held back',
+   w:[['one spread is held back','hold back one spread of seats',v=>v],
+      ['the spread is halved','hold back half a spread',v=>dv(v,2)]]}],
+ ['sell',{after:['hold'],u:'seats held back',out:'seats to sell',st:'5j',cite:LESS.cite,mk:()=>({k:pick([80,100,120])}),
+   ask:(S,p)=>'the coach has '+p.k+' seats: how many are left to sell?',
+   f:(v,S,p)=>qa(R(p.k),qn(v)),ex:(V,S,p)=>p.k+' − '+V,ln:'seats to sell',
+   w:[['the subtraction is turned round',(S,p)=>'take the '+p.k+' seats from the seats held back',(v,S,p)=>sub(v,p.k)],
+      ['the seats held back are added',(S,p)=>'add the seats held back to the '+p.k,(v,S,p)=>add(v,p.k)]]}],
+ ['sellone',{after:['read','more'],u:'seats',out:'seats to sell',st:'30·logi',cite:GW,mk:()=>({k:pick([80,100,120])}),
+   ask:(S,p)=>'the coach has '+p.k+' seats and two spreads are held back: how many are left to sell?',
+   f:(v,S,p)=>qa(R(p.k),qn(mul(v,2))),ex:(V,S,p)=>p.k+' − 2 · '+V,ln:'seats to sell',
+   w:[['one spread is held back',(S,p)=>'take one spread from the '+p.k+' seats',(v,S,p)=>qa(R(p.k),qn(v))],
+      ['the seats held back are added',(S,p)=>'add two spreads to the '+p.k+' seats',(v,S,p)=>add(mul(v,2),p.k)]]}]]);
+Z(L,Tm(X({u:'seats to sell',out:'dollars',k:()=>pick([20,25,40]),ask:(S,p)=>'each seat sells for '+p.K+' dollars: what are the takings if they all sell?',ln:()=>'takings'},MQ)));
+}
+/* ---------- 31·logi.wait: a queue at one counter; later in the day, how busy, people in line, room in the hall ---------- */
+{ const L='31·logi.wait', SL='the steady-line technique';
+map(L,[
+ ['later',{u:'people a minute',out:'people a minute',st:'5j',cite:MQ.cite,mk:()=>({d:pick([1,2])}),
+   ask:(S,p)=>p.d+' hour'+(p.d>1?'s':'')+' later, how many people come a minute?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'arrivals later',
+   w:[['the hours are added as people a minute',(S,p)=>'add the '+p.d+' hours to the arrivals',(v,S,p)=>add(v,p.d)],
+      ['the change alone is given',(S,p)=>'find the change over '+p.d+' hours alone',(v,S,p)=>qm(cq(S.c[1]),R(p.d))]]}],
+ ['busy',{after:['read','later'],u:'people a minute',out:'of the time busy',st:'31·logi',cite:SL,mk:S=>({m:S.mu}),
+   ask:(S,p)=>'the counter serves '+p.m+' a minute: what share of the time is it busy?',
+   f:(v,S,p)=>{ const r=dv(v,p.m); return num(r)<1?r:null; },ex:(V,S,p)=>V+'/'+p.m,ln:'share of the time busy',
+   w:[['the share is turned over',(S,p)=>'divide the '+p.m+' served by the arrivals',(v,S,p)=>dv(R(p.m),v)],
+      ['the arrivals are taken from the service',(S,p)=>'take the arrivals from the '+p.m+' served',(v,S,p)=>qa(R(p.m),qn(v))]]}],
+ ['line',{after:['busy'],u:'of the time busy',out:'people at the counter',st:'31·logi',cite:'the near-full technique',
+   ask:()=>'busy that share ρ of the time, how many people are there on average, ρ/(1 − ρ)?',
+   f:v=>qm(v,qi(qa(R(1),qn(v)))),ex:V=>V+'/(1 − '+V+')',ln:'people at the counter',
+   w:[['the busy share itself is taken as the count','take the busy share as the count',v=>v],
+      ['the top of ρ/(1 − ρ) is left as 1','take 1/(1 − ρ) for the count',v=>qi(qa(R(1),qn(v)))]]}],
+ ['lineone',{after:['read','later'],u:'people a minute',out:'people at the counter',st:'31·logi',cite:'the near-full technique',mk:S=>S.mu?{m:S.mu}:null,
+   ask:(S,p)=>'serving '+p.m+' a minute, how many are there on average, arrivals/(service − arrivals)?',
+   f:(v,S,p)=>num(v)<p.m?qm(v,qi(qa(R(p.m),qn(v)))):null,ex:(V,S,p)=>V+'/('+p.m+' − '+V+')',ln:'people at the counter',
+   w:[['the busy share is taken as the count',(S,p)=>'divide the arrivals by the '+p.m+' served',(v,S,p)=>dv(v,p.m)],
+      ['the gap is turned round',(S,p)=>'divide the arrivals by the arrivals − '+p.m,(v,S,p)=>qm(v,qi(qa(v,R(-p.m))))]]}]]);
+Z(L,Tm(X({u:'people at the counter',out:'forms',k:()=>pick([2,3,4]),ask:(S,p)=>'each person there holds '+p.K+' forms to stamp: how many forms wait at the counter?',ln:()=>'forms waiting'},MQ)));
+}
+/* ---------- 31·phys.glare: glare through filters; a higher sun, the first filter, a turned second filter, comfort ---------- */
+{ const L='31·phys.glare', ML='the mixed-light technique';
+map(L,[
+ ['higher',{u:'lux',out:'lux',st:'5j',cite:MQ.cite,mk:()=>({d:1}),
+   ask:()=>'the sun climbs one step higher on the scale: how many lux of glare now?',
+   f:(v,S)=>qa(v,cq(S.c[1])),ex:(V,S)=>V+' + '+qs(cq(S.c[1])),ln:'glare with the higher sun',
+   w:[['one step is added as a lux','add 1 lux for the step',v=>add(v,1)],
+      ['the glare is doubled','double the glare for the higher sun',v=>mul(v,2)]]}],
+ ['first',{after:['read','higher'],u:'lux',out:'lux through one filter',st:'31·phys',cite:ML,
+   ask:()=>'taking the glare as shaking at every angle alike, how much passes one filter?',
+   f:v=>dv(v,2),ex:V=>V+'/2',ln:'through one filter',
+   w:[['all of it is taken to pass','let all the glare through',v=>v],
+      ['a quarter is taken to pass','let a quarter through',v=>dv(v,4)]]}],
+ ['second',{after:['first'],u:'lux through one filter',out:'lux through both filters',st:'31·phys',cite:'the kept-sine technique',
+   ask:()=>'a second filter is turned 60° from the first, and cos 60° = 1/2: how much passes both?',
+   f:v=>dv(v,4),ex:V=>V+' · (1/2)²',ln:'through both filters',
+   w:[['the cosine is not squared','multiply by cos 60° = 1/2',v=>dv(v,2)],
+      ['sin² 60° = 3/4 is used','multiply by sin² 60° = 3/4',v=>mul(v,3,4)]]}],
+ ['secondone',{after:['read','higher'],u:'lux',out:'lux through both filters',st:'31·phys',cite:'the kept-sine technique',
+   ask:()=>'it passes one filter, then one turned 60° (cos 60° = 1/2): how much comes through both?',
+   f:v=>dv(v,8),ex:V=>V+' · 1/2 · (1/2)²',ln:'through both filters',
+   w:[['the first filter is taken to pass it all','multiply by (1/2)² only',v=>dv(v,4)],
+      ['the cosine is not squared','halve it twice',v=>dv(v,4)],['sin² 60° is used for the second','halve it, then take 3/4',v=>mul(v,3,8)]]}]]);
+Z(L,G(X({u:'lux through both filters',k:'above',ask:(S,p)=>'eyes rest easy below '+p.K+' lux: how far below that is it?',ln:()=>'lux below the comfort mark'},LESS)));
+}
+/* ---------- 31·now.picture: readings kept of a picture; more rows, the largest kept, bytes, pictures on a card ---------- */
+{ const L='31·now.picture', LR='the largest-readings technique';
+map(L,[
+ ['rows',{u:'readings',out:'readings',st:'5j',cite:MQ.cite,mk:()=>({d:pick([8,16])}),
+   ask:(S,p)=>'the picture gains '+p.d+' more rows: how many readings now?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'readings with more rows',
+   w:[['the rows are added as readings',(S,p)=>'add the '+p.d+' rows to the readings',(v,S,p)=>add(v,p.d)],
+      ['the new rows are counted alone',(S,p)=>'count the readings of the '+p.d+' new rows alone',(v,S,p)=>qm(cq(S.c[1]),R(p.d))]]}],
+ ['keep',{after:['read','rows'],u:'readings',out:'readings kept',st:'31·now',cite:LR,mk:()=>({k:pick([4,8,16])}),
+   ask:(S,p)=>'only the largest 1/'+p.k+' of the readings is kept: how many are kept?',
+   f:(v,S,p)=>dv(v,p.k),ex:(V,S,p)=>V+'/'+p.k,ln:'readings kept',
+   w:[['the share dropped is given',(S,p)=>'keep '+(p.k-1)+'/'+p.k+' of the readings',(v,S,p)=>mul(v,p.k-1,p.k)],
+      ['the share multiplies',(S,p)=>'multiply the readings by '+p.k,(v,S,p)=>mul(v,p.k)]]}],
+ ['bytes',{after:['keep'],u:'readings kept',out:'bytes',st:'5j',cite:MQ.cite,
+   ask:()=>'a kept reading stores its value and its place, 4 bytes in all: how many bytes?',
+   f:v=>mul(v,4),ex:V=>V+' · 4',ln:'bytes kept',
+   w:[['the place is not stored, only the value','store 2 bytes a reading',v=>mul(v,2)],
+      ['the bytes divide','divide the readings by 4',v=>dv(v,4)]]}],
+ ['bytesone',{after:['read','rows'],u:'readings',out:'bytes',st:'5j',cite:MQ.cite,
+   ask:()=>'all the readings are kept in order, 2 bytes each: how many bytes?',
+   f:v=>mul(v,2),ex:V=>V+' · 2',ln:'bytes kept',
+   w:[['a place is stored with each as well','store 4 bytes a reading',v=>mul(v,4)],
+      ['the bytes divide','divide the readings by 2',v=>dv(v,2)]]}]]);
+Z(L,Cu(X({u:'bytes',out:'pictures',k:()=>pick([64,128,256]),f:(S,p,q)=>R(Math.floor(num(p.k)*1024/num(q.v))),ex:(S,p,q)=>'whole part of '+p.K+' · 1024/'+par(q.v),
+  ask:(S,p)=>'a card holds '+p.K+' kilobytes of 1024 bytes: how many such pictures fit on it?',ln:()=>'pictures on the card',
+  xs:(S,p,q)=>[{why:'a part-filled picture is counted',v:R(Math.ceil(num(p.k)*1024/num(q.v)))},{why:'a kilobyte is taken as 1000 bytes',v:R(Math.floor(num(p.k)*1000/num(q.v)))}]},DR)));
+}
+/* ---------- 32·phys.tune: a violin string against a fork; more turns, beats with a lower fork, the time between beats, in milliseconds ---------- */
+{ const L='32·phys.tune', BT='the beat technique';
+map(L,[
+ ['turn',{u:'hertz',out:'hertz',st:'5j',cite:MQ.cite,mk:()=>({d:1}),
+   ask:()=>'Claire gives the peg one more turn: what does the string sound now?',
+   f:(v,S)=>qa(v,cq(S.c[1])),ex:(V,S)=>V+' + '+qs(cq(S.c[1])),ln:'pitch after one more turn',
+   w:[['one turn is taken as one hertz','add 1 hertz for the turn',v=>add(v,1)],
+      ['the pitch is doubled','double the pitch for the turn',v=>mul(v,2)]]}],
+ ['beats',{after:['read','turn'],u:'hertz',out:'beats a second',st:'32·phys',cite:BT,
+   ask:()=>'it is played against a 432 hertz fork: how many beats a second sound?',
+   f:v=>{ const b=sub(v,432); return num(b)>0?b:null; },ex:V=>V+' − 432',ln:'beats a second',
+   w:[['the subtraction is turned round','take the pitch from 432',v=>qa(R(432),qn(v))],
+      ['the two pitches are averaged','take the average of the pitch and 432',v=>dv(add(v,432),2)]]}],
+ ['gap',{after:['beats'],u:'beats a second',out:'seconds between beats',st:'32·phys',cite:BT,
+   ask:()=>'how many seconds pass from one beat to the next?',
+   f:v=>qi(v),ex:V=>'1/'+V,ln:'time between beats',
+   w:[['the beats a second are taken as the time','take the beats a second as the seconds',v=>v],
+      ['the time is halved','take half of one over the beats',v=>dv(qi(v),2)]]}],
+ ['gapone',{after:['read','turn'],u:'hertz',out:'seconds between beats',st:'32·phys',cite:BT,
+   ask:()=>'against a 432 hertz fork, how many seconds pass between beats?',
+   f:v=>{ const b=sub(v,432); return num(b)>0?qi(b):null; },ex:V=>'1/('+V+' − 432)',ln:'time between beats',
+   w:[['the pitch itself is used','take one over the pitch',v=>qi(v)],
+      ['the beats a second are given','take the pitch less 432',v=>sub(v,432),'seconds between beats']]}]]);
+Z(L,Tm(X({u:'seconds between beats',out:'milliseconds',k:1000,ask:()=>'how many milliseconds is that?',ln:()=>'milliseconds between beats',w:['the seconds are divided by 1000','1000 is added']},CU)));
+}
+/* ---------- 32·eng.cancel: noise and its delayed negative; a faster fan, the repeat, half of it, samples of delay ---------- */
+{ const L='32·eng.cancel', AT='the anti-turning technique';
+map(L,[
+ ['faster',{u:'hertz',out:'hertz',st:'5j',cite:MQ.cite,mk:()=>({d:pick([1,2])}),
+   ask:(S,p)=>'the fan speeds up by '+p.d+' turn'+(p.d>1?'s':'')+' a second: what does it hum at now?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'hum when faster',
+   w:[['the turns are added as hertz',(S,p)=>'add the '+p.d+' turns to the hum',(v,S,p)=>add(v,p.d)],
+      ['the hum is doubled','double the hum',v=>mul(v,2)]]}],
+ ['repeat',{after:['read','faster'],u:'hertz',out:'milliseconds a repeat',st:'32·eng',cite:'the repeat-ahead technique',
+   ask:()=>'how many milliseconds does one repeat of the hum last?',
+   f:v=>dv(R(1000),v),ex:V=>'1000/'+V,ln:'one repeat',
+   w:[['the division is turned over','divide the hum by 1000',v=>dv(v,1000)],
+      ['seconds are not changed to milliseconds','take one over the hum',v=>qi(v)]]}],
+ ['half',{after:['repeat'],u:'milliseconds a repeat',out:'milliseconds of slide',st:'32·eng',cite:AT,
+   ask:()=>'a copy slid half a repeat cancels it: by how many milliseconds is it slid?',
+   f:v=>dv(v,2),ex:V=>V+'/2',ln:'the slide',
+   w:[['a whole repeat is used','slide it a whole repeat',v=>v],
+      ['a quarter repeat is used','slide it a quarter repeat',v=>dv(v,4)]]}],
+ ['halfone',{after:['read','faster'],u:'hertz',out:'milliseconds of slide',st:'32·eng',cite:AT,
+   ask:()=>'a copy slid half a repeat cancels it: by how many milliseconds is it slid?',
+   f:v=>dv(R(500),v),ex:V=>'1000/(2 · '+V+')',ln:'the slide',
+   w:[['a whole repeat is used','slide it 1000/hum milliseconds',v=>dv(R(1000),v)],
+      ['the division is turned over','slide it hum/2000 milliseconds',v=>dv(v,2000)]]}]]);
+Z(L,Tm(X({u:'milliseconds of slide',out:'samples',k:48,ask:()=>'the headphones take 48 samples a millisecond: how many samples is the slide?',ln:()=>'samples of slide'},MQ)));
+}
+/* ---------- 32·comp.round: rounding a photo's amounts; the next amount, the average squared error, an 8 by 8 block, the coder's allowance ---------- */
+{ const L='32·comp.round', RE='the rounding-error technique';
+map(L,[
+ ['next',{u:'units',out:'units',st:'5j',cite:MQ.cite,
+   ask:()=>'the next cosine amount, one step on: what step is it rounded to?',
+   f:(v,S)=>qa(v,cq(S.c[1])),ex:(V,S)=>V+' + '+qs(cq(S.c[1])),ln:'the next step size',
+   w:[['one step is added as one unit','add 1 unit for the next amount',v=>add(v,1)],
+      ['the step is doubled','double the step for the next amount',v=>mul(v,2)]]}],
+ ['sq',{after:['read','next'],u:'units',out:'square units on average',st:'32·comp',cite:RE,
+   ask:()=>'rounding to a step q leaves an average squared error of q²/12: how much here?',
+   f:v=>dv(qm(v,v),12),ex:V=>V+'²/12',ln:'average squared error',
+   w:[['the step is not squared','divide the step by 12',v=>dv(v,12)],
+      ['the half step is squared instead','square half the step',v=>dv(qm(v,v),4)]]}],
+ ['block',{after:['sq'],u:'square units on average',out:'square units in a block',st:'5j',cite:MQ.cite,
+   ask:()=>'an 8 by 8 block has 64 such amounts: what squared error does a block carry?',
+   f:v=>mul(v,64),ex:V=>V+' · 64',ln:'squared error in a block',
+   w:[['only one row of 8 is counted','multiply by 8 for the block',v=>mul(v,8)],
+      ['the error is shared over the block','divide by 64 for the block',v=>dv(v,64)]]}],
+ ['blockone',{after:['read','next'],u:'units',out:'square units in a block',st:'32·comp',cite:RE,
+   ask:()=>'each of a block’s 64 amounts has squared error q²/12: what does the block carry?',
+   f:v=>mul(qm(v,v),64,12),ex:V=>'64 · '+V+'²/12',ln:'squared error in a block',
+   w:[['the step is not squared','multiply the step by 64/12',v=>mul(v,64,12)],
+      ['only one row of 8 is counted','multiply the squared step by 8/12',v=>mul(qm(v,v),8,12)]]}]]);
+Z(L,G(X({u:'square units in a block',k:'above',ask:(S,p)=>'the coder allows '+p.K+' square units of error a block: how much is to spare?',ln:()=>'error to spare'},LESS)));
+}
+/* ---------- 34·bio.link: a loop of DNA; a protein winds it, extra links as supercoils, the enzyme's passes, the time ---------- */
+{ const L='34·bio.link', CP='the cut-and-pass technique';
+map(L,[
+ ['wind',{u:'links',out:'links',st:'34·bio',cite:'the strand-link technique',mk:()=>({w:pick([2,4,6])}),
+   ask:(S,p)=>'a protein winds the loop '+p.w+' more times before it is closed: what is Lk then?',
+   f:(v,S,p)=>add(v,p.w),ex:(V,S,p)=>V+' + '+p.w,ln:'Lk after winding',
+   w:[['the windings are taken off','take the '+'windings off Lk',(v,S,p)=>sub(v,p.w)],
+      ['each winding is counted twice, once a strand','add two links for each winding',(v,S,p)=>add(v,2*p.w)]]}],
+ ['super',{after:['read','wind'],u:'links',out:'supercoils',st:'34·bio',cite:'the strand-link technique',mk:(S,ch)=>{ const n=x0(ch); return n===undefined?null:{n}; },
+   ask:(S,p)=>'relaxed, the helix turns 10 times a hundred base pairs: how many extra links are supercoils?',
+   f:(v,S,p)=>{ const r=sub(v,10*p.n); return num(r)>0?r:null; },ex:(V,S,p)=>V+' − 10 · '+p.n,ln:'supercoils',
+   w:[['the relaxed turns are not taken away','take all of Lk as supercoils',v=>v],
+      ['one turn is taken for each hundred base pairs',(S,p)=>'take '+p.n+' turns off Lk',(v,S,p)=>sub(v,p.n)]]}],
+ ['passes',{after:['super'],u:'supercoils',out:'passes of the enzyme',st:'34·bio',cite:CP,
+   ask:()=>'the enzyme takes out 2 supercoils a pass: how many passes untie them all?',
+   f:v=>R(Math.ceil(num(v)/2)),ex:V=>V+'/2, rounded up',ln:'passes',
+   w:[['the 2 multiplies','multiply the supercoils by 2',v=>mul(v,2)],
+      ['one supercoil a pass is taken','take one pass a supercoil',v=>v]]}],
+ ['passesone',{after:['read','wind'],u:'links',out:'passes of the enzyme',st:'34·bio',cite:CP,mk:(S,ch)=>{ const n=x0(ch); return n===undefined?null:{n}; },
+   ask:(S,p)=>'relaxed, 10 turns a hundred base pairs; each pass takes out 2: how many passes?',
+   f:(v,S,p)=>{ const r=num(v)-10*p.n; return r>0?R(Math.ceil(r/2)):null; },ex:(V,S,p)=>'('+V+' − 10 · '+p.n+')/2, rounded up',ln:'passes',
+   w:[['the relaxed turns are not taken away','halve all of Lk',v=>R(Math.ceil(num(v)/2))],
+      ['one supercoil a pass is taken',(S,p)=>'take 10 · '+p.n+' off Lk and stop',(v,S,p)=>sub(v,10*p.n)]]}]]);
+Z(L,Tm(X({u:'passes of the enzyme',out:'seconds',k:()=>pick([2,3,5]),ask:(S,p)=>'each pass takes the enzyme '+p.K+' seconds: how long to untie the loop?',ln:()=>'time to untie'},MQ)));
+}
+/* ---------- 34·cb18.contours: contours on a map; farther from the summit, millimetres on the map, lines a centimetre, a stretch of map ---------- */
+{ const L='34·cb18.contours', SP='the spacing-slope technique';
+map(L,[
+ ['farther',{u:'metres',out:'metres',st:'34·cb18',cite:SP,mk:()=>({d:pick([10,20,40])}),
+   ask:(S,p)=>'Mike walks '+p.d+' metres farther from the summit: how far apart are the contours there?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'spacing farther out',
+   w:[['the whole walk is added to the spacing',(S,p)=>'add the '+p.d+' metres to the spacing',(v,S,p)=>add(v,p.d)],
+      ['the spacing for the walk alone is given',(S,p)=>'take the spacing for '+p.d+' metres alone',(v,S,p)=>qm(cq(S.c[1]),R(p.d))]]}],
+ ['map',{after:['read','farther'],u:'metres',out:'millimetres on the map',st:'5j',cite:CU.cite,mk:()=>({k:pick([10000,20000,25000])}),
+   ask:(S,p)=>'the map is drawn at 1 to '+p.k+': how many millimetres apart are the lines on paper?',
+   f:(v,S,p)=>mul(v,1000,p.k),ex:(V,S,p)=>V+' · 1000/'+p.k,ln:'spacing on the map',
+   w:[['metres are not changed to millimetres',(S,p)=>'divide the metres by '+p.k,(v,S,p)=>dv(v,p.k)],
+      ['the scale is turned over',(S,p)=>'multiply the metres by '+p.k+'/1000',(v,S,p)=>mul(v,p.k,1000)]]}],
+ ['lines',{after:['map'],u:'millimetres on the map',out:'lines a centimetre',st:'34·cb18',cite:SP,
+   ask:()=>'how many contour lines fall in each centimetre of map there?',
+   f:v=>dv(R(10),v),ex:V=>'10/'+V,ln:'lines a centimetre',
+   w:[['the division is turned over','divide the spacing by 10',v=>dv(v,10)],
+      ['a centimetre is taken as 100 millimetres','divide 100 by the spacing',v=>dv(R(100),v)]]}],
+ ['linesone',{after:['read','farther'],u:'metres',out:'lines a centimetre',st:'34·cb18',cite:SP,mk:()=>({k:pick([10000,20000,25000])}),
+   ask:(S,p)=>'at 1 to '+p.k+', how many contour lines fall in each centimetre of map?',
+   f:(v,S,p)=>dv(R(p.k,100),v),ex:(V,S,p)=>p.k+'/(100 · '+V+')',ln:'lines a centimetre',
+   w:[['the division is turned over',(S,p)=>'divide the spacing by '+p.k+'/100',(v,S,p)=>mul(v,100,p.k)],
+      ['centimetres are taken as millimetres',(S,p)=>'divide '+p.k+'/1000 by the spacing',(v,S,p)=>dv(R(p.k,1000),v)]]}]]);
+Z(L,Tm(X({u:'lines a centimetre',out:'contour lines',k:()=>pick([2,3,5]),ask:(S,p)=>'how many lines cross a '+p.K+' centimetre stretch of the map there?',ln:()=>'lines on the stretch'},MQ)));
+}
+/* ---------- 35·chem.shake: a shaking bond's levels; one level up, the fall to the bottom, electronvolts, breaking ---------- */
+{ const L='35·chem.shake', SL2='the shaking-line technique';
+map(L,[
+ ['up',{u:'energy units',out:'energy units',st:'35·chem',cite:SL2,
+   ask:()=>'the bond takes in light and climbs one level: what is its energy now?',
+   f:(v,S)=>qa(v,cq(S.c[1])),ex:(V,S)=>V+' + '+qs(cq(S.c[1])),ln:'energy one level up',
+   w:[['one level is taken to add one energy unit','add 1 energy unit for the level',v=>add(v,1)],
+      ['the energy is doubled','double the energy for one level up',v=>mul(v,2)]]}],
+ ['fall',{after:['read','up'],u:'energy units',out:'energy units in the light',st:'35·chem',cite:SL2,
+   ask:(S)=>'it falls to its lowest level, v = 0, at '+qs(cq(S.c[0]))+': how much energy does its light carry?',
+   f:(v,S)=>qa(v,qn(cq(S.c[0]))),ex:(V,S)=>V+' − '+qs(cq(S.c[0])),ln:'energy of the light',
+   w:[['the lowest level is taken as 0','take the lowest level as 0',v=>v],
+      ['only one level’s drop is counted',(S)=>'take one level’s drop, '+qs(cq(S.c[1])),(v,S)=>cq(S.c[1])]]}],
+ ['ev',{after:['fall'],u:'energy units in the light',out:'electronvolts',st:'5j',cite:CU.cite,mk:()=>({f:pick([Q(1,10),Q(1,20)])}),
+   ask:(S,p)=>'an energy unit is '+qs(p.f)+' electronvolt: how many electronvolts does the light carry?',
+   f:(v,S,p)=>qm(v,p.f),ex:(V,S,p)=>V+' · '+qs(p.f),ln:'the light in electronvolts',
+   w:[['the change is turned over',(S,p)=>'divide the energy units by '+qs(p.f),(v,S,p)=>qm(v,qi(p.f))],
+      ['the size is added',(S,p)=>'add '+qs(p.f)+' to the energy units',(v,S,p)=>qa(v,p.f)]]}],
+ ['evone',{after:['read','up'],u:'energy units',out:'electronvolts',st:'35·chem',cite:SL2,mk:()=>({f:pick([Q(1,10),Q(1,20)])}),
+   ask:(S,p)=>'it falls to v = 0, a unit being '+qs(p.f)+' electronvolt: how many electronvolts in its light?',
+   f:(v,S,p)=>qm(qa(v,qn(cq(S.c[0]))),p.f),ex:(V,S,p)=>'('+V+' − '+qs(cq(S.c[0]))+') · '+qs(p.f),ln:'the light in electronvolts',
+   w:[['the lowest level is taken as 0',(S,p)=>'multiply the energy by '+qs(p.f),(v,S,p)=>qm(v,p.f)],
+      ['the change is turned over',(S,p)=>'take off the lowest level and divide by '+qs(p.f),(v,S,p)=>qm(qa(v,qn(cq(S.c[0]))),qi(p.f))]]}]]);
+Z(L,G(X({u:'electronvolts',k:'above',ask:(S,p)=>'light of '+p.K+' electronvolts would break the bond: how many electronvolts short is this?',ln:()=>'short of breaking'},own('35·chem','the break-threshold technique'))));
+}
+
+/* ---------- 36·comp.bytes: bytes for a screen; a wider screen, kilobytes, frames a second, screens a link can feed ---------- */
+{ const L='36·comp.bytes', TB='the three-bytes technique';
+map(L,[
+ ['wider',{u:'bytes',out:'bytes',st:'36·comp',cite:TB,mk:()=>({d:pick([1024,2048])}),
+   ask:(S,p)=>'the screen gains '+p.d+' more places: how many bytes does it take now?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'bytes for the wider screen',
+   w:[['one byte a place is used for the new ones',(S,p)=>'add one byte for each of the '+p.d+' places',(v,S,p)=>add(v,p.d)],['the new places are counted alone',(S,p)=>'count the bytes of the '+p.d+' new places alone',(v,S,p)=>qm(cq(S.c[1]),R(p.d))]]}],
+ ['kb',{after:['read','wider'],u:'bytes',out:'kilobytes',st:'5j',cite:CU.cite,
+   ask:()=>'how many kilobytes of 1024 bytes is a screenful?',
+   f:v=>dv(v,1024),ex:V=>V+'/1024',ln:'kilobytes a screenful',
+   w:[['a kilobyte is taken as 1000 bytes','divide the bytes by 1000',v=>dv(v,1000)],
+      ['the change is turned over','multiply the bytes by 1024',v=>mul(v,1024)]]}],
+ ['frames',{after:['kb'],u:'kilobytes',out:'kilobytes a second',st:'5j',cite:MQ.cite,mk:()=>({f:pick([24,30,60])}),
+   ask:(S,p)=>'the screen is redrawn '+p.f+' times a second: how many kilobytes a second does it take?',
+   f:(v,S,p)=>mul(v,p.f),ex:(V,S,p)=>V+' · '+p.f,ln:'kilobytes a second',
+   w:[['the frames divide',(S,p)=>'divide the kilobytes by '+p.f,(v,S,p)=>dv(v,p.f)],
+      ['the frames are added',(S,p)=>'add '+p.f+' to the kilobytes',(v,S,p)=>add(v,p.f)]]}],
+ ['framesone',{after:['read','wider'],u:'bytes',out:'kilobytes a second',st:'5j',cite:MQ.cite,mk:()=>({f:pick([24,30,60])}),
+   ask:(S,p)=>'redrawn '+p.f+' times a second, how many kilobytes of 1024 bytes a second does it take?',
+   f:(v,S,p)=>mul(v,p.f,1024),ex:(V,S,p)=>V+' · '+p.f+'/1024',ln:'kilobytes a second',
+   w:[['a kilobyte is taken as 1000 bytes',(S,p)=>'multiply by '+p.f+'/1000',(v,S,p)=>mul(v,p.f,1000)],
+      ['the frames are left out','divide the bytes by 1024',v=>dv(v,1024)]]}]]);
+Z(L,Cu(X({u:'kilobytes a second',out:'screens',k:()=>pick([10000,20000,40000]),f:(S,p,q)=>R(Math.floor(num(p.k)/num(q.v))),ex:(S,p,q)=>'whole part of '+p.K+'/'+par(q.v),
+  ask:(S,p)=>'a cable carries '+p.K+' kilobytes a second: how many such screens can it feed in full?',ln:()=>'screens fed',
+  xs:(S,p,q)=>[{why:'a part-fed screen is counted',v:R(Math.ceil(num(p.k)/num(q.v)))},{why:'the division is turned over',v:qm(q.v,qi(p.k))}]},DR)));
+}
+/* ---------- 36·bio.scatter: red light scattered by air; a brighter sun, the red passing, a second layer, the camera ---------- */
+{ const L='36·bio.scatter', SW='the short-wave-share technique';
+const I0=ch=>{ const x=x0(ch); return x===undefined?null:x; };
+map(L,[
+ ['brighter',{u:'units of brightness',out:'units of brightness',st:'36·bio',cite:SW,mk:(S,ch)=>{ const x=I0(ch); return x===null?null:{x,d:pick([100,200])}; },
+   ask:(S,p)=>'the sun brightens by '+p.d+' units: how much red is scattered now?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'red scattered',
+   w:[['the brightening is added as scattered light',(S,p)=>'add the '+p.d+' units to the scattered light',(v,S,p)=>add(v,p.d)],
+      ['only the extra light is counted',(S,p)=>'find what is scattered of the '+p.d+' units alone',(v,S,p)=>qm(cq(S.c[1]),R(p.d))]]}],
+ ['pass',{after:['read','brighter'],u:'units of brightness',out:'units of red passing',st:'36·bio',cite:SW,mk:(S,ch)=>{ const x=I0(ch); if(x===null) return null; const b=has(ch,L,'brighter'); return {I:x+(b?b.p.d:0)}; },
+   ask:(S,p)=>'of the '+p.I+' units of red sent in, how much passes straight through?',
+   f:(v,S,p)=>qa(R(p.I),qn(v)),ex:(V,S,p)=>p.I+' − '+V,ln:'red passing',
+   w:[['the scattered part is given','give the scattered part',v=>v],
+      ['the scattered part is added','add the scattered part to what was sent in',(v,S,p)=>add(v,p.I)]]}],
+ ['layer',{after:['pass'],u:'units of red passing',out:'units of red through two layers',st:'36·bio',cite:SW,
+   ask:(S)=>'a second layer alike scatters '+qs(cq(S.c[1]))+' of what reaches it: how much passes both?',
+   f:(v,S)=>qm(v,qa(R(1),qn(cq(S.c[1])))),ex:(V,S)=>V+' · (1 − '+qs(cq(S.c[1]))+')',ln:'red through two layers',
+   w:[['the second layer’s scattered part is given',(S)=>'take '+qs(cq(S.c[1]))+' of it',(v,S)=>qm(v,cq(S.c[1]))],
+      ['the second layer is taken to scatter nothing','keep all of it',v=>v]]}],
+ ['layerone',{after:['read','brighter'],u:'units of brightness',out:'units of red through two layers',st:'36·bio',cite:SW,mk:(S,ch)=>{ const x=I0(ch); if(x===null) return null; const b=has(ch,L,'brighter'); return {I:x+(b?b.p.d:0)}; },
+   ask:(S,p)=>'of '+p.I+' units sent in, what passes through two such layers, each scattering its share?',
+   f:(v,S,p)=>qm(qa(R(p.I),qn(v)),qa(R(1),qn(cq(S.c[1])))),ex:(V,S,p)=>'('+p.I+' − '+V+') · (1 − '+qs(cq(S.c[1]))+')',ln:'red through two layers',
+   w:[['the second layer is left out',(S,p)=>'take the scattered part from the '+p.I,(v,S,p)=>qa(R(p.I),qn(v))],
+      ['the scattered part is taken twice from the start',(S,p)=>'take twice the scattered part from the '+p.I,(v,S,p)=>qa(R(p.I),qn(mul(v,2)))]]}]]);
+Z(L,O(X({u:'units of red through two layers',k:'below',ask:(S,p)=>'the camera needs '+p.K+' units of red: by how many units does the light clear that?',ln:()=>'red to spare'},MQ)));
+}
+/* ---------- 36·nav.lowsun: sunlight through more air; more layers, a sun at 30°, the blue scattered, the watts lost ---------- */
+{ const L='36·nav.lowsun', LS2='the low-sun technique';
+map(L,[
+ ['more',{u:'kilometres',out:'kilometres',st:'5j',cite:MQ.cite,mk:()=>({d:pick([1,2])}),
+   ask:(S,p)=>'a haze adds '+p.d+' more layer'+(p.d>1?'s':'')+' like the others: how many kilometres of air from overhead?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'air with the haze',
+   w:[['the layers are added as kilometres',(S,p)=>'add the '+p.d+' layers as kilometres',(v,S,p)=>add(v,p.d)],
+      ['the air is doubled','double the air for the haze',v=>mul(v,2)]]}],
+ ['thirty',{after:['read','more'],u:'kilometres',out:'kilometres at a low sun',st:'36·nav',cite:LS2,
+   ask:()=>'the sun stands 30° up, and sin 30° = 1/2: how many kilometres of air does its light cross?',
+   f:v=>mul(v,2),ex:V=>V+'/(1/2)',ln:'air at a low sun',
+   w:[['the air is multiplied by sin 30° instead of divided','multiply the air by 1/2',v=>dv(v,2)],
+      ['cos 30° is used for sin 30°','divide the air by cos 30°, about 7/8',v=>mul(v,8,7)]]}],
+ ['blue',{after:['thirty'],u:'kilometres at a low sun',out:'of the blue scattered',st:'36·nav',cite:LS2,
+   ask:()=>'each kilometre scatters about 1/200 of the blue: what share of the blue is scattered?',
+   f:v=>dv(v,200),ex:V=>V+'/200',ln:'blue scattered',
+   w:[['the share multiplies','multiply the kilometres by 200',v=>mul(v,200)],
+      ['1/100 is used for 1/200','divide the kilometres by 100',v=>dv(v,100)]]}],
+ ['blueone',{after:['read','more'],u:'kilometres',out:'of the blue scattered',st:'36·nav',cite:LS2,
+   ask:()=>'the sun 30° up, sin 30° = 1/2, and 1/200 of the blue lost a kilometre: what share is lost?',
+   f:v=>dv(v,100),ex:V=>V+'/(1/2)/200',ln:'blue scattered',
+   w:[['the low sun is left out','divide the kilometres by 200',v=>dv(v,200)],
+      ['sin 30° multiplies','multiply by 1/2 and divide by 200',v=>dv(v,400)]]}]]);
+Z(L,Tm(X({u:'of the blue scattered',out:'watts a square metre',k:()=>pick([100,200,300]),ask:(S,p)=>'the sun sends '+p.K+' watts a square metre of blue: how many are scattered away?',ln:()=>'blue lost'},MQ)));
+}
+/* ---------- 37·eng.ring: a hall's ringing; more cushions, the ringing time, a 20 dB fall, syllables ---------- */
+{ const L='37·eng.ring', RG='the ringing technique';
+map(L,[
+ ['more',{u:'square metres',out:'square metres',st:'37·eng',cite:RG,mk:()=>({d:pick([5,10])}),
+   ask:(S,p)=>'Sarah hangs '+p.d+' more cushions: how many square metres of soaking now?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'soaking with more cushions',
+   w:[['the cushions are added as square metres',(S,p)=>'add the '+p.d+' cushions to the soaking',(v,S,p)=>add(v,p.d)],
+      ['the bare walls are counted again',(S,p)=>'add A('+p.d+') to the soaking',(v,S,p)=>qa(v,qa(cq(S.c[0]),qm(cq(S.c[1]),R(p.d))))]]}],
+ ['rt',{after:['read','more'],u:'square metres',out:'seconds of ringing',st:'37·eng',cite:RG,mk:()=>({V:pick([600,1200,1800])}),
+   ask:(S,p)=>'the hall holds '+p.V+' cubic metres: with T = V/(6A), how many seconds does it ring?',
+   f:(v,S,p)=>dv(R(p.V),mul(v,6)),ex:(V0,S,p)=>p.V+'/(6 · '+V0+')',ln:'ringing time',
+   w:[['the division is turned over',(S,p)=>'take 6 · soaking/'+p.V,(v,S,p)=>dv(mul(v,6),p.V)],
+      ['the 1/6 is left out',(S,p)=>'divide the '+p.V+' cubic metres by the soaking',(v,S,p)=>dv(R(p.V),v)]]}],
+ ['twenty',{after:['rt'],u:'seconds of ringing',out:'seconds to fall 20 dB',st:'37·eng',cite:'the fading technique',
+   ask:()=>'the ringing time is for a 60 dB fall, steady in decibels: how long to fall 20 dB?',
+   f:v=>dv(v,3),ex:V=>V+' · 20/60',ln:'time to fall 20 dB',
+   w:[['the share is turned over','multiply the time by 60/20',v=>mul(v,3)],
+      ['the fall is taken as 60 − 20 dB','multiply the time by 40/60',v=>mul(v,2,3)]]}],
+ ['twentyone',{after:['read','more'],u:'square metres',out:'seconds to fall 20 dB',st:'37·eng',cite:RG,mk:()=>({V:pick([600,1200,1800])}),
+   ask:(S,p)=>'the hall holds '+p.V+' cubic metres and V/(6A) is for 60 dB: how long to fall 20 dB?',
+   f:(v,S,p)=>dv(R(p.V),mul(v,18)),ex:(V0,S,p)=>p.V+'/(6 · '+V0+') · 20/60',ln:'time to fall 20 dB',
+   w:[['the full 60 dB time is given',(S,p)=>'take '+p.V+'/(6 · soaking)',(v,S,p)=>dv(R(p.V),mul(v,6))],
+      ['the share is turned over',(S,p)=>'take '+p.V+'/(6 · soaking) · 3',(v,S,p)=>dv(R(p.V),mul(v,2))]]}]]);
+Z(L,Tm(X({u:'seconds to fall 20 dB',out:'syllables',k:5,ask:()=>'a spoken syllable lasts 1/5 second: how many syllables go by while it falls 20 dB?',ln:()=>'syllables blurred',w:['the time is divided by 5','5 is added']},own('37·eng',RG))));
+}
+/* ---------- 37·comp.bits: headroom above the hiss; more bits, the room's hum, the meter, the neighbours ---------- */
+{ const L='37·comp.bits', BH='the bit-hiss technique';
+map(L,[
+ ['more',{u:'decibels',out:'decibels',st:'37·comp',cite:BH,mk:()=>({d:pick([2,4,8])}),
+   ask:(S,p)=>'the recorder uses '+p.d+' more bits: how many decibels above the hiss now?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'headroom with more bits',
+   w:[['the bits are added as decibels',(S,p)=>'add the '+p.d+' bits to the decibels',(v,S,p)=>add(v,p.d)],
+      ['the headroom is doubled for the bits','double the headroom',v=>mul(v,2)]]}],
+ ['room',{after:['read','more'],u:'decibels',out:'decibels above the room',st:'37·comp',cite:'the hidden-hiss technique',mk:()=>({r:pick([10,20,30])}),
+   ask:(S,p)=>'the room’s hum is '+p.r+' dB above the rounding hiss: how far above it is a full turning?',
+   f:(v,S,p)=>sub(v,p.r),ex:(V,S,p)=>V+' − '+p.r,ln:'headroom above the room',
+   w:[['the subtraction is turned round',(S,p)=>'take the headroom from '+p.r,(v,S,p)=>qa(R(p.r),qn(v))],
+      ['the hum is added',(S,p)=>'add the '+p.r+' dB to the headroom',(v,S,p)=>add(v,p.r)]]}],
+ ['meter',{after:['room'],u:'decibels above the room',out:'decibels on the meter',st:'5j',cite:'the sums-are-numbers technique',
+   ask:()=>'the room’s hum reads 30 dB on a sound meter: what does a full turning read?',
+   f:v=>add(v,30),ex:V=>'30 + '+V,ln:'meter reading',
+   w:[['the hum is taken away','take 30 dB off',v=>sub(v,30)],
+      ['the headroom is read alone','read the headroom alone',v=>v]]}],
+ ['meterone',{after:['read','more'],u:'decibels',out:'decibels on the meter',st:'37·comp',cite:'the hidden-hiss technique',mk:()=>({r:pick([10,20,30])}),
+   ask:(S,p)=>'the hum is '+p.r+' dB above the hiss and reads 30 dB on a meter: what does a full turning read?',
+   f:(v,S,p)=>add(sub(v,p.r),30),ex:(V,S,p)=>V+' − '+p.r+' + 30',ln:'meter reading',
+   w:[['the hum’s place above the hiss is left out',(S,p)=>'add 30 to the headroom',(v,S,p)=>add(v,30)],
+      ['the hum is added, not taken away',(S,p)=>'add '+p.r+' and 30 to the headroom',(v,S,p)=>add(v,p.r+30)]]}]]);
+Z(L,G(X({u:'decibels on the meter',out:'decibels',k:'above',ask:(S,p)=>'the neighbours’ limit is '+p.K+' dB on the meter: how far below it is that?',ln:()=>'decibels below the limit'},LESS)));
+}
+/* ---------- 37·bio.strip: a pitch step along the ear; a bigger step, hair cells, nerve fibres, the share of the nerve ---------- */
+{ const L='37·bio.strip', PM='the place-map technique';
+map(L,[
+ ['bigger',{u:'millimetres',out:'millimetres',st:'37·bio',cite:PM,mk:()=>({d:pick([600,1200])}),
+   ask:(S,p)=>'the step grows by '+p.d+' cents: how far along the strip does the best place move now?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'move for the bigger step',
+   w:[['the cents are added as millimetres',(S,p)=>'add the '+p.d+' cents to the move',(v,S,p)=>add(v,p.d)],
+      ['the extra cents are taken alone',(S,p)=>'find the move for '+p.d+' cents alone',(v,S,p)=>qm(cq(S.c[1]),R(p.d))]]}],
+ ['cells',{after:['read','bigger'],u:'millimetres',out:'hair cells',st:'5j',cite:MQ.cite,
+   ask:()=>'about 100 inner hair cells line each millimetre: how many does the move pass?',
+   f:v=>mul(v,100),ex:V=>V+' · 100',ln:'hair cells passed',
+   w:[['the cells a millimetre divide','divide the move by 100',v=>dv(v,100)],
+      ['10 cells a millimetre are used','multiply the move by 10',v=>mul(v,10)]]}],
+ ['fibres',{after:['cells'],u:'hair cells',out:'nerve fibres',st:'37·bio',cite:PM,
+   ask:()=>'each inner hair cell feeds 10 nerve fibres: how many fibres serve that stretch?',
+   f:v=>mul(v,10),ex:V=>V+' · 10',ln:'nerve fibres',
+   w:[['the fibres divide','divide the cells by 10',v=>dv(v,10)],
+      ['one fibre a cell is taken','take one fibre a cell',v=>v]]}],
+ ['fibresone',{after:['read','bigger'],u:'millimetres',out:'nerve fibres',st:'37·bio',cite:PM,
+   ask:()=>'100 hair cells a millimetre, 10 fibres a cell: how many fibres serve the stretch moved?',
+   f:v=>mul(v,1000),ex:V=>V+' · 100 · 10',ln:'nerve fibres',
+   w:[['the fibres a cell are left out','multiply the move by 100',v=>mul(v,100)],
+      ['the cells and fibres are added','multiply the move by 110',v=>mul(v,110)]]}]]);
+Z(L,Cu(X({u:'nerve fibres',out:'of the nerve',k:30000,f:(S,p,q)=>qm(q.v,qi(p.k)),ex:(S,p,q)=>par(q.v)+'/30000',ask:()=>'the hearing nerve has about 30000 fibres: what share of it is that?',ln:()=>'share of the nerve',
+  xs:(S,p,q)=>[{why:'the division is turned over',v:qm(p.k,qi(q.v))},{why:'3000 fibres are used for the nerve',v:qm(q.v,R(1,3000))}]},own('37·bio',PM))));
+}
+/* ---------- 37·crypt.level: a hidden voice level; the next tick, the key step, the clock, the listener taking the key off ---------- */
+{ const L='37·crypt.level', LK='the level-key technique';
+const md=(a,m)=>((a%m)+m)%m;
+map(L,[
+ ['next',{u:'levels',out:'levels',st:'5j',cite:MQ.cite,
+   ask:()=>'at the next tick, what level does the voice give?',
+   f:(v,S)=>qa(v,cq(S.c[1])),ex:(V,S)=>V+' + '+qs(cq(S.c[1])),ln:'level at the next tick',
+   w:[['one tick is taken as one level','add 1 level for the tick',v=>add(v,1)],
+      ['the level is doubled','double the level for the next tick',v=>mul(v,2)]]}],
+ ['key',{after:['read','next'],u:'levels',out:'levels with the key',st:'37·crypt',cite:LK,
+   ask:(S)=>'the key step is '+S.key+': what is the level with the key added?',
+   f:(v,S)=>add(v,S.key),ex:(V,S)=>V+' + '+S.key,ln:'level with the key',
+   w:[['the key is taken away',(S)=>'take the key '+S.key+' off the level',(v,S)=>sub(v,S.key)],
+      ['the key multiplies',(S)=>'multiply the level by the key '+S.key,(v,S)=>mul(v,S.key)]]}],
+ ['clock',{after:['key'],u:'levels with the key',out:'level sent',st:'4j',cite:DR.cite,mk:()=>({m:pick([6,8,10])}),
+   ask:(S,p)=>'the phone keeps the remainder by '+p.m+': what level is sent?',
+   f:(v,S,p)=>v.q===1?R(md(v.p,p.m)):null,ex:(V,S,p)=>'remainder of '+V+' by '+p.m,ln:'level sent',
+   w:[['the whole turns are given',(S,p)=>'give how many whole '+p.m+'s fit',(v,S,p)=>R(Math.floor(v.p/p.m))],
+      ['what is left is counted back from a full turn',(S,p)=>'count back from '+p.m+' to the level',(v,S,p)=>R(p.m-md(v.p,p.m))]]}],
+ ['clockone',{after:['read','next'],u:'levels',out:'level sent',st:'37·crypt',cite:LK,mk:()=>({m:pick([6,8,10])}),
+   ask:(S,p)=>'add the key step '+S.key+' and keep the remainder by '+p.m+': what level is sent?',
+   f:(v,S,p)=>v.q===1?R(md(v.p+S.key,p.m)):null,ex:(V,S,p)=>'remainder of '+V+' + '+S.key+' by '+p.m,ln:'level sent',
+   w:[['the key is left out',(S,p)=>'keep the remainder of the level by '+p.m,(v,S,p)=>R(md(v.p,p.m))],
+      ['the key is taken away',(S,p)=>'take the key off and keep the remainder by '+p.m,(v,S,p)=>R(md(v.p-S.key,p.m))]]}]]);
+const mOf=ctx=>{ const c=ctx&&ctx.chain&&ctx.chain.find(x=>/\.clock(one)?$/.test(x.W.id)); return c?c.p.m:null; };
+Z(L,Cu(X({u:'level sent',out:'level heard',k:(S,q,ctx)=>mOf(ctx),f:(S,p,q)=>R(md(q.v.p-S.key,num(p.k))),ex:(S,p,q)=>'remainder of '+par(q.v)+' − '+S.key+' by '+p.K,pos:false,
+  ask:(S,p)=>'the listener knows the key '+S.key+' and takes it off on the clock of '+p.K+': what level does she hear?',ln:()=>'level heard',
+  xs:(S,p,q)=>[{why:'the key is added again',v:R(md(q.v.p+S.key,num(p.k)))},{why:'the remainder is not taken',v:R(q.v.p-S.key)}]},own('37·crypt',LK))));
+}
+/* ---------- 37·phys.listener: a whistle and a moving listener; the next setting, riding away, the drop, a tuner's flag ---------- */
+{ const L='37·phys.listener', ML2='the moving-listener technique';
+map(L,[
+ ['up',{u:'hertz',out:'hertz',st:'5j',cite:MQ.cite,
+   ask:()=>'the whistle is turned up one setting: what does it sound now?',
+   f:(v,S)=>qa(v,cq(S.c[1])),ex:(V,S)=>V+' + '+qs(cq(S.c[1])),ln:'pitch one setting up',
+   w:[['one setting is taken as one hertz','add 1 hertz for the setting',v=>add(v,1)],
+      ['the pitch is doubled','double the pitch',v=>mul(v,2)]]}],
+ ['away',{after:['read','up'],u:'hertz',out:'hertz heard riding away',st:'37·phys',cite:ML2,
+   ask:()=>'Randy rides away from it at 1/10 of the speed of sound: what pitch does he hear?',
+   f:v=>mul(v,9,10),ex:V=>V+' · (1 − 1/10)',ln:'pitch heard riding away',
+   w:[['the riding toward it is used','multiply the pitch by 1 + 1/10',v=>mul(v,11,10)],
+      ['the moving-whistle form is used','divide the pitch by 1 + 1/10',v=>mul(v,10,11)]]}],
+ ['drop',{after:['away'],u:'hertz heard riding away',out:'hertz below the whistle',st:'37·phys',cite:ML2,mk:(S,ch)=>{ const c=ch[ch.length-1]; return c&&c.in?{f:c.in.v}:null; },
+   ask:(S,p)=>'the whistle itself sounds '+qs(p.f)+' hertz: how many hertz lower does Randy hear it?',
+   f:(v,S,p)=>qa(p.f,qn(v)),ex:(V,S,p)=>qs(p.f)+' − '+V,ln:'drop in pitch',
+   w:[['the subtraction is turned round','take the whistle’s pitch from what he hears',(v,S,p)=>qa(v,qn(p.f))],
+      ['the two pitches are added','add the two pitches',(v,S,p)=>qa(v,p.f)]]}],
+ ['dropone',{after:['read','up'],u:'hertz',out:'hertz below the whistle',st:'37·phys',cite:ML2,
+   ask:()=>'riding away at 1/10 of the speed of sound, how many hertz lower does Randy hear it?',
+   f:v=>dv(v,10),ex:V=>V+' · 1/10',ln:'drop in pitch',
+   w:[['the pitch he hears is given','take 9/10 of the pitch',v=>mul(v,9,10)],
+      ['the moving-whistle form is used','take the pitch less pitch/(1 + 1/10)',v=>sub(v,mul(v,10,11))]]}]]);
+Z(L,O(X({u:'hertz below the whistle',out:'hertz',k:'below',ask:(S,p)=>'a tuner flags any drop of more than '+p.K+' hertz: by how many hertz is it over?',ln:()=>'hertz over the flag'},own('37·phys',ML2))));
+}
+/* ---------- 38·phys.shell: electrons in a level; the next level, all the levels up to it, orbitals, boxes on a chart ---------- */
+{ const L='38·phys.shell', SC2='the shell-count technique';
+map(L,[
+ ['next',{u:'electrons',out:'electrons',st:'38·phys',cite:SC2,mk:(S,ch)=>{ const n=x0(ch); return n===undefined?null:{n}; },
+   ask:(S,p)=>'how many electrons does the next level, n = '+(p.n+1)+', hold?',
+   f:(v,S,p)=>R(2*(p.n+1)*(p.n+1)),ex:(V,S,p)=>'2 · '+(p.n+1)+'²',ln:'electrons in the next level',
+   w:[['the next level is taken to hold 2 more',(S,p)=>'add 2 electrons for the next level',v=>add(v,2)],
+      ['the count is taken to double','double the count for the next level',v=>mul(v,2)]]}],
+ ['upto',{after:['read','next'],u:'electrons',out:'electrons up to that level',st:'38·phys',cite:SC2,mk:(S,ch)=>{ const n=x0(ch); if(n===undefined) return null; return {n:n+(has(ch,L,'next')?1:0)}; },
+   ask:(S,p)=>'how many electrons fill all the levels from n = 1 up to n = '+p.n+'?',
+   f:(v,S,p)=>{ let t=0; for(let k=1;k<=p.n;k++) t+=2*k*k; return R(t); },ex:(V,S,p)=>Array.from({length:p.n},(_,i)=>'2 · '+(i+1)+'²').join(' + '),ln:'electrons up to that level',
+   w:[['only that level is counted','count that level alone',v=>v],
+      ['each level is taken to hold as many as that one',(S,p)=>'multiply that level’s count by '+p.n,(v,S,p)=>mul(v,p.n)]]}],
+ ['orb',{after:['upto'],u:'electrons up to that level',out:'orbitals filled',st:'38·phys',cite:SC2,
+   ask:()=>'two electrons fill each orbital: how many orbitals do they fill?',
+   f:v=>dv(v,2),ex:V=>V+'/2',ln:'orbitals filled',
+   w:[['the 2 multiplies','multiply the electrons by 2',v=>mul(v,2)],
+      ['one electron is put in each orbital','put one electron in each orbital',v=>v]]}],
+ ['orbone',{after:['read','next'],u:'electrons',out:'orbitals filled',st:'38·phys',cite:SC2,
+   ask:()=>'two electrons to an orbital: how many orbitals does that level fill?',
+   f:v=>dv(v,2),ex:V=>V+'/2',ln:'orbitals filled',
+   w:[['the 2 multiplies','multiply the electrons by 2',v=>mul(v,2)],
+      ['one electron is put in each orbital','put one electron in each orbital',v=>v]]}]]);
+Z(L,G(X({u:'orbitals filled',out:'empty boxes',k:'above',ask:(S,p)=>'a chart has boxes for '+p.K+' orbitals: how many boxes stay empty?',ln:()=>'empty boxes'},LESS)));
+}
+/* ---------- 38·now.kernel: lines in a small core; more moves, hours of review, a team, days booked ---------- */
+{ const L='38·now.kernel', SK='the small-kernel technique';
+map(L,[
+ ['moves',{u:'lines',out:'lines',st:'38·now',cite:SK,mk:()=>({d:pick([2,5,10])}),
+   ask:(S,p)=>'Jean adds '+p.d+' more moves to the checker: how many lines does it have now?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'lines with more moves',
+   w:[['the moves are added as lines',(S,p)=>'add the '+p.d+' moves to the lines',(v,S,p)=>add(v,p.d)],
+      ['the core is counted again',(S,p)=>'add L('+p.d+') to the lines',(v,S,p)=>qa(v,qa(cq(S.c[0]),qm(cq(S.c[1]),R(p.d))))]]}],
+ ['review',{after:['read','moves'],u:'lines',out:'hours of review',st:'38·now',cite:SK,mk:()=>({r:pick([50,100,200])}),
+   ask:(S,p)=>'a careful reviewer reads '+p.r+' lines an hour: how many hours does one full reading take?',
+   f:(v,S,p)=>dv(v,p.r),ex:(V,S,p)=>V+'/'+p.r,ln:'hours of review',
+   w:[['the pace multiplies',(S,p)=>'multiply the lines by '+p.r,(v,S,p)=>mul(v,p.r)],
+      ['the pace is taken away',(S,p)=>'take '+p.r+' off the lines',(v,S,p)=>sub(v,p.r)]]}],
+ ['team',{after:['review'],u:'hours of review',out:'hours for each reviewer',st:'5j',cite:MQ.cite,mk:()=>({m:pick([2,4,5])}),
+   ask:(S,p)=>'each of '+p.m+' reviewers reads a separate share: how many hours does each spend?',
+   f:(v,S,p)=>dv(v,p.m),ex:(V,S,p)=>V+'/'+p.m,ln:'hours for each reviewer',
+   w:[['the reviewers multiply',(S,p)=>'multiply the hours by '+p.m,(v,S,p)=>mul(v,p.m)],
+      ['each reviewer is taken to read it all','give each the whole reading',v=>v]]}],
+ ['teamone',{after:['read','moves'],u:'lines',out:'hours for each reviewer',st:'38·now',cite:SK,mk:()=>({r:pick([50,100,200]),m:pick([2,4,5])}),
+   ask:(S,p)=>p.m+' reviewers share the lines, each reading '+p.r+' an hour: how many hours does each spend?',
+   f:(v,S,p)=>dv(v,p.r*p.m),ex:(V,S,p)=>V+'/('+p.r+' · '+p.m+')',ln:'hours for each reviewer',
+   w:[['the reviewers are left out',(S,p)=>'divide the lines by '+p.r,(v,S,p)=>dv(v,p.r)],
+      ['the reviewers multiply',(S,p)=>'divide by '+p.r+' and multiply by '+p.m,(v,S,p)=>mul(v,p.m,p.r)]]}]]);
+Z(L,Cc(X({u:'hours for each reviewer',out:'days booked',k:4,ask:()=>'reviewers are booked in half-days of 4 hours: how many half-days for each?',ln:()=>'half-days booked'},DR)));
+}
+/* ---------- 39·bio.fire: a neuron's firing rate; more input, spikes in a window, packets released, the next cell ---------- */
+{ const L='39·bio.fire', WT2='the weighted-threshold technique';
+map(L,[
+ ['more',{u:'spikes a second',out:'spikes a second',st:'39·bio',cite:WT2,mk:()=>({d:pick([1,2,4])}),
+   ask:(S,p)=>'the input rises by '+p.d+': how many spikes a second now?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'rate with more input',
+   w:[['the input is added as spikes',(S,p)=>'add the '+p.d+' units of input to the rate',(v,S,p)=>add(v,p.d)],
+      ['the resting rate is counted again',(S,p)=>'add r('+p.d+') to the rate',(v,S,p)=>qa(v,qa(cq(S.c[0]),qm(cq(S.c[1]),R(p.d))))]]}],
+ ['window',{after:['read','more'],u:'spikes a second',out:'spikes in the window',st:'5j',cite:MQ.cite,mk:()=>({w:pick([100,200,500])}),
+   ask:(S,p)=>'how many spikes fall in a window of '+p.w+' milliseconds?',
+   f:(v,S,p)=>mul(v,p.w,1000),ex:(V,S,p)=>V+' · '+p.w+'/1000',ln:'spikes in the window',
+   w:[['milliseconds are taken as seconds',(S,p)=>'multiply the rate by '+p.w,(v,S,p)=>mul(v,p.w)],
+      ['the window divides',(S,p)=>'divide the rate by '+p.w+'/1000',(v,S,p)=>mul(v,1000,p.w)]]}],
+ ['packets',{after:['window'],u:'spikes in the window',out:'packets released',st:'39·bio',cite:WT2,mk:()=>({k:pick([2,3,5])}),
+   ask:(S,p)=>'each spike releases '+p.k+' packets of transmitter: how many packets in the window?',
+   f:(v,S,p)=>mul(v,p.k),ex:(V,S,p)=>V+' · '+p.k,ln:'packets released',
+   w:[['the packets divide',(S,p)=>'divide the spikes by '+p.k,(v,S,p)=>dv(v,p.k)],
+      ['the packets are added',(S,p)=>'add '+p.k+' to the spikes',(v,S,p)=>add(v,p.k)]]}],
+ ['packetsone',{after:['read','more'],u:'spikes a second',out:'packets released',st:'39·bio',cite:WT2,mk:()=>({w:pick([100,200,500]),k:pick([2,3,5])}),
+   ask:(S,p)=>'each spike releases '+p.k+' packets: how many packets in a '+p.w+' millisecond window?',
+   f:(v,S,p)=>mul(v,p.w*p.k,1000),ex:(V,S,p)=>V+' · '+p.w+'/1000 · '+p.k,ln:'packets released',
+   w:[['milliseconds are taken as seconds',(S,p)=>'multiply the rate by '+p.w+' · '+p.k,(v,S,p)=>mul(v,p.w*p.k)],
+      ['the packets are left out',(S,p)=>'multiply the rate by '+p.w+'/1000',(v,S,p)=>mul(v,p.w,1000)]]}]]);
+Z(L,G(X({u:'packets released',out:'packets',k:'above',ask:(S,p)=>'the next cell fires once '+p.K+' packets reach it in the window: how many more are needed?',ln:()=>'packets still needed'},own('39·bio',WT2))));
+}
+/* ---------- 42·eng.faces: faces of a knot drawing; more twists, edges, faces, labels ---------- */
+{ const L='42·eng.faces', CF='the crossing-faces technique';
+map(L,[
+ ['more',{u:'crossings',out:'crossings',st:'42·eng',cite:CF,mk:()=>({d:pick([1,2])}),
+   ask:(S,p)=>'Mike adds '+p.d+' more twist'+(p.d>1?'s':'')+' to the braid: how many crossings now?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'crossings with more twists',
+   w:[['each twist is taken as one crossing',(S,p)=>'add '+p.d+' crossings',(v,S,p)=>add(v,p.d)],
+      ['the crossings are doubled','double the crossings',v=>mul(v,2)]]}],
+ ['edges',{after:['read','more'],u:'crossings',out:'edges',st:'42·eng',cite:CF,
+   ask:()=>'four ends meet at a crossing, two ends to an edge: how many edges has the drawing?',
+   f:v=>mul(v,2),ex:V=>'4 · '+V+'/2',ln:'edges',
+   w:[['each end is counted as an edge','count 4 edges a crossing',v=>mul(v,4)],
+      ['one edge a crossing is taken','count one edge a crossing',v=>v]]}],
+ ['faces',{after:['edges'],u:'edges',out:'faces',st:'42·eng',cite:CF,mk:(S,ch)=>{ const c=ch[ch.length-1]; return c&&c.in?{V:c.in.v}:null; },
+   ask:(S,p)=>'with '+qs(p.V)+' crossings as corners and corners − edges + faces = 2, how many faces?',
+   f:(v,S,p)=>qa(qa(R(2),qn(p.V)),v),ex:(V,S,p)=>'2 − '+qs(p.V)+' + '+V,ln:'faces',
+   w:[['the corners are added, not taken away','take 2 + corners + edges',(v,S,p)=>qa(qa(R(2),p.V),v)],
+      ['the corners are left out','take 2 + edges',v=>add(v,2)]]}],
+ ['facesone',{after:['read','more'],u:'crossings',out:'faces',st:'42·eng',cite:CF,
+   ask:()=>'a drawing in one piece has 2 more faces than crossings: how many faces does it have?',
+   f:v=>add(v,2),ex:V=>V+' + 2',ln:'faces',
+   w:[['2 is taken away','take 2 off the crossings',v=>sub(v,2)],
+      ['the faces are taken as the edges','take twice the crossings',v=>mul(v,2)]]}]]);
+Z(L,G(X({u:'faces',out:'labels',k:'above',ask:(S,p)=>'Mike has '+p.K+' colour labels, one for each face: how many are left over?',ln:()=>'labels left over'},LESS)));
+}
+/* ---------- 42·econ.proposals: proposals in a pairing run; one more pair, rejections, minutes, hours booked ---------- */
+{ const L='42·econ.proposals', PC='the proposal-count technique';
+map(L,[
+ ['more',{u:'proposals',out:'proposals',st:'42·econ',cite:PC,mk:(S,ch)=>{ const n=x0(ch); return n===undefined?null:{n}; },
+   ask:(S,p)=>'one more doctor and one more hospital join, making '+(p.n+1)+' of each: at most how many proposals?',
+   f:(v,S,p)=>R((p.n+1)*(p.n+1)-(p.n+1)+1),ex:(V,S,p)=>(p.n+1)+'² − '+(p.n+1)+' + 1',ln:'proposals with one more pair',
+   w:[['one more proposal is counted','add 1 proposal',v=>add(v,1)],
+      ['the new doctor is taken to propose to each hospital once',(S,p)=>'add '+(p.n+1)+' proposals',(v,S,p)=>add(v,p.n+1)]]}],
+ ['reject',{after:['read','more'],u:'proposals',out:'rejections',st:'42·econ',cite:PC,mk:(S,ch)=>{ const n=x0(ch); if(n===undefined) return null; return {n:n+(has(ch,L,'more')?1:0)}; },
+   ask:(S,p)=>'every proposal but the '+p.n+' final matches ends in a rejection: at most how many rejections?',
+   f:(v,S,p)=>sub(v,p.n),ex:(V,S,p)=>V+' − '+p.n,ln:'rejections',
+   w:[['the matches are not taken away','count every proposal as a rejection',v=>v],
+      ['the matches are added',(S,p)=>'add the '+p.n+' matches',(v,S,p)=>add(v,p.n)]]}],
+ ['minutes',{after:['reject'],u:'rejections',out:'minutes',st:'5j',cite:MQ.cite,mk:()=>({t:pick([5,10,15])}),
+   ask:(S,p)=>'each rejection takes '+p.t+' minutes of calls: at most how many minutes of calls?',
+   f:(v,S,p)=>mul(v,p.t),ex:(V,S,p)=>V+' · '+p.t,ln:'minutes of calls',
+   w:[['the minutes divide',(S,p)=>'divide the rejections by '+p.t,(v,S,p)=>dv(v,p.t)],
+      ['the minutes are added',(S,p)=>'add '+p.t+' to the rejections',(v,S,p)=>add(v,p.t)]]}],
+ ['minutesone',{after:['read','more'],u:'proposals',out:'minutes',st:'5j',cite:MQ.cite,mk:()=>({t:pick([5,10,15])}),
+   ask:(S,p)=>'each proposal takes '+p.t+' minutes of calls: at most how many minutes of calls?',
+   f:(v,S,p)=>mul(v,p.t),ex:(V,S,p)=>V+' · '+p.t,ln:'minutes of calls',
+   w:[['the minutes divide',(S,p)=>'divide the proposals by '+p.t,(v,S,p)=>dv(v,p.t)],
+      ['the minutes are added',(S,p)=>'add '+p.t+' to the proposals',(v,S,p)=>add(v,p.t)]]}]]);
+Z(L,Cc(X({u:'minutes',out:'hours booked',k:60,ask:()=>'the call room is booked by the whole hour: how many hours must be booked?',ln:()=>'hours booked'},DR)));
+}
+/* ---------- 42·chem.alkane: atoms of an alkane; a longer chain, bonds, carbon-hydrogen bonds, the energy to break them ---------- */
+{ const L='42·chem.alkane', AT2='the alkane-tree technique';
+const nC=(ch)=>{ const n=x0(ch); return n===undefined?null:n+(has(ch,L,'longer')?1:0); };
+map(L,[
+ ['longer',{u:'atoms',out:'atoms',st:'42·chem',cite:AT2,
+   ask:()=>'one more carbon, with its two hydrogens, joins the chain: how many atoms now?',
+   f:v=>add(v,3),ex:V=>V+' + 3',ln:'atoms in the longer chain',
+   w:[['the carbon alone is counted','add 1 atom for the carbon',v=>add(v,1)],
+      ['three hydrogens are counted with it','add 4 atoms',v=>add(v,4)]]}],
+ ['bonds',{after:['read','longer'],u:'atoms',out:'bonds',st:'42·chem',cite:AT2,
+   ask:()=>'all its bonds single and the molecule a tree: how many bonds does it have?',
+   f:v=>sub(v,1),ex:V=>V+' − 1',ln:'bonds',
+   w:[['a bond is counted for each atom','take one bond an atom',v=>v],
+      ['a ring is assumed, one bond more','take one more bond than atoms',v=>add(v,1)]]}],
+ ['ch',{after:['bonds'],u:'bonds',out:'carbon-hydrogen bonds',st:'42·chem',cite:AT2,mk:(S,ch)=>{ const n=nC(ch); return n?{n}:null; },
+   ask:(S,p)=>'its '+p.n+' carbons are joined by '+(p.n-1)+' carbon-carbon bonds: how many carbon-hydrogen bonds?',
+   f:(v,S,p)=>sub(v,p.n-1),ex:(V,S,p)=>V+' − '+(p.n-1),ln:'carbon-hydrogen bonds',
+   w:[['the carbons are taken away instead of their bonds',(S,p)=>'take '+p.n+' off the bonds',(v,S,p)=>sub(v,p.n)],
+      ['the carbon-carbon bonds are added',(S,p)=>'add '+(p.n-1)+' to the bonds',(v,S,p)=>add(v,p.n-1)]]}],
+ ['chone',{after:['read','longer'],u:'atoms',out:'carbon-hydrogen bonds',st:'42·chem',cite:AT2,mk:(S,ch)=>{ const n=nC(ch); return n?{n}:null; },
+   ask:(S,p)=>'one bond holds each hydrogen: setting aside the '+p.n+' carbons, how many carbon-hydrogen bonds?',
+   f:(v,S,p)=>sub(v,p.n),ex:(V,S,p)=>V+' − '+p.n,ln:'carbon-hydrogen bonds',
+   w:[['the carbons are not set aside','count a bond for every atom',v=>v],
+      ['one bond is taken off as for the tree','take one off the atoms',v=>sub(v,1)]]}]]);
+Z(L,Tm(X({u:'carbon-hydrogen bonds',out:'kilojoules a mole',k:()=>pick([400,410,420]),ask:(S,p)=>'each carbon-hydrogen bond takes about '+p.K+' kilojoules a mole to break: how much for all of them?',ln:()=>'energy to break them'},MQ)));
+}
+/* ---------- 43·crypt.shares: a secret shared on a prime clock; the next holder, the clock of 11, a mask, the mask taken off ---------- */
+{ const L='43·crypt.shares', PS='the point-share technique';
+const md=(a,m)=>((a%m)+m)%m;
+const f3=(S,i)=>qa(qa(cq(S.c[0]),qm(cq(S.c[1]),R(i))),qm(cq(S.c[2]),R(i*i)));
+map(L,[
+ ['next',{u:'units',out:'units',st:'43·crypt',cite:PS,mk:(S,ch)=>{ const i=x0(ch); return i===undefined?null:{i}; },
+   ask:(S,p)=>'before the remainder, what does the next holder, i = '+(p.i+1)+', get?',
+   f:(v,S,p)=>f3(S,p.i+1),ex:(V,S,p)=>'f('+(p.i+1)+')',ln:'the next holder’s value',
+   w:[['one holder on is taken to add the first slope only',(S)=>'add '+qs(cq(S.c[1]))+' to the value',(v,S)=>qa(v,cq(S.c[1]))],
+      ['the value is taken to double','double the value',v=>mul(v,2)]]}],
+ ['clock',{after:['read','next'],u:'units',out:'share on the clock of 11',st:'43·crypt',cite:PS,
+   ask:()=>'on the clock of 11, what share does that holder hold?',
+   f:v=>v.q===1?R(md(v.p,11)):null,ex:V=>'remainder of '+V+' by 11',ln:'share on the clock of 11',
+   w:[['the whole turns are given','give how many whole 11s fit',v=>R(Math.floor(v.p/11))],
+      ['what is left is counted back from 11','count back from 11',v=>R(11-md(v.p,11))]]}],
+ ['mask',{after:['clock'],u:'share on the clock of 11',out:'masked share',st:'43·crypt',cite:'the two-say-nothing technique',mk:()=>({m:ri(2,9)}),
+   ask:(S,p)=>'the holder adds a fresh mask '+p.m+' before sending, on the clock of 11: what is sent?',
+   f:(v,S,p)=>R(md(v.p+p.m,11)),ex:(V,S,p)=>'remainder of '+V+' + '+p.m+' by 11',ln:'masked share',
+   w:[['the mask is taken away',(S,p)=>'take the mask '+p.m+' off on the clock of 11',(v,S,p)=>R(md(v.p-p.m,11))],
+      ['the remainder is not taken',(S,p)=>'add the mask '+p.m+' and stop',(v,S,p)=>add(v,p.m)]]}],
+ ['maskone',{after:['read','next'],u:'units',out:'masked share',st:'43·crypt',cite:'the two-say-nothing technique',mk:()=>({m:ri(2,9)}),
+   ask:(S,p)=>'the holder adds a mask '+p.m+' and keeps the remainder by 11: what is sent?',
+   f:(v,S,p)=>v.q===1?R(md(v.p+p.m,11)):null,ex:(V,S,p)=>'remainder of '+V+' + '+p.m+' by 11',ln:'masked share',
+   w:[['the mask is left out','keep the remainder by 11 alone',v=>R(md(v.p,11))],
+      ['the mask is taken away',(S,p)=>'take '+p.m+' off and keep the remainder by 11',(v,S,p)=>R(md(v.p-p.m,11))]]}]]);
+const mOf=ctx=>{ const c=ctx&&ctx.chain&&ctx.chain.find(x=>/\.mask(one)?$/.test(x.W.id)); return c?c.p.m:null; };
+Z(L,Cu(X({u:'masked share',out:'share',k:(S,q,ctx)=>mOf(ctx),f:(S,p,q)=>R(md(q.v.p-num(p.k),11)),ex:(S,p,q)=>'remainder of '+par(q.v)+' − '+p.K+' by 11',pos:false,
+  ask:(S,p)=>'the dealer, who chose the mask '+p.K+', takes it off on the clock of 11: what share is left?',ln:()=>'share unmasked',
+  xs:(S,p,q)=>[{why:'the mask is added again',v:R(md(q.v.p+num(p.k),11))},{why:'the remainder is not taken',v:R(q.v.p-num(p.k))}]},own('43·crypt',PS))));
+}
+/* ---------- 43·cb37.fifths: a tune moved by fifths; one more fifth, the hour, a tone up, steps to the tonic ---------- */
+{ const L='43·cb37.fifths', PCK='the pitch-clock technique';
+const md=(a,m)=>((a%m)+m)%m;
+map(L,[
+ ['more',{u:'steps',out:'steps',st:'43·cb37',cite:'the interval-cycle technique',
+   ask:()=>'the tune moves up one more fifth: how many steps from hour 0, before the clock is read?',
+   f:v=>add(v,7),ex:V=>V+' + 7',ln:'steps after one more fifth',
+   w:[['a fifth is taken as 5 steps','add 5 steps for the fifth',v=>add(v,5)],
+      ['the steps are doubled','double the steps',v=>mul(v,2)]]}],
+ ['hour',{after:['read','more'],u:'steps',out:'hour of the pitch clock',st:'43·cb37',cite:PCK,
+   ask:()=>'what hour of the clock of 12 does it land on?',
+   f:v=>v.q===1?R(md(v.p,12)):null,ex:V=>'remainder of '+V+' by 12',ln:'hour on the pitch clock',
+   w:[['the whole turns are given','give how many whole 12s fit',v=>R(Math.floor(v.p/12))],
+      ['what is left is counted back from 12','count back from 12',v=>R(12-md(v.p,12))]]}],
+ ['tone',{after:['hour'],u:'hour of the pitch clock',out:'hour after a tone up',st:'43·cb37',cite:'the tone-and-semitone technique',
+   ask:()=>'the singer then lifts it a whole tone, 2 steps: what hour does it land on?',
+   f:v=>R(md(v.p+2,12)),ex:V=>'remainder of '+V+' + 2 by 12',ln:'hour after a tone up',
+   w:[['a tone is taken as 1 step','add 1 step on the clock',v=>R(md(v.p+1,12))],
+      ['the remainder is not taken','add 2 and stop',v=>add(v,2)]]}],
+ ['toneone',{after:['read','more'],u:'steps',out:'hour after a tone up',st:'43·cb37',cite:PCK,
+   ask:()=>'the singer lifts it a tone, 2 steps more: what hour of the clock of 12 does it land on?',
+   f:v=>v.q===1?R(md(v.p+2,12)):null,ex:V=>'remainder of '+V+' + 2 by 12',ln:'hour after a tone up',
+   w:[['the tone is left out','keep the remainder by 12 alone',v=>R(md(v.p,12))],
+      ['a tone is taken as 1 step','add 1 and keep the remainder by 12',v=>R(md(v.p+1,12))]]}]]);
+Z(L,Cu(X({u:'hour after a tone up',out:'steps up to hour 0',k:1,f:(S,p,q)=>R(md(12-q.v.p,12)),ex:(S,p,q)=>'remainder of 12 − '+par(q.v)+' by 12',
+  ask:()=>'how many steps up does it still need to reach hour 0, the home note?',ln:()=>'steps to home',
+  xs:(S,p,q)=>[{why:'the hour itself is given',v:q.v},{why:'a tone is taken off again on the way home',v:R(md(10-q.v.p,12))}]},own('43·cb37',PCK))));
+}
+/* ---------- 43·comp.lcg: a generator on a prime clock; the next input, the output, fed back, the second output ---------- */
+{ const L='43·comp.lcg';
+const md=(a,m)=>((a%m)+m)%m;
+map(L,[
+ ['next',{u:'units',out:'units',st:'5j',cite:MQ.cite,
+   ask:()=>'the input is one more: what does the maker give before the remainder?',
+   f:(v,S)=>qa(v,cq(S.c[1])),ex:(V,S)=>V+' + '+qs(cq(S.c[1])),ln:'value for the next input',
+   w:[['one more input is taken to add 1','add 1 to the value',v=>add(v,1)],
+      ['the added constant is counted again',(S)=>'add '+qs(cq(S.c[0]))+' + '+qs(cq(S.c[1]))+' to the value',(v,S)=>qa(v,qa(cq(S.c[0]),cq(S.c[1])))]]}],
+ ['out',{after:['read','next'],u:'units',out:'output on the clock of 13',st:'4j',cite:DR.cite,
+   ask:()=>'what does it put out on the clock of 13?',
+   f:v=>v.q===1?R(md(v.p,13)):null,ex:V=>'remainder of '+V+' by 13',ln:'output',
+   w:[['the whole turns are given','give how many whole 13s fit',v=>R(Math.floor(v.p/13))],
+      ['what is left is counted back from 13','count back from 13',v=>R(13-md(v.p,13))]]}],
+ ['feed',{after:['out'],u:'output on the clock of 13',out:'units for the second step',st:'43·comp',cite:'the two-clock technique',
+   ask:(S)=>'the output is fed back in: what is y = '+qs(cq(S.c[1]))+'x + '+qs(cq(S.c[0]))+' of it, before the remainder?',
+   f:(v,S)=>qa(qm(cq(S.c[1]),v),cq(S.c[0])),ex:(V,S)=>qs(cq(S.c[1]))+' · '+V+' + '+qs(cq(S.c[0])),ln:'value for the second step',
+   w:[['the constant is left out',(S)=>'multiply the output by '+qs(cq(S.c[1])),(v,S)=>qm(cq(S.c[1]),v)],
+      ['the constant multiplies too',(S)=>'multiply the output by '+qs(cq(S.c[1]))+' and by '+qs(cq(S.c[0])),(v,S)=>qm(qm(cq(S.c[1]),v),cq(S.c[0]))]]}],
+ ['feedone',{after:['read','next'],u:'units',out:'units for the second step',st:'43·comp',cite:'the two-clock technique',
+   ask:(S)=>'take the remainder by 13 and feed it back: what is '+qs(cq(S.c[1]))+'x + '+qs(cq(S.c[0]))+' of it?',
+   f:(v,S)=>v.q===1?qa(qm(cq(S.c[1]),R(md(v.p,13))),cq(S.c[0])):null,ex:(V,S)=>qs(cq(S.c[1]))+' · (remainder of '+V+' by 13) + '+qs(cq(S.c[0])),ln:'value for the second step',
+   w:[['the remainder is not taken first',(S)=>'feed the value back without the remainder',(v,S)=>qa(qm(cq(S.c[1]),v),cq(S.c[0]))],
+      ['the constant is left out',(S)=>'multiply the remainder by '+qs(cq(S.c[1]))+' only',(v,S)=>qm(cq(S.c[1]),R(md(v.p,13)))]]}]]);
+Z(L,Md(X({u:'units for the second step',out:'second output',k:13,pos:false,ask:()=>'what is the second output on the clock of 13?',ln:()=>'second output'},DR)));
+}
+
+/* ---------- 44·comp.fix: flips a code can fix; one more check group, flips fixed in a word, in a block, the line's noise ---------- */
+{ const L='44·comp.fix', FR='the fix-radius technique';
+map(L,[
+ ['more',{u:'flips',out:'flips',st:'44·comp',cite:FR,
+   ask:()=>'one more check group is added: what is the least distance now?',
+   f:(v,S)=>qa(v,cq(S.c[1])),ex:(V,S)=>V+' + '+qs(cq(S.c[1])),ln:'distance with one more group',
+   w:[['one group is taken to add 1 to the distance','add 1 to the distance',v=>add(v,1)],
+      ['the distance is doubled','double the distance',v=>mul(v,2)]]}],
+ ['fix',{after:['read','more'],u:'flips',out:'flips fixed in a word',st:'44·comp',cite:FR,
+   ask:()=>'a code of least distance d fixes up to (d − 1)/2 flips, whole: how many in any word?',
+   f:v=>R(Math.floor((num(v)-1)/2)),ex:V=>'whole part of ('+V+' − 1)/2',ln:'flips fixed in a word',
+   w:[['the flips it can spot, d − 1, are given','take d − 1 flips',v=>sub(v,1)],
+      ['the distance is halved without taking 1 off','halve the distance, rounding down',v=>R(Math.floor(num(v)/2))]]}],
+ ['block',{after:['fix'],u:'flips fixed in a word',out:'flips fixed in a block',st:'5j',cite:MQ.cite,mk:()=>({k:pick([8,16,32])}),
+   ask:(S,p)=>'a block holds '+p.k+' words, each fixed on its own: at most how many flips in the block?',
+   f:(v,S,p)=>mul(v,p.k),ex:(V,S,p)=>V+' · '+p.k,ln:'flips fixed in a block',
+   w:[['the words divide',(S,p)=>'divide the flips by '+p.k,(v,S,p)=>dv(v,p.k)],
+      ['the words are added',(S,p)=>'add '+p.k+' to the flips',(v,S,p)=>add(v,p.k)]]}],
+ ['blockone',{after:['read','more'],u:'flips',out:'flips fixed in a block',st:'44·comp',cite:FR,mk:()=>({k:pick([8,16,32])}),
+   ask:(S,p)=>'a block holds '+p.k+' words, each fixing up to (d − 1)/2 flips: at most how many in the block?',
+   f:(v,S,p)=>mul(R(Math.floor((num(v)-1)/2)),p.k),ex:(V,S,p)=>p.k+' · whole part of ('+V+' − 1)/2',ln:'flips fixed in a block',
+   w:[['the flips spotted are used',(S,p)=>'take '+p.k+' · (d − 1)',(v,S,p)=>mul(sub(v,1),p.k)],
+      ['the distance itself is used',(S,p)=>'take '+p.k+' · d',(v,S,p)=>mul(v,p.k)]]}]]);
+Z(L,G(X({u:'flips fixed in a block',out:'flips',k:'above',ask:(S,p)=>'a noisy line flips up to '+p.K+' bits a block: how many flips would go unfixed?',ln:()=>'flips left unfixed'},own('44·comp',FR))));
+}
+/* ---------- 44·bio.samples: samples and their stretches; more days, pairs to compare, minutes of comparing, hours booked ---------- */
+{ const L='44·bio.samples', FS='the few-samples technique';
+map(L,[
+ ['later',{u:'samples',out:'samples',st:'5j',cite:MQ.cite,mk:()=>({d:pick([1,2,3])}),
+   ask:(S,p)=>p.d+' day'+(p.d>1?'s':'')+' later, how many samples does the lab have?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'samples later',
+   w:[['the days are added as samples',(S,p)=>'add the '+p.d+' days to the samples',(v,S,p)=>add(v,p.d)],
+      ['the first day’s samples are counted again',(S,p)=>'add N('+p.d+') to the samples',(v,S,p)=>qa(v,qa(cq(S.c[0]),qm(cq(S.c[1]),R(p.d))))]]}],
+ ['pairs',{after:['read','later'],u:'samples',out:'pairs of samples',st:'44·bio',cite:FS,
+   ask:()=>'each sample is compared once with every other: how many pairs is that?',
+   f:v=>dv(qm(v,sub(v,1)),2),ex:V=>V+' · ('+V+' − 1)/2',ln:'pairs',
+   w:[['each pair is counted twice','take N(N − 1) pairs',v=>qm(v,sub(v,1))],
+      ['each sample is paired with itself as well','take N²/2 pairs',v=>dv(qm(v,v),2)]]}],
+ ['minutes',{after:['pairs'],u:'pairs of samples',out:'minutes',st:'5j',cite:MQ.cite,mk:()=>({t:pick([2,3,5])}),
+   ask:(S,p)=>'a comparison takes '+p.t+' minutes: how many minutes of comparing?',
+   f:(v,S,p)=>mul(v,p.t),ex:(V,S,p)=>V+' · '+p.t,ln:'minutes of comparing',
+   w:[['the minutes divide',(S,p)=>'divide the pairs by '+p.t,(v,S,p)=>dv(v,p.t)],
+      ['the minutes are added',(S,p)=>'add '+p.t+' to the pairs',(v,S,p)=>add(v,p.t)]]}],
+ ['minutesone',{after:['read','later'],u:'samples',out:'minutes',st:'5j',cite:MQ.cite,mk:()=>({t:pick([10,15,20])}),
+   ask:(S,p)=>'each sample takes '+p.t+' minutes to stain and read: how many minutes for them all?',
+   f:(v,S,p)=>mul(v,p.t),ex:(V,S,p)=>V+' · '+p.t,ln:'minutes of reading',
+   w:[['the minutes divide',(S,p)=>'divide the samples by '+p.t,(v,S,p)=>dv(v,p.t)],
+      ['the minutes are added',(S,p)=>'add '+p.t+' to the samples',(v,S,p)=>add(v,p.t)]]}]]);
+Z(L,Cc(X({u:'minutes',out:'hours booked',k:60,ask:()=>'the microscope is booked by the whole hour: how many hours must be booked?',ln:()=>'hours booked'},DR)));
+}
+/* ---------- 44·chem.fill: electrons over a chain's links; a longer chain, a flask of them, the charge, the current's time ---------- */
+{ const L='44·chem.fill', FB='the fill-from-bottom technique';
+map(L,[
+ ['longer',{u:'electrons',out:'electrons',st:'44·chem',cite:'the chain-level technique',mk:()=>({d:pick([2,4])}),
+   ask:(S,p)=>'the chain is made '+p.d+' carbons longer: how many electrons spread over its links now?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'electrons in the longer chain',
+   w:[['the carbons are added as electrons',(S,p)=>'add the '+p.d+' carbons as electrons',(v,S,p)=>add(v,p.d)],
+      ['the electrons are doubled','double the electrons',v=>mul(v,2)]]}],
+ ['flask',{after:['read','longer'],u:'electrons',out:'millimoles of electrons',st:'5j',cite:MQ.cite,mk:()=>({k:pick([2,5,10])}),
+   ask:(S,p)=>'a flask holds '+p.k+' millimoles of the molecule: how many millimoles of these electrons?',
+   f:(v,S,p)=>mul(v,p.k),ex:(V,S,p)=>V+' · '+p.k,ln:'millimoles of electrons',
+   w:[['the millimoles divide',(S,p)=>'divide the electrons by '+p.k,(v,S,p)=>dv(v,p.k)],
+      ['the millimoles are added',(S,p)=>'add '+p.k+' to the electrons',(v,S,p)=>add(v,p.k)]]}],
+ ['charge',{after:['flask'],u:'millimoles of electrons',out:'coulombs',st:'5j',cite:CU.cite,
+   ask:()=>'a millimole of electrons carries about 96 coulombs: how much charge is that?',
+   f:v=>mul(v,96),ex:V=>V+' · 96',ln:'charge',
+   w:[['the change is turned over','divide by 96',v=>dv(v,96)],
+      ['a mole’s charge is not changed to a millimole’s','multiply by 96000',v=>mul(v,96000)]]}],
+ ['chargeone',{after:['read','longer'],u:'electrons',out:'coulombs',st:'5j',cite:MQ.cite,mk:()=>({k:pick([2,5,10])}),
+   ask:(S,p)=>'in a flask of '+p.k+' millimoles, at about 96 coulombs a millimole of electrons: what charge?',
+   f:(v,S,p)=>mul(v,96*p.k),ex:(V,S,p)=>V+' · '+p.k+' · 96',ln:'charge',
+   w:[['the flask is left out','multiply the electrons by 96',v=>mul(v,96)],
+      ['the millimoles divide',(S,p)=>'divide by '+p.k+' and multiply by 96',(v,S,p)=>mul(v,96,p.k)]]}]]);
+Z(L,Pr(X({u:'coulombs',out:'seconds',k:()=>pick([2,4,5]),ask:(S,p)=>'a current of '+p.K+' amps carries that charge: how many seconds does it take?',ln:()=>'seconds'},MQ)));
+}
+/* ---------- 47·comp.types: members of a type; the next setting, pairs, a maybe, maps from a two-member type ---------- */
+{ const L='47·comp.types', TC='the type-counts technique';
+map(L,[
+ ['up',{u:'members',out:'members',st:'47·comp',cite:TC,
+   ask:()=>'Mike raises the setting by one: how many members does the type have now?',
+   f:(v,S)=>qa(v,cq(S.c[1])),ex:(V,S)=>V+' + '+qs(cq(S.c[1])),ln:'members at the next setting',
+   w:[['one setting is taken to add one member','add 1 member',v=>add(v,1)],
+      ['the members are doubled','double the members',v=>mul(v,2)]]}],
+ ['pairs',{after:['read','up'],u:'members',out:'members of the pair type',st:'47·comp',cite:'the two-picks technique',
+   ask:()=>'a pair picks one member for each of two slots: how many members has the type of pairs?',
+   f:v=>qm(v,v),ex:V=>V+' · '+V,ln:'members of the pair type',
+   w:[['the two slots are added, not multiplied','add the members to themselves',v=>mul(v,2)],
+      ['a member may not be picked twice','take N(N − 1)',v=>qm(v,sub(v,1))]]}],
+ ['maybe',{after:['pairs'],u:'members of the pair type',out:'members of the maybe type',st:'47·comp',cite:TC,
+   ask:()=>'a maybe type holds a pair or one extra member, nothing: how many members has it?',
+   f:v=>add(v,1),ex:V=>V+' + 1',ln:'members of the maybe type',
+   w:[['the nothing member is left out','keep the pairs alone',v=>v],
+      ['the maybe is taken to double the type','double the pairs',v=>mul(v,2)]]}],
+ ['maybeone',{after:['read','up'],u:'members',out:'members of the maybe type',st:'47·comp',cite:TC,
+   ask:()=>'a maybe type holds a member or one extra, nothing: how many members has it?',
+   f:v=>add(v,1),ex:V=>V+' + 1',ln:'members of the maybe type',
+   w:[['the nothing member is left out','keep the members alone',v=>v],
+      ['the maybe is taken to double the type','double the members',v=>mul(v,2)]]}]]);
+Z(L,Cu(X({u:'members of the maybe type',out:'maps',k:1,f:(S,p,q)=>qm(q.v,q.v),ex:(S,p,q)=>par(q.v)+'²',ask:()=>'a map from a two-member type picks a member for each: how many such maps are there?',ln:()=>'maps',
+  xs:(S,p,q)=>[{why:'the choices are added, not multiplied',v:mul(q.v,2)},{why:'the maps are counted the other way, 2 to the members',v:num(q.v)<=16?R(Math.pow(2,num(q.v))):null}]},own('47·comp','the map-over technique'))));
+}
+/* ---------- 47·now.ways: ways a type is the same as itself; one more member, maps to itself, the share that are ways, a random pick ---------- */
+{ const L='47·now.ways', WC='the way-count technique';
+const fact=n=>{ let f=1; for(let i=2;i<=n;i++) f*=i; return f; };
+map(L,[
+ ['up',{u:'members',out:'members',st:'47·now',cite:WC,
+   ask:()=>'one more member is added to the type: how many members now?',
+   f:v=>add(v,1),ex:V=>V+' + 1',ln:'members',
+   w:[['the members are doubled','double the members',v=>mul(v,2)],
+      ['two members are added','add 2 members',v=>add(v,2)]]}],
+ ['maps',{after:['read','up'],u:'members',out:'maps of it to itself',st:'47·now',cite:WC,
+   ask:()=>'a map of the type to itself picks a member for each member: how many maps are there?',
+   f:v=>v.q===1&&v.p<=6?R(Math.pow(v.p,v.p)):null,ex:V=>V+'^'+V,ln:'maps to itself',
+   w:[['the choices are multiplied as N · N only','take N²',v=>qm(v,v)],
+      ['each member is taken to have only fewer choices left','take N!',v=>R(fact(v.p))]]}],
+ ['share',{after:['maps'],u:'maps of it to itself',out:'of the maps that are ways',st:'47·now',cite:WC,mk:(S,ch)=>{ const c=ch[ch.length-1]; return c&&c.in?{n:c.in.v.p}:null; },
+   ask:(S,p)=>'the ways are the '+p.n+'! maps that miss no member: what share of the maps is that?',
+   f:(v,S,p)=>dv(R(fact(p.n)),v),ex:(V,S,p)=>p.n+'!/'+V,ln:'share that are ways',
+   w:[['the share is turned over',(S,p)=>'divide the maps by '+p.n+'!',(v,S,p)=>dv(v,fact(p.n))],
+      ['the ways are taken as N, one for each member',(S,p)=>'divide '+p.n+' by the maps',(v,S,p)=>dv(R(p.n),v)]]}],
+ ['shareone',{after:['read','up'],u:'members',out:'of the maps that are ways',st:'47·now',cite:WC,
+   ask:()=>'of the maps of the type to itself, N^N, what share are ways, N! of them?',
+   f:v=>v.q===1&&v.p<=6?R(fact(v.p),Math.pow(v.p,v.p)):null,ex:V=>V+'!/'+V+'^'+V,ln:'share that are ways',
+   w:[['the share is turned over','divide N^N by N!',v=>v.p<=6?R(Math.pow(v.p,v.p),fact(v.p)):null],
+      ['the maps are taken as N²','divide N! by N²',v=>R(fact(v.p),v.p*v.p)]]}]]);
+Z(L,Tm(X({u:'of the maps that are ways',out:'ways expected',k:()=>pick([100,1000]),ask:(S,p)=>'picking '+p.K+' maps at random, about how many are ways?',ln:()=>'ways expected'},own('47·now',WC))));
+}
+/* ---------- 30·econ.drift: a drift against a wobble; more days, the drift in wobbles, four times as long, a trader's mark ---------- */
+{ const L='30·econ.drift', DW='the drift-and-width technique';
+const sq=t=>{ const s=Math.round(Math.sqrt(t)); return s*s===t?s:null; };
+const days=ch=>{ const t=x0(ch); if(t===undefined) return null; const a=has(ch,L,'longer'); return t+(a?a.p.d:0); };
+map(L,[
+ ['longer',{u:'dollars',out:'dollars',st:'30·econ',cite:DW,mk:(S,ch)=>{ const t=x0(ch); const s=t&&sq(t); return s?{d:(s+2)*(s+2)-t}:null; },
+   ask:(S,p)=>'the fund is held '+p.d+' days longer: how many dollars has it drifted up then?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'drift over the longer hold',
+   w:[['the days are added as dollars',(S,p)=>'add the '+p.d+' days to the drift',(v,S,p)=>add(v,p.d)],
+      ['only the extra days are counted',(S,p)=>'take the drift over the '+p.d+' days alone',(v,S,p)=>qm(cq(S.c[1]),R(p.d))]]}],
+ ['wob',{after:['read','longer'],u:'dollars',out:'wobbles',st:'30·econ',cite:DW,mk:(S,ch)=>{ const t=days(ch); const s=t&&sq(t); return s?{t,s}:null; },
+   ask:(S,p)=>'the wobble over '+p.t+' days is √'+p.t+' = '+p.s+' dollars: how many wobbles is the drift?',
+   f:(v,S,p)=>dv(v,p.s),ex:(V,S,p)=>V+'/'+p.s,ln:'drift in wobbles',
+   w:[['the wobble multiplies',(S,p)=>'multiply the drift by '+p.s,(v,S,p)=>mul(v,p.s)],
+      ['the days are used for the wobble, not their root',(S,p)=>'divide the drift by '+p.t,(v,S,p)=>dv(v,p.t)]]}],
+ ['four',{after:['wob'],u:'wobbles',out:'wobbles over four times as long',st:'30·econ',cite:'the root-n technique',
+   ask:()=>'held 4 times as long, drift grows 4 times and wobble √4 times: how many wobbles then?',
+   f:v=>mul(v,2),ex:V=>V+' · 4/√4',ln:'wobbles over four times as long',
+   w:[['the wobble is taken to grow 4 times too','keep the same number of wobbles',v=>v],
+      ['the wobble is taken to stay put','multiply the wobbles by 4',v=>mul(v,4)]]}],
+ ['fourone',{after:['read','longer'],u:'dollars',out:'wobbles over four times as long',st:'30·econ',cite:'the root-n technique',mk:(S,ch)=>{ const t=days(ch); const s=t&&sq(4*t); return s?{t,s}:null; },
+   ask:(S,p)=>'held four times as long, '+(4*p.t)+' days, the wobble is '+p.s+': how many wobbles is the drift then?',
+   f:(v,S,p)=>mul(v,4,p.s),ex:(V,S,p)=>'4 · '+V+'/'+p.s,ln:'wobbles over four times as long',
+   w:[['the drift is not grown',(S,p)=>'divide the drift by '+p.s,(v,S,p)=>dv(v,p.s)],
+      ['the days are used for the wobble',(S,p)=>'divide 4 times the drift by '+(4*p.t),(v,S,p)=>mul(v,4,4*p.t)]]}]]);
+Z(L,G(X({u:'wobbles over four times as long',out:'wobbles',k:'above',ask:(S,p)=>'a trader trusts a drift of '+p.K+' wobbles: how many wobbles short is it?',ln:()=>'wobbles short'},own('30·econ',DW))));
+}
+/* ---------- 30·now.found: true ideas among the passes; more ideas, true ones passing, the share of passes true, a journal's pages ---------- */
+{ const L='30·now.found', FT='the found-and-true technique';
+const ideas=ch=>{ const n=x0(ch); if(n===undefined) return null; const a=has(ch,L,'more'); return n+(a?a.p.d:0); };
+map(L,[
+ ['more',{u:'true ideas',out:'true ideas',st:'30·now',cite:FT,mk:()=>({d:pick([100,200])}),
+   ask:(S,p)=>'the lab tests '+p.d+' more ideas of the same kind: how many true ideas among them all?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'true ideas',
+   w:[['every new idea is counted as true',(S,p)=>'add the '+p.d+' ideas to the true ones',(v,S,p)=>add(v,p.d)],
+      ['the new ideas are counted alone',(S,p)=>'count the true ones of the '+p.d+' new ideas alone',(v,S,p)=>qm(cq(S.c[1]),R(p.d))]]}],
+ ['pass',{after:['read','more'],u:'true ideas',out:'true ideas passing',st:'30·now',cite:FT,mk:()=>({b:pick([Q(4,5),Q(1,2)])}),
+   ask:(S,p)=>'the test passes '+qs(p.b)+' of true ideas: how many true ideas pass?',
+   f:(v,S,p)=>qm(v,p.b),ex:(V,S,p)=>V+' · '+qs(p.b),ln:'true ideas passing',
+   w:[['the true ideas that fail are given',(S,p)=>'take 1 − '+qs(p.b)+' of the true ideas',(v,S,p)=>qm(v,qa(R(1),qn(p.b)))],
+      ['the share divides',(S,p)=>'divide the true ideas by '+qs(p.b),(v,S,p)=>qm(v,qi(p.b))]]}],
+ ['share',{after:['pass'],u:'true ideas passing',out:'of the passes true',st:'30·now',cite:FT,mk:(S,ch)=>{ const n=ideas(ch), c=ch[ch.length-1]; return n&&c&&c.in?{n,t:c.in.v}:null; },
+   ask:(S,p)=>'1/20 of the false ideas pass too, by luck: what share of all the passes is true?',
+   f:(v,S,p)=>{ const fp=qm(qa(R(p.n),qn(p.t)),R(1,20)); return qm(v,qi(qa(v,fp))); },ex:(V,S,p)=>V+'/('+V+' + ('+p.n+' − '+qs(p.t)+')/20)',ln:'share of the passes true',
+   w:[['the false passes are left out','take every pass as true',v=>R(1)],
+      ['the false passes are counted over all the ideas',(S,p)=>'take the true passes over them + '+p.n+'/20',(v,S,p)=>qm(v,qi(qa(v,R(p.n,20))))]]}],
+ ['shareone',{after:['read','more'],u:'true ideas',out:'of the passes true',st:'30·now',cite:FT,mk:(S,ch)=>{ const n=ideas(ch); return n?{n}:null; },
+   ask:(S,p)=>'passing 4/5 of true ideas and 1/20 of false ones, what share of the passes is true?',
+   f:(v,S,p)=>{ const tp=mul(v,4,5), fp=qm(qa(R(p.n),qn(v)),R(1,20)); return qm(tp,qi(qa(tp,fp))); },ex:(V,S,p)=>'(4/5 · '+V+')/(4/5 · '+V+' + ('+p.n+' − '+V+')/20)',ln:'share of the passes true',
+   w:[['the share of true ideas is given, not of passes',(S,p)=>'take the true ideas over all '+p.n,(v,S,p)=>dv(v,p.n)],
+      ['the false passes are left out','take 4/5 as the share',v=>R(4,5)]]}]]);
+Z(L,Tm(X({u:'of the passes true',out:'true findings',k:()=>pick([20,40,100]),ask:(S,p)=>'a journal prints '+p.K+' of the passes: about how many printed findings are true?',ln:()=>'true findings printed'},own('30·now',FT))));
+}
+/* ---------- 39·phys.band: a band filled from the bottom; more atoms, levels filled, levels left empty, room for electrons ---------- */
+{ const L='39·phys.band', FB2='the full-band technique';
+const atoms=ch=>{ const n=x0(ch); if(n===undefined) return null; const a=has(ch,L,'more'); return n+(a?a.p.d:0); };
+map(L,[
+ ['more',{u:'electrons',out:'electrons',st:'39·phys',cite:FB2,mk:()=>({d:pick([5,10])}),
+   ask:(S,p)=>'the row grows by '+p.d+' silicon atoms: how many electrons does it bring now?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'electrons of the longer row',
+   w:[['each atom is taken to bring one electron',(S,p)=>'add '+p.d+' electrons',(v,S,p)=>add(v,p.d)],
+      ['the new atoms are counted alone',(S,p)=>'count the electrons of the '+p.d+' new atoms alone',(v,S,p)=>qm(cq(S.c[1]),R(p.d))]]}],
+ ['levels',{after:['read','more'],u:'electrons',out:'levels filled',st:'39·phys',cite:FB2,
+   ask:()=>'each level takes 2 electrons: how many levels are filled?',
+   f:v=>dv(v,2),ex:V=>V+'/2',ln:'levels filled',
+   w:[['the 2 multiplies','multiply the electrons by 2',v=>mul(v,2)],
+      ['one electron a level is taken','put one electron in each level',v=>v]]}],
+ ['empty',{after:['levels'],u:'levels filled',out:'levels left empty',st:'39·phys',cite:'the two-shares technique',mk:(S,ch)=>{ const n=atoms(ch); return n?{n}:null; },
+   ask:(S,p)=>'the '+p.n+' atoms give 4 levels each in all: how many levels are left empty?',
+   f:(v,S,p)=>qa(R(4*p.n),qn(v)),ex:(V,S,p)=>'4 · '+p.n+' − '+V,ln:'levels left empty',
+   w:[['the subtraction is turned round',(S,p)=>'take 4 · '+p.n+' from the levels filled',(v,S,p)=>qa(v,R(-4*p.n))],
+      ['the levels filled are added',(S,p)=>'add the levels filled to 4 · '+p.n,(v,S,p)=>qa(v,R(4*p.n))]]}],
+ ['emptyone',{after:['read','more'],u:'electrons',out:'levels left empty',st:'39·phys',cite:'the two-shares technique',mk:(S,ch)=>{ const n=atoms(ch); return n?{n}:null; },
+   ask:(S,p)=>'the '+p.n+' atoms give 4 levels each, 2 electrons a level: how many levels stay empty?',
+   f:(v,S,p)=>qa(R(4*p.n),qn(dv(v,2))),ex:(V,S,p)=>'4 · '+p.n+' − '+V+'/2',ln:'levels left empty',
+   w:[['one electron a level is taken',(S,p)=>'take the electrons from 4 · '+p.n,(v,S,p)=>qa(R(4*p.n),qn(v))],
+      ['the electrons are not halved into levels',(S,p)=>'take the electrons from 8 · '+p.n,(v,S,p)=>qa(R(8*p.n),qn(v))]]}]]);
+Z(L,Tm(X({u:'levels left empty',out:'electrons of room',k:2,ask:()=>'each empty level could take 2 electrons: how many electrons could the empty levels hold?',ln:()=>'room for electrons',w:['the levels are halved','2 is added']},own('39·phys',FB2))));
+}
+/* ---------- 42·bio.trees: trees of descent; another week, branches, the new species grafted on, the checking computer ---------- */
+{ const L='42·bio.trees', GT='the graft technique';
+const dfact=m=>{ let f=1; for(let i=m;i>1;i-=2) f*=i; return f; };
+map(L,[
+ ['week',{u:'species',out:'species',st:'5j',cite:MQ.cite,
+   ask:()=>'Jean names one more species the next week: how many named species then?',
+   f:v=>add(v,1),ex:V=>V+' + 1',ln:'species a week on',
+   w:[['the week is counted as 7 species','add 7 for the week',v=>add(v,7)],
+      ['the species are doubled','double the species',v=>mul(v,2)]]}],
+ ['branches',{after:['read','week'],u:'species',out:'branches',st:'42·bio',cite:GT,
+   ask:()=>'a tree of descent with n named ends, no root, has 2n − 3 branches: how many here?',
+   f:v=>v.p>=3?sub(mul(v,2),3):null,ex:V=>'2 · '+V+' − 3',ln:'branches',
+   w:[['one branch an end is taken','take one branch for each end',v=>v],
+      ['the 3 is added','take 2n + 3',v=>add(mul(v,2),3)]]}],
+ ['graft',{after:['branches'],u:'branches',out:'trees with the new species',st:'42·bio',cite:GT,mk:(S,ch)=>{ const c=ch[ch.length-1]; if(!c||!c.in) return null; const n=c.in.v.p; return n>=3&&n<=8?{n,T:dfact(2*n-5)}:null; },
+   ask:(S,p)=>'there are '+p.T+' trees for '+p.n+' species; a new one grafts on any branch: how many trees?',
+   f:(v,S,p)=>mul(v,p.T),ex:(V,S,p)=>p.T+' · '+V,ln:'trees with the new species',
+   w:[['the branches are added to the trees',(S,p)=>'add the branches to the '+p.T+' trees',(v,S,p)=>add(v,p.T)],
+      ['only one place to graft is taken',(S,p)=>'keep the '+p.T+' trees',(v,S,p)=>R(p.T)]]}],
+ ['graftone',{after:['read','week'],u:'species',out:'trees with the new species',st:'42·bio',cite:GT,
+   ask:()=>'one more species added: how many trees of descent, (2n − 3)!! for the new n?',
+   f:v=>v.p>=3&&v.p<=8?R(dfact(2*v.p-3)):null,ex:V=>'(2 · '+V+' − 3)!!',ln:'trees with the new species',
+   w:[['the new species is left out','take (2n − 5)!!',v=>v.p>=3?R(dfact(2*v.p-5)):null],
+      ['a plain factorial is used','take (n + 1)!',v=>{ let f=1; for(let i=2;i<=v.p+1;i++) f*=i; return R(f); }]]}]]);
+Z(L,Pr(X({u:'trees with the new species',out:'seconds',k:()=>pick([5,15,45]),ask:(S,p)=>'a computer checks '+p.K+' trees a second against the data: how many seconds for them all?',ln:()=>'seconds to check'},MQ)));
+}
+/* ---------- 42·cb19.tiles: tiles up to turning; one more colour, the patterned tiles, boxes, the cost ---------- */
+{ const L='42·cb19.tiles', AK='the average-kept technique';
+const N4=k=>R(k*k*k*k+k*k+2*k,4);
+map(L,[
+ ['colour',{u:'tiles',out:'tiles',st:'42·cb19',cite:AK,mk:(S,ch)=>{ const k=x0(ch); return k===undefined?null:{k}; },
+   ask:(S,p)=>'Mike buys one more colour, '+(p.k+1)+' in all: how many different tiles now?',
+   f:(v,S,p)=>N4(p.k+1),ex:(V,S,p)=>'N('+(p.k+1)+')',ln:'tiles with one more colour',
+   w:[['the colourings are counted without turning',(S,p)=>'take '+(p.k+1)+'⁴',(v,S,p)=>R(Math.pow(p.k+1,4))],
+      ['one colour is taken to add one tile','add 1 tile',v=>add(v,1)]]}],
+ ['pattern',{after:['read','colour'],u:'tiles',out:'tiles with a pattern',st:'42·cb19',cite:'the part-divides-whole technique',mk:(S,ch)=>{ const k=x0(ch); if(k===undefined) return null; return {k:k+(has(ch,L,'colour')?1:0)}; },
+   ask:(S,p)=>'leave out the '+p.k+' tiles all of one colour: how many tiles have a pattern?',
+   f:(v,S,p)=>sub(v,p.k),ex:(V,S,p)=>V+' − '+p.k,ln:'patterned tiles',
+   w:[['one plain tile is left out','take 1 off',v=>sub(v,1)],
+      ['the plain tiles are added',(S,p)=>'add the '+p.k+' plain tiles',(v,S,p)=>add(v,p.k)]]}],
+ ['boxes',{after:['pattern'],u:'tiles with a pattern',out:'boxes',st:'4j',cite:DR.cite,mk:()=>({b:pick([6,10,12])}),
+   ask:(S,p)=>'one of each patterned tile goes in a sample set, '+p.b+' to a box: how many boxes are needed?',
+   f:(v,S,p)=>R(Math.ceil(num(v)/p.b)),ex:(V,S,p)=>V+'/'+p.b+', rounded up',ln:'boxes',
+   w:[['the count is rounded down','divide and round down',(v,S,p)=>R(Math.floor(num(v)/p.b))],
+      ['the boxes are left as a fraction','divide and keep the fraction',(v,S,p)=>dv(v,p.b)]]}],
+ ['boxesone',{after:['read','colour'],u:'tiles',out:'boxes',st:'4j',cite:DR.cite,mk:()=>({b:pick([6,10,12])}),
+   ask:(S,p)=>'one of each tile goes in a sample set, '+p.b+' to a box: how many boxes are needed?',
+   f:(v,S,p)=>R(Math.ceil(num(v)/p.b)),ex:(V,S,p)=>V+'/'+p.b+', rounded up',ln:'boxes',
+   w:[['the count is rounded down','divide and round down',(v,S,p)=>R(Math.floor(num(v)/p.b))],
+      ['the boxes are left as a fraction','divide and keep the fraction',(v,S,p)=>dv(v,p.b)]]}]]);
+Z(L,Tm(X({u:'boxes',out:'dollars',k:()=>pick([4,6,9]),ask:(S,p)=>'each box costs '+p.K+' dollars: what do the boxes cost?',ln:()=>'cost of the boxes'},MQ)));
+}
+/* ---------- 43·phys.ring: levels on a ring; more sites, the band's electrons, room left, dopants ---------- */
+{ const L='43·phys.ring', TP='the two-per-hour technique';
+const sites=ch=>{ const n=x0(ch); if(n===undefined) return null; const a=has(ch,L,'more'); return n+(a?a.p.d:0); };
+map(L,[
+ ['more',{u:'levels',out:'levels',st:'43·phys',cite:'the wrap-round technique',mk:()=>({d:pick([2,4])}),
+   ask:(S,p)=>'the ring is rebuilt with '+p.d+' more sites: how many levels now?',
+   f:(v,S,p)=>add(v,p.d),ex:(V,S,p)=>V+' + '+p.d,ln:'levels on the bigger ring',
+   w:[['two levels a site are counted',(S,p)=>'add 2 · '+p.d+' levels',(v,S,p)=>add(v,2*p.d)],
+      ['the levels are doubled','double the levels',v=>mul(v,2)]]}],
+ ['holds',{after:['read','more'],u:'levels',out:'electrons the band holds',st:'43·phys',cite:TP,
+   ask:()=>'two electrons fit each hour of the clock: how many electrons fill the band?',
+   f:v=>mul(v,2),ex:V=>'2 · '+V,ln:'electrons the band holds',
+   w:[['one electron an hour is taken','one electron for each level',v=>v],
+      ['the 2 divides','halve the levels',v=>dv(v,2)]]}],
+ ['room',{after:['holds'],u:'electrons the band holds',out:'electrons of room',st:'43·phys',cite:TP,mk:(S,ch)=>{ const n=sites(ch); return n?{n}:null; },
+   ask:(S,p)=>'each of the '+p.n+' sites gives one electron: how many more electrons could the band take?',
+   f:(v,S,p)=>sub(v,p.n),ex:(V,S,p)=>V+' − '+p.n,ln:'room in the band',
+   w:[['the sites’ electrons are added','add the '+'electrons the sites give',(v,S,p)=>add(v,p.n)],
+      ['two electrons a site are taken off',(S,p)=>'take 2 · '+p.n+' off',(v,S,p)=>sub(v,2*p.n)]]}],
+ ['roomone',{after:['read','more'],u:'levels',out:'electrons of room',st:'43·phys',cite:TP,
+   ask:()=>'two electrons fit a level and each site gives one: how much more can the band take?',
+   f:v=>v,ex:V=>'2 · '+V+' − '+V,ln:'room in the band',
+   w:[['the sites’ electrons are left out','take two electrons a level',v=>mul(v,2)],
+      ['only half the sites are taken to give an electron','take 2 · levels − levels/2',v=>mul(v,3,2)]]}]]);
+Z(L,O(X({u:'electrons of room',k:'below',ask:(S,p)=>'dopants add '+p.K+' more electrons to the ring: how much room is left?',ln:()=>'room left'},own('43·phys',TP))));
+}
+
+/* ---------- 30·phys.leak: two gases through one pinhole; more hours, the second gas, its millimoles, its milligrams ---------- */
+{ const L='30·phys.leak', HK='the half-kT technique';
+const rt=S=>{ const r=CH.qsqrt?CH.qsqrt(Q(S.m1,S.m2)):null; return r; };
+map(L,[
+ ['longer',{u:'millilitres',out:'millilitres',st:'5j',cite:MQ.cite,mk:()=>({d:pick([1,2,3])}),
+   ask:(S,p)=>'the tank leaks '+p.d+' hour'+(p.d>1?'s':'')+' longer: how many millilitres have got out then?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'leaked over the longer time',
+   w:[['the hours are added as millilitres',(S,p)=>'add the '+p.d+' hours to the millilitres',(v,S,p)=>add(v,p.d)],
+      ['only the extra hours are counted',(S,p)=>'take the leak over the '+p.d+' hours alone',(v,S,p)=>qm(cq(S.c[1]),R(p.d))]]}],
+ ['other',{after:['read','longer'],u:'millilitres',out:'millilitres of the second gas',st:'30·phys',cite:HK,mk:S=>rt(S)?{r:rt(S)}:null,
+   ask:(S,p)=>'filled with '+S.g2+', mass '+S.m2+', at the same heat and push: how much gets out then?',
+   f:(v,S,p)=>qm(v,p.r),ex:(V,S,p)=>V+' · √('+S.m1+'/'+S.m2+')',ln:(S)=>S.g2+' out',
+   w:[['the square root is turned over',(S)=>'multiply by √('+S.m2+'/'+S.m1+')',(v,S,p)=>qm(v,qi(p.r))],
+      ['the masses are compared without the square root',(S)=>'multiply by '+S.m1+'/'+S.m2,(v,S)=>mul(v,S.m1,S.m2)]]}],
+ ['mmol',{after:['other'],u:'millilitres of the second gas',out:'millimoles of the second gas',st:'5j',cite:CU.cite,
+   ask:()=>'at room heat a millimole of gas fills 24 millilitres: how many millimoles got out?',
+   f:v=>dv(v,24),ex:V=>V+'/24',ln:'millimoles out',
+   w:[['the 24 multiplies','multiply the millilitres by 24',v=>mul(v,24)],
+      ['litres are taken for millilitres, 24 to 2.4','divide the millilitres by 12/5',v=>mul(v,5,12)]]}],
+ ['mmolone',{after:['read','longer'],u:'millilitres',out:'millimoles of the second gas',st:'30·phys',cite:HK,mk:S=>rt(S)?{r:rt(S)}:null,
+   ask:(S,p)=>'in millimoles of 24 millilitres, how much '+S.g2+' (mass '+S.m2+') would get out instead?',
+   f:(v,S,p)=>dv(qm(v,p.r),24),ex:(V,S,p)=>V+' · √('+S.m1+'/'+S.m2+')/24',ln:'millimoles out',
+   w:[['the gas is taken to leak at the same pace','divide the millilitres by 24',v=>dv(v,24)],
+      ['the square root is turned over',(S)=>'multiply by √('+S.m2+'/'+S.m1+') and divide by 24',(v,S,p)=>dv(qm(v,qi(p.r)),24)]]}]]);
+Z(L,Tm(X({u:'millimoles of the second gas',out:'milligrams',k:S=>S.m2,ask:(S)=>'a mole of '+S.g2+' is '+S.m2+' grams: how many milligrams got out?',ln:()=>'milligrams out'},MQ)));
+}
+/* ---------- 30·phys.empty: time for a gas to leak down; more litres, the second gas, litres an hour, a day's loss ---------- */
+{ const L='30·phys.empty', HK='the half-kT technique';
+const rt=S=>CH.qsqrt?CH.qsqrt(Q(S.m2,S.m1)):null;
+const vol=ch=>{ const V=x0(ch); if(V===undefined) return null; const a=has(ch,L,'more'); return V+(a?a.p.d:0); };
+map(L,[
+ ['more',{u:'minutes',out:'minutes',st:'5j',cite:MQ.cite,mk:()=>({d:pick([1,2,5])}),
+   ask:(S,p)=>'it is to lose '+p.d+' litre'+(p.d>1?'s':'')+' more: how many minutes then?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'minutes for the larger loss',
+   w:[['the litres are added as minutes',(S,p)=>'add the '+p.d+' litres to the minutes',(v,S,p)=>add(v,p.d)],
+      ['only the extra litres are timed',(S,p)=>'time the '+p.d+' litres alone',(v,S,p)=>qm(cq(S.c[1]),R(p.d))]]}],
+ ['other',{after:['read','more'],u:'minutes',out:'minutes for the second gas',st:'30·phys',cite:HK,mk:S=>rt(S)?{r:rt(S)}:null,
+   ask:(S)=>'with '+S.g2+' (mass '+S.m2+') in the tank instead, how many minutes for the same loss?',
+   f:(v,S,p)=>qm(v,p.r),ex:(V,S)=>V+' · √('+S.m2+'/'+S.m1+')',ln:'minutes for the second gas',
+   w:[['the square root is turned over, as for the pace',(S)=>'multiply by √('+S.m1+'/'+S.m2+')',(v,S,p)=>qm(v,qi(p.r))],
+      ['the masses are compared without the square root',(S)=>'multiply by '+S.m2+'/'+S.m1,(v,S)=>mul(v,S.m2,S.m1)]]}],
+ ['rate',{after:['other'],u:'minutes for the second gas',out:'litres an hour of the second gas',st:'5j',cite:MQ.cite,mk:(S,ch)=>{ const V=vol(ch); return V?{V}:null; },
+   ask:(S,p)=>'it loses '+p.V+' litres in that time: how many litres an hour is that?',
+   f:(v,S,p)=>dv(R(60*p.V),v),ex:(V0,S,p)=>p.V+' · 60/'+V0,ln:'litres an hour',
+   w:[['the division is turned over',(S,p)=>'take the minutes · 60/'+p.V,(v,S,p)=>mul(v,60,p.V)],
+      ['minutes are not changed to hours',(S,p)=>'divide '+p.V+' by the minutes',(v,S,p)=>dv(R(p.V),v)]]}],
+ ['rateone',{after:['read','more'],u:'minutes',out:'litres an hour of the second gas',st:'30·phys',cite:HK,mk:(S,ch)=>{ const V=vol(ch), r=rt(S); return V&&r?{V,r}:null; },
+   ask:(S,p)=>'with '+S.g2+' in it, how many litres an hour does the tank lose, '+p.V+' litres in all?',
+   f:(v,S,p)=>dv(R(60*p.V),qm(v,p.r)),ex:(V0,S,p)=>p.V+' · 60/('+V0+' · √('+S.m2+'/'+S.m1+'))',ln:'litres an hour',
+   w:[['the first gas’s pace is kept',(S,p)=>'take '+p.V+' · 60 over the minutes',(v,S,p)=>dv(R(60*p.V),v)],
+      ['the square root is turned over',(S,p)=>'take '+p.V+' · 60 over the minutes · √('+S.m1+'/'+S.m2+')',(v,S,p)=>dv(R(60*p.V),qm(v,qi(p.r)))]]}]]);
+Z(L,Tm(X({u:'litres an hour of the second gas',out:'litres',k:()=>pick([2,3,5]),ask:(S,p)=>'at that pace, how many litres are lost in '+p.K+' hours?',ln:()=>'litres lost'},MQ)));
+}
+/* ---------- 33·then.puff: a puff drifting and spreading; farther downwind, its spread squared, the spread, the width ---------- */
+{ const L='33·then.puff', DB='the drifting-bell technique';
+const sqq=v=>CH.qsqrt?CH.qsqrt(v):null;
+const Dfor=t=>{ for(const D of [1,2,3,4,5,6,8,9,10,12]){ const s=sqq(qm(R(2*D),t)); if(s) return D; } return null; };
+map(L,[
+ ['farther',{u:'seconds',out:'seconds',st:'5j',cite:MQ.cite,mk:()=>({d:pick([10,20])}),
+   ask:(S,p)=>'how many seconds until it is '+p.d+' metres farther downwind?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+p.d+'/'+S.v,ln:'seconds to drift farther',
+   w:[['the metres are added as seconds',(S,p)=>'add the '+p.d+' metres to the seconds',(v,S,p)=>add(v,p.d)],
+      ['the wind multiplies the extra metres',(S,p)=>'add '+p.d+' · '+S.v+' seconds',(v,S,p)=>add(v,p.d*S.v)]]}],
+ ['spread2',{after:['read','farther'],u:'seconds',out:'square metres of spread',st:'33·then',cite:DB,mk:(S,ch,q)=>{ const D=q&&Dfor(q.v); return D?{D}:null; },
+   ask:(S,p)=>'it spreads with D = '+p.D+' square metres a second: what is its spread squared, 2Dt, by then?',
+   f:(v,S,p)=>qm(R(2*p.D),v),ex:(V,S,p)=>'2 · '+p.D+' · '+V,ln:'spread squared',
+   w:[['the 2 of 2Dt is left out',(S,p)=>'take D · t with D = '+p.D,(v,S,p)=>mul(v,p.D)],
+      ['D is added instead of multiplied',(S,p)=>'add 2 · '+p.D+' to the time',(v,S,p)=>add(v,2*p.D)]]}],
+ ['spread',{after:['spread2'],u:'square metres of spread',out:'metres of spread',st:'33·then',cite:DB,
+   ask:()=>'what is its spread, the root of the spread squared?',
+   f:v=>sqq(v),ex:V=>'√'+V,ln:'spread',
+   w:[['the spread squared is halved instead of rooted','halve the spread squared',v=>dv(v,2)],
+      ['the spread squared is kept','keep the spread squared',v=>v]]}],
+ ['spreadone',{after:['read','farther'],u:'seconds',out:'metres of spread',st:'33·then',cite:DB,mk:(S,ch,q)=>{ const D=q&&Dfor(q.v); return D?{D}:null; },
+   ask:(S,p)=>'with D = '+p.D+' square metres a second, what is its spread, √(2Dt), by then?',
+   f:(v,S,p)=>sqq(qm(R(2*p.D),v)),ex:(V,S,p)=>'√(2 · '+p.D+' · '+V+')',ln:'spread',
+   w:[['the root is not taken',(S,p)=>'take 2 · '+p.D+' · t',(v,S,p)=>qm(R(2*p.D),v)],
+      ['the 2 is left out under the root',(S,p)=>'take √('+p.D+' · t)',(v,S,p)=>sqq(mul(v,p.D))]]}]]);
+Z(L,Tm(X({u:'metres of spread',out:'metres across',k:4,ask:()=>'the puff shows about 4 spreads across: how wide does it look?',ln:()=>'width of the puff',w:['the spread is divided by 4','4 is added']},own('33·then',DB))));
+}
+/* ---------- 36·phys.panes: light through a pane; an hour later, through the pane, through the window, a day's energy ---------- */
+{ const L='36·phys.panes', PT='the pane technique';
+const PANE=[[Q(1,9),Q(4,5)],[Q(1,5),Q(2,3)],[Q(1,7),Q(3,4)],[Q(1,3),Q(1,2)]];
+map(L,[
+ ['later',{u:'watts a square metre',out:'watts a square metre',st:'5j',cite:MQ.cite,
+   ask:()=>'an hour later, how many watts a square metre fall on the window?',
+   f:(v,S)=>qa(v,cq(S.c[1])),ex:(V,S)=>V+' + '+qs(cq(S.c[1])),ln:'sunlight an hour later',
+   w:[['an hour is added as one watt','add 1 watt a square metre',v=>add(v,1)],
+      ['the sunlight is doubled','double the sunlight',v=>mul(v,2)]]}],
+ ['through',{after:['read','later'],u:'watts a square metre',out:'watts a square metre inside',st:'36·phys',cite:PT,
+   ask:(S)=>'each face sends back '+qs(PANE[S.ch][0])+' and the glass takes nothing: how much passes straight through?',
+   f:(v,S)=>qm(v,PANE[S.ch][1]),ex:(V,S)=>V+' · (1 − '+qs(PANE[S.ch][0])+')/(1 + '+qs(PANE[S.ch][0])+')',ln:'light inside',
+   w:[['only one face is counted',(S)=>'keep 1 − '+qs(PANE[S.ch][0])+' of it',(v,S)=>qm(v,qa(R(1),qn(PANE[S.ch][0])))],
+      ['the light sent back is given',(S)=>'take what the faces send back',(v,S)=>qm(v,qa(R(1),qn(PANE[S.ch][1])))]]}],
+ ['window',{after:['through'],u:'watts a square metre inside',out:'watts through the window',st:'5j',cite:MQ.cite,mk:()=>({A:pick([2,3,4])}),
+   ask:(S,p)=>'the window is '+p.A+' square metres: how many watts come through it?',
+   f:(v,S,p)=>mul(v,p.A),ex:(V,S,p)=>V+' · '+p.A,ln:'watts through the window',
+   w:[['the area divides',(S,p)=>'divide by the '+p.A+' square metres',(v,S,p)=>dv(v,p.A)],
+      ['the area is added',(S,p)=>'add '+p.A+' to the watts',(v,S,p)=>add(v,p.A)]]}],
+ ['windowone',{after:['read','later'],u:'watts a square metre',out:'watts through the window',st:'36·phys',cite:PT,mk:()=>({A:pick([2,3,4])}),
+   ask:(S,p)=>'through a '+p.A+' square metre pane keeping '+qs(PANE[S.ch][1])+' in all, how many watts come in?',
+   f:(v,S,p)=>qm(mul(v,p.A),PANE[S.ch][1]),ex:(V,S,p)=>V+' · '+p.A+' · '+qs(PANE[S.ch][1]),ln:'watts through the window',
+   w:[['the pane is left out',(S,p)=>'multiply by '+p.A+' alone',(v,S,p)=>mul(v,p.A)],
+      ['the area divides',(S,p)=>'divide by '+p.A+' and keep '+qs(PANE[S.ch][1]),(v,S,p)=>qm(dv(v,p.A),PANE[S.ch][1])]]}]]);
+Z(L,Cu(X({u:'watts through the window',out:'kilowatt hours',k:()=>pick([2,3,5]),f:(S,p,q)=>qm(q.v,qm(p.k,R(1,1000))),ex:(S,p,q)=>par(q.v)+' · '+p.K+'/1000',
+  ask:(S,p)=>'if it held at that for '+p.K+' hours, how many kilowatt hours would come in?',ln:()=>'energy in',
+  xs:(S,p,q)=>[{why:'watts are not changed to kilowatts',v:qm(q.v,p.k)},{why:'the hours divide',v:qm(q.v,qi(qm(p.k,R(1000))))}]},CU)));
+}
+/* ---------- 36·phys.filters: a lamp through two filters; the dimmer up, the first filter, the second, the camera ---------- */
+{ const L='36·phys.filters', TF='the through-filters technique';
+const FILT=[[Q(1,2),Q(2,3)],[Q(3,4),Q(2,3)],[Q(1,2),Q(4,5)],[Q(2,3),Q(3,5)],[Q(3,4),Q(1,3)]];
+map(L,[
+ ['up',{u:'units of green light',out:'units of green light',st:'5j',cite:MQ.cite,
+   ask:()=>'the dimmer is turned up one step: how much green light now?',
+   f:(v,S)=>qa(v,cq(S.c[1])),ex:(V,S)=>V+' + '+qs(cq(S.c[1])),ln:'green light one step up',
+   w:[['one step is added as one unit','add 1 unit for the step',v=>add(v,1)],
+      ['the light is doubled','double the light',v=>mul(v,2)]]}],
+ ['first',{after:['read','up'],u:'units of green light',out:'units after the first filter',st:'36·phys',cite:TF,
+   ask:(S)=>'it shines through a filter keeping '+qs(FILT[S.ch][0])+' of green: how much comes out?',
+   f:(v,S)=>qm(v,FILT[S.ch][0]),ex:(V,S)=>V+' · '+qs(FILT[S.ch][0]),ln:'after the first filter',
+   w:[['the light lost is given',(S)=>'take 1 − '+qs(FILT[S.ch][0])+' of it',(v,S)=>qm(v,qa(R(1),qn(FILT[S.ch][0])))],
+      ['the share divides',(S)=>'divide by '+qs(FILT[S.ch][0]),(v,S)=>qm(v,qi(FILT[S.ch][0]))]]}],
+ ['second',{after:['first'],u:'units after the first filter',out:'units after both filters',st:'36·phys',cite:TF,
+   ask:(S)=>'then through one keeping '+qs(FILT[S.ch][1])+': how much comes out of both?',
+   f:(v,S)=>qm(v,FILT[S.ch][1]),ex:(V,S)=>V+' · '+qs(FILT[S.ch][1]),ln:'after both filters',
+   w:[['the light lost is given',(S)=>'take 1 − '+qs(FILT[S.ch][1])+' of it',(v,S)=>qm(v,qa(R(1),qn(FILT[S.ch][1])))],
+      ['the second share is added',(S)=>'add '+qs(FILT[S.ch][1])+' of the lamp’s light',(v,S)=>qa(v,qm(qm(v,qi(FILT[S.ch][0])),FILT[S.ch][1]))]]}],
+ ['bothone',{after:['read','up'],u:'units of green light',out:'units after both filters',st:'36·phys',cite:TF,
+   ask:(S)=>'it shines through filters keeping '+qs(FILT[S.ch][0])+' then '+qs(FILT[S.ch][1])+' of green: how much comes out?',
+   f:(v,S)=>qm(v,qm(FILT[S.ch][0],FILT[S.ch][1])),ex:(V,S)=>V+' · '+qs(FILT[S.ch][0])+' · '+qs(FILT[S.ch][1]),ln:'after both filters',
+   w:[['only the last filter is counted',(S)=>'keep '+qs(FILT[S.ch][1])+' of it',(v,S)=>qm(v,FILT[S.ch][1])],
+      ['the two shares are added',(S)=>'keep '+qs(FILT[S.ch][0])+' + '+qs(FILT[S.ch][1])+' of it',(v,S)=>qm(v,qa(FILT[S.ch][0],FILT[S.ch][1]))]]}]]);
+Z(L,O(X({u:'units after both filters',k:'below',ask:(S,p)=>'the camera needs '+p.K+' units of green: by how many units does the light clear that?',ln:()=>'green to spare'},MQ)));
+}
+/* ---------- 36·chem.bounce: light kept bounce after bounce; the setting up, one mirror, a second, the exposure ---------- */
+{ const L='36·chem.bounce', MB2='the many-bounce technique';
+const rOf=ch=>{ const c=has(ch,L,'one'); return c?c.p.r:null; };
+map(L,[
+ ['up',{u:'microwatts',out:'microwatts',st:'5j',cite:MQ.cite,
+   ask:()=>'the laser is set one step higher: how many microwatts go in now?',
+   f:(v,S)=>qa(v,cq(S.c[1])),ex:(V,S)=>V+' + '+qs(cq(S.c[1])),ln:'power one step up',
+   w:[['one step is added as one microwatt','add 1 microwatt',v=>add(v,1)],
+      ['the power is doubled','double the power',v=>mul(v,2)]]}],
+ ['one',{after:['read','up'],u:'microwatts',out:'microwatts after one bounce',st:'36·chem',cite:MB2,mk:()=>({r:pick([Q(9,10),Q(4,5),Q(3,4)])}),
+   ask:(S,p)=>'the first mirror keeps '+qs(p.r)+' of the light: how many microwatts leave it?',
+   f:(v,S,p)=>qm(v,p.r),ex:(V,S,p)=>V+' · '+qs(p.r),ln:'after one bounce',
+   w:[['the light lost is given',(S,p)=>'take 1 − '+qs(p.r)+' of it',(v,S,p)=>qm(v,qa(R(1),qn(p.r)))],
+      ['the share divides',(S,p)=>'divide by '+qs(p.r),(v,S,p)=>qm(v,qi(p.r))]]}],
+ ['two',{after:['one'],u:'microwatts after one bounce',out:'microwatts after two bounces',st:'36·chem',cite:MB2,mk:(S,ch)=>{ const r=rOf(ch); return r?{r}:null; },
+   ask:(S,p)=>'a second mirror, alike, keeps '+qs(p.r)+' again: how many microwatts leave it?',
+   f:(v,S,p)=>qm(v,p.r),ex:(V,S,p)=>V+' · '+qs(p.r),ln:'after two bounces',
+   w:[['the loss is taken from the laser’s power again',(S,p)=>'take the first loss off again',(v,S,p)=>qa(v,qn(qm(qm(v,qi(p.r)),qa(R(1),qn(p.r)))))],
+      ['the light lost is given',(S,p)=>'take 1 − '+qs(p.r)+' of it',(v,S,p)=>qm(v,qa(R(1),qn(p.r)))]]}],
+ ['twoone',{after:['read','up'],u:'microwatts',out:'microwatts after two bounces',st:'36·chem',cite:MB2,mk:()=>({r:pick([Q(9,10),Q(4,5),Q(3,4)])}),
+   ask:(S,p)=>'two mirrors each keep '+qs(p.r)+' of what reaches them: how many microwatts leave the second?',
+   f:(v,S,p)=>qm(v,qm(p.r,p.r)),ex:(V,S,p)=>V+' · ('+qs(p.r)+')²',ln:'after two bounces',
+   w:[['only one bounce is counted',(S,p)=>'keep '+qs(p.r)+' of it',(v,S,p)=>qm(v,p.r)],
+      ['the two losses are taken from the start at once',(S,p)=>'keep 1 − 2 · (1 − '+qs(p.r)+') of it',(v,S,p)=>qm(v,qa(R(1),qn(mul(qa(R(1),qn(p.r)),2))))]]}]]);
+Z(L,Tm(X({u:'microwatts after two bounces',out:'microjoules',k:()=>pick([2,5,10]),ask:(S,p)=>'the detector collects it for '+p.K+' seconds: how many microjoules does it take in?',ln:()=>'energy collected'},MQ)));
+}
+/* ---------- 36·phys.glow: where a coil's glow peaks; later, the peak, in nanometres, past red ---------- */
+{ const L='36·phys.glow', GC='the glow-colour technique';
+map(L,[
+ ['later',{u:'kelvin',out:'kelvin',st:'5j',cite:MQ.cite,mk:()=>({d:pick([1,2])}),
+   ask:(S,p)=>p.d+' second'+(p.d>1?'s':'')+' later, how hot is the coil?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'heat later',
+   w:[['the seconds are added as kelvin',(S,p)=>'add the '+p.d+' seconds as kelvin',(v,S,p)=>add(v,p.d)],
+      ['the starting heat is counted again',(S,p)=>'add T('+p.d+') to the heat',(v,S,p)=>qa(v,qa(cq(S.c[0]),qm(cq(S.c[1]),R(p.d))))]]}],
+ ['peak',{after:['read','later'],u:'kelvin',out:'micrometres',st:'36·phys',cite:GC,
+   ask:()=>'a glow at 2900 kelvin peaks at 1 micrometre, and the peak goes as 1/T: where does it peak?',
+   f:v=>dv(R(2900),v),ex:V=>'2900/'+V,ln:'the peak',
+   w:[['the division is turned over','take T/2900',v=>dv(v,2900)],
+      ['the sun’s 5800 kelvin is used for 1 micrometre','take 5800/T',v=>dv(R(5800),v)]]}],
+ ['nm',{after:['peak'],u:'micrometres',out:'nanometres',st:'5j',cite:CU.cite,
+   ask:()=>'how many nanometres is that, 1000 to the micrometre?',
+   f:v=>mul(v,1000),ex:V=>V+' · 1000',ln:'the peak in nanometres',
+   w:[['the change is turned over','divide by 1000',v=>dv(v,1000)],
+      ['100 nanometres are taken to the micrometre','multiply by 100',v=>mul(v,100)]]}],
+ ['nmone',{after:['read','later'],u:'kelvin',out:'nanometres',st:'36·phys',cite:GC,
+   ask:()=>'a 2900 kelvin glow peaks at 1000 nanometres, the peak going as 1/T: where does it peak?',
+   f:v=>dv(R(2900000),v),ex:V=>'2900 · 1000/'+V,ln:'the peak in nanometres',
+   w:[['micrometres are not changed to nanometres','take 2900/T',v=>dv(R(2900),v)],
+      ['the division is turned over','take T · 1000/2900',v=>mul(v,1000,2900)]]}]]);
+Z(L,O(X({u:'nanometres',k:700,ask:()=>'the eye sees up to about 700 nanometres: how far past the red end is the peak?',ln:()=>'past the red end'},own('36·phys',GC))));
+}
+/* ---------- 36·phys.lines: a spike from a thin gas; one level up, the wavelength, the frequency, a sensor's range ---------- */
+{ const L='36·phys.lines', LN='the lines technique';
+map(L,[
+ ['up',{u:'electronvolts',out:'electronvolts',st:'36·phys',cite:LN,
+   ask:()=>'the atom is lifted one level higher: how far above the lowest is it?',
+   f:(v,S)=>qa(v,cq(S.c[1])),ex:(V,S)=>V+' + '+qs(cq(S.c[1])),ln:'one level higher',
+   w:[['one level is taken as one electronvolt','add 1 electronvolt',v=>add(v,1)],
+      ['the energy is doubled','double the energy',v=>mul(v,2)]]}],
+ ['nm',{after:['read','up'],u:'electronvolts',out:'nanometres',st:'36·phys',cite:LN,
+   ask:()=>'with hc = 1240 electronvolt nanometres, at what wavelength is the fall to the lowest?',
+   f:v=>dv(R(1240),v),ex:V=>'1240/'+V,ln:'the spike’s wavelength',
+   w:[['the division is turned over','take E/1240',v=>dv(v,1240)],
+      ['the energy multiplies hc','take 1240 · E',v=>mul(v,1240)]]}],
+ ['thz',{after:['nm'],u:'nanometres',out:'terahertz',st:'36·phys',cite:'the gap-to-wavelength technique',
+   ask:()=>'light runs 300000 nanometres a picosecond: how many terahertz is that spike?',
+   f:v=>dv(R(300000),v),ex:V=>'300000/'+V,ln:'frequency',
+   w:[['the division is turned over','take λ/300000',v=>dv(v,300000)],
+      ['3000 is used for the speed','take 3000/λ',v=>dv(R(3000),v)]]}],
+ ['thzone',{after:['read','up'],u:'electronvolts',out:'terahertz',st:'36·phys',cite:'the gap-to-wavelength technique',
+   ask:()=>'its wavelength is 1240/E nanometres; light runs 300000 a picosecond: how many terahertz?',
+   f:v=>mul(v,300000,1240),ex:V=>'300000 · '+V+'/1240',ln:'frequency',
+   w:[['the wavelength is given','take 1240/E',v=>dv(R(1240),v),'terahertz'],
+      ['the energy is divided into 300000','take 300000/E',v=>dv(R(300000),v)]]}]]);
+Z(L,G(X({u:'terahertz',k:'above',ask:(S,p)=>'the sensor reads up to '+p.K+' terahertz: how much room is above the spike?',ln:()=>'room above the spike'},MQ)));
+}
+/* ---------- 36·chem.photons: moles of photons; more minutes, bonds broken, grams of product, a leaf's share ---------- */
+{ const L='36·chem.photons', BB2='the bond-breaking technique';
+map(L,[
+ ['longer',{u:'moles of photons',out:'moles of photons',st:'5j',cite:MQ.cite,mk:()=>({d:pick([5,10])}),
+   ask:(S,p)=>'the lamp stays on '+p.d+' minutes more: how many moles of photons are taken in then?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'photons taken in',
+   w:[['the minutes are added as moles',(S,p)=>'add the '+p.d+' minutes as moles',(v,S,p)=>add(v,p.d)],
+      ['only the extra minutes are counted',(S,p)=>'take the photons of the '+p.d+' minutes alone',(v,S,p)=>qm(cq(S.c[1]),R(p.d))]]}],
+ ['bonds',{after:['read','longer'],u:'moles of photons',out:'moles of bonds',st:'36·chem',cite:BB2,mk:()=>({y:pick([Q(1,2),Q(1,3),Q(1,4)])}),
+   ask:(S,p)=>'each photon taken breaks a bond with a yield of '+qs(p.y)+': how many moles of bonds break?',
+   f:(v,S,p)=>qm(v,p.y),ex:(V,S,p)=>V+' · '+qs(p.y),ln:'bonds broken',
+   w:[['every photon is taken to break a bond','take all the photons',v=>v],
+      ['the yield divides',(S,p)=>'divide by '+qs(p.y),(v,S,p)=>qm(v,qi(p.y))]]}],
+ ['grams',{after:['bonds'],u:'moles of bonds',out:'grams of product',st:'5j',cite:MQ.cite,mk:()=>({M:pick([18,30,44])}),
+   ask:(S,p)=>'each mole of bonds broken frees a mole of product of '+p.M+' grams: how many grams?',
+   f:(v,S,p)=>mul(v,p.M),ex:(V,S,p)=>V+' · '+p.M,ln:'grams of product',
+   w:[['the molar mass divides',(S,p)=>'divide by '+p.M,(v,S,p)=>dv(v,p.M)],
+      ['the molar mass is added',(S,p)=>'add '+p.M,(v,S,p)=>add(v,p.M)]]}],
+ ['gramsone',{after:['read','longer'],u:'moles of photons',out:'grams of product',st:'36·chem',cite:BB2,mk:()=>({y:pick([Q(1,2),Q(1,4)]),M:pick([18,30,44])}),
+   ask:(S,p)=>'with a yield of '+qs(p.y)+', each bond broken frees product of '+p.M+' grams a mole: how many grams?',
+   f:(v,S,p)=>qm(mul(v,p.M),p.y),ex:(V,S,p)=>V+' · '+qs(p.y)+' · '+p.M,ln:'grams of product',
+   w:[['the yield is left out',(S,p)=>'multiply the photons by '+p.M,(v,S,p)=>mul(v,p.M)],
+      ['the yield divides',(S,p)=>'divide by '+qs(p.y)+' and multiply by '+p.M,(v,S,p)=>qm(mul(v,p.M),qi(p.y))]]}]]);
+Z(L,Pr(X({u:'grams of product',out:'grams a leaf',k:()=>pick([2,4,5]),ask:(S,p)=>'the light was shared evenly by '+p.K+' leaves: how many grams does each make?',ln:()=>'grams a leaf'},MQ)));
+}
+/* ---------- 36·chem.redder: a dye giving light back redder; longer in the light, the energy back, the heat, its power ---------- */
+{ const L='36·chem.redder', RR='the redder-return technique';
+const RED=[[Q(1,2),500],[Q(3,4),500],[Q(1,2),800],[Q(5,6),500],[Q(2,3),600]];
+const sh=S=>qm(RED[S.ch][0],Q(400,RED[S.ch][1]));
+map(L,[
+ ['longer',{u:'millijoules',out:'millijoules',st:'5j',cite:MQ.cite,mk:()=>({d:pick([1,2])}),
+   ask:(S,p)=>'the stick stays in the light '+p.d+' second'+(p.d>1?'s':'')+' more: how many millijoules does it take in?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'energy taken in',
+   w:[['the seconds are added as millijoules',(S,p)=>'add the '+p.d+' seconds as millijoules',(v,S,p)=>add(v,p.d)],
+      ['only the extra time is counted',(S,p)=>'take the energy of the '+p.d+' seconds alone',(v,S,p)=>qm(cq(S.c[1]),R(p.d))]]}],
+ ['back',{after:['read','longer'],u:'millijoules',out:'millijoules given back',st:'36·chem',cite:RR,
+   ask:(S)=>'it gives light back at '+RED[S.ch][1]+' nanometres for a share '+qs(RED[S.ch][0])+' of the photons: what energy returns?',
+   f:(v,S)=>qm(v,sh(S)),ex:(V,S)=>V+' · '+qs(RED[S.ch][0])+' · 400/'+RED[S.ch][1],ln:'energy given back',
+   w:[['the redder wavelength is left out',(S)=>'take '+qs(RED[S.ch][0])+' of it',(v,S)=>qm(v,RED[S.ch][0])],
+      ['the wavelengths are turned over',(S)=>'take '+qs(RED[S.ch][0])+' · '+RED[S.ch][1]+'/400 of it',(v,S)=>qm(v,qm(RED[S.ch][0],Q(RED[S.ch][1],400)))]]}],
+ ['heat',{after:['back'],u:'millijoules given back',out:'millijoules of heat',st:'36·chem',cite:RR,mk:(S,ch)=>{ const c=ch[ch.length-1]; return c&&c.in?{E:c.in.v}:null; },
+   ask:(S,p)=>'of the '+qs(p.E)+' millijoules taken in, how much stays in the stick as heat?',
+   f:(v,S,p)=>qa(p.E,qn(v)),ex:(V,S,p)=>qs(p.E)+' − '+V,ln:'heat',
+   w:[['the subtraction is turned round','take what was taken in from what came back',(v,S,p)=>qa(v,qn(p.E))],
+      ['the light back is given','give the light back as the heat',v=>v]]}],
+ ['heatone',{after:['read','longer'],u:'millijoules',out:'millijoules of heat',st:'36·chem',cite:RR,
+   ask:(S)=>'it gives back a share '+qs(RED[S.ch][0])+' of the photons at '+RED[S.ch][1]+' nanometres: how much stays as heat?',
+   f:(v,S)=>qm(v,qa(R(1),qn(sh(S)))),ex:(V,S)=>V+' · (1 − '+qs(RED[S.ch][0])+' · 400/'+RED[S.ch][1]+')',ln:'heat',
+   w:[['the redder wavelength is left out',(S)=>'take 1 − '+qs(RED[S.ch][0])+' of it',(v,S)=>qm(v,qa(R(1),qn(RED[S.ch][0])))],
+      ['the energy given back is given',(S)=>'take '+qs(RED[S.ch][0])+' · 400/'+RED[S.ch][1]+' of it',(v,S)=>qm(v,sh(S))]]}]]);
+Z(L,Pr(X({u:'millijoules of heat',out:'milliwatts',k:()=>pick([2,5,10]),ask:(S,p)=>'that heat leaves the stick evenly over '+p.K+' seconds: how many milliwatts?',ln:()=>'heat power'},MQ)));
+}
+/* ---------- 39·eng.charge: a store filled by a ramp; a longer ramp, its charge, the current, the drop in the lead ---------- */
+{ const L='39·eng.charge', SH2='the switch-heat technique';
+const tt=ch=>{ const t=x0(ch); if(t===undefined) return null; const a=has(ch,L,'longer'); return t+(a?a.p.d:0); };
+map(L,[
+ ['longer',{u:'volts',out:'volts',st:'5j',cite:MQ.cite,mk:()=>({d:pick([4,8])}),
+   ask:(S,p)=>'the ramp runs '+p.d+' microseconds longer: what does the store stand at then?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'volts after the longer ramp',
+   w:[['the microseconds are added as volts',(S,p)=>'add the '+p.d+' microseconds as volts',(v,S,p)=>add(v,p.d)],
+      ['only the extra ramp is counted',(S,p)=>'take the volts of the '+p.d+' microseconds alone',(v,S,p)=>qm(cq(S.c[1]),R(p.d))]]}],
+ ['charge',{after:['read','longer'],u:'volts',out:'microcoulombs of charge',st:'5j',cite:MQ.cite,
+   ask:(S)=>'the store is '+S.C+' microfarads: how much charge has gone in, CV?',
+   f:(v,S)=>mul(v,S.C),ex:(V,S)=>S.C+' · '+V,ln:'charge',
+   w:[['C divides',(S)=>'divide the volts by '+S.C,(v,S)=>dv(v,S.C)],
+      ['the energy ½CV² is taken for the charge',(S)=>'take ½ · '+S.C+' · V²',(v,S)=>mul(qm(v,v),S.C,2)]]}],
+ ['amps',{after:['charge'],u:'microcoulombs of charge',out:'amps',st:'39·eng',cite:SH2,mk:(S,ch)=>{ const t=tt(ch); return t?{t}:null; },
+   ask:(S,p)=>'that charge went in over '+p.t+' microseconds: what current flowed, in amps?',
+   f:(v,S,p)=>dv(v,p.t),ex:(V,S,p)=>V+'/'+p.t,ln:'current',
+   w:[['the time multiplies',(S,p)=>'multiply the charge by '+p.t,(v,S,p)=>mul(v,p.t)],
+      ['the time is taken away',(S,p)=>'take '+p.t+' off the charge',(v,S,p)=>sub(v,p.t)]]}],
+ ['ampsone',{after:['read','longer'],u:'volts',out:'amps',st:'39·eng',cite:SH2,
+   ask:(S)=>'a steady ramp into '+S.C+' microfarads draws C times the volts a microsecond: what current?',
+   f:(v,S)=>qm(cq(S.c[1]),R(S.C)),ex:(V,S)=>S.C+' · '+qs(cq(S.c[1])),ln:'current',
+   w:[['the volts reached are used for the ramp',(S)=>'multiply the volts by '+S.C,(v,S)=>mul(v,S.C)],
+      ['C divides',(S)=>'divide the ramp by '+S.C,(v,S)=>dv(cq(S.c[1]),S.C)]]}]]);
+Z(L,Tm(X({u:'amps',out:'volts lost in the lead',k:()=>pick([2,4,5]),ask:(S,p)=>'the lead to the store has '+p.K+' ohms: how many volts does that current lose in it?',ln:()=>'volts lost in the lead'},MQ)));
+}
+/* ---------- 43·phys.knocks: knocks that slow electrons; warmer, a wire's milliohms, the drop at a current, the budget ---------- */
+{ const L='43·phys.knocks', DC='the drift-current technique';
+map(L,[
+ ['warmer',{u:'billionths of an ohm metre',out:'billionths of an ohm metre',st:'43·phys',cite:DC,mk:()=>({d:pick([20,40,100])}),
+   ask:(S,p)=>'the wire warms by '+p.d+' kelvin: what is its resistivity now?',
+   f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'resistivity when warmer',
+   w:[['the kelvin are added as resistivity',(S,p)=>'add the '+p.d+' kelvin to the resistivity',(v,S,p)=>add(v,p.d)],
+      ['only the warming is counted',(S,p)=>'take the resistivity of the '+p.d+' kelvin alone',(v,S,p)=>qm(cq(S.c[1]),R(p.d))]]}],
+ ['wire',{after:['read','warmer'],u:'billionths of an ohm metre',out:'milliohms',st:'43·phys',cite:DC,mk:()=>({len:pick([10,20,50]),A:pick([1,2])}),
+   ask:(S,p)=>'a wire '+p.len+' metres long, '+p.A+' square millimetre'+(p.A>1?'s':'')+' across: with R = ρL/A, how many milliohms?',
+   f:(v,S,p)=>mul(v,p.len,p.A),ex:(V,S,p)=>V+' · '+p.len+'/'+p.A,ln:'resistance of the wire',
+   w:[['the area multiplies',(S,p)=>'multiply by '+p.len+' · '+p.A,(v,S,p)=>mul(v,p.len*p.A)],
+      ['the length divides',(S,p)=>'multiply by '+p.A+'/'+p.len,(v,S,p)=>mul(v,p.A,p.len)]]}],
+ ['drop',{after:['wire'],u:'milliohms',out:'millivolts',st:'5j',cite:MQ.cite,mk:()=>({I:pick([2,5,10])}),
+   ask:(S,p)=>'it carries '+p.I+' amps: how many millivolts drop along it?',
+   f:(v,S,p)=>mul(v,p.I),ex:(V,S,p)=>V+' · '+p.I,ln:'drop along the wire',
+   w:[['the current divides',(S,p)=>'divide by '+p.I+' amps',(v,S,p)=>dv(v,p.I)],
+      ['the current is added',(S,p)=>'add '+p.I+' to the milliohms',(v,S,p)=>add(v,p.I)]]}],
+ ['dropone',{after:['read','warmer'],u:'billionths of an ohm metre',out:'millivolts',st:'43·phys',cite:DC,mk:()=>({len:pick([10,20]),A:pick([1,2]),I:pick([2,5])}),
+   ask:(S,p)=>p.I+' amps run along '+p.len+' metres of '+p.A+' square millimetre wire: how many millivolts drop?',
+   f:(v,S,p)=>mul(v,p.len*p.I,p.A),ex:(V,S,p)=>V+' · '+p.len+'/'+p.A+' · '+p.I,ln:'drop along the wire',
+   w:[['the area multiplies',(S,p)=>'multiply by '+p.len+' · '+p.A+' · '+p.I,(v,S,p)=>mul(v,p.len*p.A*p.I)],
+      ['the current is left out',(S,p)=>'multiply by '+p.len+'/'+p.A,(v,S,p)=>mul(v,p.len,p.A)]]}]]);
+Z(L,G(X({u:'millivolts',k:'above',ask:(S,p)=>'the circuit can lose '+p.K+' millivolts in its wiring: how many are to spare?',ln:()=>'millivolts to spare'},LESS)));
+}
+
+/* ---------- the laws that already had a short map: each gets a second route and a route of three middles ---------- */
+{ const addAfter=(lid,mid,a)=>{ const L=LAWS.find(l=>l.id===lid); const W=L&&(L.mids||[]).find(m=>m.id===mid); if(W) W.after=W.after.concat(a); };
+/* 36·phys.ladder: read > energy > rungs > the starting rung's number > its height; read > energy > (straight to) the rung number */
+{ const L='36·phys.ladder';
+map(L,[
+ ['start',{after:['m:ladder.rungs'],u:'rungs',out:'rung number',st:'35·phys',cite:'the ladder technique',
+   ask:()=>'the molecule ended on rung v = 1: what is the number of the rung it fell from?',
+   f:v=>add(v,1),ex:V=>'1 + '+V,ln:'the starting rung',
+   w:[['the 1 is taken away','take 1 off the rungs spanned',v=>sub(v,1)],
+      ['the jump is taken to start from rung 0','take the rungs spanned as the rung',v=>v]]}],
+ ['startone',{after:['m:ladder.energy'],u:'electronvolts',out:'rung number',st:'35·phys',cite:'the ladder technique',
+   ask:(S)=>'rungs '+S.w+' electronvolts apart, ending on v = 1: which rung did it fall from?',
+   f:(v,S)=>add(qm(v,qi(S.wq)),1),ex:(V,S)=>'1 + '+V+'/'+S.w,ln:'the starting rung',
+   w:[['the end rung is left out',(S)=>'divide by the '+S.w+' electronvolt gap',(v,S)=>qm(v,qi(S.wq))],
+      ['the energy multiplies the gap',(S)=>'multiply by the gap and add 1',(v,S)=>add(qm(v,S.wq),1)]]}]]);
+Z(L,Tm(X({u:'rung number',out:'electronvolts above the lowest rung',k:S=>S.wq,ask:(S)=>'each rung is '+S.w+' electronvolts above the one below: how high above rung 0 did it start?',ln:()=>'height of the starting rung'},own('35·phys','the ladder technique'))));
+}
+/* 30·phys.which: read > ratio > mass > its mass in units > grams in a few moles; read > ratio > (straight to) mass units */
+{ const L='30·phys.which';
+map(L,[
+ ['units',{after:['m:which.mass'],u:'times helium’s mass',out:'mass units',st:'30·phys',cite:'the half-kT technique',
+   ask:()=>'helium’s mass is 4: what is the unknown molecule’s mass?',
+   f:v=>mul(v,4),ex:V=>V+' · 4',ln:'the unknown’s mass',
+   w:[['the ratio is divided by 4','divide the ratio by 4',v=>dv(v,4)],
+      ['4 is added','add 4 to the ratio',v=>add(v,4)]]}],
+ ['unitsone',{after:['m:which.ratio'],u:'times as fast',out:'mass units',st:'30·phys',cite:'the half-kT technique',
+   ask:()=>'pace goes as one over the root of the mass, helium’s being 4: what is the unknown’s mass?',
+   f:v=>mul(qm(v,v),4),ex:V=>'4 · '+V+'²',ln:'the unknown’s mass',
+   w:[['the pace ratio is not squared','take 4 · the pace ratio',v=>mul(v,4)],
+      ['the ratio is turned over','take 4/(pace ratio)²',v=>dv(R(4),qm(v,v))]]}]]);
+Z(L,Tm(X({u:'mass units',out:'grams',k:()=>pick([2,3,5]),ask:(S,p)=>'a mole of it weighs that many grams: what do '+p.K+' moles weigh?',ln:()=>'grams of the gas'},MQ)));
+}
+/* 32·bio.packs: a second route, average > one width straight from np(1 − p) */
+map('32·bio.packs',[
+ ['widthone',{after:['m:packs.avg'],u:'packs a week',out:'packs',st:'32·bio',cite:'the large-count technique',
+   ask:()=>'what is one spread width of that count, √(np(1 − p))?',
+   f:v=>CH.qsqrt?CH.qsqrt(mul(v,4,5)):null,ex:V=>'√('+V+' · 4/5)',ln:'one width',
+   w:[['the 1 − p is left out','take √(np)',v=>CH.qsqrt?CH.qsqrt(v):null],
+      ['the spread is halved instead of rooted','take np(1 − p)/2',v=>mul(v,2,5)]]}]]);
+/* 32·bio.bones: the town grows first, and a ski season doubles a week */
+map('32·bio.bones',[
+ ['grow',{u:'breaks a day',out:'breaks a day',st:'5j',cite:MQ.cite,mk:()=>({g:pick([10,20])}),
+   ask:(S,p)=>'summer brings '+p.g+' thousand visitors to the town: how many breaks a day now?',
+   f:(v,S,p)=>add(v,p.g,10),ex:(V,S,p)=>V+' + '+p.g+'/10',ln:'breaks a day with visitors',
+   w:[['the visitors are added as breaks',(S,p)=>'add the '+p.g+' thousand as breaks',(v,S,p)=>add(v,p.g)],
+      ['the visitors’ breaks are taken alone',(S,p)=>'take '+p.g+'/10 alone',(v,S,p)=>R(p.g,10)]]}],
+ ['ski',{after:['m:bones.week'],u:'breaks a week',out:'breaks a week',st:'5c',cite:SC.cite,
+   ask:()=>'in ski season the breaks run at 3/2 of that: what is a ski week’s average?',
+   f:v=>mul(v,3,2),ex:V=>V+' · 3/2',ln:'breaks in a ski week',
+   w:[['3/2 is added instead of multiplied','add 3/2 to the breaks',v=>add(v,3,2)],
+      ['only the extra half is kept','take 1/2 of the breaks',v=>dv(v,2)]]}]]);
+addAfter('32·bio.bones','m:bones.week',['m:bio.bones.grow']);
+/* 32·bio.flu: a town that grows before the weeks are counted */
+map('32·bio.flu',[
+ ['grow',{u:'cases a day',out:'cases a day',st:'5j',cite:MQ.cite,mk:()=>({g:pick([20,40])}),
+   ask:(S,p)=>'a new estate adds '+p.g+' thousand people: how many quiet-week cases a day now?',
+   f:(v,S,p)=>add(v,p.g,20),ex:(V,S,p)=>V+' + '+p.g+'/20',ln:'cases a day with the estate',
+   w:[['the new people are added as cases',(S,p)=>'add the '+p.g+' thousand as cases',(v,S,p)=>add(v,p.g)],
+      ['the estate’s cases are taken alone',(S,p)=>'take '+p.g+'/20 alone',(v,S,p)=>R(p.g,20)]]}]]);
+addAfter('32·bio.flu','m:flu.quiet',['m:bio.flu.grow']);
+/* 32·bio.vials: next year's list, and a dose that rises */
+map('32·bio.vials',[
+ ['next',{u:'people',out:'people',st:'32·bio',cite:'the count-first technique',
+   ask:()=>'a year on, the list gains one more name: how many people are on it?',
+   f:v=>add(v,1),ex:V=>V+' + 1',ln:'people a year on',
+   w:[['the list is doubled','double the list',v=>mul(v,2)],
+      ['the year is not counted','keep the list as it is',v=>v]]}],
+ ['dose',{after:['m:vials.need'],u:'vials a week',out:'vials a week',st:'32·bio',cite:'the count-first technique',mk:(S,ch)=>{ const c=ch.find(x=>x.W.id==='m:vials.need'); return c?{n:c.in.v}:null; },
+   ask:(S,p)=>'each of the '+qs(p.n)+' people now needs one vial more a week: how many vials a week?',
+   f:(v,S,p)=>qa(v,p.n),ex:(V,S,p)=>V+' + '+qs(p.n),ln:'vials a week at the higher dose',
+   w:[['one vial is added in all','add 1 vial',v=>add(v,1)],
+      ['the need is doubled','double the need',v=>mul(v,2)]]}]]);
+addAfter('32·bio.vials','m:vials.need',['m:bio.vials.next']);
+/* 32·bio.relief: a new school's pupils with asthma join */
+map('32·bio.relief',[
+ ['school',{u:'people',out:'people',st:'5j',cite:MQ.cite,mk:()=>({k:pick([120,240,360])}),
+   ask:(S,p)=>'a new school brings '+p.k+' more pupils who carry a relieving inhaler: how many people now?',
+   f:(v,S,p)=>add(v,p.k),ex:(V,S,p)=>V+' + '+p.k,ln:'people with the school',
+   w:[['the pupils are taken away',(S,p)=>'take the '+p.k+' pupils off',(v,S,p)=>sub(v,p.k)],
+      ['the pupils are counted alone',(S,p)=>'count the '+p.k+' pupils alone',(v,S,p)=>R(p.k)]]}]]);
+addAfter('32·bio.relief','m:relief.ord',['m:bio.relief.school']);
+}
+})();
 /* ===== Chains, Word Problems that read statistics (Andrew 2026-11-14 04:07Z: "Word problems asking you to interpret statistics are practically bottomless").
    A card is a story with made-up data or a summary, one to three steps to work, and a question about the right READING. The wrong options are
    the misreadings the statistics steps name in their Moves to Watch Out For, each opened only where its step is passed. The cards are dealt inside
