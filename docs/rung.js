@@ -3006,8 +3006,20 @@ function render(n){ if(n.a&&MARKS[n.a]) return renderMark(n); if(box) box.remove
   box.querySelector('.un-m').textContent=n.m; box.querySelector('.un-x').onclick=()=>{ box.classList.remove('on'); setTimeout(()=>box&&box.remove(),250); };
   document.body.appendChild(box); requestAnimationFrame(()=>box.classList.add('on'));
   clearTimeout(render.h); render.h=setTimeout(()=>{ if(box){ box.classList.remove('on'); setTimeout(()=>box&&box.remove(),300); } },8000); }
+/* newunlocks */ /* 2026-11-14 (Andrew 18:25Z): every waiting unlock in one pop-up, "New unlocks", the Ladder L where an award has its mark */
+function renderAll(ns){ if(box) box.remove(); box=document.createElement('div'); box.className='unlocknote un-all'; box.setAttribute('role','status');
+  const L=((window.ICON_L_HTML||'').match(/<svg[\s\S]*?<\/svg>/)||[''])[0], MAX=6, more=ns.length-MAX;
+  box.innerHTML='<span class="un-ic">'+L+'</span><span class="un-body"><span class="un-h">New unlocks</span><ul class="un-list"></ul></span><button type="button" class="un-x" aria-label="close">×</button>';
+  const ul=box.querySelector('.un-list'); ns.slice(0,MAX).forEach(x=>{ const li=document.createElement('li'); li.textContent=x.m; ul.appendChild(li); });
+  if(more>0){ const li=document.createElement('li'); li.className='un-more'; li.textContent='and '+more+' more'; ul.appendChild(li); }
+  box.setAttribute('aria-label','New unlocks: '+ns.map(x=>x.m).join(' '));
+  const mine=box, shut=()=>{ if(box!==mine) return; mine.classList.remove('on'); setTimeout(()=>{ mine.remove(); if(box===mine) box=null; },300); };
+  box.onclick=shut; document.body.appendChild(box); requestAnimationFrame(()=>box.classList.add('on'));
+  clearTimeout(render.h); render.h=setTimeout(shut,Math.min(16000,7000+2000*Math.min(ns.length,MAX))); }
 function next(){ if(shown) return; if(document.querySelector('#stick,#agreebox:not([hidden]),#splash:not([hidden])')||document.body.classList.contains('cardsopen')) return;
-  const q=J(QK,[]); if(!q.length) return; const n=q.shift(); put(QK,q); shown=true; render(n); }
+  const q=J(QK,[]); if(!q.length) return;
+  if(!q[0].a){ const ns=q.filter(x=>!x.a); put(QK,q.filter(x=>x.a)); shown=true; renderAll(ns); return; } /* newunlocks */
+  const n=q.shift(); put(QK,q); shown=true; render(n); }
 /* what is open now */
 const once={}; function script(src,test){ if(test&&test()) return Promise.resolve(true); if(once[src]) return once[src];
   return once[src]=new Promise(res=>{ const s=document.createElement('script'); s.src=src; s.onload=()=>res(true); s.onerror=()=>res(false); document.head.appendChild(s); }); }
