@@ -18328,6 +18328,68 @@ QP.push({id:'22·stat.work',step:'22·stat',mode:'work',label:'many small chance
       ['s4',[['\\text{slips that come in runs}','given'],['e^{-\\lambda}\\tfrac{\\lambda^k}{k!}','rare-count']],2,1,'The chances multiply only when the slips come apart.'],
       ['s5',[['\\text{a rare count with } \\lambda = 0.765','a tally'],['\\text{its variance is } 0.765','mean-and-spread']],2,0,'A count of rare events has its variance equal to its mean.'],
       ['s6',[['\\textstyle\\sum_k e^{-\\lambda}\\tfrac{\\lambda^k}{k!}','every count'],['1','count-total']],2,0,'e^(−λ) times e^λ.']],[]); }});
+/* ----- annex 23·eng Torque or horsepower: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'23·eng.work',step:'23·eng',mode:'work',label:'turning push times turning speed',open:()=>measured('23·eng'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const T=[150,200,250,300,400,500][rnd(6)], N=[2000,3000,4000,5000,6000][rnd(5)], P=T*N/9549, right=DECAX(P,1)+' kW', wrong=UQAX(right,[DECAX(T*N/1000,1)+' kW',DECAX(T*N/5252,1)+' kW',DECAX(T*2*Math.PI*N/1000,1)+' kW',DECAX(T*N/95490,1)+' kW'],3); if(wrong.length<3) return null;
+      return {index:'q:23·eng.work[p;'+T+';'+N+']', lines:[['\\tau = '+T+' \\text{ N·m}','torque'],['N = '+SPAX(N).replace(' ','\\,')+' \\text{ rpm}','turning speed']], ask:'What power does the engine give there?', right, opts:shuffle([right,...wrong]), lead:'', why:'Turn-power: P = τ · 2πN∕60 = τN∕9549 = '+T+' · '+SPAX(N)+' ÷ 9549 ≈ '+right+'.'}; }
+    if(ask===1){ const T=[200,250,300,350,400][rnd(5)], N=[2500,4000,5252,6000,7000][rnd(5)], H=T*N/5252, right=DECAX(H,0)+' hp', wrong=UQAX(right,[DECAX(T*N/9549,0)+' hp',DECAX(T,0)+' hp',DECAX(H*0.746,0)+' hp',DECAX(T*N/33000,0)+' hp'],3); if(wrong.length<3) return null;
+      return {index:'q:23·eng.work[h;'+T+';'+N+']', lines:[[T+' \\text{ lb-ft at } '+SPAX(N).replace(' ','\\,')+' \\text{ rpm}','a dynamometer chart']], ask:'What horsepower does that point give?', right, opts:shuffle([right,...wrong]), lead:'', why:'5252: horsepower is pound-feet times rpm over 5252: '+T+' · '+SPAX(N)+' ÷ 5252 ≈ '+right+'.'+(N===5252?' At 5252 rpm the two numbers agree.':'')}; }
+    const L=[1,1.5,2,2.5][rnd(4)], t=[80,100,120,150][rnd(4)], right=DECAX(t/L,0)+' lb', wrong=UQAX(right,[DECAX(t*L,0)+' lb',DECAX(t/(2*Math.PI*L),0)+' lb',DECAX(t,0)+' lb',DECAX(t/(2*L),0)+' lb'],3); if(wrong.length<3) return null;
+    return {index:'q:23·eng.work[b;'+L+';'+t+']', lines:[['\\text{a wheel nut tightened to } '+t+' \\text{ lb-ft}','the spec'],['\\text{a bar } '+L+' \\text{ ft long}','']], ask:'How hard a push, square to the bar, does it take?', right, opts:shuffle([right,...wrong]), lead:'', why:'Turning push is push times arm: '+t+' ÷ '+L+' ≈ '+right+'. A longer bar halves the push; the work per turn, 2πτ, stays the same.'}; }},
+  {id:'23·eng.word',step:'23·eng',mode:'word',label:'gears and the road push',open:()=>measured('23·eng'),make(){
+    const m=[20000,30000,36000][rnd(3)], g=[0.04,0.05,0.06][rnd(3)], k=[40,50,60][rnd(3)], v=k/3.6, P=m*9.8*g*v, F=rnd(2);
+    const right=F?'the same power: a lower gear trades speed for turning push':DECAX(P/1000,0)+' kW';
+    const wrong=F?['more power: a lower gear makes the engine stronger','less power: a lower gear wastes it','twice the power, for twice the push']:UQAX(right,[DECAX(m*9.8*g*k/1000,0)+' kW',DECAX(m*g*v/1000,0)+' kW',DECAX(m*9.8*v/1000,0)+' kW'],3);
+    if(wrong.length<3) return null;
+    return {index:'q:23·eng.word['+m+';'+g+';'+k+';'+F+']', a3:['23·eng.word',DASH,DASH], story:'A loaded log truck of '+SPAX(m)+' kg climbs a '+Math.round(g*100)+'% grade on the road over Snoqualmie Pass at '+k+' km/h. Climbing a grade r at speed v takes mgrv, with g ≈ 9.8 m/s².', lines:[], ask:F?'The driver shifts to a lower gear. What reaches the wheels, compared with before?':'What power does the climb take?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Gear-trade: τω = P. A gear multiplies the turning push and divides the turning speed by the same number, so the power through is the same.':'Road-push: '+k+' km/h is '+DECAX(v,2)+' m/s, and mgrv = '+SPAX(m)+' · 9.8 · '+g+' · '+DECAX(v,2)+' ≈ '+right+'.'}; }},
+  {id:'23·eng.line',step:'23·eng',mode:'proof',label:'what the chart licenses',open:()=>measured('23·eng'),make(){
+    return line28('23·eng.line',[
+      ['q1',[['\\text{engine A has more torque}','a chart'],['\\text{engine A has more power}','torque']],2,1,'Only at the same speed: P = τω.'],
+      ['q2',[['\\tau,\\ N \\text{ in rpm}','given'],['P = \\tau N','turn-power']],2,1,'ω is in radians a second: ω = 2πN∕60.'],
+      ['q3',[['\\text{the torque peak}','a chart'],['\\text{the power peak}','same place']],2,1,'There P′ = T∕5252 > 0: the power is still climbing.'],
+      ['q4',[['\\text{a lower gear}','given'],['\\text{more power from the engine}','the gear']],2,1,'It trades speed for turning push; the power through is the same.'],
+      ['q5',[['\\text{curves cross at } 5252 \\text{ rpm}','a chart'],['5252 \\text{ is a property of the engine}','the crossing']],2,1,'It is 33 000∕(2π), from the units.'],
+      ['q6',[['\\text{a steady turning push } \\tau','given'],['2\\pi\\tau \\text{ of work a turn}','turn-work']],2,0,'Whatever the length of the arm.']],[]); }});
+/* ----- annex 23·nav How far is the horizon: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'23·nav.work',step:'23·nav',mode:'work',label:'the horizon, near enough',open:()=>measured('23·nav'),make(){
+    const h=[1.7,4,9,16,25,36,49,100,734][rnd(9)], ask=rnd(2);
+    if(ask){ const d=1.927*Math.sqrt(h), right=DECAX(d,1)+' nautical miles', wrong=UQAX(right,[DECAX(3.57*Math.sqrt(h),1)+' nautical miles',DECAX(1.927*h,1)+' nautical miles',DECAX(1.927*Math.sqrt(2*h),1)+' nautical miles',DECAX(2.08*Math.sqrt(h),1)+' nautical miles'],3); if(wrong.length<3) return null;
+      return {index:'q:23·nav.work[n;'+h+']', lines:[['h = '+h+' \\text{ m}','eye height'],['\\text{no bending of the air}','']], ask:'About how far is the horizon?', right, opts:shuffle([right,...wrong]), lead:'', why:'Horizon: about 1.927√h nautical miles, with h in metres: 1.927 · √'+h+' ≈ 1.927 · '+DECAX(Math.sqrt(h),3)+' ≈ '+right+'.'}; }
+    const d=3.57*Math.sqrt(h), right=DECAX(d,1)+' km', wrong=UQAX(right,[DECAX(3.57*h,1)+' km',DECAX(1.927*Math.sqrt(h),1)+' km',DECAX(Math.sqrt(2*6371*h),1)+' km',DECAX(3.57*Math.sqrt(h)*1.08,1)+' km'],3); if(wrong.length<3) return null;
+    return {index:'q:23·nav.work[k;'+h+']', lines:[['h = '+h+' \\text{ m},\\ \\ R = 6371 \\text{ km}','eye height'],['\\text{no bending of the air}','']], ask:'About how far is the horizon?', right, opts:shuffle([right,...wrong]), lead:'', why:'Horizon: √(2Rh) ≈ 3.570√h km, with h in metres: 3.570 · '+DECAX(Math.sqrt(h),3)+' ≈ '+right+'. The dropped h² term changes it by a share under h∕(4R).'}; }},
+  {id:'23·nav.word',step:'23·nav',mode:'word',label:'a light seen from a ship',open:()=>measured('23·nav'),make(){
+    const L=rnd(2)?['Heceta Head Light',62]:['a harbour light',[16,25,36,49,64][rnd(5)]], b=[4,9,15,20,25][rnd(5)], a1=3.57*Math.sqrt(L[1]), a2=3.57*Math.sqrt(b), D=a1+a2;
+    const right=DECAX(D,1)+' km', wrong=UQAX(right,[DECAX(3.57*Math.sqrt(L[1]+b),1)+' km',DECAX(a1,1)+' km',DECAX(Math.abs(a1-a2),1)+' km',DECAX(D*1.08*1.08,1)+' km'],3); if(wrong.length<3) return null;
+    return {index:'q:23·nav.word['+L[0]+';'+b+']', a3:['23·nav.word',DASH,DASH], story:'The lamp of '+L[0]+(L[0][0]==='a'?'':'')+' stands about '+L[1]+' m above the sea. A lookout on a ship’s bridge has eyes '+b+' m up. Take no bending of the air, and the horizon at 3.570√h km.', lines:[], ask:'At about what distance does the light first show?', right, opts:shuffle([right,...wrong]), lead:'', why:'Lighthouse: two sight lines add, each under its own root: 3.570√'+L[1]+' + 3.570√'+b+' ≈ '+DECAX(a1,1)+' + '+DECAX(a2,1)+' ≈ '+right+'.'}; }},
+  {id:'23·nav.line',step:'23·nav',mode:'proof',label:'what the sight line licenses',open:()=>measured('23·nav'),make(){
+    return line28('23·nav.line',[
+      ['z1',[['d^2 = 2Rh + h^2','sight-line'],['d = \\sqrt{2Rh} \\text{ exactly}','drop the term']],2,1,'The dropped share is under h∕(4R): near, not exact.'],
+      ['z2',[['\\text{twice the eye height}','given'],['\\text{twice the distance}','horizon']],2,1,'The distance goes as √h: four times the height doubles it.'],
+      ['z3',[['\\text{a light at } h_1,\\ \\text{an eye at } h_2','given'],['D = \\sqrt{2R(h_1 + h_2)}','lighthouse']],2,1,'Two sight lines add, each under its own root.'],
+      ['z4',[['s \\text{ over the water},\\ d \\text{ the sight line}','given'],['s > d','over-water']],2,1,'s ≤ d, by the small-arc technique.'],
+      ['z5',[['\\text{air bending the sight line, radius } \\rho','given'],['\\text{use } R \\text{ in the sight-line technique}','sight-line']],2,1,'Use R′, with 1∕R′ = 1∕R − 1∕ρ.'],
+      ['z6',[['\\rho = 7R','bent-sight'],['\\text{every horizon out by about } 8\\%','bent-sight']],2,0,'R′ = 7R⁄6, and √(7⁄6) ≈ 1.080.']],[]); }});
+/* ----- annex 23·phys How small slants make a focus: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'23·phys.work',step:'23·phys',mode:'work',label:'kept sines and focus',open:()=>measured('23·phys'),make(){
+    const ask=rnd(2);
+    if(ask){ const n=[1.33,1.5,1.6,2.42][rnd(4)], R=[5,8,10,12,20][rnd(5)], F=n*R/(n-1), right=DECAX(F,1)+' mm', wrong=UQAX(right,[DECAX(R/(n-1),1)+' mm',DECAX(n*R,1)+' mm',DECAX(R/n,1)+' mm',DECAX(2*R,1)+' mm'],3); if(wrong.length<3) return null;
+      return {index:'q:23·phys.work[f;'+n+';'+R+']', lines:[['n = '+n+',\\ \\ R = '+R+' \\text{ mm}','a round glass front']], ask:'Where behind the front do the rays near the axis gather?', right, opts:shuffle([right,...wrong]), lead:'', why:'Falling-short: rays near the axis gather at nR∕(n − 1) = '+n+' · '+R+' ÷ '+DECAX(n-1,2)+' ≈ '+right+' behind the front. Rays farther out fall short.'}; }
+    const M=[['water',1.33],['glass',1.5],['diamond',2.42]][rnd(3)], t=[20,30,40,50,60,70][rnd(6)], s2=Math.sin(DGAX(t))/M[1], t2=DEGAX(Math.asin(s2)), right=DECAX(t2,1)+'°', wrong=UQAX(right,[DECAX(t/M[1],1)+'°',DECAX(t*M[1]>90?90-t/M[1]:t*M[1],1)+'°',DECAX(90-t2,1)+'°',DECAX(DEGAX(Math.asin(Math.sin(DGAX(t))*0.9/M[1]*1.05)),1)+'°'],3); if(wrong.length<3) return null;
+    return {index:'q:23·phys.work[s;'+M[0]+';'+t+']', lines:[['\\theta_1 = '+t+'^\\circ \\text{ from the upright, in air}','sunlight'],['n = '+M[1],M[0]]], ask:'At what slant from the upright does the light run on in the '+M[0]+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Kept-sine: sin θ₂ = sin '+t+'° ÷ '+M[1]+' ≈ '+DECAX(s2,3)+', so θ₂ ≈ '+right+'. The bend depends on sines, not on the slants.'}; }},
+  {id:'23·phys.word',step:'23·phys',mode:'word',label:'how far away is a star',open:()=>measured('23·phys'),make(){
+    const S=rnd(3)?['a faint star in a survey',[0.05,0.1,0.125,0.2,0.25,0.4,0.5][rnd(7)]]:['Proxima Centauri',0.768], F=rnd(2), pc=1/S[1], ly=3.26*pc;
+    const right=F?DECAX(ly,1)+' light-years':DECAX(pc,2)+' parsecs', wrong=F?UQAX(right,[DECAX(3.26*S[1],1)+' light-years',DECAX(ly/2,1)+' light-years',DECAX(pc,1)+' light-years',DECAX(2*ly,1)+' light-years'],3):UQAX(right,[DECAX(S[1],2)+' parsecs',DECAX(pc/2,2)+' parsecs',DECAX(2*pc,2)+' parsecs',DECAX(pc*3.26,2)+' parsecs'],3);
+    if(wrong.length<3) return null;
+    return {index:'q:23·phys.word['+S[0]+';'+F+']', a3:['23·phys.word',DASH,DASH], story:'Over a year, '+S[0]+' swings to and fro against the far stars. Half the full swing, its parallax p, is about '+S[1]+' seconds of arc. A star with a parallax of one second is one parsec away, about 3.26 light-years.', lines:[], ask:'About how far away is it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Parallax: 1 AU∕p, so 1 ÷ '+S[1]+' ≈ '+DECAX(pc,2)+' parsecs'+(F?', times 3.26: about '+right:'')+'. The small-slant reading is too far by a share under p²⁄2, far below the error in p.'}; }},
+  {id:'23·phys.line',step:'23·phys',mode:'proof',label:'what the slants license',open:()=>measured('23·phys'),make(){
+    return line28('23·phys.line',[
+      ['u1',[['n_1 \\sin\\theta_1 = n_2 \\sin\\theta_2','kept-sine'],['\\tfrac{\\theta_1}{\\theta_2} = \\tfrac{n_2}{n_1}','the slants']],2,1,'The sines keep the ratio; the slants do only when they are small.'],
+      ['u2',[['\\text{rays through a round surface}','given'],['\\text{all meet at } \\tfrac{nR}{n - 1}','focus']],2,1,'Only the rays near the axis; the edge rays cross short.'],
+      ['u3',[['\\text{a slant of } 10^\\circ','given'],['\\sin 10^\\circ \\approx 10','small slant']],2,1,'The small-slant reading needs radians: 10° is 0.1745.'],
+      ['u4',[['\\text{a star’s full yearly swing}','measured'],['\\text{its parallax}','the swing']],2,1,'The swing is 2p; p is the slant of one AU.'],
+      ['u5',[['\\text{a ray at height } y','given'],['\\text{short of the focus by about } \\tfrac{y^2}{2n(n - 1)R}','falling-short']],2,0,'It grows as the square of the height.'],
+      ['u6',[['p = 1\'\'','a parallax'],['206\\,265 \\text{ AU}','parallax']],2,0,'One second is π∕648 000 of a radian.']],[]); }});
 /* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
     const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
