@@ -16716,6 +16716,7 @@ QP.push({id:'46l.unbuild',step:'46l',label:'what can’t be built, by hand',open
 /* ===== Rung pools end ===== */
 /* ===== Annex pools (Andrew 2026-11-15) ===== */
 /* ----- annex pools: shared helpers ----- */
+const QPAX0=QP.length; /* the annex pools start here; poolsA99plain.js turns their TeX into plain maths */
 const UQAX=(right,c,n)=>{ const o=[]; c.forEach(x=>{ x=String(x); if(x!==String(right)&&!o.includes(x)&&o.length<(n||3)) o.push(x); }); return o; };
 const PTAILAX=(m,s)=>{ let t=Math.exp(-m), c=t; for(let k=1;k<=s;k++){ t*=m/k; c+=t; } return 1-c; }; /* the chance of more than s, for a rare count with average m */
 const SHELFAX=(m,a)=>{ let s=0; while(PTAILAX(m,s)>a&&s<2000) s++; return s; };
@@ -16840,6 +16841,3610 @@ QP.push({id:'1·phys.work',step:'1·phys',mode:'work',label:'the column a wiring
       ['b7',[['the bulb lit in three rows tried','given'],['the buttons are side by side','the column of P ∨ Q']],2,1,'A column is every row; a plain wire lights in all four.'],
       ['b8',[['wiring one and wiring two, the same eight answers','given'],['they do the same job','same column, same statement (1e14)']],2,0,'A bulb shows a column, and cannot show the wiring.'],
       ['b9',[['a bare wire beside button p','given'],['the bulb shows ⊤','P ∨ ⊤ has the column of ⊤ (1f2)']],2,0,'There is always a way through.']],[]); }});
+/* ----- annex 2·bio Is a Whale a Fish?: Work, Word Problems, Check Proofs ----- */
+const ANAX=[['a Chinook salmon',{backbone:1,gills:1,fins:1,water:1}],['a lingcod',{backbone:1,gills:1,fins:1,water:1}],['an orca',{backbone:1,lungs:1,fins:1,water:1,milk:1}],['a harbor seal',{backbone:1,lungs:1,fins:1,water:1,milk:1}],['a lungfish',{backbone:1,gills:1,lungs:1,fins:1,water:1}],['an octopus',{gills:1,water:1}],['a big brown bat',{backbone:1,lungs:1,milk:1}],['a green sea turtle',{backbone:1,lungs:1,fins:1,water:1}],['a black bear',{backbone:1,lungs:1,milk:1}]];
+const FTAX={backbone:'has a backbone',gills:'breathes with gills',lungs:'breathes with lungs',fins:'swims with fins or flippers',water:'lives in the water',milk:'feeds its young on milk'};
+QP.push({id:'2·bio.work',step:'2·bio',mode:'work',label:'counting a whole branch',open:()=>measured('2·bio'),make(){
+    const L='pqrstuvw'.split(''), n=6+rnd(3), par=[null]; for(let i=1;i<n;i++) par.push(rnd(i));
+    const kids=i=>par.map((p,j)=>p===i?j:-1).filter(j=>j>=0), desc=i=>{ let o=[]; kids(i).forEach(j=>{ o.push(j); o=o.concat(desc(j)); }); return o; };
+    const cand=[...Array(n).keys()].filter(i=>i>0&&desc(i).length>0); if(!cand.length) return null; const a=pick(cand), g=desc(a).length+1;
+    const right=String(g), wrong=UQAX(right,[g-1,kids(a).length+1,kids(a).length,n-g,g+1,n],3); if(wrong.length<3) return null;
+    return {index:'q:2·bio.work['+par.join(',')+';'+a+']', lines:[...Array(n).keys()].filter(i=>i>0).map(i=>[L[i]+' is a child of '+L[par[i]],'given']), ask:'How many members has the whole branch g'+L[a]+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'A whole branch holds the ancestor and every descendant (keep-every-descendant technique): '+L[a]+', then '+desc(a).map(j=>L[j]).join(', ')+'. That is '+g+'.'}; }},
+  {id:'2·bio.word',step:'2·bio',mode:'word',label:'a sift by features',open:()=>measured('2·bio'),make(){
+    const ks=Object.keys(FTAX), c=shuffle(ks.slice()).slice(0,1+rnd(2)), list=shuffle(ANAX.slice()).slice(0,5+rnd(2)), pass=list.filter(([,f])=>c.every(k=>f[k]));
+    const right=String(pass.length), wrong=UQAX(right,[pass.length+1,pass.length-1,list.length-pass.length,list.length,0,pass.length+2].filter(x=>x>=0),3); if(wrong.length<3) return null;
+    return {index:'q:2·bio.word['+c.join('+')+';'+list.map(x=>x[0]).join(',')+']', a3:['2·bio.word',DASH,DASH], story:'A field guide sifts the living things it meets by one condition: a member '+c.map(k=>FTAX[k]).join(', and ')+'. On one shore walk it meets '+list.map(x=>x[0]).join(', ')+'.', lines:[], ask:'How many of them are in the sift?', right, opts:shuffle([right,...wrong]), lead:'', why:'A kind made by a condition holds exactly what passes it: '+(pass.length?pass.map(x=>x[0]).join(', '):'none of them')+'.'}; }},
+  {id:'2·bio.line',step:'2·bio',mode:'proof',label:'what a branch licenses',open:()=>measured('2·bio'),make(){
+    return line28('2·bio.line',[
+      ['w1',[['y ∈ gₚ and x d y','given'],['x ∈ gₚ','the keep-every-descendant technique']],2,0,'A whole branch never lets a descendant of its members out.'],
+      ['w2',[['J35 ∈ J pod, and J pod ⊆ the whales','given'],['J35 ∈ the whales','the chain technique for part of']],2,0,'One ∈ at the bottom, then ⊆: J35 is a whale.'],
+      ['w3',[['J pod is a set of whales','given'],['J pod ∈ the whales','J pod is made of whales']],2,1,'A set of whales is a part of the whales: J pod ⊆ the whales.'],
+      ['w4',[['f ⊆ gₒ','given'],['f is a whole branch','a part of a whole branch']],2,1,'A part of a whole branch need not be one: the orca is in gₒ and not in f.'],
+      ['w5',[['the Southern Residents are endangered, and J35 is one of them','given'],['J35 is endangered','what is true of the kind']],2,1,'A claim about the set need not hold of each member.'],
+      ['w6',[['gₚ holds the salmon and the lungfish','given'],['gₚ holds the orca','o ∈ gₚ, the orca d o, keep every descendant']],2,0,'p is o or an ancestor of o, so o ∈ gₚ, and the orca is descended from o.'],
+      ['w7',[['the orca fails the sift by gills and fins','given'],['a whale is no fish in any sense','the orca ∉ f']],2,1,'Only by that condition. Taken as a whole branch, fish holds the whale.']],[]); }});
+/* ----- annex 2·comp What Does a Computer Check When It Reads "if"?: Work, Word Problems, Check Proofs ----- */
+const RDAX=(e,v,seen)=>{ if(typeof e==='string'){ seen.push(e); return v[e]; } if(e[0]==='¬') return !RDAX(e[1],v,seen);
+  const l=RDAX(e[1],v,seen); if(e[0]==='∧'&&!l) return false; if(e[0]==='∨'&&l) return true; return RDAX(e[2],v,seen); };
+const SHAX=e=>typeof e==='string'?e:e[0]==='¬'?'¬'+SHAX(e[1]):(typeof e[1]==='string'||e[1][0]==='¬'?SHAX(e[1]):'('+SHAX(e[1])+')')+' '+e[0]+' '+(typeof e[2]==='string'||e[2][0]==='¬'?SHAX(e[2]):'('+SHAX(e[2])+')');
+const LTAX=a=>a.length===1?a[0]+' only':a.length===2?a[0]+' and '+a[1]:a.slice(0,-1).join(', ')+' and '+a[a.length-1];
+QP.push({id:'2·comp.work',step:'2·comp',mode:'work',label:'what a machine reads',open:()=>measured('2·comp'),make(){
+    const F=pick([['∧','P','Q'],['∨','P','Q'],['∨',['∧','P','Q'],'R'],['∧',['∨','P','Q'],'R'],['∧','P',['∨','Q','R']],['∨','P',['∧','Q','R']],['∨',['¬','P'],'Q'],['∧',['¬','P'],['∨','Q','R']]]);
+    const v={P:!!rnd(2),Q:!!rnd(2),R:!!rnd(2)}, seen=[], val=RDAX(F,v,seen), used=['P','Q','R'].filter(x=>SHAX(F).includes(x)), row=used.map(x=>v[x]?'T':'F').join('');
+    const right=LTAX(seen), cands=[['P'],['P','Q'],['P','R'],['P','Q','R'],['Q'],['Q','R']].filter(a=>a.every(x=>used.includes(x))).map(LTAX), wrong=UQAX(right,shuffle(cands),3); if(wrong.length<3) return null;
+    return {index:'q:2·comp.work['+SHAX(F)+';'+row+']', lines:[['if '+SHAX(F)+', then act','the instruction'],['the row is '+row+' ('+used.join(', ')+')','read off the sensors']], ask:'Reading left first and stopping early, which letters does the machine read?', right, opts:shuffle([right,...wrong]), lead:'', why:'Stop-early technique: an and with a false left side and an or with a true left side are fixed. It reads '+LTAX(seen)+', and the condition is '+(val?'T':'F')+'.'}; }},
+  {id:'2·comp.word',step:'2·comp',mode:'word',label:'a guard on the left',open:()=>measured('2·comp'),make(){
+    const S=pick([
+      {k:'ferry',a:'F',b:'L',op:'∧',ta:'a ferry is in the slip',tb:'the ferry in the slip has its car deck level with the ramp',act:'wave the cars on'},
+      {k:'toll',a:'G',b:'B',op:'∨',ta:'the car carries a Good To Go pass',tb:'the driver pays at the booth (reading it asks the driver to pay)',act:'lift the gate'},
+      {k:'orchard',a:'D',b:'N',op:'∧',ta:'the soil at the sensor is dry',tb:'no rain is forecast for tonight',act:'open the valve'}]);
+    const turned=rnd(2), A=!!rnd(2), B=!!rnd(2), first=turned?S.b:S.a, second=turned?S.a:S.b, v={[S.a]:A,[S.b]:B}, seen=[], val=RDAX([S.op,first,second],v,seen);
+    const readsB=seen.includes(S.b), what=val?S.act:'skip the command';
+    const right=(readsB?'it reads '+S.b:'it never reads '+S.b)+', and it does: '+what;
+    const wrong=UQAX(right,[(readsB?'it never reads '+S.b:'it reads '+S.b)+', and it does: '+what,(readsB?'it reads '+S.b:'it never reads '+S.b)+', and it does: '+(val?'skip the command':S.act),(readsB?'it never reads '+S.b:'it reads '+S.b)+', and it does: '+(val?'skip the command':S.act)],3); if(wrong.length<3) return null;
+    return {index:'q:2·comp.word['+S.k+';'+turned+';'+(+A)+(+B)+']', a3:['2·comp.word',DASH,DASH], story:'Let '+S.a+' be “'+S.ta+'” and '+S.b+' be “'+S.tb+'”. The program reads: if '+first+' '+S.op+' '+second+', '+S.act+'. Right now '+S.a+' is '+(A?'T':'F')+(S.k==='ferry'&&!A?' (so '+S.b+' names nothing)':' and '+S.b+' is '+(B?'T':'F'))+'.', lines:[], ask:'Reading left first and stopping early, what does the machine read, and what does it do?', right, opts:shuffle([right,...wrong]), lead:'', why:'It reads '+LTAX(seen)+'. '+(seen.length===1?'The left side fixes the answer, so the right side is never read. ':'The left side does not fix it, so it reads the right side too. ')+'The condition is '+(val?'T, so it does the command.':'F, so it skips the command.')}; }},
+  {id:'2·comp.line',step:'2·comp',mode:'proof',label:'what a condition licenses',open:()=>measured('2·comp'),make(){
+    return line28('2·comp.line',[
+      ['c1',[['P is F','the row'],['P ∧ Q is F, whatever Q is','the stop-early technique']],2,0,'A false left side fixes an and.'],
+      ['c2',[['P is T','the row'],['P ∧ Q is T, whatever Q is','the stop-early technique']],2,1,'A true left side fixes an or, not an and: P ∧ Q waits on Q.'],
+      ['c3',[['F ∧ L is safe to read left first','the guard'],['L ∧ F is safe to read left first','the turn-about technique']],2,1,'Turn-about keeps the column; it never says which side is read first. With the slip empty, L names nothing.'],
+      ['c4',[['G ∨ B','the condition'],['B ∨ G','the turn-about technique, as a statement']],2,0,'As statements they have the same column.'],
+      ['c5',[['if D ∧ ¬R, open the valve','the instruction'],['“open the valve” is checked when the condition is T','the then part']],2,1,'The then part is done or skipped, never checked.'],
+      ['c6',[['P','a line'],['P ∨ Q','add an option']],2,0,'From P, add an option gives P ∨ Q for any Q.'],
+      ['c7',[['¬P and P ∧ Q','one line'],['the line equals ⊥','keep left, then the clash']],2,0,'Keep left gives P beside ¬P.']],[]); }});
+/* ----- annex 3·comp Can a Program Run Forever?: Work, Word Problems, Check Proofs ----- */
+const NMAX=['0','1','2','3','4','5','6','7','8'], CARSAX=['van','truck','bike','bus','camper','sedan','pickup'];
+QP.push({id:'3·comp.work',step:'3·comp',mode:'work',label:'counting the passes',open:()=>measured('3·comp'),make(){
+    const kind=rnd(3); let lines, right, why, ix;
+    if(kind===0){ const k=rnd(6), m=rnd(8), out=k<=m; right=out?String(m-k):'it never stops'; ix=[0,k,m];
+      lines=[['start: x is '+NMAX[k],'given'],['while x ≠ '+NMAX[m]+': x becomes S(x)','the loop']];
+      why=out?'Each pass makes the next one: '+NMAX.slice(k,m+1).join(', ')+'. The test fails at '+m+', after '+(m-k)+' passes.':'From '+k+' the next ones are '+(k+1)+', '+(k+2)+', … and never come back down to '+m+'; the test never fails.'; }
+    else if(kind===1){ const k=1+rnd(7); right=String(k); ix=[1,k]; lines=[['start: x is '+NMAX[k],'given'],['while x ≠ 0: x becomes ⋃x','the loop']];
+      why='Merging back undoes the next one: '+NMAX.slice(0,k+1).reverse().join(', ')+'. That is '+k+' passes.'; }
+    else { const n=2+rnd(5), u=shuffle(CARSAX.slice()).slice(0,n); right=String(n); ix=[2,n]; lines=[['start: u is {'+u.join(', ')+'}','given'],['while u ≠ ∅: pick a member c of u; u becomes u ∖ {c}','the loop']];
+      why='Shrinking-work technique: each pass takes one member out and puts nothing back, so the '+n+' members are gone after '+n+' passes, in any order.'; }
+    const r=right==='it never stops'?null:+right, wrong=UQAX(right,(r===null?['0','1','4','5']:[r+1,r-1,'it never stops',r+2]).map(String).filter(x=>x!=='-1'),3); if(wrong.length<3) return null;
+    return {index:'q:3·comp.work['+ix.join(';')+']', lines, ask:'How many passes does the loop make before it stops?', right, opts:shuffle([right,...wrong]), lead:'', why}; }},
+  {id:'3·comp.word',step:'3·comp',mode:'word',label:'a signal that comes back',open:()=>measured('3·comp'),make(){
+    const cyc=pick([['green','yellow','red'],['green','flashing green','yellow','red'],['walk','flashing hand','steady hand']]), s=rnd(cyc.length), N=5+rnd(40), at=cyc[(s+N)%cyc.length];
+    const right=at, wrong=UQAX(right,[cyc[(s+N+1)%cyc.length],cyc[(s+N+cyc.length-1)%cyc.length],cyc[s],'the loop has stopped'],3); if(wrong.length<3) return null;
+    return {index:'q:3·comp.word['+cyc.length+';'+s+';'+N+']', a3:['3·comp.word',DASH,DASH], story:'A crossing signal in Eugene is run by a loop: while x is a colour of the signal, x becomes the colour after x. The colours go '+cyc.join(', then ')+', and then back to '+cyc[0]+'. It starts at '+cyc[s]+'.', lines:[], ask:'What does it show after '+N+' passes?', right, opts:shuffle([right,...wrong]), lead:'', why:'Back-again technique: it comes back every '+cyc.length+' passes and never stops. '+N+' passes is '+Math.floor(N/cyc.length)+' full rounds and '+(N%cyc.length)+' more, so it shows '+at+'.'}; }},
+  {id:'3·comp.line',step:'3·comp',mode:'proof',label:'what a loop licenses',open:()=>measured('3·comp'),make(){
+    return line28('3·comp.line',[
+      ['l1',[['start: x is 1; while x ≠ ∅: x becomes S(x)','the loop'],['the loop never stops','the next-never-empty technique']],2,0,'S(y) ≠ ∅ for every y, so the test is true before every pass.'],
+      ['l2',[['a loop has run for a year without stopping','watched'],['it runs forever','a long watch']],2,1,'Every watch ends; the next pass may stop it. Only an argument shows it never stops.'],
+      ['l3',[['the test and body look only at x, and x comes back to a value it had','given'],['the loop runs forever','the back-again technique']],2,0,'From that value it repeats what it did, and comes back again.'],
+      ['l4',[['each pass takes a member out of the inductive set I and puts nothing back','the loop'],['I empties and the loop stops','the shrinking-work technique']],2,1,'That technique is for sets you can write down. I never empties.'],
+      ['l5',[['start: x is {1}; while x ≠ 4: x becomes S(x)','the loop'],['x reaches 4 and the loop stops','the next one after a set']],2,1,'The next one after a set outside the run stays outside it (3c13): the test never fails.'],
+      ['l6',[['start: x is 4; while x ≠ 0: x becomes ⋃x','the loop'],['the loop stops after 4 passes','merging back']],2,0,'4, 3, 2, 1, 0.'],
+      ['l7',[['a checker reads any program and answers “stops” or “runs forever”','supposed'],['it is always right','it can try every program']],2,1,'The program that asks about itself and does the opposite refutes any checker.']],[]); }});
+/* ----- annex 4·crypt Shift ciphers: Work, Word Problems, Check Proofs ----- */
+const ABAX='abcdefghijklmnopqrstuvwxyz', SHAXc=(w,k)=>w.split('').map(c=>ABAX[(ABAX.indexOf(c)+k)%26]).join('');
+QP.push({id:'4·crypt.work',step:'4·crypt',mode:'work',label:'keys that add and undo',open:()=>measured('4·crypt'),make(){
+    const kind=rnd(3), k=1+rnd(25), m=1+rnd(25); let lines, ask, right, cands, why, ix;
+    if(kind===0){ right=String((k+m)%26); cands=[k+m,(k*m)%26,Math.abs(k-m),(k+m+1)%26,26-((k+m)%26)]; ix=[0,k,m]; lines=[['shift by '+k+', then shift by '+m,'given']]; ask='Which single key does the same?'; why='Shifts-add technique: the remainder of '+k+' + '+m+' by 26 is '+((k+m)%26)+'.'; }
+    else if(kind===1){ right=String(26-k); cands=[k,26+k,25-k,27-k,(2*k)%26]; ix=[1,k]; lines=[['a message shifted by '+k,'given']]; ask='Which key undoes it?'; why='Key-back technique: the key back from '+k+' is the j with '+k+' + j = 26, so '+(26-k)+'.'; }
+    else { const p=ABAX[rnd(26)], r=ABAX[(ABAX.indexOf(p)+k)%26]; right=r; cands=[ABAX[(ABAX.indexOf(p)+k+1)%26],ABAX[(ABAX.indexOf(p)+26-k)%26],ABAX[(ABAX.indexOf(p)+k+25)%26],ABAX[k%26]]; ix=[2,p,k]; lines=[['the letter '+p+' (number '+ABAX.indexOf(p)+')','given'],['shift it by '+k,'count on, and start again past z']]; ask='Which letter comes out?'; why=p+' is '+ABAX.indexOf(p)+'; '+ABAX.indexOf(p)+' + '+k+' = '+(ABAX.indexOf(p)+k)+', whose remainder by 26 is '+((ABAX.indexOf(p)+k)%26)+', the letter '+r+'.'; }
+    const wrong=UQAX(right,cands.map(String).filter(x=>x!==''),3); if(wrong.length<3) return null;
+    return {index:'q:4·crypt.work['+ix.join(';')+']', lines, ask, right, opts:shuffle([right,...wrong]), lead:'', why}; }},
+  {id:'4·crypt.word',step:'4·crypt',mode:'word',label:'a note in a shift cipher',open:()=>measured('4·crypt'),make(){
+    const w=pick(['salmon','ferry','harbor','orchard','cedar','tide','island','summit','river','lantern']), k=1+rnd(25), c=SHAXc(w,k);
+    const right=w, wrong=UQAX(right,[SHAXc(w,(2*k)%26||1),SHAXc(c,k),SHAXc(w,1),SHAXc(w,25)],3); if(wrong.length<3) return null;
+    return {index:'q:4·crypt.word['+w+';'+k+']', a3:['4·crypt.word',DASH,DASH], story:'A note reads “'+c+'”. It was made by shifting every letter of a word by '+k+'.', lines:[], ask:'What was the word?', right, opts:shuffle([right,...wrong]), lead:'', why:'Key-back technique: shift every letter by '+(26-k)+', since '+k+' + '+(26-k)+' = 26: '+c+' becomes '+w+'.'}; }},
+  {id:'4·crypt.line',step:'4·crypt',mode:'proof',label:'what a shift licenses',open:()=>measured('4·crypt'),make(){
+    return line28('4·crypt.line',[
+      ['k1',[['shift₉ then shift₅','given'],['the same as shift₁₄','the shifts-add technique']],2,0,'Keys add: 9 + 5 = 14.'],
+      ['k2',[['shift₉ then shift₅','given'],['the same as shift₄₅','keys multiply']],2,1,'Keys add, they do not multiply: shift by 14.'],
+      ['k3',[['a message shifted by 3','given'],['shifting by 3 again undoes it','the key-back technique']],2,1,'Shifting by 3 again is shifting by 6. The key back is 23.'],
+      ['k4',[['shift₃₀','given'],['it is the same as shift₄','only the remainder by 26 matters']],2,0,'30 = 26 + 4.'],
+      ['k5',[['there are 26 keys','given'],['a code-breaker needs 26 tries','one try for each key']],2,1,'Key 0 changes nothing, and key 26 is key 0: 25 tries.'],
+      ['k6',[['a scrambled alphabet has 26! keys','given'],['no one can break it','too many keys to try']],2,1,'It falls to counting letters: size is not enough.'],
+      ['k7',[['y is 24','given'],['shift₃(y) is b','24 + 3 = 27, remainder 1']],2,0,'Keep the remainder by 26: 1 is b.']],[]); }});
+/* ----- annex 5·bio Why do peas come three to one?: Work, Word Problems, Check Proofs ----- */
+const GCDAX=(a,b)=>b?GCDAX(b,a%b):a, FRAX=(p,q)=>{ const g=GCDAX(p,q); return (p/g)+'/'+(q/g); };
+const GTAX={RR:['R','R'],Rr:['R','r'],rr:['r','r']};
+QP.push({id:'5·bio.work',step:'5·bio',mode:'work',label:'counting the cells of a cross',open:()=>measured('5·bio'),make(){
+    const ks=Object.keys(GTAX), a=pick(ks), b=pick(ks), ask=pick(['wrinkled','smooth','Rr']), cells=[]; GTAX[a].forEach(x=>GTAX[b].forEach(y=>cells.push(x+y)));
+    const hit=cells.filter(c=>ask==='wrinkled'?c==='rr':ask==='smooth'?c.includes('R'):(c==='Rr'||c==='rR')).length, right=FRAX(hit,4)==='0/1'?'0':FRAX(hit,4)==='1/1'?'1':FRAX(hit,4);
+    const wrong=UQAX(right,['0','1/4','1/2','3/4','1','1/3','2/3'],3); if(wrong.length<3) return null;
+    return {index:'q:5·bio.work['+a+';'+b+';'+ask+']', lines:[['a '+a+' parent crossed with an '+b+' parent','given'],['each gives one of its two copies, each equally likely','stages-multiply: 2 · 2 = 4 cases']], ask:'What is the chance that a seed is '+(ask==='Rr'?'Rr':ask)+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'The four equally likely cells are '+cells.join(', ')+'. '+hit+' of 4 are '+ask+(ask==='smooth'?' (smooth wherever an R is present)':'')+'.'}; }},
+  {id:'5·bio.word',step:'5·bio',mode:'word',label:'two genes in one garden',open:()=>measured('5·bio'),make(){
+    const T=pick([['smooth and yellow',9],['smooth and green',3],['wrinkled and yellow',3],['wrinkled and green',1],['smooth or yellow',15],['wrinkled',4],['green',4]]), n=pick([160,320,480,640,800,1600]), exp=n*T[1]/16;
+    const right=String(exp), wrong=UQAX(right,[n*3/4,n/2,n*T[1]/9,n/16,n*9/16,n*(T[1]+1)/16].map(x=>String(Math.round(x))),3); if(wrong.length<3) return null;
+    return {index:'q:5·bio.word['+T[0]+';'+n+']', a3:['5·bio.word',DASH,DASH], story:'A gardener crosses two pea plants that are each Rr for surface (R smooth, r wrinkled) and Yy for colour (Y yellow, y green), and plants '+n+' of the seeds. The two genes are separate stages.', lines:[], ask:'About how many plants should come from seeds that are '+T[0]+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Stages-multiply: 4 · 4 = 16 equally likely cells, '+T[1]+' of them '+T[0]+' (9 : 3 : 3 : 1). '+T[1]+'/16 of '+n+' is '+exp+'; a ratio of chances, so the count will be near it, not exactly it.'}; }},
+  {id:'5·bio.line',step:'5·bio',mode:'proof',label:'what a cross licenses',open:()=>measured('5·bio'),make(){
+    return line28('5·bio.line',[
+      ['g1',[['Rr × Rr','the cross'],['smooth : wrinkled = 3 : 1','3 of the 4 cells have an R']],2,0,'RR, Rr, rR are smooth; rr is wrinkled.'],
+      ['g2',[['smooth : wrinkled = 3 : 1','given'],['of these four peas, three are smooth','the ratio']],2,1,'The ratio is of chances: four peas may all be wrinkled.'],
+      ['g3',[['Rr × Rr gives RR, Rr, rr','the kinds'],['each has chance 1/3','three kinds']],2,1,'The equally likely cases are the four pairs: 1/4, 1/2, 1/4.'],
+      ['g4',[['smooth has chance 3/4 and yellow 3/4, as separate stages','given'],['smooth and yellow has chance 9/16','the probability of both is the product']],2,0,'3/4 · 3/4 = 9/16.'],
+      ['g5',[['smooth has chance 3/4 and yellow 3/4','given'],['smooth or yellow has chance 3/4 + 3/4','add the chances']],2,1,'That is more than 1. Only wrinkled green fails: 15/16.'],
+      ['g6',[['a smooth parent × rr gives 41 smooth, 39 wrinkled','counted'],['the smooth parent was Rr','wrinkled seeds appeared']],2,0,'An RR parent gives no wrinkled seed at all.'],
+      ['g7',[['smooth is dominant','given'],['most peas in the world are smooth','dominance']],2,1,'Dominance says what a hybrid shows, not how common either allele is.']],[]); }});
+/* ----- annex 5·chem The Weighing Ledger: Work, Word Problems, Check Proofs ----- */
+const RXAX=[{eq:'C₃H₈ + 5 O₂ → 3 CO₂ + 4 H₂O',a:['C₃H₈',44,1],b:['O₂',32,5],p:['CO₂',44,3],q:['H₂O',18,4]},
+  {eq:'CH₄ + 2 O₂ → CO₂ + 2 H₂O',a:['CH₄',16,1],b:['O₂',32,2],p:['CO₂',44,1],q:['H₂O',18,2]},
+  {eq:'2 H₂ + O₂ → 2 H₂O',a:['H₂',2,2],b:['O₂',32,1],p:['H₂O',18,2],q:null},
+  {eq:'N₂ + 3 H₂ → 2 NH₃',a:['N₂',28,1],b:['H₂',2,3],p:['NH₃',17,2],q:null}];
+const GAX=x=>(Math.round(x*10)/10)+' g', R2AX=x=>String(Math.round(x*100)/100), RUNAX=x=>R2AX(x)+(x===1?' run':' runs');
+QP.push({id:'5·chem.work',step:'5·chem',mode:'work',label:'grams through the mole ratio',open:()=>measured('5·chem'),make(){
+    const R=pick(RXAX), mol=pick([0.5,1,1.5,2,3,4]), [an,am,ac]=R.a, T=pick([R.b,R.p].concat(R.q?[R.q]:[])), [tn,tm,tc]=T, g=mol*ac*am, out=mol*tc*tm;
+    const right=GAX(out), wrong=UQAX(right,[GAX(mol*ac*tm),GAX(mol*tm),GAX(g*tc),GAX(out/2),GAX(g)],3); if(wrong.length<3) return null;
+    return {index:'q:5·chem.work['+RXAX.indexOf(R)+';'+mol+';'+tn+']', lines:[[R.eq,'the balanced change'],[GAX(g)+' of '+an+' ('+am+' g/mol)','given']], ask:'How many grams of '+tn+' ('+tm+' g/mol) does it '+(T===R.b?'take':'make')+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Grams to moles: '+GAX(g)+' / '+am+' = '+(mol*ac)+' mol '+an+'. Mole ratio '+tc+' : '+ac+': '+(mol*tc)+' mol '+tn+'. Moles to grams: '+(mol*tc)+' · '+tm+' = '+GAX(out)+'.'}; }},
+  {id:'5·chem.word',step:'5·chem',mode:'word',label:'the limiting reagent',open:()=>measured('5·chem'),make(){
+    const R=pick([RXAX[2],RXAX[3]]), [an,am,ac]=R.a, [bn,bm,bc]=R.b, [pn,pm,pc]=R.p, ma=pick([1,2,3,4,5,6]), mb=pick([1,2,3,4,5,6]); const runs=Math.min(ma/ac,mb/bc); if(ma/ac===mb/bc) return null;
+    const lim=ma/ac<mb/bc?an:bn, out=runs*pc*pm, right=GAX(out), wrong=UQAX(right,[GAX(Math.max(ma/ac,mb/bc)*pc*pm),GAX(ma*am+mb*bm),GAX(runs*pm),GAX((ma+mb)*pm)],3); if(wrong.length<3) return null;
+    return {index:'q:5·chem.word['+RXAX.indexOf(R)+';'+ma+';'+mb+']', a3:['5·chem.word',DASH,DASH], story:'A flask holds '+GAX(ma*am)+' of '+an+' and '+GAX(mb*bm)+' of '+bn+'. They react: '+R.eq+'. ('+an+' '+am+' g/mol, '+bn+' '+bm+' g/mol, '+pn+' '+pm+' g/mol.)', lines:[], ask:'How many grams of '+pn+' can it make?', right, opts:shuffle([right,...wrong]), lead:'', why:'Moles over coefficient: '+an+' '+RUNAX(ma/ac)+', '+bn+' '+RUNAX(mb/bc)+'. The lesser wins: '+lim+' limits, '+RUNAX(runs)+', '+R2AX(runs*pc)+' mol '+pn+' = '+GAX(out)+'.'}; }},
+  {id:'5·chem.line',step:'5·chem',mode:'proof',label:'what the ledger licenses',open:()=>measured('5·chem'),make(){
+    return line28('5·chem.line',[
+      ['m1',[['C₃H₈ + 5 O₂ → 3 CO₂ + 4 H₂O','balanced'],['the oxygen atoms are 10 on each side','count O: 5 · 2 = 3 · 2 + 4']],2,0,'10 = 6 + 4.'],
+      ['m2',[['H₂ + O₂ → H₂O does not balance','the oxygen count'],['H₂ + O₂ → H₂O₂ balances it','change the formula']],2,1,'Balancing changes the coefficients, never the formulas: 2 H₂ + O₂ → 2 H₂O.'],
+      ['m3',[['28 g N₂ and 9 g H₂: 1 mol and 4.5 mol','grams to moles'],['H₂ limits, since 4.5 > 1','the larger number of moles']],2,1,'Moles over coefficient: 1 run on N₂, 1.5 on H₂. The lesser wins: N₂ limits.'],
+      ['m4',[['37 g go in','the ledger'],['37 g come out, as product and leftover','in is out']],2,0,'Mass is kept: 34 g of ammonia and 3 g of hydrogen left.'],
+      ['m5',[['1 mol of fuel CₓH_y makes 3 mol CO₂ and 4 mol H₂O','measured'],['the fuel is C₃H₈','one C per CO₂, two H per water']],2,0,'x = 3, y = 8.'],
+      ['m6',[['the fuel is C₃H₈','from the smoke'],['its atoms are joined in one known way','the ledger']],2,1,'The ledger counts atoms; two different molecules can share a formula.'],
+      ['m7',[['(p, b, c, d) = (p, 5p, 3p, 4p)','every balancing'],['1 : 5 : 3 : 4 is the balanced change','take p = 1']],2,0,'Every answer is a scaling of 1 : 5 : 3 : 4.']],[]); }});
+/* ----- annex 5·nav Reading the clock and the calendar: Work, Word Problems, Check Proofs ----- */
+const DAYSAX=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+QP.push({id:'5·nav.work',step:'5·nav',mode:'work',label:'reading a count of seconds',open:()=>measured('5·nav'),make(){
+    const t=10000+rnd(290000), d=Math.floor(t/86400), h=Math.floor(t%86400/3600), m=Math.floor(t%3600/60), s=t%60, R=(d,h,m,s)=>d+' d '+h+' h '+m+' min '+s+' s';
+    const right=R(d,h,m,s), wrong=UQAX(right,[R(d,h,Math.floor(t%3600/100)%60,s),R(d,Math.floor(t/3600)%100,m,s),R(d,h,s,m),R(d+1,(h+24-1)%24,m,s),R(Math.floor(t/100000),h,m,s)],3); if(wrong.length<3) return null;
+    return {index:'q:5·nav.work['+t+']', lines:[[t.toLocaleString('en').replace(/,/g,' ')+' s','given']], ask:'Read it as days, hours, minutes and seconds.', right, opts:shuffle([right,...wrong]), lead:'', why:'Clock-reading technique: divide by 60 (seconds left '+s+'), by 60 again (minutes left '+m+'), by 24 (hours left '+h+'): '+right+'.'}; }},
+  {id:'5·nav.word',step:'5·nav',mode:'word',label:'what day of the week',open:()=>measured('5·nav'),make(){
+    const y0=2020+rnd(12), n=1+rnd(6), d0=rnd(7), leap=y=>(y%4===0&&y%100!==0)||y%400===0; let days=0; for(let y=y0+1;y<=y0+n;y++) days+=leap(y)?366:365;
+    const at=DAYSAX[(d0+days)%7], right=at, wrong=UQAX(right,[DAYSAX[(d0+n)%7],DAYSAX[(d0+days+1)%7],DAYSAX[(d0+days+6)%7],DAYSAX[d0]],3); if(wrong.length<3) return null;
+    return {index:'q:5·nav.word['+y0+';'+n+';'+d0+']', a3:['5·nav.word',DASH,DASH], story:'A ferry first sailed on 1 March '+y0+', a '+DAYSAX[d0]+'. Its crew mark the day each year.', lines:[], ask:'On what day of the week does 1 March '+(y0+n)+' fall?', right, opts:shuffle([right,...wrong]), lead:'', why:'From 1 March to 1 March a year holds 365 days, or 366 when the February in between has 29 days. In all '+days+' days; '+days+' = 7 · '+Math.floor(days/7)+' + '+(days%7)+', so add '+(days%7)+' days to '+DAYSAX[d0]+' (remainders-add): '+at+'.'}; }},
+  {id:'5·nav.line',step:'5·nav',mode:'proof',label:'what a clock licenses',open:()=>measured('5·nav'),make(){
+    return line28('5·nav.line',[
+      ['n1',[['100 000 = 60 · 1666 + 40','divide by 60'],['100 000 s = 1666 min 40 s','one-split, base 60']],2,0,'40 < 60, so the split is the only one.'],
+      ['n2',[['1.5 h','given'],['1 h 50 min','the places after the point']],2,1,'Tenths of an hour, not minutes: 0.5 h = 30 min.'],
+      ['n3',[['22:00 + 3 h','given'],['01:00 the next day','[22] + [3] = [1] in ℕ/∼₂₄']],2,0,'The hours roll over at 24.'],
+      ['n4',[['4 divides 1900','given'],['1900 was a leap year','one leap day in every 4 years']],2,1,'100 divides 1900 and 400 does not: 1900 had 365 days.'],
+      ['n5',[['365 = 7 · 52 + 1','divide by 7'],['a date moves one weekday on in a year of 365 days','remainders-add']],2,0,'52 whole weeks and 1 day.'],
+      ['n6',[['3 h 50 min + 20 min','given'],['3 h 70 min','add the minutes']],2,1,'The minutes place stays below 60: 4 h 10 min.'],
+      ['n7',[['97 leap years in every 400','the fourth guess'],['the calendar year is 365.2425 days','97/400 = 0.2425']],2,0,'365 + 97/400.']],[]); }});
+/* ----- annex 6·chem Who gives up electrons: Work, Word Problems, Check Proofs ----- */
+/* [formula tex, element, count of x, the rest's sum, charge, name] */
+const OXAX=[['\\mathrm{Fe_2O_3}','Fe',2,-6,0,'rust'],['\\mathrm{NaOCl}','Cl',1,-1,0,'bleach'],['\\mathrm{MnO_2}','Mn',1,-4,0,'a flashlight cell'],['\\mathrm{Mn_2O_3}','Mn',2,-6,0,'a spent cell'],['\\mathrm{NH_4^{+}}','N',1,4,1,'an ion'],
+  ['\\mathrm{SO_4^{2-}}','S',1,-8,-2,'an ion'],['\\mathrm{NO_3^{-}}','N',1,-6,-1,'an ion'],['\\mathrm{KMnO_4}','Mn',1,-7,0,'a purple salt'],['\\mathrm{Cr_2O_7^{2-}}','Cr',2,-14,-2,'an ion'],['\\mathrm{CO_2}','C',1,-4,0,'a gas'],
+  ['\\mathrm{CH_4}','C',1,4,0,'natural gas'],['\\mathrm{H_2O_2}','O',2,2,0,'a peroxide'],['\\mathrm{NaH}','H',1,1,0,'a metal hydride'],['\\mathrm{PO_4^{3-}}','P',1,-8,-3,'an ion'],['\\mathrm{ClO_4^{-}}','Cl',1,-8,-1,'an ion'],['\\mathrm{Fe_3O_4}','Fe',3,-8,0,'magnetite']];
+const SGAX=v=>v>0?'+'+v:v<0?'−'+(-v):'0';
+const FRSAX=(p,q)=>{ if(p%q===0) return SGAX(p/q); const g=GCDAX(Math.abs(p),q); return (p<0?'−':'+')+Math.abs(p)/g+'/'+q/g; };
+QP.push({id:'6·chem.work',step:'6·chem',mode:'work',label:'charge-sum',open:()=>measured('6·chem'),make(){
+    const [f,el,n,rest,Q]=OXAX[rnd(OXAX.length)], x=Q-rest, right=FRSAX(x,n);
+    const wrong=UQAX(right,[SGAX(x),SGAX(-x/n|0)===right?SGAX(x+n):SGAX(Math.round(-x/n)),SGAX(Math.round((rest)/n)),FRSAX(x+2,n),FRSAX(x-2,n),SGAX(Math.round(x/n)+1)],3); if(wrong.length<3) return null;
+    return {index:'q:6·chem.work['+f+']', lines:[[f,'a particle with charge '+SGAX(Q)]], ask:'What is the oxidation number of '+el+' in it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Charge-sum: '+(n>1?n+'x':'x')+' + ('+SGAX(rest)+') = '+SGAX(Q)+', so '+(n>1?n+'x':'x')+' = '+SGAX(x)+(n>1?' and each '+el+' is '+right:'')+'.'+(n>1&&x%n?' The '+n+' atoms share '+SGAX(x)+'; the bond technique gives them different whole numbers, and only the sum is fixed here.':'')}; }},
+  {id:'6·chem.word',step:'6·chem',mode:'word',label:'the electrons balance',open:()=>measured('6·chem'),make(){
+    /* [metal, gives per atom, ion tex, story] with oxygen taking 4 per O2 */
+    const M=[['Fe',3,'Fe³⁺','An iron railing rusts in salt air.'],['Al',3,'Al³⁺','A bare aluminium ladder dulls as a thin coat of oxide forms.'],['Mg',2,'Mg²⁺','A strip of magnesium burns with a white flame.'],['Na',1,'Na⁺','A cut piece of sodium dulls in the air.'],['Cu',2,'Cu²⁺','A copper roof turns dark.'],['Zn',2,'Zn²⁺','A zinc coat on a fence post weathers.']][rnd(6)];
+    const a=M[1], b=4, g=GCDAX(a,b), L=a*b/g, nm=L/a, no=L/b, ask=rnd(2);
+    const right=String(ask?nm:L), wrong=UQAX(right,ask?[String(no),String(b),String(a),String(L),String(nm*2)]:[String(a+b),String(a),String(b),String(2*L),String(L/2)],3); if(wrong.length<3) return null;
+    return {index:'q:6·chem.word['+M[0]+';'+ask+']', a3:['6·chem.word',DASH,DASH], story:M[3]+' Each '+M[0]+' atom gives up '+a+' electron'+(a>1?'s':'')+' and becomes '+M[2]+'. Each O₂ molecule takes 4 and becomes two O²⁻.', lines:[], ask:ask?'In the balanced change, how many '+M[0]+' atoms go with '+no+' O₂?':'How many electrons are handed over in the smallest balanced change?', right, opts:shuffle([right,...wrong]), lead:'', why:'Electrons-balance: both halves reach lcm('+a+', 4) = '+L+'. So '+nm+' '+M[0]+' give '+L+', and '+no+' O₂ take'+(no===1?'s':'')+' '+L+'.'}; }},
+  {id:'6·chem.line',step:'6·chem',mode:'proof',label:'what charge-sum licenses',open:()=>measured('6·chem'),make(){
+    return line28('6·chem.line',[
+      ['c1',[['\\mathrm{Fe_2O_3}:\\ 2x + 3(-2) = 0','charge-sum'],['Fe is +6','5g']],2,1,'The two Fe share +6: each is +3.'],
+      ['c2',[['\\mathrm{H_2O_2}','a peroxide'],['O is −2','O is always −2']],2,1,'The O–O pair is split one and one: each O is −1.'],
+      ['c3',[['\\mathrm{NH_4^{+}}:\\ x + 4(+1) = +1','charge-sum, Q = +1'],['N is −3','5g']],2,0,'x = 1 − 4 = −3.'],
+      ['c4',[['\\mathrm{Cu} + \\mathrm{Ag^+} \\to \\mathrm{Cu^{2+}} + \\mathrm{Ag}','given'],['the change is balanced','the atoms balance']],2,1,'The charge does not: Cu + 2Ag⁺ → Cu²⁺ + 2Ag.'],
+      ['c5',[['\\mathrm{Fe} \\to \\mathrm{Fe^{3+}} + 3e^-','the iron half'],['iron is oxidized','its number rises']],2,0,'0 to +3: it gives up 3.'],
+      ['c6',[['\\mathrm{Na} + \\mathrm{Cl_2} \\to \\mathrm{NaCl}','no oxygen at all'],['nothing is oxidized','oxidation is taking in oxygen']],2,1,'Na gives up an electron, 0 to +1: oxidation is giving up electrons.'],
+      ['c7',[['\\mathrm{Zn}:\\ 0 \\to +2,\\ \\ \\mathrm{Mn}:\\ +4 \\to +3','the cell'],['\\mathrm{Zn} + 2\\,\\mathrm{MnO_2} \\to \\mathrm{ZnO} + \\mathrm{Mn_2O_3}','electrons-balance']],2,0,'Two Mn take what one Zn gives.'],
+      ['c8',[['\\mathrm{Cl_2} + 2\\,\\mathrm{NaOH} \\to \\mathrm{NaCl} + \\mathrm{NaOCl} + \\mathrm{H_2O}','bleach'],['chlorine is only reduced','0 to −1 in NaCl']],2,1,'The other Cl goes 0 to +1 in NaOCl: one element gives and takes.']],[]); }});
+/* ----- annex 6·logi Can every job get a driver: Work, Word Problems, Check Proofs ----- */
+const DRVAX=['Sarah','Randy','Mike','Terry','Claire'];
+const BOARDAX=()=>{ const nj=3+rnd(2), nd=3+rnd(3), D=[]; for(let j=0;j<nj;j++){ const s=[]; for(let d=0;d<nd;d++) if(rnd(100)<45) s.push(d); if(!s.length) s.push(rnd(nd)); D.push(s); } return {nj,nd,D}; };
+const FAIRAX=D=>{ let c=0; const go=(j,used)=>{ if(j===D.length){ c++; return; } D[j].forEach(d=>{ if(!used.includes(d)) go(j+1,used.concat([d])); }); }; go(0,[]); return c; };
+const BLOCKAX=D=>{ const n=D.length; for(let k=n;k>=1;k--) for(let m=0;m<(1<<n);m++){ let b=0,u=new Set(); for(let j=0;j<n;j++) if(m>>j&1){ b++; D[j].forEach(d=>u.add(d)); } if(b===k&&u.size<k) return [m,u]; } return null; };
+const ROWSAX=(D)=>D.map((s,j)=>['D(j_'+(j+1)+') = \\{'+s.map(d=>'\\text{'+DRVAX[d]+'}').join(', ')+'\\}','who can take load '+(j+1)]);
+QP.push({id:'6·logi.work',step:'6·logi',mode:'work',label:'counting assignments',open:()=>measured('6·logi'),make(){
+    const B=BOARDAX(), all=B.D.reduce((p,s)=>p*s.length,1), fair=FAIRAX(B.D), ask=rnd(2);
+    if(ask&&all===fair) return null;
+    const right=String(ask?fair:all), wrong=UQAX(right,ask?[String(all),String(fair+1),String(Math.max(0,fair-1)),String(fair*2),String(B.D.reduce((p,s)=>p+s.length,0))]:[String(fair),String(B.D.reduce((p,s)=>p+s.length,0)),String(all*2),String(all-1),String(Math.pow(B.nd,B.nj))],3); if(wrong.length<3) return null;
+    return {index:'q:6·logi.work['+ask+';'+JSON.stringify(B.D)+']', lines:ROWSAX(B.D), ask:ask?'How many fair assignments are there, giving no driver two loads?':'How many assignments are there, fair or not?', right, opts:shuffle([right,...wrong]), lead:'', why:ask?'Fair assignments do not simply multiply: the choices for one load depend on the others. Going load by load, never reusing a driver, gives '+fair+' of the '+all+'.':'Stages-multiply: one factor for each load, '+B.D.map(s=>s.length).join(' · ')+' = '+all+'.'}; }},
+  {id:'6·logi.word',step:'6·logi',mode:'word',label:'a blocking group',open:()=>measured('6·logi'),make(){
+    const B=BOARDAX(), fair=FAIRAX(B.D), bl=BLOCKAX(B.D), J=[];
+    const right=fair?'yes: a fair assignment exists':'no: some loads share too few drivers', wrong=fair?['no: some loads share too few drivers','no: there are fewer drivers than loads','only if one driver takes two loads']:['yes: a fair assignment exists','yes: there are as many drivers as loads','yes, if the loads are taken in turn'];
+    if(!fair&&!bl) return null; if(fair&&B.nd<B.nj) return null;
+    const used=new Set(); B.D.forEach(s=>s.forEach(d=>used.add(d)));
+    let why; if(fair){ let f=null; const go=(j,u)=>{ if(f) return; if(j===B.D.length){ f=u; return; } B.D[j].forEach(d=>{ if(!u.includes(d)) go(j+1,u.concat([d])); }); }; go(0,[]); why='One fair assignment: '+f.map((d,j)=>'load '+(j+1)+' to '+DRVAX[d]).join(', ')+'. There are '+fair+' in all.'; }
+    else { const [m,u]=bl; const js=[]; for(let j=0;j<B.nj;j++) if(m>>j&1) js.push(j+1); why='Blocking-group: loads '+js.join(', ')+' have between them only '+[...u].map(d=>DRVAX[d]).join(', ')+(u.size?'':'nobody')+', '+u.size+' driver'+(u.size===1?'':'s')+' for '+js.length+' loads. No-room forbids it.'; }
+    return {index:'q:6·logi.word['+JSON.stringify(B.D)+']', a3:['6·logi.word',DASH,DASH], story:'A dispatcher in Salinas has '+B.nj+' loads this morning and drivers '+DRVAX.slice(0,B.nd).join(', ')+'. The board says who can take each load.', lines:ROWSAX(B.D), ask:'Can every load get its own driver?', right, opts:shuffle([right,...wrong]), lead:'', why}; }},
+  {id:'6·logi.line',step:'6·logi',mode:'proof',label:'what the board licenses',open:()=>measured('6·logi'),make(){
+    return line28('6·logi.line',[
+      ['g1',[['3 \\cdot 3 \\cdot 2 \\cdot 5 = 90','stages-multiply'],['90 fair assignments','one per assignment']],2,1,'Most of the 90 give a driver two loads; only 16 are fair.'],
+      ['g2',[['D(g) \\cup D(s) \\cup D(f) = \\{\\text{Sarah}, \\text{Randy}\\}','three loads'],['no fair assignment','blocking-group, k = 3']],2,0,'3 loads, 2 drivers between them: no-room forbids a matching.'],
+      ['g3',[['five drivers, four loads','given'],['a fair assignment exists','more drivers than loads']],2,1,'Not enough: check every group of loads.'],
+      ['g4',[['picking in turn strands load t','down the board'],['no fair assignment exists','picking in turn failed']],2,1,'The order may be at fault: a swap can serve t.'],
+      ['g5',[['D(g) = D(s)','given'],['a choosing function for \\{D(g), D(s), D(t), D(v)\\} is an assignment','6b']],2,1,'That collection has three members; the picks are made by load, not by set.'],
+      ['g6',[['D(j) = \\varnothing','a load nobody can take'],['no fair assignment','a blocking group of one']],2,0,'One load, 0 drivers: blocking-group with k = 1.'],
+      ['g7',[['f(t) = \\text{Mike}:\\ 4;\\ \\ f(t) = \\text{Terry}:\\ 12','by cases on the tanker'],['16 fair assignments','separate-piles']],2,0,'The two cases share nothing: 4 + 12.']],[]); }});
+/* ----- annex 6·phys Can a scale be perfectly in tune: Work, Word Problems, Check Proofs ----- */
+const IVAX=[['2/1','an octave'],['3/2','a fifth'],['4/3','a fourth'],['5/4','a just major third'],['6/5','a minor third'],['9/8','a whole step'],['5/3','a major sixth']];
+QP.push({id:'6·phys.work',step:'6·phys',mode:'work',label:'stacking fifths, fitted',open:()=>measured('6·phys'),make(){
+    const m=2+rnd(5); let p=1,q=1; for(let i=0;i<m;i++) p*=3; let j=0; while(p>=2*q*Math.pow(2,0)&&p/Math.pow(2,j)>=2) j++; q=Math.pow(2,j);
+    const right=p+'/'+q, wrong=UQAX(right,[p+'/'+(q*2),p+'/'+(q/2),(3*m)+'/'+(2*m),p+'/'+Math.pow(2,m),(p-q)+'/'+q],3); if(wrong.length<3||q<2) return null;
+    return {index:'q:6·phys.work['+m+']', lines:[['(3/2)^{'+m+'}','a stack of '+m+' fifths']], ask:'Fit it into the octave: which ratio r, with 1 ≤ r < 2?', right, opts:shuffle([right,...wrong]), lead:'', why:'Power-of-a-fraction: (3/2)^'+m+' = '+p+'/'+Math.pow(2,m)+'. Divide by 2 until it is below 2: '+p+'/'+q+' ≈ '+(p/q).toFixed(4)+'.'}; }},
+  {id:'6·phys.word',step:'6·phys',mode:'word',label:'naming two sounds',open:()=>measured('6·phys'),make(){
+    const iv=IVAX[1+rnd(6)], [a,b]=iv[0].split('/').map(Number), lo=[55,82.5,110,73.5,41.25,98][rnd(6)], oc=rnd(2), hi=lo*a/b*(oc?2:1);
+    if(Math.abs(hi*100-Math.round(hi*100))>1e-9) return null;
+    const N=x=>oc?'an octave and '+x.replace(/^an? /,'a '):x, right=N(iv[1]);
+    const wrong=UQAX(right,shuffle(IVAX.slice(1).map(x=>N(x[1]))).concat([oc?iv[1]:'an octave and '+iv[1].replace(/^an? /,'a ')]),3); if(wrong.length<3) return null;
+    const F=x=>String(Math.round(x*100)/100);
+    return {index:'q:6·phys.word['+iv[0]+';'+lo+';'+oc+']', a3:['6·phys.word',DASH,DASH], story:'Two strings of a bass sound together. A tuner reads '+F(hi)+' Hz on one and '+F(lo)+' Hz on the other.', lines:[], ask:'What interval do they make?', right, opts:shuffle([right,...wrong]), lead:'', why:'Divide the higher by the lower: '+F(hi)+'/'+F(lo)+' = '+(oc?(2*a)+'/'+b:iv[0])+(oc?'; it is 2 or more, so fit it, dividing by 2 once: '+iv[0]:'')+', '+iv[1]+'.'}; }},
+  {id:'6·phys.line',step:'6·phys',mode:'proof',label:'what the numbers license',open:()=>measured('6·phys'),make(){
+    return line28('6·phys.line',[
+      ['p1',[['\\tfrac32 \\cdot \\tfrac43 = 2','fractions-of-rationals ii'],['a fifth and a fourth fill an octave','stacking multiplies']],2,0,'Tops times tops, bottoms times bottoms: 12/6 = 2.'],
+      ['p2',[['a fifth, then a fourth on top','given'],['\\tfrac32 + \\tfrac43 = 2','the intervals add']],2,1,'The ratios multiply; 3/2 + 4/3 = 17/6.'],
+      ['p3',[['(3/2)^{12} = 531441/4096','power-of-a-fraction'],['twelve fifths land on seven octaves','2^7 = 128']],2,1,'531441/524288 ≈ 1.0136: not 1.'],
+      ['p4',[['(3/2)^m = 2^n,\\ m \\ne 0','assumed'],['3^m = 2^{m+n}','cross-multiplying; powers-add-their-counts']],2,0,'3^m/2^m = 2^n/1, so 3^m · 1 = 2^m · 2^n.'],
+      ['p5',[['3^m = 2^{m+n}','given'],['3 = 2','one-prime-list']],2,0,'One number has one prime list; the first entries match.'],
+      ['p6',[['nobody has found the right m','given'],['some larger stack of fifths closes','the near misses get better']],2,1,'No-closing-fifths: (3/2)^m ≠ 2^n for every m ≠ 0.'],
+      ['p7',[['\\tfrac{81}{64} \\div \\tfrac54','the two thirds'],['= \\tfrac{81}{80}','multiply by the reciprocal; cancel 4']],2,0,'324/320 = 81/80, the syntonic comma.'],
+      ['p8',[['220\\ \\text{Hz and } 82.5\\ \\text{Hz}','two notes'],['a fourth','220/82.5 = 8/3']],2,1,'8/3 is wider than an octave: an octave and a fourth.'],
+      ['p9',[['tune every interval just','given'],['no comma is left','pure intervals']],2,1,'The comma hides between D and A: 40/27 is flat by 81/80.']],[]); }});
+/* ----- annex 6·stat How do you pick a fair sample: Work, Word Problems, Check Proofs ----- */
+const BINAX=(n,k)=>{ if(k<0||k>n) return 0; let r=1; for(let i=1;i<=k;i++) r=r*(n-k+i)/i; return Math.round(r); };
+QP.push({id:'6·stat.work',step:'6·stat',mode:'work',label:'each member’s chance',open:()=>measured('6·stat'),make(){
+    const N=12+rnd(40), k=2+rnd(6), two=rnd(2), F=(p,q)=>{ const g=GCDAX(p,q); return q/g===1?String(p/g):FRAX(p,q); };
+    if(two){ const right=BINAX(N-1,k-1).toLocaleString('en').replace(/,/g,' '), S=v=>v.toLocaleString('en').replace(/,/g,' ');
+      const wrong=UQAX(right,[S(BINAX(N,k-1)),S(BINAX(N-1,k)),S(BINAX(N,k)),S(BINAX(N-1,k-2)),S(BINAX(N-2,k-1))],3); if(wrong.length<3) return null;
+      return {index:'q:6·stat.work[c;'+N+';'+k+']', lines:[['N = '+N+',\\ k = '+k,'a fair sample of k from N']], ask:'How many of the samples hold one named member x?', right, opts:shuffle([right,...wrong]), lead:'', why:'x is in; pick the other k − 1 = '+(k-1)+' from the N − 1 = '+(N-1)+' others (choosing-counts-parts): C('+(N-1)+', '+(k-1)+') = '+right+'.'}; }
+    const right=F(k,N), wrong=UQAX(right,[F(1,BINAX(N,k)),F(1,N),F(k-1,N-1),F(k,N-k),F(1,k)],3); if(wrong.length<3) return null;
+    return {index:'q:6·stat.work[p;'+N+';'+k+']', lines:[['N = '+N+',\\ k = '+k,'a fair sample of k from N']], ask:'What is one member’s chance of being in the sample?', right, opts:shuffle([right,...wrong]), lead:'', why:'Fair-share technique: k/N = '+k+'/'+N+(right!==k+'/'+N?' = '+right:'')+'. The chance of one whole sample, 1/C(N, k), is another thing.'}; }},
+  {id:'6·stat.word',step:'6·stat',mode:'word',label:'right on average',open:()=>measured('6·stat'),make(){
+    const C=[['wells in a valley','wells','run dry in August'],['ferries in a fleet','ferries','run on batteries'],['schools in a district','schools','have a garden'],['orchards in a county','orchards','grow pears'],['lakes on a map','lakes','hold trout']][rnd(5)];
+    const N=20+rnd(41), m=2+rnd(Math.floor(N/2)), k=2+rnd(9), F=(p,q)=>{ const g=GCDAX(p,q); return q/g===1?String(p/g):FRAX(p,q); };
+    const right=F(k*m,N), wrong=UQAX(right,[F(m,N),F(k,N),F(m,k),F(k*m,N-m),String(Math.round(k*m/N)+1)],3); if(wrong.length<3) return null;
+    return {index:'q:6·stat.word['+N+';'+m+';'+k+']', a3:['6·stat.word',DASH,DASH], story:'There are '+N+' '+C[0]+', and '+m+' of the '+C[1]+' '+C[2]+'. A study draws '+k+' of the '+N+' fairly, from a drum.', lines:[], ask:'How many of the drawn '+C[1]+' '+C[2]+', on average?', right, opts:shuffle([right,...wrong]), lead:'', why:'Fair-sample technique: k · m/N = '+k+' · '+m+'/'+N+' = '+right+'. That is an average over all the samples; one sample holds a whole number.'}; }},
+  {id:'6·stat.line',step:'6·stat',mode:'proof',label:'what a fair sample licenses',open:()=>measured('6·stat'),make(){
+    return line28('6·stat.line',[
+      ['s1',[['\\binom{36}{4} = 58\\,905','choosing-counts-parts'],['Lane’s chance of being in is 1/58\\,905','fair']],2,1,'That is one sample’s chance; 6545 samples hold Lane, so 4/36.'],
+      ['s2',[['\\binom{35}{3} = 6545','parts holding Lane'],['6545/58\\,905 = 1/9','4/36 in lowest terms']],2,0,'Fair-share: k/N = 4/36.'],
+      ['s3',[['the first four in the alphabet','least-chooses'],['a fair sample of 4','the alphabet has no opinion']],2,1,'It names one part every time; the other 58 904 can never come.'],
+      ['s4',[['7 of 36 counties on the coast','given'],['a fair sample of 4 holds 7/9 of them on average','fair-sample: k · m/N']],2,0,'4 · 7/36 = 7/9.'],
+      ['s5',[['a fair sample of 4','given'],['it holds a coastal county','its share is 7/36 on average']],2,1,'Only on average; 23 751 samples hold none.'],
+      ['s6',[['2.4 million answers','a poll by mail'],['the poll is close','size']],2,1,'Size does not undo a tilted pick: the lean stays.'],
+      ['s7',[['tickets drawn from a mixed drum','no ticket put back'],['each part of 4 is equally likely','each part comes from 24 lists']],2,0,'Every ordered list of 4 is equally likely, and each part comes from 4 · 3 · 2 · 1 of them.'],
+      ['s8',[['the people who chose to answer','given'],['a fair sample','a pick']],2,1,'Answering depends on the answer, so the chances differ.']],[]); }});
+/* ----- annex 7·crypt Prove you know a secret without telling it: Work, Word Problems, Check Proofs ----- */
+const P2AX=n=>{ const v=Math.pow(2,n); return v<10000?String(v):v.toLocaleString('en').replace(/,/g,' '); };
+QP.push({id:'7·crypt.work',step:'7·crypt',mode:'work',label:'the cheat’s chance',open:()=>measured('7·crypt'),make(){
+    const n=3+rnd(18), ask=rnd(2);
+    if(ask){ const lim=[100,1000,10000,100000,1000000][rnd(5)]; let k=0; while(Math.pow(2,k)<lim) k++;
+      const right=String(k), wrong=UQAX(right,[String(k-1),String(k+1),String(Math.round(Math.log10(lim))),String(lim/2>40?Math.round(Math.log10(lim))*2:k+2)],3); if(wrong.length<3) return null;
+      return {index:'q:7·crypt.work[k;'+lim+']', lines:[['P(\\text{a cheat passes } n \\text{ rounds}) = 1/2^n','cheat’s-chance']], ask:'What is the fewest rounds that bring a cheat’s chance to 1 in '+lim.toLocaleString('en').replace(/,/g,' ')+' or less?', right, opts:shuffle([right,...wrong]), lead:'', why:'2^'+(k-1)+' = '+P2AX(k-1)+' is short of '+lim.toLocaleString('en').replace(/,/g,' ')+', and 2^'+k+' = '+P2AX(k)+' is not: '+k+' rounds.'}; }
+    const right='1 in '+P2AX(n), wrong=UQAX(right,['1 in '+(2*n),n+' in '+P2AX(n),'1 in '+P2AX(n-1),'1 in '+n,'1 in '+P2AX(n+1)],3); if(wrong.length<3) return null;
+    return {index:'q:7·crypt.work[n;'+n+']', lines:[[n+'\\text{ rounds, each called by a fair toss}','given']], ask:'What chance has a cheat of passing all '+n+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Cheat’s-chance: the rounds’ chances multiply, 1/2 taken '+n+' times, 1/2^'+n+', 1 in '+P2AX(n)+'. They do not add.'}; }},
+  {id:'7·crypt.word',step:'7·crypt',mode:'word',label:'cards behind the back',open:()=>measured('7·crypt'),make(){
+    const n=4+rnd(14), F=rnd(2);
+    const right=F?'1 in '+P2AX(n):'she is guessing, and one miss refutes that she can tell', wrong=F?UQAX(right,['1 in '+(2*n),'1 in '+P2AX(n-1),n+' in '+P2AX(n),'1 in 2'],3):['she still sees the colours: one miss is chance','nothing: a miss counts the same as a hit','she sees the colours with chance 1/2'];
+    if(wrong.length<3) return null;
+    const story='A friend who cannot tell red from green holds two cards that look the same to him. Mara says one is red and one green. Each round he hides both behind his back, tosses a coin to swap them or not, and she says whether he swapped.';
+    return {index:'q:7·crypt.word['+n+';'+F+']', a3:['7·crypt.word',DASH,DASH], story, lines:[], ask:F?'If the cards looked alike to Mara too, what chance has she of being right '+n+' rounds in a row?':'In round '+n+', after '+(n-1)+' right answers, Mara answers wrong. What follows?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Each round a guess is right with chance 1/2, and the tosses are fair, so the chances multiply: 1/2^'+n+', 1 in '+P2AX(n)+'.':'One who sees the colours is never wrong: the error of the test runs one way only. So a single miss shows she cannot tell them apart.'}; }},
+  {id:'7·crypt.line',step:'7·crypt',mode:'proof',label:'what the rounds license',open:()=>measured('7·crypt'),make(){
+    return line28('7·crypt.line',[
+      ['z1',[['she passed 20 rounds','given'],['she knows the word','the checker’s verdict']],2,1,'Or a 1 in 1 048 576 chance came off: the verdict carries its chance.'],
+      ['z2',[['each round: chance \\tfrac12','a fair toss'],['20 rounds: chance 20 \\cdot \\tfrac12','the rounds add']],2,1,'The chances multiply: 1/2²⁰.'],
+      ['z3',[['each round: chance \\tfrac12','a fair toss'],['20 rounds: chance 1/2^{20}','cheat’s-chance']],2,0,'1/2 taken 20 times: 1 in 1 048 576.'],
+      ['z4',[['the checker always calls left','his plan'],['a cheat still passes with chance \\tfrac12','one round']],2,1,'A cheat who knows the pattern goes in left and always passes: the call must be a fair toss.'],
+      ['z5',[['she fails one round','given'],['she does not know the word','one who knows never fails']],2,0,'The error runs one way only: a prover who knows always comes out where called.'],
+      ['z6',[['a film of 20 met calls','the record'],['she knows the word','the film proves it']],2,1,'A cut film from a stand-in looks the same; only the live tosses convince.'],
+      ['z7',[['he cannot check whether she knows','given'],['he cannot reason by cases on it','no split']],2,1,'Either-way: she knows or she does not; reason in each case.']],[]); }});
+/* ----- annex 7·phys What flows in a wire: Work, Word Problems, Check Proofs ----- */
+const NUMAX=x=>{ const r=Math.round(x*1000)/1000; return String(r).replace('-','\u2212'); };
+QP.push({id:'7·phys.work',step:'7·phys',mode:'work',label:'series and parallel',open:()=>measured('7·phys'),make(){
+    const P=[[6,3],[4,12],[10,15],[20,30],[3,6],[12,6],[60,30],[8,8],[2,6],[30,20],[10,40],[5,20]][rnd(12)], [a,b]=P, par=rnd(2), V=[6,9,12,24][rnd(4)];
+    const R=par?a*b/(a+b):a+b, ask=rnd(2);
+    if(ask){ const I=V/R; if(Math.abs(I*1000-Math.round(I*1000))>1e-9) return null;
+      const right=NUMAX(I)+' A', wrong=UQAX(right,[NUMAX(V/(a+b))+' A',NUMAX(V*(1/a+1/b))+' A',NUMAX(V/(1/a+1/b)/a)+' A',NUMAX(V/a)+' A',NUMAX(R/V)+' A',NUMAX(V*R)+' A'],3); if(wrong.length<3) return null;
+      return {index:'q:7·phys.work[I;'+a+';'+b+';'+par+';'+V+']', lines:[[V+'\\ \\text{V across }'+a+'\\ \\Omega\\text{ and }'+b+'\\ \\Omega\\text{ in '+(par?'parallel':'series')+'}','given']], ask:'What current does the battery send?', right, opts:shuffle([right,...wrong]), lead:'', why:(par?'Product over sum: '+a+' \u00b7 '+b+'/('+a+' + '+b+') = '+NUMAX(R)+' \u03a9':'In series, resistances add: '+a+' + '+b+' = '+R+' \u03a9')+'. The proportion law: I = V/R = '+V+'/'+NUMAX(R)+' = '+NUMAX(I)+' A.'}; }
+    if(Math.abs(R*1000-Math.round(R*1000))>1e-9) return null;
+    const right=NUMAX(R)+' \u03a9', wrong=UQAX(right,[NUMAX(par?a+b:a*b/(a+b))+' \u03a9',NUMAX(1/a+1/b)+' \u03a9',NUMAX((a+b)/2)+' \u03a9',NUMAX(a*b)+' \u03a9',NUMAX(Math.abs(a-b)||a/2)+' \u03a9'],3); if(wrong.length<3) return null;
+    return {index:'q:7·phys.work[R;'+a+';'+b+';'+par+']', lines:[[a+'\\ \\Omega\\text{ and }'+b+'\\ \\Omega\\text{ in '+(par?'parallel':'series')+'}','two resistors']], ask:'What single resistance do they act as?', right, opts:shuffle([right,...wrong]), lead:'', why:par?'Reciprocals add: 1/'+a+' + 1/'+b+' = '+(a+b)+'/'+(a*b)+'; turn it over, product over sum: '+NUMAX(R)+' \u03a9, less than either.':'The same current goes through both, so the drops add: '+a+' + '+b+' = '+R+' \u03a9.'}; }},
+  {id:'7·phys.word',step:'7·phys',mode:'word',label:'power at the wall',open:()=>measured('7·phys'),make(){
+    const A=[['kettle',1500],['toaster',900],['space heater',1200],['hair dryer',1800],['microwave oven',1000],['iron',960]][rnd(6)], V=120, W=A[1], ask=rnd(3), min=[2,3,4,5,6,10][rnd(6)];
+    let right,wrong,why,q;
+    if(ask===0){ right=NUMAX(W/V)+' A'; wrong=[NUMAX(V/W)+' A',NUMAX(W*V)+' A',NUMAX(W/V/2)+' A',NUMAX(W/V*2)+' A']; q='What current does it draw?'; why='P = IV, so I = P/V = '+W+'/'+V+' = '+NUMAX(W/V)+' A.'; }
+    else if(ask===1){ right=NUMAX(V*V/W)+' \u03a9'; wrong=[NUMAX(W/V)+' \u03a9',NUMAX(W/(V*V))+' \u03a9',NUMAX(V/W*100)+' \u03a9',NUMAX(W/V*V/10)+' \u03a9']; q='What is the resistance of its element, while it runs?'; why='P = V\u00b2/R, so R = V\u00b2/P = '+V+'\u00b2/'+W+' = '+NUMAX(V*V/W)+' \u03a9.'; }
+    else { const J=W*min*60; right=(J).toLocaleString('en').replace(/,/g,' ')+' J'; wrong=[(W*min).toLocaleString('en').replace(/,/g,' ')+' J',(J/1000).toLocaleString('en').replace(/,/g,' ')+' J',(W*min*3600).toLocaleString('en').replace(/,/g,' ')+' J',(J*2).toLocaleString('en').replace(/,/g,' ')+' J']; q='How much energy does it use in '+min+' minutes?'; why='A watt is a joule per second: '+W+' W \u00b7 '+(min*60)+' s = '+right+'.'; }
+    wrong=UQAX(right,wrong,3); if(wrong.length<3) return null;
+    return {index:'q:7·phys.word['+A[0]+';'+ask+';'+min+']', a3:['7·phys.word',DASH,DASH], story:'A '+W+' W '+A[0]+' is plugged into a '+V+' V outlet.', lines:[], ask:q, right, opts:shuffle([right,...wrong]), lead:'', why}; }},
+  {id:'7·phys.line',step:'7·phys',mode:'proof',label:'what the circuit laws license',open:()=>measured('7·phys'),make(){
+    return line28('7·phys.line',[
+      ['e1',[['6\\ \\Omega\\text{ and }3\\ \\Omega\\text{ in parallel}','given'],['9\\ \\Omega','resistances add']],2,1,'That is series: in parallel, product over sum, 2 \u03a9.'],
+      ['e2',[['\\tfrac16 + \\tfrac13 = \\tfrac12','reciprocals add'],['the pair is \\tfrac12\\ \\Omega','parallel']],2,1,'1/2 is the reciprocal of the answer: the pair is 2 \u03a9.'],
+      ['e3',[['V = V_1 + V_2 = IR_1 + IR_2','series, the same I'],['V = I(R_1 + R_2)','factoring']],2,0,'Spread turned about: the pair acts as one resistor.'],
+      ['e4',[['a red LED and 9 V','given'],['I = 9\\ \\text{V}/R_{\\text{LED}}','the proportion law']],2,1,'An LED is not a resistor: the proportion law is a fact about some materials only.'],
+      ['e5',[['I_2 = -2\\ \\text{A}','solving the loops'],['the circuit was drawn wrong','a negative current']],2,1,'Only the guessed arrow was wrong: 2 A flows the other way.'],
+      ['e6',[['P = IV,\\ \\ V = IR','given'],['P = I^2 R','substitution']],2,0,'P = I(IR).'],
+      ['e7',[['an ideal switch, open','given'],['it spends energy','the whole voltage is across its gap']],2,1,'Open, I = 0, so P = I \u00b7 V = 0.'],
+      ['e8',[['current in at a joint: 3 A','given'],['current out: 3 A','the junction law']],2,0,'Charge cannot pile up at a point in a steady circuit.']],[]); }});
+/* ----- annex 8·comp Why is 0.1 + 0.2 not 0.3 on a computer: Work, Word Problems, Check Proofs ----- */
+const STAX=(p,q,s)=>{ let n=0; while(Math.pow(2,n)>p/q) n--; while(Math.pow(2,n+1)<=p/q) n++; const e=s-1-n, t=p*Math.pow(2,e)/q; let m=Math.floor(t); const fr=t-m; if(fr>0.5+1e-12||(Math.abs(fr-0.5)<1e-12&&m%2)) m++; return {m,e,n,t}; };
+const KFAX=(m,e)=>e>=0?m+'/'+Math.pow(2,e):String(m*Math.pow(2,-e));
+QP.push({id:'8·comp.work',step:'8·comp',mode:'work',label:'the kept number',open:()=>measured('8·comp'),make(){
+    const F=[[1,10],[1,5],[3,10],[1,3],[2,3],[7,10],[2,5],[3,5],[1,6],[5,6],[7,3],[9,10],[11,10],[13,10],[17,10],[5,3]][rnd(16)], [p,q]=F, s=5, ask=rnd(2);
+    const r=STAX(p,q,s); if(ask){ const g=n=>KFAX(1,s-1-n); const right=g(r.n), wrong=UQAX(right,[g(r.n+1),g(r.n-1),g(r.n-2),'1/'+Math.pow(2,s),'1/'+q*2],3); if(wrong.length<3) return null;
+      return {index:'q:8·comp.work[g;'+p+';'+q+']', lines:[['x = '+p+'/'+q,'on a 5-bit machine']], ask:'What is the gap at x?', right, opts:shuffle([right,...wrong]), lead:'', why:'2^'+String(r.n).replace('-','−')+' ≤ '+p+'/'+q+' < 2^'+String(r.n+1).replace('-','−')+', so n = '+String(r.n).replace('-','−')+' and the gap is 2^(n + 1 − 5) = '+right+'.'}; }
+    const right=KFAX(r.m,r.e), lo=KFAX(Math.floor(r.t)===r.m?r.m+1:r.m-1,r.e), wrong=UQAX(right,[lo,KFAX(r.m+(Math.floor(r.t)===r.m?2:-2),r.e),KFAX(r.m,r.e+1),p+'/'+q],3); if(wrong.length<3) return null;
+    return {index:'q:8·comp.work[st;'+p+';'+q+']', lines:[['x = '+p+'/'+q,'on a 5-bit machine']], ask:'Which number does the machine keep for x?', right, opts:shuffle([right,...wrong]), lead:'', why:'The gap at x is '+KFAX(1,r.e)+', and x = '+(Math.round(r.t*1000)/1000)+'/'+Math.pow(2,r.e)+' lies between '+KFAX(Math.floor(r.t),r.e)+' and '+KFAX(Math.floor(r.t)+1,r.e)+'. st(x) is the nearer: '+right+'. '+p+'/'+q+' itself is not kept: no-ending-twos.'}; }},
+  {id:'8·comp.word',step:'8·comp',mode:'word',label:'an ending numeral in twos',open:()=>measured('8·comp'),make(){
+    const p=1+rnd(15), q=[2,3,4,5,6,8,10,12,16,20,25,32,40,64,100][rnd(15)], g=GCDAX(p,q), a=p/g, b=q/g; if(b===1) return null;
+    let t=b; while(t%2===0) t/=2; const ends=t===1;
+    const right=ends?'yes: it ends, as '+a+'/'+b:'no: its bottom has a prime other than 2', wrong=ends?['no: its bottom has a prime other than 2','no: no fraction ends in twos','only on a machine with more bits']:['yes: it ends, as '+a+'/'+b,'yes, on a machine with enough bits','yes: every fraction ending in tens ends in twos'];
+    const W=[['a price of $'+(p/q).toFixed(2)+' per item',(p/q).toFixed(2)],['a tolerance of '+(p/q)+' mm',String(p/q)],['a step of '+p+'/'+q+' of a second',p+'/'+q]][rnd(3)];
+    if(W[1].indexOf('/')<0&&(Math.abs(parseFloat(W[1])-p/q)>1e-9||W[1].length>7)) return null;
+    return {index:'q:8·comp.word['+p+';'+q+']', a3:['8·comp.word',DASH,DASH], story:'A program stores '+W[0]+(W[1]===a+'/'+b?'.':', which is '+a+'/'+b+' in lowest terms.'), lines:[], ask:'Can a machine with a fixed count of bits keep it exactly?', right, opts:shuffle([right,...wrong]), lead:'', why:ends?b+' is a power of two, so '+a+'/'+b+' is a number over a power of two: its numeral in twos ends, and a machine with enough bits keeps it.':'No-ending-twos, run with '+t+' in place of 5: if m/2^k = '+a+'/'+b+', then '+t+' divides a power of 2. No count of bits holds it.'}; }},
+  {id:'8·comp.line',step:'8·comp',mode:'proof',label:'what the machine licenses',open:()=>measured('8·comp'),make(){
+    return line28('8·comp.line',[
+      ['b1',[['\\mathrm{st}(a) + \\mathrm{st}(b)','given'],['= \\mathrm{st}(a + b)','storing keeps sums']],2,1,'On 5 bits: 26/256 + 26/128 = 0.3046875, while st(0.3) = 0.296875.'],
+      ['b2',[['\\mathrm{st}(0.1) \\text{ prints as } 0.1','given'],['\\mathrm{st}(0.1) = 0.1','what it prints']],2,1,'Printing rounds again, to the shortest decimal that keeps the same number.'],
+      ['b3',[['10m = 2^k','supposed'],['5 \\mid 2','prime-divides-a-list']],2,0,'5 divides 10m, so 5 divides the product of a list of 2s, so 5 divides 2.'],
+      ['b4',[['\\text{a machine with more bits}','given'],['0.1 \\text{ is kept exactly}','more bits']],2,1,'No-ending-twos: no count of bits holds 1/10.'],
+      ['b5',[['|\\mathrm{st}(x) - x| \\le g/2','the nearer end'],['\\le 2^{-s}\\,x','2^n \\le x']],2,0,'Half-gap: g/2 = 2^(n − s) = 2^(−s) · 2^n.'],
+      ['b6',[['0.1 + 0.2 + 0.3','left to right'],['\\text{the same as right to left}','grouping']],2,1,'Left to right prints 0.6000000000000001; right to left, 0.6.'],
+      ['b7',[['\\text{the gap between 1 and 2 is } \\tfrac1{16}','5-bit'],['\\text{the gap between 2 and 4 is } \\tfrac1{16}','the gap is the same everywhere']],2,1,'It doubles at each power of two: 1/8.'],
+      ['b8',[['|p - x| \\le d_1,\\ \\ |q - x| \\le d_2','given'],['|p - q| \\le d_1 + d_2','near-enough']],2,0,'Triangle and size-of-a-negative.']],[]); }});
+/* ----- annex 8·econ What does a price really say: Work, Word Problems, Check Proofs ----- */
+const PCAX=v=>{ const r=Math.round(v*100)/100; return (r<0?'−':'')+String(Math.abs(r))+'%'; };
+QP.push({id:'8·econ.work',step:'8·econ',mode:'work',label:'changes multiply',open:()=>measured('8·econ'),make(){
+    const ask=rnd(3);
+    if(ask<2){ const u=[5,8,10,12,15,20,25,30,40,50][rnd(10)], d=ask?u:[5,10,15,20,25][rnd(5)], f=(1+u/100)*(1-d/100), net=(f-1)*100;
+      const right=(net>=0?'up ':'down ')+PCAX(Math.abs(net)), wrong=UQAX(right,[(u-d>=0?'up ':'down ')+PCAX(Math.abs(u-d)),'up '+PCAX(Math.abs(net)*(net<0?1:2)),'down '+PCAX(Math.abs(net)+1),'down '+PCAX(Math.abs(net)/2),'up '+PCAX(u)],3); if(wrong.length<3) return null;
+      return {index:'q:8·econ.work[ud;'+u+';'+d+']', lines:[['\\text{up } '+u+'\\%,\\ \\text{then down } '+d+'\\%','a price']], ask:'What is the change, start to end?', right, opts:shuffle([right,...wrong]), lead:'', why:'Changes multiply: '+(1+u/100)+' · '+(1-d/100)+' = '+(Math.round(f*10000)/10000)+', so '+right+'.'+(u===d?' Up-and-down: the same rate up and down always leaves less.':'')}; }
+    const d=[10,20,25,40,50,60,75][rnd(7)], up=d/(100-d)*100;
+    const right=PCAX(Math.round(up*100)/100), wrong=UQAX(right,[PCAX(d),PCAX(d*2),PCAX(Math.round(up*100)/100+5),PCAX(100-d)],3); if(wrong.length<3) return null;
+    return {index:'q:8·econ.work[undo;'+d+']', lines:[['\\text{down } '+d+'\\%','a price']], ask:'What rise brings it back to where it started?', right, opts:shuffle([right,...wrong]), lead:'', why:'After the fall the price is '+(1-d/100)+' of the start. To come back, divide by '+(1-d/100)+', that is, multiply by about '+(Math.round(10000/(100-d))/100)+': up about '+right+'.'}; }},
+  {id:'8·econ.word',step:'8·econ',mode:'word',label:'a price per unit',open:()=>measured('8·econ'),make(){
+    const G=[['salsa','oz'],['olive oil','fl oz'],['rice','lb'],['coffee','oz'],['detergent','fl oz']][rnd(5)], a=[8,12,16][rnd(3)], b=a*[2,3,4][rnd(3)], pa=(2+rnd(500)/100), pb=Math.round(pa*b/a*(0.7+rnd(60)/100)*100)/100;
+    const ua=pa/a, ub=pb/b; if(Math.abs(ua-ub)/ua<0.03) return null; const cheap=ub<ua?'the '+b+' '+G[1]+' one':'the '+a+' '+G[1]+' one';
+    const right=cheap+', by about '+Math.round(Math.abs(ua-ub)/Math.max(ua,ub)*100)+'% a unit', other=(ub<ua?'the '+a+' '+G[1]+' one':'the '+b+' '+G[1]+' one');
+    const wrong=UQAX(right,[other+', by about '+Math.round(Math.abs(ua-ub)/Math.max(ua,ub)*100)+'% a unit','the '+a+' '+G[1]+' one, since it costs less','they cost the same per '+G[1],cheap+', by about '+Math.round(Math.abs(pb-pa)/pb*100)+'% a unit'],3); if(wrong.length<3) return null;
+    return {index:'q:8·econ.word['+G[0]+';'+a+';'+b+';'+pa+';'+pb+']', a3:['8·econ.word',DASH,DASH], story:'A shelf in Salinas has '+G[0]+' at $'+pa.toFixed(2)+' for '+a+' '+G[1]+' and $'+pb.toFixed(2)+' for '+b+' '+G[1]+'.', lines:[], ask:'Which is cheaper?', right, opts:shuffle([right,...wrong]), lead:'', why:'Compare per unit: $'+pa.toFixed(2)+'/'+a+' ≈ $'+ua.toFixed(4)+' and $'+pb.toFixed(2)+'/'+b+' ≈ $'+ub.toFixed(4)+' per '+G[1]+'. '+cheap[0].toUpperCase()+cheap.slice(1)+' is cheaper.'}; }},
+  {id:'8·econ.line',step:'8·econ',mode:'proof',label:'what a price licenses',open:()=>measured('8·econ'),make(){
+    return line28('8·econ.line',[
+      ['x1',[['+10\\%,\\ \\text{then } -10\\%','a price'],['0\\%','they cancel']],2,1,'Changes multiply: 1.1 · 0.9 = 0.99, down 1%.'],
+      ['x2',[['\\text{down } 25\\%','given'],['\\text{undone by up } 25\\%','the same rate']],2,1,'0.75 · 1.25 = 0.9375; it takes about 33%.'],
+      ['x3',[['\\text{a total factor of } 1.2270 \\text{ in 5 years}','an index'],['\\text{a steady rate of } 1.2270^{1/5} - 1','steady-rate']],2,0,'Exactly one positive 5th root: about 4.18% a year.'],
+      ['x4',[['\\text{a rate from } 4\\% \\text{ to } 5\\%','given'],['\\text{up } 1\\%','take away']],2,1,'Up 1 percentage point, which is up 25%.'],
+      ['x5',[['250\\ \\text{USD} \\cdot \\tfrac{1.39\\ \\text{CAD}}{1\\ \\text{USD}}','a chain of ones'],['347.50\\ \\text{CAD}','dollars cancel']],2,0,'A rate is one amount written two ways.'],
+      ['x6',[['\\$16 \\text{ is a third more than } \\$12','given'],['\\text{it buys a third more}','the wage']],2,1,'Divide by the price level: about 8.7% more.'],
+      ['x7',[['\\text{the big jar costs more}','given'],['\\text{it is dearer}','the price']],2,1,'Compare per unit: it may be cheaper per ounce.'],
+      ['x8',[['\\text{buy at } 1.36,\\ \\text{sell at } 1.42','a booth'],['\\$100 \\text{ comes home as } \\$100','a round trip']],2,1,'100 · 1.36/1.42 ≈ 95.77: the rates are not reciprocals.']],[]); }});
+/* ----- annex 8·eng How close is close enough: Work, Word Problems, Check Proofs ----- */
+const MMAX=v=>{ const r=Math.round(v*10000)/10000; return (r<0?'−':'')+Math.abs(r).toFixed(Math.max(2,(String(Math.abs(r)).split('.')[1]||'').length)); };
+QP.push({id:'8·eng.work',step:'8·eng',mode:'work',label:'tolerances add',open:()=>measured('8·eng'),make(){
+    const k=2+rnd(6), p=[5,10,12.5,20,25][rnd(5)], d=[0.01,0.02,0.05,0.1][rnd(4)], two=rnd(2);
+    if(two){ const a=[30,40,50,60][rnd(4)], b=a-[2,5,10,15][rnd(4)], da=[0.01,0.02,0.05][rnd(3)], db=[0.01,0.02,0.03][rnd(3)];
+      const right=MMAX(a-b)+' ± '+MMAX(da+db)+' mm', wrong=UQAX(right,[MMAX(a-b)+' ± '+MMAX(Math.abs(da-db)||da/2)+' mm',MMAX(a-b)+' ± '+MMAX(Math.max(da,db))+' mm',MMAX(a-b)+' ± '+MMAX((da+db)/2)+' mm',MMAX(a+b)+' ± '+MMAX(da+db)+' mm'],3); if(wrong.length<3) return null;
+      return {index:'q:8·eng.work[g;'+a+';'+b+';'+da+';'+db+']', lines:[[a+' \\pm '+da+'\\ \\text{mm}','a slot'],[b+' \\pm '+db+'\\ \\text{mm}','the block in it']], ask:'What is the gap, slot less block, with its tolerance?', right, opts:shuffle([right,...wrong]), lead:'', why:'Tolerances-add: subtracting adds tolerances too, '+da+' + '+db+' = '+MMAX(da+db)+'. The gap is '+right+'.'}; }
+    const right=MMAX(k*p)+' ± '+MMAX(k*d)+' mm', wrong=UQAX(right,[MMAX(k*p)+' ± '+MMAX(d)+' mm',MMAX(k*p)+' ± '+MMAX(d*(k-1))+' mm',MMAX(k*p)+' ± '+MMAX(d/k)+' mm',MMAX(k*p)+' ± '+MMAX(2*k*d)+' mm'],3); if(wrong.length<3) return null;
+    return {index:'q:8·eng.work[s;'+k+';'+p+';'+d+']', lines:[[k+'\\text{ spacers, each }'+p+' \\pm '+d+'\\ \\text{mm}','end to end']], ask:'What does the stack promise, for every set of good spacers?', right, opts:shuffle([right,...wrong]), lead:'', why:'Tolerances-add, '+k+' times: '+k+' · '+d+' = '+MMAX(k*d)+'. It is reached: if every spacer is '+MMAX(p+d)+' mm, the stack is '+MMAX(k*(p+d))+' mm.'}; }},
+  {id:'8·eng.word',step:'8·eng',mode:'word',label:'the guard band',open:()=>measured('8·eng'),make(){
+    const n=[12,20,25,30,40][rnd(5)], d=[0.01,0.02,0.025,0.05,0.1][rnd(5)], T=[['a dial caliper',0.02],['a micrometer',0.002],['a steel rule',0.25],['a digital caliper',0.01]][rnd(4)], e=T[1], b=d-e; if(Math.abs(b)<1e-9) return null;
+    const right=b>0?'readings within '+MMAX(b)+' mm of '+n+' mm':'no reading: the tool is too coarse', wrong=UQAX(right,shuffle(['readings within '+MMAX(d)+' mm of '+n+' mm','readings within '+MMAX(d+e)+' mm of '+n+' mm',b>0?'no reading: the tool is too coarse':'readings within '+MMAX(e)+' mm of '+n+' mm','readings within '+MMAX(d/2)+' mm of '+n+' mm']),3); if(wrong.length<3) return null;
+    return {index:'q:8·eng.word['+n+';'+d+';'+e+']', a3:['8·eng.word',DASH,DASH], story:'A shaft is drawn '+n+' ± '+d+' mm. The shop checks it with '+T[0]+' that reads within '+e+' mm of the true size.', lines:[], ask:'Which readings prove the shaft is good?', right, opts:shuffle([right,...wrong]), lead:'', why:'Guard-band: a reading proves the part good only within d − e = '+d+' − '+e+' = '+MMAX(b)+' mm of the drawing'+(b>0?'.':'; that is below 0, so no reading can. Use a tool about ten times finer than the tolerance.')}; }},
+  {id:'8·eng.line',step:'8·eng',mode:'proof',label:'what a tolerance licenses',open:()=>measured('8·eng'),make(){
+    return line28('8·eng.line',[
+      ['t1',[['(20 \\pm 0.01) - (19.99 \\pm 0.01)','given'],['0.01 \\pm 0','the tolerances cancel']],2,1,'Subtracting adds tolerances: 0.01 ± 0.02.'],
+      ['t2',[['\\text{five parts of } \\pm 0.05','end to end'],['\\text{a stack of } \\pm 0.05','the same tolerance']],2,1,'The tolerances add: ±0.25.'],
+      ['t3',[['|x - a| \\le d,\\ \\ |y - b| \\le e','given'],['|(x + y) - (a + b)| \\le d + e','triangle technique']],2,0,'Regroup, then the triangle technique and same-direction-add.'],
+      ['t4',[['the reading is within tolerance','a caliper'],['the part is within tolerance','the reading']],2,1,'Only if the reading is within d − e of the drawing: guard-band.'],
+      ['t5',[['two readings agree','given'],['both are exact','measure twice']],2,1,'Agreement within 2e is all two readings can show.'],
+      ['t6',[['20.000 \\le h \\le 20.021,\\ \\ 19.980 \\le s \\le 19.993','the drawings'],['0.007 \\le h - s \\le 0.041','same-direction-add with −s']],2,0,'Least with least, greatest with greatest, after the order turns about for −s.'],
+      ['t7',[['|x - y|','given'],['\\le |x| - |y|','triangle technique']],2,1,'The triangle technique runs the other way: |x − y| ≤ |x| + |y|.'],
+      ['t8',[['two readings differ by more than 2e','given'],['one of them is wrong','|r_1 - r_2| \\le 2e']],2,0,'Each is within e of the true size, so honest readings are within 2e.']],[]); }});
+/* ----- annex 8·phys How big and how small do things get: Work, Word Problems, Check Proofs ----- */
+const SCIAX=(u,n)=>{ while(u>=10-1e-9){ u/=10; n++; } while(u<1-1e-9){ u*=10; n--; } u=Math.round(u*100)/100; return '$'+String(u)+' \\cdot 10^{'+n+'}$'; };
+const MAX=v=>String(v).replace('-','\u2212');
+QP.push({id:'8·phys.work',step:'8·phys',mode:'work',label:'scientific form',open:()=>measured('8·phys'),make(){
+    const a=[2,3,4,5,6,8,1.5,2.5][rnd(8)], b=[2,3,4,5,6,8,1.5,2.5][rnd(8)], m=rnd(25)-12, n=rnd(25)-12, div=rnd(3)===0;
+    const u=div?a/b:a*b, e=div?m-n:m+n; if(div&&Math.abs(u*100-Math.round(u*100))>1e-9) return null;
+    const right=SCIAX(u,e), wrong=UQAX(right,[SCIAX(u,div?m+n:m-n),'$'+String(Math.round(u*100)/100)+' \\cdot 10^{'+e+'}$',SCIAX(u,e+1),SCIAX(u,e-1),SCIAX(u,div?m*n:m*n)],3); if(wrong.length<3) return null;
+    const L=a+' \\cdot 10^{'+m+'}'+(div?' \\div ':' \\cdot ')+'('+b+' \\cdot 10^{'+n+'})';
+    return {index:'q:8·phys.work['+a+';'+b+';'+m+';'+n+';'+div+']', lines:[[L,'given']], ask:'Which is it in scientific form, 1 \u2264 u < 10?', right, opts:shuffle([right,...wrong]), lead:'', why:'Whole-exponent techniques: '+(div?'exponents take away, '+MAX(m)+' \u2212 ('+MAX(n)+') = '+MAX(e):'exponents add, '+MAX(m)+' + ('+MAX(n)+') = '+MAX(e))+', and '+a+(div?' \u00f7 ':' \u00b7 ')+b+' = '+(Math.round(u*1000)/1000)+'. Tidy so that 1 \u2264 u < 10: '+right+'.'}; }},
+  {id:'8·phys.word',step:'8·phys',mode:'word',label:'how many times bigger',open:()=>measured('8·phys'),make(){
+    const T=[['a grain of sand',0.5,-3,'0.5 mm'],['a human hair',70,-6,'70 \u03bcm'],['a red blood cell',8,-6,'8 \u03bcm'],['a hydrogen atom',0.11,-9,'0.11 nm'],['a virus',100,-9,'100 nm'],['a proton',1.7,-15,'1.7 \u00b7 10\u207b\u00b9\u2075 m'],['Earth',1.3,7,'1.3 \u00b7 10\u2077 m'],['a person',1.7,0,'1.7 m'],['a city block',100,0,'100 m'],['the Moon\u2019s distance',3.8,8,'3.8 \u00b7 10\u2078 m']];
+    let i=rnd(10), j=rnd(10); if(i===j) return null; let A=T[i],B=T[j]; const va=A[1]*Math.pow(10,A[2]), vb=B[1]*Math.pow(10,B[2]); if(va<vb) [A,B]=[B,A];
+    const r=Math.max(va,vb)/Math.min(va,vb), k=Math.round(Math.log10(r)); if(k<2) return null;
+    const P=x=>'about $10^{'+x+'}$', right=P(k), wrong=UQAX(right,[P(k+3),P(k-3>0?k-3:k+6),P(k+1),P(k-1)],3); if(wrong.length<3) return null;
+    return {index:'q:8·phys.word['+A[0]+';'+B[0]+']', a3:['8·phys.word',DASH,DASH], story:'Sizes, roughly: '+A[0]+', '+A[3]+'; '+B[0]+', '+B[3]+'.', lines:[], ask:'About how many times the size of '+B[0]+' is '+A[0]+', to the nearest power of ten?', right, opts:shuffle([right,...wrong]), lead:'', why:'Convert both to metres first: $'+A[1]+' \\cdot 10^{'+A[2]+'}$ m and $'+B[1]+' \\cdot 10^{'+B[2]+'}$ m. Divide: about '+(r>=1e4?'$'+r.toExponential(1).replace(/e\+?(-?\d+)/,' \\cdot 10^{$1}')+'$':Math.round(r))+', so about $10^{'+k+'}$.'}; }},
+  {id:'8·phys.line',step:'8·phys',mode:'proof',label:'what powers of ten license',open:()=>measured('8·phys'),make(){
+    return line28('8·phys.line',[
+      ['f1',[['10^3 + 10^3','given'],['10^6','exponents add']],2,1,'2 \u00b7 10\u00b3: exponents add when you multiply, not when you add.'],
+      ['f2',[['10^3 \\cdot 10^2','given'],['10^6','exponents multiply']],2,1,'10\u2075; exponents multiply only for a power of a power.'],
+      ['f3',[['(5 \\cdot 10^{3})^2','given'],['2.5 \\cdot 10^{7}','25 = 2.5 \\cdot 10']],2,0,'25 \u00b7 10\u2076, tidied: the point moves left, the exponent goes up one.'],
+      ['f4',[['25 \\cdot 10^6','given'],['2.5 \\cdot 10^6','tidy']],2,1,'Off by ten: it is 2.5 \u00b7 10\u2077.'],
+      ['f5',[['2.4\\ \\text{m/s for } 3.15\\ \\text{s}','measured'],['7.56\\ \\text{m}','multiply']],2,1,'The third figure is noise: 7.6 m.'],
+      ['f6',[['12.3 + 0.456 = 12.756','given'],['\\approx 12.8','places of the least precise term']],2,0,'The first is known only to tenths.'],
+      ['f7',[['\\tfrac{70\\ \\mu\\text{m}}{0.11\\ \\text{nm}}','given'],['= \\tfrac{70}{0.11}','divide the numbers']],2,1,'\u03bcm and nm differ by 10\u00b3: convert both to metres first.'],
+      ['f8',[['a light-year','given'],['a time','a year']],2,1,'A length: how far light goes in a year.'],
+      ['f9',[['0.00520','a measurement'],['three significant figures','from the first digit not 0']],2,0,'5, 2 and the final 0.']],[]); }});
+/* ----- annex 9·bio Is a cow just a big mouse: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'9·bio.work',step:'9·bio',mode:'work',label:'power-law habit',open:()=>measured('9·bio'),make(){
+    const r=2+rnd(4), k=Math.pow(r,4), per=rnd(2);
+    if(per){ const right='1/'+r, wrong=UQAX(right,['1/'+k,'1/'+(r*r*r),String(r),'1/'+(r*r)],3); if(wrong.length<3) return null;
+      return {index:'q:9·bio.work[per;'+k+']', lines:[['B = 70\\,M^{3/4}','the three-quarters law'],['M_2 = '+k+'\\,M_1','a heavier animal']], ask:'By what factor is the heavier animal’s rate per kilogram, B/M, multiplied?', right, opts:shuffle([right,...wrong]), lead:'', why:'Per kilogram: B/M = 70 M^(−1/4). Power-law habit with b = −1/4: '+k+'^(−1/4) = 1/'+r+', since '+k+' = '+r+'⁴.'}; }
+    const right=String(r*r*r), wrong=UQAX(right,[String(k),String(r*r),String(Math.round(k*3/4)),String(r*r*r*r/2)],3); if(wrong.length<3) return null;
+    return {index:'q:9·bio.work[B;'+k+']', lines:[['B = 70\\,M^{3/4}','the three-quarters law'],['M_2 = '+k+'\\,M_1','a heavier animal']], ask:'By what factor is the heavier animal’s B multiplied?', right, opts:shuffle([right,...wrong]), lead:'', why:'Power-law habit: f(kM) = k^b f(M), so the factor is '+k+'^(3/4). '+k+' = '+r+'⁴, so '+k+'^(3/4) = '+r+'³ = '+right+'.'}; }},
+  {id:'9·bio.word',step:'9·bio',mode:'word',label:'the three-quarters law',open:()=>measured('9·bio'),make(){
+    const A=[['a dog',16,2],['a goat',81,3],['a pig',256,4],['a steer',625,5],['a rabbit',1,1],['a sheep',81,3],['a hog',256,4]][rnd(7)], [nm,M,r]=A, B=70*r*r*r, per=rnd(2);
+    const right=per?String(Math.round(B/M*100)/100)+' kcal/kg/day':B+' kcal/day', wrong=per?UQAX(right,[String(70)+' kcal/kg/day',String(Math.round(70*r*100)/100)+' kcal/kg/day',String(Math.round(B/M*r*100)/100)+' kcal/kg/day',String(Math.round(70/(r*r)*100)/100)+' kcal/kg/day'],3):UQAX(right,[70*M+' kcal/day',Math.round(70*M*3/4)+' kcal/day',70*r*r+' kcal/day',70*r*r*r*r/2+' kcal/day'],3);
+    if(wrong.length<3) return null;
+    return {index:'q:9·bio.word['+nm+';'+per+']', a3:['9·bio.word',DASH,DASH], story:'Basal metabolism follows B = 70 M^(3/4), with M in kilograms and B in kcal/day. '+nm[0].toUpperCase()+nm.slice(1)+' has a mass of '+M+' kg.', lines:[], ask:per?'What does the law give for its rate per kilogram?':'What does the law give for its basal rate?', right, opts:shuffle([right,...wrong]), lead:'', why:M+' = '+r+'⁴, so '+M+'^(3/4) = '+r+'³ = '+(r*r*r)+', and B = 70 · '+(r*r*r)+' = '+B+' kcal/day.'+(per?' Per kilogram: '+B+'/'+M+' = 70 · '+M+'^(−1/4) = '+right+'.':'')}; }},
+  {id:'9·bio.line',step:'9·bio',mode:'proof',label:'what a power law licenses',open:()=>measured('9·bio'),make(){
+    return line28('9·bio.line',[
+      ['w1',[['f(M) = a M^b','a power law'],['f(kM) = k \\cdot a M^b','the factor comes out']],2,1,'It comes out as k^b: double the mass gives ×1.68 under ¾, not ×2.'],
+      ['w2',[['f(M) = a M^b','a power law'],['f(kM) = k^b f(M)','fraction-exponent techniques']],2,0,'A power of a product is the product of the powers, for positive k and M.'],
+      ['w3',[['16 = 2^4','given'],['16^{3/4} = 8','2^3']],2,0,'Sixteen times the mass, eight times the rate.'],
+      ['w4',[['B = 70 M^{3/4}','the law'],['B/M \\text{ goes as } M^{3/4}','per kilogram']],2,1,'Divide by M: M^(−1/4). Per kilogram falls as mass grows.'],
+      ['w5',[['B = 70 M^{3/4}','the law'],['M = B^{4/3}/70','run it backwards']],2,1,'Undo the 70 first, then the power: M = (B/70)^(4/3).'],
+      ['w6',[['\\text{mouse and cow give } b \\text{ a little under } \\tfrac34','one pair'],['\\text{every pair gives that } b','the law']],2,1,'Data scatter around the law: mouse and sheep give a little over.'],
+      ['w7',[['K^p \\lt L^q','whole-number powers'],['K^{p/q} \\lt L','bracket-an-exponent']],2,0,'Raising to the q-th power keeps order both ways.']],[]); }});
+/* ----- annex 9·crypt Can a code be truly unbreakable: Work, Word Problems, Check Proofs ----- */
+const BITSAX=n=>{ let s=''; for(let i=0;i<n;i++) s+=rnd(2); return s; };
+const XORAX=(a,b)=>a.split('').map((x,i)=>x===b[i]?'0':'1').join('');
+const ANDAX=(a,b)=>a.split('').map((x,i)=>x==='1'&&b[i]==='1'?'1':'0').join('');
+const ORAX=(a,b)=>a.split('').map((x,i)=>x==='1'||b[i]==='1'?'1':'0').join('');
+const FLIPAX=(a,i)=>a.slice(0,i)+(a[i]==='1'?'0':'1')+a.slice(i+1);
+QP.push({id:'9·crypt.work',step:'9·crypt',mode:'work',label:'exclusive or, place by place',open:()=>measured('9·crypt'),make(){
+    const n=8, m=BITSAX(n), k=BITSAX(n), c=XORAX(m,k), ask=rnd(2);
+    const right=c, wrong=UQAX(right,[ANDAX(m,k),ORAX(m,k),FLIPAX(c,rnd(n)),XORAX(c,'11111111')],3); if(wrong.length<3) return null;
+    return {index:'q:9·crypt.work['+m+';'+k+';'+ask+']', lines:ask?[['c = '+m,'a cipher text'],['k = '+k,'the key']]:[['m = '+m,'a message'],['k = '+k,'the key']], ask:ask?'What message does the pad give back, c ⊕ k?':'What is the cipher text, m ⊕ k?', right, opts:shuffle([right,...wrong]), lead:'', why:'At each place, 1 exactly when one of the two bits is 1: '+m+' ⊕ '+k+' = '+c+'.'+(ask?' Own-way-back: the same key undoes itself.':'')}; }},
+  {id:'9·crypt.word',step:'9·crypt',mode:'word',label:'one key each',open:()=>measured('9·crypt'),make(){
+    const n=8, m=BITSAX(n), c=BITSAX(n), k=XORAX(m,c), two=rnd(2);
+    if(two){ const m2=BITSAX(n), k2=BITSAX(n), c1=XORAX(m,k2), c2=XORAX(m2,k2), right=XORAX(m,m2), wrong=UQAX(right,[k2,XORAX(right,'11111111'),FLIPAX(right,rnd(n)),ANDAX(c1,c2)],3); if(wrong.length<3) return null;
+      return {index:'q:9·crypt.word[2;'+m+';'+m2+';'+k2+']', a3:['9·crypt.word',DASH,DASH], story:'A clerk used one pad key twice. An eavesdropper took both cipher texts off the wire: c₁ = '+c1+' and c₂ = '+c2+'.', lines:[], ask:'What does c₁ ⊕ c₂ hand the eavesdropper?', right:'m₁ ⊕ m₂ = '+right, opts:shuffle(['m₁ ⊕ m₂ = '+right,...wrong.map(w=>(w===k2?'the key, ':'m₁ ⊕ m₂ = ')+w)]), lead:'', why:'Key-cancels: (m₁ ⊕ k) ⊕ (m₂ ⊕ k) = m₁ ⊕ m₂ ⊕ (k ⊕ k) = m₁ ⊕ m₂, here '+right+'. The key is gone, and the two messages are tied together.'}; }
+    const right=k, wrong=UQAX(right,[ANDAX(m,c),ORAX(m,c),FLIPAX(k,rnd(n)),c],3); if(wrong.length<3) return null;
+    return {index:'q:9·crypt.word[1;'+m+';'+c+']', a3:['9·crypt.word',DASH,DASH], story:'An eavesdropper holds the cipher text '+c+' and guesses that the message was '+m+'.', lines:[], ask:'Which key would send that message to that cipher text?', right, opts:shuffle([right,...wrong]), lead:'', why:'One-key-each: exactly one key does it, k = m ⊕ c = '+k+'. Every guess has its own key, so the cipher text alone rules out no message.'}; }},
+  {id:'9·crypt.line',step:'9·crypt',mode:'proof',label:'what the pad licenses',open:()=>measured('9·crypt'),make(){
+    return line28('9·crypt.line',[
+      ['o1',[['E_k(m) = m \\oplus k','the pad'],['E_k(E_k(m)) = m','A \\oplus A = 0,\\ A \\oplus 0 = A']],2,0,'Own-way-back: (m ⊕ k) ⊕ k = m ⊕ (k ⊕ k) = m ⊕ 0 = m.'],
+      ['o2',[['c \\text{ looks like noise}','given'],['\\text{any key is safe}','the output']],2,1,'A key from a guessable source fails: the attacker tries the guessable keys first.'],
+      ['o3',[['\\text{a key of } 8 \\text{ bits, repeated}','given'],['\\text{a pad}','one key per message']],2,1,'2⁸ keys cannot fit 2ⁿ messages: most messages are ruled out.'],
+      ['o4',[['E_k(E_j(m))','two pads'],['\\text{safer than } E_k(m)','twice']],2,1,'E_k ∘ E_j = E_{j ⊕ k}: one pad with key j ⊕ k.'],
+      ['o5',[['c_1 = m_1 \\oplus k,\\ \\ c_2 = m_2 \\oplus k','one key twice'],['c_1 \\oplus c_2 = m_1 \\oplus m_2','key-cancels']],2,0,'k ⊕ k = 0, and the key is gone.'],
+      ['o6',[['m \\text{ AND } k','a cipher'],['\\text{the key runs it back}','own-way-back']],2,1,'AND is not one-to-one in m: where k(i) = 0 every message gives 0.'],
+      ['o7',[['\\text{a message } m,\\ \\text{a cipher text } c','same length'],['\\text{exactly one key sends } m \\text{ to } c','k = m \\oplus c']],2,0,'One-key-each.']],[]); }});
+/* ----- annex 10·crypt Is a huge number of keys enough: Work, Word Problems, Check Proofs ----- */
+const ABCAX='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const KEYAX=()=>shuffle(ABCAX.split(''));
+QP.push({id:'10·crypt.work',step:'10·crypt',mode:'work',label:'a key is a bijection',open:()=>measured('10·crypt'),make(){
+    const W=['SALINAS','RIVER','LETTUCE','HARBOR','ORCHARD','FERRY','TRACTOR','MONTEREY','CANNERY','ARTICHOKE'][rnd(10)], g=KEYAX(), map=x=>g[ABCAX.indexOf(x)], back=rnd(2);
+    const L=[...new Set(W.split(''))], c=W.split('').map(map).join(''), inv=x=>ABCAX[g.indexOf(x)];
+    const right=back?W:c, scr=s=>{ const a=s.split(''); const i=rnd(a.length-1); [a[i],a[i+1]]=[a[i+1],a[i]]; return a.join(''); };
+    const wrong=UQAX(right,back?[W.split('').map(x=>map(map(x))).join(''),scr(W),W.split('').reverse().join(''),c]:[W.split('').map(inv).join(''),scr(c),W,c.split('').reverse().join('')],3); if(wrong.length<3) return null;
+    const rows=L.map(x=>back?[map(x)+' \\leftarrow '+x,'']:[x+' \\mapsto '+map(x),'']); rows[0][1]=back?'g, read leftward':'the key g';
+    return {index:'q:10·crypt.work['+W+';'+g.join('')+';'+back+']', lines:[[rows.map(r=>r[0]).join(',\\ \\ '),back?'g, as pairs':'the key g, as pairs']], ask:back?'The cipher text is '+c+'. What is the plain text?':'What is the cipher text of '+W+'?', right, opts:shuffle([right,...wrong]), lead:'', why:back?'Run the key backwards, letter by letter: g⁻¹ sends '+c+' to '+W+'. g is a bijection, so g⁻¹ exists.':'Apply g to each letter in turn: '+W+' becomes '+c+'.'}; }},
+  {id:'10·crypt.word',step:'10·crypt',mode:'word',label:'the tallies travel',open:()=>measured('10·crypt'),make(){
+    const ask=rnd(2);
+    if(ask){ const j=1+rnd(6), F=n=>{ let r=1; for(let i=2;i<=n;i++) r*=i; return r; }, left=26-j;
+      const right=left+'!', wrong=UQAX(right,['26! − '+j,(26-j)+'','26!/'+j,'26 · '+left+'!'],3); if(wrong.length<3) return null;
+      return {index:'q:10·crypt.word[k;'+j+']', a3:['10·crypt.word',DASH,DASH], story:'A codebreaker has worked out what the key does to '+j+' letter'+(j>1?'s':'')+' of a substitution cipher on 26 letters.', lines:[], ask:'How many keys are still possible?', right, opts:shuffle([right,...wrong]), lead:'', why:'The key is a bijection. With '+j+' letter'+(j>1?'s':'')+' and '+(j>1?'their':'its')+' images fixed, what is left is a bijection between the other '+left+' letters and the other '+left+' images: '+left+'! of them (4k’s arrangements).'}; }
+    const x='ETAOINSRH'[rnd(9)], g=KEYAX(), y=g[ABCAX.indexOf(x)], n=8+rnd(60), z=ABCAX[ABCAX.indexOf(y)===25?0:ABCAX.indexOf(y)+1];
+    const right=y+', '+n+' times', wrong=UQAX(right,[x+', '+n+' times',y+', '+(n+1)+' times',z+', '+n+' times',y+', a different count: the key changes tallies'],3); if(wrong.length<3) return null;
+    return {index:'q:10·crypt.word[t;'+x+';'+y+';'+n+']', a3:['10·crypt.word',DASH,DASH], story:'A letter written in English holds the letter '+x+' exactly '+n+' times. It is sent through a substitution cipher whose key sends '+x+' to '+y+'.', lines:[], ask:'Which cipher letter appears, and how often?', right, opts:shuffle([right,...wrong]), lead:'', why:'Tallies-travel: f_c(g(x)) = f_m(x). The cipher text holds '+y+' exactly as often as the plain text holds '+x+': '+n+' times.'}; }},
+  {id:'10·crypt.line',step:'10·crypt',mode:'proof',label:'what the tallies license',open:()=>measured('10·crypt'),make(){
+    return line28('10·crypt.line',[
+      ['q1',[['26! \\text{ keys}','keys technique'],['\\text{it takes } 10^{10} \\text{ years to break}','try every key']],2,1,'That is the time to try every key; the tally attack tries none.'],
+      ['q2',[['g \\text{ sends A to B and B to B}','given'],['g \\text{ is a key}','a substitution']],2,1,'Not one-to-one: no g⁻¹, and the reader cannot tell A from B.'],
+      ['q3',[['g, h \\text{ two keys}','given'],['\\text{encrypting with } g \\text{ then } h \\text{ is stronger}','twice']],2,1,'h ∘ g is one bijection: one key of the same kind.'],
+      ['q4',[['c_i = g(m_i)','the cipher'],['f_c(g(x)) = f_m(x)','tallies-travel']],2,0,'The same places: cᵢ = g(x) exactly when mᵢ = x, since g is one-to-one.'],
+      ['q5',[['f_c(g(x)) = f_m(x)','tallies-travel'],['f_c = f_m','the tallies']],2,1,'f_c = f_m ∘ g⁻¹: the same numbers on different letters.'],
+      ['q6',[['\\text{a key is fixed by } g(\\text{A}), \\dots, g(\\text{Z})','an arrangement'],['26! \\text{ keys}','arrangements technique']],2,0,'Each arrangement is the list of exactly one bijection.'],
+      ['q7',[['\\text{the top cipher letter in a short text}','given'],['\\text{it is } g(\\text{E})','the chart']],2,1,'Only probably: the chart is a law, not a technique. It may be g(T) or g(A).']],[]); }});
+/* ----- annex 10·logi How many trucks does a route need: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'10·logi.work',step:'10·logi',mode:'work',label:'items and hours',open:()=>measured('10·logi'),make(){
+    const ask=rnd(3), lam=[4,6,8,10,12,15,20,24][rnd(8)], W=[0.5,1.5,2,2.5,3,4][rnd(6)], L=lam*W;
+    if(ask===0){ const right=String(L), wrong=UQAX(right,[String(lam/W),String(lam+W),String(W/lam),String(L*2)],3); if(wrong.length<3) return null;
+      return {index:'q:10·logi.work[L;'+lam+';'+W+']', lines:[['\\lambda = '+lam+'\\ \\text{an hour},\\ \\ W = '+W+'\\ \\text{hours}','in the long run']], ask:'How many items are in the queue, on average?', right, opts:shuffle([right,...wrong]), lead:'', why:'Long-run: L = λW = '+lam+' · '+W+' = '+L+'.'}; }
+    if(ask===1){ const right=W+' hours', wrong=UQAX(right,[L*lam+' hours',(lam/L)+' hours',(L+lam)+' hours',(L-lam>0?L-lam:lam/2)+' hours'],3); if(wrong.length<3) return null;
+      return {index:'q:10·logi.work[W;'+lam+';'+W+']', lines:[['L = '+L+',\\ \\ \\lambda = '+lam+'\\ \\text{an hour}','in the long run']], ask:'How long does an item stay, on average?', right, opts:shuffle([right,...wrong]), lead:'', why:'Long-run, run backwards: W = L/λ = '+L+'/'+lam+' = '+W+' hours.'}; }
+    const mu=[3,4,5,6,8][rnd(5)], steps=[mu,mu+2+rnd(4),mu+1+rnd(6)], n=[6,8,10,12][rnd(4)];
+    const right=String(mu*n), wrong=UQAX(right,[String(steps[1]*n),String(Math.round((steps[0]+steps[1]+steps[2])/3)*n),String(steps[2]*n),String((steps[0]+steps[1]+steps[2])*n)],3); if(wrong.length<3) return null;
+    return {index:'q:10·logi.work[D;'+steps.join(',')+';'+n+']', lines:[['\\text{steps pass on } '+shuffle(steps.slice()).join(', ')+'\\ \\text{an hour}','a line of three'],['n = '+n+'\\ \\text{hours}','']], ask:'At most how many items leave the line in that time?', right, opts:shuffle([right,...wrong]), lead:'', why:'Slowest-step: D(n) ≤ μ_min · n = '+mu+' · '+n+' = '+(mu*n)+'.'}; }},
+  {id:'10·logi.word',step:'10·logi',mode:'word',label:'the trucks',open:()=>measured('10·logi'),make(){
+    const trips=[6,8,9,10,12,14,15,16,18,20][rnd(10)], hpt=[1.5,2,2.5,3,4,5][rnd(6)], wh=[8,10,12][rnd(3)], need=trips*hpt/wh, n=Math.ceil(need-1e-9);
+    const right=String(n), wrong=UQAX(right,[String(trips),String(Math.floor(need)===n?n+1:Math.floor(need)),String(Math.ceil(trips*hpt/24)),String(n+2)],3); if(wrong.length<3) return null;
+    return {index:'q:10·logi.word['+trips+';'+hpt+';'+wh+']', a3:['10·logi.word',DASH,DASH], story:'A cooler in Salinas sends '+trips+' loads a day to a port. Each round trip, loading included, takes '+hpt+' hours, and each truck works '+wh+' hours a day.', lines:[], ask:'What is the fewest trucks the route can run on?', right, opts:shuffle([right,...wrong]), lead:'', why:'Truck-count: trips × hours per trip ÷ working hours = '+trips+' · '+hpt+'/'+wh+' = '+(Math.round(need*100)/100)+(Math.abs(need-n)>1e-9?', so at least '+n+' whole trucks.':' trucks.')}; }},
+  {id:'10·logi.line',step:'10·logi',mode:'proof',label:'what the queue licenses',open:()=>measured('10·logi'),make(){
+    return line28('10·logi.line',[
+      ['l1',[['\\text{trips per day}','given'],['\\text{trucks needed}','the same number']],2,1,'Units: trips per day times hours per trip, over working hours per truck.'],
+      ['l2',[['\\text{the cooler passes on } 5 \\text{ an hour}','the slowest step'],['\\text{a faster truck clears the queue}','speed']],2,1,'Slowest-step: the cooler sets the pace; faster trucks only arrive sooner to wait.'],
+      ['l3',[['\\textstyle\\sum_{t<T} N(t) = \\sum_j W_j','item-hours'],['L_T = \\lambda_T W_T','divide by T']],2,0,'Both sides are counted in item-hours, by hours and by items.'],
+      ['l4',[['\\lambda \\gt \\mu_{\\min}','given'],['\\text{the queue settles}','the long run']],2,1,'At least (λ − μ_min)n wait at hour n: it passes every bound.'],
+      ['l5',[['\\text{one hour’s look: 30 items, 10 arrivals}','given'],['W = 3 \\text{ hours}','W = L/\\lambda']],2,1,'L and λ are averages over the window, not one hour’s look.'],
+      ['l6',[['D(n) \\le \\mu_{\\min} \\cdot n','slowest-step'],['\\text{speeding up another step raises the bound}','a faster step']],2,1,'Every item passes the slowest step; the bound does not change.'],
+      ['l7',[['12 \\text{ trips} \\cdot 2.5\\ \\text{h} \\div 10\\ \\text{h}','truck-count'],['\\text{at least } 3 \\text{ trucks}','30 truck-hours']],2,0,'30/10 = 3.']],[]); }});
+/* ----- annex 11·crypt Is a keyword safer than one shift: Work, Word Problems, Check Proofs ----- */
+const VIGAX=(m,k,s)=>m.split('').map((x,i)=>ABCAX[(ABCAX.indexOf(x)+(s||1)*ABCAX.indexOf(k[i%k.length])+26)%26]).join('');
+QP.push({id:'11·crypt.work',step:'11·crypt',mode:'work',label:'several shifts in turn',open:()=>measured('11·crypt'),make(){
+    const W=['MONTE','CANYON','KELP','OTTERS','HARBOR','UPWELL','SALMON','FOGBANK'][rnd(8)], K=['OTTER','BAY','SEA','KEY','FOG','TIDE'][rnd(6)], back=rnd(2), c=VIGAX(W,K);
+    const right=back?W:c, wrong=UQAX(right,back?[VIGAX(c,K),VIGAX(c,K.split('').reverse().join(''),-1),VIGAX(W,K.slice(1)+K[0]),VIGAX(c,'B',-1)]:[VIGAX(W,K,-1),VIGAX(W,K[0]),VIGAX(W,K.slice(1)+K[0]),VIGAX(W,K.split('').reverse().join(''))],3); if(wrong.length<3) return null;
+    return {index:'q:11·crypt.work['+W+';'+K+';'+back+']', lines:[['\\text{keyword } '+K+' = '+K.split('').map(x=>ABCAX.indexOf(x)).join(',\\ '),'L = '+K.length]], ask:back?'The cipher text is '+c+'. What is the plain text?':'What does '+W+' become?', right, opts:shuffle([right,...wrong]), lead:'', why:(back?'Take away the key letter at each place, by remainders on 26: ':'Add the key letter at each place, by remainders on 26: ')+W.split('').map((x,i)=>ABCAX.indexOf(x)+(back?'':'')+' + '+ABCAX.indexOf(K[i%K.length])).join(', ').replace(/^/,back?c+' gives ':'')+(back?', so '+W+'.':' → '+c+'.')}; }},
+  {id:'11·crypt.word',step:'11·crypt',mode:'word',label:'repeats give away the length',open:()=>measured('11·crypt'),make(){
+    const L=[3,4,5,6,7][rnd(5)], ks=[2,3,4,5].map(j=>L*j+[0,L,2*L][rnd(3)]), dist=shuffle([...new Set(ks)]).slice(0,3+rnd(2)).sort((a,b)=>a-b), g=dist.reduce((a,b)=>GCDAX(a,b));
+    if(g!==L||dist.length<3) return null;
+    const right=String(L)+', or a divisor of it', wrong=UQAX(right,[String(dist[0]),String(dist.reduce((a,b)=>a+b,0)/dist.length|0),String(L*2),String(L+1)],3); if(wrong.length<3) return null;
+    return {index:'q:11·crypt.word['+dist.join(',')+']', a3:['11·crypt.word',DASH,DASH], story:'A codebreaker finds the same stretch of three letters repeated in a keyword cipher text, at distances of '+dist.join(', ')+' letters.', lines:[], ask:'What does the keyword’s length look like?', right, opts:shuffle([right,...wrong]), lead:'', why:'Repeats technique: a repeat whose distance the length divides shows up as a repeat. gcd('+dist.join(', ')+') = '+L+', so the length is likely '+L+', but every divisor of the length divides the distances too: the column test decides.'}; }},
+  {id:'11·crypt.line',step:'11·crypt',mode:'proof',label:'what the repeats license',open:()=>measured('11·crypt'),make(){
+    return line28('11·crypt.line',[
+      ['v1',[['\\text{the repeats’ distances have gcd } 1','given'],['L = 1','the gcd']],2,1,'Stray repeats spoil a single divisor: tally which L divides the most distances.'],
+      ['v2',[['L \\text{ divides every distance}','given'],['L \\text{ is the length}','repeats']],2,1,'Every divisor of the length does too, and every multiple passes the column test.'],
+      ['v3',[['\\text{MONTE},\\ \\text{key OTTER}','L = 5'],['\\text{AHGXV}','remainders by 26']],2,0,'12 + 14, 14 + 19, 13 + 19, 19 + 4, 4 + 17, by 26: 0, 7, 6, 23, 21.'],
+      ['v4',[['\\text{a shift}','one column'],['\\text{changes } \\kappa','the letters move']],2,1,'Tallies-travel: the same tallies on other letters, the same sum.'],
+      ['v5',[['L \\mid j - i','a plain stretch at places i and j'],['\\text{the cipher text repeats it}','repeats technique']],2,0,'Places i + t and j + t have one remainder, so one shift.'],
+      ['v6',[['\\text{the top letter of a column of 114}','given'],['\\text{it is } g(\\text{E})','the chart']],2,1,'In 114 letters, often not: match the whole chart.'],
+      ['v7',[['g(0.0390) \\approx 55','the estimate'],['L = 55','the formula']],2,1,'Near κ_flat the estimate passes every bound; trust the column test.']],[]); }});
+/* ----- annex 11·econ Why would oranges be left to rot: Work, Word Problems, Check Proofs ----- */
+const MKTAX=()=>{ for(let t=0;t<40;t++){ const a=[4000,5000,6000,8000][rnd(4)], b=[50,80,100,120,200][rnd(5)], c=[0,500,1000,1500][rnd(4)], d=[50,100,150,200,250][rnd(5)], p=(a-c)/(b+d); if(Number.isInteger(p)&&p>2&&a-b*p>0) return {a,b,c,d,p,q:a-b*p}; } return null; };
+QP.push({id:'11·econ.work',step:'11·econ',mode:'work',label:'where they meet',open:()=>measured('11·econ'),make(){
+    const M=MKTAX(); if(!M) return null; const {a,b,c,d,p,q}=M, ask=rnd(2);
+    const lines=[['D(p) = '+a+' - '+b+'\\,p','demand'],['S(p) = '+(c?c+' + ':'')+d+'\\,p','supply']];
+    if(ask){ const right='$'+p+', '+q+' boxes', wrong=UQAX(right,['$'+((a+c)/(b+d)).toFixed(0)+', '+(a-b*Math.round((a+c)/(b+d)))+' boxes','$'+p+', '+(a+c+(d-b)*p)/2+' boxes','$'+(p+1)+', '+(a-b*(p+1))+' boxes','$'+p+', '+(a-c)+' boxes'],3); if(wrong.length<3) return null;
+      return {index:'q:11·econ.work[m;'+a+';'+b+';'+c+';'+d+']', lines, ask:'Where do they meet: the price, and the boxes?', right, opts:shuffle([right,...wrong]), lead:'', why:a+' − '+b+'p = '+(c?c+' + ':'')+d+'p gives '+(b+d)+'p = '+(a-c)+', so p* = '+p+', and q* = D('+p+') = '+q+'.'}; }
+    const f=p+2+rnd(8), Df=a-b*f, Sf=c+d*f; if(Df<=0) return null;
+    const right=String(Sf-Df), wrong=UQAX(right,[String(Df),String(Sf),String((b+d)*(f-p)+b),String(Sf+Df)],3); if(wrong.length<3) return null;
+    return {index:'q:11·econ.work[r;'+a+';'+b+';'+c+';'+d+';'+f+']', lines:lines.concat([['f = '+f,'a price floor']]), ask:'How many boxes are left over at the floor?', right, opts:shuffle([right,...wrong]), lead:'', why:'The floor is above p* = '+p+', so the rot technique gives S(f) − D(f) = '+Sf+' − '+Df+' = '+right+'.'}; }},
+  {id:'11·econ.word',step:'11·econ',mode:'word',label:'a least price',open:()=>measured('11·econ'),make(){
+    const M=MKTAX(); if(!M) return null; const {a,b,c,d,p}=M, below=rnd(3)===0, f=below?p-1-rnd(Math.min(4,p-1)):p+1+rnd(6), Df=a-b*f, Sf=c+d*f; if(Df<=0||f<1) return null;
+    const right=below?'nothing changes: the floor is below the meeting price':Df+' boxes', wrong=below?['$'+f+' a box, with boxes left over',(Sf)+' boxes',(Df)+' boxes']:UQAX(right,[Sf+' boxes',(Sf-Df)+' boxes',(a-b*p)+' boxes','nothing changes: the floor is below the meeting price'],3);
+    if(wrong.length<3) return null;
+    return {index:'q:11·econ.word['+a+';'+b+';'+c+';'+d+';'+f+']', a3:['11·econ.word',DASH,DASH], story:'At a wholesale market for navel oranges, buyers take D(p) = '+a+' − '+b+'p boxes a week and growers send S(p) = '+(c?c+' + ':'')+d+'p, at p dollars a box. The growers agree that no box sells below $'+f+'.', lines:[], ask:below?'What does the floor do?':'How many boxes are sold each week?', right, opts:shuffle([right,...wrong]), lead:'', why:'They meet at p* = '+p+'. '+(below?'A floor of $'+f+' is below it, so the price stays at $'+p+': R('+f+') = 0.':'Above p*, what is sold is the lesser of the two: D('+f+') = '+Df+'. The other '+(Sf-Df)+' sent are left over.')}; }},
+  {id:'11·econ.line',step:'11·econ',mode:'proof',label:'what the market licenses',open:()=>measured('11·econ'),make(){
+    return line28('11·econ.line',[
+      ['m1',[['D(26) = 3400,\\ \\ S(26) = 4900','a floor of $26'],['4900 \\text{ boxes are sold}','supply']],2,1,'Sold is the lesser: 3400. The other 1500 are left over.'],
+      ['m2',[['\\text{a floor of } \\$15,\\ p^* = 20','given'],['\\text{boxes are left over}','a floor']],2,1,'Below p* a floor does nothing: R(15) = 0.'],
+      ['m3',[['6000 - 100p = 1000 + 150p','where they meet'],['p^* = 20','250p = 5000']],2,0,'5g’s techs: q* = 4000.'],
+      ['m4',[['T(f) = 90\\,000 - 100(f - 30)^2','takings'],['\\text{a higher floor always means more takings}','a higher price']],2,1,'T is greatest at 30, and falls after.'],
+      ['m5',[['\\text{a supply with a jump}','the bumper crop'],['\\text{there is a meeting price}','every market has one']],2,1,'A jump can skip over demand.'],
+      ['m6',[['Q(p) = S(p) \\text{ below } 20,\\ D(p) \\text{ above}','the lesser'],['Q \\text{ is continuous at } 20','glued-functions']],2,0,'Both pieces arrive at 4000.'],
+      ['m7',[['Q(p)','what is sold'],['= \\tfrac12\\,(S(p) + D(p))','the average']],2,1,'The lesser of the two: a box is sold only when sent and bought.']],[]); }});
+/* ----- annex 12·comp What can a machine with no memory check: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'12·comp.work',step:'12·comp',mode:'work',label:'the remainder machine',open:()=>measured('12·comp'),make(){
+    const v=5+rnd(250), w=v.toString(2); let r=0; const path=[0]; for(const d of w){ r=(2*r+ +d)%3; path.push(r); }
+    const right='state '+r+(r===0?', accept':', reject'), wrong=UQAX(right,['state 0, accept','state 1, reject','state 2, reject','state '+r+(r===0?', reject':', accept'),('state '+((r+1)%3))+(((r+1)%3)===0?', accept':', reject')],3); if(wrong.length<3) return null;
+    return {index:'q:12·comp.work['+v+']', lines:[['w = '+w,'a numeral in twos'],['r \\mapsto 2r + d \\bmod 3','each digit d']], ask:'Where does the machine end, from state 0?', right, opts:shuffle([right,...wrong]), lead:'', why:'States after each digit: '+path.join(', ')+'. Remainder-machine: it ends at the remainder of '+v+' by 3, which is '+r+'.'}; }},
+  {id:'12·comp.word',step:'12·comp',mode:'word',label:'a sentence, or not',open:()=>measured('12·comp'),make(){
+    const n=1+rnd(5), kind=rnd(5); let s;
+    if(kind===0) s='a'.repeat(n)+'b'.repeat(n); else if(kind===1) s='a'.repeat(n+1)+'b'.repeat(n); else if(kind===2) s='a'.repeat(n)+'b'.repeat(n+1); else if(kind===3){ s='a'.repeat(n)+'b'.repeat(n); const i=rnd(s.length-1); s=s.slice(0,i)+s[i+1]+s[i]+s.slice(i+2); if(s==='a'.repeat(n)+'b'.repeat(n)) return null; } else s='a'.repeat(n)+'S'+'b'.repeat(n);
+    const yes=kind===0;
+    const right=yes?'a sentence: a\u207f b\u207f with n = '+n:kind===4?'reachable, but no sentence: it keeps S':'no sentence: it is not a\u207f b\u207f', wrong=yes?['no sentence: it is not a\u207f b\u207f','reachable, but no sentence: it keeps S','a sentence only for a longer string']:UQAX(right,['a sentence: a\u207f b\u207f with n = '+n,'no sentence: it is not a\u207f b\u207f','reachable, but no sentence: it keeps S','a sentence: the techniques go in any order'],3);
+    return {index:'q:12·comp.word['+s+']', a3:['12·comp.word',DASH,DASH], story:'A grammar has two techniques: S \u2192 aSb and S \u2192 ab, starting from S.', lines:[], ask:'What is the string '+s+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Sentences technique: the sentences are exactly a\u207f b\u207f with n \u2265 1, plain letters only. '+(yes?s+' is a'+'\u207f b\u207f with n = '+n+': S, then aSb '+(n>2?'and so on ':'')+(n>1?n-1+' time'+(n>2?'s':'')+', then ab.':'once, ab.'):kind===4?s+' is reached on the way, but a sentence has no placeholder.':s+' is not of that form.')}; }},
+  {id:'12·comp.line',step:'12·comp',mode:'proof',label:'what a machine licenses',open:()=>measured('12·comp'),make(){
+    return line28('12·comp.line',[
+      ['n1',[['\\text{I can\u2019t build a machine for it}','given'],['\\text{none exists}','no-memory wall']],2,1,'That is a report on you; the wall is a proof about every machine.'],
+      ['n2',[['\\text{a machine with } q \\text{ states}','given'],['\\text{it checks } a^nb^n \\text{ if } q \\text{ is large}','more states']],2,1,'The proof works for every q: it fails on a\u2071b\u2071 against a\u02b2b\u2071, i < j \u2264 q.'],
+      ['n3',[['S \\to aSb,\\ \\ S \\to ab','the grammar'],['aaSbb \\text{ is a sentence}','reachable']],2,1,'A sentence is plain letters: aaSbb is reachable but no sentence.'],
+      ['n4',[['h_i - h_{i+1} = \\pm 1','a walk'],['\\text{it jumps from } 0 \\text{ to } -2','one step']],2,1,'Step-walk: it moves by one, so it passes \u22121.'],
+      ['n5',[['S \\to aSb,\\ \\ S \\to ab','the grammar'],['ba \\text{ is a sentence}','any order']],2,1,'Only what the techniques build: ba is no sentence.'],
+      ['n6',[['r \\mapsto 2r + d \\bmod 3','the machine'],['\\text{after } w,\\ \\text{the state is } w \\bmod 3','remainder-machine']],2,0,'Reading d after w makes 2w + d, and remainders add and multiply.'],
+      ['n7',[['\\text{depths } 0, \\dots, k \\text{ and a dead state}','k + 2 states'],['\\text{it checks balanced strings of depth at most } k','bounded-depth']],2,0,'By step-walk, a walk above k passes k + 1 and dies.']],[]); }});
+/* ----- annex 12·eng Will the shelf hold: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'12·eng.work',step:'12·eng',mode:'work',label:'support pushes and the worst bend',open:()=>measured('12·eng'),make(){
+    const L=[1.2,1.8,2,2.4,3,3.6][rnd(6)], P=[300,400,500,600,800,900,1200][rnd(7)], ask=rnd(3);
+    if(ask===0){ const d=Math.round(L*(1+rnd(5))/6*100)/100, RB=P*d/L, RA=P-RB; if(Math.abs(RB*10-Math.round(RB*10))>1e-9) return null;
+      const right='R_A = '+DECAX(RA,1)+' N, R_B = '+DECAX(RB,1)+' N', wrong=UQAX(right,['R_A = '+DECAX(RB,1)+' N, R_B = '+DECAX(RA,1)+' N','R_A = '+DECAX(P/2,1)+' N, R_B = '+DECAX(P/2,1)+' N','R_A = '+DECAX(P*d,1)+' N, R_B = '+DECAX(P*(L-d),1)+' N'],3); if(wrong.length<3||Math.abs(RA-RB)<1e-9) return null;
+      return {index:'q:12·eng.work[r;'+L+';'+P+';'+d+']', lines:[['P = '+P+'\\ \\text{N at } d = '+d+'\\ \\text{m}','a load'],['\\text{supports at } 0 \\text{ and } L = '+L+'\\ \\text{m}','A and B']], ask:'How hard does each support push?', right:'$'+right.replace(/ N/g,'\\ \\text{N}')+'$', opts:shuffle([right,...wrong]).map(o=>'$'+o.replace(/ N/g,'\\ \\text{N}')+'$'), lead:'', why:'Support-pushes: R_B = Pd/L = ('+P+' \u00b7 '+d+')/'+L+' = '+DECAX(RB,1)+' N, and R_A = P \u2212 R_B = '+DECAX(RA,1)+' N. The nearer support takes more.'}; }
+    if(ask===1){ const M=P*L/4, right=DECAX(M,1)+' N\u00b7m', wrong=UQAX(right,[DECAX(P*L/2,1)+' N\u00b7m',DECAX(P*L/8,1)+' N\u00b7m',DECAX(P*L,1)+' N\u00b7m',DECAX(P*L*L/8,1)+' N\u00b7m'],3); if(wrong.length<3) return null;
+      return {index:'q:12·eng.work[m;'+L+';'+P+']', lines:[['P = '+P+'\\ \\text{N},\\ \\ L = '+L+'\\ \\text{m}','one load that can move along the span']], ask:'What is the worst turning effect it can bend the beam with?', right, opts:shuffle([right,...wrong]), lead:'', why:'Worst-place: at the middle, PL/4 = '+P+' \u00b7 '+L+'/4 = '+right+'.'}; }
+    const w=[100,150,200,250,300,400][rnd(6)], M=w*L*L/8, right=DECAX(M,1)+' N\u00b7m', wrong=UQAX(right,[DECAX(w*L/8,1)+' N\u00b7m',DECAX(w*L*L/4,1)+' N\u00b7m',DECAX(w*L*L/2,1)+' N\u00b7m',DECAX(w*L/4,1)+' N\u00b7m'],3); if(wrong.length<3) return null;
+    return {index:'q:12·eng.work[w;'+L+';'+w+']', lines:[['w = '+w+'\\ \\text{N/m},\\ \\ L = '+L+'\\ \\text{m}','a load spread evenly over the span']], ask:'What is the greatest turning effect in the beam?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spread-load: at the middle, wL\u00b2/8 = '+w+' \u00b7 '+L+'\u00b2/8 = '+right+'.'}; }},
+  {id:'12·eng.word',step:'12·eng',mode:'word',label:'a safety factor',open:()=>measured('12·eng'),make(){
+    const L=[0.8,0.9,1,1.2][rnd(4)], w=[200,250,300,400,500][rnd(5)], sf=[2,3,4][rnd(3)], M=w*L*L/8, cap=Math.round(M*sf*(0.7+rnd(70)/100)), ok=cap>=sf*M;
+    if(Math.abs(cap-sf*M)<1) return null;
+    const right=ok?'yes: '+cap+' N\u00b7m is at least '+sf+' \u00d7 '+DECAX(M,1):'no: it needs at least '+DECAX(sf*M,1)+' N\u00b7m', wrong=ok?['no: it needs at least '+DECAX(sf*M*2,1)+' N\u00b7m','no: '+cap+' N\u00b7m is less than '+DECAX(w*L*L/2*sf,1),'yes, but only for a quarter of the load']:['yes: '+cap+' N\u00b7m is more than '+DECAX(M,1),'yes: '+cap+' N\u00b7m is at least '+DECAX(sf*w*L/8,1),'no: it needs at least '+DECAX(M/sf,1)+' N\u00b7m'];
+    return {index:'q:12·eng.word['+L+';'+w+';'+sf+';'+cap+']', a3:['12·eng.word',DASH,DASH], story:'A shelf of span '+L+' m will carry books spread evenly, '+w+' N on each metre. The plank is rated for a turning effect of '+cap+' N\u00b7m, and the code asks for a safety factor of '+sf+'.', lines:[], ask:'Does the plank pass?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spread-load: the worst turning effect is wL\u00b2/8 = '+w+' \u00b7 '+L+'\u00b2/8 = '+DECAX(M,1)+' N\u00b7m. The factor multiplies it: capacity \u2265 '+sf+' \u00d7 '+DECAX(M,1)+' = '+DECAX(sf*M,1)+'. '+(ok?cap+' passes.':cap+' falls short.')}; }},
+  {id:'12·eng.line',step:'12·eng',mode:'proof',label:'what the beam licenses',open:()=>measured('12·eng'),make(){
+    return line28('12·eng.line',[
+      ['k1',[['\\text{a load at } 0.6\\ \\text{m of } 2.4\\ \\text{m}','given'],['\\text{each support takes half}','two supports']],2,1,'Only with the load at the middle: here the near one takes three quarters.'],
+      ['k2',[['\\text{one load at } 0.6\\ \\text{m}','given'],['\\text{the plank bends hardest at its middle}','a beam']],2,1,'For one load it bends hardest under the load.'],
+      ['k3',[['\\text{a spread load},\\ wL^2/8','given'],['\\text{twice the span, twice the bend}','L doubles']],2,1,'(2L)\u00b2 = 4L\u00b2: four times the bend.'],
+      ['k4',[['\\text{safety factor } 4','the code'],['\\text{capacity} \\ge 4 \\times \\text{the worst load}','the factor multiplies']],2,0,'Not a quarter of the load: the factor multiplies the worst case.'],
+      ['k5',[['\\text{loads and strengths, rounded}','for the check'],['\\text{each to the nearest}','rounding']],2,1,'Loads round up and strengths round down.'],
+      ['k6',[['R_A \\lt 0','the push'],['\\text{a small push}','R_A']],2,1,'A pull the support must supply; a trestle cannot, and the plank tips.'],
+      ['k7',[['P \\text{ at } d,\\ \\text{supports at } 0, L','given'],['R_B = Pd/L','turning effects about A']],2,0,'Support-pushes: R_B \u00b7 L = P \u00b7 d.']],[]); }});
+/* ----- annex 12·phys How does a small push lift a heavy weight: Work, Word Problems, Check Proofs ----- */
+const DECAX=(v,k)=>{ k=(k==null?3:k); return String(Math.round(v*Math.pow(10,k))/Math.pow(10,k)); };
+QP.push({id:'12·phys.work',step:'12·phys',mode:'work',label:'the balance point',open:()=>measured('12·phys'),make(){
+    const n=3, w=[], x=[]; for(let i=0;i<n;i++){ w.push(1+rnd(8)); x.push(rnd(9)/2); } const W=w.reduce((a,b)=>a+b,0), M=w.reduce((a,b,i)=>a+b*x[i],0), p=M/W, avg=x.reduce((a,b)=>a+b,0)/n;
+    if(Math.abs(p-avg)<0.05) return null;
+    const right=DECAX(p)+' m', wrong=UQAX(right,[DECAX(avg)+' m',DECAX(M)+' m',DECAX(M/n)+' m',DECAX(W/ (x.reduce((a,b)=>a+b,0)||1))+' m'],3); if(wrong.length<3) return null;
+    return {index:'q:12·phys.work['+w.join(',')+';'+x.join(',')+']', lines:w.map((v,i)=>[v+'\\ \\text{kg at }'+x[i]+'\\ \\text{m}','on the bar']), ask:'Where does the bar balance?', right, opts:shuffle([right,...wrong]), lead:'', why:'Balance-formula: the weighted average, ('+w.map((v,i)=>v+' \u00b7 '+x[i]).join(' + ')+')/'+W+' = '+DECAX(M)+'/'+W+(Math.abs(p*1000-Math.round(p*1000))>1e-9?' \u2248 ':' = ')+right+'. Not the plain average of the positions, '+DECAX(avg)+'.'}; }},
+  {id:'12·phys.word',step:'12·phys',mode:'word',label:'levers and gears',open:()=>measured('12·phys'),make(){
+    if(rnd(2)){ const g=[[12,36],[10,30],[15,45],[16,48],[20,40],[12,48],[18,36],[14,42]], a=g[rnd(8)], b=g[rnd(8)], m1=a[0]/a[1], m2=b[0]/b[1], m=m1*m2, rpm=[60,90,120,180,240][rnd(5)]*(1/m)/ (1/m);
+      const F=v=>{ const d=Math.round(1/v); return Math.abs(1/v-d)<1e-9?'1/'+d:DECAX(v); }, out=rpm*m;
+      if(Math.abs(out*100-Math.round(out*100))>1e-9) return null;
+      const right=DECAX(out,2)+' turns a minute', wrong=UQAX(right,[DECAX(rpm*(m1+m2),2)+' turns a minute',DECAX(rpm/m,2)+' turns a minute',DECAX(rpm*m1,2)+' turns a minute',DECAX(rpm*m2,2)+' turns a minute'],3); if(wrong.length<3) return null;
+      return {index:'q:12·phys.word[g;'+a+';'+b+';'+rpm+']', a3:['12·phys.word',DASH,DASH], story:'A winch has two meshes. A '+a[0]+'-tooth gear drives a '+a[1]+'-tooth gear, and a '+b[0]+'-tooth gear on that shaft drives a '+b[1]+'-tooth gear. The crank turns the first gear '+rpm+' times a minute.', lines:[], ask:'How fast does the last gear turn?', right, opts:shuffle([right,...wrong]), lead:'', why:'Gear-train: the ratios multiply, '+a[0]+'/'+a[1]+' \u00b7 '+b[0]+'/'+b[1]+' = '+F(m)+'. So '+rpm+' \u00b7 '+F(m)+' = '+DECAX(out,2)+'. They do not add.'}; }
+    const L=[600,800,900,1000,1200,1500][rnd(6)], a=[0.1,0.2,0.25,0.3,0.5][rnd(5)], b=[1,1.2,1.5,2,2.5][rnd(5)], E=L*a/b;
+    if(Math.abs(E*100-Math.round(E*100))>1e-9) return null;
+    const right=DECAX(E,2)+' N', wrong=UQAX(right,[DECAX(L*b/a,2)+' N',DECAX(L-E,2)+' N',DECAX(L*a,2)+' N',DECAX(L/2,2)+' N'],3); if(wrong.length<3) return null;
+    return {index:'q:12·phys.word[l;'+L+';'+a+';'+b+']', a3:['12·phys.word',DASH,DASH], story:'A crowbar rests on a stone. A rock pushing down with '+L+' N sits '+a+' m from the stone on one side; a hand pushes '+b+' m from the stone on the other.', lines:[], ask:'What push of the hand just balances the rock?', right, opts:shuffle([right,...wrong]), lead:'', why:'Law of the lever: the turning effects match, '+L+' \u00b7 '+a+' = E \u00b7 '+b+', so E = '+right+'. The hand moves '+DECAX(b/a,2)+' times as far as the rock: no energy is free.'}; }},
+  {id:'12·phys.line',step:'12·phys',mode:'proof',label:'what the lever licenses',open:()=>measured('12·phys'),make(){
+    return line28('12·phys.line',[
+      ['h1',[['5\\ \\text{kg moved to } 0.5\\ \\text{m}','given'],['\\text{the balance point is } 1.625\\ \\text{m}','the plain average']],2,1,'The balance point is the weighted average: 37/24 \u2248 1.54 m.'],
+      ['h2',[['\\text{weights in kilograms}','both sides'],['\\text{the balance point is the same}','the 9.8 is on both sides']],2,0,'Multiplying-keeps-answers lets the 9.8 go.'],
+      ['h3',[['50\\ \\text{N over } 12\\ \\text{cm}','the hand'],['600\\ \\text{N over } 1\\ \\text{cm}','the same energy']],2,0,'Both are 6 J: the price of force is distance.'],
+      ['h4',[['\\tfrac13 \\text{ and } \\tfrac14','two meshes'],['\\tfrac13 + \\tfrac14','the train']],2,1,'Gear-train: the ratios multiply, 1/12.'],
+      ['h5',[['(-12/30)(-30/36)','with an idler'],['12/36','the idler cancels']],2,0,'The idler\u2019s teeth cancel; only its turning flips.'],
+      ['h6',[['T(0) \\lt 0 \\lt T(L)','the turning effect'],['\\text{a balance point } 0 \\lt p \\lt L','in-between-value']],2,0,'T is continuous along a rigid bar.'],
+      ['h7',[['\\text{a loose hinge in the bar}','given'],['\\text{a balance point exists}','in-between-value']],2,1,'T may jump at the hinge: the hypothesis fails.']],[]); }});
+/* ----- annex 13·comp How does a calculator find a root: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'13·comp.work',step:'13·comp',mode:'work',label:'halving and tangents',open:()=>measured('13·comp'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const w=[1,2,4,8][rnd(4)], tol=[0.01,0.001,0.0001][rnd(3)]; let n=0; while(w/Math.pow(2,n)>tol) n++;
+      const right=String(n), wrong=UQAX(right,[String(n-1),String(n+1),String(Math.round(Math.log10(w/tol))),String(n*2)],3); if(wrong.length<3) return null;
+      return {index:'q:13·comp.work[n;'+w+';'+tol+']', lines:[['\\text{a trap of width } '+w,'f continuous, a zero inside']], ask:'How many halving rounds bring the trap to width '+tol+' or less?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each round halves the width: '+w+'/2^'+(n-1)+' = '+DECAX(w/Math.pow(2,n-1),6)+' is still too wide, and '+w+'/2^'+n+' = '+DECAX(w/Math.pow(2,n),6)+' is not. '+n+' rounds.'}; }
+    if(ask===1){ const k=[2,3,5,6,7,10][rnd(6)], p=Math.floor(Math.sqrt(k)), q=p+1, m=(p+q)/2, fm=m*m-k, np=fm<0?[m,q]:[p,m];
+      const right='['+np[0]+', '+np[1]+']', wrong=UQAX(right,['['+(fm<0?p:m)+', '+(fm<0?m:q)+']','['+p+', '+q+']','['+(p-0.5)+', '+p+']'],3); if(wrong.length<3) return null;
+      return {index:'q:13·comp.work[h;'+k+']', lines:[['f(x) = x^2 - '+k,'continuous'],['['+p+', '+q+']','a trap: f('+p+') = '+(p*p-k)+',\\ f('+q+') = '+(q*q-k)]], ask:'What is the trap after one halving?', right, opts:shuffle([right,...wrong]), lead:'', why:'The middle is '+m+', and f('+m+') = '+DECAX(fm,2)+(fm<0?', below 0, like f('+p+'): keep the half whose ends differ in sign, ['+m+', '+q+'].':', above 0, like f('+q+'): keep ['+p+', '+m+'].')}; }
+    const k=[2,3,5,7,10][rnd(5)], x=[1,2,3][rnd(3)], N=(x+k/x)/2, F=v=>DECAX(v,4);
+    const right=F(N), wrong=UQAX(right,[F(x-k/x),F(x+k/x),F((x*x-k)/(2*x)),F(k/x)],3); if(wrong.length<3) return null;
+    return {index:'q:13·comp.work[t;'+k+';'+x+']', lines:[['f(x) = x^2 - '+k,'f\'(x) = 2x'],['x = '+x,'a guess']], ask:'Where does one tangent step land?', right, opts:shuffle([right,...wrong]), lead:'', why:'N(x) = x \u2212 f(x)/f\'(x) = '+x+' \u2212 ('+(x*x-k)+')/'+(2*x)+' = '+right+'. That is (x + '+k+'/x)/2.'}; }},
+  {id:'13·comp.word',step:'13·comp',mode:'word',label:'dividing with no divide key',open:()=>measured('13·comp'),make(){
+    const k=[3,4,6,7,8,9][rnd(6)], x=[0.1,0.2,0.3][rnd(3)], e=x-1/k, N=x*(2-k*x);
+    if(N<=0) return null; const right=MNAX(DECAX(N,4)), wrong=UQAX(right,[DECAX(x*(2+k*x),4),DECAX(2*x-k,4),DECAX(x+ k*e*e,4),DECAX(1/k,4)].map(MNAX),3); if(wrong.length<3) return null;
+    return {index:'q:13·comp.word['+k+';'+x+']', a3:['13·comp.word',DASH,DASH], story:'An old machine could multiply and subtract but not divide. To find 1/'+k+', it ran the tangent step for f(x) = 1/x \u2212 '+k+', starting from '+x+'.', lines:[], ask:'What is its next guess?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Reciprocal-step: N(x) = x(2 \u2212 kx) = '+x+' \u00b7 (2 \u2212 '+DECAX(k*x,4)+') = '+right+'. The new error is \u2212k times the old error squared: \u2212'+k+' \u00b7 ('+DECAX(e,4)+')\u00b2 \u2248 '+DECAX(-k*e*e,4)+'.')}; }},
+  {id:'13·comp.line',step:'13·comp',mode:'proof',label:'what a root program licenses',open:()=>measured('13·comp'),make(){
+    return line28('13·comp.line',[
+      ['r1',[['\\text{the tangent step is faster}','given'],['\\text{use it alone}','speed']],2,1,'On x\u00b3 \u2212 2x + 2 from 0 it never arrives; the trap is what makes it safe.'],
+      ['r2',[['\\text{a trap of width } 10^{-12}','halving'],['\\text{a zero lies in it}','in-between-value']],2,1,'Only if f is continuous there; on a jump the traps close on no zero.'],
+      ['r3',[['\\text{keep halving}','a machine'],['\\text{until the width is } 0','halving']],2,1,'The machine\u2019s numbers have holes; stop when the middle is an end.'],
+      ['r4',[['\\text{the guesses stopped changing}','given'],['f(x) = 0','the machine']],2,1,'The machine\u2019s f(x) is rounded too; report the trap.'],
+      ['r5',[['x = 1/k + e','a guess'],['N(x) = 1/k - ke^2','reciprocal-step']],2,0,'x(2 \u2212 kx) = (1/k + e)(1 \u2212 ke) = 1/k \u2212 ke\u00b2.'],
+      ['r6',[['[p, q] \\text{ a trap},\\ \\text{width } w','given'],['\\text{after } n \\text{ rounds, width at most } w/2^n','safe-step']],2,0,'Every round at least halves the trap.'],
+      ['r7',[['f(m) \\text{ has the sign of } f(d)','one split'],['d \\leftarrow m,\\ \\text{then } c \\leftarrow m','both ends move']],2,1,'One box changes per split: the half kept must still be a trap.']],[]); }});
+/* ----- annex 13·eng How much power does a car need to climb: Work, Word Problems, Check Proofs ----- */
+const KWAX=v=>DECAX(v/1000,1)+' kW';
+QP.push({id:'13·eng.work',step:'13·eng',mode:'work',label:'force times speed',open:()=>measured('13·eng'),make(){
+    const m=[1000,1200,1500,1800,2000][rnd(5)], r=[0.02,0.04,0.05,0.06,0.08,0.1][rnd(6)], v=[10,15,20,25][rnd(4)], ask=rnd(2);
+    if(ask){ const F=[200,300,400,500,600,800][rnd(6)], right=KWAX(F*v), wrong=UQAX(right,[KWAX(F/v*1000),KWAX(F*v*v),KWAX(F+v),KWAX(F*v/2)],3); if(wrong.length<3) return null;
+      return {index:'q:13·eng.work[F;'+F+';'+v+']', lines:[['F = '+F+'\\ \\text{N},\\ \\ v = '+v+'\\ \\text{m/s}','a steady push along the motion']], ask:'What power does the push deliver?', right, opts:shuffle([right,...wrong]), lead:'', why:'Force-times-speed: P = Fv = '+F+' \u00b7 '+v+' = '+(F*v)+' W = '+right+'.'}; }
+    const P=m*9.8*r*v, right=KWAX(P), wrong=UQAX(right,[KWAX(m*9.8*v),KWAX(m*r*v),KWAX(m*9.8*r*v*v),KWAX(m*9.8*r)],3); if(wrong.length<3) return null;
+    return {index:'q:13·eng.work[c;'+m+';'+r+';'+v+']', lines:[['m = '+m+'\\ \\text{kg},\\ \\ r = '+r+',\\ \\ v = '+v+'\\ \\text{m/s}','a car on a grade']], ask:'What power goes into lifting the car alone?', right, opts:shuffle([right,...wrong]), lead:'', why:'Climbing-power: mgrv = '+m+' \u00b7 9.8 \u00b7 '+r+' \u00b7 '+v+' = '+DECAX(P,0)+' W \u2248 '+right+'.'}; }},
+  {id:'13·eng.word',step:'13·eng',mode:'word',label:'the steady climb',open:()=>measured('13·eng'),make(){
+    const m=[1200,1500,1800][rnd(3)], r=[0,0.03,0.05,0.06][rnd(4)], c=0.012, k=0.36, v=[15,20,25,30][rnd(4)], P=(m*9.8*(r+c)+k*v*v)*v;
+    const right=KWAX(P), wrong=UQAX(right,[KWAX((m*9.8*(r+c)+k*v*v)),KWAX(m*9.8*(r+c)*v),KWAX((m*9.8*r+k*v*v)*v),KWAX((m*9.8*(r+c)+k*v)*v)],3); if(wrong.length<3) return null;
+    return {index:'q:13·eng.word['+m+';'+r+';'+v+']', a3:['13·eng.word',DASH,DASH], story:'A car of '+m+' kg drives at a steady '+v+' m/s '+(r?'up a grade that rises '+r+' m for each metre of road':'on a level road')+'. Its tyres pull back with 0.012 of its weight, and the air with 0.36v\u00b2 newtons.', lines:[], ask:'What power must reach its wheels?', right, opts:shuffle([right,...wrong]), lead:'', why:'Steady-climb: P = (mg(r + c) + kv\u00b2)v = ('+m+' \u00b7 9.8 \u00b7 '+DECAX(r+c,3)+' + 0.36 \u00b7 '+v+'\u00b2) \u00b7 '+v+' \u2248 '+DECAX(P,0)+' W \u2248 '+right+'.'}; }},
+  {id:'13·eng.line',step:'13·eng',mode:'proof',label:'what power licenses',open:()=>measured('13·eng'),make(){
+    return line28('13·eng.line',[
+      ['p1',[['\\text{work over a minute}','given'],['\\text{the power at an instant}','work over time']],2,1,'That is the average, a chord; the power at an instant is the slope.'],
+      ['p2',[['15\\ \\text{m/s} \\to 30\\ \\text{m/s, level}','given'],['\\text{twice the power}','twice the speed']],2,1,'The air\u2019s share grows as v\u00b3: about 3.9 times the power.'],
+      ['p3',[['\\text{lifting } m \\text{ by } h','given'],['P = mgh','the power']],2,1,'That is work, in joules; the power is mg times the rate of rising.'],
+      ['p4',[['\\text{a steady speed}','no net force'],['\\text{no power is needed}','no acceleration']],2,1,'The wheels still push against the pullbacks, and force-times-speed prices the push.'],
+      ['p5',[['F \\text{ steady, along the motion}','given'],['P(t) = F\\,v(t)','the slope of } Fx(t)'.replace('}','')]],2,0,'Work is Fx(t); its slope is F v(t).'],
+      ['p6',[['330\\ \\text{kW at the engine}','given'],['330\\ \\text{kW at the road}','all of it reaches']],2,1,'Roughly a tenth is lost between engine and wheels.'],
+      ['p7',[['P(v) = (mg(r + c) + kv^2)v','steady-climb'],['P\'(v) = mg(r + c) + 3kv^2','slopes']],2,0,'The slope of kv\u00b3 is 3kv\u00b2.']],[]); }});
+/* ----- annex 13·nav How fast is the tide rising: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'13·nav.work',step:'13·nav',mode:'work',label:'the centred chord',open:()=>measured('13·nav'),make(){
+    const R=[3,3.6,4.2,4.8,5.4,6][rnd(6)], lo=[0.2,0.5,0.8,1.1][rnd(4)], T=6, h=t=>{ const s=t/T; return lo+R*(3*s*s-2*s*s*s); };
+    const t=1+rnd(4), H=[0,1,2,3,4,5,6].map(i=>Math.round(h(i)*100)/100), cc=(H[t+1]-H[t-1])/2, fw=H[t+1]-H[t], bw=H[t]-H[t-1];
+    const right=DECAX(cc,3)+' ft an hour', wrong=UQAX(right,[DECAX(fw,3)+' ft an hour',DECAX(bw,3)+' ft an hour',DECAX(H[t]/t,3)+' ft an hour',DECAX(R/6,3)+' ft an hour'],3); if(wrong.length<3) return null;
+    const hrs=['noon','1 p.m.','2 p.m.','3 p.m.','4 p.m.','5 p.m.','6 p.m.'];
+    return {index:'q:13·nav.work['+R+';'+lo+';'+t+']', lines:[[H.slice(t-1,t+2).map((v,i)=>'\\text{'+hrs[t-1+i]+'}: '+v).join(',\\ \\ '),'a tide table, ft']], ask:'What is the best reading of the rate at '+hrs[t]+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Centred-chord: the rise over the two hours around it, halved, ('+H[t+1]+' \u2212 '+H[t-1]+')/2 = '+right+'. The chord from '+hrs[t]+' to '+hrs[t+1]+' belongs to the half hour after.'}; }},
+  {id:'13·nav.word',step:'13·nav',mode:'word',label:'the twelfths law',open:()=>measured('13·nav'),make(){
+    const R=[2.4,3.6,4.8,6,7.2,9.6][rnd(6)], lo=[0.5,1,1.5,2][rnd(4)], n=1+rnd(5), tw=[1,2,3,3,2,1], cum=tw.slice(0,n).reduce((a,b)=>a+b,0), ask=rnd(2);
+    const P=['Moss Landing','Monterey','Half Moon Bay','Bodega Bay'][rnd(4)];
+    const right=ask?DECAX(tw[n-1]*R/12,2)+' ft':DECAX(lo+cum*R/12,2)+' ft', wrong=UQAX(right,ask?[DECAX(R/6,2)+' ft',DECAX(cum*R/12,2)+' ft',DECAX(tw[n%6]*R/12+0.1,2)+' ft',DECAX(R/12,2)+' ft',DECAX(R/4,2)+' ft']:[DECAX(lo+n*R/6,2)+' ft',DECAX(cum*R/12,2)+' ft',DECAX(lo+(cum+1)*R/12,2)+' ft',DECAX(lo+tw[n-1]*R/12,2)+' ft'],3); if(wrong.length<3) return null;
+    return {index:'q:13·nav.word['+R+';'+lo+';'+n+';'+ask+']', a3:['13·nav.word',DASH,DASH], story:'At '+P+', low water is '+lo+' ft at noon, and high water '+DECAX(lo+R,2)+' ft at 6 p.m.', lines:[], ask:ask?'By the twelfths law, how much does the water rise in hour '+n+'?':'By the twelfths law, how high is the water at '+n+' p.m.?', right, opts:shuffle([right,...wrong]), lead:'', why:'The range is '+R+' ft. The law climbs 1, 2, 3, 3, 2, 1 twelfths. '+(ask?'Hour '+n+' takes '+tw[n-1]+'/12 of '+R+' = '+right+'.':'After '+n+' hour'+(n>1?'s':'')+', '+cum+' twelfths: '+lo+' + '+cum+'/12 \u00b7 '+R+' = '+right+'.')}; }},
+  {id:'13·nav.line',step:'13·nav',mode:'proof',label:'what a tide table licenses',open:()=>measured('13·nav'),make(){
+    return line28('13·nav.line',[
+      ['d1',[['\\text{the rise from 7 to 8}','the table'],['\\text{the rate at 7 p.m.}','a chord']],2,1,'That chord belongs to 7:30; the centred chord, 6 to 8, is the better guess.'],
+      ['d2',[['R/T = 0.60\\ \\text{ft an hour}','Monterey'],['\\text{the rate all through the rise}','the average']],2,1,'That is the average; the middle runs at 0.90.'],
+      ['d3',[['\\text{Seattle\u2019s rise}','7 h 43 min'],['\\text{the twelfths law fits it}','any rise']],2,1,'It ran quicker early: 1.2 ft off at 3 p.m.'],
+      ['d4',[['h(t) = a + bt + ct^2','a stretch'],['\\text{the centred chord is the slope at } t','centred-chord']],2,0,'For a constant, a multiple of t and a multiple of t\u00b2 the centred chord is exact.'],
+      ['d5',[['s = (t - t_0)/T','given'],['h\'(t) = 6R(s - s^2)','the slope']],2,1,'Multiple-inside brings a factor 1/T: h\u2032(t) = 6R(s \u2212 s\u00b2)/T.'],
+      ['d6',[['\\text{the fastest hour of the table}','given'],['\\text{the instant of the fastest rate}','the hour']],2,1,'An hour\u2019s chord is an average over the hour; the instant lies somewhere near it.'],
+      ['d7',[['\\text{the law: } 1, 2, 3, 3, 2, 1','twelfths'],['\\text{the middle hours climb } R/4','3/12']],2,0,'3/12 = 1/4 of the range in each of hours 3 and 4.']],[]); }});
+/* ----- annex 13·phys How fast is a falling stone going right now: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'13·phys.work',step:'13·phys',mode:'work',label:'velocity at an instant',open:()=>measured('13·phys'),make(){
+    const t=1+rnd(6), ask=rnd(2), x=4.9*t*t, v=9.8*t;
+    if(ask){ const right=DECAX(x/t,2)+' m/s', wrong=UQAX(right,[DECAX(v,2)+' m/s',DECAX(x,2)+' m/s',DECAX(9.8,2)+' m/s',DECAX(2*v,2)+' m/s'],3); if(wrong.length<3) return null;
+      return {index:'q:13·phys.work[avg;'+t+']', lines:[['x(t) = 4.9\\,t^2','a stone dropped from rest, in m']], ask:'What is its average velocity over the first '+t+' s?', right, opts:shuffle([right,...wrong]), lead:'', why:'The chord: x('+t+')/'+t+' = '+DECAX(x,2)+'/'+t+' = '+right+'. The velocity at '+t+' s itself is the slope, 9.8 \u00b7 '+t+' = '+DECAX(v,2)+' m/s, twice the average.'}; }
+    const right=DECAX(v,2)+' m/s', wrong=UQAX(right,[DECAX(x/t,2)+' m/s',DECAX(x,2)+' m/s',DECAX(4.9*t,2)+' m/s',DECAX(9.8,2)+' m/s'],3); if(wrong.length<3) return null;
+    return {index:'q:13·phys.work[v;'+t+']', lines:[['x(t) = 4.9\\,t^2','a stone dropped from rest, in m']], ask:'How fast is it going at t = '+t+' s?', right, opts:shuffle([right,...wrong]), lead:'', why:'The slope of 4.9t\u00b2 is 9.8t, so v('+t+') = '+right+'. x('+t+')/'+t+' = '+DECAX(x/t,2)+' is the average over the first '+t+' s.'}; }},
+  {id:'13·phys.word',step:'13·phys',mode:'word',label:'thrown upward',open:()=>measured('13·phys'),make(){
+    const v0=[9.8,14.7,19.6,24.5,29.4][rnd(5)], T=v0/9.8, H=v0*v0/19.6, ask=rnd(3), t=Math.round((0.5+rnd(Math.round(2*T*2-1)))*0.5*100)/100;
+    let right,wrong,q,why;
+    if(ask===0){ right=DECAX(T,2)+' s'; wrong=[DECAX(2*T,2)+' s',DECAX(T/2,2)+' s',DECAX(v0,2)+' s',DECAX(T+1,2)+' s']; q='When does it reach the top?'; why='v(t) = '+v0+' \u2212 9.8t is 0 at t = '+v0+'/9.8 = '+right+'. There the velocity is 0; the acceleration is still \u22129.8 m/s\u00b2.'; }
+    else if(ask===1){ right=DECAX(H,3)+' m'; wrong=[DECAX(2*H,3)+' m',DECAX(v0*T,3)+' m',DECAX(H/2,3)+' m',DECAX(v0,3)+' m']; q='How high does it go?'; why='At the top, t = '+DECAX(T,2)+' s, and y = '+v0+'t \u2212 4.9t\u00b2 = '+DECAX(v0*T,2)+' \u2212 '+DECAX(4.9*T*T,3)+' = '+right+'.'; }
+    else { if(t<=0||t>=2*T) return null; const v=v0-9.8*t; right=DECAX(v,2)+' m/s'; wrong=[DECAX(-v===v?v+1:-v,2)+' m/s',DECAX(v0+9.8*t,2)+' m/s',DECAX(v0-4.9*t,2)+' m/s',DECAX(Math.abs(v)+9.8,2)+' m/s']; q='What is its velocity, measured upward, at t = '+t+' s?'; why='v(t) = '+v0+' \u2212 9.8t, so v('+t+') = '+right+(v<0?': negative, so it is coming down, at a speed of '+DECAX(-v,2)+' m/s.':'.'); }
+    wrong=UQAX(right,wrong.map(w=>w.replace(/^-/,'\u2212')),3).map(x=>x); right=right.replace(/^-/,'\u2212'); wrong=UQAX(right,wrong,3); if(wrong.length<3) return null;
+    return {index:'q:13·phys.word['+v0+';'+ask+';'+t+']', a3:['13·phys.word',DASH,DASH], story:'A ball is thrown straight up at '+v0+' m/s. Its height in metres is y(t) = '+v0+'t \u2212 4.9t\u00b2, t seconds later.', lines:[], ask:q, right, opts:shuffle([right,...wrong]), lead:'', why:why.replace(/= -/g,'= \u2212')}; }},
+  {id:'13·phys.line',step:'13·phys',mode:'proof',label:'what the slopes license',open:()=>measured('13·phys'),make(){
+    return line28('13·phys.line',[
+      ['y1',[['x(t) = 4.9\\,t^2','from rest'],['v(3) = x(3)/3 = 14.7\\ \\text{m/s}','velocity']],2,1,'That is the average over the first 3 s; v(3) = 9.8 \u00b7 3 = 29.4 m/s.'],
+      ['y2',[['v(t_{\\text{top}}) = 0','at the top'],['a = 0 \\text{ at the top}','it has stopped']],2,1,'The velocity is 0 there; its slope is \u22129.8 m/s\u00b2.'],
+      ['y3',[['x(t) = 4.9\\,t^2','from rest'],['v(t) = 9.8\\,t,\\ \\ a(t) = 9.8','slopes twice']],2,0,'The slope of t\u00b2 is 2t, and of t is 1.'],
+      ['y4',[['v(t) \\lt 0','measured upward'],['\\text{its speed is negative}','speed is v']],2,1,'Speed is |v(t)|: falling, v < 0 and the speed is positive.'],
+      ['y5',[['F = mg,\\ \\ F = ma','in empty space'],['\\text{a heavier body falls faster}','more force']],2,1,'a = (m \u00b7 g)/m = g: the mass cancels.'],
+      ['y6',[['x \\text{ in m},\\ t \\text{ in s}','given'],['v \\text{ in m/s},\\ a \\text{ in m/s}^2','a slope\u2019s unit']],2,0,'A slope\u2019s unit is the top\u2019s per the bottom\u2019s.'],
+      ['y7',[['v(t) = 3t^2','a speedometer'],['x(t) = t^3','a function with that slope']],2,1,'A slope cannot see where it started: x(t) = t\u00b3 + x(0).']],[]); }});
+/* ----- annex 14·bio Why are cells so small: Work, Word Problems, Check Proofs ----- */
+const TIMEAX=s=>s<120?DECAX(s,2)+' s':s<7200?DECAX(s/60,1)+' min':s<172800?DECAX(s/3600,1)+' h':DECAX(s/86400,1)+' days';
+QP.push({id:'14·bio.work',step:'14·bio',mode:'work',label:'x\u00b2 = 2Dt',open:()=>measured('14·bio'),make(){
+    const x=[1e-6,1e-5,1e-4,1e-3,1e-2,1e-1][rnd(6)], D=2e-9, t=x*x/(2*D), k=[2,3,10][rnd(3)], ask=rnd(2);
+    const XS={1e-6:'1 \u03bcm',1e-5:'10 \u03bcm',1e-4:'0.1 mm',1e-3:'1 mm',1e-2:'1 cm',1e-1:'10 cm'};
+    if(ask){ const right=String(k*k)+' times as long', wrong=UQAX(right,[k+' times as long',(2*k)+' times as long',DECAX(Math.sqrt(k),2)+' times as long',(k*k*k)+' times as long'],3); if(wrong.length<3) return null;
+      return {index:'q:14·bio.work[k;'+k+']', lines:[['x^2 = 2Dt','a random walk']], ask:'To spread '+k+' times as far, how much longer does it take?', right, opts:shuffle([right,...wrong]), lead:'', why:'t = x\u00b2/(2D): t grows with x\u00b2, so '+k+'\u00b2 = '+(k*k)+' times as long.'}; }
+    const right=TIMEAX(t), wrong=UQAX(right,[TIMEAX(t*10),TIMEAX(t*100),TIMEAX(t/100),TIMEAX(t/10)],3); if(wrong.length<3) return null;
+    return {index:'q:14·bio.work[t;'+x+']', lines:[['D \\approx 2 \\times 10^{-9}\\ \\text{m}^2\\text{/s}','oxygen in water']], ask:'About how long does oxygen take to spread '+XS[x]+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'t = x\u00b2/(2D) = ('+XS[x]+')\u00b2/(4 \u00d7 10\u207b\u2079 m\u00b2/s) = '+(t>=1e5?'$'+t.toExponential(1).replace(/e\+?(-?\d+)/,' \\times 10^{$1}')+'$':String(Number(t.toPrecision(2))))+' s'+(t<120?'.':', about '+right+'.')}; }},
+  {id:'14·bio.word',step:'14·bio',mode:'word',label:'the thickest living sheet',open:()=>measured('14·bio'),make(){
+    const k=[2,4,9,16,0.25][rnd(5)], f=1/Math.sqrt(k), K=k===0.25?'a quarter':String(k);
+    const right='it is multiplied by '+DECAX(f,3), wrong=UQAX(right,['it is multiplied by '+DECAX(1/k,3),'it does not change','it is multiplied by '+DECAX(Math.sqrt(k),3),'it is multiplied by '+DECAX(1/(k*k),3)],3); if(wrong.length<3) return null;
+    return {index:'q:14·bio.word['+k+']', a3:['14·bio.word',DASH,DASH], story:'Oxygen spreads into a living sheet from both faces, and the sheet uses it at a steady rate q. The thickest sheet with oxygen everywhere has half-thickness L_max = \u221a(2Dc\u2080/q).', lines:[], ask:'A tissue is made to use oxygen '+(k>=1?k+' times as fast':'at a quarter of the rate')+'. What happens to L_max?', right, opts:shuffle([right,...wrong]), lead:'', why:'L_max goes as 1 over \u221aq. Multiplying q by '+K+' multiplies L_max by 1 over \u221a('+K+'), that is '+DECAX(f,3)+'. Not by 1 over '+K+'.'}; }},
+  {id:'14·bio.line',step:'14·bio',mode:'proof',label:'what diffusion licenses',open:()=>measured('14·bio'),make(){
+    return line28('14·bio.line',[
+      ['i1',[['x^2 = 2Dt','given'],['\\text{twice as far, twice as long}','t and x']],2,1,'Four times as long: t grows with x\u00b2.'],
+      ['i2',[['x/t = 2D/x','the average speed'],['\\text{at tiny } x \\text{ it is as fast as you like}','the premise']],2,1,'It would beat any real molecule\u2019s speed: the premise holds only over many collisions.'],
+      ['i3',[['c(0) = c_0 - qL^2/(2D) \\lt 0','a thick sheet'],['\\text{the core holds negative oxygen}','the formula']],2,1,'The premise failed first: a part with no oxygen cannot use it at rate q.'],
+      ['i4',[['q \\text{ doubles}','given'],['L_{\\max} \\text{ halves}','L_max']],2,1,'L_max shrinks by \u221a2, not by 2.'],
+      ['i5',[['c_0 - qL^2/(2D) \\ge 0','oxygen everywhere'],['L^2 \\le 2Dc_0/q','order-and-arithmetic-agree']],2,0,'q and D are positive.'],
+      ['i6',[['L^2 \\le 2Dc_0/q','given'],['L \\le \\sqrt{2Dc_0/q}','squares-keep-order']],2,0,'Squares keep order from 0 up.'],
+      ['i7',[['t(x) = x^2/(2D)','the premise turned around'],['x/t = 2D/x','divide']],2,0,'The average speed over the whole trip falls as the trip grows.']],[]); }});
+/* ----- annex 14·econ How much should a factory make: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'14·econ.work',step:'14·econ',mode:'work',label:'where profit is greatest',open:()=>measured('14·econ'),make(){
+    const p=[60,80,100,120,150][rnd(5)], a=[0.5,1,2,2.5][rnd(4)], F=[500,1000,1500,2000][rnd(4)], y=p/(2*a), G=p*y-F-a*y*y, ask=rnd(2);
+    if(Math.abs(y*10-Math.round(y*10))>1e-9||G<=0) return null;
+    if(ask){ const right='$'+DECAX(G,2), wrong=UQAX(right,['$'+DECAX(G+F,2),'$'+DECAX(p*y,2),'$'+DECAX(p*y-a*y*y/2-F,2),'$'+DECAX(G/y,2)],3); if(wrong.length<3) return null;
+      return {index:'q:14·econ.work[G;'+p+';'+a+';'+F+']', lines:[['G(y) = '+p+'y - '+F+' - '+(a===1?'':a)+'y^2','profit, dollars']], ask:'What is the greatest profit?', right:MNAX(right), opts:shuffle([right,...wrong]).map(MNAX), lead:'', why:MNAX('G\u2032(y) = '+p+' \u2212 '+(2*a)+'y is 0 at y = '+y+'; G\u2033 = \u2212'+(2*a)+' < 0, a top. G('+y+') = '+DECAX(p*y,2)+' \u2212 '+F+' \u2212 '+DECAX(a*y*y,2)+' = '+DECAX(G,2)+'.')}; }
+    const right=String(y), wrong=UQAX(right,[String(p/a),String(2*y),String(Math.round(F/p*10)/10),String(Math.round(Math.sqrt(F/a)*10)/10)],3); if(wrong.length<3) return null;
+    return {index:'q:14·econ.work[y;'+p+';'+a+';'+F+']', lines:[['G(y) = '+p+'y - '+F+' - '+(a===1?'':a)+'y^2','profit, dollars']], ask:'At what y is the profit greatest?', right, opts:shuffle([right,...wrong]), lead:'', why:'G\u2032(y) = '+p+' \u2212 '+(2*a)+'y = 0 at y = '+y+'. The fixed '+F+' has slope 0: it does not move the best y.'}; }},
+  {id:'14·econ.word',step:'14·econ',mode:'word',label:'a seller alone, and a tax',open:()=>measured('14·econ'),make(){
+    const A=[60,80,100][rnd(3)], b=[0.02,0.04,0.05][rnd(3)], c=[20,30,40][rnd(3)], t=[0,2,4,5,10][rnd(5)]; if(c+t>=A) return null;
+    const q=(A-c-t)/(2*b), p=A-b*q; if(Math.abs(q-Math.round(q))>1e-9) return null;
+    const right=q+' tons, at $'+DECAX(p,2), wrong=UQAX(right,[(A-c-t)/b+' tons, at $'+DECAX(c+t,2),q+' tons, at $'+DECAX(c+t,2),(A-c)/(2*b)+' tons, at $'+DECAX(A-b*(A-c)/(2*b),2),(q*2)+' tons, at $'+DECAX(A-2*b*q,2)],3); if(wrong.length<3) return null;
+    return {index:'q:14·econ.word['+A+';'+b+';'+c+';'+t+']', a3:['14·econ.word',DASH,DASH], story:'The only ready-mix concrete plant within a day\u2019s haul sells q tons a week at the price p(q) = '+A+' \u2212 '+b+'q dollars a ton. Each ton costs it $'+c+' to make'+(t?', and the county taxes each ton sold $'+t:'')+'.', lines:[], ask:'How much does it make, and at what price?', right, opts:shuffle([right,...wrong]), lead:'', why:'R(q) = '+A+'q \u2212 '+b+'q\u00b2, so R\u2032(q) = '+A+' \u2212 '+(2*b)+'q. It makes where R\u2032 = C\u2032 = '+(c+t)+': q = '+q+', and p('+q+') = '+DECAX(p,2)+'. R\u2032 is below p, so not where p = C\u2032.'}; }},
+  {id:'14·econ.line',step:'14·econ',mode:'proof',label:'what the slopes license',open:()=>measured('14·econ'),make(){
+    return line28('14·econ.line',[
+      ['g1',[['G(y)/y \\text{ greatest near } 38.7','profit per ton'],['\\text{the best output is } 38.7','the goal']],2,1,'A different goal: G itself is greatest at 50.'],
+      ['g2',[['R\'(q) = C\'(q)','given'],['\\text{a top of } G','slope 0']],2,1,'It may be a bottom: check G\u2033, or compare values.'],
+      ['g3',[['\\text{a seller alone}','given'],['\\text{it makes where } p = C\'','price meets cost']],2,1,'It makes where R\u2032 = C\u2032, and R\u2032 is below p.'],
+      ['g4',[['t = 5:\\ p \\text{ rises from } \\$44 \\text{ to } \\$46','a tax'],['\\text{the buyers pay all of it}','the tax']],2,1,'Here they pay 2 of each 5.'],
+      ['g5',[['\\text{a higher fixed cost}','given'],['\\text{a lower best output}','cost']],2,1,'Constant-has-slope-0: it decides only whether to open at all.'],
+      ['g6',[['G(y) = 100y - 1500 - y^2','the grower'],['y = 50','G\'(y) = 100 - 2y = 0']],2,0,'G\u2033 = \u22122 < 0: a top.'],
+      ['g7',[['C(q) + tq','a tax on each ton'],['\\text{the slope of cost is } C\'(q) + t','slopes add']],2,0,'The slope of tq is t.']],[]); }});
+/* ----- annex 14·logi Should we order often or order big: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'14·logi.work',step:'14·logi',mode:'work',label:'the best order',open:()=>measured('14·logi'),make(){
+    const Q=[200,250,300,400,500,600,800,1000][rnd(8)], d=[8,10,20,40,50][rnd(5)], h=[0.005,0.008,0.01,0.02,0.05][rnd(5)], K=h*Q*Q/(2*d);
+    if(Math.abs(K-Math.round(K))>1e-6||K<10||K>500) return null;
+    const right=String(Math.round(Q)), wrong=UQAX(right,[String(Math.round(Math.sqrt(K*d/h))),String(Math.round(2*K*d/h)),String(Math.round(Math.sqrt(2*K*h/d)*1000)),String(Math.round(Q*Math.SQRT2))],3); if(wrong.length<3) return null;
+    return {index:'q:14·logi.work['+K+';'+d+';'+h+']', lines:[['K = \\$'+K+',\\ \\ d = '+d+'\\ \\text{a day},\\ \\ h = \\$'+h,'cost of an order; sales; a unit\u2019s day on the shelf']], ask:'What is the best order size?', right, opts:shuffle([right,...wrong]), lead:'', why:'Q_b = \u221a(2Kd/h) = \u221a(2 \u00b7 '+K+' \u00b7 '+d+' \u00f7 '+h+') = \u221a'+Math.round(2*K*d/h)+' = '+right+'.'}; }},
+  {id:'14·logi.word',step:'14·logi',mode:'word',label:'a wrong order, and the lead time',open:()=>measured('14·logi'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const x=[0.5,0.8,1.25,1.5,2,1.4142][rnd(6)], r=(x+1/x)/2, S=x===1.4142?'\u221a2':String(x);
+      const right=DECAX(r,3)+' times the least', wrong=UQAX(right,[S+' times the least',DECAX(Math.abs(x-1)+1,3)+' times the least','the least: the order does not matter',DECAX(x*x,3)+' times the least'],3); if(wrong.length<3) return null;
+      return {index:'q:14·logi.word[x;'+x+']', a3:['14·logi.word',DASH,DASH], story:'A feed store orders '+S+' times its best order size, because its guess of the ordering cost was off.', lines:[], ask:'How does its yearly cost compare with the least?', right, opts:shuffle([right,...wrong]), lead:'', why:'T(Q)/T(Q_b) = \u00bd(x + 1/x) with x = '+S+': \u00bd('+DECAX(x,4)+' + '+DECAX(1/x,4)+') = '+DECAX(r,3)+'. The curve is level near its bottom.'}; }
+    if(ask===1){ const k=[2,4,9,0.5][rnd(4)], f=Math.sqrt(k);
+      const right=(f>1?'it grows by ':'it shrinks to ')+DECAX(f,3)+(f>1?' times':' of what it was'), wrong=UQAX(right,[(k>1?'it grows by ':'it shrinks to ')+k+(k>1?' times':' of what it was'),'it does not change',(k>1?'it grows by ':'it shrinks to ')+DECAX(k*k,3)+(k>1?' times':' of what it was'),(1/f>1?'it grows by ':'it shrinks to ')+DECAX(1/f,3)+(1/f>1?' times':' of what it was')],3); if(wrong.length<3) return null;
+      return {index:'q:14·logi.word[k;'+k+']', a3:['14·logi.word',DASH,DASH], story:'A store\u2019s daily sales '+(k>1?'grow '+k+' times':'fall by half')+', and nothing else changes.', lines:[], ask:'What happens to its best order size?', right, opts:shuffle([right,...wrong]), lead:'', why:'Q_b = \u221a(2Kd/h) goes as \u221ad: multiplying d by '+k+' multiplies Q_b by \u221a'+k+' \u2248 '+DECAX(f,3)+'.'}; }
+    const d=[10,20,30,40,50][rnd(5)], L=[2,3,4,5,7][rnd(5)], s=[0,10,20,25][rnd(4)];
+    const right=String(d*L+s)+' units', wrong=UQAX(right,[String(d*L)+' units',String(d+L+s)+' units',String(d*(L+1)+s)+' units',String(Math.round(Math.sqrt(d*L))+s)+' units'],3); if(wrong.length<3||!s&&d*L+s===d*L) {}
+    if(wrong.length<3) return null;
+    return {index:'q:14·logi.word[L;'+d+';'+L+';'+s+']', a3:['14·logi.word',DASH,DASH], story:'A hardware store sells '+d+' bags of feed a day. The truck comes '+L+' days after an order'+(s?', and the store keeps '+s+' bags back against uneven sales':'')+'.', lines:[], ask:'At what stock should it reorder?', right, opts:shuffle([right,...wrong]), lead:'', why:'Reorder at dL'+(s?' + s':'')+' = '+d+' \u00b7 '+L+(s?' + '+s:'')+' = '+right+': what sells while the truck is on its way'+(s?', plus the stock kept back.':'.')}; }},
+  {id:'14·logi.line',step:'14·logi',mode:'proof',label:'what the best order licenses',open:()=>measured('14·logi'),make(){
+    return line28('14·logi.line',[
+      ['j1',[['\\text{sales double}','given'],['\\text{the best order doubles}','Q_b']],2,1,'It grows by \u221a2.'],
+      ['j2',[['\\text{reorder at } dL','given'],['\\text{the shelf never empties}','the lead time']],2,1,'Only if every lead time sells exactly dL.'],
+      ['j3',[['\\text{the stock kept back}','s units'],['\\text{it costs nothing}','it is sold']],2,1,'It is there every day: hs a day.'],
+      ['j4',[['\\text{order } 1.5\\,Q_b','given'],['\\text{cost } 1.5\\,T(Q_b)','the order']],2,1,'About 1.08 T(Q_b): the curve is level near its bottom.'],
+      ['j5',[['\\text{two stores merge their stock}','given'],['\\text{the stock adds}','merging']],2,1,'Pooled, it is 1/\u221a2 of the sum.'],
+      ['j6',[['T(Q)/T(Q_b) = \\tfrac12(x + 1/x)','x = Q/Q_b'],['\\ge 1,\\ \\text{equal only at } x = 1','8g\u2019s means']],2,0,'The mean of x and 1/x is at least their geometric mean, 1.'],
+      ['j7',[['Q_b^2 = 2Kd/h','the best order'],['Kd = \\tfrac h2 Q_b^2','multiply by h/2']],2,0,'Multiplying-keeps-answers.']],[]); }});
+/* ----- annex 14·phys What stays the same when things crash: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'14·phys.work',step:'14·phys',mode:'work',label:'sticking together',open:()=>measured('14·phys'),make(){
+    const m1=[1,2,3,4,5,6][rnd(6)], m2=[1,2,3,4,5,6][rnd(6)], v1=[2,3,4,6,8][rnd(5)], v2=[0,-1,-2,-3,1,2][rnd(6)], V=(m1*v1+m2*v2)/(m1+m2);
+    if(Math.abs(V*100-Math.round(V*100))>1e-9) return null;
+    const S=v=>MNAX(DECAX(v,2))+' m/s', right=S(V), wrong=UQAX(right,[S((v1+v2)/2),S((m1*v1-m2*v2)/(m1+m2)),S(m1*v1+m2*v2),S((m1*v1+m2*Math.abs(v2))/(m1+m2)),S(-V)],3); if(wrong.length<3) return null;
+    return {index:'q:14·phys.work['+m1+';'+m2+';'+v1+';'+v2+']', lines:[[m1+'\\ \\text{kg at }'+MNAX(v1)+'\\ \\text{m/s}','cart A'],[m2+'\\ \\text{kg at }'+MNAX(v2)+'\\ \\text{m/s}','cart B, on the same line']], ask:'They collide and stick. What is their velocity after?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Momentum is kept, with its sign: '+m1+' \u00b7 '+v1+' + '+m2+' \u00b7 ('+v2+') = '+(m1*v1+m2*v2)+' kg\u00b7m/s, shared by '+(m1+m2)+' kg: '+DECAX(V,2)+' m/s.')}; }},
+  {id:'14·phys.word',step:'14·phys',mode:'word',label:'impulse',open:()=>measured('14·phys'),make(){
+    const m=[0.06,0.15,0.4,0.45,5,70][rnd(6)], nm={0.06:'tennis ball',0.15:'baseball',0.4:'volleyball',0.45:'soccer ball',5:'bowling ball',70:'climber'}[m], v=[4,5,8,10,20,30][rnd(6)], dt=[0.002,0.005,0.01,0.05,0.1,0.25][rnd(6)], bounce=rnd(2)&&m<1;
+    const dp=m*v*(bounce?2:1), F=dp/dt; if(F<1) return null;
+    const N=x=>DECAX(x,1)+' N', right=N(F), wrong=UQAX(right,[N(m*v/dt*(bounce?1:2)),N(dp*dt),N(m*9.8),N(dp)],3); if(wrong.length<3) return null;
+    return {index:'q:14·phys.word['+m+';'+v+';'+dt+';'+bounce+']', a3:['14·phys.word',DASH,DASH], story:'A '+m+' kg '+nm+' moving at '+v+' m/s '+(bounce?'hits a wall and comes straight back at '+v+' m/s':'is brought to rest')+', in '+dt+' s.', lines:[], ask:'What average force acted on it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Impulse: the average force is the change of momentum over the time. '+(bounce?'From +'+v+' to \u2212'+v+', the change is 2 \u00b7 '+m+' \u00b7 '+v:'From '+v+' to 0, the change is '+m+' \u00b7 '+v)+' = '+DECAX(dp,3)+' kg\u00b7m/s; over '+dt+' s, '+right+'. A longer stop, the same change, a smaller force.'}; }},
+  {id:'14·phys.line',step:'14·phys',mode:'proof',label:'what momentum licenses',open:()=>measured('14·phys'),make(){
+    return line28('14·phys.line',[
+      ['u1',[['\\text{two railcars couple}','a collision'],['\\text{kinetic energy is kept}','conservation']],2,1,'The coupled railcars lose 24 000 J; only momentum is kept in every collision.'],
+      ['u2',[['1\\ \\text{kg at } {+3},\\ 1\\ \\text{kg at } {-3}','two carts'],['\\text{total momentum } 6\\ \\text{kg\u00b7m/s}','speeds add']],2,1,'Momentum has a sign: the total is 0.'],
+      ['u3',[['\\text{a ball bounces off the floor}','given'],['\\text{its momentum is kept}','conservation']],2,1,'The floor, and the Earth behind it, push from outside the ball.'],
+      ['u4',[['\\text{a padded vest}','given'],['\\text{the impulse is lower}','padding']],2,1,'The same change of momentum; it lowers the average force by taking longer.'],
+      ['u5',[['F_{AB} = -F_{BA}','the third law'],['\\text{the accelerations are equal and opposite}','the effects']],2,1,'The forces are equal; the accelerations differ by mass.'],
+      ['u6',[['F_{AB} = -F_{BA}','no outside force'],['(p_A + p_B)\' = 0','the second law on each']],2,0,'p\u2032_A + p\u2032_B = F_BA + F_AB = 0: the total does not change.'],
+      ['u7',[['\\text{closest approach, a spring between}','given'],['\\text{the two move with one velocity}','the gap stops shrinking']],2,0,'At the least gap its slope is 0, so the two velocities agree.']],[]); }});
+/* ----- annex 15·chem Why does a squeezed gas push back: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'15·chem.work',step:'15·chem',mode:'work',label:'the ideal gas law',open:()=>measured('15·chem'),make(){
+    const n=[0.5,1,2,3][rnd(4)], TC=[0,20,25,27,100][rnd(5)], T=TC+273.15, V=[0.01,0.02,0.025,0.05][rnd(4)], p=n*8.314*T/V;
+    const K=x=>DECAX(x/1000,1)+' kPa', right=K(p), wrong=UQAX(right,[TC>0?K(n*8.314*TC/V):K(p*10),K(p/2),K(p/10),K(p*2)],3); if(wrong.length<3) return null;
+    return {index:'q:15·chem.work['+n+';'+TC+';'+V+']', lines:[['n = '+n+'\\ \\text{mol},\\ \\ T = '+TC+'\\ {}^\\circ\\text{C},\\ \\ V = '+V+'\\ \\text{m}^3','an ideal gas'],['R = 8.314\\ \\text{J/(mol\u00b7K)}','']], ask:'What is its pressure?', right, opts:shuffle([right,...wrong]), lead:'', why:'pV = nRT, with T in kelvin: '+TC+' \u00b0C = '+T+' K. p = '+n+' \u00b7 8.314 \u00b7 '+T+' \u00f7 '+V+' \u2248 '+DECAX(p,0)+' Pa \u2248 '+right+'.'}; }},
+  {id:'15·chem.word',step:'15·chem',mode:'word',label:'work is an area',open:()=>measured('15·chem'),make(){
+    const ask=rnd(2);
+    if(ask){ const u=[2,3,4,5][rnd(4)], v=u*[2,3,4,5][rnd(4)], right=FRAX(v-u,u*v), wrong=UQAX(right,[MNAX('-'+FRAX(v-u,u*v)),FRAX(1,v-u),FRAX(v*v-u*u,u*u*v*v),String(v-u)].map(String),3); if(wrong.length<3) return null;
+      return {index:'q:15·chem.word[a;'+u+';'+v+']', a3:['15·chem.word',DASH,DASH], story:'A piston\u2019s work against the pull of molecules on each other needs the area under 1/V\u00b2.', lines:[], ask:'What is the area under 1/x\u00b2 from '+u+' to '+v+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Inverse-square-area: 1/u \u2212 1/v = 1/'+u+' \u2212 1/'+v+' = '+right+'. Positive, since 1/u > 1/v.'}; }
+    const p=[1,1.5,2,3][rnd(4)], V1=[1,2,5][rnd(3)], V2=V1+[1,2,3,5][rnd(4)], W=p*(V2-V1)*100;
+    const right=DECAX(W,1)+' J', wrong=UQAX(right,[DECAX(p*(V2-V1),2)+' J',DECAX(p*V2*100,1)+' J',DECAX(W*10,1)+' J',DECAX(p*(V2+V1)*100,1)+' J'],3); if(wrong.length<3) return null;
+    return {index:'q:15·chem.word[w;'+p+';'+V1+';'+V2+']', a3:['15·chem.word',DASH,DASH], story:'A gas held at a steady '+p+' bar pushes a piston slowly out, from '+V1+' L to '+V2+' L. (1 L\u00b7bar = 100 J.)', lines:[], ask:'How much work does it do?', right, opts:shuffle([right,...wrong]), lead:'', why:'At a fixed pressure the area under p is a box: W = p(V\u2082 \u2212 V\u2081) = '+p+' \u00b7 '+(V2-V1)+' = '+DECAX(p*(V2-V1),2)+' L\u00b7bar = '+right+'.'}; }},
+  {id:'15·chem.line',step:'15·chem',mode:'proof',label:'what the gas law licenses',open:()=>measured('15·chem'),make(){
+    return line28('15·chem.line',[
+      ['a1',[['pV = nRT','given'],['T = 20 \\text{ for } 20\\ {}^\\circ\\text{C}','the temperature']],2,1,'In kelvin: at 0 \u00b0C the law would give V = 0.'],
+      ['a2',[['p \\text{ changes as } V \\text{ grows}','given'],['W = p\\,(V_2 - V_1)','work']],2,1,'That is a box; a changing p needs the area under its curve.'],
+      ['a3',[['\\textstyle\\int_u^v dx/x^2','0 < u < v'],['= 1/v - 1/u','inverse-square-area']],2,1,'Backwards: the area is positive, and 1/u > 1/v.'],
+      ['a4',[['\\Pi = cRT,\\ R = 8.314','osmotic pressure'],['c \\text{ in mol/L}','the unit']],2,1,'In mol/m\u00b3 with R in J/(mol\u00b7K); 1 mol/L = 1000 mol/m\u00b3.'],
+      ['a5',[['\\tfrac{1}{x_{i-1}x_i}\\,\\Delta x_i','one piece'],['= \\tfrac{1}{x_{i-1}} - \\tfrac{1}{x_i}','divide through']],2,0,'\u0394x\u1d62 = x\u1d62 \u2212 x\u1d62\u208b\u2081.'],
+      ['a6',[['\\text{the corrected law for CO}_2','below 304 K'],['\\text{true for every } V','the law']],2,1,'Its curve wiggles there: the gas is turning to liquid.'],
+      ['a7',[['1\\ \\text{L\u00b7bar}','given'],['= 100\\ \\text{J}','10^{-3}\\ \\text{m}^3 \\cdot 10^5\\ \\text{Pa}']],2,0,'A litre is 10\u207b\u00b3 m\u00b3 and a bar 10\u2075 Pa.']],[]); }});
+/* ----- annex 15·econ What is a payment next year worth today: Work, Word Problems, Check Proofs ----- */
+const USDAX=v=>'$'+(Math.round(v*100)/100).toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+QP.push({id:'15·econ.work',step:'15·econ',mode:'work',label:'money later, counted now',open:()=>measured('15·econ'),make(){
+    const ask=rnd(3), i=[0.03,0.04,0.05,0.06,0.08][rnd(5)], P=[1000,2000,5000,10000][rnd(4)], n=[1,2,3,5,10][rnd(5)];
+    if(ask===0){ const V=P/Math.pow(1+i,n), right=USDAX(V), wrong=UQAX(right,[USDAX(P*(1-n*i)),USDAX(P*Math.pow(1+i,n)),USDAX(P/(1+n*i)+ (n===1?7:0)),USDAX(P-i*P)],3); if(wrong.length<3) return null;
+      return {index:'q:15·econ.work[pv;'+P+';'+i+';'+n+']', lines:[['\\$'+P+' \\text{ paid in } '+n+' \\text{ year'+(n>1?'s':'')+'}','at '+(i*100)+'% a year']], ask:'What is it worth today?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each year multiplies by '+(1+i)+', so bring it back by dividing: '+P+'/'+(1+i)+'^'+n+' = '+right+'.'}; }
+    if(ask===1){ const A=[1000,2500,5000,6000][rnd(4)], right=USDAX(A/i), wrong=UQAX(right,[USDAX(A*i),USDAX(A/(1+i)),USDAX(A*(1+i)/i),USDAX(A*100)],3); if(wrong.length<3) return null;
+      return {index:'q:15·econ.work[perp;'+A+';'+i+']', lines:[['\\$'+A+' \\text{ a year, forever}','the first in a year'],['i = '+i,'']], ask:'What is the stream worth today?', right, opts:shuffle([right,...wrong]), lead:'', why:'Endless-ratio-sum, ratio 1/(1 + i) < 1: the total is A/i = '+A+' \u00f7 '+i+' = '+right+'.'}; }
+    const j=i/12, F=Math.pow(1+j,12), right=DECAX((F-1)*100,2)+'%', wrong=UQAX(right,[DECAX(i*100,2)+'%',DECAX(i*100*12,2)+'%',DECAX(i*150,2)+'%',DECAX(i*100+0.5,2)+'%'],3); if(wrong.length<3) return null;
+    return {index:'q:15·econ.work[m;'+i+']', lines:[[(i*100)+'\\% \\text{ a year, charged as } '+DECAX(i*100/12,4)+'\\% \\text{ a month}','interest that multiplies']], ask:'What does a year of it multiply by, as a yearly rate?', right, opts:shuffle([right,...wrong]), lead:'', why:'Twelve monthly steps multiply: (1 + '+DECAX(j,5)+')\u00b9\u00b2 \u2248 '+DECAX(F,5)+', so about '+right+' a year, a little more than '+(i*100)+'%.'}; }},
+  {id:'15·econ.word',step:'15·econ',mode:'word',label:'a loan in equal payments',open:()=>measured('15·econ'),make(){
+    const L=[10000,20000,25000,30000,150000][rnd(5)], yr=[3,5,10,15][rnd(4)], r=[0.04,0.06,0.09,0.12][rnd(4)], j=r/12, n=yr*12, M=L*j/(1-Math.pow(1+j,-n));
+    const right=USDAX(M), wrong=UQAX(right,[USDAX(L/n),USDAX(L*(1+r*yr)/n*0.97),USDAX(L*j),USDAX(L*r/(1-Math.pow(1+r,-yr))/12)],3); if(wrong.length<3) return null;
+    return {index:'q:15·econ.word['+L+';'+yr+';'+r+']', a3:['15·econ.word',DASH,DASH], story:'A loan of $'+L.toLocaleString('en')+' is paid back in equal payments at the end of each month for '+yr+' years, at '+(r*100)+'% a year, charged monthly.', lines:[], ask:'What is the monthly payment?', right, opts:shuffle([right,...wrong]), lead:'', why:'M = Lj/(1 \u2212 (1 + j)^(\u2212n)) with j = '+DECAX(j,5)+' and n = '+n+': '+right+'. The payments are worth the loan today; the '+n+' payments add to '+USDAX(M*n)+'.'}; }},
+  {id:'15·econ.line',step:'15·econ',mode:'proof',label:'what present value licenses',open:()=>measured('15·econ'),make(){
+    return line28('15·econ.line',[
+      ['e1',[['\\$1200 \\text{ in payments for } \\$1100 \\text{ cash}','a deal'],['\\text{rate } 100/1100 \\approx 9\\%','the extra']],2,1,'The balance falls each month; the true rate is near 17.7% a year.'],
+      ['e2',[['\\text{payments in different years}','given'],['\\text{add them}','a total']],2,1,'Bring each to today first, then add.'],
+      ['e3',[['6\\% \\text{ a year as } 0.5\\% \\text{ a month}','given'],['6\\% \\text{ a year}','twelve months']],2,1,'1.005\u00b9\u00b2 \u2248 1.0617.'],
+      ['e4',[['1000/1.05^2','given'],['= 1000(1 - 2 \\cdot 0.05)','a short cut']],2,1,'Dividing by 1.05\u00b2 multiplies by about 0.907, not 0.9.'],
+      ['e5',[['\\text{payments growing faster than } i,\\ \\text{forever}','given'],['\\text{a price}','endless-ratio-sum']],2,1,'Ratio at least 1: the sum has no total.'],
+      ['e6',[['V = Mv\\,\\tfrac{1 - v^n}{1 - v}','finite-ratio-sum'],['V = M\\,\\tfrac{1 - (1 + j)^{-n}}{j}','v/(1 - v) = 1/j']],2,0,'v = 1/(1 + j), so 1 \u2212 v = j/(1 + j).'],
+      ['e7',[['\\$5000 \\text{ a year forever, at } 4\\%','given'],['\\$125\\,000','A/i']],2,0,'5000 \u00f7 0.04.']],[]); }});
+/* ----- annex 15·eng How hard does water push on a dam: Work, Word Problems, Check Proofs ----- */
+const MNNAX=v=>v>=1e9?DECAX(v/1e9,2)+' GN':v>=1e6?DECAX(v/1e6,2)+' MN':DECAX(v/1e3,1)+' kN';
+QP.push({id:'15·eng.work',step:'15·eng',mode:'work',label:'the push, in thin strips',open:()=>measured('15·eng'),make(){
+    const H=[2,3,4,5,10,20][rnd(6)], W=[3,5,10,20,50][rnd(5)], F=0.5*1000*9.8*W*H*H, ask=rnd(2);
+    if(ask){ const right=DECAX(H/3,3)+' m above the bed', wrong=UQAX(right,[DECAX(H/2,3)+' m above the bed',DECAX(2*H/3,3)+' m above the bed',DECAX(H/4,3)+' m above the bed','at the bed'],3); if(wrong.length<3) return null;
+      return {index:'q:15·eng.work[c;'+H+']', lines:[['H = '+H+'\\ \\text{m}','water against a flat wall']], ask:'Where does the whole push act?', right, opts:shuffle([right,...wrong]), lead:'', why:'The deep strips push hardest: the push acts at H/3 = '+DECAX(H/3,3)+' m above the bed, two thirds of the way down.'}; }
+    const right=MNNAX(F), wrong=UQAX(right,[MNNAX(2*F),MNNAX(F/H),MNNAX(F*H/3),MNNAX(1000*9.8*W*H)],3); if(wrong.length<3) return null;
+    return {index:'q:15·eng.work[F;'+H+';'+W+']', lines:[['H = '+H+'\\ \\text{m},\\ \\ W = '+W+'\\ \\text{m}','water depth; wall width'],['\\rho = 1000\\ \\text{kg/m}^3,\\ \\ g = 9.8','']], ask:'How hard does the water push on the wall?', right, opts:shuffle([right,...wrong]), lead:'', why:'F = \u222b\u2080\u1d34 \u03c1gyW dy = \u00bd\u03c1gWH\u00b2 = \u00bd \u00b7 1000 \u00b7 9.8 \u00b7 '+W+' \u00b7 '+H+'\u00b2 = '+DECAX(F,0)+' N \u2248 '+right+'. Using the bottom pressure everywhere would double it.'}; }},
+  {id:'15·eng.word',step:'15·eng',mode:'word',label:'deeper water',open:()=>measured('15·eng'),make(){
+    const k=[1.5,2,3,0.5][rnd(4)], ask=rnd(2), K=k===0.5?'half as deep':k+' times as deep';
+    const right=ask?'it does not change: only the depth at the wall counts':'it is multiplied by '+DECAX(k*k,3), wrong=ask?['it doubles: twice the water','it is multiplied by 4','it halves: the water spreads']:UQAX(right,['it is multiplied by '+k,'it is multiplied by '+DECAX(k*k*k,3),'it is multiplied by '+DECAX(Math.sqrt(k),3),'it does not change: only the depth at the wall counts'],3);
+    if(wrong.length<3) return null;
+    return {index:'q:15·eng.word['+k+';'+ask+']', a3:['15·eng.word',DASH,DASH], story:ask?'A reservoir behind a dam is lengthened to twice as far upstream. The depth at the wall stays the same.':'A flood leaves the water behind a straight dam '+K+' as before.', lines:[], ask:'What happens to the push on the dam?', right, opts:shuffle([right,...wrong]), lead:'', why:ask?'F = \u00bd\u03c1gWH\u00b2 has no length of lake in it: only the depth at the wall counts.':'F = \u00bd\u03c1gWH\u00b2 grows like H\u00b2: '+k+'\u00b2 = '+DECAX(k*k,3)+'.'}; }},
+  {id:'15·eng.line',step:'15·eng',mode:'proof',label:'what the strips license',open:()=>measured('15·eng'),make(){
+    return line28('15·eng.line',[
+      ['s1',[['p(H) = \\rho g H','the bottom pressure'],['F = p(H) \\cdot WH','the push']],2,1,'That uses the bottom pressure everywhere: twice the push.'],
+      ['s2',[['p(y) = \\rho g y','the pressure at depth y'],['\\text{the push acts at half the depth}','the middle']],2,1,'The deep strips push hardest: it acts at H/3 above the bed.'],
+      ['s3',[['\\text{twice as deep}','given'],['\\text{twice the push}','F and H']],2,1,'F grows like H\u00b2: four times.'],
+      ['s4',[['\\textstyle\\int_0^H \\rho g y\\,dy','given'],['\\text{the push on the dam}','the area']],2,1,'That is the push on a strip one metre wide; multiply by W.'],
+      ['s5',[['F = \\textstyle\\int_0^H \\rho g y W\\,dy','thin strips'],['= \\tfrac12 \\rho g W H^2','the area under y']],2,0,'The area under y from 0 to H is H\u00b2/2.'],
+      ['s6',[['p \\text{ grows with depth}','given'],['\\text{a dam is thicker at the bottom}','the deep strips push hardest']],2,0,'The wall must hold most where the pressure is greatest.']],[]); }});
+/* ----- annex 16·eng Where will a loaded beam crack: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'16·eng.work',step:'16·eng',mode:'work',label:'shear and bending',open:()=>measured('16·eng'),make(){
+    const L=[2,3,4,5,6][rnd(5)], w=[1,2,3,4,5][rnd(5)], ask=rnd(3), R=w*L/2;
+    if(ask===0){ const x=Math.round((rnd(L*2)+1)/2*10)/10; if(x>=L) return null; const V=R-w*x;
+      const right=MNAX(DECAX(V,2))+' kN', wrong=UQAX(right,[DECAX(w*x,2)+' kN',MNAX(DECAX(-V,2))+' kN',DECAX(R,2)+' kN',DECAX(R*x-w*x*x/2,3)+' kN'],3); if(wrong.length<3) return null;
+      return {index:'q:16·eng.work[V;'+L+';'+w+';'+x+']', lines:[['w = '+w+'\\ \\text{kN/m on } [0, '+L+']','spread evenly'],['R_0 = R_L = '+R+'\\ \\text{kN}','the supports']], ask:'What is the shear at x = '+x+' m?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Shear-from-load: V\u2032 = \u2212w, so V(x) = R\u2080 \u2212 wx = '+R+' \u2212 '+w+' \u00b7 '+x+' = '+DECAX(V,2)+' kN.')}; }
+    if(ask===1){ const M=w*L*L/8, right=DECAX(M,3)+' kN\u00b7m at x = '+DECAX(L/2,2)+' m', wrong=UQAX(right,[DECAX(w*L*L/4,3)+' kN\u00b7m at x = '+DECAX(L/2,2)+' m',DECAX(M,3)+' kN\u00b7m at x = 0',DECAX(w*L/2,3)+' kN\u00b7m at x = '+DECAX(L/2,2)+' m',DECAX(w*L*L/2,3)+' kN\u00b7m at x = '+L+' m'],3); if(wrong.length<3) return null;
+      return {index:'q:16·eng.work[M;'+L+';'+w+']', lines:[['w = '+w+'\\ \\text{kN/m on } [0, '+L+']','spread evenly, supports at both ends']], ask:'Where does the beam bend most, and how hard?', right, opts:shuffle([right,...wrong]), lead:'', why:'Most-bending: V(x) = '+R+' \u2212 '+w+'x crosses zero at x = '+DECAX(L/2,2)+'. M there is the area under V: \u00bd \u00b7 '+R+' \u00b7 '+DECAX(L/2,2)+' = '+DECAX(M,3)+' kN\u00b7m.'}; }
+    const b=[0.05,0.1][rnd(2)], h=[0.1,0.15,0.2,0.3][rnd(4)], M=[1,2,3,6][rnd(4)]*1000, s=6*M/(b*h*h);
+    const right=DECAX(s/1e6,2)+' MPa', wrong=UQAX(right,[DECAX(6*M/(b*b*h)/1e6,2)+' MPa',DECAX(M/(b*h*h)/1e6,2)+' MPa',DECAX(6*M/(b*h)/1e6,2)+' MPa',DECAX(3*M/(b*h*h)/1e6,2)+' MPa'],3); if(wrong.length<3) return null;
+    return {index:'q:16·eng.work[s;'+b+';'+h+';'+M+']', lines:[['b = '+b+'\\ \\text{m},\\ \\ h = '+h+'\\ \\text{m}','width; depth'],['M = '+M+'\\ \\text{N\u00b7m}','at the cut']], ask:'What is the greatest stress at the cut?', right, opts:shuffle([right,...wrong]), lead:'', why:'Deep-beam: \u03c3_m = 6M/(bh\u00b2) = 6 \u00b7 '+M+' \u00f7 ('+b+' \u00b7 '+h+'\u00b2) = '+DECAX(s,0)+' Pa \u2248 '+right+', at the top and bottom faces.'}; }},
+  {id:'16·eng.word',step:'16·eng',mode:'word',label:'deep or wide',open:()=>measured('16·eng'),make(){
+    const ask=rnd(2), k=[2,3,1.5][rnd(3)];
+    const right='it is divided by '+DECAX(ask?k*k:k,3), wrong=UQAX(right,['it is divided by '+DECAX(ask?k:k*k,3),'it does not change','it is divided by '+DECAX(k*k*k,3),'it is multiplied by '+DECAX(ask?k*k:k,3)],3); if(wrong.length<3) return null;
+    return {index:'q:16·eng.word['+ask+';'+k+']', a3:['16·eng.word',DASH,DASH], story:'A deck joist carries the same load as before, but the builder uses a board '+(k===1.5?'one and a half':k)+' times as '+(ask?'deep':'wide')+', the other size the same.', lines:[], ask:'What happens to the greatest stress in it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Deep-beam: \u03c3_m = 6M/(bh\u00b2). '+(ask?'Depth helps by its square: h \u00d7 '+k+' divides \u03c3 by '+DECAX(k*k,3)+'.':'Width helps only by itself: b \u00d7 '+k+' divides \u03c3 by '+k+'.')}; }},
+  {id:'16·eng.line',step:'16·eng',mode:'proof',label:'what shear and bending license',open:()=>measured('16·eng'),make(){
+    return line28('16·eng.line',[
+      ['b1',[['\\text{a heavy load at } p','given'],['\\text{the beam cracks at } p','the heaviest load']],2,1,'It bends most where the shear crosses zero.'],
+      ['b2',[['V\' = -w','shear-from-load'],['M(x) = \\textstyle\\int_0^x w(s)\\,ds','the area']],2,1,'That is R\u2080 \u2212 V(x); M is the area under V, two steps from w.'],
+      ['b3',[['\\text{twice as deep}','given'],['\\text{twice as strong}','depth']],2,1,'Deep-beam: four times, since h is squared.'],
+      ['b4',[['\\text{a person standing at } p','a load at a point'],['V\'(p) = -w(p)','area-slope']],2,1,'A load at one point makes V jump there; area-slope needs w continuous.'],
+      ['b5',[['M\' = V','moment-from-shear'],['M \\text{ rises while } V \\gt 0','rise-and-fall']],2,0,'A positive slope means M climbs.'],
+      ['b6',[['\\sigma_m = 6M/(bh^2)','deep-beam'],['\\text{the breaking load}','the stress']],2,1,'Only while the stretch law is true.']],[]); }});
+/* ----- annex 16·logi How much is in the tank right now: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'16·logi.work',step:'16·logi',mode:'work',label:'the level from the rates',open:()=>measured('16·logi'),make(){
+    const V0=[200,300,400,500][rnd(4)], P=[[6,60,50],[6,80,120],[6,80,100],[6,90,60]].map(r=>[r[0],r[1]+rnd(3)*10,r[2]+rnd(3)*10]).slice(0,2+rnd(2));
+    let V=V0, lo=V0; P.forEach(r=>{ V+=r[0]*(r[1]-r[2]); lo=Math.min(lo,V); }); if(lo<0) return null;
+    const right=String(V)+' m\u00b3', wrong=UQAX(right,[String(V-V0)+' m\u00b3',String(V0+P.reduce((a,r)=>a+r[0]*r[1],0))+' m\u00b3',String(V0-P.reduce((a,r)=>a+r[0]*(r[1]-r[2]),0))+' m\u00b3',String(lo)+' m\u00b3'],3); if(wrong.length<3) return null;
+    return {index:'q:16·logi.work['+V0+';'+JSON.stringify(P)+']', lines:[['V(0) = '+V0+'\\ \\text{m}^3','at midnight']].concat(P.map((r,i)=>['\\text{in } '+r[1]+',\\ \\text{out } '+r[2]+'\\ \\text{m}^3\\text{/h}','for '+r[0]+' h'])), ask:'How much water is in the tank at the end?', right, opts:shuffle([right,...wrong]), lead:'', why:'Tank-level: V(T) = V(0) + the area under in \u2212 out = '+V0+P.map(r=>' + '+r[0]+' \u00b7 ('+r[1]+' \u2212 '+r[2]+')').join('')+' = '+right+'.'}; }},
+  {id:'16·logi.word',step:'16·logi',mode:'word',label:'never dry',open:()=>measured('16·logi'),make(){
+    const P=[]; for(let i=0;i<4;i++) P.push([3+rnd(4), 40+10*rnd(5), 30+10*rnd(7)]); let c=0, D=0; P.forEach(r=>{ c+=r[0]*(r[2]-r[1]); D=Math.max(D,c); }); if(D<=0) return null;
+    const draw=P.reduce((a,r)=>a+r[0]*r[2],0);
+    const right=String(D)+' m\u00b3', wrong=UQAX(right,[String(draw)+' m\u00b3',String(c>0?c:D+40)+' m\u00b3','0 m\u00b3',String(D+P[0][0]*P[0][2])+' m\u00b3'],3); if(wrong.length<3) return null;
+    return {index:'q:16·logi.word['+JSON.stringify(P)+']', a3:['16·logi.word',DASH,DASH], story:'A town\u2019s water tank has a steady pump and a changing draw. In order through the day: '+P.map(r=>r[0]+' h at '+r[1]+' in, '+r[2]+' out').join('; ')+' (m\u00b3 an hour).', lines:[], ask:'What is the least the tank can hold at the start and never run dry that day?', right, opts:shuffle([right,...wrong]), lead:'', why:'Never-dry: the start must be at least the deepest dip of \u222b(out \u2212 in). Running: '+(()=>{ let s=0; return P.map(r=>{ s+=r[0]*(r[2]-r[1]); return MNAX(String(s)); }).join(', '); })()+'. The greatest is '+D+' m\u00b3, not the day\u2019s whole draw.'}; }},
+  {id:'16·logi.line',step:'16·logi',mode:'proof',label:'what the tank licenses',open:()=>measured('16·logi'),make(){
+    return line28('16·logi.line',[
+      ['w1',[['\\text{the town draws hardest at noon}','given'],['\\text{the tank is lowest at noon}','the draw']],2,1,'It is lowest when out falls back to in.'],
+      ['w2',[['\\textstyle\\int_0^t (\\text{in} - \\text{out})','given'],['\\text{the water in the tank}','the area']],2,1,'It is the change: add V(0).'],
+      ['w3',[['\\text{start with the day\u2019s whole draw}','given'],['\\text{the least safe start}','to be safe']],2,1,'The deepest dip is enough.'],
+      ['w4',[['\\text{in} = \\text{out at } t','given'],['\\text{the lowest is at } t','slope 0']],2,1,'The crest has in = out too; and the lowest may sit at an end.'],
+      ['w5',[['r \\lt 88\\ \\text{m}^3\\text{/h, the average outflow}','a pump'],['\\text{the tank runs dry in the end}','pump-rate']],2,0,'Each day it loses 24(88 \u2212 r) m\u00b3, and no start saves it.'],
+      ['w6',[['V(t) = V(0) - \\textstyle\\int_0^t (\\text{out} - \\text{in})','tank-level'],['V(t) \\ge 0 \\text{ for all } t \\iff V(0) \\ge D','never-dry']],2,0,'D is the greatest of those integrals.']],[]); }});
+/* ----- annex 16·nav Where am I now: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'16·nav.work',step:'16·nav',mode:'work',label:'dead reckoning',open:()=>measured('16·nav'),make(){
+    const legs=[[2+rnd(3),[6,8,10,12][rnd(4)]],[1+rnd(3),[4,5,6,9][rnd(4)]],[1+rnd(2),[7,8,11][rnd(3)]]], s0=[0,5,10,20][rnd(4)], d=legs.reduce((a,l)=>a+l[0]*l[1],0);
+    const right=String(s0+d)+' nmi', wrong=UQAX(right,[String(d)+' nmi',String(s0+legs.reduce((a,l)=>a+l[1],0)*legs.reduce((a,l)=>a+l[0],0)/3|0)+' nmi',String(s0+d+legs[2][1])+' nmi',String(s0+legs.reduce((a,l)=>a+l[0]+l[1],0))+' nmi'],3); if(wrong.length<3) return null;
+    return {index:'q:16·nav.work['+JSON.stringify(legs)+';'+s0+']', lines:[['s(0) = '+s0+'\\ \\text{nmi}','along the track'],[legs.map(l=>l[1]+'\\ \\text{kn for } '+l[0]+'\\ \\text{h}').join(',\\ \\ \\text{then }'),'speed through the run']], ask:'Where is the boat at the end, along the track?', right, opts:shuffle([right,...wrong]), lead:'', why:'Dead-reckoning: s(T) = s(0) + the area under the speed = '+s0+' + '+legs.map(l=>l[1]+' \u00b7 '+l[0]).join(' + ')+' = '+right+'.'}; }},
+  {id:'16·nav.word',step:'16·nav',mode:'word',label:'errors that grow',open:()=>measured('16·nav'),make(){
+    const ask=rnd(2);
+    if(ask){ const M=[0.1,0.2,0.25,0.5][rnd(4)], T=[6,10,12,24,30][rnd(4)], e=M*T;
+      const right='at most '+DECAX(e,2)+' nmi', wrong=UQAX(right,['exactly '+DECAX(e,2)+' nmi','at most '+DECAX(M,2)+' nmi','at most '+DECAX(M*T*T/2,2)+' nmi','none: the doubt is too small to matter'],3); if(wrong.length<3) return null;
+      return {index:'q:16·nav.word[s;'+M+';'+T+']', a3:['16·nav.word',DASH,DASH], story:'A navigator trusts the log to within '+M+' kn at every moment of a '+T+'-hour run, from a known start.', lines:[], ask:'How far off can the reckoned place be at the end?', right, opts:shuffle([right,...wrong]), lead:'', why:'Speed-error: |e(T)| \u2264 MT = '+M+' \u00b7 '+T+' = '+DECAX(e,2)+' nmi. At most: errors of both signs may cancel.'}; }
+    const M=[0.01,0.02,0.05][rnd(3)], T=[60,100,300,600][rnd(4)], e=M*T*T/2;
+    const right='at most '+DECAX(e,1)+' m', wrong=UQAX(right,['at most '+DECAX(M*T,1)+' m','at most '+DECAX(M*T*T,1)+' m','exactly '+DECAX(e,1)+' m','at most '+DECAX(M*T/2,1)+' m'],3); if(wrong.length<3) return null;
+    return {index:'q:16·nav.word[a;'+M+';'+T+']', a3:['16·nav.word',DASH,DASH], story:'A drone reckons its place from an accelerometer that reads within '+M+' m/s\u00b2 of the truth, its speed and place right at the start.', lines:[], ask:'How far off can its place be after '+T+' s?', right, opts:shuffle([right,...wrong]), lead:'', why:'Doubled-error: run backwards twice, |e| \u2264 MT\u00b2/2 = '+M+' \u00b7 '+T+'\u00b2/2 = '+DECAX(e,1)+' m. It grows with the square of the time.'}; }},
+  {id:'16·nav.line',step:'16·nav',mode:'proof',label:'what the log licenses',open:()=>measured('16·nav'),make(){
+    return line28('16·nav.line',[
+      ['n1',[['\\text{the log reads } 8\\ \\text{kn}','given'],['\\text{the speed over the ground is } 8\\ \\text{kn}','the log']],2,1,'Through the water; a current adds its own, unseen.'],
+      ['n2',[['|e(T)| \\le MT','speed-error'],['e(T) = MT','the bound']],2,1,'At most; errors of both signs may cancel.'],
+      ['n3',[['\\text{a doubt of } 0.1\\ \\text{kn}','given'],['\\text{too small to matter}','small']],2,1,'After 30 h it may be 3 nmi.'],
+      ['n4',[['\\text{a doubt in the push}','an accelerometer'],['\\text{the place error grows with the time}','speed-error']],2,1,'With the square of the time: doubled-error.'],
+      ['n5',[['|u(t) - v(t)| \\le M','on [0, T]'],['|e(T)| \\le MT','the area under M']],2,0,'The error is the area under u \u2212 v, at most M over a stretch T.'],
+      ['n6',[['\\text{the left sum of the speeds}','readings each hour'],['\\text{where the boat is}','dead reckoning']],2,1,'An estimate: the speed may rise and fall between readings.']],[]); }});
+/* ----- annex 16·phys How far did it go, if you only know how fast: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'16·phys.work',step:'16·phys',mode:'work',label:'work is an area',open:()=>measured('16·phys'),make(){
+    const k=[100,200,400,500,800][rnd(5)], x1=[0.1,0.2,0.3,0.4][rnd(4)], ask=rnd(2);
+    if(ask){ const m=[0.5,1,2][rnd(3)], E=0.5*k*x1*x1, v=Math.sqrt(2*E/m); if(Math.abs(v*100-Math.round(v*100))>1e-6) return null;
+      const right=DECAX(v,2)+' m/s', wrong=UQAX(right,[DECAX(2*E/m,2)+' m/s',DECAX(k*x1/m,2)+' m/s',DECAX(Math.sqrt(E/m),3)+' m/s',DECAX(E,2)+' m/s'],3); if(wrong.length<3) return null;
+      return {index:'q:16·phys.work[v;'+k+';'+x1+';'+m+']', lines:[['k = '+k+'\\ \\text{N/m},\\ \\ x_1 = '+x1+'\\ \\text{m}','a spring, squeezed'],['m = '+m+'\\ \\text{kg}','a block, let go from rest']], ask:'How fast is the block going when the spring is back at its natural length?', right, opts:shuffle([right,...wrong]), lead:'', why:'Work-energy: the area under kx from 0 to '+x1+' is \u00bdk x\u2081\u00b2 = '+DECAX(E,3)+' J = \u00bdmv\u00b2, so v = \u221a(2 \u00b7 '+DECAX(E,3)+' \u00f7 '+m+') = '+right+'.'}; }
+    const x2=0, W=0.5*k*(x1*x1-x2*x2), right=DECAX(W,3)+' J', wrong=UQAX(right,[DECAX(k*x1*x1,3)+' J',DECAX(k*x1,3)+' J',DECAX(0.5*k*x1,3)+' J',DECAX(k*x1*x1/4,3)+' J'],3); if(wrong.length<3) return null;
+    return {index:'q:16·phys.work[W;'+k+';'+x1+']', lines:[['F(x) = -'+k+'x','a spring, x in m']], ask:'How much work does the spring do as it goes from x = '+x1+' m back to 0?', right, opts:shuffle([right,...wrong]), lead:'', why:'F changes along the way, so the work is an area: \u00bdk(x\u2081\u00b2 \u2212 x\u2082\u00b2) = \u00bd \u00b7 '+k+' \u00b7 '+x1+'\u00b2 = '+right+'. Not F \u00b7 d.'}; }},
+  {id:'16·phys.word',step:'16·phys',mode:'word',label:'impulse is an area',open:()=>measured('16·phys'),make(){
+    const F=[200,400,600,1000,1500][rnd(5)], T=[0.01,0.02,0.05,0.1][rnd(4)], m=[0.1,0.15,0.45,0.5][rnd(4)], nm={0.1:'hockey puck',0.15:'baseball',0.45:'soccer ball',0.5:'rubber ball'}[m], J=0.5*F*T, v=J/m;
+    const right=DECAX(v,2)+' m/s', wrong=UQAX(right,[DECAX(F*T/m,2)+' m/s',DECAX(J,3)+' m/s',DECAX(F/m*T/4,2)+' m/s',DECAX(F*m*T,3)+' m/s'],3); if(wrong.length<3) return null;
+    return {index:'q:16·phys.word['+F+';'+T+';'+m+']', a3:['16·phys.word',DASH,DASH], story:'A '+m+' kg '+nm+' at rest is struck. The force rises steadily from 0 to '+F+' N and falls steadily back to 0, over '+T+' s in all.', lines:[], ask:'How fast does it leave?', right, opts:shuffle([right,...wrong]), lead:'', why:'Impulse: the change in momentum is the area under F, a triangle, \u00bd \u00b7 '+F+' \u00b7 '+T+' = '+DECAX(J,3)+' kg\u00b7m/s. So v = '+DECAX(J,3)+' \u00f7 '+m+' = '+right+'.'}; }},
+  {id:'16·phys.line',step:'16·phys',mode:'proof',label:'what the areas license',open:()=>measured('16·phys'),make(){
+    return line28('16·phys.line',[
+      ['q1',[['\\text{a speed record } v(t)','given'],['\\text{distance} = \\textstyle\\int v\\,dt','area-is-a-change']],2,1,'That is displacement; distance is \u222b|v| dt.'],
+      ['q2',[['F(x) = -kx','a spring'],['W = F \\cdot d','work']],2,1,'F changes along the way; the work is an area: \u00bdk(x\u2081\u00b2 \u2212 x\u2082\u00b2).'],
+      ['q3',[['\\textstyle\\int F\\,dt','over time'],['= \\Delta(\\tfrac12 mv^2)','work-energy']],2,1,'Over time it is \u0394(mv); over distance, \u0394(\u00bdmv\u00b2).'],
+      ['q4',[['\\textstyle\\int_R^\\infty GMm/r^2\\,dr','escape'],['= \\infty','the region is endless']],2,1,'Out-to-forever with p = 2: it converges, to GMm/R.'],
+      ['q5',[['F = p\', \\text{ continuous}','given'],['p(t_2) - p(t_1) = \\textstyle\\int_{t_1}^{t_2} F\\,dt','impulse']],2,0,'Area-is-a-change, with p as the antiderivative of F.'],
+      ['q6',[['F(x(t)) = m v\'(t)','given'],['\\textstyle\\int F\\,dx = \\Delta(\\tfrac12 m v^2)','substitution']],2,0,'The slope of \u00bdmv\u00b2 along the motion is m v v\u2032 = F v.']],[]); }});
+/* ----- annex 17·bio Can a population double forever: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'17·bio.work',step:'17·bio',mode:'work',label:'the logistic curve',open:()=>measured('17·bio'),make(){
+    const K=[500,1000,2000,5000][rnd(4)], P0=K/[2,4,5,10,20][rnd(5)], r=[0.1,0.2,0.3,0.5][rnd(4)], C=(K-P0)/P0, ask=rnd(2);
+    if(ask){ const t=Math.log(C)/r; if(C<=1) return null; const right=DECAX(t,2), wrong=UQAX(right,[DECAX(C/r,2),DECAX(Math.log(C),2),DECAX(Math.log(K/2)/r,2),'0'],3); if(wrong.length<3) return null;
+      return {index:'q:17·bio.work[t;'+K+';'+P0+';'+r+']', lines:[['P\' = '+r+'P(1 - P/'+K+')','logistic'],['P_0 = '+P0,'']], ask:'At what time is the growth fastest?', right, opts:shuffle([right,...wrong]), lead:'', why:'Fastest-growth: at P = K/2 = '+(K/2)+', which happens at t = ln C / r, with C = (K \u2212 P\u2080)/P\u2080 = '+DECAX(C,3)+': ln '+DECAX(C,3)+' \u00f7 '+r+' \u2248 '+right+'. Not at the start.'}; }
+    const right=String(C), wrong=UQAX(right,[String(P0/(K-P0)),String(K/P0),String(K-P0),String((K+P0)/P0)].map(x=>String(Math.round(+x*1000)/1000)),3); if(wrong.length<3) return null;
+    return {index:'q:17·bio.work[C;'+K+';'+P0+']', lines:[['P(t) = K/(1 + Ce^{-rt})','logistic-solution'],['K = '+K+',\\ \\ P_0 = '+P0,'']], ask:'What is C?', right, opts:shuffle([right,...wrong]), lead:'', why:'At t = 0, P\u2080 = K/(1 + C), so C = (K \u2212 P\u2080)/P\u2080 = '+(K-P0)+'/'+P0+' = '+right+'.'}; }},
+  {id:'17·bio.word',step:'17·bio',mode:'word',label:'a ceiling',open:()=>measured('17·bio'),make(){
+    const K=[400,600,800,1200][rnd(4)], P0=[20,40,50,100][rnd(4)], r=[0.2,0.4,0.5][rnd(3)], t=[2,5,10][rnd(3)], C=(K-P0)/P0, P=K/(1+C*Math.exp(-r*t)); if(P0>=K/2) return null;
+    const S=['sea otters in a bay','deer on an island','trout in a lake','elk in a valley'][rnd(4)];
+    const right=String(Math.round(P)), wrong=UQAX(right,[String(Math.round(P0*Math.exp(r*t))),String(K),String(Math.round(K/2)),String(Math.round(K/(1+C*Math.exp(r*t))))],3); if(wrong.length<3) return null;
+    return {index:'q:17·bio.word['+K+';'+P0+';'+r+';'+t+']', a3:['17·bio.word',DASH,DASH], story:'A count of '+S+' starts at '+P0+'. Their growth is modelled as P\u2032 = '+r+'P(1 \u2212 P/'+K+'), with t in years.', lines:[], ask:'About how many are there after '+t+' years?', right, opts:shuffle([right,...wrong]), lead:'', why:'Logistic-solution: C = ('+K+' \u2212 '+P0+')/'+P0+' = '+DECAX(C,3)+', and P('+t+') = '+K+'/(1 + '+DECAX(C,3)+' e^(\u2212'+DECAX(r*t,2)+')) \u2248 '+right+'. Unchecked growth would give about '+Math.round(P0*Math.exp(r*t))+'.'}; }},
+  {id:'17·bio.line',step:'17·bio',mode:'proof',label:'what the logistic licenses',open:()=>measured('17·bio'),make(){
+    return line28('17·bio.line',[
+      ['l1',[['P\' = rP(1 - P/K),\\ P_0 \\text{ small}','given'],['\\text{growth is fastest at the start}','the start']],2,1,'It is fastest at P = K/2; the start is slow when P\u2080 is small.'],
+      ['l2',[['P(t) \\to K','as t grows'],['P = K \\text{ at some time}','the limit']],2,1,'Ce^(\u2212rt) > 0 for every t: K is approached, not reached.'],
+      ['l3',[['\\text{a fit to a few early years}','given'],['\\text{the curve gives } K','the fit']],2,1,'Early on the logistic and the exponential look alike; K is barely seen.'],
+      ['l4',[['P_0 \\gt K','given'],['\\text{logistic-solution fails}','P_0 < K needed']],2,1,'The same steps work with ln(P \u2212 K); P falls toward K from above.'],
+      ['l5',[['P = K/(1 + Ce^{-rt})','logistic-solution'],['P(0) = K/(1 + C)','e^0 = 1']],2,0,'So C = (K \u2212 P\u2080)/P\u2080.'],
+      ['l6',[['P\' = rP(1 - P/K)','a parabola in P'],['P\' \\text{ greatest at } P = K/2','its top']],2,0,'rP \u2212 rP\u00b2/K has slope r \u2212 2rP/K, zero at K/2.']],[]); }});
+/* ----- annex 17·comp What is the quickest way to sort a list: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'17·comp.work',step:'17·comp',mode:'work',label:'counting comparisons',open:()=>measured('17·comp'),make(){
+    const ask=rnd(4), n=[8,10,16,20,32,50,64,100][rnd(8)];
+    if(ask===0){ const right=String(n*(n-1)/2), wrong=UQAX(right,[String(n*n),String(n-1),String(n*(n-1)),String(n*(n-1)/4)],3); if(wrong.length<3) return null;
+      return {index:'q:17·comp.work[s;'+n+']', lines:[['n = '+n,'a list']], ask:'How many comparisons does selection sort make?', right, opts:shuffle([right,...wrong]), lead:'', why:'Selection-count: n(n \u2212 1)/2 = '+n+' \u00b7 '+(n-1)+'/2 = '+right+', on every list.'}; }
+    if(ask===1){ const sorted=rnd(2), right=String(sorted?n-1:n*(n-1)/2), wrong=UQAX(right,[String(sorted?n*(n-1)/2:n-1),String(n*(n-1)/4),String(n),String(n*n)],3); if(wrong.length<3) return null;
+      return {index:'q:17·comp.work[i;'+n+';'+sorted+']', lines:[['n = '+n,sorted?'a list already sorted':'a list in falling order']], ask:'How many comparisons does insertion sort make?', right, opts:shuffle([right,...wrong]), lead:'', why:'Insertion-range: '+(sorted?'n \u2212 1 on a sorted list: '+right+'.':'n(n \u2212 1)/2 on a falling list: '+right+'.')}; }
+    if(ask===2){ const m=[8,16,32,64,128,256,1024][rnd(7)], k=Math.log2(m), M=m*k-m+1, right=String(M), wrong=UQAX(right,[String(m*k),String(m*(m-1)/2),String(m*k+m-1),String(2*m)],3); if(wrong.length<3) return null;
+      return {index:'q:17·comp.work[m;'+m+']', lines:[['n = '+m+' = 2^{'+k+'}','a list']], ask:'At most how many comparisons does merge sort make?', right, opts:shuffle([right,...wrong]), lead:'', why:'Merge-count: n log\u2082 n \u2212 n + 1 = '+m+' \u00b7 '+k+' \u2212 '+m+' + 1 = '+right+'.'}; }
+    const right=String(n*(n-1)/4), wrong=UQAX(right,[String(n*(n-1)/2),String(n-1),String(n*n/4),String(n*(n-1)/8)],3); if(wrong.length<3) return null;
+    return {index:'q:17·comp.work[a;'+n+']', lines:[['n = '+n,'different items, every order alike']], ask:'What is the average number of inversions?', right, opts:shuffle([right,...wrong]), lead:'', why:'Insertion-average: n(n \u2212 1)/4 = '+right+'. Each pair is out of order in half the orders.'}; }},
+  {id:'17·comp.word',step:'17·comp',mode:'word',label:'splitting the work',open:()=>measured('17·comp'),make(){
+    const p=[0.5,0.75,0.8,0.9,0.95][rnd(5)], N=[2,4,8,16,64][rnd(5)], S=1/((1-p)+p/N), cap=1/(1-p), ask=rnd(2);
+    const right=ask?'never more than '+DECAX(cap,2)+' times as fast':DECAX(S,2)+' times as fast', wrong=UQAX(right,ask?['as fast as you like, with enough processors','never more than '+DECAX(1/p,2)+' times as fast','never more than '+DECAX(N*p,2)+' times as fast','never more than '+DECAX(cap*2,2)+' times as fast']:[N+' times as fast',DECAX(N*p,2)+' times as fast',DECAX(cap,2)+' times as fast',DECAX(1/(p+(1-p)/N),2)+' times as fast'],3); if(wrong.length<3) return null;
+    return {index:'q:17·comp.word['+p+';'+N+';'+ask+']', a3:['17·comp.word',DASH,DASH], story:'A weather model spends '+(p*100)+'% of its time on work that can be shared evenly among processors; the rest cannot be shared.', lines:[], ask:ask?'How fast can it ever run, however many processors?':'How fast does it run on '+N+' processors?', right, opts:shuffle([right,...wrong]), lead:'', why:'Speed-up-limit: S(N) = 1/((1 \u2212 p) + p/N)'+(ask?', always below 1/(1 \u2212 p) = '+DECAX(cap,2)+'.':' = 1/('+DECAX(1-p,2)+' + '+DECAX(p/N,4)+') \u2248 '+DECAX(S,2)+'. Not '+N+'.')}; }},
+  {id:'17·comp.line',step:'17·comp',mode:'proof',label:'what the counts license',open:()=>measured('17·comp'),make(){
+    return line28('17·comp.line',[
+      ['s1',[['\\text{insertion sort on a nearly sorted list}','given'],['n(n-1)/2 \\text{ comparisons}','insertion sort']],2,1,'Only on a falling list; a nearly sorted list costs nearly n \u2212 1.'],
+      ['s2',[['M(n) = n\\log_2 n - n + 1','merge-count'],['\\text{for every } n','the formula']],2,1,'Proved for powers of 2; other n split unevenly.'],
+      ['s3',[['N \\text{ processors}','given'],['N \\text{ times faster}','sharing']],2,1,'Only when p = 1; speed-up-limit caps it at 1/(1 \u2212 p).'],
+      ['s4',[['\\text{fewer comparisons}','given'],['\\text{faster on every list}','the count']],2,1,'For small n a simple method\u2019s lighter steps can win.'],
+      ['s5',[['M(1) = 0,\\ M(2n) = 2M(n) + 2n - 1','merge sort'],['M(4) = 5','M(2) = 1']],2,0,'M(2) = 0 + 1 = 1, M(4) = 2 + 3 = 5.'],
+      ['s6',[['(n-1) + (n-2) + \\cdots + 1','selection sort'],['= n(n-1)/2','the sum']],2,0,'The first n \u2212 1 numbers add to n(n \u2212 1)/2.']],[]); }});
+/* ----- annex 17·crypt How long would it take to guess a password: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'17·crypt.work',step:'17·crypt',mode:'work',label:'bits',open:()=>measured('17·crypt'),make(){
+    const A=[[10,'digits'],[26,'small letters'],[36,'small letters and digits'],[52,'letters of both cases'],[62,'letters and digits'],[95,'printable symbols']][rnd(6)], L=[4,6,8,10,12,16][rnd(6)], b=L*Math.log2(A[0]);
+    const right=DECAX(b,1)+' bits', wrong=UQAX(right,[DECAX(Math.pow(Math.log2(A[0]),2)*L/2,1)+' bits',DECAX(Math.log2(A[0])+L,1)+' bits',DECAX(A[0]*L/8,1)+' bits',DECAX(b/2,1)+' bits'],3); if(wrong.length<3) return null;
+    return {index:'q:17·crypt.work['+A[0]+';'+L+']', lines:[['A = '+A[0]+',\\ \\ L = '+L,A[1]+', chosen at random']], ask:'How many bits does the password have?', right, opts:shuffle([right,...wrong]), lead:'', why:'Bits: log\u2082(A^L) = L log\u2082 A = '+L+' \u00b7 '+DECAX(Math.log2(A[0]),3)+' \u2248 '+right+'.'}; }},
+  {id:'17·crypt.word',step:'17·crypt',mode:'word',label:'length beats symbols',open:()=>measured('17·crypt'),make(){
+    const ask=rnd(2);
+    if(ask){ const P=[[8,95,12,26],[8,95,14,26],[10,62,16,10],[6,95,10,26],[8,62,12,36]][rnd(5)], b1=P[0]*Math.log2(P[1]), b2=P[2]*Math.log2(P[3]); if(Math.abs(b1-b2)<0.5) return null;
+      const W=b2>b1?'the '+P[2]+' from '+P[3]:'the '+P[0]+' from '+P[1], O=b2>b1?'the '+P[0]+' from '+P[1]:'the '+P[2]+' from '+P[3];
+      const right=W+', by about '+DECAX(Math.abs(b1-b2),1)+' bits', wrong=[O+', by about '+DECAX(Math.abs(b1-b2),1)+' bits','they are the same strength',O+': more kinds of symbol always win'];
+      return {index:'q:17·crypt.word[c;'+P.join(',')+']', a3:['17·crypt.word',DASH,DASH], story:'Two passwords are chosen at random: '+P[0]+' symbols from '+P[1]+' kinds, or '+P[2]+' from '+P[3]+'.', lines:[], ask:'Which is harder to guess?', right, opts:shuffle([right,...wrong]), lead:'', why:'Bits: '+P[0]+' log\u2082 '+P[1]+' \u2248 '+DECAX(b1,1)+' against '+P[2]+' log\u2082 '+P[3]+' \u2248 '+DECAX(b2,1)+'. Length adds a whole symbol\u2019s bits; a bigger alphabet adds only the log of the ratio.'}; }
+    const b=[40,50,56,60,64,72][rnd(6)], g=[1e9,1e10,1e12][rnd(3)], s=Math.pow(2,b-1)/g, Y=s/3.16e7;
+    const T=v=>v<3600?DECAX(v,1)+' seconds':v<86400*2?DECAX(v/3600,1)+' hours':v<3.16e7*2?DECAX(v/86400,1)+' days':v<3.16e10?DECAX(v/3.16e7,1)+' years':'about '+Number((v/3.16e7).toPrecision(2)).toExponential(1).replace(/e\+?(\d+)/,' \u00d7 10^$1')+' years';
+    const right=T(s), wrong=UQAX(right,[T(s*2),T(s/1024),T(s*1024),T(b/g*1e9)],3); if(wrong.length<3) return null;
+    const G={1e9:'a billion',1e10:'ten billion',1e12:'a trillion'}[g];
+    return {index:'q:17·crypt.word[y;'+b+';'+g+']', a3:['17·crypt.word',DASH,DASH], story:'A guesser can try '+G+' passwords a second against a password of '+b+' random bits.', lines:[], ask:'On average, how long does it take to find it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Years technique: about 2^(b \u2212 1)/g = 2^'+(b-1)+' \u00f7 '+g.toExponential(0).replace('e+',' \u00d7 10^')+' s \u2248 '+right+'. On average half the count, not all of it.'}; }},
+  {id:'17·crypt.line',step:'17·crypt',mode:'proof',label:'what the bits license',open:()=>measured('17·crypt'),make(){
+    return line28('17·crypt.line',[
+      ['b1',[['8 \\text{ from } 95;\\ 12 \\text{ from } 26','two passwords'],['\\text{the first is stronger}','more kinds of symbol']],2,1,'52.6 bits against 56.4 bits: length wins.'],
+      ['b2',[['\\log_2 (A^L)','given'],['= (\\log_2 A)^L','log-of-a-power']],2,1,'Log-of-a-power: L log\u2082 A.'],
+      ['b3',[['\\log_2 (26 + 26)','given'],['= \\log_2 26 + \\log_2 26','logs and adding']],2,1,'Logs turn multiplying into adding, not adding: log\u2082 52 \u2248 5.70.'],
+      ['b4',[['\\text{twice the bits}','given'],['\\text{twice the time}','the count']],2,1,'The count is 2^b: twice the bits squares the count.'],
+      ['b5',[['N \\text{ passwords}','given'],['\\text{the guesser needs all } N','the worst case']],2,1,'About N/2 on average, and possibly the first.'],
+      ['b6',[['L \\to L + 1','one more symbol'],['+\\log_2 A \\text{ bits}','length-beats-symbols']],2,0,'log\u2082(A^(L+1)) \u2212 log\u2082(A^L) = log\u2082 A.']],[]); }});
+/* ----- annex 17·phys Is light a dot or a flow: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'17·phys.work',step:'17·phys',mode:'work',label:'the peak, and the fourth power',open:()=>measured('17·phys'),make(){
+    const ask=rnd(2);
+    if(ask){ const S=[['the Sun\u2019s surface',5800],['a red dwarf star',3000],['a tungsten filament',3000],['Sirius',9900],['a person\u2019s skin',305],['an electric stove ring',1000]][rnd(6)], lam=2.898e-3/S[1];
+      const F=v=>v<1e-6?DECAX(v*1e9,0)+' nm':DECAX(v*1e6,2)+' \u03bcm', right=F(lam), wrong=UQAX(right,[F(lam*10),F(lam/10),F(2.898e-3*S[1]/1e7),F(lam*2)],3); if(wrong.length<3) return null;
+      return {index:'q:17·phys.work[p;'+S[1]+']', lines:[['\\lambda_{\\max} T = 2.898 \\times 10^{-3}\\ \\text{m\u00b7K}','peak-moves'],['T = '+S[1]+'\\ \\text{K}',S[0]]], ask:'Where does its glow peak?', right, opts:shuffle([right,...wrong]), lead:'', why:'\u03bb_max = 2.898 \u00d7 10\u207b\u00b3 \u00f7 '+S[1]+' m \u2248 '+right+'.'}; }
+    const k=[2,3,1.5,0.5][rnd(4)], right='\u00d7 '+DECAX(Math.pow(k,4),4), wrong=UQAX(right,['\u00d7 '+DECAX(k,4),'\u00d7 '+DECAX(k*k,4),'\u00d7 '+DECAX(Math.pow(k,3),4),'\u00d7 '+DECAX(4*k,4)],3); if(wrong.length<3) return null;
+    return {index:'q:17·phys.work[t;'+k+']', lines:[['\\textstyle\\int_0^\\infty u\\,d\\lambda = \\text{const} \\cdot T^4','fourth-power']], ask:'The temperature is multiplied by '+k+'. By what is the total glow multiplied?', right, opts:shuffle([right,...wrong]), lead:'', why:'Fourth-power: the total goes as T\u2074, so '+k+'\u2074 = '+DECAX(Math.pow(k,4),4)+'.'}; }},
+  {id:'17·phys.word',step:'17·phys',mode:'word',label:'the photoelectric effect',open:()=>measured('17·phys'),make(){
+    const M=[['sodium',2.3],['potassium',2.3],['zinc',4.3],['copper',4.7],['caesium',2.1]][rnd(5)], L=[['red light at 700 nm',700],['green light at 530 nm',530],['violet light at 400 nm',400],['ultraviolet at 250 nm',250]][rnd(4)];
+    const E=1240/L[1], K=E-M[1], right=K>0?DECAX(K,2)+' eV':'none: no electron is freed', wrong=K>0?UQAX(right,[DECAX(E,2)+' eV',DECAX(E+M[1],2)+' eV',DECAX(M[1],2)+' eV','none: no electron is freed'],3):['some, if the light is bright enough',DECAX(E,2)+' eV',DECAX(M[1]-E,2)+' eV'];
+    if(wrong.length<3) return null;
+    return {index:'q:17·phys.word['+M[0]+';'+L[1]+']', a3:['17·phys.word',DASH,DASH], story:'Light shines on clean '+M[0]+', whose electrons need at least \u03c6 = '+M[1]+' eV to leave. The light is '+L[0]+'; a photon of wavelength \u03bb nm carries about 1240/\u03bb eV.', lines:[], ask:'What is the most energy a freed electron can have?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each photon carries hf \u2248 1240 \u00f7 '+L[1]+' \u2248 '+DECAX(E,2)+' eV. Photoelectric: K_max = hf \u2212 \u03c6 = '+DECAX(K,2)+' eV'+(K>0?'.':'; below 0, so none is freed, however bright the light: brightness counts photons.')}; }},
+  {id:'17·phys.line',step:'17·phys',mode:'proof',label:'what the lump law licenses',open:()=>measured('17·phys'),make(){
+    return line28('17·phys.line',[
+      ['h1',[['\\text{brighter red light}','given'],['\\text{faster freed electrons}','more energy']],2,1,'Brightness counts photons; each still carries hf < \u03c6.'],
+      ['h2',[['\\textstyle\\int_0^{\\lambda_1} C kT \\lambda^{-4}\\,d\\lambda','the classical count'],['\\text{diverges}','endless-glow']],2,0,'Near 0, \u03bb\u207b\u2074 has an endless area.'],
+      ['h3',[['\\text{a peak per unit frequency at } f_{\\max}','given'],['\\lambda_{\\max} = c/f_{\\max}','the peak']],2,1,'The two peaks are at different places.'],
+      ['h4',[['\\text{a greenhouse layer}','given'],['T_s = T_e + \\text{a term for each gas}','adding']],2,1,'The layer enters through T\u2074, under a fourth root: T_s = T_e (2/(2 \u2212 \u03b5))^(1/4).'],
+      ['h5',[['E \\in \\{0, hf, 2hf, \\dots\\}','lumps'],['\\text{the average is less than } kT','lumpy-average']],2,0,'hf/(e^(hf/kT) \u2212 1) < kT.'],
+      ['h6',[['T \\times 2','given'],['\\text{the total glow} \\times 16','fourth-power']],2,0,'2\u2074 = 16.']],[]); }});
+/* ----- annex 18·econ How much do buyers flinch: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'18·econ.work',step:'18·econ',mode:'work',label:'a flinch with no units',open:()=>measured('18·econ'),make(){
+    const ask=rnd(2);
+    if(ask){ const P1=[2,4,5][rnd(3)], P2=P1*[1.5,2][rnd(2)], Q1=[400,600,800,1000][rnd(4)], Q2=Math.round(Q1*[0.5,0.55,0.6,0.7,0.8,0.9][rnd(6)]), e=Math.log(Q2/Q1)/Math.log(P2/P1);
+      const right=MNAX(DECAX(e,2)), wrong=UQAX(right,[MNAX(DECAX((Q2-Q1)/(P2-P1),2)),MNAX(DECAX(((Q2-Q1)/Q1)/((P2-P1)/P1),2)),DECAX(-e,2),MNAX(DECAX(Math.log(Q2/Q1),2))],3); if(wrong.length<3) return null;
+      return {index:'q:18·econ.work[e;'+P1+';'+P2+';'+Q1+';'+Q2+']', lines:[['P = '+P1+':\\ Q = '+Q1+';\\ \\ P = '+P2+':\\ Q = '+Q2,'two weeks of sales']], ask:'Fit a constant elasticity: what is \u03b5?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Elasticity-is-a-slope: on the log\u2013log plot, \u03b5 = (ln '+Q2+' \u2212 ln '+Q1+')/(ln '+P2+' \u2212 ln '+P1+') = ln '+DECAX(Q2/Q1,4)+' \u00f7 ln '+DECAX(P2/P1,4)+' \u2248 '+DECAX(e,2)+'.')}; }
+    const A=[100,200,300][rnd(3)], b=[2,4,5,10][rnd(4)], P=Math.round(A/b*[0.2,0.25,0.5,0.6,0.75,0.8][rnd(6)]), Q=A-b*P; if(Q<=0||P<=0) return null; const e=-b*P/Q;
+    const right=MNAX(DECAX(e,3)), wrong=UQAX(right,[MNAX(DECAX(-b,3)),MNAX(DECAX(-Q/(b*P),3)),DECAX(-e,3),MNAX(DECAX(-P/Q,3))],3); if(wrong.length<3) return null;
+    return {index:'q:18·econ.work[l;'+A+';'+b+';'+P+']', lines:[['Q(P) = '+A+' - '+b+'P','a straight demand line'],['P = '+P,'']], ask:'What is the elasticity at that price?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('\u03b5 = PQ\u2032/Q = '+P+' \u00b7 (\u2212'+b+')/'+Q+' = '+DECAX(e,3)+'. Not the slope \u2212'+b+': elasticity has no units.')}; }},
+  {id:'18·econ.word',step:'18·econ',mode:'word',label:'when a rise brings in more',open:()=>measured('18·econ'),make(){
+    const G=['artichokes at a farm stand in Castroville','strawberries at a market in Watsonville','tickets to a county fair','loaves at a bakery in Salinas'][rnd(4)], e=[-0.4,-0.6,-0.8,-1,-1.3,-1.5,-2][rnd(7)];
+    const right=e>-1?'more money':e<-1?'less money':'the same money, near this price', wrong=['more money','less money','the same money, near this price','more money, since the price is higher'].filter(x=>x!==right).slice(0,3);
+    return {index:'q:18·econ.word['+e+']', a3:['18·econ.word',DASH,DASH], story:'The demand for '+G+' has elasticity '+MNAX(String(e))+' near the present price.', lines:[], ask:'Does a small price rise bring in more money or less?', right, opts:shuffle([right,...wrong]), lead:'', why:'Revenue-sign: R\u2032(P) = Q(1 + \u03b5) = Q(1 + ('+MNAX(String(e))+')) = Q \u00b7 ('+MNAX(DECAX(1+e,2))+'). '+(e>-1?'Positive: buyers flinch less than one for one.':e<-1?'Negative: buyers flinch more than one for one.':'Zero: the flinch is one for one.')}; }},
+  {id:'18·econ.line',step:'18·econ',mode:'proof',label:'what elasticity licenses',open:()=>measured('18·econ'),make(){
+    return line28('18·econ.line',[
+      ['x1',[['Q(P)','demand'],['\\varepsilon = Q\'(P)','the slope']],2,1,'\u03b5 = PQ\u2032/Q: the slope on the log\u2013log plot, with no units.'],
+      ['x2',[['\\text{a straight demand line}','given'],['\\text{one elasticity}','a line']],2,1,'It has every value from 0 to endless, by pieces-of-the-line.'],
+      ['x3',[['\\text{a price rise}','given'],['\\text{more money}','a higher price']],2,1,'Only where \u03b5 > \u22121.'],
+      ['x4',[['\\varepsilon = -1.47 \\text{ at } \\$2 \\text{ and } \\$3','a fit'],['\\varepsilon = -1.47 \\text{ at } 1\\text{\u00a2}','constant elasticity']],2,1,'A law with a range; far outside it, it fails.'],
+      ['x5',[['PQ(P) = k','constant revenue'],['\\varepsilon = -1 \\text{ at every price}','constant-revenue']],2,0,'Q = k/P, so PQ\u2032/Q = P(\u2212k/P\u00b2)/(k/P) = \u22121.'],
+      ['x6',[['R(P) = PQ(P)','revenue'],['R\'(P) = Q(P)(1 + \\varepsilon(P))','product slope']],2,0,'R\u2032 = Q + PQ\u2032 = Q(1 + PQ\u2032/Q).']],[]); }});
+/* ----- annex 18·eng Why are bridges built from triangles: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'18·eng.work',step:'18·eng',mode:'work',label:'the force in a bar',open:()=>measured('18·eng'),make(){
+    const S=[[3,4,5],[6,8,10],[5,12,13],[8,15,17],[1,1,Math.SQRT2]][rnd(5)], [run,rise,len]=S, W=[6,10,12,20,24,30][rnd(6)], ask=rnd(2);
+    if(ask){ const j=rnd(5)===0?1:0; const T=W*len/rise; const right=DECAX(T,2)+' kN', wrong=UQAX(right,[DECAX(W,2)+' kN',DECAX(W*rise/len,2)+' kN',DECAX(W*run/rise,2)+' kN',DECAX(W*len/run,2)+' kN'],3); if(wrong.length<3) return null;
+      return {index:'q:18·eng.work[t;'+S.join(',')+';'+W+']', lines:[['\\text{a slant bar: run } '+run+',\\ \\text{rise } '+rise+(len%1?'':',\\ \\text{length } '+len),'pinned at both ends'],['\\text{its part up must hold } '+W+'\\ \\text{kN}','the load at the top joint']], ask:'What force runs along the slant?', right, opts:shuffle([right,...wrong]), lead:'', why:'Bar-force: the force and its parts make a triangle similar to the bar. The part up is T \u00b7 rise/\u2113, so T = '+W+' \u00b7 '+DECAX(len,3)+'/'+rise+' = '+right+'. The load is only its part up.'}; }
+    const j=[4,5,6,7,8,10][rnd(6)], b=2*j-3, right=String(b), wrong=UQAX(right,[String(2*j),String(j+1),String(3*j-6),String(2*j-2)],3); if(wrong.length<3) return null;
+    return {index:'q:18·eng.work[b;'+j+']', lines:[['j = '+j,'joints, grown from a triangle']], ask:'How many bars does the frame have?', right, opts:shuffle([right,...wrong]), lead:'', why:'Add-a-joint: a triangle has 3 joints and 3 bars; each new joint brings 2 bars. b = 2j \u2212 3 = '+right+'.'}; }},
+  {id:'18·eng.word',step:'18·eng',mode:'word',label:'a roof frame',open:()=>measured('18·eng'),make(){
+    const S=[[3,4,5],[4,3,5],[12,5,13],[5,12,13],[8,6,10]][rnd(5)], [run,rise,len]=S, W=[2,4,6,8,10][rnd(5)]*(len/5===Math.round(len/5)?5:13)/ (len/5===Math.round(len/5)?5:13), P=W*[1,2,3][rnd(3)];
+    const T=(P/2)*len/rise, H=(P/2)*run/rise;
+    const right='each rafter pushes with '+DECAX(T,2)+' kN; the tie pulls with '+DECAX(H,2)+' kN', wrong=UQAX(right,['each rafter pushes with '+DECAX(P/2,2)+' kN; the tie pulls with '+DECAX(H,2)+' kN','each rafter pushes with '+DECAX(P*len/rise,2)+' kN; the tie pulls with '+DECAX(2*H,2)+' kN','each rafter pushes with '+DECAX(H,2)+' kN; the tie pulls with '+DECAX(T,2)+' kN'],3); if(wrong.length<3) return null;
+    return {index:'q:18·eng.word['+S.join(',')+';'+P+']', a3:['18·eng.word',DASH,DASH], story:'A small roof truss is a triangle: two rafters meet at the peak, and a tie joins their feet. Each rafter runs '+run+' m across and rises '+rise+' m. A load of '+P+' kN hangs at the peak; the walls hold the feet up.', lines:[], ask:'What are the forces in the bars?', right, opts:shuffle([right,...wrong]), lead:'', why:'Joint at the peak: each rafter\u2019s part up is half the load, '+DECAX(P/2,2)+' kN, so the rafter carries '+DECAX(P/2,2)+' \u00b7 '+len+'/'+rise+' = '+DECAX(T,2)+' kN. Joint at a foot: the rafter\u2019s part across, '+DECAX(P/2,2)+' \u00b7 '+run+'/'+rise+' = '+DECAX(H,2)+' kN, is held by the tie.'}; }},
+  {id:'18·eng.line',step:'18·eng',mode:'proof',label:'what a frame licenses',open:()=>measured('18·eng'),make(){
+    return line28('18·eng.line',[
+      ['f1',[['\\text{a four-bar frame of strong bars}','given'],['\\text{it keeps its shape}','strength']],2,1,'It racks with every bar at full length: strength is not the point.'],
+      ['f2',[['b = 2j - 3','a count'],['\\text{the frame keeps its shape}','the count']],2,1,'The count is needed, not enough: badly placed bars still move.'],
+      ['f3',[['\\text{a slant bar holds a load at its top}','given'],['\\text{the force in it is the load}','the load']],2,1,'The load is only its part up: the slant carries load \u00b7 \u2113/rise.'],
+      ['f4',[['\\text{a load across}','given'],['\\text{the pinned bar pushes across}','the load']],2,1,'A pinned bar pushes or pulls only along itself.'],
+      ['f5',[['\\text{three bar lengths, two placements}','a triangle'],['\\text{they are congruent}','rigid-triangle']],2,0,'Three-sides, carried out on bars.'],
+      ['f6',[['\\text{an extra bar}','given'],['\\text{always safer}','more bars']],2,1,'Then the joint equations no longer fix the forces; they depend on how each bar stretches.']],[]); }});
+/* ----- annex 18·nav How can a small map be true to the land: Work, Word Problems, Check Proofs ----- */
+const GRAX=v=>v>=1000?DECAX(v/1000,3)+' km':DECAX(v,1)+' m';
+QP.push({id:'18·nav.work',step:'18·nav',mode:'work',label:'map scale',open:()=>measured('18·nav'),make(){
+    const n=[10000,24000,25000,50000,62500,100000][rnd(6)], cm=[2,3,4.5,6,8,12.5][rnd(6)], ask=rnd(2);
+    if(ask){ const g=cm*n/100, right=GRAX(g), wrong=UQAX(right,[GRAX(cm*n),GRAX(g/10),GRAX(g*10),GRAX(cm*n/1000)],3); if(wrong.length<3) return null;
+      return {index:'q:18·nav.work[d;'+n+';'+cm+']', lines:[['1 : '+n.toLocaleString('en').replace(/,/g,'\\,'),'the map\u2019s scale'],[cm+'\\ \\text{cm}','between two places on the paper']], ask:'How far apart are they on the ground?', right, opts:shuffle([right,...wrong]), lead:'', why:'Map-scale: the same unit both sides, so '+cm+' cm on paper is '+cm+' \u00d7 '+n.toLocaleString('en').replace(/,/g,' ')+' cm = '+GRAX(g)+'.'}; }
+    const a=[2,4,6,9][rnd(4)], f=n/100, A=a*f*f, right=DECAX(A/10000,2)+' ha', wrong=UQAX(right,[DECAX(a*f/10000,4)+' ha',DECAX(A/1e6,4)+' ha',DECAX(A/1000,2)+' ha',DECAX(2*A/10000,2)+' ha'],3); if(wrong.length<3) return null;
+    return {index:'q:18·nav.work[a;'+n+';'+a+']', lines:[['1 : '+n.toLocaleString('en').replace(/,/g,'\\,'),'the map\u2019s scale'],[a+'\\ \\text{cm}^2','a field, on the paper']], ask:'What is its area on the ground? (1 ha = 10 000 m\u00b2)', right, opts:shuffle([right,...wrong]), lead:'', why:'Map-scale: areas scale by n\u00b2. 1 cm on paper is '+f+' m, so 1 cm\u00b2 is '+(f*f).toLocaleString('en').replace(/,/g,' ')+' m\u00b2, and '+a+' cm\u00b2 is '+A.toLocaleString('en').replace(/,/g,' ')+' m\u00b2 = '+right+'.'}; }},
+  {id:'18·nav.word',step:'18·nav',mode:'word',label:'an enlarged copy',open:()=>measured('18·nav'),make(){
+    const n=[24000,25000,50000,100000][rnd(4)], k=[1.25,1.5,2,0.5][rnd(4)], m=n/k;
+    const right='1 : '+m.toLocaleString('en').replace(/,/g,' '), wrong=UQAX(right,['1 : '+n.toLocaleString('en').replace(/,/g,' '),'1 : '+(n*k).toLocaleString('en').replace(/,/g,' '),'1 : '+(n/(k*k)).toLocaleString('en').replace(/,/g,' ')],3); if(wrong.length<3) return null;
+    return {index:'q:18·nav.word['+n+';'+k+']', a3:['18·nav.word',DASH,DASH], story:'A hiker copies a 1 : '+n.toLocaleString('en').replace(/,/g,' ')+' trail map at '+(k*100)+'% on a photocopier.', lines:[], ask:'What is the scale of the copy?', right, opts:shuffle([right,...wrong]), lead:'', why:'Every paper distance is multiplied by '+k+', so 1 unit on the copy is '+n.toLocaleString('en').replace(/,/g,' ')+' \u00f7 '+k+' = '+m.toLocaleString('en').replace(/,/g,' ')+' on the ground. The printed scale bar grew with the copy and stays right.'}; }},
+  {id:'18·nav.line',step:'18·nav',mode:'proof',label:'what a map licenses',open:()=>measured('18·nav'),make(){
+    return line28('18·nav.line',[
+      ['m1',[['1 : 24\\,000','given'],['1\\ \\text{cm for } 24\\,000\\ \\text{m}','the scale']],2,1,'The same unit both sides: 24 000 cm, which is 240 m.'],
+      ['m2',[['\\text{a copy at } 150\\%','given'],['\\text{still } 1 : 24\\,000','the scale']],2,1,'It is 1 : 16 000; the scale bar grew with it.'],
+      ['m3',[['6\\ \\text{cm}^2 \\text{ at } 1 : 24\\,000','given'],['6 \\times 240\\ \\text{m}^2','scale']],2,1,'The area scales by 240\u00b2: 6 \u00d7 57 600 m\u00b2.'],
+      ['m4',[['\\text{eastings in km, northings in miles}','given'],['\\sqrt{\\Delta e^2 + \\Delta n^2}','distance-basics']],2,1,'Distance-basics needs one unit in both directions.'],
+      ['m5',[['\\text{the line on the map}','given'],['\\text{the road is that long}','the map']],2,1,'Never shorter, and on a coast road far longer.'],
+      ['m6',[['\\text{a base line and two sighted directions}','a survey'],['\\text{the far point is fixed}','surveyor\u2019s-triangle']],2,0,'Angle, side, angle fixes a triangle.']],[]); }});
+/* ----- annex 18·phys Why do planets travel on ellipses: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'18·phys.work',step:'18·phys',mode:'work',label:'nearest and farthest',open:()=>measured('18·phys'),make(){
+    const ask=rnd(2), l=[1,1.2,1.5,2][rnd(4)], e=[0.1,0.2,0.25,0.5,0.6][rnd(5)];
+    if(ask){ const q=l/(1+e), Q=l/(1-e), right='q = '+DECAX(q,3)+',\\ Q = '+DECAX(Q,3), wrong=UQAX(right,['q = '+DECAX(l*(1-e),3)+',\\ Q = '+DECAX(l*(1+e),3),'q = '+DECAX(l-e,3)+',\\ Q = '+DECAX(l+e,3),'q = '+DECAX(Q,3)+',\\ Q = '+DECAX(q,3)],3); if(wrong.length<3) return null;
+      return {index:'q:18·phys.work[qQ;'+l+';'+e+']', lines:[['r = '+l+' - '+e+'x','the line of an orbit, AU']], ask:'What are the nearest and farthest distances from the sun?', right:'$'+right+'$', opts:shuffle([right,...wrong]).map(o=>'$'+o+'$'), lead:'', why:'Orbit-ends: q = \u2113/(1 + e) = '+l+' \u00f7 '+(1+e)+' \u2248 '+DECAX(q,3)+', and Q = \u2113/(1 \u2212 e) = '+l+' \u00f7 '+DECAX(1-e,2)+' \u2248 '+DECAX(Q,3)+' AU.'}; }
+    const q=[0.3,0.5,0.586,1,1.381][rnd(5)], Q=q*[1.5,2,3,4,10][rnd(5)], E=(Q-q)/(Q+q), right=DECAX(E,3), wrong=UQAX(right,[DECAX((Q-q)/Q,3),DECAX(q/Q,3),DECAX((Q-q)/2,3),DECAX(1-E,3)],3); if(wrong.length<3) return null;
+    return {index:'q:18·phys.work[e;'+q+';'+Q+']', lines:[['q = '+q+',\\ \\ Q = '+DECAX(Q,3),'nearest and farthest, AU']], ask:'What is the orbit\u2019s e?', right, opts:shuffle([right,...wrong]), lead:'', why:'Run backwards: e = (Q \u2212 q)/(Q + q) = '+DECAX(Q-q,3)+' \u00f7 '+DECAX(Q+q,3)+' \u2248 '+right+'.'}; }},
+  {id:'18·phys.word',step:'18·phys',mode:'word',label:'which cut of the cone',open:()=>measured('18·phys'),make(){
+    const B=[['a planet',0.093],['a comet',0.967],['a body from outside the solar system',1.2],['a probe on its way out',1],['a moon',0.05],['a returning comet',0.6]][rnd(6)], e=B[1];
+    const right=e<1?'an ellipse':e===1?'a parabola':'a hyperbola', wrong=['an ellipse','a parabola','a hyperbola','a circle'].filter(x=>x!==right).slice(0,3);
+    return {index:'q:18·phys.word['+e+']', a3:['18·phys.word',DASH,DASH], story:'The places of '+B[0]+' fit r = \u2113 \u2212 ex with e \u2248 '+e+'.', lines:[], ask:'What kind of path is it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Lift: the places lie on (1 \u2212 e\u00b2)x\u00b2 + 2e\u2113x + y\u00b2 = \u2113\u00b2: an ellipse for 0 \u2264 e < 1, a parabola for e = 1, a hyperbola for e > 1. Here e = '+e+'.'+(e<1&&e>0?' Not a circle, which needs e = 0.':'')}; }},
+  {id:'18·phys.line',step:'18·phys',mode:'proof',label:'what an orbit licenses',open:()=>measured('18·phys'),make(){
+    return line28('18·phys.line',[
+      ['o1',[['\\text{an ellipse with the sun on it}','given'],['\\text{the sun sits at the centre}','the middle']],2,1,'At a focus: r differs at x and \u2212x.'],
+      ['o2',[['r \\text{ changes}','given'],['\\text{the path is an ellipse}','not round']],2,1,'Only if r = \u2113 \u2212 ex: the raised points must lie on one plane.'],
+      ['o3',[['r = \\ell - ex','the line'],['\\text{its slope is } e','reading the line']],2,1,'The slope is \u2212e, with x pointing toward the nearest place.'],
+      ['o4',[['r = \\ell - ex','the line'],['\\alpha = \\ell','the half long axis']],2,1,'\u03b1 = \u2113/(1 \u2212 e\u00b2); \u2113 is r at x = 0, above the sun.'],
+      ['o5',[['q = \\ell/(1 + e),\\ Q = \\ell/(1 - e)','orbit-ends'],['e = (Q - q)/(Q + q)','run backwards']],2,0,'Q \u2212 q = 2\u2113e/(1 \u2212 e\u00b2) and Q + q = 2\u2113/(1 \u2212 e\u00b2).'],
+      ['o6',[['\\text{the fit says how the places lie}','given'],['\\text{it explains why}','the fit']],2,1,'It says how they lie; the cause is held in trust.']],[]); }});
+/* ----- annex 19·bio Why not just burn the sugar: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'19·bio.work',step:'19·bio',mode:'work',label:'the drop, and the coins',open:()=>measured('19·bio'),make(){
+    const ask=rnd(2);
+    if(ask){ const D=[150,180,200,220,250,300][rnd(6)], c=[19,20,25,50][rnd(4)], m=[1,2,3,4][rnd(4)], k=Math.ceil(D/(m*c)); if(k<2) return null;
+      const right=String(k), wrong=UQAX(right,[String(Math.floor(D/c)),String(k+1),String(k-1),String(Math.ceil(D/c))],3); if(wrong.length<3) return null;
+      return {index:'q:19·bio.work[w;'+D+';'+c+';'+m+']', lines:[['\\text{drop } D = '+D+' \\text{ kJ}','route-free'],['\\text{coins of } '+c+' \\text{ kJ, at most } '+m+' \\text{ a step}','given']], ask:'What is the fewest steps that could bank the whole drop?', right, opts:shuffle([right,...wrong]), lead:'', why:'Whole-coins: at least D ÷ (mc) = '+D+' ÷ '+(m*c)+' ≈ '+DECAX(D/(m*c),2)+' steps, so '+k+'.'}; }
+    const C=[['NADH',-0.32],['a flavin carrier',-0.03],['ubiquinone',0.05],['cytochrome c',0.25]], a=C[rnd(C.length)], E2=[0.82,0.82,0.55,0.39][rnd(4)]; if(E2<=a[1]+0.1) return null;
+    const v=2*96.5*(E2-a[1]), right=Math.round(v)+' kJ', wrong=UQAX(right,[Math.round(96.5*(E2-a[1]))+' kJ',Math.round(2*96.5*Math.abs(E2+a[1]))+' kJ',Math.round(v*2)+' kJ',Math.round(2*(E2-a[1])*100)/100+' kJ'],3); if(wrong.length<3) return null;
+    return {index:'q:19·bio.work[d;'+a[0]+';'+E2+']', lines:[[MNAX('E_1 \\approx '+a[1]+' \\text{ V},\\ \\ E_2 \\approx +'+E2+' \\text{ V}'),'measured'],['2 \\text{ electrons per carrier, through four carriers between}','given']], ask:'How much energy per mole does the chain release?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Route-free: only the ends count. 2 · 96.5 · ('+E2+' − ('+a[1]+')) ≈ '+Math.round(v)+' kJ per mole; the carriers between drop out of the sum.')}; }},
+  {id:'19·bio.word',step:'19·bio',mode:'word',label:'a membrane as a battery',open:()=>measured('19·bio'),make(){
+    const p=[0.5,0.75,1,1.25][rnd(4)], v=[0.1,0.12,0.15,0.18,0.2][rnd(5)], coin=5.93*p+96.5*v, F=rnd(2), n=Math.ceil(50/coin);
+    const right=F?String(n):DECAX(coin,1)+' kJ', wrong=F?UQAX(right,[String(n+1),String(n-1),String(Math.floor(50/coin)||n+2),String(Math.round(50/(96.5*v))),String(n+2),String(n*2)],3):UQAX(right,[DECAX(96.5*v,1)+' kJ',DECAX(5.93*p,1)+' kJ',DECAX(2.58*p+96.5*v,1)+' kJ',DECAX(5.93*p*96.5*v,1)+' kJ'],3);
+    if(wrong.length<3) return null;
+    return {index:'q:19·bio.word['+p+';'+v+';'+F+']', a3:['19·bio.word',DASH,DASH], story:'In a cell at 310 K, a membrane holds protons '+p+' pH units more crowded on one side, with '+v+' V across it, the crowded side the higher. RT ln 10 ≈ 5.93 kJ, and F ≈ 96.5 kJ per mole per volt.', lines:[], ask:F?'An ATP coin is worth about 50 kJ per mole. How many protons, at the fewest, must cross back to make one?':'What is a mole of protons crossing back worth?', right, opts:shuffle([right,...wrong]), lead:'', why:'Ratio-coin: 5.93 · '+p+' + 96.5 · '+v+' ≈ '+DECAX(coin,1)+' kJ per mole of protons.'+(F?' Whole coins: 50 ÷ '+DECAX(coin,1)+' ≈ '+DECAX(50/coin,2)+', so at least '+n+'.':'')}; }},
+  {id:'19·bio.line',step:'19·bio',mode:'proof',label:'what the chain licenses',open:()=>measured('19·bio'),make(){
+    return line28('19·bio.line',[
+      ['b1',[['\\text{a chain with more carriers}','given'],['\\text{more energy released}','more steps']],2,1,'Route-free: the sum collapses to the ends.'],
+      ['b2',[['\\text{sugar burned in a fire}','given'],['\\text{the energy banked faster}','a fast release']],2,1,'It is released faster; with nothing coupled, a fire banks none.'],
+      ['b3',[['\\text{glucose releases } 2870 \\text{ kJ}','measured'],['57 \\text{ ATP per glucose}','2870 ÷ 50']],2,1,'Whole-coins bounds what is banked; it does not promise it.'],
+      ['b4',[['(E_1 - E_0) + (E_2 - E_1) + (E_3 - E_2)','three steps'],['E_3 - E_0','the sum collapses']],2,0,'Route-free: each middle carrier comes in once with each sign.'],
+      ['b5',[['\\text{crowding protons from } C_1 \\text{ to } C_2','a membrane'],['RT\\,(C_2 - C_1)','the work']],2,1,'The work is an area under 1/V: a log, not a difference.'],
+      ['b6',[['\\text{a proton coin} \\approx 19 \\text{ kJ}','ratio-coin'],['\\text{one ATP coin needs at least } 3','whole-coins']],2,0,'2 · 19 = 38 falls short of 50; 3 · 19 = 57 does not.']],[]); }});
+/* ----- annex 19·chem Which moves leave a molecule unchanged: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'19·chem.work',step:'19·chem',mode:'work',label:'class times keepers',open:()=>measured('19·chem'),make(){
+    const G=[8,12,24,48][rnd(4)], ds=[1,2,3,4,6,8,12,24].filter(d=>G%d===0&&d<G), K=ds[rnd(ds.length)], C=G/K, ask=rnd(2);
+    if(ask){ const right=String(K), wrong=UQAX(right,[String(G-C),String(C),String(G*C),String(K*2),String(Math.max(1,K-1))],3); if(wrong.length<3) return null;
+      return {index:'q:19·chem.work[k;'+G+';'+C+']', lines:[['|G| = '+G,'the moves of the molecule'],['\\text{the class of } x \\text{ has } '+C+' \\text{ placements}','counted']], ask:'How many moves keep x?', right, opts:shuffle([right,...wrong]), lead:'', why:'Class-times-keepers: '+C+' · |K| = '+G+', so |K| = '+G+' ÷ '+C+' = '+K+'.'}; }
+    const right=String(C), wrong=UQAX(right,[String(K),String(G-K),String(G*K),String(C+1),String(C*2)],3); if(wrong.length<3) return null;
+    return {index:'q:19·chem.work[c;'+G+';'+K+']', lines:[['|G| = '+G,'the moves of the molecule'],['|K| = '+K,'the moves that keep x']], ask:'How many placements are in the class of x, the compound it draws?', right, opts:shuffle([right,...wrong]), lead:'', why:'Class-times-keepers: the class size times '+K+' is '+G+', so the class has '+G+' ÷ '+K+' = '+C+' placements.'}; }},
+  {id:'19·chem.word',step:'19·chem',mode:'word',label:'square or tetrahedron',open:()=>measured('19·chem'),make(){
+    const F=rnd(4), S=[
+      ['If the hydrogens sat at the corners of a flat square, how many compounds with two chlorines would there be?','2','Sides and diagonals: no move of the square turns a side into a diagonal. Check: 4 · 2 = 8 and 2 · 4 = 8.'],
+      ['If the hydrogens sat at the corners of a tetrahedron, how many compounds with two chlorines would there be?','1','Every two corners of a tetrahedron are joined, and a turn carries any edge to any other: all 6 pairs in one class. Check: 6 · 2 = 12.'],
+      ['If the hydrogens sat at the corners of a flat square, how many compounds with one chlorine would there be?','1','A quarter turn carries any corner to any other: all 4 in one class. Check: 4 · 2 = 8. This count cannot tell the square from the tetrahedron.'],
+      ['Chemists have only ever found one compound with two chlorines. Which guess does that kill?','the square','The square allows 2 such compounds, sides and diagonals; the tetrahedron allows 1. A count that disagrees with the shelf kills the guess.']][F];
+    const pool=F===3?['the square','the tetrahedron','both guesses','neither guess']:['1','2','3','4','6'];
+    const right=S[1], wrong=UQAX(right,pool,3);
+    return {index:'q:19·chem.word['+F+']', a3:['19·chem.word',DASH,DASH], story:'Methane is a carbon with four hydrogens round it. Nobody can see where the hydrogens sit. Swap some of them for chlorine, and count the different compounds that come out.', lines:[], ask:S[0], right, opts:shuffle([right,...wrong]), lead:'', why:S[2]}; }},
+  {id:'19·chem.line',step:'19·chem',mode:'proof',label:'what the moves license',open:()=>measured('19·chem'),make(){
+    return line28('19·chem.line',[
+      ['c1',[['\\text{two placements have the same atoms}','given'],['\\text{they are the same compound}','same formula']],2,1,'Where the atoms sit matters: benzene has three compounds with the same formula.'],
+      ['c2',[['15 \\text{ placements},\\ 12 \\text{ moves}','counted'],['\\tfrac{15}{12} \\text{ compounds}','placements over moves']],2,1,'Only when doing nothing is each placement’s only keeper; 15/12 is no count.'],
+      ['c3',[['|G| = 12,\\ |K| = 2','benzene, one chlorine'],['\\text{class size } 6','class-times-keepers']],2,0,'6 · 2 = 12.'],
+      ['c4',[['\\text{the count agrees with the shelf}','observed'],['\\text{the tetrahedron is proved}','the test']],2,1,'Agreement only lets a guess live; another count may still kill it.'],
+      ['c5',[['g\\,x = y','a move'],['\\{h : h\\,x = y\\} = gK','shifted copy']],2,0,'h x = y exactly when g⁻¹h keeps x.'],
+      ['c6',[['\\text{two turns of CO}_2 \\text{ about its axis}','different angles'],['\\text{two moves}','different turns']],2,1,'They make the same shuffle of the atoms, and count once.'],
+      ['c7',[['x \\text{ carried to } y,\\ y \\text{ carried to } z','moves'],['x \\text{ carried to } z','two moves in a row are a move']],2,0,'Carried-is-sorting: the group’s demands make it an equivalence.']],[]); }});
+/* ----- annex 19·comp How many ways can a puzzle cube be scrambled: Work, Word Problems, Check Proofs ----- */
+const LCMAX=a=>a.reduce((x,y)=>{ const g=(p,q)=>q?g(q,p%q):p; return x*y/g(x,y); },1);
+QP.push({id:'19·comp.work',step:'19·comp',mode:'work',label:'socks and shoes, and orders',open:()=>measured('19·comp'),make(){
+    const ask=rnd(2);
+    if(ask){ const ls=[[15,7,7,3],[4,4,3],[5,3,3],[6,4],[2,3,5],[9,6],[10,4,4],[8,6,3],[12,8],[7,4,2]][rnd(10)];
+      const v=LCMAX(ls), right=String(v), wrong=UQAX(right,[String(ls.reduce((a,b)=>a*b,1)),String(ls.reduce((a,b)=>a+b,0)),String(Math.max(...ls)),String(v*2)],3); if(wrong.length<3) return null;
+      return {index:'q:19·comp.work[o;'+ls.join(',')+']', lines:[['\\text{a string of twists moves its stickers in loops of } '+ls.join(',\\ '),'followed by hand']], ask:'How many times must the string be done to bring the cube back to the start?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each loop comes back after a number of rounds its length divides. The order is the least number that '+ls.join(', ')+' all divide: '+right+'.'}; }
+    const F='RULFDB'; const n=2+rnd(3); const s=[]; for(let i=0;i<n;i++){ let f; do{ f=F[rnd(6)]; }while(s.length&&s[s.length-1][0]===f); s.push(f+(rnd(2)?'′':'')); }
+    const inv=t=>t.length>1?t[0]:t+'′', show=a=>a.join(' ');
+    const right=show(s.slice().reverse().map(inv)), wrong=UQAX(right,[show(s.map(inv)),show(s.slice().reverse()),show(s),show([inv(s[0]),...s.slice(1)])],3); if(wrong.length<3) return null;
+    return {index:'q:19·comp.work[u;'+show(s)+']', lines:[['\\text{the string } '+show(s).replace(/′/g,"'"),'done in order']], ask:'Which string undoes it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Socks and shoes: the last twist done is the first undone, each turned the other way. So '+right+'.'}; }},
+  {id:'19·comp.word',step:'19·comp',mode:'word',label:'pulled apart and put back',open:()=>measured('19·comp'),make(){
+    const K=rnd(4), A=['yes: all three things no twist changes are as they should be','no: the corners’ twists do not add to whole turns','no: an odd number of edges sit the wrong way round','no: one of the corner and edge shuffles is even and the other odd'];
+    const c=[['every corner and edge in its place, every piece the right way','',0],['two corners swapped, and two edges swapped','',0],['every piece in place, one corner turned a third of a turn clockwise','',1],['every piece in place, one corner turned clockwise and another anticlockwise','',0],['every piece in place, one edge the wrong way round','',2],['every piece in place, two edges the wrong way round','',0],['two corners swapped, every edge in place, every piece the right way','',3],['two edges swapped, every corner in place, every piece the right way','',3],['every piece in place, two corners each turned a third clockwise','',1],['every piece in place, three edges the wrong way round','',2]].filter(x=>K===0?x[2]===0:x[2]===K||rnd(3)===0);
+    const pick=c[rnd(c.length)], right=A[pick[2]], wrong=A.filter(x=>x!==right);
+    return {index:'q:19·comp.word['+pick[0].length+';'+pick[2]+']', a3:['19·comp.word',DASH,DASH], story:'A solver pulls a puzzle cube apart and puts it back with '+pick[0]+'.', lines:[], ask:'Can the cube now be twisted back to solved?', right, opts:shuffle([right,...wrong]), lead:'', why:['The twist total is a whole number of turns, an even number of edges sit wrong, and the two shuffles have the same parity: the reach count says such a way can be twisted to solved.','Twist total: twisting keeps the corners’ twists adding to whole turns, and this way has a total that is not whole.','Twisting changes the number of wrong-way edges by 0 or 4, so it stays even; this way has it odd.','Every quarter turn is a loop of four corners and a loop of four edges: both shuffles change parity together. One swap alone breaks that.'][pick[2]]}; }},
+  {id:'19·comp.line',step:'19·comp',mode:'proof',label:'what the twists license',open:()=>measured('19·comp'),make(){
+    return line28('19·comp.line',[
+      ['q1',[['\\text{the string } R\\ U','done'],['\\text{its undo is } R\'\\ U\'','undo each twist']],2,1,'Socks and shoes: U′ first, then R′.'],
+      ['q2',[['\\text{a way of putting the cube back}','any'],['\\text{it can be twisted to solved}','twists reach all']],2,1,'One in twelve: three things no twist changes.'],
+      ['q3',[['\\text{one corner turned a third, all else solved}','given'],['\\text{one twist away}','a small change']],2,1,'Its twist total would be a third: never reached.'],
+      ['q4',[['R\\ U\\ R\'\\ U\'','do, do, undo, undo'],['\\text{at most three pieces move}','small-change']],2,1,'R and U share three pieces, not one: it moves seven.'],
+      ['q5',[['R \\text{ has order } 4,\\ U \\text{ has order } 4','order'],['R\\ U \\text{ has order } 16','orders multiply']],2,1,'105, not 16: R and U do not turn about.'],
+      ['q6',[['R^4 = e','order 4'],['R\' = R^3','one-answer']],2,0,'R³R = R⁴ = e, and an undo is unique.'],
+      ['q7',[['8! \\cdot 3^8 \\cdot 12! \\cdot 2^{12} \\text{ ways to put back}','take-apart'],['\\text{at most one in } 12 \\text{ reached}','reach count']],2,0,'3 twist totals, 2 parities, 2 counts of wrong-way edges: 12 copies of G.']],[]); }});
+/* ----- annex 19·crypt Can a letter ever stand for itself: Work, Word Problems, Check Proofs ----- */
+const SPAX=v=>v<10000?String(v):v.toLocaleString('en').replace(/,/g,' ');
+QP.push({id:'19·crypt.work',step:'19·crypt',mode:'work',label:'counting the settings',open:()=>measured('19·crypt'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const n=3+rnd(6), v=n*(n-1)*(n-2), right=SPAX(v), wrong=UQAX(right,[SPAX(n*(n-1)*(n-2)/6),SPAX(n*n*n),SPAX(3*n),SPAX((n+1)*n*(n-1))],3); if(wrong.length<3) return null;
+      return {index:'q:19·crypt.work[w;'+n+']', lines:[['\\text{three wheels from a box of } '+n+',\\ \\text{in order}','the keeper’s choice']], ask:'How many wheel orders are there?', right, opts:shuffle([right,...wrong]), lead:'', why:'Count by stages: '+n+' for the first wheel, '+(n-1)+' for the second, '+(n-2)+' for the third: '+n+' · '+(n-1)+' · '+(n-2)+' = '+right+'.'}; }
+    if(ask===1){ const k=2+rnd(3), v=Math.pow(26,k), right=SPAX(v), wrong=UQAX(right,[SPAX(26*k),SPAX(Math.pow(k,26)>1e9?Math.pow(26,k-1):Math.pow(k,26)),SPAX(Math.pow(26,k+1)),SPAX(Math.pow(26,k-1))],3); if(wrong.length<3) return null;
+      return {index:'q:19·crypt.work[t;'+k+']', lines:[[k+' \\text{ wheels, each set to one of } 26 \\text{ turns}','the starting turns']], ask:'How many starting turns are there in all?', right, opts:shuffle([right,...wrong]), lead:'', why:'Stages multiply: 26 for each of '+k+' wheels, 26^'+k+' = '+right+'.'}; }
+    const p=1+rnd(3); let num=1; for(let i=0;i<2*p;i++) num*=26-i; let den=Math.pow(2,p); for(let i=2;i<=p;i++) den*=i; const v=num/den;
+    const right=SPAX(v), wrong=UQAX(right,[SPAX(num/Math.pow(2,p)),SPAX(num),SPAX(num/den*Math.pow(2,p)/ (p>1?1:2)),SPAX(v*2),SPAX(Math.round(v/2))],3); if(wrong.length<3) return null;
+    return {index:'q:19·crypt.work[b;'+p+']', lines:[[p+' \\text{ pair'+(p>1?'s':'')+' of letters swapped on the board}','the board']], ask:'How many ways are there to choose the pairs?', right, opts:shuffle([right,...wrong]), lead:'', why:'Choose the '+(2*p)+' letters in order: '+SPAX(num)+'. Forget the order within each pair (2^'+p+')'+(p>1?' and the order of the pairs ('+p+'!)':'')+': '+right+'.'}; }},
+  {id:'19·crypt.word',step:'19·crypt',mode:'word',label:'a letter never itself',open:()=>measured('19·crypt'),make(){
+    const A='ABCDEFGHIJKLMNOPQRSTUVWXYZ', crib=['WEATHER','REPORT','GENERAL','NOTHING','ATTACK'][rnd(5)], L=crib.length;
+    let ct='', bad=[]; for(let t=0;t<60;t++){ ct=''; for(let i=0;i<L+3;i++) ct+=A[rnd(26)]; bad=[0,1,2,3].filter(o=>[...crib].some((c,i)=>ct[o+i]===c)); if(bad.length===1) break; }
+    if(bad.length!==1) return null; const o=bad[0], j=[...crib].findIndex((c,i)=>ct[o+i]===c);
+    const lab=x=>'starting at letter '+(x+1)+' of the intercept', right=lab(o), wrong=[0,1,2,3].filter(x=>x!==o).map(lab);
+    return {index:'q:19·crypt.word['+crib+';'+ct+']', a3:['19·crypt.word',DASH,DASH], story:'A listener has the intercept '+ct+' and guesses that the word '+crib+' lies in it, letter under letter, somewhere in its first four starting places.', lines:[], ask:'Which starting place can be ruled out without trying a single setting?', right, opts:shuffle([right,...wrong]), lead:'', why:'No-self: the machine never sends a letter to itself. Started at letter '+(o+1)+', the '+crib[j]+' of '+crib+' would sit under the letter '+crib[j]+' in the intercept.'}; }},
+  {id:'19·crypt.line',step:'19·crypt',mode:'proof',label:'what the wheels license',open:()=>measured('19·crypt'),make(){
+    return line28('19·crypt.line',[
+      ['k1',[['\\text{in through the wheels: } S','the way in'],['\\text{back through the wheels: } S','the same wheels']],2,1,'It is S⁻¹: each wheel backwards, in the other order.'],
+      ['k2',[['E = S^{-1} R\\, S','through and back'],['E^{-1} = S\\, R^{-1} S^{-1}','undo each part']],2,1,'Socks and shoes gives S⁻¹R⁻¹S, which is E.'],
+      ['k3',[['R = R^{-1}','the reflector pairs letters'],['E^{-1} = E','self-undo']],2,0,'E⁻¹ = S⁻¹R⁻¹S = S⁻¹RS = E.'],
+      ['k4',[['\\text{ten pairs on the board}','given'],['\\tbinom{26}{20} \\text{ ways}','choose the letters']],2,1,'That chooses the letters; the pairing still has to be counted.'],
+      ['k5',[['1.6 \\times 10^{20} \\text{ settings}','counted'],['\\text{no way in}','too many to try']],2,1,'Settings can be ruled out without being tried.'],
+      ['k6',[['R \\text{ sends no letter to itself}','the reflector'],['E \\text{ sends no letter to itself}','no-self']],2,0,'If E x = x, then R(Sx) = Sx: R would keep a letter.']],[]); }});
+/* ----- annex 19·eng What limits an engine's work per turn: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'19·eng.work',step:'19·eng',mode:'work',label:'the squeeze-ratio cap',open:()=>measured('19·eng'),make(){
+    const r=[6,7,8,9,10,11,12,14][rnd(8)], e=1-Math.pow(r,-0.4), right=Math.round(100*e)+'%';
+    const wrong=UQAX(right,[Math.round(100*(1-1/r))+'%',Math.round(100*Math.pow(r,-0.4))+'%',Math.round(100*(1-Math.pow(r,-1.4)))+'%',Math.round(100*(1-Math.pow(r,-0.4))*0.5)+'%'],3); if(wrong.length<3) return null;
+    return {index:'q:19·eng.work[e;'+r+']', lines:[['r = '+r,'the squeeze ratio'],['\\text{four strokes, squeezed too fast to cool}','given']], ask:'What share of the fuel’s heat can the strokes turn into work, at most?', right, opts:shuffle([right,...wrong]), lead:'', why:'Squeeze-ratio: η = 1 − r^(−0.4) = 1 − '+r+'^(−0.4) ≈ 1 − '+DECAX(Math.pow(r,-0.4),3)+' ≈ '+right+', whatever the fuel.'}; }},
+  {id:'19·eng.word',step:'19·eng',mode:'word',label:'squeezed too fast to cool',open:()=>measured('19·eng'),make(){
+    const r=[6,8,9,10,12][rnd(5)], T=[280,290,300,310][rnd(4)], P=rnd(2), t=T*Math.pow(r,0.4), q=Math.pow(r,1.4);
+    const right=P?'about '+DECAX(q,1)+' times':'about '+Math.round(t)+' K', wrong=P?UQAX(right,['about '+r+' times','about '+DECAX(Math.pow(r,0.4),1)+' times','about '+DECAX(r*r,1)+' times'],3):UQAX(right,['about '+(T*r)+' K','about '+Math.round(T*q)+' K','about '+(T+r)+' K'],3);
+    if(wrong.length<3) return null;
+    return {index:'q:19·eng.word['+r+';'+T+';'+P+']', a3:['19·eng.word',DASH,DASH], story:'A tractor engine in a barn near Fresno squeezes its air into a space '+r+' times smaller, so fast that no heat gets out. The air goes in at '+T+' K.', lines:[], ask:P?'How many times the starting pressure is the squeezed air?':'How hot is the air at the end of the squeeze?', right, opts:shuffle([right,...wrong]), lead:'', why:P?'Fast-squeeze: the pressure ends r^1.4 = '+r+'^1.4 ≈ '+DECAX(q,1)+' times. Not r: the air also heats up.':'Fast-squeeze: the temperature ends r^0.4 times higher, '+T+' · '+r+'^0.4 ≈ '+T+' · '+DECAX(Math.pow(r,0.4),3)+' ≈ '+Math.round(t)+' K.'}; }},
+  {id:'19·eng.line',step:'19·eng',mode:'proof',label:'what the loop licenses',open:()=>measured('19·eng'),make(){
+    return line28('19·eng.line',[
+      ['e1',[['P \\text{ changes as } V \\text{ changes}','a stroke'],['W = P \\cdot V','work']],2,1,'Work is the area under P as V changes; a product only when P is fixed.'],
+      ['e2',[['\\text{air squeezed } r \\text{ times, no heat lost}','given'],['T_2/T_1 = r','the squeeze']],2,1,'That would need the pressure fixed; the fast squeeze gives r^0.4.'],
+      ['e3',[['\\text{a hotter fuel}','given'],['\\text{a higher cap on } \\eta','hotter is better']],2,1,'The temperatures cancel: only r is left.'],
+      ['e4',[['r \\text{ as big as you like}','given'],['\\eta = 1','squeeze-ratio']],2,1,'r^(−0.4) is never 0.'],
+      ['e5',[['\\text{one full turn of the engine}','a loop'],['W = \\text{the area inside the loop}','cycle-area']],2,0,'Out along the high curve, back along the low one: the difference of the areas.'],
+      ['e6',[['r = 10','given'],['\\eta \\le 1 - 10^{-0.4} \\approx 0.6','squeeze-ratio']],2,0,'10^(−0.4) ≈ 0.398.']],[]); }});
+/* ----- annex 20·chem Which molecules have a left and right hand: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'20·chem.work',step:'20·chem',mode:'work',label:'handed carbons, counted',open:()=>measured('20·chem'),make(){
+    const ask=rnd(2);
+    if(ask){ const N=['F','Cl','Br','I'], ord=[[0,1,2],[1,0,2],[1,2,0],[2,1,0],[0,2,1],[2,0,1]][rnd(6)], sw=[[0,1,2],[1,2,0],[2,0,1]].some(p=>p.join()===ord.join()), sgn=sw?'':'−';
+      const right=sgn+'6√3', wrong=UQAX(right,[sw?'−6√3':'6√3','0','6','−6'],3);
+      return {index:'q:20·chem.work[d;'+ord.join('')+']', lines:[['D(\\text{F},\\ \\text{Cl},\\ \\text{Br}) = 6\\sqrt3','seen from H']], ask:'What is D('+ord.map(k=>N[k]).join(', ')+') for the same molecule?', right:right, opts:shuffle([right,...wrong]), lead:'', why:'Seen-from: swapping two names changes the sign of D. '+N[ord[0]]+', '+N[ord[1]]+', '+N[ord[2]]+' is '+(sw?'an even number of swaps from F, Cl, Br, so D is unchanged.':'one swap from F, Cl, Br, so D changes sign.')}; }
+    const G=['H','CH₃','OH','Cl','F','Br','NH₂','COOH'], k=3+rnd(3), C=[]; let h=0;
+    for(let i=0;i<k;i++){ const s=[]; for(let j=0;j<4;j++) s.push(G[rnd(rnd(2)?3:8)]); C.push(s); if(new Set(s).size===4) h++; }
+    const right=String(h), wrong=UQAX(right,['0','1','2','3','4','5'].filter(x=>+x<=k),3); if(wrong.length<3) return null;
+    return {index:'q:20·chem.work[h;'+C.map(s=>s.join('')).join('|')+']', lines:C.map((s,i)=>['\\text{carbon '+(i+1)+': } '+s.join(',\\ ').replace(/([₂₃])/g,m=>'_'+(m==='₂'?2:3)),'its four neighbours']), ask:'How many of these carbons are handed?', right, opts:shuffle([right,...wrong]), lead:'', why:'Handed-carbon: a carbon is handed exactly when its four neighbours all differ. '+(h?h+' of the '+k+(h===1?' has':' have')+' four different neighbours.':'Each has two neighbours alike, so the mirror swap makes it its own image.')}; }},
+  {id:'20·chem.word',step:'20·chem',mode:'word',label:'one hand, or both',open:()=>measured('20·chem'),make(){
+    const M=[['CHBrClF','H, Br, Cl and F',1],['CH₂BrCl','H, H, Br and Cl',0],['CHCl₂F','H, Cl, Cl and F',0],['lactic acid','H, OH, CH₃ and COOH',1],['alanine','H, NH₂, CH₃ and COOH',1],['glycine','H, H, NH₂ and COOH',0],['ethanol','H, H, CH₃ and OH',0]][rnd(7)];
+    const Y='yes: its four neighbours all differ, so no turn carries it onto its mirror image', Nn='no: two neighbours are alike, so the mirror image is the molecule itself';
+    const right=M[2]?Y:Nn, wrong=[M[2]?Nn:Y,'yes: every molecule has a mirror twin that no turn reaches','no: turned upside down, any molecule is its own mirror image'];
+    return {index:'q:20·chem.word['+M[0]+']', a3:['20·chem.word',DASH,DASH], story:'In '+M[0]+', one carbon holds '+M[1]+'. A drug maker asks whether it comes in a left hand and a right hand that a pocket in the body could tell apart.', lines:[], ask:'Does that carbon make the molecule handed?', right, opts:shuffle([right,...wrong]), lead:'', why:M[2]?'Handed-carbon: four different neighbours, and the seen-from reading D changes sign in the mirror, which no turn can do.':'Mirror-swap: put the two alike neighbours in the swapped places, and the mirror image is the molecule itself.'}; }},
+  {id:'20·chem.line',step:'20·chem',mode:'proof',label:'what the mirror licenses',open:()=>measured('20·chem'),make(){
+    return line28('20·chem.line',[
+      ['h1',[['\\text{same atoms, same distances}','measured'],['\\text{the same molecule}','nothing differs']],2,1,'Every distance agrees; the way round, seen from a neighbour, does not.'],
+      ['h2',[['\\text{a handed carbon turned upside down}','a turn'],['\\text{its own mirror image}','turning over']],2,1,'Turning over is a turn in space; read again from the same neighbour.'],
+      ['h3',[['D(\\text{F, Cl, Br}) = 6\\sqrt3','seen from H'],['D(\\text{Cl, F, Br}) = 6\\sqrt3','the same molecule']],2,1,'Swapping two names changes the sign of D: −6√3.'],
+      ['h4',[['\\text{a pocket with two sites}','given'],['\\text{it tells the hands apart}','sites fit']],2,1,'Two points are matched either way round; it takes three.'],
+      ['h5',[['\\text{a carbon with two H neighbours}','given'],['\\text{its mirror image is itself}','mirror-swap']],2,0,'Put the two H in the swapped places.'],
+      ['h6',[['D \\text{ before},\\ -D \\text{ after}','the mirror'],['\\text{no turn carries one onto the other}','seen-from']],2,0,'A turn keeps D; the mirror reverses it.']],[]); }});
+/* ----- annex 20·crypt How a guessed word breaks a cipher: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'20·crypt.work',step:'20·crypt',mode:'work',label:'the work, counted',open:()=>measured('20·crypt'),make(){
+    const ask=rnd(2), n=3+rnd(6), o=n*(n-1)*(n-2);
+    if(ask){ const v=o*17576, right=SPAX(v), wrong=UQAX(right,[SPAX(o*26),SPAX(v*26),SPAX(o+17576),SPAX(n*17576)],3); if(wrong.length<3) return null;
+      return {index:'q:20·crypt.work[s;'+n+']', lines:[['\\text{three wheels from a box of } '+n+',\\ \\text{in order}','wheel orders'],['26^3 = 17\\,576','starting turns'],['\\text{round a loop}','the board cancels']], ask:'How many wheel settings are left to try?', right, opts:shuffle([right,...wrong]), lead:'', why:'Loop: the board is gone. '+n+' · '+(n-1)+' · '+(n-2)+' = '+o+' orders, times 17 576 turns: '+right+'.'}; }
+    const t=[10,15,20,30][rnd(4)], M=[2,3,4,5,6,10,12][rnd(7)], h=o*t/M; if(h!==Math.round(h)) return null;
+    const right=SPAX(h)+' minutes', wrong=UQAX(right,[SPAX(o*t)+' minutes',SPAX(Math.round(o/M))+' minutes',SPAX(t*M)+' minutes',SPAX(h*2)+' minutes'],3); if(wrong.length<3) return null;
+    return {index:'q:20·crypt.work[t;'+n+';'+t+';'+M+']', lines:[['\\text{three wheels from a box of } '+n+',\\ \\text{in order}','wheel orders'],['\\text{one machine runs one order in } '+t+' \\text{ minutes}','given'],[M+' \\text{ machines}','given']], ask:'How long do the machines take to run every order?', right, opts:shuffle([right,...wrong]), lead:'', why:o+' orders · '+t+' minutes ÷ '+M+' machines = '+right+'.'}; }},
+  {id:'20·crypt.word',step:'20·crypt',mode:'word',label:'every wrong setting refutes itself',open:()=>measured('20·crypt'),make(){
+    const A='ABCDEFGHIJKLMNOPQRSTUVWXYZ', L=A[rnd(26)], X=A[rnd(26)], Y=A[rnd(26)], i=1+rnd(8), j=i+1+rnd(8), F=rnd(3); if(X===Y) return null;
+    const S=[['Under one guess for P('+L+'), letter '+i+' of the crib forces '+L+' to be plugged to '+X+', and letter '+j+' forces it to be plugged to '+Y+'. What follows?','that guess is refuted, and only that guess'],
+      ['Under one wheel setting, all 26 guesses for P('+L+') force some letter to be plugged to two different letters. What follows?','the wheel setting is refuted'],
+      ['Under one wheel setting, 25 guesses for P('+L+') clash and one does not. What follows?','the setting survives, and still has to be checked']][F];
+    const right=S[1], wrong=UQAX(right,['that guess is refuted, and only that guess','the wheel setting is refuted','the setting survives, and still has to be checked','the setting is the key'],3);
+    return {index:'q:20·crypt.word['+F+';'+L+X+Y+']', a3:['20·crypt.word',DASH,DASH], story:'At a hut in the countryside, a team tests wheel settings against a guessed word, a crib, round a loop. For each setting they guess which letter the board plugs '+L+' to, and follow the loop.', lines:[], ask:S[0], right, opts:shuffle([right,...wrong]), lead:'', why:['Clash: a letter plugged to two letters is no board. One guess falls; the setting stands until all 26 do.','Clash: if all 26 guesses are refuted, there is no board that fits, and the setting is refuted.','A survivor is not a proof: it may survive by luck. It is checked by hand, or on more of the message.'][F]}; }},
+  {id:'20·crypt.line',step:'20·crypt',mode:'proof',label:'what the crib licenses',open:()=>measured('20·crypt'),make(){
+    return line28('20·crypt.line',[
+      ['r1',[['\\text{a setting with no clash}','tested'],['\\text{this is the key}','no clash']],2,1,'A survivor is not a proof; it may survive by luck.'],
+      ['r2',[['\\text{a crib, any crib}','given'],['\\text{the board cancels}','loop']],2,1,'Only round a loop, where P P meets P P.'],
+      ['r3',[['\\text{one guess for } P(A) \\text{ refuted}','a clash'],['\\text{the setting is refuted}','clash']],2,1,'All 26 guesses must fall.'],
+      ['r4',[['\\text{one crib letter under the same letter}','a place'],['\\text{the crib can sit there}','crib-place']],2,1,'No-self rules that place out.'],
+      ['r5',[['A \\to E \\to T \\to A','a loop in the crib'],['\\text{the wheels alone keep } P(A)','loop']],2,0,'Round the loop each P meets P again: P P does nothing.'],
+      ['r6',[['60 \\cdot 26^3 = 1\\,054\\,560','wheel orders and turns'],['1\\,054\\,560 \\cdot 26 \\approx 2.7 \\times 10^{7}','one guess for P(A) at each']],2,0,'Stages multiply.']],[]); }});
+/* ----- annex 20·nav Where a ship ends after its orders: Work, Word Problems, Check Proofs ----- */
+const H3AX=h=>{ h=((h%360)+360)%360; return (h<10?'00':h<100?'0':'')+h+'°'; };
+QP.push({id:'20·nav.work',step:'20·nav',mode:'work',label:'heading sums and poses',open:()=>measured('20·nav'),make(){
+    const ask=rnd(2);
+    if(ask){ const c1=[-3,-2,-1,1,2,3][rnd(6)], c2=[-3,-2,-1,1,2,3][rnd(6)], s1=c1-c2, s2=c1+c2; if(!s1||!s2) return null;
+      const P=(x,y)=>MNAX('('+x+', '+y+')'), right=P(c1,c2), wrong=UQAX(right,[P(c2,c1),P(-c1,-c2),P(c1,-c2),P(-c2,c1),P(s1,s2)],3); if(wrong.length<3) return null;
+      return {index:'q:20·nav.work[p;'+s1+';'+s2+']', lines:[['\\text{start at } (0, 0),\\ \\text{facing north}','given'],[MNAX('\\text{end at } ('+s1+', '+s2+'),\\ \\text{facing east}'),'after the orders']], ask:'About which point could the ship have swung once, a quarter turn to starboard, to reach that pose?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Pose: c = R(c) + s with R(x, y) = (y, \u2212x). So c\u2081 \u2212 c\u2082 = '+s1+' and c\u2081 + c\u2082 = '+s2+'. Half the sum gives c\u2081 = '+c1+', half the difference c\u2082 = '+c2+'.')}; }
+    const h0=10*rnd(36), T=[]; const n=2+rnd(3); for(let i=0;i<n;i++) T.push([rnd(2),[15,30,45,60,90,105,120,135][rnd(8)]]);
+    const sum=h0+T.reduce((a,t)=>a+(t[0]?t[1]:-t[1]),0), rev=h0-T.reduce((a,t)=>a+(t[0]?t[1]:-t[1]),0), abs=h0+T.reduce((a,t)=>a+t[1],0);
+    const right=H3AX(sum), wrong=UQAX(right,[H3AX(rev),H3AX(abs),String(sum)+'°',H3AX(sum+180),H3AX(sum+90)],3); if(wrong.length<3) return null;
+    const words=T.map(t=>(t[0]?'starboard ':'port ')+t[1]).join(', ');
+    return {index:'q:20·nav.work[h;'+h0+';'+words+']', lines:[['\\text{heading } '+H3AX(h0).replace('°','^\\circ'),'at the start'],['\\text{'+words+'}','the orders, with runs between']], ask:'What is the heading at the end?', right, opts:shuffle([right,...wrong]), lead:'', why:'Heading-sum: start, plus starboard, less port, starting again past 360: '+H3AX(h0)+' gives '+right+'. The runs between change the place, not the heading.'}; }},
+  {id:'20·nav.word',step:'20·nav',mode:'word',label:'which orders can be swapped',open:()=>measured('20·nav'),make(){
+    const a=1+rnd(5), sb=rnd(2), side=sb?'starboard':'port', dir=sb?'east':'west';
+    const right=a+' '+dir+' and '+a+' south of the skipper’s, facing the same way', wrong=['in the same place, facing the same way',a+' '+dir+' of the skipper’s, facing the other way',a+' north and '+a+' '+(sb?'west':'east')+' of the skipper’s, facing the same way'];
+    return {index:'q:20·nav.word['+a+';'+sb+']', a3:['20·nav.word',DASH,DASH], story:'Off Port Townsend, facing north, a skipper orders “ahead '+a+', '+side+' 90”. On a second boat beside the first, the mate gives the same two orders the other way round: “'+side+' 90, ahead '+a+'”.', lines:[], ask:'Where does the mate’s boat end, beside the skipper’s?', right, opts:shuffle([right,...wrong]), lead:'', why:'Order: the headings agree, both '+dir+'; the places do not. The skipper ends '+a+' north, the mate '+a+' '+dir+', so the mate is '+a+' '+dir+' and '+a+' south of the skipper.'}; }},
+  {id:'20·nav.line',step:'20·nav',mode:'proof',label:'what the orders license',open:()=>measured('20·nav'),make(){
+    return line28('20·nav.line',[
+      ['n1',[['\\text{heading } 350^\\circ,\\ \\text{starboard } 30','given'],['\\text{heading } 380^\\circ','heading-sum']],2,1,'Starting again past 360: 020°.'],
+      ['n2',[['\\text{an order}','given'],['\\text{it turns the ship about the start}','a move']],2,1,'About the ship itself: the order goes on the right, g ∘ h.'],
+      ['n3',[['\\text{ahead 2, starboard 90}','orders'],['\\text{ends where starboard 90, ahead 2 ends}','swap']],2,1,'The headings agree; the places differ by Rs − s.'],
+      ['n4',[['\\text{starboard 90, ahead 1, port 90, astern 1}','orders'],['\\text{nothing done}','they cancel']],2,1,'It leaves a slide by (1, −1).'],
+      ['n5',[['\\text{run } a,\\ \\text{then run } b','two runs'],['\\text{run } b,\\ \\text{then run } a','order']],2,0,'Runs can be done in any order: slides add.'],
+      ['n6',[['4 \\times \\text{starboard } 90','orders'],['\\text{facing as at the start}','heading-sum']],2,0,'4 · 90 = 360: starting again, doing nothing to the heading.']],[]); }});
+/* ----- annex 20·phys Which path does light take: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'20·phys.work',step:'20·phys',mode:'work',label:'flip the target, bend the ray',open:()=>measured('20·phys'),make(){
+    const ask=rnd(2);
+    if(ask){ const M=[['water',1.33],['glass',1.5],['diamond',2.42],['ice',1.31]][rnd(4)], r=1/M[1], right=DECAX(r,2), wrong=UQAX(right,[DECAX(M[1]-1,2),DECAX(1-r,2),DECAX(r/2,2),DECAX(r*r,2)],3); if(wrong.length<3) return null;
+      return {index:'q:20·phys.work[c;'+M[0]+']', lines:[['\\text{light runs } '+M[1]+' \\text{ times faster in air than in '+M[0]+'}','measured'],['\\text{in '+M[0]+' } r \\Rightarrow \\text{ in air } '+M[1]+'\\,r','the bend']], ask:'What is the largest run over length, inside the '+M[0]+', that still has a path out?', right, opts:shuffle([right,...wrong]), lead:'', why:'A run is never longer than its length: '+M[1]+' r ≤ 1, so r ≤ 1 ÷ '+M[1]+' ≈ '+right+'. Past that, the light bounces back in.'}; }
+    const a=1+rnd(6), b=1+rnd(6), d=2+rnd(10); if(a===b) return null; const x=d*a/(a+b);
+    const right=DECAX(x,2), wrong=UQAX(right,[DECAX(d/2,2),DECAX(d*b/(a+b),2),DECAX(d*a/b,2),DECAX(d*a/(a+b+1),2)],3); if(wrong.length<3) return null;
+    return {index:'q:20·phys.work[f;'+a+';'+b+';'+d+']', lines:[['A \\text{ is } '+a+' \\text{ above the mirror},\\ B \\text{ is } '+b+' \\text{ above}','given'],['\\text{their feet on the mirror are } '+d+' \\text{ apart}','given']], ask:'How far from A’s foot does the shortest path from A to the mirror to B touch it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Flip-the-target: flip B to B′, '+b+' below. AB′ drops '+(a+b)+' over '+d+', so it crosses the mirror after '+d+' · '+a+' ÷ '+(a+b)+' ≈ '+right+'.'}; }},
+  {id:'20·phys.word',step:'20·phys',mode:'word',label:'light that cannot leave',open:()=>measured('20·phys'),make(){
+    const r=[0.3,0.45,0.5,0.6,0.7,0.8,0.85,0.9][rnd(8)], out=1.33*r<=1;
+    const right=out?'yes: its run over length in the air is about '+DECAX(1.33*r,2):'no: it bounces back into the water';
+    const wrong=out?['no: it bounces back into the water','yes: its run over length in the air is about '+DECAX(r/1.33,2),'yes: it goes straight on at '+r]:['yes: its run over length in the air is about '+DECAX(1.33*r,2),'yes: its run over length in the air is about '+DECAX(r/1.33,2),'yes: it goes straight on at '+r];
+    return {index:'q:20·phys.word['+r+']', a3:['20·phys.word',DASH,DASH], story:'A diver at the bottom of a pool in Palm Springs points a torch up at the surface. In the water, the beam’s run along the surface over its length is '+r+'. Light runs about 1.33 times faster in air than in water.', lines:[], ask:'Does the beam get out of the water?', right, opts:shuffle([right,...wrong]), lead:'', why:'The bend: in water r gives 1.33 r in air, here '+DECAX(1.33*r,3)+'. '+(out?'That is at most 1, so there is a path out, slanted further from straight up.':'A run is never longer than its length, so there is no path out: past 0.75, the light stays in.')}; }},
+  {id:'20·phys.line',step:'20·phys',mode:'proof',label:'what the mirror licenses',open:()=>measured('20·phys'),make(){
+    return line28('20·phys.line',[
+      ['p1',[['\\text{the shortest bounce from } A \\text{ to } B','a mirror'],['\\text{at the point of the mirror nearest } A','nearest is shortest']],2,1,'It is where AB′ crosses the mirror.'],
+      ['p2',[['\\text{light from air into water}','two speeds'],['\\text{the quickest path is the shortest}','quickest is straight']],2,1,'Only when the speeds are equal.'],
+      ['p3',[['v_1 \\ne v_2','two speeds'],['\\tfrac{\\text{angle in}}{\\text{angle out}} = \\tfrac{v_1}{v_2}','the bend']],2,1,'The law is for run over length, not for angles.'],
+      ['p4',[['A,\\ B \\text{ on one side of the mirror}','given'],['\\text{flip } A \\text{ and } B \\text{ both}','flip-the-target']],2,1,'Flipping both leaves them on one side: flip one.'],
+      ['p5',[['\\text{two mirrors at right angles}','a corner'],['\\text{every ray comes back the way it came}','corner']],2,0,'Each mirror flips one part of the direction; both together make a half turn.'],
+      ['p6',[['\\text{in air } 0.8','run over length'],['\\text{in water } 0.8 / 1.33 \\approx 0.60','the bend']],2,0,'The ray steepens going in.']],[]); }});
+/* ----- annex 21·bio How a sunflower packs its seeds: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'21·bio.work',step:'21·bio',mode:'work',label:'spokes and misses',open:()=>measured('21·bio'),make(){
+    const ask=rnd(2);
+    if(ask){ const P=[[1,3],[2,5],[3,8],[1,4],[3,7],[2,7],[4,9],[5,13],[19,50],[3,10]][rnd(10)], right=String(P[1]), wrong=UQAX(right,[String(P[0]),String(P[0]+P[1]),String(P[1]-P[0]),String(2*P[1]),String(P[1]+1)],3); if(wrong.length<3) return null;
+      return {index:'q:21·bio.work[s;'+P.join('/')+']', lines:[['\\alpha = \\tfrac{'+P[0]+'}{'+P[1]+'} \\text{ of a turn}','the fixed turn']], ask:'On how many spokes do the seeds sit?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spoke: (n + '+P[1]+') · '+P[0]+'∕'+P[1]+' = n · '+P[0]+'∕'+P[1]+' + '+P[0]+', and whole turns change nothing. So seeds '+P[1]+' apart share a ray: '+P[1]+' spokes, with empty wedges between.'}; }
+    const a=0.381966, q=[3,5,8,13,21,34,55,4,6,7,10][rnd(11)], qa=q*a, near=Math.round(qa), miss=qa-near, below=qa-Math.floor(qa);
+    const S=x=>(x>=0?'+':'−')+DECAX(Math.abs(x),4), right=S(miss), wrong=UQAX(right,[S(below),S(-miss),DECAX(qa,4),S(miss*2)],3); if(wrong.length<3) return null;
+    return {index:'q:21·bio.work[m;'+q+']', lines:[['\\alpha \\approx 0.381966','the golden turn'],['q = '+q,'seeds this far apart']], ask:'What is the miss of q, with its sign?', right, opts:shuffle([right,...wrong]), lead:'', why:'qα = '+DECAX(qa,5)+'. The miss is qα less the nearest whole number, '+near+': '+right+'. Its sign gives the way the arms lean.'}; }},
+  {id:'21·bio.word',step:'21·bio',mode:'word',label:'a fixed turn, seed after seed',open:()=>measured('21·bio'),make(){
+    const F=rnd(2);
+    if(F){ const n=[4,9,16,25,36,49,64,100,144,400][rnd(10)], c=[1,2,3][rnd(3)], right=(c*Math.sqrt(n))+' mm', wrong=UQAX(right,[(c*n)+' mm',(c*n/2)+' mm',(c*Math.sqrt(n)+1)+' mm',DECAX(c*Math.sqrt(n)/2,1)+' mm'],3); if(wrong.length<3) return null;
+      return {index:'q:21·bio.word[r;'+n+';'+c+']', a3:['21·bio.word',DASH,DASH], story:'In a sunflower head from the Sacramento Valley, seed n sits at reach c√n from the centre, with c = '+c+' mm.', lines:[], ask:'How far out is seed '+n+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Seed-place: '+c+' · √'+n+' = '+c+' · '+Math.sqrt(n)+' = '+right+'. Reach grows as the root, so each ring holds more seeds than the last.'}; }
+    const A=[[0.4,'2/5','5'],[0.375,'3/8','8'],[0.38,'19/50','50'],[0.3,'3/10','10'],[0.25,'1/4','4']][rnd(5)];
+    const right='no: '+A[0]+' is '+A[1]+', so the seeds sit on '+A[2]+' spokes with empty wedges between', wrong=['yes: '+A[0]+' is close to 0.382, so it packs nearly as well','yes: any turn near 137.5° fills the head','no: only a turn of exactly 137.5° puts seeds anywhere at all'];
+    return {index:'q:21·bio.word[t;'+A[0]+']', a3:['21·bio.word',DASH,DASH], story:'A breeder grows a plant whose head turns '+A[0]+' of a whole between seeds, close to the golden turn of about 0.382.', lines:[], ask:'Does a big head of this plant pack as well as a sunflower’s?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spoke: a turn of p/q puts every seed on just q spokes, and the wedges widen as the head grows. Near a simple fraction is nearly as bad.'}; }},
+  {id:'21·bio.line',step:'21·bio',mode:'proof',label:'what the turn licenses',open:()=>measured('21·bio'),make(){
+    return line28('21·bio.line',[
+      ['g1',[['\\text{a turn near } 137.5^\\circ','given'],['\\text{it packs as well}','near is enough']],2,1,'0.38 of a turn is 19/50: 50 spokes, far out.'],
+      ['g2',[['\\text{arms on a sunflower head}','seen'],['\\text{the plant twisted}','the arms']],2,1,'They are seeds q apart, placed by one fixed turn.'],
+      ['g3',[['34\\alpha = 12.98684','the golden turn'],['\\text{miss of } 34 = +0.98684','less the whole below']],2,1,'The nearest whole number, 13: miss −0.01316.'],
+      ['g4',[['\\text{a measured head}','given'],['\\text{it shows neighbouring rabbit counts}','must']],2,1,'Only a turn near the golden one does; measured heads sometimes show others.'],
+      ['g5',[['\\alpha = \\tfrac{p}{q}','a simple fraction'],['\\text{every seed on one of } q \\text{ rays}','spoke']],2,0,'Seeds q apart differ by p whole turns.'],
+      ['g6',[['\\text{misses of } 34 \\text{ and } 55 \\text{ have opposite signs}','golden turn'],['34 \\text{ arms lean one way, } 55 \\text{ the other}','spiral-count']],2,0,'The sign of the miss gives the lean.']],[]); }});
+/* ----- annex 21·eng Why a piston pauses: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'21·eng.work',step:'21·eng',mode:'work',label:'where the piston is',open:()=>measured('21·eng'),make(){
+    const r=[40,50,60,75,81,90][rnd(6)], l=r*[3,3.5,4][rnd(3)], ask=rnd(2);
+    if(ask){ const p=l-Math.sqrt(l*l-r*r), right=DECAX(p,2)+' mm', wrong=UQAX(right,[DECAX(r*r/l,1)+' mm','0 mm',DECAX(Math.sqrt(l*l-r*r),2)+' mm',r+' mm'],3); if(wrong.length<3) return null;
+      return {index:'q:21·eng.work[q;'+r+';'+l+']', lines:[['r = '+r+' \\text{ mm},\\ \\ l = '+l+' \\text{ mm}','crank and rod'],['\\theta = 90^\\circ','a quarter turn']], ask:'How far past mid-stroke, toward the axle, is the piston?', right, opts:shuffle([right,...wrong]), lead:'', why:'Place: x(90°) = √('+l+'² − '+r+'²) ≈ '+DECAX(Math.sqrt(l*l-r*r),2)+' mm, and mid-stroke is l = '+l+' mm. Past it by l − √(l² − r²) ≈ '+right+'.'}; }
+    const th=[0,60,120,180][rnd(4)], x=r*Math.cos(DGAX(th))+Math.sqrt(l*l-r*r*Math.pow(Math.sin(DGAX(th)),2));
+    const right=DECAX(x,1)+' mm', wrong=UQAX(right,[DECAX(r*Math.cos(DGAX(th))+l,1)+' mm',DECAX(l+r,1)+' mm',DECAX(l-r*Math.cos(DGAX(th)),1)+' mm',DECAX(r*Math.cos(DGAX(th))+Math.sqrt(l*l-r*r),1)+' mm'],3); if(wrong.length<3) return null;
+    return {index:'q:21·eng.work[x;'+r+';'+l+';'+th+']', lines:[['r = '+r+' \\text{ mm},\\ \\ l = '+l+' \\text{ mm}','crank and rod'],['\\theta = '+th+'^\\circ','the crank’s turn']], ask:'How far from the axle is the piston?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Place: x = r cos θ + √(l² − r² sin² θ) = '+DECAX(r*Math.cos(DGAX(th)),2)+' + '+DECAX(Math.sqrt(l*l-r*r*Math.pow(Math.sin(DGAX(th)),2)),2)+' ≈ '+right+'.').replace('+ −','−')}; }},
+  {id:'21·eng.word',step:'21·eng',mode:'word',label:'how fast the piston moves',open:()=>measured('21·eng'),make(){
+    const N=[1200,1500,1800,2000,2400][rnd(5)], r=[60,75,81,90][rnd(4)], w=N*2*Math.PI/60, v=r/1000*w, F=rnd(2), avg=4*r/1000*N/60;
+    const right=DECAX(F?avg:v,1)+' m/s', wrong=UQAX(right,[DECAX(F?v:avg,1)+' m/s',DECAX(r/1000*N/60,1)+' m/s',DECAX((F?avg:v)*2,1)+' m/s',DECAX(2*r/1000*N,0)+' m/s'],3); if(wrong.length<3) return null;
+    return {index:'q:21·eng.word['+N+';'+r+';'+F+']', a3:['21·eng.word',DASH,DASH], story:'A truck diesel built in Kirkland turns its crank '+SPAX(N)+' times a minute. Its crank pin swings at r = '+r+' mm from the axle, so the stroke is '+(2*r)+' mm.', lines:[], ask:F?'What is the piston’s average speed over a turn?':'How fast does the piston move at a quarter turn?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Two strokes a turn: 2 · '+DECAX(2*r/1000,3)+' m every '+DECAX(60/N,4)+' s, about '+right+'.':'Piston-speed: ω = '+SPAX(N)+' · 2π ÷ 60 ≈ '+DECAX(w,2)+' rad/s, and at 90° the rod’s factor is 1, so the speed is rω = '+DECAX(r/1000,3)+' · '+DECAX(w,2)+' ≈ '+right+'.'}; }},
+  {id:'21·eng.line',step:'21·eng',mode:'proof',label:'what the crank licenses',open:()=>measured('21·eng'),make(){
+    return line28('21·eng.line',[
+      ['a1',[['\\text{a crank and a rod}','given'],['x = r\\cos\\theta + l','the place']],2,1,'Only with a slot; a rod gives r cos θ + √(l² − r² sin² θ).'],
+      ['a2',[['\\theta = 90^\\circ','a quarter turn'],['\\text{the piston at mid-stroke}','half the turn']],2,1,'Past it, by l − √(l² − r²).'],
+      ['a3',[['x = r\\cos\\theta + \\sqrt{l^2 - r^2\\sin^2\\theta}','place'],['x\' = -r\\omega\\sin\\theta','the slope']],2,1,'The slot’s speed; the rod multiplies it by 1 + r cos θ/√(l² − r² sin² θ).'],
+      ['a4',[['\\theta \\text{ in degrees}','given'],['\\text{the slope of } \\sin\\theta \\text{ is } \\cos\\theta','slope of sine']],2,1,'Only in radians; in degrees it is π/180 times the cosine.'],
+      ['a5',[['\\theta = 0 \\text{ and } \\theta = 180^\\circ','the ends'],['\\text{the piston stops}','pause']],2,0,'There the pin moves straight across the piston’s line: sin θ = 0.'],
+      ['a6',[['x(0) = l + r,\\ \\ x(\\pi) = l - r','the ends'],['\\text{a stroke of } 2r','place']],2,0,'(l + r) − (l − r) = 2r.']],[]); }});
+/* ----- annex 21·nav How a sailor finds latitude: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'21·nav.work',step:'21·nav',mode:'work',label:'noon sun and two mirrors',open:()=>measured('21·nav'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const h=30+rnd(50), d=(rnd(47)-23), phi=90-h+d; if(phi<1||phi>70) return null; const right=phi+'°', wrong=UQAX(right,[(90-h-d)+'°',(h+d)+'°',(90-h)+'°',(h-d)+'°'],3); if(wrong.length<3) return null;
+      return {index:'q:21·nav.work[n;'+h+';'+d+']', lines:[['\\text{noon sun height } '+h+'^\\circ','sighted'],[MNAX('\\delta = '+d+'^\\circ'),'the day’s table']], ask:'What is the latitude?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Noon: 90° less the sun’s height, plus δ: 90 − '+h+' + ('+d+') = '+phi+'°.')}; }
+    if(ask===1){ const b=[10,15,20,25,30,35,40,45,50,55][rnd(10)], right=(2*b)+'°', wrong=UQAX(right,[b+'°',(b/2)+'°',(90-b)+'°',(180-2*b)+'°'],3);
+      return {index:'q:21·nav.work[m;'+b+']', lines:[['\\text{the moving mirror turned by } '+b+'^\\circ','on the arc']], ask:'By how much has the seen star turned?', right, opts:shuffle([right,...wrong]), lead:'', why:'Two-mirror: two flips make a turn by twice the angle between the mirrors, 2 · '+b+' = '+right+'. So the scale is marked double.'}; }
+    const a=20+rnd(30), b=a+1+rnd(15), right=SPAX(60*(b-a))+' nautical miles', wrong=UQAX(right,[SPAX(b-a)+' nautical miles',SPAX(69*(b-a))+' nautical miles',SPAX(60*b-a)+' nautical miles',SPAX(360*(b-a))+' nautical miles'],3); if(wrong.length<3) return null;
+    return {index:'q:21·nav.work[d;'+a+';'+b+']', lines:[['\\text{pole star at } '+a+'^\\circ,\\ \\text{later at } '+b+'^\\circ','sailing due north']], ask:'How far north has the ship come?', right, opts:shuffle([right,...wrong]), lead:'', why:'Pole-star: the heights are the latitudes. A degree of latitude is 60 nautical miles: 60 · '+(b-a)+' = '+right+'.'}; }},
+  {id:'21·nav.word',step:'21·nav',mode:'word',label:'vectors carried forward',open:()=>measured('21·nav'),make(){
+    const th=[0,30,45,60,120,135,150,180][rnd(8)], v=[6,8,10,12][rnd(4)], t=[2,3,4,5][rnd(4)], D=v*t, n=D*Math.cos(DGAX(th)), e=D*Math.sin(DGAX(th));
+    const fmt=x=>{ const r=Math.round(x); return r===0?'no change':(r>0?r+' minutes north':(-r)+' minutes south'); };
+    const right=fmt(n), wrong=UQAX(right,[fmt(e),fmt(D),fmt(-n),fmt(n/60)==='no change'?fmt(D/2):fmt(n/60)],3); if(wrong.length<3) return null;
+    return {index:'q:21·nav.word['+th+';'+v+';'+t+']', a3:['21·nav.word',DASH,DASH], story:'A schooner out of Port Townsend holds heading '+H3AX(th)+' at '+v+' knots, a knot being a nautical mile an hour, for '+t+' hours.', lines:[], ask:'How much does its latitude change?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Reckoning: '+D+' miles at '+H3AX(th)+'; headings turn from north, so the north part is '+D+' cos '+th+'° ≈ '+DECAX(n,1)+' miles. A nautical mile is one minute of latitude: '+right+'.')}; }},
+  {id:'21·nav.line',step:'21·nav',mode:'proof',label:'what the sightings license',open:()=>measured('21·nav'),make(){
+    return line28('21·nav.line',[
+      ['l1',[['\\text{latitude } \\varphi','given'],['\\text{height of the pole star} = 90^\\circ - \\varphi','pole-star']],2,1,'That is its angle from overhead; its height is φ.'],
+      ['l2',[['\\text{the mirror turned } \\beta','given'],['\\text{the reading is } \\beta','one mirror']],2,1,'Two flips make a turn by 2β.'],
+      ['l3',[['\\text{run at heading } \\theta','given'],['(vt\\cos\\theta,\\ vt\\sin\\theta) \\text{ east, north}','parts']],2,1,'Headings turn from north: east is sin θ.'],
+      ['l4',[['\\text{a nautical mile}','defined'],['\\text{a minute of longitude}','a minute of arc']],2,1,'Of latitude; lines of longitude close in toward the poles.'],
+      ['l5',[['\\text{the pole star at } 47^\\circ','sighted'],['\\varphi = 47^\\circ \\pm 0.7^\\circ','pole-star']],2,0,'The star sits about 0.7° from the true pole.'],
+      ['l6',[['\\text{noon sun at } 50^\\circ,\\ \\delta = 0^\\circ','an equinox'],['\\varphi = 40^\\circ','noon']],2,0,'90° less 50°, plus 0°.']],[]); }});
+/* ----- annex 21·phys Why does a car stay on a curve: Work, Word Problems, Check Proofs ----- */
+const DGAX=x=>x*Math.PI/180, DEGAX=x=>x*180/Math.PI;
+QP.push({id:'21·phys.work',step:'21·phys',mode:'work',label:'slopes, curves and throws',open:()=>measured('21·phys'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const mu=[0.3,0.4,0.5,0.6,0.7,0.8,0.9][rnd(7)], a=DEGAX(Math.atan(mu)), right=Math.round(a)+'°', wrong=UQAX(right,[Math.round(DEGAX(Math.asin(mu)))+'°',Math.round(DEGAX(Math.acos(mu)))+'°',Math.round(mu*90)+'°',Math.round(90-a)+'°'],3); if(wrong.length<3) return null;
+      return {index:'q:21·phys.work[s;'+mu+']', lines:[['\\mu = '+mu,'the slope and the block']], ask:'What is the steepest slope the block holds on, to the nearest degree?', right, opts:shuffle([right,...wrong]), lead:'', why:'Slope: the block holds exactly when tan α ≤ μ, whatever it weighs. tan α = '+mu+' at α ≈ '+right+'.'}; }
+    if(ask===1){ const v=[10,15,20,25,30][rnd(5)], r=[40,50,80,100,150,200][rnd(6)], m=v*v/(r*9.8); if(m>1.2) return null; const right=DECAX(m,2), wrong=UQAX(right,[DECAX(v/(r*9.8),2),DECAX(v*v/r,2),DECAX(r*9.8/(v*v),2),DECAX(m*2,2)],3); if(wrong.length<3) return null;
+      return {index:'q:21·phys.work[c;'+v+';'+r+']', lines:[['v = '+v+' \\text{ m/s},\\ \\ r = '+r+' \\text{ m}','a flat curve'],['g \\approx 9.8 \\text{ m/s}^2','']], ask:'What is the least μ that holds the car on the curve?', right, opts:shuffle([right,...wrong]), lead:'', why:'Round: the car needs v² ÷ r = '+(v*v)+' ÷ '+r+' = '+DECAX(v*v/r,2)+' m/s² toward the centre; friction gives at most μ · 9.8. So μ ≥ '+right+'.'}; }
+    const v=[10,12,15,20,25][rnd(5)], th=[15,30,45,60,75][rnd(5)], R=v*v*Math.sin(DGAX(2*th))/9.8, right=Math.round(R)+' m', wrong=UQAX(right,[Math.round(v*v*Math.sin(DGAX(th))/9.8)+' m',Math.round(v*v/9.8)+' m',Math.round(2*R)+' m',Math.round(v*Math.sin(DGAX(2*th))/9.8)+' m'],3); if(wrong.length<3) return null;
+    return {index:'q:21·phys.work[t;'+v+';'+th+']', lines:[['v = '+v+' \\text{ m/s},\\ \\ \\theta = '+th+'^\\circ','thrown over level ground'],['g \\approx 9.8 \\text{ m/s}^2','']], ask:'How far away does the stone land, to the nearest metre?', right, opts:shuffle([right,...wrong]), lead:'', why:'Slant-throw: v² sin 2θ ÷ g = '+(v*v)+' · sin '+(2*th)+'° ÷ 9.8 ≈ '+right+'.'+(th!==45?' The angle '+(90-th)+'° lands it at the same place.':' 45° goes farthest.')}; }},
+  {id:'21·phys.word',step:'21·phys',mode:'word',label:'a road tilted for its curve',open:()=>measured('21·phys'),make(){
+    const F=rnd(2);
+    if(F){ const P=[[300,400],[600,800],[500,1200],[900,1200],[700,2400]][rnd(5)], s=Math.hypot(P[0],P[1]), right=SPAX(s)+' N', wrong=UQAX(right,[SPAX(P[0]+P[1])+' N',SPAX(P[1]-P[0])+' N',SPAX(Math.round((P[0]+P[1])/2))+' N'],3);
+      return {index:'q:21·phys.word[f;'+P.join(';')+']', a3:['21·phys.word',DASH,DASH], story:'Two tugs ease a barge off a dock in the port of Stockton. One pulls east with '+SPAX(P[0])+' N, the other north with '+SPAX(P[1])+' N.', lines:[], ask:'How big is the pull on the barge, the two together?', right, opts:shuffle([right,...wrong]), lead:'', why:'Vector: add part by part, '+SPAX(P[0])+' across and '+SPAX(P[1])+' up. The size is √('+SPAX(P[0])+'² + '+SPAX(P[1])+'²) = '+right+'. They add to '+SPAX(P[0]+P[1])+' only when both point the same way.'}; }
+    const v=[15,20,25,30][rnd(4)], r=[100,150,200,300,400][rnd(5)], a=DEGAX(Math.atan(v*v/(r*9.8))), right=Math.round(a)+'°', wrong=UQAX(right,[Math.round(DEGAX(Math.atan(v/(r*9.8))))+'°',Math.round(90-a)+'°',Math.round(DEGAX(Math.asin(Math.min(1,v*v/(r*9.8))))+2)+'°',Math.round(a*2)+'°'],3); if(wrong.length<3) return null;
+    return {index:'q:21·phys.word[t;'+v+';'+r+']', a3:['21·phys.word',DASH,DASH], story:'A highway ramp curves with radius '+r+' m, and its cars run at about '+v+' m/s. The builders tilt it so that a car at that speed needs no friction at all. Take g ≈ 9.8 m/s².', lines:[], ask:'At what tilt, to the nearest degree?', right, opts:shuffle([right,...wrong]), lead:'', why:'Tilt: tan α = v² ÷ (rg) = '+(v*v)+' ÷ '+DECAX(r*9.8,1)+' ≈ '+DECAX(v*v/(r*9.8),3)+', so α ≈ '+right+'. Slower cars lean on friction to keep from sliding in.'}; }},
+  {id:'21·phys.line',step:'21·phys',mode:'proof',label:'what the forces license',open:()=>measured('21·phys'),make(){
+    return line28('21·phys.line',[
+      ['f1',[['300 \\text{ N east},\\ 400 \\text{ N north}','two forces'],['700 \\text{ N}','they add']],2,1,'Only when the two point the same way; part by part, 500 N.'],
+      ['f2',[['\\text{a heavier block}','given'],['\\text{it slides sooner}','more weight']],2,1,'W cancels: tan α ≤ μ for every weight.'],
+      ['f3',[['\\text{round a curve at a steady speed}','given'],['\\text{no force needed}','steady']],2,1,'The direction changes: v²/r toward the centre.'],
+      ['f4',[['\\text{a stone whirled on a string}','given'],['\\text{the pull on it is outward}','it feels so']],2,1,'The string pulls it in; outward is only how it feels.'],
+      ['f5',[['\\text{thrown at } 30^\\circ \\text{ and at } 60^\\circ','same speed'],['\\text{the same landing place}','slant-throw']],2,0,'sin 60° = sin 120°: angles adding to 90° land together.'],
+      ['f6',[['20 \\text{ m/s on a curve of } 50 \\text{ m}','given'],['\\mu \\ge 0.82','round']],2,0,'400 ÷ 50 = 8, and 8 ÷ 9.8 ≈ 0.82.']],[]); }});
+/* ----- annex 22·chem How much energy holds a salt crystal: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'22·chem.work',step:'22·chem',mode:'work',label:'the same terms, another total',open:()=>measured('22·chem'),make(){
+    const ask=rnd(2);
+    if(ask){ const a=[0.25,0.282,0.3,0.32,0.35][rnd(5)], u=1.44/a, E=-2*Math.LN2*u, right=MNAX(DECAX(E,2))+' eV', wrong=UQAX(right,[MNAX(DECAX(-Math.LN2*u,2))+' eV',MNAX(DECAX(-2*u,2))+' eV',MNAX(DECAX(-u,2))+' eV',DECAX(-E,2)+' eV'],3); if(wrong.length<3) return null;
+      return {index:'q:22·chem.work[e;'+a+']', lines:[['Ke^2 = 1.44 \\text{ eV nm},\\ \\ a = '+a+' \\text{ nm}','a charged row']], ask:'What is the energy of one atom in the row?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Total: −2 ln 2 · Ke²/a. Ke²/a = 1.44 ÷ '+a+' ≈ '+DECAX(u,2)+' eV, and −1.386 · '+DECAX(u,2)+' ≈ '+DECAX(E,2)+' eV.')}; }
+    const P=[[1,1],[1,2],[2,1],[1,4],[3,1],[1,3],[4,1],[2,3]][rnd(8)], t=Math.LN2+0.5*Math.log(P[0]/P[1]), right=DECAX(t,3), wrong=UQAX(right,[DECAX(Math.LN2,3),DECAX(Math.LN2*P[0]/P[1],3),DECAX(Math.LN2+0.5*Math.log(P[1]/P[0]),3),DECAX(Math.LN2+Math.log(P[0]/P[1]),3)],3); if(wrong.length<3) return null;
+    return {index:'q:22·chem.work[b;'+P.join(';')+']', lines:[['1 - \\tfrac12 + \\tfrac13 - \\tfrac14 + \\cdots','the bracket'],['\\text{gathered } '+P[0]+' \\text{ pull'+(P[0]>1?'s':'')+' for every } '+P[1]+' \\text{ push'+(P[1]>1?'es':'')+'}','an order']], ask:'What total does that order give, to three places?', right, opts:shuffle([right,...wrong]), lead:'', why:'Block-order: ln 2 + ½ ln('+P[0]+'∕'+P[1]+') ≈ 0.693 '+(P[0]>=P[1]?'+ '+DECAX(0.5*Math.log(P[0]/P[1]),3):'− '+DECAX(-0.5*Math.log(P[0]/P[1]),3))+' = '+right+'.'+(P[0]===P[1]?' Equal blocks keep ln 2.':'')}; }},
+  {id:'22·chem.word',step:'22·chem',mode:'word',label:'a row of alternating charges',open:()=>measured('22·chem'),make(){
+    const n=3+rnd(6); let s=0; const S=[]; for(let k=1;k<=n+2;k++){ s+=(k%2?1:-1)/k; S.push(s); }
+    const a=S[n-1], b=S[n], lo=Math.min(a,b), hi=Math.max(a,b), f=x=>DECAX(x,3), right='between '+f(lo)+' and '+f(hi);
+    const wrong=UQAX(right,['between '+f(Math.min(S[n-2],S[n-1]))+' and '+f(Math.max(S[n-2],S[n-1]))+', and nowhere else','exactly '+f(b),'between 0.5 and '+f(lo),'above '+f(hi)],3); if(wrong.length<3) return null;
+    return {index:'q:22·chem.word['+n+']', a3:['22·chem.word',DASH,DASH], story:'A student adds the bracket 1 − ½ + ⅓ − ¼ + ⋯ shell by shell. After '+n+' terms the sum is '+f(a)+'; after '+(n+1)+', it is '+f(b)+'.', lines:[], ask:'What can be said of the whole total from these two sums alone?', right, opts:shuffle([right,...wrong]), lead:'', why:'Charged-row: the sum settles between any two partial sums in a row, since each new term overshoots back by less than the last. So the total, ln 2 ≈ 0.693, lies between '+f(lo)+' and '+f(hi)+'.'}; }},
+  {id:'22·chem.line',step:'22·chem',mode:'proof',label:'what the bracket licenses',open:()=>measured('22·chem'),make(){
+    return line28('22·chem.line',[
+      ['i1',[['\\text{the terms head to } 0','given'],['\\text{every order gives one total}','terms shrink']],2,1,'Only when the sizes’ sum settles; here it is 1 + ½ + ⅓ + ⋯.'],
+      ['i2',[['\\text{one atom in a charged row}','given'],['U = -\\tfrac{Ke^2}{a}\\ln 2','total']],2,1,'Each shell holds two atoms: the 2 stays.'],
+      ['i3',[['\\tfrac1{n+1} + \\cdots + \\tfrac1{2n} \\ge \\tfrac12','a fence'],['\\text{the total is } \\tfrac12','the fence']],2,1,'A fence is not a total; the areas close in on ln 2.'],
+      ['i4',[['\\text{a lopsided order of shells}','given'],['\\text{just as good a crystal}','same atoms']],2,1,'Its pieces’ charge passes every bound.'],
+      ['i5',[['1 \\text{ pull for } 4 \\text{ pushes}','an order'],['\\text{total } 0','block-order']],2,0,'ln 2 + ½ ln ¼ = ln 2 − ln 2 = 0.'],
+      ['i6',[['\\text{pieces of bounded charge}','neutral-piece'],['\\text{total } \\ln 2','every such order']],2,0,'The shell by shell total is the crystal’s energy.']],[]); }});
+/* ----- annex 22·comp What does forgetting cost: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'22·comp.work',step:'22·comp',mode:'work',label:'ways in bits, steps in a search',open:()=>measured('22·comp'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const n=[10,50,100,1000,1500,10000,65536,1000000][rnd(8)], c=Math.floor(Math.log2(n))+1, right=String(c), wrong=UQAX(right,[String(c-1),String(Math.ceil(n/2)),String(c+1),String(Math.round(Math.log10(n)))],3); if(wrong.length<3) return null;
+      return {index:'q:22·comp.work[h;'+n+']', lines:[['\\text{a sorted list of } '+SPAX(n).replace(/ /g,'\\,')+' \\text{ items}','given']], ask:'How many comparisons, at most, does a halving search make?', right, opts:shuffle([right,...wrong]), lead:'', why:'Halve-to-nothing: at most ⌊log₂ n⌋ + 1. 2^'+(c-1)+' = '+SPAX(Math.pow(2,c-1))+' ≤ '+SPAX(n)+' < 2^'+c+', so '+(c-1)+' + 1 = '+c+'.'}; }
+    if(ask===1){ const a=1+rnd(8), b=1+rnd(8), right=(a+b)+' bits', wrong=UQAX(right,[Math.log2(Math.pow(2,a)+Math.pow(2,b)).toFixed(2).replace(/\.00$/,'')+' bits',(a*b)+' bits',SPAX(Math.pow(2,a)*Math.pow(2,b))+' bits',(Math.max(a,b))+' bits'],3); if(wrong.length<3) return null;
+      return {index:'q:22·comp.work[b;'+a+';'+b+']', lines:[['W_1 = '+Math.pow(2,a)+',\\ \\ W_2 = '+Math.pow(2,b),'two bodies, each its equally likely ways']], ask:'How many bits of ways do the two have, side by side?', right, opts:shuffle([right,...wrong]), lead:'', why:'Ways-to-bits: side by side the ways multiply, '+Math.pow(2,a)+' · '+Math.pow(2,b)+' = '+SPAX(Math.pow(2,a+b))+', and their logs add: '+a+' + '+b+' = '+right+'.'}; }
+    const T=[77,150,273,300,310,373,600][rnd(7)], q=1.380649e-23*T*Math.LN2, right=DECAX(q*1e21,2)+' × 10⁻²¹ J', wrong=UQAX(right,[DECAX(1.380649e-23*T*1e21,2)+' × 10⁻²¹ J',DECAX(q*1e21/Math.LN2*Math.LN10,2)+' × 10⁻²¹ J',DECAX(q*2e21,2)+' × 10⁻²¹ J',DECAX(q*1e22,2)+' × 10⁻²¹ J'],3); if(wrong.length<3) return null;
+    return {index:'q:22·comp.work[e;'+T+']', lines:[['T = '+T+' \\text{ K}','the room'],['k = 1.380649 \\times 10^{-23} \\text{ J/K}','fixed']], ask:'What is the least heat sent into the room by wiping one bit?', right, opts:shuffle([right,...wrong]), lead:'', why:'Erasure: at least kT ln 2 = 1.380649 × 10⁻²³ · '+T+' · 0.6931 ≈ '+right+'.'}; }},
+  {id:'22·comp.word',step:'22·comp',mode:'word',label:'gates that forget',open:()=>measured('22·comp'),make(){
+    const G=[['NOT, which sends A to not A',0],['AND, which sends A and B to A · B',1],['OR, which sends A and B to A + B',1],['the gate that sends (A, B) to (A, A ⊕ B)',0],['the gate that sends (A, B, C) to (A, B, C ⊕ A · B)',0],['the gate that sends A and B to A ⊕ B',1],['the gate that sends (A, B) to (B, A)',0]][rnd(7)];
+    const Y='yes: it sends two input rows to one output, so it forgets', Nn='no: its rows go to different outputs and can be run backwards';
+    const right=G[1]?Y:Nn, wrong=[G[1]?Nn:Y,'yes: every gate pays kT ln 2 each time it is used','no: a gate that has an output never forgets'];
+    return {index:'q:22·comp.word['+G[0].length+']', a3:['22·comp.word',DASH,DASH], story:'A chip designer in Hillsboro wants a circuit whose heat could, in principle, be pushed below kT ln 2 a step. One gate in it is '+G[0]+'.', lines:[], ask:'Must that gate pay at least kT ln 2 of heat each time it runs?', right, opts:shuffle([right,...wrong]), lead:'', why:'Gate-loss: a gate pays only for the bits it forgets, and it forgets exactly when two input rows share an output. '+(G[1]?'Here they do.':'Here no two rows share one, so it forgets nothing.')}; }},
+  {id:'22·comp.line',step:'22·comp',mode:'proof',label:'what the ways license',open:()=>measured('22·comp'),make(){
+    return line28('22·comp.line',[
+      ['w1',[['\\text{two bodies side by side}','given'],['W = W_1 + W_2','ways add']],2,1,'Ways multiply; their logs add.'],
+      ['w2',[['N = 1000,\\ k = 100','a share'],['\\log_2\\tbinom{N}{k} = N h(0.1) \\text{ exactly}','share-count']],2,1,'Off by a few times ln N: 464.4 against 469.0.'],
+      ['w3',[['\\text{a NOT gate}','given'],['\\text{it pays } kT\\ln 2 \\text{ a use}','every gate pays']],2,1,'Only for the bits it forgets; NOT pays nothing.'],
+      ['w4',[['\\text{a gas fills its box}','seen'],['\\text{a force spreads it}','it spreads']],2,1,'The even splits outnumber the rest.'],
+      ['w5',[['\\text{a gas halved at fixed } T','a slow squeeze'],['\\text{heat out} = NkT\\ln 2','halved-room']],2,0,'The work is the area under NkT/v from V/2 to V.'],
+      ['w6',[['n = 10^6','a sorted list'],['\\text{at most } 20 \\text{ comparisons}','halve-to-nothing']],2,0,'2¹⁹ ≤ 10⁶ < 2²⁰: 19 + 1.']],[]); }});
+/* ----- annex 22·crypt How soon do two fingerprints match: Work, Word Problems, Check Proofs ----- */
+const QNAX=(n,N)=>{ let q=1; for(let k=1;k<n;k++) q*=1-k/N; return q; };
+QP.push({id:'22·crypt.work',step:'22·crypt',mode:'work',label:'no match, counted',open:()=>measured('22·crypt'),make(){
+    const ask=rnd(2);
+    if(ask){ const b=[32,40,48,56,64,128,160,256][rnd(8)], right=String(b/2), wrong=UQAX(right,[String(b),String(b-1),String(Math.round(Math.log2(b))),String(b/4)],3); if(wrong.length<3) return null;
+      return {index:'q:22·crypt.work[b;'+b+']', lines:[['\\text{a fingerprint of } '+b+' \\text{ bits}','given']], ask:'About how many bits does it hold out against a search for any colliding pair?', right, opts:shuffle([right,...wrong]), lead:'', why:'Matching-pair: a match is as likely as not after about 1.18 \u221aN codes, and \u221a(2^'+b+') = 2^'+(b/2)+'. So about '+right+' bits.'}; }
+    const N=[365,365,100,1000][rnd(4)], n=[5,10,15,20,23,30,40][rnd(7)]; if(n>=N) return null; const q=QNAX(n,N), l=n*(n-1)/(2*N);
+    const right=DECAX(1-q,3), wrong=UQAX(right,[DECAX(q,3),DECAX(n/N,3),l<1?DECAX(l,3):DECAX(n/(2*N),3),DECAX(1-Math.pow(1-1/N,n),3)],3); if(wrong.length<3) return null;
+    return {index:'q:22·crypt.work[m;'+N+';'+n+']', lines:[[n+' \\text{ codes drawn at random from } '+N,'given']], ask:'What is the chance that two of them match, to three places?', right, opts:shuffle([right,...wrong]), lead:'', why:'No-match: q = (1 \u2212 1\u2215'+N+')(1 \u2212 2\u2215'+N+')\u22ef(1 \u2212 '+(n-1)+'\u2215'+N+') \u2248 '+DECAX(q,4)+', so a match has chance 1 \u2212 q \u2248 '+right+'.'}; }},
+  {id:'22·crypt.word',step:'22·crypt',mode:'word',label:'fenced by e',open:()=>measured('22·crypt'),make(){
+    const n=[10,15,20,23,25,30][rnd(6)], l=n*(n-1)/2/365, lo=1-Math.exp(-l), f=x=>DECAX(x,3);
+    const right='between '+f(lo)+' and '+f(l), wrong=UQAX(right,['between '+f(n/365)+' and '+f(l),'exactly '+f(l),'between '+f(lo)+' and '+f(2*l),'between '+f(Math.exp(-l))+' and 1'],3); if(wrong.length<3) return null;
+    return {index:'q:22·crypt.word['+n+']', a3:['22·crypt.word',DASH,DASH], story:'A class in Bellingham has '+n+' students. Take birthdays as random among 365 days.', lines:[], ask:'Without working the whole product, between which two numbers does the chance of a shared birthday lie?', right, opts:shuffle([right,...wrong]), lead:'', why:'Pairs-per-code: '+n+' students make '+(n*(n-1)/2)+' pairs, so \u03bb = '+(n*(n-1)/2)+' \u00f7 365 \u2248 '+DECAX(l,3)+'. The chance lies between 1 \u2212 e^(\u2212\u03bb) \u2248 '+f(lo)+' and \u03bb; the count gives '+f(1-QNAX(n,365))+'.'}; }},
+  {id:'22·crypt.line',step:'22·crypt',mode:'proof',label:'what the pairs license',open:()=>measured('22·crypt'),make(){
+    return line28('22·crypt.line',[
+      ['y1',[['365 \\text{ days}','given'],['\\text{a shared birthday takes about } 183 \\text{ people}','half the days']],2,1,'The pairs grow as n\u00b2: 23 people make it as likely as not.'],
+      ['y2',[['\\text{a } b\\text{-bit fingerprint}','given'],['\\text{breaking it takes } 2^b \\text{ tries}','every code']],2,1,'That is for a match to one given file; any colliding pair takes about \u221a(2\u1d47).'],
+      ['y3',[['40 \\text{ birthdays},\\ \\lambda \\approx 2.14','pairs per code'],['\\text{the chance of a match is } \\lambda','pairs-per-code']],2,1,'\u03bb is an upper fence; a chance is never above 1.'],
+      ['y4',[['\\text{no collision has been found}','given'],['\\text{none exists}','a search']],2,1,'By pigeonhole they exist; only finding one is hard.'],
+      ['y5',[['\\text{fingerprints of } b \\text{ bits on longer files}','given'],['\\text{two files share a fingerprint}','collision']],2,0,'More files than fingerprints: pigeonhole.'],
+      ['y6',[['23 \\text{ birthdays},\\ \\lambda \\approx 0.693','given'],['0.500 \\le \\text{chance} \\le 0.693','pairs-per-code']],2,0,'1 \u2212 e^(\u22120.693) = 0.5.']],[]); }});
+/* ----- annex 22·econ How far does a dollar go: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'22·econ.work',step:'22·econ',mode:'work',label:'round after round',open:()=>measured('22·econ'),make(){
+    const ask=rnd(2);
+    if(ask){ const b=[0.2,0.3,0.4,0.5,0.6][rnd(5)], c=b+[0.1,0.2,0.3][rnd(3)]; if(c>=0.95) return null; const f=x=>DECAX(1/(1-x),2), right='between '+f(b)+' and '+f(c);
+      const wrong=UQAX(right,['between '+DECAX(1/b,2)+' and '+DECAX(1/c,2),'between '+DECAX(1+b,2)+' and '+DECAX(1+c,2),'exactly '+DECAX(1/(1-(b+c)/2),2),'between '+DECAX(1/c,2)+' and '+DECAX(1/b,2)],3); if(wrong.length<3) return null;
+      return {index:'q:22·econ.work[b;'+b+';'+c+']', lines:[['\\text{every round spends between } '+b+' \\text{ and } '+DECAX(c,2)+' \\text{ of the round before}','given']], ask:'What can be said of the total from one first dollar?', right, opts:shuffle([right,...wrong]), lead:'', why:'Between-shares: the total lies between 1\u2215(1 \u2212 '+b+') = '+f(b)+' and 1\u2215(1 \u2212 '+DECAX(c,2)+') = '+f(c)+'. The bracket is as wide as the guesses.'}; }
+    const c=[0.2,0.25,0.4,0.5,0.6,0.75,0.8,0.9][rnd(8)], right=DECAX(1/(1-c),2), wrong=UQAX(right,[DECAX(1/c,2),DECAX(1+c,2),DECAX(1-c,2),DECAX(c/(1-c),2)],3); if(wrong.length<3) return null;
+    return {index:'q:22·econ.work[c;'+c+']', lines:[['c = '+c,'the share each round spends of the last'],['\\text{one first dollar}','']], ask:'How many dollars of spending does it make in all?', right, opts:shuffle([right,...wrong]), lead:'', why:'Respending: 1 + c + c\u00b2 + \u22ef = 1\u2215(1 \u2212 c) = 1\u2215'+DECAX(1-c,2)+' = '+right+'. The total is one over the leak.'}; }},
+  {id:'22·econ.word',step:'22·econ',mode:'word',label:'where the dollar leaks',open:()=>measured('22·econ'),make(){
+    const T=['Forks, on the Olympic Peninsula','Port Angeles','Aberdeen','Sequim'][rnd(4)], s=[0.05,0.1][rnd(2)], t=[0.15,0.2][rnd(2)], o=[0.3,0.4,0.5][rnd(3)], L=s+t+o, F=rnd(3);
+    if(F===2){ const right='one dollar', wrong=['1\u2215(1 \u2212 c) dollars','nothing: the tax cancels it','one dollar less than without the plan'];
+      return {index:'q:22·econ.word[b;'+T.length+']', a3:['22·econ.word',DASH,DASH], story:'The town council in '+T+' spends a new dollar on a road crew and pays for it with a new dollar of local tax.', lines:[], ask:'How much spending does the plan add in all?', right, opts:shuffle([right,...wrong]), lead:'', why:'Balanced: only round 0 survives. Every later round of the spending is cancelled by a round the tax took away, whatever share is spent.'}; }
+    const v=F?t/L:1/L, right=F?DECAX(v,2)+' dollars':DECAX(v,2)+' dollars', wrong=F?UQAX(right,[DECAX(t,2)+' dollars',DECAX(t/(1-t),2)+' dollars',DECAX(t*(1-L),2)+' dollars',DECAX(t*2,2)+' dollars'],3):UQAX(right,[DECAX(1/(1-L),2)+' dollars',DECAX(1/(1-o),2)+' dollars',DECAX(1/s,2)+' dollars',DECAX(1-L,2)+' dollars'],3);
+    if(wrong.length<3) return null;
+    return {index:'q:22·econ.word['+s+';'+t+';'+o+';'+F+']', a3:['22·econ.word',DASH,DASH], story:'A household in '+T+' saves '+s+' of each new dollar, pays '+t+' in taxes, and spends '+o+' on goods made outside the town. The rest it spends in town, and each shop that takes it does the same.', lines:[], ask:F?'Of one first dollar, how much ends in taxes, over all the rounds?':'How many dollars of spending in town does one first dollar make?', right, opts:shuffle([right,...wrong]), lead:'', why:'Leaked-share: each round leaks '+s+' + '+t+' + '+o+' = '+DECAX(L,2)+', so the total is 1 \u00f7 '+DECAX(L,2)+' \u2248 '+DECAX(1/L,2)+'.'+(F?' Taxes take '+t+' of every round: '+t+' \u00b7 '+DECAX(1/L,2)+' \u2248 '+right+'.':'')}; }},
+  {id:'22·econ.line',step:'22·econ',mode:'proof',label:'what the rounds license',open:()=>measured('22·econ'),make(){
+    return line28('22·econ.line',[
+      ['d1',[['c = 0.8','the share spent'],['\\text{total} = \\tfrac{1}{0.8}','one over c']],2,1,'One over the leak: 1\u2215(1 \u2212 0.8) = 5.'],
+      ['d2',[['\\text{the rounds never end}','given'],['\\text{the total passes every bound}','endless rounds']],2,1,'Rounds that shrink by a fixed share below 1 settle.'],
+      ['d3',[['\\text{the rounds shrink}','given'],['\\text{the total settles}','shrinking']],2,1,'Shrinking is not enough; shrinking by a share below a fixed c is.'],
+      ['d4',[['5 \\text{ dollars of spending from } 1','respending'],['5 \\text{ dollars of new money}','the total']],2,1,'It is one dollar, changing hands.'],
+      ['d5',[['\\text{leak } 0.7 \\text{ each round}','leaked-share'],['\\text{total} \\approx 1.43','one over the leak']],2,0,'1 \u00f7 0.7 \u2248 1.43.'],
+      ['d6',[['\\text{a dollar spent, paid by a dollar of tax}','balanced'],['\\text{one dollar of spending}','only round 0']],2,0,'Each later round is cancelled by one the tax took away.']],[]); }});
+/* ----- annex 22·logi Why is the best route so hard to find: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'22·logi.work',step:'22·logi',mode:'work',label:'tours and floors',open:()=>measured('22·logi'),make(){
+    const ask=rnd(2);
+    if(ask){ const n=3+rnd(8), v=FACAX(n)/2, right=SPAX(v), wrong=UQAX(right,[SPAX(FACAX(n)),SPAX(FACAX(n-1)/2),SPAX(FACAX(n-1)),SPAX(n*n)],3); if(wrong.length<3) return null;
+      return {index:'q:22·logi.work[t;'+n+']', lines:[['\\text{a depot and } '+n+' \\text{ stops}','a courier’s day']], ask:'How many different tours are there?', right, opts:shuffle([right,...wrong]), lead:'', why:'Tour-count: '+n+'! orders of the stops, each loop counted once each way round: '+SPAX(FACAX(n))+' ÷ 2 = '+right+'.'}; }
+    const k=5+rnd(3), L=[]; let s=0; for(let i=0;i<k;i++){ const a=1+rnd(5), b=a+rnd(4); L.push([a,b]); s+=a+b; }
+    const right=DECAX(s/2,1), wrong=UQAX(right,[String(s),DECAX(L.reduce((x,y)=>x+y[0],0),1),DECAX(L.reduce((x,y)=>x+y[1],0),1),DECAX(s/2+k,1)],3); if(wrong.length<3) return null;
+    return {index:'q:22·logi.work[f;'+L.map(x=>x.join('+')).join(',')+']', lines:[['\\text{each place’s two shortest links: } '+L.map(x=>x[0]+' + '+x[1]).join(',\\ '),'in blocks, the depot first']], ask:'What floor does the two-links technique put under every tour?', right, opts:shuffle([right,...wrong]), lead:'', why:'Two-links floor: every tour is at least half the sum of each place’s two shortest links: '+s+' ÷ 2 = '+right+' blocks.'}; }},
+  {id:'22·logi.word',step:'22·logi',mode:'word',label:'one more stop',open:()=>measured('22·logi'),make(){
+    const n=[10,12,14,16][rnd(4)], f=[10,100,1000,10000,1000000][rnd(5)]; let m=n, w=1; while(w*(m+1)<=f){ m++; w*=m; }
+    const right=String(m), wrong=UQAX(right,[String(m+2),String(m+1),String(n+Math.round(Math.log10(f))*2),String(2*n),String(m-1)],3); if(wrong.length<3) return null;
+    return {index:'q:22·logi.word['+n+';'+f+']', a3:['22·logi.word',DASH,DASH], story:'A delivery firm in Tacoma has a machine that tries every tour of '+n+' stops in one night. It buys a machine '+SPAX(f)+' times as fast.', lines:[], ask:'How many stops can the new machine try every tour of, in one night?', right, opts:shuffle([right,...wrong]), lead:'', why:'One-more-stop: each extra stop multiplies the tours by the new number of stops. '+(m>n?Array.from({length:m-n},(_,i)=>n+1+i).join(' · ')+' = '+SPAX(w)+' fits in '+SPAX(f)+', and one more stop would not.':'Even '+(n+1)+' more times the work does not fit.')}; }},
+  {id:'22·logi.line',step:'22·logi',mode:'proof',label:'what the tours license',open:()=>measured('22·logi'),make(){
+    return line28('22·logi.line',[
+      ['t1',[['n \\text{ stops and a depot}','given'],['n! \\text{ tours}','orders']],2,1,'Each loop is counted once each way round: n!/2.'],
+      ['t2',[['\\text{a computer twice as fast}','given'],['\\text{twice the stops}','speed']],2,1,'One more stop multiplies the work by n + 1.'],
+      ['t3',[['\\text{the nearest stop each time}','nearest-stop'],['\\text{the shortest tour in all}','greedy']],2,1,'The far stops are left for last.'],
+      ['t4',[['\\text{the floor is } 28.5','two-links floor'],['\\text{a tour of } 28.5 \\text{ exists}','the floor']],2,1,'The floor is under the best; it need not be met.'],
+      ['t5',[['\\text{a nearest-stop tour of } 44,\\ \\text{floor } 28.5','given'],['\\text{at most } 1.54 \\text{ times the best}','two-links floor']],2,0,'44 ÷ 28.5 ≈ 1.54, without trying another tour.'],
+      ['t6',[['4 \\text{ stops}','given'],['12 \\text{ tours}','tour-count']],2,0,'4! ÷ 2 = 12.']],[]); }});
+/* ----- annex 22·nav Why the far north looks so big: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'22·nav.work',step:'22·nav',mode:'work',label:'stretches and strips',open:()=>measured('22·nav'),make(){
+    const P=[['Eureka',40.8],['Vancouver',49.3],['Juneau',58.3],['Anchorage',61.2],['San Diego',32.7],['Honolulu',21.3],['Fairbanks',64.8]][rnd(7)], c=Math.cos(DGAX(P[1])), ask=rnd(3);
+    if(ask===2){ const h=Math.log(1/c+Math.tan(DGAX(P[1]))), right=DECAX(h,3)+'R', wrong=UQAX(right,[DECAX(DGAX(P[1]),3)+'R',DECAX(Math.tan(DGAX(P[1])),3)+'R',DECAX(1/c,3)+'R',DECAX(Math.sin(DGAX(P[1])),3)+'R'],3); if(wrong.length<3) return null;
+      return {index:'q:22·nav.work[h;'+P[0]+']', lines:[['\\varphi = '+P[1]+'^\\circ','the latitude of '+P[0]]], ask:'At what height does the heading map draw it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Strip: the height is R ln(sec φ + tan φ) = R ln('+DECAX(1/c,3)+' + '+DECAX(Math.tan(DGAX(P[1])),3)+') ≈ '+right+'.'}; }
+    const A=ask===1, v=A?1/(c*c):1/c, right=DECAX(v,2), wrong=UQAX(right,[DECAX(A?1/c:1/(c*c),2),DECAX(c,2),DECAX(Math.tan(DGAX(P[1])),2),DECAX(1+P[1]/90,2)],3); if(wrong.length<3) return null;
+    return {index:'q:22·nav.work['+(A?'a':'s')+';'+P[0]+']', lines:[['\\varphi = '+P[1]+'^\\circ','the latitude of '+P[0]]], ask:A?'By how much does the heading map stretch areas there?':'By how much does every straight-grid map stretch east–west lengths there?', right, opts:shuffle([right,...wrong]), lead:'', why:A?'Shape-or-size: the heading map stretches east by sec φ and north by sec φ too, so areas by sec² φ = 1 ÷ '+DECAX(c*c,4)+' ≈ '+right+'.':'East-stretch: a circle of latitude has length 2πR cos φ but is drawn as wide as the equator: sec φ = 1 ÷ '+DECAX(c,4)+' ≈ '+right+'.'}; }},
+  {id:'22·nav.word',step:'22·nav',mode:'word',label:'sizes or headings, not both',open:()=>measured('22·nav'),make(){
+    const p=[30,45,60,70][rnd(4)], c=Math.cos(DGAX(p)), r=c*c, nm={30:'three quarters',45:'half',60:'a quarter',70:'about an eighth'}[p];
+    const right=nm+' of it', wrong=UQAX(right,['the same ground','four times it','twice it','three quarters of it','half of it','a quarter of it'],3);
+    return {index:'q:22·nav.word['+p+']', a3:['22·nav.word',DASH,DASH], story:'On a wall chart that keeps every heading, a ship’s officer draws two squares of the same size: one on the equator, one at '+p+'° N.', lines:[], ask:'How much ground does the square at '+p+'° N cover, beside the one on the equator?', right, opts:shuffle([right,...wrong]), lead:'', why:'Shape-or-size: the heading map stretches areas by sec² φ, so the same drawn area covers cos² '+p+'° ≈ '+DECAX(r,3)+' of the ground at the equator.'}; }},
+  {id:'22·nav.line',step:'22·nav',mode:'proof',label:'what the map licenses',open:()=>measured('22·nav'),make(){
+    return line28('22·nav.line',[
+      ['m1',[['\\text{a straight-grid map}','given'],['\\text{it stretches north by } \\sec\\varphi','east-stretch']],2,1,'Only the east stretch is forced; the north stretch is chosen.'],
+      ['m2',[['\\text{a straight line on the heading map}','drawn'],['\\text{the shortest route}','straight']],2,1,'It is a steady heading; the great circle bends toward the pole.'],
+      ['m3',[['\\text{the pole}','latitude 90°'],['\\text{drawn at } R\\ln(\\sec 90^\\circ + \\tan 90^\\circ)','strip']],2,1,'sec 90° is not defined; the height passes every bound.'],
+      ['m4',[['\\text{the strips get thin}','given'],['\\text{their total stays small}','thin strips']],2,1,'Thin strips can add past every bound, as 1 + ½ + ⅓ + ⋯ does.'],
+      ['m5',[['\\text{the same drawn area}','on the heading map'],['\\text{the same ground}','area']],2,1,'Only at the same latitude.'],
+      ['m6',[['\\varphi = 60^\\circ','given'],['\\text{east stretch } 2','east-stretch']],2,0,'sec 60° = 1 ÷ cos 60° = 2.']],[]); }});
+/* ----- annex 22·now Can a far digit of pi be found alone: Work, Word Problems, Check Proofs ----- */
+const HXAX='0123456789ABCDEF';
+QP.push({id:'22·now.work',step:'22·now',mode:'work',label:'a digit far out',open:()=>measured('22·now'),make(){
+    const ask=rnd(2);
+    if(ask){ const K=[5,8,10,12,20,25][rnd(6)], d=K*Math.log10(16), right='about '+Math.floor(d), wrong=UQAX(right,['about '+K,'about '+(K*16),'about '+Math.floor(K*Math.log10(2)),'about '+(2*K)],3); if(wrong.length<3) return null;
+      return {index:'q:22·now.work[k;'+K+']', lines:[['\\text{terms that shrink by a factor of } 16','the digit sum'],[K+' \\text{ terms}','summed']], ask:'About how many decimal places do the summed terms fix, before the tail can reach them?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each term is sixteen times smaller than the last, and log₁₀ 16 ≈ 1.204: '+K+' terms fix about '+K+' · 1.204 ≈ '+DECAX(d,1)+' decimal places.'}; }
+    const x=(1+rnd(9998))/9999, i=Math.floor(16*x), right=HXAX[i], wrong=UQAX(right,[HXAX[Math.floor(10*x)],HXAX[(i+1)%16],HXAX[Math.floor(x*100)%16],HXAX[(i+15)%16]],3); if(wrong.length<3) return null;
+    return {index:'q:22·now.work[s;'+DECAX(x,4)+']', lines:[['\\operatorname{frac}(16^d\\pi) \\approx '+DECAX(x,4),'computed']], ask:'What is the base-sixteen digit in place d + 1?', right, opts:shuffle([right,...wrong]), lead:'', why:'Shift: the digit is the whole part of 16 · '+DECAX(x,4)+' = '+DECAX(16*x,4)+', which is '+i+(i>9?', written '+right:'')+'.'}; }},
+  {id:'22·now.word',step:'22·now',mode:'word',label:'a digit is read from a fence',open:()=>measured('22·now'),make(){
+    const x=Math.random(), wE=[6,8,10][rnd(3)], w=Math.pow(10,-wE); let a=x-w, b=x+w; if(a<0||b>=1) return null; let n=0, s='';
+    while(n<12){ const da=Math.floor(16*a), db=Math.floor(16*b); if(da!==db) break; s+=HXAX[da]; n++; a=16*a-da; b=16*b-db; }
+    const right=String(n), wrong=UQAX(right,[String(wE),String(n+1),String(Math.max(0,n-1)),String(2*wE),String(n+2)],3); if(wrong.length<3) return null;
+    return {index:'q:22·now.word['+DECAX(x,10)+';'+wE+']', a3:['22·now.word',DASH,DASH], story:'A run in ordinary arithmetic finds frac(16ᵈπ) as '+DECAX(x,10)+', with a width of 10⁻'+String(wE).replace(/./g,c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[c])+' on each side.', lines:[], ask:'How many base-sixteen digits can be published from this fence?', right, opts:shuffle([right,...wrong]), lead:'', why:'Report only the digits on which the whole fence agrees. Peeling both ends of the fence by sixteen'+(n?' gives '+s+' from each, and then they part.':' parts at once: the fence straddles a boundary.')}; }},
+  {id:'22·now.line',step:'22·now',mode:'proof',label:'what the digit sum licenses',open:()=>measured('22·now'),make(){
+    return line28('22·now.line',[
+      ['v1',[['\\text{the digit sum}','BBP'],['\\text{the millionth decimal digit, peeled off}','peeling']],2,1,'It peels base-sixteen digits; base ten is open.'],
+      ['v2',[['\\text{the computer matched } \\pi \\text{ to many places}','a hunt'],['\\text{the sum is proved}','a match']],2,1,'A match is a guess; the column proves it.'],
+      ['v3',[['\\textstyle\\int\\sum','an area of a sum'],['\\textstyle\\sum\\int','swap them']],2,1,'Only once the leftover’s area heads to 0.'],
+      ['v4',[['\\text{a value with width } 10^{-12}','computed'],['\\text{all its digits}','narrow enough']],2,1,'Only those on which the whole fence agrees.'],
+      ['v5',[['\\text{trillions of digits look even}','counted'],['\\pi \\text{ is normal}','the cases']],2,1,'Cases prove no statement; it is open.'],
+      ['v6',[['\\operatorname{frac}(16^d\\pi) = 0.3125','given'],['\\delta_{d+1} = 5','shift']],2,0,'16 · 0.3125 = 5.']],[]); }});
+/* ----- annex 22·phys When does a bouncing ball stop: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'22·phys.work',step:'22·phys',mode:'work',label:'how far, and how long',open:()=>measured('22·phys'),make(){
+    const h=[0.2,0.3,0.5,1,1.5,2][rnd(6)], r=[0.25,0.36,0.49,0.64,0.81][rnd(5)], s=Math.sqrt(r), ask=rnd(2);
+    if(ask){ const t0=Math.sqrt(2*h/9.8), T=t0*(1+s)/(1-s), right=DECAX(T,2)+' s', wrong=UQAX(right,[DECAX(t0*(1+r)/(1-r),2)+' s',DECAX(t0/(1-s),2)+' s',DECAX(t0*(1+s),2)+' s',DECAX(2*T,2)+' s'],3); if(wrong.length<3) return null;
+      return {index:'q:22·phys.work[t;'+h+';'+r+']', lines:[['h = '+h+' \\text{ m},\\ \\ r = '+r,'dropped; each bounce reaches r of the last height'],['g \\approx 9.8 \\text{ m/s}^2','']], ask:'Within how many seconds do all the bounces end?', right, opts:shuffle([right,...wrong]), lead:'', why:'Time: t₀ = √(2h∕g) ≈ '+DECAX(t0,3)+' s and √r = '+DECAX(s,1)+'. The hops shrink by √r, so T = t₀(1 + √r)∕(1 − √r) ≈ '+right+'.'}; }
+    const D=h*(1+r)/(1-r), right=DECAX(D,2)+' m', wrong=UQAX(right,[DECAX(h/(1-r),2)+' m',DECAX(h*(1+s)/(1-s),2)+' m',DECAX(2*h/(1-r),2)+' m',DECAX(h*(1+r),2)+' m'],3); if(wrong.length<3) return null;
+    return {index:'q:22·phys.work[d;'+h+';'+r+']', lines:[['h = '+h+' \\text{ m},\\ \\ r = '+r,'dropped; each bounce reaches r of the last height']], ask:'How far does the ball travel, up and down, in all its bounces?', right, opts:shuffle([right,...wrong]), lead:'', why:'Distance: down h, then up and down 2hr + 2hr² + ⋯, which is h(1 + r)∕(1 − r) = '+h+' · '+DECAX(1+r,2)+' ÷ '+DECAX(1-r,2)+' ≈ '+right+'.'}; }},
+  {id:'22·phys.word',step:'22·phys',mode:'word',label:'hearing the share',open:()=>measured('22·phys'),make(){
+    const g1=[0.4,0.5,0.6][rnd(3)], s=[0.8,0.85,0.875,0.9][rnd(4)], g2=Math.round(g1*s*1000)/1000, sr=g2/g1, F=rnd(2);
+    const right=F?DECAX(g2*sr,3)+' s':DECAX(sr*sr,3), wrong=F?UQAX(right,[DECAX(g2*sr*sr,3)+' s',DECAX(g2-(g1-g2),3)+' s',DECAX(g2,3)+' s',DECAX(g2*Math.sqrt(sr),3)+' s'],3):UQAX(right,[DECAX(sr,3),DECAX(Math.sqrt(sr),3),DECAX(1-sr,3),DECAX(2*sr-1,3)],3);
+    if(wrong.length<3) return null;
+    return {index:'q:22·phys.word['+g1+';'+g2+';'+F+']', a3:['22·phys.word',DASH,DASH], story:'A referee at a table-tennis hall in Bellevue drops a ball on a table and listens. Two neighbouring gaps between clicks last '+g1+' s and then '+g2+' s.', lines:[], ask:F?'How long should the next gap last?':'What share of the last height does each bounce reach?', right, opts:shuffle([right,...wrong]), lead:'', why:'Click: neighbouring gaps stand in the ratio √r = '+g2+' ÷ '+g1+' = '+DECAX(sr,4)+'. '+(F?'So the next gap is '+g2+' · '+DECAX(sr,4)+' ≈ '+right+'.':'So r = '+DECAX(sr,4)+'² ≈ '+right+'.')}; }},
+  {id:'22·phys.line',step:'22·phys',mode:'proof',label:'what the bounces license',open:()=>measured('22·phys'),make(){
+    return line28('22·phys.line',[
+      ['o1',[['\\text{endlessly many bounces}','the share law'],['\\text{endless time}','endless hops']],2,1,'Hop times shrink by √r < 1: their sum settles.'],
+      ['o2',[['\\text{each bounce reaches } r \\text{ of the last height}','given'],['\\text{the hop times shrink by } r','the same share']],2,1,'By √r: the fall time goes as the root of the height.'],
+      ['o3',[['\\text{the hops shrink}','given'],['\\text{they end in a finite time}','shrinking']],2,1,'Shrinking is not enough: hops of 1, ½, ⅓, … seconds pass every bound.'],
+      ['o4',[['\\text{the time is finite}','time technique'],['\\text{a real ball bounces endlessly often}','the law']],2,1,'The law is read past its range; each contact takes τ.'],
+      ['o5',[['\\text{gaps of } 0.400 \\text{ s and } 0.350 \\text{ s}','heard'],['r \\approx 0.766','click']],2,0,'√r = 0.875, and 0.875² ≈ 0.766.'],
+      ['o6',[['\\text{every bounce takes at least } \\tau','contact'],['\\text{only finitely many in a few seconds}','contact']],2,0,'n bounces take at least nτ.']],[]); }});
+/* ----- annex 22·stat Why do rare events share one pattern: Work, Word Problems, Check Proofs ----- */
+const FACAX=n=>n<2?1:n*FACAX(n-1), POIAX=(l,k)=>Math.exp(-l)*Math.pow(l,k)/FACAX(k);
+QP.push({id:'22·stat.work',step:'22·stat',mode:'work',label:'many small chances, counted',open:()=>measured('22·stat'),make(){
+    const ask=rnd(2);
+    if(ask){ const l=[0.3,0.4,0.5,0.6,0.765,0.8][rnd(6)], N=[5,8,10,12,20][rnd(5)], L=l*N, right=DECAX(L,2), wrong=UQAX(right,[DECAX(l,3),DECAX(l+N,2),DECAX(L*L,2),DECAX(Math.exp(-L),4)],3); if(wrong.length<3) return null;
+      return {index:'q:22·stat.work[a;'+l+';'+N+']', lines:[['\\lambda = '+l+' \\text{ slips a page}','a tally'],[N+' \\text{ pages}','a chapter']], ask:'What count of slips does the chapter expect?', right, opts:shuffle([right,...wrong]), lead:'', why:'Pages-add: rare counts that run apart add, and so do their expected counts: '+N+' · '+l+' = '+right+'. The chapter is clean with chance e^(−'+right+') ≈ '+DECAX(Math.exp(-L),4)+'.'}; }
+    const l=[0.5,0.8,1,1.5,2,2.4,3][rnd(7)], k=rnd(4), p=POIAX(l,k), right=DECAX(p,3), wrong=UQAX(right,[DECAX(Math.pow(l,k)/FACAX(k),3),DECAX(Math.exp(-l)*Math.pow(l,k),3),DECAX(POIAX(l,k+1),3),DECAX(1-p,3)],3); if(wrong.length<3) return null;
+    return {index:'q:22·stat.work[p;'+l+';'+k+']', lines:[['\\lambda = '+l,'the expected count'],['k = '+k,'hits']], ask:'What is the chance of exactly '+k+' hit'+(k===1?'':'s')+', to three places?', right, opts:shuffle([right,...wrong]), lead:'', why:'Rare-count: e^(−'+l+') · '+l+(k>1?'^'+k:'')+' ÷ '+k+'! = '+DECAX(Math.exp(-l),4)+' · '+DECAX(Math.pow(l,k),4)+' ÷ '+FACAX(k)+' ≈ '+right+'.'}; }},
+  {id:'22·stat.word',step:'22·stat',mode:'word',label:'a help line in Olympia',open:()=>measured('22·stat'),make(){
+    const r=[1.2,1.8,2.4,3,3.6][rnd(5)], s=[10,15,20,30][rnd(4)], l=r*s/60, F=rnd(2), p=F?Math.exp(-l):1-Math.exp(-l);
+    const right=DECAX(p,3), wrong=UQAX(right,[DECAX(1-p,3),DECAX(l,3),DECAX(Math.exp(-r),3),DECAX(POIAX(l,1),3)],3); if(wrong.length<3) return null;
+    return {index:'q:22·stat.word['+r+';'+s+';'+F+']', a3:['22·stat.word',DASH,DASH], story:'A help line in Olympia takes '+r+' calls a minute on average, from many callers who each call rarely and on their own.', lines:[], ask:F?'What is the chance that '+s+' seconds pass with no call, to three places?':'What is the chance of at least one call in '+s+' seconds, to three places?', right, opts:shuffle([right,...wrong]), lead:'', why:'Pages-add, run the other way: '+s+' seconds expect '+r+' · '+s+' ÷ 60 = '+DECAX(l,3)+' calls. No call has chance e^(−'+DECAX(l,3)+') ≈ '+DECAX(Math.exp(-l),3)+(F?'.':', so at least one has chance '+right+'.')}; }},
+  {id:'22·stat.line',step:'22·stat',mode:'proof',label:'what the rare count licenses',open:()=>measured('22·stat'),make(){
+    return line28('22·stat.line',[
+      ['s1',[['\\lambda = 0.8','slips a page'],['\\text{most pages hold } 1 \\text{ slip}','the expected count']],2,1,'The most likely count is 0 whenever λ < 1.'],
+      ['s2',[['4 \\text{ letters, each at chance } \\tfrac12','given'],['e^{-2}\\tfrac{2^k}{k!}','rare-count']],2,1,'The law needs many chances, each small.'],
+      ['s3',[['\\text{mean} = \\text{variance}','a tally'],['\\text{a count of rare events}','mean-and-spread']],2,1,'That runs the technique backwards.'],
+      ['s4',[['\\text{slips that come in runs}','given'],['e^{-\\lambda}\\tfrac{\\lambda^k}{k!}','rare-count']],2,1,'The chances multiply only when the slips come apart.'],
+      ['s5',[['\\text{a rare count with } \\lambda = 0.765','a tally'],['\\text{its variance is } 0.765','mean-and-spread']],2,0,'A count of rare events has its variance equal to its mean.'],
+      ['s6',[['\\textstyle\\sum_k e^{-\\lambda}\\tfrac{\\lambda^k}{k!}','every count'],['1','count-total']],2,0,'e^(−λ) times e^λ.']],[]); }});
+/* ----- annex 23·eng Torque or horsepower: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'23·eng.work',step:'23·eng',mode:'work',label:'turning push times turning speed',open:()=>measured('23·eng'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const T=[150,200,250,300,400,500][rnd(6)], N=[2000,3000,4000,5000,6000][rnd(5)], P=T*N/9549, right=DECAX(P,1)+' kW', wrong=UQAX(right,[DECAX(T*N/1000,1)+' kW',DECAX(T*N/5252,1)+' kW',DECAX(T*2*Math.PI*N/1000,1)+' kW',DECAX(T*N/95490,1)+' kW'],3); if(wrong.length<3) return null;
+      return {index:'q:23·eng.work[p;'+T+';'+N+']', lines:[['\\tau = '+T+' \\text{ N·m}','torque'],['N = '+SPAX(N).replace(' ','\\,')+' \\text{ rpm}','turning speed']], ask:'What power does the engine give there?', right, opts:shuffle([right,...wrong]), lead:'', why:'Turn-power: P = τ · 2πN∕60 = τN∕9549 = '+T+' · '+SPAX(N)+' ÷ 9549 ≈ '+right+'.'}; }
+    if(ask===1){ const T=[200,250,300,350,400][rnd(5)], N=[2500,4000,5252,6000,7000][rnd(5)], H=T*N/5252, right=DECAX(H,0)+' hp', wrong=UQAX(right,[DECAX(T*N/9549,0)+' hp',DECAX(T,0)+' hp',DECAX(H*0.746,0)+' hp',DECAX(T*N/33000,0)+' hp'],3); if(wrong.length<3) return null;
+      return {index:'q:23·eng.work[h;'+T+';'+N+']', lines:[[T+' \\text{ lb-ft at } '+SPAX(N).replace(' ','\\,')+' \\text{ rpm}','a dynamometer chart']], ask:'What horsepower does that point give?', right, opts:shuffle([right,...wrong]), lead:'', why:'5252: horsepower is pound-feet times rpm over 5252: '+T+' · '+SPAX(N)+' ÷ 5252 ≈ '+right+'.'+(N===5252?' At 5252 rpm the two numbers agree.':'')}; }
+    const L=[1,1.5,2,2.5][rnd(4)], t=[80,100,120,150][rnd(4)], right=DECAX(t/L,0)+' lb', wrong=UQAX(right,[DECAX(t*L,0)+' lb',DECAX(t/(2*Math.PI*L),0)+' lb',DECAX(t,0)+' lb',DECAX(t/(2*L),0)+' lb'],3); if(wrong.length<3) return null;
+    return {index:'q:23·eng.work[b;'+L+';'+t+']', lines:[['\\text{a wheel nut tightened to } '+t+' \\text{ lb-ft}','the spec'],['\\text{a bar } '+L+' \\text{ ft long}','']], ask:'How hard a push, square to the bar, does it take?', right, opts:shuffle([right,...wrong]), lead:'', why:'Turning push is push times arm: '+t+' ÷ '+L+' ≈ '+right+'. A longer bar halves the push; the work per turn, 2πτ, stays the same.'}; }},
+  {id:'23·eng.word',step:'23·eng',mode:'word',label:'gears and the road push',open:()=>measured('23·eng'),make(){
+    const m=[20000,30000,36000][rnd(3)], g=[0.04,0.05,0.06][rnd(3)], k=[40,50,60][rnd(3)], v=k/3.6, P=m*9.8*g*v, F=rnd(2);
+    const right=F?'the same power: a lower gear trades speed for turning push':DECAX(P/1000,0)+' kW';
+    const wrong=F?['more power: a lower gear makes the engine stronger','less power: a lower gear wastes it','twice the power, for twice the push']:UQAX(right,[DECAX(m*9.8*g*k/1000,0)+' kW',DECAX(m*g*v/1000,0)+' kW',DECAX(m*9.8*v/1000,0)+' kW'],3);
+    if(wrong.length<3) return null;
+    return {index:'q:23·eng.word['+m+';'+g+';'+k+';'+F+']', a3:['23·eng.word',DASH,DASH], story:'A loaded log truck of '+SPAX(m)+' kg climbs a '+Math.round(g*100)+'% grade on the road over Snoqualmie Pass at '+k+' km/h. Climbing a grade r at speed v takes mgrv, with g ≈ 9.8 m/s².', lines:[], ask:F?'The driver shifts to a lower gear. What reaches the wheels, compared with before?':'What power does the climb take?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Gear-trade: τω = P. A gear multiplies the turning push and divides the turning speed by the same number, so the power through is the same.':'Road-push: '+k+' km/h is '+DECAX(v,2)+' m/s, and mgrv = '+SPAX(m)+' · 9.8 · '+g+' · '+DECAX(v,2)+' ≈ '+right+'.'}; }},
+  {id:'23·eng.line',step:'23·eng',mode:'proof',label:'what the chart licenses',open:()=>measured('23·eng'),make(){
+    return line28('23·eng.line',[
+      ['q1',[['\\text{engine A has more torque}','a chart'],['\\text{engine A has more power}','torque']],2,1,'Only at the same speed: P = τω.'],
+      ['q2',[['\\tau,\\ N \\text{ in rpm}','given'],['P = \\tau N','turn-power']],2,1,'ω is in radians a second: ω = 2πN∕60.'],
+      ['q3',[['\\text{the torque peak}','a chart'],['\\text{the power peak}','same place']],2,1,'There P′ = T∕5252 > 0: the power is still climbing.'],
+      ['q4',[['\\text{a lower gear}','given'],['\\text{more power from the engine}','the gear']],2,1,'It trades speed for turning push; the power through is the same.'],
+      ['q5',[['\\text{curves cross at } 5252 \\text{ rpm}','a chart'],['5252 \\text{ is a property of the engine}','the crossing']],2,1,'It is 33 000∕(2π), from the units.'],
+      ['q6',[['\\text{a steady turning push } \\tau','given'],['2\\pi\\tau \\text{ of work a turn}','turn-work']],2,0,'Whatever the length of the arm.']],[]); }});
+/* ----- annex 23·nav How far is the horizon: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'23·nav.work',step:'23·nav',mode:'work',label:'the horizon, near enough',open:()=>measured('23·nav'),make(){
+    const h=[1.7,4,9,16,25,36,49,100,734][rnd(9)], ask=rnd(2);
+    if(ask){ const d=1.927*Math.sqrt(h), right=DECAX(d,1)+' nautical miles', wrong=UQAX(right,[DECAX(3.57*Math.sqrt(h),1)+' nautical miles',DECAX(1.927*h,1)+' nautical miles',DECAX(1.927*Math.sqrt(2*h),1)+' nautical miles',DECAX(2.08*Math.sqrt(h),1)+' nautical miles'],3); if(wrong.length<3) return null;
+      return {index:'q:23·nav.work[n;'+h+']', lines:[['h = '+h+' \\text{ m}','eye height'],['\\text{no bending of the air}','']], ask:'About how far is the horizon?', right, opts:shuffle([right,...wrong]), lead:'', why:'Horizon: about 1.927√h nautical miles, with h in metres: 1.927 · √'+h+' ≈ 1.927 · '+DECAX(Math.sqrt(h),3)+' ≈ '+right+'.'}; }
+    const d=3.57*Math.sqrt(h), right=DECAX(d,1)+' km', wrong=UQAX(right,[DECAX(3.57*h,1)+' km',DECAX(1.927*Math.sqrt(h),1)+' km',DECAX(Math.sqrt(2*6371*h),1)+' km',DECAX(3.57*Math.sqrt(h)*1.08,1)+' km'],3); if(wrong.length<3) return null;
+    return {index:'q:23·nav.work[k;'+h+']', lines:[['h = '+h+' \\text{ m},\\ \\ R = 6371 \\text{ km}','eye height'],['\\text{no bending of the air}','']], ask:'About how far is the horizon?', right, opts:shuffle([right,...wrong]), lead:'', why:'Horizon: √(2Rh) ≈ 3.570√h km, with h in metres: 3.570 · '+DECAX(Math.sqrt(h),3)+' ≈ '+right+'. The dropped h² term changes it by a share under h∕(4R).'}; }},
+  {id:'23·nav.word',step:'23·nav',mode:'word',label:'a light seen from a ship',open:()=>measured('23·nav'),make(){
+    const L=rnd(2)?['Heceta Head Light',62]:['a harbour light',[16,25,36,49,64][rnd(5)]], b=[4,9,15,20,25][rnd(5)], a1=3.57*Math.sqrt(L[1]), a2=3.57*Math.sqrt(b), D=a1+a2;
+    const right=DECAX(D,1)+' km', wrong=UQAX(right,[DECAX(3.57*Math.sqrt(L[1]+b),1)+' km',DECAX(a1,1)+' km',DECAX(Math.abs(a1-a2),1)+' km',DECAX(D*1.08*1.08,1)+' km'],3); if(wrong.length<3) return null;
+    return {index:'q:23·nav.word['+L[0]+';'+b+']', a3:['23·nav.word',DASH,DASH], story:'The lamp of '+L[0]+(L[0][0]==='a'?'':'')+' stands about '+L[1]+' m above the sea. A lookout on a ship’s bridge has eyes '+b+' m up. Take no bending of the air, and the horizon at 3.570√h km.', lines:[], ask:'At about what distance does the light first show?', right, opts:shuffle([right,...wrong]), lead:'', why:'Lighthouse: two sight lines add, each under its own root: 3.570√'+L[1]+' + 3.570√'+b+' ≈ '+DECAX(a1,1)+' + '+DECAX(a2,1)+' ≈ '+right+'.'}; }},
+  {id:'23·nav.line',step:'23·nav',mode:'proof',label:'what the sight line licenses',open:()=>measured('23·nav'),make(){
+    return line28('23·nav.line',[
+      ['z1',[['d^2 = 2Rh + h^2','sight-line'],['d = \\sqrt{2Rh} \\text{ exactly}','drop the term']],2,1,'The dropped share is under h∕(4R): near, not exact.'],
+      ['z2',[['\\text{twice the eye height}','given'],['\\text{twice the distance}','horizon']],2,1,'The distance goes as √h: four times the height doubles it.'],
+      ['z3',[['\\text{a light at } h_1,\\ \\text{an eye at } h_2','given'],['D = \\sqrt{2R(h_1 + h_2)}','lighthouse']],2,1,'Two sight lines add, each under its own root.'],
+      ['z4',[['s \\text{ over the water},\\ d \\text{ the sight line}','given'],['s > d','over-water']],2,1,'s ≤ d, by the small-arc technique.'],
+      ['z5',[['\\text{air bending the sight line, radius } \\rho','given'],['\\text{use } R \\text{ in the sight-line technique}','sight-line']],2,1,'Use R′, with 1∕R′ = 1∕R − 1∕ρ.'],
+      ['z6',[['\\rho = 7R','bent-sight'],['\\text{every horizon out by about } 8\\%','bent-sight']],2,0,'R′ = 7R⁄6, and √(7⁄6) ≈ 1.080.']],[]); }});
+/* ----- annex 23·phys How small slants make a focus: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'23·phys.work',step:'23·phys',mode:'work',label:'kept sines and focus',open:()=>measured('23·phys'),make(){
+    const ask=rnd(2);
+    if(ask){ const n=[1.33,1.5,1.6,2.42][rnd(4)], R=[5,8,10,12,20][rnd(5)], F=n*R/(n-1), right=DECAX(F,1)+' mm', wrong=UQAX(right,[DECAX(R/(n-1),1)+' mm',DECAX(n*R,1)+' mm',DECAX(R/n,1)+' mm',DECAX(2*R,1)+' mm'],3); if(wrong.length<3) return null;
+      return {index:'q:23·phys.work[f;'+n+';'+R+']', lines:[['n = '+n+',\\ \\ R = '+R+' \\text{ mm}','a round glass front']], ask:'Where behind the front do the rays near the axis gather?', right, opts:shuffle([right,...wrong]), lead:'', why:'Falling-short: rays near the axis gather at nR∕(n − 1) = '+n+' · '+R+' ÷ '+DECAX(n-1,2)+' ≈ '+right+' behind the front. Rays farther out fall short.'}; }
+    const M=[['water',1.33],['glass',1.5],['diamond',2.42]][rnd(3)], t=[20,30,40,50,60,70][rnd(6)], s2=Math.sin(DGAX(t))/M[1], t2=DEGAX(Math.asin(s2)), right=DECAX(t2,1)+'°', wrong=UQAX(right,[DECAX(t/M[1],1)+'°',DECAX(t*M[1]>90?90-t/M[1]:t*M[1],1)+'°',DECAX(90-t2,1)+'°',DECAX(DEGAX(Math.asin(Math.sin(DGAX(t))*0.9/M[1]*1.05)),1)+'°'],3); if(wrong.length<3) return null;
+    return {index:'q:23·phys.work[s;'+M[0]+';'+t+']', lines:[['\\theta_1 = '+t+'^\\circ \\text{ from the upright, in air}','sunlight'],['n = '+M[1],M[0]]], ask:'At what slant from the upright does the light run on in the '+M[0]+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Kept-sine: sin θ₂ = sin '+t+'° ÷ '+M[1]+' ≈ '+DECAX(s2,3)+', so θ₂ ≈ '+right+'. The bend depends on sines, not on the slants.'}; }},
+  {id:'23·phys.word',step:'23·phys',mode:'word',label:'how far away is a star',open:()=>measured('23·phys'),make(){
+    const S=rnd(3)?['a faint star in a survey',[0.05,0.1,0.125,0.2,0.25,0.4,0.5][rnd(7)]]:['Proxima Centauri',0.768], F=rnd(2), pc=1/S[1], ly=3.26*pc;
+    const right=F?DECAX(ly,1)+' light-years':DECAX(pc,2)+' parsecs', wrong=F?UQAX(right,[DECAX(3.26*S[1],1)+' light-years',DECAX(ly/2,1)+' light-years',DECAX(pc,1)+' light-years',DECAX(2*ly,1)+' light-years'],3):UQAX(right,[DECAX(S[1],2)+' parsecs',DECAX(pc/2,2)+' parsecs',DECAX(2*pc,2)+' parsecs',DECAX(pc*3.26,2)+' parsecs'],3);
+    if(wrong.length<3) return null;
+    return {index:'q:23·phys.word['+S[0]+';'+F+']', a3:['23·phys.word',DASH,DASH], story:'Over a year, '+S[0]+' swings to and fro against the far stars. Half the full swing, its parallax p, is about '+S[1]+' seconds of arc. A star with a parallax of one second is one parsec away, about 3.26 light-years.', lines:[], ask:'About how far away is it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Parallax: 1 AU∕p, so 1 ÷ '+S[1]+' ≈ '+DECAX(pc,2)+' parsecs'+(F?', times 3.26: about '+right:'')+'. The small-slant reading is too far by a share under p²⁄2, far below the error in p.'}; }},
+  {id:'23·phys.line',step:'23·phys',mode:'proof',label:'what the slants license',open:()=>measured('23·phys'),make(){
+    return line28('23·phys.line',[
+      ['u1',[['n_1 \\sin\\theta_1 = n_2 \\sin\\theta_2','kept-sine'],['\\tfrac{\\theta_1}{\\theta_2} = \\tfrac{n_2}{n_1}','the slants']],2,1,'The sines keep the ratio; the slants do only when they are small.'],
+      ['u2',[['\\text{rays through a round surface}','given'],['\\text{all meet at } \\tfrac{nR}{n - 1}','focus']],2,1,'Only the rays near the axis; the edge rays cross short.'],
+      ['u3',[['\\text{a slant of } 10^\\circ','given'],['\\sin 10^\\circ \\approx 10','small slant']],2,1,'The small-slant reading needs radians: 10° is 0.1745.'],
+      ['u4',[['\\text{a star’s full yearly swing}','measured'],['\\text{its parallax}','the swing']],2,1,'The swing is 2p; p is the slant of one AU.'],
+      ['u5',[['\\text{a ray at height } y','given'],['\\text{short of the focus by about } \\tfrac{y^2}{2n(n - 1)R}','falling-short']],2,0,'It grows as the square of the height.'],
+      ['u6',[['p = 1\'\'','a parallax'],['206\\,265 \\text{ AU}','parallax']],2,0,'One second is π∕648 000 of a radian.']],[]); }});
+/* ----- annex 24·bio How does a cell keep time: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'24·bio.work',step:'24·bio',mode:'work',label:'catching several at once',open:()=>measured('24·bio'),make(){
+    const ask=rnd(2);
+    if(ask){ const n=1+rnd(4), v=Math.pow(81,1/n), right=DECAX(v,2), wrong=UQAX(right,['81',DECAX(81/n,2),DECAX(Math.pow(9,1/n),2),DECAX(Math.pow(81,n),2)],3); if(wrong.length<3) return null;
+      return {index:'q:24·bio.work[s;'+n+']', lines:[['n = '+n,'copies caught at once']], ask:'How many times as much signal does it take to go from 10% caught to 90% caught?', right, opts:shuffle([right,...wrong]), lead:'', why:'Steepness: 81^(1∕n) = 81^(1∕'+n+') ≈ '+right+'.'+(n===1?' One at a time, the full 81.':' The steeper the switch, the less signal it takes.')}; }
+    const n=1+rnd(4), K=[10,20,26,40][rnd(4)], x=K*[0.5,0.75,1.25,1.5,2][rnd(5)], th=Math.pow(x,n)/(Math.pow(K,n)+Math.pow(x,n)), right=Math.round(100*th)+'%', wrong=UQAX(right,[Math.round(100*x/(K+x))+'%',Math.round(100*Math.pow(x/K,n)>100?100*K/(K+x):100*Math.pow(x/K,n))+'%',Math.round(100*(1-th))+'%',Math.round(50*n*x/K>99?100*th/2:50*n*x/K)+'%'],3); if(wrong.length<3) return null;
+    return {index:'q:24·bio.work[b;'+n+';'+K+';'+x+']', lines:[['n = '+n+',\\ \\ K = '+K,'a protein catching n at once'],['x = '+x,'the signal']], ask:'What share is caught, to the nearest percent?', right, opts:shuffle([right,...wrong]), lead:'', why:'Binding: xⁿ∕(Kⁿ + xⁿ) = '+x+(n>1?'^'+n:'')+' ÷ ('+K+(n>1?'^'+n:'')+' + '+x+(n>1?'^'+n:'')+') ≈ '+DECAX(th,3)+', about '+right+'.'+(x===K?' Half caught when x = K.':'')}; }},
+  {id:'24·bio.word',step:'24·bio',mode:'word',label:'two genes that hold each other down',open:()=>measured('24·bio'),make(){
+    const F=rnd(2);
+    if(F){ const h=[22,23,23.5,24.2,24.5,25][rnd(6)], d=Math.round((h-24)*60), right=d===0?'it keeps step with the sun':(d>0?'it drifts about '+d+' minutes later each day':'it drifts about '+(-d)+' minutes earlier each day');
+      const wrong=UQAX(right,['it keeps step with the sun','it drifts about '+Math.abs(d||10)+' minutes '+(d>0?'earlier':'later')+' each day','it drifts about '+Math.round(Math.abs(h-24)*24||5)+' minutes later each day','it stops, with no daylight to set it'],3); if(wrong.length<3) return null;
+      return {index:'q:24·bio.word[p;'+h+']', a3:['24·bio.word',DASH,DASH], story:'Volunteers live for weeks in a cave with dim, steady light and no clocks. Their sleep and waking keep a cycle of about '+h+' hours.', lines:[], ask:'What does their day do against the sun?', right, opts:shuffle([right,...wrong]), lead:'', why:'Own-period: a cycle cut off from daylight keeps a period of its own. '+h+' hours against 24 is '+Math.abs(d)+' minutes a day'+(d?', '+(d>0?'later':'earlier')+' each day.':'.')}; }
+    const a=[1.5,2,3,4,6][rnd(5)], right=a>2?'two states hold, one with each gene on':'only the middle state, with both genes partly on', wrong=UQAX(right,['two states hold, one with each gene on','only the middle state, with both genes partly on','three states hold, the middle one too','no state holds: the genes take turns for ever'],3);
+    return {index:'q:24·bio.word[s;'+a+']', a3:['24·bio.word',DASH,DASH], story:'A lab in Boston builds two genes into a bacterium so that each holds the other down, with n = 2 and strength α = '+a+'.', lines:[], ask:'Which states can the cell rest in?', right, opts:shuffle([right,...wrong]), lead:'', why:'Switch: for n = 2 the pair makes a switch only when α > 2. '+(a>2?'Here the middle state tips, since its relay slope is above 1, and the two one-sided states hold.':'Here α ≤ 2, and the one state left alone holds.')}; }},
+  {id:'24·bio.line',step:'24·bio',mode:'proof',label:'what the binding licenses',open:()=>measured('24·bio'),make(){
+    return line28('24·bio.line',[
+      ['b1',[['\\text{a protein that catches a signal}','given'],['\\theta = \\tfrac{x}{K + x}','binding']],2,1,'Only for one-at-a-time catching; n at once gives xⁿ∕(Kⁿ + xⁿ).'],
+      ['b2',[['\\text{two genes that stop each other}','given'],['\\text{a switch}','they compete']],2,1,'For n = 2, only when α > 2.'],
+      ['b3',[['\\text{a state the relay leaves alone}','given'],['\\text{it holds}','left alone']],2,1,'Only where the relay slope is under 1 in size.'],
+      ['b4',[['\\text{three genes in a ring take turns}','the relay'],['\\text{the cell keeps time}','turns']],2,1,'The statements on rates ask for more: n(1 − L∕α) > 2.'],
+      ['b5',[['x = K','the signal'],['\\text{half caught}','binding']],2,0,'Kⁿ∕(Kⁿ + Kⁿ) = ½, whatever n.'],
+      ['b6',[['n = 4','haemoglobin, roughly'],['10\\% \\text{ to } 90\\% \\text{ in about } 3 \\text{ times the signal}','steepness']],2,0,'81^(1⁄4) = 3.']],[]); }});
+/* ----- annex 24·eng How does a thermostat hold a room: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'24·eng.work',step:'24·eng',mode:'work',label:'a house that leaks',open:()=>measured('24·eng'),make(){
+    const l=[150,200,250,300,400][rnd(5)], To=[-10,-6,-2,0,4][rnd(5)], ask=rnd(3);
+    if(ask===0){ const Ts=[18,20,21][rnd(3)], P=l*(Ts-To), right=SPAX(P)+' W', wrong=UQAX(right,[SPAX(l*Ts)+' W',SPAX(l*(Ts+To))+' W',SPAX(Math.round(P/2))+' W',SPAX(Ts-To)+' W'],3); if(wrong.length<3) return null;
+      return {index:'q:24·eng.work[p;'+l+';'+To+';'+Ts+']', lines:[['\\lambda = '+l+' \\text{ W per degree}','the leak'],[MNAX('T_o = '+To+'\\ ^\\circ\\text{C},\\ \\ \\text{hold } '+Ts+'\\ ^\\circ\\text{C}'),'a winter night']], ask:'What steady heater holds the room?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Closing-gap: the house settles at T_o + P∕λ, so P = λ(T_s − T_o) = '+l+' · '+(Ts-To)+' = '+right+'.')}; }
+    if(ask===1){ const P=[4000,6000,8000,10000][rnd(4)], T=To+P/l, right=MNAX(DECAX(T,1))+' °C', wrong=UQAX(right,[MNAX(DECAX(P/l,1))+' °C',MNAX(DECAX(To-P/l,1))+' °C',MNAX(DECAX(To+P/(2*l),1))+' °C',MNAX(DECAX(To*P/l/10,1))+' °C'],3); if(wrong.length<3) return null;
+      return {index:'q:24·eng.work[s;'+l+';'+To+';'+P+']', lines:[['\\lambda = '+l+' \\text{ W per degree}','the leak'],[MNAX('T_o = '+To+'\\ ^\\circ\\text{C},\\ \\ P = '+SPAX(P).replace(' ','\\,')+' \\text{ W}'),'a furnace left on']], ask:'Where does the house settle?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Closing-gap: T_o + P∕λ = '+To+' + '+SPAX(P)+' ÷ '+l+' ≈ '+DECAX(T,1)+' °C.').replace('+ −','−')}; }
+    const G=[1000,2000,3000,5000][rnd(4)], Ts=20, g=l*(Ts-To)/(l+G), right=DECAX(g,1)+' degrees short', wrong=UQAX(right,[DECAX(l*(Ts-To)/G,1)+' degrees short','0 degrees short',DECAX((Ts-To)*G/(l+G),1)+' degrees short',DECAX(l*(Ts-To)/(l+G)/2,1)+' degrees short'],3); if(wrong.length<3) return null;
+    return {index:'q:24·eng.work[g;'+l+';'+To+';'+G+']', lines:[['\\lambda = '+l+',\\ \\ G = '+SPAX(G).replace(' ','\\,')+' \\text{ W per degree}','leak and heater'],[MNAX('T_o = '+To+'\\ ^\\circ\\text{C},\\ \\ \\text{set point } 20\\ ^\\circ\\text{C}'),'']], ask:'A heater that pushes G times the gap: where does the room settle?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Droop: the gap at rest is λ(T_s − T_o)∕(λ + G) = '+l+' · '+(Ts-To)+' ÷ '+(l+G)+' ≈ '+DECAX(g,1)+'. With no gap there is no push, and the house still leaks.')}; }},
+  {id:'24·eng.word',step:'24·eng',mode:'word',label:'switching at a set point',open:()=>measured('24·eng'),make(){
+    const l=[200,250,300][rnd(3)], To=[-6,-2,2,6][rnd(4)], P=[8000,10000,12000][rnd(3)], need=l*(20-To), sh=need/P, F=rnd(2);
+    if(sh>=1) return null;
+    const right=F?'the swings come faster, and the share stays '+Math.round(100*sh)+'%':Math.round(100*sh)+'%', wrong=F?['the swings come slower, and the share stays '+Math.round(100*sh)+'%','the share drops to half','the room holds at exactly 20 °C']:UQAX(right,[Math.round(100*(1-sh))+'%',Math.round(100*20/(20-To+20))+'%','50%',Math.round(100*P/(P+need))+'%'],3);
+    if(wrong.length<3) return null;
+    return {index:'q:24·eng.word['+l+';'+To+';'+P+';'+F+']', a3:['24·eng.word',DASH,DASH], story:'A house in Truckee leaks '+l+' W per degree. Outside it is '+MNAX(String(To))+' °C. A switching thermostat runs a '+SPAX(P)+' W furnace to hold 20 °C, within a band.', lines:[], ask:F?'The owner narrows the band. What happens?':'For what share of the time is the furnace on?', right, opts:shuffle([right,...wrong]), lead:'', why:'On-share: the furnace is on for the share that matches the heat the house needs: '+l+' · '+(20-To)+' = '+SPAX(need)+' W of '+SPAX(P)+', about '+Math.round(100*sh)+'%.'+(F?' Narrowing the band makes the swings come faster; the share stays the same.':'')}; }},
+  {id:'24·eng.line',step:'24·eng',mode:'proof',label:'what the thermostat licenses',open:()=>measured('24·eng'),make(){
+    return line28('24·eng.line',[
+      ['h1',[['\\text{a switching thermostat set to } 20^\\circ','given'],['\\text{the room holds at } 20^\\circ','the set point']],2,1,'It swings across its band.'],
+      ['h2',[['\\text{a heater by the gap}','given'],['\\text{the gap closes if you wait}','time']],2,1,'The gap λ(T_s − T_o)∕(λ + G) stays for ever.'],
+      ['h3',[['G \\text{ large enough}','given'],['\\text{the gap is exactly } 0','droop']],2,1,'For no G; and the furnace tops out.'],
+      ['h4',[['\\text{the summing heater has no gap at rest}','summing'],['\\text{it settles}','no gap']],2,1,'No gap at rest; that it settles is another question.'],
+      ['h5',[['\\tau = c\\,/\\lambda','closing-gap'],['63\\% \\text{ of what is left closed in each } \\tau','closing-gap']],2,0,'1 − e⁻¹ ≈ 0.63.'],
+      ['h6',[['\\lambda = 250,\\ \\ T_s - T_o = 26','the Truckee house'],['6500 \\text{ W to hold the room}','closing-gap']],2,0,'250 · 26 = 6500.']],[]); }});
+/* ----- annex 24·now Can chaos be proved: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'24·now.work',step:'24·now',mode:'work',label:'a fixed future, out of sight',open:()=>measured('24·now'),make(){
+    const ask=rnd(2);
+    if(ask){ const mu=[0.5,0.906,1,1.5,2][rnd(5)], k=[1,2,3,6][rnd(4)], v=k*Math.LN10/mu, right=DECAX(v,1)+' units', wrong=UQAX(right,[DECAX(k/mu,1)+' units',DECAX(k*mu*Math.LN10,1)+' units',DECAX(Math.pow(10,k)/mu,1)+' units',DECAX(v*2,1)+' units'],3); if(wrong.length<3) return null;
+      return {index:'q:24·now.work[t;'+mu+';'+k+']', lines:[['\\text{gap after time } t \\approx \\varepsilon\\,e^{'+mu+'\\,t}','measured'],['\\text{a start } 10^{'+k+'} \\text{ times sharper}','given']], ask:'How much longer does the forecast hold?', right, opts:shuffle([right,...wrong]), lead:'', why:'Parting-starts: t = (1∕μ) ln(D∕ε), so a start 10^'+k+' times sharper adds ln(10^'+k+')∕μ = '+k+' · 2.303 ÷ '+mu+' ≈ '+right+'.'}; }
+    const b=[8,10,16,20,30,40,52][rnd(7)], right='about '+b, wrong=UQAX(right,['about '+(2*b),'about '+Math.round(b*0.301),'about '+Math.round(b/2),'for ever'],3); if(wrong.length<3) return null;
+    return {index:'q:24·now.work[d;'+b+']', lines:[['s_{n+1} = 4s_n(1 - s_n)','the logistic run at r = 4'],['\\text{two starts whose } \\theta_0 \\text{ agree to } '+b+' \\text{ base-two places}','given']], ask:'For about how many steps do the two runs agree?', right, opts:shuffle([right,...wrong]), lead:'', why:'Doubling: sₙ = sin²(π frac(2ⁿθ₀)), and each step shifts the base-two digits of θ₀ one place left. After about '+b+' steps the digits that differ are in front, and nothing ties the runs.'}; }},
+  {id:'24·now.word',step:'24·now',mode:'word',label:'a step a computer cannot fake',open:()=>measured('24·now'),make(){
+    const lo=1.105+rnd(5)/10000, w=[2,5,10,40][rnd(4)]/1e6, hi=lo+w, d4=x=>Math.round(x*1e4)/1e4, same=d4(lo)===d4(hi);
+    const right=same?'y(0.1) = '+d4(lo).toFixed(4)+' to four places, since every point of the box rounds to it':'only that y(0.1) lies in the box: its ends round differently';
+    const wrong=same?['only that y(0.1) lies in the box: its ends round differently','y(0.1) = '+((lo+hi)/2).toFixed(7)+' exactly','nothing: a computer’s box proves nothing']:['y(0.1) = '+d4(lo).toFixed(4)+' to four places, since every point of the box rounds to it','y(0.1) = '+((lo+hi)/2).toFixed(7)+' exactly','nothing: a computer’s box proves nothing'];
+    return {index:'q:24·now.word['+lo.toFixed(6)+';'+w+']', a3:['24·now.word',DASH,DASH], story:'A boxed step, with every rounding pushed outward, ends with y(0.1) in the box ['+lo.toFixed(6)+', '+hi.toFixed(6)+'].', lines:[], ask:'What does the step prove about y(0.1)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Boxed-step: the box must hold the true value. Only what holds at every point of the box is proved: '+(same?'both ends round to '+d4(lo).toFixed(4)+'.':'the ends round to '+d4(lo).toFixed(4)+' and '+d4(hi).toFixed(4)+'.')}; }},
+  {id:'24·now.line',step:'24·now',mode:'proof',label:'what the boxes license',open:()=>measured('24·now'),make(){
+    return line28('24·now.line',[
+      ['c1',[['\\text{the statement is tame}','one future from each start'],['\\text{the future can be foreseen}','fixed']],2,1,'Fixed is not foreseen: each tenfold buys 2.5 units.'],
+      ['c2',[['\\text{the screen shows a butterfly}','a rounded run'],['\\text{the attractor exists}','seen']],2,1,'Rounded runs prove nothing; boxes can.'],
+      ['c3',[['y(0.1) \\in [1.105166,\\ 1.105200]','a box'],['y(0.1) = 1.1052','four places']],2,1,'Only what holds at every point of the box: the ends round differently.'],
+      ['c4',[['\\text{wild at } r = 4','proved'],['\\text{wild for every } r \\text{ near } 4','nearby']],2,1,'Cycles that hold lie next to every r.'],
+      ['c5',[['y \\le 1.2 \\Rightarrow y \\le 1.12','on [0, 0.1]'],['\\text{the box } [1, 1.2] \\text{ keeps itself}','boxed-step']],2,0,'1 + 0.1 · 1.2 = 1.12 < 1.2.'],
+      ['c6',[['\\text{gap} \\approx \\varepsilon\\,e^{0.906\\,t}','measured'],['\\text{each tenfold sharper start buys about } 2.5 \\text{ units}','parting-starts']],2,0,'ln 10 ÷ 0.906 ≈ 2.54.']],[]); }});
+/* ----- annex 25·chem Where does a reaction stop: Work, Word Problems, Check Proofs ----- */
+const SCAX=(v,k)=>{ if(v===0) return '0'; const e=Math.floor(Math.log10(Math.abs(v))), m=v/Math.pow(10,e); const ms=DECAX(m,k||2); return e===0?ms:ms+' × 10'+String(e).replace('-','⁻').replace(/\d/g,c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[c]); };
+QP.push({id:'25·chem.work',step:'25·chem',mode:'work',label:'the ratio at rest',open:()=>measured('25·chem'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const G=[-17.1,-11.4,-5.7,5.7,11.4,17.1,-22.8,13.8][rnd(8)], K=Math.pow(10,-G/5.7), right=SCAX(K,2), wrong=UQAX(right,[SCAX(1/K,2),SCAX(Math.exp(-G/5.7),2),SCAX(-G/5.7===0?2:Math.abs(G/5.7),2),SCAX(K*10,2)],3); if(wrong.length<3) return null;
+      return {index:'q:25·chem.work[g;'+G+']', lines:[[MNAX('\\Delta G^\\circ = '+G+' \\text{ kJ per mole}'),'at 25 °C']], ask:'About what is K?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Rest-energy: every 5.7 kJ per mole handed out multiplies K by ten at 25 °C. K = 10^('+DECAX(-G/5.7,2)+') ≈ '+right+'.')}; }
+    if(ask===1){ const K=[0.25,0.5,1,2,3,4,9][rnd(7)], c=[1,2,3][rnd(3)], u=c/(1+K), right=DECAX(u,3)+' mol/L', wrong=UQAX(right,[DECAX(c*K/(1+K),3)+' mol/L',DECAX(c/K,3)+' mol/L',DECAX(c/2,3)+' mol/L',DECAX(c*K,3)+' mol/L'],3); if(wrong.length<3) return null;
+      return {index:'q:25·chem.work[u;'+K+';'+c+']', lines:[['\\alpha \\rightleftharpoons \\beta,\\ \\ K = '+K,'one change and its reverse'],['[\\alpha] + [\\beta] = '+c+' \\text{ mol/L}','in all']], ask:'How much α is left at rest?', right, opts:shuffle([right,...wrong]), lead:'', why:'Balance: at rest v∕u = K and u + v = '+c+', so u(1 + K) = '+c+' and u = '+c+' ÷ '+DECAX(1+K,2)+' ≈ '+right+'.'}; }
+    const Ksp=[1.8e-10,5e-13,8.3e-17,1e-10,4e-12][rnd(5)], c=[0.001,0.01,0.1][rnd(3)], s=Ksp/c, right=SCAX(s,2)+' mol/L', wrong=UQAX(right,[SCAX(Math.sqrt(Ksp),2)+' mol/L',SCAX(Ksp*c,2)+' mol/L',SCAX(Math.sqrt(Ksp/c),2)+' mol/L',SCAX(c-Ksp,2)+' mol/L'],3); if(wrong.length<3) return null;
+    return {index:'q:25·chem.work[s;'+Ksp+';'+c+']', lines:[['K_{sp} = '+String(Ksp).replace(/e-(\d+)/,'\\times 10^{-$1}'),'a salt of one ion of each kind'],['\\text{water already holding } '+c+' \\text{ mol/L of one ion}','given']], ask:'About how much of the salt dissolves?', right, opts:shuffle([right,...wrong]), lead:'', why:'Shared-ion: s(s + '+c+') = K_sp, and s is tiny beside '+c+', so s ≈ K_sp ÷ '+c+' ≈ '+right+'. In pure water it would be √K_sp ≈ '+SCAX(Math.sqrt(Ksp),2)+'.'}; }},
+  {id:'25·chem.word',step:'25·chem',mode:'word',label:'a pushed mixture pushes back',open:()=>measured('25·chem'),make(){
+    const F=rnd(3), Fwd='it runs forward, making more product', Bck='it runs back, using up product', Rst='nothing changes: it was at rest', Stp='it stops: both changes halt';
+    if(F===0){ const right=Fwd, wrong=[Bck,Rst,Stp];
+      return {index:'q:25·chem.word[s]', a3:['25·chem.word',DASH,DASH], story:'A plant near Pasco makes ammonia, N₂ + 3H₂ ⇌ 2NH₃. A mixture at rest is squeezed to half its volume, so every amount doubles.', lines:[], ask:'What does the mixture do next?', right, opts:shuffle([right,...wrong]), lead:'', why:'Push-back: Q is multiplied by 2²∕(2 · 2³) = ¼, so Q falls below K and the forward change runs faster until Q is back at K.'}; }
+    const K=[4,10,50,100][rnd(4)], Q=K*[0.1,0.5,2,5,1][rnd(5)], right=Q<K?Fwd:Q>K?Bck:'both changes run, at equal paces', wrong=UQAX(right,[Fwd,Bck,'both changes run, at equal paces',Stp],3);
+    return {index:'q:25·chem.word[q;'+K+';'+Q+']', a3:['25·chem.word',DASH,DASH], story:'For a change at this temperature K = '+K+'. A sample is mixed so that its ratio of amounts Q is '+Q+'.', lines:[], ask:'What does the mixture do?', right, opts:shuffle([right,...wrong]), lead:'', why:'Push-back: forward pace over reverse pace is K∕Q = '+DECAX(K/Q,2)+'. '+(Q<K?'Above 1: forward runs faster.':Q>K?'Below 1: the reverse runs faster.':'Exactly 1: at rest, both still run.')+' Either way Q heads for K.'}; }},
+  {id:'25·chem.line',step:'25·chem',mode:'proof',label:'what the balance licenses',open:()=>measured('25·chem'),make(){
+    return line28('25·chem.line',[
+      ['k1',[['\\text{a mixture at rest}','given'],['\\text{nothing reacts}','at rest']],2,1,'Both changes run, at equal paces.'],
+      ['k2',[['46x^2 - 150x + 100 = 0','the ratio’s polynomial'],['x = 2.326','a root']],2,1,'2.326 leaves −1.326 of hydrogen: outside the window.'],
+      ['k3',[['K = 50','given'],['\\text{the change runs to the end}','K is large']],2,1,'It stops where Q = 50, with hydrogen left.'],
+      ['k4',[['\\Delta G^\\circ > 0','given'],['\\text{nothing forms}','uphill']],2,1,'K is below 1, not 0: a little forms.'],
+      ['k5',[['Q < K','a mixture'],['\\text{it runs forward}','push-back']],2,0,'Forward over reverse pace is K∕Q > 1.'],
+      ['k6',[['\\Delta G^\\circ_1 + \\Delta G^\\circ_2','two changes in a row'],['K_1 K_2','rest-energy']],2,0,'A log turns a product into a sum.']],[]); }});
+/* ----- annex 25·econ Why saving does not make growth for ever: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'25·econ.work',step:'25·econ',mode:'work',label:'machines per worker',open:()=>measured('25·econ'),make(){
+    const ask=rnd(2);
+    if(ask){ const s=[0.1,0.15,0.2,0.25,0.3][rnd(5)], d=[0.04,0.05,0.06][rnd(3)], n=[0.01,0.02][rnd(2)], k=Math.pow(s/(d+n),1.5), right=DECAX(k,2), wrong=UQAX(right,[DECAX(s/(d+n),2),DECAX(Math.pow(s/(d+n),0.5),2),DECAX(Math.pow(s/d,1.5),2),DECAX(Math.pow(k,1/3),2)],3); if(wrong.length<3) return null;
+      return {index:'q:25·econ.work[k;'+s+';'+d+';'+n+']', lines:[['s = '+s+',\\ \\ \\delta = '+d+',\\ \\ n = '+n,'saving, wear, new workers'],['y = k^{1/3}','output per worker']], ask:'Where do machines per worker come to rest?', right, opts:shuffle([right,...wrong]), lead:'', why:'Resting-point: s k^(1⁄3) = (δ + n)k, so k* = (s∕(δ + n))^1.5 = ('+s+' ÷ '+DECAX(d+n,2)+')^1.5 ≈ '+right+'.'}; }
+    const m=[2,3,4,8,27,64][rnd(6)], a=[1/3,0.5][rnd(2)], v=Math.pow(m,a), right=DECAX(v,2)+' times', wrong=UQAX(right,[m+' times',DECAX(m*a,2)+' times',DECAX(Math.pow(m,1-a),2)+' times',DECAX(m/2,2)+' times'],3); if(wrong.length<3) return null;
+    return {index:'q:25·econ.work[y;'+m+';'+a+']', lines:[['y = k^{'+(a===0.5?'1/2':'1/3')+'}','output per worker'],['\\text{machines per worker } \\times '+m,'given']], ask:'By what factor does output per worker grow?', right, opts:shuffle([right,...wrong]), lead:'', why:'Per-worker: ('+m+'k)^'+(a===0.5?'½':'⅓')+' = '+m+'^'+(a===0.5?'½':'⅓')+' · k^'+(a===0.5?'½':'⅓')+', so '+right+'. Each extra machine adds less than the last.'}; }},
+  {id:'25·econ.word',step:'25·econ',mode:'word',label:'saving lifts the level',open:()=>measured('25·econ'),make(){
+    const F=rnd(2);
+    if(F){ const r=[1.5,2,1.25,3][rnd(4)], v=Math.sqrt(r), right='about '+Math.round(100*(v-1))+'% more output per worker, once', wrong=['growth '+r+' times as fast, for ever','about '+Math.round(100*(r-1))+'% more output per worker, once','no change: workers save, so they spend less'];
+      return {index:'q:25·econ.word[l;'+r+']', a3:['25·econ.word',DASH,DASH], story:'An economy with y = k^(1⁄3) raises its saving from one share to '+r+' times that share, and keeps it there. Wear and new workers stay as they were.', lines:[], ask:'What does it buy, in the long run?', right, opts:shuffle([right,...wrong]), lead:'', why:'Level: y* = (s∕(δ + n))^½ with α = ⅓, so '+r+' times the saving gives √'+r+' ≈ '+DECAX(v,3)+' times the output per worker. The level rises once; growth fades back.'}; }
+    const c=[0.4,0.5,0.6,0.8,0.9][rnd(5)], v=[0.8,1,1.25,1.5,2][rnd(5)], cv=c*v, right=cv<1?'they die away, since cv < 1':cv>1?'they grow, since cv > 1':'they keep the same size, since cv = 1';
+    const wrong=UQAX(right,['they die away, since cv < 1','they grow, since cv > 1','they keep the same size, since cv = 1','they never wave: an economy always settles'],3);
+    return {index:'q:25·econ.word[w;'+c+';'+v+']', a3:['25·econ.word',DASH,DASH], story:'In a model of booms and busts, households spend c = '+c+' of last year’s income, and firms invest v = '+v+' times last year’s rise in spending. The road to rest runs in waves.', lines:[], ask:'What happens to the waves?', right, opts:shuffle([right,...wrong]), lead:'', why:'Wave: the waves die away exactly when cv < 1. Here cv = '+c+' · '+v+' = '+DECAX(cv,2)+'.'}; }},
+  {id:'25·econ.line',step:'25·econ',mode:'proof',label:'what the model licenses',open:()=>measured('25·econ'),make(){
+    return line28('25·econ.line',[
+      ['e1',[['\\text{save twice as much}','given'],['\\text{grow twice as fast, for ever}','more machines']],2,1,'The level rises once; growth fades.'],
+      ['e2',[['\\text{twice the machines per worker}','given'],['\\text{twice the output}','per-worker']],2,1,'2^⅓ ≈ 1.26 times, with α = ⅓.'],
+      ['e3',[['\\text{a poor country}','given'],['\\text{it catches up with the rich}','resting point']],2,1,'Only to its own resting point.'],
+      ['e4',[['\\text{the gaps wave}','given'],['\\text{the economy never settles}','waves']],2,1,'Waves die away when cv < 1.'],
+      ['e5',[['y = k^{1/3},\\ k \\times 8','given'],['y \\times 2','per-worker']],2,0,'8^⅓ = 2.'],
+      ['e6',[['s = 0.2,\\ \\delta + n = 0.06','given'],['k^* = (0.2 \\div 0.06)^{1.5} \\approx 6.09','resting-point']],2,0,'Saving just covers the wear and the new workers there.']],[]); }});
+/* ----- annex 25·eng Why an arch stands: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'25·eng.work',step:'25·eng',mode:'work',label:'cables and chains',open:()=>measured('25·eng'),make(){
+    const ask=rnd(2);
+    if(ask){ const L=[300,600,800,1000,1280][rnd(5)], s=L*[0.08,0.1,0.11,0.125][rnd(4)], v=L/(8*s), right=DECAX(v,2)+' times', wrong=UQAX(right,[DECAX(8*s/L,2)+' times',DECAX(L/s,2)+' times',DECAX(L/(4*s),2)+' times',DECAX(v/2,2)+' times'],3); if(wrong.length<3) return null;
+      return {index:'q:25·eng.work[d;'+L+';'+s+']', lines:[['\\text{span } L = '+SPAX(L).replace(' ','\\,')+' \\text{ m},\\ \\ \\text{sag } s = '+DECAX(s,1)+' \\text{ m}','a cable under a level deck']], ask:'The across pull is how many times the weight of the whole deck?', right, opts:shuffle([right,...wrong]), lead:'', why:'Even-deck: H = qL²∕(8s) = (L∕(8s)) · qL, and qL is the deck’s weight: '+L+' ÷ (8 · '+DECAX(s,1)+') ≈ '+right+'. The flatter the cable, the harder it pulls.'}; }
+    const L=[100,200,300,400][rnd(4)], c=[500,800,1000,1500,2000][rnd(5)], sg=L*L/(8*c), right=DECAX(sg,2)+' m', wrong=UQAX(right,[DECAX(L*L/(4*c),2)+' m',DECAX(L/(8*c),2)+' m',DECAX(c/(8*L),2)+' m',DECAX(L*L/c,2)+' m'],3); if(wrong.length<3) return null;
+    return {index:'q:25·eng.work[s;'+L+';'+c+']', lines:[['y = c\\cosh(x/c),\\ \\ c = '+SPAX(c).replace(' ','\\,')+' \\text{ m}','a hanging chain'],['\\text{span } '+L+' \\text{ m}','shallow']], ask:'About how far does it sag in the middle?', right, opts:shuffle([right,...wrong]), lead:'', why:'Hanging-chain, shallow: sag ≈ L²∕(8c) = '+(L*L)+' ÷ '+(8*c)+' ≈ '+right+'. Never 0 for a finite pull.'}; }},
+  {id:'25·eng.word',step:'25·eng',mode:'word',label:'shape, not strength',open:()=>measured('25·eng'),make(){
+    const F=rnd(2);
+    if(F){ const S=[[130,2700,'granite'],[60,2400,'a sandstone that takes 60 million'],[20,2300,'a soft limestone that takes 20 million'],[40,2400,'a concrete that takes 40 million']][rnd(4)], h=S[0]*1e6/(S[1]*9.8)/1000, right=DECAX(h,1)+' km', wrong=UQAX(right,[DECAX(h*9.8,1)+' km',DECAX(h/9.8,2)+' km',DECAX(S[0]/S[1]*1000,1)+' km',DECAX(h*2,1)+' km'],3); if(wrong.length<3) return null;
+      return {index:'q:25·eng.word[c;'+S[0]+']', a3:['25·eng.word',DASH,DASH], story:(S[2]==='granite'?'Granite takes a squeeze of about 130 million':'Picture '+S[2])+' newtons per square metre and weighs about '+SPAX(S[1])+' kg per cubic metre.', lines:[], ask:'How tall a column of it crushes its own base?', right, opts:shuffle([right,...wrong]), lead:'', why:'Shape: the squeeze at the base is the weight over the area, ρgh. It reaches '+S[0]+' × 10⁶ at h = '+S[0]+' × 10⁶ ÷ ('+SPAX(S[1])+' · 9.8) ≈ '+right+'.'}; }
+    const right='nothing stronger: the same shape stands at twice the size', wrong=['stone twice as strong','stone four times as strong','a parabola instead of a hanging-chain shape'];
+    return {index:'q:25·eng.word[a]', a3:['25·eng.word',DASH,DASH], story:'A mason has built a small stone arch in the shape of a hanging chain, turned upside down, and it stands. A town asks for one twice as large, in the same stone.', lines:[], ask:'What does the larger arch need?', right, opts:shuffle([right,...wrong]), lead:'', why:'Shape: whether an arch stands depends on its shape, not its size. The squeeze grows only in proportion to the size, far below the crushing point until the arch is kilometres tall.'}; }},
+  {id:'25·eng.line',step:'25·eng',mode:'proof',label:'what the chain licenses',open:()=>measured('25·eng'),make(){
+    return line28('25·eng.line',[
+      ['g1',[['\\text{a chain under its own weight}','given'],['\\text{a parabola}','its shape']],2,1,'c cosh(x∕c): nearly one only when shallow.'],
+      ['g2',[['\\text{a hanging chain}','given'],['\\text{the same pull everywhere}','steady']],2,1,'Only its across part is; the pull grows toward the ends.'],
+      ['g3',[['\\text{pull a chain hard enough}','given'],['\\text{it hangs straight}','a hard pull']],2,1,'Sag ≈ L²∕(8c) is never 0 for finite H.'],
+      ['g4',[['\\text{an arch twice as large}','given'],['\\text{stone twice as strong}','size']],2,1,'The shape decides; the squeeze grows only in proportion.'],
+      ['g5',[['\\text{a hanging chain turned upside down}','given'],['\\text{an arch that stands by pushing alone}','upside-down']],2,0,'Every pull turns into a push under the same loads.'],
+      ['g6',[['\\text{the lowest point of a chain}','slope 0'],['\\text{the pull there is all across}','steady-across']],2,0,'The up part is the across part times the slope.']],[]); }});
+/* ----- annex 25·now Which numbers stay home: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'25·now.work',step:'25·now',mode:'work',label:'run the step',open:()=>measured('25·now'),make(){
+    const c=[-2,-1.5,-1,-0.75,-0.5,0.25,0.3,0.5,1,-2.5,0.1][rnd(11)], z1=c, z2=c*c+c, z3=z2*z2+c, ask=rnd(2);
+    if(ask){ const right=MNAX(DECAX(z3,4)), wrong=UQAX(right,[MNAX(DECAX(z2,4)),MNAX(DECAX(z2*z2,4)),MNAX(DECAX(z2+c,4)),MNAX(DECAX(z3*z3+c,4))],3); if(wrong.length<3) return null;
+      return {index:'q:25·now.work[z;'+c+']', lines:[[MNAX('z_{n+1} = z_n^2 + c,\\ \\ z_0 = 0,\\ \\ c = '+c),'the run of c']], ask:'What is z₃?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('z₁ = c = '+c+', z₂ = z₁² + c = '+DECAX(z2,4)+', z₃ = z₂² + c = '+DECAX(z3,4)+'.')}; }
+    const home=c>=-2&&c<=0.25, right=home?'it stays home':'it escapes', wrong=[home?'it escapes':'it stays home',home?'it escapes, since |c| > 0':'it stays home, since |c| ≤ 2',home?'no one can tell without running it for ever':'no one can tell without running it for ever'];
+    const W=UQAX(right,wrong,3); if(W.length<3) W.push('it stays home only for the first 1000 steps');
+    return {index:'q:25·now.work[h;'+c+']', lines:[[MNAX('c = '+c),'a real number']], ask:'Does c stay home under z ↦ z² + c, from z₀ = 0?', right, opts:shuffle([right,...W.slice(0,3)]), lead:'', why:MNAX('Line: a real c stays home exactly when it lies from −2 to ¼. '+c+(home?' lies there.':' does not'+(c>0.25?': past ¼ the run climbs.':': past −2, z₁ is already past 2.')))}; }},
+  {id:'25·now.word',step:'25·now',mode:'word',label:'the heart and its first bud',open:()=>measured('25·now'),make(){
+    const c=[-1,-1.1,-0.9,-0.8,-1.2,0,0.2,-0.5,-0.7,-1.5,-1.8,0.4,-2.2][rnd(13)];
+    const R=c>0.25||c<-2?'outside the set: it escapes':c>-0.75?'in the heart: its resting point pulls':c>=-1.25?'in the first bud: its cycle of two pulls':'on the line past the bud: it stays home, but neither heart nor first bud';
+    const right=R, wrong=UQAX(right,['outside the set: it escapes','in the heart: its resting point pulls','in the first bud: its cycle of two pulls','on the line past the bud: it stays home, but neither heart nor first bud'],3);
+    return {index:'q:25·now.word['+c+']', a3:['25·now.word',DASH,DASH], story:MNAX('A student marks c = '+c+' on a printed picture of the set of c that stay home under z ↦ z² + c. The heart meets the line at ¼ and −¾; the first bud is the disc of size ¼ about −1.'), lines:[], ask:'Where does c sit?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Heart-and-bud: on the line the heart runs from −¾ to ¼ and the bud from −1¼ to −¾; the set runs from −2 to ¼. c = '+c+' lies '+(c>0.25||c<-2?'outside it.':c>-0.75?'in the heart.':c>=-1.25?'in the bud.':'between −2 and −1¼.'))}; }},
+  {id:'25·now.line',step:'25·now',mode:'proof',label:'what the runs license',open:()=>measured('25·now'),make(){
+    return line28('25·now.line',[
+      ['m1',[['|z_n| < 2 \\text{ for } 1000 \\text{ steps}','a run'],['c \\text{ stays home}','long enough']],2,1,'Under 2 so far proves nothing.'],
+      ['m2',[['|z^2 + c| \\le |z|^2 + |c|','a ceiling'],['\\text{the run grows}','the ceiling']],2,1,'A ceiling cannot show growth; the floor |z|² − |c| does.'],
+      ['m3',[['\\text{the picture shows specks apart}','a screen'],['\\text{the set is in pieces}','seen']],2,1,'Proved in one piece; a thread can be thinner than a square.'],
+      ['m4',[['|z_1| = |c| \\le 2','c = 1 + i'],['c \\text{ stays home}','under 2']],2,1,'c = 1 + i has |c| ≈ 1.41 and escapes.'],
+      ['m5',[['|z_N| > 2','a run'],['c \\text{ escapes}','escape']],2,0,'One step past 2 proves escape.'],
+      ['m6',[['c = -1','a real number'],['0,\\ -1,\\ 0,\\ -1,\\ \\dots','the run']],2,0,'(−1)² − 1 = 0 and 0² − 1 = −1: a cycle of two.']],[]); }});
+/* ----- annex 26·phys How does a radio pick one station: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'26·phys.work',step:'26·phys',mode:'work',label:'swings and impedances',open:()=>measured('26·phys'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const V=[100,110,120,220,230,240][rnd(6)], right=DECAX(V*Math.SQRT2,0)+' V', wrong=UQAX(right,[V+' V',DECAX(V/Math.SQRT2,0)+' V',DECAX(2*V,0)+' V',DECAX(V*1.5,0)+' V'],3); if(wrong.length<3) return null;
+      return {index:'q:26·phys.work[v;'+V+']', lines:[['\\text{an outlet rated } '+V+' \\text{ V}','the steady stand-in']], ask:'How far does the voltage swing each way?', right, opts:shuffle([right,...wrong]), lead:'', why:'Steady-stand-in: a swing to ±V₀ warms as a steady V₀∕√2 would, so V₀ = '+V+' · √2 ≈ '+right+'.'}; }
+    if(ask===1){ const R=[10,20,30][rnd(3)], XL=[20,30,37.7,40,50][rnd(5)], XC=[10,15,26.5,30][rnd(4)], Z=Math.hypot(R,XL-XC), right=DECAX(Z,1)+' Ω', wrong=UQAX(right,[DECAX(R+XL+XC,1)+' Ω',DECAX(Math.hypot(R,XL+XC),1)+' Ω',DECAX(R+Math.abs(XL-XC),1)+' Ω',DECAX(Math.hypot(XL,XC),1)+' Ω'],3); if(wrong.length<3) return null;
+      return {index:'q:26·phys.work[z;'+R+';'+XL+';'+XC+']', lines:[['R = '+R+' \\ \\Omega,\\ \\ \\omega L = '+XL+' \\ \\Omega,\\ \\ \\tfrac{1}{\\omega C} = '+XC+' \\ \\Omega','in a row']], ask:'What is the size of the total impedance?', right, opts:shuffle([right,...wrong]), lead:'', why:'Row: Z = '+R+' + '+XL+'i − '+XC+'i = '+R+(XL>=XC?' + ':' − ')+DECAX(Math.abs(XL-XC),1)+'i, as complex numbers. Its size is √('+R+'² + '+DECAX(Math.abs(XL-XC),1)+'²) ≈ '+right+'. The coil and store point opposite ways.'}; }
+    const L=[100,200,240,250][rnd(4)], C=[50,100,150,200,365][rnd(5)], f=1/(2*Math.PI*Math.sqrt(L*1e-6*C*1e-12))/1000, right=DECAX(f,0)+' kHz', wrong=UQAX(right,[DECAX(1/Math.sqrt(L*1e-6*C*1e-12)/1000,0)+' kHz',DECAX(f/2,0)+' kHz',DECAX(f*Math.PI,0)+' kHz',DECAX(f*2,0)+' kHz'],3); if(wrong.length<3) return null;
+    return {index:'q:26·phys.work[f;'+L+';'+C+']', lines:[['L = '+L+' \\ \\mu\\text{H},\\ \\ C = '+C+' \\text{ pF}','a coil and a store in a row']], ask:'What pace, in kHz, does the circuit pass best?', right, opts:shuffle([right,...wrong]), lead:'', why:'Resonance: ω₀ = 1∕√(LC), so f₀ = 1∕(2π√(LC)) ≈ '+right+'.'}; }},
+  {id:'26·phys.word',step:'26·phys',mode:'word',label:'a swing pushed at its own pace',open:()=>measured('26·phys'),make(){
+    const l=[1.6,2,2.4,3,4][rnd(5)], b=[0.02,0.05,0.1,0.2][rnd(4)], w=Math.sqrt(9.8/l), v=w/(2*b), right=DECAX(v,0)+' times', wrong=UQAX(right,[DECAX(w/b,0)+' times',DECAX(w,1)+' times',DECAX(1/(2*b),0)+' times',DECAX(v*v,0)+' times'],3); if(wrong.length<3) return null;
+    return {index:'q:26·phys.word['+l+';'+b+']', a3:['26·phys.word',DASH,DASH], story:'A playground swing in a park in Spokane hangs on chains '+l+' m long, so ω₀ = √(9.8 ÷ '+l+') a second. Its brake is light, b = '+b+' a second. A parent gives small pushes in step with it.', lines:[], ask:'How many times as far does it swing as the same push held steady would hold it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Pushed-swing: ω₀∕(2b) = '+DECAX(w,3)+' ÷ '+DECAX(2*b,2)+' ≈ '+right+'.'}; }},
+  {id:'26·phys.line',step:'26·phys',mode:'proof',label:'what the circuit licenses',open:()=>measured('26·phys'),make(){
+    return line28('26·phys.line',[
+      ['a1',[['\\text{a 120 V outlet}','given'],['\\text{never past 120 V}','its rating']],2,1,'120 V is the steady stand-in; the peaks are near 170 V.'],
+      ['a2',[['R,\\ \\omega L,\\ \\tfrac{1}{\\omega C} \\text{ in a row}','given'],['|Z| = R + \\omega L + \\tfrac{1}{\\omega C}','they add']],2,1,'The parts point different ways: add as complex numbers, then take the size.'],
+      ['a3',[['\\text{a coil}','Z = iωL'],['\\text{its current in step with its voltage}','impedance']],2,1,'iωL: a quarter turn behind.'],
+      ['a4',[['\\text{a sharper tuning}','larger Q'],['\\text{better sound}','sharp']],2,1,'Too narrow a band cuts the station’s own high notes.'],
+      ['a5',[['\\omega = 1/\\sqrt{LC}','the pace'],['\\omega L = \\tfrac{1}{\\omega C}','resonance']],2,0,'The coil and store cancel, leaving only R.'],
+      ['a6',[['Q = 50 \\text{ at } 680 \\text{ kHz}','sharpness'],['\\text{a band } 13.6 \\text{ kHz wide}','sharpness']],2,0,'ω₀∕Q wide: 680 ÷ 50 = 13.6.']],[]); }});
+/* ----- annex 27·chem Can every reaction be balanced: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'27·chem.work',step:'27·chem',mode:'work',label:'one balance, up to stretching',open:()=>measured('27·chem'),make(){
+    const ask=rnd(2);
+    if(ask){ const k=[2,3,4][rnd(3)], a=DEGAX(Math.acos(-1/(k-1))), right=DECAX(a,2)+'°', wrong=UQAX(right,[DECAX(360/k,2)+'°',DECAX(180/k,2)+'°',DECAX(DEGAX(Math.acos(-1/k)),2)+'°','90°'],3); if(wrong.length<3) return null;
+      return {index:'q:27·chem.work[a;'+k+']', lines:[[k+' \\text{ vectors of length 1 adding to } 0','every two at one angle']], ask:'At what angle does each pair meet?', right, opts:shuffle([right,...wrong]), lead:'', why:'Equal-spread: cos θ = −1∕(k − 1) = −1∕'+(k-1)+', so θ ≈ '+right+'.'}; }
+    const R=[['CH_4 + O_2 \\to CO_2 + H_2O',[1,2,1,2]],['C_2H_6 + O_2 \\to CO_2 + H_2O',[2,7,4,6]],['C_3H_8 + O_2 \\to CO_2 + H_2O',[1,5,3,4]],['C_4H_{10} + O_2 \\to CO_2 + H_2O',[2,13,8,10]],['H_2 + O_2 \\to H_2O',[2,1,2]],['N_2 + H_2 \\to NH_3',[1,3,2]],['Fe + O_2 \\to Fe_2O_3',[4,3,2]],['Al + O_2 \\to Al_2O_3',[4,3,2]],['C_2H_4 + O_2 \\to CO_2 + H_2O',[1,3,2,2]]][rnd(9)];
+    const s=a=>a.join(' : '), c=R[1], right=s(c), wrong=UQAX(right,[s(c.map((x,i)=>i===1?x+1:x)),s(c.map(x=>x*2)),s(c.map((x,i)=>i===c.length-1?x+1:x)),s(c.map(()=>1)),s(c.map((x,i)=>i===0?x+1:x))],3); if(wrong.length<3) return null;
+    return {index:'q:27·chem.work[b;'+right+']', lines:[['\\mathrm{'+R[0]+'}','a reaction']], ask:'What is its one balance in whole amounts, all positive, with no common divisor above 1?', right, opts:shuffle([right,...wrong]), lead:'', why:'One-up-to-scale: every balance is a stretch of one. Count each element on both sides; '+right+' balances them all, and its amounts share no divisor above 1.'}; }},
+  {id:'27·chem.word',step:'27·chem',mode:'word',label:'when the pulls do not cancel',open:()=>measured('27·chem'),make(){
+    const F=rnd(3);
+    if(F===0){ const p=[1,1.5,2][rnd(3)], t=[90,104.5,120,150,180][rnd(5)], v=2*p*Math.cos(DGAX(t/2)), right=DECAX(v,2)+' units', wrong=UQAX(right,[DECAX(2*p,2)+' units',DECAX(p*Math.cos(DGAX(t/2)),2)+' units',DECAX(2*p*Math.sin(DGAX(t/2)),2)+' units',DECAX(2*p*Math.cos(DGAX(t)),2)+' units'].map(x=>x.replace(/^-/,'−')),3); if(wrong.length<3) return null;
+      return {index:'q:27·chem.word[p;'+p+';'+t+']', a3:['27·chem.word',DASH,DASH], story:'A molecule has two like bonds, each pulling charge with size '+p+', meeting at '+t+'°.', lines:[], ask:'How big is the molecule’s charge-vector?', right, opts:shuffle([right,...wrong]), lead:'', why:'Cancelling-pulls: two like bonds of size p meeting at θ leave 2p cos(θ⁄2) = 2 · '+p+' · cos '+DECAX(t/2,2)+'° ≈ '+right+'.'+(t===180?' Opposite pulls cancel.':'')}; }
+    const M=[['CCl₄','four like bonds spread evenly',0],['CO₂','two like bonds in a straight line',0],['H₂O','two like bonds meeting at 104.5°',1],['BF₃','three like bonds spread evenly in a plane',0],['NH₃','three like bonds bent below the nitrogen like a tripod',1]][rnd(5)];
+    const right=M[2]?'yes: the bond vectors do not add to 0':'no: the bond vectors add to 0, however hard each pulls', wrong=[M[2]?'no: the bond vectors add to 0, however hard each pulls':'yes: the bond vectors do not add to 0','yes: every molecule with pulling bonds has one','no: like bonds never pull'];
+    return {index:'q:27·chem.word[m;'+M[0]+']', a3:['27·chem.word',DASH,DASH], story:'In '+M[0]+' the central atom has '+M[1]+'.', lines:[], ask:'Does the molecule have a charge-vector?', right, opts:shuffle([right,...wrong]), lead:'', why:'Cancelling-pulls: a molecule whose like bonds point along vectors that add to 0 has no charge-vector. '+(M[2]?'These do not add to 0.':'These do, by the equal-spread technique.')}; }},
+  {id:'27·chem.line',step:'27·chem',mode:'proof',label:'what the atom grid licenses',open:()=>measured('27·chem'),make(){
+    return line28('27·chem.line',[
+      ['n1',[['\\mathrm{N_2 + 4\\,H_2 \\to 2\\,NH_4}','balanced'],['\\text{it happens}','a balance']],2,1,'A balance is needed for a reaction, not enough: NH₄ alone is no stable molecule.'],
+      ['n2',[['\\mathrm{H_2O \\to H_2O_2}','unbalanced'],['\\text{balanced by changing the small numbers}','fix it']],2,1,'That changes the species; only the amounts in front are unknowns.'],
+      ['n3',[['\\text{a reaction}','given'],['\\text{exactly one balance}','balance']],2,1,'Only when the space of balances has dimension 1.'],
+      ['n4',[['\\tfrac{13}{2}\\,\\mathrm{O_2} \\text{ for one butane}','amounts'],['\\text{not a balance}','fractions']],2,1,'It is; whole numbers are only its stretch by 2.'],
+      ['n5',[['\\text{two balances}','given'],['\\text{their sum is a balance}','atom-grid']],2,0,'The balances are what the atom grid loses: a space.'],
+      ['n6',[['4 \\text{ equal vectors adding to } 0','equal-spread'],['\\cos\\theta = -\\tfrac13,\\ \\theta \\approx 109.47^\\circ','equal-spread']],2,0,'cos θ = −1∕(k − 1) with k = 4.']],[]); }});
+/* ----- annex 27·crypt A grid that locks letters: Work, Word Problems, Check Proofs ----- */
+const M26AX=x=>((x%26)+26)%26, INV26AX=d=>{ for(let e=1;e<26;e++) if(M26AX(d*e)===1) return e; return 0; };
+QP.push({id:'27·crypt.work',step:'27·crypt',mode:'work',label:'remainders by 26',open:()=>measured('27·crypt'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const m=-(1+rnd(80)), right=String(M26AX(m)), wrong=UQAX(right,[String(-m%26),String(26-M26AX(m)+1),String(M26AX(m)+1),String(Math.abs(m))],3); if(wrong.length<3) return null;
+      return {index:'q:27·crypt.work[n;'+m+']', lines:[[MNAX(String(m)),'an entry']], ask:'What remainder by 26 does it leave?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX(m+' + 26 · '+Math.ceil(-m/26)+' = '+right+', from 0 to 25.')}; }
+    if(ask===1){ const d=[3,5,7,9,11,15,17,19,21,23,25][rnd(11)], e=INV26AX(d), right=String(e), wrong=UQAX(right,[String(26-d),String(M26AX(e+2)),String(27-e),String(d)],3); if(wrong.length<3) return null;
+      return {index:'q:27·crypt.work[e;'+d+']', lines:[['\\det K \\text{ leaves } '+d,'by 26']], ask:'What e makes e · '+d+' leave 1 by 26?', right, opts:shuffle([right,...wrong]), lead:'', why:e+' · '+d+' = '+(e*d)+' = 26 · '+Math.floor(e*d/26)+' + 1.'}; }
+    const d=[2,3,4,5,6,7,8,9,10,11,12,13,15,17,24,25][rnd(16)], g=(a,b)=>b?g(b,a%b):a, ok=g(d,26)===1, right=ok?'yes: '+d+' shares no divisor above 1 with 26':'no: '+d+' shares '+g(d,26)+' with 26', wrong=[ok?'no: '+d+' shares '+(d%2?13:2)+' with 26':'yes: '+d+' shares no divisor above 1 with 26','yes: any det other than 0 will do','no: only det 1 can be undone'];
+    return {index:'q:27·crypt.work[d;'+d+']', lines:[['\\det K = '+d,'a key grid']], ask:'Can K be undone among letters?', right, opts:shuffle([right,...wrong]), lead:'', why:'The way back needs e with e · det K leaving 1 by 26, and that e exists exactly when det K shares no divisor above 1 with 26. '+(ok?'Here e = '+INV26AX(d)+'.':'Here no e does.')}; }},
+  {id:'27·crypt.word',step:'27·crypt',mode:'word',label:'a pair of letters is a vector',open:()=>measured('27·crypt'),make(){
+    const A='abcdefghijklmnopqrstuvwxyz', K=[[7,8],[11,11]], x=rnd(26), y=rnd(26), u=M26AX(K[0][0]*x+K[0][1]*y), v=M26AX(K[1][0]*x+K[1][1]*y);
+    const right=(A[u]+A[v]).toUpperCase(), wrong=UQAX(right,[(A[M26AX(K[0][0]*x+K[1][0]*y)]+A[M26AX(K[0][1]*x+K[1][1]*y)]).toUpperCase(),(A[v]+A[u]).toUpperCase(),(A[M26AX(u+1)]+A[v]).toUpperCase(),(A[x]+A[y]).toUpperCase()],3); if(wrong.length<3) return null;
+    return {index:'q:27·crypt.word['+A[x]+A[y]+']', a3:['27·crypt.word',DASH,DASH], story:'A clerk locks a report two letters at a time, a = 0 to z = 25, with the key grid K whose rows are (7, 8) and (11, 11). The next pair of the message is “'+A[x]+A[y]+'”.', lines:[], ask:'What pair does the clerk send?', right, opts:shuffle([right,...wrong]), lead:'', why:'Remainders-pass-through: K('+x+', '+y+') = ('+(7*x+8*y)+', '+(11*x+11*y)+'), which leave ('+u+', '+v+') by 26: '+right+'.'}; }},
+  {id:'27·crypt.line',step:'27·crypt',mode:'proof',label:'what the grid licenses',open:()=>measured('27·crypt'),make(){
+    return line28('27·crypt.line',[
+      ['g1',[['\\det K = 2 \\ne 0','given'],['K \\text{ can be undone among letters}','det not 0']],2,1,'2 shares a divisor with 26; no e has 2e leaving 1.'],
+      ['g2',[['S\\,K = (\\det K)\\,I','stand-in'],['K\' = \\tfrac{1}{\\det K}\\,S','undo']],2,1,'Fractions are not letters; use e with e det K leaving 1.'],
+      ['g3',[['-11','an entry'],['\\text{it leaves } 11 \\text{ by } 26','drop the sign']],2,1,'−11 + 26 = 15: it leaves 15.'],
+      ['g4',[['\\text{two known pairs}','a guessed word'],['\\text{the key}','known-pairs']],2,1,'Only when their grid P can be undone among letters; ga and le cannot.'],
+      ['g5',[['\\det K = -11 \\text{ leaves } 15','given'],['K\' = 7\\,S','15 · 7 = 105 = 26 · 4 + 1']],2,0,'7 undoes 15 among letters.'],
+      ['g6',[['m \\text{ leaves } r,\\ n \\text{ leaves } r\'','by 26'],['mn \\text{ leaves what } rr\' \\text{ leaves}','remainders-pass-through']],2,0,'mn = 26(…) + rr′.']],[]); }});
+/* ----- annex 27·econ How much must every industry make: Work, Word Problems, Check Proofs ----- */
+const LEOAX=(a,b,c,d)=>{ const D=(1-a)*(1-d)-b*c; return {D, i:[[(1-d)/D,b/D],[c/D,(1-a)/D]]}; };
+QP.push({id:'27·econ.work',step:'27·econ',mode:'work',label:'one new order',open:()=>measured('27·econ'),make(){
+    const ask=rnd(2);
+    if(ask){ const c=[0.3,0.4,0.5,0.6][rnd(4)], k=[1,2,3,4][rnd(4)], v=Math.pow(c,k+1)/(1-c), right=DECAX(v,4), wrong=UQAX(right,[DECAX(Math.pow(c,k)/(1-c),4),DECAX(Math.pow(c,k+1),4),DECAX(1/(1-c),4),DECAX(Math.pow(c,k+1)*(1-c),4)],3); if(wrong.length<3) return null;
+      return {index:'q:27·econ.work[r;'+c+';'+k+']', lines:[['\\text{every column of } A \\text{ adds to at most } '+c,'an input–output table'],['\\text{rounds } 0 \\text{ to } '+k+' \\text{ counted}','I + A + \\dots + A^{'+k+'}']], ask:'At most what share of the total demand do the rounds left out add?', right, opts:shuffle([right,...wrong]), lead:'', why:'Every-round: the rounds after the kth add up to at most c^(k+1)∕(1 − c) = '+c+'^'+(k+1)+' ÷ '+DECAX(1-c,2)+' ≈ '+right+' of it.'}; }
+    const a=[0.1,0.2,0.3][rnd(3)], b=[0.1,0.2,0.3][rnd(3)], c=[0.1,0.2][rnd(2)], d=[0.2,0.3,0.4][rnd(4)%3], L=LEOAX(a,b,c,d), j=rnd(2), m=L.i[0][j]+L.i[1][j];
+    const right=DECAX(m,2), wrong=UQAX(right,[DECAX(1/(1-(j?b+d:a+c)),2),DECAX(L.i[j][j],2),DECAX(1+(j?b+d:a+c),2),DECAX(L.i[0][1-j]+L.i[1][1-j],2)],3); if(wrong.length<3) return null;
+    return {index:'q:27·econ.work[m;'+[a,b,c,d,j].join(';')+']', lines:[['A = \\begin{pmatrix} '+a+' & '+b+' \\\\ '+c+' & '+d+' \\end{pmatrix}','farms, factories'],['\\text{one more dollar of final demand for '+(j?'factories':'farms')+'}','']], ask:'How much total output does it bring, to two places?', right, opts:shuffle([right,...wrong]), lead:'', why:'Order-column: column '+(j+1)+' of (I − A)⁻¹ is ('+DECAX(L.i[0][j],3)+', '+DECAX(L.i[1][j],3)+'), and its sum is '+right+'.'}; }},
+  {id:'27·econ.word',step:'27·econ',mode:'word',label:'every industry buys from every other',open:()=>measured('27·econ'),make(){
+    const a=[0.1,0.2,0.3][rnd(3)], b=[0.2,0.3][rnd(2)], c=[0.1,0.2][rnd(2)], d=[0.2,0.3,0.4][rnd(3)], d1=[10,20,30][rnd(3)], d2=[20,40,50][rnd(3)], L=LEOAX(a,b,c,d), x1=L.i[0][0]*d1+L.i[0][1]*d2, x2=L.i[1][0]*d1+L.i[1][1]*d2;
+    const right=DECAX(x1,1)+' farm, '+DECAX(x2,1)+' factory', wrong=UQAX(right,[d1+' farm, '+d2+' factory',DECAX(d1+a*d1+b*d2,1)+' farm, '+DECAX(d2+c*d1+d*d2,1)+' factory',DECAX(x2,1)+' farm, '+DECAX(x1,1)+' factory'],3); if(wrong.length<3) return null;
+    return {index:'q:27·econ.word['+[a,b,c,d,d1,d2].join(';')+']', a3:['27·econ.word',DASH,DASH], story:'In a small valley economy, each dollar of farm output uses '+a+' of farm goods and '+c+' of factory goods; each dollar of factory output uses '+b+' of farm goods and '+d+' of factory goods. Final buyers want '+d1+' of farm goods and '+d2+' of factory goods, in millions.', lines:[], ask:'What must each industry make?', right, opts:shuffle([right,...wrong]), lead:'', why:'Gross-output: x = Ax + d, so (I − A)x = d and x = (I − A)⁻¹d ≈ ('+DECAX(x1,1)+', '+DECAX(x2,1)+'). The industries also make for each other.'}; }},
+  {id:'27·econ.line',step:'27·econ',mode:'proof',label:'what the table licenses',open:()=>measured('27·econ'),make(){
+    return line28('27·econ.line',[
+      ['t1',[['\\text{final demand } d','given'],['\\text{output} = d','what buyers want']],2,1,'Industries also make for each other: x = Ax + d.'],
+      ['t2',[['\\text{a column adds to more than 1}','given'],['\\text{it cannot feed itself}','the column test']],2,1,'The column test is enough, not needed: look for a surplus plan.'],
+      ['t3',[['\\det(I - A) \\ne 0','given'],['\\text{it feeds itself}','undone']],2,1,'The outputs must not be negative: Δ < 0 gives negative ones.'],
+      ['t4',[['x = (I - A)^{-1}d','gross-output'],['x = d + Ad','the rounds']],2,1,'Two rounds of endlessly many.'],
+      ['t5',[['\\text{every column of } A \\text{ adds to at most } c < 1','given'],['(I - A)^{-1} = I + A + A^2 + \\cdots','every-round']],2,0,'The rounds shrink by c at least, and settle.'],
+      ['t6',[['\\text{a plan leaving a surplus of everything}','given'],['\\text{every demand can be met}','feeds-itself']],2,0,'The surplus plan scales to cover any demand that is not negative.']],[]); }});
+/* ----- annex 27·nav How does a phone know where it is: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'27·nav.work',step:'27·nav',mode:'work',label:'a distance is a delay',open:()=>measured('27·nav'),make(){
+    const ask=rnd(2);
+    if(ask){ const e=[1,5,10,30,100,1000][rnd(6)], d=e*0.29979, right=e>=1000?DECAX(d/1000,1)+' km':DECAX(d,1)+' m', wrong=UQAX(right,[e>=1000?DECAX(d,0)+' km':DECAX(d*100,1)+' m',e>=1000?DECAX(d/1e6,4)+' km':DECAX(d/10,2)+' m',e>=1000?DECAX(d/100,1)+' km':DECAX(e*3,1)+' m',e>=1000?DECAX(d/500,1)+' km':DECAX(d*2,1)+' m'],3); if(wrong.length<3) return null;
+      return {index:'q:27·nav.work[t;'+e+']', lines:[['\\text{a clock error of } '+SPAX(e)+' \\text{ billionths of a second}','in the delay'],['c \\approx 299\\,792 \\text{ km/s}','']], ask:'How big an error does it make in the distance?', right, opts:shuffle([right,...wrong]), lead:'', why:'Travel-time: each billionth of a second is about 30 cm: '+SPAX(e)+' · 0.29979 m ≈ '+right+'.'}; }
+    const a=[[0,0],[10,0],[0,10]], px=1+rnd(8), py=1+rnd(8), r=a.map(t=>Math.hypot(px-t[0],py-t[1])), R2=a.map((t,i)=>DECAX(r[i]*r[i],0));
+    const right='x = '+px, wrong=UQAX(right,['x = '+py,'x = '+(10-px),'x = '+DECAX(Math.sqrt(R2[0]),1),'x = '+(px+1)],3); if(wrong.length<3) return null;
+    return {index:'q:27·nav.work[s;'+px+';'+py+']', lines:[['\\text{towers at } (0, 0) \\text{ and } (10, 0)','in km'],['x^2 + y^2 = '+R2[0]+',\\ \\ (x - 10)^2 + y^2 = '+R2[1],'the two circles']], ask:'Take one sameness from the other. Which straight sameness is left?', right, opts:shuffle([right,...wrong]), lead:'', why:'Sphere-difference: the squares cancel, leaving 20x − 100 = '+R2[0]+' − '+R2[1]+' = '+(R2[0]-R2[1])+', so 20x = '+(R2[0]-R2[1]+100)+' and x = '+px+'.'}; }},
+  {id:'27·nav.word',step:'27·nav',mode:'word',label:'the fourth satellite is the clock',open:()=>measured('27·nav'),make(){
+    const F=rnd(2);
+    if(F){ const n=[3,4,5][rnd(3)], right=n>=4?'yes: four unknowns, the place and the clock error, need four':'no: with the clock error there are four unknowns, and three leave a curve of answers', wrong=[n>=4?'no: with the clock error there are four unknowns, and three leave a curve of answers':'yes: four unknowns, the place and the clock error, need four','yes: three spheres always meet in one point','no: a phone needs ten satellites at least'];
+      return {index:'q:27·nav.word[n;'+n+']', a3:['27·nav.word',DASH,DASH], story:'A hiker’s phone in the North Cascades hears '+n+' satellites. Its quartz clock is off by an unknown amount, the same for every satellite.', lines:[], ask:'Can it fix its place?', right, opts:shuffle([right,...wrong]), lead:'', why:'Clock-unknown: the clock error is a fourth unknown. Four satellites give three straight samenesses whose answers lie along a line, and one sphere picks the point.'+(n===5?' A fifth only checks the fix.':'')}; }
+    const right='the spread one: bunched satellites shrink the determinant, so the same error moves the fix further', wrong=['the bunched one: more satellites in one patch agree better','neither: the number of satellites is all that matters','the bunched one: closer satellites give shorter delays'];
+    return {index:'q:27·nav.word[s]', a3:['27·nav.word',DASH,DASH], story:'Two phones each hear four satellites with the same small timing errors. One sees them spread across the sky; the other sees them bunched in one patch to the south.', lines:[], ask:'Which phone gets the better fix?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spread-sky: an error moves the fix by the undo of the grid, (1∕det M) S Δc. As the satellites bunch, det M nears 0 and the fix moves much further.'}; }},
+  {id:'27·nav.line',step:'27·nav',mode:'proof',label:'what the satellites license',open:()=>measured('27·nav'),make(){
+    return line28('27·nav.line',[
+      ['s1',[['\\text{three satellites heard}','given'],['\\text{the phone is fixed}','three spheres']],2,1,'With an unknown clock there are four unknowns; three satellites leave a curve of answers.'],
+      ['s2',[['\\text{the straight samenesses}','sphere-difference'],['\\text{the place}','solve them']],2,1,'Subtracting dropped the squares; keep one sphere and check.'],
+      ['s3',[['\\rho_i','measured'],['\\text{the distance to satellite } i','a delay']],2,1,'ρᵢ is the distance plus the clock error b, the same for every satellite.'],
+      ['s4',[['\\text{more satellites in one patch of sky}','given'],['\\text{a better fix}','more']],2,1,'Bunched satellites shrink the determinant; the spread matters.'],
+      ['s5',[['\\text{a delay error of } 1 \\text{ billionth of a second}','given'],['\\text{about } 30 \\text{ cm of distance}','travel-time']],2,0,'c · 10⁻⁹ s ≈ 0.3 m.'],
+      ['s6',[['\\text{towers on one line}','given'],['\\det M = 0','spread-sky']],2,0,'The grid cannot be undone: the phone and its mirror image fit alike.']],[]); }});
+/* ----- annex 27·now How does a search engine rank pages: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'27·now.work',step:'27·now',mode:'work',label:'rounds, not elimination',open:()=>measured('27·now'),make(){
+    const ask=rnd(2);
+    if(ask){ const q=[0.5,0.7,0.85,0.9][rnd(4)], t=[2,3,4,6,8][rnd(5)]; let k=0; while(Math.pow(q,k)>Math.pow(10,-t)) k++;
+      const right=String(k), wrong=UQAX(right,[String(Math.round(t/(1-q))),String(t*10),String(Math.ceil(k/2)),String(k*2)],3); if(wrong.length<3) return null;
+      return {index:'q:27·now.work[r;'+q+';'+t+']', lines:[['\\text{every other stretch has size at most } '+q,'second-stretch'],['\\text{shrink the gap to the ranking by } 10^{-'+t+'}','the aim']], ask:'How many rounds are enough?', right, opts:shuffle([right,...wrong]), lead:'', why:'Second-stretch: each round shrinks the gap by '+q+'. '+q+'^'+(k-1)+' ≈ '+SCAX(Math.pow(q,k-1),2)+' is not yet below 10⁻'+'⁰¹²³⁴⁵⁶⁷⁸⁹'[t]+', and '+q+'^'+k+' ≈ '+SCAX(Math.pow(q,k),2)+' is: '+k+' rounds.'}; }
+    const r=[0.01,0.02,0.0375,0.05,0.1][rnd(5)], v=r*1.7/0.15, right=DECAX(v,3), wrong=UQAX(right,[DECAX(r,3),DECAX(r/0.15,3),DECAX(r*1.7,3),DECAX(r*0.85,3)],3); if(wrong.length<3) return null;
+    return {index:'q:27·now.work[f;'+r+']', lines:[['\\text{the pages that change their links hold rank } '+r,'in all'],['\\text{the web’s grid}','damping 0.85']], ask:'At most how far can the whole ranking move, in total size?', right, opts:shuffle([right,...wrong]), lead:'', why:'Few-links: at most 1.7 ÷ 0.15, about 11.3, times the rank those pages hold: 11.33 · '+r+' ≈ '+right+'.'}; }},
+  {id:'27·now.word',step:'27·now',mode:'word',label:'closed loops and dead ends',open:()=>measured('27·now'),make(){
+    const F=rnd(3), S=[['A small web splits into two groups of pages with no links between them. Do the links alone choose one ranking?','no: the rankings they allow form a space of dimension two or more'],['A page links to nothing. What happens to the total rank, round after round, without a fix?','it drains away: that page’s column is all zeros, and its rank passes nowhere'],['Every entry of the grid is above 0 and every column adds to 1. How many rankings adding to 1 are there?','exactly one, with every rank above 0']][F];
+    const pool=['no: the rankings they allow form a space of dimension two or more','it drains away: that page’s column is all zeros, and its rank passes nowhere','exactly one, with every rank above 0','yes: the most linked-to page ranks first','none: such a grid has no ranking','it doubles each round'];
+    const right=S[1], wrong=UQAX(right,pool,3);
+    return {index:'q:27·now.word['+F+']', a3:['27·now.word',DASH,DASH], story:'A student in Palo Alto ranks a few web pages by passing each page’s rank out along its links, round after round.', lines:[], ask:S[0], right, opts:shuffle([right,...wrong]), lead:'', why:['Closed-loops: groups with no links between them leave a space of rankings; the links alone choose no single order.','Closed-loops: a page with no links out has a column of zeros, so the total drains away.','One-rank: a grid with every entry above 0 and every column adding to 1 shrinks differences, so it has exactly one ranking.'][F]}; }},
+  {id:'27·now.line',step:'27·now',mode:'proof',label:'what the grid licenses',open:()=>measured('27·now'),make(){
+    return line28('27·now.line',[
+      ['w1',[['\\text{page A has the most links in}','counted'],['\\text{page A ranks first}','links in']],2,1,'Rank counts who links, and how many links each one shares out.'],
+      ['w2',[['\\text{links on a web}','given'],['\\text{one ranking}','the links']],2,1,'Two closed loops leave a space of dimension 2.'],
+      ['w3',[['r = Gr \\text{ for the web}','the ranking'],['\\text{solve it by elimination}','a method']],2,1,'About n³ steps: for 26 million pages, half a million years.'],
+      ['w4',[['20 \\text{ rounds}','done'],['\\text{the order of ranks is settled}','rounds']],2,1,'Only the order of ranks further apart than twice the fence.'],
+      ['w5',[['\\text{every column adds to } 1','given'],['1 \\text{ is a stretch of the grid}','column-sum']],2,0,'The rows of G − I add to the zero row, so it loses some list.'],
+      ['w6',[['\\text{other stretches at most } 0.85','second-stretch'],['\\text{about } 130 \\text{ rounds give } 10^{-8}','second-stretch']],2,0,'0.85¹³⁰ ÷ 0.15 · 2 is below 10⁻⁸.']],[]); }});
+/* ----- annex 27·phys Why spin is kept: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'27·phys.work',step:'27·phys',mode:'work',label:'spin energy and rolling',open:()=>measured('27·phys'),make(){
+    const ask=rnd(2);
+    if(ask){ const B=[['a ball',0.4],['a disc',0.5],['a hoop',1],['a hollow ball',2/3]][rnd(4)], h=[0.5,1,2,3][rnd(4)], v=Math.sqrt(2*9.8*h/(1+B[1])), right=DECAX(v,2)+' m/s', wrong=UQAX(right,[DECAX(Math.sqrt(2*9.8*h),2)+' m/s',DECAX(Math.sqrt(9.8*h),2)+' m/s',DECAX(Math.sqrt(2*9.8*h*(1+B[1])),2)+' m/s',DECAX(Math.sqrt(2*9.8*h/(2+B[1])),2)+' m/s'],3); if(wrong.length<3) return null;
+      return {index:'q:27·phys.work[r;'+B[0]+';'+h+']', lines:[[B[0]+',\\ I = '+(B[1]===0.4?'\\tfrac25':B[1]===0.5?'\\tfrac12':B[1]===1?'1':'\\tfrac23')+'\\,MR^2','rolling without slipping'],['\\text{a drop of } '+h+' \\text{ m}','g \\approx 9.8 \\text{ m/s}^2']], ask:'How fast is it going at the bottom?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spin-energy: Mgh = ½Mv² + ½Iω² with v = Rω, so v = √(2gh∕(1 + I∕(MR²))) = √('+DECAX(2*9.8*h,1)+' ÷ '+DECAX(1+B[1],3)+') ≈ '+right+'.'}; }
+    const rn=[0.98,1,1.2,1.5,0.4][rnd(5)], rf=rn*[1.03,1.5,2,3,1.67][rnd(5)], vn=[30.3,29.3,20,50,59][rnd(5)], vf=vn*rn/rf, right=DECAX(vf,1)+' km/s', wrong=UQAX(right,[DECAX(vn*rf/rn,1)+' km/s',DECAX(vn,1)+' km/s',DECAX(vn*Math.pow(rn/rf,2),1)+' km/s',DECAX(vn-(rf-rn),1)+' km/s'],3); if(wrong.length<3) return null;
+    return {index:'q:27·phys.work[k;'+rn+';'+rf+';'+vn+']', lines:[['\\text{nearest } '+rn+',\\ \\text{farthest } '+DECAX(rf,2),'a comet\u2019s distances from the sun, in AU'],['v = '+vn+' \\text{ km/s at the nearest}','']], ask:'How fast does it move at the farthest place?', right, opts:shuffle([right,...wrong]), lead:'', why:'Kept-spin: at both ends the motion is square to r, so rv is the same: v = '+vn+' · '+rn+' ÷ '+DECAX(rf,2)+' ≈ '+right+'. Fastest where nearest.'}; }},
+  {id:'27·phys.word',step:'27·phys',mode:'word',label:'the sideways push of a turning earth',open:()=>measured('27·phys'),make(){
+    const F=rnd(2);
+    if(F){ const P=[['Seattle',47.6],['Anchorage',61.2],['Honolulu',21.3],['San Diego',32.7]][rnd(4)], v=[10,20,30,50][rnd(4)], a=2*7.29e-5*v*Math.sin(DGAX(P[1])), right=SCAX(a,2)+' m/s², to the right', wrong=UQAX(right,[SCAX(a,2)+' m/s², to the left',SCAX(2*7.29e-5*v,2)+' m/s², to the right',SCAX(7.29e-5*v*Math.sin(DGAX(P[1])),2)+' m/s², to the right'],3); if(wrong.length<3) return null;
+      return {index:'q:27·phys.word[c;'+P[0]+';'+v+']', a3:['27·phys.word',DASH,DASH], story:'A train runs level at '+v+' m/s near '+P[0]+', latitude '+P[1]+'° N. The earth turns at Ω ≈ 7.29 × 10⁻⁵ a second.', lines:[], ask:'How big is the sideways push of the turning earth, for each kilogram, and which way?', right, opts:shuffle([right,...wrong]), lead:'', why:'Sideways-push: 2Ωv sin(latitude) = 2 · 7.29 × 10⁻⁵ · '+v+' · sin '+P[1]+'° ≈ '+SCAX(a,2)+', to the right in the northern half. It bends the path and does no work.'}; }
+    const right='the ball, then the disc, then the hoop', wrong=['all three together: they have one mass and radius','the hoop, then the disc, then the ball','the disc, then the ball, then the hoop'];
+    return {index:'q:27·phys.word[r]', a3:['27·phys.word',DASH,DASH], story:'A ball, a disc and a hoop, of one mass and one radius, are let go together at the top of a ramp and roll without slipping.', lines:[], ask:'In what order do they reach the bottom?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spin-energy: v = √(2gh∕(1 + I∕(MR²))), with I∕(MR²) = 2⁄5 for the ball, ½ for the disc, 1 for the hoop. The less goes to turning, the faster.'}; }},
+  {id:'27·phys.line',step:'27·phys',mode:'proof',label:'what the spin licenses',open:()=>measured('27·phys'),make(){
+    return line28('27·phys.line',[
+      ['p1',[['\\text{a solid spun about an axis}','given'],['\\text{the spin points along the turning}','spin']],2,1,'Only about a principal axis.'],
+      ['p2',[['\\text{a hoop and a ball, one mass and radius}','given'],['\\text{they roll down together}','same size']],2,1,'The ball wins: 2⁄5 against 1.'],
+      ['p3',[['\\text{a book}','three axes'],['\\text{it spins steadily about each}','principal axes']],2,1,'Not about the middle one.'],
+      ['p4',[['\\text{the sideways push of the earth}','given'],['\\text{it speeds things up}','a push']],2,1,'It is square to v: it bends, and does no work.'],
+      ['p5',[['rv \\text{ the same at both ends}','kept-spin'],['\\text{a planet is fastest where it is farthest}','the ends']],2,1,'Fastest where nearest.'],
+      ['p6',[['\\text{a pull only toward a fixed point}','given'],['\\text{equal areas in equal times}','kept-spin']],2,0,'The spin L is kept, and |L| is twice m times the rate of sweeping.']],[]); }});
+/* ----- annex 28·bio Why do rabbits and foxes cycle: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'28·bio.work',step:'28·bio',mode:'work',label:'averaged over a loop',open:()=>measured('28·bio'),make(){
+    const a=[0.4,0.6,0.8,1][rnd(4)], b=[0.1,0.2,0.4][rnd(3)], c=[0.3,0.6,0.9][rnd(3)], d=[0.01,0.02,0.03,0.05][rnd(4)], F=rnd(2), v=F?a/b:c/d;
+    const right=DECAX(v,1), wrong=UQAX(right,[DECAX(F?c/d:a/b,1),DECAX(F?b/a:d/c,2),DECAX(F?a*b:c*d,3),DECAX(v*2,1)],3); if(wrong.length<3) return null;
+    return {index:'q:28·bio.work['+[a,b,c,d,F].join(';')+']', lines:[['x\' = ax - bxy,\\ \\ y\' = dxy - cy','rabbits x, foxes y'],['a = '+a+',\\ b = '+b+',\\ c = '+c+',\\ d = '+d,'']], ask:'Over any loop, what is the average number of '+(F?'foxes':'rabbits')+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Loop-average: over every loop the rabbits average c\u2215d and the foxes a\u2215b, however wide the loop. '+(F?'a\u2215b = '+a+' \u00f7 '+b:'c\u2215d = '+c+' \u00f7 '+d)+' = '+right+'.'}; }},
+  {id:'28·bio.word',step:'28·bio',mode:'word',label:'a cull at the wrong moment',open:()=>measured('28·bio'),make(){
+    const avg=[20,30,40][rnd(3)], at=avg*[0.5,0.8,1,1.5,2][rnd(5)], left=at>avg?Math.max(avg,at-avg*0.4):at*0.8, out=at<=avg;
+    const right=out?'every later swing moves outward: a higher peak and a lower low':'every later swing moves inward: a lower peak and a higher low', wrong=[out?'every later swing moves inward: a lower peak and a higher low':'every later swing moves outward: a higher peak and a lower low','the next peak is lower, whenever the cull is made','nothing: the loop closes as before'];
+    return {index:'q:28·bio.word['+avg+';'+at+']', a3:['28·bio.word',DASH,DASH], story:'On an island the rabbits average '+avg+' over each loop of their swings with the foxes. A ranger culls rabbits when there are '+at+', leaving '+DECAX(left,0)+'.', lines:[], ask:'What does the cull do to the swings that follow?', right, opts:shuffle([right,...wrong]), lead:'', why:'Wrong-moment: a cull made at or below the average c\u2215d moves every later swing outward; one made above it that leaves them no lower than c\u2215d moves every swing inward. Here the cull is made '+(out?'at or below':'above')+' '+avg+'.'}; }},
+  {id:'28·bio.line',step:'28·bio',mode:'proof',label:'what the loops license',open:()=>measured('28·bio'),make(){
+    return line28('28·bio.line',[
+      ['f1',[['\\text{the slope grid at the rest is a centre}','the grid'],['\\text{the paths close}','centre']],2,1,'On the border line the grid cannot tell; V settles it.'],
+      ['f2',[['\\text{the vector from the rest always turns}','always-round'],['\\text{the paths close}','turning']],2,1,'Turning is not closing: with crowding, the paths turn and spiral in.'],
+      ['f3',[['\\text{more rabbit births}','a larger a'],['\\text{more rabbits on average}','births']],2,1,'The rabbits average c\u2215d; more births give more foxes.'],
+      ['f4',[['\\text{a cull of rabbits}','given'],['\\text{their next peak is lower}','fewer rabbits']],2,1,'A cull at or below c\u2215d raises it.'],
+      ['f5',[['\\text{these statements make loops}','level-loop'],['\\text{they show why hares and lynx cycle}','loops']],2,1,'The loops vanish with any crowding: they show only what these statements do.'],
+      ['f6',[['V = dx - c\\ln x + by - a\\ln y','along a path'],['V \\text{ never changes}','kept-quantity']],2,0,'Its slope along a path works out to 0.']],[]); }});
+/* ----- annex 28·econ What does a shopper buy: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'28·econ.work',step:'28·econ',mode:'work',label:'the spending share',open:()=>measured('28·econ'),make(){
+    const al=[0.25,0.3,0.4,0.5,0.6,0.75][rnd(6)], m=[60,100,120,200,600][rnd(5)], px=[1,2,3,4,5][rnd(5)], F=rnd(2), q=F?al*m/px:(1-al)*m/px;
+    const right=DECAX(q,2), wrong=UQAX(right,[DECAX(F?(1-al)*m/px:al*m/px,2),DECAX(F?al*m:(1-al)*m,2),DECAX(m/px/2,2),DECAX(F?al*px:(1-al)*px,2)],3); if(wrong.length<3) return null;
+    return {index:'q:28·econ.work['+[al,m,px,F].join(';')+']', lines:[['U = '+al+'\\ln x + '+DECAX(1-al,2)+'\\ln y','satisfaction'],['m = '+m+',\\ \\ \\text{the price of '+(F?'x':'y')+' is } '+px,'the budget']], ask:'How much '+(F?'x':'y')+' is in the best basket?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spending-share: the shopper spends the share '+(F?al:DECAX(1-al,2))+' of the budget on '+(F?'x':'y')+', whatever the prices: '+(F?al:DECAX(1-al,2))+' \u00b7 '+m+' \u00f7 '+px+' = '+right+'.'}; }},
+  {id:'28·econ.word',step:'28·econ',mode:'word',label:'the worth of one more dollar',open:()=>measured('28·econ'),make(){
+    const m=[40,60,80,120,600][rnd(5)], F=rnd(2);
+    if(F){ const right='about 1\u2215'+m+', the multiplier \u03bb', wrong=['about 1\u2215'+(2*m)+', half the multiplier','exactly 1, since a dollar is a dollar','about '+m+', the size of the budget'];
+      return {index:'q:28·econ.word[l;'+m+']', a3:['28·econ.word',DASH,DASH], story:'A student in Eugene has '+m+' dollars a week for coffee and books, and satisfaction \u03b1 ln x + (1 \u2212 \u03b1) ln y.', lines:[], ask:'About how much does one more dollar add to the best satisfaction?', right, opts:shuffle([right,...wrong]), lead:'', why:'Dollar-worth: the multiplier is the worth of one more dollar, and for this satisfaction \u03bb = 1\u2215m = 1\u2215'+m+'. It is a rate, not a measure of how happy the student is.'}; }
+    const right='the same number of books: the books still get the same share of the same budget', wrong=['fewer books: everything gets dearer','more books: the student switches from coffee','half as many books'];
+    return {index:'q:28·econ.word[p;'+m+']', a3:['28·econ.word',DASH,DASH], story:'A student in Eugene has '+m+' dollars a week for coffee and books, and satisfaction \u03b1 ln x + (1 \u2212 \u03b1) ln y, with x the coffee. The price of coffee doubles; books cost what they did.', lines:[], ask:'What happens to the books in the best basket?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spending-share: the share (1 \u2212 \u03b1) of the budget goes to books, whatever the prices, so y = (1 \u2212 \u03b1)m\u2215p_y is unchanged. Coffee drops to half: the switch and the shrink pull on books equally and opposite.'}; }},
+  {id:'28·econ.line',step:'28·econ',mode:'proof',label:'what the basket licenses',open:()=>measured('28·econ'),make(){
+    return line28('28·econ.line',[
+      ['u1',[['\\text{the gradients line up}','on the budget line'],['\\text{the best basket}','lined up']],2,1,'A level curve can touch from the wrong side; check along the line.'],
+      ['u2',[['\\lambda = \\tfrac1{60}','the multiplier'],['\\text{how happy the shopper is}','\u03bb']],2,1,'It is a rate: the worth of one more dollar, and it changes with the scale of U.'],
+      ['u3',[['\\text{a good gets dearer}','given'],['\\text{less of it is bought}','always']],2,1,'Only the switch part is sure; the shrink can pull the other way.'],
+      ['u4',[['\\text{no lined-up point on the line}','given'],['\\text{no best basket}','none lined up']],2,1,'The best may sit on an edge.'],
+      ['u5',[['U = \\alpha\\ln x + (1 - \\alpha)\\ln y','satisfaction'],['\\text{the share } \\alpha \\text{ on } x','spending-share']],2,0,'Whatever the prices.'],
+      ['u6',[['\\text{the best basket leaves } x \\text{ out}','an edge'],['\\text{a dollar on } x \\text{ adds no more than a dollar on } y','edge-basket']],2,0,'Otherwise a little x would raise satisfaction.']],[]); }});
+/* ----- annex 28·logi Where to put the warehouse: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'28·logi.work',step:'28·logi',mode:'work',label:'the middle store and the average',open:()=>measured('28·logi'),make(){
+    const P=[]; while(P.length<5){ const v=rnd(60); if(!P.includes(v)) P.push(v); } P.sort((a,b)=>a-b); const F=rnd(2), avg=P.reduce((a,b)=>a+b,0)/5, med=P[2];
+    const right=(F?DECAX(avg,1):String(med))+' km', wrong=UQAX(right,[(F?String(med):DECAX(avg,1))+' km',DECAX((P[0]+P[4])/2,1)+' km',P[1]+' km',P[3]+' km'],3); if(wrong.length<3) return null;
+    return {index:'q:28·logi.work['+P.join(',')+';'+F+']', lines:[['\\text{stores at } '+P.join(',\\ ')+' \\text{ km}','along one road, one truck each']], ask:'Where on the road is the total '+(F?'of squared distances':'distance')+' lowest?', right, opts:shuffle([right,...wrong]), lead:'', why:'Middle-store: the total distance is lowest at the middle store, '+med+' km, with no more than half the trucks on either side; the total of squared distances is lowest at the average, '+P.reduce((a,b)=>a+b,0)+' \u00f7 5 = '+DECAX(avg,1)+' km.'}; }},
+  {id:'28·logi.word',step:'28·logi',mode:'word',label:'when a store is the answer',open:()=>measured('28·logi'),make(){
+    const wk=[3,5,6,8,10,12][rnd(6)], l=[2,4,6][rnd(3)], r=[3,5,8,10,14][rnd(5)], R=Math.abs(r-l), ok=wk>=R;
+    const right=ok?'yes: its '+wk+' trucks are at least the others\u2019 pull of '+R:'no: the others pull with '+R+', more than its '+wk+' trucks', wrong=[ok?'no: the others pull with '+R+', more than its '+wk+' trucks':'yes: its '+wk+' trucks are at least the others\u2019 pull of '+R,'no: the best point is always the average of the stores','yes: the store with the most trucks always wins'];
+    return {index:'q:28·logi.word['+wk+';'+l+';'+r+']', a3:['28·logi.word',DASH,DASH], story:'Along Highway 50 in the Sierra, a store in the middle sends '+wk+' trucks a day. Stores to its west send '+l+' trucks in all; stores to its east send '+r+'. Each store pulls toward itself with its trucks, near or far.', lines:[], ask:'Is the middle store itself the best place for the warehouse?', right, opts:shuffle([right,...wrong]), lead:'', why:'Heavy-store: a store is the best place exactly when its own trucks are at least the size of the others\u2019 combined pull. The pulls are '+l+' west and '+r+' east, combined '+R+(ok?'.':': walking toward the heavier side lowers the total.')}; }},
+  {id:'28·logi.line',step:'28·logi',mode:'proof',label:'what the pulls license',open:()=>measured('28·logi'),make(){
+    return line28('28·logi.line',[
+      ['w1',[['\\text{the total distance}','to be lowest'],['\\text{the average of the stores}','best point']],2,1,'That is the best point for squares; for distance the pulls must balance.'],
+      ['w2',[['\\text{a far store}','given'],['\\text{it pulls harder}','far']],2,1,'For distance, every store pulls with its trucks, near or far.'],
+      ['w3',[['\\text{at a store}','given'],['\\text{the uphill vector of } G \\text{ is its pull}','the slope']],2,1,'At a store G has a sharp point; test the slopes in each direction.'],
+      ['w4',[['\\text{a walk downhill}','reweighting'],['\\text{it can settle on a bad bottom}','walks']],2,1,'G bends up: a point where the pulls balance is the bottom.'],
+      ['w5',[['\\text{squared distances, weighted by trucks}','given'],['\\text{lowest at the weighted average}','average-point']],2,0,'It grows as W times the square of the distance from there.'],
+      ['w6',[['\\text{re-average, each store by trucks over distance}','a step'],['\\text{the total distance does not rise}','reweighting']],2,0,'p\u2032 is the bottom of H, and H(p) = G(p).']],[]); }});
+/* ----- annex 28·now Can a machine learn from its mistakes: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'28·now.work',step:'28·now',mode:'work',label:'mistakes and smooth switches',open:()=>measured('28·now'),make(){
+    const ask=rnd(2);
+    if(ask){ const R=[1,2,3,5][rnd(4)], g=[0.1,0.2,0.25,0.5][rnd(4)], v=Math.pow(R/g,2), right=SPAX(Math.round(v)), wrong=UQAX(right,[SPAX(Math.round(R/g)),SPAX(Math.round(R*R/g)),SPAX(Math.round(2*v)),SPAX(Math.round(Math.sqrt(R/g)))],3); if(wrong.length<3) return null;
+      return {index:'q:28·now.work[m;'+R+';'+g+']', lines:[['R = '+R,'no example longer'],['\\gamma = '+g,'room of some right weights']], ask:'At most how many mistakes does the machine make?', right, opts:shuffle([right,...wrong]), lead:'', why:'Mistake-bound: (R\u2215\u03b3)\u00b2 = ('+R+' \u00f7 '+g+')\u00b2 = '+right+', however the examples are ordered.'}; }
+    const z=[-2,-1,0,0.5,1,2,3][rnd(7)], s=1/(1+Math.exp(-z)), d=s*(1-s), right=DECAX(d,3), wrong=UQAX(right,[DECAX(s,3),DECAX(1-s,3),DECAX(s*s,3),DECAX(0.25,3)==DECAX(d,3)?DECAX(0.5,3):DECAX(0.25,3)],3); if(wrong.length<3) return null;
+    return {index:'q:28·now.work[s;'+z+']', lines:[['\\sigma(z) = \\tfrac{1}{1 + e^{-z}}','the smooth switch'],[MNAX('z = '+z),'']], ask:'What is the slope of \u03c3 there, to three places?', right, opts:shuffle([right,...wrong]), lead:'', why:'Smooth-switch: the slope is \u03c3(1 \u2212 \u03c3) = '+DECAX(s,4)+' \u00b7 '+DECAX(1-s,4)+' \u2248 '+right+'. It is largest, \u00bc, at z = 0.'}; }},
+  {id:'28·now.word',step:'28·now',mode:'word',label:'training is walking downhill',open:()=>measured('28·now'),make(){
+    const F=rnd(4), S=[
+      ['A student tries to teach one unit, answering by the sign of w \u00b7 x, to say either-but-not-both. What happens?','no weights can do it: one unit cannot answer either-but-not-both','Either-not-both: no single sign-of-w\u00b7x unit answers it; two layers can.'],
+      ['A student starts both hidden units of a small network at the same knob values. What happens in training?','the two hidden units get the same slopes and stay twins for ever','Backward-pass: twins get the same slopes at every step, so they never part.'],
+      ['The error never bends more sharply than L. A student takes steps of size 3\u2215L. What can happen?','the steps can grow, or stall: past 2\u2215L nothing is promised','Small-slope: steps of size 1\u2215L never raise the error; past 2\u2215L the steps can grow.'],
+      ['After many steps the uphill vector is tiny. What has the student found?','a place that may be a bottom, a saddle or a poor hollow','Small-slope: a small uphill vector can be a bottom, a saddle or a poor hollow.']][F];
+    const pool=['no weights can do it: one unit cannot answer either-but-not-both','the two hidden units get the same slopes and stay twins for ever','the steps can grow, or stall: past 2\u2215L nothing is promised','a place that may be a bottom, a saddle or a poor hollow','the best weights of all','it reaches the bottom sooner'];
+    const right=S[1], wrong=UQAX(right,pool,3);
+    return {index:'q:28·now.word['+F+']', a3:['28·now.word',DASH,DASH], story:'A class in Pittsburgh trains small networks by hand, carrying slopes back from the error and stepping downhill.', lines:[], ask:S[0], right, opts:shuffle([right,...wrong]), lead:'', why:S[2]}; }},
+  {id:'28·now.line',step:'28·now',mode:'proof',label:'what training licenses',open:()=>measured('28·now'),make(){
+    return line28('28·now.line',[
+      ['n1',[['\\text{the mistake technique}','given'],['\\text{it always stops}','mistake-bound']],2,1,'Only when some weights get every example right with room \u03b3 > 0.'],
+      ['n2',[['\\text{a sharp yes or no}','a switch'],['\\text{it can be trained by slopes}','slopes']],2,1,'Its slope is 0 wherever it has one.'],
+      ['n3',[['\\text{every knob starts at one value}','given'],['\\text{training parts them}','slopes differ']],2,1,'The two hidden units then get the same slopes, and stay twins for ever.'],
+      ['n4',[['\\text{a larger step size}','given'],['\\text{the bottom sooner}','bigger steps']],2,1,'Past 2\u2215L the steps can grow, or stall on a flat stretch.'],
+      ['n5',[['\\text{a small uphill vector}','found'],['\\text{a bottom}','small slope']],2,1,'It can be a saddle or a poor hollow.'],
+      ['n6',[['\\sigma\'(z)','the switch\u2019s slope'],['\\sigma(1 - \\sigma)','smooth-switch']],2,0,'Its slope comes free with its value.']],[]); }});
+/* ----- annex 28·phys How fluids and fields flow: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'28·phys.work',step:'28·phys',mode:'work',label:'tubes, streams and wires',open:()=>measured('28·phys'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const f=[0.5,0.8,0.9,0.75,2][rnd(5)], v=Math.pow(f,4), right=DECAX(v,4)+' times', wrong=UQAX(right,[DECAX(f,4)+' times',DECAX(f*f,4)+' times',DECAX(Math.pow(f,3),4)+' times',DECAX(Math.pow(f,8),4)+' times'],3); if(wrong.length<3) return null;
+      return {index:'q:28·phys.work[t;'+f+']', lines:[['\\text{a tube\u2019s radius} \\times '+f,'the same push, the same length']], ask:'By what factor does the flow change?', right, opts:shuffle([right,...wrong]), lead:'', why:'Narrow-tube: Q = \u03c0R\u2074\u0394p\u2215(8\u03bcL), so the flow goes as the fourth power: '+f+'\u2074 = '+DECAX(v,4)+'.'}; }
+    if(ask===1){ const I=[100,500,1000,2000][rnd(4)], r=[5,10,15,20,30][rnd(5)], B=0.2*I/r, right=DECAX(B,1)+' \u03bcT', wrong=UQAX(right,[DECAX(B*2*Math.PI,1)+' \u03bcT',DECAX(0.2*I/(r*r),2)+' \u03bcT',DECAX(B/2,1)+' \u03bcT',DECAX(0.1*I/r,2)+' \u03bcT'],3); if(wrong.length<3) return null;
+      return {index:'q:28·phys.work[w;'+I+';'+r+']', lines:[['I = '+SPAX(I).replace(' ','\\,')+' \\text{ A},\\ \\ r = '+r+' \\text{ m}','a long straight line'],['\\mu_0 = 4\\pi \\times 10^{-7}','']], ask:'How strong is its field there?', right, opts:shuffle([right,...wrong]), lead:'', why:'Wire-field: \u03bc\u2080I\u2215(2\u03c0r) = 2 \u00d7 10\u207b\u2077 \u00b7 '+SPAX(I)+' \u00f7 '+r+' \u2248 '+right+'.'}; }
+    const v1=[1,2,3][rnd(3)], v2=v1*[2,3,4][rnd(3)], rho=1000, dp=0.5*rho*(v2*v2-v1*v1), right=SPAX(dp)+' Pa', wrong=UQAX(right,[SPAX(0.5*rho*(v2-v1)*(v2-v1))+' Pa',SPAX(rho*(v2*v2-v1*v1))+' Pa',SPAX(0.5*rho*v2*v2)+' Pa',SPAX(0.5*rho*(v2-v1))+' Pa'],3); if(wrong.length<3) return null;
+    return {index:'q:28·phys.work[b;'+v1+';'+v2+']', lines:[['\\text{water, } \\rho = 1000 \\text{ kg/m}^3','level, no friction'],['\\text{speed } '+v1+' \\text{ m/s, then } '+v2+' \\text{ m/s in a narrowing}','one stream']], ask:'How much does the pressure drop in the narrowing?', right, opts:shuffle([right,...wrong]), lead:'', why:'Stream: p + \u00bd\u03c1v\u00b2 stays the same, so the drop is \u00bd \u00b7 1000 \u00b7 ('+v2+'\u00b2 \u2212 '+v1+'\u00b2) = '+right+'. Faster means lower pressure.'}; }},
+  {id:'28·phys.word',step:'28·phys',mode:'word',label:'the fourth power',open:()=>measured('28·phys'),make(){
+    const F=rnd(2);
+    if(F){ const I=[500,1000,1500][rnd(3)], r=[12,15,20][rnd(3)], B=0.2*I/r, right=DECAX(B,1)+' \u03bcT, about '+Math.round(100*B/54)+'% of the earth\u2019s 54', wrong=[DECAX(B*2*Math.PI,1)+' \u03bcT, more than the earth\u2019s 54',DECAX(0.2*I/(r*r),2)+' \u03bcT, a tiny share of the earth\u2019s 54',DECAX(B*10,0)+' \u03bcT, several times the earth\u2019s 54'];
+      return {index:'q:28·phys.word[w;'+I+';'+r+']', a3:['28·phys.word',DASH,DASH], story:'A power line near Seattle carries '+SPAX(I)+' A, '+r+' m above a field. The earth\u2019s own field there is about 54 microtesla.', lines:[], ask:'How strong is the line\u2019s field at the ground?', right, opts:shuffle([right,...wrong]), lead:'', why:'Wire-field: \u03bc\u2080I\u2215(2\u03c0r) = 2 \u00d7 10\u207b\u2077 \u00b7 '+SPAX(I)+' \u00f7 '+r+' \u2248 '+DECAX(B,1)+' \u03bcT, falling off as one over the distance.'}; }
+    const f=[0.5,0.6,0.7,0.8][rnd(4)], v=1/Math.pow(f,4), right=DECAX(v,1)+' times as much', wrong=UQAX(right,[DECAX(1/f,1)+' times as much',DECAX(1/(f*f),1)+' times as much',DECAX(1/Math.pow(f,3),1)+' times as much','the same'],3); if(wrong.length<3) return null;
+    return {index:'q:28·phys.word[a;'+f+']', a3:['28·phys.word',DASH,DASH], story:'One centimetre of an artery of the heart narrows to '+f+' of its width. The same flow of blood still passes through it.', lines:[], ask:'How much pressure does that centimetre now cost, against before?', right, opts:shuffle([right,...wrong]), lead:'', why:'Narrow-tube: at the same flow the push goes as 1\u2215R\u2074, so 1 \u00f7 '+f+'\u2074 \u2248 '+DECAX(v,1)+'. A narrowing does almost nothing until it does a lot.'}; }},
+  {id:'28·phys.line',step:'28·phys',mode:'proof',label:'what the flow licenses',open:()=>measured('28·phys'),make(){
+    return line28('28·phys.line',[
+      ['h1',[['\\text{the stream speeds up}','a narrowing'],['\\text{it pushes harder on the walls}','faster']],2,1,'Along a stream, faster means lower pressure.'],
+      ['h2',[['\\text{half the radius}','given'],['\\text{half the flow}','the radius']],2,1,'A sixteenth, at the same push.'],
+      ['h3',[['\\text{half the radius}','given'],['\\text{a quarter of the flow}','the area']],2,1,'That counts the area only; the drag at the wall gives the other two powers.'],
+      ['h4',[['\\text{a long narrow tube}','given'],['\\text{the stream technique}','pressure and speed']],2,1,'It needs no friction; in a long tube friction rules.'],
+      ['h5',[['\\text{charge on a metal at rest}','given'],['\\text{it spreads through the metal}','charge moves']],2,1,'At rest it sits on the skin.'],
+      ['h6',[['\\text{the field inside a metal at rest is } 0','enclosed-charge'],['\\text{no charge inside}','flux 0']],2,0,'Every closed surface inside has flux 0, so holds no charge.']],[]); }});
+/* ----- annex 29·nav Why fly over the pole to Asia: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'29·nav.work',step:'29·nav',mode:'work',label:'great circles',open:()=>measured('29·nav'),make(){
+    const ask=rnd(2);
+    if(ask){ const p=[30,40,47.6,50][rnd(4)], h=[30,45,60,75,90][rnd(5)], v=DEGAX(Math.acos(Math.cos(DGAX(p))*Math.sin(DGAX(h)))), right=DECAX(v,1)+'° N', wrong=UQAX(right,[DECAX(p+h/10,1)+'° N',DECAX(90-h,1)+'° N',DECAX(DEGAX(Math.acos(Math.cos(DGAX(p))*Math.cos(DGAX(h)))),1)+'° N',DECAX(p,1)+'° N'],3); if(wrong.length<3) return null;
+      return {index:'q:29·nav.work[f;'+p+';'+h+']', lines:[['\\varphi_P = '+p+'^\\circ \\text{ N}','the start'],['h_P = '+h+'^\\circ','the heading there, from north']], ask:'How far north does the great-circle route reach?', right, opts:shuffle([right,...wrong]), lead:'', why:'Kept-product: cos φ sin h is the same all along, and at the top sin h = 1. So cos φ_max = cos '+p+'° · sin '+h+'° ≈ '+DECAX(Math.cos(DGAX(p))*Math.sin(DGAX(h)),4)+', and φ_max ≈ '+right+'.'}; }
+    const p1=[0,20,30,45][rnd(4)], p2=[0,20,30,45,60][rnd(5)], dl=[30,45,60,90][rnd(4)], c=Math.sin(DGAX(p1))*Math.sin(DGAX(p2))+Math.cos(DGAX(p1))*Math.cos(DGAX(p2))*Math.cos(DGAX(dl)), d=DEGAX(Math.acos(c))*60;
+    const right=SPAX(Math.round(d/10)*10)+' nautical miles', wrong=UQAX(right,[SPAX(Math.round(dl*60*Math.cos(DGAX((p1+p2)/2))/10)*10+300)+' nautical miles',SPAX(Math.round(Math.hypot(dl,p2-p1)*60/10)*10)+' nautical miles',SPAX(Math.round(d/60))+' nautical miles',SPAX(Math.round(d*1.852/10)*10)+' nautical miles'],3); if(wrong.length<3) return null;
+    return {index:'q:29·nav.work[d;'+p1+';'+p2+';'+dl+']', lines:[['\\varphi_1 = '+p1+'^\\circ,\\ \\ \\varphi_2 = '+p2+'^\\circ \\text{ N}','two places'],['\\Delta\\lambda = '+dl+'^\\circ','apart in longitude']], ask:'How long is the great-circle route, to the nearest ten nautical miles?', right, opts:shuffle([right,...wrong]), lead:'', why:'Great-circle: cos δ = sin φ₁ sin φ₂ + cos φ₁ cos φ₂ cos Δλ ≈ '+DECAX(c,4)+', so δ ≈ '+DECAX(d/60,2)+'°. A minute of arc is a nautical mile: about '+right+'.'}; }},
+  {id:'29·nav.word',step:'29·nav',mode:'word',label:'the pole, the star and the ship',open:()=>measured('29·nav'),make(){
+    const Hc=20+rnd(50), mc=rnd(60), dm=(rnd(2)?1:-1)*(2+rnd(25)), tot=Hc*60+mc+dm, Ho=Math.floor(tot/60), mo=tot%60, f=(d,m)=>d+'° '+(m<10?'0':'')+m+'′';
+    const right=Math.abs(dm)+' nautical miles '+(dm>0?'toward':'away from')+' the star', wrong=UQAX(right,[Math.abs(dm)+' nautical miles '+(dm>0?'away from':'toward')+' the star',DECAX(Math.abs(dm)/60,2)+' nautical miles '+(dm>0?'toward':'away from')+' the star',Math.abs(dm)*60+' nautical miles '+(dm>0?'toward':'away from')+' the star'],3);
+    return {index:'q:29·nav.word['+Hc+';'+mc+';'+dm+']', a3:['29·nav.word',DASH,DASH], story:'A navigator on a crossing to Hawaii works out that, from the guessed place, a star should stand '+f(Hc,mc)+' high. The sextant reads '+f(Ho,mo)+'.', lines:[], ask:'Which way, and how far, should the guessed place move?', right, opts:shuffle([right,...wrong]), lead:'', why:'Star-circle: every place that sees the star at height H lies 90° − H from its ground point. The star stands '+Math.abs(dm)+'′ '+(dm>0?'higher':'lower')+' than worked out, so the ship is that much '+(dm>0?'nearer':'farther')+': one nautical mile for each minute of arc.'}; }},
+  {id:'29·nav.line',step:'29·nav',mode:'proof',label:'what the sphere licenses',open:()=>measured('29·nav'),make(){
+    return line28('29·nav.line',[
+      ['g1',[['\\text{a straight line on the straight-grid map}','drawn'],['\\text{the shortest route}','straight']],2,1,'It is a steady heading; the great circle bends toward the pole.'],
+      ['g2',[['\\text{a great-circle route}','given'],['\\text{one heading all the way}','a great circle']],2,1,'cos φ sin h is kept, not h.'],
+      ['g3',[['\\text{a route from Seattle to Asia}','given'],['\\text{it crosses the pole}','north']],2,1,'Only a far city on the opposite longitude; Seattle to Tokyo tops out at 54.3° N.'],
+      ['g4',[['\\text{a triangle on the earth}','given'],['\\text{its angles add to } \\pi','a triangle']],2,1,'More, by its area over R².'],
+      ['g5',[['\\cos\\gamma \\text{ to seven places}','given'],['\\text{every distance}','the cosine form']],2,1,'Near 1 it loses short distances; use the half-angle form.'],
+      ['g6',[['\\text{the star } 5\' \\text{ higher than worked out}','sighted'],['\\text{move } 5 \\text{ nautical miles toward it}','star-circle']],2,0,'One nautical mile for each minute of arc.']],[]); }});
+/* ----- annex 29·now Why GPS clocks are set to run slow: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'29·now.work',step:'29·now',mode:'work',label:'higher clocks run faster',open:()=>measured('29·now'),make(){
+    const ask=rnd(2);
+    if(ask){ const h=[10,50,100,184,500,1000,4000][rnd(7)], f=9.8*h/9e16, d=f*86400*1e9, right=DECAX(d,2)+' ns', wrong=UQAX(right,[DECAX(d/86400*3600,3)+' ns',DECAX(d*1000,1)+' ns',DECAX(f*1e9,6)+' ns',DECAX(d*2,2)+' ns'],3); if(wrong.length<3) return null;
+      return {index:'q:29·now.work[h;'+h+']', lines:[['h = '+h+' \\text{ m}','one clock above the other'],['g \\approx 9.8,\\ \\ c^2 \\approx 9 \\times 10^{16}','']], ask:'How much does the higher clock gain in a day, in billionths of a second?', right, opts:shuffle([right,...wrong]), lead:'', why:'Height-clock: gh∕c² = 9.8 · '+h+' ÷ (9 × 10¹⁶) ≈ '+SCAX(f,2)+' of each second, times 86 400 seconds: about '+right+'.'}; }
+    const hh=[1,2,5,10][rnd(4)], L=[3,4][rnd(2)], d=hh*1e-21*L*1000, right=SCAX(d,1)+' m', wrong=UQAX(right,[SCAX(hh*1e-21,1)+' m',SCAX(d*1000,1)+' m',SCAX(d/2,1)+' m',SCAX(hh*1e-21/L,1)+' m'],3); if(wrong.length<3) return null;
+    return {index:'q:29·now.work[a;'+hh+';'+L+']', lines:[['h = '+hh+' \\times 10^{-21}','a passing ripple'],['L = '+L+' \\text{ km}','arms set across each other']], ask:'By how much do the arms come to differ?', right, opts:shuffle([right,...wrong]), lead:'', why:'Arm-stretch: by hL, one growing while the other shrinks: '+hh+' × 10⁻²¹ · '+(L*1000)+' m ≈ '+right+'.'}; }},
+  {id:'29·now.word',step:'29·now',mode:'word',label:'thirty-eight millionths of a second a day',open:()=>measured('29·now'),make(){
+    const F=rnd(3), S=[['A GPS satellite’s clock moves fast and sits high. Uncorrected, what does it do against a clock on the ground?','it gains about 38 millionths of a second a day: its height gains more than its speed loses','Orbit-clock: the height gain wins over the speed loss, by about 38 microseconds a day.'],
+      ['Light runs about 11 km in 38 millionths of a second. Left uncorrected for a day, does a phone’s fix drift 11 km?','no: a gain shared by every satellite goes into the clock unknown b, though the time and the orbits drift','Clock-unknown: a shared gain shifts every ρᵢ alike, and b takes it; the fix barely moves.'],
+      ['One clock sits on the top floor of a tower, another in the basement. Which runs faster?','the top-floor clock, by about gh∕c² of each second','Height-clock: of two clocks at rest, the higher gains (Φ₂ − Φ₁)∕c².']][F];
+    const pool=['it gains about 38 millionths of a second a day: its height gains more than its speed loses','no: a gain shared by every satellite goes into the clock unknown b, though the time and the orbits drift','the top-floor clock, by about gh∕c² of each second','it only loses time, since it moves','yes: 11 km a day, and more each day','the basement clock, nearer the earth’s pull'];
+    const right=S[1], wrong=UQAX(right,pool,3);
+    return {index:'q:29·now.word['+F+']', a3:['29·now.word',DASH,DASH], story:'An engineer in Colorado Springs checks how the GPS clocks are set before launch.', lines:[], ask:S[0], right, opts:shuffle([right,...wrong]), lead:'', why:S[2]}; }},
+  {id:'29·now.line',step:'29·now',mode:'proof',label:'what the clocks license',open:()=>measured('29·now'),make(){
+    return line28('29·now.line',[
+      ['t1',[['\\text{a GPS clock moves}','given'],['\\text{it only loses time}','moving clocks run slow']],2,1,'Its height gains more than its speed loses.'],
+      ['t2',[['38\\ \\mu\\text{s a day, uncorrected}','the gain'],['\\text{the fix drifts } 11 \\text{ km a day}','c times the gain']],2,1,'b takes the shared gain; the time and the orbits drift.'],
+      ['t3',[['\\text{a passing ripple}','given'],['\\text{both arms stretch alike}','a stretch']],2,1,'One grows while the other shrinks.'],
+      ['t4',[['\\text{a ripple of size } h','given'],['\\text{the arms move by } h \\text{ metres}','arm-stretch']],2,1,'By a share: hL.'],
+      ['t5',[['\\text{a chirp}','given'],['\\text{its frequency rises in a straight line}','chirp']],2,1,'f^(−8⁄3) falls in a straight line.'],
+      ['t6',[['h = 184 \\text{ m}','the Space Needle'],['\\text{about } 2.0 \\times 10^{-14} \\text{ of each second}','height-clock']],2,0,'9.8 · 184 ÷ (9 × 10¹⁶) ≈ 2.0 × 10⁻¹⁴.']],[]); }});
+/* ----- annex 29·phys Why moving clocks run slow: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'29·phys.work',step:'29·phys',mode:'work',label:'gamma, turns and light',open:()=>measured('29·phys'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const v=[0.5,0.6,0.8,0.9,0.99][rnd(5)], g=1/Math.sqrt(1-v*v), right=DECAX(g,3), wrong=UQAX(right,[DECAX(1/(1-v),3),DECAX(Math.sqrt(1-v*v),3),DECAX(1/(1-v*v),3),DECAX(1+v,3)],3); if(wrong.length<3) return null;
+      return {index:'q:29·phys.work[g;'+v+']', lines:[['v = '+v+'c','a moving clock']], ask:'By what factor does it tick slower, seen from the ground?', right, opts:shuffle([right,...wrong]), lead:'', why:'Light-clock: γ = 1∕√(1 − v²∕c²) = 1∕√(1 − '+DECAX(v*v,4)+') ≈ '+right+'.'}; }
+    if(ask===1){ const a=[0.3,0.5,0.6,0.8,0.9][rnd(5)], b=[0.3,0.5,0.6,0.8][rnd(4)], v=(a+b)/(1+a*b), right=DECAX(v,3)+'c', wrong=UQAX(right,[DECAX(a+b,3)+'c',DECAX(Math.min(0.999,(a+b)/2),3)+'c',DECAX((a+b)/(1+a+b),3)+'c',DECAX(Math.sqrt(a*a+b*b),3)+'c'],3); if(wrong.length<3) return null;
+      return {index:'q:29·phys.work[s;'+a+';'+b+']', lines:[['v_1 = '+a+'c,\\ \\ v_2 = '+b+'c','along one line']], ask:'What do the two speeds combine to?', right, opts:shuffle([right,...wrong]), lead:'', why:'Speeds-add: (v₁ + v₂)∕(1 + v₁v₂∕c²) = '+DECAX(a+b,2)+' ÷ '+DECAX(1+a*b,2)+' ≈ '+right+'. It never reaches c.'}; }
+    const t=[30,45,60,90,120,180][rnd(6)], d=2.43*(1-Math.cos(DGAX(t))), right=DECAX(d,2)+' pm', wrong=UQAX(right,[DECAX(2.43*Math.cos(DGAX(t)),2)+' pm',DECAX(2.43*Math.sin(DGAX(t)),2)+' pm','2.43 pm',DECAX(2.43*(1+Math.cos(DGAX(t))),2)+' pm'],3); if(wrong.length<3) return null;
+    return {index:'q:29·phys.work[c;'+t+']', lines:[['\\tfrac{h}{mc} \\approx 2.43 \\text{ pm}','for an electron'],['\\theta = '+t+'^\\circ','the turn of the scattered light']], ask:'How much longer is the scattered light’s wavelength?', right, opts:shuffle([right,...wrong]), lead:'', why:'Scattered-light: (h∕mc)(1 − cos θ) = 2.43 · (1 − cos '+t+'°) ≈ '+right+', whatever the light was.'}; }},
+  {id:'29·phys.word',step:'29·phys',mode:'word',label:'speeds add as turns',open:()=>measured('29·phys'),make(){
+    const a=[0.5,0.6,0.7,0.8][rnd(4)], b=[0.5,0.6,0.7,0.8,0.9][rnd(5)], F=rnd(2), v=(a+b)/(1+a*b);
+    if(F){ const right='still c', wrong=['c + '+a+'c','c − '+a+'c','a little over c']; 
+      return {index:'q:29·phys.word[l;'+a+']', a3:['29·phys.word',DASH,DASH], story:'A ship moving at '+a+'c past a station flashes a lamp forward.', lines:[], ask:'How fast does the station see the light go?', right, opts:shuffle([right,...wrong]), lead:'', why:'Speeds-add with v₂ = c: ('+a+'c + c)∕(1 + '+a+') = c. The kept interval keeps light’s speed for every steady observer.'}; }
+    const right=DECAX(v,3)+'c', wrong=UQAX(right,[DECAX(a+b,2)+'c',DECAX(b,3)+'c',DECAX(Math.min(0.999,a*b+0.5),3)+'c'],3); if(wrong.length<3) return null;
+    return {index:'q:29·phys.word[s;'+a+';'+b+']', a3:['29·phys.word',DASH,DASH], story:'A ship moving at '+a+'c past a station fires a probe straight ahead, at '+b+'c as the ship measures it.', lines:[], ask:'How fast does the station see the probe go?', right, opts:shuffle([right,...wrong]), lead:'', why:'Speeds-add: ('+a+' + '+b+')∕(1 + '+a+' · '+b+') = '+DECAX(a+b,2)+' ÷ '+DECAX(1+a*b,2)+' ≈ '+right+'. Speeds combine as turns, not as sums.'}; }},
+  {id:'29·phys.line',step:'29·phys',mode:'proof',label:'what spacetime licenses',open:()=>measured('29·phys'),make(){
+    return line28('29·phys.line',[
+      ['r1',[['0.6c \\text{ and } 0.6c','two speeds along a line'],['1.2c','they add']],2,1,'Speeds combine as turns: 0.882c.'],
+      ['r2',[['\\text{a clock moving at } v','seen from the ground'],['\\text{it runs fast}','moving']],2,1,'Slow, seen from the ground, by γ.'],
+      ['r3',[['\\text{the ruler of spacetime}','kept-interval'],['c^2dt^2 + dx^2','like a plane']],2,1,'The minus sign is measured; with a plus sign light’s speed would not be kept.'],
+      ['r4',[['\\text{a collision at any speed}','given'],['p = mv \\text{ is kept}','momentum']],2,1,'γmv is kept; mv only nearly, far below c.'],
+      ['r5',[['\\text{a moving body}','given'],['E = mc^2','mass-energy']],2,1,'γmc²; mc² is the energy at rest.'],
+      ['r6',[['\\text{light}','no mass'],['\\text{it cannot push}','no mass']],2,1,'It has momentum E∕c.'],
+      ['r7',[['\\tanh u = 0.6','v = 0.6c'],['e^u = 2','mixing-turn']],2,0,'tanh u = (e²ᵘ − 1)∕(e²ᵘ + 1) = 3⁄5 at e²ᵘ = 4.']],[]); }});
+/* ----- annex 30·bio How do gene shares change: Work, Word Problems, Check Proofs ----- */
+const HBAX=x=>x<=0||x>=1?0:-(x*Math.log2(x)+(1-x)*Math.log2(1-x));
+QP.push({id:'30·bio.work',step:'30·bio',mode:'work',label:'shares at rest, and odds that grow',open:()=>measured('30·bio'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const p=[0.1,0.2,0.3,0.4,0.6,0.7][rnd(6)], q=1-p, k=rnd(3), v=[p*p,2*p*q,q*q][k], nm=['AA','Aa','aa'][k], right=DECAX(v,2), wrong=UQAX(right,[DECAX(p*q,2),DECAX(k===1?p*p:2*p*q,2),DECAX(k===2?q:p,2),DECAX(k===0?q*q:p*p,2)],3); if(wrong.length<3) return null;
+      return {index:'q:30·bio.work[r;'+p+';'+k+']', lines:[['p = '+p,'the share of A'],['\\text{copies join at random}','']], ask:'After one round of mixing, what share of plants are '+nm+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'One-round-rest: AA, Aa and aa sit at p\u00b2, 2pq and q\u00b2: '+(k===0?p+'\u00b2':k===1?'2 \u00b7 '+p+' \u00b7 '+DECAX(q,2):DECAX(q,2)+'\u00b2')+' = '+right+'.'}; }
+    if(ask===1){ const s=[0.01,0.05,0.1,0.2][rnd(4)], o=[0.25,0.5,1][rnd(3)], g=[5,10,20][rnd(3)], v=o*Math.pow(1+s,g), right=DECAX(v,3), wrong=UQAX(right,[DECAX(o+g*s,3),DECAX(o*(1+g*s),3)===DECAX(v,3)?DECAX(o*Math.pow(1+s,g+1),3):DECAX(o*(1+g*s),3),DECAX(o*Math.pow(s,g),3)==='0'?DECAX(o*Math.pow(1+s,g-1),3):DECAX(o*Math.pow(1+2*s,g),3),DECAX(v/(1+v),3)],3); if(wrong.length<3) return null;
+      return {index:'q:30·bio.work[o;'+s+';'+o+';'+g+']', lines:[['\\text{odds of A against a: } '+o,'now'],['s = '+s+',\\ \\ '+g+' \\text{ generations}','each copy of A adds the edge s']], ask:'What are the odds after '+g+' generations?', right, opts:shuffle([right,...wrong]), lead:'', why:'Odds-growth: the odds grow by 1 + s each generation: '+o+' \u00b7 '+DECAX(1+s,2)+'^'+g+' \u2248 '+right+'. The edge multiplies the odds; it does not add to the share.'}; }
+    const N=[25,50,100,200][rnd(4)], t=[50,100,200][rnd(3)], v=Math.pow(1-1/(2*N),t), right=Math.round(100*v)+'%', wrong=UQAX(right,[Math.round(100*Math.max(0,1-t/(2*N)))+'%',Math.round(100*Math.pow(1-1/N,t))+'%',Math.round(100*Math.exp(-t/N)*1.0001)+'%',Math.round(100*Math.pow(1-1/(4*N),t))+'%'],3); if(wrong.length<3) return null;
+    return {index:'q:30·bio.work[d;'+N+';'+t+']', lines:[['N = '+N,'plants'],[t+' \\text{ generations}','drift alone']], ask:'What share of the mixing 2pq is kept on average?', right, opts:shuffle([right,...wrong]), lead:'', why:'Shrinking-mix: 2pq shrinks by 1 \u2212 1\u2215(2N) each generation: (1 \u2212 1\u2215'+(2*N)+')^'+t+' \u2248 '+DECAX(v,3)+', about '+right+'.'}; }},
+  {id:'30·bio.word',step:'30·bio',mode:'word',label:'fitness landscapes',open:()=>measured('30·bio'),make(){
+    const F=rnd(2);
+    if(F){ const s=[0.1,0.2,0.3][rnd(3)], t=[0.1,0.2,0.4,0.6][rnd(4)], p=t/(s+t), right=DECAX(p,3), wrong=UQAX(right,[DECAX(s/(s+t),3),DECAX(t/s>1?s/t:t/s,3),'1','0.5'],3); if(wrong.length<3) return null;
+      return {index:'q:30·bio.word[m;'+s+';'+t+']', a3:['30·bio.word',DASH,DASH], story:'In a field of wild sunflowers near Davis the mixed kind Aa does best. Its fitness is 1; AA has 1 \u2212 '+s+' and aa has 1 \u2212 '+t+'.', lines:[], ask:'At what share of A does selection rest?', right, opts:shuffle([right,...wrong]), lead:'', why:'Uphill-share: the slope of w\u0304 is 0 where \u2212ps + qt = 0, so p* = t\u2215(s + t) = '+t+' \u00f7 '+DECAX(s+t,2)+' \u2248 '+right+'. Below it p climbs, above it p falls: both forms are kept.'}; }
+    const N=[50,100,500,1000][rnd(4)], right='1 in '+(2*N)+', its share at the start', wrong=['one half: it spreads half the time','none: with no edge it always dies out','1 in '+N+', one per plant'];
+    return {index:'q:30·bio.word[n;'+N+']', a3:['30·bio.word',DASH,DASH], story:'A new form of a gene, with no edge at all, turns up in one copy among '+N+' plants, each carrying two copies.', lines:[], ask:'What is its chance of spreading to every copy, by drift alone?', right, opts:shuffle([right,...wrong]), lead:'', why:'With drift alone the average share is kept, so the chance of fixing is the share at the start: 1 copy of '+(2*N)+'.'}; }},
+  {id:'30·bio.line',step:'30·bio',mode:'proof',label:'what selection licenses',open:()=>measured('30·bio'),make(){
+    return line28('30·bio.line',[
+      ['g1',[['A \\text{ is dominant}','given'],['A \\text{ spreads until it is three quarters}','dominance']],2,1,'Dominance changes what shows, not the share: at rest p stays put.'],
+      ['g2',[['\\text{the best allele}','given'],['\\text{it ends up everywhere}','selection']],2,1,'When the mixed kind does best, both are kept; and drift can lose a good allele.'],
+      ['g3',[['\\text{selection}','given'],['\\text{it climbs to the highest top}','uphill']],2,1,'It climbs the nearest slope; a valley can hold it on a lower top.'],
+      ['g4',[['\\text{drift has no direction}','given'],['\\text{it changes nothing on average}','no direction']],2,1,'The average share is kept; the mixing 2pq is not.'],
+      ['g5',[['\\text{an edge } s','given'],['p\' = p + s','selection']],2,1,'The edge multiplies the odds by 1 + s; it does not add s to the share.'],
+      ['g6',[['\\text{copies join at random}','given'],['p^2,\\ 2pq,\\ q^2 \\text{ after one round}','one-round-rest']],2,0,'Mixing alone changes nothing after that.']],[]); }});
+/* ----- annex 30·comp How much can a message be squeezed: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'30·comp.work',step:'30·comp',mode:'work',label:'surprise and capacity',open:()=>measured('30·comp'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const n=[2,4,8,10,16,26,32,64][rnd(8)], v=Math.log2(n), right=DECAX(v,2)+' bits', wrong=UQAX(right,[n+' bits',DECAX(Math.log10(n),2)+' bits',DECAX(n/2,2)+' bits',DECAX(Math.log(n),2)+' bits'],3); if(wrong.length<3) return null;
+      return {index:'q:30·comp.work[n;'+n+']', lines:[[n+' \\text{ outcomes, equally likely}','a source']], ask:'What is its average surprise?', right, opts:shuffle([right,...wrong]), lead:'', why:'Surprise-average: with all n outcomes equally likely, H = log\u2082 n = log\u2082 '+n+' \u2248 '+right+', the largest any '+n+' outcomes can have.'}; }
+    if(ask===1){ const e=[0.01,0.05,0.1,0.2,0.3,0.6,0.9][rnd(7)], c=1-HBAX(e), right=DECAX(c,3)+' bits a bit', wrong=UQAX(right,[DECAX(1-e,3)+' bits a bit',DECAX(HBAX(e),3)+' bits a bit',e>0.5?'0 bits a bit':DECAX(1-2*e,3)+' bits a bit',DECAX(c/2,3)+' bits a bit'],3); if(wrong.length<3) return null;
+      return {index:'q:30·comp.work[c;'+e+']', lines:[['\\varepsilon = '+e,'a line that flips each bit with this chance']], ask:'What is the line\u2019s capacity?', right, opts:shuffle([right,...wrong]), lead:'', why:'Flip-line: 1 \u2212 h(\u03b5) = 1 \u2212 h('+e+') \u2248 1 \u2212 '+DECAX(HBAX(e),3)+' = '+right+'.'+(e>0.5?' Flip every bit received: it is a line with \u03b5 = '+DECAX(1-e,2)+'.':'')}; }
+    const P=[[0.5,0.25,0.25],[0.5,0.25,0.125,0.125],[0.25,0.25,0.25,0.25],[0.7,0.1,0.1,0.1],[0.4,0.3,0.2,0.1]][rnd(5)], H=-P.reduce((a,p)=>a+p*Math.log2(p),0), right=DECAX(H,3)+' bits', wrong=UQAX(right,[DECAX(Math.log2(P.length),3)+' bits',DECAX(P.length,3)+' bits',DECAX(-P.reduce((a,p)=>a+Math.log2(p),0)/P.length,3)+' bits',DECAX(H/2,3)+' bits'],3); if(wrong.length<3) return null;
+    return {index:'q:30·comp.work[h;'+P.join(',')+']', lines:[['\\text{chances } '+P.join(',\\ '),'a source']], ask:'What is its average surprise, the fewest bits an outcome any code can average?', right, opts:shuffle([right,...wrong]), lead:'', why:'Surprise-average: H = \u03a3 p log\u2082(1\u2215p) \u2248 '+right+'. Source coding: no code without commas averages fewer.'}; }},
+  {id:'30·comp.word',step:'30·comp',mode:'word',label:'the noisy channel',open:()=>measured('30·comp'),make(){
+    const e=[0.01,0.05,0.1][rnd(3)], c=1-HBAX(e), r=[0.3,0.5,0.6,0.8,0.95][rnd(5)], ok=r<c;
+    const right=ok?'yes: below capacity, long enough blocks make errors as rare as you like':'no: the rate is above the line\u2019s capacity', wrong=[ok?'no: the rate is above the line\u2019s capacity':'yes: below capacity, long enough blocks make errors as rare as you like','only by sending every bit many more times, at a rate near 0','no line with flips can ever be made reliable'];
+    return {index:'q:30·comp.word['+e+';'+r+']', a3:['30·comp.word',DASH,DASH], story:'A probe far out in the solar system sends home over a link that flips each bit with chance '+e+'. Engineers want to send '+r+' bits of message for each bit on the link.', lines:[], ask:'Can they make the errors as rare as they like?', right, opts:shuffle([right,...wrong]), lead:'', why:'Noisy channel: the capacity is 1 \u2212 h('+e+') \u2248 '+DECAX(c,3)+' bits a bit. Any rate below it can be carried with errors as rare as you like; '+r+' is '+(ok?'below':'above')+' it.'}; }},
+  {id:'30·comp.line',step:'30·comp',mode:'proof',label:'what information licenses',open:()=>measured('30·comp'),make(){
+    return line28('30·comp.line',[
+      ['i1',[['n \\text{ outcomes}','given'],['H = \\log_2 n','bits']],2,1,'It is the average surprise; log\u2082 n only when the chances are equal.'],
+      ['i2',[['\\text{a clever code}','given'],['\\text{fewer than } H \\text{ bits on average}','squeezing']],2,1,'Not without commas: the source coding technique.'],
+      ['i3',[['I(X; Y)','what Y tells about X'],['I(X; Y) \\ne I(Y; X)','one way']],2,1,'It is the same either way.'],
+      ['i4',[['\\varepsilon = 0.6','a line'],['\\text{it carries nothing}','mostly flipped']],2,1,'Flip every bit received: a line with \u03b5 = 0.4, capacity 1 \u2212 h(0.4).'],
+      ['i5',[['\\text{the noisy channel technique}','given'],['\\text{it builds the code}','a proof']],2,1,'It shows that some code works, by averaging over random ones.'],
+      ['i6',[['\\text{lengths } 1, 2, 3, 3','a code'],['\\text{no codeword begins another can be had}','leaf-count']],2,0,'\u00bd + \u00bc + \u215b + \u215b = 1 \u2264 1.']],[]); }});
+/* ----- annex 30·econ Can a chart beat the market: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'30·econ.work',step:'30·econ',mode:'work',label:'the drift and the wobble',open:()=>measured('30·econ'),make(){
+    const ask=rnd(2);
+    if(ask){ const m=[5,10,20,50,100,500][rnd(6)], a=[0.05,0.01][rnd(2)], v=1-Math.pow(1-a,m), right=Math.round(100*v)+'%', wrong=UQAX(right,[Math.round(100*Math.min(1,m*a))+'%',Math.round(100*a)+'%',Math.round(100*Math.pow(a,1/m))+'%',Math.round(100*Math.pow(1-a,m))+'%'],3); if(wrong.length<3) return null;
+      return {index:'q:30·econ.work[m;'+m+';'+a+']', lines:[[m+' \\text{ trading rules, each tested apart}','none with any real edge'],['\\text{each passes by luck with chance } '+a,'']], ask:'What is the chance that at least one passes?', right, opts:shuffle([right,...wrong]), lead:'', why:'At-least-one: 1 \u2212 (1 \u2212 '+a+')^'+m+' \u2248 '+right+'; on average '+DECAX(m*a,2)+' pass. A winner among many tries is no evidence by itself.'}; }
+    const mu=[0.02,0.04,0.05][rnd(3)], sg=[1,1.2,1.5,2][rnd(4)], t=[1,25,100,250,1000][rnd(5)], v=mu/sg*Math.sqrt(t), right=DECAX(v,3), wrong=UQAX(right,[DECAX(mu/sg*t,3),DECAX(mu/sg,3),DECAX(mu*t/(sg*t),4),DECAX(sg/mu/Math.sqrt(t),3)],3); if(wrong.length<3) return null;
+    return {index:'q:30·econ.work[d;'+mu+';'+sg+';'+t+']', lines:[['\\mu = '+mu+'\\%,\\ \\ \\sigma = '+sg+'\\%','a day\u2019s drift and wobble'],['t = '+t+' \\text{ days}','']], ask:'By how many widths does the drift stand out against the wobble?', right, opts:shuffle([right,...wrong]), lead:'', why:'Drift-and-width: the drift grows like t and the wobble like \u221at, so (\u03bc\u2215\u03c3)\u221at = ('+mu+' \u00f7 '+sg+') \u00b7 \u221a'+t+' \u2248 '+right+'.'}; }},
+  {id:'30·econ.word',step:'30·econ',mode:'word',label:'many tries make winners',open:()=>measured('30·econ'),make(){
+    const F=rnd(2);
+    if(F){ const n=[100,250,400,1000][rnd(4)], r=[0.02,0.05,0.08,0.1,0.15][rnd(5)], w=1/Math.sqrt(n), ok=Math.abs(r)<=2*w;
+      const right=ok?'no: it is within about two widths, 2\u2215\u221an \u2248 '+DECAX(2*w,3)+', of 0':'yes: it is more than two widths, 2\u2215\u221an \u2248 '+DECAX(2*w,3)+', from 0', wrong=[ok?'yes: it is more than two widths, 2\u2215\u221an \u2248 '+DECAX(2*w,3)+', from 0':'no: it is within about two widths, 2\u2215\u221an \u2248 '+DECAX(2*w,3)+', of 0','yes: any r other than 0 is a pattern','no: no lag product can ever show a pattern'];
+      return {index:'q:30·econ.word[r;'+n+';'+r+']', a3:['30·econ.word',DASH,DASH], story:'An analyst in San Francisco works the lag product average of '+n+' daily changes of a stock and gets r = '+r+'.', lines:[], ask:'Can that r be told from luck?', right, opts:shuffle([right,...wrong]), lead:'', why:'Lag-check: if the changes are independent, r has average 0 and width 1\u2215\u221a'+n+' \u2248 '+DECAX(w,3)+'. Within about two widths it cannot be told from luck.'}; }
+    const m=[300,500,1000][rnd(3)], P=0.0547, v=Math.round(m*P), right='about '+v+', by luck alone', wrong=['none: 8 years of 10 is skill','about '+Math.round(m*0.5)+', half of them','about '+Math.round(m*0.01)+', one in a hundred'];
+    return {index:'q:30·econ.word[f;'+m+']', a3:['30·econ.word',DASH,DASH], story:'There are '+m+' fund managers, none with any skill; each beats the index in a year with chance \u00bd, year by year apart. Beating it 8 or more years of 10 has chance about 0.0547.', lines:[], ask:'How many of them beat the index 8 years of 10 or more?', right, opts:shuffle([right,...wrong]), lead:'', why:'Many tries: on average m\u03b1 pass, '+m+' \u00b7 0.0547 \u2248 '+v+'. A winner among many tries is no evidence by itself.'}; }},
+  {id:'30·econ.line',step:'30·econ',mode:'proof',label:'what the prices license',open:()=>measured('30·econ'),make(){
+    return line28('30·econ.line',[
+      ['m1',[['\\text{the price rose 5 days running}','seen'],['\\text{it is due to fall}','a run']],2,1,'In a fair game the past is silent.'],
+      ['m2',[['\\text{a year\u2019s fall}','seen'],['\\text{the drift is down}','a year']],2,1,'A year\u2019s drift is half its width.'],
+      ['m3',[['\\text{the rule passed the test}','tested'],['\\text{it works}','a pass']],2,1,'Which of twenty rules? At least one passes with chance 64%.'],
+      ['m4',[['\\text{she beat the index 8 years of 10}','seen'],['\\text{she has skill}','a record']],2,1,'Among 500, about 27 do so by luck.'],
+      ['m5',[['\\text{the bell for daily changes}','given'],['\\text{a 20\\% day cannot happen}','the bell']],2,1,'The bell needs independent steps; panics are not.'],
+      ['m6',[['\\text{a fair game}','given'],['\\text{yesterday\u2019s change has co-spread } 0 \\text{ with the next}','past-is-silent']],2,0,'Anything built from the past is silent about the next change.']],[]); }});
+/* ----- annex 30·logi How many tickets to sell: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'30·logi.work',step:'30·logi',mode:'work',label:'who shows',open:()=>measured('30·logi'),make(){
+    const ask=rnd(2), n=[76,80,100,150,200][rnd(5)], p=[0.9,0.92,0.95][rnd(3)];
+    if(ask){ const f=[100,150,200][rnd(3)], b=[300,500,800,1000][rnd(4)], v=f/(f+b), right=DECAX(v,3), wrong=UQAX(right,[DECAX(b/(f+b),3),DECAX(f/b,3),DECAX(1-f/(f+2*b),3),'0.5'],3); if(wrong.length<3) return null;
+      return {index:'q:30·logi.work[f;'+f+';'+b+']', lines:[['\\text{fare } \\$'+f+',\\ \\ \\text{a bump costs } \\$'+b,'given']], ask:'Up to what chance that the tickets already sold fill the plane does one more ticket lower the average cost?', right, opts:shuffle([right,...wrong]), lead:'', why:'One-more-ticket: while that chance is below f\u2215(f + b) = '+f+' \u00f7 '+(f+b)+' \u2248 '+right+'. The best number is the first n at which it reaches that line.'}; }
+    const F=rnd(2), m=n*p, w=Math.sqrt(n*p*(1-p)), right=F?DECAX(w,2):DECAX(m,1), wrong=UQAX(right,F?[DECAX(n*p*(1-p),2),DECAX(Math.sqrt(n*p),2),DECAX(Math.sqrt(n)*(1-p),2),DECAX(w*2,2)]:[DECAX(n*(1-p),1),String(n),DECAX(n/p,1),DECAX(m+w,1)],3); if(wrong.length<3) return null;
+    return {index:'q:30·logi.work[s;'+n+';'+p+';'+F+']', lines:[[n+' \\text{ tickets}','sold'],['p = '+p,'each shows, apart from the rest']], ask:F?'What is the width of the count who show?':'What is the average count who show?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Width \u221a(npq) = \u221a('+n+' \u00b7 '+p+' \u00b7 '+DECAX(1-p,2)+') \u2248 '+right+'. It grows like \u221an, not n.':'Average np = '+n+' \u00b7 '+p+' = '+right+'.'}; }},
+  {id:'30·logi.word',step:'30·logi',mode:'word',label:'travellers who come together',open:()=>measured('30·logi'),make(){
+    const g=[2,3,4][rnd(3)], n=[80,90,120][rnd(3)], p=0.92, w=Math.sqrt(n*p*(1-p)), F=rnd(2);
+    if(F){ const right='the same average, '+DECAX(n*p,1)+', with width about '+DECAX(w*Math.sqrt(g),2), wrong=['the same average, '+DECAX(n*p,1)+', with width about '+DECAX(w,2),'a lower average, '+DECAX(n*p/g,1)+', with width about '+DECAX(w,2),'the same average, '+DECAX(n*p,1)+', with width about '+DECAX(w*g,2)];
+      return {index:'q:30·logi.word[g;'+g+';'+n+']', a3:['30·logi.word',DASH,DASH], story:'An airline sells '+n+' tickets on a flight out of Portland. Each traveller shows with chance 0.92, but they all travel in groups of '+g+' who show or stay home together.', lines:[], ask:'What happens to the count who show?', right, opts:shuffle([right,...wrong]), lead:'', why:'Groups-widen: groups leave the average count unchanged and widen it by \u221ag = \u221a'+g+'. Alone the width would be \u221a(npq) \u2248 '+DECAX(w,2)+'; in groups about '+DECAX(w*Math.sqrt(g),2)+', so the same tickets bump more often.'}; }
+    const s=[76,100,150][rnd(3)], t=Math.round(s/0.92), right='no: then the average fills the plane, and about half the flights would bump', wrong=['yes: it fills the plane exactly every time','no: sell exactly '+s+', since any extra risks a bump','yes: the width of the count shrinks to 0 at that size'];
+    return {index:'q:30·logi.word[a;'+s+']', a3:['30·logi.word',DASH,DASH], story:'A jet has '+s+' seats, and 8% of ticket holders don\u2019t show. A planner proposes selling '+s+' \u00f7 0.92 \u2248 '+t+' tickets.', lines:[], ask:'Is that the right number to sell?', right, opts:shuffle([right,...wrong]), lead:'', why:'The average count would equal the seats, and the count spreads round its average, about as often above as below. The right number comes from f\u2215(f + b), the one-more-ticket line.'}; }},
+  {id:'30·logi.line',step:'30·logi',mode:'proof',label:'what the count licenses',open:()=>measured('30·logi'),make(){
+    return line28('30·logi.line',[
+      ['b1',[['8\\% \\text{ don\u2019t show}','given'],['\\text{sell } 76 \\div 0.92 \\approx 83 \\text{ tickets}','fill the plane']],2,1,'The average fills the plane; half the flights would bump.'],
+      ['b2',[['n \\text{ tickets}','given'],['\\text{the width of the count grows like } n','width']],2,1,'Like \u221an, so big planes overbook by a bigger share.'],
+      ['b3',[['\\text{a couple}','given'],['\\text{two independent travellers}','two people']],2,1,'They show together: the width grows by \u221a2.'],
+      ['b4',[['80 \\text{ tickets is best}','one cost of a bump'],['\\text{best whatever a bump costs}','best']],2,1,'The line f\u2215(f + b) moves with b.'],
+      ['b5',[['S = B_1 + \\cdots + B_n','independent shows'],['\\operatorname{Var} S = npq','independent spreads add']],2,0,'Each B\u1d62 has spread p \u2212 p\u00b2 = pq.'],
+      ['b6',[['G_S(s) = (q + ps)^n','sums multiply'],['P(S = k) = \\tbinom nk p^k q^{n-k}','the coefficient of s^k']],2,0,'The chances come from the coefficients of G.']],[]); }});
+/* ----- annex 30·nav How sure am I of where I am: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'30·nav.work',step:'30·nav',mode:'work',label:'weigh each fix by trust',open:()=>measured('30·nav'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const s=[2,3,5,10][rnd(4)], k=[1,1.5,2,2.5][rnd(4)], r=s*k, v=Math.exp(-k*k/2), right=DECAX(100*v,1)+'%', wrong=UQAX(right,[DECAX(100*Math.exp(-k),1)+'%',DECAX(100*Math.exp(-k*k),1)+'%',DECAX(100*Math.exp(-k*k/4),1)+'%',DECAX(100*(1-v),1)+'%'].filter(x=>x!=='0%'),3); if(wrong.length<3) return null;
+      return {index:'q:30·nav.work[c;'+s+';'+k+']', lines:[['\\sigma = '+s+' \\text{ m east and north}','independent bells'],['r = '+DECAX(r,1)+' \\text{ m}','']], ask:'What is the chance of being more than r off?', right, opts:shuffle([right,...wrong]), lead:'', why:'Circle-chance: e^(−r²/(2σ²)) = e^(−'+DECAX(k*k/2,3)+') ≈ '+right+'.'}; }
+    const a=[2,3,4][rnd(3)], b=[5,6,8,10,12][rnd(5)], A=a*a, B=b*b;
+    if(ask===1){ const right=DECAX(B/(A+B),2), wrong=UQAX(right,[DECAX(b/(a+b),2),DECAX(A/(A+B),2),'0.5',DECAX(a/(a+b),2)],3); if(wrong.length<3) return null;
+      return {index:'q:30·nav.work[w;'+a+';'+b+']', lines:[['\\text{satellite: width } '+a+' \\text{ m}','one fix'],['\\text{radar: width } '+b+' \\text{ m}','an independent fix']], ask:'What weight, weighed by trust, goes on the satellite fix?', right, opts:shuffle([right,...wrong]), lead:'', why:'Weigh-by-trust: weights go as one over the spread, the width squared: (1/'+A+') ÷ (1/'+A+' + 1/'+B+') = '+B+'/'+(A+B)+' ≈ '+right+'.'}; }
+    const v=a*b/Math.sqrt(A+B), right=DECAX(v,2)+' m', wrong=UQAX(right,[DECAX(Math.sqrt(A+B)/2,2)+' m',DECAX((a+b)/2,2)+' m',DECAX(a*b/(a+b),2)+' m',DECAX(Math.sqrt(A+B),2)+' m'],3); if(wrong.length<3) return null;
+    return {index:'q:30·nav.work[s;'+a+';'+b+']', lines:[['\\text{satellite: width } '+a+' \\text{ m}','one fix'],['\\text{radar: width } '+b+' \\text{ m}','an independent fix']], ask:'What is the width of the two fixes weighed by trust?', right, opts:shuffle([right,...wrong]), lead:'', why:'Trusts-add: 1/σ² = 1/'+A+' + 1/'+B+', so σ = '+a+' · '+b+' ÷ √'+(A+B)+' ≈ '+right+': better than either fix.'}; }},
+  {id:'30·nav.word',step:'30·nav',mode:'word',label:'the ferry in the fog',open:()=>measured('30·nav'),make(){
+    const F=rnd(2);
+    if(F){ const s0=[2,5,10][rnd(3)], t=[2,4,5,8,10,12][rnd(6)], v=Math.sqrt(s0*s0+225*t), right='about '+DECAX(v,1)+' m', wrong=UQAX(right,['about '+DECAX(s0+15*t,1)+' m','about '+DECAX(s0+Math.sqrt(225*t),1)+' m','about '+DECAX(15*Math.sqrt(t),1)+' m','about '+s0+' m'],3); if(wrong.length<3) return null;
+      return {index:'q:30·nav.word[c;'+s0+';'+t+']', a3:['30·nav.word',DASH,DASH], story:'A ferry for Bremerton loses its satellite fix in fog, with a width of '+s0+' m at that moment. Carried forward by speed and heading, its place spreads like a random walk, q = 225 m² a minute.', lines:[], ask:'What is the width of its carried place after '+t+' minutes with no fix?', right, opts:shuffle([right,...wrong]), lead:'', why:'Predict: the spread grows by q a minute, so √('+(s0*s0)+' + 225 · '+t+') = √'+(s0*s0+225*t)+' ≈ '+DECAX(v,1)+' m. Spreads add, not widths.'}; }
+    const a=2, b=[2.5,3,3.2,4,5,10][rnd(6)], ok=b<Math.sqrt(3)*a, pv=DECAX(Math.sqrt(a*a+b*b)/2,2);
+    const right=ok?'yes: the plain average has width '+pv+' m, under 2 m':'no: the plain average has width '+pv+' m, worse than 2 m alone', wrong=[ok?'no: the plain average has width '+pv+' m, worse than 2 m alone':'yes: the plain average has width '+pv+' m, under 2 m','yes: two fixes always beat one, however averaged','no: a poorer fix can never help'];
+    return {index:'q:30·nav.word[p;'+b+']', a3:['30·nav.word',DASH,DASH], story:'In Rich Passage the satellite fix has a width of 2 m and the radar, independent of it, a width of '+b+' m. The mate takes the plain average of the two.', lines:[], ask:'Does the plain average beat the satellite fix alone?', right, opts:shuffle([right,...wrong]), lead:'', why:'A plain average has spread (a² + b²)/4, which beats a² only when b is less than √3 a ≈ 3.46 m. Weighed by trust, the radar always helps a little.'}; }},
+  {id:'30·nav.line',step:'30·nav',mode:'proof',label:'what the fixes license',open:()=>measured('30·nav'),make(){
+    return line28('30·nav.line',[
+      ['n1',[['\\text{satellite 2 m, radar 10 m}','two fixes'],['\\text{trust the satellite, ignore the radar}','the best one']],2,1,'Weighed by trust the radar lowers the width to 1.96 m.'],
+      ['n2',[['\\text{satellite 2 m, radar 10 m}','two fixes'],['\\text{plain average: width } \\sqrt{104}/2 \\approx 5.1 \\text{ m}','spreads add, w = ½']],2,0,'(a² + b²)/4, two and a half times worse than the satellite.'],
+      ['n3',[['\\text{widths } a, b','two fixes'],['\\text{weights as } 1/a,\\ 1/b','weigh-by-trust']],2,1,'One over the spread, the width squared.'],
+      ['n4',[['\\text{last fix: width 10 m}','given'],['\\text{five minutes later: still 10 m}','carried']],2,1,'The spread grows by q each minute.'],
+      ['n5',[['\\text{widths 2 m east and 2 m north}','independent'],['\\text{distance off: width 4 m}','widths add']],2,1,'Spreads add: the average of R² is σ² + σ².'],
+      ['n6',[['\\sigma = 2 \\text{ m east and north}','given'],['95\\% \\text{ circle: radius } 4.9 \\text{ m}','circle-chance']],2,0,'σ√(2 ln 20) = 2.45σ.'],
+      ['n7',[['1/\\sigma^2 = 1/a^2 + 1/b^2','trusts add'],['\\sigma \\lt a \\text{ and } \\sigma \\lt b','the result']],2,0,'Each one over the spread is less than the sum.']],[]); }});
+/* ----- annex 30·now How many findings survive: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'30·now.work',step:'30·now',mode:'work',label:'found, and true',open:()=>measured('30·now'),make(){
+    const ask=rnd(2);
+    if(ask){ const k=[2,3,5,10,20][rnd(5)], v=1-Math.pow(0.95,k), right=Math.round(100*v)+'%', wrong=UQAX(right,[Math.min(100,5*k)+'%','5%',Math.round(100*Math.pow(0.95,k))+'%',Math.round(100*Math.pow(0.05,1/k))+'%'],3); if(wrong.length<3) return null;
+      return {index:'q:30·now.work[k;'+k+']', lines:[[k+' \\text{ independent analyses of a false idea}','forks'],['\\alpha = 0.05 \\text{ each}','']], ask:'What is the chance that at least one passes?', right, opts:shuffle([right,...wrong]), lead:'', why:'At-least-one: 1 − 0.95^'+k+' ≈ '+right+'. More forks, more passes.'}; }
+    const p=[0.5,0.25,0.1,0.05][rnd(4)], w=[0.8,0.5,0.2][rnd(3)], t=w*p, f=0.05*(1-p), right=Math.round(100*t/(t+f))+'%', wrong=UQAX(right,['95%',Math.round(100*w)+'%',Math.round(100*p)+'%',Math.round(100*f/(t+f))+'%'],3); if(wrong.length<3) return null;
+    return {index:'q:30·now.work[t;'+p+';'+w+']', lines:[['\\pi = '+p+'','share of ideas true'],['\\text{power } '+w+',\\ \\ \\alpha = 0.05','']], ask:'What share of passed tests are true?', right, opts:shuffle([right,...wrong]), lead:'', why:'Found-and-true: '+w+' · '+p+' ÷ ('+w+' · '+p+' + 0.05 · '+DECAX(1-p,2)+') ≈ '+right+'.'}; }},
+  {id:'30·now.word',step:'30·now',mode:'word',label:'a thousand ideas',open:()=>measured('30·now'),make(){
+    const F=rnd(2);
+    if(F){ const p=[0.1,0.2,0.25,0.5][rnd(4)], w=[0.2,0.5,0.8][rnd(3)], T=Math.round(1000*p*w), Fa=Math.round(1000*(1-p)*0.05), right=T+' true and '+Fa+' false', wrong=UQAX(right,[Math.round(1000*p)+' true and '+Fa+' false',T+' true and '+Math.round(50)+' false',T+' true and '+Math.round(1000*(1-p)*(1-w))+' false',Math.round(1000*p*0.95)+' true and '+Fa+' false'],3); if(wrong.length<3) return null;
+      return {index:'q:30·now.word[c;'+p+';'+w+']', a3:['30·now.word',DASH,DASH], story:'A field tests 1000 ideas. Of them '+Math.round(1000*p)+' are true. Its studies have power '+w+', and each false idea passes with chance 0.05.', lines:[], ask:'How many of the passed tests are true, and how many false?', right, opts:shuffle([right,...wrong]), lead:'', why:'Count: '+Math.round(1000*p)+' · '+w+' = '+T+' true pass; '+Math.round(1000*(1-p))+' · 0.05 = '+Fa+' false pass. So '+Math.round(100*T/(T+Fa))+'% of passes are true.'}; }
+    const w=[0.17,0.2,0.3,0.5,0.8][rnd(5)], right=Math.round(100*(1-w))+'%', wrong=UQAX(right,['0%: the effect is real','5%',Math.round(100*w)+'%','95%'],3); if(wrong.length<3) return null;
+    return {index:'q:30·now.word[r;'+w+']', a3:['30·now.word',DASH,DASH], story:'An effect is real. A lab repeats the study at the same size, which gives it power '+w+'.', lines:[], ask:'What is the chance the repeat fails?', right, opts:shuffle([right,...wrong]), lead:'', why:'A real effect passes with chance equal to the power, so it fails with chance 1 − '+w+' = '+right+'. A failed repeat is not proof that the effect is not real.'}; }},
+  {id:'30·now.line',step:'30·now',mode:'proof',label:'what a pass licenses',open:()=>measured('30·now'),make(){
+    return line28('30·now.line',[
+      ['w1',[['p = 0.03','the test'],['\\text{the idea is false with chance } 3\\%','p']],2,1,'p is P(this far | no effect), not P(no effect | this far).'],
+      ['w2',[['\\pi = 0.1,\\ \\text{power } 0.8','given'],['64\\% \\text{ of passes are true}','found-and-true']],2,0,'0.08 ÷ (0.08 + 0.045) ≈ 64%.'],
+      ['w3',[['\\text{looked after each batch}','peeking'],['\\text{false alarms still } 5\\%','the line']],2,1,'Peeking: between α and kα, rising with the looks.'],
+      ['w4',[['\\text{the effect passed}','a weak study'],['\\text{its size is about right}','passed']],2,1,'Filtered-average: too large, the more so the weaker the study.'],
+      ['w5',[['\\text{the repeat failed}','power 17\\%'],['\\text{the effect is not real}','a failed repeat']],2,1,'A real effect fails five times in six at that power.'],
+      ['w6',[['p \\gt 0.05','the test'],['\\text{there is no effect}','a fail']],2,1,'Report the size with its width: the cloud.'],
+      ['w7',[['\\text{plan written before the data}','registered'],['\\text{one planned look at the line}','the plan']],2,0,'The plan fixes the looks and the line.']],[]); }});
+/* ----- annex 30·phys How is energy shared among molecules: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'30·phys.work',step:'30·phys',mode:'work',label:'shares fall as e to the energy',open:()=>measured('30·phys'),make(){
+    const ask=rnd(2);
+    if(ask){ const c=[10,50,100,300][rnd(4)], T=[293,310][rnd(2)], v=c*8.314*T/1000, right=DECAX(v,0)+' kPa', wrong=UQAX(right,[DECAX(c*8.314*(T-273)/1000,0)+' kPa',DECAX(c*T/1000,1)+' kPa',DECAX(v/1000,2)+' kPa',DECAX(c*8.314/T,2)+' kPa'],3); if(wrong.length<3) return null;
+      return {index:'q:30·phys.work[o;'+c+';'+T+']', lines:[['c = '+c+' \\text{ mol of solute per m}^3','a dilute solution'],['T = '+T+' \\text{ K},\\ \\ R = 8.314','']], ask:'What extra pressure does the solution stand at, against pure water through the skin?', right, opts:shuffle([right,...wrong]), lead:'', why:'Solvent-push: Π = cRT = '+c+' · 8.314 · '+T+' ≈ '+DECAX(v*1000,0)+' Pa, '+right+'.'}; }
+    const x=[0.5,1,2,3,4][rnd(5)], right=DECAX(Math.exp(-x),3), wrong=UQAX(right,[DECAX(Math.exp(-x/2),3),DECAX(1/(1+x),3),DECAX(Math.exp(-x*x),3),DECAX(1/x,3)].filter(s=>s!=='0'&&s!=='1'),3); if(wrong.length<3) return null;
+    return {index:'q:30·phys.work[s;'+x+']', lines:[['E_2 - E_1 = '+x+'\\,kT','two states'],['p_i = \\tfrac{1}{Z}e^{-E_i/kT}','energy-share']], ask:'What is p₂ ÷ p₁?', right, opts:shuffle([right,...wrong]), lead:'', why:'Energy-share: Z cancels, so p₂ ÷ p₁ = e^(−'+x+') ≈ '+right+'.'}; }},
+  {id:'30·phys.word',step:'30·phys',mode:'word',label:'counting the squares',open:()=>measured('30·phys'),make(){
+    const K=[['a helium atom in a balloon at room temperature',3],['a nitrogen molecule in the air of a room in Victoria',5],['a nitrogen molecule in a flame hot enough to set its shake going',7],['an atom in a block of copper, held by springs in three directions',6]], i=rnd(4), s=K[i][1], fr=n=>n%2?n+'/2':String(n/2), right=fr(s)+' kT', wrong=UQAX(right,[fr(s-1)+' kT',fr(s+2)+' kT',s+' kT','3/2 kT','1/2 kT'],3); if(wrong.length<3) return null;
+    return {index:'q:30·phys.word[h;'+i+']', a3:['30·phys.word',DASH,DASH], story:'Take '+K[i][0]+'. Each part of its energy that goes as a square, moving, turning or a spring, counts once.', lines:[], ask:'What is its average energy?', right, opts:shuffle([right,...wrong]), lead:'', why:'Half-kT: each square averages ½kT whatever its size. Here there are '+s+' squares, so '+right+'.'}; }},
+  {id:'30·phys.line',step:'30·phys',mode:'proof',label:'what the count licenses',open:()=>measured('30·phys'),make(){
+    return line28('30·phys.line',[
+      ['h1',[['\\text{a body in touch with a big room}','given'],['\\text{every state gets the same share}','equal shares']],2,1,'Only with an exact energy; in touch with a room, shares fall as e^(−E/kT).'],
+      ['h2',[['-\\ln p_i - 1 = \\lambda + \\beta E_i','lines-up'],['p_i \\text{ is the most ways}','a level point']],2,1,'The lines-up technique finds a level point; the log-bounds technique proves it is the most.'],
+      ['h3',[['\\text{a stiffer spring}','given'],['\\text{it holds more energy}','stiffer']],2,1,'Half-kT for every square, whatever κ.'],
+      ['h4',[['\\operatorname{E}E = -\\tfrac{d\\ln Z}{d\\beta}','sum-over-states'],['\\operatorname{Var}E = \\tfrac{d^2\\ln Z}{d\\beta^2} = kT^2c','the next slope']],2,0,'The heat a body soaks up and the jitter of its energy are one number.'],
+      ['h5',[['E = E^{\\text{move}} + E^{\\text{shake}}','independent parts'],['Z = Z_{\\text{move}} + Z_{\\text{shake}}','parts add']],2,1,'e to a sum is a product: the sums over states multiply.'],
+      ['h6',[['hf/k = 3390 \\text{ K},\\ T = 293 \\text{ K}','nitrogen'],['\\text{the shake holds almost nothing}','frozen-shake']],2,0,'e^(−11.6): about 9 in a million shake at all.'],
+      ['h7',[['\\text{the ground state has the largest share}','energy-share'],['\\text{most molecules have energy near } 0','the share']],2,1,'There may be many more states at higher energy.']],[]); }});
+/* ----- annex 30·stat Did the treatment work: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'30·stat.work',step:'30·stat',mode:'work',label:'between and within',open:()=>measured('30·stat'),make(){
+    const ask=rnd(2);
+    if(ask){ const s2=[1,2.5,4,10.5][rnd(4)], d=[1,2,3][rnd(3)], n=Math.ceil(15.68*s2/(d*d)); if(n<3) return null;
+      const right=String(n), wrong=UQAX(right,[String(Math.ceil(7.84*s2/(d*d))),String(Math.ceil(15.68*s2/d)),String(Math.ceil(15.68*Math.sqrt(s2)/d)),String(Math.ceil(3.92*s2/(d*d)))].filter(x=>x!=='0'&&x!=='1'),3); if(wrong.length<3) return null;
+      return {index:'q:30·stat.work[n;'+s2+';'+d+']', lines:[['\\sigma^2 = '+s2+',\\ \\ d = '+d,'spread, and the difference to find'],['\\text{power } 0.8 \\text{ at the one-in-twenty line}','']], ask:'How many plots does each group need?', right, opts:shuffle([right,...wrong]), lead:'', why:'Plots-needed: n = 2(2.80)²σ²/d² ≈ 15.68 · '+s2+' ÷ '+(d*d)+' ≈ '+DECAX(15.68*s2/(d*d),1)+', so '+n+'.'}; }
+    const k=[3,4][rnd(2)], m=[4,5,6][rnd(3)], N=k*m, b=[6,10,12,20][rnd(4)], w=[2,2.5,3,4][rnd(4)], B=(k-1)*b, W=(N-k)*w, right=DECAX(b/w,2), wrong=UQAX(right,[DECAX(B/W,2),DECAX((B/k)/(W/N),2),DECAX((B/(k-1))/(W/(N-1)),2),DECAX(w/b,2)],3); if(wrong.length<3) return null;
+    return {index:'q:30·stat.work[f;'+k+';'+m+';'+b+';'+w+']', lines:[[k+' \\text{ mixes, '+m+' plots each}','N = '+N],['B = '+DECAX(B,1)+',\\ \\ W = '+DECAX(W,1),'squares-split']], ask:'What is F?', right, opts:shuffle([right,...wrong]), lead:'', why:'F = (B/(k − 1)) ÷ (W/(N − k)) = ('+DECAX(B,1)+'/'+(k-1)+') ÷ ('+DECAX(W,1)+'/'+(N-k)+') = '+b+' ÷ '+w+' = '+right+'.'}; }},
+  {id:'30·stat.word',step:'30·stat',mode:'word',label:'plots in fields',open:()=>measured('30·stat'),make(){
+    const F=rnd(2);
+    if(F){ const k=[3,4,5][rnd(3)], m=k*(k-1)/2, right='up to '+Math.min(100,5*m)+'%', wrong=UQAX(right,['5%','up to '+DECAX(5/m,2)+'%','up to '+(5*k+5)+'%'],3); if(wrong.length<3) return null;
+      return {index:'q:30·stat.word[p;'+k+']', a3:['30·stat.word',DASH,DASH], story:'A seed company tries '+k+' mixes of fertiliser and, in place of one ratio, tests each pair of mixes apart at the one-in-twenty line. No mix differs from any other.', lines:[], ask:'What is the chance that some test raises a false alarm?', right, opts:shuffle([right,...wrong]), lead:'', why:'There are '+m+' pairs, and P(A or B) ≤ P(A) + P(B), so up to '+m+' · 5%. One ratio, F, asks all the groups at once.'}; }
+    const s=[1,2,2.5,4][rnd(4)], v=[4,6,8][rnd(3)], b=[4,5,8][rnd(3)], right=DECAX(Math.sqrt(2*s/b),2)+' kg', wrong=UQAX(right,[DECAX(Math.sqrt(2*(s+v)/b),2)+' kg',DECAX(Math.sqrt(s/b),2)+' kg',DECAX(2*s/b,2)+' kg',DECAX(Math.sqrt(2*s),2)+' kg'],3); if(wrong.length<3) return null;
+    return {index:'q:30·stat.word[b;'+s+';'+v+';'+b+']', a3:['30·stat.word',DASH,DASH], story:'Two mixes are each grown once in every one of '+b+' fields. Inside a field the scatter has spread '+s+' kg²; the fields differ among themselves with spread '+v+' kg².', lines:[], ask:'What is the width of the difference of the two averages?', right, opts:shuffle([right,...wrong]), lead:'', why:'Same-field: the field effects cancel, so the spread is 2σ²/b = '+DECAX(2*s/b,3)+' and the width √'+DECAX(2*s/b,3)+' ≈ '+right+'.'}; }},
+  {id:'30·stat.line',step:'30·stat',mode:'proof',label:'what the ratio licenses',open:()=>measured('30·stat'),make(){
+    return line28('30·stat.line',[
+      ['t1',[['\\text{three pair tests at } 0.05','tests'],['\\text{a false alarm has chance } 0.05','each']],2,1,'At least one: up to 0.15.'],
+      ['t2',[['B = 40,\\ W = 30','squares-split'],['Q = 70','the sums add']],2,0,'Q = W + B.'],
+      ['t3',[['B/(k - 1) = 20,\\ W/(N - k) = 2.5','three mixes, fifteen plots'],['Q/(N - 1) = 22.5','they add']],2,1,'Divided by their directions they do not add: 70/14 = 5.'],
+      ['t4',[['F = 8','the ratio'],['\\text{every mix differs from every other}','F']],2,1,'A large ratio says the averages are not all equal, not which differ.'],
+      ['t5',[['\\text{each mix once in each field}','blocks'],['\\text{the field effects cancel}','same-field']],2,0,'β̄ is in both averages and drops from the difference.'],
+      ['t6',[['\\text{five plots to a mix found no difference}','a small trial'],['\\text{the mixes are alike}','no pass']],2,1,'A trial that small has low power.'],
+      ['t7',[['\\text{laid out in fields}','blocks'],['\\text{shuffle the labels over all fifteen plots}','label-shuffle']],2,1,'Count only the splits the draw could make: inside each field.']],[]); }});
+/* ----- annex 31·eng Why does a tall building sway: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'31·eng.work',step:'31·eng',mode:'work',label:'ways of shaking',open:()=>measured('31·eng'),make(){
+    const ask=rnd(2);
+    if(ask){ const a=1+rnd(9), b=1+rnd(9), v=(3*a+4*b)/5, right=DECAX(v,2), wrong=UQAX(right,[DECAX((4*a+3*b)/5,2),String(a+b),DECAX((3*a+4*b)/25,2),DECAX(Math.sqrt(a*a+b*b),2)],3); if(wrong.length<3) return null;
+      return {index:'q:31·eng.work[f;'+a+';'+b+']', lines:[['F = ('+a+', '+b+')','a push on two floors'],['e_1 = (\\tfrac35, \\tfrac45)','the first way of shaking']], ask:'What part of the push drives the first way?', right, opts:shuffle([right,...wrong]), lead:'', why:'Shared-push: only the reading F · e₁ = (3 · '+a+' + 4 · '+b+') ÷ 5 = '+right+' drives it.'}; }
+    const m=[2,4,5,10][rnd(4)], w=[1,1.5,2,3][rnd(4)], L=m*w*w, right=DECAX(w,2), wrong=UQAX(right,[DECAX(L/m,2),DECAX(Math.sqrt(L),2),DECAX(Math.sqrt(m/L),2),DECAX(Math.sqrt(L*m),2)],3); if(wrong.length<3) return null;
+    return {index:'q:31·eng.work[w;'+m+';'+w+']', lines:[['m\\,x\'\' = -Kx,\\ \\ m = '+m,'the pulls between floors'],['\\lambda_1 = '+DECAX(L,2),'a stretch of K']], ask:'At what pace ω does that way swing?', right, opts:shuffle([right,...wrong]), lead:'', why:'Symmetric-sway: ω = √(λ ÷ m) = √('+DECAX(L,2)+' ÷ '+m+') = '+right+'.'}; }},
+  {id:'31·eng.word',step:'31·eng',mode:'word',label:'the tower in the wind',open:()=>measured('31·eng'),make(){
+    const k=[2,4,9,16][rnd(4)], right=DECAX(4/Math.sqrt(k),2)+' s', wrong=UQAX(right,[DECAX(4/k,2)+' s',DECAX(4*Math.sqrt(k),2)+' s',DECAX(4*k,2)+' s','4 s'],3); if(wrong.length<3) return null;
+    return {index:'q:31·eng.word['+k+']', a3:['31·eng.word',DASH,DASH], story:'A tower in Seattle sways once every 4 seconds in its first way of shaking. Engineers make every pull between floors '+k+' times as stiff, with the same floors.', lines:[], ask:'What is the new time of one sway?', right, opts:shuffle([right,...wrong]), lead:'', why:'Symmetric-sway: each stretch λ is '+k+' times as large, ω = √(λ/m) grows by √'+k+', and the time 2π/ω shrinks by √'+k+'. A stiffer tower moves its paces; it may move one onto the wind’s.'}; }},
+  {id:'31·eng.line',step:'31·eng',mode:'proof',label:'what the sway licenses',open:()=>measured('31·eng'),make(){
+    return line28('31·eng.line',[
+      ['e1',[['M x\'\' = -Kx,\\ \\text{masses differ}','given'],['M^{-1}K \\text{ has right-angled axes}','symmetric']],2,1,'It is not symmetric when the masses differ; weigh by the roots of the masses first.'],
+      ['e2',[['\\text{the tower is made stiffer}','given'],['\\text{it sways less in every wind}','stiffer']],2,1,'It moves its paces, and may move one onto the wind’s.'],
+      ['e3',[['F \\cdot e_k = 0','the push'],['\\text{the push never starts way } k','shared-push']],2,0,'m yₖ″ = −λₖyₖ + F · eₖ, and the push term is 0.'],
+      ['e4',[['\\text{a push on every floor}','given'],['\\text{every way starts}','pushed']],2,1,'Only those it is not at right angles to.'],
+      ['e5',[['K \\text{ symmetric},\\ \\tfrac12 x^{\\mathsf T}Kx \\gt 0','the grid'],['\\text{right-angled ways, each with } \\omega_k = \\sqrt{\\lambda_k/m}','symmetric-sway']],2,0,'A symmetric grid with positive energy has right-angled axes with stretches above 0.'],
+      ['e6',[['\\text{a building that does not sway}','given'],['\\text{it is safest}','stiff']],2,1,'It cannot bend, so it cannot store a gust’s energy, and it cracks.']],[]); }});
+/* ----- annex 31·logi Should every counter have its own line: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'31·logi.work',step:'31·logi',mode:'work',label:'the wait near full use',open:()=>measured('31·logi'),make(){
+    const ask=rnd(2), r=[0.5,0.75,0.8,0.9,0.95,0.99][rnd(6)];
+    if(ask){ const right=DECAX(r/(1-r),2), wrong=UQAX(right,[DECAX(1/(1-r),2),String(r),DECAX((1-r)/r,2),DECAX(r*r/(1-r),2)],3); if(wrong.length<3) return null;
+      return {index:'q:31·logi.work[n;'+r+']', lines:[['\\rho = \\lambda/\\mu = '+r,'one counter']], ask:'How many service times does a person wait, on average, before being served?', right, opts:shuffle([right,...wrong]), lead:'', why:'Near-full: ρ ÷ (1 − ρ) = '+r+' ÷ '+DECAX(1-r,2)+' = '+right+'.'}; }
+    const s=DECAX(2*r/(1-r),2), right=DECAX(2*r*r/(1-r*r),2)+' min', wrong=UQAX(right,[s+' min',DECAX(r*r/(1-r*r),2)+' min',DECAX(r/(1-r),2)+' min',DECAX(2*r*r/(1-r),2)+' min'],3); if(wrong.length<3) return null;
+    return {index:'q:31·logi.work[s;'+r+']', lines:[['\\text{two clerks, one shared line}','each serves 30 an hour'],['\\rho = '+r,'each busy that share']], ask:'What is the average wait before service?', right, opts:shuffle([right,...wrong]), lead:'', why:'Shared-line: ρ² ÷ (μ(1 − ρ²)), with 1/μ = 2 min: 2 · '+DECAX(r*r,4)+' ÷ '+DECAX(1-r*r,4)+' ≈ '+right+'. Separate lines give '+s+' min.'}; }},
+  {id:'31·logi.word',step:'31·logi',mode:'word',label:'the post office at noon',open:()=>measured('31·logi'),make(){
+    const r=[0.5,0.6,0.75,0.8,0.9][rnd(5)], v=2*(1-r)*r*r, right=DECAX(100*v,1)+'%', wrong=UQAX(right,['0%',DECAX(100*(1-r),1)+'%',DECAX(100*(1-r)*r*r,1)+'%',DECAX(100*r*r,1)+'%'],3); if(wrong.length<3) return null;
+    return {index:'q:31·logi.word['+r+']', a3:['31·logi.word',DASH,DASH], story:'A post office in Olympia paints two lines, one to each counter. People pick a line at random, and each clerk is busy a share '+r+' of the time.', lines:[], ask:'What is the chance that a clerk idles while someone waits at the other counter?', right, opts:shuffle([right,...wrong]), lead:'', why:'Idle-waste: one clerk free and the other with someone waiting, either way round: 2(1 − ρ)ρ² = '+right+'. With one shared line it is 0.'}; }},
+  {id:'31·logi.line',step:'31·logi',mode:'proof',label:'what the lines license',open:()=>measured('31·logi'),make(){
+    return line28('31·logi.line',[
+      ['q1',[['\\text{same clerks, same arrivals}','given'],['\\text{the same wait either plan}','averages match']],2,1,'The waste of idle clerks does not match.'],
+      ['q2',[['\\rho = 0.99','one counter'],['\\text{only a little worse than } \\rho = 0.9','near']],2,1,'The wait is 99 services against 9.'],
+      ['q3',[['\\rho = 1','full use'],['\\text{a long but steady line}','steady-line']],2,1,'The steady-line technique needs ρ below 1.'],
+      ['q4',[['\\text{two counters, one line, each busy } \\rho','shared'],['\\text{wait} = \\text{separate wait} \\times \\tfrac{\\rho}{1 + \\rho}','shared-line']],2,0,'ρ²/(μ(1 − ρ²)) against ρ/(μ(1 − ρ)).'],
+      ['q5',[['\\text{one shared line}','built'],['\\text{no clerk idles while someone waits}','idle-waste']],2,0,'A free clerk takes the next person.'],
+      ['q6',[['\\text{two lines, people switch to the shorter}','given'],['\\text{as good as one shared line}','switching']],2,1,'A free clerk can still idle beside a line one service long.']],[]); }});
+/* ----- annex 31·now How can a picture be stored small: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'31·now.work',step:'31·now',mode:'work',label:'keep the largest readings',open:()=>measured('31·now'),make(){
+    const R=shuffle([9,7,5,4,3,2,1,1].map((x,i)=>x*(rnd(2)?1:-1))).slice(0,6), m=2+rnd(2), S=R.map(Math.abs).sort((a,b)=>b-a), miss=S.slice(m).reduce((s,x)=>s+x*x,0), first=R.slice(m).reduce((s,x)=>s+x*x,0), right=String(miss), wrong=UQAX(right,[String(first),String(S[m]*S[m]),String(S[m]),String(S.slice(m).reduce((s,x)=>s+x,0))],3); if(wrong.length<3) return null;
+    return {index:'q:31·now.work['+R.join(';')+';'+m+']', lines:[['\\text{readings: } '+R.join(',\\ ').replace(/-/g,'−'),'along a right-angled basis'],['\\text{keep } '+m,'']], ask:'What is the smallest squared miss with '+m+' basis lists?', right, opts:shuffle([right,...wrong]), lead:'', why:'Largest-readings: keep the '+m+' largest in size, and the miss is the total of the squares dropped: '+S.slice(m).map(x=>x+'²').join(' + ')+' = '+right+'.'}; }},
+  {id:'31·now.word',step:'31·now',mode:'word',label:'one roof against the sky',open:()=>measured('31·now'),make(){
+    const J=[3,4,6,8,10,12][rnd(6)], N=Math.pow(2,J), right=String(J+1), wrong=UQAX(right,[String(N),String(N/2),String(J),'1'],3); if(wrong.length<3) return null;
+    return {index:'q:31·now.word['+J+']', a3:['31·now.word',DASH,DASH], story:'A row of '+N.toLocaleString('en').replace(/,/g,' ')+' dots in a photo of the Skagit Valley is pale sky, then dark roof: constant except for one jump.', lines:[], ask:'At most how many of its readings along the brief waves are not 0?', right, opts:shuffle([right,...wrong]), lead:'', why:'Edge-count: 2^'+J+' dots, so one reading at each of the '+J+' sizes, plus the constant: '+right+'.'}; }},
+  {id:'31·now.line',step:'31·now',mode:'proof',label:'what the readings license',open:()=>measured('31·now'),make(){
+    return line28('31·now.line',[
+      ['b1',[['\\text{store } m \\text{ readings}','given'],['\\text{keep the first } m','the list']],2,1,'Keep the m largest; the order of the list is not their size.'],
+      ['b2',[['\\text{readings dropped}','largest kept'],['\\text{the miss is the largest dropped}','miss']],2,1,'It is the total of the squares of all dropped.'],
+      ['b3',[['\\text{a basis that is not right-angled}','given'],['\\text{dropping small readings costs their squares}','miss']],2,1,'Only in a right-angled one; otherwise the misses mix.'],
+      ['b4',[['\\text{a right-angled basis}','given'],['\\text{the } m \\text{ largest readings give the closest picture}','largest-readings']],2,0,'The squared miss is the total of the squares dropped.'],
+      ['b5',[['\\text{brief waves}','a basis'],['\\text{best for every picture}','brief-wave']],2,1,'A picture of fine stripes is cheaper in turnings.'],
+      ['b6',[['\\text{a small squared miss}','given'],['\\text{the picture looks the same}','the eye']],2,1,'The eye weighs edges and textures in its own way.']],[]); }});
+/* ----- annex 31·phys How do polarized sunglasses cut glare: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'31·phys.work',step:'31·phys',mode:'work',label:'the filter as a shadow map',open:()=>measured('31·phys'),make(){
+    const ask=rnd(2);
+    if(ask){ const N=[['water',1.33],['glass',1.5],['a diamond',2.42]][rnd(3)], n=N[1], d=180/Math.PI, right=DECAX(Math.atan(n)*d,1)+'°', wrong=UQAX(right,[DECAX(Math.asin(1/n)*d,1)+'°',DECAX(Math.atan(1/n)*d,1)+'°',DECAX(Math.acos(1/n)*d,1)+'°','45°'],3); if(wrong.length<3) return null;
+      return {index:'q:31·phys.work[b;'+n+']', lines:[['n = '+n,N[0]]], ask:'At what angle from straight down does light off '+N[0]+' shake only level?', right, opts:shuffle([right,...wrong]), lead:'', why:'Level-glare: tan θ = n, so θ = arctan '+n+' ≈ '+right+'.'}; }
+    const t=[20,30,45,60,70][rnd(5)], c=Math.cos(t*Math.PI/180), right=DECAX(100*c*c,1)+'%', wrong=UQAX(right,[DECAX(100*c,1)+'%','50%',DECAX(50*c*c,1)+'%',DECAX(100*(1-c*c),1)+'%'],3); if(wrong.length<3) return null;
+    return {index:'q:31·phys.work[m;'+t+']', lines:[['\\text{light shaking along one line}','glare'],['\\theta = '+t+'^\\circ \\text{ to the filter’s line}','']], ask:'What share of its brightness passes?', right, opts:shuffle([right,...wrong]), lead:'', why:'Filter-shadow: |PE|² = |E|² cos²θ = cos² '+t+'° ≈ '+right+'.'}; }},
+  {id:'31·phys.word',step:'31·phys',mode:'word',label:'three filters at the lake',open:()=>measured('31·phys'),make(){
+    const t=[15,30,45,60][rnd(4)], a=t*Math.PI/180, v=0.5*Math.pow(Math.cos(a)*Math.sin(a),2), right=DECAX(100*v,2)+'%', wrong=UQAX(right,['0%',DECAX(50*Math.pow(Math.cos(a),2),2)+'%',DECAX(100*Math.pow(Math.cos(a)*Math.sin(a),2),2)+'%','50%'],3); if(wrong.length<3) return null;
+    return {index:'q:31·phys.word['+t+']', a3:['31·phys.word',DASH,DASH], story:'An angler on Lake Tahoe holds two polarized lenses crossed, one line upright and one level, against the sun. Then she slips a third between them, its line '+t+'° from upright.', lines:[], ask:'What share of the sunlight now comes through?', right, opts:shuffle([right,...wrong]), lead:'', why:'Mixed-light, then the stack: ½ · cos² '+t+'° · cos² '+(90-t)+'° ≈ '+right+'. The middle filter adds no light; it lets through part of what the crossed pair throws away whole.'}; }},
+  {id:'31·phys.line',step:'31·phys',mode:'proof',label:'what the filters license',open:()=>measured('31·phys'),make(){
+    return line28('31·phys.line',[
+      ['p1',[['\\text{sunlight through a filter}','given'],['\\text{it keeps } \\cos^2\\theta','filter-shadow']],2,1,'Sunlight has no one θ; it keeps ½.'],
+      ['p2',[['P = dd^{\\mathsf T}','filter-shadow'],['P^2 = P','twice as once']],2,0,'dᵀd = 1, so ddᵀddᵀ = ddᵀ.'],
+      ['p3',[['\\text{two filters at } 30^\\circ','given'],['P_1P_2 = P_2P_1','either order']],2,1,'Only at 0° or 90°; otherwise the light leaves along the last line.'],
+      ['p4',[['\\text{a second filter}','given'],['\\text{it undoes the first}','undo']],2,1,'A shadow map has determinant 0; the part across is gone.'],
+      ['p5',[['\\tan\\theta = 1.33','water'],['\\text{the glare shakes only level}','level-glare']],2,0,'At that angle the reflected light shakes level.'],
+      ['p6',[['\\text{glare off water at any angle}','given'],['\\text{it is all level}','glare']],2,1,'Only at tan θ = n; at other angles it is mostly level.']],[]); }});
+/* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
+    const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
+    const right=String(shelf), wrong=UQAX(right,[A,Math.ceil(avg+w),Math.ceil(avg+4*w),Math.ceil(avg+2*Math.sqrt(avg)),Math.ceil(avg+2*n*p*(1-p)/10)],3); if(wrong.length<3) return null;
+    return {index:'q:32·bio.work['+[n,D].join(';')+']', lines:[[n+' people, each on one pack that lasts '+D+' days','given'],['in a week each comes in with chance 7/'+D,'one for each person']], ask:'What is the shelf of packs, for a short-chance of about 2 in 100?', right, opts:shuffle([right,...wrong]), lead:'', why:'Large-count technique: average '+n+' · 7/'+D+' = '+avg.toFixed(1)+', spread width √('+n+' · (7/'+D+')(1 − 7/'+D+')) = '+w.toFixed(1)+', and the shelf is the average plus two widths: '+shelf+'.'}; }},
+  {id:'32·bio.word',step:'32·bio',mode:'word',label:'a shelf for rare arrivals',open:()=>measured('32·bio'),make(){
+    const N=pick([5000,8000,10000,12000,15000,20000,30000]), M=pick([5000,10000,20000]), d=pick([1,2,3,7]), m=N/M*d; if(m<0.5||m>25) return null;
+    const shelf=SHELFAX(m,0.02), mm=Math.round(m), right=String(shelf), wrong=UQAX(right,[mm,shelf-1,shelf+2,Math.ceil(m+2*Math.sqrt(m))===shelf?shelf+1:Math.ceil(m+2*Math.sqrt(m)),Math.ceil(2*m)],3); if(wrong.length<3) return null;
+    const what=pick(['a sprained ankle','a burn that needs a dressing','a bee sting that needs cream','a broken wrist']);
+    return {index:'q:32·bio.word['+[N,M,d].join(';')+']', a3:['32·bio.word',DASH,DASH], story:'A town of '+N.toLocaleString('en')+' people has one pharmacy. Each person has a chance of 1 in '+M.toLocaleString('en')+' a day of '+what+', which needs one course of medicine, and one person’s case does not make another’s more likely. The van comes every '+(d===1?'day':d+' days')+'.', lines:[], ask:'What is the least shelf of courses with a short-chance of at most 0.02?', right, opts:shuffle([right,...wrong]), lead:'', why:'Rare-events technique: the need until the van is a rare count with average '+(Math.round(m*100)/100)+'. Shelf technique for rare arrivals: the least s whose chance of more is at most 0.02 is '+shelf+' (chance '+PTAILAX(m,shelf).toFixed(3)+'; with '+(shelf-1)+' it is '+PTAILAX(m,shelf-1).toFixed(3)+').'}; }},
+  {id:'32·bio.line',step:'32·bio',mode:'proof',label:'what a shelf licenses',open:()=>measured('32·bio'),make(){
+    const a=4+rnd(10), w=1+rnd(4);
+    return line28('32·bio.line',[
+      ['b1',[['broken bones arrive one by one, independently, average 14 a week','given'],['the shelf is 14 courses','the average need']],2,1,'Stocking the average runs short in 43 weeks out of 100. The shelf technique gives 22.'],
+      ['b2',[['the people who need the vial can be listed: 2 of them, 1 vial a week each','given'],['the need is 2 vials a week','the count-first technique']],2,0,'Listed people, an every over weeks: nothing here is a chance.'],
+      ['b3',[['a town has average need '+a+'0 packs and spread width '+w+'0','given'],['a town twice the size has spread width '+(2*w)+'0','twice the town']],2,1,'The average doubles; the spread doubles, so the width grows by √2: about '+(Math.round(w*14.14))+'.'],
+      ['b4',[['influenza weeks are quiet (average 7) 9 weeks in 10 and waves (average 70) 1 in 10','given'],['the average need is 13.3','the whole-chance technique, on averages']],2,0,'0.9 · 7 + 0.1 · 70 = 13.3.'],
+      ['b5',[['influenza and broken bones both average near 14 a week','given'],['they need the same shelf','the shelf technique for rare arrivals']],2,1,'That technique needs independent arrivals. Cases that bring cases need 77, not 22.'],
+      ['b6',[['asthma attacks are not caught from anyone','given'],['the attacks are independent','no case causes another']],2,1,'A shared cause, bad air, raises everyone’s chance at once. Not catching is not independent.'],
+      ['b7',[['in a bad-air week each of 1,600 needs a relieving inhaler with chance 1/4','given'],['the average need that week is 400','the average-adds technique']],2,0,'1600 · 1/4 = 400.']],[]); }});
+/* ----- annex 32·chem How do X-rays see inside a crystal: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'32·chem.work',step:'32·chem',mode:'work',label:'where the spots fall',open:()=>measured('32·chem'),make(){
+    const ask=rnd(2), L=[0.1,0.15,0.2][rnd(3)], dg=180/Math.PI;
+    if(ask){ const t=[10,15,20,30][rnd(4)], d=L/(2*Math.sin(t/dg)), right=DECAX(d,3)+' nm', wrong=UQAX(right,[DECAX(L/(2*Math.sin(2*t/dg)),3)+' nm',DECAX(L/Math.sin(t/dg),3)+' nm',DECAX(L*Math.sin(t/dg)/2,4)+' nm',DECAX(L/(2*Math.cos(t/dg)),3)+' nm'],3); if(wrong.length<3) return null;
+      return {index:'q:32·chem.work[d;'+L+';'+t+']', lines:[['\\lambda = '+L+' \\text{ nm}','the X-rays'],['\\text{the ray is turned through } '+(2*t)+'^\\circ','the first spot']], ask:'What is the spacing d of the planes?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spot-condition: θ is half the turn, '+t+'°, and d = λ ÷ (2 sin θ) = '+L+' ÷ (2 sin '+t+'°) ≈ '+right+'.'}; }
+    const d=[0.2,0.25,0.3,0.4][rnd(4)], s=L/(2*d); if(s>=1) return null; const t=Math.asin(s)*dg, right=DECAX(2*t,1)+'°', wrong=UQAX(right,[DECAX(t,1)+'°',DECAX(2*Math.asin(L/d)*dg,1)+'°',DECAX(4*t,1)+'°',DECAX(Math.asin(s/2)*dg*2,1)+'°'],3); if(wrong.length<3) return null;
+    return {index:'q:32·chem.work[t;'+L+';'+d+']', lines:[['\\lambda = '+L+' \\text{ nm}','the X-rays'],['d = '+d+' \\text{ nm}','planes of atoms']], ask:'Through what angle is the ray turned at the first spot?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spot-condition: sin θ = λ ÷ 2d = '+DECAX(s,4)+', θ ≈ '+DECAX(t,1)+'°, and the ray turns through 2θ ≈ '+right+'.'}; }},
+  {id:'32·chem.word',step:'32·chem',mode:'word',label:'the spots of salt',open:()=>measured('32·chem'),make(){
+    const h=rnd(4), k=rnd(4), l=rnd(4); if(h+k+l===0) return null; const ev=[h,k,l].map(x=>x%2), all0=ev.every(x=>x===0), all1=ev.every(x=>x===1);
+    const A='bright: F = 4f(Na) + 4f(Cl)', B='faint: F = 4f(Na) − 4f(Cl)', C='missing: the cell cancels itself', right=all0?A:all1?B:C, wrong=[A,B,C,'every spot equally bright'].filter(x=>x!==right);
+    return {index:'q:32·chem.word['+h+k+l+']', a3:['32·chem.word',DASH,DASH], story:'A student in a crystal lab shines X-rays on a grain of table salt, sodium and chlorine on alternate places of a cube, and looks for the spot ('+h+', '+k+', '+l+').', lines:[], ask:'What does she find there?', right, opts:shuffle([right,...wrong.slice(0,3)]), lead:'', why:'Cell-sum: all even, every turning is 1; all odd, the Cl places turn by −1; mixed odd and even, the four places of each kind cancel. ('+h+', '+k+', '+l+') is '+(all0?'all even':all1?'all odd':'mixed')+'.'}; }},
+  {id:'32·chem.line',step:'32·chem',mode:'proof',label:'what the spots license',open:()=>measured('32·chem'),make(){
+    return line28('32·chem.line',[
+      ['x1',[['\\text{the pattern of spots}','seen'],['\\text{a picture of the atoms}','spots']],2,1,'They are the sizes of the crystal’s coefficients.'],
+      ['x2',[['\\text{a triple } (h, k, l)','given'],['\\text{it gives a spot}','every triple']],2,1,'The cell can cancel itself: salt’s mixed spots are missing.'],
+      ['x3',[['\\text{the brightness of a spot}','measured'],['F_{hkl}','the coefficient']],2,1,'It gives |F|²; the turn is lost.'],
+      ['x4',[['\\text{the ray turned through } 2\\theta','a spot'],['2d\\sin 2\\theta = \\lambda','spot-condition']],2,1,'θ is half the angle the ray turns through.'],
+      ['x5',[['(2,0,0) \\text{ in salt}','all even'],['F = 4f_{\\text{Na}} + 4f_{\\text{Cl}}','cell-sum']],2,0,'Every turning is e^(−2πi × whole) = 1.'],
+      ['x6',[['\\text{a spot at angle } \\theta','seen'],['2d\\sin\\theta = \\lambda','spot-condition']],2,0,'The cells agree only there.']],[]); }});
+/* ----- annex 32·comp How does a photo shrink to a small file: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'32·comp.work',step:'32·comp',mode:'work',label:'rounding the amounts',open:()=>measured('32·comp'),make(){
+    const ask=rnd(2);
+    if(ask){ const a=[1,2,3,4,5,6].map(()=>rnd(5)*(rnd(2)?1:-1)), E=a.reduce((s,x)=>s+x*x,0); if(E===0) return null; const S=E>99?null:1; if(!S) return null;
+      const right=DECAX(Math.sqrt(E/8),2), wrong=UQAX(right,[DECAX(Math.sqrt(E),2),DECAX(E/8,2),String(E),DECAX(a.reduce((s,x)=>s+Math.abs(x),0)/8,2)],3); if(wrong.length<3) return null;
+      return {index:'q:32·comp.work[e;'+a.join(';')+']', lines:[['\\text{moves of six amounts: } '+a.join(',\\ ').replace(/-/g,'−'),'rounding, a row of 8 pixels'],['\\text{the other two amounts not moved}','']], ask:'What is the error per pixel, as the root of its average square?', right, opts:shuffle([right,...wrong]), lead:'', why:'Rounding-error: the energy of the error in the row is the sum of the squared moves, '+E+'; spread over 8 pixels, √('+E+' ÷ 8) ≈ '+right+'.'}; }
+    const q=[2,4,8,10,16][rnd(5)], right=DECAX(q/2,1), wrong=UQAX(right,[String(q),DECAX(q/4,1),DECAX(q*q/4,1),DECAX(q/Math.sqrt(8),2)],3); if(wrong.length<3) return null;
+    return {index:'q:32·comp.work[q;'+q+']', lines:[['q_k = '+q,'the step for one cosine']], ask:'At most how far does rounding move that cosine’s amount?', right, opts:shuffle([right,...wrong]), lead:'', why:'Rounding-error: to the nearest whole multiple of q, the move is at most q/2 = '+right+'.'}; }},
+  {id:'32·comp.word',step:'32·comp',mode:'word',label:'saving the photo',open:()=>measured('32·comp'),make(){
+    const F=rnd(2);
+    const right=F?'the rounding of the amounts, most fast ones to zero':'its energy is the sum of the squared moves of the amounts', wrong=F?['splitting into eight cosines','storing eight amounts in place of eight pixels','the cosines being at right angles']:['it is at most one step per pixel','it is the largest single move','it is zero, since cosines are exact'];
+    return {index:'q:32·comp.word['+F+']', a3:['32·comp.word',DASH,DASH], story:'A phone saves a photo of the Skagit Valley: it reflects each row of eight pixels end to end, writes it as eight cosines, and rounds each amount to a step, coarse for the fast cosines.', lines:[], ask:F?'Which step makes the file small?':'What is true of the error in the row?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Eight pixels become eight amounts: no saving yet. The rounding sends most fast amounts to zero, which costs almost nothing to store.':'Rounding-error: the cosines are at right angles with size 1, so the books balance in energy: the error’s energy is exactly the sum of the squared moves.'}; }},
+  {id:'32·comp.line',step:'32·comp',mode:'proof',label:'what the cosines license',open:()=>measured('32·comp'),make(){
+    return line28('32·comp.line',[
+      ['c1',[['\\text{a row split into cosines}','mirrored-row'],['\\text{the file is smaller}','split']],2,1,'Eight pixels become eight amounts; the rounding shrinks it.'],
+      ['c2',[['\\text{a picture of noise}','given'],['\\text{its energy sits in the first few cosines}','the law']],2,1,'A law of photos, false for noise.'],
+      ['c3',[['\\text{amounts rounded to steps}','rounding'],['\\text{error at most one step per pixel}','bound']],2,1,'Its energy is the sum of the squared moves of the amounts.'],
+      ['c4',[['\\text{saved twice}','given'],['\\text{the same pixels as after once}','saving']],2,1,'Each saving rounds again, and the errors can grow.'],
+      ['c5',[['\\text{squared moves total } 144','8 pixels'],['\\text{about } 4.2 \\text{ grey levels per pixel}','rounding-error']],2,0,'√(144/8) ≈ 4.2.'],
+      ['c6',[['\\text{a row reflected end to end}','mirrored'],['\\text{energy of row} = \\text{energy of amounts}','mirrored-row']],2,0,'The cosines are at right angles, with sizes set to 1.']],[]); }});
+/* ----- annex 32·eng How can headphones cancel noise: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'32·eng.work',step:'32·eng',mode:'work',label:'what the delay leaves',open:()=>measured('32·eng'),make(){
+    const ask=rnd(2), tau=[25,50,100][rnd(3)];
+    if(ask){ const right=DECAX(1e6/(6*tau),0)+' Hz', wrong=UQAX(right,[DECAX(1e6/(2*tau),0)+' Hz',DECAX(1e6/tau,0)+' Hz',DECAX(1e6/(4*tau),0)+' Hz',DECAX(6e6/tau,0)+' Hz'],3); if(wrong.length<3) return null;
+      return {index:'q:32·eng.work[f;'+tau+']', lines:[['\\tau = '+tau+'\\ \\mu\\text{s}','the delay of the negative']], ask:'Above what frequency does the anti-noise make the sound louder?', right, opts:shuffle([right,...wrong]), lead:'', why:'Delay-residue: 2 sin(πfτ) passes 1 at πfτ = π/6, f = 1/(6τ) ≈ '+right+'.'}; }
+    const f=[50,100,200,500,1000,2000][rnd(6)], v=2*Math.abs(Math.sin(Math.PI*f*tau*1e-6)), right=DECAX(v,3), wrong=UQAX(right,[DECAX(Math.abs(Math.sin(Math.PI*f*tau*1e-6)),3),DECAX(2*Math.abs(Math.cos(Math.PI*f*tau*1e-6)),3),DECAX(Math.PI*f*tau*1e-6,3),'0'],3); if(wrong.length<3) return null;
+    return {index:'q:32·eng.work[r;'+tau+';'+f+']', lines:[['\\tau = '+tau+'\\ \\mu\\text{s}','the delay'],['f = '+f+' \\text{ Hz}','a turning of the noise']], ask:'By what factor is that turning’s size multiplied?', right, opts:shuffle([right,...wrong]), lead:'', why:'Delay-residue: 2|sin(πfτ)| = 2|sin(π · '+f+' · '+DECAX(tau*1e-6,6)+')| ≈ '+right+'.'}; }},
+  {id:'32·eng.word',step:'32·eng',mode:'word',label:'the roar on the plane',open:()=>measured('32·eng'),make(){
+    const F=rnd(2);
+    const right=F?'yes: play the negative of what was heard one repeat earlier':'no: only noise that repeats, or can be predicted, is cancelled ahead', wrong=F?['no: the delay always leaves some','yes: play a copy of the roar half a repeat late','no: the cups must block it']:['yes: any noise, once heard','yes: if the delay is short enough','no: no noise can be cancelled'];
+    return {index:'q:32·eng.word['+F+']', a3:['32·eng.word',DASH,DASH], story:F?'A traveller’s headphones hear an engine roar that repeats every 20 ms, while their delay is 50 μs.':'A traveller’s headphones hear a crowd talking, with no repeat to it.', lines:[], ask:F?'Can the roar be cancelled exactly, delay and all?':'Can the chatter be cancelled exactly ahead of time?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Repeat-ahead: the next repeat is known from the last, and 20 ms is longer than the delay.':'Repeat-ahead needs a repeat; chatter has none, so only the delay-residue cancelling of low notes is left.'}; }},
+  {id:'32·eng.line',step:'32·eng',mode:'proof',label:'what the anti-noise licenses',open:()=>measured('32·eng'),make(){
+    return line28('32·eng.line',[
+      ['a1',[['\\text{a copy of the noise half a repeat late}','given'],['\\text{the noise is cancelled}','anti-turning']],2,1,'For one frequency only; the speaker must play the negative.'],
+      ['a2',[['\\text{a short delay } \\tau','given'],['\\text{every frequency cancels a little less}','delay']],2,1,'Above 1/(6τ) it makes them louder.'],
+      ['a3',[['\\text{noise-cancelling headphones}','given'],['\\text{they work by blocking the sound}','headphones']],2,1,'They add the negative; the cups block the highs.'],
+      ['a4',[['\\text{a sound and its negative, in time}','added'],['\\text{silence}','anti-turning']],2,0,'Every frequency at once.'],
+      ['a5',[['\\text{the negative } \\tau \\text{ late}','given'],['\\text{each turning survives at } 2|\\sin(\\pi f\\tau)|','delay-residue']],2,0,'Small when fτ is small: low notes cancel well.'],
+      ['a6',[['\\text{any noise}','given'],['\\text{it can be cancelled ahead of time}','repeat-ahead']],2,1,'Only one that repeats, or can otherwise be predicted.']],[]); }});
+/* ----- annex 32·nav How can tides be predicted years ahead: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'32·nav.work',step:'32·nav',mode:'work',label:'turnings that drift apart',open:()=>measured('32·nav'),make(){
+    const ask=rnd(2);
+    if(ask){ const P=[[12,12.4206],[12.4206,12.6583],[23.9345,25.8193],[12,11.9672]][rnd(4)], v=1/Math.abs(1/P[0]-1/P[1])/24, right=DECAX(v,2)+' days', wrong=UQAX(right,[DECAX(Math.abs(P[1]-P[0]),2)+' h',DECAX(v*24,1)+' days',DECAX((P[0]+P[1])/48,2)+' days',DECAX(v/2,2)+' days'],3); if(wrong.length<3) return null;
+      return {index:'q:32·nav.work[b;'+P[0]+';'+P[1]+']', lines:[['\\text{two turnings, repeating every } '+P[0]+' \\text{ h and } '+P[1]+' \\text{ h}','the tide']], ask:'How long do they take to drift one whole turn apart?', right, opts:shuffle([right,...wrong]), lead:'', why:'2π/Δω = 1 ÷ |1/'+P[0]+' − 1/'+P[1]+'| h ≈ '+DECAX(v*24,1)+' h, or '+right+'. A record must be long against that to tell them apart.'}; }
+    const A=[1.07,0.9,1.2][rnd(3)], B=[0.21,0.3,0.5][rnd(3)], right=DECAX(A+B,2)+' m and '+DECAX(A-B,2)+' m', wrong=UQAX(right,[DECAX(A+B,2)+' m and 0 m',DECAX(A,2)+' m and '+DECAX(B,2)+' m',DECAX(Math.sqrt(A*A+B*B),2)+' m and '+DECAX(A-B,2)+' m',DECAX(2*A,2)+' m and '+DECAX(2*B,2)+' m'],3); if(wrong.length<3) return null;
+    return {index:'q:32·nav.work[s;'+A+';'+B+']', lines:[['A_1 = '+A+' \\text{ m},\\ \\ A_2 = '+B+' \\text{ m}','two turnings close in speed']], ask:'What are the largest and smallest sizes of their sum over a beat?', right, opts:shuffle([right,...wrong]), lead:'', why:'In step the sizes add, '+DECAX(A+B,2)+' m; half a beat later they oppose, '+DECAX(A-B,2)+' m: springs and neaps.'}; }},
+  {id:'32·nav.word',step:'32·nav',mode:'word',label:'the tide table',open:()=>measured('32·nav'),make(){
+    const F=rnd(2);
+    const right=F?'about 15 days, the time the two drift a whole turn apart':'at full and new moon, when the lunar and solar turnings are in step', wrong=F?['about 12 hours, one tide','about a week','about a year']:['when the Moon is nearest the Earth','at the half moons','at noon each day'];
+    return {index:'q:32·nav.word['+F+']', a3:['32·nav.word',DASH,DASH], story:'A harbour office keeps a record of the water level to build its tide table. The main lunar turning repeats every 12.42 h and the main solar every 12 h.', lines:[], ask:F?'How long a record does it need to tell the solar size from the lunar?':'When do the spring tides, the largest, come?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Long-record: the product of the two has size at most 2/(|Δω|T), small only once T is long against 2π/Δω = 14.77 days.':'The two turnings beat; their sizes add when they are in step, which is at full and new moon.'}; }},
+  {id:'32·nav.line',step:'32·nav',mode:'proof',label:'what the record licenses',open:()=>measured('32·nav'),make(){
+    return line28('32·nav.line',[
+      ['t1',[['\\text{the tide at a port}','given'],['\\text{it repeats every } 12 \\text{ hours}','repeat']],2,1,'The main lunar turning repeats every 12.42 h, the solar every 12; no one repeat fits.'],
+      ['t2',[['\\text{a week of record}','given'],['\\text{the main solar size is found}','shadow']],2,1,'Separating it from the lunar needs about 15 days.'],
+      ['t3',[['\\text{the Moon at its nearest}','given'],['\\text{spring tides}','springs']],2,1,'They come at full and new moon, when the turnings are in step.'],
+      ['t4',[['\\text{the table is exact}','given'],['\\text{the water will reach it}','the table']],2,1,'A law with exceptions: storms add a surge.'],
+      ['t5',[['T \\gg 2\\pi/|\\Delta\\omega|','a long record'],['\\text{each size is its shadow}','long-record']],2,0,'The product of two turnings has size at most 2/(|Δω|T).'],
+      ['t6',[['\\text{speeds fixed by the Moon and Sun}','known'],['\\text{only sizes and timings need measuring}','the tide']],2,0,'The turnings’ speeds are known in advance.']],[]); }});
+/* ----- annex 32·now Can a signal be rebuilt from fewer samples: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'32·now.work',step:'32·now',mode:'work',label:'least energy, least plain size',open:()=>measured('32·now'),make(){
+    const ask=rnd(2);
+    if(ask){ const v=[1,2,3,4,5,6].map(()=>1+rnd(6)).map(x=>x*(rnd(2)?1:-1)), k=1+rnd(2), A=v.map(Math.abs), T=A.reduce((s,x)=>s+x,0), top=A.slice().sort((a,b)=>b-a).slice(0,k).reduce((s,x)=>s+x,0), ok=2*top<T;
+      const right=ok?'yes: its largest '+k+' hold '+top+' of '+T:'no: its largest '+k+' hold '+top+' of '+T, wrong=[ok?'no: its largest '+k+' hold '+top+' of '+T:'yes: its largest '+k+' hold '+top+' of '+T,'yes: every kernel vector meets it','no: a kernel vector is never allowed'];
+      return {index:'q:32·now.work[k;'+v.join(';')+';'+k+']', lines:[['v = ('+v.join(', ').replace(/-/g,'−')+')','a vector of the kernel of A'],['k = '+k,'']], ask:'Does v keep less than half its plain size on every '+k+' places?', right, opts:shuffle([right,...wrong]), lead:'', why:'Kernel-share: the worst k places are the largest; '+top+' against half of '+T+', which is '+DECAX(T/2,1)+'.'}; }
+    const a=[1,2,3].map(()=>1+rnd(4)); if(a[0]===a[1]&&a[1]===a[2]) return null; const y=[6,12][rnd(2)], m=Math.max(...a), i=a.indexOf(m);
+    const right='('+a.map((x,j)=>j===i?DECAX(y/x,2):'0').join(', ')+')', s2=a.reduce((s,x)=>s+x*x,0), wrong=UQAX(right,['('+a.map(x=>DECAX(x*y/s2,2)).join(', ')+')','('+a.map((x,j)=>j===a.indexOf(Math.min(...a))?DECAX(y/x,2):'0').join(', ')+')','('+a.map(x=>DECAX(y/(3*x),2)).join(', ')+')'],3); if(wrong.length<3) return null;
+    return {index:'q:32·now.work[p;'+a.join(';')+';'+y+']', lines:[[a.map((x,j)=>(x===1?'':x)+'x_'+(j+1)).join(' + ')+' = '+y,'one equation, three unknowns']], ask:'Which solution has the least plain size |x₁| + |x₂| + |x₃|?', right, opts:shuffle([right,...wrong]), lead:'', why:'Least plain size lands on a corner of its diamond: all on the unknown with the largest coefficient, '+m+', giving '+DECAX(y/m,2)+'. Least energy would spread over all three.'}; }},
+  {id:'32·now.word',step:'32·now',mode:'word',label:'a few spikes, a few samples',open:()=>measured('32·now'),make(){
+    const F=rnd(2);
+    const right=F?'no: the places of the nonzero entries are unknown too, so more than k are needed':'only signals that are few in some known turnings', wrong=F?['yes: k equations for k unknowns','yes: any k samples, if random','no: every entry must be sampled']:['every signal of that length','only signals of least energy','none: fewer samples never fix a signal'];
+    return {index:'q:32·now.word['+F+']', a3:['32·now.word',DASH,DASH], story:'A scanner wants to take fewer samples of a signal of length N than the count 32g asks for, knowing the signal has at most k entries that are not zero.', lines:[], ask:F?'Do any k samples fix such a signal?':'Which signals can fewer samples fix?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'With k samples the places of the k entries are also unknown; random rows meet the kernel-share condition near C k log(N/k) samples.':'The samples fix a signal only among the few-entry ones, by least plain size, when the kernel spreads its size thin on every k places.'}; }},
+  {id:'32·now.line',step:'32·now',mode:'proof',label:'what the samples license',open:()=>measured('32·now'),make(){
+    return line28('32·now.line',[
+      ['s1',[['\\text{fewer samples than 32g asks for}','given'],['\\text{every signal is fixed}','samples']],2,1,'Only signals that are few in some known turnings.'],
+      ['s2',[['\\text{least energy solution}','given'],['\\text{it has the fewest nonzero entries}','least energy']],2,1,'It spreads: (1/3, 1/3, 2/3) in the example.'],
+      ['s3',[['\\text{any grid } A','given'],['\\text{least plain size finds every } k\\text{-few signal}','plain size']],2,1,'Only when the kernel spreads its size thin on every k places.'],
+      ['s4',[['\\|v_S\\|_1 \\lt \\|v\\|_1/2 \\text{ for all } v \\ne 0,\\ |S| = k','the kernel'],['\\text{least plain size finds every } k\\text{-few signal}','kernel-share']],2,0,'The condition is enough.'],
+      ['s5',[['k \\text{ samples}','given'],['\\text{a } k\\text{-few signal is fixed}','count']],2,1,'The places of the nonzero entries are unknown too: m must be larger than k.'],
+      ['s6',[['\\text{fewer equations than unknowns}','given'],['\\text{endlessly many solutions}','kernel']],2,0,'They form a slid copy of the kernel.']],[]); }});
+/* ----- annex 32·phys What makes a violin sound like a violin: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'32·phys.work',step:'32·phys',mode:'work',label:'recipe, beats and bunches',open:()=>measured('32·phys'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const m=[2,3,4,5][rnd(4)], ms=[1,2,3,4,5,6,7,8,9,10,11,12].filter(n=>n%m===0).slice(0,3), right=ms.join(', '), wrong=UQAX(right,[[1,2,3].map(n=>n*m+1).join(', '),[1,2,3].map(n=>n+m).join(', '),'none',[1,2,3].join(', ')],3); if(wrong.length<3) return null;
+      return {index:'q:32·phys.work[p;'+m+']', lines:[['\\text{plucked at } d = L/'+m,'a string fixed at both ends']], ask:'Which shapes, the first three, are missing from its recipe?', right, opts:shuffle([right,...wrong]), lead:'', why:'Pluck-point: the amount has sin(nπ/'+m+'), which is 0 when n is a multiple of '+m+'. Those shapes are still at the pluck point.'}; }
+    if(ask===1){ const f=[440,330,220][rnd(3)], d=1+rnd(5), right=d+' times a second', wrong=UQAX(right,[DECAX(f+d/2,1)+' times a second',(2*d)+' times a second',DECAX(d/2,1)+' times a second',(2*f+d)+' times a second'],3); if(wrong.length<3) return null;
+      return {index:'q:32·phys.work[b;'+f+';'+d+']', lines:[['f_1 = '+f+' \\text{ Hz},\\ \\ f_2 = '+(f+d)+' \\text{ Hz}','two equal turnings']], ask:'How often does their sum swell?', right, opts:shuffle([right,...wrong]), lead:'', why:'Beat: the swell comes |f₁ − f₂| = '+d+' times a second, around the middle frequency '+DECAX(f+d/2,1)+' Hz.'}; }
+    const c=[4,6,8,10,12][rnd(5)], right=DECAX(c/2,1)+' m/s', wrong=UQAX(right,[c+' m/s',(2*c)+' m/s',DECAX(c/Math.sqrt(2),2)+' m/s',DECAX(c*c,1)+' m/s'],3); if(wrong.length<3) return null;
+    return {index:'q:32·phys.work[g;'+c+']', lines:[['\\omega = \\sqrt{gk}','waves on deep water'],['\\text{crests move at } '+c+' \\text{ m/s}','']], ask:'At what speed does a bunch of those waves travel?', right, opts:shuffle([right,...wrong]), lead:'', why:'Group-speed: ω′(k) = ½√(g/k), half the crest speed √(g/k): '+right+'.'}; }},
+  {id:'32·phys.word',step:'32·phys',mode:'word',label:'tuning by beats',open:()=>measured('32·phys'),make(){
+    const d=2+rnd(4), up=rnd(2), right=up?'it is off by '+d+' Hz, and tightening made it worse':'it is off by '+d+' Hz, and tightening brought it closer', wrong=[up?'it is off by '+d+' Hz, and tightening brought it closer':'it is off by '+d+' Hz, and tightening made it worse','it is in tune: beats mean agreement','it is off by '+(2*d)+' Hz'];
+    return {index:'q:32·phys.word['+d+';'+up+']', a3:['32·phys.word',DASH,DASH], story:'A violinist sounds her A string against a 440 Hz fork and hears the sound swell '+d+' times a second. She tightens the string a little, which raises its pitch, and the swells come '+(up?'faster':'slower')+'.', lines:[], ask:'What does she learn?', right, opts:shuffle([right,...wrong]), lead:'', why:'Beat: the swell rate is |f₁ − f₂|, so the string is '+d+' Hz off. '+(up?'Faster swells mean the gap grew: the string was already sharp.':'Slower swells mean the gap shrank: the string was flat.')}; }},
+  {id:'32·phys.line',step:'32·phys',mode:'proof',label:'what the recipe licenses',open:()=>measured('32·phys'),make(){
+    return line28('32·phys.line',[
+      ['v1',[['\\text{two instruments at 440 Hz}','given'],['\\text{the same wave}','one repeat']],2,1,'The same repeat, different recipes.'],
+      ['v2',[['\\text{a plucked string}','given'],['\\text{every whole multiple is present}','recipe']],2,1,'The shapes still at the pluck point are missing.'],
+      ['v3',[['f_1,\\ f_2 \\text{ close}','two turnings'],['\\text{beats at } (f_1 + f_2)/2','beat']],2,1,'The swell comes |f₁ − f₂| times a second.'],
+      ['v4',[['\\text{a swell on deep water}','given'],['\\text{its energy arrives at the crests’ speed}','speed']],2,1,'It arrives at the group speed, half that on deep water.'],
+      ['v5',[['\\text{the string’s recipe}','pluck'],['\\text{times the body’s gain, speed by speed}','body-filter']],2,0,'That is the recipe at the ear.'],
+      ['v6',[['\\omega = vk','a violin string'],['\\text{bunches move with the crests}','group-speed']],2,0,'ω′ = ω/k when ω is in proportion to k.']],[]); }});
+/* ----- annex 32·stat Why does the bell curve keep turning up: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'32·stat.work',step:'32·stat',mode:'work',label:'turning averages multiply',open:()=>measured('32·stat'),make(){
+    const ask=rnd(2);
+    if(ask){ const s=[1,2,3][rnd(3)], t=[0.1,0.2][rnd(2)], v=1-0.5*s*s*t*t, right=DECAX(v,4), wrong=UQAX(right,[DECAX(1-s*s*t*t,4),DECAX(1-0.5*s*t,4),DECAX(1-0.5*s*s*t,4),'1'],3); if(wrong.length<3) return null;
+      return {index:'q:32·stat.work[e;'+s+';'+t+']', lines:[['\\operatorname{E}X = 0,\\ \\ \\operatorname{E}X^2 = '+(s*s),'a chance variable'],['t = '+t,'near 0']], ask:'About what is ψ(t)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Sum-turnings: ψ(t) ≈ 1 + iμt − ½E X² t² = 1 − ½ · '+(s*s)+' · '+DECAX(t*t,4)+' = '+right+'.'}; }
+    const n=[2,3,4,5][rnd(4)], t=[0.5,1][rnd(2)], v=Math.exp(-n*t*t/2), right=DECAX(v,4), wrong=UQAX(right,[DECAX(n*Math.exp(-t*t/2),4),DECAX(Math.exp(-t*t/2),4),DECAX(Math.exp(-n*n*t*t/2),4),DECAX(Math.exp(-t*t/(2*n)),4)],3); if(wrong.length<3) return null;
+    return {index:'q:32·stat.work[s;'+n+';'+t+']', lines:[['X_1, \\ldots, X_{'+n+'} \\text{ independent standard bells}','\\psi(t) = e^{-t^2/2} \\text{ each}'],['t = '+t,'']], ask:'What is the turning average of their sum at t?', right, opts:shuffle([right,...wrong]), lead:'', why:'Sum-turnings: independent parts multiply, e^(−t²/2) taken '+n+' times, e^(−'+n+' · '+DECAX(t*t,2)+'/2) ≈ '+right+': a bell again, of spread '+n+'.'}; }},
+  {id:'32·stat.word',step:'32·stat',mode:'word',label:'spots of a lighthouse beam',open:()=>measured('32·stat'),make(){
+    const n=[10,100,1000][rnd(3)], F=rnd(2);
+    const right=F?'no narrower: the average has the chances of a single spot':'narrower by √'+n+': the average heads to a bell', wrong=F?['narrower by √'+n,'narrower by '+n,'it heads to a bell']:['no narrower: the average has the chances of a single spot','narrower by '+n,'wider'];
+    return {index:'q:32·stat.word['+n+';'+F+']', a3:['32·stat.word',DASH,DASH], story:F?'A lighthouse beam turns at a random angle and lights a spot on a long straight beach. A surveyor averages the places of '+n+' independent spots.':'A surveyor averages '+n+' independent readings, each with a finite spread.', lines:[], ask:'How spread is the average?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Heavy-tail: ψ(t) = e^(−|t|), so the average has ψ(t/n)^n = e^(−|t|): the same as one spot. The spread is endless.':'Turning-limit: with a finite spread the rescaled sum heads to the bell, and the average narrows like 1/√n.'}; }},
+  {id:'32·stat.line',step:'32·stat',mode:'proof',label:'what the turnings license',open:()=>measured('32·stat'),make(){
+    return line28('32·stat.line',[
+      ['g1',[['\\text{an average of many independent tries}','given'],['\\text{near a bell}','turning-limit']],2,1,'Only with a finite spread; the lighthouse spots never narrow.'],
+      ['g2',[['X, Y \\text{ independent}','given'],['\\psi_{X+Y} = \\psi_X + \\psi_Y','sum']],2,1,'Turning averages of independent parts multiply.'],
+      ['g3',[['\\operatorname{E}e^{tX} \\text{ endless}','given'],['X \\text{ has no turning average}','needs']],2,1,'It always exists, with size at most 1.'],
+      ['g4',[['\\text{a sum of 3 independent bells}','given'],['\\text{a bell only in the limit}','limit']],2,1,'It is a bell exactly, for every number of parts.'],
+      ['g5',[['\\psi_X(t)','any X'],['\\psi_X(0) = 1,\\ |\\psi_X(t)| \\le 1','turning-average']],2,0,'The average of e^(i·0·X) is 1; each turning has size 1.'],
+      ['g6',[['\\text{the bell}','given'],['\\psi(t) = e^{-t^2/2}','bell-turning']],2,0,'A bell again.']],[]); }});
+/* ----- annex 33·now Does water always flow smoothly: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'33·now.work',step:'33·now',mode:'work',label:'zooming the flow',open:()=>measured('33·now'),make(){
+    const ask=rnd(2), L=[2,4,10,100][rnd(4)];
+    if(ask){ const E=[1,5,8][rnd(3)], sp=rnd(2), right=sp?DECAX(E/L,3):String(E), wrong=UQAX(right,[sp?String(E):DECAX(E/L,3),String(E*L),DECAX(E/(L*L),4),String(E*L*L)],3); if(wrong.length<3) return null;
+      return {index:'q:33·now.work[e;'+L+';'+E+';'+sp+']', lines:[['u_\\lambda(x,t) = \\lambda u(\\lambda x, \\lambda^2 t),\\ \\ \\lambda = '+L,'the zoom'],['\\text{energy of } u = '+E,sp?'in space':'in the plane']], ask:'What is the energy of the zoomed flow?', right, opts:shuffle([right,...wrong]), lead:'', why:'Zoom: the speed brings λ, so its square brings λ², and the volume shrinks by λ'+(sp?'³ in space: E/λ = '+right+'.':'² in the plane: E, unchanged.')}; }
+    const U=[1,2,3][rnd(3)], T=[1,2][rnd(2)], right='speed '+(L*U)+' at time '+DECAX(T/(L*L),5), wrong=UQAX(right,['speed '+(L*U)+' at time '+DECAX(T/L,4),'speed '+U+' at time '+DECAX(T/(L*L),5),'speed '+(L*L*U)+' at time '+DECAX(T/L,4),'speed '+DECAX(U/L,3)+' at time '+(T*L*L)],3); if(wrong.length<3) return null;
+    return {index:'q:33·now.work[s;'+L+';'+U+';'+T+']', lines:[['u \\text{ reaches speed } '+U+' \\text{ at time } '+T,'a flow'],['\\lambda = '+L,'the zoom']], ask:'What does the zoomed flow u_λ reach, and when?', right, opts:shuffle([right,...wrong]), lead:'', why:'Zoom: u_λ = λu(λx, λ²t), so speeds grow by λ = '+L+' and times shrink by λ² = '+(L*L)+'.'}; }},
+  {id:'33·now.word',step:'33·now',mode:'word',label:'the prize question',open:()=>measured('33·now'),make(){
+    const F=rnd(3);
+    const Q=[['In one dimension, the statement u_t + uu_x = νu_xx is rewritten with u = −2νφ_x/φ.','Does it ever break?','no: φ solves the heat statement and stays smooth, so u does'],['In space, with stickiness, a flow starts smooth with finite energy.','Is it known whether it stays smooth for all time?','no: that is open'],['A team runs a simulation of water in space, and it stays smooth.','Does that settle that water never breaks?','no: a grid cannot see below its gap']];
+    const right=Q[F][2], wrong=[['yes: the speed carries itself and breaks','yes: in space as well','no: it breaks at once'],['yes: energy loss keeps it smooth','yes: it was proved in 2022','yes: it always breaks'],['yes: the computer has the answer','yes: if the grid is fine enough','no: simulations always break']][F];
+    return {index:'q:33·now.word['+F+']', a3:['33·now.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right, opts:shuffle([right,...wrong]), lead:'', why:['Heat-tames-breaking: every positive φ is smooth for t above 0, so u is, for all time.','Energy never grows, but zooming in weakens the bound in space: a blow-up at a small scale needs only energy E/λ.','A blow-up is a question about all scales at once.'][F]}; }},
+  {id:'33·now.line',step:'33·now',mode:'proof',label:'what the energy licenses',open:()=>measured('33·now'),make(){
+    return line28('33·now.line',[
+      ['f1',[['\\text{the energy never grows}','energy-loss'],['\\text{the speed never passes every bound}','energy']],2,1,'The zoom: a blow-up at a small scale needs only energy E/λ.'],
+      ['f2',[['\\text{the 2022 proof}','given'],['\\text{the prize question is settled}','proof']],2,1,'It is for the statement without stickiness, in a pipe.'],
+      ['f3',[['\\text{every simulation stays smooth}','seen'],['\\text{the answer is yes}','simulation']],2,1,'A grid cannot see below its gap.'],
+      ['f4',[['\\text{in one dimension it never breaks}','heat-tames-breaking'],['\\text{in space it never breaks}','dimension']],2,1,'The change of knobs works only in one dimension.'],
+      ['f5',[['E\'(t) = -\\nu\\int|\\nabla u|^2','energy-loss'],['E(t) \\le E(0)','the energy']],2,0,'The slope is never above 0.'],
+      ['f6',[['u, p \\text{ solve the statement}','given'],['u_\\lambda = \\lambda u(\\lambda x, \\lambda^2 t) \\text{ does too}','zoom']],2,0,'Each term brings λ³.']],[]); }});
+/* ----- annex 34·bio Can a cell untie its own DNA: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'34·bio.work',step:'34·bio',mode:'work',label:'twist, coil and the count',open:()=>measured('34·bio'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const N=[3150,4200,5250,10500,21000][rnd(5)], right=String(N/10.5), wrong=UQAX(right,[String(N/21),String(N*2/10.5),String(Math.round(N/10)),String(N)],3); if(wrong.length<3) return null;
+      return {index:'q:34·bio.work[n;'+N+']', lines:[['\\text{a closed ring of } '+N.toLocaleString('en').replace(/,/g,' ')+' \\text{ base pairs}','relaxed, in water'],['\\text{one turn every } 10.5 \\text{ base pairs}','']], ask:'What is its relaxed linking count Lk₀?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each full turn carries one strand once round the other: '+N+' ÷ 10.5 = '+right+'.'}; }
+    if(ask===1){ const a=380+rnd(30), b=a+2*(1+rnd(12)), d=b-a, right=String(d/2), wrong=UQAX(right,[String(d),String(d*2),String(d/2+1),String(Math.ceil(d/4))],3); if(wrong.length<3) return null;
+      return {index:'q:34·bio.work[p;'+a+';'+b+']', lines:[['Lk = '+a+' \\to '+b,'a ring'],['\\text{an enzyme that cuts both strands}','']], ask:'How many passes does it take, at the fewest?', right, opts:shuffle([right,...wrong]), lead:'', why:'Cut-and-pass: each pass through a cut in both strands changes Lk by exactly 2, so '+d+' ÷ 2 = '+right+'.'}; }
+    const L=390+rnd(30), W=[-8,-5,-3,2,4][rnd(5)], T=L-W, right=String(T), wrong=UQAX(right,[String(L+W),String(L),String(W),String(-T)],3).map(x=>x.replace('-','−')); if(wrong.length<3) return null;
+    return {index:'q:34·bio.work[t;'+L+';'+W+']', lines:[['Lk = '+L,'a closed ring'],['Wr = '+String(W).replace('-','−'),'its coil']], ask:'What is its twist Tw?', right, opts:shuffle([right,...wrong]), lead:'', why:'Lk = Tw + Wr, so Tw = '+L+' − ('+String(W).replace('-','−')+') = '+right+'.'}; }},
+  {id:'34·bio.word',step:'34·bio',mode:'word',label:'the daughters linked',open:()=>measured('34·bio'),make(){
+    const n=2+rnd(9), F=rnd(2), right=F?String(n):'an even change: it reaches only counts of the same evenness', wrong=F?UQAX(String(n),[String(2*n),String(Math.ceil(n/2)),'1',String(n+1)],3):['any count, one at a time','only counts that go down','no change: Lk is fixed'];
+    return {index:'q:34·bio.word['+n+';'+F+']', a3:['34·bio.word',DASH,DASH], story:F?'After a ring of DNA is copied, the two daughter rings are left linked, with linking count '+n+'. An enzyme passes one daughter through a cut in the other.':'A strained ring of DNA meets an enzyme that cuts both strands and passes another piece of the double strand through.', lines:[], ask:F?'How many passes, at the fewest, set them apart with count 0?':'What can the enzyme do to Lk?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Ring-pass: each pass of one daughter through the other changes their count by exactly 1, so '+n+' passes.':'Cut-and-pass: four crossings switch, two of them count, so each pass changes Lk by exactly ±2: from 390 it reaches 414 or 416, never 415.'}; }},
+  {id:'34·bio.line',step:'34·bio',mode:'proof',label:'what the count licenses',open:()=>measured('34·bio'),make(){
+    return line28('34·bio.line',[
+      ['d1',[['\\text{a ring coiled tightly}','moving'],['\\text{its linking count changes}','coil']],2,1,'Coiling is moving: it trades twist for coil, and Lk = Tw + Wr stays.'],
+      ['d2',[['\\text{an enzyme that cuts both strands}','given'],['Lk \\text{ changes by } 1','one pass']],2,1,'Four crossings switch, two of them count: ±2.'],
+      ['d3',[['\\text{a relaxed tube}','given'],['\\text{every ring has } Lk = N/10.5','relaxed']],2,1,'Each ring has a whole count; the bell is about N/10.5.'],
+      ['d4',[['lk(A, B) = 0','two rings'],['\\text{they lie apart}','unlinked']],2,1,'A pair can hang together with lk = 0.'],
+      ['d5',[['\\text{a ring of DNA}','given'],['Tw \\text{ is a whole number}','twist']],2,1,'Only Lk is; Tw and Wr change as the ring jostles.'],
+      ['d6',[['\\text{a twist, a poke or a slide}','moving'],['lk(A, B) \\text{ unchanged}','strand-link']],2,0,'Only crossings of A with B count, and moving keeps their sum.']],[]); }});
+/* ----- annex 34·now Can loops tell you the shape of space: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'34·now.work',step:'34·now',mode:'work',label:'the shrinking sphere',open:()=>measured('34·now'),make(){
+    const n=[2,3][rnd(2)], r=[1,2,3,4][rnd(4)], right=DECAX(r*r/(2*(n-1)),3), wrong=UQAX(right,[DECAX(r*r/(2*(n===2?2:1)),3),DECAX(r/(2*(n-1)),3),DECAX(r*r*2*(n-1),3),DECAX(r*r,3)],3); if(wrong.length<3) return null;
+    return {index:'q:34·now.work['+n+';'+r+']', lines:[['\\text{a round sphere of } '+n+' \\text{ dimensions}','r_0 = '+r],['\\text{under the flow of the ruler by its bends}','']], ask:'At what time does it vanish?', right, opts:shuffle([right,...wrong]), lead:'', why:'Shrinking-sphere: r² = r₀² − 2(n − 1)t falls by '+(2*(n-1))+'t, so it vanishes at '+(r*r)+' ÷ '+(2*(n-1))+' = '+right+'.'}; }},
+  {id:'34·now.word',step:'34·now',mode:'word',label:'a dumbbell under the flow',open:()=>measured('34·now'),make(){
+    const R=[2,4,6][rnd(3)], p=[0.5,1,1.5,2,3,4][rnd(6)]; if(p>=R) return null; const pinch=p<R/Math.SQRT2;
+    const right=pinch?'the neck pinches first: ρ is below R/√2':'the ends vanish first: ρ is not below R/√2', wrong=[pinch?'the ends vanish first: ρ is not below R/√2':'the neck pinches first: ρ is below R/√2','the flow makes it round, with no pinch','both at once, always'];
+    return {index:'q:34·now.word['+R+';'+p+']', a3:['34·now.word',DASH,DASH], story:'A three-dimensional dumbbell has two round ends of radius '+R+' joined by a neck of radius '+p+', flowing by its bends.', lines:[], ask:'Which goes first?', right, opts:shuffle([right,...wrong]), lead:'', why:'Neck-pinch: the neck goes at ρ²/2 = '+DECAX(p*p/2,3)+' and an end at R²/4 = '+DECAX(R*R/4,3)+'; R/√2 ≈ '+DECAX(R/Math.SQRT2,2)+'.'}; }},
+  {id:'34·now.line',step:'34·now',mode:'proof',label:'what the loops license',open:()=>measured('34·now'),make(){
+    return line28('34·now.line',[
+      ['l1',[['\\text{a closed surface, characteristic 2}','given'],['\\text{it might be a torus}','list']],2,1,'The surface list: characteristic 2 is the sphere alone.'],
+      ['l2',[['\\text{a short loop on the torus}','given'],['\\text{it slides to a point}','short']],2,1,'A short loop round the tube does not.'],
+      ['l3',[['\\text{any ruler}','given'],['\\text{the flow makes it round}','flow']],2,1,'A dumbbell’s neck pinches first, when ρ < R/√2.'],
+      ['l4',[['\\text{a round three-sphere}','given'],['r^2 \\text{ falls by } 2t','surface pace']],2,1,'Two planes through each direction: r² falls by 4t.'],
+      ['l5',[['\\text{the 1904 question}','given'],['\\text{settled in every dimension at once}','history']],2,1,'Five and up in 1961, four in 1982, three in 2002–03.'],
+      ['l6',[['\\text{a closed surface, every loop slides to a point}','given'],['\\text{it is the sphere}','sphere-loops']],2,0,'The surface list and the turn-about count leave nothing else.']],[]); }});
+/* ----- annex 34·phys How do charges make light: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'34·phys.work',step:'34·phys',mode:'work',label:'the shaken charge',open:()=>measured('34·phys'),make(){
+    const ask=rnd(2);
+    if(ask){ const k=[2,3,4,0.5][rnd(4)], v=Math.pow(k,4), right=DECAX(v,4)+' times', wrong=UQAX(right,[DECAX(k*k,4)+' times',DECAX(k,4)+' times',DECAX(Math.pow(k,3),4)+' times',DECAX(Math.pow(k,6),4)+' times'],3); if(wrong.length<3) return null;
+      return {index:'q:34·phys.work[k;'+k+']', lines:[['\\text{a charge shaken at pace } \\omega','x_0 \\cos\\omega t'],['\\text{the pace made } '+k+' \\text{ times as fast}','same reach']], ask:'How much more power does it send out?', right, opts:shuffle([right,...wrong]), lead:'', why:'Shaken-charge: the power goes as ω⁴, so '+k+'⁴ = '+DECAX(v,4)+'.'}; }
+    const L=[400,450,500,550,350][rnd(5)], v=Math.pow(700/L,4), right=DECAX(v,2), wrong=UQAX(right,[DECAX(700/L,2),DECAX(Math.pow(700/L,2),2),DECAX(Math.pow(L/700,4),3),DECAX(Math.pow(700/L,3),2)],3); if(wrong.length<3) return null;
+    return {index:'q:34·phys.work[s;'+L+']', lines:[['\\lambda = '+L+' \\text{ nm}','light on the air’s electrons'],['\\text{against red, } 700 \\text{ nm}','']], ask:'How many times as much power do the electrons send out?', right, opts:shuffle([right,...wrong]), lead:'', why:'Shaken-charge: the power goes as ω⁴, so (700 ÷ '+L+')⁴ ≈ '+right+'. That is the blue of the sky.'}; }},
+  {id:'34·phys.word',step:'34·phys',mode:'word',label:'fields and the charges inside',open:()=>measured('34·phys'),make(){
+    const F=rnd(3), Q=[['A physicist wraps a charge in a small sphere, then in a large box round the same charge, never crossing it.','How does the flux out of the box compare?','the same: the surface was slid without crossing the charge'],['An engineer arranges fixed charges in a ring and puts a test charge at the centre, hoping it will rest there stably.','Can it?','no: the potential has no lowest point where there is no charge'],['A charge moves at a steady speed in a straight line through empty space.','Does it shine?','no: only a charge whose speed changes sends power out']];
+    const wrong=[['larger: the box is bigger','smaller: the field is weaker far out','zero: the box is not round'],['yes: the pushes cancel at the centre','yes, if the ring is large enough','only if the charges alternate'],['yes: every moving charge shines','yes, if it is fast','only in a magnetic field']][F];
+    return {index:'q:34·phys.word['+F+']', a3:['34·phys.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Wrap-count: sliding a closed surface without crossing a charge never changes the flux.','No-trap: away from charges the potential is the average of its neighbours, with no lowest point inside.','Shaken-charge: power goes out only while the speed changes.'][F]}; }},
+  {id:'34·phys.line',step:'34·phys',mode:'proof',label:'what the laws license',open:()=>measured('34·phys'),make(){
+    return line28('34·phys.line',[
+      ['m1',[['\\text{a bigger surface round the charge}','given'],['\\text{more flux}','bigger']],2,1,'Any surface slid from it without crossing the charge has the same flux.'],
+      ['m2',[['\\text{a ring of fixed charges}','given'],['\\text{it holds a charge still at its centre}','trap']],2,1,'The potential has no lowest point there.'],
+      ['m3',[['\\text{a neutral molecule}','Q = 0'],['\\text{it has no field}','neutral']],2,1,'Its pair moment makes a field falling as 1/R³.'],
+      ['m4',[['\\text{a charging plate}','given'],['\\text{swirl of } B = \\mu_0 J','steady law']],2,1,'Not there; the missing term keeps charge.'],
+      ['m5',[['\\text{light in empty space}','given'],['\\text{its field shakes along the travel}','light']],2,1,'Spread of E = 0 makes it shake across.'],
+      ['m6',[['\\text{the four laws in empty space}','with the missing term'],['\\text{waves at } 1/\\sqrt{\\mu_0\\varepsilon_0}','light-speed']],2,0,'2.998 × 10⁸ m/s.']],[]); }});
+/* ----- annex 35·chem How do molecules turn and shake: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'35·chem.work',step:'35·chem',mode:'work',label:'turning lines and the shake',open:()=>measured('35·chem'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const D=[300,400,498,945,243][rnd(5)], v=119627/D, right=DECAX(v,0)+' nm', wrong=UQAX(right,[DECAX(v*2,0)+' nm',DECAX(1240/D*100,0)+' nm',DECAX(D*1.2,0)+' nm',DECAX(v/2,0)+' nm'],3); if(wrong.length<3) return null;
+      return {index:'q:35·chem.work[d;'+D+']', lines:[['D = '+D+' \\text{ kJ per mole}','a bond'],['N_A hc = 0.1196 \\text{ J m per mole}','']], ask:'Below what wavelength can one lump of light break it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Break-threshold: λ below N_A hc ÷ D = 0.1196 ÷ '+(D*1000)+' m ≈ '+right+'.'}; }
+    if(ask===1){ const B=[10,20,57.636][rnd(3)], J=rnd(4), right=DECAX(2*B*(J+1),3)+' GHz', wrong=UQAX(right,[DECAX(B*(J+1),3)+' GHz',DECAX(2*B*J,3)+' GHz',DECAX(B*(J+1)*(J+2),3)+' GHz',DECAX(2*B*(J+2),3)+' GHz'].filter(x=>x!=='0 GHz'),3); if(wrong.length<3) return null;
+      return {index:'q:35·chem.work[t;'+B+';'+J+']', lines:[['B = '+B+' \\text{ GHz}','a molecule of two atoms'],['J = '+J+' \\to '+(J+1),'']], ask:'At what frequency is the line?', right, opts:shuffle([right,...wrong]), lead:'', why:'Turning-lines: 2B(J + 1) = 2 · '+B+' · '+(J+1)+' = '+right+'. The lines are 2B apart.'}; }
+    const P=[['H³⁵Cl','D³⁵Cl',35/36,70/37,2886],['¹²C¹⁶O','¹³C¹⁶O',192/28,208/29,2143]][rnd(2)], v=P[4]*Math.sqrt(P[2]/P[3]), right=DECAX(v,0)+' cm⁻¹', wrong=UQAX(right,[DECAX(P[4]*P[2]/P[3],0)+' cm⁻¹',DECAX(P[4]*Math.sqrt(P[3]/P[2]),0)+' cm⁻¹',P[4]+' cm⁻¹',DECAX(P[4]*P[3]/P[2],0)+' cm⁻¹'],3); if(wrong.length<3) return null;
+    return {index:'q:35·chem.work[i;'+P[0]+']', lines:[['\\tilde\\nu = '+P[4]+' \\text{ cm}^{-1}','the shake of '+P[0]],['\\mu = '+DECAX(P[2],4)+' \\to '+DECAX(P[3],4),P[1]+', the same bond']], ask:'Where is the shake of '+P[1]+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Shaking-line: f = (1/2π)√(κ/μ), and κ is the same bond, so '+P[4]+' · √('+DECAX(P[2],4)+' ÷ '+DECAX(P[3],4)+') ≈ '+right+'.'}; }},
+  {id:'35·chem.word',step:'35·chem',mode:'word',label:'light on a bond',open:()=>measured('35·chem'),make(){
+    const F=rnd(3), Q=[['A lab shines brighter and brighter red light, 700 nm, on a gas whose bond needs light below 398 nm to break.','What happens to the bonds?','none break: one lump breaks one bond, and red lumps are too weak'],['A climate scientist asks why nitrogen, most of the air, takes in so little of the ground’s infrared glow.','Why?','two like atoms shift no charge when they stretch, so light cannot take hold'],['A radio astronomer sees carbon monoxide lines at 115.271 and 230.54 GHz.','What is B?','57.636 GHz, half the spacing']];
+    const wrong=[['more break as it brightens','all break at once when bright enough','they break more slowly'],['nitrogen is too cold','its bond is too stiff to shake','it takes in all of it'],['115.271 GHz, the spacing','230.54 GHz','28.818 GHz']][F];
+    return {index:'q:35·chem.word['+F+']', a3:['35·chem.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Break-threshold: a lump with less energy than the bond does nothing, however many come.','Light takes hold of a shake only when the stretch moves charge.','Turning-lines: the lines are 2B apart.'][F]}; }},
+  {id:'35·chem.line',step:'35·chem',mode:'proof',label:'what the lines license',open:()=>measured('35·chem'),make(){
+    return line28('35·chem.line',[
+      ['k1',[['\\text{a microwave oven at 2.45 GHz}','given'],['\\text{it heats at water’s turning line}','oven']],2,1,'Far from any line of water vapour; liquid water soaks it up across a broad band.'],
+      ['k2',[['E_J = hBJ(J + 1)','turning'],['\\text{lines } B \\text{ apart}','spacing']],2,1,'They are 2B apart: E_(J+1) − E_J = 2hB(J + 1).'],
+      ['k3',[['\\text{a heavier isotope}','given'],['\\text{a stiffer bond}','isotope']],2,1,'The bond is the same; only μ changes, so the frequency falls.'],
+      ['k4',[['\\text{brighter red light}','given'],['\\text{it breaks NO}_2','brightness']],2,1,'One lump breaks one bond; below the threshold, more lumps do nothing.'],
+      ['k5',[['\\text{CO: lines at } 115.271,\\ 230.54 \\text{ GHz}','measured'],['B = 57.636 \\text{ GHz}','turning-lines']],2,0,'The first line is at 2B.'],
+      ['k6',[['\\text{a bond of stiffness } \\kappa','given'],['\\text{energies } (v + \\tfrac12)hf','shaking-line']],2,0,'An even ladder, f = (1/2π)√(κ/μ).']],[]); }});
+/* ----- annex 35·now How many points are on a line: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'35·now.work',step:'35·now',mode:'work',label:'sizes the line cannot be',open:()=>measured('35·now'),make(){
+    const no=['\\aleph_\\omega','\\aleph_{\\omega + \\omega}','\\aleph_{\\omega \\cdot 3}','\\aleph_{\\omega^2}'], ok=['\\aleph_1','\\aleph_2','\\aleph_{17}','\\aleph_{\\omega + 1}','\\aleph_{\\omega_1}'], r=no[rnd(4)], w=shuffle(ok.slice()).slice(0,3);
+    const NM={'\\aleph_1':'ℵ₁','\\aleph_2':'ℵ₂','\\aleph_{17}':'ℵ₁₇','\\aleph_{\\omega + 1}':'ℵ(ω+1)','\\aleph_{\\omega_1}':'ℵ(ω₁)','\\aleph_\\omega':'ℵ(ω)','\\aleph_{\\omega + \\omega}':'ℵ(ω+ω)','\\aleph_{\\omega \\cdot 3}':'ℵ(ω·3)','\\aleph_{\\omega^2}':'ℵ(ω²)'}, nm=s=>NM[s];
+    return {index:'q:35·now.work['+no.indexOf(r)+']', lines:[['2^{\\aleph_0}','the size of the line'],['\\text{with choice}','']], ask:'Which of these can the size of the line not be?', right:nm(r), opts:shuffle([nm(r),...w.map(nm)]), lead:'', why:'No-countable-climb: the line is not a union of countably many smaller sets, so 2^ℵ₀ is no top of a countable climb; '+nm(r)+' is one. The 1963 method can make it any of the others.'}; }},
+  {id:'35·now.word',step:'35·now',mode:'word',label:'one world or many',open:()=>measured('35·now'),make(){
+    const F=rnd(3), Q=[['A student reads that two strong new axioms each make 2^ℵ₀ = ℵ₂.','Do they prove it from the old axioms?','no: they are new axioms; from the old ones nothing more follows'],['A student hopes a large size of infinity will settle whether 2^ℵ₀ = ℵ₁.','Can it?','no: none settles it, since the 1963 method leaves large sizes as they were'],['A student says the many-worlds view calls the question of 2^ℵ₀ meaningless.','Is that what it says?','no: it says the question is answered, true in some worlds and false in others']];
+    const wrong=[['yes: they are theorems','yes, since 2021','yes: they settle every question'],['yes: the largest one does','yes, with choice','yes: large sizes settle everything'],['yes: it calls it meaningless','yes: it rejects sets','no: it says 2^ℵ₀ = ℵ₁ in every world']][F];
+    return {index:'q:35·now.word['+F+']', a3:['35·now.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Neither 2^ℵ₀ = ℵ₁ nor its denial follows from the axioms (35f3); the new axioms add to them.','Proved in 1967: with any large size in hand the line can still be made of size ℵ₁ or ℵ₂.','On the view set out in 2012, each world of sets is a world, and none the true one.'][F]}; }},
+  {id:'35·now.line',step:'35·now',mode:'proof',label:'what the axioms license',open:()=>measured('35·now'),make(){
+    return line28('35·now.line',[
+      ['c1',[['\\text{the strong axioms}','new'],['2^{\\aleph_0} = \\aleph_2 \\text{ from the old axioms}','proved']],2,1,'They are new axioms; from the old ones nothing more follows.'],
+      ['c2',[['\\text{the old axioms}','given'],['2^{\\aleph_0} \\text{ can be any size past } \\aleph_0','open']],2,1,'Not ℵ_ω, nor any top of a countable climb.'],
+      ['c3',[['\\text{a large size}','given'],['\\text{every question about sets is settled}','large']],2,1,'None settles 2^ℵ₀ = ℵ₁ (1967).'],
+      ['c4',[['\\text{choice}','given'],['2^{\\aleph_0} \\ne \\aleph_\\omega','no-countable-climb']],2,0,'The line is not a union of countably many smaller sets.'],
+      ['c5',[['\\text{the many-worlds view}','given'],['\\text{the question is meaningless}','view']],2,1,'It says the question is answered: true in some worlds, false in others.'],
+      ['c6',[['\\text{the old axioms}','given'],['2^{\\aleph_0} \\ge \\aleph_1','Cantor']],2,0,'The line is past the counting numbers.']],[]); }});
+/* ----- annex 36·bio True blue is rare in nature: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'36·bio.work',step:'36·bio',mode:'work',label:'the cost of a blue',open:()=>measured('36·bio'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const L=[600,650,700,750][rnd(4)], v=1.986e-25/(L*1e-9), right=SCAX(v,2)+' J', wrong=UQAX(right,[SCAX(v*10,2)+' J',SCAX(L*1e-9/1.986e-25,2)+' J',SCAX(v/1000,2)+' J',SCAX(1.986e-25*L,2)+' J'],3); if(wrong.length<3) return null;
+      return {index:'q:36·bio.work[g;'+L+']', lines:[['\\lambda = '+L+' \\text{ nm}','the edge of the band taken away'],['hc = 1.986 \\times 10^{-25} \\text{ J m}','']], ask:'What is the largest energy gap of a pigment that takes light at that wavelength?', right, opts:shuffle([right,...wrong]), lead:'', why:'Small-gap: the gap is hc ÷ λ = 1.986 × 10⁻²⁵ ÷ '+SCAX(L*1e-9,2)+' ≈ '+right+'; a longer wavelength is a smaller energy.'}; }
+    if(ask===1){ const p=[0.8,0.9,0.95][rnd(3)], n=[2,5,10,12,20][rnd(5)], v=1/Math.pow(p,n), right=DECAX(v,2), wrong=UQAX(right,[DECAX(n/p,2),DECAX(Math.pow(p,n),3),DECAX(1+n*(1-p),2),DECAX(1/(p*n),3)],3); if(wrong.length<3) return null;
+      return {index:'q:36·bio.work[c;'+p+';'+n+']', lines:[[n+' \\text{ steps in a row}','making a pigment'],['\\text{each keeps } '+p+' \\text{ of what reaches it}','']], ask:'How many units of the start does one unit of pigment cost?', right, opts:shuffle([right,...wrong]), lead:'', why:'Chain-cost: it keeps '+p+'^'+n+', so one unit costs 1 ÷ '+p+'^'+n+' ≈ '+right+'.'}; }
+    const a=[400,450,470][rnd(3)], b=[600,650,700][rnd(3)], v=Math.pow(b/a,4), right=DECAX(v,2), wrong=UQAX(right,[DECAX(b/a,2),DECAX(Math.pow(b/a,2),2),DECAX(Math.pow(a/b,4),3),DECAX(Math.pow(b/a,3),2)],3); if(wrong.length<3) return null;
+    return {index:'q:36·bio.work[s;'+a+';'+b+']', lines:[['\\text{share scattered} \\propto 1/\\lambda^4','small scatterers'],['\\lambda_1 = '+a+' \\text{ nm},\\ \\ \\lambda_2 = '+b+' \\text{ nm}','']], ask:'How many times as much is light at λ₁ scattered as light at λ₂?', right, opts:shuffle([right,...wrong]), lead:'', why:'Short-wave-share: ('+b+' ÷ '+a+')⁴ ≈ '+right+'.'}; }},
+  {id:'36·bio.word',step:'36·bio',mode:'word',label:'the jay’s feather',open:()=>measured('36·bio'),make(){
+    const F=rnd(2);
+    const right=F?'the blue goes: it was made by the spacing of tiny pockets':'it moves toward violet: tilted, the stack sends back a shorter wavelength', wrong=F?['the blue stays: it is a pigment','it turns red','it turns brighter blue']:['it moves toward red','it stays the same','it turns white'];
+    return {index:'q:36·bio.word['+F+']', a3:['36·bio.word',DASH,DASH], story:F?'A child finds a blue feather from a jay and crushes it between two stones.':'A beetle’s blue shell is a stack of thin layers. A collector tilts it in the light.', lines:[], ask:F?'What happens to the blue?':'What happens to its colour?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Most blue in animals is structure, not pigment: crush the structure and the blue goes; crush a pigment and its colour stays.':'Tilt-shift: as θ grows, cos θᵢ falls in each layer, so λ = 2(n₁d₁ cos θ₁ + n₂d₂ cos θ₂)/m falls.'}; }},
+  {id:'36·bio.line',step:'36·bio',mode:'proof',label:'what the blue licenses',open:()=>measured('36·bio'),make(){
+    return line28('36·bio.line',[
+      ['u1',[['\\text{a pigment takes away light at 600 nm and longer}','looks blue'],['\\text{its gap is at most about } 3.31 \\times 10^{-19} \\text{ J}','small-gap']],2,0,'A longer wavelength is a smaller energy.'],
+      ['u2',[['\\text{a pigment that looks blue}','given'],['\\text{it takes away blue light}','colour']],2,1,'It takes away the long end of the window; blue is what is left.'],
+      ['u3',[['\\text{a blue feather crushed}','given'],['\\text{the blue stays}','pigment']],2,1,'The jay’s blue is structure; crushed, it goes.'],
+      ['u4',[['n \\text{ steps, each keeping } p','chain'],['\\text{cost } 1/p^n','chain-cost']],2,0,'A share of a share, n times.'],
+      ['u5',[['n \\text{ steps, each keeping } p','chain'],['\\text{cost } n/p','steps add']],2,1,'The shares multiply: 1/pⁿ.'],
+      ['u6',[['\\text{a layered stack, tilted}','given'],['\\text{it sends back a longer wavelength}','tilt']],2,1,'Tilt-shift: a shorter wavelength, toward violet.']],[]); }});
+/* ----- annex 36·chem What a molecule does with light: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'36·chem.work',step:'36·chem',mode:'work',label:'photons, dyes and afterglow',open:()=>measured('36·chem'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const r=[0.5,0.8,0.9][rnd(3)], s=[0.01,0.001][rnd(2)], x=Math.log(s)/Math.log(r), n=Math.floor(x)+1, right=String(n), wrong=UQAX(right,[String(Math.round(1/s*(1-r))),String(n+3),String(Math.ceil(x/2)),String(Math.round(-Math.log10(s)))],3); if(wrong.length<3) return null;
+      return {index:'q:36·chem.work[n;'+r+';'+s+']', lines:[['\\text{each bounce keeps } '+r,'a forest of tubes'],['\\text{come out with less than } '+s,'']], ask:'How many bounces does the light need, at the fewest?', right, opts:shuffle([right,...wrong]), lead:'', why:'Many-bounce: n > log '+s+' ÷ log '+r+' ≈ '+DECAX(x,2)+', so '+right+'.'}; }
+    if(ask===1){ const k=[0.1,0.5,0.02,1][rnd(4)], right=DECAX(Math.LN2/k,2)+' s', wrong=UQAX(right,[DECAX(1/k,2)+' s',DECAX(0.5/k,2)+' s',DECAX(Math.LN2*k,3)+' s',DECAX(2/k,2)+' s'],3); if(wrong.length<3) return null;
+      return {index:'q:36·chem.work[h;'+k+']', lines:[['k = '+k+' \\text{ per second}','each held molecule lets go']], ask:'How often does the afterglow halve?', right, opts:shuffle([right,...wrong]), lead:'', why:'Afterglow: I₀e^(−kt) halves every ln 2 ÷ k = 0.693 ÷ '+k+' ≈ '+right+'.'}; }
+    const H=[348,413,614,839,243][rnd(5)], right=DECAX(119627/H,0)+' nm', wrong=UQAX(right,[DECAX(2*119627/H,0)+' nm',DECAX(H,0)+' nm',DECAX(1240*100/H,0)+' nm',DECAX(119627/(2*H),0)+' nm'],3); if(wrong.length<3) return null;
+    return {index:'q:36·chem.work[b;'+H+']', lines:[['H = '+H+' \\text{ kJ per mole}','a bond'],['N_A hc = 0.1196 \\text{ J m per mole}','']], ask:'Up to what wavelength can a photon break it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Bond-breaking: λ ≤ N_A hc ÷ H = 0.1196 ÷ '+(H*1000)+' m ≈ '+right+'.'}; }},
+  {id:'36·chem.word',step:'36·chem',mode:'word',label:'the dye and the glow',open:()=>measured('36·chem'),make(){
+    const F=rnd(2);
+    if(F){ const t=[0,60,120,180,240,300][rnd(6)], right=((t+180)%360)+'°', wrong=UQAX(right,[t+'°',((t+90)%360)+'°',((t+270)%360)+'°'],3);
+      return {index:'q:36·chem.word[h;'+t+']', a3:['36·chem.word',DASH,DASH], story:'A dye in white light takes away a band of hue '+t+'° on the colour circle.', lines:[], ask:'What hue does it look?', right, opts:shuffle([right,...wrong]), lead:'', why:'Left-colour: white minus the band is across the circle from it, '+t+'° + 180° = '+right+'.'}; }
+    const a=[350,400,450][rnd(3)], b=a+[50,100,150][rnd(3)], ph=[0.5,0.9,1][rnd(3)], right=DECAX(ph*a/b,3), wrong=UQAX(right,[DECAX(ph*b/a,3),String(ph),DECAX(a/b,3)===right?DECAX(ph,2)+'0':DECAX(a/b,3),DECAX(ph*(b-a)/b,3)],3); if(wrong.length<3) return null;
+    return {index:'q:36·chem.word[r;'+a+';'+b+';'+ph+']', a3:['36·chem.word',DASH,DASH], story:'A glowing marker takes in light at '+a+' nm and gives light back at '+b+' nm, a share '+ph+' of the photons it took.', lines:[], ask:'What share of the energy does it give back?', right, opts:shuffle([right,...wrong]), lead:'', why:'Redder-return: each photon given back carries λ₁/λ₂ of the energy, so φ · '+a+' ÷ '+b+' ≈ '+right+'.'}; }},
+  {id:'36·chem.line',step:'36·chem',mode:'proof',label:'what the light licenses',open:()=>measured('36·chem'),make(){
+    return line28('36·chem.line',[
+      ['y1',[['\\text{a C–C single bond}','given'],['\\text{broken only for } \\lambda \\le 344 \\text{ nm}','bond-breaking']],2,0,'The photon’s energy per mole must reach H: only ultraviolet.'],
+      ['y2',[['\\text{brighter visible light}','given'],['\\text{it breaks a C–C bond}','brightness']],2,1,'One photon, one chance; below the threshold, more photons do nothing.'],
+      ['y3',[['\\text{a dye takes away a band}','given'],['\\text{it looks the colour of the band}','dye']],2,1,'It looks the colour across the circle from the band.'],
+      ['y4',[['\\text{light taken at } \\lambda_1,\\ \\text{given back at } \\lambda_2','glow'],['\\lambda_2 \\ge \\lambda_1','redder-return']],2,0,'Each photon given back carries at most the energy taken.'],
+      ['y5',[['\\text{a glowing paint with many traps}','given'],['\\text{it halves at one steady pace}','afterglow']],2,1,'Many-traps: the rate falls toward the slowest, and the halving time grows.'],
+      ['y6',[['\\text{each bounce keeps } r \\lt 1','tubes'],['\\text{after } n \\text{ bounces, } r^n','many-bounce']],2,0,'A share of a share, n times.']],[]); }});
+/* ----- annex 36·comp The circle and the cylinder in a machine: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'36·comp.work',step:'36·comp',mode:'work',label:'colours in bytes',open:()=>measured('36·comp'),make(){
+    const ask=rnd(4), HX=n=>n.toString(16).toUpperCase().padStart(2,'0');
+    if(ask===3){ const n=rnd(256), right=HX(n), wrong=UQAX(right,[HX((n*7+33)%256),HX(255-n),String(n).padStart(2,'0').slice(-2),HX((n+16)%256)],3); if(wrong.length<3) return null;
+      return {index:'q:36·comp.work[x;'+n+']', lines:[['\\text{a byte: } '+n,'one amount']], ask:'How is it written in sixteens?', right, opts:shuffle([right,...wrong]), lead:'', why:'Two-digit: '+n+' = 16 · '+Math.floor(n/16)+' + '+(n%16)+', written '+right+'.'}; }
+    if(ask===2){ const c=50+rnd(200), d=50+rnd(200), a=[0.25,0.5,0.75,0.4][rnd(4)], right=String(Math.round(a*c+(1-a)*d)), wrong=UQAX(right,[String(Math.round((1-a)*c+a*d)),String(Math.round((c+d)/2)),String(Math.round(a*c)),String(Math.round(a*c+d))],3); if(wrong.length<3) return null;
+      return {index:'q:36·comp.work[o;'+c+';'+d+';'+a+']', lines:[['c = '+c+',\\ \\ \\alpha = '+a,'the upper layer'],['d = '+d,'beneath']], ask:'What byte does the place show?', right, opts:shuffle([right,...wrong]), lead:'', why:'Over-blend: α·c + (1 − α)·d = '+a+' · '+c+' + '+DECAX(1-a,2)+' · '+d+' ≈ '+right+'.'}; }
+    if(ask===1){ const a=50+rnd(206), b=50+rnd(206), right=String(Math.round(a*b/255)), wrong=UQAX(right,[String(a*b),String(Math.round((a+b)/2)),String(Math.min(255,a+b)),String(Math.round(a*b/256)+3)],3); if(wrong.length<3) return null;
+      return {index:'q:36·comp.work[m;'+a+';'+b+']', lines:[['a = '+a+',\\ \\ b = '+b,'two bytes'],['\\text{multiply blend}','']], ask:'What byte does multiply give?', right, opts:shuffle([right,...wrong]), lead:'', why:'Byte-blend: '+a+' · '+b+' ÷ 255 ≈ '+DECAX(a*b/255,2)+', kept as '+right+'.'}; }
+    const M=200+rnd(56), m=rnd(60), g=m+1+rnd(M-m-1), v=60*(g-m)/(M-m), right=DECAX(v,1)+'°', wrong=UQAX(right,[DECAX(60*(M-g)/(M-m),1)+'°',DECAX(360*(g-m)/(M-m),1)+'°',DECAX(60*g/M,1)+'°',DECAX(120+v,1)+'°'],3); if(wrong.length<3) return null;
+    return {index:'q:36·comp.work[h;'+M+';'+g+';'+m+']', lines:[['(r, g, b) = ('+M+', '+g+', '+m+')','red largest, blue smallest']], ask:'What hue does the machine give?', right, opts:shuffle([right,...wrong]), lead:'', why:'Hue-sector: 60° × (g − b) ÷ (M − m) = 60° × '+(g-m)+' ÷ '+(M-m)+' ≈ '+right+'.'}; }},
+  {id:'36·comp.word',step:'36·comp',mode:'word',label:'fine stripes on a screen',open:()=>measured('36·comp'),make(){
+    const p=[1.1,1.2,1.25,1.5,0.9,0.8][rnd(6)], f=1/p, k=Math.round(f), v=1/Math.abs(f-k), right=DECAX(v,2)+' places', wrong=UQAX(right,[p+' places',DECAX(1/f,2)===String(p)?'2 places':DECAX(1/f,2)+' places',DECAX(v/2,2)+' places','no stripes at all'],3); if(wrong.length<3) return null;
+    return {index:'q:36·comp.word['+p+']', a3:['36·comp.word',DASH,DASH], story:'A camera photographs a fence of even stripes that repeat every '+p+' places of its sensor.', lines:[], ask:'Every how many places do the stripes repeat in the picture?', right, opts:shuffle([right,...wrong]), lead:'', why:'Stripe: 1/p = '+DECAX(f,3)+', and the whole number '+k+' brings it to '+DECAX(f-k,3).replace('-','−')+', so the picture repeats every 1 ÷ |1/p − k| ≈ '+right+'.'}; }},
+  {id:'36·comp.line',step:'36·comp',mode:'proof',label:'what the bytes license',open:()=>measured('36·comp'),make(){
+    return line28('36·comp.line',[
+      ['z1',[['\\text{three bytes a place}','a screen'],['256^3 = 16\\,777\\,216 \\text{ colours}','three-bytes']],2,0,'256 choices for each of three amounts.'],
+      ['z2',[['\\text{three bytes a place}','a screen'],['\\text{it shows every colour the eye sees}','gamut']],2,1,'Every one lies in the gamut of its three primaries, and no more.'],
+      ['z3',[['(r, g, b) = (128, 128, 128)','a grey'],['\\text{hue } 0','hue-sector']],2,0,'M = m, no hue, so the program writes 0.'],
+      ['z4',[['\\text{multiply of 200 and 100}','bytes'],['78','byte-blend']],2,0,'20 000/255 ≈ 78.43, kept as 78: half a step at most.'],
+      ['z5',[['\\alpha = 0.5','a layer'],['\\text{the place shows the upper colour}','over']],2,1,'Over-blend: halfway from the lower colour to the upper.'],
+      ['z6',[['\\text{a picture } w \\times h','kept'],['3wh \\text{ bytes}','picture-count']],2,0,'Three bytes for each of the wh places.']],[]); }});
+/* ----- annex 36·nav The sky tells where the land is: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'36·nav.work',step:'36·nav',mode:'work',label:'signs of land',open:()=>measured('36·nav'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const r1=[3,5,14][rnd(3)], r2=[2,3,5][rnd(3)], o=r1*r2/9, right=Math.round(100*o/(1+o))+'%', wrong=UQAX(right,[Math.round(100*(r1+r2)/9/(1+(r1+r2)/9))+'%',Math.round(100*Math.min(1,0.1*r1*r2))+'%','10%',Math.round(100*o)+'%'],3); if(wrong.length<3) return null;
+      return {index:'q:36·nav.work[o;'+r1+';'+r2+']', lines:[['P(\\text{land}) = 0.1,\\ \\text{odds } 1/9','before any sign'],['\\text{two signs, ratios } '+r1+' \\text{ and } '+r2,'independent']], ask:'What is the chance of land after both?', right, opts:shuffle([right,...wrong]), lead:'', why:'Two-sign: odds 1/9 · '+r1+' · '+r2+' = '+(r1*r2)+'/9, a chance of '+(r1*r2)+'/'+(r1*r2+9)+' ≈ '+right+'.'}; }
+    if(ask===1){ const h=[30,100,300,600][rnd(4)], e=2, v=Math.sqrt(2*6371*h/1000)+Math.sqrt(2*6371*e/1000), right=DECAX(v,1)+' km', wrong=UQAX(right,[DECAX(Math.sqrt(2*6371*h/1000),1)+' km',DECAX(Math.sqrt(2*6371*(h+e)/1000)*2,1)+' km',DECAX(2*6371*h/1000,1)+' km',DECAX(Math.sqrt(6371*h/1000),1)+' km'],3); if(wrong.length<3) return null;
+      return {index:'q:36·nav.work[h;'+h+']', lines:[['h_1 = '+h+' \\text{ m}','a sign: palms or a cloud'],['h_2 = 2 \\text{ m},\\ \\ R = 6371 \\text{ km}','the eye in a canoe']], ask:'From about how far does it show?', right, opts:shuffle([right,...wrong]), lead:'', why:'Higher-sign: √(2Rh₁) + √(2Rh₂) = √(2 · 6371 · '+DECAX(h/1000,3)+') + √(2 · 6371 · 0.002) ≈ '+right+'.'}; }
+    const H=[90,30,10,5][rnd(4)], v=1/Math.sin(H*Math.PI/180), right=DECAX(v,2)+' times', wrong=UQAX(right,[DECAX(H===90?1/Math.sin(H*Math.PI/360):1/Math.cos(H*Math.PI/180),2)+' times',DECAX(90/H,2)+' times',DECAX(Math.sin(H*Math.PI/180),3)+' times',DECAX(v*v,2)+' times'],3); if(wrong.length<3) return null;
+    return {index:'q:36·nav.work[s;'+H+']', lines:[['H = '+H+'^\\circ','the sun above the horizon']], ask:'How many times as much air does its light cross as from overhead?', right, opts:shuffle([right,...wrong]), lead:'', why:'Low-sun: about 1/sin H = 1 ÷ sin '+H+'° ≈ '+right+'; the red it keeps over the blue grows as the sun goes down.'}; }},
+  {id:'36·nav.word',step:'36·nav',mode:'word',label:'the filter and the cloud',open:()=>measured('36·nav'),make(){
+    const F=rnd(2);
+    if(F){ const t=[0,30,45,60,90][rnd(5)], c=Math.cos(t*Math.PI/180), right=DECAX(100*c*c,0)+'%', wrong=UQAX(right,[DECAX(100*c,0)+'%','50%',DECAX(100*(1-c*c),0)+'%','100%'],3); if(wrong.length<3) return null;
+      return {index:'q:36·nav.word[f;'+t+']', a3:['36·nav.word',DASH,DASH], story:'Under a sky with the sun hidden, a navigator holds a filter to a patch of sky a right angle from the sun, turned '+t+'° from the line that patch shakes along.', lines:[], ask:'What share of its strength comes through, at best?', right, opts:shuffle([right,...wrong]), lead:'', why:'Combed: the patch shakes along one line, and a filter turned θ keeps cos²θ = '+right+'.'}; }
+    const right='a lagoon over white sand, which sends back greens and blues', wrong=['deep sea, which sends back almost nothing','ice, which sends back white','the cloud’s own colour'];
+    return {index:'q:36·nav.word[c]', a3:['36·nav.word',DASH,DASH], story:'A navigator far out on the Pacific sees a cloud whose underside is tinted green, with no land in sight.', lines:[], ask:'What most likely lies beneath it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Cloud-base: the base is lit by the mix of what lies beneath; a lagoon tints it green. It is a sign, multiplying the odds, not a proof.'}; }},
+  {id:'36·nav.line',step:'36·nav',mode:'proof',label:'what the sky licenses',open:()=>measured('36·nav'),make(){
+    return line28('36·nav.line',[
+      ['s1',[['\\text{the sun near the horizon}','given'],['\\text{its light crosses about } 1/\\sin H \\text{ times the air}','low-sun']],2,0,'So it keeps e^(−τ/sin H): the red over the blue grows.'],
+      ['s2',[['\\text{a green cloud base}','seen'],['\\text{land, for certain}','sign']],2,1,'A reef, a shoal or a low sun can do it too: odds, never certainty.'],
+      ['s3',[['\\text{a sign 100 times higher}','given'],['\\text{shows from nearly 10 times as far}','higher-sign']],2,0,'√(2R · 100h) = 10√(2Rh).'],
+      ['s4',[['\\text{a sign 100 times higher}','given'],['\\text{shows from 100 times as far}','higher']],2,1,'The reach goes as the root of the height.'],
+      ['s5',[['\\text{two independent signs}','given'],['\\text{odds before times both ratios}','two-sign']],2,0,'The odds-update technique, once for each sign.'],
+      ['s6',[['\\text{a patch of sky a right angle from the sun}','given'],['\\text{it shakes every way alike}','skylight']],2,1,'Combed: it shakes, at best, along one line.']],[]); }});
+/* ----- annex 37·bio How does the ear tell one pitch from another: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'37·bio.work',step:'37·bio',mode:'work',label:'place, dose and echo',open:()=>measured('37·bio'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const k=[100,200,300,600,1200,2400][rnd(6)], right=DECAX(5*k/1200,3)+' mm', wrong=UQAX(right,[DECAX(k/1200,3)+' mm',DECAX(5*k/100,2)+' mm',DECAX(35*k/1200,2)+' mm',DECAX(5*k/2400,3)+' mm'],3); if(wrong.length<3) return null;
+      return {index:'q:37·bio.work[c;'+k+']', lines:[['\\text{a pitch step of } '+k+' \\text{ cents}','above a few hundred hertz'],['\\text{an octave} \\approx 5 \\text{ mm of the strip}','']], ask:'How far does the best place move along the strip?', right, opts:shuffle([right,...wrong]), lead:'', why:'Place-shift: '+k+' cents is '+k+'/1200 of an octave, about 5 · '+k+' ÷ 1200 = '+right+'.'}; }
+    if(ask===1){ const L=[85,88,91,94,97,100,103][rnd(7)], v=8/Math.pow(2,(L-85)/3), right=DECAX(v,3)+' h', wrong=UQAX(right,[DECAX(8/Math.pow(2,(L-85)/6),3)+' h',DECAX(8-(L-85)/3,3)+' h',DECAX(8/((L-85)/3+1),3)+' h',DECAX(8/Math.pow(2,(L-85)/10),3)+' h'],3); if(wrong.length<3) return null;
+      return {index:'q:37·bio.work[d;'+L+']', lines:[['85 \\text{ dB is safe for 8 hours}','the line laid down'],['L = '+L+' \\text{ dB}','']], ask:'For how long is that level safe?', right, opts:shuffle([right,...wrong]), lead:'', why:'Dose: each 3 dB louder halves the time: 8 ÷ 2^'+((L-85)/3)+' = '+right+'.'}; }
+    const f=[40,50,80][rnd(3)], v=[5,10,20][rnd(3)], c=343, r=f*(c+v)/(c-v), right=DECAX(r,2)+' kHz', wrong=UQAX(right,[DECAX(f*c/(c-v),2)+' kHz',DECAX(f*(c-v)/(c+v),2)+' kHz',DECAX(f*(c+v)/c,2)+' kHz',f+' kHz'],3); if(wrong.length<3) return null;
+    return {index:'q:37·bio.work[e;'+f+';'+v+']', lines:[['f = '+f+' \\text{ kHz},\\ \\ v = '+v+' \\text{ m/s}','a bat flying at a wall'],['c = 343 \\text{ m/s}','']], ask:'At what frequency does it hear the echo?', right, opts:shuffle([right,...wrong]), lead:'', why:'Returned-shift: f(c + v) ÷ (c − v) = '+f+' · '+(c+v)+' ÷ '+(c-v)+' ≈ '+right+': two shifts, one each way.'}; }},
+  {id:'37·bio.word',step:'37·bio',mode:'word',label:'a night at the concert',open:()=>measured('37·bio'),make(){
+    const F=rnd(2);
+    const right=F?'a quarter of the time: twice the pressure is 6 dB':'yes: a pitch step is the same move anywhere above a few hundred hertz', wrong=F?['half the time: twice as loud','the same time','an eighth of the time']:['no: high notes are packed closer','no: low notes are packed closer','yes, but only below 100 Hz'];
+    return {index:'q:37·bio.word['+F+']', a3:['37·bio.word',DASH,DASH], story:F?'At a concert the sound pressure at the front is twice what it is at the back.':'A tuner asks whether an octave from 500 to 1000 Hz takes as much of the inner ear’s strip as one from 4000 to 8000 Hz.', lines:[], ask:F?'Compared with the back, for how long is the front safe?':'Does it?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Dose: twice the pressure is four times the intensity, 6 dB, so two halvings.':'Place-map: each octave takes about the same 5 mm: the strip maps octaves evenly, not hertz.'}; }},
+  {id:'37·bio.line',step:'37·bio',mode:'proof',label:'what the ear licenses',open:()=>measured('37·bio'),make(){
+    return line28('37·bio.line',[
+      ['b1',[['\\text{each hair cell hears one pitch}','given'],['\\text{the ear tells pitches only to a cell}','cells']],2,1,'It tells finer, by place and rate together.'],
+      ['b2',[['\\text{twice as loud}','given'],['\\text{safe for half the time}','dose']],2,1,'Twice the intensity, 3 dB, halves it; twice the pressure, 6 dB, quarters it.'],
+      ['b3',[['\\text{the strip of the inner ear}','given'],['\\text{it maps hertz evenly}','map']],2,1,'It maps octaves evenly.'],
+      ['b4',[['\\text{an echo’s shift}','given'],['\\text{the one-way Doppler shift}','echo']],2,1,'It is two shifts, one each way.'],
+      ['b5',[['\\text{85 dB safe for 8 h}','the line'],['\\text{88 dB safe for 4 h}','dose']],2,0,'3 dB louder halves the time.'],
+      ['b6',[['\\text{a step of 1200 cents}','an octave'],['\\text{about 5 mm along the strip}','place-shift']],2,0,'An octave is about 5 mm of 35.']],[]); }});
+/* ----- annex 37·comp How does a computer hold a sound: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'37·comp.work',step:'37·comp',mode:'work',label:'bits and the hiss',open:()=>measured('37·comp'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const m=[12,18,24,30,36][rnd(5)], right=String(Math.ceil(m/6)), wrong=UQAX(right,[String(m),String(Math.ceil(m/3)),String(16),String(Math.ceil(m/12))],3); if(wrong.length<3) return null;
+      return {index:'q:37·comp.work[h;'+m+']', lines:[['\\text{a band } '+m+' \\text{ dB above what its neighbours hide}','a coder']], ask:'About how many bits does it need?', right, opts:shuffle([right,...wrong]), lead:'', why:'Hidden-hiss: each bit sets the hiss 6 dB further down, so about '+m+' ÷ 6 = '+right+'.'}; }
+    if(ask===1){ const a=[0.5,0.6,0.75,0.9][rnd(4)], right=DECAX(1/(1-a),2), wrong=UQAX(right,[DECAX(1+a,2),DECAX(1/(1+a),3),DECAX(a/(1-a),2),DECAX(1-a,2)],3); if(wrong.length<3) return null;
+      return {index:'q:37·comp.work[e;'+a+']', lines:[['y_k = x_k + '+a+'\\,y_{k-D}','an echo fed back'],['\\text{a turning at a whole multiple of } r/D','in step']], ask:'By what factor is it lifted?', right, opts:shuffle([right,...wrong]), lead:'', why:'Repeat-echo: in step the trips add, 1 + a + a² + ⋯ = 1 ÷ (1 − '+a+') = '+right+'.'}; }
+    const n=[8,12,16,20,24][rnd(5)], v=6.02*n+1.76, right=DECAX(v,2)+' dB', wrong=UQAX(right,[DECAX(6.02*n,2)+' dB',DECAX(3.01*n+1.76,2)+' dB',DECAX(2*6.02*n,2)+' dB',DECAX(10*n,2)+' dB'],3); if(wrong.length<3) return null;
+    return {index:'q:37·comp.work[b;'+n+']', lines:[['n = '+n+' \\text{ bits a sample}','']], ask:'How far above its rounding hiss can a full turning stand?', right, opts:shuffle([right,...wrong]), lead:'', why:'Bit-hiss: 6.02n + 1.76 = 6.02 · '+n+' + 1.76 = '+right+'.'}; }},
+  {id:'37·comp.word',step:'37·comp',mode:'word',label:'the studio’s recording',open:()=>measured('37·comp'),make(){
+    const F=rnd(3), Q=[['A studio adds a faint random shake to a quiet passage before rounding it to bits.','Does that only make the recording worse?','no: rounding after a random shake is right on average, so notes under a step survive'],['An engineer doubles the samples a second past twice the highest frequency of the music.','Does the quality double?','no: past twice the highest frequency, nothing more is told'],['A listener says a coded song is a smaller copy of the CD.','Is it?','no: it is another sound, heard the same by most ears']];
+    const wrong=[['yes: noise is always worse','yes, unless it is loud','no: it removes the hiss entirely'],['yes: twice the samples, twice the quality','yes, for high notes','no: it halves it'],['yes: the same samples, packed','yes: nothing is thrown away','no: it is louder']][F];
+    return {index:'q:37·comp.word['+F+']', a3:['37·comp.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Shaken-rounding: add an amount spread evenly over one step, round down, and the result is x on average.','32g1: the samples tell everything below half their rate, and no more.','Hidden-hiss: the coder keeps only the bits needed above what the ear would hide.'][F]}; }},
+  {id:'37·comp.line',step:'37·comp',mode:'proof',label:'what the bits license',open:()=>measured('37·comp'),make(){
+    return line28('37·comp.line',[
+      ['s1',[['\\text{twice the samples a second}','given'],['\\text{twice the quality}','rate']],2,1,'Past twice the highest frequency, nothing more is told.'],
+      ['s2',[['\\text{noise added}','given'],['\\text{the recording can only be worse}','noise']],2,1,'A small shake saves notes under a step.'],
+      ['s3',[['\\text{a coded song}','given'],['\\text{a smaller copy of the CD}','copy']],2,1,'It is another sound, heard the same by most ears.'],
+      ['s4',[['\\text{one more bit}','given'],['\\text{the range in decibels doubles}','bits']],2,1,'Each bit adds 6 dB; it doubles the range in pressure.'],
+      ['s5',[['16 \\text{ bits}','a CD'],['\\text{about } 98 \\text{ dB above the hiss}','bit-hiss']],2,0,'6.02 · 16 + 1.76 ≈ 98.1.'],
+      ['s6',[['\\text{fed back after } D \\text{ samples, share } a','echo'],['\\text{peaks at whole multiples of } r/D','repeat-echo']],2,0,'There the trips arrive in step.']],[]); }});
+/* ----- annex 37·crypt Can a voice be hidden: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'37·crypt.work',step:'37·crypt',mode:'work',label:'flip, key and last bit',open:()=>measured('37·crypt'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const L=rnd(6), K=rnd(6), S=(L+K)%6, right=String(S), wrong=UQAX(right,[String(L+K),String(Math.abs(L-K)),String((L+6-K)%6),String(K)],3); if(wrong.length<3) return null;
+      return {index:'q:37·crypt.work[k;'+L+';'+K+']', lines:[['\\text{level } '+L+',\\ \\text{key step } '+K,'one piece of the voice']], ask:'What step is sent?', right, opts:shuffle([right,...wrong]), lead:'', why:'Level-key: add the key and keep the remainder by 6: ('+L+' + '+K+') mod 6 = '+right+'. The receiver adds 6 − '+K+' and keeps the remainder again.'}; }
+    if(ask===1){ const s=[1,2,4][rnd(3)], v=44100*s, right=v.toLocaleString('en').replace(/,/g,' ')+' bits a second', wrong=UQAX(right,[(44100*16*s).toLocaleString('en').replace(/,/g,' ')+' bits a second',(44100).toLocaleString('en').replace(/,/g,' ')+' bits a second'===right?(88200*2).toLocaleString('en').replace(/,/g,' ')+' bits a second':'44 100 bits a second',(22050*s).toLocaleString('en').replace(/,/g,' ')+' bits a second',(s*16).toLocaleString('en')+' bits a second'],3); if(wrong.length<3) return null;
+      return {index:'q:37·crypt.work[b;'+s+']', lines:[[s+' \\text{ channel'+(s>1?'s':'')+' of 16-bit samples}','44 100 a second each'],['\\text{a message in the last bit of every sample}','']], ask:'How fast does it carry the message?', right, opts:shuffle([right,...wrong]), lead:'', why:'Last-bit: one bit in each sample, 44 100 a second in each channel, so '+right+'.'}; }
+    const f=[300,500,1000,1500,2000,3000][rnd(6)], right=(3600-f)+' Hz', wrong=UQAX(right,[f+' Hz',(3600+f)+' Hz',DECAX(f/2,0)+' Hz',(1800-f>0?1800-f:f-1800)+' Hz'],3); if(wrong.length<3) return null;
+    return {index:'q:37·crypt.work[f;'+f+']', lines:[['f \\to 3600 - f','the flip of the band'],['f = '+f+' \\text{ Hz}','a turning of the voice']], ask:'Where does that turning go, and where does the flip send it back?', right:right+', then '+f+' Hz', opts:shuffle([right+', then '+f+' Hz',...wrong.map(w=>w+', then '+f+' Hz')]), lead:'', why:'Flip-band: 3600 − '+f+' = '+(3600-f)+', and 3600 − (3600 − f) = f: the flip is its own undoing.'}; }},
+  {id:'37·crypt.word',step:'37·crypt',mode:'word',label:'the scrambled call',open:()=>measured('37·crypt'),make(){
+    const F=rnd(3), Q=[['A phone scrambles a call by flipping its band upside down.','Is the call locked?','no: anyone with the flip box follows it'],['A spy writes a message into the last bit of each sample of a song.','Is the message safe?','no: hidden is not locked; it hides from ears, not programs'],['A record is played backwards, and a listener told what to listen for hears words.','Are the words in the recording?','no: being told makes them heard; backwards, every change runs the other way']];
+    const wrong=[['yes: no one can follow it','yes, if the band is wide','no: flipping loses the power'],['yes: it is 90 dB under the music','yes: no one can hear it','no: it ruins the song'],['yes: the recipe is the same','yes: heard, so there','no: backwards sounds are silent']][F];
+    return {index:'q:37·crypt.word['+F+']', a3:['37·crypt.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Flip-band: one key, and the flip is its own undoing.','Last-bit: the hiss is about 90 dB down, but a program reads the last bits at once.','Backwards-recipe: the recipe over the whole stretch is the same, but “t” reversed is not “t”.'][F]}; }},
+  {id:'37·crypt.line',step:'37·crypt',mode:'proof',label:'what the hiding licenses',open:()=>measured('37·crypt'),make(){
+    return line28('37·crypt.line',[
+      ['v1',[['\\text{a voice no one can follow}','given'],['\\text{a locked voice}','lock']],2,1,'One key, and anyone with the box follows it.'],
+      ['v2',[['\\text{played backwards}','given'],['\\text{it says its letters backwards}','reverse']],2,1,'“t” reversed is not “t”: the click comes after the hiss.'],
+      ['v3',[['\\text{a hidden message}','given'],['\\text{it is safe}','hidden']],2,1,'Hidden is not locked.'],
+      ['v4',[['\\text{heard after being told}','given'],['\\text{it is there}','heard']],2,1,'Being told makes it heard.'],
+      ['v5',[['\\text{a fresh random key, mod 6}','level-key'],['\\text{the step sent is even over 0 to 5}','whatever the voice']],2,0,'Each step comes out from exactly one key.'],
+      ['v6',[['\\text{the flip, done twice}','given'],['\\text{the voice back}','flip-band']],2,0,'3600 − (3600 − f) = f.']],[]); }});
+/* ----- annex 37·eng Why does a room change a song: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'37·eng.work',step:'37·eng',mode:'work',label:'ringing, levels and howls',open:()=>measured('37·eng'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const S=[85,88,90,92][rnd(4)], P=[1,2,10,100][rnd(4)], r=[1,2,4,10][rnd(4)], v=S+10*Math.log10(P)-20*Math.log10(r), right=DECAX(v,1)+' dB', wrong=UQAX(right,[DECAX(S+20*Math.log10(P)-20*Math.log10(r),1)+' dB',DECAX(S+10*Math.log10(P)-10*Math.log10(r),1)+' dB',DECAX(S+P-r,1)+' dB',DECAX(S+10*Math.log10(P),1)+' dB'],3); if(wrong.length<3) return null;
+      return {index:'q:37·eng.work[l;'+S+';'+P+';'+r+']', lines:[['S = '+S+' \\text{ dB (1 W, 1 m)}','a loudspeaker'],['P = '+P+' \\text{ W},\\ \\ r = '+r+' \\text{ m}','open air']], ask:'What level does it make there?', right, opts:shuffle([right,...wrong]), lead:'', why:'Loudspeaker: S + 10 log₁₀ P − 20 log₁₀ r = '+S+' + '+DECAX(10*Math.log10(P),1)+' − '+DECAX(20*Math.log10(r),1)+' ≈ '+right+'.'}; }
+    if(ask===1){ const g=[[20,-6,10],[30,-10,6],[12,12,-20]][rnd(3)], v=g.reduce((s,x)=>s+x,0), f=x=>String(x).replace('-','−'), right=f(v)+' dB', wrong=UQAX(right,[f(2*v)+' dB',f(Math.abs(g[0])+Math.abs(g[1])+Math.abs(g[2]))+' dB',f(Math.max(...g))+' dB',f(Math.round(v/3))+' dB'],3); if(wrong.length<3) return null;
+      return {index:'q:37·eng.work[c;'+g.join(';')+']', lines:[['\\text{gains } '+g.map(f).join(',\\ ')+' \\text{ dB}','three stages in a chain']], ask:'What is the gain of the chain?', right, opts:shuffle([right,...wrong]), lead:'', why:'Level-chain: gains multiply as numbers and add in decibels: '+g.map(f).join(' + ').replace(/\+ −/g,'− ')+' = '+right+'.'}; }
+    const V=[120,240,500,1000][rnd(4)], A=[40,60,85.4,120][rnd(4)], v=0.161*V/A, right=DECAX(v,2)+' s', wrong=UQAX(right,[DECAX(0.161*A/V,3)+' s',DECAX(V/A,2)+' s',DECAX(0.161*V*A/1000,2)+' s',DECAX(1.61*V/A,2)+' s'],3); if(wrong.length<3) return null;
+    return {index:'q:37·eng.work[r;'+V+';'+A+']', lines:[['V = '+V+' \\text{ m}^3','a room'],['A = '+A+' \\text{ m}^2','what its surfaces soak up']], ask:'How long does the sound take to fall 60 dB?', right, opts:shuffle([right,...wrong]), lead:'', why:'Ringing: 0.161 · '+V+' ÷ '+A+' ≈ '+right+'.'}; }},
+  {id:'37·eng.word',step:'37·eng',mode:'word',label:'the hall and the howl',open:()=>measured('37·eng'),make(){
+    const F=rnd(3), Q=[['A band doubles the watts into its loudspeakers.','How much louder is it?','3 dB louder, not twice'],['A school moves a choir to a bigger hall with heavy curtains and soft seats.','Must it ring longer?','no: it goes as V over A, and soft surfaces can more than make up'],['A microphone near a loudspeaker begins to howl at one note.','Why that note?','its trips round the loop arrive in step with gain at least one']];
+    const wrong=[['twice as loud','6 dB louder','10 dB louder'],['yes: bigger rooms always ring longer','yes, by the ratio of volumes','no: curtains stop all ringing'],['it was the loudest note in the room','the microphone is broken','the loudspeaker plays only that note']][F];
+    return {index:'q:37·eng.word['+F+']', a3:['37·eng.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Loudspeaker: power in decibels is 10 log₁₀ P, and 10 log₁₀ 2 ≈ 3.','Ringing: 0.161 V/A; A grows with every soft surface.','Howl: after n trips its size is |G(f)|ⁿ times the start, which grows when |G| ≥ 1, often from a quiet start.'][F]}; }},
+  {id:'37·eng.line',step:'37·eng',mode:'proof',label:'what the room licenses',open:()=>measured('37·eng'),make(){
+    return line28('37·eng.line',[
+      ['r1',[['\\text{twice the watts}','given'],['\\text{twice as loud}','watts']],2,1,'+3 dB.'],
+      ['r2',[['\\text{a bigger room}','given'],['\\text{it rings longer}','size']],2,1,'V over A; soft surfaces can more than make up.'],
+      ['r3',[['\\text{a howl}','given'],['\\text{the loudest sound in the room, fed back}','howl']],2,1,'It is the frequency where |G| ≥ 1 in step, often a quiet one to start.'],
+      ['r4',[['\\text{gains along a chain}','given'],['\\text{they multiply in decibels}','chain']],2,1,'They multiply as numbers and add in decibels.'],
+      ['r5',[['V = 240,\\ A = 85.4','a room'],['\\text{rings about } 0.45 \\text{ s}','ringing']],2,0,'0.161 × 240/85.4 ≈ 0.45: good for speech.'],
+      ['r6',[['|G(f)| \\lt 1 \\text{ round the loop}','given'],['\\text{that frequency dies away}','howl']],2,0,'|G|ⁿ falls toward 0.']],[]); }});
+/* ----- annex 38·chem What Shape Is an Electron's Cloud?: Work, Word Problems, Check Proofs ----- */
+const ORDAX=(()=>{ const o=[]; for(let s=1;s<=8;s++) for(let n=1;n<=s;n++){ const l=s-n; if(l<n&&l<=3) o.push([n,l]); } return o; })(); /* n + ℓ order, ties to the smaller n */
+const LETAX='spdf', MISSAX=[24,29,41,42,44,45,46,47,57,58,64,78,79]; /* fillings the rule misses, as measured: left out */
+const FILLAX=Z=>{ const out=[]; let left=Z; for(const [n,l] of ORDAX){ if(left<=0) break; const k=Math.min(left,2*(2*l+1)); out.push([n,l,k]); left-=k; } return out; };
+QP.push({id:'38·chem.work',step:'38·chem',mode:'work',label:'filling by n + ℓ',open:()=>measured('38·chem'),make(){
+    const Z=3+rnd(54); if(MISSAX.includes(Z)) return null; const F=FILLAX(Z), sh=F.filter(x=>x[0]>1||x[1]>0), [n,l,k]=pick(sh.slice(-3)); const name=n+LETAX[l];
+    const right=String(k), wrong=UQAX(right,[2*(2*l+1),k-1,k+1,k+2,Math.max(0,k-2),Z%10],3); if(wrong.length<3) return null;
+    return {index:'q:38·chem.work['+Z+';'+name+']', lines:[['an atom with '+Z+' electrons','given'],['it fills by the n-plus-ℓ order','the n-plus-ℓ technique']], ask:'How many electrons sit in '+name+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'In n + ℓ order: '+F.map(([a,b,c])=>a+LETAX[b]+'('+c+')').join(' ')+'.'}; }},
+  {id:'38·chem.word',step:'38·chem',mode:'word',label:'where a cloud is thickest',open:()=>measured('38·chem'),make(){
+    const n=1+rnd(4), l=n-1, r=(n*n*0.0529), E=13.6/(n*n), two=rnd(2), name=n+LETAX[l];
+    const MN=x=>String(x).replace(/^-/,'−'), right=two?MN((-E).toFixed(2))+' eV':r.toFixed(3)+' nm', wrong=two?UQAX(right,[MN((-13.6/n).toFixed(2))+' eV',MN((-13.6/((n+1)*(n+1))).toFixed(2))+' eV',MN((-13.6*n*n).toFixed(1))+' eV',MN((-13.6/(l*l||4)).toFixed(2))+' eV'],3):UQAX(right,[(n*0.0529).toFixed(3)+' nm',((n+1)*(n+1)*0.0529).toFixed(3)+' nm',(2*n*n*0.0529).toFixed(3)+' nm',(0).toFixed(3)+' nm'],3); if(wrong.length<3) return null;
+    return {index:'q:38·chem.word['+n+';'+two+']', a3:['38·chem.word',DASH,DASH], story:'A hydrogen atom’s electron is in the '+name+' shape, p · e^(−r/'+n+'r₀) with p a still polynomial of degree '+l+'. Take r₀ = 0.0529 nm.', lines:[], ask:two?'What is its energy?':'At what distance from the nucleus is the chance per unit distance largest?', right, opts:shuffle([right,...wrong]), lead:'', why:two?'Times-a-fade technique: a = (ℓ + 1) r₀ and E = −13.6 eV/(ℓ + 1)² = −13.6/'+(n*n)+' = '+MN((-E).toFixed(2))+' eV.':'Thickest-distance technique: r = n² r₀ = '+(n*n)+' · 0.0529 = '+r.toFixed(3)+' nm, not 0, since the shell 4πr² is tiny near the centre.'}; }},
+  {id:'38·chem.line',step:'38·chem',mode:'proof',label:'what a cloud licenses',open:()=>measured('38·chem'),make(){
+    const n=2+rnd(4), l=rnd(n);
+    return line28('38·chem.line',[
+      ['o1',[['a shape of level '+n+' and type ℓ = '+l,'given'],['it has '+(n-l-1)+' still spheres and '+l+' still surfaces through the centre','the still-surface technique']],2,0,'n − ℓ − 1 spheres and ℓ surfaces through the centre, n − 1 in all.'],
+      ['o2',[['there are six terms of degree 2 in x, y, z','given'],['there are six d shapes','one shape for each term']],2,1,'x² + y² + z² is not still: Δ of it is 6. The still-count technique gives 2ℓ + 1 = 5.'],
+      ['o3',[['|φ|² is largest at the centre for 1s','given'],['the electron is most likely found at r = 0','the largest chance per point']],2,1,'Per unit distance the shell 4πr² counts: the thickest distance is r₀.'],
+      ['o4',[['p = xy has every term of degree 2 and Δp = 0','given'],['xy · e^(−r/3r₀) is a shape of hydrogen with E = −1.51 eV','the times-a-fade technique']],2,0,'a = (ℓ + 1) r₀ = 3r₀, and −13.6/9 = −1.51 eV.'],
+      ['o5',[['chromium has 24 electrons','given'],['chromium is [Ar] 3d⁴ 4s², as measured','the n-plus-ℓ technique']],2,1,'The rule gives 3d⁴ 4s², but measured chromium is 3d⁵ 4s¹: the rule is a summary, and here it misses.'],
+      ['o6',[['h_u = ½(s + √3 p_u) and h_v = ½(s + √3 p_v), each of size 1','given'],['h_u and h_v are at right angles exactly when u · v = −1/3','the four-arm technique']],2,0,'⟨h_u, h_v⟩ = ¼(1 + 3 u · v).'],
+      ['o7',[['the 2p_z shape has two lobes, + above and − below','given'],['each lobe holds one of its two electrons','one electron to each lobe']],2,1,'The two lobes are one shape and one state, with opposite signs.']],[]); }});
+/* ----- annex 38·now Can a machine check a proof: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'38·now.work',step:'38·now',mode:'work',label:'what the core certifies',open:()=>measured('38·now'),make(){
+    const F=rnd(3), Q=[['a helper with a bug hands the core a false line','the core rejects it: it checks every line the helper gives'],['a helper with a bug finds no proof of a true statement','nothing is certified: a helper’s mistake can only fail to find a proof'],['the core accepts a proof of a mistyped statement','the mistyped statement is proved, not the one meant'],['the core accepts a proof','the formal statement follows in the calculus, given the core and the machine are sound']];
+    const all=Q.slice(0,3).map(q=>q[1]).concat(['the statement meant is true beyond any doubt','the helper’s whole search must be read']), right=Q[F][1], wrong=all.filter(x=>x!==right).slice(0,3);
+    return {index:'q:38·now.work['+F+']', lines:[['\\text{a checker: a small core and many helpers}','small-kernel']], ask:'Suppose '+Q[F][0]+'. What follows?', right, opts:shuffle([right,...wrong]), lead:'', why:['Small-kernel: the core applies the moves and nothing else; a false line does not pass.','Small-kernel: a mistake outside the core can fail to find a proof and cannot make a false one pass.','Statement-read: a checked proof certifies the formal statement and nothing else; read the statement.','What is left to trust is the core, the statement as written, and a calculus that cannot certify itself.'][F]}; }},
+  {id:'38·now.word',step:'38·now',mode:'word',label:'the grocer’s stack',open:()=>measured('38·now'),make(){
+    const F=rnd(2);
+    const right=F?'the statement and every definition it uses, matched with what was meant':'no: it rests on the core, the machine and a calculus that cannot certify itself', wrong=F?['every line of the proof','the helpers’ code','nothing: the checker read it']:['yes: a machine cannot err','yes, once two checkers agree','no: the proof must be read line by line'];
+    return {index:'q:38·now.word['+F+']', a3:['38·now.word',DASH,DASH], story:'A team proves that no packing of equal balls beats the greengrocer’s pyramid, and a checker accepts the formal proof.', lines:[], ask:F?'What must a person still read?':'Is the result now certain beyond any doubt?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Statement-read: the proof itself need not be read; the statement must.':'A checked proof is as sure as the core, the machine and the calculus (38j).'}; }},
+  {id:'38·now.line',step:'38·now',mode:'proof',label:'what the checker licenses',open:()=>measured('38·now'),make(){
+    return line28('38·now.line',[
+      ['k1',[['\\text{the checker accepted it}','checked'],['\\text{the technique I meant is true}','meant']],2,1,'It certifies the formal statement; read the statement.'],
+      ['k2',[['\\text{the helper is buggy}','given'],['\\text{its proofs are suspect}','helper']],2,1,'The core checks every line the helper gives.'],
+      ['k3',[['\\text{a checked proof}','given'],['\\text{certain beyond any doubt}','certain']],2,1,'It rests on the core, the machine, and a calculus that cannot certify itself.'],
+      ['k4',[['\\text{the grocer’s stack has density } \\pi/\\sqrt{18}','computed'],['\\text{it is the best packing}','pattern']],2,1,'The claim is about all packings; one density proves nothing about the others.'],
+      ['k5',[['\\text{a finite list of lines}','given'],['\\text{whether it is a proof is settled by a recipe}','proof-check']],2,0,'Look at each line, and see it is in G or follows by a move.'],
+      ['k6',[['\\text{every helper hands the core lines}','small-kernel'],['\\text{a helper’s bug cannot pass a false proof}','the core']],2,0,'Only the core decides what passes.']],[]); }});
+/* ----- annex 38·now2 What if a machine writes the proof: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'38·now2.work',step:'38·now2',mode:'work',label:'how long the list is',open:()=>measured('38·now2'),make(){
+    const s=[10,16][rnd(2)], n=[15,20,25][rnd(3)], r=[1e6,1e9][rnd(2)], N=Math.pow(s,n), sec=N/r, y=sec/3.16e7, right=SCAX(y,2)+' years', wrong=UQAX(right,[SCAX(sec,2)+' years',SCAX(y*r,2)+' years',SCAX(s*n/r/3.16e7,2)+' years',SCAX(Math.pow(n,s)/r/3.16e7,2)+' years'],3); if(wrong.length<3||y<1) return null;
+    return {index:'q:38·now2.work['+s+';'+n+';'+r+']', lines:[['\\text{strings of } '+n+' \\text{ marks from } '+s,'every one a candidate proof'],[SCAX(r,0).replace('1 × ','')+' \\text{ checks a second}','3.16 × 10⁷ seconds a year']], ask:'How long does a machine take to check them all?', right, opts:shuffle([right,...wrong]), lead:'', why:'Search-finds: '+s+'^'+n+' ≈ '+SCAX(N,2)+' strings, ÷ '+SCAX(r,0)+' a second ≈ '+SCAX(sec,2)+' s, ÷ 3.16 × 10⁷ ≈ '+right+'.'}; }},
+  {id:'38·now2.word',step:'38·now2',mode:'word',label:'the contest proofs',open:()=>measured('38·now2'),make(){
+    const F=rnd(3), Q=[['A search for a proof of φ has run for a year and found none.','Is φ unreached?','not known: the proof may be at the next place on the list'],['A guide trained on many proofs orders a search, and is wrong most of the time.','Can it make the core accept a wrong proof?','no: it changes only how soon a proof is found, and costs only time'],['In 2025 programs wrote contest proofs in words and scored gold.','Are those proofs certified by a core?','no: they were marked by graders, as a pupil’s are']];
+    const wrong=[['yes: a year is long enough','yes: the search would have found it','no: φ is false'],['yes: a wrong guide passes wrong proofs','yes, if it is trained badly','no: a guide cannot order a search'],['yes: gold means certified','yes: the programs checked themselves','no: they were never marked']][F];
+    return {index:'q:38·now2.word['+F+']', a3:['38·now2.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Search-finds: if G reaches φ the run stops after finitely many steps; if not, it never stops, and no time tells the two apart.','Guided-search: every proof it finds is certified by the core.','Two-checks: a proof in words needs the same trust as any person’s proof.'][F]}; }},
+  {id:'38·now2.line',step:'38·now2',mode:'proof',label:'what the search licenses',open:()=>measured('38·now2'),make(){
+    return line28('38·now2.line',[
+      ['g1',[['\\text{a year with no proof}','search'],['\\varphi \\text{ is unreached}','search']],2,1,'The proof may be at the next place.'],
+      ['g2',[['\\text{a guide trained on proofs}','given'],['\\text{the core might accept a wrong one}','guide']],2,1,'The core checks every line; the guide only orders the search.'],
+      ['g3',[['\\text{the 2025 programs scored gold}','given'],['\\text{their proofs are certified}','gold']],2,1,'They were marked by graders, as a pupil’s are.'],
+      ['g4',[['\\text{a machine search}','given'],['\\text{it reaches every true statement of arithmetic}','search']],2,1,'It reaches only what PA reaches; U is true and unreached.'],
+      ['g5',[['G \\text{ listed},\\ G \\text{ reaches } \\varphi','given'],['\\text{the search finds a proof in finitely many steps}','search-finds']],2,0,'The proof is at some place on the list.'],
+      ['g6',[['\\text{a proof in a calculus}','given'],['\\text{only its statement needs reading}','two-checks']],2,0,'The core certifies the rest.']],[]); }});
+/* ----- annex 39·bio Is a neuron a gate: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'39·bio.work',step:'39·bio',mode:'work',label:'thresholds and windows',open:()=>measured('39·bio'),make(){
+    const ask=rnd(2);
+    if(ask){ const tau=[10,20][rnd(2)], k=[6,8,10][rnd(3)], d=k+1+rnd(k-1), v=tau*Math.log(k/(d-k)), right=DECAX(v,2)+' ms', wrong=UQAX(right,[DECAX(tau*Math.log(d/k),2)+' ms',DECAX(tau*k/(d-k),2)+' ms',tau+' ms',DECAX(tau*Math.log((d-k)/k),2).replace('-','−')+' ms'],3); if(wrong.length<3) return null;
+      return {index:'q:39·bio.work[w;'+tau+';'+k+';'+d+']', lines:[['\\tau = '+tau+' \\text{ ms},\\ \\ d = '+d,'a leaking cell and its threshold'],['\\text{two kicks of } '+k,'at 0 and at Δ']], ask:'Within what Δ do the two kicks fire it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Coincidence-window: Δ ≤ τ ln(k ÷ (d − k)) = '+tau+' ln('+k+' ÷ '+(d-k)+') ≈ '+right+'.'}; }
+    const G=[['both',[1,1],2],['either',[1,1],1],['not-and',[-1,-1],-1]][rnd(3)], x=[rnd(2),rnd(2)], s=G[1][0]*x[0]+G[1][1]*x[1], out=s>=G[2]?1:0, f=n=>String(n).replace('-','−');
+    const right=out?'it fires: the sum '+f(s)+' reaches '+f(G[2]):'it stays quiet: the sum '+f(s)+' is below '+f(G[2]), wrong=[out?'it stays quiet: the sum '+f(s)+' is below '+f(G[2]):'it fires: the sum '+f(s)+' reaches '+f(G[2]),'it fires whenever any input is 1','it never fires'];
+    return {index:'q:39·bio.work[g;'+G[0]+';'+x.join('')+']', lines:[['\\text{weights } '+f(G[1][0])+', '+f(G[1][1])+',\\ \\text{threshold } '+f(G[2]),'a unit'],['\\text{inputs } '+x[0]+', '+x[1],'']], ask:'What does the unit do?', right, opts:shuffle([right,...wrong]), lead:'', why:'Weighted-threshold: ('+f(G[1][0])+') · '+x[0]+' + ('+f(G[1][1])+') · '+x[1]+' = '+f(s)+', against the threshold '+f(G[2])+'; this unit is '+G[0]+'.'}; }},
+  {id:'39·bio.word',step:'39·bio',mode:'word',label:'rings and rates',open:()=>measured('39·bio'),make(){
+    const F=rnd(2);
+    if(F){ const n=[3,4,5,6,7][rnd(5)], odd=n%2, right=odd?'it runs as a clock':'it holds a state and does not run', wrong=[odd?'it holds a state and does not run':'it runs as a clock','it falls silent for good','every cell fires at once'];
+      return {index:'q:39·bio.word[r;'+n+']', a3:['39·bio.word',DASH,DASH], story:'A ring of '+n+' steadily driven cells, each silenced by the one before.', lines:[], ask:'What does the ring do?', right, opts:shuffle([right,...wrong]), lead:'', why:'Inhibitory-ring: an odd ring cannot settle, so it runs, with period n(δ + τ ln(RI/(RI − d))); an even ring holds a state.'}; }
+    const t=[1,2,4,5][rnd(4)], right='below '+DECAX(1000/t,0)+' a second', wrong=['as fast as the drive asks','exactly '+DECAX(1000/t,0)+' a second','below '+DECAX(500/t,0)+' a second'];
+    return {index:'q:39·bio.word[c;'+t+']', a3:['39·bio.word',DASH,DASH], story:'A leaking cell rests '+t+' ms after each spike. A lab turns its drive up and up.', lines:[], ask:'How fast can it fire?', right, opts:shuffle([right,...wrong]), lead:'', why:'Rate-ceiling: the rate is 1/(t_r + τ ln(RI/(RI − d))), which rises with the drive and never reaches 1/t_r = '+DECAX(1000/t,0)+' a second.'}; }},
+  {id:'39·bio.line',step:'39·bio',mode:'proof',label:'what the cell licenses',open:()=>measured('39·bio'),make(){
+    return line28('39·bio.line',[
+      ['n1',[['\\text{one threshold unit}','given'],['\\text{it gives either-but-not-both}','one unit']],2,1,'One straight cut; it needs two layers.'],
+      ['n2',[['\\text{a stronger drive}','given'],['\\text{the cell fires as fast as we like}','drive']],2,1,'The rest t_r caps the rate below 1/t_r.'],
+      ['n3',[['\\text{two kicks}','given'],['\\text{they always add to fire the cell}','kicks']],2,1,'Only within the window τ ln(k/(d − k)).'],
+      ['n4',[['\\text{a ring of cells that silence each other}','given'],['\\text{always a clock}','ring']],2,1,'An even ring holds a state; only an odd ring runs.'],
+      ['n5',[['\\text{weights } 1, 1,\\ \\text{threshold } 2','a unit'],['\\text{it is both}','weighted-threshold']],2,0,'It fires only when both inputs are 1.'],
+      ['n6',[['\\text{weight } -1,\\ \\text{threshold } 0','a unit'],['\\text{it is not}','weighted-threshold']],2,0,'Input 0 gives 0, which reaches 0; input 1 gives −1, which does not.']],[]); }});
+/* ----- annex 39·chem Why Is a Chip Made of Sand?: Work, Word Problems, Check Proofs ----- */
+const SUPAX=k=>String(k).split('').map(c=>c==='-'?'⁻':'⁰¹²³⁴⁵⁶⁷⁸⁹'[+c]).join('');
+QP.push({id:'39·chem.work',step:'39·chem',mode:'work',label:'electrons and holes in balance',open:()=>measured('39·chem'),make(){
+    const k=13+rnd(6), don=rnd(2), two=rnd(2), mu=(0.0259*Math.log(10)*(k-10));
+    const right=two?mu.toFixed(3)+' eV':'10'+SUPAX(20-k), wrong=two?UQAX(right,[(0.0259*(k-10)).toFixed(3)+' eV',(2*mu).toFixed(3)+' eV',(0.0259*Math.log(10)*k).toFixed(3)+' eV',(mu/2).toFixed(3)+' eV'],3):UQAX(right,['10'+SUPAX(10),'10'+SUPAX(k),'10'+SUPAX(k-10),'10'+SUPAX(20+k)],3); if(wrong.length<3) return null;
+    const kind=don?'phosphorus (donor)':'boron (acceptor)', maj=don?'n':'p', mino=don?'p':'n';
+    return {index:'q:39·chem.work['+[k,don,two].join(';')+']', lines:[['silicon at 300 K, nᵢ = 10¹⁰ per cm³','given'],['10'+SUPAX(k)+' atoms of '+kind+' per cm³, every one freed','so '+maj+' = 10'+SUPAX(k)]], ask:two?'How far is μ from μᵢ?':'What is '+mino+'?', right, opts:shuffle([right,...wrong]), lead:'', why:two?'One-level technique: kT ln('+maj+'/nᵢ) = 0.0259 · ln 10'+SUPAX(k-10)+' = '+mu.toFixed(3)+' eV, '+(don?'above':'below')+' the middle.':'Fixed-product technique: '+mino+' = nᵢ²/'+maj+' = 10²⁰/10'+SUPAX(k)+' = 10'+SUPAX(20-k)+'.'}; }},
+  {id:'39·chem.word',step:'39·chem',mode:'word',label:'freezing out the dirt',open:()=>measured('39·chem'),make(){
+    const [nm,kk]=pick([['boron',0.8],['phosphorus',0.35],['aluminium',0.002]]), f=pick([0.25,0.5,0.75,0.9]), C0=pick([10,20,50,100]), cs=kk*C0*Math.pow(1-f,kk-1);
+    const fmt=x=>x>=10?x.toFixed(1):x>=1?x.toFixed(2):x.toPrecision(2), right=fmt(cs)+' parts per million', wrong=UQAX(right,[fmt(kk*C0)+' parts per million',fmt(C0)+' parts per million',fmt(kk*C0*Math.pow(1-f,kk))+' parts per million',fmt(C0*Math.pow(1-f,kk-1))+' parts per million'],3); if(wrong.length<3) return null;
+    return {index:'q:39·chem.word['+[nm,f,C0].join(';')+']', a3:['39·chem.word',DASH,DASH], story:'Molten silicon holds '+C0+' parts per million of '+nm+', whose keep-share is '+kk+'. It freezes slowly from one end, staying mixed.', lines:[], ask:'What share of '+nm+' does the solid hold at the point where '+Math.round(f*100)+'% has frozen?', right, opts:shuffle([right,...wrong]), lead:'', why:'Freeze-out technique: C_S = k C₀ (1 − f)^(k − 1) = '+kk+' · '+C0+' · '+(Math.round((1-f)*100)/100)+'^('+String(Math.round((kk-1)*1000)/1000).replace('-','−')+') = '+fmt(cs)+'.'}; }},
+  {id:'39·chem.line',step:'39·chem',mode:'proof',label:'what the crystal licenses',open:()=>measured('39·chem'),make(){
+    const k=14+rnd(4);
+    return line28('39·chem.line',[
+      ['s1',[['silicon with n = 10'+SUPAX(k)+' per cm³ at 300 K','given'],['p = 10'+SUPAX(20-k),'the fixed-product technique']],2,0,'n p = nᵢ² = 10²⁰.'],
+      ['s2',[['donors are added to silicon','given'],['the holes stay at 10¹⁰','donors add electrons only']],2,1,'n p = nᵢ²: as n rises the holes fall.'],
+      ['s3',[['each freed electron leaves its donor charged +','given'],['doped silicon has a net charge','the electrons are extra']],2,1,'Every free electron is matched by its charged donor: the crystal stays neutral.'],
+      ['s4',[['indium is in column 13, like boron','given'],['indium makes p-type silicon as well as boron does','the one-column-over technique']],2,1,'The column gives the sign. Indium binds its hole at 0.16 eV and frees few.'],
+      ['s5',[['gallium is in column 13 and arsenic in column 15','given'],['GaAs can build silicon’s crystal','the eight-a-pair technique']],2,0,'3 + 5 = 8 outer electrons between the pair.'],
+      ['s6',[['boron’s keep-share is 0.8','given'],['one more freeze cleans the boron out','the freeze-out technique']],2,1,'Each pass keeps 0.8 of its share: boron has to come out by chemistry.'],
+      ['s7',[['n-type and p-type silicon are joined, each doped 10¹⁶','given'],['the bands bend by 0.716 V and μ is one level throughout','the one-level technique']],2,0,'0.358 + 0.358 = 0.716 V; joined materials in balance have one μ.']],[]); }});
+/* ----- annex 39·now How little energy can a switch spend: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'39·now.work',step:'39·now',mode:'work',label:'ramps and barriers',open:()=>measured('39·now'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const f0=[1e9,1e12][rnd(2)], t=[3.15e7,3.15e8][rnd(2)], e=[1e-3,1e-6,1e-9][rnd(3)], v=Math.log(f0*t/e), right=DECAX(v,1)+' kT', wrong=UQAX(right,[DECAX(Math.log10(f0*t/e),1)+' kT',DECAX(Math.log(f0*t),1)+' kT',DECAX(v/2,1)+' kT',DECAX(2*v,1)+' kT'],3); if(wrong.length<3) return null;
+      return {index:'q:39·now.work[b;'+f0+';'+t+';'+e+']', lines:[['f_0 = '+SCAX(f0,0).replace('1 × ','')+' \\text{ tries a second}','against the barrier'],['t = '+SCAX(t,3)+' \\text{ s},\\ \\ \\varepsilon = '+SCAX(e,0).replace('1 × ',''),'']], ask:'How high must the barrier be?', right, opts:shuffle([right,...wrong]), lead:'', why:'Holding-barrier: E ≥ kT ln(f₀t ÷ ε) = kT ln '+SCAX(f0*t/e,2)+' ≈ '+right+'.'}; }
+    if(ask===1){ const x=[2,5,10,50,100][rnd(5)], right=DECAX(2/x,3), wrong=UQAX(right,[DECAX(1/x,3),DECAX(1/(2*x),3),DECAX(x/2,2),DECAX(1-1/x,3)],3); if(wrong.length<3) return null;
+      return {index:'q:39·now.work[r;'+x+']', lines:[['T = '+x+'\\,RC','the length of the ramp'],['\\text{a step loses } \\tfrac12 CV^2','']], ask:'What share of the step’s heat does the ramp lose?', right, opts:shuffle([right,...wrong]), lead:'', why:'Slow-ramp: (RC/T) C V² ÷ ½CV² = 2RC/T = 2 ÷ '+x+' = '+right+'.'}; }
+    const RC=[1,2,5][rnd(3)], E=[1,4,9][rnd(3)], P=[0.01,0.04,0.25][rnd(3)], T=Math.sqrt(RC*E/P), right=DECAX(T,2), wrong=UQAX(right,[DECAX(RC*E/P,2),DECAX(Math.sqrt(RC*P/E),3),DECAX(2*Math.sqrt(RC*E*P),3),DECAX(Math.sqrt(E/P),2)],3); if(wrong.length<3) return null;
+    return {index:'q:39·now.work[t;'+RC+';'+E+';'+P+']', lines:[['RC = '+RC+',\\ \\ CV^2 = '+E,'the store'],['P_\\ell = '+P,'the leak']], ask:'What ramp length T* spends the least energy?', right, opts:shuffle([right,...wrong]), lead:'', why:'Best-ramp: T* = √(RC · CV² ÷ P_ℓ) = √('+RC+' · '+E+' ÷ '+P+') ≈ '+right+'.'}; }},
+  {id:'39·now.word',step:'39·now',mode:'word',label:'the frugal circuit',open:()=>measured('39·now'),make(){
+    const F=rnd(3), Q=[['A designer swaps in a smaller resistance to cut the heat of switching a store with a sudden step.','Does it?','no: a step loses ½CV² whatever R; only the time of a ramp cuts it'],['A circuit ramps its charge back to the supply, but its gates have already forgotten their inputs.','Can it get the charge back?','no: only while each gate’s inputs are still held'],['An engineer slows the ramps further and further to save energy.','Does it always save more?','no: leak grows with the wait; past T* the energy rises']];
+    const wrong=[['yes: less resistance, less heat','yes, by the ratio of resistances','no: it doubles the heat'],['yes: a slow ramp gives back any charge','yes, if it is slow enough','no: charge can never go back'],['yes: the slower, the better','yes, until it stops','no: slower always costs more']][F];
+    return {index:'q:39·now.word['+F+']', a3:['39·now.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Slow-ramp: the heat falls as (RC/T) C V², which needs T long against RC.','Undo-gate: the gate must forget nothing until its output has been given back.','Best-ramp: ramp heat plus leak P_ℓT is least at T*.'][F]}; }},
+  {id:'39·now.line',step:'39·now',mode:'proof',label:'what the ramp licenses',open:()=>measured('39·now'),make(){
+    return line28('39·now.line',[
+      ['e1',[['\\text{a smaller resistance}','given'],['\\text{less heat from a step}','resistance']],2,1,'A step loses ½CV² whatever R.'],
+      ['e2',[['\\text{a slow ramp}','given'],['\\text{it gives back the charge of any gate}','ramp']],2,1,'Only while its inputs are still held.'],
+      ['e3',[['\\text{a slower ramp}','given'],['\\text{always better}','slower']],2,1,'Leak grows with the wait; past T* the energy rises.'],
+      ['e4',[['\\text{a held bit}','given'],['\\text{it spends its barrier energy}','barrier']],2,1,'It sits behind it for nothing.'],
+      ['e5',[['T \\gg RC','a ramp'],['\\text{heat} \\approx (RC/T)\\,CV^2','slow-ramp']],2,0,'It heads to 0 as T grows.'],
+      ['e6',[['\\text{ramp heat plus leak}','given'],['\\text{least at } T^* = \\sqrt{RC \\cdot CV^2/P_\\ell}','best-ramp']],2,0,'Where the two parts are equal.']],[]); }});
+/* ----- annex 39·phys Why does silicon have a gap: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'39·phys.work',step:'39·phys',mode:'work',label:'bands, gap and donors',open:()=>measured('39·phys'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const M=[[0.26,11.7],[0.2,11.7],[0.067,12.9]][rnd(3)], v=13.6*M[0]/(M[1]*M[1]), right=DECAX(1000*v,1)+' meV', wrong=UQAX(right,[DECAX(1000*13.6*M[0]/M[1],0)+' meV',DECAX(1000*13.6/(M[1]*M[1]),1)+' meV',DECAX(1000*13.6*M[0]*M[0]/M[1],0)+' meV',DECAX(13.6*1000,0)+' meV'],3); if(wrong.length<3) return null;
+      return {index:'q:39·phys.work[d;'+M[0]+';'+M[1]+']', lines:[['m^* = '+M[0]+',\\ \\ \\varepsilon = '+M[1],'a material'],['\\text{one extra electron on a donor}','']], ask:'How tightly is it held?', right, opts:shuffle([right,...wrong]), lead:'', why:'Donor: 13.6 eV × m* ÷ ε² = 13.6 × '+M[0]+' ÷ '+DECAX(M[1]*M[1],2)+' ≈ '+right+'; warmth, kT ≈ 26 meV, frees it at once.'}; }
+    if(ask===1){ const a=[0.66,1.12,1.42][rnd(3)], b=[0.66,1.12,1.42,3.4].filter(x=>x>a)[0], kT=0.0259, v=Math.exp((b-a)/(2*kT)), right=SCAX(v,2)+' times', wrong=UQAX(right,[SCAX(Math.exp((b-a)/kT),2)+' times',SCAX(b/a,2)+' times',SCAX(Math.exp((b-a)/(4*kT)),2)+' times',SCAX(Math.exp(b/(2*kT)),2)+' times'],3); if(wrong.length<3) return null;
+      return {index:'q:39·phys.work[g;'+a+';'+b+']', lines:[['E_g = '+a+' \\text{ eV and } '+b+' \\text{ eV}','two gaps'],['kT = 0.0259 \\text{ eV}','room warmth']], ask:'How many times as many carriers does the smaller gap have?', right, opts:shuffle([right,...wrong]), lead:'', why:'Gap-crossing: e^(−E_g/2kT), so the ratio is e^('+DECAX(b-a,2)+' ÷ 0.0518) ≈ '+right+'.'}; }
+    const t=[0.5,1,2,3][rnd(4)], N=[2,3,4,10][rnd(4)], w=4*t*Math.cos(Math.PI/(N+1)), right=DECAX(w,3)+' eV', wrong=UQAX(right,[DECAX(4*t,3)+' eV',DECAX(2*t,3)+' eV',DECAX(N*t,3)+' eV',DECAX(2*t*Math.cos(Math.PI/(N+1)),3)+' eV'],3); if(wrong.length<3) return null;
+    return {index:'q:39·phys.work[b;'+t+';'+N+']', lines:[['N = '+N+' \\text{ atoms in a row}','one level each'],['t = '+t+' \\text{ eV}','the leak to a neighbour']], ask:'How wide is the band, lowest level to highest?', right, opts:shuffle([right,...wrong]), lead:'', why:'Level-spread: E₀ − 2t cos(kπ/(N + 1)); from k = 1 to k = N the width is 4t cos(π/'+(N+1)+') ≈ '+right+', just under 4t.'}; }},
+  {id:'39·phys.word',step:'39·phys',mode:'word',label:'the diode on the bench',open:()=>measured('39·phys'),make(){
+    const F=rnd(2);
+    if(F){ const dv=[0.06,0.12,0.18][rnd(3)], v=Math.exp(dv/0.0259), right='about '+DECAX(v,1)+' times', wrong=UQAX(right,['about '+DECAX(1+dv,2)+' times','about '+DECAX(Math.exp(dv/0.0518),1)+' times','about '+DECAX(dv/0.0259,2)+' times'],3); if(wrong.length<3) return null;
+      return {index:'q:39·phys.word[v;'+dv+']', a3:['39·phys.word',DASH,DASH], story:'A student pushes a silicon diode forward and raises the push by '+dv+' V, at room warmth, Vₜ = 0.0259 V.', lines:[], ask:'How much does the current grow?', right, opts:shuffle([right,...wrong]), lead:'', why:'Junction-voltage: the current over the barrier grows as e^(V/Vₜ): e^('+dv+' ÷ 0.0259) ≈ '+DECAX(v,1)+'.'}; }
+    const right='its lower band is exactly full, so a push can move no electron', wrong=['it has no outer electrons','its electrons are bound to the nuclei for good','it has no bands'];
+    return {index:'q:39·phys.word[f]', a3:['39·phys.word',DASH,DASH], story:'A child asks why pure, cold silicon barely conducts, when every atom has four outer electrons.', lines:[], ask:'Why?', right, opts:shuffle([right,...wrong]), lead:'', why:'Full-band: a band whose every level is filled carries no current, and silicon’s gap of 1.12 eV separates full from empty.'}; }},
+  {id:'39·phys.line',step:'39·phys',mode:'proof',label:'what the bands license',open:()=>measured('39·phys'),make(){
+    return line28('39·phys.line',[
+      ['i1',[['\\text{silicon barely conducts}','seen'],['\\text{it has no free electrons}','electrons']],2,1,'It has four outer electrons an atom; its band is full, so a push moves none.'],
+      ['i2',[['N \\text{ atoms}','given'],['\\text{a band is one level}','band']],2,1,'N atoms give N levels, packed into a band of width under 4t.'],
+      ['i3',[['\\text{doping}','given'],['\\text{it adds a band}','doping']],2,1,'It adds levels just inside the gap, freed by warmth.'],
+      ['i4',[['V_{bi}','the junction'],['\\text{it drives a current through a wire}','barrier']],2,1,'Joining the ends sets up equal and opposite steps at the contacts.'],
+      ['i5',[['\\text{a larger gap}','given'],['\\text{exponentially fewer carriers}','gap-crossing']],2,0,'The share is about e^(−E_g/2kT).'],
+      ['i6',[['\\text{a band partly filled}','a metal'],['\\text{a push moves electrons}','full-band']],2,0,'They shift into the empty levels just above.']],[]); }});
+/* ----- annex 40·eng How do you know the compiler is right: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'40·eng.work',step:'40·eng',mode:'work',label:'a second opinion',open:()=>measured('40·eng'),make(){
+    const a=1+rnd(9), b=1+rnd(9), same=rnd(2), A=a*b+a, B=same?A:A+1+rnd(3);
+    const right=same?'neither is shown right: agreement only fails to find a fault':'at least one compiler is wrong, but not which', wrong=same?['both are right','the newer is right','at least one compiler is wrong']:['the newer compiler is wrong','both are right','neither is shown right: agreement only fails to find a fault'];
+    return {index:'q:40·eng.work['+a+';'+b+';'+same+']', lines:[['\\text{one program, two compilers}','x = '+a+',\\ y = '+b],['\\text{runs end with } '+A+' \\text{ and } '+B,'from the same start']], ask:'What follows?', right, opts:shuffle([right,...wrong]), lead:'', why:'Second-opinion: '+(same?'agreement proves neither right.':'a disagreement proves a fault, in one of them at least, and does not say which.')}; }},
+  {id:'40·eng.word',step:'40·eng',mode:'word',label:'a thousand tests',open:()=>measured('40·eng'),make(){
+    const n=[100,1000,10000][rnd(3)], right='no: tests try rows, and there are endlessly many', wrong=['yes: '+n.toLocaleString('en').replace(/,/g,' ')+' tests is enough','yes, if they all agree','no: tests cannot pass'];
+    return {index:'q:40·eng.word['+n+']', a3:['40·eng.word',DASH,DASH], story:'A team compiles a program two ways and runs '+n.toLocaleString('en').replace(/,/g,' ')+' tests; every run agrees.', lines:[], ask:'Is the compiler now shown right?', right, opts:shuffle([right,...wrong]), lead:'', why:'Second-opinion: if they agree, neither is shown right; '+n.toLocaleString('en').replace(/,/g,' ')+' rows of endlessly many leave the rest untried.'}; }},
+  {id:'40·eng.line',step:'40·eng',mode:'proof',label:'what the runs license',open:()=>measured('40·eng'),make(){
+    return line28('40·eng.line',[
+      ['c1',[['\\text{a thousand tests passed}','tests'],['\\text{the compiler is right}','tested']],2,1,'Tests try rows; there are endlessly many.'],
+      ['c2',[['\\text{the two compilers disagree}','runs'],['\\text{the newer is wrong}','newer']],2,1,'A disagreement shows one is wrong, not which.'],
+      ['c3',[['\\text{the two compilers disagree}','runs'],['\\text{at least one breaks the demand}','second-opinion']],2,0,'From the same start, the same program must end in the same state.'],
+      ['c4',[['\\text{the two compilers agree}','runs'],['\\text{both are right}','agree']],2,1,'Agreement only fails to find a fault.']],[]); }});
+/* ----- annex 41·comp Must computing cost energy: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'41·comp.work',step:'41·comp',mode:'work',label:'the price of wiping',open:()=>measured('41·comp'),make(){
+    const ask=rnd(2);
+    if(ask){ const N=[1e9,8e9,1e12][rnd(3)], v=N*1.380649e-23*300*Math.LN2, right=SCAX(v,2)+' J', wrong=UQAX(right,[SCAX(v/Math.LN2,2)+' J',SCAX(1.380649e-23*300*Math.LN2,2)+' J',SCAX(v*1.7e4,2)+' J',SCAX(N*1.380649e-23*Math.LN2,2)+' J'],3); if(wrong.length<3) return null;
+      return {index:'q:41·comp.work[n;'+N+']', lines:[[SCAX(N,0).replace('1 × ','')+' \\text{ bits wiped}','at 300 K'],['kT\\ln 2 \\approx 2.87 \\times 10^{-21} \\text{ J a bit}','the floor']], ask:'What is the least heat the wiping must pay?', right, opts:shuffle([right,...wrong]), lead:'', why:'Wiping pays at least kT ln 2 a bit: '+SCAX(N,0)+' × 2.87 × 10⁻²¹ ≈ '+right+'. Copying onto clean cells would cost nothing.'}; }
+    const T=[3,77,300,373][rnd(4)], v=1.380649e-23*T*Math.LN2, right=SCAX(v,2)+' J', wrong=UQAX(right,[SCAX(1.380649e-23*T,2)+' J',SCAX(1.380649e-23*T*2,2)+' J',SCAX(v*1000,2)+' J',SCAX(1.380649e-23*Math.LN2/T,2)+' J'],3); if(wrong.length<3) return null;
+    return {index:'q:41·comp.work[t;'+T+']', lines:[['T = '+T+' \\text{ K}','the surroundings'],['k = 1.381 \\times 10^{-23} \\text{ J/K}','']], ask:'What is the least heat to wipe one bit?', right, opts:shuffle([right,...wrong]), lead:'', why:'The floor is kT ln 2 = 1.381 × 10⁻²³ × '+T+' × 0.693 ≈ '+right+'.'}; }},
+  {id:'41·comp.word',step:'41·comp',mode:'word',label:'the small being',open:()=>measured('41·comp'),make(){
+    const F=rnd(3), Q=[['A small being looks at which side a molecule is on, copying the answer onto a clean notebook bit.','Does the look cost kT ln 2?','no: copying onto a clean cell forgets nothing; wiping the notebook later pays'],['The small being looks, pushes and wipes, cycle after cycle.','Does it gain work, against the second law?','no: it gains at most kT ln 2 and pays at least kT ln 2 each cycle'],['A chip designer blames the heat of her chips on the floor of kT ln 2 a bit.','Is that right?','no: today’s switches spend about seventeen thousand times the floor']];
+    const wrong=[['yes: every measurement costs kT ln 2','yes, at room warmth','no: looking costs more than wiping'],['yes: it breaks the law','yes, if it is quick','no: it loses work each look'],['yes: the floor sets the heat','yes, at 300 K','no: chips spend less than the floor']][F];
+    return {index:'q:41·comp.word['+F+']', a3:['41·comp.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Free-copy: a gate that forgets nothing can copy onto a cell known to hold 0.','Being’s-books: the second law is saved by wiping.','4.9 × 10⁻¹⁷ J a switching against 2.87 × 10⁻²¹ J is about 1.7 × 10⁴.'][F]}; }},
+  {id:'41·comp.line',step:'41·comp',mode:'proof',label:'what the floor licenses',open:()=>measured('41·comp'),make(){
+    return line28('41·comp.line',[
+      ['w1',[['\\text{measuring a bit}','given'],['\\text{it costs } kT\\ln 2','look']],2,1,'Copying onto a clean cell forgets nothing; wiping the notebook pays.'],
+      ['w2',[['\\text{the small being}','given'],['\\text{it breaks the second law}','being']],2,1,'It gains kT ln 2 and pays it back when it wipes.'],
+      ['w3',[['\\text{a computer that forgets nothing}','given'],['\\text{no heat at all}','reversible']],2,1,'It needs no heat for forgetting; running it still has losses.'],
+      ['w4',[['\\text{chips are hot}','seen'],['\\text{because of the floor}','floor']],2,1,'They run about seventeen thousand times above it.'],
+      ['w5',[['\\text{compute, copy the answer, uncompute}','plan'],['\\text{ends with } x, f(x) \\text{ and clean cells}','uncompute']],2,0,'In about twice the steps, forgetting nothing.'],
+      ['w6',[['\\text{wiping one bit at } T','given'],['\\text{heat at least } kT\\ln 2','the floor']],2,0,'Forgetting a bit pays kT ln 2.']],[]); }});
+/* ----- annex 41·now How long can a tiny machine run: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'41·now.work',step:'41·now',mode:'work',label:'the busy beaver',open:()=>measured('41·now'),make(){
+    const F=rnd(3), Q=[['a set of tape patterns holds the start, holds the next of each member, and holds no stop state','the machine never stops'],['a machine stops after exactly 47 176 870 steps, and every other five-state machine is shown to stop sooner or never','BB(5) = 47 176 870'],['a machine is claimed to compute f with f(n) ≥ BB(n) for every n','no such machine: it would decide stopping']];
+    const all=Q.map(q=>q[1]).concat(['BB(5) cannot be known','the machine stops at the next step']), right=Q[F][1], wrong=all.filter(x=>x!==right).slice(0,3);
+    return {index:'q:41·now.work['+F+']', lines:[['BB(n)','the longest run of a stopping machine with n states']], ask:'Suppose '+Q[F][0]+'. What follows?', right, opts:shuffle([right,...wrong]), lead:'', why:['Closed-patterns: the run never leaves the set, and the set holds no stop.','A stopper of that length, and every other machine caught, settles the value.','Beaver-outruns: run each machine f(n) steps; one that has not stopped never will.'][F]}; }},
+  {id:'41·now.word',step:'41·now',mode:'word',label:'volunteers and tables',open:()=>measured('41·now'),make(){
+    const F=rnd(3), Q=[['A reader says: no machine computes BB, so BB(5) can never be known.','Is that right?','no: each value is one number; it was settled by listing the tables and proving each non-stopper'],['A machine M_T searches the axioms T for a clash, and T cannot prove that M_T never stops.','Might M_T stop?','no: if T is free of clashes, M_T never stops; T just cannot prove it'],['Every start below 2.95 × 10²⁰ of a halving-and-tripling rule reaches 1.','Does every start?','not shown: a check of finitely many starts settles none beyond them']];
+    const wrong=[['yes: uncomputed means unknown','yes, until a faster machine','no: BB(5) is infinite'],['yes: unprovable means perhaps','yes, after BB(n) steps','no: it stops at once'],['yes: that many starts settle it','yes, by the closed-patterns technique','no: some start is known to fail']][F];
+    return {index:'q:41·now.word['+F+']', a3:['41·now.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Beaver-outruns says no machine computes every value; one value can still be found.','Axioms-outrun: M_T never stops, and T does not reach that.','A claim about every start needs an argument, not a run.'][F]}; }},
+  {id:'41·now.line',step:'41·now',mode:'proof',label:'what the runs license',open:()=>measured('41·now'),make(){
+    return line28('41·now.line',[
+      ['y1',[['BB \\text{ is not computed}','given'],['BB(5) \\text{ cannot be known}','computed']],2,1,'Each value is one number.'],
+      ['y2',[['T \\text{ cannot prove } M_T \\text{ never stops}','given'],['\\text{perhaps it stops}','unprovable']],2,1,'It never stops, if T is free of clashes.'],
+      ['y3',[['\\text{every start below } 2.95 \\times 10^{20} \\text{ reaches 1}','checked'],['\\text{every start does}','all']],2,1,'A check of finitely many starts settles none beyond them.'],
+      ['y4',[['\\text{a closed set of patterns with no stop state}','holds the start'],['\\text{the machine never stops}','closed-patterns']],2,0,'The run never leaves the set.'],
+      ['y5',[['\\text{a machine computes } f \\ge BB','claimed'],['\\text{it would decide stopping}','beaver-outruns']],2,0,'So no machine does.']],[]); }});
+/* ----- annex 41·now2 Is checking easier than finding: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'41·now2.work',step:'41·now2',mode:'work',label:'branching on clauses',open:()=>measured('41·now2'),make(){
+    const ask=rnd(2), n=[50,80,100,150][rnd(4)];
+    if(ask){ const v=Math.pow(2/1.84,n), right=SCAX(v,2)+' times', wrong=UQAX(right,[SCAX(Math.pow(2,n),2)+' times',SCAX(2/1.84,2)+' times',SCAX(Math.pow(1.84,n),2)+' times',SCAX(n*0.16,2)+' times'],3); if(wrong.length<3) return null;
+      return {index:'q:41·now2.work[r;'+n+']', lines:[['n = '+n+' \\text{ letters}','clauses of three'],['2^n \\text{ against } 1.84^n','every row, and branching']], ask:'How many times fewer steps does branching take?', right, opts:shuffle([right,...wrong]), lead:'', why:'(2 ÷ 1.84)^'+n+' ≈ '+right+': still a fixed power above one to the n.'}; }
+    const v=Math.pow(1.84,n)/1e9/3.16e7, right=SCAX(v,2)+' years', wrong=UQAX(right,[SCAX(Math.pow(1.84,n)/1e9,2)+' years',SCAX(Math.pow(2,n)/1e9/3.16e7,2)+' years',SCAX(1.84*n/1e9,2)+' years',SCAX(Math.pow(n,1.84)/1e9,2)+' years'],3); if(wrong.length<3) return null;
+    return {index:'q:41·now2.work[t;'+n+']', lines:[['n = '+n+' \\text{ letters}','clauses of three'],['10^9 \\text{ steps a second}','3.16 × 10⁷ s a year']], ask:'How long does clause branching take, at worst?', right, opts:shuffle([right,...wrong]), lead:'', why:'Clause-branch: 1.84^'+n+' ≈ '+SCAX(Math.pow(1.84,n),2)+' steps, ÷ 10⁹ ÷ 3.16 × 10⁷ ≈ '+right+'.'}; }},
+  {id:'41·now2.word',step:'41·now2',mode:'word',label:'finding and checking',open:()=>measured('41·now2'),make(){
+    const F=rnd(3), Q=[['Programs for satisfiability solve statements with millions of letters every day.','Does that show P equals NP?','no: they are fast on the statements met in practice, not shown fast on all'],['A student says P ≠ NP would mean no NP-complete statement can ever be solved.','Is that so?','no: it would mean no fast method works for every one'],['A student argues the more-time technique shows NP is bigger than P.','Does it?','no: free questions can tilt the diagonal either way']];
+    const wrong=[['yes: millions is enough','yes, for clauses of three','no: they solve none'],['yes: none could be solved','yes, above a million letters','no: P ≠ NP is proved false'],['yes: by the diagonal','yes, with more time','no: P is bigger than NP']][F];
+    return {index:'q:41·now2.word['+F+']', a3:['41·now2.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['One-test: P equals NP exactly when every satisfiable statement is decided fast.','Slow on the worst does not mean slow on each.','The diagonal cannot settle it, since free questions can tilt it either way.'][F]}; }},
+  {id:'41·now2.line',step:'41·now2',mode:'proof',label:'what the search licenses',open:()=>measured('41·now2'),make(){
+    return line28('41·now2.line',[
+      ['p1',[['\\text{programs solve millions of letters}','seen'],['\\text{P equals NP}','practice']],2,1,'Fast on those met in practice, not shown fast on all.'],
+      ['p2',[['P \\ne NP','given'],['\\text{no NP-complete statement is ever solved}','hard']],2,1,'No fast method works for every one; many are solved.'],
+      ['p3',[['\\text{the more-time technique}','given'],['\\text{NP is bigger than P}','diagonal']],2,1,'Free questions can tilt the diagonal either way.'],
+      ['p4',[['P = NP','given'],['\\text{every lock is picked tomorrow}','locks']],2,1,'Fast can still mean a large power; and no method is yet known.'],
+      ['p5',[['\\text{satisfiable statements are fast}','given'],['P = NP','one-test']],2,0,'Every NP question turns fast into one about satisfiability.'],
+      ['p6',[['n \\text{ letters, clauses of three}','given'],['\\text{decided in about } 1.84^n \\text{ steps}','clause-branch']],2,0,'Branch on a clause, three ways, each shrinking the statement.']],[]); }});
+/* ----- annex 41·now3 Can a computer tell if a knot is untied: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'41·now3.work',step:'41·now3',mode:'work',label:'colours and bounds',open:()=>measured('41·now3'),make(){
+    const ask=rnd(2);
+    if(ask){ const n=[3,4,6,10][rnd(4)], v=Math.pow(236*n,11), right=SCAX(v,2)+' moves', wrong=UQAX(right,[SCAX(236*Math.pow(n,11),2)+' moves',SCAX(Math.pow(236,11)*n,2)+' moves',SCAX(Math.pow(236*n,2),2)+' moves',SCAX(Math.pow(11,236*n)>1e300?1e300:Math.pow(n,236),2)+' moves'].filter(x=>!x.startsWith('Infinity')),3); if(wrong.length<3) return null;
+      return {index:'q:41·now3.work[b;'+n+']', lines:[['n = '+n+' \\text{ crossings}','a drawing of the ring'],['(236n)^{11}','the bound']], ask:'At most how many moves untie it, if it is untied?', right, opts:shuffle([right,...wrong]), lead:'', why:'Bounded-untying: (236 · '+n+')^11 = '+(236*n)+'^11 ≈ '+right+'. Large, but a bound: untied is decided, and in NP.'}; }
+    const K=[['the overhand knot',9,5,7],['the figure-eight knot',3,25,7],['the unknot',3,5,7]][rnd(3)], p=[3,5,7][rnd(3)], c=K[[3,5,7].indexOf(p)+1], knot=c!==p;
+    const right=knot?'knotted: c = '+c+', not '+p:'no verdict: c = '+p+', the same as the unknot', wrong=[knot?'no verdict: c = '+p+', the same as the unknot':'knotted: c = '+c+', not '+p,'untied: every colouring is alike','knotted: any colouring at all proves it'];
+    return {index:'q:41·now3.work[c;'+K[0]+';'+p+']', lines:[['c_'+p+' = '+c,'colourings of a drawing of '+K[0]+' with '+p+' colours']], ask:'What does it certify?', right, opts:shuffle([right,...wrong]), lead:'', why:'Many-colour: c_p is the same for every drawing, and p for the unknot; c_'+p+' = '+c+(knot?' differs, so it is knotted.':' gives no verdict either way.')}; }},
+  {id:'41·now3.word',step:'41·now3',mode:'word',label:'the knot in the program',open:()=>measured('41·now3'),make(){
+    const F=rnd(3), Q=[['A program lists every string of moves from a drawing D, looking for the plain ring.','Does that decide whether D is untied?','no: on a knotted drawing it runs for ever; the bound is what makes it stop'],['A drawing has c_p = p for every p.','Is it the plain ring?','not shown: a knot with ten crossings has c_p = p for every p'],['Untied is decided.','Is it then fast?','not known: decided says the machine stops, not how soon']];
+    const wrong=[['yes: it will find the ring','yes, if D is small','no: it can never find the ring'],['yes: colours decide it','yes, for p up to 7','no: c_p = p means knotted'],['yes: decided means fast','yes: it is in NP','no: it is proved slow']][F];
+    return {index:'q:41·now3.word['+F+']', a3:['41·now3.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Move-search lists the unknot’s drawings; with the bound (236n)¹¹, the search can stop.','Many-colour gives a certificate of knottedness for many knots but not all.','Whether untied is fast is open.'][F]}; }},
+  {id:'41·now3.line',step:'41·now3',mode:'proof',label:'what the moves license',open:()=>measured('41·now3'),make(){
+    return line28('41·now3.line',[
+      ['t1',[['\\text{the move search}','given'],['\\text{it decides whether } D \\text{ is untied}','search']],2,1,'On a knotted drawing it runs for ever.'],
+      ['t2',[['D \\text{ untied}','given'],['\\text{moves that never add a crossing untie it}','fewer']],2,1,'Some untied drawings need a crossing added first.'],
+      ['t3',[['c_p(D) = p \\text{ for every } p','given'],['D \\text{ is the ring}','colours']],2,1,'A knot with ten crossings has cₚ = p for every p.'],
+      ['t4',[['\\text{untied is decided}','given'],['\\text{it is fast}','decided']],2,1,'Decided says the machine stops; not how soon.'],
+      ['t5',[['c_3(D) = 9','overhand'],['D \\text{ is knotted}','many-colour']],2,0,'c₃ of the unknot is 3.'],
+      ['t6',[['\\text{a string of at most } (236n)^{11} \\text{ moves}','certificate'],['\\text{untied is in NP}','bounded-untying']],2,0,'The string of moves is checked fast.']],[]); }});
+/* ----- annex 41·phys Are faraway particles secretly connected: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'41·phys.work',step:'41·phys',mode:'work',label:'pairs, cold and periods',open:()=>measured('41·phys'),make(){
+    const ask=rnd(3), G=(a,b)=>b?G(b,a%b):a;
+    if(ask===2){ const C=[[15,2],[15,7],[21,2],[35,3],[33,2]][rnd(5)], N=C[0], a=C[1]; let r=1, x=a%N; while(x!==1){ x=x*a%N; r++; } if(r%2) return null; let h=1; for(let i=0;i<r/2;i++) h=h*a%N; if(h===N-1) return null;
+      const f1=G(h-1,N), f2=G(h+1,N), right=Math.min(f1,f2)+' and '+Math.max(f1,f2), wrong=UQAX(right,['1 and '+N,(r)+' and '+(N/r>1?Math.round(N/r):N),Math.min(h-1,h+1)+' and '+(h+1),a+' and '+r],3); if(wrong.length<3) return null;
+      return {index:'q:41·phys.work[f;'+N+';'+a+']', lines:[['N = '+N+',\\ \\ a = '+a,'to factor'],['r = '+r,'the period of a by N']], ask:'What factors does the period give?', right, opts:shuffle([right,...wrong]), lead:'', why:'Period-factor: a^(r/2) = '+a+'^'+(r/2)+', remainder '+h+' by '+N+', not '+(N-1)+'; gcd('+(h-1)+', '+N+') = '+f1+' and gcd('+(h+1)+', '+N+') = '+f2+'.'}; }
+    if(ask===1){ const f=[5,6,8][rnd(3)], T=[0.01,0.02,0.05,0.1][rnd(4)], x=4.799e-11*f*1e9/T, v=Math.exp(-x), right=SCAX(v,2), wrong=UQAX(right,[SCAX(Math.exp(-x/2),2),SCAX(1/x,2),SCAX(Math.exp(-1/x),2),'0.5'],3); if(wrong.length<3) return null;
+      return {index:'q:41·phys.work[c;'+f+';'+T+']', lines:[['f = '+f+' \\text{ GHz}','a qubit'],['T = '+T+' \\text{ K},\\ \\ h/k = 4.8 \\times 10^{-11} \\text{ K s}','']], ask:'With what chance is it found in the upper state?', right, opts:shuffle([right,...wrong]), lead:'', why:'Cold-qubit: e^(−hf/kT), with hf/kT = 4.8 × 10⁻¹¹ × '+f+' × 10⁹ ÷ '+T+' ≈ '+DECAX(x,2)+': '+right+'.'}; }
+    const E=[0.71,0.71,0.71,-0.71].map(x=>rnd(3)?x:Math.round(x*50)/100), S=E[0]+E[1]+E[2]-E[3], right=DECAX(Math.abs(S),2)+(Math.abs(S)>2?': no plan of hidden answers gives it':': a plan of hidden answers could give it'), alt=DECAX(Math.abs(S),2)+(Math.abs(S)>2?': a plan of hidden answers could give it':': no plan of hidden answers gives it'), wrong=[alt,DECAX(Math.abs(E[0]+E[1]+E[2]+E[3]),2)+': a plan of hidden answers could give it',DECAX(Math.abs(S)/2,2)+': no plan of hidden answers gives it'];
+    const g=x=>String(x).replace('-','−');
+    return {index:'q:41·phys.work[s;'+E.join(';')+']', lines:[['E(a,b) = '+g(E[0])+',\\ E(a,b\') = '+g(E[1]),'measured'],['E(a\',b) = '+g(E[2])+',\\ E(a\',b\') = '+g(E[3]),'']], ask:'What is |E(a,b) + E(a,b′) + E(a′,b) − E(a′,b′)|, and what does it say?', right, opts:shuffle([right,...wrong]), lead:'', why:'Hidden-answers: every plan keeps the sum within 2; the shared state reaches 2√2 ≈ 2.83. Here it is '+DECAX(Math.abs(S),2)+'.'}; }},
+  {id:'41·phys.word',step:'41·phys',mode:'word',label:'Seattle and Victoria',open:()=>measured('41·phys'),make(){
+    const F=rnd(3), Q=[['A lab in Seattle measures its photon of a shared pair, choosing its filter at the last moment.','Does its choice change any chance in Victoria?','no: Victoria’s photon alone is an even mix whatever Seattle does'],['A reader says each photon of the pair was level or upright all along, and we only find out which.','Can that explain the results?','no: every such plan keeps the sum within 2, and experiments find about 2.83'],['A reader says a quantum computer tries every answer at once and reads them all.','Is that how it works?','no: one reading gives one answer; a transform must make the wanted one likely']];
+    const wrong=[['yes: the filter sends a signal','yes, faster than light','no: the photons are not connected'],['yes: hidden answers explain all','yes, with enough answers','no: the photons have no state'],['yes: it reads every answer','yes, for small numbers','no: it reads none']][F];
+    return {index:'q:41·phys.word['+F+']', a3:['41·phys.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Half-pair: the Victoria photon alone has density grid ½I, so nothing is sent.','Hidden-answers: |E(a,b) + E(a,b′) + E(a′,b) − E(a′,b′)| ≤ 2 for every plan.','A period found by a transform factors a number; it is not a reading of every answer.'][F]}; }},
+  {id:'41·phys.line',step:'41·phys',mode:'proof',label:'what the pair licenses',open:()=>measured('41·phys'),make(){
+    return line28('41·phys.line',[
+      ['q1',[['\\text{each photon was level or upright all along}','a plan'],['\\text{the sum reaches } 2\\sqrt2','hidden']],2,1,'Every plan keeps the sum within 2.'],
+      ['q2',[['\\text{Seattle’s filter}','given'],['\\text{it sends a signal to Victoria}','signal']],2,1,'Victoria’s grid is ½I whatever Seattle does.'],
+      ['q3',[['\\text{a quantum computer}','given'],['\\text{it tries every answer and reads them all}','all']],2,1,'One reading gives one answer.'],
+      ['q4',[['a = 14,\\ N = 15','given'],['\\text{the period gives factors}','period']],2,1,'r = 2 and 14 is N − 1: this a fails; pick another.'],
+      ['q5',[['\\Phi = (|00\\rangle + |11\\rangle)/\\sqrt2','shared'],['\\text{no pair of states}','no-split']],2,0,'A pair would give |01⟩ or |10⟩ a share, or lose one of the two terms.'],
+      ['q6',[['kT \\ll hf','a cold qubit'],['\\text{upper state with chance about } e^{-hf/kT}','cold-qubit']],2,0,'The energy-share technique on two states.']],[]); }});
+/* ----- annex 42·chem How many ways can atoms join: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'42·chem.work',step:'42·chem',mode:'work',label:'trees of carbon',open:()=>measured('42·chem'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const R=[[6,[2,1,1,-1,-1,-2],6,'benzene: a ring of six'],[4,[2,0,0,-2],4,'a ring of four']][rnd(2)], L=R[1].slice().sort((a,b)=>b-a); let s=0; for(let i=0;i<R[2]/2;i++) s+=2*L[i]; const pairs=R[2]/2*2, g=s-pairs, right=g+' units of β', wrong=UQAX(right,[s+' units of β',pairs+' units of β',(g+2)+' units of β',(-g-1)+' units of β'],3).map(x=>x.replace('-','−')); if(wrong.length<3) return null;
+      return {index:'q:42·chem.work[r;'+R[0]+']', lines:[['\\text{stretches of the grid: } '+R[1].join(', ').replace(/-/g,'−'),R[3]],[R[2]+' \\text{ spread electrons}','two to a state, lowest first']], ask:'How much does the ring gain over '+(R[2]/2)+' separate pairs, each pair at stretch 1?', right, opts:shuffle([right,...wrong]), lead:'', why:'Graph-energy: filled stretches total '+s+'; separate pairs give '+pairs+'; the gain is '+g+' units of β.'}; }
+    if(ask===1){ const W=[['pentane, a chain of five',20,36.1],['isopentane, a chain of four with a branch',18,27.7],['neopentane, one carbon with four',16,9.5]], i=rnd(3), j=(i+1+rnd(2))%3, hi=W[i][1]>W[j][1]?i:j;
+      const right=W[hi][0], wrong=[W[hi===i?j:i][0],'they boil at the same point','it cannot be told from the trees'];
+      return {index:'q:42·chem.work[w;'+i+';'+j+']', lines:[['\\text{distance totals } '+W[i][1]+' \\text{ and } '+W[j][1],'two kinds of C₅H₁₂']], ask:'Which boils higher: '+W[i][0]+', or '+W[j][0]+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'The distance total sorts the pentanes: 20, 18, 16 against 36.1, 27.7, 9.5 °C. The larger total, less branched, boils higher.'}; }
+    const C=[1,1,1,2,3,5,9,18,35,75], n=4+rnd(7), right=String(C[n-1]), wrong=UQAX(right,[Math.pow(n,n-2).toLocaleString('en').replace(/,/g,' '),String(C[n-2]),String(C[n]||C[n-1]*2+5),String(n-2)],3); if(wrong.length<3) return null;
+    return {index:'q:42·chem.work[n;'+n+']', lines:[['C_{'+n+'}H_{'+(2*n+2)+'}','all bonds single']], ask:'How many kinds of molecule have that formula?', right, opts:shuffle([right,...wrong]), lead:'', why:'Alkane-tree: the kinds are the carbon trees on '+n+' dots with at most four links each: '+right+'. '+n+'^'+(n-2)+' counts trees on named dots, not shapes.'}; }},
+  {id:'42·chem.word',step:'42·chem',mode:'word',label:'the camp stove',open:()=>measured('42·chem'),make(){
+    const F=rnd(2);
+    const right=F?'they have different graphs: a chain of four, and three carbons round a fourth':'it is a tree, with '+'n − 1 carbon links', wrong=F?['the same graph drawn differently','the same graph with different hydrogens','different numbers of atoms']:['it has one ring','it has a double bond','it has n links'];
+    return {index:'q:42·chem.word['+F+']', a3:['42·chem.word',DASH,DASH], story:F?'Two gases in camp stove canisters are both C₄H₁₀, and one boils at a lower point than the other.':'A molecule in one piece has n carbons and 2n + 2 hydrogens, all bonds single.', lines:[], ask:F?'How do they differ?':'What is its graph of atoms?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Isomers have different graphs; one graph drawn two ways is one molecule.':'Alkane-tree: count the links, 4n + 2n + 2 ends, halved: 3n + 1 links on 3n + 2 dots, one fewer than the dots, so a tree.'}; }},
+  {id:'42·chem.line',step:'42·chem',mode:'proof',label:'what the graph licenses',open:()=>measured('42·chem'),make(){
+    return line28('42·chem.line',[
+      ['a1',[['\\text{two isomers}','given'],['\\text{the same graph drawn differently}','drawings']],2,1,'They have different graphs.'],
+      ['a2',[['\\text{six carbons}','hexanes'],['6^4 \\text{ kinds}','leaf-code']],2,1,'That counts trees on six named dots with any links.'],
+      ['a3',[['\\text{the distance total}','given'],['\\text{the boiling point exactly}','fit']],2,1,'It sorts the pentanes; the fit has a spread of about a degree.'],
+      ['a4',[['\\text{a stretch } \\lambda \\text{ of the grid}','graph'],['\\text{the energy is } \\lambda','energies']],2,1,'It is α + λβ, and β is negative.'],
+      ['a5',[['C_nH_{2n+2},\\ \\text{one piece}','given'],['\\text{a tree}','alkane-tree']],2,0,'3n + 1 links on 3n + 2 dots.'],
+      ['a6',[['\\text{benzene}','ring of six'],['\\text{gains 2 units over three pairs}','graph-energy']],2,0,'2 · 2 + 4 · 1 = 8 against 6.']],[]); }});
+/* ----- annex 42·econ Can everyone be paired so no two would rather swap: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'42·econ.work',step:'42·econ',mode:'work',label:'proposals and holding',open:()=>measured('42·econ'),make(){
+    const ask=rnd(2);
+    if(ask){ const n=3+rnd(8), right=String(n*n-n+1), wrong=UQAX(right,[String(n*n),String(n),String(n*(n+1)/2),String(n*n-1)],3); if(wrong.length<3) return null;
+      return {index:'q:42·econ.work[n;'+n+']', lines:[[n+' \\text{ doctors},\\ '+n+' \\text{ hospitals}','doctors propose']], ask:'At most how many proposals does the run take?', right, opts:shuffle([right,...wrong]), lead:'', why:'Proposal-count: each doctor is refused at most n − 1 times, and the run stops when the last hospital gets its first offer: n² − n + 1 = '+right+'.'}; }
+    const D=['Ana','Ben','Cai'], H=['North','Lake','Park'], dp=D.map(()=>shuffle([0,1,2])), hp=H.map(()=>shuffle([0,1,2]));
+    const held=[-1,-1,-1], nxt=[0,0,0]; let free=[0,1,2], guard=0;
+    while(free.length&&guard++<20){ const d=free.shift(), h=dp[d][nxt[d]++]; if(held[h]<0) held[h]=d; else if(hp[h].indexOf(d)<hp[h].indexOf(held[h])){ free.push(held[h]); held[h]=d; } else free.push(d); }
+    const who=rnd(3), mine=held.indexOf(who), right=H[mine], wrong=H.filter(x=>x!==right).concat(['no hospital']);
+    const pr=(L,names)=>L.map(x=>names[x]).join(' > ');
+    return {index:'q:42·econ.work[g;'+dp.map(x=>x.join('')).join('')+';'+hp.map(x=>x.join('')).join('')+';'+who+']', lines:[[D.map((d,i)=>'\\text{'+d+': '+pr(dp[i],H)+'}').join(',\\ '),'doctors’ lists'],[H.map((h,i)=>'\\text{'+h+': '+pr(hp[i],D)+'}').join(',\\ '),'hospitals’ lists']], ask:'Doctors propose, and each hospital holds its best offer so far. Where does '+D[who]+' end?', right, opts:shuffle([right,...wrong]), lead:'', why:'Run the proposals: the end pairs '+held.map((d,h)=>D[d]+' with '+H[h]).join(', ')+'. It holds, and it is the best that holds for each doctor.'}; }},
+  {id:'42·econ.word',step:'42·econ',mode:'word',label:'the match day',open:()=>measured('42·econ'),make(){
+    const F=rnd(3), Q=[['A medical school pairs doctors with hospitals by a run in which doctors propose.','Is the run fair to both sides?','no: best for the doctors, worst for the hospitals, of all pairings that hold'],['Four students must split into two pairs of roommates, each ranking the other three.','Must a pairing that holds exist?','no: with one side, there may be none'],['A pairing holds: no doctor and hospital both prefer each other to their partners.','Does everyone get a first choice?','no: holding is about pairs, not about joy']];
+    const wrong=[['yes: it is fair to both','yes, if the lists are honest','no: it is worst for the doctors'],['yes: one always exists','yes, by the proposal run','no: four is too few'],['yes: holding means first choices','yes, for the proposers','no: no one does']][F];
+    return {index:'q:42·econ.word['+F+']', a3:['42·econ.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Best-for-proposers: no doctor is ever refused by a hospital possible for them.','Two sides are needed; the four roommates can have none.','In the example one gets a second choice, and the pairing still holds.'][F]}; }},
+  {id:'42·econ.line',step:'42·econ',mode:'proof',label:'what the pairing licenses',open:()=>measured('42·econ'),make(){
+    return line28('42·econ.line',[
+      ['m1',[['\\text{a pairing that holds}','given'],['\\text{everyone has a first choice}','joy']],2,1,'Holding is about pairs, not about joy.'],
+      ['m2',[['\\text{the proposal run}','given'],['\\text{fair to both sides}','fair']],2,1,'Best for proposers, worst for choosers.'],
+      ['m3',[['\\text{a group of doctors and hospitals}','given'],['\\text{only one pairing holds}','one']],2,1,'The example has two.'],
+      ['m4',[['\\text{any group that pairs off}','one side'],['\\text{a pairing that holds exists}','exists']],2,1,'Two sides are needed.'],
+      ['m5',[['\\text{the run ends}','given'],['\\text{the pairing holds}','no-swap']],2,0,'A doctor who prefers a hospital proposed there first and was refused for someone it prefers.'],
+      ['m6',[['n \\text{ doctors, } n \\text{ hospitals}','given'],['\\text{at most } n^2 - n + 1 \\text{ proposals}','proposal-count']],2,0,'Each doctor is refused at most n − 1 times.']],[]); }});
+/* ----- annex 42·eng What holds cloth and rope together: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'42·eng.work',step:'42·eng',mode:'work',label:'faces, crimp and grip',open:()=>measured('42·eng'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const c=3+rnd(10), right=String(c+2), wrong=UQAX(right,[String(c),String(2*c),String(c+1),String(4*c)],3); if(wrong.length<3) return null;
+      return {index:'q:42·eng.work[f;'+c+']', lines:[['\\text{a knot drawing in one piece}',c+' \\text{ crossings}']], ask:'How many faces does it have?', right, opts:shuffle([right,...wrong]), lead:'', why:'Crossing-faces: c dots, 2c links (four ends at each), and dots − links + faces = 2: '+c+' − '+(2*c)+' + F = 2, F = '+right+'.'}; }
+    if(ask===1){ const d=[0.1,0.2,0.3,0.5][rnd(4)], v=Math.sqrt(1+d*d)-1, right=DECAX(100*v,2)+'%', wrong=UQAX(right,[DECAX(100*d,1)+'%',DECAX(100*d*d,2)+'%',DECAX(100*Math.sqrt(d),1)+'%',DECAX(50*d,1)+'%'],3); if(wrong.length<3) return null;
+      return {index:'q:42·eng.work[c;'+d+']', lines:[['d/p = '+d,'a thread’s rise over its run, in a weave']], ask:'By how much can the cloth stretch along it before the yarn is pulled?', right, opts:shuffle([right,...wrong]), lead:'', why:'Crimp: √(1 + (d/p)²) − 1 = √'+DECAX(1+d*d,4)+' − 1 ≈ '+right+'.'}; }
+    const m=[0.2,0.3,0.5][rnd(3)], t=[0.5,1,2,3][rnd(4)], v=Math.exp(2*Math.PI*m*t), right=DECAX(v,1)+' times', wrong=UQAX(right,[DECAX(t*Math.exp(2*Math.PI*m),1)+' times',DECAX(1+2*Math.PI*m*t,1)+' times',DECAX(Math.exp(m*t),2)+' times',DECAX(2*Math.PI*m*t,2)+' times'],3); if(wrong.length<3) return null;
+    return {index:'q:42·eng.work[g;'+m+';'+t+']', lines:[['\\mu = '+m,'rope on a post'],[t+' \\text{ turn'+(t===1?'':'s')+'}','θ = 2π × turns']], ask:'How many times the pull can it hold?', right, opts:shuffle([right,...wrong]), lead:'', why:'Turn-grip: e^(μθ) = e^('+m+' · 2π · '+t+') ≈ '+right+'. Each turn multiplies; turns do not add.'}; }},
+  {id:'42·eng.word',step:'42·eng',mode:'word',label:'the dock line',open:()=>measured('42·eng'),make(){
+    const F=rnd(3), Q=[['A deckhand takes a second turn of line round a bollard, μ = 0.3.','Does two turns hold twice what one turn holds?','no: each turn multiplies the grip, by e^(2π · 0.3) ≈ 6.6'],['A weaver lays one warp over every weft.','Does the cloth hang together, since that thread crosses every other?','no: the warp lifts off; no arrow comes back up to it'],['A plait ends with every strand back where it started.','Has the plait come undone?','no: the shuffle forgets over and under']];
+    const wrong=[['yes: twice the rope, twice the grip','yes, if it is tight','no: a second turn adds nothing'],['yes: it crosses every thread','yes, if pulled tight','no: no weave hangs together'],['yes: back in place means undone','yes, if pulled straight','no: it is a knot']][F];
+    return {index:'q:42·eng.word['+F+']', a3:['42·eng.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Turn-grip: T′ = μT gives T₀e^(μθ).','Hangs-together: every thread must be reached from every other along arrows.','Strand-shuffle: σᵢ gives the same swap over or under; the braid is not the do-nothing braid.'][F]}; }},
+  {id:'42·eng.line',step:'42·eng',mode:'proof',label:'what the weave licenses',open:()=>measured('42·eng'),make(){
+    return line28('42·eng.line',[
+      ['k1',[['\\text{the strands are back in their places}','shuffle'],['\\text{the plait has come undone}','undone']],2,1,'The shuffle forgets over and under.'],
+      ['k2',[['\\text{every thread crosses some other}','weave'],['\\text{the cloth hangs together}','crossing']],2,1,'A warp over every weft crosses all of them and lifts off.'],
+      ['k3',[['\\text{two turns}','given'],['\\text{twice what one turn holds}','grip']],2,1,'The grip multiplies by e^(2πμ) each turn.'],
+      ['k4',[['\\text{a cloth}','given'],['\\text{it stretches as far as its yarn}','stretch']],2,1,'It stretches by its crimp, or its loops’ change of shape, first.'],
+      ['k5',[['\\text{a knot drawing, } c \\text{ crossings}','one piece'],['c + 2 \\text{ faces}','crossing-faces']],2,0,'c − 2c + F = 2.'],
+      ['k6',[['\\text{a braid after a braid}','given'],['\\text{the shuffle after the shuffle}','strand-shuffle']],2,0,'Follow each strand through both.']],[]); }});
+/* ----- annex 42·logi What is the cheapest way to ship: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'42·logi.work',step:'42·logi',mode:'work',label:'chains and cuts',open:()=>measured('42·logi'),make(){
+    const ask=rnd(2), a=1+rnd(5), b=2+rnd(7), c=2+rnd(7), d=1+rnd(5); if(b===c) return null;
+    if(ask){ const right=String(Math.abs(b-c))+' days, on '+(b<c?'B':'C'), wrong=UQAX(right,['0 days, on '+(b<c?'B':'C'),String(Math.abs(b-c))+' days, on '+(b<c?'C':'B'),String(b+c)+' days, on '+(b<c?'B':'C')],3); if(wrong.length<3) return null;
+      return {index:'q:42·logi.work[s;'+a+';'+b+';'+c+';'+d+']', lines:[['A\\ '+a+',\\ B\\ '+b+',\\ C\\ '+c+',\\ D\\ '+d+' \\text{ days}','tasks'],['A \\text{ before } B, C;\\ \\ B, C \\text{ before } D','']], ask:'Which task has slack, and how much?', right, opts:shuffle([right,...wrong]), lead:'', why:'Slack-time: the longest chain is A, '+(b>c?'B':'C')+', D; the other middle task can start up to '+Math.abs(b-c)+' days late without moving the end.'}; }
+    const v=a+Math.max(b,c)+d, right=v+' days', wrong=UQAX(right,[(a+b+c+d)+' days',(a+Math.min(b,c)+d)+' days',Math.max(a,b,c,d)+' days',(a+(b+c)/2+d)+' days'],3); if(wrong.length<3) return null;
+    return {index:'q:42·logi.work[l;'+a+';'+b+';'+c+';'+d+']', lines:[['A\\ '+a+',\\ B\\ '+b+',\\ C\\ '+c+',\\ D\\ '+d+' \\text{ days}','tasks'],['A \\text{ before } B, C;\\ \\ B, C \\text{ before } D','']], ask:'How long does the project take?', right, opts:shuffle([right,...wrong]), lead:'', why:'A project takes as long as its longest chain: '+a+' + '+Math.max(b,c)+' + '+d+' = '+right+'.'}; }},
+  {id:'42·logi.word',step:'42·logi',mode:'word',label:'roads, ports and prices',open:()=>measured('42·logi'),make(){
+    const F=rnd(3), Q=[['A shipper widens a road that some smallest cut of the network leaves untouched.','Does the network carry more?','no: widening links outside a smallest cut cannot raise the largest flow'],['A planner sends every city its cheapest port’s containers.','Is that the cheapest plan?','not always: a port’s supply can bind, and others must cover'],['A company has three warehouses and wants every town’s distance to the nearest one.','How many nearest-first runs does it need?','one: from a new start linked at length 0 to every warehouse']];
+    const wrong=[['yes: any wider road helps','yes, if it is busy','no: widening never helps'],['yes: always','yes, if costs are whole numbers','no: never'],['three, one from each warehouse','one from each town','none: it cannot be done']][F];
+    return {index:'q:42·logi.word['+F+']', a3:['42·logi.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Untouched-cut: the most a network carries is its smallest cut.','Bend’s cheapest port is Seattle, which has only 300: supplies bind.','Shared-start: one run from the new dot gives every distance at once.'][F]}; }},
+  {id:'42·logi.line',step:'42·logi',mode:'proof',label:'what the network licenses',open:()=>measured('42·logi'),make(){
+    return line28('42·logi.line',[
+      ['s1',[['\\text{the shortest road from Seattle to Bend}','given'],['\\text{it starts on the shortest link out of Seattle}','first link']],2,1,'The technique settles whole paths, not first links.'],
+      ['s2',[['\\text{any road widened}','given'],['\\text{the network carries more}','widen']],2,1,'Only links of every smallest cut.'],
+      ['s3',[['\\text{each city takes its cheapest port}','given'],['\\text{the cheapest plan}','greedy']],2,1,'Supplies bind.'],
+      ['s4',[['\\text{the tasks total 21 days}','given'],['\\text{the project takes 21 days}','sum']],2,1,'It is the longest chain: 15.'],
+      ['s5',[['p_j - q_i \\le \\text{cost on every route, equal where used}','prices'],['\\text{the plan is cheapest}','route-price']],2,0,'Prices at the ports prove it.'],
+      ['s6',[['\\text{a corner of the shipping plans}','given'],['\\text{the routes in use hold no cycle}','tree-corner']],2,0,'So whole supplies give whole shipments.']],[]); }});
+/* ----- annex 42·now Can we trust a proof no one can read: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'42·now.work',step:'42·now',mode:'work',label:'charges on the map',open:()=>measured('42·now'),make(){
+    const ask=rnd(2);
+    if(ask){ const n5=12, n7=rnd(6), n5b=n5+n7, right=String(n5b), wrong=UQAX(right,[String(12),String(12-n7),String(n7),String(6*n7)],3); if(wrong.length<3) return null;
+      return {index:'q:42·now.work[c;'+n7+']', lines:[['\\text{a flat graph of triangles, every dot of 5, 6 or 7 links}','charges 6 − d add to 12'],[n7+' \\text{ dots of 7 links}','']], ask:'How many dots of 5 links does it have?', right, opts:shuffle([right,...wrong]), lead:'', why:'Charge-count: each 5 carries +1, each 6 carries 0, each 7 carries −1; they add to 12, so fives − '+n7+' = 12, fives = '+right+'.'}; }
+    const V=4+rnd(20), E=3*V-6, F=2*V-4, ask2=rnd(2), right=String(ask2?E:F), wrong=UQAX(right,[String(ask2?F:E),String(3*V),String(V+2),String(2*V)],3); if(wrong.length<3) return null;
+    return {index:'q:42·now.work[v;'+V+';'+ask2+']', lines:[['V = '+V,'a flat graph whose faces are all triangles']], ask:'How many '+(ask2?'links':'faces')+' does it have?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each face has 3 links and each link 2 faces, so 3F = 2E; with V − E + F = 2, E = 3V − 6 = '+E+' and F = 2V − 4 = '+F+'.'}; }},
+  {id:'42·now.word',step:'42·now',mode:'word',label:'four colours',open:()=>measured('42·now'),make(){
+    const F=rnd(3), Q=[['In 1879 a proof of four colours swapped two colours along one chain at a dot of five neighbours.','Does one swap always free a colour?','no: two chains can cross, which was the mistake'],['In 2005 a proof checker checked the whole four-colour proof.','Is it now a proof without trust?','no: the trust moves to the program and the core; it does not vanish'],['A student says a proof no one can read through is no more certain than a guess.','Is that so?','no: it is a check anyone can repeat; a guess is not']];
+    const wrong=[['yes: one swap always works','yes, at five neighbours','no: no swap ever frees one'],['yes: checked means certain','yes, if two checkers agree','no: it was found wrong'],['yes: unread means unsure','yes, for computer proofs','no: it is more certain than any proof read by hand']][F];
+    return {index:'q:42·now.word['+F+']', a3:['42·now.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['The swap at one chain can undo the swap at the other.','A checked proof rests on the core and the machine that runs it.','A repeated check is evidence a guess lacks.'][F]}; }},
+  {id:'42·now.line',step:'42·now',mode:'proof',label:'what the charges license',open:()=>measured('42·now'),make(){
+    return line28('42·now.line',[
+      ['f1',[['\\text{a dot of five neighbours}','given'],['\\text{one swap always frees a colour}','swap']],2,1,'The 1879 mistake; two chains can cross.'],
+      ['f2',[['\\text{every flat graph}','given'],['\\text{a dot of five next to one of five or six}','pair']],2,1,'Only when every dot has five or more.'],
+      ['f3',[['\\text{a computer checked it}','given'],['\\text{a proof without trust}','checked']],2,1,'The trust moves to the program and the core.'],
+      ['f4',[['\\text{faces all triangles},\\ V \\ge 3','flat'],['\\sum (6 - d) = 12','charge-count']],2,0,'6V − 2E with E = 3V − 6.'],
+      ['f5',[['\\text{every dot has at least five links}','given'],['\\text{a five next to a five or six}','unavoidable-pair']],2,0,'Moving charge shows one must appear.']],[]); }});
+/* ----- annex 42·now2 How big must order be: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'42·now2.work',step:'42·now2',mode:'work',label:'squares mod 17',open:()=>measured('42·now2'),make(){
+    const ask=rnd(2);
+    if(ask){ const n=[17,20,30,43][rnd(4)], q=n*(n-1)*(n-2)*(n-3)/24, v=q*Math.pow(2,-5), right=DECAX(v,1), wrong=UQAX(right,[DECAX(q*Math.pow(2,-6),1),DECAX(q,0),'0',DECAX(q/2,1)],3); if(wrong.length<3) return null;
+      return {index:'q:42·now2.work[r;'+n+']', lines:[['K_{'+n+'}, \\text{ each link coloured by a fair toss}','two colours'],['\\binom{'+n+'}{4} = '+q.toLocaleString('en').replace(/,/g,' '),'sets of four dots']], ask:'On average, how many one-colour sets of four?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each set of four has 6 links, all one colour with chance 2 · 2⁻⁶ = 2⁻⁵: '+q+' · 2⁻⁵ ≈ '+right+'.'}; }
+    const S=[1,2,4,8,9,13,15,16], a=rnd(17), b=(a+1+rnd(16))%17, d=Math.min((a-b+17)%17,(b-a+17)%17), linked=S.includes((a-b+17)%17);
+    const right=linked?'linked: '+d+' is a square remainder':'not linked: '+d+' is no square remainder', wrong=[linked?'not linked: '+d+' is no square remainder':'linked: '+d+' is a square remainder','linked: every pair is','not linked: no pair is'];
+    return {index:'q:42·now2.work[s;'+a+';'+b+']', lines:[['\\text{square remainders by 17: } 1, 2, 4, 8, 9, 13, 15, 16','the square party'],['\\text{dots } '+a+' \\text{ and } '+b,'']], ask:'Are they linked?', right, opts:shuffle([right,...wrong]), lead:'', why:'Link two dots when their difference leaves a square remainder; −1 is a square by 17, so the order does not matter: '+a+' − '+b+' leaves '+((a-b+17)%17)+'.'}; }},
+  {id:'42·now2.word',step:'42·now2',mode:'word',label:'the party of 43',open:()=>measured('42·now2'),make(){
+    const F=rnd(3), Q=[['A student says R(5, 5) is unknown only because no one has searched hard enough.','Is that so?','no: there are at least 10²¹⁹ classes of colourings; no search finishes'],['To show R(4, 4) > 17, a student plans to check every colouring of K₁₇.','Is that needed?','no: one colouring with no one-colour four is enough'],['A 2023 bound lowered the upper base for R(k, k).','Does it settle R(k, k) for large k?','no: the gap between √2 and the new base is open']];
+    const wrong=[['yes: a big enough computer will do it','yes, by next year','no: R(5, 5) is known'],['yes: every one must be checked','yes, by machine','no: R(4, 4) is 17'],['yes: it is now exact','yes, above k = 100','no: it raised the base']][F];
+    return {index:'q:42·now2.word['+F+']', a3:['42·now2.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['The colourings of K₄₃ number 2⁹⁰³.','Square-party: the graph of square remainders has no four all linked or all unlinked.','It lowers the upper base only.'][F]}; }},
+  {id:'42·now2.line',step:'42·now2',mode:'proof',label:'what the colourings license',open:()=>measured('42·now2'),make(){
+    return line28('42·now2.line',[
+      ['r1',[['R(5, 5) \\text{ unknown}','given'],['\\text{no one has searched hard enough}','search']],2,1,'At least 10²¹⁹ classes; no search finishes.'],
+      ['r2',[['\\text{a random colouring of } K_{17}','given'],['\\text{no one-colour } K_4','random']],2,1,'On average about 74 of them.'],
+      ['r3',[['\\text{the 2023 bound}','given'],['R(k, k) \\text{ settled for large } k','bound']],2,1,'It lowers the upper base.'],
+      ['r4',[['R(4, 4) \\gt 17','claim'],['\\text{every colouring of } K_{17} \\text{ checked}','needs']],2,1,'One colouring with none is enough.'],
+      ['r5',[['\\text{the 17-dot square party}','given'],['\\text{no four all linked, no four all unlinked}','square-party']],2,0,'So R(4, 4) > 17.']],[]); }});
+/* ----- annex 42·phys How do tiny magnets agree: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'42·phys.work',step:'42·phys',mode:'work',label:'agreement and the point',open:()=>measured('42·phys'),make(){
+    const ask=rnd(3), th=x=>(Math.exp(x)-Math.exp(-x))/(Math.exp(x)+Math.exp(-x));
+    if(ask===2){ const K=[0.5,1,2][rnd(3)], k=[2,5,10][rnd(3)], v=Math.pow(th(K),k), right=DECAX(v,4), wrong=UQAX(right,[DECAX(th(K),4),DECAX(k*th(K),3),DECAX(Math.pow(th(K),1/k),4),DECAX(th(K*k),4)],3); if(wrong.length<3) return null;
+      return {index:'q:42·phys.work[r;'+K+';'+k+']', lines:[['J/kT = '+K,'a long ring, no field'],['\\text{two arrows } '+k+' \\text{ apart}','']], ask:'On average, how much do they agree?', right, opts:shuffle([right,...wrong]), lead:'', why:'Agreement falls as (tanh K)^k = (tanh '+K+')^'+k+' ≈ '+right+'; it dies out along the ring.'}; }
+    if(ask===1){ const q=[4,6,8][rnd(3)], Tc=[300,770,1043][rnd(3)], J=8.617e-5*Tc/q, right=DECAX(J,4)+' eV', wrong=UQAX(right,[DECAX(8.617e-5*Tc,4)+' eV',DECAX(8.617e-5*Tc*q,3)+' eV',DECAX(2*J,4)+' eV',DECAX(J/2,4)+' eV'],3); if(wrong.length<3) return null;
+      return {index:'q:42·phys.work[j;'+q+';'+Tc+']', lines:[['T_c = '+Tc+' \\text{ K},\\ \\ q = '+q,'agreement appears below'],['k = 8.617 \\times 10^{-5} \\text{ eV/K}','']], ask:'By the average-field technique, about what is J?', right, opts:shuffle([right,...wrong]), lead:'', why:'Average-field: kT_c = qJ, so J = 8.617 × 10⁻⁵ × '+Tc+' ÷ '+q+' ≈ '+right+'.'}; }
+    const K=[0.25,0.5,1,2][rnd(4)], right=DECAX(th(K),3), wrong=UQAX(right,[DECAX(Math.exp(-K),3),DECAX(K,3),DECAX(1/(1+Math.exp(-K)),3),DECAX(th(K/2),3)],3); if(wrong.length<3) return null;
+    return {index:'q:42·phys.work[p;'+K+']', lines:[['J/kT = '+K,'two linked arrows, no field']], ask:'On average, how much do they agree?', right, opts:shuffle([right,...wrong]), lead:'', why:'Pair-agreement: tanh('+K+') = (e^'+K+' − e^(−'+K+')) ÷ (e^'+K+' + e^(−'+K+')) ≈ '+right+'.'}; }},
+  {id:'42·phys.word',step:'42·phys',mode:'word',label:'iron and memory',open:()=>measured('42·phys'),make(){
+    const F=rnd(3), Q=[['A long ring of tiny magnets has neighbours that agree well.','Does the ring agree across its whole length?','no: agreement between arrows k apart falls as (tanh K)^k'],['A network stores patterns as low points of its energy and has N arrows.','Does it recall every stored pattern, however many?','no: past about 0.14N patterns, stored ones stop being low points'],['A student says iron agrees because its atoms are magnets pulling on each other.','Is that why?','no: that pull is about 10⁻⁵ eV; J comes from the swap sign']];
+    const wrong=[['yes: neighbours agree, so all do','yes, below room warmth','no: neighbours never agree'],['yes: every one','yes, if N is large','no: it recalls none'],['yes: magnets pull magnets','yes, at room warmth','no: iron does not agree']][F];
+    return {index:'q:42·phys.word['+F+']', a3:['42·phys.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Ring-grid: the ring has no agreement in the whole at any temperature above zero.','Downhill-update finds a low point, but too many patterns crowd each other out.','Iron’s 1043 K gives J of about 0.01 eV, far above the magnets’ pull.'][F]}; }},
+  {id:'42·phys.line',step:'42·phys',mode:'proof',label:'what the arrows license',open:()=>measured('42·phys'),make(){
+    return line28('42·phys.line',[
+      ['i1',[['\\text{neighbours agree}','given'],['\\text{a long ring agrees across its length}','ring']],2,1,'Agreement k apart falls as (tanh K)ᵏ.'],
+      ['i2',[['\\text{the square grid}','given'],['kT_c = 4J','exact']],2,1,'That is the average-field guess; the exact value is 2.269J.'],
+      ['i3',[['\\text{iron agrees}','seen'],['\\text{its atoms are magnets pulling on each other}','pull']],2,1,'Their pull is about 10⁻⁵ eV; J comes from the swap sign.'],
+      ['i4',[['\\text{a memory}','given'],['\\text{it recalls every stored pattern}','memory']],2,1,'Past about 0.14N patterns, stored ones stop being low points.'],
+      ['i5',[['s_i \\text{ set to the sign of its field}','update'],['\\text{the energy never rises}','downhill-update']],2,0,'The arrow then agrees with its field.'],
+      ['i6',[['\\text{two linked arrows, no field}','given'],['\\text{agreement } \\tanh(J/kT)','pair-agreement']],2,0,'Weights e^(±J/kT) for agree and disagree.']],[]); }});
+/* ----- annex 43·comp How can strangers share a secret: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'43·comp.work',step:'43·comp',mode:'work',label:'clocks give themselves away',open:()=>measured('43·comp'),make(){
+    const ask=rnd(3), md=(a,p)=>((a%p)+p)%p, inv=(a,p)=>{ for(let x=1;x<p;x++) if(md(a*x,p)===1) return x; return 0; }, G=(a,b)=>b?G(b,a%b):a;
+    if(ask===2){ const P=[[7,11],[11,13],[13,17],[7,19]][rnd(4)], n=P[0]*P[1]; let x=0,y=0; for(let t=0;t<50&&!x;t++){ const r=2+rnd(n-3); if(G(r,n)!==1) continue; for(let s=2;s<n-1;s++){ if(s!==r&&s!==n-r&&md(s*s-r*r,n)===0){ x=r; y=s; break; } } } if(!x) return null;
+      const f=G(Math.abs(x-y),n), right=Math.min(f,n/f)+' × '+Math.max(f,n/f), wrong=UQAX(right,['1 × '+n,G(x+y,n)===f?(f+1)+' × '+(n-f):Math.min(G(x+y,n),n/G(x+y,n))+' × '+Math.max(G(x+y,n),n/G(x+y,n)),x+' × '+y,(Math.abs(x-y))+' × '+(x+y)],3).filter(w=>w!==right); if(wrong.length<3) return null;
+      return {index:'q:43·comp.work[r;'+n+';'+x+';'+y+']', lines:[['n = '+n,'to split'],[x+'^2 \\equiv '+y+'^2 \\pmod{'+n+'}','two roots of one square, not ± each other']], ask:'What split of n do they give?', right, opts:shuffle([right,...wrong]), lead:'', why:'Root-gives-factor: n divides ('+x+' − '+y+')('+x+' + '+y+') but neither factor alone, so gcd('+Math.abs(x-y)+', '+n+') = '+f+' splits it.'}; }
+    if(ask===1){ const p=[11,13,17,101][rnd(4)], right='1 in '+p, wrong=UQAX(right,['1 in 2','1 in '+(p*p),'1 in '+(p-1),'certain'],3); if(wrong.length<3) return null;
+      return {index:'q:43·comp.work[t;'+p+']', lines:[['t \\equiv am + b \\pmod{'+p+'}','a tag, key (a, b) at random'],['\\text{one message and its tag seen}','']], ask:'With what chance does a forger tag another message rightly?', right, opts:shuffle([right,...wrong]), lead:'', why:'One-time-tag: every a fits the one seen pair with some b, so the right tag of a new message is any hour alike: 1 in '+p+'.'}; }
+    const p=[11,13,17,19,23][rnd(5)], a=2+rnd(p-3), c=1+rnd(p-1), x0=rnd(p), x1=md(a*x0+c,p), x2=md(a*x1+c,p); if(x1===x0) return null; const A=md((x2-x1)*inv(x1-x0,p),p), right=String(A), wrong=UQAX(right,[String(md(x2-x1,p)),String(md(x1-x0,p)),String(c),String(md(A+1,p))],3); if(wrong.length<3) return null;
+    return {index:'q:43·comp.work[g;'+p+';'+a+';'+c+';'+x0+']', lines:[['x_{n+1} \\equiv a x_n + c \\pmod{'+p+'}','a straight-map generator'],['x_0, x_1, x_2 = '+x0+', '+x1+', '+x2,'three outputs']], ask:'What is a?', right, opts:shuffle([right,...wrong]), lead:'', why:'Three-outputs: x₂ − x₁ ≡ a(x₁ − x₀), so a ≡ '+md(x2-x1,p)+' · '+md(x1-x0,p)+'⁻¹ ≡ '+right+' on the clock of '+p+'.'}; }},
+  {id:'43·comp.word',step:'43·comp',mode:'word',label:'the listener in the middle',open:()=>measured('43·comp'),make(){
+    const F=rnd(3), Q=[['Two strangers make a shared key with the shared-secret technique, while a listener can change their messages.','Are they safe?','no: she stands in the middle; one side must sign'],['A shop uses a one-time tag, but uses its key twice.','Is it still safe?','no: two messages and tags give the key (a, b)'],['A stream of digits passes every test a student tried.','Is it pseudorandom?','not shown: the straight map passes tallies and falls to three outputs']];
+    const wrong=[['yes: the key is secret','yes, if the clock is large','no: no key can be shared'],['yes: the key is still random','yes, if the messages differ','no: one use already breaks it'],['yes: every test passed','yes, if the tests are many','no: no stream is']][F];
+    return {index:'q:43·comp.word['+F+']', a3:['43·comp.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['She makes one key with each side and passes messages between.','Two equations t ≡ am + b fix a and b.','Passing tests tried is not passing every fast test.'][F]}; }},
+  {id:'43·comp.line',step:'43·comp',mode:'proof',label:'what the clock licenses',open:()=>measured('43·comp'),make(){
+    return line28('43·comp.line',[
+      ['c1',[['\\text{a stream passes every test I tried}','tests'],['\\text{it is pseudorandom}','tried']],2,1,'The straight map passes tallies and falls to three outputs.'],
+      ['c2',[['\\text{multiplying primes}','given'],['\\text{proved one-way}','one-way']],2,1,'No function is proved one-way; this is believed.'],
+      ['c3',[['\\text{a fingerprint}','given'],['\\text{it can be made with no matches}','matches']],2,1,'More files than fingerprints.'],
+      ['c4',[['\\text{a one-time tag, key used twice}','given'],['\\text{still safe}','tag']],2,1,'Two messages and tags give (a, b).'],
+      ['c5',[['x_0, x_1, x_2 \\text{ of a straight map},\\ x_1 \\ne x_0','prime clock'],['a \\text{ and } c \\text{ are found}','three-outputs']],2,0,'a ≡ (x₂ − x₁)/(x₁ − x₀), then c.'],
+      ['c6',[['\\text{a signature on } H(m)','given'],['\\text{it passes for every } m\' \\text{ with } H(m\') = H(m)','sign-the-fingerprint']],2,0,'So it is as safe as the fingerprint’s matches are hard.']],[]); }});
+/* ----- annex 43·crypt Can a secret be split so any three of five can open it: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'43·crypt.work',step:'43·crypt',mode:'work',label:'three points fix the curve',open:()=>measured('43·crypt'),make(){
+    const md=(a,p)=>((a%p)+p)%p, inv=(a,p)=>{ a=md(a,p); for(let x=1;x<p;x++) if(md(a*x,p)===1) return x; return 0; };
+    const p=[11,13,17][rnd(3)], s=rnd(p), a1=rnd(p), a2=1+rnd(p-1), f=x=>md(s+a1*x+a2*x*x,p), X=shuffle([1,2,3,4,5]).slice(0,3).sort((a,b)=>a-b), Y=X.map(f);
+    const w=X.map((xi,i)=>{ const o=X.filter((_,j)=>j!==i); return md(o[0]*o[1]*inv((xi-o[0])*(xi-o[1]),p),p); }), S=md(Y[0]*w[0]+Y[1]*w[1]+Y[2]*w[2],p); if(S!==s) return null;
+    const right=String(s), wrong=UQAX(right,[String(md(Y[0]+Y[1]+Y[2],p)),String(Y[0]),String(md(s+1,p)),String(md(Y[0]*w[0],p))],3); if(wrong.length<3) return null;
+    return {index:'q:43·crypt.work['+p+';'+s+';'+a1+';'+a2+';'+X.join('')+']', lines:[['\\text{shares } '+X.map((x,i)=>'('+x+', '+Y[i]+')').join(',\\ '),'on the clock of '+p],['f(x) = s + a_1x + a_2x^2','']], ask:'What is the secret s?', right, opts:shuffle([right,...wrong]), lead:'', why:'Rebuild-at-zero: weights '+w.join(', ')+'; s ≡ '+Y.map((y,i)=>y+' · '+w[i]).join(' + ')+' ≡ '+right+' on the clock of '+p+'.'}; }},
+  {id:'43·crypt.word',step:'43·crypt',mode:'word',label:'two holders meet',open:()=>measured('43·crypt'),make(){
+    const p=[11,13,17,101][rnd(4)], F=rnd(2);
+    const right=F?'all '+p+' hours, each equally likely':'no: on the clock of 12 the weights need 2⁻¹, which does not exist', wrong=F?[(p-1)+' hours, all but 0','only one: two shares fix it','about half the hours']:['yes: any clock will do','yes, if the shares differ','no: the clock must be 10'];
+    return {index:'q:43·crypt.word['+F+';'+p+']', a3:['43·crypt.word',DASH,DASH], story:F?'A secret is split on the clock of '+p+' so any three of five can open it. Two holders compare their shares.':'A club wants to split its secret on the clock of 12.', lines:[], ask:F?'Which secrets are still possible to them?':'Will that work?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Two-say-nothing: for every hour s′ exactly one curve passes through both shares with value s′ at 0.':'Three-points-fix needs a prime clock, where every difference has an inverse.'}; }},
+  {id:'43·crypt.line',step:'43·crypt',mode:'proof',label:'what the shares license',open:()=>measured('43·crypt'),make(){
+    return line28('43·crypt.line',[
+      ['s1',[['\\text{the curve}','given'],['\\text{worked in the ordinary numbers}','numbers']],2,1,'Sizes leak: on the clock every hour is as likely.'],
+      ['s2',[['\\text{a share}','given'],['\\text{given at } x = 0','hour']],2,1,'That share is the secret.'],
+      ['s3',[['a_2 = 0 \\text{ always}','given'],['\\text{three are still needed}','line']],2,1,'Then f is a straight line and two shares fix it.'],
+      ['s4',[['\\text{two shares}','given'],['\\text{the secret is one of } p - 1','hours']],2,1,'Every one of the p hours is still possible, 0 included.'],
+      ['s5',[['\\text{three shares at different hours}','prime clock'],['\\text{the curve is fixed, and so } s','three-points-fix']],2,0,'Two curves of degree at most 2 agreeing at three hours are the same.'],
+      ['s6',[['\\text{two shares, any } s\'','prime clock'],['\\text{exactly one curve through both with value } s\' \\text{ at } 0','two-say-nothing']],2,0,'Three points fix one curve.']],[]); }});
+/* ----- annex 43·now Do primes keep coming close together: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'43·now.work',step:'43·now',mode:'work',label:'gaps and patterns',open:()=>measured('43·now'),make(){
+    const ask=rnd(2);
+    if(ask){ const P=[[0,2,4],[0,2,6],[0,4,6],[0,2,8],[0,1],[0,2,6,8],[0,2,4,6],[0,6,12],[0,4,8]][rnd(9)], cov=q=>new Set(P.map(h=>h%q)).size===q, c2=cov(2), c3=cov(3), adm=!c2&&!c3;
+      const right=adm?'admissible: it misses an hour of every small prime':'not admissible: it fills every hour of the clock of '+(c2?2:3), wrong=[adm?'not admissible: it fills every hour of the clock of 3':'admissible: it misses an hour of every small prime','not admissible: it has an even offset','admissible: every pattern is'].filter(x=>x!==right);
+      return {index:'q:43·now.work[a;'+P.join(',')+']', lines:[['\\text{offsets } '+P.join(', '),'n + h, all prime at once?']], ask:'Is the pattern admissible?', right, opts:shuffle([right,...wrong.slice(0,3)]), lead:'', why:'Covered-hours: on the clock of 2 the offsets fill '+[...new Set(P.map(h=>h%2))].join(', ')+'; on the clock of 3, '+[...new Set(P.map(h=>h%3))].join(', ')+'. A pattern that fills every hour of some clock is all prime only finitely often.'}; }
+    const n=[5,6,8,10][rnd(4)], right=String(n-1)+' numbers, from n! + 2 to n! + '+n, wrong=UQAX(right,[n+' numbers, from n! + 1 to n! + '+n,(n-2)+' numbers, from n! + 2 to n! + '+(n-1),'none: n! + 2 is prime'],3); if(wrong.length<3) return null;
+    return {index:'q:43·now.work[g;'+n+']', lines:[['n = '+n,'n! = '+[1,2,3,4,5,6,7,8,9,10].slice(0,n).reduce((a,b)=>a*b,1).toLocaleString('en').replace(/,/g,' ')]], ask:'What run of numbers is surely free of primes?', right, opts:shuffle([right,...wrong]), lead:'', why:'Long-gap: n! + j has the factor j for 2 ≤ j ≤ n, so n − 1 = '+(n-1)+' numbers in a row are none of them prime.'}; }},
+  {id:'43·now.word',step:'43·now',mode:'word',label:'twins and the bound',open:()=>measured('43·now'),make(){
+    const F=rnd(3), Q=[['Since 2013 the bound came down to 246.','Has the gap 246 itself been seen endlessly often?','not shown: some gap of at most 246 recurs; which one is not known'],['A table finds 8169 twin pairs below a million.','Does that show twins never end?','no: counts of a finite table prove nothing about the endless'],['The average gap between primes grows like ln x.','Must short gaps stop?','no: an average says nothing about the smallest']];
+    const wrong=[['yes: 246 recurs','yes, and 2 as well','no: no gap recurs'],['yes: so many cannot end','yes, if the count keeps growing','no: twins end at a million'],['yes: they grow too','yes, after a million','no: gaps shrink']][F];
+    return {index:'q:43·now.word['+F+']', a3:['43·now.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Width-bound: gaps no wider than the narrowest pattern recur.','A finite table cannot speak for the endless.','Gaps as long as you like and gaps of at most 246 both recur.'][F]}; }},
+  {id:'43·now.line',step:'43·now',mode:'proof',label:'what the patterns license',open:()=>measured('43·now'),make(){
+    return line28('43·now.line',[
+      ['q1',[['\\text{the 2013 bound, now 246}','given'],['\\text{the gap 246 is seen endlessly often}','246']],2,1,'Some gap of at most 246; which one is not known.'],
+      ['q2',[['0, 2, 4','offsets'],['\\text{a pattern like any other}','pattern']],2,1,'It covers the clock of 3.'],
+      ['q3',[['\\text{the average gap grows}','given'],['\\text{short gaps must stop}','average']],2,1,'An average says nothing about the smallest.'],
+      ['q4',[['\\text{a finer weighing}','given'],['246 \\text{ comes down to } 2','methods']],2,1,'The methods cannot see an even or odd count of prime factors; 6 at the very best.'],
+      ['q5',[['n! + j,\\ 2 \\le j \\le n','given'],['\\text{none prime}','long-gap']],2,0,'j divides n! + j.'],
+      ['q6',[['k \\text{ primes, each above } k','offsets'],['\\text{an admissible pattern}','big-primes']],2,0,'They miss hour 0 of every clock of a prime up to k, and k offsets cannot fill a bigger clock.']],[]); }});
+/* ----- annex 43·now2 How regularly are the primes spread: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'43·now2.work',step:'43·now2',mode:'work',label:'the count and its error',open:()=>measured('43·now2'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const p=[3,5,7,11,13][rnd(5)], a=(p-2)/p, b=(p-1)*(p-1)/(p*p), right=DECAX(a/b,4), wrong=UQAX(right,[DECAX(b/a,4),DECAX(a,4),DECAX(b,4),DECAX((p-2)/(p-1),4)],3); if(wrong.length<3) return null;
+      return {index:'q:43·now2.work[t;'+p+']', lines:[['\\text{the clock of } '+p,'n and n + 2 both miss hour 0']], ask:'By what factor does that beat two independent misses?', right, opts:shuffle([right,...wrong]), lead:'', why:'Twin-correction: '+(p-2)+' of '+p+' hours, against '+(p-1)+'²/'+p+'² for independent misses: ratio '+(p*(p-2))+'/'+((p-1)*(p-1))+' ≈ '+right+'.'}; }
+    const e=[4,6,8,10][rnd(4)], x=Math.pow(10,e), L=Math.log(x);
+    if(ask===1){ const v=x/(L*L), right=DECAX(v,0), wrong=UQAX(right,[DECAX(x/L,0),DECAX(Math.sqrt(x/L),0),DECAX(x/(L*L*L),0),DECAX(Math.sqrt(x),0)],3); if(wrong.length<3) return null;
+      return {index:'q:43·now2.work[l;'+e+']', lines:[['x = 10^{'+e+'}','\\ln x \\approx '+DECAX(L,3)]], ask:'About how much does li(x) exceed x/ln x?', right, opts:shuffle([right,...wrong]), lead:'', why:'Parts-count: by about x/(ln x)² = 10^'+e+' ÷ '+DECAX(L*L,2)+' ≈ '+right+'.'}; }
+    const v=Math.sqrt(x/L), right='about '+DECAX(v,0), wrong=UQAX(right,['about '+DECAX(x/L,0),'about '+DECAX(Math.sqrt(x),0),'about '+DECAX(x/(L*L),0),'about '+DECAX(Math.log(x/L),1)],3); if(wrong.length<3) return null;
+    return {index:'q:43·now2.work[s;'+e+']', lines:[['x = 10^{'+e+'}','\\ln x \\approx '+DECAX(L,3)],['\\text{each } n \\text{ prime by a toss with chance } 1/\\ln n','the pretend count']], ask:'By about how much does the pretend count stray from li(x)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spread-of-count: the spread squared is at most the average, about x/ln x, so the count strays by about √(x/ln x) ≈ '+DECAX(v,0)+'.'}; }},
+  {id:'43·now2.word',step:'43·now2',mode:'word',label:'zeros on the line',open:()=>measured('43·now2'),make(){
+    const b=[0.5,0.6,0.75][rnd(3)], e=[6,10][rnd(2)], v=Math.pow(10,e*b), F=rnd(2);
+    if(F){ const right='about 10^'+DECAX(e*b,2), wrong=UQAX(right,['about 10^'+e,'about 10^'+DECAX(e*b*2,2),'about 10^'+DECAX(e*0.25,2),'about 10^'+DECAX(e*0.9,2)],3);
+      return {index:'q:43·now2.word[z;'+b+';'+e+']', a3:['43·now2.word',DASH,DASH], story:'Suppose ζ had a zero ρ = '+b+' + iγ.', lines:[], ask:'How large a wave would it put in the error of the count, at x = 10^'+e+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Zero-size: x^ρ has size x^β = 10^('+e+' · '+b+'), less the |ρ| below it. Only zeros with β = ½ keep the error to square-root size.'}; }
+    const right='no: a finite check; the hypothesis is about endlessly many', wrong=['yes: ten trillion is enough','yes, by the zero-size technique','no: some zero is known off the line'];
+    return {index:'q:43·now2.word[c]', a3:['43·now2.word',DASH,DASH], story:'Ten trillion zeros of ζ have been checked, and every one lies on the line of real part ½.', lines:[], ask:'Are all of them on it?', right, opts:shuffle([right,...wrong]), lead:'', why:'A table checks finitely many; the claim is about every zero.'}; }},
+  {id:'43·now2.line',step:'43·now2',mode:'proof',label:'what the count licenses',open:()=>measured('43·now2'),make(){
+    return line28('43·now2.line',[
+      ['z1',[['\\text{ten trillion zeros on the line}','checked'],['\\text{all are}','all']],2,1,'A finite check; the hypothesis is about endlessly many.'],
+      ['z2',[['\\rho = \\beta + i\\gamma,\\ x \\gt 1','a zero'],['|x^\\rho| = x^\\beta','zero-size']],2,0,'The turn x^(iγ) has size 1.'],
+      ['z3',[['\\text{a count of independent tosses}','given'],['\\text{spread squared at most its average}','spread-of-count']],2,0,'Each qₙ(1 − qₙ) is at most qₙ.'],
+      ['z4',[['li(x)','given'],['\\text{equal to } x/\\ln x','count']],2,1,'It exceeds it by about x/(ln x)².'],
+      ['z5',[['\\text{the clock of 2}','twins'],['\\text{both odd with chance } \\tfrac12 \\text{ against } \\tfrac14','twin-correction']],2,0,'n odd makes n + 2 odd.']],[]); }});
+/* ----- annex 43·phys Why do metals conduct: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'43·phys.work',step:'43·phys',mode:'work',label:'drift, knocks and heat',open:()=>measured('43·phys'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const s=[5.96e7,3.77e7,1e7][rnd(3)], T=[100,200,300][rnd(3)], v=2.44e-8*s*T, right=DECAX(v,0)+' W/(m K)', wrong=UQAX(right,[DECAX(2.44e-8*s,2)+' W/(m K)',DECAX(v/2,0)+' W/(m K)',DECAX(v*10,0)+' W/(m K)',DECAX(2.44e-8*s*T*T/100,0)+' W/(m K)'],3); if(wrong.length<3) return null;
+      return {index:'q:43·phys.work[w;'+s+';'+T+']', lines:[['\\sigma = '+SCAX(s,2)+' \\text{ S/m}','a metal'],['T = '+T+' \\text{ K}','']], ask:'About what is its thermal conductivity?', right, opts:shuffle([right,...wrong]), lead:'', why:'Heat-and-charge: κ = 2.44 × 10⁻⁸ · σ · T = 2.44 × 10⁻⁸ × '+SCAX(s,2)+' × '+T+' ≈ '+right+'.'}; }
+    if(ask===1){ const a=[1.5,1.7,2.0][rnd(3)], b=[0.1,0.3,0.5,1.0][rnd(3)], right=DECAX(a+b,2)+' × 10⁻⁸ Ω m', wrong=UQAX(right,[DECAX(a*b/(a+b),3)+' × 10⁻⁸ Ω m',DECAX(Math.max(a,b),2)+' × 10⁻⁸ Ω m',DECAX(a*b,3)+' × 10⁻⁸ Ω m',DECAX(Math.sqrt(a*a+b*b),2)+' × 10⁻⁸ Ω m'],3); if(wrong.length<3) return null;
+      return {index:'q:43·phys.work[r;'+a+';'+b+']', lines:[['\\rho_{\\text{heat}} = '+a+' \\times 10^{-8}\\ \\Omega\\text{ m}','knocks by shaking atoms'],['\\rho_{\\text{stray}} = '+b+' \\times 10^{-8}\\ \\Omega\\text{ m}','knocks by stray atoms']], ask:'What is the resistivity with both?', right, opts:shuffle([right,...wrong]), lead:'', why:'Rates-add: independent knocks add their rates, and resistivity goes as the rate, so '+a+' + '+b+' = '+DECAX(a+b,2)+'.'}; }
+    const n=[8.5e28,5.9e28,1.8e29][rnd(3)], t=[2.5e-14,1e-14,4e-14][rnd(3)], v=n*1.602e-19*1.602e-19*t/9.109e-31, right=SCAX(v,2)+' S/m', wrong=UQAX(right,[SCAX(n*1.602e-19*t/9.109e-31,2)+' S/m',SCAX(v*1e3,2)+' S/m',SCAX(1/v,2)+' S/m',SCAX(n*1.602e-19*1.602e-19/(t*9.109e-31),2)+' S/m'],3); if(wrong.length<3) return null;
+    return {index:'q:43·phys.work[s;'+n+';'+t+']', lines:[['n = '+SCAX(n,2)+' \\text{ m}^{-3}','free electrons'],['\\tau = '+SCAX(t,2)+' \\text{ s},\\ \\ e = 1.602 \\times 10^{-19},\\ m = 9.109 \\times 10^{-31}','time between knocks']], ask:'What is the conductivity?', right, opts:shuffle([right,...wrong]), lead:'', why:'Drift-current: σ = ne²τ/m ≈ '+right+'.'}; }},
+  {id:'43·phys.word',step:'43·phys',mode:'word',label:'bands of a ring',open:()=>measured('43·phys'),make(){
+    const N=[6,8,10,100][rnd(4)], F=rnd(2);
+    if(F){ const right=String(2*N), wrong=UQAX(right,[String(N),String(N/2),String(4*N)],3);
+      return {index:'q:43·phys.word[n;'+N+']', a3:['43·phys.word',DASH,DASH], story:'A ring of '+N+' atoms wraps a repeating lattice round; one band of its electron levels is considered.', lines:[], ask:'How many electrons does the band hold?', right, opts:shuffle([right,...wrong]), lead:'', why:'Two-per-hour: the band has '+N+' levels, one for each hour, and two spins to each: '+right+'.'}; }
+    const right='no: in three directions two bands overlap, and magnesium is a metal', wrong=['yes: two per atom fill a band','yes, at low temperature','no: magnesium has one electron an atom'];
+    return {index:'q:43·phys.word[m]', a3:['43·phys.word',DASH,DASH], story:'Magnesium has two outer electrons an atom, enough to fill a band exactly.', lines:[], ask:'Does magnesium insulate?', right, opts:shuffle([right,...wrong]), lead:'', why:'A full band carries nothing; but the next band dips below the top of the full one, so both are part full.'}; }},
+  {id:'43·phys.line',step:'43·phys',mode:'proof',label:'what the bands license',open:()=>measured('43·phys'),make(){
+    return line28('43·phys.line',[
+      ['b1',[['\\text{a ring of } N \\text{ atoms has } N \\text{ states}','given'],['\\text{its band holds } N \\text{ electrons}','count']],2,1,'Two spins to each hour: 2N.'],
+      ['b2',[['k \\text{ and } k + 2\\pi/a','given'],['\\text{different waves}','waves']],2,1,'At the sites they agree.'],
+      ['b3',[['\\text{an electron in copper}','given'],['\\text{knocked by every atom it passes}','knocks']],2,1,'The perfect lattice never knocks; copper’s run is about 170 atoms.'],
+      ['b4',[['\\text{a full band}','given'],['\\text{its electrons cannot move}','full']],2,1,'Each moves; the speeds cancel in pairs.'],
+      ['b5',[['\\text{the drift speed}','given'],['\\text{the electrons’ speed}','drift']],2,1,'7.4 × 10⁻⁵ m/s is the average; each moves at about 1.6 × 10⁶ m/s.'],
+      ['b6',[['\\text{hopping by } t \\text{ on a ring of } N','given'],['\\text{levels } E_0 - 2t\\cos(2\\pi m/N)','hopping-band']],2,0,'One for each hour m, in a band from E₀ − 2t to E₀ + 2t.']],[]); }});
+/* ----- annex 44·bio Which few directions carry most of the variation: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'44·bio.work',step:'44·bio',mode:'work',label:'axes of the spread',open:()=>measured('44·bio'),make(){
+    const ask=rnd(2);
+    if(ask){ const n=[10,20,50,100][rnd(4)], p=[1000,5000,20000][rnd(3)], right=String(n-1), wrong=UQAX(right,[String(p),String(n),String(p-1),String(Math.min(n,p)/2)],3); if(wrong.length<3) return null;
+      return {index:'q:44·bio.work[n;'+n+';'+p+']', lines:[[n+' \\text{ samples, average taken away}','rows'],[p.toLocaleString('en').replace(/,/g,' ')+' \\text{ genes read}','columns']], ask:'At most how many axes carry any spread?', right, opts:shuffle([right,...wrong]), lead:'', why:'Few-samples: C·d lies in the build of the n rows, which add to 0, so at most n − 1 = '+right+' stretches are not 0.'}; }
+    const a=[100,50,25,9][rnd(4)], c=[1,4,16][rnd(3)], b=[2,3,6][rnd(3)]; if(b*b>=a*c) return null; const D=Math.sqrt((a-c)*(a-c)+4*b*b), l1=(a+c+D)/2, right=DECAX(100*l1/(a+c),1)+'%', wrong=UQAX(right,[DECAX(100*a/(a+c),1)+'%',DECAX(100*(a+c-l1)/(a+c),1)+'%','50%',DECAX(100*l1/(a+c+2*b),1)+'%'],3); if(wrong.length<3) return null;
+    return {index:'q:44·bio.work[s;'+a+';'+b+';'+c+']', lines:[['C = \\begin{pmatrix} '+a+' & '+b+' \\\\ '+b+' & '+c+' \\end{pmatrix}','a spread grid of two traits']], ask:'What share of the spread does the first axis keep?', right, opts:shuffle([right,...wrong]), lead:'', why:'λ² − '+(a+c)+'λ + '+(a*c-b*b)+' = 0 gives λ₁ ≈ '+DECAX(l1,3)+'; kept-share: '+DECAX(l1,3)+' ÷ '+(a+c)+' ≈ '+right+'.'}; }},
+  {id:'44·bio.word',step:'44·bio',mode:'word',label:'genes and the first axis',open:()=>measured('44·bio'),make(){
+    const F=rnd(3), Q=[['A lab reads 20 000 genes from 100 samples, average taken away.','How many directions of spread can there be?','at most 99, by the few-samples technique'],['The first axis of a gene study separates the samples cleanly.','Is it the disease?','not shown: it is the most spread; it may be a size, a batch, or the day the samples were run'],['A botanist scales each trait by its own spread before finding the axes.','Are the axes the same as before?','not in general: the correlation grid has its own axes and shares']];
+    const wrong=[['20 000, one for each gene','100, one for each sample','at most 50'],['yes: the first axis is always the cause','yes, if it keeps most of the spread','no: the first axis is noise'],['yes: scaling leaves axes alone','yes, if the traits are in metres','no: it gives no axes at all']][F];
+    return {index:'q:44·bio.word['+F+']', a3:['44·bio.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['However many genes are read, n samples give at most n − 1 stretches other than 0.','An axis is a direction of spread, not a cause.','Own-units: the plants keep 99.4% one way and 80% the other.'][F]}; }},
+  {id:'44·bio.line',step:'44·bio',mode:'proof',label:'what the axes license',open:()=>measured('44·bio'),make(){
+    return line28('44·bio.line',[
+      ['g1',[['20\\,000 \\text{ genes}','100 samples'],['20\\,000 \\text{ directions of spread}','genes']],2,1,'100 samples give at most 99.'],
+      ['g2',[['\\text{the first axis}','given'],['\\text{it is the disease}','cause']],2,1,'It may be a size, a batch, or the day the samples were run.'],
+      ['g3',[['\\text{traits scaled}','given'],['\\text{the axes are left alone}','scaling']],2,1,'The plants keep 99.4% one way and 80% the other.'],
+      ['g4',[['\\text{an axis keeping } 0.3\\%','given'],['\\text{it is noise}','small']],2,1,'The map of Europe came from two such axes.'],
+      ['g5',[['C \\text{ real symmetric}','spread grid'],['\\text{a full set of axes at right angles}','no-block']],2,0,'No ones above the diagonal in its nearly diagonal form.'],
+      ['g6',[['XX^{\\mathsf T}u = \\lambda u,\\ \\lambda \\ne 0','small side'],['X^{\\mathsf T}u \\text{ is stretched by } X^{\\mathsf T}X \\text{ with } \\lambda','small-side']],2,0,'Multiply by Xᵀ on the left.']],[]); }});
+/* ----- annex 44·chem Where do a molecule’s electrons sit: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'44·chem.work',step:'44·chem',mode:'work',label:'levels of rings and chains',open:()=>measured('44·chem'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const n=[3,4,5,6,7,8][rnd(6)], right=String(Math.floor(n/2)+1), wrong=UQAX(right,[String(n),String(n-1),String(Math.ceil(n/2)),String(2*n)],3); if(wrong.length<3) return null;
+      return {index:'q:44·chem.work[d;'+n+']', lines:[['\\text{a ring of } '+n+' \\text{ carbons}','stretches 2cos(2πk/n)']], ask:'How many different levels does it have?', right, opts:shuffle([right,...wrong]), lead:'', why:'Ring-level: k and n − k share a level, so k = 0 to '+Math.floor(n/2)+' give '+right+' different ones.'}; }
+    if(ask===1){ const n=[2,3,4,5][rnd(4)], k=1+rnd(n), v=2*Math.cos(k*Math.PI/(n+1)), right=DECAX(v,3).replace('-','−'), wrong=UQAX(right,[DECAX(2*Math.cos(2*k*Math.PI/n),3).replace('-','−'),DECAX(2*Math.cos(k*Math.PI/n),3).replace('-','−'),DECAX(Math.cos(k*Math.PI/(n+1)),3).replace('-','−'),DECAX(2*Math.sin(k*Math.PI/(n+1)),3).replace('-','−')],3); if(wrong.length<3) return null;
+      return {index:'q:44·chem.work[c;'+n+';'+k+']', lines:[['\\text{a chain of } '+n+' \\text{ atoms}','k = '+k]], ask:'What is its kth stretch?', right, opts:shuffle([right,...wrong]), lead:'', why:'Chain-level: 2cos(kπ/(n + 1)) = 2cos('+k+'π/'+(n+1)+') ≈ '+right+'.'}; }
+    const e=[2,4,6,8,10,12,14,18][rnd(8)], ok=e%4===2, right=ok?'none half filled: '+e+' = 4m + 2':'a pair half filled: '+e+' is not 4m + 2', wrong=[ok?'a pair half filled: '+e+' is not 4m + 2':'none half filled: '+e+' = 4m + 2','every level half filled','none half filled: every even count fills'];
+    return {index:'q:44·chem.work[e;'+e+']', lines:[['\\text{a ring cloud of } '+e+' \\text{ electrons}','fill from the bottom']], ask:'Is any level left half filled?', right, opts:shuffle([right,...wrong]), lead:'', why:'Full-pairs: the bottom level takes 2 and each pair after it 4, so the levels close at 2, 6, 10, 14, …: 4m + 2.'}; }},
+  {id:'44·chem.word',step:'44·chem',mode:'word',label:'benzene and the ring of four',open:()=>measured('44·chem'),make(){
+    const F=rnd(3), Q=[['A chemist expects every ring of carbons with links taking turns to be steady.','Is the ring of four?','no: it has 4 electrons, not 4m + 2, and gains nothing'],['A student says benzene’s ring of six has six different levels.','Does it?','no: k and n − k share a level; benzene has four, two of them pairs'],['A student uses only real numbers to find the levels of a ring.','Is that enough?','no: S has no real stretched vectors but a few; the turnings live in ℂ']];
+    const wrong=[['yes: all such rings are steady','yes, by the ring-level technique','no: it has 6 electrons'],['yes: one for each atom','yes, all different','no: it has two'],['yes: the levels are real','yes, for even n','no: no ring has real levels']][F];
+    return {index:'q:44·chem.word['+F+']', a3:['44·chem.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Full-pairs: only e = 4m + 2 leaves no level half filled.','Ring-level: 2cos(2πk/6) for k and 6 − k agree.','The least polynomial of S is xⁿ − 1, whose zeros are the n turnings in ℂ.'][F]}; }},
+  {id:'44·chem.line',step:'44·chem',mode:'proof',label:'what the levels license',open:()=>measured('44·chem'),make(){
+    return line28('44·chem.line',[
+      ['l1',[['\\text{every ring with links taking turns}','given'],['\\text{it is steady}','rings']],2,1,'The ring of four has 4 electrons, not 4m + 2.'],
+      ['l2',[['\\text{a ring of } n \\text{ atoms}','given'],['n \\text{ different levels}','levels']],2,1,'k and n − k share a level.'],
+      ['l3',[['\\text{the ring-level technique}','given'],['\\text{only real numbers are needed}','real']],2,1,'The turnings live in ℂ.'],
+      ['l4',[['\\text{the levels}','given'],['\\text{the molecule’s exact energy}','exact']],2,1,'α and β are fitted once; the model ignores the electrons pushing on each other.'],
+      ['l5',[['\\text{benzene, 6 electrons}','ring of six'],['8 \\text{ units of sharing, against 6}','fill-from-bottom']],2,0,'2 · 2 + 4 · 1 = 8.'],
+      ['l6',[['\\text{a ring of } n','given'],['\\text{stretches } 2\\cos(2\\pi k/n)','ring-level']],2,0,'A = S + S⁻¹, and S stretches by ωᵏ.']],[]); }});
+/* ----- annex 44·comp How can a damaged message still be read: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'44·comp.work',step:'44·comp',mode:'work',label:'distance, flips and checks',open:()=>measured('44·comp'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const j=1+rnd(7), right=j.toString(2).padStart(3,'0'), wrong=UQAX(right,[(8-j).toString(2).padStart(3,'0'),(j%7+1).toString(2).padStart(3,'0'),'000',j.toString(2).padStart(3,'0').split('').reverse().join('')],3); if(wrong.length<3) return null;
+      return {index:'q:44·comp.work[h;'+j+']', lines:[['H \\text{: column } j \\text{ is } j \\text{ written in twos}','a check grid for words of 7'],['\\text{one flip, at place } '+j,'']], ask:'What does H give on the received word?', right, opts:shuffle([right,...wrong]), lead:'', why:'Flip-finder: H(c + e_j) = Hc + He_j = 0 + column '+j+', which is '+right+'.'}; }
+    if(ask===1){ const n=[7,15,23][rnd(3)], t=n===23?3:1, C=(a,b)=>{ let r=1; for(let i=0;i<b;i++) r=r*(a-i)/(i+1); return r; }; let s=0; for(let i=0;i<=t;i++) s+=C(n,i); const v=Math.floor(Math.pow(2,n)/s), right=v.toLocaleString('en').replace(/,/g,' '), wrong=UQAX(right,[Math.pow(2,n).toLocaleString('en').replace(/,/g,' '),Math.floor(Math.pow(2,n)/(n*t)).toLocaleString('en').replace(/,/g,' '),Math.floor(Math.pow(2,n-t)).toLocaleString('en').replace(/,/g,' '),Math.floor(Math.pow(2,n)/(s+1)).toLocaleString('en').replace(/,/g,' ')],3); if(wrong.length<3) return null;
+      return {index:'q:44·comp.work[b;'+n+']', lines:[['n = '+n,'words of length n'],['\\text{fixes } t = '+t+' \\text{ flip'+(t>1?'s':'')+'}','']], ask:'At most how many code words can it have?', right, opts:shuffle([right,...wrong]), lead:'', why:'Ball-packing: 2^'+n+' ÷ ('+Array.from({length:t+1},(_,i)=>'C('+n+', '+i+')').join(' + ')+') = 2^'+n+' ÷ '+s+' = '+right+'.'}; }
+    const d=2+rnd(8), right='finds '+(d-1)+', fixes '+Math.floor((d-1)/2), wrong=UQAX(right,['finds '+d+', fixes '+d,'finds '+(d-1)+', fixes '+(d-1),'finds '+Math.floor((d-1)/2)+', fixes '+(d-1),'finds '+d+', fixes '+Math.floor(d/2)],3); if(wrong.length<3) return null;
+    return {index:'q:44·comp.work[d;'+d+']', lines:[['d = '+d,'the least distance of a code']], ask:'How many flips can it find, and how many fix?', right, opts:shuffle([right,...wrong]), lead:'', why:'Fix-radius: it finds d − 1 = '+(d-1)+' and fixes t with 2t + 1 ≤ '+d+': t = '+Math.floor((d-1)/2)+'.'}; }},
+  {id:'44·comp.word',step:'44·comp',mode:'word',label:'the scratched code',open:()=>measured('44·comp'),make(){
+    const F=rnd(3), Q=[['A receiver finds Hr = 0 on a word of a code that fixes one flip.','Was no bit flipped?','not shown: three flips can land on another code word'],['A designer wants a value code over ℤ/7 of length 10.','Can it be made?','no: it needs 10 different points of the field, and ℤ/7 has 7'],['A QR code is scratched, damaging eight bits in a row of one byte.','Over which field does that count as one damaged symbol?','the field of 256, where a byte is one symbol']];
+    const wrong=[['yes: Hr = 0 means clean','yes, if the code is long','no: one bit was flipped'],['yes: any length works','yes, with 10 checks','no: it needs length 7 exactly'],['ℤ/2, where it is one flip','ℤ/7','none: a burst is always unfixable']][F];
+    return {index:'q:44·comp.word['+F+']', a3:['44·comp.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['1110000 has H of it 0: three flips from 0000000.','Value-code: the values at n different points of the field.','Over ℤ/2 the burst is 8 flips; over the field of 256 it is one damaged symbol.'][F]}; }},
+  {id:'44·comp.line',step:'44·comp',mode:'proof',label:'what the distance licenses',open:()=>measured('44·comp'),make(){
+    return line28('44·comp.line',[
+      ['h1',[['d = 3','a code'],['\\text{it fixes 3 flips}','fix']],2,1,'It finds 2 and fixes 1.'],
+      ['h2',[['Hr = 0','received'],['\\text{no bit was flipped}','check']],2,1,'Three flips can land on another code word.'],
+      ['h3',[['\\text{the value code over } \\mathbb Z/7','given'],['\\text{length 10}','length']],2,1,'It needs n different points of the field.'],
+      ['h4',[['\\text{a straight code}','given'],['\\text{least distance} = \\text{least weight other than 0}','lightest-word']],2,0,'dist(u, v) = weight(u + v), and u + v is in the code.'],
+      ['h5',[['\\text{a value code},\\ k \\text{ coefficients},\\ n \\text{ points}','given'],['\\text{least distance } n - k + 1','value-code']],2,0,'Two words agree in at most k − 1 places.']],[]); }});
+/* ----- annex 44·now Can two cubes ever add to a cube: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'44·now.work',step:'44·now',mode:'work',label:'cubes on the clock of 9',open:()=>measured('44·now'),make(){
+    const ask=rnd(2);
+    if(ask){ const P=[[37,'not regular'],[59,'not regular'],[67,'not regular'],[3,'regular'],[5,'regular'],[7,'regular'],[11,'regular'],[13,'regular'],[31,'regular'],[41,'regular'],[43,'regular'],[61,'regular'],[71,'regular']][rnd(13)], right=P[1]==='regular'?'regular: the ideal method proves it for this p':'not regular: the ideal method of the 1840s does not reach it', wrong=[P[1]==='regular'?'not regular: the ideal method of the 1840s does not reach it':'regular: the ideal method proves it for this p','every prime is regular','no prime is regular'];
+      return {index:'q:44·now.work[r;'+P[0]+']', lines:[['p = '+P[0],'xᵖ + yᵖ = zᵖ'],['\\text{below 100, the primes that are not regular: } 37, 59, 67','']], ask:'Is p regular, and what follows?', right, opts:shuffle([right,...wrong]), lead:'', why:'Ideals repair the factoring for the primes that do not divide the count of ideal classes: all but 37, 59 and 67 below 100.'}; }
+    const x=1+rnd(20), v=Math.pow(x,3)%9, right=String(v), wrong=UQAX(right,[String((x*x)%9),String(x%9),String((3*x)%9),String((v+1)%9)],3); if(wrong.length<3) return null;
+    return {index:'q:44·now.work[c;'+x+']', lines:[['x = '+x,'a whole number']], ask:'What is x³ on the clock of 9?', right, opts:shuffle([right,...wrong]), lead:'', why:'Nine-clock: '+x+'³ = '+Math.pow(x,3)+', remainder '+right+' by 9. Every cube is 0, 1 or 8, and only multiples of 3 give 0.'}; }},
+  {id:'44·now.word',step:'44·now',mode:'word',label:'the margin and the proof',open:()=>measured('44·now'),make(){
+    const F=rnd(3), Q=[['A student shows x³ + y³ = z³ fails on the clock of 9 when 3 divides none of x, y, z.','Does that rule out every answer?','no: only answers with 3 dividing none of x, y, z'],['A student says factors sharing nothing whose product is a cube must be cubes, in any ring.','Is that so?','no: only where factoring is unique; (2) = P² but 2 is no square'],['A reader says the margin proof of the 1630s was the 1995 proof.','Was it?','no: no proof was written; the 1995 one needs tools from the 1950s on']];
+    const wrong=[['yes: the clock settles it','yes, for every n','no: it rules out nothing'],['yes: in every ring','yes, in ℤ[ζ] always','no: not even in ℤ'],['yes: the same proof','yes, in shorter words','no: the 1995 proof was wrong']][F];
+    return {index:'q:44·now.word['+F+']', a3:['44·now.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Nine-clock: it forces one of x, y, z to be a multiple of 3, no more.','Ideal-power: (2) is the square of an ideal, but 2 is not a unit times a square.','The 1995 proof went through curves and their point counts.'][F]}; }},
+  {id:'44·now.line',step:'44·now',mode:'proof',label:'what the clocks license',open:()=>measured('44·now'),make(){
+    return line28('44·now.line',[
+      ['f1',[['\\text{failing on the clock of 9}','given'],['x^3 + y^3 = z^3 \\text{ ruled out}','clock']],2,1,'Only answers with 3 dividing none of x, y, z.'],
+      ['f2',[['\\text{factors sharing nothing, product a cube}','any ring'],['\\text{they are cubes}','unique']],2,1,'Only where factoring is unique.'],
+      ['f3',[['\\text{the margin proof of the 1630s}','given'],['\\text{the 1995 proof}','history']],2,1,'No proof was written.'],
+      ['f4',[['\\text{the regular primes}','given'],['\\text{all but finitely many}','regular']],2,1,'Endlessly many primes are not regular.'],
+      ['f5',[['x^3 \\bmod 9','any x'],['0, 1 \\text{ or } 8','nine-clock']],2,0,'Only multiples of 3 give 0.']],[]); }});
+/* ----- annex 44·now2 Will today’s codes survive quantum computers: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'44·now2.work',step:'44·now2',mode:'work',label:'wrap, noise and size',open:()=>measured('44·now2'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const k=[2,3,4][rnd(3)], n=256, b=[12,13][rnd(2)], v=k*n*b/8, right=v+' bytes', wrong=UQAX(right,[(k*n*b)+' bytes',(k*n)+' bytes',(n*b/8)+' bytes',(k*n*b/16)+' bytes'],3); if(wrong.length<3) return null;
+      return {index:'q:44·now2.work[m;'+k+';'+b+']', lines:[['k = '+k+',\\ n = 256','members of R_q, coefficients each'],['b = '+b+' \\text{ bits a coefficient}','']], ask:'How many bytes does the list take?', right, opts:shuffle([right,...wrong]), lead:'', why:'Module-size: k · n · b / 8 = '+k+' · 256 · '+b+' / 8 = '+right+'.'}; }
+    if(ask===1){ const q=[3329,97,257][rnd(3)], m=rnd(2), e=rnd(Math.floor(q/5))-Math.floor(q/10), v=((e+m*Math.floor(q/2))%q+q)%q, near0=Math.min(v,q-v)<Math.abs(v-q/2), right='m = '+(near0?0:1), wrong=[right==='m = 0'?'m = 1':'m = 0','it cannot be read','both bits at once'];
+      return {index:'q:44·now2.work[r;'+q+';'+v+']', lines:[['q = '+q,'the clock'],['v - u \\cdot s = '+v,'r·e small']], ask:'What bit does the receiver read?', right, opts:shuffle([right,...wrong]), lead:'', why:'Round-off: '+v+' is nearer '+(near0?'0 (or q)':'q/2 ≈ '+Math.floor(q/2))+', so '+right+'.'}; }
+    const n=[4,8][rnd(2)], m=n+1+rnd(2*n-1), neg=Math.floor(m/n)%2, r=m%n, right=(neg?'−':'')+(r===0?'1':r===1?'x':'x^'+r), base=(r===0?'1':r===1?'x':'x^'+r), wrong=[neg?base:'−'+base,'x^'+m,'0','−x^'+m].filter(w=>w!==right).slice(0,3); if(wrong.length<3) return null;
+    return {index:'q:44·now2.work[w;'+n+';'+m+']', lines:[['\\mathbb Z_q[x]/(x^{'+n+'} + 1)','x^'+n+' = −1']], ask:'What is x^'+m+' there?', right, opts:shuffle([right,...wrong]), lead:'', why:'Sign-wrap: '+m+' = '+Math.floor(m/n)+' · '+n+' + '+r+', and each x^'+n+' is −1: '+right+'.'}; }},
+  {id:'44·now2.word',step:'44·now2',mode:'word',label:'the new standards',open:()=>measured('44·now2'),make(){
+    const F=rnd(3), Q=[['A newspaper says the new standards rest on a proof that learning with errors is hard.','Is there such a proof?','no: it is believed hard, for ordinary and quantum machines; no proof is known'],['A student runs row moves on a noisy b to find s.','Is the answer nearly right?','no: the errors spread over all of s'],['A reader says a quantum computer breaks every code.','Does it?','no: it finds orders fast; codes from errors on R_q are not known to fall']];
+    const wrong=[['yes: it was proved in 2024','yes, for quantum machines','no: it is known to be easy'],['yes: small errors give a small miss','yes, if q is large','no: row moves fail without noise too'],['yes: every one','yes, given enough qubits','no: it breaks none']][F];
+    return {index:'q:44·now2.word['+F+']', a3:['44·now2.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Noise-hides: that belief, not a proof, carries the new standards.','Noise-hides: they gave (0, 7) against (3, 5).','Order-splits breaks the secrets of 43l and 44·crypt.'][F]}; }},
+  {id:'44·now2.line',step:'44·now2',mode:'proof',label:'what the noise licenses',open:()=>measured('44·now2'),make(){
+    return line28('44·now2.line',[
+      ['w1',[['\\text{learning with errors}','given'],['\\text{proved hard}','hard']],2,1,'Believed hard; no proof is known.'],
+      ['w2',[['\\mathbb Z_q[x]/(x^4 + 1)','given'],['x^5 = x','wrap']],2,1,'x⁴ = −1, so x⁵ = −x.'],
+      ['w3',[['\\text{row moves on a noisy } b','given'],['\\text{a nearly right } s','rows']],2,1,'The errors spread over all of s.'],
+      ['w4',[['\\text{a quantum computer}','given'],['\\text{it breaks every code}','quantum']],2,1,'It finds orders fast; others are not known to fall.'],
+      ['w5',[['g^r \\equiv 1,\\ r \\text{ even},\\ g^{r/2} \\not\\equiv -1','clock of N'],['\\gcd(g^{r/2} \\pm 1, N) \\text{ split } N','order-splits']],2,0,'N divides the product but neither factor.']],[]); }});
+/* ----- annex 46·now What are the building blocks of symmetry: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'46·now.work',step:'46·now',mode:'work',label:'sizes of simple groups',open:()=>measured('46·now'),make(){
+    const ask=rnd(2);
+    if(ask){ const n=[5,6,7,8][rnd(4)], f=[1,2,3,4,5,6,7,8].slice(0,n).reduce((a,b)=>a*b,1), right=(f/2).toLocaleString('en').replace(/,/g,' '), wrong=UQAX(right,[f.toLocaleString('en').replace(/,/g,' '),(n*n).toLocaleString('en'),((f/n)/2).toLocaleString('en').replace(/,/g,' '),(f/4).toLocaleString('en').replace(/,/g,' ')],3); if(wrong.length<3) return null;
+      return {index:'q:46·now.work[a;'+n+']', lines:[['A_{'+n+'}','the even shuffles of '+n+' things']], ask:'How many members has it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Half of the '+n+'! = '+f+' shuffles are even: '+right+'. For five or more things it is simple.'}; }
+    const p=[5,7,11,13][rnd(4)], v=p*(p*p-1)/2, right=String(v), wrong=UQAX(right,[String(p*(p*p-1)),String(p*p-1),String(p*(p-1)/2),String(p*p*(p*p-1))],3); if(wrong.length<3) return null;
+    return {index:'q:46·now.work[p;'+p+']', lines:[['PSL(2, '+p+')','grids over the clock of '+p]], ask:'How many members has it?', right, opts:shuffle([right,...wrong]), lead:'', why:'SL(2, p) has p(p² − 1) members; dividing by ±1 halves it: '+p+' · '+(p*p-1)+' ÷ 2 = '+right+'.'}; }},
+  {id:'46·now.word',step:'46·now',mode:'word',label:'the list of pieces',open:()=>measured('46·now'),make(){
+    const F=rnd(3), Q=[['A student says every finite group is a product of simple groups.','Is it?','no: it has simple pieces, but S₃ is not the product of its pieces of 2 and 3'],['A reader says the list of simple groups makes every finite group known.','Does it?','no: it lists the pieces; how they fit is a separate question'],['A student says PSL(2, p) is simple for every prime p.','Is it?','no: PSL(2, 2) has 6 members and PSL(2, 3) has 12; neither is simple']];
+    const wrong=[['yes: every group is','yes, for groups of even size','no: no group has simple pieces'],['yes: every group is now known','yes, up to a million members','no: the list is wrong'],['yes: for every prime','yes, from 2 on','no: for no prime']][F];
+    return {index:'q:46·now.word['+F+']', a3:['46·now.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['A group is built from its simple pieces, but not always as their product.','The pieces of a group do not fix the group.','From p = 5 on, PSL(2, p) is simple.'][F]}; }},
+  {id:'46·now.line',step:'46·now',mode:'proof',label:'what the list licenses',open:()=>measured('46·now'),make(){
+    return line28('46·now.line',[
+      ['s1',[['\\text{a finite group}','given'],['\\text{a product of simple groups}','product']],2,1,'S₃ is not the product of its pieces of 2 and 3.'],
+      ['s2',[['\\text{the list of simple groups}','given'],['\\text{every finite group is known}','list']],2,1,'It lists pieces; how they fit is a separate question.'],
+      ['s3',[['PSL(2, p)','given'],['\\text{simple for every prime}','PSL']],2,1,'PSL(2, 2) and PSL(2, 3) are not.'],
+      ['s4',[['\\text{moonshine}','given'],['\\text{proved by computing all of } j','moonshine']],2,1,'By building one structure with the group as its symmetries.'],
+      ['s5',[['A_5','given'],['60 \\text{ members}','even shuffles']],2,0,'Half of 120.']],[]); }});
+/* ----- annex 46·now2 Can every symmetry group come from an equation: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'46·now2.work',step:'46·now2',mode:'work',label:'groups of cubics',open:()=>measured('46·now2'),make(){
+    const C=[[-3,1],[-7,7],[-2,1],[-1,1],[-4,2],[-6,2]][rnd(6)], p=C[0], q=C[1], D=-4*p*p*p-27*q*q, sq=D>0&&Number.isInteger(Math.sqrt(D)), f=x=>String(x).replace('-','−');
+    const right=sq?'A₃, the clock of 3: the discriminant '+D+' is a square':'S₃: the discriminant '+f(D)+' is not a square', wrong=[sq?'S₃: the discriminant '+D+' is not a square':'A₃, the clock of 3: the discriminant '+f(D)+' is a square','S₅','the group of 20'];
+    return {index:'q:46·now2.work['+p+';'+q+']', lines:[['y^3 '+(p<0?'- '+(p===-1?'':-p):'+ '+(p===1?'':p))+'y '+(q<0?'- '+(-q):'+ '+q)+' = 0','irreducible over ℚ'],['\\Delta = -4p^3 - 27q^2','']], ask:'What is its group over ℚ?', right, opts:shuffle([right,...wrong]), lead:'', why:'Δ = −4('+f(p)+')³ − 27 · '+(q*q)+' = '+f(D)+'; an irreducible cubic has group A₃ exactly when Δ is a square in ℚ, else S₃.'}; }},
+  {id:'46·now2.word',step:'46·now2',mode:'word',label:'the open question',open:()=>measured('46·now2'),make(){
+    const F=rnd(3), Q=[['A student says an irreducible quintic always has group S₅.','Does it?','no: x⁵ − 2 has a group of 20'],['A group has not yet been found as the group of an equation over ℚ.','Does that show it cannot come from ℚ?','no: open is not no; no group is known not to come from ℚ'],['Every finite group is Aut(K/E) for some fields.','Does every group then come from an equation over ℚ?','no: E there is a field of letters, not ℚ']];
+    const wrong=[['yes: always','yes, if it has real roots','no: it has group A₅'],['yes: not found means impossible','yes, after 1984','no: it comes from ℚ already'],['yes: E can be ℚ','yes, by cutting the circle','no: no group is Aut(K/E)']][F];
+    return {index:'q:46·now2.word['+F+']', a3:['46·now2.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['46g6: the roots of x⁵ − 2 are a fifth root of 2 times the fifth roots of 1, and its group has 20 members.','Whether every finite group comes from ℚ is open.','Any-group: over a field of letters, by fixing part of the shuffles.'][F]}; }},
+  {id:'46·now2.line',step:'46·now2',mode:'proof',label:'what the fields license',open:()=>measured('46·now2'),make(){
+    return line28('46·now2.line',[
+      ['g1',[['\\text{every group is Aut}(K/E)','any-group'],['\\text{every group comes from } \\mathbb Q','fields']],2,1,'E is a field of letters, not ℚ.'],
+      ['g2',[['\\text{an irreducible quintic}','given'],['\\text{group } S_5','quintic']],2,1,'x⁵ − 2 has a group of 20.'],
+      ['g3',[['\\text{a group not yet found over } \\mathbb Q','given'],['\\text{it cannot come from } \\mathbb Q','open']],2,1,'Open is not no.'],
+      ['g4',[['\\text{the clock of 3}','group'],['\\text{needs a cubic with three non-real roots}','cubic']],2,1,'y³ + y² − 2y − 1 has three real roots and group A₃.'],
+      ['g5',[['\\text{any finite group } G','given'],['\\text{the group of some splitting field over some field}','any-group']],2,0,'Fix part of the shuffles of a field of letters.']],[]); }});
+/* ----- annex 46·phys What are particles built from: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'46·phys.work',step:'46·phys',mode:'work',label:'quarks and binding',open:()=>measured('46·phys'),make(){
+    const ask=rnd(2);
+    if(ask){ const Q=[['uud',1],['udd',0],['uus',1],['dds',-1],['uds',0],['sss',-1],['uuu',2],['ddd',-1]][rnd(8)], ch={u:2,d:-1,s:-1}, v=Q[0].split('').reduce((a,c)=>a+ch[c],0)/3, f=x=>String(x).replace('-','−'), right=f(v), wrong=UQAX(right,[f(v+1),f(v-1),'1/3','2'],3); if(wrong.length<3) return null;
+      return {index:'q:46·phys.work[q;'+Q[0]+']', lines:[['\\text{quarks } '+Q[0],'u = +⅔, d = −⅓, s = −⅓']], ask:'What is the charge of the particle?', right, opts:shuffle([right,...wrong]), lead:'', why:'Add the thirds: '+Q[0].split('').map(c=>c==='u'?'⅔':'−⅓').join(' + ').replace(/\+ −/g,'− ')+' = '+right+'.'}; }
+    const N=[['the deuteron',1,1,1875.613],['helium-4',2,2,3727.379],['tritium',1,2,2808.921]][rnd(3)], B=N[1]*938.272+N[2]*939.565-N[3], right=DECAX(B,3)+' MeV', wrong=UQAX(right,[DECAX(N[3]-N[1]*938.272,3)+' MeV',DECAX(B/(N[1]+N[2]),3)+' MeV',DECAX(N[1]*938.272+N[2]*939.565,3)+' MeV',DECAX(2*B,3)+' MeV'],3); if(wrong.length<3) return null;
+    return {index:'q:46·phys.work[b;'+N[0]+']', lines:[[N[0]+': '+N[1]+'\\text{ p}, '+N[2]+'\\text{ n}','M c^2 = '+N[3]+' \\text{ MeV}'],['m_p c^2 = 938.272,\\ \\ m_n c^2 = 939.565 \\text{ MeV}','']], ask:'What is its binding energy?', right, opts:shuffle([right,...wrong]), lead:'', why:'A nucleus weighs less than its parts by B/c²: '+N[1]+' · 938.272 + '+N[2]+' · 939.565 − '+N[3]+' ≈ '+right+'.'}; }},
+  {id:'46·phys.word',step:'46·phys',mode:'word',label:'the gap in the ten',open:()=>measured('46·phys'),make(){
+    const F=rnd(3), Q=[['A student says isospin is exact, so the proton and neutron weigh the same.','Do they?','no: it is broken by the electric push and the quark masses: 1.293 MeV apart'],['A reader says the Ω⁻ was found first, then fitted into the ten.','Was it?','no: the gap in the ten predicted it'],['A student says quark colour is the colour of rung 36.','Is it?','no: it is a third label with three values; only the name is borrowed']];
+    const wrong=[['yes: exactly the same','yes, within a millionth','no: the neutron is lighter'],['yes: found, then fitted','yes, in 1932','no: it was never found'],['yes: red, green and blue light','yes, seen in a prism','no: quarks have no labels']][F];
+    return {index:'q:46·phys.word['+F+']', a3:['46·phys.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['938.272 against 939.565 MeV.','The ten had one place left, and its strangeness and mass were read off before the find.','The name is borrowed for a label with three values.'][F]}; }},
+  {id:'46·phys.line',step:'46·phys',mode:'proof',label:'what the symmetry licenses',open:()=>measured('46·phys'),make(){
+    return line28('46·phys.line',[
+      ['p1',[['\\text{isospin}','given'],['m_p = m_n','exact']],2,1,'1.293 MeV apart.'],
+      ['p2',[['\\text{a nucleus}','given'],['\\text{weighs the sum of its parts}','sum']],2,1,'Less by B/c²: 2.224 MeV for the deuteron.'],
+      ['p3',[['\\text{the } \\Omega^-','given'],['\\text{found, then fitted into the ten}','order']],2,1,'The gap in the ten predicted it.'],
+      ['p4',[['\\text{quark colour}','given'],['\\text{the colour of rung 36}','colour']],2,1,'Only the name is borrowed.'],
+      ['p5',[['\\psi \\text{ obeys the wave law, dies away at both ends}','given'],['\\text{the total of } |\\psi|^2 \\text{ is kept}','phase-keeps']],2,0,'Its rate is a flow out of the ends.'],
+      ['p6',[['uud','quarks'],['\\text{charge } 1','proton']],2,0,'⅔ + ⅔ − ⅓ = 1.']],[]); }});
+/* ----- annex 47·comp Can a program’s type say what it does: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'47·comp.work',step:'47·comp',mode:'work',label:'counting the members of types',open:()=>measured('47·comp'),make(){
+    const T=[['Bool',2],['One',1],['Dir',4],['Bit3',8],['Day',7]], a=T[rnd(5)], b=T[rnd(5)], k=rnd(3), name=['('+a[0]+' × '+b[0]+')','('+a[0]+' + '+b[0]+')','('+a[0]+' → '+b[0]+')'][k], v=[a[1]*b[1],a[1]+b[1],Math.pow(b[1],a[1])][k];
+    const right=v.toLocaleString('en').replace(/,/g,' '), wrong=UQAX(right,[String(a[1]*b[1]),String(a[1]+b[1]),String(Math.pow(b[1],a[1])),String(Math.pow(a[1],b[1])),String(a[1]*b[1]+1)].map(x=>Number(x).toLocaleString('en').replace(/,/g,' ')),3); if(wrong.length<3) return null;
+    return {index:'q:47·comp.work['+a[0]+';'+b[0]+';'+k+']', lines:[['|\\text{'+a[0]+'}| = '+a[1]+',\\ \\ |\\text{'+b[0]+'}| = '+b[1],'two types']], ask:'How many members has '+name+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Type-counts: products multiply, sums add, and Y → Z has |Z|^|Y|: '+right+'.'}; }},
+  {id:'47·comp.word',step:'47·comp',mode:'word',label:'a program for every type',open:()=>measured('47·comp'),make(){
+    const F=rnd(3), Q=[['A program p_X : X → X is written for every type X without looking at the type.','What can it do?','nothing: it is the do-nothing program at every type'],['A program p_X : X × X → X is written for every type X without looking at the type.','What can it do?','hand back the first part at every type, or the second at every type'],['A program takes a choice of Worker or Task to a Report.','What is it the same as?','a program from Worker to Report, paired with one from Task to Report']];
+    const wrong=[['anything it likes','swap members of X','hand back a fixed member'],['add the two parts','hand back the larger part','choose a part by the type'],['a program from Worker × Task to Report','one program from Report','a Report for every pair']][F];
+    return {index:'q:47·comp.word['+F+']', a3:['47·comp.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Only-identity: test it on One → X picking any x; it must hand back x.','Two-picks: test it on Bool → X sending false to x and true to y.','The cases-map technique: (X + Y) → Z matches (X → Z) × (Y → Z).'][F]}; }},
+  {id:'47·comp.line',step:'47·comp',mode:'proof',label:'what the types license',open:()=>measured('47·comp'),make(){
+    return line28('47·comp.line',[
+      ['t1',[['(X + Y) \\to Z','a program'],['(X \\to Z) \\times (Y \\to Z)','cases-map']],2,0,'A program out of a choice is a program for each tag.'],
+      ['t2',[['|Y \\to Z|','given'],['|Y| \\cdot |Z|','count']],2,1,'It is |Z| to the power |Y|.'],
+      ['t3',[['\\text{map over a list}','given'],['\\text{map of do-nothing is do-nothing}','map-over']],2,0,'Entry by entry, each entry is left as it is.'],
+      ['t4',[['p_X : X \\to X \\text{ for every type}','carried along'],['\\text{it may swap members}','swap']],2,1,'Only-identity: it is the do-nothing program.'],
+      ['t5',[['\\text{the join of Worker and Task over Team}','given'],['\\text{the limit of Worker → Team ← Task}','join-is-limit']],2,0,'The pairs whose two teams agree.']],[]); }});
+/* ----- annex 47·now When are two things truly the same: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'47·now.work',step:'47·now',mode:'work',label:'ways of being the same',open:()=>measured('47·now'),make(){
+    const ask=rnd(2);
+    if(ask){ const a=rnd(9)-4, b=rnd(9)-4, f=x=>String(x).replace('-','−'), w=x=>x===0?'refl':(x>0?'loop':'loop⁻¹')+(Math.abs(x)>1?' run '+Math.abs(x)+' times':''), right=f(a+b), wrong=UQAX(right,[f(a*b),f(a-b),f(Math.abs(a)+Math.abs(b)),'0'],3); if(wrong.length<3) return null;
+      return {index:'q:47·now.work[c;'+a+';'+b+']', lines:[['\\text{a way } '+w(a)+',\\ \\text{then a way } '+w(b),'base = base on the circle']], ask:'What whole number matches the two run in a row?', right, opts:shuffle([right,...wrong]), lead:'', why:'Circle-ways: loop goes to 1 and running ways in a row goes to adding: '+(a<0?'('+f(a)+')':f(a))+' + '+(b<0?'('+f(b)+')':f(b))+' = '+right+'.'}; }
+    const n=2+rnd(5), F=[1,1,2,6,24,120,720][n], right=String(F), wrong=UQAX(right,[String(n),String(n*n),String(Math.pow(2,n)),String(F/2)],3); if(wrong.length<3) return null;
+    return {index:'q:47·now.work[n;'+n+']', lines:[['\\text{a type with } '+n+' \\text{ members}','with univalence']], ask:'In how many ways is it the same as itself?', right, opts:shuffle([right,...wrong]), lead:'', why:'Way-count: the ways are its matchings with itself, its shuffles: '+n+'! = '+right+'.'}; }},
+  {id:'47·now.word',step:'47·now',mode:'word',label:'paths and the circle',open:()=>measured('47·now'),make(){
+    const F=rnd(3), Q=[['Two ways p and q show x = y.','Must p = q?','no: Bool = Bool has refl and the swap'],['A student says the circle type has a point for each angle.','Does it?','no: it has one point, base, and one way, loop'],['A student calls univalence a technique of the calculus.','Is it?','no: it is laid down; the calculus without it cannot prove it']];
+    const wrong=[['yes: all ways are one','yes, for sets','no: there are no ways'],['yes: every angle','yes, for whole angles','no: it has no points'],['yes: it is proved','yes, from the carry-along technique','no: it is false']][F];
+    return {index:'q:47·now.word['+F+']', a3:['47·now.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Ways need not be the same way.','The angles are not members; ways base = base match the whole numbers.','The calculus has a world where it fails.'][F]}; }},
+  {id:'47·now.line',step:'47·now',mode:'proof',label:'what the ways license',open:()=>measured('47·now'),make(){
+    return line28('47·now.line',[
+      ['u1',[['p : x = y,\\ q : x = y','given'],['p = q','same']],2,1,'Bool = Bool has refl and the swap.'],
+      ['u2',[['\\text{univalence}','given'],['\\{1, 2\\} = \\{3, 4\\} \\text{ as sets}','sets']],2,1,'It speaks of types in the calculus.'],
+      ['u3',[['\\text{the circle type}','given'],['\\text{a point for each angle}','angles']],2,1,'One point, base, and one way, loop.'],
+      ['u4',[['\\text{univalence}','given'],['\\text{a technique of the calculus}','laid down']],2,1,'It is laid down.'],
+      ['u5',[['p : x = y,\\ \\text{a member of } P(x)','given'],['\\text{a member of } P(y)','carry-along']],2,0,'For every type family P.']],[]); }});
+/* ----- annex 47·now2 Is all of mathematics one theory: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'47·now2.work',step:'47·now2',mode:'work',label:'counting on a clock',open:()=>measured('47·now2'),make(){
+    const p=[3,5,7,13,17][rnd(5)]; let A=0; for(let x=0;x<p;x++) for(let y=0;y<p;y++) if(((y*y+y-(x*x*x-x*x))%p+p)%p===0) A++; const ask=rnd(2), b=p-A, f=x=>String(x).replace('-','−');
+    const right=ask?f(b):String(A), wrong=UQAX(right,ask?[f(A),f(p+1-A),f(-b),'0']:[String(p),String(p+1),String(2*p),String(A+1)],3); if(wrong.length<3) return null;
+    return {index:'q:47·now2.work['+p+';'+ask+']', lines:[['y^2 + y = x^3 - x^2','a curve'],['\\text{the clock of } '+p,'']], ask:ask?'What is b_'+p+' = '+p+' − A_'+p+'?':'How many pairs (x, y) of hours lie on it, A_'+p+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Clock-count: for each hour x, y² + y = f(x) has 1 + χ(4f(x) + 1) answers; summed over the '+p+' hours, A = '+A+', and b = '+p+' − '+A+' = '+f(b)+'.'}; }},
+  {id:'47·now2.word',step:'47·now2',mode:'word',label:'the programme of 1967',open:()=>measured('47·now2'),make(){
+    const F=rnd(3), Q=[['c_p = b_p for every prime anyone has checked.','Is it proved?','not by checking: checking is induction under the large case; the proof is a deduction'],['A student uses the clock-count technique on the clock of 2.','Does it work there?','no: it needs p odd; on the clock of 2, try all four pairs'],['A reader says the programme of 1967 is proved.','Is it?','no: its geometric form over complex curves is; the case over the fractions is open']];
+    const wrong=[['yes: every prime checked','yes, after a million primes','no: it is false'],['yes: for every prime','yes, with χ(1)','no: no clock works'],['yes: proved in 2024','yes, every case','no: no part of it is proved']][F];
+    return {index:'q:47·now2.word['+F+']', a3:['47·now2.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['The proof (1954) is a deduction over the arrangement.','The technique divides by 2 to complete the square.','The 2024 proof matches two categories built from a curve.'][F]}; }},
+  {id:'47·now2.line',step:'47·now2',mode:'proof',label:'what the counts license',open:()=>measured('47·now2'),make(){
+    return line28('47·now2.line',[
+      ['l1',[['c_p = b_p \\text{ for every prime checked}','checked'],['\\text{proved}','check']],2,1,'Checking is induction under the large case.'],
+      ['l2',[['p = 2','clock'],['A_2 = 2 \\text{ by the clock-count technique}','count']],2,1,'The technique needs p odd; A₂ = 4.'],
+      ['l3',[['\\text{the 2024 proof}','given'],['\\text{the two categories have the same things}','things']],2,1,'It matches them as categories, not thing for thing.'],
+      ['l4',[['\\text{the programme}','given'],['\\text{proved}','all']],2,1,'Its geometric form over complex curves is; the case over the fractions is open.'],
+      ['l5',[['p \\text{ odd}','clock'],['A_p = \\sum_x (1 + \\chi(4f(x) + 1))','clock-count']],2,0,'Complete the square: (2y + 1)² = 4f(x) + 1.']],[]); }});
+/* ----- annex pools: plain maths (Andrew 2026-11-15 07:13Z, the exhaustive draw): the Laundry and the Measuring Stick print a line as text,
+   as the rung pools write it, so every annex question is turned from TeX into that plain style before it is shown ----- */
+const PLAINAX=(()=>{
+  const SUP={'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','+':'⁺','-':'⁻','−':'⁻','=':'⁼','(':'⁽',')':'⁾','n':'ⁿ','i':'ⁱ','x':'ˣ','y':'ʸ','t':'ᵗ','k':'ᵏ','a':'ᵃ','b':'ᵇ','c':'ᶜ','d':'ᵈ','e':'ᵉ','m':'ᵐ','p':'ᵖ','r':'ʳ','s':'ˢ','u':'ᵘ','v':'ᵛ','z':'ᶻ','T':'ᵀ','*':'*','′':'′','∗':'*',' ':''};
+  const SUB={'0':'₀','1':'₁','2':'₂','3':'₃','4':'₄','5':'₅','6':'₆','7':'₇','8':'₈','9':'₉','+':'₊','-':'₋','−':'₋','=':'₌','(':'₍',')':'₎','a':'ₐ','e':'ₑ','h':'ₕ','i':'ᵢ','j':'ⱼ','k':'ₖ','l':'ₗ','m':'ₘ','n':'ₙ','o':'ₒ','p':'ₚ','r':'ᵣ','s':'ₛ','t':'ₜ','u':'ᵤ','v':'ᵥ','x':'ₓ'};
+  const SYM={alpha:'α',beta:'β',gamma:'γ',delta:'δ',epsilon:'ϵ',varepsilon:'ε',zeta:'ζ',eta:'η',theta:'θ',vartheta:'ϑ',iota:'ι',kappa:'κ',lambda:'λ',mu:'μ',nu:'ν',xi:'ξ',pi:'π',rho:'ρ',sigma:'σ',tau:'τ',upsilon:'υ',phi:'ϕ',varphi:'φ',chi:'χ',psi:'ψ',omega:'ω',
+    Gamma:'Γ',Delta:'Δ',Theta:'Θ',Lambda:'Λ',Xi:'Ξ',Pi:'Π',Sigma:'Σ',Phi:'Φ',Psi:'Ψ',Omega:'Ω',
+    cdot:'·',times:'×',div:'÷',pm:'±',mp:'∓',approx:'≈',le:'≤',leq:'≤',ge:'≥',geq:'≥',ne:'≠',neq:'≠',lt:'<',gt:'>',to:'→',rightarrow:'→',mapsto:'↦',leftarrow:'←',gets:'←',Rightarrow:'⇒',implies:'⇒',Leftarrow:'⇐',iff:'⇔',Leftrightarrow:'⇔',leftrightarrow:'↔',rightleftharpoons:'⇌',
+    circ:'∘',in:'∈',notin:'∉',ni:'∋',cup:'∪',cap:'∩',subseteq:'⊆',subset:'⊂',supseteq:'⊇',supset:'⊃',setminus:'∖',emptyset:'∅',varnothing:'∅',infty:'∞',aleph:'ℵ',beth:'ℶ',ell:'ℓ',hbar:'ℏ',nabla:'∇',partial:'∂',int:'∫',oint:'∮',iint:'∬',sum:'Σ',prod:'∏',
+    cdots:'⋯',dots:'…',ldots:'…',vdots:'⋮',equiv:'≡',propto:'∝',gg:'≫',ll:'≪',mid:'|',nmid:'∤',vert:'|',lvert:'|',rvert:'|',Vert:'‖',lVert:'‖',rVert:'‖',oplus:'⊕',otimes:'⊗',land:'∧',wedge:'∧',lor:'∨',vee:'∨',neg:'¬',lnot:'¬',forall:'∀',exists:'∃',
+    langle:'⟨',rangle:'⟩',lfloor:'⌊',rfloor:'⌋',lceil:'⌈',rceil:'⌉',star:'⋆',ast:'∗',bullet:'•',sim:'∼',simeq:'≃',cong:'≅',perp:'⊥',bot:'⊥',top:'⊤',parallel:'∥',angle:'∠',triangle:'△',degree:'°',prime:'′',dagger:'†',square:'□',Box:'□',Diamond:'◇',diamond:'◇',models:'⊨',vdash:'⊢',
+    uparrow:'↑',downarrow:'↓',hookrightarrow:'↪',twoheadrightarrow:'↠',longrightarrow:'⟶',longmapsto:'⟼',colon:':',prec:'≺',succ:'≻',preceq:'⪯',succeq:'⪰',sqcup:'⊔',bigcup:'⋃',bigcap:'⋂',coloneqq:'≔',triangleq:'≜',lnot:'¬',S:'§',
+    sin:'sin',cos:'cos',tan:'tan',sec:'sec',csc:'csc',cot:'cot',sinh:'sinh',cosh:'cosh',tanh:'tanh',arcsin:'arcsin',arccos:'arccos',arctan:'arctan',ln:'ln',log:'log',exp:'exp',det:'det',max:'max',min:'min',gcd:'gcd',lcm:'lcm',lim:'lim',arg:'arg',dim:'dim',ker:'ker',sup:'sup',inf:'inf',deg:'deg',Pr:'Pr',
+    ',':' ',';':' ',':':' ','!':'',' ':' ',quad:'  ',qquad:'  ','%':'%','$':'$','&':'&','#':'#','_':'_','|':'‖'};
+  const BB={Q:'ℚ',R:'ℝ',Z:'ℤ',N:'ℕ',C:'ℂ',F:'𝔽',P:'ℙ',E:'𝔼',H:'ℍ'};
+  const ACC={tilde:'̃',hat:'̂',bar:'̄',overline:'̅',vec:'⃗',dot:'̇',ddot:'̈',widetilde:'̃',widehat:'̂'};
+  const FR={'1/2':'½','1/3':'⅓','2/3':'⅔','1/4':'¼','3/4':'¾','1/5':'⅕','1/6':'⅙','1/8':'⅛'};
+  const simple=s=>/^[\p{L}\p{N}.′∞!]+$/u.test(s)||/^[−-]?\d+(\.\d+)?$/.test(s);
+  const wrap=s=>simple(s)||/^\(.*\)$/.test(s)&&!/\).*\(/.test(s)?s:'('+s+')';
+  function conv(s){ let i=0; const n=s.length;
+    const group=()=>{ /* reads one argument: {...} or one token */ while(i<n&&s[i]===' ') i++;
+      if(s[i]==='{'){ let d=1, j=i+1; while(j<n&&d){ if(s[j]==='\\'){ j+=2; continue; } if(s[j]==='{') d++; else if(s[j]==='}') d--; j++; } const inner=s.slice(i+1,j-1); i=j; return conv(inner); }
+      if(s[i]==='\\'){ const m=/^\\([a-zA-Z]+|.)/.exec(s.slice(i)); i+=m[0].length; return conv(m[0]); }
+      return s[i++]||''; };
+    const raw=()=>{ while(i<n&&s[i]===' ') i++; if(s[i]!=='{') return s[i++]||''; let d=1, j=i+1; while(j<n&&d){ if(s[j]==='{') d++; else if(s[j]==='}') d--; j++; } const r=s.slice(i+1,j-1); i=j; return r; };
+    const script=(t,M,mark)=>{ t=t.trim(); if(t&&[...t].every(c=>M[c]!==undefined)) return [...t].map(c=>M[c]).join(''); t=t.replace(/-/g,'−'); if(mark==='_'&&/^[\p{L}\p{N}]+$/u.test(t)) return '_'+t; return mark+([...t].length===1?t:'('+t+')'); };
+    let o='';
+    while(i<n){ const c=s[i];
+      if(c==='\\'){ const m=/^\\([a-zA-Z]+|.)/.exec(s.slice(i)); const w=m[1]; i+=m[0].length;
+        if(w==='\\'){ o+='; '; continue; }
+        if(w==='{'){ o+='{'; continue; } if(w==='}'){ o+='}'; continue; }
+        if(w==='text'||w==='mathrm'||w==='textrm'||w==='operatorname'||w==='mathsf'||w==='textsf'||w==='mathit'||w==='textit'||w==='mathbf'||w==='textbf'||w==='boldsymbol'||w==='bm'||w==='mbox'||w==='mathtt'||w==='texttt'||w==='mathcal'||w==='mathscr'||w==='mathfrak'||w==='emph'||w==='textup'){ o+=w.startsWith('text')||w==='mbox'?raw().replace(/\\([%$&#_{}])/g,'$1').replace(/\\,/g,' '):group(); continue; }
+        if(w==='mathbb'){ const a=group(); o+=[...a].map(ch=>BB[ch]||ch).join(''); continue; }
+        if(w in ACC){ const a=group(); o+=a.length===1?a+ACC[w]:a; continue; }
+        if(w==='frac'||w==='tfrac'||w==='dfrac'||w==='cfrac'){ const a=group().trim(), b=group().trim(); const f=a+'/'+b; let r=FR[f]||(wrap(a)+(/^0[.,]/.test(b)?' ÷ ':'/')+wrap(b)); const nx=s.slice(i).trimStart()[0]||''; if(!FR[f]&&(/[\p{L}\p{N}²³)]$/u.test(o)||/[\p{L}\p{N}\\(]/u.test(nx))) r='('+r+')'; o+=r; continue; }
+        if(w==='binom'||w==='tbinom'||w==='dbinom'){ const a=group().trim(), b=group().trim(); o+=(/[^\s(]$/.test(o)?' ':'')+'C('+a+', '+b+')'; continue; }
+        if(w==='sqrt'){ let k=''; if(s[i]==='['){ const j=s.indexOf(']',i); k=s.slice(i+1,j); i=j+1; } const a=group().trim(); o+=(k?script(k,SUP,''):'')+'√'+(simple(a)?a:'('+a+')'); continue; }
+        if(w==='pmod'){ o+=' (mod '+group().trim()+')'; continue; } if(w==='bmod'||w==='mod'){ o+=' mod '; continue; }
+        if(w==='not'){ const a=group(); o+=a==='='?'≠':a==='∈'?'∉':a==='≡'?'≢':a==='|'?'∤':a+'̸'; continue; }
+        if(w==='left'||w==='right'||w==='big'||w==='Big'||w==='bigg'||w==='Bigg'||w==='bigl'||w==='bigr'||w==='Bigl'||w==='Bigr'||w==='middle'){ if(s[i]==='.') i++; continue; }
+        if(w==='textstyle'||w==='displaystyle'||w==='scriptstyle'||w==='limits'||w==='nolimits'||w==='qquad'&&false){ continue; }
+        if(w==='begin'){ const env=raw(); const end='\\end{'+env+'}'; const j=s.indexOf(end,i); let body=s.slice(i,j<0?n:j); i=j<0?n:j+end.length; if(/array/.test(env)) body=body.replace(/^\s*\{[^}]*\}/,'');
+          const rows=body.split(/\\\\/).map(r=>r.trim()).filter(Boolean).map(r=>r.split('&').map(x=>conv(x).trim()));
+          if(env==='cases') o+='{ '+rows.map(r=>r.join(', ')).join('; ')+' }';
+          else if(/matrix|array/.test(env)){ const t=rows.map(r=>r.join('  ')).join('; '); o+=env[0]==='p'?'('+t+')':env[0]==='v'?'|'+t+'|':'['+t+']'; }
+          else o+=rows.map(r=>r.join(' ')).join('; ');
+          continue; }
+        if(w==='end'){ raw(); continue; }
+        if(w==='overset'||w==='stackrel'){ const a=group(), b=group(); o+=b+'⁽'+a+'⁾'; continue; }
+        if(w==='underbrace'||w==='overbrace'||w==='boxed'||w==='phantom'&&false){ o+=group(); continue; }
+        if(w==='color'){ raw(); continue; } if(w==='hspace'||w==='vspace'||w==='kern'){ raw(); continue; }
+        if(w in SYM){ const v=SYM[w]; if(/^[a-z]{2,}$/i.test(v)&&w===v){ if(/[\p{L}\p{N}²³⁻¹)]$/u.test(o)) o+=' '; o+=v; if(/^[\p{L}\p{N}\\]/u.test(s[i]||'')) o+=' '; } else o+=v; continue; }
+        o+=w; continue; }
+      if(c==='^'||c==='_'){ i++; const t=group(); o+=script(t,c==='^'?SUP:SUB,c); continue; }
+      if(c==='{'){ o+=group(); continue; }
+      if(c==='}'){ i++; continue; }
+      if(c==='~'){ o+=' '; i++; continue; }
+      if(c==='-'&&/[\s(=,]$|^$/.test(o)&&/\d|[a-zA-Z(]/.test(s[i+1]||'')){ o+='−'; i++; continue; }
+      o+=c; i++; }
+    return o; }
+  const tidy=t=>t.replace(/ {2,}/g,' ').replace(/ ([,;.:)])/g,'$1').replace(/\( /g,'(').replace(/(\d) - (\d)/g,'$1 − $2').replace(/ - /g,' − ').trim();
+  const isTex=t=>/\\[a-zA-Z,;:! %${}|]|\^|_\{|_[a-zA-Z0-9]/.test(t);
+  const line=t=>typeof t!=='string'||!isTex(t)?t:tidy(conv(t));
+  const text=t=>typeof t!=='string'?t:t.replace(/\$([^$]+)\$/g,(m,x)=>/[\\^_]/.test(x)?tidy(conv(x)):m).replace(/[A-Za-z]_\{[^{}]*\}|\\[a-zA-Z]+(\{[^{}]*\})*/g,m=>tidy(conv(m))).replace(/([A-Za-zα-ωΑ-Ω])_([aehijklmnoprstuvx0-9])(?![A-Za-z0-9])/g,(m,x,y)=>x+SUB[y]);
+  return q=>{ if(!q) return q;
+    if(q.lines) q.lines=q.lines.map(l=>[line(l[0]),l[1]==null?l[1]:text(line(l[1]))].concat(l.slice(2)));
+    ['story','ask','why','lead'].forEach(k=>{ if(typeof q[k]==='string') q[k]=text(q[k]); });
+    if(q.opts&&!q.html){ const o=q.opts.map(text), r=text(q.right); if(new Set(o).size!==o.length||o.filter(x=>x===r).length!==1) return null; q.opts=o; q.right=r; }
+    q.plain=1;
+    return q; }; })();
+QP.slice(QPAX0).forEach(P=>{ const mk=P.make; P.make=function(){ return PLAINAX(mk.apply(this,arguments)); }; });
 /* ===== Annex pools end ===== */
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
@@ -28922,7 +32527,7 @@ function render(box){
     +'<div class="rzbar"><button type="button" class="rzb rzrep" aria-expanded="false"><svg class="rzi" viewBox="0 0 24 22" aria-hidden="true"><path d="M12 1.8 22.6 20.3H1.4Z" fill="#fff" stroke="#000" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 8v6.3" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><circle cx="12" cy="17.2" r="1.5" fill="#000"/></svg><span>Report</span></button><button type="button" class="rzb rzset" aria-label="settings"><span class="rzi rzig" aria-hidden="true">⚙</span><span>Settings</span></button><button type="button" class="rzb rznext"><span class="rzi rzip" aria-hidden="true">+</span><span>Another question</span></button></div>'
     +'<p class="rzaddr" hidden><button type="button" class="rzseed" title="report this question · '+esc(addr).replace(/"/g,'&quot;')+'">'+sayAddr(q.a3)+'</button><br>Tap the address to send the report. <button type="button" class="dlink rzcopy">copy address</button></p>'+gearBox(q);
   wire(); rzUi(box);
-  if(/\$[^$]+\$/.test(q.ask)&&window.katex){ const el=box.querySelector('.rzask'); el.innerHTML=''; String(q.ask).split(/(\$[^$]+\$)/).forEach(t=>{ if(/^\$[^$]+\$$/.test(t)){ const sp=document.createElement('span'); try{ katex.render(t.slice(1,-1),sp,{throwOnError:false}); }catch(e){ sp.textContent=t; } el.appendChild(sp); } else el.appendChild(document.createTextNode(t)); }); }
+  if(/\$[^$]+\$/.test(q.ask)&&window.katex&&!q.plain){ const el=box.querySelector('.rzask'); el.innerHTML=''; String(q.ask).split(/(\$[^$]+\$)/).forEach(t=>{ if(/^\$[^$]+\$$/.test(t)){ const sp=document.createElement('span'); try{ katex.render(t.slice(1,-1),sp,{throwOnError:false}); }catch(e){ sp.textContent=t; } el.appendChild(sp); } else el.appendChild(document.createTextNode(t)); }); }
   let chose='';
   const cp=box.querySelector('.rzcopy'); if(cp) cp.onclick=()=>{ const s='laundry '+addr+' ('+MD.label+') index: '+q.index; const done=()=>{ cp.textContent='copied'; };
     try{ navigator.clipboard.writeText(s).then(done,()=>{ window.prompt('Copy this address',s); }); }catch(e){ window.prompt('Copy this address',s); } };

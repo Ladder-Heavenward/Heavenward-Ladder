@@ -431,7 +431,7 @@ function packLadder(){
     const royal=complete&&annex.length>0&&annex.every(done);
     sec.classList.toggle('complete',complete);
     sec.classList.toggle('royal',royal);
-    if(complete) crown(sec,th,core,royal);
+    if(complete) crown(sec,th,core,royal,annex);
     else { sec.classList.remove('folded','rfin','rfin-blue','rfin-gold','rfin-wings'); const c=th.querySelector(':scope>.rfin-line'); if(c) c.remove(); }
   });
 }
@@ -442,7 +442,7 @@ function rfinTiers(){ let U=null; try{ U=window.__starUnits&&window.__starUnits(
     const tier=U.wings.includes(r)?'wings':U.gold.includes(r)?'gold':'blue';
     sec.classList.remove('rfin-blue','rfin-gold','rfin-wings'); sec.classList.add('rfin-'+tier);
     const c=sec.querySelector('.rfin-line'); if(c) c.setAttribute('title',tier==='wings'?'finished: gold star with wings':tier==='gold'?'finished: gold star':'finished: blue star'); }); }
-function crown(sec,th,built,royal){ /* rfinish (Andrew 2026-11-13): the math line and the star earned: blue, gold, or gold with wings */
+function crown(sec,th,built,royal,annex){ /* rfinish (Andrew 2026-11-13): the math line and the star earned: blue, gold, or gold with wings */
   const label=th.querySelector(':scope>.n').textContent.trim();
   if(!sec.classList.contains('rfin')) sec.classList.add('rfin','rfin-blue');
   clearTimeout(crown.tq); crown.tq=setTimeout(rfinTiers,0); /* the star counts are defined later in this file: colour the stars once they are */
@@ -476,7 +476,18 @@ function crown(sec,th,built,royal){ /* rfinish (Andrew 2026-11-13): the math lin
     const rkey='R:'+label;
     if(L&&!L.st[rkey]){ L.st[rkey]=true; L.save(rkey); const calm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches; if(!calm){ rc.classList.add('drop'); setTimeout(()=>rc.classList.remove('drop'),2600); } }
   } else if(!royal&&rc) rc.remove();
+  /* annex crown jewels (Andrew 2026-11-15 05:19Z): passed annexes earn the crown; an annex with its gold star, wings and crosswalk x too sets a purple jewel in it */
+  let jw=wrap&&wrap.querySelector('.rc-jw'); const jn=royal?jewels(annex||[]):0;
+  if(jn&&wrap){ if(!jw){ jw=document.createElement('span'); jw.className='rc-jw'; wrap.appendChild(jw); }
+    if(+jw.dataset.n!==jn){ jw.dataset.n=jn; const sz=Math.min(.13,.8/jn).toFixed(3); jw.innerHTML=('<i style="width:'+sz+'rem;height:'+sz+'rem"></i>').repeat(jn);
+      const all=jn===(annex||[]).length; jw.title=jn+' of '+(annex||[]).length+' annexes with every mark'+(all?': all of them':''); jw.setAttribute('aria-label',jw.title); if(rc) rc.title='every annex passed; '+jw.title; } }
+  else if(jw) jw.remove();
 }
+function jewels(annex){ let P={}, X={}; try{ P=JSON.parse(LS.getItem('pages:done')||'{}')||{}; X=JSON.parse(LS.getItem('cards:x')||'{}')||{}; }catch(e){}
+  const CMx=window.LADDER_CARDMAP||{};
+  return annex.filter(li=>{ const a=li.querySelector('.t a'); const s=a?hstem(a.getAttribute('href')):''; if(!s) return false; const p=P[s]||{};
+    const gold=!!certRead(s), wings=!(+p.cn)||(+p.cd||0)>=(+p.cn), x=!(CMx[s]&&CMx[s][2]>0)||!!X[s];
+    return !!p.v&&gold&&wings&&x; }).length; }
 function unpack(sec,animate){
   if(!sec) return;
   const th=sec.querySelector('li.k-theory'); const subs=[...sec.querySelectorAll('ol.ladder>li')].filter(li=>li!==th);
@@ -607,6 +618,7 @@ function deskHTML(){
     +'<div class="dpane" id="dp-deck"><p class="dtrio" role="group" aria-label="tech screens"><button type="button" data-go="moves">Techs Read</button><button type="button" data-go="graph">Graph View</button><button type="button" data-go="deck">Tech Deck</button></p><p class="dnote">Each card is one tech you have earned. A tech lands here when you finish its step’s questions.</p><div class="dk-tools"><input type="search" id="dkq" placeholder="find a tech by name or word" aria-label="find a tech"><span class="dk-count" id="dkcount"></span></div><div id="dklist"></div><p class="dnote" id="dkahead"></p></div>'
     +'<div class="dpane" id="dp-rand">'+/* hangdry */'<p class="jogtxt" role="status" aria-label="the laundry is loading">'+'Hang Drying'.split('').map((c,i)=>c===' '?'<s>&nbsp;</s>':'<s aria-hidden="true" style="animation-delay:'+(i*70)+'ms">'+c+'</s>').join('')+'</p></div>'
     +(hb?'<div class="dpane" id="dp-base"><div id="dbase"></div></div>':'')+'<div class="dpane" id="dp-rec"><p class="dtheme"><span class="dnote">Display:</span> <button type="button" data-th="light">Light</button> <button type="button" data-th="dark">Dark</button></p><p class="dcomp"><label><input type="checkbox" class="reccomp"> Opt into competition</label><span class="dnote dcomp-n">Gives you a climber name and opens the Standing.</span></p><h4 class="drech">Record</h4><p class="recname"><span class="dnote">Your climber name:</span> <b class="dname-n">'+(window.LadderAccount?LadderAccount.name:'')+'</b> </p><p class="recrolls"><button type="button" class="dlink recroll">New Name</button> <button type="button" class="dlink recroll-a">New Animal</button> <button type="button" class="dlink recroll-p">New Place</button></p><p class="dnote">Everything the ladder remembers about your climb is one record, kept on this device. Save it as a file to keep a copy or to carry it to another device, and open that file there.</p><p><button type="button" class="dlink recx">save my record as a file</button></p><p><button type="button" class="dlink recopen">open my record as a file</button><input type="file" accept=".json,application/json" class="reci" hidden></p><p><label class="dnote recai-l"><input type="checkbox" class="recai"> An AI assistant is connected</label></p><p><button type="button" class="dlink recdel">delete my progress</button></p><p class="dnote" id="recnote"></p></div>';
+  { const w=document.createElement('div'); w.className='dtool'; w.appendChild(d.querySelector('.dtop')); d.querySelectorAll(':scope>.dpane:not(#dp-keys)').forEach(x=>w.appendChild(x)); d.appendChild(w); } /* sidepanels: the tool's half of the toolbox */
   document.body.append(b,d);
 }
 
@@ -1359,7 +1371,7 @@ window.__deskInit=function(){
     if(on){ const h=hereOf(); desk.querySelector('.dttl').textContent=TOOLS[p]; desk.dataset.tool=p; desk.querySelector('.dback').textContent='← back to '+h.say;
       if(!(history.state&&history.state.tool)) try{ history.pushState({tool:p},''); }catch(e){} else try{ history.replaceState({tool:p},''); }catch(e){}
       desk.querySelector('.dpane.on')&&(desk.querySelector('.dpane.on').scrollTop=0); } }
-  function show(p){ desk.querySelectorAll('.dtabs [data-p]').forEach(b=>b.classList.toggle('on',b.dataset.p===p)); desk.querySelectorAll('.dpane').forEach(d=>d.classList.toggle('on',d.id==='dp-'+p)); dock(p==='keys'); toolPage(p); if(p==='book') renderBook(); if(p==='qs') fillQs(); if(p==='base') fillBase(); if(p==='moves') fillMoves(); if(p==='deck') fillDeck(); trio(p); if(p==='graph') initGraph(); if(p==='rand') loadRand(); else if(window.MathKeys) MathKeys.limit(null); st.tab=p; save(); }
+  function show(p){ desk.querySelectorAll('.dtabs [data-p]').forEach(b=>b.classList.toggle('on',b.dataset.p===p)); desk.querySelectorAll('.dpane').forEach(d=>d.classList.toggle('on',d.id==='dp-'+p)); dock(p==='keys'||!!(window.LadderSide&&LadderSide.on&&LadderSide.on())); /* sidepanels: the keys stay in the toolbox column */ toolPage(p); if(p==='book') renderBook(); if(p==='qs') fillQs(); if(p==='base') fillBase(); if(p==='moves') fillMoves(); if(p==='deck') fillDeck(); trio(p); if(p==='graph') initGraph(); if(p==='rand') loadRand(); else if(window.MathKeys) MathKeys.limit(null); st.tab=p; save(); }
   window.addEventListener('popstate',()=>{ if(desk.classList.contains('toolpage')) open(false); });
 /* spindry (Andrew 2026-11-14 00:20Z): a tumble dryer's drum over the Laundry while it loads; at least 1.6 s, then until questions are drawn */
 window.LadderDrum=(function(){ const SAY=['Laundry Day']; /* Andrew 00:24Z: 'just that one is fine' */
@@ -1459,7 +1471,10 @@ window.LadderDrum=(function(){ const SAY=['Laundry Day']; /* Andrew 00:24Z: 'jus
     setTimeout(go,50); });
   document.addEventListener('click',e=>{ const a=e.target.closest&&e.target.closest('#dmoves a.mwhere'); if(a&&a.getAttribute('href').startsWith('#')) open(false); });
   desk.querySelector('.x').onclick=()=>open(false);
-  desk.querySelector('.dback').onclick=()=>open(false);
+  /* sidepanels: on a desktop closing a tool leaves the toolbox open */
+  window.LadderSide=window.LadderSide||{}; LadderSide.toolOff=()=>{ if(!desk.classList.contains('toolpage')) return; show('keys'); if(history.state&&history.state.tool) try{ history.back(); }catch(e){} };
+  const side0=()=>{ if(window.LadderSide&&LadderSide.on&&LadderSide.on()) LadderSide.toolOff(); else open(false); };
+  desk.querySelector('.dback').onclick=side0;
   desk.querySelectorAll('.dtabs [data-p]').forEach(b=>b.onclick=()=>show(b.dataset.p));
   /* toolbox gear */ (function(){ const R=document.documentElement, eff=()=>R.getAttribute('data-theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
     const mark=()=>desk.querySelectorAll('.dtheme [data-th]').forEach(b=>{ const on=b.dataset.th===eff(); b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false'); });
@@ -1471,9 +1486,9 @@ window.LadderDrum=(function(){ const SAY=['Laundry Day']; /* Andrew 00:24Z: 'jus
       const an=desk.querySelector('.dannex'), ba=desk.querySelector('.dtabs [data-p="base"]'); if(ba) ba.classList.toggle('tb-in',!!(an&&!an.classList.contains('lk-hide'))); };
     document.addEventListener('click',()=>setTimeout(sync,0)); [300,1200,3000,7000].forEach(ms=>setTimeout(sync,ms)); })();
   const dfv=desk.querySelector('.dfv'); if(dfv) dfv.onclick=()=>{ open(false); if(window.LadderFV&&LadderFV.toggle) LadderFV.toggle(); };
-  const dx=desk.querySelector('.dcross'); if(dx) dx.onclick=()=>{ open(false); if(window.LadderCards) LadderCards.open(); else if(typeof toast==='function') toast('the crosswalk is loading'); };
-  const dsk=desk.querySelector('.dstick'); if(dsk) dsk.onclick=()=>{ open(false); if(window.LadderMeasure) LadderMeasure.list(); };
-  const dsq=desk.querySelector('.dstand'); if(dsq) dsq.onclick=()=>{ open(false); if(window.LadderStanding) LadderStanding.list(); else if(typeof toast==='function') toast('the standing questions are loading'); };
+  const dx=desk.querySelector('.dcross'); if(dx) dx.onclick=()=>{ side0(); if(window.LadderCards) LadderCards.open(); else if(typeof toast==='function') toast('the crosswalk is loading'); };
+  const dsk=desk.querySelector('.dstick'); if(dsk) dsk.onclick=()=>{ side0(); if(window.LadderMeasure) LadderMeasure.list(); };
+  const dsq=desk.querySelector('.dstand'); if(dsq) dsq.onclick=()=>{ side0(); if(window.LadderStanding) LadderStanding.list(); else if(typeof toast==='function') toast('the standing questions are loading'); };
   const dh=desk.querySelector('.dheights'); if(dh) dh.onclick=()=>{ open(false); if(window.LadderFV) LadderFV.heights(); else location.href='index.html'; };
   const rx=desk.querySelector('.recx'), ri=desk.querySelector('.reci'), rn=desk.querySelector('#recnote');
   if(rx) rx.onclick=()=>LadderRecord.export();
@@ -2554,6 +2569,18 @@ function stickSection(scope,key){
   if(scope==='rung'){ const R=rungOf(key); return R?{steps:R.core.concat(R.annex).map(stickTag),norm:'r'+key}:null; }
   if(scope==='floor'){ const F=floorOf(key); if(!F) return null; const st=[]; F.rungs.forEach(r=>{ const R=rungOf(r); if(R) R.core.concat(R.annex).forEach(s=>st.push(stickTag(s))); }); return {steps:st,norm:'f'+key}; }
   return null; }
+/* annexstick (Andrew 2026-11-15 05:12Z, 05:33Z): a step that cannot feed all four Laundry kinds (most annexes) is measured on the pools
+   it does feed, two of each: its Laundry kinds (drawn as usual), its crosswalk cards, its technique questions and its standing questions' forks */
+async function annexQs(tags,kinds){ const M=window.LADDER_CARDMAP||{}, stems=Object.keys(M).filter(s=>tags.includes(M[s][0]));
+  const ok=x=>x&&x.a&&(x.w||[]).filter(w=>w&&w!==x.a).length>=2; let tq=[], cq=[], sq=[];
+  for(const s of stems){ try{ tq=tq.concat(await stepTech(s)); }catch(e){} try{ cq=cq.concat(await cardsOf(s)); }catch(e){}
+    try{ await script('sq/'+s+'.js',()=>window.LADDER_SQ&&Object.keys(window.LADDER_SQ).some(id=>id.split('.')[0]===M[s][0])); const S=window.LADDER_SQ||{};
+      Object.keys(S).filter(id=>id.split('.')[0]===M[s][0]&&S[id].kind!=='debate').forEach(id=>Object.keys(S[id].n).forEach(k=>{ const N=S[id].n[k], r=(N.c||[]).find(c=>c.go||c.win);
+        if(r&&N.c.length>1) sq.push({id:'s:'+id+'#'+k,q:N.t,a:r.t,w:N.c.filter(c=>c!==r).map(c=>c.t),why:r.why||''}); })); }catch(e){} }
+  const seenT=new Set(); tq=tq.filter(ok).filter(x=>{ const k=x.id.replace(/[nw]$/,''); if(seenT.has(k)) return false; seenT.add(k); return true; });
+  const two=(arr,mode)=>shuffle(arr.filter(ok)).slice(0,2).map(x=>{ const L=String(x.q).split('\n'), w=shuffle(x.w.filter(v=>v&&v!==x.a)).slice(0,3);
+    return {mode, index:x.id, ask:L[0], lines:L.length>1?[[L.slice(1).join(' '),null]]:[], right:x.a, opts:shuffle([x.a].concat(w)), why:x.why||'', lead:mode==='tech'?'':mode==='sq'?'The path goes by: '+x.a+'. ':'It is '+x.a+'. '}; });
+  const out=[]; kinds.forEach(m=>out.push(m,m)); return shuffle(out.concat(two(cq,'cards'),two(tq,'tech'),two(sq,'sq'))); }
 /* the sitting */
 let box=null;
 function close(){ if(box){ box.remove(); box=null; document.body.classList.remove('stickopen'); } }
@@ -2565,29 +2592,31 @@ async function sit(scope,key,opts){ opts=opts||{}; close();
   /* stickdraw (Andrew 2026-11-14 16:52Z): eight Laundry questions from the section's own steps, two of each kind, at full links and terms,
      each 2 sd of complexity above the norm; the first is dealt the moment it is drawn, the rest are drawn while the climber works */
   await maps(); await rand().catch(()=>null); const Rz=window.LadderRandomizer, me=box, sec=stickSection(scope,key);
-  const plan=(Rz&&Rz.stickPlan&&sec)?Rz.stickPlan(sec.steps):[];
+  let plan=(Rz&&Rz.stickPlan&&sec)?Rz.stickPlan(sec.steps):[];
+  /* annexstick (Andrew 05:33Z): a step that cannot feed all four kinds is measured on the pools it does feed, two of each */
+  const fb=(scope==='step'&&sec&&new Set(plan).size<4)?await annexQs(sec.steps,[...new Set(plan)]):null; if(fb) plan=fb;
   if(!plan.length){ box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-q">This section has no Laundry pools yet, so its measuring stick cannot be sat.</p></div>'; wire(); return; }
   try{ Rz.style&&Rz.style(); }catch(e){}
-  const N=plan.length, got=new Array(N), seenIdx=new Set(), KL={}; (Rz.MODES||[]).forEach(M=>{ KL[M.id]=M.label; });
+  const N=plan.length, got=plan.map(x=>typeof x==='string'?undefined:x), seenIdx=new Set(), KL={cards:'Crosswalk',tech:'Techniques',sq:'Standing Questions'}; (Rz.MODES||[]).forEach(M=>{ KL[M.id]=M.label; });
   let i=0, right=0, asked=0, waiting=false;
-  plan.reduce((ch,m,k)=>ch.then(()=>box===me?Rz.stickDraw(m,sec.steps,sec.norm,seenIdx):null).then(q=>{ got[k]=q||{none:1}; if(box===me&&waiting&&k===i){ waiting=false; show(); } }),Promise.resolve());
+  plan.reduce((ch,m,k)=>typeof m!=='string'?ch:ch.then(()=>box===me?Rz.stickDraw(m,sec.steps,sec.norm,seenIdx):null).then(q=>{ got[k]=q||{none:1}; if(box===me&&waiting&&k===i){ waiting=false; show(); } }),Promise.resolve());
   const total=()=>N-got.filter(g=>g&&g.none).length, need=()=>Math.ceil(total()*0.8);
   const show=()=>{ if(box!==me) return; while(i<N&&got[i]&&got[i].none) i++; if(i>=N) return end();
     const c=got[i];
     if(!c){ waiting=true; box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-n">question '+(i+1)+' of '+total()+'</p><p class="sk-q">'+(i?'Drawing the next question…':'Drawing the first question…')+'</p></div>'; wire(); return; }
-    const L=c.lines||[];
+    const L=c.lines||[], rp=c.plain?(el,x)=>{ el.textContent=String(x); }:rich;
     box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-n">question '+(i+1)+' of '+total()+' · '+esc(KL[c.mode]||c.mode)+' · '+need()+' right to pass</p>'
       +(c.story?'<p class="rzstory"></p>':'')+(c.fig?'<div class="rzfig">'+c.fig+'</div>':'')
       +(L.length?'<div class="rzlines">'+L.map((l,k)=>'<div class="rzl rzs"><span class="rzn">'+(k+1)+'</span><span class="rzt"></span><span class="rzw"></span></div>').join('')+'</div>':'')
       +'<div class="sk-q rzask"></div><div class="sk-opts"></div><p class="sk-why" hidden></p><p><button type="button" class="sk-next" hidden>'+(i+1<N?'next':'finish')+'</button></p></div>'; wire();
-    if(c.story) rich(box.querySelector('.rzstory'),c.story);
-    box.querySelectorAll('.rzl').forEach((row,k)=>{ rich(row.querySelector('.rzt'),L[k][0]); row.querySelector('.rzw').textContent=L[k][1]===null?'?':(L[k][1]||''); });
-    rich(box.querySelector('.rzask'),c.ask||'');
+    if(c.story) rp(box.querySelector('.rzstory'),c.story);
+    box.querySelectorAll('.rzl').forEach((row,k)=>{ rp(row.querySelector('.rzt'),L[k][0]); row.querySelector('.rzw').textContent=L[k][1]===null?'?':(L[k][1]||''); });
+    rp(box.querySelector('.rzask'),c.ask||'');
     const oe=box.querySelector('.sk-opts');
-    shuffle((c.opts||[]).slice()).forEach(o=>{ const b=document.createElement('button'); b.type='button'; b.className='sk-o'; b.dataset.v=o; if(c.html&&c.html[o]){ b.innerHTML=c.html[o]; b.setAttribute('aria-label',o); b.classList.add('sk-g'); } else rich(b,o);
+    shuffle((c.opts||[]).slice()).forEach(o=>{ const b=document.createElement('button'); b.type='button'; b.className='sk-o'; b.dataset.v=o; if(c.html&&c.html[o]){ b.innerHTML=c.html[o]; b.setAttribute('aria-label',o); b.classList.add('sk-g'); } else rp(b,o);
       b.onclick=()=>{ if(oe.dataset.done) return; oe.dataset.done='1'; asked++; const ok=o===c.right; if(ok) right++;
         oe.querySelectorAll('.sk-o').forEach(x=>{ x.disabled=true; if(x.dataset.v===c.right) x.classList.add('ok'); }); if(!ok) b.classList.add('no');
-        const w=box.querySelector('.sk-why'); w.hidden=false; rich(w,(ok?'Right. ':(c.lead||'Not this one. '))+(c.why||'')); box.querySelector('.sk-next').hidden=false; };
+        const w=box.querySelector('.sk-why'); w.hidden=false; rp(w,(ok?'Right. ':(c.lead||'Not this one. '))+(c.why||'')); box.querySelector('.sk-next').hidden=false; };
       oe.appendChild(b); });
     box.querySelector('.sk-next').onclick=()=>{ i++; show(); }; };
   const end=()=>{ const n=total(), nd=need(), pass=n>0&&right>=nd, k=certKey(scope,key);
@@ -2955,7 +2984,7 @@ function catalogue(want){ data().then(D=>{ if(!D) return;
 /* the toolbox button, beside "Dizzying heights" */
 function button(){ const dh=document.querySelector('#desk .dheights'); if(!dh) return false; if(document.querySelector('#desk .dannex')) return true;
   const b=document.createElement('button'); b.type='button'; b.className='dannex'; b.textContent='Annexes';
-  b.onclick=()=>{ const x=document.querySelector('#desk .x'); if(x) x.click(); catalogue(); };
+  b.onclick=()=>{ if(window.LadderSide&&LadderSide.on&&LadderSide.on()){ if(LadderSide.toolOff) LadderSide.toolOff(); } else { const x=document.querySelector('#desk .x'); if(x) x.click(); } catalogue(); /* sidepanels */ };
   dh.parentNode.insertBefore(b,dh); return true; }
 /* annexlayout: every annex unlocked so far is finished (at least one unlocked) */
 function crowned(D){ const h=high(), P=get('pages:done',{}); let any=false;
@@ -3566,7 +3595,7 @@ try{ if(document.fonts&&document.fonts.load){ window.addEventListener('load',fun
 /* toolscreens */
 (function(){ 'use strict'; if(window.LADDER_DESK) return;
   const closeStick=()=>{ const s=document.getElementById('stick'); if(s){ s.remove(); document.body.classList.remove('stickopen'); } };
-  document.addEventListener('click',e=>{ if(e.target.closest&&e.target.closest('#lbar')&&document.getElementById('stick')) closeStick(); },true);
+  document.addEventListener('click',e=>{ if(e.target.closest&&e.target.closest('#lbar')&&document.getElementById('stick')&&!(window.LadderSide&&LadderSide.on&&LadderSide.on())) closeStick(); /* sidepanels: the tool column stays */ },true);
   const boot=()=>{ if(!document.querySelector('.rungs')) return;
     const f=document.createElement('button'); f.type='button'; f.id='annexfab'; f.textContent='Annexes'; f.hidden=true;
     f.onclick=()=>{ if(window.LadderAnnexes) LadderAnnexes.catalogue(); }; document.body.appendChild(f);
@@ -3850,4 +3879,93 @@ function dress(ol){ load().then(F=>{ ol.querySelectorAll(':scope>li.k-sky').forE
     li.appendChild(d); });
   if(window.__footCount){ if(window.LADDER_UND) __footCount(); else setTimeout(()=>{ if(window.__footCount) __footCount(); },1500); } }); }
 window.LadderSkyFeet={dress,load};
+})();
+/* sidepanels */ /* 2026-11-15 (Andrew 04:33Z): on a desktop the footing view, the toolbox and the open tool sit side by side; none takes the screen.
+   Toolbox screens (Laundry, Techs Read, Graph View, Tech Deck, Cellar, Settings) open in a column right of the toolbox; the screens
+   built on #stick (Answering Questions, the Measuring Stick, Standing Questions, Annexes, the cellar) and the crosswalk take that column too. */
+(function(){ 'use strict';
+const MQ=window.matchMedia?matchMedia('(min-width:1200px)'):null;
+const on=()=>!!(MQ&&MQ.matches);
+window.LadderSide=Object.assign(window.LadderSide||{},{on});
+function stickGone(){ const s=document.getElementById('stick'); if(s){ s.remove(); document.body.classList.remove('stickopen'); } }
+function cardsGone(){ const c=document.querySelector('body>#cards:not(.cd-in)'); if(!c) return; if(window.LadderCards&&LadderCards.close) LadderCards.close(); if(c.isConnected) c.remove(); document.body.classList.remove('cardsopen'); }
+function start(){ const desk=document.getElementById('desk'); if(!desk){ if(document.readyState!=='complete') setTimeout(start,200); return; }
+  /* one tool at a time: a toolbox screen closes a #stick screen or the crosswalk, and the other way round; the toolbox stays */
+  new MutationObserver(()=>{ if(on()&&desk.classList.contains('toolpage')){ stickGone(); cardsGone(); } }).observe(desk,{attributes:true,attributeFilter:['class']});
+  new MutationObserver(ms=>{ if(!on()) return; ms.forEach(m=>m.addedNodes.forEach(n=>{ if(n.nodeType!==1) return;
+    if(n.id==='stick'){ if(desk.classList.contains('toolpage')&&LadderSide.toolOff) LadderSide.toolOff(); cardsGone(); }
+    else if(n.id==='cards'&&!n.classList.contains('cd-in')){ if(desk.classList.contains('toolpage')&&LadderSide.toolOff) LadderSide.toolOff(); stickGone(); } })); }).observe(document.body,{childList:true}); }
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
+})();
+
+/* stepunlocks */ /* 2026-11-15 (Andrew 04:33Z): each footing's understanding-question slide is titled "Answering Questions", slug "here or in the
+   toolbox", with a button opening a pane of what the step unlocks: its understanding questions, crosswalk, measuring stick and standing
+   questions, and a way into the Laundry when the step opens new pools (laundry-new.js, made by mklnew.js). */
+(function(){ 'use strict';
+const CHI='<svg class="aq-chi" viewBox="20 20 280 300" width="15" height="16" aria-hidden="true"><path d="M262,64 C220,118 130,226 66,292" fill="none" stroke="#5fd13a" stroke-width="22" stroke-linecap="round"/><path fill="currentColor" d="M38,92 C52,52 98,44 124,86 L216,262 C228,284 246,290 270,276 L276,286 C246,318 196,316 176,280 L88,112 C76,90 58,88 46,100 Z"/></svg>', STAR='<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M12 2l2.9 6.6 7.1.7-5.4 4.8 1.6 7L12 17.4 5.8 21.1l1.6-7L2 9.3l7.1-.7z"/></svg>', WING='<svg viewBox="0 0 28 14" width="24" height="12" aria-hidden="true"><path fill="currentColor" d="M13.4 9.2C11 3.6 6.4.9.8.8c1 3 2.4 5 4.4 6.2-1 .5-1.7 1.1-2.2 1.9 1.9.9 3.8 1 5.2.7-.6 1-.8 2-.5 3.2 1.4.4 3.4-.2 5.7-3.6z"/><path fill="currentColor" transform="matrix(-1 0 0 1 28 0)" d="M13.4 9.2C11 3.6 6.4.9.8.8c1 3 2.4 5 4.4 6.2-1 .5-1.7 1.1-2.2 1.9 1.9.9 3.8 1 5.2.7-.6 1-.8 2-.5 3.2 1.4.4 3.4-.2 5.7-3.6z"/></svg>';
+const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+const get=(k,d)=>{ try{ const v=JSON.parse(LS.getItem(k)||'null'); return v==null?d:v; }catch(e){ return d; } };
+const stem=()=>window.ladderPage?ladderPage():(location.pathname.split('/').pop()||'').replace(/\.html$/,'');
+const CM=()=>window.LADDER_CARDMAP||{};
+const once={};
+function script(src,test){ if(test&&test()) return Promise.resolve(true); if(once[src]) return once[src];
+  return once[src]=new Promise(res=>{ const s=document.createElement('script'); s.src=src; s.onload=()=>res(true); s.onerror=()=>res(false); document.head.appendChild(s); }); }
+function rich(el,t){ el.innerHTML=''; String(t).split(/(\$[^$]+\$)/).forEach(p=>{ if(/^\$[^$]+\$$/.test(p)){ const sp=document.createElement('span'), x=p.slice(1,-1);
+    if(window.katex){ try{ katex.render(x,sp,{throwOnError:false,strict:false}); }catch(e){ sp.textContent=x; } } else sp.textContent=x; el.appendChild(sp); } else el.appendChild(document.createTextNode(p)); }); }
+const mine=el=>!el.closest('#desk,#stick,.aqu');
+const srcQs=()=>{ const a=[...document.querySelectorAll('section.step .sayback ol')].filter(mine); return a.length?a:[...document.querySelectorAll('.wrap .sayback ol, .wrap #qs ol')].filter(mine); };
+const origin=t=>[...document.querySelectorAll('.qid,.id')].find(o=>mine(o)&&o.textContent.trim()===t);
+function measures(s){ const S=window.LadderStick; if(!S||!S.where) return []; const w=S.where(s); if(!w) return [];
+  if(w.core&&w.core[w.core.length-1]===s) return w.lastRung?[['floor',w.fl,'measure floor '+w.fl]]:[['rung',w.r,'measure rung '+w.r]]; return [['step',s,'measure this step']]; }
+function msState(sc,k){ const S=window.LadderStick; const c=S&&S.certKey?get('cert:'+S.certKey(sc,k),null):null; return c?(c.via==='measure'?'measured ahead':'measured '+(c.score||'')):'not yet measured'; }
+function sqState(id){ const r=get('sq:'+id,{}); return r.done?'answered':(r.until&&r.until>Date.now()?'resting':''); }
+function laundry(){ const d=document.getElementById('desk'), b=document.getElementById('deskbtn'); if(d&&!d.classList.contains('open')&&b) b.click(); const t=d&&d.querySelector('.dtabs [data-p="rand"]'); if(t) t.click(); }
+const LBL={un:'Understanding',cw:'Crosswalk',ms:'Measuring Stick',sq:'Standing Questions'};
+function fill(pane){ const s=stem(); pane.innerHTML='<p class="aqu-n">Gathering what this step unlocks…</p>';
+  Promise.all([window.LadderStick&&LadderStick.maps?LadderStick.maps().catch(()=>null):null,script('sq/index.js',()=>window.LADDER_SQINDEX),script('sq/titles.js',()=>window.LADDER_SQTITLES),script('laundry-new.js',()=>window.LADDER_LNEW)]).then(()=>{
+    const qs=srcQs(), c=CM()[s], ms=measures(s), sq=((window.LADDER_SQINDEX||{})[s]||[]), ln=+((window.LADDER_LNEW||{})[s]||0), rb=document.querySelector('#desk .dtabs [data-p="rand"]');
+    const nq=qs.reduce((a,o)=>a+o.querySelectorAll(':scope>li').length,0), X=get('cards:x',{}), P=get('pages:done',{});
+    const K=[]; if(nq) K.push('un'); if(c&&c[2]>0) K.push('cw'); if(ms.length) K.push('ms'); if(sq.length) K.push('sq');
+    const sub={un:(P[s]&&P[s].v?STAR+' ':'')+nq+' question'+(nq===1?'':'s'),cw:(X[s]?CHI+' ':'')+(c?c[2]:0)+' cards',ms:ms.map(m=>m[0]==='step'?'this step':m[0]+' '+m[1]).join(''),sq:sq.length+' question'+(sq.length===1?'':'s')};
+    pane.innerHTML='';
+    if(!K.length&&!(ln>0)){ pane.innerHTML='<p class="aqu-n">This step unlocks no questions of its own.</p>'; return; }
+    const bar=document.createElement('div'); bar.className='aqu-bar'; bar.innerHTML=K.map(k=>'<button type="button" class="aqu-k aqu-k-'+k+'" data-k="'+k+'" aria-pressed="false"><b>'+LBL[k]+'</b><span>'+sub[k]+'</span></button>').join('');
+    pane.appendChild(bar); const box={};
+    K.forEach(k=>{ const d=document.createElement('div'); d.className='aqu-sub aqu-s-'+k; d.hidden=true; box[k]=d; pane.appendChild(d); });
+    if(ln>0&&rb&&!rb.classList.contains('lk-hide')){ const p=document.createElement('p'); p.className='aqu-lp'; p.innerHTML='<button type="button" class="aqu-l">Laundry · '+ln+' new pool'+(ln===1?'':'s')+' <span aria-hidden="true">→</span></button>'; p.firstChild.onclick=e=>{ e.preventDefault(); e.stopPropagation(); laundry(); }; pane.appendChild(p); }
+    const made={};
+    const make={
+      un:d=>{ const w=document.createElement('div'); w.className='aqu-ql';
+        qs.forEach(o=>o.querySelectorAll(':scope>li').forEach(li=>{ const id=li.querySelector('.qid,.id'); const t=id?id.textContent.trim():''; const r=document.createElement('div'); r.className='aqu-q';
+          const c2=li.cloneNode(true); c2.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id')); c2.querySelectorAll('.qid,.id,.ph,.qbr').forEach(e=>e.remove());
+          r.innerHTML='<button type="button" class="aqu-qid" data-q="'+esc(t)+'">'+esc(t)+'</button><div class="aqu-qt"></div>'; while(c2.firstChild) r.lastChild.appendChild(c2.firstChild);
+          w.appendChild(r); }));
+        const paint=()=>w.querySelectorAll('.aqu-qid').forEach(b=>{ const o=origin(b.dataset.q); b.classList.toggle('done',!!(o&&o.classList.contains('done'))); });
+        w.querySelectorAll('.aqu-qid').forEach(b=>b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); const o=origin(b.dataset.q); if(o&&o.__tick){ o.__tick(); paint(); } });
+        paint(); d.__paint=paint; d.appendChild(w);
+        /* a tick made on the page or in the toolbox repaints this pane too */
+        const mo=new MutationObserver(paint); w.querySelectorAll('.aqu-qid').forEach(b=>{ const o=origin(b.dataset.q); if(o) mo.observe(o,{attributes:true,attributeFilter:['class']}); }); },
+      cw:d=>{ if(window.LadderCrosswalk&&LadderCrosswalk.deal) LadderCrosswalk.deal(d,s,()=>{ const b=bar.querySelector('.aqu-k-cw span'); if(b) b.innerHTML=CHI+' '+(c?c[2]:0)+' cards'; }); else d.innerHTML='<p class="aqu-n">The crosswalk is still loading.</p>'; },
+      ms:d=>{ d.innerHTML='<p class="aqu-n">Fresh Laundry questions from this section’s own pools; 80% passes and gives the gold star.</p><ul class="aqu-list">'+ms.map(([sc,k,l])=>'<li><button type="button" class="aqu-go" data-s="'+sc+'" data-k="'+esc(k)+'">'+esc(l)+'</button> <span class="aqu-st">'+msState(sc,k)+'</span></li>').join('')+'</ul>';
+        d.querySelectorAll('.aqu-go').forEach(b=>b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); const sc=b.dataset.s; if(window.LadderStick) LadderStick.sit(sc,sc==='step'?b.dataset.k:+b.dataset.k,{via:'stick'}); }); },
+      sq:d=>{ const TT=window.LADDER_SQTITLES||{};
+        d.innerHTML='<p class="aqu-n">Each walks a branching path: a path to its answer, or a debate to the bottom of one line of inquiry.</p><ul class="aqu-list">'+sq.map(([id,kind,txt,has])=>'<li'+(get('sq:'+id,{}).done?' class="aqu-done"':'')+'><button type="button" class="aqu-go" data-id="'+esc(id)+'"'+(has?'':' disabled')+'>'+esc(id)+'</button> <span class="aqu-tt"></span> <span class="aqu-st">'+(kind==='debate'?'debate':'')+(sqState(id)?(kind==='debate'?' · ':'')+sqState(id):'')+'</span></li>').join('')+'</ul>';
+        d.querySelectorAll('.aqu-tt').forEach((e,i)=>rich(e,TT[sq[i][0]]||sq[i][2]||''));
+        d.querySelectorAll('.aqu-go').forEach(b=>b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); if(window.LadderStanding) LadderStanding.walk(b.dataset.id,{stem:s}); }); } };
+    bar.querySelectorAll('.aqu-k').forEach(b=>b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); const k=b.dataset.k, v=box[k].hidden; box[k].hidden=!v; b.classList.toggle('on',v); b.setAttribute('aria-pressed',String(v));
+      if(v&&!made[k]){ made[k]=true; make[k](box[k]); } else if(v&&box[k].__paint) box[k].__paint(); });
+  }); }
+function mark(){ document.querySelectorAll('.sayback').forEach(sb=>{ if(sb.closest('#desk,#stick')||sb.querySelector(':scope>.aqh')||!sb.querySelector('ol')) return;
+  const h=document.createElement('div'); h.className='aqh'; h.innerHTML='<span class="aqh-s">here or in the toolbox</span><span class="aqh-t">Answering Questions</span>';
+  const h3=sb.querySelector(':scope>h3'); if(h3) h3.after(h); else sb.prepend(h);
+  const w=document.createElement('div'); w.className='aqu'; w.innerHTML='<button type="button" class="aqu-b" aria-expanded="false"><span>Unlocked by this step</span><span class="aqu-v" aria-hidden="true">▾</span></button><div class="aqu-pane" hidden></div>';
+  sb.appendChild(w); const b=w.firstChild, pane=w.lastChild;
+  b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); const v=pane.hidden; pane.hidden=!v; b.setAttribute('aria-expanded',String(v)); b.classList.toggle('on',v); if(v&&!pane.dataset.made){ pane.dataset.made='1'; fill(pane); } }; }); }
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',mark); else mark();
+/* a crosswalk x earned anywhere (this slide's pane or the toolbox's Crosswalk pane) shows in both */
+function cwSync(){ const X=get('cards:x',{}), s=stem(), c=CM()[s];
+  document.querySelectorAll('.aqu-k-cw span').forEach(e=>{ e.innerHTML=(X[s]?CHI+' ':'')+(c?c[2]:0)+' cards'; });
+  const pane=document.querySelector('#stick .aq-p-cw'); if(pane&&!pane.hidden&&pane.childNodes.length&&!pane.querySelector('#cards')&&window.LadderCrosswalk){ const sc=pane.closest('#stick'), y=sc?sc.scrollTop:0; LadderCrosswalk.fill(pane); if(sc) sc.scrollTop=y; } }
+new MutationObserver(ms=>{ for(const m of ms) for(const n of m.addedNodes){ if(n.nodeType===1&&(n.classList.contains('aq-cwdone')||(n.querySelector&&n.querySelector('.aq-cwdone')))){ setTimeout(cwSync,1700); return; } } }).observe(document.documentElement,{childList:true,subtree:true});
+window.LadderStepUnlocks={mark,fill,cwSync};
 })();
