@@ -54,15 +54,19 @@ const css=`
 #mk-tray .mk-k.leaf.w{font-size:.95rem;font-family:var(--mk-mono)}
 #mk-tray .mk-k.here::after{content:"";position:absolute;top:4px;right:4px;width:5px;height:5px;border-radius:50%;background:#fff;opacity:.9}
 #mk-tray .mk-k:hover{filter:brightness(1.08)}
-/* the pane a group opens into: a head with the way back, then the group's sections */
-#mk-tray .mk-pane{animation:mkin .2s ease}
-@keyframes mkin{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+/* the pane opens under its row of group buttons, full width; the open button is marked */
+#mk-tray .mk-g.on{border-color:var(--mk-teal);box-shadow:inset 0 0 0 1px var(--mk-teal)}
+#mk-tray .mk-g.on small{color:var(--mk-teal)}
+#mk-tray .mk-pane{flex:0 0 100%;box-sizing:border-box;border:1px solid var(--mk-grid);border-radius:10px;background:var(--mk-card);padding:6px;display:grid;gap:4px;animation:mkin .18s ease}
+@keyframes mkin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){#mk-tray .mk-pane{animation:none}}
-#mk-tray .mk-ph{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;margin:0 0 8px}
-#mk-tray .mk-ph .mk-back{justify-self:start;font-family:var(--mk-mono);font-size:.8rem;background:var(--mk-sand);color:var(--mk-ink);border:1px solid var(--mk-grid);border-radius:6px;padding:5px 9px;cursor:pointer}
-#mk-tray .mk-ph b{font-family:var(--mk-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mk-ink);font-weight:700}
-#mk-tray .mk-sec{margin:0 0 10px}
-#mk-tray .mk-sh{font-family:var(--mk-mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mk-muted);text-align:center;margin:0 0 5px}
+#mk-tray .mk-sec{display:grid;gap:6px}
+#mk-tray .mk-sh{margin:0;display:grid;grid-template-columns:1.2rem 1fr auto;align-items:center;gap:6px;width:100%;box-sizing:border-box;text-align:left;background:var(--mk-sand);color:var(--mk-ink);border:1px solid var(--mk-grid);border-radius:7px;padding:7px 10px;cursor:pointer;font-family:var(--mk-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase}
+#mk-tray .mk-sh i{font-style:normal;color:var(--mk-muted)}
+#mk-tray .mk-sh em{font-style:normal;color:var(--mk-muted);font-size:.66rem;letter-spacing:0}
+#mk-tray .mk-sh.here span::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--mk-teal);margin-left:7px;vertical-align:middle}
+#mk-tray .mk-row[hidden]{display:none}
+#mk-tray .mk-row{padding:2px 0 6px}
 #mk-tray .mk-scope{margin:8px 0 0;font-family:var(--mk-mono);font-size:.68rem;color:var(--mk-muted);text-align:center}
 #mk-tray .mk-toast{font-family:var(--mk-mono);font-size:.72rem;color:var(--mk-teal);min-height:1em}
 #mk-tray button:focus-visible{outline:2px solid var(--mk-ember);outline-offset:2px}
@@ -112,7 +116,8 @@ function makeKey(k,here){
 function makeGroup(g,here){
   const b=document.createElement('button'); b.type='button'; b.className='mk-g'+(g.s.some(x=>x.c.some(k=>here.has(k)))?' here':'');
   b.innerHTML=`<span>${g.t}</span><small>${g.n}</small>`; b.setAttribute('aria-label',g.n+': '+g.s.flatMap(x=>x.c).join(' '));
-  b.addEventListener('click',()=>{ openG=g.n; paint(); }); return b;
+  b.setAttribute('aria-expanded',String(openG===g.n)); if(openG===g.n) b.classList.add('on');
+  b.addEventListener('click',()=>{ openG=openG===g.n?null:g.n; paint(); }); return b;
 }
 /* The keys limit themselves to the marks the learner is expected to use: by default the marks this page
    writes in its lesson and questions (not its basement); in the randomizer, the marks its chosen pools write. */
@@ -176,22 +181,32 @@ function drawKeys(){
   if(limitTo) S=limitTo; else { askMap(); const U=unlockedKeys(); S=new Set(here); if(U) U.forEach(k=>S.add(k)); }
   lastS=S; lastHere=limitTo?new Set():here; paint();
 }
+/* quickkeys 08:25Z (Andrew): a group button opens and closes its pane in place, under its row of buttons; each subset has
+   its own button to open and close it. Subsets holding this page's keys start open; what you open or close is remembered. */
+let secOpen={}; try{ secOpen=JSON.parse(LS.getItem('mathkeys-open')||'{}')||{}; }catch(e){}
+const saveSec=()=>{ try{ LS.setItem('mathkeys-open',JSON.stringify(secOpen)); }catch(e){} };
 function paint(){
   keys.innerHTML=''; const G=groupsFor(lastS), here=lastHere;
-  const g=openG&&G.find(x=>x.n===openG);
-  if(g){
-    const pane=document.createElement('div'); pane.className='mk-pane'; pane.setAttribute('role','group'); pane.setAttribute('aria-label',g.n);
-    const ph=document.createElement('div'); ph.className='mk-ph'; ph.innerHTML=`<button type="button" class="mk-back">‹ keys</button><b>${g.n}</b><span></span>`;
-    ph.querySelector('.mk-back').addEventListener('click',()=>{ openG=null; paint(); }); pane.appendChild(ph);
-    g.s.forEach(x=>{ const sec=document.createElement('div'); sec.className='mk-sec'; if(x.h){ const h=document.createElement('p'); h.className='mk-sh'; h.textContent=x.h; sec.appendChild(h); }
-      const row=document.createElement('div'); row.className='mk-row'; x.c.forEach(k=>row.appendChild(makeKey(k,here))); sec.appendChild(row); pane.appendChild(sec); });
-    keys.appendChild(pane); return;
-  }
-  openG=null;
-  const grid=document.createElement('div'); grid.className='mk-grid'; G.forEach(x=>grid.appendChild(makeGroup(x,here))); keys.appendChild(grid);
+  if(openG&&!G.some(x=>x.n===openG)) openG=null;
+  const grid=document.createElement('div'); grid.className='mk-grid';
+  G.forEach((x,i)=>{ grid.appendChild(makeGroup(x,here));
+    const rowEnd=(i%2===1)||i===G.length-1, g=G.find(y=>y.n===openG), gi=g?G.indexOf(g):-1;
+    if(g&&rowEnd&&Math.floor(gi/2)===Math.floor(i/2)) grid.appendChild(makePane(g,here)); });
+  keys.appendChild(grid);
   const n=document.createElement('p'); n.className='mk-scope';
   n.textContent=limitTo?'keys for '+limitLabel:'keys open so far · a dot marks the keys this page writes';
   keys.appendChild(n);
+}
+function makePane(g,here){
+  const pane=document.createElement('div'); pane.className='mk-pane'; pane.id='mk-pane-'+g.n; pane.setAttribute('role','group'); pane.setAttribute('aria-label',g.n);
+  g.s.forEach(x=>{ const id=g.n+'/'+x.h, sec=document.createElement('div'); sec.className='mk-sec';
+    const isOpen=(id in secOpen)?secOpen[id]:(g.s.length===1||x.c.some(k=>here.has(k)));
+    const row=document.createElement('div'); row.className='mk-row'; row.hidden=!isOpen; x.c.forEach(k=>row.appendChild(makeKey(k,here)));
+    const h=document.createElement('button'); h.type='button'; h.className='mk-sh'+(x.c.some(k=>here.has(k))?' here':''); h.setAttribute('aria-expanded',String(isOpen));
+    h.innerHTML=`<i>${isOpen?'▾':'▸'}</i><span></span><em>${x.c.length}</em>`; h.querySelector('span').textContent=x.h;
+    h.addEventListener('click',()=>{ const v=row.hidden; row.hidden=!v; h.setAttribute('aria-expanded',String(v)); h.querySelector('i').textContent=v?'▾':'▸'; secOpen[id]=v; saveSec(); });
+    sec.appendChild(h); sec.appendChild(row); pane.appendChild(sec); });
+  return pane;
 }
 window.MathKeys={ limit(set,label){ limitTo=set&&[...set].length?new Set(set):null; limitLabel=label||''; drawKeys(); }, marksIn, open:v=>open(v), tree:TREE };
 drawKeys();
