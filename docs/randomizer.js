@@ -17962,6 +17962,97 @@ QP.push({id:'19·eng.work',step:'19·eng',mode:'work',label:'the squeeze-ratio c
       ['e4',[['r \\text{ as big as you like}','given'],['\\eta = 1','squeeze-ratio']],2,1,'r^(−0.4) is never 0.'],
       ['e5',[['\\text{one full turn of the engine}','a loop'],['W = \\text{the area inside the loop}','cycle-area']],2,0,'Out along the high curve, back along the low one: the difference of the areas.'],
       ['e6',[['r = 10','given'],['\\eta \\le 1 - 10^{-0.4} \\approx 0.6','squeeze-ratio']],2,0,'10^(−0.4) ≈ 0.398.']],[]); }});
+/* ----- annex 20·chem Which molecules have a left and right hand: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'20·chem.work',step:'20·chem',mode:'work',label:'handed carbons, counted',open:()=>measured('20·chem'),make(){
+    const ask=rnd(2);
+    if(ask){ const N=['F','Cl','Br','I'], ord=[[0,1,2],[1,0,2],[1,2,0],[2,1,0],[0,2,1],[2,0,1]][rnd(6)], sw=[[0,1,2],[1,2,0],[2,0,1]].some(p=>p.join()===ord.join()), sgn=sw?'':'−';
+      const right=sgn+'6√3', wrong=UQAX(right,[sw?'−6√3':'6√3','0','6','−6'],3);
+      return {index:'q:20·chem.work[d;'+ord.join('')+']', lines:[['D(\\text{F},\\ \\text{Cl},\\ \\text{Br}) = 6\\sqrt3','seen from H']], ask:'What is D('+ord.map(k=>N[k]).join(', ')+') for the same molecule?', right:right, opts:shuffle([right,...wrong]), lead:'', why:'Seen-from: swapping two names changes the sign of D. '+N[ord[0]]+', '+N[ord[1]]+', '+N[ord[2]]+' is '+(sw?'an even number of swaps from F, Cl, Br, so D is unchanged.':'one swap from F, Cl, Br, so D changes sign.')}; }
+    const G=['H','CH₃','OH','Cl','F','Br','NH₂','COOH'], k=3+rnd(3), C=[]; let h=0;
+    for(let i=0;i<k;i++){ const s=[]; for(let j=0;j<4;j++) s.push(G[rnd(rnd(2)?3:8)]); C.push(s); if(new Set(s).size===4) h++; }
+    const right=String(h), wrong=UQAX(right,['0','1','2','3','4','5'].filter(x=>+x<=k),3); if(wrong.length<3) return null;
+    return {index:'q:20·chem.work[h;'+C.map(s=>s.join('')).join('|')+']', lines:C.map((s,i)=>['\\text{carbon '+(i+1)+': } '+s.join(',\\ ').replace(/([₂₃])/g,m=>'_'+(m==='₂'?2:3)),'its four neighbours']), ask:'How many of these carbons are handed?', right, opts:shuffle([right,...wrong]), lead:'', why:'Handed-carbon: a carbon is handed exactly when its four neighbours all differ. '+(h?h+' of the '+k+(h===1?' has':' have')+' four different neighbours.':'Each has two neighbours alike, so the mirror swap makes it its own image.')}; }},
+  {id:'20·chem.word',step:'20·chem',mode:'word',label:'one hand, or both',open:()=>measured('20·chem'),make(){
+    const M=[['CHBrClF','H, Br, Cl and F',1],['CH₂BrCl','H, H, Br and Cl',0],['CHCl₂F','H, Cl, Cl and F',0],['lactic acid','H, OH, CH₃ and COOH',1],['alanine','H, NH₂, CH₃ and COOH',1],['glycine','H, H, NH₂ and COOH',0],['ethanol','H, H, CH₃ and OH',0]][rnd(7)];
+    const Y='yes: its four neighbours all differ, so no turn carries it onto its mirror image', Nn='no: two neighbours are alike, so the mirror image is the molecule itself';
+    const right=M[2]?Y:Nn, wrong=[M[2]?Nn:Y,'yes: every molecule has a mirror twin that no turn reaches','no: turned upside down, any molecule is its own mirror image'];
+    return {index:'q:20·chem.word['+M[0]+']', a3:['20·chem.word',DASH,DASH], story:'In '+M[0]+', one carbon holds '+M[1]+'. A drug maker asks whether it comes in a left hand and a right hand that a pocket in the body could tell apart.', lines:[], ask:'Does that carbon make the molecule handed?', right, opts:shuffle([right,...wrong]), lead:'', why:M[2]?'Handed-carbon: four different neighbours, and the seen-from reading D changes sign in the mirror, which no turn can do.':'Mirror-swap: put the two alike neighbours in the swapped places, and the mirror image is the molecule itself.'}; }},
+  {id:'20·chem.line',step:'20·chem',mode:'proof',label:'what the mirror licenses',open:()=>measured('20·chem'),make(){
+    return line28('20·chem.line',[
+      ['h1',[['\\text{same atoms, same distances}','measured'],['\\text{the same molecule}','nothing differs']],2,1,'Every distance agrees; the way round, seen from a neighbour, does not.'],
+      ['h2',[['\\text{a handed carbon turned upside down}','a turn'],['\\text{its own mirror image}','turning over']],2,1,'Turning over is a turn in space; read again from the same neighbour.'],
+      ['h3',[['D(\\text{F, Cl, Br}) = 6\\sqrt3','seen from H'],['D(\\text{Cl, F, Br}) = 6\\sqrt3','the same molecule']],2,1,'Swapping two names changes the sign of D: −6√3.'],
+      ['h4',[['\\text{a pocket with two sites}','given'],['\\text{it tells the hands apart}','sites fit']],2,1,'Two points are matched either way round; it takes three.'],
+      ['h5',[['\\text{a carbon with two H neighbours}','given'],['\\text{its mirror image is itself}','mirror-swap']],2,0,'Put the two H in the swapped places.'],
+      ['h6',[['D \\text{ before},\\ -D \\text{ after}','the mirror'],['\\text{no turn carries one onto the other}','seen-from']],2,0,'A turn keeps D; the mirror reverses it.']],[]); }});
+/* ----- annex 20·crypt How a guessed word breaks a cipher: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'20·crypt.work',step:'20·crypt',mode:'work',label:'the work, counted',open:()=>measured('20·crypt'),make(){
+    const ask=rnd(2), n=3+rnd(6), o=n*(n-1)*(n-2);
+    if(ask){ const v=o*17576, right=SPAX(v), wrong=UQAX(right,[SPAX(o*26),SPAX(v*26),SPAX(o+17576),SPAX(n*17576)],3); if(wrong.length<3) return null;
+      return {index:'q:20·crypt.work[s;'+n+']', lines:[['\\text{three wheels from a box of } '+n+',\\ \\text{in order}','wheel orders'],['26^3 = 17\\,576','starting turns'],['\\text{round a loop}','the board cancels']], ask:'How many wheel settings are left to try?', right, opts:shuffle([right,...wrong]), lead:'', why:'Loop: the board is gone. '+n+' · '+(n-1)+' · '+(n-2)+' = '+o+' orders, times 17 576 turns: '+right+'.'}; }
+    const t=[10,15,20,30][rnd(4)], M=[2,3,4,5,6,10,12][rnd(7)], h=o*t/M; if(h!==Math.round(h)) return null;
+    const right=SPAX(h)+' minutes', wrong=UQAX(right,[SPAX(o*t)+' minutes',SPAX(Math.round(o/M))+' minutes',SPAX(t*M)+' minutes',SPAX(h*2)+' minutes'],3); if(wrong.length<3) return null;
+    return {index:'q:20·crypt.work[t;'+n+';'+t+';'+M+']', lines:[['\\text{three wheels from a box of } '+n+',\\ \\text{in order}','wheel orders'],['\\text{one machine runs one order in } '+t+' \\text{ minutes}','given'],[M+' \\text{ machines}','given']], ask:'How long do the machines take to run every order?', right, opts:shuffle([right,...wrong]), lead:'', why:o+' orders · '+t+' minutes ÷ '+M+' machines = '+right+'.'}; }},
+  {id:'20·crypt.word',step:'20·crypt',mode:'word',label:'every wrong setting refutes itself',open:()=>measured('20·crypt'),make(){
+    const A='ABCDEFGHIJKLMNOPQRSTUVWXYZ', L=A[rnd(26)], X=A[rnd(26)], Y=A[rnd(26)], i=1+rnd(8), j=i+1+rnd(8), F=rnd(3); if(X===Y) return null;
+    const S=[['Under one guess for P('+L+'), letter '+i+' of the crib forces '+L+' to be plugged to '+X+', and letter '+j+' forces it to be plugged to '+Y+'. What follows?','that guess is refuted, and only that guess'],
+      ['Under one wheel setting, all 26 guesses for P('+L+') force some letter to be plugged to two different letters. What follows?','the wheel setting is refuted'],
+      ['Under one wheel setting, 25 guesses for P('+L+') clash and one does not. What follows?','the setting survives, and still has to be checked']][F];
+    const right=S[1], wrong=UQAX(right,['that guess is refuted, and only that guess','the wheel setting is refuted','the setting survives, and still has to be checked','the setting is the key'],3);
+    return {index:'q:20·crypt.word['+F+';'+L+X+Y+']', a3:['20·crypt.word',DASH,DASH], story:'At a hut in the countryside, a team tests wheel settings against a guessed word, a crib, round a loop. For each setting they guess which letter the board plugs '+L+' to, and follow the loop.', lines:[], ask:S[0], right, opts:shuffle([right,...wrong]), lead:'', why:['Clash: a letter plugged to two letters is no board. One guess falls; the setting stands until all 26 do.','Clash: if all 26 guesses are refuted, there is no board that fits, and the setting is refuted.','A survivor is not a proof: it may survive by luck. It is checked by hand, or on more of the message.'][F]}; }},
+  {id:'20·crypt.line',step:'20·crypt',mode:'proof',label:'what the crib licenses',open:()=>measured('20·crypt'),make(){
+    return line28('20·crypt.line',[
+      ['r1',[['\\text{a setting with no clash}','tested'],['\\text{this is the key}','no clash']],2,1,'A survivor is not a proof; it may survive by luck.'],
+      ['r2',[['\\text{a crib, any crib}','given'],['\\text{the board cancels}','loop']],2,1,'Only round a loop, where P P meets P P.'],
+      ['r3',[['\\text{one guess for } P(A) \\text{ refuted}','a clash'],['\\text{the setting is refuted}','clash']],2,1,'All 26 guesses must fall.'],
+      ['r4',[['\\text{one crib letter under the same letter}','a place'],['\\text{the crib can sit there}','crib-place']],2,1,'No-self rules that place out.'],
+      ['r5',[['A \\to E \\to T \\to A','a loop in the crib'],['\\text{the wheels alone keep } P(A)','loop']],2,0,'Round the loop each P meets P again: P P does nothing.'],
+      ['r6',[['60 \\cdot 26^3 = 1\\,054\\,560','wheel orders and turns'],['1\\,054\\,560 \\cdot 26 \\approx 2.7 \\times 10^{7}','one guess for P(A) at each']],2,0,'Stages multiply.']],[]); }});
+/* ----- annex 20·nav Where a ship ends after its orders: Work, Word Problems, Check Proofs ----- */
+const H3AX=h=>{ h=((h%360)+360)%360; return (h<10?'00':h<100?'0':'')+h+'°'; };
+QP.push({id:'20·nav.work',step:'20·nav',mode:'work',label:'heading sums and poses',open:()=>measured('20·nav'),make(){
+    const ask=rnd(2);
+    if(ask){ const c1=[-3,-2,-1,1,2,3][rnd(6)], c2=[-3,-2,-1,1,2,3][rnd(6)], s1=c1-c2, s2=c1+c2; if(!s1||!s2) return null;
+      const P=(x,y)=>MNAX('('+x+', '+y+')'), right=P(c1,c2), wrong=UQAX(right,[P(c2,c1),P(-c1,-c2),P(c1,-c2),P(-c2,c1),P(s1,s2)],3); if(wrong.length<3) return null;
+      return {index:'q:20·nav.work[p;'+s1+';'+s2+']', lines:[['\\text{start at } (0, 0),\\ \\text{facing north}','given'],[MNAX('\\text{end at } ('+s1+', '+s2+'),\\ \\text{facing east}'),'after the orders']], ask:'About which point could the ship have swung once, a quarter turn to starboard, to reach that pose?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Pose: c = R(c) + s with R(x, y) = (y, \u2212x). So c\u2081 \u2212 c\u2082 = '+s1+' and c\u2081 + c\u2082 = '+s2+'. Half the sum gives c\u2081 = '+c1+', half the difference c\u2082 = '+c2+'.')}; }
+    const h0=10*rnd(36), T=[]; const n=2+rnd(3); for(let i=0;i<n;i++) T.push([rnd(2),[15,30,45,60,90,105,120,135][rnd(8)]]);
+    const sum=h0+T.reduce((a,t)=>a+(t[0]?t[1]:-t[1]),0), rev=h0-T.reduce((a,t)=>a+(t[0]?t[1]:-t[1]),0), abs=h0+T.reduce((a,t)=>a+t[1],0);
+    const right=H3AX(sum), wrong=UQAX(right,[H3AX(rev),H3AX(abs),String(sum)+'°',H3AX(sum+180),H3AX(sum+90)],3); if(wrong.length<3) return null;
+    const words=T.map(t=>(t[0]?'starboard ':'port ')+t[1]).join(', ');
+    return {index:'q:20·nav.work[h;'+h0+';'+words+']', lines:[['\\text{heading } '+H3AX(h0).replace('°','^\\circ'),'at the start'],['\\text{'+words+'}','the orders, with runs between']], ask:'What is the heading at the end?', right, opts:shuffle([right,...wrong]), lead:'', why:'Heading-sum: start, plus starboard, less port, starting again past 360: '+H3AX(h0)+' gives '+right+'. The runs between change the place, not the heading.'}; }},
+  {id:'20·nav.word',step:'20·nav',mode:'word',label:'which orders can be swapped',open:()=>measured('20·nav'),make(){
+    const a=1+rnd(5), sb=rnd(2), side=sb?'starboard':'port', dir=sb?'east':'west';
+    const right=a+' '+dir+' and '+a+' south of the skipper’s, facing the same way', wrong=['in the same place, facing the same way',a+' '+dir+' of the skipper’s, facing the other way',a+' north and '+a+' '+(sb?'west':'east')+' of the skipper’s, facing the same way'];
+    return {index:'q:20·nav.word['+a+';'+sb+']', a3:['20·nav.word',DASH,DASH], story:'Off Port Townsend, facing north, a skipper orders “ahead '+a+', '+side+' 90”. On a second boat beside the first, the mate gives the same two orders the other way round: “'+side+' 90, ahead '+a+'”.', lines:[], ask:'Where does the mate’s boat end, beside the skipper’s?', right, opts:shuffle([right,...wrong]), lead:'', why:'Order: the headings agree, both '+dir+'; the places do not. The skipper ends '+a+' north, the mate '+a+' '+dir+', so the mate is '+a+' '+dir+' and '+a+' south of the skipper.'}; }},
+  {id:'20·nav.line',step:'20·nav',mode:'proof',label:'what the orders license',open:()=>measured('20·nav'),make(){
+    return line28('20·nav.line',[
+      ['n1',[['\\text{heading } 350^\\circ,\\ \\text{starboard } 30','given'],['\\text{heading } 380^\\circ','heading-sum']],2,1,'Starting again past 360: 020°.'],
+      ['n2',[['\\text{an order}','given'],['\\text{it turns the ship about the start}','a move']],2,1,'About the ship itself: the order goes on the right, g ∘ h.'],
+      ['n3',[['\\text{ahead 2, starboard 90}','orders'],['\\text{ends where starboard 90, ahead 2 ends}','swap']],2,1,'The headings agree; the places differ by Rs − s.'],
+      ['n4',[['\\text{starboard 90, ahead 1, port 90, astern 1}','orders'],['\\text{nothing done}','they cancel']],2,1,'It leaves a slide by (1, −1).'],
+      ['n5',[['\\text{run } a,\\ \\text{then run } b','two runs'],['\\text{run } b,\\ \\text{then run } a','order']],2,0,'Runs can be done in any order: slides add.'],
+      ['n6',[['4 \\times \\text{starboard } 90','orders'],['\\text{facing as at the start}','heading-sum']],2,0,'4 · 90 = 360: starting again, doing nothing to the heading.']],[]); }});
+/* ----- annex 20·phys Which path does light take: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'20·phys.work',step:'20·phys',mode:'work',label:'flip the target, bend the ray',open:()=>measured('20·phys'),make(){
+    const ask=rnd(2);
+    if(ask){ const M=[['water',1.33],['glass',1.5],['diamond',2.42],['ice',1.31]][rnd(4)], r=1/M[1], right=DECAX(r,2), wrong=UQAX(right,[DECAX(M[1]-1,2),DECAX(1-r,2),DECAX(r/2,2),DECAX(r*r,2)],3); if(wrong.length<3) return null;
+      return {index:'q:20·phys.work[c;'+M[0]+']', lines:[['\\text{light runs } '+M[1]+' \\text{ times faster in air than in '+M[0]+'}','measured'],['\\text{in '+M[0]+' } r \\Rightarrow \\text{ in air } '+M[1]+'\\,r','the bend']], ask:'What is the largest run over length, inside the '+M[0]+', that still has a path out?', right, opts:shuffle([right,...wrong]), lead:'', why:'A run is never longer than its length: '+M[1]+' r ≤ 1, so r ≤ 1 ÷ '+M[1]+' ≈ '+right+'. Past that, the light bounces back in.'}; }
+    const a=1+rnd(6), b=1+rnd(6), d=2+rnd(10); if(a===b) return null; const x=d*a/(a+b);
+    const right=DECAX(x,2), wrong=UQAX(right,[DECAX(d/2,2),DECAX(d*b/(a+b),2),DECAX(d*a/b,2),DECAX(d*a/(a+b+1),2)],3); if(wrong.length<3) return null;
+    return {index:'q:20·phys.work[f;'+a+';'+b+';'+d+']', lines:[['A \\text{ is } '+a+' \\text{ above the mirror},\\ B \\text{ is } '+b+' \\text{ above}','given'],['\\text{their feet on the mirror are } '+d+' \\text{ apart}','given']], ask:'How far from A’s foot does the shortest path from A to the mirror to B touch it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Flip-the-target: flip B to B′, '+b+' below. AB′ drops '+(a+b)+' over '+d+', so it crosses the mirror after '+d+' · '+a+' ÷ '+(a+b)+' ≈ '+right+'.'}; }},
+  {id:'20·phys.word',step:'20·phys',mode:'word',label:'light that cannot leave',open:()=>measured('20·phys'),make(){
+    const r=[0.3,0.45,0.5,0.6,0.7,0.8,0.85,0.9][rnd(8)], out=1.33*r<=1;
+    const right=out?'yes: its run over length in the air is about '+DECAX(1.33*r,2):'no: it bounces back into the water';
+    const wrong=out?['no: it bounces back into the water','yes: its run over length in the air is about '+DECAX(r/1.33,2),'yes: it goes straight on at '+r]:['yes: its run over length in the air is about '+DECAX(1.33*r,2),'yes: its run over length in the air is about '+DECAX(r/1.33,2),'yes: it goes straight on at '+r];
+    return {index:'q:20·phys.word['+r+']', a3:['20·phys.word',DASH,DASH], story:'A diver at the bottom of a pool in Palm Springs points a torch up at the surface. In the water, the beam’s run along the surface over its length is '+r+'. Light runs about 1.33 times faster in air than in water.', lines:[], ask:'Does the beam get out of the water?', right, opts:shuffle([right,...wrong]), lead:'', why:'The bend: in water r gives 1.33 r in air, here '+DECAX(1.33*r,3)+'. '+(out?'That is at most 1, so there is a path out, slanted further from straight up.':'A run is never longer than its length, so there is no path out: past 0.75, the light stays in.')}; }},
+  {id:'20·phys.line',step:'20·phys',mode:'proof',label:'what the mirror licenses',open:()=>measured('20·phys'),make(){
+    return line28('20·phys.line',[
+      ['p1',[['\\text{the shortest bounce from } A \\text{ to } B','a mirror'],['\\text{at the point of the mirror nearest } A','nearest is shortest']],2,1,'It is where AB′ crosses the mirror.'],
+      ['p2',[['\\text{light from air into water}','two speeds'],['\\text{the quickest path is the shortest}','quickest is straight']],2,1,'Only when the speeds are equal.'],
+      ['p3',[['v_1 \\ne v_2','two speeds'],['\\tfrac{\\text{angle in}}{\\text{angle out}} = \\tfrac{v_1}{v_2}','the bend']],2,1,'The law is for run over length, not for angles.'],
+      ['p4',[['A,\\ B \\text{ on one side of the mirror}','given'],['\\text{flip } A \\text{ and } B \\text{ both}','flip-the-target']],2,1,'Flipping both leaves them on one side: flip one.'],
+      ['p5',[['\\text{two mirrors at right angles}','a corner'],['\\text{every ray comes back the way it came}','corner']],2,0,'Each mirror flips one part of the direction; both together make a half turn.'],
+      ['p6',[['\\text{in air } 0.8','run over length'],['\\text{in water } 0.8 / 1.33 \\approx 0.60','the bend']],2,0,'The ray steepens going in.']],[]); }});
 /* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
     const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
